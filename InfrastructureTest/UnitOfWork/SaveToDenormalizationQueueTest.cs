@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		[Test]
 		public void ShouldSaveMessageToDenormalizationQueue()
 		{
-			var message = new DenormalizeScheduleProjection();
+			var message = new ScheduleChanged();
 			var runSql = mocks.DynamicMock<IRunSql>();
 			var sqlQuery = mocks.DynamicMock<ISqlQuery>();
 			using (mocks.Record())

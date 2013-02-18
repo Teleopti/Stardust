@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             IAddOvertimeViewModel dialog1 =
                 ScheduleViewBase.CreateAddOvertimeViewModel(ScheduleParts.FirstOrDefault(), SchedulerStateHolder.CommonStateHolder.ActiveActivities,
                                                             _definitionSets, defaultActivity,
-                                                            addPeriod);
+                                                            addPeriod, SchedulerStateHolder.TimeZoneInfo);
 
 
             bool result = dialog1.Result;

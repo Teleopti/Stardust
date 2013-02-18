@@ -17,7 +17,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IGroupOptimizerValidateProposedDatesInSameGroup _groupOptimizerValidateProposedDatesInSameGroup;
         private IPerson _person;
         private DateOnly _dayMoveFrom;
-        private DateOnly _dayMoveTo;
         private IScheduleMatrixPro _scheduleMatrixPro;
         private List<IScheduleMatrixPro> _allMatrixes;
         private IScheduleDayPro _scheduleDayPro;
@@ -33,31 +32,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                                                            _groupOptimizerValidateProposedDatesInSameGroup);
             _person = PersonFactory.CreatePerson();
             _dayMoveFrom = DateOnly.MinValue;
-            _dayMoveTo = DateOnly.MaxValue;
             _scheduleMatrixPro = _mock.StrictMock<IScheduleMatrixPro>();
             _scheduleDayPro = _mock.StrictMock<IScheduleDayPro>();
             _allMatrixes = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
-        }
-
-        [Test,Ignore  ]
-        public void ShouldRunAllAndReturnTrueIfAllSuccess()
-        {
-            using (_mock.Record())
-            {
-                Expect.Call(_groupOptimizerValidateProposedDatesInSameMatrix.Validate(_person, new List<DateOnly> { _dayMoveTo, _dayMoveFrom  },
-                                                                              true)).Return(new ValidatorResult { Success = true });
-                Expect.Call(_groupOptimizerValidateProposedDatesInSameGroup.Validate(_person, new List<DateOnly> { _dayMoveTo, _dayMoveFrom },
-                                                                              true)).Return(new ValidatorResult { Success = true });
-                
-            }
-
-            ValidatorResult result;
-            using (_mock.Playback())
-            {
-                result = _target.Run(_person, new List<DateOnly> { _dayMoveFrom }, true, _allMatrixes);
-            }
-
-            Assert.IsTrue(result.Success);
         }
 
         [Test]

@@ -47,11 +47,23 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 
 		public int IntervalId { get { return (int)DataRow["interval_id"]; } }
 
+		public int IntervalCounter { get { return (int)DataRow["date_interval_counter"]; } }
+
 		public int PersonId { get { return (int)DataRow["person_id"]; } }
 
 		public DateTime Date
 		{
 			get { return (DateTime)DataRow["date"]; }
+		}
+
+		public DateTime ShiftStartDate
+		{
+			get { return (DateTime)DataRow["shift_startdate"]; }
+		}
+
+		public bool ShiftOverMidnight
+		{
+			get{return !Date.Equals(ShiftStartDate);}
 		}
 
 		public IntervalToolTip CellToolTip 
@@ -60,9 +72,9 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 			{
 				if (_perDate)
 				{
-					return _tooltipContainer.GetToolTip(Date, IntervalId);
+					return _tooltipContainer.GetToolTip(ShiftStartDate, IntervalCounter);
 				}
-				return _tooltipContainer.GetToolTip(PersonId, IntervalId);
+				return _tooltipContainer.GetToolTip(PersonId, IntervalCounter);
 			} 
 		}
 

@@ -64,10 +64,7 @@ namespace Teleopti.Ccc.AgentPortalCode.Common.Clipboard
             {
                 return false;
             }
-            else
-            {
-                return Equals(clip);
-            }
+        	return Equals(clip);
         }
 
         /// <summary>

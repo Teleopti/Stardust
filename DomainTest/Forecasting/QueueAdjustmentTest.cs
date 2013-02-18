@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.AreEqual(new QueueAdjustment(),_target);
             Assert.IsTrue(new QueueAdjustment()==_target);
             Assert.IsFalse(new QueueAdjustment() != _target);
-            Assert.IsFalse(new QueueAdjustment().Equals((object)null));
+            Assert.IsFalse(new QueueAdjustment().Equals(null));
         }
 
         [Test]

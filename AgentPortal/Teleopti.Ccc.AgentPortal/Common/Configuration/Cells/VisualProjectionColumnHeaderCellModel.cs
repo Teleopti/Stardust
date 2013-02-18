@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.AgentPortal.Common.Configuration.Cells
             string dispDate = (string)style.CellValue;
             SizeF dispDateSize = g.MeasureString(dispDate, font);
             if (dispDateSize.Height == 0)
-                dispDateSize = new SizeF(0, (int)(cellRectangle.Height/4));
+                dispDateSize = new SizeF(0, cellRectangle.Height/4);
 
             string time1 = DateTime.MinValue.Add(TimeSpan.FromHours(12)).ToShortTimeString();
             SizeF size1 = g.MeasureString(time1, font);

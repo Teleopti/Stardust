@@ -81,6 +81,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<PersonRequestProvider>().As<IPersonRequestProvider>();
 			builder.RegisterType<TextRequestPersister>().As<ITextRequestPersister>();
 			builder.RegisterType<AbsenceRequestPersister>().As<IAbsenceRequestPersister>();
+			builder.RegisterType<ShiftTradeRequestProvider>().As<IShiftTradeRequestProvider>();
+			builder.RegisterType<ShiftTradeResponseService>().As<IShiftTradeResponseService>();
+			builder.RegisterType<ShiftTradePeriodViewModelMapper>().As<IShiftTradePeriodViewModelMapper>();
+			builder.RegisterType<PossibleShiftTradePersonsProvider>().As<IPossibleShiftTradePersonsProvider>();
 		}
 
 		private void registerAutoMapperTypes(ContainerBuilder builder)
@@ -137,7 +141,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<HeaderViewModelFactory>().As<IHeaderViewModelFactory>();
 			builder.RegisterType<PeriodViewModelFactory>().As<IPeriodViewModelFactory>();
 			builder.RegisterType<PeriodSelectionViewModelFactory>().As<IPeriodSelectionViewModelFactory>();
-			builder.RegisterType<ScenarioProvider>().As<IScenarioProvider>();
 			builder.RegisterType<ProjectionProvider>().As<IProjectionProvider>();
 		}
 

@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Win
         {
             _presenter.SelectDate(dateOnly);
             _presenter.SortCommand.Execute(dateOnly);
-            TheGrid.CurrentCell.MoveTo(TheGrid.CurrentCell.RowIndex, TheGrid.CurrentCell.ColIndex);
+			base.SetSelectedDateLocal(dateOnly);
         }
 
         internal override void CellDrawn(object sender, GridDrawCellEventArgs e)
@@ -186,7 +186,7 @@ namespace Teleopti.Ccc.Win
 
             foreach (IVisualLayer visualLayer in scheduleDay.ProjectionService().CreateProjection())
             {
-                DateTimePeriod local = toLocalUtcPeriod(visualLayer.Period);
+                DateTimePeriod local = toLocalUtcPeriod(visualLayer.Period, scheduleDay.TimeZone);
                 int startPixel =
                     (int)Math.Round(pixelConverter.PositionFromDateTime(local.StartDateTime, IsRightToLeft)) +
                     e.Bounds.X;
@@ -273,7 +273,7 @@ namespace Teleopti.Ccc.Win
         {
             foreach (IVisualLayer visualLayer in tomorrow.ProjectionService().CreateProjection())
             {
-                DateTimePeriod local = toLocalUtcPeriod(visualLayer.Period);
+                DateTimePeriod local = toLocalUtcPeriod(visualLayer.Period, tomorrow.TimeZone);
                 int startPixel =
                     (int) Math.Round(pixelConverter.PositionFromDateTime(local.StartDateTime, IsRightToLeft)) +
                     e.Bounds.X;
@@ -292,7 +292,7 @@ namespace Teleopti.Ccc.Win
         {
             foreach (IVisualLayer visualLayer in yesterday.ProjectionService().CreateProjection())
             {
-                DateTimePeriod local = toLocalUtcPeriod(visualLayer.Period);
+				DateTimePeriod local = toLocalUtcPeriod(visualLayer.Period, yesterday.TimeZone);
                 int startPixel =
                     (int) Math.Round(pixelConverter.PositionFromDateTime(local.StartDateTime, IsRightToLeft)) +
                     e.Bounds.X;
@@ -354,10 +354,10 @@ namespace Teleopti.Ccc.Win
             }
         }
 
-        static DateTimePeriod toLocalUtcPeriod(DateTimePeriod utcPeriod)
+        static DateTimePeriod toLocalUtcPeriod(DateTimePeriod utcPeriod, TimeZoneInfo timeZone)
         {
-            DateTime localStart = utcPeriod.LocalStartDateTime;
-            DateTime localEnd = utcPeriod.LocalEndDateTime;
+            DateTime localStart = utcPeriod.StartDateTimeLocal(timeZone);
+            DateTime localEnd = utcPeriod.EndDateTimeLocal(timeZone);
 
             // what if the summertime 3:05 becomes 2:05 on the day of timechange, so the endtime get lower that starttime?
             // solution1: we are not going to show it

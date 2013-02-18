@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 		public void Execute()
 		{
 			var nhibConfPath = System.IO.Path.Combine(_physicalApplicationPath.Get(), _settings.nhibConfPath());
-			_initializeApplication.Start(new WebState(), nhibConfPath, new LoadPasswordPolicyService(nhibConfPath));
+			_initializeApplication.Start(new WebState(), nhibConfPath, new LoadPasswordPolicyService(nhibConfPath), new ConfigurationManagerWrapper());
 		}
 	}
 }

@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
     public class BudgetGroupAllowanceSpecificationTest
     {
         private MockRepository _mocks;
-        private IScenarioProvider _scenarioProvider;
+        private IScenarioRepository _scenarioRepository;
         private IBudgetDayRepository _budgetDayRepository;
         private IScheduleProjectionReadOnlyRepository _scheduleProjectionReadOnlyRepository;
         private IBudgetGroupAllowanceSpecification _target;
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
         public void Setup()
         {
             _mocks = new MockRepository();
-            _scenarioProvider = _mocks.StrictMock<IScenarioProvider>();
+            _scenarioRepository = _mocks.StrictMock<IScenarioRepository>();
             _budgetDayRepository = _mocks.StrictMock<IBudgetDayRepository>();
             _scheduleProjectionReadOnlyRepository = _mocks.StrictMock<IScheduleProjectionReadOnlyRepository>();
             _schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			_defaultDay = new DateOnly();
 			_defaultDatePeriod = new DateOnlyPeriod();
 			
-            _target = new BudgetGroupAllowanceSpecification(_schedulingResultStateHolder, _scenarioProvider, _budgetDayRepository,
+            _target = new BudgetGroupAllowanceSpecification(_schedulingResultStateHolder, _scenarioRepository, _budgetDayRepository,
                                                             _scheduleProjectionReadOnlyRepository);
         }
 
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
             _person.PermissionInformation.SetDefaultTimeZone(TimeZoneHelper.CurrentSessionTimeZone);
             using (_mocks.Record())
             {
-                Expect.Call(_scenarioProvider.DefaultScenario()).Return(ScenarioFactory.CreateScenarioAggregate());
+                Expect.Call(_scenarioRepository.LoadDefaultScenario()).Return(ScenarioFactory.CreateScenarioAggregate());
                 Expect.Call(_absenceRequest.Person).Return(_person).Repeat.AtLeastOnce();
                 Expect.Call(_absenceRequest.Period).Return(shortPeriod()).Repeat.AtLeastOnce();
                 Expect.Call(_budgetDayRepository.Find(null, null, _defaultDatePeriod)).IgnoreArguments().Return(new List<IBudgetDay> { budgetDay });
@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
             _person.PermissionInformation.SetDefaultTimeZone(TimeZoneHelper.CurrentSessionTimeZone);
             using (_mocks.Record())
             {
-                Expect.Call(_scenarioProvider.DefaultScenario()).Return(ScenarioFactory.CreateScenarioAggregate());
+                Expect.Call(_scenarioRepository.LoadDefaultScenario()).Return(ScenarioFactory.CreateScenarioAggregate());
                 Expect.Call(_absenceRequest.Person).Return(_person).Repeat.AtLeastOnce();
                 Expect.Call(_absenceRequest.Period).Return(longPeriod()).Repeat.AtLeastOnce();
                 Expect.Call(_budgetDayRepository.Find(null, null, _defaultDatePeriod)).IgnoreArguments().Return(new List<IBudgetDay>{budgetDay});

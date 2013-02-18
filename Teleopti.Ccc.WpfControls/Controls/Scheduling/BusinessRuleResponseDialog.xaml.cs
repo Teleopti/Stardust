@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Ccc.WpfControls.Common.Interop;
@@ -32,7 +33,7 @@ namespace Teleopti.Ccc.WpfControls.Controls.Scheduling
         {
             var viewModel = new BusinessRuleResponseListViewModel(businessRuleResponses);
             var businessRuleResponseDialog = new BusinessRuleResponseDialog(viewModel);
-            businessRuleResponseDialog.ShowDialogFromWinForms(true);
+            businessRuleResponseDialog.ShowDialogFromWinForms(true, TimeZoneInfo.Local);
         }
     }
 }

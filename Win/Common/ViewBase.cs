@@ -68,6 +68,7 @@ namespace Teleopti.Ccc.Win.Common
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.MessageBoxAdv.Show(System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon,System.Windows.Forms.MessageBoxDefaultButton,System.Windows.Forms.MessageBoxOptions)")]
         public static void ShowErrorMessage(string text, string caption)
         {
+			LocalizationProvider.Provider = new Localizer();
 			MessageBoxAdv.Show(string.Concat(text, DoubleSpace), caption,
                                                         MessageBoxButtons.OK, MessageBoxIcon.Error,
                                                         MessageBoxDefaultButton.Button1,
@@ -80,6 +81,7 @@ namespace Teleopti.Ccc.Win.Common
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Syncfusion.Windows.Forms.MessageBoxAdv.Show(System.Windows.Forms.IWin32Window,System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon,System.Windows.Forms.MessageBoxDefaultButton,System.Windows.Forms.MessageBoxOptions)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.MessageBoxAdv.Show(System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon,System.Windows.Forms.MessageBoxDefaultButton,System.Windows.Forms.MessageBoxOptions)")]
 		public static void ShowErrorMessage(IWin32Window owner, string text, string caption)
 		{
+			LocalizationProvider.Provider = new Localizer();
 			MessageBoxAdv.Show(owner, string.Concat(text, DoubleSpace), caption,
 														MessageBoxButtons.OK, MessageBoxIcon.Error,
 														MessageBoxDefaultButton.Button1,
@@ -92,6 +94,7 @@ namespace Teleopti.Ccc.Win.Common
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.MessageBoxAdv.Show(System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon,System.Windows.Forms.MessageBoxDefaultButton,System.Windows.Forms.MessageBoxOptions)")]
         public static void ShowInformationMessage(string text, string caption)
         {
+			LocalizationProvider.Provider = new Localizer();
             MessageBoxAdv.Show(string.Concat(text, DoubleSpace), caption,
                                                         MessageBoxButtons.OK, MessageBoxIcon.Information,
                                                         MessageBoxDefaultButton.Button1,
@@ -104,6 +107,7 @@ namespace Teleopti.Ccc.Win.Common
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.MessageBoxAdv.Show(System.Windows.Forms.IWin32Window,System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon,System.Windows.Forms.MessageBoxDefaultButton,System.Windows.Forms.MessageBoxOptions)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters")]
         public static void ShowInformationMessage(IWin32Window owner, string text, string caption)
         {
+			LocalizationProvider.Provider = new Localizer();
             MessageBoxAdv.Show(owner, string.Concat(text, DoubleSpace), caption,
                                                         MessageBoxButtons.OK, MessageBoxIcon.Information,
                                                         MessageBoxDefaultButton.Button1,
@@ -116,6 +120,7 @@ namespace Teleopti.Ccc.Win.Common
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.MessageBoxAdv.Show(System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon,System.Windows.Forms.MessageBoxDefaultButton,System.Windows.Forms.MessageBoxOptions)")]
         public static DialogResult ShowYesNoMessage(string text, string caption)
 		{
+			LocalizationProvider.Provider = new Localizer();
             return MessageBoxAdv.Show(string.Concat(text, DoubleSpace), caption,
 															   MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2,
                                                                (((IUnsafePerson)TeleoptiPrincipal.Current).Person.PermissionInformation.
@@ -128,6 +133,7 @@ namespace Teleopti.Ccc.Win.Common
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.MessageBoxAdv.Show(System.Windows.Forms.IWin32Window,System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon,System.Windows.Forms.MessageBoxDefaultButton,System.Windows.Forms.MessageBoxOptions)")]
         public static DialogResult ShowYesNoMessage(IWin32Window owner, string text, string caption)
         {
+			LocalizationProvider.Provider = new Localizer();
             return MessageBoxAdv.Show(owner, string.Concat(text, DoubleSpace), caption,
                                                                MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2,
                                                                (((IUnsafePerson)TeleoptiPrincipal.Current).Person.PermissionInformation.
@@ -140,6 +146,7 @@ namespace Teleopti.Ccc.Win.Common
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.MessageBoxAdv.Show(System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon,System.Windows.Forms.MessageBoxDefaultButton,System.Windows.Forms.MessageBoxOptions)")]
         public static DialogResult ShowConfirmationMessage(string text, string caption)
         {
+			LocalizationProvider.Provider = new Localizer();
             return MessageBoxAdv.Show(string.Concat(text, DoubleSpace), caption,
                                                                MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question,
                                                                MessageBoxDefaultButton.Button1,
@@ -153,6 +160,7 @@ namespace Teleopti.Ccc.Win.Common
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.MessageBoxAdv.Show(System.Windows.Forms.IWin32Window,System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon,System.Windows.Forms.MessageBoxDefaultButton,System.Windows.Forms.MessageBoxOptions)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters")]
 		public static DialogResult ShowConfirmationMessage(IWin32Window owner, string text, string caption)
 		{
+			LocalizationProvider.Provider = new Localizer();
             return MessageBoxAdv.Show(owner, string.Concat(text, DoubleSpace), caption,
 															   MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question,
 															   MessageBoxDefaultButton.Button1,
@@ -166,6 +174,7 @@ namespace Teleopti.Ccc.Win.Common
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.MessageBoxAdv.Show(System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon,System.Windows.Forms.MessageBoxDefaultButton,System.Windows.Forms.MessageBoxOptions)")]
         public static DialogResult ShowOkCancelMessage(string text, string caption)
         {
+			LocalizationProvider.Provider = new Localizer();
             return MessageBoxAdv.Show(string.Concat(text, DoubleSpace), caption,
                                                                MessageBoxButtons.OKCancel, MessageBoxIcon.Question,
                                                                MessageBoxDefaultButton.Button1,
@@ -179,6 +188,7 @@ namespace Teleopti.Ccc.Win.Common
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.MessageBoxAdv.Show(System.String,System.String,System.Windows.Forms.MessageBoxButtons,System.Windows.Forms.MessageBoxIcon,System.Windows.Forms.MessageBoxDefaultButton,System.Windows.Forms.MessageBoxOptions)")]
         public static DialogResult ShowWarningMessage(string text, string caption)
         {
+			LocalizationProvider.Provider = new Localizer();
             return MessageBoxAdv.Show(string.Concat(text, DoubleSpace), caption,
                 MessageBoxButtons.OK, MessageBoxIcon.Warning,
                 MessageBoxDefaultButton.Button1,

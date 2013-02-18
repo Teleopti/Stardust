@@ -139,25 +139,12 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => page.DatePicker.DateFormat, Is.EqualTo("m/d/yy"));
 		}
 
-		[Then(@"I should see the browser's language's date format")]
-		public void ThenIShouldSeeTheBrowserSLanguageSDateFormat()
-		{
-			// don't know a good way to read http header from browser to server
-			ScenarioContext.Current.Pending();
-		}
 
 		[Then(@"I should see english text")]
 		public void ThenIShouldSeeEnglishText()
 		{
 			var page = Browser.Current.Page<RegionalSettingsPage>();
 			EventualAssert.That(() => page.RequestsLink.Text, Is.EqualTo("Requests"));
-		}
-
-		[Then(@"I should see text in the the browser's language")]
-		public void ThenIShouldSeeTextInTheTheBrowserSLanguage()
-		{
-			// don't know a good way to read http header from browser to server
-			ScenarioContext.Current.Pending();
 		}
 
 		[Then(@"I should see a message saying the password is not confirmed correctly")]

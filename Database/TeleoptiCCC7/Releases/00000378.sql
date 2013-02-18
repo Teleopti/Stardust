@@ -34,24 +34,46 @@ AND index_id = 1
 AND is_primary_key = 1
 SELECT @PKName
 EXEC sp_rename @PKName, N'PK_StudentAvailabilityRestriction', N'INDEX'
-
---Alter Indexes
-ALTER TABLE [dbo].[StudentAvailabilityRestriction] DROP CONSTRAINT [PK_StudentAvailabilityRestriction]
 GO
 
+--create temp table
+CREATE TABLE [dbo].[temp_StudentAvailabilityRestriction](
+	[Id] [uniqueidentifier] NOT NULL,
+	[Parent] [uniqueidentifier] NULL,
+	[RestrictionIndex] [int] NOT NULL,
+	[StartTimeMinimum] [bigint] NULL,
+	[StartTimeMaximum] [bigint] NULL,
+	[EndTimeMinimum] [bigint] NULL,
+	[EndTimeMaximum] [bigint] NULL,
+	[WorkTimeMinimum] [bigint] NULL,
+	[WorkTimeMaximum] [bigint] NULL
+	)
+
+CREATE CLUSTERED INDEX [CIX_StudentAvailabilityRestriction_parent] ON [dbo].[temp_StudentAvailabilityRestriction] 
+(
+	[Parent] ASC
+)
+
+--get current data
+INSERT INTO [dbo].[temp_StudentAvailabilityRestriction]
+(Id, Parent, RestrictionIndex, StartTimeMinimum, StartTimeMaximum, EndTimeMinimum, EndTimeMaximum, WorkTimeMinimum, WorkTimeMaximum)
+SELECT
+Id, Parent, RestrictionIndex, StartTimeMinimum, StartTimeMaximum, EndTimeMinimum, EndTimeMaximum, WorkTimeMinimum, WorkTimeMaximum
+FROM [dbo].[StudentAvailabilityRestriction]
+
+--drop old table
+DROP TABLE [dbo].[StudentAvailabilityRestriction]
+
+--rename temp_table
+EXEC dbo.sp_rename @objname = N'temp_StudentAvailabilityRestriction', @newname = N'StudentAvailabilityRestriction', @objtype = N'OBJECT'
+
+--re-add PK
 ALTER TABLE dbo.StudentAvailabilityRestriction ADD CONSTRAINT
 	PK_StudentAvailabilityRestriction PRIMARY KEY NONCLUSTERED 
 	(
 	Id
 	)
 
-CREATE CLUSTERED INDEX [CIX_StudentAvailabilityRestriction_parent] ON [dbo].[StudentAvailabilityRestriction] 
-(
-	[Parent] ASC
-)
-
-ALTER TABLE [dbo].[StudentAvailabilityRestriction] DROP CONSTRAINT [FK_StudentAvailabilityDay_AvailabilityRestriction]
-GO
 
 ALTER TABLE [dbo].[StudentAvailabilityRestriction]  WITH CHECK ADD  CONSTRAINT [FK_StudentAvailabilityDay_AvailabilityRestriction] FOREIGN KEY([Parent])
 REFERENCES [dbo].[StudentAvailabilityDay] ([Id])
@@ -84,7 +106,17 @@ GO
 --add constraint to block new duplicates
 IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[dbo].[PersonSkill]') AND name = N'UC_Parent_Skill')
 ALTER TABLE PersonSkill ADD CONSTRAINT UC_Parent_Skill UNIQUE (Parent,Skill)
+GO
 
+
+----------------  
+--Name: Robin Karlsson
+--Date: 2013-02-13
+--Desc: Bug #22194. Constraint violation error in PersonSkill
+----------------  
+IF  EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[dbo].[PersonSkill]') AND name = N'UC_Parent_Skill')
+	EXEC('ALTER TABLE [dbo].[PersonSkill] DROP CONSTRAINT [UC_Parent_Skill]')
+GO
 
 ----------------  
 --Name: Jonas N

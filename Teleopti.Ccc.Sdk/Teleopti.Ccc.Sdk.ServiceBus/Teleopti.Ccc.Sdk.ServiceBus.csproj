@@ -109,25 +109,25 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Autofac.2.6.3.862\lib\NET40\Autofac.Configuration.dll</HintPath>
     </Reference>
-    <Reference Include="Esent.Interop, Version=1.6.0.0, Culture=neutral, PublicKeyToken=8dd49bbdae3f61af, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Rhino.ServiceBus.References.2.3.2.9\lib\Esent.Interop.dll</HintPath>
+    <Reference Include="Common.Logging">
+      <HintPath>..\..\packages\Common.Logging.2.1.2\lib\net40\Common.Logging.dll</HintPath>
     </Reference>
-    <Reference Include="log4net">
+    <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="Rhino.PersistentHashTable">
-      <HintPath>..\..\packages\Rhino.PersistentHashTable.1.7.0.0\lib\4.0\Rhino.PersistentHashTable.dll</HintPath>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="Rhino.Queues">
-      <HintPath>..\..\packages\Rhino.Queues.1.4.2.0\lib\4.0\Rhino.Queues.dll</HintPath>
-    </Reference>
-    <Reference Include="Rhino.ServiceBus, Version=2.3.2.9, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
+    <Reference Include="Rhino.ServiceBus, Version=3.0.0.0, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Rhino.ServiceBus.2.3.2.9\lib\4.0\Rhino.ServiceBus.dll</HintPath>
+      <HintPath>..\..\packages\Rhino.ServiceBus.3.0.0.0\lib\4.0\Rhino.ServiceBus.dll</HintPath>
     </Reference>
-    <Reference Include="Rhino.ServiceBus.Autofac, Version=2.3.2.9, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
+    <Reference Include="Rhino.ServiceBus.Autofac, Version=3.0.0.0, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Rhino.ServiceBus.Autofac.2.3.2.9\lib\4.0\Rhino.ServiceBus.Autofac.dll</HintPath>
+      <HintPath>..\..\packages\Rhino.ServiceBus.Autofac.3.0.0.0\lib\4.0\Rhino.ServiceBus.Autofac.dll</HintPath>
+    </Reference>
+    <Reference Include="Rhino.ServiceBus.SqlQueues">
+      <HintPath>..\..\packages\Rhino.ServiceBus.SqlQueues.1.0.0.0\lib\net40\Rhino.ServiceBus.SqlQueues.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -135,6 +135,7 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IdentityModel" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
@@ -148,9 +149,6 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Wintellect.Threading">
-      <HintPath>..\..\packages\PowerThreading.20101026.0\lib\net20\Wintellect.Threading.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationInfrastructureContainerInstaller.cs" />
@@ -161,16 +159,20 @@
     <Compile Include="ConfigFileDefaultHost.cs" />
     <Compile Include="RTA\RTAPersonInfoMessageConsumer.cs" />
     <Compile Include="RTA\RTAStateCheckerMessageConsumer.cs" />
+    <Compile Include="Denormalizer\PersonScheduleDayReadModelHandler.cs" />
+    <Compile Include="Denormalizer\PersonScheduleDayReadModelsCreator.cs" />
+    <Compile Include="Denormalizer\DenormalizedScheduleMessageBuilder.cs" />
+    <Compile Include="Denormalizer\IDenormalizedScheduleMessageBuilder.cs" />
+    <Compile Include="Denormalizer\IScheduleDayReadModelCreator.cs" />
+    <Compile Include="Denormalizer\IScheduleDayReadModelsCreator.cs" />
+    <Compile Include="Denormalizer\LoadProjectedScheduleConsumer.cs" />
     <Compile Include="Denormalizer\ScheduleDayReadModelsCreator.cs" />
-    <Compile Include="Denormalizer\DenormalizeScheduleDayMessageConsumer.cs" />
-    <Compile Include="Denormalizer\InitialLoadScheduleDayConsumer.cs" />
     <Compile Include="Forecast\RecalculateForecastOnSkillConsumer.cs" />
     <Compile Include="Forecast\StatisticLoader.cs" />
-    <Compile Include="InitialLoadOfScheduleDayReadModel.cs" />
     <Compile Include="DateOnlyPeriodSerializer.cs" />
     <Compile Include="DenormalizeBusBootStrapper.cs" />
-    <Compile Include="Denormalizer\ScheduleDayReadModelCreator.cs" />
     <Compile Include="Denormalizer\ScheduleDayReadModelHandler.cs" />
+    <Compile Include="IUpdateScheduleProjectionReadModel.cs" />
     <Compile Include="Notification\NotificationMessage.cs" />
     <Compile Include="Notification\ScheduleDayReadModelComparer.cs" />
     <Compile Include="Notification\SignificantChangeChecker.cs" />
@@ -184,13 +186,11 @@
     <Compile Include="Denormalizer\IScheduleChangedNotification.cs" />
     <Compile Include="Denormalizer\IUpdateGroupingReadModel.cs" />
     <Compile Include="Denormalizer\IUpdatePersonFinderReadModel.cs" />
-    <Compile Include="Denormalizer\IUpdateScheduleProjectionReadModel.cs" />
     <Compile Include="Denormalizer\UpdateGroupingReadModelConsumer.cs" />
     <Compile Include="Denormalizer\ProcessDenormalizeQueueConsumer.cs" />
     <Compile Include="Denormalizer\ScheduleChangedInDefaultScenarioNotification.cs" />
     <Compile Include="Denormalizer\UpdateFindPersonConsumer.cs" />
     <Compile Include="Denormalizer\UpdateFindPersonDataConsumer.cs" />
-    <Compile Include="Denormalizer\UpdateScheduleProjectionReadModel.cs" />
     <Compile Include="ExportForecastContainerInstaller.cs" />
     <Compile Include="ForecastContainerInstaller.cs" />
     <Compile Include="Forecast\DateOnlyPeriodExtensions.cs" />
@@ -213,6 +213,7 @@
     <Compile Include="IScheduleIsInvalidSpecification.cs" />
     <Compile Include="LargeGuidCollectionSerializer.cs" />
     <Compile Include="PayrollContainerInstaller.cs" />
+    <Compile Include="PayrollDllCopy.cs" />
     <Compile Include="Payroll\ChannelCreator.cs" />
     <Compile Include="Payroll\FormatLoader\AssemblyFileLoader.cs" />
     <Compile Include="Payroll\FormatLoader\DomainAssemblyResolver.cs" />
@@ -242,7 +243,6 @@
     <Compile Include="RequestFactory.cs" />
     <Compile Include="BusBootStrapper.cs" />
     <Compile Include="DataSourceFactory.cs" />
-    <Compile Include="ErrorNotifier.cs" />
     <Compile Include="Messages\CustomErrorMessage.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="MessageBrokerSendEnabler.cs" />
@@ -262,6 +262,7 @@
     </Compile>
     <Compile Include="ServiceBusRunner.cs" />
     <Compile Include="ShiftTrade\ShiftTradeRequestSaga.cs" />
+    <Compile Include="UpdateScheduleProjectionReadModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="..\..\CodeAnalysisDictionary.xml">

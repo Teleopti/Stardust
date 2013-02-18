@@ -4,7 +4,7 @@ using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using Newtonsoft.Json;
-using SignalR.Client.Hubs;
+using Microsoft.AspNet.SignalR.Client.Hubs;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Client;
@@ -116,7 +116,7 @@ namespace Teleopti.Messaging.SignalR
 		public void InstantiateBrokerService()
 		{
 			var connection = new HubConnection(_serverUrl);
-			var proxy = connection.CreateProxy("MessageBrokerHub");
+			var proxy = connection.CreateHubProxy("MessageBrokerHub");
 
 			_wrapper = new SignalWrapper(proxy, connection);
 			_wrapper.StartListening();

@@ -86,10 +86,20 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AbsenceRequestFromSchedule.feature</DependentUpon>
     </Compile>
-    <Compile Include="AdminWeb\AdminWebLogOn.feature.cs">
+    <Compile Include="Anywhere\AgentSchedule.feature.cs">
+      <DependentUpon>AgentSchedule.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>AdminWebLogOn.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Anywhere\Absence.feature.cs">
+      <DependentUpon>Absence.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="Anywhere\Schedule.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Schedule.feature</DependentUpon>
     </Compile>
     <Compile Include="AsmSummerToWinter.feature.cs">
       <AutoGen>True</AutoGen>
@@ -105,10 +115,16 @@
     <Compile Include="AsmStepDefinition.cs" />
     <Compile Include="Bindings\Generic\ActivityStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\ContractStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\Anywhere\TeamSchedulePageStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\TeamStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\ShiftTradeRequestFromRequestStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PasswordPolicyStepDefinitions.cs" />
-    <Compile Include="Bindings\Generic\SignInPageStepDefinitions.cs" />
-    <Compile Include="Bindings\Generic\StudentAvailabilityPageStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\Start\SignInPageStepDefinitions.cs" />
+    <Compile Include="Data\Setups\Generic\PersonAbsenceConfigurable.cs" />
+    <Compile Include="Data\Setups\Generic\PersonDayOffConfigurable.cs" />
+    <Compile Include="Data\Setups\Generic\ReadModelShiftConfigurable.cs" />
+    <Compile Include="Data\Setups\Generic\TeamConfigurable.cs" />
+    <Compile Include="Bindings\Generic\MyTime\StudentAvailabilityPageStepDefinitions.cs" />
     <Compile Include="StudentAvailabilityMultidays.feature.cs">
       <DependentUpon>StudentAvailabilityMultidays.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -118,18 +134,13 @@
     <Compile Include="Bindings\Generic\ScenarioStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\ShiftStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\NotifyStepDefinition.cs" />
-    <Compile Include="Bindings\Generic\ShiftTradeRequestsPageStepDefinition.cs" />
-    <Compile Include="Bindings\Generic\WeekSchedulePageStepDefinitions.cs" />
-    <Compile Include="BrowserNotifications.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>BrowserNotifications.feature</DependentUpon>
-    </Compile>
+    <Compile Include="Bindings\Generic\MyTime\ShiftTradeRequestsPageStepDefinition.cs" />
+    <Compile Include="Bindings\Generic\MyTime\WeekSchedulePageStepDefinitions.cs" />
     <Compile Include="Core\Robustness\EventualAssert.cs" />
     <Compile Include="Core\Robustness\EventualElementActions.cs" />
     <Compile Include="Core\Robustness\Timeouts.cs" />
     <Compile Include="Core\Robustness\Retrying.cs" />
-    <Compile Include="Pages\AdminWebPage.cs" />
+    <Compile Include="Pages\AnywherePage.cs" />
     <Compile Include="Pages\SignInPage.cs" />
     <Compile Include="Routing.feature.cs">
       <DependentUpon>Routing.feature</DependentUpon>
@@ -165,7 +176,7 @@
     <Compile Include="Data\Setups\Generic\RuleSetBagConfigurable.cs" />
     <Compile Include="Bindings\Generic\RuleSetBagStepDefinitions.cs" />
     <Compile Include="Data\Setups\Generic\WorkShiftRuleSetConfigurable.cs" />
-    <Compile Include="Bindings\Generic\WeekScheduleTimeIndicatorStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\MyTime\WeekScheduleTimeIndicatorStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\DayOffStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PreferenceStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\ShiftCategoryStepDefinitions.cs" />
@@ -174,7 +185,7 @@
     <Compile Include="Bindings\Generic\RoleStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\WorkflowControlSetStepDefinitions.cs" />
     <Compile Include="ConfigSanityCheck.cs" />
-    <Compile Include="Bindings\Generic\PortalPageStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\MyTime\PortalPageStepDefinitions.cs" />
     <Compile Include="PreferencesFeedbackRefact.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -200,7 +211,7 @@
     <Compile Include="Data\Setups\Generic\MeetingConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\DayOffTemplateConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\ShiftCategoryConfigurable.cs" />
-    <Compile Include="Bindings\Generic\PreferencesPageStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\MyTime\PreferencesPageStepDefinitions.cs" />
     <Compile Include="Data\Setups\Specific\AgentWithoutExtendedPreferencesAccess.cs" />
     <Compile Include="Data\Setups\Specific\StockholmTimeZone.cs" />
     <Compile Include="Pages\Common\ComboBox.cs" />
@@ -403,11 +414,6 @@
     <Compile Include="Core\Extensions\LogExtensions.cs" />
     <Compile Include="Data\Setups\Specific\Agent.cs" />
     <Compile Include="Data\Setups\Specific\AgentWithoutStudentAvailabilityAccess.cs" />
-    <Compile Include="ApplicationStartRecovery.feature.cs">
-      <DependentUpon>ApplicationStartRecovery.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <Compile Include="Data\TestData.cs" />
     <Compile Include="Data\Setups\Specific\AnotherStandardPreference.cs" />
     <Compile Include="Data\Setups\Specific\BasePreference.cs" />
@@ -510,7 +516,7 @@
       <DependentUpon>TextRequestFromSchedule.feature</DependentUpon>
     </Compile>
     <Compile Include="TextRequestStepDefinitions.cs" />
-    <Compile Include="Bindings\Generic\EditRequestPageStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\MyTime\EditRequestPageStepDefinitions.cs" />
     <Compile Include="WeekSchedule.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -534,13 +540,17 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="AdminWeb\AdminWebLogOn.feature">
+    <None Include="Anywhere\AgentSchedule.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>AdminWebLogOn.feature.cs</LastGenOutput>
+      <LastGenOutput>AgentSchedule.feature.cs</LastGenOutput>
     </None>
-    <None Include="BrowserNotifications.feature">
+    <None Include="Anywhere\Absence.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>BrowserNotifications.feature.cs</LastGenOutput>
+      <LastGenOutput>Absence.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Anywhere\Schedule.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>Schedule.feature.cs</LastGenOutput>
     </None>
     <None Include="StudentAvailabilityMultidays.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
@@ -573,10 +583,6 @@
       <LastGenOutput>AbsenceRequestFromSchedule.feature.cs</LastGenOutput>
     </None>
     <None Include="App.config" />
-    <None Include="ApplicationStartRecovery.feature">
-      <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>ApplicationStartRecovery.feature.cs</LastGenOutput>
-    </None>
     <None Include="PreferencesFollowUp.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>PreferencesFollowUp.feature.cs</LastGenOutput>

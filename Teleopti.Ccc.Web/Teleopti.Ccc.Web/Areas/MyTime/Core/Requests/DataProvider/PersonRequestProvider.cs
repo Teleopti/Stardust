@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 
 		public IEnumerable<IPersonRequest> RetrieveRequests(Paging paging)
 		{
-			return _repository.FindAllRequestsForAgent(_loggedOnUser.CurrentUser(), paging);
+			return _repository.FindTextAndAbsenceRequestsForAgent(_loggedOnUser.CurrentUser(), paging);
 		}
 
 		public IEnumerable<IPersonRequest> RetrieveRequests(DateOnlyPeriod period)

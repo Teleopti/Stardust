@@ -154,6 +154,11 @@
 	font-size: 115%;
 }
 
+.request-detail-title {
+	font-weight: bold;
+	font-size: 115%;
+}
+
 select.absence-input 
 {
 	width: 8em;

@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Extensions
 
 		public static bool IsDisplayed(this Element element)
 		{
-			if (string.Equals(element.Style.Display, "none"))
+			if (!element.Exists || string.Equals(element.Style.Display, "none"))
 			{
 				return false;
 			}

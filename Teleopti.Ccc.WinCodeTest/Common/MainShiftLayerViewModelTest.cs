@@ -1,6 +1,4 @@
-﻿using System;
-using NUnit.Framework;
-using Rhino.Mocks;
+﻿using NUnit.Framework;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
 
@@ -15,7 +13,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             get { return UserTexts.Resources.Activity; }
         }
 
-        protected override LayerViewModel CreateTestInstance(ILayer<IPayload> layer)
+        protected override LayerViewModel CreateTestInstance(ILayer layer)
         {
             return new MainShiftLayerViewModel(layer, null);
         }

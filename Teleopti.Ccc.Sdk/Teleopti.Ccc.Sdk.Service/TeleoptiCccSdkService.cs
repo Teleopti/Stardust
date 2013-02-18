@@ -327,8 +327,9 @@ namespace Teleopti.Ccc.Sdk.WcfService
 		/// <returns>A collection of <see cref="PayrollFormatDto"/>.</returns>
         public ICollection<PayrollFormatDto> GetPayrollFormats()
 		{
+			var dataSource = ((TeleoptiIdentity) TeleoptiPrincipal.Current.Identity).DataSource.DataSourceName;
             var formatter = new PayrollFormatHandler(Path.GetFullPath(AppDomain.CurrentDomain.BaseDirectory));
-		    return formatter.Load();
+		    return formatter.Load(dataSource);
 		}
 
         //Added this for testing and separation of old stuff, dont know if the name 
@@ -831,7 +832,6 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			return AdherenceReportSetting.MapToMatrix(adherenceReportSetting.CalculationMethod);
 		}
 
-
 		[SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.Convert.ToInt32(System.String)")]
 		public AdherenceDto GetAdherenceData(DateTime dateTime, string timeZoneId, PersonDto personDto,
 										PersonDto agentPersonDto, int languageId)
@@ -857,8 +857,15 @@ namespace Teleopti.Ccc.Sdk.WcfService
 				int startMinutes = Convert.ToInt32(temp.Substring(3, 2));
 				int endHour = Convert.ToInt32(temp.Substring(6, 2));
 				int endMinutes = Convert.ToInt32(temp.Substring(9, 2));
-				TimeSpan startTime = new TimeSpan(0, startHour, startMinutes, 0);
-				TimeSpan endTime = new TimeSpan(0, endHour, endMinutes, 0);
+				DateTime calendarDateTime = Convert.ToDateTime(data[0].ToString());
+				DateTime shiftBelongsToDateTime = Convert.ToDateTime(data[29].ToString());
+				int day = 0;
+				
+				if (calendarDateTime != shiftBelongsToDateTime)
+					day = 1;
+				TimeSpan startTime = new TimeSpan(day, startHour, startMinutes, 0);
+				TimeSpan endTime = new TimeSpan(day, endHour, endMinutes, 0);
+				
 				decimal deviation;
 				decimal dayAdherence;
 				decimal readyTime;
@@ -879,7 +886,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 					adherence = 0;
 				else
 					adherence = (decimal)data[12];
-				AdherenceDataDto adherenceDataDto = new AdherenceDataDto(startTime.Ticks, endTime.Ticks, readyTime, deviation, adherence);
+				AdherenceDataDto adherenceDataDto = new AdherenceDataDto(startTime.Ticks, endTime.Ticks, readyTime, deviation, adherence, calendarDateTime, shiftBelongsToDateTime);
 				adherenceDataDto.DayAdherence = dayAdherence;
 				adherenceDto.AdherenceDataDtos.Add(adherenceDataDto);
 			}

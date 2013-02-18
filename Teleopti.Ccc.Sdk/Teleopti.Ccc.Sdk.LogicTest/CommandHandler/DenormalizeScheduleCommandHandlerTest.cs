@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             using (_mock.Record())
             {
                 Expect.Call(_busSender.EnsureBus()).Return(true);
-                Expect.Call(() => _busSender.NotifyServiceBus(new DenormalizeScheduleProjection())).IgnoreArguments();
+                Expect.Call(() => _busSender.NotifyServiceBus(new ScheduleChanged())).IgnoreArguments();
             }
             using (_mock.Playback())
             {
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             using (_mock.Record())
             {
                 Expect.Call(_busSender.EnsureBus()).Return(false);
-                Expect.Call(() => _busSender.NotifyServiceBus(new DenormalizeScheduleProjection())).IgnoreArguments();
+                Expect.Call(() => _busSender.NotifyServiceBus(new ScheduleChanged())).IgnoreArguments();
             }
             using (_mock.Playback())
             {

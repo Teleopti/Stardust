@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
             if (e.Message.DomainUpdateType == DomainUpdateType.Update ||
                 e.Message.DomainUpdateType == DomainUpdateType.Delete)
             {
-                IRtaStateGroup stateGroup = _rtaStateGroups.FirstOrDefault(s => s.Id == e.Message.DomainObjectId);
+				IRtaStateGroup stateGroup = _rtaStateGroups.FirstOrDefault(s => s != null && s.Id == e.Message.DomainObjectId);
                 if (stateGroup != null)
                 {
                     _rtaStateGroups.Remove(stateGroup);

@@ -8,11 +8,17 @@ namespace Teleopti.Ccc.Sdk.SimpleSample.Repositories
 {
     public class ContractRepository
     {
-        private Dictionary<Guid, ContractDto> _contractDictionary;
+    	private readonly ITeleoptiOrganizationService _teleoptiOrganizationService;
+    	private Dictionary<Guid, ContractDto> _contractDictionary;
 
-        public void Initialize(ITeleoptiOrganizationService teleoptiOrganizationService)
+    	public ContractRepository(ITeleoptiOrganizationService teleoptiOrganizationService)
+    	{
+    		_teleoptiOrganizationService = teleoptiOrganizationService;
+    	}
+
+    	public void Initialize()
         {
-            var contracts = teleoptiOrganizationService.GetContracts(new LoadOptionDto {LoadDeleted = true});
+            var contracts = _teleoptiOrganizationService.GetContracts(new LoadOptionDto {LoadDeleted = true});
             _contractDictionary = contracts.ToDictionary(k => k.Id.GetValueOrDefault(), v => v);
         }
 

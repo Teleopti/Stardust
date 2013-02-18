@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		public List RequestsList { get; set; }
 
 		private Constraint RequestConstraint = Find.BySelector(".request-item");
-		private DivCollection RequestListItems { get { return Document.Divs.Filter(RequestConstraint); } }
+		public DivCollection RequestListItems { get { return Document.Divs.Filter(RequestConstraint); } }
 		public IEnumerable<Div> Requests { get { return RequestListItems; } }
 		public Div FirstRequest { get { return Document.Div(RequestConstraint).EventualGet(); } }
 		public Div LastRequest { get { return RequestListItems.Last(); } }
@@ -63,21 +63,40 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		[FindBy(Id = "Request-detail-subject-input")]
 		public TextField RequestDetailSubjectInput { get; set; }
+
+		[FindBy(Id = "Approve-shift-trade")]
+		public Button ApproveShiftTradeButton { get; set; }
+
+		[FindBy(Id = "Deny-shift-trade")]
+		public Button DenyShiftTradeButton { get; set; }
+		
+		[FindBy(Id = "I-am-a-shifttrade")]
+		public Div IamAShiftTrade { get; set; }
+
+		[FindBy(Class = "request-detail-title")]
+		public Div RequestDetailTitle { get; set; }
+		
 		[FindBy(Id = "Request-detail-fromDate-input")]
 		public TextField RequestDetailFromDateTextField { get; set; }
+		
 		[FindBy(Id = "Request-detail-fromTime-input-input")]
 		public TextField RequestDetailFromTimeTextField { get; set; }
+		
 		[FindBy(Id = "Request-detail-toDate-input")]
 		public TextField RequestDetailToDateTextField { get; set; }
+		
 		[FindBy(Id = "Request-detail-toTime-input-input")]
 		public TextField RequestDetailToTimeTextField { get; set; }
+		
 		[FindBy(Id = "Request-detail-message-input")]
 		public TextField RequestDetailMessageTextField { get; set; }
+		
 		[FindBy(Id = "Request-detail-error")]
 		public Div ValidationErrorText { get; set; }
 
 		[FindBy(Id = "Request-detail-ok-button")]
 		public Button OkButton { get; set; }
+
 		[FindBy(Id = "Request-detail-cancel-button")]
 		public Element CancelButton { get; set; }
 
@@ -89,5 +108,32 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		[FindBy(Class = "arrow-down")]
 		public Div MoreToLoadArrow { get; set; }
+
+		[FindBy(Id = "Requests-no-requests-found")]
+		public Div NoRequestsFound { get; set; }
+		
+		[FindBy(Id = "Request-add-shift-trade-button")]
+		public Button ShiftTradeRequestsButton { get; set; }
+
+		[FindBy(Id = "Request-add-shift-trade-missing-wcs-message")]
+		public Div AddShiftTradeMissingWorkflowControlsSetMessage { get; set; }
+
+		[FindBy(Id = "Request-add-shift-trade-no-possible-trades")]
+		public Div AddShiftTradeNoPossibleShiftTradesMessage { get; set; }
+
+		public SpanCollection MyScheduleLayers
+		{
+			get { return Document.Div(QuicklyFind.ByClass("shift-trade-my-schedule")).Spans.Filter(QuicklyFind.ByClass("shift-trade-layer")); }
+		}
+
+		public TextField AddShiftTradeDatePicker
+		{
+			get { return Document.TextField(QuicklyFind.ByClass("shift-trade-add-datepicker")); }
+		}
+
+		public SpanCollection AddShiftTradeTimeLineItems
+		{
+			get { return Document.Div(QuicklyFind.ByClass("shift-trade-timeline")).Spans.Filter(QuicklyFind.ByClass("shift-trade-timeline-line")); }
+		}
 	}
 }

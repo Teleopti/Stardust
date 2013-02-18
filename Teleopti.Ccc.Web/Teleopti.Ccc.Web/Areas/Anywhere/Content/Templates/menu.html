@@ -1,0 +1,29 @@
+
+<nav class="navbar navbar-inverse navbar-static-top">
+	<div class="navbar-inner">
+		<div class="container">
+			<ul class="nav">  
+				<li class="dropdown">  
+					<a href="#"  
+					   class="dropdown-toggle nowrap brand"  
+					   data-toggle="dropdown">Teleopti <b class="caret"></b>  
+					</a>  
+					<ul class="dropdown-menu">
+						<li><a href="#" tabindex="-1"><span data-bind="text: Translations.Home"></span></a></li>
+						<li class="divider"></li>
+						<li id="link-mytime" data-bind="visible: MyTimeVisible"><a href="mytime">MyTime</a></li>
+						<li id="link-mobilereports" data-bind="visible: MobileReportsVisible"><a href="mobilereports" tabindex="-1">Mobile Reports</a></li>
+						<li class="divider"></li>
+						<li><a href="authentication/signout" tabindex="-1"><i class="icon-eject"></i> <span data-bind="text: Translations.LogOut"></span></a></li>  
+					</ul>
+				</li>  
+			</ul>
+			<ul class="nav">
+				<li class="active"><a href="#">Schedules</a></li>
+			</ul>
+			<ul class="nav pull-right">
+				<li><a href="#settings" id="username"></a></li>
+			</ul>
+		</div>
+	</div>
+</nav>

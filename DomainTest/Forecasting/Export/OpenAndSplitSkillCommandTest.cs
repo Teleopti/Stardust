@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export
 		private ISkill targetSkill;
 		private IOpenAndSplitSkillCommand target;
 		private MockRepository mocks;
-		private IScenarioProvider scenarioProvider;
+		private IScenarioRepository scenarioRepository;
 		private ISkillDayRepository skillDayRepository;
 		private WorkloadDayHelper workloadDayHelper;
 
@@ -30,10 +30,10 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export
 			targetSkill = SkillFactory.CreateSkillWithWorkloadAndSources();
 
 			skillDayRepository = mocks.StrictMock<ISkillDayRepository>();
-			scenarioProvider = mocks.DynamicMock<IScenarioProvider>();
+			scenarioRepository = mocks.DynamicMock<IScenarioRepository>();
 			workloadDayHelper = new WorkloadDayHelper();
 
-			target = new OpenAndSplitSkillCommand(scenarioProvider, skillDayRepository, workloadDayHelper);
+			target = new OpenAndSplitSkillCommand(scenarioRepository, skillDayRepository, workloadDayHelper);
 		}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Export
 
             using (mocks.Record())
             {
-                Expect.Call(scenarioProvider.DefaultScenario(secondBusinessUnit)).Return(targetScenario);
+                Expect.Call(scenarioRepository.LoadDefaultScenario(secondBusinessUnit)).Return(targetScenario);
                 Expect.Call(skillDayRepository.FindRange(period, targetSkill, targetScenario)).Return(new[] { skillDay });
                 Expect.Call(skillDayRepository.GetAllSkillDays(period, new[] { skillDay }, targetSkill, targetScenario, true)).
                     Return(new[] { skillDay });

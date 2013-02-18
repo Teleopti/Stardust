@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
 using System.Windows.Data;
 
 namespace Teleopti.Ccc.WinCode.Converters
@@ -12,14 +9,16 @@ namespace Teleopti.Ccc.WinCode.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is TimeSpan) return ((TimeSpan) value).TotalMinutes;
-            else throw new ArgumentException("Argument must be TimeSpan");
+            if (value is TimeSpan) 
+					return ((TimeSpan) value).TotalMinutes;
+            throw new ArgumentException("Argument must be TimeSpan");
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is double) return TimeSpan.FromMinutes((double) value);
-            else throw new ArgumentException("Argument must be double");
+            if (value is double) 
+					return TimeSpan.FromMinutes((double) value);
+            throw new ArgumentException("Argument must be double");
         }
     }
 }

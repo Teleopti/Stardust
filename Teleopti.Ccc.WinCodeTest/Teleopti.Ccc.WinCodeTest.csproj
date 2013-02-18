@@ -106,10 +106,10 @@
     <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.0\lib\net35-full\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="MbCache">
+    <Reference Include="MbCache, Version=2.1.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
       <HintPath>..\packages\MbCache.2.1\lib\net40\MbCache.dll</HintPath>
     </Reference>
-    <Reference Include="MbCache.ProxyImpl.LinFu">
+    <Reference Include="MbCache.ProxyImpl.LinFu, Version=2.1.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
       <HintPath>..\packages\MbCache.2.1\lib\net40\MbCache.ProxyImpl.LinFu.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.Composite, Version=2.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
@@ -146,34 +146,36 @@
       <HintPath>..\packages\Syncfusion.Pdf.10.2.80\lib\4.0\Syncfusion.Compression.Base.dll</HintPath>
     </Reference>
     <Reference Include="Syncfusion.Core, Version=10.204.0.75, Culture=neutral, PublicKeyToken=632609b4d040f6b4, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Core.10.2.80\lib\4.0\Syncfusion.Core.dll</HintPath>
+      <Private>True</Private>
+      <HintPath>..\packages\Syncfusion.Core.10.2.81\lib\4.0\Syncfusion.Core.dll</HintPath>
     </Reference>
     <Reference Include="Syncfusion.Grid.Base, Version=10.204.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
       <Private>True</Private>
-      <HintPath>..\packages\Syncfusion.Grid.Win.10.2.80\lib\4.0\Syncfusion.Grid.Base.dll</HintPath>
+      <HintPath>..\packages\Syncfusion.Grid.Win.10.2.81\lib\4.0\Syncfusion.Grid.Base.dll</HintPath>
     </Reference>
     <Reference Include="Syncfusion.Grid.Windows, Version=10.204.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
       <Private>True</Private>
-      <HintPath>..\packages\Syncfusion.Grid.Win.10.2.80\lib\4.0\Syncfusion.Grid.Windows.dll</HintPath>
+      <HintPath>..\packages\Syncfusion.Grid.Win.10.2.81\lib\4.0\Syncfusion.Grid.Windows.dll</HintPath>
     </Reference>
     <Reference Include="Syncfusion.Pdf.Base, Version=10.204.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\packages\Syncfusion.Pdf.10.2.80\lib\4.0\Syncfusion.Pdf.Base.dll</HintPath>
     </Reference>
     <Reference Include="Syncfusion.Shared.Base, Version=10.204.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
-      <HintPath>..\packages\Syncfusion.Shared.Base.10.2.80\lib\4.0\Syncfusion.Shared.Base.dll</HintPath>
+      <Private>True</Private>
+      <HintPath>..\packages\Syncfusion.Shared.Base.10.2.81\lib\4.0\Syncfusion.Shared.Base.dll</HintPath>
     </Reference>
     <Reference Include="Syncfusion.Shared.Windows, Version=10.204.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
       <Private>True</Private>
-      <HintPath>..\packages\Syncfusion.Shared.Win.10.2.80\lib\4.0\Syncfusion.Shared.Windows.dll</HintPath>
+      <HintPath>..\packages\Syncfusion.Shared.Win.10.2.81\lib\4.0\Syncfusion.Shared.Windows.dll</HintPath>
     </Reference>
     <Reference Include="Syncfusion.Tools.Base, Version=10.204.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
       <Private>True</Private>
-      <HintPath>..\packages\Syncfusion.Tools.Win.10.2.80\lib\4.0\Syncfusion.Tools.Base.dll</HintPath>
+      <HintPath>..\packages\Syncfusion.Tools.Win.10.2.81\lib\4.0\Syncfusion.Tools.Base.dll</HintPath>
     </Reference>
     <Reference Include="Syncfusion.Tools.Windows, Version=10.204.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
       <Private>True</Private>
-      <HintPath>..\packages\Syncfusion.Tools.Win.10.2.80\lib\4.0\Syncfusion.Tools.Windows.dll</HintPath>
+      <HintPath>..\packages\Syncfusion.Tools.Win.10.2.81\lib\4.0\Syncfusion.Tools.Windows.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -631,6 +633,7 @@
     <Compile Include="Scheduler\Restriction\WorkTimeLimitationAdapterTest.cs" />
     <Compile Include="Scheduler\ScheduleNavigatorPresenterTest.cs" />
     <Compile Include="Scheduler\SchedulerStateLoaderTest.cs" />
+    <Compile Include="Scheduler\ScheduleSortingCommands\SchedulerSortCommandMapperTest.cs" />
     <Compile Include="Scheduler\ScheduleSortingCommands\ScheduleSortingCommandsTest.cs" />
     <Compile Include="Scheduler\SetTagCommandTest.cs" />
     <Compile Include="Scheduler\SkillMonthGridControlPresenterTest.cs" />
@@ -887,7 +890,9 @@
       <Link>Teleopti.Ccc.snk</Link>
     </None>
     <None Include="Migrated rules for Teleopti.Ccc.WinCodeTest.ruleset" />
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="Forecasting\ImportForecast\InvalidFile.txt">

@@ -28,8 +28,8 @@ namespace Teleopti.Ccc.DomainTest.Security.LicenseOptions
             IList<IApplicationFunction> resultList = _target.EnabledApplicationFunctions;
 			var functions = resultList.Select(r => r.FunctionPath);
 
-			functions.Should().Contain(DefinedRaptorApplicationFunctionPaths.SchedulesAdminWeb);
-        	functions.Should().Contain(DefinedRaptorApplicationFunctionPaths.AdminWeb);
+			functions.Should().Contain(DefinedRaptorApplicationFunctionPaths.SchedulesAnywhere);
+        	functions.Should().Contain(DefinedRaptorApplicationFunctionPaths.Anywhere);
         }
     }
 }

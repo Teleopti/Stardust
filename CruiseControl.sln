@@ -125,7 +125,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Sdk.ServiceBus
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Sdk.ServiceBus", "Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBus\Teleopti.Ccc.Sdk.ServiceBus.csproj", "{9DF2D12C-4895-42D9-A365-6B9F97E787B5}"
 	ProjectSection(ProjectDependencies) = postProject
-		{BE2EB225-3FAA-460A-B616-4A67CCF05EFD} = {BE2EB225-3FAA-460A-B616-4A67CCF05EFD}
+		{E65D42D5-246C-45A3-B62E-442203E2A84D} = {E65D42D5-246C-45A3-B62E-442203E2A84D}
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.DayOffPlanningTest", "Teleopti.Ccc.DayOffPlanningTest\Teleopti.Ccc.DayOffPlanningTest.csproj", "{8CA6DF87-B017-4180-A8E4-A80C16D954F1}"
@@ -191,6 +191,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Startpage", "Teleopti.Ccc.Startpage\Teleopti.Ccc.Startpage.csproj", "{BF7E4697-98E5-47B1-8C2E-DA24E308453F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost", "Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost\Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost.csproj", "{3266BFDE-8B39-458E-B0B7-063434806C96}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Web.Broker.Backplane", "Teleopti.Ccc.Web.Broker.Backplane\Teleopti.Ccc.Web.Broker.Backplane.csproj", "{31C00166-E856-49D3-A664-424224D90C2C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1266,6 +1268,18 @@ Global
 		{3266BFDE-8B39-458E-B0B7-063434806C96}.Release|Mixed Platforms.Build.0 = Release|x86
 		{3266BFDE-8B39-458E-B0B7-063434806C96}.Release|x86.ActiveCfg = Release|x86
 		{3266BFDE-8B39-458E-B0B7-063434806C96}.Release|x86.Build.0 = Release|x86
+		{31C00166-E856-49D3-A664-424224D90C2C}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{31C00166-E856-49D3-A664-424224D90C2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{31C00166-E856-49D3-A664-424224D90C2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{31C00166-E856-49D3-A664-424224D90C2C}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{31C00166-E856-49D3-A664-424224D90C2C}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{31C00166-E856-49D3-A664-424224D90C2C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{31C00166-E856-49D3-A664-424224D90C2C}.Release|.NET.ActiveCfg = Release|Any CPU
+		{31C00166-E856-49D3-A664-424224D90C2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{31C00166-E856-49D3-A664-424224D90C2C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{31C00166-E856-49D3-A664-424224D90C2C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{31C00166-E856-49D3-A664-424224D90C2C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{31C00166-E856-49D3-A664-424224D90C2C}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

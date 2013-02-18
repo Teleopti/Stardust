@@ -14,7 +14,7 @@ namespace Teleopti.Messaging.Client
 			{
 				return new SignalSender(connectionString);
 			}
-			return new MessageSender(connectionString);
+			return null;
 		}
 	}
 }

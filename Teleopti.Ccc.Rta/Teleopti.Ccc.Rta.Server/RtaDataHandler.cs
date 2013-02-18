@@ -37,6 +37,9 @@ namespace Teleopti.Ccc.Rta.Server
 			_personResolver = personResolver;
 			_stateResolver = stateResolver;
 
+
+			if (_messageSender == null) return;
+
 			try
 			{
 				_messageSender.InstantiateBrokerService();

@@ -9,12 +9,20 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 	[Binding]
 	public class ShiftStepDefinitions
 	{
-		[Given(@"I have a shift with")]
-		public void GivenIHaveAShiftWith(Table table)
+		[Given(@"(.*) have a shift with")]
+		public void GivenIHaveAShiftWith(string userName, Table table)
 		{
 			var schedule = table.CreateInstance<ShiftConfigurable>();
-			UserFactory.User().Setup(schedule);
+			UserFactory.User(userName).Setup(schedule);
 		}
+
+		[Given(@"(.*) have a \(read model\) shift with")]
+		public void GivenThereIsAShiftWith(string userName, Table table)
+		{
+			var shift = table.CreateInstance<ReadModelShiftConfigurable>();
+			UserFactory.User(userName).Setup(shift);
+		}
+
 		[When(@"I am assigned this shift with")]
 		public void WhenIAmAssignedThisShiftWith(Table table)
 		{

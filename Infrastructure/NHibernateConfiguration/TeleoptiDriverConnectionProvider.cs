@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data;
+using System.Data.SqlClient;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using log4net;
 using NHibernate.Connection;
@@ -34,6 +35,7 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
                 catch (Exception e)
                 {
                     log.Warn("Failed to get connection (" + counter + "). Retrying...");
+						  SqlConnection.ClearAllPools();
                     if (counter >= NumberOfRetries)
                         throw new DataSourceException("Failed to get connection (" + counter + ").", e);
                 }

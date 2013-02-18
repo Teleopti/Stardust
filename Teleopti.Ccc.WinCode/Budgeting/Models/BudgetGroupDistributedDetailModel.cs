@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
 				budgetDay.PropertyChanged += budgetDay_PropertyChanged;
             }
             _count = _budgetDays.Count();
-            _openDaysCount = _budgetDays.Where(day=>!day.IsClosed).Count();
+            _openDaysCount = _budgetDays.Count(day => !day.IsClosed);
 
             RecalculateAndSetMonthTotal();
         }

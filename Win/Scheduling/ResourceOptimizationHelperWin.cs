@@ -83,20 +83,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 					backgroundWorker.ReportProgress(1);
 				}
 			}
-
-			OnResourcesChanged(dates);
-		}
-
-		/// <summary>
-		/// Raises the ResourcesChanged event.
-		/// </summary>
-		/// <remarks>
-		/// Created by: micke
-		/// Created date: 2008-05-04
-		/// </remarks>
-		public virtual void OnResourcesChanged(IEnumerable<DateOnly> changedDays)
-		{
-			_stateHolder.SchedulingResultState.OnResourcesChanged(changedDays.ToList());
 		}
 	}
 }

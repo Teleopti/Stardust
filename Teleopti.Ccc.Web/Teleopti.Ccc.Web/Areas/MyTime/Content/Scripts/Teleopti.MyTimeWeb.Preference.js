@@ -1,5 +1,5 @@
-﻿/// <reference path="~/Content/Scripts/jquery-1.8.2-vsdoc.js" />
-/// <reference path="~/Content/Scripts/jquery-1.8.2.js" />
+﻿/// <reference path="~/Content/Scripts/jquery-1.8.3-vsdoc.js" />
+/// <reference path="~/Content/Scripts/jquery-1.8.3.js" />
 /// <reference path="~/Content/Scripts/jquery-ui-1.8.16.js" />
 /// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js" />
@@ -214,18 +214,22 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 		var date = portal ? portal.CurrentFixedDate() : null;
 
 		var dayViewModels = {};
-		$('li[data-mytime-date].inperiod').each(function (index, element) {
+		var dayViewModelsInPeriod = {};
+		$('li[data-mytime-date]').each(function (index, element) {
 			var dayViewModel = new Teleopti.MyTimeWeb.Preference.DayViewModel(ajax);
 			dayViewModel.ReadElement(element);
 			dayViewModels[dayViewModel.Date] = dayViewModel;
+			if($(element).hasClass("inperiod")) {
+				dayViewModelsInPeriod[dayViewModel.Date] = dayViewModel;
+			}
 			ko.applyBindings(dayViewModel, element);
 		});
-		var from = $('li[data-mytime-date].inperiod').first().data('mytime-date');
-		var to = $('li[data-mytime-date].inperiod').last().data('mytime-date');
+		var from = $('li[data-mytime-date]').first().data('mytime-date');
+		var to = $('li[data-mytime-date]').last().data('mytime-date');
 
 		preferencesAndScheduleViewModel = new Teleopti.MyTimeWeb.Preference.PreferencesAndSchedulesViewModel(ajax, dayViewModels);
-		mustHaveCountViewModel = new Teleopti.MyTimeWeb.Preference.MustHaveCountViewModel(dayViewModels, $('#Preference-body').data('mytime-maxmusthave'));
-		periodFeedbackViewModel = new Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel(ajax, dayViewModels, date);
+		mustHaveCountViewModel = new Teleopti.MyTimeWeb.Preference.MustHaveCountViewModel(dayViewModelsInPeriod, $('#Preference-body').data('mytime-maxmusthave'));
+		periodFeedbackViewModel = new Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel(ajax, dayViewModelsInPeriod, date);
 
 		var periodFeedbackElement = $('#Preference-period-feedback-view')[0];
 		if (periodFeedbackElement)

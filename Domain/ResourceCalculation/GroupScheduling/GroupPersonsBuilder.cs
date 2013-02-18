@@ -72,16 +72,17 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 					if (guid == null && personGroup.GetType() == typeof(ChildPersonGroup))
 					{
 						var entity = ((ChildPersonGroup)personGroup).Entity;
-						if (entity.Id.HasValue)
+						if (entity != null && entity.Id.HasValue)
 							guid = entity.Id.Value;
 					}
 
 					if (guid == null && personGroup.GetType() == typeof(RootPersonGroup))
 					{
 						var entity = ((RootPersonGroup)personGroup).Entity;
-						if (entity.Id.HasValue)
+						if (entity != null && entity.Id.HasValue)
 							guid = entity.Id.Value;
 					}
+					if (guid == null) guid = Guid.Empty;
 
                     var newGroupPerson = _groupPersonFactory.CreateGroupPerson(personsInGroup, dateOnly, personGroup.Description.Name, guid);
                     if (!newGroupPerson.GroupMembers.IsEmpty())

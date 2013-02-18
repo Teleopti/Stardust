@@ -115,8 +115,11 @@ namespace Teleopti.Ccc.WpfControls
             ILayerViewModel model = DataContext as LayerViewModel;
             if (model != null) 
             {
-                model.UpdatePeriod();
-                if(model.Period.StartDateTime!=_initialPeriod.StartDateTime || model.Period.EndDateTime!=_initialPeriod.EndDateTime)RaiseEvent(new RoutedEventArgs(LayerView.LayerChangedEvent));
+                if(model.Period.StartDateTime!=_initialPeriod.StartDateTime || model.Period.EndDateTime!=_initialPeriod.EndDateTime)
+				{
+					model.UpdatePeriod();
+                	RaiseEvent(new RoutedEventArgs(LayerChangedEvent));
+                }
             }
 
         }

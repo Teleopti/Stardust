@@ -5,7 +5,7 @@ using System.Net;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
-using SignalR.Client.Hubs;
+using Microsoft.AspNet.SignalR.Client.Hubs;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Core;
 using Teleopti.Interfaces.MessageBroker.Events;
@@ -379,7 +379,7 @@ namespace Teleopti.Messaging.SignalR
 				throw new BrokerNotInstantiatedException("The SignalBroker can only be used with a valid Uri!");
 			}
 			var connection = new HubConnection(serverUrl.ToString());
-			var hubProxy = connection.CreateProxy(HubClassName);
+			var hubProxy = connection.CreateHubProxy(HubClassName);
 
 			lock (WrapperLock)
 			{

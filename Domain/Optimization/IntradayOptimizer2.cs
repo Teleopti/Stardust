@@ -85,8 +85,12 @@ namespace Teleopti.Ccc.Domain.Optimization
             ISchedulingOptions schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences);
 			schedulingOptions.UseCustomTargetTime = _workShiftOriginalStateContainer.OriginalWorkTime();
 
-			IMainShift originalShift =
-				_workShiftOriginalStateContainer.OldPeriodDaysState[dateToBeRemoved].AssignmentHighZOrder().MainShift;
+        	var personAssignment = _workShiftOriginalStateContainer.OldPeriodDaysState[dateToBeRemoved].AssignmentHighZOrder();
+			if (personAssignment == null) return false;
+
+        	var originalShift = personAssignment.MainShift;
+			if (originalShift == null) return false;
+
 			_mainShiftOptimizeActivitySpecificationSetter.SetSpecification(schedulingOptions, _optimizerPreferences, originalShift, dateToBeRemoved);
 
             _rollbackService.ClearModificationCollection();
@@ -103,7 +107,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                                   PrevoiousSchedule = (IScheduleDay) scheduleDay.Clone()
                               };
             
-            _deleteAndResourceCalculateService.DeleteWithResourceCalculation(listToDelete, _rollbackService);
+            _deleteAndResourceCalculateService.DeleteWithResourceCalculation(listToDelete, _rollbackService, schedulingOptions.ConsiderShortBreaks);
 
             changed.CurrentSchedule = _matrixConverter.SourceMatrix.GetScheduleDayByKey(dateToBeRemoved).DaySchedulePart();
             

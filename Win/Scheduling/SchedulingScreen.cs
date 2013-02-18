@@ -264,7 +264,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 Icon = Properties.Resources.scheduler;
 
             // this timer is just for fixing bug 17948 regarding dateNavigationControl
-            _tmpTimer.Interval = 100;
+            _tmpTimer.Interval = 50;
             _tmpTimer.Enabled = false;
             _tmpTimer.Tick += _tmpTimer_Tick;
         }
@@ -272,6 +272,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         private void _tmpTimer_Tick(object sender, EventArgs e)
         {
             _tmpTimer.Enabled = false;
+			updateShiftEditor();
             _grid.Focus();
         }
 
@@ -287,6 +288,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             }
 
             _tmpTimer.Enabled = true;
+			
         }
 
         private void formatRibbonControls()
@@ -974,7 +976,6 @@ namespace Teleopti.Ccc.Win.Scheduling
                 {
                     saveAllChartSetting();
                     saveQuickAccessState();
-
                     _currentSchedulingScreenSettings.EditorSnapToResolution = wpfShiftEditor1.Interval;
                     _currentSchedulingScreenSettings.HideEditor = !_showEditor;
                     _currentSchedulingScreenSettings.HideGraph = !_showGraph;
@@ -983,6 +984,13 @@ namespace Teleopti.Ccc.Win.Scheduling
                     _currentSchedulingScreenSettings.DefaultScheduleTag = _defaultScheduleTag.Id;
                 	_currentSchedulingScreenSettings.SkillResultViewSetting = _skillResultViewSetting;
 
+					if(_scheduleView != null)
+					{
+						var mapper = new SchedulerSortCommandMapper(SchedulerState, SchedulerSortCommandSetting.NoSortCommand);
+						var sortSetting = mapper.GetSettingFromCommand(_scheduleView.Presenter.SortCommand);
+						_currentSchedulingScreenSettings.SortCommandSetting = sortSetting;
+					}
+					
                     using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
                     {
                         var settingDataRepository = new PersonalSettingDataRepository(uow);
@@ -2632,7 +2640,11 @@ namespace Teleopti.Ccc.Win.Scheduling
                 if (scheduleDay != null)
                 {
                     schedulerSplitters1.MultipleHostControl3.UpdateItems();
-                    _scheduleView.SetSelectedDateLocal(scheduleDay.DateOnlyAsPeriod.DateOnly);
+                	if (!(_scheduleView is DayViewNew))
+                	{
+						_scheduleView.SetSelectedDateLocal(scheduleDay.DateOnlyAsPeriod.DateOnly);
+                	}
+                    
                 }
             }
         }
@@ -2724,7 +2736,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             _dayOffTemplate = displayList[0];
             wpfShiftEditor1.Interval = _currentSchedulingScreenSettings.EditorSnapToResolution;
 
-
             loadAbsencesMenu();
             loadShiftCategoriesMenu();
             loadDayOffMenu();
@@ -2735,7 +2746,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             if (schedulerSplitters1.PinnedPage != null)
                 schedulerSplitters1.TabSkillData.SelectedTab = schedulerSplitters1.PinnedPage;
-
             toolStripStatusLabelStatus.Text = Resources.ReadyThreeDots;
 
             if (PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.RequestScheduler))
@@ -2759,6 +2769,11 @@ namespace Teleopti.Ccc.Win.Scheduling
             _grid.CurrentCell.MoveTo(point.Y, point.X, GridSetCurrentCellOptions.None);
             _grid.Selections.SelectRange(GridRangeInfo.Cell(point.Y, point.X), true);
             _grid.Select();
+        	var schedulerSortCommandSetting = _currentSchedulingScreenSettings.SortCommandSetting;
+        	var sortCommandMapper = new SchedulerSortCommandMapper(SchedulerState, SchedulerSortCommandSetting.NoSortCommand);
+        	var sortCommand = sortCommandMapper.GetCommandFromSetting(schedulerSortCommandSetting);
+			_scheduleView.Sort(sortCommand);
+
             GridHelper.GridlockWriteProtected(_grid, LockManager);
             drawSkillGrid();
             reloadChart();
@@ -2766,6 +2781,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             setupRequestViewButtonStates();
             releaseUserInterface(e.Cancelled);
             ResumeLayout(true);
+
             Cursor = Cursors.Default;
         }
 
@@ -2913,7 +2929,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             }
         }
 
-
         private IList<ITeam> getDistinctTeamList(IMeeting meeting)
         {
             IList<ITeam> teams = new List<ITeam>();
@@ -2947,26 +2962,6 @@ namespace Teleopti.Ccc.Win.Scheduling
                     IMeeting meeting = _schedulerMeetingHelper.MeetingFromList(dest.Person, dest.Period.StartDateTimeLocal(_schedulerState.TimeZoneInfo),dest.PersonMeetingCollection());
                     if (meeting != null)
                         _schedulerMeetingHelper.MeetingRemove(meeting, _scheduleView);
-                }
-            }
-        }
-
-        private void _optimizationHelper_ResourcesChanged(object sender, ResourceChangedEventArgs e)
-        {
-            if (InvokeRequired)
-            {
-                BeginInvoke(new EventHandler<ResourceChangedEventArgs>(_optimizationHelper_ResourcesChanged), sender, e);
-            }
-            else
-            {
-                if (_scheduleCounter >= _optimizerOriginalPreferences.SchedulingOptions.RefreshRate)
-                {
-                    _skillIntradayGridControl.RefreshGrid();
-                    _skillDayGridControl.RefreshGrid(new List<DateOnly>(e.ChangedDays));
-					_skillWeekGridControl.RefreshGrid();
-					_skillMonthGridControl.RefreshGrid();
-					_skillFullPeriodGridControl.RefreshGrid();
-                	refreshChart();
                 }
             }
         }
@@ -3547,7 +3542,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             //No code after next line please.
             RecalculateResources();
 			//afterBackgroundWorkersCompleted(false);
-
         }
 
         private void _backgroundWorkerScheduling_ProgressChanged(object sender, ProgressChangedEventArgs e)
@@ -3744,7 +3738,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			refreshChart();
             statusStrip1.Refresh();
             Application.DoEvents();
-
             _inUpdate = false;
         }
 
@@ -3764,7 +3757,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					_skillMonthGridControl.RefreshGrid();
 					_skillFullPeriodGridControl.RefreshGrid();
 					refreshChart();
-                    _scheduleCounter = 0;
+					_scheduleCounter = 0;
                 }
                 if (!string.IsNullOrEmpty(progress.Message))
                 {
@@ -3777,7 +3770,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 }
             }
             statusStrip1.Refresh();
-            _scheduleCounter++;
+			_scheduleCounter++;
         }
 
         private void releaseUserInterface(bool canceled)
@@ -4039,8 +4032,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             _groupDayOffOptimizerHelper = new GroupDayOffOptimizerHelper(_container);
             _blockOptimizerHelper = new BlockOptimizerHelper(_container, _scheduleOptimizerHelper);
-
-            SchedulerState.SchedulingResultState.ResourcesChanged += _optimizationHelper_ResourcesChanged;
 
             if (!_schedulerState.SchedulingResultState.SkipResourceCalculation)
                 backgroundWorkerLoadData.ReportProgress(1, Resources.CalculatingResourcesDotDotDot);
@@ -4818,6 +4809,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             schedulerSplitters1.SuspendLayout();
             IList<IScheduleDay> scheduleParts = null;
         	IScheduleDay selectedPart = null;
+        	IScheduleSortCommand sortCommand = null;
         	IList<IPerson> selectedPersons = null;
 
             if (_scheduleView != null)
@@ -4825,6 +4817,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             	_grid.ContextMenuStrip = null;
                 scheduleParts = _scheduleView.SelectedSchedules();
             	selectedPersons = new List<IPerson>(_scheduleView.AllSelectedPersons());
+            	sortCommand = _scheduleView.Presenter.SortCommand;
 				selectedPart = _scheduleView.ViewGrid[_scheduleView.ViewGrid.CurrentCell.RowIndex, _scheduleView.ViewGrid.CurrentCell.ColIndex].CellValue as IScheduleDay;
                 _scheduleView.RefreshSelectionInfo -= _scheduleView_RefreshSelectionInfo;
                 _scheduleView.RefreshShiftEditor -= _scheduleView_RefreshShiftEditor;
@@ -4938,7 +4931,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             if (_scheduleView != null)
             {
-
+				if(sortCommand != null) _scheduleView.Presenter.SortCommand = sortCommand;
                 _scheduleView.RefreshSelectionInfo += _scheduleView_RefreshSelectionInfo;
                 _scheduleView.RefreshShiftEditor += _scheduleView_RefreshShiftEditor;
                 _scheduleView.ViewPasteCompleted += _currentView_viewPasteCompleted;
@@ -5834,8 +5827,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             if (SchedulerState != null && SchedulerState.Schedules != null)
                 SchedulerState.Schedules.PartModified -= _schedules_PartModified;
-            if (SchedulerState != null && SchedulerState.SchedulingResultState != null)
-                SchedulerState.SchedulingResultState.ResourcesChanged -= _optimizationHelper_ResourcesChanged;
 
             if (_schedulerMeetingHelper != null)
                 _schedulerMeetingHelper.ModificationOccured -= _schedulerMeetingHelper_ModificationOccured;
@@ -6789,35 +6780,34 @@ namespace Teleopti.Ccc.Win.Scheduling
             drawSkillGrid();
         }
 
-        private void sort(MouseEventArgs e, IScheduleSortCommand command)
-        {
-            if (e.Button != MouseButtons.Left) return;
-            var selectedSchedulePart = _scheduleView.SelectedSchedules().FirstOrDefault();
-            if (selectedSchedulePart == null) return;
-            _scheduleView.Presenter.SortCommand = command;
-            _scheduleView.Presenter.SortCommand.Execute(selectedSchedulePart.DateOnlyAsPeriod.DateOnly);
-            _scheduleView.SetSelectionFromParts(new List<IScheduleDay> {selectedSchedulePart});
-            _scheduleView.ViewGrid.Refresh();
-        }
-
+		//private void sort(IScheduleSortCommand command)
+		//{
+		//    var selectedSchedulePart = _scheduleView.SelectedSchedules().FirstOrDefault();
+		//    if (selectedSchedulePart == null) return;
+		//    _scheduleView.Presenter.SortCommand = command;
+		//    _scheduleView.Presenter.SortCommand.Execute(selectedSchedulePart.DateOnlyAsPeriod.DateOnly);
+		//    _scheduleView.SetSelectionFromParts(new List<IScheduleDay> {selectedSchedulePart});
+		//    _scheduleView.ViewGrid.Refresh();
+		//}
         private void ToolStripMenuItemStartAscMouseUp(object sender, MouseEventArgs e)
         {
-            sort(e, new SortByStartAscendingCommand(SchedulerState));
+			if (e.Button == MouseButtons.Left) _scheduleView.Sort(new SortByStartAscendingCommand(SchedulerState));
         }
 
         private void ToolStripMenuItemStartTimeDescMouseUp(object sender, MouseEventArgs e)
         {
-            sort(e, new SortByStartDescendingCommand(SchedulerState));
+
+			if (e.Button == MouseButtons.Left) _scheduleView.Sort(new SortByStartDescendingCommand(SchedulerState));
         }
 
         private void ToolStripMenuItemEndTimeAscMouseUp(object sender, MouseEventArgs e)
         {
-            sort(e, new SortByEndAscendingCommand(SchedulerState));
+			if (e.Button == MouseButtons.Left) _scheduleView.Sort(new SortByEndAscendingCommand(SchedulerState));
         }
 
         private void ToolStripMenuItemEndTimeDescMouseUp(object sender, MouseEventArgs e)
         {
-            sort(e, new SortByEndDescendingCommand(SchedulerState));
+			if (e.Button == MouseButtons.Left) _scheduleView.Sort(new SortByEndDescendingCommand(SchedulerState));
         }
 
         private void ToolStripMenuItemUnlockSelectionRmMouseUp(object sender, MouseEventArgs e)
@@ -7016,12 +7006,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private void ToolStripMenuItemContractTimeAscMouseUp(object sender, MouseEventArgs e)
         {
-            sort(e, new SortByContractTimeAscendingCommand(SchedulerState));
+			if (e.Button == MouseButtons.Left) _scheduleView.Sort(new SortByContractTimeAscendingCommand(SchedulerState));
         }
 
         private void ToolStripMenuItemContractTimeDescMouseUp(object sender, MouseEventArgs e)
         {
-            sort(e, new SortByContractTimeDescendingCommand(SchedulerState));
+			if (e.Button == MouseButtons.Left) _scheduleView.Sort(new SortByContractTimeDescendingCommand(SchedulerState));
         }
 
         private void ToolStripMenuItemExportToPDFShiftsPerDay_MouseUp(object sender, MouseEventArgs e)
@@ -7034,7 +7024,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			toolStripMenuItemCopy_Click(sender, e);
 		}
-
 		private void toolStripMenuItemRestrictionPaste_Click(object sender, EventArgs e)
 		{
 			((AgentRestrictionsDetailView)_scheduleView).PasteSelectedRestrictions(_undoRedo);

@@ -75,7 +75,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			{
 				foreach (DataRow dataRow in dataSet.Tables[0].Rows)
 				{
-					ITimeZoneDim timeZoneDim = new TimeZoneDim((int)(Int16)dataRow["time_zone_id"],
+					ITimeZoneDim timeZoneDim = new TimeZoneDim((Int16)dataRow["time_zone_id"],
 														(string)dataRow["time_zone_code"],
 														(string)dataRow["time_zone_name"],
 														handleDbNullValueBool(dataRow["default_zone"]),
@@ -150,7 +150,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 						timeZone = value;
 						break;
 					default:
-						_logger.WarnFormat(CultureInfo.InvariantCulture, "Trying to load un unknown configuration key named: '{0}'.", key);
+						_logger.InfoFormat(CultureInfo.InvariantCulture, "Trying to load un unknown configuration key named: '{0}'.", key);
 						break;
 				}
 			}

@@ -158,11 +158,11 @@
     <Compile Include="Common\JobResultTest.cs" />
     <Compile Include="Common\PersonComparerTest.cs" />
     <Compile Include="Common\ScheduleDictionaryLoadOptionsTest.cs" />
+    <Compile Include="Common\TrueFalseRandomizerTest.cs" />
     <Compile Include="Common\VirtualSchedulePeriodFinderTest.cs" />
     <Compile Include="Common\PersonProviderTest.cs" />
     <Compile Include="Common\DateOnlyAsDateTimePeriodTest.cs" />
     <Compile Include="Common\PersonsInOrganizationProviderTest.cs" />
-    <Compile Include="Common\ScenarioProviderTest.cs" />
     <Compile Include="Forecasting\DaylightSavingTimeHelperTest.cs" />
     <Compile Include="Forecasting\Export\ExportForecastDataToFileSerializerTest.cs" />
     <Compile Include="Forecasting\Export\ExportSkillToFileCommandModelTest.cs" />
@@ -249,7 +249,7 @@
     <Compile Include="Optimization\GroupMoveTimeOptimizerServiceTest.cs" />
     <Compile Include="Optimization\GroupMoveTimeOptimizerTest.cs" />
     <Compile Include="Optimization\GroupMoveTimeValidatorRunnerTest.cs" />
-    <Compile Include="Optimization\GroupOptimizationValidatorRunnerTest.cs" />
+    <Compile Include="Optimization\MatrixMultipleShiftsLockerTest.cs" />
     <Compile Include="Optimization\GroupOptimizerFindMatrixesForGroupTest.cs" />
     <Compile Include="Optimization\GroupOptimizerValidateProposedDatesInSameGroupTest.cs" />
     <Compile Include="Optimization\GroupPersonBuilderForOptimizationTest.cs" />
@@ -259,6 +259,7 @@
     <Compile Include="Optimization\MainShiftOptimizeActivitySpecificationSetterTest.cs" />
     <Compile Include="Optimization\NightRestWhiteSpotSolverServiceTest.cs" />
     <Compile Include="Optimization\NightRestWhiteSpotSolverTest.cs" />
+    <Compile Include="Optimization\OptimizationOverLimitByRestrictionDeciderCreatorTest.cs" />
     <Compile Include="Optimization\OptimizationOverLimitByRestrictionDeciderTest.cs" />
     <Compile Include="Optimization\OptimizationPreferencesTest.cs" />
     <Compile Include="Optimization\PeriodValueCalculatorProviderTest.cs" />
@@ -274,6 +275,7 @@
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessAggregatorTest.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessComparerTest.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessContractTimeCheckTest.cs" />
+    <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessContractToleranceCheckerTest.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessPersonsSkillCheckerTest.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessPersonsSwappableCheckerTest.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessReSchedulerTest.cs" />
@@ -340,6 +342,7 @@
     <Compile Include="ResourceCalculation\GroupScheduling\RuleSetBagForGroupPersonTest.cs" />
     <Compile Include="ResourceCalculation\LegalStateCheckerOptionsTest.cs" />
     <Compile Include="ResourceCalculation\OptimizerActivitiesPreferencesTest.cs" />
+    <Compile Include="ResourceCalculation\PersonalShiftMeetingTimeCheckerTest.cs" />
     <Compile Include="ResourceCalculation\PossibleCombinationsOfStartEndCategoryCreatorTest.cs" />
     <Compile Include="ResourceCalculation\PossibleCombinationsOfStartEndCategoryRunnerTest.cs" />
     <Compile Include="ResourceCalculation\ResourceCalculateDaysDeciderTest.cs" />
@@ -758,6 +761,8 @@
     <Compile Include="Security\Authentication\DataSourceContainerLogOnTest.cs" />
     <Compile Include="Security\Authentication\EnvironmentWindowsUserProviderTest.cs" />
     <Compile Include="Security\Authentication\FindApplicationUserTest.cs" />
+    <Compile Include="Security\Authentication\LoggedOnUserTest.cs" />
+    <Compile Include="Security\Authentication\UserTimeZoneTest.cs" />
     <Compile Include="Security\Authentication\WindowsDataSourceProviderTest.cs" />
     <Compile Include="Security\Authentication\AuthenticationSettingsTest.cs" />
     <Compile Include="Security\AuthorizationData\DefaultAuthorizationSettingsTest.cs" />
@@ -767,7 +772,7 @@
     <Compile Include="Security\InsufficientPrivilegeExceptionTest.cs" />
     <Compile Include="Security\IsPasswordEncryptedSpecificationTest.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccVersion8LicenseOptionTest.cs" />
-    <Compile Include="Security\LicenseOptions\TeleoptiCccAnywhereLicenseOptionTest.cs" />
+    <Compile Include="Security\LicenseOptions\TeleoptiCccMobileReportsLicenseOptionTest.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccMyTimeWebLicenseOptionTest.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccDeveloperLicenseOptionTest.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccPilotCustomersBaseLicenseOptionTest.cs" />
@@ -1048,6 +1053,7 @@
     <Compile Include="WorkflowControl\ShiftTrades\IsShiftTradeRequestNotNullSpecificationTest.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\OpenShiftTradePeriodSpecificationTest.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\ShiftTradeAbsenceSpecificationTest.cs" />
+    <Compile Include="WorkflowControl\ShiftTrades\ShiftTradeAvailableCheckItemTest.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\ShiftTradeLightValidatorTest.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\ShiftTradeMeetingSpecificationTest.cs" />
     <Compile Include="WorkflowControl\ShiftTrades\ShiftTradePersonalActivitySpecificationTest.cs" />

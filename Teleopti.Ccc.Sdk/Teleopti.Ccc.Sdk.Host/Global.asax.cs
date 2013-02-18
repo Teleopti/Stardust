@@ -5,9 +5,9 @@ using System.Web;
 using Autofac;
 using Autofac.Integration.Wcf;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
+using Teleopti.Messaging.SignalR;
 using log4net;
 using log4net.Config;
-using MbCache.Configuration;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.Config;
@@ -24,7 +24,6 @@ using Teleopti.Ccc.Sdk.WcfHost.Ioc;
 using Teleopti.Ccc.Sdk.WcfService;
 using Teleopti.Ccc.Sdk.WcfService.Factory;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Messaging.Client;
 using Teleopti.Messaging.Composites;
 
 namespace Teleopti.Ccc.Sdk.WcfHost
@@ -56,6 +55,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2109:ReviewVisibleEventHandlers")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
         protected void Application_Start(object sender, EventArgs e)
         {
             XmlConfigurator.Configure();
@@ -76,10 +76,10 @@ namespace Teleopti.Ccc.Sdk.WcfHost
                                                 new PersonPeriodChangedMessageSender(busSender,saveToDenormalizationQueue )
                                             },
 													DataSourceConfigurationSetter.ForSdk()),
-        			MessageBrokerImplementation.GetInstance(MessageFilterManager.Instance.FilterDictionary))
+        			new SignalBroker(MessageFilterManager.Instance.FilterDictionary))
         			{MessageBrokerDisabled = messageBrokerDisabled()};
             string sitePath = Global.sitePath();
-            initializeApplication.Start(new SdkState(), sitePath, new LoadPasswordPolicyService(sitePath));
+            initializeApplication.Start(new SdkState(), sitePath, new LoadPasswordPolicyService(sitePath), new ConfigurationManagerWrapper());
             var messageBroker = initializeApplication.MessageBroker;
 
             var messageBrokerEnabled = !messageBrokerDisabled();
@@ -154,10 +154,10 @@ namespace Teleopti.Ccc.Sdk.WcfHost
             builder.RegisterModule<ShiftTradeModule>();
             builder.RegisterModule<CommandHandlerModule>();
             builder.RegisterModule<UpdateScheduleModule>();
+			  builder.RegisterModule<DateAndTimeModule>();
             builder.RegisterType<WebWindowsUserProvider>()
                 .As<IWindowsUserProvider>()
                 .InstancePerDependency();
-        	builder.RegisterType<ScenarioProvider>().As<IScenarioProvider>();
             builder.RegisterType<ScheduleDictionarySaver>().As<IScheduleDictionarySaver>();
 
             registerSdkFactories(builder);

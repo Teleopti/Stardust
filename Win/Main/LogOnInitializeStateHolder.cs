@@ -12,6 +12,7 @@ using System.Xml.Linq;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast;
 using Teleopti.Ccc.Win.Payroll.Forms.PayrollExportPages;
+using Teleopti.Messaging.SignalR;
 using log4net;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Security;
@@ -20,7 +21,6 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.ClientProxies;
 using Teleopti.Ccc.Win.Services;
-using Teleopti.Messaging.Client;
 using Teleopti.Messaging.Composites;
 
 #endregion
@@ -52,7 +52,8 @@ namespace Teleopti.Ccc.Win.Main
             return GetConfigFromFileSystem();
         }
 
-        private static bool GetConfigFromFileSystem()
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
+		private static bool GetConfigFromFileSystem()
         {
             string nhibConfPath;
 
@@ -64,24 +65,21 @@ namespace Teleopti.Ccc.Win.Main
             if (nhibConfPath == null)
                 nhibConfPath = Directory.GetCurrentDirectory();
 
-            bool messageBrokerDisabled = false;
-            if (string.IsNullOrEmpty(ConfigurationManager.AppSettings["MessageBroker"]))
-            {
-                messageBrokerDisabled = true;
-            }
+        	bool messageBrokerDisabled = string.IsNullOrEmpty(ConfigurationManager.AppSettings["MessageBroker"]);
 
-				new InitializeApplication(new DataSourcesFactory(new EnversConfiguration(), new List<IMessageSender>(), DataSourceConfigurationSetter.ForDesktop()),
-				MessageBrokerImplementation.GetInstance(MessageFilterManager.Instance.FilterDictionary))
+        	new InitializeApplication(new DataSourcesFactory(new EnversConfiguration(), new List<IMessageSender>(), DataSourceConfigurationSetter.ForDesktop()),
+				new SignalBroker(MessageFilterManager.Instance.FilterDictionary))
 				{
 					MessageBrokerDisabled = messageBrokerDisabled
-				}.Start(new StateManager(), nhibConfPath, new LoadPasswordPolicyService(nhibConfPath));
+				}.Start(new StateManager(), nhibConfPath, new LoadPasswordPolicyService(nhibConfPath), new ConfigurationManagerWrapper());
             return true;
         }
 
         public static string ErrorMessage = string.Empty;
         public static string WarningMessage = string.Empty;
 
-        private static bool GetConfigFromWebService()
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
+		private static bool GetConfigFromWebService()
         {
             ICollection<string> encryptedNHibConfigs;
             IDictionary<string, string> encryptedAppSettings;
@@ -138,7 +136,7 @@ namespace Teleopti.Ccc.Win.Main
                                                           new PersonChangedMessageSender(sendDenormalizeNotification, saveToDenormalizationQueue ),
                                                           new PersonPeriodChangedMessageSender(sendDenormalizeNotification, saveToDenormalizationQueue )
 												      }, DataSourceConfigurationSetter.ForDesktop()),
-        			MessageBrokerImplementation.GetInstance(MessageFilterManager.Instance.FilterDictionary))
+        			new SignalBroker(MessageFilterManager.Instance.FilterDictionary))
         			{
         				MessageBrokerDisabled = messageBrokerDisabled
         			};

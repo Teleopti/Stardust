@@ -1,8 +1,8 @@
-﻿/// <reference path="~/Scripts/jquery-1.5.1.js" />
-/// <reference path="~/Scripts/jquery-ui-1.8.11.js" />
-/// <reference path="~/Scripts/jquery-1.5.1-vsdoc.js" />
-/// <reference path="~/Scripts/MicrosoftMvcAjax.debug.js" />
-/// <reference path="~/Scripts/date.js" />
+﻿/// <reference path="~/Content/Scripts/jquery-1.8.3.js" />
+/// <reference path="~/Content/jqueryui/jquery-ui-1.9.1.custom.js" />
+/// <reference path="~/Content/Scripts/jquery-1.8.3-vsdoc.js" />
+/// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
+/// <reference path="~/Content/Scripts/date.js" />
 /// <reference path="Teleopti.MyTimeWeb.Common.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Ajax.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Request.js"/>
@@ -15,38 +15,29 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 	function _initToolbarButtons() {
 		$('#Requests-addRequest-button')
 			.click(function () {
+				requestViewModel = new Teleopti.MyTimeWeb.Request.RequestViewModel();
+				requestViewModel.TypeEnum(3);
 				_clearFormData();
 				requestViewModel.TextRequestTabVisible(true);
 				requestViewModel.AbsenceRequestTabVisible(true);
-				requestViewModel.isUpdate(false);
+				requestViewModel.IsUpdate(false);
+				_initEditSection(requestViewModel);
 				_hideEditSection();
 				_showEditSection();
+
 				$('#Text-request-tab').click();
 			})
-			.removeAttr('disabled')
-			;
+			.removeAttr('disabled');
+	}
+
+	function _initTemporary() {
+		_initEditSection(requestViewModel);
+		_initToolbarButtons();
 	}
 
 	function _initEditSection(requestDetailViewModel) {
 		_initControls(requestDetailViewModel);
 		_initLabels();
-	}
-
-	function _clearValidationError() {
-		$('#Request-detail-deny-reason').text('');
-		$('#Request-detail-error').html('');
-	}
-
-	function _selectAbsenceRequestTab() {
-		$('#Absence-type-element').show();
-		$('#Absence-request-tab').addClass("selected-tab");
-		$('#Text-request-tab').removeClass("selected-tab");
-	}
-
-	function _selectTextRequestTab() {
-		$('#Absence-type-element').hide();
-		$('#Text-request-tab').addClass("selected-tab");
-		$('#Absence-request-tab').removeClass("selected-tab");
 	}
 
 	function _initControls(requestDetailViewModel) {
@@ -64,30 +55,14 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 		$("#Request-detail-section .combobox.absence-input").combobox();
 		$("#Absence-type-input").prop('readonly', true);
 
-		$('#Request-detail-ok-button')
+		$('#Request-detail-ok-button').button()
 			.click(function () {
 				$(this).prop('disabled', true);
-				if ($('#Text-request-tab.selected-tab').length > 0) {
+				if ($('#Text-request-tab').hasClass('selected-tab') || requestViewModel.TypeEnum() == 0) {
 					_addRequest("Requests/TextRequest");
-				} else {
+				}
+				else {
 					_addRequest("Requests/AbsenceRequest");
-				}
-			});
-
-		$('#Text-request-tab')
-			.click(function () {
-				_clearValidationError();
-				if (!$('#Text-request-tab').hasClass('selected-tab')) {
-					_selectTextRequestTab();
-					requestViewModel.IsFullDay(false);
-				}
-			});
-		$('#Absence-request-tab')
-			.click(function () {
-				_clearValidationError();
-				if (!$('#Absence-request-tab').hasClass('selected-tab')) {
-					_selectAbsenceRequestTab();
-					requestViewModel.IsFullDay(true);
 				}
 			});
 	}
@@ -123,7 +98,17 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 	}
 
 	function _showRequest(data, position) {
-		requestViewModel.isUpdate(true);
+
+		if (data.TypeEnum == 2) {
+			requestViewModel = new ShiftTradeRequestDetailViewModel();
+			requestViewModel.Initialize(data);
+		}
+		else {
+			requestViewModel = new Teleopti.MyTimeWeb.Request.RequestViewModel();
+			requestViewModel.IsUpdate(true);
+			requestViewModel.TypeEnum(data.TypeEnum);
+		}
+
 		_hideEditSection();
 		_clearFormData();
 		_showRequestTypeTab(data.TypeEnum);
@@ -138,12 +123,12 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 	function _showRequestTypeTab(requestType) {
 		if (requestType == 0) {
 			requestViewModel.TextRequestTabVisible(true);
-			_selectTextRequestTab();
+			requestViewModel._selectTextRequestTab();
 			requestViewModel.AbsenceRequestTabVisible(false);
 		} else if (requestType == 1) {
 			requestViewModel.TextRequestTabVisible(false);
 			requestViewModel.AbsenceRequestTabVisible(true);
-			_selectAbsenceRequestTab();
+			requestViewModel._selectAbsenceRequestTab();
 		}
 	}
 
@@ -254,7 +239,8 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 			;
 		$('#Absence-type').prop('selectedIndex', 0);
 		requestViewModel.IsFullDay(false);
-		_clearValidationError();
+		$('#Request-detail-deny-reason').text('');
+		$('#Request-detail-error').html('');
 		_enableDetailSecion();
 		_enableTimeinput();
 	}
@@ -262,14 +248,14 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 	function _enableTimeinput() {
 		$('#Request-detail-fromTime button, #Request-detail-fromTime-input-input, #Request-detail-toTime button, #Request-detail-toTime-input-input')
 			.removeAttr("disabled");
-		$('#Request-detail-fromTime-input-input').css("color", "black");
-		$('#Request-detail-toTime-input-input').css("color", "black");
+		$('#Request-detail-fromTime-input-input').css("color", "");
+		$('#Request-detail-toTime-input-input').css("color", "");
 	}
 
 	return {
-		Init: function (requestDetailViewModel) {
+		Init: function () {
 			_initToolbarButtons();
-			_initEditSection(requestDetailViewModel);
+			_initEditSection(new Teleopti.MyTimeWeb.Request.RequestViewModel());
 		},
 		HideEditSection: function () {
 			_hideEditSection();
@@ -279,6 +265,9 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 		},
 		ShowRequest: function (data, position) {
 			_showRequest(data, position);
+			_initTemporary();
+			_showRequest(data, position);
+
 		},
 		EnableTimeinput: function () {
 			_enableTimeinput();
@@ -287,16 +276,64 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 
 })(jQuery);
 
-Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel() {
+
+var ShiftTradeRequestDetailViewModel = function () {
 	var self = this;
 
+	self.Id = ko.observable();
+	self.IsUpdate = ko.observable(true);
+	self.TypeEnum = ko.observable(2);
+	self.IsFullDay = ko.observable(true);
+	self.Template = ko.observable("shifttrade-request-detail-template");
+
+	self.ajax = new Teleopti.MyTimeWeb.Ajax();
+
+	self.Approve = function () {
+		self.respondToRequest("Requests/ApproveShiftTrade/" + self.Id());
+	};
+
+	self.Deny = function () {
+		self.respondToRequest("Requests/RejectShiftTrade/" + self.Id());
+	};
+
+	self.respondToRequest = function (url) {
+
+		self.ajax.Ajax({
+			url: url,
+			type: "POST",
+			success: function () {
+				//todo
+			},
+			error: function (error) {
+				//todo
+			}
+		});
+	};
+};
+
+ko.utils.extend(ShiftTradeRequestDetailViewModel.prototype, {
+	Initialize: function (data) {
+
+		var self = this;
+
+		self.Id(data.Id);
+	}
+});
+
+Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel() {
+
+	var self = this;
+	self.Templates = ["text-request-detail-template", "absence-request-detail-template", "shifttrade-request-detail-template"];
 	self.TextRequestTabVisible = ko.observable(true);
 	self.AbsenceRequestTabVisible = ko.observable(true);
 	self.IsFullDay = ko.observable(false);
-	self.isUpdate = ko.observable(true);
-
+	self.IsUpdate = ko.observable(true);
+	self.TypeEnum = ko.observable(0);
 	self.TabSeparatorVisible = ko.computed(function () {
 		return self.TextRequestTabVisible() && self.AbsenceRequestTabVisible();
+	});
+	self.Template = ko.computed(function () {
+		return self.IsUpdate() ? self.Templates[self.TypeEnum()] : "add-new-request-detail-template";
 	});
 
 	ko.computed(function () {
@@ -317,4 +354,39 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel() {
 		$('#Request-detail-fromTime-input-input').css("color", "grey");
 		$('#Request-detail-toTime-input-input').css("color", "grey");
 	}
+
+	self.AddTextRequest = function () {
+		self._clearValidationError();
+		self.TypeEnum(0);
+		if (!$('#Text-request-tab').hasClass('selected-tab')) {
+			self._selectTextRequestTab();
+			self.IsFullDay(false);
+		}
+	};
+
+	self.AddAbsenceRequest = function () {
+		self._clearValidationError();
+		self.TypeEnum(1);
+		if (!$('#Absence-request-tab').hasClass('selected-tab')) {
+			self._selectAbsenceRequestTab();
+			self.IsFullDay(true);
+		}
+	};
+
+	self._clearValidationError = function () {
+		$('#Request-detail-deny-reason').text('');
+		$('#Request-detail-error').html('');
+	};
+
+	self._selectAbsenceRequestTab = function () {
+		$('#Absence-type-element').show();
+		$('#Absence-request-tab').addClass("selected-tab");
+		$('#Text-request-tab').removeClass("selected-tab");
+	};
+
+	self._selectTextRequestTab = function () {
+		$('#Absence-type-element').hide();
+		$('#Text-request-tab').addClass("selected-tab");
+		$('#Absence-request-tab').removeClass("selected-tab");
+	};
 };

@@ -15,9 +15,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		new ScenarioContextLazy<MobileReportsPage>(() => Browser.Current.Page<MobileReportsPage>());
 		public static MobileReportsPage MobileReportsPage { get { return _mobileReportsPage.Value; } }
 
-		private static readonly ScenarioContextLazy<AdminWebPage> _adminWebPage =
-		new ScenarioContextLazy<AdminWebPage>(() => Browser.Current.Page<AdminWebPage>());
-		public static AdminWebPage AdminWebPage { get { return _adminWebPage.Value; } }
+		private static readonly ScenarioContextLazy<AnywherePage> _anywherePage =
+		new ScenarioContextLazy<AnywherePage>(() => Browser.Current.Page<AnywherePage>());
+		public static AnywherePage AnywherePage { get { return _anywherePage.Value; } }
 
 		private static readonly ScenarioContextLazy<MobileGlobalMenuPage> _mobileGlobalMenuPage =
 		new ScenarioContextLazy<MobileGlobalMenuPage>(() => Browser.Current.Page<MobileGlobalMenuPage>());

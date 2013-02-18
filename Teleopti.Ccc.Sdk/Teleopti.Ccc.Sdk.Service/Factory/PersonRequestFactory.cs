@@ -21,17 +21,17 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
         private readonly IPersistPersonRequest _persistPersonRequest;
         private readonly IServiceBusSender _serviceBusSender;
         private readonly IPersonRequestRepository _personRequestRepository;
-        private readonly IScenarioProvider _scenarioProvider;
+        private readonly IScenarioRepository _scenarioRepository;
         private readonly IScheduleRepository _scheduleRepository;
         private readonly IPersonRepository _personRepository;
         private readonly IAssembler<IPersonRequest, PersonRequestDto> _personRequestAssembler;
 
-        public PersonRequestFactory(IPersistPersonRequest persistPersonRequest, IServiceBusSender serviceBusSender, IPersonRequestRepository personRequestRepository, IScenarioProvider scenarioProvider, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IAssembler<IPersonRequest,PersonRequestDto> personRequestAssembler)
+		  public PersonRequestFactory(IPersistPersonRequest persistPersonRequest, IServiceBusSender serviceBusSender, IPersonRequestRepository personRequestRepository, IScenarioRepository scenarioRepository, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IAssembler<IPersonRequest, PersonRequestDto> personRequestAssembler)
         {
             _persistPersonRequest = persistPersonRequest;
             _serviceBusSender = serviceBusSender;
             _personRequestRepository = personRequestRepository;
-            _scenarioProvider = scenarioProvider;
+            _scenarioRepository = scenarioRepository;
             _scheduleRepository = scheduleRepository;
             _personRepository = personRepository;
             _personRequestAssembler = personRequestAssembler;
@@ -204,7 +204,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
         {
             IPersonRequest personRequest = _personRequestAssembler.DtoToDomainEntity(personRequestDto);
             ShiftTradeRequestSetChecksum shiftTradeRequestSetChecksum =
-                new ShiftTradeRequestSetChecksum(_scenarioProvider.DefaultScenario(),
+                new ShiftTradeRequestSetChecksum(_scenarioRepository,
                                                  _scheduleRepository);
             shiftTradeRequestSetChecksum.SetChecksum(personRequest.Request);
             return _personRequestAssembler.DomainEntityToDto(personRequest);
@@ -250,9 +250,8 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
                     IPersonRequest domainPersonRequest;
                     using (new MessageBrokerSendEnabler())
                     {
-                        IScenario scenario = _scenarioProvider.DefaultScenario();
                         ShiftTradeRequestSetChecksum shiftTradeRequestSetChecksum =
-                            new ShiftTradeRequestSetChecksum(scenario, _scheduleRepository);
+									 new ShiftTradeRequestSetChecksum(_scenarioRepository, _scheduleRepository);
 
                         domainPersonRequest =
                             _personRequestRepository.Find(personRequestDto.Id.GetValueOrDefault(Guid.Empty));

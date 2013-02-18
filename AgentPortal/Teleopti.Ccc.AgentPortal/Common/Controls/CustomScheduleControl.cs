@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms;
+using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Schedule;
 using Teleopti.Ccc.AgentPortalCode.Common;
 using Teleopti.Ccc.AgentPortalCode.ScheduleControlDataProvider;
 using System.Globalization;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.AgentPortal.Common.Controls
 {
@@ -155,8 +157,10 @@ namespace Teleopti.Ccc.AgentPortal.Common.Controls
         /// Created by: Sumedah
         /// Created date: 2008-11-20
         /// </remarks>
-        public override ScheduleGrid CreateScheduleGrid(NavigationCalendar calendar, ScheduleControl schedule, DateTime initialDate)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public override ScheduleGrid CreateScheduleGrid(NavigationCalendar calendar, ScheduleControl schedule, DateTime initialDate)
         {
+			calendar.CalenderGrid.QueryCellInfo += CalendarQueryCellInfo;
             CustomScheduleGrid scheduleGrid = new CustomScheduleGrid(calendar, schedule, initialDate);
             scheduleGrid.MouseDown += ScheduleGridMouseDown;
             scheduleGrid.KeyDown += ScheduleGrid_KeyDown;
@@ -167,7 +171,18 @@ namespace Teleopti.Ccc.AgentPortal.Common.Controls
             return scheduleGrid;
         }
 
-        /// <summary>
+	    private static void CalendarQueryCellInfo(object sender, GridQueryCellInfoEventArgs e)
+	    {
+			const int rowsPerCal = 8;
+			int rest = e.RowIndex % rowsPerCal;
+			if ((e.ColIndex > 0) && (rest == 1))
+			{
+				var weekdays = DateHelper.GetDaysOfWeek(CultureInfo.CurrentUICulture);
+				e.Style.CellValue = CultureInfo.CurrentUICulture.DateTimeFormat.GetShortestDayName(weekdays[e.ColIndex - 1])[0];
+			}
+	    }
+
+	    /// <summary>
         /// Raises a ScheduleAppointmentClick event.
         /// </summary>
         /// <param name="e"></param>
@@ -245,7 +260,6 @@ namespace Teleopti.Ccc.AgentPortal.Common.Controls
         internal void SetSevenDayWeek()
         {
             Appearance.WeekHeaderFormat = "MMMM dd";
-            
             DateSelections dates = Calendar.SelectedDates;
             DateTime firstDay = dates[0];
             //if (_previousView == ScheduleViewType.CustomWeek)
@@ -269,7 +283,6 @@ namespace Teleopti.Ccc.AgentPortal.Common.Controls
             {
                 firstDay = firstDay.AddDays(-1);
             }
-
             Calendar.SelectedDates.BeginUpdate();
             Calendar.SelectedDates.Clear();
             Calendar.SelectedDates.AddRange(

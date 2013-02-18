@@ -157,7 +157,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
                 TeleoptiCccPayrollIntegrationEnabled = true;
                 TeleoptiCccFreemiumForecastsEnabled = false;
                 TeleoptiCccMyTimeWebEnabled = true;
-                TeleoptiCccAnywhereEnabled = true;
+                TeleoptiCccMobileReportsEnabled = true;
 				TeleoptiCccSmsLinkEnabled = true;
 				TeleoptiCccVersion8Enabled = true;
             }
@@ -209,7 +209,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             public bool TeleoptiCccPerformanceManagerEnabled { get; private set; }
             public bool TeleoptiCccPayrollIntegrationEnabled { get; private set; }
             public bool TeleoptiCccMyTimeWebEnabled { get; private set; }
-			public bool TeleoptiCccAnywhereEnabled { get; private set; }
+			public bool TeleoptiCccMobileReportsEnabled { get; private set; }
 			public bool TeleoptiCccSmsLinkEnabled { get; private set; }
 			public bool TeleoptiCccVersion8Enabled { get; private set; }
 
@@ -265,7 +265,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
                 TeleoptiCccPerformanceManagerEnabled = false;
                 TeleoptiCccPayrollIntegrationEnabled = false;
                 TeleoptiCccMyTimeWebEnabled = false;
-                TeleoptiCccAnywhereEnabled = false;
+                TeleoptiCccMobileReportsEnabled = false;
 				TeleoptiCccSmsLinkEnabled = false;
 				TeleoptiCccVersion8Enabled = false;
 
@@ -318,7 +318,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             public bool TeleoptiCccRealTimeAdherenceEnabled { get; private set; }
             public bool TeleoptiCccPerformanceManagerEnabled { get; private set; }
             public bool TeleoptiCccPayrollIntegrationEnabled { get; private set; }
-			public bool TeleoptiCccAnywhereEnabled { get; private set; }
+			public bool TeleoptiCccMobileReportsEnabled { get; private set; }
 			public bool TeleoptiCccSmsLinkEnabled { get; private set; }
 			public bool TeleoptiCccVersion8Enabled { get; private set; }
 
@@ -376,7 +376,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
                 TeleoptiCccPerformanceManagerEnabled = false;
                 TeleoptiCccPayrollIntegrationEnabled = false;
                 TeleoptiCccMyTimeWebEnabled = false;
-                TeleoptiCccAnywhereEnabled = false;
+                TeleoptiCccMobileReportsEnabled = false;
             	TeleoptiCccSmsLinkEnabled = false;
             	TeleoptiCccVersion8Enabled = false;
 
@@ -429,7 +429,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Licensing
             public bool TeleoptiCccRealTimeAdherenceEnabled { get; private set; }
             public bool TeleoptiCccPerformanceManagerEnabled { get; private set; }
             public bool TeleoptiCccPayrollIntegrationEnabled { get; private set; }
-			public bool TeleoptiCccAnywhereEnabled { get; private set; }
+			public bool TeleoptiCccMobileReportsEnabled { get; private set; }
 			public bool TeleoptiCccSmsLinkEnabled { get; private set; }
 			public bool TeleoptiCccVersion8Enabled { get; private set; }
 

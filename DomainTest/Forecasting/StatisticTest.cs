@@ -179,8 +179,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             ISkillStaffPeriod skillStaffPeriod1 = mocks.StrictMock<ISkillStaffPeriod>();
             ISkillStaffPeriod skillStaffPeriod2 = mocks.StrictMock<ISkillStaffPeriod>();
 
-            Expect.Call(skillStaffPeriod1.Period).Return(period1).Repeat.AtLeastOnce();
-            Expect.Call(skillStaffPeriod2.Period).Return(period2).Repeat.AtLeastOnce();
+            Expect.Call(((IPeriodized)skillStaffPeriod1).Period).Return(period1).Repeat.AtLeastOnce();
+            Expect.Call(((IPeriodized)skillStaffPeriod2).Period).Return(period2).Repeat.AtLeastOnce();
 
             mocks.ReplayAll();
 

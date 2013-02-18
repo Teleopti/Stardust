@@ -15,6 +15,8 @@ SET IIS5=5
 SET IIS7PoolUser40=IIS APPPOOL\Teleopti ASP.NET v4.0
 SET IIS7PoolUser40Web=IIS APPPOOL\Teleopti ASP.NET v4.0 Web
 SET IIS7PoolUser40Broker=IIS APPPOOL\Teleopti ASP.NET v4.0 Broker
+SET IIS7PoolUser40RTA=IIS APPPOOL\Teleopti ASP.NET v4.0 RTA
+SET IIS7PoolUser40SDK=IIS APPPOOL\Teleopti ASP.NET v4.0 SDK
 SET IIS6PoolUser=NT AUTHORITY\Network Service
 SET IIS5PoolUser=IUSR_%COMPUTERNAME%
 
@@ -30,6 +32,8 @@ IF %IISVersion% EQU %IIS7% (
 Call:SetPermissions "%IIS7PoolUser40%" %localError% localError
 Call:SetPermissions "%IIS7PoolUser40Web%" %localError% localError
 Call:SetPermissions "%IIS7PoolUser40Broker%" %localError% localError
+Call:SetPermissions "%IIS7PoolUser40RTA%" %localError% localError
+Call:SetPermissions "%IIS7PoolUser40SDK%" %localError% localError
 )
 
 IF %IISVersion% EQU %IIS6% (

@@ -5,7 +5,6 @@ using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Asm;
-using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping
@@ -14,7 +13,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping
 	{
 		private readonly IProjectionProvider _projectionProvider;
 		private readonly IUserTimeZone _userTimeZoneInfo;
-		private ILoggedOnUser _loggedOnUser;
+		private readonly ILoggedOnUser _loggedOnUser;
 
 		public AsmViewModelMapper(IProjectionProvider projectionProvider, IUserTimeZone userTimeZoneInfo, ILoggedOnUser loggedOnUser)
 		{
@@ -31,15 +30,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping
 				layers.AddRange(proj);
 			}
 			var timeZone = _userTimeZoneInfo.TimeZone();
+			var culture = _loggedOnUser.CurrentUser().PermissionInformation.Culture();
 			return new AsmViewModel
 			          	{
-			          		Layers = createAsmLayers(asmZero, timeZone, layers),
-								Hours = createHours(asmZero, timeZone),
+			          		Layers = createAsmLayers(asmZero, timeZone, culture, layers),
+								Hours = createHours(asmZero, timeZone, culture),
 								UnreadMessageCount = unreadMessageCount
 			          	};
 		}
 		
-		private IEnumerable<string> createHours(DateTime asmZero, TimeZoneInfo timeZone)
+		private static IEnumerable<string> createHours(DateTime asmZero, TimeZoneInfo timeZone, CultureInfo culture)
 		{
 			const int numberOfHoursToShow = 24*3;
 			var hoursAsInts = new List<string>();
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping
 			for (var hour = 0; hour < numberOfHoursToShow; hour++)
 			{
  				var localTime = TimeZoneInfo.ConvertTimeFromUtc(asmZeroAsUtc.AddHours(hour), timeZone);
-				var hourString = string.Format(_loggedOnUser.CurrentUser().PermissionInformation.Culture(), localTime.ToShortTimeString());
+				var hourString = string.Format(culture, localTime.ToShortTimeString());
  
 				const string regex = "(\\:.*\\ )";
 				var output = Regex.Replace(hourString, regex, " ");
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping
 			return hoursAsInts;
 		}
 
-		private IEnumerable<AsmLayer> createAsmLayers(DateTime asmZero, TimeZoneInfo timeZone, IEnumerable<IVisualLayer> layers)
+		private IEnumerable<AsmLayer> createAsmLayers(DateTime asmZero, TimeZoneInfo timeZone, CultureInfo culture, IEnumerable<IVisualLayer> layers)
 		{
 			var asmLayers = (from visualLayer in layers
 			                 let startDate = TimeZoneHelper.ConvertFromUtc(visualLayer.Period.StartDateTime, timeZone)
@@ -71,8 +71,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping
 													StartMinutesSinceAsmZero = startDate.Subtract(asmZero).TotalMinutes,
 			                        		LengthInMinutes = length,
 			                        		Color = ColorTranslator.ToHtml(visualLayer.DisplayColor()),
-			                        		StartTimeText = string.Format(_loggedOnUser.CurrentUser().PermissionInformation.Culture(), startDate.ToShortTimeString()),
-											EndTimeText = string.Format(_loggedOnUser.CurrentUser().PermissionInformation.Culture(), endDate.ToShortTimeString())
+			                        		StartTimeText = string.Format(culture, startDate.ToShortTimeString()),
+													EndTimeText = string.Format(culture, endDate.ToShortTimeString())
  			                        	}).ToList();
 			return asmLayers;
 		}

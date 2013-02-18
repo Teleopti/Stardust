@@ -42,39 +42,48 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
                                                     TimeSpan averageWorkTimePerDay, ISchedulingOptions schedulingOptions)
         {
             double highestShiftValue = double.MinValue;
-            var shiftCategoryFairnessFactors = _shiftCategoryFairnessManager.GetFactorsForPersonOnDate(person, dateOnly);
-            var foundValues = new List<IWorkShiftCalculationResultHolder>();
+            IShiftCategoryFairnessFactors shiftCategoryFairnessFactors = null;
+			if (schedulingOptions.Fairness.Value > 0)
+			{
+				shiftCategoryFairnessFactors = _shiftCategoryFairnessManager.GetFactorsForPersonOnDate(person, dateOnly);
+			}
+
+			var foundValues = new List<IWorkShiftCalculationResultHolder>();
 
 
             foreach (WorkShiftCalculationResultHolder thisShiftValue in allValues)
             {
                 IShiftProjectionCache shiftProjection = thisShiftValue.ShiftProjection;
-                double fairnessValue;
+	            double shiftValue = thisShiftValue.Value;
 
-                if (useShiftCategoryFairness)
-                {
-                    IShiftCategory shiftCategory = shiftProjection.TheMainShift.ShiftCategory;
-                    double factorForShiftCategory = shiftCategoryFairnessFactors.FairnessFactor(shiftCategory);
-                    fairnessValue =
-                        _categoryFairnessShiftValueCalculator.ModifiedShiftValue(thisShiftValue.Value,
-                                                                                 factorForShiftCategory,
-                                                                                 maxValue, schedulingOptions);
-                }
-                else
-                {
-                    var maxFairnessOnShiftCat = getMaxFairnessOnShiftCategories();
-                    double totalFairness = shiftCategoryFairnessFactors.FairnessPointsPerShift;
-                    IFairnessValueResult agentFairness = ScheduleDictionary[person].FairnessPoints();
-                    int dayOfWeekJusticeValue = shiftProjection.ShiftCategoryDayOfWeekJusticeValue;
-                    fairnessValue = _fairnessValueCalculator.CalculateFairnessValue(thisShiftValue.Value,
-                                                                                   dayOfWeekJusticeValue,
-                                                                                   maxFairnessOnShiftCat,
-                                                                                   totalFairness,
-                                                                                   agentFairness, maxValue, 
-																				   schedulingOptions);
-                }
+	            if (shiftCategoryFairnessFactors != null)
+	            {
+		            double fairnessValue;
+		            if (useShiftCategoryFairness)
+		            {
+			            IShiftCategory shiftCategory = shiftProjection.TheMainShift.ShiftCategory;
+			            double factorForShiftCategory = shiftCategoryFairnessFactors.FairnessFactor(shiftCategory);
+			            fairnessValue =
+				            _categoryFairnessShiftValueCalculator.ModifiedShiftValue(thisShiftValue.Value,
+				                                                                     factorForShiftCategory,
+				                                                                     maxValue, schedulingOptions);
+		            }
+		            else
+		            {
+			            var maxFairnessOnShiftCat = getMaxFairnessOnShiftCategories();
+			            double totalFairness = shiftCategoryFairnessFactors.FairnessPointsPerShift;
+			            IFairnessValueResult agentFairness = ScheduleDictionary[person].FairnessPoints();
+			            int dayOfWeekJusticeValue = shiftProjection.ShiftCategoryDayOfWeekJusticeValue;
+			            fairnessValue = _fairnessValueCalculator.CalculateFairnessValue(thisShiftValue.Value,
+			                                                                            dayOfWeekJusticeValue,
+			                                                                            maxFairnessOnShiftCat,
+			                                                                            totalFairness,
+			                                                                            agentFairness, maxValue,
+			                                                                            schedulingOptions);
+		            }
 
-                double shiftValue = fairnessValue;
+		            shiftValue = fairnessValue;
+	            }
 
 
 

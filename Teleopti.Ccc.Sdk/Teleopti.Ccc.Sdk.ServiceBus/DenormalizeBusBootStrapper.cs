@@ -13,8 +13,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		{
 			var initialLoad = new InitialLoadOfScheduleProjectionReadModel(daBus);
 			initialLoad.Check();
-			var initialLoadDay = new InitialLoadOfScheduleDayReadModel(daBus);
-			initialLoadDay.Check();
             //add RTA state checker
             var rtaChecker = new RTAStateChecker(daBus);
             rtaChecker.Check();

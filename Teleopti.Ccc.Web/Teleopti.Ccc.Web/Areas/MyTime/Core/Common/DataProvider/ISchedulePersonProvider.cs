@@ -6,6 +6,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 {
 	public interface ISchedulePersonProvider
 	{
-		IEnumerable<IPerson> GetPermittedPersonsForTeam(DateOnly date, Guid id);
+		IEnumerable<IPerson> GetPermittedPersonsForTeam(DateOnly date, Guid id, string function);
 	}
 }

@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using Autofac;
 using Teleopti.Ccc.DayOffPlanning;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -651,7 +652,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder, new EmptyScheduleDayChangeCallback(), tagSetter);
 			fairnessOpt.ReportProgress += resourceOptimizerPersonOptimized;
 			fairnessOpt.ExecutePersonal(_backgroundWorker, selectedPersons, selectedDates, matrixListForFairness,
-										optimizerPreferences.Extra.GroupPageOnCompareWith, rollbackService);
+										optimizerPreferences, rollbackService, optimizerPreferences.Advanced.UseAverageShiftLengths);
 			fairnessOpt.ReportProgress -= resourceOptimizerPersonOptimized;
 		}
 
@@ -702,6 +703,8 @@ namespace Teleopti.Ccc.Win.Scheduling
             matrixOvertimeLocker.Execute();
             IMatrixNoMainShiftLocker noMainShiftLocker = new MatrixNoMainShiftLocker(matrixList);
             noMainShiftLocker.Execute();
+			IMatrixMultipleShiftsLocker matrixMultipleShiftsLocker = new MatrixMultipleShiftsLocker(matrixList);
+			matrixMultipleShiftsLocker.Execute();
         }
 
         internal void RunWorkShiftOptimization(
@@ -1206,7 +1209,8 @@ namespace Teleopti.Ccc.Win.Scheduling
             IScheduleResultDataExtractor scheduleResultDataExtractor = OptimizerHelperHelper.CreatePersonalSkillsDataExtractor(optimizerPreferences.Advanced, scheduleMatrix);
 
             IDayOffBackToLegalStateFunctions dayOffBackToLegalStateFunctions = new DayOffBackToLegalStateFunctions(scheduleMatrixArray);
-            ISmartDayOffBackToLegalStateService dayOffBackToLegalStateService = new SmartDayOffBackToLegalStateService(dayOffBackToLegalStateFunctions, daysOffPreferences, 25);
+			IDayOffDecisionMaker cmsbOneFreeWeekendMax5WorkingDaysDecisionMaker = new CMSBOneFreeWeekendMax5WorkingDaysDecisionMaker(new OfficialWeekendDays(), new TrueFalseRandomizer());
+            ISmartDayOffBackToLegalStateService dayOffBackToLegalStateService = new SmartDayOffBackToLegalStateService(dayOffBackToLegalStateFunctions, daysOffPreferences, 25, cmsbOneFreeWeekendMax5WorkingDaysDecisionMaker);
 
             var effectiveRestrictionCreator = _container.Resolve<IEffectiveRestrictionCreator>();
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true, true);

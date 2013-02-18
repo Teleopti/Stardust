@@ -8,11 +8,17 @@ namespace Teleopti.Ccc.Sdk.SimpleSample.Repositories
 {
     public class OvertimeDefinitionSetRepository
     {
-        private Dictionary<Guid, OvertimeDefinitionSetDto> _overtimeDefinitionSetDictionary;
+    	private readonly ITeleoptiOrganizationService _teleoptiOrganizationService;
+    	private Dictionary<Guid, OvertimeDefinitionSetDto> _overtimeDefinitionSetDictionary;
 
-        public void Initialize(ITeleoptiOrganizationService teleoptiOrganizationService)
+		public OvertimeDefinitionSetRepository(ITeleoptiOrganizationService teleoptiOrganizationService)
+		{
+			_teleoptiOrganizationService = teleoptiOrganizationService;
+		}
+
+    	public void Initialize()
         {
-            var overtimeDefinitions = teleoptiOrganizationService.GetOvertimeDefinitions(new LoadOptionDto { LoadDeleted = true });
+            var overtimeDefinitions = _teleoptiOrganizationService.GetOvertimeDefinitions(new LoadOptionDto { LoadDeleted = true });
             _overtimeDefinitionSetDictionary = overtimeDefinitions.ToDictionary(k => k.Id.GetValueOrDefault(), v => v);
         }
 

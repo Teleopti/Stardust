@@ -169,6 +169,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			builder.RegisterType<ShiftCategoryFairnessPersonsSkillChecker>().As<IShiftCategoryFairnessPersonsSkillChecker>().InstancePerLifetimeScope();
             builder.RegisterType<ShiftCategoryFairnessRuleSetChecker>().As<IShiftCategoryFairnessRuleSetChecker>().InstancePerLifetimeScope();
             builder.RegisterType<ShiftCategoryFairnessContractTimeChecker>().As<IShiftCategoryFairnessContractTimeChecker>().InstancePerLifetimeScope();
+			builder.RegisterType<ShiftCategoryFairnessContractToleranceChecker>().As<IShiftCategoryFairnessContractToleranceChecker>().InstancePerLifetimeScope();
+			builder.RegisterType<OptimizationOverLimitByRestrictionDeciderCreator>().As<IOptimizationOverLimitByRestrictionDeciderCreator>().InstancePerLifetimeScope();
         	builder.RegisterType<SingleSkillDictionary>().As<ISingleSkillDictionary>().InstancePerLifetimeScope();
 
 			//DaysOffSchedulingService

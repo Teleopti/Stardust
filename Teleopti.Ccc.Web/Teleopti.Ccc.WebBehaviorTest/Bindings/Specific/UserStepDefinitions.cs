@@ -405,6 +405,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			UserFactory.User().Setup(new AbsenceToday());
 		}
 
+		[Given(@"I have a full-day absence today with")]
+		[Given(@"I have a full-day absence with")]
+		public void GivenIHaveAFull_DayAbsenceTodayWith(Table table)
+		{
+			var absence = table.CreateInstance<AbsenceToday>();
+			UserFactory.User().Setup(absence);
+		}
+
 		[Given(@"I have a shift from (.*) to (.*)")]
 		public void GivenIHaveAShiftFrom756To1700(string from, string to)
 		{
@@ -489,11 +497,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			UserFactory.User().Setup(new ExistingShiftTradeRequest());
 		}
 
+		[Given(@"I have created a shift trade request with subject '(.*)'")]
+		public void GivenIHaveCreatedAShiftTradeRequestWithSubject(string subject)
+		{
+			UserFactory.User().Setup(new ExistingShiftTradeRequest(subject));
+		}
+
 		[Given(@"I have received a shift trade request from '(.*)'")]
 		public void GivenIHaveReceivedAShiftTradeRequestFrom(string from)
 		{
 			var person = PersonFactory.CreatePerson(from);
-			UserFactory.User().MakePerson(person);
+			UserFactory.User().MakeOtherPerson(person);
 			UserFactory.User().Setup(new ExistingShiftTradeRequest() {From = person});
 		}
 

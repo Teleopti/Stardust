@@ -43,15 +43,6 @@ Scenario: View team schedule, absence
 	When I view team schedule
 	Then I should see my colleague's absence
 
-#Scenario: View team schedule, absence on day off
-#	Given I am an agent in a team
-#	And I have a colleague
-#	And My colleague has an absence today
-#	And My colleague has a dayoff today
-#	When I view team schedule
-#	Then I should see my colleague's absence
-#	And I should not see my colleague's day off
-
 Scenario: View team schedule, no shift
 	Given I am an agent in a team
 	And I have a colleague
@@ -115,14 +106,6 @@ Scenario: Navigate to the previous day
 	And I view team schedule
 	When I click the previous day button
 	Then I should see the previous day
- 
-Scenario: Select day from day-picker
-	Given I am an agent in a team
-	And I view team schedule
-	When I open the day-picker
-	And I click on a day
-	Then the day-picker should close
-	And I should see the selected day
  
 Scenario: Sort late shifts after early shifts
 	Given I am an agent in a team

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Xml.Linq;
@@ -13,9 +14,9 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Events;
-using Teleopti.Messaging.Client;
 using Teleopti.Messaging.Composites;
 using Teleopti.Messaging.Exceptions;
+using Teleopti.Messaging.SignalR;
 using Is = Rhino.Mocks.Constraints.Is;
 
 namespace Teleopti.Ccc.InfrastructureTest.Foundation
@@ -87,13 +88,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 				Expect.Call(datasourcesFactory.TryCreate(xmlFile1, out ds1)).Return(true).OutRef(ds1);
 				Expect.Call(datasourcesFactory.TryCreate(xmlFile2, out ds2)).Return(true).OutRef(ds2);
 				messBroker.StartMessageBroker();
+				Expect.Call(messBroker.ConnectionString).PropertyBehavior();
 			}
 
 			using (new StateHolderModificationContext())
 			{
 				using (mocks.Playback())
 				{
-					target.Start(stateStub, Directory.GetCurrentDirectory(), null);
+					target.Start(stateStub, Directory.GetCurrentDirectory(), null, new ConfigurationDictionaryWrapper(new Dictionary<string, string>{{"MessageBroker", "http://localhost/signalr"}}));
 					Assert.AreEqual(2, StateHolder.Instance.StateReader.ApplicationScopeData.RegisteredDataSourceCollection.Count());
 					CollectionAssert.Contains(StateHolder.Instance.StateReader.ApplicationScopeData.RegisteredDataSourceCollection, ds1);
 					CollectionAssert.Contains(StateHolder.Instance.StateReader.ApplicationScopeData.RegisteredDataSourceCollection, ds2);
@@ -117,7 +119,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 			var appSettingValue = DateTime.Now.ToLongTimeString();
 			IDictionary<string, string> appSettings = new Dictionary<string, string> {
 															  {"HelpUrl", appSettingValue},
-															  {"MatrixWebSiteUrl", "http://localhost/Analytics"}
+															  {"MatrixWebSiteUrl", "http://localhost/Analytics"},
+															  {"MessageBroker", "http://localhost/signalr"}
 														  };
 
 			ICollection<string> nhibConfigurations = new List<string>();
@@ -159,6 +162,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 					.Constraints(
 					Is.Matching<XElement>(x => x.ToString() == nhibXml2.ToString()), Is.Anything());
 				messBroker.StartMessageBroker();
+				Expect.Call(messBroker.ConnectionString).PropertyBehavior();
 			}
 
 			using (new StateHolderModificationContext())
@@ -182,7 +186,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 		[Test]
 		public void ShouldHandleNotAvailableDataSources()
 		{
-			IDictionary<string, string> appSettings = new Dictionary<string, string>();
+			IDictionary<string, string> appSettings = new Dictionary<string, string>
+			                                          	{
+															  {"MessageBroker", "http://localhost/signalr"}
+			                                          	};
 			ICollection<string> nhibConfigurations = new List<string>();
 
 			var nhibString1 = XmlText("dummy1", string.Empty);
@@ -214,6 +221,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 					.Constraints(
 					Is.Matching<XElement>(x => x.ToString() == nhibXml2.ToString()), Is.Anything());
 				messBroker.StartMessageBroker();
+				Expect.Call(messBroker.ConnectionString).PropertyBehavior();
 			}
 
 			using (new StateHolderModificationContext())
@@ -246,6 +254,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 				Expect.Call(uowF2.Name).Return("dummy2").Repeat.Any();
 				Expect.Call(datasourcesFactory.TryCreate(xmlFile1, out ds1)).Return(true).OutRef(ds1);
 				Expect.Call(datasourcesFactory.TryCreate(xmlFile2, out ds2)).Return(true).OutRef(ds2);
+				Expect.Call(messBroker.ConnectionString).PropertyBehavior();
 				messBroker.StartMessageBroker();
 				LastCall.Throw(new BrokerNotInstantiatedException("dummy", new Exception("inner")));
 			}
@@ -254,7 +263,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 			{
 				using (mocks.Playback())
 				{
-					target.Start(stateStub, Directory.GetCurrentDirectory(), null);
+					target.Start(stateStub, Directory.GetCurrentDirectory(), null, new ConfigurationDictionaryWrapper(new Dictionary<string, string>{{"MessageBroker", "http://localhost/signalr"}}));
 					Assert.AreEqual(2, StateHolder.Instance.StateReader.ApplicationScopeData.RegisteredDataSourceCollection.Count());
 					CollectionAssert.Contains(StateHolder.Instance.StateReader.ApplicationScopeData.RegisteredDataSourceCollection, ds1);
 					CollectionAssert.Contains(StateHolder.Instance.StateReader.ApplicationScopeData.RegisteredDataSourceCollection, ds2);
@@ -275,14 +284,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 			using (mocks.Record())
 			{
 				Expect.Call(datasourcesFactory.Create(nHibSettings(), matrixConnstring)).Return(ds);
-				messBroker.StartMessageBroker();
 			}
 
 			using (new StateHolderModificationContext())
 			{
 				using (mocks.Playback())
 				{
-					target.Start(stateStub, nHibSettings(), matrixConnstring);
+					target.Start(stateStub, nHibSettings(), matrixConnstring, new ConfigurationDictionaryWrapper(new Dictionary<string, string>()));
 					Assert.AreEqual(1, StateHolder.Instance.StateReader.ApplicationScopeData.RegisteredDataSourceCollection.Count());
 					CollectionAssert.Contains(StateHolder.Instance.StateReader.ApplicationScopeData.RegisteredDataSourceCollection, ds);
 				}
@@ -298,6 +306,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 			using (mocks.Record())
 			{
 				Expect.Call(datasourcesFactory.Create(nHibSettings(), matrixConnstring)).Return(ds);
+				Expect.Call(messBroker.ConnectionString).PropertyBehavior();
 				messBroker.StartMessageBroker();
 				LastCall.Throw(new BrokerNotInstantiatedException("dummy", new Exception("inner")));
 			}
@@ -306,7 +315,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 			{
 				using (mocks.Playback())
 				{
-					target.Start(stateStub, nHibSettings(), matrixConnstring);
+					target.Start(stateStub, nHibSettings(), matrixConnstring, new ConfigurationDictionaryWrapper(new Dictionary<string, string>{{"MessageBroker", "http://localhost/signalr"}}));
 					Assert.AreEqual(1, StateHolder.Instance.StateReader.ApplicationScopeData.RegisteredDataSourceCollection.Count());
 					CollectionAssert.Contains(StateHolder.Instance.StateReader.ApplicationScopeData.RegisteredDataSourceCollection, ds);
 				}
@@ -329,18 +338,18 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 			{
 				using (mocks.Playback())
 				{
-					target.Start(stateStub, nHibSettings(), matrixConnstring);
+					target.Start(stateStub, nHibSettings(), matrixConnstring, new ConfigurationDictionaryWrapper(new Dictionary<string, string>{{"MessageBroker", "http://localhost/signalr"}}));
 					Assert.AreEqual(1, StateHolder.Instance.StateReader.ApplicationScopeData.RegisteredDataSourceCollection.Count());
 					CollectionAssert.Contains(StateHolder.Instance.StateReader.ApplicationScopeData.RegisteredDataSourceCollection, ds);
 				}
 			}
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void VerifyDefaultProperty()
 		{
 			target = new InitializeApplication(new DataSourcesFactory(null, new List<IMessageSender>(), DataSourceConfigurationSetter.ForTest()),
-				MessageBrokerImplementation.GetInstance(MessageFilterManager.Instance.FilterDictionary));
+				new SignalBroker(MessageFilterManager.Instance.FilterDictionary));
 		}
 
 

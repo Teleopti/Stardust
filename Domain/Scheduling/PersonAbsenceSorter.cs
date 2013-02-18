@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
             {
                 if (!x.LastChange.HasValue && !y.LastChange.HasValue)
                 {
-                    return 0;
+                    return y.Period.StartDateTime.CompareTo(x.Period.StartDateTime);
                 }
                 if (!x.LastChange.HasValue)
                 {
@@ -44,6 +44,10 @@ namespace Teleopti.Ccc.Domain.Scheduling
                     return 1;
                 }
                 ret = x.LastChange.Value.CompareTo(y.LastChange.Value);
+				if (ret == 0)
+				{
+					ret = y.Period.StartDateTime.CompareTo(x.Period.StartDateTime);
+				}
             }
             return ret;
         }

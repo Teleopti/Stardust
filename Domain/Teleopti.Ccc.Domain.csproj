@@ -145,18 +145,17 @@
     <Compile Include="Common\IModifyNow.cs" />
     <Compile Include="Common\ListAggregator.cs" />
     <Compile Include="Common\ScheduleDictionaryLoadOptions.cs" />
+    <Compile Include="Common\TrueFalseRandomizer.cs" />
     <Compile Include="Common\VirtualSchedulePeriodFinder.cs" />
     <Compile Include="Common\DateTimePeriodPerStartTimeSorter.cs" />
     <Compile Include="Common\EntityBaseTypes\SimpleAggregateRoot.cs" />
     <Compile Include="AgentInfo\Requests\PersonRequestCheckAuthorization.cs" />
-    <Compile Include="Common\IScenarioProvider.cs" />
     <Compile Include="Common\LogWriter.cs" />
     <Compile Include="Common\Now.cs" />
     <Compile Include="Common\PersonComparer.cs" />
     <Compile Include="Common\PersonProvider.cs" />
     <Compile Include="Common\DateOnlyAsDateTimePeriod.cs" />
     <Compile Include="Common\PersonsInOrganizationProvider.cs" />
-    <Compile Include="Common\ScenarioProvider.cs" />
     <Compile Include="Forecasting\DaylightSavingTimeHelper.cs" />
     <Compile Include="Forecasting\Export\ExportForecastDataToFileSerializer.cs" />
     <Compile Include="Forecasting\Export\ExportSkillToFileCommandModel.cs" />
@@ -235,6 +234,7 @@
     <Compile Include="Optimization\DaysOffPreferencesPersonalSettings.cs" />
     <Compile Include="Optimization\ExtraPreferencesPersonalSettings.cs" />
     <Compile Include="Optimization\GeneralPreferencesPersonalSettings.cs" />
+    <Compile Include="Optimization\MatrixMultipleShiftsLocker.cs" />
     <Compile Include="Optimization\GroupDayOffOptimizationResourceHelper.cs" />
     <Compile Include="Optimization\GroupDayOffOptimizerValidateDayOffToAdd.cs" />
     <Compile Include="Optimization\GroupDayOffOptimizerValidateDayOffToRemove.cs" />
@@ -258,6 +258,7 @@
     <Compile Include="Optimization\MainShiftOptimizeActivitySpecificationSetter.cs" />
     <Compile Include="Optimization\OptimizationOverLimitByRestrictionDecider.cs" />
     <Compile Include="Optimization\EmptyDaysInBlockOutsideSelectedHandler.cs" />
+    <Compile Include="Optimization\OptimizationOverLimitByRestrictionDeciderCreator.cs" />
     <Compile Include="Optimization\PersonalSettings.cs" />
     <Compile Include="Optimization\RemoveGroupShiftCategoryOnBestDateService.cs" />
     <Compile Include="Optimization\RestrictionOverLimitDecider.cs" />
@@ -295,6 +296,7 @@
     <Compile Include="Optimization\DayOffOptimizerPreMoveResultPredictor.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessAggregator.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessContractTimeCheck.cs" />
+    <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessContractToleranceChecker.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessSwapCategorySorter.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessComparer.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessPersonsSkillChecker.cs" />
@@ -388,6 +390,7 @@
     <Compile Include="ResourceCalculation\ISwapAndModifyServiceNew.cs" />
     <Compile Include="ResourceCalculation\OptimizerActivitiesPreferences.cs" />
     <Compile Include="Optimization\SkillExtractorForGroupOfPeople.cs" />
+    <Compile Include="ResourceCalculation\PersonalShiftMeetingTimeChecker.cs" />
     <Compile Include="ResourceCalculation\PossibleCombinationsOfStartEndCategoryRunner.cs" />
     <Compile Include="ResourceCalculation\PossibleStartEndCategory.cs" />
     <Compile Include="ResourceCalculation\ShiftCategoryPeriodValueExtractorThread.cs" />
@@ -833,6 +836,8 @@
     <Compile Include="Security\Authentication\IFindApplicationUser.cs" />
     <Compile Include="Security\Authentication\IFindUserDetail.cs" />
     <Compile Include="Security\Authentication\IWindowsUserProvider.cs" />
+    <Compile Include="Security\Authentication\LoggedOnUser.cs" />
+    <Compile Include="Security\Authentication\UserTimeZone.cs" />
     <Compile Include="Security\Authentication\WindowsDataSourceProvider.cs" />
     <Compile Include="Security\Authentication\AuthenticationSettings.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccVersion8LicenseOption.cs" />
@@ -845,7 +850,7 @@
     </Compile>
     <Compile Include="Security\IsPasswordEncryptedSpecification.cs" />
     <Compile Include="Security\ISystemUserSpecification.cs" />
-    <Compile Include="Security\LicenseOptions\TeleoptiCccAnywhereLicenseOption.cs" />
+    <Compile Include="Security\LicenseOptions\TeleoptiCccMobileReportsLicenseOption.cs" />
     <Compile Include="Security\LicenseOptions\TeleoptiCccMyTimeWebLicenseOption.cs" />
     <Compile Include="Security\Matrix\ApplicationFunctionResolver.cs" />
     <Compile Include="Security\AuthorizationData\ShippedApplicationRoleNames.cs" />

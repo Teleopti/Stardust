@@ -70,7 +70,12 @@ namespace Teleopti.Ccc.IocCommon.Configuration
             builder.RegisterType<CheckBruteForce>()
                 .As<ICheckBruteForce>()
                 .SingleInstance();
-            builder.Register(c => new PasswordPolicy(c.Resolve<ILoadPasswordPolicyService>()))
+				builder.Register<IPasswordPolicy>(c =>
+                             	{
+											if(c.Resolve<IApplicationData>().LoadPasswordPolicyService==null)
+												return new DummyPasswordPolicy();
+                             		return new PasswordPolicy(c.Resolve<ILoadPasswordPolicyService>());
+                             	})
                 .As<IPasswordPolicy>()
                 .SingleInstance();
             builder.RegisterType<SystemUserSpecification>()
@@ -101,6 +106,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.As<IPrincipalAuthorization>()
 				.SingleInstance();
 			builder.RegisterType<UserCulture>().As<IUserCulture>();
+			builder.RegisterType<LoggedOnUser>().As<ILoggedOnUser>();
+			builder.RegisterType<UserTimeZone>().As<IUserTimeZone>();
+			builder.RegisterType<ApplicationDataSourceProvider>().As<IApplicationDataSourceProvider>().SingleInstance();
+			builder.RegisterType<OneWayEncryption>().As<IOneWayEncryption>().SingleInstance();
 		}
     }
 }

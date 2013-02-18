@@ -20,5 +20,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		{
 			UserFactory.User().Setup(new DayOffTemplateConfigurable() {Name = name});
 		}
+
+		[Given(@"'(.*)' have a day off with")]
+		public void GivenHaveADayOffWith(string username, Table table)
+		{
+			var personDayOff = table.CreateInstance<PersonDayOffConfigurable>();
+			UserFactory.User(username).Setup(personDayOff);
+		}
 	}
 }

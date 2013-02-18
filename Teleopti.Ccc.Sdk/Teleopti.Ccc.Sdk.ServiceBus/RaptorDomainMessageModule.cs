@@ -1,4 +1,8 @@
 ﻿using System;
+using System.Collections.Concurrent;
+using System.Globalization;
+using System.IdentityModel.Claims;
+using System.Threading;
 using log4net;
 using Rhino.ServiceBus;
 using Rhino.ServiceBus.Internal;
@@ -8,7 +12,6 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Licensing;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Obfuscated.Security;
@@ -24,15 +27,17 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
         private static readonly ILog Logger = LogManager.GetLogger(typeof (RaptorDomainMessageModule));
         private readonly ILogOnOff _logOnOff;
         private readonly IApplicationDataSourceProvider _applicationDataSourceProvider;
-        private readonly IRoleToPrincipalCommand _roleToPrincipalCommand;
+        private readonly IRoleToClaimSetTransformer _roleToClaimSetTransformer;
         private readonly IRepositoryFactory _repositoryFactory;
+    	private readonly ClaimCache _claimCache;
 
-        public RaptorDomainMessageModule(ILogOnOff logOnOff, IApplicationDataSourceProvider applicationDataSourceProvider, IRoleToPrincipalCommand roleToPrincipalCommand, IRepositoryFactory repositoryFactory)
+    	public RaptorDomainMessageModule(ILogOnOff logOnOff, IApplicationDataSourceProvider applicationDataSourceProvider, IRoleToClaimSetTransformer roleToClaimSetTransformer, IRepositoryFactory repositoryFactory, ClaimCache claimCache)
         {
             _logOnOff = logOnOff;
             _applicationDataSourceProvider = applicationDataSourceProvider;
-            _roleToPrincipalCommand = roleToPrincipalCommand;
+            _roleToClaimSetTransformer = roleToClaimSetTransformer;
             _repositoryFactory = repositoryFactory;
+        	_claimCache = claimCache;
         }
 
         public void Init(ITransport transport, IServiceBus bus)
@@ -113,11 +118,26 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
                 AuthenticationMessageHeader.UseWindowsIdentity = false;
                 _logOnOff.LogOn(dataSourceContainer.DataSource, dataSourceContainer.User, businessUnit);
 
-				_roleToPrincipalCommand.Execute(TeleoptiPrincipal.Current, unitOfWork, _repositoryFactory.CreatePersonRepository(unitOfWork));
+				setCorrectPermissionsOnUser(unitOfWork);
             }
         }
 
-        public void Stop(ITransport transport, IServiceBus bus)
+    	private void setCorrectPermissionsOnUser(IUnitOfWork unitOfWork)
+    	{
+    		var person = TeleoptiPrincipal.Current.GetPerson(_repositoryFactory.CreatePersonRepository(unitOfWork));
+    		foreach (var applicationRole in person.PermissionInformation.ApplicationRoleCollection)
+    		{
+    			var cachedClaim = _claimCache.Get(AuthenticationMessageHeader.DataSource, applicationRole.Id.GetValueOrDefault());
+    			if (cachedClaim == null)
+    			{
+    				cachedClaim = _roleToClaimSetTransformer.Transform(applicationRole, unitOfWork);
+    				_claimCache.Add(cachedClaim, AuthenticationMessageHeader.DataSource, applicationRole.Id.GetValueOrDefault());
+    			}
+    			TeleoptiPrincipal.Current.AddClaimSet(cachedClaim);
+    		}
+    	}
+
+    	public void Stop(ITransport transport, IServiceBus bus)
         {
             transport.MessageArrived -= transport_MessageArrived;
             transport.MessageProcessingCompleted -= transport_MessageProcessingCompleted;
@@ -148,4 +168,57 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
             set { _current = value; }
         }
     }
+
+	public class ClaimCache : IDisposable
+	{
+		private readonly ConcurrentDictionary<string, ClaimSet> _cache = new ConcurrentDictionary<string,ClaimSet>();
+		private readonly Timer _timer;
+
+		public ClaimCache()
+		{
+			_timer = new Timer(emptyCache,null,TimeSpan.FromMilliseconds(-1),TimeSpan.FromMinutes(30));
+		}
+
+		private void emptyCache(object state)
+		{
+			_cache.Clear();
+		}
+
+		public void Add(ClaimSet claimSet, string dataSourceName, Guid roleId)
+		{
+			var key = getKey(dataSourceName, roleId);
+			_cache.AddOrUpdate(key, claimSet, (s, set) => claimSet);
+		}
+
+		private static string getKey(string dataSourceName, Guid roleId)
+		{
+			string key = string.Format(CultureInfo.InvariantCulture, "{0}-{1}", dataSourceName, roleId);
+			return key;
+		}
+
+		public ClaimSet Get(string dataSourceName, Guid roleId)
+		{
+			var key = getKey(dataSourceName, roleId);
+			ClaimSet foundClaimSet;
+			return (_cache.TryGetValue(key, out foundClaimSet)) ? foundClaimSet : null;
+		}
+
+		public void Dispose()
+		{
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
+		protected virtual void Dispose(bool disposing)
+		{
+			if (disposing)
+			{
+				if (_timer != null)
+				{
+					_timer.Dispose();
+				}
+				_cache.Clear();
+			}
+		}
+	}
 }

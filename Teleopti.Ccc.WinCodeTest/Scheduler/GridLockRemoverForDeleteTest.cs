@@ -113,25 +113,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Assert.AreSame(_day2, ret[0]);
         }
 
-        [Test, Ignore("Exposes a bug that should be fixed")]
-        public void ShouldNotRemoveIfOutsidePeriodLockAndWriteProtectAndIAmAllowed()
-        {
-            IList<IScheduleDay> source = new List<IScheduleDay> { _day1, _day2 };
-            using (_mocks.Record())
-            {
-                commonMocks();
-            }
-
-            IList<IScheduleDay> ret;
-            using (_mocks.Playback())
-            {
-                _gridlockManager.AddLock(_day1, LockType.OutsidePersonPeriod);
-                _gridlockManager.AddLock(_day1, LockType.WriteProtected);
-                ret = _target.RemoveLocked(source);
-            }
-            Assert.AreEqual(2, ret.Count);
-        }
-
         private void commonMocks()
         {
             Expect.Call(_day1.Person).Return(_person).Repeat.Any();

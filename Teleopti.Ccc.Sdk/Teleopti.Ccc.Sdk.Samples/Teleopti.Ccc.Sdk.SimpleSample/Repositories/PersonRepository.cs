@@ -8,13 +8,19 @@ namespace Teleopti.Ccc.Sdk.SimpleSample.Repositories
 {
     public class PersonRepository
     {
-        private Dictionary<Guid, PersonDto> _personDictionary;
+    	private readonly ITeleoptiOrganizationService _teleoptiOrganizationService;
+    	private Dictionary<Guid, PersonDto> _personDictionary;
 
-        public void Initialize(ITeleoptiOrganizationService teleoptiOrganizationService)
-        {
-            var people = teleoptiOrganizationService.GetPersons(false);
-            _personDictionary = people.ToDictionary(k => k.Id.GetValueOrDefault(), v => v);
-        }
+		public PersonRepository(ITeleoptiOrganizationService teleoptiOrganizationService)
+		{
+			_teleoptiOrganizationService = teleoptiOrganizationService;
+		}
+
+    	public void Initialize()
+		{
+			var people = _teleoptiOrganizationService.GetPersons(false);
+			_personDictionary = people.ToDictionary(k => k.Id.GetValueOrDefault(), v => v);
+		}
 
         public PersonDto GetById(Guid id)
         {

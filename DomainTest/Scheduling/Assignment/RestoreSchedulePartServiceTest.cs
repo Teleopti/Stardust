@@ -44,7 +44,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             using (_mocks.Record())
             {
                 Expect.Call(() => _destination.Clear<IPersonAssignment>());
-                Expect.Call(() => _destination.Clear<IPersonAbsence>());
+            	Expect.Call(_destination.PersonAbsenceCollection()).Return(
+            		new ReadOnlyCollection<IPersonAbsence>(new List<IPersonAbsence>()));
                 Expect.Call(() => _destination.Clear<IPersonDayOff>());
 
                 Expect.Call(_source.PersonAssignmentCollection()).Return(_personAssignments);

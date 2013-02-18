@@ -1,7 +1,6 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
-using System.Runtime.InteropServices;
-using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data;
@@ -66,9 +65,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			Pages.Pages.NavigatingTo(Browser.Current.Page<SignInPage>());
 		}
 
-		public static void GotoAdminWeb()
+		public static void GotoAnywhere()
 		{
-			GoTo("Team", new ApplicationStartupTimeout());
+			GoTo("Anywhere", new ApplicationStartupTimeout());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<SignInPage>());
 		}
 
@@ -197,6 +196,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
             GoTo("MyTime#Message/Index", new ApplicationStartupTimeout(), new LoadingOverlay());
             Pages.Pages.NavigatingTo(Browser.Current.Page<MessagePage>());
 	    }
+
+		public static void GotoAnywhereSchedule(string date = null)
+		{
+			string hash = string.Empty;
+			if (!string.IsNullOrEmpty(date))
+			{
+				hash = string.Format(CultureInfo.InvariantCulture, "#teamschedule/{0}", date.Replace("-",""));
+			}
+			GoTo("Anywhere" + hash, new ApplicationStartupTimeout());
+			Pages.Pages.NavigatingTo(Browser.Current.Page<AnywherePage>());
+		}
 	}
 
 

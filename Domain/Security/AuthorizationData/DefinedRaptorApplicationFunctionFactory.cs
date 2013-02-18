@@ -164,11 +164,9 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger, "xxAgentScheduleMessengerPermission", DefinedRaptorApplicationFunctionForeignIds.AgentScheduleMessenger, null);
 			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb, "xxShiftTradeRequests", DefinedRaptorApplicationFunctionForeignIds.ShiftTradeRequestsWeb, null);
 
-			// Team Web
-			var function = CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.AdminWeb, "xxAnywhere", DefinedRaptorApplicationFunctionForeignIds.AdminWeb, null);
-			function.IsPreliminary = true;
-			function = CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.SchedulesAdminWeb, "xxSchedules", DefinedRaptorApplicationFunctionForeignIds.SchedulesAdminWeb, null);
-			function.IsPreliminary = true;
+			// Anywhere
+			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.Anywhere, "xxAnywhere", DefinedRaptorApplicationFunctionForeignIds.Anywhere, null);
+			CreateAndAddApplicationFunction(applicationFunctionList, DefinedRaptorApplicationFunctionPaths.SchedulesAnywhere, "xxSchedules", DefinedRaptorApplicationFunctionForeignIds.SchedulesAnywhere, null);
 
 			return new ReadOnlyCollection<IApplicationFunction>(applicationFunctionList);
 		}

@@ -116,4 +116,112 @@
 {
 	text-align: right;
 }
+.shift-trade-add-canvas
+{
+	background-color: #f8f8f8;
+	border: 1px solid rgb(216, 216, 216);
+	display: none;
+	height: 100%;
+	padding: 3px;
+}
+.shift-trade-layer
+{
+	position: absolute;
+	zoom: 1;
+	filter: alpha(opacity=80);
+	opacity: 0.80;
+	height: 18px;
+	z-index: 10;
+}
+.shift-trade-add-schedule
+{
+	position: relative;
+	height: 100%;
+	margin-top: 18px;
+	background: #f8f8f8;
+	display: block;
+	z-index: 9;
+}
+.shift-trade-my-schedule-row 
+{
+	height: 30px;
+	position: relative;
+	font-style: italic;
+}
+.shift-trade-person-schedule-row 
+{
+	height: 22px;
+	position: relative;
+}
+.shift-trade-my-schedule
+{
+	position: relative;
+	display: inline;
+}
+.shift-trade-possible-trade-schedule
+{
+	position: relative;
+	display: inline;
+}
+.shift-trade-timeline 
+{
+	height: 100%;
+	position: absolute;
+	left: 150px;
+}
+.shift-trade-timeline .shift-trade-timeline-line:last-child
+{
+	border-right: 0px;
+}
+.shift-trade-timeline .shift-trade-timeline-line:first-child .shift-trade-timeline-number:first-child
+{
+	border: 0px;
+	background: none;
+}
+.shift-trade-timeline-line 
+{
+	height: 100%;
+	float: left;
+	border-right: 1px solid rgb(216, 216, 216);
+}
 
+.shift-trade-timeline-number
+{
+	padding-left: 2px;
+	padding-right: 3px;
+	position: relative;
+	top: -19px;
+	left: -8px;
+	font-family: verdana;
+	font-size: 8px;
+	white-space: nowrap;
+	border: 1px solid rgba(0, 0, 0, 0.15);
+	background: white;
+}
+.shift-trade-add-datepicker
+{
+	position:relative;
+	z-index: 9999999;
+	width: 100px;
+	text-align: center;
+}
+.shift-trade-add-previous-date 
+{
+	background-position: 0 -30px;
+	height: 20px;
+	width: 22px !important;
+	vertical-align: middle;
+	float: left;
+}
+.shift-trade-add-next-date 
+{
+	background-position: right -90px; margin: 0 -4px;
+	height: 20px;
+	width: 22px !important;
+	vertical-align: middle;
+}
+.shift-trade-dayoff-name 
+{
+	position: absolute;
+	left: 50%;
+}

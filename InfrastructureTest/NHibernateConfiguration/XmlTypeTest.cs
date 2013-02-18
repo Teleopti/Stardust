@@ -72,27 +72,6 @@ namespace Teleopti.Ccc.InfrastructureTest.NHibernateConfiguration
             target.NullSafeGet(null, new[] {"name1", "name2"},null);
         }
 
-		  [Test, Ignore("Meaningless test that tests nothing - needs to be ignore due to upgrade of NH (it now crashes)")]
-        public void VerifyNullSafeSet()
-        {
-            MockRepository mocks = new MockRepository();
-            IDbCommand dbCommand = mocks.StrictMock<IDbCommand>();
-            IDataParameterCollection dataParameterCollection = mocks.StrictMock<IDataParameterCollection>();
-            IDataParameter dataParameter = mocks.StrictMock<IDataParameter>();
-
-            Expect.Call(dbCommand.Parameters).Return(dataParameterCollection).Repeat.Twice();
-            Expect.Call(dataParameterCollection[1]).Return(dataParameter).Repeat.Twice();
-            Expect.Call(dataParameter.Value = DBNull.Value);
-            Expect.Call(dataParameter.Value = document2.CreateNavigator().OuterXml);
-
-            mocks.ReplayAll();
-
-            target.NullSafeSet(dbCommand, null, 1);
-            target.NullSafeSet(dbCommand, document2, 1);
-
-            mocks.VerifyAll();
-        }
-
         [Test]
         public void VerifyDeepCopy()
         {

@@ -50,16 +50,16 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Core.Menu
 		}
 
 		[Test]
-		public void ShouldCreateModelForUserWithAccessOnlyToTeam()
+		public void ShouldCreateModelForUserWithAccessOnlyToAnywhere()
 		{
 			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
-			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AdminWeb)).Return(true);
+			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.Anywhere)).Return(true);
 			var target = new MenuViewModelFactory(permissionProvider);
 
 			var result = target.CreateMenyViewModel();
 
-			result.Single().Area.Should().Be.EqualTo("Team");
-			result.Single().Name.Should().Be.EqualTo(getMenuText(DefinedRaptorApplicationFunctionPaths.AdminWeb));
+			result.Single().Area.Should().Be.EqualTo("Anywhere");
+			result.Single().Name.Should().Be.EqualTo(getMenuText(DefinedRaptorApplicationFunctionPaths.Anywhere));
 		}
 
 		private string getMenuText(string applicationFunctionPath)

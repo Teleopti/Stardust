@@ -282,7 +282,8 @@
 			Include=
 	"$(CCNetWorkingDirectory)\Cube\Xmla\**\*.*;
 	$(CCNetWorkingDirectory)\Teleopti.Ccc.AnalysisServicesManager\bin\$(Configuration)\AnalysisServicesManager.exe;
-	$(CCNetWorkingDirectory)\Teleopti.Ccc.AnalysisServicesManager\bin\$(Configuration)\Microsoft.AnalysisServices.AdomdClient.dll"
+	$(CCNetWorkingDirectory)\Teleopti.Ccc.AnalysisServicesManager\bin\$(Configuration)\Microsoft.AnalysisServices.AdomdClient.dll;
+	$(CCNetWorkingDirectory)\Teleopti.Ccc.AnalysisServicesManager\bin\$(Configuration)\Microsoft.AnalysisServices.dll"
 	/>
 
 			<!-- Database -->
@@ -327,10 +328,6 @@
 			<ETLService
 				Include="$(CCNetWorkingDirectory)\Microsoft.AnalysisServices.AdomdClient.dll"
 	/>
-			<MessageBroker
-			Include="$(CCNetWorkingDirectory)\Teleopti.Messaging\TeleOpti.Messaging.Bin\**\*.*"
-			Exclude="$(CCNetWorkingDirectory)\Teleopti.Messaging\TeleOpti.Messaging.Bin\*.xml;
-			 $(CCNetWorkingDirectory)\Teleopti.Messaging\TeleOpti.Messaging.Bin\*.xsl"/>
 
 			<!-- MyTimeStandAlone -->
 			<MyTimeStandAlone
@@ -426,6 +423,19 @@
 			$(CCNetWorkingDirectory)\Teleopti.Ccc.Web.Broker\**\*.cs;
 			$(CCNetWorkingDirectory)\Teleopti.Ccc.Web.Broker\Web.Debug.config;
 			$(CCNetWorkingDirectory)\Teleopti.Ccc.Web.Broker\Web.Release.config"
+			/>
+			
+			<!-- BrokerBackplane -->
+			<BrokerBackplane
+			Include=
+			"$(CCNetWorkingDirectory)\Teleopti.Ccc.Web.Broker.Backplane\**\*.*"
+			Exclude=
+			"$(CCNetWorkingDirectory)\Teleopti.Ccc.Web.Broker.Backplane\**\obj\**\*.*;
+			$(CCNetWorkingDirectory)\Teleopti.Ccc.Web.Broker.Backplane\**\properties\**\*.*;
+			$(CCNetWorkingDirectory)\Teleopti.Ccc.Web.Broker.Backplane\**\*.csproj;
+			$(CCNetWorkingDirectory)\Teleopti.Ccc.Web.Broker.Backplane\**\*.cs;
+			$(CCNetWorkingDirectory)\Teleopti.Ccc.Web.Broker.Backplane\Web.Debug.config;
+			$(CCNetWorkingDirectory)\Teleopti.Ccc.Web.Broker.Backplane\Web.Release.config"
 			/>
 		</ItemGroup>
 	</Target>
@@ -618,8 +628,6 @@
 			DestinationFiles="@(ETLTool->'$(DeployPath)\ETL\Tool\%(RecursiveDir)%(Filename)%(Extension)')" />
 		<Copy	SourceFiles="@(ETLService)"
 			DestinationFiles="@(ETLService->'$(DeployPath)\ETL\Service\%(RecursiveDir)%(Filename)%(Extension)')" />
-		<Copy	SourceFiles="@(MessageBroker)"
-			DestinationFiles="@(MessageBroker->'$(DeployPath)\MessageBroker\%(RecursiveDir)%(Filename)%(Extension)')" />
 		<Copy 	SourceFiles="@(MyTimeStandAlone)"
 			DestinationFiles="@(MyTimeStandAlone->'$(DeployPath)\MyTime\StandAlone\%(RecursiveDir)%(Filename)%(Extension)')"/>
 		<Copy	SourceFiles="@(RTATools)"
@@ -660,6 +668,8 @@
 		  DestinationFiles="@(ForecastDatabase->'$(DeployPath)\ForecastDatabase\%(RecursiveDir)%(Filename)%(Extension)')"/>
 		 <Copy SourceFiles="@(Broker)"
 		  DestinationFiles="@(Broker->'$(DeployPath)\Broker\%(RecursiveDir)%(Filename)%(Extension)')"/>
+		 <Copy SourceFiles="@(BrokerBackplane)"
+		  DestinationFiles="@(BrokerBackplane->'$(DeployPath)\BrokerBackplane\%(RecursiveDir)%(Filename)%(Extension)')"/>		  
 		<Copy SourceFiles="$(SDKDocOutput)"
 			DestinationFiles="$(DeployPath)\SDK\SdkDoc.chm"
 			/>

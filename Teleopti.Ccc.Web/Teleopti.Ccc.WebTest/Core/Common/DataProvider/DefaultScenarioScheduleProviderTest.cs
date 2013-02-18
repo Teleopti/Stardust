@@ -5,6 +5,8 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Core.RequestContext;
@@ -16,7 +18,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 	public class DefaultScenarioScheduleProviderTest
 	{
 		private DefaultScenarioScheduleProvider _target;
-		private IScenarioProvider _scenarioProvider;
+		private IScenarioRepository _scenarioProvider;
 		private IScheduleRepository _scheduleRepository;
 		private ILoggedOnUser _loggedOnUser;
 		private IUserTimeZone _userTimeZone;
@@ -24,7 +26,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 		[SetUp]
 		public void Setup()
 		{
-			_scenarioProvider = MockRepository.GenerateMock<IScenarioProvider>();
+			_scenarioProvider = MockRepository.GenerateMock<IScenarioRepository>();
 			_loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			_scheduleRepository = MockRepository.GenerateMock<IScheduleRepository>();
 			_userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
@@ -44,7 +46,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 
 			_loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
 			_userTimeZone.Stub(x => x.TimeZone()).Return(timeZone);
-			_scenarioProvider.Stub(x => x.DefaultScenario()).Return(scenario);
+			_scenarioProvider.Stub(x => x.LoadDefaultScenario()).Return(scenario);
 			_scheduleRepository.Stub(x => x.FindSchedulesOnlyInGivenPeriod(new PersonProvider(new[] { person }), new ScheduleDictionaryLoadOptions(true, true),
 																			period.ToDateTimePeriod(timeZone),
 																			scenario)).Return(scheduleDictionary).IgnoreArguments();
@@ -70,7 +72,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 			var scheduleDays = new IScheduleDay[] {};
 
 			_loggedOnUser.Stub(x => x.CurrentUser()).Return(user);
-			_scenarioProvider.Stub(x => x.DefaultScenario()).Return(scenario);
+			_scenarioProvider.Stub(x => x.LoadDefaultScenario()).Return(scenario);
 			_scheduleRepository.Stub(x => x.FindSchedulesOnlyInGivenPeriod(
 				Arg<IPersonProvider>.Matches(o => o.GetPersons().Single().Equals(user)),
 				Arg<IScheduleDictionaryLoadOptions>.Is.Anything,
@@ -108,6 +110,25 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 		}
 
 		[Test]
+		public void ShouldThrowExceptionWhenStudentAvailabilityForDateHasSeveralRestrictions()
+		{
+			var scheduleDays = new[]
+										{
+											MockRepository.GenerateMock<IScheduleDay>()
+										};
+			var date = DateOnly.Today;
+			var studentAvailabilityDay = MockRepository.GenerateMock<IStudentAvailabilityDay>();
+			var personRestrictions = new[] { MockRepository.GenerateMock<IScheduleData>(), studentAvailabilityDay, MockRepository.GenerateMock<IScheduleData>() };
+			var studentAvailabilityRestriction = MockRepository.GenerateMock<IStudentAvailabilityRestriction>();
+
+			scheduleDays[0].Stub(x => x.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(date, TimeZoneInfoFactory.StockholmTimeZoneInfo()));
+			scheduleDays[0].Stub(x => x.PersonRestrictionCollection()).Return(new ReadOnlyCollection<IScheduleData>(new List<IScheduleData>(personRestrictions)));
+			studentAvailabilityDay.Stub(x => x.RestrictionCollection).Return(new ReadOnlyCollection<IStudentAvailabilityRestriction>(new List<IStudentAvailabilityRestriction>(new[] { studentAvailabilityRestriction,studentAvailabilityRestriction })));
+
+			Assert.Throws<MoreThanOneStudentAvailabilityFoundException>(()=> _target.GetStudentAvailabilityForDate(scheduleDays, date));
+		}
+
+		[Test]
 		public void ShouldReturnNullWhenNoStudentAvailabilityForDate()
 		{
 			var scheduleDay = MockRepository.GenerateMock<IScheduleDay>();
@@ -115,6 +136,20 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 
 			scheduleDay.Stub(x => x.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(date, TimeZoneInfoFactory.StockholmTimeZoneInfo()));
 			scheduleDay.Stub(x => x.PersonRestrictionCollection()).Return(new ReadOnlyCollection<IScheduleData>(new List<IScheduleData>()));
+
+			var result = _target.GetStudentAvailabilityForDate(new[] { scheduleDay }, date);
+
+			result.Should().Be.Null();
+		}
+
+		[Test]
+		public void ShouldReturnNullWhenNoStudentAvailabilityRestrictionForDate()
+		{
+			var scheduleDay = MockRepository.GenerateMock<IScheduleDay>();
+			var date = DateOnly.Today;
+
+			scheduleDay.Stub(x => x.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(date, TimeZoneInfoFactory.StockholmTimeZoneInfo()));
+			scheduleDay.Stub(x => x.PersonRestrictionCollection()).Return(new ReadOnlyCollection<IScheduleData>(new List<IScheduleData>{new StudentAvailabilityDay(null, date, new List<IStudentAvailabilityRestriction>())}));
 
 			var result = _target.GetStudentAvailabilityForDate(new[] { scheduleDay }, date);
 
@@ -180,7 +215,7 @@ namespace Teleopti.Ccc.WebTest.Core.Common.DataProvider
 
 			_loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
 			_userTimeZone.Stub(x => x.TimeZone()).Return(timeZone);
-			_scenarioProvider.Stub(x => x.DefaultScenario()).Return(scenario);
+			_scenarioProvider.Stub(x => x.LoadDefaultScenario()).Return(scenario);
 			_scheduleRepository.Stub(x => x.FindSchedulesOnlyInGivenPeriod(new PersonProvider(new[] { person }), new ScheduleDictionaryLoadOptions(true, true),
 																			period.ToDateTimePeriod(timeZone),
 																			scenario)).Return(scheduleDictionary).IgnoreArguments();

@@ -4855,10 +4855,6 @@ Standard</value>
     <value>Ready Time</value>
     <comment>AP: Information grid columns (My Report)</comment>
   </data>
-  <data name="IdleTime" xml:space="preserve">
-    <value>Not Ready Time</value>
-    <comment>AP: Information grid columns (My Report)</comment>
-  </data>
   <data name="LoggedInTime" xml:space="preserve">
     <value>Logged in time</value>
     <comment>AP: Information grid columns (My Report)</comment>
@@ -11124,6 +11120,10 @@ These options are activated:
     <value>Scheduled Agents per Activity</value>
     <comment>Scheduled Agents per Activity</comment>
   </data>
+  <data name="NotReadyTime" xml:space="preserve">
+    <value>Not Ready Time</value>
+    <comment>My report in MyTime</comment>
+  </data>
   <data name="ResTotals" xml:space="preserve">
     <value>Totals</value>
     <comment>Totals</comment>
@@ -11233,5 +11233,53 @@ These options are activated:
   </data>
   <data name="YouHaveToSelectAtLeastOneWorkload" xml:space="preserve">
     <value>You have to select at least one workload</value>
+  </data>
+  <data name="MySchedule" xml:space="preserve">
+    <value>My Schedule</value>
+    <comment>Used in creating Shift Trade on web</comment>
+  </data>
+  <data name="ResShiftStartDateColon" xml:space="preserve">
+    <value>Date (shifts starting):</value>
+    <comment>Date (shifts starting):</comment>
+  </data>
+  <data name="NoAgentsAvailableForShiftTrade" xml:space="preserve">
+    <value>No agents available for shift trade</value>
+    <comment>Message in Shift Trade in MyTime Web</comment>
+  </data>
+  <data name="ResShiftStartDateFromColon" xml:space="preserve">
+    <value>Date From (shifts starting):</value>
+    <comment>Date From (shifts starting):</comment>
+  </data>
+  <data name="ResShiftStartDateToColon" xml:space="preserve">
+    <value>Date To (shifts starting):</value>
+    <comment>Date To (shifts starting):</comment>
+  </data>
+  <data name="Little" xml:space="preserve">
+    <value>Little</value>
+    <comment>Smoothing style Little</comment>
+  </data>
+  <data name="Medium" xml:space="preserve">
+    <value>Medium</value>
+    <comment>Smoothing style Medium</comment>
+  </data>
+  <data name="Much" xml:space="preserve">
+    <value>Much</value>
+    <comment>Smoothing style Much</comment>
+  </data>
+  <data name="QuickForecast" xml:space="preserve">
+    <value>Quick Forecast</value>
+    <comment>Menu item and caption on form</comment>
+  </data>
+  <data name="SeasonalityDataRange" xml:space="preserve">
+    <value>Seasonality and trends data range</value>
+    <comment>Quick forecast wizard page</comment>
+  </data>
+  <data name="SmoothingStyle" xml:space="preserve">
+    <value>Smoothing style</value>
+    <comment>Quick forecast wizard page</comment>
+  </data>
+  <data name="TemplatesHistoricalDataRange" xml:space="preserve">
+    <value>Templates historical data range</value>
+    <comment>Quick forecast wizard page</comment>
   </data>
 </root>

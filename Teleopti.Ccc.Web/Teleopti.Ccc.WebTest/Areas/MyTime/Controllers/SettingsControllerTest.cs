@@ -1,6 +1,9 @@
 ﻿using System.Threading;
+using System.Web.Mvc;
+using System.Web.Routing;
 using AutoMapper;
 using MbCache.Core;
+using MvcContrib.TestHelper.Fakes;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -101,7 +104,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			person.PermissionInformation.Culture().Should().Be.EqualTo(Thread.CurrentThread.CurrentCulture);
 		}
 
-
 		[Test]
 		public void ShouldChangePassword()
 		{
@@ -112,6 +114,26 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			{
 				var result=target.ChangePassword(new ChangePasswordViewModel {NewPassword = "new", OldPassword = "old"}).Data as IChangePasswordResultInfo;
 				Assert.IsTrue(result.IsSuccessful);
+			}
+		}
+
+		[Test]
+		public void ShouldHandleChangePasswordError()
+		{
+			var person = new Person();
+			var response = MockRepository.GenerateStub<FakeHttpResponse>();
+			
+			loggedOnUser.Expect(x => x.CurrentUser()).Return(person);
+			modifyPassword.Expect(x => x.Change(person, "old", "new")).Return(new ChangePasswordResultInfo { IsSuccessful = false });
+			using (var target = new SettingsController(null, loggedOnUser, modifyPassword, new PersonPersister(MockRepository.GenerateMock<IMbCacheFactory>(), null)))
+			{
+				var context = new FakeHttpContext("/");
+				context.SetResponse(response);
+				target.ControllerContext = new ControllerContext(context, new RouteData(), target);
+				target.ModelState.AddModelError("Error", "Error");
+
+				var result = target.ChangePassword(new ChangePasswordViewModel { NewPassword = "new", OldPassword = "old" }).Data as IChangePasswordResultInfo;
+				Assert.IsFalse(result.IsSuccessful);
 			}
 		}
 	}

@@ -5,14 +5,27 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 {
     public class PersonSkill : AggregateEntity, IPersonSkill
     {
-        private ISkill _skill;
+        private readonly ISkill _skill;
         private Percent _skillPercentage;
     	private bool _active;
+
+		protected PersonSkill()
+		{
+		}
+
+		public PersonSkill(ISkill skill, Percent skillPercentage)
+			: this()
+		{
+			InParameter.NotNull("skill", skill);
+			InParameter.NotNull("skillPercentage", skillPercentage);
+
+			_skill = skill;
+			_skillPercentage = skillPercentage;
+		}
 
         public virtual ISkill Skill
         {
             get { return _skill; }
-            set { _skill = value; }
         }
 
         public virtual Percent SkillPercentage
@@ -30,29 +43,12 @@ namespace Teleopti.Ccc.Domain.AgentInfo
     		set { _active = value; }
     	}
 
-        protected PersonSkill()
-        {
-        }
-
-        public PersonSkill(ISkill skill, Percent skillPercentage)
-        {
-            InParameter.NotNull("skill", skill);
-            InParameter.NotNull("skillPercentage", skillPercentage);
-            
-            _skill = skill;
-            _skillPercentage = skillPercentage;
-        }
-
         public virtual object Clone()
         {
             return NoneEntityClone();
         }
 
-        
-
-        #region Implementation of ICloneableEntity<IPersonSkill>
-
-        public virtual IPersonSkill NoneEntityClone()
+		public virtual IPersonSkill NoneEntityClone()
         {
             var retobj = (PersonSkill)MemberwiseClone();
             retobj.SetId(null);
@@ -64,7 +60,5 @@ namespace Teleopti.Ccc.Domain.AgentInfo
             var retobj = (PersonSkill)MemberwiseClone();
             return retobj;
         }
-
-        #endregion
     }
 }

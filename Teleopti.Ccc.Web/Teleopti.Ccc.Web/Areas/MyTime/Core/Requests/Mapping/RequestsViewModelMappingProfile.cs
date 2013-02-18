@@ -5,7 +5,6 @@ using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
-using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Ccc.Web.Models.Shared;
 using Teleopti.Interfaces.Domain;

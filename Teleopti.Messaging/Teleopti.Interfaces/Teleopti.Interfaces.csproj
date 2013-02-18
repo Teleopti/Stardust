@@ -114,6 +114,7 @@
     <Compile Include="Domain\IActualAgentState.cs" />
     <Compile Include="Domain\IEffectiveRestrictionCombiner.cs" />
     <Compile Include="Domain\IChangePasswordResultInfo.cs" />
+    <Compile Include="Domain\ILoggedOnUser.cs" />
     <Compile Include="Domain\IPersonalShiftRestrictionCombiner.cs" />
     <Compile Include="Domain\IActivityNormalExtender.cs" />
     <Compile Include="Domain\IActivityRestrictionTemplate.cs" />
@@ -316,6 +317,7 @@
     <Compile Include="Domain\IterationOperationOption.cs" />
     <Compile Include="Domain\ITextFormatter.cs" />
     <Compile Include="Domain\ITimeZoneDim.cs" />
+    <Compile Include="Domain\ITrueFalseRandomizer.cs" />
     <Compile Include="Domain\IUniqueSchedulePartExtractor.cs" />
     <Compile Include="Domain\IUnsafePersonProvider.cs" />
     <Compile Include="Domain\IUnsavedDaysInfo.cs" />
@@ -858,11 +860,9 @@
     <Compile Include="MessageBroker\Events\IMessageBroker.cs" />
     <Compile Include="MessageBroker\Notification.cs" />
     <Compile Include="MessageBroker\Subscription.cs" />
-    <Compile Include="Messages\Denormalize\DenormalizeScheduleDayMessage.cs" />
-    <Compile Include="Messages\Denormalize\InitialLoadScheduleDay.cs" />
     <Compile Include="Messages\Denormalize\GroupPageChangedMessage.cs" />
     <Compile Include="Messages\Denormalize\PersonChangedMessage.cs" />
-    <Compile Include="Messages\Denormalize\DenormalizeScheduleProjection.cs" />
+    <Compile Include="Messages\Denormalize\ScheduleChanged.cs" />
     <Compile Include="Messages\Denormalize\InitialLoadScheduleProjection.cs" />
     <Compile Include="Messages\Denormalize\PersonPeriodChangedMessage.cs" />
     <Compile Include="Messages\Denormalize\ProcessDenormalizeQueue.cs" />
@@ -870,6 +870,7 @@
     <Compile Include="Messages\Denormalize\RTAStateCheckerMessage.cs" />
     <Compile Include="Messages\Denormalize\RTAUpdatedScheduleDayMessage.cs" />
     <Compile Include="Messages\General\ChildSkillSelection.cs" />
+    <Compile Include="Messages\General\RecalculateForecastOnSkillMessage.cs" />
     <Compile Include="Messages\General\ExportMultisiteSkillsToSkill.cs" />
     <Compile Include="Messages\General\ExportMultisiteSkillToSkill.cs" />
     <Compile Include="Messages\General\IForecastsRow.cs" />
@@ -877,8 +878,7 @@
     <Compile Include="Messages\General\MultisiteSkillSelection.cs" />
     <Compile Include="Messages\General\OpenAndSplitChildSkills.cs" />
     <Compile Include="Messages\General\OpenAndSplitTargetSkill.cs" />
-    <Compile Include="Messages\General\RecalculateForecastOnSkillMessage.cs" />
-    <Compile Include="Messages\General\RunPayrollExport.cs" />
+    <Compile Include="Messages\Payroll\RunPayrollExport.cs" />
     <Compile Include="Messages\General\ImportForecastsFileToSkill.cs" />
     <Compile Include="Messages\Requests\AcceptShiftTrade.cs" />
     <Compile Include="Messages\Requests\NewShiftTradeRequestCreated.cs" />

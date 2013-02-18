@@ -131,28 +131,6 @@ Scenario: View public note
 	| Note text | My note    |
 	When I view my week schedule for date '2012-08-28'
 	Then I should see the public note on date '2012-08-28'
-	
-Scenario: Select week from week-picker
-	Given I am an agent
-	And I view my week schedule
-	When I open the week-picker
-	And I click on any day of a week
-	Then the week-picker should close
-	And I should see the selected week
-
-Scenario: Week-picker monday first day of week for swedish culture
-	Given I am an agent
-	And I am swedish
-	And I view my week schedule
-	When I open the week-picker
-	Then I should see monday as the first day of week
-
-Scenario: Week-picker sunday first day of week for US culture
-	Given I am an agent
-	And I am american
-	And I view my week schedule
-	When I open the week-picker
-	Then I should see sunday as the first day of week
 
 Scenario: Show text request symbol
 	Given I have the role 'Full access to mytime'
@@ -321,4 +299,75 @@ Scenario: Keep user request input when schedules are refreshed
 	And My schedule between '2013-10-03 08:00' to '2013-10-03 18:00' reloads
 	Then I should see the add text request form
 	And Subject should not be empty
+
+Scenario: Show black day summary text when background color is white 
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Published schedule'
+	And I have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2013-01-30 08:00 |
+	| EndTime               | 2013-01-30 18:00 |
+	| Shift category        | Day              |
+	| Shift color           | White            |
+	When I view my week schedule for date '2013-01-30'
+	Then I should see the day summary text for date '2013-01-30' in 'black'
+
+Scenario: Show white day summary text when background color is black 
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Published schedule'
+	And I have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2013-01-30 08:00 |
+	| EndTime               | 2013-01-30 18:00 |
+	| Shift category		| Day	           |
+	| Shift color           | Black            |
+	When I view my week schedule for date '2013-01-30'
+	Then I should see the day summary text for date '2013-01-30' in 'white'
+
+Scenario: Show black activity text when activity background color is white
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Published schedule'
+	And I have a shift with
+    | Field                 | Value            |
+	| StartTime             | 2013-01-30 08:00 |
+	| EndTime               | 2013-01-30 18:00 |
+	| Shift category        | Day              |
+	| All activity color    | White            |
+	When I view my week schedule for date '2013-01-30'
+	Then I should see the text for date '2013-01-30' in 'black'
+
+Scenario: Show white activity text when activity background color is black
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Published schedule'
+	And I have a shift with
+    | Field                 | Value            |
+	| StartTime             | 2013-01-30 08:00 |
+	| EndTime               | 2013-01-30 18:00 |
+	| Shift category        | Day              |
+	| All activity color    | Black            |
+	When I view my week schedule for date '2013-01-30'
+	Then I should see the text for date '2013-01-30' in 'white'
+
+Scenario: Show white absence text when absence background color is black
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Published schedule'
+	And I have a full-day absence today with
+	| Field         | Value      |
+	| Absence color | Black      |
+	| Date          | 2013-01-01 |
+	When I view my week schedule for date '2013-01-01'
+	Then I should see the text for date '2013-01-01' in 'white'
+
+Scenario: Show black absence text when absence background color is white
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Published schedule'
+	And I have a full-day absence today with
+	| Field         | Value      |
+	| Absence color | White      |
+	| Date          | 2013-01-01 |
+	When I view my week schedule for date '2013-01-01'
+	Then I should see the text for date '2013-01-01' in 'black'
+
+
+	 
 	 

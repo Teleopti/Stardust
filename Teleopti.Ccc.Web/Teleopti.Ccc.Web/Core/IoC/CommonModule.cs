@@ -3,6 +3,7 @@ using System.Web;
 using System.Web.Mvc;
 using Autofac;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -18,6 +19,7 @@ using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
 using Teleopti.Ccc.Web.Core.RequestContext.Initialize;
 using Teleopti.Interfaces.Domain;
+using IDataSourceProvider = Teleopti.Ccc.Web.Core.RequestContext.IDataSourceProvider;
 
 namespace Teleopti.Ccc.Web.Core.IoC
 {
@@ -42,8 +44,6 @@ namespace Teleopti.Ccc.Web.Core.IoC
 
 		private static void registerRequestContextTypes(ContainerBuilder builder)
 		{
-			builder.RegisterType<LoggedOnUser>().As<ILoggedOnUser>();
-			builder.RegisterType<UserTimeZone>().As<IUserTimeZone>();
 			builder.RegisterType<SessionPrincipalFactory>().As<ISessionPrincipalFactory>();
 			builder.RegisterType<IdentityProvider>().As<IIdentityProvider>();
 			builder.RegisterType<RequestContextInitializer>().As<IRequestContextInitializer>();

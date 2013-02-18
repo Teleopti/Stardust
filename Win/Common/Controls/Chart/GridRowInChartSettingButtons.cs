@@ -180,24 +180,25 @@ namespace Teleopti.Ccc.Win.Common.Controls.Chart
 
         private Color getcolor()
         {
-            return this.pickColorControl1.ThisColor;
+            return pickColorControl1.ThisColor;
         }
 
         private ChartSeriesDisplayType getselectedStyle()
         {
-            if (buttonAdvBar.State == ButtonAdvState.Pressed || buttonAdvBar.State == (ButtonAdvState.Pressed | ButtonAdvState.Default)) return ChartSeriesDisplayType.Bar;
-            else return ChartSeriesDisplayType.Line;
+        	if (buttonAdvBar.State == ButtonAdvState.Pressed || buttonAdvBar.State == (ButtonAdvState.Pressed | ButtonAdvState.Default)) 
+				return ChartSeriesDisplayType.Bar;
+        	return ChartSeriesDisplayType.Line;
         }
 
-        private AxisLocation getselectedAxis()
-        {
-            //In some cases the button seems both pressed and default?!? which made the chart to change axis of the series
-            if (buttonAdvLeftAxis.State == ButtonAdvState.Pressed || buttonAdvLeftAxis.State == (ButtonAdvState.Pressed | ButtonAdvState.Default)) return AxisLocation.Left;
-            else 
-                return AxisLocation.Right;
-        }
+    	private AxisLocation getselectedAxis()
+    	{
+    		//In some cases the button seems both pressed and default?!? which made the chart to change axis of the series
+            if (buttonAdvLeftAxis.State == ButtonAdvState.Pressed || buttonAdvLeftAxis.State == (ButtonAdvState.Pressed | ButtonAdvState.Default)) 
+					return AxisLocation.Left;
+    		return AxisLocation.Right;
+    	}
 
-        #endregion
+    	#endregion
 
         #region public function - must be called or the state shown will be out of sync
         /// <summary>

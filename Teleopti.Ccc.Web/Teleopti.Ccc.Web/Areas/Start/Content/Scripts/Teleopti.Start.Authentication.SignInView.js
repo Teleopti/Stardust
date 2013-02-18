@@ -1,12 +1,8 @@
 ﻿
 Teleopti.Start.Authentication.SignInView = function (args) {
-
-	var events = new ko.subscribable();
-
 	this.Display = function (data) {
 		var viewModel = new Teleopti.Start.Authentication.SignInViewModel({
 			baseUrl: args.baseUrl,
-			events: events,
 			authenticationState: args.authenticationState
 		});
 		data.render(args.html);
@@ -14,5 +10,11 @@ Teleopti.Start.Authentication.SignInView = function (args) {
 		viewModel.LoadDataSources();
 
 		Teleopti.Start.Common.Layout.ActivatePlaceHolderText();
+
+		viewModel.UserNameFocus.subscribe(function (newValue) {
+			if (newValue == true) {
+				$('#Username-input').focus();
+			}
+		});
 	};
 };

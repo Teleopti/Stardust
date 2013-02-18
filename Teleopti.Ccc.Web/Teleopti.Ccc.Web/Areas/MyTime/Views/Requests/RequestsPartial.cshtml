@@ -5,49 +5,52 @@
 @{
 	Layout = null;
 }
-<!-- Used for setting properties on the requestdetailsviewmodel -->
-<div class="displaynone" id="Request-detail-default-start-time">@TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(0, 0, 0))</div>
-<div class="displaynone" id="Request-detail-default-end-time">@TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(23, 59, 0))</div>
-<div id="Requests-body-inner" class="request-body-inner relative">
-	<div class="ui-corner-all friendly-message ui-corner-all floatleft" data-bind="visible: requests().length == 0">
-		@Resources.NoRequestsFound
+<script type="text/Html" id="request-detail-not-set">
+	<div>apa</div>
+</script>
+<script type="text/Html" id="shifttrade-request-detail-template">
+	<div id="I-am-a-shifttrade">xxx</div>
+	<div class="pdb5 request-detail-title">@Resources.ShiftTradeRequest</div>
+	<br/>
+	<br/>
+	<div>| 08:00 | 09:00 | 10:00 | 11:00 | 12:00 | 13:00 | 14:00 | 15:00 | 16:00 | 17:00 | </div>
+	<span style="background: green; width: 50px; position: relative; display:inline-block; float: left; margin-left: 80px;" >Phone</span>
+	<span style="background: red; width: 20px; position: relative; display:inline-block; float: left" >SB</span>
+	<span style="background: green; width: 50px; position: relative; display:inline-block; float: left" >Phone</span>
+	<span style="background: yellow; width: 80px; position: relative; display:inline-block; float: left" >Lunch</span>
+	<span style="background: green; width: 100px; position: relative; display:inline-block; float: left" >Phone</span>
+
+	<br/>
+	<br/>
+	<br/>
+	<div class="arrow-down"></div>
+	
+	<div>| 08:00 | 09:00 | 10:00 | 11:00 | 12:00 | 13:00 | 14:00 | 15:00 | 16:00 | 17:00 |</div>
+	<span style="background: green; width: 100px; position: relative; display:inline-block; float: left; margin-left: 30px;" >Phone</span>	
+	<span style="background: yellow; width: 80px; position: relative; display:inline-block; float: left" >Lunch</span>
+	<span style="background: green; width: 50px; position: relative; display:inline-block; float: left" >Phone</span>
+	<span style="background: red; width: 20px; position: relative; display:inline-block; float: left" >SB</span>
+	<span style="background: green; width: 50px; position: relative; display:inline-block; float: left" >Phone</span>
+	<br/>
+	<br/>
+	<br/>
+	<div class="edit-module-element">
+		<label class="displayblock" for="Request-detail-subject-input">@Resources.Subject</label>
+		<input id="Request-detail-subject-input" type="text" />
+	</div>
+	
+	
+	<div  class="floatright">
+		<input type="button" id="Approve-shift-trade" value="@Resources.Approve" data-bind="click: Approve" class="button mb5"></input>
+		<input type="button" id="Deny-shift-trade" value="@Resources.Deny" data-bind="click: Deny" class="button mb5"></input>
 	</div>
 
-	<div id="request-list" data-bind="foreach: requests" class="request-list">
-		<div class="ui-corner-all request-item relative" data-bind="click: $parent.SelectItem, event: { mouseover: toggle, mouseout: toggle }, increaseWidthIf: mouseIsOver,  css: { 'request-selected': isSelected() == true , 'request-not-selected': isSelected() == false}, attr:{'data-mytime-requestid' : Id}">
-			<div class="request-arrow-right" data-bind="fadeInIf: mouseIsOver">
-				<img src="@Url.Content("~/Areas/MyTime/Content/Images/arrow-right.png")"/>
-			</div>
-		
-			<div>
-				<button class="request-delete-button icon" title="@Resources.Delete" data-bind="click: $parent.Delete,clickBubble: false, visible: CanDelete" />
-			</div>
-			<div class="request-subject">
-				<h3 class="request-data-subject" data-bind="text: Subject">
-				</h3>
-			</div>
-			<div class="request-details" >
-				<div>
-					<span class="request-caption">@Resources.Type: </span><span data-bind="text: Type" class="request-data-type"></span>
-					<span class="request-caption">@Resources.Status: </span><span data-bind="text: Status"></span>
-				</div>
-				<span class="request-caption">@Resources.Date: </span><span class="request-data-date" data-bind="text: Dates"></span>
-				<span class="request-caption">@Resources.UpdatedOn: </span><span data-bind="text: UpdatedOn" ></span>
-			</div>
-			<div class="request-text" data-bind="text: Text">
-			</div>
-		</div>
-	</div>
-	<div id="Request-detail-section" class="displaynone request-edit-section ui-corner-all request-selected" data-bind=" css: { 'request-selected': isUpdate() == true , 'request-not-selected': isUpdate() == false}">
-		<input type="hidden" id="Request-detail-entityid" />
-		<div id="Schedule-addRequest-title" class="pdb5">
-			<span id="Text-request-tab" class="selectable-tab selected-tab" data-bind="visible: TextRequestTabVisible">@Resources.TextRequest</span>
-			@if (Model.RequestPermission.AbsenceRequestPermission)
-			{
-				<span data-bind="visible: TabSeparatorVisible">|</span>
-				<span id="Absence-request-tab" class="selectable-tab" data-bind="visible: AbsenceRequestTabVisible">@Resources.AbsenceRequest</span>
-			}
-		</div>
+</script>
+
+<script type="text/Html" id="text-request-detail-template">
+	<div class="pdb5 request-detail-title">@Resources.TextRequest</div>
+			<input type="hidden" id="Request-detail-entityid" />
+
 		<div class="edit-module-element">
 			<span id="Request-detail-deny-reason"></span>
 		</div>
@@ -107,43 +110,202 @@
 		<input id="Request-detail-ok-button" type="button" class="button mb5 floatright" update-value="@Html.AttributeEncode(Resources.Update)" new-value="@Html.AttributeEncode(Resources.SubmitRequest)"/>
 		<div id="Request-detail-error" class="error edit-module-element floatleft clearleftfloat">
 		</div>
-	</div>
-	<div class="request-list">
-		<div id="friendly-message" class="friendly-message ui-corner-all floatleft" style="display: none;">
+</script>
+
+<script type="text/Html" id="absence-request-detail-template">
+	<div class="pdb5 request-detail-title">@Resources.AbsenceRequest</div>
+			<input type="hidden" id="Request-detail-entityid" />
+
+		<div class="edit-module-element">
+			<span id="Request-detail-deny-reason"></span>
+		</div>
+		<div class="edit-module-element">
+			<label class="displayblock" for="Request-detail-subject-input">@Resources.Subject</label>
+			<input id="Request-detail-subject-input" type="text" />
+		</div>
+		<div class="edit-module-element">
+			<label class="displayblock" for="Request-detail-message-input">@Resources.Message</label>
+			<textarea id="Request-detail-message-input" />
+		</div>
+		<div id="Absence-type-element" class="floatleft displaynone">
+			<div class="edit-module-element floatleft">
+				<div class="floatleft absence-type-input-label">@Resources.AbsenceType</div>
+			</div>
+			<div class="edit-module-element floatleft">
+				<select id="Absence-type" class="absence-input combobox">
+					@foreach (var absenceType in Model.AbsenceTypes)
+					{
+						<option value="@Html.AttributeEncode(absenceType.Name)" typeid="@Html.AttributeEncode(absenceType.Id)">@absenceType.Name</option>
+					}
+				</select>
+			</div>
+		</div>
+		<div class="floatleft">
+			<span class="edit-module-element floatleft">
+				<input id="Request-detail-fromDate-input" class="date-input" type="text" value="@DateTime.Today.ToShortDateString()" />
+			</span><span id="Request-detail-fromTime" class="edit-module-element floatleft">
+				       <label class="displayblock" for="Request-detail-fromTime-input-input">@Resources.Time</label>
+				       <select id="Request-detail-fromTime-input" class="time-input combobox">
+					       @foreach (var timeSpan in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, x * 30, 0)))
+					       {
+						       <option @(timeSpan.Hours == 8 && timeSpan.Minutes == 0 ? "selected" : "") value="@Html.AttributeEncode(@TimeHelper.TimeOfDayFromTimeSpan(timeSpan))">@TimeHelper.TimeOfDayFromTimeSpan(timeSpan)</option>
+					       }
+				       </select>
+			       </span>
+		</div>
+		<div>
+			<span class="edit-module-element clearleftfloat floatleft">
+				<input id="Request-detail-toDate-input" class="date-input" type="text" value="@DateTime.Today.ToShortDateString()"  />
+			</span><span id="Request-detail-toTime" class="edit-module-element floatleft">
+				       <label class="displayblock" for="Request-detail-toTime-input-input">@Resources.Time</label>
+				       <select id="Request-detail-toTime-input" class="time-input combobox">
+					       @foreach (var timeSpan in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, x * 30, 0)))
+					       {
+						       <option @(timeSpan.Hours == 17 && timeSpan.Minutes == 0 ? "selected" : "") value="@Html.AttributeEncode(@TimeHelper.TimeOfDayFromTimeSpan(timeSpan))">@TimeHelper.TimeOfDayFromTimeSpan(timeSpan)</option>
+					       }
+				       </select>
+			       </span>
+		</div>
+		<span class="edit-module-element clearleftfloat floatleft">
+			<input type="checkbox" id="Fullday-check" data-bind="checked: IsFullDay" />
+		</span>
+		<label class="floatleft" for="Fullday-check">
+			@Resources.FullDay
+		</label>
+		<input id="Request-detail-ok-button" type="button" class="button mb5 floatright" update-value="@Html.AttributeEncode(Resources.Update)" new-value="@Html.AttributeEncode(Resources.SubmitRequest)"/>
+		<div id="Request-detail-error" class="error edit-module-element floatleft clearleftfloat">
+		</div>
+</script>
+
+<script type="text/Html" id="add-new-request-detail-template">
+		<div id="Schedule-addRequest-title" class="pdb5">
+			
+			<span id="Text-request-tab" class="selectable-tab selected-tab" data-bind="visible: TextRequestTabVisible, click: AddTextRequest">@Resources.TextRequest</span>
+			@if (Model.RequestPermission.AbsenceRequestPermission)
+			{
+				<span data-bind="visible: TabSeparatorVisible">|</span>
+				<span id="Absence-request-tab" class="selectable-tab" data-bind="visible: AbsenceRequestTabVisible, click: AddAbsenceRequest">@Resources.AbsenceRequest</span>
+			}
+		</div>
+				<input type="hidden" id="Request-detail-entityid" />
+
+		<div class="edit-module-element">
+			<span id="Request-detail-deny-reason"></span>
+		</div>
+		<div class="edit-module-element">
+			<label class="displayblock" for="Request-detail-subject-input">@Resources.Subject</label>
+			<input id="Request-detail-subject-input" type="text" />
+		</div>
+		<div class="edit-module-element">
+			<label class="displayblock" for="Request-detail-message-input">@Resources.Message</label>
+			<textarea id="Request-detail-message-input" />
+		</div>
+		<div id="Absence-type-element" class="floatleft displaynone">
+			<div class="edit-module-element floatleft">
+				<div class="floatleft absence-type-input-label">@Resources.AbsenceType</div>
+			</div>
+			<div class="edit-module-element floatleft">
+				<select id="Absence-type" class="absence-input combobox">
+					@foreach (var absenceType in Model.AbsenceTypes)
+					{
+						<option value="@Html.AttributeEncode(absenceType.Name)" typeid="@Html.AttributeEncode(absenceType.Id)">@absenceType.Name</option>
+					}
+				</select>
+			</div>
+		</div>
+		<div class="floatleft">
+			<span class="edit-module-element floatleft">
+				<input id="Request-detail-fromDate-input" class="date-input" type="text" value="@DateTime.Today.ToShortDateString()" />
+			</span><span id="Request-detail-fromTime" class="edit-module-element floatleft">
+				       <label class="displayblock" for="Request-detail-fromTime-input-input">@Resources.Time</label>
+				       <select id="Request-detail-fromTime-input" class="time-input combobox">
+					       @foreach (var timeSpan in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, x * 30, 0)))
+					       {
+						       <option @(timeSpan.Hours == 8 && timeSpan.Minutes == 0 ? "selected" : "") value="@Html.AttributeEncode(@TimeHelper.TimeOfDayFromTimeSpan(timeSpan))">@TimeHelper.TimeOfDayFromTimeSpan(timeSpan)</option>
+					       }
+				       </select>
+			       </span>
+		</div>
+		<div>
+			<span class="edit-module-element clearleftfloat floatleft">
+				<input id="Request-detail-toDate-input" class="date-input" type="text" value="@DateTime.Today.ToShortDateString()"  />
+			</span><span id="Request-detail-toTime" class="edit-module-element floatleft">
+				       <label class="displayblock" for="Request-detail-toTime-input-input">@Resources.Time</label>
+				       <select id="Request-detail-toTime-input" class="time-input combobox">
+					       @foreach (var timeSpan in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, x * 30, 0)))
+					       {
+						       <option @(timeSpan.Hours == 17 && timeSpan.Minutes == 0 ? "selected" : "") value="@Html.AttributeEncode(@TimeHelper.TimeOfDayFromTimeSpan(timeSpan))">@TimeHelper.TimeOfDayFromTimeSpan(timeSpan)</option>
+					       }
+				       </select>
+			       </span>
+		</div>
+		<span class="edit-module-element clearleftfloat floatleft">
+			<input type="checkbox" id="Fullday-check" data-bind="checked: IsFullDay" />
+		</span>
+		<label class="floatleft" for="Fullday-check">
+			@Resources.FullDay
+		</label>
+		<input id="Request-detail-ok-button" type="button" class="button mb5 floatright" update-value="@Html.AttributeEncode(Resources.Update)" new-value="@Html.AttributeEncode(Resources.SubmitRequest)"/>
+		<div id="Request-detail-error" class="error edit-module-element floatleft clearleftfloat">
+		</div>
+</script>
+
+<div class="displaynone" id="Request-detail-default-start-time">@TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(0, 0, 0))</div>
+<div class="displaynone" id="Request-detail-default-end-time" >@TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(23, 59, 0))</div>
+
+<div id="Requests-body-inner" class="request-body-inner relative">
+	<button id="Request-add-shift-trade-button" class="ui-button" style="display: none">xxxLägg till shift trade request</button>
+	@Html.Partial("NewShiftTradeRequest")
+	<div id="Requests-data-binding-area">
+		<div class="ui-corner-all friendly-message ui-corner-all floatleft" data-bind="visible: Requests().length == 0" id="Requests-no-requests-found">
 			@Resources.NoRequestsFound
 		</div>
-		<ol id="Requests-list">
-			<li class="ui-corner-all request-item template relative">
-				<div class="request-delete-button-container">
-					<button class="request-delete-button icon" style="display: none;" disabled="disabled" title="@Resources.Delete" />
+
+		<div id="request-list" data-bind="foreach: Requests" class="request-list">
+		
+			<!-- Shows the requestviewmodel -->
+			<div class="ui-corner-all request-item relative" data-bind="click: $parent.SelectItem, event: { mouseover: ToggleMouseOver, mouseout: ToggleMouseOver }, increaseWidthIf: IsMouseOver,  css: { 'request-selected': IsSelected() == true , 'request-not-selected': IsSelected() == false}, attr:{'data-mytime-requestid' : Id}">
+				<div class="request-arrow-right" data-bind="fadeInIf: IsMouseOver">
+					<img src="@Url.Content("~/Areas/MyTime/Content/Images/arrow-right.png")"/>
+				</div>
+		
+				<div>
+					<button class="request-delete-button icon" title="@Resources.Delete" data-bind="click: $parent.Delete,clickBubble: false, visible: CanDelete" />
 				</div>
 				<div class="request-subject">
-					<h3 class="request-data-subject">
+					<h3 class="request-data-subject" data-bind="text: Subject">
 					</h3>
 				</div>
-				<div class="request-details">
+
+				<div class="request-details" >
 					<div>
-						<span class="request-caption">@Resources.Type: </span><span class="request-data-type">
-						</span><span class="request-caption">@Resources.Status: </span><span class="request-data-status">
-						</span>
+						<span class="request-caption">@Resources.Type: </span><span data-bind="text: Type" class="request-data-type"></span>
+						<span class="request-caption">@Resources.Status: </span><span data-bind="text: Status"></span>
 					</div>
-					<span class="request-caption">@Resources.Date: </span><span class="request-data-date">
-					</span><span class="request-caption">@Resources.UpdatedOn: </span><span class="request-data-updatedon">
-					</span>
+					<span class="request-caption">@Resources.Date: </span><span class="request-data-date" data-bind="text: Dates"></span>
+					<span class="request-caption">@Resources.UpdatedOn: </span><span data-bind="text: UpdatedOn" ></span>
 				</div>
-				<div class="request-text request-data-text">
+
+				<div class="request-text" data-bind="text: Text">
 				</div>
-				<div class="request-connector">
-				</div>
-			</li>
-		</ol>
+			
+
+			</div>
+		</div>
+
+		<div id="Request-detail-section" class="displaynone request-edit-section ui-corner-all request-selected" data-bind=" css: { 'request-selected': IsUpdate() == true , 'request-not-selected': IsUpdate() == false}">
+			<div data-bind="template : Template">
+			</div>
+		</div>
+
+
 		<div class="loading-gradient" style="display: none">
 			<div class="loading">
 			</div>
 		</div>
-		<div class="arrow-down" data-bind="fadeInIf: moreToLoad,hiddenWhenFalse: true">
+		<div class="arrow-down" data-bind="fadeInIf: MoreToLoad,hiddenWhenFalse: true">
 		</div>
 		<div class="clearboth">
 		</div>
-	</div>
+	</div>		
 </div>

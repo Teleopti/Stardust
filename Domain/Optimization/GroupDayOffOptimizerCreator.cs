@@ -1,4 +1,5 @@
 using Teleopti.Ccc.DayOffPlanning;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Interfaces.Domain;
 
@@ -48,8 +49,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IDaysOffPreferences daysOffPreferences)
 		{
 			IDayOffBackToLegalStateFunctions dayOffBackToLegalStateFunctions = new DayOffBackToLegalStateFunctions();
+			IDayOffDecisionMaker cmsbOneFreeWeekendMax5WorkingDaysDecisionMaker = new CMSBOneFreeWeekendMax5WorkingDaysDecisionMaker(new OfficialWeekendDays(), new TrueFalseRandomizer());
 			ISmartDayOffBackToLegalStateService dayOffBackToLegalStateService
-				= new SmartDayOffBackToLegalStateService(dayOffBackToLegalStateFunctions, daysOffPreferences, 25);
+				= new SmartDayOffBackToLegalStateService(dayOffBackToLegalStateFunctions, daysOffPreferences, 25, cmsbOneFreeWeekendMax5WorkingDaysDecisionMaker);
 			return new GroupDayOffOptimizer(converter,
 			                                decisionMaker,
 			                                _scheduleResultDataExtractorProvider,

@@ -472,6 +472,19 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             _mocks.VerifyAll();
         }
 
+		[Test]
+		public void VerifyCannotSaveNewMeetingWithEndTimeEarlierThanStartTime()
+		{
+			_model.StartTime = new TimeSpan(11,0,0);
+			_model.EndTime = new TimeSpan(10,0,0);
+			_view.ShowErrorMessage("", "");
+			LastCall.IgnoreArguments();
+
+			_mocks.ReplayAll();
+			_target.InvalidTimeInfo();
+			_mocks.VerifyAll();
+		}
+
         [Test]
         public void VerifyCanUpdateRecurringActive()
         {
@@ -534,11 +547,26 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             _mocks.VerifyAll();
         }
 
+		[Test]
+		public void VerifyTrySave()
+		{
+			ISchedulerStateHolder schedulerStateHolder = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_requestedPeriod, _timeZone),
+																				  new List<IPerson>
+                                                                                      {
+                                                                                          _person,
+                                                                                          _requiredPerson,
+                                                                                          _optionalPerson
+                                                                                      });
+			_target = new MeetingComposerPresenterForTest(_view, _model, schedulerStateHolder, _unitOfWorkFactory,
+														  _repositoryFactory);
+			_target.TrySave();
+			Assert.IsFalse(_target.TrySave());
+		}
+		
+
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void VerifyOnCloseBehavior()
         {
-            var unitOfWork = _mocks.StrictMock<IUnitOfWork>();
-            var meetingRepository = _mocks.StrictMock<IMeetingRepository>();
             ISchedulerStateHolder schedulerStateHolder = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_requestedPeriod,_timeZone), 
                                                                                   new List<IPerson>
                                                                                       {
@@ -558,20 +586,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
                 Expect.Call(_view.ShowConfirmationMessage("", "")).IgnoreArguments().Return(DialogResult.Yes);
 
             }
-            Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-            Expect.Call(_repositoryFactory.CreatePersonRepository(unitOfWork)).Return(_personRep);
-            Expect.Call(_personRep.FindPeople(new List<IPerson>())).Return(new List<IPerson>()).IgnoreArguments();
-            //Expect.Call(() => unitOfWork.Reassociate(new List<IPerson>())).IgnoreArguments();
-            Expect.Call(unitOfWork.Dispose);
-            Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-            Expect.Call(_repositoryFactory.CreateMeetingRepository(unitOfWork)).Return(meetingRepository);
-            meetingRepository.Add(_meeting);
-            Expect.Call(unitOfWork.PersistAll(_target)).Return(new List<IRootChangeInfo>());
-            unitOfWork.Dispose();
-
-            _view.Close();
-            _view.OnModificationOccurred(_model.Meeting, false);
-
+           
             _mocks.ReplayAll();
 
             _target.Initialize();
@@ -588,7 +603,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             Assert.IsTrue(_target.CanClose());
 
             _target.OnClose();
-            Assert.IsTrue(_target.CanClose());
+            Assert.IsFalse(_target.CanClose());
 
             _mocks.VerifyAll();
         }

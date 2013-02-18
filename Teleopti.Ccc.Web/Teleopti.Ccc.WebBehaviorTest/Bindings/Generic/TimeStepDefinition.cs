@@ -1,4 +1,5 @@
 ﻿using System;
+using NUnit.Framework;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
@@ -10,13 +11,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 	[Binding]
 	public class TimeStepDefinition
 	{
-		[Given(@"Current time is '(.*)'")]
+		[Given(@"Current time is '(.*)'"), SetCulture("sv-SE")]
 		public void GivenCurrentTimeIs(DateTime time)
 		{
 			Navigation.GoTo("Test/SetCurrentTime?dateSet=" + time);
 		}
 
-		[When(@"Current browser time has changed to '(.*)'")]
+		[When(@"Current browser time has changed to '(.*)'"), SetCulture("sv-SE")]
 		public void WhenCurrentBrowserTimeHasChangedTo(DateTime time)
 		{
 			const string setJsDateTemplate =
