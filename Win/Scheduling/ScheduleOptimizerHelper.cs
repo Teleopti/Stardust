@@ -1106,7 +1106,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             return groupPersonBuilderForOptimization;
         }
 
-        public void BlockScheduleForAdvanceScheduling(IList<IScheduleMatrixPro> selectedPersonMatrixList, IList<IScheduleMatrixPro> selectedPersonAllMatrixList, IList<IScheduleMatrixPro> AllPersonMatrixList, BackgroundWorker backgroundWorker, ISchedulingOptions schedulingOptions)
+        public void BlockScheduleForAdvanceScheduling(IList<IScheduleMatrixPro> selectedPersonMatrixList, IList<IScheduleMatrixPro> selectedPersonAllMatrixList, IList<IScheduleMatrixPro> AllPersonMatrixList, BackgroundWorker backgroundWorker, ISchedulingOptions schedulingOptions,IList<IScheduleDay > scheduleDays )
         {
             var fixedStaffSchedulingService = _container.Resolve<IFixedStaffSchedulingService>();
             fixedStaffSchedulingService.ClearFinderResults();
@@ -1126,10 +1126,23 @@ namespace Teleopti.Ccc.Win.Scheduling
             
                 var advancedaysOffSchedulingService = _container.Resolve<IAdvanceDaysOffSchedulingService>();
                 advancedaysOffSchedulingService.Execute(selectedPersonAllMatrixList, schedulePartModifyAndRollbackServiceForContractDaysOff, schedulingOptions, groupPersonBuilderForOptimization);
-                
+
+                DateOnlyPeriod selectedPeriod = OptimizerHelperHelper.GetSelectedPeriod(scheduleDays);
+                var targetTimeCalculator = new SchedulePeriodTargetTimeCalculator();
+                var groupPersonsBuilder = _container.Resolve<IGroupPersonsBuilder>();
+                var teamSteadyStateRunner = new TeamSteadyStateRunner(selectedPersonAllMatrixList, targetTimeCalculator);
+                var teamSteadyStateCreator = new TeamSteadyStateDictionaryCreator(teamSteadyStateRunner, selectedPersonAllMatrixList, groupPersonsBuilder, schedulingOptions);
+                var teamSteadyStateDictionary = teamSteadyStateCreator.Create(selectedPeriod);
+                //var resourceOptimizationHelper = _container.Resolve<IResourceOptimizationHelper>();
+                //IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization = new GroupPersonBuilderForOptimization(_schedulerStateHolder.SchedulingResultState, _container.Resolve<IGroupPersonFactory>(), _container.Resolve<IGroupPagePerDateHolder>());
+                //var coherentChecker = new TeamSteadyStateCoherentChecker();
+                //var scheduleMatrixProFinder = new TeamSteadyStateScheduleMatrixProFinder();
+                //var teamSteadyStateMainShiftScheduler = new TeamSteadyStateMainShiftScheduler(coherentChecker, scheduleMatrixProFinder, resourceOptimizationHelper);
+                var teamSteadyStateHolder = new TeamSteadyStateHolder(teamSteadyStateDictionary);
+
                 var advanceSchedulingService = CallAdvanceSchedulingService(schedulingOptions,selectedPersonMatrixList, groupPersonBuilderForOptimization);
                 IDictionary<string, IWorkShiftFinderResult> schedulingResults = new Dictionary<string, IWorkShiftFinderResult>();
-                advanceSchedulingService.Execute(schedulingResults, AllPersonMatrixList, selectedPersonMatrixList);
+                advanceSchedulingService.Execute(schedulingResults, AllPersonMatrixList, selectedPersonMatrixList, teamSteadyStateHolder);
                 if (schedulingOptions.RotationDaysOnly)
                     schedulePartModifyAndRollbackServiceForContractDaysOff.Rollback();
                 blockSchedulingService.BlockScheduled -= blockSchedulingServiceBlockScheduled;
