@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using AutoMapper;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.Web.Core.IoC;
@@ -16,13 +17,18 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		private readonly Func<IShiftTradeRequestProvider> _shiftTradeRequestProvider;
 		private readonly Func<IProjectionProvider> _projectionProvider;
 		private readonly IResolve<IShiftTradeTimeLineHoursViewModelFactory> _shiftTradeTimelineHoursViewModelFactory;
+		private readonly Func<IUserCulture> _userCulture;
 		private const int TimeLineOffset = 15;
 
-		public ShiftTradeScheduleViewModelMappingProfile(Func<IShiftTradeRequestProvider> shiftTradeRequestProvider, Func<IProjectionProvider> projectionProvider, IResolve<IShiftTradeTimeLineHoursViewModelFactory> shiftTradeTimelineHoursViewModelFactory)
+		public ShiftTradeScheduleViewModelMappingProfile(Func<IShiftTradeRequestProvider> shiftTradeRequestProvider, 
+																										Func<IProjectionProvider> projectionProvider, 
+																										IResolve<IShiftTradeTimeLineHoursViewModelFactory> shiftTradeTimelineHoursViewModelFactory,
+																										Func<IUserCulture> userCulture)
 		{
 			_shiftTradeRequestProvider = shiftTradeRequestProvider;
 			_projectionProvider = projectionProvider;
 			_shiftTradeTimelineHoursViewModelFactory = shiftTradeTimelineHoursViewModelFactory;
+			_userCulture = userCulture;
 		}
 
 		protected override void Configure()
@@ -167,7 +173,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		}
 
 
-		private static IEnumerable<ShiftTradeScheduleLayerViewModel> createShiftTradeLayers(ShiftTradePersonDayData personDay, TimeZoneInfo timeZone, DateTimePeriod timeLineRange)
+		private IEnumerable<ShiftTradeScheduleLayerViewModel> createShiftTradeLayers(ShiftTradePersonDayData personDay, TimeZoneInfo timeZone, DateTimePeriod timeLineRange)
 		{
 			if (personDay.SignificantPartForDisplay == SchedulePartView.DayOff)
 				return createShiftTradeDayOffLayer(timeLineRange, timeZone);
@@ -188,10 +194,21 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 											 Color = ColorTranslator.ToHtml(visualLayer.DisplayColor()),
 											 StartTimeText = startDate.ToString("HH:mm"),
 											 EndTimeText = endDate.ToString("HH:mm"),
-											 Title = string.Concat(startDate.ToString("HH:mm"), " - ", endDate.ToString("HH:mm")),
+											 Title = createTitle(startDate, endDate),
 											 ElapsedMinutesSinceShiftStart = (int)startDate.Subtract(TimeZoneHelper.ConvertFromUtc(shiftStartTime, timeZone)).TotalMinutes
 										 }).ToList();
 			return scheduleLayers;
+		}
+
+		private string createTitle(DateTime start, DateTime end)
+		{
+			//make a component for this?
+			var userCulture = _userCulture().GetCulture();
+			//easier testing - not null in runtime 
+			if (userCulture == null)
+				userCulture = CultureInfo.CurrentUICulture;
+			return string.Concat(start.ToString(userCulture.DateTimeFormat.ShortTimePattern, userCulture), " - ",
+													 end.ToString(userCulture.DateTimeFormat.ShortTimePattern, userCulture));
 		}
 
 		private static IEnumerable<ShiftTradeScheduleLayerViewModel> createShiftTradeDayOffLayer(DateTimePeriod timeLineRange, TimeZoneInfo timeZone)

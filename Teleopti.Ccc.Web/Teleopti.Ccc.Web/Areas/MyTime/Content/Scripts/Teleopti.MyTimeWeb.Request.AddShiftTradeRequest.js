@@ -162,7 +162,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		});
 		self.title = ko.computed(function () {
 			if (self.payload) {
-				return self.startTime + '-' + self.endTime + ' ' + self.payload;
+				return layer.Title;
 			}
 			return '';
 		});
@@ -220,7 +220,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 	function _hideShiftTradeWindow() {
 		$('#Request-add-shift-trade').hide();
 	}
-	
+
 	function setShiftTradeRequestDate(date) {
 		vm.loadedDateSwedishFormat(null); //make sure scenarios wait until requested date is bound
 		vm.requestedDate(moment(date));
