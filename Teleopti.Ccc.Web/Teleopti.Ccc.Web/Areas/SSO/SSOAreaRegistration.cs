@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Web.Areas.SSO
 			context.MapRoute(
 				"SSO_default",
 				"SSO/{controller}/{action}/{id}",
-				new { action = "Index", id = UrlParameter.Optional }
+				new { controller = "OpenId", action = "Identifier", id = UrlParameter.Optional }
 			);
 		}
 	}

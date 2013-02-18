@@ -201,11 +201,8 @@
     <Compile Include="Areas\MyTime\Core\StudentAvailability\Mapping\StudentAvailabilityAndScheduleDayViewModelMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradePersonScheduleViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeTimeLineHoursViewModel.cs" />
-    <Compile Include="Areas\SSO\Controllers\AccountController.cs" />
     <Compile Include="Areas\SSO\Controllers\OpenIdController.cs" />
     <Compile Include="Areas\SSO\Core\TransferResult.cs" />
-    <Compile Include="Areas\SSO\Core\Util.cs" />
-    <Compile Include="Areas\SSO\Models\AccountModels.cs" />
     <Compile Include="Areas\SSO\SSOAreaRegistration.cs" />
     <Compile Include="Areas\Start\Controllers\ApplicationAuthenticationApiController.cs" />
     <Compile Include="Areas\Start\Models\Authentication\ChangePasswordInput.cs" />
@@ -877,10 +874,10 @@
     <Content Include="Content\Scripts\MicrosoftMvcValidation.debug.js" />
     <Content Include="Areas\Start\Views\Test\WidgetStylingSample.cshtml" />
     <Content Include="Areas\SSO\Views\Web.config" />
+    <Content Include="Areas\SSO\Views\OpenId\Xrds.cshtml" />
     <Content Include="Areas\SSO\Views\OpenId\AskUser.cshtml" />
     <Content Include="Areas\SSO\Views\OpenId\Identifier.cshtml" />
-    <Content Include="Areas\SSO\Views\OpenId\Xrds.cshtml" />
-    <Content Include="Areas\SSO\Views\Shared\_LogOnPartial.cshtml" />
+    <Content Include="Areas\SSO\Views\Shared\_Layout.cshtml" />
     <None Include="PasswordPolicy.xml.notinuse">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
