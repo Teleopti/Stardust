@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Web.Mvc;
 using DotNetOpenAuth.OpenId;
+using DotNetOpenAuth.OpenId.Extensions.AttributeExchange;
 using DotNetOpenAuth.OpenId.Provider;
 using DotNetOpenAuth.Messaging;
 using Teleopti.Ccc.Web.IdentityProvider.Core;
@@ -14,15 +15,6 @@ namespace Teleopti.Ccc.Web.IdentityProvider.Controllers
 
 		  public ActionResult Identifier()
 		  {
-				if (User.Identity.IsAuthenticated && ProviderEndpoint.PendingAuthenticationRequest != null)
-				{
-					 Util.ProcessAuthenticationChallenge(ProviderEndpoint.PendingAuthenticationRequest);
-					 if (ProviderEndpoint.PendingAuthenticationRequest.IsAuthenticated.HasValue)
-					 {
-						  ProviderEndpoint.SendResponse();
-					 }
-				}
-
 				if (Request.AcceptTypes != null && Request.AcceptTypes.Contains("application/xrds+xml"))
 				{
 					 return new TransferResult("~/OpenId/Xrds");
@@ -46,9 +38,34 @@ namespace Teleopti.Ccc.Web.IdentityProvider.Controllers
 					 ProviderEndpoint.PendingRequest = (IHostProcessedRequest)request;
 					 var idrequest = request as IAuthenticationRequest;
 
+					 // Verify that RP discovery is successful.
+					 if (idrequest.IsReturnUrlDiscoverable(ProviderEndpoint.Provider.Channel.WebRequestHandler) != RelyingPartyDiscoveryResult.Success)
+					 {
+						 idrequest.IsAuthenticated = false;
+						 ProviderEndpoint.Provider.PrepareResponse(idrequest).AsActionResult();
+					 }
+
 					 idrequest.LocalIdentifier = buildIdentityUrl();
 					 idrequest.IsAuthenticated = true;
 					 ProviderEndpoint.SendResponse();
+
+					 if (idrequest.IsAuthenticated != null && idrequest.IsAuthenticated.Value)
+					 {
+						 // add extension responses here.
+						 var fetchRequest = idrequest.GetExtension<FetchRequest>();
+						 if (fetchRequest != null)
+						 {
+							 var fetchResponse = new FetchResponse();
+							 //if (fetchRequest.Attributes.Contains(RolesAttribute))
+							 //{
+							 //    // Inform the RP what roles this user should fill
+							 //    // These roles would normally come out of the user database
+							 //    // or Windows security groups.
+							 //    fetchResponse.Attributes.Add(RolesAttribute, "Member", "Admin");
+							 //}
+							 idrequest.AddResponseExtension(fetchResponse);
+						 }
+					 }
 				}
 
 				return new EmptyResult();
