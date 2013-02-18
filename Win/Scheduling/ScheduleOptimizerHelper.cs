@@ -1119,25 +1119,34 @@ namespace Teleopti.Ccc.Win.Scheduling
                     new SchedulePartModifyAndRollbackService(SchedulingStateHolder, _scheduleDayChangeCallback,
                                                              new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
                
-                var blockSchedulingService = _container.Resolve<IBlockSchedulingService>();
-                var refreshRate = schedulingOptions.RefreshRate;
-                schedulingOptions.RefreshRate = 1;
-                blockSchedulingService.BlockScheduled += blockSchedulingServiceBlockScheduled;
+				//var blockSchedulingService = _container.Resolve<IBlockSchedulingService>();
+				//var refreshRate = schedulingOptions.RefreshRate;
+				//schedulingOptions.RefreshRate = 1;
+				//blockSchedulingService.BlockScheduled += blockSchedulingServiceBlockScheduled;
                 //schedulingOptions.UseTwoDaysOffAsBlock = true;
 				var groupPersonBuilderForOptimization = CallGroupPage(schedulingOptions);
             
                 var advancedaysOffSchedulingService = _container.Resolve<IAdvanceDaysOffSchedulingService>();
+	            advancedaysOffSchedulingService.DayScheduled += schedulingServiceDayScheduled;
                 advancedaysOffSchedulingService.Execute(selectedPersonAllMatrixList, schedulePartModifyAndRollbackServiceForContractDaysOff, schedulingOptions, groupPersonBuilderForOptimization);
+				advancedaysOffSchedulingService.DayScheduled += schedulingServiceDayScheduled;
 
                 var teamSteadyStateHolder = InitiateTeamSteadyStateHolder(selectedPersonAllMatrixList, schedulingOptions, scheduleDays);
 
                 var advanceSchedulingService = CallAdvanceSchedulingService(schedulingOptions,selectedPersonMatrixList, groupPersonBuilderForOptimization);
                 IDictionary<string, IWorkShiftFinderResult> schedulingResults = new Dictionary<string, IWorkShiftFinderResult>();
+                advanceSchedulingService.DayScheduled += schedulingServiceDayScheduled;
+
+
                 advanceSchedulingService.Execute(schedulingResults, allPersonMatrixList, selectedPersonMatrixList, teamSteadyStateHolder);
+	            
+				advanceSchedulingService.DayScheduled -= schedulingServiceDayScheduled;
+
                 if (schedulingOptions.RotationDaysOnly)
                     schedulePartModifyAndRollbackServiceForContractDaysOff.Rollback();
-                blockSchedulingService.BlockScheduled -= blockSchedulingServiceBlockScheduled;
-                schedulingOptions.RefreshRate = refreshRate;
+
+				//blockSchedulingService.BlockScheduled -= blockSchedulingServiceBlockScheduled;
+				//schedulingOptions.RefreshRate = refreshRate;
                 _allResults.AddResults(new List<IWorkShiftFinderResult>(schedulingResults.Values), DateTime.Now);
             }
             _allResults.AddResults(fixedStaffSchedulingService.FinderResults, DateTime.Now);
