@@ -93,6 +93,19 @@ Scenario: Show possible shift trades
 	| Start time	| 08:00 |
 	| End time		| 18:00 |
 
+Scenario: Do not show person that agent has no permission to
+	Given I am an agent in a team with access only to my own data
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And OtherAgent have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And OtherAgent have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 08:00 |
+	| EndTime               | 2030-01-01 18:00 |
+	| Shift category		| Day	           |
+	And Current time is '2029-12-20'
+	When I view Add Shift Trade Request for date '2030-01-01'
+	Then I should see a message text saying that no possible shift trades could be found
+
 Scenario: Time line should cover my scheduled shift
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
