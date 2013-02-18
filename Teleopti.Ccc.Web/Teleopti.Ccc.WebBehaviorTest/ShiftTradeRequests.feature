@@ -263,10 +263,11 @@ Given I have the role 'Full access to mytime'
 	| EndTime               | 2030-01-01 16:00 |
 	| Shift category		| Day	           |
 	And I have created a shift trade request
-	| Field		| Value         |
-	| To			| Ashley Andeen |
-	| DateTo		| 2030-01-01    |
-	| DateFrom	| 2030-01-01    |
+	| Field    | Value         |
+	| To       | Ashley Andeen |
+	| DateTo   | 2030-01-01    |
+	| DateFrom | 2030-01-01    |
+	| Pending  | True          |
 	And I am viewing requests
 	When I click on the request
 	Then I should see details with a schedule
@@ -287,6 +288,7 @@ Given I have the role 'Full access to mytime'
 	| To			| Ashley  Andeen|
 	| DateTo		| 2030-01-01    |
 	| DateFrom	| 2030-01-01    |
+	| Pending  | True          |
 	And I am viewing requests
 	When I click on the request
 	Then I should see details with a schedule
