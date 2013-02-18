@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_teamScheduling.DayScheduled += dayScheduled;
             List<DateOnly> dayOff,effectiveDays,unLockedDays;
 
-            var startDate = AdvanceSchedulingService.startDate(selectedPersonMatrixList, out dayOff, out effectiveDays, out unLockedDays);
+			var startDate = retrieveStartDate(selectedPersonMatrixList, out dayOff, out effectiveDays, out unLockedDays);
 
             var selectedPerson = selectedPersonMatrixList.Select(scheduleMatrixPro => scheduleMatrixPro.Person).Distinct().ToList();
             
@@ -142,7 +142,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_cancelMe = scheduleServiceBaseEventArgs.Cancel;
 		}
 
-		private static DateOnly startDate(IList<IScheduleMatrixPro> matrixList, out  List<DateOnly> dayOff, out  List<DateOnly> effectiveDays, out  List<DateOnly> unLockedDays)
+		private static DateOnly retrieveStartDate(IList<IScheduleMatrixPro> matrixList, out  List<DateOnly> dayOff, out  List<DateOnly> effectiveDays, out  List<DateOnly> unLockedDays)
 		{
 			var startDate = DateOnly.MinValue;
 			dayOff = new List<DateOnly>();

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -46,6 +47,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 		    var groupPerson = _mocks.StrictMock<IGroupPerson>();
 			var scheduleMatrixPro = _mocks.StrictMock<IScheduleMatrixPro>();
 			var matrixList = new List<IScheduleMatrixPro> { scheduleMatrixPro };
+			IActivity activity = new Activity("bo");
+			var period = new DateTimePeriod(new DateTime(2012, 12, 7, 8, 0, 0, DateTimeKind.Utc),
+											new DateTime(2012, 12, 7, 8, 30, 0, DateTimeKind.Utc));
+			IMainShift mainShift = MainShiftFactory.CreateMainShift(activity, period, new ShiftCategory("cat"));
+			
 		    var firstDay =
 			    new EffectiveRestriction(new StartTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(12)),
 			                             new EndTimeLimitation(TimeSpan.FromHours(15), TimeSpan.FromHours(18)),
@@ -58,10 +64,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 			    new EffectiveRestriction(new StartTimeLimitation(TimeSpan.FromHours(11),null),
 			                             new EndTimeLimitation(null, TimeSpan.FromHours(17.5)),
 			                             new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
-			var scheduleRestriction =
+		    var scheduleRestriction =
 			    new EffectiveRestriction(new StartTimeLimitation(),
 			                             new EndTimeLimitation(),
-			                             new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
+			                             new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>())
+				    {
+					    CommonMainShift = mainShift
+				    };
 		    using (_mocks.Record())
 		    {
 			    Expect.Call(groupPerson.GroupMembers)
@@ -89,7 +98,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 			    var result = new EffectiveRestriction(new StartTimeLimitation(TimeSpan.FromHours(11), TimeSpan.FromHours(12)),
 			                                          new EndTimeLimitation(TimeSpan.FromHours(17), TimeSpan.FromHours(17.5)),
 			                                          new WorkTimeLimitation(), null, null, null,
-			                                          new List<IActivityRestriction>());
+			                                          new List<IActivityRestriction>()){CommonMainShift = mainShift};
 
 			    var restriction = _target.Aggregate(dateList, groupPerson, matrixList, _schedulingOptions);
 			    Assert.That(restriction, Is.EqualTo(result));

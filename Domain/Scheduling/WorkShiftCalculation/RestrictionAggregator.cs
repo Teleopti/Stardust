@@ -58,10 +58,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 		                                                                             schedulingOptions);
 		        if (restrictionFromSchedules == null)
 			        return null;
-				if (effectiveRestriction != null)
-			        effectiveRestriction = effectiveRestriction.Combine(restrictionFromSchedules);
-		        
-				return effectiveRestriction;
+		        if (effectiveRestriction != null)
+					effectiveRestriction = effectiveRestriction.Combine(restrictionFromSchedules);
+
+		        return effectiveRestriction;
 	        }
 	        return null;
         }

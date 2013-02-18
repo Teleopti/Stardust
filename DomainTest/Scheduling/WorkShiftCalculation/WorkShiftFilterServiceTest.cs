@@ -35,7 +35,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
         private IWorkShift _workShift3;
         private IShiftCategory _category;
         private IActivity _activity;
-	    private IScheduleDayEquator _mainShiftEquator;
 	    private IPersonalShiftMeetingTimeChecker _personalShiftMeetingTimeChecker;
 
 	    [SetUp]
@@ -47,7 +46,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
             _workShiftMinMaxCalculator = _mocks.StrictMock<IWorkShiftMinMaxCalculator>();
             _stateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
             _shiftLengthDecider = _mocks.StrictMock<IShiftLengthDecider>();
-	        _mainShiftEquator = _mocks.StrictMock<IScheduleDayEquator>();
             _schedulingOptions = new SchedulingOptions();
             var zone = TimeZoneInfo.FindSystemTimeZoneById("Atlantic Standard Time");
             _timeZoneInfo = (zone);
@@ -58,8 +56,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
             _info = new PermissionInformation(_person);
             _info.SetDefaultTimeZone(_timeZoneInfo);
 		    _target = new WorkShiftFilterService(_shiftProjectionCacheManager, _shiftProjectionCacheFilter,
-		                                         _workShiftMinMaxCalculator, _stateHolder, _shiftLengthDecider,
-		                                         _mainShiftEquator);
+		                                         _workShiftMinMaxCalculator, _stateHolder, _shiftLengthDecider);
 		    _personalShiftMeetingTimeChecker = _mocks.StrictMock<IPersonalShiftMeetingTimeChecker>();
         }
 

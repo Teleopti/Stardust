@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
@@ -19,21 +18,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
         private readonly IWorkShiftMinMaxCalculator _workShiftMinMaxCalculator;
         private readonly ISchedulingResultStateHolder _resultStateHolder;
         private readonly IShiftLengthDecider _shiftLengthDecider;
-	    private readonly IScheduleDayEquator _scheduleDayEquator;
 
 	    public WorkShiftFilterService(IShiftProjectionCacheManager shiftProjectionCacheManager,
                                       IShiftProjectionCacheFilter shiftProjectionCacheFilter,
                                       IWorkShiftMinMaxCalculator workShiftMinMaxCalculator,
                                       ISchedulingResultStateHolder resultStateHolder,
-                                      IShiftLengthDecider shiftLengthDecider,
-									  IScheduleDayEquator scheduleDayEquator)
+                                      IShiftLengthDecider shiftLengthDecider)
         {
             _shiftProjectionCacheManager = shiftProjectionCacheManager;
             _shiftProjectionCacheFilter = shiftProjectionCacheFilter;
             _workShiftMinMaxCalculator = workShiftMinMaxCalculator;
             _resultStateHolder = resultStateHolder;
             _shiftLengthDecider = shiftLengthDecider;
-	        _scheduleDayEquator = scheduleDayEquator;
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity")]
@@ -69,9 +65,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
                 {
 					if (effectiveRestriction.CommonMainShift != null)
 					{
-						var shift = shiftList.FirstOrDefault(x => _scheduleDayEquator.AreMainShiftEqual(x.TheMainShift, effectiveRestriction.CommonMainShift));
+						var shift = shiftList.FirstOrDefault(x => areMainShiftsEqual(x.TheMainShift, effectiveRestriction.CommonMainShift));
 						if (shift != null)
 							return new List<IShiftProjectionCache> {shift};
+						return null;
 					}
                     if (schedulingOptions.ShiftCategory != null)
                     {
@@ -135,6 +132,26 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
             }
             return null;
         }
+
+		private static bool areMainShiftsEqual(IMainShift original, IMainShift current)
+		{
+			if (original.ShiftCategory.Id != current.ShiftCategory.Id)
+				return false;
+			if (original.LayerCollection.Count != current.LayerCollection.Count)
+				return false;
+			for (int layerIndex = 0; layerIndex < original.LayerCollection.Count; layerIndex++)
+			{
+				ILayer<IActivity> originalLayer = original.LayerCollection[layerIndex];
+				ILayer<IActivity> currentLayer = current.LayerCollection[layerIndex];
+				if (!originalLayer.Period.StartDateTime.TimeOfDay.Equals(currentLayer.Period.StartDateTime.TimeOfDay))
+					return false;
+				if (!originalLayer.Period.EndDateTime.TimeOfDay.Equals(currentLayer.Period.EndDateTime.TimeOfDay))
+					return false;
+				if (!originalLayer.Payload.Equals(currentLayer.Payload))
+					return false;
+			}
+			return true;
+		}
 
         private void loggFilterResult(string message, int countWorkShiftsBefore, int countWorkShiftsAfter)
         {
