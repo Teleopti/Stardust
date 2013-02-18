@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -40,6 +41,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             _mocks = new MockRepository();
             _baseLineData = new BaseLineData();
             _schedulingOptions = new SchedulingOptions();
+			_schedulingOptions.GroupOnGroupPageForLevelingPer = new GroupPageLight
+			{
+				Key = "Root",
+				Name = "BU"
+			};
             _skillDayPeriodIntervalDataGenerator =  _mocks.StrictMock<ISkillDayPeriodIntervalDataGenerator>();
             _dynamicBlockFinder = _mocks.StrictMock<IDynamicBlockFinder>();
             _restrictionAggregator = _mocks.StrictMock<IRestrictionAggregator>();

@@ -71,7 +71,10 @@ namespace Teleopti.Ccc.Domain.Scheduling
                 
                 foreach (var person in selectedPerson)
                 {
-					allGroupPersonListOnStartDate.Add(_groupPersonBuilderForOptimization.BuildGroupPerson(person, startDate));
+					if(_schedulingOptions.GroupOnGroupPageForLevelingPer.Key.Equals("SingleAgentTeam"))
+						allGroupPersonListOnStartDate.Add(_groupPersonBuilderForOptimization.BuildSingleGroupPerson(person, startDate));
+					else
+						allGroupPersonListOnStartDate.Add(_groupPersonBuilderForOptimization.BuildGroupPerson(person, startDate));
                 }
                 
                 foreach (var fullGroupPerson in allGroupPersonListOnStartDate.GetRandom(allGroupPersonListOnStartDate.Count, true))
