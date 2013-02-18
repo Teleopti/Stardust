@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
@@ -7,9 +8,9 @@ using Teleopti.Ccc.WinCode.Forecasting.QuickForecastPages;
 
 namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
 {
-	public partial class SelectTemplateSmoothing : BaseUserControl, IPropertyPageNoRoot<QuickForecastModel>
+	public partial class SelectTemplateSmoothing : BaseUserControl, IPropertyPageNoRoot<QuickForecastCommandDto>
     {
-		private QuickForecastModel _stateObj;
+		private QuickForecastCommandDto _stateObj;
         private readonly ICollection<string> _errorMessages = new List<string>();
 
 		public SelectTemplateSmoothing()
@@ -25,7 +26,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
             label1.BackColor = ColorHelper.WizardPanelBackgroundColor();
         }
 
-		public void Populate(QuickForecastModel stateObj)
+		public void Populate(QuickForecastCommandDto stateObj)
         {
             _stateObj = stateObj;
         }
@@ -42,7 +43,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public bool Depopulate(QuickForecastModel stateObj)
+		public bool Depopulate(QuickForecastCommandDto stateObj)
 		{
 			stateObj.SmoothingStyle = (int)comboBoxSmoothing.SelectedValue;
             return true;	

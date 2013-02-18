@@ -1,21 +1,17 @@
-﻿using System;
-using NUnit.Framework;
-using Rhino.Mocks;
-using Teleopti.Ccc.WinCode.Forecasting.QuickForecastPages;
+﻿using NUnit.Framework;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 
 namespace Teleopti.Ccc.WinCodeTest.Forecasting.QuickForecast
 {
 	[TestFixture]
 	public class QuickForecastModelTest
 	{
-		private MockRepository _mocks;
-		private QuickForecastModel _target;
+		private QuickForecastCommandDto _target;
 
 		[SetUp]
 		public void Setup()
 		{
-			_mocks = new MockRepository();
-			_target = new QuickForecastModel();
+			_target = new QuickForecastCommandDto();
 		}
 
 		[Test]
@@ -24,6 +20,7 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting.QuickForecast
 			Assert.That(_target.StatisticPeriod, Is.Not.Null);
 			Assert.That(_target.TemplatePeriod, Is.Not.Null);
 			Assert.That(_target.TargetPeriod, Is.Not.Null);
+			Assert.That(_target.SmoothingStyle, Is.EqualTo(5));
 		}
 	}
 

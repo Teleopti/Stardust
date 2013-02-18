@@ -30,7 +30,7 @@
         {
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SelectHistoricalDateRange));
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-			this.reportDateFromToSelector1 = new Teleopti.Ccc.Win.Reporting.ReportDateFromToSelector();
+			this.HistoricalFromTo = new Teleopti.Ccc.Win.Reporting.ReportDateFromToSelector();
 			this.label1 = new System.Windows.Forms.Label();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.SuspendLayout();
@@ -40,7 +40,7 @@
 			this.tableLayoutPanel1.ColumnCount = 2;
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.Controls.Add(this.reportDateFromToSelector1, 0, 0);
+			this.tableLayoutPanel1.Controls.Add(this.HistoricalFromTo, 0, 0);
 			this.tableLayoutPanel1.Controls.Add(this.label1, 0, 1);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
@@ -52,15 +52,15 @@
 			this.tableLayoutPanel1.Size = new System.Drawing.Size(489, 338);
 			this.tableLayoutPanel1.TabIndex = 1;
 			// 
-			// reportDateFromToSelector1
+			// HistoricalFromTo
 			// 
-			this.reportDateFromToSelector1.Location = new System.Drawing.Point(3, 3);
-			this.reportDateFromToSelector1.Name = "reportDateFromToSelector1";
-			this.reportDateFromToSelector1.NullString = "xxNoDateIsSelected";
-			this.reportDateFromToSelector1.Size = new System.Drawing.Size(178, 53);
-			this.reportDateFromToSelector1.TabIndex = 0;
-			this.reportDateFromToSelector1.WorkPeriodEnd = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("reportDateFromToSelector1.WorkPeriodEnd")));
-			this.reportDateFromToSelector1.WorkPeriodStart = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("reportDateFromToSelector1.WorkPeriodStart")));
+			this.HistoricalFromTo.Location = new System.Drawing.Point(3, 3);
+			this.HistoricalFromTo.Name = "HistoricalFromTo";
+			this.HistoricalFromTo.NullString = "xxNoDateIsSelected";
+			this.HistoricalFromTo.Size = new System.Drawing.Size(178, 53);
+			this.HistoricalFromTo.TabIndex = 0;
+			this.HistoricalFromTo.WorkPeriodEnd = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("HistoricalFromTo.WorkPeriodEnd")));
+			this.HistoricalFromTo.WorkPeriodStart = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("HistoricalFromTo.WorkPeriodStart")));
 			// 
 			// label1
 			// 
@@ -92,7 +92,7 @@
 
         #endregion
 
-        private Reporting.ReportDateFromToSelector reportDateFromToSelector1;
+        private Reporting.ReportDateFromToSelector HistoricalFromTo;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Label label1;
 

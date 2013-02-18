@@ -4,17 +4,17 @@ using Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard;
 
 namespace Teleopti.Ccc.WinCode.Forecasting.QuickForecastPages
 {
-	public class QuickForecastWizardPages : AbstractWizardPagesNoRoot<QuickForecastModel>
+	public class QuickForecastWizardPages : AbstractWizardPagesNoRoot<QuickForecastCommandDto>
     {
-		private readonly QuickForecastModel _stateObj;
+		private readonly QuickForecastCommandDto _stateObj;
 
-		public QuickForecastWizardPages(QuickForecastModel stateObj)
+		public QuickForecastWizardPages(QuickForecastCommandDto stateObj)
 			: base(stateObj)
         {
             _stateObj = stateObj;
         }
 
-		public override QuickForecastModel CreateNewStateObj()
+		public override QuickForecastCommandDto CreateNewStateObj()
         {
             return _stateObj;
         }
@@ -29,18 +29,6 @@ namespace Teleopti.Ccc.WinCode.Forecasting.QuickForecastPages
 			get { return "xxQuickForecast"; }
         }
 
-		public QuickForecastCommandDto GetCommand()
-		{
-			// onödigt med två likadana modeller 
-			 return new QuickForecastCommandDto
-                {
-                    ScenarioId = _stateObj.ScenarioId,
-                    StatisticPeriod = _stateObj.StatisticPeriod ,
-                    TargetPeriod = _stateObj.TargetPeriod,
-                    TemplatePeriod = _stateObj.TemplatePeriod,
-					SmoothingStyle = _stateObj.SmoothingStyle,
-					WorkloadIds = _stateObj.SelectedWorkloads
-                };
-		}
+		
     }
 }

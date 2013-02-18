@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Autofac;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Win.Budgeting;
 using Teleopti.Ccc.Win.Forecasting.Forms.ExportPages;
 using Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast;
@@ -240,9 +241,9 @@ namespace Teleopti.Ccc.Win.Common
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
-		public static IList<IPropertyPageNoRoot<QuickForecastModel>> GetQuickForecastPages(ICollection<ISkill> skills)
+		public static IList<IPropertyPageNoRoot<QuickForecastCommandDto>> GetQuickForecastPages(ICollection<ISkill> skills)
 		{
-			return new List<IPropertyPageNoRoot<QuickForecastModel>>
+			return new List<IPropertyPageNoRoot<QuickForecastCommandDto>>
                        {
                            new SelectWorkload(skills),
 						   new SelectHistoricalDateRange(),

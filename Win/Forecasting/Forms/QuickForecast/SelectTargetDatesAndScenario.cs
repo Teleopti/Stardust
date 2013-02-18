@@ -3,18 +3,18 @@ using System.Collections.Generic;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard;
-using Teleopti.Ccc.WinCode.Forecasting.QuickForecastPages;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
 {
-    public partial class SelectTargetDatesAndScenario : BaseUserControl, IPropertyPageNoRoot<QuickForecastModel>
+	public partial class SelectTargetDatesAndScenario : BaseUserControl, IPropertyPageNoRoot<QuickForecastCommandDto>
     {
-		private QuickForecastModel _stateObj;
+		private QuickForecastCommandDto _stateObj;
         private readonly ICollection<string> _errorMessages = new List<string>();
         private IList<IScenario> _scenarios;
 
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
             {
                 SetTexts();
                 setColors();
-                reportDateFromToSelector1.PeriodChanged += reportDateFromToSelector1PeriodChanged;
+                TargetFromTo.PeriodChanged += reportDateFromToSelector1PeriodChanged;
             }
         }
 
@@ -41,11 +41,11 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public void Populate(QuickForecastModel stateObj)
+		public void Populate(QuickForecastCommandDto stateObj)
         {
             _stateObj = stateObj;
-			reportDateFromToSelector1.WorkPeriodStart = new DateOnly(_stateObj.TargetPeriod.StartDate.DateTime);
-			reportDateFromToSelector1.WorkPeriodEnd = new DateOnly(_stateObj.TargetPeriod.EndDate.DateTime);
+			TargetFromTo.WorkPeriodStart = new DateOnly(_stateObj.TargetPeriod.StartDate.DateTime);
+			TargetFromTo.WorkPeriodEnd = new DateOnly(_stateObj.TargetPeriod.EndDate.DateTime);
         }
         
         protected override void OnLoad(EventArgs e)
@@ -61,12 +61,12 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public bool Depopulate(QuickForecastModel stateObj)
+		public bool Depopulate(QuickForecastCommandDto stateObj)
         {
 			stateObj.TargetPeriod = new DateOnlyPeriodDto
 			{
-				StartDate = new DateOnlyDto { DateTime = reportDateFromToSelector1.WorkPeriodStart },
-				EndDate = new DateOnlyDto { DateTime = reportDateFromToSelector1.WorkPeriodEnd }
+				StartDate = new DateOnlyDto { DateTime = TargetFromTo.WorkPeriodStart },
+				EndDate = new DateOnlyDto { DateTime = TargetFromTo.WorkPeriodEnd }
 			};
 			stateObj.ScenarioId = ((IScenario)comboBoxScenario.SelectedItem).Id.GetValueOrDefault();
 			return true;

@@ -1,16 +1,16 @@
 ﻿using System.Collections.Generic;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard;
-using Teleopti.Ccc.WinCode.Forecasting.QuickForecastPages;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
 {
-	public partial class SelectHistoricalDateRange : BaseUserControl, IPropertyPageNoRoot<QuickForecastModel>
+	public partial class SelectHistoricalDateRange : BaseUserControl, IPropertyPageNoRoot<QuickForecastCommandDto>
     {
-		private QuickForecastModel _stateObj;
+		private QuickForecastCommandDto _stateObj;
         private readonly ICollection<string> _errorMessages = new List<string>();
 
         public SelectHistoricalDateRange()
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
             label1.BackColor = ColorHelper.WizardPanelBackgroundColor();
         }
 
-		public void Populate(QuickForecastModel stateObj)
+		public void Populate(QuickForecastCommandDto stateObj)
         {
             _stateObj = stateObj;
         }
@@ -36,17 +36,17 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
             base.OnLoad(e);
 
            // var exportModel = _stateObj.ExportMultisiteSkillToSkillCommandModel;
-			reportDateFromToSelector1.WorkPeriodStart = new DateOnly(_stateObj.StatisticPeriod.StartDate.DateTime);
-			reportDateFromToSelector1.WorkPeriodEnd = new DateOnly(_stateObj.StatisticPeriod.EndDate.DateTime);
+			HistoricalFromTo.WorkPeriodStart = new DateOnly(_stateObj.StatisticPeriod.StartDate.DateTime);
+			HistoricalFromTo.WorkPeriodEnd = new DateOnly(_stateObj.StatisticPeriod.EndDate.DateTime);
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public bool Depopulate(QuickForecastModel stateObj)
+		public bool Depopulate(QuickForecastCommandDto stateObj)
         {
 	        stateObj.StatisticPeriod = new DateOnlyPeriodDto
 		        {
-			        StartDate = new DateOnlyDto {DateTime = reportDateFromToSelector1.WorkPeriodStart},
-			        EndDate = new DateOnlyDto {DateTime = reportDateFromToSelector1.WorkPeriodEnd}
+			        StartDate = new DateOnlyDto {DateTime = HistoricalFromTo.WorkPeriodStart},
+			        EndDate = new DateOnlyDto {DateTime = HistoricalFromTo.WorkPeriodEnd}
 		        };
             return true;	
         }

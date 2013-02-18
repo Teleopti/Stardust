@@ -1,19 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms;
 using Syncfusion.Windows.Forms.Tools;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard;
-using Teleopti.Ccc.WinCode.Forecasting.QuickForecastPages;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
 {
-	public partial class SelectWorkload : BaseUserControl, IPropertyPageNoRoot<QuickForecastModel>
+	public partial class SelectWorkload : BaseUserControl, IPropertyPageNoRoot<QuickForecastCommandDto>
     {
 		private readonly ICollection<ISkill> _skills;
         private readonly ICollection<string> _errorMessages = new List<string>();
@@ -36,20 +37,20 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
             treeViewSkills.BackColor = ColorHelper.WizardPanelBackgroundColor();
         }
 
-		public void Populate(QuickForecastModel stateObj)
+		public void Populate(QuickForecastCommandDto stateObj)
         {
 			reloadSkillsTreeView(stateObj);
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public bool Depopulate(QuickForecastModel stateObj)
+		public bool Depopulate(QuickForecastCommandDto stateObj)
         {
             if (!validated()) return false;
 
-			stateObj.SelectedWorkloads.Clear();
+			stateObj.WorkloadIds = new Collection<Guid>();
 			foreach (var checkedNode in treeViewSkills.CheckedNodes.Cast<TreeNodeAdv>().Where(checkedNode => checkedNode.Tag != null))
 			{
-				stateObj.SelectedWorkloads.Add((Guid)checkedNode.Tag);
+				stateObj.WorkloadIds.Add((Guid)checkedNode.Tag);
 			}
 
             return true;
@@ -69,7 +70,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
             get { return _errorMessages; }
         }
 
-        private void reloadSkillsTreeView(QuickForecastModel stateObj)
+		private void reloadSkillsTreeView(QuickForecastCommandDto stateObj)
         {
 			treeViewSkills.Nodes.Clear();
 	        var root = new TreeNodeAdv(Resources.Skills);
@@ -81,7 +82,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
 		        foreach (var workLoad in skill.WorkloadCollection)
 		        {
 			       skillNode.Nodes.Add(new TreeNodeAdv(workLoad.Name){Tag = workLoad.Id,
-				   Checked = stateObj.SelectedWorkloads.Contains(workLoad.Id.GetValueOrDefault())});
+				   Checked = stateObj.WorkloadIds.Contains(workLoad.Id.GetValueOrDefault())});
 		        }
 	        }
 			root.Expand();

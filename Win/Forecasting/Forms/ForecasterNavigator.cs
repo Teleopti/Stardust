@@ -14,6 +14,7 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Controls;
@@ -1209,23 +1210,23 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 				var skills = skillRep.FindAllWithWorkloadAndQueues();
 				skills = skills.Except(skills.OfType<IChildSkill>()).ToList();
 				var quickForecastPages = PropertyPagesHelper.GetQuickForecastPages(skills);
-				var model = new QuickForecastModel();
-				model.SelectedWorkloads.AddRange(getWorkloadIds(treeViewSkills.SelectedNode));
+				var model = new QuickForecastCommandDto();
+				model.WorkloadIds = getWorkloadIds(treeViewSkills.SelectedNode);
 				using (var wwp = new QuickForecastWizardPages(model))
 				{
 					wwp.Initialize(quickForecastPages);
-					using (var wizard = new WizardNoRoot<QuickForecastModel>(wwp))
+					using (var wizard = new WizardNoRoot<QuickForecastCommandDto>(wwp))
 					{
 						if (wizard.ShowDialog(this) == DialogResult.OK)
 						{
-							_sendCommandToSdk.ExecuteCommand(wwp.GetCommand());
+							_sendCommandToSdk.ExecuteCommand(wwp.CreateNewStateObj());
 						}
 					}
 				}
 			}
 		}
 
-		private IEnumerable<Guid> getWorkloadIds(TreeNode treeNode)
+		private ICollection<Guid> getWorkloadIds(TreeNode treeNode)
 		{
 			var retList = new List<Guid>();
 			if (treeNode != null)

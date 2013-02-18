@@ -32,7 +32,7 @@
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.label1 = new System.Windows.Forms.Label();
 			this.comboBoxScenario = new System.Windows.Forms.ComboBox();
-			this.reportDateFromToSelector1 = new Teleopti.Ccc.Win.Reporting.ReportDateFromToSelector();
+			this.TargetFromTo = new Teleopti.Ccc.Win.Reporting.ReportDateFromToSelector();
 			this.labelScenario = new System.Windows.Forms.Label();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.SuspendLayout();
@@ -45,7 +45,7 @@
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.Controls.Add(this.label1, 0, 1);
 			this.tableLayoutPanel1.Controls.Add(this.comboBoxScenario, 2, 0);
-			this.tableLayoutPanel1.Controls.Add(this.reportDateFromToSelector1, 0, 0);
+			this.tableLayoutPanel1.Controls.Add(this.TargetFromTo, 0, 0);
 			this.tableLayoutPanel1.Controls.Add(this.labelScenario, 1, 0);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
@@ -81,15 +81,15 @@
 			this.comboBoxScenario.Size = new System.Drawing.Size(143, 21);
 			this.comboBoxScenario.TabIndex = 3;
 			// 
-			// reportDateFromToSelector1
+			// TargetFromTo
 			// 
-			this.reportDateFromToSelector1.Location = new System.Drawing.Point(3, 3);
-			this.reportDateFromToSelector1.Name = "reportDateFromToSelector1";
-			this.reportDateFromToSelector1.NullString = "xxNoDateIsSelected";
-			this.reportDateFromToSelector1.Size = new System.Drawing.Size(178, 53);
-			this.reportDateFromToSelector1.TabIndex = 0;
-			this.reportDateFromToSelector1.WorkPeriodEnd = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("reportDateFromToSelector1.WorkPeriodEnd")));
-			this.reportDateFromToSelector1.WorkPeriodStart = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("reportDateFromToSelector1.WorkPeriodStart")));
+			this.TargetFromTo.Location = new System.Drawing.Point(3, 3);
+			this.TargetFromTo.Name = "TargetFromTo";
+			this.TargetFromTo.NullString = "xxNoDateIsSelected";
+			this.TargetFromTo.Size = new System.Drawing.Size(178, 53);
+			this.TargetFromTo.TabIndex = 0;
+			this.TargetFromTo.WorkPeriodEnd = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("TargetFromTo.WorkPeriodEnd")));
+			this.TargetFromTo.WorkPeriodStart = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("TargetFromTo.WorkPeriodStart")));
 			// 
 			// labelScenario
 			// 
@@ -118,7 +118,7 @@
         #endregion
 
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-		private Reporting.ReportDateFromToSelector reportDateFromToSelector1;
+		private Reporting.ReportDateFromToSelector TargetFromTo;
         private System.Windows.Forms.ComboBox comboBoxScenario;
         private System.Windows.Forms.Label labelScenario;
 		private System.Windows.Forms.Label label1;
