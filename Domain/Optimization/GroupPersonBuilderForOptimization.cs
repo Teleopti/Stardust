@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
@@ -9,6 +10,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 	public interface IGroupPersonBuilderForOptimization
 	{
 		IGroupPerson BuildGroupPerson(IPerson person, DateOnly dateOnly);
+		IGroupPerson BuildSingleGroupPerson(IPerson person, DateOnly dateOnly);
 	}
 
 	public class GroupPersonBuilderForOptimization : IGroupPersonBuilderForOptimization
@@ -61,6 +63,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 	
 			var groupPerson = _groupPersonFactory.CreateGroupPerson(personsInGroup, dateOnly, personGroup.Description.Name, guid);
 			
+			return groupPerson;
+		}
+
+		public IGroupPerson BuildSingleGroupPerson(IPerson person, DateOnly dateOnly)
+		{
+			var groupPerson = _groupPersonFactory.CreateGroupPerson(new List<IPerson>{person}, dateOnly, person.Name.ToString(),Guid.NewGuid());
 			return groupPerson;
 		}
 

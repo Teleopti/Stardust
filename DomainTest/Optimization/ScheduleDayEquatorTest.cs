@@ -272,7 +272,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		#region Bugfix 19056
 
 		/// <summary>
-		/// Bugfix for 19056> Error "ScheduleDayEquator.mainShiftEquals" during optimization on days with only a personal shift.
+		/// Bugfix for 19056> Error "ScheduleDayEquator.MainShiftEquals" during optimization on days with only a personal shift.
 		/// </summary>
 		[Test]
 		public void ShouldReturnFalseIfCurrentPersonAssignmentHasNoMainShift()
