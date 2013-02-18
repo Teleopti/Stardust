@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			using(_mocks.Playback())
 			{
 				Assert.IsFalse(_target.CalculateIfNeeded(new DateOnly(), new DateTimePeriod()));
-				Assert.IsFalse(_target.CalculateIfNeeded(new DateOnly(), new DateTimePeriod()));
+				Assert.IsFalse(_target.CalculateIfNeeded(new DateOnly(), new DateTimePeriod(), new List<IScheduleDay>(), new List<IScheduleDay>()));
 			}
 		}
 
