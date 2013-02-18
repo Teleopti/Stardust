@@ -19,15 +19,15 @@ namespace Teleopti.Ccc.Rta.ServerTest
 	public class RtaDataHandlerTest
 	{
 		private MockRepository _mocks;
+		private RtaDataHandlerForTest _target;
+		private IActualAgentHandler _agentHandler;
 		private ILog _loggingSvc;
 		private IMessageSender _messageSender;
 		private IDatabaseConnectionFactory _databaseConnectionFactory;
-		private const string ConnectionString = "connection";
-		private RtaDataHandlerForTest _target;
+		private const string ConnectionString = "connection";		
 		private IDataSourceResolver _dataSourceResolver;
 		private IPersonResolver _personResolver;
 		private IStateResolver _stateResolver;
-		private IRtaConsumer _rtaConsumer;
 	    
 		private string _logOn;
 		private string _stateCode;
@@ -43,13 +43,13 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		public void Setup()
 		{
 			_mocks = new MockRepository();
+			_agentHandler = _mocks.DynamicMock<IActualAgentHandler>();
 			_loggingSvc = _mocks.DynamicMock<ILog>();
 			_messageSender = _mocks.StrictMock<IMessageSender>();
 			_databaseConnectionFactory = _mocks.StrictMock<IDatabaseConnectionFactory>();
 			_dataSourceResolver = _mocks.StrictMock<IDataSourceResolver>();
 			_personResolver = _mocks.DynamicMock<IPersonResolver>();
 			_stateResolver = _mocks.DynamicMock<IStateResolver>();
-			_rtaConsumer = _mocks.StrictMock<IRtaConsumer>();
 		    
 			_logOn = "002";
 			_stateCode = "AUX2";
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		[Test, ExpectedException(typeof (BrokerNotInstantiatedException))]
 		public void VerifyCreateInstanceUsingEmptyConstructorFailsBecauseNoConfigurationAvailable()
 		{
-			new RtaDataHandler(_rtaConsumer);
+			new RtaDataHandler(_agentHandler);
 		}
 
 		[Test]
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			LastCall.Throw(new BrokerNotInstantiatedException());
 			_mocks.ReplayAll();
 			_target = new RtaDataHandlerForTest(_loggingSvc, _messageSender, ConnectionString, _databaseConnectionFactory,
-			                                    _dataSourceResolver, _personResolver, _stateResolver, _rtaConsumer);
+												_dataSourceResolver, _personResolver, _stateResolver, _agentHandler);
 			_mocks.VerifyAll();
 		}
 
@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			Expect.Call(_messageSender.IsAlive).Return(true);
 			_mocks.ReplayAll();
 			_target = new RtaDataHandlerForTest(_loggingSvc, _messageSender, ConnectionString, _databaseConnectionFactory,
-			                                    _dataSourceResolver, _personResolver, _stateResolver, _rtaConsumer);
+												_dataSourceResolver, _personResolver, _stateResolver, _agentHandler);
 			Assert.IsTrue(_target.IsAlive);
 			_mocks.VerifyAll();
 		}
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_loggingSvc.Expect(l => l.Warn("No connection information available in configuration file."));
 			_mocks.ReplayAll();
 
-			_target = new RtaDataHandlerForTest(_loggingSvc, _messageSender, string.Empty, _databaseConnectionFactory, _dataSourceResolver, _personResolver, _stateResolver, _rtaConsumer);
+			_target = new RtaDataHandlerForTest(_loggingSvc, _messageSender, string.Empty, _databaseConnectionFactory, _dataSourceResolver, _personResolver, _stateResolver, _agentHandler);
 			_target.ProcessRtaData(_logOn, _stateCode, _timeInState, _timestamp, _platformTypeId, _sourceId, _batchId,
 			                       _isSnapshot);
 			_mocks.VerifyAll();
@@ -200,8 +200,8 @@ namespace Teleopti.Ccc.Rta.ServerTest
 				retPersonBusinessUnits);
 			_messageSender.Expect(m => m.IsAlive).Return(true);
 			_stateResolver.Expect(s => s.HaveStateCodeChanged(Guid.Empty, _stateCode)).Return(true);
-			_rtaConsumer.Expect(
-				r => r.Consume(Guid.Empty, Guid.Empty, _platformTypeId, _stateCode, _timestamp, _timeInState, autoReset)).
+			_agentHandler.Expect(
+				r => r.GetState(Guid.Empty, Guid.Empty, _platformTypeId, _stateCode, _timestamp, _timeInState, autoReset)).
 				IgnoreArguments().Return(
 					null);
 			
@@ -234,15 +234,15 @@ namespace Teleopti.Ccc.Rta.ServerTest
 				retPersonBusinessUnits);
 			_messageSender.Expect(m => m.IsAlive).Return(true);
 			_stateResolver.Expect(s => s.HaveStateCodeChanged(Guid.Empty, _stateCode)).Return(true);
-			_rtaConsumer.Expect(
-				r => r.Consume(Guid.Empty, Guid.Empty, _platformTypeId, _stateCode, _timestamp, _timeInState, autoReset)).
+			_agentHandler.Expect(
+				r => r.GetState(Guid.Empty, Guid.Empty, _platformTypeId, _stateCode, _timestamp, _timeInState, autoReset)).
 				IgnoreArguments().Return(agentState);
 			_messageSender.Expect(m => m.SendRtaData(Guid.Empty, Guid.Empty, agentState));
 			
 			_mocks.ReplayAll();
 
 			_target = new RtaDataHandlerForTest(_loggingSvc, _messageSender, "connectionStringDataStore", _databaseConnectionFactory,
-												_dataSourceResolver, _personResolver, _stateResolver, _rtaConsumer);
+												_dataSourceResolver, _personResolver, _stateResolver, _agentHandler);
 			var result = _target.ProcessRtaData(_logOn, _stateCode, _timeInState, _timestamp, _platformTypeId, _sourceId, _batchId,
 								   _isSnapshot);
 			Assert.That(result, Is.Not.Null);
@@ -273,8 +273,8 @@ namespace Teleopti.Ccc.Rta.ServerTest
 				retPersonBusinessUnits);
 			_messageSender.Expect(m => m.IsAlive).Return(true);
 			_stateResolver.Expect(s => s.HaveStateCodeChanged(Guid.Empty, _stateCode)).Return(true);
-			_rtaConsumer.Expect(
-				r => r.Consume(Guid.Empty, Guid.Empty, _platformTypeId, _stateCode, _timestamp, _timeInState, autoReset)).
+			_agentHandler.Expect(
+				r => r.GetState(Guid.Empty, Guid.Empty, _platformTypeId, _stateCode, _timestamp, _timeInState, autoReset)).
 				IgnoreArguments().Return(agentState);
 			_messageSender.Expect(m => m.SendRtaData(Guid.Empty, Guid.Empty, agentState)).Throw(new SocketException());
 			_loggingSvc.Expect(l => l.Error("", new SocketException())).IgnoreArguments();
@@ -308,8 +308,8 @@ namespace Teleopti.Ccc.Rta.ServerTest
 				retPersonBusinessUnits);
 			_messageSender.Expect(m => m.IsAlive).Return(true);
 			_stateResolver.Expect(s => s.HaveStateCodeChanged(Guid.Empty, _stateCode)).Return(true);
-			_rtaConsumer.Expect(
-				r => r.Consume(Guid.Empty, Guid.Empty, _platformTypeId, _stateCode, _timestamp, _timeInState, autoReset)).
+			_agentHandler.Expect(
+				r => r.GetState(Guid.Empty, Guid.Empty, _platformTypeId, _stateCode, _timestamp, _timeInState, autoReset)).
 				IgnoreArguments().Return(agentState);
 			_messageSender.Expect(m => m.SendRtaData(Guid.Empty, Guid.Empty, agentState)).Throw(new BrokerNotInstantiatedException());
 			_loggingSvc.Expect(l => l.Error("", new SocketException())).IgnoreArguments();
@@ -324,7 +324,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		private void AssignTargetAndRun()
 		{
 			_target = new RtaDataHandlerForTest(_loggingSvc, _messageSender, ConnectionString, _databaseConnectionFactory,
-                                                _dataSourceResolver, _personResolver, _stateResolver, _rtaConsumer);
+												_dataSourceResolver, _personResolver, _stateResolver, _agentHandler);
 			_target.ProcessRtaData(_logOn, _stateCode, _timeInState, _timestamp, _platformTypeId, _sourceId, _batchId,
 			                       _isSnapshot);
 		}
@@ -334,10 +334,10 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			public RtaDataHandlerForTest(ILog loggingSvc, IMessageSender messageSender, string connectionStringDataStore,
 			                             IDatabaseConnectionFactory databaseConnectionFactory,
 			                             IDataSourceResolver dataSourceResolver, IPersonResolver personResolver,
-			                             IStateResolver stateResolver, IRtaConsumer rtaConsumer)
+										 IStateResolver stateResolver, IActualAgentHandler agentHandler)
 				: base(
 					loggingSvc, messageSender, connectionStringDataStore, databaseConnectionFactory, dataSourceResolver, personResolver,
-                    stateResolver, rtaConsumer)
+                    stateResolver, agentHandler)
 			{
 			}
 

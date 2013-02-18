@@ -135,7 +135,6 @@
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="PersonResolverTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RtaConsumerTest.cs" />
     <Compile Include="RtaDataHandlerTest.cs" />
     <Compile Include="ScheduleLayerTest.cs" />
     <Compile Include="StateResolverTest.cs" />

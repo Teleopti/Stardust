@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Rta.Server
 {
 	public class RtaDataHandler : IRtaDataHandler
 	{
-		private readonly IRtaConsumer _rtaConsumer;
+		private readonly IActualAgentHandler _agentHandler;
 	    private readonly IMessageSender _messageSender;
 		private readonly string _connectionStringDataStore;
 		private readonly IDatabaseConnectionFactory _databaseConnectionFactory;
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Rta.Server
 
 		public RtaDataHandler(ILog loggingSvc, IMessageSender messageSender, string connectionStringDataStore,
 		                      IDatabaseConnectionFactory databaseConnectionFactory, IDataSourceResolver dataSourceResolver,
-                              IPersonResolver personResolver, IStateResolver stateResolver, IRtaConsumer rtaConsumer
+							  IPersonResolver personResolver, IStateResolver stateResolver, IActualAgentHandler agentHandler
             )
 		{
 			_loggingSvc = loggingSvc;
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Rta.Server
 			_dataSourceResolver = dataSourceResolver;
 			_personResolver = personResolver;
 			_stateResolver = stateResolver;
-			_rtaConsumer = rtaConsumer;
+			_agentHandler = agentHandler;
             
 
 		    try
@@ -78,14 +78,14 @@ namespace Teleopti.Ccc.Rta.Server
 			}
 		}
 
-       
-        public RtaDataHandler(IRtaConsumer rtaConsumer) 
+
+		public RtaDataHandler(IActualAgentHandler agentHandler) 
 			: this(
 				LogManager.GetLogger(typeof (RtaDataHandler)),
 				MessageSenderFactory.CreateMessageSender(ConfigurationManager.AppSettings["MessageBroker"]),
                 ConfigurationManager.AppSettings["DataStore"], new DatabaseConnectionFactory(), null, null, null, null)
 		{
-			_rtaConsumer = rtaConsumer;
+			_agentHandler = agentHandler;
 
 			_dataSourceResolver = new DataSourceResolver(_databaseConnectionFactory, _connectionStringDataStore);
 			_personResolver = new PersonResolver(_databaseConnectionFactory, _connectionStringDataStore);
@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.Rta.Server
 							continue;
 						}
 
-						var agentState = _rtaConsumer.Consume(personWithBusinessUnit.PersonId, personWithBusinessUnit.BusinessUnitId,
+						var agentState = _agentHandler.GetState(personWithBusinessUnit.PersonId, personWithBusinessUnit.BusinessUnitId,
 						                                      platformTypeId, stateCode,
 						                                      timestamp, timeInState, waitHandle);
 						if (agentState == null) continue;
