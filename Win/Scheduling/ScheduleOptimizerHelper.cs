@@ -984,7 +984,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             var fixedStaffSchedulingService = _container.Resolve<IFixedStaffSchedulingService>();
             fixedStaffSchedulingService.ClearFinderResults();
 
-            ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackServiceForContractDaysOff = new SchedulePartModifyAndRollbackService(SchedulingStateHolder, _scheduleDayChangeCallback, new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
+            var schedulePartModifyAndRollbackServiceForContractDaysOff = new SchedulePartModifyAndRollbackService(SchedulingStateHolder, _scheduleDayChangeCallback, new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
 			_daysOffSchedulingService.Execute(matrixList, matrixListAll, schedulePartModifyAndRollbackServiceForContractDaysOff, schedulingOptions);
 
             var tagSetter = _container.Resolve<IScheduleTagSetter>();
