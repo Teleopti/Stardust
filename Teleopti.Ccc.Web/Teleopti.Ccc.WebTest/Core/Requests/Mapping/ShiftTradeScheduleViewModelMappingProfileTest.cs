@@ -372,7 +372,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		[Test]
 		public void ShouldSetTitleInUs()
 		{
-			_userCulture.Expect(c => c.GetCulture()).Return(CultureInfo.GetCultureInfo("en-US"));
+			_userCulture.Expect(c => c.GetCulture()).Return(CultureInfo.GetCultureInfo("en-US")).Repeat.Any();
 
 			var date = new DateOnly(2000, 1, 1);
 			var layerPeriod = new DateTimePeriod(new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc), new DateTime(2000, 1, 1, 13, 0, 0, DateTimeKind.Utc));
