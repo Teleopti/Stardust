@@ -27,7 +27,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public IEffectiveRestriction Convert(IGroupPerson groupPerson, IList<DateOnly> dateOnlyList)
 		{
-			var skillDays = _schedulingResultStateHolder.SkillDaysOnDateOnly(dateOnlyList);
+            if (groupPerson == null) return null;
+            if (dateOnlyList == null) return null;
+            var skillDays = _schedulingResultStateHolder.SkillDaysOnDateOnly(dateOnlyList);
 			var dateOnlyPeriod = new DateOnlyPeriod(dateOnlyList.Min(), dateOnlyList.Max());
 			var skills = _groupPersonSkillAggregator.AggregatedSkills(groupPerson, dateOnlyPeriod);
 			var openHours = new List<TimePeriod>();
