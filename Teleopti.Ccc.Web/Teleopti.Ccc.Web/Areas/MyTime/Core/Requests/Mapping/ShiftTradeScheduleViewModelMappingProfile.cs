@@ -188,6 +188,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 											 Color = ColorTranslator.ToHtml(visualLayer.DisplayColor()),
 											 StartTimeText = startDate.ToString("HH:mm"),
 											 EndTimeText = endDate.ToString("HH:mm"),
+											 Title = string.Concat(startDate.ToString("HH:mm"), " - ", endDate.ToString("HH:mm")),
 											 ElapsedMinutesSinceShiftStart = (int)startDate.Subtract(TimeZoneHelper.ConvertFromUtc(shiftStartTime, timeZone)).TotalMinutes
 										 }).ToList();
 			return scheduleLayers;
