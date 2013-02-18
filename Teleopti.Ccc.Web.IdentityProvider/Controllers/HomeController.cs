@@ -14,10 +14,5 @@ namespace Teleopti.Ccc.Web.IdentityProvider.Controllers
 
 			return View();
 		}
-
-		public ActionResult About()
-		{
-			return View();
-		}
 	}
 }

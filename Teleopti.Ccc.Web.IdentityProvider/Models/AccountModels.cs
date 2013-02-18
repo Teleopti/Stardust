@@ -25,21 +25,6 @@ namespace Teleopti.Ccc.Web.IdentityProvider.Models
 	// how to create an abstract wrapper around such a type in order to make the AccountController
 	// code unit testable.
 
-	public interface IMembershipService
-	{
-		bool ValidateUser(string userName, string password);
-	}
-
-	public class AccountMembershipService : IMembershipService
-	{
-		//private readonly MembershipProvider _provider;
-
-		public bool ValidateUser(string userName, string password)
-		{
-			return true;
-		}
-	}
-
 	public interface IFormsAuthenticationService
 	{
 		void SignIn(string userName, bool createPersistentCookie);
