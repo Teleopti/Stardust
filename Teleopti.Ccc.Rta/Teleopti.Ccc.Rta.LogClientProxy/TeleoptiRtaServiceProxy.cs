@@ -17,7 +17,12 @@ namespace Teleopti.Ccc.Rta.LogClientProxy
         	return new AutoResetEvent(true);
         }
 
-		public WaitHandle ProcessRtaData(Guid platformTypeId, string sourceId, ICollection<ITeleoptiRtaState> rtaStates)
+	    public void CheckSchedule(Guid personId)
+	    {
+		    
+	    }
+
+	    public WaitHandle ProcessRtaData(Guid platformTypeId, string sourceId, ICollection<ITeleoptiRtaState> rtaStates)
 		{
 			var listOfStates = new List<ExternalUserState>();
 			foreach (var externalUserState in rtaStates)

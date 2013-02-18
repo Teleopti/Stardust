@@ -102,6 +102,11 @@ namespace Teleopti.Ccc.Rta.Server
 			}
 		}
 
+		public void CheckSchedule(Guid personId)
+		{
+			
+		}
+
 		public bool IsAlive
 		{
 			get { return _messageSender.IsAlive; }
