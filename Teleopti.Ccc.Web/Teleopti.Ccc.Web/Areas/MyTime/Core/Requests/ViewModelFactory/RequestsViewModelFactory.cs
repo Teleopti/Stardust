@@ -22,11 +22,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly IShiftTradeRequestProvider _shiftTradeRequestprovider;
 		private readonly IShiftTradePeriodViewModelMapper _shiftTradeRequestsPeriodViewModelMapper;
-		private readonly IShiftTradeRequestSetChecksum _shiftTradeRequestSetChecksum;
+		private readonly IShiftTradeRequestStatusChecker _shiftTradeRequestStatusChecker;
 
 		public RequestsViewModelFactory(IPersonRequestProvider personRequestProvider, IMappingEngine mapper, IAbsenceTypesProvider absenceTypesProvider, 
 										IPermissionProvider permissionProvider, IShiftTradeRequestProvider shiftTradeRequestprovider, 
-										IShiftTradePeriodViewModelMapper shiftTradeRequestsPeriodViewModelMapper, IShiftTradeRequestSetChecksum shiftTradeRequestSetChecksum)
+										IShiftTradePeriodViewModelMapper shiftTradeRequestsPeriodViewModelMapper, IShiftTradeRequestStatusChecker shiftTradeRequestStatusChecker)
 		{
 			_personRequestProvider = personRequestProvider;
 			_mapper = mapper;
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 			_permissionProvider = permissionProvider;
 			_shiftTradeRequestprovider = shiftTradeRequestprovider;
 			_shiftTradeRequestsPeriodViewModelMapper = shiftTradeRequestsPeriodViewModelMapper;
-			_shiftTradeRequestSetChecksum = shiftTradeRequestSetChecksum;
+			_shiftTradeRequestStatusChecker = shiftTradeRequestStatusChecker;
 		}
 
 		public RequestsViewModel CreatePageViewModel()
@@ -88,8 +88,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 		{
 			var personRequest =  _personRequestProvider.RetrieveRequest(id);
 			
-			//Henke 20130214: We probably should check the checksum, I just want the /&¤%! schedules to be there....
-			_shiftTradeRequestSetChecksum.SetChecksum(personRequest.Request);
+			_shiftTradeRequestStatusChecker.Check(personRequest.Request as IShiftTradeRequest);
 
 			var shiftTradeSwapDetails = _mapper.Map<IShiftTradeRequest,ShiftTradeSwapDetailsViewModel>(personRequest.Request as IShiftTradeRequest);
 			
