@@ -125,6 +125,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Sdk.ServiceBus
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Sdk.ServiceBus", "Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBus\Teleopti.Ccc.Sdk.ServiceBus.csproj", "{9DF2D12C-4895-42D9-A365-6B9F97E787B5}"
 	ProjectSection(ProjectDependencies) = postProject
+		{BE2EB225-3FAA-460A-B616-4A67CCF05EFD} = {BE2EB225-3FAA-460A-B616-4A67CCF05EFD}
 		{E65D42D5-246C-45A3-B62E-442203E2A84D} = {E65D42D5-246C-45A3-B62E-442203E2A84D}
 	EndProjectSection
 EndProject
