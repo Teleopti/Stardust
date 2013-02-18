@@ -366,7 +366,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 
 			var result = Mapper.Map<DateOnly, ShiftTradeScheduleViewModel>(date);
 
-			result.MySchedule.ScheduleLayers.First().Title.Should().Be.EqualTo("11:00 - 14:00");
+			result.MySchedule.ScheduleLayers.First().Title.Should().Be.EqualTo("11:00-14:00");
 		}
 
 		[Test]
@@ -388,7 +388,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 
 			var result = Mapper.Map<DateOnly, ShiftTradeScheduleViewModel>(date);
 
-			result.MySchedule.ScheduleLayers.First().Title.Should().Be.EqualTo("11:00 AM - 2:00 PM");
+			result.MySchedule.ScheduleLayers.First().Title.Should().Be.EqualTo("11:00 AM-2:00 PM");
 		}
 
 		[Test]

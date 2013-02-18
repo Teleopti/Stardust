@@ -202,7 +202,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		{
 			//make a component for this?
 			var userCulture = _userCulture().GetCulture();
-			return string.Concat(start.ToString(userCulture.DateTimeFormat.ShortTimePattern, userCulture), " - ",
+			return string.Concat(start.ToString(userCulture.DateTimeFormat.ShortTimePattern, userCulture), "-",
 													 end.ToString(userCulture.DateTimeFormat.ShortTimePattern, userCulture));
 		}
 
