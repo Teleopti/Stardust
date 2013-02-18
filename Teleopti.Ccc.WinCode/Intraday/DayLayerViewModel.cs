@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows.Data;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
@@ -24,6 +25,8 @@ namespace Teleopti.Ccc.WinCode.Intraday
         private static CommonNameDescriptionSetting _commonNameDescriptionSetting;
         private readonly ICollection<DayLayerModel> _models = new ObservableCollection<DayLayerModel>();
 
+		public CollectionViewSource ModelSource { get; set; }
+
         public DayLayerViewModel(IRtaStateHolder rtaStateHolder, IEventAggregator eventAggregator, IUnitOfWorkFactory unitOfWorkFactory, IRepositoryFactory repositoryFactory, IDispatcherWrapper dispatcherWrapper)
         {
             _eventAggregator = eventAggregator;
@@ -31,6 +34,9 @@ namespace Teleopti.Ccc.WinCode.Intraday
             _repositoryFactory = repositoryFactory;
             _dispatcherWrapper = dispatcherWrapper;
             _rtaStateHolder = rtaStateHolder;
+
+			ModelSource = new CollectionViewSource();
+	        ModelSource.Source = Models;
         }
 
         public ICollection<DayLayerModel> Models
@@ -116,6 +122,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
             		dayLayerModel.StaffingEffect = agentState.StaffingEffect;
             	}
             }
+			ModelSource.View.Refresh();
         }
 
         public void RefreshProjection(IPerson person)
