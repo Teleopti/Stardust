@@ -59,19 +59,13 @@ Scenario: View team schedule with night shift from yesterday
 	When I view schedules for '2012-12-03'
 	Then I should see schedule for 'Pierre Baldi'
 	
-@ignore
-Scenario: My time zone, not agents
-
-@ignore
-Scenario: Day off
-
-@ignore
-Scenario: Absence
-
 Scenario: View team schedule, no shift
 	Given I have the role 'Anywhere Team Green'
 	When I view schedules for '2012-12-03'
 	Then I should see no schedule for 'Pierre Baldi'
+
+@ignore
+Scenario: View schedules in my time zone
 
 @ignore
 Scenario: View team selection

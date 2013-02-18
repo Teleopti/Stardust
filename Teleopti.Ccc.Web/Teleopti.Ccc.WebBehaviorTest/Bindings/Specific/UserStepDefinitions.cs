@@ -440,13 +440,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 		[Given(@"(I am|'(.*)' is) located in (h|H)awaii")]
 		public void GivenIAmLocatedInAmerica(string what, string userName, string hH)
 		{
-			UserFactory.User().SetupCulture(new HawaiiTimeZone());
+			UserFactory.User().Setup(new HawaiiTimeZone());
 		}
 
 		[Given(@"(I am|(.*) is) located in (S|s)tockholm")]
 		public void GivenIAmLocatedInStockholm(string what, string userName, string sS)
 		{
-			UserFactory.User().SetupCulture(new StockholmTimeZone());
+			UserFactory.User().Setup(new StockholmTimeZone());
 		}
 
 

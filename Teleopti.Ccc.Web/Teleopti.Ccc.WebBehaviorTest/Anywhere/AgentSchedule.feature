@@ -29,10 +29,6 @@ Background:
 	| Field | Value |
 	| Name  | Phone |
 	| Color | Green |
-	And there is an absence with
-	| Field | Value   |
-	| Name  | Illness |
-	| Color | Red     |
 
 Scenario: View shift
 	Given I have the role 'Anywhere Team Green'
@@ -90,10 +86,6 @@ Scenario: View night shift from today
 	| Lunch activity   | Lunch        |
 	When I view agent schedule for 'Pierre Baldi' on '2012-12-02'
 	Then I should see 3 shift layers
-	
-Scenario: View absence ??
-
-Scenario: View Day off ??
 
 Scenario: View schedule in agents time zone
 	Given I have the role 'Anywhere Team Green'
