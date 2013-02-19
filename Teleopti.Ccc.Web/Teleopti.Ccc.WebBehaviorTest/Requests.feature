@@ -29,6 +29,15 @@ Scenario: Show created shift trade request
 	When I view requests
 	Then I should see my existing shift trade request with subject 'swap with me'
 
+
+Scenario: Show status of the shift trade request
+	Given I am an agent
+	And I have created a shift trade request
+	| Field			| Value				|
+	| Subject		| swap with me		|
+	And I am viewing requests
+	Then I should see my existing shift trade request with status OkByMe
+
 Scenario: Show received shift trade request
 	Given I am an agent
 	And I have received a shift trade request
