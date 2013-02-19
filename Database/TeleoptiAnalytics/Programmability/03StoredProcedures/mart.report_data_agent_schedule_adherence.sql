@@ -519,6 +519,22 @@ set
 where 	date_id = @nowLocalDateId 
 and interval_id > @nowLocalIntervalId
 END
+ELSE
+BEGIN
+update #result
+set
+	adherence_calc_s=0,
+	deviation_s = 0
+where 	date_id > @nowLocalDateId 
+
+update #result
+set
+	adherence_calc_s=0,
+	deviation_s = 0
+where 	date_id = @nowLocalDateId 
+and interval_id > @nowLocalIntervalId
+END
+
 ----------
 --calculation of Agent adherence, team adherence
 ----------
