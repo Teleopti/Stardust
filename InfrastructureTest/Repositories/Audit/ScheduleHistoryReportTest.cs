@@ -291,8 +291,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var res = target.Report(new DateOnlyPeriod(new DateOnly(Today), new DateOnly(Today).AddDays(1)),
-								  PersonAssignment.Period.ToDateOnlyPeriod((TimeZoneInfo.Local)),
+				var res = target.Report(new DateOnlyPeriod(new DateOnly(Today).AddDays(-1), new DateOnly(Today)),
+								  PersonAssignment.Period.ToDateOnlyPeriod(TimeZoneInfo.Local),
 								  new List<IPerson> { PersonAssignment.Person });
 				res.Any(dayOff => consideredEqual(dayOff, expected)).Should().Be.True();
 			}

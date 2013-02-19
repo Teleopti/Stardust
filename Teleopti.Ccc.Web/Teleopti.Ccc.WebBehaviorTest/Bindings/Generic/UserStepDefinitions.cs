@@ -17,8 +17,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			UserFactory.User().Setup(schedulePeriod);
 		}
 
-		[Given(@"(.*) have a person period with")]
-		public void GivenIHaveAPersonPeriodWith(string userName, Table table)
+		[Given(@"(.*) (has|have) a person period with")]
+		public void GivenIHaveAPersonPeriodWith(string userName, string hasHave, Table table)
 		{
 			var personPeriod = table.CreateInstance<PersonPeriodConfigurable>();
 			UserFactory.User(userName).Setup(personPeriod);
@@ -35,8 +35,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			UserFactory.User(userName).Setup(personPeriod);
 		}
 
-		[Given(@"(I am|'(.*)' is a) user with")]
-		public void GivenIAmAUserWith(string what, string userName, Table table)
+		// I am a user with
+		// 'Kalle' is a user with
+		// 'I' am a user with
+		[Given(@"'?(I|.*)'? (am a|is a) user with")]
+		public void GivenIAmAUserWith(string userName, string amAIsA, Table table)
 		{
 			var user = table.CreateInstance<UserConfigurable>();
 			UserFactory.User(userName).Setup(user);

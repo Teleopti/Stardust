@@ -4,10 +4,10 @@
 	I want to see the schedules for the team
 	
 Background:
-	And there is a team with
+	Given there is a team with
 	| Field | Value      |
 	| Name  | Team green |
-	Given there is a role with
+	And there is a role with
 	| Field                      | Value               |
 	| Name                       | Anywhere Team Green |
 	| Access to team             | Team green          |
@@ -58,14 +58,29 @@ Scenario: View team schedule with night shift from yesterday
 	| Lunch activity   | Lunch        |
 	When I view schedules for '2012-12-03'
 	Then I should see schedule for 'Pierre Baldi'
-
+	
 Scenario: View team schedule, no shift
 	Given I have the role 'Anywhere Team Green'
 	When I view schedules for '2012-12-03'
 	Then I should see no schedule for 'Pierre Baldi'
 
 @ignore
-Scenario: View team schedule and open agent schedule
+Scenario: View schedules in my time zone
+
+@ignore
+Scenario: View team selection
+
+@ignore
+Scenario: Change team
+
+@ignore
+Scenario: Select date
+
+@ignore
+Scenario: Select next/previous day
+
+@ignore
+Scenario: Select agent
 	Given I have the role 'Anywhere Team Green'
 	And there is a shift with
 	| Field            | Value        |
@@ -78,5 +93,6 @@ Scenario: View team schedule and open agent schedule
 	| Lunch end time   | 12:15        |
 	| Lunch activity   | Lunch        |
 	When I view schedules for '2012-12-02'
-	And I click on the day panel for 'Pierre Baldi'
-	Then I should see agent schedule for 'Pierre Baldi'
+	And I select 'Pierre Baldi'
+	Then I should see agent schedule for 'Pierre Baldi' on '2012-12-02'
+

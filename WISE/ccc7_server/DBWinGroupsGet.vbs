@@ -6,13 +6,16 @@ On Error Resume Next 'With out this, any error will crash MsiExec
 Dim intMessage
 Dim admConnectString
 Dim objConnection,objRecordSet
-Dim displayGroups
 Dim server
 Dim admSqlLogin
 Dim admPassword
 Dim admAuthModel
 Dim debug
 Dim dbCounter
+Dim strEdition
+Const strAzure = "SQL Azure"
+Const sqlEdition="SELECT CONVERT(NVARCHAR(200), SERVERPROPERTY('edition'))"
+Const displayGroups="SET NOCOUNT ON;SELECT ROW_NUMBER() OVER (ORDER BY name) AS ComboOrder, name from sys.syslogins where isntgroup = 1 and name <> 'NT SERVICE\MSSQLSERVER' and name <> 'NT SERVICE\SQLSERVERAGENT'"
 
 'set to true if you need to debug. Note: Session-Object (a WISE specific object) is not avaiable from cscript host
 debug = false
@@ -29,8 +32,6 @@ Else
 	admSqlLogin	=Session.Property("WiseSqlUser")
 	admPassword=Session.Property("WiseSqlPass")
 End If
-
-displayGroups="SET NOCOUNT ON;SELECT ROW_NUMBER() OVER (ORDER BY name) AS ComboOrder, name from sys.syslogins where isntgroup = 1 and name <> 'NT SERVICE\MSSQLSERVER' and name <> 'NT SERVICE\SQLSERVERAGENT'"
 
 'admConnection string to the server
 If admAuthModel = "NT" Then
@@ -49,8 +50,13 @@ If (admAuthModel = "SQL" and admSqlLogin="") Then
 	DisplayCustomError("I can't connect blank SQL User Name, please specify a valid login or use Windows NT Authentication")
 End If
 
+'Get edition
+strEdition = CheckSingleValue (admConnectString,sqlEdition)
+
 'Loop Windows groups on SQL Server
-AvailableGroupsGet admConnectString, displayGroups
+If strEdition<>strAzure Then
+	AvailableGroupsGet admConnectString, displayGroups
+End If
 
 '====================================
 'subs
@@ -72,6 +78,28 @@ End Sub
 '====================================
 'functions
 '====================================
+Public Function CheckSingleValue (strCon, strQuery) 
+    'init as "don't have permissions"
+	CheckSingleValue = 0
+	
+	On Error Resume Next
+	Set objConnection = CreateObject("ADODB.Connection") 
+	Set objRecordSet = CreateObject("ADODB.Recordset") 
+	objConnection.Open strCon
+	
+	objRecordSet.Open strQuery,objConnection
+	If Err.Number = 0 Then
+		objRecordSet.MoveFirst
+		CheckSingleValue=objRecordset(0)
+	End If
+	objRecordSet.Close 
+	objConnection.Close
+	
+	On Error Goto 0
+	Set objConnection = Nothing 
+	Set objRecordSet = Nothing 
+End Function
+
 Public Function AvailableGroupsGet(strCon, strQuery) 
 	On Error Resume Next
 	

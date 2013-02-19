@@ -125,6 +125,7 @@
     <Compile Include="Data\Setups\Generic\ReadModelShiftConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\TeamConfigurable.cs" />
     <Compile Include="Bindings\Generic\MyTime\StudentAvailabilityPageStepDefinitions.cs" />
+    <Compile Include="Data\Setups\Specific\UtcTimeZone.cs" />
     <Compile Include="StudentAvailabilityMultidays.feature.cs">
       <DependentUpon>StudentAvailabilityMultidays.feature</DependentUpon>
       <AutoGen>True</AutoGen>
