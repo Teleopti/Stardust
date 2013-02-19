@@ -15,14 +15,14 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 	public class OpenIdControllerTest
 	{
 		[Test]
-		public void ShouldReturnXrdsView()
+		public void ShouldReturnXrdsViewForIdentifier()
 		{
 			HttpContext.Current = new HttpContext(
 				new HttpRequest("mock", "http://mock", "mock"),
 				new HttpResponse(new StringWriter()));
 
 			var response = MockRepository.GenerateStub<FakeHttpResponse>();
-			var request = MockRepository.GenerateStub<FakeHttpRequest>("/", new Uri("http://localhost/"), new Uri("http://localhost/"));
+			var request = MockRepository.GenerateStub<FakeHttpRequest>("/", new Uri("http://mock/"), new Uri("http://mock/"));
 			request.Stub(x => x.AcceptTypes).Return(new string[] { "application/xrds+xml" });
 			var context = new FakeHttpContext("/");
 			context.SetResponse(response);
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 				new HttpResponse(new StringWriter()));
 
 			var response = MockRepository.GenerateStub<FakeHttpResponse>();
-			var request = MockRepository.GenerateStub<FakeHttpRequest>("/", new Uri("http://localhost/"), new Uri("http://localhost/"));
+			var request = MockRepository.GenerateStub<FakeHttpRequest>("/", new Uri("http://mock/"), new Uri("http://mock/"));
 			var context = new FakeHttpContext("/");
 			context.SetResponse(response);
 			context.SetRequest(request);
@@ -51,6 +51,38 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 			target.ControllerContext = new ControllerContext(context, new RouteData(), target);
 
 			var result = target.Identifier();
+
+			(result as ViewResult).ViewName.Should().Be.EqualTo("");
+		}
+
+		[Test]
+		public void ShouldReturnAskUserView()
+		{
+			HttpContext.Current = new HttpContext(
+				new HttpRequest("mock", "http://mock", "mock"),
+				new HttpResponse(new StringWriter()));
+
+			var context = new FakeHttpContext("/");
+			var target = new OpenIdController();
+			target.ControllerContext = new ControllerContext(context, new RouteData(), target);
+
+			var result = target.AskUser();
+
+			(result as ViewResult).ViewName.Should().Be.EqualTo("");
+		}
+
+		[Test]
+		public void ShouldReturnXrdsView()
+		{
+			HttpContext.Current = new HttpContext(
+				new HttpRequest("mock", "http://mock", "mock"),
+				new HttpResponse(new StringWriter()));
+
+			var context = new FakeHttpContext("/");
+			var target = new OpenIdController();
+			target.ControllerContext = new ControllerContext(context, new RouteData(), target);
+
+			var result = target.AskUser();
 
 			(result as ViewResult).ViewName.Should().Be.EqualTo("");
 		}
