@@ -82,6 +82,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoAnywhereSchedule(date);
 		}
 
+		[When(@"I view agent schedule for '(.*)' on '(.*)'")]
+		public void WhenIViewAgentScheduleForAgentOnDate(string name, DateTime date)
+		{
+			TestControllerMethods.Logon();
+			var personId = UserFactory.User(name).Person.Id.Value;
+			Navigation.GotoAnywhereAgentSchedule(personId, date);
+		}
+
 		[When(@"I navigate to the preferences page")]
 		public void WhenINavigateToThePreferencesPage()
 		{

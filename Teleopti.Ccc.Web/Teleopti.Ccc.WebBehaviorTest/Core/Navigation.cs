@@ -207,9 +207,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			GoTo("Anywhere" + hash, new ApplicationStartupTimeout());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<AnywherePage>());
 		}
+
+		public static void GotoAnywhereAgentSchedule(Guid personId, DateTime date)
+		{
+			GoTo(string.Format("Anywhere#agentschedule/{0}/{1}",
+				personId, date.Year.ToString("0000") + date.Month.ToString("00") + date.Day.ToString("00"))
+				, new ApplicationStartupTimeout());
+			Pages.Pages.NavigatingTo(Browser.Current.Page<AnywherePage>());
+		}
 	}
-
-
 
 	public class GotoArgs
 	{

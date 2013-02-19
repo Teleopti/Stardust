@@ -15,11 +15,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		public void ThenIShouldSeeAgentScheduleForAgentOnDate(string name, string date)
 		{
 			var id = UserFactory.User(name).Person.Id.ToString();
-			
 			EventualAssert.That(() => Browser.Current.Url.Contains(id), Is.True);
 			EventualAssert.That(() => Browser.Current.Url.Contains(date.Replace("-", "")), Is.True);
 		}
 
+		[Then(@"I should see a shift")]
+		public void ThenIShouldSeeAShift()
+		{
+			EventualAssert.That(() => Browser.Current.Element(Find.BySelector(".shift .layer")).Exists, Is.True);
+		}
 
 	}
 }

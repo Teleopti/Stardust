@@ -14,9 +14,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		public Element RowByPerson(string personName)
 		{
-			//$('.myclass .myotherclass').
-			// Find.BySelector(".myclass .myotherclass")
-			//$('.agent ')
 			return Document.Element(Find.BySelector(".agent:contains('" + personName + "')"));
 		}
 	}
