@@ -219,6 +219,12 @@ DECLARE @hide_time_zone bit
 DECLARE @selected_adherence_type nvarchar(100)
 DECLARE @date TABLE (date_from_id INT, date_to_id INT)
 DECLARE @scenario_id int
+DECLARE @nowutcDateOnly smalldatetime
+DECLARE @nowutcInterval smalldatetime
+DECLARE @nowLocalDateId int
+DECLARE @nowLocalIntervalId smallint
+SELECT @nowutcDateOnly = DATEADD(dd, 0, DATEDIFF(dd, 0, GETUTCDATE()))
+SELECT @nowutcInterval = DATEADD(minute,DATEPART(minute, GETUTCDATE()),DATEADD(hour, DATEPART(hour, GETUTCDATE()),'1900-01-01 00:00:00'))
 
 ------------
 --Init
@@ -260,6 +266,17 @@ INSERT INTO @date (date_from_id,date_to_id)
 	WHERE	d.date_date	between @date_from AND @date_to
 	AND		b.time_zone_id	= @time_zone_id
 
+--Get Now() in local date/interval Id variables
+SELECT
+	@nowLocalDateId = b.local_date_id,
+	@nowLocalIntervalId = b.local_interval_id
+FROM bridge_time_zone b
+INNER JOIN mart.dim_date d 
+	ON b.date_id = d.date_id
+	AND d.date_date = @nowUtcDateOnly
+INNER JOIN mart.dim_interval i
+	ON b.interval_id = i.interval_id
+	AND @nowUtcInterval between i.interval_start and i.interval_end
 
 --Multiple Time zones?
 IF (SELECT COUNT(*) FROM mart.dim_time_zone tz WHERE tz.time_zone_code<>'UTC') < 2
@@ -528,6 +545,40 @@ FROM mart.dim_person p
 			AND fsd.date_id=fs.schedule_date_id
 			AND fsd.interval_id=fs.interval_id)
 	AND b.time_zone_id=@time_zone_id
+END
+
+----------
+--remove deviation and schedule_ready_time for every interval > Now(), but keep color and activity for display
+----------
+IF (@from_matrix = 1) --Only do this for Standard Reports => Don't bother/break SDK and MyTime client
+BEGIN
+update #result
+set
+	adherence_calc_s=NULL,
+	deviation_s = NULL
+where 	date_id > @nowLocalDateId 
+
+update #result
+set
+	adherence_calc_s=NULL,
+	deviation_s = NULL
+where 	date_id = @nowLocalDateId 
+and interval_id > @nowLocalIntervalId
+END
+ELSE
+BEGIN
+update #result
+set
+	adherence_calc_s=0,
+	deviation_s = 0
+where 	date_id > @nowLocalDateId 
+
+update #result
+set
+	adherence_calc_s=0,
+	deviation_s = 0
+where 	date_id = @nowLocalDateId 
+and interval_id > @nowLocalIntervalId
 END
 
 ----------
