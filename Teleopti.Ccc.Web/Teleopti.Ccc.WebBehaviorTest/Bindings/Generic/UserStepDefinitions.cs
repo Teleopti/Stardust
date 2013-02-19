@@ -35,8 +35,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			UserFactory.User(userName).Setup(personPeriod);
 		}
 
-		[Given(@"(I am a|'(.*)' is a) user with")]
-		public void GivenIAmAUserWith(string what, string userName, Table table)
+		// I am a user with
+		// 'Kalle' is a user with
+		// 'I' am a user with
+		[Given(@"'?(I|.*)'? (am a|is a) user with")]
+		public void GivenIAmAUserWith(string userName, string amAIsA, Table table)
 		{
 			var user = table.CreateInstance<UserConfigurable>();
 			UserFactory.User(userName).Setup(user);
