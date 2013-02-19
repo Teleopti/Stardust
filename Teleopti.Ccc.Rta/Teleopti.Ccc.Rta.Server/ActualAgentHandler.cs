@@ -12,6 +12,8 @@ namespace Teleopti.Ccc.Rta.Server
 		IActualAgentState GetState(Guid personId, Guid businessUnitId, Guid platformTypeId, string stateCode,
 		                           DateTime timestamp,
 		                           TimeSpan timeInState, AutoResetEvent waitHandle);
+
+		IActualAgentState CheckSchedule(Guid personId, Guid businessUnitId, DateTime timestamp, AutoResetEvent waitHandle);
 	}
 
 	public class ActualAgentHandler : IActualAgentHandler
@@ -21,6 +23,27 @@ namespace Teleopti.Ccc.Rta.Server
 		public ActualAgentHandler(IActualAgentDataHandler actualAgentDataHandler)
 		{
 			_actualAgentDataHandler = actualAgentDataHandler;
+		}
+
+		public IActualAgentState CheckSchedule(Guid personId, Guid businessUnitId, DateTime timestamp, AutoResetEvent waitHandle)
+		{
+			var platformId = Guid.Empty;
+			var stateCode = "Unknown";
+			var scheduleLayers = _actualAgentDataHandler.CurrentLayerAndNext(timestamp, personId);
+			var previousState = _actualAgentDataHandler.LoadOldState(personId);
+
+			if (previousState == null)
+				return CreateAndSaveState(scheduleLayers, null, personId, platformId, stateCode, timestamp, new TimeSpan(0),
+				                          businessUnitId, waitHandle);
+
+			if (scheduleLayers[0].PayloadId == previousState.ScheduledId)
+				return null;
+
+			platformId = previousState.PlatformTypeId;
+			stateCode = previousState.StateCode;
+
+			return CreateAndSaveState(scheduleLayers, previousState, personId, platformId, stateCode, timestamp, new TimeSpan(0),
+			                          businessUnitId, waitHandle);
 		}
 
 		public IActualAgentState GetState(Guid personId, Guid businessUnitId, Guid platformTypeId, string stateCode, DateTime timestamp,
@@ -84,13 +107,12 @@ namespace Teleopti.Ccc.Rta.Server
 			if (previousState != null && newState.Equals(previousState))
 				return null;
 
-			ThreadPool.QueueUserWorkItem(SaveToDataStore, new object[] { newState, waitHandle });
-			//_actualAgentDataHandler.AddOrUpdate(newState);
+			ThreadPool.QueueUserWorkItem(saveToDataStore, new object[] { newState, waitHandle });
 
 			return newState;
 		}
 
-		private void SaveToDataStore(object arg)
+		private void saveToDataStore(object arg)
 		{
 			var argsArr = arg as object[];
 			if (argsArr == null) return;
@@ -99,30 +121,30 @@ namespace Teleopti.Ccc.Rta.Server
 
 			if (agentState == null)
 			{
-				if (waitHandle != null) waitHandle.Set();
+				waitHandle.Set();
 				return;
 			}
 			_actualAgentDataHandler.AddOrUpdate(agentState);
-			if (waitHandle != null) waitHandle.Set();
+			waitHandle.Set();
 		}
 
 		public RtaAlarmLight GetAlarm(Guid platformTypeId, string stateCode, ScheduleLayer layer, Guid businessUnitId)
 		{
-			var state = ResolveStateGroupId(platformTypeId, stateCode, businessUnitId);
+			var state = resolveStateGroupId(platformTypeId, stateCode, businessUnitId);
 		    var activityAlarms = _actualAgentDataHandler.ActivityAlarms();
-		    var localPayloadId = PayloadId(layer);
+		    var localPayloadId = payloadId(layer);
 		    return activityAlarms.ContainsKey(localPayloadId)
 		               ? activityAlarms[localPayloadId].SingleOrDefault(
 		                   s => s.StateGroupId == state)
 		               : null;
 		}
 
-		private static Guid PayloadId(ScheduleLayer scheduleLayer)
+		private static Guid payloadId(ScheduleLayer scheduleLayer)
 		{
 			return scheduleLayer == null ? Guid.Empty : scheduleLayer.PayloadId;
 		}
 
-		private Guid ResolveStateGroupId(Guid platformTypeId, string stateCode, Guid businessUnitId)
+		private Guid resolveStateGroupId(Guid platformTypeId, string stateCode, Guid businessUnitId)
 		{
 			var stateGroups = _actualAgentDataHandler.StateGroups().ToList();
 			var foundState = stateGroups.FirstOrDefault(s => s.PlatformTypeId == platformTypeId && s.StateCode == stateCode && s.BusinessUnitId == businessUnitId);

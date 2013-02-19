@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_isSnapshot = false;
 		}
 
-		[Test, ExpectedException(typeof (BrokerNotInstantiatedException))]
+		[Test]
 		public void VerifyCreateInstanceUsingEmptyConstructorFailsBecauseNoConfigurationAvailable()
 		{
 			new RtaDataHandler(_agentHandler);

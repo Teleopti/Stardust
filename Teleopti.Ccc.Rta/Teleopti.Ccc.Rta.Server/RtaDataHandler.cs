@@ -37,7 +37,6 @@ namespace Teleopti.Ccc.Rta.Server
 			_personResolver = personResolver;
 			_stateResolver = stateResolver;
 
-
 			if (_messageSender == null) return;
 
 			try
@@ -65,14 +64,15 @@ namespace Teleopti.Ccc.Rta.Server
 			_personResolver = personResolver;
 			_stateResolver = stateResolver;
 			_agentHandler = agentHandler;
-            
+
+			if (_messageSender == null) return;
 
 		    try
-			{
-				_messageSender.InstantiateBrokerService();
-			   // _messageBrokerResolver.MessageBroker.RegisterEventSubscription(getActivityChangeInTheScheduler, typeof(IActivityChangeInTheScheduler));
+		    {
+			    _messageSender.InstantiateBrokerService();
+			    // _messageBrokerResolver.MessageBroker.RegisterEventSubscription(getActivityChangeInTheScheduler, typeof(IActivityChangeInTheScheduler));
 
-			}
+		    }
 			catch (BrokerNotInstantiatedException ex)
 			{
 				_loggingSvc.Error(
@@ -93,6 +93,9 @@ namespace Teleopti.Ccc.Rta.Server
 			_dataSourceResolver = new DataSourceResolver(_databaseConnectionFactory, _connectionStringDataStore);
 			_personResolver = new PersonResolver(_databaseConnectionFactory, _connectionStringDataStore);
 			_stateResolver = new StateResolver(_databaseConnectionFactory, _connectionStringDataStore);
+
+			if (_messageSender == null) return;
+
 			try
 			{
 				_messageSender.InstantiateBrokerService();
@@ -105,9 +108,30 @@ namespace Teleopti.Ccc.Rta.Server
 			}
 		}
 
-		public void CheckSchedule(Guid personId)
+		public WaitHandle CheckSchedule(Guid personId, Guid businessUnitId, DateTime timestamp)
 		{
+			var waitHandle = new AutoResetEvent(false);
+			_agentHandler.CheckSchedule(personId, businessUnitId, timestamp, waitHandle);
 			
+			if (string.IsNullOrEmpty(_connectionStringDataStore))
+			{
+				_loggingSvc.ErrorFormat("No connection information avaiable in configuration file.");
+				waitHandle.Set();
+				return waitHandle;
+			}
+			
+			var agentState = _agentHandler.CheckSchedule(personId, businessUnitId, timestamp, waitHandle);
+			if (agentState == null)
+			{
+				_loggingSvc.InfoFormat("Schedule for {0} has not changed", personId);
+				waitHandle.Set();
+				return waitHandle;
+			}
+
+			_loggingSvc.InfoFormat("Trying to send object {0} through Message Broker", agentState);
+			_messageSender.SendRtaData(personId, businessUnitId, agentState);
+			waitHandle.Set();
+			return waitHandle;
 		}
 
 		public bool IsAlive

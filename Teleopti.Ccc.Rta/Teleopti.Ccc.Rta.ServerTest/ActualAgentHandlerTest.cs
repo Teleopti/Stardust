@@ -45,60 +45,61 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_guid = Guid.NewGuid();
 
 			_scheduleLayer = new ScheduleLayer
-			                 	{
-									PayloadId = _payloadId
-			                 	};
+				{
+					PayloadId = _payloadId
+				};
 			_stateGroups = new RtaStateGroupLight
-			                      	{
-			                      		BusinessUnitId = _businessUnitId,
-			                      		PlatformTypeId = _platformTypeId,
-			                      		StateCode = _stateCode,
-										StateGroupId = _stateGroupId
-			                      	};
+				{
+					BusinessUnitId = _businessUnitId,
+					PlatformTypeId = _platformTypeId,
+					StateCode = _stateCode,
+					StateGroupId = _stateGroupId
+				};
 			_rtaAlarmLight = new RtaAlarmLight
-			                 	{
-									StateGroupId = _stateGroupId,
-			                 		Name = "SomeName",
-			                 		StateGroupName = "SomeStateGroupName",
-									AlarmTypeId = _guid
-			                 	};
+				{
+					StateGroupId = _stateGroupId,
+					Name = "SomeName",
+					StateGroupName = "SomeStateGroupName",
+					AlarmTypeId = _guid
+				};
 			_activityAlarms = new Dictionary<Guid, List<RtaAlarmLight>>
-			              	{
-			              		{_payloadId, new List<RtaAlarmLight> {_rtaAlarmLight}}
-			              	};
+				{
+					{_payloadId, new List<RtaAlarmLight> {_rtaAlarmLight}}
+				};
 
-			
+
 		}
 
 		[Test]
 		public void VerifyGetState()
 		{
 			var currentLayer = new ScheduleLayer
-			{
-				Name = "CurrentLayer",
-				StartDateTime = _dateTime,
-				PayloadId = _payloadId
-			};
-			
+				{
+					Name = "CurrentLayer",
+					StartDateTime = _dateTime,
+					PayloadId = _payloadId
+				};
+
 			var nextLayer = new ScheduleLayer
-			{
-				Name = "NextLayer"
-			};
+				{
+					Name = "NextLayer"
+				};
 
 			var previousState = new ActualAgentState
-			{
-				AlarmId = _guid,
-				StateStart = _dateTime
-			};
-			
+				{
+					AlarmId = _guid,
+					StateStart = _dateTime
+				};
+
 			var alarmLight = new RtaAlarmLight
-			{
-				Name = "SomeName",
-				AlarmTypeId = _guid
-			};
+				{
+					Name = "SomeName",
+					AlarmTypeId = _guid
+				};
 			var resetEvent = new AutoResetEvent(false);
 
-			_dataHandler.Expect(s => s.CurrentLayerAndNext(_dateTime, _guid)).Return(new List<ScheduleLayer> { currentLayer, nextLayer });
+			_dataHandler.Expect(s => s.CurrentLayerAndNext(_dateTime, _guid))
+			            .Return(new List<ScheduleLayer> {currentLayer, nextLayer});
 			_dataHandler.Expect(s => s.LoadOldState(_guid)).Return(previousState);
 
 			_dataHandler.Expect(s => s.StateGroups()).Return(new List<RtaStateGroupLight>
@@ -117,7 +118,8 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_dataHandler.Expect(s => s.AddOrUpdate(new ActualAgentState())).IgnoreArguments();
 			_mock.ReplayAll();
 
-			var result = _target.GetState(_guid, _businessUnitId, _platformTypeId, _stateCode, _dateTime, new TimeSpan(), resetEvent);
+			var result = _target.GetState(_guid, _businessUnitId, _platformTypeId, _stateCode, _dateTime, new TimeSpan(),
+			                              resetEvent);
 			Assert.That(result.AlarmName, Is.EqualTo(alarmLight.Name));
 			Assert.That(result.StateStart, Is.EqualTo(currentLayer.StartDateTime));
 			Assert.That(result.Scheduled, Is.EqualTo(currentLayer.Name));
@@ -130,44 +132,45 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		public void VerifyGetStateNextAndCurrentAreEqual()
 		{
 			var currentLayer = new ScheduleLayer
-			{
-				Name = "SameName",
-				PayloadId = _stateGroupId,
-				StartDateTime = _dateTime,
-				EndDateTime = _dateTime
-			};
+				{
+					Name = "SameName",
+					PayloadId = _stateGroupId,
+					StartDateTime = _dateTime,
+					EndDateTime = _dateTime
+				};
 			var nextLayer = new ScheduleLayer
-			{
-				Name = "SameName",
-				PayloadId = _stateGroupId,
-				StartDateTime = _dateTime,
-				EndDateTime = _dateTime,
-			};
+				{
+					Name = "SameName",
+					PayloadId = _stateGroupId,
+					StartDateTime = _dateTime,
+					EndDateTime = _dateTime,
+				};
 
 			var previousState = new ActualAgentState
-			{
-				ScheduledId = _stateGroupId,
-				ScheduledNextId = _stateGroupId,
-				AlarmId = _guid,
-				StateId = _stateGroupId,
-				ScheduledNext = "SameName",
-				NextStart = _dateTime
-			};
+				{
+					ScheduledId = _stateGroupId,
+					ScheduledNextId = _stateGroupId,
+					AlarmId = _guid,
+					StateId = _stateGroupId,
+					ScheduledNext = "SameName",
+					NextStart = _dateTime
+				};
 
 			_rtaAlarmLight = new RtaAlarmLight
-			{
-				StateGroupId = _stateGroupId,
-				Name = "SomeName",
-				StateGroupName = "SomeStateGroupName",
-				AlarmTypeId = _guid
-			};
+				{
+					StateGroupId = _stateGroupId,
+					Name = "SomeName",
+					StateGroupName = "SomeStateGroupName",
+					AlarmTypeId = _guid
+				};
 			_activityAlarms = new Dictionary<Guid, List<RtaAlarmLight>>
-			              	{
-			              		{_stateGroupId, new List<RtaAlarmLight> {_rtaAlarmLight}}
-			              	};
+				{
+					{_stateGroupId, new List<RtaAlarmLight> {_rtaAlarmLight}}
+				};
 
 			var resetEvent = new AutoResetEvent(false);
-			_dataHandler.Expect(s => s.CurrentLayerAndNext(_dateTime, _guid)).Return(new List<ScheduleLayer> { currentLayer, nextLayer });
+			_dataHandler.Expect(s => s.CurrentLayerAndNext(_dateTime, _guid))
+			            .Return(new List<ScheduleLayer> {currentLayer, nextLayer});
 			_dataHandler.Expect(s => s.LoadOldState(_guid)).Return(previousState);
 			_dataHandler.Expect(s => s.StateGroups()).Return(new List<RtaStateGroupLight>
 				{
@@ -182,7 +185,8 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_dataHandler.Expect(s => s.ActivityAlarms()).Return(_activityAlarms);
 			_mock.ReplayAll();
 
-			var result = _target.GetState(_guid, _businessUnitId, _platformTypeId, _stateCode, _dateTime, new TimeSpan(), resetEvent);
+			var result = _target.GetState(_guid, _businessUnitId, _platformTypeId, _stateCode, _dateTime, new TimeSpan(),
+			                              resetEvent);
 			Assert.IsNull(result);
 			_mock.VerifyAll();
 			resetEvent.Dispose();
@@ -217,11 +221,129 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		{
 			_dataHandler.Expect(d => d.StateGroups()).Return(new List<RtaStateGroupLight> {new RtaStateGroupLight()});
 			_dataHandler.Expect(d => d.ActivityAlarms()).Return(_activityAlarms);
-			
+
 			_mock.ReplayAll();
 			var result = _target.GetAlarm(_platformTypeId, _stateCode, _scheduleLayer, _businessUnitId);
 			_mock.VerifyAll();
 			Assert.That(result, Is.Null);
+		}
+
+		[Test]
+		public void ShouldCheckSchedule()
+		{
+			var currentLayer = new ScheduleLayer
+				{
+					Name = "CurrentLayer",
+					StartDateTime = _dateTime,
+					PayloadId = _payloadId
+				};
+
+			var nextLayer = new ScheduleLayer
+				{
+					Name = "NextLayer"
+				};
+
+			var previousState = new ActualAgentState
+				{
+					AlarmId = _guid,
+					StateStart = _dateTime,
+					StateCode = _stateCode,
+					PlatformTypeId = _platformTypeId
+				};
+
+			var alarmLight = new RtaAlarmLight
+				{
+					Name = "SomeName",
+					AlarmTypeId = _guid
+				};
+
+			var resetEvent = new AutoResetEvent(false);
+
+			_dataHandler.Expect(s => s.CurrentLayerAndNext(_dateTime, _guid))
+			            .Return(new List<ScheduleLayer> {currentLayer, nextLayer});
+			_dataHandler.Expect(s => s.LoadOldState(_guid)).Return(previousState);
+			_dataHandler.Expect(s => s.StateGroups()).Return(new List<RtaStateGroupLight>
+				{
+					new RtaStateGroupLight
+						{
+							PlatformTypeId = _platformTypeId,
+							StateCode = _stateCode,
+							BusinessUnitId = _businessUnitId,
+							StateGroupId = _stateGroupId
+						}
+				});
+
+			_dataHandler.Expect(s => s.ActivityAlarms())
+			            .Return(_activityAlarms);
+			_dataHandler.Expect(s => s.AddOrUpdate(new ActualAgentState())).IgnoreArguments();
+			_mock.ReplayAll();
+
+			var result = _target.CheckSchedule(_guid, _businessUnitId, _dateTime, resetEvent);
+			Assert.That(result.AlarmName, Is.EqualTo(alarmLight.Name));
+			Assert.That(result.StateStart, Is.EqualTo(currentLayer.StartDateTime));
+			Assert.That(result.Scheduled, Is.EqualTo(currentLayer.Name));
+			Assert.That(result.ScheduledNext, Is.EqualTo(nextLayer.Name));
+			_mock.VerifyAll();
+			resetEvent.Dispose();
+		}
+
+		[Test]
+		public void ShouldCheckScheduleNoPreviousState()
+		{
+			var currentLayer = new ScheduleLayer
+				{
+					Name = "CurrentLayer",
+					StartDateTime = _dateTime,
+					PayloadId = _payloadId
+				};
+
+			var nextLayer = new ScheduleLayer
+				{
+					Name = "NextLayer"
+				};
+			
+			var resetEvent = new AutoResetEvent(false);
+
+			_dataHandler.Expect(s => s.CurrentLayerAndNext(_dateTime, _guid))
+			            .Return(new List<ScheduleLayer> {currentLayer, nextLayer});
+			_dataHandler.Expect(s => s.LoadOldState(_guid)).Return(null);
+			_dataHandler.Expect(s => s.StateGroups()).Return(new List<RtaStateGroupLight>
+				{
+					new RtaStateGroupLight()
+				});
+
+			_dataHandler.Expect(s => s.ActivityAlarms())
+			            .Return(_activityAlarms);
+			_dataHandler.Expect(s => s.AddOrUpdate(new ActualAgentState())).IgnoreArguments();
+			_mock.ReplayAll();
+
+			var result = _target.CheckSchedule(_guid, _businessUnitId, _dateTime, resetEvent);
+			Assert.That(result.AlarmName, Is.EqualTo(string.Empty));
+			Assert.That(result.StateStart, Is.EqualTo(currentLayer.StartDateTime));
+			Assert.That(result.Scheduled, Is.EqualTo(currentLayer.Name));
+			Assert.That(result.ScheduledNext, Is.EqualTo(nextLayer.Name));
+			_mock.VerifyAll();
+			resetEvent.Dispose();
+		}
+
+		[Test]
+		public void ShouldCheckScheduleSameActivity()
+		{
+			var currentLayer = new ScheduleLayer
+				{
+					PayloadId = _payloadId
+				};
+			var resetEvent = new AutoResetEvent(false);
+
+			_dataHandler.Expect(s => s.CurrentLayerAndNext(_dateTime, _guid))
+			            .Return(new List<ScheduleLayer> {currentLayer, new ScheduleLayer()});
+			_dataHandler.Expect(s => s.LoadOldState(_guid)).Return(new ActualAgentState {ScheduledId = _payloadId});
+			_mock.ReplayAll();
+
+			var result = _target.CheckSchedule(_guid, _businessUnitId, _dateTime, resetEvent);
+			Assert.IsNull(result);
+			_mock.VerifyAll();
+			resetEvent.Dispose();
 		}
 	}
 }
