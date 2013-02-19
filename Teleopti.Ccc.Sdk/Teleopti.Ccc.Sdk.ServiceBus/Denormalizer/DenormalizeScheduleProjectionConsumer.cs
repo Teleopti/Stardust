@@ -1,4 +1,5 @@
-﻿using Rhino.ServiceBus;
+﻿using System;
+using Rhino.ServiceBus;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -10,11 +11,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 	{
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IScheduleProjectionReadOnlyRepository _scheduleProjectionReadOnlyRepository;
+	    private readonly IServiceBus _serviceBus;
 
-		public DenormalizeScheduleProjectionConsumer(IUnitOfWorkFactory unitOfWorkFactory, IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository)
+	    public DenormalizeScheduleProjectionConsumer(IUnitOfWorkFactory unitOfWorkFactory, IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository, IServiceBus serviceBus)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_scheduleProjectionReadOnlyRepository = scheduleProjectionReadOnlyRepository;
+		    _serviceBus = serviceBus;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
@@ -42,6 +45,16 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 				}
 
 				unitOfWork.PersistAll();
+
+                _serviceBus.Send(new RTAUpdatedScheduleDayMessage
+                {
+                    Datasource = message.Datasource,
+                    BusinessUnitId = message.BusinessUnitId,
+                    PersonId = message.PersonId,
+                    ActivityStartDateTime = message.StartDateTime.GetValueOrDefault(),
+                    ActivityEndDateTime = message.EndDateTime.GetValueOrDefault(),
+                    Timestamp = DateTime.UtcNow
+                });
 			}
 		}
 

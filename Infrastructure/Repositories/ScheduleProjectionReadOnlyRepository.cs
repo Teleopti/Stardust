@@ -84,10 +84,15 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
             var uow = _unitOfWorkFactory.CurrentUnitOfWork();
             string query = string.Format(CultureInfo.InvariantCulture,@"SELECT TOP 1 StartDateTime, EndDateTime 
-                                                                      FROM ReadModel.v_ScheduleProjectionReadOnlyRTA rta WHERE EndDateTime >= '{0}' 
-                                                                      AND PersonId='{1}' order by StartDateTime", dateTime, personId);
+                            FROM ReadModel.v_ScheduleProjectionReadOnlyRTA rta WHERE EndDateTime >= :endDate 
+                            AND PersonId=:personId order by StartDateTime");
 
-            var result = ((NHibernateUnitOfWork) uow).Session.CreateSQLQuery(query).List<ActivityPeriod>();
+            var result = ((NHibernateUnitOfWork) uow).Session
+                .CreateSQLQuery(query)
+                .SetDateTime("endDate", dateTime)
+                .SetGuid("personId", personId)
+                .SetResultTransformer(Transformers.AliasToBean(typeof(ActivityPeriod)))
+                .List<ActivityPeriod>();
 
             if (result.Count<1)
                 return new DateTime();
@@ -96,10 +101,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
             foreach (var activityPeriod in result)
             {
-                if (activityPeriod.ActivityStartDateTime > dateTime)
-                    nextActivityDateTime = activityPeriod.ActivityStartDateTime;
+                if (activityPeriod.StartDateTime > dateTime)
+                    nextActivityDateTime = activityPeriod.StartDateTime;
                 else
-                    nextActivityDateTime = activityPeriod.ActivityEndDateTime;
+                    nextActivityDateTime = activityPeriod.EndDateTime;
             }
 
             return nextActivityDateTime;
@@ -108,7 +113,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
     public class ActivityPeriod
     {
-        public DateTime ActivityStartDateTime;
-        public DateTime ActivityEndDateTime;
+        public DateTime StartDateTime;
+        public DateTime EndDateTime;
     }
 }

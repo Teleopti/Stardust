@@ -181,7 +181,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.TeleoptiRtaService {
         int SaveBatchExternalUserState(string authenticationKey, string platformTypeId, string sourceId, Teleopti.Ccc.Sdk.ServiceBus.TeleoptiRtaService.ExternalUserState[] externalUserStateBatch);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/ITeleoptiRtaService/GetUpdatedScheduleChange", ReplyAction="http://tempuri.org/ITeleoptiRtaService/GetUpdatedScheduleChangeResponse")]
-        void GetUpdatedScheduleChange(System.Guid personId, System.DateTime activityStartTimeStamp, System.DateTime activityEndTimeStamp);
+        void GetUpdatedScheduleChange(System.Guid personId, System.Guid bussinessUnitId, string dataSource, System.DateTime activityTimeStamp);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -219,8 +219,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.TeleoptiRtaService {
             return base.Channel.SaveBatchExternalUserState(authenticationKey, platformTypeId, sourceId, externalUserStateBatch);
         }
         
-        public void GetUpdatedScheduleChange(System.Guid personId, System.DateTime activityStartTimeStamp, System.DateTime activityEndTimeStamp) {
-            base.Channel.GetUpdatedScheduleChange(personId, activityStartTimeStamp, activityEndTimeStamp);
+        public void GetUpdatedScheduleChange(System.Guid personId, System.Guid bussinessUnitId, string dataSource, System.DateTime activityTimeStamp) {
+            base.Channel.GetUpdatedScheduleChange(personId, bussinessUnitId, dataSource, activityTimeStamp);
         }
     }
 }

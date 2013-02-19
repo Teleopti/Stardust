@@ -1,4 +1,5 @@
-﻿using Rhino.ServiceBus;
+﻿using System;
+using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Messages.Denormalize;
 
@@ -24,9 +25,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.RTA
                 _serviceBus.Send(new RTAPersonInfoMessage { Datasource = message.Datasource,
                                                             BusinessUnitId = message.BusinessUnitId,
                                                             PersonId = person, 
-                                                            ActivityStartDateTime = message.Timestamp, 
-                                                            ActivityEndDateTime = message.Timestamp,
-                                                            Timestamp = message.Timestamp});
+                                                            Timestamp = DateTime.UtcNow});
             }
         }
     }
