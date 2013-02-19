@@ -33,7 +33,7 @@ Background:
 Scenario: View full day absence form
 	Given I have the role 'Anywhere Team Green'
 	When I view agent schedule for 'Pierre Baldi' on '2012-12-02'
-	And I click add full day absence
+	And I click 'add full day absence'
 	Then I should see the add full day absence form
 	
 Scenario: Add full day absence
@@ -60,7 +60,7 @@ Scenario: Add full day absence
 Scenario: Default full day absence values
 	Given I have the role 'Anywhere Team Green'
 	When I view agent schedule for 'Pierre Baldi' on '2012-12-02'
-	And I click add full day absence
+	And I click 'add full day absence'
 	Then I should see the add full day absence form with
 	| Field      | Value      |
 	| Start date | 2012-12-02 |
@@ -69,7 +69,7 @@ Scenario: Default full day absence values
 Scenario: Adding invalid absence values
 	Given I have the role 'Anywhere Team Green'
 	When I view agent schedule for 'Pierre Baldi' on '2012-12-02'
-	And I click add full day absence
+	And I click 'add full day absence'
 	And I input these full day absence values
 	| Field    | Value      |
 	| End date | 2012-12-01 |
