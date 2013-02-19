@@ -209,41 +209,18 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldGetLayersForMySchedule()
 		{
 			var modelFactory = MockRepository.GenerateMock<IRequestsViewModelFactory>();
-			var layer = new ShiftTradeScheduleLayerViewModel
-			            	{
-			            		Payload = "phone",
-			            		Color = "green",
-			            		StartTimeText = "9:00",
-			            		EndTimeText = "15:00",
-			            		LengthInMinutes = 360,
-			            		ElapsedMinutesSinceShiftStart = 30
-			            	};
-			var model = new ShiftTradeScheduleViewModel
-							{
-								MySchedule = new ShiftTradePersonScheduleViewModel { ScheduleLayers = new List<ShiftTradeScheduleLayerViewModel> { layer } }
-							};
-
-			modelFactory.Stub(x => x.CreateShiftTradeScheduleViewModel(Arg<DateTime>.Is.Anything)).Return(model);
+			var date = DateTime.Now;
+			var model = new ShiftTradeScheduleViewModel();
+			modelFactory.Stub(x => x.CreateShiftTradeScheduleViewModel(date)).Return(model);
 
 			var target = new RequestsController(modelFactory, null, null, null);
-			
-			var result = target.ShiftTradeRequestSchedule(DateTime.Now);
-			var scheduleViewModel = (ShiftTradeScheduleViewModel) result.Data;
-
-			var createdLayer = scheduleViewModel.MySchedule.ScheduleLayers.FirstOrDefault();
-			createdLayer.Payload.Should().Be.EqualTo(layer.Payload);
-			createdLayer.Color.Should().Be.EqualTo(layer.Color);
-			createdLayer.StartTimeText.Should().Be.EqualTo(layer.StartTimeText);
-			createdLayer.EndTimeText.Should().Be.EqualTo(layer.EndTimeText);
-			createdLayer.LengthInMinutes.Should().Be.EqualTo(layer.LengthInMinutes);
-			createdLayer.ElapsedMinutesSinceShiftStart.Should().Be.EqualTo(layer.ElapsedMinutesSinceShiftStart);
-
+			var result = target.ShiftTradeRequestSchedule(date);
+			result.Data.Should().Be.SameInstanceAs(model);
 		}
 		
 		[Test]
 		public void ShouldApproveShiftTradeRequest()
 		{
-
 			var id = Guid.NewGuid();
 			var resultData = new RequestViewModel();
 			var shiftTradePersister = MockRepository.GenerateStrictMock<IRespondToShiftTrade>();

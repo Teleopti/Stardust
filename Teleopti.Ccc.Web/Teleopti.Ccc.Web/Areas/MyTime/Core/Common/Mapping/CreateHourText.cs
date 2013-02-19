@@ -2,7 +2,7 @@
 using System.Text.RegularExpressions;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
+namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping
 {
 	public class CreateHourText : ICreateHourText
 	{

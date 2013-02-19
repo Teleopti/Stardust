@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using AutoMapper;
 using NUnit.Framework;
@@ -8,10 +9,9 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Security.Authentication;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
@@ -28,12 +28,15 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		private IProjectionProvider _projectionProvider;
 		private StubFactory _scheduleFactory;
 		private IShiftTradeTimeLineHoursViewModelFactory _timelineFactory;
+		private IUserCulture _userCulture;
 
 		[SetUp]
 		public void Setup()
 		{
 			_shiftTradeRequestProvider = MockRepository.GenerateMock<IShiftTradeRequestProvider>();
 			_projectionProvider = MockRepository.GenerateMock<IProjectionProvider>();
+			_userCulture = MockRepository.GenerateMock<IUserCulture>();
+			_userCulture.Expect(c => c.GetCulture()).Return(CultureInfo.GetCultureInfo("sv-SE"));
 			var timeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
 			_person = new Person {Name = new Name("John", "Doe")};
 			_person.PermissionInformation.SetDefaultTimeZone(timeZone);
@@ -45,9 +48,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 
 			_scheduleFactory = new StubFactory();
 			
-
 			Mapper.Reset();
-			Mapper.Initialize(c => c.AddProfile(new ShiftTradeScheduleViewModelMappingProfile(() => _shiftTradeRequestProvider, () => _projectionProvider, Depend.On(_timelineFactory))));
+			Mapper.Initialize(c => c.AddProfile(new ShiftTradeScheduleViewModelMappingProfile(() => _shiftTradeRequestProvider, () => _projectionProvider, Depend.On(_timelineFactory), () => _userCulture)));
 		}
 
 		#region henke move out mapping of scheduleday
@@ -97,7 +99,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		                                                }));
 			var result = Mapper.Map<IScheduleDay, ShiftTradePersonScheduleViewModel>(scheduleDay);
 			var expectedDate = TimeZoneHelper.ConvertFromUtc(startDate, _person.PermissionInformation.DefaultTimeZone());
-			result.ScheduleLayers.First().StartTimeText.Should().Be.EqualTo(expectedDate.ToString("HH:mm"));
+			result.ScheduleLayers.First().Title.Should().Contain(expectedDate.ToString("HH:mm"));
 		}
 
 		[Test]
@@ -116,7 +118,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var result = Mapper.Map<IScheduleDay, ShiftTradePersonScheduleViewModel>(scheduleDay);
 
 			var expectedDate = TimeZoneHelper.ConvertFromUtc(endDate, _person.PermissionInformation.DefaultTimeZone());
-			result.ScheduleLayers.First().EndTimeText.Should().Be.EqualTo(expectedDate.ToString("HH:mm"));
+			result.ScheduleLayers.First().Title.Should().Contain(expectedDate.ToString("HH:mm"));
 		}
 
 		[Test]
@@ -312,7 +314,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var result = Mapper.Map<DateOnly, ShiftTradeScheduleViewModel>(new DateOnly(startDate));
 
 			var expectedDate = TimeZoneHelper.ConvertFromUtc(startDate, _person.PermissionInformation.DefaultTimeZone());
-			result.MySchedule.ScheduleLayers.First().StartTimeText.Should().Be.EqualTo(expectedDate.ToString("HH:mm"));
+			result.MySchedule.ScheduleLayers.First().Title.Should().Contain(expectedDate.ToString("HH:mm"));
 		}
 
 		[Test]
@@ -331,7 +333,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var result = Mapper.Map<DateOnly, ShiftTradeScheduleViewModel>(new DateOnly(endDate));
 
 			var expectedDate = TimeZoneHelper.ConvertFromUtc(endDate, _person.PermissionInformation.DefaultTimeZone());
-			result.MySchedule.ScheduleLayers.First().EndTimeText.Should().Be.EqualTo(expectedDate.ToString("HH:mm"));
+			result.MySchedule.ScheduleLayers.First().Title.Should().Contain(expectedDate.ToString("HH:mm"));
 		}
 
 		[Test]
@@ -350,6 +352,50 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var result = Mapper.Map<DateOnly, ShiftTradeScheduleViewModel>(new DateOnly(layerPeriod.StartDateTime));
 
 			result.MySchedule.ScheduleLayers.First().LengthInMinutes.Should().Be.EqualTo(layerPeriod.ElapsedTime().TotalMinutes);
+		}
+
+		[Test]
+		public void ShouldSetTitleInSwedish()
+		{
+			_userCulture.Expect(c => c.GetCulture()).Return(CultureInfo.GetCultureInfo("sv-SE"));
+
+			var date = new DateOnly(2000, 1, 1);
+			var layerPeriod = new DateTimePeriod(new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc), new DateTime(2000, 1, 1, 13, 0, 0, DateTimeKind.Utc));
+			var scheduleDay = _scheduleFactory.ScheduleDayStub(new DateTime(), _person);
+
+			_shiftTradeRequestProvider.Stub(x => x.RetrieveMyScheduledDay(new DateOnly(layerPeriod.StartDateTime))).Return(scheduleDay);
+			_shiftTradeRequestProvider.Stub(x => x.RetrievePossibleTradePersonsScheduleDay(Arg<DateOnly>.Is.Anything)).Return(new List<IScheduleDay>());
+
+			_projectionProvider.Expect(p => p.Projection(scheduleDay)).Return(_scheduleFactory.ProjectionStub(new[]
+		                                                {
+		                                                    _scheduleFactory.VisualLayerStub(layerPeriod)
+		                                                }));
+
+			var result = Mapper.Map<DateOnly, ShiftTradeScheduleViewModel>(date);
+
+			result.MySchedule.ScheduleLayers.First().Title.Should().Be.EqualTo("11:00-14:00");
+		}
+
+		[Test]
+		public void ShouldSetTitleInUs()
+		{
+			_userCulture.Expect(c => c.GetCulture()).Return(CultureInfo.GetCultureInfo("en-US")).Repeat.Any();
+
+			var date = new DateOnly(2000, 1, 1);
+			var layerPeriod = new DateTimePeriod(new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc), new DateTime(2000, 1, 1, 13, 0, 0, DateTimeKind.Utc));
+			var scheduleDay = _scheduleFactory.ScheduleDayStub(new DateTime(), _person);
+
+			_shiftTradeRequestProvider.Stub(x => x.RetrieveMyScheduledDay(new DateOnly(layerPeriod.StartDateTime))).Return(scheduleDay);
+			_shiftTradeRequestProvider.Stub(x => x.RetrievePossibleTradePersonsScheduleDay(Arg<DateOnly>.Is.Anything)).Return(new List<IScheduleDay>());
+
+			_projectionProvider.Expect(p => p.Projection(scheduleDay)).Return(_scheduleFactory.ProjectionStub(new[]
+		                                                {
+		                                                    _scheduleFactory.VisualLayerStub(layerPeriod)
+		                                                }));
+
+			var result = Mapper.Map<DateOnly, ShiftTradeScheduleViewModel>(date);
+
+			result.MySchedule.ScheduleLayers.First().Title.Should().Be.EqualTo("11:00 AM-2:00 PM");
 		}
 
 		[Test]

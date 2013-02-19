@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
+namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping
 {
 	public interface ICreateHourText
 	{
