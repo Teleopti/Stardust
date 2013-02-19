@@ -3,12 +3,11 @@ DROP PROCEDURE [mart].[report_data_agent_schedule_adherence]
 GO
 
 /* 
-
+exec mart.report_data_agent_schedule_adherence @date_from='2013-02-16 00:00:00',@date_to='2013-02-18 00:00:00',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_set=NULL,@group_page_agent_code=NULL,@site_id=N'-2',@team_set=N'13',@agent_person_code=N'11610fe4-0130-4568-97de-9b5e015b2564',@adherence_id=N'1',@sort_by=N'6',@time_zone_id=N'2',@person_code='10957AD5-5489-48E0-959A-9B5E015B2B5C',@report_id='6A3EB69B-690E-4605-B80E-46D5710B28AF',@language_id=1033,@business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA'
 exec mart.report_data_agent_schedule_adherence @date_from='2009-02-01 00:00:00',@adherence_id=1,@date_to='2009-02-28 00:00:00',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_set=NULL,@site_id=N'0',@team_set=N'7',@agent_person_code=N'11610fe4-0130-4568-97de-9b5e015b2564',@sort_by=N'6',@time_zone_id=N'1',@person_code='BEDF5892-5A2A-4BB2-9B7E-35F3C71A5AD0',@report_id='6A3EB69B-690E-4605-B80E-46D5710B28AF',@language_id=1033,@business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA'
 exec mart.report_data_agent_schedule_adherence @date_from='2009-01-13 00:00:00',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_set=NULL,@group_page_agent_code=NULL,@site_id=N'-2',@team_set=N'7',@agent_person_code=N'00000000-0000-0000-0000-000000000002',@adherence_id=N'1',@sort_by=N'1',@time_zone_id=N'2',@person_code='BEDF5892-5A2A-4BB2-9B7E-35F3C71A5AD0',@report_id='D1ADE4AC-284C-4925-AEDD-A193676DBD2F',@language_id=1033,@business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA'
 exec mart.report_data_agent_schedule_adherence @date_from='2009-02-05 00:00:00',@date_to='2009-02-11 00:00:00',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_set=NULL,@group_page_agent_code=NULL,@site_id=N'1',@team_set=N'5',@agent_person_code=N'826f2a46-93bb-4b04-8d5e-9b5e015b2577',@adherence_id=N'1',@sort_by=N'6',@time_zone_id=N'1',@person_code='6B7DD8B6-F5AD-428F-8934-9B5E015B2B5C',@report_id='6A3EB69B-690E-4605-B80E-46D5710B28AF',@language_id=2057,@business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA'
 exec mart.report_data_agent_schedule_adherence @date_from='2009-02-05 00:00:00',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_set=NULL,@group_page_agent_code=NULL,@site_id=N'1',@team_set=N'5',@agent_person_code=N'00000000-0000-0000-0000-000000000002',@adherence_id=N'1',@sort_by=N'1',@time_zone_id=N'1',@person_code='6B7DD8B6-F5AD-428F-8934-9B5E015B2B5C',@report_id='D1ADE4AC-284C-4925-AEDD-A193676DBD2F',@language_id=2057,@business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA'
-
 */
 -- =============================================
 -- Author:		KJ
@@ -36,6 +35,7 @@ exec mart.report_data_agent_schedule_adherence @date_from='2009-02-05 00:00:00',
 --				2012-02-15 Changed to uniqueidentifier as report_id - Ola
 --				2012-04-16 Bug 18933
 --				2012-09-06 Added new functionality for report Adherence Per Agent. Parameter @date_to only used by Adherence Per Agent.
+--				2013-02-17 #22358
 -- Description:	Used by reports Adherence per Agent and Adherence per Date.
 -- TODO: remove scenario from this SP and .aspx selection. Only default scenario is calculated in the fact-table
 -- =============================================
@@ -187,6 +187,12 @@ DECLARE @hide_time_zone bit
 DECLARE @selected_adherence_type nvarchar(100)
 DECLARE @date TABLE (date_from_id INT, date_to_id INT)
 DECLARE @scenario_id int
+DECLARE @nowutcDateOnly smalldatetime
+DECLARE @nowutcInterval smalldatetime
+DECLARE @nowLocalDateId int
+DECLARE @nowLocalIntervalId smallint
+SELECT @nowutcDateOnly = DATEADD(dd, 0, DATEDIFF(dd, 0, GETUTCDATE()))
+SELECT @nowutcInterval = DATEADD(minute,DATEPART(minute, GETUTCDATE()),DATEADD(hour, DATEPART(hour, GETUTCDATE()),'1900-01-01 00:00:00'))
 
 ------------
 --Init
@@ -227,7 +233,18 @@ INSERT INTO @date (date_from_id,date_to_id)
 	WHERE	d.date_date	between @date_from AND @date_to
 	AND		b.time_zone_id	= @time_zone_id
 
-
+--Get Now() in local date/interval Id variables
+SELECT
+	@nowLocalDateId = b.local_date_id,
+	@nowLocalIntervalId = b.local_interval_id
+FROM bridge_time_zone b
+INNER JOIN mart.dim_date d 
+	ON b.date_id = d.date_id
+	AND d.date_date = @nowUtcDateOnly
+INNER JOIN mart.dim_interval i
+	ON b.interval_id = i.interval_id
+	AND @nowUtcInterval between i.interval_start and i.interval_end
+	
 --Multiple Time zones?
 IF (SELECT COUNT(*) FROM mart.dim_time_zone tz WHERE tz.time_zone_code<>'UTC') < 2
 	SET @hide_time_zone = 1
@@ -407,7 +424,7 @@ adherence_type_selected,hide_time_zone,count_activity_per_interval)
 				WHEN 3 THEN isnull(fsd.deviation_contract_s,0)
 			END AS 'deviation_s',
 			isnull(fsd.ready_time_s,0) 'ready_time_s',
-			fsd.is_logged_in,
+			isnull(fsd.is_logged_in,0),
 			isnull(fs.activity_id,-1), --isnull = not defined
 			isnull(fs.absence_id,-1), --isnull = not defined
 			CASE @adherence_id 
@@ -420,15 +437,15 @@ adherence_type_selected,hide_time_zone,count_activity_per_interval)
 			isnull(count_activity_per_interval,2) --fake a mixed shift = white color
 			
 	FROM mart.dim_person p
-	INNER JOIN #fact_schedule_deviation fsd
-		ON fsd.person_id=p.person_id
-	LEFT JOIN #fact_schedule fs
+	INNER JOIN #fact_schedule fs
+		ON p.person_id=fs.person_id
+	LEFT JOIN #fact_schedule_deviation fsd
 		ON fsd.person_id=fs.person_id
 		AND fsd.date_id=fs.schedule_date_id
 		AND fsd.interval_id=fs.interval_id
 	INNER JOIN mart.bridge_time_zone b
-		ON	fsd.interval_id= b.interval_id
-		AND fsd.date_id= b.date_id
+		ON	fs.interval_id= b.interval_id
+		AND fs.schedule_date_id= b.date_id
 	INNER JOIN mart.dim_date d 
 		ON b.local_date_id = d.date_id
 	INNER JOIN mart.dim_interval i
@@ -458,7 +475,7 @@ INSERT #result(date_id,date,interval_id,interval_name,intervals_per_day,site_id,
 			p.person_name,
 			isnull(fsd.deviation_schedule_s,0) 'deviation_s', --@adherence_id =2
 			isnull(fsd.ready_time_s,0) 'ready_time_s',
-			fsd.is_logged_in,
+			isnull(fsd.is_logged_in,0),
 			-1,
 			-1,
 			@intervals_length_s AS 'adherence_calc_s', --Compare to full Interval since there's no Scheduled Time here
@@ -466,7 +483,7 @@ INSERT #result(date_id,date,interval_id,interval_name,intervals_per_day,site_id,
 			@hide_time_zone,
 			2
 FROM mart.dim_person p
-	INNER JOIN #fact_schedule_deviation fsd
+	LEFT JOIN #fact_schedule_deviation fsd
 		ON fsd.person_id=p.person_id
 	INNER JOIN mart.bridge_time_zone b
 		ON	fsd.interval_id= b.interval_id
@@ -484,6 +501,24 @@ FROM mart.dim_person p
 	AND b.time_zone_id=@time_zone_id
 END
 
+----------
+--remove deviation and schedule_ready_time for every interval > Now(), but keep color and activity for display
+----------
+IF (@from_matrix = 1) --Only do this for Standard Reports => Don't bother/break SDK and MyTime client
+BEGIN
+update #result
+set
+	adherence_calc_s=NULL,
+	deviation_s = NULL
+where 	date_id > @nowLocalDateId 
+
+update #result
+set
+	adherence_calc_s=NULL,
+	deviation_s = NULL
+where 	date_id = @nowLocalDateId 
+and interval_id > @nowLocalIntervalId
+END
 ----------
 --calculation of Agent adherence, team adherence
 ----------
