@@ -58,6 +58,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
             {
                 bindScenarioCombo(_scenarios);
             }
+			TargetFromTo.WorkPeriodStart = new DateOnly(_stateObj.TargetPeriod.StartDate.DateTime);
+			TargetFromTo.WorkPeriodEnd = new DateOnly(_stateObj.TargetPeriod.EndDate.DateTime);
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
