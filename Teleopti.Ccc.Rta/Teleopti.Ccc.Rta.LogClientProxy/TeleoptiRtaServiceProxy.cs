@@ -17,10 +17,11 @@ namespace Teleopti.Ccc.Rta.LogClientProxy
         	return new AutoResetEvent(true);
         }
 
-	    public void CheckSchedule(Guid personId)
-	    {
-		    
-	    }
+		public WaitHandle CheckSchedule(Guid personId, Guid businessUnitId, DateTime timestamp)
+		{
+
+			return null;
+		}
 
 	    public WaitHandle ProcessRtaData(Guid platformTypeId, string sourceId, ICollection<ITeleoptiRtaState> rtaStates)
 		{

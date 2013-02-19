@@ -163,7 +163,7 @@ namespace Teleopti.Ccc.Rta.WebService
                 if (_rtaDataHandler == null || !_rtaDataHandler.IsAlive) InitializeClientHandler();
                 if (_rtaDataHandler != null)
                 {
-                    _rtaDataHandler.CheckSchedule(personId);
+					_rtaDataHandler.CheckSchedule(personId, bussinessUnitId, activityTimeStamp);
                 }
             }
         }
