@@ -22,10 +22,5 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			EventualAssert.That(() => Browser.Current.Element(Find.BySelector(string.Format(".agent:contains('{0}') .shift li", personName))).Exists, Is.False);
 		}
 
-		[When(@"I select '(.*)'")]
-		public void WhenISelectAgent(string personName)
-		{
-			Browser.Current.Element(Find.BySelector(".agent:contains('" + personName + "')")).EventualClick();
-		}
 	}
 }

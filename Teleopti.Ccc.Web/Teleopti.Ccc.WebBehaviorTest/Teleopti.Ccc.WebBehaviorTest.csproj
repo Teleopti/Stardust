@@ -115,12 +115,14 @@
     <Compile Include="AsmStepDefinition.cs" />
     <Compile Include="Bindings\Generic\ActivityStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Anywhere\AgentSchedulePageStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\UIStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\ContractStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Anywhere\TeamSchedulePageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\TeamStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\ShiftTradeRequestFromRequestStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PasswordPolicyStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Start\SignInPageStepDefinitions.cs" />
+    <Compile Include="Bindings\StringContainsAnyLanguageResourceConstraint.cs" />
     <Compile Include="Data\Setups\Generic\PersonAbsenceConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\PersonDayOffConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\ReadModelShiftConfigurable.cs" />
@@ -326,7 +328,7 @@
     <Compile Include="Data\Setups\Specific\ExistingExtendedPreferenceToday.cs" />
     <Compile Include="Data\Setups\Specific\ExistingPreference.cs" />
     <Compile Include="Data\Setups\Specific\RuleSetBag.cs" />
-    <Compile Include="Bindings\SharedSignInStepDefinitions.cs" />
+    <Compile Include="Bindings\Specific\SharedSignInStepDefinitions.cs" />
     <Compile Include="Data\Setups\Specific\BaseShiftCategory.cs" />
     <Compile Include="Data\Setups\Specific\UserWithoutResReportScheduledAndActualAgentsAccess.cs" />
     <Compile Include="Data\Setups\Specific\AbsenceToday.cs" />

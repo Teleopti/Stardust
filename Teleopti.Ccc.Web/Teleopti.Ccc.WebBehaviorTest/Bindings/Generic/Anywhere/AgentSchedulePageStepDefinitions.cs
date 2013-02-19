@@ -1,7 +1,9 @@
 using System;
+using System.Globalization;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using WatiN.Core;
@@ -48,18 +50,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			EventualAssert.That(() => Browser.Current.Element(Find.BySelector(".shift .layer:last")).GetAttributeValue("data-end-time"), Is.EqualTo(shiftLayer.EndTime));
 		}
 
-		//[When(@"I click (.*)")]
-		//public void WhenIClick(string buttonText)
-		//{
-		//    Browser.Current.Element(Find.BySelector(".addFullDayAbsence")).EventualClick();
-		//}
 
 
-		[When(@"I click add full day absence")]
-		public void WhenIClickAddFullDayAbsence()
-		{
-			Browser.Current.Element(Find.BySelector(".addFullDayAbsence")).EventualClick();
-		}
+
+
+
+
+
+
 
 		public class ShiftLayerInfo
 		{

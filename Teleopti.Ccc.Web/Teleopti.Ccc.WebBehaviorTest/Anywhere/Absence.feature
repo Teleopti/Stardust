@@ -46,12 +46,12 @@ Scenario: Add full day absence
 	| End time         | 17:00        |
 	| Activity         | Phone        |
 	When I view agent schedule for 'Pierre Baldi' on '2012-12-02'
-	And I click add full day absence
+	And I click 'add full day absence'
 	And I input these full day absence values
 	| Field    | Value      |
 	| Absence  | Vacation   |
 	| End date | 2012-12-02 |
-	And I click apply
+	And I click 'apply'
 	Then I should see a shift layer with
 	| Field      | Value |
 	| Start time | 08:00 |

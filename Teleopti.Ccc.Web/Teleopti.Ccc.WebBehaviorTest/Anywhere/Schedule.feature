@@ -93,6 +93,6 @@ Scenario: Select agent
 	| Lunch end time   | 12:15        |
 	| Lunch activity   | Lunch        |
 	When I view schedules for '2012-12-02'
-	And I select 'Pierre Baldi'
+	And I click agent 'Pierre Baldi'
 	Then I should see agent schedule for 'Pierre Baldi' on '2012-12-02'
 
