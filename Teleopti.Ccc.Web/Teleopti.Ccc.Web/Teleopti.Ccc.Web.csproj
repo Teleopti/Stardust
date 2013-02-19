@@ -194,6 +194,7 @@
     <Reference Include="System.Configuration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Areas\AppAuth\AppAuthAreaRegistration.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IPossibleShiftTradePersonsProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\PossibleShiftTradePersonsProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IShiftTradeResponseService.cs" />
@@ -881,6 +882,7 @@
     <Content Include="Areas\SSO\Views\OpenId\Identifier.cshtml" />
     <Content Include="Areas\SSO\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\SSO\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\AppAuth\Views\Web.config" />
     <None Include="PasswordPolicy.xml.notinuse">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -964,6 +966,9 @@
     <Content Include="Areas\MyTime\Views\_ViewStart.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Areas\AppAuth\Controllers\" />
+    <Folder Include="Areas\AppAuth\Models\" />
+    <Folder Include="Areas\AppAuth\Views\Shared\" />
     <Folder Include="Areas\Team\Models\" />
     <Folder Include="Areas\Team\Views\" />
     <Folder Include="Scripts\" />
