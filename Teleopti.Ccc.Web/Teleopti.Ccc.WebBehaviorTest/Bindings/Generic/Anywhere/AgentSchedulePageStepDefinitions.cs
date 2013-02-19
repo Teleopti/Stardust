@@ -1,0 +1,25 @@
+using System;
+using NUnit.Framework;
+using TechTalk.SpecFlow;
+using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
+using Teleopti.Ccc.WebBehaviorTest.Data;
+using WatiN.Core;
+using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
+
+namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
+{
+	[Binding]
+	public class AgentSchedulePageStepDefinitions
+	{
+		[Then(@"I should see agent schedule for '(.*)' on '(.*)'")]
+		public void ThenIShouldSeeAgentScheduleForAgentOnDate(string name, string date)
+		{
+			var id = UserFactory.User(name).Person.Id.ToString();
+			
+			EventualAssert.That(() => Browser.Current.Url.Contains(id), Is.True);
+			EventualAssert.That(() => Browser.Current.Url.Contains(date.Replace("-", "")), Is.True);
+		}
+
+
+	}
+}

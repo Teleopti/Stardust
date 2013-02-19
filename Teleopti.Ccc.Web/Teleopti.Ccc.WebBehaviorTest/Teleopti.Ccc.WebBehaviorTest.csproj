@@ -114,6 +114,7 @@
     <Compile Include="Bindings\Generic\AbsenceStepDefinitions.cs" />
     <Compile Include="AsmStepDefinition.cs" />
     <Compile Include="Bindings\Generic\ActivityStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\Anywhere\AgentSchedulePageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\ContractStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Anywhere\TeamSchedulePageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\TeamStepDefinitions.cs" />

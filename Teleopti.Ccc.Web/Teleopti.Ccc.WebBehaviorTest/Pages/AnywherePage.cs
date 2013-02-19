@@ -11,5 +11,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		{
 			get { return Document.Table(QuicklyFind.ByClass("table")); }
 		}
+
+		public Element RowByPerson(string personName)
+		{
+			//$('.myclass .myotherclass').
+			// Find.BySelector(".myclass .myotherclass")
+			//$('.agent ')
+			return Document.Element(Find.BySelector(".agent:contains('" + personName + "')"));
+		}
 	}
 }

@@ -1,6 +1,8 @@
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
+using WatiN.Core;
+using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 {
@@ -12,6 +14,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		{
 			EventualAssert.That(() => Pages.Pages.AnywherePage.ScheduleTable.TableRow(QuicklyFind.ByClass("agent")).Text.Contains(personName), Is.True);
 			EventualAssert.That(() => Pages.Pages.AnywherePage.ScheduleTable.TableRow(QuicklyFind.ByClass("agent")).TableCell(QuicklyFind.ByClass("shift")).ChildrenOfType<WatiN.Core.List>().First().OwnListItems.Count, Is.GreaterThan(0));
+			//EventualAssert.That(() => Browser.Current.Element(Find.BySelector(string.Format("agent:contains('{0}') layer", personName))), Is.Not.Null);
 		}
 
 		[Then(@"I should see no schedule for '(.*)'")]
@@ -20,5 +23,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			EventualAssert.That(() => Pages.Pages.AnywherePage.ScheduleTable.TableRow(QuicklyFind.ByClass("agent")).Text.Contains(personName), Is.True);
 			EventualAssert.That(() => Pages.Pages.AnywherePage.ScheduleTable.TableRow(QuicklyFind.ByClass("agent")).TableCell(QuicklyFind.ByClass("shift")).ChildrenOfType<WatiN.Core.List>().First().OwnListItems.Count, Is.EqualTo(0));
 		}
+
+		[When(@"I select '(.*)'")]
+		public void WhenISelectPierreBaldi(string personName)
+		{
+			Pages.Pages.AnywherePage.RowByPerson(personName).EventualClick();
+		}
+
 	}
 }
