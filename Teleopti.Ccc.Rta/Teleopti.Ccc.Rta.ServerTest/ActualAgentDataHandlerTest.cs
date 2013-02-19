@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 	[TestFixture]
 	public class ActualAgentDataHandlerTest
 	{
-		private ActualAgentStateDataHandler _target;
+		private ActualAgentDataHandler _target;
 
 		private MockRepository _mock;
 		private IDatabaseConnectionFactory _connectionFactory;
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_mock = new MockRepository();
 			_connectionFactory = _mock.StrictMock<IDatabaseConnectionFactory>();
 			_stringHandler = _mock.StrictMock<IDatabaseConnectionStringHandler>();
-			_target = new ActualAgentStateDataHandler(_connectionFactory, _stringHandler);
+			_target = new ActualAgentDataHandler(_connectionFactory, _stringHandler);
 
 			_connection = _mock.StrictMock<IDbConnection>();
 			_command = _mock.StrictMock<IDbCommand>();
