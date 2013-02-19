@@ -12,20 +12,20 @@ namespace Teleopti.Ccc.Rta.Server
 
 	public class RtaConsumer : IRtaConsumer
 	{
-		private readonly IActualAgentStateDataHandler _actualAgentStateDataHandler;
+		private readonly IActualAgentDataHandler _actualAgentDataHandler;
 		private readonly IActualAgentHandler _actualAgentHandler;
 
-		public RtaConsumer(IActualAgentStateDataHandler actualAgentStateDataHandler, IActualAgentHandler actualAgentHandler)
+        public RtaConsumer(IActualAgentDataHandler actualAgentDataHandler, IActualAgentHandler actualAgentHandler)
 		{
-			_actualAgentStateDataHandler = actualAgentStateDataHandler;
+			_actualAgentDataHandler = actualAgentDataHandler;
 			_actualAgentHandler = actualAgentHandler;
 		}
 
 		public IActualAgentState Consume(Guid personId, Guid businessUnitId, Guid platformTypeId, string stateCode, DateTime timestamp,
             TimeSpan timeInState, AutoResetEvent waitHandle)
 		{
-			var scheduleLayers = _actualAgentStateDataHandler.CurrentLayerAndNext(timestamp,personId);
-			var previousState = _actualAgentStateDataHandler.LoadOldState(personId);
+            var scheduleLayers = _actualAgentDataHandler.CurrentLayerAndNext(timestamp, personId);
+            var previousState = _actualAgentDataHandler.LoadOldState(personId);
 			return checkState(scheduleLayers, previousState, personId, platformTypeId, stateCode, timestamp, timeInState, businessUnitId, waitHandle);
 		}
 
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.Rta.Server
                 waitHandle.Set();
                 return;
             }
-            _actualAgentStateDataHandler.AddOrUpdate(agentState);
+            _actualAgentDataHandler.AddOrUpdate(agentState);
             waitHandle.Set();
         }
 	}
