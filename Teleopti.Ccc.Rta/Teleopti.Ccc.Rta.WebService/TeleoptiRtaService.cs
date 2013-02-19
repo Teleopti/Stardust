@@ -156,16 +156,16 @@ namespace Teleopti.Ccc.Rta.WebService
     		return result;
     	}
 
-        public void GetUpdatedScheduleChange(Guid personId, DateTime activityStartTimeStamp, DateTime activityEndTimeStamp)
+        public void GetUpdatedScheduleChange(Guid personId, Guid bussinessUnitId, string dataSource, DateTime activityTimeStamp)
         {
-			lock (_lockObject)
-			{
-				if (_rtaDataHandler == null || !_rtaDataHandler.IsAlive) InitializeClientHandler();
-				if (_rtaDataHandler != null)
-				{
-					_rtaDataHandler.CheckSchedule(personId);
-				}
-			}
+            lock (_lockObject)
+            {
+                if (_rtaDataHandler == null || !_rtaDataHandler.IsAlive) InitializeClientHandler();
+                if (_rtaDataHandler != null)
+                {
+                    _rtaDataHandler.CheckSchedule(personId);
+                }
+            }
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "log4net.ILog.ErrorFormat(System.String,System.Object[])")]

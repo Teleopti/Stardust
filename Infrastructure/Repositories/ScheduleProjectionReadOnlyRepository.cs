@@ -83,16 +83,37 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         public DateTime GetNextActivityStartTime(DateTime dateTime, Guid personId)
         {
             var uow = _unitOfWorkFactory.CurrentUnitOfWork();
-            string query = string.Format(CultureInfo.InvariantCulture,@"SELECT TOP 1 StartDateTime 
-                                                                      FROM ReadModel.v_ScheduleProjectionReadOnlyRTA rta WHERE StartDateTime >= '{0}' 
-                                                                      AND PersonId='{1}' order by StartDateTime", dateTime, personId);
+            string query = string.Format(CultureInfo.InvariantCulture,@"SELECT TOP 1 StartDateTime, EndDateTime 
+                            FROM ReadModel.v_ScheduleProjectionReadOnlyRTA rta WHERE EndDateTime >= :endDate 
+                            AND PersonId=:personId order by StartDateTime");
 
-            var result = ((NHibernateUnitOfWork) uow).Session.CreateSQLQuery(query).List();
+            var result = ((NHibernateUnitOfWork) uow).Session
+                .CreateSQLQuery(query)
+                .SetDateTime("endDate", dateTime)
+                .SetGuid("personId", personId)
+                .SetResultTransformer(Transformers.AliasToBean(typeof(ActivityPeriod)))
+                .List<ActivityPeriod>();
 
-            if (result.Count>0)
-                return (DateTime)result[0];
-            
-            return new DateTime();
+            if (result.Count<1)
+                return new DateTime();
+
+            var nextActivityDateTime = new DateTime();
+
+            foreach (var activityPeriod in result)
+            {
+                if (activityPeriod.StartDateTime > dateTime)
+                    nextActivityDateTime = activityPeriod.StartDateTime;
+                else
+                    nextActivityDateTime = activityPeriod.EndDateTime;
+            }
+
+            return nextActivityDateTime;
         }
 	}
+
+    public class ActivityPeriod
+    {
+        public DateTime StartDateTime;
+        public DateTime EndDateTime;
+    }
 }

@@ -47,8 +47,9 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element xmlns:q2="http://schemas.microsoft.com/2003/10/Serialization/" minOccurs="0" name="personId" type="q2:guid" />
-        <xs:element minOccurs="0" name="activityStartTimeStamp" type="xs:dateTime" />
-        <xs:element minOccurs="0" name="activityEndTimeStamp" type="xs:dateTime" />
+        <xs:element xmlns:q3="http://schemas.microsoft.com/2003/10/Serialization/" minOccurs="0" name="bussinessUnitId" type="q3:guid" />
+        <xs:element minOccurs="0" name="dataSource" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="activityTimeStamp" type="xs:dateTime" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

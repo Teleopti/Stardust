@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Rhino.ServiceBus;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Sdk.ServiceBus.Denormalizer;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -19,6 +20,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 		private IUnitOfWorkFactory unitOfWorkFactory;
 		private IUnitOfWork unitOfWork;
 		private IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository;
+	    private IServiceBus serviceBus;
 
 		[SetUp]
 		public void Setup()
@@ -27,7 +29,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			scheduleProjectionReadOnlyRepository = mocks.DynamicMock<IScheduleProjectionReadOnlyRepository>();
 			unitOfWork = mocks.DynamicMock<IUnitOfWork>();
 			unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
-			target = new DenormalizeScheduleProjectionConsumer(unitOfWorkFactory,scheduleProjectionReadOnlyRepository);
+		    serviceBus = mocks.DynamicMock<IServiceBus>();
+			target = new DenormalizeScheduleProjectionConsumer(unitOfWorkFactory,scheduleProjectionReadOnlyRepository, serviceBus);
 		}
 
 		[Test]

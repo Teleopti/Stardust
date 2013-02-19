@@ -22,17 +22,5 @@ namespace Teleopti.Interfaces.Messages.Denormalize
             get { return _personId; }
             set { _personId = value; }
         }
-
-        public DateTime ActivityStartDateTime
-        {
-            get { return _activityStartDateTime; }
-            set { _activityStartDateTime = value; }
-        }
-
-        public DateTime ActivityEndDateTime
-        {
-            get { return _activityEndDateTime; }
-            set { _activityEndDateTime = value; }
-        }
     }
 }
