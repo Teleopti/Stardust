@@ -129,7 +129,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActualAgentHandlerTest.cs" />
-    <Compile Include="ActualAgentStateDataHandlerTest.cs" />
+    <Compile Include="ActualAgentDataHandlerTest.cs" />
     <Compile Include="DatabaseConnectionStringHandlerTest.cs" />
     <Compile Include="DataSourceResolverTest.cs" />
     <Compile Include="GlobalSuppressions.cs" />

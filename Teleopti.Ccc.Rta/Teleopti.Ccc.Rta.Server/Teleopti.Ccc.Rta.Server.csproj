@@ -141,7 +141,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActualAgentHandler.cs" />
-    <Compile Include="ActualAgentStateDataHandler.cs" />
+    <Compile Include="ActualAgentDataHandler.cs" />
     <Compile Include="DatabaseConnectionStringHandler.cs" />
     <Compile Include="IPersonResolver.cs" />
     <Compile Include="PersonResolver.cs" />

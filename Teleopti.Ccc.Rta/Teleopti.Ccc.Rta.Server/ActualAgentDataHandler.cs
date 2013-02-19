@@ -10,7 +10,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Rta.Server
 {
-	public interface IActualAgentStateDataHandler
+	public interface IActualAgentDataHandler
 	{
 		IList<ScheduleLayer> CurrentLayerAndNext(DateTime onTime, Guid personId);
 		IActualAgentState LoadOldState(Guid personToLoad);
@@ -20,12 +20,12 @@ namespace Teleopti.Ccc.Rta.Server
 		void AddOrUpdate(IActualAgentState newState);
 	}
 
-	public class ActualAgentStateDataHandler : IActualAgentStateDataHandler
+	public class ActualAgentDataHandler : IActualAgentDataHandler
 	{
 		private readonly IDatabaseConnectionFactory _databaseConnectionFactory;
 		private readonly IDatabaseConnectionStringHandler _databaseConnectionStringHandler;
 
-		public ActualAgentStateDataHandler(IDatabaseConnectionFactory databaseConnectionFactory,
+		public ActualAgentDataHandler(IDatabaseConnectionFactory databaseConnectionFactory,
 		                                   IDatabaseConnectionStringHandler databaseConnectionStringHandler)
 		{
 			_databaseConnectionFactory = databaseConnectionFactory;

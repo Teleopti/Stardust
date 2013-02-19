@@ -13,7 +13,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.Rta.ServerTest
 {
 	[TestFixture]
-	public class ActualAgentStateDataHandlerTest
+	public class ActualAgentDataHandlerTest
 	{
 		private ActualAgentStateDataHandler _target;
 

@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 	public class ActualAgentHandlerTest
 	{
 		private MockRepository _mock;
-		private IActualAgentStateDataHandler _dataHandler;
+		private IActualAgentDataHandler _dataHandler;
 		private IActualAgentHandler _target;
 
 		private RtaStateGroupLight _stateGroups;
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		public void Setup()
 		{
 			_mock = new MockRepository();
-			_dataHandler = _mock.StrictMock<IActualAgentStateDataHandler>();
+			_dataHandler = _mock.StrictMock<IActualAgentDataHandler>();
 			_target = new ActualAgentHandler(_dataHandler);
 
 			_stateCode = "AUX2";
