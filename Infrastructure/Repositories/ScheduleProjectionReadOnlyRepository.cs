@@ -83,16 +83,32 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         public DateTime GetNextActivityStartTime(DateTime dateTime, Guid personId)
         {
             var uow = _unitOfWorkFactory.CurrentUnitOfWork();
-            string query = string.Format(CultureInfo.InvariantCulture,@"SELECT TOP 1 StartDateTime 
-                                                                      FROM ReadModel.v_ScheduleProjectionReadOnlyRTA rta WHERE StartDateTime >= '{0}' 
+            string query = string.Format(CultureInfo.InvariantCulture,@"SELECT TOP 1 StartDateTime, EndDateTime 
+                                                                      FROM ReadModel.v_ScheduleProjectionReadOnlyRTA rta WHERE EndDateTime >= '{0}' 
                                                                       AND PersonId='{1}' order by StartDateTime", dateTime, personId);
 
-            var result = ((NHibernateUnitOfWork) uow).Session.CreateSQLQuery(query).List();
+            var result = ((NHibernateUnitOfWork) uow).Session.CreateSQLQuery(query).List<ActivityPeriod>();
 
-            if (result.Count>0)
-                return (DateTime)result[0];
-            
-            return new DateTime();
+            if (result.Count<1)
+                return new DateTime();
+
+            var nextActivityDateTime = new DateTime();
+
+            foreach (var activityPeriod in result)
+            {
+                if (activityPeriod.ActivityStartDateTime > dateTime)
+                    nextActivityDateTime = activityPeriod.ActivityStartDateTime;
+                else
+                    nextActivityDateTime = activityPeriod.ActivityEndDateTime;
+            }
+
+            return nextActivityDateTime;
         }
 	}
+
+    public class ActivityPeriod
+    {
+        public DateTime ActivityStartDateTime;
+        public DateTime ActivityEndDateTime;
+    }
 }
