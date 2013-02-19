@@ -73,5 +73,5 @@ Scenario: Adding invalid absence values
 	And I input these full day absence values
 	| Field    | Value      |
 	| End date | 2012-12-01 |
-	And I click apply
-	Then I should see a message saying 'Invalid end date'
+	And I click 'apply'
+	Then I should see the message 'Invalid end date'

@@ -3,6 +3,7 @@ using System.Globalization;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data;
@@ -50,14 +51,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			EventualAssert.That(() => Browser.Current.Element(Find.BySelector(".shift .layer:last")).GetAttributeValue("data-end-time"), Is.EqualTo(shiftLayer.EndTime));
 		}
 
-		
-
-
-
-
-
-
-
 		[Then(@"I should see the add full day absence form with")]
 		public void ThenIShouldSeeTheAddFullDayAbsenceFormWith(Table table)
 		{
@@ -70,8 +63,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		public void WhenIInputTheseFullDayAbsenceValues(Table table)
 		{
 			var fullDayAbsenceFormInfo = table.CreateInstance<FullDayAbsenceFormInfo>();
-			Browser.Current.SelectList(Find.BySelector(".full-day-absence .absence-type")).Option(fullDayAbsenceFormInfo.Absence).Select(); //Click?? or SelectNoWait?
-			Browser.Current.Element(Find.BySelector(".full-day-absence .end-date")).SetAttributeValue("value", fullDayAbsenceFormInfo.EndDate.ToString("yyyy-MM-dd"));
+			if (fullDayAbsenceFormInfo.Absence != null)
+			{
+				Browser.Current.SelectList(Find.BySelector(".full-day-absence .absence-type")).SelectByValue(fullDayAbsenceFormInfo.Absence);
+			}
+			Browser.Current.TextField(Find.BySelector(".full-day-absence .end-date")).Value = fullDayAbsenceFormInfo.EndDate.ToShortDateString(UserFactory.User().Culture);
 		}
 
 		public class ShiftLayerInfo
