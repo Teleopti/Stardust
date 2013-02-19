@@ -25,5 +25,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			EventualAssert.That(() => Browser.Current.Element(Find.BySelector(".shift .layer")).Exists, Is.True);
 		}
 
+		[Then(@"I should see (.*) shift layers")]
+		public void ThenIShouldSeeNumberOfShiftLayers(int numberOfShifts)
+		{
+			EventualAssert.That(() => Browser.Current.Elements.Filter(Find.BySelector(".shift .layer")).Count, Is.EqualTo(numberOfShifts));
+		}
 	}
 }
