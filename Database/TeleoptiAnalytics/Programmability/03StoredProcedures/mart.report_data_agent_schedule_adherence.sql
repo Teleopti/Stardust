@@ -219,7 +219,7 @@ SELECT
 FROM mart.bridge_time_zone b
 INNER JOIN mart.dim_date d 
 	ON b.local_date_id = d.date_id
-	AND d.date_date BETWEEN @date_from AND dateadd(dd,1,@date_to)
+	AND d.date_date BETWEEN @date_from AND @date_to
 INNER JOIN mart.dim_interval i
 	ON b.local_interval_id = i.interval_id
 WHERE b.time_zone_id = @time_zone_id
@@ -237,7 +237,7 @@ INSERT INTO @date (date_from_id,date_to_id)
 SELECT
 	@nowLocalDateId = b.local_date_id,
 	@nowLocalIntervalId = b.local_interval_id
-FROM #bridge_time_zone b
+FROM bridge_time_zone b
 INNER JOIN mart.dim_date d 
 	ON b.date_id = d.date_id
 	AND d.date_date = @nowUtcDateOnly
@@ -505,13 +505,15 @@ END
 --remove deviation and schedule_ready_time for every interval > Now(), but keep color and activity for display
 ----------
 update #result
-set deviation_s=0,
-adherence_calc_s=0
+set
+	adherence_calc_s=NULL,
+	deviation_s = NULL
 where 	date_id > @nowLocalDateId 
 
 update #result
-set deviation_s=0,
-adherence_calc_s=0
+set
+	adherence_calc_s=NULL,
+	deviation_s = NULL
 where 	date_id = @nowLocalDateId 
 and interval_id > @nowLocalIntervalId
 
