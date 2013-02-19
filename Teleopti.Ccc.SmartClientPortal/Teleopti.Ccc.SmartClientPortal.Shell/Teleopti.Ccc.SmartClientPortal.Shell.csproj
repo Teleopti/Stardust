@@ -108,10 +108,11 @@
     </Reference>
     <Reference Include="MbCache">
       <HintPath>..\..\packages\MbCache.2.1\lib\net40\MbCache.dll</HintPath>
+      
     </Reference>
     <Reference Include="MbCache.ProxyImpl.LinFu">
-      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\MbCache.2.1\lib\net40\MbCache.ProxyImpl.LinFu.dll</HintPath>
+      
     </Reference>
     <Reference Include="Microsoft.Practices.CompositeUI, Version=1.0.51205.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

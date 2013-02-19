@@ -161,6 +161,8 @@
     <Compile Include="RTA\RTAStateCheckerMessageConsumer.cs" />
     <Compile Include="Denormalizer\PersonScheduleDayReadModelHandler.cs" />
     <Compile Include="Denormalizer\PersonScheduleDayReadModelsCreator.cs" />
+    <Compile Include="RTA\RTAPersonInfoMessageConsumer.cs" />
+    <Compile Include="RTA\RTAStateCheckerMessageConsumer.cs" />
     <Compile Include="Denormalizer\DenormalizedScheduleMessageBuilder.cs" />
     <Compile Include="Denormalizer\IDenormalizedScheduleMessageBuilder.cs" />
     <Compile Include="Denormalizer\IScheduleDayReadModelCreator.cs" />

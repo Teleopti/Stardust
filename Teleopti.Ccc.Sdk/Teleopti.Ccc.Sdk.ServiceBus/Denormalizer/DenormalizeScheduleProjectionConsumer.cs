@@ -1,6 +1,7 @@
 ﻿using System;
 using Rhino.ServiceBus;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Sdk.ServiceBus.RTA;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Messages.Denormalize;
