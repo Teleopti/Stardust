@@ -38,6 +38,7 @@ DECLARE @scenario_id int
 DECLARE @date_min smalldatetime
 DECLARE @intervals_outside_shift int
 declare @interval_length_minutes int 
+SET @date_min='1900-01-01'
 
 SELECT @date_min = '1900-01-01'
 
@@ -210,7 +211,7 @@ ON
 INNER JOIN 
 	mart.dim_interval di
 ON 
-	dateadd(hour,DATEPART(hour,fs.shift_endtime),@date_min)+ dateadd(minute,DATEPART(minute,fs.shift_endtime),@date_min) = di.interval_end
+	dateadd(hour,DATEPART(hour,fs.shift_endtime),@date_min)+ dateadd(minute,DATEPART(minute,fs.shift_endtime),@date_min) between di.interval_start and di.interval_end
 WHERE
 	fs.schedule_date_id BETWEEN @start_date_id AND @end_date_id
 	AND fs.business_unit_id = @business_unit_id
