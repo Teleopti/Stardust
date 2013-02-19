@@ -307,7 +307,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             _target.CalculateStaff();
 
             Assert.AreEqual(
-                Math.Round(_target.ForecastedIncomingDemand().TotalMinutes/0.8,3),
+                Math.Round(_target.ForecastedIncomingDemand().TotalMinutes/0.8, 3),
                 Math.Round(_target.ForecastedIncomingDemandWithShrinkage().TotalMinutes,3));
         }
 
