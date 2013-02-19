@@ -11,10 +11,5 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		{
 			get { return Document.Table(QuicklyFind.ByClass("table")); }
 		}
-
-		public Element RowByPerson(string personName)
-		{
-			return Document.Element(Find.BySelector(".agent:contains('" + personName + "')"));
-		}
 	}
 }

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Threading;
 using NUnit.Framework;
 using NUnit.Framework.Constraints;
 using TechTalk.SpecFlow;
@@ -42,11 +43,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 	{
 		private readonly List<string> _texts = new List<string>();
 
-		public StringContainsAnyLanguageResourceContraint(string resource)
+		public StringContainsAnyLanguageResourceContraint(string resourceOrText)
 		{
+			if (resourceOrText.Contains(" "))
+				resourceOrText = CultureInfo.CurrentUICulture.TextInfo.ToTitleCase(resourceOrText).Replace(" ", "");
 			// add any browser language in which tests need to run on here
-			_texts.Add(Resources.ResourceManager.GetString(resource, new CultureInfo("en-US")));
-			_texts.Add(Resources.ResourceManager.GetString(resource, new CultureInfo("sv-SE")));
+			_texts.Add(Resources.ResourceManager.GetString(resourceOrText, new CultureInfo("en-US")));
+			_texts.Add(Resources.ResourceManager.GetString(resourceOrText, new CultureInfo("sv-SE")));
 		}
 
 		public override bool Matches(object actual)

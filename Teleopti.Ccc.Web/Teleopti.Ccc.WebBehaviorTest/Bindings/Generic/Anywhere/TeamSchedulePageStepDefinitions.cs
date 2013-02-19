@@ -24,10 +24,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		}
 
 		[When(@"I select '(.*)'")]
-		public void WhenISelectPierreBaldi(string personName)
+		public void WhenISelectAgent(string personName)
 		{
-			Pages.Pages.AnywherePage.RowByPerson(personName).EventualClick();
+			Browser.Current.Element(Find.BySelector(".agent:contains('" + personName + "')")).EventualClick();
 		}
-
 	}
 }
