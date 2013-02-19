@@ -1,6 +1,6 @@
 ﻿@{
-    Layout = null;
-    Response.ContentType = "application/xrds+xml";
+	Layout = null;
+	Response.ContentType = "application/xrds+xml";
 	var uri = new Uri(Request.Url, Response.ApplyAppPathModifier("~/SSO/OpenId/Provider")).ToString();
 }<?xml version="1.0" encoding="UTF-8"?>
 <xrds:XRDS
