@@ -12,15 +12,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[Then(@"I should see schedule for '(.*)'")]
 		public void ThenIShouldSeeScheduleFor(string personName)
 		{
-			EventualAssert.That(() => Pages.Pages.AnywherePage.ScheduleTable.TableRow(QuicklyFind.ByClass("agent")).Text.Contains(personName), Is.True);
-			EventualAssert.That(() => Pages.Pages.AnywherePage.ScheduleTable.TableRow(QuicklyFind.ByClass("agent")).TableCell(QuicklyFind.ByClass("shift")).ChildrenOfType<WatiN.Core.List>().First().OwnListItems.Count, Is.GreaterThan(0));
+			EventualAssert.That(() => Browser.Current.Element(Find.BySelector(string.Format(".agent:contains('{0}') .shift li", personName))).Exists, Is.True);
 		}
 
 		[Then(@"I should see no schedule for '(.*)'")]
 		public void ThenIShouldSeeNoScheduleFor(string personName)
 		{
-			EventualAssert.That(() => Pages.Pages.AnywherePage.ScheduleTable.TableRow(QuicklyFind.ByClass("agent")).Text.Contains(personName), Is.True);
-			EventualAssert.That(() => Pages.Pages.AnywherePage.ScheduleTable.TableRow(QuicklyFind.ByClass("agent")).TableCell(QuicklyFind.ByClass("shift")).ChildrenOfType<WatiN.Core.List>().First().OwnListItems.Count, Is.EqualTo(0));
+			EventualAssert.That(() => Browser.Current.Element(Find.BySelector(string.Format(".agent:contains('{0}')", personName))).Exists, Is.True);
+			EventualAssert.That(() => Browser.Current.Element(Find.BySelector(string.Format(".agent:contains('{0}') .shift li", personName))).Exists, Is.False);
 		}
 
 		[When(@"I select '(.*)'")]
