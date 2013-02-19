@@ -9,9 +9,9 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 {
 	 public class OpenIdController : Controller
 	 {
-		  internal static OpenIdProvider OpenIdProvider = new OpenIdProvider();
+		 internal static OpenIdProvider OpenIdProvider = new OpenIdProvider();
 
-		  public ActionResult Identifier()
+		 public ActionResult Identifier()
 		  {
 				if (Request.AcceptTypes != null && Request.AcceptTypes.Contains("application/xrds+xml"))
 				{
@@ -33,13 +33,6 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 					 }
 
 					 var idrequest = request as IAuthenticationRequest;
-
-					 // Verify that RP discovery is successful.
-					 if (idrequest.IsReturnUrlDiscoverable(ProviderEndpoint.Provider.Channel.WebRequestHandler) != RelyingPartyDiscoveryResult.Success)
-					 {
-						 idrequest.IsAuthenticated = false;
-						 return ProviderEndpoint.Provider.PrepareResponse(idrequest).AsActionResult();
-					 }
 
 					 idrequest.LocalIdentifier = buildIdentityUrl();
 					 idrequest.IsAuthenticated = true;
