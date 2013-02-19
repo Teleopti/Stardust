@@ -504,6 +504,8 @@ END
 ----------
 --remove deviation and schedule_ready_time for every interval > Now(), but keep color and activity for display
 ----------
+IF (@from_matrix = 1) --Only do this for Standard Reports => Don't bother/break SDK and MyTime client
+BEGIN
 update #result
 set
 	adherence_calc_s=NULL,
@@ -516,7 +518,7 @@ set
 	deviation_s = NULL
 where 	date_id = @nowLocalDateId 
 and interval_id > @nowLocalIntervalId
-
+END
 ----------
 --calculation of Agent adherence, team adherence
 ----------
