@@ -65,6 +65,19 @@
 	
 	<div data-bind="click: henkeTest">HENKE TEST</div>
 	
+	<!-- TESTAREA FOR TIMELINE -->
+	<!-- visa/bind endast om vi har hämtat data -->
+	<div>start</div>
+	<div data-bind="foreach: hours">
+		<div class="shift-trade-timeline" data-bind="foreach: hours">
+			<span class="shift-trade-timeline-line" data-bind="style: { width : hourWidth }">
+				<span class="shift-trade-timeline-number ui-corner-all" data-bind="text: hourText, style: {left: leftPx}"></span>
+			</span>
+		</div>
+	</div>
+		<div>slut</div>
+	<!-- ENDING TESTAREA FOR TIMELINE -->
+	
 </script>
 
 <script type="text/Html" id="text-request-detail-template">

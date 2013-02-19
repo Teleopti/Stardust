@@ -304,23 +304,6 @@ var ShiftTradeRequestDetailViewModel = function () {
 		Teleopti.MyTimeWeb.Request.RequestDetail.FadeEditSection();
 	};
 
-
-	self.henkeTest = function () {
-		self.ajax.Ajax({
-			url: "Requests/ShiftTradeRequestSwapDetails/" + self.Id(),
-			dataType: "json",
-			type: "POST",
-			success: function (data) {
-				console.log('Henke... det fungerar');
-				console.log(data);
-			},
-			error: function (error) {
-				console.log('henke det fungerar inte......');
-				console.log(error);
-			}
-		});
-	};
-
 	self.respondToRequest = function (url) {
 
 		self.ajax.Ajax({
@@ -335,6 +318,40 @@ var ShiftTradeRequestDetailViewModel = function () {
 			}
 		});
 	};
+
+	//test:
+	self.hours = ko.observableArray();
+	self.hourWidth = ko.observable(10);
+	self.henkeTest = function () {
+		self.ajax.Ajax({
+			url: "Requests/ShiftTradeRequestSwapDetails/" + self.Id(),
+			dataType: "json",
+			type: "POST",
+			success: function (data) {
+				console.log('Henke... det fungerar');
+				console.log(data);
+
+				self.hours.removeAll();
+				for (var i = 0; i < data.TimeLineHours.length; i++) {
+					//self.hours.push(data.TimeLineHours[i]);
+					//self.hours.push(new HourViewModel());
+				}
+			},
+			error: function (error) {
+				console.log('henke det fungerar inte......');
+				console.log(error);
+			}
+		});
+	};
+
+};
+
+var HourViewModel = function () {
+	var self = this;
+	console.log('asdsdasdasd');
+	self.hourWidth = 10;
+	self.hourText = 'apa';
+	self.leftPx = 100;
 };
 
 ko.utils.extend(ShiftTradeRequestDetailViewModel.prototype, {
