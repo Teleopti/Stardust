@@ -25,7 +25,7 @@ Background:
 	| Field | Value |
 	| Name  | Phone |
 	| Color | Green |
-
+	
 Scenario: View team schedule
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' have a (read model) shift with

@@ -86,20 +86,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AbsenceRequestFromSchedule.feature</DependentUpon>
     </Compile>
-    <Compile Include="Anywhere\AddFullDayAbsence1.feature.cs">
+    <Compile Include="Anywhere\AddFullDayAbsence.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>AddFullDayAbsence.feature</DependentUpon>
-    </Compile>
-    <Compile Include="Anywhere\ViewAgentSchedule1.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ViewAgentSchedule.feature</DependentUpon>
-    </Compile>
-    <Compile Include="Anywhere\ViewTeamSchedule1.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ViewTeamSchedule.feature</DependentUpon>
     </Compile>
     <Compile Include="AsmSummerToWinter.feature.cs">
       <AutoGen>True</AutoGen>
@@ -546,15 +536,15 @@
     </Content>
     <None Include="Anywhere\ViewAgentSchedule.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>ViewAgentSchedule1.feature.cs</LastGenOutput>
+      <LastGenOutput>ViewAgentSchedule.feature.cs</LastGenOutput>
     </None>
     <None Include="Anywhere\AddFullDayAbsence.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>AddFullDayAbsence1.feature.cs</LastGenOutput>
+      <LastGenOutput>AddFullDayAbsence.feature.cs</LastGenOutput>
     </None>
     <None Include="Anywhere\ViewTeamSchedule.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>ViewTeamSchedule1.feature.cs</LastGenOutput>
+      <LastGenOutput>ViewTeamSchedule.feature.cs</LastGenOutput>
     </None>
     <None Include="StudentAvailabilityMultidays.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

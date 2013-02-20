@@ -30,7 +30,7 @@ Background:
 	| Field | Value    |
 	| Name  | Vacation |
 	| Color | Red      |
-
+	
 Scenario: View form
 	Given I have the role 'Anywhere Team Green'
 	When I view agent schedule for 'Pierre Baldi' on '2012-12-02'
