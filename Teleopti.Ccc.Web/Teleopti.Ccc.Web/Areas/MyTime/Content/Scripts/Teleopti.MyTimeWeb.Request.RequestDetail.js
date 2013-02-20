@@ -102,7 +102,7 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 	function _showRequest(data, position) {
 
 		if (data.TypeEnum == 2) {
-			requestViewModel = new ShiftTradeRequestDetailViewModel();
+			requestViewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel(ajax);
 			requestViewModel.Initialize(data);
 		}
 		else {
@@ -281,72 +281,6 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 
 })(jQuery);
 
-
-var ShiftTradeRequestDetailViewModel = function () {
-	var self = this;
-
-	self.Id = ko.observable();
-	self.IsUpdate = ko.observable(true);
-	self.TypeEnum = ko.observable(2);
-	self.IsFullDay = ko.observable(true);
-	self.Template = ko.observable("shifttrade-request-detail-template");
-	self.CanApprove = ko.observable(true);
-	self.ajax = new Teleopti.MyTimeWeb.Ajax();
-	self.From = ko.observable("");
-	self.To = ko.observable("");
-	self.Approve = function () {
-		self.respondToRequest("Requests/ApproveShiftTrade/" + self.Id());
-		Teleopti.MyTimeWeb.Request.RequestDetail.FadeEditSection();
-	};
-
-	self.Deny = function () {
-		self.respondToRequest("Requests/DenyShiftTrade/" + self.Id());
-		Teleopti.MyTimeWeb.Request.RequestDetail.FadeEditSection();
-	};
-
-
-	self.henkeTest = function () {
-		self.ajax.Ajax({
-			url: "Requests/ShiftTradeRequestSwapDetails/" + self.Id(),
-			dataType: "json",
-			type: "POST",
-			success: function (data) {
-				console.log('Henke... det fungerar');
-				console.log(data);
-			},
-			error: function (error) {
-				console.log('henke det fungerar inte......');
-				console.log(error);
-			}
-		});
-	};
-
-	self.respondToRequest = function (url) {
-
-		self.ajax.Ajax({
-			url: url,
-			dataType: "json",
-			type: "POST",
-			success: function (data) {
-				Teleopti.MyTimeWeb.Request.List.AddItemAtTop(data);
-			},
-			error: function (error) {
-				//todo
-			}
-		});
-	};
-};
-
-ko.utils.extend(ShiftTradeRequestDetailViewModel.prototype, {
-	Initialize: function (data) {
-
-		var self = this;
-		self.Id(data.Id);
-		self.CanApprove(!data.IsCreatedByUser);
-		self.From(data.From);
-		self.To(data.To);
-	}
-});
 
 Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel() {
 
