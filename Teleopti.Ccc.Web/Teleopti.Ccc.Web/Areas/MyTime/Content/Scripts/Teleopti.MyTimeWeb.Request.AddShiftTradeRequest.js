@@ -160,7 +160,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		});
 		self.title = ko.computed(function () {
 			if (self.payload) {
-				return layer.Title;
+				return layer.Title + ' ' + self.payload;
 			}
 			return '';
 		});
