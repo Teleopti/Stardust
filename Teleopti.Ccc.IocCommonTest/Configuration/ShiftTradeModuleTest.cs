@@ -4,6 +4,7 @@ using System.Linq;
 using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades;
@@ -70,6 +71,47 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			using (var ioc = containerBuilder.Build())
 			{
 				ioc.Resolve<IShiftTradeLightValidator>().Should().Not.Be.Null();
+			}
+		}
+
+		[Test]
+		public void CanCreateShiftTradeRequestSetChecksum()
+		{
+			containerBuilder.RegisterModule<RepositoryModule>();
+			containerBuilder.RegisterModule<UnitOfWorkModule>();
+			using (var ioc = containerBuilder.Build())
+			{
+				ioc.Resolve<IShiftTradeRequestSetChecksum>().Should().Not.Be.Null();
+			}		
+		}
+
+		[Test]
+		public void CanCreateShiftTradeRequestStatusChecker()
+		{
+			containerBuilder.RegisterModule<RepositoryModule>();
+			containerBuilder.RegisterModule<UnitOfWorkModule>();
+			//just a dummy impl used here
+			containerBuilder.RegisterType<personRequestCheckAuthorization>().As<IPersonRequestCheckAuthorization>();
+			using (var ioc = containerBuilder.Build())
+			{
+				ioc.Resolve<IShiftTradeRequestStatusChecker>().Should().Be.InstanceOf<ShiftTradeRequestStatusChecker>();
+			}
+		}
+
+		private class personRequestCheckAuthorization : IPersonRequestCheckAuthorization
+		{
+			public void VerifyEditRequestPermission(IPersonRequest personRequest)
+			{
+			}
+
+			public bool HasEditRequestPermission(IPersonRequest personRequest)
+			{
+				return false;
+			}
+
+			public bool HasViewRequestPermission(IPersonRequest personRequest)
+			{
+				return false;
 			}
 		}
 	}
