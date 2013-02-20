@@ -3,7 +3,7 @@ Feature: Add full day absence
 	In order to keep track of agents absences
 	As a team leader
 	I want to add absence for an agent
-
+	
 Background:
 	Given there is a team with
 	| Field | Value            |

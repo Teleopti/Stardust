@@ -60,12 +60,27 @@ Scenario: View team schedule, no shift
 	Given I have the role 'Anywhere Team Green'
 	When I view schedules for '2012-12-03'
 	Then I should see no schedule for 'Pierre Baldi'
-
+	
 @ignore
 Scenario: View schedules in my time zone
 
 @ignore
 Scenario: View team selection
+	Given there is a team with
+	| Field | Value      |
+	| Name  | Team other |
+	And there is a role with
+	| Field                      | Value                         |
+	| Name                       | Anywhere Team Green And Other |
+	| Access to team             | Team green, Team other        |
+	| Access to Anywhere         | true                          |
+	| View unpublished schedules | true                          |
+	And I have the role 'Anywhere Team Green And Other'
+	When I view schedules for '2012-12-02'
+	Then I should be able to select teams
+	| Team       |
+	| Team green |
+	| Team other |
 
 @ignore
 Scenario: Change team

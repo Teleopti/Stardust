@@ -91,27 +91,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AddFullDayAbsence.feature</DependentUpon>
     </Compile>
-    <Compile Include="Anywhere\ViewTeamSchedule1.feature.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ViewTeamSchedule.feature</DependentUpon>
-    </Compile>
     <Compile Include="Anywhere\ViewAgentSchedule1.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ViewAgentSchedule.feature</DependentUpon>
     </Compile>
-    <Compile Include="Anywhere\ViewAgentSchedule.feature.cs">
-      <DependentUpon>ViewAgentSchedule.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Anywhere\AddFullDayAbsence.feature.cs">
-      <DependentUpon>AddFullDayAbsence.feature</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="Anywhere\ViewTeamSchedule.feature.cs">
+    <Compile Include="Anywhere\ViewTeamSchedule1.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ViewTeamSchedule.feature</DependentUpon>
