@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.DomainTest.Scheduling;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
