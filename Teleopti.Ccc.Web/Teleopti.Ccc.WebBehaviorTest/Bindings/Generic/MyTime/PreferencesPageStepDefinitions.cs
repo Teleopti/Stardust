@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			EventualAssert.That(() => extendedPreference.DisplayVisible(), Is.True);
 		}
 
-		[Then(@"I should see the preference '(.*)' on '(.*)'")]
+		[Then(@"I should see the preference (.*) on '(.*)'")]
 		public void ThenIShouldSeeThePreferenceLateOn(string preference, DateTime date)
 		{
 			var cell = Pages.Pages.PreferencePage.CalendarCellForDate(date);
