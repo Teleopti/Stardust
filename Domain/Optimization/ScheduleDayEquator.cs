@@ -58,7 +58,8 @@ namespace Teleopti.Ccc.Domain.Optimization
             return true;
         }
 
-        public bool MainShiftEquals(IMainShift original, IMainShift current)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
+		public bool MainShiftEquals(IMainShift original, IMainShift current)
         {
             if(original.ShiftCategory.Id != current.ShiftCategory.Id)
                 return false;
