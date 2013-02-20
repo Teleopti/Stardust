@@ -48,6 +48,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _target.UseBlockScheduling = BlockFinderType.BetweenDayOff;
             Assert.AreEqual(BlockFinderType.BetweenDayOff, _target.UseBlockScheduling);
             Assert.IsNull(_target.ShiftCategory);
+
+            _target.BlockFinderTypeForAdvanceScheduling  = BlockFinderType.BetweenDayOff;
+            Assert.AreEqual(BlockFinderType.BetweenDayOff, _target.BlockFinderTypeForAdvanceScheduling);
+
             _target.UsePreferences = true;
             _target.UsePreferencesMustHaveOnly = true;
             Assert.IsTrue(_target.UsePreferencesMustHaveOnly);
@@ -65,6 +69,18 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Assert.IsFalse(_target.UseSameDayOffs);
             _target.UseSameDayOffs = true;
             Assert.IsTrue(_target.UseSameDayOffs);
+            
+        }
+
+        [Test]
+        public void VerifyBlockOptions()
+        {
+            _target.UsePeriodAsBlock = true;
+            Assert.IsTrue(_target.UsePeriodAsBlock);
+            _target.UseTwoDaysOffAsBlock = true;
+            Assert.IsTrue(_target.UseTwoDaysOffAsBlock);
+            _target.UseCalendarWeekAsBlock = true;
+            Assert.IsTrue(_target.UseCalendarWeekAsBlock);
         }
 
         [Test]

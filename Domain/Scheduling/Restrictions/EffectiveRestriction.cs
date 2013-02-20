@@ -230,9 +230,43 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 				ret.IsStudentAvailabilityDay = true;
 			if (effectiveRestriction.NotAvailable)
 				ret.NotAvailable = true;
-            return ret;
+			if (CommonMainShift == null)
+			{
+				ret.CommonMainShift = effectiveRestriction.CommonMainShift;
+				return ret;
+			}
+
+	        if (effectiveRestriction.CommonMainShift != null)
+	        {
+		        if (areMainShiftsEqual(CommonMainShift, effectiveRestriction.CommonMainShift))
+				{
+					ret.CommonMainShift = effectiveRestriction.CommonMainShift; 
+		        }
+		        else
+		        {
+			        return null;
+		        }
+	        }
+
+	        return ret;
 
         }
+
+		private bool areMainShiftsEqual(IMainShift original, IMainShift current)
+		{
+			if (original.ShiftCategory.Id != current.ShiftCategory.Id)
+				return false;
+			if (original.LayerCollection.Count != current.LayerCollection.Count)
+				return false;
+			for (int layerIndex = 0; layerIndex < original.LayerCollection.Count; layerIndex++)
+			{
+				ILayer<IActivity> originalLayer = original.LayerCollection[layerIndex];
+				ILayer<IActivity> currentLayer = current.LayerCollection[layerIndex];
+				if (!originalLayer.Period.Equals(currentLayer.Period))
+					return false;
+			}
+			return true;
+		}
 
         private static TimeSpan? resolveTime(TimeSpan? thisTime, TimeSpan? otherTime, bool min)
         {
@@ -392,6 +426,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 				result = (result * 398) ^ WorkTimeLimitation.GetHashCode();
 				if (ShiftCategory != null)
 					result = (result * 398) ^ ShiftCategory.GetHashCode();
+				if (CommonMainShift != null)
+					result = (result * 398) ^ CommonMainShift.GetHashCode();
 				if (DayOffTemplate != null)
 					result = (result * 398) ^ DayOffTemplate.GetHashCode();
 				if (Absence != null)
@@ -422,5 +458,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 		}
 
 		public bool NotAllowedForDayOffs { get; set; }
+	    public IMainShift CommonMainShift { get; set; }
     }
 }

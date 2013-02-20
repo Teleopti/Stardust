@@ -92,5 +92,22 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			Assert.IsNotNull(groupPerson);
 		}
+
+		[Test]
+		public void ShouldBuildDummySingleGroupPerson()
+		{
+			using (_mock.Record())
+			{
+				Expect.Call(_groupPersonFactory.CreateGroupPerson(new List<IPerson> { _person }, _dateToTest, _person.Name.ToString(), Guid.Empty)).IgnoreArguments();
+			}
+
+			IGroupPerson groupPerson;
+			using (_mock.Playback())
+			{
+				groupPerson = _target.BuildSingleGroupPerson(_person, _dateToTest);
+			}
+
+			Assert.IsNotNull(groupPerson);
+		}
 	}
 }

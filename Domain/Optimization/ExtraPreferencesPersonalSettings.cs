@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 	{
 		private string _groupPageOnTeamKey;
 		private string _groupPageOnCompareWithKey;
+        private string _groupPageOnTeamLevelingPerKey;
 
 		private BlockFinderType _blockFinderTypeValue;
 
@@ -22,7 +23,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 	    private bool _useGroupSchedulingCommonEnd;
 	    private bool _useGroupSchedulingCommonCategory;
 
-		public ExtraPreferencesPersonalSettings()
+	    private BlockFinderType _blockFinderTypeForAdvanceOptimization;
+	    
+
+	    public ExtraPreferencesPersonalSettings()
 		{
 			SetDefaultValues();
 		}
@@ -38,19 +42,23 @@ namespace Teleopti.Ccc.Domain.Optimization
 					target.GroupPageOnTeam = groupPage;
 				if (_groupPageOnCompareWithKey == groupPage.Key)
 					target.GroupPageOnCompareWith = groupPage;
+                if (_groupPageOnTeamLevelingPerKey == groupPage.Key)
+                    target.GroupPageOnTeamLevelingPer = groupPage;
 			}
 
 			target.BlockFinderTypeValue = _blockFinderTypeValue;
 			target.UseBlockScheduling = _useBlockScheduling;
 			target.UseTeams = _useTeams;
 			target.KeepSameDaysOffInTeam = _useSameDaysOffForTeams;
-
+            
            
 			target.FairnessValue = _fairnessValue;
 
 		    target.UseGroupSchedulingCommonCategory = _useGroupSchedulingCommonCategory;
 		    target.UseGroupSchedulingCommonEnd = _useGroupSchedulingCommonEnd;
 		    target.UseGroupSchedulingCommonStart = _useGroupSchedulingCommonStart;
+
+		    target.BlockFinderTypeForAdvanceOptimization = _blockFinderTypeForAdvanceOptimization;
 		}
 
 		public void MapFrom(IExtraPreferences source)
@@ -59,6 +67,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 				_groupPageOnTeamKey = source.GroupPageOnTeam.Key;
 			if (source.GroupPageOnCompareWith != null)
 				_groupPageOnCompareWithKey = source.GroupPageOnCompareWith.Key;
+            if (source.GroupPageOnTeamLevelingPer != null)
+                _groupPageOnTeamLevelingPerKey = source.GroupPageOnTeamLevelingPer.Key;
 
 			_blockFinderTypeValue = source.BlockFinderTypeValue;
 			_useBlockScheduling = source.UseBlockScheduling;
@@ -70,6 +80,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 		    _useGroupSchedulingCommonCategory = source.UseGroupSchedulingCommonCategory;
 		    _useGroupSchedulingCommonEnd = source.UseGroupSchedulingCommonEnd;
 		    _useGroupSchedulingCommonStart = source.UseGroupSchedulingCommonStart;
+
+		    _blockFinderTypeForAdvanceOptimization = source.BlockFinderTypeForAdvanceOptimization;
 		}
 
 		/// <summary>
@@ -91,6 +103,16 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			_groupPageOnCompareWithKey = key;
 		}
+
+        /// <summary>
+        /// Sets the group page on cleveling per.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <remarks>Used in tests only</remarks>
+        public void SetGroupPageOnTeamLevellingPerKey(string key)
+        {
+            _groupPageOnTeamLevelingPerKey = key;
+        }
 
 		private void SetDefaultValues()
 		{
