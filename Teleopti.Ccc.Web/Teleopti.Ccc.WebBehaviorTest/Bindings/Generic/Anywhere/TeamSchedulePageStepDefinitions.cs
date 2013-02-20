@@ -40,5 +40,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 				EventualAssert.That(() => Browser.Current.Element(Find.BySelector(string.Format(".team-selector:contains('{0}'", row["Team"]))).Exists, Is.True);
 			}
 		}
+
+		[When(@"I select team '(.*)'")]
+		public void WhenISelectTeam(string teamName)
+		{
+			Browser.Current.Element(Find.BySelector(string.Format(".team-selector li:contains('{0}", teamName))).EventualClick();
+		}
 	}
 }
