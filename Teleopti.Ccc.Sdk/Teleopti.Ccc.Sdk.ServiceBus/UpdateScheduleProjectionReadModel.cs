@@ -27,18 +27,21 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 					}, scheduleRange, dateOnlyPeriod, updateReadModel);
 		}
 
-		private void updateReadModel(DenormalizedSchedule message)
+		private void updateReadModel(DenormalizedSchedule[] messages)
 		{
-			var date = new DateOnly(message.Date);
-			if (!message.IsInitialLoad)
+			foreach (var message in messages)
 			{
-				_scheduleProjectionReadOnlyRepository.ClearPeriodForPerson(
-					new DateOnlyPeriod(date, date), message.ScenarioId, message.PersonId);
-			}
+				var date = new DateOnly(message.Date);
+				if (!message.IsInitialLoad)
+				{
+					_scheduleProjectionReadOnlyRepository.ClearPeriodForPerson(
+						new DateOnlyPeriod(date, date), message.ScenarioId, message.PersonId);
+				}
 
-			foreach (var layer in message.Layers)
-			{
-				_scheduleProjectionReadOnlyRepository.AddProjectedLayer(date, message.ScenarioId, message.PersonId, layer);
+				foreach (var layer in message.Layers)
+				{
+					_scheduleProjectionReadOnlyRepository.AddProjectedLayer(date, message.ScenarioId, message.PersonId, layer);
+				}
 			}
 		}
 	}
