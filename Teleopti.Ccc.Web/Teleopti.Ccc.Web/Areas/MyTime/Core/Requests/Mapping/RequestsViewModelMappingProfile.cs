@@ -6,6 +6,7 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
+using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Ccc.Web.Models.Shared;
 using Teleopti.Interfaces.Domain;
 
@@ -16,12 +17,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		private readonly Func<IUserTimeZone> _userTimeZone;
 		private readonly Func<ILinkProvider> _linkProvider;
 		private readonly Func<ILoggedOnUser> _loggedOnUser;
-		private readonly IShiftTradeRequestStatusChecker _shiftTradeRequestStatusChecker;
+	    private IResolve<IShiftTradeRequestStatusChecker> _shiftTradeRequestStatusChecker;
 
-		public RequestsViewModelMappingProfile(Func<IUserTimeZone> userTimeZone,
+	    public RequestsViewModelMappingProfile(Func<IUserTimeZone> userTimeZone,
 																				Func<ILinkProvider> linkProvider,
 																				Func<ILoggedOnUser> loggedOnUser,
-																				IShiftTradeRequestStatusChecker shiftTradeRequestStatusChecker)
+																				IResolve<IShiftTradeRequestStatusChecker> shiftTradeRequestStatusChecker)
 		{
 			_userTimeZone = userTimeZone;
 			_linkProvider = linkProvider;
@@ -42,7 +43,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 						var shiftTradeRequest = s.Request as IShiftTradeRequest;
 						if (shiftTradeRequest != null)
 						{
-							ret += ", " + shiftTradeStatusText(shiftTradeRequest.GetShiftTradeStatus(_shiftTradeRequestStatusChecker));
+							ret += ", " + shiftTradeStatusText(shiftTradeRequest.GetShiftTradeStatus(_shiftTradeRequestStatusChecker.Invoke()));
 						}
 						return ret;
 					}))

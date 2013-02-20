@@ -14,6 +14,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
+using Teleopti.Ccc.WebTest.Core.Mapping;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
@@ -43,7 +44,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 				() => _userTimeZone, 
 				() => _linkProvider,
 				() => _loggedOnUser,
-				_shiftTradeRequestStatusChecker
+				Depend.On(_shiftTradeRequestStatusChecker)
 				)));
 		}
 

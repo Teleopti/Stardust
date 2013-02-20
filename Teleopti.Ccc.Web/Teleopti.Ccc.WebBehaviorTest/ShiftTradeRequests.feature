@@ -270,6 +270,8 @@ Given I have the role 'Full access to mytime'
 @ignore
 Scenario: Show my schedule of the shift trade
 Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And Ashley Andeen have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And I have a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 06:00 |
