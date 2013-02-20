@@ -71,10 +71,8 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			_groupPagesFairness = _groupPages.ToList();
 		    //adding an extra entry for single Agent
             _groupPagesLevelingPer = _groupPages.ToList();
-		    var singleAgentEntry = new GroupPageLight();
-		    singleAgentEntry.Key = "SingleAgentTeam";
-		    singleAgentEntry.Name = "Single Agent Team";
-            _groupPagesLevelingPer.Add(singleAgentEntry );
+		    var singleAgentEntry = new GroupPageLight {Key = "SingleAgentTeam", Name = Resources.SingleAgentTeam};
+			_groupPagesLevelingPer.Add(singleAgentEntry );
             ExchangeData(ExchangeDataOption.DataSourceToControls);
             _dataLoaded = true;
         }
