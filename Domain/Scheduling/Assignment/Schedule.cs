@@ -237,7 +237,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             return new DateTimePeriod(scheduleDataClone.Min(d => d.Period.StartDateTime), scheduleDataClone.Max(d => d.Period.EndDateTime));
         }
 
-        protected IScheduleDay ScheduleDay(IDateOnlyAsDateTimePeriod dateAndDateTime, bool includeUnpublished, IEnumerable<DateOnly> availableDates)
+        protected IScheduleDay ScheduleDay(IDateOnlyAsDateTimePeriod dateAndDateTime, bool includeUnpublished, IEnumerable<DateOnlyPeriod> availableDatePeriods)
         {
             IEnumerable<IScheduleData> filteredData;
             IEnumerable<IPersonAssignment> filteredConflicts;
@@ -248,7 +248,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                 new SchedulePublishedSpecification(Person.WorkflowControlSet, ScheduleVisibleReasons.Published);
             var schedIsPublished = schedulePublishedSpecification.IsSatisfiedBy(dateAndDateTime.DateOnly);
             var retObj = (ExtractedSchedule)ExtractedSchedule.CreateScheduleDay(Owner, Person, dateAndDateTime);
-            retObj.FullAccess = availableDates.Any(a => a == dateAndDateTime.DateOnly);
+            retObj.FullAccess = availableDatePeriods.Any(a => a.Contains(dateAndDateTime.DateOnly));
             retObj.IsFullyPublished = schedIsPublished;
 
             if (schedIsPublished || includeUnpublished)

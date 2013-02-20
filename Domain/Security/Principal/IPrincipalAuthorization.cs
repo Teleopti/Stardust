@@ -12,10 +12,10 @@ namespace Teleopti.Ccc.Domain.Security.Principal
         bool IsPermitted(string functionPath, DateOnly dateOnly, ISite site);
         bool IsPermitted(string functionPath, DateOnly dateOnly, IBusinessUnit businessUnit);
         bool IsPermitted(string functionPath);
-        IEnumerable<DateOnlyPeriod> PermittedPeriods(IApplicationFunction applicationFunction, DateOnlyPeriod period, IPerson person);
 		IEnumerable<IApplicationFunction> GrantedFunctions();
 		IEnumerable<IApplicationFunction> GrantedFunctionsBySpecification(ISpecification<IApplicationFunction> specification);
         bool EvaluateSpecification(ISpecification<IEnumerable<ClaimSet>> specification);
     	bool IsPermitted(string functionPath, DateOnly dateOnly, IAuthorizeOrganisationDetail authorizeOrganisationDetail);
+    	IEnumerable<DateOnlyPeriod> PermittedPeriods(string functionPath, DateOnlyPeriod period, IPerson person);
     }
 }
