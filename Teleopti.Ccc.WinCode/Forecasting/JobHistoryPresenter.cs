@@ -46,9 +46,9 @@ namespace Teleopti.Ccc.WinCode.Forecasting
 			loadHistory();
 		}
 
-        public void LoadDetailedHistory(JobResultModel jobResultModel)
+        public void LoadDetailedHistory(JobResultModel jobResultModel, bool showInfo)
         {
-            var jobHistoryEntries = _jobResultProvider.GetJobResultDetails(jobResultModel);
+			var jobHistoryEntries = _jobResultProvider.GetJobResultDetails(jobResultModel, showInfo);
             _view.BindJobResultDetailData(jobHistoryEntries);
         }
 

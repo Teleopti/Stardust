@@ -40,13 +40,16 @@ namespace Teleopti.Ccc.WinCode.Forecasting
 			}
 		}
 
-        public IList<JobResultDetailModel> GetJobResultDetails(JobResultModel jobResultModel)
+        public IList<JobResultDetailModel> GetJobResultDetails(JobResultModel jobResultModel, bool showInfo)
         {
+	        var level = (int)DetailLevel.Info;
+	        if (showInfo) level = -1;
+ 
             using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
                 var jobResult = _jobResultRepository.Get(jobResultModel.JobId.GetValueOrDefault());
 
-                return jobResult.Details.Where(d => d.DetailLevel != DetailLevel.Info).OrderByDescending(d => d.Timestamp).Select(m =>
+				return jobResult.Details.Where(d => (int)d.DetailLevel != level).OrderByDescending(d => d.Timestamp).Select(m =>
                         new JobResultDetailModel
                             {
                                 Message = m.Message,

@@ -31,13 +31,13 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting
             var details = new List<JobResultDetailModel>();
             using (mocks.Record())
             {
-                Expect.Call(jobResultProvider.GetJobResultDetails(jobModel)).Return(details);
+                Expect.Call(jobResultProvider.GetJobResultDetails(jobModel, false)).Return(details);
                 Expect.Call(() => view.BindJobResultDetailData(details));
             }
             using (mocks.Playback())
             {
                
-                target.LoadDetailedHistory(jobModel);
+                target.LoadDetailedHistory(jobModel, false);
             }
         }
 

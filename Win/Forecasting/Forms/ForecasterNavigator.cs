@@ -1219,6 +1219,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 						if (wizard.ShowDialog(this) == DialogResult.OK)
 						{
 							_sendCommandToSdk.ExecuteCommand(wwp.CreateNewStateObj());
+							_dataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(() => _jobHistoryViewFactory.Create());
 						}
 					}
 				}

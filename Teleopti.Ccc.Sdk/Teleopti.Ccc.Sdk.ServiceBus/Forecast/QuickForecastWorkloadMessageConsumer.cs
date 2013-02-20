@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Rhino.ServiceBus;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Forecasting.Export;
 using Teleopti.Ccc.Domain.Repositories;
@@ -62,10 +64,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 				_feedback.SetJobResult(jobResult, _messageBroker);
 
 				_feedback.ReportProgress(2, string.Format(CultureInfo.InvariantCulture, "Loading workload...."));
-
+							
 				var workload = _workloadRepository.Get(message.WorkloadId);
 				if (workload == null) return;
-
+				jobResult.AddDetail(new JobResultDetail(DetailLevel.Info, "Loaded workload " + workload.Name, DateTime.UtcNow, null));	
 				//TriggerWorkloadStart();
 				
 				var skill = workload.Skill;
@@ -76,6 +78,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 					statisticHelper.GetWorkloadDaysWithValidatedStatistics(message.StatisticPeriod,
 																			workload, scenario,
 																			new List<IValidatedVolumeDay>());
+				
+				jobResult.AddDetail(new JobResultDetail(DetailLevel.Info, "Loaded statistics...", DateTime.UtcNow, null));
 
 				var outlierWorkloadDayFilter = new OutlierWorkloadDayFilter<ITaskOwner>(workload, _outlierRepository);
 				var taskOwnerDaysWithoutOutliers =
@@ -86,11 +90,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 
 				//Load (or create) workload days
 				var skillDays = _skillDayRepository.FindRange(message.TargetPeriod, skill, scenario);
-				skillDays = _skillDayRepository.GetAllSkillDays(message.TargetPeriod, skillDays, skill, scenario, false);
+				skillDays = _skillDayRepository.GetAllSkillDays(message.TargetPeriod, skillDays, skill, scenario, true);
 				var calculator = _forecastClassesCreator.CreateSkillDayCalculator(skill, skillDays.ToList(), message.TargetPeriod);
 
 				var workloadDays = _workloadDayHelper.GetWorkloadDaysFromSkillDays(calculator.SkillDays, workload).OfType<ITaskOwner>().ToList();
-
+				jobResult.AddDetail(new JobResultDetail(DetailLevel.Info, "Loaded skill days..", DateTime.UtcNow, null));	
 				applyVolumes(workload, taskOwnerPeriod, workloadDays);
 
 				//(Update templates for workload)
@@ -98,7 +102,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 
 				//Create budget forecast (apply standard templates for all days in target)
 				workload.SetDefaultTemplates(workloadDays);
-
+				jobResult.AddDetail(new JobResultDetail(DetailLevel.Info, "Updated forecast for " + workload.Name, DateTime.UtcNow, null));	
+				jobResult.FinishedOk = true;
 				//Save!
 				unitOfWork.PersistAll();
 
