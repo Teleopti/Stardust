@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(QuickForecast.SelectTargetDatesAndScenario));
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.reportDateFromToSelector1 = new Teleopti.Ccc.Win.Reporting.ReportDateFromToSelector();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
@@ -62,8 +61,6 @@
             this.reportDateFromToSelector1.NullString = "xxNoDateIsSelected";
             this.reportDateFromToSelector1.Size = new System.Drawing.Size(178, 53);
             this.reportDateFromToSelector1.TabIndex = 0;
-            this.reportDateFromToSelector1.WorkPeriodEnd = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("reportDateFromToSelector1.WorkPeriodEnd")));
-            this.reportDateFromToSelector1.WorkPeriodStart = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("reportDateFromToSelector1.WorkPeriodStart")));
             // 
             // tableLayoutPanel2
             // 

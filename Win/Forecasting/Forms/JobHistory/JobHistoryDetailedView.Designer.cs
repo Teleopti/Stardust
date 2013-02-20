@@ -90,7 +90,8 @@
 			this.splitContainerJobHistoryView.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.splitContainerJobHistoryView.HotBackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Horizontal, System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(240)))), ((int)(((byte)(171))))), System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(223)))), ((int)(((byte)(103))))));
 			this.splitContainerJobHistoryView.HotExpandLine = System.Drawing.Color.FromArgb(((int)(((byte)(101)))), ((int)(((byte)(107)))), ((int)(((byte)(207)))));
-			this.splitContainerJobHistoryView.Location = new System.Drawing.Point(3, 3);
+			this.splitContainerJobHistoryView.Location = new System.Drawing.Point(0, 0);
+			this.splitContainerJobHistoryView.Margin = new System.Windows.Forms.Padding(0);
 			this.splitContainerJobHistoryView.Name = "splitContainerJobHistoryView";
 			this.splitContainerJobHistoryView.Orientation = System.Windows.Forms.Orientation.Vertical;
 			// 
@@ -104,8 +105,8 @@
 			this.splitContainerJobHistoryView.Panel2.BackgroundColor = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Vertical, System.Drawing.Color.FromArgb(((int)(((byte)(190)))), ((int)(((byte)(194)))), ((int)(((byte)(203))))), System.Drawing.Color.FromArgb(((int)(((byte)(223)))), ((int)(((byte)(227)))), ((int)(((byte)(231))))));
 			this.splitContainerJobHistoryView.Panel2.Controls.Add(this.tableLayoutPanel3);
 			this.splitContainerJobHistoryView.PanelToBeCollapsed = Syncfusion.Windows.Forms.Tools.Enums.CollapsedPanel.Panel2;
-			this.splitContainerJobHistoryView.Size = new System.Drawing.Size(917, 513);
-			this.splitContainerJobHistoryView.SplitterDistance = 266;
+			this.splitContainerJobHistoryView.Size = new System.Drawing.Size(923, 519);
+			this.splitContainerJobHistoryView.SplitterDistance = 269;
 			this.splitContainerJobHistoryView.Style = Syncfusion.Windows.Forms.Tools.Enums.Style.Office2007Silver;
 			this.splitContainerJobHistoryView.TabIndex = 0;
 			this.splitContainerJobHistoryView.ThemesEnabled = true;
@@ -129,11 +130,12 @@
 			this.tableLayoutPanel2.RowCount = 2;
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 36F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(917, 266);
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(923, 269);
 			this.tableLayoutPanel2.TabIndex = 0;
 			// 
 			// gridControlJobHistory
 			// 
+			this.gridControlJobHistory.ActivateCurrentCellBehavior = Syncfusion.Windows.Forms.Grid.GridCellActivateAction.None;
 			this.gridControlJobHistory.AllowDragSelectedCols = true;
 			this.gridControlJobHistory.AllowResizeToFit = false;
 			this.gridControlJobHistory.AllowSelection = ((Syncfusion.Windows.Forms.Grid.GridSelectionFlags)((Syncfusion.Windows.Forms.Grid.GridSelectionFlags.Row | Syncfusion.Windows.Forms.Grid.GridSelectionFlags.Cell)));
@@ -168,6 +170,7 @@
             gridBaseStyle2,
             gridBaseStyle3,
             gridBaseStyle4});
+			this.gridControlJobHistory.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
 			this.tableLayoutPanel2.SetColumnSpan(this.gridControlJobHistory, 4);
 			this.gridControlJobHistory.ControllerOptions = ((Syncfusion.Windows.Forms.Grid.GridControllerOptions)((((((Syncfusion.Windows.Forms.Grid.GridControllerOptions.ClickCells | Syncfusion.Windows.Forms.Grid.GridControllerOptions.DragSelectRowOrColumn) 
             | Syncfusion.Windows.Forms.Grid.GridControllerOptions.SelectCells) 
@@ -176,6 +179,7 @@
             | Syncfusion.Windows.Forms.Grid.GridControllerOptions.DragColumnHeader)));
 			this.gridControlJobHistory.DefaultColWidth = 80;
 			this.gridControlJobHistory.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.gridControlJobHistory.EnableEdit = false;
 			this.gridControlJobHistory.GridOfficeScrollBars = Syncfusion.Windows.Forms.OfficeScrollBars.Office2010;
 			this.gridControlJobHistory.GridVisualStyles = Syncfusion.Windows.Forms.GridVisualStyles.Office2007Blue;
 			this.gridControlJobHistory.Location = new System.Drawing.Point(0, 0);
@@ -186,7 +190,7 @@
 			this.gridControlJobHistory.Office2007ScrollBarsColorScheme = Syncfusion.Windows.Forms.Office2007ColorScheme.Managed;
 			this.gridControlJobHistory.Office2010ScrollBarsColorScheme = Syncfusion.Windows.Forms.Office2010ColorScheme.Managed;
 			this.gridControlJobHistory.ShowCurrentCellBorderBehavior = Syncfusion.Windows.Forms.Grid.GridShowCurrentCellBorder.GrayWhenLostFocus;
-			this.gridControlJobHistory.Size = new System.Drawing.Size(917, 230);
+			this.gridControlJobHistory.Size = new System.Drawing.Size(923, 233);
 			this.gridControlJobHistory.SmartSizeBox = false;
 			this.gridControlJobHistory.SortBehavior = Syncfusion.Windows.Forms.Grid.GridSortBehavior.SingleClick;
 			this.gridControlJobHistory.TabIndex = 0;
@@ -200,7 +204,7 @@
 			// autoLabelPageCount
 			// 
 			this.autoLabelPageCount.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.autoLabelPageCount.Location = new System.Drawing.Point(5, 241);
+			this.autoLabelPageCount.Location = new System.Drawing.Point(5, 244);
 			this.autoLabelPageCount.Margin = new System.Windows.Forms.Padding(5, 0, 3, 0);
 			this.autoLabelPageCount.Name = "autoLabelPageCount";
 			this.autoLabelPageCount.Size = new System.Drawing.Size(110, 13);
@@ -213,7 +217,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.linkLabelNext.AutoSize = true;
-			this.linkLabelNext.Location = new System.Drawing.Point(832, 230);
+			this.linkLabelNext.Location = new System.Drawing.Point(838, 233);
 			this.linkLabelNext.Name = "linkLabelNext";
 			this.linkLabelNext.Size = new System.Drawing.Size(82, 36);
 			this.linkLabelNext.TabIndex = 2;
@@ -228,7 +232,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.linkLabelPrevious.AutoSize = true;
-			this.linkLabelPrevious.Location = new System.Drawing.Point(744, 230);
+			this.linkLabelPrevious.Location = new System.Drawing.Point(750, 233);
 			this.linkLabelPrevious.Name = "linkLabelPrevious";
 			this.linkLabelPrevious.Size = new System.Drawing.Size(82, 36);
 			this.linkLabelPrevious.TabIndex = 1;
@@ -240,9 +244,8 @@
 			// tableLayoutPanel3
 			// 
 			this.tableLayoutPanel3.BackColor = System.Drawing.SystemColors.Window;
-			this.tableLayoutPanel3.ColumnCount = 2;
-			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 897F));
+			this.tableLayoutPanel3.ColumnCount = 1;
+			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 923F));
 			this.tableLayoutPanel3.Controls.Add(this.gridControlDetailedJobHistory, 0, 0);
 			this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel3.Location = new System.Drawing.Point(0, 0);
@@ -250,11 +253,12 @@
 			this.tableLayoutPanel3.Name = "tableLayoutPanel3";
 			this.tableLayoutPanel3.RowCount = 1;
 			this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel3.Size = new System.Drawing.Size(917, 240);
+			this.tableLayoutPanel3.Size = new System.Drawing.Size(923, 243);
 			this.tableLayoutPanel3.TabIndex = 0;
 			// 
 			// gridControlDetailedJobHistory
 			// 
+			this.gridControlDetailedJobHistory.ActivateCurrentCellBehavior = Syncfusion.Windows.Forms.Grid.GridCellActivateAction.None;
 			this.gridControlDetailedJobHistory.AllowDragSelectedCols = true;
 			this.gridControlDetailedJobHistory.AllowResizeToFit = false;
 			gridBaseStyle5.Name = "Column Header";
@@ -287,13 +291,13 @@
             gridBaseStyle7,
             gridBaseStyle8});
 			this.gridControlDetailedJobHistory.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.tableLayoutPanel3.SetColumnSpan(this.gridControlDetailedJobHistory, 2);
 			this.gridControlDetailedJobHistory.ControllerOptions = ((Syncfusion.Windows.Forms.Grid.GridControllerOptions)(((((Syncfusion.Windows.Forms.Grid.GridControllerOptions.ClickCells | Syncfusion.Windows.Forms.Grid.GridControllerOptions.DragSelectRowOrColumn) 
             | Syncfusion.Windows.Forms.Grid.GridControllerOptions.SelectCells) 
             | Syncfusion.Windows.Forms.Grid.GridControllerOptions.ExcelLikeSelection) 
             | Syncfusion.Windows.Forms.Grid.GridControllerOptions.ResizeCells)));
 			this.gridControlDetailedJobHistory.DefaultColWidth = 80;
 			this.gridControlDetailedJobHistory.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.gridControlDetailedJobHistory.EnableEdit = false;
 			this.gridControlDetailedJobHistory.ForeColor = System.Drawing.SystemColors.ControlText;
 			this.gridControlDetailedJobHistory.GridOfficeScrollBars = Syncfusion.Windows.Forms.OfficeScrollBars.Office2010;
 			this.gridControlDetailedJobHistory.GridVisualStyles = Syncfusion.Windows.Forms.GridVisualStyles.Office2007Blue;
@@ -306,7 +310,7 @@
 			this.gridControlDetailedJobHistory.Office2010ScrollBarsColorScheme = Syncfusion.Windows.Forms.Office2010ColorScheme.Managed;
 			this.gridControlDetailedJobHistory.OptimizeInsertRemoveCells = true;
 			this.gridControlDetailedJobHistory.ShowCurrentCellBorderBehavior = Syncfusion.Windows.Forms.Grid.GridShowCurrentCellBorder.GrayWhenLostFocus;
-			this.gridControlDetailedJobHistory.Size = new System.Drawing.Size(917, 240);
+			this.gridControlDetailedJobHistory.Size = new System.Drawing.Size(923, 243);
 			this.gridControlDetailedJobHistory.SmartSizeBox = false;
 			this.gridControlDetailedJobHistory.SortBehavior = Syncfusion.Windows.Forms.Grid.GridSortBehavior.SingleClick;
 			this.gridControlDetailedJobHistory.TabIndex = 0;
@@ -401,7 +405,7 @@
             this.toolStripButtonShowInfoMessages});
 			this.toolStripEx3.Location = new System.Drawing.Point(69, 1);
 			this.toolStripEx3.Name = "toolStripEx3";
-			this.toolStripEx3.Size = new System.Drawing.Size(192, 63);
+			this.toolStripEx3.Size = new System.Drawing.Size(129, 63);
 			this.toolStripEx3.TabIndex = 2;
 			// 
 			// toolStripButtonShowInfoMessages
@@ -412,8 +416,9 @@
 			this.toolStripButtonShowInfoMessages.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonShowInfoMessages.Name = "toolStripButtonShowInfoMessages";
 			this.SetShortcut(this.toolStripButtonShowInfoMessages, System.Windows.Forms.Keys.None);
-			this.toolStripButtonShowInfoMessages.Size = new System.Drawing.Size(154, 56);
+			this.toolStripButtonShowInfoMessages.Size = new System.Drawing.Size(122, 56);
 			this.toolStripButtonShowInfoMessages.Text = "xxShowInfoMessages";
+			this.toolStripButtonShowInfoMessages.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonShowInfoMessages, false);
 			this.toolStripButtonShowInfoMessages.CheckedChanged += new System.EventHandler(this.toolStripButtonShowInfoMessagesCheckedChanged);
 			// 

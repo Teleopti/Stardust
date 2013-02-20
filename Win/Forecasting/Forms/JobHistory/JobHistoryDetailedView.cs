@@ -155,12 +155,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.JobHistory
         private void gridControlJobHistory_CellClick(object sender, GridCellClickEventArgs e)
         {
 			loadDetails();
-			//if (e.RowIndex != 0)
-			//{
-			//    var data = (IList) gridControlJobHistory.DataSource;
-			//    var jobResult = (JobResultModel) data[e.RowIndex - 1];
-			//    Presenter.LoadDetailedHistory(jobResult, toolStripCheckBoxShowInfo.Checked);
-			//}
         }
 
 		private void ribbonControlAdv1BeforeContextMenuOpen(object sender, Syncfusion.Windows.Forms.Tools.ContextMenuEventArgs e)

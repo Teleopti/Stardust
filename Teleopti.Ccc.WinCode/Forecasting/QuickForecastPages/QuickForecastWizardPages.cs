@@ -1,5 +1,4 @@
-﻿using Teleopti.Ccc.Sdk.Common.DataTransferObject;
-using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
+﻿using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard;
 

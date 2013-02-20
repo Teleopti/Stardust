@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 			_forecastClassesCreator = forecastClassesCreator;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Domain.Common.JobResultDetail.#ctor(Teleopti.Interfaces.Domain.DetailLevel,System.String,System.DateTime,System.Exception)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		public void Consume(QuickForecastWorkloadMessage message)
 		{
 			using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())

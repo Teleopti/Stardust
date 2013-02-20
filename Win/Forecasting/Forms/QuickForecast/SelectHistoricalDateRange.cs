@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
 
         public string PageName
         {
-			get { return Resources.SeasonalityDataRange; }
+			get { return Resources.LongtermForecast; }
         }
 
         public ICollection<string> ErrorMessages

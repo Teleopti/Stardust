@@ -40,7 +40,8 @@ namespace Teleopti.Ccc.WinCode.Forecasting
 			}
 		}
 
-        public IList<JobResultDetailModel> GetJobResultDetails(JobResultModel jobResultModel, bool showInfo)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public IList<JobResultDetailModel> GetJobResultDetails(JobResultModel jobResultModel, bool showInfo)
         {
 	        var level = (int)DetailLevel.Info;
 	        if (showInfo) level = -1;

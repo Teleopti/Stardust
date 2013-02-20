@@ -12,12 +12,9 @@ using Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages;
 using Teleopti.Ccc.Win.Payroll.Forms.PayrollExportPages;
 using Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard;
 using Teleopti.Ccc.WinCode.Forecasting.ExportPages;
-using Teleopti.Ccc.WinCode.Forecasting.QuickForecastPages;
 using Teleopti.Ccc.WinCode.Intraday;
-using Intraday = Teleopti.Ccc.WinCode.Intraday;
 using Teleopti.Ccc.WinCode.Payroll.PayrollExportPages;
 using Teleopti.Interfaces.Domain;
-using SelectDateAndScenario = Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast.SelectTargetDatesAndScenario;
 
 namespace Teleopti.Ccc.Win.Common
 {
@@ -224,7 +221,7 @@ namespace Teleopti.Ccc.Win.Common
                        {
                            firstPage,
                            new SelectSkills(),
-                           new Forecasting.Forms.ExportPages.SelectDateAndScenario(),
+                           new SelectDateAndScenario(),
                            new SelectFileDestination(),
                            new FileExportFinished()
                        };
@@ -248,7 +245,6 @@ namespace Teleopti.Ccc.Win.Common
                            new SelectWorkload(skills),
 						   new SelectHistoricalDateRange(),
 						   new SelectHistoricalDateRangeForTemplates(),
-						   new SelectTemplateSmoothing(),
 						   new SelectTargetDatesAndScenario()
                        };
 		}
