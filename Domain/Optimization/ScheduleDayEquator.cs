@@ -5,6 +5,7 @@ namespace Teleopti.Ccc.Domain.Optimization
     public interface IScheduleDayEquator
     {
         bool MainShiftEquals(IScheduleDay original, IScheduleDay current);
+		bool MainShiftEquals(IMainShift original, IMainShift current);
         bool DayOffEquals(IScheduleDay original, IScheduleDay current);
 	    bool AreMainShiftEqual(IMainShift original, IMainShift current);
     }
@@ -50,7 +51,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                     if (originalMainShift == null || currentMainShift == null)
                         return false;
 
-					if (!AreMainShiftEqual(originalMainShift, currentMainShift))
+                    if (!MainShiftEquals(originalMainShift, currentMainShift))
                         return false;
                 }
                 
@@ -59,7 +60,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
-		public bool AreMainShiftEqual(IMainShift original, IMainShift current)
+        public bool MainShiftEquals(IMainShift original, IMainShift current)
         {
             if(original.ShiftCategory.Id != current.ShiftCategory.Id)
                 return false;
@@ -77,7 +78,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         private static bool activityEquals(ILayer<IActivity> original, ILayer<IActivity> current)
         {
-            return original.Period.Equals(current.Period);
+            return original.Period.Equals(current.Period) && original.Payload.Equals(current.Payload);
         }
 
         private static bool checkDayOffEqual(IScheduleDay original, IScheduleDay current)

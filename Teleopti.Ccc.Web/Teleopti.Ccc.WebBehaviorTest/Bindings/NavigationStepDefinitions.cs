@@ -75,6 +75,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoStudentAvailability(date);
 		}
 
+		[When(@"I view schedules for '(.*)'")]
+		public void WhenIViewSchedules(string date)
+		{
+			TestControllerMethods.Logon();
+			Navigation.GotoAnywhereSchedule(date);
+		}
+
 		[When(@"I navigate to the preferences page")]
 		public void WhenINavigateToThePreferencesPage()
 		{
@@ -129,13 +136,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		public void WhenIBrowseToTheSiteHomePage()
 		{
 			Navigation.GotoSiteHomePage();
-		}
-
-		[When(@"I view schedules for '(.*)'")]
-		public void WhenIViewSchedules(string date)
-		{
-			TestControllerMethods.Logon();
-			Navigation.GotoAnywhereSchedule(date);
 		}
 
 

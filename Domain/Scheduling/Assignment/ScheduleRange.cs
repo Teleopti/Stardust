@@ -4,10 +4,8 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
@@ -22,7 +20,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         private int? _calculatedTargetScheduleDaysOff;
         private int? _calculatedScheduleDaysOff;
         private TimeZoneInfo _timeZone;
-        private ICollection<DateOnly> _availableDates;
         private IEnumerable<DateOnlyPeriod> _availablePeriods;
         private IShiftCategoryFairnessHolder _shiftCategoryFairnessHolder;
 
@@ -46,37 +43,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         {
             if(_availablePeriods == null)
             {
-                var function = ApplicationFunction.FindByPath(new DefinedRaptorApplicationFunctionFactory().ApplicationFunctionList, DefinedRaptorApplicationFunctionPaths.ViewSchedules);
                 var timeZone = Person.PermissionInformation.DefaultTimeZone();
                 var dop = Period.ToDateOnlyPeriod(timeZone);
-                _availablePeriods = PrincipalAuthorization.Instance().PermittedPeriods(function, dop, Person);
+				_availablePeriods = PrincipalAuthorization.Instance().PermittedPeriods(DefinedRaptorApplicationFunctionPaths.ViewSchedules, dop, Person);
             }
             return _availablePeriods;
         }
-
-        public IEnumerable<DateOnly> AvailableDates
-		{
-			get
-			{
-				if (_availableDates == null)
-				{
-					var function = ApplicationFunction.FindByPath(new DefinedRaptorApplicationFunctionFactory().ApplicationFunctionList, DefinedRaptorApplicationFunctionPaths.ViewSchedules);
-				    var timeZone = Person.PermissionInformation.DefaultTimeZone();
-					var dop = Period.ToDateOnlyPeriod(timeZone);
-                    var availablePeriods = PrincipalAuthorization.Instance().PermittedPeriods(function, dop, Person);
-					_availableDates = new HashSet<DateOnly>();
-					foreach (var period in availablePeriods)
-					{
-						foreach (var date in period.DayCollection())
-						{
-							_availableDates.Add(date);
-						}
-					}
-				}
-
-				return _availableDates;
-			}
-		}
 
 		public bool Contains(IScheduleData scheduleData, bool includeNonPermitted)
 		{
@@ -91,7 +63,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			foreach (var day in period.ToDateOnlyPeriod(zone).DayCollection())
 			{
 				var dayAndPeriod = new DateOnlyAsDateTimePeriod(day, zone);
-				var part = ScheduleDay(dayAndPeriod, true, AvailableDates);
+				var part = ScheduleDay(dayAndPeriod, true, AvailablePeriods());
 				(from data in _scheduleObjectsWithNoPermissions
 					 where data.BelongsToPeriod(dayAndPeriod)
 					 select data).ForEach(data => part.Add((IScheduleData)data.Clone()));
@@ -108,13 +80,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		public IScheduleDay ScheduledDay(DateOnly day, bool includeUnpublished)
 		{
 			var dayAndPeriod = new DateOnlyAsDateTimePeriod(day, Person.PermissionInformation.DefaultTimeZone());
-			return ScheduleDay(dayAndPeriod, includeUnpublished, AvailableDates);
+			return ScheduleDay(dayAndPeriod, includeUnpublished, AvailablePeriods());
 		}
 
 		public IScheduleDay ScheduledDay(DateOnly day)
 		{
 			var dayAndPeriod = new DateOnlyAsDateTimePeriod(day, Person.PermissionInformation.DefaultTimeZone());
-			return ScheduleDay(dayAndPeriod, PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules), AvailableDates);
+			return ScheduleDay(dayAndPeriod, PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules), AvailablePeriods());
 		}
 
         public void ValidateBusinessRules(INewBusinessRuleCollection newBusinessRuleCollection)
@@ -339,7 +311,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			foreach (var date in dateOnlyPeriod.DayCollection())
 			{
 				var dayAndPeriod = new DateOnlyAsDateTimePeriod(date, Person.PermissionInformation.DefaultTimeZone());
-				retList.Add(ScheduleDay(dayAndPeriod, canSeeUnpublished, AvailableDates));
+				retList.Add(ScheduleDay(dayAndPeriod, canSeeUnpublished, AvailablePeriods()));
 			}
 			return retList;
 		}

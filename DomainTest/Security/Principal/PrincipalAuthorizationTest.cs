@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
             }
             using (mocks.Playback())
             {
-                var result = principalAuthorization.PermittedPeriods(applicationFunction,
+                var result = principalAuthorization.PermittedPeriods(applicationFunction.FunctionPath,
                                                                      new DateOnlyPeriod(today.AddDays(-20),
                                                                                         today.AddDays(5)), otherPerson);
                 result.Count().Should().Be.EqualTo(2);
@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
             }
             using (mocks.Playback())
             {
-                var result = principalAuthorization.PermittedPeriods(applicationFunction,
+                var result = principalAuthorization.PermittedPeriods(applicationFunction.FunctionPath,
                                                                      new DateOnlyPeriod(today.AddDays(-20),
                                                                                         today.AddDays(-12)), otherPerson);
                 result.Count().Should().Be.EqualTo(1);
@@ -197,7 +197,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
 			}
 			using (mocks.Playback())
 			{
-				var result = principalAuthorization.PermittedPeriods(applicationFunction,
+				var result = principalAuthorization.PermittedPeriods(applicationFunction.FunctionPath,
 																	 new DateOnlyPeriod(today.AddDays(-15),
 																						today.AddDays(2)), otherPerson);
 				result.Count().Should().Be.EqualTo(2);
@@ -228,7 +228,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
 			}
 			using (mocks.Playback())
 			{
-				var result = principalAuthorization.PermittedPeriods(applicationFunction,
+				var result = principalAuthorization.PermittedPeriods(applicationFunction.FunctionPath,
 																	 new DateOnlyPeriod(today,
 																						today.AddDays(2)), otherPerson);
 				result.Count().Should().Be.EqualTo(1);

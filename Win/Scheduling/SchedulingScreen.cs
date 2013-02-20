@@ -2456,7 +2456,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         private void _backgroundWorkerResourceCalculator_DoWork(object sender, DoWorkEventArgs e)
         {
             setThreadCulture();
-            _optimizationHelperWin.ResourceCalculateMarkedDays(e, _backgroundWorkerResourceCalculator, true, true);
+            _optimizationHelperWin.ResourceCalculateMarkedDays(e, _backgroundWorkerResourceCalculator, SchedulerState.ConsiderShortBreaks, true);
         }
 
         private void validateAllPersons()
@@ -4033,6 +4033,9 @@ namespace Teleopti.Ccc.Win.Scheduling
                 }
 
 				var period = new ScheduleDateTimePeriod(SchedulerState.RequestedPeriod.Period(), SchedulerState.SchedulingResultState.PersonsInOrganization);
+				ISchedulingOptions options = new SchedulingOptions();
+				OptimizerHelperHelper.SetConsiderShortBreaks(SchedulerState.SchedulingResultState.PersonsInOrganization, SchedulerState.RequestedPeriod.DateOnlyPeriod, options, _container);
+	            SchedulerState.ConsiderShortBreaks = options.ConsiderShortBreaks;
                 initMessageBroker(period.LoadedPeriod());
             }
 
@@ -5433,17 +5436,20 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Week))
 			{
-				_skillWeekGridControl.SetDataSource(_schedulerState, skill);	
+				_skillWeekGridControl.SetDataSource(_schedulerState, skill);
+				_skillWeekGridControl.Refresh();
 			}
 
 			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Month))
 			{
 				_skillMonthGridControl.SetDataSource(_schedulerState, skill);
+				_skillMonthGridControl.Refresh();
 			}
 
 			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Period))
 			{
 				_skillFullPeriodGridControl.SetDataSource(_schedulerState, skill);
+				_skillFullPeriodGridControl.Refresh();
 			}
 
 			if(_skillResultViewSetting.Equals(SkillResultViewSetting.Intraday))
@@ -5451,10 +5457,16 @@ namespace Teleopti.Ccc.Win.Scheduling
 				var skillStaffPeriods = SchedulerState.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodList(
 					aggregateSkillSkill, TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(_currentIntraDayDate,_currentIntraDayDate.AddDays(1),_schedulerState.TimeZoneInfo));
 				if (_skillIntradayGridControl.Presenter.RowManager != null)
+				{
 					_skillIntradayGridControl.Presenter.RowManager.SetDataSource(skillStaffPeriods);
+					_skillFullPeriodGridControl.Refresh();
+				}
 			}
-			if(_skillResultViewSetting.Equals(SkillResultViewSetting.Day))
-				_skillDayGridControl.SetDataSource(_schedulerState, skill);	
+			if (_skillResultViewSetting.Equals(SkillResultViewSetting.Day))
+			{
+				_skillDayGridControl.SetDataSource(_schedulerState, skill);
+				_skillDayGridControl.Refresh();
+			}
 		}
 
         private void drawIntraday(ISkill skill, IAggregateSkill aggregateSkillSkill)
@@ -6705,6 +6717,8 @@ namespace Teleopti.Ccc.Win.Scheduling
             ((ToolStripMenuItem) _contextMenuSkillGrid.Items["UseShrinkage"]).Checked = useShrinkage;
             toolStripButtonShrinkage.Checked = useShrinkage;
             Cursor = Cursors.Default;
+
+			refreshSummarySkillIfActive();
         }
 
         private void toolStripMenuItemFilter_Click(object sender, EventArgs e)
