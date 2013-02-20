@@ -60,14 +60,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             return retList;
         }
 
-        public ICollection<IMeeting> Find(IEnumerable<Guid> persons, DateOnlyPeriod period, IScenario scenario, bool includeForOrganizer)
+        public ICollection<IMeeting> Find(IEnumerable<IPerson> persons, DateOnlyPeriod period, IScenario scenario, bool includeForOrganizer)
         {
-        	return findMeetings(persons.Select(p =>
-        	                                   	{
-													var person = new Person();
-													person.SetId(p);
-        	                                   		return person;
-        	                                   	}), period, scenario, includeForOrganizer);
+        	return findMeetings(persons, period, scenario, includeForOrganizer);
         }
 
     	private ICollection<IMeeting> findMeetings(IEnumerable<IPerson> persons, DateOnlyPeriod period, IScenario scenario, bool includeForOrganizer)

@@ -133,7 +133,9 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
 						}
 
                     	new ScenarioRepository(unitOfWork).LoadAll();
-						var meetings = meetingRepository.Find(persons, period, _model.CurrentScenario, _model.IncludeForOrganizer);
+
+                    	var loadedPeople = personRepository.FindPeople(persons);
+						var meetings = meetingRepository.Find(loadedPeople, period, _model.CurrentScenario, _model.IncludeForOrganizer);
                     	meetings = meetings.OrderBy(m => m.StartDate).ThenBy(m => m.StartTime).ToList();
                     	IEnumerable<ISimpleAppointment> tempAppointments = _appointmentFromMeetingCreator.GetAppointments(meetings,
                     	                                                                      period.StartDate.AddDays(-1),
@@ -190,7 +192,8 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
                 using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
                 {
                     var meetingRepository = _repositoryFactory.CreateMeetingRepository(unitOfWork);
-                    var meetings = meetingRepository.Find(_model.FilteredPersonsId, period, _model.CurrentScenario, _model.IncludeForOrganizer);
+                	var people = _repositoryFactory.CreatePersonRepository(unitOfWork).FindPeople(_model.FilteredPersonsId);
+                    var meetings = meetingRepository.Find(people, period, _model.CurrentScenario, _model.IncludeForOrganizer);
                     var tempAppointments = _appointmentFromMeetingCreator.GetAppointments(meetings, period.StartDate, period.EndDate);
                     return _scheduleAppointmentFromMeetingCreator.GetAppointmentList(tempAppointments, LabelList);
                 }
