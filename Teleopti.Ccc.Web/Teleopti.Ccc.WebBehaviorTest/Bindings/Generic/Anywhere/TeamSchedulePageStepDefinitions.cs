@@ -1,9 +1,12 @@
 using NUnit.Framework;
 using TechTalk.SpecFlow;
+using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using WatiN.Core;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
+using Table = TechTalk.SpecFlow.Table;
+using TableRow = TechTalk.SpecFlow.TableRow;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 {
@@ -29,5 +32,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			EventualAssert.That(() => Browser.Current.Element(Find.BySelector(string.Format(".agent:contains('{0}') .shift li", personName))).Exists, Is.False);
 		}
 
+		[Then(@"I should be able to select teams")]
+		public void ThenIShouldBeAbleToSelectTeams(Table table)
+		{
+			foreach (var row in table.Rows)
+			{
+				EventualAssert.That(() => Browser.Current.Element(Find.BySelector(string.Format(".team-selector:contains('{0}'", row["Team"]))).Exists, Is.True);
+			}
+		}
 	}
 }
