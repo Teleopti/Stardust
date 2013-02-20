@@ -19963,7 +19963,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select workload.
+        ///   Looks up a localized string similar to Workloads.
         /// </summary>
         public static string SelectWorkload {
             get {
@@ -21305,11 +21305,11 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Smoothing style.
+        ///   Looks up a localized string similar to Smoothing style:.
         /// </summary>
-        public static string SmoothingStyle {
+        public static string SmoothingStyleColon {
             get {
-                return ResourceManager.GetString("SmoothingStyle", resourceCulture);
+                return ResourceManager.GetString("SmoothingStyleColon", resourceCulture);
             }
         }
         
