@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 		public string Subject { get; set; }
 		public DateTime? DateTo { get; set; }
 		public DateTime? DateFrom { get; set; }
+		public bool Pending { get; set; }
 
 		public void Apply(IPerson user, IUnitOfWork uow)
 		{
@@ -27,10 +28,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 
 			var shiftTradeSwapDetail = new ShiftTradeSwapDetail(sender, reciever, new DateOnly(dateTimefrom), new DateOnly(dateTimeTo));
 			var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail> { shiftTradeSwapDetail });
+			
 			PersonRequest = new PersonRequest(reciever)
 			{
 				Subject = Subject == string.Empty ? "Swap shift with " + sender.Name : Subject
 			};
+			if(Pending)PersonRequest.Pending();
 			PersonRequest.Request = shiftTradeRequest;
 			PersonRequest.TrySetMessage("This is a short text for the description of a shift trade request");
 
