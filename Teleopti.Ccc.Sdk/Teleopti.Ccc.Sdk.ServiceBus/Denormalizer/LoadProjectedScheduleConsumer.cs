@@ -1,3 +1,4 @@
+using System.Linq;
 using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
@@ -74,7 +75,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 			if (!scenario.DefaultScenario) return false;
 
 			var period = new DateTimePeriod(message.StartDateTime, message.EndDateTime);
-			var person = _personRepository.Load(message.PersonId);
+			var person = _personRepository.FindPeople(new []{ message.PersonId}).FirstOrDefault();
+			if (person == null) return false;
 
 			var timeZone = person.PermissionInformation.DefaultTimeZone();
 			var dateOnlyPeriod = period.ToDateOnlyPeriod(timeZone);
