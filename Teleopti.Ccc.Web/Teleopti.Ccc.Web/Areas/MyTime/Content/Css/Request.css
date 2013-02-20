@@ -232,3 +232,25 @@
 {
 	margin-top: 10px;
 }
+.shift-trade-agent-name {
+	position: absolute;
+	overflow: hidden;
+	white-space: nowrap;
+	width: 150px;
+	height: 19px;
+	background-color: #f8f8f8;
+	float: left; 
+	text-overflow: ellipsis;		
+}
+.rtl .shift-trade-agent-name {
+	right: auto;
+	left: 0;
+}
+.shift-trade-agent-name-hover
+{
+	padding-right: 10px;
+	box-shadow: 7px 0px 10px -1px rgba(0, 0, 0, 0.35);
+	border-right: 1px solid rgba(0, 0, 0, 0.20);
+	width: auto;
+	z-index: 11;
+}
