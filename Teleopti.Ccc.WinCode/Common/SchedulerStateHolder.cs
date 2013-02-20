@@ -34,7 +34,8 @@ namespace Teleopti.Ccc.WinCode.Common
         private DefaultSegment _defaultSegment = new DefaultSegment();
         private readonly CommonStateHolder _commonStateHolder = new CommonStateHolder();
         private IDictionary<Guid, IPerson> _filteredPersons;
-        private const int _NUMBER_OF_PERSONREQUEST_DAYS = -14;
+	    private bool _considerShortBreaks = true;
+	    private const int _NUMBER_OF_PERSONREQUEST_DAYS = -14;
 
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
@@ -57,6 +58,8 @@ namespace Teleopti.Ccc.WinCode.Common
             _allPermittedPersons = new List<IPerson>();
         }
 
+
+
         public void SetRequestedScenario(IScenario scenario)
         {
             _requestedScenario = scenario;
@@ -67,7 +70,13 @@ namespace Teleopti.Ccc.WinCode.Common
             get { return _allPermittedPersons; }
         }
 
-        public ISchedulingResultStateHolder SchedulingResultState
+	    public bool ConsiderShortBreaks
+	    {
+		    get { return _considerShortBreaks; }
+		    set { _considerShortBreaks = value; }
+	    }
+
+	    public ISchedulingResultStateHolder SchedulingResultState
         {
             get { return _schedulingResultState; }
         }
