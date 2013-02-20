@@ -857,7 +857,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
                     splitPart.Clear<IPersonAbsence>();
                     splitPart.Add(personAbsenceSplitPart);
-                    foreach (IPersonAbsence personAbsenceCloneDay in cloneSplitPart.PersonAbsenceCollection())
+                    foreach (IPersonAbsence personAbsenceCloneDay in cloneSplitPart.PersonAbsenceCollection(true))
                     {
                         if (personAbsenceCloneDay.Layer.Payload.Id != personAbsenceSplitPart.Layer.Payload.Id)
                             splitPart.Add(personAbsenceCloneDay);
