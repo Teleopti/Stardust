@@ -1,6 +1,9 @@
+using System.Linq;
 using NUnit.Framework;
+using SharpTestsEx;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using WatiN.Core;
@@ -35,10 +38,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[Then(@"I should be able to select teams")]
 		public void ThenIShouldBeAbleToSelectTeams(Table table)
 		{
-			foreach (var row in table.Rows)
-			{
-				EventualAssert.That(() => Browser.Current.Element(Find.BySelector(string.Format(".team-selector:contains('{0}'", row["Team"]))).Exists, Is.True);
-			}
+			var teams = table.CreateSet<TeamInfo>();
+			teams.ForEach(t => EventualAssert.That(() => Browser.Current.Element(Find.BySelector(string.Format(".team-selector:contains('{0}'", t.Team))).Exists, Is.True));
+		}
+		
+		public class TeamInfo
+		{
+			public string Team { get; set; }
 		}
 	}
 }
