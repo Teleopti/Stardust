@@ -1043,19 +1043,19 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         #region Advance Block Scheduling
 
-        private static IWorkShiftSelector InitializeWorkShiftRelatedClasses()
-        {
-            IWorkShiftPeriodValueCalculator workShiftPeriodValueCalculator = new WorkShiftPeriodValueCalculator();
-            IWorkShiftLengthValueCalculator workShiftLengthValueCalculator = new WorkShiftLengthValueCalculator();
-            IWorkShiftValueCalculator workShiftValueCalculator =
-                new WorkShiftValueCalculator(workShiftPeriodValueCalculator, workShiftLengthValueCalculator);
-            IEqualWorkShiftValueDecider equalWorkShiftValueDecider = new EqualWorkShiftValueDecider();
-            IWorkShiftSelector workShiftSelector = new WorkShiftSelector(workShiftValueCalculator,
-                                                                         equalWorkShiftValueDecider);
-            return workShiftSelector;
-        }
+		//private static IWorkShiftSelector InitializeWorkShiftRelatedClasses()
+		//{
+		//    IWorkShiftPeriodValueCalculator workShiftPeriodValueCalculator = new WorkShiftPeriodValueCalculator();
+		//    IWorkShiftLengthValueCalculator workShiftLengthValueCalculator = new WorkShiftLengthValueCalculator();
+		//    IWorkShiftValueCalculator workShiftValueCalculator =
+		//        new WorkShiftValueCalculator(workShiftPeriodValueCalculator, workShiftLengthValueCalculator);
+		//    IEqualWorkShiftValueDecider equalWorkShiftValueDecider = new EqualWorkShiftValueDecider();
+		//    IWorkShiftSelector workShiftSelector = new WorkShiftSelector(workShiftValueCalculator,
+		//                                                                 equalWorkShiftValueDecider);
+		//    return workShiftSelector;
+		//}
 
-		private AdvanceSchedulingService CallAdvanceSchedulingService(ISchedulingOptions schedulingOptions,
+		private AdvanceSchedulingService callAdvanceSchedulingService(ISchedulingOptions schedulingOptions,
                                                                       IList<IScheduleMatrixPro> selectedPersonMatrixList,
 			IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization)
         {
@@ -1067,7 +1067,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                          new ScheduleTagSetter(
                                                              schedulingOptions.TagToUseOnScheduling));
             var teamScheduling = new TeamScheduling(resourceCalculateDelayer, schedulePartModifyAndRollbackService);
-            var workShiftSelector = InitializeWorkShiftRelatedClasses();
+            //var workShiftSelector = InitializeWorkShiftRelatedClasses();
             IGroupPersonBuilderBasedOnContractTime groupPersonBuilderBasedOnContractTime =
                 new GroupPersonBuilderBasedOnContractTime(_container.Resolve<IGroupPersonFactory>());
             var advanceSchedulingService = new AdvanceSchedulingService(_container.Resolve<ISkillDayPeriodIntervalDataGenerator>(),
@@ -1075,7 +1075,8 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                                         _container.Resolve<IRestrictionAggregator>(),
                                                                         _container.Resolve<IWorkShiftFilterService>(),
                                                                         teamScheduling,
-                                                                        schedulingOptions, workShiftSelector,
+                                                                        schedulingOptions, 
+																		_container.Resolve<IWorkShiftSelector>(),
                                                                         groupPersonBuilderBasedOnContractTime, groupPersonBuilderForOptimization);
             return advanceSchedulingService;
         }
@@ -1133,7 +1134,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
                 var teamSteadyStateHolder = InitiateTeamSteadyStateHolder(selectedPersonAllMatrixList, schedulingOptions, scheduleDays);
 
-                var advanceSchedulingService = CallAdvanceSchedulingService(schedulingOptions,selectedPersonMatrixList, groupPersonBuilderForOptimization);
+                var advanceSchedulingService = callAdvanceSchedulingService(schedulingOptions,selectedPersonMatrixList, groupPersonBuilderForOptimization);
                 IDictionary<string, IWorkShiftFinderResult> schedulingResults = new Dictionary<string, IWorkShiftFinderResult>();
                 advanceSchedulingService.DayScheduled += schedulingServiceDayScheduled;
 

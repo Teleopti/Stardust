@@ -7,7 +7,6 @@ namespace Teleopti.Ccc.Domain.Optimization
         bool MainShiftEquals(IScheduleDay original, IScheduleDay current);
 		bool MainShiftEquals(IMainShift original, IMainShift current);
         bool DayOffEquals(IScheduleDay original, IScheduleDay current);
-	    bool AreMainShiftEqual(IMainShift original, IMainShift current);
     }
 
     public class ScheduleDayEquator : IScheduleDayEquator

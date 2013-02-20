@@ -202,6 +202,15 @@ namespace Teleopti.Ccc.Win.Scheduling
 			builder.RegisterType<TeamDayOffScheduler>().As<ITeamDayOffScheduler>().InstancePerDependency();
         	builder.RegisterType<DaysOffSchedulingService>().As<IDaysOffSchedulingService>().InstancePerDependency();
 			builder.RegisterType<GroupPersonSkillAggregator>().As<IGroupPersonSkillAggregator>().InstancePerDependency();
+	        builder.RegisterType<WorkShiftPeriodValueCalculator>()
+	               .As<IWorkShiftPeriodValueCalculator>()
+	               .InstancePerDependency();
+	        builder.RegisterType<WorkShiftLengthValueCalculator>()
+	               .As<IWorkShiftLengthValueCalculator>()
+	               .InstancePerDependency();
+	        builder.RegisterType<WorkShiftValueCalculator>().As<IWorkShiftValueCalculator>().InstancePerDependency();
+	        builder.RegisterType<EqualWorkShiftValueDecider>().As<IEqualWorkShiftValueDecider>().InstancePerDependency();
+	        builder.RegisterType<WorkShiftSelector>().As<IWorkShiftSelector>().InstancePerDependency();
         }
 
     }
