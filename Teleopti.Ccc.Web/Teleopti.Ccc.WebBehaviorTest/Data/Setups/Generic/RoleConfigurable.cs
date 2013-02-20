@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -64,8 +65,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			if (!string.IsNullOrEmpty(AccessToTeam))
 			{
 				var teamRepository = new TeamRepository(uow);
-				var team = teamRepository.FindTeamByDescriptionName(AccessToTeam).Single();
-				role.AvailableData.AddAvailableTeam(team);
+				AccessToTeam.Split(',')
+					.Select(t => teamRepository.FindTeamByDescriptionName(t.Trim()).Single())
+					.ForEach(role.AvailableData.AddAvailableTeam);
 			}
 
 			var businessUnitRepository = new BusinessUnitRepository(uow);

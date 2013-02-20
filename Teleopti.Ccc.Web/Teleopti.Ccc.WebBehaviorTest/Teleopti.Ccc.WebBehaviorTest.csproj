@@ -86,20 +86,20 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AbsenceRequestFromSchedule.feature</DependentUpon>
     </Compile>
-    <Compile Include="Anywhere\AgentSchedule.feature.cs">
-      <DependentUpon>AgentSchedule.feature</DependentUpon>
+    <Compile Include="Anywhere\AddFullDayAbsence.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
+      <DependentUpon>AddFullDayAbsence.feature</DependentUpon>
     </Compile>
-    <Compile Include="Anywhere\Absence.feature.cs">
-      <DependentUpon>Absence.feature</DependentUpon>
+    <Compile Include="Anywhere\ViewAgentSchedule.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
+      <DependentUpon>ViewAgentSchedule.feature</DependentUpon>
     </Compile>
-    <Compile Include="Anywhere\Schedule.feature.cs">
+    <Compile Include="Anywhere\ViewTeamSchedule.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Schedule.feature</DependentUpon>
+      <DependentUpon>ViewTeamSchedule.feature</DependentUpon>
     </Compile>
     <Compile Include="AsmSummerToWinter.feature.cs">
       <AutoGen>True</AutoGen>
@@ -114,12 +114,15 @@
     <Compile Include="Bindings\Generic\AbsenceStepDefinitions.cs" />
     <Compile Include="AsmStepDefinition.cs" />
     <Compile Include="Bindings\Generic\ActivityStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\Anywhere\AgentSchedulePageStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\UIStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\ContractStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Anywhere\TeamSchedulePageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\TeamStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\ShiftTradeRequestFromRequestStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PasswordPolicyStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Start\SignInPageStepDefinitions.cs" />
+    <Compile Include="Bindings\StringContainsAnyLanguageResourceConstraint.cs" />
     <Compile Include="Data\Setups\Generic\PersonAbsenceConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\PersonDayOffConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\ReadModelShiftConfigurable.cs" />
@@ -325,7 +328,7 @@
     <Compile Include="Data\Setups\Specific\ExistingExtendedPreferenceToday.cs" />
     <Compile Include="Data\Setups\Specific\ExistingPreference.cs" />
     <Compile Include="Data\Setups\Specific\RuleSetBag.cs" />
-    <Compile Include="Bindings\SharedSignInStepDefinitions.cs" />
+    <Compile Include="Bindings\Specific\SharedSignInStepDefinitions.cs" />
     <Compile Include="Data\Setups\Specific\BaseShiftCategory.cs" />
     <Compile Include="Data\Setups\Specific\UserWithoutResReportScheduledAndActualAgentsAccess.cs" />
     <Compile Include="Data\Setups\Specific\AbsenceToday.cs" />
@@ -541,17 +544,17 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="Anywhere\AgentSchedule.feature">
+    <None Include="Anywhere\ViewAgentSchedule.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>AgentSchedule.feature.cs</LastGenOutput>
+      <LastGenOutput>ViewAgentSchedule.feature.cs</LastGenOutput>
     </None>
-    <None Include="Anywhere\Absence.feature">
+    <None Include="Anywhere\AddFullDayAbsence.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Absence.feature.cs</LastGenOutput>
+      <LastGenOutput>AddFullDayAbsence.feature.cs</LastGenOutput>
     </None>
-    <None Include="Anywhere\Schedule.feature">
+    <None Include="Anywhere\ViewTeamSchedule.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Schedule.feature.cs</LastGenOutput>
+      <LastGenOutput>ViewTeamSchedule.feature.cs</LastGenOutput>
     </None>
     <None Include="StudentAvailabilityMultidays.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

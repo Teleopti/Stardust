@@ -1,9 +1,9 @@
 ﻿@Ignore 
-Feature: Report absence on agents
+Feature: Add full day absence
 	In order to keep track of agents absences
 	As a team leader
 	I want to add absence for an agent
-
+	
 Background:
 	Given there is a team with
 	| Field | Value            |
@@ -14,9 +14,6 @@ Background:
 	| Access to team             | Team green          |
 	| Access to Anywhere         | true                |
 	| View unpublished schedules | true                |
-	And 'Pierre Baldi' is a user with
-	| Field         | Value        |
-	| Terminal date | 2012-12-31   |
 	And 'Pierre Baldi' has a person period with
 	| Field      | Value      |
 	| Team       | Team green |
@@ -29,14 +26,18 @@ Background:
 	| Field | Value |
 	| Name  | Phone |
 	| Color | Green |
-
-Scenario: View full day absence form
+	And there is an absence with
+	| Field | Value    |
+	| Name  | Vacation |
+	| Color | Red      |
+	
+Scenario: View form
 	Given I have the role 'Anywhere Team Green'
 	When I view agent schedule for 'Pierre Baldi' on '2012-12-02'
-	And I click add full day absence
+	And I click 'add full day absence'
 	Then I should see the add full day absence form
 	
-Scenario: Add full day absence
+Scenario: Add
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' have a (read model) shift with
 	| Field            | Value        |
@@ -45,33 +46,31 @@ Scenario: Add full day absence
 	| Start time       | 08:00        |
 	| End time         | 17:00        |
 	| Activity         | Phone        |
-	When I view agent schedule for 'Pierre Baldi' on '2012-12-02'
-	And I click add full day absence
+	When I view agent schedules add full day absence form for 'Pierre Baldi' on '2012-12-02'
 	And I input these full day absence values
 	| Field    | Value      |
 	| Absence  | Vacation   |
 	| End date | 2012-12-02 |
-	And I click apply
+	And I click 'apply'
 	Then I should see a shift layer with
 	| Field      | Value |
 	| Start time | 08:00 |
 	| End time   | 17:00 |
+	| Color      | Red   |
 
-Scenario: Default full day absence values
+Scenario: Default values
 	Given I have the role 'Anywhere Team Green'
-	When I view agent schedule for 'Pierre Baldi' on '2012-12-02'
-	And I click add full day absence
+	When I view agent schedules add full day absence form for 'Pierre Baldi' on '2012-12-02'
 	Then I should see the add full day absence form with
 	| Field      | Value      |
 	| Start date | 2012-12-02 |
 	| End date   | 2012-12-02 |
 	
-Scenario: Adding invalid absence values
+Scenario: Invalid values
 	Given I have the role 'Anywhere Team Green'
-	When I view agent schedule for 'Pierre Baldi' on '2012-12-02'
-	And I click add full day absence
+	When I view agent schedules add full day absence form for 'Pierre Baldi' on '2012-12-02'
 	And I input these full day absence values
 	| Field    | Value      |
 	| End date | 2012-12-01 |
-	And I click apply
-	Then I should see a message saying 'Invalid end date'
+	And I click 'apply'
+	Then I should see the message 'Invalid end date'
