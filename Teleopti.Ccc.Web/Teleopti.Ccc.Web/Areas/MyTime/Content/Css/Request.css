@@ -156,12 +156,14 @@
 }
 .shift-trade-my-schedule
 {
-	position: relative;
+	position: absolute;
+	left: 150px;
 	display: inline;
 }
 .shift-trade-possible-trade-schedule
 {
-	position: relative;
+	position: absolute;
+	left: 150px;
 	display: inline;
 }
 .shift-trade-timeline 
@@ -200,9 +202,10 @@
 }
 .shift-trade-add-datepicker
 {
-	position:relative;
+	position:absolute;
 	width: 100px;
 	text-align: center;
+	left: 30px;
 }
 .shift-trade-add-previous-date 
 {
@@ -218,6 +221,7 @@
 	height: 20px;
 	width: 22px !important;
 	vertical-align: middle;
+	left: 102px;
 }
 .shift-trade-dayoff-name 
 {

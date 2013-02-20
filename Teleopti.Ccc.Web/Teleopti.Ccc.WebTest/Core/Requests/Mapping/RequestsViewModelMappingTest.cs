@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.Services;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
@@ -23,6 +24,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		private IUserTimeZone _userTimeZone;
 		private ILinkProvider _linkProvider;
 		private ILoggedOnUser _loggedOnUser;
+		private IShiftTradeRequestStatusChecker _shiftTradeRequestStatusChecker;
 		private IPerson _loggedOnPerson;
 
 		[SetUp]
@@ -34,12 +36,14 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			_loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			_loggedOnPerson = PersonFactory.CreatePerson("LoggedOn", "Agent");
 			_loggedOnUser.Expect(l => l.CurrentUser()).Return(_loggedOnPerson).Repeat.Any();
+			_shiftTradeRequestStatusChecker = MockRepository.GenerateMock<IShiftTradeRequestStatusChecker>();
 
 			Mapper.Reset();
 			Mapper.Initialize(c => c.AddProfile(new RequestsViewModelMappingProfile(
 				() => _userTimeZone, 
 				() => _linkProvider,
-				() => _loggedOnUser
+				() => _loggedOnUser,
+				_shiftTradeRequestStatusChecker
 				)));
 		}
 
@@ -334,6 +338,51 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 
 			result.From.Should().Be.Empty();
 			result.To.Should().Be.Empty();
+		}
+
+		[Test]
+		public void ShouldMapShiftTradeStatusOkByMe()
+		{
+			var str = MockRepository.GenerateMock<IShiftTradeRequest>();
+			str.Expect(c => c.GetShiftTradeStatus(_shiftTradeRequestStatusChecker)).Return(ShiftTradeStatus.OkByMe);
+			var personRequest = new PersonRequest(new Person(), str);
+
+			var result = Mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
+			result.Status.Should().Contain(Resources.WaitingForOtherPart);
+		}
+
+		[Test]
+		public void ShouldMapShiftTradeStatusOkByBothParts()
+		{
+			var str = MockRepository.GenerateMock<IShiftTradeRequest>();
+			str.Expect(c => c.GetShiftTradeStatus(_shiftTradeRequestStatusChecker)).Return(ShiftTradeStatus.OkByBothParts);
+			var personRequest = new PersonRequest(new Person(), str);
+
+			var result = Mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
+			result.Status.Should().Contain(Resources.WaitingForSupervisorApproval);
+		}
+
+		[Test]
+		public void ShouldMapShiftTradeStatusReferred()
+		{
+			var str = MockRepository.GenerateMock<IShiftTradeRequest>();
+			str.Expect(c => c.GetShiftTradeStatus(_shiftTradeRequestStatusChecker)).Return(ShiftTradeStatus.Referred);
+			var personRequest = new PersonRequest(new Person(), str);
+
+			var result = Mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
+			result.Status.Should().Contain(Resources.TheScheduleHasChanged);
+		}
+
+		[Test]
+		public void ShouldThrowShiftTradeStatusNotValid()
+		{
+			//AFAIK - this status is not in used. Cannot be deleted due to SDK thingys (?).
+			var str = MockRepository.GenerateMock<IShiftTradeRequest>();
+			str.Expect(c => c.GetShiftTradeStatus(_shiftTradeRequestStatusChecker)).Return(ShiftTradeStatus.NotValid);
+			var personRequest = new PersonRequest(new Person(), str);
+
+			Assert.Throws<AutoMapperMappingException>(() =>
+					Mapper.Map<IPersonRequest, RequestViewModel>(personRequest));
 		}
 	}
 }
