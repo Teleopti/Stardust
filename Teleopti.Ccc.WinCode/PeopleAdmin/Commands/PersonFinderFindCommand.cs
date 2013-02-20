@@ -25,10 +25,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Commands
 
         public bool CanExecute()
         {
-            if (_model == null || _model.SearchCriteria.SearchValue.Length == 0)
-                return false;
-
-            return true;
+        	return _model != null && _model.SearchCriteria.SearchValue.Length != 0;
         }
     }
 }
