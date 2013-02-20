@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -182,7 +181,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			if (!_scheduleService.SchedulePersonOnDay(scheduleDay.DaySchedulePart(), schedulingOptions, effectiveRestriction, resourceCalculateDelayer, null, _rollbackService))
             {
-				var days = _rollbackService.ModificationCollection.ToList();
+				var days = _rollbackService.ModificationCollection;
                 _rollbackService.Rollback();
 				foreach (var schedDay in days)
 				{
