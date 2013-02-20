@@ -1,9 +1,8 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DomainTest.GroupPageCreator
+namespace Teleopti.Ccc.Domain.GroupPageCreator
 {
     public class SingleAgentTeamGroupPage : IGroupPageCreator<IPerson>
     {
