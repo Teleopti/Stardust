@@ -10,6 +10,15 @@ namespace Teleopti.Ccc.WinCode.Common
 {
     public interface ISchedulerStateHolder
     {
+		/// <summary>
+		/// Gets or sets a value indicating whether [consider short breaks].
+		/// Used when no scheduling options exists
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if [consider short breaks]; otherwise, <c>false</c>.
+		/// </value>
+		bool ConsiderShortBreaks { get; set; }
+
         /// <summary>
         /// Gets or sets the state of the scheduling result.
         /// </summary>
