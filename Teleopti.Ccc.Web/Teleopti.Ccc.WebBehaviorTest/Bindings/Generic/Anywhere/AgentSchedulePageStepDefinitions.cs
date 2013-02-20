@@ -59,6 +59,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			EventualAssert.That(() => DateTime.Parse(Browser.Current.Element(Find.BySelector(".full-day-absence .end-date")).GetAttributeValue("value")), Is.EqualTo(fullDayAbsenceFormInfo.EndDate));
 		}
 
+		[Then(@"I should see the add full day absence form")]
+		public void ThenIShouldSeeTheAddFullDayAbsenceForm()
+		{
+			EventualAssert.That(() => Browser.Current.Element(Find.BySelector(".full-day-absence")).Exists, Is.True);
+		}
+
 		[When(@"I input these full day absence values")]
 		public void WhenIInputTheseFullDayAbsenceValues(Table table)
 		{
