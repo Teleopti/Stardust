@@ -86,20 +86,35 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AbsenceRequestFromSchedule.feature</DependentUpon>
     </Compile>
-    <Compile Include="Anywhere\AgentSchedule.feature.cs">
-      <DependentUpon>AgentSchedule.feature</DependentUpon>
+    <Compile Include="Anywhere\AddFullDayAbsence1.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AddFullDayAbsence.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Anywhere\ViewTeamSchedule1.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ViewTeamSchedule.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Anywhere\ViewAgentSchedule1.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ViewAgentSchedule.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Anywhere\ViewAgentSchedule.feature.cs">
+      <DependentUpon>ViewAgentSchedule.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Anywhere\Absence.feature.cs">
-      <DependentUpon>Absence.feature</DependentUpon>
+    <Compile Include="Anywhere\AddFullDayAbsence.feature.cs">
+      <DependentUpon>AddFullDayAbsence.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Anywhere\Schedule.feature.cs">
+    <Compile Include="Anywhere\ViewTeamSchedule.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Schedule.feature</DependentUpon>
+      <DependentUpon>ViewTeamSchedule.feature</DependentUpon>
     </Compile>
     <Compile Include="AsmSummerToWinter.feature.cs">
       <AutoGen>True</AutoGen>
@@ -544,17 +559,17 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="Anywhere\AgentSchedule.feature">
+    <None Include="Anywhere\ViewAgentSchedule.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>AgentSchedule.feature.cs</LastGenOutput>
+      <LastGenOutput>ViewAgentSchedule1.feature.cs</LastGenOutput>
     </None>
-    <None Include="Anywhere\Absence.feature">
+    <None Include="Anywhere\AddFullDayAbsence.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Absence.feature.cs</LastGenOutput>
+      <LastGenOutput>AddFullDayAbsence1.feature.cs</LastGenOutput>
     </None>
-    <None Include="Anywhere\Schedule.feature">
+    <None Include="Anywhere\ViewTeamSchedule.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Schedule.feature.cs</LastGenOutput>
+      <LastGenOutput>ViewTeamSchedule1.feature.cs</LastGenOutput>
     </None>
     <None Include="StudentAvailabilityMultidays.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
