@@ -74,9 +74,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 						foreach (var scheduleDayPro in matrixData.Matrix.UnlockedDays)
 						{
 							var scheduleDate = scheduleDayPro.Day;
-							var groupPerson = schedulingOptions.GroupOnGroupPageForLevelingPer.Key.Equals("SingleAgentTeam")
-								                           ? groupPersonBuilderForOptimization.BuildSingleGroupPerson(person, scheduleDate)
-								                           : groupPersonBuilderForOptimization.BuildGroupPerson(person, scheduleDate);
+							var groupPerson = groupPersonBuilderForOptimization.BuildGroupPerson(person, scheduleDate);
 							var scheduleDictionary = _schedulingResultStateHolder.Schedules;
 							var restriction = _effectiveRestrictionCreator.GetEffectiveRestriction(groupPerson.GroupMembers,
 																								   scheduleDate, schedulingOptions,
@@ -86,9 +84,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 						foreach (var scheduleDayPro in matrixData.Matrix.UnlockedDays)
 						{
 							var scheduleDate = scheduleDayPro.Day;
-							var groupPerson = schedulingOptions.GroupOnGroupPageForLevelingPer.Key.Equals("SingleAgentTeam")
-														   ? groupPersonBuilderForOptimization.BuildSingleGroupPerson(person, scheduleDate)
-														   : groupPersonBuilderForOptimization.BuildGroupPerson(person, scheduleDate);
+							var groupPerson =  groupPersonBuilderForOptimization.BuildGroupPerson(person, scheduleDate);
 							var scheduleDictionary = _schedulingResultStateHolder.Schedules;
 							var restriction = _effectiveRestrictionCreator.GetEffectiveRestriction(groupPerson.GroupMembers,
 																								   scheduleDate, schedulingOptions,

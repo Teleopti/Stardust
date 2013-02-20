@@ -1160,6 +1160,16 @@ namespace Teleopti.Ccc.Win.Scheduling
             DateOnlyPeriod selectedPeriod = OptimizerHelperHelper.GetSelectedPeriod(scheduleDays);
             var targetTimeCalculator = new SchedulePeriodTargetTimeCalculator();
             var groupPersonsBuilder = _container.Resolve<IGroupPersonsBuilder>();
+            //var groupPageDataProvider = _container.Resolve<IGroupScheduleGroupPageDataProvider>();
+            //IList<DateOnly> dates =
+            //        _schedulerStateHolder.LoadedPeriod.Value.ToDateOnlyPeriod(TeleoptiPrincipal.Current.Regional.TimeZone).
+            //            DayCollection();
+            //groupPersonsBuilder.GroupPagePerDateHolder.GroupPersonGroupPagePerDate   =
+            //    _container.Resolve<IGroupPageCreator>().CreateGroupPagePerDate(dates,
+            //                                                                   groupPageDataProvider,
+            //                                                                   schedulingOptions.GroupOnGroupPageForLevelingPer,
+            //                                                                   true);
+            
             var teamSteadyStateRunner = new TeamSteadyStateRunner(selectedPersonAllMatrixList, targetTimeCalculator);
             var teamSteadyStateCreator = new TeamSteadyStateDictionaryCreator(teamSteadyStateRunner, selectedPersonAllMatrixList,
                                                                               groupPersonsBuilder, schedulingOptions);
