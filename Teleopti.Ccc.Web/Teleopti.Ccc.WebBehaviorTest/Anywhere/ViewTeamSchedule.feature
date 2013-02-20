@@ -84,6 +84,23 @@ Scenario: View team selection
 
 @ignore
 Scenario: Change team
+	Given there is a team with
+	| Field | Value      |
+	| Name  | Team other |
+	And there is a role with
+	| Field                      | Value                         |
+	| Name                       | Anywhere Team Green And Other |
+	| Access to team             | Team green, Team other        |
+	| Access to Anywhere         | true                          |
+	| View unpublished schedules | true                          |
+	And I have the role 'Anywhere Team Green And Other'
+	And 'Max Persson' have a person period with
+	| Field      | Value      |
+	| Team       | Team other |
+	| Start date | 2012-12-01 |
+	When I view schedules for 'Team green' on '2012-12-02'
+	And I select team 'Team other'
+	Then I should see schedule for 'Max Persson'
 
 @ignore
 Scenario: Select date
