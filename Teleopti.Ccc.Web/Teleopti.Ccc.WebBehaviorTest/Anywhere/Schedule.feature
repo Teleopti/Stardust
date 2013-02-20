@@ -13,9 +13,6 @@ Background:
 	| Access to team             | Team green          |
 	| Access to Anywhere         | true                |
 	| View unpublished schedules | true                |
-	And 'Pierre Baldi' is a user with
-	| Field         | Value        |
-	| Terminal date | 2012-12-31   |
 	And 'Pierre Baldi' have a person period with
 	| Field      | Value      |
 	| Team       | Team green |
