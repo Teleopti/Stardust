@@ -75,6 +75,12 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => _page.FirstRequest.InnerHtml, Is.StringContaining(subject));
 		}
 
+		[Then(@"I should see my existing shift trade request with status OkByMe")]
+		public void ThenIShouldSeeMyExistingShiftTradeRequestWithStatus()
+		{
+			ThenIShouldSeeMyExistingShiftTradeRequestWithSubject(Resources.WaitingForOtherPart);
+		}
+
 
 		[Then(@"I should not see my existing shift trade request")]
 		public void ThenIShouldNotSeeMyExistingShiftTradeRequest()
