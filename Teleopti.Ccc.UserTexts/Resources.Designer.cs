@@ -20711,6 +20711,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show Info Messages.
+        /// </summary>
+        public static string ShowInfoMessages {
+            get {
+                return ResourceManager.GetString("ShowInfoMessages", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Labels.
         /// </summary>
         public static string ShowLabels {
