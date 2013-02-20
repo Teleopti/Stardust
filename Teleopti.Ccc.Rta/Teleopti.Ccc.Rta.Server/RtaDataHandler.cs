@@ -111,7 +111,6 @@ namespace Teleopti.Ccc.Rta.Server
 		public WaitHandle CheckSchedule(Guid personId, Guid businessUnitId, DateTime timestamp)
 		{
 			var waitHandle = new AutoResetEvent(false);
-			_agentHandler.CheckSchedule(personId, businessUnitId, timestamp, waitHandle);
 			
 			if (string.IsNullOrEmpty(_connectionStringDataStore))
 			{
@@ -138,9 +137,7 @@ namespace Teleopti.Ccc.Rta.Server
 		{
 			get { return _messageSender.IsAlive; }
 		}
-
-		#region IRTADataHandler Members
-
+		
 		// Probably a WaitHandle object isnt a best choice, but same applies to QueueUserWorkItem method.
 		// An alternative using Tasks should be looked at instead.
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"
@@ -207,6 +204,5 @@ namespace Teleopti.Ccc.Rta.Server
 			}
 			return waitHandle;
 		}
-		#endregion
 	}
 }

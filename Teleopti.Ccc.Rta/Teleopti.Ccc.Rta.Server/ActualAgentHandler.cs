@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Rta.Server
 				return CreateAndSaveState(scheduleLayers, null, personId, platformId, stateCode, timestamp, new TimeSpan(0),
 				                          businessUnitId, waitHandle);
 
-			if (scheduleLayers[0].PayloadId == previousState.ScheduledId)
+			if (scheduleLayers[0] != null && scheduleLayers[0].PayloadId == previousState.ScheduledId)
 				return null;
 
 			platformId = previousState.PlatformTypeId;
