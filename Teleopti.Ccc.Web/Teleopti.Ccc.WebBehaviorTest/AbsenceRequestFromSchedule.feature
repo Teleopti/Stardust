@@ -105,3 +105,18 @@ Scenario: Switch request type
 	And I click absence request tab
 	Then I should see my existing inputs for date '2013-10-03'
 	And I should see an absence type called Vacation in droplist
+
+Scenario: Add absence request from week schedule view with multiple absences
+	Given I have the role 'Full access to mytime'
+	And I have a requestable absence called Vacation
+	And I have a requestable absence called Time in lieu
+	And I have a requestable absence called Unpaid Holiday
+	And I view my week schedule for date '2013-10-03'
+	When I click on the day symbol area for date '2013-10-03'
+	And I click absence request tab
+	And I input absence request values with 'Time in lieu' for date '2013-10-03'
+	And I click the OK button
+	And I navigate to the requests page
+	Then I should see my existing absence request with absence 'Time in lieu'
+
+

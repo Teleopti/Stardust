@@ -11282,4 +11282,8 @@ These options are activated:
     <value>Templates historical data range</value>
     <comment>Quick forecast wizard page</comment>
   </data>
+  <data name="ShowInfoMessages" xml:space="preserve">
+    <value>Show Info Messages</value>
+    <comment>if to show these messages in jobhistory in forecast navigator</comment>
+  </data>
 </root>

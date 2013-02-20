@@ -29,10 +29,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 
        IList<IMeeting> FindMeetingsWithTheseOriginals(ICollection<IMeeting> meetings, IScenario scenario);
 
-    	ICollection<IMeeting> Find(IEnumerable<IPerson> persons, DateOnlyPeriod period, IScenario scenario,
-    	                           bool includeForOrganizer);
-
-        ICollection<IMeeting> Find(IEnumerable<Guid> persons, DateOnlyPeriod period, IScenario scenario,
+        ICollection<IMeeting> Find(IEnumerable<IPerson> persons, DateOnlyPeriod period, IScenario scenario,
                                    bool includeForOrganizer);
     }
 }
