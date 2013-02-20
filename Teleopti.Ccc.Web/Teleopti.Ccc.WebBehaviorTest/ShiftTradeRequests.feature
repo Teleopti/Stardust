@@ -276,6 +276,12 @@ Given I have the role 'Full access to mytime'
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 06:00 |
 	| EndTime               | 2030-01-01 16:00 |
+	| Shift category        | Day              |
+	| Lunch3HoursAfterStart | True             |
+	And Ashley Andeen have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 12:00 |
+	| EndTime               | 2030-01-01 22:00 |
 	| Shift category		| Day	           |
 	And I have created a shift trade request
 	| Field    | Value         |
@@ -293,23 +299,30 @@ Given I have the role 'Full access to mytime'
 @ignore
 Scenario: Show other schedule of the shift trade
 Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And Ashley Andeen have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And I have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 06:00 |
+	| EndTime               | 2030-01-01 16:00 |
+	| Shift category		| Day	           |
 	And Ashley Andeen have a shift with
 	| Field                 | Value            |
-	| StartTime             | 2030-01-01 10:00 |
-	| EndTime               | 2030-01-01 17:00 |
+	| StartTime             | 2030-01-01 12:00 |
+	| EndTime               | 2030-01-01 19:00 |
 	| Shift category		| Day	           |
 	And I have created a shift trade request
-	| Field		| Value         |
-	| To			| Ashley  Andeen|
-	| DateTo		| 2030-01-01    |
-	| DateFrom	| 2030-01-01    |
+	| Field    | Value         |
+	| To       | Ashley Andeen |
+	| DateTo   | 2030-01-01    |
+	| DateFrom | 2030-01-01    |
 	| Pending  | True          |
 	And I am viewing requests
 	When I click on the request
 	Then I should see details with a schedule
 	| Field			| Value |
-	| Start time	| 10:00 |
-	| End time		| 17:00 |
+	| Start time	| 12:00 |
+	| End time		| 19:00 |
 
 
 
