@@ -219,6 +219,7 @@
     <Compile Include="GroupPageCreator\GenericFinderService.cs" />
     <Compile Include="GroupPageCreator\RuleSetBagGroupPage.cs" />
     <Compile Include="GroupPageCreator\PersonIndexBuilder.cs" />
+    <Compile Include="GroupPageCreator\SingleAgentTeamGroupPage.cs" />
     <Compile Include="GroupPageCreator\SkillGroupPage.cs" />
     <Compile Include="Helper\LoggerNames.cs" />
     <Compile Include="Helper\LogPointOutput.cs" />

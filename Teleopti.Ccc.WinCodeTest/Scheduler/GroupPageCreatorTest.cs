@@ -16,6 +16,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		private IGroupPageFactory _groupPageFactory;
 		private GroupPageCreator _target;
 		private IGroupPageDataProvider _groupPageDataProvider;
+        
+ 
 
 		[SetUp]
 		public void Setup()
@@ -115,6 +117,19 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_target.CreateGroupPagePerDate(new List<DateOnly> { date }, _groupPageDataProvider, grouping);
 			_mocks.VerifyAll();
 		}
+
+        [Test]
+        public void ShouldReturnSingleAgentTeamGrouping()
+        {
+            var grouping = new GroupPageLight { Key = "SingleAgentTeam" };
+            var date = new DateOnly(2012, 9, 12);
+            var creator = _mocks.DynamicMock<IGroupPageCreator<IPerson>>();
+            Expect.Call(_groupPageFactory.GetSingleAgentTeamCreator()).Return(creator);
+            Expect.Call(creator.CreateGroupPage(null, null)).IgnoreArguments().Return(new GroupPage("page"));
+            _mocks.ReplayAll();
+            _target.CreateGroupPagePerDate(new List<DateOnly> { date }, _groupPageDataProvider, grouping);
+            _mocks.VerifyAll();
+        }
 
 
 		[Test]

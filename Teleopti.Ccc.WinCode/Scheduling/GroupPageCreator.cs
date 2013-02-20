@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
+using Teleopti.Ccc.DomainTest.GroupPageCreator;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling
@@ -105,7 +106,13 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 						groupPage = ruleSetBagGroupPage.CreateGroupPage(groupPageDataProvider.RuleSetBagCollection, options);
 						break;
 					}
-				default:
+                case "SingleAgentTeam":
+			        {
+			            var singleAgentTeam = _groupPageFactory.GetSingleAgentTeamCreator();
+			            groupPage= singleAgentTeam.CreateGroupPage(groupPageDataProvider.AllLoadedPersons, options);
+                        break;
+			        }
+                default:
 					{
 						groupPage = null;// selectedGrouping;
 						var groups = groupPageDataProvider.UserDefinedGroupings;
@@ -155,6 +162,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		IGroupPageCreator<IPerson> GetNotesGroupPageCreator();
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
 		IGroupPageCreator<IRuleSetBag> GetRuleSetBagsGroupPageCreator();
+
+	    IGroupPageCreator<IPerson> GetSingleAgentTeamCreator();
 	}
 
 	public class GroupPageFactory : IGroupPageFactory
@@ -188,5 +197,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		{
 			return new RuleSetBagGroupPage();
 		}
+
+	    public IGroupPageCreator<IPerson> GetSingleAgentTeamCreator()
+	    {
+	        return new SingleAgentTeamGroupPage();
+	    }
 	}
 }
