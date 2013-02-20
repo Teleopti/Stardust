@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 	[Binding]
 	public class AgentSchedulePageStepDefinitions
 	{
-		[Then(@"I should see agent schedule for '(.*)' on '(.*)'")]
+		[Then(@"I should be viewing agent schedule for '(.*)' on '(.*)'")]
 		public void ThenIShouldSeeAgentScheduleForAgentOnDate(string name, string date)
 		{
 			var id = UserFactory.User(name).Person.Id.ToString();

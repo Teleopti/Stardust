@@ -62,9 +62,6 @@ Scenario: View team schedule, no shift
 	Then I should see no schedule for 'Pierre Baldi'
 	
 @ignore
-Scenario: View schedules in my time zone
-
-@ignore
 Scenario: View team selection
 	Given there is a team with
 	| Field | Value      |
@@ -104,14 +101,15 @@ Scenario: Change team
 
 @ignore
 Scenario: Select date
-
-@ignore
-Scenario: Select next/previous day
+	Given I have the role 'Anywhere Team Green'
+	When I view schedules for '2012-12-02'
+	And I select date '2012-12-03'
+	Then I should be viewing schedules for '2012-12-03'
 
 @ignore
 Scenario: Select agent
 	Given I have the role 'Anywhere Team Green'
 	When I view schedules for '2012-12-02'
 	And I click agent 'Pierre Baldi'
-	Then I should see agent schedule for 'Pierre Baldi' on '2012-12-02'
+	Then I should be viewing agent schedule for 'Pierre Baldi' on '2012-12-02'
 

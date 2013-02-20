@@ -91,6 +91,16 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AddFullDayAbsence.feature</DependentUpon>
     </Compile>
+    <Compile Include="Anywhere\ViewAgentSchedule.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ViewAgentSchedule.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Anywhere\ViewTeamSchedule.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ViewTeamSchedule.feature</DependentUpon>
+    </Compile>
     <Compile Include="AsmSummerToWinter.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
