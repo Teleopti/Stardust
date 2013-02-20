@@ -323,8 +323,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
             var authorization = _mockRep.StrictMock<IPrincipalAuthorization>();
 
-            var dummyFunction = ApplicationFunction.FindByPath(new DefinedRaptorApplicationFunctionFactory().ApplicationFunctionList,
-                                                           DefinedRaptorApplicationFunctionPaths.ViewSchedules);
+            const string dummyFunction = DefinedRaptorApplicationFunctionPaths.ViewSchedules;
             using(_mockRep.Record())
             {
                 Expect.Call(authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewConfidential,

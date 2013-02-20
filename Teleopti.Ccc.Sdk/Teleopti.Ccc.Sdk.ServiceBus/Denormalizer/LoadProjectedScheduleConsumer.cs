@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 			if (!scenario.DefaultScenario) return false;
 
 			var period = new DateTimePeriod(message.StartDateTime, message.EndDateTime);
-			var person = _personRepository.Get(message.PersonId);
+			var person = _personRepository.Load(message.PersonId);
 
 			var timeZone = person.PermissionInformation.DefaultTimeZone();
 			var dateOnlyPeriod = period.ToDateOnlyPeriod(timeZone);
