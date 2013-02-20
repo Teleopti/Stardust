@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 						var shiftTradeRequest = s.Request as IShiftTradeRequest;
 						if (shiftTradeRequest != null)
 						{
-							ret += ", " + shiftTradeStatusText(shiftTradeRequest.GetShiftTradeStatus(_shiftTradeRequestStatusChecker.Invoke()));
+							ret += ", " + shiftTradeRequest.GetShiftTradeStatus(_shiftTradeRequestStatusChecker.Invoke()).ToText();
 						}
 						return ret;
 					}))
@@ -91,8 +91,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				.ForMember(d => d.To, o => o.MapFrom(s => s.Request.PersonTo == null ? string.Empty : s.Request.PersonTo.Name.ToString()))
 				.ForMember(d => d.DenyReason, o => o.MapFrom(s =>
 																											{
-																												UserTexts.Resources.ResourceManager.IgnoreCase = true;
-																												var result = UserTexts.Resources.ResourceManager.GetString(s.DenyReason);
+																												Resources.ResourceManager.IgnoreCase = true;
+																												var result = Resources.ResourceManager.GetString(s.DenyReason);
 																												if (string.IsNullOrEmpty(result))
 																												{
 																													result = s.DenyReason;
@@ -116,30 +116,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 																				return new[] { 0, 3 }.Contains(stateId) ? "GET, DELETE, PUT" : "GET";
 																			}))
 				;
-		}
-
-		private static string shiftTradeStatusText(ShiftTradeStatus status)
-		{
-			switch (status)
-			{
-				case ShiftTradeStatus.OkByBothParts:
-					{
-						return Resources.WaitingForSupervisorApproval;
-					}
-				case ShiftTradeStatus.OkByMe:
-					{
-						return Resources.WaitingForOtherPart;
-					}
-				case ShiftTradeStatus.Referred:
-					{
-						return Resources.TheScheduleHasChanged;
-					}
-				default:
-					{
-						//ShiftTradeStatus.NotValid verkar inte användas
-						throw new ArgumentException("Unknown shift trade status " + status);
-					}
-			}
 		}
 	}
 }
