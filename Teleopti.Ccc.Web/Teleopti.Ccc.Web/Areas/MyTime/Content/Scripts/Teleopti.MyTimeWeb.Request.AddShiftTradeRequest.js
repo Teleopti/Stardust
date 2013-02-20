@@ -231,20 +231,37 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 				ko.dataFor(this).leftPx(-leftPx + 'px');
 			}
 		});
+		_initAgentNameOverflow();
+	}
+
+	function _initAgentNameOverflow() {
+	    $('.shift-trade-agent-name')
+			.hoverIntent({
+			    interval: 200,
+			    timeout: 200,
+			    over: function () {
+			        if ($(this).hasHiddenContent())
+			            $(this).addClass('shift-trade-agent-name-hover');
+			    },
+			    out: function () {
+			        $(this).removeClass('shift-trade-agent-name-hover');
+			    }
+			})
+	    ;
 	}
 
 	return {
 		Init: function () {
-			_init();
+		    _init();
 		},
 		SetShiftTradeRequestDate: function (date) {
-			setShiftTradeRequestDate(date);
+		    setShiftTradeRequestDate(date);
 		},
 		OpenAddShiftTradeWindow: function () {
-			_openAddShiftTradeWindow();
+		    _openAddShiftTradeWindow();
 		},
 		HideShiftTradeWindow: function () {
-			_hideShiftTradeWindow();
+		    _hideShiftTradeWindow();
 		}
 	};
 
