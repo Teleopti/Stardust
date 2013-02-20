@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(scheduleDayPro2.Day).Return(new DateOnly(2010, 1, 11)).Repeat.Any();
                 Expect.Call(_matrix.GetScheduleDayByKey(new DateOnly(2010, 1, 11))).Return(_scheduleDayPro);
                 Expect.Call(scheduleDayPro2.DaySchedulePart()).Return(_part).Repeat.AtLeastOnce();
-				Expect.Call(_scheduleDayEquator.MainShiftEquals(_part, _part)).IgnoreArguments()
+                Expect.Call(_scheduleDayEquator.MainShiftEquals(null, null)).IgnoreArguments()
                     .Return(true)
                     .Repeat.Times(periodDayCount);
 

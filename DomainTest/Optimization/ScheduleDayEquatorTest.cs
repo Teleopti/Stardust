@@ -37,7 +37,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             IScheduleDay original = schedulePartFactory.CreatePartWithMainShift();
             IScheduleDay current = schedulePartFactory.CreatePartWithMainShift();
             SetIdOnShiftCategories(original, current, Guid.NewGuid());
-			setSameIdOnActivites(original, current);
             Assert.IsTrue(_target.MainShiftEquals(original, current));
 
             IDayOffTemplate dayOffTemplate = new DayOffTemplate(new Description("DayOff"));
@@ -61,7 +60,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             IScheduleDay original = schedulePartFactory.CreatePartWithMainShift();
             IScheduleDay current = schedulePartFactory.CreatePartWithMainShift();
             SetIdOnShiftCategories(original, current, Guid.NewGuid());
-			setSameIdOnActivites(original, current);
             Assert.IsTrue(_target.MainShiftEquals(original, current));
 
             IDayOffTemplate dayOffTemplate = new DayOffTemplate(new Description("DayOff"));
@@ -120,7 +118,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             IScheduleDay original = schedulePartFactory.CreatePartWithMainShift();
             IScheduleDay current = schedulePartFactory.CreatePartWithMainShift();
-			setSameIdOnActivites(original, current);
             SetIdOnShiftCategories(original, current, Guid.NewGuid());
 
             Assert.IsTrue(_target.MainShiftEquals(original, current));
@@ -203,7 +200,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             IScheduleDay current = schedulePartFactory.CreatePartWithMainShift();
             IScheduleDay current2 = schedulePartFactory.CreatePartWithMainShift();
             SetIdOnShiftCategories(original, current, Guid.NewGuid());
-			setSameIdOnActivites(original, current);
             Assert.IsTrue(_target.MainShiftEquals(original, current));
 
             IDayOffTemplate dayOffTemplate = new DayOffTemplate(new Description("DayOff"));
@@ -237,7 +233,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             IScheduleDay original = schedulePartFactory.CreatePartWithMainShift();
             IScheduleDay current = schedulePartFactory.CreatePartWithMainShift();
             SetIdOnShiftCategories(original, current, Guid.NewGuid());
-			setSameIdOnActivites(original, current);
             Assert.IsTrue(_target.MainShiftEquals(original, current));
 
             IDayOffTemplate dayOffTemplate = new DayOffTemplate(new Description("DayOff"));
@@ -264,7 +259,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             IScheduleDay original = schedulePartFactory.CreatePartWithMainShift();
             IScheduleDay current = schedulePartFactory.CreatePartWithMainShift();
             SetIdOnShiftCategories(original, current, Guid.NewGuid());
-			setSameIdOnActivites(original, current);
 
             Assert.IsTrue(_target.MainShiftEquals(original, current));
             original.DeleteMainShift(original);
@@ -275,22 +269,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
         #endregion
 
-		[Test]
-		public void ShouldCheckLayerActivity()
-		{
-			var period = new DateTimePeriod(2013, 02, 19, 2013, 02, 19);
-			var shiftCategory = new ShiftCategory("C");
-			IMainShift currentShift = MainShiftFactory.CreateMainShift(new Activity("A"), period, shiftCategory);
-			IMainShift otherShift = MainShiftFactory.CreateMainShift(new Activity("B"), period, shiftCategory);
-
-			bool result = _target.MainShiftEquals(otherShift, currentShift);
-			Assert.IsFalse(result);
-		}
-
 		#region Bugfix 19056
 
 		/// <summary>
-		/// Bugfix for 19056> Error "ScheduleDayEquator.MainShiftEquals" during optimization on days with only a personal shift.
+		/// Bugfix for 19056> Error "ScheduleDayEquator.mainShiftEquals" during optimization on days with only a personal shift.
 		/// </summary>
 		[Test]
 		public void ShouldReturnFalseIfCurrentPersonAssignmentHasNoMainShift()
@@ -372,15 +354,5 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             return new SchedulePartFactoryForDomain(person, scenario,
                                                     dateTimePeriod, skill);
         }
-
-		private static void setSameIdOnActivites(IScheduleDay scheduleDay1, IScheduleDay scheduleDay2)
-		{
-			var id1 = Guid.NewGuid();
-			var id2 = Guid.NewGuid();
-			scheduleDay1.PersonAssignmentCollection()[0].MainShift.LayerCollection[0].Payload.SetId(id1);
-			scheduleDay2.PersonAssignmentCollection()[0].MainShift.LayerCollection[0].Payload.SetId(id1);
-			scheduleDay1.PersonAssignmentCollection()[0].MainShift.LayerCollection[1].Payload.SetId(id2);
-			scheduleDay2.PersonAssignmentCollection()[0].MainShift.LayerCollection[1].Payload.SetId(id2);
-		}
     }
 }

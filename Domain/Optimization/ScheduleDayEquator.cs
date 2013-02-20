@@ -1,11 +1,12 @@
-﻿using Teleopti.Interfaces.Domain;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
     public interface IScheduleDayEquator
     {
         bool MainShiftEquals(IScheduleDay original, IScheduleDay current);
-		bool MainShiftEquals(IMainShift original, IMainShift current);
         bool DayOffEquals(IScheduleDay original, IScheduleDay current);
     }
 
@@ -23,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             return checkDayOffEqual(original, current);
         }
 
-        private bool checkMainShiftEqual(IScheduleDay original, IScheduleDay current)
+        private static bool checkMainShiftEqual(IScheduleDay original, IScheduleDay current)
         {
             if (original.PersonDayOffCollection().Count > 0 && current.PersonDayOffCollection().Count == 0)
                 return true;
@@ -50,7 +51,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                     if (originalMainShift == null || currentMainShift == null)
                         return false;
 
-                    if (!MainShiftEquals(originalMainShift, currentMainShift))
+                    if (!mainShiftEquals(originalMainShift, currentMainShift))
                         return false;
                 }
                 
@@ -58,7 +59,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             return true;
         }
 
-        public bool MainShiftEquals(IMainShift original, IMainShift current)
+        private static bool mainShiftEquals(IMainShift original, IMainShift current)
         {
             if(original.ShiftCategory.Id != current.ShiftCategory.Id)
                 return false;
@@ -76,7 +77,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         private static bool activityEquals(ILayer<IActivity> original, ILayer<IActivity> current)
         {
-            return original.Period.Equals(current.Period) && original.Payload.Equals(current.Payload);
+            return original.Period.Equals(current.Period);
         }
 
         private static bool checkDayOffEqual(IScheduleDay original, IScheduleDay current)
