@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.Rta.LogClientProxy
 
 		public WaitHandle CheckSchedule(Guid personId, Guid businessUnitId, DateTime timestamp)
 		{
-
 			return null;
 		}
 

@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Rta.Server
 				return CreateAndSaveState(scheduleLayers, null, personId, platformId, stateCode, timestamp, new TimeSpan(0),
 				                          businessUnitId, waitHandle);
 
-			if (scheduleLayers[0] != null && scheduleLayers[0].PayloadId == previousState.ScheduledId)
+			if (scheduleLayers[0] != null && haveScheduleChanged(scheduleLayers[0], previousState))
 				return null;
 
 			platformId = previousState.PlatformTypeId;
@@ -149,6 +149,12 @@ namespace Teleopti.Ccc.Rta.Server
 			var stateGroups = _actualAgentDataHandler.StateGroups().ToList();
 			var foundState = stateGroups.FirstOrDefault(s => s.PlatformTypeId == platformTypeId && s.StateCode == stateCode && s.BusinessUnitId == businessUnitId);
 			return foundState != null ? foundState.StateGroupId : Guid.Empty;
+		}
+
+		private bool haveScheduleChanged(ScheduleLayer layer, IActualAgentState oldState)
+		{
+			return layer.PayloadId == oldState.ScheduledId && layer.StartDateTime == oldState.StateStart &&
+			       layer.EndDateTime == oldState.NextStart;
 		}
 	}
 }

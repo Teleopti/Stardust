@@ -19,6 +19,12 @@
   <wsdl:message name="ITeleoptiRtaService_SaveBatchExternalUserState_OutputMessage">
     <wsdl:part name="parameters" element="tns:SaveBatchExternalUserStateResponse" />
   </wsdl:message>
+  <wsdl:message name="ITeleoptiRtaService_GetUpdatedScheduleChange_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetUpdatedScheduleChange" />
+  </wsdl:message>
+  <wsdl:message name="ITeleoptiRtaService_GetUpdatedScheduleChange_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetUpdatedScheduleChangeResponse" />
+  </wsdl:message>
   <wsdl:portType name="ITeleoptiRtaService">
     <wsdl:operation name="SaveExternalUserState">
       <wsdl:input wsaw:Action="http://tempuri.org/ITeleoptiRtaService/SaveExternalUserState" message="tns:ITeleoptiRtaService_SaveExternalUserState_InputMessage" />
@@ -27,6 +33,10 @@
     <wsdl:operation name="SaveBatchExternalUserState">
       <wsdl:input wsaw:Action="http://tempuri.org/ITeleoptiRtaService/SaveBatchExternalUserState" message="tns:ITeleoptiRtaService_SaveBatchExternalUserState_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/ITeleoptiRtaService/SaveBatchExternalUserStateResponse" message="tns:ITeleoptiRtaService_SaveBatchExternalUserState_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetUpdatedScheduleChange">
+      <wsdl:input wsaw:Action="http://tempuri.org/ITeleoptiRtaService/GetUpdatedScheduleChange" message="tns:ITeleoptiRtaService_GetUpdatedScheduleChange_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/ITeleoptiRtaService/GetUpdatedScheduleChangeResponse" message="tns:ITeleoptiRtaService_GetUpdatedScheduleChange_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="BasicHttpBinding_ITeleoptiRtaService" type="tns:ITeleoptiRtaService">
@@ -42,6 +52,15 @@
     </wsdl:operation>
     <wsdl:operation name="SaveBatchExternalUserState">
       <soap:operation soapAction="http://tempuri.org/ITeleoptiRtaService/SaveBatchExternalUserState" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetUpdatedScheduleChange">
+      <soap:operation soapAction="http://tempuri.org/ITeleoptiRtaService/GetUpdatedScheduleChange" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>

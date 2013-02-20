@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.Rta.WebService
     		return result;
     	}
 
-        public void GetUpdatedScheduleChange(Guid personId, Guid bussinessUnitId, string dataSource, DateTime activityTimeStamp)
+        public void GetUpdatedScheduleChange(Guid personId, Guid bussinessUnitId, DateTime activityTimeStamp)
         {
             lock (_lockObject)
             {
