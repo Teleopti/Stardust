@@ -3,6 +3,7 @@ using System.Globalization;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
@@ -24,16 +25,26 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			EventualAssert.That(() => Browser.Current.Url.Contains(date.Replace("-", "")), Is.True);
 		}
 
-		[Then(@"I should see a shift")]
-		public void ThenIShouldSeeAShift()
+		[Then(@"I should see these shift layers")]
+		public void ThenIShouldSeeTheseShiftLayers(Table table)
 		{
-			EventualAssert.That(() => Browser.Current.Element(Find.BySelector(".shift .layer")).Exists, Is.True);
+			var shiftLayers = table.CreateSet<ShiftLayerInfo>();
+			shiftLayers.ForEach(AssertShiftLayer);
 		}
 
-		[Then(@"I should see (.*) shift layers")]
-		public void ThenIShouldSeeNumberOfShiftLayers(int numberOfShifts)
+		[Then(@"I should see a shift layer with")]
+		public void ThenIShouldSeeAShiftLayerWith(Table table)
 		{
-			EventualAssert.That(() => Browser.Current.Elements.Filter(Find.BySelector(".shift .layer")).Count, Is.EqualTo(numberOfShifts));
+			var shiftLayer = table.CreateInstance<ShiftLayerInfo>();
+			AssertShiftLayer(shiftLayer);
+		}
+
+		private static void AssertShiftLayer(ShiftLayerInfo shiftLayer)
+		{
+			EventualAssert.That(() => Browser.Current.Element(Find.BySelector(string.Format(".shift .layer[data-start-time='{0}']", shiftLayer.StartTime))).Exists, Is.True);
+			EventualAssert.That(() => Browser.Current.Element(Find.BySelector(string.Format(".shift .layer[data-end-time='{0}']", shiftLayer.EndTime))).Exists, Is.True);
+			if (shiftLayer.Color != null)
+				EventualAssert.That(() => Browser.Current.Element(Find.BySelector(string.Format(".shift .layer[data-start-time='{0}']", shiftLayer.StartTime))).Style.Color, Is.EqualTo(shiftLayer.Color));
 		}
 
 		[Then(@"I should not see any shift")]
@@ -41,14 +52,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		{
 			EventualAssert.That(() => Browser.Current.Element(Find.BySelector(".shift")).Exists, Is.True);
 			EventualAssert.That(() => Browser.Current.Element(Find.BySelector(".shift .layer")).Exists, Is.False);
-		}
-
-		[Then(@"I should see a shift layer with")]
-		public void ThenIShouldSeeAShiftLayerWith(Table table)
-		{
-			var shiftLayer = table.CreateInstance<ShiftLayerInfo>();
-			EventualAssert.That(() => Browser.Current.Element(Find.BySelector(".shift .layer")).GetAttributeValue("data-start-time"), Is.EqualTo(shiftLayer.StartTime));
-			EventualAssert.That(() => Browser.Current.Element(Find.BySelector(".shift .layer:last")).GetAttributeValue("data-end-time"), Is.EqualTo(shiftLayer.EndTime));
 		}
 
 		[Then(@"I should see the add full day absence form with")]
@@ -80,6 +83,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		{
 			public DateTime StartTime { get; set; }
 			public DateTime EndTime { get; set; }
+			public string Color { get; set; }
 		}
 
 		public class FullDayAbsenceFormInfo

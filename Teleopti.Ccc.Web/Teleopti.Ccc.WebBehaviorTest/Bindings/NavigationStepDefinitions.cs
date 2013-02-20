@@ -90,6 +90,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoAnywhereAgentSchedule(personId, date);
 		}
 
+		[When(@"I view agent schedules add full day absence form for '(.*)' on '(.*)'")]
+		public void WhenIViewAgentSchedulesAddFullDayAbsenceFormForAgentOnDate(string name, DateTime date)
+		{
+			TestControllerMethods.Logon();
+			var personId = UserFactory.User(name).Person.Id.Value;
+			Navigation.GotoAnywhereAgentScheduleFullDayAbsenceForm(personId, date);
+		}
+
 		[When(@"I navigate to the preferences page")]
 		public void WhenINavigateToThePreferencesPage()
 		{

@@ -94,16 +94,6 @@ Scenario: Select next/previous day
 @ignore
 Scenario: Select agent
 	Given I have the role 'Anywhere Team Green'
-	And there is a shift with
-	| Field            | Value        |
-	| Person           | Pierre Baldi |
-	| Date             | 2012-12-02   |
-	| Start time       | 08:00        |
-	| End time         | 17:00        |
-	| Activity         | Phone        |
-	| Lunch start time | 11:30        |
-	| Lunch end time   | 12:15        |
-	| Lunch activity   | Lunch        |
 	When I view schedules for '2012-12-02'
 	And I click agent 'Pierre Baldi'
 	Then I should see agent schedule for 'Pierre Baldi' on '2012-12-02'

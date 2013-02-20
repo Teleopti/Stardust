@@ -30,18 +30,6 @@ Background:
 Scenario: View shift
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' have a (read model) shift with
-	| Field          | Value        |
-	| Person         | Pierre Baldi |
-	| Date           | 2012-12-02   |
-	| Start time     | 08:00        |
-	| End time       | 17:00        |
-	| Activity       | Phone        |
-	When I view agent schedule for 'Pierre Baldi' on '2012-12-02'
-	Then I should see a shift
-
-Scenario: View lunch
-	Given I have the role 'Anywhere Team Green'
-	And 'Pierre Baldi' have a (read model) shift with
 	| Field            | Value        |
 	| Person           | Pierre Baldi |
 	| Date             | 2012-12-02   |
@@ -52,7 +40,11 @@ Scenario: View lunch
 	| Lunch end time   | 12:15        |
 	| Lunch activity   | Lunch        |
 	When I view agent schedule for 'Pierre Baldi' on '2012-12-02'
-	Then I should see 3 shift layers
+	Then I should see these shift layers
+	| Start time | End time |
+	| 08:00      | 11:30    |
+	| 11:30      | 12:15    |
+	| 12:15      | 17:00    |
 
 Scenario: View night shift from yesterday
 	Given I have the role 'Anywhere Team Green'
@@ -63,9 +55,6 @@ Scenario: View night shift from yesterday
 	| Start time       | 20:00        |
 	| End time         | 1.04:00      |
 	| Activity         | Phone        |
-	| Lunch start time | 23:30        |
-	| Lunch end time   | 1.00:15      |
-	| Lunch activity   | Lunch        |
 	When I view agent schedule for 'Pierre Baldi' on '2012-12-02'
 	Then I should not see any shift
 
@@ -78,11 +67,11 @@ Scenario: View night shift from today
 	| Start time       | 20:00        |
 	| End time         | 1.04:00      |
 	| Activity         | Phone        |
-	| Lunch start time | 23:30        |
-	| Lunch end time   | 1.00:15      |
-	| Lunch activity   | Lunch        |
 	When I view agent schedule for 'Pierre Baldi' on '2012-12-02'
-	Then I should see 3 shift layers
+	Then I should see a shift layer with
+	| Field      | Value |
+	| Start time | 20:00 |
+	| End time   | 04:00 |
 
 Scenario: View schedule in agents time zone
 	Given I have the role 'Anywhere Team Green'
