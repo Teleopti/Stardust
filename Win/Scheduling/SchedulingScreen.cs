@@ -2456,7 +2456,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         private void _backgroundWorkerResourceCalculator_DoWork(object sender, DoWorkEventArgs e)
         {
             setThreadCulture();
-            _optimizationHelperWin.ResourceCalculateMarkedDays(e, _backgroundWorkerResourceCalculator, true, true);
+            _optimizationHelperWin.ResourceCalculateMarkedDays(e, _backgroundWorkerResourceCalculator, SchedulerState.ConsiderShortBreaks, true);
         }
 
         private void validateAllPersons()
@@ -4021,6 +4021,9 @@ namespace Teleopti.Ccc.Win.Scheduling
                 }
 
 				var period = new ScheduleDateTimePeriod(SchedulerState.RequestedPeriod.Period(), SchedulerState.SchedulingResultState.PersonsInOrganization);
+				ISchedulingOptions options = new SchedulingOptions();
+				OptimizerHelperHelper.SetConsiderShortBreaks(SchedulerState.SchedulingResultState.PersonsInOrganization, SchedulerState.RequestedPeriod.DateOnlyPeriod, options, _container);
+	            SchedulerState.ConsiderShortBreaks = options.ConsiderShortBreaks;
                 initMessageBroker(period.LoadedPeriod());
             }
 
