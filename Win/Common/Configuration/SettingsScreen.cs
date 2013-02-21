@@ -168,22 +168,14 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 				DialogResult = DialogResult.None;
 				CloseForm();
 			}
-			catch (ForeignKeyException ex)
+			catch (ForeignKeyException)
 			{
 				//special case that comes as in bug 22347 -> FK-exception
-				//the reason is most probably a deleted scorecard but then used in SetScorecard
-				//using (var view = new SimpleExceptionHandlerView(ex, UserTexts.Resources.OpenTeleoptiCCC, UserTexts.Resources.DataHasBeenDeleted))
-				//{
-				//    view.ShowDialog();
-				//}
-				//DialogResult = DialogResult.None;
-				//CloseForm();
+				//the reason is most probably a deleted, but then used scorecard in SetScorecard
 
 				ShowWarningMessage(UserTexts.Resources.DataHasBeenDeleted, UserTexts.Resources.OpenTeleoptiCCC);
 				DialogResult = DialogResult.None;
 				CloseForm();
-
-
 			}
 			catch (DataSourceException ex)
 			{
