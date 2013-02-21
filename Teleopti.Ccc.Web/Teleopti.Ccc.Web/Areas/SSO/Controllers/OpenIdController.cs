@@ -1,66 +1,70 @@
 ﻿using System;
 using System.Linq;
 using System.Web.Mvc;
-using DotNetOpenAuth.OpenId;
 using DotNetOpenAuth.OpenId.Provider;
 using DotNetOpenAuth.Messaging;
+using Teleopti.Ccc.Web.Areas.SSO.Core;
+using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
+using Teleopti.Ccc.Web.Core.RequestContext;
 
 namespace Teleopti.Ccc.Web.Areas.SSO.Controllers
 {
-	 public class OpenIdController : Controller
-	 {
-		 internal static OpenIdProvider OpenIdProvider = new OpenIdProvider();
+	public class OpenIdController : Controller
+	{
+		private readonly IOpenIdProviderWapper _openIdProvider;
+		private readonly IWindowsAccountProvider _windowsAccountProvider;
+		private readonly ICurrentHttpContext _currentHttpContext;
 
-		 public ActionResult Identifier()
-		  {
-				if (Request.AcceptTypes != null && Request.AcceptTypes.Contains("application/xrds+xml"))
-				{
-					 return View("Xrds");
-				}
-				return View();
-		  }
+		public OpenIdController(IOpenIdProviderWapper openIdProvider, IWindowsAccountProvider windowsAccountProvider, ICurrentHttpContext currentHttpContext)
+		{
+			_openIdProvider = openIdProvider;
+			_windowsAccountProvider = windowsAccountProvider;
+			_currentHttpContext = currentHttpContext;
+		}
 
-		  [ValidateInput(false)]
-		  public ActionResult Provider()
-		  {
-				var request = OpenIdProvider.GetRequest();
+		public ActionResult Identifier()
+		{
+			if (Request.AcceptTypes != null && Request.AcceptTypes.Contains("application/xrds+xml"))
+			{
+				return View("Xrds");
+			}
+			return View();
+		}
 
-				if (request != null)
-				{
-					 if (request.IsResponseReady)
-					 {
-						  return OpenIdProvider.PrepareResponse(request).AsActionResult();
-					 }
+		[ValidateInput(false)]
+		public ActionResult Provider()
+		{
+			var request = _openIdProvider.GetRequest();
 
-					 var idrequest = request as IAuthenticationRequest;
+			// handles request from site
+			if (request.IsResponseReady)
+			{
+				return _openIdProvider.PrepareResponse(request).AsActionResult();
+			}
 
-					 idrequest.LocalIdentifier = buildIdentityUrl();
-					 idrequest.IsAuthenticated = true;
-					 ProviderEndpoint.Provider.SendResponse(request);
-				}
+			// handles request from browser
+			var idrequest = request as IAuthenticationRequest;
 
-				return new EmptyResult();
-		  }
+			var windowsAccount = _windowsAccountProvider.RetrieveWindowsAccount();
+			if (windowsAccount != null)
+			{
+				var username = windowsAccount.UserName;
+				idrequest.LocalIdentifier =
+					new Uri(_currentHttpContext.Current().Request.Url,
+							_currentHttpContext.Current().Response.ApplyAppPathModifier("~/SSO/OpenId/AskUser/" + username));
+				idrequest.IsAuthenticated = true;
+				_openIdProvider.SendResponse(request);
+			}
+			else
+			{
+				idrequest.IsAuthenticated = false;
+			}
+			return new EmptyResult();
+		}
 
-		  private static Identifier buildIdentityUrl()
-		  {
-			  var username = System.Web.HttpContext.Current.User.Identity.Name;
-			  var slash = username.IndexOf('\\');
-			  if (slash >= 0)
-			  {
-				  username = username.Substring(slash + 1);
-			  }
-			  return new Uri(System.Web.HttpContext.Current.Request.Url, System.Web.HttpContext.Current.Response.ApplyAppPathModifier("~/SSO/OpenId/AskUser/" + username));
-		  }
-
-		  public ActionResult AskUser()
-		  {
-				return View();
-		  }
-
-		  public ActionResult Xrds()
-		  {
-				return View();
-		  }
-	 }
+		public ActionResult AskUser()
+		{
+			return View();
+		}
+	}
 }
