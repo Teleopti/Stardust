@@ -11183,4 +11183,8 @@ These options are activated:
     <value>Your schedule the {0} has changed!</value>
     <comment>Your schedule the 2/16/2012 has changed!</comment>
   </data>
+  <data name="DataHasBeenDeleted" xml:space="preserve">
+    <value>Error when saving your changes. The most possible reason is that you or another user has deleted the data you set. To preserve data consistency, the form will be closed. Sorry, your changes has been lost.</value>
+    <comment>used for SQL Server ForeignKeyException type of errors</comment>
+  </data>
 </root>
