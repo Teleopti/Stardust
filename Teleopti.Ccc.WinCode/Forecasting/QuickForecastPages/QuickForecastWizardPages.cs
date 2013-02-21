@@ -28,7 +28,5 @@ namespace Teleopti.Ccc.WinCode.Forecasting.QuickForecastPages
         {
 			get { return Resources.QuickForecast; }
         }
-
-		
     }
 }

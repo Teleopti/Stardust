@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
@@ -11,7 +12,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.JobHistory
 {
     public partial class JobHistoryDetailedView : BaseRibbonForm, IJobHistoryView
     {
-        public JobHistoryDetailedView()
+		public JobHistoryDetailedView()
         {
             InitializeComponent();  
         }
@@ -65,7 +66,9 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.JobHistory
             autoLabelPageCount.Text = description;
         }
 
-        private void toolStripButtonReloadHistory_Click(object sender, EventArgs e)
+	    public int DetailLevel { get; private set; }
+
+	    private void toolStripButtonReloadHistory_Click(object sender, EventArgs e)
         {
             Presenter.ReloadHistory();
 			loadDetails();
@@ -174,12 +177,22 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.JobHistory
 			{
 				var data = (IList)gridControlJobHistory.DataSource;
 				var jobResult = (JobResultModel)data[row - 1];
-				Presenter.LoadDetailedHistory(jobResult, toolStripButtonShowInfoMessages.Checked);
+				Presenter.LoadDetailedHistory(jobResult);
 			}
 		}
 
-		private void toolStripButtonShowInfoMessagesCheckedChanged(object sender, EventArgs e)
+	    
+		private void toolStripButtonDetailLevelClick(object sender, EventArgs e)
 		{
+			toolStripButtonInfo.Checked = false;
+			toolStripButtonWarnings.Checked = false;
+			toolStripButtonErrors.Checked = false;
+			var butt = (ToolStripButton) sender;
+			{
+				butt.Checked = true;
+				DetailLevel = Convert.ToInt32(butt.Tag);
+			}
+		
 			loadDetails();
 		}
     }

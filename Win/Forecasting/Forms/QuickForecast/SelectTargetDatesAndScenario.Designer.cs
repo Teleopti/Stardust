@@ -64,10 +64,10 @@
 			this.label1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.label1.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label1.ImageAlign = System.Drawing.ContentAlignment.TopRight;
-			this.label1.Location = new System.Drawing.Point(10, 69);
+			this.label1.Location = new System.Drawing.Point(10, 71);
 			this.label1.Margin = new System.Windows.Forms.Padding(10);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(448, 231);
+			this.label1.Size = new System.Drawing.Size(448, 229);
 			this.label1.TabIndex = 4;
 			this.label1.Text = "xxSelect the dates and scenario where the forecast should be saved";
 			// 
@@ -83,7 +83,8 @@
 			// 
 			// TargetFromTo
 			// 
-			this.TargetFromTo.Location = new System.Drawing.Point(3, 3);
+			this.TargetFromTo.Location = new System.Drawing.Point(3, 5);
+			this.TargetFromTo.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
 			this.TargetFromTo.Name = "TargetFromTo";
 			this.TargetFromTo.NullString = "xxNoDateIsSelected";
 			this.TargetFromTo.Size = new System.Drawing.Size(178, 53);

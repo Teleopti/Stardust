@@ -60,7 +60,7 @@
 			// 
 			this.comboBoxSmoothing.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxSmoothing.FormattingEnabled = true;
-			this.comboBoxSmoothing.Location = new System.Drawing.Point(284, 8);
+			this.comboBoxSmoothing.Location = new System.Drawing.Point(311, 8);
 			this.comboBoxSmoothing.Margin = new System.Windows.Forms.Padding(4, 8, 5, 5);
 			this.comboBoxSmoothing.Name = "comboBoxSmoothing";
 			this.comboBoxSmoothing.Size = new System.Drawing.Size(143, 21);
@@ -72,13 +72,14 @@
 			this.label2.Location = new System.Drawing.Point(187, 0);
 			this.label2.Name = "label2";
 			this.label2.Padding = new System.Windows.Forms.Padding(0, 10, 0, 0);
-			this.label2.Size = new System.Drawing.Size(90, 23);
+			this.label2.Size = new System.Drawing.Size(117, 23);
 			this.label2.TabIndex = 5;
-			this.label2.Text = "xxSmoothingStyle";
+			this.label2.Text = "xxSmoothingStyleColon";
 			// 
 			// TemplatesDatesFromTo
 			// 
-			this.TemplatesDatesFromTo.Location = new System.Drawing.Point(3, 3);
+			this.TemplatesDatesFromTo.Location = new System.Drawing.Point(3, 5);
+			this.TemplatesDatesFromTo.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
 			this.TemplatesDatesFromTo.Name = "TemplatesDatesFromTo";
 			this.TemplatesDatesFromTo.NullString = "xxNoDateIsSelected";
 			this.TemplatesDatesFromTo.Size = new System.Drawing.Size(178, 53);
@@ -94,10 +95,10 @@
 			this.label1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.label1.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label1.ImageAlign = System.Drawing.ContentAlignment.TopRight;
-			this.label1.Location = new System.Drawing.Point(10, 69);
+			this.label1.Location = new System.Drawing.Point(10, 71);
 			this.label1.Margin = new System.Windows.Forms.Padding(10);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(469, 259);
+			this.label1.Size = new System.Drawing.Size(469, 257);
 			this.label1.TabIndex = 1;
 			this.label1.Text = "xxSelect historical data range for templates.";
 			// 
