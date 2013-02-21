@@ -244,6 +244,9 @@ Scenario: Show name of sender of a received shifttrade
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And Ashley Andeen have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And Ashley Andeen has a person period with
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
 	And I have a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 06:00 |
@@ -268,6 +271,9 @@ Scenario: Show name of the person of a shifttrade that I have created
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And Ashley Andeen have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And Ashley Andeen has a person period with
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
 	And I have a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 06:00 |
@@ -292,6 +298,9 @@ Scenario: Show schedules of the shift trade
 Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And Ashley Andeen have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And Ashley Andeen has a person period with
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
 	And I have a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 06:00 |
@@ -315,6 +324,11 @@ Given I have the role 'Full access to mytime'
 	| Field			| Value |
 	| Start time	| 06:00 |
 	| End time		| 16:00 |
+	And I should see details with a schedule to
+	| Field			| Value |
+	| Start time	| 12:00 |
+	| End time		| 22:00 |
+
 
 
 
