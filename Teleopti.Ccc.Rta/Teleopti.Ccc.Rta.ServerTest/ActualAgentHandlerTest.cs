@@ -331,13 +331,21 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		{
 			var currentLayer = new ScheduleLayer
 				{
-					PayloadId = _payloadId
+					PayloadId = _payloadId,
+					StartDateTime = new DateTime(2013, 02, 21, 00, 00, 00, DateTimeKind.Utc),
+					EndDateTime = new DateTime(2013, 02, 21, 12, 00, 00, DateTimeKind.Utc)
 				};
 			var resetEvent = new AutoResetEvent(false);
 
 			_dataHandler.Expect(s => s.CurrentLayerAndNext(_dateTime, _guid))
 			            .Return(new List<ScheduleLayer> {currentLayer, new ScheduleLayer()});
-			_dataHandler.Expect(s => s.LoadOldState(_guid)).Return(new ActualAgentState {ScheduledId = _payloadId});
+			_dataHandler.Expect(s => s.LoadOldState(_guid)).Return(
+				new ActualAgentState
+					{
+						ScheduledId = _payloadId,
+						StateStart = new DateTime(2013, 02, 21, 00, 00, 00, DateTimeKind.Utc),
+						NextStart = new DateTime(2013, 02, 21, 12, 00, 00, DateTimeKind.Utc)
+					});
 			_mock.ReplayAll();
 
 			var result = _target.CheckSchedule(_guid, _businessUnitId, _dateTime, resetEvent);
