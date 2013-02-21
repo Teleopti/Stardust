@@ -1,6 +1,7 @@
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -13,10 +14,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
-			var roleRepository = new ApplicationRoleRepository(uow);
-			var role = roleRepository.LoadAll().Single(b => b.Name == Name);
-			user.PermissionInformation.AddApplicationRole(role);
+			using (uow.DisableFilter(QueryFilter.BusinessUnit))
+			{
+				var roleRepository = new ApplicationRoleRepository(uow);
+				var role = roleRepository.LoadAll().Single(b => b.Name == Name);
+				user.PermissionInformation.AddApplicationRole(role);			
+			}
 		}
 	}
-
 }
