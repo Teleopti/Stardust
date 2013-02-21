@@ -11290,4 +11290,8 @@ These options are activated:
     <value>Show Info Messages</value>
     <comment>if to show these messages in jobhistory in forecast navigator</comment>
   </data>
+  <data name="Errors" xml:space="preserve">
+    <value>Errors</value>
+    <comment>Errors</comment>
+  </data>
 </root>
