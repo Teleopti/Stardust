@@ -162,3 +162,28 @@ GO
 IF  EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[dbo].[PersonSkill]') AND name = N'UC_Parent_Skill')
 	EXEC('ALTER TABLE [dbo].[PersonSkill] DROP CONSTRAINT [UC_Parent_Skill]')
 GO
+
+----------------  
+--Name: Robin Karlsson
+--Date: 2013-02-21
+--Desc: Extend the length of the read model to fit large projections.
+----------------  
+EXEC('ALTER TABLE ReadModel.PersonScheduleDay ADD Shift2 nvarchar(MAX) NOT NULL DEFAULT('''')')
+GO
+	
+EXEC('UPDATE ReadModel.PersonScheduleDay SET Shift2 = Shift')
+GO
+
+DECLARE @d_name nvarchar(400)
+SELECT @d_name=name FROM dbo.sysobjects WHERE parent_obj = OBJECT_ID(N'[ReadModel].[PersonScheduleDay]') AND type = 'D' AND name LIKE 'DF__PersonSch__%'
+
+IF @d_name IS NOT NULL
+BEGIN
+	EXEC('ALTER TABLE [ReadModel].[PersonScheduleDay] DROP CONSTRAINT ['+@d_name+']')
+END
+GO
+
+EXEC('ALTER TABLE ReadModel.PersonScheduleDay DROP COLUMN Shift')
+GO
+
+sp_rename 'ReadModel.PersonScheduleDay.Shift2','Shift','COLUMN'
