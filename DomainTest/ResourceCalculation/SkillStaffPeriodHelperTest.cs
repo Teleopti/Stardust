@@ -347,7 +347,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		public void VerifyCalculationsForSpecificPeriod()
 		{
 			var periods = new List<IEnumerable<ISkillStaffPeriod>>();
-			var res = SkillStaffPeriodHelper.SkillPeriodGridSmootheness(periods);
+			var res = SkillStaffPeriodHelper.SkillPeriodGridSmoothness(periods);
 			Assert.IsNull(res);
 
 			Expect.Call(_skillStaffPeriod1.FStaff).Return(2).Repeat.Any();
@@ -363,7 +363,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var skillStaffPeriods2 = new List<ISkillStaffPeriod> {  _skillStaffPeriod3 };
 			var skillStaffPeriods = new[] {skillStaffPeriods1, skillStaffPeriods2};
 			
-			res = SkillStaffPeriodHelper.SkillPeriodGridSmootheness(skillStaffPeriods);
+			res = SkillStaffPeriodHelper.SkillPeriodGridSmoothness(skillStaffPeriods);
 			Assert.That(Math.Round(res.Value, 2), Is.EqualTo(0.04));
 		}
 
