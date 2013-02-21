@@ -7,6 +7,7 @@ require([
 		'hasher',
 		'knockout',
 		'momentDatepickerKo',
+		'menu',
 		'noext!application/resources'
 	], function (
 		layoutTemplate,
@@ -16,16 +17,12 @@ require([
 		hasher,
 		ko,
 		datepicker,
+		menuViewModel,
 		translations) {
 
 		var currentView;
 		var defaultView = 'teamschedule';
-
-		var navigationViewModel = {
-			Translations: translations,
-			MyTimeVisible: ko.observable(false),
-			MobileReportsVisible: ko.observable(false)
-		};
+		var menu = new menuViewModel(translations);
 
 		function _displayView(routeInfo) {
 
@@ -45,19 +42,7 @@ require([
 				_fixBootstrapDropdownForMobileDevices();
 			});
 
-			var navList = $('.nav > li');
-			navList.removeClass('active');
-			navList.each(function () {
-				if ($(this).attr('class')) return;
-				var href = $(this).children('a').attr('href');
-				if (href === '#') {
-					href = defaultView;
-				}
-				if (href.indexOf(routeInfo.view) > -1) {
-					$(this).addClass('active');
-					return;
-				}
-			});
+			menu.ActiveView(routeInfo.view);
 		}
 
 		function _setupRoutes() {
@@ -123,30 +108,29 @@ require([
 			$('#menu-placeholder').replaceWith(menuTemplate);
 		}
 
-		function _updateMenu() {
-			$.getJSON('Application/NavigationContent?' + $.now()).success(function (responseData, textStatus, jqXHR) {
-				if (responseData.IsMyTimeAvailable)
-					navigationViewModel.MyTimeVisible(true);
-				if (responseData.IsMobileReportsAvailable)
-					navigationViewModel.MobileReportsVisible(true);
-
-				$('#username').text(responseData.UserName);
-			});
-		}
-
 		function _fixBootstrapDropdownForMobileDevices() {
 			$('.dropdown-menu').on('touchstart.dropdown.data-api', function (e) {
 				e.stopPropagation();
 			});
 		}
 
-		function _bindViewModel() {
-			ko.applyBindings(navigationViewModel, $('nav')[0]);
+		function _bindMenu() {
+			$.ajax({
+				dataType: "json",
+				cache: false,
+				url: "Application/NavigationContent",
+				success: function (responseData, textStatus, jqXHR) {
+					menu.MyTimeVisible(responseData.IsMyTimeAvailable === true);
+					menu.MobileReportsVisible(responseData.IsMobileReportsAvailable === true);
+					menu.UserName(responseData.UserName);
+				}
+			});
+			ko.applyBindings(menu, $('nav')[0]);
 		}
 
 		_render();
-		_updateMenu();
 		_setupRoutes();
 		_initializeHasher();
-		_bindViewModel();
+
+		_bindMenu();
 	});

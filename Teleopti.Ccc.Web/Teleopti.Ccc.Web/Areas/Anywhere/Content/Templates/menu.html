@@ -19,10 +19,10 @@
 				</li>  
 			</ul>
 			<ul class="nav">
-				<li class="active"><a href="#">Schedules</a></li>
+				<li data-bind="css: {active: ActiveView() == 'teamschedule'}"><a href="#">Schedules</a></li>
 			</ul>
 			<ul class="nav pull-right">
-				<li><a href="#settings" id="username"></a></li>
+				<li><a href="#settings" data-bind="text: UserName, css: {active: ActiveView() == 'settings'}"></a></li>
 			</ul>
 		</div>
 	</div>
