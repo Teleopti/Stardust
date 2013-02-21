@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Rhino.ServiceBus;
@@ -15,14 +12,14 @@ using Teleopti.Interfaces.Messages.Denormalize;
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.RTA
 {
     [TestFixture]
-    public class RTAPersonInfoMessageConsumerTest
+    public class UpdatedScheduleInfoConsumerTest
     {
         private MockRepository mocks;
         private IServiceBus serviceBus;
         private IUnitOfWorkFactory unitOfWorkFactory;
         private IUnitOfWork unitOfWork;
         private IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository;
-        private RTAPersonInfoMessageConsumer target;
+        private UpdatedScheduleInfoConsumer target;
 
         [SetUp]
         public void Setup()
@@ -32,13 +29,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.RTA
             unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
             unitOfWork = mocks.DynamicMock<IUnitOfWork>();
             scheduleProjectionReadOnlyRepository = new ScheduleProjectionReadOnlyRepository(unitOfWorkFactory);
-                //mocks.DynamicMock<IScheduleProjectionReadOnlyRepository>();
+            //mocks.DynamicMock<IScheduleProjectionReadOnlyRepository>();
 
-            target = new RTAPersonInfoMessageConsumer(serviceBus, scheduleProjectionReadOnlyRepository, unitOfWorkFactory);
+            target = new UpdatedScheduleInfoConsumer(serviceBus, scheduleProjectionReadOnlyRepository, unitOfWorkFactory);
         }
 
         [Test]
-        public void IsRTAPersonInfoMessageConsumeSuccessfully()
+        public void IsPersonWithExternalLogonConsumeSuccessfully()
         {
             var person = PersonFactory.CreatePerson();
 			person.SetId(Guid.NewGuid());
@@ -48,7 +45,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.RTA
             
             var period = new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow);
 
-            var personInfoMessage = new RTAPersonInfoMessage();
+            var personInfoMessage = new PersonWithExternalLogon();
             personInfoMessage.PersonId = person.Id.GetValueOrDefault();
             personInfoMessage.Timestamp = period.StartDateTime;
             personInfoMessage.BusinessUnitId = bussinessUnit.Id.GetValueOrDefault();
@@ -74,7 +71,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.RTA
         }
 
         [Test]
-        public void IsRTAUpdatedScheduleDayMessageConsumeSuccessfully()
+        public void IsUpdatedScheduleDayConsumeSuccessfully()
         {
            
         }

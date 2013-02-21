@@ -14,12 +14,12 @@ using Teleopti.Interfaces.Messages.Denormalize;
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.RTA
 {
     [TestFixture]
-    public class RTAStateCheckerMessageConsumerTest
+    public class BusinessUnitInfoConsumerTest
     {
         private MockRepository mocks;
         private IStatisticRepository statisticRepository;
         private IServiceBus serviceBus;
-        private RTAStateCheckerMessageConsumer target;
+        private BusinessUnitInfoConsumer target;
 
         [SetUp]
         public void Setup()
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.RTA
             mocks = new MockRepository();
             statisticRepository = mocks.DynamicMock<IStatisticRepository>();
             serviceBus = mocks.DynamicMock<IServiceBus>();
-            target = new RTAStateCheckerMessageConsumer(statisticRepository, serviceBus);
+            target = new BusinessUnitInfoConsumer(statisticRepository, serviceBus);
         }
 
         [Test]
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.RTA
             
             var period = new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow);
 
-            var message = new RTAStateCheckerMessage();
+            var message = new BusinessUnitInfo();
             message.Timestamp = period.StartDateTime;
             message.BusinessUnitId = bussinessUnit.Id.GetValueOrDefault();
 

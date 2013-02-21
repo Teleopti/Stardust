@@ -149,8 +149,8 @@
     <Compile Include="Payroll\PayrollExportResolveTest.cs" />
     <Compile Include="Payroll\PayrollPeopleLoaderTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RTA\RTAPersonInfoMessageConsumerTest.cs" />
-    <Compile Include="RTA\RTAStateCheckerMessageConsumerTest.cs" />
+    <Compile Include="RTA\UpdatedScheduleInfoConsumerTest.cs" />
+    <Compile Include="RTA\BusinessUnitInfoConsumerTest.cs" />
     <Compile Include="RTA\RTAStateCheckerTest.cs" />
     <Compile Include="SetUpFixtureForAssembly.cs" />
     <Compile Include="ShiftTrade\ShiftTradeContainerInstallerTest.cs" />

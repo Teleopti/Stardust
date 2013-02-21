@@ -1,7 +1,4 @@
-﻿using Autofac;
-using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Sdk.ServiceBus.RTA;
+﻿using Teleopti.Ccc.Sdk.ServiceBus.RTA;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
 {
@@ -14,8 +11,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			var initialLoad = new InitialLoadOfScheduleProjectionReadModel(daBus);
 			initialLoad.Check();
             //add RTA state checker
-            var rtaChecker = new RTAStateChecker(daBus);
-            rtaChecker.Check();
+            var rtaChecker = new BusinessUnitInfoFinder(daBus);
+            rtaChecker.SendMessage();
 		}
 	}
 }

@@ -5,18 +5,25 @@ using System.Text;
 
 namespace Teleopti.Interfaces.Messages.Denormalize
 {
-    public class RTAPersonInfoMessage: RaptorDomainMessage
+    /// <summary>
+    /// 
+    /// </summary>
+    public class PersonWithExternalLogon: RaptorDomainMessage
     {
         private readonly Guid _messageId = Guid.NewGuid();
         private Guid _personId;
-        private DateTime _activityStartDateTime;
-        private DateTime _activityEndDateTime;
 
+        ///<summary>
+        /// Definies an identity for this message (typically the Id of the root this message refers to.
+        ///</summary>
         public override Guid Identity
         {
             get { return _messageId; }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public Guid PersonId
         {
             get { return _personId; }

@@ -1,26 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Rhino.ServiceBus;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Messages.Denormalize;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.RTA
 {
-    public class RTAStateChecker
+    public class BusinessUnitInfoFinder
     {
         private readonly Func<IServiceBus> _serviceBusFinder;
         
-        public RTAStateChecker(Func<IServiceBus> serviceBusFinder)
+        public BusinessUnitInfoFinder(Func<IServiceBus> serviceBusFinder)
         {
             _serviceBusFinder = serviceBusFinder;
         }
 
-        public void Check()
+        public void SendMessage()
 		{
 			var bus = _serviceBusFinder.Invoke();
 
@@ -35,7 +32,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.RTA
 
                 foreach (var businessUnitId in businessUnitCollection)
 			    {
-				    bus.Send(new RTAStateCheckerMessage { Datasource = dataSource.DataSourceName, BusinessUnitId = businessUnitId, Timestamp = DateTime.UtcNow });
+				    bus.Send(new BusinessUnitInfo { Datasource = dataSource.DataSourceName, BusinessUnitId = businessUnitId, Timestamp = DateTime.UtcNow });
 			    }
 			}
 		}

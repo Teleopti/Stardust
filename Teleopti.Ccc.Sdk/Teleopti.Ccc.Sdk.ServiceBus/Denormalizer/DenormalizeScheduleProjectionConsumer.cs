@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 
 				unitOfWork.PersistAll();
 
-                _serviceBus.Send(new RTAUpdatedScheduleDayMessage
+                _serviceBus.Send(new UpdatedScheduleDay
                 {
                     Datasource = message.Datasource,
                     BusinessUnitId = message.BusinessUnitId,
