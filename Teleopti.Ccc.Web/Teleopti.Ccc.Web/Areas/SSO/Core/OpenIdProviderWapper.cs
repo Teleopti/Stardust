@@ -5,21 +5,26 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Core
 {
 	public class OpenIdProviderWapper : IOpenIdProviderWapper
 	{
-		public OpenIdProvider OpenIdProvider { get; set; }
+		private readonly OpenIdProvider _openIdProvider;
+
+		public OpenIdProviderWapper(OpenIdProvider openIdProvider)
+		{
+			_openIdProvider = openIdProvider;
+		}
 
 		public IRequest GetRequest()
 		{
-			return OpenIdProvider.GetRequest();
+			return _openIdProvider.GetRequest();
 		}
 
 		public OutgoingWebResponse PrepareResponse(IRequest request)
 		{
-			return OpenIdProvider.PrepareResponse(request);
+			return _openIdProvider.PrepareResponse(request);
 		}
 
 		public void SendResponse(IRequest request)
 		{
-			OpenIdProvider.SendResponse(request);
+			_openIdProvider.SendResponse(request);
 		}
 	}
 }

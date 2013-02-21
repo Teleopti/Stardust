@@ -9,9 +9,8 @@ namespace Teleopti.Ccc.Web.Areas.SSO.Core.IoC
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterType<OpenIdProviderWapper>().As<IOpenIdProviderWapper>()
-				.WithProperty("OpenIdProvider", new OpenIdProvider())
-				.SingleInstance();
+			builder.RegisterType<OpenIdProviderWapper>().As<IOpenIdProviderWapper>().SingleInstance();
+			builder.RegisterType<OpenIdProvider>().SingleInstance();
 			builder.RegisterType<WindowsAccountProvider>().As<IWindowsAccountProvider>().SingleInstance();
 			builder.RegisterType<CurrentHttpContext>().As<ICurrentHttpContext>().SingleInstance();
 		}
