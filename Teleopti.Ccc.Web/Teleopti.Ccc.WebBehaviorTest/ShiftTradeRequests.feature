@@ -259,19 +259,6 @@ Scenario: Show name of the person that recieved the shift trade request
 	Then I should see 'Ashley Andeen' as the receiver of the request
 
 @ignore
-Scenario: Show dates of the shift trade
-Given I have the role 'Full access to mytime'
-	And I have created a shift trade request
-	| Field		| Value         |
-	| To			| Ashley Andeen |
-	| DateTo		| 2010-12-24    |
-	| DateFrom	| 2010-12-28    |
-	And I am viewing requests
-	When I click on the request
-	Then I should see '2010-12-24' as the date of the request target
-	And I should see '2010-12-28' as the date of the request source
-
-@ignore
 Scenario: Show my schedule of the shift trade 
 Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -286,7 +273,7 @@ Given I have the role 'Full access to mytime'
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 12:00 |
 	| EndTime               | 2030-01-01 22:00 |
-	| Shift category		| Day	           |
+	| Shift category			| Day	           |
 	And I have created a shift trade request
 	| Field    | Value         |
 	| To       | Ashley Andeen |

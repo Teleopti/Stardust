@@ -13,8 +13,5 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 
 		public int TimeLineLengthInMinutes { get; set; }
 
-		public DateTime DateFrom { get; set; }
-
-		public DateTime DateTo { get; set; }
 	}
 }

@@ -1,9 +1,7 @@
 ﻿
-
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
 using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -31,32 +29,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			Mapper.Initialize(c => c.AddProfile(new ShiftTradeSwapDetailsViewModelMappingProfile(Depend.On(_timeLineFactory))));
 		}
 
-		[Test]
-		public void SetsTheDatesFromTheFirstShiftTradeSwapDetail()
-		{
-			var result = Mapper.Map<IShiftTradeRequest, ShiftTradeSwapDetailsViewModel>(CreateShiftTrade(_dateFrom, _dateTo));
-			Assert.That(result.DateFrom, Is.EqualTo(_dateFrom.Date));
-			Assert.That(result.DateTo, Is.EqualTo(_dateTo.Date));
-		}
-
-		[Test]
-		public void CreatesShiftTradePersonScheduleFromBasedOnTheFirstSwapdetail()
-		{
-			var dateFrom = new DateOnly(2001, 12, 12);
-			var dateTo = new DateOnly(2002, 12, 12);
-
-			var result = Mapper.Map<IShiftTradeRequest, ShiftTradeSwapDetailsViewModel>(CreateShiftTrade(dateFrom, dateTo));
-			Assert.That(result.DateFrom, Is.EqualTo(dateFrom.Date));
-			Assert.That(result.DateTo, Is.EqualTo(dateTo.Date));
-		}
-
-		[Test]
-		public void CreatesShiftTradePersonScheduleToBasedOnTheFirstSwapDetail()
-		{
-			var result = Mapper.Map<IShiftTradeRequest, ShiftTradeSwapDetailsViewModel>(CreateShiftTrade(_dateFrom,_dateTo));
-			Assert.That(result.DateFrom, Is.EqualTo(_dateFrom.Date));
-			Assert.That(result.DateTo, Is.EqualTo(_dateTo.Date));
-		}
 
 		[Test]
 		public void CreateScheduleViewModelsFromMapper()

@@ -254,17 +254,13 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			shiftTradePersister.VerifyAllExpectations();
 		}
 
-		[Test,Ignore]
+		[Test]
 		public void ShouldGetShiftTradeDetails()
 		{
 			var id = Guid.NewGuid();
-			var dateFrom = new DateOnly(2001, 1, 1);
-			var dateTo = new DateOnly(2001, 1, 3);
 			var requestViewModelFactory = MockRepository.GenerateMock<IRequestsViewModelFactory>();
 			var shiftTradeSwapDetails = new ShiftTradeSwapDetailsViewModel()
 				                            {
-					                            DateFrom = dateFrom,
-					                            DateTo = dateTo,
 														 From =  new ShiftTradePersonScheduleViewModel()
 															         {
 																         ScheduleLayers = new List<ShiftTradeScheduleLayerViewModel>(),
@@ -288,10 +284,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 
 			using (var target = new RequestsController(requestViewModelFactory, null, null, null))
 			{
-				var result = target.ShiftTradeRequestSwapDetails(id);
-				var scheduleViewModel = (ShiftTradeSwapDetailsViewModel) result.Data;
-				Assert.That(scheduleViewModel.DateFrom,Is.EqualTo(dateFrom));
-				Assert.That(scheduleViewModel.DateTo,Is.EqualTo(dateTo));
+				var result = (ShiftTradeSwapDetailsViewModel) target.ShiftTradeRequestSwapDetails(id).Data;
+				Assert.That(result.From.Name, Is.EqualTo("xxx"));				
+				Assert.That(result.To.Name,Is.EqualTo("yyy"));
 			}
 
 			requestViewModelFactory.VerifyAllExpectations();
