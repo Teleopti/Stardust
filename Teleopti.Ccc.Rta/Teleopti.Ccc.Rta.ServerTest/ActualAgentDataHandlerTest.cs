@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_reader = _mock.StrictMock<IDataReader>();
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity"), Test]
 		public void VerifyCurrentLayerAndNext()
 		{
 			_stringHandler.Expect(sh => sh.AppConnectionString()).Return("connectionString");
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			result.Count.Should().Be.EqualTo(2);
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity"), Test]
 		public void VerifyCurrentLayerAndNextNoCurrentLayer()
 		{
 			_stringHandler.Expect(sh => sh.AppConnectionString()).Return("connectionString");
@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			result[0].Should().Be.Null();
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity"), Test]
 		public void VerifyCurrentLayerAndNextNextLayerStartDelayed()
 		{
 			_stringHandler.Expect(sh => sh.AppConnectionString()).Return("connectionString");
@@ -157,7 +157,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			result[1].Should().Be.Null();
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1505:AvoidUnmaintainableCode"), Test]
 		public void VerifyLoadOldState()
 		{
 			_stringHandler.Expect(sh => sh.DataStoreConnectionString()).Return("connectionString");
@@ -240,7 +240,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			result.Should().Be.Null();
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity"), Test]
 		public void VerifyStateGroups()
 		{
 			_stringHandler.Expect(sh => sh.AppConnectionString()).Return("connectionString");
@@ -278,7 +278,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			result[0].Should().Not.Be.Null();
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity"), Test]
 		public void VerifyActivityAlarms()
 		{
 			_stringHandler.Expect(sh => sh.AppConnectionString()).Return("connectionString");

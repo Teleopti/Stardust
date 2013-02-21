@@ -156,14 +156,14 @@ namespace Teleopti.Ccc.Rta.WebService
     		return result;
     	}
 
-        public void GetUpdatedScheduleChange(Guid personId, Guid bussinessUnitId, DateTime activityTimeStamp)
+        public void GetUpdatedScheduleChange(Guid personId, Guid businessUnitId, DateTime activityTimestamp)
         {
             lock (_lockObject)
             {
                 if (_rtaDataHandler == null || !_rtaDataHandler.IsAlive) InitializeClientHandler();
                 if (_rtaDataHandler != null)
                 {
-					_rtaDataHandler.CheckSchedule(personId, bussinessUnitId, activityTimeStamp);
+					_rtaDataHandler.CheckSchedule(personId, businessUnitId, activityTimestamp);
                 }
             }
         }

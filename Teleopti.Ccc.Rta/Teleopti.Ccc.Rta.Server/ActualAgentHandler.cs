@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Rta.Server
 		}
 
 		public IActualAgentState CreateAndSaveState(IList<ScheduleLayer> scheduleLayers, IActualAgentState previousState, Guid personId, Guid platformTypeId,
-			string stateCode, DateTime timeStamp, TimeSpan timeInState, Guid businessUnitId, AutoResetEvent waitHandle)
+			string stateCode, DateTime timestamp, TimeSpan timeInState, Guid businessUnitId, AutoResetEvent waitHandle)
 		{
 			var scheduleLayer = scheduleLayers[0];
 			var nextLayer = scheduleLayers[1];
@@ -66,9 +66,9 @@ namespace Teleopti.Ccc.Rta.Server
 			{
 				PersonId = personId,
 				StateCode = stateCode,
-				AlarmStart = timeStamp,
+				AlarmStart = timestamp,
 				PlatformTypeId = platformTypeId,
-				Timestamp = timeStamp
+				Timestamp = timestamp
 			};
 
 			if (foundAlarm != null)
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Rta.Server
 				newState.StaffingEffect = foundAlarm.StaffingEffect;
 				newState.State = foundAlarm.StateGroupName;
 				newState.StateId = foundAlarm.StateGroupId;
-				newState.StateStart = timeStamp.Add(timeInState.Negate());
+				newState.StateStart = timestamp.Add(timeInState.Negate());
 
 				if (previousState != null && previousState.AlarmId == newState.AlarmId)
 				{
@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.Rta.Server
 			return foundState != null ? foundState.StateGroupId : Guid.Empty;
 		}
 
-		private bool haveScheduleChanged(ScheduleLayer layer, IActualAgentState oldState)
+		private static bool haveScheduleChanged(ScheduleLayer layer, IActualAgentState oldState)
 		{
 			return layer.PayloadId == oldState.ScheduledId && layer.StartDateTime == oldState.StateStart &&
 			       layer.EndDateTime == oldState.NextStart;

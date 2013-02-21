@@ -108,13 +108,14 @@ namespace Teleopti.Ccc.Rta.Server
 			}
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
 		public WaitHandle CheckSchedule(Guid personId, Guid businessUnitId, DateTime timestamp)
 		{
 			var waitHandle = new AutoResetEvent(false);
 			
 			if (string.IsNullOrEmpty(_connectionStringDataStore))
 			{
-				_loggingSvc.ErrorFormat("No connection information avaiable in configuration file.");
+				_loggingSvc.Error("No connection information avaiable in configuration file.");
 				waitHandle.Set();
 				return waitHandle;
 			}

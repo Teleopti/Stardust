@@ -320,13 +320,6 @@ namespace Teleopti.Ccc.Rta.ServerTest
 
 			autoReset.Dispose();
 		}
-
-
-		[Test]
-		public void ShouldSendMessageOnBrokerWhenScheduleUpdated()
-		{
-			
-		}
 		
 		private void AssignTargetAndRun()
 		{
