@@ -102,8 +102,10 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 	function _showRequest(data, position) {
 
 		if (data.TypeEnum == 2) {
-			requestViewModel = new Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel(ajax);
-			requestViewModel.Initialize(data);
+			var vm = new Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel(ajax);
+			vm.Initialize(data);
+			vm.loadSwapDetails();
+			requestViewModel = vm;
 		}
 		else {
 			requestViewModel = new Teleopti.MyTimeWeb.Request.RequestViewModel();
