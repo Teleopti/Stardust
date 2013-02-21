@@ -11234,4 +11234,8 @@ These options are activated:
   <data name="YouHaveToSelectAtLeastOneWorkload" xml:space="preserve">
     <value>You have to select at least one workload</value>
   </data>
+  <data name="DataHasBeenDeleted" xml:space="preserve">
+    <value>Error when saving your changes. The most possible reason is that you or another user has deleted the data you set. To preserve data consistency, the form will be closed. Sorry, your changes has been lost.</value>
+    <comment>used for SQL Server ForeignKeyException type of errors</comment>
+  </data>
 </root>
