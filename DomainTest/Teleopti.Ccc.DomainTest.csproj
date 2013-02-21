@@ -213,6 +213,7 @@
     <Compile Include="Infrastructure\PagingDetailTest.cs" />
     <Compile Include="Infrastructure\PagingTest.cs" />
     <Compile Include="Optimization\AdvancedPreferencesPersonalSettingsTest.cs" />
+    <Compile Include="Optimization\AdvanceGroupDayOffOptimizerTest.cs" />
     <Compile Include="Optimization\BlockDayOffOptimizerContainerTest.cs" />
     <Compile Include="Optimization\BlockDayOffOptimizationServiceTest.cs" />
     <Compile Include="Optimization\BlockOptimizerBlockCleanerTest.cs" />
