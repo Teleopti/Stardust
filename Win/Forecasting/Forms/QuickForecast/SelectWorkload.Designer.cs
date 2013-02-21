@@ -44,8 +44,8 @@
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
 			this.tableLayoutPanel1.RowCount = 1;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(357, 250);
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 288F));
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(416, 288);
 			this.tableLayoutPanel1.TabIndex = 8;
 			// 
 			// treeViewSkills
@@ -66,7 +66,7 @@
 			this.treeViewSkills.SelectionMode = Syncfusion.Windows.Forms.Tools.TreeSelectionMode.MultiSelectSameLevel;
 			this.treeViewSkills.ShowCheckBoxes = true;
 			this.treeViewSkills.ShowFocusRect = true;
-			this.treeViewSkills.Size = new System.Drawing.Size(351, 244);
+			this.treeViewSkills.Size = new System.Drawing.Size(410, 282);
 			this.treeViewSkills.TabIndex = 8;
 			this.treeViewSkills.Text = "treeViewAdv1";
 			// 
@@ -82,11 +82,12 @@
 			// 
 			// SelectWorkload
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.tableLayoutPanel1);
+			this.Font = new System.Drawing.Font("Segoe UI", 9F);
 			this.Name = "SelectWorkload";
-			this.Size = new System.Drawing.Size(357, 250);
+			this.Size = new System.Drawing.Size(416, 288);
 			this.tableLayoutPanel1.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.treeViewSkills)).EndInit();
 			this.ResumeLayout(false);

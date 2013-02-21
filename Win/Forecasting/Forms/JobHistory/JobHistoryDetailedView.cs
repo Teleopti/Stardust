@@ -82,12 +82,20 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.JobHistory
                 gridControlJobHistory.Model.ColWidths.SetSize(i, colWidth);
             }
             gridControlJobHistory.Model.ColWidths.SetSize(0, 0);
+			for (int i = 0; i <= gridControlJobHistory.Model.RowCount; i++)
+			{
+				gridControlJobHistory.Model.RowHeights.ResizeToFit(GridRangeInfo.Row(i));
+			}
         }
 
         private void resizeJobDetailColumns()
         {
             gridControlDetailedJobHistory.Model.ColWidths.ResizeToFit(GridRangeInfo.Col(1));
             gridControlDetailedJobHistory.Model.ColWidths.ResizeToFit(GridRangeInfo.Col(2));
+			for (int i = 0; i <= gridControlDetailedJobHistory.Model.RowCount; i++)
+	        {
+				gridControlDetailedJobHistory.Model.RowHeights.ResizeToFit(GridRangeInfo.Row(i));
+	        }
         }
 
         private void initializeGrid()
@@ -173,7 +181,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.JobHistory
 		private void loadDetails()
 		{
 			var row = gridControlJobHistory.CurrentCell.RowIndex;
-			if (row != 0)
+			if (row > 0)
 			{
 				var data = (IList)gridControlJobHistory.DataSource;
 				var jobResult = (JobResultModel)data[row - 1];
@@ -181,7 +189,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.JobHistory
 			}
 		}
 
-	    
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.Convert.ToInt32(System.Object)")]
 		private void toolStripButtonDetailLevelClick(object sender, EventArgs e)
 		{
 			toolStripButtonInfo.Checked = false;

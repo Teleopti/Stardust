@@ -188,7 +188,7 @@
 			this.gridControlJobHistory.DefaultColWidth = 80;
 			this.gridControlJobHistory.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.gridControlJobHistory.EnableEdit = false;
-			this.gridControlJobHistory.Font = new System.Drawing.Font("Segoe UI", 9F);
+			this.gridControlJobHistory.Font = new System.Drawing.Font("Segoe UI", 8F);
 			this.gridControlJobHistory.GridOfficeScrollBars = Syncfusion.Windows.Forms.OfficeScrollBars.Office2010;
 			this.gridControlJobHistory.GridVisualStyles = Syncfusion.Windows.Forms.GridVisualStyles.Office2007Blue;
 			this.gridControlJobHistory.Location = new System.Drawing.Point(0, 0);
@@ -206,7 +206,7 @@
 			gridStyleInfo1.Font.Bold = false;
 			gridStyleInfo1.Font.Facename = "Segoe UI";
 			gridStyleInfo1.Font.Italic = false;
-			gridStyleInfo1.Font.Size = 9F;
+			gridStyleInfo1.Font.Size = 8F;
 			gridStyleInfo1.Font.Strikeout = false;
 			gridStyleInfo1.Font.Underline = false;
 			this.gridControlJobHistory.TableStyle = gridStyleInfo1;
@@ -314,7 +314,7 @@
 			this.gridControlDetailedJobHistory.DefaultColWidth = 80;
 			this.gridControlDetailedJobHistory.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.gridControlDetailedJobHistory.EnableEdit = false;
-			this.gridControlDetailedJobHistory.Font = new System.Drawing.Font("Segoe UI", 9F);
+			this.gridControlDetailedJobHistory.Font = new System.Drawing.Font("Segoe UI", 8F);
 			this.gridControlDetailedJobHistory.ForeColor = System.Drawing.SystemColors.ControlText;
 			this.gridControlDetailedJobHistory.GridOfficeScrollBars = Syncfusion.Windows.Forms.OfficeScrollBars.Office2010;
 			this.gridControlDetailedJobHistory.GridVisualStyles = Syncfusion.Windows.Forms.GridVisualStyles.Office2007Blue;
@@ -334,7 +334,7 @@
 			gridStyleInfo2.Font.Bold = false;
 			gridStyleInfo2.Font.Facename = "Segoe UI";
 			gridStyleInfo2.Font.Italic = false;
-			gridStyleInfo2.Font.Size = 9F;
+			gridStyleInfo2.Font.Size = 8F;
 			gridStyleInfo2.Font.Strikeout = false;
 			gridStyleInfo2.Font.Underline = false;
 			this.gridControlDetailedJobHistory.TableStyle = gridStyleInfo2;

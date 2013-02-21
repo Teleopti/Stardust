@@ -53,7 +53,7 @@
 			this.tableLayoutPanel1.RowCount = 2;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(468, 310);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(546, 358);
 			this.tableLayoutPanel1.TabIndex = 2;
 			// 
 			// label1
@@ -62,12 +62,12 @@
 			this.tableLayoutPanel1.SetColumnSpan(this.label1, 3);
 			this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.label1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.label1.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label1.Font = new System.Drawing.Font("Segoe UI", 9F);
 			this.label1.ImageAlign = System.Drawing.ContentAlignment.TopRight;
-			this.label1.Location = new System.Drawing.Point(10, 71);
-			this.label1.Margin = new System.Windows.Forms.Padding(10);
+			this.label1.Location = new System.Drawing.Point(12, 82);
+			this.label1.Margin = new System.Windows.Forms.Padding(12, 12, 12, 12);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(448, 229);
+			this.label1.Size = new System.Drawing.Size(522, 264);
 			this.label1.TabIndex = 4;
 			this.label1.Text = "xxSelect the dates and scenario where the forecast should be saved";
 			// 
@@ -75,19 +75,19 @@
 			// 
 			this.comboBoxScenario.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxScenario.FormattingEnabled = true;
-			this.comboBoxScenario.Location = new System.Drawing.Point(280, 8);
-			this.comboBoxScenario.Margin = new System.Windows.Forms.Padding(4, 8, 5, 5);
+			this.comboBoxScenario.Location = new System.Drawing.Point(319, 9);
+			this.comboBoxScenario.Margin = new System.Windows.Forms.Padding(5, 9, 6, 6);
 			this.comboBoxScenario.Name = "comboBoxScenario";
-			this.comboBoxScenario.Size = new System.Drawing.Size(143, 21);
+			this.comboBoxScenario.Size = new System.Drawing.Size(166, 23);
 			this.comboBoxScenario.TabIndex = 3;
 			// 
 			// TargetFromTo
 			// 
-			this.TargetFromTo.Location = new System.Drawing.Point(3, 5);
-			this.TargetFromTo.Margin = new System.Windows.Forms.Padding(3, 5, 3, 3);
+			this.TargetFromTo.Location = new System.Drawing.Point(3, 6);
+			this.TargetFromTo.Margin = new System.Windows.Forms.Padding(3, 6, 3, 3);
 			this.TargetFromTo.Name = "TargetFromTo";
 			this.TargetFromTo.NullString = "xxNoDateIsSelected";
-			this.TargetFromTo.Size = new System.Drawing.Size(178, 53);
+			this.TargetFromTo.Size = new System.Drawing.Size(208, 61);
 			this.TargetFromTo.TabIndex = 0;
 			this.TargetFromTo.WorkPeriodEnd = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("TargetFromTo.WorkPeriodEnd")));
 			this.TargetFromTo.WorkPeriodStart = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("TargetFromTo.WorkPeriodStart")));
@@ -95,21 +95,22 @@
 			// labelScenario
 			// 
 			this.labelScenario.AutoSize = true;
-			this.labelScenario.Location = new System.Drawing.Point(187, 0);
+			this.labelScenario.Location = new System.Drawing.Point(217, 0);
 			this.labelScenario.Name = "labelScenario";
-			this.labelScenario.Padding = new System.Windows.Forms.Padding(0, 10, 0, 0);
-			this.labelScenario.Size = new System.Drawing.Size(86, 23);
+			this.labelScenario.Padding = new System.Windows.Forms.Padding(0, 12, 0, 0);
+			this.labelScenario.Size = new System.Drawing.Size(94, 27);
 			this.labelScenario.TabIndex = 3;
 			this.labelScenario.Text = "xxScenarioColon";
 			this.labelScenario.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			// 
 			// SelectTargetDatesAndScenario
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.Controls.Add(this.tableLayoutPanel1);
+			this.Font = new System.Drawing.Font("Segoe UI", 9F);
 			this.Name = "SelectTargetDatesAndScenario";
-			this.Size = new System.Drawing.Size(468, 310);
+			this.Size = new System.Drawing.Size(546, 358);
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanel1.PerformLayout();
 			this.ResumeLayout(false);

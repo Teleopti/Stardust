@@ -43,6 +43,7 @@
 			this.tableLayoutPanel1.Controls.Add(this.HistoricalFromTo, 0, 0);
 			this.tableLayoutPanel1.Controls.Add(this.label1, 0, 1);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tableLayoutPanel1.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
 			this.tableLayoutPanel1.RowCount = 3;
@@ -54,10 +55,11 @@
 			// 
 			// HistoricalFromTo
 			// 
+			this.HistoricalFromTo.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.HistoricalFromTo.Location = new System.Drawing.Point(3, 3);
 			this.HistoricalFromTo.Name = "HistoricalFromTo";
 			this.HistoricalFromTo.NullString = "xxNoDateIsSelected";
-			this.HistoricalFromTo.Size = new System.Drawing.Size(178, 53);
+			this.HistoricalFromTo.Size = new System.Drawing.Size(192, 53);
 			this.HistoricalFromTo.TabIndex = 0;
 			this.HistoricalFromTo.WorkPeriodEnd = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("HistoricalFromTo.WorkPeriodEnd")));
 			this.HistoricalFromTo.WorkPeriodStart = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("HistoricalFromTo.WorkPeriodStart")));
@@ -68,7 +70,7 @@
 			this.tableLayoutPanel1.SetColumnSpan(this.label1, 2);
 			this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.label1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.label1.Font = new System.Drawing.Font("Verdana", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label1.Font = new System.Drawing.Font("Segoe UI", 9F);
 			this.label1.ImageAlign = System.Drawing.ContentAlignment.TopRight;
 			this.label1.Location = new System.Drawing.Point(10, 69);
 			this.label1.Margin = new System.Windows.Forms.Padding(10);

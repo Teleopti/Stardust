@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
@@ -17,7 +18,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
 		private QuickForecastCommandDto _stateObj;
         private readonly ICollection<string> _errorMessages = new List<string>();
         private IList<IScenario> _scenarios;
-
+		
         public SelectTargetDatesAndScenario()
         {
             InitializeComponent();
@@ -117,7 +118,10 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
         {
             comboBoxScenario.DataSource = null;
             comboBoxScenario.DisplayMember = "Description";
+			comboBoxScenario.ValueMember = "Id";
             comboBoxScenario.DataSource = scenariosToLoad;
+			if(_stateObj.ScenarioId.Equals(Guid.Empty))
+				comboBoxScenario.SelectedValue = scenariosToLoad.FirstOrDefault(scenario => scenario.DefaultScenario).Id.GetValueOrDefault();
         }
        
     }
