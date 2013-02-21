@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using Teleopti.Ccc.Obfuscated.ResourceCalculation;
 using Teleopti.Ccc.WinCode.Common.Rows;
 using Teleopti.Interfaces.Domain;
@@ -12,7 +13,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Rows
         private readonly RowManagerScheduler<SkillWeekGridRow, IDictionary<DateOnlyPeriod, IList<ISkillStaffPeriod>>> _rowManager;
 		private IEnumerable<ISkillStaffPeriod> _skillStaffPeriodList;
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
         public SkillWeekGridRow(RowManagerScheduler<SkillWeekGridRow, IDictionary<DateOnlyPeriod, IList<ISkillStaffPeriod>>> rowManager, string cellType,
                                string displayMember, string rowHeaderText) 
             : base(cellType, displayMember, rowHeaderText)
@@ -60,11 +61,23 @@ namespace Teleopti.Ccc.Win.Common.Controls.Rows
 			return new List<ISkillStaffPeriod>();
         }
 
+		private IEnumerable<IEnumerable<ISkillStaffPeriod>> getSkillStaffPeriodsForOneWeek(CellInfo cellInfo)
+		{
+			var period = GetDateOnlyPeriodFromColum(cellInfo);
+			var skillStaffPeriodsOfOneWeek = new List<IList<ISkillStaffPeriod>>();
+			foreach (var day in period.DayCollection())
+			{
+				var dayUtcPeriod = new DateOnlyPeriod(day, day).ToDateTimePeriod(_rowManager.TimeZoneInfo);
+				var skillStaffPeriods = SkillStaffPeriodList.Where(x => dayUtcPeriod.Contains(x.Period)).ToList();
+				skillStaffPeriodsOfOneWeek.Add(skillStaffPeriods);
+			}
+			return skillStaffPeriodsOfOneWeek;
+		}
 
         protected object GetValue	(CellInfo cellInfo)
         {
             _skillStaffPeriodList = getSkillStaffPeriodsForColumn	(cellInfo);
-
+	        
 			//if (DisplayMember == "MaxUsedSeats")
 			//    return SkillStaffPeriodHelper.MaxUsedSeats(SkillStaffPeriodList);
 
@@ -84,7 +97,10 @@ namespace Teleopti.Ccc.Win.Common.Controls.Rows
 			//    return SkillStaffPeriodHelper.SkillDayRootMeanSquare(SkillStaffPeriodList);
 
 			if (DisplayMember == "DailySmoothness")
-				return SkillStaffPeriodHelper.SkillDayGridSmoothness(SkillStaffPeriodList);
+			{
+				var skillStaffPeriodOfOneWeek = getSkillStaffPeriodsForOneWeek(cellInfo);
+				return SkillStaffPeriodHelper.SkillPeriodGridSmootheness(skillStaffPeriodOfOneWeek);
+			}
 
 			//if (DisplayMember == "HighestDeviationInPeriod")
 			//    return SkillStaffPeriodHelper.GetHighestIntraIntervalDeviation(SkillStaffPeriodList);
