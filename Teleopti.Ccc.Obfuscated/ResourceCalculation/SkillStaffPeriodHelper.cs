@@ -363,7 +363,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
                        : statistics.StatisticsCalculator.RelativeStandardDeviation;
         }
 
-		public static double? SkillPeriodGridSmootheness(IEnumerable<IEnumerable<ISkillStaffPeriod>> skillStaffPeriodsOfOneWeek)
+		public static double? SkillPeriodGridSmoothness(IEnumerable<IEnumerable<ISkillStaffPeriod>> skillStaffPeriodsOfOneWeek)
 		{
 			var standardDeviationsOfDays = new List<double>();
 			foreach (var skillStaffPeriodsOfOneDay in skillStaffPeriodsOfOneWeek)
