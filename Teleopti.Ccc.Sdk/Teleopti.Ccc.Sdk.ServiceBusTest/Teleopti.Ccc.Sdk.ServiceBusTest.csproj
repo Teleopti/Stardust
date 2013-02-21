@@ -149,7 +149,8 @@
     <Compile Include="Payroll\PayrollExportResolveTest.cs" />
     <Compile Include="Payroll\PayrollPeopleLoaderTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RTA\RTAStateCheckerMessageConsumerTest.cs" />
+    <Compile Include="RTA\UpdatedScheduleInfoConsumerTest.cs" />
+    <Compile Include="RTA\BusinessUnitInfoConsumerTest.cs" />
     <Compile Include="RTA\RTAStateCheckerTest.cs" />
     <Compile Include="SetUpFixtureForAssembly.cs" />
     <Compile Include="ShiftTrade\ShiftTradeContainerInstallerTest.cs" />
@@ -169,6 +170,10 @@
   <ItemGroup>
     <None Include="..\..\Teleopti.Ccc.snk">
       <Link>Teleopti.Ccc.snk</Link>
+    </None>
+    <None Include="..\Teleopti.Ccc.Sdk.ServiceBus.Host\App.config">
+      <Link>App.config</Link>
+      <SubType>Designer</SubType>
     </None>
     <None Include="..\Teleopti.Ccc.Sdk.ServiceBus\log4net.config">
       <Link>log4net.config</Link>

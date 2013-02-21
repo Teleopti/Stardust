@@ -5,24 +5,24 @@ using Teleopti.Interfaces.Messages.Denormalize;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.RTA
 {
-    public class RTAStateCheckerMessageConsumer : ConsumerOf<RTAStateCheckerMessage>
+    public class BusinessUnitInfoConsumer : ConsumerOf<BusinessUnitInfo>
     {
         private readonly IStatisticRepository _statisticRepository;
         private readonly IServiceBus _serviceBus;
 
-        public RTAStateCheckerMessageConsumer(IStatisticRepository statisticRepository, IServiceBus serviceBus)
+        public BusinessUnitInfoConsumer(IStatisticRepository statisticRepository, IServiceBus serviceBus)
         {
             _statisticRepository = statisticRepository;
             _serviceBus = serviceBus;
         }
 
-        public void Consume(RTAStateCheckerMessage message)
+        public void Consume(BusinessUnitInfo message)
         {
            var persons = _statisticRepository.PersonIdsWithExternalLogOn();
 
             foreach (var person in persons)
             {
-                _serviceBus.Send(new RTAPersonInfoMessage { Datasource = message.Datasource,
+                _serviceBus.Send(new PersonWithExternalLogon { Datasource = message.Datasource,
                                                             BusinessUnitId = message.BusinessUnitId,
                                                             PersonId = person, 
                                                             Timestamp = DateTime.UtcNow});
