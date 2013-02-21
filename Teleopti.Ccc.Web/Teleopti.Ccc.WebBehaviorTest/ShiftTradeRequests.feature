@@ -21,6 +21,10 @@ Background:
 	And I have a person period with 
 	| Field      | Value      |
 	| Start date | 2012-06-18 |	
+	And OtherAgent has a person period with
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
+
 	And there are shift categories
 	| Name  |
 	| Day   |
