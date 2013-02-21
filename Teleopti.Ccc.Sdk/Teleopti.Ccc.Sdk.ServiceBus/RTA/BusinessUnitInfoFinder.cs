@@ -6,7 +6,7 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Messages.Denormalize;
 
-namespace Teleopti.Ccc.Sdk.ServiceBus.RTA
+namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
 {
     public class BusinessUnitInfoFinder
     {

@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NUnit.Framework;
-using Rhino.Mocks;
+﻿using NUnit.Framework;
 
-namespace Teleopti.Ccc.Sdk.ServiceBusTest.RTA
+namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 {
     [TestFixture]
-    public class RTAStateCheckerTest
+    public class RtaStateCheckerTest
     {
-
         [SetUp]
         public void Setup()
         {

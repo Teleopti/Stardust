@@ -5,7 +5,7 @@ using Teleopti.Ccc.Sdk.ServiceBus.TeleoptiRtaService;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Messages.Denormalize;
 
-namespace Teleopti.Ccc.Sdk.ServiceBus.RTA
+namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
 {
 	public class UpdatedScheduleInfoConsumer : ConsumerOf<PersonWithExternalLogon>, ConsumerOf<UpdatedScheduleDay>
 	{
@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.RTA
 			_unitOfWorkFactory = unitOfWorkFactory;
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "exception"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
 		public void Consume(PersonWithExternalLogon message)
 		{
 			DateTime startTime;
@@ -29,16 +30,18 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.RTA
 			}
 
 			if (startTime.Date.Equals(new DateTime().Date)) return;
-
+			
 			try
 			{
-				var teleoptiRtaServiceClient = new TeleoptiRtaServiceClient();
-				teleoptiRtaServiceClient.GetUpdatedScheduleChange(message.PersonId, message.BusinessUnitId, message.Datasource,DateTime.UtcNow);
+				using (var teleoptiRtaServiceClient = new TeleoptiRtaServiceClient())
+				{
+					teleoptiRtaServiceClient.GetUpdatedScheduleChange(message.PersonId, message.BusinessUnitId, message.Datasource,
+																	  DateTime.UtcNow);
+				}
 			}
 			catch (Exception exp)
 			{
 				var exception = exp.Message;
-			    return;
 			}
 
 			_serviceBus.DelaySend(startTime, new PersonWithExternalLogon
@@ -50,6 +53,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.RTA
 			});
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "excpetion"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
 		public void Consume(UpdatedScheduleDay message)
 		{
 			//if (message.ActivityStartDateTime.Date == DateTime.UtcNow.Date || message.ActivityStartDateTime.Date == DateTime.UtcNow.AddDays(1).Date)
@@ -57,19 +61,20 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.RTA
 				return;
 			
 			//send message to the web service.
-		    try
-		    {
-		        var teleoptiRtaServiceClient = new TeleoptiRtaServiceClient();
-		        teleoptiRtaServiceClient.GetUpdatedScheduleChange(message.PersonId, message.BusinessUnitId, message.Datasource,
-		                                                          DateTime.UtcNow);
-		    }
-		    catch (Exception exp)
-		    {
-		        var excpetion = exp.Message;
-		        return;
-		    }
+			try
+			{
+				using (var teleoptiRtaServiceClient = new TeleoptiRtaServiceClient())
+				{
+					teleoptiRtaServiceClient.GetUpdatedScheduleChange(message.PersonId, message.BusinessUnitId, message.Datasource,
+					                                                  DateTime.UtcNow);
+				}
+			}
+			catch (Exception exp)
+			{
+				var excpetion = exp.Message;
+			}
 
-		    DateTime startTime;
+			DateTime startTime;
 			using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
 				startTime = _scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow, message.PersonId);

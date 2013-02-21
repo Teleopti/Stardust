@@ -1,17 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Sdk.ServiceBus.RTA;
+using Teleopti.Ccc.Sdk.ServiceBus.Rta;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Messages.Denormalize;
 
-namespace Teleopti.Ccc.Sdk.ServiceBusTest.RTA
+namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 {
     [TestFixture]
     public class BusinessUnitInfoConsumerTest

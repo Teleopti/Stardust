@@ -157,10 +157,10 @@
     <Compile Include="BudgetGroupAllowanceSpecification.cs" />
     <Compile Include="BusStartup.cs" />
     <Compile Include="ConfigFileDefaultHost.cs" />
-    <Compile Include="RTA\BusinessUnitInfoConsumer.cs" />
+    <Compile Include="Rta\BusinessUnitInfoConsumer.cs" />
     <Compile Include="Denormalizer\PersonScheduleDayReadModelHandler.cs" />
     <Compile Include="Denormalizer\PersonScheduleDayReadModelsCreator.cs" />
-    <Compile Include="RTA\UpdatedScheduleInfoConsumer.cs" />
+    <Compile Include="Rta\UpdatedScheduleInfoConsumer.cs" />
     <Compile Include="Denormalizer\DenormalizedScheduleMessageBuilder.cs" />
     <Compile Include="Denormalizer\IDenormalizedScheduleMessageBuilder.cs" />
     <Compile Include="Denormalizer\IScheduleDayReadModelCreator.cs" />
@@ -250,7 +250,7 @@
     <Compile Include="BasicState.cs" />
     <Compile Include="NewAbsenceRequestConsumer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RTA\BusinessUnitInfoFinder.cs" />
+    <Compile Include="Rta\BusinessUnitInfoFinder.cs" />
     <Compile Include="ScheduleIsInvalidSpecification.cs" />
     <Compile Include="SchedulingContainerInstaller.cs" />
     <Compile Include="SdkConfigurationReader.cs" />

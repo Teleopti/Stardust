@@ -1,4 +1,4 @@
-﻿using Teleopti.Ccc.Sdk.ServiceBus.RTA;
+﻿using Teleopti.Ccc.Sdk.ServiceBus.Rta;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
 {

@@ -3,7 +3,7 @@ using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Messages.Denormalize;
 
-namespace Teleopti.Ccc.Sdk.ServiceBus.RTA
+namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
 {
     public class BusinessUnitInfoConsumer : ConsumerOf<BusinessUnitInfo>
     {

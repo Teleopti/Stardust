@@ -3,13 +3,13 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Rhino.ServiceBus;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Sdk.ServiceBus.RTA;
+using Teleopti.Ccc.Sdk.ServiceBus.Rta;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Messages.Denormalize;
 
-namespace Teleopti.Ccc.Sdk.ServiceBusTest.RTA
+namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 {
     [TestFixture]
     public class UpdatedScheduleInfoConsumerTest
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.RTA
         }
 
         [Test]
-        public void IsPersonWithExternalLogonConsumeSuccessfully()
+        public void IsPersonWithExternalLogOnConsumeSuccessfully()
         {
             var person = PersonFactory.CreatePerson();
 			person.SetId(Guid.NewGuid());
@@ -58,30 +58,32 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.RTA
             mocks.VerifyAll();
         }
 
-        [Test]
-        public void DontSendDelayMessageIfThereIsNoNextActivity()
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
+        public void DoNotSendDelayMessageIfThereIsNoNextActivity()
         {
             
         }
 
-        [Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
         public void SendDelayMessageIfThereExistNextActivity()
         {
             
         }
 
-        [Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
         public void IsUpdatedScheduleDayConsumeSuccessfully()
         {
            
         }
 
-        public void DontSendAnyMessageIfTheScheduleIsNotUpdatedWithinRange()
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
+		public void DoNotSendAnyMessageIfTheScheduleIsNotUpdatedWithinRange()
         {
             
         }
 
-        public void SendMessageIfTheScheduleIsNotUpdatedWithinRange()
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
+		public void SendMessageIfTheScheduleIsNotUpdatedWithinRange()
         {
             
         }
