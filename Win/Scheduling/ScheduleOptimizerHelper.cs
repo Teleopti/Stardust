@@ -619,16 +619,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 					runFairness(selectedDays, tagSetter, selectedPersons, optimizerPreferences);
             }
 
-
-            if (optimizerPreferences.General.UseShiftCategoryLimitations)
-            {
-				var schedulingOptionsCreator = new SchedulingOptionsCreator();
-				var schedulingOptions = schedulingOptionsCreator.CreateSchedulingOptions(optimizerPreferences);
-
-            	RemoveShiftCategoryBackToLegalState(matrixListForWorkShiftOptimization, backgroundWorker,
-            	                                    optimizerPreferences, schedulingOptions, selectedPeriod, allMatrixes);
-            }
-
             //set back
             optimizerPreferences.Rescheduling.OnlyShiftsWhenUnderstaffed = onlyShiftsWhenUnderstaffed;
         }
