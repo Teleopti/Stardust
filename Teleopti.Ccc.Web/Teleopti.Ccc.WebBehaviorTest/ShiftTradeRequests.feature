@@ -288,7 +288,6 @@ Scenario: Show name of the person of a shifttrade that I have created
 	When I click on the request
 	Then I should see 'Ashley Andeen' as the receiver of the request
 
-@ignore
 Scenario: Show schedules of the shift trade 
 Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -312,14 +311,11 @@ Given I have the role 'Full access to mytime'
 	| Pending  | True          |
 	And I am viewing requests
 	When I click on the request
-	Then I should see details with a schedule
+	Then I should see details with a schedule from
 	| Field			| Value |
 	| Start time	| 06:00 |
 	| End time		| 16:00 |
-	And I should see details with a schedule
-	| Field			| Value |
-	| Start time	| 12:00 |
-	| End time		| 22:00 |
+
 
 
 

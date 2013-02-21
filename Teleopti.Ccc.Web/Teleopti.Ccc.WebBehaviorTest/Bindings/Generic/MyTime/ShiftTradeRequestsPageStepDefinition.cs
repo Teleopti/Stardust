@@ -102,11 +102,31 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			EventualAssert.That(() => Pages.Pages.RequestsPage.MyScheduleLayers.First().Span(Find.First()).Text, Is.EqualTo(dayOffName));
 		}
 
-		[Then(@"I should see details with a schedule")]
-		public void ThenIShouldSeeDetailsWithASchedule(Table table)
+		[Then(@"I should see details with a schedule from")]
+		public void ThenIShouldSeeDetailsWithAScheduleFrom(Table table)
 		{
-			ScenarioContext.Current.Pending();
+			var expectedStart = table.Rows[0][1];
+			var expectedEnd = table.Rows[1][1];
+
+			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeDetailsFromScheduleLayers.Any(), Is.True);
+			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeDetailsFromScheduleLayers.First().Title, Contains.Substring(expectedStart));
+			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeDetailsFromScheduleLayers.Last().Title, Contains.Substring(expectedEnd));
 		}
+
+		[Then(@"I should see details with a schedule to")]
+		public void ThenIShouldSeeDetailsWithAScheduleTo(Table table)
+		{
+			
+			var expectedStart = table.Rows[0][1];
+			var expectedEnd = table.Rows[1][1];
+
+			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeDetailsToScheduleLayers.Any(), Is.True);
+			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeDetailsToScheduleLayers.First().Title, Contains.Substring(expectedStart));
+			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeDetailsToScheduleLayers.Last().Title, Contains.Substring(expectedEnd));
+
+		}
+
+
 
 
 	}
