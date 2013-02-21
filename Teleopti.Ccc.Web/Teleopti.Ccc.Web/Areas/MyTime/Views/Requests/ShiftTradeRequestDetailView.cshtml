@@ -11,18 +11,6 @@
 
     <br/>
     <br/>
-    <div>
-       @* <span>xxFrom: 
-        </span>
-        <span id="Request-shift-trade-sender" data-bind="text: From"></span>
-   
-        <span>xxTo: 
-        </span>
-        <span id="Request-shift-trade-reciever" data-bind="text: To"></span>*@
-    </div>
-   
-  
-	
 <div data-bind="click: henkeTest">HENKE TEST</div>
 <br/>
 	
@@ -31,7 +19,7 @@
 <div>
 	<br/>
 	<div>
-	<div class="shift-trade-swap-detail-agent-name" style="width: 150px;" data-bind="text: mySchedule().agentName"></div>
+	<div class="shift-trade-swap-detail-agent-name" id="Request-shift-trade-sender" style="width: 150px;" data-bind="text: mySchedule().agentName"></div>
 	<div  class="shift-trade-swap-detail-timeline" data-bind="foreach: hours">
 		<span class="shift-trade-timeline-line" data-bind="style: { width : hourWidth }">
 			<span class="shift-trade-timeline-number ui-corner-all" data-bind="text: hourText, style: {left: leftPx}"></span>
@@ -51,7 +39,7 @@
 	
 	<br/>
 	<div>
-	<div class="shift-trade-swap-detail-agent-name" data-bind="text: otherSchedule().agentName"></div>
+	<div class="shift-trade-swap-detail-agent-name" id="Request-shift-trade-reciever" data-bind="text: otherSchedule().agentName"></div>
 		<div class="shift-trade-swap-detail-schedule-row">
 			
 			<div  class="shift-trade-swap-detail-timeline" data-bind="foreach: hours">

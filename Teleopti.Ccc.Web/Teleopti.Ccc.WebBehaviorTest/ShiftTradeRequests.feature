@@ -240,20 +240,50 @@ Scenario: Should not be able to delete received shift trade request
 	When I view requests
 	Then I should not see a delete button on the request
 
-Scenario: Show name of the person that created the shift trade request
+Scenario: Show name of sender of a received shifttrade
 	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And Ashley Andeen have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And I have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 06:00 |
+	| EndTime               | 2030-01-01 16:00 |
+	| Shift category        | Day              |
+	And Ashley Andeen have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 12:00 |
+	| EndTime               | 2030-01-01 22:00 |
+	| Shift category			| Day	           |
 	And I have received a shift trade request
-	| Field		| Value					|
-	| From		| Keil Randor			|
+	| Field    | Value         |
+	| From       | Ashley Andeen	|
+	| DateTo   | 2030-01-01    |
+	| DateFrom | 2030-01-01    |
+	| Pending  | True          |
 	And I am viewing requests
 	When I click on the request
-	Then I should see 'Keil Randor' as the sender of the request
+	Then I should see 'Ashley Andeen' as the sender of the request
 
-Scenario: Show name of the person that recieved the shift trade request
+Scenario: Show name of the person of a shifttrade that I have created
 	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And Ashley Andeen have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And I have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 06:00 |
+	| EndTime               | 2030-01-01 16:00 |
+	| Shift category        | Day              |
+	And Ashley Andeen have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 12:00 |
+	| EndTime               | 2030-01-01 22:00 |
+	| Shift category			| Day	           |
 	And I have created a shift trade request
-	| Field	| Value					|
-	| To		| Ashley Andeen		|
+	| Field    | Value         |
+	| To       | Ashley Andeen	|
+	| DateTo   | 2030-01-01    |
+	| DateFrom | 2030-01-01    |
+	| Pending  | True          |
 	And I am viewing requests
 	When I click on the request
 	Then I should see 'Ashley Andeen' as the receiver of the request
