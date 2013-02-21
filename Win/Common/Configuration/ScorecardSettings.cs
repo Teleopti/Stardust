@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
+using Microsoft.Practices.Composite;
 using Teleopti.Ccc.Domain.Kpi;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -18,7 +20,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
     public partial class ScorecardSettings : BaseUserControl, ISettingPage
     {
         private IList<IKeyPerformanceIndicator> _kpiList;
-        private IList<IScorecard> _scorecardList;
+        private readonly BindingList<IScorecard> _scorecardList = new BindingList<IScorecard>();
         private bool _resetting;
         private IUnitOfWork _unitOfWork;
 
@@ -26,7 +28,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         {
             get
             {
-                return (IScorecard)comboBoxAdvScorecard.SelectedItem;
+                return (IScorecard)comboBoxAdvScorecard.SelectedValue;
             }
         }
 
@@ -62,10 +64,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
                 return;
             }
             SelectedScorecard.Name = textBoxScorecardName.Text;
-            IScorecard itemToBeSelected = SelectedScorecard;
-            LoadScorecards();
-
-            comboBoxAdvScorecard.SelectedIndex = _scorecardList.IndexOf(itemToBeSelected);
+			BindScorecard(); // update the name field in the scorecard combo
         }
 
         private void CheckedListBoxKpiItemCheck(object sender, ItemCheckEventArgs e)
@@ -98,10 +97,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             IScorecard newScorecard = NewScorecard();
             _scorecardList.Add(newScorecard);
 
-            LoadScorecards();
-            comboBoxAdvScorecard.SelectedIndex = _scorecardList.IndexOf(newScorecard);
-            ComboBoxAdvScorecardSelectedIndexChanged(this, EventArgs.Empty);
-            //Selected the added Scorecard
+			comboBoxAdvScorecard.SelectedItem = newScorecard;
         }
 
         private void ButtonAdvDeleteScorecardClick(object sender, EventArgs e)
@@ -151,26 +147,30 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
         public void LoadControl()
         {
-            LoadPeriods();
+        	LoadPeriods();
             LoadKpi();
-            LoadScorecards();
-            ComboBoxAdvScorecardSelectedIndexChanged(this, EventArgs.Empty);
+
+			BindScorecard();
+			LoadScorecards();
         }
 
-        public void SaveChanges()
+    	private void BindScorecard()
+    	{
+    		comboBoxAdvScorecard.DataSource = null;
+    		comboBoxAdvScorecard.ValueMember = "";
+    		comboBoxAdvScorecard.DataSource = _scorecardList;
+    		comboBoxAdvScorecard.DisplayMember = "Name";
+    	}
+
+    	public void SaveChanges()
         {
-            if (_scorecardList.Count > 0 && ValidateData())
-            {
-                _scorecardList = null;
-                LoadScorecards();
-            }
-            else
-            {
-                textBoxScorecardName.Text = string.Empty;
-            }
+        	if (_scorecardList.Count <= 0 || !ValidateData())
+        	{
+        		textBoxScorecardName.Text = string.Empty;
+        	}
         }
 
-        public void Unload()
+    	public void Unload()
         {
         }
 
@@ -186,12 +186,12 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
         public TreeFamily TreeFamily()
         {
-            return new TreeFamily(UserTexts.Resources.Scorecards, DefinedRaptorApplicationFunctionPaths.ManageScorecards);
+            return new TreeFamily(Resources.Scorecards, DefinedRaptorApplicationFunctionPaths.ManageScorecards);
         }
 
         public string TreeNode()
         {
-            return UserTexts.Resources.Scorecards;
+            return Resources.Scorecards;
         }
 
     	public void OnShow()
@@ -220,10 +220,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
         private void DeleteScorecard()
         {
-        	var scoreRep = new ScorecardRepository(_unitOfWork);
-        	_scorecardList.Remove(SelectedScorecard);
-        	scoreRep.Remove(SelectedScorecard);
-
         	//Make sure that teams with this scorecard gets disconnected, otherwise there will be a FK error!
         	var teamRepository = new TeamRepository(_unitOfWork);
         	using (_unitOfWork.DisableFilter(QueryFilter.Deleted))
@@ -237,19 +233,19 @@ namespace Teleopti.Ccc.Win.Common.Configuration
         			}
         		}
         	}
-                
+
+			var scoreRep = new ScorecardRepository(_unitOfWork);
+			scoreRep.Remove(SelectedScorecard);
+
+			_scorecardList.Remove(SelectedScorecard);
+
         	if (_scorecardList.Count > 0)
         	{
-        		LoadScorecards();
         		textBoxScorecardName.Text = SelectedScorecard.Name;
         		comboBoxAdvType.SelectedValue = SelectedScorecard.Period.Id;
         	}
         	else
         	{
-        		comboBoxAdvScorecard.SelectedIndexChanged -= ComboBoxAdvScorecardSelectedIndexChanged;
-        		comboBoxAdvScorecard.DataSource = null;
-        		comboBoxAdvScorecard.SelectedIndexChanged += ComboBoxAdvScorecardSelectedIndexChanged;
-
         		textBoxScorecardName.Text = string.Empty;
 
         		for (int i = 0; i < checkedListBoxKpi.Items.Count; i++)
@@ -270,32 +266,17 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
         private void LoadScorecards()
         {
-            if (_scorecardList == null)
-            {
                 var scoreRep = new ScorecardRepository(_unitOfWork);
-                _scorecardList = scoreRep.LoadAll();
-            }
+				_scorecardList.Clear();
+				_scorecardList.AddRange(scoreRep.LoadAll().OrderBy(p => p.Name).ToList());
+           
             if (_scorecardList.Count == 0)
                 _scorecardList.Add(NewScorecard());
 
-            _scorecardList = _scorecardList.OrderBy(p => p.Name).ToList();
+				comboBoxAdvScorecard.SelectedIndex = -1;
+				comboBoxAdvScorecard.SelectedIndex = 0;				
 
-            // Set same as before as selected if none was seelcted select the first
-            int selected = comboBoxAdvScorecard.SelectedIndex;
-            if (selected == -1) selected = 0;
-            comboBoxAdvScorecard.SelectedIndexChanged -= ComboBoxAdvScorecardSelectedIndexChanged;
-            comboBoxAdvScorecard.DataSource = null;
-            comboBoxAdvScorecard.ValueMember = "";
-            comboBoxAdvScorecard.DataSource = _scorecardList;
-            comboBoxAdvScorecard.DisplayMember = "Name";
-            comboBoxAdvScorecard.SelectedIndexChanged += ComboBoxAdvScorecardSelectedIndexChanged;
-
-            if (selected >= comboBoxAdvScorecard.Items.Count)
-                selected = comboBoxAdvScorecard.Items.Count - 1;
-
-            comboBoxAdvScorecard.SelectedIndex = selected;
-
-            SetCorrectKpiChecked();
+        	SetCorrectKpiChecked();
         }
 
         private IScorecard NewScorecard()

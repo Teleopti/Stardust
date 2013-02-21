@@ -18,7 +18,7 @@
         /// Created by: sumeda herath
         /// Created date: 2008-01-09
         /// </remarks>
-        ISkill Skill { get; set; }
+        ISkill Skill { get; }
 
         /// <summary>
         /// Gets or sets the percent.

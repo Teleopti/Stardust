@@ -149,22 +149,5 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			ISkill skill = _target.AffectedSkills.FirstOrDefault();
 			Assert.AreEqual("vanligt", skill.Name);
 		}
-
-		[Test]
-		public void ShouldOnlyReturnUniqueSkills()
-		{
-			IActivity act = new Activity("sd");
-			ISkill validSkill = SkillFactory.CreateSkill("valid");
-			validSkill.Activity = act;
-			
-			_validSkills.Add(validSkill);
-			IPerson person = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(1900, 1, 1), new List<ISkill> { validSkill, validSkill });
-
-			ICollection<IPersonSkill> validPersonSkill = _target.Execute(person, act, new DateOnly(2000, 1, 1));
-			Assert.AreEqual(1, validPersonSkill.Count);
-			Assert.AreSame(validSkill, validPersonSkill.First().Skill);
-		}
     }
-
-
 }

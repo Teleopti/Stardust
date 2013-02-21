@@ -3,6 +3,7 @@ using System.Data.SqlClient;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Win.ExceptionHandling;
 using Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Interfaces.Domain;
@@ -39,6 +40,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		void Form_KeyDown(object sender, KeyEventArgs e)
 		{
+			if(ActiveControl != treeViewOptions) return;
+			
 			if (e.KeyValue.Equals(32))
 			{
 				e.Handled = true;
@@ -47,6 +50,8 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
 		void Form_KeyPress(object sender, KeyPressEventArgs e)
 		{
+			if (ActiveControl != treeViewOptions) return;
+
 			if (e.KeyChar.Equals((Char)Keys.Space))
 			{
 				e.Handled = true;
@@ -147,27 +152,36 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 
         private bool SaveChanges()
         {
-            try
-            {
-                _core.SaveChanges();
-            }
-            catch (ValidationException ex)
-            {
-                ShowWarningMessage(UserTexts.Resources.InvalidDataOnFollowingPage + ex.Message, UserTexts.Resources.ValidationError);
-                DialogResult = DialogResult.None;
-                return false;
-            }
-            catch(OptimisticLockException)
-            {
-                ShowWarningMessage(UserTexts.Resources.OptimisticLockText, UserTexts.Resources.OptimisticLockHeader);
-                DialogResult = DialogResult.None;
-                CloseForm();
-            }
-            catch (DataSourceException ex)
-            {
-                DatabaseLostConnectionHandler.ShowConnectionLostFromCloseDialog(ex);
-                FormKill();
-            }
+			try
+			{
+				_core.SaveChanges();
+			}
+			catch (ValidationException ex)
+			{
+				ShowWarningMessage(UserTexts.Resources.InvalidDataOnFollowingPage + ex.Message, UserTexts.Resources.ValidationError);
+				DialogResult = DialogResult.None;
+				return false;
+			}
+			catch (OptimisticLockException)
+			{
+				ShowWarningMessage(UserTexts.Resources.OptimisticLockText, UserTexts.Resources.OptimisticLockHeader);
+				DialogResult = DialogResult.None;
+				CloseForm();
+			}
+			catch (ForeignKeyException)
+			{
+				//special case that comes as in bug 22347 -> FK-exception
+				//the reason is most probably a deleted, but then used scorecard in SetScorecard
+
+				ShowWarningMessage(UserTexts.Resources.DataHasBeenDeleted, UserTexts.Resources.OpenTeleoptiCCC);
+				DialogResult = DialogResult.None;
+				CloseForm();
+			}
+			catch (DataSourceException ex)
+			{
+				DatabaseLostConnectionHandler.ShowConnectionLostFromCloseDialog(ex);
+				FormKill();
+			}
 			catch (Exception exception)
 			{
 				if (exception.InnerException != null && exception.InnerException is SqlException)

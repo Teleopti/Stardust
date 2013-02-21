@@ -42,25 +42,7 @@ CSCRIPT "%ROOTDIR%..\WiseIISConfig\adsutil.vbs" START_SERVER "W3SVC/AppPools/Tel
 echo Start App Pools. Done
 echo.
 
-::Kick the local SDK url
-Echo Browsing SDK url
-::32-bit
-reg query HKEY_LOCAL_MACHINE\SOFTWARE\Teleopti\TeleoptiCCC\InstallationSettings /v AGENT_SERVICE > nul
-if %errorlevel% EQU 0 set confirmedPath=HKEY_LOCAL_MACHINE\SOFTWARE\Teleopti\TeleoptiCCC\InstallationSettings
-::64-bit
-reg query HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Teleopti\TeleoptiCCC\InstallationSettings /v AGENT_SERVICE > nul
-if %errorlevel% EQU 0 set confirmedPath=HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Teleopti\TeleoptiCCC\InstallationSettings
-
-::get install path
-set SDKUrl=
-for /f "tokens=2*" %%A in ('REG QUERY "%confirmedPath%" /v AGENT_SERVICE') DO (
-  for %%F in (%%B) do (
-    set SDKUrl=%%F
-  )
-)
-
-cscript "%ROOTDIR%BrowseUrl.vbs" "%SDKUrl%"
-if %errorlevel% neq 200 Echo WARNING: could not send GET request to SDK!
+if exist "%ROOTDIR%\..\..\TeleoptiCCC\SDK\TeleoptiCccSdkService.svc" call:browseSDK
 Echo.
 
 ::For each service in list
@@ -78,6 +60,28 @@ set serviceList=%%b
 )
 if not "%serviceList%" == "" goto :processServiceList
 goto :done
+
+:browseSDK
+::32-bit
+reg query HKEY_LOCAL_MACHINE\SOFTWARE\Teleopti\TeleoptiCCC\InstallationSettings /v AGENT_SERVICE > nul
+if %errorlevel% EQU 0 set confirmedPath=HKEY_LOCAL_MACHINE\SOFTWARE\Teleopti\TeleoptiCCC\InstallationSettings
+::64-bit
+reg query HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Teleopti\TeleoptiCCC\InstallationSettings /v AGENT_SERVICE > nul
+if %errorlevel% EQU 0 set confirmedPath=HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Teleopti\TeleoptiCCC\InstallationSettings
+
+::get install path
+set SDKUrl=
+for /f "tokens=2*" %%A in ('REG QUERY "%confirmedPath%" /v AGENT_SERVICE') DO (
+  for %%F in (%%B) do (
+    set SDKUrl=%%F
+  )
+)
+
+Echo Browsing SDK url
+cscript "%ROOTDIR%BrowseUrl.vbs" "%SDKUrl%"
+if %errorlevel% neq 200 Echo WARNING: could not send GET request to SDK!
+exit /b 0
+
 
 :SetSvcModeAndAction
 ::Check if Service is disabled, then exit

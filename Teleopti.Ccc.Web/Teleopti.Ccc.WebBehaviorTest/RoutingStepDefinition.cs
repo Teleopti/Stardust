@@ -24,10 +24,10 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => Pages.Pages.MobileReportsPage.ReportsSettingsViewPageContainer.DisplayVisible(), Is.True);
 		}
 
-		[Then(@"I should see Admin Web")]
-		public void ThenIShouldSeeAdminWeb()
+		[Then(@"I should see Anywhere")]
+		public void ThenIShouldSeeAnywhere()
 		{
-			EventualAssert.That(() => Pages.Pages.AdminWebPage.Placeholder.DisplayVisible(), Is.True);
+			EventualAssert.That(() => Pages.Pages.AnywherePage.Placeholder.DisplayVisible(), Is.True);
 		}
 	}
 }

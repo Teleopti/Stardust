@@ -31,13 +31,13 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
             var auth = PrincipalAuthorization.Instance();
             foreach (var personFinderDisplayRow in SearchCriteria.DisplayRows)
             {
-                if(personFinderDisplayRow.PersonId != new Guid() )
+                if(personFinderDisplayRow.PersonId != Guid.Empty )
                 {
                     personFinderDisplayRow.Grayed =
                         !auth.IsPermitted(DefinedRaptorApplicationFunctionPaths.OpenPersonAdminPage, today,
                                          personFinderDisplayRow);
                 }
-				if (!personFinderDisplayRow.Grayed && personFinderDisplayRow.BusinessUnitId != new Guid())
+				if (!personFinderDisplayRow.Grayed && personFinderDisplayRow.BusinessUnitId != Guid.Empty)
 				{
 					personFinderDisplayRow.Grayed = personFinderDisplayRow.BusinessUnitId != bu;
 				}

@@ -381,8 +381,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             var roles = DetachedCriteria.For<Person>()
                 .Add(Restrictions.Eq("Id", person.Id))
                 .SetFetchMode("PermissionInformation.personInApplicationRole", FetchMode.Join);
+
+			var rolesSubquery = DetachedCriteria.For<Person>()
+				.Add(Restrictions.Eq("Id", person.Id))
+				.CreateAlias("PermissionInformation.personInApplicationRole","role")
+				.SetProjection(Projections.Property("role.Id"));
             
             var functions = DetachedCriteria.For<ApplicationRole>()
+				.Add(Subqueries.PropertyIn("Id",rolesSubquery))
                 .SetFetchMode("ApplicationFunctionCollection", FetchMode.Join)
                 .SetFetchMode("BusinessUnit", FetchMode.Join);
             

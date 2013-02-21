@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -21,12 +22,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 	{
 		public string Name { get; set; }
 		public string BusinessUnit { get; set; }
+
+		public string AccessToTeam { get; set; }
+
 		public bool ViewUnpublishedSchedules { get; set; }
 		public bool ViewConfidential { get; set; }
 		public bool AccessToMobileReports { get; set; }
 		public bool AccessToExtendedPreferences { get; set; }
 		public bool AccessToMytimeWeb { get; set; }
-		public bool AccessToAdminWeb { get; set; }
+		public bool AccessToAnywhere { get; set; }
 		public bool AccessToAsm { get; set; }
         public bool AccessToTextRequests { get; set; }
         public bool AccessToAbsenceRequests { get; set; }
@@ -45,7 +49,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
             AccessToTextRequests = true;
             AccessToAbsenceRequests = true;
             AccessToShiftTradeRequests = true;
-			AccessToAdminWeb = false;
+			AccessToAnywhere = false;
 		}
 
 		public void Apply(IUnitOfWork uow)
@@ -58,6 +62,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			                    		AvailableDataRange = AvailableDataRangeOption.MyTeam
 			                    	};
 			role.AvailableData = availableData;
+
+			if (!string.IsNullOrEmpty(AccessToTeam))
+			{
+				var teamRepository = new TeamRepository(uow);
+				AccessToTeam.Split(',')
+					.Select(t => teamRepository.FindTeamByDescriptionName(t.Trim()).Single())
+					.ForEach(role.AvailableData.AddAvailableTeam);
+			}
 
 			var businessUnitRepository = new BusinessUnitRepository(uow);
 			var businessUnit = businessUnitRepository.LoadAllBusinessUnitSortedByName().Single(b => b.Name == BusinessUnit);
@@ -122,9 +134,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 				applicationFunctions = from f in applicationFunctions
 				                       where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb
 				                       select f;
-			if (!AccessToAdminWeb)
+			if (!AccessToAnywhere)
 				applicationFunctions = from f in applicationFunctions
-				                       where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.AdminWeb
+				                       where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.Anywhere
 				                       select f;
 			if (!AccessToStudentAvailability)
 				applicationFunctions = from f in applicationFunctions

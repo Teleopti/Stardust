@@ -14,6 +14,7 @@ WITH EXECUTE AS OWNER
 -- Date			Who	Description
 -- 2012-0x-xx	DJ	Added a parameter which persons we should update
 -- 2012-11-18	DJ	#21539 - Speed up initial load 400 sec => 6 sec
+-- 2013-02-20	RobinK	Faulty update with team id in some cases.
 -- =============================================
 AS
 -- exec [ReadModel].[UpdateFindPerson] 'B0C67CB1-1C4F-4047-8DC1-9EF500DC79A6, 2AE730A0-5AF7-49B7-9498-9EF500DC79A6'
@@ -153,8 +154,10 @@ WHERE t.IsDeleted = 0 AND s.IsDeleted = 0
 
 /*last if terminal*/
 INSERT INTO #last
-SELECT Parent, Team, MAX(enddate) from PersonPeriodWithEndDate
-group by Parent, Team
+SELECT Parent,Team,EndDate FROM
+(
+SELECT Parent, Team, EndDate, ROW_NUMBER () OVER (PARTITION BY Parent ORDER BY Parent,enddate DESC) row FROM PersonPeriodWithEndDate
+) AS LastPersonPeriod WHERE row=1
 
 UPDATE [ReadModel].[FindPerson] SET [TeamId] = t.Id,
 	[SiteId] = s.Id,[BusinessUnitId] = s.BusinessUnit 

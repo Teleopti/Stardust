@@ -405,6 +405,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			UserFactory.User().Setup(new AbsenceToday());
 		}
 
+		[Given(@"I have a full-day absence today with")]
+		[Given(@"I have a full-day absence with")]
+		public void GivenIHaveAFull_DayAbsenceTodayWith(Table table)
+		{
+			var absence = table.CreateInstance<AbsenceToday>();
+			UserFactory.User().Setup(absence);
+		}
+
 		[Given(@"I have a shift from (.*) to (.*)")]
 		public void GivenIHaveAShiftFrom756To1700(string from, string to)
 		{
@@ -429,16 +437,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			UserFactory.User().SetupCulture(new USCulture());
 		}
 
-		[Given(@"I am located in hawaii")]
-		public void GivenIAmLocatedInAmerica()
+		[Given(@"(I am|'(.*)' is) located in (h|H)awaii")]
+		public void GivenIAmLocatedInAmerica(string what, string userName, string hH)
 		{
-			UserFactory.User().SetupCulture(new HawaiiTimeZone());
+			UserFactory.User().SetupTimeZone(new HawaiiTimeZone());
 		}
 
-		[Given(@"I am located in Stockholm")]
-		public void GivenIAmLocatedInStockholm()
+		[Given(@"(I am|(.*) is) located in (S|s)tockholm")]
+		public void GivenIAmLocatedInStockholm(string what, string userName, string sS)
 		{
-			UserFactory.User().SetupCulture(new StockholmTimeZone());
+			UserFactory.User().SetupTimeZone(new StockholmTimeZone());
 		}
 
 

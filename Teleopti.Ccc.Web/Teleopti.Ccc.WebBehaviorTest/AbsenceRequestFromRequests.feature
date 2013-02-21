@@ -10,7 +10,18 @@ Scenario: Add absence request
 	When I click new absence request menu item in the toolbar
 	And I input absence request values with Vacation
 	And I click the OK button
-	Then I should see the absence request in the list
+	Then I should see the absence request containing 'Vacation' in the list
+
+Scenario: Add absence request when multiple absences exist
+	Given I am an agent
+	And I have a requestable absence called Vacation
+	And I have a requestable absence called Holiday
+	And I am viewing requests
+	When I click add request button in the toolbar
+	And I click absence request tab
+	And I input absence request values with Holiday
+	And I click the OK button
+	Then I should see the absence request containing 'Holiday' in the list
 
 Scenario: Can not add absence request from request view if no permission
 	Given I am an agent without access to absence requests

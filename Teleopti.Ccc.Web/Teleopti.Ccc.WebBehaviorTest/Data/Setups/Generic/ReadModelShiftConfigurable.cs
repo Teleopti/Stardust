@@ -1,5 +1,6 @@
 using System;
 using System.Drawing;
+using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -7,9 +8,8 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 {
-	public class ReadModelShiftConfigurable : IDataSetup
+	public class ReadModelShiftConfigurable : IUserDataSetup
 	{
-		public string Person { get; set; }
 		public DateTime Date { get; set; }
 		public string StartTime { get; set; }
 		public string EndTime { get; set; }
@@ -25,18 +25,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			return result;
 		}
 
-		public void Apply(IUnitOfWork uow)
+		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
 			var activityRepository = new ActivityRepository(uow);
 			var activities = activityRepository.LoadAll();
 			var mainActivity = activities.Single(a => a.Name == Activity);
 			var lunchActivity = activities.Single(a => a.Name == LunchActivity);
 
-			var personRepository = new PersonRepository(uow);
-			var person = personRepository.LoadAll().Single(p => p.Name.ToString(NameOrderOption.FirstNameLastName) == Person);
 			var dateOnly = new DateOnly(Date);
-			var personPeriod = person.Period(dateOnly);
-			var timeZone = person.PermissionInformation.DefaultTimeZone();
+			var personPeriod = user.Period(dateOnly);
+			var timeZone = user.PermissionInformation.DefaultTimeZone();
 
 			var reposistory = new PersonScheduleDayReadModelRepository(GlobalUnitOfWorkState.UnitOfWorkFactory);
 			reposistory.SaveReadModel(new PersonScheduleDayReadModel
@@ -44,18 +42,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			                           				BusinessUnitId = mainActivity.BusinessUnit.Id.GetValueOrDefault(),
 			                           				SiteId = personPeriod.Team.Site.Id.GetValueOrDefault(),
 			                           				TeamId = personPeriod.Team.Id.GetValueOrDefault(),
-			                           				PersonId = person.Id.GetValueOrDefault(),
+													PersonId = user.Id.GetValueOrDefault(),
 			                           				Date = Date,
 			                           				ShiftStart = TimeZoneInfo.ConvertTimeToUtc(Date.Add(AsTimeSpan(StartTime)), timeZone),
 			                           				ShiftEnd = TimeZoneInfo.ConvertTimeToUtc(Date.Add(AsTimeSpan(EndTime)), timeZone),
 			                           				Shift = Newtonsoft.Json.JsonConvert.SerializeObject(new
 			                           				                                                    	{
 			                           				                                                    		Date,
-			                           				                                                    		person.Name.FirstName,
-			                           				                                                    		person.Name.LastName,
-			                           				                                                    		person.EmploymentNumber,
+																												user.Name.FirstName,
+																												user.Name.LastName,
+																												user.EmploymentNumber,
 			                           				                                                    		Id =
-			                           				                                                    	person.Id.GetValueOrDefault().
+			                           				                                                    	user.Id.GetValueOrDefault().
 			                           				                                                    	ToString(),
 			                           				                                                    		ContractTimeMinutes =
 			                           				                                                    	AsTimeSpan(EndTime).Subtract(AsTimeSpan(StartTime)).
@@ -69,7 +67,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			                           				                                                    		             	{
 			                           				                                                    		             		new
 			                           				                                                    		             			{
-			                           				                                                    		             				Color = ColorTranslator. ToHtml(mainActivity.DisplayColor),
+			                           				                                                    		             				Color = ColorTranslator.ToHtml(mainActivity.DisplayColor),
 			                           				                                                    		             				Title = mainActivity.Name,
 																																			Start = TimeZoneInfo.ConvertTimeToUtc(Date.Add(AsTimeSpan(StartTime)),timeZone),
 																																			End = TimeZoneInfo.ConvertTimeToUtc(Date.Add(AsTimeSpan(LunchStartTime)),timeZone),
@@ -77,7 +75,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			                           				                                                    		             			},
 																																		new
 			                           				                                                    		             			{
-			                           				                                                    		             				Color = ColorTranslator. ToHtml(lunchActivity.DisplayColor),
+			                           				                                                    		             				Color = ColorTranslator.ToHtml(lunchActivity.DisplayColor),
 			                           				                                                    		             				Title = lunchActivity.Name,
 																																			Start = TimeZoneInfo.ConvertTimeToUtc(Date.Add(AsTimeSpan(LunchStartTime)),timeZone),
 																																			End = TimeZoneInfo.ConvertTimeToUtc(Date.Add(AsTimeSpan(LunchEndTime)),timeZone),
@@ -85,7 +83,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			                           				                                                    		             			},
 																																		new
 			                           				                                                    		             			{
-			                           				                                                    		             				Color = ColorTranslator. ToHtml(mainActivity.DisplayColor),
+			                           				                                                    		             				Color = ColorTranslator.ToHtml(mainActivity.DisplayColor),
 			                           				                                                    		             				Title = mainActivity.Name,
 																																			Start = TimeZoneInfo.ConvertTimeToUtc(Date.Add(AsTimeSpan(LunchEndTime)),timeZone),
 																																			End = TimeZoneInfo.ConvertTimeToUtc(Date.Add(AsTimeSpan(EndTime)),timeZone),
@@ -95,5 +93,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			                           				                                                    	})
 			                           			});
 		}
+
 	}
 }

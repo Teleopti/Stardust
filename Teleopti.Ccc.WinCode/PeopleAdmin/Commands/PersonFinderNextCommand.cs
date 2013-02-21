@@ -25,10 +25,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Commands
 
         public bool CanExecute()
         {
-            if (_model.SearchCriteria.CurrentPage < _model.SearchCriteria.TotalPages)
-                return true;
-
-            return false;
+        	return _model.SearchCriteria.CurrentPage < _model.SearchCriteria.TotalPages;
         }
     }
 }

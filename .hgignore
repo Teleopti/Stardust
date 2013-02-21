@@ -62,3 +62,5 @@ Logs/WebApps.log.1
 *.feature.cs
 Teleopti.Ccc.Sdk/Teleopti.Ccc.Sdk.Host/Teleopti.Payroll/internal.storage.xml
 */Pester.1.1.1
+*/Pester.2.0.0
+PowerShellTests.xml

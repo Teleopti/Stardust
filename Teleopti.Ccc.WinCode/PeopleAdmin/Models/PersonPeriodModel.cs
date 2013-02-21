@@ -180,7 +180,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
             }
             set
             {
-                if (_currentPeriod != null && _currentPeriod.PersonContract != null && _currentPeriod.PersonContract.PartTimePercentage != null)
+                if (value != null && _currentPeriod != null && _currentPeriod.PersonContract != null && _currentPeriod.PersonContract.PartTimePercentage != null)
                 {
                     _currentPeriod.PersonContract.PartTimePercentage = value;
                 }
@@ -232,7 +232,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
             }
             set
             {
-                if (_currentPeriod != null && _currentPeriod.PersonContract != null && _currentPeriod.PersonContract.Contract != null)
+                if (value != null && _currentPeriod != null && _currentPeriod.PersonContract != null && _currentPeriod.PersonContract.Contract != null)
                 {
                     _currentPeriod.PersonContract.Contract = value;
                 }
@@ -259,7 +259,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
             }
             set
             {
-                if (_currentPeriod != null && _currentPeriod.PersonContract != null && _currentPeriod.PersonContract.ContractSchedule != null)
+                if (value != null && _currentPeriod != null && _currentPeriod.PersonContract != null && _currentPeriod.PersonContract.ContractSchedule != null)
                 {
                     _currentPeriod.PersonContract.ContractSchedule = value;
                 }
@@ -471,13 +471,11 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin.Models
             }
             set
             {
-                if (_currentPeriod != null)
+				if (value != null && _currentPeriod != null)
                 {
                     _currentPeriod.Team = value.Team;
                 }
-
             }
-
         }
 
         /// <summary>

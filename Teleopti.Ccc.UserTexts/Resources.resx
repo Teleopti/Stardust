@@ -11228,8 +11228,8 @@ These options are activated:
     <comment>Remove person from Role</comment>
   </data>
   <data name="SelectWorkload" xml:space="preserve">
-    <value>Select workload</value>
-    <comment>Select workload</comment>
+    <value>Workloads</value>
+    <comment>Select workload in quickforecast</comment>
   </data>
   <data name="YouHaveToSelectAtLeastOneWorkload" xml:space="preserve">
     <value>You have to select at least one workload</value>
@@ -11237,6 +11237,10 @@ These options are activated:
   <data name="MySchedule" xml:space="preserve">
     <value>My Schedule</value>
     <comment>Used in creating Shift Trade on web</comment>
+  </data>
+  <data name="DataHasBeenDeleted" xml:space="preserve">
+    <value>Error when saving your changes. The most possible reason is that you or another user has deleted the data you set. To preserve data consistency, the form will be closed. Sorry, your changes has been lost.</value>
+    <comment>used for SQL Server ForeignKeyException type of errors</comment>
   </data>
   <data name="ResShiftStartDateColon" xml:space="preserve">
     <value>Date (shifts starting):</value>
@@ -11253,5 +11257,37 @@ These options are activated:
   <data name="ResShiftStartDateToColon" xml:space="preserve">
     <value>Date To (shifts starting):</value>
     <comment>Date To (shifts starting):</comment>
+  </data>
+  <data name="Little" xml:space="preserve">
+    <value>Little</value>
+    <comment>Smoothing style Little</comment>
+  </data>
+  <data name="Medium" xml:space="preserve">
+    <value>Medium</value>
+    <comment>Smoothing style Medium</comment>
+  </data>
+  <data name="Much" xml:space="preserve">
+    <value>Much</value>
+    <comment>Smoothing style Much</comment>
+  </data>
+  <data name="QuickForecast" xml:space="preserve">
+    <value>Quick Forecast</value>
+    <comment>Menu item and caption on form</comment>
+  </data>
+  <data name="SeasonalityDataRange" xml:space="preserve">
+    <value>Seasonality and trends data range</value>
+    <comment>Quick forecast wizard page</comment>
+  </data>
+  <data name="SmoothingStyleColon" xml:space="preserve">
+    <value>Smoothing style:</value>
+    <comment>Used in Quick forecast wizard page</comment>
+  </data>
+  <data name="TemplatesHistoricalDataRange" xml:space="preserve">
+    <value>Templates historical data range</value>
+    <comment>Quick forecast wizard page</comment>
+  </data>
+  <data name="ShowInfoMessages" xml:space="preserve">
+    <value>Show Info Messages</value>
+    <comment>if to show these messages in jobhistory in forecast navigator</comment>
   </data>
 </root>

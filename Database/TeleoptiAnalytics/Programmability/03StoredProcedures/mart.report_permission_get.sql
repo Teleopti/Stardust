@@ -20,7 +20,8 @@ BEGIN
 SET NOCOUNT ON
 
 SELECT COUNT(ReportId) report_permission_count 
-FROM mart.permission_report
+FROM mart.v_permission_report perm
+INNER JOIN [mart].[permission_report_active] active ON perm.table_name = active.is_active
 WHERE person_code=@person_code
 AND ReportId=@report_id
 
