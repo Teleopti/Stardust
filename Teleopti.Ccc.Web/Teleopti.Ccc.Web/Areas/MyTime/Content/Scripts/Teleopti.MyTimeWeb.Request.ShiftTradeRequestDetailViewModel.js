@@ -5,6 +5,8 @@ Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
 
 	var self = this;
 	self.Id = ko.observable();
+	self.Subject = ko.observable();
+	self.MessageText = ko.observable();
 	self.IsUpdate = ko.observable(true);
 	self.TypeEnum = ko.observable(2);
 	self.IsFullDay = ko.observable(true);
@@ -96,7 +98,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
 			dataType: "json",
 			type: "POST",
 			success: function (data) {
-
+			  
 				self.hours.removeAll();
 				for (var i = 0; i < data.TimeLineHours.length; i++) {
 
@@ -144,13 +146,13 @@ function TimeLineHourViewModel(hour, parentViewModel) {
 }
 
 ko.utils.extend(Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel.prototype, {
-    Initialize: function (data) {
-
-        var self = this;
-       
-        self.Id(data.Id);
-        self.CanApprove(!data.IsCreatedByUser);
-        self.From(data.From);
-        self.To(data.To);
-    }
+	Initialize: function (data) {
+		var self = this;
+		self.Subject(data.Subject);
+		self.MessageText(data.Text);
+		self.Id(data.Id);
+		self.CanApprove(!data.IsCreatedByUser);
+		self.From(data.From);
+		self.To(data.To);
+	}
 });

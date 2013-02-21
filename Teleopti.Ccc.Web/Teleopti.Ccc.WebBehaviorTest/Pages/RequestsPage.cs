@@ -169,5 +169,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		[FindBy(Id = "Request-shift-trade-date-to")]
 		public Element ShiftTradeDateTo { get; set; }
+
+		[FindBy(Id = "Request-shift-trade-detail-subject")]
+		public Div ShiftTradeRequestDetailSubject { get; set; }
+
+		[FindBy(Id = "Request-shift-trade-detail-message")]
+		public Div  ShiftTradeRequestDetailMessage { get; set; }
 	}
 }

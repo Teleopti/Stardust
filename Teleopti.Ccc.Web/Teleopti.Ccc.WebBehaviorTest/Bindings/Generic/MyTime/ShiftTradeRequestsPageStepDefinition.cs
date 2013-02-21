@@ -126,8 +126,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 
 		}
 
+		[Then(@"I should see details with subject '(.*)'")]
+		public void ThenIShouldSeeDetailsWithSubject(string subject)
+		{
+			
+			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeRequestDetailSubject.Text, Is.EqualTo(subject));
 
+		}
 
+		[Then(@"I should see details with message '(.*)'")]
+		public void ThenIShouldSeeDetailsWithMessage(string message)
+		{
+			ScenarioContext.Current.Pending();
+		}
 
 	}
 }
