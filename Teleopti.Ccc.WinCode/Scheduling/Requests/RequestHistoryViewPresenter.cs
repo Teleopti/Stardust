@@ -87,11 +87,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
         {
             try
             {
-                ICollection<IRequestPerson> persons = filteredPersons.Select(person => new RequestPerson
+                ICollection<IRequestPerson> persons = filteredPersons.Select(person => (IRequestPerson)new RequestPerson
                 {
                     Name = _commonAgentNameProvider.CommonAgentNameSettings.BuildCommonNameDescription(person),
-                    Id = person.Id.Value
-                }).Cast<IRequestPerson>().ToList();
+                    Id = person.Id.GetValueOrDefault()
+                }).ToList();
                 _requestHistoryView.FillPersonCombo(persons, preselectedPerson);
 				_loadRequestHistoryCommand.Execute();
 				UpdateNextPreviousState(_requestHistoryView.PageSize);
@@ -100,9 +100,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
             catch (DataSourceException dataSourceException)
             {
                 _requestHistoryView.ShowDataSourceException(dataSourceException);
-                return;
             }
-			
         }
     }
 

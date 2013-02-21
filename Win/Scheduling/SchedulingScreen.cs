@@ -36,10 +36,8 @@ using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.NonBlendSkill;
-using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
-using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.UndoRedo;
@@ -1053,8 +1051,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             {
                 if (options.ShowDialog(this) == DialogResult.OK)
                 {
-                    //_currentSchedulingOptions = options.CurrentOptions;
-
                     Cursor = Cursors.WaitCursor;
                     disableAllExceptCancelInRibbon();
                     _backgroundWorkerRunning = true;
@@ -4849,14 +4845,6 @@ namespace Teleopti.Ccc.Win.Scheduling
                     _grid.ContextMenuStrip = contextMenuViews;
                     ActiveControl = _grid;
                     break;
-				//removed in PBI21261
-                //case ZoomLevel.Level3:
-					//restrictionViewMode(false);
-					//_grid.BringToFront();
-					//_scheduleView = new DetailView(_grid, SchedulerState, _gridLockManager, SchedulePartFilter,_clipHandlerSchedule, _overriddenBusinessRulesHolder, callback,_defaultScheduleTag);
-					//_grid.ContextMenuStrip = contextMenuViews;
-					//ActiveControl = _grid;
-					//break;
                 case ZoomLevel.Level2:
                     restrictionViewMode(false);
                     _grid.BringToFront();
@@ -6422,11 +6410,12 @@ namespace Teleopti.Ccc.Win.Scheduling
             if (view == null)
                 return;
 
-            ((RestrictionPresenter) view.Presenter).UseStudent = toolStripMenuItemUseStudentAvailability.Checked;
-            ((RestrictionPresenter) view.Presenter).UseSchedule = toolStripMenuItemUseSchedule.Checked;
-            ((RestrictionPresenter) view.Presenter).UseRotation = toolStripMenuItemUseRotation.Checked;
-            ((RestrictionPresenter) view.Presenter).UsePreference = toolStripMenuItemUsePreference.Checked;
-            ((RestrictionPresenter) view.Presenter).UseAvailability = toolStripMenuItemUseAvailability.Checked;
+        	var restrictionPresenter = (RestrictionPresenter) view.Presenter;
+            restrictionPresenter.UseStudent = toolStripMenuItemUseStudentAvailability.Checked;
+            restrictionPresenter.UseSchedule = toolStripMenuItemUseSchedule.Checked;
+            restrictionPresenter.UseRotation = toolStripMenuItemUseRotation.Checked;
+            restrictionPresenter.UsePreference = toolStripMenuItemUsePreference.Checked;
+            restrictionPresenter.UseAvailability = toolStripMenuItemUseAvailability.Checked;
             disableAllExceptCancelInRibbon();
             _grid.Enabled = false;
             validateAllPersons();
@@ -6473,7 +6462,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             var conflictsBuffer = new List<PersistConflictMessageState>();
             var refreshedEntitiesBuffer = new List<IPersistableScheduleData>();
             refreshEntitiesUsingMessageBroker(refreshedEntitiesBuffer, conflictsBuffer);
-            var result = handleConflicts(refreshedEntitiesBuffer, conflictsBuffer.Cast<IPersistConflict>());
+            var result = handleConflicts(refreshedEntitiesBuffer, conflictsBuffer);
             return result;
         }
 
@@ -6794,15 +6783,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             drawSkillGrid();
         }
 
-		//private void sort(IScheduleSortCommand command)
-		//{
-		//    var selectedSchedulePart = _scheduleView.SelectedSchedules().FirstOrDefault();
-		//    if (selectedSchedulePart == null) return;
-		//    _scheduleView.Presenter.SortCommand = command;
-		//    _scheduleView.Presenter.SortCommand.Execute(selectedSchedulePart.DateOnlyAsPeriod.DateOnly);
-		//    _scheduleView.SetSelectionFromParts(new List<IScheduleDay> {selectedSchedulePart});
-		//    _scheduleView.ViewGrid.Refresh();
-		//}
         private void ToolStripMenuItemStartAscMouseUp(object sender, MouseEventArgs e)
         {
 			if (e.Button == MouseButtons.Left) _scheduleView.Sort(new SortByStartAscendingCommand(SchedulerState));
@@ -6956,10 +6936,9 @@ namespace Teleopti.Ccc.Win.Scheduling
         private void toolStripMenuItemViewHistory_Click(object sender, EventArgs e)
         {
             var selected = _scheduleView.SelectedSchedules()[0];
-            var isLocked = false;
-            if (_gridLockManager.HasLocks && _gridLockManager.Gridlocks(selected) != null) isLocked = true;
+        	bool isLocked = _gridLockManager.HasLocks && _gridLockManager.Gridlocks(selected) != null;
 
-            using (var auditHistoryView = new AuditHistoryView(selected, this))
+        	using (var auditHistoryView = new AuditHistoryView(selected, this))
             {
                 auditHistoryView.ShowDialog(this);
                 if (auditHistoryView.DialogResult != DialogResult.OK || auditHistoryView.SelectedScheduleDay == null ||
@@ -6994,7 +6973,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             }else
             {
                 var requestDate = new DateOnly(defaultRequest.RequestedDate);
-                var personPeriod = defaultRequest.Person.PersonPeriodCollection.Where(p => p.Period.Contains(requestDate)).FirstOrDefault();
+                var personPeriod = defaultRequest.Person.PersonPeriodCollection.FirstOrDefault(p => p.Period.Contains(requestDate));
                 if (personPeriod != null)
                 {
                     var allowanceView = new RequestAllowanceView(personPeriod.BudgetGroup, requestDate);
@@ -7005,10 +6984,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private void toolStripViewRequestHistory_Click(object sender, EventArgs e)
         {
-            var id = new Guid();
+            var id = Guid.Empty;
             var defaultRequest = _requestView.SelectedAdapters().Count > 0 ? _requestView.SelectedAdapters().First().PersonRequest : _schedulerState.PersonRequests.FirstOrDefault(r => r.Request is AbsenceRequest);
             if (defaultRequest != null)
-                id = defaultRequest.Person.Id.Value;
+                id = defaultRequest.Person.Id.GetValueOrDefault();
             var presenter = _container.BeginLifetimeScope().Resolve<IRequestHistoryViewPresenter>();
             presenter.ShowHistory(id, _schedulerState.FilteredPersonDictionary.Values);
         }
