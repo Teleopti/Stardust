@@ -117,12 +117,6 @@
     <Reference Include="MbCache.ProxyImpl.LinFu">
       <HintPath>..\..\packages\MbCache.2.1\lib\net40\MbCache.ProxyImpl.LinFu.dll</HintPath>
     </Reference>
-    <Reference Include="Rhino.PersistentHashTable">
-      <HintPath>..\..\packages\Rhino.PersistentHashTable.1.7.0.0\lib\3.5\Rhino.PersistentHashTable.dll</HintPath>
-    </Reference>
-    <Reference Include="Rhino.Queues">
-      <HintPath>..\..\packages\Rhino.Queues.1.4.2.0\lib\3.5\Rhino.Queues.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Data" />
@@ -135,9 +129,6 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Xml" />
-    <Reference Include="Wintellect.Threading">
-      <HintPath>..\..\packages\PowerThreading.20101026.0\lib\net20\Wintellect.Threading.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActualAgentHandler.cs" />
