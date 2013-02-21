@@ -259,7 +259,7 @@ Scenario: Show name of the person that recieved the shift trade request
 	Then I should see 'Ashley Andeen' as the receiver of the request
 
 @ignore
-Scenario: Show my schedule of the shift trade 
+Scenario: Show schedules of the shift trade 
 Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And Ashley Andeen have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -276,7 +276,7 @@ Given I have the role 'Full access to mytime'
 	| Shift category			| Day	           |
 	And I have created a shift trade request
 	| Field    | Value         |
-	| To       | Ashley Andeen |
+	| To       | Ashley Andeen	|
 	| DateTo   | 2030-01-01    |
 	| DateFrom | 2030-01-01    |
 	| Pending  | True          |
@@ -286,34 +286,12 @@ Given I have the role 'Full access to mytime'
 	| Field			| Value |
 	| Start time	| 06:00 |
 	| End time		| 16:00 |
-
-@ignore
-Scenario: Show other schedule of the shift trade
-Given I have the role 'Full access to mytime'
-	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
-	And Ashley Andeen have the workflow control set 'Trade from tomorrow until 30 days forward'
-	And I have a shift with
-	| Field                 | Value            |
-	| StartTime             | 2030-01-01 06:00 |
-	| EndTime               | 2030-01-01 16:00 |
-	| Shift category		| Day	           |
-	And Ashley Andeen have a shift with
-	| Field                 | Value            |
-	| StartTime             | 2030-01-01 12:00 |
-	| EndTime               | 2030-01-01 19:00 |
-	| Shift category		| Day	           |
-	And I have created a shift trade request
-	| Field    | Value         |
-	| To       | Ashley Andeen |
-	| DateTo   | 2030-01-01    |
-	| DateFrom | 2030-01-01    |
-	| Pending  | True          |
-	And I am viewing requests
-	When I click on the request
-	Then I should see details with a schedule
+	And I should see details with a schedule
 	| Field			| Value |
 	| Start time	| 12:00 |
-	| End time		| 19:00 |
+	| End time		| 22:00 |
+
+
 
 
 

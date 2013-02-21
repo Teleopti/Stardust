@@ -128,7 +128,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
         self.otherSchedule(new personScheduleViewModel(mappedlayers, myScheduleObject));
     };
 
-};
+      };
 
 //henke: separate class used by both addshifttrade and show shifttrade
 function TimeLineHourViewModel(hour, parentViewModel) {

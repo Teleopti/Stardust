@@ -201,9 +201,23 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 				colleague.MakeOtherPerson(colleague.Person);
 			});
 
+			doPostSetups();
+			_colleagues.ForEach(c => c.doPostSetups());
 			Resources.Culture = Culture;
 
 			return logonName;
+		}
+
+		private void doPostSetups()
+		{
+			using (var uow = GlobalUnitOfWorkState.UnitOfWorkFactory.CreateAndOpenUnitOfWork())
+			{
+				_postSetups.ForEach(s =>
+				{
+					s.Apply(Person, uow);
+				});
+				uow.PersistAll();
+			}
 		}
 
 		private void MakeMePerson(IPerson person)
@@ -213,15 +227,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			_dataFactory.Apply();
 
 			ApplyPersonData(person, out culture);
-
-			using (var uow = GlobalUnitOfWorkState.UnitOfWorkFactory.CreateAndOpenUnitOfWork())
-			{
-				_postSetups.ForEach(s =>
-					{
-						s.Apply(person, uow);
-					});
-				uow.PersistAll();
-			}
 
 			_analyticsDataFactory.Persist(culture);
 		}
