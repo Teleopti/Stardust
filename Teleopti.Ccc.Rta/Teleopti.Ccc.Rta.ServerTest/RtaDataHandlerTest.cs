@@ -383,7 +383,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		}
 
 		[Test]
-		public void ShouldReturnFromCtorWhenNoMessageSender()
+		public void ShouldReturnFromConstructorWhenNoMessageSender()
 		{
 			_target = new RtaDataHandlerForTest(_loggingSvc, null, ConnectionString, _databaseConnectionFactory,
 												_dataSourceResolver, _personResolver, _stateResolver);
