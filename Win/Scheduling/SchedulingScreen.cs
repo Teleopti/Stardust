@@ -1132,6 +1132,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         private void toolStripButtonQuickAccessSave_Click(object sender, EventArgs e)
         {
+			if (_forceClose) return;
+
             save();
         }
 
