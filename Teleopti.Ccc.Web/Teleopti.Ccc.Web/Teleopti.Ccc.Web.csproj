@@ -848,6 +848,7 @@
     <Content Include="Content\Scripts\MicrosoftMvcValidation.js" />
     <Content Include="Content\Scripts\MicrosoftMvcValidation.debug.js" />
     <Content Include="Areas\Start\Views\Test\WidgetStylingSample.cshtml" />
+    <Content Include="Areas\MyTime\Views\Requests\ShiftTradeRequestDetailView.cshtml" />
     <None Include="PasswordPolicy.xml.notinuse">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

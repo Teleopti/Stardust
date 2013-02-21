@@ -268,7 +268,7 @@ Given I have the role 'Full access to mytime'
 	And I should see '2010-12-28' as the date of the request source
 
 @ignore
-Scenario: Show my schedule of the shift trade
+Scenario: Show my schedule of the shift trade 
 Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And Ashley Andeen have the workflow control set 'Trade from tomorrow until 30 days forward'
