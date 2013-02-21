@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
     public class ActivityPeriod
     {
-        public DateTime StartDateTime;
-        public DateTime EndDateTime;
+		public DateTime StartDateTime { get; set; }
+        public DateTime EndDateTime { get; set; }
     }
 }

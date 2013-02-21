@@ -8,9 +8,8 @@ namespace Teleopti.Interfaces.Messages.Denormalize
     public class PersonWithExternalLogOn: RaptorDomainMessage
     {
         private readonly Guid _messageId = Guid.NewGuid();
-        private Guid _personId;
 
-        ///<summary>
+	    ///<summary>
         /// Definies an identity for this message (typically the Id of the root this message refers to.
         ///</summary>
         public override Guid Identity
@@ -18,13 +17,9 @@ namespace Teleopti.Interfaces.Messages.Denormalize
             get { return _messageId; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public Guid PersonId
-        {
-            get { return _personId; }
-            set { _personId = value; }
-        }
+	    /// <summary>
+	    /// 
+	    /// </summary>
+	    public Guid PersonId { get; set; }
     }
 }
