@@ -5304,6 +5304,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error when saving your changes. The most possible reason is that you or another user has deleted the data you set. To preserve data consistency, the form will be closed. Sorry, your changes has been lost..
+        /// </summary>
+        public static string DataHasBeenDeleted {
+            get {
+                return ResourceManager.GetString("DataHasBeenDeleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Data source initialized.
         /// </summary>
         public static string DataSourceInitialized {
@@ -7551,6 +7560,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ErrorOccuredWhenSavingSettings {
             get {
                 return ResourceManager.GetString("ErrorOccuredWhenSavingSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Errors.
+        /// </summary>
+        public static string Errors {
+            get {
+                return ResourceManager.GetString("Errors", resourceCulture);
             }
         }
         
