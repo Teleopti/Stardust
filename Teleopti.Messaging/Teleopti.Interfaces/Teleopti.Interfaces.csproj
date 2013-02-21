@@ -109,7 +109,6 @@
     <Compile Include="Domain\ChartSeriesDisplayType.cs" />
     <Compile Include="Domain\ClipboardAction.cs" />
     <Compile Include="Domain\ClipboardItems.cs" />
-    <Compile Include="Domain\IActivityChangeInTheScheduler.cs" />
     <Compile Include="Domain\IActivityRestrictableVisualLayer.cs" />
     <Compile Include="Domain\IActualAgentState.cs" />
     <Compile Include="Domain\IEffectiveRestrictionCombiner.cs" />

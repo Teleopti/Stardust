@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
 
             foreach (var person in persons)
             {
-                _serviceBus.Send(new PersonWithExternalLogon { Datasource = message.Datasource,
+                _serviceBus.Send(new PersonWithExternalLogOn { Datasource = message.Datasource,
                                                             BusinessUnitId = message.BusinessUnitId,
                                                             PersonId = person, 
                                                             Timestamp = DateTime.UtcNow});

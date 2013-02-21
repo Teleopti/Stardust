@@ -7,7 +7,7 @@ using Teleopti.Interfaces.Messages.Denormalize;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
 {
-	public class UpdatedScheduleInfoConsumer : ConsumerOf<PersonWithExternalLogon>, ConsumerOf<UpdatedScheduleDay>
+	public class UpdatedScheduleInfoConsumer : ConsumerOf<PersonWithExternalLogOn>, ConsumerOf<UpdatedScheduleDay>
 	{
 		private readonly IServiceBus _serviceBus;
 		private readonly IScheduleProjectionReadOnlyRepository _scheduleProjectionReadOnlyRepository;
@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "exception"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-		public void Consume(PersonWithExternalLogon message)
+		public void Consume(PersonWithExternalLogOn message)
 		{
 			DateTime startTime;
 			using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
 				var exception = exp.Message;
 			}
 
-			_serviceBus.DelaySend(startTime, new PersonWithExternalLogon
+			_serviceBus.DelaySend(startTime, new PersonWithExternalLogOn
 				{
 				Datasource = message.Datasource,
 				BusinessUnitId = message.BusinessUnitId,
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
 
 			if (!startTime.Date.Equals(new DateTime().Date))
 			{
-				_serviceBus.DelaySend(startTime, new PersonWithExternalLogon
+				_serviceBus.DelaySend(startTime, new PersonWithExternalLogOn
 					{
 						Datasource = message.Datasource,
 						BusinessUnitId = message.BusinessUnitId,

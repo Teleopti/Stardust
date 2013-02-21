@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
             
             var period = new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow);
 
-            var personInfoMessage = new PersonWithExternalLogon();
+            var personInfoMessage = new PersonWithExternalLogOn();
             personInfoMessage.PersonId = person.Id.GetValueOrDefault();
             personInfoMessage.Timestamp = period.StartDateTime;
             personInfoMessage.BusinessUnitId = bussinessUnit.Id.GetValueOrDefault();
