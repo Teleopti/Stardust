@@ -54,16 +54,19 @@ namespace Teleopti.Ccc.WinCode.Meetings
         private void AddPersonMeetingsToDictionary(IMeeting meeting)
         {
         	var loadedPeriod = _schedulerStateHolder.Schedules.Period.LoadedPeriod();
-            foreach (var meetingPerson in meeting.MeetingPersons)
-            {
-                var person = meetingPerson.Person;
-				var personMeetings = meeting.GetPersonMeetings(person).Where(m => loadedPeriod.Contains(m.Period.StartDateTime));
-            	foreach (var personMeeting in personMeetings)
-            	{
-					((ScheduleRange)_schedulerStateHolder.Schedules[person]).Add(personMeeting);
-					break;
-            	}
-            }
+			using (TurnoffPermissionScope.For((IPermissionCheck) _schedulerStateHolder.Schedules))
+        	{
+				foreach (var meetingPerson in meeting.MeetingPersons)
+				{
+					var person = meetingPerson.Person;
+					var personMeetings = meeting.GetPersonMeetings(person).Where(m => loadedPeriod.Contains(m.Period.StartDateTime));
+					foreach (var personMeeting in personMeetings)
+					{
+						((ScheduleRange)_schedulerStateHolder.Schedules[person]).Add(personMeeting);
+						break;
+					}
+				}        		
+        	}
         }
 
 
