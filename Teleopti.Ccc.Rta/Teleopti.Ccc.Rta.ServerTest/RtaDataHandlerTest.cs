@@ -38,6 +38,8 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		private DateTime _batchId;
 		private bool _isSnapshot;
 
+		private Guid _personId;
+		private Guid _businessUnitId;
 
 		[SetUp]
 		public void Setup()
@@ -59,6 +61,9 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_sourceId = "1";
 			_batchId = SqlDateTime.MinValue.Value;
 			_isSnapshot = false;
+
+			_personId = Guid.NewGuid();
+			_businessUnitId = Guid.NewGuid();
 		}
 
 		[Test]
@@ -320,7 +325,70 @@ namespace Teleopti.Ccc.Rta.ServerTest
 
 			autoReset.Dispose();
 		}
-		
+
+		[Test]
+		public void ShouldCheckSchedule()
+		{
+			var waitHandle = new AutoResetEvent(false);
+			var agentState = new ActualAgentState();
+
+			_messageSender.InstantiateBrokerService();
+			_agentHandler.Expect(a => a.CheckSchedule(_personId, _businessUnitId, _timestamp, waitHandle)).IgnoreArguments().Return(
+				agentState);
+			_messageSender.Expect(m => m.SendRtaData(_personId, _businessUnitId, agentState));
+			_mocks.ReplayAll();
+
+			_target = new RtaDataHandlerForTest(_loggingSvc, _messageSender, ConnectionString, _databaseConnectionFactory,
+												_dataSourceResolver, _personResolver, _stateResolver, _agentHandler);
+			var result = _target.CheckSchedule(_personId, _businessUnitId, _timestamp);
+			_mocks.VerifyAll();
+
+			Assert.IsNotNull(result);
+			result.Dispose();
+			waitHandle.Set();
+			waitHandle.Dispose();
+		}
+
+		[Test]
+		public void ShouldNotSendWhenConnectionStringIsNull()
+		{
+			_messageSender.InstantiateBrokerService();
+			_loggingSvc.Expect(l => l.Error("No connection information avaiable in configuration file."));
+			_mocks.ReplayAll();
+
+			_target = new RtaDataHandlerForTest(_loggingSvc, _messageSender, null, _databaseConnectionFactory,
+												_dataSourceResolver, _personResolver, _stateResolver, _agentHandler);
+			var result = _target.CheckSchedule(_personId, _businessUnitId, _timestamp);
+			_mocks.VerifyAll();
+			Assert.IsNotNull(result);
+			result.Dispose();
+		}
+
+		[Test]
+		public void ShouldNotSendWhenStateHaveNotChangedForScheduleUpdate()
+		{
+			var waitHandle = new AutoResetEvent(false);
+			_messageSender.InstantiateBrokerService();
+			_agentHandler.Expect(a => a.CheckSchedule(_personId, _businessUnitId, _timestamp, waitHandle)).IgnoreArguments().Return(null);
+			_loggingSvc.Expect(l => l.InfoFormat("Schedule for {0} has not changed", _personId));
+			_mocks.ReplayAll();
+
+			_target = new RtaDataHandlerForTest(_loggingSvc, _messageSender, ConnectionString, _databaseConnectionFactory,
+												_dataSourceResolver, _personResolver, _stateResolver, _agentHandler);
+			var result = _target.CheckSchedule(_personId, _businessUnitId, _timestamp);
+			_mocks.VerifyAll();
+			Assert.IsNotNull(result);
+			waitHandle.Dispose();
+			result.Dispose();
+		}
+
+		[Test]
+		public void ShouldReturnFromCtorWhenNoMessageSender()
+		{
+			_target = new RtaDataHandlerForTest(_loggingSvc, null, ConnectionString, _databaseConnectionFactory,
+												_dataSourceResolver, _personResolver, _stateResolver);
+		}
+
 		private void AssignTargetAndRun()
 		{
 			_target = new RtaDataHandlerForTest(_loggingSvc, _messageSender, ConnectionString, _databaseConnectionFactory,

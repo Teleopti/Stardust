@@ -61,6 +61,8 @@ namespace Teleopti.Ccc.Rta.ServerTest
 
 			Assert.That(_target.HaveStateCodeChanged(personId, "AUX2"), Is.True);
 			Assert.That(_target.HaveStateCodeChanged(Guid.NewGuid(), "OFF"), Is.True);
+			Assert.That(_target.HaveStateCodeChanged(personId, "OFF"), Is.True);
+			Assert.That(_target.HaveStateCodeChanged(personId, "OFF"), Is.False);
 			_mock.VerifyAll();
 		}
 	}
