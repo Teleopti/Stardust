@@ -333,7 +333,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             {
                 if (radioButtonBetweenDaysOffAdvScheduling.Checked)
                     _localSchedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.BetweenDayOff;
-                else if(radioButtonSchedulePeriod.Checked)
+                else if(radioButtonSchedulePeriodAdvScheduling.Checked)
                     _localSchedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.SchedulePeriod;
                 else
 					_localSchedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.SingleDay;

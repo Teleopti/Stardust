@@ -26,11 +26,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 		                                          addedResourceInMinutes);
 
 		        //double assignedResourceInMinutes = (forecastedDemand - currentDemand) * intervalLengthInMinutes;
-		        double corrFactor;
-		        //if (assignedResourceInMinutes == 0)  //eller ska man bara boosta första och sista intervall=
-		        //    corrFactor = TheBigNumber;
-		        //else
-		        corrFactor = getCorrectionFactor(useMinimumPersons, useMaximumPersons, skillIntervalData);
+		        double corrFactor = 0;
+				if (Math.Abs(currentDemand - forecastedDemand) < 0.01)  //eller ska man bara boosta första och sista intervall=
+					corrFactor = theBigNumber;
+
+				corrFactor += getCorrectionFactor(useMinimumPersons, useMaximumPersons, skillIntervalData);
 
 		        calculatedValue += corrFactor;
 
