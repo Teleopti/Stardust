@@ -2,6 +2,8 @@
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
 {
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "BootStrapper"), 
+	System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Strapper")]
 	public class RtaBusBootStrapper : BusBootStrapper
 	{
 		protected override void OnEndStart()
