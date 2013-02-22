@@ -26,7 +26,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IDayOffDecisionMakerExecuter _dayOffDecisionMakerExecuter;
         private ILockableBitArrayChangesTracker _lockableBitArrayChangesTracker;
         private ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
-        private IGroupSchedulingService _groupSchedulingService;
         private IGroupMatrixHelper _groupMatrixHelper;
         private IScheduleMatrixPro _activeScheduleMatrix;
         private IList<IScheduleMatrixPro> _allScheduleMatrixes = new List<IScheduleMatrixPro>();
@@ -56,6 +55,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IWorkShiftSelector _workShiftSelector;
         private ITeamScheduling _teamScheduling;
         private IEffectiveRestriction _effectiveRestriction;
+        private IShiftProjectionCache _shiftProjectionCache;
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
         public void Setup()
@@ -72,7 +72,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _dayOffDecisionMakerExecuter = _mocks.StrictMock<IDayOffDecisionMakerExecuter>();
             _lockableBitArrayChangesTracker = _mocks.StrictMock<ILockableBitArrayChangesTracker>();
             _schedulePartModifyAndRollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
-            _groupSchedulingService = _mocks.StrictMock<IGroupSchedulingService>();
             _groupMatrixHelper = _mocks.StrictMock<IGroupMatrixHelper>();
             _activeScheduleMatrix = _mocks.StrictMock<IScheduleMatrixPro>();
             _scheduleMatrix2 = _mocks.StrictMock<IScheduleMatrixPro>();
@@ -101,17 +100,16 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _effectiveRestriction = _mocks.StrictMock<IEffectiveRestriction>();
             _skillDayPeriodDataGenerator = _mocks.StrictMock<ISkillDayPeriodIntervalDataGenerator>();
             _workShiftFilerService = _mocks.StrictMock<IWorkShiftFilterService>();
-
+            _shiftProjectionCache = _mocks.StrictMock<IShiftProjectionCache>();
+            _teamScheduling = _mocks.StrictMock<ITeamScheduling>();
         }
 
         [Test]
         public void VerifyCreation()
         {
-            
-            _target = new AdvanceGroupDayOffOptimizer(_converter,
-                    _decisionMaker, _dataExtractorProvider, _daysOffPreferences, _dayOffDecisionMakerExecuter, _lockableBitArrayChangesTracker, _schedulePartModifyAndRollbackService, _groupMatrixHelper, _groupOptimizationValidatorRunner,
-                    _groupPersonBuilderForOptimization, _smartDayOffBackToLegalStateService, _restrictionAggregator, _dynamicBlockFinder, _groupPersonBuilderBasedOnContractTime, _schedulingOptions, _skillDayPeriodDataGenerator, _workShiftFilerService,
-                    _workShiftSelector, _teamScheduling);
+
+            _target = createTarget();
+            Assert.IsNotNull(_target);
 
         }
 
@@ -202,20 +200,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mocks.Record())
             {
                 commonMocks(true, true, _groupPerson);
-                Expect.Call(_groupMatrixHelper.ScheduleRemovedDayOffDays(_daysOffToRemove, _groupPerson,
-                                                                         _groupSchedulingService,
-                                                                         _schedulePartModifyAndRollbackService,
-                                                                         _schedulingOptions,
-                                                                         _groupPersonBuilderForOptimization,
-                                                                         _allScheduleMatrixes)).IgnoreArguments().Return(
-                                                                            true);
-                Expect.Call(_groupMatrixHelper.ScheduleBackToLegalStateDays(new List<IScheduleDay>(),
-                                                                            _groupSchedulingService,
-                                                                            _schedulePartModifyAndRollbackService,
-                                                                            _schedulingOptions, _optimizationPreferences,
-                                                                            _groupPersonBuilderForOptimization,
-                                                                            _allScheduleMatrixes)).Return(true);
-
+                
                 IList<IScheduleDayPro> scheduleDayPros = new List<IScheduleDayPro>();
                 Expect.Call(_activeScheduleMatrix.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(scheduleDayPros)).Repeat.AtLeastOnce();
                 Expect.Call(_scheduleMatrix2.Person).Return(_person).Repeat.AtLeastOnce();
@@ -230,11 +215,15 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 IDictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>> activityInternalData = new Dictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>>();
                 Expect.Call(_skillDayPeriodDataGenerator.Generate(_groupPerson, _daysOffToRemove)).Return(
                     activityInternalData);
-                IList<IShiftProjectionCache> shiftProjectionCaheList = new List<IShiftProjectionCache>();
+                IList<IShiftProjectionCache> shiftProjectionCaheList = new List<IShiftProjectionCache>{_shiftProjectionCache};
                 Expect.Call(_workShiftFilerService.Filter(_daysOffToRemove[0], _person,
                                                           new List<IScheduleMatrixPro> {_scheduleMatrix2},
                                                           _effectiveRestriction, _schedulingOptions)).IgnoreArguments().Return(shiftProjectionCaheList);
                 Expect.Call(_teamSteadyStateHolder.IsSteadyState(_groupPerson)).Return(true);
+                Expect.Call(() => _teamScheduling.Execute(_daysOffToRemove[0], _daysOffToRemove,
+                                                    new List<IScheduleMatrixPro> {_scheduleMatrix2}, _groupPerson,
+                                                    _effectiveRestriction, _shiftProjectionCache,
+                                                    new List<DateOnly>() {}, new List<IPerson>() {})).IgnoreArguments();
             }
             using (_mocks.Playback())
             {
