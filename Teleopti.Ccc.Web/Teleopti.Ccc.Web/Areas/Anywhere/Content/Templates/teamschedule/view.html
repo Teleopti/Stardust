@@ -1,4 +1,4 @@
-<div class="container">
+<div class="container team-schedule">
     <div class="row">
         <div class="span12 nowrap">
             <select id="team-selector" data-bind="options: TeamSchedule.Teams, optionsText: 'SiteAndTeam', value: TeamSchedule.SelectedTeam"></select>
@@ -14,7 +14,7 @@
     <div class="row">
         <div class="span12">
             <div data-bind="visible: TeamSchedule.isLoading"><span data-bind="text: Resources.LoadingThreeDots"></span></div>
-            <div class="team-schedule relative" data-bind="visible: !TeamSchedule.isLoading()">
+            <div class="relative" data-bind="visible: !TeamSchedule.isLoading()">
     			
                 <div class="time-line absolute">
                     <div class="relative">

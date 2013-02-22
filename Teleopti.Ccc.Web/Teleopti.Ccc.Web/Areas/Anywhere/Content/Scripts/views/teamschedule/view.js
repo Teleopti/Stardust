@@ -29,7 +29,7 @@ define([
 
 		return {
 			display: function (options) {
-
+				
 				options.renderHtml(view);
 
 				var date = options.date;
@@ -177,7 +177,7 @@ define([
 								Resources: resources,
 								Timeline: timeLine,
 								Agents: agents
-							}, $('body > section')[0]);
+							}, $('.team-schedule')[0]);
 						});
 					})
 					.fail(function (error) {
