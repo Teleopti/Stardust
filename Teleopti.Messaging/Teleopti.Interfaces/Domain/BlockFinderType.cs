@@ -28,7 +28,12 @@ namespace Teleopti.Interfaces.Domain
         /// <summary>
         /// Finds block between calender week
         /// </summary>
-        Weeks
+        Weeks,
+
+		/// <summary>
+		/// To use when each day is considered a block
+		/// </summary>
+		SingleDay
        
     }
 }

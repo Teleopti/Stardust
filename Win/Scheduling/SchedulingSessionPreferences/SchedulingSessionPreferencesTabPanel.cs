@@ -63,6 +63,12 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 				labelScheduleOrSchedules1.Visible = false;
 			}
 
+			if (StateHolderReader.Instance.StateReader.SessionScopeData.MickeMode)
+			{
+				radioButtonBetweenDaysOffAdvScheduling.Visible = true;
+				radioButtonSingleDayAdvScheduling.Visible = true;
+			}
+
             _schedulingOptions = schedulingOptions;
             _shiftCategories = (from s in shiftCategories where ((IDeleteTag)s).IsDeleted == false select s).ToList();
             _scheduleTags = scheduleTags;
@@ -327,8 +333,10 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             {
                 if (radioButtonBetweenDaysOffAdvScheduling.Checked)
                     _localSchedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.BetweenDayOff;
-                else
+                else if(radioButtonSchedulePeriod.Checked)
                     _localSchedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.SchedulePeriod;
+                else
+					_localSchedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.SingleDay;
             }
 
             _localSchedulingOptions.Fairness = new Percent(trackBar1.Value / 100d);
@@ -434,6 +442,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
                     radioButtonBetweenDaysOffAdvScheduling.Enabled = true;
                     radioButtonBetweenDaysOffAdvScheduling.Checked = true;
                     radioButtonSchedulePeriodAdvScheduling.Enabled = true;
+		            radioButtonSingleDayAdvScheduling.Enabled = true;
                     break;
 
                 case BlockFinderType.SchedulePeriod:
@@ -441,8 +450,15 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
                     radioButtonBetweenDaysOffAdvScheduling.Enabled = true;
                     radioButtonSchedulePeriodAdvScheduling.Checked = true;
                     radioButtonSchedulePeriodAdvScheduling.Enabled = true;
+					radioButtonSingleDayAdvScheduling.Enabled = true;
                     break;
-
+				case BlockFinderType.SingleDay:
+					checkBoxLevellingPerBlockScheduling.Checked = true;
+					radioButtonBetweenDaysOffAdvScheduling.Enabled = true;
+                    radioButtonSchedulePeriodAdvScheduling.Enabled = true;
+					radioButtonSingleDayAdvScheduling.Enabled = true;
+					radioButtonSingleDayAdvScheduling.Checked = true;
+					break;
             }
 
         	checkBoxUseGroupScheduling.Checked = _localSchedulingOptions.UseGroupScheduling;
