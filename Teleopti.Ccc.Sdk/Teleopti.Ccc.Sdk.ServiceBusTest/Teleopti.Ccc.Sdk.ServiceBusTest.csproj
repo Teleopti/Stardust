@@ -171,10 +171,6 @@
     <None Include="..\..\Teleopti.Ccc.snk">
       <Link>Teleopti.Ccc.snk</Link>
     </None>
-    <None Include="..\Teleopti.Ccc.Sdk.ServiceBus.Host\App.config">
-      <Link>App.config</Link>
-      <SubType>Designer</SubType>
-    </None>
     <None Include="..\Teleopti.Ccc.Sdk.ServiceBus\log4net.config">
       <Link>log4net.config</Link>
     </None>
