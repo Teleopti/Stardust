@@ -21,11 +21,9 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 		[Test]
 		public void IdentifierShouldReturnXrds()
 		{
-			var response = MockRepository.GenerateStub<FakeHttpResponse>();
 			var request = MockRepository.GenerateStub<FakeHttpRequest>("/", new Uri("http://mock/"), new Uri("http://mock/"));
 			request.Stub(x => x.AcceptTypes).Return(new[] { "application/xrds+xml" });
 			var context = new FakeHttpContext("/");
-			context.SetResponse(response);
 			context.SetRequest(request);
 			var target = new OpenIdController(null, null, null);
 			target.ControllerContext = new ControllerContext(context, new RouteData(), target);
@@ -38,10 +36,8 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 		[Test]
 		public void IdentifierShouldReturnView()
 		{
-			var response = MockRepository.GenerateStub<FakeHttpResponse>();
 			var request = MockRepository.GenerateStub<FakeHttpRequest>("/", new Uri("http://mock/"), new Uri("http://mock/"));
 			var context = new FakeHttpContext("/");
-			context.SetResponse(response);
 			context.SetRequest(request);
 			var target = new OpenIdController(null, null, null);
 			target.ControllerContext = new ControllerContext(context, new RouteData(), target);
@@ -123,9 +119,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO.Contollers
 		[Test]
 		public void ShouldReturnAskUserView()
 		{
-			var context = new FakeHttpContext("/");
 			var target = new OpenIdController(null, null, null);
-			target.ControllerContext = new ControllerContext(context, new RouteData(), target);
 
 			var result = target.AskUser();
 
