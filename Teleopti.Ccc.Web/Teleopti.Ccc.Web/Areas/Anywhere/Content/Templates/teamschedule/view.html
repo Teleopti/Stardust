@@ -34,7 +34,7 @@
                         </tr>
                     </thead>
                     <tbody data-bind="foreach: Agents.Agents">
-                        <tr class="agent" data-bind="attr: { 'data-agent-id': Id }">
+                        <tr class="agent" data-bind="attr: { 'data-agent-id': Id }, click: Select">
                             <td class="agent-name">
                                 <!-- Must do it this way to get correct overflow: hidden in IE -->
                                 <div class="agent-name nowrap" data-bind="text: Name"></div>

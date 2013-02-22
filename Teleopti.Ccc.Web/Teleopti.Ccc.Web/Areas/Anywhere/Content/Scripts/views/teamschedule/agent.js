@@ -4,12 +4,12 @@ define([
 		'views/teamschedule/layer'
 	], function (ko, moment, layer) {
 
-		return function (agentDay) {
+		return function (data, events) {
 			var self = this;
 
-			this.Id = agentDay.Id;
+			this.Id = data.Id;
+			this.Name = ko.observable(data.FirstName + ' ' + data.LastName);
 
-			this.Name = ko.observable(agentDay.FirstName + ' ' + agentDay.LastName);
 			this.Layers = ko.observableArray();
 			this.WorkTimeMinutes = ko.observable(0);
 			this.ContractTimeMinutes = ko.observable(0);
@@ -42,7 +42,7 @@ define([
 			this.AddWorkTime = function (minutes) {
 				self.WorkTimeMinutes(self.WorkTimeMinutes() + minutes);
 			};
-			
+
 			this.FirstStartMinute = ko.computed(function () {
 				var start = undefined;
 				ko.utils.arrayForEach(self.Layers(), function (l) {
@@ -66,5 +66,9 @@ define([
 				});
 				return end;
 			});
+
+			this.Select = function() {
+				events.notifySubscribers(self.Id, "gotoagent");
+			};
 		};
 	});

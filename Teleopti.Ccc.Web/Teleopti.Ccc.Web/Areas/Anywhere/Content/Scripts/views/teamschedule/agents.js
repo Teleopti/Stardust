@@ -8,8 +8,9 @@ define([
 
 			this.Agents = ko.observableArray();
 
-			this.AddAgents = function(agentsToAdd) {
-				self.Agents.push.apply(self.Agents, agentsToAdd);
+			this.SetAgents = function(agents) {
+				self.Agents([]);
+				self.Agents.push.apply(self.Agents, agents);
 			};
 
 		};

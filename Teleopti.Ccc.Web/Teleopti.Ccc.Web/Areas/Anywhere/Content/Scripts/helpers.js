@@ -23,11 +23,6 @@ define(
 					return minutes + 60 * hours;
 				}
 			},
-			Date: {
-				DateToUrl: function (date) {
-					return date.replace(/-/g, '');
-				} 
-			},
 			Async: {
 				RunAndSetInterval: function (code, interval) {
 					code();
