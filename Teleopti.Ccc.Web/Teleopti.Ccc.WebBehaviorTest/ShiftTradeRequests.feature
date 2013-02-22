@@ -197,15 +197,6 @@ Scenario: Show my scheduled day off
 	Then I should see my scheduled day off 'DayOff'
 	And I should see the time line hours span from '8' to '17'
 
-Scenario: View shift trade request details
-	Given I have the role 'Full access to mytime'
-	And I have created a shift trade request
-	| Field			| Value				|
-	| Subject		| swap with me		|
-	And I am viewing requests
-	When I click on the request
-	Then I should see the shift trade request form  with subject 'swap with me'
-
 Scenario: Close details when approving shift trade request
 	Given I have the role 'Full access to mytime'
 	And I have received a shift trade request from 'Some Person'
@@ -357,6 +348,7 @@ Given I have the role 'Full access to mytime'
 	And I am viewing requests
 	When I click on the request
 	Then I should see details with subject 'Swap shift with me'
+	And I should see details with message 'message of shifttrade'
 
 
 
