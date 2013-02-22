@@ -4,7 +4,6 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using AutoMapper;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.Web.Core.IoC;
@@ -99,7 +98,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 							{
 								MySchedule = myScheduleViewModel,
 								PossibleTradePersons = possibleTradePersonViewModelCollection,
-								TimeLineHours = CreateTimeLineHours(timeLineRangeTot),
+								TimeLineHours = createTimeLineHours(timeLineRangeTot),
 								TimeLineLengthInMinutes = (int)timeLineRangeTot.EndDateTime.Subtract(timeLineRangeTot.StartDateTime).TotalMinutes
 							};
 					});
@@ -167,7 +166,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			return returnDay;
 		}
 
-		private  IEnumerable<ShiftTradeTimeLineHoursViewModel> CreateTimeLineHours(DateTimePeriod timeLinePeriod)
+		private  IEnumerable<ShiftTradeTimeLineHoursViewModel> createTimeLineHours(DateTimePeriod timeLinePeriod)
 		{
 			return _shiftTradeTimelineHoursViewModelFactory.Invoke().CreateTimeLineHours(timeLinePeriod);
 		}
