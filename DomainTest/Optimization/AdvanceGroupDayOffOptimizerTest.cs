@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -28,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IGroupSchedulingService _groupSchedulingService;
         private IGroupMatrixHelper _groupMatrixHelper;
         private IScheduleMatrixPro _activeScheduleMatrix;
-        private readonly IList<IScheduleMatrixPro> _allScheduleMatrixes = new List<IScheduleMatrixPro>();
+        private IList<IScheduleMatrixPro> _allScheduleMatrixes = new List<IScheduleMatrixPro>();
         private IScheduleMatrixPro _scheduleMatrix2;
         private ISchedulingOptions _schedulingOptions;
         private IGroupOptimizationValidatorRunner _groupOptimizationValidatorRunner;
@@ -54,6 +55,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private IWorkShiftFilterService _workShiftFilerService;
         private IWorkShiftSelector _workShiftSelector;
         private ITeamScheduling _teamScheduling;
+        private IEffectiveRestriction _effectiveRestriction;
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
         public void Setup()
@@ -78,8 +80,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _schedulingOptions.UseSameDayOffs = true;
             _groupOptimizationValidatorRunner = _mocks.StrictMock<IGroupOptimizationValidatorRunner>();
             _groupPersonBuilderForOptimization = _mocks.StrictMock<IGroupPersonBuilderForOptimization>();
-            _allScheduleMatrixes.Add(_activeScheduleMatrix);
-            _allScheduleMatrixes.Add(_scheduleMatrix2);
             _validatorResult = new ValidatorResult();
             _optimizationPreferences = new OptimizationPreferences();
             _teamSteadyStateMainShiftScheduler = _mocks.StrictMock<ITeamSteadyStateMainShiftScheduler>();
@@ -95,22 +95,30 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _person = PersonFactory.CreatePerson();
             _groupPerson = new GroupPerson(new List<IPerson> { _person }, DateOnly.MinValue, "Hej", null);
 
-            _target = new AdvanceGroupDayOffOptimizer(_converter,
-                    _decisionMaker, _dataExtractorProvider, _daysOffPreferences, _dayOffDecisionMakerExecuter, _lockableBitArrayChangesTracker, _schedulePartModifyAndRollbackService, _groupMatrixHelper, _groupOptimizationValidatorRunner,
-                    _groupPersonBuilderForOptimization, _smartDayOffBackToLegalStateService, _restrictionAggregator, _dynamicBlockFinder, _groupPersonBuilderBasedOnContractTime, _schedulingOptions, _skillDayPeriodDataGenerator, _workShiftFilerService,
-                    _workShiftSelector, _teamScheduling);
+            _dynamicBlockFinder = _mocks.StrictMock<IDynamicBlockFinder>();
+            _groupPersonBuilderBasedOnContractTime = _mocks.StrictMock<IGroupPersonBuilderBasedOnContractTime>();
+            _restrictionAggregator = _mocks.StrictMock<IRestrictionAggregator>();
+            _effectiveRestriction = _mocks.StrictMock<IEffectiveRestriction>();
+            _skillDayPeriodDataGenerator = _mocks.StrictMock<ISkillDayPeriodIntervalDataGenerator>();
+            _workShiftFilerService = _mocks.StrictMock<IWorkShiftFilterService>();
+
         }
 
         [Test]
         public void VerifyCreation()
         {
-           
+            
+            _target = new AdvanceGroupDayOffOptimizer(_converter,
+                    _decisionMaker, _dataExtractorProvider, _daysOffPreferences, _dayOffDecisionMakerExecuter, _lockableBitArrayChangesTracker, _schedulePartModifyAndRollbackService, _groupMatrixHelper, _groupOptimizationValidatorRunner,
+                    _groupPersonBuilderForOptimization, _smartDayOffBackToLegalStateService, _restrictionAggregator, _dynamicBlockFinder, _groupPersonBuilderBasedOnContractTime, _schedulingOptions, _skillDayPeriodDataGenerator, _workShiftFilerService,
+                    _workShiftSelector, _teamScheduling);
 
         }
 
 		[Test]
 		public void ShouldContinueWithScheduleRemovedDaysOffIfTeamSteadyStateFails()
 		{
+            //_target = createTarget();
             //_daysOffPreferences.ConsiderWeekBefore = false;
             //_daysOffPreferences.ConsiderWeekAfter = false;
             //_target = createTarget();
@@ -139,10 +147,18 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             //                                                                _groupPersonBuilderForOptimization,
             //                                                                _allScheduleMatrixes)).Return(true);
 
+            //    Expect.Call(_teamSteadyStateHolder.IsSteadyState(_groupPerson)).Return(false);
+
+            //    Expect.Call(_dynamicBlockFinder.ExtractBlockDays(_daysOffToRemove[0])).Return(_daysOffToRemove);
+            //    Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(_person, _daysOffToRemove[0])).Return(_groupPerson);
+
             //}
             //using (_mocks.Playback())
             //{
-            //    bool result = _target.Execute(_activeScheduleMatrix, _allScheduleMatrixes, _schedulingOptions, _optimizationPreferences, _teamSteadyStateMainShiftScheduler, _teamSteadyStateHolder, _scheduleDictionary);
+            //    bool result = _target.Execute(_activeScheduleMatrix, _allScheduleMatrixes, _schedulingOptions,
+            //                                  _optimizationPreferences, _teamSteadyStateMainShiftScheduler,
+            //                                  _teamSteadyStateHolder, _scheduleDictionary, new List<IPerson>{_person},
+            //                                  new List<IScheduleMatrixPro>() { });
             //    Assert.IsTrue(result);
             //}	
 		}
@@ -178,41 +194,63 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 		[Test]
         public void VerifySuccessfulExecuteWithOnePerson()
-        {
-            //_daysOffPreferences.ConsiderWeekBefore = false;
-            //_daysOffPreferences.ConsiderWeekAfter = false;
-            //_target = createTarget();
+		{
+            _daysOffPreferences.ConsiderWeekBefore = false;
+            _daysOffPreferences.ConsiderWeekAfter = false;
+            _target = createTarget();
 
-            //using (_mocks.Record())
-            //{
-            //    commonMocks(true, true, _groupPerson);
-            //    Expect.Call(_teamSteadyStateHolder.IsSteadyState(_groupPerson)).Return(false);
-            //    Expect.Call(_groupMatrixHelper.ScheduleRemovedDayOffDays(_daysOffToRemove, _groupPerson,
-            //                                                             _groupSchedulingService,
-            //                                                             _schedulePartModifyAndRollbackService,
-            //                                                             _schedulingOptions,
-            //                                                             _groupPersonBuilderForOptimization,
-            //                                                             _allScheduleMatrixes)).IgnoreArguments().Return(
-            //                                                                true);
-            //    Expect.Call(_groupMatrixHelper.ScheduleBackToLegalStateDays(new List<IScheduleDay>(),
-            //                                                                _groupSchedulingService,
-            //                                                                _schedulePartModifyAndRollbackService,
-            //                                                                _schedulingOptions, _optimizationPreferences,
-            //                                                                _groupPersonBuilderForOptimization,
-            //                                                                _allScheduleMatrixes)).Return(true);
+            using (_mocks.Record())
+            {
+                commonMocks(true, true, _groupPerson);
+                Expect.Call(_groupMatrixHelper.ScheduleRemovedDayOffDays(_daysOffToRemove, _groupPerson,
+                                                                         _groupSchedulingService,
+                                                                         _schedulePartModifyAndRollbackService,
+                                                                         _schedulingOptions,
+                                                                         _groupPersonBuilderForOptimization,
+                                                                         _allScheduleMatrixes)).IgnoreArguments().Return(
+                                                                            true);
+                Expect.Call(_groupMatrixHelper.ScheduleBackToLegalStateDays(new List<IScheduleDay>(),
+                                                                            _groupSchedulingService,
+                                                                            _schedulePartModifyAndRollbackService,
+                                                                            _schedulingOptions, _optimizationPreferences,
+                                                                            _groupPersonBuilderForOptimization,
+                                                                            _allScheduleMatrixes)).Return(true);
 
-            //}
-            //using (_mocks.Playback())
-            //{
-            //    bool result = _target.Execute(_activeScheduleMatrix, _allScheduleMatrixes, _schedulingOptions, _optimizationPreferences, _teamSteadyStateMainShiftScheduler, _teamSteadyStateHolder, _scheduleDictionary);
-            //    Assert.IsTrue(result);
-            //    Assert.AreEqual(_workingBitArray, _target.WorkingBitArray);
-            //}	
+                IList<IScheduleDayPro> scheduleDayPros = new List<IScheduleDayPro>();
+                Expect.Call(_activeScheduleMatrix.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(scheduleDayPros)).Repeat.AtLeastOnce();
+                Expect.Call(_scheduleMatrix2.Person).Return(_person).Repeat.AtLeastOnce();
+                Expect.Call(_scheduleMatrix2.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(scheduleDayPros)).Repeat.AtLeastOnce();
+                Expect.Call(_dynamicBlockFinder.ExtractBlockDays(_daysOffToRemove[0])).Return(_daysOffToRemove);
+                Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(_person, _daysOffToRemove[0])).Return(_groupPerson);
+
+                Expect.Call(_groupPersonBuilderBasedOnContractTime.SplitTeams(_groupPerson, _daysOffToRemove[0])).Return
+                    (new List<IGroupPerson> {_groupPerson});
+                Expect.Call(_restrictionAggregator.Aggregate(_daysOffToRemove, _groupPerson, new List<IScheduleMatrixPro>{_scheduleMatrix2 },_schedulingOptions )).IgnoreArguments().Return(
+                    _effectiveRestriction);
+                IDictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>> activityInternalData = new Dictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>>();
+                Expect.Call(_skillDayPeriodDataGenerator.Generate(_groupPerson, _daysOffToRemove)).Return(
+                    activityInternalData);
+                IList<IShiftProjectionCache> shiftProjectionCaheList = new List<IShiftProjectionCache>();
+                Expect.Call(_workShiftFilerService.Filter(_daysOffToRemove[0], _person,
+                                                          new List<IScheduleMatrixPro> {_scheduleMatrix2},
+                                                          _effectiveRestriction, _schedulingOptions)).IgnoreArguments().Return(shiftProjectionCaheList);
+                Expect.Call(_teamSteadyStateHolder.IsSteadyState(_groupPerson)).Return(true);
+            }
+            using (_mocks.Playback())
+            {
+                bool result = _target.Execute(_activeScheduleMatrix, _allScheduleMatrixes, _schedulingOptions,
+                                              _optimizationPreferences, _teamSteadyStateMainShiftScheduler,
+                                              _teamSteadyStateHolder, _scheduleDictionary, new List<IPerson> {_person },
+                                              new List<IScheduleMatrixPro>() { });
+                Assert.IsTrue(result);
+                Assert.AreEqual(_workingBitArray, _target.WorkingBitArray);
+            }	
         }
 
         [Test]
         public void VerifyUnsuccessfulExecuteDecisionMakerNotFindDay()
         {
+            _target = createTarget();
             _daysOffPreferences.ConsiderWeekBefore = false;
             _daysOffPreferences.ConsiderWeekAfter = false;
             var solvers = new List<IDayOffBackToLegalStateSolver>();
@@ -254,6 +292,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         [Test]
         public void VerifyUnsuccessfulExecuteGroupPersonNull()
         {
+            _target = createTarget();
             _daysOffPreferences.ConsiderWeekBefore = false;
             _daysOffPreferences.ConsiderWeekAfter = false;
 
@@ -274,6 +313,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         [Test]
         public void VerifyUnsuccessfulExecuteValidationFail()
         {
+            _target = createTarget();
             _daysOffPreferences.ConsiderWeekBefore = false;
             _daysOffPreferences.ConsiderWeekAfter = false;
 
@@ -294,6 +334,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         [Test]
         public void VerifyUnsuccessfulExecuteDayOffsFail()
         {
+            _target = createTarget();
             _daysOffPreferences.ConsiderWeekBefore = false;
             _daysOffPreferences.ConsiderWeekAfter = false;
 
@@ -315,6 +356,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         [Test]
         public void VerifyUnsuccessfulExecute()
         {
+            _target = createTarget();
             _daysOffPreferences.ConsiderWeekBefore = false;
             _daysOffPreferences.ConsiderWeekAfter = false;
             _daysOffToRemove = new List<DateOnly>();
@@ -351,35 +393,32 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         }
 
         [Test]
-        public void VerifyUnsuccessfulExecuteReschedulingFail()
+        public void VerifyUnsuccessfulExecuteReschedulingFailWhenNotInSteadyState()
         {
+            _target = createTarget();
             _daysOffPreferences.ConsiderWeekBefore = false;
             _daysOffPreferences.ConsiderWeekAfter = false;
 
             using (_mocks.Record())
             {
                 commonMocks(true, true, _groupPerson);
-
-                IList<IScheduleDayPro > schduleDayProList= new List<IScheduleDayPro>();
-                Expect.Call(_activeScheduleMatrix.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(schduleDayProList ) );
-                Expect.Call(_scheduleMatrix2.Person).Return(_person);
-                Expect.Call(_scheduleMatrix2.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(schduleDayProList));
+                
+                IList<IScheduleDayPro> schduleDayProList = new List<IScheduleDayPro>();
+                Expect.Call(_activeScheduleMatrix.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(schduleDayProList)).Repeat.AtLeastOnce();
+                Expect.Call(_scheduleMatrix2.Person).Return(_person).Repeat.AtLeastOnce();
+                Expect.Call(_scheduleMatrix2.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(schduleDayProList)).Repeat.AtLeastOnce();
                 Expect.Call(_teamSteadyStateHolder.IsSteadyState(_groupPerson)).Return(false);
-                Expect.Call(_groupMatrixHelper.ScheduleRemovedDayOffDays(_daysOffToRemove, _groupPerson,
-                                                                         _groupSchedulingService,
-                                                                         _schedulePartModifyAndRollbackService,
-                                                                         _schedulingOptions,
-                                                                         _groupPersonBuilderForOptimization,
-                                                                         _allScheduleMatrixes)).IgnoreArguments().Return(
-                                                                            false);
+
+                Expect.Call(_dynamicBlockFinder.ExtractBlockDays(_daysOffToRemove[0])).Return(_daysOffToRemove);
+                Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(_person, _daysOffToRemove[0])).Return(_groupPerson);
             }
             using (_mocks.Playback())
             {
-                bool result = _target.Execute(_activeScheduleMatrix, _allScheduleMatrixes, _schedulingOptions,
+                _target.Execute(_activeScheduleMatrix, _allScheduleMatrixes, _schedulingOptions,
                                               _optimizationPreferences, _teamSteadyStateMainShiftScheduler,
-                                              _teamSteadyStateHolder, _scheduleDictionary, new List<IPerson>(),
+                                              _teamSteadyStateHolder, _scheduleDictionary, new List<IPerson>{_person},
                                               new List<IScheduleMatrixPro>());
-                Assert.IsFalse(result);
+                Assert.IsFalse(_target.TeamSchedulingSuccessfullForTesting);
             }
 
         }
@@ -439,6 +478,17 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(_daysOffToRemove);
         }
 
+
+        private AdvanceGroupDayOffOptimizer createTarget()
+        {
+            _allScheduleMatrixes = new List<IScheduleMatrixPro>();
+            _allScheduleMatrixes.Add(_activeScheduleMatrix);
+            _allScheduleMatrixes.Add(_scheduleMatrix2);
+            return new AdvanceGroupDayOffOptimizer(_converter,
+                   _decisionMaker, _dataExtractorProvider, _daysOffPreferences, _dayOffDecisionMakerExecuter, _lockableBitArrayChangesTracker, _schedulePartModifyAndRollbackService, _groupMatrixHelper, _groupOptimizationValidatorRunner,
+                   _groupPersonBuilderForOptimization, _smartDayOffBackToLegalStateService, _restrictionAggregator, _dynamicBlockFinder, _groupPersonBuilderBasedOnContractTime, _schedulingOptions, _skillDayPeriodDataGenerator, _workShiftFilerService,
+                   _workShiftSelector, _teamScheduling);
+        }
 
     }
 

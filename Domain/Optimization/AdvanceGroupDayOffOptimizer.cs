@@ -30,6 +30,8 @@ namespace Teleopti.Ccc.Domain.Optimization
         private readonly IWorkShiftSelector _workShiftSelector;
         private readonly ITeamScheduling _teamScheduling;
 
+        public bool TeamSchedulingSuccessfullForTesting { get; set; }
+
         public AdvanceGroupDayOffOptimizer(IScheduleMatrixLockableBitArrayConverter converter,
                                            IDayOffDecisionMaker decisionMaker,
                                            IScheduleResultDataExtractorProvider scheduleResultDataExtractorProvider,
@@ -87,24 +89,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             WorkingBitArray = _converter.Convert(_daysOffPreferences.ConsiderWeekBefore,
                                                  _daysOffPreferences.ConsiderWeekAfter);
 
-            IScheduleResultDataExtractor scheduleResultDataExtractor =
-                _scheduleResultDataExtractorProvider.CreatePersonalSkillDataExtractor(matrix);
-
-            bool success = _decisionMaker.Execute(WorkingBitArray, scheduleResultDataExtractor.Values());
-            if (!success)
-            {
-                success = _smartDayOffBackToLegalStateService.Execute(_smartDayOffBackToLegalStateService.BuildSolverList(WorkingBitArray), 100);
-                if (!success)
-                    return false;
-
-                success = _decisionMaker.Execute(WorkingBitArray, scheduleResultDataExtractor.Values());
-                if (!success)
-                    return false;
-            }
-            // DayOffBackToLegal if decisionMaker did something wrong
-            success = _smartDayOffBackToLegalStateService.Execute(_smartDayOffBackToLegalStateService.BuildSolverList(WorkingBitArray), 100);
-            if (!success)
-                return false;
+            if (!DataExtractorExecute(matrix)) return false;
 
             IList<DateOnly> daysOffToRemove = _changesTracker.DaysOffRemoved(WorkingBitArray, originalArray, matrix,
                                                                              _daysOffPreferences.ConsiderWeekBefore);
@@ -118,7 +103,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             if (matrixGroupPerson == null)
                 return false;
 
-            ValidatorResult result = new ValidatorResult();
+            var result = new ValidatorResult();
             result.Success = true;
 
             IList<GroupMatrixContainer> containers;
@@ -182,78 +167,113 @@ namespace Teleopti.Ccc.Domain.Optimization
                     if(!dayOffDates.Contains(scheduleDay.DateOnlyAsPeriod.DateOnly))
                         dayOffDates.Add(scheduleDay.DateOnlyAsPeriod.DateOnly );
 
-                var unLockedDays = new List<DateOnly>();
-                for (var i = 0; i < allMatrixes.Count; i++)
-                {
-                    var openMatrixList = allMatrixes.Where(x => x.Person.Equals(allMatrixes[i].Person));
-                    foreach (var scheduleMatrixPro in openMatrixList)
-                    {
-                        foreach (var scheduleDayPro in scheduleMatrixPro.EffectivePeriodDays.OrderBy(x => x.Day))
-                        {
+                executeAdvanceBlockScheduling(allMatrixes, teamSteadyStateHolder, selectedPerson, allPersonMatrixList, dayOffDates);
+            }
 
-                            if (scheduleMatrixPro.UnlockedDays.Contains(scheduleDayPro))
-                                unLockedDays.Add(scheduleDayPro.Day);
-                        }
+            return true;
+        }
+
+        private void executeAdvanceBlockScheduling(IList<IScheduleMatrixPro> allMatrixes, ITeamSteadyStateHolder teamSteadyStateHolder,
+                                                   IList<IPerson> selectedPerson, IList<IScheduleMatrixPro> allPersonMatrixList, IList<DateOnly> dayOffDates)
+        {
+            var unLockedDays = new List<DateOnly>();
+            for (var i = 0; i < allMatrixes.Count; i++)
+            {
+                var openMatrixList = allMatrixes.Where(x => x.Person.Equals(allMatrixes[i].Person));
+                foreach (var scheduleMatrixPro in openMatrixList)
+                {
+                    foreach (var scheduleDayPro in scheduleMatrixPro.EffectivePeriodDays.OrderBy(x => x.Day))
+                    {
+                        if (scheduleMatrixPro.UnlockedDays.Contains(scheduleDayPro))
+                            unLockedDays.Add(scheduleDayPro.Day);
                     }
                 }
+            }
 
-                foreach(var dateOnly in dayOffDates )
+            foreach (var dateOnly in dayOffDates)
+            {
+                var dateOnlyList = _dynamicBlockFinder.ExtractBlockDays(dateOnly);
+                var allGroupPersonListOnStartDate = new HashSet<IGroupPerson>();
+
+                foreach (var person in selectedPerson)
                 {
-                    var dateOnlyList = _dynamicBlockFinder.ExtractBlockDays(dateOnly);
-                    var allGroupPersonListOnStartDate = new HashSet<IGroupPerson>();
+                    allGroupPersonListOnStartDate.Add(_groupPersonBuilderForOptimization.BuildGroupPerson(person, dateOnly));
+                }
 
-                    foreach (var person in selectedPerson)
+                foreach (
+                    var fullGroupPerson in allGroupPersonListOnStartDate.GetRandom(allGroupPersonListOnStartDate.Count, true))
+                {
+                    if (!teamSteadyStateHolder.IsSteadyState(fullGroupPerson))
                     {
-                        allGroupPersonListOnStartDate.Add(_groupPersonBuilderForOptimization.BuildGroupPerson(person, dateOnly ));
+                        TeamSchedulingSuccessfullForTesting = false;
+                        continue;
                     }
-
-                    foreach (var fullGroupPerson in allGroupPersonListOnStartDate.GetRandom(allGroupPersonListOnStartDate.Count, true))
+                    var groupPersonList = _groupPersonBuilderBasedOnContractTime.SplitTeams(fullGroupPerson, dateOnly);
+                    foreach (var groupPerson in groupPersonList)
                     {
-                        if (!teamSteadyStateHolder.IsSteadyState(fullGroupPerson)) continue;
-                        var groupPersonList = _groupPersonBuilderBasedOnContractTime.SplitTeams(fullGroupPerson, dateOnly );
-                        foreach (var groupPerson in groupPersonList)
+                        var groupMatrixList = getScheduleMatrixProList(groupPerson, dateOnly, allPersonMatrixList);
+                        
+                        var restriction = _restrictionAggregator.Aggregate(dateOnlyList, groupPerson, groupMatrixList,
+                                                                           _schedulingOptions);
+                        if (restriction == null) continue;
+                        
+                        var activityInternalData = _skillDayPeriodIntervalDataGenerator.Generate(fullGroupPerson, dateOnlyList);
+
+                        var shifts = _workShiftFilterService.Filter(dateOnly, groupPerson, groupMatrixList, restriction,
+                                                                    _schedulingOptions);
+                        if (shifts != null && shifts.Count > 0)
                         {
-                            var groupMatrixList = getScheduleMatrixProList(groupPerson, dateOnly, allPersonMatrixList);
-                            //call class that returns the aggregated restrictions for the teamblock (is team member personal skills needed for this?)
-                            var restriction = _restrictionAggregator.Aggregate(dateOnlyList, groupPerson, groupMatrixList, _schedulingOptions);
-                            if (restriction == null) continue;
+                            IShiftProjectionCache bestShiftProjectionCache;
+                            if (shifts.Count == 1)
+                                bestShiftProjectionCache = shifts.First();
+                            else
+                                bestShiftProjectionCache = _workShiftSelector.SelectShiftProjectionCache(shifts,
+                                                                                                         activityInternalData,
+                                                                                                         _schedulingOptions.
+                                                                                                             WorkShiftLengthHintOption,
+                                                                                                         _schedulingOptions.
+                                                                                                             UseMinimumPersons,
+                                                                                                         _schedulingOptions.
+                                                                                                             UseMaximumPersons);
 
-                            //call class that returns the aggregated intraday dist based on teamblock dates ???? consider the priority and understaffing
-                            var activityInternalData = _skillDayPeriodIntervalDataGenerator.Generate(fullGroupPerson, dateOnlyList);
-
-                            //call class that returns a filtered list of valid workshifts, this class will probably consists of a lot of subclasses 
-                            // (should we cover for max seats here?) ????
-                            var shifts = _workShiftFilterService.Filter(dateOnly , groupPerson, groupMatrixList, restriction, _schedulingOptions);
-
-                            if (shifts != null && shifts.Count > 0)
-                            {
-                                //call class that returns the workshift to use based on valid workshifts, the aggregated intraday dist and other things we need ???
-                                IShiftProjectionCache bestShiftProjectionCache;
-                                if (shifts.Count == 1)
-                                    bestShiftProjectionCache = shifts.First();
-                                else
-                                    bestShiftProjectionCache = _workShiftSelector.SelectShiftProjectionCache(shifts, activityInternalData,
-                                                                                                             _schedulingOptions.WorkShiftLengthHintOption,
-                                                                                                             _schedulingOptions.UseMinimumPersons,
-                                                                                                             _schedulingOptions.UseMaximumPersons);
-
-                                //call class that schedules given date with given workshift on the complete team
-                                //call class that schedules the unscheduled days for the teamblock using the same start time from the given shift, 
-                                //this class will handle steady state as well as individual
-                                _teamScheduling.Execute(dateOnly , dateOnlyList, groupMatrixList, groupPerson, restriction, bestShiftProjectionCache, unLockedDays, selectedPerson);
-                                //if (_cancelMe)
-                                //    break;
-                            }
+                            _teamScheduling.Execute(dateOnly, dateOnlyList, groupMatrixList, groupPerson, restriction,
+                                                    bestShiftProjectionCache, unLockedDays, selectedPerson);
                             //if (_cancelMe)
                             //    break;
                         }
                         //if (_cancelMe)
                         //    break;
                     }
+                    //if (_cancelMe)
+                    //    break;
                 }
-
             }
+        }
 
+        private bool DataExtractorExecute(IScheduleMatrixPro matrix)
+        {
+            IScheduleResultDataExtractor scheduleResultDataExtractor =
+                _scheduleResultDataExtractorProvider.CreatePersonalSkillDataExtractor(matrix);
+
+            bool success = _decisionMaker.Execute(WorkingBitArray, scheduleResultDataExtractor.Values());
+            if (!success)
+            {
+                success =
+                    _smartDayOffBackToLegalStateService.Execute(
+                        _smartDayOffBackToLegalStateService.BuildSolverList(WorkingBitArray), 100);
+                if (!success)
+                    return false;
+
+                success = _decisionMaker.Execute(WorkingBitArray, scheduleResultDataExtractor.Values());
+                if (!success)
+                    return false;
+            }
+            // DayOffBackToLegal if decisionMaker did something wrong
+            success =
+                _smartDayOffBackToLegalStateService.Execute(
+                    _smartDayOffBackToLegalStateService.BuildSolverList(WorkingBitArray), 100);
+            if (!success)
+                return false;
             return true;
         }
 
