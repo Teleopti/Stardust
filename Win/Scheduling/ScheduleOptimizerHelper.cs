@@ -561,7 +561,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-		public void ReOptimize(BackgroundWorker backgroundWorker, IList<IScheduleDay> selectedDays, IList<IScheduleMatrixPro> allMatrixes)
+		public void ReOptimize(BackgroundWorker backgroundWorker, IList<IScheduleDay> selectedDays)
         {
             _backgroundWorker = backgroundWorker;
             _scheduledCount = 0;
