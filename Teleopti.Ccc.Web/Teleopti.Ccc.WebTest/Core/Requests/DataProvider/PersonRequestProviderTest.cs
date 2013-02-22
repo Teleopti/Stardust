@@ -16,24 +16,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 	public class PersonRequestProviderTest
 	{
 		[Test]
-		public void ShouldFindTextRequestsForCurrentUserWithPaging()
-		{
-			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
-			var repository = MockRepository.GenerateMock<IPersonRequestRepository>();
-			var target = new PersonRequestProvider(repository, loggedOnUser, null);
-			var person = new Person();
-			var paging = new Paging();
-			var personRequests = new IPersonRequest[] { };
-
-			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
-			repository.Stub(x => x.FindTextAndAbsenceRequestsForAgent(person, paging)).Return(personRequests);
-
-			target.RetrieveTextAndAbsenceRequests(paging);
-
-			repository.AssertWasCalled(x => x.FindTextAndAbsenceRequestsForAgent(person, paging));
-		}
-
-		[Test]
 		public void ShouldRetrieveRequestsForCurrentUserAndDays()
 		{
 			var repository = MockRepository.GenerateMock<IPersonRequestRepository>();
