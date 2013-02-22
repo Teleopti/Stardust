@@ -37,8 +37,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
 			{
 				using (var teleoptiRtaServiceClient = new TeleoptiRtaServiceClient())
 				{
-					teleoptiRtaServiceClient.GetUpdatedScheduleChange(message.PersonId, message.BusinessUnitId, message.Datasource,
-																	  DateTime.UtcNow);
+					teleoptiRtaServiceClient.GetUpdatedScheduleChange(message.PersonId, message.BusinessUnitId, DateTime.UtcNow);
 				}
 			}
 			catch (Exception exp)
@@ -61,20 +60,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
 			//if (message.ActivityStartDateTime.Date == DateTime.UtcNow.Date || message.ActivityStartDateTime.Date == DateTime.UtcNow.AddDays(1).Date)
 			if (message.ActivityStartDateTime > DateTime.UtcNow.AddDays(1) || message.ActivityEndDateTime < DateTime.UtcNow)
 				return;
-			
-			//send message to the web service.
-			try
-			{
-				using (var teleoptiRtaServiceClient = new TeleoptiRtaServiceClient())
-				{
-					teleoptiRtaServiceClient.GetUpdatedScheduleChange(message.PersonId, message.BusinessUnitId, message.Datasource,
-					                                                  DateTime.UtcNow);
-				}
-			}
-			catch (Exception exp)
-			{
-				var excpetion = exp.Message;
-			}
 
 			DateTime startTime;
 			using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
@@ -82,16 +67,29 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
 				startTime = _scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow, message.PersonId);
 			}
 
-			if (!startTime.Date.Equals(new DateTime().Date))
+			if (startTime.Date.Equals(new DateTime().Date))
+				return;
+
+			//send message to the web service.
+			try
 			{
-				_serviceBus.DelaySend(startTime, new PersonWithExternalLogOn
-					{
-						Datasource = message.Datasource,
-						BusinessUnitId = message.BusinessUnitId,
-						PersonId = message.PersonId,
-						Timestamp = DateTime.UtcNow
-					});
+				using (var teleoptiRtaServiceClient = new TeleoptiRtaServiceClient())
+				{
+					teleoptiRtaServiceClient.GetUpdatedScheduleChange(message.PersonId, message.BusinessUnitId, DateTime.UtcNow);
+				}
 			}
+			catch (Exception exp)
+			{
+				var excpetion = exp.Message;
+			}
+			
+			_serviceBus.DelaySend(startTime, new PersonWithExternalLogOn
+				{
+					Datasource = message.Datasource,
+					BusinessUnitId = message.BusinessUnitId,
+					PersonId = message.PersonId,
+					Timestamp = DateTime.UtcNow
+				});
 		}
 	}
 }
