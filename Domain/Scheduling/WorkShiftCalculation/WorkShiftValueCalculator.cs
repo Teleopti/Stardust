@@ -33,12 +33,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 
 			double periodValue = 0;
 			int resourceInMinutes = 0;
-			if (mainShiftLayers == null)
-				return 0;
-
 			var dateTimePeriod = mainShiftLayers.Period();
-			if (dateTimePeriod == null)
-				return 0;
 
 			DateTime shiftStartDate = dateTimePeriod.Value.StartDateTime.Date;
 			foreach (IVisualLayer layer in mainShiftLayers)
@@ -50,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 				DateTime layerStart = baseLayer.Period.StartDateTime;
 				DateTime layerEnd = baseLayer.Period.EndDateTime;
 
-				int resolution = GetResolution(skillIntervalDataList);
+				int resolution = getResolution(skillIntervalDataList);
 				int currentResourceInMinutes = resolution;
 
 				DateTime currentStart =
@@ -71,7 +66,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 				if (skillIntervalDataList != null)
 				{
 					ISkillIntervalData currentStaffPeriod;
-					if (!skillIntervalDataList.TryGetValue(TimeOfDay(SkillDayTemplate.BaseDate, currentStart), out currentStaffPeriod))
+					if (!skillIntervalDataList.TryGetValue(timeOfDay(SkillDayTemplate.BaseDate, currentStart), out currentStaffPeriod))
 					{
 						if (activity.RequiresSkill)
 							return null;
@@ -91,12 +86,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 						currentStart = currentStart.AddMinutes(resolution);
 
 						if (currentStart >= baseLayer.Period.EndDateTime)
-						{
 							break;
-						}
 
-						if (
-							!skillIntervalDataList.TryGetValue(TimeOfDay(SkillDayTemplate.BaseDate, currentStart), out currentStaffPeriod))
+						if (!skillIntervalDataList.TryGetValue(timeOfDay(SkillDayTemplate.BaseDate, currentStart), out currentStaffPeriod))
 						{
 							if (activity.RequiresSkill)
 								return null;
@@ -112,7 +104,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 			return _workShiftLengthValueCalculator.CalculateShiftValueForPeriod(periodValue, resourceInMinutes, lengthFactor);
 		}
 
-		private static int GetResolution(IEnumerable<KeyValuePair<TimeSpan, ISkillIntervalData>> staffPeriods)
+		private static int getResolution(IEnumerable<KeyValuePair<TimeSpan, ISkillIntervalData>> staffPeriods)
 		{
 			int resolution = 15;
 			foreach (KeyValuePair<TimeSpan, ISkillIntervalData> pair in staffPeriods)
@@ -123,7 +115,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 			return resolution;
 		}
 
-		private static TimeSpan TimeOfDay(DateTime shiftStartDate, DateTime currentStart)
+		private static TimeSpan timeOfDay(DateTime shiftStartDate, DateTime currentStart)
 		{
 			if (currentStart.Date == shiftStartDate.Date)
 				return currentStart.TimeOfDay;
@@ -134,10 +126,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 		private static IVisualLayer layerToBaseDate(IVisualLayer layer, DateTime shiftStartDate)
 		{
 			var movedStart =
-				new DateTime(SkillDayTemplate.BaseDate.Date.Ticks, DateTimeKind.Utc).Add(TimeOfDay(shiftStartDate,
+				new DateTime(SkillDayTemplate.BaseDate.Date.Ticks, DateTimeKind.Utc).Add(timeOfDay(shiftStartDate,
 				                                                                                   layer.Period.StartDateTime));
 			var movedEnd =
-				new DateTime(SkillDayTemplate.BaseDate.Date.Ticks, DateTimeKind.Utc).Add(TimeOfDay(shiftStartDate,
+				new DateTime(SkillDayTemplate.BaseDate.Date.Ticks, DateTimeKind.Utc).Add(timeOfDay(shiftStartDate,
 				                                                                                   layer.Period.EndDateTime));
 			var
 			movedPeriod = new DateTimePeriod(movedStart, movedEnd);

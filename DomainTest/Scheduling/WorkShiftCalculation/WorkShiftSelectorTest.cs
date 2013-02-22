@@ -65,6 +65,35 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 		}
 
 		[Test]
+		public void ShouldCallEqualWorkShiftValueDeciderIfTwoShiftsHasTheSameValue()
+		{
+			_shiftProjectionCaches = new List<IShiftProjectionCache> { _shiftProjectionCache2, _shiftProjectionCache2 };
+
+			using (_mocks.Record())
+			{
+				Expect.Call(_shiftProjectionCache2.MainShiftProjection).Return(_visualLayerCollection);
+				Expect.Call(_workShiftValueCalculator.CalculateShiftValue(_visualLayerCollection, _activity,
+																		  _skillIntervalDatas, _lengthHint, true, true)).Return(7);
+
+				Expect.Call(_shiftProjectionCache2.MainShiftProjection).Return(_visualLayerCollection);
+				Expect.Call(_workShiftValueCalculator.CalculateShiftValue(_visualLayerCollection, _activity,
+																		  _skillIntervalDatas, _lengthHint, true, true)).Return(7);
+
+				Expect.Call(_equalWorkShiftValueDecider.Decide(_shiftProjectionCache2, _shiftProjectionCache2))
+				      .Return(_shiftProjectionCache2);
+			}
+
+			IShiftProjectionCache result;
+
+			using (_mocks.Playback())
+			{
+				result = _target.SelectShiftProjectionCache(_shiftProjectionCaches, _skillIntervalDataForActivity, _lengthHint, true, true);
+			}
+
+			Assert.AreSame(_shiftProjectionCache2, result);
+		}
+
+		[Test]
 		public void ShouldReturnCacheWithHighestValue()
 		{
 			_shiftProjectionCaches = new List<IShiftProjectionCache> { _shiftProjectionCache1, _shiftProjectionCache2, _shiftProjectionCache1 };

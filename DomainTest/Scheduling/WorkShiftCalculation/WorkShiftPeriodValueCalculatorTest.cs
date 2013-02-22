@@ -22,6 +22,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 		}
 
 		[Test]
+		public void ShouldReturnZeroIfIntervalDataIsNull()
+		{
+			ISkillIntervalData skillIntervalData = null;
+			double result = _target.PeriodValue(skillIntervalData, 15, false, false);
+			Assert.AreEqual(0, result);
+		}
+
+		[Test]
 		public void ShouldCalculateAsBeforeWhenUnderstaffed()
 		{
 			ISkillIntervalData skillIntervalData = new SkillIntervalData(_period, 10.80, 5, 0, null, null);
@@ -30,11 +38,19 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 		}
 
 		[Test]
-		public void ShouldCalculateAsBeforeWhenUnderstaffedShouldBoostIntervalWithZeroScheduled()
+		public void ShouldCalculateAsBeforeWhenUnderstaffedShouldBoostIntervalWithNearToZeroScheduled()
 		{
 			ISkillIntervalData skillIntervalData = new SkillIntervalData(_period, 13.33, 13.33, 0, null, null);
 			double result = _target.PeriodValue(skillIntervalData, 15, false, false);
 			Assert.AreEqual(100028.87, result, 0.01);
+		}
+
+		[Test]
+		public void ShouldCalculateAsBeforeWhenUnderstaffedShouldNotBoostIntervalWithNotThatNearToZeroScheduled()
+		{
+			ISkillIntervalData skillIntervalData = new SkillIntervalData(_period, 13.33, 13, 0, null, null);
+			double result = _target.PeriodValue(skillIntervalData, 15, false, false);
+			Assert.AreEqual(28.13, result, 0.01);
 		}
 
 		[Test]

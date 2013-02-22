@@ -9,34 +9,32 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 
 	public class WorkShiftPeriodValueCalculator : IWorkShiftPeriodValueCalculator
 	{
-		const int theBigNumber = 100000;
+		const int TheBigNumber = 100000;
 
-		public double PeriodValue(ISkillIntervalData skillIntervalData, int addedResourceInMinutes, bool useMinimumPersons, bool useMaximumPersons)
+		public double PeriodValue(ISkillIntervalData skillIntervalData, int addedResourceInMinutes, bool useMinimumPersons,
+		                          bool useMaximumPersons)
 		{
-		    if (skillIntervalData != null)
-		    {
-		        double partOfResolution = addedResourceInMinutes / skillIntervalData.Period.ElapsedTime().TotalMinutes;
+			if (skillIntervalData == null)
+				return 0;
 
-		        double intervalLengthInMinutes = skillIntervalData.Period.ElapsedTime().TotalMinutes;
-		        double forecastedDemand = skillIntervalData.ForecastedDemand;
-		        double currentDemand = skillIntervalData.CurrentDemand;
-		        double calculatedValue =
-		            calculateWorkShiftPeriodValue(forecastedDemand * intervalLengthInMinutes * partOfResolution,
-		                                          currentDemand * intervalLengthInMinutes * partOfResolution,
-		                                          addedResourceInMinutes);
+			double partOfResolution = addedResourceInMinutes/skillIntervalData.Period.ElapsedTime().TotalMinutes;
+			double intervalLengthInMinutes = skillIntervalData.Period.ElapsedTime().TotalMinutes;
+			double forecastedDemand = skillIntervalData.ForecastedDemand;
+			double currentDemand = skillIntervalData.CurrentDemand;
+			double calculatedValue =
+				calculateWorkShiftPeriodValue(forecastedDemand*intervalLengthInMinutes*partOfResolution,
+				                              currentDemand*intervalLengthInMinutes*partOfResolution,
+				                              addedResourceInMinutes);
 
-		        //double assignedResourceInMinutes = (forecastedDemand - currentDemand) * intervalLengthInMinutes;
-		        double corrFactor = 0;
-				if (Math.Abs(currentDemand - forecastedDemand) < 0.01)  //eller ska man bara boosta första och sista intervall=
-					corrFactor = theBigNumber;
+			double corrFactor = 0;
+			if (Math.Abs(forecastedDemand - currentDemand) < 0.01)
+				//eller ska man bara boosta första och sista intervall, eller dom också, tror jag, i alla fall om de är noll?
+				corrFactor = TheBigNumber;
 
-				corrFactor += getCorrectionFactor(useMinimumPersons, useMaximumPersons, skillIntervalData);
+			corrFactor += getCorrectionFactor(useMinimumPersons, useMaximumPersons, skillIntervalData);
+			calculatedValue += corrFactor;
 
-		        calculatedValue += corrFactor;
-
-		        return calculatedValue;
-		    }
-		    return 0;
+			return calculatedValue;
 		}
 
 
@@ -67,14 +65,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 			{
 				if (skillIntervalData.CurrentHeads >= skillIntervalData.MinimumHeads.Value)
 					return 0;
-				return (skillIntervalData.MinimumHeads.Value - skillIntervalData.CurrentHeads)*theBigNumber;
+				return (skillIntervalData.MinimumHeads.Value - skillIntervalData.CurrentHeads)*TheBigNumber;
 			}
 
 			if(useMaximumPersons && skillIntervalData.MaximumHeads.HasValue)
 			{
 				if (skillIntervalData.CurrentHeads + 1 <= skillIntervalData.MaximumHeads.Value)
 					return 0;
-				return -(skillIntervalData.CurrentHeads + 1 - skillIntervalData.MaximumHeads.Value)*theBigNumber;
+				return -(skillIntervalData.CurrentHeads + 1 - skillIntervalData.MaximumHeads.Value)*TheBigNumber;
 			}
 
 			return 0;
