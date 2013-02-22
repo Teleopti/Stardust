@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 				Expect.Call(scheduleDay2.AssignmentHighZOrder()).Return(personAssignment2);
 				Expect.Call(personAssignment1.MainShift).Return(mainShift1);
 				Expect.Call(personAssignment2.MainShift).Return(mainShift2);
-                Expect.Call(_mainShiftEquator.AreMainShiftEqual(mainShift2, mainShift1)).Return(false);
+                //Expect.Call(_mainShiftEquator.AreMainShiftEqual(mainShift2, mainShift1)).Return(false);
 			}
 			using (_mocks.Playback())
 			{
