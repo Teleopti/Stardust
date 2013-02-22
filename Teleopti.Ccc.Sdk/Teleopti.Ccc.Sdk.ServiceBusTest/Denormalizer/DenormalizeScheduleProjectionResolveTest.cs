@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			}
 		}
 
-		[Test]
+		[Test, Ignore("Temporarily disabled")]
 		public void ShouldResolvePersonScheduleDayReadModelHandlerConsumer()
 		{
 			UnitOfWorkFactoryContainer.Current = _unitOfWorkFactory;

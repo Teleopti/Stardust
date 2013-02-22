@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 				}
 				if (!personScheduleDayModelInitialized)
 				{
-					messages.AddRange(initialLoad<PersonScheduleDayInitialize>(message));
+					//messages.AddRange(initialLoad<PersonScheduleDayInitialize>(message));
 				}
 				uow.Clear();
 			}
