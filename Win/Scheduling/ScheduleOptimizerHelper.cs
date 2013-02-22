@@ -14,6 +14,7 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.DayOffScheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
+using Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Obfuscated.ResourceCalculation;
 using Teleopti.Ccc.UserTexts;
@@ -894,145 +895,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             }
         }
 
-		//public IGroupPagePerDate CreateGroupPagePerDate(IScheduleViewBase currentView, IGroupPageDataProvider groupPageDataProvider, IGroupPageLight selectedGrouping)
-		//{
-		//    return _container.Resolve<IGroupPageCreator>().CreateGroupPagePerDate(currentView, groupPageDataProvider, selectedGrouping);
-		//    //IDictionary<DateOnly, IGroupPage> dic = new Dictionary<DateOnly, IGroupPage>();
-		//    //DateOnlyPeriod selectedPeriod = GetSelectedPeriod(currentView);
-		//    //foreach (var dateOnly in selectedPeriod.DayCollection())
-		//    //{
-		//    //    IGroupPage groupPage = createGroupPageForDate(groupPageDataProvider, selectedGrouping,  dateOnly);
-		//    //    dic.Add(dateOnly, groupPage);
-		//    //}
-		//    //return new GroupPagePerDate(dic);
-		//}
-
-		//public IGroupPagePerDate CreateGroupPagePerDate(IList<DateOnly> dates, IGroupPageDataProvider groupPageDataProvider, IGroupPageLight selectedGrouping)
-		//{
-		//    return _container.Resolve<IGroupPageCreator>().CreateGroupPagePerDate(dates, groupPageDataProvider, selectedGrouping);
-		//    //if (dates == null) throw new ArgumentNullException("dates");
-		//    //if (groupPageDataProvider == null) throw new ArgumentNullException("groupPageDataProvider");
-		//    //IDictionary<DateOnly, IGroupPage> dic = new Dictionary<DateOnly, IGroupPage>();
-
-		//    //foreach (var dateOnly in dates)
-		//    //{
-		//    //    var groupPage = createGroupPageForDate(groupPageDataProvider, selectedGrouping, dateOnly);
-		//    //    dic.Add(dateOnly, groupPage);
-		//    //}
-
-		//    //return new GroupPagePerDate(dic);
-		//}
-
-		///// <summary>
-		///// Used to display a combo of groupings when starting groupScheduling
-		///// </summary>
-		///// <param name="currentView">The current view.</param>
-		///// <param name="stateHolder">The state holder.</param>
-		///// <returns></returns>
-		//[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
-		//public IList<IGroupPage> CreateGroupPages(IScheduleViewBase currentView, ISchedulerStateHolder stateHolder)
-		//{
-		//    DateOnlyPeriod selectedPeriod = GetSelectedPeriod(currentView);
-
-
-		//    IGroupPageDataProvider dataProvider = new GroupScheduleGroupPageDataProvider(stateHolder, new RepositoryFactory(),
-		//                                                                                 UnitOfWorkFactory.Current);
-		//    ((GroupScheduleGroupPageDataProvider)dataProvider).SetSelectedPeriod(selectedPeriod);
-		//    IGroupingsCreator groupingsCreator = new GroupingsCreator(dataProvider);
-		//    IList<IGroupPage> pages = groupingsCreator.CreateBuiltInGroupPages(true);
-		//    foreach (var userDefinedGrouping in dataProvider.UserDefinedGroupings)
-		//    {
-		//        pages.Add(userDefinedGrouping);
-		//    }
-
-		//    return pages;
-
-		//}
-
-		//public static DateOnlyPeriod GetSelectedPeriod(IScheduleViewBase currentView)
-		//{
-		//    if (currentView == null) throw new ArgumentNullException("currentView");
-		//    DateOnly minDate = DateOnly.MaxValue;
-		//    DateOnly maxDate = DateOnly.MinValue;
-		//    foreach (var dateOnly in currentView.AllSelectedDates())
-		//    {
-		//        if (dateOnly < minDate)
-		//            minDate = dateOnly;
-
-		//        if (dateOnly > maxDate)
-		//            maxDate = dateOnly;
-		//    }
-
-		//    return new DateOnlyPeriod(minDate, maxDate);
-		//}
-
-		//private static IGroupPage createGroupPageForDate(IGroupPageDataProvider groupPageDataProvider, IGroupPageLight selectedGrouping,  DateOnly dateOnly)
-		//{
-		//    IGroupPage groupPage;
-		//    IGroupPageOptions options = new GroupPageOptions(groupPageDataProvider.PersonCollection)
-		//                                    {
-		//                                        SelectedPeriod = new DateOnlyPeriod(dateOnly, dateOnly),
-		//                                        CurrentGroupPageName = selectedGrouping.Name,
-		//                                        CurrentGroupPageNameKey = selectedGrouping.Key
-		//                                    };
-
-		//    switch (selectedGrouping.Key)
-		//    {
-		//        case "Main":
-		//            {
-		//                var personGroupPage = new PersonGroupPage();
-		//                groupPage = personGroupPage.CreateGroupPage(groupPageDataProvider.BusinessUnitCollection, options);
-		//                break;
-		//            }
-		//        case "Contracts":
-		//            {
-		//                var contractGroupPage = new ContractGroupPage();
-		//                groupPage = contractGroupPage.CreateGroupPage(groupPageDataProvider.ContractCollection, options);
-		//                break;
-		//            }
-		//        case "ContractSchedule":
-		//            {
-		//                var contractScheduleGroupPage = new ContractScheduleGroupPage();
-		//                groupPage = contractScheduleGroupPage.CreateGroupPage(groupPageDataProvider.ContractScheduleCollection, options);
-		//                break;
-		//            }
-		//        case "PartTimepercentages":
-		//            {
-		//                var partTimePercentageGroupPage = new PartTimePercentageGroupPage();
-		//                groupPage = partTimePercentageGroupPage.CreateGroupPage(groupPageDataProvider.PartTimePercentageCollection, options);
-		//                break;
-		//            }
-		//        case "Note":
-		//            {
-		//                var personNoteGroupPage = new PersonNoteGroupPage();
-		//                groupPage = personNoteGroupPage.CreateGroupPage(null, options);
-		//                break;
-		//            }
-		//        case "RuleSetBag":
-		//            {
-		//                var ruleSetBagGroupPage = new RuleSetBagGroupPage();
-		//                groupPage = ruleSetBagGroupPage.CreateGroupPage(groupPageDataProvider.RuleSetBagCollection, options);
-		//                break;
-		//            }
-		//        default:
-		//            {
-		//                groupPage = null;// selectedGrouping;
-		//                var groups = groupPageDataProvider.UserDefinedGroupings;
-		//                foreach (var group in groups)
-		//                {
-		//                    if (group.IdOrDescriptionKey.Equals(selectedGrouping.Key))
-		//                    {
-		//                        groupPage = group;
-		//                        break;
-		//                    }
-		//                }
-						
-		//                break;
-		//            }
-		//    }
-		//    return groupPage;
-		//}
-
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "groupPageHelper"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
         public void GroupSchedule(BackgroundWorker backgroundWorker, IList<IScheduleDay> scheduleDays, IList<IScheduleMatrixPro> matrixList, 
 			IList<IScheduleMatrixPro> matrixListAll, ISchedulingOptions schedulingOptions, IGroupPageHelper groupPageHelper, IList<IScheduleMatrixPro> allMatrixes)
@@ -1112,7 +974,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             var fixedStaffSchedulingService = _container.Resolve<IFixedStaffSchedulingService>();
             fixedStaffSchedulingService.ClearFinderResults();
 
-            ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackServiceForContractDaysOff = new SchedulePartModifyAndRollbackService(SchedulingStateHolder, _scheduleDayChangeCallback, new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
+            var schedulePartModifyAndRollbackServiceForContractDaysOff = new SchedulePartModifyAndRollbackService(SchedulingStateHolder, _scheduleDayChangeCallback, new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
 			_daysOffSchedulingService.Execute(matrixList, matrixListAll, schedulePartModifyAndRollbackServiceForContractDaysOff, schedulingOptions);
 
             var tagSetter = _container.Resolve<IScheduleTagSetter>();
@@ -1135,10 +997,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 			schedulingOptions.UseGroupSchedulingCommonEnd = false;
 			schedulingOptions.UseGroupSchedulingCommonStart = false;
 
-            using (PerformanceOutput.ForOperation("Scheduling x blocks"))
-                blockSchedulingService.Execute(matrixes, schedulingOptions, schedulingResults);
+		    using (PerformanceOutput.ForOperation("Scheduling x blocks"))
+		            blockSchedulingService.Execute(matrixes, schedulingOptions, schedulingResults);
 
-            if (schedulingOptions.RotationDaysOnly)
+
+		    if (schedulingOptions.RotationDaysOnly)
                 schedulePartModifyAndRollbackServiceForContractDaysOff.Rollback();
 
             blockSchedulingService.BlockScheduled -= blockSchedulingServiceBlockScheduled;
@@ -1146,7 +1009,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             _allResults.AddResults(new List<IWorkShiftFinderResult>(schedulingResults.Values), DateTime.Now);
             _allResults.AddResults(fixedStaffSchedulingService.FinderResults, DateTime.Now);
         }
-
+        
         void blockSchedulingServiceBlockScheduled(object sender, BlockSchedulingServiceEventArgs e)
         {
             if (_backgroundWorker.CancellationPending)
@@ -1167,6 +1030,146 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             return retList;
         }
+
+        #region Advance Block Scheduling
+
+		//private static IWorkShiftSelector InitializeWorkShiftRelatedClasses()
+		//{
+		//    IWorkShiftPeriodValueCalculator workShiftPeriodValueCalculator = new WorkShiftPeriodValueCalculator();
+		//    IWorkShiftLengthValueCalculator workShiftLengthValueCalculator = new WorkShiftLengthValueCalculator();
+		//    IWorkShiftValueCalculator workShiftValueCalculator =
+		//        new WorkShiftValueCalculator(workShiftPeriodValueCalculator, workShiftLengthValueCalculator);
+		//    IEqualWorkShiftValueDecider equalWorkShiftValueDecider = new EqualWorkShiftValueDecider();
+		//    IWorkShiftSelector workShiftSelector = new WorkShiftSelector(workShiftValueCalculator,
+		//                                                                 equalWorkShiftValueDecider);
+		//    return workShiftSelector;
+		//}
+
+		private AdvanceSchedulingService callAdvanceSchedulingService(ISchedulingOptions schedulingOptions,
+                                                                      IList<IScheduleMatrixPro> selectedPersonMatrixList,
+			IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization)
+        {
+            var dynamicBlockFinder = new DynamicBlockFinder(schedulingOptions, _stateHolder, selectedPersonMatrixList);
+            var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true,
+                                                                        schedulingOptions.ConsiderShortBreaks);
+            ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService =
+                new SchedulePartModifyAndRollbackService(_stateHolder, _scheduleDayChangeCallback,
+                                                         new ScheduleTagSetter(
+                                                             schedulingOptions.TagToUseOnScheduling));
+            var teamScheduling = new TeamScheduling(resourceCalculateDelayer, schedulePartModifyAndRollbackService);
+            //var workShiftSelector = InitializeWorkShiftRelatedClasses();
+            IGroupPersonBuilderBasedOnContractTime groupPersonBuilderBasedOnContractTime =
+                new GroupPersonBuilderBasedOnContractTime(_container.Resolve<IGroupPersonFactory>());
+            var advanceSchedulingService = new AdvanceSchedulingService(_container.Resolve<ISkillDayPeriodIntervalDataGenerator>(),
+                                                                        dynamicBlockFinder,
+                                                                        _container.Resolve<IRestrictionAggregator>(),
+                                                                        _container.Resolve<IWorkShiftFilterService>(),
+                                                                        teamScheduling,
+                                                                        schedulingOptions, 
+																		_container.Resolve<IWorkShiftSelector>(),
+                                                                        groupPersonBuilderBasedOnContractTime, groupPersonBuilderForOptimization);
+            return advanceSchedulingService;
+        }
+
+
+        private IGroupPersonBuilderForOptimization CallGroupPage(ISchedulingOptions schedulingOptions)
+        {
+            IGroupPageDataProvider groupPageDataProvider = _container.Resolve<IGroupScheduleGroupPageDataProvider>();
+            var groupPagePerDateHolder = _container.Resolve<IGroupPagePerDateHolder>();
+            if (_schedulerStateHolder.LoadedPeriod != null)
+            {
+                IList<DateOnly> dates =
+                    _schedulerStateHolder.LoadedPeriod.Value.ToDateOnlyPeriod(TeleoptiPrincipal.Current.Regional.TimeZone).
+                        DayCollection();
+                groupPagePerDateHolder.GroupPersonGroupPagePerDate =
+                    _container.Resolve<IGroupPageCreator>().CreateGroupPagePerDate(dates,
+                                                                                   groupPageDataProvider,
+                                                                                   schedulingOptions.GroupOnGroupPageForLevelingPer,
+                                                                                   true);
+            }
+            IGroupPersonFactory groupPersonFactory = new GroupPersonFactory();
+            IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization =
+                new GroupPersonBuilderForOptimization(_schedulerStateHolder.SchedulingResultState, groupPersonFactory,
+                                                      groupPagePerDateHolder);
+            return groupPersonBuilderForOptimization;
+        }
+
+        public void BlockScheduleForAdvanceScheduling(IList<IScheduleMatrixPro> selectedPersonMatrixList,
+                                                      IList<IScheduleMatrixPro> selectedPersonAllMatrixList, 
+                                                      IList<IScheduleMatrixPro> allPersonMatrixList, 
+                                                      BackgroundWorker backgroundWorker, 
+                                                      ISchedulingOptions schedulingOptions,
+                                                      IList<IScheduleDay > scheduleDays )
+        {
+            var fixedStaffSchedulingService = _container.Resolve<IFixedStaffSchedulingService>();
+            fixedStaffSchedulingService.ClearFinderResults();
+            _backgroundWorker = backgroundWorker;
+            if (schedulingOptions != null)
+            {
+                ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackServiceForContractDaysOff =
+                    new SchedulePartModifyAndRollbackService(SchedulingStateHolder, _scheduleDayChangeCallback,
+                                                             new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
+               
+				//var blockSchedulingService = _container.Resolve<IBlockSchedulingService>();
+				//var refreshRate = schedulingOptions.RefreshRate;
+				//schedulingOptions.RefreshRate = 1;
+				//blockSchedulingService.BlockScheduled += blockSchedulingServiceBlockScheduled;
+                //schedulingOptions.UseTwoDaysOffAsBlock = true;
+				var groupPersonBuilderForOptimization = CallGroupPage(schedulingOptions);
+            
+                var advancedaysOffSchedulingService = _container.Resolve<IAdvanceDaysOffSchedulingService>();
+	            advancedaysOffSchedulingService.DayScheduled += schedulingServiceDayScheduled;
+                advancedaysOffSchedulingService.Execute(selectedPersonAllMatrixList, schedulePartModifyAndRollbackServiceForContractDaysOff, schedulingOptions, groupPersonBuilderForOptimization);
+				advancedaysOffSchedulingService.DayScheduled += schedulingServiceDayScheduled;
+
+                var teamSteadyStateHolder = InitiateTeamSteadyStateHolder(selectedPersonAllMatrixList, schedulingOptions, scheduleDays);
+
+                var advanceSchedulingService = callAdvanceSchedulingService(schedulingOptions,selectedPersonMatrixList, groupPersonBuilderForOptimization);
+                IDictionary<string, IWorkShiftFinderResult> schedulingResults = new Dictionary<string, IWorkShiftFinderResult>();
+                advanceSchedulingService.DayScheduled += schedulingServiceDayScheduled;
+
+
+                advanceSchedulingService.Execute(schedulingResults, allPersonMatrixList, selectedPersonMatrixList, teamSteadyStateHolder);
+	            
+				advanceSchedulingService.DayScheduled -= schedulingServiceDayScheduled;
+
+                if (schedulingOptions.RotationDaysOnly)
+                    schedulePartModifyAndRollbackServiceForContractDaysOff.Rollback();
+
+				//blockSchedulingService.BlockScheduled -= blockSchedulingServiceBlockScheduled;
+				//schedulingOptions.RefreshRate = refreshRate;
+                _allResults.AddResults(new List<IWorkShiftFinderResult>(schedulingResults.Values), DateTime.Now);
+            }
+            _allResults.AddResults(fixedStaffSchedulingService.FinderResults, DateTime.Now);
+        }
+
+        private TeamSteadyStateHolder InitiateTeamSteadyStateHolder(IList<IScheduleMatrixPro> selectedPersonAllMatrixList,
+                                                                    ISchedulingOptions schedulingOptions, 
+                                                                    IList<IScheduleDay> scheduleDays)
+        {
+            DateOnlyPeriod selectedPeriod = OptimizerHelperHelper.GetSelectedPeriod(scheduleDays);
+            var targetTimeCalculator = new SchedulePeriodTargetTimeCalculator();
+            var groupPersonsBuilder = _container.Resolve<IGroupPersonsBuilder>();
+            //var groupPageDataProvider = _container.Resolve<IGroupScheduleGroupPageDataProvider>();
+            //IList<DateOnly> dates =
+            //        _schedulerStateHolder.LoadedPeriod.Value.ToDateOnlyPeriod(TeleoptiPrincipal.Current.Regional.TimeZone).
+            //            DayCollection();
+            //groupPersonsBuilder.GroupPagePerDateHolder.GroupPersonGroupPagePerDate   =
+            //    _container.Resolve<IGroupPageCreator>().CreateGroupPagePerDate(dates,
+            //                                                                   groupPageDataProvider,
+            //                                                                   schedulingOptions.GroupOnGroupPageForLevelingPer,
+            //                                                                   true);
+            
+            var teamSteadyStateRunner = new TeamSteadyStateRunner(selectedPersonAllMatrixList, targetTimeCalculator);
+            var teamSteadyStateCreator = new TeamSteadyStateDictionaryCreator(teamSteadyStateRunner, selectedPersonAllMatrixList,
+                                                                              groupPersonsBuilder, schedulingOptions);
+            var teamSteadyStateDictionary = teamSteadyStateCreator.Create(selectedPeriod);
+            var teamSteadyStateHolder = new TeamSteadyStateHolder(teamSteadyStateDictionary);
+            return teamSteadyStateHolder;
+        }
+
+        #endregion
+        
 
         #endregion
         

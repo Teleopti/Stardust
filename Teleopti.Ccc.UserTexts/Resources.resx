@@ -11294,4 +11294,11 @@ These options are activated:
     <value>Errors</value>
     <comment>Errors</comment>
   </data>
+  <data name="LevellingPer" xml:space="preserve">
+    <value>Levelling Per</value>
+    <comment>Levelling per Block Scheduling</comment>
+  </data>
+  <data name="SingleAgentTeam" xml:space="preserve">
+    <value>Single Agent Team</value>
+  </data>
 </root>
