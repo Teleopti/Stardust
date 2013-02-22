@@ -3654,7 +3654,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                     _groupPagePerDateHolder.GroupPersonGroupPagePerDate = _groupPagePerDateHolder.ShiftCategoryFairnessGroupPagePerDate; 
 
                     var allPersonMatrixList = OptimizerHelperHelper.CreateMatrixListAll(_schedulerState, _container);
-                    _scheduleOptimizerHelper.BlockScheduleForAdvanceScheduling(matrixList, matrixListAll, allPersonMatrixList, _backgroundWorkerScheduling, schedulingOptions, scheduleDays);
+                    _scheduleOptimizerHelper.BlockTeamScheduleSelected(matrixList, matrixListAll, allPersonMatrixList, _backgroundWorkerScheduling, schedulingOptions, scheduleDays);
                 }
                 
             }
