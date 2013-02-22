@@ -40,12 +40,12 @@ Scenario: View form
 Scenario: Add
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' have a (read model) shift with
-	| Field            | Value        |
-	| Person           | Pierre Baldi |
-	| Date             | 2012-12-02   |
-	| Start time       | 08:00        |
-	| End time         | 17:00        |
-	| Activity         | Phone        |
+	| Field      | Value        |
+	| Person     | Pierre Baldi |
+	| Date       | 2012-12-02   |
+	| Start time | 08:00        |
+	| End time   | 17:00        |
+	| Activity   | Phone        |
 	When I view agent schedules add full day absence form for 'Pierre Baldi' on '2012-12-02'
 	And I input these full day absence values
 	| Field    | Value      |

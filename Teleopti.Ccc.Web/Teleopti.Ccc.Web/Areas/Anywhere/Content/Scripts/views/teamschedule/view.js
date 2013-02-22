@@ -24,6 +24,7 @@ define([
 		view,
 		translations
 	) {
+
 		return {
 			display: function (options) {
 

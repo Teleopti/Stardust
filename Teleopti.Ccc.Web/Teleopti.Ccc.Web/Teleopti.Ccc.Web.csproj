@@ -534,6 +534,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Anywhere\Content\Scripts\menu.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\agentschedule\view.js" />
+    <Content Include="Areas\Anywhere\Content\Templates\agentschedule\view.html" />
     <Content Include="Areas\MyTime\Content\Css\StudentAvailability.css" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.js" />
     <Content Include="Areas\MyTime\Content\Images\ajax-loader-small-f8f8f8.gif" />
