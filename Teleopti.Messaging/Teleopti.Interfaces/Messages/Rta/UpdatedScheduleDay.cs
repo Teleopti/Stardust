@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Teleopti.Interfaces.Messages.Denormalize
+namespace Teleopti.Interfaces.Messages.Rta
 {
     /// <summary>
     /// 

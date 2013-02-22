@@ -1,23 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace Teleopti.Interfaces.Messages.Denormalize
+namespace Teleopti.Interfaces.Messages.Rta
 {
     /// <summary>
     /// 
     /// </summary>
-    public class BusinessUnitInfo : RaptorDomainMessage
+    public class PersonWithExternalLogOn: RaptorDomainMessage
     {
         private readonly Guid _messageId = Guid.NewGuid();
 
-        ///<summary>
+	    ///<summary>
         /// Definies an identity for this message (typically the Id of the root this message refers to.
         ///</summary>
         public override Guid Identity
         {
             get { return _messageId; }
         }
+
+	    /// <summary>
+	    /// 
+	    /// </summary>
+	    public Guid PersonId { get; set; }
     }
 }

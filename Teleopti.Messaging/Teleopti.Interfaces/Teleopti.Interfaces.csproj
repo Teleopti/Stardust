@@ -865,9 +865,9 @@
     <Compile Include="Messages\Denormalize\InitialLoadScheduleProjection.cs" />
     <Compile Include="Messages\Denormalize\PersonPeriodChangedMessage.cs" />
     <Compile Include="Messages\Denormalize\ProcessDenormalizeQueue.cs" />
-    <Compile Include="Messages\Denormalize\PersonWithExternalLogon.cs" />
-    <Compile Include="Messages\Denormalize\BusinessUnitInfo.cs" />
-    <Compile Include="Messages\Denormalize\UpdatedScheduleDay.cs" />
+    <Compile Include="Messages\Rta\PersonWithExternalLogon.cs" />
+    <Compile Include="Messages\Rta\BusinessUnitInfo.cs" />
+    <Compile Include="Messages\Rta\UpdatedScheduleDay.cs" />
     <Compile Include="Messages\General\ChildSkillSelection.cs" />
     <Compile Include="Messages\General\ExportMultisiteSkillsToSkill.cs" />
     <Compile Include="Messages\General\ExportMultisiteSkillToSkill.cs" />

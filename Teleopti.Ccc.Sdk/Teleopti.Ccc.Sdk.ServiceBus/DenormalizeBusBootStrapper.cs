@@ -1,6 +1,4 @@
-﻿using Teleopti.Ccc.Sdk.ServiceBus.Rta;
-
-namespace Teleopti.Ccc.Sdk.ServiceBus
+﻿namespace Teleopti.Ccc.Sdk.ServiceBus
 {
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Strapper", Justification = "As the base class is named as it is, this will remain like this."), 
 	 System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "BootStrapper", Justification = "As the base class is named as it is, this will remain like this.")]
@@ -10,9 +8,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		{
 			var initialLoad = new InitialLoadOfScheduleProjectionReadModel(daBus);
 			initialLoad.Check();
-            //add RTA state checker
-            var rtaChecker = new BusinessUnitInfoFinder(daBus);
-            rtaChecker.SendMessage();
 		}
 	}
 }

@@ -4,7 +4,7 @@ using System.Linq;
 using Rhino.ServiceBus;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Messages.Denormalize;
+using Teleopti.Interfaces.Messages.Rta;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
 {

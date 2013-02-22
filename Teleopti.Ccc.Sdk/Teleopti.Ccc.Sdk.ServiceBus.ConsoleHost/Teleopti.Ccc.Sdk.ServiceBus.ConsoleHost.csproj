@@ -102,6 +102,9 @@
       <Link>RequestQueue.config</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="..\Teleopti.Ccc.Sdk.ServiceBus.Host\RtaQueue.config">
+      <Link>RtaQueue.config</Link>
+    </None>
     <None Include="packages.config" />
     <Content Include="web.config" />
   </ItemGroup>
