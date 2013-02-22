@@ -54,8 +54,8 @@ Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
 
 					self.hours.push(new Teleopti.MyTimeWeb.Request.TimeLineHourViewModel(data.TimeLineHours[i], self));
 				}
-				self._createMySchedule(data.From);
-				self._createOtherSchedule(data.To);
+				self.createMySchedule(data.From);
+				self.createOtherSchedule(data.To);
 				
 			},
 			error: function (error) {
@@ -64,14 +64,14 @@ Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
 		});
 	};
 
-	self._createMySchedule = function (myScheduleObject) {
+	self.createMySchedule = function (myScheduleObject) {
 		var mappedlayers = ko.utils.arrayMap(myScheduleObject.ScheduleLayers, function (layer) {
 			return new Teleopti.MyTimeWeb.Request.LayerViewModel(layer, myScheduleObject.MinutesSinceTimeLineStart, self.pixelPerMinute());
 		});
 		self.mySchedule(new Teleopti.MyTimeWeb.Request.PersonScheduleViewModel(mappedlayers, myScheduleObject));
 	};
 
-	self._createOtherSchedule = function (myScheduleObject) {
+	self.createOtherSchedule = function (myScheduleObject) {
 		var mappedlayers = ko.utils.arrayMap(myScheduleObject.ScheduleLayers, function (layer) {
 			return new Teleopti.MyTimeWeb.Request.LayerViewModel(layer, myScheduleObject.MinutesSinceTimeLineStart, self.pixelPerMinute());
 		});
@@ -107,25 +107,25 @@ Teleopti.MyTimeWeb.Request.TimeLineHourViewModel = function(hour, parentViewMode
 };
 
 Teleopti.MyTimeWeb.Request.LayerViewModel = function(layer, minutesSinceTimeLineStart, pixelPerMinute) {
-		var self = this;
+	var self = this;
 
-		self.payload = layer.Payload;
-		self.backgroundColor = layer.Color;
-		self.lengthInMinutes = layer.LengthInMinutes;
-		self.leftPx = ko.computed(function () {
-			var timeLineoffset = minutesSinceTimeLineStart;
-			return (layer.ElapsedMinutesSinceShiftStart + timeLineoffset) * pixelPerMinute + 'px';
-		});
-		self.paddingLeft = ko.computed(function () {
-			return self.lengthInMinutes * pixelPerMinute + 'px';
-		});
-		self.title = ko.computed(function () {
-			if (self.payload) {
-				return layer.Title + ' ' + self.payload;
-			}
-			return '';
-		});
-	}
+	self.payload = layer.Payload;
+	self.backgroundColor = layer.Color;
+	self.lengthInMinutes = layer.LengthInMinutes;
+	self.leftPx = ko.computed(function() {
+		var timeLineoffset = minutesSinceTimeLineStart;
+		return (layer.ElapsedMinutesSinceShiftStart + timeLineoffset) * pixelPerMinute + 'px';
+	});
+	self.paddingLeft = ko.computed(function() {
+		return self.lengthInMinutes * pixelPerMinute + 'px';
+	});
+	self.title = ko.computed(function() {
+		if (self.payload) {
+			return layer.Title + ' ' + self.payload;
+		}
+		return '';
+	});
+};
 
 Teleopti.MyTimeWeb.Request.PersonScheduleViewModel = function(layers, scheduleObject) {
 	var self = this;

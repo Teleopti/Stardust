@@ -24,7 +24,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		self.noPossibleShiftTrades = ko.observable(false);
 		self.timeLineLengthInMinutes = ko.observable(0);
 		self.hours = ko.observableArray();
-		self.mySchedule = ko.observable(new personScheduleViewModel());
+		self.mySchedule = ko.observable(new Teleopti.MyTimeWeb.Request.PersonScheduleViewModel());
 		self.possibleTradeSchedules = ko.observableArray();
 		self.pixelPerMinute = ko.computed(function () {
 			return layerCanvasPixelWidth / self.timeLineLengthInMinutes();
@@ -34,7 +34,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			var mappedlayers = ko.utils.arrayMap(myScheduleObject.ScheduleLayers, function (layer) {
 				return new layerViewModel(layer, myScheduleObject.MinutesSinceTimeLineStart, self.pixelPerMinute());
 			});
-			self.mySchedule(new personScheduleViewModel(mappedlayers, myScheduleObject));
+			self.mySchedule(new Teleopti.MyTimeWeb.Request.PersonScheduleViewModel(mappedlayers, myScheduleObject));
 		};
 
 		self._createPossibleTradeSchedules = function (possibleTradePersons) {
@@ -44,7 +44,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 					return new layerViewModel(layer, personSchedule.MinutesSinceTimeLineStart, self.pixelPerMinute());
 				});
 
-				return new personScheduleViewModel(mappedLayers, personSchedule);
+				return new Teleopti.MyTimeWeb.Request.PersonScheduleViewModel(mappedLayers, personSchedule);
 			});
 
 			self.noPossibleShiftTrades(mappedPersonsSchedule.length == 0 ? true : false);
@@ -116,33 +116,6 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		self.setScheduleLoadedReady = function () {
 			self.loadedDateSwedishFormat(moment(self.requestedDate()).format('YYYY-MM-DD'));
 		};
-	}
-
-	function personScheduleViewModel(layers, scheduleObject) {
-		var self = this;
-		var minutesSinceTimeLineStart = 0;
-		var agentName = '';
-		var dayOffText = '';
-		var hasUnderlyingDayOff = false;
-		if (scheduleObject) {
-			agentName = scheduleObject.Name;
-			minutesSinceTimeLineStart = scheduleObject.MinutesSinceTimeLineStart;
-			dayOffText = scheduleObject.DayOffText;
-			hasUnderlyingDayOff = scheduleObject.HasUnderlyingDayOff;
-		}
-
-		self.agentName = agentName;
-		self.layers = layers;
-		self.minutesSinceTimeLineStart = minutesSinceTimeLineStart;
-		self.dayOffText = dayOffText;
-		self.hasUnderlyingDayOff = ko.observable(hasUnderlyingDayOff);
-		self.showDayOffStyle = function () {
-			if (self.hasUnderlyingDayOff() == true | self.dayOffText.length > 0) {
-				return true;
-			}
-			return false;
-		};
-
 	}
 
 	function layerViewModel(layer, minutesSinceTimeLineStart, pixelPerMinute) {
