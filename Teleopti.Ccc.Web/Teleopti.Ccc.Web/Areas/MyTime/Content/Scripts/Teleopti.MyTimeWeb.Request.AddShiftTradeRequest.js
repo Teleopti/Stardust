@@ -32,7 +32,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 
 		self._createMySchedule = function (myScheduleObject) {
 			var mappedlayers = ko.utils.arrayMap(myScheduleObject.ScheduleLayers, function (layer) {
-				return new layerViewModel(layer, myScheduleObject.MinutesSinceTimeLineStart, self.pixelPerMinute());
+				return new Teleopti.MyTimeWeb.Request.LayerViewModel(layer, myScheduleObject.MinutesSinceTimeLineStart, self.pixelPerMinute());
 			});
 			self.mySchedule(new Teleopti.MyTimeWeb.Request.PersonScheduleViewModel(mappedlayers, myScheduleObject));
 		};
@@ -41,7 +41,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			var mappedPersonsSchedule = ko.utils.arrayMap(possibleTradePersons, function (personSchedule) {
 
 				var mappedLayers = ko.utils.arrayMap(personSchedule.ScheduleLayers, function (layer) {
-					return new layerViewModel(layer, personSchedule.MinutesSinceTimeLineStart, self.pixelPerMinute());
+					return new Teleopti.MyTimeWeb.Request.LayerViewModel(layer, personSchedule.MinutesSinceTimeLineStart, self.pixelPerMinute());
 				});
 
 				return new Teleopti.MyTimeWeb.Request.PersonScheduleViewModel(mappedLayers, personSchedule);
@@ -53,7 +53,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 
 		self._createTimeLine = function (hours) {
 			var arrayMap = ko.utils.arrayMap(hours, function (hour) {
-				return new timeLineHourViewModel(hour, self);
+				return new  Teleopti.MyTimeWeb.Request.TimeLineHourViewModel(hour, self);
 			});
 			self.hours(arrayMap);
 			_positionTimeLineHourTexts();
@@ -116,39 +116,6 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		self.setScheduleLoadedReady = function () {
 			self.loadedDateSwedishFormat(moment(self.requestedDate()).format('YYYY-MM-DD'));
 		};
-	}
-
-	function layerViewModel(layer, minutesSinceTimeLineStart, pixelPerMinute) {
-		var self = this;
-
-		self.payload = layer.Payload;
-		self.backgroundColor = layer.Color;
-		self.lengthInMinutes = layer.LengthInMinutes;
-		self.leftPx = ko.computed(function () {
-			var timeLineoffset = minutesSinceTimeLineStart;
-			return (layer.ElapsedMinutesSinceShiftStart + timeLineoffset) * pixelPerMinute + 'px';
-		});
-		self.paddingLeft = ko.computed(function () {
-			return self.lengthInMinutes * pixelPerMinute + 'px';
-		});
-		self.title = ko.computed(function () {
-			if (self.payload) {
-				return layer.Title + ' ' + self.payload;
-			}
-			return '';
-		});
-	}
-
-	function timeLineHourViewModel(hour, parentViewModel) {
-		var self = this;
-		var borderSize = 1;
-
-		self.hourText = hour.HourText;
-		self.lengthInMinutes = hour.LengthInMinutesToDisplay;
-		self.leftPx = ko.observable('-8px');
-		self.hourWidth = ko.computed(function () {
-			return self.lengthInMinutes * parentViewModel.pixelPerMinute() - borderSize + 'px';
-		});
 	}
 
 	function _init() {
