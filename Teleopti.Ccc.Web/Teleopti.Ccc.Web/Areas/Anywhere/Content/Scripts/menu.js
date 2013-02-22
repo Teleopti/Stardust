@@ -2,10 +2,10 @@ define([
 		'knockout'
 	], function(ko) {
 
-		return function(translations) {
+		return function(resources) {
 			var self = this;
 
-			this.Translations = translations;
+			this.Resources = resources;
 			this.MyTimeVisible = ko.observable(false);
 			this.MobileReportsVisible = ko.observable(false);
 			this.ActiveView = ko.observable("");

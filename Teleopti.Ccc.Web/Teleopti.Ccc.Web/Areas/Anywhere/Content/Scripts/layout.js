@@ -6,6 +6,7 @@ require([
 		'crossroads',
 		'hasher',
 		'knockout',
+		'moment',
 		'momentDatepickerKo',
 		'menu',
 		'noext!application/resources'
@@ -16,13 +17,14 @@ require([
 		crossroads,
 		hasher,
 		ko,
+		moment,
 		datepicker,
 		menuViewModel,
-		translations) {
+		resources) {
 
 		var currentView;
 		var defaultView = 'teamschedule';
-		var menu = new menuViewModel(translations);
+		var menu = new menuViewModel(resources);
 
 		function _displayView(routeInfo) {
 
@@ -114,6 +116,21 @@ require([
 			});
 		}
 
+		function _initMomentLanguageWithFallback() {
+			var ietfLanguageTag = resources.LanguageCode;
+			var baseLang = 'en'; //Base
+			var languages = [ietfLanguageTag, ietfLanguageTag.split('-')[0], baseLang];
+
+			for (var i = 0; i < languages.length; i++) {
+				try {
+					moment.lang(languages[i]);
+				} catch (e) {
+					continue;
+				}
+				if (moment.lang() == languages[i]) return;
+			}
+		}
+
 		function _bindMenu() {
 			$.ajax({
 				dataType: "json",
@@ -132,5 +149,7 @@ require([
 		_setupRoutes();
 		_initializeHasher();
 
+		_initMomentLanguageWithFallback();
+		
 		_bindMenu();
 	});

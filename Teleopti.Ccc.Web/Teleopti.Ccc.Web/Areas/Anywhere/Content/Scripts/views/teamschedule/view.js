@@ -22,7 +22,7 @@ define([
 		timeLineViewModel,
 		agentViewModel,
 		view,
-		translations
+		resources
 	) {
 
 		return {
@@ -37,7 +37,6 @@ define([
 					date = moment(date, 'YYYYMMDD');
 				}
 
-				setMomentLangWithFallback(translations.LanguageCode);
 				var agentsViewModel = function () {
 					var self = this;
 
@@ -49,7 +48,7 @@ define([
 				};
 
 				var agents = new agentsViewModel();
-				var timeLine = new timeLineViewModel(agents, translations.ShortTimePattern);
+				var timeLine = new timeLineViewModel(agents, resources.ShortTimePattern);
 				var teamSchedule = new teamScheduleViewModel(date);
 
 				var previousOffset;
@@ -182,7 +181,7 @@ define([
 						$(window).ready(function () {
 							ko.applyBindings({
 								TeamSchedule: teamSchedule,
-								Translations: translations,
+								Resources: resources,
 								Timeline: timeLine,
 								Agents: agents
 							}, $('body > section')[0]);
@@ -209,20 +208,6 @@ define([
 						teamScheduleContainer.offset({ left: -movementX });
 					}
 				});
-
-				function setMomentLangWithFallback(ietfLanguageTag) {
-					var baseLang = 'en'; //Base
-					var languages = [ietfLanguageTag, ietfLanguageTag.split('-')[0], baseLang];
-
-					for (var i = 0; i < languages.length; i++) {
-						try {
-							moment.lang(languages[i]);
-						} catch (e) {
-							continue;
-						}
-						if (moment.lang() == languages[i]) return;
-					}
-				}
 			}
 		};
 	});
