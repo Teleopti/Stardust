@@ -63,6 +63,26 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
             }
         }
 
+		[Test]
+		public void ShouldReturnSameDateAsAskedForIfBlockFinderTypeIsSingleDay()
+		{	_schedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.SingleDay;
+			DateOnly date = new DateOnly(2013, 02, 22);
+			_target = new DynamicBlockFinder(_schedulingOptions, _schedulingResultStateHolder, _matrixList);
+			using (_mock.Record())
+			{
+
+			}
+
+			using (_mock.Playback())
+			{
+				IList<DateOnly> result = _target.ExtractBlockDays(date);
+				Assert.AreEqual(date, result[0]);
+				Assert.AreEqual(1, result.Count);
+			}
+      
+      
+		}
+
         [Test]
         public void FindSkillDayFromBlockUsingTwoDaysOff()
         {

@@ -60,6 +60,22 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 		    _personalShiftMeetingTimeChecker = _mocks.StrictMock<IPersonalShiftMeetingTimeChecker>();
         }
 
+		[Test]
+		public void ShouldReturnNullIfEffectiveRestrictionIsNull()
+		{
+			var dateOnly = new DateOnly(2012, 12, 12);
+			IEffectiveRestriction effectiveRestriction = null;
+			using (_mocks.Record())
+			{
+			}
+			using (_mocks.Playback())
+			{
+				var retShift = _target.Filter(dateOnly, _person, new List<IScheduleMatrixPro> {_matrix}, effectiveRestriction,
+				                              _schedulingOptions);
+				Assert.IsNull(retShift);
+			}
+		}
+
         [Test]
         public void ShouldFilterWorkShifts()
         {

@@ -36,6 +36,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 		public IList<IShiftProjectionCache> Filter(DateOnly dateOnly, IPerson person, IList<IScheduleMatrixPro> matrixList, IEffectiveRestriction effectiveRestriction, ISchedulingOptions schedulingOptions)
         {
             FinderResult = new WorkShiftFinderResult(person, dateOnly);
+			if (effectiveRestriction == null)
+				return null;
+
             _workShiftMinMaxCalculator.ResetCache();
             if (person != null)
             {
