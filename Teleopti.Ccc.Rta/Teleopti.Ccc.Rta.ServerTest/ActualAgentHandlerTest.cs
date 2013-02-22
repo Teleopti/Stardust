@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		public void Setup()
 		{
 			_mock = new MockRepository();
-			_dataHandler = _mock.StrictMock<IActualAgentDataHandler>();
+			_dataHandler = MockRepository.GenerateMock<IActualAgentDataHandler>();
 			_target = new ActualAgentHandler(_dataHandler);
 
 			_stateCode = "AUX2";
@@ -115,7 +115,6 @@ namespace Teleopti.Ccc.Rta.ServerTest
 
 			_dataHandler.Expect(s => s.ActivityAlarms())
 			            .Return(_activityAlarms);
-			_dataHandler.Expect(s => s.AddOrUpdate(new ActualAgentState())).IgnoreArguments();
 			_mock.ReplayAll();
 
 			var result = _target.GetState(_guid, _businessUnitId, _platformTypeId, _stateCode, _dateTime, new TimeSpan(),
