@@ -19,11 +19,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			_userTimeZone = userTimeZone;
 		}
 
-		public IEnumerable<IPersonRequest> RetrieveTextAndAbsenceRequests(Paging paging)
-		{
-			return _repository.FindTextAndAbsenceRequestsForAgent(_loggedOnUser.CurrentUser(), paging);
-		}
-
 		public IEnumerable<IPersonRequest> RetrieveRequests(Paging paging)
 		{
 			return _repository.FindAllRequestsForAgent(_loggedOnUser.CurrentUser(), paging);
