@@ -9,6 +9,7 @@ define([
 		'views/teamschedule/vm',
 		'views/teamschedule/timeline',
 		'views/teamschedule/agent',
+		'views/teamschedule/agents',
 		'text!templates/teamschedule/view.html',
 		'noext!application/resources'
 	], function (
@@ -21,6 +22,7 @@ define([
 		teamScheduleViewModel,
 		timeLineViewModel,
 		agentViewModel,
+		agentsViewModel,
 		view,
 		resources
 	) {
@@ -36,16 +38,6 @@ define([
 				} else {
 					date = moment(date, 'YYYYMMDD');
 				}
-
-				var agentsViewModel = function () {
-					var self = this;
-
-					this.Agents = ko.observableArray();
-
-					this.AddAgents = function (agentsToAdd) {
-						self.Agents.push.apply(self.Agents, agentsToAdd);
-					};
-				};
 
 				var agents = new agentsViewModel();
 				var timeLine = new timeLineViewModel(agents, resources.ShortTimePattern);
@@ -64,6 +56,7 @@ define([
 					.resize(resize)
 					.bind('orientationchange', resize)
 					.ready(resize);
+
 
 				var initialLoad = true;
 				var loadSchedules = function () {
