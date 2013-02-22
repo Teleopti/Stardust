@@ -229,6 +229,8 @@
     <Compile Include="Helper\StringExtensions.cs" />
     <Compile Include="Optimization\AdvancedPreferencesPersonalSettings.cs" />
     <Compile Include="Optimization\AdvanceGroupDayOffOptimizer.cs" />
+    <Compile Include="Optimization\AdvanceGroupIntradayOptimizer.cs" />
+    <Compile Include="Optimization\AdvanceGroupIntradayOptimizerExecuter.cs" />
     <Compile Include="Optimization\BlockDayOffOptimizer.cs" />
     <Compile Include="Optimization\BlockDayOffOptimizerContainer.cs" />
     <Compile Include="Optimization\BlockDayOffOptimizationService.cs" />
