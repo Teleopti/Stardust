@@ -113,6 +113,8 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 	}
 
 	function _drawRequests(requests) {
+		$('#Requests-list li.template').find('.request-delete-button').qtip('render');
+		
 		for (var i = 0; i < requests.length; i++) {
 			var request = requests[i];
 			_drawRequest(request);
