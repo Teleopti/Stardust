@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 {
@@ -9,5 +10,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 		public ShiftTradePersonScheduleViewModel To { get; set; }
 
 		public IEnumerable<ShiftTradeTimeLineHoursViewModel> TimeLineHours { get; set; }
+
+		public DateTime TimeLineStartDateTime { get; set; }
 	}
 }
