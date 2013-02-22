@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             Expect.Call(eventMessage.DomainObjectId).Return(alarmTypeId).Repeat.AtLeastOnce();
             Expect.Call(alarmType.Id).Return(alarmTypeId).Repeat.AtLeastOnce();
 
-            IList<IAlarmType> alarmTypes = new List<IAlarmType> { alarmType };
+            IList<IAlarmType> alarmTypes = new List<IAlarmType>();
             PrepareMockForLoad(new List<IRtaStateGroup>(), alarmTypes, new List<IActivity>(), new List<IStateGroupActivityAlarm>());
             Expect.Call(_alarmTypeRepository.Get(alarmTypeId)).Return(alarmType);
             _manageAlarmSituationView.RefreshGrid();
@@ -90,6 +90,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
                                                         _activityRepository, _stateGroupActvityAlarmRepository,
                                                         _messageBroker, _manageAlarmSituationView);
             _target.Load();
+			alarmTypes.Add(alarmType);
 
             Assert.AreEqual(1, alarmTypes.Count);
             _target.OnAlarmEvent(null, new EventMessageArgs(eventMessage));
@@ -166,7 +167,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             Expect.Call(eventMessage.DomainObjectId).Return(rtaStateGroupId).Repeat.AtLeastOnce();
             Expect.Call(rtaStateGroup.Id).Return(rtaStateGroupId).Repeat.AtLeastOnce();
 
-            IList<IRtaStateGroup> rtaStateGroups = new List<IRtaStateGroup> { rtaStateGroup };
+            IList<IRtaStateGroup> rtaStateGroups = new List<IRtaStateGroup>();
             PrepareMockForLoad(rtaStateGroups, new List<IAlarmType>(), new List<IActivity>(), new List<IStateGroupActivityAlarm>());
             Expect.Call(_rtaStateGroupRepository.Get(rtaStateGroupId)).Return(rtaStateGroup);
             _manageAlarmSituationView.RefreshGrid();
@@ -177,6 +178,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
                                                         _activityRepository, _stateGroupActvityAlarmRepository,
                                                         _messageBroker, _manageAlarmSituationView);
             _target.Load();
+			rtaStateGroups.Add(rtaStateGroup);
 
             Assert.AreEqual(2, rtaStateGroups.Count);
             _target.OnRtaStateGroupEvent(null, new EventMessageArgs(eventMessage));
@@ -251,7 +253,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             Expect.Call(eventMessage.DomainObjectId).Return(activityId).Repeat.AtLeastOnce();
             Expect.Call(activity.Id).Return(activityId).Repeat.AtLeastOnce();
 
-            IList<IActivity> activities = new List<IActivity>{activity};
+            IList<IActivity> activities = new List<IActivity>();
             PrepareMockForLoad(new List<IRtaStateGroup>(), new List<IAlarmType>(), activities, new List<IStateGroupActivityAlarm>());
             Expect.Call(_activityRepository.Get(activityId)).Return(activity);
             _manageAlarmSituationView.RefreshGrid();
@@ -262,6 +264,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
                                                         _activityRepository, _stateGroupActvityAlarmRepository,
                                                         _messageBroker, _manageAlarmSituationView);
             _target.Load();
+			activities.Add(activity);
 
             Assert.AreEqual(2, activities.Count);
             _target.OnActivityEvent(null, new EventMessageArgs(eventMessage));

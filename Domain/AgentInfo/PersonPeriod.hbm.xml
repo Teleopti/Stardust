@@ -24,12 +24,12 @@
 			  length="1024"
 			  not-null="false"/>
 
-    <bag name="PersonSkillCollection"
+    <set name="PersonSkillCollection"
             cascade="all-delete-orphan"
             inverse="true">
       <key column ="Parent" />
       <one-to-many class="PersonSkill" />
-    </bag>
+    </set>
 
 
     <bag name="ExternalLogOnCollection"

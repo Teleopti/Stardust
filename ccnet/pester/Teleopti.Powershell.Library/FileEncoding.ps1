@@ -58,16 +58,53 @@ function Get-FileListOtherEncoding {
 		$filter,
 		$ExpectedEncoding
     )
-	
-	$fileHash = @{};
-	
-	$files = Get-ChildItem -path "$path" -recurse -filter "$filter" | Where-object {!$_.psIsContainer -eq $true}
+	$fileHash=@{}
+	$files = Get-FileListByFilter -path "$path" -filter "$filter"
 	foreach ($file in $files) {
 		$encoding = Get-FileEncoding $file.FullName
 		if ($encoding -ne $ExpectedEncoding) {
 			$fileHash[$file.FullName] = $encoding
 		}
 	}
-
 	return $fileHash
+}
+
+function Get-FileListByFilter {
+    param(
+        $path,
+		$filter
+	)
+
+	#bug: http://connect.microsoft.com/PowerShell/feedback/details/354672/get-childitem-count-problem-with-one-file
+	$files = Get-ChildItem -path "$path" -recurse -filter "$filter" | Where-object {!$_.psIsContainer -eq $true}
+	return $files
+}
+
+function Get-Banan {
+return "banan"
+}
+
+function WrongTsqlEncoding {
+    param(
+        $path
+    )
+	
+	#Enforced encoding
+	$encoding = "Unicode (UTF-7)"
+	
+	$extension = "*.sql"
+	
+	$Files = @{}
+	
+	$Files = Get-FileListOtherEncoding "$path" "*$extension" "$encoding"
+	
+	If ($Files.count -gt 0 ) {
+		Write-Host "----------Wrong Encoding found!-------------"
+		foreach($item in $Files.GetEnumerator() | Sort Name)
+		{
+			$item.Name + " : " + $item.Value
+		}
+		Write-Host "--------------------------------------------"
+	throw "There are Little Indians in the Village!"
+	}
 }

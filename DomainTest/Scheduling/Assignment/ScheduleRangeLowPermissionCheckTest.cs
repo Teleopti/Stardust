@@ -8,7 +8,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -20,7 +19,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
     [TestFixture]
     public class ScheduleRangeLowPermissionCheckTest
     {
-        private IApplicationFunction function;
+        private string function;
         private MockRepository mocks;
         private IScheduleParameters parameters;
         private IPerson person;
@@ -36,8 +35,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             scenario = new Scenario("sdf");
             mocks = new MockRepository();
             principalAuthorization = mocks.StrictMock<IPrincipalAuthorization>();
-            function = ApplicationFunction.FindByPath(new DefinedRaptorApplicationFunctionFactory().ApplicationFunctionList,
-                                                      DefinedRaptorApplicationFunctionPaths.ViewSchedules);
+            function = DefinedRaptorApplicationFunctionPaths.ViewSchedules;
             parameters =
                 new ScheduleParameters(scenario, person, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
             dic = mocks.StrictMock<IScheduleDictionary>();

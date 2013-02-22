@@ -78,7 +78,8 @@ namespace Teleopti.Ccc.Domain.Security.Principal
             return CheckPermitted(functionPath, a => true); //Ignoring available data!
         }
 
-        public IEnumerable<DateOnlyPeriod> PermittedPeriods(IApplicationFunction applicationFunction, DateOnlyPeriod period, IPerson person)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
+		public IEnumerable<DateOnlyPeriod> PermittedPeriods(string functionPath, DateOnlyPeriod period, IPerson person)
         {
             var owningPersonPeriods = _teleoptiPrincipal.Current().Organisation.Periods();
             owningPersonPeriods = owningPersonPeriods.Where(p => p.StartDate <= period.EndDate);
@@ -96,7 +97,6 @@ namespace Teleopti.Ccc.Domain.Security.Principal
             uniqueDates.Add(period.StartDate);
             var uniqueDatesArray = uniqueDates.OrderBy(d => d.Date).ToArray();
             var permittedPeriods = new List<DateOnlyPeriod>();
-            var functionPath = applicationFunction.FunctionPath;
 
             int i = 0;
             for (; i < uniqueDates.Count-1; i++)

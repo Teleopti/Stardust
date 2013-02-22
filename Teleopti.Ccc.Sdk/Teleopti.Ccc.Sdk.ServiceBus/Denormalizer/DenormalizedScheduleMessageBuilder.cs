@@ -1,5 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Messages.Denormalize;
 
@@ -8,8 +11,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 	public class DenormalizedScheduleMessageBuilder : IDenormalizedScheduleMessageBuilder
 	{
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-		public void Build<T>(ScheduleDenormalizeBase message, IScheduleRange range, DateOnlyPeriod realPeriod, Action<T> actionForEachItem) where T : DenormalizedScheduleBase, new()
+		public void Build<T>(ScheduleDenormalizeBase message, IScheduleRange range, DateOnlyPeriod realPeriod, Action<T[]> actionForItems) where T : DenormalizedScheduleBase, new()
 		{
+			var messageList = new List<T>();
 			foreach (var scheduleDay in range.ScheduledDayCollection(realPeriod))
 			{
 				var date = scheduleDay.DateOnlyAsPeriod.DateOnly;
@@ -18,6 +22,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 
 				var projection = scheduleDay.ProjectionService().CreateProjection();
 				var significantPart = scheduleDay.SignificantPart();
+				if (significantPart == SchedulePartView.None) continue;
+
 				var result = new T
 				             	{
 				             		IsInitialLoad = message.SkipDelete,
@@ -77,8 +83,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 					                  	});
 				}
 
-				actionForEachItem(result);
+				messageList.Add(result);
 			}
+
+			messageList.Batch(50).ForEach(b => actionForItems(b.ToArray()));
 		}
 
 		private static bool IsWorkDay(SchedulePartView significantPart)

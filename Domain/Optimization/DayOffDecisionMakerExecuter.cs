@@ -310,7 +310,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
                         removeDayOffFromMatrix(workingBitArray, originalBitArray, matrix, daysOffPreferences, movedDays);
                         _schedulePartModifyAndRollbackService.Modify(part);
-						_resourceOptimizationHelper.ResourceCalculateDate(changed.DateChanged, true, true, new List<IScheduleDay>{ changed.PrevoiousSchedule }, new List<IScheduleDay>());
+						_resourceOptimizationHelper.ResourceCalculateDate(changed.DateChanged, true, schedulingOptions.ConsiderShortBreaks, new List<IScheduleDay>{ changed.PrevoiousSchedule }, new List<IScheduleDay>());
 
                         changed.CurrentSchedule = scheduleDayPro.DaySchedulePart();
                         movedDays.Add(changed);
@@ -489,7 +489,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             //resource calculate removed days
             foreach (DateOnly dateOnly in removedIllegalDates)
             {
-                bool considerShortBreaks = _optimizerPreferences.Rescheduling.ConsiderShortBreaks;
+				bool considerShortBreaks = schedulingOptions.ConsiderShortBreaks;
                 _resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, considerShortBreaks, removedIllegalScheules, new List<IScheduleDay>());
 				_resourceOptimizationHelper.ResourceCalculateDate(dateOnly.AddDays(1), true, considerShortBreaks, removedIllegalScheules, new List<IScheduleDay>());
             }

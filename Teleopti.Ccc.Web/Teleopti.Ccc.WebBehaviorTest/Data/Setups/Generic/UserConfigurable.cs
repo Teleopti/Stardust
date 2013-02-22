@@ -8,6 +8,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 {
 	public class UserConfigurable : IUserSetup
 	{
+		public string Name { get; set; }
+
+		public DateTime? TerminalDate { get; set; }
+
 		public string UserName { get; set; }
 		public string Password { get; set; }
 
@@ -20,6 +24,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
+
+			if (!string.IsNullOrEmpty(Name))
+			{
+				if (Name.Contains(" "))
+				{
+					var splitted = Name.Split(' ');
+					user.Name = new Name(splitted[0], splitted[1]);
+				}
+				else
+					user.Name = new Name("", Name);
+			}
+
+			if (TerminalDate.HasValue)
+				user.TerminalDate = new DateOnly(TerminalDate.Value);
+
 			if (!string.IsNullOrEmpty(UserName))
 			{
 				var authenticationInfo = new ApplicationAuthenticationInfo
@@ -29,6 +48,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 				};
 				user.ApplicationAuthenticationInfo = authenticationInfo;
 			}
+
 			if (WindowsAuthentication)
 			{
 				var authenticationInfo = new WindowsAuthenticationInfo

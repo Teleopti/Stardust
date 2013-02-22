@@ -78,6 +78,9 @@
     <Reference Include="Common.Logging">
       <HintPath>..\..\packages\Common.Logging.2.1.2\lib\net40\Common.Logging.dll</HintPath>
     </Reference>
+    <Reference Include="Common.Logging.Log4Net1211">
+      <HintPath>..\..\packages\Common.Logging.Log4Net1211.2.1.2\lib\net40\Common.Logging.Log4Net1211.dll</HintPath>
+    </Reference>
     <Reference Include="DotNetOpenAuth.Core">
       <HintPath>..\..\packages\DotNetOpenAuth.Core.4.2.1.13026\lib\net40-full\DotNetOpenAuth.Core.dll</HintPath>
     </Reference>
@@ -215,9 +218,9 @@
     <Compile Include="Areas\Start\Controllers\ApplicationAuthenticationApiController.cs" />
     <Compile Include="Areas\Start\Models\Authentication\ChangePasswordInput.cs" />
     <Compile Include="Areas\Start\Models\Authentication\PasswordWarningViewModel.cs" />
-    <Compile Include="Areas\Team\Controllers\PersonController.cs" />
-    <Compile Include="Areas\Team\Core\AutofacDependencyResolver.cs" />
-    <Compile Include="Areas\Team\Core\ScheduleHub.cs" />
+    <Compile Include="Areas\Anywhere\Controllers\PersonController.cs" />
+    <Compile Include="Areas\Anywhere\Core\AutofacDependencyResolver.cs" />
+    <Compile Include="Areas\Anywhere\Core\ScheduleHub.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IShiftTradeRequestProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\ShiftTradeRequestProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\IShiftTradePeriodViewModelMapper.cs" />
@@ -226,8 +229,8 @@
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradePeriodViewModelMapper.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeScheduleLayerViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeRequestsPeriodViewModel.cs" />
-    <Compile Include="Areas\Team\TeamAreaRegistration.cs" />
-    <Compile Include="Areas\Team\Controllers\ApplicationController.cs" />
+    <Compile Include="Areas\Anywhere\AnywhereAreaRegistration.cs" />
+    <Compile Include="Areas\Anywhere\Controllers\ApplicationController.cs" />
     <Compile Include="Areas\MobileReports\Controllers\ReportController.cs" />
     <Compile Include="Areas\MobileReports\Core\DateBoxGlobalizationViewModelFactory.cs" />
     <Compile Include="Areas\MobileReports\Core\DefinedReports.cs" />
@@ -577,21 +580,21 @@
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.StudentAvailability.DayViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.StudentAvailability.EditFormViewModel.js" />
     <Content Include="Areas\Start\Content\Scripts\Teleopti.Start.Authentication.ChangePasswordViewModel.js" />
-    <Content Include="Areas\Team\Content\Scripts\helpers.js" />
-    <Content Include="Areas\Team\Content\Scripts\layout.js" />
-    <Content Include="Areas\Team\Content\Scripts\main.js" />
-    <Content Include="Areas\Team\Content\Scripts\navigation.js" />
-    <Content Include="Areas\Team\Content\Scripts\views\teamschedule\agent.js" />
-    <Content Include="Areas\Team\Content\Scripts\views\teamschedule\layer.js" />
-    <Content Include="Areas\Team\Content\Scripts\views\teamschedule\timeline-time.js" />
-    <Content Include="Areas\Team\Content\Scripts\views\teamschedule\timeline.js" />
-    <Content Include="Areas\Team\Content\Scripts\views\teamschedule\view.js" />
-    <Content Include="Areas\Team\Content\Scripts\views\teamschedule\vm.js" />
-    <Content Include="Areas\Team\Content\Styles\helpers.css" />
-    <Content Include="Areas\Team\Content\Styles\main.css" />
-    <Content Include="Areas\Team\Content\Styles\team-schedule.css" />
-    <Content Include="Areas\Team\Content\Templates\dummy.html" />
-    <Content Include="Areas\Team\Content\Templates\index.html" />
+    <Content Include="Areas\Anywhere\Content\Scripts\helpers.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\layout.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\main.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\navigation.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\agent.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\layer.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\timeline-time.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\timeline.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\view.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\vm.js" />
+    <Content Include="Areas\Anywhere\Content\Styles\helpers.css" />
+    <Content Include="Areas\Anywhere\Content\Styles\main.css" />
+    <Content Include="Areas\Anywhere\Content\Styles\team-schedule.css" />
+    <Content Include="Areas\Anywhere\Content\Templates\dummy.html" />
+    <Content Include="Areas\Anywhere\Content\Templates\index.html" />
     <Content Include="Areas\MobileReports\Content\Css\mobile.custom.css" />
     <Content Include="Areas\MobileReports\Content\Images\ajax-loader.gif" />
     <Content Include="Areas\MobileReports\Content\Images\logo.png" />
@@ -706,10 +709,10 @@
     <Content Include="Areas\MyTime\Views\Requests\NewShiftTradeRequest.cshtml" />
     <Content Include="Areas\Start\Views\Authentication\SignIn.cshtml" />
     <Content Include="Areas\Start\Content\Css\login.css" />
-    <Content Include="Areas\Team\Content\Templates\layout.html" />
-    <Content Include="Areas\Team\Content\Templates\menu.html" />
-    <Content Include="Areas\Team\Content\Templates\teamschedule\view.html" />
-    <Content Include="Areas\Team\Content\Translation\TranslationTemplate.txt" />
+    <Content Include="Areas\Anywhere\Content\Templates\layout.html" />
+    <Content Include="Areas\Anywhere\Content\Templates\menu.html" />
+    <Content Include="Areas\Anywhere\Content\Templates\teamschedule\view.html" />
+    <Content Include="Areas\Anywhere\Content\Translation\TranslationTemplate.txt" />
     <Content Include="Content\crossroads\crossroads.js" />
     <Content Include="Content\crossroads\crossroads.min.js" />
     <Content Include="Content\hasher\hasher.js" />
@@ -970,8 +973,8 @@
     <Content Include="Areas\MyTime\Views\_ViewStart.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Areas\Team\Models\" />
-    <Folder Include="Areas\Team\Views\" />
+    <Folder Include="Areas\Anywhere\Models\" />
+    <Folder Include="Areas\Anywhere\Views\" />
     <Folder Include="Scripts\" />
   </ItemGroup>
   <ItemGroup>

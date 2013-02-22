@@ -10830,4 +10830,28 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
   <data name="ResShiftStartDateToColon" xml:space="preserve">
     <value>Till datum (då skiften påbörjas):</value>
   </data>
+  <data name="Little" xml:space="preserve">
+    <value>Lite</value>
+  </data>
+  <data name="Medium" xml:space="preserve">
+    <value>Medium</value>
+  </data>
+  <data name="Much" xml:space="preserve">
+    <value>Mycket</value>
+  </data>
+  <data name="QuickForecast" xml:space="preserve">
+    <value>Snabbprognos</value>
+  </data>
+  <data name="SeasonalityDataRange" xml:space="preserve">
+    <value>Dataperiod för säsongsvariation och trend</value>
+  </data>
+  <data name="SmoothingStyleColon" xml:space="preserve">
+    <value>Utjämning:</value>
+  </data>
+  <data name="TemplatesHistoricalDataRange" xml:space="preserve">
+    <value>Historikdataperiod för mallar</value>
+  </data>
+  <data name="ShowInfoMessages" xml:space="preserve">
+    <value>Visa informationsmeddelanden</value>
+  </data>
 </root>

@@ -153,6 +153,7 @@
     <Compile Include="Services\EmptyShiftTradeRequestSetChecksum.cs" />
     <Compile Include="Services\PersonRequestAuthorizationCheckerForTest.cs" />
     <Compile Include="Services\ShiftTradeRequestStatusCheckerForTestDoesNothing.cs" />
+    <Compile Include="SqlExceptionConstructor.cs" />
     <Compile Include="StateHolderProxyHelper.cs" />
     <Compile Include="StubFactory.cs" />
     <Compile Include="TestData\Analytics\AQueue.cs" />

@@ -86,10 +86,20 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AbsenceRequestFromSchedule.feature</DependentUpon>
     </Compile>
-    <Compile Include="AdminWeb\Schedule.feature.cs">
+    <Compile Include="Anywhere\AddFullDayAbsence.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Schedule.feature</DependentUpon>
+      <DependentUpon>AddFullDayAbsence.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Anywhere\ViewAgentSchedule.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ViewAgentSchedule.feature</DependentUpon>
+    </Compile>
+    <Compile Include="Anywhere\ViewTeamSchedule.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ViewTeamSchedule.feature</DependentUpon>
     </Compile>
     <Compile Include="AsmSummerToWinter.feature.cs">
       <AutoGen>True</AutoGen>
@@ -104,18 +114,21 @@
     <Compile Include="Bindings\Generic\AbsenceStepDefinitions.cs" />
     <Compile Include="AsmStepDefinition.cs" />
     <Compile Include="Bindings\Generic\ActivityStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\Anywhere\AgentSchedulePageStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\UIStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\ContractStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\Anywhere\TeamSchedulePageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\TeamStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\ShiftTradeRequestFromRequestStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PasswordPolicyStepDefinitions.cs" />
-    <Compile Include="Bindings\Generic\SignInPageStepDefinitions.cs" />
-    <Compile Include="Data\Setups\Generic\BasicPersonConfigurable.cs" />
+    <Compile Include="Bindings\Generic\Start\SignInPageStepDefinitions.cs" />
+    <Compile Include="Bindings\StringContainsAnyLanguageResourceConstraint.cs" />
     <Compile Include="Data\Setups\Generic\PersonAbsenceConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\PersonDayOffConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\ReadModelShiftConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\TeamConfigurable.cs" />
-    <Compile Include="Bindings\Generic\StudentAvailabilityPageStepDefinitions.cs" />
-    <Compile Include="Data\Setups\Specific\SetName.cs" />
+    <Compile Include="Bindings\Generic\MyTime\StudentAvailabilityPageStepDefinitions.cs" />
+    <Compile Include="Data\Setups\Specific\UtcTimeZone.cs" />
     <Compile Include="StudentAvailabilityMultidays.feature.cs">
       <DependentUpon>StudentAvailabilityMultidays.feature</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -125,13 +138,13 @@
     <Compile Include="Bindings\Generic\ScenarioStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\ShiftStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\NotifyStepDefinition.cs" />
-    <Compile Include="Bindings\Generic\ShiftTradeRequestsPageStepDefinition.cs" />
-    <Compile Include="Bindings\Generic\WeekSchedulePageStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\MyTime\ShiftTradeRequestsPageStepDefinition.cs" />
+    <Compile Include="Bindings\Generic\MyTime\WeekSchedulePageStepDefinitions.cs" />
     <Compile Include="Core\Robustness\EventualAssert.cs" />
     <Compile Include="Core\Robustness\EventualElementActions.cs" />
     <Compile Include="Core\Robustness\Timeouts.cs" />
     <Compile Include="Core\Robustness\Retrying.cs" />
-    <Compile Include="Pages\AdminWebPage.cs" />
+    <Compile Include="Pages\AnywherePage.cs" />
     <Compile Include="Pages\SignInPage.cs" />
     <Compile Include="Routing.feature.cs">
       <DependentUpon>Routing.feature</DependentUpon>
@@ -167,7 +180,7 @@
     <Compile Include="Data\Setups\Generic\RuleSetBagConfigurable.cs" />
     <Compile Include="Bindings\Generic\RuleSetBagStepDefinitions.cs" />
     <Compile Include="Data\Setups\Generic\WorkShiftRuleSetConfigurable.cs" />
-    <Compile Include="Bindings\Generic\WeekScheduleTimeIndicatorStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\MyTime\WeekScheduleTimeIndicatorStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\DayOffStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\PreferenceStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\ShiftCategoryStepDefinitions.cs" />
@@ -176,7 +189,7 @@
     <Compile Include="Bindings\Generic\RoleStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\WorkflowControlSetStepDefinitions.cs" />
     <Compile Include="ConfigSanityCheck.cs" />
-    <Compile Include="Bindings\Generic\PortalPageStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\MyTime\PortalPageStepDefinitions.cs" />
     <Compile Include="PreferencesFeedbackRefact.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -202,7 +215,7 @@
     <Compile Include="Data\Setups\Generic\MeetingConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\DayOffTemplateConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\ShiftCategoryConfigurable.cs" />
-    <Compile Include="Bindings\Generic\PreferencesPageStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\MyTime\PreferencesPageStepDefinitions.cs" />
     <Compile Include="Data\Setups\Specific\AgentWithoutExtendedPreferencesAccess.cs" />
     <Compile Include="Data\Setups\Specific\StockholmTimeZone.cs" />
     <Compile Include="Pages\Common\ComboBox.cs" />
@@ -315,7 +328,7 @@
     <Compile Include="Data\Setups\Specific\ExistingExtendedPreferenceToday.cs" />
     <Compile Include="Data\Setups\Specific\ExistingPreference.cs" />
     <Compile Include="Data\Setups\Specific\RuleSetBag.cs" />
-    <Compile Include="Bindings\SharedSignInStepDefinitions.cs" />
+    <Compile Include="Bindings\Specific\SharedSignInStepDefinitions.cs" />
     <Compile Include="Data\Setups\Specific\BaseShiftCategory.cs" />
     <Compile Include="Data\Setups\Specific\UserWithoutResReportScheduledAndActualAgentsAccess.cs" />
     <Compile Include="Data\Setups\Specific\AbsenceToday.cs" />
@@ -507,7 +520,7 @@
       <DependentUpon>TextRequestFromSchedule.feature</DependentUpon>
     </Compile>
     <Compile Include="TextRequestStepDefinitions.cs" />
-    <Compile Include="Bindings\Generic\EditRequestPageStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\MyTime\EditRequestPageStepDefinitions.cs" />
     <Compile Include="WeekSchedule.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -531,9 +544,17 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="AdminWeb\Schedule.feature">
+    <None Include="Anywhere\ViewAgentSchedule.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>Schedule.feature.cs</LastGenOutput>
+      <LastGenOutput>ViewAgentSchedule.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Anywhere\AddFullDayAbsence.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>AddFullDayAbsence.feature.cs</LastGenOutput>
+    </None>
+    <None Include="Anywhere\ViewTeamSchedule.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>ViewTeamSchedule.feature.cs</LastGenOutput>
     </None>
     <None Include="StudentAvailabilityMultidays.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

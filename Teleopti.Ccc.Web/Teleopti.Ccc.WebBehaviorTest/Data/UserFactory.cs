@@ -9,6 +9,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.TestData.Core;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
 using Teleopti.Interfaces.Domain;
 using log4net;
@@ -23,6 +24,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		private static readonly ILog Log = LogManager.GetLogger(typeof(UserFactory));
 
 		private IUserSetup _cultureSetup = new SwedishCulture();
+		private IUserSetup _timeZoneSetup = new UtcTimeZone();
 
 		private readonly DataFactory _dataFactory = new DataFactory(ScenarioUnitOfWorkState.UnitOfWorkAction);
 		private readonly IList<IUserSetup> _userSetups = new List<IUserSetup>();
@@ -59,7 +61,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		private void AddColleague(string userName)
 		{
 			var userFactory = new UserFactory();
-			userFactory.Setup(new SetName(userName));
+			userFactory.Setup(new UserConfigurable {Name = userName});
 			_colleagues.Add(userFactory);
 			ScenarioContext.Current.Value(userName, userFactory);
 		}
@@ -69,6 +71,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			_teamColleague = new UserFactory();
 			_colleagues.Add(_teamColleague);
 		}
+
 		public UserFactory LastColleague() { return _colleagues.Last(); }
 		public UserFactory TeamColleague() { return _teamColleague; }
 		public IEnumerable<UserFactory> AllColleagues() { return _colleagues; }
@@ -145,6 +148,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			_cultureSetup = setup;
 		}
 
+		public void SetupTimeZone(IUserSetup setup)
+		{
+			_timeZoneSetup = setup;
+		}
+
 		public CultureInfo Culture { get { return Person.PermissionInformation.Culture(); } }
 		
 		public IPerson Person { get; private set; }
@@ -178,80 +186,63 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		/// <returns>Returns the given logonName</returns>
 		public string MakeUser(string logonName, string lastName, string password)
 		{
-			CreatePersonWithPermissions(logonName, lastName, password);
+			Person = PersonFactory.CreatePersonWithBasicPermissionInfo(logonName, password);
+			Person.Name = new Name("Agent", lastName);
 
 			Log.Write("Making user " + Person.Name);
 
-			SetupAndPersistPerson(Person);
+			MakeMePerson(Person);
 
-			CreateAndPersistColleagueList();
+			_colleagues.ForEach(colleague =>
+			{
+				var colleagueName = NextColleagueName();
+				colleague.Person = PersonFactory.CreatePerson();
+				colleague.Person.Name = new Name("Colleague", colleagueName.LastName);
+				colleague.MakeOtherPerson(colleague.Person);
+			});
 
 			Resources.Culture = Culture;
 
 			return logonName;
 		}
 
-		public void MakePerson(IPerson person)
+		private void MakeMePerson(IPerson person)
 		{
 			CultureInfo culture = null;
 
 			_dataFactory.Apply();
 
-			ScenarioUnitOfWorkState.UnitOfWorkAction(uow =>
-			{
-				_cultureSetup.Apply(uow, person, null);
-				culture = person.PermissionInformation.Culture();
-				_userSetups.ForEach(s => s.Apply(uow, person, culture));
-				new PersonRepository(uow).Add(person);
-			});
-
-			ScenarioUnitOfWorkState.UnitOfWorkAction(uow => _userDataSetups.ForEach(s => s.Apply(uow, person, culture)));
+			ApplyPersonData(person, out culture);
 
 			_postSetups.ForEach(s => s.Apply(person, culture));
 
 			_analyticsDataFactory.Persist(culture);
 		}
 
-		private void CreatePersonWithPermissions(string logonName, string lastName, string password)
+		public void MakeOtherPerson(IPerson person)
 		{
-			Person = PersonFactory.CreatePersonWithBasicPermissionInfo(logonName, password);
-			Person.Name = new Name("Agent", lastName);
+			CultureInfo culture;
+			ApplyPersonData(person, out culture);
 		}
 
-		/// <summary>
-		/// Creates the colleague list of persons who are in the inner Colleague list.
-		/// </summary>
-		private void CreateAndPersistColleagueList()
+		private void ApplyPersonData(IPerson person, out CultureInfo culture)
 		{
-			_colleagues.ForEach(colleague =>
-			                    	{
-			                    		var colleagueName = NextColleagueName();
-			                    		colleague.Person = PersonFactory.CreatePerson();
-			                    		colleague.Person.Name = new Name("Colleague", colleagueName.LastName);
-			                    		colleague.SetupAndPersistPerson(colleague.Person);
-			                    	});
-		}
-
-		private void SetupAndPersistPerson(IPerson person)
-		{
-			CultureInfo culture = null;
-
-			_dataFactory.Apply();
+			CultureInfo cultureInfo = null;
 
 			ScenarioUnitOfWorkState.UnitOfWorkAction(uow =>
-			                                         	{
-															_cultureSetup.Apply(uow, person, null);
-															culture = person.PermissionInformation.Culture();
-															_userSetups.ForEach(s => s.Apply(uow, person, culture));
-															new PersonRepository(uow).Add(person);
-														});
+				{
+					_cultureSetup.Apply(uow, person, null);
+					cultureInfo = person.PermissionInformation.Culture();
+					_timeZoneSetup.Apply(uow, person, cultureInfo);
+					_userSetups.ForEach(s => s.Apply(uow, person, cultureInfo));
+					new PersonRepository(uow).Add(person);
+				});
 
-			ScenarioUnitOfWorkState.UnitOfWorkAction(uow => _userDataSetups.ForEach(s => s.Apply(uow, person, culture) ));
+			ScenarioUnitOfWorkState.UnitOfWorkAction(uow => _userDataSetups.ForEach(s => s.Apply(uow, person, cultureInfo)));
 
-			_postSetups.ForEach(s => s.Apply(person, culture));
-
-			_analyticsDataFactory.Persist(culture);
+			culture = cultureInfo;
 		}
+
 
 		private IEnumerable<object> AllSpecs
 		{

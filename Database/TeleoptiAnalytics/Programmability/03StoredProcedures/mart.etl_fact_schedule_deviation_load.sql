@@ -22,7 +22,7 @@ GO
 --
 -- =============================================
 
---exec mart.etl_fact_schedule_deviation_load '2009-02-01 23:00:00','2009-02-03 23:00:00','928DD0BC-BF40-412E-B970-9B5E015AADEA' --Demo
+--exec mart.etl_fact_schedule_deviation_load '2013-02-18 23:00:00','2013-02-21 23:00:00','928DD0BC-BF40-412E-B970-9B5E015AADEA' --Demo
 CREATE PROCEDURE [mart].[etl_fact_schedule_deviation_load]
 @start_date smalldatetime,
 @end_date smalldatetime,
@@ -35,9 +35,10 @@ DECLARE @max_date_id int
 DECLARE @min_date_id int
 DECLARE @business_unit_id int
 DECLARE @scenario_id int
-DECLARE @date_min smalldatetime = '1900-01-01'
+DECLARE @date_min smalldatetime
 DECLARE @intervals_outside_shift int
 declare @interval_length_minutes int 
+SET @date_min='1900-01-01'
 
 CREATE TABLE #fact_schedule_deviation(
 	date_id int,
@@ -208,11 +209,11 @@ ON
 INNER JOIN 
 	mart.dim_interval di
 ON 
-	dateadd(hour,DATEPART(hour,fs.shift_endtime),@date_min)+ dateadd(minute,DATEPART(minute,fs.shift_endtime),@date_min) = di.interval_end
+	dateadd(hour,DATEPART(hour,fs.shift_endtime),@date_min)+ dateadd(minute,DATEPART(minute,fs.shift_endtime),@date_min) > di.interval_start
+	and dateadd(hour,DATEPART(hour,fs.shift_endtime),@date_min)+ dateadd(minute,DATEPART(minute,fs.shift_endtime),@date_min) <= di.interval_end
 WHERE
 	fs.schedule_date_id BETWEEN @start_date_id AND @end_date_id
 	AND fs.business_unit_id = @business_unit_id
-	
 	
 --UPDATE ALL ROWS WITH KNOWN SHIFT_STARTDATE_ID
 UPDATE stat

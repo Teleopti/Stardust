@@ -17,29 +17,32 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			UserFactory.User().Setup(schedulePeriod);
 		}
 
-		[Given(@"(.*) have a person period with")]
-		public void GivenIHaveAPersonPeriodWith(string userName, Table table)
+		[Given(@"(.*) (has|have) a person period with")]
+		public void GivenIHaveAPersonPeriodWith(string userName, string hasHave, Table table)
 		{
 			var personPeriod = table.CreateInstance<PersonPeriodConfigurable>();
 			UserFactory.User(userName).Setup(personPeriod);
 		}
 
-		[Given(@"I have a person period that starts on '(.*)'")]
-		public void GivenIHaveAPersonPeriodThatStartsOn(DateTime date)
+		[Given(@"(.*) have a person period that starts on '(.*)'")]
+		public void GivenIHaveAPersonPeriodThatStartsOn(string userName, DateTime date)
 		{
 			var personPeriod = new PersonPeriodConfigurable
 				{
 					StartDate = date,
 					RuleSetBag = "Common"
 				};
-			UserFactory.User().Setup(personPeriod);
+			UserFactory.User(userName).Setup(personPeriod);
 		}
 
-		[Given(@"I am a user with")]
-		public void GivenIAmAUserWith(Table table)
+		// I am a user with
+		// 'Kalle' is a user with
+		// 'I' am a user with
+		[Given(@"'?(I|.*)'? (am a|is a) user with")]
+		public void GivenIAmAUserWith(string userName, string amAIsA, Table table)
 		{
 			var user = table.CreateInstance<UserConfigurable>();
-			UserFactory.User().Setup(user);
+			UserFactory.User(userName).Setup(user);
 		}
 
 		[Given(@"I have user credential with")]
