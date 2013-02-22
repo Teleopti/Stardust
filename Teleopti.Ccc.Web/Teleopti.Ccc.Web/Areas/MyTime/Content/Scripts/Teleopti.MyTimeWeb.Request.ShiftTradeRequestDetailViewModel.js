@@ -38,8 +38,8 @@ Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
 			}
 		});
 	};
-	self.mySchedule = ko.observable(new Teleopti.MyTimeWeb.Request.LayerViewModel.PersonScheduleViewModel());
-	self.otherSchedule = ko.observable(new Teleopti.MyTimeWeb.Request.LayerViewModel.PersonScheduleViewModel());
+	self.mySchedule = ko.observable(new Teleopti.MyTimeWeb.Request.PersonScheduleViewModel());
+	self.otherSchedule = ko.observable(new Teleopti.MyTimeWeb.Request.PersonScheduleViewModel());
 	self.hours = ko.observableArray();
 	self.hourWidth = ko.observable(10);
 	self.loadSwapDetails = function () {
@@ -68,14 +68,14 @@ Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
 		var mappedlayers = ko.utils.arrayMap(myScheduleObject.ScheduleLayers, function (layer) {
 			return new Teleopti.MyTimeWeb.Request.LayerViewModel(layer, myScheduleObject.MinutesSinceTimeLineStart, self.pixelPerMinute());
 		});
-		self.mySchedule(new Teleopti.MyTimeWeb.Request.LayerViewModel.PersonScheduleViewModel(mappedlayers, myScheduleObject));
+		self.mySchedule(new Teleopti.MyTimeWeb.Request.PersonScheduleViewModel(mappedlayers, myScheduleObject));
 	};
 
 	self._createOtherSchedule = function (myScheduleObject) {
 		var mappedlayers = ko.utils.arrayMap(myScheduleObject.ScheduleLayers, function (layer) {
 			return new Teleopti.MyTimeWeb.Request.LayerViewModel(layer, myScheduleObject.MinutesSinceTimeLineStart, self.pixelPerMinute());
 		});
-		self.otherSchedule(new Teleopti.MyTimeWeb.Request.LayerViewModel.PersonScheduleViewModel(mappedlayers, myScheduleObject));
+		self.otherSchedule(new Teleopti.MyTimeWeb.Request.PersonScheduleViewModel(mappedlayers, myScheduleObject));
 	};
 
 };
@@ -127,7 +127,7 @@ Teleopti.MyTimeWeb.Request.LayerViewModel = function(layer, minutesSinceTimeLine
 		});
 	}
 
-Teleopti.MyTimeWeb.Request.LayerViewModel.PersonScheduleViewModel = function(layers, scheduleObject) {
+Teleopti.MyTimeWeb.Request.PersonScheduleViewModel = function(layers, scheduleObject) {
 	var self = this;
 	var minutesSinceTimeLineStart = 0;
 	var agentName = '';
