@@ -28,6 +28,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 
         public IList<DateOnly> ExtractBlockDays(DateOnly startDateOnly)
         {
+	        if (_schedulingOptions.BlockFinderTypeForAdvanceScheduling == BlockFinderType.SingleDay)
+	        {
+				return new List<DateOnly> { startDateOnly };
+	        }
+		        
+
             var selectedPeriod = new List<IScheduleDayPro>();
             foreach (var matrix in _matrixList)
             {

@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_teamScheduling.DayScheduled += dayScheduled;
             List<DateOnly> dayOff,effectiveDays,unLockedDays;
 
-			var startDate = retrieveStartDate(selectedPersonMatrixList, out dayOff, out effectiveDays, out unLockedDays);
+			var startDate = retrieveStartDate(_schedulingOptions.BlockFinderTypeForAdvanceScheduling, selectedPersonMatrixList, out dayOff, out effectiveDays, out unLockedDays);
 
             var selectedPerson = selectedPersonMatrixList.Select(scheduleMatrixPro => scheduleMatrixPro.Person).Distinct().ToList();
             
@@ -81,20 +81,17 @@ namespace Teleopti.Ccc.Domain.Scheduling
                     foreach (var groupPerson in groupPersonList)
                     {
                         var groupMatrixList = getScheduleMatrixProList(groupPerson, startDate, allPersonMatrixList);
-                        //call class that returns the aggregated restrictions for the teamblock (is team member personal skills needed for this?)
-                        var restriction = _restrictionAggregator.Aggregate(dateOnlyList, groupPerson,groupMatrixList, _schedulingOptions);
-						if (restriction == null) continue;
+                        var restriction = _restrictionAggregator.Aggregate(dateOnlyList, groupPerson, groupMatrixList, _schedulingOptions);
+						if (restriction == null) 
+							continue;
 
-                        //call class that returns the aggregated intraday dist based on teamblock dates ???? consider the priority and understaffing
                         var activityInternalData = _skillDayPeriodIntervalDataGenerator.Generate(fullGroupPerson, dateOnlyList);
 
-                        //call class that returns a filtered list of valid workshifts, this class will probably consists of a lot of subclasses 
                         // (should we cover for max seats here?) ????
                         var shifts = _workShiftFilterService.Filter(startDate, groupPerson, groupMatrixList, restriction, _schedulingOptions);
 
                         if (shifts != null && shifts.Count > 0)
                         {
-                            //call class that returns the workshift to use based on valid workshifts, the aggregated intraday dist and other things we need ???
 	                        IShiftProjectionCache bestShiftProjectionCache;
 	                        if (shifts.Count == 1)
 		                        bestShiftProjectionCache = shifts.First();
@@ -104,9 +101,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
                                                                                         _schedulingOptions.UseMinimumPersons,
                                                                                         _schedulingOptions.UseMaximumPersons);
 
-                            //call class that schedules given date with given workshift on the complete team
-                            //call class that schedules the unscheduled days for the teamblock using the same start time from the given shift, 
-                            //this class will handle steady state as well as individual
                             _teamScheduling.Execute(startDate, dateOnlyList, groupMatrixList, groupPerson, restriction, bestShiftProjectionCache, unLockedDays,selectedPerson );
 							if (_cancelMe)
 								break;
@@ -143,7 +137,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_cancelMe = scheduleServiceBaseEventArgs.Cancel;
 		}
 
-		private static DateOnly retrieveStartDate(IList<IScheduleMatrixPro> matrixList, out  List<DateOnly> dayOff, out  List<DateOnly> effectiveDays, out  List<DateOnly> unLockedDays)
+		private static DateOnly retrieveStartDate(BlockFinderType blockType, IList<IScheduleMatrixPro> matrixList, out  List<DateOnly> dayOff, out  List<DateOnly> effectiveDays, out  List<DateOnly> unLockedDays)
 		{
 			var startDate = DateOnly.MinValue;
 			dayOff = new List<DateOnly>();
@@ -154,7 +148,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			{
 				for (var i = 0; i < matrixList.Count; i++)
 				{
-					var openMatrixList = matrixList.Where(x => x.Person.Equals(matrixList[i].Person));
+					int i1 = i;
+					var openMatrixList = matrixList.Where(x => x.Person.Equals(matrixList[i1].Person));
 					foreach (var scheduleMatrixPro in openMatrixList)
 					{
 						foreach (var scheduleDayPro in scheduleMatrixPro.EffectivePeriodDays.OrderBy(x => x.Day))
@@ -171,6 +166,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 							if (daySignificantPart == SchedulePartView.DayOff)
 								dayOff.Add(scheduleDayPro.Day);
+
 							effectiveDays.Add(scheduleDayPro.Day);
 
 							if (scheduleMatrixPro.UnlockedDays.Contains(scheduleDayPro))
@@ -181,6 +177,10 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 
 			}
+
+			if (blockType == BlockFinderType.SingleDay)
+				return unLockedDays.FirstOrDefault();
+
 			return startDate;
 		}
 
