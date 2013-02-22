@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			
 		}
 
-		[Test,Ignore("This is crashing now and this test is to show that")]
+		[Test]
 		public void ShouldNotCrashIfShiftIsBiggerThanFourThousand()
 		{
 			_target = new PersonScheduleDayReadModelRepository(UnitOfWorkFactory.Current);
