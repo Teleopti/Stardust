@@ -13,7 +13,6 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.Web.Core;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 {
@@ -259,18 +258,18 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			var id = Guid.NewGuid();
 			var requestViewModelFactory = MockRepository.GenerateMock<IRequestsViewModelFactory>();
-			var shiftTradeSwapDetails = new ShiftTradeSwapDetailsViewModel()
-				                            {
-														 From =  new ShiftTradePersonScheduleViewModel()
-															         {
+			var shiftTradeSwapDetails = new ShiftTradeSwapDetailsViewModel
+				{
+														 From =  new ShiftTradePersonScheduleViewModel
+															 {
 																         ScheduleLayers = new List<ShiftTradeScheduleLayerViewModel>(),
 																			DayOffText = "DO",
 																			HasUnderlyingDayOff = false,
 																			MinutesSinceTimeLineStart = 60,
 																			Name="xxx"
 															         },
-														 To =  new ShiftTradePersonScheduleViewModel()
-															       {
+														 To =  new ShiftTradePersonScheduleViewModel
+															 {
 																		 ScheduleLayers = new List<ShiftTradeScheduleLayerViewModel>(),
 																		 DayOffText = "DO",
 																		 HasUnderlyingDayOff = false,
