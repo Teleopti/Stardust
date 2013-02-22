@@ -70,6 +70,7 @@
             // 
             this.textBoxName.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.textBoxName.Location = new System.Drawing.Point(99, 7);
+        	this.textBoxName.MaxLength = 49;
             this.textBoxName.Name = "textBoxName";
             this.textBoxName.Size = new System.Drawing.Size(198, 20);
             this.textBoxName.TabIndex = 3;
