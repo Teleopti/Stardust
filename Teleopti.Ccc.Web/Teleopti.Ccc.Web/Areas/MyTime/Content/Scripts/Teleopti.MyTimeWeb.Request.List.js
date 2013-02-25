@@ -2,13 +2,13 @@
 /// <reference path="~/Content/jqueryui/jquery-ui-1.9.1.custom.js" />
 /// <reference path="~/Content/Scripts/jquery-1.8.3-vsdoc.js" />
 /// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
-/// <reference path="~/Content/Scripts/date.js" />
 /// <reference path="Teleopti.MyTimeWeb.Common.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Ajax.js"/>
+/// <reference path="Teleopti.MyTimeWeb.Request.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Request.RequestDetail.js"/>
 /// <reference path="jquery.ui.connector.js"/>
 /// <reference path="jquery.ui.connector.js"/>
-/// <reference path="~/Content/Scripts/knockout-2.1.0.debug.js" />
+/// <reference path="~/Content/Scripts/knockout-2.2.0.debug.js" />
 
 Teleopti.MyTimeWeb.Request.List = (function ($) {
 
@@ -39,7 +39,6 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 		});
 
 		self.ShowDetails = function (viewmodel, event) {
-			var distanceFromTop = Math.max(15, $(event.currentTarget).position().top - 30);
 			ajax.Ajax({
 				url: self.Link(),
 				dataType: "json",
@@ -51,6 +50,8 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 					self.IsLoading(false);
 				},
 				success: function (data) {
+					Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.HideShiftTradeWindow();
+					var distanceFromTop = Math.max(15, $(event.currentTarget).position().top - 30);
 					Teleopti.MyTimeWeb.Request.RequestDetail.ShowRequest(data, distanceFromTop);
 				}
 			});
@@ -169,8 +170,10 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 				}
 			});
 		};
+
+		self.CanDelete = ko.observable(true);
 	}
-	
+
 	ko.utils.extend(RequestItemViewModel.prototype, {
 		Initialize: function (data) {
 			var self = this;
@@ -183,7 +186,8 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 			self.Link(data.Link.href);
 			self.Id(data.Id);
 			self.RequestPayload(data.Payload);
-			self.CanDelete(data.Link.Methods.indexOf("DELETE") != -1);
+			self.CanDelete((data.Link.Methods.indexOf("DELETE") != -1) && data.IsCreatedByUser);
+
 		}
 	});
 

@@ -65,27 +65,6 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             
         }
 
-        [Test]
-        public void VerifyBatchWithDateOutsideBoundaryForOtherRequest()
-        {
-            Expect.Call(_scenarioRepository.LoadDefaultScenario()).Return(_scenario);
-            Expect.Call(_scheduleRepository.FindSchedulesOnlyInGivenPeriod(new PersonProvider(new[] { _person2, _person1 }), new ScheduleDictionaryLoadOptions(true, true), _personRequest2.Request.Period.ChangeEndTime(TimeSpan.FromHours(25)), _scenario)).Return(_scheduleDictionary).IgnoreArguments();
-            SetupSchedule();
-
-            _mockRepository.ReplayAll();
-            _personRequest1.Pending();
-            _personRequest2.Pending();
-
-            Assert.IsFalse(_target.IsInBatchMode);
-            _target.StartBatch(new List<IPersonRequest> { _personRequest1, _personRequest2 });
-            Assert.IsTrue(_target.IsInBatchMode);
-            _target.Check((IShiftTradeRequest) _personRequest2.Request);
-            _target.EndBatch();
-            Assert.IsFalse(_target.IsInBatchMode);
-
-            _mockRepository.VerifyAll();
-        }
-
         private void SetupSchedule()
         {
             Expect.Call(_scheduleDictionary[_person1]).Return(_scheduleRangePerson1).Repeat.AtLeastOnce();

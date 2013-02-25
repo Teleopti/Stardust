@@ -12,13 +12,34 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 	[Binding]
 	public class EditRequestPageStepDefinitions
 	{
-		[When(@"I click add request button in the toolbar")]
-		public void WhenIClickAddRequestButtonInTheToolbar()
+		[Then(@"I should not see the New Absence Request menu item")]
+		public void ThenIShouldNotSeeTheNewAbsenceRequestMenuItem()
 		{
-			Pages.Pages.CurrentEditRequestPage.AddRequestButton.EventualClick();
+			EventualAssert.That(() => Pages.Pages.RequestsPage.AddAbsenceRequestMenuItem.SafeExists(), Is.False);
+		}
+
+		[Then(@"I should not see the New Shift Trade Request menu item")]
+		public void ThenIShouldNotSeeTheNewShiftTradeRequestMenuItem()
+		{
+			EventualAssert.That(() => Pages.Pages.RequestsPage.AddShiftTradeRequestMenuItem.SafeExists(), Is.False);
+		}
+
+		[When(@"I click new text request menu item in the toolbar")]
+		public void WhenIClickNewTextRequestMenuItemInTheToolbar()
+		{
+			Pages.Pages.CurrentEditRequestPage.AddRequestDropDown.EventualClick();
+			Pages.Pages.CurrentEditRequestPage.AddTextRequestMenuItem.EventualClick();
 			Pages.Pages.CurrentEditRequestPage.RequestDetailSection.WaitUntilDisplayed();
 		}
 
+		[When(@"I click new absence request menu item in the toolbar")]
+		public void WhenIClickNewAbsenceRequestMenuItemInTheToolbar()
+		{
+			Pages.Pages.CurrentEditRequestPage.AddRequestDropDown.EventualClick();
+			Pages.Pages.CurrentEditRequestPage.AddAbsenceRequestMenuItem.EventualClick();
+			Pages.Pages.CurrentEditRequestPage.RequestDetailSection.WaitUntilDisplayed();
+		}
+		
 		[When(@"I click absence request tab")]
 		public void WhenIClickAbsenceRequestTab()
 		{

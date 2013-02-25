@@ -7,14 +7,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 {
-    public interface IBatchShiftTradeRequestStatusChecker : IShiftTradeRequestStatusChecker
-    {
-        bool IsInBatchMode { get; }
-        void StartBatch(IEnumerable<IPersonRequest> personRequests);
-        void EndBatch();
-    }
-
-    public class ShiftTradeRequestStatusChecker : IBatchShiftTradeRequestStatusChecker
+	public class ShiftTradeRequestStatusChecker : IBatchShiftTradeRequestStatusChecker
     {
         private readonly IScenarioRepository _scenarioRepository;
         private readonly IScheduleRepository _scheduleRepository;
@@ -29,11 +22,6 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             _scenarioRepository = scenarioRepository;
             _scheduleRepository = scheduleRepository;
             _authorization = authorization;
-        }
-
-        public bool IsInBatchMode
-        {
-            get { return _isInBatchMode; }
         }
 
         public void StartBatch(IEnumerable<IPersonRequest> personRequests)

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
@@ -20,14 +19,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			_userTimeZone = userTimeZone;
 		}
 
-		public IEnumerable<IPersonRequest> RetrieveTextAndAbsenceRequests(Paging paging)
-		{
-			return _repository.FindTextAndAbsenceRequestsForAgent(_loggedOnUser.CurrentUser(), paging);
-		}
-
 		public IEnumerable<IPersonRequest> RetrieveRequests(Paging paging)
 		{
-			return _repository.FindTextAndAbsenceRequestsForAgent(_loggedOnUser.CurrentUser(), paging);
+			return _repository.FindAllRequestsForAgent(_loggedOnUser.CurrentUser(), paging);
 		}
 
 		public IEnumerable<IPersonRequest> RetrieveRequests(DateOnlyPeriod period)

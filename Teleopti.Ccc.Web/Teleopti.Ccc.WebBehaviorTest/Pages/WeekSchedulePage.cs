@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
@@ -62,9 +60,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 			return Document.Div(Find.BySelector(DateSelector(date) + " .text-request")).EventualGet();
 		}
 
-		[FindBy(Id = "Schedule-addRequest-button")]
-		public Button AddRequestButton { get; set; }
-
+		public Span AddRequestDropDown { get; set; }
+		public Link AddTextRequestMenuItem { get; set; }
+		public Link AddAbsenceRequestMenuItem { get; set; }
+		public Link AddShiftTradeRequestMenuItem { get; set; }
+		
 		[FindBy(Id = "Schedule-addRequest-section")]
 		public Div RequestDetailSection { get; set; }
 
