@@ -218,6 +218,7 @@
     <Compile Include="Optimization\BlockDayOffOptimizationServiceTest.cs" />
     <Compile Include="Optimization\BlockOptimizerBlockCleanerTest.cs" />
     <Compile Include="Optimization\BlockDayOffOptimizerTest.cs" />
+    <Compile Include="Optimization\AdvanceGroupIntradayOptimizerExecuterTest.cs" />
     <Compile Include="Optimization\DayOffOptimizerPreMoveResultPredictorTest.cs" />
     <Compile Include="Optimization\GroupDayOffOptimizationResourceHelperTest.cs" />
     <Compile Include="Optimization\GroupIntradayOptimizerExecuterTest.cs" />
