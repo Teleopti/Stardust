@@ -244,11 +244,6 @@ namespace Teleopti.Ccc.TestCommon
             return true;
         }
 
-        public IEnumerable<DateOnlyPeriod> PermittedPeriods(IApplicationFunction applicationFunction, DateOnlyPeriod period, IPerson person)
-        {
-            return new []{period};
-        }
-
     	public IEnumerable<IApplicationFunction> GrantedFunctions() { throw new NotImplementedException(); }
 
     	public IEnumerable<IApplicationFunction> GrantedFunctionsBySpecification(ISpecification<IApplicationFunction> specification) { throw new NotImplementedException(); }
@@ -261,6 +256,11 @@ namespace Teleopti.Ccc.TestCommon
     	public bool IsPermitted(string functionPath, DateOnly dateOnly, IAuthorizeOrganisationDetail authorizeOrganisationDetail)
     	{
     		return true;
+    	}
+
+    	public IEnumerable<DateOnlyPeriod> PermittedPeriods(string functionPath, DateOnlyPeriod period, IPerson person)
+    	{
+			return new[] { period };
     	}
     }
 
@@ -291,11 +291,6 @@ namespace Teleopti.Ccc.TestCommon
             return false;
         }
 
-        public IEnumerable<DateOnlyPeriod> PermittedPeriods(IApplicationFunction applicationFunction, DateOnlyPeriod period, IPerson person)
-        {
-            return new List<DateOnlyPeriod>(0);
-        }
-
     	public IEnumerable<IApplicationFunction> GrantedFunctions() { throw new NotImplementedException(); }
 
     	public IEnumerable<IApplicationFunction> GrantedFunctionsBySpecification(ISpecification<IApplicationFunction> specification) { throw new NotImplementedException(); }
@@ -308,6 +303,11 @@ namespace Teleopti.Ccc.TestCommon
     	public bool IsPermitted(string functionPath, DateOnly dateOnly, IAuthorizeOrganisationDetail authorizeOrganisationDetail)
     	{
     		return false;
+    	}
+
+    	public IEnumerable<DateOnlyPeriod> PermittedPeriods(string functionPath, DateOnlyPeriod period, IPerson person)
+    	{
+			return new List<DateOnlyPeriod>(0);
     	}
     }
 

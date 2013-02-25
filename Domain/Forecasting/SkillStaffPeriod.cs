@@ -429,7 +429,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// </remarks>
         public TimeSpan ForecastedIncomingDemandWithShrinkage()
         {
-            return TimeSpan.FromMinutes(ForecastedIncomingDemand().TotalMinutes * (1 + Payload.Shrinkage.Value));
+            return TimeSpan.FromMinutes(ForecastedIncomingDemand().TotalMinutes / (1 - Payload.Shrinkage.Value));
         }
 
         /// <summary>

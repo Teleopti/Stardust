@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		private static readonly ILog Log = LogManager.GetLogger(typeof(UserFactory));
 
 		private IUserSetup _cultureSetup = new SwedishCulture();
+		private IUserSetup _timeZoneSetup = new UtcTimeZone();
 
 		private readonly DataFactory _dataFactory = new DataFactory(ScenarioUnitOfWorkState.UnitOfWorkAction);
 		private readonly IList<IUserSetup> _userSetups = new List<IUserSetup>();
@@ -147,6 +148,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			_cultureSetup = setup;
 		}
 
+		public void SetupTimeZone(IUserSetup setup)
+		{
+			_timeZoneSetup = setup;
+		}
+
 		public CultureInfo Culture { get { return Person.PermissionInformation.Culture(); } }
 		
 		public IPerson Person { get; private set; }
@@ -227,6 +233,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 				{
 					_cultureSetup.Apply(uow, person, null);
 					cultureInfo = person.PermissionInformation.Culture();
+					_timeZoneSetup.Apply(uow, person, cultureInfo);
 					_userSetups.ForEach(s => s.Apply(uow, person, cultureInfo));
 					new PersonRepository(uow).Add(person);
 				});

@@ -85,14 +85,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void ThenIShouldSeeChangePasswordPageWithWarning(string resourceText)
 		{
 			EventualAssert.That(() => Pages.Pages.CurrentSignInPage.PasswordExpireSoonError.DisplayVisible(), Is.True);
-			EventualAssert.That(() => Pages.Pages.CurrentSignInPage.PasswordExpireSoonError.InnerHtml, new StringContainsAnyLanguageResourceContraint(resourceText));
+			EventualAssert.That(() => Pages.Pages.CurrentSignInPage.PasswordExpireSoonError.InnerHtml, new StringContainsAnyLanguageResourceConstraint(resourceText));
 		}
 
 		[Then(@"I should see must change password page with warning '(.*)'")]
 		public void ThenIShouldSeeMustChangePasswordPageWithWarning(string resourceText)
 		{
 			EventualAssert.That(() => Pages.Pages.CurrentSignInPage.PasswordAlreadyExpiredError.DisplayVisible(), Is.True);
-			EventualAssert.That(() => Pages.Pages.CurrentSignInPage.PasswordAlreadyExpiredError.InnerHtml, new StringContainsAnyLanguageResourceContraint(resourceText));
+			EventualAssert.That(() => Pages.Pages.CurrentSignInPage.PasswordAlreadyExpiredError.InnerHtml, new StringContainsAnyLanguageResourceConstraint(resourceText));
 		}
 
 		[Then(@"I should not see skip button")]
@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Then(@"I should see an error '(.*)'")]
 		public void ThenIShouldSeeAnError(string resourceText)
 		{
-			EventualAssert.That(() => Pages.Pages.CurrentSignInPage.ChangePasswordErrorMessage.Text, new StringContainsAnyLanguageResourceContraint(resourceText));
+			EventualAssert.That(() => Pages.Pages.CurrentSignInPage.ChangePasswordErrorMessage.Text, new StringContainsAnyLanguageResourceConstraint(resourceText));
 		}
 
 	}
