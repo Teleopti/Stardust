@@ -8,8 +8,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
     public interface ITeamScheduling
     {
 		event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
-        void Execute(DateOnly startDateOfBlock, IList<DateOnly> daysInBlock, IList<IScheduleMatrixPro> matrixList, IGroupPerson groupPerson,
-                     IEffectiveRestriction effectiveRestriction, IShiftProjectionCache shiftProjectionCache,
+        void Execute(DateOnly startDateOfBlock, IList<DateOnly> daysInBlock, IList<IScheduleMatrixPro> matrixList, IGroupPerson groupPerson, IShiftProjectionCache shiftProjectionCache,
                      IList<DateOnly> unlockedDays, IList<IPerson> selectedPerson);
     }
 
@@ -29,7 +28,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "7")]
 		public void  Execute(DateOnly startDateOfBlock, IList<DateOnly  > daysInBlock, IList<IScheduleMatrixPro> matrixList,
-                IGroupPerson groupPerson,IEffectiveRestriction effectiveRestriction, IShiftProjectionCache shiftProjectionCache, IList<DateOnly>  unlockedDays, IList<IPerson> selectedPerson )
+                IGroupPerson groupPerson, IShiftProjectionCache shiftProjectionCache, IList<DateOnly>  unlockedDays, IList<IPerson> selectedPerson )
         {
             if (matrixList == null) throw new ArgumentNullException("matrixList");
 	        if (daysInBlock == null) 

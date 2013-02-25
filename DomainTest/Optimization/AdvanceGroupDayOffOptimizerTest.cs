@@ -221,8 +221,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                                                           _effectiveRestriction, _schedulingOptions)).IgnoreArguments().Return(shiftProjectionCaheList);
                 Expect.Call(_teamSteadyStateHolder.IsSteadyState(_groupPerson)).Return(true);
                 Expect.Call(() => _teamScheduling.Execute(_daysOffToRemove[0], _daysOffToRemove,
-                                                    new List<IScheduleMatrixPro> {_scheduleMatrix2}, _groupPerson,
-                                                    _effectiveRestriction, _shiftProjectionCache,
+                                                    new List<IScheduleMatrixPro> {_scheduleMatrix2}, _groupPerson, _shiftProjectionCache,
                                                     new List<DateOnly>() {}, new List<IPerson>() {})).IgnoreArguments();
             }
             using (_mocks.Playback())

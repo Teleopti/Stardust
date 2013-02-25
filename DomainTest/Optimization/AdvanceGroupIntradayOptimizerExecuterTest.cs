@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				      .Return(new List<IShiftProjectionCache> {scheduleProjectionCache});
 				Expect.Call(
 					() =>
-					_teamScheduling.Execute(date, new List<DateOnly> {date}, _allMatrixes, groupPerson, effectiveRestriction,
+					_teamScheduling.Execute(date, new List<DateOnly> {date}, _allMatrixes, groupPerson,
 					                        scheduleProjectionCache, new List<DateOnly> {date}, new List<IPerson> {_person}))
 				      .IgnoreArguments();
 			}

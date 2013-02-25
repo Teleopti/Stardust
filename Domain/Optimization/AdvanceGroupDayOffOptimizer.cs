@@ -236,7 +236,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                                                                                                          _schedulingOptions.
                                                                                                              UseMaximumPersons);
 
-                            _teamScheduling.Execute(dateOnly, dateOnlyList, groupMatrixList, groupPerson, restriction,
+                            _teamScheduling.Execute(dateOnly, dateOnlyList, groupMatrixList, groupPerson,
                                                     bestShiftProjectionCache, unLockedDays, selectedPerson);
                             //if (_cancelMe)
                             //    break;

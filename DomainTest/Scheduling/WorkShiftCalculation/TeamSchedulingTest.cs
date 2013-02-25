@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
             using(_mock.Playback()   )
             {
 
-                _target.Execute(startDateOfBlock, selectedDays, matrixList, _groupPerson, _effectiveRestriction,
+                _target.Execute(startDateOfBlock, selectedDays, matrixList, _groupPerson,
                                 _shiftProjectionCache, new List<DateOnly> {startDateOfBlock}, _baseLineData.PersonList);
             }
         }
@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
             }
             using (_mock.Playback())
             {
-                _target.Execute(startDateOfBlock, selectedDays, matrixList, _groupPerson, _effectiveRestriction,
+                _target.Execute(startDateOfBlock, selectedDays, matrixList, _groupPerson,
                                 _shiftProjectionCache, new List<DateOnly> {startDateOfBlock}, _baseLineData.PersonList);
             }
         }
@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
             }
             using (_mock.Playback())
             {
-                _target.Execute(startDateOfBlock, selectedDays, matrixList, _groupPerson, _effectiveRestriction,
+                _target.Execute(startDateOfBlock, selectedDays, matrixList, _groupPerson,
                                 _shiftProjectionCache, new List<DateOnly> {startDateOfBlock}, _baseLineData.PersonList);
             }
         }
@@ -143,7 +143,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
             }
             using (_mock.Playback())
             {
-                _target.Execute(startDateOfBlock, selectedDays, matrixList, _groupPerson, _effectiveRestriction,
+                _target.Execute(startDateOfBlock, selectedDays, matrixList, _groupPerson,
                                 _shiftProjectionCache, new List<DateOnly> {startDateOfBlock}, _baseLineData.PersonList);
             }
         }
@@ -173,7 +173,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 			using (_mock.Playback())
 			{
 				_target.DayScheduled += targetDayScheduledNotCanceled;
-				_target.Execute(startDateOfBlock, selectedDays, matrixList, _groupPerson, _effectiveRestriction,
+				_target.Execute(startDateOfBlock, selectedDays, matrixList, _groupPerson,
 								_shiftProjectionCache, new List<DateOnly> { startDateOfBlock }, _baseLineData.PersonList);
 				_target.DayScheduled += targetDayScheduledNotCanceled;
 			}
@@ -204,7 +204,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 			using (_mock.Playback())
 			{
 				_target.DayScheduled += targetDayScheduledCanceled;
-				_target.Execute(startDateOfBlock, selectedDays, matrixList, _groupPerson, _effectiveRestriction,
+				_target.Execute(startDateOfBlock, selectedDays, matrixList, _groupPerson,
 								_shiftProjectionCache, new List<DateOnly> { startDateOfBlock }, _baseLineData.PersonList);
 				_target.DayScheduled += targetDayScheduledCanceled;
 			}
