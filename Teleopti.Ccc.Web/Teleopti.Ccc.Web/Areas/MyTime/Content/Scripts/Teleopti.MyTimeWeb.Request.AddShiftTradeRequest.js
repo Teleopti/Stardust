@@ -24,7 +24,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		self.noPossibleShiftTrades = ko.observable(false);
 		self.timeLineLengthInMinutes = ko.observable(0);
 		self.hours = ko.observableArray();
-		self.mySchedule = ko.observable(new personScheduleViewModel());
+		self.mySchedule = ko.observable(new Teleopti.MyTimeWeb.Request.PersonScheduleViewModel());
 		self.possibleTradeSchedules = ko.observableArray();
 		self.pixelPerMinute = ko.computed(function () {
 			return layerCanvasPixelWidth / self.timeLineLengthInMinutes();
@@ -32,19 +32,19 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 
 		self._createMySchedule = function (myScheduleObject) {
 			var mappedlayers = ko.utils.arrayMap(myScheduleObject.ScheduleLayers, function (layer) {
-				return new layerViewModel(layer, myScheduleObject.MinutesSinceTimeLineStart, self.pixelPerMinute());
+				return new Teleopti.MyTimeWeb.Request.LayerViewModel(layer, myScheduleObject.MinutesSinceTimeLineStart, self.pixelPerMinute());
 			});
-			self.mySchedule(new personScheduleViewModel(mappedlayers, myScheduleObject));
+			self.mySchedule(new Teleopti.MyTimeWeb.Request.PersonScheduleViewModel(mappedlayers, myScheduleObject));
 		};
 
 		self._createPossibleTradeSchedules = function (possibleTradePersons) {
 			var mappedPersonsSchedule = ko.utils.arrayMap(possibleTradePersons, function (personSchedule) {
 
 				var mappedLayers = ko.utils.arrayMap(personSchedule.ScheduleLayers, function (layer) {
-					return new layerViewModel(layer, personSchedule.MinutesSinceTimeLineStart, self.pixelPerMinute());
+					return new Teleopti.MyTimeWeb.Request.LayerViewModel(layer, personSchedule.MinutesSinceTimeLineStart, self.pixelPerMinute());
 				});
 
-				return new personScheduleViewModel(mappedLayers, personSchedule);
+				return new Teleopti.MyTimeWeb.Request.PersonScheduleViewModel(mappedLayers, personSchedule);
 			});
 
 			self.noPossibleShiftTrades(mappedPersonsSchedule.length == 0 ? true : false);
@@ -53,7 +53,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 
 		self._createTimeLine = function (hours) {
 			var arrayMap = ko.utils.arrayMap(hours, function (hour) {
-				return new timeLineHourViewModel(hour, self);
+				return new Teleopti.MyTimeWeb.Request.TimeLineHourViewModel(hour, self);
 			});
 			self.hours(arrayMap);
 			_positionTimeLineHourTexts();
@@ -118,71 +118,10 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		};
 	}
 
-	function personScheduleViewModel(layers, scheduleObject) {
-		var self = this;
-		var minutesSinceTimeLineStart = 0;
-		var agentName = '';
-		var dayOffText = '';
-		var hasUnderlyingDayOff = false;
-		if (scheduleObject) {
-			agentName = scheduleObject.Name;
-			minutesSinceTimeLineStart = scheduleObject.MinutesSinceTimeLineStart;
-			dayOffText = scheduleObject.DayOffText;
-			hasUnderlyingDayOff = scheduleObject.HasUnderlyingDayOff;
-		}
-
-		self.agentName = agentName;
-		self.layers = layers;
-		self.minutesSinceTimeLineStart = minutesSinceTimeLineStart;
-		self.dayOffText = dayOffText;
-		self.hasUnderlyingDayOff = ko.observable(hasUnderlyingDayOff);
-		self.showDayOffStyle = function () {
-			if (self.hasUnderlyingDayOff() == true | self.dayOffText.length > 0) {
-				return true;
-			}
-			return false;
-		};
-
-	}
-
-	function layerViewModel(layer, minutesSinceTimeLineStart, pixelPerMinute) {
-		var self = this;
-
-		self.payload = layer.Payload;
-		self.backgroundColor = layer.Color;
-		self.lengthInMinutes = layer.LengthInMinutes;
-		self.leftPx = ko.computed(function () {
-			var timeLineoffset = minutesSinceTimeLineStart;
-			return (layer.ElapsedMinutesSinceShiftStart + timeLineoffset) * pixelPerMinute + 'px';
-		});
-		self.paddingLeft = ko.computed(function () {
-			return self.lengthInMinutes * pixelPerMinute + 'px';
-		});
-		self.title = ko.computed(function () {
-			if (self.payload) {
-				return layer.Title + ' ' + self.payload;
-			}
-			return '';
-		});
-	}
-
-	function timeLineHourViewModel(hour, parentViewModel) {
-		var self = this;
-		var borderSize = 1;
-
-		self.hourText = hour.HourText;
-		self.lengthInMinutes = hour.LengthInMinutesToDisplay;
-		self.leftPx = ko.observable('-8px');
-		self.hourWidth = ko.computed(function () {
-			return self.lengthInMinutes * parentViewModel.pixelPerMinute() - borderSize + 'px';
-		});
-	}
-
 	function _init() {
 		vm = new shiftTradeViewModel();
 		var elementToBind = $('#Request-add-shift-trade').get(0);
 		ko.applyBindings(vm, elementToBind);
-		vm.loadPeriod();
 	}
 	function _initDatePicker() {
 		$('.shift-trade-add-previous-date').button({
@@ -212,7 +151,6 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		Teleopti.MyTimeWeb.Request.RequestDetail.HideEditSection();
 		_initDatePicker();
 		$('#Request-add-shift-trade').show();
-		_positionTimeLineHourTexts();
 	}
 
 	function _hideShiftTradeWindow() {
@@ -235,33 +173,34 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 	}
 
 	function _initAgentNameOverflow() {
-	    $('.shift-trade-agent-name')
+		$('.shift-trade-agent-name')
 			.hoverIntent({
-			    interval: 200,
-			    timeout: 200,
-			    over: function () {
-			        if ($(this).hasHiddenContent())
-			            $(this).addClass('shift-trade-agent-name-hover');
-			    },
-			    out: function () {
-			        $(this).removeClass('shift-trade-agent-name-hover');
-			    }
+				interval: 200,
+				timeout: 200,
+				over: function () {
+					if ($(this).hasHiddenContent())
+						$(this).addClass('shift-trade-agent-name-hover');
+				},
+				out: function () {
+					$(this).removeClass('shift-trade-agent-name-hover');
+				}
 			})
 	    ;
 	}
 
 	return {
 		Init: function () {
-		    _init();
+			_init();
 		},
 		SetShiftTradeRequestDate: function (date) {
-		    setShiftTradeRequestDate(date);
+			setShiftTradeRequestDate(date);
 		},
 		OpenAddShiftTradeWindow: function () {
-		    _openAddShiftTradeWindow();
+			vm.loadPeriod();
+			_openAddShiftTradeWindow();
 		},
 		HideShiftTradeWindow: function () {
-		    _hideShiftTradeWindow();
+			_hideShiftTradeWindow();
 		}
 	};
 

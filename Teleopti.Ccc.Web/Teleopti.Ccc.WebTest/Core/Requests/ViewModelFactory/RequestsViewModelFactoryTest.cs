@@ -161,8 +161,12 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 			var personRequestProvider = MockRepository.GenerateMock<IPersonRequestProvider>();
 			var shiftTrade = MockRepository.GenerateStub<IShiftTradeRequest>();
 			var personRequest = MockRepository.GenerateStub<IPersonRequest>(); personRequest.Request = shiftTrade;
-			var shiftTradeSwapDetailsViewModel = new ShiftTradeSwapDetailsViewModel();
-
+			var shiftTradeSwapDetailsViewModel = new ShiftTradeSwapDetailsViewModel()
+				                                     {
+					                                     From = new ShiftTradePersonScheduleViewModel(),
+																	 To = new ShiftTradePersonScheduleViewModel()
+				                                     };
+			
 			var target = new RequestsViewModelFactory(personRequestProvider, mapper, null, null, null, null, requestCheckSum);
 
 			personRequestProvider.Expect(p => p.RetrieveRequest(personRequestId)).Return(personRequest);
@@ -172,6 +176,38 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.ViewModelFactory
 
 			var result = target.CreateShiftTradeRequestSwapDetails(personRequestId);
 			Assert.That(result,Is.SameAs(shiftTradeSwapDetailsViewModel));
+
+		}
+
+		[Test]
+		public void ShouldSetMinutesSinceTimelineStartOnShiftTradeSwapDetailsBasedOnTheTimelinesStartDateTime()
+		{
+			var timelineStartTime = new DateTime(2001, 10, 10, 1, 0, 0, DateTimeKind.Utc);
+			var startTimeFromSchedule = timelineStartTime.Add(TimeSpan.FromMinutes(20));
+			var startTimeToSchedule = timelineStartTime.Add(TimeSpan.FromMinutes(180));
+
+			var requestCheckSum = MockRepository.GenerateStub<IShiftTradeRequestStatusChecker>();
+			var mapper = MockRepository.GenerateMock<IMappingEngine>();
+			var personRequestProvider = MockRepository.GenerateMock<IPersonRequestProvider>();
+			var shiftTrade = MockRepository.GenerateStub<IShiftTradeRequest>();
+			var personRequest = MockRepository.GenerateStub<IPersonRequest>(); personRequest.Request = shiftTrade;
+			
+			var shiftTradeSwapDetailsViewModel = new ShiftTradeSwapDetailsViewModel()
+			{
+				TimeLineStartDateTime = timelineStartTime,
+				From = new ShiftTradePersonScheduleViewModel() {StartTimeUtc = startTimeFromSchedule},
+				To = new ShiftTradePersonScheduleViewModel()	  {StartTimeUtc = startTimeToSchedule}
+			};
+
+			var target = new RequestsViewModelFactory(personRequestProvider, mapper, null, null, null, null, requestCheckSum);
+
+			personRequestProvider.Expect(p => p.RetrieveRequest(new Guid())).IgnoreArguments().Return(personRequest);
+			
+			mapper.Expect(m => m.Map<IShiftTradeRequest, ShiftTradeSwapDetailsViewModel>(Arg<IShiftTradeRequest>.Is.Equal(shiftTrade))).Return(shiftTradeSwapDetailsViewModel);
+
+			var result = target.CreateShiftTradeRequestSwapDetails(new Guid());
+			Assert.That(result.From.MinutesSinceTimeLineStart, Is.EqualTo(20));
+			Assert.That(result.To.MinutesSinceTimeLineStart, Is.EqualTo(180));
 
 		}
 	}

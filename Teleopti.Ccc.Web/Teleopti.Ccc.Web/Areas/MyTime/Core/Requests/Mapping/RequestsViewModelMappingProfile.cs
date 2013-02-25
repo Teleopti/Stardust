@@ -17,12 +17,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		private readonly Func<IUserTimeZone> _userTimeZone;
 		private readonly Func<ILinkProvider> _linkProvider;
 		private readonly Func<ILoggedOnUser> _loggedOnUser;
-	    private IResolve<IShiftTradeRequestStatusChecker> _shiftTradeRequestStatusChecker;
+		private readonly IResolve<IShiftTradeRequestStatusChecker> _shiftTradeRequestStatusChecker;
 
-	    public RequestsViewModelMappingProfile(Func<IUserTimeZone> userTimeZone,
-																				Func<ILinkProvider> linkProvider,
-																				Func<ILoggedOnUser> loggedOnUser,
-																				IResolve<IShiftTradeRequestStatusChecker> shiftTradeRequestStatusChecker)
+		public RequestsViewModelMappingProfile(Func<IUserTimeZone> userTimeZone,
+																			Func<ILinkProvider> linkProvider,
+																			Func<ILoggedOnUser> loggedOnUser,
+																			IResolve<IShiftTradeRequestStatusChecker> shiftTradeRequestStatusChecker)
 		{
 			_userTimeZone = userTimeZone;
 			_linkProvider = linkProvider;

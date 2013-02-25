@@ -92,6 +92,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 
 			var shiftTradeSwapDetails = _mapper.Map<IShiftTradeRequest,ShiftTradeSwapDetailsViewModel>(personRequest.Request as IShiftTradeRequest);
 			
+			var startTimeForTimeline = shiftTradeSwapDetails.TimeLineStartDateTime;
+			var startTimeForSchedOne = shiftTradeSwapDetails.From.StartTimeUtc;
+			var startTimeForSchedTwo = shiftTradeSwapDetails.To.StartTimeUtc;
+
+			shiftTradeSwapDetails.From.MinutesSinceTimeLineStart = (int)startTimeForSchedOne.Subtract(startTimeForTimeline).TotalMinutes;
+			shiftTradeSwapDetails.To.MinutesSinceTimeLineStart = (int) startTimeForSchedTwo.Subtract(startTimeForTimeline).TotalMinutes;
+			
 			return shiftTradeSwapDetails;
 		}
 	}

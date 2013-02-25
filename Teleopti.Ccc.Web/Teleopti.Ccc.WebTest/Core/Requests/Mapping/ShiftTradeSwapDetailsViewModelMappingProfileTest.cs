@@ -77,8 +77,10 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			timeLineHoursViewModelFactory.VerifyAllExpectations();
 
 			Assert.That(result.TimeLineHours, Is.EqualTo(timelineHours));
+			Assert.That(result.TimeLineStartDateTime, Is.EqualTo(expectedTimelinePeriod.StartDateTime));
 
 		}
+
 
 		private void AddNeededMappingProfiles()
 		{

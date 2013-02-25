@@ -197,15 +197,6 @@ Scenario: Show my scheduled day off
 	Then I should see my scheduled day off 'DayOff'
 	And I should see the time line hours span from '8' to '17'
 
-Scenario: View shift trade request details
-	Given I have the role 'Full access to mytime'
-	And I have created a shift trade request
-	| Field			| Value				|
-	| Subject		| swap with me		|
-	And I am viewing requests
-	When I click on the request
-	Then I should see the shift trade request form  with subject 'swap with me'
-
 Scenario: Close details when approving shift trade request
 	Given I have the role 'Full access to mytime'
 	And I have received a shift trade request from 'Some Person'
@@ -240,29 +231,67 @@ Scenario: Should not be able to delete received shift trade request
 	When I view requests
 	Then I should not see a delete button on the request
 
-Scenario: Show name of the person that created the shift trade request
+Scenario: Show name of sender of a received shifttrade
 	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And Ashley Andeen have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And Ashley Andeen has a person period with
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
+	And I have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 06:00 |
+	| EndTime               | 2030-01-01 16:00 |
+	| Shift category        | Day              |
+	And Ashley Andeen have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 12:00 |
+	| EndTime               | 2030-01-01 22:00 |
+	| Shift category			| Day	           |
 	And I have received a shift trade request
-	| Field		| Value					|
-	| From		| Keil Randor			|
+	| Field    | Value         |
+	| From       | Ashley Andeen	|
+	| DateTo   | 2030-01-01    |
+	| DateFrom | 2030-01-01    |
+	| Pending  | True          |
 	And I am viewing requests
 	When I click on the request
-	Then I should see 'Keil Randor' as the sender of the request
+	Then I should see 'Ashley Andeen' as the sender of the request
 
-Scenario: Show name of the person that recieved the shift trade request
+Scenario: Show name of the person of a shifttrade that I have created
 	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And Ashley Andeen have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And Ashley Andeen has a person period with
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
+	And I have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 06:00 |
+	| EndTime               | 2030-01-01 16:00 |
+	| Shift category        | Day              |
+	And Ashley Andeen have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 12:00 |
+	| EndTime               | 2030-01-01 22:00 |
+	| Shift category			| Day	           |
 	And I have created a shift trade request
-	| Field	| Value					|
-	| To		| Ashley Andeen		|
+	| Field    | Value         |
+	| To       | Ashley Andeen	|
+	| DateTo   | 2030-01-01    |
+	| DateFrom | 2030-01-01    |
+	| Pending  | True          |
 	And I am viewing requests
 	When I click on the request
 	Then I should see 'Ashley Andeen' as the receiver of the request
 
-@ignore
 Scenario: Show schedules of the shift trade 
 Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And Ashley Andeen have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And Ashley Andeen has a person period with
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
 	And I have a shift with
 	| Field                 | Value            |
 	| StartTime             | 2030-01-01 06:00 |
@@ -282,14 +311,45 @@ Given I have the role 'Full access to mytime'
 	| Pending  | True          |
 	And I am viewing requests
 	When I click on the request
-	Then I should see details with a schedule
+	Then I should see details with a schedule from
 	| Field			| Value |
 	| Start time	| 06:00 |
 	| End time		| 16:00 |
-	And I should see details with a schedule
+	And I should see details with a schedule to
 	| Field			| Value |
 	| Start time	| 12:00 |
 	| End time		| 22:00 |
+
+Scenario: Show subject of the shift trade in shifttrade details
+Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And Ashley Andeen have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And Ashley Andeen has a person period with
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
+	And I have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 06:00 |
+	| EndTime               | 2030-01-01 16:00 |
+	| Shift category        | Day              |
+	And Ashley Andeen have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 12:00 |
+	| EndTime               | 2030-01-01 22:00 |
+	| Shift category			| Day	           |
+	And I have created a shift trade request
+	| Field		| Value						|
+	| To			| Ashley Andeen			|
+	| DateTo		| 2030-01-01				|
+	| DateFrom	| 2030-01-01				|
+	| Pending	| True						|
+	| Subject	| Swap shift with me		|
+	| Message	| message of shifttrade	|
+	And I am viewing requests
+	When I click on the request
+	Then I should see details with subject 'Swap shift with me'
+	And I should see details with message 'message of shifttrade'
+
 
 
 
