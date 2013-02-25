@@ -41,15 +41,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 											 {
 												 Name = o.Person.Name.ToString(),
 												 ScheduleLayers = createShiftTradeLayers(myScheduleDay, myScheduleDay.PersonTimeZone, timeLineRangeTot),
-												 MinutesSinceTimeLineStart =
-													 myScheduleDay.ScheduleLayers.Any() ?
-														 (int)myScheduleDay.ScheduleLayers.First()
-																			 .Period.StartDateTime.Subtract(timeLineRangeTot.StartDateTime)
-																			 .TotalMinutes :
-														 TimeLineOffset,
-												 DayOffText = myScheduleDay.DayOffText,
 												 HasUnderlyingDayOff = myScheduleDay.SignificantPartForDisplay == SchedulePartView.ContractDayOff,
+												  DayOffText = myScheduleDay.DayOffText,
 											 };
+
+											 myScheduleViewModel.StartTimeUtc = myScheduleDay.ScheduleLayers.Any()
+													 ? myScheduleDay.ScheduleLayers.First()
+																				 .Period.StartDateTime
+																				 : timeLineRangeTot.StartDateTime.Add(TimeSpan.FromMinutes(TimeLineOffset));
+
+											 myScheduleViewModel.MinutesSinceTimeLineStart = (int) myScheduleViewModel.StartTimeUtc.Subtract(timeLineRangeTot.StartDateTime).TotalMinutes;
+												
 											 return myScheduleViewModel;
 					                });
 				
