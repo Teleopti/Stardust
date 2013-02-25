@@ -152,9 +152,7 @@
 .shift-trade-person-schedule-row 
 {
 	height: 22px;
-	position: absolute;
-	left: 150px;
-	display: inline;
+	position: relative;
 }
 .shift-trade-my-schedule
 {
