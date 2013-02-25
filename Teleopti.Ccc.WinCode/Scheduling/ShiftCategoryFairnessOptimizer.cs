@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             //if (swapSuggestion == null)
             //    return;
 
-		    var swapSuggestionList = _shiftCategoryFairnessSwapFinder.GetGroupListOfSwaps(fairnessResults, blackList);
+			var swapSuggestionList = _shiftCategoryFairnessSwapFinder.GetAllGroupsToSwap(fairnessResults);
             foreach (var swap in swapSuggestionList)
             {
                 if (backgroundWorker.CancellationPending)
@@ -210,13 +210,19 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			{
 				if (shiftCategoryFairnessCompareResult.ShiftCategoryFairnessCompareValues == null)
 					continue;
+				var toRemove = new List<IShiftCategoryFairnessCompareValue>();
 				foreach (var shiftCategoryFairnessCompareValue in shiftCategoryFairnessCompareResult.ShiftCategoryFairnessCompareValues)
 				{
-					if(shiftCategoryFairnessCompareValue.Original > 0)
-					{
-						ret.Add(shiftCategoryFairnessCompareResult);
-						break;
-					}
+					if(shiftCategoryFairnessCompareValue.Original.Equals(0.0) && shiftCategoryFairnessCompareValue.ComparedTo.Equals(0.0))
+						toRemove.Add(shiftCategoryFairnessCompareValue);
+				}
+				foreach (var shiftCategoryFairnessCompareValue in toRemove)
+				{
+					shiftCategoryFairnessCompareResult.ShiftCategoryFairnessCompareValues.Remove(shiftCategoryFairnessCompareValue);
+				}
+				if (shiftCategoryFairnessCompareResult.ShiftCategoryFairnessCompareValues.Any())
+				{
+					ret.Add(shiftCategoryFairnessCompareResult);
 				}
 			}
 			return ret;
