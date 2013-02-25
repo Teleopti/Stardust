@@ -3627,10 +3627,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 
                 if(schedulingOptions.BlockFinderTypeForAdvanceScheduling == BlockFinderType.None )
                 {
-				switch (schedulingOptions.UseBlockScheduling)
-				{
-					case BlockFinderType.None:
-						{
                     switch (schedulingOptions.UseBlockScheduling)
                     {
                         case BlockFinderType.None:
