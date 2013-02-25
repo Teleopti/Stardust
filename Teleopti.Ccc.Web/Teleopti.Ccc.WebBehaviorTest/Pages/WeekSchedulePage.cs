@@ -62,6 +62,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 			return Document.Div(Find.BySelector(DateSelector(date) + " .text-request")).EventualGet();
 		}
 
+		public Div HolidayAgentsForDate(DateTime date)
+		{
+			return Document.Div(Find.BySelector(DateSelector(date) + " .holiday-agents")).EventualGet();
+		}
+
 		[FindBy(Id = "Schedule-addRequest-button")]
 		public Button AddRequestButton { get; set; }
 
