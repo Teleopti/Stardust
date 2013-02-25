@@ -48,7 +48,8 @@ Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
 			dataType: "json",
 			type: "POST",
 			success: function (data) {
-			  
+				self.pixelPerMinute(72/ (data.TimeLineHours.length*10));
+				console.log(self.pixelPerMinute());
 				self.hours.removeAll();
 				for (var i = 0; i < data.TimeLineHours.length; i++) {
 
@@ -56,7 +57,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
 				}
 				self.createMySchedule(data.From);
 				self.createOtherSchedule(data.To);
-				
+
 			},
 			error: function (error) {
 				//todo

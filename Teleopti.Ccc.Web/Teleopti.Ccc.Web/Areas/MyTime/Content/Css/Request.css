@@ -264,6 +264,13 @@
 	display: inline;
 }
 
+.shift-trade-swap-detail-timeline-line 
+{
+	height: 100%;
+	float: left;
+	border-left: 1px solid rgb(216, 216, 216);
+}
+
 .shift-trade-swap-detail-schedule-row {
 	height: 22px;
 	position: relative;
@@ -271,12 +278,11 @@
 
 .shift-trade-swap-detail-timeline 
 {
-	height: 30px;
+	height: 26px;
 	position: absolute;
 }
 
 .shift-trade-swap-detail-agent-name {
 	width: 150px;
 	height: 30px;
-
 }
