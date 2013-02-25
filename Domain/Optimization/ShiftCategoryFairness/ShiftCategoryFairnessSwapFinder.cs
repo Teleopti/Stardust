@@ -12,6 +12,8 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
         IList<IShiftCategoryFairnessSwap> GetGroupListOfSwaps(
             IList<IShiftCategoryFairnessCompareResult> groupList,
             IList<IShiftCategoryFairnessSwap> blacklist);
+
+	    IEnumerable<IShiftCategoryFairnessSwap> GetAllGroupsToSwap(IList<IShiftCategoryFairnessCompareResult> groupList);
     }
 
     public class ShiftCategoryFairnessSwapFinder : IShiftCategoryFairnessSwapFinder
@@ -56,7 +58,7 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
             return returnList;
         }
 
-        public IShiftCategoryFairnessSwap GetGroupsToSwap(IList<IShiftCategoryFairnessCompareResult> groupList,
+	    public IShiftCategoryFairnessSwap GetGroupsToSwap(IList<IShiftCategoryFairnessCompareResult> groupList,
                                                           IList<IShiftCategoryFairnessSwap> blacklist)
         {
             var ret = getGroupsToSwap(groupList, blacklist);
@@ -208,5 +210,57 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
 
             return returnSuggestion;
         }
+
+		public IEnumerable<IShiftCategoryFairnessSwap> GetAllGroupsToSwap(IList<IShiftCategoryFairnessCompareResult> groupList)
+		{
+			var ret = new List<IShiftCategoryFairnessSwap>();
+			foreach (var selectedGroup in groupList)
+			{
+				foreach (var otherGroup in groupList)
+				{
+					if(otherGroup.Equals(selectedGroup)) continue;
+					foreach (var shiftCategoryFairnessCompareValue in selectedGroup.ShiftCategoryFairnessCompareValues)
+					{
+						var selectedCat = shiftCategoryFairnessCompareValue.ShiftCategory;
+						foreach (var categoryFairnessCompareValue in otherGroup.ShiftCategoryFairnessCompareValues)
+						{
+							
+							if(selectedCat.Equals(categoryFairnessCompareValue.ShiftCategory)) continue;
+
+							// trade away something there are too few off
+							if (shiftCategoryFairnessCompareValue.Original < shiftCategoryFairnessCompareValue.ComparedTo)
+							{
+								// and the other has too many, no good
+								if (hasMoreOfCategory(selectedCat, otherGroup.ShiftCategoryFairnessCompareValues))
+								{
+									// and the other have too few of what they will trade away
+									if (categoryFairnessCompareValue.ComparedTo > categoryFairnessCompareValue.Original)
+									{
+										// and group one has too many of them, puh
+										if (hasMoreOfCategory(categoryFairnessCompareValue.ShiftCategory, selectedGroup.ShiftCategoryFairnessCompareValues))
+											continue;
+									}
+								}
+							}
+							
+							ret.Add(new ShiftCategoryFairnessSwap
+								{
+									Group1 = selectedGroup,
+									Group2 = otherGroup,
+									ShiftCategoryFromGroup1 = selectedCat,
+									ShiftCategoryFromGroup2 = categoryFairnessCompareValue.ShiftCategory
+								});
+						}
+					}
+				}
+			}
+			return ret;
+		}
+
+
+		private bool hasMoreOfCategory(IShiftCategory shiftCategory, IEnumerable<IShiftCategoryFairnessCompareValue> values)
+		{
+			return (from shiftCategoryFairnessCompareValue in values where shiftCategoryFairnessCompareValue.ShiftCategory.Equals(shiftCategory) select shiftCategoryFairnessCompareValue.Original > shiftCategoryFairnessCompareValue.ComparedTo).FirstOrDefault();
+		}
     }
 }
