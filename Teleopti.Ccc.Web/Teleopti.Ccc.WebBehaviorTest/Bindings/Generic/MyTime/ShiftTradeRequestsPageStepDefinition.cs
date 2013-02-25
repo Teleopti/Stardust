@@ -19,25 +19,26 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[When(@"I view Add Shift Trade Request")]
 		public void WhenIViewAddShiftTradeRequest()
 		{
-			TestControllerMethods.Logon();
-			Navigation.GotoRequests();
-			Pages.Pages.RequestsPage.AddRequestDropDown.EventualClick();
-			Pages.Pages.RequestsPage.AddShiftTradeRequestMenuItem.EventualClick();
-			EventualAssert.That(() => string.IsNullOrEmpty(Pages.Pages.Current.Document.Span(Find.ById("Request-add-loaded-date")).Text), Is.False);
+			gotoAddRequestToday();
 		}
 
 		[When(@"I view Add Shift Trade Request for date '(.*)'")]
 		public void WhenIViewAddShiftTradeRequestForDate(DateTime date)
+		{
+			gotoAddRequestToday();
+			var dateAsSwedishString = date.ToShortDateString(CultureInfo.GetCultureInfo("sv-SE"));
+			var script = string.Format("Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.SetShiftTradeRequestDate('{0}');", dateAsSwedishString);
+			Browser.Current.Eval(script);
+			EventualAssert.That(() => Pages.Pages.Current.Document.Span(Find.ById("Request-add-loaded-date")).Text, Is.EqualTo(dateAsSwedishString));
+		}
+
+		private static void gotoAddRequestToday()
 		{
 			TestControllerMethods.Logon();
 			Navigation.GotoRequests();
 			Pages.Pages.RequestsPage.AddRequestDropDown.EventualClick();
 			Pages.Pages.RequestsPage.AddShiftTradeRequestMenuItem.EventualClick();
 			EventualAssert.That(() => string.IsNullOrEmpty(Pages.Pages.Current.Document.Span(Find.ById("Request-add-loaded-date")).Text), Is.False);
-			var dateAsSwedishString = date.ToShortDateString(CultureInfo.GetCultureInfo("sv-SE"));
-			var script = string.Format("Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.SetShiftTradeRequestDate('{0}');", dateAsSwedishString);
-			Browser.Current.Eval(script);
-			EventualAssert.That(() => Pages.Pages.Current.Document.Span(Find.ById("Request-add-loaded-date")).Text, Is.EqualTo(dateAsSwedishString));
 		}
 
 		[Then(@"I should see a message text saying I am missing a workflow control set")]
