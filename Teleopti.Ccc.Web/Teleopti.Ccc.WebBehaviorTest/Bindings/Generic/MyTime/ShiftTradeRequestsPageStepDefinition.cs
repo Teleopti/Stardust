@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			Navigation.GotoRequests();
 			Pages.Pages.RequestsPage.AddRequestDropDown.EventualClick();
 			Pages.Pages.RequestsPage.AddShiftTradeRequestMenuItem.EventualClick();
+			EventualAssert.That(() => string.IsNullOrEmpty(Pages.Pages.Current.Document.Span(Find.ById("Request-add-loaded-date")).Text), Is.False);
 		}
 
 		[When(@"I view Add Shift Trade Request for date '(.*)'")]
@@ -32,6 +33,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			Navigation.GotoRequests();
 			Pages.Pages.RequestsPage.AddRequestDropDown.EventualClick();
 			Pages.Pages.RequestsPage.AddShiftTradeRequestMenuItem.EventualClick();
+			EventualAssert.That(() => string.IsNullOrEmpty(Pages.Pages.Current.Document.Span(Find.ById("Request-add-loaded-date")).Text), Is.False);
 			var dateAsSwedishString = date.ToShortDateString(CultureInfo.GetCultureInfo("sv-SE"));
 			var script = string.Format("Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.SetShiftTradeRequestDate('{0}');", dateAsSwedishString);
 			Browser.Current.Eval(script);

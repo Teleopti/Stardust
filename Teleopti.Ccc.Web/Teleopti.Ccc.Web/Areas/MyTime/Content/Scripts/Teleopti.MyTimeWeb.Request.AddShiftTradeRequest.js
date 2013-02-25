@@ -53,7 +53,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 
 		self._createTimeLine = function (hours) {
 			var arrayMap = ko.utils.arrayMap(hours, function (hour) {
-				return new  Teleopti.MyTimeWeb.Request.TimeLineHourViewModel(hour, self);
+				return new Teleopti.MyTimeWeb.Request.TimeLineHourViewModel(hour, self);
 			});
 			self.hours(arrayMap);
 			_positionTimeLineHourTexts();
@@ -122,7 +122,6 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		vm = new shiftTradeViewModel();
 		var elementToBind = $('#Request-add-shift-trade').get(0);
 		ko.applyBindings(vm, elementToBind);
-		vm.loadPeriod();
 	}
 	function _initDatePicker() {
 		$('.shift-trade-add-previous-date').button({
@@ -152,7 +151,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		Teleopti.MyTimeWeb.Request.RequestDetail.HideEditSection();
 		_initDatePicker();
 		$('#Request-add-shift-trade').show();
-		_positionTimeLineHourTexts();
+		//_positionTimeLineHourTexts();
 	}
 
 	function _hideShiftTradeWindow() {
@@ -175,33 +174,34 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 	}
 
 	function _initAgentNameOverflow() {
-	    $('.shift-trade-agent-name')
+		$('.shift-trade-agent-name')
 			.hoverIntent({
-			    interval: 200,
-			    timeout: 200,
-			    over: function () {
-			        if ($(this).hasHiddenContent())
-			            $(this).addClass('shift-trade-agent-name-hover');
-			    },
-			    out: function () {
-			        $(this).removeClass('shift-trade-agent-name-hover');
-			    }
+				interval: 200,
+				timeout: 200,
+				over: function () {
+					if ($(this).hasHiddenContent())
+						$(this).addClass('shift-trade-agent-name-hover');
+				},
+				out: function () {
+					$(this).removeClass('shift-trade-agent-name-hover');
+				}
 			})
 	    ;
 	}
 
 	return {
 		Init: function () {
-		    _init();
+			_init();
 		},
 		SetShiftTradeRequestDate: function (date) {
-		    setShiftTradeRequestDate(date);
+			setShiftTradeRequestDate(date);
 		},
 		OpenAddShiftTradeWindow: function () {
-		    _openAddShiftTradeWindow();
+			vm.loadPeriod();
+			_openAddShiftTradeWindow();
 		},
 		HideShiftTradeWindow: function () {
-		    _hideShiftTradeWindow();
+			_hideShiftTradeWindow();
 		}
 	};
 
