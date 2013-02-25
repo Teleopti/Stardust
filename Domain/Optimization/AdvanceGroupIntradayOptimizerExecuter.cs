@@ -95,7 +95,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 				{
 					foreach (var scheduleDayPro in scheduleMatrixPro.EffectivePeriodDays.OrderBy(x => x.Day))
 					{
-
 						if (scheduleMatrixPro.UnlockedDays.Contains(scheduleDayPro))
 							unLockedDays.Add(scheduleDayPro.Day);
 					}
