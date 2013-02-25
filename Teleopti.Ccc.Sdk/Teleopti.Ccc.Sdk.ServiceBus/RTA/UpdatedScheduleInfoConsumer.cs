@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
 				Datasource = message.Datasource,
 				BusinessUnitId = message.BusinessUnitId,
 				PersonId = message.PersonId,
-				Timestamp = DateTime.UtcNow
+				Timestamp = DateTime.Now
 			});
 
             infoMessage = string.Format("Delay Message successfully send to Service Bus where startTime ={0} for person={1} and Business Unit at {2}", startTime, message.PersonId, message.BusinessUnitId);
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
 					Datasource = message.Datasource,
 					BusinessUnitId = message.BusinessUnitId,
 					PersonId = message.PersonId,
-					Timestamp = DateTime.UtcNow
+					Timestamp = DateTime.Now
 				});
 
             infoMessage = string.Format("Delay Message successfully send to Service Bus where startTime ={0} for person={1} and Business Unit at {2}", startTime, message.PersonId, message.BusinessUnitId);
