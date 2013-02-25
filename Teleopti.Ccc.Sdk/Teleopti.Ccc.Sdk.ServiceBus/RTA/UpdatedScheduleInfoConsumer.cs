@@ -13,15 +13,15 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
 		private readonly IServiceBus _serviceBus;
 		private readonly IScheduleProjectionReadOnlyRepository _scheduleProjectionReadOnlyRepository;
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-	    private readonly TeleoptiRtaServiceClient _teleoptiRtaServiceClient;
+        private readonly ITeleoptiRtaService _teleoptiRtaService;
         private readonly static ILog Logger = LogManager.GetLogger(typeof(UpdatedScheduleInfoConsumer));
 
-	    public UpdatedScheduleInfoConsumer(IServiceBus serviceBus, IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository, IUnitOfWorkFactory unitOfWorkFactory, TeleoptiRtaServiceClient teleoptiRtaServiceClient)
+        public UpdatedScheduleInfoConsumer(IServiceBus serviceBus, IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository, IUnitOfWorkFactory unitOfWorkFactory, ITeleoptiRtaService teleoptiRtaService)
 		{
 			_serviceBus = serviceBus;
 			_scheduleProjectionReadOnlyRepository = scheduleProjectionReadOnlyRepository;
 			_unitOfWorkFactory = unitOfWorkFactory;
-	        _teleoptiRtaServiceClient = teleoptiRtaServiceClient;
+	        _teleoptiRtaService = teleoptiRtaService;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), 
@@ -47,8 +47,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
 			{
 			    infoMessage = string.Format("Calling TeleoptiRtaService for person={0} at {1}", message.PersonId, DateTime.UtcNow);
                 Logger.Info(infoMessage);
-                
-                _teleoptiRtaServiceClient.GetUpdatedScheduleChange(message.PersonId, message.BusinessUnitId, DateTime.UtcNow);
+
+                _teleoptiRtaService.GetUpdatedScheduleChange(message.PersonId, message.BusinessUnitId, DateTime.UtcNow);
 
                 infoMessage = string.Format("Message successfully send to TeleoptiRtaService for person={0} at {1}", message.PersonId, DateTime.UtcNow);
                 Logger.Info(infoMessage);
@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
                 infoMessage = string.Format("Calling TeleoptiRtaService for person={0} at {1}", message.PersonId, DateTime.UtcNow);
                 Logger.Info(infoMessage);
 
-				_teleoptiRtaServiceClient.GetUpdatedScheduleChange(message.PersonId, message.BusinessUnitId, DateTime.UtcNow);
+                _teleoptiRtaService.GetUpdatedScheduleChange(message.PersonId, message.BusinessUnitId, DateTime.UtcNow);
 
                 infoMessage = string.Format("Message successfully send to TeleoptiRtaService for person={0} at {1}", message.PersonId, DateTime.UtcNow);
                 Logger.Info(infoMessage);
