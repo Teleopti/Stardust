@@ -1379,7 +1379,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
 		}
 
 		[Test]
-		public void ShouldNotReturnInpossibleSwaps()
+		public void ShouldNotReturnImpossibleSwaps()
 		{
 
 			var person2 = new Person();
