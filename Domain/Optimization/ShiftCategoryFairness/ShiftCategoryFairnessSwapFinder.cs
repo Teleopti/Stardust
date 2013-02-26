@@ -211,6 +211,7 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
             return returnSuggestion;
         }
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public IEnumerable<IShiftCategoryFairnessSwap> GetAllGroupsToSwap(IList<IShiftCategoryFairnessCompareResult> groupList)
 		{
 			var ret = new HashSet<IShiftCategoryFairnessSwap>();
@@ -260,7 +261,7 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
 		}
 
 
-		private bool hasMoreOfCategory(IShiftCategory shiftCategory, IEnumerable<IShiftCategoryFairnessCompareValue> values)
+		private static bool hasMoreOfCategory(IShiftCategory shiftCategory, IEnumerable<IShiftCategoryFairnessCompareValue> values)
 		{
 			return (from shiftCategoryFairnessCompareValue in values where shiftCategoryFairnessCompareValue.ShiftCategory.Equals(shiftCategory) select shiftCategoryFairnessCompareValue.Original > shiftCategoryFairnessCompareValue.ComparedTo).FirstOrDefault();
 		}
