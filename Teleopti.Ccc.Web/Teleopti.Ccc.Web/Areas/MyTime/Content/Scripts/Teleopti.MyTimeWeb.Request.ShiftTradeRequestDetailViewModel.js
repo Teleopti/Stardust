@@ -48,11 +48,14 @@ Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
 			dataType: "json",
 			type: "POST",
 			success: function (data) {
-				self.pixelPerMinute(72/ (data.TimeLineHours.length*10));
+				var numberOfShownHours = data.TimeLineHours.length;
+				var showNumberRatio = Math.floor(numberOfShownHours / 24);
+				self.pixelPerMinute(72 / (numberOfShownHours * 10));
 				self.hours.removeAll();
 				for (var i = 0; i < data.TimeLineHours.length; i++) {
-
-					self.hours.push(new Teleopti.MyTimeWeb.Request.TimeLineHourViewModel(data.TimeLineHours[i], self));
+					var timelineHour = new Teleopti.MyTimeWeb.Request.TimeLineHourViewModel(data.TimeLineHours[i], self);
+					timelineHour.showLabel(!(i % showNumberRatio));
+					self.hours.push(timelineHour);
 				}
 				self.createMySchedule(data.From);
 				self.createOtherSchedule(data.To);
@@ -92,15 +95,15 @@ ko.utils.extend(Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel.prot
 	}
 });
 
-Teleopti.MyTimeWeb.Request.TimeLineHourViewModel = function(hour, parentViewModel) {
+Teleopti.MyTimeWeb.Request.TimeLineHourViewModel = function (hour, parentViewModel) {
 	var self = this;
 	self.borderSize = 1;
-
+	self.showLabel = ko.observable(true);
 	self.hourText = hour.HourText;
 	self.lengthInMinutes = hour.LengthInMinutesToDisplay;
 	self.leftPx = ko.observable('-8px');
 
-	self.hourWidth = ko.computed(function() {
+	self.hourWidth = ko.computed(function () {
 		return self.lengthInMinutes * parentViewModel.pixelPerMinute() - self.borderSize + 'px';
 	});
 
