@@ -95,14 +95,13 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				return;
 			if (_cancelMe)
 				return;
-			var blackList = new List<IShiftCategoryFairnessSwap>();
 			IList<IShiftCategoryFairnessCompareResult> fairnessResults;
 			if(runPersonal)
 				// if we run per person (in the team,group), not between teams 
-				fairnessResults = _shiftCategoryFairnessAggregateManager.GetPerPersonsAndGroup(persons, optimizationPreferences.Extra.GroupPageOnCompareWith, dateOnly).OrderBy(
+				fairnessResults = _shiftCategoryFairnessAggregateManager.GetPerPersonsAndGroup(persons, optimizationPreferences.Extra.GroupPageOnCompareWith, dateOnly).OrderByDescending(
 						x => x.StandardDeviation).ToList();
 			else
-				fairnessResults = _shiftCategoryFairnessAggregateManager.GetForGroups(persons, optimizationPreferences.Extra.GroupPageOnTeam, dateOnly, selectedDays).OrderBy(
+				fairnessResults = _shiftCategoryFairnessAggregateManager.GetForGroups(persons, optimizationPreferences.Extra.GroupPageOnTeam, dateOnly, selectedDays).OrderByDescending(
 					x => x.StandardDeviation).ToList();
 			fairnessResults = stripOutAllZeros(fairnessResults);
 			// if zero it should be fair
@@ -111,22 +110,16 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				return;
 			var optFairnessOnDate = Resources.FairnessOptimizationOn + dateOnly.ToShortDateString(CultureInfo.CurrentCulture);
 			OnReportProgress(optFairnessOnDate + Resources.FairnessOptimizationValueBefore + diff);
-			//it goes to fast
-			//Thread.Sleep(300);
-            //var swapSuggestion = _shiftCategoryFairnessSwapFinder.GetGroupsToSwap(fairnessResults, blackList);
-            //if (swapSuggestion == null)
-            //    return;
-
+			
 			var swapSuggestionList = _shiftCategoryFairnessSwapFinder.GetAllGroupsToSwap(fairnessResults);
             foreach (var swap in swapSuggestionList)
             {
                 if (backgroundWorker.CancellationPending)
                     return;
-
+				
 				var success = _shiftCategoryFairnessSwapper.TrySwap(swap, dateOnly, matrixListForFairnessOptimization, rollbackService, backgroundWorker, useAverageShiftLengths, optimizationPreferences);
                 if (!success)
                 {
-                    blackList.Add(swap);
                     rollbackService.Rollback();
                 }
                 else
@@ -144,7 +137,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                     if (newdiff >= diff) // not better
                     {
                         OnReportProgress(optFairnessOnDate + Resources.FairnessOptimizationRollingBack);
-                        blackList.Add(swap);
                         // do a rollback (if scheduled we need to resourcecalculate again??)
                         rollbackService.Rollback();
                     }
@@ -153,7 +145,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                         diff = newdiff;
                         OnReportProgress(optFairnessOnDate + Resources.FairnessOptimizationValueAfter + diff);
                         // if we did swap start all over again and we do this day until no more suggestions
-                        blackList = new List<IShiftCategoryFairnessSwap>();
                         rollbackService.ClearModificationCollection();
                     }
                 }

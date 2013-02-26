@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_mocks = new MockRepository();
 			_shiftCategoryFairnessAggregateManager = _mocks.StrictMock<IShiftCategoryFairnessAggregateManager>();
 			_shiftCategoryFairnessSwapper = _mocks.DynamicMock<IShiftCategoryFairnessSwapper>();
-			_shiftCategoryFairnessSwapFinder = _mocks.StrictMock<IShiftCategoryFairnessSwapFinder>();
+			_shiftCategoryFairnessSwapFinder = _mocks.DynamicMock<IShiftCategoryFairnessSwapFinder>();
 			_groupPersonBuilder = _mocks.DynamicMock<IGroupPersonsBuilder>();
 			_target = new ShiftCategoryFairnessOptimizer(_shiftCategoryFairnessAggregateManager, _shiftCategoryFairnessSwapper, _shiftCategoryFairnessSwapFinder,_groupPersonBuilder);
 			_rollbackService = _mocks.DynamicMock<ISchedulePartModifyAndRollbackService>();
@@ -70,11 +70,11 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			var gropPage = new GroupPageLight();
 			_optimizationPreferences.Extra.GroupPageOnTeam = gropPage;
 			var value = new ShiftCategoryFairnessCompareValue { Original = 1 };
-			var compare1 = new ShiftCategoryFairnessCompareResult { StandardDeviation = 0, ShiftCategoryFairnessCompareValues = new List<IShiftCategoryFairnessCompareValue> { value } };
-			var compare2 = new ShiftCategoryFairnessCompareResult { StandardDeviation = 3, ShiftCategoryFairnessCompareValues = new List<IShiftCategoryFairnessCompareValue> { value } };
+			var compare1 = new ShiftCategoryFairnessCompareResult { OriginalMembers = new List<IPerson>(), StandardDeviation = 0, ShiftCategoryFairnessCompareValues = new List<IShiftCategoryFairnessCompareValue> { value } };
+			var compare2 = new ShiftCategoryFairnessCompareResult { OriginalMembers = new List<IPerson>(), StandardDeviation = 3, ShiftCategoryFairnessCompareValues = new List<IShiftCategoryFairnessCompareValue> { value } };
 			var list = new List<IShiftCategoryFairnessCompareResult> {compare1, compare2};
 			Expect.Call(_shiftCategoryFairnessAggregateManager.GetForGroups(persons, gropPage, dateOnly, days)).Return(list);
-			Expect.Call(_shiftCategoryFairnessSwapFinder.GetGroupListOfSwaps(list, new List<IShiftCategoryFairnessSwap>())).Return(new List<IShiftCategoryFairnessSwap>());
+			Expect.Call(_shiftCategoryFairnessSwapFinder.GetAllGroupsToSwap(list)).Return(new List<IShiftCategoryFairnessSwap>());
 			_mocks.ReplayAll();
 			_target.Execute(_bgWorker, persons, days, matrixes, _optimizationPreferences, _rollbackService,true);
 			_mocks.VerifyAll();
@@ -90,12 +90,12 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			var gropPage = new GroupPageLight();
 			_optimizationPreferences.Extra.GroupPageOnTeam = gropPage;
 			var value = new ShiftCategoryFairnessCompareValue { Original = 1 };
-			var compare1 = new ShiftCategoryFairnessCompareResult { StandardDeviation = 0, ShiftCategoryFairnessCompareValues = new List<IShiftCategoryFairnessCompareValue> { value } };
-			var compare2 = new ShiftCategoryFairnessCompareResult { StandardDeviation = 3, ShiftCategoryFairnessCompareValues = new List<IShiftCategoryFairnessCompareValue> { value } };
+			var compare1 = new ShiftCategoryFairnessCompareResult { OriginalMembers = new List<IPerson>(), StandardDeviation = 0, ShiftCategoryFairnessCompareValues = new List<IShiftCategoryFairnessCompareValue> { value } };
+			var compare2 = new ShiftCategoryFairnessCompareResult { OriginalMembers = new List<IPerson>(), StandardDeviation = 3, ShiftCategoryFairnessCompareValues = new List<IShiftCategoryFairnessCompareValue> { value } };
 			var list = new List<IShiftCategoryFairnessCompareResult> { compare1, compare2 };
 			var toSwap = _mocks.DynamicMock<IShiftCategoryFairnessSwap>();
 			Expect.Call(_shiftCategoryFairnessAggregateManager.GetForGroups(persons, gropPage, dateOnly, days)).Return(list);
-            Expect.Call(_shiftCategoryFairnessSwapFinder.GetGroupListOfSwaps(list, new List<IShiftCategoryFairnessSwap>())).Return(new List<IShiftCategoryFairnessSwap> { toSwap });
+            Expect.Call(_shiftCategoryFairnessSwapFinder.GetAllGroupsToSwap(list)).Return(new List<IShiftCategoryFairnessSwap> { toSwap });
 			Expect.Call(_shiftCategoryFairnessSwapper.TrySwap(toSwap, dateOnly, matrixes, _rollbackService, _bgWorker, true,_optimizationPreferences)).Return(false);
 			//Expect.Call(_shiftCategoryFairnessSwapFinder.GetGroupsToSwap(list, new List<IShiftCategoryFairnessSwap> { toSwap })).Return(null);
 			_mocks.ReplayAll();
@@ -113,14 +113,14 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			var gropPage = new GroupPageLight();
 			_optimizationPreferences.Extra.GroupPageOnTeam = gropPage;
 			var value = new ShiftCategoryFairnessCompareValue { Original = 1 };
-			var compare1 = new ShiftCategoryFairnessCompareResult { StandardDeviation = 0, ShiftCategoryFairnessCompareValues = new List<IShiftCategoryFairnessCompareValue> { value } };
-			var compare2 = new ShiftCategoryFairnessCompareResult { StandardDeviation = 3, ShiftCategoryFairnessCompareValues = new List<IShiftCategoryFairnessCompareValue> { value } };
-			var compare3 = new ShiftCategoryFairnessCompareResult { StandardDeviation = 2, ShiftCategoryFairnessCompareValues = new List<IShiftCategoryFairnessCompareValue> { value } };
+			var compare1 = new ShiftCategoryFairnessCompareResult { OriginalMembers = new List<IPerson>(), StandardDeviation = 0, ShiftCategoryFairnessCompareValues = new List<IShiftCategoryFairnessCompareValue> { value } };
+			var compare2 = new ShiftCategoryFairnessCompareResult { OriginalMembers = new List<IPerson>(), StandardDeviation = 3, ShiftCategoryFairnessCompareValues = new List<IShiftCategoryFairnessCompareValue> { value } };
+			var compare3 = new ShiftCategoryFairnessCompareResult { OriginalMembers = new List<IPerson>(), StandardDeviation = 2, ShiftCategoryFairnessCompareValues = new List<IShiftCategoryFairnessCompareValue> { value } };
 			var list = new List<IShiftCategoryFairnessCompareResult> { compare1, compare2 };
 			var list2 = new List<IShiftCategoryFairnessCompareResult> { compare1, compare3 };
 			var toSwap = _mocks.DynamicMock<IShiftCategoryFairnessSwap>();
 			Expect.Call(_shiftCategoryFairnessAggregateManager.GetForGroups(persons, gropPage, dateOnly, days)).Return(list);
-            Expect.Call(_shiftCategoryFairnessSwapFinder.GetGroupListOfSwaps(list, new List<IShiftCategoryFairnessSwap>())).Return(new List<IShiftCategoryFairnessSwap> { toSwap });
+            Expect.Call(_shiftCategoryFairnessSwapFinder.GetAllGroupsToSwap(list)).Return(new List<IShiftCategoryFairnessSwap> { toSwap });
 			Expect.Call(_shiftCategoryFairnessSwapper.TrySwap(toSwap, dateOnly, matrixes, _rollbackService, _bgWorker, true, _optimizationPreferences)).Return(true);
 			//second
 			Expect.Call(_shiftCategoryFairnessAggregateManager.GetForGroups(persons, gropPage, dateOnly, days)).Return(list2);
@@ -130,31 +130,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_mocks.VerifyAll();
 		}
 
-		[Test]
-		public void ShouldAddToBlacklistIfWorse()
-		{
-			var persons = new List<IPerson>();
-			var dateOnly = new DateOnly(2012, 9, 21);
-			var days = new List<DateOnly> { dateOnly };
-			var matrixes = new List<IScheduleMatrixPro>();
-			var gropPage = new GroupPageLight();
-			_optimizationPreferences.Extra.GroupPageOnTeam = gropPage;
-			var value = new ShiftCategoryFairnessCompareValue{Original = 1};
-			var compare1 = new ShiftCategoryFairnessCompareResult { StandardDeviation = 0, ShiftCategoryFairnessCompareValues = new List<IShiftCategoryFairnessCompareValue> { value } };
-			var compare2 = new ShiftCategoryFairnessCompareResult { StandardDeviation = 3, ShiftCategoryFairnessCompareValues = new List<IShiftCategoryFairnessCompareValue> { value } };
-			var compare3 = new ShiftCategoryFairnessCompareResult { StandardDeviation = 4, ShiftCategoryFairnessCompareValues = new List<IShiftCategoryFairnessCompareValue> { value } };
-			var list = new List<IShiftCategoryFairnessCompareResult> { compare1, compare2 };
-			var list2 = new List<IShiftCategoryFairnessCompareResult> { compare1, compare3 };
-			var toSwap = _mocks.DynamicMock<IShiftCategoryFairnessSwap>();
-			Expect.Call(_shiftCategoryFairnessAggregateManager.GetForGroups(persons, gropPage, dateOnly, days)).Return(list);
-            Expect.Call(_shiftCategoryFairnessSwapFinder.GetGroupListOfSwaps(list, new List<IShiftCategoryFairnessSwap>())).Return(new List<IShiftCategoryFairnessSwap>{toSwap});
-			Expect.Call(_shiftCategoryFairnessSwapper.TrySwap(toSwap, dateOnly, matrixes, _rollbackService, _bgWorker, true, _optimizationPreferences)).Return(true);
-			//second
-			Expect.Call(_shiftCategoryFairnessAggregateManager.GetForGroups(persons, gropPage, dateOnly, days)).Return(list2);
-			_mocks.ReplayAll();
-			_target.Execute(_bgWorker, persons, days, matrixes, _optimizationPreferences, _rollbackService,true);
-			_mocks.VerifyAll();
-		}
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldRunForEachGroupPersonWhenPersonal()
 		{
@@ -165,9 +140,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			var gropPage = new GroupPageLight();
 			_optimizationPreferences.Extra.GroupPageOnCompareWith = gropPage;
 			var value = new ShiftCategoryFairnessCompareValue { Original = 1 };
-			var compare1 = new ShiftCategoryFairnessCompareResult { StandardDeviation = 0, ShiftCategoryFairnessCompareValues = new List<IShiftCategoryFairnessCompareValue> { value } };
-			var compare2 = new ShiftCategoryFairnessCompareResult { StandardDeviation = 3, ShiftCategoryFairnessCompareValues = new List<IShiftCategoryFairnessCompareValue> { value } };
-			var compare3 = new ShiftCategoryFairnessCompareResult { StandardDeviation = 4, ShiftCategoryFairnessCompareValues = new List<IShiftCategoryFairnessCompareValue> { value } };
+			var compare1 = new ShiftCategoryFairnessCompareResult { OriginalMembers = new List<IPerson>(), StandardDeviation = 0, ShiftCategoryFairnessCompareValues = new List<IShiftCategoryFairnessCompareValue> { value } };
+			var compare2 = new ShiftCategoryFairnessCompareResult { OriginalMembers = new List<IPerson>(), StandardDeviation = 3, ShiftCategoryFairnessCompareValues = new List<IShiftCategoryFairnessCompareValue> { value } };
+			var compare3 = new ShiftCategoryFairnessCompareResult { OriginalMembers = new List<IPerson>(), StandardDeviation = 4, ShiftCategoryFairnessCompareValues = new List<IShiftCategoryFairnessCompareValue> { value } };
 			var list = new List<IShiftCategoryFairnessCompareResult> { compare1, compare2 };
 			var list2 = new List<IShiftCategoryFairnessCompareResult> { compare1, compare3 };
 			var toSwap = _mocks.DynamicMock<IShiftCategoryFairnessSwap>();
@@ -175,7 +150,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			Expect.Call(_groupPersonBuilder.BuildListOfGroupPersons(dateOnly,persons,false,null)).Return(new List<IGroupPerson>{groupPerson});
 			Expect.Call(_groupPersonBuilder.BuildListOfGroupPersons(dateOnly.AddDays(1), persons, false, null)).Return(new List<IGroupPerson> { groupPerson });
 			Expect.Call(_shiftCategoryFairnessAggregateManager.GetPerPersonsAndGroup(persons, gropPage, dateOnly)).Return(list).IgnoreArguments();
-            Expect.Call(_shiftCategoryFairnessSwapFinder.GetGroupListOfSwaps(list, new List<IShiftCategoryFairnessSwap>())).Return(new List<IShiftCategoryFairnessSwap>{toSwap});
+            Expect.Call(_shiftCategoryFairnessSwapFinder.GetAllGroupsToSwap(list)).Return(new List<IShiftCategoryFairnessSwap>{toSwap});
 			Expect.Call(_shiftCategoryFairnessSwapper.TrySwap(toSwap, dateOnly, matrixes, _rollbackService, _bgWorker, true, _optimizationPreferences)).Return(true);
 			Expect.Call(_shiftCategoryFairnessAggregateManager.GetPerPersonsAndGroup(persons, gropPage, dateOnly)).Return(list2).IgnoreArguments();
 			//Expect.Call(_shiftCategoryFairnessSwapFinder.GetGroupsToSwap(list2, new List<IShiftCategoryFairnessSwap> { toSwap })).Return(null);
@@ -196,7 +171,15 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			var gropPage = new GroupPageLight();
 			_optimizationPreferences.Extra.GroupPageOnCompareWith = gropPage;
 			var compare1 = new ShiftCategoryFairnessCompareResult { StandardDeviation = 0 };
-			var list = new List<IShiftCategoryFairnessCompareResult> { compare1};
+			var compare2 = new ShiftCategoryFairnessCompareResult
+				{
+					ShiftCategoryFairnessCompareValues =
+						new List<IShiftCategoryFairnessCompareValue>
+							{
+								new ShiftCategoryFairnessCompareValue {ComparedTo = 0.0, Original = 0.0}
+							}
+				};
+			var list = new List<IShiftCategoryFairnessCompareResult> { compare1,compare2};
 			
 			var groupPerson = new GroupPerson(persons, dateOnly, "name", null);
 			Expect.Call(_groupPersonBuilder.BuildListOfGroupPersons(dateOnly, persons, false, null)).Return(new List<IGroupPerson> { groupPerson });

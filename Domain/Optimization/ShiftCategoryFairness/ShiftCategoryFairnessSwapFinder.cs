@@ -219,36 +219,38 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
 				foreach (var otherGroup in groupList)
 				{
 					if(otherGroup.Equals(selectedGroup)) continue;
-					foreach (var shiftCategoryFairnessCompareValue in selectedGroup.ShiftCategoryFairnessCompareValues)
+					foreach (var groupOneValue in selectedGroup.ShiftCategoryFairnessCompareValues)
 					{
-						var selectedCat = shiftCategoryFairnessCompareValue.ShiftCategory;
-						foreach (var categoryFairnessCompareValue in otherGroup.ShiftCategoryFairnessCompareValues)
+						var selectedCat = groupOneValue.ShiftCategory;
+						foreach (var groupTwoValue in otherGroup.ShiftCategoryFairnessCompareValues)
 						{
 							
-							if(selectedCat.Equals(categoryFairnessCompareValue.ShiftCategory)) continue;
+							if(selectedCat.Equals(groupTwoValue.ShiftCategory)) continue;
 
 							// trade away something there are too few off
-							if (shiftCategoryFairnessCompareValue.Original < shiftCategoryFairnessCompareValue.ComparedTo)
+							if (groupOneValue.Original < groupOneValue.ComparedTo)
 							{
 								// and the other has too many, no good
 								if (hasMoreOfCategory(selectedCat, otherGroup.ShiftCategoryFairnessCompareValues))
 								{
-									// and the other have too few of what they will trade away
-									if (categoryFairnessCompareValue.ComparedTo > categoryFairnessCompareValue.Original)
-									{
-										// and group one has too many of them, puh
-										if (hasMoreOfCategory(categoryFairnessCompareValue.ShiftCategory, selectedGroup.ShiftCategoryFairnessCompareValues))
-											continue;
-									}
+									continue;
 								}
 							}
-							
+
+							// or the other have too few of what they will trade away
+							if (groupTwoValue.Original < groupTwoValue.ComparedTo )
+							{
+								// and the first has too many, no good
+								if (hasMoreOfCategory(groupTwoValue.ShiftCategory, selectedGroup.ShiftCategoryFairnessCompareValues))
+									continue;
+							}
+
 							ret.Add(new ShiftCategoryFairnessSwap
 								{
 									Group1 = selectedGroup,
 									Group2 = otherGroup,
 									ShiftCategoryFromGroup1 = selectedCat,
-									ShiftCategoryFromGroup2 = categoryFairnessCompareValue.ShiftCategory
+									ShiftCategoryFromGroup2 = groupTwoValue.ShiftCategory
 								});
 						}
 					}
