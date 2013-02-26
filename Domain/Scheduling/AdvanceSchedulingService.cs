@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation;
 using Teleopti.Interfaces.Domain;
 
@@ -65,13 +66,13 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		    var startDate = retrieveStartDate(_schedulingOptions.BlockFinderTypeForAdvanceScheduling, selectedPersonMatrixList,
 		                                      out dayOff, out effectiveDays, out unLockedDays);
 
-		    var selectedPerson =
-			    selectedPersonMatrixList.Select(scheduleMatrixPro => scheduleMatrixPro.Person).Distinct().ToList();
+		    var selectedPerson = selectedPersonMatrixList.Select(scheduleMatrixPro => scheduleMatrixPro.Person).Distinct().ToList();
 
 		    while (startDate != DateOnly.MinValue)
 		    {
 			    //call class that return the teamblock dates for a given date (problem if team members don't have same days off)
-			    var dateOnlyList = _dynamicBlockFinder.ExtractBlockDays(startDate);
+			    var dateOnlyList = _dynamicBlockFinder.ExtractBlockDays(startDate, new GroupPerson(new List<IPerson>( ),new DateOnly(),"",Guid.NewGuid()  ) );
+
 			    var allGroupPersonListOnStartDate = new HashSet<IGroupPerson>();
 
 			    foreach (var person in selectedPerson)
@@ -79,14 +80,14 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				    allGroupPersonListOnStartDate.Add(_groupPersonBuilderForOptimization.BuildGroupPerson(person, startDate));
 			    }
 
-			    foreach (
-				    var fullGroupPerson in allGroupPersonListOnStartDate.GetRandom(allGroupPersonListOnStartDate.Count, true))
+			    foreach (var fullGroupPerson in allGroupPersonListOnStartDate.GetRandom(allGroupPersonListOnStartDate.Count, true))
 			    {
 				    if (!teamSteadyStateHolder.IsSteadyState(fullGroupPerson)) 
 						continue;
 
 				    var groupPersonList = _groupPersonBuilderBasedOnContractTime.SplitTeams(fullGroupPerson, startDate);
-				    foreach (var groupPerson in groupPersonList)
+				    
+                    foreach (var groupPerson in groupPersonList)
 				    {
 					    var groupMatrixList = getScheduleMatrixProList(groupPerson, startDate, allPersonMatrixList);
 					    var restriction = _restrictionAggregator.Aggregate(dateOnlyList, groupPerson, groupMatrixList,
@@ -112,6 +113,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 					    if (_cancelMe)
 						    break;
 				    }
+
+
 				    if (_cancelMe)
 					    break;
 			    }
@@ -124,6 +127,87 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		    _teamScheduling.DayScheduled -= dayScheduled;
 		    return true;
 	    }
+
+
+        public bool Execute2(IDictionary<string, IWorkShiftFinderResult> workShiftFinderResultList,
+                    IList<IScheduleMatrixPro> allPersonMatrixList,
+                    IList<IScheduleMatrixPro> selectedPersonMatrixList, TeamSteadyStateHolder teamSteadyStateHolder)
+        {
+            _teamScheduling.DayScheduled += dayScheduled;
+            List<DateOnly> dayOff, effectiveDays, unLockedDays;
+
+            var startDate = retrieveStartDate(_schedulingOptions.BlockFinderTypeForAdvanceScheduling, selectedPersonMatrixList,
+                                              out dayOff, out effectiveDays, out unLockedDays);
+
+            var selectedPerson = selectedPersonMatrixList.Select(scheduleMatrixPro => scheduleMatrixPro.Person).Distinct().ToList();
+
+            //while (startDate != DateOnly.MinValue)
+            //{
+                //call class that return the teamblock dates for a given date (problem if team members don't have same days off)
+                
+                var allGroupPersonListOnStartDate = new HashSet<IGroupPerson>();
+
+                foreach (var person in selectedPerson)
+                {
+                    allGroupPersonListOnStartDate.Add(_groupPersonBuilderForOptimization.BuildGroupPerson(person, startDate));
+                }
+
+                foreach (var fullGroupPerson in allGroupPersonListOnStartDate.GetRandom(allGroupPersonListOnStartDate.Count, true))
+                {
+                    
+                    if (!teamSteadyStateHolder.IsSteadyState(fullGroupPerson))
+                        continue;
+                    var nextStartDate = startDate;
+                    while (nextStartDate != DateOnly.MinValue)
+                    {
+                        var dateOnlyList = _dynamicBlockFinder.ExtractBlockDays(nextStartDate, fullGroupPerson);
+
+                        var groupPersonList = _groupPersonBuilderBasedOnContractTime.SplitTeams(fullGroupPerson, nextStartDate);
+
+                        foreach (var groupPerson in groupPersonList)
+                        {
+                            var groupMatrixList = getScheduleMatrixProList(groupPerson, nextStartDate, allPersonMatrixList);
+                            var restriction = _restrictionAggregator.Aggregate(dateOnlyList, groupPerson, groupMatrixList,
+                                                                               _schedulingOptions);
+
+                            // (should we cover for max seats here?) ????
+                            var shifts = _workShiftFilterService.Filter(nextStartDate, groupPerson, groupMatrixList, restriction,
+                                                                        _schedulingOptions);
+                            if (shifts == null || shifts.Count <= 0)
+                                continue;
+
+                            var activityInternalData = _skillDayPeriodIntervalDataGenerator.Generate(fullGroupPerson, dateOnlyList);
+                            var bestShiftProjectionCache = _workShiftSelector.SelectShiftProjectionCache(shifts, activityInternalData,
+                                                                                                         _schedulingOptions
+                                                                                                             .WorkShiftLengthHintOption,
+                                                                                                         _schedulingOptions
+                                                                                                             .UseMinimumPersons,
+                                                                                                         _schedulingOptions
+                                                                                                             .UseMaximumPersons);
+
+                            _teamScheduling.Execute(nextStartDate, dateOnlyList, groupMatrixList, groupPerson,
+                                                    bestShiftProjectionCache, unLockedDays, selectedPerson);
+                            if (_cancelMe)
+                                break;
+                        }
+
+                        nextStartDate = getNextDate(dateOnlyList.OrderByDescending(x => x.Date).First(), effectiveDays, dayOff, unLockedDays);
+                    }
+                    
+
+
+                    if (_cancelMe)
+                        break;
+                }
+            //    if (_cancelMe)
+            //        break;
+            //    startDate = getNextDate(dateOnlyList.OrderByDescending(x => x.Date).First(), effectiveDays, dayOff, unLockedDays);
+
+            //}
+
+            _teamScheduling.DayScheduled -= dayScheduled;
+            return true;
+        }
 
 	    void dayScheduled(object sender, SchedulingServiceBaseEventArgs e)
 	    {

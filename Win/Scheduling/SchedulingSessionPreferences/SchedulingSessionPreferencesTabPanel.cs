@@ -747,6 +747,12 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
                 setDataInControls();
             }
         }
+
+        private void btnLevellingPer_Click(object sender, EventArgs e)
+        {
+            //var levelingPanel = new LevellingPerForm();
+            //levelingPanel.Show();
+        }
     }
     
 }

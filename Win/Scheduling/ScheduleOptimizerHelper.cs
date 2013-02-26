@@ -1037,7 +1037,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                                       IList<IScheduleMatrixPro> selectedPersonMatrixList,
 			IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization)
         {
-            var dynamicBlockFinder = new DynamicBlockFinder(schedulingOptions, _stateHolder, selectedPersonMatrixList);
+            var dynamicBlockFinder = new DynamicBlockFinder(schedulingOptions, _stateHolder, selectedPersonMatrixList, groupPersonBuilderForOptimization);
             var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true,
                                                                         schedulingOptions.ConsiderShortBreaks);
             ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService =
@@ -1109,7 +1109,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 IDictionary<string, IWorkShiftFinderResult> schedulingResults = new Dictionary<string, IWorkShiftFinderResult>();
 
                 advanceSchedulingService.DayScheduled += schedulingServiceDayScheduled;
-                advanceSchedulingService.Execute(schedulingResults, allPersonMatrixList, selectedPersonMatrixList, teamSteadyStateHolder);
+                advanceSchedulingService.Execute2(schedulingResults, allPersonMatrixList, selectedPersonMatrixList, teamSteadyStateHolder);
 				advanceSchedulingService.DayScheduled -= schedulingServiceDayScheduled;
 
 				//if (schedulingOptions.RotationDaysOnly)

@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation;
 using Teleopti.Interfaces.Domain;
@@ -126,7 +128,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IPerson selectedPerson,
 			IList<DateOnly> unLockedDays)
 		{
-			var dateOnlyList = _dynamicBlockFinder.ExtractBlockDays(scheduleDate);
+            var dateOnlyList = _dynamicBlockFinder.ExtractBlockDays(scheduleDate, new GroupPerson(new List<IPerson>(), new DateOnly(), "", Guid.NewGuid()));
 			var allGroupPersonListOnStartDate = new HashSet<IGroupPerson>();
 			allGroupPersonListOnStartDate.Add(_groupPersonBuilderForOptimization.BuildGroupPerson(selectedPerson, scheduleDate));
 			
