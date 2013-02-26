@@ -213,7 +213,7 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
 
 		public IEnumerable<IShiftCategoryFairnessSwap> GetAllGroupsToSwap(IList<IShiftCategoryFairnessCompareResult> groupList)
 		{
-			var ret = new List<IShiftCategoryFairnessSwap>();
+			var ret = new HashSet<IShiftCategoryFairnessSwap>();
 			foreach (var selectedGroup in groupList)
 			{
 				foreach (var otherGroup in groupList)
