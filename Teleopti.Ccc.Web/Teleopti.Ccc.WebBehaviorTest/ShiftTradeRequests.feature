@@ -167,6 +167,7 @@ Scenario: When clicking an agent i shift trade list, the other agent's should be
 	And I click agent 'OtherAgent'
 	Then I should see only see OtherAgent's schedule
 
+@ignore
 Scenario: Sending shift trade request closes the Add Shift Trade Request view
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
