@@ -22,9 +22,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 			var templates = new List<IExtendedPreferenceTemplate>();
 			extendedPreferenceTemplateRepository.Stub(x => x.FindByUser(person)).Return(templates);
 
-			var target = new PreferenceTemplateOptionsProvider(loggedOnUser, extendedPreferenceTemplateRepository);
+			var target = new PreferenceTemplatesProvider(loggedOnUser, extendedPreferenceTemplateRepository);
 
-			var result = target.RetrievePreferenceTemplateOptions();
+			var result = target.RetrievePreferenceTemplates();
 
 			result.Should().Be.SameInstanceAs(templates);
 		}

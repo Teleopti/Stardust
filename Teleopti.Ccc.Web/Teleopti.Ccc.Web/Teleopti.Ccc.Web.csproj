@@ -203,7 +203,8 @@
     <Reference Include="System.Configuration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceTemplateOptionsProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Preference\DataProvider\IPreferenceTemplatesProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceTemplatesProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IPossibleShiftTradePersonsProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\PossibleShiftTradePersonsProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IShiftTradeResponseService.cs" />
