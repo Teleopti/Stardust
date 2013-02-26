@@ -152,5 +152,24 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 
 		}
 
+		[When(@"I enter a subject")]
+		public void WhenIEnterASubject()
+		{
+			Pages.Pages.RequestsPage.AddShiftTradeSubject.WaitUntilDisplayed();
+			Pages.Pages.RequestsPage.AddShiftTradeSubject.Value = "A nice subject";
+		}
+
+		[When(@"I enter a message")]
+		public void WhenIEnterAMessage()
+		{
+			Pages.Pages.RequestsPage.AddShiftTradeMessage.WaitUntilDisplayed();
+			Pages.Pages.RequestsPage.AddShiftTradeMessage.Value = "A nice message";
+		}
+		
+		[Then(@"Add Shift Trade Request view should not be visible")]
+		public void ThenAddShiftTradeRequestViewShouldNotBeVisible()
+		{
+			EventualAssert.That(() => Pages.Pages.RequestsPage.AddShiftTradeContainer.DisplayVisible(), Is.False);
+		}
 	}
 }

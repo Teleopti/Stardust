@@ -167,6 +167,27 @@ Scenario: When clicking an agent i shift trade list, the other agent's should be
 	And I click agent 'OtherAgent'
 	Then I should see only see OtherAgent's schedule
 
+Scenario: Sending shift trade request closes the Add Shift Trade Request view
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And OtherAgent have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And I have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 06:00 |
+	| EndTime               | 2030-01-01 16:00 |
+	| Shift category		| Day	           |
+	And OtherAgent have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 08:00 |
+	| EndTime               | 2030-01-01 18:00 |
+	| Shift category		| Day	           |
+	And Current time is '2029-12-27'
+	When I view Add Shift Trade Request for date '2030-01-01'
+	And I click agent 'OtherAgent'
+	And I enter a subject
+	And I enter a message
+	And I click 'send button'
+	Then Add Shift Trade Request view should not be visible
 
 Scenario: Time line should cover scheduled night shift
 	Given I have the role 'Full access to mytime'
