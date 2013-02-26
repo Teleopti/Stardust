@@ -26,6 +26,7 @@ Background:
 	| Name  | Phone |
 	| Color | Green |
 	
+@ignore
 Scenario: View shift
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' have a (read model) shift with

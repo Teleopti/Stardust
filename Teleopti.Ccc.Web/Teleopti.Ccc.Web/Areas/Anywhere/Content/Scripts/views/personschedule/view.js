@@ -1,7 +1,7 @@
 
 define([
 		'knockout',
-		'text!templates/agentschedule/view.html'
+		'text!templates/personschedule/view.html'
 	], function (
 		ko,
 		view

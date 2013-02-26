@@ -34,7 +34,7 @@ define([
 		var events = new ko.subscribable();
 
 		events.subscribe(function (agentId) {
-			navigation.GotoAgentSchedule(agentId, teamSchedule.SelectedDate().format('YYYYMMDD'));
+			navigation.GotoPersonSchedule(agentId, teamSchedule.SelectedDate().format('YYYYMMDD'));
 		}, null, "gotoagent");
 
 		return {

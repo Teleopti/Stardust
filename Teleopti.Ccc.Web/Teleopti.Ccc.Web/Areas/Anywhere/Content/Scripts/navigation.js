@@ -3,11 +3,11 @@ define([
 	], function (
 	) {
 		return {
-			GotoAgentSchedule: function (id, date) {
+			GotoPersonSchedule: function (id, date) {
 				if (date)
-					window.location.hash = 'agentschedule/' + id + '/' + date;
+					window.location.hash = 'personschedule/' + id + '/' + date;
 				else
-					window.location.hash = 'agentschedule/' + id;
+					window.location.hash = 'personschedule/' + id;
 			}
 		};
 	});
