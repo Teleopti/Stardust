@@ -65,16 +65,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should see only see (.*)'s schedule")]
 		public void ThenIShouldSeeOnlySeeOtherAgentSSchedule(string agentName)
 		{
-			EventualAssert.That(() => Pages.Pages.Current.Document.Divs.Filter(QuicklyFind.ByClass("agent")).Select(div => div.IsDisplayed()).Count(), Is.EqualTo(1));
-			EventualAssert.That(() => Pages.Pages.Current.Document.Div(QuicklyFind.ByClass("agent")).Text, Is.StringContaining(agentName));
+			EventualAssert.That(() => Pages.Pages.Current.Document.Divs.Filter(QuicklyFind.ByClass("agent")).Count(div => div.IsDisplayed()), Is.EqualTo(1));
+			EventualAssert.That(() => Pages.Pages.Current.Document.Divs.Filter(QuicklyFind.ByClass("agent")).First(div => div.IsDisplayed()).Text, Is.StringContaining(agentName));
 		}
-
 
 		[Then(@"I should see a possible schedule trade with")]
 		public void ThenIShouldSeeAPossibleScheduleTradeWith(Table table)
 		{
 			var expectedTimes = table.Rows[0][1] + "-" + table.Rows[1][1];
-
 
 			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeScheduleLayers.Any(), Is.True);
 			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeScheduleLayers[0].Title, Contains.Substring(expectedTimes));
