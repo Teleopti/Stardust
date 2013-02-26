@@ -8,6 +8,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
+using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
 using Table = TechTalk.SpecFlow.Table;
 
@@ -338,6 +339,25 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			Pages.Pages.PreferencePage.MustHaveDeleteButton.EventualClick();
 		}
 
+		[Given(@"I have a preference template with")]
+		public void GivenIHaveAPreferenceTemplateWith(Table table)
+		{
+			var preferenceTemplate = table.CreateInstance<PreferenceTemplateConfigurable>();
+			UserFactory.User().Setup(preferenceTemplate);
+		}
+
+		[When(@"I click the templates select box")]
+		public void WhenIClickTheTemplatesSelectBox()
+		{
+			Pages.Pages.PreferencePage.ExtendedPreferenceTemplateSelectBox.Open();
+		}
+
+		[Then(@"I should see these available templates")]
+		public void ThenIShouldSeeTheseAvailableTemplates(Table table)
+		{
+			var templates = table.CreateSet<SingleValue>();
+			templates.ForEach(preference => EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceTemplateSelectBox.Menu.Text, Is.StringContaining(preference.Value)));
+		}
 
 		private class ExtendedPreferenceFields
 		{

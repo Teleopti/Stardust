@@ -35,6 +35,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		[FindBy(Id = "ui-tooltip-add-extended")]
 		public Div ExtendedPreferencePanel;
+		[FindBy(Id = "Preference-template-container")]
+		public SelectBox ExtendedPreferenceTemplateSelectBox;
 		[FindBy(Id = "Preference-extended-preference-container")]
 		public SelectBox ExtendedPreferenceSelectBox;
 		[FindBy(Id = "Preference-extended-start-time-minimum")]

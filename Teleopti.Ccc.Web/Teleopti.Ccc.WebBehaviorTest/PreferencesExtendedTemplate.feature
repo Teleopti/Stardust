@@ -31,7 +31,7 @@ Background:
 	And I have a preference template with 
 	| Field              | Value     |
 	| Name               | template1 |
-	| Preference         | Late      |
+	| Shift Category     | Late      |
 	| Start time minimum | 10:30     |
 	And I have the role 'Access to extended preferences'
 
