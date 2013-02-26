@@ -88,6 +88,7 @@
 {
 	padding-top: 0.3em;
 	max-width: 440px;
+    word-break: break-all;
 }
 .request-edit-section .edit-module-element {
 	position: relative;
