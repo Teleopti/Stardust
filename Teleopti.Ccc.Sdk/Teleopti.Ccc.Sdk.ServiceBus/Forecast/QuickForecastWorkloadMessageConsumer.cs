@@ -60,54 +60,76 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 			using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
 				var jobResult = _jobResultRepository.Get(message.JobId);
+				if (jobResult == null) return;
+				// more work not finished yet
+				jobResult.FinishedOk = false;
+				unitOfWork.PersistAll();
+			}
+
+			using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+			{
+				var jobResult = _jobResultRepository.Get(message.JobId);
 				if(jobResult == null) return;
 				_feedback.SetJobResult(jobResult, _messageBroker);
 
-				_feedback.ReportProgress(2, string.Format(CultureInfo.InvariantCulture, "Loading workload...."));
-							
-				var workload = _workloadRepository.Get(message.WorkloadId);
-				if (workload == null) return;
-				jobResult.AddDetail(new JobResultDetail(DetailLevel.Info, "Loaded workload " + workload.Name, DateTime.UtcNow, null));	
-				//TriggerWorkloadStart();
+				try
+				{
+					var workload = _workloadRepository.Get(message.WorkloadId);
+					if (workload == null) return;
+					jobResult.AddDetail(new JobResultDetail(DetailLevel.Info, "Loaded workload " + workload.Name, DateTime.UtcNow, null));
+
+					var skill = workload.Skill;
+					var scenario = _scenarioRepository.Get(message.ScenarioId);
+					//Load statistic data
+					var statisticHelper = _forecastClassesCreator.CreateStatisticHelper(_repositoryFactory, unitOfWork);
+					var daysWithValidatedStatistics =
+						statisticHelper.GetWorkloadDaysWithValidatedStatistics(message.StatisticPeriod,
+						                                                       workload, scenario,
+						                                                       new List<IValidatedVolumeDay>());
+
+					jobResult.AddDetail(new JobResultDetail(DetailLevel.Info,
+					                                        "Loaded statistics on " + message.StatisticPeriod.ToString(),
+					                                        DateTime.UtcNow, null));
+
+					var outlierWorkloadDayFilter = new OutlierWorkloadDayFilter<ITaskOwner>(workload, _outlierRepository);
+					var taskOwnerDaysWithoutOutliers =
+						outlierWorkloadDayFilter.FilterStatistics(daysWithValidatedStatistics,
+						                                          new[] {message.StatisticPeriod});
+
+					var taskOwnerPeriod = new TaskOwnerPeriod(DateOnly.Today, taskOwnerDaysWithoutOutliers, TaskOwnerPeriodType.Other);
+
+					//Load (or create) workload days
+					// Here we could split it in smaller chunks so we don't lock the tables too long
+					var skillDays = _skillDayRepository.FindRange(message.TargetPeriod, skill, scenario);
+					skillDays = _skillDayRepository.GetAllSkillDays(message.TargetPeriod, skillDays, skill, scenario, true);
+					var calculator = _forecastClassesCreator.CreateSkillDayCalculator(skill, skillDays.ToList(), message.TargetPeriod);
+
+					var workloadDays =
+						_workloadDayHelper.GetWorkloadDaysFromSkillDays(calculator.SkillDays, workload).OfType<ITaskOwner>().ToList();
+					jobResult.AddDetail(new JobResultDetail(DetailLevel.Info, "Loaded skill days on " + message.TargetPeriod,
+					                                        DateTime.UtcNow, null));
+					applyVolumes(workload, taskOwnerPeriod, workloadDays);
+
+					//(Update templates for workload)
+					updateStandardTemplates(workload, statisticHelper, message.TemplatePeriod, message.SmoothingStyle);
+
+					//Create budget forecast (apply standard templates for all days in target)
+					workload.SetDefaultTemplates(workloadDays);
+					jobResult.AddDetail(new JobResultDetail(DetailLevel.Info, "Updated forecast for " + workload.Name, DateTime.UtcNow,
+					                                        null));
+					if (!jobResult.HasError())
+						jobResult.FinishedOk = true;
+				}
+				catch (Exception exception)
+				{
+					jobResult.AddDetail(new JobResultDetail(DetailLevel.Error, "Error occured!", DateTime.UtcNow, exception));
+				}
+				finally
+				{
+					//Save!
+					unitOfWork.PersistAll();
+				}
 				
-				var skill = workload.Skill;
-				var scenario = _scenarioRepository.Get(message.ScenarioId);
-				//Load statistic data
-				var statisticHelper = _forecastClassesCreator.CreateStatisticHelper(_repositoryFactory, unitOfWork);
-				var daysWithValidatedStatistics =
-					statisticHelper.GetWorkloadDaysWithValidatedStatistics(message.StatisticPeriod,
-																			workload, scenario,
-																			new List<IValidatedVolumeDay>());
-				
-				jobResult.AddDetail(new JobResultDetail(DetailLevel.Info, "Loaded statistics...", DateTime.UtcNow, null));
-
-				var outlierWorkloadDayFilter = new OutlierWorkloadDayFilter<ITaskOwner>(workload, _outlierRepository);
-				var taskOwnerDaysWithoutOutliers =
-					outlierWorkloadDayFilter.FilterStatistics(daysWithValidatedStatistics,
-																new[] { message.StatisticPeriod });
-
-				var taskOwnerPeriod = new TaskOwnerPeriod(DateOnly.Today, taskOwnerDaysWithoutOutliers, TaskOwnerPeriodType.Other);
-
-				//Load (or create) workload days
-				var skillDays = _skillDayRepository.FindRange(message.TargetPeriod, skill, scenario);
-				skillDays = _skillDayRepository.GetAllSkillDays(message.TargetPeriod, skillDays, skill, scenario, true);
-				var calculator = _forecastClassesCreator.CreateSkillDayCalculator(skill, skillDays.ToList(), message.TargetPeriod);
-
-				var workloadDays = _workloadDayHelper.GetWorkloadDaysFromSkillDays(calculator.SkillDays, workload).OfType<ITaskOwner>().ToList();
-				jobResult.AddDetail(new JobResultDetail(DetailLevel.Info, "Loaded skill days..", DateTime.UtcNow, null));	
-				applyVolumes(workload, taskOwnerPeriod, workloadDays);
-
-				//(Update templates for workload)
-				updateStandardTemplates(workload, statisticHelper, message.TemplatePeriod, message.SmoothingStyle);
-
-				//Create budget forecast (apply standard templates for all days in target)
-				workload.SetDefaultTemplates(workloadDays);
-				jobResult.AddDetail(new JobResultDetail(DetailLevel.Info, "Updated forecast for " + workload.Name, DateTime.UtcNow, null));	
-				jobResult.FinishedOk = true;
-				//Save!
-				unitOfWork.PersistAll();
-
-				//TriggerWorkloadEnd();
 			}
 		}
 

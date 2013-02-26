@@ -68,6 +68,7 @@ namespace Teleopti.Ccc.Win.Intraday.Reforecast
 			this.listViewWorkloads.TileSize = new System.Drawing.Size(100, 100);
 			this.listViewWorkloads.UseCompatibleStateImageBehavior = false;
 			this.listViewWorkloads.View = System.Windows.Forms.View.Details;
+			this.listViewWorkloads.ColumnClick += ListViewWorkloadsOnColumnClick;
 			// 
 			// tableLayoutPanel1
 			// 
