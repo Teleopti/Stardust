@@ -94,7 +94,8 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
 						var matrix =  getMatrixForPersonOnDay(dateOnly, matrixListForFairnessOptimization, groupOneMember);
 						var restrictionCheck = _optimizationOverLimitByRestrictionDeciderCreator.GetDecider(dateOnly, matrix,
 						                                                                                    optimizationPreferences);
-						if (restrictionCheck.OverLimit().Any()) return false;
+						if (restrictionCheck.OverLimit().Any()) 
+							return false;
 
 						matrix = getMatrixForPersonOnDay(dateOnly, matrixListForFairnessOptimization, groupTwoMember);
 						restrictionCheck = _optimizationOverLimitByRestrictionDeciderCreator.GetDecider(dateOnly, matrix,
