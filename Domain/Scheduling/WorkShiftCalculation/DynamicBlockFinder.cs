@@ -40,55 +40,44 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
             
             //get the matrix which has the start date
             var validMatrix = new List<IScheduleMatrixPro>();
-            foreach (var matrix in _matrixList)
+            foreach (var matrix in _matrixList.Where(x=>groupPerson1.GroupMembers.Contains(x.Person)))
             {
-                foreach (var schdaypro in matrix.EffectivePeriodDays)
+                foreach (var schdaypro in matrix.EffectivePeriodDays  )
                 {
-                    if (schdaypro.Day == startDateOnly)
+                    
+                    if (schdaypro.Day == startDateOnly  && !matrix.GetScheduleDayByKey(startDateOnly).DaySchedulePart().IsScheduled() )
                     {
                         validMatrix.Add( matrix) ;
                     }
                 }
             }
 
-            //create the group person for the matrix
-            //var selectedPerson =
-            //    validMatrix.Select(scheduleMatrixPro => scheduleMatrixPro.Person).Distinct().ToList();
-            //var allGroupPersonListOnStartDate = new HashSet<IGroupPerson>();
-            //foreach (var person in selectedPerson)
-            //{
-            //    allGroupPersonListOnStartDate.Add(_groupPersonBuilderForOptimization.BuildGroupPerson(person, startDateOnly));
-            //}
-           
-            //get the list of matrix from the group person
-             var matrixToSelectFrom = new List<IScheduleMatrixPro>();
-            //foreach (var randomGroupPerson in allGroupPersonListOnStartDate.GetRandom(allGroupPersonListOnStartDate.Count, true))
-            //{
-                foreach (var source in validMatrix.Where(x => groupPerson1.GroupMembers.Contains(x.Person) ).ToList())
-                {
-                    if(_analyzedMatrix.Contains(source)) continue;
-                    matrixToSelectFrom.Add(source);
-                }
-            //}           
+           //var matrixToSelectFrom = new List<IScheduleMatrixPro>();
+           ////remove this code after testing
+           // foreach (var source in validMatrix.Where(x => groupPerson1.GroupMembers.Contains(x.Person) ).ToList())
+           //     {
+           //         if(_analyzedMatrix.Contains(source)) continue;
+           //         matrixToSelectFrom.Add(source);
+           //     }
+         
                
-            //pick a random matrix and add it to processed matrix
+           // //pick a random matrix and add it to processed matrix
 
-            var selectedPeriod = new List<IScheduleDayPro>();
-            foreach (var matrix in matrixToSelectFrom.GetRandom(matrixToSelectFrom.Count, true))
-            {
+           // var selectedPeriod = new List<IScheduleDayPro>();
+           // foreach (var matrix in matrixToSelectFrom.GetRandom(matrixToSelectFrom.Count, true))
+           // {
 
-                //foreach (var schdaypro in matrix.EffectivePeriodDays)
-                //{
-                //    if (schdaypro.Day == startDateOnly)
-                //    {
-                selectedPeriod = new List<IScheduleDayPro>(matrix.EffectivePeriodDays);
-                _analyzedMatrix.Add(matrix);
-                break;
-                //    }
-                //}
-            }
+           //     selectedPeriod = new List<IScheduleDayPro>(matrix.EffectivePeriodDays);
+           //     _analyzedMatrix.Add(matrix);
+           //     break;
+
+           // }
+
 
             var retList = new List<DateOnly>();
+            
+            if (validMatrix.Count == 0) return retList;
+            var selectedPeriod = new List<IScheduleDayPro>(validMatrix[0] .EffectivePeriodDays);
             if (_schedulingOptions.BlockFinderTypeForAdvanceScheduling == BlockFinderType.SchedulePeriod)
             {
                 retList = selectedPeriod.Select(s => s.Day).ToList();
