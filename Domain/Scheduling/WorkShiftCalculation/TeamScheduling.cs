@@ -8,8 +8,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
     public interface ITeamScheduling
     {
 		event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
-        void Execute(DateOnly startDateOfBlock, IList<DateOnly> daysInBlock, IList<IScheduleMatrixPro> matrixList, IGroupPerson groupPerson, IShiftProjectionCache shiftProjectionCache,
-                     IList<DateOnly> unlockedDays, IList<IPerson> selectedPerson);
+        void Execute(IList<DateOnly> daysInBlock, IList<IScheduleMatrixPro> matrixList, IGroupPerson groupPerson, IShiftProjectionCache shiftProjectionCache,
+                     IList<DateOnly> unlockedDays, IList<IPerson> selectedPersons);
     }
 
     public  class TeamScheduling : ITeamScheduling
@@ -27,15 +27,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 		public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "7")]
-		public void  Execute(DateOnly startDateOfBlock, IList<DateOnly  > daysInBlock, IList<IScheduleMatrixPro> matrixList,
-                IGroupPerson groupPerson, IShiftProjectionCache shiftProjectionCache, IList<DateOnly>  unlockedDays, IList<IPerson> selectedPerson )
+		public void  Execute(IList<DateOnly> daysInBlock, IList<IScheduleMatrixPro> matrixList,
+                IGroupPerson groupPerson, IShiftProjectionCache shiftProjectionCache, IList<DateOnly>  unlockedDays, IList<IPerson> selectedPersons)
         {
             if (matrixList == null) throw new ArgumentNullException("matrixList");
 	        if (daysInBlock == null) 
 				return;
             if (shiftProjectionCache == null) return;
             if (unlockedDays == null) return;
-            if (selectedPerson == null) return;
+            if (selectedPersons == null) return;
+
+			var startDateOfBlock = daysInBlock.Min();
 
 	        foreach(var day in daysInBlock )
 	        {
@@ -49,7 +51,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 							if (_cancelMe)
 								continue;
 
-                            if (!selectedPerson.Contains(person)) continue;
+                            if (!selectedPersons.Contains(person)) continue;
                             IPerson tmpPerson = person;
 					        var tempMatrixList = matrixList.Where(scheduleMatrixPro => scheduleMatrixPro.Person == tmpPerson).ToList();
 					        if (tempMatrixList.Any())
