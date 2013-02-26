@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Rows
 			if (DisplayMember == "DailySmoothness")
 			{
 				var skillStaffPeriodOfOneWeek = getSkillStaffPeriodsForOneWeek(cellInfo);
-				return SkillStaffPeriodHelper.SkillPeriodGridSmootheness(skillStaffPeriodOfOneWeek);
+				return SkillStaffPeriodHelper.SkillPeriodGridSmoothness(skillStaffPeriodOfOneWeek);
 			}
 
 			//if (DisplayMember == "HighestDeviationInPeriod")

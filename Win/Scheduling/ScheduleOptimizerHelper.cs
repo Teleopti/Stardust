@@ -562,7 +562,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-		public void ReOptimize(BackgroundWorker backgroundWorker, IList<IScheduleDay> selectedDays, IList<IScheduleMatrixPro> allMatrixes)
+		public void ReOptimize(BackgroundWorker backgroundWorker, IList<IScheduleDay> selectedDays)
         {
             _backgroundWorker = backgroundWorker;
             _scheduledCount = 0;
@@ -627,16 +627,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 				if (optimizerPreferences.General.OptimizationStepFairness)
 					runFairness(selectedDays, tagSetter, selectedPersons, optimizerPreferences);
-            }
-
-
-            if (optimizerPreferences.General.UseShiftCategoryLimitations)
-            {
-				var schedulingOptionsCreator = new SchedulingOptionsCreator();
-				var schedulingOptions = schedulingOptionsCreator.CreateSchedulingOptions(optimizerPreferences);
-
-            	RemoveShiftCategoryBackToLegalState(matrixListForWorkShiftOptimization, backgroundWorker,
-            	                                    optimizerPreferences, schedulingOptions, selectedPeriod, allMatrixes);
             }
 
             //set back

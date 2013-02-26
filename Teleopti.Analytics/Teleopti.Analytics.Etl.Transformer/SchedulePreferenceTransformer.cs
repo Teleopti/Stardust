@@ -167,6 +167,11 @@ namespace Teleopti.Analytics.Etl.Transformer
                 return true;
             }
 
+			if(preferenceRestriction.ActivityRestrictionCollection.Count > 0)
+			{
+				return true;
+			}
+
             return false;
         }
 
@@ -232,6 +237,12 @@ namespace Teleopti.Analytics.Etl.Transformer
             {
                 dataRow["WorkTimeMaximum"] = preferenceRestriction.WorkTimeLimitation.EndTime.Value.TotalMinutes;
             }
+
+			if(preferenceRestriction.ActivityRestrictionCollection.Count > 0)
+			{
+				dataRow["activity_code"] = preferenceRestriction.ActivityRestrictionCollection[0].Activity.Id;
+			}
+
             RestrictionChecker restrictionChecker = new RestrictionChecker(schedulePart);
             PermissionState permissionState = restrictionChecker.CheckPreference();
             if (permissionState == PermissionState.Satisfied)

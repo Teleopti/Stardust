@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
 					{
 						contractTime = contractTime.Add(dayPro.DaySchedulePart().ProjectionService().CreateProjection().ContractTime());
 					}
-					return !tolerance.Contains(contractTime);
+					return !tolerance.ContainsPart(contractTime);
 				}
 			}
 

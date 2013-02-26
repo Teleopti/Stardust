@@ -86,6 +86,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
 
             var result = _target1.Equals(_target2);
             Assert.AreEqual(true, result);
+
+	        var hashSet = new HashSet<IShiftCategoryFairnessSwap> {_target1, _target2};
+			Assert.That(hashSet.Count, Is.EqualTo(1));
         }
 
         [Test]

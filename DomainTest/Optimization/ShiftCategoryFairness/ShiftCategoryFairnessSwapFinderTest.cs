@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness;
@@ -23,6 +25,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
         [SetUp]
         public void Setup()
         {
+			_person.SetId(Guid.NewGuid());
             _shiftCategoryMorning = new ShiftCategory("Morning");
             _shiftCategoryDay = new ShiftCategory("Day");
             _shiftCategoryNight = new ShiftCategory("Night");
@@ -1303,5 +1306,149 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
             Assert.That(result.Contains(thirdItem), Is.True);
             Assert.That(result.Contains(fourthItem), Is.True);
         }
+
+		[Test]
+		public void ShouldReturnAllPossibleSwaps()
+		{
+
+			var person2 = new Person();
+			person2.SetId(Guid.NewGuid());
+			_groupList = new List<IShiftCategoryFairnessCompareResult>
+                             {
+                                 new ShiftCategoryFairnessCompareResult
+                                     {
+                                         ShiftCategoryFairnessCompareValues =
+                                             new List<IShiftCategoryFairnessCompareValue>
+                                                 {
+                                                     new ShiftCategoryFairnessCompareValue
+                                                         {
+                                                             Original = 0.35,
+                                                             ComparedTo = 0.1,
+                                                             ShiftCategory = _shiftCategoryMorning
+                                                         },
+                                                     new ShiftCategoryFairnessCompareValue
+                                                         {
+                                                             Original = 0.15,
+                                                             ComparedTo = 0.15,
+                                                             ShiftCategory = _shiftCategoryDay
+                                                         },
+                                                     new ShiftCategoryFairnessCompareValue
+                                                         {
+                                                             Original = 0.50,
+                                                             ComparedTo = 0.75,
+                                                             ShiftCategory = _shiftCategoryNight
+                                                         }
+                                                 },
+                                         StandardDeviation = 0.15,
+                                         OriginalMembers = new List<IPerson> {person2, person2, person2}
+                                     },
+                                 new ShiftCategoryFairnessCompareResult
+                                     {
+                                         ShiftCategoryFairnessCompareValues =
+                                             new List<IShiftCategoryFairnessCompareValue>
+                                                 {
+                                                     new ShiftCategoryFairnessCompareValue
+                                                         {
+                                                             Original = 0.1,
+                                                             ComparedTo = 0.35,
+                                                             ShiftCategory = _shiftCategoryMorning
+                                                         },
+                                                     new ShiftCategoryFairnessCompareValue
+                                                         {
+                                                             Original = 0.15,
+                                                             ComparedTo = 0.15,
+                                                             ShiftCategory = _shiftCategoryDay
+                                                         },
+                                                     new ShiftCategoryFairnessCompareValue
+                                                         {
+                                                             Original = 0.75,
+                                                             ComparedTo = 0.50,
+                                                             ShiftCategory = _shiftCategoryNight
+                                                         }
+                                                 },
+                                         StandardDeviation = 0.14,
+                                         OriginalMembers = new List<IPerson> {_person, _person, _person}
+                                     }
+                             };
+
+			_blackList = new List<IShiftCategoryFairnessSwap>();
+
+			var result = _target.GetAllGroupsToSwap(_groupList);
+			Assert.That(result.Count(),Is.EqualTo(3));
+			
+		}
+
+		[Test]
+		public void ShouldNotReturnImpossibleSwaps()
+		{
+
+			var person2 = new Person();
+			person2.SetId(Guid.NewGuid());
+			_groupList = new List<IShiftCategoryFairnessCompareResult>
+                             {
+                                 new ShiftCategoryFairnessCompareResult
+                                     {
+                                         ShiftCategoryFairnessCompareValues =
+                                             new List<IShiftCategoryFairnessCompareValue>
+                                                 {
+                                                     new ShiftCategoryFairnessCompareValue
+                                                         {
+                                                             Original = 0.1,
+                                                             ComparedTo = 0.35,
+                                                             ShiftCategory = _shiftCategoryMorning
+                                                         },
+                                                     new ShiftCategoryFairnessCompareValue
+                                                         {
+                                                             Original = 0.15,
+                                                             ComparedTo = 0.20,
+                                                             ShiftCategory = _shiftCategoryDay
+                                                         },
+                                                     new ShiftCategoryFairnessCompareValue
+                                                         {
+                                                             Original = 0.1,
+                                                             ComparedTo = 0.5,
+                                                             ShiftCategory = _shiftCategoryNight
+                                                         }
+                                                 },
+                                         StandardDeviation = 0.15,
+                                         OriginalMembers = new List<IPerson> {person2, person2, person2}
+                                     },
+                                 new ShiftCategoryFairnessCompareResult
+                                     {
+                                         ShiftCategoryFairnessCompareValues =
+                                             new List<IShiftCategoryFairnessCompareValue>
+                                                 {
+                                                     new ShiftCategoryFairnessCompareValue
+                                                         {
+                                                             Original = 0.15,
+                                                             ComparedTo = 0.1,
+                                                             ShiftCategory = _shiftCategoryMorning
+                                                         },
+                                                     new ShiftCategoryFairnessCompareValue
+                                                         {
+                                                             Original = 0.35,
+                                                             ComparedTo = 0.2,
+                                                             ShiftCategory = _shiftCategoryDay
+                                                         },
+                                                     new ShiftCategoryFairnessCompareValue
+                                                         {
+                                                             Original = 0.6,
+                                                             ComparedTo = 0.5,
+                                                             ShiftCategory = _shiftCategoryNight
+                                                         }
+                                                 },
+                                         StandardDeviation = 0.14,
+                                         OriginalMembers = new List<IPerson> {_person, _person, _person}
+                                     }
+                             };
+
+			_blackList = new List<IShiftCategoryFairnessSwap>();
+
+			var result = _target.GetAllGroupsToSwap(_groupList);
+			Assert.That(result.Count(), Is.EqualTo(0));
+
+		}
     }
+
+
 }

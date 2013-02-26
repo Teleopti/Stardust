@@ -116,15 +116,13 @@ namespace Teleopti.Ccc.Win.Reporting
 
 			IList<IScheduledTimeVersusTargetTimeReportData> detailDataList = new List<IScheduledTimeVersusTargetTimeReportData>();
 
-			VirtualSchedulePeriodFinder periodFinder;
-
 			var startDate = DateOnly.MaxValue;
 			var endDate = DateOnly.MinValue;
 			var personDictionary = new Dictionary<IPerson, IList<IVirtualSchedulePeriod>>();
 
 			foreach(var person in model.Persons)
 			{
-				periodFinder = new VirtualSchedulePeriodFinder(person);
+				var periodFinder = new VirtualSchedulePeriodFinder(person);
 				var schedulePeriods = periodFinder.FindVirtualPeriods(model.Period);
 
 				if (schedulePeriods.Count > 0)
@@ -138,7 +136,11 @@ namespace Teleopti.Ccc.Win.Reporting
 					personDictionary.Add(person, schedulePeriods);
 				}
 			}
-			var loadPeriod = new DateOnlyPeriod(startDate, endDate);
+
+			var loadPeriod = new DateOnlyPeriod(DateOnly.MaxValue, DateOnly.MaxValue);
+
+			if(endDate > startDate)
+				loadPeriod = new DateOnlyPeriod(startDate, endDate);
 			var stateHolder = new SchedulerStateHolder(model.Scenario, new DateOnlyPeriodAsDateTimePeriod(loadPeriod,timeZoneInfo), model.Persons);
 			stateHolder.CommonNameDescription.AliasFormat = commonNameDescriptionSetting.AliasFormat;
 			LoadSchedules(unitOfWork, model.Persons, stateHolder);
