@@ -1374,7 +1374,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
 			_blackList = new List<IShiftCategoryFairnessSwap>();
 
 			var result = _target.GetAllGroupsToSwap(_groupList);
-			Assert.That(result.Count(),Is.EqualTo(6));
+			Assert.That(result.Count(),Is.EqualTo(3));
 			
 		}
 
@@ -1435,11 +1435,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
                                                              Original = 0.6,
                                                              ComparedTo = 0.5,
                                                              ShiftCategory = _shiftCategoryNight
-                                                         },
-														 new ShiftCategoryFairnessCompareValue
-                                                         {
-                                                             Original = 0.0,
-                                                             ComparedTo = 0.0
                                                          }
                                                  },
                                          StandardDeviation = 0.14,
