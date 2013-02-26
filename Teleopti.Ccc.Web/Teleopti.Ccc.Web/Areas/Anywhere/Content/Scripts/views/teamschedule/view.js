@@ -35,6 +35,8 @@ define([
 			navigation.GotoPersonSchedule(agentId, teamSchedule.SelectedDate().format('YYYYMMDD'));
 		}, null, "gotoagent");
 
+		var hub = $.connection.teamScheduleHub;
+
 		return {
 			display: function (options) {
 
@@ -54,8 +56,6 @@ define([
 				var previousOffset;
 				var teamScheduleContainer = $('.team-schedule');
 
-				var schedule = $.connection.teamScheduleHub;
-
 				var resize = function () {
 					timeLine.WidthPixels($('.shift').width());
 				};
@@ -72,7 +72,7 @@ define([
 					queryDate.utc();
 
 					teamSchedule.isLoading(true);
-					schedule.server.subscribeTeamSchedule(teamSchedule.SelectedTeam().Id, queryDate.toDate()).fail(function () {
+					hub.server.subscribeTeamSchedule(teamSchedule.SelectedTeam().Id, queryDate.toDate()).fail(function () {
 						window.location.href = 'authentication/signout';
 					}).done(function (schedules) {
 						var currentAgents = agents.Agents();
@@ -190,17 +190,10 @@ define([
 							Resources: resources,
 							Timeline: timeLine,
 							Agents: agents
-						}, $('.team-schedule')[0]);
+						}, options.bindingElement);
 					});
 					
 				});
-//				$.connection.hub.url = 'signalr';
-//				$.connection.hub.start()
-//					.done(function () {
-//					})
-//					.fail(function (error) {
-//						$('.container > .row:first').html('<div class="alert"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>Warning!</strong> ' + error + '.</div>');
-//					});
 
 				teamScheduleContainer.swipeListener({
 					swipeLeft: function () {

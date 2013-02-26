@@ -535,8 +535,9 @@
   <ItemGroup>
     <Content Include="Areas\Anywhere\Content\Scripts\menu.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\view.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\vm.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\agents.js" />
-    <Content Include="Areas\Anywhere\Content\Templates\agentschedule\view.html" />
+    <Content Include="Areas\Anywhere\Content\Templates\personschedule\view.html" />
     <Content Include="Areas\MyTime\Content\Css\StudentAvailability.css" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.js" />
     <Content Include="Areas\MyTime\Content\Images\ajax-loader-small-f8f8f8.gif" />
@@ -822,7 +823,6 @@
     <Content Include="Content\Mobile\jquery.mobile-1.2.0.js" />
     <Content Include="Content\Mobile\jquery.mobile-1.2.0.min.js" />
     <Content Include="Content\signalr\broker-hubs.js" />
-    <Content Include="Content\signalr\signalr-hubs.js" />
     <Content Include="Content\signals\signals.js" />
     <Content Include="Content\signals\signals.min.js" />
     <Content Include="Content\jqueryui.touch-punch\jquery.ui.touch-punch.js" />
