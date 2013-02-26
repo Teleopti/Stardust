@@ -19,6 +19,19 @@ ko.bindingHandlers['class'] = {
 	}
 };
 
+ko.bindingHandlers.hoverToggle = {
+	update: function (element, valueAccessor) {
+		var css = valueAccessor();
+		ko.utils.registerEventHandler(element, "mouseover", function () {
+			ko.utils.toggleDomNodeCssClass(element, ko.utils.unwrapObservable(css), true);
+		});
+
+		ko.utils.registerEventHandler(element, "mouseleave", function () {
+			ko.utils.toggleDomNodeCssClass(element, ko.utils.unwrapObservable(css), false);
+		});
+	}
+};
+
 ko.bindingHandlers.fadeInIf = {
 	update: function (element, valueAccessor, allBindingsAccessor) {
 		var value = valueAccessor(), allBindings = allBindingsAccessor();

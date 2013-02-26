@@ -1,4 +1,7 @@
-﻿
+﻿.hoverBorder {
+	outline: solid 1px black;
+}
+
 .request-body-inner ol
 {
 	list-style: none;
@@ -144,14 +147,15 @@
 }
 .shift-trade-my-schedule-row 
 {
-	top: 4px;
+	margin-top: 4px;
 	height: 34px;
 	position: relative;
 	font-style: italic;
 }
 .shift-trade-person-schedule-row 
 {
-	height: 22px;
+	margin-top: 2px;
+	height: 18px;
 	position: relative;
 }
 .shift-trade-my-schedule
@@ -239,7 +243,7 @@
 	overflow: hidden;
 	white-space: nowrap;
 	width: 150px;
-	height: 19px;
+	height: 18px;
 	background-color: #f8f8f8;
 	float: left; 
 	text-overflow: ellipsis;		
