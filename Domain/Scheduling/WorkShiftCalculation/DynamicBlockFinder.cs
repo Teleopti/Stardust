@@ -52,28 +52,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
                 }
             }
 
-           //var matrixToSelectFrom = new List<IScheduleMatrixPro>();
-           ////remove this code after testing
-           // foreach (var source in validMatrix.Where(x => groupPerson1.GroupMembers.Contains(x.Person) ).ToList())
-           //     {
-           //         if(_analyzedMatrix.Contains(source)) continue;
-           //         matrixToSelectFrom.Add(source);
-           //     }
-         
-               
-           // //pick a random matrix and add it to processed matrix
-
-           // var selectedPeriod = new List<IScheduleDayPro>();
-           // foreach (var matrix in matrixToSelectFrom.GetRandom(matrixToSelectFrom.Count, true))
-           // {
-
-           //     selectedPeriod = new List<IScheduleDayPro>(matrix.EffectivePeriodDays);
-           //     _analyzedMatrix.Add(matrix);
-           //     break;
-
-           // }
-
-
+           
             var retList = new List<DateOnly>();
             
             if (validMatrix.Count == 0) return retList;
@@ -111,13 +90,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
                 }
                 retList = extractedBlock.ToList();
             }
-
-
-
+            
             return  retList;
-            
-            
-        }
+            }
 
         private List<DateOnly > GetDaysOffFromSchedule(IEnumerable<DateOnly> dateOnlyListForFullPeriod )
         {

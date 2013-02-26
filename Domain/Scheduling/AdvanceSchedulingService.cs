@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			    }
 			    if (_cancelMe)
 				    break;
-			    startDate = getNextDate(dateOnlyList.OrderByDescending(x => x.Date).First(), effectiveDays, dayOff, unLockedDays);
+			    startDate = getNextDate(dateOnlyList.OrderByDescending(x => x.Date).First(), effectiveDays);
 
 		    }
 
@@ -157,9 +157,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
                     
                     if (!teamSteadyStateHolder.IsSteadyState(fullGroupPerson))
                         continue;
-                    //var nextStartDate = startDate;
-                    //while (nextStartDate != DateOnly.MinValue)
-                    //{
                     var dateOnlyList = _dynamicBlockFinder.ExtractBlockDays(startDate, fullGroupPerson);
 
                     if (dateOnlyList.Count == 0) continue;
@@ -193,17 +190,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
                             break;
                     }
 
-                        //startDate = getNextDate(dateOnlyList.OrderByDescending(x => x.Date).First(), effectiveDays, dayOff, unLockedDays);
-                    //}
-                    
-
-
                     if (_cancelMe)
                         break;
                 }
                 if (_cancelMe)
                     break;
-                startDate = getNextDate2(startDate, effectiveDays, dayOff, unLockedDays);
+                startDate = getNextDate(startDate, effectiveDays);
 
             }
 
@@ -272,21 +264,11 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			return startDate;
 		}
 
-		private static DateOnly getNextDate(DateOnly dateOnly, List<DateOnly> effectiveDays, List<DateOnly> daysOff, List<DateOnly> unLockedDays)
+		private static DateOnly getNextDate(DateOnly dateOnly, List<DateOnly> effectiveDays)
 		{
-			dateOnly = dateOnly.AddDays(1);
-			while (daysOff.Contains(dateOnly))
-				dateOnly = dateOnly.AddDays(1);
-			return effectiveDays.Contains(dateOnly) && unLockedDays.Contains(dateOnly) ? dateOnly : DateOnly.MinValue;
-		}
-
-        private static DateOnly getNextDate2(DateOnly dateOnly, List<DateOnly> effectiveDays, List<DateOnly> daysOff, List<DateOnly> unLockedDays)
-        {
             dateOnly = dateOnly.AddDays(1);
-            while (daysOff.Contains(dateOnly))
-                dateOnly = dateOnly.AddDays(1);
-            return effectiveDays.Contains(dateOnly) && unLockedDays.Contains(dateOnly) ? dateOnly : DateOnly.MinValue;
-        }
+            return effectiveDays.Contains(dateOnly) ? dateOnly : DateOnly.MinValue;
+		}
 
         private static List<IScheduleMatrixPro> getScheduleMatrixProList(IGroupPerson groupPerson, DateOnly startDate, IEnumerable<IScheduleMatrixPro> matrixList)
         {
