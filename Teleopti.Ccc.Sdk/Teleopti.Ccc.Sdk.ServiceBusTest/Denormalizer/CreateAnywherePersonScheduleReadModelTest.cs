@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 	[TestFixture]
 	public class CreateAnywherePersonScheduleReadModelTest
 	{
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
 		public void ShouldConvertMessageToReadModel() {
 			var fromDenormalizedScheduleToReadModel = MockRepository.GenerateMock<IAnywherePersonScheduleFromDenormalizedSchedule>();
 			var target = new CreateAnywherePersonScheduleReadModel(fromDenormalizedScheduleToReadModel, MockRepository.GenerateMock<IAnywherePersonScheduleReadModelRepository>());
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			fromDenormalizedScheduleToReadModel.AssertWasCalled(x => x.Convert(message));
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
 		public void ShouldSaveReadModel()
 		{
 			var fromDenormalizedScheduleToReadModel = MockRepository.GenerateMock<IAnywherePersonScheduleFromDenormalizedSchedule>();
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			anywherePersonScheduleReadModelRepository.AssertWasCalled(x => x.SaveReadModel(anywherePersonScheduleReadModel));
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
 		public void ShouldIgnoreScheduleChangesNotInDefaultScenario()
 		{
 			var fromDenormalizedScheduleToReadModel = MockRepository.GenerateMock<IAnywherePersonScheduleFromDenormalizedSchedule>();
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 	[TestFixture]
 	public class AnywherePersonScheduleFromDenormalizedScheduleTest
 	{
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
 		public void ShouldSetPersonIdToReadModel()
 		{
 			var personId = Guid.NewGuid();
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			result.PersonId.Should().Be.EqualTo(personId);
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
 		public void ShouldSetProjectedLayers() { 
 			var layer = new DenormalizedScheduleProjectionLayer {StartDateTime = new DateTime(2012, 12, 12, 8, 0, 0, DateTimeKind.Utc), EndDateTime = new DateTime(2012, 12, 12, 15, 0, 0, DateTimeKind.Utc), DisplayColor = -3, Name = "Lunch"};
 			var target = new AnywherePersonScheduleFromDenormalizedSchedule();
@@ -90,6 +90,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 		{
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public AnywherePersonScheduleReadModel Convert(DenormalizedSchedule message)
 		{
 			var model = new AnywherePersonScheduleReadModel
@@ -129,6 +130,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			_anywherePersonScheduleReadModelRepository = anywherePersonScheduleReadModelRepository;
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void Consume(DenormalizedSchedule message)
 		{
 			if (!message.IsDefaultScenario) return;
