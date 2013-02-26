@@ -13,10 +13,11 @@ define([
 			//this.TimeLine = data.timeLine;
 
 			self.Id = ko.observable("");
+			self.Date = ko.observable();
 			self.Name = ko.observable("");
 			self.Site = ko.observable("");
 			self.Team = ko.observable("");
-			
+
 			this.SetData = function (data) {
 				self.Id(data.Id);
 				self.Name(data.Name);

@@ -17,20 +17,15 @@ define([
 
 				options.renderHtml(view);
 
-				options.startedPromise.done(function () {
-					var data = {
-						Id: options.id,
-						Name: "Mathias Syenbom",
-						Site: "Moon",
-						Team: "A-Team"
-					};
-					
-					//					hub
-					//						.server
-					//						.subscribePersonScheduleViewModel(options.id, options.date)
-					//						.done(function (data) {
-					personSchedule.SetData(data);
-					//						});
+				personSchedule.Date(moment(options.date, 'YYYYMMDD'));
+
+				options.startedPromise.done(function() {
+					hub
+						.server
+						.subscribePersonScheduleViewModel(options.id, personSchedule.Date().toDate())
+						.done(function(data) {
+							personSchedule.SetData(data);
+						});
 				});
 
 				ko.applyBindings(personSchedule, options.bindingElement);

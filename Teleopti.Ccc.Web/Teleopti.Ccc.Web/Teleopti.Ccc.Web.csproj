@@ -167,6 +167,7 @@
     <Reference Include="System.Configuration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Areas\Anywhere\Core\PersonScheduleHub.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IPossibleShiftTradePersonsProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\PossibleShiftTradePersonsProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IShiftTradeResponseService.cs" />
