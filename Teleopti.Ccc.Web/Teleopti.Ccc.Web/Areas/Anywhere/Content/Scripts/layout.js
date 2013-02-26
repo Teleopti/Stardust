@@ -9,7 +9,7 @@ require([
 		'moment',
 		'momentDatepickerKo',
 		'menu',
-		'signalrHubs',
+		'noext!../../../../signalr/hubs',
 		'noext!application/resources'
 	], function (
 		layoutTemplate,

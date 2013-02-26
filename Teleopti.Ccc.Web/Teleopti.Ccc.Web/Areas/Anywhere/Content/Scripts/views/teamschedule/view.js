@@ -54,7 +54,7 @@ define([
 				var previousOffset;
 				var teamScheduleContainer = $('.team-schedule');
 
-				var schedule = $.connection.scheduleHub;
+				var schedule = $.connection.teamScheduleHub;
 
 				var resize = function () {
 					timeLine.WidthPixels($('.shift').width());

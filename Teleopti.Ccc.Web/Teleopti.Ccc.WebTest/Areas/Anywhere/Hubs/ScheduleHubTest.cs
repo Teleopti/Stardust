@@ -14,13 +14,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 	public class ScheduleHubTest
 	{
 		private IPersonScheduleDayReadModelRepository personScheduleDayReadModelRepository;
-		private ScheduleHub hub;
+		private TeamScheduleHub hub;
 
 		[SetUp]
 		public void Setup()
 		{
 			personScheduleDayReadModelRepository = MockRepository.GenerateMock<IPersonScheduleDayReadModelRepository>();
-			hub = new ScheduleHub(personScheduleDayReadModelRepository);
+			hub = new TeamScheduleHub(personScheduleDayReadModelRepository);
 		}
 
 		[Test]

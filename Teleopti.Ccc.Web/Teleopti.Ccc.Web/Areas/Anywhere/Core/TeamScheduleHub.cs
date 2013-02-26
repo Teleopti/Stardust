@@ -10,12 +10,12 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 {
-	[HubName("scheduleHub")]
-	public class ScheduleHub : Hub
+	[HubName("teamScheduleHub")]
+	public class TeamScheduleHub : Hub
 	{
 		private readonly IPersonScheduleDayReadModelRepository _personScheduleDayReadModelRepository;
 		
-		public ScheduleHub(IPersonScheduleDayReadModelRepository personScheduleDayReadModelRepository)
+		public TeamScheduleHub(IPersonScheduleDayReadModelRepository personScheduleDayReadModelRepository)
 		{
 			_personScheduleDayReadModelRepository = personScheduleDayReadModelRepository;
 		}

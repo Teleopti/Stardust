@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterModule(new AutofacWebTypesModuleFromRepository20111123());
 			builder.RegisterType<CurrentHttpContext>().As<ICurrentHttpContext>().SingleInstance();
 
-			builder.RegisterType<ScheduleHub>().EnableClassInterceptors();
+			builder.RegisterType<TeamScheduleHub>().EnableClassInterceptors();
 			builder.RegisterType<InterceptorPipelineModule>().As<IHubPipelineModule>();
 
 			builder.RegisterFilterProvider();
