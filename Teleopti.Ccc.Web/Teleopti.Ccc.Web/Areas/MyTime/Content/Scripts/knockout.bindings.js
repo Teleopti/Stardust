@@ -20,10 +20,16 @@ ko.bindingHandlers['class'] = {
 };
 
 ko.bindingHandlers.hoverToggle = {
-	update: function (element, valueAccessor) {
+	init: function (element, valueAccessor, allBindingsAccessor) {
 		var css = valueAccessor();
 		ko.utils.registerEventHandler(element, "mouseover", function () {
-			ko.utils.toggleDomNodeCssClass(element, ko.utils.unwrapObservable(css), true);
+			var hoverIf = allBindingsAccessor().hoverIf;
+			if (hoverIf === undefined) {
+				hoverIf = true;
+			}
+			if (hoverIf) {
+				ko.utils.toggleDomNodeCssClass(element, ko.utils.unwrapObservable(css), true);
+			}
 		});
 
 		ko.utils.registerEventHandler(element, "mouseleave", function () {
