@@ -24,7 +24,7 @@
 			</div>
 		</div>
 		<div data-bind="foreach: possibleTradeSchedules">
-			<div class="shift-trade-person-schedule-row">
+			<div class="shift-trade-person-schedule-row agent" data-bind="visible: isVisible, click: $parent.chooseAgent">
 				<span class="shift-trade-agent-name" data-bind="text: agentName"></span>
 				<div class="shift-trade-possible-trade-schedule" data-bind="foreach: $data.layers">
 					<span class="shift-trade-layer ui-corner-all" data-bind="style: { left : leftPx, backgroundColor : backgroundColor, paddingLeft : paddingLeft}, attr: {'title' : title}, css:{ striped : $parent.showDayOffStyle(), dayoff : $parent.showDayOffStyle() }">

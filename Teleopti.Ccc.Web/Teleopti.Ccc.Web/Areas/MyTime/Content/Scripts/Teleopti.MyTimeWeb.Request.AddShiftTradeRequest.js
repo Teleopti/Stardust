@@ -51,6 +51,14 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			self.possibleTradeSchedules(mappedPersonsSchedule);
 		};
 
+		self.chooseAgent = function (agent) {
+			//hide all agents
+			$.each(self.possibleTradeSchedules(), function (index, value) {
+				value.isVisible(false);
+			});
+			agent.isVisible(true);
+		};
+
 		self._createTimeLine = function (hours) {
 			var arrayMap = ko.utils.arrayMap(hours, function (hour) {
 				return new Teleopti.MyTimeWeb.Request.TimeLineHourViewModel(hour, self);

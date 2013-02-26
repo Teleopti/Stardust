@@ -62,6 +62,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			EventualAssert.That(() => Pages.Pages.RequestsPage.MyScheduleLayers[0].Title, Contains.Substring(expectedTimes));
 		}
 
+		[Then(@"I should see only see (.*)'s schedule")]
+		public void ThenIShouldSeeOnlySeeOtherAgentSSchedule(string agentName)
+		{
+			EventualAssert.That(() => Pages.Pages.Current.Document.Divs.Filter(QuicklyFind.ByClass("agent")).Select(div => div.IsDisplayed()).Count(), Is.EqualTo(1));
+			EventualAssert.That(() => Pages.Pages.Current.Document.Div(QuicklyFind.ByClass("agent")).Text, Is.StringContaining(agentName));
+		}
+
+
 		[Then(@"I should see a possible schedule trade with")]
 		public void ThenIShouldSeeAPossibleScheduleTradeWith(Table table)
 		{

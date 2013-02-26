@@ -127,7 +127,7 @@ Teleopti.MyTimeWeb.Request.LayerViewModel = function(layer, minutesSinceTimeLine
 	});
 };
 
-Teleopti.MyTimeWeb.Request.PersonScheduleViewModel = function(layers, scheduleObject) {
+Teleopti.MyTimeWeb.Request.PersonScheduleViewModel = function (layers, scheduleObject) {
 	var self = this;
 	var minutesSinceTimeLineStart = 0;
 	var agentName = '';
@@ -140,12 +140,13 @@ Teleopti.MyTimeWeb.Request.PersonScheduleViewModel = function(layers, scheduleOb
 		hasUnderlyingDayOff = scheduleObject.HasUnderlyingDayOff;
 	}
 
+	self.isVisible = ko.observable(true);
 	self.agentName = agentName;
 	self.layers = layers;
 	self.minutesSinceTimeLineStart = minutesSinceTimeLineStart;
 	self.dayOffText = dayOffText;
 	self.hasUnderlyingDayOff = ko.observable(hasUnderlyingDayOff);
-	self.showDayOffStyle = function() {
+	self.showDayOffStyle = function () {
 		if (self.hasUnderlyingDayOff() == true | self.dayOffText.length > 0) {
 			return true;
 		}

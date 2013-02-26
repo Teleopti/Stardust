@@ -24,7 +24,6 @@ Background:
 	And OtherAgent has a person period with
 	| Field      | Value      |
 	| Start date | 2012-06-18 |
-
 	And there are shift categories
 	| Name  |
 	| Day   |
@@ -139,6 +138,35 @@ Scenario: Time line should cover all scheduled shifts
 	And Current time is '2029-12-27'
 	When I view Add Shift Trade Request for date '2030-01-01'
 	Then I should see the time line hours span from '6' to '18'
+
+Scenario: When clicking an agent i shift trade list, the other agent's should be hidden
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And OtherAgent have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And OtherAgent2 have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And OtherAgent2 has a person period with
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
+	And I have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 06:00 |
+	| EndTime               | 2030-01-01 16:00 |
+	| Shift category		| Day	           |
+	And OtherAgent2 have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 07:00 |
+	| EndTime               | 2030-01-01 20:00 |
+	| Shift category		| Day	           |
+	And OtherAgent have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 08:00 |
+	| EndTime               | 2030-01-01 18:00 |
+	| Shift category		| Day	           |
+	And Current time is '2029-12-27'
+	When I view Add Shift Trade Request for date '2030-01-01'
+	And I click agent 'OtherAgent'
+	Then I should see only see OtherAgent's schedule
+
 
 Scenario: Time line should cover scheduled night shift
 	Given I have the role 'Full access to mytime'
