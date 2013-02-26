@@ -9,7 +9,7 @@ require([
 		'moment',
 		'momentDatepickerKo',
 		'menu',
-		'noext!../../../../signalr/hubs',
+		'subscriptions',
 		'noext!application/resources'
 	], function (
 		layoutTemplate,
@@ -21,7 +21,7 @@ require([
 		moment,
 		datepicker,
 		menuViewModel,
-		signalrHubs,
+		subscriptions,
 		resources) {
 
 		var currentView;
@@ -40,7 +40,7 @@ require([
 			routeInfo.startedPromise = startedPromise;
 
 			routeInfo.bindingElement = placeHolder[0];
-			
+
 			if (currentView && currentView.dispose)
 				currentView.dispose();
 
@@ -153,8 +153,7 @@ require([
 		}
 
 		function _initSignalR() {
-			$.connection.hub.url = 'signalr';
-			startedPromise = $.connection.hub.start();
+			startedPromise = subscriptions.start();
 			startedPromise.fail(function () {
 				$('.container > .row:first').html('<div class="alert"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>Warning!</strong> ' + error + '.</div>');
 			});

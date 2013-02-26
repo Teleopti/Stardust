@@ -1,5 +1,10 @@
 using System;
+using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
+using System.Threading;
+using Microsoft.AspNet.SignalR;
+using Microsoft.AspNet.SignalR.Hubs;
 using NUnit.Framework;
 using Newtonsoft.Json.Linq;
 using Rhino.Mocks;
@@ -11,7 +16,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 {
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable"), TestFixture]
-	public class ScheduleHubTest
+	public class TeamScheduleHubTest
 	{
 		private IPersonScheduleDayReadModelRepository personScheduleDayReadModelRepository;
 		private TeamScheduleHub hub;
@@ -36,10 +41,21 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 
 			personScheduleDayReadModelRepository.Stub(x => x.ForTeam(period.ChangeEndTime(TimeSpan.FromHours(25)), teamId)).Return(new[] { model });
 
-			var result = hub.SubscribeTeamSchedule(teamId, period.StartDateTime);
-			JObject shift = (JObject) result.Single();
-			shift["EmploymentNumber"].Value<string>().Should().Be.EqualTo("137577");
-			((JArray)shift["Projection"])[0]["Title"].Value<string>().Should().Be.EqualTo("Phone");
+			bool called = false;
+			dynamic o = new ExpandoObject();
+			o.incomingTeamSchedule = new Action<IEnumerable<object>>(result =>
+				{
+					called = true;
+					JObject shift = (JObject)result.Single();
+					shift["EmploymentNumber"].Value<string>().Should().Be.EqualTo("137577");
+					((JArray)shift["Projection"])[0]["Title"].Value<string>().Should().Be.EqualTo("Phone");
+				});
+			hub.Groups = MockRepository.GenerateMock<IGroupManager>();
+			hub.Context = new HubCallerContext(MockRepository.GenerateMock<Microsoft.AspNet.SignalR.IRequest>(),"connectionid");
+			hub.Clients.Caller = o;
+			hub.SubscribeTeamSchedule(teamId,period.StartDateTime);
+
+			called.Should().Be.True();
 		}
 
 		[TearDown]

@@ -36,6 +36,7 @@ require.config({
 		'signalr': ['jquery'],
 		// wtf!
 		'Areas/Anywhere/Content/Scripts/../../../../signalr/hubs?noext=1&noext=1': ['jquery', 'signalr'],
+		'Areas/Anywhere/Content/Scripts/../../../../signalr/hubs?noext=1': ['jquery', 'signalr'],
 		
 		'momentLanguages': ['moment'],
 		'momentDatepicker': ['momentLanguages'],

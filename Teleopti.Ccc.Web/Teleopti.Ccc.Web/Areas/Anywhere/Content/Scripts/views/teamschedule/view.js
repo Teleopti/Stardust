@@ -5,6 +5,7 @@ define([
 		'navigation',
 		'swipeListener',
 		'moment',
+		'subscriptions',
 		'views/teamschedule/vm',
 		'views/teamschedule/timeline',
 		'views/teamschedule/agent',
@@ -17,6 +18,7 @@ define([
 		navigation,
 		swipeListener,
 		momentX,
+		subscriptions,
 		teamScheduleViewModel,
 		timeLineViewModel,
 		agentViewModel,
@@ -34,8 +36,6 @@ define([
 		events.subscribe(function (agentId) {
 			navigation.GotoPersonSchedule(agentId, teamSchedule.SelectedDate().format('YYYYMMDD'));
 		}, null, "gotoagent");
-
-		var hub = $.connection.teamScheduleHub;
 
 		return {
 			display: function (options) {
@@ -65,54 +65,56 @@ define([
 					.bind('orientationchange', resize)
 					.ready(resize);
 
-
 				var initialLoad = true;
-				var loadSchedules = function () {
+				var loadSchedules = function() {
 					var queryDate = teamSchedule.SelectedDate().clone();
 					queryDate.utc();
 
 					teamSchedule.isLoading(true);
-					hub.server.subscribeTeamSchedule(teamSchedule.SelectedTeam().Id, queryDate.toDate()).fail(function () {
-						window.location.href = 'authentication/signout';
-					}).done(function (schedules) {
-						var currentAgents = agents.Agents();
 
-						var dateClone = teamSchedule.SelectedDate().clone();
-						for (var i = 0; i < schedules.length; i++) {
-							for (var j = 0; j < currentAgents.length; j++) {
-								if (currentAgents[j].Id == schedules[i].Id) {
-									currentAgents[j].AddLayers(schedules[i].Projection, timeLine, dateClone);
-									currentAgents[j].AddContractTime(schedules[i].ContractTimeMinutes);
-									currentAgents[j].AddWorkTime(schedules[i].WorkTimeMinutes);
-									break;
+					subscriptions.subscribeTeamSchedule(
+						teamSchedule.SelectedTeam().Id,
+						queryDate.toDate(),
+						function(schedules) {
+							var currentAgents = agents.Agents();
+
+							var dateClone = teamSchedule.SelectedDate().clone();
+							for (var i = 0; i < schedules.length; i++) {
+								for (var j = 0; j < currentAgents.length; j++) {
+									if (currentAgents[j].Id == schedules[i].Id) {
+										currentAgents[j].AddLayers(schedules[i].Projection, timeLine, dateClone);
+										currentAgents[j].AddContractTime(schedules[i].ContractTimeMinutes);
+										currentAgents[j].AddWorkTime(schedules[i].WorkTimeMinutes);
+										break;
+									}
 								}
 							}
-						}
 
-						currentAgents.sort(function (a, b) {
-							var firstStartMinutes = a.FirstStartMinute();
-							var secondStartMinutes = b.FirstStartMinute();
-							return firstStartMinutes == secondStartMinutes ? (a.LastEndMinute() == b.LastEndMinute() ? 0 : a.LastEndMinute() < b.LastEndMinute() ? -1 : 1) : firstStartMinutes < secondStartMinutes ? -1 : 1;
+							currentAgents.sort(function(a, b) {
+								var firstStartMinutes = a.FirstStartMinute();
+								var secondStartMinutes = b.FirstStartMinute();
+								return firstStartMinutes == secondStartMinutes ? (a.LastEndMinute() == b.LastEndMinute() ? 0 : a.LastEndMinute() < b.LastEndMinute() ? -1 : 1) : firstStartMinutes < secondStartMinutes ? -1 : 1;
+							});
+
+							agents.Agents.valueHasMutated();
+							timeLine.CalculateTimes();
+
+							teamSchedule.isLoading(false);
+
+							if (initialLoad) {
+								teamSchedule.SelectedTeam.subscribe(function() {
+									loadPeople();
+								});
+
+								teamSchedule.SelectedDate.subscribe(function() {
+									loadAvailableTeams();
+								});
+								initialLoad = false;
+							}
+
+							resize();
 						});
 
-						agents.Agents.valueHasMutated();
-						timeLine.CalculateTimes();
-
-						teamSchedule.isLoading(false);
-
-						if (initialLoad) {
-							teamSchedule.SelectedTeam.subscribe(function () {
-								loadPeople();
-							});
-
-							teamSchedule.SelectedDate.subscribe(function () {
-								loadAvailableTeams();
-							});
-							initialLoad = false;
-						}
-
-						resize();
-					});
 				};
 
 				var arrayIndexOf = function (a, fnc, b) {
@@ -181,7 +183,7 @@ define([
 					);
 				};
 
-				options.startedPromise.done(function() {
+				options.startedPromise.done(function () {
 					loadAvailableTeams();
 
 					$(window).ready(function () {
@@ -192,7 +194,7 @@ define([
 							Agents: agents
 						}, options.bindingElement);
 					});
-					
+
 				});
 
 				teamScheduleContainer.swipeListener({

@@ -116,7 +116,7 @@
     <Compile Include="Areas\Start\Core\Authentication\ViewModelFactory\BusinessUnitsViewModelFactoryTest.cs" />
     <Compile Include="Areas\Start\Core\AuthenticationModelBinderTest.cs" />
     <Compile Include="Areas\Anywhere\Controllers\PersonControllerTest.cs" />
-    <Compile Include="Areas\Anywhere\Hubs\ScheduleHubTest.cs" />
+    <Compile Include="Areas\Anywhere\Hubs\TeamScheduleHubTest.cs" />
     <Compile Include="Areas\Anywhere\AnywhereAreaRegistrationTest.cs" />
     <Compile Include="Areas\Anywhere\Controllers\ApplicationControllerTest.cs" />
     <Compile Include="Areas\MobileReports\Core\DefinedReportsTest.cs" />
