@@ -10,6 +10,19 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
+	public interface IAdvanceGroupDayOffOptimizer
+	{
+		bool Execute(IScheduleMatrixPro matrix,
+									 IList<IScheduleMatrixPro> allMatrixes,
+									 ISchedulingOptions schedulingOptions,
+									 IOptimizationPreferences optimizationPreferences,
+									 ITeamSteadyStateMainShiftScheduler teamSteadyStateMainShiftScheduler,
+									 ITeamSteadyStateHolder teamSteadyStateHolder,
+									 IScheduleDictionary scheduleDictionary,
+									 IList<IPerson> selectedPerson,
+									 IList<IScheduleMatrixPro> allPersonMatrixList);
+	}
+
     public class AdvanceGroupDayOffOptimizer : IAdvanceGroupDayOffOptimizer
     {
         private readonly IScheduleMatrixLockableBitArrayConverter _converter;
@@ -91,7 +104,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             WorkingBitArray = _converter.Convert(_daysOffPreferences.ConsiderWeekBefore,
                                                  _daysOffPreferences.ConsiderWeekAfter);
 
-            if (!DataExtractorExecute(matrix)) return false;
+            if (!dataExtractorExecute(matrix)) return false;
 
             IList<DateOnly> daysOffToRemove = _changesTracker.DaysOffRemoved(WorkingBitArray, originalArray, matrix,
                                                                              _daysOffPreferences.ConsiderWeekBefore);
@@ -217,33 +230,28 @@ namespace Teleopti.Ccc.Domain.Optimization
                         
                         var restriction = _restrictionAggregator.Aggregate(dateOnlyList, groupPerson, groupMatrixList,
                                                                            _schedulingOptions);
-                        if (restriction == null) continue;
-                        
+
                         var activityInternalData = _skillDayPeriodIntervalDataGenerator.Generate(fullGroupPerson, dateOnlyList);
 
                         var shifts = _workShiftFilterService.Filter(dateOnly, groupPerson, groupMatrixList, restriction,
                                                                     _schedulingOptions);
                         if (shifts != null && shifts.Count > 0)
                         {
-                            IShiftProjectionCache bestShiftProjectionCache;
-                            if (shifts.Count == 1)
-                                bestShiftProjectionCache = shifts.First();
-                            else
-                                bestShiftProjectionCache = _workShiftSelector.SelectShiftProjectionCache(shifts,
-                                                                                                         activityInternalData,
-                                                                                                         _schedulingOptions.
-                                                                                                             WorkShiftLengthHintOption,
-                                                                                                         _schedulingOptions.
-                                                                                                             UseMinimumPersons,
-                                                                                                         _schedulingOptions.
-                                                                                                             UseMaximumPersons);
+	                        IShiftProjectionCache bestShiftProjectionCache = _workShiftSelector.SelectShiftProjectionCache(shifts,
+	                                                                                                                       activityInternalData,
+	                                                                                                                       _schedulingOptions.
+		                                                                                                                       WorkShiftLengthHintOption,
+	                                                                                                                       _schedulingOptions.
+		                                                                                                                       UseMinimumPersons,
+	                                                                                                                       _schedulingOptions.
+		                                                                                                                       UseMaximumPersons);
 
-                            _teamScheduling.Execute(dateOnly, dateOnlyList, groupMatrixList, groupPerson,
+	                        _teamScheduling.Execute(dateOnlyList, groupMatrixList, groupPerson,
                                                     bestShiftProjectionCache, unLockedDays, selectedPerson);
                             //if (_cancelMe)
                             //    break;
                         }
-                        //if (_cancelMe)
+	                    //if (_cancelMe)
                         //    break;
                     }
                     //if (_cancelMe)
@@ -252,7 +260,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             }
         }
 
-        private bool DataExtractorExecute(IScheduleMatrixPro matrix)
+        private bool dataExtractorExecute(IScheduleMatrixPro matrix)
         {
             IScheduleResultDataExtractor scheduleResultDataExtractor =
                 _scheduleResultDataExtractorProvider.CreatePersonalSkillDataExtractor(matrix);
@@ -292,18 +300,5 @@ namespace Teleopti.Ccc.Domain.Optimization
         }
     }
 
-    public interface IAdvanceGroupDayOffOptimizer
-    {
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "5"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-        bool Execute(IScheduleMatrixPro matrix,
-                                     IList<IScheduleMatrixPro> allMatrixes,
-                                     ISchedulingOptions schedulingOptions,
-                                     IOptimizationPreferences optimizationPreferences,
-                                     ITeamSteadyStateMainShiftScheduler teamSteadyStateMainShiftScheduler,
-                                     ITeamSteadyStateHolder teamSteadyStateHolder,
-                                     IScheduleDictionary scheduleDictionary,
-                                     IList<IPerson> selectedPerson,
-                                     IList<IScheduleMatrixPro> allPersonMatrixList);
-    }
+   
 }
