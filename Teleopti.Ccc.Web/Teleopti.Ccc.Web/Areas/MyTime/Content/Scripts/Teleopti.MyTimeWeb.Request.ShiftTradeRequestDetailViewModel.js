@@ -32,9 +32,6 @@ Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
 			type: "POST",
 			success: function (data) {
 				Teleopti.MyTimeWeb.Request.List.AddItemAtTop(data);
-			},
-			error: function (error) {
-				//todo
 			}
 		});
 	};
@@ -60,9 +57,6 @@ Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
 				self.createMySchedule(data.From);
 				self.createOtherSchedule(data.To);
 
-			},
-			error: function (error) {
-				//todo
 			}
 		});
 	};

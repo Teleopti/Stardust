@@ -13,6 +13,7 @@
 }
 .request-list 
 {
+    padding-top: 1.5em;
 	width: 483px;
 }
 .rtl .request-list
