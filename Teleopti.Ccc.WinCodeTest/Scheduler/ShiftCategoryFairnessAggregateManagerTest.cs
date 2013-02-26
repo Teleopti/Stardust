@@ -212,7 +212,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_mocks.VerifyAll();
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldReturnComparisonSelectedPersonsOnDate()
 		{
 			var date = new DateOnly(2012, 9, 12);
