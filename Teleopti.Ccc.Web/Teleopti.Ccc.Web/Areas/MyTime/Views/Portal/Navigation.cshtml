@@ -84,21 +84,21 @@
 				}
 				@{
 					var times = from t in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, x*30, 0))
-								let value = Html.AttributeEncode(TimeHelper.TimeOfDayFromTimeSpan(t))
-								let text = TimeHelper.TimeOfDayFromTimeSpan(t)
-								select new Option
-									{
-										Value = value,
-										Text = text
-									};
+					            let value = Html.AttributeEncode(TimeHelper.TimeOfDayFromTimeSpan(t))
+					            let text = TimeHelper.TimeOfDayFromTimeSpan(t)
+					            select new Option
+						            {
+							            Value = value,
+							            Text = text
+						            };
 					var timeLengths = from t in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, x*30, 0))
-									  let value = Html.AttributeEncode(TimeHelper.GetLongHourMinuteTimeString(t, CultureInfo.CurrentCulture))
-									  let text = TimeHelper.GetLongHourMinuteTimeString(t, CultureInfo.CurrentCulture)
-									  select new Option
-										  {
-											  Value = value,
-											  Text = text
-										  };
+					                  let value = Html.AttributeEncode(TimeHelper.GetLongHourMinuteTimeString(t, CultureInfo.CurrentCulture))
+					                  let text = TimeHelper.GetLongHourMinuteTimeString(t, CultureInfo.CurrentCulture)
+					                  select new Option
+						                  {
+							                  Value = value,
+							                  Text = text
+						                  };
 				}
 				
 				@if (navSection is StudentAvailabilityNavigationItem)
@@ -144,6 +144,14 @@
 
 					<div id="Preference-add-extended-form" class="displaynone"> 
 						
+						<select id="Preference-template" data-bind="selectbox: TemplateName" title="@Resources.ExtendedPreferencesTemplate" class="ml15 mt5">
+							<option value="">&nbsp;</option>
+							<option value="-">-</option>
+							<option value="Template1">Template1</option>
+							<option value="Template2">Template2</option>
+							<option value="Template3">Template3</option>
+						</select>
+
 						<select id="Preference-extended-preference" data-bind="selectbox: PreferenceId, option-data: {data: 'preference-extended', member: IsTimeInputEnabled}" title="@Resources.Preference" class="ml15 mt5">
 							<option value="" data-preference-extended="true">&nbsp;</option>
 							<option value="-">-</option>
@@ -274,9 +282,20 @@
 								</select>
 							</div>
 						</div>
-						<div class="mt5">
+						<div class="mt10 ml10 floatleft">
+							<input class="clearleftfloat floatleft" type="checkbox" id="Template-save" data-bind="checked: IsSaveAsNewTemplate"/>
+							<label class="floatleft" for="Template-save">
+								@Resources.SaveAsTemplate
+							</label>
+						</div>
+						<div id="template-name-section" class="edit-module-element clearleftfloat" data-bind="visible: IsSaveAsNewTemplate()">
+							<label class="displayblock" for="Template-name-input">@Resources.NewTemplateName</label>
+							<input id="Template-name-input" type="text"/>
+						</div>
+						<div class="clearleftfloat">
 							<button id="Preference-extended-reset" class="ml15 mt10 mb5 floatleft">@Resources.Reset</button>
-							<button id="Preference-extended-apply" class="mr25 mt10 mb5 floatright">@Resources.Apply</button>
+							<button id="Preference-extended-apply" class="mr25 mt10 mb5 floatright" data-bind="visible: !IsSaveAsNewTemplate()">@Resources.Apply</button>
+							<button id="Preference-extended-save-template" class="mr25 mt10 mb5 floatright" data-bind="visible: IsSaveAsNewTemplate()">@Resources.Save</button>
 						</div>
 						<div>
 							<div id="Preference-extended-error" class="error floatleft" data-bind="html: ValidationError"></div>

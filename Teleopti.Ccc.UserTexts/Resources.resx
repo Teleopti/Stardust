@@ -11294,4 +11294,8 @@ These options are activated:
     <value>Errors</value>
     <comment>Errors</comment>
   </data>
+  <data name="NewTemplateName" xml:space="preserve">
+    <value>New Template Name</value>
+    <comment>New Template Name</comment>
+  </data>
 </root>

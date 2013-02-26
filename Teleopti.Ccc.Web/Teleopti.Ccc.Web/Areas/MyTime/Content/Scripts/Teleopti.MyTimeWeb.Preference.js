@@ -149,6 +149,12 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 							.click(function () {
 								_setPreference(ko.toJS(addExtendedPreferenceFormViewModel));
 							});
+						$('#Preference-extended-save-template')
+							.button()
+							.click(function() {
+								//TODO
+
+							});
 
 						ko.applyBindings(addExtendedPreferenceFormViewModel, $("#Preference-add-extended-form")[0]);
 
@@ -157,6 +163,10 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			});
 
 		button.removeAttr('disabled');
+
+		$('#template-name-section input[type=text]')
+			.labeledinput()
+			;
 	}
 
 	function _initMustHaveButton() {
@@ -219,7 +229,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			var dayViewModel = new Teleopti.MyTimeWeb.Preference.DayViewModel(ajax);
 			dayViewModel.ReadElement(element);
 			dayViewModels[dayViewModel.Date] = dayViewModel;
-			if($(element).hasClass("inperiod")) {
+			if ($(element).hasClass("inperiod")) {
 				dayViewModelsInPeriod[dayViewModel.Date] = dayViewModel;
 			}
 			ko.applyBindings(dayViewModel, element);
