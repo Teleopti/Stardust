@@ -84,6 +84,11 @@ namespace Teleopti.Interfaces.Messages.Denormalize
 		private readonly Guid _messageId = Guid.NewGuid();
 
 		/// <summary>
+		/// creates a thingy
+		/// </summary>
+		public DenormalizedScheduleBase() { IsDefaultScenario = true; }
+
+		/// <summary>
 		/// Gets the message identity.
 		/// </summary>
 		public override Guid Identity
