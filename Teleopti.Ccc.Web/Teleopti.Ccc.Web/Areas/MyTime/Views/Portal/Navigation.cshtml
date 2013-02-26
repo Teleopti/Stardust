@@ -147,9 +147,10 @@
 						<select id="Preference-template" data-bind="selectbox: TemplateName" title="@Resources.ExtendedPreferencesTemplate" class="ml15 mt5">
 							<option value="">&nbsp;</option>
 							<option value="-">-</option>
-							<option value="Template1">Template1</option>
-							<option value="Template2">Template2</option>
-							<option value="Template3">Template3</option>
+							@*@foreach (var option in preferenceNavigation.TemplateOptions)
+							{
+								<option value="@option.Value" data-color="@option.Color">@option.Text</option>
+							}*@
 						</select>
 
 						<select id="Preference-extended-preference" data-bind="selectbox: PreferenceId, option-data: {data: 'preference-extended', member: IsTimeInputEnabled}" title="@Resources.Preference" class="ml15 mt5">
