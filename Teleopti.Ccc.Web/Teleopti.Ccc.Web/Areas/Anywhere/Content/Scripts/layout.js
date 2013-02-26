@@ -9,6 +9,7 @@ require([
 		'moment',
 		'momentDatepickerKo',
 		'menu',
+		'signalrHubs',
 		'noext!application/resources'
 	], function (
 		layoutTemplate,
@@ -20,11 +21,13 @@ require([
 		moment,
 		datepicker,
 		menuViewModel,
+		signalrHubs,
 		resources) {
 
 		var currentView;
 		var defaultView = 'teamschedule';
 		var menu = new menuViewModel(resources);
+		var startedPromise;
 
 		function _displayView(routeInfo) {
 
@@ -33,6 +36,8 @@ require([
 			routeInfo.renderHtml = function (html) {
 				placeHolder.html(html);
 			};
+
+			routeInfo.startedPromise = startedPromise;
 
 			if (currentView && currentView.dispose)
 				currentView.dispose();
@@ -145,11 +150,22 @@ require([
 			ko.applyBindings(menu, $('nav')[0]);
 		}
 
+		function _initSignalR() {
+			$.connection.hub.url = 'signalr';
+			startedPromise = $.connection.hub.start();
+			startedPromise.fail(function() {
+				$('.container > .row:first').html('<div class="alert"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>Warning!</strong> ' + error + '.</div>');
+			});
+		}
+
 		_render();
+
+		_initSignalR();
+
 		_setupRoutes();
 		_initializeHasher();
 
 		_initMomentLanguageWithFallback();
-		
+
 		_bindMenu();
 	});

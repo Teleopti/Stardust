@@ -3,7 +3,6 @@ define([
 		'knockout',
 		'jquery',
 		'navigation',
-		'signalrHubs',
 		'swipeListener',
 		'moment',
 		'views/teamschedule/vm',
@@ -16,7 +15,6 @@ define([
 		ko,
 		$,
 		navigation,
-		signalrHubs,
 		swipeListener,
 		momentX,
 		teamScheduleViewModel,
@@ -181,38 +179,28 @@ define([
 						}
 					}
 					);
-					//					
-					//					$.getJSON('Person/PeopleInTeam?' + $.now(), { date: teamSchedule.SelectedDate().toDate().toJSON(), teamId: teamSchedule.SelectedTeam().Id }).success(function (people, textStatus, jqXHR) {
-					//						agents.Agents([]);
-
-					//						var newItems = ko.utils.arrayMap(people, function (s) {
-					//							return new agentViewModel(s);
-					//						});
-					//						agents.AddAgents(newItems);
-
-					//						loadSchedules();
-					//					}).error(function () {
-					//						window.location.href = 'authentication/signout';
-					//					});
 				};
 
-				$.connection.hub.url = 'signalr';
-				$.connection.hub.start()
-					.done(function () {
-						loadAvailableTeams();
+				options.startedPromise.done(function() {
+					loadAvailableTeams();
 
-						$(window).ready(function () {
-							ko.applyBindings({
-								TeamSchedule: teamSchedule,
-								Resources: resources,
-								Timeline: timeLine,
-								Agents: agents
-							}, $('.team-schedule')[0]);
-						});
-					})
-					.fail(function (error) {
-						$('.container > .row:first').html('<div class="alert"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>Warning!</strong> ' + error + '.</div>');
+					$(window).ready(function () {
+						ko.applyBindings({
+							TeamSchedule: teamSchedule,
+							Resources: resources,
+							Timeline: timeLine,
+							Agents: agents
+						}, $('.team-schedule')[0]);
 					});
+					
+				});
+//				$.connection.hub.url = 'signalr';
+//				$.connection.hub.start()
+//					.done(function () {
+//					})
+//					.fail(function (error) {
+//						$('.container > .row:first').html('<div class="alert"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>Warning!</strong> ' + error + '.</div>');
+//					});
 
 				teamScheduleContainer.swipeListener({
 					swipeLeft: function () {
