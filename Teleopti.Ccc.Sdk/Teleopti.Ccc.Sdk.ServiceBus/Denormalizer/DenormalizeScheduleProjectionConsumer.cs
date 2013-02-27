@@ -29,18 +29,20 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 			{
 				if (!message.IsDefaultScenario) return;
 
-				var date = new DateOnly(message.Date);
-				if (!message.IsInitialLoad)
+				foreach (var scheduleDay in message.ScheduleDays)
 				{
-					_scheduleProjectionReadOnlyRepository.ClearPeriodForPerson(
-						new DateOnlyPeriod(date, date), message.ScenarioId, message.PersonId);
-				}
+					var date = new DateOnly(scheduleDay.Date);
+					if (!message.IsInitialLoad)
+					{
+						_scheduleProjectionReadOnlyRepository.ClearPeriodForPerson(
+							new DateOnlyPeriod(date, date), message.ScenarioId, message.PersonId);
+					}
 
-				foreach (var layer in message.Layers)
-				{
-					_scheduleProjectionReadOnlyRepository.AddProjectedLayer(date, message.ScenarioId, message.PersonId, layer);
+					foreach (var layer in scheduleDay.Layers)
+					{
+						_scheduleProjectionReadOnlyRepository.AddProjectedLayer(date, message.ScenarioId, message.PersonId, layer);
+					}
 				}
-
 				unitOfWork.PersistAll();
 			}
 		}

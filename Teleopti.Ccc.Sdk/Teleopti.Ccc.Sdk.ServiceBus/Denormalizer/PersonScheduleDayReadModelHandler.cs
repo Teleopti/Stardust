@@ -1,4 +1,5 @@
-﻿using Rhino.ServiceBus;
+﻿using System.Linq;
+using Rhino.ServiceBus;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -12,7 +13,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 		private readonly IPersonScheduleDayReadModelsCreator _scheduleDayReadModelsCreator;
 		private readonly IPersonScheduleDayReadModelRepository _scheduleDayReadModelRepository;
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "sms")]
 		public PersonScheduleDayReadModelHandler(IUnitOfWorkFactory unitOfWorkFactory,
 									IPersonScheduleDayReadModelsCreator scheduleDayReadModelsCreator,
 									IPersonScheduleDayReadModelRepository scheduleDayReadModelRepository)
@@ -30,20 +30,21 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 
 		private void createReadModel(DenormalizedScheduleBase message)
 		{
+			if (!message.IsDefaultScenario) return;
+			if (message.ScheduleDays == null || message.ScheduleDays.Count == 0) return;
+
 			using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
-				if (!message.IsDefaultScenario) return;
-
-				var date = new DateOnly(message.Date);
-				var dateOnlyPeriod = new DateOnlyPeriod(date, date);
+				var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(message.ScheduleDays.Min(s => s.Date.Date)),
+				                                        new DateOnly(message.ScheduleDays.Max(s => s.Date.Date)));
 
 				if (!message.IsInitialLoad)
 				{
 					_scheduleDayReadModelRepository.ClearPeriodForPerson(dateOnlyPeriod, message.PersonId);
 				}
 
-				var readModel = _scheduleDayReadModelsCreator.GetReadModels(message);
-				if (readModel != null)
+				var readModels = _scheduleDayReadModelsCreator.GetReadModels(message);
+				foreach (var readModel in readModels)
 				{
 					_scheduleDayReadModelRepository.SaveReadModel(readModel);
 				}

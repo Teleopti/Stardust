@@ -77,37 +77,10 @@ namespace Teleopti.Interfaces.Messages.Denormalize
 	}
 
 	/// <summary>
-	/// Denormalized schedule message
+	/// A denormalized schedule day
 	/// </summary>
-	public class DenormalizedScheduleBase : RaptorDomainMessage
+	public class DenormalizedScheduleDay
 	{
-		private readonly Guid _messageId = Guid.NewGuid();
-
-		/// <summary>
-		/// creates a thingy
-		/// </summary>
-		public DenormalizedScheduleBase() { IsDefaultScenario = true; }
-
-		/// <summary>
-		/// Gets the message identity.
-		/// </summary>
-		public override Guid Identity
-		{
-			get { return _messageId; }
-		}
-
-		/// <summary>
-		/// Is this default scenario
-		/// </summary>
-		public bool IsDefaultScenario { get; set; }
-		/// <summary>
-		/// Scenario id
-		/// </summary>
-		public Guid ScenarioId { get; set; }
-		/// <summary>
-		/// Person id
-		/// </summary>
-		public Guid PersonId { get; set; }
 		/// <summary>
 		/// Team id
 		/// </summary>
@@ -116,6 +89,7 @@ namespace Teleopti.Interfaces.Messages.Denormalize
 		/// Site id
 		/// </summary>
 		public Guid SiteId { get; set; }
+		
 		/// <summary>
 		/// Date
 		/// </summary>
@@ -154,6 +128,46 @@ namespace Teleopti.Interfaces.Messages.Denormalize
 		/// </summary>
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 		public ICollection<DenormalizedScheduleProjectionLayer> Layers { get; set; }
+	}
+
+	/// <summary>
+	/// Denormalized schedule message
+	/// </summary>
+	public class DenormalizedScheduleBase : RaptorDomainMessage
+	{
+		private readonly Guid _messageId = Guid.NewGuid();
+
+		/// <summary>
+		/// creates a thingy
+		/// </summary>
+		public DenormalizedScheduleBase() { IsDefaultScenario = true; }
+
+		/// <summary>
+		/// Gets the message identity.
+		/// </summary>
+		public override Guid Identity
+		{
+			get { return _messageId; }
+		}
+
+		/// <summary>
+		/// Is this default scenario
+		/// </summary>
+		public bool IsDefaultScenario { get; set; }
+		/// <summary>
+		/// Scenario id
+		/// </summary>
+		public Guid ScenarioId { get; set; }
+		/// <summary>
+		/// Person id
+		/// </summary>
+		public Guid PersonId { get; set; }
+
+		/// <summary>
+		/// The layers for this shift
+		/// </summary>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+		public ICollection<DenormalizedScheduleDay> ScheduleDays { get; set; }
 
 		/// <summary>
 		/// Is this the initial load of read models

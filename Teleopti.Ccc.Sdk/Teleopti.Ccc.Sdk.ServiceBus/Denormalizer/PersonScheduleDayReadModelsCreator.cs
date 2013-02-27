@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Messages.Denormalize;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
@@ -17,52 +18,56 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
-		public PersonScheduleDayReadModel GetReadModels(DenormalizedScheduleBase schedule)
+		public IEnumerable<PersonScheduleDayReadModel> GetReadModels(DenormalizedScheduleBase schedule)
 		{
-			if (schedule.Layers.Count == 0) return null;
-
 			var person = _personRepository.Load(schedule.PersonId);
-			var ret = new PersonScheduleDayReadModel();
 
-			ret.PersonId = schedule.PersonId;
-			ret.TeamId = schedule.TeamId;
-			ret.SiteId = schedule.SiteId;
-			ret.BusinessUnitId = schedule.BusinessUnitId;
-			ret.Date = schedule.Date;
-
-			if (schedule.StartDateTime.HasValue && schedule.EndDateTime.HasValue)
+			foreach (var scheduleDay in schedule.ScheduleDays)
 			{
-				ret.ShiftStart = schedule.StartDateTime;
-				ret.ShiftEnd = schedule.EndDateTime;
+				if (scheduleDay.Layers.Count == 0) continue;
+
+				var ret = new PersonScheduleDayReadModel();
+
+				ret.PersonId = schedule.PersonId;
+				ret.TeamId = scheduleDay.TeamId;
+				ret.SiteId = scheduleDay.SiteId;
+				ret.BusinessUnitId = schedule.BusinessUnitId;
+				ret.Date = scheduleDay.Date;
+
+				if (scheduleDay.StartDateTime.HasValue && scheduleDay.EndDateTime.HasValue)
+				{
+					ret.ShiftStart = scheduleDay.StartDateTime;
+					ret.ShiftEnd = scheduleDay.EndDateTime;
+				}
+
+				var shift = new Shift
+				{
+					Date = scheduleDay.Date,
+					FirstName = person.Name.FirstName,
+					LastName = person.Name.LastName,
+					EmploymentNumber = person.EmploymentNumber,
+					Id = schedule.PersonId.ToString(),
+					ContractTimeMinutes = (int)scheduleDay.ContractTime.TotalMinutes,
+					WorkTimeMinutes = (int)scheduleDay.WorkTime.TotalMinutes,
+					Projection = new List<SimpleLayer>()
+				};
+
+				foreach (var layer in scheduleDay.Layers)
+				{
+					shift.Projection.Add(new SimpleLayer
+					{
+						Color = ColorTranslator.ToHtml(Color.FromArgb(layer.DisplayColor)),
+						Title = layer.Name,
+						Start = layer.StartDateTime,
+						End = layer.EndDateTime,
+						Minutes = (int)layer.EndDateTime.Subtract(layer.StartDateTime).TotalMinutes
+					});
+				}
+
+				ret.Shift = Newtonsoft.Json.JsonConvert.SerializeObject(shift);
+
+				yield return ret;
 			}
-
-			var shift = new Shift
-			{
-				Date = schedule.Date,
-				FirstName = person.Name.FirstName,
-				LastName = person.Name.LastName,
-				EmploymentNumber = person.EmploymentNumber,
-				Id = schedule.PersonId.ToString(),
-				ContractTimeMinutes = (int) schedule.ContractTime.TotalMinutes,
-				WorkTimeMinutes = (int)schedule.WorkTime.TotalMinutes,
-				Projection = new List<SimpleLayer>()
-			};
-
-			foreach (var layer in schedule.Layers)
-			{
-				shift.Projection.Add(new SimpleLayer
-				                     	{
-				                     		Color = ColorTranslator.ToHtml(Color.FromArgb(layer.DisplayColor)),
-				                     		Title = layer.Name,
-				                     		Start = layer.StartDateTime,
-				                     		End = layer.EndDateTime,
-				                     		Minutes = (int) layer.EndDateTime.Subtract(layer.StartDateTime).TotalMinutes
-				                     	});
-			}
-
-			ret.Shift = Newtonsoft.Json.JsonConvert.SerializeObject(shift);
-
-			return ret;
 		}
 	}
 	
@@ -92,6 +97,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 	public interface IPersonScheduleDayReadModelsCreator
 	{
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
-		PersonScheduleDayReadModel GetReadModels(DenormalizedScheduleBase schedule);
+		IEnumerable<PersonScheduleDayReadModel> GetReadModels(DenormalizedScheduleBase schedule);
 	}
 }

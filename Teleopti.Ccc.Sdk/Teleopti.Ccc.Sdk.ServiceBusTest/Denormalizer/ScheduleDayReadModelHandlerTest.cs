@@ -59,6 +59,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			DefinedLicenseDataFactory.LicenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccSmsLink);
 			
 			var period = new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow.AddDays(2));
+			var denormalizedScheduleDay = new DenormalizedScheduleDay
+			{
+				StartDateTime = period.StartDateTime,
+				EndDateTime = period.EndDateTime,
+			};
+
 			var uow = _mocks.StrictMock<IUnitOfWork>();
 
 			Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow);
@@ -68,9 +74,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			_target.Consume(new DenormalizedSchedule
 			{
 				PersonId = _person.Id.GetValueOrDefault(),
-				StartDateTime = period.StartDateTime,
-				EndDateTime = period.EndDateTime,
-				IsDefaultScenario = false
+				IsDefaultScenario = false,
+				ScheduleDays = new[] { denormalizedScheduleDay }
 			});
 			_mocks.VerifyAll();
 		}
@@ -83,18 +88,22 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			var dateOnlyPeriod = period.ToDateOnlyPeriod(_person.PermissionInformation.DefaultTimeZone());
 			var uow = _mocks.StrictMock<IUnitOfWork>();
 			var model = new ScheduleDayReadModel();
+			var denormalizedScheduleDay = new DenormalizedScheduleDay
+			{
+				Date = dateOnlyPeriod.StartDate,
+				StartDateTime = period.StartDateTime,
+				EndDateTime = period.EndDateTime,
+			};
 			var message = new DenormalizedSchedule
 			              	{
-								Date = dateOnlyPeriod.StartDate,
-			              		PersonId = _person.Id.GetValueOrDefault(),
-			              		StartDateTime = period.StartDateTime,
-			              		EndDateTime = period.EndDateTime,
-								IsDefaultScenario = true
+				          		PersonId = _person.Id.GetValueOrDefault(),
+								IsDefaultScenario = true,
+								ScheduleDays = new[] { denormalizedScheduleDay }
 			              	};
 
 			Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow);
 			Expect.Call(_personRepository.Get(_person.Id.GetValueOrDefault())).Return(_person);
-			Expect.Call(_scheduleDayReadModelsCreator.GetReadModels(message)).Return(model);
+			Expect.Call(_scheduleDayReadModelsCreator.GetReadModel(denormalizedScheduleDay,_person)).Return(model);
 			Expect.Call(() => _scheduleDayReadModelRepository.ClearPeriodForPerson(dateOnlyPeriod, _person.Id.GetValueOrDefault()));
 			Expect.Call(() => _scheduleDayReadModelRepository.SaveReadModel(model));
 			Expect.Call(uow.Dispose);
@@ -116,18 +125,22 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			var dateOnlyPeriod = period.ToDateOnlyPeriod(_person.PermissionInformation.DefaultTimeZone());
 			var uow = _mocks.StrictMock<IUnitOfWork>();
 			var model = new ScheduleDayReadModel();
+			var denormalizedScheduleDay = new DenormalizedScheduleDay
+			                              	{
+			                              		Date = dateOnlyPeriod.StartDate,
+			                              		StartDateTime = period.StartDateTime,
+			                              		EndDateTime = period.EndDateTime,
+			                              	};
 			var message = new DenormalizedSchedule
 			              	{
-								Date = dateOnlyPeriod.StartDate,
-			              		PersonId = _person.Id.GetValueOrDefault(),
-			              		StartDateTime = period.StartDateTime,
-			              		EndDateTime = period.EndDateTime,
-								IsDefaultScenario = true
+								PersonId = _person.Id.GetValueOrDefault(),
+			              		IsDefaultScenario = true,
+								ScheduleDays = new []{denormalizedScheduleDay}
 			              	};
 
 			Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow);
 			Expect.Call(_personRepository.Get(_person.Id.GetValueOrDefault())).Return(_person);
-			Expect.Call(_scheduleDayReadModelsCreator.GetReadModels(message)).Return(model);
+			Expect.Call(_scheduleDayReadModelsCreator.GetReadModel(denormalizedScheduleDay,_person)).Return(model);
 			Expect.Call(_significantChangeChecker.SignificantChangeNotificationMessage(dateOnlyPeriod.StartDate, _person, model)).Return(mess);
 			Expect.Call(_smsLinkChecker.SmsMobileNumber(_person)).Return("124578");
 			Expect.Call(_notificationSenderFactory.GetSender()).Return(_notificationSender);
