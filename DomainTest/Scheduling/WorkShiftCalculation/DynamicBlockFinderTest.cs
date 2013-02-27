@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
@@ -17,32 +13,21 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
         private IDynamicBlockFinder _target;
         private SchedulingOptions  _schedulingOptions;
         private MockRepository _mock;
-        private ISchedulingResultStateHolder _schedulingResultStateHolder;
         private IScheduleMatrixPro _matrixPro;
-        private IList<IScheduleMatrixPro> _matrixList;
-        private IScheduleDayPro _scheduleDayPro1;
-        private IScheduleDayPro _scheduleDayPro2;
-        private IScheduleDayPro _scheduleDayPro3;
-        private ReadOnlyCollection<IScheduleDayPro> _scheduleDayReadOnlyProList;
-        private IList<IScheduleDayPro> _scheduleDayProList;
-        private IScheduleDayPro _scheduleDayPro4;
-        private IGroupPerson   _groupPerson;
-        private BaseLineData _baseLine;
-        private IScheduleDay _schedulePart;
 	    private ITeamInfo _teamInfo;
+	    private DateOnly _date;
+	    private IVirtualSchedulePeriod _schedulePeriod;
 
-        [SetUp]
+	    [SetUp]
         public void Setup()
         {
             _mock = new MockRepository();
-            _schedulingResultStateHolder = _mock.StrictMock<ISchedulingResultStateHolder>();
             _schedulingOptions = new SchedulingOptions();
             _matrixPro = _mock.StrictMock<IScheduleMatrixPro>();
-            _matrixList = new List<IScheduleMatrixPro> {_matrixPro};
-            _schedulePart = _mock.StrictMock<IScheduleDay>();
-            _groupPerson = _mock.StrictMock<IGroupPerson>();
-            _baseLine = new BaseLineData();
 	        _teamInfo = _mock.StrictMock<ITeamInfo>();
+			_target = new DynamicBlockFinder();
+			_date = new DateOnly(2013, 02, 22);
+		    _schedulePeriod = _mock.StrictMock<IVirtualSchedulePeriod>();
         }
 
       
@@ -50,16 +35,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 		[Test]
 		public void ShouldReturnSameDateAsAskedForIfBlockFinderTypeIsSingleDay()
 		{	_schedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.SingleDay;
-			var date = new DateOnly(2013, 02, 22);
-			_target = new DynamicBlockFinder();
+			
+			
             using (_mock.Record())
             {
                 
             }
             using (_mock.Playback())
 			{
-                IList<DateOnly> result = _target.ExtractBlockInfo(date, _teamInfo, BlockFinderType.SingleDay).BlockPeriod.DayCollection();
-				Assert.AreEqual(date, result[0]);
+                IList<DateOnly> result = _target.ExtractBlockInfo(_date, _teamInfo, BlockFinderType.SingleDay).BlockPeriod.DayCollection();
+				Assert.AreEqual(_date, result[0]);
 				Assert.AreEqual(1, result.Count);
 			}
       
@@ -69,15 +54,30 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
        
 
         [Test]
-        public void FindSkillDayFromBlockUsingTwoDaysOff()
+        public void ShouldReturnSamePeriodAsSchedulePeriodIfBlockFinderTypeIsSchedulePeriod()
         {
-            
+
+			using (_mock.Record())
+			{
+				Expect.Call(_teamInfo.MatrixesForGroup).Return(new List<IScheduleMatrixPro> {_matrixPro});
+				Expect.Call(_matrixPro.SchedulePeriod).Return(_schedulePeriod);
+				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(_date, _date));
+			}
+
+			using (_mock.Playback())
+			{
+				DateOnlyPeriod result = _target.ExtractBlockInfo(_date, _teamInfo, BlockFinderType.SchedulePeriod).BlockPeriod;
+				Assert.AreEqual(new DateOnlyPeriod(_date, _date), result);
+			}
+      
+      
         }
 
         [Test]
-        public void FindSkillDayFromBlockUsingCalendarWeek()
+        public void ShouldReturnNullIfNoPeriodFound()
         {
-            
+	        var result = _target.ExtractBlockInfo(_date, _teamInfo, BlockFinderType.None);
+			Assert.IsNull(result);
         }
         
     }

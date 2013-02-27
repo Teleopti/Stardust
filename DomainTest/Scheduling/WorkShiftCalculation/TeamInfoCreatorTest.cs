@@ -35,20 +35,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 			IScheduleMatrixPro matrixOnOtherPerson = _mocks.StrictMock<IScheduleMatrixPro>();
 			IScheduleMatrixPro matrixOnOtherPeriod = _mocks.StrictMock<IScheduleMatrixPro>();
 			IScheduleMatrixPro matrixOnPersonAndPeriod = _mocks.StrictMock<IScheduleMatrixPro>();
-			IScheduleMatrixPro sourceMatrix = matrixOnPersonAndPeriod;
 			IGroupPerson groupPerson = _mocks.StrictMock<IGroupPerson>();
 
 			var allMatrixesInScheduler = new List<IScheduleMatrixPro> { matrixOnOtherPerson, matrixOnOtherPeriod, matrixOnPersonAndPeriod };
 
 			IVirtualSchedulePeriod schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
-			IScheduleDayPro scheduleDayPro = _mocks.StrictMock<IScheduleDayPro>();
 
 			using (_mocks.Record())
 			{
-				Expect.Call(sourceMatrix.Person).Return(_baseLineData.Person1);
-				Expect.Call(sourceMatrix.EffectivePeriodDays)
-				      .Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> {scheduleDayPro}));
-				Expect.Call(scheduleDayPro.Day).Return(new DateOnly(2013, 2, 26));
 				Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(_baseLineData.Person1, new DateOnly(2013, 2, 26))).Return(groupPerson);
 				Expect.Call(groupPerson.GroupMembers)
 				      .Return(new ReadOnlyCollection<IPerson>(new List<IPerson> {_baseLineData.Person1}));
@@ -59,8 +53,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 				Expect.Call(matrixOnOtherPeriod.SchedulePeriod).Return(schedulePeriod);
 				Expect.Call(schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod());
 
-				Expect.Call(matrixOnOtherPeriod.Person).Return(_baseLineData.Person1);
-				Expect.Call(matrixOnOtherPeriod.SchedulePeriod).Return(schedulePeriod);
+				Expect.Call(matrixOnPersonAndPeriod.Person).Return(_baseLineData.Person1);
+				Expect.Call(matrixOnPersonAndPeriod.SchedulePeriod).Return(schedulePeriod);
 				Expect.Call(schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(new DateOnly(2013, 2, 26), new DateOnly(2013, 2, 26)));
 			}
 
@@ -71,10 +65,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 				Assert.AreSame(matrixOnPersonAndPeriod, result.MatrixesForGroup.FirstOrDefault());
 				Assert.AreEqual(1, result.MatrixesForGroup.Count());
 			}
-      
-      
-
 		}
-
 	}
 }

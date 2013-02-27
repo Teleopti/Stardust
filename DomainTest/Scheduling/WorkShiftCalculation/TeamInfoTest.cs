@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -37,6 +38,23 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 		{
 			IScheduleMatrixPro matrix = _target.MatrixesForGroup.FirstOrDefault();
 			Assert.AreSame(_matrix, matrix);
+		}
+
+		[Test]
+		public void ShouldReturnSameHashAsContainedGroupPerson()
+		{
+
+			using (_mocks.Record())
+			{
+				Expect.Call(_groupPerson.Id).Return(Guid.NewGuid());
+			}
+
+			using (_mocks.Playback())
+			{
+				Assert.AreEqual(_groupPerson.GetHashCode(), _target.GetHashCode());
+			}
+      
+      
 		}
 	}
 }

@@ -1,3 +1,4 @@
+using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
@@ -23,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 
 					case BlockFinderType.SchedulePeriod:
 				    {
-					    blockPeriod = teamInfo.GroupPerson.GroupMembers[0].VirtualSchedulePeriod(blockOnDate).DateOnlyPeriod;
+					    blockPeriod = teamInfo.MatrixesForGroup.FirstOrDefault().SchedulePeriod.DateOnlyPeriod;
 					    break;
 				    }
 		    }
