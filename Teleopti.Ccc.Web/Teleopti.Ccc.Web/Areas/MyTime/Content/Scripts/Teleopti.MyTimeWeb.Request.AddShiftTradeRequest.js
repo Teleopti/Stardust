@@ -181,8 +181,8 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 				Message: vm.message(),
 				PersonToId: vm.agentChoosed().personId
 			},
-			success: function (data, textStatus, jqXHR) {
-				//todo: dölj subject och message å sånt
+			success: function () {
+				vm.agentChoosed(null);
 			}
 		});
 	}
