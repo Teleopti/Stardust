@@ -747,6 +747,7 @@
     <Compile Include="Scheduling\ShiftCategorySorterTest.cs" />
     <Compile Include="Scheduling\ShiftCreator\ActivityTimeLimiterTest.cs" />
     <Compile Include="Scheduling\SkillDayHelperTest.cs" />
+    <Compile Include="Scheduling\WorkShiftCalculation\BlockInfoTest.cs" />
     <Compile Include="Scheduling\WorkShiftCalculation\DayIntervalDataCalculatorTest.cs" />
     <Compile Include="Scheduling\WorkShiftCalculation\GroupPersonBuilderBasedOnContractTimeTest.cs" />
     <Compile Include="Scheduling\WorkShiftCalculation\EqualWorkShiftValueDeciderTest.cs" />

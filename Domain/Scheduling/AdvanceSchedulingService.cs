@@ -147,7 +147,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
 					//Create new class that returns a TeamBlockInfo
 					BlockInfo blockInfo = _dynamicBlockFinder.ExtractBlockInfo(datePointer, teamInfo,
 					                                                           _schedulingOptions.BlockFinderTypeForAdvanceScheduling);
+					if(blockInfo == null)
+						continue;
+
 					ITeamBlockInfo teamBlockInfo = new TeamBlockInfo(teamInfo, blockInfo);
+
+					//if teamBlockInfo is fully scheduled, continue;
 
 					//change signature
 					var restriction = _restrictionAggregator.Aggregate(teamBlockInfo.BlockInfo.BlockPeriod.DayCollection(),
