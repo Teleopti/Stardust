@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		}
 
 		[UnitOfWork]
-		public void ViewModelChanged(Guid teamId, DateTime date)
+		public void PushTeamSchedule(Guid teamId, DateTime date)
 		{
 			pushSchedule(Clients.Group(string.Format("{0}-{1}", teamId, date)), teamId, date);
 		}
