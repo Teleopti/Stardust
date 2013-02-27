@@ -133,13 +133,16 @@ Teleopti.MyTimeWeb.Request.PersonScheduleViewModel = function (layers, scheduleO
 	var agentName = '';
 	var dayOffText = '';
 	var hasUnderlyingDayOff = false;
+	var personId=null;
 	if (scheduleObject) {
 		agentName = scheduleObject.Name;
 		minutesSinceTimeLineStart = scheduleObject.MinutesSinceTimeLineStart;
 		dayOffText = scheduleObject.DayOffText;
 		hasUnderlyingDayOff = scheduleObject.HasUnderlyingDayOff;
+		personId = scheduleObject.personId;
 	}
 
+	self.personId = personId;
 	self.isVisible = ko.observable(true);
 	self.agentName = agentName;
 	self.layers = layers;

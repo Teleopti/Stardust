@@ -179,7 +179,8 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			data: {
 				Date: vm.selectedDate().toDate().toJSON(),
 				Subject: vm.subject(),
-				Message: vm.message()
+				Message: vm.message(),
+				PersonToId: vm.agentChoosed().personId
 			},
 			success: function (data, textStatus, jqXHR) {
 				alert('done');
