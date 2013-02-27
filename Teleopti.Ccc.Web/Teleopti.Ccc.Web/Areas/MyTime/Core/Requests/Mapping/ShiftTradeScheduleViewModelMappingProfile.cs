@@ -40,7 +40,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 											 var myScheduleViewModel = new ShiftTradePersonScheduleViewModel
 											 {
 												 Name = o.Person.Name.ToString(),
-												 PersonId = o.Person.Id.Value,
 												 ScheduleLayers = createShiftTradeLayers(myScheduleDay, myScheduleDay.PersonTimeZone, timeLineRangeTot),
 												 HasUnderlyingDayOff = myScheduleDay.SignificantPartForDisplay == SchedulePartView.ContractDayOff,
 												  DayOffText = myScheduleDay.DayOffText,

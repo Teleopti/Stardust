@@ -18,16 +18,19 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		private readonly IRequestsViewModelFactory _requestsViewModelFactory;
 		private readonly ITextRequestPersister _textRequestPersister;
 		private readonly IAbsenceRequestPersister _absenceRequestPersister;
+		private readonly IShiftTradeRequestPersister _shiftTradeRequestPersister;
 		private readonly IRespondToShiftTrade _respondToShiftTrade;
 
 		public RequestsController(IRequestsViewModelFactory requestsViewModelFactory, 
 								ITextRequestPersister textRequestPersister, 
 								IAbsenceRequestPersister absenceRequestPersister, 
+								IShiftTradeRequestPersister shiftTradeRequestPersister,
 								IRespondToShiftTrade respondToShiftTrade)
 		{
 			_requestsViewModelFactory = requestsViewModelFactory;
 			_textRequestPersister = textRequestPersister;
 			_absenceRequestPersister = absenceRequestPersister;
+			_shiftTradeRequestPersister = shiftTradeRequestPersister;
 			_respondToShiftTrade = respondToShiftTrade;
 		}
 
@@ -68,7 +71,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[HttpPostOrPut]
 		public void ShiftTradeRequest(ShiftTradeRequestForm form)
 		{
-			var foo = "sdfsdfsdf";
+			_shiftTradeRequestPersister.Persist(form);
 		}
 
 		[UnitOfWorkAction]

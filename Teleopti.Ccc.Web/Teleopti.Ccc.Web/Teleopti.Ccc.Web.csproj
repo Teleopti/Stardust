@@ -204,12 +204,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IPossibleShiftTradePersonsProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IShiftTradeRequestPersister.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\MyTimeWebPersonRequestCheckAuthorization.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\PossibleShiftTradePersonsProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IRespondToShiftTrade.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\RespondToShiftTrade.cs" />
     <Compile Include="Areas\MyTime\Core\Common\Mapping\CreateHourText.cs" />
     <Compile Include="Areas\MyTime\Core\Common\Mapping\ICreateHourText.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\DataProvider\ShiftTradeRequestPersister.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\IShiftTradeTimeLineHoursViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradeSwapDetailsViewModelMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradeTimeLineHoursViewModelFactory.cs" />
