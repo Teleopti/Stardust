@@ -1,5 +1,5 @@
 ﻿@using Teleopti.Ccc.UserTexts
-<div id="Request-add-shift-trade" class="shift-trade-add-canvas ui-corner-all">
+<div id="Request-add-shift-trade" class="shift-trade-add-canvas displaynone ui-corner-all">
 	<span id="Request-add-loaded-date" class="displaynone" data-bind="text: loadedDateSwedishFormat"></span>
 	<div id="Request-add-shift-trade-missing-wcs-message" class="friendly-message ui-corner-all" data-bind="visible : missingWorkflowControlSet">
 		@Resources.MissingWorkflowControlSet
@@ -34,7 +34,7 @@
 			</div>
 		</div>
 	</div>
-	<div id="Request-add-shift-trade-detail-section" data-bind="visible: isDetailVisible">
+	<div id="Request-add-shift-trade-detail-section" data-bind="visible: isDetailVisible" class="shift-trade-add-canvas mt10 ui-corner-all">
 		<div class="edit-module-element">
 			<label class="displayblock" for="Request-add-shift-trade-subject-input">@Resources.Subject</label>
 			<input id="Request-add-shift-trade-subject-input" type="text" />
@@ -43,10 +43,8 @@
 			<label class="displayblock" for="Request-add-shift-trade-message-input">@Resources.Message</label>
 			<textarea id="Request-add-shift-trade-message-input" />
 		</div>
-		<div class="edit-module-element">
-			<button class="send-button">xxSend</button>
-		</div>
-		</div>
+		<button class="relative floatright send-button">xxSend</button>
+	</div>
 	<div id="Request-add-shift-trade-no-possible-trades" class="shift-trade-no-possible-trades" data-bind="visible : noPossibleShiftTrades()">
 		@Resources.NoAgentsAvailableForShiftTrade
 	</div>
