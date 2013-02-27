@@ -27,6 +27,8 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		self.mySchedule = ko.observable(new Teleopti.MyTimeWeb.Request.PersonScheduleViewModel());
 		self.possibleTradeSchedules = ko.observableArray();
 		self.isDetailVisible = ko.observable(false);
+		self.subject = ko.observable();
+		self.message = ko.observable();
 		self.pixelPerMinute = ko.computed(function () {
 			return layerCanvasPixelWidth / self.timeLineLengthInMinutes();
 		});
@@ -160,7 +162,26 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 	function _initButtons() {
 		$('#Request-add-shift-trade-detail-section button')
 			.button()
-			;
+			.click(function () {
+				_saveNewShiftTrade();
+			});
+	}
+
+	function _saveNewShiftTrade() {
+		console.log(vm);
+		ajax.Ajax({
+			url: "Requests/ShiftTradeRequest",
+			dataType: "json",
+			type: 'POST',
+			data: {
+				Date: vm.selectedDate().toDate().toJSON(),
+				Subject: vm.subject(),
+				Message: vm.message()
+			},
+			success: function (data, textStatus, jqXHR) {
+				alert('done');
+			}
+		});
 	}
 
 	function setDatePickerRange(relativeStart, relativeEnd) {

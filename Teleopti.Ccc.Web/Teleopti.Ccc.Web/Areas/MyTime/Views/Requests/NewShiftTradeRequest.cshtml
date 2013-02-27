@@ -37,11 +37,11 @@
 	<div id="Request-add-shift-trade-detail-section" data-bind="visible: isDetailVisible">
 		<div class="edit-module-element">
 			<label class="displayblock" for="Request-add-shift-trade-subject-input">@Resources.Subject</label>
-			<input id="Request-add-shift-trade-subject-input" type="text" />
+			<input id="Request-add-shift-trade-subject-input" type="text" data-bind="value: subject" />
 		</div>
 		<div class="edit-module-element">
 			<label class="displayblock" for="Request-add-shift-trade-message-input">@Resources.Message</label>
-			<textarea id="Request-add-shift-trade-message-input" />
+			<textarea id="Request-add-shift-trade-message-input" data-bind="value: message"/>
 		</div>
 		<div class="edit-module-element">
 			<button class="send-button">xxSend</button>

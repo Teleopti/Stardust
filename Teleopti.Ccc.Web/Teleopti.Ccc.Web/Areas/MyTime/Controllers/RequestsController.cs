@@ -65,6 +65,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			return Json(_textRequestPersister.Persist(form));
 		}
 
+		[HttpPostOrPut]
+		public void ShiftTradeRequest(ShiftTradeRequestForm form)
+		{
+			var foo = "sdfsdfsdf";
+		}
+
 		[UnitOfWorkAction]
 		[HttpPostOrPut]
 		public JsonResult ApproveShiftTrade(Guid id)
