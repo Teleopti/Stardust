@@ -10,28 +10,28 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 	{
 		private IntradayDecisionMakerComponents _target;
 		private MockRepository _mocks;
+		private IScheduleMatrixLockableBitArrayConverter _converter;
+		private IScheduleResultDataExtractor _extractor;
 
 		[SetUp]
 		public void Setup()
 		{
 			_mocks = new MockRepository();
-			var converter = _mocks.StrictMock<IScheduleMatrixLockableBitArrayConverter>();
-			var extractor = _mocks.StrictMock<IScheduleResultDataExtractor>();
-			_target = new IntradayDecisionMakerComponents(converter, extractor);
+			_converter = _mocks.StrictMock<IScheduleMatrixLockableBitArrayConverter>();
+			_extractor = _mocks.StrictMock<IScheduleResultDataExtractor>();
+			_target = new IntradayDecisionMakerComponents(_converter, _extractor);
 		}
 
 		[Test]
 		public void ShouldHaveScheduleMatrixLockableBitArrayConverter()
 		{
-			var converter = _target.MatrixConverter;
-			Assert.That(converter.GetType(), Is.EqualTo(typeof (ScheduleMatrixLockableBitArrayConverter)));
+			Assert.That(_target.MatrixConverter, Is.EqualTo(_converter));
 		}
 
 		[Test]
 		public void ShouldHaveRelativeDailyValueByPersonalSkillsExtractor()
 		{
-			var extractor = _target.DataExtractor;
-			Assert.That(extractor.GetType(), Is.EqualTo(typeof (RelativeDailyValueByPersonalSkillsExtractor)));
+			Assert.That(_target.DataExtractor, Is.EqualTo(_extractor));
 		}
 	}
 }

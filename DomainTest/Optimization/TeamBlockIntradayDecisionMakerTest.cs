@@ -4,6 +4,8 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Optimization
@@ -26,25 +28,27 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		}
 
 		[Test]
-		public void ShouldDecideOneBlock()
+		public void ShouldDecideABlockWithHighestSum()
 		{
 			var matrix1 = _mocks.StrictMock<IScheduleMatrixPro>();
 			var scheduleDay1 = _mocks.StrictMock<IScheduleDayPro>();
 			var scheduleDay2 = _mocks.StrictMock<IScheduleDayPro>();
 			var schedulingOptions = new SchedulingOptions();
+			var person = PersonFactory.CreatePerson("bill");
 			var matrixes = new List<IScheduleMatrixPro> {matrix1};
 			var converter1 = _mocks.StrictMock<IScheduleMatrixLockableBitArrayConverter>();
 			var extractor1 = _mocks.StrictMock<IScheduleResultDataExtractor>();
 			var date = new DateOnly();
-			var blocks = new List<IIntradayBlock>
+			var selectedPeriod = new DateOnlyPeriod(date, date.AddDays(1));
+			var blocks = new List<IBlockInfo>
 				{
-					new IntradayBlock {BlockDays = new List<DateOnly> {date}},
-					new IntradayBlock {BlockDays = new List<DateOnly> {date.AddDays(1)}}
+					new BlockInfo(new DateOnlyPeriod(date, date)),
+					new BlockInfo(new DateOnlyPeriod(date.AddDays(1), date.AddDays(1)))
 				};
 			_lockableData.Add(matrix1, new IntradayDecisionMakerComponents(converter1, extractor1));
 			using (_mocks.Record())
 			{
-				Expect.Call(_blockProvider.Provide(matrixes)).Return(blocks);
+				Expect.Call(_blockProvider.Provide(selectedPeriod, new List<IPerson>{person}, matrixes, schedulingOptions)).Return(blocks);
 				Expect.Call(matrix1.FullWeeksPeriodDays)
 				      .Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> {scheduleDay1, scheduleDay2}))
 				      .Repeat.Twice();
@@ -54,7 +58,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.Decide(matrixes, schedulingOptions);
+				var result = _target.Decide(selectedPeriod, new List<IPerson>{person}, matrixes, schedulingOptions);
 
 				Assert.That(result.Sum, Is.EqualTo(0.2));
 			}
