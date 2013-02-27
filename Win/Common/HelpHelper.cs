@@ -1,9 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Web;
 using System.Windows.Forms;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using System.Globalization;
 
 namespace Teleopti.Ccc.Win.Common
 {
@@ -70,17 +68,16 @@ namespace Teleopti.Ccc.Win.Common
 		{
 			var topic = GetTopic(formName, control);
 			topic = HttpUtility.UrlEncode(topic);
-			topic = topic.Replace(".", "_");
-			var url = string.Concat(_http, _helpLang, _prefix, topic, _suffix);
-			return url;
+			return string.Concat(_http, _helpLang, _prefix, topic, _suffix);
 		}
+
 		private string GetOnlineUrl(string formName, IHelpContext control)
 		{
-			string topic = GetTopicUrlOnline(formName, control);
+			var topic = GetTopicUrlOnline(formName, control);
 			topic = HttpUtility.UrlEncode(topic);
-			//return string.Concat(_httpOnline, "dev/", _helpLang, _prefixOnline, topic, _suffixOnline);
 			return string.Concat(_httpOnline, _helpLang, _prefixOnline, topic, _suffixOnline);
 		}
+
 		private string GetTopicUrlOnline(string formName, IHelpContext control)
 		{
 			string controlName = null;
@@ -88,6 +85,7 @@ namespace Teleopti.Ccc.Win.Common
 			if (string.IsNullOrEmpty(controlName)) controlName = "Main";
 			return formName + _dividerOnline + controlName;
 		}
+
 		private string GetTopic(string formName, IHelpContext control)
 		{
 			string controlName = null;
