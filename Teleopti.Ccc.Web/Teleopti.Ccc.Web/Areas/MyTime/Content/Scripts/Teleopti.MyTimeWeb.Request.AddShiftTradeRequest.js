@@ -61,11 +61,13 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		};
 
 		self.chooseAgent = function (agent) {
-			//hide all agents
+			//hide or show all agents
 			$.each(self.possibleTradeSchedules(), function (index, value) {
-				value.isVisible(false);
+				value.isVisible(agent == null);
 			});
-			agent.isVisible(true);
+			if (agent != null) {
+				agent.isVisible(true);
+			}
 			self.agentChoosed(agent);
 		};
 
@@ -163,10 +165,15 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 	}
 
 	function _initButtons() {
-		$('#Request-add-shift-trade-detail-section button')
+		$('#Request-add-shift-trade-detail-section .send-button')
 			.button()
 			.click(function () {
 				_saveNewShiftTrade();
+			});
+		$('#Request-add-shift-trade-detail-section .cancel-button')
+			.button()
+			.click(function () {
+				vm.chooseAgent(null);
 			});
 	}
 
