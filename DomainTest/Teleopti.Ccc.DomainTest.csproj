@@ -763,6 +763,7 @@
     <Compile Include="Scheduling\WorkShiftCalculation\SkillIntervalDataSkillFactorApplierTest.cs" />
     <Compile Include="Scheduling\WorkShiftCalculation\SkillResolutionProviderTest.cs" />
     <Compile Include="Scheduling\WorkShiftCalculation\SkillStaffPeriodToSkillIntervalDataMapperTest.cs" />
+    <Compile Include="Scheduling\WorkShiftCalculation\TeamBlockInfoFactoryTest.cs" />
     <Compile Include="Scheduling\WorkShiftCalculation\TeamInfoCreatorTest.cs" />
     <Compile Include="Scheduling\WorkShiftCalculation\TeamInfoTest.cs" />
     <Compile Include="Scheduling\WorkShiftCalculation\TeamDayOffSchedulerTest.cs" />
