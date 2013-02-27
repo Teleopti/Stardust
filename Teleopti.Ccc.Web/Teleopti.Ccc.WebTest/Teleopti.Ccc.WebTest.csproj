@@ -176,6 +176,7 @@
     <Compile Include="Core\Message\DataProvider\PushMessageProviderTest.cs" />
     <Compile Include="Core\Portal\ViewModelFactory\PortalViewModelFactoryRequestsTest.cs" />
     <Compile Include="Core\Requests\DataProvider\PossibleShiftTradePersonsProviderTest.cs" />
+    <Compile Include="Core\Requests\DataProvider\ShiftTradeRequestPersisterTest.cs" />
     <Compile Include="Core\Requests\DataProvider\ShiftTradeRequestProviderTest.cs" />
     <Compile Include="Core\Requests\Mapping\ShiftTradeScheduleViewModelMappingProfileTest.cs" />
     <Compile Include="Core\Requests\Mapping\ShiftTradePeriodViewModelMapperTest.cs" />

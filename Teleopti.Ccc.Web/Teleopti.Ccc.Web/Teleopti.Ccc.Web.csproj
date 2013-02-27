@@ -212,7 +212,9 @@
     <Compile Include="Areas\MyTime\Core\Common\Mapping\CreateHourText.cs" />
     <Compile Include="Areas\MyTime\Core\Common\Mapping\ICreateHourText.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\ShiftTradeRequestPersister.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\Mapping\IShiftTradeRequestMapper.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\IShiftTradeTimeLineHoursViewModelFactory.cs" />
+    <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradeRequestMapper.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradeSwapDetailsViewModelMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradeTimeLineHoursViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\StudentAvailability\Mapping\StudentAvailabilityAndScheduleDayViewModelMappingProfile.cs" />
