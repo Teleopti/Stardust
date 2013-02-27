@@ -18,6 +18,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		protected override void Configure()
 		{
 			CreateMap<IShiftTradeRequest, ShiftTradeSwapDetailsViewModel>()
+				.ForMember(d=>d.To,o=>o.NullSubstitute(new ShiftTradePersonScheduleViewModel()))
+				.ForMember(d=>d.From,o=>o.NullSubstitute(new ShiftTradePersonScheduleViewModel()))
 				.ForMember(d => d.To, o => o.MapFrom(s => s.ShiftTradeSwapDetails.First().SchedulePartTo))
 				.ForMember(d => d.From, o => o.MapFrom(s => s.ShiftTradeSwapDetails.First().SchedulePartFrom))
 				.ForMember(d=> d.TimeLineHours, o=>o.MapFrom(s=> _timelineViewModelFactory.Invoke().CreateTimeLineHours(createTimelinePeriod(s))))
@@ -32,9 +34,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			{
 				return shiftTRadeRequest.Period;
 			}
-			var fromPeriod = shiftTRadeRequest.ShiftTradeSwapDetails.First().SchedulePartFrom.Period;
-			var toPeriod = shiftTRadeRequest.ShiftTradeSwapDetails.First().SchedulePartTo.Period;
-			return fromPeriod.MaximumPeriod(toPeriod);
+			else
+			{
+				var fromPeriod = shiftTRadeRequest.ShiftTradeSwapDetails.First().SchedulePartFrom.Period;
+				var toPeriod = shiftTRadeRequest.ShiftTradeSwapDetails.First().SchedulePartTo.Period;
+				return fromPeriod.MaximumPeriod(toPeriod);
+			}
+		
 		}
 	}
 }

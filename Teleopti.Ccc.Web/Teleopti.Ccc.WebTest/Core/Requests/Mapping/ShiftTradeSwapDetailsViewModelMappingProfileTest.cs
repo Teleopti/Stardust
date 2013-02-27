@@ -80,28 +80,15 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		[Test]
 		public void CreateEmptyScheduleViewModelsIfNoSchedulesExists()
 		{
-			var timeLineHoursViewModelFactory = MockRepository.GenerateStrictMock<IShiftTradeTimeLineHoursViewModelFactory>();
-
-			Mapper.Reset();
-
-			Mapper.Initialize(c => c.AddProfile(new ShiftTradeSwapDetailsViewModelMappingProfile(Depend.On(timeLineHoursViewModelFactory))));
-			AddNeededMappingProfiles();
-
 			var from = new DateTime(2001, 1, 1, 0, 0, 0, DateTimeKind.Utc);
 			var to = new DateTime(2001, 1, 2, 0, 0, 0, DateTimeKind.Utc);
 
-			var expectedTimelinePeriod = new DateTimePeriod(from, to);
 			var shiftTrade = CreateShiftTrade(from, to, null, null);
-
-			var timelineHours = new List<ShiftTradeTimeLineHoursViewModel>() { new ShiftTradeTimeLineHoursViewModel(), new ShiftTradeTimeLineHoursViewModel() };
-			timeLineHoursViewModelFactory.Expect(s => s.CreateTimeLineHours(expectedTimelinePeriod)).Return(timelineHours);
 
 			var result = Mapper.Map<IShiftTradeRequest, ShiftTradeSwapDetailsViewModel>(shiftTrade);
 
-			timeLineHoursViewModelFactory.VerifyAllExpectations();
-
-			Assert.That(result.TimeLineHours, Is.EqualTo(timelineHours));
-			Assert.That(result.TimeLineStartDateTime, Is.EqualTo(expectedTimelinePeriod.StartDateTime));
+			Assert.That(result.To, Is.Not.Null);
+			Assert.That(result.From, Is.Not.Null);
 		}
 
 		private void AddNeededMappingProfiles()
