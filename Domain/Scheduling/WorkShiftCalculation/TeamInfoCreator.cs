@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 {
 	public interface ITeamInfoCreator
 	{
-		TeamInfo CreateTeamInfo(IScheduleMatrixPro sourceMatrix, IList<IScheduleMatrixPro> allMatrixesInScheduler);
+		TeamInfo CreateTeamInfo(IPerson person, DateOnly date, IList<IScheduleMatrixPro> allMatrixesInScheduler);
 	}
 
 	public class TeamInfoCreator : ITeamInfoCreator
@@ -20,10 +20,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 			_groupPersonBuilderForOptimization = groupPersonBuilderForOptimization;
 		}
 
-		public TeamInfo CreateTeamInfo(IScheduleMatrixPro sourceMatrix, IList<IScheduleMatrixPro> allMatrixesInScheduler)
+		public TeamInfo CreateTeamInfo(IPerson person, DateOnly date, IList<IScheduleMatrixPro> allMatrixesInScheduler)
 		{
-			IPerson person = sourceMatrix.Person;
-			DateOnly firstDateOfMatrix = sourceMatrix.EffectivePeriodDays[0].Day;
+			DateOnly firstDateOfMatrix = date;
 			IGroupPerson groupPerson = _groupPersonBuilderForOptimization.BuildGroupPerson(person, firstDateOfMatrix);
 			IList<IScheduleMatrixPro> matrixesForGroup = new List<IScheduleMatrixPro>();
 			foreach (var groupMember in groupPerson.GroupMembers)

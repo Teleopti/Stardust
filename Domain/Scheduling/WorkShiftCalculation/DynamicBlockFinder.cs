@@ -11,6 +11,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
     public interface IDynamicBlockFinder
     {
         IList<DateOnly> ExtractBlockDays(DateOnly startDateOnly,IGroupPerson groupPerson );
+	    BlockInfo ExtractBlockInfo(DateOnly blockOnDate, ITeamInfo teamInfo, BlockFinderType blockType);
 
     }
 
@@ -94,10 +95,56 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
             return  retList;
             }
 
-        private List<DateOnly > GetDaysOffFromSchedule(IEnumerable<DateOnly> dateOnlyListForFullPeriod )
+	    public BlockInfo ExtractBlockInfo(DateOnly blockOnDate, ITeamInfo teamInfo, BlockFinderType blockType)
+	    {
+		    DateOnlyPeriod? blockPeriod = null;
+		    switch (blockType)
+		    {
+			    case BlockFinderType.SingleDay:
+				    {
+					    blockPeriod = new DateOnlyPeriod(blockOnDate, blockOnDate);
+					    break;
+				    }
+
+					case BlockFinderType.SchedulePeriod:
+				    {
+					    blockPeriod = teamInfo.GroupPerson.GroupMembers[0].VirtualSchedulePeriod(blockOnDate).DateOnlyPeriod;
+					    break;
+				    }
+		    }
+
+		    if (!blockPeriod.HasValue)
+		    {
+			    return null;
+		    }
+
+			return new BlockInfo(blockPeriod.Value);
+	    }
+
+	    private List<DateOnly > GetDaysOffFromSchedule(IEnumerable<DateOnly> dateOnlyListForFullPeriod )
         {
             return (from dateOnly in dateOnlyListForFullPeriod let scheduleDayList = SchedulingResultStateHolder.Schedules.SchedulesForDay(dateOnly) 
                     where scheduleDayList.Any(schedule => schedule.SignificantPart() == SchedulePartView.DayOff) select dateOnly).ToList();
         }
     }
+
+	public interface IBlockInfo
+	{
+		DateOnlyPeriod BlockPeriod { get; }
+	}
+
+	public class BlockInfo : IBlockInfo
+	{
+		private readonly DateOnlyPeriod _blockPeriod;
+
+		public BlockInfo(DateOnlyPeriod blockPeriod)
+		{
+			_blockPeriod = blockPeriod;
+		}
+
+		public DateOnlyPeriod BlockPeriod
+		{
+			get { return _blockPeriod; }
+		}
+	}
 }

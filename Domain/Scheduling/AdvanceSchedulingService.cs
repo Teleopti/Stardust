@@ -14,11 +14,13 @@ namespace Teleopti.Ccc.Domain.Scheduling
     {
 		event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
         bool Execute(IDictionary<string, IWorkShiftFinderResult> workShiftFinderResultList, IList<IScheduleMatrixPro> allPersonMatrixList, IList<IScheduleMatrixPro> selectedPersonMatrixList,TeamSteadyStateHolder teamSteadyStateHolder );
+		bool Execute3(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, TeamSteadyStateHolder teamSteadyStateHolder);
     }
     public class AdvanceSchedulingService : IAdvanceSchedulingService
     {
         private readonly IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
-        private readonly IDynamicBlockFinder _dynamicBlockFinder;
+	    private readonly ITeamInfoCreator _teamInfoCreator;
+	    private readonly IDynamicBlockFinder _dynamicBlockFinder;
         private readonly IRestrictionAggregator _restrictionAggregator;
         private readonly IWorkShiftFilterService _workShiftFilterService;
         private readonly ITeamScheduling _teamScheduling;
@@ -37,11 +39,13 @@ namespace Teleopti.Ccc.Domain.Scheduling
             ISchedulingOptions schedulingOptions,
 			IWorkShiftSelector workShiftSelector,
             IGroupPersonBuilderBasedOnContractTime groupPersonBuilderBasedOnContractTime ,
-            IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization 
+            IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization,
+			ITeamInfoCreator teamInfoCreator
             )
         {
             _groupPersonBuilderForOptimization = groupPersonBuilderForOptimization;
-            _dynamicBlockFinder = dynamicBlockFinder;
+		    _teamInfoCreator = teamInfoCreator;
+		    _dynamicBlockFinder = dynamicBlockFinder;
             _restrictionAggregator = restrictionAggregator;
             _workShiftFilterService = workShiftFilterService;
             _teamScheduling = teamScheduling;
@@ -128,8 +132,62 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		    return true;
 	    }
 
+	    public bool Execute3(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, TeamSteadyStateHolder teamSteadyStateHolder)
+	    {
+		    foreach (var datePointer in selectedPeriod.DayCollection())
+		    {
+				var allTeamInfoListOnStartDate = new HashSet<ITeamInfo>();
+			    foreach (var selectedPerson in selectedPersons)
+			    {
+				    allTeamInfoListOnStartDate.Add(_teamInfoCreator.CreateTeamInfo(selectedPerson, datePointer, allPersonMatrixList));
+			    }
 
-        public bool Execute2(IDictionary<string, IWorkShiftFinderResult> workShiftFinderResultList,
+				foreach (var teamInfo in allTeamInfoListOnStartDate.GetRandom(allTeamInfoListOnStartDate.Count, true))
+				{
+					//Create new class that returns a TeamBlockInfo
+					BlockInfo blockInfo = _dynamicBlockFinder.ExtractBlockInfo(datePointer, teamInfo,
+					                                                           _schedulingOptions.BlockFinderTypeForAdvanceScheduling);
+					ITeamBlockInfo teamBlockInfo = new TeamBlockInfo(teamInfo, blockInfo);
+
+					//change signature
+					var restriction = _restrictionAggregator.Aggregate(teamBlockInfo.BlockInfo.BlockPeriod.DayCollection(),
+					                                                   teamBlockInfo.TeamInfo.GroupPerson,
+					                                                   teamBlockInfo.TeamInfo.MatrixesForGroup.ToList(),
+					                                                   _schedulingOptions);
+
+					// (should we cover for max seats here?) ????
+					//change signature
+					var shifts = _workShiftFilterService.Filter(datePointer, teamBlockInfo.TeamInfo.GroupPerson,
+					                                            teamBlockInfo.TeamInfo.MatrixesForGroup.ToList(), restriction,
+					                                            _schedulingOptions);
+					if (shifts == null || shifts.Count <= 0)
+						continue;
+
+					//change signature
+					var activityInternalData = _skillDayPeriodIntervalDataGenerator.Generate(teamBlockInfo.TeamInfo.GroupPerson,
+					                                                                         teamBlockInfo.BlockInfo.BlockPeriod
+					                                                                                      .DayCollection());
+
+					var bestShiftProjectionCache = _workShiftSelector.SelectShiftProjectionCache(shifts, activityInternalData,
+																								 _schedulingOptions
+																									 .WorkShiftLengthHintOption,
+																								 _schedulingOptions
+																									 .UseMinimumPersons,
+																								 _schedulingOptions
+																									 .UseMaximumPersons);
+					//implement
+					_teamScheduling.Execute(teamBlockInfo, bestShiftProjectionCache);
+
+					if (_cancelMe)
+						break;
+				}
+		    }
+
+		    return true;
+	    }
+
+
+	    public bool Execute2(IDictionary<string, IWorkShiftFinderResult> workShiftFinderResultList,
                     IList<IScheduleMatrixPro> allPersonMatrixList,
                     IList<IScheduleMatrixPro> selectedPersonMatrixList, TeamSteadyStateHolder teamSteadyStateHolder)
         {

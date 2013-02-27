@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 		event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
         void Execute(IList<DateOnly> daysInBlock, IList<IScheduleMatrixPro> matrixList, IGroupPerson groupPerson, IShiftProjectionCache shiftProjectionCache,
                      IList<DateOnly> unlockedDays, IList<IPerson> selectedPersons);
+		void Execute(ITeamBlockInfo teamBlockInfo, IShiftProjectionCache shiftProjectionCache);
     }
 
     public  class TeamScheduling : ITeamScheduling
@@ -81,7 +82,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 	        }
         }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+	    public void Execute(ITeamBlockInfo teamBlockInfo, IShiftProjectionCache shiftProjectionCache)
+	    {
+		    throw new NotImplementedException();
+	    }
+
+	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		protected virtual void OnDayScheduled(SchedulingServiceBaseEventArgs scheduleServiceBaseEventArgs)
 		{
 			EventHandler<SchedulingServiceBaseEventArgs> temp = DayScheduled;

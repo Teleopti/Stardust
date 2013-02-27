@@ -31,5 +31,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 		{
 			get { return _matrixesForGroup; }
 		}
+
+		public override int GetHashCode()
+		{
+			if (_groupPerson != null && _groupPerson.Id.HasValue)
+				return _groupPerson.GetHashCode();
+
+			return base.GetHashCode();
+		}
 	}
 }
