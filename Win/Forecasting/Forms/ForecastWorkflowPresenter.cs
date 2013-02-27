@@ -98,20 +98,13 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		{
 			var taskOwnerDays = new List<ITaskOwner>();
 			InitializeWorkloadDaysWithStatistics(selectedDates);
-				//Todo: this initalizes the workloadDaysWithStatistics not good but fix.... sorry
-			taskOwnerDays.AddRange(_model.WorkloadDaysWithStatistics);
+			InitializeWorkloadDaysWithoutOutliers();
+
+			taskOwnerDays.AddRange(_model.WorkloadDaysWithoutOutliers);
 
 			var taskOwnerPeriod = new TaskOwnerPeriod(DateOnly.Today, taskOwnerDays.Distinct(), TaskOwnerPeriodType.Other);
 			volumeYear.ReloadHistoricalDataDepth(taskOwnerPeriod);
 		}
-
-    	public void ReloadHistoricalDataDepth(IList<DateOnlyPeriod> selectedDates)
-    	{
-    		var taskOwnerDays = new List<ITaskOwner>();
-
-    		InitializeWorkloadDaysWithStatistics(selectedDates);
-    		taskOwnerDays.AddRange(_model.WorkloadDaysWithStatistics);
-    	}
 
     	public void InitializeWorkloadDaysWithStatistics(IList<DateOnlyPeriod> period)
         {
