@@ -214,11 +214,13 @@
     <Compile Include="Infrastructure\PagingTest.cs" />
     <Compile Include="Optimization\AdvancedPreferencesPersonalSettingsTest.cs" />
     <Compile Include="Optimization\AdvanceGroupDayOffOptimizerTest.cs" />
+    <Compile Include="Optimization\TeamBlockIntradayDecisionMakerTest.cs" />
     <Compile Include="Optimization\BlockDayOffOptimizerContainerTest.cs" />
     <Compile Include="Optimization\BlockDayOffOptimizationServiceTest.cs" />
     <Compile Include="Optimization\BlockOptimizerBlockCleanerTest.cs" />
     <Compile Include="Optimization\BlockDayOffOptimizerTest.cs" />
     <Compile Include="Optimization\AdvanceGroupIntradayOptimizerExecuterTest.cs" />
+    <Compile Include="Optimization\BlockProviderTest.cs" />
     <Compile Include="Optimization\DayOffOptimizerPreMoveResultPredictorTest.cs" />
     <Compile Include="Optimization\GroupDayOffOptimizationResourceHelperTest.cs" />
     <Compile Include="Optimization\GroupIntradayOptimizerExecuterTest.cs" />
@@ -251,6 +253,10 @@
     <Compile Include="Optimization\GroupMoveTimeOptimizerServiceTest.cs" />
     <Compile Include="Optimization\GroupMoveTimeOptimizerTest.cs" />
     <Compile Include="Optimization\GroupMoveTimeValidatorRunnerTest.cs" />
+    <Compile Include="Optimization\IntradayBlockTest.cs" />
+    <Compile Include="Optimization\IntradayDecisionMakerComponentsTest.cs" />
+    <Compile Include="Optimization\LockableDataProviderTest.cs" />
+    <Compile Include="Optimization\LockableDataTest.cs" />
     <Compile Include="Optimization\MatrixMultipleShiftsLockerTest.cs" />
     <Compile Include="Optimization\GroupOptimizerFindMatrixesForGroupTest.cs" />
     <Compile Include="Optimization\GroupOptimizerValidateProposedDatesInSameGroupTest.cs" />
@@ -288,6 +294,7 @@
     <Compile Include="Optimization\ShiftsPreferencesPersonalSettingsTest.cs" />
     <Compile Include="Optimization\IsSignificantPartFullDayAbsenceOrDayOffSpecificationTest.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessSwapperTest.cs" />
+    <Compile Include="Optimization\StandardDeviationDataTest.cs" />
     <Compile Include="Optimization\TeleoptiPeriodValueCalculatorTest.cs" />
     <Compile Include="Optimization\WorkShiftRuleSetExtractorForGroupOfPeopleTest.cs" />
     <Compile Include="Optimization\RelativeDailyDifferencesByAllSkillsExtractorTest.cs" />
