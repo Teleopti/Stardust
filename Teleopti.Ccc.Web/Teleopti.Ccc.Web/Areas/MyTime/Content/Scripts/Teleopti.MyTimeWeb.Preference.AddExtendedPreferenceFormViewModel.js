@@ -17,7 +17,7 @@ Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (aja
 			success: function (data, textStatus, jqXHR) {
 				data = data || [];
 				$.each(data, function (index, element) {
-					self.AvailableTemplates.push(element);
+					self.AvailableTemplates = element;
 				});
 				deferred.resolve();
 			}
@@ -26,6 +26,8 @@ Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (aja
 	};
 
 	this.AvailableTemplates = ko.observableArray();
+	this.selectedTemplate = ko.observable();
+
 	this.PreferenceId = ko.observable();
 	this.EarliestStartTime = ko.observable();
 	this.LatestStartTime = ko.observable();

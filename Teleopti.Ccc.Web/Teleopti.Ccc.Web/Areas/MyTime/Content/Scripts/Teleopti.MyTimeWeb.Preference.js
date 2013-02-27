@@ -3,6 +3,7 @@
 /// <reference path="~/Content/Scripts/jquery-ui-1.8.16.js" />
 /// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js" />
+/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Preference.DayViewModel.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Preference.PreferencesAndScheduleViewModel.js" />
@@ -102,7 +103,6 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 		var button = $('#Preference-add-extended-button');
 		var template = $('#Preference-add-extended-form');
 		addExtendedPreferenceFormViewModel = new Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel(ajax);
-
 		addExtendedTooltip = $('<div/>')
 			.qtip({
 				id: "add-extended",
@@ -139,6 +139,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 				},
 				events: {
 					render: function () {
+
 						$('#Preference-extended-reset')
 							.button()
 							.click(function () {
@@ -256,7 +257,6 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 					loadingStarted = true;
 					_activateSelectable();
 					_activateMeetingTooltip();
-					addExtendedPreferenceFormViewModel.LoadAvailableTemplates();
 					readyForInteraction();
 					loader(function () {
 						periodFeedbackViewModel.LoadFeedback();
@@ -266,6 +266,12 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 						callWhenAjaxIsCompleted(completelyLoaded);
 					});
 				});
+			addExtendedPreferenceFormViewModel.LoadAvailableTemplates();
+			//				.done(function() {
+			//					loader(function() {
+			//						$('#Preference-template').selectbox();
+			//					});
+			//				});
 		});
 	}
 
