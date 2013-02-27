@@ -2050,6 +2050,8 @@ namespace Teleopti.Ccc.Win.Permissions
 
         private void toolStripButtonExitSystemClick(object sender, EventArgs e)
         {
+			if (!CloseAllOtherForms(this)) return;
+
             Close();
 
             ////this canceled
