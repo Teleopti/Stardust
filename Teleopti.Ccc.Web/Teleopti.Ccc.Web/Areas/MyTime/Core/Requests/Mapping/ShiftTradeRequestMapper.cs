@@ -1,4 +1,6 @@
-﻿using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
+﻿using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
@@ -7,7 +9,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 	{
 		public IPersonRequest Map(ShiftTradeRequestForm form)
 		{
-			return null;
+			var ret = new PersonRequest(new Person());
+			ret.Subject = form.Subject;
+			return ret;
 		}
 	}
 }
