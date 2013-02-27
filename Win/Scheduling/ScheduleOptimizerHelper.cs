@@ -1054,7 +1054,9 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                                         teamScheduling,
                                                                         schedulingOptions, 
 																		_container.Resolve<IWorkShiftSelector>(),
-                                                                        groupPersonBuilderBasedOnContractTime, groupPersonBuilderForOptimization);
+                                                                        groupPersonBuilderBasedOnContractTime, 
+																		groupPersonBuilderForOptimization,
+																		new TeamInfoCreator(groupPersonBuilderForOptimization));
             return advanceSchedulingService;
         }
 
