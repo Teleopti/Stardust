@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 		{
 			if (command == null)
 				throw new FaultException("Command is null.");
-
+			Guid jobId;
 
 			using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                 var jobResult = new JobResult(JobCategory.QuickForecast, period,
                                               ((IUnsafePerson) TeleoptiPrincipal.Current).Person, DateTime.UtcNow);
                 _jobResultRepository.Add(jobResult);
-                var jobId = jobResult.Id.GetValueOrDefault();
+                jobId = jobResult.Id.GetValueOrDefault();
                 
 				unitOfWork.PersistAll();
 				if (!_busSender.EnsureBus())
@@ -58,13 +58,14 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 								JobId = jobId,
 								SmoothingStyle = command.SmoothingStyle,
 								TemplatePeriod = new DateOnlyPeriod(new DateOnly(command.TemplatePeriod.StartDate.DateTime), new DateOnly(command.TemplatePeriod.EndDate.DateTime)),
-								WorkloadIds = command.WorkloadIds
+								WorkloadIds = command.WorkloadIds,
+								IncreaseWith = command.IncreaseWith
 			              	};
 
 			_busSender.NotifyServiceBus(message);
 			}
 			
-			return new CommandResultDto {AffectedId = Guid.Empty, AffectedItems = 1};
+			return new CommandResultDto {AffectedId = jobId, AffectedItems = 1};
 		}
     }
 }

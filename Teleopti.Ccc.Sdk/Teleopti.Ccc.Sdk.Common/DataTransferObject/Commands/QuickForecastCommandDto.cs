@@ -75,7 +75,13 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands
 		/// <summary>
 		/// The workloads to forecast
 		/// </summary>
-		[DataMember]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly"), DataMember]
 		public ICollection<Guid> WorkloadIds { get; set; }
+
+		/// <summary>
+		/// How much the progress bar should increase for every step
+		/// </summary>
+		[DataMember]
+		public int IncreaseWith { get; set; }
     }
 }

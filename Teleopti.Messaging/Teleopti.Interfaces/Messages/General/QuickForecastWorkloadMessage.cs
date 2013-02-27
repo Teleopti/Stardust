@@ -50,5 +50,10 @@ namespace Teleopti.Interfaces.Messages.General
 		/// The period to get the temlplates from
 		/// </summary>
 		public DateOnlyPeriod TemplatePeriod { get; set; }
+
+		/// <summary>
+		/// How much the progress bar should increase for every step
+		/// </summary>
+		public int IncreaseWith { get; set; }
 	}
 }

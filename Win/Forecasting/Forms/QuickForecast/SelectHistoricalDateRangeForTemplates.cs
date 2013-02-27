@@ -23,8 +23,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
 
         private void setColors()
         {
-            BackColor = ColorHelper.WizardBackgroundColor();
-            label1.BackColor = ColorHelper.WizardPanelBackgroundColor();
+            BackColor = ColorHelper.WizardBackgroundColor();          
         }
 
 		public void Populate(QuickForecastCommandDto stateObj)

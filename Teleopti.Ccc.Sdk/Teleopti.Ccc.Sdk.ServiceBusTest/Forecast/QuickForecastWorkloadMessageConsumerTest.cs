@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 			_mocks.VerifyAll();
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldForecast()
 		{
 			var jobResult = _mocks.DynamicMock<IJobResult>();

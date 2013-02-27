@@ -4,7 +4,7 @@ using Teleopti.Ccc.WinCode.Forecasting.QuickForecastPages;
 
 namespace Teleopti.Ccc.WinCodeTest.Forecasting.QuickForecast
 {
-	[TestFixture]
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable"), TestFixture]
 	public class QuickForecastWizardPagesTest
 	{
 		private QuickForecastWizardPages _target;

@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 					BusinessUnitId = message.BusinessUnitId, Datasource = message.Datasource, JobId = message.JobId, 
 					ScenarioId = message.ScenarioId, StatisticPeriod = message.StatisticPeriod, TargetPeriod = message.TargetPeriod, 
 					WorkloadId = workloadId, TemplatePeriod = message.TemplatePeriod,
-					SmoothingStyle = message.SmoothingStyle
+					SmoothingStyle = message.SmoothingStyle, IncreaseWith = message.IncreaseWith
 				}).ToList();
 			messages.ForEach(m => _serviceBus.Send(m));
 		}

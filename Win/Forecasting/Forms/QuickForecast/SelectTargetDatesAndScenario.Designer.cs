@@ -65,11 +65,11 @@
 			this.label1.Font = new System.Drawing.Font("Segoe UI", 9F);
 			this.label1.ImageAlign = System.Drawing.ContentAlignment.TopRight;
 			this.label1.Location = new System.Drawing.Point(12, 82);
-			this.label1.Margin = new System.Windows.Forms.Padding(12, 12, 12, 12);
+			this.label1.Margin = new System.Windows.Forms.Padding(12);
 			this.label1.Name = "label1";
 			this.label1.Size = new System.Drawing.Size(522, 264);
 			this.label1.TabIndex = 4;
-			this.label1.Text = "xxSelect the dates and scenario where the forecast should be saved";
+			this.label1.Text = "xxTheQuickForecatWillStartInBackgroundMessage";
 			// 
 			// comboBoxScenario
 			// 

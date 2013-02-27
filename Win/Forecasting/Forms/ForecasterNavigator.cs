@@ -1218,8 +1218,13 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 					{
 						if (wizard.ShowDialog(this) == DialogResult.OK)
 						{
-							_sendCommandToSdk.ExecuteCommand(wwp.CreateNewStateObj());
-							_dataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(() => _jobHistoryViewFactory.Create());
+							var dto = wwp.CreateNewStateObj();
+							var everyStep = Convert.ToInt32((1000 / dto.WorkloadIds.Count )/ 3);
+							dto.IncreaseWith = everyStep;
+							var jobId = _sendCommandToSdk.ExecuteCommand(dto).AffectedId.GetValueOrDefault();
+							var statusDialog = new JobStatusView(new JobStatusModel { JobStatusId = jobId, ProgressMax = everyStep * dto.WorkloadIds.Count * 3 });
+							statusDialog.ShowDialog();
+							//_dataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(() => _jobHistoryViewFactory.Create());
 						}
 					}
 				}

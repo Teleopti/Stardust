@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 			_forecastClassesCreator = forecastClassesCreator;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Domain.Common.JobResultDetail.#ctor(Teleopti.Interfaces.Domain.DetailLevel,System.String,System.DateTime,System.Exception)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Domain.Common.JobResultDetail.#ctor(Teleopti.Interfaces.Domain.DetailLevel,System.String,System.DateTime,System.Exception)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		public void Consume(QuickForecastWorkloadMessage message)
 		{
 			using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
@@ -76,7 +76,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 				{
 					var workload = _workloadRepository.Get(message.WorkloadId);
 					if (workload == null) return;
+					
 					jobResult.AddDetail(new JobResultDetail(DetailLevel.Info, "Loaded workload " + workload.Name, DateTime.UtcNow, null));
+
+					_feedback.ReportProgress(message.IncreaseWith, "Loaded workload " + workload.Name);
 
 					var skill = workload.Skill;
 					var scenario = _scenarioRepository.Get(message.ScenarioId);
@@ -88,8 +91,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 						                                                       new List<IValidatedVolumeDay>());
 
 					jobResult.AddDetail(new JobResultDetail(DetailLevel.Info,
-					                                        "Loaded statistics on " + message.StatisticPeriod.ToString(),
+					                                        "Loaded statistics on " + message.StatisticPeriod,
 					                                        DateTime.UtcNow, null));
+
+					_feedback.ReportProgress(message.IncreaseWith, "Loaded statistics on " + message.StatisticPeriod.ToShortDateString(CultureInfo.CurrentCulture));
 
 					var outlierWorkloadDayFilter = new OutlierWorkloadDayFilter<ITaskOwner>(workload, _outlierRepository);
 					var taskOwnerDaysWithoutOutliers =
@@ -117,12 +122,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 					workload.SetDefaultTemplates(workloadDays);
 					jobResult.AddDetail(new JobResultDetail(DetailLevel.Info, "Updated forecast for " + workload.Name, DateTime.UtcNow,
 					                                        null));
+					_feedback.ReportProgress(message.IncreaseWith, "Updated forecast for " + workload.Name);
 					if (!jobResult.HasError())
 						jobResult.FinishedOk = true;
 				}
 				catch (Exception exception)
 				{
-					jobResult.AddDetail(new JobResultDetail(DetailLevel.Error, "Error occured!", DateTime.UtcNow, exception));
+					jobResult.AddDetail(new JobResultDetail(DetailLevel.Error, "Error occurred!", DateTime.UtcNow, exception));
 				}
 				finally
 				{

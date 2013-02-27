@@ -33,7 +33,6 @@
 			this.comboBoxSmoothing = new System.Windows.Forms.ComboBox();
 			this.label2 = new System.Windows.Forms.Label();
 			this.TemplatesDatesFromTo = new Teleopti.Ccc.Win.Reporting.ReportDateFromToSelector();
-			this.label1 = new System.Windows.Forms.Label();
 			this.tableLayoutPanel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -46,7 +45,6 @@
 			this.tableLayoutPanel1.Controls.Add(this.comboBoxSmoothing, 0, 0);
 			this.tableLayoutPanel1.Controls.Add(this.label2, 0, 0);
 			this.tableLayoutPanel1.Controls.Add(this.TemplatesDatesFromTo, 0, 0);
-			this.tableLayoutPanel1.Controls.Add(this.label1, 0, 1);
 			this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -88,21 +86,6 @@
 			this.TemplatesDatesFromTo.WorkPeriodEnd = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("TemplatesDatesFromTo.WorkPeriodEnd")));
 			this.TemplatesDatesFromTo.WorkPeriodStart = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("TemplatesDatesFromTo.WorkPeriodStart")));
 			// 
-			// label1
-			// 
-			this.label1.BackColor = System.Drawing.Color.Transparent;
-			this.tableLayoutPanel1.SetColumnSpan(this.label1, 3);
-			this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.label1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.label1.Font = new System.Drawing.Font("Segoe UI", 9F);
-			this.label1.ImageAlign = System.Drawing.ContentAlignment.TopRight;
-			this.label1.Location = new System.Drawing.Point(12, 82);
-			this.label1.Margin = new System.Windows.Forms.Padding(12, 12, 12, 12);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(546, 296);
-			this.label1.TabIndex = 1;
-			this.label1.Text = "xxSelect historical data range for templates.";
-			// 
 			// SelectHistoricalDateRangeForTemplates
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -120,8 +103,7 @@
         #endregion
 
         private Reporting.ReportDateFromToSelector TemplatesDatesFromTo;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.ComboBox comboBoxSmoothing;
 
