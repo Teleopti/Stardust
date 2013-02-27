@@ -171,7 +171,6 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 	}
 
 	function _saveNewShiftTrade() {
-		console.log(vm);
 		ajax.Ajax({
 			url: "Requests/ShiftTradeRequest",
 			dataType: "json",
@@ -183,7 +182,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 				PersonToId: vm.agentChoosed().personId
 			},
 			success: function (data, textStatus, jqXHR) {
-				alert('done');
+				//todo: dölj subject och message å sånt
 			}
 		});
 	}
