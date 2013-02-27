@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
     public interface IDynamicBlockFinder
     {
         IList<DateOnly> ExtractBlockDays(DateOnly startDateOnly,IGroupPerson groupPerson );
-	    BlockInfo ExtractBlockInfo(DateOnly blockOnDate, ITeamInfo teamInfo, BlockFinderType blockType);
+	    IBlockInfo ExtractBlockInfo(DateOnly blockOnDate, ITeamInfo teamInfo, BlockFinderType blockType);
 
     }
 
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
             return  retList;
             }
 
-	    public BlockInfo ExtractBlockInfo(DateOnly blockOnDate, ITeamInfo teamInfo, BlockFinderType blockType)
+	    public IBlockInfo ExtractBlockInfo(DateOnly blockOnDate, ITeamInfo teamInfo, BlockFinderType blockType)
 	    {
 		    DateOnlyPeriod? blockPeriod = null;
 		    switch (blockType)
