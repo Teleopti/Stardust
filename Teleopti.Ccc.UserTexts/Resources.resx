@@ -11294,4 +11294,8 @@ These options are activated:
     <value>Errors</value>
     <comment>Errors</comment>
   </data>
+  <data name="TheQuickForecatWillStartInBackgroundMessage" xml:space="preserve">
+    <value>The quick forecast will be started as a job in the background when this wizard is finished, look in Job History for status.</value>
+    <comment>Information on the last step in quick forecast</comment>
+  </data>
 </root>

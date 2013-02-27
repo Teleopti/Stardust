@@ -22693,6 +22693,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The quick forecast will be started as a job in the background when this wizard is finished, look in Job History for status..
+        /// </summary>
+        public static string TheQuickForecatWillStartInBackgroundMessage {
+            get {
+                return ResourceManager.GetString("TheQuickForecatWillStartInBackgroundMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to There are agents assigned to the team.
         /// </summary>
         public static string ThereAreAgentsAssignedToTheTeam {
