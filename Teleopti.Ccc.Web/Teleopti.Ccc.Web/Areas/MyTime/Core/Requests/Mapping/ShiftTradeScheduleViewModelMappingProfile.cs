@@ -40,6 +40,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 											 var myScheduleViewModel = new ShiftTradePersonScheduleViewModel
 											 {
 												 Name = o.Person.Name.ToString(),
+												 PersonId = o.Person.Id.Value,
 												 ScheduleLayers = createShiftTradeLayers(myScheduleDay, myScheduleDay.PersonTimeZone, timeLineRangeTot),
 												 HasUnderlyingDayOff = myScheduleDay.SignificantPartForDisplay == SchedulePartView.ContractDayOff,
 												  DayOffText = myScheduleDay.DayOffText,
@@ -86,6 +87,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 						possibleTradePersonViewModelCollection.AddRange(possibleTradePersonDayCollection
 																							.Select(personDay => new ShiftTradePersonScheduleViewModel
 																								{
+																									PersonId = personDay.PersonId,
 																									Name = personDay.Name,
 																									ScheduleLayers = createShiftTradeLayers(personDay, myScheduleDay.PersonTimeZone, timeLineRangeTot),
 																									MinutesSinceTimeLineStart =
@@ -153,11 +155,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 
 		private ShiftTradePersonDayData createPersonDay(IScheduleDay scheduleDay)
 		{
+			var person = scheduleDay.Person;
 			var returnDay = new ShiftTradePersonDayData
 									{
-										Name = scheduleDay.Person.Name.ToString(),
-										PersonTimeZone = scheduleDay.Person.PermissionInformation.DefaultTimeZone(),
-										PersonCulture = scheduleDay.Person.PermissionInformation.Culture()
+										PersonId = person.Id.HasValue ? person.Id.Value : Guid.Empty,
+										Name = person.Name.ToString(),
+										PersonTimeZone = person.PermissionInformation.DefaultTimeZone(),
+										PersonCulture = person.PermissionInformation.Culture()
 									};
 
 			var layerCollection = _projectionProvider.Invoke().Projection(scheduleDay);
@@ -234,5 +238,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		public CultureInfo PersonCulture { get; set; }
 
 		public SchedulePartView SignificantPartForDisplay { get; set; }
+
+		public Guid PersonId { get; set; }
 	}
 }

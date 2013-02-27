@@ -514,8 +514,29 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		                                                }));
 
 			var result = Mapper.Map<DateOnly, ShiftTradeScheduleViewModel>(new DateOnly(possibleTradePersonLayerPeriod.StartDateTime));
-			result.PossibleTradePersons.FirstOrDefault().Name.Should().Be.EqualTo(_person.Name.ToString());
-			result.PossibleTradePersons.FirstOrDefault().ScheduleLayers.Count().Should().Be.EqualTo(1);
+			result.PossibleTradePersons.First().Name.Should().Be.EqualTo(_person.Name.ToString());
+			result.PossibleTradePersons.First().ScheduleLayers.Count().Should().Be.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldMapPersonId()
+		{
+			var personId = Guid.NewGuid();
+			_person.SetId(personId);
+			var possibleTradePersonLayerPeriod = new DateTimePeriod(new DateTime(2013, 1, 1, 12, 0, 0, DateTimeKind.Utc),
+												 new DateTime(2013, 1, 1, 21, 40, 0, DateTimeKind.Utc));
+			var scheduleDay = _scheduleFactory.ScheduleDayStub(new DateTime(), _person);
+
+			_shiftTradeRequestProvider.Stub(x => x.RetrieveMyScheduledDay(Arg<DateOnly>.Is.Anything)).Return(scheduleDay);
+			_shiftTradeRequestProvider.Stub(
+	            x => x.RetrievePossibleTradePersonsScheduleDay(new DateOnly(possibleTradePersonLayerPeriod.StartDateTime))).Return(new[] { scheduleDay });
+			_projectionProvider.Stub(p => p.Projection(scheduleDay)).Return(_scheduleFactory.ProjectionStub(new[]
+		                                                {
+		                                                    _scheduleFactory.VisualLayerStub(possibleTradePersonLayerPeriod, _person)
+		                                                }));
+
+			var result = Mapper.Map<DateOnly, ShiftTradeScheduleViewModel>(new DateOnly(possibleTradePersonLayerPeriod.StartDateTime));
+			result.PossibleTradePersons.First().PersonId.Should().Be.EqualTo(personId);
 		}
 
 		[Test]

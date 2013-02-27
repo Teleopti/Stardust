@@ -139,7 +139,7 @@ Teleopti.MyTimeWeb.Request.PersonScheduleViewModel = function (layers, scheduleO
 		minutesSinceTimeLineStart = scheduleObject.MinutesSinceTimeLineStart;
 		dayOffText = scheduleObject.DayOffText;
 		hasUnderlyingDayOff = scheduleObject.HasUnderlyingDayOff;
-		personId = scheduleObject.personId;
+		personId = scheduleObject.PersonId;
 	}
 
 	self.personId = personId;
