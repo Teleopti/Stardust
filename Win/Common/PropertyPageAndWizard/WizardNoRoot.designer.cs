@@ -70,9 +70,9 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 			// 
 			this.buttonFinish.Anchor = System.Windows.Forms.AnchorStyles.Right;
 			this.buttonFinish.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
-			this.buttonFinish.Location = new System.Drawing.Point(525, 3);
+			this.buttonFinish.Location = new System.Drawing.Point(525, 7);
 			this.buttonFinish.Name = "buttonFinish";
-			this.buttonFinish.Size = new System.Drawing.Size(99, 19);
+			this.buttonFinish.Size = new System.Drawing.Size(99, 23);
 			this.buttonFinish.TabIndex = 7;
 			this.buttonFinish.Text = "xxFinishAmpersand";
 			this.buttonFinish.UseVisualStyle = true;
@@ -83,9 +83,9 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 			// 
 			this.buttonNext.Anchor = System.Windows.Forms.AnchorStyles.Right;
 			this.buttonNext.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
-			this.buttonNext.Location = new System.Drawing.Point(408, 3);
+			this.buttonNext.Location = new System.Drawing.Point(408, 7);
 			this.buttonNext.Name = "buttonNext";
-			this.buttonNext.Size = new System.Drawing.Size(99, 19);
+			this.buttonNext.Size = new System.Drawing.Size(99, 23);
 			this.buttonNext.TabIndex = 6;
 			this.buttonNext.Text = "xxNextAmpersandArrow";
 			this.buttonNext.UseVisualStyle = true;
@@ -96,9 +96,9 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 			// 
 			this.buttonBack.Anchor = System.Windows.Forms.AnchorStyles.Right;
 			this.buttonBack.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
-			this.buttonBack.Location = new System.Drawing.Point(291, 3);
+			this.buttonBack.Location = new System.Drawing.Point(291, 7);
 			this.buttonBack.Name = "buttonBack";
-			this.buttonBack.Size = new System.Drawing.Size(99, 19);
+			this.buttonBack.Size = new System.Drawing.Size(99, 23);
 			this.buttonBack.TabIndex = 5;
 			this.buttonBack.Text = "xxBackAmpersandArrow";
 			this.buttonBack.UseVisualStyle = true;
@@ -110,9 +110,9 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 			this.buttonCancel.Anchor = System.Windows.Forms.AnchorStyles.Right;
 			this.buttonCancel.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
 			this.buttonCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-			this.buttonCancel.Location = new System.Drawing.Point(642, 3);
+			this.buttonCancel.Location = new System.Drawing.Point(642, 7);
 			this.buttonCancel.Name = "buttonCancel";
-			this.buttonCancel.Size = new System.Drawing.Size(99, 19);
+			this.buttonCancel.Size = new System.Drawing.Size(99, 23);
 			this.buttonCancel.TabIndex = 8;
 			this.buttonCancel.Text = "xxCancel";
 			this.buttonCancel.UseVisualStyle = true;
@@ -129,13 +129,13 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 			// splitContainerPages.Panel1
 			// 
 			this.splitContainerPages.Panel1.Controls.Add(this.treeViewPages);
-			this.splitContainerPages.Panel1.Padding = new System.Windows.Forms.Padding(12, 12, 12, 12);
+			this.splitContainerPages.Panel1.Padding = new System.Windows.Forms.Padding(12);
 			this.splitContainerPages.Panel1MinSize = 120;
 			// 
 			// splitContainerPages.Panel2
 			// 
 			this.splitContainerPages.Panel2.Controls.Add(this.splitContainerVertical);
-			this.splitContainerPages.Size = new System.Drawing.Size(744, 442);
+			this.splitContainerPages.Size = new System.Drawing.Size(744, 430);
 			this.splitContainerPages.SplitterDistance = 179;
 			this.splitContainerPages.SplitterWidth = 1;
 			this.splitContainerPages.TabIndex = 6;
@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
             treeNode1});
 			this.treeViewPages.ShowPlusMinus = false;
 			this.treeViewPages.ShowRootLines = false;
-			this.treeViewPages.Size = new System.Drawing.Size(155, 418);
+			this.treeViewPages.Size = new System.Drawing.Size(155, 406);
 			this.treeViewPages.TabIndex = 0;
 			this.treeViewPages.TabStop = false;
 			this.treeViewPages.BeforeCollapse += new System.Windows.Forms.TreeViewCancelEventHandler(this.treeViewPages_BeforeCollapse);
@@ -175,8 +175,8 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 			// 
 			this.splitContainerVertical.Panel1.Controls.Add(this.gradientPanel1);
 			this.splitContainerVertical.Panel1MinSize = 50;
-			this.splitContainerVertical.Size = new System.Drawing.Size(564, 442);
-			this.splitContainerVertical.SplitterDistance = 57;
+			this.splitContainerVertical.Size = new System.Drawing.Size(564, 430);
+			this.splitContainerVertical.SplitterDistance = 55;
 			this.splitContainerVertical.SplitterWidth = 1;
 			this.splitContainerVertical.TabIndex = 0;
 			// 
@@ -190,7 +190,7 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 			this.gradientPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.gradientPanel1.Location = new System.Drawing.Point(0, 0);
 			this.gradientPanel1.Name = "gradientPanel1";
-			this.gradientPanel1.Size = new System.Drawing.Size(564, 57);
+			this.gradientPanel1.Size = new System.Drawing.Size(564, 55);
 			this.gradientPanel1.TabIndex = 0;
 			// 
 			// labelHeading
@@ -221,7 +221,7 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 			// 
 			this.splitContainerHorizontal.Panel2.Controls.Add(this.tableLayoutPanelButtonsRtl);
 			this.splitContainerHorizontal.Size = new System.Drawing.Size(744, 468);
-			this.splitContainerHorizontal.SplitterDistance = 442;
+			this.splitContainerHorizontal.SplitterDistance = 430;
 			this.splitContainerHorizontal.SplitterWidth = 1;
 			this.splitContainerHorizontal.TabIndex = 7;
 			this.splitContainerHorizontal.TabStop = false;
@@ -242,7 +242,7 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 			this.tableLayoutPanelButtonsRtl.Name = "tableLayoutPanelButtonsRtl";
 			this.tableLayoutPanelButtonsRtl.RowCount = 1;
 			this.tableLayoutPanelButtonsRtl.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-			this.tableLayoutPanelButtonsRtl.Size = new System.Drawing.Size(744, 25);
+			this.tableLayoutPanelButtonsRtl.Size = new System.Drawing.Size(744, 37);
 			this.tableLayoutPanelButtonsRtl.TabIndex = 9;
 			// 
 			// ribbonControlAdv1

@@ -123,6 +123,14 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
 			if(_stateObj.ScenarioId.Equals(Guid.Empty))
 				comboBoxScenario.SelectedValue = scenariosToLoad.FirstOrDefault(scenario => scenario.DefaultScenario).Id.GetValueOrDefault();
         }
+
+		public override string HelpId
+		{
+			get
+			{
+				return "Help";
+			}
+		}
        
     }
 }

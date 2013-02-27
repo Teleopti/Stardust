@@ -65,5 +65,13 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
         {
             get { return _errorMessages; }
         }
+
+		public override string HelpId
+		{
+			get
+			{
+				return "Help";
+			}
+		}
     }
 }

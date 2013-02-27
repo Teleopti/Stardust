@@ -92,5 +92,13 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
 			[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
 			public string Text { get; set; }
 		}
+
+		public override string HelpId
+		{
+			get
+			{
+				return "Help";
+			}
+		}
     }
 }
