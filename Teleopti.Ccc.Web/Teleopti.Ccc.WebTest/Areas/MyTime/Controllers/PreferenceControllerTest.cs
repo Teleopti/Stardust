@@ -187,11 +187,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldGetPreferenceTemplates()
 		{
-			var preferenceTemplateOptionsProvider = MockRepository.GenerateMock<IPreferenceTemplatesProvider>();
-			var target = new PreferenceController(null, null, null, preferenceTemplateOptionsProvider);
+			var preferenceTemplateProvider = MockRepository.GenerateMock<IPreferenceTemplatesProvider>();
+			var target = new PreferenceController(null, null, null, preferenceTemplateProvider);
 
 			var templates = new List<IExtendedPreferenceTemplate>();
-			preferenceTemplateOptionsProvider.Stub(x => x.RetrievePreferenceTemplates()).Return(templates);
+			preferenceTemplateProvider.Stub(x => x.RetrievePreferenceTemplates()).Return(templates);
 
 			var result = target.GetPreferenceTemplates();
 
