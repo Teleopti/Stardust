@@ -26,7 +26,13 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		self.hours = ko.observableArray();
 		self.mySchedule = ko.observable(new Teleopti.MyTimeWeb.Request.PersonScheduleViewModel());
 		self.possibleTradeSchedules = ko.observableArray();
-		self.isDetailVisible = ko.observable(false);
+		self.agentChoosed = ko.observable(null);
+		self.isDetailVisible = ko.computed(function () {
+			if (self.agentChoosed() === null) {
+				return false;
+			}
+			return true;
+		});
 		self.subject = ko.observable();
 		self.message = ko.observable();
 		self.pixelPerMinute = ko.computed(function () {
@@ -54,16 +60,13 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			self.possibleTradeSchedules(mappedPersonsSchedule);
 		};
 
-		self.agentChoosed = ko.observable(false);
-
 		self.chooseAgent = function (agent) {
 			//hide all agents
 			$.each(self.possibleTradeSchedules(), function (index, value) {
 				value.isVisible(false);
 			});
 			agent.isVisible(true);
-			self.agentChoosed(true);
-			self.isDetailVisible(true);
+			self.agentChoosed(agent);
 		};
 
 		self._createTimeLine = function (hours) {
