@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 																									 _schedulingOptions.UseMinimumPersons,
 																									 _schedulingOptions.UseMaximumPersons);
 						}
-						_teamScheduling.Execute(scheduleDate, dateOnlyList, groupMatrixList, groupPerson,
+						_teamScheduling.Execute(dateOnlyList, groupMatrixList, groupPerson,
 						                        bestShiftProjectionCache, unLockedDays, new List<IPerson> {selectedPerson});
 					}
 				}
