@@ -191,72 +191,72 @@ namespace Teleopti.Ccc.Domain.Optimization
         private void executeAdvanceBlockScheduling(IList<IScheduleMatrixPro> allMatrixes, ITeamSteadyStateHolder teamSteadyStateHolder,
                                                    IList<IPerson> selectedPerson, IList<IScheduleMatrixPro> allPersonMatrixList, IList<DateOnly> dayOffDates)
         {
-            var unLockedDays = new List<DateOnly>();
-            for (var i = 0; i < allMatrixes.Count; i++)
-            {
-                var openMatrixList = allMatrixes.Where(x => x.Person.Equals(allMatrixes[i].Person));
-                foreach (var scheduleMatrixPro in openMatrixList)
-                {
-                    foreach (var scheduleDayPro in scheduleMatrixPro.EffectivePeriodDays.OrderBy(x => x.Day))
-                    {
-                        if (scheduleMatrixPro.UnlockedDays.Contains(scheduleDayPro))
-                            unLockedDays.Add(scheduleDayPro.Day);
-                    }
-                }
-            }
+			//var unLockedDays = new List<DateOnly>();
+			//for (var i = 0; i < allMatrixes.Count; i++)
+			//{
+			//    var openMatrixList = allMatrixes.Where(x => x.Person.Equals(allMatrixes[i].Person));
+			//    foreach (var scheduleMatrixPro in openMatrixList)
+			//    {
+			//        foreach (var scheduleDayPro in scheduleMatrixPro.EffectivePeriodDays.OrderBy(x => x.Day))
+			//        {
+			//            if (scheduleMatrixPro.UnlockedDays.Contains(scheduleDayPro))
+			//                unLockedDays.Add(scheduleDayPro.Day);
+			//        }
+			//    }
+			//}
 
-            foreach (var dateOnly in dayOffDates)
-            {
-                var allGroupPersonListOnStartDate = new HashSet<IGroupPerson>();
+			//foreach (var dateOnly in dayOffDates)
+			//{
+			//    var allGroupPersonListOnStartDate = new HashSet<IGroupPerson>();
 
-                foreach (var person in selectedPerson)
-                {
-                    allGroupPersonListOnStartDate.Add(_groupPersonBuilderForOptimization.BuildGroupPerson(person, dateOnly));
-                }
+			//    foreach (var person in selectedPerson)
+			//    {
+			//        allGroupPersonListOnStartDate.Add(_groupPersonBuilderForOptimization.BuildGroupPerson(person, dateOnly));
+			//    }
 
-                foreach (var fullGroupPerson in allGroupPersonListOnStartDate.GetRandom(allGroupPersonListOnStartDate.Count, true))
-                {
-                    if (!teamSteadyStateHolder.IsSteadyState(fullGroupPerson))
-                    {
-                        TeamSchedulingSuccessfullForTesting = false;
-                        continue;
-                    }
-                    var dateOnlyList = _dynamicBlockFinder.ExtractBlockDays(dateOnly,fullGroupPerson );
-                    var groupPersonList = _groupPersonBuilderBasedOnContractTime.SplitTeams(fullGroupPerson, dateOnly);
-                    foreach (var groupPerson in groupPersonList)
-                    {
-                        var groupMatrixList = getScheduleMatrixProList(groupPerson, dateOnly, allPersonMatrixList);
+			//    foreach (var fullGroupPerson in allGroupPersonListOnStartDate.GetRandom(allGroupPersonListOnStartDate.Count, true))
+			//    {
+			//        if (!teamSteadyStateHolder.IsSteadyState(fullGroupPerson))
+			//        {
+			//            TeamSchedulingSuccessfullForTesting = false;
+			//            continue;
+			//        }
+			//        var dateOnlyList = _dynamicBlockFinder.ExtractBlockDays(dateOnly,fullGroupPerson );
+			//        var groupPersonList = _groupPersonBuilderBasedOnContractTime.SplitTeams(fullGroupPerson, dateOnly);
+			//        foreach (var groupPerson in groupPersonList)
+			//        {
+			//            var groupMatrixList = getScheduleMatrixProList(groupPerson, dateOnly, allPersonMatrixList);
                         
-                        var restriction = _restrictionAggregator.Aggregate(dateOnlyList, groupPerson, groupMatrixList,
-                                                                           _schedulingOptions);
+			//            var restriction = _restrictionAggregator.Aggregate(dateOnlyList, groupPerson, groupMatrixList,
+			//                                                               _schedulingOptions);
 
-                        var activityInternalData = _skillDayPeriodIntervalDataGenerator.Generate(fullGroupPerson, dateOnlyList);
+			//            var activityInternalData = _skillDayPeriodIntervalDataGenerator.Generate(fullGroupPerson, dateOnlyList);
 
-                        var shifts = _workShiftFilterService.Filter(dateOnly, groupPerson, groupMatrixList, restriction,
-                                                                    _schedulingOptions);
-                        if (shifts != null && shifts.Count > 0)
-                        {
-	                        IShiftProjectionCache bestShiftProjectionCache = _workShiftSelector.SelectShiftProjectionCache(shifts,
-	                                                                                                                       activityInternalData,
-	                                                                                                                       _schedulingOptions.
-		                                                                                                                       WorkShiftLengthHintOption,
-	                                                                                                                       _schedulingOptions.
-		                                                                                                                       UseMinimumPersons,
-	                                                                                                                       _schedulingOptions.
-		                                                                                                                       UseMaximumPersons);
+			//            var shifts = _workShiftFilterService.Filter(dateOnly, groupPerson, groupMatrixList, restriction,
+			//                                                        _schedulingOptions);
+			//            if (shifts != null && shifts.Count > 0)
+			//            {
+			//                IShiftProjectionCache bestShiftProjectionCache = _workShiftSelector.SelectShiftProjectionCache(shifts,
+			//                                                                                                               activityInternalData,
+			//                                                                                                               _schedulingOptions.
+			//                                                                                                                   WorkShiftLengthHintOption,
+			//                                                                                                               _schedulingOptions.
+			//                                                                                                                   UseMinimumPersons,
+			//                                                                                                               _schedulingOptions.
+			//                                                                                                                   UseMaximumPersons);
 
-	                        _teamScheduling.Execute(dateOnlyList, groupMatrixList, groupPerson,
-                                                    bestShiftProjectionCache, unLockedDays, selectedPerson);
-                            //if (_cancelMe)
-                            //    break;
-                        }
-	                    //if (_cancelMe)
-                        //    break;
-                    }
-                    //if (_cancelMe)
-                    //    break;
-                }
-            }
+			//                _teamScheduling.Execute(dateOnlyList, groupMatrixList, groupPerson,
+			//                                        bestShiftProjectionCache, unLockedDays, selectedPerson);
+			//                //if (_cancelMe)
+			//                //    break;
+			//            }
+			//            //if (_cancelMe)
+			//            //    break;
+			//        }
+			//        //if (_cancelMe)
+			//        //    break;
+			//    }
+			//}
         }
 
         private bool dataExtractorExecute(IScheduleMatrixPro matrix)

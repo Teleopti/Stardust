@@ -190,50 +190,50 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             //}		
 		}
 
-		[Test]
-        public void VerifySuccessfulExecuteWithOnePerson()
-		{
-            _daysOffPreferences.ConsiderWeekBefore = false;
-            _daysOffPreferences.ConsiderWeekAfter = false;
-            _target = createTarget();
+		//[Test]
+		//public void VerifySuccessfulExecuteWithOnePerson()
+		//{
+		//    _daysOffPreferences.ConsiderWeekBefore = false;
+		//    _daysOffPreferences.ConsiderWeekAfter = false;
+		//    _target = createTarget();
 
-            using (_mocks.Record())
-            {
-                commonMocks(true, true, _groupPerson);
+		//    using (_mocks.Record())
+		//    {
+		//        commonMocks(true, true, _groupPerson);
                 
-                IList<IScheduleDayPro> scheduleDayPros = new List<IScheduleDayPro>();
-                Expect.Call(_activeScheduleMatrix.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(scheduleDayPros)).Repeat.AtLeastOnce();
-                Expect.Call(_scheduleMatrix2.Person).Return(_person).Repeat.AtLeastOnce();
-                Expect.Call(_scheduleMatrix2.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(scheduleDayPros)).Repeat.AtLeastOnce();
-                Expect.Call(_dynamicBlockFinder.ExtractBlockDays(_daysOffToRemove[0], _groupPerson)).Return(_daysOffToRemove);
-                Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(_person, _daysOffToRemove[0])).Return(_groupPerson);
+		//        IList<IScheduleDayPro> scheduleDayPros = new List<IScheduleDayPro>();
+		//        Expect.Call(_activeScheduleMatrix.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(scheduleDayPros)).Repeat.AtLeastOnce();
+		//        Expect.Call(_scheduleMatrix2.Person).Return(_person).Repeat.AtLeastOnce();
+		//        Expect.Call(_scheduleMatrix2.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(scheduleDayPros)).Repeat.AtLeastOnce();
+		//        Expect.Call(_dynamicBlockFinder.ExtractBlockDays(_daysOffToRemove[0], _groupPerson)).Return(_daysOffToRemove);
+		//        Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(_person, _daysOffToRemove[0])).Return(_groupPerson);
 
-                Expect.Call(_groupPersonBuilderBasedOnContractTime.SplitTeams(_groupPerson, _daysOffToRemove[0])).Return
-                    (new List<IGroupPerson> {_groupPerson});
-                Expect.Call(_restrictionAggregator.Aggregate(_daysOffToRemove, _groupPerson, new List<IScheduleMatrixPro>{_scheduleMatrix2 },_schedulingOptions )).IgnoreArguments().Return(
-                    _effectiveRestriction);
-                IDictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>> activityInternalData = new Dictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>>();
-                Expect.Call(_skillDayPeriodDataGenerator.Generate(_groupPerson, _daysOffToRemove)).Return(
-                    activityInternalData);
-                IList<IShiftProjectionCache> shiftProjectionCaheList = new List<IShiftProjectionCache>{_shiftProjectionCache};
-                Expect.Call(_workShiftFilerService.Filter(_daysOffToRemove[0], _person,
-                                                          new List<IScheduleMatrixPro> {_scheduleMatrix2},
-                                                          _effectiveRestriction, _schedulingOptions)).IgnoreArguments().Return(shiftProjectionCaheList);
-                Expect.Call(_teamSteadyStateHolder.IsSteadyState(_groupPerson)).Return(true);
-                Expect.Call(() => _teamScheduling.Execute(_daysOffToRemove[0], _daysOffToRemove,
-                                                    new List<IScheduleMatrixPro> {_scheduleMatrix2}, _groupPerson, _shiftProjectionCache,
-                                                    new List<DateOnly>() {}, new List<IPerson>() {})).IgnoreArguments();
-            }
-            using (_mocks.Playback())
-            {
-                bool result = _target.Execute(_activeScheduleMatrix, _allScheduleMatrixes, _schedulingOptions,
-                                              _optimizationPreferences, _teamSteadyStateMainShiftScheduler,
-                                              _teamSteadyStateHolder, _scheduleDictionary, new List<IPerson> {_person },
-                                              new List<IScheduleMatrixPro>() { });
-                Assert.IsTrue(result);
-                Assert.AreEqual(_workingBitArray, _target.WorkingBitArray);
-            }	
-        }
+		//        Expect.Call(_groupPersonBuilderBasedOnContractTime.SplitTeams(_groupPerson, _daysOffToRemove[0])).Return
+		//            (new List<IGroupPerson> {_groupPerson});
+		//        Expect.Call(_restrictionAggregator.Aggregate(_daysOffToRemove, _groupPerson, new List<IScheduleMatrixPro>{_scheduleMatrix2 },_schedulingOptions )).IgnoreArguments().Return(
+		//            _effectiveRestriction);
+		//        IDictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>> activityInternalData = new Dictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>>();
+		//        Expect.Call(_skillDayPeriodDataGenerator.Generate(_groupPerson, _daysOffToRemove)).Return(
+		//            activityInternalData);
+		//        IList<IShiftProjectionCache> shiftProjectionCaheList = new List<IShiftProjectionCache>{_shiftProjectionCache};
+		//        Expect.Call(_workShiftFilerService.Filter(_daysOffToRemove[0], _person,
+		//                                                  new List<IScheduleMatrixPro> {_scheduleMatrix2},
+		//                                                  _effectiveRestriction, _schedulingOptions)).IgnoreArguments().Return(shiftProjectionCaheList);
+		//        Expect.Call(_teamSteadyStateHolder.IsSteadyState(_groupPerson)).Return(true);
+		//        Expect.Call(() => _teamScheduling.Execute(_daysOffToRemove[0], _daysOffToRemove,
+		//                                            new List<IScheduleMatrixPro> {_scheduleMatrix2}, _groupPerson, _shiftProjectionCache,
+		//                                            new List<DateOnly>() {}, new List<IPerson>() {})).IgnoreArguments();
+		//    }
+		//    using (_mocks.Playback())
+		//    {
+		//        bool result = _target.Execute(_activeScheduleMatrix, _allScheduleMatrixes, _schedulingOptions,
+		//                                      _optimizationPreferences, _teamSteadyStateMainShiftScheduler,
+		//                                      _teamSteadyStateHolder, _scheduleDictionary, new List<IPerson> {_person },
+		//                                      new List<IScheduleMatrixPro>() { });
+		//        Assert.IsTrue(result);
+		//        Assert.AreEqual(_workingBitArray, _target.WorkingBitArray);
+		//    }	
+		//}
 
         [Test]
         public void VerifyUnsuccessfulExecuteDecisionMakerNotFindDay()
@@ -380,36 +380,36 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             }
         }
 
-        [Test]
-        public void VerifyUnsuccessfulExecuteReschedulingFailWhenNotInSteadyState()
-        {
-            _target = createTarget();
-            _daysOffPreferences.ConsiderWeekBefore = false;
-            _daysOffPreferences.ConsiderWeekAfter = false;
+		//[Test]
+		//public void VerifyUnsuccessfulExecuteReschedulingFailWhenNotInSteadyState()
+		//{
+		//    _target = createTarget();
+		//    _daysOffPreferences.ConsiderWeekBefore = false;
+		//    _daysOffPreferences.ConsiderWeekAfter = false;
 
-            using (_mocks.Record())
-            {
-                commonMocks(true, true, _groupPerson);
+		//    using (_mocks.Record())
+		//    {
+		//        commonMocks(true, true, _groupPerson);
                 
-                IList<IScheduleDayPro> schduleDayProList = new List<IScheduleDayPro>();
-                Expect.Call(_activeScheduleMatrix.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(schduleDayProList)).Repeat.AtLeastOnce();
-                Expect.Call(_scheduleMatrix2.Person).Return(_person).Repeat.AtLeastOnce();
-                Expect.Call(_scheduleMatrix2.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(schduleDayProList)).Repeat.AtLeastOnce();
-                Expect.Call(_teamSteadyStateHolder.IsSteadyState(_groupPerson)).Return(false);
+		//        IList<IScheduleDayPro> schduleDayProList = new List<IScheduleDayPro>();
+		//        Expect.Call(_activeScheduleMatrix.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(schduleDayProList)).Repeat.AtLeastOnce();
+		//        Expect.Call(_scheduleMatrix2.Person).Return(_person).Repeat.AtLeastOnce();
+		//        Expect.Call(_scheduleMatrix2.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(schduleDayProList)).Repeat.AtLeastOnce();
+		//        Expect.Call(_teamSteadyStateHolder.IsSteadyState(_groupPerson)).Return(false);
 
-                Expect.Call(_dynamicBlockFinder.ExtractBlockDays(_daysOffToRemove[0],_groupPerson )).Return(_daysOffToRemove);
-                Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(_person, _daysOffToRemove[0])).Return(_groupPerson);
-            }
-            using (_mocks.Playback())
-            {
-                _target.Execute(_activeScheduleMatrix, _allScheduleMatrixes, _schedulingOptions,
-                                              _optimizationPreferences, _teamSteadyStateMainShiftScheduler,
-                                              _teamSteadyStateHolder, _scheduleDictionary, new List<IPerson>{_person},
-                                              new List<IScheduleMatrixPro>());
-                Assert.IsFalse(_target.TeamSchedulingSuccessfullForTesting);
-            }
+		//        Expect.Call(_dynamicBlockFinder.ExtractBlockDays(_daysOffToRemove[0],_groupPerson )).Return(_daysOffToRemove);
+		//        Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(_person, _daysOffToRemove[0])).Return(_groupPerson);
+		//    }
+		//    using (_mocks.Playback())
+		//    {
+		//        _target.Execute(_activeScheduleMatrix, _allScheduleMatrixes, _schedulingOptions,
+		//                                      _optimizationPreferences, _teamSteadyStateMainShiftScheduler,
+		//                                      _teamSteadyStateHolder, _scheduleDictionary, new List<IPerson>{_person},
+		//                                      new List<IScheduleMatrixPro>());
+		//        Assert.IsFalse(_target.TeamSchedulingSuccessfullForTesting);
+		//    }
 
-        }
+		//}
 
         private void commonMocks(bool executeDaysOffMoveSuccess, bool validatorSuccess, IGroupPerson groupPersonToReturn)
         {

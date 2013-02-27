@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 
 			using (_mocks.Playback())
 			{
-				ITeamInfo result = _target.CreateTeamInfo(sourceMatrix, allMatrixesInScheduler);
+				ITeamInfo result = _target.CreateTeamInfo(_baseLineData.Person1, new DateOnly(2013, 2, 26), allMatrixesInScheduler);
 				Assert.AreSame(groupPerson, result.GroupPerson);
 				Assert.AreSame(matrixOnPersonAndPeriod, result.MatrixesForGroup.FirstOrDefault());
 				Assert.AreEqual(1, result.MatrixesForGroup.Count());

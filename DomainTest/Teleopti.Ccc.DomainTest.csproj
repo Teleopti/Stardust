@@ -362,7 +362,6 @@
     <Compile Include="ResourceCalculation\SwapAndModifyServiceNewTest.cs" />
     <Compile Include="ResourceCalculation\SwapServiceNewTest.cs" />
     <Compile Include="ResourceCalculation\WorkShiftCalculatorsManagerTest.cs" />
-    <Compile Include="Scheduling\AdvanceSchedulingServiceTest.cs" />
     <Compile Include="Scheduling\AffectsSameDayAndPersonSpecificationTest.cs" />
     <Compile Include="Scheduling\Assignment\DeleteAndResourceCalculateServiceTest.cs" />
     <Compile Include="Scheduling\Assignment\GroupShiftCategoryFairnessCreatorTest.cs" />

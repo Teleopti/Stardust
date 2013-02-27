@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			foreach (var fullGroupPerson in allGroupPersonListOnStartDate.GetRandom(allGroupPersonListOnStartDate.Count, true))
 			{
 				var groupPersonList = _groupPersonBuilderBasedOnContractTime.SplitTeams(fullGroupPerson, scheduleDate);
-                var dateOnlyList = _dynamicBlockFinder.ExtractBlockDays(scheduleDate, fullGroupPerson);
+                var dateOnlyList = new List<DateOnly>();// = _dynamicBlockFinder.ExtractBlockDays(scheduleDate, fullGroupPerson);
                 foreach (var groupPerson in groupPersonList)
 				{
 					var groupMatrixList = getScheduleMatrixProList(groupPerson, scheduleDate, allMatrixList);
