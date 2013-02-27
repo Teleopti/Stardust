@@ -126,6 +126,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<ExtendedPreferencePredicate>().As<IExtendedPreferencePredicate>().SingleInstance();
 			builder.RegisterType<PreferenceFulfilledChecker>().As<IPreferenceFulfilledChecker>().SingleInstance();
 			builder.RegisterType<RestrictionChecker>().As<ICheckerRestriction>();
+			builder.RegisterType<PreferenceTemplatesProvider>().As<IPreferenceTemplatesProvider>();
 		}
 		 
 		private static void registerStudentAvailabilityTypes(ContainerBuilder builder)

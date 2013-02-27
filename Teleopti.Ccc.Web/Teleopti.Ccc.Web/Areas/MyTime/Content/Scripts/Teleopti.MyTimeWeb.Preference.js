@@ -101,7 +101,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 	function _initAddExtendedButton() {
 		var button = $('#Preference-add-extended-button');
 		var template = $('#Preference-add-extended-form');
-		addExtendedPreferenceFormViewModel = new Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel();
+		addExtendedPreferenceFormViewModel = new Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel(ajax);
 
 		addExtendedTooltip = $('<div/>')
 			.qtip({
@@ -151,22 +151,20 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 							});
 						$('#Preference-extended-save-template')
 							.button()
-							.click(function() {
+							.click(function () {
 								//TODO
 
 							});
 
-						ko.applyBindings(addExtendedPreferenceFormViewModel, $("#Preference-add-extended-form")[0]);
+						$('#template-name-section input[type=text]')
+							.labeledinput();
 
+						ko.applyBindings(addExtendedPreferenceFormViewModel, $("#Preference-add-extended-form")[0]);
 					}
 				}
 			});
 
 		button.removeAttr('disabled');
-
-		$('#template-name-section input[type=text]')
-			.labeledinput()
-			;
 	}
 
 	function _initMustHaveButton() {
@@ -258,6 +256,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 					loadingStarted = true;
 					_activateSelectable();
 					_activateMeetingTooltip();
+					addExtendedPreferenceFormViewModel.LoadAvailableTemplates();
 					readyForInteraction();
 					loader(function () {
 						periodFeedbackViewModel.LoadFeedback();

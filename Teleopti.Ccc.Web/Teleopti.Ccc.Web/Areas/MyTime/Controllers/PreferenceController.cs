@@ -1,4 +1,5 @@
 using System.Net;
+using System.Web.Helpers;
 using System.Web.Mvc;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
@@ -94,11 +95,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			return Json(_preferencePersister.Delete(date));
 		}
 
-		[UnitOfWork]
 		[HttpGet]
+		[UnitOfWork]
 		public virtual  JsonResult GetPreferenceTemplates()
 		{
-			return Json(_preferenceTemplatesProvider.RetrievePreferenceTemplates());
+			return Json(_preferenceTemplatesProvider.RetrievePreferenceTemplates(), JsonRequestBehavior.AllowGet);
 		}
 	}
 }

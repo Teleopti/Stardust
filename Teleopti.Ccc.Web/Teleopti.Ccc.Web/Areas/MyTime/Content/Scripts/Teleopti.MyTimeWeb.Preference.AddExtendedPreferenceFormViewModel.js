@@ -4,10 +4,28 @@
 /// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js" />
 
-Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function () {
+
+Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (ajax) {
 	var self = this;
 
-	this.TemplateName = ko.observable();
+	this.LoadAvailableTemplates = function () {
+		var deferred = $.Deferred();
+		ajax.Ajax({
+			url: "Preference/GetPreferenceTemplates",
+			dataType: "json",
+			type: 'GET',
+			success: function (data, textStatus, jqXHR) {
+				data = data || [];
+				$.each(data, function (index, element) {
+					self.AvailableTemplates.push(element);
+				});
+				deferred.resolve();
+			}
+		});
+		return deferred.promise();
+	};
+
+	this.AvailableTemplates = ko.observableArray();
 	this.PreferenceId = ko.observable();
 	this.EarliestStartTime = ko.observable();
 	this.LatestStartTime = ko.observable();
