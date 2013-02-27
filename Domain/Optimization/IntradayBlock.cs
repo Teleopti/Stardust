@@ -1,32 +1,23 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
+namespace Teleopti.Ccc.Domain.Optimization
 {
-	public interface IBlockInfo
+	public interface IIntradayBlock
 	{
-		DateOnlyPeriod BlockPeriod { get; }
+		IList<DateOnly> BlockDays { get; set; }
 		IList<double?> StandardDeviations { get; set; }
 		double Sum { get; }
 		double Average { get; }
+		DateOnlyPeriod CoveringPeriod { get; }
 	}
 
-	public class BlockInfo : IBlockInfo
+	public class IntradayBlock : IIntradayBlock
 	{
-		private readonly DateOnlyPeriod _blockPeriod;
-
-		public BlockInfo(DateOnlyPeriod blockPeriod)
-		{
-			_blockPeriod = blockPeriod;
-		}
-
-		public DateOnlyPeriod BlockPeriod
-		{
-			get { return _blockPeriod; }
-		}
-
+		public IList<DateOnly> BlockDays { get; set; }
+		public DateOnlyPeriod CoveringPeriod { get { return new DateOnlyPeriod(BlockDays.First(), BlockDays.Last()); } }
 		public IList<double?> StandardDeviations { get; set; }
-
 		public double Sum
 		{
 			get
@@ -50,7 +41,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 				foreach (var standardDeviation in StandardDeviations)
 				{
 					if (!standardDeviation.HasValue) continue;
-
+					
 					count++;
 					sum += standardDeviation.Value;
 				}
