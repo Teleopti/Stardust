@@ -98,6 +98,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			Expect.Call(() => _scheduleDayReadModelRepository.ClearPeriodForPerson(dateOnlyPeriod, _person.Id.GetValueOrDefault()));
 			Expect.Call(() => _scheduleDayReadModelRepository.SaveReadModel(model));
 			Expect.Call(uow.Dispose);
+			Expect.Call(uow.PersistAll());
 
 			_mocks.ReplayAll();
 			_target.Consume(message);
@@ -134,6 +135,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			Expect.Call(() =>_scheduleDayReadModelRepository.ClearPeriodForPerson(dateOnlyPeriod, _person.Id.GetValueOrDefault()));
 			Expect.Call(() => _scheduleDayReadModelRepository.SaveReadModel(model));
 			Expect.Call(uow.Dispose);
+			Expect.Call(uow.PersistAll());
 
 			_mocks.ReplayAll();
 			_target.Consume(message);

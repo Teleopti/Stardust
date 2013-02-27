@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 
 		private void createReadModel(DenormalizedScheduleBase message)
 		{
-			using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
+			using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
 				if (!message.IsDefaultScenario) return;
 
@@ -89,6 +89,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 					_scheduleDayReadModelRepository.ClearPeriodForPerson(dateOnlyPeriod, message.PersonId);
 				}
 				_scheduleDayReadModelRepository.SaveReadModel(readModel);
+
+				uow.PersistAll();
 			}
 		}
 
