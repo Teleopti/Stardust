@@ -194,7 +194,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             foreach (var dateOnly in dayOffDates)
             {
-                var dateOnlyList = _dynamicBlockFinder.ExtractBlockDays(dateOnly, new GroupPerson(new List<IPerson>(), new DateOnly(), "", Guid.NewGuid()));
                 var allGroupPersonListOnStartDate = new HashSet<IGroupPerson>();
 
                 foreach (var person in selectedPerson)
@@ -202,14 +201,14 @@ namespace Teleopti.Ccc.Domain.Optimization
                     allGroupPersonListOnStartDate.Add(_groupPersonBuilderForOptimization.BuildGroupPerson(person, dateOnly));
                 }
 
-                foreach (
-                    var fullGroupPerson in allGroupPersonListOnStartDate.GetRandom(allGroupPersonListOnStartDate.Count, true))
+                foreach (var fullGroupPerson in allGroupPersonListOnStartDate.GetRandom(allGroupPersonListOnStartDate.Count, true))
                 {
                     if (!teamSteadyStateHolder.IsSteadyState(fullGroupPerson))
                     {
                         TeamSchedulingSuccessfullForTesting = false;
                         continue;
                     }
+                    var dateOnlyList = _dynamicBlockFinder.ExtractBlockDays(dateOnly,fullGroupPerson );
                     var groupPersonList = _groupPersonBuilderBasedOnContractTime.SplitTeams(fullGroupPerson, dateOnly);
                     foreach (var groupPerson in groupPersonList)
                     {

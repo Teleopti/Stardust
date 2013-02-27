@@ -60,71 +60,71 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	                        IList<IScheduleMatrixPro> allPersonMatrixList,
 	                        IList<IScheduleMatrixPro> selectedPersonMatrixList, TeamSteadyStateHolder teamSteadyStateHolder)
 	    {
-		    _teamScheduling.DayScheduled += dayScheduled;
-		    List<DateOnly> dayOff, effectiveDays, unLockedDays;
+            //_teamScheduling.DayScheduled += dayScheduled;
+            //List<DateOnly> dayOff, effectiveDays, unLockedDays;
 
-		    var startDate = retrieveStartDate(_schedulingOptions.BlockFinderTypeForAdvanceScheduling, selectedPersonMatrixList,
-		                                      out dayOff, out effectiveDays, out unLockedDays);
+            //var startDate = retrieveStartDate(_schedulingOptions.BlockFinderTypeForAdvanceScheduling, selectedPersonMatrixList,
+            //                                  out dayOff, out effectiveDays, out unLockedDays);
 
-		    var selectedPerson = selectedPersonMatrixList.Select(scheduleMatrixPro => scheduleMatrixPro.Person).Distinct().ToList();
+            //var selectedPerson = selectedPersonMatrixList.Select(scheduleMatrixPro => scheduleMatrixPro.Person).Distinct().ToList();
 
-		    while (startDate != DateOnly.MinValue)
-		    {
-			    //call class that return the teamblock dates for a given date (problem if team members don't have same days off)
-			    var dateOnlyList = _dynamicBlockFinder.ExtractBlockDays(startDate, new GroupPerson(new List<IPerson>( ),new DateOnly(),"",Guid.NewGuid()  ) );
+            //while (startDate != DateOnly.MinValue)
+            //{
+            //    //call class that return the teamblock dates for a given date (problem if team members don't have same days off)
+            //    var dateOnlyList = _dynamicBlockFinder.ExtractBlockDays(startDate, new GroupPerson(new List<IPerson>( ),new DateOnly(),"",Guid.NewGuid()  ) );
 
-			    var allGroupPersonListOnStartDate = new HashSet<IGroupPerson>();
+            //    var allGroupPersonListOnStartDate = new HashSet<IGroupPerson>();
 
-			    foreach (var person in selectedPerson)
-			    {
-				    allGroupPersonListOnStartDate.Add(_groupPersonBuilderForOptimization.BuildGroupPerson(person, startDate));
-			    }
+            //    foreach (var person in selectedPerson)
+            //    {
+            //        allGroupPersonListOnStartDate.Add(_groupPersonBuilderForOptimization.BuildGroupPerson(person, startDate));
+            //    }
 
-			    foreach (var fullGroupPerson in allGroupPersonListOnStartDate.GetRandom(allGroupPersonListOnStartDate.Count, true))
-			    {
-				    if (!teamSteadyStateHolder.IsSteadyState(fullGroupPerson)) 
-						continue;
+            //    foreach (var fullGroupPerson in allGroupPersonListOnStartDate.GetRandom(allGroupPersonListOnStartDate.Count, true))
+            //    {
+            //        if (!teamSteadyStateHolder.IsSteadyState(fullGroupPerson)) 
+            //            continue;
 
-				    var groupPersonList = _groupPersonBuilderBasedOnContractTime.SplitTeams(fullGroupPerson, startDate);
+            //        var groupPersonList = _groupPersonBuilderBasedOnContractTime.SplitTeams(fullGroupPerson, startDate);
 				    
-                    foreach (var groupPerson in groupPersonList)
-				    {
-					    var groupMatrixList = getScheduleMatrixProList(groupPerson, startDate, allPersonMatrixList);
-					    var restriction = _restrictionAggregator.Aggregate(dateOnlyList, groupPerson, groupMatrixList,
-					                                                       _schedulingOptions);
+            //        foreach (var groupPerson in groupPersonList)
+            //        {
+            //            var groupMatrixList = getScheduleMatrixProList(groupPerson, startDate, allPersonMatrixList);
+            //            var restriction = _restrictionAggregator.Aggregate(dateOnlyList, groupPerson, groupMatrixList,
+            //                                                               _schedulingOptions);
 
-					    // (should we cover for max seats here?) ????
-					    var shifts = _workShiftFilterService.Filter(startDate, groupPerson, groupMatrixList, restriction,
-					                                                _schedulingOptions);
-					    if (shifts == null || shifts.Count <= 0)
-						    continue;
+            //            // (should we cover for max seats here?) ????
+            //            var shifts = _workShiftFilterService.Filter(startDate, groupPerson, groupMatrixList, restriction,
+            //                                                        _schedulingOptions);
+            //            if (shifts == null || shifts.Count <= 0)
+            //                continue;
 
-					    var activityInternalData = _skillDayPeriodIntervalDataGenerator.Generate(fullGroupPerson, dateOnlyList);
-					    var bestShiftProjectionCache = _workShiftSelector.SelectShiftProjectionCache(shifts, activityInternalData,
-					                                                                                 _schedulingOptions
-						                                                                                 .WorkShiftLengthHintOption,
-					                                                                                 _schedulingOptions
-						                                                                                 .UseMinimumPersons,
-					                                                                                 _schedulingOptions
-						                                                                                 .UseMaximumPersons);
+            //            var activityInternalData = _skillDayPeriodIntervalDataGenerator.Generate(fullGroupPerson, dateOnlyList);
+            //            var bestShiftProjectionCache = _workShiftSelector.SelectShiftProjectionCache(shifts, activityInternalData,
+            //                                                                                         _schedulingOptions
+            //                                                                                             .WorkShiftLengthHintOption,
+            //                                                                                         _schedulingOptions
+            //                                                                                             .UseMinimumPersons,
+            //                                                                                         _schedulingOptions
+            //                                                                                             .UseMaximumPersons);
 
-					    _teamScheduling.Execute(startDate, dateOnlyList, groupMatrixList, groupPerson,
-					                            bestShiftProjectionCache, unLockedDays, selectedPerson);
-					    if (_cancelMe)
-						    break;
-				    }
+            //            _teamScheduling.Execute(startDate, dateOnlyList, groupMatrixList, groupPerson,
+            //                                    bestShiftProjectionCache, unLockedDays, selectedPerson);
+            //            if (_cancelMe)
+            //                break;
+            //        }
 
 
-				    if (_cancelMe)
-					    break;
-			    }
-			    if (_cancelMe)
-				    break;
-			    startDate = getNextDate(dateOnlyList.OrderByDescending(x => x.Date).First(), effectiveDays);
+            //        if (_cancelMe)
+            //            break;
+            //    }
+            //    if (_cancelMe)
+            //        break;
+            //    startDate = getNextDate(dateOnlyList.OrderByDescending(x => x.Date).First(), effectiveDays);
 
-		    }
+            //}
 
-		    _teamScheduling.DayScheduled -= dayScheduled;
+            //_teamScheduling.DayScheduled -= dayScheduled;
 		    return true;
 	    }
 

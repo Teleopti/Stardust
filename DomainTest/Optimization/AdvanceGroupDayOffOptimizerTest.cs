@@ -205,7 +205,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_activeScheduleMatrix.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(scheduleDayPros)).Repeat.AtLeastOnce();
                 Expect.Call(_scheduleMatrix2.Person).Return(_person).Repeat.AtLeastOnce();
                 Expect.Call(_scheduleMatrix2.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(scheduleDayPros)).Repeat.AtLeastOnce();
-                Expect.Call(_dynamicBlockFinder.ExtractBlockDays(_daysOffToRemove[0])).Return(_daysOffToRemove);
+                Expect.Call(_dynamicBlockFinder.ExtractBlockDays(_daysOffToRemove[0], _groupPerson)).Return(_daysOffToRemove);
                 Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(_person, _daysOffToRemove[0])).Return(_groupPerson);
 
                 Expect.Call(_groupPersonBuilderBasedOnContractTime.SplitTeams(_groupPerson, _daysOffToRemove[0])).Return
@@ -397,7 +397,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_scheduleMatrix2.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(schduleDayProList)).Repeat.AtLeastOnce();
                 Expect.Call(_teamSteadyStateHolder.IsSteadyState(_groupPerson)).Return(false);
 
-                Expect.Call(_dynamicBlockFinder.ExtractBlockDays(_daysOffToRemove[0])).Return(_daysOffToRemove);
+                Expect.Call(_dynamicBlockFinder.ExtractBlockDays(_daysOffToRemove[0],_groupPerson )).Return(_daysOffToRemove);
                 Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(_person, _daysOffToRemove[0])).Return(_groupPerson);
             }
             using (_mocks.Playback())

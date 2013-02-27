@@ -1037,7 +1037,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                                       IList<IScheduleMatrixPro> selectedPersonMatrixList,
 			IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization)
         {
-            var dynamicBlockFinder = new DynamicBlockFinder(schedulingOptions, _stateHolder, selectedPersonMatrixList, groupPersonBuilderForOptimization);
+            var dynamicBlockFinder = new DynamicBlockFinder(schedulingOptions, _stateHolder, selectedPersonMatrixList);
             var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true,
                                                                         schedulingOptions.ConsiderShortBreaks);
             ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService =

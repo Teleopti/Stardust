@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
                 Expect.Call(_scheduleMatrixPro.Person.Equals(_baseLineData.Person1)).IgnoreArguments().Return(true).Repeat.AtLeastOnce();
 
 
-                Expect.Call(_dynamicBlockFinder.ExtractBlockDays(_baseLineData.BaseDateOnly )).IgnoreArguments().Return(dateOnlyList);
+                Expect.Call(_dynamicBlockFinder.ExtractBlockDays(_baseLineData.BaseDateOnly, _baseLineData.GroupPerson)).IgnoreArguments().Return(dateOnlyList);
                 Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(_baseLineData.Person1,
                                                                                 _baseLineData.BaseDateOnly)).Return(_baseLineData.GroupPerson);
                 Expect.Call(_scheduleMatrixPro.Person).Return(_baseLineData.Person1).Repeat.AtLeastOnce();
@@ -225,7 +225,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             Expect.Call(_scheduleMatrixPro.Person.Equals(_baseLineData.Person1)).IgnoreArguments().Return(true).Repeat.AtLeastOnce();
 
 
-            Expect.Call(_dynamicBlockFinder.ExtractBlockDays(dateOnly)).IgnoreArguments().Return(dateOnlyList);
+            Expect.Call(_dynamicBlockFinder.ExtractBlockDays(dateOnly,_baseLineData.GroupPerson )).IgnoreArguments().Return(dateOnlyList);
             Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(_baseLineData.Person1,
                                                                             _baseLineData.BaseDateOnly)).Return(_baseLineData.GroupPerson );
             Expect.Call(_groupPersonBuilderBasedOnContractTime.SplitTeams(_baseLineData.GroupPerson , dateOnly)).IgnoreArguments().

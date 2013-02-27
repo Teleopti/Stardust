@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
@@ -19,16 +16,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
         public ISchedulingResultStateHolder SchedulingResultStateHolder { get; set; }
         private readonly ISchedulingOptions _schedulingOptions;
         private readonly IList<IScheduleMatrixPro> _matrixList;
-        private readonly IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
-        private IList<IScheduleMatrixPro> _analyzedMatrix;
 
-        public DynamicBlockFinder(ISchedulingOptions schedulingOptions, ISchedulingResultStateHolder schedulingResultStateHolder, IList<IScheduleMatrixPro> matrixList, IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization)
+        public DynamicBlockFinder(ISchedulingOptions schedulingOptions, ISchedulingResultStateHolder schedulingResultStateHolder, IList<IScheduleMatrixPro> matrixList)
         {
             SchedulingResultStateHolder = schedulingResultStateHolder;
             _schedulingOptions = schedulingOptions;
             _matrixList = matrixList;
-            _groupPersonBuilderForOptimization = groupPersonBuilderForOptimization;
-            _analyzedMatrix = new List<IScheduleMatrixPro>();
         }
 
         public IList<DateOnly> ExtractBlockDays(DateOnly startDateOnly, IGroupPerson groupPerson1)

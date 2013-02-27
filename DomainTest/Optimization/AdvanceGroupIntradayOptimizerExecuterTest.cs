@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 					_mainShiftOptimizeActivitySpecificationSetter.SetSpecification(_schedulingOptions, _optimizerPreferences,
 					                                                               _mainShift, new DateOnly(2012, 1, 1)));
 				Expect.Call(_scheduleDay.Person).Return(_person);
-				Expect.Call(_dynamicBlockFinder.ExtractBlockDays(date)).Return(new List<DateOnly> {date});
+				Expect.Call(_dynamicBlockFinder.ExtractBlockDays(date,groupPerson )).Return(new List<DateOnly> {date});
 				Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(_person, date)).Return(groupPerson);
 				Expect.Call(_groupPersonBuilderBasedOnContractTime.SplitTeams(groupPerson, date))
 				      .Return(new List<IGroupPerson> {groupPerson});
