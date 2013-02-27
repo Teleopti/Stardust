@@ -15,6 +15,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.IocCommon.Configuration;
+using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
@@ -56,14 +57,14 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			mocks = new MockRepository();
 			var applicationData = mocks.DynamicMock<IApplicationData>();
 
-			var containerOrg = new ContainerConfiguration().Configure();
+			var container = new ContainerConfiguration().Configure();
 
 			var containerAdder = new ContainerBuilder();
 			containerAdder.RegisterModule(new AuthenticationModule(applicationData));
 			containerAdder.Register(c => mocks.DynamicMock<HttpContextBase>());
-			containerAdder.Update(containerOrg);
+			containerAdder.Update(container);
 
-			requestContainer = containerOrg.BeginLifetimeScope("httpRequest");
+			requestContainer = container.BeginLifetimeScope("httpRequest");
 		}
 
 		private ILifetimeScope requestContainer;
@@ -492,6 +493,20 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 				where !isSelf
 				select t;
 			result.Select(p => p.GetType()).Should().Have.SameValuesAs(dataSourceViewModelFactoryTypes);
+		}
+
+		[Test]
+		public void ShouldResolveAnywhereTeamScheduleHub()
+		{
+			requestContainer.Resolve<TeamScheduleHub>()
+				.Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldResolveAnywherePersonScheduleHub()
+		{
+			requestContainer.Resolve<PersonScheduleHub>()
+				.Should().Not.Be.Null();
 		}
 
 	}

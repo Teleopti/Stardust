@@ -19,24 +19,16 @@ define([
 
 				options.renderHtml(view);
 
+				personSchedule.Id(options.id);
 				personSchedule.Date(moment(options.date, 'YYYYMMDD'));
-
+				
 				subscriptions.subscribePersonSchedule(
 					options.id,
 					personSchedule.Date().toDate(),
-					function(data) {
+					function (data) {
 						personSchedule.SetData(data);
 					}
 				);
-
-//				options.startedPromise.done(function () {
-//					hub
-//						.server
-//						.subscribePersonScheduleViewModel(options.id, personSchedule.Date().toDate())
-//						.done(function (data) {
-//							personSchedule.SetData(data);
-//						});
-//				});
 
 				ko.applyBindings(personSchedule, options.bindingElement);
 			}
