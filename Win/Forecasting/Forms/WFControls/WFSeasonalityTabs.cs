@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 
         public void ReloadHistoricalDataDepth(IList<DateOnlyPeriod> selectedDates)
         {
-            Presenter.ReloadHistoricalDataDepth(selectedDates);
+            Presenter.InitializeWorkloadDaysWithStatistics(selectedDates);
 
             if (Presenter.Model.WorkloadDaysWithStatistics.Count > 0)
             {
