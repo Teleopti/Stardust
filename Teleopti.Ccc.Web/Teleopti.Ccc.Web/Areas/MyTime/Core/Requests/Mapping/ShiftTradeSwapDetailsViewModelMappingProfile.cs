@@ -26,6 +26,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 
 		private static DateTimePeriod createTimelinePeriod(IShiftTradeRequest shiftTRadeRequest)
 		{
+			var schedpartFrom = shiftTRadeRequest.ShiftTradeSwapDetails.First().SchedulePartFrom;
+			var schedpartTo = shiftTRadeRequest.ShiftTradeSwapDetails.First().SchedulePartTo;
+			if (schedpartFrom == null || schedpartTo == null)
+			{
+				return shiftTRadeRequest.Period;
+			}
 			var fromPeriod = shiftTRadeRequest.ShiftTradeSwapDetails.First().SchedulePartFrom.Period;
 			var toPeriod = shiftTRadeRequest.ShiftTradeSwapDetails.First().SchedulePartTo.Period;
 			return fromPeriod.MaximumPeriod(toPeriod);
