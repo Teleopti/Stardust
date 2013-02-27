@@ -27,7 +27,6 @@ require([
 		var currentView;
 		var defaultView = 'teamschedule';
 		var menu = new menuViewModel(resources);
-		var startedPromise;
 
 		function _displayView(routeInfo) {
 
@@ -36,8 +35,6 @@ require([
 			routeInfo.renderHtml = function (html) {
 				placeHolder.html(html);
 			};
-
-			routeInfo.startedPromise = startedPromise;
 
 			routeInfo.bindingElement = placeHolder[0];
 
@@ -153,8 +150,8 @@ require([
 		}
 
 		function _initSignalR() {
-			startedPromise = subscriptions.start();
-			startedPromise.fail(function () {
+			var promise = subscriptions.start();
+			promise.fail(function () {
 				$('.container > .row:first').html('<div class="alert"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>Warning!</strong> ' + error + '.</div>');
 			});
 		}

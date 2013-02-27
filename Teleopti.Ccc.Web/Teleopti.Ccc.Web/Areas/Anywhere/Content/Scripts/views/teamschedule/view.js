@@ -66,7 +66,7 @@ define([
 					.ready(resize);
 
 				var initialLoad = true;
-				var loadSchedules = function() {
+				var loadSchedules = function () {
 					var queryDate = teamSchedule.SelectedDate().clone();
 					queryDate.utc();
 
@@ -75,7 +75,7 @@ define([
 					subscriptions.subscribeTeamSchedule(
 						teamSchedule.SelectedTeam().Id,
 						queryDate.toDate(),
-						function(schedules) {
+						function (schedules) {
 							var currentAgents = agents.Agents();
 
 							var dateClone = teamSchedule.SelectedDate().clone();
@@ -90,7 +90,7 @@ define([
 								}
 							}
 
-							currentAgents.sort(function(a, b) {
+							currentAgents.sort(function (a, b) {
 								var firstStartMinutes = a.FirstStartMinute();
 								var secondStartMinutes = b.FirstStartMinute();
 								return firstStartMinutes == secondStartMinutes ? (a.LastEndMinute() == b.LastEndMinute() ? 0 : a.LastEndMinute() < b.LastEndMinute() ? -1 : 1) : firstStartMinutes < secondStartMinutes ? -1 : 1;
@@ -102,11 +102,11 @@ define([
 							teamSchedule.isLoading(false);
 
 							if (initialLoad) {
-								teamSchedule.SelectedTeam.subscribe(function() {
+								teamSchedule.SelectedTeam.subscribe(function () {
 									loadPeople();
 								});
 
-								teamSchedule.SelectedDate.subscribe(function() {
+								teamSchedule.SelectedDate.subscribe(function () {
 									loadAvailableTeams();
 								});
 								initialLoad = false;
@@ -183,18 +183,30 @@ define([
 					);
 				};
 
-				options.startedPromise.done(function () {
+				//				options.startedPromise.done(function () {
+				//					loadAvailableTeams();
+
+				//					$(window).ready(function () {
+				//						ko.applyBindings({
+				//							TeamSchedule: teamSchedule,
+				//							Resources: resources,
+				//							Timeline: timeLine,
+				//							Agents: agents
+				//						}, options.bindingElement);
+				//					});
+
+				//				});
+
+				$(window).ready(function () {
+
+					ko.applyBindings({
+						TeamSchedule: teamSchedule,
+						Resources: resources,
+						Timeline: timeLine,
+						Agents: agents
+					}, options.bindingElement);
+
 					loadAvailableTeams();
-
-					$(window).ready(function () {
-						ko.applyBindings({
-							TeamSchedule: teamSchedule,
-							Resources: resources,
-							Timeline: timeLine,
-							Agents: agents
-						}, options.bindingElement);
-					});
-
 				});
 
 				teamScheduleContainer.swipeListener({

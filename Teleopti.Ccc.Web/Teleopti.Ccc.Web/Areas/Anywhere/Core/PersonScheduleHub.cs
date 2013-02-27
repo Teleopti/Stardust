@@ -14,15 +14,32 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 	public class PersonScheduleHub : Hub
 	{
 		[UnitOfWork]
-		public object SubscribePersonScheduleViewModel(Guid personId, DateTime date)
+		public void SubscribePersonSchedule(Guid personId, DateTime date)
 		{
-			return new
+			Groups.Add(Context.ConnectionId, string.Format("{0}-{1}", personId, date));
+			pushData(Clients.Caller, personId, date);
+
+		}
+
+		//[UnitOfWork]
+		//public void PushPersonSchedule(Guid personId, DateTime date)
+		//{
+		//    pushData(Clients.Group(string.Format("{0}-{1}", personId, date)), personId, date);
+		//}
+
+		private void pushData(dynamic target, Guid personId, DateTime date)
+		{
+			//var dateTimePeriod = new DateTimePeriod(date, date.AddHours(25));
+			//var schedule = _personScheduleDayReadModelRepository.ForTeam(dateTimePeriod, teamId);
+			var data = new
 				{
-					Id = personId, 
-					Name = "Mathias Stenbvom", 
-					Site = "Maramö", 
+					Id = personId,
+					Name = "Mathias Stenbvom",
+					Site = "Maramö",
 					Team = "Alliansen"
 				};
+			target.incomingPersonSchedule(data);
 		}
+
 	}
 }
