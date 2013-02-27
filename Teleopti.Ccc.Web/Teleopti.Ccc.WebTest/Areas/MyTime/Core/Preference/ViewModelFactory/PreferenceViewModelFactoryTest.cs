@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.ViewModelFactory
 		public void ShoudCreateViewModelByTwoStepMapping()
 		{
 			var mapper = MockRepository.GenerateMock<IMappingEngine>();
-			var target = new PreferenceViewModelFactory(mapper, null, null);
+			var target = new PreferenceViewModelFactory(mapper, null, null, null);
 			var domainData = new PreferenceDomainData();
 			var viewModel = new PreferenceViewModel();
 
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.ViewModelFactory
 		{
 			var mapper = MockRepository.GenerateMock<IMappingEngine>();
 			var preferenceProvider = MockRepository.GenerateMock<IPreferenceProvider>();
-			var target = new PreferenceViewModelFactory(mapper, preferenceProvider, null);
+			var target = new PreferenceViewModelFactory(mapper, preferenceProvider, null, null);
 			var preferenceDay = new PreferenceDay(new Person(), DateOnly.Today, new PreferenceRestriction());
 			var viewModel = new PreferenceDayViewModel();
 
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.ViewModelFactory
 		public void ShouldThrow404IfPreferenceDoesNotExist()
 		{
 			var preferenceProvider = MockRepository.GenerateMock<IPreferenceProvider>();
-			var target = new PreferenceViewModelFactory(null, preferenceProvider, null);
+			var target = new PreferenceViewModelFactory(null, preferenceProvider, null, null);
 
 			preferenceProvider.Stub(x => x.GetPreferencesForDate(DateOnly.Today)).Return(null);
 
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.ViewModelFactory
 		public void ShouldCreateFeedbackDayViewModelByMapping()
 		{
 			var mapper = MockRepository.GenerateMock<IMappingEngine>();
-			var target = new PreferenceViewModelFactory(mapper, null, null);
+			var target = new PreferenceViewModelFactory(mapper, null, null, null);
 			var viewModel = new PreferenceDayFeedbackViewModel();
 
 			mapper.Stub(x => x.Map<DateOnly, PreferenceDayFeedbackViewModel>(DateOnly.Today)).Return(viewModel);
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.ViewModelFactory
 		{
 			var mapper = MockRepository.GenerateMock<IMappingEngine>();
 			var scheduleProvider = MockRepository.GenerateMock<IScheduleProvider>();
-			var target = new PreferenceViewModelFactory(mapper, null, scheduleProvider);
+			var target = new PreferenceViewModelFactory(mapper, null, scheduleProvider, null);
 			var scheduleDays = new IScheduleDay[] {};
 			var preferenceDayViewModels = new PreferenceAndScheduleDayViewModel[] {};
 
@@ -94,5 +94,25 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.ViewModelFactory
 
 			result.Should().Be.SameInstanceAs(preferenceDayViewModels);
 		}
+
+		[Test]
+		public void CreatePreferenceTemplateViewModel()
+		{
+			var mapper = MockRepository.GenerateMock<IMappingEngine>();
+			var preferenceTemplatesProvider = MockRepository.GenerateMock<IPreferenceTemplatesProvider>();
+			var target = new PreferenceViewModelFactory(mapper, null, null, preferenceTemplatesProvider);
+			var templates = new IExtendedPreferenceTemplate[] { };
+			var preferenceTemplateViewModels = new PreferenceTemplateViewModel[] { };
+
+			preferenceTemplatesProvider.Stub(x => x.RetrievePreferenceTemplates())
+				.Return(templates);
+			mapper.Stub(x => x.Map<IEnumerable<IExtendedPreferenceTemplate>, IEnumerable<PreferenceTemplateViewModel>>(templates))
+				.Return(preferenceTemplateViewModels);
+			var result = target.CreatePreferenceTemplateViewModels();
+
+			result.Should().Be.SameInstanceAs(preferenceTemplateViewModels);
+		}
 	}
+
+	
 }

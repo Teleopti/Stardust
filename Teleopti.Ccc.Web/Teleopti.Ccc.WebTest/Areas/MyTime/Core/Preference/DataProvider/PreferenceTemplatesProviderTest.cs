@@ -10,7 +10,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 {
 	[TestFixture]
-	public class PreferenceTemplateOptionsProviderTest
+	public class PreferenceTemplatesProviderTest
 	{
 		[Test]
 		public void ShouldRetrievePreferenceTemplates()

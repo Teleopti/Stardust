@@ -22,14 +22,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		private readonly IPreferenceViewModelFactory _viewModelFactory;
 		private readonly IVirtualSchedulePeriodProvider _virtualSchedulePeriodProvider;
 		private readonly IPreferencePersister _preferencePersister;
-		private readonly IPreferenceTemplatesProvider _preferenceTemplatesProvider;
 
-		public PreferenceController(IPreferenceViewModelFactory viewModelFactory, IVirtualSchedulePeriodProvider virtualSchedulePeriodProvider, IPreferencePersister preferencePersister, IPreferenceTemplatesProvider preferenceTemplatesProvider)
+		public PreferenceController(IPreferenceViewModelFactory viewModelFactory, IVirtualSchedulePeriodProvider virtualSchedulePeriodProvider, IPreferencePersister preferencePersister)
 		{
 			_viewModelFactory = viewModelFactory;
 			_virtualSchedulePeriodProvider = virtualSchedulePeriodProvider;
 			_preferencePersister = preferencePersister;
-			_preferenceTemplatesProvider = preferenceTemplatesProvider;
 		}
 
 		[EnsureInPortal]
@@ -99,7 +97,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[UnitOfWork]
 		public virtual  JsonResult GetPreferenceTemplates()
 		{
-			return Json(_preferenceTemplatesProvider.RetrievePreferenceTemplates(), JsonRequestBehavior.AllowGet);
+			return Json(_viewModelFactory.CreatePreferenceTemplateViewModels(), JsonRequestBehavior.AllowGet);
 		}
 	}
 }
