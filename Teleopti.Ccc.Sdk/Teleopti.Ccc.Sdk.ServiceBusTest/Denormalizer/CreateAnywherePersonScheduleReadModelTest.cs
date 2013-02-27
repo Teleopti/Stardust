@@ -1,18 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
 using NUnit.Framework;
-using Newtonsoft.Json;
 using Rhino.Mocks;
 using Rhino.ServiceBus;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.AgentInfo;
-using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Messages.Denormalize;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
@@ -76,9 +67,17 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 		public void ShouldSetProjectedLayers() { 
 			var layer = new DenormalizedScheduleProjectionLayer {StartDateTime = new DateTime(2012, 12, 12, 8, 0, 0, DateTimeKind.Utc), EndDateTime = new DateTime(2012, 12, 12, 15, 0, 0, DateTimeKind.Utc), DisplayColor = -3, Name = "Lunch"};
 			var target = new AnywherePersonScheduleFromDenormalizedSchedule();
-			var message = new DenormalizedSchedule();
-			message.Layers = new Collection<DenormalizedScheduleProjectionLayer>{layer};
-
+			var message = new DenormalizedSchedule
+			              	{
+			              		ScheduleDays = new []
+			              		               	{
+			              		               		new DenormalizedScheduleDay
+			              		               			{
+			              		               				Layers = new Collection<DenormalizedScheduleProjectionLayer>{layer}
+			              		               			}
+			              		               	}
+			              	};
+			
 			var result = target.Convert(message);
 			result.ProjectedLayers.Should().Not.Be.NullOrEmpty();
 		}

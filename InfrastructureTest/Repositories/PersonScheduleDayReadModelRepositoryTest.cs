@@ -18,7 +18,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			_target = new PersonScheduleDayReadModelRepository(UnitOfWorkFactory.Current);	
 			var dateOnly = new DateOnly(2012, 8, 28);
 			var personId = Guid.NewGuid();
-			Assert.That(_target.ReadModelsOnPerson(dateOnly, dateOnly.AddDays(5), personId), Is.Not.Null);
+
+			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				Assert.That(_target.ReadModelsOnPerson(dateOnly, dateOnly.AddDays(5), personId), Is.Not.Null);
+			}
 		}
 
 		[Test]
@@ -29,11 +33,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var teamId = Guid.NewGuid();
 			var dateOnly = new DateOnly(2012, 8, 29);
 
-			createAndSaveReadModel(personId,teamId);
-			
-			var ret = _target.ReadModelsOnPerson(dateOnly.AddDays(-1), dateOnly.AddDays(5), personId);
-			
-			Assert.That(ret.Count, Is.EqualTo(1));
+			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				createAndSaveReadModel(personId, teamId);
+
+				var ret = _target.ReadModelsOnPerson(dateOnly.AddDays(-1), dateOnly.AddDays(5), personId);
+
+				Assert.That(ret.Count, Is.EqualTo(1));
+			}
 		}
 		
 		[Test]
@@ -44,15 +51,18 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var teamId = Guid.NewGuid();
 			var dateOnly = new DateOnly(2012, 8, 29);
 
-			Assert.That(_target.IsInitialized(), Is.False);
+			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				Assert.That(_target.IsInitialized(), Is.False);
 
-			createAndSaveReadModel(personId, teamId);
+				createAndSaveReadModel(personId, teamId);
 
-			Assert.That(_target.IsInitialized(), Is.True);
+				Assert.That(_target.IsInitialized(), Is.True);
 
-			_target.ClearPeriodForPerson(new DateOnlyPeriod(dateOnly, dateOnly.AddDays(2)), personId);
-			
-			Assert.That(_target.IsInitialized(), Is.False);
+				_target.ClearPeriodForPerson(new DateOnlyPeriod(dateOnly, dateOnly.AddDays(2)), personId);
+
+				Assert.That(_target.IsInitialized(), Is.False);
+			}
 		}
 
 		[Test]
@@ -62,8 +72,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			var personId = Guid.NewGuid();
 			var teamId = Guid.NewGuid();
 
-			createAndSaveReadModel(personId, teamId);
-
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				createAndSaveReadModel(personId, teamId);
+				uow.PersistAll();
+			}
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				var ret = _target.ForTeam(new DateTimePeriod(new DateTime(2012, 8, 29, 10, 0, 0, DateTimeKind.Utc), new DateTime(2012, 8, 29, 12, 0, 0, DateTimeKind.Utc)), teamId);
@@ -72,7 +85,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		private void createAndSaveReadModel(Guid personId, Guid teamId)
-		{
+			{
 				var model = new PersonScheduleDayReadModel
 				            	{
 				            		Date = new DateTime(2012, 8, 29),
@@ -82,10 +95,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 				            		ShiftEnd = new DateTime(2012, 8, 29, 18, 0, 0, DateTimeKind.Utc),
 				            		Shift = "",
 				            	};
+
 				_target.SaveReadModel(model);
-			
+			}
 		}
-	}
 
 	
 }
