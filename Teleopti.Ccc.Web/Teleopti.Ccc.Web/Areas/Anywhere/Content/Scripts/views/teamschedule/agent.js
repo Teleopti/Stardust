@@ -23,12 +23,9 @@ define([
 				var time = moment().startOf('day').add('minutes', self.WorkTimeMinutes());
 				return time.format("H:mm");
 			});
-
-			this.ClearLayers = function () {
+			
+			this.SetLayers = function (layers, timeline, date) {
 				self.Layers([]);
-			};
-
-			this.AddLayers = function (layers, timeline, date) {
 				var newItems = ko.utils.arrayMap(layers, function (p) {
 					return new layer(timeline, p, date);
 				});

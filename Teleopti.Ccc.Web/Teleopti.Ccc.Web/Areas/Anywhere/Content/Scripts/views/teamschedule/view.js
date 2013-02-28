@@ -82,7 +82,7 @@ define([
 							for (var i = 0; i < schedules.length; i++) {
 								for (var j = 0; j < currentAgents.length; j++) {
 									if (currentAgents[j].Id == schedules[i].Id) {
-										currentAgents[j].AddLayers(schedules[i].Projection, timeLine, dateClone);
+										currentAgents[j].SetLayers(schedules[i].Projection, timeLine, dateClone);
 										currentAgents[j].AddContractTime(schedules[i].ContractTimeMinutes);
 										currentAgents[j].AddWorkTime(schedules[i].WorkTimeMinutes);
 										break;

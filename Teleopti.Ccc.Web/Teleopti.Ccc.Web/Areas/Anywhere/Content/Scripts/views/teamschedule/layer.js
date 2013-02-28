@@ -10,7 +10,6 @@ define([
 			var localTime = moment(projectionLayer.Start, "YYYY-MM-DD hh:mm:ss Z").local();
 			var layerStartMinutes = localTime.diff(date, 'minutes');
 
-
 			this.InternalStartMinutes = layerStartMinutes;
 			this.LengthMinutes = projectionLayer.Minutes;
 			this.Color = projectionLayer.Color;
