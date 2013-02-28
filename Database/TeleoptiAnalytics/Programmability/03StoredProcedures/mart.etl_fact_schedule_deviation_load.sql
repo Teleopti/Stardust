@@ -23,7 +23,8 @@ GO
 -- =============================================
 
 --exec mart.etl_fact_schedule_deviation_load '2013-02-18 23:00:00','2013-02-21 23:00:00','928DD0BC-BF40-412E-B970-9B5E015AADEA' --Demo
-/**______DO NOT MERGE THIS CHANGE TO MAIN______***
+/*
+*______DO NOT MERGE THIS CHANGE TO MAIN______***
 **************************************************
 ** There is currently a bug with this proc      **
 ** Im commening it out to start testing our PBI **
@@ -355,7 +356,9 @@ SET 	deviation_contract_s = ABS(
 	)
 )
 WHERE mart.fact_schedule_deviation.date_id BETWEEN @start_date_id AND @end_date_id
+*/
 GO
+/*
 --================================
 --If empty try re-load
 --================================
