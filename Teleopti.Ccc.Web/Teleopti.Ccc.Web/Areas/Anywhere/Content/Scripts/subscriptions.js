@@ -5,77 +5,63 @@ define([
 		$,
 		signalrHubs
 	) {
-//		
-//		var subscription = function (options) {
 
-//			var self = this;
+		var subscription = function (options) {
 
-//			this.callback = options.callback;
-//			this.serverSubscribe = options.serverSubscribe;
+			var self = this;
 
-//			this.incomingData = function (data) {
-//				if (callback) callback(data);
-//			};
+			this.startPromise = options.startPromise;
+			this.callback = options.callback;
+			
+			this.serverSubscribeMethod = options.serverSubscribeMethod;
+			
+			this.incomingData = function (data) {
+				if (self.callback) self.callback(data);
+			};
 
-//			this.subscribe = function () {
-//				self.callback = arguments[arguments.length - 1];
-//				self.serverSubscribe.apply(self, arguments.slice(0, arguments.length - 2));
-//			};
+			options.clientIncomingMethodSetter(this.incomingData);
 
-//		};
+			this.subscribe = function() {
+				var argumentsArray = Array.prototype.slice.call(arguments);
+				var serverArguments = argumentsArray.slice(0, arguments.length - 1);
+				var callbackArgument = arguments[arguments.length - 1];
+				self.callback = callbackArgument;
+				startPromise.done(function() {
+					self.serverSubscribeMethod.apply(self, serverArguments);
+				});
+			};
 
-//		var subscriptions = [];
+		};
 
+		var subscriptions = [];
 		var startPromise;
-		
 		var teamScheduleHub = $.connection.teamScheduleHub;
 		var personScheduleHub = $.connection.personScheduleHub;
 
-//		subscriptions.push(new subscription({
-//			serverSubscribe: teamScheduleHub.server.subscribeTeamSchedule,
-//		}));
+		subscriptions.push(new subscription({
+			serverSubscribeMethod: teamScheduleHub.server.subscribeTeamSchedule,
+			clientIncomingMethodSetter: function(method) {
+				teamScheduleHub.client.incomingTeamSchedule = method;
+			}
+		}));
 
-		var incomingTeamScheduleCallback = null;
-		var incomingTeamSchedule = function (data) {
-			if (incomingTeamScheduleCallback)
-				incomingTeamScheduleCallback(data);
-		};
-		var subscribeTeamSchedule = function (teamId, date, callback) {
-			incomingTeamScheduleCallback = callback;
-			startPromise.done(function() {
-				teamScheduleHub.server.subscribeTeamSchedule(teamId, date);
-			});
-		};
-
-		var incomingPersonScheduleCallback = null;
-		var incomingPersonSchedule = function (data) {
-			if (incomingPersonScheduleCallback)
-				incomingPersonScheduleCallback(data);
-		};
-		var subscribePersonSchedule = function (personId, date, callback) {
-			incomingPersonScheduleCallback = callback;
-			startPromise.done(function() {
-				personScheduleHub.server.subscribePersonSchedule(personId, date);
-			});
-		};
+		subscriptions.push(new subscription({
+			serverSubscribeMethod: personScheduleHub.server.subscribePersonSchedule,
+			clientIncomingMethodSetter: function(method) {
+				personScheduleHub.client.incomingPersonSchedule = method;
+			}
+		}));
 
 		var start = function () {
 			$.connection.hub.url = 'signalr';
-
-//			for (var i = 0; i < subscriptions.length; i++) {
-//				var sub = subscriptions[i];
-//			}
-			teamScheduleHub.client.incomingTeamSchedule = incomingTeamSchedule;
-			personScheduleHub.client.incomingPersonSchedule = incomingPersonSchedule;
-			
 			startPromise = $.connection.hub.start();
 			return startPromise;
 		};
 
 		return {
 			start: start,
-			subscribeTeamSchedule: subscribeTeamSchedule,
-			subscribePersonSchedule: subscribePersonSchedule,
+			subscribeTeamSchedule: subscriptions[0].subscribe,
+			subscribePersonSchedule: subscriptions[1].subscribe,
 		};
 
 	});

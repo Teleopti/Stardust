@@ -11,7 +11,6 @@ define([
 		view
 	) {
 
-		//var hub = $.connection.personScheduleHub;
 		var personSchedule = new personScheduleViewModel();
 
 		return {
