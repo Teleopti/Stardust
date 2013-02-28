@@ -4,12 +4,6 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 {
-
-	public interface IPersonScheduleViewModelFactory
-	{
-		PersonScheduleViewModel CreateViewModel(Guid personId, DateTime date);
-	}
-
 	public class PersonScheduleViewModelFactory : IPersonScheduleViewModelFactory
 	{
 		private readonly IPersonRepository _personRepository;
