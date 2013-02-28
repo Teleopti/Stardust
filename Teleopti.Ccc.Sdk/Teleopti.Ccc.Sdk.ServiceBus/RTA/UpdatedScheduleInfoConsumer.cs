@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
 			using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
 				startTime =
-					_scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow, message.PersonId).ToLocalTime();
+					_scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.Now, message.PersonId);
                 
                 infoMessage = string.Format("Next activity start time = {0} for person {1}", startTime, message.PersonId);
                 Logger.Info(infoMessage);
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
 			using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
 				startTime =
-					_scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow, message.PersonId).ToLocalTime();
+					_scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.Now, message.PersonId);
                 infoMessage = string.Format("Next activity start time = {0} for person {1}", startTime, message.PersonId);
                 Logger.Info(infoMessage);
 			}
