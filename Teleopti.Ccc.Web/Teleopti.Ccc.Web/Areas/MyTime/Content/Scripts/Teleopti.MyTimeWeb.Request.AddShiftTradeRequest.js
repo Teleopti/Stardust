@@ -277,6 +277,14 @@ ko.bindingHandlers.datepicker = {
 			observable(moment($(element).datepicker("getDate")));
 		});
 
+		//handle the field keydown for enter key
+		ko.utils.registerEventHandler(element, "keydown", function (key) {
+			if (key.keyCode == 13) {
+				var observable = valueAccessor();
+				observable(moment($(element).datepicker("getDate")));
+			}
+		});
+
 		//handle disposal (if KO removes by the template binding)
 		ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
 			$(element).datepicker("destroy");
@@ -284,10 +292,7 @@ ko.bindingHandlers.datepicker = {
 
 	},
 	update: function (element, valueAccessor) {
-		var value = ko.utils.unwrapObservable(valueAccessor()),
-				current = $(element).datepicker("getDate");
-		if (value - current !== 0) {
-			$(element).datepicker("setDate", new Date(value));
-		}
+		var value = ko.utils.unwrapObservable(valueAccessor());
+		$(element).datepicker("setDate", new Date(value));
 	}
 };
