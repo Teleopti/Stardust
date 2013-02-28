@@ -50,7 +50,7 @@ define([
 				}
 
 				agents = new agentsViewModel();
-				timeLine = new timeLineViewModel(agents, resources.ShortTimePattern);
+				timeLine = new timeLineViewModel(agents.Agents, resources.ShortTimePattern);
 				teamSchedule = new teamScheduleViewModel(date);
 
 				var previousOffset;
@@ -91,13 +91,12 @@ define([
 							}
 
 							currentAgents.sort(function (a, b) {
-								var firstStartMinutes = a.FirstStartMinute();
-								var secondStartMinutes = b.FirstStartMinute();
+								var firstStartMinutes = a.TimeLineAffectingStartMinute();
+								var secondStartMinutes = b.TimeLineAffectingStartMinute();
 								return firstStartMinutes == secondStartMinutes ? (a.LastEndMinute() == b.LastEndMinute() ? 0 : a.LastEndMinute() < b.LastEndMinute() ? -1 : 1) : firstStartMinutes < secondStartMinutes ? -1 : 1;
 							});
 
 							agents.Agents.valueHasMutated();
-							timeLine.CalculateTimes();
 
 							teamSchedule.isLoading(false);
 

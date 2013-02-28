@@ -43,7 +43,7 @@ define([
 				self.WorkTimeMinutes(self.WorkTimeMinutes() + minutes);
 			};
 
-			this.FirstStartMinute = ko.computed(function () {
+			this.TimeLineAffectingStartMinute = ko.computed(function () {
 				var start = undefined;
 				ko.utils.arrayForEach(self.Layers(), function (l) {
 					var startMinutes = l.StartMinutes();
@@ -55,7 +55,7 @@ define([
 				return start;
 			});
 
-			this.LastEndMinute = ko.computed(function () {
+			this.TimeLineAffectingEndMinute = ko.computed(function () {
 				var end = undefined;
 				ko.utils.arrayForEach(self.Layers(), function (l) {
 					var endMinutes = l.EndMinutes();
