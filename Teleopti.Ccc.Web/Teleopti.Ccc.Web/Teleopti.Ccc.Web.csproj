@@ -541,6 +541,8 @@
   <ItemGroup>
     <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\menu.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\timeline-time.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\timeline.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\view.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\vm.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\agents.js" />
