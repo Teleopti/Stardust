@@ -5,11 +5,11 @@
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js" />
 
      
-$(function() {
-    $( "#accordion" ).accordion({
-        collapsible: true
-    });
-});
+//$(function() {
+//    $( "#accordion" ).accordion({
+//        collapsible: true
+//    });
+//});
 
 Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (ajax) {
 	var self = this;
@@ -23,15 +23,17 @@ Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (aja
 			success: function (data, textStatus, jqXHR) {
 				data = data || [];
 
-				//				self.addresses = ko.observableArray(ko.utils.arrayMap(data,
-				//					function(i) { return new Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel(i); }
-				//				));
+//				self.AvailableTemplates.removeAll();
+//				self.AvailableTemplates.push("");
+//				$.each(data, function (index, element) {
+//					self.AvailableTemplates.push(element);
+//				});
 
-				self.AvailableTemplates.push("");
-				$.each(data, function (index, element) {
-					self.AvailableTemplates.push(element);
-				});
+				//				self.AvailableTemplates.valueHasMutated();
+				self.AvailableTemplates(data);
 
+				$("#Preference-template").selectbox({ refreshMenu: data });
+				
 				//				self.AvailableTemplates.push(new Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel(0));
 				//				self.AvailableTemplates.push(ko.utils.arrayMap(data,
 				//					function(i) { return new Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel(i); }
@@ -43,7 +45,9 @@ Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (aja
 	};
 
 	this.AvailableTemplates = ko.observableArray();
+	this.SelectedTemplateId = ko.observable();
 	this.SelectedTemplate = ko.observable();
+	this.UrlTimeStamp = ko.observable();
 
 	this.PreferenceId = ko.observable();
 	this.EarliestStartTime = ko.observable();

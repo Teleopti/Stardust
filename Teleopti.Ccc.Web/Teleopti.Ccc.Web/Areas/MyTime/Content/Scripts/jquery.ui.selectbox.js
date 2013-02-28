@@ -99,6 +99,43 @@
 
 		},
 
+		_refreshMenu: function (data) {
+			var self = this;
+
+			var items = this._select
+				.children("option")
+				.map(function () {
+					var text = $(this).text();
+					var value = this.value;
+					var color = $(this).data('color');
+					return {
+						label: text,
+						value: value,
+						color: color,
+						option: this
+					};
+				});
+
+			this._menu.empty();
+			for (var i = 0; i < items.length; i++) {
+				var item = this._createMenuItem(items[i]);
+				this._menu.append(item);
+			}
+
+			this._menu.menu("refresh");
+			this._menu.menu({
+				select: function (event, ui) {
+					var dataItem = ui.item.data("selectbox-item");
+//					self._optionByValue(dataItem.value);
+					self._selectOption(dataItem.option);
+//					self._trigger("changed", event, {
+//						item: dataItem.option
+//					});
+				}
+			});
+
+		},
+
 		_createMenuItems: function () {
 			var items = this._select
 				.children("option")
@@ -217,6 +254,9 @@
 					break;
 				case "visible":
 					this._setVisibility(value);
+					break;
+				case "refreshMenu":
+					this._refreshMenu(value);
 					break;
 			}
 

@@ -144,9 +144,7 @@
 
 					<div id="Preference-add-extended-form" class="displaynone"> 
 						
-						<select id="Preference-template" data-bind="options: AvailableTemplates, optionsText: 'Text', value: SelectedTemplate" title="@Resources.ExtendedPreferencesTemplate" class="ml15 mt5">
-							<option value="">&nbsp;</option>
-							<option value="-">-</option>
+						<select id="Preference-template" data-bind="@*selectbox: SelectedTemplateId,*@ options: AvailableTemplates, optionsText: 'Text', optionsValue:'Value', value: SelectedTemplate, optionsCaption: 'Choose...'" title="@Resources.ExtendedPreferencesTemplate" class="ml15 mt5">
 							@*@foreach (var option in preferenceNavigation.TemplateOptions)
 							{
 								<option value="@option.Value" data-color="@option.Color">@option.Text</option>
