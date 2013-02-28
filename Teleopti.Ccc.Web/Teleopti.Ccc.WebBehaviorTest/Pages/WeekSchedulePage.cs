@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
@@ -66,10 +64,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		{
 			return Document.Div(Find.BySelector(DateSelector(date) + " .holiday-agents")).EventualGet();
 		}
+		public Span AddRequestDropDown { get; set; }
+		public Link AddTextRequestMenuItem { get; set; }
+		public Link AddAbsenceRequestMenuItem { get; set; }
+		public Link AddShiftTradeRequestMenuItem { get; set; }
 
-		[FindBy(Id = "Schedule-addRequest-button")]
-		public Button AddRequestButton { get; set; }
-
+		
 		[FindBy(Id = "Schedule-addRequest-section")]
 		public Div RequestDetailSection { get; set; }
 
@@ -78,28 +78,37 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		[FindBy(Id = "Absence-request-tab")]
 		public Span AbsenceRequestTab { get; set; }
+		
 		[FindBy(Id = "Absence-type-element")]
 		public Div AbsenceTypesElement { get; set; }
 
 		[FindBy(Id = "Absence-type-input")]
 		public TextField AbsenceTypesTextField { get; set; }
+		
 		[FindBy(Id = "Absence-type")]
 		public SelectList AbsenceTypesSelectList { get; set; }
+		
 		[FindBy(Id = "Fullday-check")]
 		public CheckBox FulldayCheck { get; set; }
 
 		[FindBy(Id = "Schedule-addRequest-subject-input")]
 		public TextField RequestDetailSubjectInput { get; set; }
+		
 		[FindBy(Id = "Schedule-addRequest-fromDate-input")]
 		public TextField RequestDetailFromDateTextField { get; set; }
+		
 		[FindBy(Id = "Schedule-addRequest-fromTime-input-input")]
 		public TextField RequestDetailFromTimeTextField { get; set; }
+		
 		[FindBy(Id = "Schedule-addRequest-toDate-input")]
 		public TextField RequestDetailToDateTextField { get; set; }
+		
 		[FindBy(Id = "Schedule-addRequest-toTime-input-input")]
 		public TextField RequestDetailToTimeTextField { get; set; }
+		
 		[FindBy(Id = "Schedule-addRequest-message-input")]
 		public TextField RequestDetailMessageTextField { get; set; }
+		
 		[FindBy(Id = "Schedule-addRequest-error")]
 		public Div ValidationErrorText { get; set; }
 

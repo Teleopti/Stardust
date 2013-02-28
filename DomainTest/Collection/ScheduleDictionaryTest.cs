@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
         private TimeSpan _nightlyRest;
         private IDictionary<IPerson, IScheduleRange> dictionary;
         private IDifferenceCollectionService<IPersistableScheduleData> diffSvc;
-        private IApplicationFunction dummyFunction;
+        private string dummyFunction;
         private IPerson dummyPerson;
         private bool eventFired;
         private MockRepository mocks;
@@ -59,8 +59,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
             target = new ScheduleDictionary(scenario, period, new DifferenceEntityCollectionService<IPersistableScheduleData>());
             dummyPerson = PersonFactory.CreatePerson();
             IScheduleRange justToCreateTheScheduleRangeForTests = target[dummyPerson];
-            dummyFunction = ApplicationFunction.FindByPath(new DefinedRaptorApplicationFunctionFactory().ApplicationFunctionList,
-                                                           DefinedRaptorApplicationFunctionPaths.ViewSchedules);
+            dummyFunction = DefinedRaptorApplicationFunctionPaths.ViewSchedules;
             _dummyScheduleRange =
                 new ScheduleRange(target, new ScheduleParameters(ScenarioFactory.CreateScenarioAggregate(), dummyPerson, new DateTimePeriod(2000, 1, 1, 2001, 1, 1)));
 
@@ -158,7 +157,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
         private void SetAuthorizationServiceExpectations()
         {
             DateOnlyPeriod dop = period.VisiblePeriod.ToDateOnlyPeriod(dummyPerson.PermissionInformation.DefaultTimeZone());
-            Expect.Call(principalAuthorization.PermittedPeriods(null, new DateOnlyPeriod(),null))
+            Expect.Call(principalAuthorization.PermittedPeriods(string.Empty, new DateOnlyPeriod(),null))
                 .IgnoreArguments()
                 .Repeat.Any()
                 .Return(new List<DateOnlyPeriod> { dop });
@@ -506,7 +505,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
             {
                 Expect.Call(rep.LoadAggregate(newId))
                     .Return(ass);
-                Expect.Call(principalAuthorization.PermittedPeriods(null, new DateOnlyPeriod(),null))
+                Expect.Call(principalAuthorization.PermittedPeriods(string.Empty, new DateOnlyPeriod(),null))
                     .IgnoreArguments()
                     .Repeat.Any()
                     .Return(new List<DateOnlyPeriod>());
@@ -540,7 +539,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
             {
                 Expect.Call(rep.LoadAggregate(newId))
                     .Return(meeting);
-                Expect.Call(principalAuthorization.PermittedPeriods(null, new DateOnlyPeriod(), null))
+                Expect.Call(principalAuthorization.PermittedPeriods(string.Empty, new DateOnlyPeriod(), null))
                     .IgnoreArguments()
                     .Repeat.Any()
                     .Return(new List<DateOnlyPeriod>());
@@ -709,7 +708,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
                     .Return(false).Repeat.Any();
                 DateOnlyPeriod dop = period.VisiblePeriod.ToDateOnlyPeriod(timeZone);
                 Expect.Call(principalAuthorization.PermittedPeriods(dummyFunction, dop,person))
-                    .Return(new List<DateOnlyPeriod> { dop }).Repeat.Twice();
+                    .Return(new List<DateOnlyPeriod> { dop });
 
             }
             using (mocks.Playback())
@@ -738,7 +737,7 @@ namespace Teleopti.Ccc.DomainTest.Collection
             IPersonDayOff dOff2BeRemoved = PersonDayOffFactory.CreatePersonDayOff(dummyPerson, scenario, new DateOnly(2000, 1, 1), dOff1);
             IPersonAbsence pAbs2BeChanged = PersonAbsenceFactory.CreatePersonAbsence(dummyPerson, scenario, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
             IPersonAssignment pAss2BeAdded = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, dummyPerson, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
-            IApplicationFunction function = ApplicationFunction.FindByPath(new DefinedRaptorApplicationFunctionFactory().ApplicationFunctionList, DefinedRaptorApplicationFunctionPaths.ViewSchedules);
+            const string function = DefinedRaptorApplicationFunctionPaths.ViewSchedules;
 
             using (mocks.Record())
             {

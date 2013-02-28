@@ -20,8 +20,8 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 		private int _timeLineStartInterval;
 		private int _timeLineEndInterval;
 		private int _timeLineDayTwoEndInterval;
-		private Decimal _teamAdherenceTotal = -2;
-		private Decimal _teamDeviationTotal = -2;
+		private Decimal? _teamAdherenceTotal = -2;
+		private Decimal? _teamDeviationTotal = -2;
 		private IList<SqlParameter> _sqlParameterList;
 		private IList<String> _parameterTextList;
 
@@ -380,11 +380,11 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 
 			tableRow.Cells.Add(MakeTableCell(ReportTexts.Resources.ResTotalsColon, HorizontalAlign.Left,
 											VerticalAlign.Bottom, cssClass));
-			tableRow.Cells.Add(MakeTableCell((_teamAdherenceTotal * 100).ToString("0.0", CultureInfo.CurrentCulture),
-													HorizontalAlign.Center,
-													VerticalAlign.Middle, cssClass));
-			tableRow.Cells.Add(MakeTableCell(_teamDeviationTotal.ToString("0", CultureInfo.CurrentCulture),
-											HorizontalAlign.Center, VerticalAlign.Middle, cssClass));
+
+			var teamAdherenceTotal = _teamAdherenceTotal.HasValue ? ((decimal)(_teamAdherenceTotal * 100)).ToString("0.0", CultureInfo.CurrentCulture) : string.Empty;
+			tableRow.Cells.Add(MakeTableCell(teamAdherenceTotal,HorizontalAlign.Center,VerticalAlign.Middle, cssClass));
+			var teamDeviationTotal = _teamDeviationTotal.HasValue ? ((decimal)(_teamDeviationTotal)).ToString("0", CultureInfo.CurrentCulture) : string.Empty;
+			tableRow.Cells.Add(MakeTableCell(teamDeviationTotal,HorizontalAlign.Center, VerticalAlign.Middle, cssClass));
 
 			if (isTopTotals)
 			{
@@ -581,10 +581,10 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 			tableCellArray[0] = MakeTableCell(header, HorizontalAlign.Left,
 											 VerticalAlign.Middle, "");
 			tableCellArray[0].Wrap = false;
-			tableCellArray[1] = MakeTableCell((row.AdherenceTotal * 100).ToString("0.0", CultureInfo.CurrentCulture), HorizontalAlign.Center ,
-											 VerticalAlign.Middle, "");
-			tableCellArray[2] = MakeTableCell(row.DeviationTotal.ToString("0", CultureInfo.CurrentCulture), HorizontalAlign.Center,
-											 VerticalAlign.Middle, "");
+			var totalAdherence = row.AdherenceTotal.HasValue ? ((decimal)(row.AdherenceTotal * 100)).ToString("0.0", CultureInfo.CurrentCulture) : string.Empty;
+			tableCellArray[1] = MakeTableCell(totalAdherence, HorizontalAlign.Center ,VerticalAlign.Middle, "");
+			var DeviationTotal = row.AdherenceTotal.HasValue ? ((decimal)(row.DeviationTotal)).ToString("0", CultureInfo.CurrentCulture) : string.Empty;
+			tableCellArray[2] = MakeTableCell(DeviationTotal, HorizontalAlign.Center, VerticalAlign.Middle, "");
 			return tableCellArray;
 		}
 

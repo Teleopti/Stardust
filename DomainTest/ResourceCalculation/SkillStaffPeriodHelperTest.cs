@@ -342,5 +342,30 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			Assert.AreEqual(9, result.Value);
 		}
+
+		[Test]
+		public void VerifyCalculationsForSpecificPeriod()
+		{
+			var periods = new List<IEnumerable<ISkillStaffPeriod>>();
+			var res = SkillStaffPeriodHelper.SkillPeriodGridSmoothness(periods);
+			Assert.IsNull(res);
+
+			Expect.Call(_skillStaffPeriod1.FStaff).Return(2).Repeat.Any();
+			Expect.Call(_skillStaffPeriod2.FStaff).Return(3).Repeat.Any();
+			Expect.Call(_skillStaffPeriod3.FStaff).Return(5).Repeat.Any();
+
+			Expect.Call(_skillStaffPeriod1.CalculatedResource).Return(1).Repeat.Any();
+			Expect.Call(_skillStaffPeriod2.CalculatedResource).Return(2).Repeat.Any();
+			Expect.Call(_skillStaffPeriod3.CalculatedResource).Return(3).Repeat.Any();
+
+			_mockRepository.ReplayAll();
+			var skillStaffPeriods1 = new List<ISkillStaffPeriod> { _skillStaffPeriod1, _skillStaffPeriod2 };
+			var skillStaffPeriods2 = new List<ISkillStaffPeriod> {  _skillStaffPeriod3 };
+			var skillStaffPeriods = new[] {skillStaffPeriods1, skillStaffPeriods2};
+			
+			res = SkillStaffPeriodHelper.SkillPeriodGridSmoothness(skillStaffPeriods);
+			Assert.That(Math.Round(res.Value, 2), Is.EqualTo(0.04));
+		}
+
     }
 }

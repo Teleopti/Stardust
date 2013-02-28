@@ -32,9 +32,9 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Menu
 		                                                                            			{
 		                                                                            				ApplicationFunctionPath =
 		                                                                            					DefinedRaptorApplicationFunctionPaths
-		                                                                            					.AdminWeb,
-		                                                                            				Area = "Team",
-		                                                                            				Name = GetMenuText(DefinedRaptorApplicationFunctionPaths.AdminWeb)
+		                                                                            					.Anywhere,
+		                                                                            				Area = "Anywhere",
+		                                                                            				Name = GetMenuText(DefinedRaptorApplicationFunctionPaths.Anywhere)
 		                                                                            			}
 		                                                                            	};
 

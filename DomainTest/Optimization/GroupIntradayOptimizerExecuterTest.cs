@@ -201,7 +201,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		{
 			Expect.Call(() =>_schedulePartModifyAndRollbackService.ClearModificationCollection());
 			Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
-			Expect.Call(() => _deleteService.DeleteWithResourceCalculation( _daysToDelete, _schedulePartModifyAndRollbackService));
+			Expect.Call(() => _deleteService.DeleteWithResourceCalculation(_daysToDelete, _schedulePartModifyAndRollbackService, true));
 			Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences)).Return(_schedulingOptions);
 		}
 

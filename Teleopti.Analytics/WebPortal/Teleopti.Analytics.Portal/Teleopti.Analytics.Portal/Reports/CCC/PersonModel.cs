@@ -27,46 +27,47 @@ namespace Teleopti.Analytics.Portal.Reports.Ccc
 		}
 
 		public DateTime ShiftStartDate
+
 		{
 			get { return ((DateTime)DataRow["shift_startdate"]); }
 		}
 
-		public decimal AdherenceTotal
+		public decimal? AdherenceTotal
 		{
 			get
 			{
 				if (DataRow["adherence_tot"] == DBNull.Value)
-					return 0;
+					return null;
 				return (decimal)DataRow["adherence_tot"];
 			}
 		}
 
-		public decimal DeviationTotal
+		public decimal? DeviationTotal
 		{
 			get
 			{
 				if (DataRow["deviation_tot_m"] == DBNull.Value)
-					return 0;
+					return null;
 				return (decimal)DataRow["deviation_tot_m"];
 			}
 		}
 
-		public decimal TeamAdherenceTotal
+		public decimal? TeamAdherenceTotal
 		{
 			get
 			{
 				if (DataRow["team_adherence_tot"] == DBNull.Value)
-					return 0;
+					return null;
 				return (decimal)DataRow["team_adherence_tot"];
 			}
 		}
 
-		public decimal TeamDeviationTotal
+		public decimal? TeamDeviationTotal
 		{
 			get
 			{
 				if (DataRow["team_deviation_tot_m"] == DBNull.Value)
-					return 0;
+					return null;
 				return (decimal)DataRow["team_deviation_tot_m"];
 			}
 		}

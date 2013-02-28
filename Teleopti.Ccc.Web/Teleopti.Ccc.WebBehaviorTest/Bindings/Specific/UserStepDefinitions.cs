@@ -437,16 +437,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			UserFactory.User().SetupCulture(new USCulture());
 		}
 
-		[Given(@"I am located in hawaii")]
-		public void GivenIAmLocatedInAmerica()
+		[Given(@"(I am|'(.*)' is) located in (h|H)awaii")]
+		public void GivenIAmLocatedInAmerica(string what, string userName, string hH)
 		{
-			UserFactory.User().SetupCulture(new HawaiiTimeZone());
+			UserFactory.User().SetupTimeZone(new HawaiiTimeZone());
 		}
 
-		[Given(@"I am located in Stockholm")]
-		public void GivenIAmLocatedInStockholm()
+		[Given(@"(I am|(.*) is) located in (S|s)tockholm")]
+		public void GivenIAmLocatedInStockholm(string what, string userName, string sS)
 		{
-			UserFactory.User().SetupCulture(new StockholmTimeZone());
+			UserFactory.User().SetupTimeZone(new StockholmTimeZone());
 		}
 
 
@@ -491,24 +491,26 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			UserFactory.User().Setup(new ExistingAbsenceRequest());
 		}
 
+		[Given(@"I have received a shift trade request")]
 		[Given(@"I have created a shift trade request")]
-		public void GivenIHaveCreatedAShiftTradeRequest()
+		public void GivenIHaveCreatedAShiftTradeRequest(Table table)
 		{
-			UserFactory.User().Setup(new ExistingShiftTradeRequest());
-		}
-
-		[Given(@"I have created a shift trade request with subject '(.*)'")]
-		public void GivenIHaveCreatedAShiftTradeRequestWithSubject(string subject)
-		{
-			UserFactory.User().Setup(new ExistingShiftTradeRequest(subject));
+			var existingShiftTrade = table.CreateInstance<ExistingShiftTradeRequest>();
+			UserFactory.User().Setup(existingShiftTrade);
 		}
 
 		[Given(@"I have received a shift trade request from '(.*)'")]
-		public void GivenIHaveReceivedAShiftTradeRequestFrom(string from)
+		public void GivenIHaveReceivedAShiftTradeRequestFrom(string name)
 		{
-			var person = PersonFactory.CreatePerson(from);
-			UserFactory.User().MakePerson(person);
-			UserFactory.User().Setup(new ExistingShiftTradeRequest() {From = person});
+			var existingShiftTrade = new ExistingShiftTradeRequest() {From = name};
+			UserFactory.User().Setup(existingShiftTrade);
+		}
+
+		[Given(@"I have created a shift trade request to '(.*)'")]
+		public void GivenIHaveCreatedAShiftTradeRequestTo(string name)
+		{
+			var existingShiftTrade = new ExistingShiftTradeRequest() { To = name };
+			UserFactory.User().Setup(existingShiftTrade);
 		}
 
 		[Given(@"the site has another team")]
@@ -604,6 +606,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			UserFactory.User().Setup(contractSchedule);
 			UserFactory.User().UserData<PersonPeriod>().Contract = contract;
 			UserFactory.User().UserData<PersonPeriod>().ContractSchedule = contractSchedule;
+		}
+
+		private static IPerson CreatePerson(string name)
+		{
+			var names = name.Split(' ');
+			return names.Length > 1 ? PersonFactory.CreatePerson(names[0], names[1]) : PersonFactory.CreatePerson(name);
 		}
 
 	}

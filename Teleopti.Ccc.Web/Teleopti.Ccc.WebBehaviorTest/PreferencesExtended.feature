@@ -81,7 +81,7 @@ Scenario: Add standard preference
 	| Preference | Late  |
 	And I click the apply extended preferences button
 	Then I should not see an extended preference indication on '2012-06-20'
-	And I should see the preference 'Late' on '2012-06-20'
+	And I should see the preference Late on '2012-06-20'
 
 Scenario: Add extended preference
 	Given I have the role 'Access to extended preferences'

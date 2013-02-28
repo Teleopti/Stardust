@@ -31,14 +31,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 			return request.Button(QuicklyFind.ByClass("request-delete-button"));
 		}
 
-		[FindBy(Id = "Requests-showRequests-button")]
-		public Button ShowRequestsButton { get; set; }
+		public Span AddRequestDropDown
+		{
+			get { return Document.Span(QuicklyFind.ByClass("toolbar-addRequest")); }
+		}
 
-		[FindBy(Id = "Requests-addShiftTradeRequest-button")]
-		public Button AddShiftTradeRequestButton { get; set; }
+		[FindBy(Id = "Requests-addTextRequest-menuItem")]
+		public Link AddTextRequestMenuItem { get; set; }
 
-		[FindBy(Id = "Requests-addRequest-button")]
-		public Button AddRequestButton { get; set; }
+		[FindBy(Id = "Requests-addAbsenceRequest-menuItem")]
+		public Link AddAbsenceRequestMenuItem { get; set; }
+
+		[FindBy(Id = "Requests-addShiftTradeRequest-menuItem")]
+		public Link AddShiftTradeRequestMenuItem { get; set; }
 
 		[FindBy(Id = "Request-detail-section")]
 		public Div RequestDetailSection { get; set; }
@@ -106,15 +111,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "Request-detail-deny-reason")]
 		public Span RequestDetailDenyReason { get; set; }
 
-		[FindBy(Class = "arrow-down")]
-		public Div MoreToLoadArrow { get; set; }
+		public Div MoreToLoadArrow 
+		{ 
+			get
+			{
+				return Document.Divs.Filter(QuicklyFind.ByClass("arrow-down")).FirstOrDefault();
+			}
+		}
 
 		[FindBy(Id = "Requests-no-requests-found")]
 		public Div NoRequestsFound { get; set; }
 		
-		[FindBy(Id = "Request-add-shift-trade-button")]
-		public Button ShiftTradeRequestsButton { get; set; }
-
 		[FindBy(Id = "Request-add-shift-trade-missing-wcs-message")]
 		public Div AddShiftTradeMissingWorkflowControlsSetMessage { get; set; }
 
@@ -126,6 +133,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 			get { return Document.Div(QuicklyFind.ByClass("shift-trade-my-schedule")).Spans.Filter(QuicklyFind.ByClass("shift-trade-layer")); }
 		}
 
+		public SpanCollection ShiftTradeScheduleLayers
+		{
+			get { return Document.Div(QuicklyFind.ByClass("shift-trade-possible-trade-schedule")).Spans.Filter(QuicklyFind.ByClass("shift-trade-layer")); }
+		}
+
+		public SpanCollection ShiftTradeDetailsFromScheduleLayers
+		{
+			get { return Document.Divs.Filter(QuicklyFind.ByClass("shift-trade-swap-detail-schedule")).First().Spans.Filter(QuicklyFind.ByClass("shift-trade-layer")); }
+		}
+
+		public SpanCollection ShiftTradeDetailsToScheduleLayers
+		{
+			get { return Document.Divs.Filter(QuicklyFind.ByClass("shift-trade-swap-detail-schedule")).Skip(1).First().Spans.Filter(QuicklyFind.ByClass("shift-trade-layer")); }
+		}
+
 		public TextField AddShiftTradeDatePicker
 		{
 			get { return Document.TextField(QuicklyFind.ByClass("shift-trade-add-datepicker")); }
@@ -135,5 +157,23 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		{
 			get { return Document.Div(QuicklyFind.ByClass("shift-trade-timeline")).Spans.Filter(QuicklyFind.ByClass("shift-trade-timeline-line")); }
 		}
+
+		[FindBy(Id = "Request-shift-trade-sender")]
+		public Span ShiftTradeSender { get; set; }
+
+		[FindBy(Id = "Request-shift-trade-reciever")]
+		public Span ShiftTradeReciever { get; set; }
+
+		[FindBy(Id = "Request-shift-trade-date-from")]
+		public Element ShiftTradeDateFrom { get; set; }
+
+		[FindBy(Id = "Request-shift-trade-date-to")]
+		public Element ShiftTradeDateTo { get; set; }
+
+		[FindBy(Id = "Request-shift-trade-detail-subject")]
+		public Div ShiftTradeRequestDetailSubject { get; set; }
+
+		[FindBy(Id = "Request-shift-trade-detail-message")]
+		public Div  ShiftTradeRequestDetailMessage { get; set; }
 	}
 }

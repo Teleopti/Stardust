@@ -154,8 +154,15 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return res != null;
 		}
 
+    	public IEnumerable<IPerson> FindPossibleShiftTrades(IPerson loggedOnUser)
+    	{
+    		return Session.GetNamedQuery("FindPossibleShiftTrades")
+				.SetEntity("loggedOnUser", loggedOnUser)
+				.List<IPerson>();
+    	}
 
-        private ICriteria createWindowsLogonNameCriteria(string domainName, string logOnName)
+
+    	private ICriteria createWindowsLogonNameCriteria(string domainName, string logOnName)
         {
 
             //todo
@@ -374,8 +381,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             var roles = DetachedCriteria.For<Person>()
                 .Add(Restrictions.Eq("Id", person.Id))
                 .SetFetchMode("PermissionInformation.personInApplicationRole", FetchMode.Join);
+
+			var rolesSubquery = DetachedCriteria.For<Person>()
+				.Add(Restrictions.Eq("Id", person.Id))
+				.CreateAlias("PermissionInformation.personInApplicationRole","role")
+				.SetProjection(Projections.Property("role.Id"));
             
             var functions = DetachedCriteria.For<ApplicationRole>()
+				.Add(Subqueries.PropertyIn("Id",rolesSubquery))
                 .SetFetchMode("ApplicationFunctionCollection", FetchMode.Join)
                 .SetFetchMode("BusinessUnit", FetchMode.Join);
             

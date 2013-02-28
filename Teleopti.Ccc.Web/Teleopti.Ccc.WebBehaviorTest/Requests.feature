@@ -21,17 +21,40 @@ Scenario: See absence request
 	When I view requests
 	Then I should see my existing absence request
 
-Scenario: Do not show created shift trade request because its not implemented yet
+Scenario: Show created shift trade request
 	Given I am an agent
 	And I have created a shift trade request
+	| Field			| Value				|
+	| Subject		| swap with me		|
 	When I view requests
-	Then I should not see my existing shift trade request
+	Then I should see my existing shift trade request with subject 'swap with me'
 
-Scenario: Do not show received shift trade request because its not implemented yet
+
+Scenario: Show status of a created shift trade request
 	Given I am an agent
-	And I have received a shift trade request from 'Ashley'
+	And I have created a shift trade request
+	| Field			| Value				|
+	| Subject		| swap with me		|
+	And I am viewing requests
+	Then I should see my existing shift trade request with status waiting for other part
+
+Scenario: Show status of a recieved shift trade request
+	Given I am an agent
+	And I have received a shift trade request
+	| Field   | Value         |
+	| Subject | swap with me  |
+	| From    | Ashley Andeen |
+	And I am viewing requests
+	Then I should see my existing shift trade request with status waiting for your approval
+
+Scenario: Show received shift trade request
+	Given I am an agent
+	And I have received a shift trade request
+	| Field			| Value         |
+	| Subject		| swap with me  |
+	| From			| Ashley Andeen |
 	When I view requests
-	Then I should not see my existing shift trade request
+	Then I should see my existing shift trade request with subject 'swap with me'
 
 Scenario: Requests tab
 	Given I am an agent
@@ -50,7 +73,6 @@ Scenario: No access to requests page
 	And I am signed in
 	When I navigate to the requests page
 	Then I should see an error message
-
 Scenario: No requests
 	Given I am an agent
 	And I have no existing requests

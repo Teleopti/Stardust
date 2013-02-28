@@ -5304,6 +5304,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Error when saving your changes. The most possible reason is that you or another user has deleted the data you set. To preserve data consistency, the form will be closed. Sorry, your changes has been lost..
+        /// </summary>
+        public static string DataHasBeenDeleted {
+            get {
+                return ResourceManager.GetString("DataHasBeenDeleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Data source initialized.
         /// </summary>
         public static string DataSourceInitialized {
@@ -7551,6 +7560,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ErrorOccuredWhenSavingSettings {
             get {
                 return ResourceManager.GetString("ErrorOccuredWhenSavingSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Errors.
+        /// </summary>
+        public static string Errors {
+            get {
+                return ResourceManager.GetString("Errors", resourceCulture);
             }
         }
         
@@ -10842,6 +10860,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Little.
+        /// </summary>
+        public static string Little {
+            get {
+                return ResourceManager.GetString("Little", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Load.
         /// </summary>
         public static string Load {
@@ -11932,6 +11959,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Medium.
+        /// </summary>
+        public static string Medium {
+            get {
+                return ResourceManager.GetString("Medium", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Meeting.
         /// </summary>
         public static string Meeting {
@@ -12805,6 +12841,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Much.
+        /// </summary>
+        public static string Much {
+            get {
+                return ResourceManager.GetString("Much", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to (multiple values).
         /// </summary>
         public static string MultipleValuesParanteses {
@@ -13662,7 +13707,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to New shift trade request.
+        ///   Looks up a localized string similar to New Shift Trade Request.
         /// </summary>
         public static string NewShiftTradeRequest {
             get {
@@ -17091,6 +17136,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Quick Forecast.
+        /// </summary>
+        public static string QuickForecast {
+            get {
+                return ResourceManager.GetString("QuickForecast", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to R&amp;place with:.
         /// </summary>
         public static string RAmpesandeplaceWithColon {
@@ -19471,6 +19525,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Seasonality and trends data range.
+        /// </summary>
+        public static string SeasonalityDataRange {
+            get {
+                return ResourceManager.GetString("SeasonalityDataRange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This system is licensed to &quot;{0}&quot; according to the terms and conditions of the license agreement and the license key will expire {1}.
         ///
         ///The license covers a maximum of {2} seats.
@@ -19918,7 +19981,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select workload.
+        ///   Looks up a localized string similar to Workloads.
         /// </summary>
         public static string SelectWorkload {
             get {
@@ -20666,6 +20729,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show Info Messages.
+        /// </summary>
+        public static string ShowInfoMessages {
+            get {
+                return ResourceManager.GetString("ShowInfoMessages", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Labels.
         /// </summary>
         public static string ShowLabels {
@@ -21247,6 +21319,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Smoothing {
             get {
                 return ResourceManager.GetString("Smoothing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Smoothing style:.
+        /// </summary>
+        public static string SmoothingStyleColon {
+            get {
+                return ResourceManager.GetString("SmoothingStyleColon", resourceCulture);
             }
         }
         
@@ -22314,6 +22395,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Templates historical data range.
+        /// </summary>
+        public static string TemplatesHistoricalDataRange {
+            get {
+                return ResourceManager.GetString("TemplatesHistoricalDataRange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Templates loaded.
         /// </summary>
         public static string TemplatesLoaded {
@@ -22599,6 +22689,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string TheProvidedStringCouldNotBeFormattedToAValidTime {
             get {
                 return ResourceManager.GetString("TheProvidedStringCouldNotBeFormattedToAValidTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The quick forecast will be started as a job in the background when this wizard is finished, look in Job History for status..
+        /// </summary>
+        public static string TheQuickForecatWillStartInBackgroundMessage {
+            get {
+                return ResourceManager.GetString("TheQuickForecatWillStartInBackgroundMessage", resourceCulture);
             }
         }
         

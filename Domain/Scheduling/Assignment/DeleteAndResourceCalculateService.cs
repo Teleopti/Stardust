@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
 	public interface IDeleteAndResourceCalculateService
 	{
-		IList<IScheduleDay> DeleteWithResourceCalculation(IList<IScheduleDay> list, ISchedulePartModifyAndRollbackService rollbackService);
+		IList<IScheduleDay> DeleteWithResourceCalculation(IList<IScheduleDay> list, ISchedulePartModifyAndRollbackService rollbackService, bool considerShortBreaks);
 	}
 
 	public class DeleteAndResourceCalculateService : IDeleteAndResourceCalculateService
@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public IList<IScheduleDay> DeleteWithResourceCalculation(IList<IScheduleDay> list, ISchedulePartModifyAndRollbackService rollbackService)
+		public IList<IScheduleDay> DeleteWithResourceCalculation(IList<IScheduleDay> list, ISchedulePartModifyAndRollbackService rollbackService, bool considerShortBreaks)
 		{
 
 			IList<IScheduleDay> deleted = _deleteSchedulePartService.Delete(list, rollbackService);
@@ -35,8 +35,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
     		foreach (var pair in dic)
     		{
-    			_resourceOptimizationHelper.ResourceCalculateDate(pair.Key, true, true, pair.Value, new List<IScheduleDay>());
-				_resourceOptimizationHelper.ResourceCalculateDate(pair.Key.AddDays(1), true, true, pair.Value, new List<IScheduleDay>());
+				_resourceOptimizationHelper.ResourceCalculateDate(pair.Key, true, considerShortBreaks, pair.Value, new List<IScheduleDay>());
+				_resourceOptimizationHelper.ResourceCalculateDate(pair.Key.AddDays(1), true, considerShortBreaks, pair.Value, new List<IScheduleDay>());
     		}
 
     		return deleted;

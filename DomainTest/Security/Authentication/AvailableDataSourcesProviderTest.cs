@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Linq;
-using System.Reflection;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Security.Authentication;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -56,7 +55,9 @@ namespace Teleopti.Ccc.DomainTest.Security.Authentication
             using (mocks.Record())
             {
                 Expect.Call(applicationData.RegisteredDataSourceCollection).Return(dataSources);
-                Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Throw(new Exception("test",CreateSqlException(4060)));
+            	Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Throw(new Exception("test",
+            	                                                                             SqlExceptionConstructor.
+            	                                                                             	CreateSqlException("Error message", 4060)));
                 Expect.Call(dataSource.Application).Return(unitOfWorkFactory);
             }
             using (mocks.Playback())
@@ -64,30 +65,6 @@ namespace Teleopti.Ccc.DomainTest.Security.Authentication
                 var result = target.UnavailableDataSources();
                 Assert.AreEqual(1, result.Count());
             }
-        }
-
-        private static T Construct<T>(params object[] p)
-        {
-            return (T)typeof(T).GetConstructors(BindingFlags.NonPublic | BindingFlags.Instance)[0].Invoke(p);
-        }
-
-        private static SqlException CreateSqlException(int errorNumber)
-        {
-			SqlErrorCollection collection = Construct<SqlErrorCollection>();
-			SqlError error = Construct<SqlError>(errorNumber, (byte)2, (byte)3, "server name", "error message", "proc", 100);
-           
-			var addMethod = collection.GetType().GetMethod("Add", BindingFlags.NonPublic | BindingFlags.Instance);
-			addMethod.Invoke(collection, new object[] { error });
-			
-			var types = new[] { typeof(string), typeof(SqlErrorCollection) };
-			var parameters = new object[] { "mess", collection };
-
-			var constructor = typeof(SqlException).
-				GetConstructor(BindingFlags.NonPublic | BindingFlags.Instance, null, types, null);
-
-			var exception = (SqlException)constructor.Invoke(parameters);
-
-			return exception;
         }
     }
 }

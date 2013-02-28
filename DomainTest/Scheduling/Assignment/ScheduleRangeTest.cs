@@ -13,9 +13,7 @@ using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Domain.Security;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -27,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 	[TestFixture]
 	public class ScheduleRangeTest
 	{
-		private IApplicationFunction _function;
+		private string _function;
 		private MockRepository _mocks;
 		private IScheduleParameters _parameters;
 		private IPerson _person;
@@ -44,8 +42,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		    _principalAuthorization = _mocks.StrictMock<IPrincipalAuthorization>();
 			_scenario = ScenarioFactory.CreateScenarioAggregate();
 			_person = PersonFactory.CreatePerson();
-			_function = ApplicationFunction.FindByPath(new DefinedRaptorApplicationFunctionFactory().ApplicationFunctionList,
-													  DefinedRaptorApplicationFunctionPaths.ViewSchedules);
+			_function = DefinedRaptorApplicationFunctionPaths.ViewSchedules;
 			_parameters = new ScheduleParameters(_scenario,
 								_person, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
 			_target = new scheduleExposingInternalCollections(_dic, _parameters);
@@ -644,24 +641,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		public void VerifyProperties()
 		{
 			ScheduleRange targetTemp = new ScheduleRange(_dic, _parameters);
-			var dates = new List<DateOnlyPeriod> { new DateOnlyPeriod(2000, 1, 1, 2000, 1, 10) };
-			using(_mocks.Record())
-			{
-                Expect.Call(_principalAuthorization.PermittedPeriods(_function, new DateOnlyPeriod(2000, 1, 1, 2000, 12, 31), _person))
-					.Return(dates).Repeat.Once();
-			}
-			using(_mocks.Playback())
-			{
-                using (new CustomAuthorizationContext(_principalAuthorization))
-                {
+			
                     Assert.AreEqual(_parameters.Period, targetTemp.Period);
                     Assert.AreSame(_parameters.Person, targetTemp.Person);
                     Assert.AreSame(_parameters.Scenario, targetTemp.Scenario);
-                    Assert.AreEqual(new DateOnly(2000, 1, 1), targetTemp.AvailableDates.First());
-                    Assert.AreEqual(new DateOnly(2000, 1, 1), targetTemp.AvailableDates.First());
-                    Assert.AreEqual(10, targetTemp.AvailableDates.Count());
-                }
-			}
 		}
 
 	    [Test]

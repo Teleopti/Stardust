@@ -13,6 +13,7 @@
 }
 .request-list 
 {
+    padding-top: 1.5em;
 	width: 483px;
 }
 .rtl .request-list
@@ -88,6 +89,7 @@
 {
 	padding-top: 0.3em;
 	max-width: 440px;
+    word-break: break-all;
 }
 .request-edit-section .edit-module-element {
 	position: relative;
@@ -122,7 +124,7 @@
 	border: 1px solid rgb(216, 216, 216);
 	display: none;
 	height: 100%;
-	padding: 3px;
+	padding: 10px;
 }
 .shift-trade-layer
 {
@@ -144,7 +146,8 @@
 }
 .shift-trade-my-schedule-row 
 {
-	height: 30px;
+	top: 4px;
+	height: 34px;
 	position: relative;
 	font-style: italic;
 }
@@ -155,12 +158,15 @@
 }
 .shift-trade-my-schedule
 {
-	position: relative;
+	position: absolute;
+	left: 150px;
 	display: inline;
 }
+
 .shift-trade-possible-trade-schedule
 {
-	position: relative;
+	position: absolute;
+	left: 150px;
 	display: inline;
 }
 .shift-trade-timeline 
@@ -169,6 +175,7 @@
 	position: absolute;
 	left: 150px;
 }
+
 .shift-trade-timeline .shift-trade-timeline-line:last-child
 {
 	border-right: 0px;
@@ -191,7 +198,6 @@
 	padding-right: 3px;
 	position: relative;
 	top: -19px;
-	left: -8px;
 	font-family: verdana;
 	font-size: 8px;
 	white-space: nowrap;
@@ -200,10 +206,10 @@
 }
 .shift-trade-add-datepicker
 {
-	position:relative;
-	z-index: 9999999;
+	position:absolute;
 	width: 100px;
 	text-align: center;
+	left: 30px;
 }
 .shift-trade-add-previous-date 
 {
@@ -219,9 +225,66 @@
 	height: 20px;
 	width: 22px !important;
 	vertical-align: middle;
+	left: 102px;
 }
 .shift-trade-dayoff-name 
 {
 	position: absolute;
 	left: 50%;
+}
+.shift-trade-no-possible-trades 
+{
+	margin-top: 10px;
+}
+.shift-trade-agent-name {
+	position: absolute;
+	overflow: hidden;
+	white-space: nowrap;
+	width: 150px;
+	height: 19px;
+	background-color: #f8f8f8;
+	float: left; 
+	text-overflow: ellipsis;		
+}
+.rtl .shift-trade-agent-name {
+	right: auto;
+	left: 0;
+}
+.shift-trade-agent-name-hover
+{
+	padding-right: 10px;
+	box-shadow: 7px 0px 10px -1px rgba(0, 0, 0, 0.35);
+	border-right: 1px solid rgba(0, 0, 0, 0.20);
+	width: auto;
+	z-index: 11;
+}
+
+.shift-trade-swap-detail-schedule
+{
+	position: absolute;
+	left: 0px;
+	display: inline;
+}
+
+.shift-trade-swap-detail-timeline-line 
+{
+	height: 100%;
+	float: left;
+	border-left: 1px solid rgb(216, 216, 216);
+}
+
+.shift-trade-swap-detail-schedule-row {
+	height: 22px;
+	position: relative;
+}
+
+.shift-trade-swap-detail-timeline 
+{
+	height: 26px;
+	position: absolute;
+}
+
+.shift-trade-swap-detail-agent-name {
+	
+	height: 30px;
 }

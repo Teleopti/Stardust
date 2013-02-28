@@ -14,9 +14,7 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Scheduling;
@@ -323,17 +321,12 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
             var authorization = _mockRep.StrictMock<IPrincipalAuthorization>();
 
-            var dummyFunction = ApplicationFunction.FindByPath(new DefinedRaptorApplicationFunctionFactory().ApplicationFunctionList,
-                                                           DefinedRaptorApplicationFunctionPaths.ViewSchedules);
             using(_mockRep.Record())
             {
                 Expect.Call(authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewConfidential,
                                                       DateOnly.Today, _agent)).Return(false);
                 Expect.Call(authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules)).
                     Return(true);
-                DateOnlyPeriod dop = _param.Period.ToDateOnlyPeriod(TimeZoneInfoFactory.UtcTimeZoneInfo());
-                Expect.Call(authorization.PermittedPeriods(dummyFunction, dop, _agent))
-                    .Return(new List<DateOnlyPeriod> { dop });
             }
             using (_mockRep.Playback())
             {

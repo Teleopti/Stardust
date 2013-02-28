@@ -29,22 +29,22 @@ ko.bindingHandlers.fadeInIf = {
 		var fadeOutOpacity = allBindings.fadeOutOpacity || 0.1;
 		var fadeInDuration = allBindings.fadeInDuration || 300;
 		var fadeOutDuration = allBindings.fadeOutDuration || 300;
-		var hiddenWhenFalse = allBindings.hiddenWhenFalse || false;
+		var hideWhenFadedOut = allBindings.hideWhenFadedOut || false;
 
 		$(element).stop();
 
 		if (valueUnwrapped) {
-			if (hiddenWhenFalse) {
+			if (hideWhenFadedOut) {
 				$(element).show();
 			}
 			$(element).animate({ opacity: fadeInOpacity }, fadeInDuration);
-		}
-		else
+		} else {
 			$(element).animate({ opacity: fadeOutOpacity }, fadeOutDuration, function () {
-				if (hiddenWhenFalse) {
+				if (hideWhenFadedOut) {
 					$(element).hide();
 				}
 			});
+		}
 	}
 };
 

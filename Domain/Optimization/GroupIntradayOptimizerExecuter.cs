@@ -61,9 +61,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 					cleanedList.Add(scheduleDay);
 
 			}
-			_deleteService.DeleteWithResourceCalculation( cleanedList, _schedulePartModifyAndRollbackService);
-
 			var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences);
+			_deleteService.DeleteWithResourceCalculation( cleanedList, _schedulePartModifyAndRollbackService, schedulingOptions.ConsiderShortBreaks);
+
+			
 			foreach (var scheduleDay in daysToSave)
 			{
 				if(!scheduleDay.IsScheduled())

@@ -25,12 +25,12 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
             EnabledApplicationFunctions.Clear();
 
         	var function = ApplicationFunction.FindByPath(allApplicationFunctions,
-        	                                              DefinedRaptorApplicationFunctionPaths.AdminWeb);
+        	                                              DefinedRaptorApplicationFunctionPaths.Anywhere);
         	function.IsPreliminary = false;
             EnabledApplicationFunctions.Add(function);
 
         	function = ApplicationFunction.FindByPath(allApplicationFunctions,
-        	                                          DefinedRaptorApplicationFunctionPaths.SchedulesAdminWeb);
+        	                                          DefinedRaptorApplicationFunctionPaths.SchedulesAnywhere);
         	function.IsPreliminary = false;
             EnabledApplicationFunctions.Add(function);
         }

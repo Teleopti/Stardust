@@ -1,0 +1,53 @@
+using System;
+using AutoMapper;
+using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
+using Teleopti.Interfaces.Domain;
+
+namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
+{
+	public class RespondToShiftTrade : IRespondToShiftTrade
+	{
+		private readonly IPersonRequestRepository _personRequestRepository;
+		private readonly IShiftTradeRequestSetChecksum _shiftTradeRequestCheckSum;
+		private readonly IPersonRequestCheckAuthorization _personRequestCheckAuthorization;
+		private readonly ILoggedOnUser _loggedOnUser;
+		private readonly IMappingEngine _mapper;
+
+		public RespondToShiftTrade(IPersonRequestRepository personRequestRepository, IShiftTradeRequestSetChecksum shiftTradeRequestCheckSum, IPersonRequestCheckAuthorization personRequestCheckAuthorization, ILoggedOnUser loggedOnUser, IMappingEngine mapper)
+		{
+			_personRequestRepository = personRequestRepository;
+			_shiftTradeRequestCheckSum = shiftTradeRequestCheckSum;
+			_personRequestCheckAuthorization = personRequestCheckAuthorization;
+			_loggedOnUser = loggedOnUser;
+			_mapper = mapper;
+		}
+
+		public RequestViewModel OkByMe(Guid requestId)
+		{
+			var personRequest = _personRequestRepository.Find(requestId);
+			if (personRequest == null)
+			{
+				return new RequestViewModel();
+			}
+			var shiftTrade = personRequest.Request as IShiftTradeRequest;
+			shiftTrade.Accept(_loggedOnUser.CurrentUser(), _shiftTradeRequestCheckSum, _personRequestCheckAuthorization);
+
+			return _mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
+		}
+
+		public RequestViewModel Deny(Guid requestId)
+		{
+			var personRequest = _personRequestRepository.Find(requestId);
+			if (personRequest == null)
+			{
+				return new RequestViewModel();
+			}
+			personRequest.TrySetMessage(personRequest.GetMessage(new NoFormatting()));
+			personRequest.Deny(_loggedOnUser.CurrentUser(), "RequestDenyReasonOtherPart", _personRequestCheckAuthorization);
+
+			return _mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
+		}
+	}
+}

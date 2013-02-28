@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         }
 
         /// <summary>
-        /// Finds schedule for the specified people only withing the given period.
+        /// Finds schedule for the specified people only within the given period.
         /// </summary>
         /// <param name="personsProvider"></param>
         /// <param name="scheduleDictionaryLoadOptions"></param>
@@ -122,10 +122,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					new DateOnlyPeriod(new DateOnly(period.StartDateTime.AddDays(-1)),
 									   new DateOnly(period.EndDateTime.AddDays(1)));
 				
-				addPersonMeetings(retDic, _repositoryFactory.CreateMeetingRepository(UnitOfWork).Find(people, longDateOnlyPeriod, scenario), false, people);
+				addPersonMeetings(retDic, _repositoryFactory.CreateMeetingRepository(UnitOfWork).Find(people, longDateOnlyPeriod, scenario), true, people);
 
                 if(scheduleDictionaryLoadOptions.LoadNotes)
-                //if (personsProvider.LoadNotes)
                 {
                     addNotes(retDic, _repositoryFactory.CreateNoteRepository(UnitOfWork).Find(longDateOnlyPeriod, people, scenario));
                     addPublicNotes(retDic, _repositoryFactory.CreatePublicNoteRepository(UnitOfWork).Find(longDateOnlyPeriod, people, scenario));
@@ -134,7 +133,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 addAgentDayScheduleTags(retDic, _repositoryFactory.CreateAgentDayScheduleTagRepository(UnitOfWork).Find(longDateOnlyPeriod, people, scenario));
 
                 if(scheduleDictionaryLoadOptions.LoadRestrictions)
-                //if (personsProvider.LoadRestrictions)
                 {
                     addPreferencesDays(retDic,
                                        _repositoryFactory.CreatePreferenceDayRepository(UnitOfWork).Find(

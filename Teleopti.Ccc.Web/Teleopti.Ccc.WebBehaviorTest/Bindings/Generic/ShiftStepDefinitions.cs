@@ -15,6 +15,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			var schedule = table.CreateInstance<ShiftConfigurable>();
 			UserFactory.User(userName).Setup(schedule);
 		}
+
+		[Given(@"(.*) have a \(read model\) shift with")]
+		public void GivenThereIsAShiftWith(string userName, Table table)
+		{
+			var shift = table.CreateInstance<ReadModelShiftConfigurable>();
+			UserFactory.User(userName).Setup(shift);
+		}
+
 		[When(@"I am assigned this shift with")]
 		public void WhenIAmAssignedThisShiftWith(Table table)
 		{
