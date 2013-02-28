@@ -27,6 +27,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		public RequestViewModel OkByMe(Guid requestId)
 		{
 			var personRequest = _personRequestRepository.Find(requestId);
+			if (personRequest == null)
+			{
+				return new RequestViewModel();
+			}
 			var shiftTrade = personRequest.Request as IShiftTradeRequest;
 			shiftTrade.Accept(_loggedOnUser.CurrentUser(), _shiftTradeRequestCheckSum, _personRequestCheckAuthorization);
 
@@ -36,6 +40,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		public RequestViewModel Deny(Guid requestId)
 		{
 			var personRequest = _personRequestRepository.Find(requestId);
+			if (personRequest == null)
+			{
+				return new RequestViewModel();
+			}
 			personRequest.TrySetMessage(personRequest.GetMessage(new NoFormatting()));
 			personRequest.Deny(_loggedOnUser.CurrentUser(), "RequestDenyReasonOtherPart", _personRequestCheckAuthorization);
 

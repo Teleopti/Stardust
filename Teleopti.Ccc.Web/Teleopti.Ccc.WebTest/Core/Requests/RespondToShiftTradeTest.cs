@@ -3,7 +3,6 @@ using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
@@ -67,6 +66,26 @@ namespace Teleopti.Ccc.WebTest.Core.Requests
 
 			personRequest.AssertWasCalled(s => s.Deny(loggedOnPerson, "RequestDenyReasonOtherPart", personRequestCheckAuthorization));
 			result.Should().Be.SameInstanceAs(requestViewModel);
+		}
+
+		[Test]
+		public void ApproveShouldReturnEmptyViewModelIfPersonrequestDoesntExist()
+		{
+			var id = new Guid();
+			var personRequestRepository = MockRepository.GenerateMock<IPersonRequestRepository>();
+			personRequestRepository.Expect(p => p.Find(id)).Return(null);
+			var target = new RespondToShiftTrade(personRequestRepository, null, null, null, null);
+			Assert.That(target.OkByMe(id),Is.Not.Null);
+		}
+
+		[Test]
+		public void DenyShouldReturnEmptyViewModelIfPersonrequestDoesntExist()
+		{
+			var id = new Guid();
+			var personRequestRepository = MockRepository.GenerateMock<IPersonRequestRepository>();
+			personRequestRepository.Expect(p => p.Find(id)).Return(null);
+			var target = new RespondToShiftTrade(personRequestRepository, null, null, null, null);
+			Assert.That(target.Deny(id), Is.Not.Null);
 		}
 	}
 }
