@@ -1,23 +1,33 @@
+using System;
+using Teleopti.Interfaces.Domain;
+
 namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 {
 	public class PreferenceTemplateViewModel
 	{
 		public string Name { get; set; }
 
-		public string Preference { get; set; }
+		public Guid? PreferenceId { get; set; }
 
-		public string StartTimeLimitation { get; set; }
+		public string EarliestStartTime { get; set; }
+		public string LatestStartTime { get; set; }
 
-		public string EndTimeLimitation { get; set; }
+		public string EarliestEndTime { get; set; }
+		public string LatestEndTime { get; set; }
 
-		public string WorkTimeLimitation { get; set; }
 
-		public string Activity { get; set; }
+		public string MinimumWorkTime { get; set; }
+		public string MaximumWorkTime { get; set; }
 
-		public string ActivityStartTimeLimitation { get; set; }
+		public Guid? ActivityPreferenceId { get; set; }
 
-		public string ActivityEndTimeLimitation { get; set; }
+		public string ActivityMinimumTime { get; set; }
+		public string ActivityMaximumTime { get; set; }
 
-		public string ActivityTimeLimitation { get; set; }
+		public string ActivityEarliestStartTime { get; set; }
+		public string ActivityLatestStartTime { get; set; }
+
+		public string ActivityEarliestEndTime { get; set; }
+		public string ActivityLatestEndTime { get; set; }
 	}
 }

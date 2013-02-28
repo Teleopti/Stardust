@@ -2,7 +2,9 @@
 using System.Drawing;
 using AutoMapper;
 using NUnit.Framework;
+using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.UserTexts;
@@ -38,36 +40,44 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		[Test]
 		public void ShouldMapShiftCategoryPreference()
 		{
-			var template = new PreferenceRestrictionTemplate { ShiftCategory = new ShiftCategory("AM") };
+			var shiftCategory = MockRepository.GenerateStub<ShiftCategory>();
+			var id = Guid.NewGuid();
+			shiftCategory.Stub(x => x.Id).Return(id);
+			var template = new PreferenceRestrictionTemplate { ShiftCategory = shiftCategory };
 			var extendedPreferenceTemplate = new ExtendedPreferenceTemplate(null, template, "name", Color.Red);
 
 			var result = Mapper.Map<IExtendedPreferenceTemplate, PreferenceTemplateViewModel>(extendedPreferenceTemplate);
 
-			result.Preference.Should().Be(template.ShiftCategory.Description.Name);
+			result.PreferenceId.Should().Be(id);
 		}
 
 		[Test]
 		public void ShouldMapDayOffTemplatePreference()
 		{
-			var template = new PreferenceRestrictionTemplate { DayOffTemplate = new DayOffTemplate(new Description("Day Off", "DO")) };
+			var dayoff = MockRepository.GenerateStub<DayOffTemplate>();
+			var id = Guid.NewGuid();
+			dayoff.Stub(x => x.Id).Return(id);
+			var template = new PreferenceRestrictionTemplate { DayOffTemplate = dayoff };
 			var extendedPreferenceTemplate = new ExtendedPreferenceTemplate(null, template, "name", Color.Red);
 
 			var result = Mapper.Map<IExtendedPreferenceTemplate, PreferenceTemplateViewModel>(extendedPreferenceTemplate);
 
-			result.Preference.Should().Be(template.DayOffTemplate.Description.Name);
+			result.PreferenceId.Should().Be(id);
 		}
 
 
 		[Test]
 		public void ShouldMapAbsencePreference()
 		{
-			var absence = new Absence { Description = new Description("Holiday", "H") };
+			var absence = MockRepository.GenerateMock<Absence>();
+			var id = Guid.NewGuid();
+			absence.Stub(x=>x.Id).Return(id);
 			var template = new PreferenceRestrictionTemplate { Absence = absence };
 			var extendedPreferenceTemplate = new ExtendedPreferenceTemplate(null, template, "name", Color.Red);
 
 			var result = Mapper.Map<IExtendedPreferenceTemplate, PreferenceTemplateViewModel>(extendedPreferenceTemplate);
 
-			result.Preference.Should().Be(template.Absence.Description.Name);
+			result.PreferenceId.Should().Be(id);
 		}
 	
 		[Test]
@@ -81,9 +91,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 
 			var result = Mapper.Map<IExtendedPreferenceTemplate, PreferenceTemplateViewModel>(extendedPreferenceTemplate);
 
-			result.StartTimeLimitation.Should().Be(
-				extendedPreferenceTemplate.Restriction.StartTimeLimitation.StartTimeString + "-" + extendedPreferenceTemplate.Restriction.StartTimeLimitation.EndTimeString
-				);
+			result.EarliestStartTime.Should().Be(extendedPreferenceTemplate.Restriction.StartTimeLimitation.StartTimeString);
+			result.LatestStartTime.Should().Be(extendedPreferenceTemplate.Restriction.StartTimeLimitation.EndTimeString);
 		}
 
 		[Test]
@@ -97,9 +106,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 
 			var result = Mapper.Map<IExtendedPreferenceTemplate, PreferenceTemplateViewModel>(extendedPreferenceTemplate);
 
-			result.EndTimeLimitation.Should().Be(
-				extendedPreferenceTemplate.Restriction.EndTimeLimitation.StartTimeString + "-" + extendedPreferenceTemplate.Restriction.EndTimeLimitation.EndTimeString
-				);
+			result.EarliestEndTime.Should().Be(extendedPreferenceTemplate.Restriction.EndTimeLimitation.StartTimeString);
+			result.LatestEndTime.Should().Be(extendedPreferenceTemplate.Restriction.EndTimeLimitation.EndTimeString);
 		}
 
 		[Test]
@@ -113,9 +121,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 
 			var result = Mapper.Map<IExtendedPreferenceTemplate, PreferenceTemplateViewModel>(extendedPreferenceTemplate);
 
-			result.WorkTimeLimitation.Should().Be(
-				extendedPreferenceTemplate.Restriction.WorkTimeLimitation.StartTimeString + "-" + extendedPreferenceTemplate.Restriction.WorkTimeLimitation.EndTimeString
-				);
+			result.MinimumWorkTime.Should().Be(extendedPreferenceTemplate.Restriction.WorkTimeLimitation.StartTimeString);
+			result.MaximumWorkTime.Should().Be(extendedPreferenceTemplate.Restriction.WorkTimeLimitation.EndTimeString);
 		}
 
 		[Test]
@@ -123,10 +130,13 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		{
 			var extendedPreferenceTemplate = new ExtendedPreferenceTemplate(null, new PreferenceRestrictionTemplate(), "name", Color.Red);
 
-			extendedPreferenceTemplate.Restriction.AddActivityRestriction(new ActivityRestriction(new Activity("Lunch")));
+			var activity = MockRepository.GenerateStub<Activity>();
+			var id = Guid.NewGuid();
+			activity.Stub(x => x.Id).Return(id);
+			extendedPreferenceTemplate.Restriction.AddActivityRestriction(new ActivityRestriction(activity));
 			var result = Mapper.Map<IExtendedPreferenceTemplate, PreferenceTemplateViewModel>(extendedPreferenceTemplate);
 
-			result.Activity.Should().Be("Lunch");
+			result.ActivityPreferenceId.Should().Be(id);
 		}
 
 		[Test]
@@ -136,7 +146,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 
 			var result = Mapper.Map<IExtendedPreferenceTemplate, PreferenceTemplateViewModel>(extendedPreferenceTemplate);
 
-			result.Activity.Should().Be("(" + Resources.NoActivity + ")");
+			result.ActivityPreferenceId.Should().Be.EqualTo(null);
 		}
 
 		[Test]
@@ -151,7 +161,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 
 			var result = Mapper.Map<IExtendedPreferenceTemplate, PreferenceTemplateViewModel>(extendedPreferenceTemplate);
 
-			result.ActivityStartTimeLimitation.Should().Be(activityRestriction.StartTimeLimitation.StartTimeString + "-" + activityRestriction.StartTimeLimitation.EndTimeString);
+			result.ActivityEarliestStartTime.Should().Be(activityRestriction.StartTimeLimitation.StartTimeString);
+			result.ActivityLatestStartTime.Should().Be(activityRestriction.StartTimeLimitation.EndTimeString);
 		}
 
 		[Test]
@@ -166,7 +177,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 
 			var result = Mapper.Map<IExtendedPreferenceTemplate, PreferenceTemplateViewModel>(extendedPreferenceTemplate);
 
-			result.ActivityEndTimeLimitation.Should().Be(activityRestriction.EndTimeLimitation.StartTimeString + "-" + activityRestriction.EndTimeLimitation.EndTimeString);
+			result.ActivityEarliestEndTime.Should().Be(activityRestriction.EndTimeLimitation.StartTimeString);
+			result.ActivityLatestEndTime.Should().Be(activityRestriction.EndTimeLimitation.EndTimeString);
 		}
 
 		[Test]
@@ -181,7 +193,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 
 			var result = Mapper.Map<IExtendedPreferenceTemplate, PreferenceTemplateViewModel>(extendedPreferenceTemplate);
 
-			result.ActivityTimeLimitation.Should().Be(activityRestriction.WorkTimeLimitation.StartTimeString + "-" + activityRestriction.WorkTimeLimitation.EndTimeString);
+			result.ActivityMinimumTime.Should().Be(activityRestriction.WorkTimeLimitation.StartTimeString);
+			result.ActivityMaximumTime.Should().Be(activityRestriction.WorkTimeLimitation.EndTimeString);
 		}
 	}
 }

@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using AutoMapper;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
 using Teleopti.Interfaces.Domain;
 
@@ -16,27 +16,29 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 
 			CreateMap<IExtendedPreferenceTemplate, PreferenceTemplateViewModel>()
 				.ForMember(d => d.Name, o => o.MapFrom(s => s.Name))
-				.ForMember(d => d.Preference, o => o.MapFrom(s =>
+				.ForMember(d => d.PreferenceId, o => o.MapFrom(s =>
 				{
 					if (s.Restriction.DayOffTemplate != null)
-						return s.Restriction.DayOffTemplate.Description.Name;
+						return s.Restriction.DayOffTemplate.Id;
 					if (s.Restriction.Absence != null)
-						return s.Restriction.Absence.Description.Name;
+						return s.Restriction.Absence.Id;
 					if (s.Restriction.ShiftCategory != null)
-						return s.Restriction.ShiftCategory.Description.Name;
-					return "";
+						return s.Restriction.ShiftCategory.Id;
+					return null;
 				}))
-				.ForMember(d => d.StartTimeLimitation, o => o.MapFrom(s => s.Restriction.StartTimeLimitation.StartTimeString.ToLower() + "-" + s.Restriction.StartTimeLimitation.EndTimeString.ToLower()))
-				.ForMember(d => d.EndTimeLimitation, o => o.MapFrom(s => s.Restriction.EndTimeLimitation.StartTimeString.ToLower() + "-" + s.Restriction.EndTimeLimitation.EndTimeString.ToLower()))
-				.ForMember(d => d.WorkTimeLimitation, o => o.MapFrom(s => s.Restriction.WorkTimeLimitation.StartTimeString + "-" + s.Restriction.WorkTimeLimitation.EndTimeString))
-				.ForMember(d => d.Activity, o => o.MapFrom(s =>
-				{
-					var activityName = GetActivityRestrictionValue(s, r => r.Activity.Name);
-					return string.IsNullOrEmpty(activityName) ? "(" + Resources.NoActivity + ")" : activityName;
-				}))
-				.ForMember(d => d.ActivityStartTimeLimitation, o => o.MapFrom(s => GetActivityRestrictionValue(s, r => r.StartTimeLimitation.StartTimeString.ToLower() + "-" + r.StartTimeLimitation.EndTimeString.ToLower())))
-				.ForMember(d => d.ActivityEndTimeLimitation, o => o.MapFrom(s => GetActivityRestrictionValue(s, r => r.EndTimeLimitation.StartTimeString.ToLower() + "-" + r.EndTimeLimitation.EndTimeString.ToLower())))
-				.ForMember(d => d.ActivityTimeLimitation, o => o.MapFrom(s => GetActivityRestrictionValue(s, r => r.WorkTimeLimitation.StartTimeString + "-" + r.WorkTimeLimitation.EndTimeString)))
+				.ForMember(d => d.EarliestStartTime, o => o.MapFrom(s => s.Restriction.StartTimeLimitation.StartTimeString))
+				.ForMember(d => d.LatestStartTime, o => o.MapFrom(s => s.Restriction.StartTimeLimitation.EndTimeString))
+				.ForMember(d => d.EarliestEndTime, o => o.MapFrom(s => s.Restriction.EndTimeLimitation.StartTimeString))
+				.ForMember(d => d.LatestEndTime, o => o.MapFrom(s => s.Restriction.EndTimeLimitation.EndTimeString))
+				.ForMember(d => d.MinimumWorkTime, o => o.MapFrom(s => s.Restriction.WorkTimeLimitation.StartTimeString))
+				.ForMember(d => d.MaximumWorkTime, o => o.MapFrom(s => s.Restriction.WorkTimeLimitation.EndTimeString))
+				.ForMember(d => d.ActivityPreferenceId, o => o.MapFrom(s =>GetActivityRestrictionValue(s, r => r.Activity.Id)))
+				.ForMember(d => d.ActivityEarliestStartTime, o => o.MapFrom(s => GetActivityRestrictionValue(s, r => r.StartTimeLimitation.StartTimeString)))
+				.ForMember(d => d.ActivityLatestStartTime, o => o.MapFrom(s => GetActivityRestrictionValue(s, r => r.StartTimeLimitation.EndTimeString)))
+				.ForMember(d => d.ActivityEarliestEndTime, o => o.MapFrom(s => GetActivityRestrictionValue(s, r => r.EndTimeLimitation.StartTimeString)))
+				.ForMember(d => d.ActivityLatestEndTime, o => o.MapFrom(s => GetActivityRestrictionValue(s, r => r.EndTimeLimitation.EndTimeString)))
+				.ForMember(d => d.ActivityMinimumTime, o => o.MapFrom(s => GetActivityRestrictionValue(s, r => r.WorkTimeLimitation.StartTimeString)))
+				.ForMember(d => d.ActivityMaximumTime, o => o.MapFrom(s => GetActivityRestrictionValue(s, r => r.WorkTimeLimitation.EndTimeString)))
 				;
 		}
 

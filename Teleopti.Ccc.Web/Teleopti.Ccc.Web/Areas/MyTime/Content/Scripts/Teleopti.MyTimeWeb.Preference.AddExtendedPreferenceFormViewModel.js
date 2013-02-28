@@ -16,9 +16,20 @@ Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (aja
 			type: 'GET',
 			success: function (data, textStatus, jqXHR) {
 				data = data || [];
+
+				//				self.addresses = ko.observableArray(ko.utils.arrayMap(data,
+				//					function(i) { return new Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel(i); }
+				//				));
+
+				self.AvailableTemplates.push("");
 				$.each(data, function (index, element) {
-					self.AvailableTemplates = element;
+					self.AvailableTemplates.push(element);
 				});
+
+				//				self.AvailableTemplates.push(new Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel(0));
+				//				self.AvailableTemplates.push(ko.utils.arrayMap(data,
+				//					function(i) { return new Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel(i); }
+				//				));
 				deferred.resolve();
 			}
 		});
@@ -26,7 +37,7 @@ Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (aja
 	};
 
 	this.AvailableTemplates = ko.observableArray();
-	this.selectedTemplate = ko.observable();
+	this.SelectedTemplate = ko.observable();
 
 	this.PreferenceId = ko.observable();
 	this.EarliestStartTime = ko.observable();
@@ -52,6 +63,16 @@ Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (aja
 	this.EnableActivityTimeEditing = ko.computed(function () {
 		var result = self.ActivityPreferenceId();
 		return result != undefined && result != '';
+	});
+
+	this.SelectedTemplate.subscribe(function (newValue) {
+		if (newValue) {
+			self.PreferenceId(newValue.PreferenceId);
+			self.EarliestStartTime(newValue.EarliestStartTime);
+			self.LatestStartTime(newValue.LatestStartTime);
+			self.EarliestEndTime(newValue.EarliestEndTime);
+			self.LatestEndTime(newValue.LatestEndTime);
+		}
 	});
 
 	this.IsTimeInputEnabled.subscribe(function (newValue) {
