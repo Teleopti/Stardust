@@ -15,10 +15,10 @@ using Table = TechTalk.SpecFlow.Table;
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 {
 	[Binding]
-	public class AgentSchedulePageStepDefinitions
+	public class PersonSchedulePageStepDefinitions
 	{
-		[Then(@"I should be viewing agent schedule for '(.*)' on '(.*)'")]
-		public void ThenIShouldSeeAgentScheduleForAgentOnDate(string name, string date)
+		[Then(@"I should be viewing person schedule for '(.*)' on '(.*)'")]
+		public void ThenIShouldSeePersonScheduleForAgentOnDate(string name, string date)
 		{
 			var id = UserFactory.User(name).Person.Id.ToString();
 			EventualAssert.That(() => Browser.Current.Url.Contains(id), Is.True);
