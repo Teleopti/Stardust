@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Rta.Server
 			{
 				newState.AlarmName = foundAlarm.Name;
 				newState.AlarmId = foundAlarm.AlarmTypeId;
-
+				newState.AlarmStart = newState.AlarmStart.AddTicks(foundAlarm.ThresholdTime);
 				newState.Color = foundAlarm.DisplayColor;
 				newState.StaffingEffect = foundAlarm.StaffingEffect;
 				newState.State = foundAlarm.StateGroupName;
@@ -83,16 +83,12 @@ namespace Teleopti.Ccc.Rta.Server
 				newState.StateStart = timestamp.Add(timeInState.Negate());
 
 				if (previousState != null && previousState.AlarmId == newState.AlarmId)
-				{
 					newState.StateStart = previousState.StateStart;
-				}
-
 			}
 			if (scheduleLayer != null)
 			{
 				newState.Scheduled = scheduleLayer.Name;
 				newState.ScheduledId = scheduleLayer.PayloadId;
-				newState.StateStart = scheduleLayer.StartDateTime;
 				newState.NextStart = scheduleLayer.EndDateTime;
 			}
 			if (nextLayer != null)
