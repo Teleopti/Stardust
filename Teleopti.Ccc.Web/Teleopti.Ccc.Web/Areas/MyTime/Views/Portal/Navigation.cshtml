@@ -152,87 +152,85 @@
 								<option value="@option.Value" data-color="@option.Color">@option.Text</option>
 							}*@
 						</select>
-
-						<select id="Preference-extended-preference" data-bind="selectbox: PreferenceId, option-data: {data: 'preference-extended', member: IsTimeInputEnabled}" title="@Resources.Preference" class="ml15 mt5">
-							<option value="" data-preference-extended="true">&nbsp;</option>
-							<option value="-">-</option>
-							@foreach (var option in preferenceNavigation.PreferenceOptions)
-							{
-								<option value="@option.Value" data-color="@option.Color" data-preference-extended="@option.Extended.ToString().ToLower()">@option.Text</option>
-							}
-						</select>
+						<p/>
                         
-                        <div id="accordion">
-                          <h2>Details</h2>
-                          <div>                    
-                        
-						<div id="Preference-extended-time-input-fields" data-bind="visible: IsTimeInputEnabled">
-							<div class="mt5">
-								<div class="time-limitation-label icon leftarrow"></div>
-								<select id="Preference-extended-start-time-minimum" class="time-input" data-bind="combobox: EarliestStartTime, combobox-enabled: IsTimeInputEnabled" title="@Resources.EarliestStartTime">
+						<div class="mt10 ml10 floatleft">          
+							<button id="template-show-details" data-bind="click: toggleDetails">Show details</button>
+							<div id="Preference-extended-time-input-fields" data-bind="visible: IsShowDetails">
+								<div class="mt5">
+									<select id="Preference-extended-preference" data-bind="selectbox: PreferenceId, option-data: {data: 'preference-extended', member: IsTimeInputEnabled}" title="@Resources.Preference" class="ml15 mt5">
+										<option value="" data-preference-extended="true">&nbsp;</option>
+										<option value="-">-</option>
+										@foreach (var option in preferenceNavigation.PreferenceOptions)
+										{
+											<option value="@option.Value" data-color="@option.Color" data-preference-extended="@option.Extended.ToString().ToLower()">@option.Text</option>
+										}
+									</select>
+									<div class="time-limitation-label icon leftarrow"></div>
+									<select id="Preference-extended-start-time-minimum" class="time-input" data-bind="combobox: EarliestStartTime, combobox-enabled: IsTimeInputEnabled" title="@Resources.EarliestStartTime">
+										<option value="">&nbsp;</option>
+										@foreach (var timeSpan in times)
+										{
+											<option value="@timeSpan.Value">@timeSpan.Text</option>
+										}
+									</select>
+									<span class="ml20"></span>
+									<select id="Preference-extended-start-time-maximum" class="time-input" data-bind="combobox: LatestStartTime, combobox-enabled: IsTimeInputEnabled" title="@Resources.LatestStartTime">
+										<option value="">&nbsp;</option>
+										@foreach (var timeSpan in times)
+										{
+											<option value="@timeSpan.Value">@timeSpan.Text</option>
+										}
+									</select>
+								</div>
+								<div>
+									<div class="time-limitation-label icon rightarrow"></div>
+									<select id="Preference-extended-end-time-minimum" class="time-input" data-bind="combobox: EarliestEndTime, combobox-enabled: IsTimeInputEnabled" title="@Resources.EarliestEndTime">
+										<option value="">&nbsp;</option>
+										@foreach (var timeSpan in times)
+										{
+											<option value="@timeSpan.Value">@timeSpan.Text</option>
+										}
+									</select>
+									<input type="checkbox" id="Preference-extended-end-time-minimum-next-day" class="preference-next-day-checkbox" data-bind="checked: EarliestEndTimeNextDay, enable: IsTimeInputEnabled" title="@Resources.NextDay"/>
+									<select id="Preference-extended-end-time-maximum" class="time-input" data-bind="combobox: LatestEndTime, combobox-enabled: IsTimeInputEnabled" title="@Resources.LatestEndTime">
+										<option value="">&nbsp;</option>
+										@foreach (var timeSpan in times)
+										{
+											<option value="@timeSpan.Value">@timeSpan.Text</option>
+										}
+									</select>
+									<input type="checkbox" id="Preference-extended-end-time-maximum-next-day" class="preference-next-day-checkbox" data-bind="checked: LatestEndTimeNextDay, enable: IsTimeInputEnabled" title="@Resources.NextDay"/>
+								</div>
+								<div>
+									<div class="time-limitation-label icon doublearrow-blue"></div>
+									<select id="Preference-extended-work-time-minimum" class="time-input" data-bind="combobox: MinimumWorkTime, combobox-enabled: IsTimeInputEnabled" title="@Resources.MinWorkTime">
+										<option value="">&nbsp;</option>
+										@foreach (var timeSpan in timeLengths)
+										{
+											<option value="@timeSpan.Value">@timeSpan.Text</option>
+										}
+									</select>
+									<span class="ml20"></span> 
+									<select id="Preference-extended-work-time-maximum" class="time-input" data-bind="combobox: MaximumWorkTime, combobox-enabled: IsTimeInputEnabled" title="@Resources.MaxWorkTime">
+										<option value="">&nbsp;</option>
+										@foreach (var timeSpan in timeLengths)
+										{
+											<option value="@timeSpan.Value">@timeSpan.Text</option>
+										}
+									</select>
+								</div>
+								<hr/>
+								<select id="Preference-extended-activity" data-bind="selectbox: ActivityPreferenceId, selectbox-enabled: IsTimeInputEnabled" title="@Resources.Activity" class="ml15">
 									<option value="">&nbsp;</option>
-									@foreach (var timeSpan in times)
+									<option value="-">-</option>
+									@foreach (var option in preferenceNavigation.ActivityOptions)
 									{
-										<option value="@timeSpan.Value">@timeSpan.Text</option>
-									}
-								</select>
-								<span class="ml20"></span>
-								<select id="Preference-extended-start-time-maximum" class="time-input" data-bind="combobox: LatestStartTime, combobox-enabled: IsTimeInputEnabled" title="@Resources.LatestStartTime">
-									<option value="">&nbsp;</option>
-									@foreach (var timeSpan in times)
-									{
-										<option value="@timeSpan.Value">@timeSpan.Text</option>
+										<option value="@option.Value" data-color="@option.Color">@option.Text</option>
 									}
 								</select>
 							</div>
-							<div>
-								<div class="time-limitation-label icon rightarrow"></div>
-								<select id="Preference-extended-end-time-minimum" class="time-input" data-bind="combobox: EarliestEndTime, combobox-enabled: IsTimeInputEnabled" title="@Resources.EarliestEndTime">
-									<option value="">&nbsp;</option>
-									@foreach (var timeSpan in times)
-									{
-										<option value="@timeSpan.Value">@timeSpan.Text</option>
-									}
-								</select>
-								<input type="checkbox" id="Preference-extended-end-time-minimum-next-day" class="preference-next-day-checkbox" data-bind="checked: EarliestEndTimeNextDay, enable: IsTimeInputEnabled" title="@Resources.NextDay"/>
-								<select id="Preference-extended-end-time-maximum" class="time-input" data-bind="combobox: LatestEndTime, combobox-enabled: IsTimeInputEnabled" title="@Resources.LatestEndTime">
-									<option value="">&nbsp;</option>
-									@foreach (var timeSpan in times)
-									{
-										<option value="@timeSpan.Value">@timeSpan.Text</option>
-									}
-								</select>
-								<input type="checkbox" id="Preference-extended-end-time-maximum-next-day" class="preference-next-day-checkbox" data-bind="checked: LatestEndTimeNextDay, enable: IsTimeInputEnabled" title="@Resources.NextDay"/>
-							</div>
-							<div>
-								<div class="time-limitation-label icon doublearrow-blue"></div>
-								<select id="Preference-extended-work-time-minimum" class="time-input" data-bind="combobox: MinimumWorkTime, combobox-enabled: IsTimeInputEnabled" title="@Resources.MinWorkTime">
-									<option value="">&nbsp;</option>
-									@foreach (var timeSpan in timeLengths)
-									{
-										<option value="@timeSpan.Value">@timeSpan.Text</option>
-									}
-								</select>
-								<span class="ml20"></span> 
-								<select id="Preference-extended-work-time-maximum" class="time-input" data-bind="combobox: MaximumWorkTime, combobox-enabled: IsTimeInputEnabled" title="@Resources.MaxWorkTime">
-									<option value="">&nbsp;</option>
-									@foreach (var timeSpan in timeLengths)
-									{
-										<option value="@timeSpan.Value">@timeSpan.Text</option>
-									}
-								</select>
-							</div>
-							<hr/>
-							<select id="Preference-extended-activity" data-bind="selectbox: ActivityPreferenceId, selectbox-enabled: IsTimeInputEnabled" title="@Resources.Activity" class="ml15">
-								<option value="">&nbsp;</option>
-								<option value="-">-</option>
-								@foreach (var option in preferenceNavigation.ActivityOptions)
-								{
-									<option value="@option.Value" data-color="@option.Color">@option.Text</option>
-								}
-							</select>
-						</div>
-						  	<div id="Activity-preference-fields" data-bind="visible: EnableActivityTimeEditing" class="mt5">
+							<div id="Activity-preference-fields" data-bind="visible: EnableActivityTimeEditing" class="mt5">
 								<div>
 									<div class="time-limitation-label icon leftarrow"></div>
 									<select id="Preference-extended-activity-start-time-minimum" class="time-input" data-bind="combobox: ActivityEarliestStartTime, combobox-enabled: EnableActivityTimeEditing" title="@Resources.EarliestStartTime">
@@ -288,23 +286,18 @@
 									</select>
 								</div>
 							</div>
-                            <p>&nbsp;</p>
-                           </div>
-                          <h2>Save template</h2>
-                          <div>
+						</div>
+						<br/>
 						  	<div class="mt10 ml10 floatleft">
-							<input class="clearleftfloat floatleft" type="checkbox" id="Template-save" data-bind="checked: IsSaveAsNewTemplate"/>
-							<label class="floatleft" for="Template-save">
-								@Resources.SaveAsTemplate
-							</label>
+							    <input class="clearleftfloat floatleft" type="checkbox" id="Template-save" data-bind="checked: IsSaveAsNewTemplate"/>
+							    <label class="floatleft" for="Template-save">
+								    @Resources.SaveAsTemplate
+							    </label>
 						    </div>
 							<div id="template-name-section" class="edit-module-element clearleftfloat" data-bind="visible: IsSaveAsNewTemplate()">
 								<label class="displayblock" for="Template-name-input">@Resources.NewTemplateName</label>
 								<input id="Template-name-input" type="text"/>
 							</div>
-                            <p>&nbsp;</p>
-                          </div>
-                        </div>
            
 							<div class="clearleftfloat">
 							<button id="Preference-extended-reset" class="ml15 mt10 mb5 floatleft">@Resources.Reset</button>

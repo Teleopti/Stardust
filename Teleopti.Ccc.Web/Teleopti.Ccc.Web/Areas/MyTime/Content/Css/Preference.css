@@ -154,3 +154,10 @@
 .preference-tooltip-font {
 	font-family: Arial;
 }
+
+#template-show-details {
+    padding: 0.3em 1.8em;
+    color: #555555;
+    display: block;
+    line-height: 1.4;  
+}
