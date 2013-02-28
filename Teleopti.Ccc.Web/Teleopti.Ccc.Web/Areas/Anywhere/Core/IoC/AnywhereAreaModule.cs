@@ -1,7 +1,6 @@
 ﻿using Autofac;
-using AutofacContrib.DynamicProxy2;
+using Autofac.Extras.DynamicProxy2;
 using Microsoft.AspNet.SignalR.Hubs;
-using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
 using Teleopti.Ccc.Web.Core.Startup;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Core.IoC

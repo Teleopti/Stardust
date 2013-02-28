@@ -42,12 +42,12 @@
 	<div id="Preference-period">
 		@if (Model.PreferencePeriod == null)
 		{
-			@string.Format("{0} : {1}", Resources.PreferencePeriod, Resources.MissingWorkflowControlSet)
+			@String.Format("{0} : {1}", Resources.PreferencePeriod, Resources.MissingWorkflowControlSet)
 		}
 		else
 		{
-			@string.Format("{0} : {1} | ", Resources.PreferencePeriod, Model.PreferencePeriod.Period)
-			@string.Format("{0} : {1}", Resources.IsOpen, Model.PreferencePeriod.OpenPeriod)
+			@String.Format("{0} : {1} | ", Resources.PreferencePeriod, Model.PreferencePeriod.Period)
+			@String.Format("{0} : {1}", Resources.IsOpen, Model.PreferencePeriod.OpenPeriod)
 		}
 	</div>
 </div>

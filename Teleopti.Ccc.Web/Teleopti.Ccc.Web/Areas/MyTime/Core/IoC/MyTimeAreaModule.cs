@@ -1,6 +1,6 @@
 ﻿using Autofac;
 using AutoMapper;
-using AutofacContrib.DynamicProxy2;
+using Autofac.Extras.DynamicProxy2;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
