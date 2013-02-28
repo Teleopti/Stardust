@@ -15,7 +15,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 			base.Configure();
 
 			CreateMap<IExtendedPreferenceTemplate, PreferenceTemplateViewModel>()
-				.ForMember(d => d.Name, o => o.MapFrom(s => s.Name))
+				.ForMember(d => d.Value, o => o.MapFrom(s => s.Id.ToString()))
+				.ForMember(d => d.Text, o => o.MapFrom(s => s.Name))
+				.ForMember(d => d.Color, o => o.MapFrom(s => s.DisplayColor.ToHtml()))
 				.ForMember(d => d.PreferenceId, o => o.MapFrom(s =>
 				{
 					if (s.Restriction.DayOffTemplate != null)

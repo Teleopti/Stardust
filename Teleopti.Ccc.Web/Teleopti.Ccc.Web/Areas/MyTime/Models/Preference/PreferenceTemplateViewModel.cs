@@ -1,11 +1,10 @@
 using System;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 {
-	public class PreferenceTemplateViewModel
+	public class PreferenceTemplateViewModel : Option
 	{
-		public string Name { get; set; }
 
 		public Guid? PreferenceId { get; set; }
 

@@ -4,10 +4,9 @@ using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
-using Teleopti.Ccc.UserTexts;
+using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
 using Teleopti.Interfaces.Domain;
@@ -28,13 +27,34 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		public void ShouldConfigureCorrectly() { Mapper.AssertConfigurationIsValid(); }
 
 		[Test]
+		public void ShouldMapId()
+		{
+			var extendedPreferenceTemplate = MockRepository.GenerateStub<ExtendedPreferenceTemplate>();
+			var id = Guid.NewGuid();
+			extendedPreferenceTemplate.Stub(x => x.Id).Return(id);
+			var result = Mapper.Map<IExtendedPreferenceTemplate, PreferenceTemplateViewModel>(extendedPreferenceTemplate);
+
+			result.Value.Should().Be.EqualTo(id.ToString());
+		}
+
+		[Test]
 		public void ShouldMapName()
 		{
 			var template = new PreferenceRestrictionTemplate();
 			var extendedPreferenceTemplate = new ExtendedPreferenceTemplate(null, template, "name", Color.Red);
 			var result = Mapper.Map<IExtendedPreferenceTemplate, PreferenceTemplateViewModel>(extendedPreferenceTemplate);
 
-			result.Name.Should().Be.EqualTo("name");
+			result.Text.Should().Be.EqualTo("name");
+		}
+
+		[Test]
+		public void ShouldMapColor()
+		{
+			var template = new PreferenceRestrictionTemplate();
+			var extendedPreferenceTemplate = new ExtendedPreferenceTemplate(null, template, "name", Color.Red);
+			var result = Mapper.Map<IExtendedPreferenceTemplate, PreferenceTemplateViewModel>(extendedPreferenceTemplate);
+
+			result.Color.Should().Be.EqualTo(Color.Red.ToHtml());
 		}
 
 		[Test]
