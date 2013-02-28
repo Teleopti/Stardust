@@ -367,7 +367,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Assert.AreEqual(_target.Skill, workloadClone.Skill);
 
             workloadClone = _target.EntityClone();
-            Assert.AreEqual(_target.Id.Value, workloadClone.Id.Value);
+            Assert.AreEqual(_target.Id.GetValueOrDefault(), workloadClone.Id.GetValueOrDefault());
             Assert.AreEqual(_target.TemplateWeekCollection.Count, workloadClone.TemplateWeekCollection.Count);
             Assert.AreSame(_target, _target.TemplateWeekCollection[0].Parent);
             Assert.AreSame(workloadClone, workloadClone.TemplateWeekCollection[0].Parent); 

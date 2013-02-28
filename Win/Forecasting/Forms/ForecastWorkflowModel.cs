@@ -201,7 +201,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
         public void InitializeDayOfWeeks()
         {
-            var taskOwnerDays = GetWorkloadDaysWithStatistics(_compareHistoricPeriod).OfType<ITaskOwner>();
+            var taskOwnerDays = GetWorkloadDaysWithStatistics(_compareHistoricPeriod);
             var taskOwnerPeriod = new TaskOwnerPeriod(DateOnly.Today, taskOwnerDays, TaskOwnerPeriodType.Other);
             _dayOfWeeks = new DayOfWeeks(taskOwnerPeriod, new DaysOfWeekCreator());
         }

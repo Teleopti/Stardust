@@ -80,6 +80,19 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			ThenIShouldSeeMyExistingShiftTradeRequestWithSubject(Resources.WaitingForOtherPart);
 		}
+
+		[Then(@"I should see my existing shift trade request with status waiting for other part")]
+		public void ThenIShouldSeeMyExistingShiftTradeRequestWithStatusWaitingForOtherPart()
+		{
+			ThenIShouldSeeMyExistingShiftTradeRequestWithSubject(Resources.WaitingForOtherPart);
+		}
+
+		[Then(@"I should see my existing shift trade request with status waiting for your approval")]
+		public void ThenIShouldSeeMyExistingShiftTradeRequestWithStatusWaitingForYourApproval()
+		{
+			ThenIShouldSeeMyExistingShiftTradeRequestWithSubject(Resources.WaitingForYourApproval);
+		}
+
 		
 		[Then(@"I should see my existing absence request with absence '(.*)'")]
 		public void ThenIShouldSeeMyExistingAbsenceRequestWithAbsence(string absence)
@@ -187,6 +200,25 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => _page.ShiftTradeSender.Text, Is.EqualTo(name));
 		}
 
+		[Then(@"I should see '(.*)' as the receiver of the request")]
+		public void ThenIShouldSeeAsTheReceiverOfTheRequest(string name)
+		{
+			EventualAssert.That(() => _page.ShiftTradeReciever.Text, Is.EqualTo(name));
+		}
+
+		[Then(@"I should see '(.*)' as the date of the request target")]
+		public void ThenIShouldSeeAsTheDateOfTheRequestTarget(string date)
+		{
+			var dateOfTheTrade = DateTime.Parse(date);
+			EventualAssert.That(() => DateTime.Parse(_page.ShiftTradeDateFrom.Text), Is.EqualTo(dateOfTheTrade));
+		}
+
+		[Then(@"I should see '(.*)' as the date of the request source")]
+		public void ThenIShouldSeeAsTheDateOfTheRequestSource(string date)
+		{
+			var dateOfTheTrade = DateTime.Parse(date);
+			EventualAssert.That(() => DateTime.Parse(_page.ShiftTradeDateTo.Text), Is.EqualTo(dateOfTheTrade));
+		}
 		[Then(@"I should see '(.*)' as the receiver of the request")]
 		public void ThenIShouldSeeAsTheReceiverOfTheRequest(string name)
 		{

@@ -159,10 +159,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		}
 
 		[FindBy(Id = "Request-shift-trade-sender")]
-		public Div ShiftTradeSender { get; set; }
+		public Span ShiftTradeSender { get; set; }
 
 		[FindBy(Id = "Request-shift-trade-reciever")]
-		public Div ShiftTradeReciever { get; set; }
+		public Span ShiftTradeReciever { get; set; }
 
 		[FindBy(Id = "Request-shift-trade-date-from")]
 		public Element ShiftTradeDateFrom { get; set; }

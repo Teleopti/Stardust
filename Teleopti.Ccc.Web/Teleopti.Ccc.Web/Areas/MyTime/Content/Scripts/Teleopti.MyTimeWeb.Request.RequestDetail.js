@@ -101,18 +101,6 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 
 	function _showRequest(data, position) {
 
-		if (data.TypeEnum == 2) {
-			var vm = new Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel(ajax);
-			vm.Initialize(data);
-			vm.loadSwapDetails();
-			requestViewModel = vm;
-		}
-		else {
-			requestViewModel = new Teleopti.MyTimeWeb.Request.RequestViewModel();
-			requestViewModel.IsUpdate(true);
-			requestViewModel.TypeEnum(data.TypeEnum);
-		}
-
 		_hideEditSection();
 		_clearFormData();
 		_showRequestTypeTab(data.TypeEnum);
@@ -122,6 +110,22 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 		_enableDisableDetailSection(data);
 		_fillFormData(data);
 		_showEditSection(position);
+	}
+
+	function _setRequest(data) {
+		if (data.TypeEnum == 2) {
+
+			var vm = new Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel(ajax);
+			requestViewModel = vm;
+			vm.Initialize(data);
+			vm.loadSwapDetails();
+
+		}
+		else {
+			requestViewModel = new Teleopti.MyTimeWeb.Request.RequestViewModel();
+			requestViewModel.IsUpdate(true);
+			requestViewModel.TypeEnum(data.TypeEnum);
+		}
 	}
 
 	function _showRequestTypeTab(requestType) {
@@ -265,10 +269,9 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 			_fadeEditSection(func);
 		},
 		ShowRequest: function (data, position) {
-			_showRequest(data, position);
+			_setRequest(data);
 			_initTemporary();
 			_showRequest(data, position);
-
 		},
 		EnableTimeinput: function () {
 			_enableTimeinput();
@@ -280,7 +283,6 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 			_addAbsenceRequestClick();
 		}
 	};
-
 })(jQuery);
 
 

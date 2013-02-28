@@ -24,8 +24,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 		{
 			var dateTimefrom = DateFrom ?? DateTime.UtcNow.Date;
 			var dateTimeTo = DateTo ?? dateTimefrom.AddDays(1);
-			var sender = String.IsNullOrEmpty(From) ? user : GetOrCreatePerson(From, uow);
-			var reciever = String.IsNullOrEmpty(To) ? user : GetOrCreatePerson(To, uow);
+			var sender = String.IsNullOrEmpty(From) ? user : getOrCreatePerson(From, uow);
+			var reciever = String.IsNullOrEmpty(To) ? user : getOrCreatePerson(To, uow);
 			var message = String.IsNullOrEmpty(Message)
 				              ? "This is a short text for the description of a shift trade request"
 				              : Message; 
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 			requestRepository.Add(PersonRequest);
 		}
 
-		private static IPerson GetOrCreatePerson(string name, IUnitOfWork uow)
+		private static IPerson getOrCreatePerson(string name, IUnitOfWork uow)
 		{
 			var personName = new CreateName().FromString(name);
 			var personRepository = new PersonRepository(uow);

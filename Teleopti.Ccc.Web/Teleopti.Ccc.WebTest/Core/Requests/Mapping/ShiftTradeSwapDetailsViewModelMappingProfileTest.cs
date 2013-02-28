@@ -15,20 +15,19 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 	[TestFixture]
 	public class ShiftTradeSwapDetailsViewModelMappingProfileTest
 	{
-		private DateOnly _dateFrom;
-		private DateOnly _dateTo;
+		private DateTime _dateFrom;
+		private DateTime _dateTo;
 		private IShiftTradeTimeLineHoursViewModelFactory _timeLineFactory;
 
 		[SetUp]
 		public void Setup()
 		{
 			_timeLineFactory = MockRepository.GenerateStub<IShiftTradeTimeLineHoursViewModelFactory>();
-			_dateFrom = new DateOnly(2001, 12, 12);
-			_dateTo = new DateOnly(2002, 12, 12);
+			_dateFrom = new DateTime(2001, 12, 12,0,0,0,DateTimeKind.Utc);
+			_dateTo = new DateTime(2001, 12, 13,0,0,0,DateTimeKind.Utc);
 			Mapper.Reset();
 			Mapper.Initialize(c => c.AddProfile(new ShiftTradeSwapDetailsViewModelMappingProfile(Depend.On(_timeLineFactory))));
 		}
-
 
 		[Test]
 		public void CreateScheduleViewModelsFromMapper()
@@ -49,27 +48,25 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			Assert.That(result.To, Is.EqualTo(shiftTradePersonScheduleViewModelStub),"Should have been set from the mapper (we are using the same result for To and For");
 		}
 
+		
+
 		[Test]
-		public void CreateTimelineBasedOnTheLargestPeriodFromTheSchedules()
+		public void CreateTimelineBasedOnShiftTRadePeriodIfNoSchedulesExists()
 		{
-			var timeLineHoursViewModelFactory = MockRepository.GenerateStrictMock<IShiftTradeTimeLineHoursViewModelFactory>(); 
+			var timeLineHoursViewModelFactory = MockRepository.GenerateStrictMock<IShiftTradeTimeLineHoursViewModelFactory>();
 
 			Mapper.Reset();
-			
+
 			Mapper.Initialize(c => c.AddProfile(new ShiftTradeSwapDetailsViewModelMappingProfile(Depend.On(timeLineHoursViewModelFactory))));
 			AddNeededMappingProfiles();
 
-			var fromStart = new DateTime(2001, 1, 1, 8, 0, 0,DateTimeKind.Utc);
-			var fromEnd = new DateTime(2001, 1, 1, 18, 0, 0,DateTimeKind.Utc);
-			var toStart = new DateTime(2001, 1, 1, 12, 0, 0,DateTimeKind.Utc);
-			var toEnd = new DateTime(2001, 1, 1, 22, 0, 0,DateTimeKind.Utc);
+			var from = new DateTime(2001, 1, 1,0,0,0,DateTimeKind.Utc);
+			var to = new DateTime(2001, 1, 2, 0, 0, 0, DateTimeKind.Utc);
 
-			IScheduleDay from = CreatScheduleDayWithPeriod(fromStart, fromEnd);
-			IScheduleDay to = CreatScheduleDayWithPeriod(toStart, toEnd);
-			var shiftTrade = CreateShiftTrade(new DateOnly(fromStart), new DateOnly(fromEnd), from, to);
+			var expectedTimelinePeriod = new DateTimePeriod(from, to);
+			var shiftTrade = CreateShiftTrade(from,to,null, null);
 
-			var expectedTimelinePeriod = new DateTimePeriod(fromStart, toEnd);
-			var timelineHours = new List<ShiftTradeTimeLineHoursViewModel>() {new ShiftTradeTimeLineHoursViewModel(),new ShiftTradeTimeLineHoursViewModel()};
+			var timelineHours = new List<ShiftTradeTimeLineHoursViewModel>() { new ShiftTradeTimeLineHoursViewModel(), new ShiftTradeTimeLineHoursViewModel() };
 			timeLineHoursViewModelFactory.Expect(s => s.CreateTimeLineHours(expectedTimelinePeriod)).Return(timelineHours);
 
 			var result = Mapper.Map<IShiftTradeRequest, ShiftTradeSwapDetailsViewModel>(shiftTrade);
@@ -78,9 +75,21 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 
 			Assert.That(result.TimeLineHours, Is.EqualTo(timelineHours));
 			Assert.That(result.TimeLineStartDateTime, Is.EqualTo(expectedTimelinePeriod.StartDateTime));
-
 		}
 
+		[Test]
+		public void CreateEmptyScheduleViewModelsIfNoSchedulesExists()
+		{
+			var from = new DateTime(2001, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+			var to = new DateTime(2001, 1, 2, 0, 0, 0, DateTimeKind.Utc);
+
+			var shiftTrade = CreateShiftTrade(from, to, null, null);
+
+			var result = Mapper.Map<IShiftTradeRequest, ShiftTradeSwapDetailsViewModel>(shiftTrade);
+
+			Assert.That(result.To, Is.Not.Null);
+			Assert.That(result.From, Is.Not.Null);
+		}
 
 		private void AddNeededMappingProfiles()
 		{
@@ -97,14 +106,17 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			return scheduleDay;
 		}
 
-		private static IShiftTradeRequest CreateShiftTrade(DateOnly dateFrom, DateOnly dateTo, IScheduleDay scheduleDayFrom = null, IScheduleDay scheduleDayTo = null)
+
+		private static IShiftTradeRequest CreateShiftTrade(DateTime dateFrom, DateTime dateTo, IScheduleDay scheduleDayFrom = null, IScheduleDay scheduleDayTo = null)
 		{
+			var shiftTradePeriod = new DateTimePeriod(dateFrom, dateTo);
 			var shiftTrade = MockRepository.GenerateMock<IShiftTradeRequest>();
 			var swapDetail = MockRepository.GenerateMock<IShiftTradeSwapDetail>();
 			var swapDetails = new ReadOnlyCollection<IShiftTradeSwapDetail>(new List<IShiftTradeSwapDetail>() { swapDetail });
-			
-			swapDetail.Expect(s => s.DateFrom).Return(dateFrom).Repeat.Any();
-			swapDetail.Expect(s => s.DateTo).Return(dateTo).Repeat.Any();
+
+			shiftTrade.Expect(s => s.Period).Repeat.Any().Return(shiftTradePeriod);
+			swapDetail.Expect(s => s.DateFrom).Return(new DateOnly(dateFrom)).Repeat.Any();
+			swapDetail.Expect(s => s.DateTo).Return(new DateOnly(dateTo)).Repeat.Any();
 			swapDetail.Expect(s => s.SchedulePartFrom).Return(scheduleDayFrom).Repeat.Any();
 			swapDetail.Expect(s => s.SchedulePartTo).Return(scheduleDayTo).Repeat.Any();
 			shiftTrade.Expect(s => s.ShiftTradeSwapDetails).Return(swapDetails).Repeat.Any();

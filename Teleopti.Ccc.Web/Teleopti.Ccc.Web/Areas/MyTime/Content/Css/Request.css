@@ -16,6 +16,7 @@
 }
 .request-list 
 {
+    padding-top: 1.5em;
 	width: 483px;
 }
 .rtl .request-list
@@ -91,6 +92,7 @@
 {
 	padding-top: 0.3em;
 	max-width: 440px;
+    word-break: break-all;
 }
 .request-body-inner .edit-module-element {
 	position: relative;
@@ -290,4 +292,60 @@
 .request-message-input {
 	width: 100%;
 	height: 5em;
+}
+.shift-trade-no-possible-trades 
+{
+	margin-top: 10px;
+}
+.shift-trade-agent-name {
+	position: absolute;
+	overflow: hidden;
+	white-space: nowrap;
+	width: 150px;
+	height: 19px;
+	background-color: #f8f8f8;
+	float: left; 
+	text-overflow: ellipsis;		
+}
+.rtl .shift-trade-agent-name {
+	right: auto;
+	left: 0;
+}
+.shift-trade-agent-name-hover
+{
+	padding-right: 10px;
+	box-shadow: 7px 0px 10px -1px rgba(0, 0, 0, 0.35);
+	border-right: 1px solid rgba(0, 0, 0, 0.20);
+	width: auto;
+	z-index: 11;
+}
+
+.shift-trade-swap-detail-schedule
+{
+	position: absolute;
+	left: 0px;
+	display: inline;
+}
+
+.shift-trade-swap-detail-timeline-line 
+{
+	height: 100%;
+	float: left;
+	border-left: 1px solid rgb(216, 216, 216);
+}
+
+.shift-trade-swap-detail-schedule-row {
+	height: 22px;
+	position: relative;
+}
+
+.shift-trade-swap-detail-timeline 
+{
+	height: 26px;
+	position: absolute;
+}
+
+.shift-trade-swap-detail-agent-name {
+	
+	height: 30px;
 }
