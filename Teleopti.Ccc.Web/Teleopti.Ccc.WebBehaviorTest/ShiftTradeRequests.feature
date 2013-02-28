@@ -166,7 +166,7 @@ Scenario: When clicking an agent i shift trade list, the other agent's should be
 	And Current time is '2029-12-27'
 	When I view Add Shift Trade Request for date '2030-01-01'
 	And I click agent 'OtherAgent'
-	Then I should see only see OtherAgent's schedule
+	Then I should only see OtherAgent's schedule
 	
 Scenario: Time line should cover scheduled night shift
 	Given I have the role 'Full access to mytime'
@@ -203,6 +203,36 @@ Scenario: Sending shift trade request closes the Add Shift Trade Request view
 	And I enter a message
 	And I click 'send button'
 	Then Add Shift Trade Request view should not be visible
+
+Scenario: Cancel a shift trade request before sending 
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And OtherAgent have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And OtherAgent2 have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And OtherAgent2 has a person period with
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
+	And I have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 06:00 |
+	| EndTime               | 2030-01-01 16:00 |
+	| Shift category		| Day	           |
+	And OtherAgent2 have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 07:00 |
+	| EndTime               | 2030-01-01 20:00 |
+	| Shift category		| Day	           |
+	And OtherAgent have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 08:00 |
+	| EndTime               | 2030-01-01 18:00 |
+	| Shift category		| Day	           |
+	And Current time is '2029-12-27'
+	When I view Add Shift Trade Request for date '2030-01-01'
+	And I click agent 'OtherAgent'
+	And I click 'Cancel button'
+	Then I should see OtherAgent's schedule
+	And I should see OtherAgent2's schedule
 
 Scenario: Time line should cover scheduled night shift
 	Given I have the role 'Full access to mytime'
