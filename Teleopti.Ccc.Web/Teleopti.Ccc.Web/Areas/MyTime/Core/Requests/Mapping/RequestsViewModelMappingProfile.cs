@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 						var shiftTradeRequest = s.Request as IShiftTradeRequest;
 						if (shiftTradeRequest != null)
 						{
-							ret += ", " + shiftTradeRequest.GetShiftTradeStatus(_shiftTradeRequestStatusChecker.Invoke()).ToText();
+							ret += ", " + shiftTradeRequest.GetShiftTradeStatus(_shiftTradeRequestStatusChecker.Invoke()).ToText(isCreatedByUser(s.Request, _loggedOnUser));
 						}
 						return ret;
 					}))
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 																												return start.TimeOfDay == TimeSpan.Zero &&
 																															 end.TimeOfDay == allDayEndDateTime.TimeOfDay;
 																											}))
-				.ForMember(d => d.IsCreatedByUser, o => o.MapFrom(s => s.Request.PersonFrom == _loggedOnUser.Invoke().CurrentUser()))
+				.ForMember(d => d.IsCreatedByUser, o => o.MapFrom(s => isCreatedByUser(s.Request,_loggedOnUser)))
 				.ForMember(d => d.From, o => o.MapFrom(s => s.Request.PersonFrom == null ? string.Empty : s.Request.PersonFrom.Name.ToString()))
 				.ForMember(d => d.To, o => o.MapFrom(s => s.Request.PersonTo == null ? string.Empty : s.Request.PersonTo.Name.ToString()))
 				.ForMember(d => d.DenyReason, o => o.MapFrom(s =>
@@ -116,6 +116,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 																				return new[] { 0, 3 }.Contains(stateId) ? "GET, DELETE, PUT" : "GET";
 																			}))
 				;
+		}
+
+		private static bool isCreatedByUser(IRequest request, Func<ILoggedOnUser> loggedOnUser)
+		{
+			return request.PersonFrom == loggedOnUser.Invoke().CurrentUser();
 		}
 	}
 }

@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 {
 	public static class ShiftTradeStatusExtensions
 	{
-		public static string ToText(this ShiftTradeStatus status)
+		public static string ToText(this ShiftTradeStatus status, bool isCreatedByUser)
 		{
 			switch (status)
 			{
@@ -16,7 +16,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 					}
 				case ShiftTradeStatus.OkByMe:
 					{
-						return Resources.WaitingForOtherPart;
+						if(isCreatedByUser) return Resources.WaitingForOtherPart;
+						return Resources.WaitingForYourApproval;
 					}
 				case ShiftTradeStatus.Referred:
 					{

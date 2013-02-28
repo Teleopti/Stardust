@@ -75,11 +75,18 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => _page.FirstRequest.InnerHtml, Is.StringContaining(subject));
 		}
 
-		[Then(@"I should see my existing shift trade request with status OkByMe")]
-		public void ThenIShouldSeeMyExistingShiftTradeRequestWithStatus()
+		[Then(@"I should see my existing shift trade request with status waiting for other part")]
+		public void ThenIShouldSeeMyExistingShiftTradeRequestWithStatusWaitingForOtherPart()
 		{
 			ThenIShouldSeeMyExistingShiftTradeRequestWithSubject(Resources.WaitingForOtherPart);
 		}
+
+		[Then(@"I should see my existing shift trade request with status waiting for your approval")]
+		public void ThenIShouldSeeMyExistingShiftTradeRequestWithStatusWaitingForYourApproval()
+		{
+			ThenIShouldSeeMyExistingShiftTradeRequestWithSubject(Resources.WaitingForYourApproval);
+		}
+
 		
 		[Then(@"I should see my existing absence request with absence '(.*)'")]
 		public void ThenIShouldSeeMyExistingAbsenceRequestWithAbsence(string absence)
