@@ -12,7 +12,7 @@ define([
 	) {
 
 		var personSchedule = new personScheduleViewModel();
-
+		
 		return {
 			display: function (options) {
 
@@ -20,7 +20,7 @@ define([
 
 				personSchedule.Id(options.id);
 				personSchedule.Date(moment(options.date, 'YYYYMMDD'));
-				
+
 				subscriptions.subscribePersonSchedule(
 					options.id,
 					personSchedule.Date().toDate(),

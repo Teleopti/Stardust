@@ -6,7 +6,7 @@ define([
 
 		var minutes = helpers.Minutes;
 
-		return function (timeLineLayers, shortTimePattern) {
+		return function (timeLineLayers) {
 
 			var self = this;
 
@@ -41,7 +41,7 @@ define([
 				var time = self.StartMinutes();
 				var end = self.EndMinutes();
 				while (time < end + 1) {
-					times.push(new timeViewModel(self, time, shortTimePattern));
+					times.push(new timeViewModel(self, time));
 					time = minutes.AddHours(time, 1);
 				}
 				return times;

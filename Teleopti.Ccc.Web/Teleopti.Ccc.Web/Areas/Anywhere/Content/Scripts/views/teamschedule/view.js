@@ -182,20 +182,6 @@ define([
 					);
 				};
 
-				//				options.startedPromise.done(function () {
-				//					loadAvailableTeams();
-
-				//					$(window).ready(function () {
-				//						ko.applyBindings({
-				//							TeamSchedule: teamSchedule,
-				//							Resources: resources,
-				//							Timeline: timeLine,
-				//							Agents: agents
-				//						}, options.bindingElement);
-				//					});
-
-				//				});
-
 				$(window).ready(function () {
 
 					ko.applyBindings({

@@ -2,13 +2,16 @@ define([
 		'knockout'
 	], function (ko) {
 
-		return function (timeline, start, length, color) {
+		return function (timeline, data) {
 
 			var self = this;
 
-			this.StartMinutes = ko.observable(start);
-			this.LengthMinutes = ko.observable(length);
-			this.Color = ko.observable(color);
+			var localTime = moment(data.Start, "YYYY-MM-DD hh:mm:ss Z").local();
+			var localStartMinutes = localTime.diff(data.Date, 'minutes');
+
+			this.StartMinutes = ko.observable(localStartMinutes);
+			this.LengthMinutes = ko.observable(data.Minutes);
+			this.Color = ko.observable(data.Color);
 
 			this.EndMinutes = ko.computed(function () {
 				return self.StartMinutes() + self.LengthMinutes();

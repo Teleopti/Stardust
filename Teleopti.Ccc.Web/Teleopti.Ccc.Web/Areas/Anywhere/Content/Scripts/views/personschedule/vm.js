@@ -1,8 +1,12 @@
 define([
 		'knockout',
+		'views/personschedule/layer',
+		'views/personschedule/timeline',
 		'helpers'
 	], function (
 		ko,
+		layerViewModel,
+		timeLineViewModel,
 		helpers
 		) {
 
@@ -10,19 +14,28 @@ define([
 
 			var self = this;
 
-			//this.TimeLine = data.timeLine;
+			this.Layers = ko.observableArray();
 
-			self.Id = ko.observable("");
-			self.Date = ko.observable();
-			
-			self.Name = ko.observable("");
-			self.Site = ko.observable("");
-			self.Team = ko.observable("");
+			this.TimeLine = new timeLineViewModel(this.Layers);
+
+			this.Id = ko.observable("");
+			this.Date = ko.observable();
+
+			this.Name = ko.observable("");
+			this.Site = ko.observable("");
+			this.Team = ko.observable("");
 
 			this.SetData = function (data) {
 				self.Name(data.Name);
 				self.Site(data.Site);
 				self.Team(data.Team);
+
+				self.Layers([]);
+				var layers = ko.utils.arrayMap(data.layers, function (l) {
+					return new layerViewModel(timeLine, l);
+				});
+				self.Layers.push.apply(self.Layers, layers);
+
 			};
 
 		};
