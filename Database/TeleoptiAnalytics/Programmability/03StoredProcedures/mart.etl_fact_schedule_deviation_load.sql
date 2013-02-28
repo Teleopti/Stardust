@@ -23,6 +23,12 @@ GO
 -- =============================================
 
 --exec mart.etl_fact_schedule_deviation_load '2013-02-18 23:00:00','2013-02-21 23:00:00','928DD0BC-BF40-412E-B970-9B5E015AADEA' --Demo
+/**______DO NOT MERGE THIS CHANGE TO MAIN______***
+**************************************************
+** There is currently a bug with this proc      **
+** Im commening it out to start testing our PBI **
+**************************************************
+***______DO NOT MERGE THIS CHANGE TO MAIN______***
 CREATE PROCEDURE [mart].[etl_fact_schedule_deviation_load]
 @start_date smalldatetime,
 @end_date smalldatetime,
@@ -387,3 +393,9 @@ BEGIN
 END
 
 GO
+***______DO NOT MERGE THIS CHANGE TO MAIN______***
+**************************************************
+** There is currently a bug with this proc      **
+** Im commening it out to start testing our PBI **
+**************************************************
+***______DO NOT MERGE THIS CHANGE TO MAIN______**/
