@@ -69,9 +69,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 			using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
 				var jobResult = _jobResultRepository.Get(message.JobId);
-				if(jobResult == null) return;
 				_feedback.SetJobResult(jobResult, _messageBroker);
-
+				var remainingProgress = message.IncreaseWith*3;
 				try
 				{
 					var workload = _workloadRepository.Get(message.WorkloadId);
@@ -80,6 +79,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 					jobResult.AddDetail(new JobResultDetail(DetailLevel.Info, "Loaded workload " + workload.Name, DateTime.UtcNow, null));
 
 					_feedback.ReportProgress(message.IncreaseWith, "Loaded workload " + workload.Name);
+					remainingProgress -= message.IncreaseWith;
 
 					var skill = workload.Skill;
 					var scenario = _scenarioRepository.Get(message.ScenarioId);
@@ -89,19 +89,33 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 						statisticHelper.GetWorkloadDaysWithValidatedStatistics(message.StatisticPeriod,
 						                                                       workload, scenario,
 						                                                       new List<IValidatedVolumeDay>());
+					if (!daysWithValidatedStatistics.Any())
+					{
+						// this never happens because we always get empty days back if we don't have statistcs, how should we check that?
+						jobResult.AddDetail(new JobResultDetail(DetailLevel.Info,
+															"No statistics found for workload on " + message.StatisticPeriod,
+															DateTime.UtcNow, null));
 
+						_feedback.ReportProgress(remainingProgress,
+						                         "No statistics found for workload on " +
+						                         message.StatisticPeriod.ToShortDateString(CultureInfo.CurrentCulture));
+						return;
+					}
 					jobResult.AddDetail(new JobResultDetail(DetailLevel.Info,
-					                                        "Loaded statistics on " + message.StatisticPeriod,
+															daysWithValidatedStatistics.Count + " days with statistics loaded for workload on " + message.StatisticPeriod,
 					                                        DateTime.UtcNow, null));
 
-					_feedback.ReportProgress(message.IncreaseWith, "Loaded statistics on " + message.StatisticPeriod.ToShortDateString(CultureInfo.CurrentCulture));
+					_feedback.ReportProgress(message.IncreaseWith,
+					                         daysWithValidatedStatistics.Count + " days with statistics loaded for workload on " +
+					                         message.StatisticPeriod.ToShortDateString(CultureInfo.CurrentCulture));
+					remainingProgress -= message.IncreaseWith;
 
 					var outlierWorkloadDayFilter = new OutlierWorkloadDayFilter<ITaskOwner>(workload, _outlierRepository);
 					var taskOwnerDaysWithoutOutliers =
 						outlierWorkloadDayFilter.FilterStatistics(daysWithValidatedStatistics,
 						                                          new[] {message.StatisticPeriod});
 
-					var taskOwnerPeriod = new TaskOwnerPeriod(DateOnly.Today, taskOwnerDaysWithoutOutliers, TaskOwnerPeriodType.Other);
+					var taskOwnerPeriod = _forecastClassesCreator.GetNewTaskOwnerPeriod(taskOwnerDaysWithoutOutliers);
 
 					//Load (or create) workload days
 					// Here we could split it in smaller chunks so we don't lock the tables too long
@@ -129,6 +143,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 				catch (Exception exception)
 				{
 					jobResult.AddDetail(new JobResultDetail(DetailLevel.Error, "Error occurred!", DateTime.UtcNow, exception));
+					_feedback.ReportProgress(remainingProgress, "Error occurred! " + exception.Message);
 				}
 				finally
 				{
@@ -139,7 +154,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 			}
 		}
 
-		private void applyVolumes(IWorkload workload, TaskOwnerPeriod taskOwnerPeriod, IList<ITaskOwner> workloadDays)
+		private void applyVolumes(IWorkload workload, ITaskOwnerPeriod taskOwnerPeriod, IList<ITaskOwner> workloadDays)
 		{
 			//Calculate indexes
 			VolumeYear volumeMonthYear = new MonthOfYear(taskOwnerPeriod, new MonthOfYearCreator());
@@ -163,7 +178,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 			{
 				for (var i = 0; i < 7; i++)
 				{
-					var template = (WorkloadDayTemplate)workload.GetTemplateAt(TemplateTarget.Workload, i);
+					var template = (IWorkloadDayTemplate)workload.GetTemplateAt(TemplateTarget.Workload, i);
 					template.SnapshotTemplateTaskPeriodList(TaskPeriodType.Tasks);
 					template.DoRunningSmoothing(smoothing, TaskPeriodType.Tasks);
 					template.SnapshotTemplateTaskPeriodList(TaskPeriodType.AverageTaskTime);
@@ -189,6 +204,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 
 		IStatisticHelper CreateStatisticHelper(IRepositoryFactory repositoryFactory, IUnitOfWork unitOfWork);
 
+
+		ITaskOwnerPeriod GetNewTaskOwnerPeriod(IList<ITaskOwner> taskOwnerDaysWithoutOutliers);
 	}
 
 	public class ForecastClassesCreator : IForecastClassesCreator
@@ -213,6 +230,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 		public IStatisticHelper CreateStatisticHelper(IRepositoryFactory repositoryFactory, IUnitOfWork unitOfWork)
 		{
 			return new StatisticHelper(repositoryFactory,unitOfWork);
+		}
+
+		public ITaskOwnerPeriod GetNewTaskOwnerPeriod(IList<ITaskOwner> taskOwnerDaysWithoutOutliers)
+		{
+			return new TaskOwnerPeriod(DateOnly.Today, taskOwnerDaysWithoutOutliers, TaskOwnerPeriodType.Other);
 		}
 	}
 }

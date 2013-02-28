@@ -1222,8 +1222,12 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 							var everyStep = Convert.ToInt32((1000 / dto.WorkloadIds.Count )/ 3);
 							dto.IncreaseWith = everyStep;
 							var jobId = _sendCommandToSdk.ExecuteCommand(dto).AffectedId.GetValueOrDefault();
-							var statusDialog = new JobStatusView(new JobStatusModel { JobStatusId = jobId, ProgressMax = everyStep * dto.WorkloadIds.Count * 3 });
-							statusDialog.ShowDialog();
+							using (
+								var statusDialog =
+									new JobStatusView(new JobStatusModel {JobStatusId = jobId, ProgressMax = everyStep*dto.WorkloadIds.Count*3}))
+							{
+								statusDialog.ShowDialog();
+							}
 							//_dataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(() => _jobHistoryViewFactory.Create());
 						}
 					}

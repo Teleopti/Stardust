@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 			}
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public JobStatusView(JobStatusModel model)  : this()
 		{
 			Presenter = new JobStatusPresenter(this,model, StateHolder.Instance.StateReader.ApplicationScopeData.Messaging);

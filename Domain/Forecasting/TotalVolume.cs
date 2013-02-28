@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		/// Created by: peterwe
 		/// Created date: 2008-04-01
 		/// </remarks>
-		void Create(TaskOwnerPeriod historicalDepth, IList<ITaskOwner> workloadDays, 
+		void Create(ITaskOwnerPeriod historicalDepth, IList<ITaskOwner> workloadDays, 
 		                            IList<IVolumeYear> volumes, IList<IOutlier> outliers, 
 		                            double startDayTrendFactor, double dayTrendFactor, bool useTrend, IWorkload workload);
 	}
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         private IDictionary<IOutlier, TaskOwnerPeriod> _outliersWithStatistics;
         private IDictionary<DateOnly, IOutlier> _outliersByDate;
         private IList<IVolumeYear> _volumes;
-        private TaskOwnerPeriod _historicalDepth;
+        private ITaskOwnerPeriod _historicalDepth;
         
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// Created by: peterwe
         /// Created date: 2008-04-01
         /// </remarks>
-        public void Create(TaskOwnerPeriod historicalDepth, IList<ITaskOwner> workloadDays, 
+        public void Create(ITaskOwnerPeriod historicalDepth, IList<ITaskOwner> workloadDays, 
             IList<IVolumeYear> volumes, IList<IOutlier> outliers, 
             double startDayTrendFactor, double dayTrendFactor, bool useTrend, IWorkload workload)
         {

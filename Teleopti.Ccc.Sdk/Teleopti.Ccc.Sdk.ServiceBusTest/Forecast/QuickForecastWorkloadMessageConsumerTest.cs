@@ -61,7 +61,17 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 
 			_jobId = Guid.NewGuid();
 			_statPeriod = new DateOnlyPeriod(2013, 1, 1, 2013, 1, 31);
-			_mess = new QuickForecastWorkloadMessage {JobId = _jobId,StatisticPeriod = _statPeriod};
+			_mess = new QuickForecastWorkloadMessage {JobId = _jobId,StatisticPeriod = _statPeriod, SmoothingStyle = 3};
+		}
+
+		[Test]
+		public void ShouldExitIfWrongJobId()
+		{
+			Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
+			Expect.Call(_jobResultRep.Get(_jobId)).Return(null);
+			_mocks.ReplayAll();
+			_target.Consume(_mess);
+			_mocks.VerifyAll();
 		}
 
 		[Test]
@@ -85,6 +95,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 			var skillDayCalc = _mocks.DynamicMock<ISkillDayCalculator>();
 			var totalVolume = _mocks.DynamicMock<ITotalVolume>();
 			var workloadDayTemplateCalculator = _mocks.DynamicMock<IWorkloadDayTemplateCalculator>();
+			var taskOwner = _mocks.DynamicMock<ITaskOwner>();
+			var teskOwners = new List<ITaskOwner> {taskOwner};
+			//var taskOwnerPeriod = _mocks.DynamicMock<ITaskOwnerPeriod>();
+			var taskOwnerPeriod = new TaskOwnerPeriod(new DateOnly(2013,1,1),new List<ITaskOwner>(),TaskOwnerPeriodType.Other  );
+			var template = _mocks.DynamicMock<IWorkloadDayTemplate>();
 
 			Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
 			Expect.Call(_jobResultRep.Get(_jobId)).Return(jobResult);
@@ -94,7 +109,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 			Expect.Call(_forecastClassesCreator.CreateStatisticHelper(_repFactory, _unitOfWork)).Return(_statisticHelper);
 			Expect.Call(_statisticHelper.GetWorkloadDaysWithValidatedStatistics(_statPeriod, workload, scenario,
 			                                                                    new List<IValidatedVolumeDay>()))
-			      .Return(new List<ITaskOwner>());
+				  .Return(teskOwners);
+			Expect.Call(_forecastClassesCreator.GetNewTaskOwnerPeriod(teskOwners)).Return(taskOwnerPeriod);
 			Expect.Call(_outlierRep.FindByWorkload(workload)).Return(new List<IOutlier>());
 			Expect.Call(_skillDayRep.GetAllSkillDays(_statPeriod, new List<ISkillDay>(), null, scenario,false)).IgnoreArguments()
 			      .Return(new Collection<ISkillDay>());
@@ -114,6 +130,42 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 			      .Return(workloadDayTemplateCalculator);
 			Expect.Call(() => workloadDayTemplateCalculator.LoadWorkloadDayTemplates(new List<DateOnlyPeriod>(), workload))
 			      .IgnoreArguments();
+			Expect.Call(workload.GetTemplateAt(TemplateTarget.Workload, 1)).IgnoreArguments().Return(template);
+			_mocks.ReplayAll();
+			_target.Consume(_mess);
+			_mocks.VerifyAll();
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+		public void ShouldNotForecastWhenNoStatistic()
+		{
+			var jobResult = _mocks.DynamicMock<IJobResult>();
+			var workload = _mocks.DynamicMock<IWorkload>();
+			var scenario = _mocks.DynamicMock<IScenario>();
+			
+			Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
+			Expect.Call(_jobResultRep.Get(_jobId)).Return(jobResult);
+			Expect.Call(_workloadRep.Get(Guid.NewGuid())).IgnoreArguments().Return(workload);
+			Expect.Call(() => _jobResultFeedback.SetJobResult(jobResult, _messBroker));
+			Expect.Call(_scenarioRep.Get(Guid.NewGuid())).IgnoreArguments().Return(scenario);
+			Expect.Call(_forecastClassesCreator.CreateStatisticHelper(_repFactory, _unitOfWork)).Return(_statisticHelper);
+			Expect.Call(_statisticHelper.GetWorkloadDaysWithValidatedStatistics(_statPeriod, workload, scenario,
+																				new List<IValidatedVolumeDay>()))
+				  .Return(new List<ITaskOwner>());
+
+			_mocks.ReplayAll();
+			_target.Consume(_mess);
+			_mocks.VerifyAll();
+		}
+
+		[Test]
+		public void ShouldReportError()
+		{
+			var jobResult = _mocks.DynamicMock<IJobResult>();
+			Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
+			Expect.Call(_jobResultRep.Get(_jobId)).Return(jobResult);
+			Expect.Call(_workloadRep.Get(Guid.NewGuid())).IgnoreArguments().Throw(new ArgumentOutOfRangeException());
+			Expect.Call(() => _jobResultFeedback.ReportProgress(0, "Error")).IgnoreArguments();
 			_mocks.ReplayAll();
 			_target.Consume(_mess);
 			_mocks.VerifyAll();
@@ -127,6 +179,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 			Assert.That(creator.CreateTotalVolume(), Is.Not.Null);
 			Assert.That(creator.CreateSkillDayCalculator(null, new List<ISkillDay>(),new DateOnlyPeriod() ), Is.Not.Null);
 			Assert.That(creator.CreateWorkloadDayTemplateCalculator(_statisticHelper,_outlierRep),Is.Not.Null);
+			Assert.That(creator.GetNewTaskOwnerPeriod(new List<ITaskOwner>()),Is.Not.Null);
 			Expect.Call(_repFactory.CreateStatisticRepository()).Return(statRep);
 			_mocks.ReplayAll();
 			Assert.That(creator.CreateStatisticHelper(_repFactory,_unitOfWork),Is.Not.Null);
