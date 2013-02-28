@@ -140,55 +140,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should see details with subject '(.*)'")]
 		public void ThenIShouldSeeDetailsWithSubject(string subject)
 		{
-			
 			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeRequestDetailSubject.Text, Is.EqualTo(subject));
-
 		}
 
 		[Then(@"I should see details with message '(.*)'")]
 		public void ThenIShouldSeeDetailsWithMessage(string message)
 		{
 			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeRequestDetailMessage.Text, Is.EqualTo(message));
-
-		}
-
-		[Then(@"I should see details with a schedule from")]
-		public void ThenIShouldSeeDetailsWithAScheduleFrom(Table table)
-		{
-			var expectedStart = table.Rows[0][1];
-			var expectedEnd = table.Rows[1][1];
-
-			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeDetailsFromScheduleLayers.Any(), Is.True);
-			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeDetailsFromScheduleLayers.First().Title, Contains.Substring(expectedStart));
-			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeDetailsFromScheduleLayers.Last().Title, Contains.Substring(expectedEnd));
-		}
-
-		[Then(@"I should see details with a schedule to")]
-		public void ThenIShouldSeeDetailsWithAScheduleTo(Table table)
-		{
-			
-			var expectedStart = table.Rows[0][1];
-			var expectedEnd = table.Rows[1][1];
-
-			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeDetailsToScheduleLayers.Any(), Is.True);
-			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeDetailsToScheduleLayers.First().Title, Contains.Substring(expectedStart));
-			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeDetailsToScheduleLayers.Last().Title, Contains.Substring(expectedEnd));
-
-		}
-
-		[Then(@"I should see details with subject '(.*)'")]
-		public void ThenIShouldSeeDetailsWithSubject(string subject)
-		{
-			
-			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeRequestDetailSubject.Text, Is.EqualTo(subject));
-
-		}
-
-		[Then(@"I should see details with message '(.*)'")]
-		public void ThenIShouldSeeDetailsWithMessage(string message)
-		{
-			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeRequestDetailMessage.Text, Is.EqualTo(message));
-
 		}
 
 		[When(@"I enter a subject")]

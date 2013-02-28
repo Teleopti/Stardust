@@ -82,13 +82,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			return Json(_respondToShiftTrade.OkByMe(id));
 		}
 
-	[UnitOfWorkAction]
-		[HttpPostOrPut]
-		public JsonResult ApproveShiftTrade(Guid id)
-		{
-			return Json(_respondToShiftTrade.OkByMe(id));
-		}
-
 
 		[UnitOfWorkAction]
 		[HttpPostOrPut]

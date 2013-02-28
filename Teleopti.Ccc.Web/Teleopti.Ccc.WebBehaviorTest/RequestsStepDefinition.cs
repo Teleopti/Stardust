@@ -219,25 +219,5 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			var dateOfTheTrade = DateTime.Parse(date);
 			EventualAssert.That(() => DateTime.Parse(_page.ShiftTradeDateTo.Text), Is.EqualTo(dateOfTheTrade));
 		}
-		[Then(@"I should see '(.*)' as the receiver of the request")]
-		public void ThenIShouldSeeAsTheReceiverOfTheRequest(string name)
-		{
-			EventualAssert.That(() => _page.ShiftTradeReciever.Text, Is.EqualTo(name));
-		}
-
-		[Then(@"I should see '(.*)' as the date of the request target")]
-		public void ThenIShouldSeeAsTheDateOfTheRequestTarget(string date)
-		{
-			var dateOfTheTrade = DateTime.Parse(date);
-			EventualAssert.That(() => DateTime.Parse(_page.ShiftTradeDateFrom.Text), Is.EqualTo(dateOfTheTrade));
-		}
-
-		[Then(@"I should see '(.*)' as the date of the request source")]
-		public void ThenIShouldSeeAsTheDateOfTheRequestSource(string date)
-		{
-			var dateOfTheTrade = DateTime.Parse(date);
-			EventualAssert.That(() => DateTime.Parse(_page.ShiftTradeDateTo.Text), Is.EqualTo(dateOfTheTrade));
-		}
 	}
-
 }
