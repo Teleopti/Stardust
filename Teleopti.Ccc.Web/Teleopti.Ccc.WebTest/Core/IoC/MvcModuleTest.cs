@@ -355,22 +355,17 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		[Test]
 		public void ShouldResolveWebTypes()
 		{
-			requestContainer.Resolve<UrlHelper>().Should().Not.Be.Null();
-
-			//var request = new SimpleWorkerRequest("/dummy", @"c:\inetpub\wwwroot\dummy", "dummy.html", null, new StringWriter());
-			//HttpContext.Current = new HttpContext(request);
-			requestContainer.Resolve<HttpContextBase>().Should().Not.Be.Null();
-			requestContainer.Resolve<HttpRequestBase>().Should().Not.Be.Null();
-			requestContainer.Resolve<HttpResponseBase>().Should().Not.Be.Null();
-			requestContainer.Resolve<HttpServerUtilityBase>().Should().Not.Be.Null();
-			requestContainer.Resolve<HttpSessionStateBase>().Should().Not.Be.Null();
-			requestContainer.Resolve<HttpApplicationStateBase>().Should().Not.Be.Null();
-			//requestContainer.Resolve<HttpBrowserCapabilitiesBase>().Should().Not.Be.Null();
-			//requestContainer.Resolve<HttpFileCollectionBase>().Should().Not.Be.Null();
-			//requestContainer.Resolve<System.Web.Routing.RequestContext>().Should().Not.Be.Null();
-			requestContainer.Resolve<HttpCachePolicyBase>().Should().Not.Be.Null();
-			//requestContainer.Resolve<VirtualPathProvider>().Should().Not.Be.Null();
-			requestContainer.Resolve<UrlHelper>().Should().Not.Be.Null();
+			using (var lifetime = requestContainer.BeginLifetimeScope("AutofacWebRequest"))
+			{
+				lifetime.Resolve<HttpContextBase>().Should().Not.Be.Null();
+				lifetime.Resolve<HttpRequestBase>().Should().Not.Be.Null();
+				lifetime.Resolve<HttpResponseBase>().Should().Not.Be.Null();
+				lifetime.Resolve<HttpServerUtilityBase>().Should().Not.Be.Null();
+				lifetime.Resolve<HttpSessionStateBase>().Should().Not.Be.Null();
+				lifetime.Resolve<HttpApplicationStateBase>().Should().Not.Be.Null();
+				lifetime.Resolve<HttpCachePolicyBase>().Should().Not.Be.Null();
+				lifetime.Resolve<UrlHelper>().Should().Not.Be.Null();
+			}
 		}
 
 		[Test]
