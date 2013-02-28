@@ -116,6 +116,7 @@ Scenario: Show number of agents that can go on holiday
 	When I view my week schedule for date '2013-02-15'
 	Then I should see an indication of the amount of agents that can go on holiday on each day of the week
 
+@ignore
 Scenario: Indicate that no agents that can go on holiday if outside bounds of absence period
 	Given I have the role 'Full access to mytime'
 	# And the absence period is opened between '2013-01-01' and '2013-01-30'
@@ -136,6 +137,7 @@ Scenario: Add absence request from week schedule view with multiple absences
 	And I navigate to the requests page
 	Then I should see my existing absence request with absence 'Time in lieu'
 
+@ignore
 Scenario: Indicate that no agents that can go on holiday if no allowance left
 	Given I have the role 'Full access to mytime'
 	And I have no absence allowance left
