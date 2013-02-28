@@ -229,8 +229,8 @@ Scenario: Cancel a shift trade request before sending
 	When I view Add Shift Trade Request for date '2030-01-01'
 	And I click agent 'OtherAgent'
 	And I click 'Cancel button'
-	Then I should see OtherAgent's schedule
-	And I should see OtherAgent2's schedule
+	Then I should see the schedule of OtherAgent
+	And I should see the schedule of OtherAgent2
 
 Scenario: Show message when no agents are available for shift trade
 	Given I have the role 'Full access to mytime'
