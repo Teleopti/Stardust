@@ -35,7 +35,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
 
 			using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
-				startTime = DateTime.SpecifyKind(_scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow, message.PersonId), DateTimeKind.Utc);
+				startTime =
+					_scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow, message.PersonId).ToLocalTime();
                 
                 infoMessage = string.Format("Next activity start time = {0} for person {1}", startTime, message.PersonId);
                 Logger.Info(infoMessage);
@@ -57,7 +58,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
 			catch (Exception exception)
 			{
                 Logger.Error("Exception occured when calling TeleoptiRtaService", exception);
-			    return;
 			}
 
 			_serviceBus.DelaySend(startTime, new PersonWithExternalLogOn
@@ -89,7 +89,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
 		    DateTime startTime;
 			using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
-				startTime = _scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow, message.PersonId);
+				startTime =
+					_scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow, message.PersonId).ToLocalTime();
                 infoMessage = string.Format("Next activity start time = {0} for person {1}", startTime, message.PersonId);
                 Logger.Info(infoMessage);
 			}
@@ -112,7 +113,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
 			catch (Exception exception)
 			{
                 Logger.Error("Exception occured when calling TeleoptiRtaService", exception);
-                return;
 			}
 			
 			_serviceBus.DelaySend(startTime, new PersonWithExternalLogOn
