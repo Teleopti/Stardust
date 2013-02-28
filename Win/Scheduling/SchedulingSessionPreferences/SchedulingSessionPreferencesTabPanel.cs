@@ -24,8 +24,9 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
         private IList<IGroupPageLight> _groupPagesLevelingPer;
         private IList<IScheduleTag> _scheduleTags;
     	private ISchedulerGroupPagesProvider _groupPagesProvider;
+        private LevellingPerConfiguration _levellingConfiguartion;
 
-    	public SchedulingSessionPreferencesTabPanel()
+        public SchedulingSessionPreferencesTabPanel()
         {
             InitializeComponent();
             if (!DesignMode) SetTexts();
@@ -327,23 +328,23 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
                     _localSchedulingOptions.UseBlockScheduling = BlockFinderType.SchedulePeriod;
             }
 
-            if (!checkBoxLevellingPerBlockScheduling.Checked)
-                _localSchedulingOptions.BlockFinderTypeForAdvanceScheduling  = BlockFinderType.None;
-            else
-            {
-                if (radioButtonBetweenDaysOffAdvScheduling.Checked)
-                    _localSchedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.BetweenDayOff;
-                else if(radioButtonSchedulePeriodAdvScheduling.Checked)
-                    _localSchedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.SchedulePeriod;
-                else
-					_localSchedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.SingleDay;
-            }
+            //if (!checkBoxLevellingPerBlockScheduling.Checked)
+            //    _localSchedulingOptions.BlockFinderTypeForAdvanceScheduling  = BlockFinderType.None;
+            //else
+            //{
+            //    if (radioButtonBetweenDaysOffAdvScheduling.Checked)
+            //        _localSchedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.BetweenDayOff;
+            //    else if(radioButtonSchedulePeriodAdvScheduling.Checked)
+            //        _localSchedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.SchedulePeriod;
+            //    else
+            //        _localSchedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.SingleDay;
+            //}
 
             _localSchedulingOptions.Fairness = new Percent(trackBar1.Value / 100d);
             _localSchedulingOptions.UseShiftCategoryLimitations = checkBoxUseShiftCategoryRestrictions.Checked;
 			_localSchedulingOptions.UseGroupScheduling = checkBoxUseGroupScheduling.Checked;
         	_localSchedulingOptions.GroupOnGroupPage = (IGroupPageLight)comboBoxGrouping.SelectedItem;
-            _localSchedulingOptions.GroupOnGroupPageForLevelingPer  = (IGroupPageLight)comboBoxGroupingLevelingPer .SelectedItem;
+            //_localSchedulingOptions.GroupOnGroupPageForLevelingPer  = (IGroupPageLight)comboBoxGroupingLevelingPer .SelectedItem;
 			_localSchedulingOptions.GroupPageForShiftCategoryFairness = (IGroupPageLight)comboBoxGroupingFairness.SelectedItem;
 			_localSchedulingOptions.DoNotBreakMaxStaffing = checkBoxDoNotBreakMaxSeats.Checked;
         	_localSchedulingOptions.UseMaxSeats = checkBoxUseMaxSeats.Checked;
@@ -358,6 +359,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             if (checkBoxCommonActivity.Checked)
                 _localSchedulingOptions.CommonActivity = (IActivity) comboBoxActivity.SelectedItem;
         	_localSchedulingOptions.UseAverageShiftLengths = checkBoxUseAverageShiftLengths.Checked;
+            GetLevellingPerDataToSave();
         }
 
         private void setDataInControls()
@@ -750,8 +752,25 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 
         private void btnLevellingPer_Click(object sender, EventArgs e)
         {
-            //var levelingPanel = new LevellingPerForm();
-            //levelingPanel.Show();
+            LevellingPerConfiguration levellingPerConfiguration = new LevellingPerConfiguration();
+
+            levellingPerConfiguration._selectedBlockFinderType =
+                _localSchedulingOptions.BlockFinderTypeForAdvanceScheduling;
+            levellingPerConfiguration._selectedGroupPage = _localSchedulingOptions.GroupOnGroupPageForLevelingPer;
+            
+                
+            var levellingPerPrefrences = new LevellingPerPrefrences(levellingPerConfiguration, _groupPagesLevelingPer);
+            levellingPerPrefrences.ShowDialog();
+            _levellingConfiguartion = levellingPerPrefrences.LevellingConfiguration;
+            
+        }
+
+        private void GetLevellingPerDataToSave()
+        {
+            _localSchedulingOptions.BlockFinderTypeForAdvanceScheduling =
+                _levellingConfiguartion._selectedBlockFinderType;
+            _localSchedulingOptions.GroupOnGroupPageForLevelingPer = _levellingConfiguartion._selectedGroupPage;
+
         }
     }
     

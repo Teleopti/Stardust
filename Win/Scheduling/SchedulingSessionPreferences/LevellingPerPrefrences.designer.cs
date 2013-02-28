@@ -40,12 +40,12 @@
             this.radioButton6 = new System.Windows.Forms.RadioButton();
             this.tableLayoutPanelTeam = new System.Windows.Forms.TableLayoutPanel();
             this.label1 = new System.Windows.Forms.Label();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.comboBoxTeams = new System.Windows.Forms.ComboBox();
             this.groupBoxBlock = new System.Windows.Forms.GroupBox();
-            this.radioButton1 = new System.Windows.Forms.RadioButton();
-            this.radioButton2 = new System.Windows.Forms.RadioButton();
-            this.radioButton3 = new System.Windows.Forms.RadioButton();
-            this.radioButton4 = new System.Windows.Forms.RadioButton();
+            this.radioButtonSingleDay = new System.Windows.Forms.RadioButton();
+            this.radioButtonWeek = new System.Windows.Forms.RadioButton();
+            this.radioButtonBetweenDaysOff = new System.Windows.Forms.RadioButton();
+            this.radioButtonSchedulePeriod = new System.Windows.Forms.RadioButton();
             this.tableLayoutPanel1.SuspendLayout();
             this.groupBoxUse.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
@@ -150,6 +150,8 @@
             // checkBox3
             // 
             this.checkBox3.AutoSize = true;
+            this.checkBox3.Checked = true;
+            this.checkBox3.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox3.Location = new System.Drawing.Point(3, 26);
             this.checkBox3.Name = "checkBox3";
             this.checkBox3.Size = new System.Drawing.Size(74, 17);
@@ -190,9 +192,8 @@
             this.tableLayoutPanelTeam.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 24.57143F));
             this.tableLayoutPanelTeam.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 75.42857F));
             this.tableLayoutPanelTeam.Controls.Add(this.label1, 0, 0);
-            this.tableLayoutPanelTeam.Controls.Add(this.comboBox1, 1, 0);
+            this.tableLayoutPanelTeam.Controls.Add(this.comboBoxTeams, 1, 0);
             this.tableLayoutPanelTeam.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanelTeam.Enabled = false;
             this.tableLayoutPanelTeam.Location = new System.Drawing.Point(3, 3);
             this.tableLayoutPanelTeam.Name = "tableLayoutPanelTeam";
             this.tableLayoutPanelTeam.RowCount = 1;
@@ -211,28 +212,27 @@
             this.label1.Text = "Teams";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // comboBox1
+            // comboBoxTeams
             // 
-            this.comboBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Items.AddRange(new object[] {
+            this.comboBoxTeams.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.comboBoxTeams.FormattingEnabled = true;
+            this.comboBoxTeams.Items.AddRange(new object[] {
             "Single Agent",
             "Organization",
             "Bla",
             "Bla"});
-            this.comboBox1.Location = new System.Drawing.Point(89, 3);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(258, 21);
-            this.comboBox1.TabIndex = 0;
+            this.comboBoxTeams.Location = new System.Drawing.Point(89, 3);
+            this.comboBoxTeams.Name = "comboBoxTeams";
+            this.comboBoxTeams.Size = new System.Drawing.Size(258, 21);
+            this.comboBoxTeams.TabIndex = 0;
             // 
             // groupBoxBlock
             // 
-            this.groupBoxBlock.Controls.Add(this.radioButton1);
-            this.groupBoxBlock.Controls.Add(this.radioButton2);
-            this.groupBoxBlock.Controls.Add(this.radioButton3);
-            this.groupBoxBlock.Controls.Add(this.radioButton4);
+            this.groupBoxBlock.Controls.Add(this.radioButtonSingleDay);
+            this.groupBoxBlock.Controls.Add(this.radioButtonWeek);
+            this.groupBoxBlock.Controls.Add(this.radioButtonBetweenDaysOff);
+            this.groupBoxBlock.Controls.Add(this.radioButtonSchedulePeriod);
             this.groupBoxBlock.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBoxBlock.Enabled = false;
             this.groupBoxBlock.Location = new System.Drawing.Point(3, 35);
             this.groupBoxBlock.Name = "groupBoxBlock";
             this.groupBoxBlock.Size = new System.Drawing.Size(350, 113);
@@ -240,48 +240,48 @@
             this.groupBoxBlock.TabStop = false;
             this.groupBoxBlock.Text = "Block";
             // 
-            // radioButton1
+            // radioButtonSingleDay
             // 
-            this.radioButton1.AutoSize = true;
-            this.radioButton1.Checked = true;
-            this.radioButton1.Location = new System.Drawing.Point(6, 19);
-            this.radioButton1.Name = "radioButton1";
-            this.radioButton1.Size = new System.Drawing.Size(76, 17);
-            this.radioButton1.TabIndex = 4;
-            this.radioButton1.TabStop = true;
-            this.radioButton1.Text = "Single Day";
-            this.radioButton1.UseVisualStyleBackColor = true;
-            this.radioButton1.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
+            this.radioButtonSingleDay.AutoSize = true;
+            this.radioButtonSingleDay.Checked = true;
+            this.radioButtonSingleDay.Location = new System.Drawing.Point(6, 19);
+            this.radioButtonSingleDay.Name = "radioButtonSingleDay";
+            this.radioButtonSingleDay.Size = new System.Drawing.Size(76, 17);
+            this.radioButtonSingleDay.TabIndex = 4;
+            this.radioButtonSingleDay.TabStop = true;
+            this.radioButtonSingleDay.Text = "Single Day";
+            this.radioButtonSingleDay.UseVisualStyleBackColor = true;
+            this.radioButtonSingleDay.CheckedChanged += new System.EventHandler(this.radioButton1_CheckedChanged);
             // 
-            // radioButton2
+            // radioButtonWeek
             // 
-            this.radioButton2.AutoSize = true;
-            this.radioButton2.Location = new System.Drawing.Point(6, 42);
-            this.radioButton2.Name = "radioButton2";
-            this.radioButton2.Size = new System.Drawing.Size(99, 17);
-            this.radioButton2.TabIndex = 5;
-            this.radioButton2.Text = "Calendar Week";
-            this.radioButton2.UseVisualStyleBackColor = true;
+            this.radioButtonWeek.AutoSize = true;
+            this.radioButtonWeek.Location = new System.Drawing.Point(6, 42);
+            this.radioButtonWeek.Name = "radioButtonWeek";
+            this.radioButtonWeek.Size = new System.Drawing.Size(99, 17);
+            this.radioButtonWeek.TabIndex = 5;
+            this.radioButtonWeek.Text = "Calendar Week";
+            this.radioButtonWeek.UseVisualStyleBackColor = true;
             // 
-            // radioButton3
+            // radioButtonBetweenDaysOff
             // 
-            this.radioButton3.AutoSize = true;
-            this.radioButton3.Location = new System.Drawing.Point(6, 65);
-            this.radioButton3.Name = "radioButton3";
-            this.radioButton3.Size = new System.Drawing.Size(111, 17);
-            this.radioButton3.TabIndex = 6;
-            this.radioButton3.Text = "Between Days Off";
-            this.radioButton3.UseVisualStyleBackColor = true;
+            this.radioButtonBetweenDaysOff.AutoSize = true;
+            this.radioButtonBetweenDaysOff.Location = new System.Drawing.Point(6, 65);
+            this.radioButtonBetweenDaysOff.Name = "radioButtonBetweenDaysOff";
+            this.radioButtonBetweenDaysOff.Size = new System.Drawing.Size(111, 17);
+            this.radioButtonBetweenDaysOff.TabIndex = 6;
+            this.radioButtonBetweenDaysOff.Text = "Between Days Off";
+            this.radioButtonBetweenDaysOff.UseVisualStyleBackColor = true;
             // 
-            // radioButton4
+            // radioButtonSchedulePeriod
             // 
-            this.radioButton4.AutoSize = true;
-            this.radioButton4.Location = new System.Drawing.Point(6, 88);
-            this.radioButton4.Name = "radioButton4";
-            this.radioButton4.Size = new System.Drawing.Size(103, 17);
-            this.radioButton4.TabIndex = 7;
-            this.radioButton4.Text = "Schedule Period";
-            this.radioButton4.UseVisualStyleBackColor = true;
+            this.radioButtonSchedulePeriod.AutoSize = true;
+            this.radioButtonSchedulePeriod.Location = new System.Drawing.Point(6, 88);
+            this.radioButtonSchedulePeriod.Name = "radioButtonSchedulePeriod";
+            this.radioButtonSchedulePeriod.Size = new System.Drawing.Size(103, 17);
+            this.radioButtonSchedulePeriod.TabIndex = 7;
+            this.radioButtonSchedulePeriod.Text = "Schedule Period";
+            this.radioButtonSchedulePeriod.UseVisualStyleBackColor = true;
             // 
             // LevellingPerPrefrences
             // 
@@ -295,7 +295,6 @@
             this.MinimizeBox = false;
             this.Name = "LevellingPerPrefrences";
             this.Text = "Leveling Settings";
-            this.Load += new System.EventHandler(this.Form2_Load);
             this.tableLayoutPanel1.ResumeLayout(false);
             this.groupBoxUse.ResumeLayout(false);
             this.tableLayoutPanel3.ResumeLayout(false);
@@ -314,7 +313,7 @@
 
 		private System.Windows.Forms.Button button1;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
-        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.ComboBox comboBoxTeams;
 		private System.Windows.Forms.Label label1;
 		private System.Windows.Forms.GroupBox groupBoxUse;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
@@ -326,9 +325,9 @@
 		private System.Windows.Forms.RadioButton radioButton6;
 		private System.Windows.Forms.TableLayoutPanel tableLayoutPanelTeam;
 		private System.Windows.Forms.GroupBox groupBoxBlock;
-		private System.Windows.Forms.RadioButton radioButton1;
-		private System.Windows.Forms.RadioButton radioButton2;
-		private System.Windows.Forms.RadioButton radioButton3;
-		private System.Windows.Forms.RadioButton radioButton4;
+		private System.Windows.Forms.RadioButton radioButtonSingleDay;
+		private System.Windows.Forms.RadioButton radioButtonWeek;
+		private System.Windows.Forms.RadioButton radioButtonBetweenDaysOff;
+		private System.Windows.Forms.RadioButton radioButtonSchedulePeriod;
 	}
 }
