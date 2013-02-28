@@ -5,14 +5,14 @@ define([
 		$,
 		signalrHubs
 	) {
+		
+		var startPromise;
 
 		var subscription = function (options) {
 
 			var self = this;
 
-			this.startPromise = options.startPromise;
 			this.callback = options.callback;
-			
 			this.serverSubscribeMethod = options.serverSubscribeMethod;
 			
 			this.incomingData = function (data) {
@@ -34,7 +34,6 @@ define([
 		};
 
 		var subscriptions = [];
-		var startPromise;
 		var teamScheduleHub = $.connection.teamScheduleHub;
 		var personScheduleHub = $.connection.personScheduleHub;
 
