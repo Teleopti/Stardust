@@ -82,8 +82,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoAnywhereTeamSchedule(date);
 		}
 
-		[When(@"I view agent schedule for '(.*)' on '(.*)'")]
-		public void WhenIViewAgentScheduleForAgentOnDate(string name, DateTime date)
+		[When(@"I view person schedule for '(.*)' on '(.*)'")]
+		public void WhenIViewPersonScheduleForPersonOnDate(string name, DateTime date)
 		{
 			TestControllerMethods.Logon();
 			var personId = UserFactory.User(name).Person.Id.Value;
