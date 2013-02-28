@@ -154,14 +154,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		public void WhenIEnterASubject()
 		{
 			Pages.Pages.RequestsPage.AddShiftTradeSubject.WaitUntilDisplayed();
-			Pages.Pages.RequestsPage.AddShiftTradeSubject.Value = "A nice subject";
+			Pages.Pages.RequestsPage.AddShiftTradeSubject.ChangeValue("A nice subject");
 		}
 
 		[When(@"I enter a message")]
 		public void WhenIEnterAMessage()
 		{
 			Pages.Pages.RequestsPage.AddShiftTradeMessage.WaitUntilDisplayed();
-			Pages.Pages.RequestsPage.AddShiftTradeMessage.Value = "A nice message";
+			Pages.Pages.RequestsPage.AddShiftTradeMessage.ChangeValue("A nice message");
 		}
 		
 		[Then(@"Add Shift Trade Request view should not be visible")]

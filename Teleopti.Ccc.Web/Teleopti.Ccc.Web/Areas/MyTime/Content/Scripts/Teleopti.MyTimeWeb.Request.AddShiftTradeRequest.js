@@ -169,6 +169,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			.button()
 			.click(function () {
 				_saveNewShiftTrade();
+				_hideShiftTradeWindow();
 			});
 		$('#Request-add-shift-trade-detail-section .cancel-button')
 			.button()
