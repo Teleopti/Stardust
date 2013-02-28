@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
 			{
 				startTime = DateTime.SpecifyKind(_scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow, message.PersonId), DateTimeKind.Utc);
                 
-                infoMessage = string.Format("Next activity start time = {0} for person {1}", startTime, message.PersonId);
+                infoMessage = "Next activity start time =" + startTime +  " for personId=" + message.PersonId;
                 Logger.Info(infoMessage);
 			}
 
@@ -45,12 +45,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
 			
 			try
 			{
-			    infoMessage = string.Format("Calling TeleoptiRtaService for person={0} at {1}", message.PersonId, DateTime.UtcNow);
+			    infoMessage = "Calling TeleoptiRtaService for person=" + message.PersonId + " at " + DateTime.UtcNow;
                 Logger.Info(infoMessage);
 
                 _teleoptiRtaService.GetUpdatedScheduleChange(message.PersonId, message.BusinessUnitId, DateTime.UtcNow);
 
-                infoMessage = string.Format("Message successfully send to TeleoptiRtaService for person={0} at {1}", message.PersonId, DateTime.UtcNow);
+                infoMessage = "Message successfully send to TeleoptiRtaService for person=" + message.PersonId + " at " + DateTime.UtcNow;
                 Logger.Info(infoMessage);
 				
 			}
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
 				Timestamp = DateTime.Now
 			});
 
-            infoMessage = string.Format("Delay Message successfully send to Service Bus where startTime ={0} for person={1} and Business Unit at {2}", startTime, message.PersonId, message.BusinessUnitId);
+            infoMessage = "Delay Message successfully send to Service Bus where startTime ="+ startTime + " for person=" + message.PersonId + " and Business Unit at "+ message.BusinessUnitId;
             Logger.Info(infoMessage);
 		}
 
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
 			//if (message.ActivityStartDateTime.Date == DateTime.UtcNow.Date || message.ActivityStartDateTime.Date == DateTime.UtcNow.AddDays(1).Date)
 		    if (message.ActivityStartDateTime > DateTime.UtcNow.AddDays(1) || message.ActivityEndDateTime < DateTime.UtcNow)
 		    {
-		        infoMessage = string.Format("Updated activity is not within today or tomorow range. Ignoring this update.");
+		        infoMessage = "Updated activity is not within today or tomorow range. Ignoring this update.";
 		        Logger.Info(infoMessage);
 		        return;
 		    }
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
 			using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
 				startTime = _scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow, message.PersonId);
-                infoMessage = string.Format("Next activity start time = {0} for person {1}", startTime, message.PersonId);
+                infoMessage = "Next activity start time =" + startTime + " for person "+ message.PersonId;
                 Logger.Info(infoMessage);
 			}
 
@@ -100,12 +100,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
 			//send message to the web service.
 			try
 			{
-                infoMessage = string.Format("Calling TeleoptiRtaService for person={0} at {1}", message.PersonId, DateTime.UtcNow);
+                infoMessage = "Calling TeleoptiRtaService for person="+ message.PersonId + " at " + DateTime.UtcNow;
                 Logger.Info(infoMessage);
 
                 _teleoptiRtaService.GetUpdatedScheduleChange(message.PersonId, message.BusinessUnitId, DateTime.UtcNow);
 
-                infoMessage = string.Format("Message successfully send to TeleoptiRtaService for person={0} at {1}", message.PersonId, DateTime.UtcNow);
+                infoMessage = "Message successfully send to TeleoptiRtaService for person= "+ message.PersonId +" at "+ DateTime.UtcNow;
                 Logger.Info(infoMessage);
 				
 			}
@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
 					Timestamp = DateTime.Now
 				});
 
-            infoMessage = string.Format("Delay Message successfully send to Service Bus where startTime ={0} for person={1} and Business Unit at {2}", startTime, message.PersonId, message.BusinessUnitId);
+            infoMessage = "Delay Message successfully send to Service Bus where startTime ="+ startTime +" for person="+message.PersonId+" and Business Unit at " + message.BusinessUnitId;
             Logger.Info(infoMessage);
 		}
 	}
