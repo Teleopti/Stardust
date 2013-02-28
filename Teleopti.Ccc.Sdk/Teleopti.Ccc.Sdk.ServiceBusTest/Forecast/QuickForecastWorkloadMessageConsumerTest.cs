@@ -158,7 +158,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 			_mocks.VerifyAll();
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly"), Test]
 		public void ShouldReportError()
 		{
 			var jobResult = _mocks.DynamicMock<IJobResult>();
