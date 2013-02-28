@@ -13,6 +13,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 
 	public class PersonScheduleData
 	{
+		public DateTime Date { get; set; }
 		public IPerson Person { get; set; }
 	}
 
@@ -25,7 +26,13 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 	{
 		public PersonScheduleViewModel Map(PersonScheduleData data)
 		{
-			var viewModel = new PersonScheduleViewModel {Name = data.Person.Name.ToString()};
+			var team = data.Person.MyTeam(new DateOnly(data.Date));
+			var viewModel = new PersonScheduleViewModel
+				{
+					Name = data.Person.Name.ToString(),
+					Team = team.Description.Name,
+					Site = team.Site.Description.Name
+				};
 			return viewModel;
 		}
 	}

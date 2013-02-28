@@ -11,8 +11,20 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 	[TestFixture]
 	public class PersonScheduleViewModelFactoryTest
 	{
+
 		[Test]
-		public void ShouldRetrievePerson()
+		public void ShouldPassDateToMapping()
+		{
+			var personScheduleViewModelMapper = MockRepository.GenerateMock<IPersonScheduleViewModelMapper>();
+			var target = new PersonScheduleViewModelFactory(MockRepository.GenerateMock<IPersonRepository>(), personScheduleViewModelMapper);
+			
+			target.CreateViewModel(Guid.NewGuid(), DateTime.Today);
+
+			personScheduleViewModelMapper.AssertWasCalled(x => x.Map(Arg<PersonScheduleData>.Matches(s => s.Date == DateTime.Today)));
+		}
+
+		[Test]
+		public void ShouldRetrievePersonAndPassToMapping()
 		{
 			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
 			var personScheduleViewModelMapper = MockRepository.GenerateMock<IPersonScheduleViewModelMapper>();

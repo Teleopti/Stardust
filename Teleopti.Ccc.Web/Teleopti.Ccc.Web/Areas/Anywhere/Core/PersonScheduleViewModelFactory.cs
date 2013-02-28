@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 
 	public interface IPersonScheduleViewModelFactory
 	{
-		PersonScheduleViewModel CreateViewModel(Guid personId, DateTime today);
+		PersonScheduleViewModel CreateViewModel(Guid personId, DateTime date);
 	}
 
 	public class PersonScheduleViewModelFactory : IPersonScheduleViewModelFactory
@@ -21,10 +21,11 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 			_personScheduleViewModelMapper = personScheduleViewModelMapper;
 		}
 
-		public PersonScheduleViewModel CreateViewModel(Guid personId, DateTime today)
+		public PersonScheduleViewModel CreateViewModel(Guid personId, DateTime date)
 		{
 			var personData = new PersonScheduleData();
 			personData.Person = _personRepository.Get(personId);
+			personData.Date = date;
 			return _personScheduleViewModelMapper.Map(personData);
 		}
 	}
