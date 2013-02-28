@@ -30,30 +30,21 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
 		public void Consume(PersonWithExternalLogOn message)
 		{
 			DateTime startTime;
-		    string infoMessage = "";
             Logger.Info("Start consuming PersonalWithExternalLogonOn message.");
 
 			using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
 				startTime =
 					_scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.Now, message.PersonId);
-                
-                infoMessage = "Next activity start time =" + startTime +  " for personId=" + message.PersonId;
-                Logger.Info(infoMessage);
+				Logger.InfoFormat("Next activity for Person: {0}, StartTime: {1}.", message.PersonId, startTime);
 			}
 
 			if (startTime.Date.Equals(new DateTime().Date)) return;
 			
 			try
 			{
-			    infoMessage = "Calling TeleoptiRtaService for person=" + message.PersonId + " at " + DateTime.UtcNow;
-                Logger.Info(infoMessage);
-
                 _teleoptiRtaService.GetUpdatedScheduleChange(message.PersonId, message.BusinessUnitId, DateTime.UtcNow);
-
-                infoMessage = "Message successfully send to TeleoptiRtaService for person=" + message.PersonId + " at " + DateTime.UtcNow;
-                Logger.Info(infoMessage);
-				
+				Logger.InfoFormat("Message successfully send to TeleoptiRtaService BU: {0}, Person: {1}, TimeStamp: {2}.", message.BusinessUnitId, message.PersonId, DateTime.UtcNow);
 			}
 			catch (Exception exception)
 			{
@@ -67,22 +58,17 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
 				PersonId = message.PersonId,
 				Timestamp = DateTime.Now
 			});
-
-            infoMessage = "Delay Message successfully send to Service Bus where startTime ="+ startTime + " for person=" + message.PersonId + " and Business Unit at "+ message.BusinessUnitId;
-            Logger.Info(infoMessage);
+			Logger.InfoFormat("Delay Message successfully sent to ServiceBus BU: {0}, Person: {1}, SendTime: {2}.", message.BusinessUnitId, message.PersonId, startTime);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "excpetion"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
 		public void Consume(UpdatedScheduleDay message)
 		{
-            string infoMessage = "";
             Logger.Info("Start consuming UpdatedScheduleDay message.");
 
-			//if (message.ActivityStartDateTime.Date == DateTime.UtcNow.Date || message.ActivityStartDateTime.Date == DateTime.UtcNow.AddDays(1).Date)
 		    if (message.ActivityStartDateTime > DateTime.UtcNow.AddDays(1) || message.ActivityEndDateTime < DateTime.UtcNow)
 		    {
-		        infoMessage = "Updated activity is not within today or tomorow range. Ignoring this update.";
-		        Logger.Info(infoMessage);
+				Logger.Info("Updated activity is not within the range of today or tomorow. Ignoring this update.");
 		        return;
 		    }
 
@@ -91,23 +77,19 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
 			{
 				startTime =
 					_scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.Now, message.PersonId);
-infoMessage = "Next activity start time =" + startTime + " for person "+ message.PersonId;
-                Logger.Info(infoMessage);
+				if (startTime.Date.Equals(new DateTime().Date))
+				{
+					Logger.Info("No next activity found. Ignoring this update");
+					return;
+				}
+				Logger.InfoFormat("Next activity for Person: {0}, StartTime: {1}.", message.PersonId, startTime);
 			}
-
-			if (startTime.Date.Equals(new DateTime().Date))
-				return;
-
+			
 			//send message to the web service.
 			try
 			{
-                infoMessage = "Calling TeleoptiRtaService for person="+ message.PersonId + " at " + DateTime.UtcNow;
-                Logger.Info(infoMessage);
-
                 _teleoptiRtaService.GetUpdatedScheduleChange(message.PersonId, message.BusinessUnitId, DateTime.UtcNow);
-
-                infoMessage = "Message successfully send to TeleoptiRtaService for person= "+ message.PersonId +" at "+ DateTime.UtcNow;
-                Logger.Info(infoMessage);
+				Logger.InfoFormat("Message successfully send to TeleoptiRtaService BU: {0}, Person: {1}, TimeStamp: {2}.", message.BusinessUnitId, message.PersonId, DateTime.UtcNow);
 				
 			}
 			catch (Exception exception)
@@ -122,9 +104,7 @@ infoMessage = "Next activity start time =" + startTime + " for person "+ message
 					PersonId = message.PersonId,
 					Timestamp = DateTime.Now
 				});
-
-            infoMessage = "Delay Message successfully send to Service Bus where startTime ="+ startTime +" for person="+message.PersonId+" and Business Unit at " + message.BusinessUnitId;
-            Logger.Info(infoMessage);
+			Logger.InfoFormat("Delay Message successfully sent to ServiceBus BU: {0}, Person: {1}, SendTime: {2}.", message.BusinessUnitId, message.PersonId, startTime);
 		}
 	}
 }

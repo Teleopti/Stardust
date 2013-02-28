@@ -99,15 +99,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
             var nextActivityDateTime = new DateTime();
 
-            foreach (var activityPeriod in result)
-            {
-                if (activityPeriod.StartDateTime > dateTime)
-                    nextActivityDateTime = activityPeriod.StartDateTime;
-                else
-                    nextActivityDateTime = activityPeriod.EndDateTime;
-            }
+	        foreach (var activityPeriod in result)
+		        nextActivityDateTime = activityPeriod.StartDateTime > dateTime
+			                               ? activityPeriod.StartDateTime
+			                               : activityPeriod.EndDateTime;
 
-            return nextActivityDateTime;
+	        return nextActivityDateTime;
         }
 	}
 
