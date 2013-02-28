@@ -74,6 +74,7 @@
             this.radioButtonBetweenDaysOffAdvScheduling = new System.Windows.Forms.RadioButton();
             this.comboBoxGroupingLevelingPer = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
             this.radioButtonSingleDayAdvScheduling = new System.Windows.Forms.RadioButton();
+            this.btnLevellingPer = new System.Windows.Forms.Button();
             this.tabPageAdvance = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.lblShiftSelection = new System.Windows.Forms.Label();
@@ -94,7 +95,6 @@
             this.checkBoxUseMinimumPersons = new System.Windows.Forms.CheckBox();
             this.checkBoxDoNotBreakMaxSeats = new System.Windows.Forms.CheckBox();
             this.checkBoxUseAverageShiftLengths = new System.Windows.Forms.CheckBox();
-            this.btnLevellingPer = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPageGeneral.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -680,6 +680,7 @@
             this.radioButtonSchedulePeriodAdvScheduling.TabStop = true;
             this.radioButtonSchedulePeriodAdvScheduling.Text = "xxSchedulePeriod";
             this.radioButtonSchedulePeriodAdvScheduling.UseVisualStyleBackColor = true;
+            this.radioButtonSchedulePeriodAdvScheduling.Visible = false;
             // 
             // radioButtonBetweenDaysOffAdvScheduling
             // 
@@ -704,6 +705,7 @@
             this.comboBoxGroupingLevelingPer.Size = new System.Drawing.Size(117, 21);
             this.comboBoxGroupingLevelingPer.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
             this.comboBoxGroupingLevelingPer.TabIndex = 44;
+            this.comboBoxGroupingLevelingPer.Visible = false;
             this.comboBoxGroupingLevelingPer.SelectedIndexChanged += new System.EventHandler(this.comboBoxGroupingLevelingPer_SelectedIndexChanged);
             // 
             // radioButtonSingleDayAdvScheduling
@@ -717,6 +719,16 @@
             this.radioButtonSingleDayAdvScheduling.Text = "xxSingleDay";
             this.radioButtonSingleDayAdvScheduling.UseVisualStyleBackColor = true;
             this.radioButtonSingleDayAdvScheduling.Visible = false;
+            // 
+            // btnLevellingPer
+            // 
+            this.btnLevellingPer.Location = new System.Drawing.Point(165, 78);
+            this.btnLevellingPer.Name = "btnLevellingPer";
+            this.btnLevellingPer.Size = new System.Drawing.Size(91, 23);
+            this.btnLevellingPer.TabIndex = 46;
+            this.btnLevellingPer.Text = "xxLevellingPer";
+            this.btnLevellingPer.UseVisualStyleBackColor = true;
+            this.btnLevellingPer.Click += new System.EventHandler(this.btnLevellingPer_Click);
             // 
             // tabPageAdvance
             // 
@@ -995,16 +1007,6 @@
             this.checkBoxUseAverageShiftLengths.TabIndex = 55;
             this.checkBoxUseAverageShiftLengths.Text = "xxUseAverageShiftLengths";
             this.checkBoxUseAverageShiftLengths.UseVisualStyleBackColor = true;
-            // 
-            // btnLevellingPer
-            // 
-            this.btnLevellingPer.Location = new System.Drawing.Point(165, 78);
-            this.btnLevellingPer.Name = "btnLevellingPer";
-            this.btnLevellingPer.Size = new System.Drawing.Size(91, 23);
-            this.btnLevellingPer.TabIndex = 46;
-            this.btnLevellingPer.Text = "xxLevellingPer";
-            this.btnLevellingPer.UseVisualStyleBackColor = true;
-            this.btnLevellingPer.Click += new System.EventHandler(this.btnLevellingPer_Click);
             // 
             // SchedulingSessionPreferencesTabPanel
             // 
