@@ -4,6 +4,12 @@
 /// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js" />
 
+     
+$(function() {
+    $( "#accordion" ).accordion({
+        collapsible: true
+    });
+});
 
 Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (ajax) {
 	var self = this;
