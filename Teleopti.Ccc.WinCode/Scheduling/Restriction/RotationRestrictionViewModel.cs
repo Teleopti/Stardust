@@ -50,7 +50,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Restriction
         {
             get
             {
-                return ((IRotationRestriction) Restriction).ShiftCategory.Description.Name;
+	            var shiftCategory = ((IRotationRestriction) Restriction).ShiftCategory;
+	            return shiftCategory != null ? shiftCategory.Description.Name : "";
             }
             set { }
         }

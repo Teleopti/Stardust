@@ -7564,6 +7564,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Errors.
+        /// </summary>
+        public static string Errors {
+            get {
+                return ResourceManager.GetString("Errors", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ESL.
         /// </summary>
         public static string ESL {
@@ -22680,6 +22689,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string TheProvidedStringCouldNotBeFormattedToAValidTime {
             get {
                 return ResourceManager.GetString("TheProvidedStringCouldNotBeFormattedToAValidTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The quick forecast will be started as a job in the background when this wizard is finished, look in Job History for status..
+        /// </summary>
+        public static string TheQuickForecatWillStartInBackgroundMessage {
+            get {
+                return ResourceManager.GetString("TheQuickForecatWillStartInBackgroundMessage", resourceCulture);
             }
         }
         

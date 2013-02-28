@@ -30,8 +30,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration.Columns
             _sourceList = sourceList;
             _originalCopy.AddRange(_sourceList);
 
-            _grid.RowCount = 0;
-            _grid.ColCount = 0;
+			_grid.Refresh();
 
             BindEvents();
 

@@ -34,6 +34,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             IScheduleDay schedulePart = scheduleParts[0];
 
             IActivity activity = new Activity("Main");
+			activity.SetId(Guid.NewGuid());
             IPerson person = schedulePart.Person;
             IShiftCategory shiftCategory = new ShiftCategory("TopCat");
             shiftCategory.SetId(Guid.NewGuid());
@@ -120,6 +121,13 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             preference = new PreferenceRestriction();
 				preference.WorkTimeLimitation = new WorkTimeLimitation(null, new TimeSpan(23, 0, 0));
             Assert.IsTrue(_target.CheckIfPreferenceIsValid(preference));
+
+			//Activity
+			preference = new PreferenceRestriction();
+			IActivity activity = new Activity("activity");
+			IActivityRestriction activityRestriction = new ActivityRestriction(activity);
+			preference.AddActivityRestriction(activityRestriction);
+			Assert.IsTrue(_target.CheckIfPreferenceIsValid(preference));
         }
 
         [Test]

@@ -56,6 +56,18 @@
     <Reference Include="Castle.Core">
       <HintPath>..\..\packages\Castle.Core.3.1.0\lib\net40-client\Castle.Core.dll</HintPath>
     </Reference>
+    <Reference Include="DotNetOpenAuth.Core, Version=4.2.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\DotNetOpenAuth.Core.4.2.1.13026\lib\net40-full\DotNetOpenAuth.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetOpenAuth.OpenId, Version=4.2.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\DotNetOpenAuth.OpenId.Core.4.2.1.13026\lib\net40-full\DotNetOpenAuth.OpenId.dll</HintPath>
+    </Reference>
+    <Reference Include="DotNetOpenAuth.OpenId.Provider, Version=4.2.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\DotNetOpenAuth.OpenId.Provider.4.2.1.13026\lib\net40-full\DotNetOpenAuth.OpenId.Provider.dll</HintPath>
+    </Reference>
     <Reference Include="LinFu.DynamicProxy, Version=1.0.4.16035, Culture=neutral, PublicKeyToken=62a6874124340d6e, processorArchitecture=MSIL">
       <HintPath>..\..\packages\LinFu.DynamicProxy.OfficialRelease.1.0.5\lib\net\LinFu.DynamicProxy.dll</HintPath>
     </Reference>
@@ -96,8 +108,15 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Net.Http.2.0.20710.0\lib\net40\System.Net.Http.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.Net.Http.2.0.20710.0\lib\net40\System.Net.Http.WebRequest.dll</HintPath>
+    </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -112,6 +131,8 @@
   <ItemGroup>
     <Compile Include="Areas\MyTime\Core\StudentAvailability\Mapping\StudentAvailabilityAndScheduleDayViewModelMappingTest.cs" />
     <Compile Include="Areas\MyTime\Models\StudentAvailability\StudentAvailabilityDayFormTest.cs" />
+    <Compile Include="Areas\SSO\Contollers\OpenIdControllerTest.cs" />
+    <Compile Include="Areas\SSO\OpenIdProviderWapperTest.cs" />
     <Compile Include="Areas\Start\Controllers\ApplicationAuthenticationApiControllerTest.cs" />
     <Compile Include="Areas\Start\Core\Authentication\ViewModelFactory\BusinessUnitsViewModelFactoryTest.cs" />
     <Compile Include="Areas\Start\Core\AuthenticationModelBinderTest.cs" />
@@ -119,6 +140,7 @@
     <Compile Include="Areas\Anywhere\Hubs\ScheduleHubTest.cs" />
     <Compile Include="Areas\Anywhere\AnywhereAreaRegistrationTest.cs" />
     <Compile Include="Areas\Anywhere\Controllers\ApplicationControllerTest.cs" />
+    <Compile Include="Areas\SSO\SSOAreaRegistrationTest.cs" />
     <Compile Include="Areas\MobileReports\Core\DefinedReportsTest.cs" />
     <Compile Include="Areas\MobileReports\Core\Mappings\ReportGenerationViewModelMappingTest.cs" />
     <Compile Include="Areas\MobileReports\Core\Providers\DefinedReportProviderTest.cs" />
@@ -348,7 +370,7 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Teleopti.Ccc.AgentPortalWebTest.dll.Config">
+    <None Include="Teleopti.Ccc.WebTest.dll.Config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </None>
