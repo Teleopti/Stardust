@@ -1037,7 +1037,8 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                                       IList<IScheduleMatrixPro> selectedPersonMatrixList,
 			IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization)
         {
-            var dynamicBlockFinder = new DynamicBlockFinder(schedulingOptions, _stateHolder, selectedPersonMatrixList);
+            //var dynamicBlockFinder = new DynamicBlockFinder(schedulingOptions, _stateHolder, selectedPersonMatrixList);
+		    var dynamicBlockFinder = new DynamicBlockFinder();
             var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true,
                                                                         schedulingOptions.ConsiderShortBreaks);
             ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService =
@@ -1047,16 +1048,24 @@ namespace Teleopti.Ccc.Win.Scheduling
             var teamScheduling = new TeamScheduling(resourceCalculateDelayer, schedulePartModifyAndRollbackService);
             IGroupPersonBuilderBasedOnContractTime groupPersonBuilderBasedOnContractTime =
                 new GroupPersonBuilderBasedOnContractTime(_container.Resolve<IGroupPersonFactory>());
-            var advanceSchedulingService = new AdvanceSchedulingService(_container.Resolve<ISkillDayPeriodIntervalDataGenerator>(),
-                                                                        dynamicBlockFinder,
-                                                                        _container.Resolve<IRestrictionAggregator>(),
-                                                                        _container.Resolve<IWorkShiftFilterService>(),
-                                                                        teamScheduling,
-                                                                        schedulingOptions, 
-																		_container.Resolve<IWorkShiftSelector>(),
-                                                                        groupPersonBuilderBasedOnContractTime, 
-																		groupPersonBuilderForOptimization,
-																		new TeamInfoCreator(groupPersonBuilderForOptimization));
+		    IWorkShiftSelector workShiftSelector=null;
+		    ITeamInfoCreator teamInfoCreator = new TeamInfoCreator(groupPersonBuilderForOptimization );
+		    ITeamBlockInfoFactory teamBlockInfoFactory = new TeamBlockInfoFactory(dynamicBlockFinder);
+		    var advanceSchedulingService =
+		        new AdvanceSchedulingService(_container.Resolve<ISkillDayPeriodIntervalDataGenerator>(),
+		                                     _container.Resolve<IRestrictionAggregator>(),
+		                                     _container.Resolve<IWorkShiftFilterService>(), teamScheduling, schedulingOptions,
+		                                     workShiftSelector, teamInfoCreator, teamBlockInfoFactory);
+            //var advanceSchedulingService = new AdvanceSchedulingService(_container.Resolve<ISkillDayPeriodIntervalDataGenerator>(),
+            //                                                            dynamicBlockFinder,
+            //                                                            _container.Resolve<IRestrictionAggregator>(),
+            //                                                            _container.Resolve<IWorkShiftFilterService>(),
+            //                                                            teamScheduling,
+            //                                                            schedulingOptions, 
+            //                                                            _container.Resolve<IWorkShiftSelector>(),
+            //                                                            groupPersonBuilderBasedOnContractTime, 
+            //                                                            groupPersonBuilderForOptimization,
+            //                                                            new TeamInfoCreator(groupPersonBuilderForOptimization));
             return advanceSchedulingService;
         }
 
@@ -1111,7 +1120,9 @@ namespace Teleopti.Ccc.Win.Scheduling
                 IDictionary<string, IWorkShiftFinderResult> schedulingResults = new Dictionary<string, IWorkShiftFinderResult>();
 
                 advanceSchedulingService.DayScheduled += schedulingServiceDayScheduled;
-                advanceSchedulingService.Execute2(schedulingResults, allPersonMatrixList, selectedPersonMatrixList, teamSteadyStateHolder);
+                advanceSchedulingService.Execute3(allPersonMatrixList, allPersonMatrixList[0].SelectedPeriod,
+                                                  selectedPersonMatrixList.Select(x => x.Person).ToList(),
+                                                  teamSteadyStateHolder);
 				advanceSchedulingService.DayScheduled -= schedulingServiceDayScheduled;
 
 				//if (schedulingOptions.RotationDaysOnly)

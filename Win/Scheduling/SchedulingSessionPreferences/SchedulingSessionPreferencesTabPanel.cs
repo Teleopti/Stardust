@@ -294,6 +294,10 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             _schedulingOptions.UseCommonActivity = _localSchedulingOptions.UseCommonActivity;
             _schedulingOptions.CommonActivity = _localSchedulingOptions.CommonActivity;
         	_schedulingOptions.UseAverageShiftLengths = _localSchedulingOptions.UseAverageShiftLengths;
+            _schedulingOptions.UseLevellingSameEndTime = _localSchedulingOptions.UseLevellingSameEndTime;
+            _schedulingOptions.UseLevellingSameShift = _localSchedulingOptions.UseLevellingSameShift;
+            _schedulingOptions.UseLevellingSameShiftCategory = _localSchedulingOptions.UseLevellingSameShiftCategory;
+            _schedulingOptions.UseLevellingSameStartTime = _localSchedulingOptions.UseLevellingSameStartTime;
         }
 
         private void getDataFromControls()
@@ -345,7 +349,6 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			_localSchedulingOptions.UseGroupScheduling = checkBoxUseGroupScheduling.Checked;
         	_localSchedulingOptions.GroupOnGroupPage = (IGroupPageLight)comboBoxGrouping.SelectedItem;
             //_localSchedulingOptions.GroupOnGroupPageForLevelingPer  = (IGroupPageLight)comboBoxGroupingLevelingPer .SelectedItem;
-			_localSchedulingOptions.GroupPageForShiftCategoryFairness = (IGroupPageLight)comboBoxGroupingFairness.SelectedItem;
 			_localSchedulingOptions.DoNotBreakMaxStaffing = checkBoxDoNotBreakMaxSeats.Checked;
         	_localSchedulingOptions.UseMaxSeats = checkBoxUseMaxSeats.Checked;
         	_localSchedulingOptions.DoNotBreakMaxSeats = checkBoxDoNotBreakMaxSeats.Checked;
@@ -757,6 +760,10 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             levellingPerConfiguration._selectedBlockFinderType =
                 _localSchedulingOptions.BlockFinderTypeForAdvanceScheduling;
             levellingPerConfiguration._selectedGroupPage = _localSchedulingOptions.GroupOnGroupPageForLevelingPer;
+            levellingPerConfiguration._UseSameEndTime = _localSchedulingOptions.UseLevellingSameEndTime;
+            levellingPerConfiguration._UseSameShiftCategory = _localSchedulingOptions.UseLevellingSameShiftCategory;
+            levellingPerConfiguration._UseSameStartTime = _localSchedulingOptions.UseLevellingSameStartTime;
+            levellingPerConfiguration._UserSameShift = _localSchedulingOptions.UseLevellingSameShift;
             
                 
             var levellingPerPrefrences = new LevellingPerPrefrences(levellingPerConfiguration, _groupPagesLevelingPer);

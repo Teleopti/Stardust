@@ -103,6 +103,13 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 
         public BlockFinderType _selectedBlockFinderType;
 
+        public bool _UserSameShift;
+
+        public bool _UseSameStartTime;
+
+        public bool _UseSameEndTime;
+
+        public bool _UseSameShiftCategory;
 
     }
 }

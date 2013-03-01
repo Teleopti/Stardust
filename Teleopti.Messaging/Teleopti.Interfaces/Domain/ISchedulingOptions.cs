@@ -350,5 +350,25 @@ namespace Teleopti.Interfaces.Domain
         /// Group page to be used for leveling oer
         /// </summary>
         IGroupPageLight GroupOnGroupPageForLevelingPer { get; set; }
+
+        /// <summary>
+        /// Used in levelling per same end time
+        /// </summary>
+        bool UseLevellingSameEndTime { get; set; }
+
+        /// <summary>
+        /// Used in levelling per same shift category
+        /// </summary>
+        bool UseLevellingSameShiftCategory { get; set; }
+
+        /// <summary>
+        /// Used in levelling per same start time
+        /// </summary>
+        bool UseLevellingSameStartTime { get; set; }
+
+        /// <summary>
+        /// Used in levelling per same shift
+        /// </summary>
+        bool UseLevellingSameShift { get; set; }
     }
 }
