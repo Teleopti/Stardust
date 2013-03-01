@@ -74,12 +74,6 @@
     <Reference Include="Microsoft.AspNet.SignalR.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.AspNet.SignalR.Core.1.0.1\lib\net40\Microsoft.AspNet.SignalR.Core.dll</HintPath>
     </Reference>
-    <Reference Include="MvcContrib.TestHelper, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\MvcContrib.Mvc3.TestHelper-ci.3.0.100.0\lib\MvcContrib.TestHelper.dll</HintPath>
-    </Reference>
-    <Reference Include="MvcContrib.TestHelper.WatiN, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\MvcContrib.Mvc3.WatiN-ci.3.0.100.0\lib\MvcContrib.TestHelper.WatiN.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -105,9 +99,6 @@
     <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Microsoft.AspNet.Mvc.4.0.20710.0\lib\net40\System.Web.Mvc.dll</HintPath>
-    </Reference>
-    <Reference Include="WatiN.Core, Version=1.3.0.4000, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\MvcContrib.Mvc3.WatiN-ci.3.0.100.0\lib\WatiN.Core.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -216,6 +207,19 @@
     <Compile Include="Areas\MobileReports\MobileReportsAreaRegistrationTest.cs" />
     <Compile Include="Areas\MyTime\Core\HtmlHelperExtensionTest.cs" />
     <Compile Include="Areas\Start\Core\HtmlHelperExtensionTest.cs" />
+    <Compile Include="TestHelper\FakeHttpContext.cs" />
+    <Compile Include="TestHelper\FakeHttpRequest.cs" />
+    <Compile Include="TestHelper\FakeHttpResponse.cs" />
+    <Compile Include="TestHelper\FakeHttpSessionState.cs" />
+    <Compile Include="TestHelper\FirstAvailableMockFactory.cs" />
+    <Compile Include="TestHelper\IMockFactory.cs" />
+    <Compile Include="TestHelper\IMockProxy.cs" />
+    <Compile Include="TestHelper\IWriteableHttpFileCollection.cs" />
+    <Compile Include="TestHelper\MockSession.cs" />
+    <Compile Include="TestHelper\RhinoMocksFactory.cs" />
+    <Compile Include="TestHelper\RhinoMocksProxy.cs" />
+    <Compile Include="TestHelper\TestControllerBuilder.cs" />
+    <Compile Include="TestHelper\WriteableHttpFileCollection.cs" />
     <Compile Include="TestRouteBuilder.cs" />
     <Compile Include="TestUrlHelperBuilder.cs" />
     <Compile Include="TestHttpContextBuilder.cs" />
