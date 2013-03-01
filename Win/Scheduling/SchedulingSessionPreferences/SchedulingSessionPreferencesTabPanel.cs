@@ -740,8 +740,8 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             comboBoxGroupingLevelingPer.Enabled = checkBoxLevellingPerBlockScheduling.Checked;
             checkBoxUseGroupScheduling.Enabled  = !checkBoxLevellingPerBlockScheduling.Checked;
             checkBoxUseBlockScheduling.Enabled = !checkBoxLevellingPerBlockScheduling.Checked;
-           
-                
+            btnLevellingPer.Enabled = checkBoxLevellingPerBlockScheduling.Checked;
+
         }
 
         private void comboBoxGroupingLevelingPer_SelectedIndexChanged(object sender, EventArgs e)
@@ -777,6 +777,10 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             _localSchedulingOptions.BlockFinderTypeForAdvanceScheduling =
                 _levellingConfiguartion._selectedBlockFinderType;
             _localSchedulingOptions.GroupOnGroupPageForLevelingPer = _levellingConfiguartion._selectedGroupPage;
+            _localSchedulingOptions.UseLevellingSameEndTime = _levellingConfiguartion._UseSameEndTime;
+            _localSchedulingOptions.UseLevellingSameShift = _levellingConfiguartion._UserSameShift;
+            _localSchedulingOptions.UseLevellingSameShiftCategory = _levellingConfiguartion._UseSameShiftCategory;
+            _localSchedulingOptions.UseLevellingSameStartTime = _levellingConfiguartion._UseSameStartTime;
 
         }
     }

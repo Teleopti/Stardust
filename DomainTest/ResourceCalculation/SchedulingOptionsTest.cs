@@ -134,6 +134,29 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         }
 
         [Test]
+        public void VerifyPreferenceToBeSavedForLevelling()
+        {
+            _target.UseLevellingSameEndTime  = true;
+            _target.UseLevellingSameShift = true;
+            _target.UseLevellingSameStartTime = true;
+            _target.UseLevellingSameShiftCategory = true;
+            Assert.IsTrue(_target.UseLevellingSameEndTime );
+            Assert.IsTrue(_target.UseLevellingSameShift );
+            Assert.IsTrue(_target.UseLevellingSameShiftCategory );
+            Assert.IsTrue(_target.UseLevellingSameStartTime );
+
+
+            _target.UseLevellingSameEndTime = false;
+            _target.UseLevellingSameShift = false;
+            _target.UseLevellingSameStartTime = false;
+            _target.UseLevellingSameShiftCategory = false;
+            Assert.IsFalse(_target.UseLevellingSameEndTime);
+            Assert.IsFalse(_target.UseLevellingSameShift);
+            Assert.IsFalse(_target.UseLevellingSameShiftCategory);
+            Assert.IsFalse(_target.UseLevellingSameStartTime);
+        }
+
+        [Test]
         public void VerifyClone()
         {
             ISchedulingOptions cloned = _target.Clone() as ISchedulingOptions;

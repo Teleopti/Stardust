@@ -44,6 +44,15 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
                     radioButtonSchedulePeriod.Checked = true;
                     break;
             }
+
+	        radioButtonSameShifts.Checked = _levellingPerConfiguration._UserSameShift;
+	        radioButtonSame.Checked = _levellingPerConfiguration._UseSameEndTime ||
+	                                  _levellingPerConfiguration._UseSameStartTime ||
+	                                  _levellingPerConfiguration._UseSameShiftCategory;
+
+	        checkBoxShiftCategory.Checked  = _levellingPerConfiguration._UseSameShiftCategory;
+	        checkBoxEndTime.Checked = _levellingPerConfiguration._UseSameEndTime;
+	        checkBoxStartTime.Checked = _levellingPerConfiguration._UseSameStartTime;
 	    }
 
 
@@ -54,7 +63,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 
 		private void radioButton5_CheckedChanged(object sender, EventArgs e)
 		{
-			panelSame.Enabled = radioButton5.Checked;
+			panelSame.Enabled = radioButtonSame.Checked;
 		}
 
 		private void button1_Click(object sender, EventArgs e)
@@ -77,7 +86,14 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
                 levelling._selectedGroupPage = null;
 
 		    _levellingPerConfiguration = levelling;
+
+		    _levellingPerConfiguration._UseSameEndTime = checkBoxEndTime.Checked;
+		    _levellingPerConfiguration._UseSameShiftCategory = checkBoxShiftCategory.Checked;
+		    _levellingPerConfiguration._UseSameStartTime = checkBoxStartTime.Checked;
+		    _levellingPerConfiguration._UserSameShift = radioButtonSameShifts.Checked;
+
             Close();
+
 		}
 
 	    public LevellingPerConfiguration UpdatedLevellingPerConfiguration

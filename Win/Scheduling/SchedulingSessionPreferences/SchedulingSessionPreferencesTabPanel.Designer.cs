@@ -722,6 +722,7 @@
             // 
             // btnLevellingPer
             // 
+            this.btnLevellingPer.Enabled = false;
             this.btnLevellingPer.Location = new System.Drawing.Point(165, 78);
             this.btnLevellingPer.Name = "btnLevellingPer";
             this.btnLevellingPer.Size = new System.Drawing.Size(91, 23);
