@@ -16,7 +16,8 @@ GO
 --				For Schedule the stage table will only contain "full UTC-day". Revert back to full delete in fact table.
 --				Found possible logical error when using min_date, max_date. Removed for now. Always load/delete full period
 -- 2009-02-09	Stage moved to mart db, removed view KJ
--- 2009-02-11 New mart schema KJ
+-- 2009-02-11	New mart schema KJ
+-- 2013-03-01	Removed ABS() calculation from relative difference calculation KJ
 -- =============================================
 
 CREATE PROCEDURE [mart].[etl_fact_schedule_forecast_skill_load] 
@@ -125,7 +126,7 @@ SELECT
 	scheduled_resources						= f.scheduled_resources, 
 	scheduled_resources_m					= f.scheduled_resources_incl_shrinkage_m, 
 	scheduled_resources						= f.scheduled_resources_incl_shrinkage, 
-	intraday_deviation_m					= abs(isnull(f.scheduled_resources_m,0) - isnull(f.forecasted_resources_m,0)), 
+	intraday_deviation_m					= isnull(f.scheduled_resources_m,0) - isnull(f.forecasted_resources_m,0), --2013-03-01 Removed ABS() calculation KJ
 	business_unit_id						= dsk.business_unit_id,
 	datasource_id							= f.datasource_id, 
 	update_date								= f.update_date
