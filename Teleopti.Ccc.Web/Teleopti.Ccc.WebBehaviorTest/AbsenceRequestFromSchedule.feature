@@ -106,11 +106,13 @@ Scenario: Switch request type
 	Then I should see my existing inputs for date '2013-10-03'
 	And I should see an absence type called Vacation in droplist
 
+@ignore
 Scenario: Do not show indication of the amount of agents that can go on holiday if no permission to absence request
 	Given I have the role 'No access to absence requests'
 	When I view my week schedule for date '2013-02-15'
 	Then I should not see any indication of how many agents can go on holiday
 
+@ignore
 Scenario: Show number of agents that can go on holiday
 	Given I have the role 'Full access to mytime'
 	When I view my week schedule for date '2013-02-15'
