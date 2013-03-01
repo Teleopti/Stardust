@@ -1,4 +1,7 @@
 using System;
+using System.Dynamic;
+using System.Linq;
+using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -71,7 +74,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			personScheduleViewModelMapper.AssertWasCalled(x => x.Map(Arg<PersonScheduleData>.Matches(s => MatchDynamic(s))));
 		}
 
-		private static bool MatchDynamic(PersonScheduleData s) { return s.Shift.FirstName == "Pierre"; }
+		private static bool MatchDynamic(PersonScheduleData s)
+		{
+			return s.Shift is ExpandoObject && s.Shift.FirstName == "Pierre";
+		}
 
 		[Test]
 		public void ShouldCreateViewModelUsingMapping()

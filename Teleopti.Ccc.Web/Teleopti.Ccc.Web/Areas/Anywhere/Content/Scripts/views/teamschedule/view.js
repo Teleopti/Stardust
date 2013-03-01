@@ -6,6 +6,7 @@ define([
 		'swipeListener',
 		'moment',
 		'subscriptions',
+		'helpers',
 		'views/teamschedule/vm',
 		'views/teamschedule/timeline',
 		'views/teamschedule/agent',
@@ -19,6 +20,7 @@ define([
 		swipeListener,
 		momentX,
 		subscriptions,
+		helpers,
 		teamScheduleViewModel,
 		timeLineViewModel,
 		agentViewModel,
@@ -67,14 +69,12 @@ define([
 
 				var initialLoad = true;
 				var loadSchedules = function () {
-					var queryDate = teamSchedule.SelectedDate().clone();
-					queryDate.utc();
-
+					
 					teamSchedule.isLoading(true);
 
 					subscriptions.subscribeTeamSchedule(
 						teamSchedule.SelectedTeam().Id,
-						queryDate.toDate(),
+						helpers.Date.AsUTCDate(teamSchedule.SelectedDate().toDate()),
 						function (schedules) {
 							var currentAgents = agents.Agents();
 

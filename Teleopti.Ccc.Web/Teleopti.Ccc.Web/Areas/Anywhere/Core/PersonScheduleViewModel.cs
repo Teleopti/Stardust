@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 {
@@ -13,5 +14,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 	public class PersonScheduleViewModelLayer
 	{
 		public string Color { get; set; }
+		public DateTime Start { get; set; }
+		public int Minutes { get; set; }
 	}
 }

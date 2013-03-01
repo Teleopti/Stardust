@@ -3,11 +3,13 @@ define([
 		'knockout',
 		'views/personschedule/vm',
 		'subscriptions',
+		'helpers',
 		'text!templates/personschedule/view.html'
 	], function (
 		ko,
 		personScheduleViewModel,
 		subscriptions,
+		helpers,
 		view
 	) {
 
@@ -21,7 +23,7 @@ define([
 			.resize(resize)
 			.bind('orientationchange', resize)
 			.ready(resize);
-		
+
 		return {
 			display: function (options) {
 
@@ -32,7 +34,7 @@ define([
 
 				subscriptions.subscribePersonSchedule(
 					options.id,
-					personSchedule.Date().toDate(),
+					helpers.Date.AsUTCDate(personSchedule.Date().toDate()),
 					function (data) {
 						personSchedule.SetData(data);
 					}

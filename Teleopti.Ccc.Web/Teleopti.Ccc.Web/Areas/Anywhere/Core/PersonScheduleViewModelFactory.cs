@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Dynamic;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -27,7 +28,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 					PersonScheduleDayReadModel = _personScheduleDayReadModelRepository.ForPerson(new DateOnly(date), personId)
 				};
 			if (data.PersonScheduleDayReadModel != null && data.PersonScheduleDayReadModel.Shift != null)
-				data.Shift = Newtonsoft.Json.JsonConvert.DeserializeObject(data.PersonScheduleDayReadModel.Shift);
+				data.Shift = Newtonsoft.Json.JsonConvert.DeserializeObject<ExpandoObject>(data.PersonScheduleDayReadModel.Shift);
 			return _personScheduleViewModelMapper.Map(data);
 		}
 	}
