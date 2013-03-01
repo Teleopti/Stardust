@@ -178,6 +178,7 @@
     <Compile Include="Areas\Anywhere\Core\PersonScheduleViewModel.cs" />
     <Compile Include="Areas\Anywhere\Core\PersonScheduleViewModelFactory.cs" />
     <Compile Include="Areas\Anywhere\Core\PersonScheduleViewModelMapper.cs" />
+    <Compile Include="Areas\Anywhere\Core\PersonScheduleViewModelMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IPossibleShiftTradePersonsProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\PossibleShiftTradePersonsProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IShiftTradeResponseService.cs" />

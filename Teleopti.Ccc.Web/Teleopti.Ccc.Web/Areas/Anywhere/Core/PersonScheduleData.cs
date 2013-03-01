@@ -9,5 +9,6 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		public DateTime Date { get; set; }
 		public IPerson Person { get; set; }
 		public PersonScheduleDayReadModel PersonScheduleDayReadModel { get; set; }
+		public dynamic Shift { get; set; }
 	}
 }
