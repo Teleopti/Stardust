@@ -46,10 +46,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 
 			if (_schedulingOptions.UseScheduling)
 			{
-				if (scheduleDay.SignificantPart().Equals(SchedulePartView.MainShift)) totalRestriction = ExtractOnMainShift(scheduleDay, preferenceCellData);
-				if (scheduleDay.SignificantPart().Equals(SchedulePartView.DayOff)) totalRestriction = ExtractOnDayOff(scheduleDay, preferenceCellData);
-				if (scheduleDay.SignificantPart().Equals(SchedulePartView.FullDayAbsence)) totalRestriction = ExtractFullDayAbsence(scheduleDay, preferenceCellData);
-				if (scheduleDay.SignificantPart().Equals(SchedulePartView.ContractDayOff)) totalRestriction = ExtractFullDayAbsence(scheduleDay, preferenceCellData);
+				if (scheduleDay.SignificantPartForDisplay().Equals(SchedulePartView.MainShift)) totalRestriction = ExtractOnMainShift(scheduleDay, preferenceCellData);
+				if (scheduleDay.SignificantPartForDisplay().Equals(SchedulePartView.DayOff)) totalRestriction = ExtractOnDayOff(scheduleDay, preferenceCellData);
+				if (scheduleDay.SignificantPartForDisplay().Equals(SchedulePartView.FullDayAbsence)) totalRestriction = ExtractFullDayAbsence(scheduleDay, preferenceCellData);
+				if (scheduleDay.SignificantPartForDisplay().Equals(SchedulePartView.ContractDayOff)) totalRestriction = ExtractFullDayAbsence(scheduleDay, preferenceCellData);
 			}
 
 			SetTotalRestriction(scheduleDay, totalRestriction, preferenceCellData);
@@ -88,11 +88,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
             var timeSpan = period.Value.ElapsedTime();
             var startTimeLimitation = new StartTimeLimitation(null, null);
             var endTimeLimitation = new EndTimeLimitation(null, null);
-			var virtualSchedulePeriod = scheduleDay.Person.VirtualSchedulePeriod(scheduleDay.DateOnlyAsPeriod.DateOnly);
-			var schedulePeriodStart = scheduleDay.Person.SchedulePeriodStartDate(scheduleDay.DateOnlyAsPeriod.DateOnly);
+			
+			if (scheduleDay.SignificantPartForDisplay() == SchedulePartView.ContractDayOff) preferenceCellData.HasAbsenceOnContractDayOff = true;
 
-			if (virtualSchedulePeriod.IsValid && schedulePeriodStart.HasValue) preferenceCellData.HasAbsenceOnContractDayOff = !virtualSchedulePeriod.ContractSchedule.IsWorkday(schedulePeriodStart.Value, scheduleDay.DateOnlyAsPeriod.DateOnly);
-            
             WorkTimeLimitation workTimeLimitation;
 			if (preferenceCellData.HasAbsenceOnContractDayOff)workTimeLimitation = new WorkTimeLimitation(TimeSpan.Zero, TimeSpan.Zero);
             else workTimeLimitation = new WorkTimeLimitation(timeSpan, timeSpan);
@@ -110,7 +108,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 			preferenceCellData.HasFullDayAbsence = true;
 			preferenceCellData.ShiftLengthScheduledShift = TimeHelper.GetLongHourMinuteTimeString(projection.ContractTime(),TeleoptiPrincipal.Current.Regional.Culture);
 			preferenceCellData.StartEndScheduledShift = period.Value.TimePeriod(TeleoptiPrincipal.Current.Regional.TimeZone).ToShortTimeString(TeleoptiPrincipal.Current.Regional.Culture);
-            
+
             return totalRestriction;
 		}
 
