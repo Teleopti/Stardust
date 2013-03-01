@@ -16,36 +16,29 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 	[Binding]
 	public class ShiftTradeRequestsPageStepDefinition
 	{
-		[Then(@"I should not see the Create Shift Trade Request button")]
-		public void ThenIShouldNotSeeTheCreateShiftTradeRequestButton()
-		{
-			EventualAssert.That(() => Pages.Pages.RequestsPage.AddShiftTradeRequestButton.SafeExists(), Is.False);
-		}
-
-		[Then(@"I should not see the Requests button")]
-		public void ThenIShouldNotSeeTheRequestsButton()
-		{
-			EventualAssert.That(() => Pages.Pages.RequestsPage.ShowRequestsButton.SafeExists(), Is.False);
-		}
-
 		[When(@"I view Add Shift Trade Request")]
 		public void WhenIViewAddShiftTradeRequest()
 		{
-			TestControllerMethods.Logon();
-			Navigation.GotoRequests();
-			Pages.Pages.RequestsPage.ShiftTradeRequestsButton.EventualClick();
+			gotoAddRequestToday();
 		}
 
 		[When(@"I view Add Shift Trade Request for date '(.*)'")]
 		public void WhenIViewAddShiftTradeRequestForDate(DateTime date)
 		{
-			TestControllerMethods.Logon();
-			Navigation.GotoRequests();
-			Pages.Pages.RequestsPage.ShiftTradeRequestsButton.EventualClick();
+			gotoAddRequestToday();
 			var dateAsSwedishString = date.ToShortDateString(CultureInfo.GetCultureInfo("sv-SE"));
 			var script = string.Format("Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.SetShiftTradeRequestDate('{0}');", dateAsSwedishString);
 			Browser.Current.Eval(script);
 			EventualAssert.That(() => Pages.Pages.Current.Document.Span(Find.ById("Request-add-loaded-date")).Text, Is.EqualTo(dateAsSwedishString));
+		}
+
+		private static void gotoAddRequestToday()
+		{
+			TestControllerMethods.Logon();
+			Navigation.GotoRequests();
+			Pages.Pages.RequestsPage.AddRequestDropDown.EventualClick();
+			Pages.Pages.RequestsPage.AddShiftTradeRequestMenuItem.EventualClick();
+			EventualAssert.That(() => string.IsNullOrEmpty(Pages.Pages.Current.Document.Span(Find.ById("Request-add-loaded-date")).Text), Is.False);
 		}
 
 		[Then(@"I should see a message text saying I am missing a workflow control set")]
@@ -67,6 +60,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 
 			EventualAssert.That(() => Pages.Pages.RequestsPage.MyScheduleLayers.Any(), Is.True);
 			EventualAssert.That(() => Pages.Pages.RequestsPage.MyScheduleLayers[0].Title, Contains.Substring(expectedTimes));
+		}
+
+		[Then(@"I should see a possible schedule trade with")]
+		public void ThenIShouldSeeAPossibleScheduleTradeWith(Table table)
+		{
+			var expectedTimes = table.Rows[0][1] + "-" + table.Rows[1][1];
+
+
+			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeScheduleLayers.Any(), Is.True);
+			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeScheduleLayers[0].Title, Contains.Substring(expectedTimes));
 		}
 
 		[Then(@"the selected date should be '(.*)'")]
@@ -100,6 +103,45 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		{
 			EventualAssert.That(() => Pages.Pages.RequestsPage.MyScheduleLayers.Count, Is.EqualTo(1));
 			EventualAssert.That(() => Pages.Pages.RequestsPage.MyScheduleLayers.First().Span(Find.First()).Text, Is.EqualTo(dayOffName));
+		}
+
+		[Then(@"I should see details with a schedule from")]
+		public void ThenIShouldSeeDetailsWithAScheduleFrom(Table table)
+		{
+			var expectedStart = table.Rows[0][1];
+			var expectedEnd = table.Rows[1][1];
+
+			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeDetailsFromScheduleLayers.Any(), Is.True);
+			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeDetailsFromScheduleLayers.First().Title, Contains.Substring(expectedStart));
+			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeDetailsFromScheduleLayers.Last().Title, Contains.Substring(expectedEnd));
+		}
+
+		[Then(@"I should see details with a schedule to")]
+		public void ThenIShouldSeeDetailsWithAScheduleTo(Table table)
+		{
+			
+			var expectedStart = table.Rows[0][1];
+			var expectedEnd = table.Rows[1][1];
+
+			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeDetailsToScheduleLayers.Any(), Is.True);
+			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeDetailsToScheduleLayers.First().Title, Contains.Substring(expectedStart));
+			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeDetailsToScheduleLayers.Last().Title, Contains.Substring(expectedEnd));
+
+		}
+
+		[Then(@"I should see details with subject '(.*)'")]
+		public void ThenIShouldSeeDetailsWithSubject(string subject)
+		{
+			
+			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeRequestDetailSubject.Text, Is.EqualTo(subject));
+
+		}
+
+		[Then(@"I should see details with message '(.*)'")]
+		public void ThenIShouldSeeDetailsWithMessage(string message)
+		{
+			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeRequestDetailMessage.Text, Is.EqualTo(message));
+
 		}
 
 	}

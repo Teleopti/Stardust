@@ -208,66 +208,87 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldGetLayersForMySchedule()
 		{
 			var modelFactory = MockRepository.GenerateMock<IRequestsViewModelFactory>();
-			var layer = new ShiftTradeScheduleLayerViewModel
-			            	{
-			            		Payload = "phone",
-			            		Color = "green",
-			            		StartTimeText = "9:00",
-			            		EndTimeText = "15:00",
-			            		LengthInMinutes = 360,
-			            		ElapsedMinutesSinceShiftStart = 30
-			            	};
-			var model = new ShiftTradeScheduleViewModel
-							{
-								MySchedule = new ShiftTradePersonScheduleViewModel { ScheduleLayers = new List<ShiftTradeScheduleLayerViewModel> { layer } }
-							};
-
-			modelFactory.Stub(x => x.CreateShiftTradeScheduleViewModel(Arg<DateTime>.Is.Anything)).Return(model);
+			var date = DateTime.Now;
+			var model = new ShiftTradeScheduleViewModel();
+			modelFactory.Stub(x => x.CreateShiftTradeScheduleViewModel(date)).Return(model);
 
 			var target = new RequestsController(modelFactory, null, null, null);
-			
-			var result = target.ShiftTradeRequestSchedule(DateTime.Now);
-			var scheduleViewModel = (ShiftTradeScheduleViewModel) result.Data;
-
-			var createdLayer = scheduleViewModel.MySchedule.ScheduleLayers.FirstOrDefault();
-			createdLayer.Payload.Should().Be.EqualTo(layer.Payload);
-			createdLayer.Color.Should().Be.EqualTo(layer.Color);
-			createdLayer.StartTimeText.Should().Be.EqualTo(layer.StartTimeText);
-			createdLayer.EndTimeText.Should().Be.EqualTo(layer.EndTimeText);
-			createdLayer.LengthInMinutes.Should().Be.EqualTo(layer.LengthInMinutes);
-			createdLayer.ElapsedMinutesSinceShiftStart.Should().Be.EqualTo(layer.ElapsedMinutesSinceShiftStart);
-
+			var result = target.ShiftTradeRequestSchedule(date);
+			result.Data.Should().Be.SameInstanceAs(model);
 		}
 		
 		[Test]
-		public void ApproveShiftTradeRequest()
+		public void ShouldApproveShiftTradeRequest()
 		{
-
 			var id = Guid.NewGuid();
-			var shiftTradePersister = MockRepository.GenerateStrictMock<IShiftTradeResponseService>();
-			shiftTradePersister.Expect(a => a.OkByMe(id)).Repeat.Once();
+			var resultData = new RequestViewModel();
+			var shiftTradePersister = MockRepository.GenerateStrictMock<IRespondToShiftTrade>();
+			shiftTradePersister.Expect(a => a.OkByMe(id)).Return(resultData);
 
 			using (var target = new RequestsController(null, null, null, shiftTradePersister))
 			{
-				target.ApproveShiftTrade(id);
+				var result = target.ApproveShiftTrade(id);
+				var data = result.Data as RequestViewModel;
+				data.Should().Be.SameInstanceAs(resultData);
 			}
 
 			shiftTradePersister.VerifyAllExpectations();
 		}
 
 		[Test]
-		public void RejectShiftTradeRequest()
+		public void ShouldDenyShiftTradeRequest()
 		{
 			var id = Guid.NewGuid();
-			var shiftTradePersister = MockRepository.GenerateStrictMock<IShiftTradeResponseService>();
-			shiftTradePersister.Expect(a => a.Reject(id)).Repeat.Once();
+			var resultData = new RequestViewModel();
+			var shiftTradePersister = MockRepository.GenerateStrictMock<IRespondToShiftTrade>();
+			shiftTradePersister.Expect(a => a.Deny(id)).Return(resultData);
 
 			using (var target = new RequestsController(null, null, null, shiftTradePersister))
 			{
-				target.RejectShiftTrade(id);
+				var result = target.DenyShiftTrade(id);
+				var data = result.Data as RequestViewModel;
+				data.Should().Be.SameInstanceAs(resultData);
 			}
 
 			shiftTradePersister.VerifyAllExpectations();
+		}
+
+		[Test]
+		public void ShouldGetShiftTradeDetails()
+		{
+			var id = Guid.NewGuid();
+			var requestViewModelFactory = MockRepository.GenerateMock<IRequestsViewModelFactory>();
+			var shiftTradeSwapDetails = new ShiftTradeSwapDetailsViewModel
+				{
+														 From =  new ShiftTradePersonScheduleViewModel
+															 {
+																         ScheduleLayers = new List<ShiftTradeScheduleLayerViewModel>(),
+																			DayOffText = "DO",
+																			HasUnderlyingDayOff = false,
+																			MinutesSinceTimeLineStart = 60,
+																			Name="xxx"
+															         },
+														 To =  new ShiftTradePersonScheduleViewModel
+															 {
+																		 ScheduleLayers = new List<ShiftTradeScheduleLayerViewModel>(),
+																		 DayOffText = "DO",
+																		 HasUnderlyingDayOff = false,
+																		 MinutesSinceTimeLineStart = 60,
+																		 Name = "yyy"
+															       },
+														
+				                            };
+
+			requestViewModelFactory.Expect(r => r.CreateShiftTradeRequestSwapDetails(id)).Return(shiftTradeSwapDetails);
+
+			using (var target = new RequestsController(requestViewModelFactory, null, null, null))
+			{
+				var result = (ShiftTradeSwapDetailsViewModel) target.ShiftTradeRequestSwapDetails(id).Data;
+				Assert.That(result.From.Name, Is.EqualTo("xxx"));				
+				Assert.That(result.To.Name,Is.EqualTo("yyy"));
+			}
+
+			requestViewModelFactory.VerifyAllExpectations();
 		}
 
 		private static void assertRequestEqual(RequestViewModel target, RequestViewModel expected)

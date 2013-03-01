@@ -9,11 +9,12 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.Services;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
-using Teleopti.Ccc.Web.Core.RequestContext;
+using Teleopti.Ccc.WebTest.Core.Mapping;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
@@ -24,6 +25,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		private IUserTimeZone _userTimeZone;
 		private ILinkProvider _linkProvider;
 		private ILoggedOnUser _loggedOnUser;
+		private IShiftTradeRequestStatusChecker _shiftTradeRequestStatusChecker;
 		private IPerson _loggedOnPerson;
 
 		[SetUp]
@@ -35,12 +37,14 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			_loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			_loggedOnPerson = PersonFactory.CreatePerson("LoggedOn", "Agent");
 			_loggedOnUser.Expect(l => l.CurrentUser()).Return(_loggedOnPerson).Repeat.Any();
+			_shiftTradeRequestStatusChecker = MockRepository.GenerateMock<IShiftTradeRequestStatusChecker>();
 
 			Mapper.Reset();
 			Mapper.Initialize(c => c.AddProfile(new RequestsViewModelMappingProfile(
 				() => _userTimeZone, 
 				() => _linkProvider,
-				() => _loggedOnUser
+				() => _loggedOnUser,
+				Depend.On(_shiftTradeRequestStatusChecker)
 				)));
 		}
 
@@ -198,7 +202,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 
 			var result = Mapper.Map<IPersonRequest, RequestViewModel>(request);
 
-            result.UpdatedOn.Should().Be(TimeZoneInfo.ConvertTimeFromUtc(request.UpdatedOn.Value, timeZone).ToShortDateTimeString());
+			result.UpdatedOn.Should().Be(TimeZoneInfo.ConvertTimeFromUtc(request.UpdatedOn.Value, timeZone).ToShortDateTimeString());
 		}
 
 		[Test]
@@ -251,7 +255,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 
 			var result = Mapper.Map<IPersonRequest, RequestViewModel>(request);
 
-			result.DenyReason.Should().Be.EqualTo(UserTexts.Resources.RequestDenyReasonNoWorkflow);
+			result.DenyReason.Should().Be.EqualTo(Resources.RequestDenyReasonNoWorkflow);
 		}
 
 		[Test]
@@ -270,12 +274,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		public void ShouldSetIsCreatedByUserToTrueIfTheSenderIsTheSamePersonAsTheLoggedOnUser()
 		{
 			var receiver = PersonFactory.CreatePerson("Receiver");
-			var tradeDate = new DateOnly(2010, 1, 1);
-			var shiftTradeSwapDetail = new ShiftTradeSwapDetail(_loggedOnPerson, receiver, tradeDate, tradeDate);
-			var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail> { shiftTradeSwapDetail });
-			var personRequest = new PersonRequest(_loggedOnPerson) { Subject = "Subject of request", Request = shiftTradeRequest };
-			personRequest.TrySetMessage("This is a short text for the description of a shift trade request");
-			personRequest.SetId(new Guid());
+			var personRequest = createShiftTrade(_loggedOnPerson, receiver);
 
 			var result = Mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
 
@@ -286,16 +285,136 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		public void ShouldSetIsCreatedByUserToFalseIfTheSenderIsTheSamePersonAsTheLoggedOnUser()
 		{
 			var sender = PersonFactory.CreatePerson("Sender");
-			var tradeDate = new DateOnly(2010, 1, 1);
-			var shiftTradeSwapDetail = new ShiftTradeSwapDetail(sender, _loggedOnPerson, tradeDate, tradeDate);
-			var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail> {shiftTradeSwapDetail});
-			var personRequest = new PersonRequest(_loggedOnPerson) { Subject = "Subject of request", Request = shiftTradeRequest };
-			personRequest.TrySetMessage("This is a short text for the description of a shift trade request");
-			personRequest.SetId(new Guid());
+			var personRequest = createShiftTrade(sender, _loggedOnPerson);
 
 			var result = Mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
 			
 			Assert.That(result.IsCreatedByUser,Is.False);
+		}
+
+		[Test]
+		public void ShouldMapFrom()
+		{
+			var sender = PersonFactory.CreatePerson("Sender");
+			var tradeDate = new DateOnly(2010, 1, 1);
+			var shiftTradeSwapDetail = new ShiftTradeSwapDetail(sender, _loggedOnPerson, tradeDate, tradeDate);
+			var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail> { shiftTradeSwapDetail });
+			var personRequest = new PersonRequest(_loggedOnPerson) { Subject = "Subject of request", Request = shiftTradeRequest };
+
+			var result = Mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
+
+			Assert.That(result.From, Is.EqualTo(sender.Name.ToString()));
+		}
+
+		[Test]
+		public void ShouldMapTo()
+		{
+			var sender = PersonFactory.CreatePerson("Sender");
+			var tradeDate = new DateOnly(2010, 1, 1);
+			var shiftTradeSwapDetail = new ShiftTradeSwapDetail(sender, _loggedOnPerson, tradeDate, tradeDate);
+			var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail> { shiftTradeSwapDetail });
+			var personRequest = new PersonRequest(_loggedOnPerson) { Subject = "Subject of request", Request = shiftTradeRequest };
+
+			var result = Mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
+
+			Assert.That(result.To, Is.EqualTo(_loggedOnPerson.Name.ToString()));
+		}
+
+		[Test]
+		public void ShouldMapFromAndToToEmptyStringIfNotShiftTradeRequest()
+		{
+			var personRequest = new PersonRequest(new Person(), new TextRequest(new DateTimePeriod()));
+
+			var result = Mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
+
+			result.From.Should().Be.Empty();
+			result.To.Should().Be.Empty();
+		}
+
+		[Test]
+		public void ShouldMapShiftTradeStatusOkByMeWhenUserHasCreatedTheShiftTradeRequest()
+		{
+			var str = MockRepository.GenerateMock<IShiftTradeRequest>();
+			str.Expect(c => c.GetShiftTradeStatus(_shiftTradeRequestStatusChecker)).Return(ShiftTradeStatus.OkByMe);
+			str.Expect(c => c.PersonFrom).Return(_loggedOnPerson);
+			var personRequest = new PersonRequest(_loggedOnPerson, str);
+			personRequest.ForcePending();
+			
+			var result = Mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
+			result.Status.Should().Contain(Resources.WaitingForOtherPart);
+		}
+
+		[Test]
+		public void ShouldMapShiftTradeStatusOkByMeWhenUserHasRecievedTheShiftTradeRequest()
+		{
+			var str = MockRepository.GenerateMock<IShiftTradeRequest>();
+			str.Expect(c => c.GetShiftTradeStatus(_shiftTradeRequestStatusChecker)).Return(ShiftTradeStatus.OkByMe);
+			str.Expect(c => c.PersonFrom).Return(new Person());
+			var personRequest = new PersonRequest(_loggedOnPerson, str);
+			personRequest.ForcePending();
+			
+			var result = Mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
+			result.Status.Should().Contain(Resources.WaitingForYourApproval);
+		}
+
+		[Test]
+		public void ShouldMapShiftTradeStatusOkByBothParts()
+		{
+			var str = MockRepository.GenerateMock<IShiftTradeRequest>();
+			str.Expect(c => c.GetShiftTradeStatus(_shiftTradeRequestStatusChecker)).Return(ShiftTradeStatus.OkByBothParts);
+			var personRequest = new PersonRequest(new Person(), str);
+			personRequest.ForcePending();
+
+			var result = Mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
+			result.Status.Should().Contain(Resources.WaitingForSupervisorApproval);
+		}
+
+		[Test]
+		public void ShouldOnlyMapShiftTradeStatusWhenPending()
+		{
+			var str = MockRepository.GenerateMock<IShiftTradeRequest>();
+			var personRequest = new PersonRequest(new Person(), str);
+
+			var result = Mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
+			result.Status.Should().Not.Contain(",");
+
+			str.AssertWasNotCalled(x => x.GetShiftTradeStatus(_shiftTradeRequestStatusChecker));
+		}
+
+		[Test]
+		public void ShouldMapShiftTradeStatusReferred()
+		{
+			var str = MockRepository.GenerateMock<IShiftTradeRequest>();
+			str.Expect(c => c.GetShiftTradeStatus(_shiftTradeRequestStatusChecker)).Return(ShiftTradeStatus.Referred);
+			var personRequest = new PersonRequest(new Person(), str);
+			personRequest.ForcePending();
+
+			var result = Mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
+			result.Status.Should().Contain(Resources.TheScheduleHasChanged);
+		}
+
+		[Test]
+		public void ShouldThrowShiftTradeStatusNotValid()
+		{
+			//AFAIK - this status is not in used. Cannot be deleted due to SDK thingys (?).
+			var str = MockRepository.GenerateMock<IShiftTradeRequest>();
+			str.Expect(c => c.GetShiftTradeStatus(_shiftTradeRequestStatusChecker)).Return(ShiftTradeStatus.NotValid);
+			var personRequest = new PersonRequest(new Person(), str);
+			personRequest.ForcePending();
+
+			Assert.Throws<AutoMapperMappingException>(() =>
+					Mapper.Map<IPersonRequest, RequestViewModel>(personRequest));
+		}
+
+		private static IPersonRequest createShiftTrade(IPerson from, IPerson to)
+		{
+			var tradeDate = new DateOnly(2010, 1, 1);
+			var shiftTradeSwapDetail = new ShiftTradeSwapDetail(from, to, tradeDate, tradeDate);
+			var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail> { shiftTradeSwapDetail });
+			var personRequest = new PersonRequest(from) { Subject = "Subject of request", Request = shiftTradeRequest };
+			personRequest.TrySetMessage("This is a short text for the description of a shift trade request");
+			personRequest.SetId(new Guid());
+			return personRequest;
 		}
 	}
 }

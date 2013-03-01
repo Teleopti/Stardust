@@ -998,6 +998,10 @@ footer p
 	border-bottom-right-radius: 4px/*{cornerRadius}*/;
 }
 
+#ui-datepicker-div {
+	z-index: 1000 !important;
+}
+
 /*
 Personal drop down menu
 */

@@ -4,7 +4,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 {
 	public interface IEditRequestPage
 	{
-		Button AddRequestButton { get; }
+		Span AddRequestDropDown { get; }
+		Link AddShiftTradeRequestMenuItem { get; }
+		Link AddTextRequestMenuItem { get; }
+		Link AddAbsenceRequestMenuItem { get; }
 		Div RequestDetailSection { get; }
 		Span TextRequestTab { get; }
 		Span AbsenceRequestTab { get; }

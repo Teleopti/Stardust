@@ -33,6 +33,7 @@ namespace Teleopti.Ccc.Win.Scheduling.AgentRestrictions
 			_restrictionRectangle = RestrictionRect(clientRectangle);
 
 			if(_decider.ShouldPaintFullDayAbsence(preferenceCellData)) PaintFullDayAbsence(g, clientRectangle, preferenceCellData, format);
+			else if (_decider.ShouldPaintFullDayAbsenceOnContractDayOff(preferenceCellData))PaintFullDayAbsence(g, clientRectangle, preferenceCellData, format);
 			else if (_decider.ShouldPaintDayOff(preferenceCellData)) PaintDayOff(g, preferenceCellData, format);
 			else if (_decider.ShouldPaintMainShift(preferenceCellData)) PaintMainShift(g, preferenceCellData, format);
         }

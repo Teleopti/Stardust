@@ -177,6 +177,13 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.hasTextRequest = ko.computed(function () {
 			return self.textRequestCount() > 0;
 		});
+		self.holidayAgents = ko.computed(function () {
+		    if (!self.hasTextRequest())
+		        return "X";
+		    else {
+		        return self.textRequestCount();
+		    }
+		});
 		self.hasNote = ko.observable(day.HasNote);
 		self.textRequestText = ko.computed(function () {
 			return parent.userTexts.xRequests.format(self.textRequestCount());
