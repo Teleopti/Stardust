@@ -1,0 +1,42 @@
+
+.person-schedule 
+{
+}
+
+.person-schedule .time-line 
+{
+	left: 0; /* first column with paddings */
+	width: 100%;
+}
+.person-schedule .time-line,
+.person-schedule .time-line div
+{
+	height: 100%;
+    z-index: -10;
+}
+
+.person-schedule .time-line .ruler {
+	height: 100%;
+	width: 1px;
+	background-color: rgba(0,0,0,0.2);
+	z-index: 100;
+}
+.person-schedule .time-line .label {
+	font-size: xx-small;
+	height: 12px;
+	z-index: 111;
+ }
+
+
+.person-schedule .schedule-row {
+	height: 57px;
+}
+
+.person-schedule .layer 
+{
+	height: 40px;
+	-webkit-border-radius: 4px 4px 4px 4px;
+	   -moz-border-radius: 4px 4px 4px 4px;
+			border-radius: 4px 4px 4px 4px;
+}
+

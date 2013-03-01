@@ -16,7 +16,16 @@ define([
 			this.serverSubscribeMethod = options.serverSubscribeMethod;
 			
 			this.incomingData = function (data) {
-				if (self.callback) self.callback(data);
+				//throw "why cant I see this?";
+				if (self.callback) {
+					try {
+						self.callback(data);
+					} catch(e) {
+						// why is signalr eating my exceptions?
+						console.log(e);
+						throw e;
+					} 
+				}
 			};
 
 			options.clientIncomingMethodSetter(this.incomingData);

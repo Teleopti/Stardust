@@ -1,4 +1,4 @@
-<div class="container agent-schedule">
+<div class="container person-schedule">
     <div class="row">
         <div class="span12 page-header">
 	        <h1>
@@ -11,5 +11,44 @@
 	        </h1>
         </div>
     </div>
-	
+
+	<div class="row">
+        <div class="span12">
+			
+            <div class="relative">
+				
+                <!-- ko with: TimeLine -->
+                <div class="time-line absolute">
+                    <div class="relative">
+                        <!-- ko foreach: Times -->
+                        <div class="ruler absolute" data-bind="style: { left: Pixel() + 'px' }"></div>
+                        <div class="label label-info absolute" data-bind="style: { left: (Pixel() - 13) + 'px' }, text: Time"></div>
+                        <!-- /ko -->
+                    </div>
+                </div>
+                <!-- /ko -->
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="schedule-row">
+                            <td class="relative shift">
+                                <!-- ko foreach: Layers -->
+	                            <div class="layer absolute" data-bind="
+								style: { left: StartPixels() + 'px', width: LengthPixels() + 'px', backgroundColor: Color()}
+								"></div>
+                                <!-- /ko -->
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+				
+            </div>
+
+        </div>
+    </div>
 </div>

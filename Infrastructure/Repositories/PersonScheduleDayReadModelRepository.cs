@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NHibernate.Transform;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
@@ -9,53 +10,61 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 {
 	public interface IPersonScheduleDayReadModelRepository
 	{
-		IList<PersonScheduleDayReadModel> ReadModelsOnPerson(DateOnly startDate, DateOnly toDate, Guid personId);
+		IEnumerable<PersonScheduleDayReadModel> ForPerson(DateOnly startDate, DateOnly endDate, Guid personId);
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Date")]
+		PersonScheduleDayReadModel ForPerson(DateOnly date, Guid personId);
+		IEnumerable<PersonScheduleDayReadModel> ForTeam(DateTimePeriod period, Guid teamId);
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		void ClearPeriodForPerson(DateOnlyPeriod period, Guid personId);
 
 		void SaveReadModel(PersonScheduleDayReadModel model);
 		bool IsInitialized();
-		IList<PersonScheduleDayReadModel> ForTeam(DateTimePeriod period, Guid teamId);
 	}
 
 	public class PersonScheduleDayReadModelRepository : IPersonScheduleDayReadModelRepository
 	{
-		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+		private readonly ICurrentUnitOfWork _unitOfWork;
 
-		public PersonScheduleDayReadModelRepository(IUnitOfWorkFactory unitOfWorkFactory)
+		public PersonScheduleDayReadModelRepository(ICurrentUnitOfWork unitOfWork)
 		{
-			_unitOfWorkFactory = unitOfWorkFactory;
+			_unitOfWork = unitOfWork;
 		}
 
-		public IList<PersonScheduleDayReadModel> ForTeam(DateTimePeriod period, Guid teamId)
+		public IEnumerable<PersonScheduleDayReadModel> ForPerson(DateOnly startDate, DateOnly endDate, Guid personId)
 		{
-				return ((NHibernateUnitOfWork)_unitOfWorkFactory.CurrentUnitOfWork()).Session.CreateSQLQuery(
-					"SELECT PersonId, TeamId, SiteId, BusinessUnitId, BelongsToDate AS Date, ShiftStart, ShiftEnd, Shift FROM ReadModel.PersonScheduleDay WHERE TeamId=:TeamId AND ShiftStart IS NOT NULL AND ShiftStart < :DateEnd AND ShiftEnd > :DateStart")
-					.SetGuid("TeamId", teamId)
-					.SetDateTime("DateStart", period.StartDateTime)
-					.SetDateTime("DateEnd", period.EndDateTime)
-					 .SetResultTransformer(Transformers.AliasToBean(typeof(PersonScheduleDayReadModel)))
-					 .SetReadOnly(true)
-					 .List<PersonScheduleDayReadModel>();
+			return _unitOfWork.Session().CreateSQLQuery(
+				"SELECT PersonId, TeamId, SiteId, BusinessUnitId, BelongsToDate AS Date, ShiftStart, ShiftEnd, Shift FROM ReadModel.PersonScheduleDay WHERE PersonId=:personid AND BelongsToDate Between :startdate AND :enddate")
+			                  .SetGuid("personid", personId)
+			                  .SetDateTime("startdate", startDate)
+			                  .SetDateTime("enddate", endDate)
+			                  .SetResultTransformer(Transformers.AliasToBean(typeof (PersonScheduleDayReadModel)))
+			                  .SetReadOnly(true)
+			                  .List<PersonScheduleDayReadModel>()
+				;
 		}
 
-		public IList<PersonScheduleDayReadModel> ReadModelsOnPerson(DateOnly startDate, DateOnly toDate, Guid personId)
+		public PersonScheduleDayReadModel ForPerson(DateOnly date, Guid personId)
 		{
-				return ((NHibernateUnitOfWork)_unitOfWorkFactory.CurrentUnitOfWork()).Session.CreateSQLQuery(
-					"SELECT PersonId, TeamId, SiteId, BusinessUnitId, BelongsToDate AS Date, ShiftStart, ShiftEnd, Shift FROM ReadModel.PersonScheduleDay WHERE PersonId=:personid AND BelongsToDate Between :startdate AND :enddate")
-					.SetGuid("personid", personId)
-					.SetDateTime("startdate",startDate)
-					.SetDateTime("enddate", toDate)
-					 .SetResultTransformer(Transformers.AliasToBean(typeof(PersonScheduleDayReadModel)))
-					 .SetReadOnly(true)
-					 .List<PersonScheduleDayReadModel>();
+			return ForPerson(date, date, personId).FirstOrDefault();
+		}
+
+		public IEnumerable<PersonScheduleDayReadModel> ForTeam(DateTimePeriod period, Guid teamId)
+		{
+			return _unitOfWork.Session().CreateSQLQuery(
+				"SELECT PersonId, TeamId, SiteId, BusinessUnitId, BelongsToDate AS Date, ShiftStart, ShiftEnd, Shift FROM ReadModel.PersonScheduleDay WHERE TeamId=:TeamId AND ShiftStart IS NOT NULL AND ShiftStart < :DateEnd AND ShiftEnd > :DateStart")
+				.SetGuid("TeamId", teamId)
+				.SetDateTime("DateStart", period.StartDateTime)
+				.SetDateTime("DateEnd", period.EndDateTime)
+				 .SetResultTransformer(Transformers.AliasToBean(typeof(PersonScheduleDayReadModel)))
+				 .SetReadOnly(true)
+				 .List<PersonScheduleDayReadModel>();
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public void ClearPeriodForPerson(DateOnlyPeriod period, Guid personId)
 		{
-			((NHibernateUnitOfWork)_unitOfWorkFactory.CurrentUnitOfWork()).Session.CreateSQLQuery(
+			_unitOfWork.Session().CreateSQLQuery(
 				"DELETE FROM ReadModel.PersonScheduleDay WHERE PersonId=:person AND BelongsToDate BETWEEN :StartDate AND :EndDate")
 				.SetGuid("person", personId)
 				.SetDateTime("StartDate", period.StartDate)
@@ -66,7 +75,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void SaveReadModel(PersonScheduleDayReadModel model)
 		{
-			((NHibernateUnitOfWork)_unitOfWorkFactory.CurrentUnitOfWork()).Session.CreateSQLQuery(
+			_unitOfWork.Session().CreateSQLQuery(
 				"INSERT INTO ReadModel.PersonScheduleDay (Id,PersonId,TeamId,SiteId,BusinessUnitId,ShiftStart,ShiftEnd,BelongsToDate,Shift) VALUES (:Id,:PersonId,:TeamId,:SiteId,:BusinessUnitId,:ShiftStart,:ShiftEnd,:BelongsToDate,:Shift)")
 				.SetGuid("Id", Guid.NewGuid())
 				.SetGuid("PersonId", model.PersonId)
@@ -82,7 +91,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public bool IsInitialized()
 		{
-			var result = ((NHibernateUnitOfWork)_unitOfWorkFactory.CurrentUnitOfWork()).Session.CreateSQLQuery(
+			var result = _unitOfWork.Session().CreateSQLQuery(
 				"SELECT TOP 1 * FROM ReadModel.PersonScheduleDay")
 				.List();
 			return result.Count > 0;

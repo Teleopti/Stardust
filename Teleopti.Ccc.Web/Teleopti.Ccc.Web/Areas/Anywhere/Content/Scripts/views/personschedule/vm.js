@@ -31,8 +31,9 @@ define([
 				self.Team(data.Team);
 
 				self.Layers([]);
-				var layers = ko.utils.arrayMap(data.layers, function (l) {
-					return new layerViewModel(timeLine, l);
+				var layers = ko.utils.arrayMap(data.Layers, function (l) {
+					l.Date = self.Date();
+					return new layerViewModel(self.TimeLine, l);
 				});
 				self.Layers.push.apply(self.Layers, layers);
 

@@ -17,6 +17,9 @@ define([
 				return self.StartMinutes() + self.LengthMinutes();
 			});
 
+			this.TimeLineAffectingStartMinute = this.StartMinutes;
+			this.TimeLineAffectingEndMinute = this.EndMinutes;
+
 			this.StartPixels = ko.computed(function () {
 				var startMinutes = self.StartMinutes() - timeline.StartMinutes();
 				var pixels = startMinutes * timeline.PixelsPerMinute();
