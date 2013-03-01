@@ -55,6 +55,25 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		}
 
 		[Test]
+		public void ShouldParsePersonScheduleDayReadModelShiftsToMapping()
+		{
+			var personScheduleDayReadModelRepository = MockRepository.GenerateMock<IPersonScheduleDayReadModelRepository>();
+			var personScheduleViewModelMapper = MockRepository.GenerateMock<IPersonScheduleViewModelMapper>();
+			var target = new PersonScheduleViewModelFactory(MockRepository.GenerateMock<IPersonRepository>(), personScheduleDayReadModelRepository, personScheduleViewModelMapper);
+			var personId = Guid.NewGuid();
+			var shifts = new {FirstName = "Pierre"};
+			var readModel = new PersonScheduleDayReadModel {Shift = Newtonsoft.Json.JsonConvert.SerializeObject(shifts)};
+
+			personScheduleDayReadModelRepository.Stub(x => x.ForPerson(DateOnly.Today, personId)).Return(readModel);
+
+			target.CreateViewModel(personId, DateTime.Today);
+
+			personScheduleViewModelMapper.AssertWasCalled(x => x.Map(Arg<PersonScheduleData>.Matches(s => MatchDynamic(s))));
+		}
+
+		private static bool MatchDynamic(PersonScheduleData s) { return s.Shift.FirstName == "Pierre"; }
+
+		[Test]
 		public void ShouldCreateViewModelUsingMapping()
 		{
 			var personScheduleViewModelMapper = MockRepository.GenerateMock<IPersonScheduleViewModelMapper>();

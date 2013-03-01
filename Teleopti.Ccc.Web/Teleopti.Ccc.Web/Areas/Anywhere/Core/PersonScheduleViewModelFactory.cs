@@ -20,13 +20,15 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 
 		public PersonScheduleViewModel CreateViewModel(Guid personId, DateTime date)
 		{
-			var personData = new PersonScheduleData();
-			personData.Person = _personRepository.Get(personId);
-			personData.Date = date;
-
-			personData.PersonScheduleDayReadModel = _personScheduleDayReadModelRepository.ForPerson(new DateOnly(date), personId);
-			
-			return _personScheduleViewModelMapper.Map(personData);
+			var data = new PersonScheduleData
+				{
+					Person = _personRepository.Get(personId), 
+					Date = date, 
+					PersonScheduleDayReadModel = _personScheduleDayReadModelRepository.ForPerson(new DateOnly(date), personId)
+				};
+			if (data.PersonScheduleDayReadModel != null && data.PersonScheduleDayReadModel.Shift != null)
+				data.Shift = Newtonsoft.Json.JsonConvert.DeserializeObject(data.PersonScheduleDayReadModel.Shift);
+			return _personScheduleViewModelMapper.Map(data);
 		}
 	}
 }
