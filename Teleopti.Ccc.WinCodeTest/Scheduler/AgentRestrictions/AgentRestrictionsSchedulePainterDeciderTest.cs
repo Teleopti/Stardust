@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			using (_mocks.Record())
 			{
 				Expect.Call(_preferenceCellData.SchedulingOption).Return(_restrictionSchedulingOptions);
-				Expect.Call(_preferenceCellData.HasDayOff).Return(false);
+				//Expect.Call(_preferenceCellData.HasDayOff).Return(false);
 				Expect.Call(_preferenceCellData.HasFullDayAbsence).Return(true);
 			}
 
@@ -137,8 +137,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			using (_mocks.Record())
 			{
 				Expect.Call(_preferenceCellData.SchedulingOption).Return(_restrictionSchedulingOptions);
-				Expect.Call(_preferenceCellData.HasDayOff).Return(false);
-				Expect.Call(_preferenceCellData.HasFullDayAbsence).Return(true);
+				//Expect.Call(_preferenceCellData.HasDayOff).Return(false);
+				//Expect.Call(_preferenceCellData.HasFullDayAbsence).Return(true);
 				Expect.Call(_preferenceCellData.HasAbsenceOnContractDayOff).Return(true);
 			}
 
