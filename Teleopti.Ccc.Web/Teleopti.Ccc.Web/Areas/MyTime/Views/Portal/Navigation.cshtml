@@ -150,10 +150,9 @@
 								<option value="@option.Value" data-color="@option.Color">@option.Text</option>
 							}*@
 						</select>
-						<p/>
+						<button id="template-show-details" data-bind="click: toggleDetails"></button>
                         
 						<div class="mt10 ml10 floatleft">          
-							<button id="template-show-details" data-bind="click: toggleDetails">Show details</button>
 							<div id="Preference-extended-time-input-fields" data-bind="visible: IsShowDetails">
 								<div class="mt5">
 									<select id="Preference-extended-preference" data-bind="selectbox: PreferenceId, option-data: {data: 'preference-extended', member: IsTimeInputEnabled}" title="@Resources.Preference" class="ml15 mt5">

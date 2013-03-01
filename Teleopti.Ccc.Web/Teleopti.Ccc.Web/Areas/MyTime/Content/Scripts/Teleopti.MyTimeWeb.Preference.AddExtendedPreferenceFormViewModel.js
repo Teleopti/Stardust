@@ -23,17 +23,17 @@ Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (aja
             success: function (data, textStatus, jqXHR) {
                 data = data || [];
 
-//				self.AvailableTemplates.removeAll();
-//				self.AvailableTemplates.push("");
-//				$.each(data, function (index, element) {
-//					self.AvailableTemplates.push(element);
-//				});
+                //				self.AvailableTemplates.removeAll();
+                //				self.AvailableTemplates.push("");
+                //				$.each(data, function (index, element) {
+                //					self.AvailableTemplates.push(element);
+                //				});
 
-				//				self.AvailableTemplates.valueHasMutated();
-				self.AvailableTemplates(data);
+                //				self.AvailableTemplates.valueHasMutated();
+                self.AvailableTemplates(data);
 
-				$("#Preference-template").selectbox({ refreshMenu: data });
-				
+                $("#Preference-template").selectbox({ refreshMenu: data });
+
                 //				self.AvailableTemplates.push(new Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel(0));
                 //				self.AvailableTemplates.push(ko.utils.arrayMap(data,
                 //					function(i) { return new Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel(i); }
@@ -45,9 +45,9 @@ Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (aja
     };
 
     this.AvailableTemplates = ko.observableArray();
-	this.SelectedTemplateId = ko.observable();
+    this.SelectedTemplateId = ko.observable();
     this.SelectedTemplate = ko.observable();
-	this.UrlTimeStamp = ko.observable();
+    this.UrlTimeStamp = ko.observable();
 
     this.PreferenceId = ko.observable();
     this.EarliestStartTime = ko.observable();
@@ -67,7 +67,7 @@ Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (aja
     this.ActivityMaximumTime = ko.observable();
 
     this.IsSaveAsNewTemplate = ko.observable();
-    this.IsShowDetails = ko.observable(false);
+    this.IsShowDetails = ko.observable(true);
 
     this.toggleDetails = function () {
         var currentValue = this.IsShowDetails();
@@ -78,7 +78,14 @@ Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (aja
 
     this.EnableActivityTimeEditing = ko.computed(function () {
         var result = self.ActivityPreferenceId();
+        alert("activity");
         return result != undefined && result != '';
+    });
+
+    this.SelectedTemplate = ko.computed(function () {
+        var templateId = self.SelectedTemplateId();
+        alert("template");
+        return templateId != undefined && templateId != '';
     });
 
     this.SelectedTemplate.subscribe(function (newValue) {
