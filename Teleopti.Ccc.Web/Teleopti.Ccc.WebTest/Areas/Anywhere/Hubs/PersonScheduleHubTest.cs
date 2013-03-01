@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			target.Clients.Caller = caller;
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldCreateViewModelOnSubscribe()
 		{
 			var viewModelFactory = MockRepository.GenerateMock<IPersonScheduleViewModelFactory>();
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			viewModelFactory.AssertWasCalled(x => x.CreateViewModel(personId, DateTime.Today));
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldPushDataToCallerOnSubscribe()
 		{
 			var viewModelFactory = MockRepository.GenerateMock<IPersonScheduleViewModelFactory>();
