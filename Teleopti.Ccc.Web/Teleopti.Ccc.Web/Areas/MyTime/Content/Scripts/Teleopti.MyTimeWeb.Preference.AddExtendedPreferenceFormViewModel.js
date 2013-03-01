@@ -78,13 +78,13 @@ Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (aja
 
     this.EnableActivityTimeEditing = ko.computed(function () {
         var result = self.ActivityPreferenceId();
-        alert("activity");
+        //alert("activity");
         return result != undefined && result != '';
     });
 
     this.SelectedTemplate = ko.computed(function () {
         var templateId = self.SelectedTemplateId();
-        alert("template");
+        //alert("template");
         return templateId != undefined && templateId != '';
     });
 
