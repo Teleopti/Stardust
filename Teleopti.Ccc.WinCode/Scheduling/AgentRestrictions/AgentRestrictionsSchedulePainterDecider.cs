@@ -13,13 +13,15 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
 		public bool ShouldPaintFullDayAbsence(IPreferenceCellData preferenceCellData)
 		{
-			return (preferenceCellData.SchedulingOption.UseScheduling && preferenceCellData.HasFullDayAbsence && !preferenceCellData.HasDayOff);
+			return (preferenceCellData.SchedulingOption.UseScheduling && preferenceCellData.HasFullDayAbsence);
+			//return (preferenceCellData.SchedulingOption.UseScheduling && preferenceCellData.HasFullDayAbsence && !preferenceCellData.HasDayOff);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
 		public bool ShouldPaintFullDayAbsenceOnContractDayOff(IPreferenceCellData preferenceCellData)
 		{
-			return (preferenceCellData.SchedulingOption.UseScheduling && preferenceCellData.HasFullDayAbsence && !preferenceCellData.HasDayOff && preferenceCellData.HasAbsenceOnContractDayOff);
+			return (preferenceCellData.SchedulingOption.UseScheduling && preferenceCellData.HasAbsenceOnContractDayOff);
+			//return (preferenceCellData.SchedulingOption.UseScheduling && preferenceCellData.HasFullDayAbsence && !preferenceCellData.HasDayOff && preferenceCellData.HasAbsenceOnContractDayOff);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
