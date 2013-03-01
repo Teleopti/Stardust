@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -36,7 +37,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			var personPeriod = user.Period(dateOnly);
 			var timeZone = user.PermissionInformation.DefaultTimeZone();
 
-			var reposistory = new PersonScheduleDayReadModelRepository(GlobalUnitOfWorkState.UnitOfWorkFactory);
+			var reposistory = new PersonScheduleDayReadModelRepository(new CurrentUnitOfWork(GlobalUnitOfWorkState.UnitOfWorkFactory));
 			reposistory.SaveReadModel(new PersonScheduleDayReadModel
 			                           			{
 			                           				BusinessUnitId = mainActivity.BusinessUnit.Id.GetValueOrDefault(),
