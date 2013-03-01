@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
                 var personAssignmentCollection = scheduleDay.PersonAssignmentCollection();
                 var personMeetingCollection = scheduleDay.PersonMeetingCollection();
 
-                var significant = scheduleDay.SignificantPart();
+                var significant = scheduleDay.SignificantPartForDisplay();
                 if (significant == SchedulePartView.DayOff)
                     dto = CheckPersonDayOffCollection(scheduleDay.PersonDayOffCollection(), dto);
 
