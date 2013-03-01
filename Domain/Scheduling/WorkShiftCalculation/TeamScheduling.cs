@@ -84,7 +84,46 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 
 	    public void Execute(ITeamBlockInfo teamBlockInfo, IShiftProjectionCache shiftProjectionCache)
 	    {
-		    throw new NotImplementedException();
+	        var startDateOfBlock = teamBlockInfo.BlockInfo.BlockPeriod.StartDate;
+
+            foreach (var day in teamBlockInfo.BlockInfo.BlockPeriod.DayCollection() )
+            {
+                if (teamBlockInfo.TeamInfo.MatrixesForGroup.Any(singleMatrix => singleMatrix.UnlockedDays.Any(schedulePro => schedulePro.Day == day)))
+                {
+                    IScheduleDay destinationScheduleDay = null;
+                    var listOfDestinationScheduleDays = new List<IScheduleDay>();
+                    foreach (var person in teamBlockInfo.TeamInfo.GroupPerson.GroupMembers)
+                    {
+                        if (_cancelMe)
+                            continue;
+
+                        //if (!selectedPersons.Contains(person)) continue;
+                        IPerson tmpPerson = person;
+                        var tempMatrixList = teamBlockInfo.TeamInfo.MatrixesForGroup.Where(scheduleMatrixPro => scheduleMatrixPro.Person == tmpPerson).ToList();
+                        if (tempMatrixList.Any())
+                        {
+                            IScheduleMatrixPro matrix = null;
+                            foreach (var scheduleMatrixPro in tempMatrixList)
+                            {
+                                if (scheduleMatrixPro.SchedulePeriod.DateOnlyPeriod.Contains(startDateOfBlock))
+                                    matrix = scheduleMatrixPro;
+                            }
+                            if (matrix == null) continue;
+                            if(matrix.GetScheduleDayByKey(day).DaySchedulePart().IsScheduled()) continue; 
+                            destinationScheduleDay = assignShiftProjection(startDateOfBlock, shiftProjectionCache, listOfDestinationScheduleDays, matrix, day);
+                            OnDayScheduled(new SchedulingServiceBaseEventArgs(destinationScheduleDay));
+                        }
+
+                    }
+
+                    if (_cancelMe)
+                        return;
+                    if (destinationScheduleDay != null)
+                        _resourceCalculateDelayer.CalculateIfNeeded(destinationScheduleDay.DateOnlyAsPeriod.DateOnly,
+                                                                    shiftProjectionCache.WorkShiftProjectionPeriod, listOfDestinationScheduleDays);
+                }
+
+            }
 	    }
 
 	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
@@ -103,6 +142,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
         {
             var scheduleDayPro = matrix.GetScheduleDayByKey(day);
             if (!matrix.UnlockedDays.Contains(scheduleDayPro)) return null;
+            //does that day count as is_scheduled??
             IScheduleDay destinationScheduleDay ;
             destinationScheduleDay = matrix.GetScheduleDayByKey(day).DaySchedulePart();
             var destinationSignificanceType = destinationScheduleDay.SignificantPart();
