@@ -12,8 +12,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 			var viewModel = new PersonScheduleViewModel
 				{
 					Name = data.Person.Name.ToString(),
-					Team = team.Description.Name,
-					Site = team.Site.Description.Name,
+					Team = team == null ? null : team.Description.Name,
+					Site = team == null || team.Site == null ? null : team.Site.Description.Name,
 					Layers = new[]
 						{
 							new
@@ -40,7 +40,6 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 									End = data.Date.Add(TimeSpan.FromHours(17)),
 									Minutes = 5*60
 								}
-
 						}
 				};
 			return viewModel;

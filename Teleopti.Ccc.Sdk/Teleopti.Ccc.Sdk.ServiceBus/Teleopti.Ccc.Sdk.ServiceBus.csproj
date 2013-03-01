@@ -236,7 +236,6 @@
     <Compile Include="Payroll\PayrollPeopleLoader.cs" />
     <Compile Include="Payroll\PersonBusAssembler.cs" />
     <Compile Include="PersonAbsenceAccountProvider.cs" />
-    <Compile Include="RepositoryContainerInstaller.cs" />
     <Compile Include="RequestContainerInstaller.cs" />
     <Compile Include="RequestFactory.cs" />
     <Compile Include="BusBootStrapper.cs" />

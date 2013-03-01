@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Rhino.ServiceBus;
 using SharpTestsEx;
+using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Sdk.ServiceBus;
 using Teleopti.Ccc.Sdk.ServiceBus.Payroll;
 using Teleopti.Interfaces.Infrastructure;
@@ -30,7 +31,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Payroll
 			var builder = new ContainerBuilder();
 			builder.RegisterType<PayrollExportConsumer>().As<ConsumerOf<RunPayrollExport>>();
 
-			builder.RegisterModule<RepositoryContainerInstaller>();
+			builder.RegisterModule<RepositoryModule>();
 			builder.RegisterModule<ApplicationInfrastructureContainerInstaller>();
 			builder.RegisterModule<PayrollContainerInstaller>();
 

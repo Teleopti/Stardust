@@ -1,4 +1,5 @@
 ﻿using System;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
@@ -7,5 +8,6 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 	{
 		public DateTime Date { get; set; }
 		public IPerson Person { get; set; }
+		public PersonScheduleDayReadModel PersonScheduleDayReadModel { get; set; }
 	}
 }
