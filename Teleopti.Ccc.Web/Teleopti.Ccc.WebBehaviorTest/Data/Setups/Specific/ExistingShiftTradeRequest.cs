@@ -37,7 +37,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 			{
 				Subject = Subject == string.Empty ? "Swap shift with " + sender.Name : Subject
 			};
-			if(Pending)PersonRequest.Pending();
+			if (Pending)
+			{
+				PersonRequest.Pending();				
+			}
 			PersonRequest.TrySetMessage(message);
 			PersonRequest.Request = shiftTradeRequest;
 
