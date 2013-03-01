@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using AutoMapper;
 using Newtonsoft.Json.Linq;
 using Teleopti.Interfaces.Domain;
 
@@ -8,39 +11,23 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 	{
 		public PersonScheduleViewModel Map(PersonScheduleData data)
 		{
-			var team = data.Person.MyTeam(new DateOnly(data.Date));
+			var team = data.Person != null ? data.Person.MyTeam(new DateOnly(data.Date)) : null;
+
+			var layers = new PersonScheduleViewModelLayer[] { };
+
+			if (data.Shift != null)
+				layers = (from d in data.Shift.Projection as IEnumerable<dynamic>
+			        select new PersonScheduleViewModelLayer
+				        {
+					        Color = d.Color
+				        }).ToArray();
+
 			var viewModel = new PersonScheduleViewModel
 				{
-					Name = data.Person.Name.ToString(),
+					Name = data.Person != null ? data.Person.Name.ToString() : null,
 					Team = team == null ? null : team.Description.Name,
 					Site = team == null || team.Site == null ? null : team.Site.Description.Name,
-					Layers = new[]
-						{
-							new
-								{
-									Color = "Green",
-									Title = "Phone",
-									Start = data.Date.Add(TimeSpan.FromHours(8)),
-									End = data.Date.Add(TimeSpan.FromHours(11)),
-									Minutes = 3*60
-								},
-							new
-								{
-									Color = "Yellow",
-									Title = "Lunch",
-									Start = data.Date.Add(TimeSpan.FromHours(11)),
-									End = data.Date.Add(TimeSpan.FromHours(12)),
-									Minutes = 1*60
-								},
-							new
-								{
-									Color = "Green",
-									Title = "Phone",
-									Start = data.Date.Add(TimeSpan.FromHours(12)),
-									End = data.Date.Add(TimeSpan.FromHours(17)),
-									Minutes = 5*60
-								}
-						}
+					Layers = layers
 				};
 			return viewModel;
 		}

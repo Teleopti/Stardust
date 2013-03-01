@@ -1,4 +1,7 @@
 using System;
+using System.Dynamic;
+using System.Linq;
+using System.Runtime.CompilerServices;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
@@ -53,6 +56,25 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var result = target.Map(new PersonScheduleData { Date = DateTime.Today, Person = person });
 
 			result.Site.Should().Be("Moon");
+		}
+
+		[Test]
+		public void ShouldMapLayerColor()
+		{
+			var target = new PersonScheduleViewModelMapper();
+
+			dynamic layer1 = new ExpandoObject();
+			layer1.Color = "Green";
+			dynamic layer2 = new ExpandoObject();
+			layer2.Color = "Yellow";
+			dynamic shift = new ExpandoObject();
+			shift.Test = "Value";
+			shift.Projection = new[] {layer1, layer2};
+
+			var result = target.Map(new PersonScheduleData {Shift = shift});
+
+			result.Layers.First().Color.Should().Be("Green");
+			result.Layers.ElementAt(1).Color.Should().Be("Yellow");
 		}
 	}
 }
