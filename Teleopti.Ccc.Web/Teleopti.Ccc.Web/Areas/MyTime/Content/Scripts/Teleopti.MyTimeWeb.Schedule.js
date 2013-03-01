@@ -159,6 +159,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		var self = this;
 
 		self.fixedDate = ko.observable(day.FixedDate);
+		self.dayOfWeek = ko.observable(day.DayOfWeekNumber);
 		self.date = ko.observable(day.Date);
 		self.state = ko.observable(day.State);
 		self.headerTitle = ko.observable(day.Header.Title);
@@ -322,8 +323,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		var division = (clientNowMinutes - timelineStartMinutes) / (timelineEndMinutes - timelineStartMinutes);
 		var position = Math.round(timelineHeight * division) - Math.round(timeindicatorHeight / 2);
 
-		var formattedDate = $.datepicker.formatDate('yy-mm-dd', theDate);
-		var timeIndicator = $('ul[data-mytime-date="' + formattedDate + '"] .week-schedule-time-indicator');
+		var dayOfWeek = moment(theDate).day();
+		var timeIndicator = $('ul[data-mytime-dayofweek="' + dayOfWeek + '"] .week-schedule-time-indicator');
 		var timeIndicatorTimeLine = $('.week-schedule-time-indicator-small');
 
 		if (timelineStartMinutes <= clientNowMinutes && clientNowMinutes <= timelineEndMinutes) {
