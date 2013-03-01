@@ -255,7 +255,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 
 			var result = Mapper.Map<IPersonRequest, RequestViewModel>(request);
 
-			result.DenyReason.Should().Be.EqualTo(UserTexts.Resources.RequestDenyReasonNoWorkflow);
+			result.DenyReason.Should().Be.EqualTo(Resources.RequestDenyReasonNoWorkflow);
 		}
 
 		[Test]
@@ -338,6 +338,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			str.Expect(c => c.GetShiftTradeStatus(_shiftTradeRequestStatusChecker)).Return(ShiftTradeStatus.OkByMe);
 			str.Expect(c => c.PersonFrom).Return(_loggedOnPerson);
 			var personRequest = new PersonRequest(_loggedOnPerson, str);
+			personRequest.ForcePending();
 			
 			var result = Mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
 			result.Status.Should().Contain(Resources.WaitingForOtherPart);
@@ -350,6 +351,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			str.Expect(c => c.GetShiftTradeStatus(_shiftTradeRequestStatusChecker)).Return(ShiftTradeStatus.OkByMe);
 			str.Expect(c => c.PersonFrom).Return(new Person());
 			var personRequest = new PersonRequest(_loggedOnPerson, str);
+			personRequest.ForcePending();
 			
 			var result = Mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
 			result.Status.Should().Contain(Resources.WaitingForYourApproval);
@@ -361,9 +363,22 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var str = MockRepository.GenerateMock<IShiftTradeRequest>();
 			str.Expect(c => c.GetShiftTradeStatus(_shiftTradeRequestStatusChecker)).Return(ShiftTradeStatus.OkByBothParts);
 			var personRequest = new PersonRequest(new Person(), str);
+			personRequest.ForcePending();
 
 			var result = Mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
 			result.Status.Should().Contain(Resources.WaitingForSupervisorApproval);
+		}
+
+		[Test]
+		public void ShouldOnlyMapShiftTradeStatusWhenPending()
+		{
+			var str = MockRepository.GenerateMock<IShiftTradeRequest>();
+			var personRequest = new PersonRequest(new Person(), str);
+
+			var result = Mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
+			result.Status.Should().Not.Contain(",");
+
+			str.AssertWasNotCalled(x => x.GetShiftTradeStatus(_shiftTradeRequestStatusChecker));
 		}
 
 		[Test]
@@ -372,6 +387,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var str = MockRepository.GenerateMock<IShiftTradeRequest>();
 			str.Expect(c => c.GetShiftTradeStatus(_shiftTradeRequestStatusChecker)).Return(ShiftTradeStatus.Referred);
 			var personRequest = new PersonRequest(new Person(), str);
+			personRequest.ForcePending();
 
 			var result = Mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
 			result.Status.Should().Contain(Resources.TheScheduleHasChanged);
@@ -384,6 +400,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var str = MockRepository.GenerateMock<IShiftTradeRequest>();
 			str.Expect(c => c.GetShiftTradeStatus(_shiftTradeRequestStatusChecker)).Return(ShiftTradeStatus.NotValid);
 			var personRequest = new PersonRequest(new Person(), str);
+			personRequest.ForcePending();
 
 			Assert.Throws<AutoMapperMappingException>(() =>
 					Mapper.Map<IPersonRequest, RequestViewModel>(personRequest));

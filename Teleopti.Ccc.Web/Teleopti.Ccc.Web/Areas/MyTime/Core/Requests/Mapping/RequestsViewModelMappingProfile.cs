@@ -40,10 +40,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				.ForMember(d => d.Status, o => o.MapFrom(s =>
 					{
 						var ret = s.StatusText;
-						var shiftTradeRequest = s.Request as IShiftTradeRequest;
-						if (shiftTradeRequest != null)
+						if (s.IsPending)
 						{
-							ret += ", " + shiftTradeRequest.GetShiftTradeStatus(_shiftTradeRequestStatusChecker.Invoke()).ToText(isCreatedByUser(s.Request, _loggedOnUser));
+							var shiftTradeRequest = s.Request as IShiftTradeRequest;
+							if (shiftTradeRequest != null)
+							{
+								ret += ", " + shiftTradeRequest.GetShiftTradeStatus(_shiftTradeRequestStatusChecker.Invoke()).ToText(isCreatedByUser(s.Request, _loggedOnUser));
+							}							
 						}
 						return ret;
 					}))
