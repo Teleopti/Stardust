@@ -46,7 +46,7 @@ Scenario: View available templates
 Scenario: Select preference template
 	Given I am viewing preferences
 	When I click the add extended preference button
-	And I select preference template with "template1"
+	And I select preference template with 'template1'
 	Then I should see extended preference fields filled with
 	| Field                       | Value      |
 	| Preference                  | Late       |

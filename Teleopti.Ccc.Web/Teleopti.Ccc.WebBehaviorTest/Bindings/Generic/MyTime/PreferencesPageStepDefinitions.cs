@@ -185,6 +185,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferencePanelError.Text, Is.StringContaining(string.Format(Resources.InvalidTimeValue, Resources.StartTime)));
 		}
 
+		[When(@"I select preference template with '(.*)'")]
+		public void WhenISelectPreferenceTemplateWith(string name)
+		{
+			Pages.Pages.PreferencePage.ExtendedPreferenceTemplateSelectBox.SelectWait(name);
+		}
+
 		[When(@"I input extended preference fields with")]
 		public void WhenIInputExtendedPreferenceFieldsWith(Table table)
 		{
@@ -265,6 +271,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceActivityEndTimeMaximum.TextField.Value, Is.Null);
 			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceActivityTimeMinimum.TextField.Value, Is.Null);
 			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceActivityTimeMaximum.TextField.Value, Is.Null);
+		}
+
+		[Then(@"I should see extended preference fields filled with")]
+		public void ThenIShouldSeeExtendedPreferenceFieldsFilledWith(Table table)
+		{
+			var inputs = table.CreateInstance<ExtendedPreferenceInput>();
+			if (inputs.PreferenceId != null) EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceSelectBox.SelectedText, Is.StringContaining(inputs.PreferenceId));
+			if (inputs.EarliestStartTime != null) EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceStartTimeMinimum.TextField.Value, Is.StringContaining(inputs.EarliestStartTime));
 		}
 
 		[Then(@"I should see extended preference with")]
@@ -380,7 +394,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			public string ActivityTimeMaximum { get; set; }
 		}
 
-
+		private class ExtendedPreferenceInput
+		{
+			public string PreferenceId { get; set; }
+			public string EarliestStartTime { get; set; }
+		}
 
 		[StepArgumentTransformation]
 		public PreferenceFeedbackFields PreferenceFeedbackFieldsTransform(Table table)

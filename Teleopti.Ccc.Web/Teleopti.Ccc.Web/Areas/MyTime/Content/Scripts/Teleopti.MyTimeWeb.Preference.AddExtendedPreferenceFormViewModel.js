@@ -39,7 +39,6 @@ Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (aja
 	};
 
 	this.AvailableTemplates = ko.observableArray();
-	this.SelectedTemplateId = ko.observable();
 	this.SelectedTemplate = ko.observable();
 	this.UrlTimeStamp = ko.observable();
 
