@@ -65,7 +65,7 @@ define([
 			});
 
 			this.Select = function() {
-				events.notifySubscribers(self.Id, "gotoagent");
+				//events.notifySubscribers(self.Id, "gotoagent");
 			};
 		};
 	});
