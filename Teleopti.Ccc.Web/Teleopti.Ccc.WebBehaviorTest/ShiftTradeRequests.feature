@@ -197,10 +197,11 @@ Scenario: Sending shift trade request closes the Add Shift Trade Request view
 	And Current time is '2029-12-27'
 	When I view Add Shift Trade Request for date '2030-01-01'
 	And I click agent 'OtherAgent'
-	And I enter a subject
-	And I enter a message
+	And I enter subject 'A nice subject'
+	And I enter message 'A cute little message'
 	And I click 'send button'
 	Then Add Shift Trade Request view should not be visible
+	And I should see a shift trade request in the list with subject 'A nice subject'
 
 Scenario: Cancel a shift trade request before sending 
 	Given I have the role 'Full access to mytime'
