@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 						var myScheduleDay = createPersonDay(myDomainScheduleDay.Person, myDomainScheduleDay);
 						var possibleShiftTradePersons = _possibleShiftTradePersonsProvider().RetrievePersons(dateOnly);
 
-						var possibleTradePersonsSchedule = _shiftTradeRequestProvider.Invoke().RetrievePossibleTradePersonsScheduleDay(dateOnly);
+						var possibleTradePersonsSchedule = _shiftTradeRequestProvider.Invoke().RetrievePossibleTradePersonsScheduleDay(dateOnly, possibleShiftTradePersons);
 						var possibleTradePersonDayCollection = createPossibleTradePersonsDayCollection(possibleShiftTradePersons, possibleTradePersonsSchedule);
 
 						var timeLineRangeTot = setTimeLineRange(myScheduleDay.ScheduleLayers, possibleTradePersonDayCollection,
@@ -157,11 +157,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			var ret = new List<ShiftTradePersonDayData>();
 			if (possibleShiftTradePersons != null)
 			{
-				foreach (var tradePerson in possibleShiftTradePersons)
-				{
-					var scheduleDay = possibleTradePersonsSchedule.FirstOrDefault(day => day.Person.Equals(tradePerson));
-					ret.Add(createPersonDay(tradePerson, scheduleDay));
-				}				
+				ret.AddRange(from tradePerson in possibleShiftTradePersons 
+										 let scheduleDay = possibleTradePersonsSchedule.FirstOrDefault(day => day.Person.Equals(tradePerson)) 
+										 select createPersonDay(tradePerson, scheduleDay));
 			}
 			return ret;
 		}
