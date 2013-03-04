@@ -69,6 +69,15 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 				agent.isVisible(true);
 			}
 			self.agentChoosed(agent);
+			self.clearInputForm();
+		};
+
+		self.clearInputForm = function () {
+			self.subject('');
+			self.message('');
+			//ugly hack to fire back event that something happened
+			setTimeout(function () { $("#Request-add-shift-trade-message-input").change(); }, 0);
+			setTimeout(function () { $("#Request-add-shift-trade-subject-input").change(); }, 0);
 		};
 
 		self._createTimeLine = function (hours) {
