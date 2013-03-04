@@ -894,7 +894,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
 					adherence = (decimal)data[12];
 					adherenceForPeriod = (decimal) data[12];
 				}
-				var adherenceDataDto = new AdherenceDataDto(startTime.Ticks, endTime.Ticks, readyTime, deviation, adherenceForPeriod)
+				var adherenceDataDto = new AdherenceDataDto(startTime.Ticks, endTime.Ticks, readyTime, deviation, adherenceForPeriod, calendarDateTime, shiftBelongsToDateTime)
 					{
 #pragma warning disable 612,618
 						Adherence = adherence,

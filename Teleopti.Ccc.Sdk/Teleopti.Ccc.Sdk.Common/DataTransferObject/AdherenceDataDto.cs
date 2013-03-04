@@ -21,13 +21,15 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
 	    private decimal? _adherenceForPeriod;
 	    private decimal? _adherenceForDay;
 
-		public AdherenceDataDto(long localStartTime, long localEndTime, decimal readyTimeMinutes, decimal deviationMinutes, decimal? adherenceForPeriod)
+		public AdherenceDataDto(long localStartTime, long localEndTime, decimal readyTimeMinutes, decimal deviationMinutes, decimal? adherenceForPeriod, DateTime calendarDate, DateTime shiftBelongsToDate)
 		{
 			_localStartTime = localStartTime;
 			_localEndTime = localEndTime;
 			_readyTimeMinutes = readyTimeMinutes;
 			_deviationMinutes = deviationMinutes;
 			_adherenceForPeriod = adherenceForPeriod;
+			_calendarDate = calendarDate;
+			_shiftBelongsToDate = shiftBelongsToDate;
 		}
 
 		[Obsolete("To better handle future data with no figures, use other constructor with nullable adherence.")]
@@ -86,7 +88,7 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
             set { _dayAdherence = value; }
         }
 
-		[DataMember]
+		[DataMember(Order = 2, IsRequired = false)]
 	    public decimal? AdherenceForPeriod
 	    {
 			get { return _adherenceForPeriod; }
@@ -97,7 +99,7 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
 		/// Gets or sets the day adherence, the summary for the entire day.
 		/// </summary>
 		/// <value>The day adherence.</value>
-		[DataMember]
+		[DataMember(Order = 2, IsRequired = false)]
 	    public decimal? AdherenceForDay
 	    {
 			get { return _adherenceForDay; }

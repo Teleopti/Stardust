@@ -19,8 +19,9 @@ namespace Teleopti.Ccc.Sdk.LogicTest.OldTests
         
         [SetUp]
         public void Setup()
-        {
-            _startTime = new TimeSpan(0, 10, 15, 0);
+		{
+#pragma warning disable 612,618
+			_startTime = new TimeSpan(0, 10, 15, 0);
             _endTime = new TimeSpan(0, 10, 30, 0);
             _target = new AdherenceDataDto(_startTime.Ticks, _endTime.Ticks, _readyTimeMinutes, _deviationMinutes, _adherence, DateTime.Now,DateTime.Now );
 
@@ -61,7 +62,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.OldTests
 		[Test]
 		public void VerifyNullablePropertiesAndConstructor()
 		{
-			_target = new AdherenceDataDto(_startTime.Ticks, _endTime.Ticks, _readyTimeMinutes, _deviationMinutes, _adherenceForPeriod);
+			_target = new AdherenceDataDto(_startTime.Ticks, _endTime.Ticks, _readyTimeMinutes, _deviationMinutes, _adherenceForPeriod, DateTime.Now, DateTime.Now);
 			Assert.IsNotNull(_target);
 			_target.AdherenceForDay = _adherenceForDay;
 			Assert.AreEqual(_adherenceForPeriod, _target.AdherenceForPeriod);
