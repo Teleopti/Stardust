@@ -1,7 +1,6 @@
 ﻿using Autofac;
 using AutoMapper;
 using AutofacContrib.DynamicProxy2;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
@@ -126,7 +125,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<ExtendedPreferencePredicate>().As<IExtendedPreferencePredicate>().SingleInstance();
 			builder.RegisterType<PreferenceFulfilledChecker>().As<IPreferenceFulfilledChecker>().SingleInstance();
 			builder.RegisterType<RestrictionChecker>().As<ICheckerRestriction>();
-			builder.RegisterType<PreferenceTemplatesProvider>().As<IPreferenceTemplatesProvider>();
+			builder.RegisterType<PreferenceTemplateProvider>().As<IPreferenceTemplateProvider>();
 		}
 		 
 		private static void registerStudentAvailabilityTypes(ContainerBuilder builder)

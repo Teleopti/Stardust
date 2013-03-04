@@ -3,7 +3,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 {
-	public interface IPreferenceTemplatesProvider
+	public interface IPreferenceTemplateProvider
 	{
 		IEnumerable<IExtendedPreferenceTemplate> RetrievePreferenceTemplates();
 	}

@@ -203,14 +203,19 @@
     <Reference Include="System.Configuration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Areas\MyTime\Core\Preference\DataProvider\IPreferenceTemplatesProvider.cs" />
-    <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceTemplatesProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Preference\DataProvider\IPreferenceTemplatePersister.cs" />
+    <Compile Include="Areas\MyTime\Core\Preference\DataProvider\IPreferenceTemplateProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceTemplatePersister.cs" />
+    <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceTemplateProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceTemplateInputMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceTemplateViewModelMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IPossibleShiftTradePersonsProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\PossibleShiftTradePersonsProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IShiftTradeResponseService.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\ShiftTradeResponseService.cs" />
     <Compile Include="Areas\MyTime\Core\StudentAvailability\Mapping\StudentAvailabilityAndScheduleDayViewModelMappingProfile.cs" />
+    <Compile Include="Areas\MyTime\Models\Preference\PreferenceInput.cs" />
+    <Compile Include="Areas\MyTime\Models\Preference\PreferenceTemplateInput.cs" />
     <Compile Include="Areas\MyTime\Models\Preference\PreferenceTemplateViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradePersonScheduleViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeTimeLineHoursViewModel.cs" />

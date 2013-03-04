@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.ViewModelFactory
 		public void CreatePreferenceTemplateViewModel()
 		{
 			var mapper = MockRepository.GenerateMock<IMappingEngine>();
-			var preferenceTemplatesProvider = MockRepository.GenerateMock<IPreferenceTemplatesProvider>();
+			var preferenceTemplatesProvider = MockRepository.GenerateMock<IPreferenceTemplateProvider>();
 			var target = new PreferenceViewModelFactory(mapper, null, null, preferenceTemplatesProvider);
 			var templates = new IExtendedPreferenceTemplate[] { };
 			var preferenceTemplateViewModels = new PreferenceTemplateViewModel[] { };

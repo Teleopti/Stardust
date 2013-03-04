@@ -4,12 +4,12 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 {
-	public class PreferenceTemplatesProvider : IPreferenceTemplatesProvider
+	public class PreferenceTemplateProvider : IPreferenceTemplateProvider
 	{
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IExtendedPreferenceTemplateRepository _extendedPreferenceTemplateRepository;
 
-		public PreferenceTemplatesProvider(ILoggedOnUser loggedOnUser, IExtendedPreferenceTemplateRepository extendedPreferenceTemplateRepository)
+		public PreferenceTemplateProvider(ILoggedOnUser loggedOnUser, IExtendedPreferenceTemplateRepository extendedPreferenceTemplateRepository)
 		{
 			_loggedOnUser = loggedOnUser;
 			_extendedPreferenceTemplateRepository = extendedPreferenceTemplateRepository;
