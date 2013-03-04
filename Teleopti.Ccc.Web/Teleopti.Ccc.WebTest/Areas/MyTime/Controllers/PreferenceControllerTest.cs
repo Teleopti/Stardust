@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			var virtualSchedulePeriodProvider = MockRepository.GenerateMock<IVirtualSchedulePeriodProvider>();
 			var viewModelFactory = MockRepository.GenerateMock<IPreferenceViewModelFactory>();
-			var target = new PreferenceController(viewModelFactory, virtualSchedulePeriodProvider, null);
+			var target = new PreferenceController(viewModelFactory, virtualSchedulePeriodProvider, null, null);
 
 			viewModelFactory.Stub(x => x.CreateViewModel(DateOnly.Today)).Return(new PreferenceViewModel());
 
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			var viewModelFactory = MockRepository.GenerateMock<IPreferenceViewModelFactory>();
 			var virtualSchedulePeriodProvider = MockRepository.GenerateMock<IVirtualSchedulePeriodProvider>();
-			var target = new PreferenceController(viewModelFactory, virtualSchedulePeriodProvider, null);
+			var target = new PreferenceController(viewModelFactory, virtualSchedulePeriodProvider, null, null);
 			var defaultDate = DateOnly.Today.AddDays(23);
 
 			virtualSchedulePeriodProvider.Stub(x => x.CalculatePreferenceDefaultDate()).Return(defaultDate);
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			var virtualSchedulePeriodProvider = MockRepository.GenerateMock<IVirtualSchedulePeriodProvider>();
 			var viewModelFactory = MockRepository.GenerateMock<IPreferenceViewModelFactory>();
-			var target = new PreferenceController(viewModelFactory, virtualSchedulePeriodProvider, null);
+			var target = new PreferenceController(viewModelFactory, virtualSchedulePeriodProvider, null, null);
 
 			virtualSchedulePeriodProvider.Stub(x => x.MissingSchedulePeriod()).Return(true);
 
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			var virtualSchedulePeriodProvider = MockRepository.GenerateMock<IVirtualSchedulePeriodProvider>();
 			var viewModelFactory = MockRepository.GenerateMock<IPreferenceViewModelFactory>();
-			var target = new PreferenceController(viewModelFactory, virtualSchedulePeriodProvider, null);
+			var target = new PreferenceController(viewModelFactory, virtualSchedulePeriodProvider, null, null);
 
 			virtualSchedulePeriodProvider.Stub(x => x.MissingPersonPeriod()).Return(true);
 
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldGetPreference()
 		{
 			var viewModelFactory = MockRepository.GenerateMock<IPreferenceViewModelFactory>();
-			var target = new PreferenceController(viewModelFactory, null, null);
+			var target = new PreferenceController(viewModelFactory, null, null, null);
 
 			viewModelFactory.Stub(x => x.CreateDayViewModel(DateOnly.Today)).Return(new PreferenceDayViewModel());
 
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldGetNoContentInResponseWhenNoPreferenceExists()
 		{
 			var viewModelFactory = MockRepository.GenerateMock<IPreferenceViewModelFactory>();
-			var target = new PreferenceController(viewModelFactory, null, null);
+			var target = new PreferenceController(viewModelFactory, null, null, null);
 			target.ControllerContext = new ControllerContext(new FakeHttpContext("/"), new RouteData(), target);
 
 			viewModelFactory.Stub(x => x.CreateDayViewModel(DateOnly.Today)).Return(null);
@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var input = new PreferenceDayInput();
 			var resultData = new PreferenceDayViewModel();
 
-			var target = new PreferenceController(null, null, preferencePersister);
+			var target = new PreferenceController(null, null, preferencePersister, null);
 
 			preferencePersister.Stub(x => x.Persist(input)).Return(resultData);
 
@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var response = MockRepository.GenerateStub<FakeHttpResponse>();
 			var input = new PreferenceDayInput();
 
-			var target = new PreferenceController(null, null, preferencePersister);
+			var target = new PreferenceController(null, null, preferencePersister, null);
 			var context = new FakeHttpContext("/");
 			context.SetResponse(response);
 			target.ControllerContext = new ControllerContext(context, new RouteData(), target);
@@ -143,7 +143,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldDeletePreference()
 		{
 			var preferencePersister = MockRepository.GenerateMock<IPreferencePersister>();
-			var target = new PreferenceController(null, null, preferencePersister);
+			var target = new PreferenceController(null, null, preferencePersister, null);
 			var resultData = new PreferenceDayViewModel();
 
 			preferencePersister.Stub(x => x.Delete(DateOnly.Today)).Return(resultData);
@@ -159,7 +159,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			var preferencePersister = MockRepository.GenerateMock<IPreferencePersister>();
 			var virtualSchedulePeriodProvider = MockRepository.GenerateMock<IVirtualSchedulePeriodProvider>();
-			var target = new PreferenceController(null, virtualSchedulePeriodProvider, preferencePersister);
+			var target = new PreferenceController(null, virtualSchedulePeriodProvider, preferencePersister, null);
 			var period = new DateOnlyPeriod();
 			var input = new MustHaveInput();
 
@@ -174,7 +174,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldGetPreferencesAndSchedules()
 		{
 			var viewModelFactory = MockRepository.GenerateMock<IPreferenceViewModelFactory>();
-			var target = new PreferenceController(viewModelFactory, null, null);
+			var target = new PreferenceController(viewModelFactory, null, null, null);
 			var viewModels = new PreferenceAndScheduleDayViewModel[] {};
 
 			viewModelFactory.Stub(x => x.CreatePreferencesAndSchedulesViewModel(DateOnly.Today, DateOnly.Today.AddDays(1))).Return(viewModels);
@@ -188,14 +188,27 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldGetPreferenceTemplates()
 		{
 			var viewModelFactory = MockRepository.GenerateMock<IPreferenceViewModelFactory>();
-			var target = new PreferenceController(viewModelFactory, null, null);
-
+			var target = new PreferenceController(viewModelFactory, null, null, null);
 			var templates = new List<PreferenceTemplateViewModel>();
 			viewModelFactory.Stub(x => x.CreatePreferenceTemplateViewModels()).Return(templates);
 
 			var result = target.GetPreferenceTemplates();
 
 			result.Data.Should().Be(templates);
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
+		public void ShouldPersistPreferenceTemplate()
+		{
+			var preferenceTemplatePersister = MockRepository.GenerateMock<IPreferenceTemplatePersister>();
+			var target = new PreferenceController(null, null, null, preferenceTemplatePersister);
+			var template = new PreferenceTemplateViewModel();
+			var input = new PreferenceTemplateInput();
+			preferenceTemplatePersister.Stub(x => x.Persist(input)).Return(template);
+
+			var result = target.PreferenceTemplate(input);
+
+			result.Data.Should().Be(template);
 		}
 	}
 }

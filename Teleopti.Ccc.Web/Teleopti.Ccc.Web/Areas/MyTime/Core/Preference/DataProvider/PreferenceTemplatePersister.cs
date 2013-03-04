@@ -16,9 +16,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 			_mapper = mapper;
 		}
 
-		public void Persist(PreferenceTemplateInput input)
+		public PreferenceTemplateViewModel Persist(PreferenceTemplateInput input)
 		{
-			_preferenceTemplateRepository.Add(_mapper.Map<PreferenceTemplateInput, IExtendedPreferenceTemplate>(input));
+			var extendedPreferenceTemplate = _mapper.Map<PreferenceTemplateInput, IExtendedPreferenceTemplate>(input);
+			_preferenceTemplateRepository.Add(extendedPreferenceTemplate);
+			return _mapper.Map<IExtendedPreferenceTemplate, PreferenceTemplateViewModel>(extendedPreferenceTemplate);
 		}
 	}
 }

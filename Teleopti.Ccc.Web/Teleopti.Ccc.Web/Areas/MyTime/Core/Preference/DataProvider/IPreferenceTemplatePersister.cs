@@ -4,6 +4,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 {
 	public interface IPreferenceTemplatePersister
 	{
-		void Persist(PreferenceTemplateInput input);
+		PreferenceTemplateViewModel Persist(PreferenceTemplateInput input);
 	}
 }

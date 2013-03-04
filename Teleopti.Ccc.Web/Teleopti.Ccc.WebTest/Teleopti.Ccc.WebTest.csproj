@@ -130,7 +130,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceTemplatePersisterTest.cs" />
-    <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceTemplatesProviderTest.cs" />
+    <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceTemplateProviderTest.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceTemplateInputMappingTest.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceTemplateViewModelMappingTest.cs" />
     <Compile Include="Areas\MyTime\Core\StudentAvailability\Mapping\StudentAvailabilityAndScheduleDayViewModelMappingTest.cs" />
