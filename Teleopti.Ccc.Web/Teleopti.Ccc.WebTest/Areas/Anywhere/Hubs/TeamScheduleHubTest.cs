@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable"), TestFixture]
 	public class TeamScheduleHubTest
 	{
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldQueryReadModelsForTeam()
 		{
 			var personScheduleDayReadModelRepository = MockRepository.GenerateMock<IPersonScheduleDayReadModelRepository>();
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			personScheduleDayReadModelRepository.AssertWasCalled(x => x.ForTeam(period, teamId));
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldPushDataToCallerOnSubscribe()
 		{
 			var personScheduleDayReadModelRepository = MockRepository.GenerateMock<IPersonScheduleDayReadModelRepository>();
