@@ -18,7 +18,21 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
         private decimal _dayAdherence;
     	private DateTime _calendarDate;
     	private DateTime _shiftBelongsToDate;
+	    private decimal? _adherenceForPeriod;
+	    private decimal? _adherenceForDay;
 
+		public AdherenceDataDto(long localStartTime, long localEndTime, decimal readyTimeMinutes, decimal deviationMinutes, decimal? adherenceForPeriod, DateTime calendarDate, DateTime shiftBelongsToDate)
+		{
+			_localStartTime = localStartTime;
+			_localEndTime = localEndTime;
+			_readyTimeMinutes = readyTimeMinutes;
+			_deviationMinutes = deviationMinutes;
+			_adherenceForPeriod = adherenceForPeriod;
+			_calendarDate = calendarDate;
+			_shiftBelongsToDate = shiftBelongsToDate;
+		}
+
+		[Obsolete("To better handle future data with no figures, use other constructor with nullable adherence.")]
         public AdherenceDataDto(long localStartTime, long localEndTime, decimal readyTimeMinutes, decimal deviationMinutes, decimal adherence, DateTime calendarDate, DateTime shiftBelongsToDate)
         {
             _localStartTime = localStartTime;
@@ -31,6 +45,7 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
         }
 
         [DataMember]
+		[Obsolete("To better handle future data with no figures, use AdherenceForPeriod instead")]
         public decimal Adherence
         {
             get { return _adherence; }
@@ -65,17 +80,31 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
             set { _localEndTime = value; }
         }
 
-        /// <summary>
-        /// Gets or sets the day adherence, the summery for the entire day.
-        /// </summary>
-        /// <value>The day adherence.</value>
         [DataMember]
+		[Obsolete("Obsolete: To better handle future data with no figures, use AdherenceForDay instead")]
         public decimal DayAdherence
         {
             get { return _dayAdherence; }
             set { _dayAdherence = value; }
         }
 
+		[DataMember(Order = 2, IsRequired = false)]
+	    public decimal? AdherenceForPeriod
+	    {
+			get { return _adherenceForPeriod; }
+			set { _adherenceForPeriod = value; }
+	    }
+
+		/// <summary>
+		/// Gets or sets the day adherence, the summary for the entire day.
+		/// </summary>
+		/// <value>The day adherence.</value>
+		[DataMember(Order = 2, IsRequired = false)]
+	    public decimal? AdherenceForDay
+	    {
+			get { return _adherenceForDay; }
+			set { _adherenceForDay = value; }
+	    }
 		/// <summary>
 		/// Gets or sets the calendar date.
 		/// </summary>

@@ -33,8 +33,9 @@ Scenario: Show created shift trade request
 Scenario: Show status of a created shift trade request
 	Given I am an agent
 	And I have created a shift trade request
-	| Field			| Value				|
-	| Subject		| swap with me		|
+	| Field   | Value        |
+	| Subject | swap with me |
+	| Pending | true         |
 	And I am viewing requests
 	Then I should see my existing shift trade request with status waiting for other part
 
@@ -44,6 +45,7 @@ Scenario: Show status of a recieved shift trade request
 	| Field   | Value         |
 	| Subject | swap with me  |
 	| From    | Ashley Andeen |
+	| Pending | true          |
 	And I am viewing requests
 	Then I should see my existing shift trade request with status waiting for your approval
 

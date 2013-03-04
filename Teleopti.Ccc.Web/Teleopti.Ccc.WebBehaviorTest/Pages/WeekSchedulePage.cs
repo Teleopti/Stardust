@@ -60,10 +60,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 			return Document.Div(Find.BySelector(DateSelector(date) + " .text-request")).EventualGet();
 		}
 
+		public Div HolidayAgentsForDate(DateTime date)
+		{
+			return Document.Div(Find.BySelector(DateSelector(date) + " .holiday-agents")).EventualGet();
+		}
 		public Span AddRequestDropDown { get; set; }
 		public Link AddTextRequestMenuItem { get; set; }
 		public Link AddAbsenceRequestMenuItem { get; set; }
 		public Link AddShiftTradeRequestMenuItem { get; set; }
+
 		
 		[FindBy(Id = "Schedule-addRequest-section")]
 		public Div RequestDetailSection { get; set; }
