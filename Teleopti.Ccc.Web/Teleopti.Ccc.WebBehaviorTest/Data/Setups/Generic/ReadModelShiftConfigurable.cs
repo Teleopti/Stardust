@@ -19,12 +19,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 		public string LunchEndTime { get; set; }
 		public string LunchActivity { get; set; }
 
-		private static TimeSpan AsTimeSpan(string value)
-		{
-			TimeSpan result;
-			TimeSpan.TryParse(value, out result);
-			return result;
-		}
+		private TimeSpan StartTimeAsTimeSpan() { return TimeSpan.Parse(StartTime); }
+		private TimeSpan EndTimeAsTimeSpan() { return TimeSpan.Parse(EndTime); }
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
@@ -35,26 +31,28 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 
 			var dateOnly = new DateOnly(Date);
 			var personPeriod = user.Period(dateOnly);
-			var timeZone = user.PermissionInformation.DefaultTimeZone();
 			
 			object[] projection;
 			if (lunchActivity != null)
 			{
 				projection = new[]
 					{
-						makeLayer(mainActivity, timeZone, StartTime, LunchStartTime),
-						makeLayer(lunchActivity, timeZone, LunchStartTime, LunchEndTime),
-						makeLayer(mainActivity, timeZone, LunchEndTime, EndTime)
+						makeLayer(mainActivity, StartTime, LunchStartTime),
+						makeLayer(lunchActivity, LunchStartTime, LunchEndTime),
+						makeLayer(mainActivity, LunchEndTime, EndTime)
 					};
 			}
 			else
 			{
 				projection = new[]
 					{
-						makeLayer(mainActivity, timeZone, StartTime, EndTime),
+						makeLayer(mainActivity, StartTime, EndTime),
 					};
 			}
-			
+
+			// used for worktime aswell, dont know why, just not changing the behavior for now
+			var contractTimeMinutes = EndTimeAsTimeSpan().Subtract(StartTimeAsTimeSpan()).TotalMinutes;
+
 			var reposistory = new PersonScheduleDayReadModelRepository(new CurrentUnitOfWork(GlobalUnitOfWorkState.UnitOfWorkFactory));
 			reposistory.SaveReadModel(new PersonScheduleDayReadModel
 				{
@@ -63,8 +61,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 					TeamId = personPeriod.Team.Id.GetValueOrDefault(),
 					PersonId = user.Id.GetValueOrDefault(),
 					Date = Date,
-					ShiftStart = TimeZoneInfo.ConvertTimeToUtc(Date.Add(AsTimeSpan(StartTime)), timeZone),
-					ShiftEnd = TimeZoneInfo.ConvertTimeToUtc(Date.Add(AsTimeSpan(EndTime)), timeZone),
+					ShiftStart = Date.Add(StartTimeAsTimeSpan()),
+					ShiftEnd = Date.Add(EndTimeAsTimeSpan()),
 					Shift = Newtonsoft.Json.JsonConvert.SerializeObject(
 						new
 							{
@@ -73,26 +71,24 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 								user.Name.LastName,
 								user.EmploymentNumber,
 								Id = user.Id.GetValueOrDefault().ToString(),
-								ContractTimeMinutes = AsTimeSpan(EndTime).Subtract(AsTimeSpan(StartTime)).
-								                                          Subtract(AsTimeSpan(LunchEndTime)).Add(
-									                                          AsTimeSpan(LunchStartTime)).TotalMinutes,
-								WorkTimeMinutes = AsTimeSpan(EndTime).Subtract(AsTimeSpan(StartTime)).
-								                                      Subtract(AsTimeSpan(LunchEndTime)).Add(
-									                                      AsTimeSpan(LunchStartTime)).TotalMinutes,
+								ContractTimeMinutes = contractTimeMinutes,
+								WorkTimeMinutes = contractTimeMinutes,
 								Projection = projection
 							})
 				});
 		}
 
-		private object makeLayer(IActivity activity, TimeZoneInfo timeZone, string startTime, string endTime)
+		private object makeLayer(IActivity activity, string startTime, string endTime)
 		{
+			var start = Date.Add(TimeSpan.Parse(startTime));
+			var end = Date.Add(TimeSpan.Parse(endTime));
 			return new
 				{
 					Color = ColorTranslator.ToHtml(activity.DisplayColor),
 					Title = activity.Name,
-					Start = TimeZoneInfo.ConvertTimeToUtc(Date.Add(AsTimeSpan(startTime)), timeZone),
-					End = TimeZoneInfo.ConvertTimeToUtc(Date.Add(AsTimeSpan(endTime)), timeZone),
-					Minutes = AsTimeSpan(endTime).Subtract(AsTimeSpan(startTime)).TotalMinutes
+					Start = start,
+					End = end,
+					Minutes = end.Subtract(start).TotalMinutes
 				};
 		}
 	}

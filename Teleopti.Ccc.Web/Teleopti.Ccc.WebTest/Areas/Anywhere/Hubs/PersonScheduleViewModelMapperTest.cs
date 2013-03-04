@@ -110,16 +110,20 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		}
 
 		[Test]
-		public void ShouldMapLayerStartTime()
+		public void ShouldMapLayerStartTimeInPersonsTimeZone()
 		{
 			var target = new PersonScheduleViewModelMapper();
+			var person = new Person();
+			var personTimeZone = TimeZoneInfoFactory.HawaiiTimeZoneInfo();
+			person.PermissionInformation.SetDefaultTimeZone(personTimeZone);
+			var startTime = new DateTime(2013, 3, 4, 8, 0, 0, DateTimeKind.Utc);
 
 			dynamic shift = new ExpandoObject();
-			shift.Projection = new[] { MakeLayer("", DateTime.Today.AddHours(8))};
+			shift.Projection = new[] { MakeLayer("", startTime) };
 
-			var result = target.Map(new PersonScheduleData { Shift = shift });
+			var result = target.Map(new PersonScheduleData {Shift = shift, Person = person});
 
-			result.Layers.Single().Start.Should().Be(DateTime.Today.AddHours(8));
+			result.Layers.Single().Start.Should().Be(TimeZoneInfo.ConvertTimeFromUtc(startTime, personTimeZone));
 		}
 
 		[Test]
