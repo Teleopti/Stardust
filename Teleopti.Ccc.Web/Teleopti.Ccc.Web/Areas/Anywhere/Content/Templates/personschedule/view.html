@@ -39,7 +39,15 @@
                             <td class="relative shift">
                                 <!-- ko foreach: Layers -->
 	                            <div class="layer absolute" data-bind="
-								style: { left: StartPixels() + 'px', width: LengthPixels() + 'px', backgroundColor: Color()}
+								style: { 
+									left: StartPixels() + 'px', 
+									width: LengthPixels() + 'px', 
+									backgroundColor: Color()
+								},
+								attr: { 
+									'data-start-time': StartTime,
+									'data-length-minutes': LengthMinutes,
+								}
 								"></div>
                                 <!-- /ko -->
                             </td>

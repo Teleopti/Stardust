@@ -30,7 +30,7 @@ define([
 				options.renderHtml(view);
 
 				personSchedule.Id(options.id);
-				personSchedule.Date(moment(options.date, 'YYYYMMDD'));
+				personSchedule.Date(moment.utc(options.date, 'YYYYMMDD'));
 
 				subscriptions.subscribePersonSchedule(
 					options.id,

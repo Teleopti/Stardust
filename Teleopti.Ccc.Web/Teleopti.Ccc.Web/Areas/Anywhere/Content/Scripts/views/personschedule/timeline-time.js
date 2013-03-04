@@ -11,13 +11,11 @@ define([
 
 			var self = this;
 
-			var shortTimePattern = resources.ShortTimePattern;
-			
 			this.Minutes = ko.observable(minutes);
 
 			this.Time = ko.computed(function () {
 				var time = moment().startOf('day').add('minutes', self.Minutes());
-				return time.format(shortTimePattern);
+				return time.format(resources.ShortTimePattern);
 			});
 
 			this.Pixel = ko.computed(function () {
