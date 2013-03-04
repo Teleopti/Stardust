@@ -109,6 +109,7 @@
     <Compile Include="Areas\Anywhere\Hubs\PersonScheduleHubTest.cs" />
     <Compile Include="Areas\Anywhere\Hubs\PersonScheduleViewModelFactoryTest.cs" />
     <Compile Include="Areas\Anywhere\Hubs\PersonScheduleViewModelMapperTest.cs" />
+    <Compile Include="Areas\Anywhere\Hubs\TestHubBuilder.cs" />
     <Compile Include="Areas\MyTime\Core\StudentAvailability\Mapping\StudentAvailabilityAndScheduleDayViewModelMappingTest.cs" />
     <Compile Include="Areas\MyTime\Models\StudentAvailability\StudentAvailabilityDayFormTest.cs" />
     <Compile Include="Areas\Start\Controllers\ApplicationAuthenticationApiControllerTest.cs" />

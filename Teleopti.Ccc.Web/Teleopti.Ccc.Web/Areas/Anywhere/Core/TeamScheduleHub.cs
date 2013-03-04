@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
@@ -37,7 +38,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		{
 			var dateTimePeriod = new DateTimePeriod(date, date.AddHours(24));
 			var schedule = _personScheduleDayReadModelRepository.ForTeam(dateTimePeriod, teamId);
-			target.incomingTeamSchedule(schedule.Select(s => JsonConvert.DeserializeObject(s.Shift)));
+			if (schedule != null)
+				target.incomingTeamSchedule(schedule.Select(s => JsonConvert.DeserializeObject<ExpandoObject>(s.Shift)));
 		}
 
 	}
