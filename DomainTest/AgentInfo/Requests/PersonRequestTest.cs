@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Text;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Helper;
@@ -139,6 +140,14 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 
 			Assert.AreEqual(subject, _target.GetSubject(new NoFormatting()));
         }
+
+
+			[Test]
+			public void SetNullAsMessage()
+			{
+				_target.TrySetMessage(null);
+				_target.GetMessage(new NoFormatting()).Should().Be.Empty();
+			}
 
         /// <summary>
         /// Verifies the message cannot be changed when denied.
