@@ -1,13 +1,17 @@
 define([
 		'knockout',
-		'moment'
-	], function (ko, moment) {
+		'moment',
+		'noext!application/resources'
+	], function (
+		ko,
+		moment, 
+		resources) {
 
 		return function (timeline, minutes) {
 
 			var self = this;
 
-			var shortTimePattern = "HH:mm"; //from resources!
+			var shortTimePattern = resources.ShortTimePattern;
 			
 			this.Minutes = ko.observable(minutes);
 
