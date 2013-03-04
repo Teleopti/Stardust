@@ -80,6 +80,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		};
 
 		self.requestedDate.subscribe(function (newValue) {
+			self.chooseAgent(null);
 			if (newValue.diff(self.openPeriodStartDate) < 0) {
 				self.selectedDate(moment(self.openPeriodStartDate));
 			} else if (self.openPeriodEndDate.diff(newValue) < 0) {
