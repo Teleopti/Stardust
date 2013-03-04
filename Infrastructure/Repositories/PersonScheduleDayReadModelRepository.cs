@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using NHibernate;
 using NHibernate.Transform;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
@@ -85,7 +86,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.SetParameter("ShiftStart", model.ShiftStart)
 				.SetParameter("ShiftEnd", model.ShiftEnd)
 				.SetDateTime("BelongsToDate", model.BelongsToDate)
-				.SetString("Shift", model.Shift)
+				.SetParameter("Shift", model.Shift,NHibernateUtil.StringClob)
 				.ExecuteUpdate();
 		}
 

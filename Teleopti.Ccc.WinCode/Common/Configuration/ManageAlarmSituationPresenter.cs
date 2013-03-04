@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
             if (e.Message.DomainUpdateType == DomainUpdateType.Update ||
                 e.Message.DomainUpdateType == DomainUpdateType.Delete)
             {
-                IAlarmType alarmType = _alarmTypes.FirstOrDefault(s => s.Id == e.Message.DomainObjectId);
+                IAlarmType alarmType = _alarmTypes.FirstOrDefault(s => s!=null && s.Id == e.Message.DomainObjectId);
                 if (alarmType!= null)
                 {
                     _alarmTypes.Remove(alarmType);
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
             if (e.Message.DomainUpdateType == DomainUpdateType.Update ||
                 e.Message.DomainUpdateType == DomainUpdateType.Delete)
             {
-                IActivity activity = _activities.FirstOrDefault(s => s.Id == e.Message.DomainObjectId);
+                IActivity activity = _activities.FirstOrDefault(s => s!=null && s.Id == e.Message.DomainObjectId);
                 if (activity != null)
                 {
                     _activities.Remove(activity);

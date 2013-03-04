@@ -9,7 +9,6 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
-using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
@@ -35,6 +34,63 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			TestThatRequestTabIsCreated(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb);
 		}
 
+		[Test]
+		public void	ShouldNotCreateRequestTabIfNoPermissionsToRequests()
+		{
+			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
+			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.TextRequests)).Return(false);
+			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb)).Return(false);
+			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb)).Return(false);
+
+			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateMock<IPushMessageProvider>(), MockRepository.GenerateMock<ILoggedOnUser>());
+			var result = target.CreatePortalViewModel();
+
+			var requestTab = (from i in result.NavigationItems where i.Controller == "Requests" select i).SingleOrDefault();
+			requestTab.Should().Be.Null();
+		}
+		
+		[Test]
+		public void ShouldHaveAddTextRequestMenuItemIfPermission()
+		{
+			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
+			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.TextRequests)).Return(true);
+
+			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateMock<IPushMessageProvider>(), MockRepository.GenerateMock<ILoggedOnUser>());
+			var result = ToolBarItemsOfType<ToolBarDropDown>(target.CreatePortalViewModel());
+
+			result.Any(x => x.MenuItems.Any(m => m.MenyType == "addTextRequest")).Should().Be.True();
+			result.Any(x => x.MenuItems.Any(m => m.MenyType == "addAbsenceRequest")).Should().Be.False();
+			result.Any(x => x.MenuItems.Any(m => m.MenyType == "addShiftTradeRequest")).Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldHaveAddAbsenceRequestMenuItemIfPermission()
+		{
+			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
+			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb)).Return(true);
+
+			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateMock<IPushMessageProvider>(), MockRepository.GenerateMock<ILoggedOnUser>());
+			var result = ToolBarItemsOfType<ToolBarDropDown>(target.CreatePortalViewModel());
+
+			result.Any(x => x.MenuItems.Any(m => m.MenyType == "addTextRequest")).Should().Be.False();
+			result.Any(x => x.MenuItems.Any(m => m.MenyType == "addAbsenceRequest")).Should().Be.True();
+			result.Any(x => x.MenuItems.Any(m => m.MenyType == "addShiftTradeRequest")).Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldHaveAddShiftTradeRequestMenuItemIfPermission()
+		{
+			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
+			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb)).Return(true);
+
+			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateMock<IPushMessageProvider>(), MockRepository.GenerateMock<ILoggedOnUser>());
+			var result = ToolBarItemsOfType<ToolBarDropDown>(target.CreatePortalViewModel());
+
+			result.Any(x => x.MenuItems.Any(m => m.MenyType == "addTextRequest")).Should().Be.False();
+			result.Any(x => x.MenuItems.Any(m => m.MenyType == "addAbsenceRequest")).Should().Be.False();
+			result.Any(x => x.MenuItems.Any(m => m.MenyType == "addShiftTradeRequest")).Should().Be.True();
+		}
+
 		private void TestThatRequestTabIsCreated(string applicationFunctionPath)
 		{
 			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
@@ -45,44 +101,6 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 
 			var requestTab = (from i in result.NavigationItems where i.Controller == "Requests" select i).SingleOrDefault();
 			requestTab.Should().Not.Be.Null();
-		}
-
-
-		[Test, Ignore("Fix me")]
-		public void ShouldHaveAddRequestButtonIfPermissionToTextRequest()
-		{
-			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
-			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.TextRequests)).Return(true);
-
-			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateMock<IPushMessageProvider>(), MockRepository.GenerateMock<ILoggedOnUser>());
-			var result = ToolBarItemsOfType<ToolBarButtonItem>(target.CreatePortalViewModel());
-
-			result.Any(x => x.ButtonType == "addRequest").Should().Be.True();
-		}
-
-		[Test]
-		public void ShouldHaveAddRequestButtonIfPermissionToAbsenceRequest()
-		{
-			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
-			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb)).Return(true);
-
-			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateMock<IPushMessageProvider>(), MockRepository.GenerateMock<ILoggedOnUser>());
-			var result = ToolBarItemsOfType<ToolBarButtonItem>(target.CreatePortalViewModel());
-
-			result.Any(x => x.ButtonType == "addRequest").Should().Be.True();
-		}
-
-		public void ShouldNotHaveAddRequestButtonIfNoPermission()
-		{
-			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
-			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.TextRequests)).Return(false);
-			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb)).Return(false);
-			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb)).Return(true);
-
-			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateMock<IPushMessageProvider>(), MockRepository.GenerateMock<ILoggedOnUser>());
-			var result = ToolBarItemsOfType<ToolBarButtonItem>(target.CreatePortalViewModel());
-
-			result.Any(x => x.ButtonType == "addRequest").Should().Be.False();
 		}
 
 		private static SectionNavigationItem RelevantTab(PortalViewModel result)
