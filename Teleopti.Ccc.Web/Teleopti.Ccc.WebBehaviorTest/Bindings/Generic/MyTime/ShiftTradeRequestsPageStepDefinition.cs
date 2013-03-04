@@ -156,18 +156,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeRequestDetailMessage.Text, Is.EqualTo(message));
 		}
 
-		[When(@"I enter a subject")]
-		public void WhenIEnterASubject()
+
+		[When(@"I enter subject '(.*)'")]
+		public void WhenIEnterSubject(string subject)
 		{
 			Pages.Pages.RequestsPage.AddShiftTradeSubject.WaitUntilDisplayed();
-			Pages.Pages.RequestsPage.AddShiftTradeSubject.ChangeValue("A nice subject");
+			Pages.Pages.RequestsPage.AddShiftTradeSubject.ChangeValue(subject);
 		}
 
-		[When(@"I enter a message")]
-		public void WhenIEnterAMessage()
+		[When(@"I enter message '(.*)'")]
+		public void WhenIEnterMessage(string message)
 		{
 			Pages.Pages.RequestsPage.AddShiftTradeMessage.WaitUntilDisplayed();
-			Pages.Pages.RequestsPage.AddShiftTradeMessage.ChangeValue("A nice message");
+			Pages.Pages.RequestsPage.AddShiftTradeMessage.ChangeValue(message);
 		}
 		
 		[Then(@"Add Shift Trade Request view should not be visible")]

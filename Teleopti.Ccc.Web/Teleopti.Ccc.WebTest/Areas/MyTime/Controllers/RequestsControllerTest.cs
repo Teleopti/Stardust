@@ -81,12 +81,16 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			var shiftTradePersister = MockRepository.GenerateMock<IShiftTradeRequestPersister>();
 			var form = new ShiftTradeRequestForm();
+			var resultData = new RequestViewModel();
+
+			shiftTradePersister.Stub(x => x.Persist(form)).Return(resultData);
 
 			using (var target = new RequestsController(null, null, null, shiftTradePersister, null))
 			{
-				target.ShiftTradeRequest(form);
+				var result = target.ShiftTradeRequest(form);
+				var data = result.Data as RequestViewModel;
+				data.Should().Be.SameInstanceAs(resultData);
 			}
-			shiftTradePersister.AssertWasCalled(x => x.Persist(form));
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
@@ -148,13 +152,29 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		public void ShouldReturnErrorMessageOnInvalidModel()
+		public void ShouldReturnErrorMessageOnInvalidModelFromTextRequest()
 		{
 			var target = new StubbingControllerBuilder().CreateController<RequestsController>(null, null, null,null, null);
 			const string message = "Test model validation error";
 			target.ModelState.AddModelError("Test", message);
 
 			var result = target.TextRequest(new TextRequestForm());
+			var data = result.Data as ModelStateResult;
+
+			target.Response.StatusCode.Should().Be(400);
+			target.Response.TrySkipIisCustomErrors.Should().Be.True();
+			data.Errors.Single().Should().Be(message);
+
+		}
+
+		[Test]
+		public void ShouldReturnErrorMessageOnInvalidModelFromShiftTradeRequest()
+		{
+			var target = new StubbingControllerBuilder().CreateController<RequestsController>(null, null, null, null, null);
+			const string message = "Test model validation error";
+			target.ModelState.AddModelError("Test", message);
+
+			var result = target.ShiftTradeRequest(new ShiftTradeRequestForm());
 			var data = result.Data as ModelStateResult;
 
 			target.Response.StatusCode.Should().Be(400);

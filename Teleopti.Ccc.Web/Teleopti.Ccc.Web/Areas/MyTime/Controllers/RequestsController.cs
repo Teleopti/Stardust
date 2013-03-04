@@ -70,9 +70,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 		[UnitOfWorkAction]
 		[HttpPostOrPut]
-		public void ShiftTradeRequest(ShiftTradeRequestForm form)
+		public JsonResult ShiftTradeRequest(ShiftTradeRequestForm form)
 		{
-			_shiftTradeRequestPersister.Persist(form);
+			if (!ModelState.IsValid)
+			{
+				Response.TrySkipIisCustomErrors = true;
+				Response.StatusCode = 400;
+				return ModelState.ToJson();
+			}
+			return Json(_shiftTradeRequestPersister.Persist(form));
 		}
 
 		[UnitOfWorkAction]
