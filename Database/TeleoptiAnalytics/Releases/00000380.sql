@@ -73,7 +73,13 @@ GO
 	
 	SET @max_schedule_rows = 250000
 	SELECT @number_of_bu = COUNT(*) FROM mart.dim_business_unit
-	SELECT @schedule_rows=rows FROM sysindexes WHERE OBJECT_NAME(id) = 'fact_schedule' AND indid < 2
+	SELECT @schedule_rows=ddps.row_count 
+	FROM sys.objects so
+	JOIN sys.indexes si ON si.OBJECT_ID = so.OBJECT_ID
+	JOIN sys.dm_db_partition_stats AS ddps ON si.OBJECT_ID = ddps.OBJECT_ID  AND si.index_id = ddps.index_id
+	WHERE si.index_id < 2  AND so.is_ms_shipped = 0
+	and so.name = 'fact_schedule'
+	
 	SELECT @max_schedule=MAX(schedule_date_id), @min_schedule=MIN(schedule_date_id) FROM mart.fact_schedule
 	SELECT @max_agent=MAX(date_id), @min_agent=MIN(date_id) FROM mart.fact_agent
 	SELECT @min_date=MAX(d.date_date) --Get largest @min_date
