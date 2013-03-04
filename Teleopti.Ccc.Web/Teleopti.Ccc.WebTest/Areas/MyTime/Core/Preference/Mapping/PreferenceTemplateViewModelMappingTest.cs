@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Globalization;
 using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -128,6 +129,23 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 
 			result.EarliestEndTime.Should().Be(extendedPreferenceTemplate.Restriction.EndTimeLimitation.StartTimeString);
 			result.LatestEndTime.Should().Be(extendedPreferenceTemplate.Restriction.EndTimeLimitation.EndTimeString);
+		}
+
+		[Test]
+		public void ShouldMapEndTimeLimitationNextDay()
+		{
+			var extendedPreferenceTemplate = new ExtendedPreferenceTemplate(
+				null, new PreferenceRestrictionTemplate
+				{
+					EndTimeLimitation = new EndTimeLimitation(TimeSpan.FromHours(25), TimeSpan.FromHours(27))
+				}, "name", Color.Red);
+
+			var result = Mapper.Map<IExtendedPreferenceTemplate, PreferenceTemplateViewModel>(extendedPreferenceTemplate);
+
+			result.EarliestEndTime.Should().Be(TimeHelper.TimeOfDayFromTimeSpan(extendedPreferenceTemplate.Restriction.EndTimeLimitation.StartTime.Value.Add(TimeSpan.FromDays(-1)), CultureInfo.CurrentCulture));
+			result.EarliestEndTimeNextDay.Should().Be.True();
+			result.LatestEndTime.Should().Be(TimeHelper.TimeOfDayFromTimeSpan(extendedPreferenceTemplate.Restriction.EndTimeLimitation.EndTime.Value.Add(TimeSpan.FromDays(-1)), CultureInfo.CurrentCulture));
+			result.LatestEndTimeNextDay.Should().Be.True();
 		}
 
 		[Test]

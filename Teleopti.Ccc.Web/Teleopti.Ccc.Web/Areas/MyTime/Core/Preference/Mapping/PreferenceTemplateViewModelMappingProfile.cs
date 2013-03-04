@@ -30,8 +30,28 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				}))
 				.ForMember(d => d.EarliestStartTime, o => o.MapFrom(s => s.Restriction.StartTimeLimitation.StartTimeString))
 				.ForMember(d => d.LatestStartTime, o => o.MapFrom(s => s.Restriction.StartTimeLimitation.EndTimeString))
-				.ForMember(d => d.EarliestEndTime, o => o.MapFrom(s => s.Restriction.EndTimeLimitation.StartTimeString))
-				.ForMember(d => d.LatestEndTime, o => o.MapFrom(s => s.Restriction.EndTimeLimitation.EndTimeString))
+				.ForMember(d => d.EarliestEndTime, o => o.MapFrom(s =>
+					{
+						if (s.Restriction.EndTimeLimitation.StartTime.HasValue &&
+						    s.Restriction.EndTimeLimitation.StartTime.Value >= TimeSpan.FromDays(1))
+						{
+							return TimeHelper.TimeOfDayFromTimeSpan(s.Restriction.EndTimeLimitation.StartTime.Value.Add(TimeSpan.FromDays(-1)), CultureInfo.CurrentCulture);
+						}
+						return s.Restriction.EndTimeLimitation.StartTimeString;
+					}))
+				.ForMember(d => d.EarliestEndTimeNextDay, o => o.MapFrom(s => s.Restriction.EndTimeLimitation.StartTime.HasValue &&
+																			  s.Restriction.EndTimeLimitation.StartTime.Value >= TimeSpan.FromDays(1)))
+				.ForMember(d => d.LatestEndTime, o => o.MapFrom(s =>
+					{
+						if (s.Restriction.EndTimeLimitation.EndTime.HasValue &&
+							s.Restriction.EndTimeLimitation.EndTime.Value >= TimeSpan.FromDays(1))
+						{
+							return TimeHelper.TimeOfDayFromTimeSpan(s.Restriction.EndTimeLimitation.EndTime.Value.Add(TimeSpan.FromDays(-1)), CultureInfo.CurrentCulture);
+						}
+						return s.Restriction.EndTimeLimitation.EndTimeString;
+					}))
+				.ForMember(d => d.LatestEndTimeNextDay, o => o.MapFrom(s => s.Restriction.EndTimeLimitation.EndTime.HasValue &&
+																			  s.Restriction.EndTimeLimitation.EndTime.Value >= TimeSpan.FromDays(1)))
 				.ForMember(d => d.MinimumWorkTime, o => o.MapFrom(s => s.Restriction.WorkTimeLimitation.StartTimeString))
 				.ForMember(d => d.MaximumWorkTime, o => o.MapFrom(s => s.Restriction.WorkTimeLimitation.EndTimeString))
 				.ForMember(d => d.ActivityPreferenceId, o => o.MapFrom(s =>GetActivityRestrictionValue(s, r => r.Activity.Id)))

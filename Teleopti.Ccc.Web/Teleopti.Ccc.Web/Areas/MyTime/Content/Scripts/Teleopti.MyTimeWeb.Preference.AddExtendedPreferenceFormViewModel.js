@@ -22,7 +22,6 @@ Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (aja
 			type: 'GET',
 			success: function (data, textStatus, jqXHR) {
 				data = data || [];
-
 				self.AvailableTemplates(data);
 
 				$("#Preference-template").selectbox(
@@ -83,6 +82,17 @@ Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (aja
 			self.LatestStartTime(newValue.LatestStartTime);
 			self.EarliestEndTime(newValue.EarliestEndTime);
 			self.LatestEndTime(newValue.LatestEndTime);
+			self.EarliestEndTimeNextDay(newValue.EarliestEndTimeNextDay);
+			self.LatestEndTimeNextDay(newValue.LatestEndTimeNextDay);
+			self.MinimumWorkTime(newValue.MinimumWorkTime);
+			self.MaximumWorkTime(newValue.MaximumWorkTime);
+			self.ActivityPreferenceId(newValue.ActivityPreferenceId);
+			self.ActivityEarliestStartTime(newValue.ActivityEarliestStartTime);
+			self.ActivityLatestStartTime(newValue.ActivityLatestStartTime);
+			self.ActivityEarliestEndTime(newValue.ActivityEarliestEndTime);
+			self.ActivityLatestEndTime(newValue.ActivityLatestEndTime);
+			self.ActivityMinimumTime(newValue.ActivityMinimumTime);
+			self.ActivityMaximumTime(newValue.ActivityMaximumTime);
 		}
 	});
 

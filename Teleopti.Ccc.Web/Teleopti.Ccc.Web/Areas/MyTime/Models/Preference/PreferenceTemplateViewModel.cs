@@ -12,8 +12,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 		public string LatestStartTime { get; set; }
 
 		public string EarliestEndTime { get; set; }
+		public bool EarliestEndTimeNextDay { get; set; }
 		public string LatestEndTime { get; set; }
-
+		public bool LatestEndTimeNextDay { get; set; }
 
 		public string MinimumWorkTime { get; set; }
 		public string MaximumWorkTime { get; set; }
