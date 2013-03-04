@@ -757,13 +757,13 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
         {
             LevellingPerConfiguration levellingPerConfiguration = new LevellingPerConfiguration();
 
-            levellingPerConfiguration._selectedBlockFinderType =
+            levellingPerConfiguration.SelectedBlockFinderType =
                 _localSchedulingOptions.BlockFinderTypeForAdvanceScheduling;
-            levellingPerConfiguration._selectedGroupPage = _localSchedulingOptions.GroupOnGroupPageForLevelingPer;
-            levellingPerConfiguration._UseSameEndTime = _localSchedulingOptions.UseLevellingSameEndTime;
-            levellingPerConfiguration._UseSameShiftCategory = _localSchedulingOptions.UseLevellingSameShiftCategory;
-            levellingPerConfiguration._UseSameStartTime = _localSchedulingOptions.UseLevellingSameStartTime;
-            levellingPerConfiguration._UserSameShift = _localSchedulingOptions.UseLevellingSameShift;
+            levellingPerConfiguration.SelectedGroupPage = _localSchedulingOptions.GroupOnGroupPageForLevelingPer;
+            levellingPerConfiguration.UseSameEndTime = _localSchedulingOptions.UseLevellingSameEndTime;
+            levellingPerConfiguration.UseSameShiftCategory = _localSchedulingOptions.UseLevellingSameShiftCategory;
+            levellingPerConfiguration.UseSameStartTime = _localSchedulingOptions.UseLevellingSameStartTime;
+            levellingPerConfiguration.UserSameShift = _localSchedulingOptions.UseLevellingSameShift;
             
                 
             var levellingPerPrefrences = new LevellingPerPrefrences(levellingPerConfiguration, _groupPagesLevelingPer);
@@ -775,12 +775,12 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
         private void GetLevellingPerDataToSave()
         {
             _localSchedulingOptions.BlockFinderTypeForAdvanceScheduling =
-                _levellingConfiguartion._selectedBlockFinderType;
-            _localSchedulingOptions.GroupOnGroupPageForLevelingPer = _levellingConfiguartion._selectedGroupPage;
-            _localSchedulingOptions.UseLevellingSameEndTime = _levellingConfiguartion._UseSameEndTime;
-            _localSchedulingOptions.UseLevellingSameShift = _levellingConfiguartion._UserSameShift;
-            _localSchedulingOptions.UseLevellingSameShiftCategory = _levellingConfiguartion._UseSameShiftCategory;
-            _localSchedulingOptions.UseLevellingSameStartTime = _levellingConfiguartion._UseSameStartTime;
+                _levellingConfiguartion.SelectedBlockFinderType;
+            _localSchedulingOptions.GroupOnGroupPageForLevelingPer = _levellingConfiguartion.SelectedGroupPage;
+            _localSchedulingOptions.UseLevellingSameEndTime = _levellingConfiguartion.UseSameEndTime;
+            _localSchedulingOptions.UseLevellingSameShift = _levellingConfiguartion.UserSameShift;
+            _localSchedulingOptions.UseLevellingSameShiftCategory = _levellingConfiguartion.UseSameShiftCategory;
+            _localSchedulingOptions.UseLevellingSameStartTime = _levellingConfiguartion.UseSameStartTime;
 
         }
     }
