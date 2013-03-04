@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftFilters
 	{
 		private MockRepository _mocks;
 		private ISchedulingResultStateHolder _resultStateHolder;
-		private ITimeLimitationShiftFilter _timeLimitationShiftFilter;
+		private IValidDateTimePeriodShiftFilter _validDateTimePeriodShiftFilter;
 		private ILongestPeriodForAssignmentCalculator _longestPeriodForAssignmentCalculator;
 		private BusinessRulesShiftFilter _target;
 		private IScheduleRange _scheduleRange;
@@ -28,12 +28,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftFilters
 			_mocks = new MockRepository();
 			_dateOnly = new DateOnly(2013, 3, 1);
 			_resultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
-			_timeLimitationShiftFilter = _mocks.StrictMock<ITimeLimitationShiftFilter>();
+			_validDateTimePeriodShiftFilter = _mocks.StrictMock<IValidDateTimePeriodShiftFilter>();
 			_longestPeriodForAssignmentCalculator = _mocks.StrictMock<ILongestPeriodForAssignmentCalculator>();
 			_scheduleRange = _mocks.StrictMock<IScheduleRange>();
 			_scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
 			_personalShiftMeetingTimeChecker = _mocks.StrictMock<IPersonalShiftMeetingTimeChecker>();
-			_target = new BusinessRulesShiftFilter(_resultStateHolder, _timeLimitationShiftFilter,
+			_target = new BusinessRulesShiftFilter(_resultStateHolder, _validDateTimePeriodShiftFilter,
 												   _longestPeriodForAssignmentCalculator);
 		}
 

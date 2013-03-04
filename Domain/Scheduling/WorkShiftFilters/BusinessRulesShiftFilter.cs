@@ -13,23 +13,22 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftFilters
 	public class BusinessRulesShiftFilter : IBusinessRulesShiftFilter
 	{
 		private readonly ISchedulingResultStateHolder _resultStateHolder;
-		private readonly ITimeLimitationShiftFilter _timeLimitationShiftFilter;
+		private readonly IValidDateTimePeriodShiftFilter _validDateTimePeriodShiftFilter;
 		private readonly ILongestPeriodForAssignmentCalculator _longestPeriodForAssignmentCalculator;
 
 		public BusinessRulesShiftFilter(ISchedulingResultStateHolder resultStateHolder,
-		                                ITimeLimitationShiftFilter timeLimitationShiftFilter,
+		                                IValidDateTimePeriodShiftFilter validDateTimePeriodShiftFilter,
 		                                ILongestPeriodForAssignmentCalculator longestPeriodForAssignmentCalculator)
 		{
 			_resultStateHolder = resultStateHolder;
-			_timeLimitationShiftFilter = timeLimitationShiftFilter;
+			_validDateTimePeriodShiftFilter = validDateTimePeriodShiftFilter;
 			_longestPeriodForAssignmentCalculator = longestPeriodForAssignmentCalculator;
 		}
 
 		public IList<IShiftProjectionCache> Filter(IPerson person, IList<IShiftProjectionCache> shiftList,
 												   DateOnly dateToCheck, IWorkShiftFinderResult finderResult)
 		{
-			if (shiftList.Count == 0)
-				return shiftList;
+			if (shiftList.Count == 0) return shiftList;
 			var scheduleRange = _resultStateHolder.Schedules[person];
 			var rulePeriod = _longestPeriodForAssignmentCalculator.PossiblePeriod(scheduleRange, dateToCheck);
 			if (!rulePeriod.HasValue)
@@ -40,7 +39,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftFilters
 				return new List<IShiftProjectionCache>();
 			}
 
-			return _timeLimitationShiftFilter.Filter(shiftList, rulePeriod.Value, finderResult);
+			return _validDateTimePeriodShiftFilter.Filter(shiftList, rulePeriod.Value, finderResult);
 		}
 	}
 }

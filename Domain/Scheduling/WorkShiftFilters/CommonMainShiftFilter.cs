@@ -13,6 +13,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftFilters
 	{
 		public IList<IShiftProjectionCache> Filter(IList<IShiftProjectionCache> shiftList, IEffectiveRestriction effectiveRestriction)
 		{
+			if (shiftList.Count == 0) return shiftList;
 			if (effectiveRestriction.CommonMainShift != null)
 			{
 				var shift = shiftList.FirstOrDefault(x => mainShiftsEqual(x.TheMainShift, effectiveRestriction.CommonMainShift));

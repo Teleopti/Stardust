@@ -19,11 +19,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftFilters
 		private IActivityRestrictionsShiftFilter _target;
 		private MockRepository _mocks;
 		private IPersonalShiftMeetingTimeChecker _personalShiftMeetingTimeChecker;
+		private IPerson _person;
 
 		[SetUp]
 		public void Setup()
 		{
 			_mocks = new MockRepository();
+			_person = PersonFactory.CreatePerson("bill");
 			_personalShiftMeetingTimeChecker = _mocks.StrictMock<IPersonalShiftMeetingTimeChecker>();
 			_target = new ActivityRestrictionsShiftFilter();
 		}
@@ -58,7 +60,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftFilters
 																				  new EndTimeLimitation(),
 																				  new WorkTimeLimitation(), null, null, null,
 																				  activityRestrictions);
-			var ret = _target.Filter(dateOnly, timeZoneInfo, casheList, effectiveRestriction, finderResult);
+			var ret = _target.Filter(dateOnly, _person, casheList, effectiveRestriction, finderResult);
 			Assert.AreEqual(2, ret.Count);
 
 			var activityRestriction = new ActivityRestriction(breakActivity)
@@ -72,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftFilters
 																				  new WorkTimeLimitation(), null, null, null,
 																				  activityRestrictions);
 
-			ret = _target.Filter(dateOnly, timeZoneInfo, casheList, effectiveRestriction, finderResult);
+			ret = _target.Filter(dateOnly, _person, casheList, effectiveRestriction, finderResult);
 			Assert.AreEqual(0, ret.Count);
 		}
 	}

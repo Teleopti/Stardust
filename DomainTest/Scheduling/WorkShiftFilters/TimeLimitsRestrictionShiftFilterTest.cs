@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -23,11 +21,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftFilters
 		private ShiftCategory _category;
 		private TimeZoneInfo _timeZoneInfo;
 		private IPersonalShiftMeetingTimeChecker _personalShiftMeetingTimeChecker;
-		private ITimeLimitationShiftFilter _timeLimitationShiftFilter;
+		private IValidDateTimePeriodShiftFilter _validDateTimePeriodShiftFilter;
 		private ILatestStartTimeLimitationShiftFilter _latestStartTimeLimitationShiftFilter;
 		private IEarliestEndTimeLimitationShiftFilter _earliestEndTimeLimitationShiftFilter;
 		private ITimeLimitsRestrictionShiftFilter _target;
 		private EffectiveRestriction _effectiveRestriction;
+		private IPerson _person;
 
 		[SetUp]
 		public void Setup()
@@ -39,8 +38,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftFilters
 			_category = ShiftCategoryFactory.CreateShiftCategory("dv");
 			_category.SetId(Guid.NewGuid());
 			_timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("UTC"));
+			_person = PersonFactory.CreatePerson("bill");
 			_personalShiftMeetingTimeChecker = _mocks.StrictMock<IPersonalShiftMeetingTimeChecker>();
-			_timeLimitationShiftFilter = _mocks.StrictMock<ITimeLimitationShiftFilter>();
+			_validDateTimePeriodShiftFilter = _mocks.StrictMock<IValidDateTimePeriodShiftFilter>();
 			_latestStartTimeLimitationShiftFilter = _mocks.StrictMock<ILatestStartTimeLimitationShiftFilter>();
 			_earliestEndTimeLimitationShiftFilter = _mocks.StrictMock<IEarliestEndTimeLimitationShiftFilter>();
 			_effectiveRestriction = new EffectiveRestriction(
@@ -48,21 +48,21 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftFilters
 				new EndTimeLimitation(new TimeSpan(15, 0, 0), new TimeSpan(18, 0, 0)),
 				new WorkTimeLimitation(new TimeSpan(5, 0, 0), new TimeSpan(8, 0, 0)),
 				null, null, null, new List<IActivityRestriction>());
-			_target = new TimeLimitsRestrictionShiftFilter(_timeLimitationShiftFilter, _latestStartTimeLimitationShiftFilter,
+			_target = new TimeLimitsRestrictionShiftFilter(_validDateTimePeriodShiftFilter, _latestStartTimeLimitationShiftFilter,
 														   _earliestEndTimeLimitationShiftFilter);
 		}
 
 		[Test]
 		public void CanFilterOnEffectiveRestriction()
 		{
-			var ret = _target.Filter(_dateOnly, _timeZoneInfo, getCashes(), _effectiveRestriction, new WorkShiftFinderResultForTest());
+			var ret = _target.Filter(_dateOnly, _person, getCashes(), _effectiveRestriction, new WorkShiftFinderResultForTest());
 			Assert.IsNotNull(ret);
 		}
 
 		[Test]
 		public void CanFilterOnRestrictionTimeLimitsWithEmptyList()
 		{
-			var ret = _target.Filter(_dateOnly, _timeZoneInfo, new List<IShiftProjectionCache>(), _effectiveRestriction, new WorkShiftFinderResultForTest());
+			var ret = _target.Filter(_dateOnly, _person, new List<IShiftProjectionCache>(), _effectiveRestriction, new WorkShiftFinderResultForTest());
 			Assert.IsNotNull(ret);
 		}
 

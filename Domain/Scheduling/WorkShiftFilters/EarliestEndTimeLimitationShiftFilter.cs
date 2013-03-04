@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftFilters
 	{
 		public IList<IShiftProjectionCache> Filter(IList<IShiftProjectionCache> shiftList, DateTime earliestEnd, IWorkShiftFinderResult finderResult)
 		{
+			if (shiftList.Count == 0) return shiftList;
 			int cntBefore = shiftList.Count;
 			IList<IShiftProjectionCache> workShiftsWithinPeriod = new List<IShiftProjectionCache>();
 			for (int workShiftCounter = 0; workShiftCounter < shiftList.Count; workShiftCounter++)

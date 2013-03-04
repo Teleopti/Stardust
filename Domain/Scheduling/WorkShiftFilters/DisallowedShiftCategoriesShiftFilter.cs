@@ -14,9 +14,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftFilters
 	{
 		public IList<IShiftProjectionCache> Filter(IList<IShiftCategory> categories, IList<IShiftProjectionCache> shiftList, IWorkShiftFinderResult finderResult)
 		{
-			if (categories.Count == 0)
-				return shiftList;
 			if (shiftList.Count == 0)
+				return shiftList;
+			if (categories.Count == 0)
 				return shiftList;
 			int before = shiftList.Count;
 			var ret = shiftList.Where(shiftProjectionCache => !categories.Contains(shiftProjectionCache.TheWorkShift.ShiftCategory)).ToList();

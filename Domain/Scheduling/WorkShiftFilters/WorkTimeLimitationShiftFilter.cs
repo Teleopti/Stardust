@@ -15,8 +15,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftFilters
 	{
 		public IList<IShiftProjectionCache> Filter(IList<IShiftProjectionCache> shiftList, IEffectiveRestriction restriction, IWorkShiftFinderResult finderResult)
 		{
-			if (shiftList.Count == 0)
-				return shiftList;
+			if (shiftList.Count == 0) return shiftList;
 			IList<IShiftProjectionCache> workShiftsWithinMinMax = new List<IShiftProjectionCache>();
 			if (restriction.WorkTimeLimitation.EndTime.HasValue || restriction.WorkTimeLimitation.StartTime.HasValue)
 			{

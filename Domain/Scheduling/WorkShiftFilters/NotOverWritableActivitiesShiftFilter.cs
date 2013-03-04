@@ -28,7 +28,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftFilters
 			if (shiftList == null) throw new ArgumentNullException("shiftList");
 			if (person == null) throw new ArgumentNullException("person");
 			if (finderResult == null) throw new ArgumentNullException("finderResult");
-
+			
+			if (shiftList.Count == 0) return shiftList;
 			var part = _resultStateHolder.Schedules[person].ScheduledDay(dateToSchedule);
 
 			var filteredList = new List<IShiftProjectionCache>();

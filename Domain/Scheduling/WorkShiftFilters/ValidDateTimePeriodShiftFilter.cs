@@ -5,15 +5,16 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftFilters
 {
-	public interface ITimeLimitationShiftFilter
+	public interface IValidDateTimePeriodShiftFilter
 	{
 		IList<IShiftProjectionCache> Filter(IList<IShiftProjectionCache> shiftList, DateTimePeriod validPeriod, IWorkShiftFinderResult finderResult);
 	}
 
-	public class TimeLimitationShiftFilter : ITimeLimitationShiftFilter
+	public class ValidDateTimePeriodShiftFilter : IValidDateTimePeriodShiftFilter
 	{
 		public IList<IShiftProjectionCache> Filter(IList<IShiftProjectionCache> shiftList, DateTimePeriod validPeriod, IWorkShiftFinderResult finderResult)
 		{
+			if (shiftList.Count == 0) return shiftList;
 			var cntBefore = shiftList.Count;
 			IList<IShiftProjectionCache> workShiftsWithinPeriod = new List<IShiftProjectionCache>();
 			foreach (IShiftProjectionCache proj in shiftList)

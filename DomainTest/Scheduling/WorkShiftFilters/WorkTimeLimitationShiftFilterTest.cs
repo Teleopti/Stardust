@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -24,8 +22,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftFilters
 		private ShiftCategory _category;
 		private TimeZoneInfo _timeZoneInfo;
 		private IPersonalShiftMeetingTimeChecker _personalShiftMeetingTimeChecker;
-		private ITimeLimitationShiftFilter _timeLimitationShiftFilter;
-		private ILatestStartTimeLimitationShiftFilter _latestStartTimeLimitationShiftFilter;
 		private EffectiveRestriction _effectiveRestriction;
 		private WorkShiftFinderResult _finderResult;
 		private IWorkTimeLimitationShiftFilter _target;
@@ -43,7 +39,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftFilters
 			_category.SetId(Guid.NewGuid());
 			_timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("UTC"));
 			_personalShiftMeetingTimeChecker = _mocks.StrictMock<IPersonalShiftMeetingTimeChecker>();
-			_timeLimitationShiftFilter = _mocks.StrictMock<ITimeLimitationShiftFilter>();
 			_effectiveRestriction = new EffectiveRestriction(
 				new StartTimeLimitation(new TimeSpan(8, 0, 0), new TimeSpan(10, 0, 0)),
 				new EndTimeLimitation(new TimeSpan(15, 0, 0), new TimeSpan(18, 0, 0)),

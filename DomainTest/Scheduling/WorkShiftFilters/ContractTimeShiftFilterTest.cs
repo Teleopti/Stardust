@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftFilters
 
 				Expect.Call(lc1.ContractTime()).Return(new TimeSpan(7, 0, 0));
 				Expect.Call(lc2.ContractTime()).Return(new TimeSpan(10, 0, 0));
-
+				Expect.Call(()=>_workShiftMinMaxCalculator.ResetCache());
 				Expect.Call(_workShiftMinMaxCalculator.MinMaxAllowedShiftContractTime(dateOnly, _matrix, _scheduleOptions))
 				      .Return(minMaxcontractTime);
 			}

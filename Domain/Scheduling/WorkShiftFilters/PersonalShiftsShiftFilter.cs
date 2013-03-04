@@ -21,8 +21,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftFilters
 
 		public IList<IShiftProjectionCache> Filter(DateOnly dateOnly, IPerson person, IList<IShiftProjectionCache> shiftList,IWorkShiftFinderResult finderResult)
 		{
-			if (shiftList.Count == 0)
-				return shiftList;
+			if (shiftList.Count == 0) return shiftList;
+
 			var schedulePart = _resultStateHolder.Schedules[person].ScheduledDay(dateOnly);
 			DateTimePeriod? period = getMaximumPeriodForPersonalShiftsAndMeetings(schedulePart);
 			if (period.HasValue)

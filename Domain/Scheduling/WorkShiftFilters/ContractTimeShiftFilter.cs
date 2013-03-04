@@ -26,12 +26,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftFilters
 		                                           IList<IShiftProjectionCache> shiftList,
 		                                           ISchedulingOptions schedulingOptions, IWorkShiftFinderResult finderResult)
 		{
+			if (shiftList.Count == 0) return shiftList;
+			
 			IList<IShiftProjectionCache> workShifts = new List<IShiftProjectionCache>();
 			MinMax<TimeSpan>? allowedMinMax = null;
 			if (matrixList == null)
 				return workShifts;
 			foreach (var matrix in matrixList)
 			{
+				_workShiftMinMaxCalculator.ResetCache();
 				var minMax = _workShiftMinMaxCalculator.MinMaxAllowedShiftContractTime(dateOnly, matrix, schedulingOptions);
 				if (!minMax.HasValue) continue;
 				if (!allowedMinMax.HasValue)

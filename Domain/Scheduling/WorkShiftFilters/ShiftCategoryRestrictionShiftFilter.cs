@@ -16,8 +16,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftFilters
 		public IList<IShiftProjectionCache> Filter(IShiftCategory category, IList<IShiftProjectionCache> shiftList,
 		                                           IWorkShiftFinderResult finderResult)
 		{
-			if (shiftList.Count == 0)
-				return shiftList;
+			if (shiftList.Count == 0) return shiftList;
+
 			if (category == null)
 				return shiftList;
 			var before = shiftList.Count;

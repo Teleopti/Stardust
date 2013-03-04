@@ -857,7 +857,7 @@
     <Compile Include="Scheduling\WorkShiftFilters\NotOverWritableActivitiesShiftFilter.cs" />
     <Compile Include="Scheduling\WorkShiftFilters\PersonalShiftsShiftFilter.cs" />
     <Compile Include="Scheduling\WorkShiftFilters\WorkTimeLimitationShiftFilter.cs" />
-    <Compile Include="Scheduling\WorkShiftFilters\TimeLimitationShiftFilter.cs" />
+    <Compile Include="Scheduling\WorkShiftFilters\ValidDateTimePeriodShiftFilter.cs" />
     <Compile Include="Scheduling\WorkShiftFilters\TimeLimitsRestrictionShiftFilter.cs" />
     <Compile Include="Scheduling\WorkShiftFilters\RuleSetToShiftsGenerator.cs" />
     <Compile Include="Scheduling\WorkShiftFilters\ShiftCategoryRestrictionShiftFilter.cs" />

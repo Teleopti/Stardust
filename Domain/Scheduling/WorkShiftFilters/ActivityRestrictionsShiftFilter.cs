@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
@@ -8,22 +7,23 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftFilters
 {
 	public interface IActivityRestrictionsShiftFilter
 	{
-		IList<IShiftProjectionCache> Filter(DateOnly scheduleDayDateOnly, TimeZoneInfo agentTimeZone, IList<IShiftProjectionCache> shiftList, IEffectiveRestriction restriction, IWorkShiftFinderResult finderResult);
+		IList<IShiftProjectionCache> Filter(DateOnly scheduleDayDateOnly, IPerson person, IList<IShiftProjectionCache> shiftList, IEffectiveRestriction restriction, IWorkShiftFinderResult finderResult);
 	}
 
 	public class ActivityRestrictionsShiftFilter : IActivityRestrictionsShiftFilter
 	{
-		public IList<IShiftProjectionCache> Filter(DateOnly scheduleDayDateOnly, TimeZoneInfo agentTimeZone, IList<IShiftProjectionCache> shiftList, IEffectiveRestriction restriction, IWorkShiftFinderResult finderResult)
+		public IList<IShiftProjectionCache> Filter(DateOnly scheduleDayDateOnly, IPerson person, IList<IShiftProjectionCache> shiftList, IEffectiveRestriction restriction, IWorkShiftFinderResult finderResult)
 		{
 			IList<IActivityRestriction> activityRestrictions = restriction.ActivityRestrictionCollection;
 			if (activityRestrictions.Count == 0)
 				return shiftList;
 
+			var timeZone = person.PermissionInformation.DefaultTimeZone();
 			IList<IShiftProjectionCache> workShiftsWithActivity = new List<IShiftProjectionCache>();
 
 			foreach (var projectionCache in shiftList)
 			{
-				if (restriction.VisualLayerCollectionSatisfiesActivityRestriction(scheduleDayDateOnly, agentTimeZone,
+				if (restriction.VisualLayerCollectionSatisfiesActivityRestriction(scheduleDayDateOnly, timeZone,
 																				  projectionCache.MainShiftProjection.OfType<IActivityRestrictableVisualLayer>()))
 				{
 					workShiftsWithActivity.Add(projectionCache);

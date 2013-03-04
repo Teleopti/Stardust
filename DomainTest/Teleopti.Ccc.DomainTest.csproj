@@ -793,6 +793,7 @@
     <Compile Include="Scheduling\WorkShiftFilters\PersonalShiftsShiftFilterTest.cs" />
     <Compile Include="Scheduling\WorkShiftFilters\RuleSetToShiftsGeneratorTest.cs" />
     <Compile Include="Scheduling\WorkShiftFilters\ShiftCategoryRestrictionShiftFilterTest.cs" />
+    <Compile Include="Scheduling\WorkShiftFilters\ShiftProjectionCachesFromAdjustedRuleSetBagShiftFilterTest.cs" />
     <Compile Include="Scheduling\WorkShiftFilters\TimeLimitationShiftFilterTest.cs" />
     <Compile Include="Scheduling\WorkShiftFilters\TimeLimitsRestrictionShiftFilterTest.cs" />
     <Compile Include="Scheduling\WorkShiftFilters\WorkTimeLimitationShiftFilterTest.cs" />

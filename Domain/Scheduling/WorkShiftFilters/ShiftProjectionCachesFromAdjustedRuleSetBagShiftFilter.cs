@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftFilters
 {
 	public interface IShiftProjectionCachesFromAdjustedRuleSetBagShiftFilter
 	{
-		IList<IShiftProjectionCache> Filter(DateOnly scheduleDateOnly, TimeZoneInfo timeZone, IRuleSetBag bag, bool forRestrictionsOnly, IEffectiveRestriction restriction);
+		IList<IShiftProjectionCache> Filter(DateOnly scheduleDateOnly, IPerson person, bool forRestrictionsOnly, IEffectiveRestriction restriction);
 	}
 
 	public class ShiftProjectionCachesFromAdjustedRuleSetBagShiftFilter : IShiftProjectionCachesFromAdjustedRuleSetBagShiftFilter
@@ -27,11 +27,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftFilters
 			_ruleSetToShiftsGenerator = ruleSetToShiftsGenerator;
 		}
 
-		public IList<IShiftProjectionCache> Filter(DateOnly scheduleDateOnly, TimeZoneInfo timeZone, IRuleSetBag bag, bool forRestrictionsOnly, IEffectiveRestriction restriction)
+		public IList<IShiftProjectionCache> Filter(DateOnly scheduleDateOnly, IPerson person,  bool forRestrictionsOnly, IEffectiveRestriction restriction)
 		{
 			var shiftProjectionCaches = new List<IShiftProjectionCache>();
-			if (bag == null)
+			if (person == null)
 				return shiftProjectionCaches;
+
+			var timeZone = person.PermissionInformation.DefaultTimeZone();
+			var personPeriod = person.Period(scheduleDateOnly);
+			var bag = personPeriod.RuleSetBag;
 
 			var ruleSets = bag.RuleSetCollection.Where(workShiftRuleSet => workShiftRuleSet.OnlyForRestrictions == forRestrictionsOnly).ToList();
 

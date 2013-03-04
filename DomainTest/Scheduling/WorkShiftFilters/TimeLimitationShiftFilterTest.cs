@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftFilters
 		private ShiftCategory _category;
 		private TimeZoneInfo _timeZoneInfo;
 		private IPersonalShiftMeetingTimeChecker _personalShiftMeetingTimeChecker;
-		private TimeLimitationShiftFilter _target;
+		private ValidDateTimePeriodShiftFilter _target;
 
 		[SetUp]
 		public void Setup()
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftFilters
 			_category.SetId(Guid.NewGuid());
 			_timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("UTC"));
 			_personalShiftMeetingTimeChecker = _mocks.StrictMock<IPersonalShiftMeetingTimeChecker>();
-			_target = new TimeLimitationShiftFilter();
+			_target = new ValidDateTimePeriodShiftFilter();
 		}
 
 		[Test]
