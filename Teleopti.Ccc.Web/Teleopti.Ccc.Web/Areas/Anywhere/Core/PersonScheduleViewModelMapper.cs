@@ -14,7 +14,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 
 			viewModel.Layers.ForEach(l =>
 				{
-					l.Start = TimeZoneInfo.ConvertTimeFromUtc(l.Start, data.Person.PermissionInformation.DefaultTimeZone());
+					if (l.Start != DateTime.MinValue)
+						l.Start = TimeZoneInfo.ConvertTimeFromUtc(l.Start, data.Person.PermissionInformation.DefaultTimeZone());
 				});
 
 			return viewModel;
