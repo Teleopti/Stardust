@@ -97,6 +97,19 @@ Scenario: Show possible shift trades
 	| Start time	| 08:00 |
 	| End time		| 18:00 |
 
+Scenario: Show possible shift trade when victim has no schedule
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And OtherAgent have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And I have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 06:00 |
+	| EndTime               | 2030-01-01 16:00 |
+	| Shift category		| Day	           |
+	And Current time is '2029-12-27'
+	When I view Add Shift Trade Request for date '2030-01-01'
+	Then I should see the schedule of OtherAgent
+
 Scenario: Do not show person that agent has no permission to
 	Given I am an agent in a team with access only to my own data
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'

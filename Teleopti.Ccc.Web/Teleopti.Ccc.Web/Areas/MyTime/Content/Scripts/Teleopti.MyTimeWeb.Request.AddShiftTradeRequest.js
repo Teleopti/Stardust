@@ -69,6 +69,15 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 				agent.isVisible(true);
 			}
 			self.agentChoosed(agent);
+			self.clearInputForm();
+		};
+
+		self.clearInputForm = function () {
+			self.subject('');
+			self.message('');
+			//ugly hack to fire back event that something happened
+			setTimeout(function () { $("#Request-add-shift-trade-message-input").change(); }, 0);
+			setTimeout(function () { $("#Request-add-shift-trade-subject-input").change(); }, 0);
 		};
 
 		self._createTimeLine = function (hours) {
@@ -80,6 +89,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		};
 
 		self.requestedDate.subscribe(function (newValue) {
+			self.chooseAgent(null);
 			if (newValue.diff(self.openPeriodStartDate) < 0) {
 				self.selectedDate(moment(self.openPeriodStartDate));
 			} else if (self.openPeriodEndDate.diff(newValue) < 0) {
@@ -143,6 +153,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		if (_hasPermission(elementToBind)) {
 			vm = new shiftTradeViewModel();
 			ko.applyBindings(vm, elementToBind);
+		_initButtons();
 		}
 	}
 
@@ -216,7 +227,6 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		Teleopti.MyTimeWeb.Request.RequestDetail.HideEditSection();
 		_initDatePicker();
 		_initLabels();
-		_initButtons();
 		$('#Request-add-shift-trade').show();
 	}
 
