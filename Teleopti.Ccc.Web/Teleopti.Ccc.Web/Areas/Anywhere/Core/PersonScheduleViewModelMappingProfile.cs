@@ -23,14 +23,10 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 
 			CreateMap<dynamic, PersonScheduleViewModelLayer>()
 				.ForMember(x => x.Color, o => o.MapFrom(s => s.Color))
-				.ForMember(x => x.Start, o => o.MapFrom(s =>
-					{
-						Console.WriteLine(s.GetType().ToString());
-						Console.WriteLine(s.Start.GetType().ToString());
-						return s.Start;
-					}))
+				.ForMember(x => x.Start, o => o.MapFrom(s => s.Start))
 				.ForMember(x => x.Minutes, o => o.MapFrom(s => s.Minutes))
 				;
+
 		}
 	}
 }

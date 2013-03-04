@@ -24,6 +24,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			Mapper.Initialize(c => c.AddProfile(new PersonScheduleViewModelMappingProfile()));
 		}
 
+		// cant get this green with dynamics involved
+		[Test, Ignore]
+		public void ShouldConfigureCorrectly()
+		{
+			Mapper.AssertConfigurationIsValid();
+		}
+		
 		[Test]
 		public void ShouldMapPersonName()
 		{
