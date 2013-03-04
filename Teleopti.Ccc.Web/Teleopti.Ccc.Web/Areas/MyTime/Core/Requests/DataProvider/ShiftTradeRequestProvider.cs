@@ -9,13 +9,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 	{
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IScheduleProvider _scheduleProvider;
-		private readonly IPossibleShiftTradePersonsProvider _possibleShiftTradePersonsProvider;
 
-		public ShiftTradeRequestProvider(ILoggedOnUser loggedOnUser, IScheduleProvider scheduleProvider, IPossibleShiftTradePersonsProvider possibleShiftTradePersonsProvider)
+		public ShiftTradeRequestProvider(ILoggedOnUser loggedOnUser, IScheduleProvider scheduleProvider)
 		{
 			_loggedOnUser = loggedOnUser;
 			_scheduleProvider = scheduleProvider;
-			_possibleShiftTradePersonsProvider = possibleShiftTradePersonsProvider;
 		}
 
 		public IWorkflowControlSet RetrieveUserWorkflowControlSet()
@@ -28,9 +26,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			return _scheduleProvider.GetScheduleForPeriod(new DateOnlyPeriod(date, date)).FirstOrDefault();
 		}
 
-		public IEnumerable<IScheduleDay> RetrievePossibleTradePersonsScheduleDay(DateOnly date)
+		public IEnumerable<IScheduleDay> RetrievePossibleTradePersonsScheduleDay(DateOnly date, IEnumerable<IPerson> possibleShiftTradePersons)
 		{
-			return _scheduleProvider.GetScheduleForPersons(date, _possibleShiftTradePersonsProvider.RetrievePersons(date));
+			return _scheduleProvider.GetScheduleForPersons(date, possibleShiftTradePersons);
 		}
 	}
 }

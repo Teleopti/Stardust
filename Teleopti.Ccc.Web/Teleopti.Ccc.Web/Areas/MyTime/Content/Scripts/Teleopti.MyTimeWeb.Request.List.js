@@ -50,8 +50,8 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
                     self.IsLoading(false);
                 },
                 success: function (data) {
-                    Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.HideShiftTradeWindow();
-                    var distanceFromTop = Math.max(15, $(event.currentTarget).position().top - 30);
+					Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.HideShiftTradeWindow();
+					var distanceFromTop = Math.max(15, $(event.currentTarget).position().top - 30);
                     Teleopti.MyTimeWeb.Request.RequestDetail.ShowRequest(data, distanceFromTop);
                 }
             });
@@ -171,7 +171,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
             });
         };
 
-        self.CanDelete = ko.observable(true);
+		self.CanDelete = ko.observable(true);
     }
 
     ko.utils.extend(RequestItemViewModel.prototype, {
@@ -186,7 +186,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
             self.Link(data.Link.href);
             self.Id(data.Id);
             self.RequestPayload(data.Payload);
-            self.CanDelete((data.Link.Methods.indexOf("DELETE") != -1) && data.IsCreatedByUser);
+			self.CanDelete((data.Link.Methods.indexOf("DELETE") != -1) && data.IsCreatedByUser);
 
         }
     });

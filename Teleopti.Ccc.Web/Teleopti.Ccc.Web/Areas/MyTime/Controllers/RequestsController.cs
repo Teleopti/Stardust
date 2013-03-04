@@ -18,16 +18,19 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		private readonly IRequestsViewModelFactory _requestsViewModelFactory;
 		private readonly ITextRequestPersister _textRequestPersister;
 		private readonly IAbsenceRequestPersister _absenceRequestPersister;
+		private readonly IShiftTradeRequestPersister _shiftTradeRequestPersister;
 		private readonly IRespondToShiftTrade _respondToShiftTrade;
 
 		public RequestsController(IRequestsViewModelFactory requestsViewModelFactory, 
 								ITextRequestPersister textRequestPersister, 
 								IAbsenceRequestPersister absenceRequestPersister, 
+								IShiftTradeRequestPersister shiftTradeRequestPersister,
 								IRespondToShiftTrade respondToShiftTrade)
 		{
 			_requestsViewModelFactory = requestsViewModelFactory;
 			_textRequestPersister = textRequestPersister;
 			_absenceRequestPersister = absenceRequestPersister;
+			_shiftTradeRequestPersister = shiftTradeRequestPersister;
 			_respondToShiftTrade = respondToShiftTrade;
 		}
 
@@ -67,10 +70,24 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 		[UnitOfWorkAction]
 		[HttpPostOrPut]
+		public JsonResult ShiftTradeRequest(ShiftTradeRequestForm form)
+		{
+			if (!ModelState.IsValid)
+			{
+				Response.TrySkipIisCustomErrors = true;
+				Response.StatusCode = 400;
+				return ModelState.ToJson();
+			}
+			return Json(_shiftTradeRequestPersister.Persist(form));
+		}
+
+		[UnitOfWorkAction]
+		[HttpPostOrPut]
 		public JsonResult ApproveShiftTrade(Guid id)
 		{
 			return Json(_respondToShiftTrade.OkByMe(id));
 		}
+
 
 		[UnitOfWorkAction]
 		[HttpPostOrPut]

@@ -60,6 +60,14 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => _page.FirstRequest.InnerHtml, Is.StringContaining(UserFactory.User().UserData<ExistingTextRequest>().PersonRequest.GetSubject(new NoFormatting())));
 		}
 
+		[Then(@"I should see a shift trade request in the list with subject '(.*)'")]
+		public void ThenIShouldSeeAShiftTradeRequestInTheListWithSubject(string subject)
+		{
+			EventualAssert.That(() => _page.Requests.Count(), Is.GreaterThan(0));
+			EventualAssert.That(() => _page.FirstRequest.InnerHtml, Is.StringContaining(subject));
+		}
+
+
 		[Then(@"I should see my existing absence request")]
 		public void ThenIShouldSeeMyExistingAbsenceRequest()
 		{
@@ -73,6 +81,12 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			EventualAssert.That(() => _page.Requests.Count(), Is.GreaterThan(0));
 			EventualAssert.That(() => _page.FirstRequest.InnerHtml, Is.StringContaining(subject));
+		}
+
+		[Then(@"I should see my existing shift trade request with status OkByMe")]
+		public void ThenIShouldSeeMyExistingShiftTradeRequestWithStatus()
+		{
+			ThenIShouldSeeMyExistingShiftTradeRequestWithSubject(Resources.WaitingForOtherPart);
 		}
 
 		[Then(@"I should see my existing shift trade request with status waiting for other part")]
@@ -214,5 +228,4 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => DateTime.Parse(_page.ShiftTradeDateTo.Text), Is.EqualTo(dateOfTheTrade));
 		}
 	}
-
 }

@@ -1,4 +1,7 @@
-﻿
+﻿.hoverBorder {
+	outline: solid 1px rgba(0, 0, 0, 0.15);
+}
+
 .request-body-inner ol
 {
 	list-style: none;
@@ -91,9 +94,9 @@
 	max-width: 440px;
     word-break: break-all;
 }
-.request-edit-section .edit-module-element {
+.request-body-inner .edit-module-element {
 	position: relative;
-	padding-left: 10px;
+	padding-left: 0px;
 	padding-right: 10px;
 	padding-bottom: 10px;
 }
@@ -118,11 +121,10 @@
 {
 	text-align: right;
 }
-.shift-trade-add-canvas
+.request-shift-trade-add-section
 {
 	background-color: #f8f8f8;
 	border: 1px solid rgb(216, 216, 216);
-	display: none;
 	height: 100%;
 	padding: 10px;
 }
@@ -146,14 +148,15 @@
 }
 .shift-trade-my-schedule-row 
 {
-	top: 4px;
+	margin-top: 4px;
 	height: 34px;
 	position: relative;
 	font-style: italic;
 }
 .shift-trade-person-schedule-row 
 {
-	height: 22px;
+	margin-top: 2px;
+	height: 18px;
 	position: relative;
 }
 .shift-trade-my-schedule
@@ -241,7 +244,64 @@
 	overflow: hidden;
 	white-space: nowrap;
 	width: 150px;
-	height: 19px;
+	height: 18px;
+	background-color: #f8f8f8;
+	float: left; 
+	text-overflow: ellipsis;		
+}
+.rtl .shift-trade-agent-name {
+	right: auto;
+	left: 0;
+}
+.shift-trade-agent-name-hover
+{
+	padding-right: 10px;
+	box-shadow: 7px 0px 10px -1px rgba(0, 0, 0, 0.35);
+	border-right: 1px solid rgba(0, 0, 0, 0.20);
+	width: auto;
+	z-index: 11;
+}
+
+.shift-trade-swap-detail-schedule
+{
+	position: absolute;
+	left: 0px;
+	display: inline;
+}
+
+.shift-trade-swap-detail-schedule-row {
+	height: 22px;
+	position: relative;
+}
+
+.shift-trade-swap-detail-timeline 
+{
+	height: 30px;
+	position: absolute;
+}
+
+.shift-trade-swap-detail-agent-name {
+	width: 150px;
+	height: 30px;
+
+}
+
+.request-subject-input {
+	width: 100%;
+}
+.request-message-input {
+	width: 100%;
+	height: 5em;
+}
+.shift-trade-no-possible-trades 
+{
+	margin-top: 10px;
+}
+.shift-trade-agent-name {
+	position: absolute;
+	overflow: hidden;
+	white-space: nowrap;
+	width: 150px;
 	background-color: #f8f8f8;
 	float: left; 
 	text-overflow: ellipsis;		

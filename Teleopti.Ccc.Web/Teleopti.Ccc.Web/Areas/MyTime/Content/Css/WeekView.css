@@ -260,3 +260,11 @@ select.absence-input
 {
     cursor: pointer;
 }
+
+#Schedule-addRequest-section .edit-module-element 
+{
+	position: relative;
+	padding-left: 0px;
+	padding-right: 10px;
+	padding-bottom: 10px;	
+}
