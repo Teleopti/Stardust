@@ -45,7 +45,6 @@ Scenario: View shift
 	| 11:30      | 12:15    |
 	| 12:15      | 17:00    |
 
-@ignore
 Scenario: View night shift from yesterday
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' have a (read model) shift with
