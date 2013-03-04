@@ -26,10 +26,10 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             comboBoxTeams.DisplayMember = "Name";
             comboBoxTeams.ValueMember = "Key";
             comboBoxTeams.SelectedValue = "SingleAgentTeam";
-            if (_levellingPerConfiguration._selectedGroupPage  != null)
-                comboBoxTeams.SelectedValue = _levellingPerConfiguration._selectedGroupPage.Key ;
+            if (_levellingPerConfiguration.SelectedGroupPage  != null)
+                comboBoxTeams.SelectedValue = _levellingPerConfiguration.SelectedGroupPage.Key ;
 
-            switch(_levellingPerConfiguration._selectedBlockFinderType )
+            switch(_levellingPerConfiguration.SelectedBlockFinderType )
             {
                 case BlockFinderType.SingleDay :
                     radioButtonSingleDay.Checked = true;
@@ -45,14 +45,14 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
                     break;
             }
 
-	        radioButtonSameShifts.Checked = _levellingPerConfiguration._UserSameShift;
-	        radioButtonSame.Checked = _levellingPerConfiguration._UseSameEndTime ||
-	                                  _levellingPerConfiguration._UseSameStartTime ||
-	                                  _levellingPerConfiguration._UseSameShiftCategory;
+	        radioButtonSameShifts.Checked = _levellingPerConfiguration.UserSameShift;
+	        radioButtonSame.Checked = _levellingPerConfiguration.UseSameEndTime ||
+	                                  _levellingPerConfiguration.UseSameStartTime ||
+	                                  _levellingPerConfiguration.UseSameShiftCategory;
 
-	        checkBoxShiftCategory.Checked  = _levellingPerConfiguration._UseSameShiftCategory;
-	        checkBoxEndTime.Checked = _levellingPerConfiguration._UseSameEndTime;
-	        checkBoxStartTime.Checked = _levellingPerConfiguration._UseSameStartTime;
+	        checkBoxShiftCategory.Checked  = _levellingPerConfiguration.UseSameShiftCategory;
+	        checkBoxEndTime.Checked = _levellingPerConfiguration.UseSameEndTime;
+	        checkBoxStartTime.Checked = _levellingPerConfiguration.UseSameStartTime;
 	    }
 
 
@@ -71,26 +71,26 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 		    var levelling = new LevellingPerConfiguration();
             //block type
             if (radioButtonSingleDay.Checked)
-                levelling._selectedBlockFinderType = BlockFinderType.SingleDay;
+                levelling.SelectedBlockFinderType = BlockFinderType.SingleDay;
             else if (radioButtonWeek.Checked)
-                levelling._selectedBlockFinderType = BlockFinderType.Weeks;
+                levelling.SelectedBlockFinderType = BlockFinderType.Weeks;
             else if (radioButtonBetweenDaysOff.Checked)
-                levelling._selectedBlockFinderType = BlockFinderType.BetweenDayOff;
+                levelling.SelectedBlockFinderType = BlockFinderType.BetweenDayOff;
             else if (radioButtonSchedulePeriod.Checked)
-                levelling._selectedBlockFinderType = BlockFinderType.SchedulePeriod;
+                levelling.SelectedBlockFinderType = BlockFinderType.SchedulePeriod;
 
             //selected page
             if ((string) comboBoxTeams.SelectedValue != "SingleAgentTeam")
-                levelling._selectedGroupPage = (IGroupPageLight)comboBoxTeams.SelectedItem;
+                levelling.SelectedGroupPage = (IGroupPageLight)comboBoxTeams.SelectedItem;
             else
-                levelling._selectedGroupPage = null;
+                levelling.SelectedGroupPage = null;
 
 		    _levellingPerConfiguration = levelling;
 
-		    _levellingPerConfiguration._UseSameEndTime = checkBoxEndTime.Checked;
-		    _levellingPerConfiguration._UseSameShiftCategory = checkBoxShiftCategory.Checked;
-		    _levellingPerConfiguration._UseSameStartTime = checkBoxStartTime.Checked;
-		    _levellingPerConfiguration._UserSameShift = radioButtonSameShifts.Checked;
+		    _levellingPerConfiguration.UseSameEndTime = checkBoxEndTime.Checked;
+		    _levellingPerConfiguration.UseSameShiftCategory = checkBoxShiftCategory.Checked;
+		    _levellingPerConfiguration.UseSameStartTime = checkBoxStartTime.Checked;
+		    _levellingPerConfiguration.UserSameShift = radioButtonSameShifts.Checked;
 
             Close();
 
@@ -115,17 +115,19 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 
     public class LevellingPerConfiguration
     {
-        public IGroupPageLight _selectedGroupPage;
+        public IGroupPageLight SelectedGroupPage { get; set; }
 
-        public BlockFinderType _selectedBlockFinderType;
+        public BlockFinderType SelectedBlockFinderType { get; set; }
 
-        public bool _UserSameShift;
+        public bool UserSameShift { get; set; }
 
-        public bool _UseSameStartTime;
+        public bool UseSameStartTime { get; set; }
 
-        public bool _UseSameEndTime;
+        public bool UseSameEndTime;
 
-        public bool _UseSameShiftCategory;
+        public bool UseSameShiftCategory;
+
+         
 
     }
 }
