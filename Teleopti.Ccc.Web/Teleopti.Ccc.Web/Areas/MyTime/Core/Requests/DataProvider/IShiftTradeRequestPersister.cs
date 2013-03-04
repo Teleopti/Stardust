@@ -4,6 +4,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 {
 	public interface IShiftTradeRequestPersister
 	{
-		void Persist(ShiftTradeRequestForm form);
+		RequestViewModel Persist(ShiftTradeRequestForm form);
 	}
 }
