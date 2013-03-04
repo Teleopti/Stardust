@@ -69,6 +69,35 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			.removeAttr('disabled');
 	}
 
+	function _setPreferenceTemplate(preference) {
+
+		addExtendedPreferenceFormViewModel.ValidationError('');
+		delete preference.AvailableTemplates;
+		delete preference.SelectedTemplate;
+		var templateData = JSON.stringify(preference);
+
+		ajax.Ajax({
+			url: "Preference/PreferenceTemplate",
+			contentType: "application/json; charset=utf-8",
+			dataType: "json",
+			type: 'POST',
+			data: templateData,
+			success: function (data, textStatus, jqXHR) {
+				data = data || [];
+				//				self.AvailableTemplates(data);
+
+				//				$("#Preference-template").selectbox(
+				//					{
+				//						refreshMenu: data,
+				//						changed: function (event, ui) {
+				//							var template = $.grep(data, function (e) { return e.Value == ui.item.value; })[0];
+				//							self.SelectedTemplate(template);
+				//						}
+				//					});
+			}
+		});
+	}
+
 	function _setPreference(preference) {
 		var promises = [];
 
@@ -140,9 +169,6 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 				events: {
 					render: function () {
 
-						//						$('#Preference-template')
-						//							.selectbox({ source: "Preference/GetPreferenceTemplates" });
-
 						$('#Preference-extended-reset')
 							.button()
 							.click(function () {
@@ -156,14 +182,15 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 						$('#Preference-extended-save-template')
 							.button()
 							.click(function () {
-								//TODO
-
+								_setPreferenceTemplate(ko.toJS(addExtendedPreferenceFormViewModel));
 							});
 
 						$('#template-name-section input[type=text]')
 							.labeledinput();
 
 						ko.applyBindings(addExtendedPreferenceFormViewModel, $("#Preference-add-extended-form")[0]);
+
+						addExtendedPreferenceFormViewModel.InitTemplateSelectBox();
 						addExtendedPreferenceFormViewModel.LoadAvailableTemplates();
 					}
 				}
@@ -270,12 +297,6 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 						callWhenAjaxIsCompleted(completelyLoaded);
 					});
 				});
-			
-			//				.done(function() {
-			//					loader(function() {
-			//						$('#Preference-template').selectbox();
-			//					});
-			//				});
 		});
 	}
 

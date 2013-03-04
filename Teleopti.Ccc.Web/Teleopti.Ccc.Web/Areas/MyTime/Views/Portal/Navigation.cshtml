@@ -290,12 +290,12 @@
 							<div id="template-name-section" class="edit-module-element clearleftfloat" data-bind="visible: IsSaveAsNewTemplate()">
 								<label class="displayblock" for="Template-name-input">@Resources.NewTemplateName</label>
 								<input id="Template-name-input" type="text"/>
+								<button id="Preference-extended-save-template" class="mr25 mt10 mb5 floatright">@Resources.Save</button>
 							</div>
 		   
 							<div class="clearleftfloat">
 							<button id="Preference-extended-reset" class="ml15 mt10 mb5 floatleft">@Resources.Reset</button>
-							<button id="Preference-extended-apply" class="mr25 mt10 mb5 floatright" data-bind="visible: !IsSaveAsNewTemplate()">@Resources.Apply</button>
-							<button id="Preference-extended-save-template" class="mr25 mt10 mb5 floatright" data-bind="visible: IsSaveAsNewTemplate()">@Resources.Save</button>
+							<button id="Preference-extended-apply" class="mr25 mt10 mb5 floatright">@Resources.Apply</button>
 						</div>
 						<div>
 							<div id="Preference-extended-error" class="error floatleft" data-bind="html: ValidationError"></div>
