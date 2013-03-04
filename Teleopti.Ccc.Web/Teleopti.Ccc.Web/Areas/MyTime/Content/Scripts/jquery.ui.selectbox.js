@@ -99,7 +99,7 @@
 
 		},
 
-		_refreshMenu: function (data) {
+		_refreshMenu: function () {
 			var self = this;
 
 			var items = this._select
@@ -126,11 +126,10 @@
 			this._menu.menu({
 				select: function (event, ui) {
 					var dataItem = ui.item.data("selectbox-item");
-//					self._optionByValue(dataItem.value);
 					self._selectOption(dataItem.option);
-//					self._trigger("changed", event, {
-//						item: dataItem.option
-//					});
+					self._trigger("changed", event, {
+						item: dataItem.option
+					});
 				}
 			});
 

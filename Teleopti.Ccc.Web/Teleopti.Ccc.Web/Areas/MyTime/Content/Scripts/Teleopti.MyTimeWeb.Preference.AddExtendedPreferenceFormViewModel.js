@@ -6,9 +6,9 @@
 
 	 
 //$(function() {
-//    $( "#accordion" ).accordion({
-//        collapsible: true
-//    });
+//	$( "#accordion" ).accordion({
+//		collapsible: true
+//	});
 //});
 
 Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (ajax) {
@@ -23,21 +23,16 @@ Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (aja
 			success: function (data, textStatus, jqXHR) {
 				data = data || [];
 
-				//				self.AvailableTemplates.removeAll();
-				//				self.AvailableTemplates.push("");
-				//				$.each(data, function (index, element) {
-				//					self.AvailableTemplates.push(element);
-				//				});
-
-				//				self.AvailableTemplates.valueHasMutated();
 				self.AvailableTemplates(data);
 
-				$("#Preference-template").selectbox({ refreshMenu: data });
-
-				//				self.AvailableTemplates.push(new Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel(0));
-				//				self.AvailableTemplates.push(ko.utils.arrayMap(data,
-				//					function(i) { return new Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel(i); }
-				//				));
+				$("#Preference-template").selectbox(
+					{
+						refreshMenu: data,
+						changed: function (event, ui) {
+							var template = $.grep(data, function(e) { return e.Value == ui.item.value; })[0];
+							self.SelectedTemplate(template);
+						}
+					});
 				deferred.resolve();
 			}
 		});
@@ -79,11 +74,6 @@ Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (aja
 	this.EnableActivityTimeEditing = ko.computed(function () {
 		var result = self.ActivityPreferenceId();
 		return result != undefined && result != '';
-	});
-
-	this.SelectedTemplate = ko.computed(function () {
-		var templateId = self.SelectedTemplateId();
-		return templateId != undefined && templateId != '';
 	});
 
 	this.SelectedTemplate.subscribe(function (newValue) {
@@ -137,4 +127,3 @@ Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (aja
 		self.ValidationError(undefined);
 	};
 };
-
