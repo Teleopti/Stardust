@@ -139,10 +139,17 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 	}
 
 	function _init() {
-		vm = new shiftTradeViewModel();
 		var elementToBind = $('#Request-add-shift-trade').get(0);
-		ko.applyBindings(vm, elementToBind);
+		if (_hasPermission(elementToBind)) {
+			vm = new shiftTradeViewModel();
+			ko.applyBindings(vm, elementToBind);
+		}
 	}
+
+	function _hasPermission(element) {
+		return element!==undefined;
+	}
+	
 	function _initDatePicker() {
 		$('.shift-trade-add-previous-date').button({
 			icons: {

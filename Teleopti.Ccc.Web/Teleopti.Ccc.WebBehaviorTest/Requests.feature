@@ -66,13 +66,12 @@ Scenario: No access to requests tab
 	When I am viewing an application page
 	Then I should not be able to see requests link
 
-@ignore 
-#Henke! Have a look at this one. It´s failing on the "Ready for interaction" thingy
 Scenario: No access to requests page
 	Given I am an agent without access to any requests
 	And I am signed in
 	When I navigate to the requests page
 	Then I should see an error message
+
 Scenario: No requests
 	Given I am an agent
 	And I have no existing requests
