@@ -5,5 +5,6 @@ namespace Teleopti.Interfaces.Domain
     /// </summary>
     public interface IBudgetGroupAllowanceSpecification: ISpecification<IAbsenceRequest>
     {
+       
     }
 }

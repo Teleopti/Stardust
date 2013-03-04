@@ -10,11 +10,13 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
     {
         private IAbsenceRequestValidator _target;
         private MockRepository _mocks;
+        private IValidatedRequest _validatedRequest;
 
         [SetUp]
         public void Setup()
         {
             _mocks = new MockRepository();
+            _validatedRequest = new ValidatedRequest(){IsValid = true, ValidationErrors = ""};
             _target = new BudgetGroupAllowanceValidator();
         }
 
@@ -42,7 +44,8 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             using(_mocks.Playback())
             {
                 _target.BudgetGroupAllowanceSpecification = specification;
-                Assert.IsTrue(_target.Validate(absenceRequest));
+                var result = _target.Validate(absenceRequest);
+                Assert.IsTrue(result.IsValid);
             }
         }
 
@@ -50,15 +53,22 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
         public void ShouldBeInvalidIfNotEnoughAllowanceLeft()
         {
             var specification = _mocks.StrictMock<IBudgetGroupAllowanceSpecification>();
+            var calculator = _mocks.StrictMock<IBudgetGroupAllowanceCalculator>();
             var absenceRequest = _mocks.StrictMock<IAbsenceRequest>();
+            var validationErrors = "Not Enough Allowance left";
+
             using (_mocks.Record())
             {
                 Expect.Call(specification.IsSatisfiedBy(absenceRequest)).IgnoreArguments().Return(false);
+                Expect.Call(calculator.CheckBudgetGroup(absenceRequest)).IgnoreArguments().Return(validationErrors);
             }
             using (_mocks.Playback())
             {
                 _target.BudgetGroupAllowanceSpecification = specification;
-                Assert.IsFalse(_target.Validate(absenceRequest));
+                _target.BudgetGroupAllowanceCalculator = calculator;
+                var result = _target.Validate(absenceRequest);
+                Assert.IsFalse(result.IsValid);
+                //Assert.IsFalse(_target.Validate(absenceRequest));
             }
         }
 

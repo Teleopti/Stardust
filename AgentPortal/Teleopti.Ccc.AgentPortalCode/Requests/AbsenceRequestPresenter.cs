@@ -201,7 +201,7 @@ namespace Teleopti.Ccc.AgentPortalCode.Requests
             _absenceRequestView.Subject = _personRequest.Subject;
             _absenceRequestView.Message = _personRequest.Message;
             _absenceRequestView.RequestDate = _personRequest.CreatedDate;
-            _absenceRequestView.DenyReason = LanguageResourceHelper.Translate(_personRequest.DenyReason);
+            _absenceRequestView.DenyReason = LanguageResourceHelper.TranslateMessage(_personRequest.DenyReason);
             _absenceRequestView.Status = LanguageResourceHelper.TranslateEnumValue(_personRequest.RequestStatus);
             AbsenceRequestDto absenceRequest = _personRequest.Request as AbsenceRequestDto;
             if (absenceRequest != null)

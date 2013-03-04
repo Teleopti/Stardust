@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
         private IAbsenceRequest _absenceRequest;
         private IRequestApprovalService _requestApprovalService;
         private IPersonRequestCheckAuthorization _authorization;
+        private IValidatedRequest _validatedRequest;
 
         [SetUp]
         public void Setup()
@@ -34,6 +35,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             _requestApprovalService = _mocks.StrictMock<IRequestApprovalService>();
             _validators = new List<IAbsenceRequestValidator>{_validator};
             _authorization = _mocks.StrictMock<IPersonRequestCheckAuthorization>();
+            _validatedRequest = new ValidatedRequest() {IsValid = true, ValidationErrors = ""};
             _target = new GrantAbsenceRequest();
             _target.RequestApprovalService = _requestApprovalService;
         }
@@ -43,7 +45,9 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
         {
             using (_mocks.Record())
             {
-                Expect.Call(_validator.Validate(_absenceRequest)).Return(false);
+                _validatedRequest.IsValid = false;
+                _validatedRequest.ValidationErrors = "KeyForInvalidRequest";
+                Expect.Call(_validator.Validate(_absenceRequest)).Return(_validatedRequest); // false;
                 Expect.Call(_validator.InvalidReason).Return("KeyForInvalidRequest");
                 _authorization.VerifyEditRequestPermission(_personRequest);
             }
@@ -59,10 +63,13 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
         public void VerifyRollbackBeforeDenyRequestIfNotValidAndUndoRedoContainerSet()
         {
             IUndoRedoContainer undoRedoContainer = _mocks.StrictMock<IUndoRedoContainer>();
+            _validatedRequest.IsValid = false;
+            _validatedRequest.ValidationErrors = "KeyForInvalidRequest";
+
             using (_mocks.Ordered())
             {
-                Expect.Call(_validator.Validate(_absenceRequest)).Return(false);
-                Expect.Call(_validator.InvalidReason).Return("KeyForInvalidRequest");
+                Expect.Call(_validator.Validate(_absenceRequest)).Return(_validatedRequest); // false;
+                //Expect.Call(_validator.InvalidReason).Return("KeyForInvalidRequest");
                 undoRedoContainer.UndoAll();
                 Expect.Call(() => _authorization.VerifyEditRequestPermission(_personRequest));
             }
@@ -87,9 +94,11 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
         [Test]
         public void VerifyGrantRequestIfValid()
         {
+            _validatedRequest.IsValid = true;
+            _validatedRequest.ValidationErrors = "";
             using (_mocks.Record())
             {
-                Expect.Call(_validator.Validate(_absenceRequest)).Return(true);
+                Expect.Call(_validator.Validate(_absenceRequest)).Return(_validatedRequest); // true;
                 Expect.Call(_requestApprovalService.ApproveAbsence(_absence, _period, _absenceRequest.Person)).Return(
                     new List<IBusinessRuleResponse>());
                 _authorization.VerifyEditRequestPermission(_personRequest);
@@ -106,9 +115,12 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
         public void VerifyRollbackAndGrantRequestIfValid()
         {
             IUndoRedoContainer undoRedoContainer = _mocks.StrictMock<IUndoRedoContainer>();
+            _validatedRequest.IsValid = true;
+            _validatedRequest.ValidationErrors = "";
+
             using (_mocks.Ordered())
             {
-                Expect.Call(_validator.Validate(_absenceRequest)).Return(true);
+                Expect.Call(_validator.Validate(_absenceRequest)).Return(_validatedRequest); //true;
                 undoRedoContainer.UndoAll();
                 _authorization.VerifyEditRequestPermission(_personRequest);
                 Expect.Call(_requestApprovalService.ApproveAbsence(_absence, _period, _absenceRequest.Person)).Return(

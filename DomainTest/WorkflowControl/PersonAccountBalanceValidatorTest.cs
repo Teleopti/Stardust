@@ -47,6 +47,8 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             DateTimePeriod requestedDateTimePeriod = DateTimeFactory.CreateDateTimePeriod(new DateTime(2010, 02, 01, 0, 0, 0, DateTimeKind.Utc), 1);
             IAbsence absence = AbsenceFactory.CreateAbsence("Holiday");
             IAbsenceRequest absenceRequest = _personRequestFactory.CreateAbsenceRequest(absence, requestedDateTimePeriod);
+            IValidatedRequest validatedRequest = new ValidatedRequest(){IsValid = true, ValidationErrors = ""};
+
 
             using (_mocks.Record())
             {
@@ -58,7 +60,9 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 
             }
 
-            Assert.IsTrue(_target.Validate(absenceRequest));
+            var result = _target.Validate(absenceRequest);
+            Assert.IsTrue(result.IsValid);
+            //Assert.IsTrue(_target.Validate(absenceRequest));
         }
 
         [Test, ExpectedException(typeof(ArgumentNullException))]

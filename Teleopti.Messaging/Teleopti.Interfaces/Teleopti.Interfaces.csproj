@@ -109,6 +109,7 @@
     <Compile Include="Domain\ClipboardAction.cs" />
     <Compile Include="Domain\ClipboardItems.cs" />
     <Compile Include="Domain\IActivityRestrictableVisualLayer.cs" />
+    <Compile Include="Domain\IBudgetGroupAllowanceCalculator.cs" />
     <Compile Include="Domain\IEffectiveRestrictionCombiner.cs" />
     <Compile Include="Domain\IChangePasswordResultInfo.cs" />
     <Compile Include="Domain\ILoggedOnUser.cs" />
@@ -602,6 +603,7 @@
     <Compile Include="Domain\MultiplicatorType.cs" />
     <Compile Include="Domain\TimeOfDay.cs" />
     <Compile Include="Domain\TimeZoneInfoExtensions.cs" />
+    <Compile Include="Domain\ValidatedRequest.cs" />
     <Compile Include="Domain\WeekNumber.cs" />
     <Compile Include="Domain\WorkShiftLengthHintOption.cs" />
     <Compile Include="Domain\WorkTimeLimitation.cs" />
@@ -773,6 +775,7 @@
     <Compile Include="Domain\IWorkShiftBackToLegalStateServicePro.cs" />
     <Compile Include="Infrastructure\LicenseType.cs" />
     <Compile Include="IPossibleStartEndCategory.cs" />
+    <Compile Include="Domain\IValidatedRequest.cs" />
     <Compile Include="MessageBroker\Client\IConcurrentUsers.cs">
       <SubType>Code</SubType>
     </Compile>

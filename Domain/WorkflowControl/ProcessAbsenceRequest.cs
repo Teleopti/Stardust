@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.WorkflowControl
@@ -7,6 +8,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
     {
         public IRequestApprovalService RequestApprovalService { get; set; }
         public IUndoRedoContainer UndoRedoContainer { get; set; }
+        public IBudgetGroupAllowanceSpecification BudgetGroupAllowanceSpecification { get; set; }
 
         public abstract string DisplayText { get; }
         public abstract IProcessAbsenceRequest CreateInstance();
@@ -15,11 +17,21 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
         {
             foreach (var absenceRequestValidator in absenceRequestValidatorList)
             {
-                if (!absenceRequestValidator.Validate(absenceRequest))
+                IValidatedRequest validatedRequest = absenceRequestValidator.Validate(absenceRequest);
+
+                //if (!absenceRequestValidator.Validate(absenceRequest))
+                if(! validatedRequest.IsValid)
                 {
-                    DenyAbsenceRequest denyAbsenceRequest = new DenyAbsenceRequest
+                    //DenyAbsenceRequest denyAbsenceRequest = new DenyAbsenceRequest
+                    //                                            {
+                    //                                                DenyReason = string.Format(absenceRequest.Person.PermissionInformation.Culture(),
+                    //                                                UserTexts.Resources.ResourceManager.GetString(absenceRequestValidator.InvalidReason)),
+                    //                                                UndoRedoContainer = UndoRedoContainer
+                    //                                            };
+
+                    var denyAbsenceRequest = new DenyAbsenceRequest
                                                                 {
-                                                                    DenyReason = absenceRequestValidator.InvalidReason,
+                                                                    DenyReason = validatedRequest.ValidationErrors,
                                                                     UndoRedoContainer = UndoRedoContainer
                                                                 };
                     denyAbsenceRequest.Process(processingPerson, absenceRequest,authorization,null);

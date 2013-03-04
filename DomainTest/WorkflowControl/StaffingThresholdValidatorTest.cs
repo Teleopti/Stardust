@@ -18,6 +18,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
         private ISchedulingResultStateHolder _schedulingResultStateHolder;
         private PersonRequestFactory _personRequestFactory;
         private IResourceOptimizationHelper _resourceOptimizationHelper;
+        private IValidatedRequest _validatedRequest;
 
         private ISkill _skill;
         private ISkillDay _skillDay;
@@ -36,6 +37,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             _resourceOptimizationHelper = _mocks.StrictMock<IResourceOptimizationHelper>();
             _target.ResourceOptimizationHelper = _resourceOptimizationHelper;
             _personRequestFactory = new PersonRequestFactory();
+            _validatedRequest = new ValidatedRequest(){IsValid = true, ValidationErrors = ""};
         }
 
         [Test]
@@ -100,7 +102,10 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             createSkillDay(requestedDateTimePeriod);
             _target.SchedulingResultStateHolder = SchedulingResultStateHolderFactory.Create(requestedDateTimePeriod, _skill, new List<ISkillDay> { _skillDay });
             _target.SchedulingResultStateHolder.Schedules = _dictionary;
-            
+
+            _validatedRequest.IsValid = false;
+            _validatedRequest.ValidationErrors = "Not Valid";
+
             using (_mocks.Record())
             {
                 _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 01), true, true);
@@ -115,7 +120,9 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             }
             using (_mocks.Playback())
             {
-                Assert.IsFalse(_target.Validate(absenceRequest));
+                var result = _target.Validate(absenceRequest);
+                Assert.IsFalse(result.IsValid);
+                //Assert.IsFalse(_target.Validate(absenceRequest));
             }
             _mocks.VerifyAll();
         }
@@ -134,6 +141,9 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             IVisualLayer visualLayer = _mocks.StrictMock<IVisualLayer>();
 			var filteredVisualLayers = _mocks.StrictMock<IFilteredVisualLayerCollection>();
             IList<IVisualLayer> visualLayers = new List<IVisualLayer> { visualLayer };
+
+            _validatedRequest.IsValid = false;
+            _validatedRequest.ValidationErrors = "Not Valid";
 
             createSkill();
             createSkillDay(requestedDateTimePeriod);
@@ -158,7 +168,10 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
                 Expect.Call(filteredVisualLayers.GetEnumerator()).Return(visualLayers.GetEnumerator()).Repeat.AtLeastOnce();
                 Expect.Call(visualLayer.Period).Return(requestedDateTimePeriod).Repeat.AtLeastOnce();
             }
-            Assert.IsFalse(_target.Validate(absenceRequest));
+
+            var result = _target.Validate(absenceRequest);
+            Assert.IsFalse(result.IsValid);
+            //Assert.IsFalse(_target.Validate(absenceRequest));
         }
 
         [Test]
@@ -174,6 +187,9 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			var filteredVisualLayers = _mocks.StrictMock<IFilteredVisualLayerCollection>();
             IVisualLayer visualLayer = _mocks.StrictMock<IVisualLayer>();
             IList<IVisualLayer> visualLayers = new List<IVisualLayer> { visualLayer };
+
+            _validatedRequest.IsValid = true;
+            _validatedRequest.ValidationErrors = "";
 
             createSkill();
 
@@ -210,7 +226,11 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
                 Expect.Call(filteredVisualLayers.GetEnumerator()).Return(visualLayers.GetEnumerator()).Repeat.AtLeastOnce();
                 Expect.Call(visualLayer.Period).Return(requestedDateTimePeriod).Repeat.AtLeastOnce();
             }
-            Assert.IsTrue(_target.Validate(absenceRequest));
+
+            var result = _target.Validate(absenceRequest);
+            Assert.IsTrue(result.IsValid);
+
+            //Assert.IsTrue(_target.Validate(absenceRequest));
         }
 
 		[Test]

@@ -16,6 +16,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
         public IPersonAccountBalanceCalculator PersonAccountBalanceCalculator { get; set; }
         public IResourceOptimizationHelper ResourceOptimizationHelper { get; set; }
         public IBudgetGroupAllowanceSpecification BudgetGroupAllowanceSpecification { get; set; }
+        public IBudgetGroupAllowanceCalculator BudgetGroupAllowanceCalculator { get; set; }
 
         public string InvalidReason
         {
@@ -28,12 +29,15 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-        public bool Validate(IAbsenceRequest absenceRequest)
+        public IValidatedRequest Validate(IAbsenceRequest absenceRequest)
+        //public bool Validate(IAbsenceRequest absenceRequest)
         {
             InParameter.NotNull("SchedulingResultStateHolder", SchedulingResultStateHolder);
             InParameter.NotNull("ResourceOptimizationHelper", ResourceOptimizationHelper);
 
+            var validatedRequest = new ValidatedRequest();
             var timeZone = absenceRequest.Person.PermissionInformation.DefaultTimeZone();
+            var culture = absenceRequest.Person.PermissionInformation.Culture();
             var localPeriod =
                 absenceRequest.Period.ToDateOnlyPeriod(timeZone);
 
@@ -57,23 +61,42 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
                         foreach (var skill in SchedulingResultStateHolder.Skills)
                         {
 							var skillStaffPeriodList = SchedulingResultStateHolder.SkillStaffPeriodHolder.SkillStaffPeriodList(new List<ISkill> { skill }, sharedPeriod.Value);
-							if (skillStaffPeriodList == null || skillStaffPeriodList.Count == 0) return true;
+                            if (skillStaffPeriodList == null || skillStaffPeriodList.Count == 0)
+                                return new ValidatedRequest(){IsValid = true, ValidationErrors = String.Empty};
                         	if (skill == null) continue;
                         	if (!ValidateUnderstaffing(skill, skillStaffPeriodList))
                         	{
 								Logger.DebugFormat("The request failed the understaffing validation for skill {0}.", skill.Name);
-                        		return false;
+                                validatedRequest.IsValid = false;
+                                validatedRequest.ValidationErrors = string.Format(culture,
+                                                                                  UserTexts.Resources
+                                                                                           .SkillUnderStaffingValidationError,
+                                                                                  skill.Name);
+                                return validatedRequest;
+                        	    //return false;
                         	}
                         	if (!ValidateSeriousUnderstaffing(skill, skillStaffPeriodList))
                         	{
 								Logger.DebugFormat("The request failed the serious understaffing validation for skill {0}.", skill.Name);
-                        		return false;
+                                validatedRequest.IsValid = false;
+                                validatedRequest.ValidationErrors = string.Format(culture,
+                                                                                  UserTexts.Resources
+                                                                                           .SkillUnderStaffingValidationError,
+                                                                                  skill.Name);
+                                return validatedRequest;
+                                //return false;
                         	}
                         }
                     }
                 }
             }
-            return true;
+            return new ValidatedRequest
+            {
+                IsValid = true,
+                ValidationErrors = String.Empty
+            };
+
+            //return true;
         }
 
     	public static bool ValidateSeriousUnderstaffing(ISkill skill, IEnumerable<ISkillStaffPeriod> skillStaffPeriodList)
@@ -115,6 +138,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
                 result = (result*397) ^ (PersonAccountBalanceCalculator != null ? PersonAccountBalanceCalculator.GetHashCode() : 0);
                 result = (result*397) ^ (ResourceOptimizationHelper != null ? ResourceOptimizationHelper.GetHashCode() : 0);
                 result = (result * 397) ^ (BudgetGroupAllowanceSpecification != null ? BudgetGroupAllowanceSpecification.GetHashCode() : 0);
+                result = (result * 397) ^ (BudgetGroupAllowanceCalculator != null ? BudgetGroupAllowanceCalculator.GetHashCode() : 0);
                 result = (result * 397) ^ (GetType().GetHashCode());
                 return result;
             }

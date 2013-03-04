@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				.ForMember(d => d.DenyReason, o => o.MapFrom(s =>
 				                                             	{
 				                                             		UserTexts.Resources.ResourceManager.IgnoreCase = true;
-				                                             		var result = UserTexts.Resources.ResourceManager.GetString(s.DenyReason);
+				                                             	    var result =  UserTexts.Resources.ResourceManager.GetString(s.DenyReason);
 																	if(string.IsNullOrEmpty(result))
 																	{
 																		result = s.DenyReason;

@@ -152,6 +152,7 @@
     <Compile Include="ApplicationInfrastructureContainerInstaller.cs" />
     <Compile Include="AuthenticationContainerInstaller.cs" />
     <Compile Include="AuthorizationContainerInstaller.cs" />
+    <Compile Include="BudgetGroupAllowanceCalculator.cs" />
     <Compile Include="BudgetGroupAllowanceSpecification.cs" />
     <Compile Include="BusStartup.cs" />
     <Compile Include="ConfigFileDefaultHost.cs" />

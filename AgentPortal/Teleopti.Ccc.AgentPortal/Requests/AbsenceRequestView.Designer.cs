@@ -30,6 +30,12 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AbsenceRequestView));
+            this.ribbonControlAdv1 = new Syncfusion.Windows.Forms.Tools.RibbonControlAdv();
+            this.toolStripTabItemRequest = new Syncfusion.Windows.Forms.Tools.ToolStripTabItem();
+            this.toolStripExButtons = new Syncfusion.Windows.Forms.Tools.ToolStripEx();
+            this.toolStripButtonSaveAndClose = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButtonDelete = new System.Windows.Forms.ToolStripButton();
+            this.officeButtonSaveAndClose = new System.Windows.Forms.ToolStripButton();
             this.tableLayoutPanelMain = new System.Windows.Forms.TableLayoutPanel();
             this.gradientPanelScheduleHasChanged = new Syncfusion.Windows.Forms.Tools.GradientPanel();
             this.labelDenyReason = new System.Windows.Forms.Label();
@@ -52,12 +58,10 @@
             this.checkBoxAdvAllDay = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
             this.office2007OutlookTimePickerAPStartTime = new Teleopti.Ccc.AgentPortal.Common.Controls.Office2007OutlookTimePickerAP(this.components);
             this.labelLine = new System.Windows.Forms.Label();
-            this.ribbonControlAdv1 = new Syncfusion.Windows.Forms.Tools.RibbonControlAdv();
-            this.toolStripTabItemRequest = new Syncfusion.Windows.Forms.Tools.ToolStripTabItem();
-            this.toolStripExButtons = new Syncfusion.Windows.Forms.Tools.ToolStripEx();
-            this.toolStripButtonSaveAndClose = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButtonDelete = new System.Windows.Forms.ToolStripButton();
-            this.officeButtonSaveAndClose = new System.Windows.Forms.ToolStripButton();
+            ((System.ComponentModel.ISupportInitialize)(this.ribbonControlAdv1)).BeginInit();
+            this.ribbonControlAdv1.SuspendLayout();
+            this.toolStripTabItemRequest.Panel.SuspendLayout();
+            this.toolStripExButtons.SuspendLayout();
             this.tableLayoutPanelMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gradientPanelScheduleHasChanged)).BeginInit();
             this.gradientPanelScheduleHasChanged.SuspendLayout();
@@ -71,11 +75,77 @@
             ((System.ComponentModel.ISupportInitialize)(this.office2007OutlookTimePickerAPEndTime)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvAllDay)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.office2007OutlookTimePickerAPStartTime)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ribbonControlAdv1)).BeginInit();
-            this.ribbonControlAdv1.SuspendLayout();
-            this.toolStripTabItemRequest.Panel.SuspendLayout();
-            this.toolStripExButtons.SuspendLayout();
             this.SuspendLayout();
+            // 
+            // ribbonControlAdv1
+            // 
+            this.ribbonControlAdv1.Header.AddMainItem(toolStripTabItemRequest);
+            resources.ApplyResources(this.ribbonControlAdv1, "ribbonControlAdv1");
+            this.ribbonControlAdv1.MaximizeToolTip = "Maximize Ribbon";
+            this.ribbonControlAdv1.MenuButtonImage = global::Teleopti.Ccc.AgentPortal.Properties.Resources.ccc_Menu;
+            this.ribbonControlAdv1.MenuButtonText = "";
+            this.ribbonControlAdv1.MinimizeToolTip = "Minimize Ribbon";
+            this.ribbonControlAdv1.Name = "ribbonControlAdv1";
+            // 
+            // ribbonControlAdv1.OfficeMenu
+            // 
+            this.ribbonControlAdv1.OfficeMenu.MainPanel.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.officeButtonSaveAndClose});
+            this.ribbonControlAdv1.OfficeMenu.Name = "OfficeMenu";
+            resources.ApplyResources(this.ribbonControlAdv1.OfficeMenu, "ribbonControlAdv1.OfficeMenu");
+            this.ribbonControlAdv1.SelectedTab = this.toolStripTabItemRequest;
+            this.ribbonControlAdv1.ShowQuickItemsDropDownButton = false;
+            this.ribbonControlAdv1.SystemText.QuickAccessDialogDropDownName = "xxStart menu";
+            // 
+            // toolStripTabItemRequest
+            // 
+            this.toolStripTabItemRequest.Name = "toolStripTabItemRequest";
+            // 
+            // ribbonControlAdv1.ribbonPanel1
+            // 
+            this.toolStripTabItemRequest.Panel.Controls.Add(this.toolStripExButtons);
+            this.toolStripTabItemRequest.Panel.Name = "ribbonPanel1";
+            this.toolStripTabItemRequest.Panel.ScrollPosition = 0;
+            resources.ApplyResources(this.toolStripTabItemRequest.Panel, "ribbonControlAdv1.ribbonPanel1");
+            this.toolStripTabItemRequest.Position = 0;
+            this.SetShortcut(this.toolStripTabItemRequest, System.Windows.Forms.Keys.None);
+            resources.ApplyResources(this.toolStripTabItemRequest, "toolStripTabItemRequest");
+            // 
+            // toolStripExButtons
+            // 
+            resources.ApplyResources(this.toolStripExButtons, "toolStripExButtons");
+            this.toolStripExButtons.ForeColor = System.Drawing.Color.MidnightBlue;
+            this.toolStripExButtons.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.toolStripExButtons.Image = null;
+            this.toolStripExButtons.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripButtonSaveAndClose,
+            this.toolStripButtonDelete});
+            this.toolStripExButtons.Name = "toolStripExButtons";
+            this.toolStripExButtons.ShowLauncher = false;
+            // 
+            // toolStripButtonSaveAndClose
+            // 
+            this.toolStripButtonSaveAndClose.Image = global::Teleopti.Ccc.AgentPortal.Properties.Resources.ccc_SkillEmail;
+            resources.ApplyResources(this.toolStripButtonSaveAndClose, "toolStripButtonSaveAndClose");
+            this.toolStripButtonSaveAndClose.Name = "toolStripButtonSaveAndClose";
+            this.SetShortcut(this.toolStripButtonSaveAndClose, System.Windows.Forms.Keys.None);
+            this.toolStripButtonSaveAndClose.Click += new System.EventHandler(this.toolStripButtonSaveAndClose_Click);
+            // 
+            // toolStripButtonDelete
+            // 
+            this.toolStripButtonDelete.Image = global::Teleopti.Ccc.AgentPortal.Properties.Resources.ccc_Delete;
+            resources.ApplyResources(this.toolStripButtonDelete, "toolStripButtonDelete");
+            this.toolStripButtonDelete.Name = "toolStripButtonDelete";
+            this.SetShortcut(this.toolStripButtonDelete, System.Windows.Forms.Keys.None);
+            this.toolStripButtonDelete.Click += new System.EventHandler(this.toolStripButtonDelete_Click);
+            // 
+            // officeButtonSaveAndClose
+            // 
+            this.officeButtonSaveAndClose.Image = global::Teleopti.Ccc.AgentPortal.Properties.Resources.ccc_SkillEmail;
+            resources.ApplyResources(this.officeButtonSaveAndClose, "officeButtonSaveAndClose");
+            this.officeButtonSaveAndClose.Name = "officeButtonSaveAndClose";
+            this.SetShortcut(this.officeButtonSaveAndClose, System.Windows.Forms.Keys.None);
+            this.officeButtonSaveAndClose.Click += new System.EventHandler(this.officeButtonSaveAndClose_Click);
             // 
             // tableLayoutPanelMain
             // 
@@ -132,6 +202,7 @@
             // textBoxExtSubject
             // 
             this.tableLayoutPanelTop.SetColumnSpan(this.textBoxExtSubject, 3);
+            this.textBoxExtSubject.Cursor = System.Windows.Forms.Cursors.IBeam;
             resources.ApplyResources(this.textBoxExtSubject, "textBoxExtSubject");
             this.textBoxExtSubject.Name = "textBoxExtSubject";
             this.textBoxExtSubject.OverflowIndicatorToolTipText = null;
@@ -216,6 +287,7 @@
             this.dateTimePickerAdvEnd.Calendar.HeaderStartColor = System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252)))));
             this.dateTimePickerAdvEnd.Calendar.HeadForeColor = System.Drawing.SystemColors.ControlText;
             this.dateTimePickerAdvEnd.Calendar.HeadGradient = true;
+            this.dateTimePickerAdvEnd.Calendar.Iso8601CalenderFormat = false;
             this.dateTimePickerAdvEnd.Calendar.Location = ((System.Drawing.Point)(resources.GetObject("dateTimePickerAdvEnd.Calendar.Location")));
             this.dateTimePickerAdvEnd.Calendar.Name = "monthCalendar";
             this.dateTimePickerAdvEnd.Calendar.ScrollButtonSize = new System.Drawing.Size(24, 24);
@@ -244,7 +316,6 @@
             this.dateTimePickerAdvEnd.Calendar.TodayButton.UseVisualStyle = true;
             this.dateTimePickerAdvEnd.CalendarTitleBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252)))));
             this.dateTimePickerAdvEnd.CalendarTitleForeColor = System.Drawing.SystemColors.ControlText;
-            this.dateTimePickerAdvEnd.Culture = new System.Globalization.CultureInfo("sv-SE");
             this.dateTimePickerAdvEnd.DropDownImage = null;
             this.dateTimePickerAdvEnd.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             resources.ApplyResources(this.dateTimePickerAdvEnd, "dateTimePickerAdvEnd");
@@ -277,6 +348,7 @@
             this.dateTimePickerAdvStart.Calendar.HeaderStartColor = System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252)))));
             this.dateTimePickerAdvStart.Calendar.HeadForeColor = System.Drawing.SystemColors.ControlText;
             this.dateTimePickerAdvStart.Calendar.HeadGradient = true;
+            this.dateTimePickerAdvStart.Calendar.Iso8601CalenderFormat = false;
             this.dateTimePickerAdvStart.Calendar.Location = ((System.Drawing.Point)(resources.GetObject("dateTimePickerAdvStart.Calendar.Location")));
             this.dateTimePickerAdvStart.Calendar.Name = "monthCalendar";
             this.dateTimePickerAdvStart.Calendar.ScrollButtonSize = new System.Drawing.Size(24, 24);
@@ -305,7 +377,6 @@
             this.dateTimePickerAdvStart.Calendar.TodayButton.UseVisualStyle = true;
             this.dateTimePickerAdvStart.CalendarTitleBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252)))));
             this.dateTimePickerAdvStart.CalendarTitleForeColor = System.Drawing.SystemColors.ControlText;
-            this.dateTimePickerAdvStart.Culture = new System.Globalization.CultureInfo("sv-SE");
             this.dateTimePickerAdvStart.DropDownImage = null;
             this.dateTimePickerAdvStart.Format = System.Windows.Forms.DateTimePickerFormat.Short;
             resources.ApplyResources(this.dateTimePickerAdvStart, "dateTimePickerAdvStart");
@@ -351,68 +422,6 @@
             this.labelLine.BackColor = System.Drawing.Color.SteelBlue;
             this.labelLine.Name = "labelLine";
             // 
-            // ribbonControlAdv1
-            // 
-            this.ribbonControlAdv1.Header.AddMainItem(toolStripTabItemRequest);
-            resources.ApplyResources(this.ribbonControlAdv1, "ribbonControlAdv1");
-            this.ribbonControlAdv1.MenuButtonImage = global::Teleopti.Ccc.AgentPortal.Properties.Resources.ccc_Menu;
-            this.ribbonControlAdv1.Name = "ribbonControlAdv1";
-            // 
-            // ribbonControlAdv1.OfficeMenu
-            // 
-            this.ribbonControlAdv1.OfficeMenu.MainPanel.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.officeButtonSaveAndClose});
-            this.ribbonControlAdv1.OfficeMenu.Name = "OfficeMenu";
-            resources.ApplyResources(this.ribbonControlAdv1.OfficeMenu, "ribbonControlAdv1.OfficeMenu");
-            this.ribbonControlAdv1.ShowQuickItemsDropDownButton = false;
-            this.ribbonControlAdv1.SystemText.QuickAccessDialogDropDownName = "xxStart menu";
-            // 
-            // toolStripTabItemRequest
-            // 
-            this.toolStripTabItemRequest.Name = "toolStripTabItemRequest";
-            // 
-            // ribbonControlAdv1.ribbonPanel1
-            // 
-            this.toolStripTabItemRequest.Panel.Controls.Add(this.toolStripExButtons);
-            this.toolStripTabItemRequest.Panel.Name = "ribbonPanel1";
-            this.toolStripTabItemRequest.Panel.ScrollPosition = 0;
-            resources.ApplyResources(this.toolStripTabItemRequest.Panel, "ribbonControlAdv1.ribbonPanel1");
-            this.toolStripTabItemRequest.Position = 0;
-            resources.ApplyResources(this.toolStripTabItemRequest, "toolStripTabItemRequest");
-            // 
-            // toolStripExButtons
-            // 
-            resources.ApplyResources(this.toolStripExButtons, "toolStripExButtons");
-            this.toolStripExButtons.ForeColor = System.Drawing.Color.MidnightBlue;
-            this.toolStripExButtons.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-            this.toolStripExButtons.Image = null;
-            this.toolStripExButtons.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButtonSaveAndClose,
-            this.toolStripButtonDelete});
-            this.toolStripExButtons.Name = "toolStripExButtons";
-            this.toolStripExButtons.ShowLauncher = false;
-            // 
-            // toolStripButtonSaveAndClose
-            // 
-            this.toolStripButtonSaveAndClose.Image = global::Teleopti.Ccc.AgentPortal.Properties.Resources.ccc_SkillEmail;
-            resources.ApplyResources(this.toolStripButtonSaveAndClose, "toolStripButtonSaveAndClose");
-            this.toolStripButtonSaveAndClose.Name = "toolStripButtonSaveAndClose";
-            this.toolStripButtonSaveAndClose.Click += new System.EventHandler(this.toolStripButtonSaveAndClose_Click);
-            // 
-            // toolStripButtonDelete
-            // 
-            this.toolStripButtonDelete.Image = global::Teleopti.Ccc.AgentPortal.Properties.Resources.ccc_Delete;
-            resources.ApplyResources(this.toolStripButtonDelete, "toolStripButtonDelete");
-            this.toolStripButtonDelete.Name = "toolStripButtonDelete";
-            this.toolStripButtonDelete.Click += new System.EventHandler(this.toolStripButtonDelete_Click);
-            // 
-            // officeButtonSaveAndClose
-            // 
-            this.officeButtonSaveAndClose.Image = global::Teleopti.Ccc.AgentPortal.Properties.Resources.ccc_SkillEmail;
-            resources.ApplyResources(this.officeButtonSaveAndClose, "officeButtonSaveAndClose");
-            this.officeButtonSaveAndClose.Name = "officeButtonSaveAndClose";
-            this.officeButtonSaveAndClose.Click += new System.EventHandler(this.officeButtonSaveAndClose_Click);
-            // 
             // AbsenceRequestView
             // 
             resources.ApplyResources(this, "$this");
@@ -423,6 +432,13 @@
             this.HelpButtonImage = ((System.Drawing.Image)(resources.GetObject("$this.HelpButtonImage")));
             this.Name = "AbsenceRequestView";
             this.Load += new System.EventHandler(this.AbsenceRequestView_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.ribbonControlAdv1)).EndInit();
+            this.ribbonControlAdv1.ResumeLayout(false);
+            this.ribbonControlAdv1.PerformLayout();
+            this.toolStripTabItemRequest.Panel.ResumeLayout(false);
+            this.toolStripTabItemRequest.Panel.PerformLayout();
+            this.toolStripExButtons.ResumeLayout(false);
+            this.toolStripExButtons.PerformLayout();
             this.tableLayoutPanelMain.ResumeLayout(false);
             this.tableLayoutPanelMain.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gradientPanelScheduleHasChanged)).EndInit();
@@ -439,13 +455,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.office2007OutlookTimePickerAPEndTime)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvAllDay)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.office2007OutlookTimePickerAPStartTime)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.ribbonControlAdv1)).EndInit();
-            this.ribbonControlAdv1.ResumeLayout(false);
-            this.ribbonControlAdv1.PerformLayout();
-            this.toolStripTabItemRequest.Panel.ResumeLayout(false);
-            this.toolStripTabItemRequest.Panel.PerformLayout();
-            this.toolStripExButtons.ResumeLayout(false);
-            this.toolStripExButtons.PerformLayout();
             this.ResumeLayout(false);
 
         }

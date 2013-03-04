@@ -11294,4 +11294,32 @@ These options are activated:
     <value>Errors</value>
     <comment>Errors</comment>
   </data>
+  <data name="InsufficientStaffingDays" xml:space="preserve">
+    <value>Insufficient staffing for : {0}</value>
+  </data>
+  <data name="NoBudgetDefineForSomeRequestedDays" xml:space="preserve">
+    <value>One or more days during this requested period {0} has no budget.</value>
+    <comment>One or more days during requested period has no budget.</comment>
+  </data>
+  <data name="NoBudgetForThisPeriod" xml:space="preserve">
+    <value>There is no budget for this period {0}</value>
+    <comment>No budget group is configured for this period</comment>
+  </data>
+  <data name="NoBudgetGroupForPerson" xml:space="preserve">
+    <value>There is no budget group for person: {0}</value>
+    <comment>There is no budget group configured for person.</comment>
+  </data>
+  <data name="NotEnoughBudgetAllowanceForTheDay" xml:space="preserve">
+    <value>There is not enough budget allowance for day {0}.</value>
+    <comment>Not enough budget allowance.</comment>
+  </data>
+  <data name="RequestDenyReasonClosedPeriodBeforeSendRequest" xml:space="preserve">
+    <value>Your Request has been denied. Date Period not open for sending requests.</value>
+  </data>
+  <data name="RequestDenyReasonPeriodOpenAfterSendRequest" xml:space="preserve">
+    <value>Your Request has been denied. Day not open for requests. Next open date is {0}.</value>
+  </data>
+  <data name="SkillUnderStaffingValidationError" xml:space="preserve">
+    <value>The request failed the understaffing validation for skill {0}. Since it would bring the needed number of resources below the required threshold.</value>
+  </data>
 </root>

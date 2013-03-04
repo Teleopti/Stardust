@@ -45,12 +45,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
     	private readonly IBudgetGroupAllowanceSpecification _budgetGroupAllowanceSpecification;
     	private readonly ILoadSchedulingStateHolderForResourceCalculation _loadSchedulingStateHolderForResourceCalculation;
     	private readonly IAlreadyAbsentSpecification _alreadyAbsentSpecification;
-    	private IProcessAbsenceRequest _process;
+        private readonly IBudgetGroupAllowanceCalculator _budgetGroupAllowanceCalculator;
+        private IProcessAbsenceRequest _process;
     	private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 
     	public NewAbsenceRequestConsumer(IScheduleRepository scheduleRepository, IPersonAbsenceAccountProvider personAbsenceAccountProvider, IScenarioRepository scenarioRepository, IPersonRequestRepository personRequestRepository, ISchedulingResultStateHolder schedulingResultStateHolder, 
                                          IAbsenceRequestOpenPeriodMerger absenceRequestOpenPeriodMerger, IRequestFactory factory,
-                                         IScheduleDictionarySaver scheduleDictionarySaver, IScheduleIsInvalidSpecification scheduleIsInvalidSpecification, IPersonRequestCheckAuthorization authorization, IScheduleDictionaryModifiedCallback scheduleDictionaryModifiedCallback, IResourceOptimizationHelper resourceOptimizationHelper, IUpdateScheduleProjectionReadModel updateScheduleProjectionReadModel, IBudgetGroupAllowanceSpecification budgetGroupAllowanceSpecification, ILoadSchedulingStateHolderForResourceCalculation loadSchedulingStateHolderForResourceCalculation, IAlreadyAbsentSpecification alreadyAbsentSpecification)
+                                         IScheduleDictionarySaver scheduleDictionarySaver, IScheduleIsInvalidSpecification scheduleIsInvalidSpecification, IPersonRequestCheckAuthorization authorization, IScheduleDictionaryModifiedCallback scheduleDictionaryModifiedCallback, IResourceOptimizationHelper resourceOptimizationHelper, IUpdateScheduleProjectionReadModel updateScheduleProjectionReadModel, IBudgetGroupAllowanceSpecification budgetGroupAllowanceSpecification, ILoadSchedulingStateHolderForResourceCalculation loadSchedulingStateHolderForResourceCalculation, IAlreadyAbsentSpecification alreadyAbsentSpecification, IBudgetGroupAllowanceCalculator budgetGroupAllowanceCalculator)
         {
             _scheduleRepository = scheduleRepository;
             _personAbsenceAccountProvider = personAbsenceAccountProvider;
@@ -68,7 +69,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
     		_budgetGroupAllowanceSpecification = budgetGroupAllowanceSpecification;
     		_loadSchedulingStateHolderForResourceCalculation = loadSchedulingStateHolderForResourceCalculation;
     		_alreadyAbsentSpecification = alreadyAbsentSpecification;
-    		_loadDataActions = new List<LoadDataAction>
+    	    _budgetGroupAllowanceCalculator = budgetGroupAllowanceCalculator;
+
+    	    _loadDataActions = new List<LoadDataAction>
                                    {
                                        LoadAndCheckPersonRequest,
                                        GetAndCheckAbsenceRequest,
@@ -113,8 +116,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
                 if (!HasWorkflowControlSet())
                 {
-					denyAbsenceRequest(undoRedoContainer,"RequestDenyReasonNoWorkflow");
-					if (Logger.IsWarnEnabled)
+					denyAbsenceRequest(undoRedoContainer,string.Format(_absenceRequest.Person.PermissionInformation.Culture(),UserTexts.Resources.RequestDenyReasonNoWorkflow));
+					
+                    if (Logger.IsWarnEnabled)
 					{
 						Logger.WarnFormat(CultureInfo.CurrentCulture, "No workflow control set defined for {0}, {1} (PersonId = {2}). The request with Id = {3} will be denied.",
 										  _absenceRequest.Person.EmploymentNumber, _absenceRequest.Person.Name, _absenceRequest.Person.Id, message.PersonRequestId);
@@ -181,19 +185,21 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
                 			(_absenceRequest.Absence);
                 	extractor.ViewpointDate = DateOnly.Today;
 
-                	var openPeriods = extractor.Projection.GetProjectedPeriods(dateOnlyPeriod);
+                	var openPeriods = extractor.Projection.GetProjectedPeriods(dateOnlyPeriod, _absenceRequest.Person.PermissionInformation.Culture());
+
                 	var mergedPeriod = _absenceRequestOpenPeriodMerger.Merge(openPeriods);
 
-                	validatorList = mergedPeriod.GetSelectedValidatorList(_schedulingResultStateHolder,
-                	                                                      _resourceOptimizationHelper,
-                	                                                      personAccountBalanceCalculator,
-                	                                                      _budgetGroupAllowanceSpecification);
-
+                    validatorList = mergedPeriod.GetSelectedValidatorList(_schedulingResultStateHolder,
+                                                                          _resourceOptimizationHelper,
+                                                                          personAccountBalanceCalculator,
+                                                                          _budgetGroupAllowanceSpecification,
+                                                                           _budgetGroupAllowanceCalculator);
+                    //_budgetGroupAllowanceSpecification, 
                 	_process = mergedPeriod.GetSelectedProcess(requestApprovalServiceScheduler, undoRedoContainer);
 
 					if (_process.GetType() == typeof(GrantAbsenceRequest) && alreadyAbsent)
 					{
-						denyAbsenceRequest(undoRedoContainer, "RequestDenyReasonAlreadyAbsent");
+						denyAbsenceRequest(undoRedoContainer, string.Format(_absenceRequest.Person.PermissionInformation.Culture(),UserTexts.Resources.RequestDenyReasonAlreadyAbsent));
 						if (Logger.IsWarnEnabled)
 						{
 							Logger.WarnFormat(CultureInfo.CurrentCulture,
