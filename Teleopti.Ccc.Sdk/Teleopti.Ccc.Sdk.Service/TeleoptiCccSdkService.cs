@@ -863,6 +863,8 @@ namespace Teleopti.Ccc.Sdk.WcfService
 				decimal dayAdherence;
 				decimal readyTime;
 				decimal adherence;
+				decimal? adherenceForPeriod = null;
+				decimal? adherenceForDay = null;
 				if (data[16] == null)
 					deviation = 0;
 				else
@@ -870,7 +872,10 @@ namespace Teleopti.Ccc.Sdk.WcfService
 				if (data[13] == null)
 					dayAdherence = 0;
 				else
-					dayAdherence = (decimal)data[13];
+				{
+					dayAdherence = (decimal) data[13];
+					adherenceForDay = (decimal) data[13];
+				}
 				if (data[17] == null)
 					readyTime = 0;
 				else
@@ -878,9 +883,18 @@ namespace Teleopti.Ccc.Sdk.WcfService
 				if (data[12] == null)
 					adherence = 0;
 				else
+				{
 					adherence = (decimal)data[12];
-				AdherenceDataDto adherenceDataDto = new AdherenceDataDto(startTime.Ticks, endTime.Ticks, readyTime, deviation, adherence);
-				adherenceDataDto.DayAdherence = dayAdherence;
+					adherenceForPeriod = (decimal) data[12];
+				}
+				var adherenceDataDto = new AdherenceDataDto(startTime.Ticks, endTime.Ticks, readyTime, deviation, adherenceForPeriod)
+					{
+#pragma warning disable 612,618
+						Adherence = adherence,
+						DayAdherence = dayAdherence,
+#pragma warning restore 612,618
+						AdherenceForDay = adherenceForDay
+					};
 				adherenceDto.AdherenceDataDtos.Add(adherenceDataDto);
 			}
 			return adherenceDto;

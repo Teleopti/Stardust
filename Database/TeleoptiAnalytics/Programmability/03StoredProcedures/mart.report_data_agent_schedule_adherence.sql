@@ -1,4 +1,4 @@
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[report_data_agent_schedule_adherence]') AND type in (N'P', N'PC'))
+﻿IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[report_data_agent_schedule_adherence]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [mart].[report_data_agent_schedule_adherence]
 GO
 
@@ -504,8 +504,6 @@ END
 ----------
 --remove deviation and schedule_ready_time for every interval > Now(), but keep color and activity for display
 ----------
-IF (@from_matrix = 1) --Only do this for Standard Reports => Don't bother/break SDK and MyTime client
-BEGIN
 update #result
 set
 	adherence_calc_s=NULL,
@@ -518,22 +516,6 @@ set
 	deviation_s = NULL
 where 	date_id = @nowLocalDateId 
 and interval_id > @nowLocalIntervalId
-END
-ELSE
-BEGIN
-update #result
-set
-	adherence_calc_s=0,
-	deviation_s = 0
-where 	date_id > @nowLocalDateId 
-
-update #result
-set
-	adherence_calc_s=0,
-	deviation_s = 0
-where 	date_id = @nowLocalDateId 
-and interval_id > @nowLocalIntervalId
-END
 
 ----------
 --calculation of Agent adherence, team adherence
