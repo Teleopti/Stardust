@@ -6,6 +6,7 @@ using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.UserTexts;
+using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data;
@@ -185,12 +186,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferencePanelError.Text, Is.StringContaining(string.Format(Resources.InvalidTimeValue, Resources.StartTime)));
 		}
 
-		[When(@"I select preference template with '(.*)'")]
-		public void WhenISelectPreferenceTemplateWith(string name)
-		{
-			Pages.Pages.PreferencePage.ExtendedPreferenceTemplateSelectBox.SelectWait(name);
-		}
-
 		[When(@"I input extended preference fields with")]
 		public void WhenIInputExtendedPreferenceFieldsWith(Table table)
 		{
@@ -353,11 +348,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			Pages.Pages.PreferencePage.MustHaveDeleteButton.EventualClick();
 		}
 
+
 		[Given(@"I have a preference template with")]
 		public void GivenIHaveAPreferenceTemplateWith(Table table)
 		{
 			var preferenceTemplate = table.CreateInstance<PreferenceTemplateConfigurable>();
 			UserFactory.User().Setup(preferenceTemplate);
+		}
+
+		[When(@"I select preference template with '(.*)'")]
+		public void WhenISelectPreferenceTemplateWith(string name)
+		{
+			Pages.Pages.PreferencePage.ExtendedPreferenceTemplateSelectBox.SelectWait(name);
 		}
 
 		[When(@"I click the templates select box")]
@@ -366,12 +368,34 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			Pages.Pages.PreferencePage.ExtendedPreferenceTemplateSelectBox.Open();
 		}
 
+		[When(@"I check Save as new template checkbox")]
+		public void WhenICheckSaveAsNewTemplateCheckbox()
+		{
+			Pages.Pages.PreferencePage.TemplateSaveCheckBox.Checked = true;
+		}
+
+		[When(@"I input new template name '(.*)'")]
+		public void WhenIInputNewTemplateName(string name)
+		{
+			var page = Pages.Pages.PreferencePage;
+			page.TemplateNameTextField.Value = name;
+			Browser.Current.Eval("$('#" + page.TemplateNameTextField.Id + "').keyup()");
+		}
+
+		[When(@"I click save template button")]
+		public void WhenIClickSaveTemplateButton()
+		{
+			Pages.Pages.PreferencePage.ExtendedPreferenceSaveTemplateButton.EventualClick();
+		}
+
 		[Then(@"I should see these available templates")]
 		public void ThenIShouldSeeTheseAvailableTemplates(Table table)
 		{
 			var templates = table.CreateSet<SingleValue>();
 			templates.ForEach(preference => EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceTemplateSelectBox.Menu.Text, Is.StringContaining(preference.Value)));
 		}
+		
+
 
 		private class ExtendedPreferenceFields
 		{

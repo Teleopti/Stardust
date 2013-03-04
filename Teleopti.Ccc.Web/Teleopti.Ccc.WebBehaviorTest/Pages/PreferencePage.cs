@@ -69,6 +69,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		public ComboBox ExtendedPreferenceActivityTimeMinimum;
 		[FindBy(Id = "Preference-extended-activity-time-maximum")]
 		public ComboBox ExtendedPreferenceActivityTimeMaximum;
+		[FindBy(Id = "Template-save")]
+		public CheckBox TemplateSaveCheckBox;
+		[FindBy(Id = "Template-name-input")]
+		public TextField TemplateNameTextField;
 
 		[FindBy(Id = "Preference-extended-error")]
 		public Div ExtendedPreferencePanelError { get; set; }
@@ -80,6 +84,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		public Button ExtendedPreferenceApplyButton { get; set; }
 		[FindBy(Id = "Preference-extended-reset")]
 		public Button ExtendedPreferenceResetButton { get; set; }
+		[FindBy(Id = "Preference-extended-save-template")]
+		public Button ExtendedPreferenceSaveTemplateButton { get; set; }
 
 		public void SelectPreferenceItemByText(string text, bool wait)
 		{

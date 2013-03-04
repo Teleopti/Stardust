@@ -71,8 +71,8 @@ Scenario: Create preference template
 	| Activity End time maximum   | 12:15 |
 	| Activity time minimum       | 00:15 |
 	| Activity time maximum       | 00:45 |
-	And I check "Save as new Template" checkbox
-	And I input new template name "test template"
+	And I check Save as new template checkbox
+	And I input new template name 'test template'
 	And I click save template button
 	Then I should see these available templates
 	| Value         |
