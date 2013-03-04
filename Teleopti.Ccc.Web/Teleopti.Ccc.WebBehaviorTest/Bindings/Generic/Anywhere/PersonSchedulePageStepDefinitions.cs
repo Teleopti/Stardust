@@ -41,11 +41,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 
 		private static void AssertShiftLayer(ShiftLayerInfo shiftLayer)
 		{
-			EventualAssert.That(() => Browser.Current.Element(Find.BySelector(string.Format(".shift .layer[data-start-time='{0}']", shiftLayer.StartTime))).Exists, Is.True);
-			var minutes = shiftLayer.EndTime.Subtract(shiftLayer.StartTime);
+			var startTime = shiftLayer.StartTime.ToString("HH:mm");
+			var minutes = shiftLayer.EndTime.Subtract(shiftLayer.StartTime).TotalMinutes;
+			EventualAssert.That(() => Browser.Current.Element(Find.BySelector(string.Format(".shift .layer[data-start-time='{0}']", startTime))).Exists, Is.True);
 			EventualAssert.That(() => Browser.Current.Element(Find.BySelector(string.Format(".shift .layer[data-length-minutes='{0}']", minutes))).Exists, Is.True);
 			if (shiftLayer.Color != null)
-				EventualAssert.That(() => Browser.Current.Element(Find.BySelector(string.Format(".shift .layer[data-start-time='{0}']", shiftLayer.StartTime))).Style.Color, Is.EqualTo(shiftLayer.Color));
+				EventualAssert.That(() => Browser.Current.Element(Find.BySelector(string.Format(".shift .layer[data-start-time='{0}']", startTime))).Style.Color, Is.EqualTo(shiftLayer.Color));
 		}
 
 		[Then(@"I should not see any shift")]
