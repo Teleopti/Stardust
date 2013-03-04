@@ -41,12 +41,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 
 		private static void AssertShiftLayer(ShiftLayerInfo shiftLayer)
 		{
-			var startTime = shiftLayer.StartTime.ToString("HH:mm");
-			var minutes = shiftLayer.EndTime.Subtract(shiftLayer.StartTime).TotalMinutes;
-			EventualAssert.That(() => Browser.Current.Element(Find.BySelector(string.Format(".shift .layer[data-start-time='{0}']", startTime))).Exists, Is.True);
+			var minutes = TimeSpan.Parse(shiftLayer.EndTime).Subtract(TimeSpan.Parse(shiftLayer.StartTime)).TotalMinutes;
+			EventualAssert.That(() => Browser.Current.Element(Find.BySelector(string.Format(".shift .layer[data-start-time='{0}']", shiftLayer.StartTime))).Exists, Is.True);
 			EventualAssert.That(() => Browser.Current.Element(Find.BySelector(string.Format(".shift .layer[data-length-minutes='{0}']", minutes))).Exists, Is.True);
 			if (shiftLayer.Color != null)
-				EventualAssert.That(() => Browser.Current.Element(Find.BySelector(string.Format(".shift .layer[data-start-time='{0}']", startTime))).Style.Color, Is.EqualTo(shiftLayer.Color));
+				EventualAssert.That(() => Browser.Current.Element(Find.BySelector(string.Format(".shift .layer[data-start-time='{0}']", shiftLayer.StartTime))).Style.Color, Is.EqualTo(shiftLayer.Color));
 		}
 
 		[Then(@"I should not see any shift")]
@@ -83,8 +82,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 
 		public class ShiftLayerInfo
 		{
-			public DateTime StartTime { get; set; }
-			public DateTime EndTime { get; set; }
+			public string StartTime { get; set; }
+			public string EndTime { get; set; }
 			public string Color { get; set; }
 		}
 

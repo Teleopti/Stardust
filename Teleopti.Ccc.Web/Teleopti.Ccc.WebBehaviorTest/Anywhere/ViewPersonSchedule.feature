@@ -58,7 +58,6 @@ Scenario: View night shift from yesterday
 	When I view person schedule for 'Pierre Baldi' on '2012-12-02'
 	Then I should not see any shift
 
-@ignore
 Scenario: View night shift from today
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' have a (read model) shift with
@@ -70,9 +69,9 @@ Scenario: View night shift from today
 	| Activity         | Phone        |
 	When I view person schedule for 'Pierre Baldi' on '2012-12-02'
 	Then I should see a shift layer with
-	| Field      | Value |
-	| Start time | 20:00 |
-	| End time   | 04:00 |
+	| Field      | Value   |
+	| Start time | 20:00   |
+	| End time   | 1.04:00 |
 
 @ignore
 Scenario: View schedule in persons time zone
