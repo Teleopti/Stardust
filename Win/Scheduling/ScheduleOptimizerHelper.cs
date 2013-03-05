@@ -1033,44 +1033,33 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         #region Advance Block Scheduling
 
-		private AdvanceSchedulingService callAdvanceSchedulingService(ISchedulingOptions schedulingOptions,
-                                                                      IList<IScheduleMatrixPro> selectedPersonMatrixList,
-			IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization)
-        {
-            //var dynamicBlockFinder = new DynamicBlockFinder(schedulingOptions, _stateHolder, selectedPersonMatrixList);
-		    var dynamicBlockFinder = new DynamicBlockFinder();
-            var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true,
-                                                                        schedulingOptions.ConsiderShortBreaks);
-            ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService =
-                new SchedulePartModifyAndRollbackService(_stateHolder, _scheduleDayChangeCallback,
-                                                         new ScheduleTagSetter(
-                                                             schedulingOptions.TagToUseOnScheduling));
-            var teamScheduling = new TeamScheduling(resourceCalculateDelayer, schedulePartModifyAndRollbackService);
-            IGroupPersonBuilderBasedOnContractTime groupPersonBuilderBasedOnContractTime =
-                new GroupPersonBuilderBasedOnContractTime(_container.Resolve<IGroupPersonFactory>());
-		    IWorkShiftSelector workShiftSelector=null;
-		    ITeamInfoCreator teamInfoCreator = new TeamInfoCreator(groupPersonBuilderForOptimization );
-		    ITeamBlockInfoFactory teamBlockInfoFactory = new TeamBlockInfoFactory(dynamicBlockFinder);
+	    private AdvanceSchedulingService callAdvanceSchedulingService(ISchedulingOptions schedulingOptions,
+	                                                                  IGroupPersonBuilderForOptimization
+		                                                                  groupPersonBuilderForOptimization)
+	    {
+
+		    var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true,
+		                                                                schedulingOptions.ConsiderShortBreaks);
+		    ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService =
+			    new SchedulePartModifyAndRollbackService(_stateHolder, _scheduleDayChangeCallback,
+			                                             new ScheduleTagSetter(
+				                                             schedulingOptions.TagToUseOnScheduling));
+		    var teamScheduling = new TeamScheduling(resourceCalculateDelayer, schedulePartModifyAndRollbackService);
+
+
+		    ITeamInfoCreator teamInfoCreator = new TeamInfoCreator(groupPersonBuilderForOptimization);
 		    var advanceSchedulingService =
-		        new AdvanceSchedulingService(_container.Resolve<ISkillDayPeriodIntervalDataGenerator>(),
-		                                     _container.Resolve<IRestrictionAggregator>(),
-		                                     _container.Resolve<IWorkShiftFilterService>(), teamScheduling, schedulingOptions,
-		                                     workShiftSelector, teamInfoCreator, teamBlockInfoFactory);
-            //var advanceSchedulingService = new AdvanceSchedulingService(_container.Resolve<ISkillDayPeriodIntervalDataGenerator>(),
-            //                                                            dynamicBlockFinder,
-            //                                                            _container.Resolve<IRestrictionAggregator>(),
-            //                                                            _container.Resolve<IWorkShiftFilterService>(),
-            //                                                            teamScheduling,
-            //                                                            schedulingOptions, 
-            //                                                            _container.Resolve<IWorkShiftSelector>(),
-            //                                                            groupPersonBuilderBasedOnContractTime, 
-            //                                                            groupPersonBuilderForOptimization,
-            //                                                            new TeamInfoCreator(groupPersonBuilderForOptimization));
-            return advanceSchedulingService;
-        }
+			    new AdvanceSchedulingService(_container.Resolve<ISkillDayPeriodIntervalDataGenerator>(),
+			                                 _container.Resolve<IRestrictionAggregator>(),
+			                                 _container.Resolve<IWorkShiftFilterService>(), teamScheduling, schedulingOptions,
+			                                 _container.Resolve<IWorkShiftSelector>(), teamInfoCreator,
+			                                 _container.Resolve<ITeamBlockInfoFactory>());
+
+		    return advanceSchedulingService;
+	    }
 
 
-        private IGroupPersonBuilderForOptimization callGroupPage(ISchedulingOptions schedulingOptions)
+	    private IGroupPersonBuilderForOptimization callGroupPage(ISchedulingOptions schedulingOptions)
         {
             IGroupPageDataProvider groupPageDataProvider = _container.Resolve<IGroupScheduleGroupPageDataProvider>();
             var groupPagePerDateHolder = _container.Resolve<IGroupPagePerDateHolder>();
@@ -1116,7 +1105,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
                 var teamSteadyStateHolder = initiateTeamSteadyStateHolder(selectedPersonAllMatrixList, schedulingOptions, scheduleDays);
 
-                var advanceSchedulingService = callAdvanceSchedulingService(schedulingOptions,selectedPersonMatrixList, groupPersonBuilderForOptimization);
+                var advanceSchedulingService = callAdvanceSchedulingService(schedulingOptions, groupPersonBuilderForOptimization);
                 IDictionary<string, IWorkShiftFinderResult> schedulingResults = new Dictionary<string, IWorkShiftFinderResult>();
 
                 advanceSchedulingService.DayScheduled += schedulingServiceDayScheduled;

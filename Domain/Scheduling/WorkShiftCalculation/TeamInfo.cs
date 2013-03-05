@@ -34,10 +34,27 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 
 		public override int GetHashCode()
 		{
-			if (_groupPerson != null && _groupPerson.Id.HasValue)
-				return _groupPerson.GetHashCode();
+			return _groupPerson.GetHashCode();
+		}
 
-			return base.GetHashCode();
+		public override bool Equals(object obj)
+		{
+			ITeamInfo ent = obj as ITeamInfo;
+			if (ent == null)
+				return false;
+			return Equals(ent);
+		}
+
+		public virtual bool Equals(ITeamInfo other)
+		{
+			if (other == null)
+				return false;
+			if (this == other)
+				return true;
+			if (!other.GroupPerson.Id.HasValue || !GroupPerson.Id.HasValue)
+				return false;
+
+			return (GroupPerson.Id.Value == other.GroupPerson.Id.Value);
 		}
 	}
 }

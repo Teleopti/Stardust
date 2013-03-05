@@ -114,7 +114,9 @@ namespace Teleopti.Ccc.Win.Scheduling
             builder.RegisterType<WorkShiftFilterService>().As<IWorkShiftFilterService>().InstancePerLifetimeScope();
 			builder.RegisterType<ScheduleRestrictionExtractor>().As<IScheduleRestrictionExtractor>().InstancePerLifetimeScope();
 			builder.RegisterType<ScheduleDayEquator>().As<IScheduleDayEquator>().InstancePerLifetimeScope();
+
 	        registerWorkShiftFilters(builder);
+			registerWorkShiftSelector(builder);
                     
             builder.RegisterType<GroupSchedulingService>().As<IGroupSchedulingService>().InstancePerLifetimeScope();
             builder.RegisterType<GroupPersonsBuilder>().As<IGroupPersonsBuilder>().InstancePerLifetimeScope();
@@ -203,18 +205,25 @@ namespace Teleopti.Ccc.Win.Scheduling
 			builder.RegisterType<TeamDayOffScheduler>().As<ITeamDayOffScheduler>().InstancePerDependency();
         	builder.RegisterType<DaysOffSchedulingService>().As<IDaysOffSchedulingService>().InstancePerDependency();
 			builder.RegisterType<GroupPersonSkillAggregator>().As<IGroupPersonSkillAggregator>().InstancePerDependency();
-	        builder.RegisterType<WorkShiftPeriodValueCalculator>()
-	               .As<IWorkShiftPeriodValueCalculator>()
-	               .InstancePerDependency();
-	        builder.RegisterType<WorkShiftLengthValueCalculator>()
-	               .As<IWorkShiftLengthValueCalculator>()
-	               .InstancePerDependency();
-	        builder.RegisterType<WorkShiftValueCalculator>().As<IWorkShiftValueCalculator>().InstancePerDependency();
-	        builder.RegisterType<EqualWorkShiftValueDecider>().As<IEqualWorkShiftValueDecider>().InstancePerDependency();
-	        builder.RegisterType<WorkShiftSelector>().As<IWorkShiftSelector>().InstancePerDependency();
+	        builder.RegisterType<DynamicBlockFinder>().As<IDynamicBlockFinder>().InstancePerDependency();
+	        builder.RegisterType<TeamBlockInfoFactory>().As<ITeamBlockInfoFactory>().InstancePerDependency();
+
         }
 
-		private void registerWorkShiftFilters(ContainerBuilder builder)
+		private static void registerWorkShiftSelector(ContainerBuilder builder)
+		{
+			builder.RegisterType<WorkShiftPeriodValueCalculator>()
+				   .As<IWorkShiftPeriodValueCalculator>()
+				   .InstancePerDependency();
+			builder.RegisterType<WorkShiftLengthValueCalculator>()
+				   .As<IWorkShiftLengthValueCalculator>()
+				   .InstancePerDependency();
+			builder.RegisterType<WorkShiftValueCalculator>().As<IWorkShiftValueCalculator>().InstancePerDependency();
+			builder.RegisterType<EqualWorkShiftValueDecider>().As<IEqualWorkShiftValueDecider>().InstancePerDependency();
+			builder.RegisterType<WorkShiftSelector>().As<IWorkShiftSelector>().InstancePerDependency();
+		}
+
+		private static void registerWorkShiftFilters(ContainerBuilder builder)
 		{
 			builder.RegisterType<ActivityRestrictionsShiftFilter>().As<IActivityRestrictionsShiftFilter>().InstancePerLifetimeScope();
 			builder.RegisterType<BusinessRulesShiftFilter>().As<IBusinessRulesShiftFilter>().InstancePerLifetimeScope();

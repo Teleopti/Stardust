@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 
@@ -43,18 +45,32 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 		[Test]
 		public void ShouldReturnSameHashAsContainedGroupPerson()
 		{
+			IPerson person = PersonFactory.CreatePerson();
+			IGroupPerson groupPerson1 = new GroupPerson(new List<IPerson> { person }, DateOnly.MinValue, "Hej", Guid.NewGuid());
+			_target = new TeamInfo(groupPerson1, new List<IScheduleMatrixPro>());
 
-			using (_mocks.Record())
-			{
-				Expect.Call(_groupPerson.Id).Return(Guid.NewGuid());
-			}
+			Assert.AreEqual(groupPerson1.GetHashCode(), _target.GetHashCode());
 
-			using (_mocks.Playback())
-			{
-				Assert.AreEqual(_groupPerson.GetHashCode(), _target.GetHashCode());
-			}
-      
-      
+		}
+
+		[Test]
+		public void EqualsShouldWork()
+		{
+			IPerson person = PersonFactory.CreatePerson();
+			IGroupPerson groupPerson1 = new GroupPerson(new List<IPerson> { person }, DateOnly.MinValue, "Hej", Guid.NewGuid());
+			IGroupPerson groupPerson2 = new GroupPerson(new List<IPerson> { person }, DateOnly.MinValue, "Hej", Guid.NewGuid());
+			
+			Assert.IsFalse(groupPerson1.Equals(groupPerson2));
+			Assert.IsTrue(groupPerson1.Equals(groupPerson1));
+
+			HashSet<IGroupPerson> list = new HashSet<IGroupPerson>();
+			list.Add(groupPerson1);
+			list.Add(groupPerson1);
+			Assert.AreEqual(1, list.Count);
+
+			list.Add(groupPerson2);
+			Assert.AreEqual(2, list.Count);
+
 		}
 	}
 }
