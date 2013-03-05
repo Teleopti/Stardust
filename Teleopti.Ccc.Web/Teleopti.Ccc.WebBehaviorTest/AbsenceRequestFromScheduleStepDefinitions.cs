@@ -44,13 +44,9 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should not see any indication of how many agents can go on holiday")]
 		public void ThenIShouldNotSeeAnyIndicationOfHowManyAgentsCanGoOnHoliday()
 		{
-			var page = Pages.Pages.WeekSchedulePage;
-			var days = page.DayElements;
-
-			foreach (List element in days)
+			foreach (var indicator in Pages.Pages.WeekSchedulePage.AbsenceIndiciators())
 			{
-				var holidayIndication = element.Divs.First(Find.BySelector("holiday-agents"));
-				EventualAssert.That(holidayIndication.IsDisplayed, Is.False);
+				EventualAssert.That(indicator.IsDisplayed, Is.False);
 			}
 		}
 
