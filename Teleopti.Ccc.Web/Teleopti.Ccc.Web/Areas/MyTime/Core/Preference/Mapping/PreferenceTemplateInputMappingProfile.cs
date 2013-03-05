@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				.ConvertUsing<PreferenceTemplateInputToExtendedPreferenceTemplate>()
 				;
 
-			CreateMap<PreferenceTemplateInput, ActivityRestriction>()
+			CreateMap<PreferenceTemplateInput, ActivityRestrictionTemplate>()
 				.ForMember(d => d.Activity, o => o.MapFrom(s => _activityRespository.Invoke().Get(s.ActivityPreferenceId.Value)))
 				.ForMember(d => d.StartTimeLimitation, o => o.MapFrom(s =>
 							   new StartTimeLimitation(s.ActivityEarliestStartTime.ToTimeSpan(), s.ActivityLatestStartTime.ToTimeSpan())
@@ -71,12 +71,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 					{
 						if (d.ActivityRestrictionCollection.Any())
 						{
-							var activityRestriction = d.ActivityRestrictionCollection.Cast<ActivityRestriction>().Single();
+							var activityRestriction = d.ActivityRestrictionCollection.Cast<ActivityRestrictionTemplate>().Single();
 							_mapper.Invoke().Map(s, activityRestriction);
 						}
 						else
 						{
-							var activityRestriction = _mapper.Invoke().Map<PreferenceTemplateInput, ActivityRestriction>(s);
+							var activityRestriction = _mapper.Invoke().Map<PreferenceTemplateInput, ActivityRestrictionTemplate>(s);
 							d.AddActivityRestriction(activityRestriction);
 						}
 					}

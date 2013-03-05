@@ -109,6 +109,9 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 		$('#Preference-body-inner .ui-selected')
 			.each(function (index, cell) {
 				var date = $(cell).data('mytime-date');
+				delete preference.AvailableTemplates;
+				delete preference.SelectedTemplate;
+				delete preference.TemplateName;
 				var promise = preferencesAndScheduleViewModel.DayViewModels[date].SetPreference(preference, validationErrorCallback);
 				promises.push(promise);
 			});
