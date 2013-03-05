@@ -126,6 +126,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 									                  	};
 
 									var asmPermission = _permissionProvider.Invoke().HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger);
+									var absenceRequestPermission = _permissionProvider.Invoke().HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb);
 									var isCurrentWeek = week.Contains(_now.Invoke().DateOnly());
 
 									return new WeekScheduleDomainData
@@ -135,6 +136,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 												ColorSource = colorSource,
 												MinMaxTime = minMaxTime,
 												AsmPermission = asmPermission,
+												AbsenceRequestPermission = absenceRequestPermission,
 												IsCurrentWeek = isCurrentWeek
 											};
 								});
