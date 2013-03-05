@@ -11,16 +11,19 @@ Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
 	self.TypeEnum = ko.observable(2);
 	self.IsFullDay = ko.observable(true);
 	self.Template = ko.observable("shifttrade-request-detail-template");
-	self.CanApprove = ko.observable(true);
+	self.IsTradeCreatedByMe = ko.observable(false);
 	self.ajax = ajax;
 	self.From = ko.observable("");
 	self.To = ko.observable("");
+	self.CanApproveAndDeny = ko.observable(true);
 	self.Approve = function () {
+		self.CanApproveAndDeny(false);
 		self.respondToRequest("Requests/ApproveShiftTrade/" + self.Id());
 		Teleopti.MyTimeWeb.Request.RequestDetail.FadeEditSection();
 	};
 	self.pixelPerMinute = ko.observable(0.3);
 	self.Deny = function () {
+		self.CanApproveAndDeny(false);
 		self.respondToRequest("Requests/DenyShiftTrade/" + self.Id());
 		Teleopti.MyTimeWeb.Request.RequestDetail.FadeEditSection();
 	};
@@ -32,6 +35,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
 			type: "POST",
 			success: function (data) {
 				Teleopti.MyTimeWeb.Request.List.AddItemAtTop(data);
+				self.CanApproveAndDeny(true);
 			}
 		});
 	};
@@ -83,7 +87,7 @@ ko.utils.extend(Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel.prot
 		self.Subject(data.Subject);
 		self.MessageText(data.Text);
 		self.Id(data.Id);
-		self.CanApprove(!data.IsCreatedByUser);
+		self.IsTradeCreatedByMe(data.IsCreatedByUser);
 		self.From(data.From);
 		self.To(data.To);
 	}
