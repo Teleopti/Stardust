@@ -363,20 +363,18 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
                        : statistics.StatisticsCalculator.RelativeStandardDeviation;
         }
 
-		public static double? SkillPeriodGridSmoothness(IEnumerable<IEnumerable<ISkillStaffPeriod>> skillStaffPeriodsOfOneWeek)
+		public static double? SkillPeriodGridSmoothness(IEnumerable<IEnumerable<ISkillStaffPeriod>> skillStaffPeriodsOfDays)
 		{
-			var standardDeviationsOfDays = new List<double>();
-			foreach (var skillStaffPeriodsOfOneDay in skillStaffPeriodsOfOneWeek)
+			var relativeDifferences = new List<double>();
+			foreach (var skillStaffPeriodsOfOneDay in skillStaffPeriodsOfDays)
 			{
-				var statistics = new SkillStaffPeriodStatisticsForSkillIntraday(skillStaffPeriodsOfOneDay.ToList());
-				statistics.Analyze();
-				standardDeviationsOfDays.Add(statistics.StatisticsCalculator.RelativeStandardDeviation.Equals(double.NaN)
-					                             ? 0d
-					                             : statistics.StatisticsCalculator.RelativeStandardDeviation);
+				var relativeDifference = RelativeDifference(skillStaffPeriodsOfOneDay);
+				if (relativeDifference == null) continue;
+				relativeDifferences.Add(relativeDifference.Value);
 			}
-			if (standardDeviationsOfDays.Count == 0)
+			if (relativeDifferences.Count == 0)
 				return null;
-			var calculator = new PopulationStatisticsCalculator(standardDeviationsOfDays);
+			var calculator = new PopulationStatisticsCalculator(relativeDifferences);
 			calculator.Analyze();
 			var	result = calculator.StandardDeviation;
 			return result;
