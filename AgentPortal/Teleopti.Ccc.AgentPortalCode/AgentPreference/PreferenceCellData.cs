@@ -12,14 +12,6 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentPreference
         bool Legal { get; set; }
         TimeSpan WeeklyMax { get; set; }
         TimeSpan PeriodTarget { get; set; }
-		Color DisplayColor { get; set; }
-		string DisplayName { get; set; }
-		string DisplayShortName { get; set; }
-		bool HasShift { get; set; }
-		bool HasDayOff { get; set; }
-		bool HasAbsence { get; set; }
-		EffectiveRestriction EffectiveRestriction { get; set; }
-
         TimeSpan BalancedPeriodTarget { get; set; }
         TimePeriod BalancedPeriodTargetWithTolerance { get; set; }
         TimeSpan BalanceIn { get; set; }
@@ -29,10 +21,17 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentPreference
         int PeriodDayOffsTarget { get; set; }
         int PeriodDayOffs { get; set; }
         bool IsInsidePeriod { get; set; }
+        Color DisplayColor { get; set; }
+        string DisplayName { get; set; }
+        string DisplayShortName { get; set; }
+        bool HasShift { get; set; }
+        bool HasDayOff { get; set; }
+        bool HasAbsence { get; set; }
         bool HasPersonalAssignmentOnly { get; set; }
         string TipText { get; set; }
         int MaxMustHave { get; set; }
         Preference Preference { get; set; }
+        EffectiveRestriction EffectiveRestriction { get; set; }
         bool IsWorkday { get; set; }
         bool ViolatesNightlyRest { get; set; }
     }
@@ -40,8 +39,9 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentPreference
     public class PreferenceCellData : IPreferenceCellData
     {
         private Preference _preference;
+        private EffectiveRestriction _effectiveRestriction;
 
-    	public PreferenceCellData()
+        public PreferenceCellData()
         {
             Enabled = true;
         }
@@ -71,11 +71,7 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentPreference
         public bool HasPersonalAssignmentOnly { get; set; }
         public string TipText { get; set; }
         public int MaxMustHave { get; set; }
-		public EffectiveRestriction EffectiveRestriction { get; set; }
-		public bool IsWorkday { get; set; }
-		public bool ViolatesNightlyRest { get; set; }
-		
-		public Preference Preference
+        public Preference Preference
         {
             get { return _preference; }
             set
@@ -87,5 +83,15 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentPreference
                 }
             }
         }
+
+        public EffectiveRestriction EffectiveRestriction
+        {
+            get { return _effectiveRestriction; }
+            set { _effectiveRestriction = value; }
+        }
+
+        public bool IsWorkday { get; set; }
+
+        public bool ViolatesNightlyRest { get; set; }
     }
 }
