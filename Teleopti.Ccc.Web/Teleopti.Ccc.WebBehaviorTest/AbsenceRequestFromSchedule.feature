@@ -106,7 +106,7 @@ Scenario: Switch request type
 	Then I should see my existing inputs for date '2013-10-03'
 	And I should see an absence type called Vacation in droplist
 
-@ignore
+
 Scenario: Do not show indication of the amount of agents that can go on holiday if no permission to absence request
 	Given I have the role 'No access to absence requests'
 	When I view my week schedule for date '2013-02-15'
@@ -143,6 +143,28 @@ Scenario: Indicate that no agents that can go on holiday if no allowance left
 	Given I have the role 'Full access to mytime'
 	And I have no absence allowance left
 	When I view my week schedule for date '2013-02-15'
-	Then I should see an indication that no agents that can go on holiday any of the days
+	Then I should see an 'red' indication for chance of absence request on '2013-02-15'
 
+@ignore
+Scenario: Show indication of agents that can go on holiday when there is a medium possibility of getting the absence request approved
+	Given I have the role 'Full access to mytime'
+	And There is 'medium' possibility that I will get an absence request approved for '2013-02-15'
+	# Henke: Check with AF: This should probably be changed to something like And the supervisor has granted x of y possible absences
+	When I view my week schedule for date '2013-02-15'
+	Then I should see an 'yellow' indication for chance of absence request on '2013-02-15'
 
+@ignore	
+Scenario: Show indication of agents that can go on holiday when there is no possibility of getting the absence request approved
+	Given I have the role 'Full access to mytime'
+	And There is 'no' possibility that I will get an absence request approved for '2013-02-15'
+	# Henke: Check with AF: This should probably be changed to something like And the supervisor has granted x of y possible absences
+	When I view my week schedule for date '2013-02-15'
+	Then I should see an 'red' indication for chance of absence request on '2013-02-15'
+
+@ignore
+Scenario: Show indication of agents that can go on holiday when there is a high possibility of getting the absence request approved
+	Given I have the role 'Full access to mytime'
+	And There is 'high' possibility that I will get an absence request approved for '2013-02-15'
+	# Henke: Check with AF: This should probably be changed to something like And the supervisor has granted x of y possible absences
+	When I view my week schedule for date '2013-02-15'
+	Then I should see an 'green' indication for chance of absence request on '2013-02-15'

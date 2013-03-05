@@ -41,6 +41,20 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			}
 		}
 
+		[Then(@"I should not see any indication of how many agents can go on holiday")]
+		public void ThenIShouldNotSeeAnyIndicationOfHowManyAgentsCanGoOnHoliday()
+		{
+			var page = Pages.Pages.WeekSchedulePage;
+			var days = page.DayElements;
+
+			foreach (List element in days)
+			{
+				var holidayIndication = element.Divs.First(Find.BySelector("holiday-agents"));
+				EventualAssert.That(holidayIndication.IsDisplayed, Is.False);
+			}
+		}
+
+
 		[Given(@"the absence period is opened between '(.*)' and '(.*)'")]
 		public void GivenTheAbsencePeriodIsOpenedBetweenAnd(DateTime start, DateTime end)
 		{
