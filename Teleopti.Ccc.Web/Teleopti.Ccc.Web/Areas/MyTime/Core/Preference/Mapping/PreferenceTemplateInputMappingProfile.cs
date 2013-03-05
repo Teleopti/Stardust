@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				{
 					var person = _loggedOnUser.Invoke().CurrentUser();
 					var restrictionTemplate = _mapper.Invoke().Map<PreferenceTemplateInput, IPreferenceRestrictionTemplate>(source);
-					destination = new ExtendedPreferenceTemplate(person, restrictionTemplate, source.TemplateName, Color.White);
+					destination = new ExtendedPreferenceTemplate(person, restrictionTemplate, source.NewTemplateName, Color.White);
 				}
 				else
 				{

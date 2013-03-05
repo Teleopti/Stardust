@@ -62,11 +62,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		{
 			var input = new PreferenceTemplateInput
 				{
-					TemplateName = "name1"
+					NewTemplateName = "name1"
 				};
 			var result = Mapper.Map<PreferenceTemplateInput, IExtendedPreferenceTemplate>(input);
 
-			result.Name.Should().Be.EqualTo(input.TemplateName);
+			result.Name.Should().Be.EqualTo(input.NewTemplateName);
 		}
 
 		[Test]

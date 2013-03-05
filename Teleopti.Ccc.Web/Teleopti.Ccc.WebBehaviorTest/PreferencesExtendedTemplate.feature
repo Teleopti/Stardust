@@ -61,7 +61,9 @@ Scenario: Create preference template
 	| Start time minimum          | 10:30 |
 	| Start time maximum          | 11:00 |
 	| End time minimum            | 19:00 |
+	| End time minimum next day   | true  |
 	| End time maximum            | 20:30 |
+	| End time maximum next day   | true  |
 	| Work time minimum           | 08:00 |
 	| Work time maximum           | 08:30 |
 	| Activity                    | Lunch |

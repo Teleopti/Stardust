@@ -112,12 +112,14 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			var message = data.Errors.join('</br>');
 			addExtendedPreferenceFormViewModel.ValidationError(message);
 		};
+		preference.TemplateName = preference.SelectedTemplate.Text;
+		delete preference.AvailableTemplates;
+		delete preference.SelectedTemplate;
+		delete preference.NewTemplateName;
+		
 		$('#Preference-body-inner .ui-selected')
 			.each(function (index, cell) {
 				var date = $(cell).data('mytime-date');
-				delete preference.AvailableTemplates;
-				delete preference.SelectedTemplate;
-				delete preference.TemplateName;
 				var promise = preferencesAndScheduleViewModel.DayViewModels[date].SetPreference(preference, validationErrorCallback);
 				promises.push(promise);
 			});

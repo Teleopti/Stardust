@@ -84,6 +84,29 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		}
 
 		[Test]
+		public void ShouldMapTemplateNameToDestination()
+		{
+			var destination = new PreferenceDay(null, DateOnly.Today, new PreferenceRestriction()) {TemplateName = "name2"};
+			var input = new PreferenceDayInput {PreferenceId = Guid.NewGuid(), TemplateName = "name1"};
+
+			Mapper.Map<PreferenceDayInput, IPreferenceDay>(input, destination);
+
+			destination.TemplateName.Should().Be.EqualTo("name1");
+		}
+
+		[Test]
+		public void ShouldMapTemplateName()
+		{
+			var result = Mapper.Map<PreferenceDayInput, IPreferenceDay>(
+				new PreferenceDayInput
+					{
+						TemplateName = "name1"
+					});
+
+			result.TemplateName.Should().Be.EqualTo("name1");
+		}
+
+		[Test]
 		public void ShouldMapPerson()
 		{
 			var person = new Person();
