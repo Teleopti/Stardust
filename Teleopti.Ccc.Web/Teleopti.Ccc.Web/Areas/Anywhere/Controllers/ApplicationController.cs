@@ -1,6 +1,7 @@
 using System;
 using System.Globalization;
 using System.Web.Mvc;
+using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
 
@@ -38,27 +39,26 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		{
             var path = Request.MapPath("~/Areas/Anywhere/Content/Translation/TranslationTemplate.txt");
 			var template = System.IO.File.ReadAllText(path);
-			const string itemFormat = "{0}: '{1}'";
 
-			var userTexts = new[]
-			                	{
-			                		string.Format(itemFormat, "Home",UserTexts.Resources.Home),
-			                		string.Format(itemFormat, "LogOut",UserTexts.Resources.LogOut),
-			                		string.Format(itemFormat, "Settings", UserTexts.Resources.Settings),
-			                		string.Format(itemFormat, "ContractTime",UserTexts.Resources.ContractTime),
-			                		string.Format(itemFormat, "WorkTime",UserTexts.Resources.WorkTime),
-			                		string.Format(itemFormat, "Next",UserTexts.Resources.Next),
-			                		string.Format(itemFormat, "Previous",UserTexts.Resources.Previous),
-			                		string.Format(itemFormat, "LoadingThreeDots",UserTexts.Resources.LoadingThreeDots),
+			var userTexts = JsonConvert.SerializeObject(new
+				{
+					UserTexts.Resources.Home,
+					UserTexts.Resources.LogOut,
+					UserTexts.Resources.Settings,
+					UserTexts.Resources.ContractTime,
+					UserTexts.Resources.WorkTime,
+					UserTexts.Resources.Next,
+					UserTexts.Resources.Previous,
+					UserTexts.Resources.LoadingThreeDots,
+					CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern,
+					MomentShortDatePattern = CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern.ToUpper(),
+					ShortTimePattern = CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern.Replace("tt", "a"),
+					LanguageCode = CultureInfo.CurrentCulture.IetfLanguageTag,
+					FirstDayOfWeek = (int) CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek
+				}, Formatting.Indented);
 
-									string.Format(itemFormat, "ShortDatePattern", CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern),
-									string.Format(itemFormat, "ShortTimePattern", CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern.Replace("tt","a")),
-									string.Format(itemFormat, "LanguageCode", CultureInfo.CurrentCulture.IetfLanguageTag),
-									string.Format(itemFormat, "FirstDayOfWeek", (int)CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek),
-			                	};
+			template = string.Format(template, userTexts);
 
-			template = string.Format(template, string.Join("," + Environment.NewLine, userTexts));
-			
 			return new ContentResult {Content = template, ContentType = "text/javascript"};
 		}
 	}

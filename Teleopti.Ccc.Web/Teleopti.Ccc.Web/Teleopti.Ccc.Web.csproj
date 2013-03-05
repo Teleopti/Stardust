@@ -32,6 +32,10 @@
     </FileUpgradeFlags>
     <OldToolsVersion>4.0</OldToolsVersion>
     <UpgradeBackupLocation />
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -600,6 +604,7 @@
   <ItemGroup>
     <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\menu.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\addfulldayabsenceform.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\layer.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\timeline-time.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\timeline.js" />
@@ -607,6 +612,7 @@
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\vm.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\agents.js" />
     <Content Include="Areas\Anywhere\Content\Styles\person-schedule.css" />
+    <Content Include="Areas\Anywhere\Content\Templates\error.html" />
     <Content Include="Areas\Anywhere\Content\Templates\personschedule\view.html" />
     <Content Include="Areas\MyTime\Content\Css\StudentAvailability.css" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.js" />
@@ -628,7 +634,6 @@
     <Content Include="Areas\Anywhere\Content\Styles\helpers.css" />
     <Content Include="Areas\Anywhere\Content\Styles\main.css" />
     <Content Include="Areas\Anywhere\Content\Styles\team-schedule.css" />
-    <Content Include="Areas\Anywhere\Content\Templates\dummy.html" />
     <Content Include="Areas\Anywhere\Content\Templates\index.html" />
     <Content Include="Areas\MobileReports\Content\Css\mobile.custom.css" />
     <Content Include="Areas\MobileReports\Content\Images\ajax-loader.gif" />

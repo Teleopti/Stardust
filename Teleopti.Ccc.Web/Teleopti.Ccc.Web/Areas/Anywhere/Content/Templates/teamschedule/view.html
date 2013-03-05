@@ -2,10 +2,10 @@
     <div class="row">
         <div class="span12 nowrap">
             <select id="team-selector" data-bind="options: TeamSchedule.Teams, optionsText: 'SiteAndTeam', value: TeamSchedule.SelectedTeam"></select>
-            <div class="input-append date input-prepend pull-right" id="dp3" data-bind="datepicker: TeamSchedule.SelectedDate, datepickerOptions: {pullRight: true, format: Resources.ShortDatePattern.toUpperCase(), weekStart: parseInt(Resources.FirstDayOfWeek,10), autoclose: true}">
+            <div class="input-append date input-prepend pull-right" id="dp3" data-bind="datepicker: TeamSchedule.SelectedDate, datepickerOptions: { pullRight: true, format: Resources.MomentShortDatePattern, weekStart: Resources.FirstDayOfWeek, autoclose: true }">
                 <button class="btn" data-bind="attr: {title: Resources.Previous}, click: TeamSchedule.PreviousDay"><i class="icon-chevron-left"></i></button>
                 <input class="input-small" size="16" type="text" readonly="readonly"/>
-                <span class="add-on"><i class="icon-th"></i></span>
+                <span class="add-on"><i class="icon-calendar"></i></span>
                 <button class="btn" data-bind="attr: {title: Resources.Next}, click: TeamSchedule.NextDay"><i class="icon-chevron-right"></i></button>
             </div>
         </div>

@@ -71,18 +71,27 @@
         </div>
     </div>
     
-     <!-- ko if: AddingFullDayAbsence -->
+    <!-- ko if: AddingFullDayAbsence -->
+    <!-- ko with: AddFullDayAbsenceForm -->
     <div class="row">
         <div class="span12 ">
             <div class="well well-large">
                 <div class="row-fluid">
                     <div class="span12">
-                        <form action="#" class="full-day-absence-form"></form>
+                        <form action="#" class="full-day-absence-form">
+                            <fieldset>
+                                <select class="absence-type" data-bind="options: AbsenceTypes, optionsText: 'Name', optionsValue: 'Id', value: AbsenceType">
+                                </select>
+                            </fieldset>
+                            <span class="help-block" data-bind="text: StartDate"></span>
+                            <input type="text" class="end-date" data-bind="datepicker: EndDate, datepickerOptions: { format: $root.Resources.MomentShortDatePattern, weekStart: $root.Resources.FirstDayOfWeek, autoclose: true }" />
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    <!-- /ko -->
     <!-- /ko -->
 
 </div>

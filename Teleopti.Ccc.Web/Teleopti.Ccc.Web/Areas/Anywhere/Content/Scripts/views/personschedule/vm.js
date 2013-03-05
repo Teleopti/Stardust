@@ -3,6 +3,7 @@ define([
 		'navigation',
 		'views/personschedule/layer',
 		'views/personschedule/timeline',
+        'views/personschedule/addfulldayabsenceform',
 		'helpers',
         'noext!application/resources'
 	], function (
@@ -10,6 +11,7 @@ define([
 	    navigation,
 		layerViewModel,
 		timeLineViewModel,
+	    addFullDayAbsenceFormViewModel,
 		helpers,
 	    resources
 		) {
@@ -31,6 +33,8 @@ define([
 			this.Site = ko.observable("");
 			this.Team = ko.observable("");
 
+		    this.AddFullDayAbsenceForm = new addFullDayAbsenceFormViewModel();
+		    
 			this.AddingFullDayAbsence = ko.observable(false);
 		    
 			this.SetData = function (data) {
@@ -45,11 +49,11 @@ define([
 				});
 				self.Layers.push.apply(self.Layers, layers);
 
+				self.AddFullDayAbsenceForm.SetData({ Date: self.Date() });
 			};
 		    
 			this.AddFullDayAbsence = function () {
 			    navigation.GotoPersonScheduleAddFullDayAbsenceForm(self.Id(), self.Date());
-			    //self.AddingFullDayAbsence(true);
 			};
 
 		};

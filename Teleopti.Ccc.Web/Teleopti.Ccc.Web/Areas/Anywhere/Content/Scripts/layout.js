@@ -41,23 +41,25 @@ require([
 				currentView.dispose();
 
 			var module = 'views/' + routeInfo.view + '/view';
-			require([module], function (view) {
-			    
-			    if (view != currentView) {
-			        currentView = view;
-			        view.display(routeInfo);
-			    }
-			    
-			    if (view.clearaction)
-			        view.clearaction(routeInfo);
-			    if (routeInfo.action)
-			        view[routeInfo.action](routeInfo);
-			    
-			    _fixBootstrapDropdownForMobileDevices();
-			},
-			function (err) {
-			    _displayError("View " + routeInfo.view + " could not be loaded");
-			});
+		    require([module], function(view) {
+
+		        if (view == undefined) {
+		            _displayError("View " + routeInfo.view + " could not be loaded");
+		            return;
+		        }
+
+		        if (view != currentView) {
+		            currentView = view;
+		            view.display(routeInfo);
+		        }
+
+		        if (view.clearaction)
+		            view.clearaction(routeInfo);
+		        if (routeInfo.action)
+		            view[routeInfo.action](routeInfo);
+
+		        _fixBootstrapDropdownForMobileDevices();
+		    });
 
 			menu.ActiveView(routeInfo.view);
 		}

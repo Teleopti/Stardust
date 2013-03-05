@@ -75,9 +75,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			var fullDayAbsenceFormInfo = table.CreateInstance<FullDayAbsenceFormInfo>();
 			if (fullDayAbsenceFormInfo.Absence != null)
 			{
-				Browser.Current.SelectList(Find.BySelector(".full-day-absence .absence-type")).SelectByValue(fullDayAbsenceFormInfo.Absence);
+				Browser.Current.SelectList(Find.BySelector(".full-day-absence-form .absence-type")).SelectByValue(fullDayAbsenceFormInfo.Absence);
 			}
-			Browser.Current.TextField(Find.BySelector(".full-day-absence .end-date")).Value = fullDayAbsenceFormInfo.EndDate.ToShortDateString(UserFactory.User().Culture);
+			Browser.Current.TextField(Find.BySelector(".full-day-absence-form .end-date")).Value = fullDayAbsenceFormInfo.EndDate.ToShortDateString(UserFactory.User().Culture);
 		}
 
 		public class ShiftLayerInfo
