@@ -11298,4 +11298,11 @@ These options are activated:
     <value>The quick forecast will be started as a job in the background when this wizard is finished, look in Job History for status.</value>
     <comment>Information on the last step in quick forecast</comment>
   </data>
+  <data name="LevellingPer" xml:space="preserve">
+    <value>Levelling Per</value>
+    <comment>Levelling per Block Scheduling</comment>
+  </data>
+  <data name="SingleAgentTeam" xml:space="preserve">
+    <value>Single Agent Team</value>
+  </data>
 </root>

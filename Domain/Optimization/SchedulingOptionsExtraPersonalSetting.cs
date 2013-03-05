@@ -13,13 +13,20 @@ namespace Teleopti.Ccc.Domain.Optimization
         private BlockFinderType _blockFinderType = BlockFinderType.None;
         private bool _useGroupScheduling;
         private string _groupSchedulingGroupPageKey;
+
+        private string _groupSchedlingForLevelingPerKey;
+        private bool _useLevellingSameEndTime;
+        private bool _useLevellingSameShiftCategory;
+        private bool _useLevellingSameStartTime;
+        private bool _useLevellingSameShift;
+        
         private Guid? _scheduleTagId;
         private bool _useGroupSchedulingCommonStart;
         private bool _useGroupSchedulingCommonEnd;
         private bool _useGroupSchedulingCommonCategory;
         private bool _useCommmonActivity;
         private Guid?  _commonActivtyId;
-
+        private BlockFinderType _blockFinderTypeForAdvanceScheduling = BlockFinderType.None;
 
         private double _fairnessValue;
         private string _fairnessGroupPageKey;
@@ -27,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         private int _screenRefreshRate = 10;
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public void MapTo(ISchedulingOptions schedulingOptions, IList<IScheduleTag> scheduleTags, IList<IGroupPageLight> groupPages, IList<IActivity > activityList )
+        public void MapTo(ISchedulingOptions schedulingOptions, IList<IScheduleTag> scheduleTags, IList<IGroupPageLight> groupPages, IList<IActivity> activityList)
         {
             foreach (var scheduleTag in scheduleTags)
             {
@@ -38,6 +45,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                 schedulingOptions.TagToUseOnScheduling = NullScheduleTag.Instance;
 
            schedulingOptions.UseBlockScheduling = _blockFinderType;
+            schedulingOptions.BlockFinderTypeForAdvanceScheduling = _blockFinderTypeForAdvanceScheduling;
             schedulingOptions.UseGroupScheduling = _useGroupScheduling;
 
             foreach (var groupPage in groupPages)
@@ -45,7 +53,18 @@ namespace Teleopti.Ccc.Domain.Optimization
                 if (_groupSchedulingGroupPageKey == groupPage.Key)
                     schedulingOptions.GroupOnGroupPage = groupPage;
             }
-            
+
+            //for leve per
+            foreach (var groupPage in groupPages)
+            {
+                if (_groupSchedlingForLevelingPerKey  == groupPage.Key)
+                    schedulingOptions.GroupOnGroupPageForLevelingPer = groupPage;
+            }
+            schedulingOptions.UseLevellingSameEndTime = _useLevellingSameEndTime;
+            schedulingOptions.UseLevellingSameShift = _useLevellingSameShift;
+            schedulingOptions.UseLevellingSameShiftCategory = _useLevellingSameShiftCategory;
+            schedulingOptions.UseLevellingSameStartTime = _useLevellingSameStartTime;
+
             schedulingOptions.UseGroupSchedulingCommonStart = _useGroupSchedulingCommonStart;
             schedulingOptions.UseGroupSchedulingCommonEnd = _useGroupSchedulingCommonEnd;
             schedulingOptions.UseGroupSchedulingCommonCategory = _useGroupSchedulingCommonCategory;
@@ -76,6 +95,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         {
             _scheduleTagId = schedulingOptions.TagToUseOnScheduling.Id;
              _blockFinderType = schedulingOptions.UseBlockScheduling;
+            _blockFinderTypeForAdvanceScheduling = schedulingOptions.BlockFinderTypeForAdvanceScheduling;
             _useGroupScheduling = schedulingOptions.UseGroupScheduling;
             _groupSchedulingGroupPageKey = schedulingOptions.GroupOnGroupPage.Key;
            _useGroupSchedulingCommonStart = schedulingOptions.UseGroupSchedulingCommonStart;
@@ -88,6 +108,12 @@ namespace Teleopti.Ccc.Domain.Optimization
             _resourceCalculateFrequency = schedulingOptions.ResourceCalculateFrequency;
             _screenRefreshRate = schedulingOptions.RefreshRate;
             _commonActivtyId = schedulingOptions.CommonActivity != null ? schedulingOptions.CommonActivity.Id : null;
+            
+            _groupSchedlingForLevelingPerKey = schedulingOptions.GroupOnGroupPageForLevelingPer.Key;
+            _useLevellingSameEndTime = schedulingOptions.UseLevellingSameEndTime;
+            _useLevellingSameShift = schedulingOptions.UseLevellingSameShift;
+            _useLevellingSameShiftCategory = schedulingOptions.UseLevellingSameShiftCategory;
+            _useLevellingSameStartTime  = schedulingOptions.UseLevellingSameStartTime ;
         }
     }
 }

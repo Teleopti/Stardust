@@ -327,5 +327,48 @@ namespace Teleopti.Interfaces.Domain
 		/// 	<c>true</c> if [use average shift lengths]; otherwise, <c>false</c>.
 		/// </value>
 		bool UseAverageShiftLengths { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [use period as block].
+        /// </summary>
+        bool UsePeriodAsBlock { get; set; }
+        /// <summary>
+        /// Gets or sets a value indicating whether [use two days off as block].
+        /// </summary>
+        bool UseTwoDaysOffAsBlock { get; set; }
+        /// <summary>
+        /// Gets or sets a value indicating whether [use calender as block].
+        /// </summary>
+        bool UseCalendarWeekAsBlock { get; set; }
+
+        /// <summary>
+        /// Block finder service for advance scheduling service
+        /// </summary>
+        BlockFinderType BlockFinderTypeForAdvanceScheduling { get; set; }
+
+        /// <summary>
+        /// Group page to be used for leveling oer
+        /// </summary>
+        IGroupPageLight GroupOnGroupPageForLevelingPer { get; set; }
+
+        /// <summary>
+        /// Used in levelling per same end time
+        /// </summary>
+        bool UseLevellingSameEndTime { get; set; }
+
+        /// <summary>
+        /// Used in levelling per same shift category
+        /// </summary>
+        bool UseLevellingSameShiftCategory { get; set; }
+
+        /// <summary>
+        /// Used in levelling per same start time
+        /// </summary>
+        bool UseLevellingSameStartTime { get; set; }
+
+        /// <summary>
+        /// Used in levelling per same shift
+        /// </summary>
+        bool UseLevellingSameShift { get; set; }
     }
 }

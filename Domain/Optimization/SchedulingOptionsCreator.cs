@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                 schedulingOptions.CommonActivity = optimizationPreferences.Extra.CommonActivity;
             
             schedulingOptions.GroupOnGroupPage = optimizationPreferences.Extra.GroupPageOnTeam;
-
+            
 
             setPreferencesInSchedulingOptions(optimizationPreferences, schedulingOptions);
             setRotationsInSchedulingOptions(optimizationPreferences, schedulingOptions);
