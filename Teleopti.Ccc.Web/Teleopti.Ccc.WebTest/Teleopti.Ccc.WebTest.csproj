@@ -134,6 +134,7 @@
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceTemplateInputMappingTest.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceTemplateViewModelMappingTest.cs" />
     <Compile Include="Areas\MyTime\Core\StudentAvailability\Mapping\StudentAvailabilityAndScheduleDayViewModelMappingTest.cs" />
+    <Compile Include="Areas\MyTime\Models\Preference\PreferenceTemplateInputTest.cs" />
     <Compile Include="Areas\MyTime\Models\StudentAvailability\StudentAvailabilityDayFormTest.cs" />
     <Compile Include="Areas\SSO\Contollers\OpenIdControllerTest.cs" />
     <Compile Include="Areas\SSO\OpenIdProviderWapperTest.cs" />

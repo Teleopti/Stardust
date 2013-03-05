@@ -49,6 +49,7 @@ Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (aja
 	this.ActivityMaximumTime = ko.observable();
 
 	this.IsSaveAsNewTemplate = ko.observable();
+	this.TemplateName = ko.observable('');
 	this.IsShowDetails = ko.observable(true);
 
 	this.toggleDetails = function () {

@@ -7087,6 +7087,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Empty preference template name.
+        /// </summary>
+        public static string EmptyTemplateName {
+            get {
+                return ResourceManager.GetString("EmptyTemplateName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enabled.
         /// </summary>
         public static string Enabled {

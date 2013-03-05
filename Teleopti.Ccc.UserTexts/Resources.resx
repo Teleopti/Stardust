@@ -11298,4 +11298,8 @@ These options are activated:
     <value>New Template Name</value>
     <comment>New Template Name</comment>
   </data>
+  <data name="EmptyTemplateName" xml:space="preserve">
+    <value>Empty preference template name</value>
+    <comment>Empty preference template name</comment>
+  </data>
 </root>

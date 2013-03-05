@@ -6,7 +6,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 {
-	public class PreferenceInput: IValidatableObject
+	public abstract class PreferenceInput: IValidatableObject
 	{
 		public Guid? PreferenceId { get; set; }
 
@@ -31,6 +31,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 
 		public TimeOfDay? ActivityEarliestEndTime { get; set; }
 		public TimeOfDay? ActivityLatestEndTime { get; set; }
+
+		protected abstract IEnumerable<ValidationResult> ValidateMore(ValidationContext validationContext);
 
 		public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
 		{
@@ -58,6 +60,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 				result.Add(new ValidationResult(string.Format(Resources.InvalidTimeValue, Resources.WorkTime)));
 			if (validateTimeSpan(ActivityMinimumTime, ActivityMaximumTime))
 				result.Add(new ValidationResult(string.Format(Resources.InvalidTimeValue, Resources.ActivityLength)));
+			result.AddRange(ValidateMore(validationContext));
 			return result;
 		}
 
