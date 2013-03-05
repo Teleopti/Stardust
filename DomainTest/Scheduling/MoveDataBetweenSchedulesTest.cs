@@ -98,6 +98,22 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             Assert.IsFalse(destination[person].Contains(prefDay));
         }
 
+		[Test]
+		public void ShouldNotAffectAbsencesOnNextDay()
+		{
+			var scenario = new Scenario("scenario");
+			var person = PersonFactory.CreatePerson("person");
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person, new DateTimePeriod(2000, 1, 3, 2000, 1, 3));
+			putScheduleDataToDic(PersonAbsenceFactory.CreatePersonAbsence(person, destination.Scenario, new DateTimePeriod(2000, 1, 4, 2000, 1, 5)));
+			var schedulePart = createPartWithData(personAssignment, new DateOnly(2000, 1, 3));
+			target.CopySchedulePartsToAnotherDictionary(destination, new List<IScheduleDay> { schedulePart });
+			var scheduleDay = destination[person].ScheduledDay(new DateOnly(2000, 1, 3));
+			
+			Assert.AreEqual(2, scheduleDay.PersistableScheduleDataCollection().Count());
+			Assert.AreEqual(1, scheduleDay.PersistableScheduleDataCollection().OfType<PersonAssignment>().Count());
+			Assert.AreEqual(1, scheduleDay.PersistableScheduleDataCollection().OfType<PersonAbsence>().Count());
+		}
+
 
         private static IScheduleDay createPartWithData(IScheduleData data, DateOnly dateOnly)
         {
