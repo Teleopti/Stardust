@@ -89,10 +89,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
             var startTimeLimitation = new StartTimeLimitation(null, null);
             var endTimeLimitation = new EndTimeLimitation(null, null);
 			
-			if (scheduleDay.SignificantPartForDisplay() == SchedulePartView.ContractDayOff) preferenceCellData.HasAbsenceOnContractDayOff = true;
+			if (scheduleDay.SignificantPartForDisplay() == SchedulePartView.ContractDayOff) 
+				preferenceCellData.HasAbsenceOnContractDayOff = true;
 
             WorkTimeLimitation workTimeLimitation;
-			if (preferenceCellData.HasAbsenceOnContractDayOff)workTimeLimitation = new WorkTimeLimitation(TimeSpan.Zero, TimeSpan.Zero);
+			if (preferenceCellData.HasAbsenceOnContractDayOff)
+				workTimeLimitation = new WorkTimeLimitation(TimeSpan.Zero, TimeSpan.Zero);
             else workTimeLimitation = new WorkTimeLimitation(timeSpan, timeSpan);
 
             IEffectiveRestriction totalRestriction = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(),new WorkTimeLimitation(), null, null, null,new List<IActivityRestriction>());
@@ -176,7 +178,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 				}
 			}
 			preferenceCellData.EffectiveRestriction = totalRestriction;
-			if (totalRestriction.Absence != null) SetTotalRestrictionForPreferedAbsence(scheduleDay, preferenceCellData);	
+			if (totalRestriction.Absence != null) 
+				SetTotalRestrictionForPreferedAbsence(scheduleDay, preferenceCellData);	
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
@@ -191,10 +194,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 			var schedulePeriodStartDate = scheduleDay.Person.SchedulePeriodStartDate(preferenceCellData.TheDate);
 			if (!schedulePeriodStartDate.HasValue) return;
 
-			preferenceCellData.HasAbsenceOnContractDayOff = !virtualSchedulePeriod.ContractSchedule.IsWorkday(schedulePeriodStartDate.Value, preferenceCellData.TheDate);
+			preferenceCellData.HasAbsenceOnContractDayOff = 
+				!virtualSchedulePeriod.ContractSchedule.IsWorkday(schedulePeriodStartDate.Value, preferenceCellData.TheDate);
 
 			var time = TimeSpan.Zero;
-			if (!preferenceCellData.HasAbsenceOnContractDayOff && preferenceCellData.EffectiveRestriction.Absence.InContractTime) time = virtualSchedulePeriod.AverageWorkTimePerDay;
+			if (!preferenceCellData.HasAbsenceOnContractDayOff && preferenceCellData.EffectiveRestriction.Absence.InContractTime) 
+				time = virtualSchedulePeriod.AverageWorkTimePerDay;
 
 			preferenceCellData.ShiftLengthScheduledShift = TimeHelper.GetLongHourMinuteTimeString(time, TeleoptiPrincipal.Current.Regional.Culture);
 			var totalRestriction = new EffectiveRestriction(preferenceCellData.EffectiveRestriction.StartTimeLimitation, preferenceCellData.EffectiveRestriction.EndTimeLimitation, new WorkTimeLimitation(time, time), preferenceCellData.EffectiveRestriction.ShiftCategory, preferenceCellData.EffectiveRestriction.DayOffTemplate, preferenceCellData.EffectiveRestriction.Absence, new List<IActivityRestriction>());
