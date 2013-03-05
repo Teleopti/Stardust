@@ -379,7 +379,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		{
 			var page = Pages.Pages.PreferencePage;
 			page.TemplateNameTextField.Value = name;
-			Browser.Current.Eval("$('#" + page.TemplateNameTextField.Id + "').keyup()");
+			Browser.Current.Eval("$('#" + Pages.Pages.PreferencePage.TemplateNameTextField.Id + "').blur()");
 		}
 
 		[When(@"I click save template button")]
