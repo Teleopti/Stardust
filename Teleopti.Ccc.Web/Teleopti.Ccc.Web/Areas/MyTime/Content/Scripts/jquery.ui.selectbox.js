@@ -184,7 +184,7 @@
 			}
 
 			var link = $('<a>')
-				.append(text);
+				.append($('<div/>').text(text));
 			if (secondaryIcon)
 				link.append(secondaryIcon);
 

@@ -41,7 +41,10 @@ Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (aja
 
 	this.SelectedTemplate.subscribe(function (newValue) {
 		if (newValue) {
-			self.PreferenceId(newValue.PreferenceId);
+			if (!newValue.PreferenceId)
+				self.PreferenceId('');
+			else
+				self.PreferenceId(newValue.PreferenceId);
 			self.EarliestStartTime(newValue.EarliestStartTime);
 			self.LatestStartTime(newValue.LatestStartTime);
 			self.EarliestEndTime(newValue.EarliestEndTime);
@@ -50,7 +53,10 @@ Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (aja
 			self.LatestEndTimeNextDay(newValue.LatestEndTimeNextDay);
 			self.MinimumWorkTime(newValue.MinimumWorkTime);
 			self.MaximumWorkTime(newValue.MaximumWorkTime);
-			self.ActivityPreferenceId(newValue.ActivityPreferenceId);
+			if (!newValue.ActivityPreferenceId)
+				self.ActivityPreferenceId('');
+			else
+				self.ActivityPreferenceId(newValue.ActivityPreferenceId);
 			self.ActivityEarliestStartTime(newValue.ActivityEarliestStartTime);
 			self.ActivityLatestStartTime(newValue.ActivityLatestStartTime);
 			self.ActivityEarliestEndTime(newValue.ActivityEarliestEndTime);

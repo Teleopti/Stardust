@@ -89,10 +89,16 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			success: function (data, textStatus, jqXHR) {
 				data = data || [];
 				addExtendedPreferenceFormViewModel.AvailableTemplates.push(data);
-				$("#Preference-template").selectbox(
+				var template = $("#Preference-template");
+				template.selectbox(
 					{
 						refreshMenu: addExtendedPreferenceFormViewModel.AvailableTemplates()
 					});
+				template.selectbox(
+					{
+						value: data.Value
+					});
+				addExtendedPreferenceFormViewModel.IsSaveAsNewTemplate(false);
 			}
 		});
 	}
@@ -200,8 +206,8 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 						$("#Preference-template")
 							.selectbox(
 								{
-									changed: function(event, ui) {
-										var selected = $.grep(addExtendedPreferenceFormViewModel.AvailableTemplates(), function(e) { return e.Value == ui.item.value; })[0];
+									changed: function (event, ui) {
+										var selected = $.grep(addExtendedPreferenceFormViewModel.AvailableTemplates(), function (e) { return e.Value == ui.item.value; })[0];
 										addExtendedPreferenceFormViewModel.SelectedTemplate(selected);
 									}
 								});
