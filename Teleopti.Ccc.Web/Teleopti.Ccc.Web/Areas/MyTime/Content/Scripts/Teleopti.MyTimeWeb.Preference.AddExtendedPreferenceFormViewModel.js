@@ -14,19 +14,6 @@
 Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (ajax) {
 	var self = this;
 
-	this.LoadAvailableTemplates = function () {
-		ajax.Ajax({
-			url: "Preference/GetPreferenceTemplates",
-			dataType: "json",
-			type: 'GET',
-			success: function (data, textStatus, jqXHR) {
-				data = data || [];
-				self.AvailableTemplates(data);
-				$("#Preference-template").selectbox({ refreshMenu: data });
-			}
-		});
-	};
-
 	this.AvailableTemplates = ko.observableArray();
 	this.SelectedTemplate = ko.observable();
 	this.UrlTimeStamp = ko.observable();
@@ -124,15 +111,7 @@ Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (aja
 		self.MaximumWorkTime(undefined);
 		self.ActivityPreferenceId('');
 		self.ValidationError(undefined);
+		self.SelectedTemplate(undefined);
 	};
 
-	this.InitTemplateSelectBox = function () {
-		$("#Preference-template").selectbox(
-			{
-				changed: function (event, ui) {
-					var template = $.grep(self.AvailableTemplates(), function (e) { return e.Value == ui.item.value; })[0];
-					self.SelectedTemplate(template);
-				}
-			});
-	};
 };

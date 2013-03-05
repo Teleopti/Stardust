@@ -192,13 +192,34 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 
 						ko.applyBindings(addExtendedPreferenceFormViewModel, $("#Preference-add-extended-form")[0]);
 
-						addExtendedPreferenceFormViewModel.InitTemplateSelectBox();
-						addExtendedPreferenceFormViewModel.LoadAvailableTemplates();
+						$("#Preference-template")
+							.selectbox(
+								{
+									changed: function(event, ui) {
+										var selected = $.grep(addExtendedPreferenceFormViewModel.AvailableTemplates(), function(e) { return e.Value == ui.item.value; })[0];
+										addExtendedPreferenceFormViewModel.SelectedTemplate(selected);
+									}
+								});
+
+						_loadAvailableTemplates();
 					}
 				}
 			});
 
 		button.removeAttr('disabled');
+	}
+
+	function _loadAvailableTemplates() {
+		ajax.Ajax({
+			url: "Preference/GetPreferenceTemplates",
+			dataType: "json",
+			type: 'GET',
+			success: function (data, textStatus, jqXHR) {
+				data = data || [];
+				addExtendedPreferenceFormViewModel.AvailableTemplates(data);
+				$("#Preference-template").selectbox({ refreshMenu: data });
+			}
+		});
 	}
 
 	function _initMustHaveButton() {
