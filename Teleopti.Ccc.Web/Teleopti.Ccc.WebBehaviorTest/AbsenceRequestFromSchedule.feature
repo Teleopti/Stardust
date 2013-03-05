@@ -112,8 +112,7 @@ Scenario: Do not show indication of the amount of agents that can go on holiday 
 	When I view my week schedule for date '2013-02-15'
 	Then I should not see any indication of how many agents can go on holiday
 
-@ignore
-Scenario: Show number of agents that can go on holiday
+Scenario: Show indication of agents that can go on holiday
 	Given I have the role 'Full access to mytime'
 	When I view my week schedule for date '2013-02-15'
 	Then I should see an indication of the amount of agents that can go on holiday on each day of the week
@@ -121,7 +120,7 @@ Scenario: Show number of agents that can go on holiday
 @ignore
 Scenario: Indicate that no agents that can go on holiday if outside bounds of absence period
 	Given I have the role 'Full access to mytime'
-	# And the absence period is opened between '2013-01-01' and '2013-01-30'
+	And the absence period is opened between '2013-01-01' and '2013-01-30'
 	And I have a denied absence request beacuse of missing workflow control set
 	When I view my week schedule for date '2013-02-15'
 	Then I should see an indication that no agents that can go on holiday for date '2013-02-15'
