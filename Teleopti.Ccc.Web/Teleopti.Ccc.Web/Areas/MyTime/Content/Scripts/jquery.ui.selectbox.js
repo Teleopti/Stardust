@@ -181,10 +181,12 @@
 					.addClass('menu-icon-secondary')
 					.addClass('ui-corner-all')
 					.css("background-color", item.color);
+			} else {
+				text = $('<div/>').text(item.label);
 			}
 
 			var link = $('<a>')
-				.append($('<div/>').text(text));
+				.append(text);
 			if (secondaryIcon)
 				link.append(secondaryIcon);
 
