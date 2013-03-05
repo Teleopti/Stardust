@@ -69,14 +69,14 @@ namespace Teleopti.Ccc.Win.Common.Controls.Rows
 		private IEnumerable<IEnumerable<ISkillStaffPeriod>> getSkillStaffPeriodsForOneMonth(CellInfo cellInfo)
 		{
 			var period = GetDateOnlyPeriodFromColum(cellInfo);
-			var skillStaffPeriodsOfOneWeek = new List<IList<ISkillStaffPeriod>>();
+			var skillStaffPeriodsOfOneMonth = new List<IList<ISkillStaffPeriod>>();
 			foreach (var day in period.DayCollection())
 			{
 				var dayUtcPeriod = new DateOnlyPeriod(day, day).ToDateTimePeriod(_rowManager.TimeZoneInfo);
 				var skillStaffPeriods = SkillStaffPeriodList.Where(x => dayUtcPeriod.Contains(x.Period)).ToList();
-				skillStaffPeriodsOfOneWeek.Add(skillStaffPeriods);
+				skillStaffPeriodsOfOneMonth.Add(skillStaffPeriods);
 			}
-			return skillStaffPeriodsOfOneWeek;
+			return skillStaffPeriodsOfOneMonth;
 		}
 
         protected object GetValue	(CellInfo cellInfo)
