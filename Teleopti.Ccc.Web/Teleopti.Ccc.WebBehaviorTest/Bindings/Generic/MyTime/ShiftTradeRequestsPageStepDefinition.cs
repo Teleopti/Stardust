@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			EventualAssert.That(() => Pages.Pages.Current.Document.Divs.Filter(QuicklyFind.ByClass("agent")).First(div => div.IsDisplayed()).Text, Is.StringContaining(agentName));
 		}
 
-		[Then(@"I should see the schedule of (.*)")]
+		[Then(@"I should see (.*) in the shift trade list")]
 		public void ThenIShouldSeeOtherAgentSSchedule(string agentName)
 		{
 			EventualAssert.That(() => Pages.Pages.Current.Document.Divs.Filter(QuicklyFind.ByClass("agent")).Any(div => div.IsDisplayed() && div.Text.Trim() == agentName), Is.True);

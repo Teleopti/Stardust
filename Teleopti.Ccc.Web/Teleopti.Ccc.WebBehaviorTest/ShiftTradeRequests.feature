@@ -108,7 +108,7 @@ Scenario: Show possible shift trade when victim has no schedule
 	| Shift category		| Day	           |
 	And Current time is '2029-12-27'
 	When I view Add Shift Trade Request for date '2030-01-01'
-	Then I should see the schedule of OtherAgent
+	Then I should see OtherAgent in the shift trade list
 
 Scenario: Do not show person that agent has no permission to
 	Given I am an agent in a team with access only to my own data
@@ -243,8 +243,8 @@ Scenario: Cancel a shift trade request before sending
 	When I view Add Shift Trade Request for date '2030-01-01'
 	And I click agent 'OtherAgent'
 	And I click 'Cancel button'
-	Then I should see the schedule of OtherAgent
-	And I should see the schedule of OtherAgent2
+	Then I should see OtherAgent in the shift trade list
+	And I should see OtherAgent2 in the shift trade list
 
 Scenario: Show message when no agents are available for shift trade
 	Given I have the role 'Full access to mytime'
