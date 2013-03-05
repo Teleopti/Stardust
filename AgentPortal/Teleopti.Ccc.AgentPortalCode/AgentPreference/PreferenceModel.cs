@@ -161,130 +161,150 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentPreference
             _didGetPeriodLastCall = false;
             foreach (ValidatedSchedulePartDto validatedSchedulePartDto in ret)
             {
-                _didGetPeriodLastCall = true;
-                var cellData = new PreferenceCellData
-                                   {
-                                       TheDate = validatedSchedulePartDto.DateOnly.DateTime
-                                   };
+				_didGetPeriodLastCall = true;
 
-                if (validatedSchedulePartDto.PreferenceRestriction != null)
-                {
-                    cellData.Preference = new Preference();
+				if (validatedSchedulePartDto.IsInsidePeriod && !firstDateIsSet)
+				{
+					_firstDateInCurrentPeriod = validatedSchedulePartDto.DateOnly.DateTime;
+					firstDateIsSet = true;
+					_lastDate = validatedSchedulePartDto.DateOnly.DateTime;
+					_maxMustHaveCurrentPeriod = validatedSchedulePartDto.MustHave;
+				}
 
-                    if (validatedSchedulePartDto.PreferenceRestriction.ShiftCategory != null)
-                    {
-                        Color shiftCategoryColor =
-                            ColorHelper.CreateColorFromDto(
-                                validatedSchedulePartDto.PreferenceRestriction.ShiftCategory.DisplayColor);
-                        cellData.Preference.ShiftCategory =
-                            new ShiftCategory(validatedSchedulePartDto.PreferenceRestriction.ShiftCategory.Name, "",
-                                              validatedSchedulePartDto.PreferenceRestriction.ShiftCategory.Id,
-                                              shiftCategoryColor);
-                    }
-                    if (validatedSchedulePartDto.PreferenceRestriction.DayOff != null)
-                    {
-                        cellData.Preference.DayOff =
-                            new Common.DayOff(
-                                validatedSchedulePartDto.PreferenceRestriction.DayOff.Name, "",
-                                validatedSchedulePartDto.PreferenceRestriction.DayOff.Id, Color.DimGray);
-                    }
+                var cellData = ExtractPreferenceCellData(validatedSchedulePartDto);
 
-                    if(validatedSchedulePartDto.PreferenceRestriction.Absence != null)
-                    {
-                        var absenceColor = ColorHelper.CreateColorFromDto(validatedSchedulePartDto.PreferenceRestriction.Absence.DisplayColor);
-                        cellData.Preference.Absence = new Absence(validatedSchedulePartDto.PreferenceRestriction.Absence.Name, 
-                            validatedSchedulePartDto.PreferenceRestriction.Absence.ShortName,
-                            validatedSchedulePartDto.PreferenceRestriction.Absence.Id, absenceColor);    
-                    }
-
-                    if (validatedSchedulePartDto.PreferenceRestriction.ActivityRestrictionCollection != null && validatedSchedulePartDto.PreferenceRestriction.ActivityRestrictionCollection.Length > 0)
-                    {
-                        ActivityRestrictionDto activityRestrictionDto =
-                            validatedSchedulePartDto.PreferenceRestriction.ActivityRestrictionCollection[0];
-                        var preferenceActivity = new Activity(activityRestrictionDto.Activity.Id, activityRestrictionDto.Activity.Description);
-                        cellData.Preference.Activity = preferenceActivity;
-                        if (activityRestrictionDto.StartTimeLimitation != null)
-                            cellData.Preference.ActivityStartTimeLimitation = new TimeLimitation(TimeOfDayValidatorStartTime, activityRestrictionDto.StartTimeLimitation);
-                        if (activityRestrictionDto.EndTimeLimitation != null)
-                            cellData.Preference.ActivityEndTimeLimitation = new TimeLimitation(TimeOfDayValidatorEndTime, activityRestrictionDto.EndTimeLimitation);
-                        if (activityRestrictionDto.WorkTimeLimitation != null)
-                            cellData.Preference.ActivityTimeLimitation = new TimeLimitation(TimeLengthValidator, activityRestrictionDto.WorkTimeLimitation);
-                    }
-                    cellData.Preference.StartTimeLimitation = new TimeLimitation(TimeOfDayValidatorStartTime, validatedSchedulePartDto.PreferenceRestriction.StartTimeLimitation);
-                    cellData.Preference.EndTimeLimitation = new TimeLimitation(TimeOfDayValidatorEndTime, validatedSchedulePartDto.PreferenceRestriction.EndTimeLimitation);
-                    cellData.Preference.WorkTimeLimitation = new TimeLimitation(TimeLengthValidator, validatedSchedulePartDto.PreferenceRestriction.WorkTimeLimitation);
-                    cellData.Preference.MustHave = validatedSchedulePartDto.PreferenceRestriction.MustHave;
-                    cellData.Preference.TemplateName = validatedSchedulePartDto.PreferenceRestriction.TemplateName;
-                    if (cellData.Preference.MustHave && validatedSchedulePartDto.IsInsidePeriod)
-                        AddMustHave();
-                }
-                MakeEffective(cellData, validatedSchedulePartDto);
-                cellData.Legal = validatedSchedulePartDto.LegalState;
-
-                cellData.IsInsidePeriod = validatedSchedulePartDto.IsInsidePeriod;
-                cellData.WeeklyMax = TimeSpan.FromMinutes(validatedSchedulePartDto.WeekMaxInMinutes);
-                cellData.PeriodTarget = TimeSpan.FromMinutes(validatedSchedulePartDto.PeriodTargetInMinutes);
-                cellData.Seasonality = validatedSchedulePartDto.Seasonality;
-
-                cellData.PeriodDayOffsTarget = validatedSchedulePartDto.PeriodDayOffsTarget;
-                cellData.PeriodDayOffs = validatedSchedulePartDto.PeriodDayOffs;
-
-                cellData.BalancedPeriodTarget =
-                    TimeSpan.FromMinutes(validatedSchedulePartDto.BalancedPeriodTargetInMinutes);
-                cellData.BalancedPeriodTargetWithTolerance =
-                    new TimePeriod(TimeSpan.FromMinutes(validatedSchedulePartDto.TargetTimeNegativeToleranceInMinutes),
-                                   TimeSpan.FromMinutes(validatedSchedulePartDto.TargetTimePositiveToleranceInMinutes));
-                cellData.BalanceIn = TimeSpan.FromMinutes(validatedSchedulePartDto.BalanceInInMinutes);
-                cellData.BalanceOut = TimeSpan.FromMinutes(validatedSchedulePartDto.BalanceOutInMinutes);
-                cellData.Extra = TimeSpan.FromMinutes(validatedSchedulePartDto.ExtraInInMinutes);
-
-                cellData.Enabled = validatedSchedulePartDto.IsPreferenceEditable;
-                cellData.HasAbsence = validatedSchedulePartDto.HasAbsence;
-                if (validatedSchedulePartDto.IsInsidePeriod)
-                {
-                    cellData.MaxMustHave = validatedSchedulePartDto.MustHave;
-                    _lastDate = validatedSchedulePartDto.DateOnly.DateTime;
-                    _maxMustHaveCurrentPeriod = validatedSchedulePartDto.MustHave;
-                    if (!firstDateIsSet)
-                    {
-                        _firstDateInCurrentPeriod = validatedSchedulePartDto.DateOnly.DateTime;
-                        firstDateIsSet = true;
-                    }
-                }
-
-                if (!validatedSchedulePartDto.IsInsidePeriod)
-                    cellData.Enabled = false;
-
-                if (!validatedSchedulePartDto.IsPreferenceEditable)
-                    cellData.Enabled = false;
-
-                if (validatedSchedulePartDto.HasPersonalAssignmentOnly)
-                {
-                    cellData.HasPersonalAssignmentOnly = true;
-                    cellData.TipText = validatedSchedulePartDto.TipText;
-                }
-
-                cellData.HasShift = validatedSchedulePartDto.HasShift;
-                cellData.HasDayOff = validatedSchedulePartDto.HasDayOff;
-
-                if (cellData.HasDayOff || cellData.HasShift || cellData.HasAbsence)
-                    cellData.Enabled = false;
-
-                if (validatedSchedulePartDto.DisplayColor != null)
-                    cellData.DisplayColor = ColorHelper.CreateColorFromDto(validatedSchedulePartDto.DisplayColor);
-                cellData.DisplayName = validatedSchedulePartDto.ScheduledItemName;
-                cellData.DisplayShortName = validatedSchedulePartDto.ScheduledItemShortName;
-
-                cellData.IsWorkday = validatedSchedulePartDto.IsWorkday;
-                cellData.ViolatesNightlyRest = validatedSchedulePartDto.ViolatesNightlyRest;
-
-                retList.Add(cellNumber, cellData);
+            	retList.Add(cellNumber, cellData);
                 cellNumber++;
             }
             _cellDataCollection = retList;
         }
 
-        public DateOnly GetDateOnlyInPeriod(DateTime dateInPeriod)
+    	private PreferenceCellData ExtractPreferenceCellData(ValidatedSchedulePartDto validatedSchedulePartDto)
+    	{
+    		var cellData = new PreferenceCellData
+    		               	{
+    		               		TheDate = validatedSchedulePartDto.DateOnly.DateTime
+    		               	};
+
+    		if (validatedSchedulePartDto.PreferenceRestriction != null)
+    		{
+    			cellData.Preference = new Preference();
+
+    			if (validatedSchedulePartDto.PreferenceRestriction.ShiftCategory != null)
+    			{
+    				Color shiftCategoryColor =
+    					ColorHelper.CreateColorFromDto(
+    						validatedSchedulePartDto.PreferenceRestriction.ShiftCategory.DisplayColor);
+    				cellData.Preference.ShiftCategory =
+    					new ShiftCategory(validatedSchedulePartDto.PreferenceRestriction.ShiftCategory.Name, "",
+    					                  validatedSchedulePartDto.PreferenceRestriction.ShiftCategory.Id,
+    					                  shiftCategoryColor);
+    			}
+    			if (validatedSchedulePartDto.PreferenceRestriction.DayOff != null)
+    			{
+    				cellData.Preference.DayOff =
+    					new Common.DayOff(
+    						validatedSchedulePartDto.PreferenceRestriction.DayOff.Name, "",
+    						validatedSchedulePartDto.PreferenceRestriction.DayOff.Id, Color.DimGray);
+    			}
+
+    			if (validatedSchedulePartDto.PreferenceRestriction.Absence != null)
+    			{
+    				var absenceColor = ColorHelper.CreateColorFromDto(validatedSchedulePartDto.PreferenceRestriction.Absence.DisplayColor);
+    				cellData.Preference.Absence = new Absence(validatedSchedulePartDto.PreferenceRestriction.Absence.Name,
+    				                                          validatedSchedulePartDto.PreferenceRestriction.Absence.ShortName,
+    				                                          validatedSchedulePartDto.PreferenceRestriction.Absence.Id, absenceColor);
+    			}
+
+    			if (validatedSchedulePartDto.PreferenceRestriction.ActivityRestrictionCollection != null &&
+    			    validatedSchedulePartDto.PreferenceRestriction.ActivityRestrictionCollection.Length > 0)
+    			{
+    				ActivityRestrictionDto activityRestrictionDto =
+    					validatedSchedulePartDto.PreferenceRestriction.ActivityRestrictionCollection[0];
+    				var preferenceActivity = new Activity(activityRestrictionDto.Activity.Id, activityRestrictionDto.Activity.Description);
+    				cellData.Preference.Activity = preferenceActivity;
+    				if (activityRestrictionDto.StartTimeLimitation != null)
+    					cellData.Preference.ActivityStartTimeLimitation = new TimeLimitation(TimeOfDayValidatorStartTime,
+    					                                                                     activityRestrictionDto.StartTimeLimitation);
+    				if (activityRestrictionDto.EndTimeLimitation != null)
+    					cellData.Preference.ActivityEndTimeLimitation = new TimeLimitation(TimeOfDayValidatorEndTime,
+    					                                                                   activityRestrictionDto.EndTimeLimitation);
+    				if (activityRestrictionDto.WorkTimeLimitation != null)
+    					cellData.Preference.ActivityTimeLimitation = new TimeLimitation(TimeLengthValidator,
+    					                                                                activityRestrictionDto.WorkTimeLimitation);
+    			}
+    			cellData.Preference.StartTimeLimitation = new TimeLimitation(TimeOfDayValidatorStartTime,
+    			                                                             validatedSchedulePartDto.PreferenceRestriction.
+    			                                                             	StartTimeLimitation);
+    			cellData.Preference.EndTimeLimitation = new TimeLimitation(TimeOfDayValidatorEndTime,
+    			                                                           validatedSchedulePartDto.PreferenceRestriction.
+    			                                                           	EndTimeLimitation);
+    			cellData.Preference.WorkTimeLimitation = new TimeLimitation(TimeLengthValidator,
+    			                                                            validatedSchedulePartDto.PreferenceRestriction.
+    			                                                            	WorkTimeLimitation);
+    			cellData.Preference.MustHave = validatedSchedulePartDto.PreferenceRestriction.MustHave;
+    			cellData.Preference.TemplateName = validatedSchedulePartDto.PreferenceRestriction.TemplateName;
+    			if (cellData.Preference.MustHave && validatedSchedulePartDto.IsInsidePeriod)
+    				AddMustHave();
+    		}
+    		MakeEffective(cellData, validatedSchedulePartDto);
+    		cellData.Legal = validatedSchedulePartDto.LegalState;
+
+    		cellData.IsInsidePeriod = validatedSchedulePartDto.IsInsidePeriod;
+    		cellData.WeeklyMax = TimeSpan.FromMinutes(validatedSchedulePartDto.WeekMaxInMinutes);
+    		cellData.PeriodTarget = TimeSpan.FromMinutes(validatedSchedulePartDto.PeriodTargetInMinutes);
+    		cellData.Seasonality = validatedSchedulePartDto.Seasonality;
+
+    		cellData.PeriodDayOffsTarget = validatedSchedulePartDto.PeriodDayOffsTarget;
+    		cellData.PeriodDayOffs = validatedSchedulePartDto.PeriodDayOffs;
+
+    		cellData.BalancedPeriodTarget =
+    			TimeSpan.FromMinutes(validatedSchedulePartDto.BalancedPeriodTargetInMinutes);
+    		cellData.BalancedPeriodTargetWithTolerance =
+    			new TimePeriod(TimeSpan.FromMinutes(validatedSchedulePartDto.TargetTimeNegativeToleranceInMinutes),
+    			               TimeSpan.FromMinutes(validatedSchedulePartDto.TargetTimePositiveToleranceInMinutes));
+    		cellData.BalanceIn = TimeSpan.FromMinutes(validatedSchedulePartDto.BalanceInInMinutes);
+    		cellData.BalanceOut = TimeSpan.FromMinutes(validatedSchedulePartDto.BalanceOutInMinutes);
+    		cellData.Extra = TimeSpan.FromMinutes(validatedSchedulePartDto.ExtraInInMinutes);
+
+    		cellData.Enabled = validatedSchedulePartDto.IsPreferenceEditable;
+    		cellData.HasAbsence = validatedSchedulePartDto.HasAbsence;
+    		if (validatedSchedulePartDto.IsInsidePeriod)
+    		{
+    			cellData.MaxMustHave = validatedSchedulePartDto.MustHave;
+    			_lastDate = validatedSchedulePartDto.DateOnly.DateTime;
+    			_maxMustHaveCurrentPeriod = validatedSchedulePartDto.MustHave;
+    		}
+
+    		if (!validatedSchedulePartDto.IsInsidePeriod)
+    			cellData.Enabled = false;
+
+    		if (!validatedSchedulePartDto.IsPreferenceEditable)
+    			cellData.Enabled = false;
+
+    		if (validatedSchedulePartDto.HasPersonalAssignmentOnly)
+    		{
+    			cellData.HasPersonalAssignmentOnly = true;
+    			cellData.TipText = validatedSchedulePartDto.TipText;
+    		}
+
+    		cellData.HasShift = validatedSchedulePartDto.HasShift;
+    		cellData.HasDayOff = validatedSchedulePartDto.HasDayOff;
+
+    		if (cellData.HasDayOff || cellData.HasShift || cellData.HasAbsence)
+    			cellData.Enabled = false;
+
+    		if (validatedSchedulePartDto.DisplayColor != null)
+    			cellData.DisplayColor = ColorHelper.CreateColorFromDto(validatedSchedulePartDto.DisplayColor);
+    		cellData.DisplayName = validatedSchedulePartDto.ScheduledItemName;
+    		cellData.DisplayShortName = validatedSchedulePartDto.ScheduledItemShortName;
+
+    		cellData.IsWorkday = validatedSchedulePartDto.IsWorkday;
+    		cellData.ViolatesNightlyRest = validatedSchedulePartDto.ViolatesNightlyRest;
+    		return cellData;
+    	}
+
+    	public DateOnly GetDateOnlyInPeriod(DateTime dateInPeriod)
         {
             var dateOnly = new DateOnly(dateInPeriod);
             bool periodExists = false;
@@ -312,6 +332,7 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentPreference
         {
             _numberOfMustHaveCurrentPeriod = NumberOfMustHaveCurrentPeriod + 1;
         }
+
         public void RemoveMustHave()
         {
             _numberOfMustHaveCurrentPeriod = NumberOfMustHaveCurrentPeriod - 1;
@@ -374,7 +395,6 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentPreference
             return new TimePeriod(TimeSpan.Zero, TimeSpan.Zero);
         }
 
-
         public int PeriodTargetDayOffs()
         {
             if (_cellDataCollection.Count > 0)
@@ -416,6 +436,7 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentPreference
             }
             return true;
         }
+
         public void GetPreviousPeriod()
         {
             if (!_didGetPeriodLastCall)
