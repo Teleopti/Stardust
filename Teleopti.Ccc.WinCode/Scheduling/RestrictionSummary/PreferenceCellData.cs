@@ -19,13 +19,14 @@ namespace Teleopti.Ccc.WinCode.Scheduling.RestrictionSummary
         public bool Legal { get; set; }
         public TimeSpan WeeklyMax { get; set; }
         public TimeSpan PeriodTarget { get; set; }
+		public Color DisplayColor { get; set; }
+		public string DisplayName { get; set; }
+		public string DisplayShortName { get; set; }
+		public bool HasShift { get; set; }
+		public bool HasDayOff { get; set; }
+		public bool HasAbsence { get; set; }
+
         public bool IsInsidePeriod { get; set; }
-        public Color DisplayColor { get; set; }
-        public string DisplayName { get; set; }
-        public string DisplayShortName { get; set; }
-        public bool HasShift { get; set; }
-        public bool HasDayOff { get; set; }
-        public bool HasAbsence { get; set; }
         public bool HasFullDayAbsence { get; set; }
         public bool HasActivityPreference { get; set; }
         public bool HasAbsenceOnContractDayOff { get; set; }
