@@ -4,12 +4,6 @@
 /// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js" />
 
-	 
-//$(function() {
-//	$( "#accordion" ).accordion({
-//		collapsible: true
-//	});
-//});
 
 Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (ajax) {
 	var self = this;
@@ -37,12 +31,6 @@ Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (aja
 
 	this.IsSaveAsNewTemplate = ko.observable();
 	this.TemplateName = ko.observable('');
-	this.IsShowDetails = ko.observable(true);
-
-	this.toggleDetails = function () {
-		var currentValue = this.IsShowDetails();
-		self.IsShowDetails(!currentValue);
-	};
 
 	this.IsTimeInputEnabled = ko.observable();
 

@@ -155,13 +155,20 @@
 	font-family: Arial;
 }
 
-#template-show-details {
-    color: #555555;
-    display: block;
-    width: 100%;
-    height: 100%;
+.collapse-sign a {
+	text-decoration: none;
+	min-width: 15px;
+	color: grey;
+	display: inline-block;
+	margin-left: 5px;
 }
-
-#template-show-details .hover {
-    color: #555555;
+#Template-name-section {
+	padding-bottom: 0;
+}
+#Template-name-section input 
+{
+	vertical-align: baseline;
+}
+#Preference-add-extended-form {
+	min-width: 266px;
 }

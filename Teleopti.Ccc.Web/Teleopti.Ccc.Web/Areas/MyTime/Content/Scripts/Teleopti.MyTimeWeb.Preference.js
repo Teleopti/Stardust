@@ -171,6 +171,14 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 				events: {
 					render: function () {
 
+						$('.collapse-sign a').click(function () {
+							$(this).parent().next('.collapsable').toggle();
+						}).toggle(function () {
+							$(this).text("[+]");
+						}, function () {
+							$(this).text("[-]");
+						});
+
 						$('#Preference-extended-reset')
 							.button()
 							.click(function () {
@@ -186,9 +194,6 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 							.click(function () {
 								_setPreferenceTemplate(ko.toJS(addExtendedPreferenceFormViewModel));
 							});
-
-						$('#template-name-section input[type=text]')
-							.labeledinput();
 
 						ko.applyBindings(addExtendedPreferenceFormViewModel, $("#Preference-add-extended-form")[0]);
 
