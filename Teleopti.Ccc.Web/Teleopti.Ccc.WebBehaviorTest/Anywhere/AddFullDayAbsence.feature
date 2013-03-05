@@ -30,7 +30,6 @@ Background:
 	| Name  | Vacation |
 	| Color | Red      |
 	
-@Ignore 
 Scenario: View form
 	Given I have the role 'Anywhere Team Green'
 	When I view person schedule for 'Pierre Baldi' on '2012-12-02'

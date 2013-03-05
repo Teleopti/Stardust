@@ -106,7 +106,6 @@ Scenario: Select date
 	And I select date '2012-12-03'
 	Then I should be viewing schedules for '2012-12-03'
 
-@ignore
 Scenario: Select person
 	Given I have the role 'Anywhere Team Green'
 	When I view schedules for '2012-12-02'
