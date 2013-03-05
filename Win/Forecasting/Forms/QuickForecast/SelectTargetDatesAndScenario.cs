@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
@@ -22,12 +21,10 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
         public SelectTargetDatesAndScenario()
         {
             InitializeComponent();
-            if (!DesignMode)
-            {
-                SetTexts();
-                setColors();
-                TargetFromTo.PeriodChanged += reportDateFromToSelector1PeriodChanged;
-            }
+	        if (DesignMode) return;
+	        SetTexts();
+	        setColors();
+	        TargetFromTo.PeriodChanged += reportDateFromToSelector1PeriodChanged;
         }
 
         void reportDateFromToSelector1PeriodChanged(object sender, EventArgs e)
@@ -120,8 +117,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
             comboBoxScenario.DisplayMember = "Description";
 			comboBoxScenario.ValueMember = "Id";
             comboBoxScenario.DataSource = scenariosToLoad;
-			if(_stateObj.ScenarioId.Equals(Guid.Empty))
-				comboBoxScenario.SelectedValue = scenariosToLoad.FirstOrDefault(scenario => scenario.DefaultScenario).Id.GetValueOrDefault();
         }
 
 		public override string HelpId
