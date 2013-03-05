@@ -112,11 +112,12 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			var message = data.Errors.join('</br>');
 			addExtendedPreferenceFormViewModel.ValidationError(message);
 		};
-		preference.TemplateName = preference.SelectedTemplate.Text;
+		if (preference.SelectedTemplate)
+			preference.TemplateName = preference.SelectedTemplate.Text;
 		delete preference.AvailableTemplates;
 		delete preference.SelectedTemplate;
 		delete preference.NewTemplateName;
-		
+
 		$('#Preference-body-inner .ui-selected')
 			.each(function (index, cell) {
 				var date = $(cell).data('mytime-date');
