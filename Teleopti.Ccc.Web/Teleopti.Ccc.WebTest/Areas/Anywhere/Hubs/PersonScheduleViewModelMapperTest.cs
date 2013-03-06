@@ -7,6 +7,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
@@ -72,6 +73,40 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var result = target.Map(new PersonScheduleData { Date = DateTime.Today, Person = person });
 
 			result.Site.Should().Be("Moon");
+		}
+
+		[Test]
+		public void ShouldMapAbsences()
+		{
+			var target = new PersonScheduleViewModelMapper();
+			var absences = new[] {new Absence(), new Absence()};
+
+			var result = target.Map(new PersonScheduleData { Absences = absences });
+
+			result.Absences.Should().Have.Count.EqualTo(2);
+		}
+
+		[Test]
+		public void ShouldMapAbsenceName()
+		{
+			var target = new PersonScheduleViewModelMapper();
+			var absences = new[] { new Absence { Description = new Description("A Name") } };
+
+			var result = target.Map(new PersonScheduleData { Absences = absences });
+
+			result.Absences.Single().Name.Should().Be("A Name");
+		}
+
+		[Test]
+		public void ShouldMapAbsenceId()
+		{
+			var target = new PersonScheduleViewModelMapper();
+			var absence = new Absence { Description = new Description(" ") };
+			absence.SetId(Guid.NewGuid());
+
+			var result = target.Map(new PersonScheduleData {Absences = new[] {absence}});
+
+			result.Absences.Single().Id.Should().Be(absence.Id.Value.ToString());
 		}
 
 		private dynamic MakeLayer(string Color = "", DateTime? Start = null, int Minutes = 0)

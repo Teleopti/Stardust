@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using AutoMapper;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
@@ -20,6 +21,8 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 						return s.Shift.Projection as IEnumerable<dynamic>;
 					}))
 				;
+
+			CreateMap<Absence, PersonScheduleViewModelAbsence>();
 
 			CreateMap<dynamic, PersonScheduleViewModelLayer>()
 				.ForMember(x => x.Color, o => o.MapFrom(s => s.Color))
