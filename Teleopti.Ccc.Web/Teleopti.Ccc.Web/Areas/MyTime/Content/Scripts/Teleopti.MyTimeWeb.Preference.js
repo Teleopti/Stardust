@@ -191,7 +191,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 						$('#Preference-extended-reset')
 							.button()
 							.click(function () {
-								addExtendedPreferenceFormViewModel.reset();
+								_reset();
 							});
 						$('#Preference-extended-apply')
 							.button()
@@ -222,6 +222,23 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 
 		button.removeAttr('disabled');
 	}
+
+	function _reset() {
+		addExtendedPreferenceFormViewModel.PreferenceId('');
+		addExtendedPreferenceFormViewModel.EarliestStartTime(undefined);
+		addExtendedPreferenceFormViewModel.LatestStartTime(undefined);
+		addExtendedPreferenceFormViewModel.EarliestEndTime(undefined);
+		addExtendedPreferenceFormViewModel.EarliestEndTimeNextDay(undefined);
+		addExtendedPreferenceFormViewModel.LatestEndTime(undefined);
+		addExtendedPreferenceFormViewModel.LatestEndTimeNextDay(undefined);
+		addExtendedPreferenceFormViewModel.MinimumWorkTime(undefined);
+		addExtendedPreferenceFormViewModel.MaximumWorkTime(undefined);
+		addExtendedPreferenceFormViewModel.ActivityPreferenceId('');
+		addExtendedPreferenceFormViewModel.ValidationError(undefined);
+		addExtendedPreferenceFormViewModel.SelectedTemplate(undefined);
+		$("#Preference-template")
+			.selectbox({ value: '' });
+	};
 
 	function _loadAvailableTemplates() {
 		ajax.Ajax({

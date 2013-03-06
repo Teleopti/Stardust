@@ -91,20 +91,4 @@ Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (aja
 	});
 
 	this.ValidationError = ko.observable();
-
-	this.reset = function () {
-		self.PreferenceId('');
-		self.EarliestStartTime(undefined);
-		self.LatestStartTime(undefined);
-		self.EarliestEndTime(undefined);
-		self.EarliestEndTimeNextDay(undefined);
-		self.LatestEndTime(undefined);
-		self.LatestEndTimeNextDay(undefined);
-		self.MinimumWorkTime(undefined);
-		self.MaximumWorkTime(undefined);
-		self.ActivityPreferenceId('');
-		self.ValidationError(undefined);
-		self.SelectedTemplate(undefined);
-	};
-
 };
