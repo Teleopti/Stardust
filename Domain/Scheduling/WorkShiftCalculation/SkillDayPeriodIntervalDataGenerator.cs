@@ -50,11 +50,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 			
 			var minimumResolution = _resolutionProvider.MinimumResolution(skills);
 			var activityData = new Dictionary<IActivity, IDictionary<DateOnly, IList<ISkillIntervalData>>>();
-
 			foreach (var skillDay in skillDays)
 			{
 				var currentDate = skillDay.CurrentDate;
 				var skill = skillDay.Skill;
+				if (!skills.Contains(skill)) continue;
 				var activity = skill.Activity;
 				if (skillDay.SkillStaffPeriodCollection.Count == 0) continue;
 				var mappedData = _skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(skillDay.SkillStaffPeriodCollection);
