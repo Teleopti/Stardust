@@ -21,9 +21,10 @@
 		<AggDB>$(DBNamePrefix)_agg</AggDB>
 		<AppSqlLogin>EtlNightlyUser</AppSqlLogin>
 		<AppSqlPwd>EtlNightlyPwd2</AppSqlPwd>
-		<DBManagerTeleoptiCCC7Args>-S$(COMPUTERNAME) -D$(CCC7DB) -OTeleoptiCCC7 -T -E -R -L$(AppSqlLogin):$(AppSqlPwd)</DBManagerTeleoptiCCC7Args>
-		<DBManagerTeleoptiCCCAggArgs>-S$(COMPUTERNAME) -D$(AggDB) -OTeleoptiCCCAgg -T -E -R -L$(AppSqlLogin):$(AppSqlPwd)</DBManagerTeleoptiCCCAggArgs>
-		<DBManagerTeleoptiAnalyticsArgs>-S$(COMPUTERNAME) -D$(AnalyticsDB) -OTeleoptiAnalytics -T -E -R -L$(AppSqlLogin):$(AppSqlPwd)</DBManagerTeleoptiAnalyticsArgs>
+		<DatabasePath>"$(CCNetWorkingDirectory)\database"</DatabasePath>		
+		<DBManagerTeleoptiCCC7Args>-S$(COMPUTERNAME) -D$(CCC7DB) -OTeleoptiCCC7 -T -E -R -L$(AppSqlLogin):$(AppSqlPwd) -F$(DatabasePath)</DBManagerTeleoptiCCC7Args>
+		<DBManagerTeleoptiCCCAggArgs>-S$(COMPUTERNAME) -D$(AggDB) -OTeleoptiCCCAgg -T -E -R -L$(AppSqlLogin):$(AppSqlPwd) -F$(DatabasePath)</DBManagerTeleoptiCCCAggArgs>
+		<DBManagerTeleoptiAnalyticsArgs>-S$(COMPUTERNAME) -D$(AnalyticsDB) -OTeleoptiAnalytics -T -E -R -L$(AppSqlLogin):$(AppSqlPwd) -F$(DatabasePath)</DBManagerTeleoptiAnalyticsArgs>
 		<LoadDimensionSQL>"$(CCNetWorkingDirectory)\Database\Create\AggIntoAnalytics\LoadDimension.sql"</LoadDimensionSQL>
 		<moveDataSQL>"$(CCNetWorkingDirectory)\Database\Create\AggIntoAnalytics\MoveData.sql"</moveDataSQL>
 		<BakDir>\\hebe\Installation\Dependencies\ccc7_server\DemoDatabase</BakDir>
@@ -33,9 +34,10 @@
 
 	<Import Project="$(CCNetWorkingDirectory)\ccnet\raptor2.proj"/>
 
-		<Target Name="Run" DependsOnTargets="AzureDeploy;Compile;PrepareDB;RunETL">
+	<Target Name="Run" DependsOnTargets="ETLCompile;AzureDeploy;PrepareDB;RunETL">
 		<Message Text="All target executed!" Importance="high" />
 	</Target>
+	
 	<Target Name="RunETL">
 		<Message Text="Testing ETL service ..." Importance="high" />
 
@@ -111,9 +113,9 @@
 		<Exec Command ="$(SQLCmdConn) -dmaster -i$(ETLNightlyBuildSql) -v BakDir=$(BakDir) -v TeleoptiCCC7=$(CCC7DB) -v TeleoptiCCCAgg=$(AggDB) -v TeleoptiAnalytics=$(AnalyticsDB)"/>
 
 		<Message Text="Patching 3 x databases..." Importance="high" />
-		<Exec Command ="%22$(DBManagerExe)%22 $(DBManagerTeleoptiAnalyticsArgs)"/>
-		<Exec Command ="%22$(DBManagerExe)%22 $(DBManagerTeleoptiCCC7Args)"/>
-		<Exec Command ="%22$(DBManagerExe)%22 $(DBManagerTeleoptiCCCAggArgs)"/>
+		<Exec Command ="%22@(DBManagerExe)%22 $(DBManagerTeleoptiAnalyticsArgs)"/>
+		<Exec Command ="%22@(DBManagerExe)%22 $(DBManagerTeleoptiCCC7Args)"/>
+		<Exec Command ="%22@(DBManagerExe)%22 $(DBManagerTeleoptiCCCAggArgs)"/>
 		
 		<Message Text="Applying data update via Teleopti.Support.Security.exe ..." Importance="high" />
 		<Message Text="%22$(CCNetWorkingDirectory)\Teleopti.Support.Security\bin\$(Configuration)\Teleopti.Support.Security.exe%22  -DS$(COMPUTERNAME) -DD$(CCC7DB) -EE" Importance="high" />
@@ -139,6 +141,23 @@
 
 		<Message Text="make log object internal" Importance="high" />
 		<Exec Command ="$(SQLCmdConn) -d$(AnalyticsDB) -Q%22update [mart].[sys_datasource] set internal=1 where [log_object_id]=$(LogObjectId)%22"/>
+	</Target>
+	
+	<Target Name="ETLCompile">
+
+		<Message Importance="high" Text="ETLCompile starting ... " />
+		
+		<MSBuild Projects="$(CCNetWorkingDirectory)\Teleopti.Analytics\Teleopti.Analytics.Etl.ServiceHost\Teleopti.Analytics.Etl.ServiceHost.csproj"
+				Properties="Configuration=$(Configuration);Platform=AnyCPU"
+				Targets="Build">
+		</MSBuild>
+		
+		<MSBuild Projects="$(CCNetWorkingDirectory)\Teleopti.Support.Security\Teleopti.Support.Security.csproj"
+				Properties="Configuration=$(Configuration);Platform=AnyCPU"
+				Targets="Build">
+		</MSBuild>
+		
+		<Message Importance="high" Text="ETLCompile finished!" />
 	</Target>
 	
 </Project>
