@@ -7,13 +7,13 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.Domain.Scheduling
 {
 
-    public interface IAdvanceSchedulingService
+    public interface ITeamBlockSchedulingService
     {
 		event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
-		bool Execute3(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, TeamSteadyStateHolder teamSteadyStateHolder);
+		bool ScheduleSelected(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, TeamSteadyStateHolder teamSteadyStateHolder);
     }
 
-    public class AdvanceSchedulingService : IAdvanceSchedulingService
+    public class TeamBlockSchedulingService : ITeamBlockSchedulingService
     {
 	    private readonly ITeamInfoFactory _teamInfoFactory;
 	    private readonly ITeamBlockInfoFactory _teamBlockInfoFactory;
@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
         private readonly ISchedulingOptions _schedulingOptions;
 	    private bool _cancelMe;
 
-	    public AdvanceSchedulingService
+	    public TeamBlockSchedulingService
 		    (
 		    ISchedulingOptions schedulingOptions,
 		    ITeamInfoFactory teamInfoFactory,
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 	    public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
-	    public bool Execute3(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, TeamSteadyStateHolder teamSteadyStateHolder)
+	    public bool ScheduleSelected(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, TeamSteadyStateHolder teamSteadyStateHolder)
 	    {
 			_teamBlockScheduler.DayScheduled += dayScheduled;
 		    foreach (var datePointer in selectedPeriod.DayCollection())

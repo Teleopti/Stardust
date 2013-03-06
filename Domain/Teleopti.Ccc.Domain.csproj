@@ -417,7 +417,7 @@
     <Compile Include="ResourceCalculation\RuleSetDeletedShiftCategoryChecker.cs" />
     <Compile Include="ResourceCalculation\SwapAndModifyServiceNew.cs" />
     <Compile Include="ResourceCalculation\SwapServiceNew.cs" />
-    <Compile Include="Scheduling\AdvanceSchedulingService.cs" />
+    <Compile Include="Scheduling\TeamBlockSchedulingService.cs" />
     <Compile Include="Scheduling\AffectsSameDayAndPersonSpecification.cs" />
     <Compile Include="Scheduling\Assignment\DeleteAndResourceCalculateService.cs" />
     <Compile Include="Scheduling\Assignment\IValidateScheduleRange.cs" />

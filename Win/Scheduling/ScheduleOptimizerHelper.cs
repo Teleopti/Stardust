@@ -1033,7 +1033,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
         #region Advance Block Scheduling
 
-	    private AdvanceSchedulingService callAdvanceSchedulingService(ISchedulingOptions schedulingOptions,
+	    private TeamBlockSchedulingService callAdvanceSchedulingService(ISchedulingOptions schedulingOptions,
 	                                                                  IGroupPersonBuilderForOptimization
 		                                                                  groupPersonBuilderForOptimization)
 	    {
@@ -1055,7 +1055,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			                           _container.Resolve<IWorkShiftSelector>());
 
 		    var advanceSchedulingService =
-			    new AdvanceSchedulingService(schedulingOptions,
+			    new TeamBlockSchedulingService(schedulingOptions,
 			                                 teamInfoFactory, 
 											 _container.Resolve<ITeamBlockInfoFactory>(),
 											 teamBlockScheduler);
@@ -1114,7 +1114,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 IDictionary<string, IWorkShiftFinderResult> schedulingResults = new Dictionary<string, IWorkShiftFinderResult>();
 
                 advanceSchedulingService.DayScheduled += schedulingServiceDayScheduled;
-                advanceSchedulingService.Execute3(allPersonMatrixList, allPersonMatrixList[0].SelectedPeriod,
+                advanceSchedulingService.ScheduleSelected(allPersonMatrixList, allPersonMatrixList[0].SelectedPeriod,
                                                   selectedPersonMatrixList.Select(x => x.Person).ToList(),
                                                   teamSteadyStateHolder);
 				advanceSchedulingService.DayScheduled -= schedulingServiceDayScheduled;
