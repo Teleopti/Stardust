@@ -35,6 +35,11 @@ _ReSharper*/
 TeleOpti.Messaging.Bin/
 *.jtconfig
 
+# VS 2012 on old branches
+Backup/
+_UpgradeReport_Files/
+UpgradeLog*.*
+
 # teleopti things
 *.orig
 *.rej
