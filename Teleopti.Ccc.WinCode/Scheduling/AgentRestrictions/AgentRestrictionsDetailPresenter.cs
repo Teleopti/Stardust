@@ -105,21 +105,33 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AgentRestrictions
 			var weekNumber = 0;
 
 			var weekMax = new TimeSpan(0);
-			for (int index = ((rowIndex - 1) * 7); index < stop; index++)
+			var startIndex = (rowIndex - 1) * 7;
+			for (int index = startIndex; index < stop; index++)
 			{
 				if (index >= _model.DetailData().Count)break;
 				_model.DetailData().TryGetValue(index, out preferenceCellData);
 
-				if (preferenceCellData.EffectiveRestriction != null)
+				// added as a bugfix for 22545 (In Restriction View, the weekly minimum and maximum values are not calculated correct)
+				var projection = preferenceCellData.SchedulePart.ProjectionService().CreateProjection();
+				if (preferenceCellData.SchedulingOption.UseScheduling &&
+					projection.HasLayers)
 				{
-					if (preferenceCellData.EffectiveRestriction.WorkTimeLimitation.HasValue())
-					{
-						if (preferenceCellData.EffectiveRestriction.WorkTimeLimitation.StartTime.HasValue)
-							minTime = minTime.Add(preferenceCellData.EffectiveRestriction.WorkTimeLimitation.StartTime.Value);
-						if (preferenceCellData.EffectiveRestriction.WorkTimeLimitation.EndTime.HasValue)
-							maxTime = maxTime.Add(preferenceCellData.EffectiveRestriction.WorkTimeLimitation.EndTime.Value);
-					}
+					var contractTime = projection.ContractTime();
+					minTime = minTime.Add(contractTime);
+					maxTime = maxTime.Add(contractTime);
 				}
+				// end bugfix
+				else
+					if (preferenceCellData.EffectiveRestriction != null)
+					{
+						if (preferenceCellData.EffectiveRestriction.WorkTimeLimitation.HasValue())
+						{
+							if (preferenceCellData.EffectiveRestriction.WorkTimeLimitation.StartTime.HasValue)
+								minTime = minTime.Add(preferenceCellData.EffectiveRestriction.WorkTimeLimitation.StartTime.Value);
+							if (preferenceCellData.EffectiveRestriction.WorkTimeLimitation.EndTime.HasValue)
+								maxTime = maxTime.Add(preferenceCellData.EffectiveRestriction.WorkTimeLimitation.EndTime.Value);
+						}
+					}
 
 				weekMax = preferenceCellData.WeeklyMax;
 				weekNumber = myCal.GetWeekOfYear(preferenceCellData.TheDate, myCwr, myFirstDow);
