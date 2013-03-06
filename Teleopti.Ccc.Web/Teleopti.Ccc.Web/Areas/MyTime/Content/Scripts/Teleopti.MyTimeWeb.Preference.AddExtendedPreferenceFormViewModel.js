@@ -38,8 +38,33 @@ Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (aja
 		return result != undefined && result != '';
 	});
 
+	_initPreferenceString();
+
+	function _initPreferenceString() {
+		self.PreferenceString = ko.computed(function () {
+			var str = self.PreferenceId() + self.EarliestStartTime() + self.LatestStartTime() + self.EarliestEndTime() +
+				self.EarliestEndTimeNextDay() + self.LatestEndTime() + self.LatestEndTimeNextDay() + self.MinimumWorkTime() +
+				self.MaximumWorkTime() + self.ActivityEarliestStartTime() + self.ActivityLatestStartTime() + self.ActivityEarliestEndTime() +
+				self.ActivityLatestEndTime() + self.ActivityPreferenceId() + self.ActivityMinimumTime() + self.ActivityMaximumTime();
+			return str;
+		});
+
+		self.PreferenceString.subscribe(function (newValue) {
+			if (self.SelectedTemplate()) {
+				self.SelectedTemplate(undefined);
+				$("#Preference-template")
+					.selectbox({ value: '' });
+			}
+		});
+	}
+
+	function _disposePreferenceString() {
+		self.PreferenceString.dispose();
+	}
+
 	this.SelectedTemplate.subscribe(function (newValue) {
 		if (newValue) {
+			_disposePreferenceString();
 			if (!newValue.PreferenceId)
 				self.PreferenceId('');
 			else
@@ -62,6 +87,8 @@ Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (aja
 			self.ActivityLatestEndTime(newValue.ActivityLatestEndTime);
 			self.ActivityMinimumTime(newValue.ActivityMinimumTime);
 			self.ActivityMaximumTime(newValue.ActivityMaximumTime);
+
+			_initPreferenceString();
 		}
 	});
 
