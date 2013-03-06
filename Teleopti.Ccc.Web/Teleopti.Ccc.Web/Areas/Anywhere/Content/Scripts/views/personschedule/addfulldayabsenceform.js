@@ -20,6 +20,8 @@ define([
             this.SetData = function (data) {
                 self.StartDate(data.Date);
                 self.EndDate(data.Date);
+
+                self.AbsenceTypes(data.Absences);
             };
 
             this.StartDateFormatted = ko.computed(function () {
@@ -29,16 +31,7 @@ define([
                 return value;
             });
 
-            this.AbsenceTypes = ko.observableArray([
-                {
-                    Id: 1,
-                    Name: "Holiday"
-                },
-                {
-                    Id: 2,
-                    Name: "Ill"
-                }
-            ]);
+            this.AbsenceTypes = ko.observableArray();
 
         };
     });

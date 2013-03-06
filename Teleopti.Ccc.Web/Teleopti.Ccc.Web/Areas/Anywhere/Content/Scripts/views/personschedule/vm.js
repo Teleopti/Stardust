@@ -38,6 +38,8 @@ define([
 			this.AddingFullDayAbsence = ko.observable(false);
 		    
 			this.SetData = function (data) {
+			    data.Date = self.Date();
+
 				self.Name(data.Name);
 				self.Site(data.Site);
 				self.Team(data.Team);
@@ -49,7 +51,7 @@ define([
 				});
 				self.Layers.push.apply(self.Layers, layers);
 
-				self.AddFullDayAbsenceForm.SetData({ Date: self.Date() });
+				self.AddFullDayAbsenceForm.SetData(data);
 			};
 		    
 			this.AddFullDayAbsence = function () {

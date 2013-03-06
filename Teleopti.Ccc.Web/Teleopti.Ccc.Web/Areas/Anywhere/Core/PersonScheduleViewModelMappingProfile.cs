@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 					}))
 				;
 
-			CreateMap<Absence, PersonScheduleViewModelAbsence>();
+			CreateMap<IAbsence, PersonScheduleViewModelAbsence>();
 
 			CreateMap<dynamic, PersonScheduleViewModelLayer>()
 				.ForMember(x => x.Color, o => o.MapFrom(s => s.Color))
