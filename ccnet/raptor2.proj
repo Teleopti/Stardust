@@ -16,12 +16,6 @@
 		<NCoverAssemblies>Teleopti.Ccc.Web;Teleopti.Analytics.Etl.Transformer;Teleopti.Ccc.Domain;Teleopti.Ccc.WinCode;Teleopti.Interfaces;Teleopti.Ccc.Sdk.Logic;Teleopti.Ccc.PayRoll;Teleopti.Ccc.PayRollFormatter;Teleopti.Ccc.Obfuscated;Teleopti.Ccc.DayOffPlanning;Teleopti.Ccc.IocCommon;Teleopti.Ccc.Infrastructure;Teleopti.Ccc.DataBaseConverter</NCoverAssemblies>
 		<DoCodeAnalysis>true</DoCodeAnalysis>
 
-		<UseDBManager>nottrueorfalse</UseDBManager>
-		<!-- this will actually make the script not create a database in any way.
-		tests now create they own database using dbmanager logic.
-		experimental. if we decide to do this, we can remove all this stuff from this script.
-		-->
-		
 		<RunWebBehaviorTests>true</RunWebBehaviorTests>
 		<RunWebBehaviorTests Condition="'$(CCNetProject)' == 'PBI20828'">true</RunWebBehaviorTests>
 		
@@ -237,42 +231,8 @@
 		<OnError ExecuteTargets="MessageErrorHandler"/>
 	</Target>
 
-	<Target Name="CreateTrunkDb" Condition="'$(UseDBManager)' == 'true'" DependsOnTargets="BuildDBManager">
-		<Message Importance="high" Text="Dropping database" />
-		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="ExecuteRawReader" Sql="IF EXISTS (select name from sys.databases where name = '$(DBNamePrefix)_ccc7') BEGIN ALTER DATABASE [$(DBNamePrefix)_ccc7] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;DROP DATABASE [$(DBNamePrefix)_ccc7] END" ConnectionString="Data Source=$(DBServer);Initial Catalog=master;Integrated Security=True"/>
-		<Message Importance="high" Text="Dropping database finished" />
-
-		<Message Importance="high" Text="Creating CCC 7 db ..."/>
-		<PropertyGroup>
-			<CreateDBCommand>"@(DBManagerExe)" -S$(DBServer) -E -C -T -Lnightly:nightly -A -F$(DatabasePath)</CreateDBCommand>
-		</PropertyGroup>
-
-		<Exec Command="$(CreateDBCommand) -D$(DBNamePrefix)_ccc7 -OTeleoptiCCC7" ContinueOnError="false">
-			<Output TaskParameter="ExitCode" PropertyName="ErrorCode"/>
-		</Exec>
-		<Message Text="The exit code is $(ErrorCode)"/>
-		<Error Text="Error while executing: $(CreateDBCommand) -D$(DBNamePrefix)_ccc7 -OTeleoptiCCC7" Condition="'$(ErrorCode)' != '0'" />
-
-		<Message Importance="high" Text="Creation of CCC 7 db finished." />
-
-		<Message Importance="high" Text="Check Naming Standard ..."/>
-		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="Execute" Files="@(SQLFiles)" ConnectionString="Data Source=$(DBServer);Initial Catalog=$(DBNamePrefix)_ccc7;Integrated Security=True"/>
-		<Message Importance="high" Text="Check Naming Standard. Finished"/>
-
-		<OnError ExecuteTargets="MessageErrorHandler"/>
-	</Target>
-
 	<Target Name="MessageErrorHandler" DependsOnTargets="BuildDBManager">
 		<Message Text="An error has occurred while executing database scripts. Please review DBManager logfile: @(DBManagerExe)"/>
-	</Target>
-
-	<Target Name="CreateNHibDb" Condition="'$(UseDBManager)' == 'false'">
-		<Message Importance="high" Text="Dropping database" />
-		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="ExecuteRawReader" Sql="IF EXISTS (select name from sys.databases where name = '$(DBNamePrefix)_ccc7') BEGIN ALTER DATABASE [$(DBNamePrefix)_ccc7] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;DROP DATABASE [$(DBNamePrefix)_ccc7] END" ConnectionString="Data Source=$(DBServer);Initial Catalog=master;Integrated Security=True"/>
-		<Message Importance="high" Text="Dropping database finished" />
-
-		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="ExecuteRawReader" Sql="CREATE DATABASE [$(DBNamePrefix)_ccc7]" ConnectionString="Data Source=$(DBServer);Initial Catalog=master;Integrated Security=True"/>
-
 	</Target>
 
 	<Target Name="FixConfigFiles">
@@ -299,11 +259,6 @@
 									  Encoding="windows-1252"
 									  Regex="_DBNamePrefix_"
 									  ReplacementText="$(DBNamePrefix)"/>
-		<FileUpdate Files="$(CCNetWorkingDirectory)\ccnet\infratest.ini"
-									Encoding="windows-1252"
-									Regex="create=.true."
-									ReplacementText="create='false'"
-									Condition="'$(UseDBManager)' == 'true'"/>
 		<FileUpdate Files="$(CCNetWorkingDirectory)\ccnet\infratest.ini"
 									Encoding="windows-1252"
 									Regex="_url_"
