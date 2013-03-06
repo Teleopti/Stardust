@@ -41,6 +41,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 			{
 				PersonRequest.Pending();				
 			}
+		
 			PersonRequest.TrySetMessage(message);
 			PersonRequest.Request = shiftTradeRequest;
 

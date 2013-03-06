@@ -448,7 +448,7 @@ Scenario: Show information that we dont show schedules in a new shifttrade
 	Given I have the role 'Full access to mytime'
 	And I have created a shift trade request
 	| Field		| Value		|
-	| New		| True		|
+	| IsNew		| True		|
 	And I am viewing requests
 	When I click on the request
 	Then I should see details with message that tells the user that the status of the shifttrade is new
