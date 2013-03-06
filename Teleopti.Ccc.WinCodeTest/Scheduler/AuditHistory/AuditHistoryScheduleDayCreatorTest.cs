@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AuditHistory
 														 new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
             _currentScheduleDay.Add(_abs);
 
-			_ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_parameters.Scenario, _parameters.Person,
+			_ass1	 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_parameters.Scenario, _parameters.Person,
 																	  _parameters.Period);
 			_ass2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(_parameters.Scenario, _parameters.Person,
 																				  _parameters.Period);
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AuditHistory
             _currentScheduleDay.Add(_pDayOff);
 
             _newData = new List<IPersistableScheduleData>();
-            _newData.Add(PersonAssignmentFactory.CreatePersonAssignment(_person, _scenario));
+            _newData.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_parameters.Scenario, _parameters.Person,_parameters.Period));	
             _newData.Add(PersonAbsenceFactory.CreatePersonAbsence(_person, _scenario, _parameters.Period));
             _newData.Add(PersonDayOffFactory.CreatePersonDayOff(_person, _scenario, new DateOnly(2000, 1, 1), new DayOffTemplate(new Description("Hej"))));
         }
@@ -189,5 +189,15 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AuditHistory
 
             Assert.AreEqual(1, result.PersonDayOffCollection().Count);
         }
+
+		[Test]
+		public void ShouldSkipDataStartingOutsideCurrentDay()
+		{
+			_newData.Clear();
+			_newData.Add(PersonAssignmentFactory.CreateAssignmentWithMainShift(_parameters.Scenario, _parameters.Person, _parameters.Period.ChangeStartTime(TimeSpan.FromDays(-1))));
+
+			var result = _target.Create(_currentScheduleDay, _newData);
+			Assert.AreEqual(0, result.PersonAssignmentCollection().Count);
+		}	
     }
 }
