@@ -11,7 +11,6 @@
 		<AgentPortalWebSitePath>C:\inetpub\wwwroot\$(AgentPortalWebSiteName)</AgentPortalWebSitePath>
 		<AgentPortalWebURL>http://$(Computername)/$(AgentPortalWebSiteName)/</AgentPortalWebURL>
 		<AgentPortalWebCreator>"$(CCNetWorkingDirectory)\ccnet\SetupTestWeb\AgentPortalWeb.bat"</AgentPortalWebCreator>
-		<DbManagerExe>$(CCNetWorkingDirectory)\Database\DBManager.exe</DbManagerExe>
 		<NugetPackages>$(CCNetWorkingDirectory)\packages</NugetPackages>
 		<DBServer>$(Computername)</DBServer>
 		<NCoverAssemblies>Teleopti.Ccc.Web;Teleopti.Analytics.Etl.Transformer;Teleopti.Ccc.Domain;Teleopti.Ccc.WinCode;Teleopti.Interfaces;Teleopti.Ccc.Sdk.Logic;Teleopti.Ccc.PayRoll;Teleopti.Ccc.PayRollFormatter;Teleopti.Ccc.Obfuscated;Teleopti.Ccc.DayOffPlanning;Teleopti.Ccc.IocCommon;Teleopti.Ccc.Infrastructure;Teleopti.Ccc.DataBaseConverter</NCoverAssemblies>
@@ -40,6 +39,7 @@
 		<AzureDbPwd>V3rrYH@Passw0rd!</AzureDbPwd>
 		<AzureMasterConn>SQLCMD -Stcp:$(AzureServer) -U$(AzureMasterLogin) -P$(AzureMasterPwd) -dmaster</AzureMasterConn>
 		<DBManagerAzure>-S$(AzureServer) -U$(AzureMasterLogin) -P$(AzureMasterPwd) -T -C -L$(AzureDbLogin):$(AzureDbPwd)</DBManagerAzure>
+		<DatabasePath>"$(CCNetWorkingDirectory)\database"</DatabasePath>
 	</PropertyGroup>
 
 	<Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets"/>
@@ -148,16 +148,29 @@
 		<Exec Command ="$(AzureMasterConn) -Q&quot;DROP DATABASE [$(DBNamePrefix)_ccc7]&quot;"/>
 	</Target>
 	
-	<Target Name="AzureCreateDatabase">
+	<Target Name="BuildDBManager">
+		<Message Importance="high" Text="Compile of Db Manager starting..." />
+
+		<MSBuild Projects="$(CCNetWorkingDirectory)\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.csproj"
+				Properties="Configuration=$(Configuration);Platform=AnyCPU"
+				Targets="Build">
+			<Output ItemName="DbManagerExe" TaskParameter="TargetOutputs"/>
+		</MSBuild>
+		
+		<Message Importance="high" Text="Compile of Db Manager starting..." />
+		<Message Text="DbManagerOutput:   @(DbManagerExe)" />
+	</Target>
+	
+	<Target Name="AzureCreateDatabase" DependsOnTargets="BuildDBManager">
 		<Message Text="Create Azure database ..." Importance="high" />
 
-		<Message Text="%22$(DBManagerExe)%22 $(DBManagerAzure) -D$(DBNamePrefix)_analytics -OTeleoptiAnalytics" Importance="high" />
-		<Exec Command ="%22$(DBManagerExe)%22 $(DBManagerAzure) -D$(DBNamePrefix)_analytics -OTeleoptiAnalytics" ContinueOnError="false">
+		<Message Text="%22@(DBManagerExe)%22 $(DBManagerAzure) -D$(DBNamePrefix)_analytics -OTeleoptiAnalytics -F$(DatabasePath)" Importance="high" />
+		<Exec Command ="%22@(DBManagerExe)%22 $(DBManagerAzure) -D$(DBNamePrefix)_analytics -OTeleoptiAnalytics -F$(DatabasePath)" ContinueOnError="false">
 			<Output TaskParameter="ExitCode" PropertyName="ErrorCode"/>
 		</Exec>
 		
-		<Message Text ="%22$(DBManagerExe)%22 $(DBManagerAzure) -D$(DBNamePrefix)_ccc7 -OTeleoptiCCC7" Importance="high" />
-		<Exec Command ="%22$(DBManagerExe)%22 $(DBManagerAzure) -D$(DBNamePrefix)_ccc7 -OTeleoptiCCC7" ContinueOnError="false">
+		<Message Text ="%22@(DBManagerExe)%22 $(DBManagerAzure) -D$(DBNamePrefix)_ccc7 -OTeleoptiCCC7 -F$(DatabasePath)" Importance="high" />
+		<Exec Command ="%22@(DBManagerExe)%22 $(DBManagerAzure) -D$(DBNamePrefix)_ccc7 -OTeleoptiCCC7 -F$(DatabasePath)" ContinueOnError="false">
 			<Output TaskParameter="ExitCode" PropertyName="ErrorCode"/>
 		</Exec>
 
@@ -183,7 +196,7 @@
 		<Exec Command = "$(AgentPortalWebCreator) $(AgentPortalWebSiteName) $(DBNamePrefix)_ccc7 $(DBNamePrefix)_analytics"/>
 	</Target>
 
-	<Target Name="CreateAnalyticsDb">
+	<Target Name="CreateAnalyticsDb" DependsOnTargets="BuildDBManager">
 		<Message Importance="high" Text="Dropping Analytics DB on local instance" />
 		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="ExecuteRawReader" Sql="IF EXISTS (select name from sys.databases where name = '$(DBNamePrefix)_agg') BEGIN ALTER DATABASE [$(DBNamePrefix)_agg] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;DROP DATABASE [$(DBNamePrefix)_agg] END" ConnectionString="Data Source=$(DBServer);Initial Catalog=master;Integrated Security=True"/>
 		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="ExecuteRawReader" Sql="IF EXISTS (select name from sys.databases where name = '$(DBNamePrefix)_analytics') BEGIN ALTER DATABASE [$(DBNamePrefix)_analytics] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;DROP DATABASE [$(DBNamePrefix)_analytics] END" ConnectionString="Data Source=$(DBServer);Initial Catalog=master;Integrated Security=True"/>
@@ -191,7 +204,7 @@
 
 		<Message Importance="high" Text="Creating Analytics ..."/>
 		<PropertyGroup>
-			<CreateDBCommand>"$(DbManagerExe)" -S$(DBServer) -E -C -T -Lnightly:nightly -A</CreateDBCommand>
+			<CreateDBCommand>"@(DBManagerExe)" -S$(DBServer) -E -C -T -Lnightly:nightly -A -F$(DatabasePath)</CreateDBCommand>
 		</PropertyGroup>
 
 		<Exec Command="$(CreateDBCommand) -D$(DBNamePrefix)_agg -OTeleoptiCCCAgg" ContinueOnError="false">
@@ -224,14 +237,14 @@
 		<OnError ExecuteTargets="MessageErrorHandler"/>
 	</Target>
 
-	<Target Name="CreateTrunkDb" Condition="'$(UseDBManager)' == 'true'">
+	<Target Name="CreateTrunkDb" Condition="'$(UseDBManager)' == 'true'" DependsOnTargets="BuildDBManager">
 		<Message Importance="high" Text="Dropping database" />
 		<MSBuild.ExtensionPack.SqlServer.SqlExecute TaskAction="ExecuteRawReader" Sql="IF EXISTS (select name from sys.databases where name = '$(DBNamePrefix)_ccc7') BEGIN ALTER DATABASE [$(DBNamePrefix)_ccc7] SET SINGLE_USER WITH ROLLBACK IMMEDIATE;DROP DATABASE [$(DBNamePrefix)_ccc7] END" ConnectionString="Data Source=$(DBServer);Initial Catalog=master;Integrated Security=True"/>
 		<Message Importance="high" Text="Dropping database finished" />
 
 		<Message Importance="high" Text="Creating CCC 7 db ..."/>
 		<PropertyGroup>
-			<CreateDBCommand>"$(DbManagerExe)" -S$(DBServer) -E -C -T -Lnightly:nightly -A</CreateDBCommand>
+			<CreateDBCommand>"@(DBManagerExe)" -S$(DBServer) -E -C -T -Lnightly:nightly -A -F$(DatabasePath)</CreateDBCommand>
 		</PropertyGroup>
 
 		<Exec Command="$(CreateDBCommand) -D$(DBNamePrefix)_ccc7 -OTeleoptiCCC7" ContinueOnError="false">
@@ -249,8 +262,8 @@
 		<OnError ExecuteTargets="MessageErrorHandler"/>
 	</Target>
 
-	<Target Name="MessageErrorHandler">
-		<Message Text="An error has occurred while executing database scripts. Please review DBManager logfile: $(DbManagerExe)"/>
+	<Target Name="MessageErrorHandler" DependsOnTargets="BuildDBManager">
+		<Message Text="An error has occurred while executing database scripts. Please review DBManager logfile: @(DBManagerExe)"/>
 	</Target>
 
 	<Target Name="CreateNHibDb" Condition="'$(UseDBManager)' == 'false'">

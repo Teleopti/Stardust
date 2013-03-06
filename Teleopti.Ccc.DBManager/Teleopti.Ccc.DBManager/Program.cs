@@ -58,9 +58,6 @@ namespace Teleopti.Ccc.DBManager
                 if (args.Length > 0 && args.Length < 20)
                 {
                     _commandLineArgument = new CommandLineArgument(args);
-#if DEBUG
-					logWrite("DBManager is running in DEBUG Mode...");
-#endif
 					_databaseFolder = new DatabaseFolder(new DbManagerFolder(_commandLineArgument.PathToDbManager));
 					_schemaVersionInformation = new SchemaVersionInformation(_databaseFolder);
                     logWrite("Running from:" + _databaseFolder.Path());
