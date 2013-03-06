@@ -183,9 +183,9 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 						$('.collapse-sign a').click(function () {
 							$(this).parent().next('.collapsable').toggle();
 						}).toggle(function () {
-							$(this).text("[+]");
+							$(this).text("+");
 						}, function () {
-							$(this).text("[-]");
+							$(this).text("-");
 						});
 
 						$('#Preference-extended-reset')

@@ -157,10 +157,10 @@
 
 .collapse-sign a {
 	text-decoration: none;
-	min-width: 15px;
-	color: grey;
+	min-width: 8px;
+	color: black;
 	display: inline-block;
-	margin-left: 5px;
+	text-align: center;
 }
 #Template-name-section {
 	padding-bottom: 0;
