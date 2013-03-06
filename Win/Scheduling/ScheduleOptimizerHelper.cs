@@ -1047,7 +1047,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		    var teamScheduling = new TeamScheduling(resourceCalculateDelayer, schedulePartModifyAndRollbackService);
 
 
-		    ITeamInfoCreator teamInfoCreator = new TeamInfoCreator(groupPersonBuilderForOptimization);
+		    ITeamInfoFactory teamInfoFactory = new TeamInfoFactory(groupPersonBuilderForOptimization);
 		    ITeamBlockScheduler teamBlockScheduler =
 			    new TeamBlockScheduler(_container.Resolve<ISkillDayPeriodIntervalDataGenerator>(),
 			                           _container.Resolve<IRestrictionAggregator>(),
@@ -1056,7 +1056,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		    var advanceSchedulingService =
 			    new AdvanceSchedulingService(schedulingOptions,
-			                                 teamInfoCreator, 
+			                                 teamInfoFactory, 
 											 _container.Resolve<ITeamBlockInfoFactory>(),
 											 teamBlockScheduler);
 

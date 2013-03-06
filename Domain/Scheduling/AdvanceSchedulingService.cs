@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation;
 using Teleopti.Interfaces.Domain;
@@ -16,7 +15,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
     public class AdvanceSchedulingService : IAdvanceSchedulingService
     {
-	    private readonly ITeamInfoCreator _teamInfoCreator;
+	    private readonly ITeamInfoFactory _teamInfoFactory;
 	    private readonly ITeamBlockInfoFactory _teamBlockInfoFactory;
 	    private readonly ITeamBlockScheduler _teamBlockScheduler;
         private readonly ISchedulingOptions _schedulingOptions;
@@ -25,12 +24,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	    public AdvanceSchedulingService
 		    (
 		    ISchedulingOptions schedulingOptions,
-		    ITeamInfoCreator teamInfoCreator,
+		    ITeamInfoFactory teamInfoFactory,
 		    ITeamBlockInfoFactory teamBlockInfoFactory,
 		    ITeamBlockScheduler teamBlockScheduler
 		    )
 	    {
-		    _teamInfoCreator = teamInfoCreator;
+		    _teamInfoFactory = teamInfoFactory;
 		    _teamBlockInfoFactory = teamBlockInfoFactory;
 		    _teamBlockScheduler = teamBlockScheduler;
 		    _schedulingOptions = schedulingOptions;
@@ -46,7 +45,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				var allTeamInfoListOnStartDate = new HashSet<ITeamInfo>();
 			    foreach (var selectedPerson in selectedPersons)
 			    {
-				    allTeamInfoListOnStartDate.Add(_teamInfoCreator.CreateTeamInfo(selectedPerson, datePointer, allPersonMatrixList));
+				    allTeamInfoListOnStartDate.Add(_teamInfoFactory.CreateTeamInfo(selectedPerson, datePointer, allPersonMatrixList));
 			    }
 
 				foreach (var teamInfo in allTeamInfoListOnStartDate.GetRandom(allTeamInfoListOnStartDate.Count, true))
@@ -69,11 +68,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_teamBlockScheduler.DayScheduled -= dayScheduled;
 		    return true;
 	    }
-
-
-		//extract to class
-	    
-
 
 	    void dayScheduled(object sender, SchedulingServiceBaseEventArgs e)
 	    {

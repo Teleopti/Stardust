@@ -15,16 +15,16 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 	{
 		private BlockProvider _target;
 		private MockRepository _mocks;
-		private ITeamInfoCreator _teamInfoCreator;
+		private ITeamInfoFactory _teamInfoFactory;
 		private ITeamBlockInfoFactory _teamBlockInfoFactory;
 
 		[SetUp]
 		public void Setup()
 		{
 			_mocks = new MockRepository();
-			_teamInfoCreator = _mocks.StrictMock<ITeamInfoCreator>();
+			_teamInfoFactory = _mocks.StrictMock<ITeamInfoFactory>();
 			_teamBlockInfoFactory = _mocks.StrictMock<ITeamBlockInfoFactory>();
-			_target = new BlockProvider(_teamInfoCreator, _teamBlockInfoFactory);
+			_target = new BlockProvider(_teamInfoFactory, _teamBlockInfoFactory);
 		}
 
 		[Test]
@@ -49,8 +49,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			{
 				Expect.Call(groupPerson1.Id).Return(Guid.NewGuid());
 				Expect.Call(groupPerson2.Id).Return(Guid.NewGuid());
-				Expect.Call(_teamInfoCreator.CreateTeamInfo(person, date, matrixes)).Return(teamInfo1);
-				Expect.Call(_teamInfoCreator.CreateTeamInfo(person, date.AddDays(1), matrixes)).Return(teamInfo2);
+				Expect.Call(_teamInfoFactory.CreateTeamInfo(person, date, matrixes)).Return(teamInfo1);
+				Expect.Call(_teamInfoFactory.CreateTeamInfo(person, date.AddDays(1), matrixes)).Return(teamInfo2);
 				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo1, date, BlockFinderType.SingleDay)).Return(teamBlockInfo1);
 				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo2, date.AddDays(1), BlockFinderType.SingleDay)).Return(teamBlockInfo2);
 			}

@@ -14,13 +14,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 	public class BlockProvider : IBlockProvider
 	{
-		private readonly ITeamInfoCreator _teamInfoCreator;
+		private readonly ITeamInfoFactory _teamInfoFactory;
 		private readonly ITeamBlockInfoFactory _teamBlockInfoFactory;
 
-		public BlockProvider(ITeamInfoCreator teamInfoCreator,
+		public BlockProvider(ITeamInfoFactory teamInfoFactory,
 			ITeamBlockInfoFactory teamBlockInfoFactory)
 		{
-			_teamInfoCreator = teamInfoCreator;
+			_teamInfoFactory = teamInfoFactory;
 			_teamBlockInfoFactory = teamBlockInfoFactory;
 		}
 
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				var allTeamInfoListOnStartDate = new HashSet<ITeamInfo>();
 				foreach (var selectedPerson in selectedPersons)
 				{
-					allTeamInfoListOnStartDate.Add(_teamInfoCreator.CreateTeamInfo(selectedPerson, datePointer, allPersonMatrixList));
+					allTeamInfoListOnStartDate.Add(_teamInfoFactory.CreateTeamInfo(selectedPerson, datePointer, allPersonMatrixList));
 				}
 
 				foreach (var teamInfo in allTeamInfoListOnStartDate.GetRandom(allTeamInfoListOnStartDate.Count, true))

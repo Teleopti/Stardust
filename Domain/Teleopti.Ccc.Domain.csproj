@@ -233,6 +233,7 @@
     <Compile Include="Optimization\AdvanceGroupDayOffOptimizer.cs" />
     <Compile Include="Optimization\AdvanceGroupIntradayOptimizer.cs" />
     <Compile Include="Optimization\AdvanceGroupIntradayOptimizerExecuter.cs" />
+    <Compile Include="Optimization\TeamBlockDayOffOptimizerService.cs" />
     <Compile Include="Optimization\TeamBlockIntradayDecisionMaker.cs" />
     <Compile Include="Optimization\BlockDayOffOptimizer.cs" />
     <Compile Include="Optimization\BlockDayOffOptimizerContainer.cs" />
@@ -829,7 +830,7 @@
     <Compile Include="Scheduling\WorkShiftCalculation\DynamicBlockFinder.cs" />
     <Compile Include="Scheduling\WorkShiftCalculation\TeamBlockInfo.cs" />
     <Compile Include="Scheduling\WorkShiftCalculation\TeamBlockInfoFactory.cs" />
-    <Compile Include="Scheduling\WorkShiftCalculation\TeamInfoCreator.cs" />
+    <Compile Include="Scheduling\WorkShiftCalculation\TeamInfoFactory.cs" />
     <Compile Include="Scheduling\WorkShiftCalculation\OpenHoursToEffectiveRestrictionConverter.cs" />
     <Compile Include="Scheduling\WorkShiftCalculation\RestrictionAggregator.cs" />
     <Compile Include="Scheduling\WorkShiftCalculation\ScheduleRestrictionExtractor.cs" />

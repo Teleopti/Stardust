@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 	public class TeamInfoCreatorTest
 	{
 		private MockRepository _mocks;
-		private ITeamInfoCreator _target;
+		private ITeamInfoFactory _target;
 		private IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
 		private BaseLineData _baseLineData;
 
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 		{
 			_mocks = new MockRepository();
 			_groupPersonBuilderForOptimization = _mocks.StrictMock<IGroupPersonBuilderForOptimization>();
-			_target = new TeamInfoCreator(_groupPersonBuilderForOptimization);
+			_target = new TeamInfoFactory(_groupPersonBuilderForOptimization);
 			_baseLineData = new BaseLineData();
 		}
 

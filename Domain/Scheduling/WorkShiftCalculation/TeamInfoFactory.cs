@@ -6,16 +6,16 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 {
-	public interface ITeamInfoCreator
+	public interface ITeamInfoFactory
 	{
 		TeamInfo CreateTeamInfo(IPerson person, DateOnly date, IList<IScheduleMatrixPro> allMatrixesInScheduler);
 	}
 
-	public class TeamInfoCreator : ITeamInfoCreator
+	public class TeamInfoFactory : ITeamInfoFactory
 	{
 		private readonly IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
 
-		public TeamInfoCreator(IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization)
+		public TeamInfoFactory(IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization)
 		{
 			_groupPersonBuilderForOptimization = groupPersonBuilderForOptimization;
 		}
