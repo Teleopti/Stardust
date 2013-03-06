@@ -39,6 +39,7 @@ define([
 		    
 			this.SetData = function (data) {
 			    data.Date = self.Date();
+			    data.PersonId = self.Id();
 
 				self.Name(data.Name);
 				self.Site(data.Site);
@@ -50,7 +51,7 @@ define([
 					return new layerViewModel(self.TimeLine, l);
 				});
 				self.Layers.push.apply(self.Layers, layers);
-
+			    
 				self.AddFullDayAbsenceForm.SetData(data);
 			};
 		    
