@@ -25,6 +25,18 @@ namespace Teleopti.Ccc.DBManager.Library
 					return System.IO.Path.GetDirectoryName(assembly.Location);
 				}
 			}
+			return locateDatabaseFolderUsingBlackMagic();
+		}
+
+		 
+		private static string locateDatabaseFolderUsingBlackMagic()
+		{
+			if (System.IO.Directory.Exists(@"..\..\..\..\Database"))
+				return @"..\..\..\..\Database";
+			if (System.IO.Directory.Exists(@"..\..\..\Database"))
+				return @"..\..\..\Database";
+			if (System.IO.Directory.Exists(@"..\..\Database"))
+				return @"..\..\Database";
 			return null;
 		}
 
