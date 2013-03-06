@@ -107,9 +107,9 @@ Scenario: Select date
 	Then I should be viewing schedules for '2012-12-03'
 
 @ignore
-Scenario: Select agent
+Scenario: Select person
 	Given I have the role 'Anywhere Team Green'
 	When I view schedules for '2012-12-02'
 	And I click agent 'Pierre Baldi'
-	Then I should be viewing agent schedule for 'Pierre Baldi' on '2012-12-02'
+	Then I should be viewing person schedule for 'Pierre Baldi' on '2012-12-02'
 

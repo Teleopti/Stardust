@@ -38,11 +38,21 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 	public abstract class ToolBarItemBase
 	{
 		public string Title { get; set; }
-		public bool IsHhidden { get; set; }
 	}
 
 	public class ToolBarSeparatorItem : ToolBarItemBase
 	{
+	}
+
+	public class ToolBarDropDown : ToolBarItemBase
+	{
+		public string Icon { get; set; }
+		public IEnumerable<ToolBarDropDownMenuItem> MenuItems { get; set; }
+	}
+
+	public class ToolBarDropDownMenuItem : ToolBarItemBase
+	{
+		public string MenyType { get; set; }
 	}
 
 	public class ToolBarButtonItem : ToolBarItemBase

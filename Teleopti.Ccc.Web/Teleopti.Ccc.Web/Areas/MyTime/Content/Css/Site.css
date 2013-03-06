@@ -741,13 +741,6 @@ select.time-input
 	border: 1px solid #dfdfdf;
 }
 
-#Request-detail-subject-input {
-	width: 96%;
-}
-#Request-detail-message-input {
-	width: 96%;
-	height: 5em;
-}
 .request-edit-section button.ui-button-icon-only {
 	height: 20px; 
 	width: 1.7em; 
@@ -996,6 +989,10 @@ footer p
 	border-top-left-radius: 0px/*{cornerRadius}*/;
 	border-top-right-radius: 4px/*{cornerRadius}*/;
 	border-bottom-right-radius: 4px/*{cornerRadius}*/;
+}
+
+#ui-datepicker-div {
+	z-index: 1000 !important;
 }
 
 /*

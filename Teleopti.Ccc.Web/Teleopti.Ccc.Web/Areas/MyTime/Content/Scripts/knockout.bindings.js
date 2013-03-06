@@ -20,6 +20,25 @@ ko.bindingHandlers['class'] = {
 	}
 };
 
+ko.bindingHandlers.hoverToggle = {
+	init: function (element, valueAccessor, allBindingsAccessor) {
+		var css = valueAccessor();
+		ko.utils.registerEventHandler(element, "mouseover", function () {
+			var hoverIf = allBindingsAccessor().hoverIf;
+			if (hoverIf === undefined) {
+				hoverIf = true;
+			}
+			if (hoverIf) {
+				ko.utils.toggleDomNodeCssClass(element, ko.utils.unwrapObservable(css), true);
+			}
+		});
+
+		ko.utils.registerEventHandler(element, "mouseleave", function () {
+			ko.utils.toggleDomNodeCssClass(element, ko.utils.unwrapObservable(css), false);
+		});
+	}
+};
+
 ko.bindingHandlers.fadeInIf = {
 	update: function (element, valueAccessor, allBindingsAccessor) {
 		var value = valueAccessor(), allBindings = allBindingsAccessor();
@@ -30,22 +49,22 @@ ko.bindingHandlers.fadeInIf = {
 		var fadeOutOpacity = allBindings.fadeOutOpacity || 0.1;
 		var fadeInDuration = allBindings.fadeInDuration || 300;
 		var fadeOutDuration = allBindings.fadeOutDuration || 300;
-		var hiddenWhenFalse = allBindings.hiddenWhenFalse || false;
+		var hideWhenFadedOut = allBindings.hideWhenFadedOut || false;
 
 		$(element).stop();
 
 		if (valueUnwrapped) {
-			if (hiddenWhenFalse) {
+			if (hideWhenFadedOut) {
 				$(element).show();
 			}
 			$(element).animate({ opacity: fadeInOpacity }, fadeInDuration);
-		}
-		else
+		} else {
 			$(element).animate({ opacity: fadeOutOpacity }, fadeOutDuration, function () {
-				if (hiddenWhenFalse) {
+				if (hideWhenFadedOut) {
 					$(element).hide();
 				}
 			});
+		}
 	}
 };
 

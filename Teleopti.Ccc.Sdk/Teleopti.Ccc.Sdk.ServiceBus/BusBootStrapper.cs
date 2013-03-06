@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
         	build.RegisterGeneric(typeof (InMemorySagaPersister<>)).As(typeof (ISagaPersister<>));
             
             build.RegisterModule<ShiftTradeModule>();
-        	build.RegisterModule<RepositoryContainerInstaller>();
+			build.RegisterModule<RepositoryModule>();
         	build.RegisterModule<AuthorizationContainerInstaller>();
         	build.RegisterModule<AuthenticationContainerInstaller>();
         	build.RegisterModule<AuthenticationModule>();

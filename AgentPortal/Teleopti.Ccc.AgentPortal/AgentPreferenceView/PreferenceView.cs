@@ -85,6 +85,10 @@ namespace Teleopti.Ccc.AgentPortal.AgentPreferenceView
         private void gridControl1_SelectionChanged(object sender, GridSelectionChangedEventArgs e)
         {
             GridRangeInfo range = e.Range;
+			if (range.IsRows)
+			{
+				range = GridRangeInfo.Cells(range.Top, range.Left + gridControl1.Cols.HeaderCount + 1, range.Bottom, gridControl1.ColCount);
+			}
             if (e.Reason == GridSelectionReason.MouseUp)
                 _presenter.OnSelectionChanged(range.Top, range.Bottom, range.Left, range.Right);
             if (e.Reason != GridSelectionReason.SetCurrentCell && e.Reason != GridSelectionReason.SelectRange) { return; }

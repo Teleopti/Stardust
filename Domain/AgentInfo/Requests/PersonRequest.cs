@@ -132,6 +132,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
         public virtual bool TrySetMessage(string message)
         {
             CheckIfEditable();
+	        message = message ?? string.Empty;
             if (message.Length > messageLength)
                 return false;
 

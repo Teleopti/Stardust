@@ -15,10 +15,10 @@ using Table = TechTalk.SpecFlow.Table;
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 {
 	[Binding]
-	public class AgentSchedulePageStepDefinitions
+	public class PersonSchedulePageStepDefinitions
 	{
-		[Then(@"I should be viewing agent schedule for '(.*)' on '(.*)'")]
-		public void ThenIShouldSeeAgentScheduleForAgentOnDate(string name, string date)
+		[Then(@"I should be viewing person schedule for '(.*)' on '(.*)'")]
+		public void ThenIShouldSeePersonScheduleForAgentOnDate(string name, string date)
 		{
 			var id = UserFactory.User(name).Person.Id.ToString();
 			EventualAssert.That(() => Browser.Current.Url.Contains(id), Is.True);
@@ -41,8 +41,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 
 		private static void AssertShiftLayer(ShiftLayerInfo shiftLayer)
 		{
+			var minutes = TimeSpan.Parse(shiftLayer.EndTime).Subtract(TimeSpan.Parse(shiftLayer.StartTime)).TotalMinutes;
 			EventualAssert.That(() => Browser.Current.Element(Find.BySelector(string.Format(".shift .layer[data-start-time='{0}']", shiftLayer.StartTime))).Exists, Is.True);
-			EventualAssert.That(() => Browser.Current.Element(Find.BySelector(string.Format(".shift .layer[data-end-time='{0}']", shiftLayer.EndTime))).Exists, Is.True);
+			EventualAssert.That(() => Browser.Current.Element(Find.BySelector(string.Format(".shift .layer[data-length-minutes='{0}']", minutes))).Exists, Is.True);
 			if (shiftLayer.Color != null)
 				EventualAssert.That(() => Browser.Current.Element(Find.BySelector(string.Format(".shift .layer[data-start-time='{0}']", shiftLayer.StartTime))).Style.Color, Is.EqualTo(shiftLayer.Color));
 		}
@@ -81,8 +82,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 
 		public class ShiftLayerInfo
 		{
-			public DateTime StartTime { get; set; }
-			public DateTime EndTime { get; set; }
+			public string StartTime { get; set; }
+			public string EndTime { get; set; }
 			public string Color { get; set; }
 		}
 

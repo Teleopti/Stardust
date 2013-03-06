@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
             if (toolStripComboBoxScenario.ComboBox != null)
             {
                 toolStripComboBoxScenario.ComboBox.DisplayMember = "Description";
-                toolStripComboBoxScenario.ComboBox.DropDownStyle = ComboBoxStyle.DropDown;
+                toolStripComboBoxScenario.ComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
                 toolStripComboBoxScenario.ComboBox.DataSource = _dataProvider.AllowedScenarios();
                 
                 if (_dataProvider.Scenario != null)
