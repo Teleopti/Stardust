@@ -346,7 +346,7 @@
             this.comboBoxAdvTag.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxAdvTag.Location = new System.Drawing.Point(136, 3);
             this.comboBoxAdvTag.Name = "comboBoxAdvTag";
-            this.comboBoxAdvTag.Size = new System.Drawing.Size(200, 21);
+            this.comboBoxAdvTag.Size = new System.Drawing.Size(200, 19);
             this.comboBoxAdvTag.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
             this.comboBoxAdvTag.TabIndex = 11;
             // 
@@ -481,7 +481,7 @@
             this.comboBoxGroupingFairness.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxGroupingFairness.Location = new System.Drawing.Point(165, 94);
             this.comboBoxGroupingFairness.Name = "comboBoxGroupingFairness";
-            this.comboBoxGroupingFairness.Size = new System.Drawing.Size(173, 21);
+            this.comboBoxGroupingFairness.Size = new System.Drawing.Size(173, 19);
             this.comboBoxGroupingFairness.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
             this.comboBoxGroupingFairness.TabIndex = 40;
             this.comboBoxGroupingFairness.SelectedIndexChanged += new System.EventHandler(this.comboBoxGroupingFairnessSelectedIndexChanged);
@@ -620,7 +620,7 @@
             this.comboBoxActivity.Enabled = false;
             this.comboBoxActivity.Location = new System.Drawing.Point(165, 243);
             this.comboBoxActivity.Name = "comboBoxActivity";
-            this.comboBoxActivity.Size = new System.Drawing.Size(173, 21);
+            this.comboBoxActivity.Size = new System.Drawing.Size(173, 19);
             this.comboBoxActivity.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
             this.comboBoxActivity.TabIndex = 40;
             // 
@@ -664,7 +664,7 @@
             this.comboBoxGrouping.FlatBorderColor = System.Drawing.SystemColors.ControlDark;
             this.comboBoxGrouping.Location = new System.Drawing.Point(165, 137);
             this.comboBoxGrouping.Name = "comboBoxGrouping";
-            this.comboBoxGrouping.Size = new System.Drawing.Size(173, 21);
+            this.comboBoxGrouping.Size = new System.Drawing.Size(173, 19);
             this.comboBoxGrouping.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
             this.comboBoxGrouping.TabIndex = 35;
             this.comboBoxGrouping.SelectedIndexChanged += new System.EventHandler(this.comboBoxGroupingSelectedIndexChanged);
@@ -702,7 +702,7 @@
             this.comboBoxGroupingLevelingPer.FlatBorderColor = System.Drawing.SystemColors.ControlDark;
             this.comboBoxGroupingLevelingPer.Location = new System.Drawing.Point(349, 78);
             this.comboBoxGroupingLevelingPer.Name = "comboBoxGroupingLevelingPer";
-            this.comboBoxGroupingLevelingPer.Size = new System.Drawing.Size(117, 21);
+            this.comboBoxGroupingLevelingPer.Size = new System.Drawing.Size(117, 19);
             this.comboBoxGroupingLevelingPer.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
             this.comboBoxGroupingLevelingPer.TabIndex = 44;
             this.comboBoxGroupingLevelingPer.Visible = false;

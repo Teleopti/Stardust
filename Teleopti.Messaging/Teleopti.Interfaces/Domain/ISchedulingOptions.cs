@@ -370,5 +370,10 @@ namespace Teleopti.Interfaces.Domain
         /// Used in levelling per same shift
         /// </summary>
         bool UseLevellingSameShift { get; set; }
+
+        /// <summary>
+        /// Used if the levelling option is checked or not
+        /// </summary>
+        bool UseLevellingPerOption { get; set; }
     }
 }

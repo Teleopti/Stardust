@@ -298,6 +298,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             _schedulingOptions.UseLevellingSameShift = _localSchedulingOptions.UseLevellingSameShift;
             _schedulingOptions.UseLevellingSameShiftCategory = _localSchedulingOptions.UseLevellingSameShiftCategory;
             _schedulingOptions.UseLevellingSameStartTime = _localSchedulingOptions.UseLevellingSameStartTime;
+            _schedulingOptions.UseLevellingPerOption = _localSchedulingOptions.UseLevellingPerOption;
         }
 
         private void getDataFromControls()
@@ -343,7 +344,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             //    else
             //        _localSchedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.SingleDay;
             //}
-
+            _localSchedulingOptions.UseLevellingPerOption = checkBoxLevellingPerBlockScheduling.Checked;
             _localSchedulingOptions.Fairness = new Percent(trackBar1.Value / 100d);
             _localSchedulingOptions.UseShiftCategoryLimitations = checkBoxUseShiftCategoryRestrictions.Checked;
 			_localSchedulingOptions.UseGroupScheduling = checkBoxUseGroupScheduling.Checked;
@@ -362,7 +363,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             if (checkBoxCommonActivity.Checked)
                 _localSchedulingOptions.CommonActivity = (IActivity) comboBoxActivity.SelectedItem;
         	_localSchedulingOptions.UseAverageShiftLengths = checkBoxUseAverageShiftLengths.Checked;
-            GetLevellingPerDataToSave();
+            //GetLevellingPerDataToSave();
         }
 
         private void setDataInControls()
@@ -483,6 +484,8 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
                 comboBoxActivity.Enabled = _localSchedulingOptions.UseCommonActivity;
             }
         	checkBoxUseAverageShiftLengths.Checked = _localSchedulingOptions.UseAverageShiftLengths;
+
+            checkBoxLevellingPerBlockScheduling.Checked = _localSchedulingOptions.UseLevellingPerOption;
         }
 
         private bool mustHaveSetAndOnlyPreferenceDaysVisible()
@@ -741,6 +744,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             checkBoxUseGroupScheduling.Enabled  = !checkBoxLevellingPerBlockScheduling.Checked;
             checkBoxUseBlockScheduling.Enabled = !checkBoxLevellingPerBlockScheduling.Checked;
             btnLevellingPer.Enabled = checkBoxLevellingPerBlockScheduling.Checked;
+            
 
         }
 
@@ -767,8 +771,11 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             
                 
             var levellingPerPrefrences = new LevellingPerPrefrences(levellingPerConfiguration, _groupPagesLevelingPer);
-            levellingPerPrefrences.ShowDialog();
-            _levellingConfiguartion = levellingPerPrefrences.LevellingConfiguration;
+             levellingPerPrefrences.ShowDialog();
+                _levellingConfiguartion = levellingPerPrefrences.LevellingConfiguration;
+                GetLevellingPerDataToSave();
+            
+            
             
         }
 
