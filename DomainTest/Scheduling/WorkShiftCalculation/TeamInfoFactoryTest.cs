@@ -12,7 +12,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 {
 	[TestFixture]
-	public class TeamInfoCreatorTest
+	public class TeamInfoFactoryTest
 	{
 		private MockRepository _mocks;
 		private ITeamInfoFactory _target;
