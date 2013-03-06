@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Sdk.ServiceBus.Rta;
+﻿using System.Configuration;
+using Teleopti.Ccc.Sdk.ServiceBus.Rta;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
 {
@@ -11,6 +12,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			//add RTA state checker
 			var rtaChecker = new BusinessUnitInfoFinder(daBus);
 			rtaChecker.SendMessage();
+			var dbConnection = ConfigurationManager.ConnectionStrings["Queue"];
 		}
 	}
 }
