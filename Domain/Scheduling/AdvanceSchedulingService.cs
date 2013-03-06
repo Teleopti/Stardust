@@ -60,6 +60,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 				foreach (var teamInfo in allTeamInfoListOnStartDate.GetRandom(allTeamInfoListOnStartDate.Count, true))
 				{
+					if (!teamSteadyStateHolder.IsSteadyState(teamInfo.GroupPerson))
+						continue;
 
 					ITeamBlockInfo teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, datePointer,
 					                                                                         _schedulingOptions
