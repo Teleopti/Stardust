@@ -5,8 +5,6 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data;
-using WatiN.Core;
-using List = WatiN.Core.List;
 
 namespace Teleopti.Ccc.WebBehaviorTest
 {
@@ -28,35 +26,20 @@ namespace Teleopti.Ccc.WebBehaviorTest
             EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.RequestDetailFromDateTextField.Value, Is.StringContaining(date.ToShortDateString(UserFactory.User().Culture)));
 		}
 
-		[Then(@"I should see an indication of the amount of agents that can go on holiday on each day of the week")]
-		public void ThenIShouldSeeAnIndicationOfTheAmountOfAgentsThatCanGoOnHolidayOnEachDayOfTheWeek()
-		{
-			var page = Pages.Pages.WeekSchedulePage;
-			var days = page.DayElements;
-
-			foreach (List element in days)
-			{
-				var holidayIndication = element.Divs.First(Find.BySelector("holiday-agents"));
-				EventualAssert.That(holidayIndication.IsDisplayed,Is.True);
-			}
-		}
-
 		[Then(@"I should not see any indication of how many agents can go on holiday")]
 		public void ThenIShouldNotSeeAnyIndicationOfHowManyAgentsCanGoOnHoliday()
 		{
-			foreach (var indicator in Pages.Pages.WeekSchedulePage.AbsenceIndiciators())
+			var indicators = Pages.Pages.WeekSchedulePage.AbsenceIndiciators();
+			foreach (var indicator in indicators)
 			{
 				EventualAssert.That(indicator.IsDisplayed, Is.False);
 			}
 		}
-
 
 		[Given(@"the absence period is opened between '(.*)' and '(.*)'")]
 		public void GivenTheAbsencePeriodIsOpenedBetweenAnd(DateTime start, DateTime end)
 		{
 			ScenarioContext.Current.Pending();
 		}
-
-
 	}
 }
