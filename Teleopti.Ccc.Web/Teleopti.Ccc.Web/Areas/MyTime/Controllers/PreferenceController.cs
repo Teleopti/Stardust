@@ -1,3 +1,4 @@
+using System;
 using System.Net;
 using System.Web.Mvc;
 using Autofac.Extras.DynamicProxy2;
@@ -113,6 +114,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 				return ModelState.ToJson();
 			}
 			return Json(_preferenceTemplatePersister.Persist(input));
+		}
+
+		[UnitOfWork]
+		[HttpDelete]
+		[ActionName("PreferenceTemplate")]
+		public virtual ActionResult PreferenceTemplateDelete(Guid templateId)
+		{
+			_preferenceTemplatePersister.Delete(templateId);
+			return new EmptyResult();
 		}
 	}
 }

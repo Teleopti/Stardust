@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
 using System.Web.Routing;
@@ -209,6 +210,19 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var result = target.PreferenceTemplate(input);
 
 			result.Data.Should().Be(template);
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
+		public void ShouldDeletePreferenceTemplate()
+		{
+			var preferenceTemplatePersister = MockRepository.GenerateMock<IPreferenceTemplatePersister>();
+			var target = new PreferenceController(null, null, null, preferenceTemplatePersister);
+			var id = Guid.NewGuid();
+
+			target.PreferenceTemplateDelete(id);
+
+			preferenceTemplatePersister.AssertWasCalled(x => x.Delete(id));
+
 		}
 	}
 }

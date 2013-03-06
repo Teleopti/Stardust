@@ -1,5 +1,8 @@
+using System;
+using System.Web;
 using AutoMapper;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
 using Teleopti.Interfaces.Domain;
 
@@ -21,6 +24,21 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 			var extendedPreferenceTemplate = _mapper.Map<PreferenceTemplateInput, IExtendedPreferenceTemplate>(input);
 			_preferenceTemplateRepository.Add(extendedPreferenceTemplate);
 			return _mapper.Map<IExtendedPreferenceTemplate, PreferenceTemplateViewModel>(extendedPreferenceTemplate);
+		}
+
+		public void Delete(Guid templateId)
+		{
+			var template = _preferenceTemplateRepository.Load(templateId);
+			if (template == null)
+				throw new HttpException(404, "Preference template not found");
+			try
+			{
+				_preferenceTemplateRepository.Remove(template);
+			}
+			catch (DataSourceException)
+			{
+				throw new HttpException(404, "Preference template cannot update");
+			}
 		}
 	}
 }
