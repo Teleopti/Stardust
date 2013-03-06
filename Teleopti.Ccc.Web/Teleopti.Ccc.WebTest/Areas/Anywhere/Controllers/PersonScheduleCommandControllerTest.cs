@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 	[TestFixture]
 	public class PersonScheduleCommandControllerTest
 	{
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldReturnEmptyResult() { 
 			var target = new PersonScheduleCommandController();
 
