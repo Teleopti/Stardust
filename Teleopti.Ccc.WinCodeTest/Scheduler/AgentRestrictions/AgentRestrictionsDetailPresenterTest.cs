@@ -163,11 +163,24 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.AgentRestrictions
 			var effectiveRestriction = new EffectiveRestriction(startTimeLimitation, endTimeLimitation,workTimeLimitation, shiftCategory,null, null, new List<IActivityRestriction>());
 			preferenceCellData.EffectiveRestriction = effectiveRestriction;
 			
+			var schedulePart = _mocks.StrictMock<IScheduleDay>(); 
+			var projectionService = _mocks.Stub<IProjectionService>();
+			var visualLayerCollection = _mocks.Stub<IVisualLayerCollection>();
+
+			preferenceCellData.SchedulePart = schedulePart;
+			
+			preferenceCellData.SchedulingOption = new RestrictionSchedulingOptions();
+			preferenceCellData.SchedulingOption.UseScheduling = true;
 			_detailData.Add(0, preferenceCellData);
 
 			using(_mocks.Record())
 			{
 				Expect.Call(_model.DetailData()).Return(_detailData).Repeat.AtLeastOnce();
+
+				Expect.Call(schedulePart.ProjectionService()).Return(projectionService).Repeat.AtLeastOnce();
+				Expect.Call(() => projectionService.CreateProjection()).Repeat.AtLeastOnce();
+				Expect.Call(projectionService.CreateProjection()).Return(visualLayerCollection);
+				Expect.Call(visualLayerCollection.HasLayers).Return(true);
 			}
 
 			using(_mocks.Playback())
