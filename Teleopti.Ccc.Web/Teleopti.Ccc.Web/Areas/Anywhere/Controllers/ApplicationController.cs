@@ -50,6 +50,9 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 					UserTexts.Resources.Next,
 					UserTexts.Resources.Previous,
 					UserTexts.Resources.LoadingThreeDots,
+					UserTexts.Resources.AddFullDayAbsence,
+					UserTexts.Resources.Apply,
+
 					CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern,
 					MomentShortDatePattern = CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern.ToUpper(),
 					ShortTimePattern = CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern.Replace("tt", "a"),

@@ -10,35 +10,24 @@ define([
 
         return function() {
 
+            var self = this;
+            
             this.AbsenceType = ko.observable("");
 
-            var startDateObservable = ko.observable("");
+            this.StartDate = ko.observable();
+            this.EndDate = ko.observable();
 
-            this.StartDate = ko.computed(function () {
-                var value = startDateObservable();
+            this.SetData = function (data) {
+                self.StartDate(data.Date);
+                self.EndDate(data.Date);
+            };
+
+            this.StartDateFormatted = ko.computed(function () {
+                var value = self.StartDate();
                 if (moment.isMoment(value))
-                    return startDateObservable().format(resources.MomentShortDatePattern);
+                    return value.format(resources.MomentShortDatePattern);
                 return value;
             });
-
-            var endDateObservable = ko.observable("");
-            
-            this.EndDate = ko.computed({
-                read: function () {
-                    var value = endDateObservable();
-                    if (moment.isMoment(value))
-                        return endDateObservable();
-                    return "";
-                },
-                write: function (value) {
-                    endDateObservable(moment.utc(value));
-                }
-            });
-
-            this.SetData = function(data) {
-                startDateObservable(data.Date);
-                endDateObservable(data.Date);
-            };
 
             this.AbsenceTypes = ko.observableArray([
                 {
