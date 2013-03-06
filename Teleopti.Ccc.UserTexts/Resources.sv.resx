@@ -10854,4 +10854,13 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
   <data name="ShowInfoMessages" xml:space="preserve">
     <value>Visa informationsmeddelanden</value>
   </data>
+  <data name="DataHasBeenDeleted" xml:space="preserve">
+    <value>Fel uppstod då dina ändringar skulle sparas. Den troligast orsaken är att du eller en annan användare har raderat angiven data. För att bevara datakvaliteten kommer formuläret att stängas. Beklagar, dina ändringar är förlorade.</value>
+  </data>
+  <data name="Errors" xml:space="preserve">
+    <value>Fel</value>
+  </data>
+  <data name="TheQuickForecatWillStartInBackgroundMessage" xml:space="preserve">
+    <value>Snabbprognosen kommer att startas som ett bakgrundsjobb när denna guide avslutas. Titta i jobbhistoriken för att se status. </value>
+  </data>
 </root>
