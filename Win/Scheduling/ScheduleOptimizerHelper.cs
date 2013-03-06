@@ -1048,12 +1048,17 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 
 		    ITeamInfoCreator teamInfoCreator = new TeamInfoCreator(groupPersonBuilderForOptimization);
+		    ITeamBlockScheduler teamBlockScheduler =
+			    new TeamBlockScheduler(_container.Resolve<ISkillDayPeriodIntervalDataGenerator>(),
+			                           _container.Resolve<IRestrictionAggregator>(),
+			                           _container.Resolve<IWorkShiftFilterService>(), teamScheduling,
+			                           _container.Resolve<IWorkShiftSelector>());
+
 		    var advanceSchedulingService =
-			    new AdvanceSchedulingService(_container.Resolve<ISkillDayPeriodIntervalDataGenerator>(),
-			                                 _container.Resolve<IRestrictionAggregator>(),
-			                                 _container.Resolve<IWorkShiftFilterService>(), teamScheduling, schedulingOptions,
-			                                 _container.Resolve<IWorkShiftSelector>(), teamInfoCreator,
-			                                 _container.Resolve<ITeamBlockInfoFactory>());
+			    new AdvanceSchedulingService(schedulingOptions,
+			                                 teamInfoCreator, 
+											 _container.Resolve<ITeamBlockInfoFactory>(),
+											 teamBlockScheduler);
 
 		    return advanceSchedulingService;
 	    }

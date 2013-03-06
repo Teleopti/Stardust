@@ -801,6 +801,7 @@
     <Compile Include="Scheduling\ShiftCreator\WorkShiftVisualLayerInfo.cs" />
     <Compile Include="Scheduling\ShiftTradeChecksumCalculator.cs" />
     <Compile Include="Scheduling\Restriction\ExtendedPreferenceTemplate.cs" />
+    <Compile Include="Scheduling\TeamBlockScheduler.cs" />
     <Compile Include="Scheduling\TeamSteadyState.cs" />
     <Compile Include="Scheduling\TeamSteadyStateCoherentChecker.cs" />
     <Compile Include="Scheduling\TeamSteadyStateDictionaryCreator.cs" />
