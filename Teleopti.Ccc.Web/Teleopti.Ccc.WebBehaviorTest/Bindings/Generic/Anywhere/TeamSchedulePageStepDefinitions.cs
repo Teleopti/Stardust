@@ -46,5 +46,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		{
 			public string Team { get; set; }
 		}
+
+		[When(@"I select team '(.*)'")]
+		public void WhenISelectTeam(string teamName)
+		{
+			Browser.Current.Element(Find.BySelector(string.Format(".team-selector li:contains('{0}", teamName))).EventualClick();
+		}
 	}
 }

@@ -4534,7 +4534,7 @@ deny</value>
     <comment>Group  name given to Approval actions in ribbon bar in   Request screen</comment>
   </data>
   <data name="NewShiftTradeRequest" xml:space="preserve">
-    <value>New shift trade request</value>
+    <value>New Shift Trade Request</value>
     <comment>text of context menu item "New Shift trade request"  in Agent portal Schedule</comment>
   </data>
   <data name="EarlyStart" xml:space="preserve">
@@ -11293,6 +11293,10 @@ These options are activated:
   <data name="Errors" xml:space="preserve">
     <value>Errors</value>
     <comment>Errors</comment>
+  </data>
+  <data name="TheQuickForecatWillStartInBackgroundMessage" xml:space="preserve">
+    <value>The quick forecast will be started as a job in the background when this wizard is finished, look in Job History for status.</value>
+    <comment>Information on the last step in quick forecast</comment>
   </data>
   <data name="LevellingPer" xml:space="preserve">
     <value>Levelling Per</value>

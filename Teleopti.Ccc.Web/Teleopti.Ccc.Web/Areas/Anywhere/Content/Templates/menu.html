@@ -9,20 +9,20 @@
 					   data-toggle="dropdown">Teleopti <b class="caret"></b>  
 					</a>  
 					<ul class="dropdown-menu">
-						<li><a href="#" tabindex="-1"><span data-bind="text: Translations.Home"></span></a></li>
+						<li><a href="#" tabindex="-1"><span data-bind="text: Resources.Home"></span></a></li>
 						<li class="divider"></li>
 						<li id="link-mytime" data-bind="visible: MyTimeVisible"><a href="mytime">MyTime</a></li>
 						<li id="link-mobilereports" data-bind="visible: MobileReportsVisible"><a href="mobilereports" tabindex="-1">Mobile Reports</a></li>
 						<li class="divider"></li>
-						<li><a href="authentication/signout" tabindex="-1"><i class="icon-eject"></i> <span data-bind="text: Translations.LogOut"></span></a></li>  
+						<li><a href="authentication/signout" tabindex="-1"><i class="icon-eject"></i> <span data-bind="text: Resources.LogOut"></span></a></li>  
 					</ul>
 				</li>  
 			</ul>
 			<ul class="nav">
-				<li class="active"><a href="#">Schedules</a></li>
+				<li data-bind="css: {active: ActiveView() == 'teamschedule'}"><a href="#">Schedules</a></li>
 			</ul>
 			<ul class="nav pull-right">
-				<li><a href="#settings" id="username"></a></li>
+				<li><a href="#settings" data-bind="text: UserName, css: {active: ActiveView() == 'settings'}"></a></li>
 			</ul>
 		</div>
 	</div>

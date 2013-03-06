@@ -44,6 +44,16 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		}
 
 		[Test]
+		public void PersonScheduleDayReadModelRepository()
+		{
+			using (var container = containerBuilder.Build())
+			{
+				container.Resolve<IPersonScheduleDayReadModelRepository>()
+					.Should().Not.Be.Null();
+			}
+		}
+
+		[Test]
 		public void PushMessageRepositoryShouldNotBeSingleton()
 		{
 			IPushMessageRepository rep1;

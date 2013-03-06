@@ -24,13 +24,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 		public string Status;
 		public string Payload;
 		public bool IsCreatedByUser;
-		//only needed for view/edit detail view 
-		//move to seperate model?
 		public string RawDateFrom;
 		public string RawDateTo;
 		public string RawTimeFrom;
 		public string RawTimeTo;
 		public bool IsFullDay;
 		public string DenyReason;
+		public string From;
+		public string To;
 	}
 }

@@ -27,8 +27,9 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
         private readonly IEffectiveRestriction _restriction = new EffectiveRestriction(new StartTimeLimitation(null, null),
             new EndTimeLimitation(null, null), new WorkTimeLimitation(null, null), null, null, null, new List<IActivityRestriction>());
         private IPerson _person;
+    	private IVirtualSchedulePeriod _schedulePeriod;
 
-	    [SetUp]
+    	[SetUp]
         public void Setup()
         {
             _mocks = new MockRepository();
@@ -41,6 +42,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
             //_person.SetId(Guid.NewGuid());
             _person.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
             _person.PermissionInformation.SetCulture(CultureInfo.GetCultureInfo("sv-SE"));
+			_schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
         }
         
         [Test, ExpectedException(typeof(ArgumentNullException))]
@@ -146,9 +148,10 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
                 Expect.Call(personPeriod.PersonContract).Return(personContract);
                 Expect.Call(personContract.ContractSchedule).Return(contractSchedule);
                 Expect.Call(contractSchedule.IsWorkday(dateOnly, dateOnly)).IgnoreArguments().Return(true);
-                Expect.Call(personPeriod.StartDate).Return(dateOnly);
                 Expect.Call(personContract.PartTimePercentage).Return(new PartTimePercentage("Hej"));
                 Expect.Call(person.AverageWorkTimeOfDay(new DateOnly())).IgnoreArguments().Return(new TimeSpan(0, 8, 0, 0));
+				Expect.Call(person.VirtualSchedulePeriod(new DateOnly())).IgnoreArguments().Return(_schedulePeriod);
+            	Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod());
             }
 
             using(_mocks.Playback())
@@ -182,9 +185,10 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
                 Expect.Call(personPeriod.PersonContract).Return(personContract);
                 Expect.Call(personContract.ContractSchedule).Return(contractSchedule);
                 Expect.Call(contractSchedule.IsWorkday(dateOnly, dateOnly)).IgnoreArguments().Return(true);
-                Expect.Call(personPeriod.StartDate).Return(dateOnly);
                 Expect.Call(personContract.PartTimePercentage).Return(new PartTimePercentage("Hej"));
                 Expect.Call(person.AverageWorkTimeOfDay(new DateOnly())).IgnoreArguments().Return(new TimeSpan(0, 8, 0, 0));
+				Expect.Call(person.VirtualSchedulePeriod(new DateOnly())).IgnoreArguments().Return(_schedulePeriod);
+				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod());
             }
 
             using (_mocks.Playback())
@@ -218,10 +222,10 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
                 Expect.Call(personPeriod.PersonContract).Return(personContract);
                 Expect.Call(personContract.ContractSchedule).Return(contractSchedule);
                 Expect.Call(contractSchedule.IsWorkday(dateOnly, dateOnly)).IgnoreArguments().Return(false);
-                Expect.Call(personPeriod.StartDate).Return(dateOnly);
                 Expect.Call(personContract.PartTimePercentage).Return(new PartTimePercentage("Hej"));
-                Expect.Call(person.AverageWorkTimeOfDay(new DateOnly())).IgnoreArguments().Return(new TimeSpan(0, 8, 0,
-                                                                                                               0));
+                Expect.Call(person.AverageWorkTimeOfDay(new DateOnly())).IgnoreArguments().Return(new TimeSpan(0, 8, 0, 0));
+				Expect.Call(person.VirtualSchedulePeriod(new DateOnly())).IgnoreArguments().Return(_schedulePeriod);
+				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod());
             }
 
             using (_mocks.Playback())
@@ -265,7 +269,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
             effectiveRestriction.Absence.InContractTime = true;
             var person = _mocks.StrictMock<IPerson>();
             var personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly());
-            
+        	
             IPersonContract personContract = PersonContractFactory.CreatePersonContract();
             IContract contract = ContractFactory.CreateContract("Hej");
             contract.WorkTime= new WorkTime(TimeSpan.FromHours(8));
@@ -281,6 +285,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Restrictions
                 Expect.Call(dateOnlyAsPeriod.DateOnly).Return(onDate);
                 Expect.Call(person.Period(new DateOnly())).IgnoreArguments().Return(personPeriod);
                 Expect.Call(person.AverageWorkTimeOfDay(new DateOnly())).IgnoreArguments().Return(new TimeSpan(0,8,0,0) );
+				Expect.Call(person.VirtualSchedulePeriod(new DateOnly())).IgnoreArguments().Return(_schedulePeriod);
+            	Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod());
             }
 
             IWorkTimeMinMax result;

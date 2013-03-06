@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
+using Teleopti.Ccc.Web.Areas.SSO.Controllers;
 using Teleopti.Ccc.Web.Areas.Start.Controllers;
 using Teleopti.Ccc.Web.Core.Startup.Booter;
 using Teleopti.Ccc.Web.Filters;
@@ -31,7 +32,8 @@ namespace Teleopti.Ccc.Web.Core.Startup
 																		typeof(AuthenticationController),
 																		typeof(AuthenticationApiController),
 																		typeof(ApplicationAuthenticationApiController),
-																		typeof(TestController)
+																		typeof(TestController),
+																		typeof(OpenIdController)
 			                                                    	}));
 			filters.Add(new CheckStartupExceptionAttribute());
 		}

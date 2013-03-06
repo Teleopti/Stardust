@@ -23,15 +23,17 @@ define(
 					return minutes + 60 * hours;
 				}
 			},
-			Date: {
-				DateToUrl: function (date) {
-					return date.replace(/-/g, '');
-				} 
-			},
 			Async: {
 				RunAndSetInterval: function (code, interval) {
 					code();
 					return setInterval(code, interval);
+				}
+			},
+			Date: {
+				AsUTCDate: function (date) {
+					// this is NOT a time zone conversion!
+					// it recreated the date part in another time zone!
+					return new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
 				}
 			}
 		};

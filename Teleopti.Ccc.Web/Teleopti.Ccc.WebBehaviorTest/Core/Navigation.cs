@@ -197,7 +197,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
             Pages.Pages.NavigatingTo(Browser.Current.Page<MessagePage>());
 	    }
 
-		public static void GotoAnywhereSchedule(string date = null)
+		public static void GotoAnywhereTeamSchedule(string date = null)
 		{
 			string hash = string.Empty;
 			if (!string.IsNullOrEmpty(date))
@@ -208,17 +208,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			Pages.Pages.NavigatingTo(Browser.Current.Page<AnywherePage>());
 		}
 
-		public static void GotoAnywhereAgentSchedule(Guid personId, DateTime date)
+		public static void GotoAnywherePersonSchedule(Guid personId, DateTime date)
 		{
-			GoTo(string.Format("Anywhere#agentschedule/{0}/{1}",
+			GoTo(string.Format("Anywhere#personschedule/{0}/{1}",
 				personId, date.Year.ToString("0000") + date.Month.ToString("00") + date.Day.ToString("00"))
 				, new ApplicationStartupTimeout());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<AnywherePage>());
 		}
 
-		public static void GotoAnywhereAgentScheduleFullDayAbsenceForm(Guid personId, DateTime date)
+		public static void GotoAnywherePersonScheduleFullDayAbsenceForm(Guid personId, DateTime date)
 		{
-			GoTo(string.Format("Anywhere#agentschedule/{0}/{1}/addfulldayabsence",
+			GoTo(string.Format("Anywhere#personschedule/{0}/{1}/addfulldayabsence",
 				personId, date.Year.ToString("0000") + date.Month.ToString("00") + date.Day.ToString("00"))
 				, new ApplicationStartupTimeout());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<AnywherePage>());

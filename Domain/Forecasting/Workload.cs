@@ -346,7 +346,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             {
             	workloadDay.ApplyTemplate(
             		(WorkloadDayTemplate) GetTemplate(TemplateTarget.Workload, workloadDay.CurrentDate.DayOfWeek),
-            		day => day.Lock(), day => day.Release());
+            		day => day.Lock(), day => {});
             }
         }
 

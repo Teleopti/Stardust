@@ -115,6 +115,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AgentInfo\Requests\IBatchShiftTradeRequestStatusChecker.cs" />
+    <Compile Include="AgentInfo\Requests\ShiftTradeStatusExtensions.cs" />
     <Compile Include="Analytics\BaseConfiguration.cs" />
     <Compile Include="Auditing\AuditSetting.cs" />
     <Compile Include="Auditing\Revision.cs" />

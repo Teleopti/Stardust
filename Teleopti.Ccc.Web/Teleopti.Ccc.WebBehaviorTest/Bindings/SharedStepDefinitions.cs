@@ -79,10 +79,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			EventualAssert.That(() => textRequestSymbol.DisplayHidden(), Is.True);
 		}
 
-
-
-
-
+		[Then(@"I should see an indication that no agents that can go on holiday for date '(.*)'")]
+		public void ThenIShouldSeeAnIndicationThatNoAgentsThatCanGoOnHolidayForDate(DateTime date)
+		{
+			var holidayAgentsSymbol = Pages.Pages.WeekSchedulePage.HolidayAgentsForDate(date);
+			EventualAssert.That(() => holidayAgentsSymbol.DisplayHidden(), Is.True);
+		}
 
 		[Then(@"I should see current or first future virtual schedule period \+/- 1 week")]
 		public void ThenIShouldSeeCurrentOrFirstFutureVirtualSchedulePeriod_1Week()
