@@ -38,6 +38,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         public bool UseLevellingSameShiftCategory { get; set; }
         public bool UseLevellingSameStartTime { get; set; }
         public bool UseLevellingSameShift { get; set; }
+        public bool UseLevellingPerOption { get; set; }
 
         public bool DoNotBreakMaxStaffing { get; set; }
         public IGroupPageLight GroupPageForShiftCategoryFairness { get; set; }

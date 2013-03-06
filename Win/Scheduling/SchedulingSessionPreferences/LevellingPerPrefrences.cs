@@ -78,12 +78,12 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
                 levelling.SelectedBlockFinderType = BlockFinderType.BetweenDayOff;
             else if (radioButtonSchedulePeriod.Checked)
                 levelling.SelectedBlockFinderType = BlockFinderType.SchedulePeriod;
-
-            //selected page
-            if ((string) comboBoxTeams.SelectedValue != "SingleAgentTeam")
-                levelling.SelectedGroupPage = (IGroupPageLight)comboBoxTeams.SelectedItem;
             else
-                levelling.SelectedGroupPage = null;
+                levelling.SelectedBlockFinderType = BlockFinderType.None;
+            //selected page
+           levelling.SelectedGroupPage = (IGroupPageLight)comboBoxTeams.SelectedItem;
+
+
 
 		    _levellingPerConfiguration = levelling;
 
