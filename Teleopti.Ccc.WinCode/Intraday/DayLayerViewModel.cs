@@ -25,8 +25,6 @@ namespace Teleopti.Ccc.WinCode.Intraday
         private static CommonNameDescriptionSetting _commonNameDescriptionSetting;
         private readonly ICollection<DayLayerModel> _models = new ObservableCollection<DayLayerModel>();
 
-		public CollectionViewSource ModelSource { get; set; }
-
         public DayLayerViewModel(IRtaStateHolder rtaStateHolder, IEventAggregator eventAggregator, IUnitOfWorkFactory unitOfWorkFactory, IRepositoryFactory repositoryFactory, IDispatcherWrapper dispatcherWrapper)
         {
             _eventAggregator = eventAggregator;
@@ -34,9 +32,6 @@ namespace Teleopti.Ccc.WinCode.Intraday
             _repositoryFactory = repositoryFactory;
             _dispatcherWrapper = dispatcherWrapper;
             _rtaStateHolder = rtaStateHolder;
-
-			ModelSource = new CollectionViewSource();
-	        ModelSource.Source = Models;
         }
 
         public ICollection<DayLayerModel> Models
@@ -106,24 +101,42 @@ namespace Teleopti.Ccc.WinCode.Intraday
         {
             foreach (var dayLayerModel in Models)
             {
-                IActualAgentState agentState;
-                if (!_rtaStateHolder.ActualAgentStates.TryGetValue(dayLayerModel.Person, out agentState)) continue;
-                dayLayerModel.CurrentActivityDescription = agentState.Scheduled;
-                dayLayerModel.EnteredCurrentState = agentState.StateStart;
-                dayLayerModel.NextActivityDescription = agentState.ScheduledNext;
-                dayLayerModel.NextActivityStartDateTime = agentState.NextStart;
-                dayLayerModel.CurrentStateDescription = agentState.State;
-                dayLayerModel.AlarmStart = agentState.AlarmStart;
-
-            	if (DateTime.UtcNow > dayLayerModel.AlarmStart)
-            	{
-            		dayLayerModel.AlarmDescription = agentState.AlarmName;
-            		dayLayerModel.ColorValue = agentState.Color;
-            		dayLayerModel.StaffingEffect = agentState.StaffingEffect;
-            	}
+	            IActualAgentState agentState;
+	            if (!_rtaStateHolder.ActualAgentStates.TryGetValue(dayLayerModel.Person, out agentState)) continue;
+	            if (haveStateChanged(dayLayerModel, agentState)) continue;
+	            dayLayerModel.CurrentActivityDescription = agentState.Scheduled;
+	            dayLayerModel.EnteredCurrentState = agentState.StateStart;
+	            dayLayerModel.NextActivityDescription = agentState.ScheduledNext;
+	            dayLayerModel.NextActivityStartDateTime = agentState.NextStart;
+	            dayLayerModel.CurrentStateDescription = agentState.State;
+	            dayLayerModel.AlarmStart = agentState.AlarmStart;
+	            
+	            if (DateTime.UtcNow > dayLayerModel.AlarmStart)
+	            {
+		            dayLayerModel.AlarmDescription = agentState.AlarmName;
+		            dayLayerModel.ColorValue = agentState.Color;
+		            dayLayerModel.StaffingEffect = agentState.StaffingEffect;
+	            }
             }
-			ModelSource.View.Refresh();
         }
+
+		private static bool haveStateChanged(DayLayerModel dayLayerModel, IActualAgentState agentState)
+		{
+			var includeAlarmChange = false;
+			if (DateTime.UtcNow > dayLayerModel.AlarmStart)
+			{
+				includeAlarmChange = dayLayerModel.AlarmDescription == agentState.AlarmName
+				                     && dayLayerModel.ColorValue == agentState.Color
+				                     && dayLayerModel.StaffingEffect.Equals(agentState.StaffingEffect);
+			}
+			return dayLayerModel.CurrentActivityDescription == agentState.Scheduled
+			&& dayLayerModel.EnteredCurrentState == agentState.StateStart
+			&& dayLayerModel.NextActivityDescription == agentState.ScheduledNext
+			&& dayLayerModel.NextActivityStartDateTime == agentState.NextStart
+			&& dayLayerModel.CurrentStateDescription == agentState.State
+			&& dayLayerModel.AlarmStart == agentState.AlarmStart
+			&& includeAlarmChange;
+		}
 
         public void RefreshProjection(IPerson person)
         {

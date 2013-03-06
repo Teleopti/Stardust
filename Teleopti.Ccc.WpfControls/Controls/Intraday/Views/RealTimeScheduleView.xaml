@@ -67,7 +67,7 @@
                        Background="{StaticResource RaptorStandardLightGradientBrush}"  
                        HorizontalAlignment="Stretch"  
 					   VerticalAlignment="Stretch" 
-					   ItemsSource="{Binding Path=DayLayerViewModel.ModelSource.View}"
+					   ItemsSource="{Binding Path=DayLayerViewModel.Models}"
 					   AutoGenerateColumns="False"
                        CellStyle="{StaticResource CellStyle}"
                        SelectionMode="Extended" CanUserSortColumns="True"

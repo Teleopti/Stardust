@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using log4net;
@@ -20,7 +21,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
         private IEnumerable<IStateGroupActivityAlarm> _stateGroupActivityAlarms;
         private readonly IRangeProjectionService _rangeProjectionService;
         private readonly IDictionary<IPerson, IAgentState> _agentStates = new Dictionary<IPerson, IAgentState>();
-        private readonly IDictionary<IPerson, IActualAgentState> _actualAgentStates = new Dictionary<IPerson, IActualAgentState>();
+		private readonly ConcurrentDictionary<IPerson, IActualAgentState> _actualAgentStates = new ConcurrentDictionary<IPerson, IActualAgentState>();
         private readonly IDictionary<BatchIdentifier, IAgentStateBatch> _agentStateBatchDictionary = new Dictionary<BatchIdentifier, IAgentStateBatch>();
         private IList<IActivity> _rtaStateAsActivities = new List<IActivity>();
         private readonly DateOnlyPeriod _dateOnlyPeriodToday = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today);
@@ -83,15 +84,16 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
 
         public void SetActualAgentState(IActualAgentState actualAgentState)
         {
-	        var person = FilteredPersons.FirstOrDefault(p => p.Id.Value.Equals(actualAgentState.PersonId));
+	        var person = FilteredPersons.FirstOrDefault(p => p.Id.Value == actualAgentState.PersonId);
 	        if (person == null)
                 return;
-            if (_actualAgentStates.ContainsKey(person))
-                _actualAgentStates[person] = actualAgentState;
-            else
-            {
-                _actualAgentStates.Add(person, actualAgentState);
-            }
+			_actualAgentStates.AddOrUpdate(person, actualAgentState, (key, oldState) => actualAgentState);
+			//if (_actualAgentStates.ContainsKey(person))
+			//    _actualAgentStates[person] = actualAgentState;
+			//else
+			//{
+			//    _actualAgentStates.AddOrUpdate(person, actualAgentState, (person1, state) => state);
+			//}
         }
 
         public void SetFilteredPersons(IEnumerable<IPerson> filteredPersons)

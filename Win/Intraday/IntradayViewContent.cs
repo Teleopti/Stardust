@@ -270,11 +270,11 @@ namespace Teleopti.Ccc.Win.Intraday
 
         private void backgroundWorkerFetchData_DoWork(object sender, DoWorkEventArgs e)
         {
-            using (PerformanceOutput.ForOperation("Refreshing States"))
-            {
-                _scheduleView.Presenter.Now = DateTime.UtcNow;
-                _presenter.RefreshAgentStates(_scheduleView.Presenter.Now, TimeSpan.Zero);
-            }
+			//using (PerformanceOutput.ForOperation("Refreshing States"))
+			//{
+	        _scheduleView.Presenter.Now = DateTime.UtcNow;
+	        //    _presenter.RefreshAgentStates(_scheduleView.Presenter.Now, TimeSpan.Zero);
+	        //}
         }
 
         private void backgroundWorkerFetchData_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
