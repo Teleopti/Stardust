@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -7,10 +6,8 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
-using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
@@ -18,24 +15,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 	[TestFixture]
 	public class PersonRequestProviderTest
 	{
-		[Test]
-		public void ShouldFindTextRequestsForCurrentUserWithPaging()
-		{
-			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
-			var repository = MockRepository.GenerateMock<IPersonRequestRepository>();
-			var target = new PersonRequestProvider(repository, loggedOnUser, null);
-			var person = new Person();
-			var paging = new Paging();
-			var personRequests = new IPersonRequest[] { };
-
-			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
-			repository.Stub(x => x.FindTextAndAbsenceRequestsForAgent(person, paging)).Return(personRequests);
-
-			target.RetrieveTextAndAbsenceRequests(paging);
-
-			repository.AssertWasCalled(x => x.FindTextAndAbsenceRequestsForAgent(person, paging));
-		}
-
 		[Test]
 		public void ShouldRetrieveRequestsForCurrentUserAndDays()
 		{
@@ -96,11 +75,11 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var personRequests = new IPersonRequest[] { MockRepository.GenerateStub<IPersonRequest>(), MockRepository.GenerateStub<IPersonRequest>() };
 
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
-			repository.Stub(x => x.FindTextAndAbsenceRequestsForAgent(person, paging)).Return(personRequests);
+			repository.Stub(x => x.FindAllRequestsForAgent(person, paging)).Return(personRequests);
 
 			Assert.That(personRequests.Length, Is.EqualTo(target.RetrieveRequests(paging).Count()));
 
-			repository.AssertWasCalled(x => x.FindTextAndAbsenceRequestsForAgent(person, paging));
+			repository.AssertWasCalled(x => x.FindAllRequestsForAgent(person, paging));
 		}
 	}
 }

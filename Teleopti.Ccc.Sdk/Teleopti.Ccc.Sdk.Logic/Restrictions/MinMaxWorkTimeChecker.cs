@@ -63,11 +63,12 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
             var person = scheduleDay.Person;
             var scheduleDate = scheduleDay.DateOnlyAsPeriod.DateOnly;
             var personPeriod = person.Period(scheduleDate);
+        	var schedulePeriod = person.VirtualSchedulePeriod(scheduleDate);
             var personContract = personPeriod.PersonContract;
             var avgWorkTime = new TimeSpan((long)(person.AverageWorkTimeOfDay(scheduleDate).Ticks  * personContract.PartTimePercentage.Percentage.Value));
 
 			// there is no real schedule period so we use person period's start date
-            if (!personContract.ContractSchedule.IsWorkday(personPeriod.StartDate, scheduleDate))
+			if (!personContract.ContractSchedule.IsWorkday(schedulePeriod.DateOnlyPeriod.StartDate, scheduleDate))
                 return new WorkTimeMinMax {WorkTimeLimitation = new WorkTimeLimitation(TimeSpan.Zero, TimeSpan.Zero)};
 
             if(!effectiveRestriction.Absence.InContractTime)

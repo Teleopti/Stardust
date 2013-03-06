@@ -616,6 +616,7 @@
     <Compile Include="Infrastructure\EncryptionConstants.cs" />
     <Compile Include="Infrastructure\ICheckLicenseAtPersist.cs" />
     <Compile Include="Infrastructure\IConfigReader.cs" />
+    <Compile Include="Infrastructure\ICurrentUnitOfWork.cs" />
     <Compile Include="Infrastructure\ICustomDataCache.cs" />
     <Compile Include="Infrastructure\IDeleteTag.cs" />
     <Compile Include="Domain\IEntity.cs" />

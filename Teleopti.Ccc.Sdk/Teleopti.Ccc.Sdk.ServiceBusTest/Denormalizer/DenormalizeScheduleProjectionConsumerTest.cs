@@ -49,13 +49,21 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			using (mocks.Playback())
 			{
 				target.Consume(new DenormalizedSchedule
-				{
-					IsDefaultScenario = true,
-					PersonId = person.Id.GetValueOrDefault(),
-					StartDateTime = period.StartDateTime,
-					EndDateTime = period.EndDateTime,
-					Layers = new Collection<DenormalizedScheduleProjectionLayer>{new DenormalizedScheduleProjectionLayer()}
-				});
+				               	{
+				               		IsDefaultScenario = true,
+				               		PersonId = person.Id.GetValueOrDefault(),
+				               		ScheduleDays = new[]
+				               		               	{
+				               		               		new DenormalizedScheduleDay
+				               		               			{
+				               		               				StartDateTime = period.StartDateTime,
+				               		               				EndDateTime = period.EndDateTime,
+				               		               				Layers =
+				               		               					new Collection<DenormalizedScheduleProjectionLayer>
+				               		               						{new DenormalizedScheduleProjectionLayer()}
+				               		               			}
+				               		               	}
+				               	});
 			}
 		}
 
@@ -75,14 +83,22 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			using (mocks.Playback())
 			{
 				target.Consume(new DenormalizedSchedule
-				{
-					IsDefaultScenario = true,
-					PersonId = person.Id.GetValueOrDefault(),
-					StartDateTime = period.StartDateTime,
-					EndDateTime = period.EndDateTime,
-					Layers = new Collection<DenormalizedScheduleProjectionLayer>{new DenormalizedScheduleProjectionLayer()},
-					IsInitialLoad = true,
-				});
+				               	{
+				               		IsDefaultScenario = true,
+				               		PersonId = person.Id.GetValueOrDefault(),
+				               		ScheduleDays = new[]
+				               		               	{
+				               		               		new DenormalizedScheduleDay
+				               		               			{
+				               		               				StartDateTime = period.StartDateTime,
+				               		               				EndDateTime = period.EndDateTime,
+				               		               				Layers =
+				               		               					new Collection<DenormalizedScheduleProjectionLayer>
+				               		               						{new DenormalizedScheduleProjectionLayer()}
+				               		               			}
+				               		               	},
+				               		IsInitialLoad = true,
+				               	});
 			}
 		}
 
@@ -100,13 +116,21 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			using (mocks.Playback())
 			{
 				target.Consume(new DenormalizedSchedule
-				{
-					IsDefaultScenario = false,
-					PersonId = person.Id.GetValueOrDefault(),
-					StartDateTime = period.StartDateTime,
-					EndDateTime = period.EndDateTime,
-					Layers = new Collection<DenormalizedScheduleProjectionLayer> { new DenormalizedScheduleProjectionLayer() }
-				});
+				               	{
+				               		IsDefaultScenario = false,
+				               		PersonId = person.Id.GetValueOrDefault(),
+				               		ScheduleDays = new[]
+				               		               	{
+				               		               		new DenormalizedScheduleDay
+				               		               			{
+				               		               				StartDateTime = period.StartDateTime,
+				               		               				EndDateTime = period.EndDateTime,
+				               		               				Layers =
+				               		               					new Collection<DenormalizedScheduleProjectionLayer>
+				               		               						{new DenormalizedScheduleProjectionLayer()}
+				               		               			}
+				               		               	}
+				               	});
 			}
 		}
 	}

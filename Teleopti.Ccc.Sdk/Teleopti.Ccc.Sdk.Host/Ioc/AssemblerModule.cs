@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost.Ioc
 		{
 			builder.RegisterAssemblyTypes(typeof(PersonAssembler).Assembly)
 				.Where(isAssembler)
-                .PropertiesAutowired(PropertyWiringFlags.AllowCircularDependencies)
+                .PropertiesAutowired(PropertyWiringOptions.AllowCircularDependencies)
 				.AsImplementedInterfaces()
                 .InstancePerLifetimeScope();
 

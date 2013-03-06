@@ -1,9 +1,9 @@
 using System;
-using System.Globalization;
 using System.Threading;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 {
@@ -12,29 +12,31 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 		public PersonRequest PersonRequest1;
 		public PersonRequest PersonRequest2;
 
-		public void Apply(IPerson user, CultureInfo cultureInfo)
+		public void Apply(IPerson user,IUnitOfWork uow)
 		{
 
 			ScenarioUnitOfWorkState.UnitOfWorkAction(
-				uow =>
+				unitOfWork =>
 					{
 						var textRequest1 = new TextRequest(new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow.AddHours(5)));
 						PersonRequest1 = new PersonRequest(user, textRequest1) {Subject = "I need some cake"};
-						PersonRequest1.TrySetMessage("This is some text that is just here to fill a space and demonstrate how this will behave when we have lots and lots of character is a long long text that doesnt really mean anything at all.");
-						var requestRepository = new PersonRequestRepository(uow);
-						requestRepository.Add(PersonRequest1);
+						PersonRequest1.TrySetMessage(
+							"This is some text that is just here to fill a space and demonstrate how this will behave when we have lots and lots of character is a long long text that doesnt really mean anything at all.");
+						var requestRepository1 = new PersonRequestRepository(unitOfWork);
+						requestRepository1.Add(PersonRequest1);
 					});
+					
 
 			Thread.Sleep(1010);
 
 			ScenarioUnitOfWorkState.UnitOfWorkAction(
-				uow =>
+				unitOfWork =>
 					{
 						var textRequest2 = new TextRequest(new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow.AddHours(5)));
 						PersonRequest2 = new PersonRequest(user, textRequest2) {Subject = "I need some cake"};
 						PersonRequest2.TrySetMessage("This is some text that is just here to fill a space and demonstrate how this will behave when we have lots and lots of character is a long long text that doesnt really mean anything at all.");
-						var requestRepository = new PersonRequestRepository(uow);
-						requestRepository.Add(PersonRequest2);
+						var requestRepository2 = new PersonRequestRepository(unitOfWork);
+						requestRepository2.Add(PersonRequest2);
 					});
 
 		}

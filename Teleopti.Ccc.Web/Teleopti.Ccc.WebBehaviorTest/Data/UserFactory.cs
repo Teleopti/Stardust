@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			const string userNameForMe = "I";
 			if (ScenarioContext.Current.Value<UserFactory>(userNameForMe) == null)
 			{
-				ScenarioContext.Current.Value(userNameForMe, new UserFactory());				
+				ScenarioContext.Current.Value(userNameForMe, new UserFactory());
 			}
 			return ScenarioContext.Current.Value<UserFactory>(userNameForMe);
 		}
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			if (ScenarioContext.Current.Value<UserFactory>(trimmedUserName) == null)
 			{
 				var rootUser = User();
-				rootUser.AddColleague(trimmedUserName);			
+				rootUser.AddColleague(trimmedUserName);
 			}
 			return ScenarioContext.Current.Value<UserFactory>(trimmedUserName);
 		}
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		private void AddColleague(string userName)
 		{
 			var userFactory = new UserFactory();
-			userFactory.Setup(new UserConfigurable {Name = userName});
+			userFactory.Setup(new UserConfigurable { Name = userName });
 			_colleagues.Add(userFactory);
 			ScenarioContext.Current.Value(userName, userFactory);
 		}
@@ -87,10 +87,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		{
 			_userNumber++;
 			return new NameInfo
-			       	{
-			       		LogOnName = _userNumber.ToString(),
-			       		LastName = _userNumber.ToString().PadLeft(3, '0')
-			       	};
+							{
+								LogOnName = _userNumber.ToString(),
+								LastName = _userNumber.ToString().PadLeft(3, '0')
+							};
 		}
 
 		private static int _colleagueNumber;
@@ -98,10 +98,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		{
 			_colleagueNumber++;
 			return new NameInfo
-			       	{
-			       		LogOnName = _colleagueNumber.ToString(),
-			       		LastName = _colleagueNumber.ToString().PadLeft(3, '0')
-			       	};
+							{
+								LogOnName = _colleagueNumber.ToString(),
+								LastName = _colleagueNumber.ToString().PadLeft(3, '0')
+							};
 		}
 
 		public void Setup(IUserSetup setup)
@@ -154,7 +154,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		}
 
 		public CultureInfo Culture { get { return Person.PermissionInformation.Culture(); } }
-		
+
 		public IPerson Person { get; private set; }
 
 		public bool HasSetup<T>()
@@ -201,9 +201,23 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 				colleague.MakeOtherPerson(colleague.Person);
 			});
 
+			doPostSetups();
+			_colleagues.ForEach(c => c.doPostSetups());
 			Resources.Culture = Culture;
 
 			return logonName;
+		}
+
+		private void doPostSetups()
+		{
+			using (var uow = GlobalUnitOfWorkState.UnitOfWorkFactory.CreateAndOpenUnitOfWork())
+			{
+				_postSetups.ForEach(s =>
+				{
+					s.Apply(Person, uow);
+				});
+				uow.PersistAll();
+			}
 		}
 
 		private void MakeMePerson(IPerson person)
@@ -213,8 +227,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			_dataFactory.Apply();
 
 			ApplyPersonData(person, out culture);
-
-			_postSetups.ForEach(s => s.Apply(person, culture));
 
 			_analyticsDataFactory.Persist(culture);
 		}
@@ -259,7 +271,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		private IEnumerable<T> QueryData<T>()
 		{
-			return from s in AllSpecs where typeof (T).IsAssignableFrom(s.GetType()) select (T) s;
+			return from s in AllSpecs where typeof(T).IsAssignableFrom(s.GetType()) select (T)s;
 		}
 
 	}

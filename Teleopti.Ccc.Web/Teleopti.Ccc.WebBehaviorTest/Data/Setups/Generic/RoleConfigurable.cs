@@ -48,6 +48,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			AccessToAsm = true;
             AccessToTextRequests = true;
             AccessToAbsenceRequests = true;
+            AccessToShiftTradeRequests = true;
 			AccessToAnywhere = false;
 		}
 

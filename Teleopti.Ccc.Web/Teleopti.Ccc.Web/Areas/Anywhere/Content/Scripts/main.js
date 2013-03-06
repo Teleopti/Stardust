@@ -9,8 +9,7 @@ require.config({
 		moment: '../../../../Content/moment/moment',
 		bootstrap: '../../../../Content/bootstrap/bootstrap.min',
 		signals: '../../../../Content/signals/signals',
-		signalr: '../../../../Content/signalr/jquery.signalR-1.0.0-rc2.min',
-		signalrHubs: '../../../../Content/signalr/signalr-hubs',
+		signalr: '../../../../Content/signalr/jquery.signalR-1.0.1.min',
 		crossroads: '../../../../Content/crossroads/crossroads',
 		hasher: '../../../../Content/hasher/hasher',
 		swipeListener: '../../../../Content/jquery-plugin/jquery.swipeListener',
@@ -19,7 +18,7 @@ require.config({
 		momentDatepickerKo: '../../../../Content/moment-datepicker/moment-datepicker-ko',
 		
 		noext: '../../../../Content/require/noext',
-
+		
 		templates: '../templates',
 		
 		text: '../../../../Content/require/text'
@@ -33,8 +32,12 @@ require.config({
 		},
 		'jqueryui': ['jquery'],
 		'bootstrap': ['jquery'],
+
 		'signalr': ['jquery'],
-		'signalrHubs': ['signalr'],
+		// wtf!
+		'Areas/Anywhere/Content/Scripts/../../../../signalr/hubs?noext=1&noext=1': ['jquery', 'signalr'],
+		'Areas/Anywhere/Content/Scripts/../../../../signalr/hubs?noext=1': ['jquery', 'signalr'],
+		
 		'momentLanguages': ['moment'],
 		'momentDatepicker': ['momentLanguages'],
 		'momentDatepickerKo': ['momentDatepicker'],

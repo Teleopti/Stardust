@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Rhino.ServiceBus;
 using SharpTestsEx;
+using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Sdk.ServiceBus;
 using Teleopti.Ccc.Sdk.ServiceBus.Forecast;
 using Teleopti.Interfaces.Infrastructure;
@@ -33,7 +34,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 			builder.RegisterInstance(_serviceBus).As<IServiceBus>();
 			builder.RegisterType<ExportMultisiteSkillToSkillConsumer>().As<ConsumerOf<ExportMultisiteSkillToSkill>>();
 
-			builder.RegisterModule<RepositoryContainerInstaller>();
+			builder.RegisterModule<RepositoryModule>();
 			builder.RegisterModule<ApplicationInfrastructureContainerInstaller>();
 			builder.RegisterModule<ForecastContainerInstaller>();
 			builder.RegisterModule<ExportForecastContainerInstaller>();

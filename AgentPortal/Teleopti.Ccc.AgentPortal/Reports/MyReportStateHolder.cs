@@ -157,7 +157,7 @@ namespace Teleopti.Ccc.AgentPortal.Reports
 				IList<AdherenceLayer> adherenceLayers = GetAdherenceLayers(person, mySchedulePart.Date.DateTime);
 				
 				var scheduleAdherence = new ScheduleAdherence(new VisualProjection(person, activityVisualLayers, string.Empty, false), adherenceLayers);
-				if (activityVisualLayers.Count == 0) _dayAdherence = 100;
+				if (activityVisualLayers.Count == 0) _dayAdherence = null;
 
 				var myScheduleGridAdapter = new MyScheduleGridAdapter
 				                            	{
@@ -203,7 +203,10 @@ namespace Teleopti.Ccc.AgentPortal.Reports
 						               TimeSpan.FromTicks(adherenceDataDto.LocalEndTime)), (double) adherenceDataDto.ReadyTimeMinutes, 
 									   adherenceDataDto.CalendarDate, adherenceDataDto.ShiftBelongsToDate);
 				adherenceLayers.Add(adherenceLayer);
-				_dayAdherence = adherenceDataDto.DayAdherence * 100;
+				if (adherenceDataDto.AdherenceForDay.HasValue)
+					_dayAdherence = adherenceDataDto.AdherenceForDay * 100;
+				else
+					_dayAdherence = null;
 			}
 			return adherenceLayers;
 		}

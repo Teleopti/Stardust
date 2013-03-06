@@ -1,8 +1,7 @@
-﻿@ignore
-Feature: View agent schedule
-	In order to know how an agent in my team should work
+﻿Feature: View person schedule
+	In order to know how a person in my team should work
 	As a team leader
-	I want to see the schedule for the agent
+	I want to see the schedule for the person
 	
 Background:
 	Given there is a team with
@@ -39,7 +38,7 @@ Scenario: View shift
 	| Lunch start time | 11:30        |
 	| Lunch end time   | 12:15        |
 	| Lunch activity   | Lunch        |
-	When I view agent schedule for 'Pierre Baldi' on '2012-12-02'
+	When I view person schedule for 'Pierre Baldi' on '2012-12-02'
 	Then I should see these shift layers
 	| Start time | End time |
 	| 08:00      | 11:30    |
@@ -55,7 +54,7 @@ Scenario: View night shift from yesterday
 	| Start time       | 20:00        |
 	| End time         | 1.04:00      |
 	| Activity         | Phone        |
-	When I view agent schedule for 'Pierre Baldi' on '2012-12-02'
+	When I view person schedule for 'Pierre Baldi' on '2012-12-02'
 	Then I should not see any shift
 
 Scenario: View night shift from today
@@ -67,16 +66,16 @@ Scenario: View night shift from today
 	| Start time       | 20:00        |
 	| End time         | 1.04:00      |
 	| Activity         | Phone        |
-	When I view agent schedule for 'Pierre Baldi' on '2012-12-02'
+	When I view person schedule for 'Pierre Baldi' on '2012-12-02'
 	Then I should see a shift layer with
-	| Field      | Value |
-	| Start time | 20:00 |
-	| End time   | 04:00 |
+	| Field      | Value   |
+	| Start time | 20:00   |
+	| End time   | 1.04:00 |
 
-Scenario: View schedule in agents time zone
+Scenario: View schedule in persons time zone
 	Given I have the role 'Anywhere Team Green'
-	And I am located in Stockholm
 	And 'Pierre Baldi' is located in Hawaii
+	And I am located in Hawaii
 	And 'Pierre Baldi' have a (read model) shift with
 	| Field            | Value        |
 	| Person           | Pierre Baldi |
@@ -84,8 +83,8 @@ Scenario: View schedule in agents time zone
 	| Start time       | 08:00        |
 	| End time         | 17:00        |
 	| Activity         | Phone        |
-	When I view agent schedule for 'Pierre Baldi' on '2012-12-02'
+	When I view person schedule for 'Pierre Baldi' on '2012-12-02'
 	Then I should see a shift layer with
 	| Field      | Value |
-	| Start time | 23:00 |
-	| End time   | 08:00 |
+	| Start time | 22:00 |
+	| End time   | 1.07:00 |

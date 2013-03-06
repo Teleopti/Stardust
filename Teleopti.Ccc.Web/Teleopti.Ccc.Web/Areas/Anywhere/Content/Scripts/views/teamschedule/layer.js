@@ -3,17 +3,16 @@ define([
 		'moment'
 	], function (ko, moment) {
 
-		return function (timeline, projectionLayer, date) {
+		return function (timeline, data, date) {
 
 			var self = this;
 
-			var localTime = moment(projectionLayer.Start, "YYYY-MM-DD hh:mm:ss Z").local();
+			var localTime = moment(data.Start, "YYYY-MM-DD hh:mm:ss Z").local();
 			var layerStartMinutes = localTime.diff(date, 'minutes');
 
-
 			this.InternalStartMinutes = layerStartMinutes;
-			this.LengthMinutes = projectionLayer.Minutes;
-			this.Color = projectionLayer.Color;
+			this.LengthMinutes = data.Minutes;
+			this.Color = data.Color;
 
 			this.StartMinutes = function () {
 				return self.InternalStartMinutes < 0 ? 0 : self.InternalStartMinutes;
