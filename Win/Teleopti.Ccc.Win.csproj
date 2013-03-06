@@ -1259,6 +1259,12 @@
     <Compile Include="Scheduling\PermissionClipboardControl.cs" />
     <Compile Include="Scheduling\PermissionEditControl.cs" />
     <Compile Include="Scheduling\QuickAccessState.cs" />
+    <Compile Include="Scheduling\SchedulingSessionPreferences\LevellingPerPrefrences.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Scheduling\SchedulingSessionPreferences\LevellingPerPrefrences.designer.cs">
+      <DependentUpon>LevellingPerPrefrences.cs</DependentUpon>
+    </Compile>
     <Compile Include="Scheduling\SkillFullPeriodGridControl.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -3177,6 +3183,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\SchedulerSplitters.resx">
       <DependentUpon>SchedulerSplitters.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Scheduling\SchedulingSessionPreferences\LevellingPerPrefrences.resx">
+      <DependentUpon>LevellingPerPrefrences.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\SchedulingSessionPreferences\ResourceOptimizerDayOffPreferencesPanel.resx">
       <DependentUpon>ResourceOptimizerDayOffPreferencesPanel.cs</DependentUpon>

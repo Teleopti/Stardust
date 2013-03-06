@@ -48,14 +48,18 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             _extraPreferencesSource.FairnessValue = 102d;
 
+		    _extraPreferencesSource.BlockFinderTypeForAdvanceOptimization = BlockFinderType.BetweenDayOff;
+
 			_target.MapFrom(_extraPreferencesSource);
 			_target.MapTo(_extraPreferencesTarget, _groupPages);
 
 			Assert.AreEqual(_extraPreferencesSource.BlockFinderTypeValue, _extraPreferencesTarget.BlockFinderTypeValue);
 			Assert.AreEqual(_extraPreferencesSource.UseBlockScheduling, _extraPreferencesTarget.UseBlockScheduling);
 			Assert.AreEqual(_extraPreferencesSource.UseTeams, _extraPreferencesTarget.UseTeams);
-
+            
             Assert.AreEqual(_extraPreferencesSource.FairnessValue, _extraPreferencesTarget.FairnessValue);
+
+            Assert.AreEqual(_extraPreferencesSource.BlockFinderTypeForAdvanceOptimization,_extraPreferencesTarget.BlockFinderTypeForAdvanceOptimization);
 		}
 
 		[Test]
@@ -63,8 +67,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		{
 			_target.SetGroupPageOnTeamKey(_groupPage1Key);
 			_target.SetGroupPageOnCompareWithKey(_groupPage1Key);
+            _target.SetGroupPageOnTeamLevellingPerKey( _groupPage1Key);
 			_target.MapTo(_extraPreferencesTarget, _groupPages);
 			Assert.AreEqual(_extraPreferencesTarget.GroupPageOnTeam.Key, _groupPage1Key);
+			Assert.AreEqual(_extraPreferencesTarget.GroupPageOnTeamLevelingPer.Key, _groupPage1Key);
 			Assert.AreEqual(_extraPreferencesTarget.GroupPageOnCompareWith.Key, _groupPage1Key);
 		}
 
@@ -73,8 +79,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		{
 			_target.SetGroupPageOnTeamKey(_groupPage2Key);
 			_target.SetGroupPageOnCompareWithKey(_groupPage2Key);
+            _target.SetGroupPageOnTeamLevellingPerKey(_groupPage2Key);
 			_target.MapTo(_extraPreferencesTarget, _groupPages);
 			Assert.IsNull(_extraPreferencesTarget.GroupPageOnTeam);
+            Assert.IsNull(_extraPreferencesTarget.GroupPageOnTeamLevelingPer);
 			Assert.IsNull(_extraPreferencesTarget.GroupPageOnCompareWith);
 		}
 	}
