@@ -171,7 +171,7 @@ namespace Teleopti.Messaging.SignalR
 			var handler = OnNotification;
 			if (handler!=null)
 			{
-				var d = obj[0].Value<Notification>();
+				var d = obj[0].ToObject<Notification>();
 				handler.BeginInvoke(d, onNotificationCallback,handler);
 			}
 		}

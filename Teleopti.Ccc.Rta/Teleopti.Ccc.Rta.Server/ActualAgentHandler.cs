@@ -143,7 +143,7 @@ namespace Teleopti.Ccc.Rta.Server
 		private Guid resolveStateGroupId(Guid platformTypeId, string stateCode, Guid businessUnitId)
 		{
 			var stateGroups = _actualAgentDataHandler.StateGroups().ToList();
-			var foundState = stateGroups.FirstOrDefault(s => s.PlatformTypeId == platformTypeId && s.StateCode == stateCode && s.BusinessUnitId == businessUnitId);
+			var foundState = stateGroups.FirstOrDefault(s => s.StateCode == stateCode && s.BusinessUnitId == businessUnitId && s.PlatformTypeId == platformTypeId);
 			return foundState != null ? foundState.StateGroupId : Guid.Empty;
 		}
 

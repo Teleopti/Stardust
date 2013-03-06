@@ -29,6 +29,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 
 		private void createReadModel(DenormalizedScheduleBase message)
 		{
+			var nearestLayerToNow = new DenormalizedScheduleProjectionLayer();
+			nearestLayerToNow.StartDateTime = DateTime.MaxValue;
 			using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
 				if (!message.IsDefaultScenario) return;
@@ -44,21 +46,29 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 
 					foreach (var layer in scheduleDay.Layers)
 					{
+						if (date == DateTime.UtcNow.Date &&
+						    ((layer.StartDateTime.ToUniversalTime() < DateTime.UtcNow &&
+						      layer.EndDateTime.ToUniversalTime() > DateTime.UtcNow)
+						     ||
+						     (layer.StartDateTime.ToUniversalTime() > DateTime.UtcNow &&
+						      layer.StartDateTime.ToUniversalTime() < nearestLayerToNow.StartDateTime.ToUniversalTime())))
+							nearestLayerToNow = layer;
+
 						_scheduleProjectionReadOnlyRepository.AddProjectedLayer(date, message.ScenarioId, message.PersonId, layer);
 					}
 				}
 				unitOfWork.PersistAll();
-
-                _serviceBus.Send(new UpdatedScheduleDay
-                {
-                    Datasource = message.Datasource,
-                    BusinessUnitId = message.BusinessUnitId,
-                    PersonId = message.PersonId,
-                    ActivityStartDateTime = message.StartDateTime.GetValueOrDefault(),
-                    ActivityEndDateTime = message.EndDateTime.GetValueOrDefault(),
-                    Timestamp = DateTime.UtcNow
-                });
 			}
+			if (nearestLayerToNow.StartDateTime != DateTime.MaxValue)
+				_serviceBus.Send(new UpdatedScheduleDay
+					{
+						Datasource = message.Datasource,
+						BusinessUnitId = message.BusinessUnitId,
+						PersonId = message.PersonId,
+						ActivityStartDateTime = nearestLayerToNow.StartDateTime,
+						ActivityEndDateTime = nearestLayerToNow.EndDateTime,
+						Timestamp = DateTime.UtcNow
+					});
 		}
 
 		public void Consume(DenormalizedScheduleForScheduleProjection message)
