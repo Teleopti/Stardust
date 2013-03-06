@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 							if (assignment == null) continue;
 							var mainShift = assignment.MainShift;
 							if (mainShift == null) continue;
-							if (!_scheduleDayEquator.MainShiftEquals(mainShift, restriction.CommonMainShift))
+							if (!_scheduleDayEquator.MainShiftBasicEquals(mainShift, restriction.CommonMainShift))
 								return null;
 						}
 					}

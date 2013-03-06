@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.WorkShiftFilters;
@@ -20,6 +21,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftFilters
 		private static IActivity _activity;
 		private static IShiftCategory _category;
 		private TimeZoneInfo _timeZoneInfo;
+		private IScheduleDayEquator _scheduleDayEquator;
 
 		[SetUp]
 		public void Setup()
@@ -32,7 +34,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftFilters
 			_category.SetId(Guid.NewGuid());
 			_timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("UTC"));
 			_personalShiftMeetingTimeChecker = _mocks.StrictMock<IPersonalShiftMeetingTimeChecker>();
-			_target = new CommonMainShiftFilter();
+			_scheduleDayEquator = _mocks.StrictMock<IScheduleDayEquator>();
+			_target = new CommonMainShiftFilter(_scheduleDayEquator);
 		}
 
 		[Test]
@@ -49,10 +52,17 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftFilters
 				new EndTimeLimitation(new TimeSpan(15, 0, 0), new TimeSpan(18, 0, 0)),
 				new WorkTimeLimitation(new TimeSpan(5, 0, 0), new TimeSpan(8, 0, 0)),
 				null, null, null, new List<IActivityRestriction>()) { CommonMainShift = mainShift };
+			var shifts = getCashes();
+			using (_mocks.Record())
+			{
+				Expect.Call(_scheduleDayEquator.MainShiftBasicEquals(shifts[2].TheMainShift, mainShift)).IgnoreArguments().Return(true);
+			}
+			using (_mocks.Playback())
+			{
+				var result = _target.Filter(getCashes(), effectiveRestriction);
 
-			var result = _target.Filter(getCashes(), effectiveRestriction);
-
-			Assert.That(result.Count, Is.EqualTo(1));
+				Assert.That(result.Count, Is.EqualTo(1));
+			}
 		}
 
 		[Test]
@@ -65,10 +75,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftFilters
 				new EndTimeLimitation(new TimeSpan(15, 0, 0), new TimeSpan(18, 0, 0)),
 				new WorkTimeLimitation(new TimeSpan(5, 0, 0), new TimeSpan(8, 0, 0)),
 				null, null, null, new List<IActivityRestriction>()) { CommonMainShift = mainShift };
+			using (_mocks.Record())
+			{
+				Expect.Call(_scheduleDayEquator.MainShiftBasicEquals(mainShift, mainShift)).IgnoreArguments().Return(false).Repeat.AtLeastOnce();
+			}
+			using (_mocks.Playback())
+			{
+				var result = _target.Filter(getCashes(), effectiveRestriction);
 
-			var result = _target.Filter(getCashes(), effectiveRestriction);
-
-			Assert.That(result, Is.Null);
+				Assert.That(result, Is.Null);
+			}
 		}
 
 
@@ -93,7 +109,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftFilters
 														  _activity, _category);
 			var workShift3 = WorkShiftFactory.CreateWorkShift(new TimeSpan(10, 0, 0), new TimeSpan(19, 0, 0),
 																	  _activity, _category);
-
 			return new List<IWorkShift> { workShift1, workShift2, workShift3 };
 		}
 	}
