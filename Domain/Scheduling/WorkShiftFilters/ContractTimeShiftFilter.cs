@@ -41,9 +41,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftFilters
 					allowedMinMax = minMax;
 				else
 				{
-					if (minMax.Value.Minimum > allowedMinMax.Value.Minimum)
+					if (minMax.Value.Minimum < allowedMinMax.Value.Minimum)
 						allowedMinMax = new MinMax<TimeSpan>(minMax.Value.Minimum, allowedMinMax.Value.Maximum);
-					if (minMax.Value.Maximum < allowedMinMax.Value.Maximum)
+					if (minMax.Value.Maximum < allowedMinMax.Value.Maximum && minMax.Value.Maximum > allowedMinMax.Value.Minimum)
 						allowedMinMax = new MinMax<TimeSpan>(allowedMinMax.Value.Minimum, minMax.Value.Maximum);
 				}
 			}

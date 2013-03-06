@@ -193,5 +193,54 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 				Assert.That(restriction, Is.EqualTo(result));
 			}
 		}
+
+		[Test]
+		public void ShouldNotAggregateDaysWithoutDayOff()
+		{
+			var dateOnly = new DateOnly(2012, 12, 7);
+			var dateList = new List<DateOnly> { dateOnly, dateOnly.AddDays(1) };
+			var person1 = PersonFactory.CreatePerson("bill");
+			var scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
+			var groupPerson = _mocks.StrictMock<IGroupPerson>();
+			var skill = SkillFactory.CreateSkill("skill1");
+			var skillDay1 = SkillDayFactory.CreateSkillDay(skill, dateOnly.Date,
+														   new ReadOnlyCollection<TimePeriod>(new List<TimePeriod>
+		                                                       {
+			                                                       new TimePeriod(11, 0, 18, 0)
+		                                                       }));
+
+			var skillDay2 = SkillDayFactory.CreateSkillDay(skill, dateOnly.AddDays(1).Date,
+														   new ReadOnlyCollection<TimePeriod>(new List<TimePeriod>
+		                                                       {
+			                                                       new TimePeriod(10, 0, 17, 30)
+		                                                       }));
+			var skillDays = new List<ISkillDay> { skillDay1, skillDay2 };
+			var scheduleRange1 = _mocks.StrictMock<IScheduleRange>();
+			var scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
+			var scheduleDay2 = _mocks.StrictMock<IScheduleDay>();
+			using (_mocks.Record())
+			{
+				Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(dateList)).Return(skillDays);
+				Expect.Call(_groupPersonSkillAggregator.AggregatedSkills(groupPerson, new DateOnlyPeriod(dateOnly, dateOnly.AddDays(1)))).Return(new List<ISkill>());
+				Expect.Call(groupPerson.GroupMembers)
+					  .Return(new ReadOnlyCollection<IPerson>(new List<IPerson> { person1 }))
+					  .Repeat.AtLeastOnce();
+				Expect.Call(_schedulingResultStateHolder.Schedules).Return(scheduleDictionary);
+				Expect.Call(scheduleDictionary[person1]).Return(scheduleRange1).Repeat.Twice();
+				Expect.Call(scheduleRange1.ScheduledDay(dateOnly)).Return(scheduleDay1);
+				Expect.Call(scheduleDay1.SignificantPart())
+					  .Return(SchedulePartView.MainShift);
+				Expect.Call(scheduleRange1.ScheduledDay(dateOnly.AddDays(1))).Return(scheduleDay2);
+				Expect.Call(scheduleDay2.SignificantPart())
+					  .Return(SchedulePartView.DayOff);
+			}
+
+			using (_mocks.Playback())
+			{
+				var restriction = _target.Convert(groupPerson, dateList);
+
+				Assert.That(restriction, Is.Null);
+			}
+		}
 	}
 }

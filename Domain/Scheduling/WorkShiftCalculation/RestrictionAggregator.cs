@@ -51,8 +51,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 		        }
                 
 		        var openHoursRestriction = _openHoursToRestrictionConverter.Convert(groupPerson, dateOnlyList);
-                
-		        if (effectiveRestriction != null)
+
+		        if (effectiveRestriction != null && openHoursRestriction != null)
 			        effectiveRestriction = effectiveRestriction.Combine(openHoursRestriction);
 
 		        var restrictionFromSchedules = _scheduleRestrictionExtractor.Extract(dateOnlyList, matrixList,

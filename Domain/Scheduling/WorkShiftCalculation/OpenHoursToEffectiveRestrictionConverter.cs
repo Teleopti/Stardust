@@ -44,7 +44,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 						dayOffDays.Add(dateOnly);
 				}
 			}
-			var filteredSkillDays = skillDays.Where(s => skills.Contains(s.Skill) && !dayOffDays.Contains(s.CurrentDate));
+			var filteredSkillDays = skillDays.Where(s => skills.Contains(s.Skill) && !dayOffDays.Contains(s.CurrentDate)).ToList();
+			if (filteredSkillDays.Count == 0) return null;
 			foreach (var skillDay in filteredSkillDays)
 			{
 				openHours.AddRange(skillDay.OpenHours());
