@@ -12,7 +12,7 @@ define([
         };
 
         return {
-            GotoPersonSchedule: function(id, date) {
+            GotoPersonSchedule: function (id, date) {
                 window.location.hash = 'personschedule/' + id + '/' + toDateString(date);
             },
             GotoPersonScheduleAddFullDayAbsenceForm: function(id, date) {

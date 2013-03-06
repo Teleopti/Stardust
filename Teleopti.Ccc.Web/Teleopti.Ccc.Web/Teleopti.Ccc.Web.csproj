@@ -211,6 +211,7 @@
     <Reference Include="System.Configuration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Areas\Anywhere\Controllers\PersonScheduleCommandController.cs" />
     <Compile Include="Areas\Anywhere\Core\IPersonScheduleViewModelFactory.cs" />
     <Compile Include="Areas\Anywhere\Core\IPersonScheduleViewModelMapper.cs" />
     <Compile Include="Areas\Anywhere\Core\PersonScheduleData.cs" />
