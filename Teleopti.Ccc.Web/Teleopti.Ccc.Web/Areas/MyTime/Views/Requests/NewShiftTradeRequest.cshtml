@@ -44,10 +44,11 @@
 			<label class="displayblock" for="Request-add-shift-trade-message-input">@Resources.Message</label>
 			<textarea id="Request-add-shift-trade-message-input" data-bind="value: message" class="request-message-input"/>
 		</div>
-		<div class="edit-module-element">
-			<button class="send-button floatright" data-bind="enable: isSendEnabled">@Resources.Send</button>
-			<button class="cancel-button floatright mr5">@Resources.Cancel</button>
-		</div>
+	    <div class="edit-module-element">
+	        <button class="send-button floatright" data-bind="enable: isSendEnabled">@Resources.Send</button>
+	        <button class="cancel-button floatright mr5">@Resources.Cancel</button>
+	    </div>
+        <div class="error" data-bind="html: errorMessage"></div>
 	</div>
 	<div id="Request-add-shift-trade-no-possible-trades" class="shift-trade-no-possible-trades" data-bind="visible : noPossibleShiftTrades()">
 		@Resources.NoAgentsAvailableForShiftTrade
