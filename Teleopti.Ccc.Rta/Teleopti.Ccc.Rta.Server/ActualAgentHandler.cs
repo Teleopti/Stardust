@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Rta.Server
 				StateCode = stateCode,
 				AlarmStart = timestamp,
 				PlatformTypeId = platformTypeId,
-				Timestamp = timestamp
+				ReceivedTime = timestamp
 			};
 
 			if (foundAlarm != null)

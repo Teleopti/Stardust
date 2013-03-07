@@ -2,12 +2,9 @@
 using System.Security.Policy;
 using System.Security.Principal;
 using Autofac;
-using Autofac.Core;
-using MbCache.Configuration;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Rta.Interfaces;
 using log4net;
-using log4net.Repository.Hierarchy;
 
 namespace Teleopti.Ccc.Rta.Server
 {

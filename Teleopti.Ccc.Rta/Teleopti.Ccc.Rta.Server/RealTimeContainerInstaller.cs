@@ -1,11 +1,8 @@
 ﻿using Autofac;
 using MbCache.Configuration;
 using MbCache.Core;
-using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Rta.Interfaces;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Rta.Server
 {

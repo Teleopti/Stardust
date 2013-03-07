@@ -385,10 +385,10 @@ namespace Teleopti.Ccc.Rta.Server
 					});
 				command.Parameters.Add(new SqlParameter
 					{
-						ParameterName = "@Timestamp",
+						ParameterName = "@ReceivedTime",
 						SqlDbType = SqlDbType.DateTime,
 						Direction = ParameterDirection.Input,
-						Value = newState.Timestamp
+						Value = newState.ReceivedTime
 					});
 				connection.Open();
 				command.ExecuteNonQuery();

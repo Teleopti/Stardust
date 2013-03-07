@@ -13,5 +13,5 @@ AS
 BEGIN
  SET NOCOUNT ON;
 
- SELECT StateCode, PersonId, Timestamp  FROM [RTA].[ActualAgentState]
+ SELECT StateCode, PersonId, ReceivedTime FROM [RTA].[ActualAgentState]
 END

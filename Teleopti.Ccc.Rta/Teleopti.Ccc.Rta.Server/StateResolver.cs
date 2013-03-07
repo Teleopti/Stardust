@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Data;
 using System.Web;
 using System.Web.Caching;
@@ -11,7 +10,7 @@ namespace Teleopti.Ccc.Rta.Server
 {
     public interface IStateResolver
     {
-        bool HaveStateCodeChanged(Guid personId, string newStateCode, DateTime timestamp);
+		bool HaveStateCodeChanged(Guid personId, string newStateCode, DateTime receivedTime);
     }
 
     public class StateResolver : IStateResolver
@@ -34,21 +33,21 @@ namespace Teleopti.Ccc.Rta.Server
             _loggingSvc = loggingSvc;
             _cache = HttpRuntime.Cache;
         }
-        
-        public bool HaveStateCodeChanged(Guid personId, string newStateCode, DateTime timestamp)
+
+		public bool HaveStateCodeChanged(Guid personId, string newStateCode, DateTime receivedTime)
         {
 			var dictionary = (ConcurrentDictionary<Guid, PersonStateHolder>)_cache.Get(CacheKey) ?? Initialize();
 			PersonStateHolder cachedStateHolder;
-	        var newStateHolder = new PersonStateHolder(newStateCode, timestamp);
+			var newStateHolder = new PersonStateHolder(newStateCode, receivedTime);
 
 			if (!dictionary.TryGetValue(personId, out cachedStateHolder))
             {
-                dictionary.TryAdd(personId, new PersonStateHolder(newStateCode, timestamp));
+				dictionary.TryAdd(personId, new PersonStateHolder(newStateCode, receivedTime));
                 return true;
             }
 
-			if (newStateHolder.StateCode != cachedStateHolder.StateCode && 
-				newStateHolder.Timestamp > cachedStateHolder.Timestamp)
+			if (newStateHolder.StateCode != cachedStateHolder.StateCode &&
+				newStateHolder.ReceivedTime > cachedStateHolder.ReceivedTime)
 			{
 				dictionary[personId] = newStateHolder;
 				return true;
@@ -72,9 +71,9 @@ namespace Teleopti.Ccc.Rta.Server
                 {
                     var stateCode = reader.GetString(reader.GetOrdinal("StateCode"));
                     var personId = reader.GetGuid(reader.GetOrdinal("PersonId"));
-	                var timestamp = reader.GetDateTime(reader.GetOrdinal("Timestamp"));
+					var timestamp = reader.GetDateTime(reader.GetOrdinal("ReceivedTime"));
 	                var stateHolder = new PersonStateHolder(stateCode, timestamp);
-	                dictionary.AddOrUpdate(personId, stateHolder, (guid, oldState) => stateHolder.Timestamp > oldState.Timestamp ? stateHolder : oldState);
+					dictionary.AddOrUpdate(personId, stateHolder, (guid, oldState) => stateHolder.ReceivedTime > oldState.ReceivedTime ? stateHolder : oldState);
                 }
                 if (reader != null) reader.Close();
             }
@@ -93,12 +92,12 @@ namespace Teleopti.Ccc.Rta.Server
 		public class PersonStateHolder
 		{
 			public string StateCode { get; set; }
-			public DateTime Timestamp { get; set; }
+			public DateTime ReceivedTime { get; set; }
 
 			public PersonStateHolder(string stateCode, DateTime timestamp)
 			{
 				StateCode = stateCode;
-				Timestamp = timestamp;
+				ReceivedTime = timestamp;
 			}
 
 			public override bool Equals(object obj)
@@ -112,7 +111,7 @@ namespace Teleopti.Ccc.Rta.Server
 				{
 					var result = 0;
 					result = (result*397) ^ StateCode.GetHashCode();
-					result = (result*397) ^ Timestamp.GetHashCode();
+					result = (result*397) ^ ReceivedTime.GetHashCode();
 					return result;
 				}
 			}

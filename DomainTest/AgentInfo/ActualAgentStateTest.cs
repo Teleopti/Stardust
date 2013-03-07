@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 			_target.StateCode = "StateCode";
 			_target.ScheduledId = guid;
 			_target.PlatformTypeId = guid;
-			_target.Timestamp = dateTime;
+			_target.ReceivedTime = dateTime;
 			_target.TimeInState = timeSpan;
 
 			Assert.That(_target.State, Is.EqualTo("State"));
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo
 			Assert.That(_target.StateCode, Is.EqualTo("StateCode"));
 			Assert.That(_target.ScheduledId, Is.EqualTo(guid));
 			Assert.That(_target.PlatformTypeId, Is.EqualTo(guid));
-			Assert.That(_target.Timestamp, Is.EqualTo(dateTime));
+			Assert.That(_target.ReceivedTime, Is.EqualTo(dateTime));
 			Assert.That(_target.TimeInState, Is.EqualTo(timeSpan));
 		}
 

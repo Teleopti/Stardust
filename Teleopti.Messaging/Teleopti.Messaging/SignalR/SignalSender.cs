@@ -59,8 +59,8 @@ namespace Teleopti.Messaging.SignalR
 					_wrapper.NotifyClients(new Notification
 								{
 									StartDate =
-										Subscription.DateToString(actualAgentState.Timestamp.Add(actualAgentState.TimeInState.Negate())),
-									EndDate = Subscription.DateToString(actualAgentState.Timestamp),
+										Subscription.DateToString(actualAgentState.ReceivedTime.Add(actualAgentState.TimeInState.Negate())),
+									EndDate = Subscription.DateToString(actualAgentState.ReceivedTime),
 									DomainId = Subscription.IdToString(personId),
 									DomainType = type.Name,
 									DomainQualifiedType = type.AssemblyQualifiedName,

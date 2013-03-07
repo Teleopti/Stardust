@@ -25,7 +25,7 @@ CREATE TABLE [RTA].[ActualAgentState](
  [Color] [int] NOT NULL,
  [AlarmStart] [datetime] NOT NULL,
  [StaffingEffect] [float] NOT NULL,
- [Timestamp] [datetime] NOT NULL,
+ [ReceivedTime] [datetime] NOT NULL,
  CONSTRAINT [PK_ActualAgentState] PRIMARY KEY CLUSTERED 
 (
  [PersonId] ASC

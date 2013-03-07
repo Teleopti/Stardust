@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Net.Sockets;
-using System.Threading;
 using log4net;
 using Teleopti.Ccc.Rta.Interfaces;
 using Teleopti.Interfaces.MessageBroker.Client;
@@ -70,8 +69,6 @@ namespace Teleopti.Ccc.Rta.Server
 			try
 			{
 				_messageSender.InstantiateBrokerService();
-				// _messageBrokerResolver.MessageBroker.RegisterEventSubscription(getActivityChangeInTheScheduler, typeof(IActivityChangeInTheScheduler));
-
 			}
 			catch (BrokerNotInstantiatedException ex)
 			{
@@ -108,8 +105,7 @@ namespace Teleopti.Ccc.Rta.Server
 			}
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"
-			)]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
 		public void CheckSchedule(Guid personId, Guid businessUnitId, DateTime timestamp)
 		{
 			if (string.IsNullOrEmpty(_connectionStringDataStore))
@@ -136,8 +132,7 @@ namespace Teleopti.Ccc.Rta.Server
 
 		// Probably a WaitHandle object isnt a best choice, but same applies to QueueUserWorkItem method.
 		// An alternative using Tasks should be looked at instead.
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"
-			)]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
 		public void ProcessRtaData(string logOn, string stateCode, TimeSpan timeInState, DateTime timestamp,
 		                           Guid platformTypeId, string sourceId, DateTime batchId, bool isSnapshot)
 		{
