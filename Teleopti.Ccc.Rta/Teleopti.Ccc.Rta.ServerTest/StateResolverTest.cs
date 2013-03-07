@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			dataReader.Expect(d => d.GetString(0)).Return("AUX3");
 			dataReader.Expect(d => d.GetOrdinal("PersonId")).Return(1);
 			dataReader.Expect(d => d.GetGuid(1)).Return(personId);
-			dataReader.Expect(d => d.GetOrdinal("Timestamp")).Return(2);
+			dataReader.Expect(d => d.GetOrdinal("ReceivedTime")).Return(2);
 			dataReader.Expect(d => d.GetDateTime(2)).Return(dateTime.AddMilliseconds(-100));
 			dataReader.Expect(d => d.Read()).Return(false);
 			dataReader.Expect(d => d.Close());
