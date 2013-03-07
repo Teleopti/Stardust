@@ -203,12 +203,18 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 				events: {
 					render: function () {
 
-						$('#Collapse-sign').click(function () {
+						$('#Expend-Template').click(function () {
 							$(this).parent().next('.collapsable').toggle();
 						}).toggle(function () {
 							$(this).text("+");
 						}, function () {
 							$(this).text("-");
+						});
+						
+						$('#Template-save').toggle(function () {
+							addExtendedPreferenceFormViewModel.IsSaveAsNewTemplate(!addExtendedPreferenceFormViewModel.IsSaveAsNewTemplate());
+						}, function () {
+							addExtendedPreferenceFormViewModel.IsSaveAsNewTemplate(!addExtendedPreferenceFormViewModel.IsSaveAsNewTemplate());
 						});
 						
 						$('#Delete-template').click(function () {

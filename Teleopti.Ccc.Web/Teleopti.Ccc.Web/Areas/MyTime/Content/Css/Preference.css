@@ -155,7 +155,7 @@
 	font-family: Arial;
 }
 
-#Collapse-sign,
+.collapse-sign,
 #Delete-template{
 	text-decoration: none;
 	min-width: 8px;

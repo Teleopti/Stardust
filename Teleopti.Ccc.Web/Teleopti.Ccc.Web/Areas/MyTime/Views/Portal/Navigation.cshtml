@@ -164,10 +164,10 @@
 
 					<div id="Preference-add-extended-form" class="displaynone"> 
 						<div class="ml5" data-bind="visible: AvailableTemplates().length>0">
-							<span>[</span><span id="Collapse-sign">-</span><span>]</span>
+							<span>[</span><span id="Expend-Template" class="collapse-sign">-</span><span>]</span>
 							<select id="Preference-template" data-bind="options: AvailableTemplates, optionsText: 'Text', optionsValue:'Value', optionsCaption: '&nbsp;'" title="@Resources.ExtendedPreferencesTemplate" class="displayinline-block ml5">
 							</select>
-							@*<span id="Delete-template">x</span>*@
+							@*<span id="Delete-template">[x]</span>*@
 						</div>
 						<div class="collapsable">
 							<hr data-bind="visible: AvailableTemplates().length>0"/>
@@ -305,12 +305,13 @@
 								</div>
 							
 								<div class="mt10 floatleft">
-									<input class="clearleftfloat floatleft" type="checkbox" id="Template-save" data-bind="checked: IsSaveAsNewTemplate"/>
-									<label class="ml5" for="Template-save">
-										@Resources.SaveAsTemplate
-									</label>
-									
-									<div id="Template-name-section" class="edit-module-element clearleftfloat" data-bind="visible: IsSaveAsNewTemplate()">
+									<div id="Template-save">
+										<span>[</span><span class="collapse-sign" data-bind="text: IsSaveAsNewTemplate()?'-':'+'"></span><span>]</span>
+										<label class="ml5">
+											@Resources.SaveAsTemplate
+										</label>
+									</div>
+									<div id="Template-name-section" class="collapsable edit-module-element clearleftfloat" data-bind="visible: IsSaveAsNewTemplate()">
 										<input id="Template-name-input" type="text" placeholder="@Resources.NewTemplateName" data-bind="value: NewTemplateName"/>
 										<button id="Preference-extended-save-template" class="ml5" data-bind="enable: NewTemplateName().length>0">@Resources.Save</button>
 									</div>
