@@ -4,17 +4,18 @@
 }
 
  <div class="pdb5 request-detail-title">@Resources.ShiftTradeRequest</div>
-	 
 	 <div id="Request-shift-trade-detail-subject" data-bind="text: Subject"></div>
 	 <div id="Request-shift-trade-detail-message" data-bind="text: MessageText"></div>
-<br/>
-<br />
-<br/>
+    <br/>
+    <br/>
+    <br/>
 	
 <div>
     <br/>
     <div>
         <div>
+            <div id="Request-shift-trade-detail-info" data-bind="visible: showInfo">@Resources.CannotDisplayScheduleWhenShiftTradeStatusIsNew</div>
+            <br/>
             <span class="request-caption">@Resources.From: </span>
             <span class="shift-trade-swap-detail-agent-name request-data-type" id="Request-shift-trade-sender" data-bind="text: mySchedule().agentName" ></span>
         </div>
