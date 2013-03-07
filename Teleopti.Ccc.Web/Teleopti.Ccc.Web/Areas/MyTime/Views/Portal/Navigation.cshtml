@@ -169,7 +169,7 @@
 							</select>
 						</div>
 						<div class="collapsable">
-							<hr/>
+							<hr data-bind="visible: AvailableTemplates().length>0"/>
 							<div class="ml10">
 								<select id="Preference-extended-preference" data-bind="selectbox: PreferenceId, option-data: {data: 'preference-extended', member: IsTimeInputEnabled}" title="@Resources.Preference" class="ml15">
 									<option value="" data-preference-extended="true">&nbsp;</option>
