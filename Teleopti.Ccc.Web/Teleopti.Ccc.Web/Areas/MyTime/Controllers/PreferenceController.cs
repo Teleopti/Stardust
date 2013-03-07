@@ -119,9 +119,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[UnitOfWork]
 		[HttpDelete]
 		[ActionName("PreferenceTemplate")]
-		public virtual ActionResult PreferenceTemplateDelete(Guid templateId)
+		public virtual ActionResult PreferenceTemplateDelete(Guid id)
 		{
-			_preferenceTemplatePersister.Delete(templateId);
+			_preferenceTemplatePersister.Delete(id);
 			return new EmptyResult();
 		}
 	}

@@ -68,6 +68,25 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			})
 			.removeAttr('disabled');
 	}
+	
+	function _deletePreferenceTemplate(templateId) {
+		ajax.Ajax({
+			url: "Preference/PreferenceTemplate/" + templateId,
+			dataType: "json",
+			contentType: 'application/json; charset=utf-8',
+			type: 'Delete',
+			success: function (data, textStatus, jqXHR) {
+				var templateToDelete = $.grep(addExtendedPreferenceFormViewModel.AvailableTemplates(), function (e) { return e.Value == templateId; })[0];
+				addExtendedPreferenceFormViewModel.AvailableTemplates.remove(templateToDelete);
+				var template = $("#Preference-template");
+				template.selectbox(
+					{
+						refreshMenu: addExtendedPreferenceFormViewModel.AvailableTemplates()
+					});
+				_reset();
+			}
+		});
+	}
 
 	function _savePreferenceTemplate(preference) {
 		addExtendedPreferenceFormViewModel.ValidationError('');
@@ -181,12 +200,17 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 				events: {
 					render: function () {
 
-						$('.collapse-sign a').click(function () {
+						$('#Collapse-sign').click(function () {
 							$(this).parent().next('.collapsable').toggle();
 						}).toggle(function () {
 							$(this).text("+");
 						}, function () {
 							$(this).text("-");
+						});
+						
+						$('#Delete-template').click(function () {
+							if (addExtendedPreferenceFormViewModel.SelectedTemplate())
+								_deletePreferenceTemplate(addExtendedPreferenceFormViewModel.SelectedTemplate().Value);
 						});
 
 						$('#Preference-extended-reset')

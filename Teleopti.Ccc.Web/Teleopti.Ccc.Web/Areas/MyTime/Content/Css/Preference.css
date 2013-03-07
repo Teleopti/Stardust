@@ -155,12 +155,14 @@
 	font-family: Arial;
 }
 
-.collapse-sign a {
+#Collapse-sign,
+#Delete-template{
 	text-decoration: none;
 	min-width: 8px;
 	color: black;
 	display: inline-block;
 	text-align: center;
+	cursor: pointer;
 }
 #Template-name-section {
 	padding-bottom: 0;
