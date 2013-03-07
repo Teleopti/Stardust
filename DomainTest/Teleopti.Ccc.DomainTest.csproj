@@ -773,6 +773,7 @@
     <Compile Include="Scheduling\WorkShiftCalculation\TeamInfoFactoryTest.cs" />
     <Compile Include="Scheduling\WorkShiftCalculation\TeamInfoTest.cs" />
     <Compile Include="Scheduling\WorkShiftCalculation\TeamDayOffSchedulerTest.cs" />
+    <Compile Include="Scheduling\WorkShiftCalculation\TeamScheduleSameStartTimeTest.cs" />
     <Compile Include="Scheduling\WorkShiftCalculation\TeamSchedulingTest.cs" />
     <Compile Include="Scheduling\WorkShiftCalculation\WorkShiftFilterServiceTest.cs" />
     <Compile Include="Scheduling\WorkShiftCalculation\WorkShiftLengthValueCalculatorTest.cs" />
