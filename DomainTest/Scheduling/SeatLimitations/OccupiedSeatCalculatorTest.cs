@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
 		}
 
 		[Test]
-		public void ShouldAddUsedSeatsToSkillStaffPeriod()
+		public void ShouldAddUsedSeatsAndLoggedOnToSkillStaffPeriod()
 		{
 			IList<IVisualLayerCollection> relevantProjections = new List<IVisualLayerCollection>();
 			relevantProjections.Add(_mocks.StrictMock<IVisualLayerCollection>());
@@ -56,6 +56,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
 				_target.Calculate(day, relevantProjections, relevantSkillStaffPeriods);
 			}
 			Assert.AreEqual(4.5, skillStaffPeriod.Payload.CalculatedUsedSeats);
+			Assert.AreEqual(4.5, skillStaffPeriod.CalculatedLoggedOn);
 		}
 
 		[Test]

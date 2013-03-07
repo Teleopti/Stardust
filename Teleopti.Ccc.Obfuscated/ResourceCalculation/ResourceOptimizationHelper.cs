@@ -123,13 +123,23 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 				}
 				relevantSkillStaffPeriods = CreateSkillSkillStaffDictionaryOnSkills(_stateHolder.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary, ordinarySkills, timePeriod);
 
-				if (isAllSingleSkill)
+				if (toRemove.IsEmpty() && toAdd.IsEmpty())
+				{
+					_occupiedSeatCalculator.Calculate(localDate, relevantProjections, relevantSkillStaffPeriods);
+				}
+				else
 				{
 					var singleMaxSeatCalculator = new SingleSkillMaxSeatCalculator();
 					singleMaxSeatCalculator.Calculate(relevantSkillStaffPeriods, toRemove, toAdd);
 				}
-				else
-					_occupiedSeatCalculator.Calculate(localDate, relevantProjections, relevantSkillStaffPeriods);	
+
+				//if (isAllSingleSkill)
+				//{
+				//	var singleMaxSeatCalculator = new SingleSkillMaxSeatCalculator();
+				//	singleMaxSeatCalculator.Calculate(relevantSkillStaffPeriods, toRemove, toAdd);
+				//}
+				//else
+				//	_occupiedSeatCalculator.Calculate(localDate, relevantProjections, relevantSkillStaffPeriods);	
 				
             	
 				ordinarySkills = new List<ISkill>();
