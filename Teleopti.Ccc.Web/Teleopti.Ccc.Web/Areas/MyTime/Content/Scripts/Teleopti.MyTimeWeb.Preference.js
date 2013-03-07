@@ -108,6 +108,9 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			success: function (data, textStatus, jqXHR) {
 				data = data || [];
 				addExtendedPreferenceFormViewModel.AvailableTemplates.push(data);
+				addExtendedPreferenceFormViewModel.AvailableTemplates.sort(function(a, b) {
+					return a.Text > b.Text;
+				});
 				var template = $("#Preference-template");
 				template.selectbox(
 					{
