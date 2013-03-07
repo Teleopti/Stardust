@@ -69,7 +69,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			.removeAttr('disabled');
 	}
 
-	function _setPreferenceTemplate(preference) {
+	function _savePreferenceTemplate(preference) {
 		addExtendedPreferenceFormViewModel.ValidationError('');
 		delete preference.AvailableTemplates;
 		delete preference.SelectedTemplate;
@@ -98,6 +98,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 					{
 						value: data.Value
 					});
+				addExtendedPreferenceFormViewModel.SelectedTemplate(data);
 				addExtendedPreferenceFormViewModel.IsSaveAsNewTemplate(false);
 			}
 		});
@@ -201,7 +202,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 						$('#Preference-extended-save-template')
 							.button()
 							.click(function () {
-								_setPreferenceTemplate(ko.toJS(addExtendedPreferenceFormViewModel));
+								_savePreferenceTemplate(ko.toJS(addExtendedPreferenceFormViewModel));
 							});
 
 						ko.applyBindings(addExtendedPreferenceFormViewModel, $("#Preference-add-extended-form")[0]);
