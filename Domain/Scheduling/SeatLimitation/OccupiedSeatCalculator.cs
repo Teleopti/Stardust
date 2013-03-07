@@ -30,7 +30,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 					double result = 0;
 					if (visualLayerCollections != null)
 						result = _seatImpactOnPeriodForProjection.CalculatePeriod(skillStaffPeriod, visualLayerCollections);
-					
+
+					skillStaffPeriod.Payload.CalculatedLoggedOn = result;
 					skillStaffPeriod.Payload.CalculatedUsedSeats = result;
 				}
 				
