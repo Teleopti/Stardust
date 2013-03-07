@@ -177,7 +177,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
     ko.utils.extend(RequestItemViewModel.prototype, {
         Initialize: function (data) {
             var self = this;
-            self.Subject(data.Subject);
+            self.Subject(data.Subject == null ? '<br>' : data.Subject);
             self.RequestType(data.Type);
             self.Status(data.Status);
             self.Dates(data.Dates);
