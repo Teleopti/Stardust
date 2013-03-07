@@ -96,7 +96,9 @@ namespace Teleopti.Ccc.Domain.Common
                         Period.EndDateTime == layer.Period.StartDateTime);
         }
 
-        #region ICloneableEntity<Layer<T>> Members
+
+
+	    #region ICloneableEntity<Layer<T>> Members
 
         public virtual object Clone()
         {

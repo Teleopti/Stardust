@@ -11,7 +11,7 @@ namespace Teleopti.Interfaces.Domain
     /// Created by: rogerkr
     /// Created date: 2009-02-05
     /// </remarks>
-    public interface IOvertimeShift : IShift
+	public interface IOvertimeShift : IShift, IAggregateEntity, ILayerCollectionOwner<IActivity>
     {
         /// <summary>
         /// Gets the Layercollection with definition set included.

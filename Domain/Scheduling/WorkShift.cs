@@ -1,69 +1,128 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
-    /// <summary>
-    /// Work shift class
-    /// </summary>
-    /// <remarks>
-    /// Created by: robink
-    /// Created date: 2007-10-24
-    /// </remarks>
-    public class WorkShift : Shift, IWorkShift
+    public class WorkShift : IWorkShift
     {
 
         private readonly IShiftCategory _shiftCategory;
         private IVisualLayerCollection _visualLayerCollection;
+		private IList<ILayer<IActivity>> _layerCollection = new List<ILayer<IActivity>>();
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="WorkShift"/> class.
-        /// </summary>
-        /// <param name="category">The category.</param>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 2008-04-10
-        /// </remarks>
         public WorkShift(IShiftCategory category)
         {
             InParameter.NotNull("category", category);
             _shiftCategory = category;
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="WorkShift"/> class. For NHib.
-        /// </summary>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-04-22
-        /// </remarks>
         protected WorkShift() 
         {
         }
 
-        /// <summary>
-        /// Gets the base date.
-        /// </summary>
-        /// <value>The base date.</value>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2007-10-29
-        /// </remarks>
+		public virtual ILayerCollection<IActivity> LayerCollection
+		{
+			get { return (new LayerCollection<IActivity>(this, _layerCollection)); }
+
+		}
+
+		public virtual IProjectionService ProjectionService()
+		{
+			var proj = new VisualLayerProjectionService(null);
+			proj.Add(this);
+			return proj;
+		}
+
+		public virtual bool HasProjection
+		{
+			get
+			{
+				return (LayerCollection.Count > 0);
+			}
+		}
+
+		public virtual void Transform(IShift sourceShift)
+		{
+			foreach (ActivityLayer layer in sourceShift.LayerCollection)
+			{
+				transformOrAdd(layer);
+			}
+
+			if (sourceShift.LayerCollection.Count >= LayerCollection.Count) return;
+			for (var i = LayerCollection.Count - 1; i >= 0; i--)
+			{
+				var layer = findLayerByOrderIndex(sourceShift.LayerCollection, LayerCollection[i].OrderIndex);
+
+				if (layer == null)
+				{
+					LayerCollection.Remove(LayerCollection[i]);
+				}
+			}
+		}
+
+		private static ActivityLayer findLayerByOrderIndex(IEnumerable<ILayer<IActivity>> layerCollection, int orderIndex)
+		{
+			return layerCollection.Cast<ActivityLayer>().FirstOrDefault(layer => layer.OrderIndex == orderIndex);
+		}
+
+		private void transformOrAdd(ILayer<IActivity> sourceLayer)
+		{
+			var destLayer = findLayerByOrderIndex(LayerCollection, sourceLayer.OrderIndex);
+
+			if (destLayer != null)
+			{
+				destLayer.Transform(sourceLayer);
+			}
+			else
+			{
+				LayerCollection.Add((ActivityLayer)sourceLayer.Clone());
+			}
+		}
+
+		public virtual object Clone()
+		{
+			var retObj = EntityClone();
+			return retObj;
+		}
+
+		public virtual IShift NoneEntityClone()
+		{
+			var retObj = (WorkShift)MemberwiseClone();
+			retObj._layerCollection = new List<ILayer<IActivity>>();
+			foreach (var newLayer in _layerCollection.Select(layer => layer.NoneEntityClone()))
+			{
+				newLayer.SetParent(retObj);
+				retObj._layerCollection.Add(newLayer);
+			}
+			return retObj;
+		}
+
+		public virtual IShift EntityClone()
+		{
+			var retObj = (WorkShift)MemberwiseClone();
+			retObj._layerCollection = new List<ILayer<IActivity>>();
+			foreach (var newLayer in _layerCollection.Select(layer => layer.EntityClone()))
+			{
+				newLayer.SetParent(retObj);
+				retObj._layerCollection.Add(newLayer);
+			}
+			return retObj;
+		}
+
+		public virtual IVisualLayerFactory CreateVisualLayerFactory()
+		{
+			return new VisualLayerFactory();
+		}
         public static DateTime BaseDate
         {
             get { return DateTime.SpecifyKind(new DateTime(1800, 1, 1), DateTimeKind.Utc); }
 
         }
 
-        /// <summary>
-        /// Gets the shift category.
-        /// </summary>
-        /// <value>The shift category.</value>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 2008-04-10
-        /// </remarks>
         public IShiftCategory ShiftCategory
         {
             get { return _shiftCategory; }
@@ -71,86 +130,57 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
        public TimePeriod? ToTimePeriod()
        {
-           DateTimePeriod? period = Projection.Period();
+           var period = Projection.Period();
 
            if(!period.HasValue)
                return null;
 
-           TimeSpan startTime = period.Value.StartDateTime.Subtract(BaseDate);
-           TimeSpan endTime = period.Value.EndDateTime.Subtract(BaseDate);
+           var startTime = period.Value.StartDateTime.Subtract(BaseDate);
+           var endTime = period.Value.EndDateTime.Subtract(BaseDate);
            return new TimePeriod(startTime, endTime);
        }
 
-
-        /// <summary>
-        /// Called before layer is added to collection.
-        /// </summary>
-        /// <param name="layer">The layer.</param>
-        /// <remarks>
-        /// Check here on shift because we want activity layers to be persisted in different tables
-        /// (eg adding an activity layer to a MainShift shouldn't be possible even though it makes
-        /// perfect sence regarding objects)
-        /// Created by: rogerkr
-        /// Created date: 2008-01-25
-        /// </remarks>
-        public override void OnAdd(ILayer<IActivity> layer)
+        public void OnAdd(ILayer<IActivity> layer)
         {
             if (!(layer is WorkShiftActivityLayer))
                 throw new ArgumentException("Only WorkShiftActivityLayers can be added to a WorkShift");
             _visualLayerCollection = null;
         }
 
-
-        /// <summary>
-        /// Gets the projection.
-        /// </summary>
-        /// <value>The projection.</value>
-        /// <remarks>
-        /// Created by: henrika
-        /// Created date: 2008-05-09
-        /// </remarks>
         public IVisualLayerCollection Projection
         {
-            get
-            {
-                if (_visualLayerCollection == null)
-                {
-                    _visualLayerCollection = ProjectionService().CreateProjection();
-                }
-                return _visualLayerCollection;
-            }
+            get { return _visualLayerCollection ?? (_visualLayerCollection = ProjectionService().CreateProjection()); }
         }
 
         public IMainShift ToMainShift(DateTime localMainShiftBaseDate, TimeZoneInfo localTimeZoneInfo)
         {
-            
-            DateTime utcDateBaseDate = TimeZoneHelper.ConvertToUtc(localMainShiftBaseDate, localTimeZoneInfo);
-            DateTime nextUtcDate = TimeZoneHelper.ConvertToUtc(localMainShiftBaseDate.AddDays(1), localTimeZoneInfo);
+            var utcDateBaseDate = TimeZoneHelper.ConvertToUtc(localMainShiftBaseDate, localTimeZoneInfo);
+            var nextUtcDate = TimeZoneHelper.ConvertToUtc(localMainShiftBaseDate.AddDays(1), localTimeZoneInfo);
             if (nextUtcDate.AddMinutes(-1).Subtract(utcDateBaseDate) != TimeSpan.FromHours(24).Add(TimeSpan.FromMinutes(-1)))
-                return ToMainShiftOnDaylightSavingChange(localMainShiftBaseDate, localTimeZoneInfo);
+                return toMainShiftOnDaylightSavingChange(localMainShiftBaseDate, localTimeZoneInfo);
 
-            MainShift ret = new MainShift(ShiftCategory);
-            foreach (ILayer<IActivity> layer in LayerCollection)
+            var ret = new MainShift(ShiftCategory);
+            foreach (var layer in LayerCollection)
             {
-                DateTime start = utcDateBaseDate.Add(layer.Period.StartDateTime - BaseDate);
-                DateTime end = start.Add(layer.Period.ElapsedTime());
-                DateTimePeriod outPeriod = new DateTimePeriod(start, end);
+                var start = utcDateBaseDate.Add(layer.Period.StartDateTime - BaseDate);
+                var end = start.Add(layer.Period.ElapsedTime());
+                var outPeriod = new DateTimePeriod(start, end);
 
-                MainShiftActivityLayer mainShiftLayer = new MainShiftActivityLayer(layer.Payload, outPeriod);
+                var mainShiftLayer = new MainShiftActivityLayer(layer.Payload, outPeriod);
                 ret.LayerCollection.Add(mainShiftLayer);
             }
 
             return ret;
         }
 
-        private IMainShift ToMainShiftOnDaylightSavingChange(DateTime localMainShiftBaseDate, TimeZoneInfo localTimeZoneInfo)
+        private IMainShift toMainShiftOnDaylightSavingChange(DateTime localMainShiftBaseDate, TimeZoneInfo localTimeZoneInfo)
         {
-            MainShift ret = new MainShift(ShiftCategory);
-            int hoursToChange = 0;
-            foreach (ILayer<IActivity> layer in LayerCollection)
+            var ret = new MainShift(ShiftCategory);
+            var hoursToChange = 0;
+            foreach (var layer in LayerCollection)
             {
-                DateTime localStart = localMainShiftBaseDate.Add(layer.Period.StartDateTime - BaseDate);
-                DateTime localEnd = localMainShiftBaseDate.Add(layer.Period.EndDateTime - BaseDate);
+                var localStart = localMainShiftBaseDate.Add(layer.Period.StartDateTime - BaseDate);
+                var localEnd = localMainShiftBaseDate.Add(layer.Period.EndDateTime - BaseDate);
                 localStart = DateTime.SpecifyKind(localStart, DateTimeKind.Unspecified);
                 localEnd = DateTime.SpecifyKind(localEnd, DateTimeKind.Unspecified);
 
@@ -165,11 +195,11 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
                 localEnd = localEnd.AddHours(hoursToChange);
 
-                DateTime start = localTimeZoneInfo.SafeConvertTimeToUtc(localStart);
-                DateTime end = localTimeZoneInfo.SafeConvertTimeToUtc(localEnd);
-                DateTimePeriod outPeriod = new DateTimePeriod(start, end);
+                var start = localTimeZoneInfo.SafeConvertTimeToUtc(localStart);
+                var end = localTimeZoneInfo.SafeConvertTimeToUtc(localEnd);
+                var outPeriod = new DateTimePeriod(start, end);
 
-                MainShiftActivityLayer mainShiftLayer = new MainShiftActivityLayer(layer.Payload, outPeriod);
+                var mainShiftLayer = new MainShiftActivityLayer(layer.Payload, outPeriod);
                 ret.LayerCollection.Add(mainShiftLayer);
             }
 

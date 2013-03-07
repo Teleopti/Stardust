@@ -5,7 +5,7 @@ namespace Teleopti.Interfaces.Domain
     /// Interface for types holding layer collections.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public interface ILayerCollectionOwner<T> : IEntity
+    public interface ILayerCollectionOwner<T>
     {
 
         /// <summary>

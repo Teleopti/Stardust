@@ -37,6 +37,7 @@ namespace Teleopti.Interfaces.Domain
         /// Created date: 2008-01-30
         /// </remarks>
         bool AdjacentTo(ILayer<T> layer);
+
     }
 
     /// <summary>
