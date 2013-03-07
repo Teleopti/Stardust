@@ -153,7 +153,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void VerifyAddOrUpdateActualAgentState()
 		{
-			var agentState = new ActualAgentState();
+			var agentState = new ActualAgentState
+				{
+					ReceivedTime = new DateTime(1900, 1, 1)
+				};
 			target.AddOrUpdateActualAgentState(agentState);
 		}
 

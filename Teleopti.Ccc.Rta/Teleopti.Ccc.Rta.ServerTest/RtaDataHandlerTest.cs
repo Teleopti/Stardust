@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data.SqlTypes;
 using System.Net.Sockets;
-using System.Threading;
 using Teleopti.Interfaces.Domain;
 using log4net;
 using NUnit.Framework;
@@ -197,7 +196,6 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			                             				PersonId = Guid.Empty
 			                             			}
 			                             	};
-			var autoReset = new AutoResetEvent(false);
 
 			_messageSender.InstantiateBrokerService();
 			_dataSourceResolver.Expect(d => d.TryResolveId("1", out dataSource)).Return(true).OutRef(1);
@@ -213,8 +211,6 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_mocks.ReplayAll();
 			AssignTargetAndRun();
 			_mocks.VerifyAll();
-			
-			autoReset.Dispose();
 		}
 
 		[Test]
@@ -230,7 +226,6 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			                             				PersonId = Guid.Empty
 			                             			}
 			                             	};
-			var autoReset = new AutoResetEvent(false);
 			var agentState = new ActualAgentState();
 
 			_messageSender.InstantiateBrokerService();
@@ -252,8 +247,6 @@ namespace Teleopti.Ccc.Rta.ServerTest
 								   _isSnapshot);
 			
 			_mocks.VerifyAll();
-			
-			autoReset.Dispose();
 		}
 
 		[Test]
@@ -269,7 +262,6 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			                             				PersonId = Guid.Empty
 			                             			}
 			                             	};
-			var autoReset = new AutoResetEvent(false);
 			var agentState = new ActualAgentState();
 
 			_messageSender.InstantiateBrokerService();
@@ -287,8 +279,6 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_mocks.ReplayAll();
 			AssignTargetAndRun();
 			_mocks.VerifyAll();
-
-			autoReset.Dispose();
 		}
 
 		[Test]
@@ -304,7 +294,6 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			                             				PersonId = Guid.Empty
 			                             			}
 			                             	};
-			var autoReset = new AutoResetEvent(false);
 			var agentState = new ActualAgentState();
 
 			_messageSender.InstantiateBrokerService();
@@ -322,14 +311,11 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_mocks.ReplayAll();
 			AssignTargetAndRun();
 			_mocks.VerifyAll();
-
-			autoReset.Dispose();
 		}
 
 		[Test]
 		public void ShouldCheckSchedule()
 		{
-			var waitHandle = new AutoResetEvent(false);
 			var agentState = new ActualAgentState();
 
 			_messageSender.InstantiateBrokerService();
@@ -342,9 +328,6 @@ namespace Teleopti.Ccc.Rta.ServerTest
 												_dataSourceResolver, _personResolver, _stateResolver, _agentHandler);
 			_target.CheckSchedule(_personId, _businessUnitId, _timestamp);
 			_mocks.VerifyAll();
-
-			waitHandle.Set();
-			waitHandle.Dispose();
 		}
 
 		[Test]
@@ -363,7 +346,6 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		[Test]
 		public void ShouldNotSendWhenStateHaveNotChangedForScheduleUpdate()
 		{
-			var waitHandle = new AutoResetEvent(false);
 			_messageSender.InstantiateBrokerService();
 			_agentHandler.Expect(a => a.CheckSchedule(_personId, _businessUnitId, _timestamp)).IgnoreArguments().Return(null);
 			_loggingSvc.Expect(l => l.InfoFormat("Schedule for {0} has not changed", _personId));
@@ -373,7 +355,6 @@ namespace Teleopti.Ccc.Rta.ServerTest
 												_dataSourceResolver, _personResolver, _stateResolver, _agentHandler);
 			_target.CheckSchedule(_personId, _businessUnitId, _timestamp);
 			_mocks.VerifyAll();
-			waitHandle.Dispose();
 		}
 
 		[Test]
