@@ -28,6 +28,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		self.possibleTradeSchedules = ko.observableArray();
 		self.agentChoosed = ko.observable(null);
 		self.isSendEnabled = ko.observable(true);
+	        self.IsLoading = ko.observable(false);
 		self.errorMessage = ko.observable();
 		self.isDetailVisible = ko.computed(function () {
 			if (self.agentChoosed() === null) {
@@ -128,12 +129,18 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 				dataType: "json",
 				type: 'GET',
 				data: { selectedDate: self.selectedDate().toDate().toJSON() },
+				beforeSend: function () {
+				    self.IsLoading(true);
+				},
 				success: function (data, textStatus, jqXHR) {
 					self.timeLineLengthInMinutes(data.TimeLineLengthInMinutes);
 					self._createMySchedule(data.MySchedule);
 					self._createPossibleTradeSchedules(data.PossibleTradePersons);
 					self._createTimeLine(data.TimeLineHours);
 					self.setScheduleLoadedReady();
+				},
+				complete: function() {
+				    self.IsLoading(false);
 				}
 			});
 		};
