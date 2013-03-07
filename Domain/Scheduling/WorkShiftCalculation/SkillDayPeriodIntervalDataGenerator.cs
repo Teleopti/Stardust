@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 	public interface ISkillDayPeriodIntervalDataGenerator
 	{
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
-		IDictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>> Generate(IGroupPerson groupPerson, IList<DateOnly> dateOnlyList);
+        IDictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>> Generate(ITeamBlockInfo teamBlockInfo);
 	}
 
 	public class SkillDayPeriodIntervalDataGenerator : ISkillDayPeriodIntervalDataGenerator
@@ -41,9 +41,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 			_groupPersonSkillAggregator = groupPersonSkillAggregator;
 		}
 
-		public IDictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>> Generate(IGroupPerson groupPerson, IList<DateOnly> dateOnlyList)
+		public IDictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>> Generate(ITeamBlockInfo teamBlockInfo)
 		{
-			var activityIntervalData = new Dictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>>();
+		    var groupPerson = teamBlockInfo.TeamInfo.GroupPerson;
+		    var dateOnlyList = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection();
+            var activityIntervalData = new Dictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>>();
 			var skillDays = _schedulingResultStateHolder.SkillDaysOnDateOnly(dateOnlyList);
 			var dateOnlyPeriod = new DateOnlyPeriod(dateOnlyList.Min(), dateOnlyList.Max());
 			var skills = _groupPersonSkillAggregator.AggregatedSkills(groupPerson, dateOnlyPeriod).ToList();

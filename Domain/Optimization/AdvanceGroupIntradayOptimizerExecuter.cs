@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 							bestShiftProjectionCache = shifts.First();
 						else
 						{
-							var activityInternalData = _skillDayPeriodIntervalDataGenerator.Generate(fullGroupPerson, dateOnlyList);
+							var activityInternalData = _skillDayPeriodIntervalDataGenerator.Generate(null);
 							bestShiftProjectionCache = _workShiftSelector.SelectShiftProjectionCache(shifts, activityInternalData,
 																									 _schedulingOptions.WorkShiftLengthHintOption,
 																									 _schedulingOptions.UseMinimumPersons,

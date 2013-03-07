@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.WorkShiftFilters;
 using Teleopti.Interfaces.Domain;
@@ -7,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 {
 	public interface IWorkShiftFilterService
 	{
-		IList<IShiftProjectionCache> Filter(DateOnly dateOnly, IPerson person, IList<IScheduleMatrixPro> matrixList, IEffectiveRestriction effectiveRestriction, ISchedulingOptions schedulingOptions);
+		IList<IShiftProjectionCache> Filter(DateOnly dateOnly, ITeamBlockInfo teamBlockInfo, IEffectiveRestriction effectiveRestriction, ISchedulingOptions schedulingOptions);
 	}
 
 	public class WorkShiftFilterService : IWorkShiftFilterService
@@ -61,11 +62,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 			_minMaxCalculator = minMaxCalculator;
 		}
 
-		public IList<IShiftProjectionCache> Filter(DateOnly dateOnly, IPerson person, IList<IScheduleMatrixPro> matrixList,
+		public IList<IShiftProjectionCache> Filter(DateOnly dateOnly, ITeamBlockInfo teamBlockInfo ,
 													IEffectiveRestriction effectiveRestriction,
 													ISchedulingOptions schedulingOptions)
 		{
-			FinderResult = new WorkShiftFinderResult(person, dateOnly);
+		    var person = teamBlockInfo.TeamInfo.GroupPerson;
+		    var matrixList = teamBlockInfo.TeamInfo.MatrixesForGroup.ToList();
+            FinderResult = new WorkShiftFinderResult(person, dateOnly);
 			if (effectiveRestriction == null)
 				return null;
 			if (person == null) return null;

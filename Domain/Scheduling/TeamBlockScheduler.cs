@@ -44,23 +44,15 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			//if teamBlockInfo is fully scheduled, continue;
 
 			//change signature
-			var restriction = _restrictionAggregator.Aggregate(teamBlockInfo.BlockInfo.BlockPeriod.DayCollection(),
-															   teamBlockInfo.TeamInfo.GroupPerson,
-															   teamBlockInfo.TeamInfo.MatrixesForGroup.ToList(),
-															   schedulingOptions);
+			var restriction = _restrictionAggregator.Aggregate(teamBlockInfo,schedulingOptions);
 
 			// (should we cover for max seats here?) ????
-			//change signature
-			var shifts = _workShiftFilterService.Filter(datePointer, teamBlockInfo.TeamInfo.GroupPerson,
-														teamBlockInfo.TeamInfo.MatrixesForGroup.ToList(), restriction,
+			var shifts = _workShiftFilterService.Filter(datePointer, teamBlockInfo, restriction,
 														schedulingOptions);
 			if (shifts == null || shifts.Count <= 0)
 				return false;
 
-			//change signature
-			var activityInternalData = _skillDayPeriodIntervalDataGenerator.Generate(teamBlockInfo.TeamInfo.GroupPerson,
-																					 teamBlockInfo.BlockInfo.BlockPeriod
-																								  .DayCollection());
+			var activityInternalData = _skillDayPeriodIntervalDataGenerator.Generate(teamBlockInfo);
 
 			var bestShiftProjectionCache = _workShiftSelector.SelectShiftProjectionCache(shifts, activityInternalData,
 																						 schedulingOptions
