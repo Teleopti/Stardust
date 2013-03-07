@@ -177,7 +177,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_personResolver.Expect(p => p.TryResolveId(1, _logOn, out outPersonBusinessUnits)).Return(true).OutRef(
 				retPersonBusinessUnits);
 			_messageSender.Expect(m => m.IsAlive).Return(true);
-			_stateResolver.Expect(s => s.HaveStateCodeChanged(Guid.Empty, _stateCode)).Return(false);
+			_stateResolver.Expect(s => s.HaveStateCodeChanged(Guid.Empty, _stateCode, _timestamp)).Return(false);
 			
 			_mocks.ReplayAll();
 			AssignTargetAndRun();
@@ -204,9 +204,9 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_personResolver.Expect(p => p.TryResolveId(1, _logOn, out outPersonBusinessUnits)).Return(true).OutRef(
 				retPersonBusinessUnits);
 			_messageSender.Expect(m => m.IsAlive).Return(true);
-			_stateResolver.Expect(s => s.HaveStateCodeChanged(Guid.Empty, _stateCode)).Return(true);
+			_stateResolver.Expect(s => s.HaveStateCodeChanged(Guid.Empty, _stateCode, _timestamp)).Return(true);
 			_agentHandler.Expect(
-				r => r.GetState(Guid.Empty, Guid.Empty, _platformTypeId, _stateCode, _timestamp, _timeInState, autoReset)).
+				r => r.GetState(Guid.Empty, Guid.Empty, _platformTypeId, _stateCode, _timestamp, _timeInState)).
 				IgnoreArguments().Return(
 					null);
 			
@@ -238,9 +238,9 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_personResolver.Expect(p => p.TryResolveId(1, _logOn, out outPersonBusinessUnits)).Return(true).OutRef(
 				retPersonBusinessUnits);
 			_messageSender.Expect(m => m.IsAlive).Return(true);
-			_stateResolver.Expect(s => s.HaveStateCodeChanged(Guid.Empty, _stateCode)).Return(true);
+			_stateResolver.Expect(s => s.HaveStateCodeChanged(Guid.Empty, _stateCode, _timestamp)).Return(true);
 			_agentHandler.Expect(
-				r => r.GetState(Guid.Empty, Guid.Empty, _platformTypeId, _stateCode, _timestamp, _timeInState, autoReset)).
+				r => r.GetState(Guid.Empty, Guid.Empty, _platformTypeId, _stateCode, _timestamp, _timeInState)).
 				IgnoreArguments().Return(agentState);
 			_messageSender.Expect(m => m.SendRtaData(Guid.Empty, Guid.Empty, agentState));
 			
@@ -248,9 +248,9 @@ namespace Teleopti.Ccc.Rta.ServerTest
 
 			_target = new RtaDataHandlerForTest(_loggingSvc, _messageSender, "connectionStringDataStore", _databaseConnectionFactory,
 												_dataSourceResolver, _personResolver, _stateResolver, _agentHandler);
-			var result = _target.ProcessRtaData(_logOn, _stateCode, _timeInState, _timestamp, _platformTypeId, _sourceId, _batchId,
+			_target.ProcessRtaData(_logOn, _stateCode, _timeInState, _timestamp, _platformTypeId, _sourceId, _batchId,
 								   _isSnapshot);
-			Assert.That(result, Is.Not.Null);
+			
 			_mocks.VerifyAll();
 			
 			autoReset.Dispose();
@@ -277,9 +277,9 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_personResolver.Expect(p => p.TryResolveId(1, _logOn, out outPersonBusinessUnits)).Return(true).OutRef(
 				retPersonBusinessUnits);
 			_messageSender.Expect(m => m.IsAlive).Return(true);
-			_stateResolver.Expect(s => s.HaveStateCodeChanged(Guid.Empty, _stateCode)).Return(true);
+			_stateResolver.Expect(s => s.HaveStateCodeChanged(Guid.Empty, _stateCode, _timestamp)).Return(true);
 			_agentHandler.Expect(
-				r => r.GetState(Guid.Empty, Guid.Empty, _platformTypeId, _stateCode, _timestamp, _timeInState, autoReset)).
+				r => r.GetState(Guid.Empty, Guid.Empty, _platformTypeId, _stateCode, _timestamp, _timeInState)).
 				IgnoreArguments().Return(agentState);
 			_messageSender.Expect(m => m.SendRtaData(Guid.Empty, Guid.Empty, agentState)).Throw(new SocketException());
 			_loggingSvc.Expect(l => l.Error("", new SocketException())).IgnoreArguments();
@@ -312,9 +312,9 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_personResolver.Expect(p => p.TryResolveId(1, _logOn, out outPersonBusinessUnits)).Return(true).OutRef(
 				retPersonBusinessUnits);
 			_messageSender.Expect(m => m.IsAlive).Return(true);
-			_stateResolver.Expect(s => s.HaveStateCodeChanged(Guid.Empty, _stateCode)).Return(true);
+			_stateResolver.Expect(s => s.HaveStateCodeChanged(Guid.Empty, _stateCode, _timestamp)).Return(true);
 			_agentHandler.Expect(
-				r => r.GetState(Guid.Empty, Guid.Empty, _platformTypeId, _stateCode, _timestamp, _timeInState, autoReset)).
+				r => r.GetState(Guid.Empty, Guid.Empty, _platformTypeId, _stateCode, _timestamp, _timeInState)).
 				IgnoreArguments().Return(agentState);
 			_messageSender.Expect(m => m.SendRtaData(Guid.Empty, Guid.Empty, agentState)).Throw(new BrokerNotInstantiatedException());
 			_loggingSvc.Expect(l => l.Error("", new SocketException())).IgnoreArguments();
@@ -333,18 +333,16 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			var agentState = new ActualAgentState();
 
 			_messageSender.InstantiateBrokerService();
-			_agentHandler.Expect(a => a.CheckSchedule(_personId, _businessUnitId, _timestamp, waitHandle)).IgnoreArguments().Return(
+			_agentHandler.Expect(a => a.CheckSchedule(_personId, _businessUnitId, _timestamp)).IgnoreArguments().Return(
 				agentState);
 			_messageSender.Expect(m => m.SendRtaData(_personId, _businessUnitId, agentState));
 			_mocks.ReplayAll();
 
 			_target = new RtaDataHandlerForTest(_loggingSvc, _messageSender, ConnectionString, _databaseConnectionFactory,
 												_dataSourceResolver, _personResolver, _stateResolver, _agentHandler);
-			var result = _target.CheckSchedule(_personId, _businessUnitId, _timestamp);
+			_target.CheckSchedule(_personId, _businessUnitId, _timestamp);
 			_mocks.VerifyAll();
 
-			Assert.IsNotNull(result);
-			result.Dispose();
 			waitHandle.Set();
 			waitHandle.Dispose();
 		}
@@ -358,10 +356,8 @@ namespace Teleopti.Ccc.Rta.ServerTest
 
 			_target = new RtaDataHandlerForTest(_loggingSvc, _messageSender, null, _databaseConnectionFactory,
 												_dataSourceResolver, _personResolver, _stateResolver, _agentHandler);
-			var result = _target.CheckSchedule(_personId, _businessUnitId, _timestamp);
+			_target.CheckSchedule(_personId, _businessUnitId, _timestamp);
 			_mocks.VerifyAll();
-			Assert.IsNotNull(result);
-			result.Dispose();
 		}
 
 		[Test]
@@ -369,17 +365,15 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		{
 			var waitHandle = new AutoResetEvent(false);
 			_messageSender.InstantiateBrokerService();
-			_agentHandler.Expect(a => a.CheckSchedule(_personId, _businessUnitId, _timestamp, waitHandle)).IgnoreArguments().Return(null);
+			_agentHandler.Expect(a => a.CheckSchedule(_personId, _businessUnitId, _timestamp)).IgnoreArguments().Return(null);
 			_loggingSvc.Expect(l => l.InfoFormat("Schedule for {0} has not changed", _personId));
 			_mocks.ReplayAll();
 
 			_target = new RtaDataHandlerForTest(_loggingSvc, _messageSender, ConnectionString, _databaseConnectionFactory,
 												_dataSourceResolver, _personResolver, _stateResolver, _agentHandler);
-			var result = _target.CheckSchedule(_personId, _businessUnitId, _timestamp);
+			_target.CheckSchedule(_personId, _businessUnitId, _timestamp);
 			_mocks.VerifyAll();
-			Assert.IsNotNull(result);
 			waitHandle.Dispose();
-			result.Dispose();
 		}
 
 		[Test]

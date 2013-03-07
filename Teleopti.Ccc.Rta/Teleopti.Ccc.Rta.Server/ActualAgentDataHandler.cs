@@ -272,117 +272,124 @@ namespace Teleopti.Ccc.Rta.Server
 				command.CommandText = "[RTA].[rta_addorupdate_actualagentstate]";
 
 				command.Parameters.Add(new SqlParameter
-				                       	{
-				                       		ParameterName = "@PersonId",
-				                       		SqlDbType = SqlDbType.UniqueIdentifier,
-				                       		Direction = ParameterDirection.Input,
-				                       		Value = newState.PersonId
-				                       	});
+					{
+						ParameterName = "@PersonId",
+						SqlDbType = SqlDbType.UniqueIdentifier,
+						Direction = ParameterDirection.Input,
+						Value = newState.PersonId
+					});
 				command.Parameters.Add(new SqlParameter
-				                       	{
-				                       		ParameterName = "@StateCode",
-				                       		SqlDbType = SqlDbType.NVarChar,
-				                       		Direction = ParameterDirection.Input,
-				                       		Value = newState.StateCode
-				                       	});
+					{
+						ParameterName = "@StateCode",
+						SqlDbType = SqlDbType.NVarChar,
+						Direction = ParameterDirection.Input,
+						Value = newState.StateCode
+					});
 				command.Parameters.Add(new SqlParameter
-				                       	{
-				                       		ParameterName = "@PlatformTypeId",
-				                       		SqlDbType = SqlDbType.UniqueIdentifier,
-				                       		Direction = ParameterDirection.Input,
-				                       		Value = newState.PlatformTypeId
-				                       	});
+					{
+						ParameterName = "@PlatformTypeId",
+						SqlDbType = SqlDbType.UniqueIdentifier,
+						Direction = ParameterDirection.Input,
+						Value = newState.PlatformTypeId
+					});
 				command.Parameters.Add(new SqlParameter
-				                       	{
-				                       		ParameterName = "@State",
-				                       		SqlDbType = SqlDbType.NVarChar,
-				                       		Direction = ParameterDirection.Input,
-				                       		Value = newState.State
-				                       	});
+					{
+						ParameterName = "@State",
+						SqlDbType = SqlDbType.NVarChar,
+						Direction = ParameterDirection.Input,
+						Value = newState.State
+					});
 				command.Parameters.Add(new SqlParameter
-				                       	{
-				                       		ParameterName = "@AlarmName",
-				                       		SqlDbType = SqlDbType.NVarChar,
-				                       		Direction = ParameterDirection.Input,
-				                       		Value = newState.AlarmName
-				                       	});
+					{
+						ParameterName = "@AlarmName",
+						SqlDbType = SqlDbType.NVarChar,
+						Direction = ParameterDirection.Input,
+						Value = newState.AlarmName
+					});
 				command.Parameters.Add(new SqlParameter
-				                       	{
-				                       		ParameterName = "@StateId",
-				                       		SqlDbType = SqlDbType.UniqueIdentifier,
-				                       		Direction = ParameterDirection.Input,
-				                       		Value = newState.StateId
-				                       	});
+					{
+						ParameterName = "@StateId",
+						SqlDbType = SqlDbType.UniqueIdentifier,
+						Direction = ParameterDirection.Input,
+						Value = newState.StateId
+					});
 				command.Parameters.Add(new SqlParameter
-				                       	{
-				                       		ParameterName = "@Scheduled",
-				                       		SqlDbType = SqlDbType.NVarChar,
-				                       		Direction = ParameterDirection.Input,
-				                       		Value = newState.Scheduled
-				                       	});
+					{
+						ParameterName = "@Scheduled",
+						SqlDbType = SqlDbType.NVarChar,
+						Direction = ParameterDirection.Input,
+						Value = newState.Scheduled
+					});
 				command.Parameters.Add(new SqlParameter
-				                       	{
-				                       		ParameterName = "@ScheduledId",
-				                       		SqlDbType = SqlDbType.UniqueIdentifier,
-				                       		Direction = ParameterDirection.Input,
-				                       		Value = newState.ScheduledId
-				                       	});
+					{
+						ParameterName = "@ScheduledId",
+						SqlDbType = SqlDbType.UniqueIdentifier,
+						Direction = ParameterDirection.Input,
+						Value = newState.ScheduledId
+					});
 				command.Parameters.Add(new SqlParameter
-				                       	{
-				                       		ParameterName = "@AlarmId",
-				                       		SqlDbType = SqlDbType.UniqueIdentifier,
-				                       		Direction = ParameterDirection.Input,
-				                       		Value = newState.AlarmId
-				                       	});
+					{
+						ParameterName = "@AlarmId",
+						SqlDbType = SqlDbType.UniqueIdentifier,
+						Direction = ParameterDirection.Input,
+						Value = newState.AlarmId
+					});
 				command.Parameters.Add(new SqlParameter
-				                       	{
-				                       		ParameterName = "@ScheduledNext",
-				                       		SqlDbType = SqlDbType.NVarChar,
-				                       		Direction = ParameterDirection.Input,
-				                       		Value = newState.ScheduledNext
-				                       	});
+					{
+						ParameterName = "@ScheduledNext",
+						SqlDbType = SqlDbType.NVarChar,
+						Direction = ParameterDirection.Input,
+						Value = newState.ScheduledNext
+					});
 				command.Parameters.Add(new SqlParameter
-				                       	{
-				                       		ParameterName = "@ScheduledNextId",
-				                       		SqlDbType = SqlDbType.UniqueIdentifier,
-				                       		Direction = ParameterDirection.Input,
-				                       		Value = newState.ScheduledNextId
-				                       	});
+					{
+						ParameterName = "@ScheduledNextId",
+						SqlDbType = SqlDbType.UniqueIdentifier,
+						Direction = ParameterDirection.Input,
+						Value = newState.ScheduledNextId
+					});
 				command.Parameters.Add(new SqlParameter
-				                       	{
-				                       		ParameterName = "@StateStart",
-				                       		SqlDbType = SqlDbType.DateTime,
-				                       		Direction = ParameterDirection.Input,
-				                       		Value = newState.StateStart
-				                       	});
+					{
+						ParameterName = "@StateStart",
+						SqlDbType = SqlDbType.DateTime,
+						Direction = ParameterDirection.Input,
+						Value = newState.StateStart
+					});
 				command.Parameters.Add(new SqlParameter
-				                       	{
-				                       		ParameterName = "@NextStart",
-				                       		SqlDbType = SqlDbType.DateTime,
-				                       		Direction = ParameterDirection.Input,
-				                       		Value = newState.NextStart
-				                       	});
+					{
+						ParameterName = "@NextStart",
+						SqlDbType = SqlDbType.DateTime,
+						Direction = ParameterDirection.Input,
+						Value = newState.NextStart
+					});
 				command.Parameters.Add(new SqlParameter
-				                       	{
-				                       		ParameterName = "@AlarmStart",
-				                       		SqlDbType = SqlDbType.DateTime,
-				                       		Direction = ParameterDirection.Input,
-				                       		Value = newState.AlarmStart
-				                       	});
+					{
+						ParameterName = "@AlarmStart",
+						SqlDbType = SqlDbType.DateTime,
+						Direction = ParameterDirection.Input,
+						Value = newState.AlarmStart
+					});
 				command.Parameters.Add(new SqlParameter
-				                       	{
-				                       		ParameterName = "@Color",
-				                       		SqlDbType = SqlDbType.Int,
-				                       		Direction = ParameterDirection.Input,
-				                       		Value = newState.Color
-				                       	});
+					{
+						ParameterName = "@Color",
+						SqlDbType = SqlDbType.Int,
+						Direction = ParameterDirection.Input,
+						Value = newState.Color
+					});
 				command.Parameters.Add(new SqlParameter
-				                       	{
-				                       		ParameterName = "@StaffingEffect",
-				                       		SqlDbType = SqlDbType.Float,
-				                       		Direction = ParameterDirection.Input,
-				                       		Value = newState.StaffingEffect
-				                       	});
+					{
+						ParameterName = "@StaffingEffect",
+						SqlDbType = SqlDbType.Float,
+						Direction = ParameterDirection.Input,
+						Value = newState.StaffingEffect
+					});
+				command.Parameters.Add(new SqlParameter
+					{
+						ParameterName = "@Timestamp",
+						SqlDbType = SqlDbType.DateTime,
+						Direction = ParameterDirection.Input,
+						Value = newState.Timestamp
+					});
 				connection.Open();
 				command.ExecuteNonQuery();
 			}

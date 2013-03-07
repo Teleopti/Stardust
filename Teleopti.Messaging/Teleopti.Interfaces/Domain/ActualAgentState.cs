@@ -151,15 +151,17 @@ namespace Teleopti.Interfaces.Domain
 		/// </summary>
 		public override int GetHashCode()
 		{
-			unchecked{
-            var result = 0;
-        	result = (result*397) ^ ScheduledId.GetHashCode();
-        	result = (result*397) ^ ScheduledNextId.GetHashCode();
-        	result = (result*397) ^ AlarmId.GetHashCode();
-			result = (result * 397) ^ StateId.GetHashCode();
-			result = (result * 397) ^ ScheduledNext.GetHashCode();
-			result = (result * 397) ^ NextStart.GetHashCode();
-            return result;
+			unchecked
+			{
+				var result = 0;
+				result = (result*397) ^ ScheduledId.GetHashCode();
+				result = (result*397) ^ ScheduledNextId.GetHashCode();
+				result = (result*397) ^ AlarmId.GetHashCode();
+				result = (result*397) ^ StateId.GetHashCode();
+				result = (result*397) ^ ScheduledNext.GetHashCode();
+				result = (result*397) ^ NextStart.GetHashCode();
+				result = (result*396) ^ Timestamp.GetHashCode();
+				return result;
 			}
 		}
 	}

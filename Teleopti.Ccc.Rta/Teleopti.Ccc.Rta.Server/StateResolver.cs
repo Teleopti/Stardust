@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Rta.Server
 {
     public interface IStateResolver
     {
-        bool HaveStateCodeChanged(Guid personId, string newStateCode);
+        bool HaveStateCodeChanged(Guid personId, string newStateCode, DateTime timestamp);
     }
 
     public class StateResolver : IStateResolver
@@ -35,30 +35,31 @@ namespace Teleopti.Ccc.Rta.Server
             _cache = HttpRuntime.Cache;
         }
         
-        public bool HaveStateCodeChanged(Guid personId, string newStateCode)
+        public bool HaveStateCodeChanged(Guid personId, string newStateCode, DateTime timestamp)
         {
-            var dictionary = (ConcurrentDictionary<Guid, string>) _cache.Get(CacheKey) ?? Initialize();
-            string result;
-			
-			if (!dictionary.TryGetValue(personId, out result))
+			var dictionary = (ConcurrentDictionary<Guid, PersonStateHolder>)_cache.Get(CacheKey) ?? Initialize();
+			PersonStateHolder outStateHolder;
+	        var newStateHolder = new PersonStateHolder(newStateCode, timestamp);
+
+			if (!dictionary.TryGetValue(personId, out outStateHolder))
             {
-                dictionary.Add(personId, newStateCode);
+                dictionary.TryAdd(personId, new PersonStateHolder(newStateCode, timestamp));
                 return true;
             }
 
-			if (result != newStateCode)
+			if (!outStateHolder.Equals(newStateHolder))
 			{
-				dictionary[personId] = newStateCode;
+				dictionary[personId] = newStateHolder;
 				return true;
 			}
 
         	return false;
         }
 
-        private IDictionary<Guid, string> Initialize()
+		private ConcurrentDictionary<Guid, PersonStateHolder> Initialize()
         {
             _loggingSvc.Info("Loading new data into state cache");
-            var dictionary = new ConcurrentDictionary<Guid, string>();
+			var dictionary = new ConcurrentDictionary<Guid, PersonStateHolder>();
             using (var connection = _databaseConnectionFactory.CreateConnection(_connectionStringDataStore))
             {
                 var command = connection.CreateCommand();
@@ -70,7 +71,9 @@ namespace Teleopti.Ccc.Rta.Server
                 {
                     var stateCode = reader.GetString(reader.GetOrdinal("StateCode"));
                     var personId = reader.GetGuid(reader.GetOrdinal("PersonId"));
-                    dictionary.AddOrUpdate(personId, stateCode, (guid, s) => s);
+	                var timestamp = reader.GetDateTime(reader.GetOrdinal("Timestamp"));
+	                var stateHolder = new PersonStateHolder(stateCode, timestamp);
+	                dictionary.AddOrUpdate(personId, stateHolder, (guid, oldState) => stateHolder.Timestamp > oldState.Timestamp ? stateHolder : oldState);
                 }
                 if (reader != null) reader.Close();
             }
@@ -85,5 +88,33 @@ namespace Teleopti.Ccc.Rta.Server
             _loggingSvc.Info("Statecache cleared");
             Initialize();
         }
+
+		public class PersonStateHolder
+		{
+			public string StateCode { get; set; }
+			public DateTime Timestamp { get; set; }
+
+			public PersonStateHolder(string stateCode, DateTime timestamp)
+			{
+				StateCode = stateCode;
+				Timestamp = timestamp;
+			}
+
+			public override bool Equals(object obj)
+			{
+				return obj != null && GetHashCode().Equals(obj.GetHashCode());
+			}
+
+			public override int GetHashCode()
+			{
+				unchecked
+				{
+					var result = 0;
+					result = (result*397) ^ StateCode.GetHashCode();
+					result = (result*397) ^ Timestamp.GetHashCode();
+					return result;
+				}
+			}
+		}
     }
 }
