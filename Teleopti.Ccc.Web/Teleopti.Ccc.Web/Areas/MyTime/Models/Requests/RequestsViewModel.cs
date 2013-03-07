@@ -32,5 +32,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 		public string DenyReason;
 		public string From;
 		public string To;
+		public bool IsNew;
 	}
 }

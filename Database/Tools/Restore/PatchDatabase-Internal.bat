@@ -56,6 +56,7 @@ GOTO :error
 ECHO msbuild "%ROOTDIR%\..\..\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.csproj" 
 %MSBUILD% "%ROOTDIR%\..\..\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager.csproj" > "%temp%\build.log"
 IF %ERRORLEVEL% EQU 0 (
+SET DATABASEPATH="%ROOTDIR%\..\..\..\Database"
 SET DBMANAGER="%ROOTDIR%\..\..\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\bin\Debug\DBManager.exe"
 SET DBMANAGERPATH="%ROOTDIR%\..\..\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBManager\bin\Debug"
 ) else (
@@ -66,8 +67,8 @@ GOTO :error
 ::Patch DB
 ::Upgrade DB to latest version, we now always include trunk
 CD "%DBMANAGERPATH%"
-ECHO "%DBMANAGER%" -S%MyServerInstance% %Conn1% -D%DATABASE% -O%DATABASETYPE% -R -T -LTeleoptiDemoUser:TeleoptiDemoPwd2
-"%DBMANAGER%" -S%MyServerInstance% %Conn1% -D%DATABASE% -O%DATABASETYPE% -R -T -LTeleoptiDemoUser:TeleoptiDemoPwd2
+ECHO "%DBMANAGER%" -S%MyServerInstance% %Conn1% -D%DATABASE% -O%DATABASETYPE% -R -T -LTeleoptiDemoUser:TeleoptiDemoPwd2 -F"%DATABASEPATH%"
+"%DBMANAGER%" -S%MyServerInstance% %Conn1% -D%DATABASE% -O%DATABASETYPE% -R -T -LTeleoptiDemoUser:TeleoptiDemoPwd2 -F"%DATABASEPATH%"
 IF %ERRORLEVEL% NEQ 0 (
 SET /A ERRORLEV=2
 GOTO :error

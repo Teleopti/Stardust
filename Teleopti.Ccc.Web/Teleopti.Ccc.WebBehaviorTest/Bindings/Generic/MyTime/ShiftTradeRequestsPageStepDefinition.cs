@@ -4,6 +4,7 @@ using System.Linq;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
@@ -176,5 +177,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		{
 			EventualAssert.That(() => Pages.Pages.RequestsPage.AddShiftTradeContainer.DisplayVisible(), Is.False);
 		}
+
+		[Then(@"I should see details with message that tells the user that the status of the shifttrade is new")]
+		public void ThenIShouldSeeDetailsWithMessageThatTellsTheUserThatTheStatusOfTheShifttradeIsNew()
+		{
+			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeRequestDetailInfo.Text, Is.EqualTo(Resources.CannotDisplayScheduleWhenShiftTradeStatusIsNew));
+			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeRequestDetailInfo.IsDisplayed(), Is.True);
+		}
+
+
 	}
 }
