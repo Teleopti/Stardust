@@ -57,15 +57,15 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			dataReader.Expect(d => d.GetOrdinal("PersonId")).Return(1);
 			dataReader.Expect(d => d.GetGuid(1)).Return(personId);
 			dataReader.Expect(d => d.GetOrdinal("Timestamp")).Return(2);
-			dataReader.Expect(d => d.GetDateTime(2)).Return(dateTime);
+			dataReader.Expect(d => d.GetDateTime(2)).Return(dateTime.AddMilliseconds(-100));
 			dataReader.Expect(d => d.Read()).Return(false);
 			dataReader.Expect(d => d.Close());
 			_mock.ReplayAll();
 
 			Assert.That(_target.HaveStateCodeChanged(personId, "AUX2", dateTime), Is.True);
 			Assert.That(_target.HaveStateCodeChanged(Guid.NewGuid(), "OFF", dateTime), Is.True);
-			Assert.That(_target.HaveStateCodeChanged(personId, "OFF", dateTime), Is.True);
-			Assert.That(_target.HaveStateCodeChanged(personId, "OFF", dateTime), Is.False);
+			Assert.That(_target.HaveStateCodeChanged(personId, "OFF", dateTime.AddMilliseconds(100)), Is.True);
+			Assert.That(_target.HaveStateCodeChanged(personId, "OFF", dateTime.AddMilliseconds(100)), Is.False);
 			_mock.VerifyAll();
 		}
 	}

@@ -38,16 +38,17 @@ namespace Teleopti.Ccc.Rta.Server
         public bool HaveStateCodeChanged(Guid personId, string newStateCode, DateTime timestamp)
         {
 			var dictionary = (ConcurrentDictionary<Guid, PersonStateHolder>)_cache.Get(CacheKey) ?? Initialize();
-			PersonStateHolder outStateHolder;
+			PersonStateHolder cachedStateHolder;
 	        var newStateHolder = new PersonStateHolder(newStateCode, timestamp);
 
-			if (!dictionary.TryGetValue(personId, out outStateHolder))
+			if (!dictionary.TryGetValue(personId, out cachedStateHolder))
             {
                 dictionary.TryAdd(personId, new PersonStateHolder(newStateCode, timestamp));
                 return true;
             }
 
-			if (!outStateHolder.Equals(newStateHolder))
+			if (newStateHolder.StateCode != cachedStateHolder.StateCode && 
+				newStateHolder.Timestamp > cachedStateHolder.Timestamp)
 			{
 				dictionary[personId] = newStateHolder;
 				return true;

@@ -100,8 +100,8 @@ namespace Teleopti.Ccc.Rta.Server
 			}
 
 			//if same don't send it (could happen often in batchmode)
-			//if (previousState != null && newState.Equals(previousState))
-			//    return null;
+			if (previousState != null && newState.Equals(previousState))
+				return null;
 
 			ThreadPool.QueueUserWorkItem(saveToDataStore, new object[] { newState });
 

@@ -160,7 +160,6 @@ namespace Teleopti.Interfaces.Domain
 				result = (result*397) ^ StateId.GetHashCode();
 				result = (result*397) ^ ScheduledNext.GetHashCode();
 				result = (result*397) ^ NextStart.GetHashCode();
-				result = (result*396) ^ Timestamp.GetHashCode();
 				return result;
 			}
 		}

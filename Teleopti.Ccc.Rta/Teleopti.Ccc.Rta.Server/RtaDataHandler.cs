@@ -112,27 +112,21 @@ namespace Teleopti.Ccc.Rta.Server
 			)]
 		public void CheckSchedule(Guid personId, Guid businessUnitId, DateTime timestamp)
 		{
-			//var waitHandle = new AutoResetEvent(false);
-
 			if (string.IsNullOrEmpty(_connectionStringDataStore))
 			{
 				_loggingSvc.Error("No connection information avaiable in configuration file.");
-				//waitHandle.Set();
-				//return waitHandle;
+				return;
 			}
 
 			var agentState = _agentHandler.CheckSchedule(personId, businessUnitId, timestamp);
 			if (agentState == null)
 			{
 				_loggingSvc.InfoFormat("Schedule for {0} has not changed", personId);
-				//waitHandle.Set();
-				//return waitHandle;
+				return;
 			}
 
 			_loggingSvc.InfoFormat("Trying to send object {0} through Message Broker", agentState);
 			_messageSender.SendRtaData(personId, businessUnitId, agentState);
-			//waitHandle.Set();
-			//return waitHandle;
 		}
 
 		public bool IsAlive
@@ -150,28 +144,37 @@ namespace Teleopti.Ccc.Rta.Server
 			int dataSourceId;
 
 			if (string.IsNullOrEmpty(_connectionStringDataStore))
-				_loggingSvc.Warn("No connection information available in configuration file.");
+			{
+				_loggingSvc.Error("No connection information available in configuration file.");
+				return;
+			}
 
 			if (!_dataSourceResolver.TryResolveId(sourceId, out dataSourceId))
+			{
 				_loggingSvc.ErrorFormat(
 					"No data source available for source id = {0}. Event will not be handled before data source is set up.", sourceId);
+				return;
+			}
 
 			IEnumerable<PersonWithBusinessUnit> personWithBusinessUnits;
 			if (!_personResolver.TryResolveId(dataSourceId, logOn, out personWithBusinessUnits))
+			{
 				_loggingSvc.WarnFormat(
 					"No person available for datasource id = {0} and log on {1}. Event will not be sent through message broker before person is set up.",
 					dataSourceId, logOn);
+				return;
+			}
 
 			if (!_messageSender.IsAlive) return;
 			try
 			{
 				foreach (var personWithBusinessUnit in personWithBusinessUnits)
 				{
-					//if (!_stateResolver.HaveStateCodeChanged(personWithBusinessUnit.PersonId, stateCode))
-					//{
-					//    _loggingSvc.InfoFormat("Person {0} is already in state {1}", personWithBusinessUnit.PersonId, stateCode);
-					//    continue;
-					//}
+					if (!_stateResolver.HaveStateCodeChanged(personWithBusinessUnit.PersonId, stateCode, timestamp))
+					{
+						_loggingSvc.InfoFormat("Person {0} is already in state {1}", personWithBusinessUnit.PersonId, stateCode);
+						continue;
+					}
 
 					var agentState = _agentHandler.GetState(personWithBusinessUnit.PersonId, personWithBusinessUnit.BusinessUnitId,
 					                                        platformTypeId, stateCode,

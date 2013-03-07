@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		public void	VerifyWarningWithNoConnectionString()
 		{
 			_messageSender.InstantiateBrokerService();
-			_loggingSvc.Expect(l => l.Warn("No connection information available in configuration file."));
+			_loggingSvc.Expect(l => l.Error("No connection information available in configuration file."));
 			_mocks.ReplayAll();
 
 			_target = new RtaDataHandlerForTest(_loggingSvc, _messageSender, string.Empty, _databaseConnectionFactory, _dataSourceResolver, _personResolver, _stateResolver, _agentHandler);
