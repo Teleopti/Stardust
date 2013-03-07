@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		private IMappingEngine autoMapper;
 		private IPersonRequestRepository repository;
 		private IServiceBusSender serviceBusSender;
+		private IShiftTradeRequestSetChecksum shiftTradeSetChecksum;
 
 		[SetUp]
 		public void Setup()
@@ -31,12 +32,13 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			autoMapper = MockRepository.GenerateMock<IMappingEngine>();
 			repository = MockRepository.GenerateMock<IPersonRequestRepository>();
 			serviceBusSender = MockRepository.GenerateMock<IServiceBusSender>();
+			shiftTradeSetChecksum = MockRepository.GenerateMock<IShiftTradeRequestSetChecksum>();
 		}
 
 		[Test]
 		public void ShouldPersistMappedData()
 		{
-			var target = new ShiftTradeRequestPersister(repository, mapper, autoMapper, serviceBusSender, null, null, null, null);
+			var target = new ShiftTradeRequestPersister(repository, mapper, autoMapper, serviceBusSender, null, null, null, null, shiftTradeSetChecksum);
 			var form = new ShiftTradeRequestForm();
 			var shiftTradeRequest = new PersonRequest(new Person());
 			var viewModel = new RequestViewModel();
@@ -72,7 +74,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			                                            now,
 			                                            dataSourceProvider,
 			                                            businessUnitProvider,
-			                                            uowFactory);
+			                                            uowFactory,
+																									shiftTradeSetChecksum);
 			var uow = MockRepository.GenerateMock<IUnitOfWork>();
 			uowFactory.Expect(x => x.CurrentUnitOfWork()).Return(uow);
 			serviceBusSender.Expect(x => x.EnsureBus()).Return(true);
@@ -101,7 +104,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 																									now,
 																									dataSourceProvider,
 																									businessUnitProvider,
-																									uowFactory);
+																									uowFactory,
+																									shiftTradeSetChecksum);
 			var uow = MockRepository.GenerateMock<IUnitOfWork>();
 			uowFactory.Expect(x => x.CurrentUnitOfWork()).Return(uow);
 			serviceBusSender.Expect(x => x.EnsureBus()).Return(false);
@@ -110,5 +114,22 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 
 			uow.AssertWasNotCalled(x => x.AfterSuccessfulTx(Arg<Action>.Is.Anything));
 		}
+
+		[Test]
+		public void ShouldSetChecksumOnRequest()
+		{
+			//elände - borde inte behöva anropa setchecksum explicit
+			var target = new ShiftTradeRequestPersister(repository, mapper, autoMapper, serviceBusSender, null, null, null, null, shiftTradeSetChecksum);
+			var form = new ShiftTradeRequestForm();
+			var shiftTradeRequest = new PersonRequest(new Person());
+
+			mapper.Stub(x => x.Map(form)).Return(shiftTradeRequest);
+			serviceBusSender.Expect(x => x.EnsureBus()).Return(false);
+
+			target.Persist(form);
+
+			shiftTradeSetChecksum.AssertWasCalled(x => x.SetChecksum(shiftTradeRequest.Request));
+		}
+
 	}
 }

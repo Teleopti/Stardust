@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		private readonly ICurrentBusinessUnitProvider _businessUnitProvider;
 		private readonly IServiceBusSender _serviceBusSender;
 		private readonly IUnitOfWorkFactory _uowFactory;
+		private readonly IShiftTradeRequestSetChecksum _shiftTradeSetChecksum;
 
 		public ShiftTradeRequestPersister(IPersonRequestRepository personRequestRepository, 
 																		IShiftTradeRequestMapper shiftTradeRequestMapper, 
@@ -29,7 +30,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 																		INow now,
 																		IDataSourceProvider dataSourceProvider,
 																		ICurrentBusinessUnitProvider businessUnitProvider,
-																		IUnitOfWorkFactory uowFactory)
+																		IUnitOfWorkFactory uowFactory,
+																		IShiftTradeRequestSetChecksum shiftTradeSetChecksum)
 		{
 			_personRequestRepository = personRequestRepository;
 			_shiftTradeRequestMapper = shiftTradeRequestMapper;
@@ -39,11 +41,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			_businessUnitProvider = businessUnitProvider;
 			_serviceBusSender = serviceBusSender;
 			_uowFactory = uowFactory;
+			_shiftTradeSetChecksum = shiftTradeSetChecksum;
 		}
 
 		public RequestViewModel Persist(ShiftTradeRequestForm form)
 		{
 			var personRequest = _shiftTradeRequestMapper.Map(form);
+			_shiftTradeSetChecksum.SetChecksum(personRequest.Request);
 			_personRequestRepository.Add(personRequest);
 
 			createMessage(personRequest);
