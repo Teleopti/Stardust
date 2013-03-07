@@ -42,6 +42,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
 		public void Populate(QuickForecastCommandDto stateObj)
         {
             _stateObj = stateObj;
+			TargetFromTo.EnableNullDates = false;
 			TargetFromTo.WorkPeriodStart = new DateOnly(_stateObj.TargetPeriod.StartDate.DateTime);
 			TargetFromTo.WorkPeriodEnd = new DateOnly(_stateObj.TargetPeriod.EndDate.DateTime);
         }

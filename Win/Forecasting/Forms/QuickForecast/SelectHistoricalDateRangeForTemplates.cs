@@ -28,6 +28,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
 
 		public void Populate(QuickForecastCommandDto stateObj)
         {
+			TemplatesDatesFromTo.EnableNullDates = false;
             _stateObj = stateObj;
         }
 
