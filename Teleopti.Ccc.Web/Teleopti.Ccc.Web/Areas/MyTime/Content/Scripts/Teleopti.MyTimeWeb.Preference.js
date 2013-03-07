@@ -108,8 +108,8 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			success: function (data, textStatus, jqXHR) {
 				data = data || [];
 				addExtendedPreferenceFormViewModel.AvailableTemplates.push(data);
-				addExtendedPreferenceFormViewModel.AvailableTemplates.sort(function(a, b) {
-					return a.Text > b.Text;
+				addExtendedPreferenceFormViewModel.AvailableTemplates.sort(function (l, r) {
+					return l.Text > r.Text ? 1 : -1;
 				});
 				var template = $("#Preference-template");
 				template.selectbox(
@@ -276,6 +276,9 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			success: function (data, textStatus, jqXHR) {
 				data = data || [];
 				addExtendedPreferenceFormViewModel.AvailableTemplates(data);
+				addExtendedPreferenceFormViewModel.AvailableTemplates.sort(function (l, r) {
+					return l.Text > r.Text ? 1 : -1;
+				});
 				$("#Preference-template").selectbox({ refreshMenu: data });
 			}
 		});
