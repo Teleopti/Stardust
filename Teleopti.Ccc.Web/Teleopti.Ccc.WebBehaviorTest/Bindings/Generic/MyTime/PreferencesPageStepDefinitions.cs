@@ -368,11 +368,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			Pages.Pages.PreferencePage.ExtendedPreferenceTemplateSelectBox.Open();
 		}
 
-		[When(@"I check Save as new template checkbox")]
-		public void WhenICheckSaveAsNewTemplateCheckbox()
+		[When(@"I click Save as new template")]
+		public void WhenIClickSaveAsNewTemplate()
 		{
-			Pages.Pages.PreferencePage.TemplateSaveCheckBox.Checked = true;
+			Pages.Pages.PreferencePage.TemplateSaveDiv.EventualClick();
 		}
+
 
 		[When(@"I input new template name '(.*)'")]
 		public void WhenIInputNewTemplateName(string name)

@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "Preference-extended-activity-time-maximum")]
 		public ComboBox ExtendedPreferenceActivityTimeMaximum;
 		[FindBy(Id = "Template-save")]
-		public CheckBox TemplateSaveCheckBox;
+		public Div TemplateSaveDiv;
 		[FindBy(Id = "Template-name-input")]
 		public TextField TemplateNameTextField;
 
