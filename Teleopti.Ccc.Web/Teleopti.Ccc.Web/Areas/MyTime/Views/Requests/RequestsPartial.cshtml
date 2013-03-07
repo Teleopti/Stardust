@@ -217,14 +217,20 @@
 
 <div id="Requests-body-inner" class="request-body-inner relative">
 	@Html.Partial("NewShiftTradeRequest")
-	<div id="Requests-data-binding-area">
-		<div class="ui-corner-all friendly-message ui-corner-all floatleft" data-bind="visible: Requests().length == 0" id="Requests-no-requests-found">
+	<div id="Requests-data-binding-area" >
+		<div class="ui-corner-all friendly-message ui-corner-all floatleft" data-bind="visible: Requests().length == 0 && !isLoadingRequests(), hideWhenFadedOut: true" id="Requests-no-requests-found">
 			@Resources.NoRequestsFound
 		</div>
       
-		<div id="request-list" data-bind="foreach: Requests" class="request-list">
+	    <div data-bind="visible: isLoadingRequests">	   
+	       <div class="loading-gradient">
+			<div class="loading"></div>
+		</div>
+	    </div>
+
+	    <div id="request-list" data-bind="foreach: Requests" class="request-list">
 		
-			<!-- Shows the requestviewmodel -->
+		    <!-- Shows the requestviewmodel -->
 			<div class="ui-corner-all request-item relative" data-bind="click: $parent.SelectItem, event: { mouseover: ToggleMouseOver, mouseout: ToggleMouseOver }, increaseWidthIf: IsMouseOver,  css: { 'request-selected': IsSelected() == true , 'request-not-selected': IsSelected() == false}, attr:{'data-mytime-requestid' : Id}">
 				<div class="request-arrow-right" data-bind="fadeInIf: IsMouseOver">
 					<img src="@Url.Content("~/Areas/MyTime/Content/Images/arrow-right.png")"/>
