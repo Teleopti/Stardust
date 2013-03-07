@@ -12,7 +12,7 @@
         <button class="shift-trade-add-next-date" data-bind="click : nextDate"></button>
     </div>
     
-   <div class="relative" >
+  
     <div data-bind="fadeInIf: !IsLoading(), fadeInDuration: 150,fadeOutDuration: 50">
         <div class="shift-trade-add-schedule ui-corner-bottom">
             <div class="shift-trade-timeline" data-bind="foreach: hours">
@@ -20,14 +20,21 @@
                     <span class="shift-trade-timeline-number ui-corner-all" data-bind="text: hourText, style: {left: leftPx}"></span>
                 </span>
             </div>
-            <div class="shift-trade-my-schedule-row">
-                <span style="width: 150px; float: left" data-bind="text: mySchedule().agentName"></span>
-                <div class="shift-trade-my-schedule" data-bind="foreach: mySchedule().layers">
-                    <span class="shift-trade-layer ui-corner-all" data-bind="style: { left : leftPx, backgroundColor : backgroundColor, paddingLeft : paddingLeft}, attr: {'title' : title}, css:{ striped : $parent.mySchedule().showDayOffStyle(), dayoff : $parent.mySchedule().showDayOffStyle() }">
-                        <span class="shift-trade-dayoff-name" data-bind="text: $parent.mySchedule().dayOffText"></span>
-                    </span>
-                </div>
-            </div>
+             <div class="relative" >
+                 <div class="shift-trade-my-schedule-row">
+                     <span style="width: 150px; float: left" data-bind="text: mySchedule().agentName"></span>
+                     <div class="shift-trade-my-schedule" data-bind="foreach: mySchedule().layers">
+                         <span class="shift-trade-layer ui-corner-all" data-bind="style: { left : leftPx, backgroundColor : backgroundColor, paddingLeft : paddingLeft}, attr: {'title' : title}, css:{ striped : $parent.mySchedule().showDayOffStyle(), dayoff : $parent.mySchedule().showDayOffStyle() }">
+                             <span class="shift-trade-dayoff-name" data-bind="text: $parent.mySchedule().dayOffText"></span>
+                         </span>
+                     </div>
+                 </div>
+                     <div class="shift-trade-schedule-loading">
+                         <div class="loading-gradient"  data-bind="visible: IsLoading, fadeInDuration: 900, fadeOutDuration: 10, hideWhenFadedOut: true" style="pointer-events:none" >
+                             <div class="loading"></div>
+                         </div>
+                          </div>
+       </div>
             <div data-bind="foreach: possibleTradeSchedules">
                 <div class="shift-trade-person-schedule-row agent" data-bind="visible: isVisible, click: $parent.chooseAgent, hoverToggle: 'hoverBorder', hoverIf: !$parent.isDetailVisible()">
                     <span class="shift-trade-agent-name" data-bind="text: agentName"></span>
@@ -39,6 +46,7 @@
                 </div>
             </div>
         </div>
+        
         <div id="Request-add-shift-trade-detail-section" data-bind="visible: isDetailVisible" class="request-shift-trade-add-section mt10 ui-corner-all" style="width: 400px; overflow: hidden;">
             <div class="edit-module-element">
                 <label class="displayblock" for="Request-add-shift-trade-subject-input">@Resources.Subject</label>
@@ -60,11 +68,10 @@
     </div>
     
     
-       <div class="shift-trade-schedule-loading">
-           <div class="loading-gradient"  data-bind="fadeInIf: IsLoading, fadeInDuration: 900" >
-               <div class="loading"></div>
-           </div>
-       </div>
+     
+        
+       
+       
+      
 
-</div>
 </div>
