@@ -93,6 +93,8 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 
         self.MoreToLoad = ko.observable(false);
 
+        self.isLoadingRequests = ko.observable(true);
+        
         self.ShowRequests = function (data) {
             ko.utils.arrayForEach(data, function (item) {
                 var vm = new RequestItemViewModel();
@@ -154,6 +156,9 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
                     Take: take,
                     Skip: skip
                 },
+                beforeSend: function() {
+                    self.isLoadingRequests(true);
+                },
                 success: function (data) {
                     self.MoreToLoad(data.length == take);
                     self.ShowRequests(data);
@@ -167,6 +172,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
                         self.Completed();
                         self.Completed = null;
                     }
+                    self.isLoadingRequests(false);
                 }
             });
         };
@@ -177,7 +183,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
     ko.utils.extend(RequestItemViewModel.prototype, {
         Initialize: function (data) {
             var self = this;
-            self.Subject(data.Subject);
+            self.Subject(data.Subject == null ? '<br>' : data.Subject);
             self.RequestType(data.Type);
             self.Status(data.Status);
             self.Dates(data.Dates);
