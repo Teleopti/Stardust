@@ -38,8 +38,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[Then(@"I should be able to select teams")]
 		public void ThenIShouldBeAbleToSelectTeams(Table table)
 		{
+			var select = Browser.Current.SelectList(Find.BySelector(".team-selector"));
+			EventualAssert.That(() => select.Exists, Is.True);
+
 			var teams = table.CreateSet<TeamInfo>();
-			teams.ForEach(t => EventualAssert.That(() => Browser.Current.Element(Find.BySelector(string.Format(".team-selector:contains('{0}'", t.Team))).Exists, Is.True));
+			teams.ForEach(t => EventualAssert.That(() => select.Option(Find.BySelector(string.Format(":contains('{0}')", t.Team))).Exists, Is.True));
 		}
 		
 		public class TeamInfo

@@ -61,7 +61,6 @@ Scenario: View team schedule, no shift
 	When I view schedules for '2012-12-03'
 	Then I should see no schedule for 'Pierre Baldi'
 	
-@ignore
 Scenario: View team selection
 	Given there is a team with
 	| Field | Value      |
