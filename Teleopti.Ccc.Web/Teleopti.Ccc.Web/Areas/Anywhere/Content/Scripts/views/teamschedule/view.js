@@ -101,12 +101,14 @@ define([
 							teamSchedule.isLoading(false);
 
 							if (initialLoad) {
-								teamSchedule.SelectedTeam.subscribe(function () {
-									loadPeople();
+							    teamSchedule.SelectedTeam.subscribe(function () {
+							        navigation.GoToTeamSchedule(teamSchedule.SelectedTeam().Id, teamSchedule.SelectedDate());
+									//loadPeople();
 								});
 
-								teamSchedule.SelectedDate.subscribe(function () {
-									loadAvailableTeams();
+							    teamSchedule.SelectedDate.subscribe(function () {
+							        navigation.GoToTeamSchedule(teamSchedule.SelectedTeam().Id, teamSchedule.SelectedDate());
+									//loadAvailableTeams();
 								});
 								initialLoad = false;
 							}

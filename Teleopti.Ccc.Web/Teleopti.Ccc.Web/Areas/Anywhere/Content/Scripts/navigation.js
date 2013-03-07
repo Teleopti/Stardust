@@ -17,6 +17,9 @@ define([
             },
             GotoPersonScheduleAddFullDayAbsenceForm: function(id, date) {
                 window.location.hash = 'personschedule/' + id + '/' + toDateString(date) + "/addfulldayabsence";
+            },
+            GoToTeamSchedule: function(id, date) {
+                window.location.hash = 'teamschedule/' + id + '/' + toDateString(date);
             }
         };
     });

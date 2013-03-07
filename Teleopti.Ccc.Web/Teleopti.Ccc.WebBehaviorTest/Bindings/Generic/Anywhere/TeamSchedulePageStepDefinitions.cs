@@ -53,7 +53,32 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[When(@"I select team '(.*)'")]
 		public void WhenISelectTeam(string teamName)
 		{
-			Browser.Current.Element(Find.BySelector(string.Format(".team-selector li:contains('{0}", teamName))).EventualClick();
+			var select = Browser.Current.SelectList(Find.BySelector(".team-selector"));
+			EventualAssert.That(() => select.Exists, Is.True);
+			
+			select.Option(Find.BySelector(string.Format(":contains('{0}')", teamName))).SelectNoWait();
+			//Browser.Current.SelectList(Find.BySelector(".team-selector")).Option(Find.BySelector(string.Format(":contains('{0}')", teamName))).SelectNoWait();
+		}
+
+		[When(@"I select date '(.*)'")]
+		public void WhenISelectDate(string date)
+		{
+			Browser.Current.Element(Find.BySelector(".icon-calendar")).EventualClick();
+			
+			EventualAssert.That(() => Browser.Current.Element(Find.BySelector(".datepicker")).Style.Display == "none", Is.False);
+
+			var dateParts = date.Split('-');
+
+			//Select datepicker year
+			Browser.Current.Element(Find.BySelector(".datepicker .switch")).EventualClick();
+			Browser.Current.Element(Find.BySelector(".datepicker .switch")).EventualClick();
+			Browser.Current.Element(Find.BySelector(string.Format(".datepicker-years .year:contains('{0}')", dateParts[0]))).EventualClick();
+
+			//Select datepicker month
+			Browser.Current.Element(Find.BySelector(string.Format(".datepicker-months .month:nth-child({0})", dateParts[1]))).EventualClick();
+
+			//Select datepicker day
+			Browser.Current.Elements.Filter(Find.BySelector(".datepicker-days .day")).Filter(Find.ByText(t => t.Equals(dateParts[2].TrimStart('0')))).First().EventualClick();
 		}
 	}
 }
