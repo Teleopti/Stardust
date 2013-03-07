@@ -437,12 +437,12 @@ Given I have the role 'Full access to mytime'
 	| DateTo		| 2030-01-01				|
 	| DateFrom	| 2030-01-01				|
 	| Pending	| True						|
-	| Subject	| Swap shift with me		|
-	| Message	| message of shifttrade	|
+	| Subject	| Swap with me	|
+	| Message	| CornercaseMessageWithAReallyReallyLongWordThatWillProbablyNeverHappenInTheRealWorldButItCausedATestIssueSoWePutItHereForTesting	|
 	And I am viewing requests
 	When I click on the request
-	Then I should see details with subject 'Swap shift with me'
-	And I should see details with message 'message of shifttrade'
+	Then I should see details with subject 'Swap with me'
+	And I should see details with message 'CornercaseMessageWithAReallyReallyLongWordThatWillProbablyNeverHappenInTheRealWorldButItCausedATestIssueSoWePutItHereForTesting'
 
 Scenario: Show information that we dont show schedules in a new shifttrade
 	Given I have the role 'Full access to mytime'
