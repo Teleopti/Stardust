@@ -3598,18 +3598,18 @@ namespace Teleopti.Ccc.Win.Scheduling
 			schedulingOptions.UseShiftCategoryLimitations = false;
 			var scheduleDays = argument.ScheduleDays;
 
-			IList<IScheduleMatrixPro> matrixList = OptimizerHelperHelper.CreateMatrixList(scheduleDays, _schedulerState.SchedulingResultState, _container);
-			if (matrixList.Count == 0)
+            IList<IScheduleMatrixPro> matrixesOfSelectedScheduleDays = OptimizerHelperHelper.CreateMatrixList(scheduleDays, _schedulerState.SchedulingResultState, _container);
+			if (matrixesOfSelectedScheduleDays.Count == 0)
 				return;
 
 			var allScheduleDays = new List<IScheduleDay>();
 
-			foreach (var scheduleMatrixPro in matrixList)
+			foreach (var scheduleMatrixPro in matrixesOfSelectedScheduleDays)
 			{
 				allScheduleDays.AddRange(_schedulerState.Schedules[scheduleMatrixPro.Person].ScheduledDayCollection(scheduleMatrixPro.SchedulePeriod.DateOnlyPeriod).ToList());
 			}
 
-			var matrixListAll = OptimizerHelperHelper.CreateMatrixList(allScheduleDays, _schedulerState.SchedulingResultState, _container);
+			var allMatrixesOfSelectedPersons = OptimizerHelperHelper.CreateMatrixList(allScheduleDays, _schedulerState.SchedulingResultState, _container);
 
 			_undoRedo.CreateBatch(Resources.UndoRedoScheduling);
 
@@ -3634,19 +3634,19 @@ namespace Teleopti.Ccc.Win.Scheduling
                                 if (schedulingOptions.UseGroupScheduling)
                                 {
                                     var allMatrixes = OptimizerHelperHelper.CreateMatrixListAll(_schedulerState, _container);
-                                    _scheduleOptimizerHelper.GroupSchedule(_backgroundWorkerScheduling, scheduleDays, matrixList, matrixListAll, schedulingOptions, _container.Resolve<IGroupPageHelper>(), allMatrixes);
+                                    _scheduleOptimizerHelper.GroupSchedule(_backgroundWorkerScheduling, scheduleDays, matrixesOfSelectedScheduleDays, allMatrixesOfSelectedPersons, schedulingOptions, _container.Resolve<IGroupPageHelper>(), allMatrixes);
                                 }
                                 else
-                                    _scheduleOptimizerHelper.ScheduleSelectedPersonDays(scheduleDays, matrixList, matrixListAll, true, _backgroundWorkerScheduling, schedulingOptions);
+                                    _scheduleOptimizerHelper.ScheduleSelectedPersonDays(scheduleDays, matrixesOfSelectedScheduleDays, allMatrixesOfSelectedPersons, true, _backgroundWorkerScheduling, schedulingOptions);
                                 break;
                             }
                         case BlockFinderType.BetweenDayOff:
                         case BlockFinderType.SchedulePeriod:
                             {
-                                var periodFinder = new ScheduleMatrixListPeriodFinder(matrixList);
+                                var periodFinder = new ScheduleMatrixListPeriodFinder(matrixesOfSelectedScheduleDays);
                                 var period = periodFinder.FindOuterWeekPeriod();
                                 if (period.StartDate == DateOnly.MinValue) break;
-                                _scheduleOptimizerHelper.BlockSchedule(scheduleDays, matrixList, matrixListAll, _backgroundWorkerScheduling, schedulingOptions);
+                                _scheduleOptimizerHelper.BlockSchedule(scheduleDays, matrixesOfSelectedScheduleDays, allMatrixesOfSelectedPersons, _backgroundWorkerScheduling, schedulingOptions);
                                 break;
                             }
                     }
@@ -3656,8 +3656,8 @@ namespace Teleopti.Ccc.Win.Scheduling
                     //when the advance scheduling is required
                     _groupPagePerDateHolder.GroupPersonGroupPagePerDate = _groupPagePerDateHolder.ShiftCategoryFairnessGroupPagePerDate; 
 
-                    var allPersonMatrixList = OptimizerHelperHelper.CreateMatrixListAll(_schedulerState, _container);
-                    _scheduleOptimizerHelper.BlockTeamScheduleSelected(matrixList, matrixListAll, allPersonMatrixList, _backgroundWorkerScheduling, schedulingOptions, scheduleDays);
+                    var allVisibleMatrixes = OptimizerHelperHelper.CreateMatrixListAll(_schedulerState, _container);
+                    _scheduleOptimizerHelper.BlockTeamScheduleSelected(matrixesOfSelectedScheduleDays, allMatrixesOfSelectedPersons, allVisibleMatrixes, _backgroundWorkerScheduling, schedulingOptions, scheduleDays);
                 }
                 
 			}
@@ -3685,7 +3685,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 						allMatrixes = OptimizerHelperHelper.CreateMatrixListAll(_schedulerState, _container);
 					}
 
-					_scheduleOptimizerHelper.RemoveShiftCategoryBackToLegalState(matrixList, _backgroundWorkerScheduling,
+					_scheduleOptimizerHelper.RemoveShiftCategoryBackToLegalState(matrixesOfSelectedScheduleDays, _backgroundWorkerScheduling,
 																				 _optimizationPreferences,
 																				 schedulingOptions,
 																				 selectedPeriod, allMatrixes);
