@@ -1087,8 +1087,8 @@ namespace Teleopti.Ccc.Win.Scheduling
         }
 
         public void BlockTeamScheduleSelected(IList<IScheduleMatrixPro> selectedPersonMatrixList,
-                                                      IList<IScheduleMatrixPro> selectedPersonAllMatrixList, 
-                                                      IList<IScheduleMatrixPro> allPersonMatrixList, 
+                                                      IList<IScheduleMatrixPro> allMatrixesOfSelectedPersons, 
+                                                      IList<IScheduleMatrixPro> allVisibleMatrixes, 
                                                       BackgroundWorker backgroundWorker, 
                                                       ISchedulingOptions schedulingOptions,
                                                       IList<IScheduleDay > scheduleDays )
@@ -1105,16 +1105,16 @@ namespace Teleopti.Ccc.Win.Scheduling
             
                 var advancedaysOffSchedulingService = _container.Resolve<IAdvanceDaysOffSchedulingService>();
 	            advancedaysOffSchedulingService.DayScheduled += schedulingServiceDayScheduled;
-                advancedaysOffSchedulingService.Execute(selectedPersonAllMatrixList, schedulePartModifyAndRollbackServiceForContractDaysOff, schedulingOptions, groupPersonBuilderForOptimization);
+                advancedaysOffSchedulingService.Execute(allMatrixesOfSelectedPersons, schedulePartModifyAndRollbackServiceForContractDaysOff, schedulingOptions, groupPersonBuilderForOptimization);
 				advancedaysOffSchedulingService.DayScheduled += schedulingServiceDayScheduled;
 
-                var teamSteadyStateHolder = initiateTeamSteadyStateHolder(selectedPersonAllMatrixList, schedulingOptions, scheduleDays);
+                var teamSteadyStateHolder = initiateTeamSteadyStateHolder(allVisibleMatrixes, schedulingOptions, scheduleDays);
 
                 var advanceSchedulingService = callAdvanceSchedulingService(schedulingOptions, groupPersonBuilderForOptimization);
                 IDictionary<string, IWorkShiftFinderResult> schedulingResults = new Dictionary<string, IWorkShiftFinderResult>();
 
                 advanceSchedulingService.DayScheduled += schedulingServiceDayScheduled;
-                advanceSchedulingService.ScheduleSelected(allPersonMatrixList, allPersonMatrixList[0].SelectedPeriod,
+                advanceSchedulingService.ScheduleSelected(allVisibleMatrixes, allVisibleMatrixes[0].SelectedPeriod,
                                                   selectedPersonMatrixList.Select(x => x.Person).ToList(),
                                                   teamSteadyStateHolder);
 				advanceSchedulingService.DayScheduled -= schedulingServiceDayScheduled;
