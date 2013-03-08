@@ -30,22 +30,96 @@ IF  EXISTS (SELECT * FROM sys.schemas WHERE name = N'msg')
 DROP SCHEMA [msg]
 GO
 
-
-
-
 ----------------  
 --Name: Karin and David
 --Date: 2013-01-09
---Desc: PBI21633
+--Desc: PBI21633 + #22446
 ----------------  
+CREATE TABLE mart.etl_job_delayed
+	(
+		Id int identity (1,1) not null,
+		stored_procedured nvarchar(300) not null,
+		parameter_string nvarchar(1000) not null,
+		insert_date smalldatetime not null,
+		execute_date smalldatetime null
+	)
+ALTER TABLE mart.etl_job_delayed ADD CONSTRAINT
+	PK_etl_job_delayed PRIMARY KEY CLUSTERED 
+	(
+	Id
+	)
+ALTER TABLE [mart].[etl_job_delayed] ADD  CONSTRAINT [DF_etl_job_delayed_insert_date]  DEFAULT (getdate()) FOR [insert_date]
+
 ALTER TABLE mart.fact_schedule_deviation DROP COLUMN datasource_update_date
 ALTER TABLE  mart.fact_schedule_deviation ADD shift_startdate_id int NULL
 ALTER TABLE  mart.fact_schedule_deviation ADD shift_startinterval_id smallint NULL
 GO
 
---will be re-loaded from SP-code
-TRUNCATE TABLE mart.fact_schedule_deviation
+--decieded how many rows should be part of each extra ETL-load
+	DECLARE @min_date smalldatetime
+	DECLARE @tmp_min_date smalldatetime
+	DECLARE @max_date smalldatetime
+	DECLARE @min_schedule int
+	DECLARE @max_schedule int
+	DECLARE @min_agent int
+	DECLARE @max_agent int
+	DECLARE @chunkSizeDays int 
+	DECLARE @schedule_rows int
+	DECLARE @number_of_bu int
+	DECLARE @business_unit_code uniqueidentifier
+	DECLARE @parameter_string nvarchar(1000)
+	DECLARE @stored_procedured nvarchar(300)
+	DECLARE @max_schedule_rows int
+	
+	SET @max_schedule_rows = 250000
+	SELECT @number_of_bu = COUNT(*) FROM mart.dim_business_unit
+	SELECT @schedule_rows=ddps.row_count 
+	FROM sys.objects so
+	JOIN sys.indexes si ON si.OBJECT_ID = so.OBJECT_ID
+	JOIN sys.dm_db_partition_stats AS ddps ON si.OBJECT_ID = ddps.OBJECT_ID  AND si.index_id = ddps.index_id
+	WHERE si.index_id < 2  AND so.is_ms_shipped = 0
+	and so.name = 'fact_schedule'
+	
+	SELECT @max_schedule=MAX(schedule_date_id), @min_schedule=MIN(schedule_date_id) FROM mart.fact_schedule
+	SELECT @max_agent=MAX(date_id), @min_agent=MIN(date_id) FROM mart.fact_agent
+	SELECT @min_date=MAX(d.date_date) --Get largest @min_date
+		from (select @min_schedule as date_id union all	select @min_agent as date_id) as minDate
+		inner join mart.dim_date d on minDate.date_id = d.date_id
+	SELECT @max_date = MIN(d.date_date) --Get smallest @max_date
+		from (select @max_schedule as date_id union all select @max_agent as date_id) as maxDate
+		inner join mart.dim_date d on maxDate.date_id = d.date_id
+
+	--will be re-loaded as part of "mart.etl_job_delayed"
+	TRUNCATE TABLE mart.fact_schedule_deviation
+
+	SELECT @chunkSizeDays =
+		CASE
+			WHEN  (@schedule_rows/@max_schedule_rows) > 0 THEN @number_of_bu * (DATEDIFF(dd,@min_date,@max_date)/(@schedule_rows/@max_schedule_rows))
+			ELSE 0
+		END
+
+	SELECT @tmp_min_date=@max_date
+	
+	--If we need to Chunk- add a delayed job for periods older than @chunkSizeDays
+	IF @chunkSizeDays > 0
+	BEGIN
+		WHILE @tmp_min_date > @min_date
+		BEGIN
+
+			INSERT INTO mart.etl_job_delayed(stored_procedured,parameter_string)
+			SELECT 'mart.etl_fact_schedule_deviation_load','@start_date=''' + CONVERT(nvarchar(30), @tmp_min_date, 126) + ''',@end_date=''' + CONVERT(nvarchar(30),(DATEADD(dd,@chunkSizeDays,@tmp_min_date)), 126) + ''',@business_unit_code='''+ cast(business_unit_code as nvarchar(36))+ ''''
+			FROM mart.dim_business_unit
+			WHERE business_unit_id <> -1
+			AND business_unit_id is not null
+			
+			SET @tmp_min_date = DATEADD(dd,-@chunkSizeDays,@tmp_min_date)
+		END
+	PRINT 'Delayed job added for: mart.etl_fact_schedule_deviation_load'
+	
+	END
 GO
+
+--============================
 
 IF NOT EXISTS(SELECT 1 FROM mart.sys_configuration WHERE [key]='AdherenceMinutesOutsideShift')
 	INSERT INTO mart.sys_configuration([key], value, insert_date)

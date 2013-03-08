@@ -11,16 +11,19 @@ Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
 	self.TypeEnum = ko.observable(2);
 	self.IsFullDay = ko.observable(true);
 	self.Template = ko.observable("shifttrade-request-detail-template");
-	self.CanApprove = ko.observable(true);
+	self.IsTradeCreatedByMe = ko.observable(false);
 	self.ajax = ajax;
 	self.From = ko.observable("");
 	self.To = ko.observable("");
+	self.CanApproveAndDeny = ko.observable(true);
 	self.Approve = function () {
+		self.CanApproveAndDeny(false);
 		self.respondToRequest("Requests/ApproveShiftTrade/" + self.Id());
 		Teleopti.MyTimeWeb.Request.RequestDetail.FadeEditSection();
 	};
 	self.pixelPerMinute = ko.observable(0.3);
 	self.Deny = function () {
+		self.CanApproveAndDeny(false);
 		self.respondToRequest("Requests/DenyShiftTrade/" + self.Id());
 		Teleopti.MyTimeWeb.Request.RequestDetail.FadeEditSection();
 	};
@@ -32,6 +35,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
 			type: "POST",
 			success: function (data) {
 				Teleopti.MyTimeWeb.Request.List.AddItemAtTop(data);
+				self.CanApproveAndDeny(true);
 			}
 		});
 	};
@@ -39,6 +43,8 @@ Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
 	self.otherSchedule = ko.observable(new Teleopti.MyTimeWeb.Request.PersonScheduleViewModel());
 	self.hours = ko.observableArray();
 	self.hourWidth = ko.observable(10);
+	self.showInfo = ko.observable(false);
+    self.IsPending = ko.observable(false);
 	self.loadSwapDetails = function () {
 		self.ajax.Ajax({
 			url: "Requests/ShiftTradeRequestSwapDetails/" + self.Id(),
@@ -78,15 +84,19 @@ Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
 };
 
 ko.utils.extend(Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel.prototype, {
-	Initialize: function (data) {
-		var self = this;
+    Initialize: function (data) {
+        var self = this;
+        self.showInfo(data.IsNew);
 		self.Subject(data.Subject);
 		self.MessageText(data.Text);
 		self.Id(data.Id);
-		self.CanApprove(!data.IsCreatedByUser);
+		self.IsTradeCreatedByMe(data.IsCreatedByUser);
 		self.From(data.From);
 		self.To(data.To);
-	}
+        self.IsPending(data.IsPending);
+
+
+    }
 });
 
 Teleopti.MyTimeWeb.Request.TimeLineHourViewModel = function (hour, parentViewModel) {
@@ -124,25 +134,29 @@ Teleopti.MyTimeWeb.Request.LayerViewModel = function(layer, minutesSinceTimeLine
 	});
 };
 
-Teleopti.MyTimeWeb.Request.PersonScheduleViewModel = function(layers, scheduleObject) {
+Teleopti.MyTimeWeb.Request.PersonScheduleViewModel = function (layers, scheduleObject) {
 	var self = this;
 	var minutesSinceTimeLineStart = 0;
 	var agentName = '';
 	var dayOffText = '';
 	var hasUnderlyingDayOff = false;
+	var personId=null;
 	if (scheduleObject) {
 		agentName = scheduleObject.Name;
 		minutesSinceTimeLineStart = scheduleObject.MinutesSinceTimeLineStart;
 		dayOffText = scheduleObject.DayOffText;
 		hasUnderlyingDayOff = scheduleObject.HasUnderlyingDayOff;
+		personId = scheduleObject.PersonId;
 	}
 
+	self.personId = personId;
+	self.isVisible = ko.observable(true);
 	self.agentName = agentName;
 	self.layers = layers;
 	self.minutesSinceTimeLineStart = minutesSinceTimeLineStart;
 	self.dayOffText = dayOffText;
 	self.hasUnderlyingDayOff = ko.observable(hasUnderlyingDayOff);
-	self.showDayOffStyle = function() {
+	self.showDayOffStyle = function () {
 		if (self.hasUnderlyingDayOff() == true | self.dayOffText.length > 0) {
 			return true;
 		}

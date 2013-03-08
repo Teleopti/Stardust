@@ -79,15 +79,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		public void WhenIViewSchedules(string date)
 		{
 			TestControllerMethods.Logon();
-			Navigation.GotoAnywhereSchedule(date);
+			Navigation.GotoAnywhereTeamSchedule(date);
 		}
 
-		[When(@"I view agent schedule for '(.*)' on '(.*)'")]
-		public void WhenIViewAgentScheduleForAgentOnDate(string name, DateTime date)
+		[When(@"I view person schedule for '(.*)' on '(.*)'")]
+		public void WhenIViewPersonScheduleForPersonOnDate(string name, DateTime date)
 		{
 			TestControllerMethods.Logon();
 			var personId = UserFactory.User(name).Person.Id.Value;
-			Navigation.GotoAnywhereAgentSchedule(personId, date);
+			Navigation.GotoAnywherePersonSchedule(personId, date);
 		}
 
 		[When(@"I view agent schedules add full day absence form for '(.*)' on '(.*)'")]
@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		{
 			TestControllerMethods.Logon();
 			var personId = UserFactory.User(name).Person.Id.Value;
-			Navigation.GotoAnywhereAgentScheduleFullDayAbsenceForm(personId, date);
+			Navigation.GotoAnywherePersonScheduleFullDayAbsenceForm(personId, date);
 		}
 
 		[When(@"I navigate to the preferences page")]

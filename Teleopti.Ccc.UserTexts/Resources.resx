@@ -11298,4 +11298,15 @@ These options are activated:
     <value>The quick forecast will be started as a job in the background when this wizard is finished, look in Job History for status.</value>
     <comment>Information on the last step in quick forecast</comment>
   </data>
+  <data name="CannotDisplayScheduleWhenShiftTradeStatusIsNew" xml:space="preserve">
+    <value>Can not display schedule when the status of the shifttrade request is new</value>
+  </data>
+  <data name="NewTemplateName" xml:space="preserve">
+    <value>New Template Name</value>
+    <comment>New Template Name</comment>
+  </data>
+  <data name="EmptyTemplateName" xml:space="preserve">
+    <value>Empty preference template name</value>
+    <comment>Empty preference template name</comment>
+  </data>
 </root>

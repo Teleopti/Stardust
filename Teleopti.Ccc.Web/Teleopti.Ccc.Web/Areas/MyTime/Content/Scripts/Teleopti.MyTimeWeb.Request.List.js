@@ -50,8 +50,8 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
                     self.IsLoading(false);
                 },
                 success: function (data) {
-                    Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.HideShiftTradeWindow();
-                    var distanceFromTop = Math.max(15, $(event.currentTarget).position().top - 30);
+					Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.HideShiftTradeWindow();
+					var distanceFromTop = Math.max(15, $(event.currentTarget).position().top - 30);
                     Teleopti.MyTimeWeb.Request.RequestDetail.ShowRequest(data, distanceFromTop);
                 }
             });
@@ -93,6 +93,8 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 
         self.MoreToLoad = ko.observable(false);
 
+        self.isLoadingRequests = ko.observable(true);
+        
         self.ShowRequests = function (data) {
             ko.utils.arrayForEach(data, function (item) {
                 var vm = new RequestItemViewModel();
@@ -154,6 +156,9 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
                     Take: take,
                     Skip: skip
                 },
+                beforeSend: function() {
+                    self.isLoadingRequests(true);
+                },
                 success: function (data) {
                     self.MoreToLoad(data.length == take);
                     self.ShowRequests(data);
@@ -167,17 +172,18 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
                         self.Completed();
                         self.Completed = null;
                     }
+                    self.isLoadingRequests(false);
                 }
             });
         };
 
-        self.CanDelete = ko.observable(true);
+		self.CanDelete = ko.observable(true);
     }
 
     ko.utils.extend(RequestItemViewModel.prototype, {
         Initialize: function (data) {
             var self = this;
-            self.Subject(data.Subject);
+            self.Subject(data.Subject == null ? '<br>' : data.Subject);
             self.RequestType(data.Type);
             self.Status(data.Status);
             self.Dates(data.Dates);
@@ -186,7 +192,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
             self.Link(data.Link.href);
             self.Id(data.Id);
             self.RequestPayload(data.Payload);
-            self.CanDelete((data.Link.Methods.indexOf("DELETE") != -1) && data.IsCreatedByUser);
+			self.CanDelete((data.Link.Methods.indexOf("DELETE") != -1) && data.IsCreatedByUser);
 
         }
     });

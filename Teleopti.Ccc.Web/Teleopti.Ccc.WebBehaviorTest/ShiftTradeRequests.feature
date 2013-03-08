@@ -24,11 +24,11 @@ Background:
 	And OtherAgent has a person period with
 	| Field      | Value      |
 	| Start date | 2012-06-18 |
-
 	And there are shift categories
 	| Name  |
 	| Day   |
 	| Night |
+
 
 
 Scenario: No access to make shift trade reuquests
@@ -97,6 +97,19 @@ Scenario: Show possible shift trades
 	| Start time	| 08:00 |
 	| End time		| 18:00 |
 
+Scenario: Show possible shift trade when victim has no schedule
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And OtherAgent have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And I have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 06:00 |
+	| EndTime               | 2030-01-01 16:00 |
+	| Shift category		| Day	           |
+	And Current time is '2029-12-27'
+	When I view Add Shift Trade Request for date '2030-01-01'
+	Then I should see OtherAgent in the shift trade list
+
 Scenario: Do not show person that agent has no permission to
 	Given I am an agent in a team with access only to my own data
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -140,6 +153,34 @@ Scenario: Time line should cover all scheduled shifts
 	When I view Add Shift Trade Request for date '2030-01-01'
 	Then I should see the time line hours span from '6' to '18'
 
+Scenario: When clicking an agent i shift trade list, the other agent's should be hidden
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And OtherAgent have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And OtherAgent2 have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And OtherAgent2 has a person period with
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
+	And I have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 06:00 |
+	| EndTime               | 2030-01-01 16:00 |
+	| Shift category		| Day	           |
+	And OtherAgent2 have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 07:00 |
+	| EndTime               | 2030-01-01 20:00 |
+	| Shift category		| Day	           |
+	And OtherAgent have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 08:00 |
+	| EndTime               | 2030-01-01 18:00 |
+	| Shift category		| Day	           |
+	And Current time is '2029-12-27'
+	When I view Add Shift Trade Request for date '2030-01-01'
+	And I click agent 'OtherAgent'
+	Then I should only see OtherAgent's schedule
+	
 Scenario: Time line should cover scheduled night shift
 	Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -151,6 +192,59 @@ Scenario: Time line should cover scheduled night shift
 	And Current time is '2030-01-01'
 	When I view Add Shift Trade Request for date '2030-01-03'
 	Then I should see the time line hours span from '22' to '7'
+
+Scenario: Sending shift trade request closes the Add Shift Trade Request view
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And OtherAgent have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And I have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 06:00 |
+	| EndTime               | 2030-01-01 16:00 |
+	| Shift category		| Day	           |
+	And OtherAgent have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 08:00 |
+	| EndTime               | 2030-01-01 18:00 |
+	| Shift category		| Day	           |
+	And Current time is '2029-12-27'
+	When I view Add Shift Trade Request for date '2030-01-01'
+	And I click agent 'OtherAgent'
+	And I enter subject 'A nice subject'
+	And I enter message 'A cute little message'
+	And I click 'send button'
+	Then Add Shift Trade Request view should not be visible
+	And I should see a shift trade request in the list with subject 'A nice subject'
+
+Scenario: Cancel a shift trade request before sending 
+	Given I have the role 'Full access to mytime'
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And OtherAgent have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And OtherAgent2 have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And OtherAgent2 has a person period with
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
+	And I have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 06:00 |
+	| EndTime               | 2030-01-01 16:00 |
+	| Shift category		| Day	           |
+	And OtherAgent2 have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 07:00 |
+	| EndTime               | 2030-01-01 20:00 |
+	| Shift category		| Day	           |
+	And OtherAgent have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2030-01-01 08:00 |
+	| EndTime               | 2030-01-01 18:00 |
+	| Shift category		| Day	           |
+	And Current time is '2029-12-27'
+	When I view Add Shift Trade Request for date '2030-01-01'
+	And I click agent 'OtherAgent'
+	And I click 'Cancel button'
+	Then I should see OtherAgent in the shift trade list
+	And I should see OtherAgent2 in the shift trade list
 
 Scenario: Show message when no agents are available for shift trade
 	Given I have the role 'Full access to mytime'
@@ -199,7 +293,10 @@ Scenario: Show my scheduled day off
 
 Scenario: Close details when approving shift trade request
 	Given I have the role 'Full access to mytime'
-	And I have received a shift trade request from 'Some Person'
+	And I have received a shift trade request
+	| Field    | Value         |
+	| From       | Ashley Andeen	|
+	| Pending  | True          |
 	And I am viewing requests
 	When I click on the request
 	And I click the Approve button on the shift request
@@ -207,7 +304,12 @@ Scenario: Close details when approving shift trade request
 
 Scenario: Can not approve or deny shift trade request created by me
 	Given I have the role 'Full access to mytime'
-	And I have created a shift trade request to 'Some Person'
+	And I have created a shift trade request
+	| Field    | Value         |
+	| To       | Ashley Andeen	|
+	| DateTo   | 2030-01-01    |
+	| DateFrom | 2030-01-01    |
+	| Pending  | True          |
 	And I am viewing requests
 	When I click on the request
 	Then I should not see the approve button
@@ -216,8 +318,9 @@ Scenario: Can not approve or deny shift trade request created by me
 Scenario: Deny shift trade request
 	Given I have the role 'Full access to mytime'
 	And I have received a shift trade request
-	| Field		| Value		|
-	| From		| Ashley	|
+	| Field   | Value  |
+	| From    | Ashley |
+	| Pending | True   |
 	And I am viewing requests
 	When I click on the request
 	And I click the Deny button on the shift request
@@ -343,16 +446,29 @@ Given I have the role 'Full access to mytime'
 	| DateTo		| 2030-01-01				|
 	| DateFrom	| 2030-01-01				|
 	| Pending	| True						|
-	| Subject	| Swap shift with me		|
-	| Message	| message of shifttrade	|
+	| Subject	| Swap with me	|
+	| Message	| CornercaseMessageWithAReallyReallyLongWordThatWillProbablyNeverHappenInTheRealWorldButItCausedATestIssueSoWePutItHereForTesting	|
 	And I am viewing requests
 	When I click on the request
-	Then I should see details with subject 'Swap shift with me'
-	And I should see details with message 'message of shifttrade'
+	Then I should see details with subject 'Swap with me'
+	And I should see details with message 'CornercaseMessageWithAReallyReallyLongWordThatWillProbablyNeverHappenInTheRealWorldButItCausedATestIssueSoWePutItHereForTesting'
 
+Scenario: Show information that we dont show schedules in a new shifttrade
+	Given I have the role 'Full access to mytime'
+	And I have created a shift trade request
+	| Field		| Value		|
+	| IsNew		| True		|
+	And I am viewing requests
+	When I click on the request
+	Then I should see details with message that tells the user that the status of the shifttrade is new
 
-
-
-
-
-
+Scenario: Can not approve or deny shift trade request that is already approved
+	Given I have the role 'Full access to mytime'
+	And I have received a shift trade request
+	| Field			| Value         |
+	| From			| Ashley Andeen	|
+	| Approved		| True          |
+	And I am viewing requests
+	When I click on the request
+	Then I should not see the approve button
+	And I should not see the deny button

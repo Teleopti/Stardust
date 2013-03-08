@@ -1,5 +1,5 @@
 ﻿/*!
-* ASP.NET SignalR JavaScript Library v1.0.0
+* ASP.NET SignalR JavaScript Library v1.0.1
 * http://signalr.net/
 *
 * Copyright Microsoft Open Technologies, Inc. All rights reserved.
@@ -83,26 +83,18 @@
 		proxies.MessageBrokerHub.client = {};
 		proxies.MessageBrokerHub.server = {
 			addSubscription: function (subscription) {
-				/// <summary>Calls the AddSubscription method on the server-side MessageBrokerHub hub.&#10;Returns a jQuery.Deferred() promise.</summary>
-				/// <param name=\"subscription\" type=\"Object\">Server side type is Teleopti.Interfaces.MessageBroker.Subscription</param>
 				return proxies.MessageBrokerHub.invoke.apply(proxies.MessageBrokerHub, $.merge(["AddSubscription"], $.makeArray(arguments)));
 			},
 
 			notifyClients: function (notification) {
-				/// <summary>Calls the NotifyClients method on the server-side MessageBrokerHub hub.&#10;Returns a jQuery.Deferred() promise.</summary>
-				/// <param name=\"notification\" type=\"Object\">Server side type is Teleopti.Interfaces.MessageBroker.Notification</param>
 				return proxies.MessageBrokerHub.invoke.apply(proxies.MessageBrokerHub, $.merge(["NotifyClients"], $.makeArray(arguments)));
 			},
 
 			notifyClientsMultiple: function (notifications) {
-				/// <summary>Calls the NotifyClientsMultiple method on the server-side MessageBrokerHub hub.&#10;Returns a jQuery.Deferred() promise.</summary>
-				/// <param name=\"notifications\" type=\"Object\">Server side type is System.Collections.Generic.IEnumerable`1[Teleopti.Interfaces.MessageBroker.Notification]</param>
 				return proxies.MessageBrokerHub.invoke.apply(proxies.MessageBrokerHub, $.merge(["NotifyClientsMultiple"], $.makeArray(arguments)));
 			},
 
 			removeSubscription: function (route) {
-				/// <summary>Calls the RemoveSubscription method on the server-side MessageBrokerHub hub.&#10;Returns a jQuery.Deferred() promise.</summary>
-				/// <param name=\"route\" type=\"String\">Server side type is System.String</param>
 				return proxies.MessageBrokerHub.invoke.apply(proxies.MessageBrokerHub, $.merge(["RemoveSubscription"], $.makeArray(arguments)));
 			}
 		};

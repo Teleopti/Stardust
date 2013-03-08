@@ -68,13 +68,12 @@ Scenario: No access to requests tab
 	When I am viewing an application page
 	Then I should not be able to see requests link
 
-@ignore 
-#Henke! Have a look at this one. It´s failing on the "Ready for interaction" thingy
 Scenario: No access to requests page
 	Given I am an agent without access to any requests
 	And I am signed in
 	When I navigate to the requests page
 	Then I should see an error message
+
 Scenario: No requests
 	Given I am an agent
 	And I have no existing requests
@@ -111,3 +110,15 @@ Scenario: Hide indication that there are more items to load if no more items
 	And I have an existing absence request
 	When I view requests
 	Then I should not see an indication that there are more requests
+
+@ignore
+Scenario: Close details when deleting a request
+Given I am an agent
+	And I have received a shift trade request
+	| Field			| Value         |
+	| Subject		| swap with me  |
+	| From			| Ashley Andeen |
+	And I am viewing requests
+	When I click on the request
+	And I click the delete button on the shift trade request
+	Then Details should be closed

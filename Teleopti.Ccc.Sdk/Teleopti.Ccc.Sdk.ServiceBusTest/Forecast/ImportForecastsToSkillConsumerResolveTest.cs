@@ -4,6 +4,7 @@ using Rhino.Mocks;
 using Rhino.ServiceBus;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Forecasting.Export;
+using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Sdk.ServiceBus;
 using Teleopti.Ccc.Sdk.ServiceBus.Forecast;
 using Teleopti.Interfaces.Infrastructure;
@@ -35,7 +36,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
             builder.RegisterType<ImportForecastsToSkillConsumer>().As<ConsumerOf<ImportForecastsToSkill>>();
             builder.RegisterType<SaveForecastToSkillCommand>().As<ISaveForecastToSkillCommand>();
             builder.RegisterType<OpenAndSplitSkillCommand>().As<IOpenAndSplitSkillCommand>();
-            builder.RegisterModule<RepositoryContainerInstaller>();
+			builder.RegisterModule<RepositoryModule>();
             builder.RegisterModule<ApplicationInfrastructureContainerInstaller>();
             builder.RegisterModule<ForecastContainerInstaller>();
             

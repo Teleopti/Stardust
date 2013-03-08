@@ -15,7 +15,10 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.Where(t => isRepository(t) && hasCorrectCtor(t))
 				.AsImplementedInterfaces()
 				.InstancePerDependency();
-			builder.Register(c => StatisticRepositoryFactory.Create()).As<IStatisticRepository>();
+
+			builder.Register(c => StatisticRepositoryFactory.Create())
+				.As<IStatisticRepository>();
+
 			builder.RegisterType<PushMessageRepository>()
 				.As<IPushMessageRepository>()
 				.InstancePerDependency();
@@ -29,6 +32,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				if (parameters.Count() == 1)
 				{
 					if (parameters[0].ParameterType.Equals(typeof(IUnitOfWorkFactory)))
+						return true;
+					if (parameters[0].ParameterType.Equals(typeof(ICurrentUnitOfWork)))
 						return true;
 				}
 			}

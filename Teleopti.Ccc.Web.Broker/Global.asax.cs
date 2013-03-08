@@ -15,8 +15,8 @@ namespace Teleopti.Ccc.Web.Broker
 
 			var settingsFromParser = TimeoutSettings.Load();
 
-			if (settingsFromParser.HeartbeatInterval.HasValue)
-				GlobalHost.Configuration.HeartbeatInterval = settingsFromParser.HeartbeatInterval.Value;
+			if (settingsFromParser.DefaultMessageBufferSize.HasValue)
+				GlobalHost.Configuration.DefaultMessageBufferSize = settingsFromParser.DefaultMessageBufferSize.Value;
 
 			if (settingsFromParser.DisconnectTimeout.HasValue)
 				GlobalHost.Configuration.DisconnectTimeout = settingsFromParser.DisconnectTimeout.Value;
@@ -26,8 +26,6 @@ namespace Teleopti.Ccc.Web.Broker
 
 			if (settingsFromParser.ConnectionTimeout.HasValue)
 				GlobalHost.Configuration.ConnectionTimeout = settingsFromParser.ConnectionTimeout.Value;
-
-			GlobalHost.HubPipeline.EnableAutoRejoiningGroups();
 
 			RouteTable.Routes.MapHubs();
 

@@ -4,12 +4,12 @@ define([
 		'views/teamschedule/layer'
 	], function (ko, moment, layer) {
 
-		return function (agentDay) {
+		return function (data, events) {
 			var self = this;
 
-			this.Id = agentDay.Id;
+			this.Id = data.Id;
+			this.Name = ko.observable(data.FirstName + ' ' + data.LastName);
 
-			this.Name = ko.observable(agentDay.FirstName + ' ' + agentDay.LastName);
 			this.Layers = ko.observableArray();
 			this.WorkTimeMinutes = ko.observable(0);
 			this.ContractTimeMinutes = ko.observable(0);
@@ -23,12 +23,9 @@ define([
 				var time = moment().startOf('day').add('minutes', self.WorkTimeMinutes());
 				return time.format("H:mm");
 			});
-
-			this.ClearLayers = function () {
+			
+			this.SetLayers = function (layers, timeline, date) {
 				self.Layers([]);
-			};
-
-			this.AddLayers = function (layers, timeline, date) {
 				var newItems = ko.utils.arrayMap(layers, function (p) {
 					return new layer(timeline, p, date);
 				});
@@ -42,8 +39,8 @@ define([
 			this.AddWorkTime = function (minutes) {
 				self.WorkTimeMinutes(self.WorkTimeMinutes() + minutes);
 			};
-			
-			this.FirstStartMinute = ko.computed(function () {
+
+			this.TimeLineAffectingStartMinute = ko.computed(function () {
 				var start = undefined;
 				ko.utils.arrayForEach(self.Layers(), function (l) {
 					var startMinutes = l.StartMinutes();
@@ -55,7 +52,7 @@ define([
 				return start;
 			});
 
-			this.LastEndMinute = ko.computed(function () {
+			this.TimeLineAffectingEndMinute = ko.computed(function () {
 				var end = undefined;
 				ko.utils.arrayForEach(self.Layers(), function (l) {
 					var endMinutes = l.EndMinutes();
@@ -66,5 +63,9 @@ define([
 				});
 				return end;
 			});
+
+			this.Select = function() {
+				//events.notifySubscribers(self.Id, "gotoagent");
+			};
 		};
 	});

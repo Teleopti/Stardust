@@ -437,16 +437,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 			UserFactory.User().SetupCulture(new USCulture());
 		}
 
-		[Given(@"(I am|'(.*)' is) located in (h|H)awaii")]
-		public void GivenIAmLocatedInAmerica(string what, string userName, string hH)
+		[Given(@"'?(I)'? am located in [hH]awaii")]
+		[Given(@"'?(.*)'? is located in [hH]awaii")]
+		public void GivenIAmLocatedInHawaii(string userName)
 		{
-			UserFactory.User().SetupTimeZone(new HawaiiTimeZone());
+			UserFactory.User(userName).SetupTimeZone(new HawaiiTimeZone());
 		}
 
-		[Given(@"(I am|(.*) is) located in (S|s)tockholm")]
-		public void GivenIAmLocatedInStockholm(string what, string userName, string sS)
+		[Given(@"'?(I)'? am located in [sS]tockholm")]
+		[Given(@"'?(.*)'? is located in [sS]tockholm")]
+		public void GivenIAmLocatedInStockholm(string userName)
 		{
-			UserFactory.User().SetupTimeZone(new StockholmTimeZone());
+			UserFactory.User(userName).SetupTimeZone(new StockholmTimeZone());
 		}
 
 

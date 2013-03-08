@@ -4,6 +4,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.TestCommon.Services;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -19,6 +20,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 		public DateTime? DateTo { get; set; }
 		public DateTime? DateFrom { get; set; }
 		public bool Pending { get; set; }
+		public bool Approved { get; set; }
 
 		public void Apply(IPerson user, IUnitOfWork uow)
 		{
@@ -41,14 +43,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 			{
 				PersonRequest.Pending();				
 			}
+			
 			PersonRequest.TrySetMessage(message);
 			PersonRequest.Request = shiftTradeRequest;
-
 			var setShiftTraderequestCheckSum = new ShiftTradeRequestSetChecksum(new ScenarioRepository(uow),
 																									  new ScheduleRepository(uow));
 
 			setShiftTraderequestCheckSum.SetChecksum(shiftTradeRequest);
 			var requestRepository = new PersonRequestRepository(uow);
+			if (Approved)
+			{
+				PersonRequest.ForcePending();
+				PersonRequest.Approve(new ApprovalServiceForTest(), new PersonRequestAuthorizationCheckerForTest());
+			}
 			requestRepository.Add(PersonRequest);
 		}
 

@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Web.Broker
 			if (!string.IsNullOrEmpty(value))
 			{
 				int seconds;
-				settings.KeepAlive = Int32.TryParse(value,NumberStyles.Integer,CultureInfo.InvariantCulture,out seconds) ? seconds : (int?)null;
+				settings.KeepAlive = Int32.TryParse(value,NumberStyles.Integer,CultureInfo.InvariantCulture,out seconds) ? TimeSpan.FromSeconds(seconds) : (TimeSpan?)null;
 			}
 
 			value = ConfigurationManager.AppSettings["ConnectionTimeout"];
@@ -29,10 +29,10 @@ namespace Teleopti.Ccc.Web.Broker
 				settings.DisconnectTimeout = TimeSpan.FromSeconds(Convert.ToInt32(value));
 			}
 
-			value = ConfigurationManager.AppSettings["HeartbeatInterval"];
+			value = ConfigurationManager.AppSettings["DefaultMessageBufferSize"];
 			if (!string.IsNullOrEmpty(value))
 			{
-				settings.HeartbeatInterval = TimeSpan.FromSeconds(Convert.ToInt32(value));
+				settings.DefaultMessageBufferSize = Convert.ToInt32(value);
 			}
 
 			value = ConfigurationManager.AppSettings["ScaleOutBackplaneUrl"];
@@ -44,10 +44,10 @@ namespace Teleopti.Ccc.Web.Broker
 			return settings;
 		}
 
-		public int? KeepAlive { get; set; }
+		public TimeSpan? KeepAlive { get; set; }
 		public TimeSpan? ConnectionTimeout { get; set; }
 		public TimeSpan? DisconnectTimeout { get; set; }
-		public TimeSpan? HeartbeatInterval { get; set; }
+		public int? DefaultMessageBufferSize { get; set; }
 		public Uri ScaleOutBackplaneUrl { get; set; }
 	}
 }

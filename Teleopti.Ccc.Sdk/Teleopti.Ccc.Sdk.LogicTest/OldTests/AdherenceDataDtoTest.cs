@@ -14,13 +14,17 @@ namespace Teleopti.Ccc.Sdk.LogicTest.OldTests
         private decimal _deviationMinutes = 2;
         private decimal _adherence = (decimal)0.72;
         private decimal _dayAdherence = (decimal)0.92;
+	    private decimal? _adherenceForPeriod = (decimal) 0.62;
+	    private decimal? _adherenceForDay = (decimal) 0.92;
         
         [SetUp]
         public void Setup()
-        {
-            _startTime = new TimeSpan(0, 10, 15, 0);
+		{
+#pragma warning disable 612,618
+			_startTime = new TimeSpan(0, 10, 15, 0);
             _endTime = new TimeSpan(0, 10, 30, 0);
-            _target = new AdherenceDataDto(_startTime.Ticks, _endTime.Ticks, _readyTimeMinutes, _deviationMinutes, _adherence, DateTime.Now,DateTime.Now );
+            _target = new AdherenceDataDto(_startTime.Ticks, _endTime.Ticks, _readyTimeMinutes, _deviationMinutes, _adherence);
+
         }
 
         [Test]
@@ -52,6 +56,41 @@ namespace Teleopti.Ccc.Sdk.LogicTest.OldTests
 
             Assert.AreEqual(_startTime.Add(new TimeSpan(1, 0, 0)).Ticks, _target.LocalStartTime);
             Assert.AreEqual(_endTime.Add(new TimeSpan(1, 0, 0)).Ticks, _target.LocalEndTime);
-        }
+#pragma warning restore 612,618
+		}
+
+		[Test]
+		public void VerifyNullablePropertiesAndConstructor()
+		{
+			_target = new AdherenceDataDto(_startTime.Ticks, _endTime.Ticks, _readyTimeMinutes, _deviationMinutes, _adherenceForPeriod);
+			Assert.IsNotNull(_target);
+			_target.AdherenceForDay = _adherenceForDay;
+			Assert.AreEqual(_adherenceForPeriod, _target.AdherenceForPeriod);
+			Assert.AreEqual(_adherenceForDay, _target.AdherenceForDay);
+			
+			_adherenceForPeriod = null;
+			_adherenceForDay = null;
+			_target.AdherenceForPeriod = _adherenceForPeriod;
+			_target.AdherenceForDay = _adherenceForDay;
+
+			Assert.AreEqual(_adherenceForPeriod, _target.AdherenceForPeriod);
+			Assert.AreEqual(_adherenceForDay, _target.AdherenceForDay);
+		}
+
+		[Test]
+		public void VerifyCalendarDateConstructor()
+		{
+			var dateTime = DateTime.Now;
+			_target = new AdherenceDataDto(_startTime.Ticks, _endTime.Ticks, _readyTimeMinutes, _deviationMinutes, _adherenceForPeriod, dateTime, dateTime);
+			Assert.IsNotNull(_target);
+			Assert.AreEqual(dateTime, _target.CalendarDate);
+			Assert.AreEqual(dateTime, _target.ShiftBelongsToDate);
+
+			_target.CalendarDate = dateTime.AddDays(4);
+			_target.ShiftBelongsToDate = dateTime.AddDays(4);
+
+			Assert.AreEqual(dateTime.AddDays(4), _target.CalendarDate);
+			Assert.AreEqual(dateTime.AddDays(4), _target.ShiftBelongsToDate);
+		}
     }
 }

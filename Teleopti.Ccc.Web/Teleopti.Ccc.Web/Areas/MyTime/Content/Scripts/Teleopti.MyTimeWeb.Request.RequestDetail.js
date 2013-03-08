@@ -100,6 +100,7 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 	}
 
 	function _showRequest(data, position) {
+
 		_hideEditSection();
 		_clearFormData();
 		_showRequestTypeTab(data.TypeEnum);
@@ -282,7 +283,6 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 			_addAbsenceRequestClick();
 		}
 	};
-
 })(jQuery);
 
 

@@ -741,13 +741,6 @@ select.time-input
 	border: 1px solid #dfdfdf;
 }
 
-#Request-detail-subject-input {
-	width: 96%;
-}
-#Request-detail-message-input {
-	width: 96%;
-	height: 5em;
-}
 .request-edit-section button.ui-button-icon-only {
 	height: 20px; 
 	width: 1.7em; 

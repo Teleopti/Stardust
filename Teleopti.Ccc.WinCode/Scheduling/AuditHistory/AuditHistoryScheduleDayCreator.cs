@@ -27,6 +27,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling.AuditHistory
 
             foreach (var persistableScheduleData in newData)
             {
+				if(persistableScheduleData.Period.ToDateOnlyPeriod(currentScheduleDay.TimeZone).StartDate != currentScheduleDay.DateOnlyAsPeriod.DateOnly)
+					continue;
                 if(persistableScheduleData is IPersonAbsence || persistableScheduleData is IPersonDayOff || persistableScheduleData is IPersonAssignment)
                     resultingDay.Add(persistableScheduleData);
             }
