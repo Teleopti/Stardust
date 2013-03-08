@@ -20,7 +20,8 @@
             <span class="shift-trade-swap-detail-agent-name request-data-type" id="Request-shift-trade-sender" data-bind="text: mySchedule().agentName" ></span>
         </div>
         <br/>
-        <div  class="shift-trade-swap-detail-timeline" data-bind="foreach: hours">
+
+        <div  class="shift-trade-swap-detail-timeline" data-bind="foreach: hours, visible: !showInfo()" >
             <span class="shift-trade-swap-detail-timeline-line" data-bind="style: { width : hourWidth }">
                 <span class="shift-trade-timeline-number ui-corner-all" data-bind="text: hourText, style: {left: leftPx}, visible: showLabel"></span>
             </span>
@@ -44,7 +45,7 @@
         <br/>
         <div class="shift-trade-swap-detail-schedule-row">
 			
-            <div  class="shift-trade-swap-detail-timeline" data-bind="foreach: hours">
+            <div  class="shift-trade-swap-detail-timeline" data-bind="foreach: hours, visible: !showInfo()">
                 <span class="shift-trade-swap-detail-timeline-line" data-bind="style: { width : hourWidth }">
                     <span class="shift-trade-timeline-number ui-corner-all" data-bind="text: hourText, style: {left: leftPx}, visible: showLabel"></span>
                 </span>
