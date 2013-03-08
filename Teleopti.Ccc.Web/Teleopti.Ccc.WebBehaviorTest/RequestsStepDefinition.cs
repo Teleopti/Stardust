@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void WhenIClickTheDeleteButtonOnTheShiftTradeRequest()
 		{
 			var requestId = UserFactory.User().UserData<ExistingShiftTradeRequest>().PersonRequest.Id.Value;
+			EventualAssert.That(()=>_page.RequestDeleteButtonById(requestId).IsDisplayed(),Is.True);
 			_page.RequestDeleteButtonById(requestId).EventualClick();
 		}
 
