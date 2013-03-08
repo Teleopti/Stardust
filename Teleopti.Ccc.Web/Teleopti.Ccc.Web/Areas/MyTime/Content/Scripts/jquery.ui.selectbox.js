@@ -40,7 +40,6 @@
 				})
 				.click(function (e) {
 					self._toggleMenu();
-					e.stopPropagation();
 				})
 				.appendTo(container);
 
@@ -55,7 +54,10 @@
 				.appendTo(menuContainer)
 				;
 
-			$("html").click(function () {
+			$("html").click(function (event) {
+				var children = self._button.children();
+				if (children[0] == event.target || children[1] == event.target)
+					return;
 				self._displayMenu(false);
 			});
 
