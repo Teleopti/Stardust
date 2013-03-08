@@ -4,6 +4,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -33,8 +34,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var date = new DateOnly();
 			var selectedPeriod = new DateOnlyPeriod(date, date.AddDays(1));
 			var person = PersonFactory.CreatePerson("bill");
-			var groupPerson1 = _mocks.StrictMock<IGroupPerson>();
-			var groupPerson2 = _mocks.StrictMock<IGroupPerson>();
+			var groupPerson1 = new GroupPerson(new List<IPerson>{person}, date, "Hej", Guid.NewGuid());
+			var groupPerson2 = new GroupPerson(new List<IPerson> { person }, date, "Hej", Guid.NewGuid());
 			var matrix1 = _mocks.StrictMock<IScheduleMatrixPro>();
 			var matrix2 = _mocks.StrictMock<IScheduleMatrixPro>();
 			var schedulingOptions = new SchedulingOptions { BlockFinderTypeForAdvanceScheduling = BlockFinderType.SingleDay };
@@ -54,8 +55,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var teamBlockInfo2 = new TeamBlockInfo(teamInfo2, blockInfo2);
 			using (_mocks.Record())
 			{
-				Expect.Call(groupPerson1.Id).Return(Guid.NewGuid());
-				Expect.Call(groupPerson2.Id).Return(Guid.NewGuid());
 				Expect.Call(_teamInfoFactory.CreateTeamInfo(person, date, matrixes)).Return(teamInfo1);
 				Expect.Call(_teamInfoFactory.CreateTeamInfo(person, date.AddDays(1), matrixes)).Return(teamInfo2);
 				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo1, date, BlockFinderType.SingleDay)).Return(teamBlockInfo1);

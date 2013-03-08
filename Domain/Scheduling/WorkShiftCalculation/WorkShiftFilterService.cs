@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 {
 	public interface IWorkShiftFilterService
 	{
-		IList<IShiftProjectionCache> Filter(DateOnly dateOnly, ITeamBlockInfo teamBlockInfo, IEffectiveRestriction effectiveRestriction, ISchedulingOptions schedulingOptions);
+		IList<IShiftProjectionCache> Filter(DateOnly dateOnly, ITeamBlockInfo teamBlockInfo, IEffectiveRestriction effectiveRestriction, ISchedulingOptions schedulingOptions, IWorkShiftFinderResult finderResult);
 	}
 
 	public class WorkShiftFilterService : IWorkShiftFilterService
@@ -64,11 +64,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 
 		public IList<IShiftProjectionCache> Filter(DateOnly dateOnly, ITeamBlockInfo teamBlockInfo ,
 													IEffectiveRestriction effectiveRestriction,
-													ISchedulingOptions schedulingOptions)
+													ISchedulingOptions schedulingOptions, IWorkShiftFinderResult finderResult)
 		{
 		    var person = teamBlockInfo.TeamInfo.GroupPerson;
 		    var matrixList = teamBlockInfo.TeamInfo.MatrixesForGroup().ToList();
-            FinderResult = new WorkShiftFinderResult(person, dateOnly);
 			if (effectiveRestriction == null)
 				return null;
 			if (person == null) return null;
@@ -77,7 +76,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 				return null;
 			if (schedulingOptions == null)
 				return null;
-			if (!_effectiveRestrictionShiftFilter.Filter(schedulingOptions, effectiveRestriction, FinderResult))
+			if (!_effectiveRestrictionShiftFilter.Filter(schedulingOptions, effectiveRestriction, finderResult))
 				return null;
 			if (schedulingOptions.ShiftCategory != null)
 				effectiveRestriction.ShiftCategory = schedulingOptions.ShiftCategory;
@@ -89,17 +88,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 																					schedulingOptions
 																						.MainShiftOptimizeActivitySpecification);
 
-			shiftList = _shiftCategoryRestrictionShiftFilter.Filter(effectiveRestriction.ShiftCategory, shiftList, FinderResult);
+			shiftList = _shiftCategoryRestrictionShiftFilter.Filter(effectiveRestriction.ShiftCategory, shiftList, finderResult);
 			shiftList = _disallowedShiftCategoriesShiftFilter.Filter(schedulingOptions.NotAllowedShiftCategories, shiftList,
-																	 FinderResult);
-			shiftList = _activityRestrictionsShiftFilter.Filter(dateOnly, person, shiftList, effectiveRestriction, FinderResult);
-			shiftList = _timeLimitsRestrictionShiftFilter.Filter(dateOnly, person, shiftList, effectiveRestriction, FinderResult);
-			shiftList = _workTimeLimitationShiftFilter.Filter(shiftList, effectiveRestriction, FinderResult);
+																	 finderResult);
+			shiftList = _activityRestrictionsShiftFilter.Filter(dateOnly, person, shiftList, effectiveRestriction, finderResult);
+			shiftList = _timeLimitsRestrictionShiftFilter.Filter(dateOnly, person, shiftList, effectiveRestriction, finderResult);
+			shiftList = _workTimeLimitationShiftFilter.Filter(shiftList, effectiveRestriction, finderResult);
 
-			shiftList = _contractTimeShiftFilter.Filter(dateOnly, matrixList, shiftList, schedulingOptions, FinderResult);
-			shiftList = _businessRulesShiftFilter.Filter(person, shiftList, dateOnly, FinderResult);
-			shiftList = _notOverWritableActivitiesShiftFilter.Filter(dateOnly, person, shiftList, FinderResult);
-			shiftList = _personalShiftsShiftFilter.Filter(dateOnly, person, shiftList, FinderResult);
+			shiftList = _contractTimeShiftFilter.Filter(dateOnly, matrixList, shiftList, schedulingOptions, finderResult);
+			shiftList = _businessRulesShiftFilter.Filter(person, shiftList, dateOnly, finderResult);
+			shiftList = _notOverWritableActivitiesShiftFilter.Filter(dateOnly, person, shiftList, finderResult);
+			shiftList = _personalShiftsShiftFilter.Filter(dateOnly, person, shiftList, finderResult);
 
 			if (schedulingOptions.WorkShiftLengthHintOption == WorkShiftLengthHintOption.AverageWorkTime && matrixList != null)
 			{
@@ -109,6 +108,5 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 			return shiftList.Count == 0 ? null : shiftList;
 		}
 
-		public IWorkShiftFinderResult FinderResult { get; private set; }
 	}
 }

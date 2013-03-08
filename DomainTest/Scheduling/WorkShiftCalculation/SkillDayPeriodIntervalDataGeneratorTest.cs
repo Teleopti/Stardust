@@ -30,6 +30,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 	    private IGroupPersonSkillAggregator _groupPersonSkillAggregator;
 	    private IGroupPerson _groupPerson;
 	    private DateTime _date;
+	    private ITeamBlockInfo _teamBlockInfo;
+	    private ITeamInfo _teamInfo;
+	    private BlockInfo _blockInfo;
 
 	    [SetUp]
         public void Setup()
@@ -54,6 +57,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 		                                                      _intervalDataAggregator,
 		                                                      _dayIntervalDataCalculator, _intervalMapper,
 		                                                      _schedulingResultStateHolder, _groupPersonSkillAggregator);
+		    _teamBlockInfo = _mock.StrictMock<ITeamBlockInfo>();
+		    _teamInfo = _mock.StrictMock<ITeamInfo>();
+		    _blockInfo = new BlockInfo(new DateOnlyPeriod(new DateOnly(_date), new DateOnly(_date)));
         }
 
 		[Test]
@@ -95,6 +101,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 			
             using (_mock.Record())
             {
+	            Expect.Call(_teamBlockInfo.TeamInfo).Return(_teamInfo);
+	            Expect.Call(_teamInfo.GroupPerson).Return(_groupPerson);
+	            Expect.Call(_teamBlockInfo.BlockInfo).Return(_blockInfo);
 				Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly>())).IgnoreArguments().
 			   Return(_skillDayList);
 				Expect.Call(_groupPersonSkillAggregator.AggregatedSkills(_groupPerson,
@@ -125,7 +134,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
             }
             using(_mock.Playback())
             {
-				var calculatedResult = _target.Generate(_groupPerson, new List<DateOnly> { new DateOnly(_date) });
+				var calculatedResult = _target.Generate(_teamBlockInfo);
 				Assert.That(calculatedResult.Count, Is.EqualTo(2));
 				Assert.That(calculatedResult[activity1][_date.TimeOfDay].ForecastedDemand, Is.EqualTo(activityIntervalData[activity1][_date.TimeOfDay].ForecastedDemand));
 				Assert.That(calculatedResult[activity2][_date.TimeOfDay].ForecastedDemand, Is.EqualTo(activityIntervalData[activity2][_date.TimeOfDay].ForecastedDemand));
@@ -167,6 +176,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 
 			using (_mock.Record())
 			{
+				Expect.Call(_teamBlockInfo.TeamInfo).Return(_teamInfo);
+				Expect.Call(_teamInfo.GroupPerson).Return(_groupPerson);
+				Expect.Call(_teamBlockInfo.BlockInfo).Return(_blockInfo);
 				Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly>())).IgnoreArguments().
 			   Return(_skillDayList);
 				Expect.Call(_groupPersonSkillAggregator.AggregatedSkills(_groupPerson,
@@ -192,7 +204,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 			}
 			using (_mock.Playback())
 			{
-				var calculatedResult = _target.Generate(_groupPerson, new List<DateOnly> { new DateOnly(_date) });
+				var calculatedResult = _target.Generate(_teamBlockInfo);
 				Assert.That(calculatedResult.Count, Is.EqualTo(1));
 				Assert.That(calculatedResult[activity1][_date.TimeOfDay].ForecastedDemand, Is.EqualTo(activityIntervalData[activity1][_date.TimeOfDay].ForecastedDemand));
 			}

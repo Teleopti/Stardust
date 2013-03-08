@@ -26,6 +26,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 		}
 
 		[Test]
+		public void ShouldReturnNllIfTeamInfoIsNull()
+		{
+			ITeamBlockInfo result = _target.CreateTeamBlockInfo(null, new DateOnly(2013, 2, 27), BlockFinderType.None);
+			Assert.IsNull(result);
+		}
+
+		[Test]
 		public void ShouldReturnNullIfNoBlock()
 		{
 			using (_mocks.Record())

@@ -30,12 +30,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 
         public IEffectiveRestriction Aggregate(ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions)
         {
+			if (teamBlockInfo == null)
+				return null;
             var groupPerson = teamBlockInfo.TeamInfo.GroupPerson;
             var dateOnlyList = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection();
             var matrixList = teamBlockInfo.TeamInfo.MatrixesForGroup().ToList(); 
             var scheduleDictionary = _schedulingResultStateHolder.Schedules;
-            if (groupPerson == null)
-                return null;
+			
             IEffectiveRestriction effectiveRestriction = null;
 	        if (dateOnlyList != null)
 	        {

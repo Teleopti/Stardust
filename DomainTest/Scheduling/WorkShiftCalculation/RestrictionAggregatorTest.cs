@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation;
@@ -21,13 +23,17 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
         private IRestrictionAggregator _target;
 	    private IOpenHoursToEffectiveRestrictionConverter _openHoursToRestrictionConverter;
 	    private IScheduleRestrictionExtractor _scheduleRestrictionExtractor;
+	    private TeamBlockInfo _teamBlockInfo;
+	    private IPerson _person1;
+	    private DateOnly _dateOnly;
+	    private IScheduleMatrixPro _scheduleMatrixPro;
 
 	    [SetUp]
         public void Setup()
         {
             _mocks = new MockRepository();
             _effectiveRestrictionCreator = _mocks.StrictMock<IEffectiveRestrictionCreator>();
-            _schedulingOptions = _mocks.StrictMock<ISchedulingOptions>();
+            _schedulingOptions = new SchedulingOptions();
             _schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
 			_openHoursToRestrictionConverter = _mocks.StrictMock<IOpenHoursToEffectiveRestrictionConverter>();
 			_scheduleRestrictionExtractor = _mocks.StrictMock<IScheduleRestrictionExtractor>();
@@ -35,18 +41,25 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
                                                 _schedulingResultStateHolder,
 												_openHoursToRestrictionConverter,
 												_scheduleRestrictionExtractor);
+			_person1 = PersonFactory.CreatePerson("bill");
+			_dateOnly = new DateOnly(2012, 12, 7);
+			_scheduleMatrixPro = _mocks.StrictMock<IScheduleMatrixPro>();
+			IGroupPerson groupPerson = new GroupPerson(new List<IPerson> { _person1 }, _dateOnly, "Hej", Guid.NewGuid());
+			IList<IScheduleMatrixPro> matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
+			IList<IList<IScheduleMatrixPro>> groupMatrixes = new List<IList<IScheduleMatrixPro>> { matrixList };
+			ITeamInfo teamInfo = new TeamInfo(groupPerson, groupMatrixes);
+			_teamBlockInfo = new TeamBlockInfo(teamInfo, new BlockInfo(new DateOnlyPeriod(_dateOnly, _dateOnly.AddDays(1))));
         }
 
 	    [Test]
 	    public void ShouldAggregateRestrictions()
 	    {
-		    var dateOnly = new DateOnly(2012, 12, 7);
-		    var dateList = new List<DateOnly> {dateOnly, dateOnly.AddDays(1)};
-		    var person1 = PersonFactory.CreatePerson("bill");
+		    
+		    var dateList = new List<DateOnly> {_dateOnly, _dateOnly.AddDays(1)};
+		    
 		    var scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
-		    var groupPerson = _mocks.StrictMock<IGroupPerson>();
-			var scheduleMatrixPro = _mocks.StrictMock<IScheduleMatrixPro>();
-			var matrixList = new List<IScheduleMatrixPro> { scheduleMatrixPro };
+			
+			var matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
 			IActivity activity = new Activity("bo");
 			var period = new DateTimePeriod(new DateTime(2012, 12, 7, 8, 0, 0, DateTimeKind.Utc),
 											new DateTime(2012, 12, 7, 8, 30, 0, DateTimeKind.Utc));
@@ -73,21 +86,18 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 				    };
 		    using (_mocks.Record())
 		    {
-			    Expect.Call(groupPerson.GroupMembers)
-			          .Return(new ReadOnlyCollection<IPerson>(new List<IPerson> {person1}))
-			          .Repeat.AtLeastOnce();
 			    Expect.Call(_schedulingResultStateHolder.Schedules).Return(scheduleDictionary);
 			    Expect.Call(
 				    _effectiveRestrictionCreator.GetEffectiveRestriction(
-					    new ReadOnlyCollection<IPerson>(new List<IPerson> {person1}), dateOnly,
+					    new ReadOnlyCollection<IPerson>(new List<IPerson> {_person1}), _dateOnly,
 					    _schedulingOptions, scheduleDictionary)).IgnoreArguments()
 			          .Return(firstDay);
 			    Expect.Call(
 				    _effectiveRestrictionCreator.GetEffectiveRestriction(
-					    new ReadOnlyCollection<IPerson>(new List<IPerson> {person1}), dateOnly.AddDays(1),
+					    new ReadOnlyCollection<IPerson>(new List<IPerson> {_person1}), _dateOnly.AddDays(1),
 					    _schedulingOptions, scheduleDictionary)).IgnoreArguments()
 			          .Return(secondDay);
-			    Expect.Call(_openHoursToRestrictionConverter.Convert(groupPerson, dateList))
+			    Expect.Call(_openHoursToRestrictionConverter.Convert(_teamBlockInfo.TeamInfo.GroupPerson, _teamBlockInfo.BlockInfo.BlockPeriod.DayCollection()))
 			          .Return(openHoursRestriction);
 			    Expect.Call(_scheduleRestrictionExtractor.Extract(dateList, matrixList, _schedulingOptions))
 			          .Return(scheduleRestriction);
@@ -100,19 +110,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 			                                          new WorkTimeLimitation(), null, null, null,
 			                                          new List<IActivityRestriction>()){CommonMainShift = mainShift};
 
-			    var restriction = _target.Aggregate(dateList, groupPerson, matrixList, _schedulingOptions);
+				var restriction = _target.Aggregate(_teamBlockInfo, _schedulingOptions);
 			    Assert.That(restriction, Is.EqualTo(result));
 		    }
 	    }
 
 	    [Test]
-        public void ShouldReturnNullWhenNoGroupPerson()
+        public void ShouldReturnNullWhenTeamBlockInfoIsNull()
         {
-            var dateOnly = new DateOnly(2012, 12, 7);
-            var dateList = new List<DateOnly> { dateOnly, dateOnly.AddDays(1) };
-			var scheduleMatrixPro = _mocks.StrictMock<IScheduleMatrixPro>();
-			var matrixList = new List<IScheduleMatrixPro> { scheduleMatrixPro };
-            Assert.That(_target.Aggregate(dateList, null, matrixList, _schedulingOptions), Is.Null);
+            Assert.That(_target.Aggregate(null, _schedulingOptions), Is.Null);
         }
 
     }

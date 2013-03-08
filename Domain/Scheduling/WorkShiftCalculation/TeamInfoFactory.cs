@@ -9,6 +9,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 	public interface ITeamInfoFactory
 	{
 		TeamInfo CreateTeamInfo(IPerson person, DateOnly date, IList<IScheduleMatrixPro> allMatrixesInScheduler);
+		TeamInfo CreateTeamInfo(IPerson person, DateOnlyPeriod period, IList<IScheduleMatrixPro> allMatrixesInScheduler);
 	}
 
 	public class TeamInfoFactory : ITeamInfoFactory
@@ -36,6 +37,26 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 						break;
 					}
 				}
+			}
+
+			return new TeamInfo(groupPerson, matrixesForGroup);
+		}
+
+		public TeamInfo CreateTeamInfo(IPerson person, DateOnlyPeriod period, IList<IScheduleMatrixPro> allMatrixesInScheduler)
+		{
+			IGroupPerson groupPerson = _groupPersonBuilderForOptimization.BuildGroupPerson(person, period.StartDate);
+			IList<IList<IScheduleMatrixPro>> matrixesForGroup = new List<IList<IScheduleMatrixPro>>();
+			foreach (var groupMember in groupPerson.GroupMembers)
+			{
+				IList<IScheduleMatrixPro> memberList = new List<IScheduleMatrixPro>();
+				foreach (var matrixPro in allMatrixesInScheduler)
+				{
+					if (matrixPro.Person.Equals(groupMember) && matrixPro.SchedulePeriod.DateOnlyPeriod.Intersection(period) != null)
+					{
+						memberList.Add(matrixPro);	
+					}
+				}
+				matrixesForGroup.Add(memberList);
 			}
 
 			return new TeamInfo(groupPerson, matrixesForGroup);

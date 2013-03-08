@@ -36,8 +36,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
         private DateTimePeriod _dateTimePeriod;
         private DateOnlyPeriod _dateOnlyPeriod;
         private DateOnly _startDateOfBlock;
+	    private List<IList<IScheduleMatrixPro>> _groupMatrixList;
 
-        [SetUp]
+	    [SetUp]
         public void Setup()
         {
             _mock = new MockRepository();
@@ -52,9 +53,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
             _scheduleDayPro = _mock.StrictMock<IScheduleDayPro>();
             _scheduleDay = _mock.StrictMock<IScheduleDay>();
             _mainShift = _mock.StrictMock<IMainShift>();
-
+	        _groupMatrixList = new List<IList<IScheduleMatrixPro>>();
             _matrixList = new List<IScheduleMatrixPro> {_scheduleMatrixPro };
-            _teaminfo = new TeamInfo(_groupPerson,_matrixList );
+			_groupMatrixList.Add(_matrixList);
+			_teaminfo = new TeamInfo(_groupPerson, _groupMatrixList);
             _blockInfo = new BlockInfo(new DateOnlyPeriod(DateOnly.Today,DateOnly.Today.AddDays(1)));
             _teamBlockInfo = new TeamBlockInfo(_teaminfo,_blockInfo);
             _dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(DateOnly.Today , TimeZoneInfo.Local);
@@ -302,7 +304,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
             var startDateOfBlock = teamBlockInfo.BlockInfo.BlockPeriod.StartDate;
             foreach (var day in teamBlockInfo.BlockInfo.BlockPeriod.DayCollection())
             {
-                if (teamBlockInfo.TeamInfo.MatrixesForGroup.Any(singleMatrix => singleMatrix.UnlockedDays.Any(schedulePro => schedulePro.Day == day)))
+                if (teamBlockInfo.TeamInfo.MatrixesForGroup().Any(singleMatrix => singleMatrix.UnlockedDays.Any(schedulePro => schedulePro.Day == day)))
                 {
                     IScheduleDay destinationScheduleDay = null;
                     var listOfDestinationScheduleDays = new List<IScheduleDay>();
@@ -313,7 +315,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 
                         //if (!selectedPersons.Contains(person)) continue;
                         IPerson tmpPerson = person;
-                        var tempMatrixList = teamBlockInfo.TeamInfo.MatrixesForGroup.Where(scheduleMatrixPro => scheduleMatrixPro.Person == tmpPerson).ToList();
+                        var tempMatrixList = teamBlockInfo.TeamInfo.MatrixesForGroup().Where(scheduleMatrixPro => scheduleMatrixPro.Person == tmpPerson).ToList();
                         if (tempMatrixList.Any())
                         {
                             IScheduleMatrixPro matrix = null;

@@ -2,6 +2,7 @@
 
 using System;
 using System.Linq;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation;
 using Teleopti.Interfaces.Domain;
 
@@ -48,7 +49,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 			// (should we cover for max seats here?) ????
 			var shifts = _workShiftFilterService.Filter(datePointer, teamBlockInfo, restriction,
-														schedulingOptions);
+														schedulingOptions, new WorkShiftFinderResult(teamBlockInfo.TeamInfo.GroupPerson, datePointer));
 			if (shifts == null || shifts.Count <= 0)
 				return false;
 

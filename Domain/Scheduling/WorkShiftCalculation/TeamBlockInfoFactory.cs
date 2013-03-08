@@ -20,6 +20,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 
 		public TeamBlockInfo CreateTeamBlockInfo(ITeamInfo teamInfo, DateOnly dateOnPeriod, BlockFinderType blockType)
 		{
+			if (teamInfo == null)
+				return null;
+
 			IBlockInfo blockInfo = _dynamicBlockFinder.ExtractBlockInfo(dateOnPeriod, teamInfo, blockType);
 			
 			if (blockInfo == null)
