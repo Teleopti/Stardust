@@ -1634,7 +1634,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Assert.AreEqual(28, _target.ColWeekMap.Count);
         }
 
-        [Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1304:SpecifyCultureInfo", MessageId = "Teleopti.Ccc.WinCode.Scheduling.PersonNameComparer.#ctor"), Test]
         public void ShouldHandleNullValuesInPersonNameComparer()
         {
 			//with specified culture
