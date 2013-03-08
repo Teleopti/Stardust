@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
 		}
 
 		[Test]
-		public void ShouldAddUsedSeatsAndLoggedOnToSkillStaffPeriod()
+		public void ShouldAddLoggedOnAndUsedSeatsToSkillStaffPeriod()
 		{
 			IList<IVisualLayerCollection> relevantProjections = new List<IVisualLayerCollection>();
 			relevantProjections.Add(_mocks.StrictMock<IVisualLayerCollection>());
