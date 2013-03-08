@@ -66,5 +66,12 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
             _target.TotalRows = 0;
             Assert.AreEqual(0, _target.TotalPages);
         }
+
+		[Test]
+		public void ShouldSetPageSize()
+		{
+			_target.PageSize = 9;
+			Assert.AreEqual(9, _target.PageSize);
+		}
     }
 }
