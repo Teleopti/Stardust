@@ -53,3 +53,6 @@
 	width: 18px;
 	height: 18px;
 }
+.ui-selectbox .menu-icon-delete {
+	cursor: pointer;
+}
