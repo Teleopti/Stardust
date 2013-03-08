@@ -461,6 +461,17 @@ Scenario: Show information that we dont show schedules in a new shifttrade
 	And I am viewing requests
 	When I click on the request
 	Then I should see details with message that tells the user that the status of the shifttrade is new
+	And I should not see timelines
+
+Scenario: Show information that we dont show schedules in a approved shifttrade
+	Given I have the role 'Full access to mytime'
+	And I have created a shift trade request
+	| Field				| Value		|
+	| Approved			| True		|
+	And I am viewing requests
+	When I click on the request
+	Then I should see details with message that tells the user that the status of the shifttrade is approved
+	And I should not see timelines
 
 Scenario: Can not approve or deny shift trade request that is already approved
 	Given I have the role 'Full access to mytime'

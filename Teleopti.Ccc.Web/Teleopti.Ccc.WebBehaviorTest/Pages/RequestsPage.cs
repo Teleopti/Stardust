@@ -187,5 +187,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		[FindBy(Id = "Request-add-shift-trade")]
 		public Div AddShiftTradeContainer { get; set; }
+
+
+		public DivCollection Timelines
+		{
+			get
+			{
+				return Document.Divs.Filter(QuicklyFind.ByClass("shift-trade-swap-detail-timeline"));
+			}
+		}
 	}
 }

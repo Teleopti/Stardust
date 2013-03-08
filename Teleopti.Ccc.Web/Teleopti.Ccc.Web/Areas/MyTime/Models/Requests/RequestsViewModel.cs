@@ -34,5 +34,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 		public string To;
 		public bool IsNew;
 		public bool IsPending;
+		public bool IsApproved;
 	}
 }
