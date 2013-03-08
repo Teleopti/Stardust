@@ -13,7 +13,7 @@ Background:
 	| Access to team             | Team green          |
 	| Access to Anywhere         | true                |
 	| View unpublished schedules | true                |
-	And 'Pierre Baldi' have a person period with
+	And 'Pierre Baldi' has a person period with
 	| Field      | Value      |
 	| Team       | Team green |
 	| Start date | 2012-12-01 |
@@ -90,7 +90,7 @@ Scenario: Change team
 	| Access to Anywhere         | true                          |
 	| View unpublished schedules | true                          |
 	And I have the role 'Anywhere Team Green And Other'
-	And 'Max Persson' have a person period with
+	And 'Max Persson' has a person period with
 	| Field      | Value      |
 	| Team       | Team other |
 	| Start date | 2012-12-01 |

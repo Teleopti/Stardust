@@ -56,14 +56,20 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			var select = Browser.Current.SelectList(Find.BySelector(".team-selector"));
 			EventualAssert.That(() => select.Exists, Is.True);
 			
-			select.Option(Find.BySelector(string.Format(":contains('{0}')", teamName))).SelectNoWait();
-			//Browser.Current.SelectList(Find.BySelector(".team-selector")).Option(Find.BySelector(string.Format(":contains('{0}')", teamName))).SelectNoWait();
+			var selectOption = select.Option(Find.BySelector(string.Format(":contains('{0}')", teamName)));
+			EventualAssert.That(() => selectOption.Exists, Is.True);
+			
+			//selectOption.SelectNoWait();
+			selectOption.Select();
 		}
 
 		[When(@"I select date '(.*)'")]
 		public void WhenISelectDate(string date)
 		{
-			Browser.Current.Element(Find.BySelector(".icon-calendar")).EventualClick();
+
+			var icon = Browser.Current.Element(Find.BySelector(".icon-calendar"));
+			EventualAssert.That(() => icon.Exists, Is.True);
+			icon.EventualClick();
 			
 			EventualAssert.That(() => Browser.Current.Element(Find.BySelector(".datepicker")).Style.Display == "none", Is.False);
 

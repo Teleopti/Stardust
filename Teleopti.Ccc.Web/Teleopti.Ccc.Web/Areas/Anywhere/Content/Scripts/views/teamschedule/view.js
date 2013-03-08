@@ -73,7 +73,7 @@ define([
 					teamSchedule.isLoading(true);
 
 					subscriptions.subscribeTeamSchedule(
-						teamSchedule.SelectedTeam().Id,
+						teamSchedule.SelectedTeam(),
 						helpers.Date.AsUTCDate(teamSchedule.SelectedDate().toDate()),
 						function (schedules) {
 							var currentAgents = agents.Agents();
@@ -102,13 +102,13 @@ define([
 
 							if (initialLoad) {
 							    teamSchedule.SelectedTeam.subscribe(function () {
-							        navigation.GoToTeamSchedule(teamSchedule.SelectedTeam().Id, teamSchedule.SelectedDate());
-									//loadPeople();
+							        loadPeople();
+							        navigation.GoToTeamSchedule(teamSchedule.SelectedTeam(), teamSchedule.SelectedDate());
 								});
 
 							    teamSchedule.SelectedDate.subscribe(function () {
-							        navigation.GoToTeamSchedule(teamSchedule.SelectedTeam().Id, teamSchedule.SelectedDate());
-									//loadAvailableTeams();
+							        loadAvailableTeams();
+							        navigation.GoToTeamSchedule(teamSchedule.SelectedTeam(), teamSchedule.SelectedDate());
 								});
 								initialLoad = false;
 							}
@@ -169,7 +169,7 @@ define([
 						dataType: 'json',
 						data: {
 							date: teamSchedule.SelectedDate().toDate().toJSON(),
-							teamId: teamSchedule.SelectedTeam().Id
+							teamId: teamSchedule.SelectedTeam()
 						},
 						success: function (people, textStatus, jqXHR) {
 

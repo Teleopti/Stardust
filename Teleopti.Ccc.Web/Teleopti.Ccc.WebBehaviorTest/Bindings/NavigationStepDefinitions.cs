@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -89,7 +90,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		public void WhenIViewSchedulesWithTeamAndDate(string teamName, string date)
 		{
 			TestControllerMethods.Logon();
-			var teamId = "teamId";
+			var teamId = "";
+
+			var teams =
+				UserFactory.User().Person.PermissionInformation.ApplicationRoleCollection.Single().AvailableData.AvailableTeams;
+
+			foreach (var team in teams)
+			{
+				if (team.Description.Name.Equals(teamName))
+				{
+					teamId = team.Id.ToString();
+					break;
+				}
+			}
 			Navigation.GotoAnywhereTeamSchedule(date, teamId);
 		}
 
