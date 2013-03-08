@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 
             foreach (var day in teamBlockInfo.BlockInfo.BlockPeriod.DayCollection() )
             {
-                if (teamBlockInfo.TeamInfo.MatrixesForGroup.Any(singleMatrix => singleMatrix.UnlockedDays.Any(schedulePro => schedulePro.Day == day)))
+                if (teamBlockInfo.TeamInfo.MatrixesForGroup().Any(singleMatrix => singleMatrix.UnlockedDays.Any(schedulePro => schedulePro.Day == day)))
                 {
                     IScheduleDay destinationScheduleDay = null;
                     var listOfDestinationScheduleDays = new List<IScheduleDay>();
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 
                         //if (!selectedPersons.Contains(person)) continue;
                         IPerson tmpPerson = person;
-                        var tempMatrixList = teamBlockInfo.TeamInfo.MatrixesForGroup.Where(scheduleMatrixPro => scheduleMatrixPro.Person == tmpPerson).ToList();
+                        var tempMatrixList = teamBlockInfo.TeamInfo.MatrixesForGroup().Where(scheduleMatrixPro => scheduleMatrixPro.Person == tmpPerson).ToList();
                         if (tempMatrixList.Any())
                         {
                             IScheduleMatrixPro matrix = null;

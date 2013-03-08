@@ -35,8 +35,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
         private DateTimePeriod _dateTimePeriod;
         private DateOnlyPeriod _dateOnlyPeriod;
         private DateOnly _startDateOfBlock;
+	    private List<IList<IScheduleMatrixPro>> _groupMatrixList;
 
-        [SetUp]
+	    [SetUp]
         public void Setup()
         {
             _mock = new MockRepository();
@@ -53,7 +54,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
             _mainShift = _mock.StrictMock<IMainShift>();
 
             _matrixList = new List<IScheduleMatrixPro> {_scheduleMatrixPro };
-            _teaminfo = new TeamInfo(_groupPerson,_matrixList );
+		    _groupMatrixList = new List<IList<IScheduleMatrixPro>>();
+			_groupMatrixList.Add(_matrixList);
+			_teaminfo = new TeamInfo(_groupPerson, _groupMatrixList);
             _blockInfo = new BlockInfo(new DateOnlyPeriod(DateOnly.Today,DateOnly.Today.AddDays(1)));
             _teamBlockInfo = new TeamBlockInfo(_teaminfo,_blockInfo);
             _dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(DateOnly.Today , TimeZoneInfo.Local);

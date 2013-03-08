@@ -46,13 +46,13 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			//change signature
 			var restriction = _restrictionAggregator.Aggregate(teamBlockInfo.BlockInfo.BlockPeriod.DayCollection(),
 															   teamBlockInfo.TeamInfo.GroupPerson,
-															   teamBlockInfo.TeamInfo.MatrixesForGroup.ToList(),
+															   teamBlockInfo.TeamInfo.MatrixesForGroup().ToList(),
 															   schedulingOptions);
 
 			// (should we cover for max seats here?) ????
 			//change signature
 			var shifts = _workShiftFilterService.Filter(datePointer, teamBlockInfo.TeamInfo.GroupPerson,
-														teamBlockInfo.TeamInfo.MatrixesForGroup.ToList(), restriction,
+														teamBlockInfo.TeamInfo.MatrixesForGroup().ToList(), restriction,
 														schedulingOptions);
 			if (shifts == null || shifts.Count <= 0)
 				return false;

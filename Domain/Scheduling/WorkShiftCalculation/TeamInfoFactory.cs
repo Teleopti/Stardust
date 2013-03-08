@@ -24,14 +24,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 		{
 			DateOnly firstDateOfMatrix = date;
 			IGroupPerson groupPerson = _groupPersonBuilderForOptimization.BuildGroupPerson(person, firstDateOfMatrix);
-			IList<IScheduleMatrixPro> matrixesForGroup = new List<IScheduleMatrixPro>();
+			IList<IList<IScheduleMatrixPro>> matrixesForGroup = new List<IList<IScheduleMatrixPro>>();
 			foreach (var groupMember in groupPerson.GroupMembers)
 			{
 				foreach (var matrixPro in allMatrixesInScheduler)
 				{
 					if (matrixPro.Person.Equals(groupMember) && matrixPro.SchedulePeriod.DateOnlyPeriod.Contains(firstDateOfMatrix))
 					{
-						matrixesForGroup.Add(matrixPro);
+						IList<IScheduleMatrixPro> memberList = new List<IScheduleMatrixPro>{matrixPro};
+						matrixesForGroup.Add(memberList);
 						break;
 					}
 				}

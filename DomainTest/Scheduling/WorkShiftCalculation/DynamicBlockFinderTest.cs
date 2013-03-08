@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 
 			using (_mock.Record())
 			{
-				Expect.Call(_teamInfo.MatrixesForGroup).Return(new List<IScheduleMatrixPro> {_matrixPro});
+				Expect.Call(_teamInfo.MatrixesForGroup()).Return(new List<IScheduleMatrixPro> {_matrixPro});
 				Expect.Call(_matrixPro.SchedulePeriod).Return(_schedulePeriod);
 				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(_date, _date));
 			}
