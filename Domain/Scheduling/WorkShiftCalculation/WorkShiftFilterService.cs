@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 													ISchedulingOptions schedulingOptions)
 		{
 		    var person = teamBlockInfo.TeamInfo.GroupPerson;
-		    var matrixList = teamBlockInfo.TeamInfo.MatrixesForGroup.ToList();
+		    var matrixList = teamBlockInfo.TeamInfo.MatrixesForGroup().ToList();
             FinderResult = new WorkShiftFinderResult(person, dateOnly);
 			if (effectiveRestriction == null)
 				return null;

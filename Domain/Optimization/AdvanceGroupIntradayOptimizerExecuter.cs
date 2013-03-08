@@ -139,9 +139,9 @@ namespace Teleopti.Ccc.Domain.Optimization
                 foreach (var groupPerson in groupPersonList)
 				{
 					var groupMatrixList = getScheduleMatrixProList(groupPerson, scheduleDate, allMatrixList);
-					var restriction = _restrictionAggregator.Aggregate(dateOnlyList, groupPerson, groupMatrixList, _schedulingOptions);
+					object restriction = null; //_restrictionAggregator.Aggregate(dateOnlyList, groupPerson, groupMatrixList, _schedulingOptions);
 					if (restriction == null) continue;
-					var shifts = _workShiftFilterService.Filter(scheduleDate, groupPerson, groupMatrixList, restriction, _schedulingOptions);
+					IList<IShiftProjectionCache> shifts = new List<IShiftProjectionCache>();// .Filter(scheduleDate, groupPerson, groupMatrixList, restriction, _schedulingOptions);
 					if (shifts != null && shifts.Count > 0)
 					{
 						IShiftProjectionCache bestShiftProjectionCache;

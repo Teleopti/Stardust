@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.WorkShiftCalculation
 			Assert.AreEqual(2, list.Count);
 
 			list.Add(groupPerson3);
-			Assert.AreEqual(3, list.Count);
+			Assert.AreEqual(2, list.Count);
 		}
 	}
 }
