@@ -43,7 +43,8 @@ Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
 	self.otherSchedule = ko.observable(new Teleopti.MyTimeWeb.Request.PersonScheduleViewModel());
 	self.hours = ko.observableArray();
 	self.hourWidth = ko.observable(10);
-    self.showInfo = ko.observable(false);
+	self.showInfo = ko.observable(false);
+    self.IsPending = ko.observable(false);
 	self.loadSwapDetails = function () {
 		self.ajax.Ajax({
 			url: "Requests/ShiftTradeRequestSwapDetails/" + self.Id(),
@@ -92,6 +93,7 @@ ko.utils.extend(Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel.prot
 		self.IsTradeCreatedByMe(data.IsCreatedByUser);
 		self.From(data.From);
 		self.To(data.To);
+        self.IsPending(data.IsPending);
 
 
     }
