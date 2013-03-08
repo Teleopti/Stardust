@@ -190,13 +190,14 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		[Test]
 		public void ExportToScenarioEqualsOperators()
 		{
-			ExportToScenarioWarningData data1 = new ExportToScenarioWarningData("dfsf", "sdfggg");
-			ExportToScenarioWarningData data2 = new ExportToScenarioWarningData("dfsf", "sdfggsdfsdfg");
-			ExportToScenarioWarningData data3 = new ExportToScenarioWarningData("dfsf", "sdfggsdfsdfg");
+			var data1 = new ExportToScenarioWarningData("dfsf", "sdfggg");
+			var data2 = new ExportToScenarioWarningData("dfsf", "sdfggsdfsdfg");
+			var data3 = new ExportToScenarioWarningData("dfsf", "sdfggsdfsdfg");
 
 			Assert.IsFalse(data1 == data2);
 			Assert.IsTrue(data3 == data2);
 			Assert.IsFalse(data3 != data2);
+			Assert.IsFalse(data3.Equals(new object()));
 		}
 
 		private void verifyAgentText(string textToSearchFor)
