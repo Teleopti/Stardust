@@ -12,7 +12,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			//add RTA state checker
 			var rtaChecker = new BusinessUnitInfoFinder(daBus);
 			rtaChecker.SendMessage();
-			var dbConnection = ConfigurationManager.ConnectionStrings["Queue"];
+
+			// var dbConnection = ConfigurationManager.ConnectionStrings["Queue"];
+
 		}
 	}
 }
