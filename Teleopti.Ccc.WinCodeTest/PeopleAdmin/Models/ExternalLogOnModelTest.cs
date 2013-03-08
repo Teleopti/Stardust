@@ -115,5 +115,11 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin.Models
 		{
 			Assert.AreEqual(string.Format(CultureInfo.CurrentCulture, "{0}", _externalLogOn.DataSourceId), _target.AcdText);
 		}
+
+		[Test]
+		public void ShouldGetLogObjectName()
+		{
+			Assert.AreEqual(string.Format(CultureInfo.CurrentCulture, "{0}", _externalLogOn.DataSourceName), _target.LogObjectName);	
+		}
     }
 }

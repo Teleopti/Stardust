@@ -888,6 +888,23 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Assert.IsNull(_target.LastUnsavedSchedulePart);
         }
 
+		[Test]
+		public void ShouldSkipUpdatesIfNoUnsavedPart()
+		{
+			//no calls to scheduleDictionary.Modify
+			_target.LastUnsavedSchedulePart = null;
+			_target.UpdateFromEditor();
+			_target.UpdateNoteFromEditor();
+			_target.UpdatePublicNoteFromEditor();
+			_target.UpdateRestriction();
+		}
+
+		[Test, ExpectedException(typeof(ArgumentNullException))]
+		public void ShouldThrowExceptionIfNullSchedulePartsOnTryModify()
+		{
+			_target.TryModify(null);
+		}
+
         [Test]
         public void VerifyAddAbsence()
         {
@@ -1620,10 +1637,36 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         [Test]
         public void ShouldHandleNullValuesInPersonNameComparer()
         {
+			//with specified culture
             Assert.AreEqual(0, _personNameComparer.Compare(null, null));
             Assert.AreEqual(-1, _personNameComparer.Compare(null, "a"));
             Assert.AreEqual(1, _personNameComparer.Compare("a", null));
             Assert.AreEqual(-1, _personNameComparer.Compare("a", "b"));
+
+			//and with current culture
+			_personNameComparer = new PersonNameComparer();
+			Assert.AreEqual(0, _personNameComparer.Compare(null, null));
+			Assert.AreEqual(-1, _personNameComparer.Compare(null, "a"));
+			Assert.AreEqual(1, _personNameComparer.Compare("a", null));
+			Assert.AreEqual(-1, _personNameComparer.Compare("a", "b"));
         }
+
+		[Test]
+		public void ShouldSortOnTime()
+		{
+			var dateOnly = new DateOnly();
+			var sortCommand = _mocks.StrictMock<IScheduleSortCommand>();
+
+			using (_mocks.Record())
+			{
+				Expect.Call(() => sortCommand.Execute(dateOnly));
+			}
+
+			using (_mocks.Playback())
+			{
+				_target.SortCommand = sortCommand;
+				_target.SortOnTime(dateOnly);	
+			}	
+		}
     }
 }
