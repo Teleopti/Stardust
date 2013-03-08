@@ -329,7 +329,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			}
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldNotUseRegularOccupiedSeatCalculatorWhenToAddOrRemove()
 		{
 			var skillStaffPeriodHolder = _mocks.StrictMock<ISkillStaffPeriodHolder>();
