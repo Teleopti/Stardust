@@ -7,7 +7,7 @@
     /// Created by: rogerkr
     /// Created date: 2009-02-05
     /// </remarks>
-    public interface IOvertimeShiftActivityLayer : IActivityLayer
+	public interface IOvertimeShiftActivityLayer : IPersistedActivityLayer //, IPersistedLayer<IActivity>
     {
     }
 }

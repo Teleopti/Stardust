@@ -2,6 +2,12 @@
 
 namespace Teleopti.Interfaces.Domain
 {
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <typeparam name="T"></typeparam>
+	public interface IPersistedLayer<T> : ILayer<T>, IAggregateEntity
+	{}
     /// <summary>
     /// Base class for all layers
     /// </summary>
@@ -38,6 +44,16 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         bool AdjacentTo(ILayer<T> layer);
 
+		/// <summary>
+		/// Added because all layers not are IEntity any longer
+		/// </summary>
+		/// <param name="parent"></param>
+		void SetParent(ILayerCollectionOwner<T> parent);
+
+		/// <summary>
+		/// The Parent
+		/// </summary>
+		ILayerCollectionOwner<T> Parent { get; }
     }
 
     /// <summary>
@@ -48,7 +64,7 @@ namespace Teleopti.Interfaces.Domain
     /// Created by: rogerkr
     /// Created date: 2008-01-25
     /// </remarks>
-    public interface ILayer : IAggregateEntity
+    public interface ILayer 
     {
         /// <summary>
         /// Gets the period.

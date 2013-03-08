@@ -1,5 +1,3 @@
-using Teleopti.Interfaces.Domain;
-
 namespace Teleopti.Interfaces.Domain
 {
     /// <summary>
@@ -9,7 +7,7 @@ namespace Teleopti.Interfaces.Domain
     /// Created by: rogerkr
     /// Created date: 2008-08-07
     /// </remarks>
-    public interface IMainShiftActivityLayer : ILayer<IActivity>
+	public interface IMainShiftActivityLayer : IPersistedActivityLayer, IPersistedLayer<IActivity>
     {
     }
 }

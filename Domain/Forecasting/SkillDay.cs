@@ -1581,5 +1581,12 @@ namespace Teleopti.Ccc.Domain.Forecasting
                         _currentDate.AddDays(1).Date.Add(_skill.MidnightBreakOffset), _skill.TimeZone);
             }
         }
+
+		// these two is just because we suddenly are a ILayerCollectionOwner
+	    public ILayerCollection<ISkillStaff> LayerCollection { get; private set; }
+	    public void OnAdd(ILayer<ISkillStaff> layer)
+	    {
+		    throw new NotImplementedException();
+	    }
     }
 }

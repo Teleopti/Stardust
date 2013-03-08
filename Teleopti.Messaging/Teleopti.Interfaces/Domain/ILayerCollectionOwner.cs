@@ -5,7 +5,7 @@ namespace Teleopti.Interfaces.Domain
     /// Interface for types holding layer collections.
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public interface ILayerCollectionOwner<T>
+    public interface ILayerCollectionOwner<T> : ILayerCollectionOwner
     {
 
         /// <summary>
@@ -24,4 +24,12 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         void OnAdd(ILayer<T> layer);
     }
+
+	/// <summary>
+	/// 
+	/// </summary>
+	public interface ILayerCollectionOwner 
+	{
+
+	}
 }

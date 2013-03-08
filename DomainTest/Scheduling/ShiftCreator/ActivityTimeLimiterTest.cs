@@ -281,14 +281,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
     /// <summary>
     /// Class to fake an implementation of shift
     /// </summary>
-    internal class FakeShift : Shift
+    internal class FakeShift : MainShift
     {
-        /// <summary>
-        /// Called before layer is added to collection.
-        /// </summary>
-        /// <param name="layer">The layer.</param>
-        public override void OnAdd(ILayer<IActivity> layer)
-        {
-        }
+        
     }
 }

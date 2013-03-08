@@ -17,10 +17,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
     [TestFixture]
     public class ShiftTest
     {
-        private Shift source;
+        private MainShift source;
 
-        private Shift destination1;
-        private Shift destination2;
+		private MainShift destination1;
+		private MainShift destination2;
 
         /// <summary>
         /// Run once for every test.
@@ -195,21 +195,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
     /// <summary>
     /// Class to fake an implementation of shift
     /// </summary>
-    internal class FakeShift : Shift
+	internal class FakeShift : MainShift
     {
-        /// <summary>
-        /// Called before layer is added to collection.
-        /// </summary>
-        /// <param name="layer">The layer.</param>
-        /// <remarks>
-        /// Check here on shift because we want activity layers to be persisted in different tables
-        /// (eg adding an activity layer to a MainShift shouldn't be possible even though it makes
-        /// perfect sence regarding objects)
-        /// Created by: rogerkr
-        /// Created date: 2008-01-25
-        /// </remarks>
-        public override void OnAdd(ILayer<IActivity> layer)
-        {
-        }
+
     }
 }

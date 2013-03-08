@@ -1,15 +1,14 @@
 using System;
-using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Common
 {
-    public abstract class Layer<T> : AggregateEntity, ILayer<T>
+    public abstract class Layer<T> : ILayer<T>
     {
         private DateTimePeriod _period;
         private T _payload;
 
-        protected Layer(T payload, DateTimePeriod period)
+	    protected Layer(T payload, DateTimePeriod period)
         {
             InParameter.NotNull("payload", payload);
             _period = period;
@@ -96,7 +95,13 @@ namespace Teleopti.Ccc.Domain.Common
                         Period.EndDateTime == layer.Period.StartDateTime);
         }
 
+		public virtual void SetParent(ILayerCollectionOwner<T> parent)
+		{
+			Parent = parent;
 
+		}
+
+		public ILayerCollectionOwner<T> Parent { get; private set; }
 
 	    #region ICloneableEntity<Layer<T>> Members
 

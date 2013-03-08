@@ -7,9 +7,9 @@ namespace Teleopti.Interfaces.Domain
     /// Class describing an PersonAbsence
     /// </summary>
     public interface IPersonAbsence : IPersistableScheduleData, 
-                                        IChangeInfo,
                                         IVisualLayerFactoryFactory,
-                                        ICloneableEntity<IPersonAbsence>
+                                        ICloneableEntity<IPersonAbsence>,
+										ILayerCollectionOwner<ISkillStaff>
     {
         /// <summary>
         /// Gets the layer.

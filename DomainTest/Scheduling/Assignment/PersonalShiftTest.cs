@@ -80,11 +80,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
             PersonalShift personalShift = (PersonalShift)target.EntityClone();
             Assert.AreEqual(target.Id, personalShift.Id);
-            Assert.AreEqual(target.LayerCollection[0].Id, personalShift.LayerCollection[0].Id);
+            Assert.AreEqual(((IPersonalShiftActivityLayer)target.LayerCollection[0]).Id, ((IPersonalShiftActivityLayer)personalShift.LayerCollection[0]).Id);
 
             personalShift = (PersonalShift)target.NoneEntityClone();
             Assert.IsNull(personalShift.Id);
-            Assert.IsNull(personalShift.LayerCollection[0].Id);
+            Assert.IsNull(((IPersonalShiftActivityLayer)personalShift.LayerCollection[0]).Id);
 
         }
 

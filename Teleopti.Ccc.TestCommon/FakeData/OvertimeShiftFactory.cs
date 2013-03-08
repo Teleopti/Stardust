@@ -28,8 +28,5 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
     public class OvertimeShiftForTest : OvertimeShift
     {
-        public override void OnAdd(ILayer<IActivity> layer)
-        {
-        }
     }
 }

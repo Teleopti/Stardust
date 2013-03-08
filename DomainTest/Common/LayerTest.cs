@@ -42,7 +42,6 @@ namespace Teleopti.Ccc.DomainTest.Common
             Assert.AreEqual(per, actL.Period);
             Assert.AreSame(fakeActivity, actL.Payload);
             Assert.AreSame(fakeActivity, ((ILayer)actL).Payload);
-            Assert.AreEqual(null, actL.Id);
             Assert.IsNull(actL.Parent);
 
             FakeLayerClass actL2 = new FakeLayerClass(fakeActivity, per);
@@ -117,38 +116,32 @@ namespace Teleopti.Ccc.DomainTest.Common
         [Test]
         public void VerifyCloneWorksAsExpected()
         {
-            Guid id = Guid.NewGuid();
-            DateTimePeriod period =
+            var period =
                 new DateTimePeriod(new DateTime(2000, 1, 1, 0, 0, 0, DateTimeKind.Utc),
                                    new DateTime(2001, 1, 1, 0, 0, 0, DateTimeKind.Utc));
-            FakeLayerClass orgLayer = new FakeLayerClass(fakeActivity, period);
-            ((IEntity) orgLayer).SetId(id);
-            Assert.AreEqual(id, orgLayer.Id);
-            FakeLayerClass cloneLayer = (FakeLayerClass)orgLayer.Clone();
+            var orgLayer = new FakeLayerClass(fakeActivity, period);
+
+            var cloneLayer = (FakeLayerClass)orgLayer.Clone();
             Assert.AreNotSame(orgLayer, cloneLayer);
             Assert.AreSame(fakeActivity, cloneLayer.Payload);
             Assert.AreEqual(period, cloneLayer.Period);
-            Assert.IsNull(cloneLayer.Id);
+
             Assert.AreEqual(-1, cloneLayer.OrderIndex);
             Assert.IsNull(cloneLayer.Parent);
-            Assert.IsNull(cloneLayer.Id);
         }
 
         [Test]
         public void VerifyICloneableEntity()
         {
-            Guid id = Guid.NewGuid();
-            DateTimePeriod period =
+            var period =
                 new DateTimePeriod(new DateTime(2000, 1, 1, 0, 0, 0, DateTimeKind.Utc),
                                    new DateTime(2001, 1, 1, 0, 0, 0, DateTimeKind.Utc));
-            FakeLayerClass orgLayer = new FakeLayerClass(fakeActivity, period);
-            ((IEntity)orgLayer).SetId(id);
+            var orgLayer = new FakeLayerClass(fakeActivity, period);
 
-            FakeLayerClass cloneLayer = (FakeLayerClass)orgLayer.EntityClone();
-            Assert.AreEqual(orgLayer.Id, cloneLayer.Id);
-
+            var cloneLayer = (FakeLayerClass)orgLayer.EntityClone();
+			Assert.That(cloneLayer, Is.Not.Null);
             cloneLayer = (FakeLayerClass)orgLayer.NoneEntityClone();
-            Assert.IsNull(cloneLayer.Id);
+			Assert.That(cloneLayer, Is.Not.Null);
         }
         /// <summary>
         /// Verifies the order index works.
@@ -157,9 +150,9 @@ namespace Teleopti.Ccc.DomainTest.Common
         [Test]
         public void VerifyOrderIndexWorks()
         {
-            MainShift shift = MainShiftFactory.CreateMainShiftWithDefaultCategory();
-            MainShiftActivityLayer layer1 = new MainShiftActivityLayer(fakeActivity, new DateTimePeriod());
-            MainShiftActivityLayer layer2 = new MainShiftActivityLayer(fakeActivity, new DateTimePeriod());
+            var shift = MainShiftFactory.CreateMainShiftWithDefaultCategory();
+            var layer1 = new MainShiftActivityLayer(fakeActivity, new DateTimePeriod());
+            var layer2 = new MainShiftActivityLayer(fakeActivity, new DateTimePeriod());
 
             shift.LayerCollection.Add(layer1);
             shift.LayerCollection.Add(layer2);

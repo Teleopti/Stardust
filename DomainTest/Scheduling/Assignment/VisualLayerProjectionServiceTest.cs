@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		public void CannotAddIfNull()
 		{
 			var proj = new VisualLayerProjectionService(person);
-			proj.Add((Shift)null);
+			proj.Add((MainShift)null);
 		}
 
 		[Test]
@@ -570,23 +570,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			return new DateTimePeriod(start, end);
 		}
 
-		private class fakeShift : Shift
+		private class fakeShift : MainShift
 		{
-			/// <summary>
-			/// Called before layer is added to collection.
-			/// </summary>
-			/// <param name="layer">The layer.</param>
-			/// <remarks>
-			/// Check here on shift because we want activity layers to be persisted in different tables
-			/// (eg adding an activity layer to a MainShift shouldn't be possible even though it makes
-			/// perfect sence regarding objects)
-			/// Created by: rogerkr
-			/// Created date: 2008-01-25
-			/// </remarks>
-			public override void OnAdd(ILayer<IActivity> layer)
-			{
-			}
-
 		}
 	}
 }
