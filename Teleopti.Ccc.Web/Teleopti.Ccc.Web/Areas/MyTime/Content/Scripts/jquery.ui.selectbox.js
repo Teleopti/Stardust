@@ -193,7 +193,6 @@
 					.addClass('floatright')
 					.append('x')
 					.click(function (evt) {
-						self._toggleMenu();
 						self._trigger("removeItem", event, {
 							value: item.value
 						});
