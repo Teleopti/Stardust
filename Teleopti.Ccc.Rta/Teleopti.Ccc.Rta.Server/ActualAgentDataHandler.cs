@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -14,7 +15,7 @@ namespace Teleopti.Ccc.Rta.Server
 	{
 		IList<ScheduleLayer> CurrentLayerAndNext(DateTime onTime, Guid personId);
 		IActualAgentState LoadOldState(Guid personToLoad);
-		IEnumerable<RtaStateGroupLight> StateGroups();
+		ConcurrentDictionary<string, List<RtaStateGroupLight>> StateGroups();
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
 		Dictionary<Guid, List<RtaAlarmLight>> ActivityAlarms();
 		void AddOrUpdate(IActualAgentState newState);
@@ -166,7 +167,7 @@ namespace Teleopti.Ccc.Rta.Server
 			return null;
 		}
 
-		public IEnumerable<RtaStateGroupLight> StateGroups()
+		public ConcurrentDictionary<string, List<RtaStateGroupLight>> StateGroups()
 		{
 			const string query =
 				@"SELECT s.Id StateId, s.Name StateName, s.PlatformTypeId,s.StateCode, sg.Id StateGroupId , BusinessUnit BusinessUnitId  
@@ -205,7 +206,7 @@ namespace Teleopti.Ccc.Rta.Server
 				}
 				reader.Close();
 			}
-			return stateGroups;
+			return new ConcurrentDictionary<string, List<RtaStateGroupLight>>(stateGroups.GroupBy(s => s.StateCode).ToDictionary(g => g.Key, g => g.ToList()));
 		}
 
 		public Dictionary<Guid, List<RtaAlarmLight>> ActivityAlarms()

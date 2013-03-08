@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
 using NUnit.Framework;
@@ -96,22 +97,27 @@ namespace Teleopti.Ccc.Rta.ServerTest
 					Name = "SomeName",
 					AlarmTypeId = _guid
 				};
-			var resetEvent = new AutoResetEvent(false);
+			var dictionary = new Dictionary<string, List<RtaStateGroupLight>>
+				{
+					{
+						_stateCode, new List<RtaStateGroupLight>
+							{
+								new RtaStateGroupLight
+									{
+										PlatformTypeId = _platformTypeId,
+										StateCode = _stateCode,
+										BusinessUnitId = _businessUnitId,
+										StateGroupId = _stateGroupId
+									}
+							}
+					}
+				};
 
 			_dataHandler.Expect(s => s.CurrentLayerAndNext(_dateTime, _guid))
 			            .Return(new List<ScheduleLayer> {currentLayer, nextLayer});
 			_dataHandler.Expect(s => s.LoadOldState(_guid)).Return(previousState);
-
-			_dataHandler.Expect(s => s.StateGroups()).Return(new List<RtaStateGroupLight>
-				{
-					new RtaStateGroupLight
-						{
-							PlatformTypeId = _platformTypeId,
-							StateCode = _stateCode,
-							BusinessUnitId = _businessUnitId,
-							StateGroupId = _stateGroupId
-						}
-				});
+			_dataHandler.Expect(s => s.StateGroups())
+			            .Return(new ConcurrentDictionary<string, List<RtaStateGroupLight>>(dictionary));
 
 			_dataHandler.Expect(s => s.ActivityAlarms())
 			            .Return(_activityAlarms);
@@ -123,7 +129,6 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			Assert.That(result.Scheduled, Is.EqualTo(currentLayer.Name));
 			Assert.That(result.ScheduledNext, Is.EqualTo(nextLayer.Name));
 			_mock.VerifyAll();
-			resetEvent.Dispose();
 		}
 
 		[Test]
@@ -166,20 +171,28 @@ namespace Teleopti.Ccc.Rta.ServerTest
 					{_stateGroupId, new List<RtaAlarmLight> {_rtaAlarmLight}}
 				};
 
+			var dictionary = new Dictionary<string, List<RtaStateGroupLight>>
+				{
+					{
+						_stateCode, new List<RtaStateGroupLight>
+							{
+								new RtaStateGroupLight
+									{
+										PlatformTypeId = _platformTypeId,
+										StateCode = _stateCode,
+										BusinessUnitId = _businessUnitId,
+										StateGroupId = _stateGroupId
+									}
+							}
+					}
+				};
+
 			var resetEvent = new AutoResetEvent(false);
 			_dataHandler.Expect(s => s.CurrentLayerAndNext(_dateTime, _guid))
 			            .Return(new List<ScheduleLayer> {currentLayer, nextLayer});
 			_dataHandler.Expect(s => s.LoadOldState(_guid)).Return(previousState);
-			_dataHandler.Expect(s => s.StateGroups()).Return(new List<RtaStateGroupLight>
-				{
-					new RtaStateGroupLight
-						{
-							PlatformTypeId = _platformTypeId,
-							StateCode = _stateCode,
-							BusinessUnitId = _businessUnitId,
-							StateGroupId = _stateGroupId
-						}
-				});
+			_dataHandler.Expect(s => s.StateGroups())
+			            .Return(new ConcurrentDictionary<string, List<RtaStateGroupLight>>(dictionary));
 			_dataHandler.Expect(s => s.ActivityAlarms()).Return(_activityAlarms);
 			_mock.ReplayAll();
 
@@ -192,7 +205,23 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		[Test]
 		public void ShouldReturnRtaAlarm()
 		{
-			_dataHandler.Expect(d => d.StateGroups()).Return(new List<RtaStateGroupLight> {_stateGroups});
+
+			var dictionary = new Dictionary<string, List<RtaStateGroupLight>>
+				{
+					{
+						_stateCode, new List<RtaStateGroupLight>
+							{
+								new RtaStateGroupLight
+									{
+										PlatformTypeId = _platformTypeId,
+										StateCode = _stateCode,
+										BusinessUnitId = _businessUnitId,
+										StateGroupId = _stateGroupId
+									}
+							}
+					}
+				};
+			_dataHandler.Expect(d => d.StateGroups()).Return(new ConcurrentDictionary<string, List<RtaStateGroupLight>>(dictionary));
 			_dataHandler.Expect(d => d.ActivityAlarms()).Return(_activityAlarms);
 
 			_mock.ReplayAll();
@@ -204,7 +233,22 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		[Test]
 		public void ShouldReturnNullWhenScheduleLayerIsNull()
 		{
-			_dataHandler.Expect(d => d.StateGroups()).Return(new List<RtaStateGroupLight> {_stateGroups});
+			var dictionary = new Dictionary<string, List<RtaStateGroupLight>>
+				{
+					{
+						_stateCode, new List<RtaStateGroupLight>
+							{
+								new RtaStateGroupLight
+									{
+										PlatformTypeId = _platformTypeId,
+										StateCode = _stateCode,
+										BusinessUnitId = _businessUnitId,
+										StateGroupId = _stateGroupId
+									}
+							}
+					}
+				};
+			_dataHandler.Expect(d => d.StateGroups()).Return(new ConcurrentDictionary<string, List<RtaStateGroupLight>>());
 			_dataHandler.Expect(d => d.ActivityAlarms()).Return(_activityAlarms);
 
 			_mock.ReplayAll();
@@ -216,7 +260,16 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		[Test]
 		public void ShouldReturnNullWhenNoMatchingStateGroup()
 		{
-			_dataHandler.Expect(d => d.StateGroups()).Return(new List<RtaStateGroupLight> {new RtaStateGroupLight()});
+			var dictionary = new Dictionary<string, List<RtaStateGroupLight>>
+				{
+					{
+						_stateCode, new List<RtaStateGroupLight>
+							{
+								new RtaStateGroupLight()
+							}
+					}
+				};
+			_dataHandler.Expect(d => d.StateGroups()).Return(new ConcurrentDictionary<string, List<RtaStateGroupLight>>(dictionary));
 			_dataHandler.Expect(d => d.ActivityAlarms()).Return(_activityAlarms);
 
 			_mock.ReplayAll();
@@ -254,21 +307,27 @@ namespace Teleopti.Ccc.Rta.ServerTest
 					AlarmTypeId = _guid
 				};
 
+			var dictionary = new Dictionary<string, List<RtaStateGroupLight>>
+				{
+					{
+						_stateCode, new List<RtaStateGroupLight>
+							{
+								new RtaStateGroupLight
+									{
+										PlatformTypeId = _platformTypeId,
+										StateCode = _stateCode,
+										BusinessUnitId = _businessUnitId,
+										StateGroupId = _stateGroupId
+									}
+							}
+					}
+				};
 			var resetEvent = new AutoResetEvent(false);
 
 			_dataHandler.Expect(s => s.CurrentLayerAndNext(_dateTime, _guid))
 			            .Return(new List<ScheduleLayer> {currentLayer, nextLayer});
 			_dataHandler.Expect(s => s.LoadOldState(_guid)).Return(previousState);
-			_dataHandler.Expect(s => s.StateGroups()).Return(new List<RtaStateGroupLight>
-				{
-					new RtaStateGroupLight
-						{
-							PlatformTypeId = _platformTypeId,
-							StateCode = _stateCode,
-							BusinessUnitId = _businessUnitId,
-							StateGroupId = _stateGroupId
-						}
-				});
+			_dataHandler.Expect(s => s.StateGroups()).Return(new ConcurrentDictionary<string, List<RtaStateGroupLight>>(dictionary));
 
 			_dataHandler.Expect(s => s.ActivityAlarms())
 			            .Return(_activityAlarms);
@@ -301,13 +360,19 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			
 			var resetEvent = new AutoResetEvent(false);
 
+			var dictionary = new Dictionary<string, List<RtaStateGroupLight>>
+				{
+					{
+						_stateCode, new List<RtaStateGroupLight>
+							{
+								new RtaStateGroupLight()
+							}
+					}
+				};
 			_dataHandler.Expect(s => s.CurrentLayerAndNext(_dateTime, _guid))
 			            .Return(new List<ScheduleLayer> {currentLayer, nextLayer});
 			_dataHandler.Expect(s => s.LoadOldState(_guid)).Return(null);
-			_dataHandler.Expect(s => s.StateGroups()).Return(new List<RtaStateGroupLight>
-				{
-					new RtaStateGroupLight()
-				});
+			_dataHandler.Expect(s => s.StateGroups()).Return(new ConcurrentDictionary<string, List<RtaStateGroupLight>>(dictionary));
 
 			_dataHandler.Expect(s => s.ActivityAlarms())
 			            .Return(_activityAlarms);
