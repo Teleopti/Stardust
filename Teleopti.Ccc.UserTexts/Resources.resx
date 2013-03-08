@@ -11301,4 +11301,12 @@ These options are activated:
   <data name="CannotDisplayScheduleWhenShiftTradeStatusIsNew" xml:space="preserve">
     <value>Can not display schedule when the status of the shifttrade request is new</value>
   </data>
+  <data name="NewTemplateName" xml:space="preserve">
+    <value>New Template Name</value>
+    <comment>New Template Name</comment>
+  </data>
+  <data name="EmptyTemplateName" xml:space="preserve">
+    <value>Empty preference template name</value>
+    <comment>Empty preference template name</comment>
+  </data>
 </root>

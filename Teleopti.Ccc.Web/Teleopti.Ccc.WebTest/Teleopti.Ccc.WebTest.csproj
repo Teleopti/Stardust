@@ -125,6 +125,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceTemplatePersisterTest.cs" />
+    <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceTemplateProviderTest.cs" />
+    <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceTemplateInputMappingTest.cs" />
+    <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceTemplateViewModelMappingTest.cs" />
     <Compile Include="Areas\Anywhere\Hubs\PersonScheduleHubTest.cs" />
     <Compile Include="Areas\Anywhere\Hubs\PersonScheduleViewModelFactoryTest.cs" />
     <Compile Include="Areas\Anywhere\Hubs\PersonScheduleViewModelMapperTest.cs" />

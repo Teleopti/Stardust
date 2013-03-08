@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using AutoMapper;
 using Teleopti.Ccc.Domain.Repositories;
@@ -10,7 +11,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 {
-	public class PreferenceDayInputMappingProfile : Profile
+	public class PreferenceTemplateInputMappingProfile : Profile
 	{
 		private readonly Func<IShiftCategoryRepository> _shiftCategoryRepository;
 		private readonly Func<IDayOffRepository> _dayOffRepository;
@@ -18,7 +19,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 		private readonly Func<IActivityRepository> _activityRespository;
 		private readonly IResolve<IMappingEngine> _mapper;
 
-		public PreferenceDayInputMappingProfile(Func<IShiftCategoryRepository> shiftCategoryRepository, Func<IDayOffRepository> dayOffRepository, Func<IAbsenceRepository> absenceRepository, Func<IActivityRepository> activityRespository, IResolve<IMappingEngine> mapper)
+		public PreferenceTemplateInputMappingProfile(Func<IShiftCategoryRepository> shiftCategoryRepository, Func<IDayOffRepository> dayOffRepository, Func<IAbsenceRepository> absenceRepository, Func<IActivityRepository> activityRespository, IResolve<IMappingEngine> mapper)
 		{
 			_shiftCategoryRepository = shiftCategoryRepository;
 			_dayOffRepository = dayOffRepository;
@@ -31,11 +32,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 		{
 			base.Configure();
 
-			CreateMap<PreferenceDayInput, IPreferenceDay>()
-				.ConvertUsing<PreferenceDayInputToPreferenceDay>()
+			CreateMap<PreferenceTemplateInput, IExtendedPreferenceTemplate>()
+				.ConvertUsing<PreferenceTemplateInputToExtendedPreferenceTemplate>()
 				;
 
-			CreateMap<PreferenceDayInput, ActivityRestriction>()
+			CreateMap<PreferenceTemplateInput, ActivityRestrictionTemplate>()
 				.ForMember(d => d.Activity, o => o.MapFrom(s => _activityRespository.Invoke().Get(s.ActivityPreferenceId.Value)))
 				.ForMember(d => d.StartTimeLimitation, o => o.MapFrom(s =>
 							   new StartTimeLimitation(s.ActivityEarliestStartTime.ToTimeSpan(), s.ActivityLatestStartTime.ToTimeSpan())
@@ -48,8 +49,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 							   ))
 				;
 
-			CreateMap<PreferenceDayInput, IPreferenceRestriction>()
-				.ConstructUsing(s => new PreferenceRestriction())
+			CreateMap<PreferenceTemplateInput, IPreferenceRestrictionTemplate>()
+				.ConstructUsing(s => new PreferenceRestrictionTemplate())
 				.ForMember(d => d.ShiftCategory, o => o.MapFrom(s => s.PreferenceId != null ? _shiftCategoryRepository.Invoke().Get(s.PreferenceId.Value) : null))
 				.ForMember(d => d.Absence, o => o.MapFrom(s => s.PreferenceId != null ? _absenceRepository.Invoke().Get(s.PreferenceId.Value) : null))
 				.ForMember(d => d.DayOffTemplate, o => o.MapFrom(s => s.PreferenceId != null ? _dayOffRepository.Invoke().Get(s.PreferenceId.Value) : null))
@@ -65,74 +66,56 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 							   s => new WorkTimeLimitation(s.MinimumWorkTime, s.MaximumWorkTime)
 							   ))
 				.AfterMap((s, d) =>
+				{
+					if (s.ActivityPreferenceId.HasValue)
 					{
-						if (s.ActivityPreferenceId.HasValue)
+						if (d.ActivityRestrictionCollection.Any())
 						{
-							if (d.ActivityRestrictionCollection.Any())
-							{
-								var activityRestriction = d.ActivityRestrictionCollection.Cast<ActivityRestriction>().Single();
-								_mapper.Invoke().Map(s, activityRestriction);
-							}
-							else
-							{
-								var activityRestriction = _mapper.Invoke().Map<PreferenceDayInput, ActivityRestriction>(s);
-								d.AddActivityRestriction(activityRestriction);
-							}
+							var activityRestriction = d.ActivityRestrictionCollection.Cast<ActivityRestrictionTemplate>().Single();
+							_mapper.Invoke().Map(s, activityRestriction);
 						}
 						else
 						{
-							var currentItems = new List<IActivityRestriction>(d.ActivityRestrictionCollection);
-							currentItems.ForEach(d.RemoveActivityRestriction);
+							var activityRestriction = _mapper.Invoke().Map<PreferenceTemplateInput, ActivityRestrictionTemplate>(s);
+							d.AddActivityRestriction(activityRestriction);
 						}
-					})
+					}
+					else
+					{
+						var currentItems = new List<IActivityRestriction>(d.ActivityRestrictionCollection);
+						currentItems.ForEach(d.RemoveActivityRestriction);
+					}
+				})
 				;
 		}
 
-		public class PreferenceDayInputToPreferenceDay : ITypeConverter<PreferenceDayInput, IPreferenceDay>
+		public class PreferenceTemplateInputToExtendedPreferenceTemplate : ITypeConverter<PreferenceTemplateInput, IExtendedPreferenceTemplate>
 		{
-			private readonly Func<ILoggedOnUser> _loggedOnUser;
 			private readonly Func<IMappingEngine> _mapper;
+			private readonly Func<ILoggedOnUser> _loggedOnUser;
 
-			public PreferenceDayInputToPreferenceDay(Func<IMappingEngine> mapper, Func<ILoggedOnUser> loggedOnUser)
+			public PreferenceTemplateInputToExtendedPreferenceTemplate(Func<IMappingEngine> mapper, Func<ILoggedOnUser> loggedOnUser)
 			{
-				_loggedOnUser = loggedOnUser;
 				_mapper = mapper;
+				_loggedOnUser = loggedOnUser;
 			}
 
-			public IPreferenceDay Convert(ResolutionContext context)
+			public IExtendedPreferenceTemplate Convert(ResolutionContext context)
 			{
-				var source = context.SourceValue as PreferenceDayInput;
-				var destination = context.DestinationValue as IPreferenceDay;
-				if (destination == null)
+				var source = context.SourceValue as PreferenceTemplateInput;
+				var destination = context.DestinationValue as IExtendedPreferenceTemplate;
+				if (destination == null && source != null)
 				{
 					var person = _loggedOnUser.Invoke().CurrentUser();
-					var restriction = _mapper.Invoke().Map<PreferenceDayInput, IPreferenceRestriction>(source);
-					destination = new PreferenceDay(person, source.Date, restriction);
-					destination.TemplateName = source.TemplateName;
+					var restrictionTemplate = _mapper.Invoke().Map<PreferenceTemplateInput, IPreferenceRestrictionTemplate>(source);
+					destination = new ExtendedPreferenceTemplate(person, restrictionTemplate, source.NewTemplateName, Color.White);
 				}
 				else
 				{
-					destination.TemplateName = source.TemplateName;
-					_mapper.Invoke().Map(source, destination.Restriction);
+					throw new NotSupportedException("update preference template not support now");
 				}
 				return destination;
 			}
 		}
-	}
-
-	public static class Extensions
-	{
-		public static TimeSpan? ToTimeSpan(this TimeOfDay? value)
-		{
-			if (!value.HasValue) return null;
-			return value.Value.Time;
-		}
-
-		public static TimeSpan? ToTimeSpan(this TimeOfDay? value, bool nextDay)
-		{
-			if (!value.HasValue) return null;
-			return nextDay ? value.Value.Time.Add(TimeSpan.FromDays(1)) : value.Value.Time;
-		}
-
 	}
 }

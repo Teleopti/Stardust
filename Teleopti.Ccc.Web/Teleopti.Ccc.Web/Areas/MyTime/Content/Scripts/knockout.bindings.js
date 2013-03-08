@@ -4,7 +4,8 @@
 		var observable = options.member;
 		var selected = $(element).find('option:selected');
 		var data = selected.data(options.data);
-		observable(data);
+		if (observable)
+			observable(data);
 	}
 };
 

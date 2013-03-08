@@ -6,8 +6,10 @@ using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.UserTexts;
+using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
+using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
 using Table = TechTalk.SpecFlow.Table;
 
@@ -266,6 +268,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceActivityTimeMaximum.TextField.Value, Is.Null);
 		}
 
+		[Then(@"I should see extended preference fields filled with")]
+		public void ThenIShouldSeeExtendedPreferenceFieldsFilledWith(Table table)
+		{
+			var inputs = table.CreateInstance<ExtendedPreferenceInput>();
+			if (inputs.PreferenceId != null) EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceSelectBox.SelectedText, Is.StringContaining(inputs.PreferenceId));
+			if (inputs.EarliestStartTime != null) EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceStartTimeMinimum.TextField.Value, Is.StringContaining(inputs.EarliestStartTime));
+		}
+
 		[Then(@"I should see extended preference with")]
 		public void ThenIShouldSeeExtendedPanelWith(Table table)
 		{
@@ -339,6 +349,55 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		}
 
 
+		[Given(@"I have a preference template with")]
+		public void GivenIHaveAPreferenceTemplateWith(Table table)
+		{
+			var preferenceTemplate = table.CreateInstance<PreferenceTemplateConfigurable>();
+			UserFactory.User().Setup(preferenceTemplate);
+		}
+
+		[When(@"I select preference template with '(.*)'")]
+		public void WhenISelectPreferenceTemplateWith(string name)
+		{
+			Pages.Pages.PreferencePage.ExtendedPreferenceTemplateSelectBox.SelectWait(name);
+		}
+
+		[When(@"I click the templates select box")]
+		public void WhenIClickTheTemplatesSelectBox()
+		{
+			Pages.Pages.PreferencePage.ExtendedPreferenceTemplateSelectBox.Open();
+		}
+
+		[When(@"I click Save as new template")]
+		public void WhenIClickSaveAsNewTemplate()
+		{
+			Pages.Pages.PreferencePage.TemplateSaveDiv.EventualClick();
+		}
+
+
+		[When(@"I input new template name '(.*)'")]
+		public void WhenIInputNewTemplateName(string name)
+		{
+			var page = Pages.Pages.PreferencePage;
+			page.TemplateNameTextField.Value = name;
+			Browser.Current.Eval("$('#" + Pages.Pages.PreferencePage.TemplateNameTextField.Id + "').blur()");
+		}
+
+		[When(@"I click save template button")]
+		public void WhenIClickSaveTemplateButton()
+		{
+			Pages.Pages.PreferencePage.ExtendedPreferenceSaveTemplateButton.EventualClick();
+		}
+
+		[Then(@"I should see these available templates")]
+		public void ThenIShouldSeeTheseAvailableTemplates(Table table)
+		{
+			var templates = table.CreateSet<SingleValue>();
+			templates.ForEach(preference => EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceTemplateSelectBox.Menu.Text, Is.StringContaining(preference.Value)));
+		}
+		
+
+
 		private class ExtendedPreferenceFields
 		{
 			public DateTime Date { get; set; }
@@ -360,7 +419,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			public string ActivityTimeMaximum { get; set; }
 		}
 
-
+		private class ExtendedPreferenceInput
+		{
+			public string PreferenceId { get; set; }
+			public string EarliestStartTime { get; set; }
+		}
 
 		[StepArgumentTransformation]
 		public PreferenceFeedbackFields PreferenceFeedbackFieldsTransform(Table table)
