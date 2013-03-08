@@ -452,3 +452,15 @@ Scenario: Show information that we dont show schedules in a new shifttrade
 	And I am viewing requests
 	When I click on the request
 	Then I should see details with message that tells the user that the status of the shifttrade is new
+
+@ignore
+Scenario: Can not approve or deny shift trade request that is already approved
+	Given I have the role 'Full access to mytime'
+	And I have received a shift trade request
+	| Field			| Value         |
+	| From			| Ashley Andeen	|
+	| Approved		| True          |
+	And I am viewing requests
+	When I click on the request
+	Then I should not see the approve button
+	And I should not see the deny button
