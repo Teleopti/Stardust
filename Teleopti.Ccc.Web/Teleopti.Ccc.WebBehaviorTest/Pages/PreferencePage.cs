@@ -95,6 +95,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 				PreferenceButton.Select(text);
 		}
 
+		public Span DeleteSpanForTemplate(string templateName)
+		{
+			// in order to find fast and also it has only one delete button, templateName isn't used here
+			return Document.Div("Preference-template-menu").Span(QuicklyFind.ByClass("menu-icon-delete")).EventualGet();
+		}
+
 		public Div ExtendedPreferenceIndicationForDate(DateTime date)
 		{
 			return CalendarCellForDate(date).Div(QuicklyFind.ByClass("extended-indication"));
