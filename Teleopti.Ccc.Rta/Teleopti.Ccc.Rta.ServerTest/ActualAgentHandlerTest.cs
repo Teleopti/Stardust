@@ -16,6 +16,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		private IActualAgentDataHandler _dataHandler;
 		private IActualAgentHandler _target;
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
 		private RtaStateGroupLight _stateGroups;
 		private RtaAlarmLight _rtaAlarmLight;
 		private Dictionary<Guid, List<RtaAlarmLight>> _activityAlarms;
@@ -233,21 +234,6 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		[Test]
 		public void ShouldReturnNullWhenScheduleLayerIsNull()
 		{
-			var dictionary = new Dictionary<string, List<RtaStateGroupLight>>
-				{
-					{
-						_stateCode, new List<RtaStateGroupLight>
-							{
-								new RtaStateGroupLight
-									{
-										PlatformTypeId = _platformTypeId,
-										StateCode = _stateCode,
-										BusinessUnitId = _businessUnitId,
-										StateGroupId = _stateGroupId
-									}
-							}
-					}
-				};
 			_dataHandler.Expect(d => d.StateGroups()).Return(new ConcurrentDictionary<string, List<RtaStateGroupLight>>());
 			_dataHandler.Expect(d => d.ActivityAlarms()).Return(_activityAlarms);
 

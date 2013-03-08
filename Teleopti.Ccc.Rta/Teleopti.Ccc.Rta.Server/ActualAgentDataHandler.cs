@@ -15,10 +15,11 @@ namespace Teleopti.Ccc.Rta.Server
 	{
 		IList<ScheduleLayer> CurrentLayerAndNext(DateTime onTime, Guid personId);
 		IActualAgentState LoadOldState(Guid personToLoad);
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
 		ConcurrentDictionary<string, List<RtaStateGroupLight>> StateGroups();
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
 		Dictionary<Guid, List<RtaAlarmLight>> ActivityAlarms();
-		void AddOrUpdate(IEnumerable<IActualAgentState> newState);
+		void AddOrUpdate(IEnumerable<IActualAgentState> states);
 	}
 
 	public class ActualAgentDataHandler : IActualAgentDataHandler
