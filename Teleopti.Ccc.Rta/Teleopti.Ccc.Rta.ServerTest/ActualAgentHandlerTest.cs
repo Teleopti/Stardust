@@ -331,7 +331,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 
 			_dataHandler.Expect(s => s.ActivityAlarms())
 			            .Return(_activityAlarms);
-			_dataHandler.Expect(s => s.AddOrUpdate(new ActualAgentState())).IgnoreArguments();
+			_dataHandler.Expect(s => s.AddOrUpdate(new List<IActualAgentState> {new ActualAgentState()})).IgnoreArguments();
 			_mock.ReplayAll();
 
 			var result = _target.CheckSchedule(_guid, _businessUnitId, _dateTime);
@@ -376,7 +376,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 
 			_dataHandler.Expect(s => s.ActivityAlarms())
 			            .Return(_activityAlarms);
-			_dataHandler.Expect(s => s.AddOrUpdate(new ActualAgentState())).IgnoreArguments();
+			_dataHandler.Expect(s => s.AddOrUpdate(new List<IActualAgentState> {new ActualAgentState()})).IgnoreArguments();
 			_mock.ReplayAll();
 
 			var result = _target.CheckSchedule(_guid, _businessUnitId, _dateTime);

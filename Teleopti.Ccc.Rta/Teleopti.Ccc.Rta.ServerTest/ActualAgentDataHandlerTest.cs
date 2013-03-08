@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Data;
@@ -341,7 +342,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_connection.Expect(c => c.Dispose());
 			_mock.ReplayAll();
 
-			_target.AddOrUpdate(agentState);
+			_target.AddOrUpdate(new List<IActualAgentState> {agentState});
 			_mock.VerifyAll();
 		}
 	}

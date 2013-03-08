@@ -109,22 +109,28 @@ namespace Teleopti.Ccc.Rta.Server
 
 			BatchedAgents.AddOrUpdate(personId, newState, (guid, state) => newState);
 
-			if (DateTime.UtcNow.Subtract(_lastSave) >= new TimeSpan(0, 0, 5))
+			var utcNow = DateTime.UtcNow;
+			if (utcNow.Subtract(_lastSave) >= new TimeSpan(0, 0, 5))
 				lock (LockObject)
-					if (DateTime.UtcNow.Subtract(_lastSave) >= new TimeSpan(0, 0, 5))
-						Task.Factory.StartNew(() => saveToDataStore(BatchedAgents.Values.ToList()));
-			//ThreadPool.QueueUserWorkItem(saveToDataStore, new object[] {new List<IActualAgentState>(BatchedAgents.Values)});
+					if (utcNow.Subtract(_lastSave) >= new TimeSpan(0, 0, 5))
+						saveToDataStore(BatchedAgents.Values);
 			
-
 			return newState;
 		}
 
 		private void saveToDataStore(IEnumerable<IActualAgentState> states)
 		{
-			if (states == null) return;
-			foreach (var agentState in states)
-				_actualAgentDataHandler.AddOrUpdate(agentState);
+			var actualAgentStates = states as List<IActualAgentState> ?? states.ToList();
+			_actualAgentDataHandler.AddOrUpdate(actualAgentStates);
 			_lastSave = DateTime.UtcNow;
+
+			foreach (var agentState in actualAgentStates)
+			{
+				IActualAgentState outAgentState;
+				if (BatchedAgents.TryGetValue(agentState.PersonId, out outAgentState)
+				    && agentState.ReceivedTime >= outAgentState.ReceivedTime)
+					BatchedAgents.TryRemove(agentState.PersonId, out outAgentState);
+			}
 		}
 
 		public RtaAlarmLight GetAlarm(Guid platformTypeId, string stateCode, ScheduleLayer layer, Guid businessUnitId)
