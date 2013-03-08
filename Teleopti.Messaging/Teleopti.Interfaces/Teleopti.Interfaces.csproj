@@ -316,6 +316,7 @@
     <Compile Include="Domain\ITextFormatter.cs" />
     <Compile Include="Domain\ITimeZoneDim.cs" />
     <Compile Include="Domain\ITrueFalseRandomizer.cs" />
+    <Compile Include="Domain\IUnderStaffingData.cs" />
     <Compile Include="Domain\IUniqueSchedulePartExtractor.cs" />
     <Compile Include="Domain\IUnsafePersonProvider.cs" />
     <Compile Include="Domain\IUnsavedDaysInfo.cs" />
@@ -883,6 +884,7 @@
     <Compile Include="Messages\RaptorDomainMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Domain\SettingValueTypes.cs" />
+    <Compile Include="Domain\UnderStaffingData.cs" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="..\..\CodeAnalysisDictionary.xml">

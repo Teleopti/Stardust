@@ -63,5 +63,12 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             Assert.IsTrue(otherValidatorOfSameKind.Equals(_target));
             Assert.IsFalse(_target.Equals(otherValidator));
         }
+
+        [Test]
+        public void ShouldGetHashCodeInReturn()
+        {
+            var result = _target.GetHashCode();
+            Assert.IsNotNull(result);
+        }
     }
 }

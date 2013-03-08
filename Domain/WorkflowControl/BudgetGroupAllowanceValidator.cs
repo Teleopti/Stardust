@@ -1,4 +1,3 @@
-using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.WorkflowControl
@@ -22,7 +21,6 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
         }
 
         public IValidatedRequest Validate(IAbsenceRequest absenceRequest)
-        //public bool Validate(IAbsenceRequest absenceRequest)
         {
             var validatedRequest = new ValidatedRequest();
             validatedRequest.IsValid = BudgetGroupAllowanceSpecification.IsSatisfiedBy(absenceRequest);
@@ -32,7 +30,6 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
                 validatedRequest.ValidationErrors = BudgetGroupAllowanceCalculator.CheckBudgetGroup(absenceRequest);
 
             return validatedRequest;
-            //return BudgetGroupAllowanceSpecification != null && BudgetGroupAllowanceSpecification.IsSatisfiedBy(absenceRequest);
         }
 
         public IAbsenceRequestValidator CreateInstance()

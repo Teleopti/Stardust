@@ -71,5 +71,34 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Import
                                     Ticks, DateTimeKind.Utc)));
             Assert.That(forecastsRow.Shrinkage, Is.Null);
         }
+
+        [Test]
+        public void ShouldReturnString()
+        {
+            var tasks = 12;
+            var taskTime = 110.02;
+            var afterTaskTime = 121.30;
+            var agents = 2;
+            var utcDateTimeFrom = new DateTime(2011, 1, 1, 6, 15, 0, DateTimeKind.Utc);
+            var utcDateTimeTo = new DateTime(2011, 1, 1, 6, 30, 0, DateTimeKind.Utc);
+            var localDateTimeFrom = new DateTime(2011, 1, 1, 8, 15, 0);
+            var localDateTimeTo = new DateTime(2011, 1, 1, 8, 30, 0);
+            var skillName = "Insurance";
+
+            var forecastRow = new ForecastsRow
+            {
+                TaskTime = taskTime,
+                AfterTaskTime = afterTaskTime,
+                Agents = agents,
+                LocalDateTimeFrom = localDateTimeFrom,
+                LocalDateTimeTo = localDateTimeTo,
+                SkillName = skillName,
+                Tasks = tasks,
+                UtcDateTimeFrom = utcDateTimeFrom,
+                UtcDateTimeTo = utcDateTimeTo
+            };
+
+            Assert.IsNotNullOrEmpty(forecastRow.ToString());
+        }
     }
 }

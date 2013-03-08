@@ -4107,7 +4107,7 @@ Accounts</value>
     <comment>Overstaffing</comment>
   </data>
   <data name="SeriousUnderstaffing" xml:space="preserve">
-    <value>Critical understaffing</value>
+    <value>Critical understaffing for :</value>
     <comment>Critical understaffing</comment>
   </data>
   <data name="Thresholds" xml:space="preserve">
@@ -11295,7 +11295,10 @@ These options are activated:
     <comment>Errors</comment>
   </data>
   <data name="InsufficientStaffingDays" xml:space="preserve">
-    <value>Insufficient staffing for : {0}</value>
+    <value>Insufficient understaffing for : </value>
+  </data>
+  <data name="InsufficientStaffingHours" xml:space="preserve">
+    <value>Insufficient understaffing on : {0} at </value>
   </data>
   <data name="NoBudgetDefineForSomeRequestedDays" xml:space="preserve">
     <value>One or more days during this requested period {0} has no budget.</value>
@@ -11318,6 +11321,9 @@ These options are activated:
   </data>
   <data name="RequestDenyReasonPeriodOpenAfterSendRequest" xml:space="preserve">
     <value>Your Request has been denied. Day not open for requests. Next open date is {0}.</value>
+  </data>
+  <data name="SeriousUnderStaffingHours" xml:space="preserve">
+    <value>Critical Under Staffing on : {0} at </value>
   </data>
   <data name="SkillUnderStaffingValidationError" xml:space="preserve">
     <value>The request failed the understaffing validation for skill {0}. Since it would bring the needed number of resources below the required threshold.</value>

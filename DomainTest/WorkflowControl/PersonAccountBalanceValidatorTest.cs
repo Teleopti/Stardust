@@ -65,6 +65,29 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             //Assert.IsTrue(_target.Validate(absenceRequest));
         }
 
+        [Test]
+        public void ShouldResturnValidationErrorIfNotValidatedSuccessfully()
+        {
+            DateTimePeriod requestedDateTimePeriod = DateTimeFactory.CreateDateTimePeriod(new DateTime(2010, 02, 01, 0, 0, 0, DateTimeKind.Utc), 1);
+            IAbsence absence = AbsenceFactory.CreateAbsence("Holiday");
+            IAbsenceRequest absenceRequest = _personRequestFactory.CreateAbsenceRequest(absence, requestedDateTimePeriod);
+            IValidatedRequest validatedRequest = new ValidatedRequest() { IsValid = true, ValidationErrors = "" };
+
+
+            using (_mocks.Record())
+            {
+                Expect.Call(
+                    _personAccountBalanceCalculator.CheckBalance(
+                        _schedulingResultStateHolder.Schedules[absenceRequest.Person],
+                        requestedDateTimePeriod.ToDateOnlyPeriod(
+                            absenceRequest.Person.PermissionInformation.DefaultTimeZone()))).Return(false);
+
+            }
+
+            var result = _target.Validate(absenceRequest);
+            Assert.IsFalse(result.IsValid);
+        }
+
         [Test, ExpectedException(typeof(ArgumentNullException))]
         public void VerifySchedulingResultStateHolderCannotBeNull()
         {
@@ -105,6 +128,13 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 
             Assert.IsTrue(otherValidatorOfSameKind.Equals(_target));
             Assert.IsFalse(_target.Equals(otherValidator));
+        }
+
+        [Test]
+        public void ShouldGetHashCodeInReturn()
+        {
+            var result = _target.GetHashCode();
+            Assert.IsNotNull(result);
         }
     }
 }

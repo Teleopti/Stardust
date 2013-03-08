@@ -93,5 +93,12 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             var otherValidator = new AbsenceRequestNoneValidator();
             Assert.IsFalse(_target.Equals(otherValidator));
         }
+
+        [Test]
+        public void GetHashCodeCorrectly()
+        {
+            var result = _target.GetHashCode();
+            Assert.IsNotNull(result);
+        }
     }
 }

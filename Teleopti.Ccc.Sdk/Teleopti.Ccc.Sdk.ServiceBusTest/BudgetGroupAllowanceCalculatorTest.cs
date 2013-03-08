@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
                 Expect.Call(_absenceRequest.Person).Return(_person).Repeat.AtLeastOnce();
                 Expect.Call(_absenceRequest.Period).Return(longPeriod()).Repeat.AtLeastOnce();
                 Expect.Call(_budgetDayRepository.Find(null, null, _defaultDatePeriod)).IgnoreArguments().Return(new List<IBudgetDay> { budgetDay });
-                Expect.Call(budgetDay.Day).Return(_defaultDay).Repeat.Twice();
+                Expect.Call(budgetDay.Day).Return(_defaultDay).Repeat.Times(3);
                 Expect.Call(budgetDay.Allowance).Return(2d);
                 Expect.Call(budgetDay.FulltimeEquivalentHours).Return(8d);
                 Expect.Call(_scheduleProjectionReadOnlyRepository.AbsenceTimePerBudgetGroup(_defaultDatePeriod, null, null)).IgnoreArguments().

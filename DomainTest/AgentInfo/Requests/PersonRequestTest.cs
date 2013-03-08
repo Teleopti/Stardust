@@ -536,5 +536,46 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             
         }
 
+        [Test]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void GetMessageThrowExcpetionIfThereIsNoTextFormatter()
+        {
+            _target.GetMessage(null);
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void GetSubjectThrowExceptionIfThereIsNoTextFormatter()
+        {
+            _target.GetSubject(null);
+        }
+
+        [Test]
+        public void VerifyCreateMemento()
+        {
+            Assert.IsNotNull(_target.CreateMemento());
+        }
+
+        [Test]
+        public void VerifyRestore()
+        {
+            var previousState = new PersonRequest(_person);
+            _target.Restore(previousState);
+        }
+
+        [Test]
+        public void ReturnTrueIfMessageIsEmpty()
+        {
+            Assert.IsTrue(_target.Reply(null));
+        }
+
+        [Test]
+        public void VerifyUnderlyingStateId()
+        {
+            var personRequest = new PersonRequest(_person);
+            var result = PersonRequest.GetUnderlyingStateId(personRequest);
+            Assert.AreEqual(result, 3);
+        }
+        
     }
 }

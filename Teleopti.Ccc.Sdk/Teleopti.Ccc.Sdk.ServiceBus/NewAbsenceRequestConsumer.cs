@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Resources;
 using log4net;
 using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.Common;
@@ -116,7 +117,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
                 if (!HasWorkflowControlSet())
                 {
-					denyAbsenceRequest(undoRedoContainer,string.Format(_absenceRequest.Person.PermissionInformation.Culture(),UserTexts.Resources.RequestDenyReasonNoWorkflow));
+                    denyAbsenceRequest(undoRedoContainer, UserTexts.Resources.ResourceManager.GetString(
+                                                                                                        "RequestDenyReasonNoWorkflow", 
+                                                                                                        _absenceRequest.Person.PermissionInformation.Culture()));
 					
                     if (Logger.IsWarnEnabled)
 					{
@@ -194,12 +197,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
                                                                           personAccountBalanceCalculator,
                                                                           _budgetGroupAllowanceSpecification,
                                                                            _budgetGroupAllowanceCalculator);
-                    //_budgetGroupAllowanceSpecification, 
+                    
                 	_process = mergedPeriod.GetSelectedProcess(requestApprovalServiceScheduler, undoRedoContainer);
 
 					if (_process.GetType() == typeof(GrantAbsenceRequest) && alreadyAbsent)
 					{
-						denyAbsenceRequest(undoRedoContainer, string.Format(_absenceRequest.Person.PermissionInformation.Culture(),UserTexts.Resources.RequestDenyReasonAlreadyAbsent));
+						denyAbsenceRequest(undoRedoContainer, UserTexts.Resources.ResourceManager.GetString("RequestDenyReasonAlreadyAbsent", _absenceRequest.Person.PermissionInformation.Culture()));
+
 						if (Logger.IsWarnEnabled)
 						{
 							Logger.WarnFormat(CultureInfo.CurrentCulture,

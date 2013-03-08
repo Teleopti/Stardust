@@ -141,5 +141,13 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             Assert.IsTrue(otherProcessOfSameKind.Equals(_target));
             Assert.IsFalse(_target.Equals(otherProcess));
         }
+
+        [Test]
+        public void ShouldGetHashCodeInReturn()
+        {
+            var result = _target.GetHashCode();
+            Assert.IsNotNull(result);
+
+        }
     }
 }

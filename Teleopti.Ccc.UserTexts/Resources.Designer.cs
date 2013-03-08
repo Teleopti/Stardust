@@ -10059,11 +10059,20 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Insufficient staffing for : {0}.
+        ///   Looks up a localized string similar to Insufficient understaffing for : .
         /// </summary>
         public static string InsufficientStaffingDays {
             get {
                 return ResourceManager.GetString("InsufficientStaffingDays", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Insufficient understaffing on : {0} at .
+        /// </summary>
+        public static string InsufficientStaffingHours {
+            get {
+                return ResourceManager.GetString("InsufficientStaffingHours", resourceCulture);
             }
         }
         
@@ -20125,11 +20134,20 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Critical understaffing.
+        ///   Looks up a localized string similar to Critical understaffing for :.
         /// </summary>
         public static string SeriousUnderstaffing {
             get {
                 return ResourceManager.GetString("SeriousUnderstaffing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Critical Under Staffing on : {0} at .
+        /// </summary>
+        public static string SeriousUnderStaffingHours {
+            get {
+                return ResourceManager.GetString("SeriousUnderStaffingHours", resourceCulture);
             }
         }
         

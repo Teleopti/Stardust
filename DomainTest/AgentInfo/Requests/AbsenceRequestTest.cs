@@ -4,6 +4,7 @@ using System.Globalization;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.DomainTest.Helper;
 using Teleopti.Ccc.TestCommon;
@@ -85,23 +86,51 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
         }
 
         [Test]
-        public void VerifyDenySetsTextForNotification()
+        public void VerifyDenySetsTextForNotificationIfMultipleDaysAbsence()
         {
             IPerson person = PersonFactory.CreatePerson();
             PersonRequest personRequest = new PersonRequest(person, _target);
             _target.Deny(null);
             var datePattern = person.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern;
-            var notificationMessage = string.Format(person.PermissionInformation.UICulture(),
-                                                    UserTexts.Resources.AbsenceRequestHasBeenDeniedDot,
-                                                    personRequest.Request.Period.StartDateTimeLocal(
-                                                        person.PermissionInformation.DefaultTimeZone()).ToString(
-                                                            datePattern),
-                                                    personRequest.Request.Period.EndDateTimeLocal(
-                                                        person.PermissionInformation.DefaultTimeZone()).ToString(
-                                                            datePattern));
-            Assert.AreEqual(notificationMessage, _target.TextForNotification);
-            //Assert.AreEqual(AbsenceRequestHasBeenDeniedDot, _target.TextForNotification);
+
+            var culture = person.PermissionInformation.UICulture();
+            var timeZone = person.PermissionInformation.DefaultTimeZone();
+
+            //var notificationMessage = string.Format(culture, UserTexts.Resources.ResourceManager.GetString("AbsenceRequestHasBeenDeniedDot", culture),
+            //           personRequest.Request.Period.StartDateTimeLocal(timeZone).Date.ToString(
+            //                                            culture.DateTimeFormat.ShortDatePattern, culture),
+            //                                        personRequest.Request.Period.EndDateTimeLocal(timeZone).Date.ToString(
+            //                                            culture.DateTimeFormat.ShortDatePattern, culture));
+
+            //var notificationMessage = string.Format(person.PermissionInformation.UICulture(),
+            //                                        UserTexts.Resources.AbsenceRequestHasBeenDeniedDot,
+            //                                        personRequest.Request.Period.StartDateTimeLocal(
+            //                                            person.PermissionInformation.DefaultTimeZone()).ToString(
+            //                                                datePattern),
+            //                                        personRequest.Request.Period.EndDateTimeLocal(
+            //                                            person.PermissionInformation.DefaultTimeZone()).ToString(
+            //                                                datePattern));
+            Assert.IsNotEmpty(_target.TextForNotification);
         }
+
+        [Test]
+        public void VerifyDenySetsTextForNotificationIfOneDayAbsence()
+        {
+           var period = new DateTimePeriod(new DateTime(2008, 7, 16, 0, 0, 0, DateTimeKind.Utc),
+                                         new DateTime(2008, 7, 16, 0, 0, 0, DateTimeKind.Utc));
+            var absence = new Absence();
+            absence.Description = new Description("Holiday", "861");
+
+            var target = new AbsenceRequest(absence, period);
+            
+            IPerson person = PersonFactory.CreatePerson();
+            person.SetId(new Guid());
+            PersonRequest personRequest = new PersonRequest(person, target);
+            target.Deny(null);
+            Assert.IsNotEmpty(target.TextForNotification);
+        }
+
+
 
         [Test]
         public void VerifyApproveAbsenceCallWorks()
@@ -134,6 +163,42 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             Assert.AreEqual(notificationMessage, _target.TextForNotification);
             //Assert.AreEqual(AbsenceRequestForOneDayHasBeenApprovedDot, _target.TextForNotification);
 
+            mocks.VerifyAll();
+        }
+
+        [Test]
+        public void VerifyApproveOneDayAbsenceCallWorks()
+        {
+           
+            var absence = new Absence();
+            absence.Description = new Description("Holiday", "861");
+
+            MockRepository mocks = new MockRepository();
+            IRequestApprovalService requestApprovalService = mocks.StrictMock<IRequestApprovalService>();
+            IPersonRequestCheckAuthorization authorization = mocks.StrictMock<IPersonRequestCheckAuthorization>();
+            //DateTimePeriod period = new DateTimePeriod();
+            var period = new DateTimePeriod(new DateTime(2008, 7, 16, 0, 0, 0, DateTimeKind.Utc),
+                                        new DateTime(2008, 7, 16, 0, 0, 0, DateTimeKind.Utc));
+            IPerson person = PersonFactory.CreatePerson();
+            person.SetId(new Guid());
+            var target = new AbsenceRequest(absence, period);
+
+            Expect.Call(requestApprovalService.ApproveAbsence(null, period, null)).Return(new List<IBusinessRuleResponse>()).IgnoreArguments();
+            Expect.Call(() => authorization.VerifyEditRequestPermission(null)).IgnoreArguments();
+
+            mocks.ReplayAll();
+
+            PersonRequest personRequest = new PersonRequest(person, target);
+            personRequest.Pending();
+
+            IList<IBusinessRuleResponse> brokenRules = personRequest.Approve(requestApprovalService, authorization);
+            Assert.AreEqual(0, brokenRules.Count);
+            var datePattern = person.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern;
+            //var notificationMessage = string.Format(person.PermissionInformation.UICulture(),
+            //                                            UserTexts.Resources.AbsenceRequestForOneDayHasBeenApprovedDot,
+            //                                            personRequest.Request.Period.StartDateTimeLocal(person.PermissionInformation.DefaultTimeZone()).Date.ToString(
+            //                                                person.PermissionInformation.UICulture().DateTimeFormat.ShortDatePattern, person.PermissionInformation.UICulture()));
+            Assert.IsNotNullOrEmpty(target.TextForNotification);
             mocks.VerifyAll();
         }
 

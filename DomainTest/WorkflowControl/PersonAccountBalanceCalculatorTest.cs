@@ -60,5 +60,33 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             }
         }
 
+        [Test]
+        public void VerifyThatPersonDoNotHaveBalanceLeft()
+        {
+            IScheduleRange scheduleRange = _mocks.StrictMock<IScheduleRange>();
+            DateOnlyPeriod period = new DateOnlyPeriod(2010, 1, 1, 2010, 1, 1);
+            IPerson person = PersonFactory.CreatePerson("Kalle");
+            DateTimePeriod dtPeriod = period.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
+
+            using (_mocks.Record())
+            {
+                Expect.Call(scheduleRange.Period).Return(dtPeriod).Repeat.AtLeastOnce();
+                Expect.Call(scheduleRange.Person).Return(person).Repeat.AtLeastOnce();
+                Expect.Call(scheduleRange.ScheduledDayCollection(period)).Return(new List<IScheduleDay> { _scheduleDay }).
+                    Repeat.AtLeastOnce();
+                Expect.Call(_mockedAccount.Period()).Return(period).Repeat.AtLeastOnce();
+                Expect.Call(_mockedAccount.Owner).Return(_personAbsenceAccount).Repeat.AtLeastOnce();
+                Expect.Call(_personAbsenceAccount.Absence).Return(_absence).Repeat.AtLeastOnce();
+                Expect.Call(_absence.Tracker).Return(_tracker).Repeat.AtLeastOnce();
+                Expect.Call(() => _tracker.Track(_mockedAccount, _absence, new List<IScheduleDay> { _scheduleDay })).Repeat.
+                    AtLeastOnce();
+                Expect.Call(_mockedAccount.IsExceeded).Return(true).Repeat.Twice();
+            }
+            using (_mocks.Playback())
+            {
+                Assert.False(_target.CheckBalance(scheduleRange, period));
+            }
+        }
+
     }
 }

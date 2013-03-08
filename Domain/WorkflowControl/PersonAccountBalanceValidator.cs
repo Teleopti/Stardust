@@ -21,7 +21,6 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
         }
 
         public IValidatedRequest Validate(IAbsenceRequest absenceRequest)
-        //public bool Validate(IAbsenceRequest absenceRequest)
         {
             InParameter.NotNull("SchedulingResultStateHolder", SchedulingResultStateHolder);
             InParameter.NotNull("PersonAccountBalanceCalculator", PersonAccountBalanceCalculator);
@@ -34,15 +33,10 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
                                                                 person.PermissionInformation.DefaultTimeZone()));
 
             if (!validatedRequest.IsValid)
-                validatedRequest.ValidationErrors = string.Format(person.PermissionInformation.Culture(),
-                                                                  UserTexts.Resources.RequestDenyReasonPersonAccount);
-
+                validatedRequest.ValidationErrors =
+                    UserTexts.Resources.ResourceManager.GetString("RequestDenyReasonPersonAccount",
+                                                                  person.PermissionInformation.Culture());
             return validatedRequest;
-
-            //return
-            //    PersonAccountBalanceCalculator.CheckBalance(SchedulingResultStateHolder.Schedules[person],
-            //                                                absenceRequest.Period.ToDateOnlyPeriod(
-            //                                                    person.PermissionInformation.DefaultTimeZone()));
         }
 
         public IAbsenceRequestValidator CreateInstance()

@@ -364,5 +364,76 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
         {
             return MessageWillBeSentToRequestPerson() && MessageWillBeSentToTradePerson();
         }
+
+        [Test]
+        public void VerifySwapingShiftsForMoreThanOneDay()
+        {
+            var shiftTradeSwapDetail1 = new ShiftTradeSwapDetail(_requestedPerson, _tradePerson,
+                                                             new DateOnly(2008, 7, 16), new DateOnly(2008, 7, 16));
+
+            var shiftTradeSwapDetail2 = new ShiftTradeSwapDetail(_requestedPerson, _tradePerson,
+                                                             new DateOnly(2008, 7, 17), new DateOnly(2008, 7, 17));
+
+            _authorization = new PersonRequestAuthorizationCheckerForTest();
+            var target = new ShiftTradeRequest(new List<IShiftTradeSwapDetail> { shiftTradeSwapDetail1, shiftTradeSwapDetail2 });
+            
+            MockRepository mocks = new MockRepository();
+            IRequestApprovalService requestApprovalService =
+                mocks.StrictMock<IRequestApprovalService>();
+            PersonRequest personRequest = new PersonRequest(_requestedPerson, target);
+
+            Expect.Call(requestApprovalService.ApproveShiftTrade(null)).Return(new List<IBusinessRuleResponse>()).IgnoreArguments();
+
+            mocks.ReplayAll();
+
+            personRequest.Pending();
+            IList<IBusinessRuleResponse> brokenRules = personRequest.Approve(requestApprovalService, _authorization);
+            Assert.AreEqual(0, brokenRules.Count);
+            var notificationString = string.Format(UserTexts.Resources.ShiftTradeRequestForOneDayHasBeenApprovedDot,
+                                                   personRequest.RequestedDate.ToShortDateString());
+
+            //Assert.AreEqual(notificationString, target.TextForNotification);
+            Assert.IsNotNullOrEmpty(target.TextForNotification);
+            
+            mocks.VerifyAll();
+        }
+
+        [Test]
+        public void VerifyCanAddAndClearShiftTradeSwapDetailsForMultipleDays()
+        {
+            DateOnly dateOnly = new DateOnly(2009, 9, 3);
+            DateOnly dateOnly2 = new DateOnly(2009, 9, 4);
+            Assert.AreNotEqual(new DateTimePeriod(),_target.Period);
+            Assert.AreNotEqual(0,_target.ShiftTradeSwapDetails.Count);
+            _target.ClearShiftTradeSwapDetails();
+            Assert.AreEqual(0,_target.ShiftTradeSwapDetails.Count);
+            Assert.AreEqual(new DateTimePeriod(), _target.Period);
+            _target.AddShiftTradeSwapDetail(new ShiftTradeSwapDetail(_requestedPerson,_requestedPerson,dateOnly,dateOnly));
+            _target.AddShiftTradeSwapDetail(new ShiftTradeSwapDetail(_requestedPerson,_requestedPerson,dateOnly2,dateOnly2));
+            Assert.IsNotNullOrEmpty(_target.TextForNotification);
+            Assert.AreEqual(2,_target.ShiftTradeSwapDetails.Count);
+        }
+
+        [Test]
+        public void VerifyDenyForMultipleDays()
+        {
+            var shiftTradeSwapDetail1 = new ShiftTradeSwapDetail(_requestedPerson, _tradePerson,
+                                                             new DateOnly(2008, 7, 16), new DateOnly(2008, 7, 16));
+
+            var shiftTradeSwapDetail2 = new ShiftTradeSwapDetail(_requestedPerson, _tradePerson,
+                                                             new DateOnly(2008, 7, 17), new DateOnly(2008, 7, 17));
+
+            _authorization = new PersonRequestAuthorizationCheckerForTest();
+            var target = new ShiftTradeRequest(new List<IShiftTradeSwapDetail> { shiftTradeSwapDetail1, shiftTradeSwapDetail2 });
+            target.Deny(_tradePerson);
+            Assert.IsNotNull(target);
+
+            var datepattern = _requestedPerson.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern;
+            //var notificationString = string.Format(UserTexts.Resources.ShiftTradeRequestForOneDayHasBeenDeniedDot,
+            //                                       target.Period.StartDateTimeLocal(
+            //                                           _requestedPerson.PermissionInformation.DefaultTimeZone()).
+            //                                           ToString(datepattern));
+            Assert.IsNotNullOrEmpty(target.TextForNotification);
+        }
     }
 }

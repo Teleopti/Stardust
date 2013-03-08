@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.WorkflowControl
@@ -19,16 +18,8 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
             {
                 IValidatedRequest validatedRequest = absenceRequestValidator.Validate(absenceRequest);
 
-                //if (!absenceRequestValidator.Validate(absenceRequest))
                 if(! validatedRequest.IsValid)
                 {
-                    //DenyAbsenceRequest denyAbsenceRequest = new DenyAbsenceRequest
-                    //                                            {
-                    //                                                DenyReason = string.Format(absenceRequest.Person.PermissionInformation.Culture(),
-                    //                                                UserTexts.Resources.ResourceManager.GetString(absenceRequestValidator.InvalidReason)),
-                    //                                                UndoRedoContainer = UndoRedoContainer
-                    //                                            };
-
                     var denyAbsenceRequest = new DenyAbsenceRequest
                                                                 {
                                                                     DenyReason = validatedRequest.ValidationErrors,

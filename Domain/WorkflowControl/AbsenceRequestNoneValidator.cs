@@ -21,14 +21,12 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
         }
 
         public IValidatedRequest Validate(IAbsenceRequest absenceRequest)
-        //public bool Validate(IAbsenceRequest absenceRequest)
         {
             return new ValidatedRequest()
                 {
                     IsValid = true,
                     ValidationErrors = ""
                 };
-            //return true;
         }
 
         public IAbsenceRequestValidator CreateInstance()

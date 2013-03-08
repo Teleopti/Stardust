@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 {
     public class OpenAbsenceRequestPeriodExtractor : IOpenAbsenceRequestPeriodExtractor
     {
-        public IWorkflowControlSet _workflowControlSet;
+        private IWorkflowControlSet _workflowControlSet;
         private readonly IAbsence _absence;
         public DateOnly ViewpointDate { get; set; }
 

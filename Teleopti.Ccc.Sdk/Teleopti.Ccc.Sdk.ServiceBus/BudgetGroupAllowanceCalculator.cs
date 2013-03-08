@@ -26,19 +26,21 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
             _scheduleProjectionReadOnlyRepository = scheduleProjectionReadOnlyRepository;
         }
 
-        public string CheckBudgetGroup(IAbsenceRequest obj)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+        public string CheckBudgetGroup(IAbsenceRequest absenceRequest)
         {
-            var timeZone = obj.Person.PermissionInformation.DefaultTimeZone();
-            var culture = obj.Person.PermissionInformation.Culture();
-            var requestedPeriod = obj.Period.ToDateOnlyPeriod(timeZone);
-            var personPeriod = obj.Person.PersonPeriods(requestedPeriod).FirstOrDefault();
-            var invalidConfig = "";
-            var invalidDays = "";
+            var timeZone = absenceRequest.Person.PermissionInformation.DefaultTimeZone();
+            var culture = absenceRequest.Person.PermissionInformation.Culture();
+            var requestedPeriod = absenceRequest.Period.ToDateOnlyPeriod(timeZone);
+            var personPeriod = absenceRequest.Person.PersonPeriods(requestedPeriod).FirstOrDefault();
+            var invalidConfig = string.Empty;
+            var invalidDays = string.Empty;
+            var underStaffingValidationError = UserTexts.Resources.ResourceManager.GetString("InsufficientStaffingDays",culture);
 
             if (personPeriod == null || personPeriod.BudgetGroup == null)
             {
-                Logger.DebugFormat("There is no budget group for person: {0}.", obj.Person.Id);
-                invalidConfig = string.Format(obj.Person.PermissionInformation.Culture(), UserTexts.Resources.NoBudgetGroupForPerson, obj.Person.Id);
+                Logger.DebugFormat("There is no budget group for person: {0}.", absenceRequest.Person.Id);
+                invalidConfig = string.Format(culture, UserTexts.Resources.NoBudgetGroupForPerson, absenceRequest.Person.Id);
                 return invalidConfig;
 
             }
@@ -50,18 +52,19 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
             if (budgetDays == null)
             {
                 Logger.DebugFormat("There is no budget for this period {0}.", requestedPeriod);
-                invalidConfig = string.Format(obj.Person.PermissionInformation.Culture(), UserTexts.Resources.NoBudgetForThisPeriod, requestedPeriod);
+                invalidConfig = string.Format(culture, UserTexts.Resources.NoBudgetForThisPeriod, requestedPeriod);
                 return invalidConfig;
             }
             
             if (budgetDays.Count != requestedPeriod.DayCollection().Count)
             {
                 Logger.DebugFormat("One or more days during this requested period {0} has no budget.", requestedPeriod);
-                invalidConfig = string.Format(obj.Person.PermissionInformation.Culture(), UserTexts.Resources.NoBudgetDefineForSomeRequestedDays, requestedPeriod);
+                invalidConfig = string.Format(culture, UserTexts.Resources.NoBudgetDefineForSomeRequestedDays, requestedPeriod);
                 return invalidConfig;
             }
 
-            var scheduleRange = _schedulingResultStateHolder.Schedules[obj.Person];
+            var scheduleRange = _schedulingResultStateHolder.Schedules[absenceRequest.Person];
+            var count = 0;
             foreach (var budgetDay in budgetDays)
             {
                 var currentDay = budgetDay.Day;
@@ -70,22 +73,26 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
                     _scheduleProjectionReadOnlyRepository.AbsenceTimePerBudgetGroup(new DateOnlyPeriod(currentDay, currentDay),
                         budgetGroup, defaultScenario).Sum(p => p.TotalContractTime)).TotalMinutes;
                 var remainingAllowanceMinutes = allowanceMinutes - usedAbsenceMinutes;
-                var requestedAbsenceMinutes = calculateRequestedMinutes(currentDay, obj.Period, scheduleRange, personPeriod).TotalMinutes;
+                var requestedAbsenceMinutes = calculateRequestedMinutes(currentDay, absenceRequest.Period, scheduleRange, personPeriod).TotalMinutes;
                 if (remainingAllowanceMinutes < requestedAbsenceMinutes)
                 {
                     Logger.DebugFormat(
                         "There is not enough allowance for day {0}. The remaining allowance is {1} hours, but you request for {2} hours",
                         budgetDay.Day, remainingAllowanceMinutes / TimeDefinition.MinutesPerHour,
                         requestedAbsenceMinutes / TimeDefinition.MinutesPerHour);
-                    invalidDays += currentDay.ToShortDateString(culture) + ",";
+                    invalidDays += budgetDay.Day.ToShortDateString(culture) + ",";
+                    // only showing first 5 days if a person request conatins more than 5 days.
+                    count++;
+                    if (count > 5)
+                        break;
+
                 }
             }
 
-            if (invalidDays != "")
+            if (!string.IsNullOrEmpty(invalidDays))
             {
                 invalidDays = invalidDays.Substring(0, invalidDays.Length - 1);
-                invalidConfig = string.Format(culture,
-                                              UserTexts.Resources.InsufficientStaffingDays, invalidDays);
+                invalidConfig = underStaffingValidationError + invalidDays;
             }
 
             return invalidConfig;

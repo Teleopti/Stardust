@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
             while (currentTime <= endTime)
             {
-                bool layerFound = false;
+                //bool layerFound = false;
                 for (int inverseLoop = _layerCollectionOriginal.Count - 1; inverseLoop >= 0; inverseLoop--)
                 {
                     workingLayer = _layerCollectionOriginal[inverseLoop];
@@ -60,40 +60,15 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
                         };
                         workingColl.Add(newLayer);
                         currentTime = layerEndTime.AddDays(1);
-                        layerFound = true;
+                        //layerFound = true;
                         break;
                     }
                 }
-                if (!layerFound)
-                    currentTime = findNextTimeSlot(currentTime);
+                //if (!layerFound)
+                //    currentTime = findNextTimeSlot(currentTime);
             }
 
-            //if (_layerCollectionOriginal.Count == 1)
-            //{
-            //    if (_layerCollectionOriginal[0].AbsenceRequestOpenPeriod.AbsenceRequestProcess.GetType() ==
-            //        typeof (DenyAbsenceRequest))
-            //    {
-            //        var wcsDatePeriod = _openAbsenceRequestPeriodExtractor.WorkflowControlSet;
-
-            //        foreach (var absenceRequestOpenPeriod in wcsDatePeriod.AbsenceRequestOpenPeriods)
-            //        {
-            //            if (absenceRequestOpenPeriod.OpenForRequestsPeriod.EndDate < _layerCollectionOriginal[0].Period.StartDate)
-            //            {
-            //                workingColl[0].AbsenceRequestProcess = new DenyAbsenceRequest() { DenyReason = "RequestDenyReasonClosedPeriodBeforeSendRequest" };
-            //            }
-                        
-            //            if (absenceRequestOpenPeriod.OpenForRequestsPeriod.StartDate >
-            //                _layerCollectionOriginal[0].Period.EndDate)
-            //            {
-            //                workingColl[0].AbsenceRequestProcess = new DenyAbsenceRequest() { DenyReason = "RequestDenyReasonPeriodOpenAfterSend" };
-            //            }
-            //        }
-                    
-            //    }
-            //}
-            
-
-            return workingColl.Where(w => w.GetPeriod(DateOnly.Today).Intersection(limitToDateOnlyPeriod).HasValue).ToList();
+           return workingColl.Where(w => w.GetPeriod(DateOnly.Today).Intersection(limitToDateOnlyPeriod).HasValue).ToList();
         }
 
         private void AddBottomLayer(DateOnlyPeriod limitToDateOnlyPeriod)
@@ -127,20 +102,16 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
                 {
                     if (absenceRequestOpenPeriod.OpenForRequestsPeriod.EndDate < _layerCollectionOriginal[0].Period.StartDate)
                     {
-                        var message = string.Format(_cultureInfo, UserTexts.Resources.RequestDenyReasonClosedPeriodBeforeSendRequest);
-
-                        _layerCollectionOriginal[0].AbsenceRequestOpenPeriod.AbsenceRequestProcess = 
-                            new DenyAbsenceRequest() { DenyReason = message};
+                        var message = UserTexts.Resources.ResourceManager.GetString("RequestDenyReasonClosedPeriodBeforeSendRequest", _cultureInfo);
+                        _layerCollectionOriginal[0].AbsenceRequestOpenPeriod.AbsenceRequestProcess = new DenyAbsenceRequest() { DenyReason = message};
                     }
 
-                    if (absenceRequestOpenPeriod.OpenForRequestsPeriod.StartDate >
-                        _layerCollectionOriginal[0].Period.EndDate)
+                    if (absenceRequestOpenPeriod.OpenForRequestsPeriod.StartDate >_layerCollectionOriginal[0].Period.EndDate)
                     {
-                        var message = string.Format(_cultureInfo,
-                                                    UserTexts.Resources.RequestDenyReasonPeriodOpenAfterSendRequest,
-                                                    absenceRequestOpenPeriod.OpenForRequestsPeriod.StartDate.ToShortDateString(_cultureInfo));
-
-                        _layerCollectionOriginal[0].AbsenceRequestOpenPeriod.AbsenceRequestProcess = new DenyAbsenceRequest() { DenyReason = message };
+                        var message = string.Format(_cultureInfo, UserTexts.Resources.ResourceManager.GetString("RequestDenyReasonPeriodOpenAfterSendRequest", _cultureInfo), 
+                                                                                                   absenceRequestOpenPeriod.OpenForRequestsPeriod.StartDate.ToShortDateString(_cultureInfo));
+                            
+                        _layerCollectionOriginal[0].AbsenceRequestOpenPeriod.AbsenceRequestProcess = new DenyAbsenceRequest { DenyReason = message };
                     }
                 }
 
@@ -169,17 +140,17 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
             return layerEndTime;
         }
 
-        private DateOnly findNextTimeSlot(DateOnly currentTime)
-        {
-            DateOnly retTime = new DateOnly(DateTime.MaxValue);
-            foreach (DateOnlyPeriodWithAbsenceRequestPeriod layer in _layerCollectionOriginal)
-            {
-                DateOnly layerTime = layer.Period.StartDate;
-                if (layerTime > currentTime && layerTime < retTime)
-                    retTime = layerTime;
-            }
-            return retTime;
-        }
+        //private DateOnly findNextTimeSlot(DateOnly currentTime)
+        //{
+        //    DateOnly retTime = new DateOnly(DateTime.MaxValue);
+        //    foreach (DateOnlyPeriodWithAbsenceRequestPeriod layer in _layerCollectionOriginal)
+        //    {
+        //        DateOnly layerTime = layer.Period.StartDate;
+        //        if (layerTime > currentTime && layerTime < retTime)
+        //            retTime = layerTime;
+        //    }
+        //    return retTime;
+        //}
 
         private class DateOnlyPeriodWithAbsenceRequestPeriod
         {

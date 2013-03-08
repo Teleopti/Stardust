@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Domain.WorkflowControl;
@@ -19,6 +21,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
         private PersonRequestFactory _personRequestFactory;
         private IResourceOptimizationHelper _resourceOptimizationHelper;
         private IValidatedRequest _validatedRequest;
+        private IPerson _person;
 
         private ISkill _skill;
         private ISkillDay _skillDay;
@@ -38,6 +41,10 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             _target.ResourceOptimizationHelper = _resourceOptimizationHelper;
             _personRequestFactory = new PersonRequestFactory();
             _validatedRequest = new ValidatedRequest(){IsValid = true, ValidationErrors = ""};
+            _person = new Person();
+            _person.SetId(new Guid());
+            _person.PermissionInformation.SetCulture(new CultureInfo(1033));
+            _person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
         }
 
         [Test]
@@ -97,7 +104,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             IVisualLayer visualLayer = _mocks.StrictMock<IVisualLayer>();
             IList<IVisualLayer> visualLayers = new List<IVisualLayer>{visualLayer};
 			var filteredVisualLayers = _mocks.StrictMock<IFilteredVisualLayerCollection>();
-
+            
             createSkill();
             createSkillDay(requestedDateTimePeriod);
             _target.SchedulingResultStateHolder = SchedulingResultStateHolderFactory.Create(requestedDateTimePeriod, _skill, new List<ISkillDay> { _skillDay });
@@ -108,10 +115,14 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 
             using (_mocks.Record())
             {
-                _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 01), true, true);
-                _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 02), true, true);
+                //_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 01), true, true);
+                //_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 02), true, true);
+                Expect.Call(()=>_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 01), true, true)).Repeat.Times(2);
+                Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 02), true, true)).Repeat.Times(3);
+                Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 03), true, true));
                 Expect.Call(_dictionary[absenceRequest.Person]).Return(range).Repeat.AtLeastOnce();
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 2, 1))).Return(scheduleDay);
+                Expect.Call(range.ScheduledDay(new DateOnly(2010, 2, 1))).Return(scheduleDay).Repeat.Twice();
+                Expect.Call(range.ScheduledDay(new DateOnly(2010, 2, 2))).Return(scheduleDay);
                 Expect.Call(scheduleDay.ProjectionService()).Return(projectionService).Repeat.AtLeastOnce();
                 Expect.Call(projectionService.CreateProjection()).Return(visualLayerCollection).Repeat.AtLeastOnce();
                 Expect.Call(visualLayerCollection.FilterLayers(absence)).Return(filteredVisualLayers).Repeat.AtLeastOnce();
@@ -126,6 +137,52 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             }
             _mocks.VerifyAll();
         }
+
+        [Test]
+        public void CanValidateIfWeRequestedOnlyOneDayOfAbsence()
+        {
+            DateTimePeriod requestedDateTimePeriod = DateTimeFactory.CreateDateTimePeriod(new DateTime(2010, 02, 01, 0, 0, 0, DateTimeKind.Utc), 0);
+            IAbsence absence = AbsenceFactory.CreateAbsence("Holiday");
+            IAbsenceRequest absenceRequest = _personRequestFactory.CreateAbsenceRequest(absence, requestedDateTimePeriod);
+            IScheduleRange range = _mocks.StrictMock<IScheduleRange>();
+            IScheduleDay scheduleDay = _mocks.StrictMock<IScheduleDay>();
+            IProjectionService projectionService = _mocks.StrictMock<IProjectionService>();
+            IVisualLayerCollection visualLayerCollection = _mocks.StrictMock<IVisualLayerCollection>();
+            IVisualLayer visualLayer = _mocks.StrictMock<IVisualLayer>();
+            IList<IVisualLayer> visualLayers = new List<IVisualLayer> { visualLayer };
+            var filteredVisualLayers = _mocks.StrictMock<IFilteredVisualLayerCollection>();
+
+            createSkill();
+            createSkillDay(requestedDateTimePeriod);
+            _target.SchedulingResultStateHolder = SchedulingResultStateHolderFactory.Create(requestedDateTimePeriod, _skill, new List<ISkillDay> { _skillDay });
+            _target.SchedulingResultStateHolder.Schedules = _dictionary;
+
+            _validatedRequest.IsValid = false;
+            _validatedRequest.ValidationErrors = "Not Valid";
+
+            using (_mocks.Record())
+            {
+                //_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 01), true, true);
+                //_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 02), true, true);
+                Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 01), true, true)).Repeat.Times(2);
+                Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 02), true, true)).Repeat.Times(2);
+                Expect.Call(_dictionary[absenceRequest.Person]).Return(range).Repeat.AtLeastOnce();
+                Expect.Call(range.ScheduledDay(new DateOnly(2010, 2, 1))).Return(scheduleDay).Repeat.Twice();
+                Expect.Call(scheduleDay.ProjectionService()).Return(projectionService).Repeat.AtLeastOnce();
+                Expect.Call(projectionService.CreateProjection()).Return(visualLayerCollection).Repeat.AtLeastOnce();
+                Expect.Call(visualLayerCollection.FilterLayers(absence)).Return(filteredVisualLayers).Repeat.AtLeastOnce();
+                Expect.Call(filteredVisualLayers.GetEnumerator()).Return(visualLayers.GetEnumerator()).Repeat.AtLeastOnce();
+                Expect.Call(visualLayer.Period).Return(requestedDateTimePeriod).Repeat.AtLeastOnce();
+            }
+            using (_mocks.Playback())
+            {
+                var result = _target.Validate(absenceRequest);
+                Assert.IsFalse(result.IsValid);
+                //Assert.IsFalse(_target.Validate(absenceRequest));
+            }
+            _mocks.VerifyAll();
+        }
+
 
         [Test]
         public void CanValidateWithAgentInDifferentTimeZone()
@@ -152,14 +209,26 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 
             using (_mocks.Record())
             {
-                _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 01), true, true);
-                _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 02), true, true);
-                _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 02), true, true);
-                _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 03), true, true);
-                _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 03), true, true);
-                _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 04), true, true);
+                //_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 01), true, true);
+                //_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 02), true, true);
+                //_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 02), true, true);
+                //_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 03), true, true);
+                //_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 03), true, true);
+                //_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 04), true, true);
+                Expect.Call(
+                    () => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 01), true, true))
+                      .Repeat.Twice();
+                Expect.Call(
+                    () => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 02), true, true))
+                      .Repeat.Times(3);
+                Expect.Call(
+                    () => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 03), true, true))
+                      .Repeat.Times(3);
+                Expect.Call(
+                    () => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 04), true, true))
+                      .Repeat.Twice();
                 Expect.Call(_dictionary[absenceRequest.Person]).Return(range).Repeat.AtLeastOnce();
-                Expect.Call(range.ScheduledDay(new DateOnly(2010, 2, 1))).Return(scheduleDay);
+                Expect.Call(range.ScheduledDay(new DateOnly(2010, 2, 1))).Return(scheduleDay).Repeat.Twice();
                 Expect.Call(range.ScheduledDay(new DateOnly(2010, 2, 2))).Return(scheduleDay);
                 Expect.Call(range.ScheduledDay(new DateOnly(2010, 2, 3))).Return(scheduleDay);
                 Expect.Call(scheduleDay.ProjectionService()).Return(projectionService).Repeat.AtLeastOnce();
@@ -261,8 +330,26 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 			skillDay2.SetCalculatedStaffCollection(updatedValues2);
             updatedValues2.BatchCompleted();
 
-			Assert.IsTrue(StaffingThresholdValidator.ValidateUnderstaffing(_skill, new List<ISkillStaffPeriod> { skillDay1.SkillStaffPeriodCollection[0] }));
-			Assert.IsTrue(StaffingThresholdValidator.ValidateUnderstaffing(_skill, new List<ISkillStaffPeriod> { skillDay2.SkillStaffPeriodCollection[0] }));
+		    var validateUnderStaffingSkillDay1 = StaffingThresholdValidator.ValidateUnderstaffing(_skill,
+		                                                                                          new List<ISkillStaffPeriod>
+		                                                                                              {
+		                                                                                                  skillDay1
+		                                                                                              .SkillStaffPeriodCollection
+		                                                                                              [0]
+		                                                                                              }, _person);
+
+		    var validatedUnderStaffingSkillDay2 = StaffingThresholdValidator.ValidateUnderstaffing(_skill,
+		                                                                                           new List<ISkillStaffPeriod>
+		                                                                                               {
+		                                                                                                   skillDay2
+		                                                                                               .SkillStaffPeriodCollection
+		                                                                                               [0]
+		                                                                                               }, _person);
+
+            Assert.IsTrue(validateUnderStaffingSkillDay1.IsValid);
+            Assert.IsTrue(validatedUnderStaffingSkillDay2.IsValid);
+			//Assert.IsTrue(StaffingThresholdValidator.ValidateUnderstaffing(_skill, new List<ISkillStaffPeriod> { skillDay1.SkillStaffPeriodCollection[0] }));
+			//Assert.IsTrue(StaffingThresholdValidator.ValidateUnderstaffing(_skill, new List<ISkillStaffPeriod> { skillDay2.SkillStaffPeriodCollection[0] }));
 		}
 
 		[Test]
@@ -295,8 +382,51 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 		    skillDay2.SetCalculatedStaffCollection(updatedValues2);
             updatedValues2.BatchCompleted();
 
-			Assert.IsFalse(StaffingThresholdValidator.ValidateUnderstaffing(_skill, new List<ISkillStaffPeriod> { skillDay1.SkillStaffPeriodCollection[0], skillDay2.SkillStaffPeriodCollection[0] }));
+		    var validatedUnderStaffing = StaffingThresholdValidator.ValidateUnderstaffing(_skill,
+		                                                                                  new List<ISkillStaffPeriod>
+		                                                                                      {
+		                                                                                          skillDay1
+		                                                                                      .SkillStaffPeriodCollection[0],
+		                                                                                          skillDay2
+		                                                                                      .SkillStaffPeriodCollection[0]
+		                                                                                      },
+		                                                                                  _person);
+
+			Assert.IsFalse(validatedUnderStaffing.IsValid);
+            //Assert.IsFalse(StaffingThresholdValidator.ValidateUnderstaffing(_skill, new List<ISkillStaffPeriod> { skillDay1.SkillStaffPeriodCollection[0], skillDay2.SkillStaffPeriodCollection[0] }));
 		}
+
+        [Test]
+        public void ShouldValidateWhenUnderstaffingForMaxFortyPercentForOnlyDayOnly()
+        {
+            var requestedDateTimePeriod1 = DateTimeFactory.CreateDateTimePeriod(new DateTime(2010, 02, 01, 0, 0, 0, DateTimeKind.Utc), 1);
+            //var requestedDateTimePeriod2 = DateTimeFactory.CreateDateTimePeriod(new DateTime(2010, 02, 02, 0, 0, 0, DateTimeKind.Utc), 1);
+
+            _skill = SkillFactory.CreateSkill("TunaFish", SkillTypeFactory.CreateSkillType(), 15);
+            _skill.StaffingThresholds = new StaffingThresholds(new Percent(-0.2), new Percent(-0.1), new Percent(), new Percent(0.4));
+
+            var skillDay1 = SkillDayFactory.CreateSkillDay(_skill, requestedDateTimePeriod1.StartDateTime);
+
+            var skillStaffPeriod1 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(
+                requestedDateTimePeriod1, new Task(200, TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(140)),
+                ServiceAgreement.DefaultValues());
+            skillStaffPeriod1.IsAvailable = true;
+            skillDay1.SkillDayCalculator = new SkillDayCalculator(_skill, new List<ISkillDay> { skillDay1 }, requestedDateTimePeriod1.ToDateOnlyPeriod(_skill.TimeZone));
+            var updatedValues1 = new NewSkillStaffPeriodValues(new List<ISkillStaffPeriod> { skillStaffPeriod1 });
+            skillDay1.SetCalculatedStaffCollection(updatedValues1);
+            updatedValues1.BatchCompleted();
+
+            var validatedUnderStaffing = StaffingThresholdValidator.ValidateUnderstaffing(_skill,
+                                                                                          new List<ISkillStaffPeriod>
+		                                                                                      {
+		                                                                                          skillDay1
+		                                                                                      .SkillStaffPeriodCollection[0]
+		                                                                                      },
+                                                                                          _person);
+
+            Assert.IsFalse(validatedUnderStaffing.IsValid);
+            //Assert.IsFalse(StaffingThresholdValidator.ValidateUnderstaffing(_skill, new List<ISkillStaffPeriod> { skillDay1.SkillStaffPeriodCollection[0], skillDay2.SkillStaffPeriodCollection[0] }));
+        }
 
         private void createSkillDay(DateTimePeriod period)
         {
@@ -328,5 +458,112 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             Assert.IsTrue(otherValidatorOfSameKind.Equals(_target));
             Assert.IsFalse(_target.Equals(otherValidator));
         }
-    }
+
+        [Test]
+        public void ShouldGetHashCodeInReturn()
+        {
+            var result = _target.GetHashCode();
+            Assert.IsNotNull(result);
+        }
+
+        [Test]
+        public void ShouldValidatedTrueIfNotUnderStaffing()
+        {
+            DateTimePeriod requestedDateTimePeriod = DateTimeFactory.CreateDateTimePeriod(new DateTime(2010, 02, 01, 0, 0, 0, DateTimeKind.Utc), 1);
+            IAbsence absence = AbsenceFactory.CreateAbsence("Holiday");
+            IAbsenceRequest absenceRequest = _personRequestFactory.CreateAbsenceRequest(absence, requestedDateTimePeriod);
+            IScheduleRange range = _mocks.StrictMock<IScheduleRange>();
+            IScheduleDay scheduleDay = _mocks.StrictMock<IScheduleDay>();
+            IProjectionService projectionService = _mocks.StrictMock<IProjectionService>();
+            IVisualLayerCollection visualLayerCollection = _mocks.StrictMock<IVisualLayerCollection>();
+            var filteredVisualLayers = _mocks.StrictMock<IFilteredVisualLayerCollection>();
+            IVisualLayer visualLayer = _mocks.StrictMock<IVisualLayer>();
+            IList<IVisualLayer> visualLayers = new List<IVisualLayer> { visualLayer };
+
+            _validatedRequest.IsValid = true;
+            _validatedRequest.ValidationErrors = "";
+
+            createSkill();
+
+            _skillDay = SkillDayFactory.CreateSkillDay(_skill, requestedDateTimePeriod.StartDateTime);
+
+            ISkillStaffPeriod skillStaffPeriod = SkillStaffPeriodFactory.CreateSkillStaffPeriod(
+                requestedDateTimePeriod, new Task(0, TimeSpan.FromSeconds(0), TimeSpan.FromSeconds(0)),
+                ServiceAgreement.DefaultValues());
+
+            skillStaffPeriod.IsAvailable = true;
+            _skillDay.SkillDayCalculator = new SkillDayCalculator(_skill, new List<ISkillDay> { _skillDay }, requestedDateTimePeriod.ToDateOnlyPeriod(_skill.TimeZone));
+            var updatedValues = new NewSkillStaffPeriodValues(new List<ISkillStaffPeriod> (){});
+            _skillDay.SetCalculatedStaffCollection(updatedValues);
+            updatedValues.BatchCompleted();
+
+            _target.SchedulingResultStateHolder = SchedulingResultStateHolderFactory.Create(requestedDateTimePeriod, _skill, new List<ISkillDay> { _skillDay });
+            _target.SchedulingResultStateHolder.Schedules = _dictionary;
+
+            using (_mocks.Record())
+            {
+                _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 01), true, true);
+                _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 02), true, true);
+                _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 02), true, true);
+                _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 03), true, true);
+                _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 03), true, true);
+                _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 04), true, true);
+                Expect.Call(_dictionary[absenceRequest.Person]).Return(range).Repeat.AtLeastOnce();
+                Expect.Call(range.ScheduledDay(new DateOnly(2010, 2, 1))).Return(scheduleDay);
+                Expect.Call(range.ScheduledDay(new DateOnly(2010, 2, 2))).Return(scheduleDay);
+                Expect.Call(range.ScheduledDay(new DateOnly(2010, 2, 3))).Return(scheduleDay);
+                Expect.Call(scheduleDay.ProjectionService()).Return(projectionService).Repeat.AtLeastOnce();
+                Expect.Call(projectionService.CreateProjection()).Return(visualLayerCollection).Repeat.AtLeastOnce();
+                Expect.Call(visualLayerCollection.FilterLayers(absence)).Return(filteredVisualLayers).Repeat.AtLeastOnce();
+                Expect.Call(filteredVisualLayers.GetEnumerator()).Return(visualLayers.GetEnumerator()).Repeat.AtLeastOnce();
+                Expect.Call(visualLayer.Period).Return(requestedDateTimePeriod).Repeat.AtLeastOnce();
+            }
+
+            var result = _target.Validate(absenceRequest);
+            Assert.IsTrue(result.IsValid);
+        }
+
+        [Test, ExpectedException(typeof (ArgumentNullException))]
+        public void ShouldThrowExceptionIfSkillStaffPeriodListIsNull()
+        {
+            var skill = SkillFactory.CreateSkill("test");
+            StaffingThresholdValidator.ValidateSeriousUnderstaffing(skill, null, _person);
+        }
+
+        [Test, ExpectedException(typeof(ArgumentNullException))]
+        public void ShouldThrowExceptionIfSkillStaffPeriodListIsNullIValidateUnderStaffing()
+        {
+            var skill = SkillFactory.CreateSkill("test");
+            StaffingThresholdValidator.ValidateUnderstaffing(skill, null, _person);
+        }
+
+        [Test]
+        public void VerifyUnderStaffingDateString()
+        {
+            var underStaffDict = new UnderStaffingData();
+            underStaffDict.UnderStaffingDates = new Dictionary<string, IList<string>>();
+            underStaffDict.UnderStaffingDates.Add("UnderStaffing", new List<string>(){"2012-12-01, 2012-12-02, 2012-12-03"});
+            underStaffDict.UnderStaffingDates.Add("SeriousUnderStaffing", new List<string>() {"2012-12-01, 2012-12-02,2012-12-03" });
+
+            var target = new StaffingThresholdValidator();
+            var result = target.GetUnderStaffingDateString(underStaffDict, new CultureInfo(1033));
+
+            Assert.IsNotNullOrEmpty(result);
+        }
+
+        [Test]
+        public void VerifyUnderStaffingHourString()
+        {
+            var underStaffDict = new UnderStaffingData();
+            underStaffDict.UnderStaffingHours = new Dictionary<string, IList<string>>();
+            underStaffDict.UnderStaffingHours.Add("UnderStaffingHours", new List<string>() { "10:00-10:15, 10:15-10:30, 10:30-10:45" });
+            underStaffDict.UnderStaffingHours.Add("SeriousUnderStaffingHours", new List<string>() { "10:00-10:15, 10:15-10:30, 10:30-10:45" });
+
+            var target = new StaffingThresholdValidator();
+            var result = target.GetUnderStaffingHourString(underStaffDict, new CultureInfo(1033),_person.PermissionInformation.DefaultTimeZone(), new DateTime(2012,01,01));
+
+            Assert.IsNotNullOrEmpty(result);
+        }
+        
+     }
 }

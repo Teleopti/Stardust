@@ -119,6 +119,7 @@ namespace Teleopti.Interfaces.Domain
         /// <param name="resourceOptimizationHelper">The resource optimization helper.</param>
         /// <param name="personAccountBalanceCalculator">The person account balance calculator.</param>
         /// <param name="budgetGroupAllowanceSpecification">The budget group alloance specification.</param>
+        /// <param name="budgetGroupAllowanceCalculator">The budget group alloance calculator.</param>
         /// <returns></returns>
         /// <remarks>
         /// Created by: henryg
