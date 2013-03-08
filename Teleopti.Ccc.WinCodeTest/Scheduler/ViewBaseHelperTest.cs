@@ -1156,6 +1156,12 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			}
 		}
 
+		[Test, ExpectedException(typeof(ArgumentNullException))]
+		public void ShouldThrowExceptionWhenDaysIsNull()
+		{
+			ViewBaseHelper.GetPeriod(null);
+		}
+
 		[Test]
 		public void ShouldReturnPeriodFromSchedulePeriods()
 		{
