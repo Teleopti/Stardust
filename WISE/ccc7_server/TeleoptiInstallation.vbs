@@ -24,15 +24,15 @@ debug = true
 
 'Get current Wise properties
 if debug Then
-	WiseSqlServerName	= ".\teleoptiForecast"
-	WiseSqlUser			= ""
-	WiseSqlPass			= ""
-	WiseSqlAuth			= "NT"
+	WiseSqlServerName	= ".\TeleoptiForecast"
+	WiseSqlUser			= "sa"
+	WiseSqlPass			= "cadadi"
+	WiseSqlAuth			= "SQL"
 	DNS_ALIAS			= "http://Teleopti625/"
 	IS_DMZ				= "YES"
 	DB_WINGROUP			= "BUILTIN\Administrators"
 	DB_CCC7				= "TeleoptiCCC7_Demo"
-	DB_CCCAGG			= "TeleoptiCCC7Agg_Demo6"
+	DB_CCCAGG			= "TeleoptiCCC7Agg_Demo"
 	DB_ANALYTICS		= "TeleoptiAnalytics_Demo"
 	DATABASE_UPGRADE	= "YES"
 Else
@@ -52,12 +52,12 @@ End If
 
 'In debug => Run your Custom Action here:
 if debug then
-'	On Error Goto 0 'In debug; we break for any error.
+	On Error Goto 0 'In debug; we break for any error.
 	'However; ou need to set this one to "On Error Resume Next" in order to test DisplayCustomError(strMessage)
 	
-'	Call DNSHostNameOnlySet()
-'	Call DBWinGroupsGet()
-'	Call DBWinGroupCheck()
+	Call DNSHostNameOnlySet()
+	Call DBWinGroupsGet()
+	Call DBWinGroupCheck()
 	Call CheckDbStuff()
 	
 End if
@@ -146,40 +146,40 @@ Sub DBWinGroupCheck()
 End Sub 
 
 Sub CheckDbStuff()
-	Const sqlEdition	= "SELECT CONVERT(NVARCHAR(200), SERVERPROPERTY('edition'))"
-	Const isDbOwner		= "SELECT IS_ROLEMEMBER ('db_owner')"
-	Const strUpgradeErrorFound		= "You got a problem connecting to one or more database. Please go back and review your database names."
-	Const strNewDatabaseErrorFound	= "Some of the database you are trying to create already exist. Please go back and review your database names."
+	Const strUpgradeErrorFound		= "You got a problem connecting to one or more database. DB-patch might fail. Please go back and review your database names."
+	Const strNewDatabaseErrorFound	= "Some of the database you are trying to create already exist. DB-patch will fail. Please go back and review your database names."
+	
 
 	Dim admConnectString
 	Dim database
 	Dim myArray(2)
 	Dim DbError
+	Dim countDbo
 	
 	DbError=0
+	countDbo=0
 	myArray(0) = DB_CCC7
 	myArray(1) = DB_ANALYTICS
 	myArray(2) = DB_CCCAGG
 
-	'admConnection string to the server
 	admConnectString=ConnectionStringGet("master")
 	
-	If DATABASE_UPGRADE=strYES Then
-		For Each database In myArray
+	For Each database In myArray
+		If DATABASE_UPGRADE=strYES Then
 			DbError = DbError + CheckUserDB(database, admConnectString)
-		Next
-		
-		if DbError > 0 Then
-				msgbox strUpgradeErrorFound, vbOkOnly + vbExclamation, "Error connecting"
-		End If
-	Else
-		For Each database In myArray
+		Else
 			DbError = DbError + DBExist(database, admConnectString)
-		Next
-		if DbError > 0 Then
-				msgbox strNewDatabaseErrorFound, vbOkOnly + vbExclamation, "Error connecting"
 		End If
+	Next
+
+	If DbError > 0 And DATABASE_UPGRADE=strYES Then
+		msgbox strUpgradeErrorFound, vbOkOnly + vbExclamation, "Error connecting as dbo"
 	End If
+
+	If DbError > 0 And DATABASE_UPGRADE=strNO Then
+		msgbox strNewDatabaseErrorFound, vbOkOnly + vbExclamation, "Databases already exists"
+	End If
+		
 End Sub
 '====================================
 'Subs
@@ -216,11 +216,13 @@ CheckUserDB=0
 	Const strAzure		= "SQL Azure"
 	Dim strUnableToConnect
 	Dim strDatabaseDoesNotExist
+	Dim strUpgradeDboErrorFound
 	Dim userDbConnection
 	Dim objConnection
 	Dim objRecordSet
 
 	strUnableToConnect = "Sorry I can connect to the database [" &strDatabase& "]"
+	strUpgradeDboErrorFound	= "You are not dbo in database  [" &strDatabase& "] This is a requirment. Patch might fail"	
 	strDatabaseDoesNotExist = "The database name specified: [" &strDatabase& "], does not exist on this SQL Server!"
 	
 	Set objConnection = CreateObject("ADODB.Connection")
@@ -243,13 +245,16 @@ CheckUserDB=0
 			End If
 		End If	
 	End If
+
+	If Not isDbo(strDatabase) Then
+		msgbox strUpgradeDboErrorFound
+		CheckUserDB=CheckUserDB+1
+	End If
+
 End Function
 
 Public Function CheckSingleValue (strCon, strQuery) 
-
-    'init as "don't have permissions"
-	CheckSingleValue = 0
-
+On Error Resume Next
 	Dim objConnection
 	Dim objRecordSet
 	
@@ -257,6 +262,7 @@ Public Function CheckSingleValue (strCon, strQuery)
 	Set objRecordSet = CreateObject("ADODB.Recordset")
 
 	objConnection.Open strCon
+	if err.number <> 0 Then DisplayCustomError("objConnection.Open") End If	
 
 	objRecordSet.Open strQuery,objConnection
 	If Err.Number = 0 Then
@@ -405,3 +411,17 @@ Function isAzure(strAdmConnectString)
 		isAzure = true
 	End If
 End Function
+
+Function isDbo(strDatabase)
+	isDbo=false
+	Const sqlDbOwner = "SELECT IS_ROLEMEMBER ('db_owner')"
+	Dim userDbConnection
+	userDbConnection = ConnectionStringGet(strDatabase)
+	
+	If CheckSingleValue (userDbConnection, sqlDbOwner) = "1" Then
+		isDbo = true
+	Else
+		
+	End If
+End Function
+	
