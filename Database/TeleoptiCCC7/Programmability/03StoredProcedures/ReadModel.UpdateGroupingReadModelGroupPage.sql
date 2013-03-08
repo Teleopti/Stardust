@@ -107,3 +107,15 @@ BEGIN
 		ON t.id=pp.team
 END
 GO
+--=============
+--initial load
+--=============
+declare @AllGroupings nvarchar(max)
+SET @AllGroupings =
+	(
+	select Cast(Id as char(36))+','
+	from dbo.grouppage 
+	for xml path('')
+	)
+exec [ReadModel].[UpdateGroupingReadModelGroupPage] @ids=@AllGroupings
+GO
