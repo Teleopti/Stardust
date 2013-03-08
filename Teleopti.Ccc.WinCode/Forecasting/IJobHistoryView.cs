@@ -9,5 +9,6 @@ namespace Teleopti.Ccc.WinCode.Forecasting
     	void TogglePrevious(bool enabled);
     	void ToggleNext(bool enabled);
     	void SetResultDescription(string description);
+		int DetailLevel { get; }
     }
 }

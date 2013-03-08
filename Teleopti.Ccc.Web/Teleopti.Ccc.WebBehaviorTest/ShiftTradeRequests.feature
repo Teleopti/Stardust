@@ -293,7 +293,10 @@ Scenario: Show my scheduled day off
 
 Scenario: Close details when approving shift trade request
 	Given I have the role 'Full access to mytime'
-	And I have received a shift trade request from 'Some Person'
+	And I have received a shift trade request
+	| Field    | Value         |
+	| From       | Ashley Andeen	|
+	| Pending  | True          |
 	And I am viewing requests
 	When I click on the request
 	And I click the Approve button on the shift request
@@ -301,7 +304,12 @@ Scenario: Close details when approving shift trade request
 
 Scenario: Can not approve or deny shift trade request created by me
 	Given I have the role 'Full access to mytime'
-	And I have created a shift trade request to 'Some Person'
+	And I have created a shift trade request
+	| Field    | Value         |
+	| To       | Ashley Andeen	|
+	| DateTo   | 2030-01-01    |
+	| DateFrom | 2030-01-01    |
+	| Pending  | True          |
 	And I am viewing requests
 	When I click on the request
 	Then I should not see the approve button
@@ -310,8 +318,9 @@ Scenario: Can not approve or deny shift trade request created by me
 Scenario: Deny shift trade request
 	Given I have the role 'Full access to mytime'
 	And I have received a shift trade request
-	| Field		| Value		|
-	| From		| Ashley	|
+	| Field   | Value  |
+	| From    | Ashley |
+	| Pending | True   |
 	And I am viewing requests
 	When I click on the request
 	And I click the Deny button on the shift request
@@ -452,3 +461,14 @@ Scenario: Show information that we dont show schedules in a new shifttrade
 	And I am viewing requests
 	When I click on the request
 	Then I should see details with message that tells the user that the status of the shifttrade is new
+
+Scenario: Can not approve or deny shift trade request that is already approved
+	Given I have the role 'Full access to mytime'
+	And I have received a shift trade request
+	| Field			| Value         |
+	| From			| Ashley Andeen	|
+	| Approved		| True          |
+	And I am viewing requests
+	When I click on the request
+	Then I should not see the approve button
+	And I should not see the deny button

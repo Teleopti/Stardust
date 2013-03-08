@@ -376,6 +376,8 @@
     <Compile Include="Forecasting\ImportForecast\ValidateImportForecastFileCommandTest.cs" />
     <Compile Include="Forecasting\JobHistoryPresenterTest.cs" />
     <Compile Include="Forecasting\JobResultProviderTest.cs" />
+    <Compile Include="Forecasting\QuickForecast\QuickForecastModelTest.cs" />
+    <Compile Include="Forecasting\QuickForecast\QuickForecastWizardPagesTest.cs" />
     <Compile Include="Forecasting\SkillPages\SkillGeneralPresenterTest.cs" />
     <Compile Include="Grouping\CommandProviderTest.cs" />
     <Compile Include="Grouping\Commands\AddGroupPageCommandTest.cs" />
@@ -401,6 +403,7 @@
     <Compile Include="Intraday\IntradayMessageBrokerRetryTest.cs" />
     <Compile Include="Intraday\OnEventForecastMessageCommandTest.cs" />
     <Compile Include="Intraday\OnEventStatisticMessageCommandTest.cs" />
+    <Compile Include="Intraday\OpenIntradayTodayCommandTest.cs" />
     <Compile Include="Intraday\ReforecastModelTest.cs" />
     <Compile Include="Intraday\ReforecastWizardPagesTest.cs" />
     <Compile Include="Matrix\MatrixNavigationModelTest.cs" />

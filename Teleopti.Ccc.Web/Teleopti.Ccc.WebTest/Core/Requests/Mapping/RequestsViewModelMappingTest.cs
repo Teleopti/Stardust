@@ -428,6 +428,26 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 
 		}
 
+		[Test]
+		public void ShouldMapIsPending()
+		{
+			var sender = PersonFactory.CreatePerson();
+			var tradeDate = new DateOnly(2010, 1, 1);
+			var shiftTradeSwapDetail = new ShiftTradeSwapDetail(sender, _loggedOnPerson, tradeDate, tradeDate);
+			var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail> { shiftTradeSwapDetail });
+			var personRequest = new PersonRequest(_loggedOnPerson) { Subject = "Subject of request", Request = shiftTradeRequest };
+			var result = Mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
+
+			Assert.That(personRequest.IsNew);
+			Assert.That(result.IsPending, Is.False);
+
+			personRequest.ForcePending();			
+			result = Mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
+
+			Assert.That(personRequest.IsPending, Is.True);
+			Assert.That(result.IsPending, Is.True);
+		}
+
 		private static IPersonRequest createShiftTrade(IPerson from, IPerson to)
 		{
 			var tradeDate = new DateOnly(2010, 1, 1);

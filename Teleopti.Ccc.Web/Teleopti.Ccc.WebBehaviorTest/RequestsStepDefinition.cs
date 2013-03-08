@@ -25,6 +25,13 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			_page.FirstRequest.Click();
 		}
 
+		[When(@"I click the delete button on the shift trade request")]
+		public void WhenIClickTheDeleteButtonOnTheShiftTradeRequest()
+		{
+			var requestId = UserFactory.User().UserData<ExistingShiftTradeRequest>().PersonRequest.Id.Value;
+			_page.RequestDeleteButtonById(requestId).EventualClick();
+		}
+
 		[When(@"I navigate to the requests page")]
 		public void WhenINavigateToTheRequestsPage()
 		{
