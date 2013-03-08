@@ -8,18 +8,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 	public interface ITeamInfo
 	{
 		IGroupPerson GroupPerson { get;	}
-		IEnumerable<IScheduleMatrixPro> MatrixesForGroup { get; }
+		IEnumerable<IScheduleMatrixPro> MatrixesForGroup();
+		IEnumerable<IScheduleMatrixPro> MatrixesForGroupMember(int index);
 	}
 
 	public class TeamInfo : ITeamInfo
 	{
 		private readonly IGroupPerson _groupPerson;
-		private readonly IList<IScheduleMatrixPro> _matrixesForGroup;
+		private readonly IList<IList<IScheduleMatrixPro>> _matrixesForMembers;
 
-		public TeamInfo(IGroupPerson groupPerson, IList<IScheduleMatrixPro> matrixesForGroup)
+		public TeamInfo(IGroupPerson groupPerson, IList<IList<IScheduleMatrixPro>> matrixesForMembers)
 		{
 			_groupPerson = groupPerson;
-			_matrixesForGroup = matrixesForGroup;
+			_matrixesForMembers = matrixesForMembers;
 		}
 
 		public IGroupPerson GroupPerson
@@ -27,9 +28,23 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 			get { return _groupPerson; }
 		}
 
-		public IEnumerable<IScheduleMatrixPro> MatrixesForGroup
+		public IEnumerable<IScheduleMatrixPro> MatrixesForGroup()
 		{
-			get { return _matrixesForGroup; }
+			IList<IScheduleMatrixPro> ret = new List<IScheduleMatrixPro>();
+			foreach (var matrixesForMember in _matrixesForMembers)
+			{
+				foreach (var scheduleMatrixPro in matrixesForMember)
+				{
+					ret.Add(scheduleMatrixPro);
+				}
+			}
+
+			return ret;
+		}
+
+		public IEnumerable<IScheduleMatrixPro> MatrixesForGroupMember(int index)
+		{
+			return _matrixesForMembers[index];
 		}
 
 		public override int GetHashCode()

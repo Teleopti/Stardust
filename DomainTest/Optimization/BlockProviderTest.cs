@@ -39,8 +39,15 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var matrix2 = _mocks.StrictMock<IScheduleMatrixPro>();
 			var schedulingOptions = new SchedulingOptions { BlockFinderTypeForAdvanceScheduling = BlockFinderType.SingleDay };
 			var matrixes = new List<IScheduleMatrixPro> {matrix1, matrix2};
-			var teamInfo1 = new TeamInfo(groupPerson1, new List<IScheduleMatrixPro> {matrix1});
-			var teamInfo2 = new TeamInfo(groupPerson2, new List<IScheduleMatrixPro> {matrix2});
+			IList<IList<IScheduleMatrixPro>> groupMatrixes1 = new List<IList<IScheduleMatrixPro>>();
+			IList<IScheduleMatrixPro> memberMatrixes1 = new List<IScheduleMatrixPro>{ matrix1 };
+			groupMatrixes1.Add(memberMatrixes1);
+			IList<IList<IScheduleMatrixPro>> groupMatrixes2 = new List<IList<IScheduleMatrixPro>>();
+			IList<IScheduleMatrixPro> memberMatrixes2 = new List<IScheduleMatrixPro> { matrix2 };
+			groupMatrixes1.Add(memberMatrixes1);
+			groupMatrixes2.Add(memberMatrixes2);
+			var teamInfo1 = new TeamInfo(groupPerson1, groupMatrixes1);
+			var teamInfo2 = new TeamInfo(groupPerson2, groupMatrixes2);
 			var blockInfo1 = new BlockInfo(new DateOnlyPeriod(date, date));
 			var blockInfo2 = new BlockInfo(new DateOnlyPeriod(date.AddDays(1), date.AddDays(1)));
 			var teamBlockInfo1 = new TeamBlockInfo(teamInfo1, blockInfo1);

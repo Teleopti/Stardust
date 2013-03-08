@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation
 
 					case BlockFinderType.SchedulePeriod:
 				    {
-					    blockPeriod = teamInfo.MatrixesForGroup.FirstOrDefault().SchedulePeriod.DateOnlyPeriod;
+					    blockPeriod = teamInfo.MatrixesForGroup().First().SchedulePeriod.DateOnlyPeriod;
 					    break;
 				    }
 		    }
