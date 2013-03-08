@@ -155,8 +155,7 @@
 	font-family: Arial;
 }
 
-.collapse-sign,
-#Delete-template{
+.collapse-sign{
 	text-decoration: none;
 	min-width: 8px;
 	color: black;
@@ -172,5 +171,5 @@
 	vertical-align: baseline;
 }
 #Preference-add-extended-form {
-	min-width: 266px;
+	min-width: 268px;
 }

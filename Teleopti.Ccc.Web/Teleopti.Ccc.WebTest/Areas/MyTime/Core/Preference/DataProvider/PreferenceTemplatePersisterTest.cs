@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 			var target = new PreferenceTemplatePersister(preferenceTemplateRepository, null);
 			var id = Guid.NewGuid();
 			var extendedPreferenceTemplate = MockRepository.GenerateMock<IExtendedPreferenceTemplate>();
-			preferenceTemplateRepository.Stub(x => x.Load(id)).Return(extendedPreferenceTemplate);
+			preferenceTemplateRepository.Stub(x => x.Find(id)).Return(extendedPreferenceTemplate);
 
 			target.Delete(id);
 
@@ -68,23 +68,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 			var id = Guid.NewGuid();
 			var target = new PreferenceTemplatePersister(MockRepository.GenerateStub<IExtendedPreferenceTemplateRepository>(), null);
 
-			preferenceTemplateRepository.Stub(x => x.Load(id)).Return(null);
-
-			var exception = Assert.Throws<HttpException>(() => target.Delete(id));
-			exception.GetHttpCode().Should().Be(404);
-		}
-
-		[Test]
-		public void ShouldThrowHttp404OIfRequestDeniedOrApproved()
-		{
-			var preferenceTemplateRepository = MockRepository.GenerateMock<IExtendedPreferenceTemplateRepository>();
-			var extendedPreferenceTemplate = MockRepository.GenerateMock<IExtendedPreferenceTemplate>();
-			var id = Guid.NewGuid();
-			var target = new PreferenceTemplatePersister(MockRepository.GenerateStub<IExtendedPreferenceTemplateRepository>(), null);
-
-			preferenceTemplateRepository.Stub(x => x.Load(id)).Return(extendedPreferenceTemplate);
-
-			preferenceTemplateRepository.Stub(x => x.Remove(extendedPreferenceTemplate)).Throw(new DataSourceException());
+			preferenceTemplateRepository.Stub(x => x.Find(id)).Return(null);
 
 			var exception = Assert.Throws<HttpException>(() => target.Delete(id));
 			exception.GetHttpCode().Should().Be(404);

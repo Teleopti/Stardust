@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using NHibernate.Criterion;
 using Teleopti.Ccc.Domain.Repositories;
@@ -33,5 +34,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                         .List<IExtendedPreferenceTemplate>();
             return extendedPreferenceTemplates;
         }
+
+		public IExtendedPreferenceTemplate Find(Guid id)
+		{
+			var extendedPreferenceTemplate = Session.CreateCriteria(typeof(IExtendedPreferenceTemplate))
+						.Add(Restrictions.Eq("Id", id))
+						.UniqueResult<IExtendedPreferenceTemplate>();
+			return extendedPreferenceTemplate;
+		}
     }
 }

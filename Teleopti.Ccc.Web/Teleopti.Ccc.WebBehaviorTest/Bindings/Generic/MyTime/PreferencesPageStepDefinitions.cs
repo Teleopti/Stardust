@@ -368,6 +368,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			Pages.Pages.PreferencePage.ExtendedPreferenceTemplateSelectBox.Open();
 		}
 
+		[When(@"I click delete button for '(.*)'")]
+		public void WhenIClickDeleteButtonFor(string templateName)
+		{
+			Pages.Pages.PreferencePage.DeleteSpanForTemplate(templateName).EventualClick();
+		}
+
 		[When(@"I click Save as new template")]
 		public void WhenIClickSaveAsNewTemplate()
 		{
@@ -395,6 +401,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			var templates = table.CreateSet<SingleValue>();
 			templates.ForEach(preference => EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceTemplateSelectBox.Menu.Text, Is.StringContaining(preference.Value)));
 		}
+
+		[Then(@"I should not see '(.*)' in templates list")]
+		public void ThenIShouldNotSeeInTemplatesList(string name)
+		{
+			EventualAssert.That(() => Pages.Pages.PreferencePage.ExtendedPreferenceTemplateSelectBox.Menu.Text, Is.Not.StringContaining(name));
+		}
+
 		
 
 

@@ -88,3 +88,10 @@ Scenario: Display preference template name
 	And I select preference template with 'template1'
 	And I click the apply extended preferences button
 	Then I should see the preference template1 on '2013-03-07'
+
+Scenario: Delete preference template
+	Given I am viewing preferences
+	When I click the add extended preference button
+	And I click the templates select box
+	And I click delete button for 'template1'
+	Then I should not see 'template1' in templates list

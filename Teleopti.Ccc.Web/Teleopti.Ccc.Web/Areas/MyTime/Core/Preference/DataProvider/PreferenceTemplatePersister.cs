@@ -28,17 +28,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider
 
 		public void Delete(Guid templateId)
 		{
-			var template = _preferenceTemplateRepository.Load(templateId);
+			var template = _preferenceTemplateRepository.Find(templateId);
 			if (template == null)
 				throw new HttpException(404, "Preference template not found");
-			try
-			{
-				_preferenceTemplateRepository.Remove(template);
-			}
-			catch (DataSourceException)
-			{
-				throw new HttpException(404, "Preference template cannot update");
-			}
+			_preferenceTemplateRepository.Remove(template);
 		}
 	}
 }

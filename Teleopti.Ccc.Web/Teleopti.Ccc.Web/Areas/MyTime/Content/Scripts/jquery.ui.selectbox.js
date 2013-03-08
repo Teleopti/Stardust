@@ -118,7 +118,7 @@
 
 			this._menu.empty();
 			for (var i = 0; i < items.length; i++) {
-				var item = this._createMenuItem(items[i]);
+				var item = this._createMenuItem(items[i], true);
 				this._menu.append(item);
 			}
 
@@ -157,7 +157,9 @@
 			}
 		},
 
-		_createMenuItem: function (item) {
+		_createMenuItem: function (item, removable) {
+
+			var self = this._self;
 
 			if (item.label == "-")
 				item.label = "";
@@ -172,7 +174,7 @@
 					.append($('<div>').text(item.label));
 			}
 
-			var text = item.label;
+			var text;
 			var secondaryIcon = null;
 			if (item.color) {
 				text = $('<span>')
@@ -182,13 +184,30 @@
 					.addClass('ui-corner-all')
 					.css("background-color", item.color);
 			} else {
-				text = $('<div/>').text(item.label);
+				text = $('<span/>').text(item.label);
+			}
+			var removableLink = null;
+			if (removable && item.value) {
+				removableLink = $('<span>')
+					.addClass('menu-icon-delete')
+					.addClass('floatright')
+					.css("color", "grey")
+					.append('x')
+					.click(function(evt) {
+						self._trigger("removeItem", event, {
+							value: item.value
+						});
+						evt.stopPropagation();
+					});
 			}
 
 			var link = $('<a>')
 				.append(text);
 			if (secondaryIcon)
 				link.append(secondaryIcon);
+			if (removableLink) {
+				link.append(removableLink);
+			}
 
 			var listItem = $('<li>')
 				.data("selectbox-item", item)
