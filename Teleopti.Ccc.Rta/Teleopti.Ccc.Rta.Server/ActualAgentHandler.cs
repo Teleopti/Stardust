@@ -1,7 +1,8 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
+using System.Threading.Tasks;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Rta.Server
@@ -19,6 +20,9 @@ namespace Teleopti.Ccc.Rta.Server
 	public class ActualAgentHandler : IActualAgentHandler
 	{
 		private readonly IActualAgentDataHandler _actualAgentDataHandler;
+		private static readonly ConcurrentDictionary<Guid, IActualAgentState> BatchedAgents = new ConcurrentDictionary<Guid, IActualAgentState>();
+		private static readonly object LockObject = new object();
+		private static DateTime _lastSave = DateTime.UtcNow;
 
 		public ActualAgentHandler(IActualAgentDataHandler actualAgentDataHandler)
 		{
@@ -103,18 +107,24 @@ namespace Teleopti.Ccc.Rta.Server
 			if (previousState != null && newState.Equals(previousState))
 				return null;
 
-			ThreadPool.QueueUserWorkItem(saveToDataStore, new object[] { newState });
+			BatchedAgents.AddOrUpdate(personId, newState, (guid, state) => newState);
+
+			if (DateTime.UtcNow.Subtract(_lastSave) >= new TimeSpan(0, 0, 5))
+				lock (LockObject)
+					if (DateTime.UtcNow.Subtract(_lastSave) >= new TimeSpan(0, 0, 5))
+						Task.Factory.StartNew(() => saveToDataStore(BatchedAgents.Values.ToList()));
+			//ThreadPool.QueueUserWorkItem(saveToDataStore, new object[] {new List<IActualAgentState>(BatchedAgents.Values)});
+			
 
 			return newState;
 		}
 
-		private void saveToDataStore(object arg)
+		private void saveToDataStore(IEnumerable<IActualAgentState> states)
 		{
-			var argsArr = arg as object[];
-			if (argsArr == null) return;
-			if (argsArr[0] == null) return;
-			var agentState = argsArr[0] as IActualAgentState; 
-			_actualAgentDataHandler.AddOrUpdate(agentState);
+			if (states == null) return;
+			foreach (var agentState in states)
+				_actualAgentDataHandler.AddOrUpdate(agentState);
+			_lastSave = DateTime.UtcNow;
 		}
 
 		public RtaAlarmLight GetAlarm(Guid platformTypeId, string stateCode, ScheduleLayer layer, Guid businessUnitId)
@@ -135,9 +145,14 @@ namespace Teleopti.Ccc.Rta.Server
 
 		private Guid resolveStateGroupId(Guid platformTypeId, string stateCode, Guid businessUnitId)
 		{
-			var stateGroups = _actualAgentDataHandler.StateGroups().ToList();
-			var foundState = stateGroups.FirstOrDefault(s => s.StateCode == stateCode && s.BusinessUnitId == businessUnitId && s.PlatformTypeId == platformTypeId);
-			return foundState != null ? foundState.StateGroupId : Guid.Empty;
+			List<RtaStateGroupLight> outState;
+			if (_actualAgentDataHandler.StateGroups().TryGetValue(stateCode, out outState))
+			{
+				var foundstate =
+					outState.FirstOrDefault(s => s.BusinessUnitId == businessUnitId && s.PlatformTypeId == platformTypeId);
+				return foundstate != null ? foundstate.StateGroupId : Guid.Empty;
+			}
+			return Guid.Empty;
 		}
 
 		private static bool haveScheduleChanged(ScheduleLayer layer, IActualAgentState oldState)
