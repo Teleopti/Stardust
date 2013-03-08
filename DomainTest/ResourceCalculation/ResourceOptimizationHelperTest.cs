@@ -328,5 +328,37 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 				Assert.IsTrue(res);
 			}
 		}
+
+		[Test]
+		public void ShouldNotUseRegularOccupiedSeatCalculatorWhenToAddOrRemove()
+		{
+			var skillStaffPeriodHolder = _mocks.StrictMock<ISkillStaffPeriodHolder>();
+			var scheduleDay = _mocks.StrictMock<IScheduleDay>();
+			var person = PersonFactory.CreatePerson();
+			person.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.Local));
+			var dateOnlyAsDateTimeperiod = _mocks.StrictMock<IDateOnlyAsDateTimePeriod>();
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, new DateTimePeriod(2009, 2, 2, 2009, 2, 2));
+			var singleSkillDictionary = _mocks.StrictMock<ISingleSkillDictionary>();
+			_target = new ResourceOptimizationHelper(_stateHolder, _occupiedSeatCalculator,new NonBlendSkillCalculator(new NonBlendSkillImpactOnPeriodForProjection()),singleSkillDictionary);
+
+			using (_mocks.Record())
+			{
+				Expect.Call(_stateHolder.SkipResourceCalculation).Return(false).Repeat.Any();
+				Expect.Call(_stateHolder.TeamLeaderMode).Return(false).Repeat.Any();
+				Expect.Call(scheduleDay.Person).Return(person);
+				Expect.Call(scheduleDay.DateOnlyAsPeriod).Return(dateOnlyAsDateTimeperiod);
+				Expect.Call(dateOnlyAsDateTimeperiod.DateOnly).Return(new DateOnly());
+				Expect.Call(scheduleDay.AssignmentHighZOrder()).Return(pa);
+				Expect.Call(singleSkillDictionary.IsSingleSkill(person, new DateOnly())).Return(true).Repeat.AtLeastOnce();
+				Expect.Call(_stateHolder.Skills).Return(new List<ISkill>()).Repeat.AtLeastOnce();
+				Expect.Call(_stateHolder.SkillStaffPeriodHolder).Return(skillStaffPeriodHolder).Repeat.AtLeastOnce();
+				Expect.Call(skillStaffPeriodHolder.SkillSkillStaffPeriodDictionary).Return(new SkillSkillStaffPeriodExtendedDictionary()).Repeat.AtLeastOnce();	
+			}
+
+			using (_mocks.Playback())
+			{
+				_target.ResourceCalculateDate(new DateOnly(2009, 2, 2), true, true, new List<IScheduleDay>{scheduleDay}, new List<IScheduleDay>());
+			}
+		}
     }
 }
