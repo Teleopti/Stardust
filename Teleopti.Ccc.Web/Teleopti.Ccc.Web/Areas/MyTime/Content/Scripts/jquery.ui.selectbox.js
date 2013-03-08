@@ -191,8 +191,9 @@
 				removableLink = $('<span>')
 					.addClass('menu-icon-delete')
 					.addClass('floatright')
+					.css("color", "grey")
 					.append('x')
-					.click(function (evt) {
+					.click(function(evt) {
 						self._trigger("removeItem", event, {
 							value: item.value
 						});
