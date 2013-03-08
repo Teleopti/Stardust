@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 					removedVisualLayerCollections.Add(collection);
 				}
 
-				resourceCalculateDate(relevantProjections, localDate, useOccupancyAdjustment, calculateMaxSeatsAndNonBlend, considerShortBreaks, removedVisualLayerCollections, addedVisualLayerCollections, useSingleSkillCalculations);
+				resourceCalculateDate(relevantProjections, localDate, useOccupancyAdjustment, calculateMaxSeatsAndNonBlend, considerShortBreaks, removedVisualLayerCollections, addedVisualLayerCollections);
             }
             
         }
@@ -90,8 +90,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 
         private void resourceCalculateDate(IList<IVisualLayerCollection> relevantProjections, 
 			DateOnly localDate, bool useOccupancyAdjustment, bool calculateMaxSeatsAndNonBlend, bool considerShortBreaks
-			, IList<IVisualLayerCollection> toRemove, IList<IVisualLayerCollection> toAdd,
-			bool isAllSingleSkill)
+			, IList<IVisualLayerCollection> toRemove, IList<IVisualLayerCollection> toAdd)
         {
             var timePeriod = getPeriod(localDate);
             var ordinarySkills = new List<ISkill>();
