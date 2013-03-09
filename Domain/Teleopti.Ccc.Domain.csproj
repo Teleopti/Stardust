@@ -321,6 +321,7 @@
     <Compile Include="Optimization\TeamBlock\AdvanceGroupDayOffOptimizer.cs" />
     <Compile Include="Optimization\TeamBlock\AdvanceGroupIntradayOptimizer.cs" />
     <Compile Include="Optimization\TeamBlock\AdvanceGroupIntradayOptimizerExecuter.cs" />
+    <Compile Include="Optimization\TeamBlock\LockableBitArrayFactory.cs" />
     <Compile Include="Optimization\TeleoptiPeriodValueCalculator.cs" />
     <Compile Include="Optimization\WorkRuleSetExtractorForGroupOfPeople.cs" />
     <Compile Include="Optimization\ITimePeriodCanHaveShortBreak.cs" />

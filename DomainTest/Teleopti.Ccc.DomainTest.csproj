@@ -293,8 +293,8 @@
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessSwapperTest.cs" />
     <Compile Include="Optimization\StandardDeviationDataTest.cs" />
     <Compile Include="Optimization\TeamBlock\AdvancedPreferencesPersonalSettingsTest.cs" />
-    <Compile Include="Optimization\TeamBlock\AdvanceGroupDayOffOptimizerTest.cs" />
     <Compile Include="Optimization\TeamBlock\AdvanceGroupIntradayOptimizerExecuterTest.cs" />
+    <Compile Include="Optimization\TeamBlock\LockableBitArrayFactoryTest.cs" />
     <Compile Include="Optimization\TeleoptiPeriodValueCalculatorTest.cs" />
     <Compile Include="Optimization\WorkShiftRuleSetExtractorForGroupOfPeopleTest.cs" />
     <Compile Include="Optimization\RelativeDailyDifferencesByAllSkillsExtractorTest.cs" />
