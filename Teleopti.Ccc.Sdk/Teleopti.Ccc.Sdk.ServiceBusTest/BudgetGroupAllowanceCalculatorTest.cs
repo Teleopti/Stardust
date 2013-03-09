@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
                                                             _scheduleProjectionReadOnlyRepository);
         }
 
-        [Test]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void ShouldBeEmptyStringIfEnoughAllowanceLeft()
         {
             var budgetDay = _mocks.StrictMock<IBudgetDay>();
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
                                       new DateTime(2011, 12, 1, 14, 1, 0, DateTimeKind.Utc));
         }
 
-        [Test]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void ShouldBeInvalidIfNotEnoughAllowanceLeft()
         {
             var budgetDay = _mocks.StrictMock<IBudgetDay>();
