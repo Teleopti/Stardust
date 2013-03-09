@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             _mocks.VerifyAll();
         }
 
-        [Test]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Domain.Scheduling.Rules.BusinessRuleResponse.#ctor(System.Type,System.String,System.Boolean,System.Boolean,Teleopti.Interfaces.Domain.DateTimePeriod,Teleopti.Interfaces.Domain.IPerson,Teleopti.Interfaces.Domain.DateOnlyPeriod)"), Test]
         public void VerifyRollbackAndGrantRequestIfNotValid()
         {
             IUndoRedoContainer undoRedoContainer = _mocks.StrictMock<IUndoRedoContainer>();

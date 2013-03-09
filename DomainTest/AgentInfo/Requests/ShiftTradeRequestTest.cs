@@ -366,7 +366,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
         }
 
         [Test]
-        public void VerifySwapingShiftsForMoreThanOneDay()
+        public void VerifySwappingShiftsForMoreThanOneDay()
         {
             var shiftTradeSwapDetail1 = new ShiftTradeSwapDetail(_requestedPerson, _tradePerson,
                                                              new DateOnly(2008, 7, 16), new DateOnly(2008, 7, 16));
@@ -389,8 +389,8 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             personRequest.Pending();
             IList<IBusinessRuleResponse> brokenRules = personRequest.Approve(requestApprovalService, _authorization);
             Assert.AreEqual(0, brokenRules.Count);
-            var notificationString = string.Format(UserTexts.Resources.ShiftTradeRequestForOneDayHasBeenApprovedDot,
-                                                   personRequest.RequestedDate.ToShortDateString());
+            //var notificationString = string.Format(UserTexts.Resources.ShiftTradeRequestForOneDayHasBeenApprovedDot,
+            //                                       personRequest.RequestedDate.ToShortDateString());
 
             //Assert.AreEqual(notificationString, target.TextForNotification);
             Assert.IsNotNullOrEmpty(target.TextForNotification);
@@ -428,7 +428,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             target.Deny(_tradePerson);
             Assert.IsNotNull(target);
 
-            var datepattern = _requestedPerson.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern;
+            //var datepattern = _requestedPerson.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern;
             //var notificationString = string.Format(UserTexts.Resources.ShiftTradeRequestForOneDayHasBeenDeniedDot,
             //                                       target.Period.StartDateTimeLocal(
             //                                           _requestedPerson.PermissionInformation.DefaultTimeZone()).

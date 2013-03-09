@@ -85,16 +85,16 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             Assert.AreEqual(_absence.Description, _target.RequestPayloadDescription);
         }
 
-        [Test]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "personRequest"), Test]
         public void VerifyDenySetsTextForNotificationIfMultipleDaysAbsence()
         {
             IPerson person = PersonFactory.CreatePerson();
             PersonRequest personRequest = new PersonRequest(person, _target);
             _target.Deny(null);
-            var datePattern = person.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern;
+            //var datePattern = person.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern;
 
-            var culture = person.PermissionInformation.UICulture();
-            var timeZone = person.PermissionInformation.DefaultTimeZone();
+            //var culture = person.PermissionInformation.UICulture();
+            //var timeZone = person.PermissionInformation.DefaultTimeZone();
 
             //var notificationMessage = string.Format(culture, UserTexts.Resources.ResourceManager.GetString("AbsenceRequestHasBeenDeniedDot", culture),
             //           personRequest.Request.Period.StartDateTimeLocal(timeZone).Date.ToString(
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             Assert.IsNotEmpty(_target.TextForNotification);
         }
 
-        [Test]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "personRequest"), Test]
         public void VerifyDenySetsTextForNotificationIfOneDayAbsence()
         {
            var period = new DateTimePeriod(new DateTime(2008, 7, 16, 0, 0, 0, DateTimeKind.Utc),
@@ -166,7 +166,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             mocks.VerifyAll();
         }
 
-        [Test]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
         public void VerifyApproveOneDayAbsenceCallWorks()
         {
            
@@ -193,7 +193,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 
             IList<IBusinessRuleResponse> brokenRules = personRequest.Approve(requestApprovalService, authorization);
             Assert.AreEqual(0, brokenRules.Count);
-            var datePattern = person.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern;
+            //var datePattern = person.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern;
             //var notificationMessage = string.Format(person.PermissionInformation.UICulture(),
             //                                            UserTexts.Resources.AbsenceRequestForOneDayHasBeenApprovedDot,
             //                                            personRequest.Request.Period.StartDateTimeLocal(person.PermissionInformation.DefaultTimeZone()).Date.ToString(

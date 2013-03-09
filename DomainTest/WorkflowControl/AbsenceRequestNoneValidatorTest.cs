@@ -8,13 +8,13 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
     public class AbsenceRequestNoneValidatorTest
     {
         private IAbsenceRequestValidator _target;
-        private IValidatedRequest _validatedRequest;
+        //private IValidatedRequest _validatedRequest;
 
 
         [SetUp]
         public void Setup()
         {
-            _validatedRequest = new ValidatedRequest(){IsValid = true, ValidationErrors = ""};
+            //_validatedRequest = new ValidatedRequest(){IsValid = true, ValidationErrors = ""};
             _target = new AbsenceRequestNoneValidator();
         }
 

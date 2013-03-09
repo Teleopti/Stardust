@@ -10,13 +10,13 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
     {
         private IAbsenceRequestValidator _target;
         private MockRepository _mocks;
-        private IValidatedRequest _validatedRequest;
+        //private IValidatedRequest _validatedRequest;
 
         [SetUp]
         public void Setup()
         {
             _mocks = new MockRepository();
-            _validatedRequest = new ValidatedRequest(){IsValid = true, ValidationErrors = ""};
+            //_validatedRequest = new ValidatedRequest(){IsValid = true, ValidationErrors = ""};
             _target = new BudgetGroupAllowanceValidator();
         }
 

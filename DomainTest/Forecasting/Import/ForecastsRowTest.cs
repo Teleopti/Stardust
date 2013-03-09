@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Import
             Assert.That(forecastsRow.Shrinkage, Is.Null);
         }
 
-        [Test]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
         public void ShouldReturnString()
         {
             var tasks = 12;

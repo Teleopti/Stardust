@@ -138,8 +138,8 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             _mocks.VerifyAll();
         }
 
-        [Test]
-        public void CanValidateIfWeRequestedOnlyOneDayOfAbsence()
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+        public void CanValidateIfRequestedOnlyOneDayOfAbsence()
         {
             DateTimePeriod requestedDateTimePeriod = DateTimeFactory.CreateDateTimePeriod(new DateTime(2010, 02, 01, 0, 0, 0, DateTimeKind.Utc), 0);
             IAbsence absence = AbsenceFactory.CreateAbsence("Holiday");
@@ -466,8 +466,8 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             Assert.IsNotNull(result);
         }
 
-        [Test]
-        public void ShouldValidatedTrueIfNotUnderStaffing()
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+        public void ShouldValidatedTrueIfNotUnderstaffing()
         {
             DateTimePeriod requestedDateTimePeriod = DateTimeFactory.CreateDateTimePeriod(new DateTime(2010, 02, 01, 0, 0, 0, DateTimeKind.Utc), 1);
             IAbsence absence = AbsenceFactory.CreateAbsence("Holiday");
@@ -531,14 +531,14 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
         }
 
         [Test, ExpectedException(typeof(ArgumentNullException))]
-        public void ShouldThrowExceptionIfSkillStaffPeriodListIsNullIValidateUnderStaffing()
+        public void ShouldThrowExceptionIfSkillStaffPeriodListArgumentIsNull()
         {
             var skill = SkillFactory.CreateSkill("test");
             StaffingThresholdValidator.ValidateUnderstaffing(skill, null, _person);
         }
 
-        [Test]
-        public void VerifyUnderStaffingDateString()
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
+        public void VerifyUnderstaffingDateString()
         {
             var underStaffDict = new UnderStaffingData();
             underStaffDict.UnderStaffingDates = new Dictionary<string, IList<string>>();
@@ -552,7 +552,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
         }
 
         [Test]
-        public void VerifyUnderStaffingHourString()
+        public void VerifyUnderstaffingHourString()
         {
             var underStaffDict = new UnderStaffingData();
             underStaffDict.UnderStaffingHours = new Dictionary<string, IList<string>>();

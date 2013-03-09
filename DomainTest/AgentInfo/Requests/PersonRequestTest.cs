@@ -538,7 +538,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 
         [Test]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void GetMessageThrowExcpetionIfThereIsNoTextFormatter()
+        public void GetMessageThrowExceptionIfThereIsNoTextFormatter()
         {
             _target.GetMessage(null);
         }

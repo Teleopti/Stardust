@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 
 
         [Test]
-        public void VerifyThatWorkFlowControlSetIsInTheConstructor()
+        public void VerifyThatWorkflowControlSetIsInTheConstructor()
         {
             Assert.IsNotNull(_target.WorkflowControlSet);
         }
