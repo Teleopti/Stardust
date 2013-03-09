@@ -229,10 +229,6 @@
     <Compile Include="Helper\NoFormatting.cs" />
     <Compile Include="Helper\NormalizeText.cs" />
     <Compile Include="Helper\StringExtensions.cs" />
-    <Compile Include="Optimization\AdvancedPreferencesPersonalSettings.cs" />
-    <Compile Include="Optimization\AdvanceGroupDayOffOptimizer.cs" />
-    <Compile Include="Optimization\AdvanceGroupIntradayOptimizer.cs" />
-    <Compile Include="Optimization\AdvanceGroupIntradayOptimizerExecuter.cs" />
     <Compile Include="Optimization\TeamBlockDayOffOptimizerService.cs" />
     <Compile Include="Optimization\TeamBlockIntradayDecisionMaker.cs" />
     <Compile Include="Optimization\BlockDayOffOptimizer.cs" />
@@ -321,6 +317,10 @@
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessSwapper.cs" />
     <Compile Include="Optimization\ShiftsPreferencesPersonalSettings.cs" />
     <Compile Include="Optimization\StandardDeviationData.cs" />
+    <Compile Include="Optimization\TeamBlock\AdvancedPreferencesPersonalSettings.cs" />
+    <Compile Include="Optimization\TeamBlock\AdvanceGroupDayOffOptimizer.cs" />
+    <Compile Include="Optimization\TeamBlock\AdvanceGroupIntradayOptimizer.cs" />
+    <Compile Include="Optimization\TeamBlock\AdvanceGroupIntradayOptimizerExecuter.cs" />
     <Compile Include="Optimization\TeleoptiPeriodValueCalculator.cs" />
     <Compile Include="Optimization\WorkRuleSetExtractorForGroupOfPeople.cs" />
     <Compile Include="Optimization\ITimePeriodCanHaveShortBreak.cs" />

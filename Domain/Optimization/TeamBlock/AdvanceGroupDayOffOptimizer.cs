@@ -1,14 +1,11 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.DayOffPlanning;
-using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.Optimization
+namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 {
 	public interface IAdvanceGroupDayOffOptimizer
 	{

@@ -13,6 +13,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
+using Teleopti.Ccc.Domain.Scheduling.WorkShiftCalculation;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Common;
@@ -414,6 +415,15 @@ namespace Teleopti.Ccc.Win.Scheduling
 			//        rollbackMatrixChanges(matrixOriginalStateContainer, rollbackService);
 			//}
         }
+
+		private void optimizeTeamBlockDaysOff()
+		{
+			ITeamBlockDayOffOptimizerService teamBlockDayOffOptimizerService = 
+				new TeamBlockDayOffOptimizerService(_container.Resolve<ITeamInfoFactory>(),
+					_container.Resolve<IScheduleMatrixLockableBitArrayConverter>(),
+					_container.Resolve<IScheduleResultDataExtractorProvider>(),
+					_container.Resolve<ISmartDayOffBackToLegalStateService>());
+		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		private void optimizeDaysOff(

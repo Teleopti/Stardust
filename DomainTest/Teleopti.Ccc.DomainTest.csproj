@@ -212,14 +212,11 @@
     <Compile Include="Helper\StringExtensionsTest.cs" />
     <Compile Include="Infrastructure\PagingDetailTest.cs" />
     <Compile Include="Infrastructure\PagingTest.cs" />
-    <Compile Include="Optimization\AdvancedPreferencesPersonalSettingsTest.cs" />
-    <Compile Include="Optimization\AdvanceGroupDayOffOptimizerTest.cs" />
     <Compile Include="Optimization\TeamBlockIntradayDecisionMakerTest.cs" />
     <Compile Include="Optimization\BlockDayOffOptimizerContainerTest.cs" />
     <Compile Include="Optimization\BlockDayOffOptimizationServiceTest.cs" />
     <Compile Include="Optimization\BlockOptimizerBlockCleanerTest.cs" />
     <Compile Include="Optimization\BlockDayOffOptimizerTest.cs" />
-    <Compile Include="Optimization\AdvanceGroupIntradayOptimizerExecuterTest.cs" />
     <Compile Include="Optimization\BlockProviderTest.cs" />
     <Compile Include="Optimization\DayOffOptimizerPreMoveResultPredictorTest.cs" />
     <Compile Include="Optimization\GroupDayOffOptimizationResourceHelperTest.cs" />
@@ -295,6 +292,9 @@
     <Compile Include="Optimization\IsSignificantPartFullDayAbsenceOrDayOffSpecificationTest.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessSwapperTest.cs" />
     <Compile Include="Optimization\StandardDeviationDataTest.cs" />
+    <Compile Include="Optimization\TeamBlock\AdvancedPreferencesPersonalSettingsTest.cs" />
+    <Compile Include="Optimization\TeamBlock\AdvanceGroupDayOffOptimizerTest.cs" />
+    <Compile Include="Optimization\TeamBlock\AdvanceGroupIntradayOptimizerExecuterTest.cs" />
     <Compile Include="Optimization\TeleoptiPeriodValueCalculatorTest.cs" />
     <Compile Include="Optimization\WorkShiftRuleSetExtractorForGroupOfPeopleTest.cs" />
     <Compile Include="Optimization\RelativeDailyDifferencesByAllSkillsExtractorTest.cs" />

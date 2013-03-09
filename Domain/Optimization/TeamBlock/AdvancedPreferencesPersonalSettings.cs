@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using Teleopti.Ccc.Domain.SystemSetting;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.Optimization
+namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 {
 	[Serializable]
 	public class AdvancedPreferencesPersonalSettings : SettingValue

@@ -1,6 +1,6 @@
-﻿using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.Optimization
+namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 {
 	public interface IAdvanceGroupIntradayOptimizer
 	{
