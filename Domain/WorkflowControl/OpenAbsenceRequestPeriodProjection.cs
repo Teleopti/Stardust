@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
             while (currentTime <= endTime)
             {
-                //bool layerFound = false;
+                bool layerFound = false;
                 for (int inverseLoop = _layerCollectionOriginal.Count - 1; inverseLoop >= 0; inverseLoop--)
                 {
                     workingLayer = _layerCollectionOriginal[inverseLoop];
@@ -60,12 +60,12 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
                         };
                         workingColl.Add(newLayer);
                         currentTime = layerEndTime.AddDays(1);
-                        //layerFound = true;
+                        layerFound = true;
                         break;
                     }
                 }
-                //if (!layerFound)
-                //    currentTime = findNextTimeSlot(currentTime);
+                if (!layerFound)
+                    currentTime = findNextTimeSlot(currentTime);
             }
 
            return workingColl.Where(w => w.GetPeriod(DateOnly.Today).Intersection(limitToDateOnlyPeriod).HasValue).ToList();
@@ -140,17 +140,17 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
             return layerEndTime;
         }
 
-        //private DateOnly findNextTimeSlot(DateOnly currentTime)
-        //{
-        //    DateOnly retTime = new DateOnly(DateTime.MaxValue);
-        //    foreach (DateOnlyPeriodWithAbsenceRequestPeriod layer in _layerCollectionOriginal)
-        //    {
-        //        DateOnly layerTime = layer.Period.StartDate;
-        //        if (layerTime > currentTime && layerTime < retTime)
-        //            retTime = layerTime;
-        //    }
-        //    return retTime;
-        //}
+        private DateOnly findNextTimeSlot(DateOnly currentTime)
+        {
+            DateOnly retTime = new DateOnly(DateTime.MaxValue);
+            foreach (DateOnlyPeriodWithAbsenceRequestPeriod layer in _layerCollectionOriginal)
+            {
+                DateOnly layerTime = layer.Period.StartDate;
+                if (layerTime > currentTime && layerTime < retTime)
+                    retTime = layerTime;
+            }
+            return retTime;
+        }
 
         private class DateOnlyPeriodWithAbsenceRequestPeriod
         {
