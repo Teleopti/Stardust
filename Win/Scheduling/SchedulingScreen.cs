@@ -3913,6 +3913,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 						IList<IPerson> selectedPersons =
 							new PersonListExtractorFromScheduleParts(selectedSchedules).ExtractPersons().ToList();
 						_groupDayOffOptimizerHelper.TeamGroupReOptimize(selectedPeriod, selectedPersons, _container.Resolve<IOptimizationPreferences>());
+						break;
 					}
 
 					if (optimizerPreferences.Extra.UseBlockScheduling)

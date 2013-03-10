@@ -436,11 +436,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 					_container.Resolve<IDayOffDecisionMaker>());
 
 			ITeamBlockDayOffOptimizerService teamBlockDayOffOptimizerService = 
-				new TeamBlockDayOffOptimizerService(_container.Resolve<ITeamInfoFactory>(),
+				new TeamBlockDayOffOptimizerService(
+					_container.Resolve<ITeamInfoFactory>(),
 					_container.Resolve<ILockableBitArrayFactory>(),
 					_container.Resolve<IScheduleResultDataExtractorProvider>(),
 					dayOffBackToLegalStateService,
-					_container.Resolve<ISchedulingOptionsCreator>());
+					_container.Resolve<ISchedulingOptionsCreator>(),
+					_container.Resolve<ILockableBitArrayChangesTracker>()
+					);
 
 			teamBlockDayOffOptimizerService.OptimizeDaysOff(allMatrixes, selectedPeriod, selectedPersons, optimizationPreferences);
 		}

@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             builder.RegisterType<GroupMatrixHelper>().As<IGroupMatrixHelper>().InstancePerLifetimeScope();
             builder.RegisterType<GroupMatrixContainerCreator>().As<IGroupMatrixContainerCreator>().InstancePerLifetimeScope();
 
-            builder.RegisterType<LockableBitArrayChangesTracker>().As<ILockableBitArrayChangesTracker>().InstancePerLifetimeScope();
+            
             builder.RegisterType<GroupDayOffOptimizerCreator>().As<IGroupDayOffOptimizerCreator>().InstancePerLifetimeScope();
 
 			builder.RegisterType<GroupMatrixContainerCreator>().As<IGroupMatrixContainerCreator>().InstancePerLifetimeScope();
@@ -213,6 +213,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 	        builder.RegisterType<OfficialWeekendDays>().As<IOfficialWeekendDays>();
 	        builder.RegisterType<CMSBOneFreeWeekendMax5WorkingDaysDecisionMaker>().As<IDayOffDecisionMaker>();
 	        builder.RegisterType<SchedulingOptionsCreator>().As<ISchedulingOptionsCreator>();
+	        builder.RegisterType<LockableBitArrayChangesTracker>().As<ILockableBitArrayChangesTracker>();
 
 
 			registerWorkShiftFilters(builder);

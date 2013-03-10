@@ -23,18 +23,23 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IScheduleResultDataExtractorProvider _scheduleResultDataExtractorProvider;
 		private readonly ISmartDayOffBackToLegalStateService _smartDayOffBackToLegalStateService;
 		private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
+		private readonly ILockableBitArrayChangesTracker _lockableBitArrayChangesTracker;
 
-		public TeamBlockDayOffOptimizerService(ITeamInfoFactory teamInfoFactory, 
-												ILockableBitArrayFactory lockableBitArrayFactory,
-												IScheduleResultDataExtractorProvider scheduleResultDataExtractorProvider,
-												ISmartDayOffBackToLegalStateService smartDayOffBackToLegalStateService,
-												ISchedulingOptionsCreator schedulingOptionsCreator)
+		public TeamBlockDayOffOptimizerService(
+			ITeamInfoFactory teamInfoFactory, 				
+			ILockableBitArrayFactory lockableBitArrayFactory,
+			IScheduleResultDataExtractorProvider scheduleResultDataExtractorProvider,
+			ISmartDayOffBackToLegalStateService smartDayOffBackToLegalStateService,
+			ISchedulingOptionsCreator schedulingOptionsCreator,
+			ILockableBitArrayChangesTracker lockableBitArrayChangesTracker
+			)
 		{
 			_teamInfoFactory = teamInfoFactory;
 			_lockableBitArrayFactory = lockableBitArrayFactory;
 			_scheduleResultDataExtractorProvider = scheduleResultDataExtractorProvider;
 			_smartDayOffBackToLegalStateService = smartDayOffBackToLegalStateService;
 			_schedulingOptionsCreator = schedulingOptionsCreator;
+			_lockableBitArrayChangesTracker = lockableBitArrayChangesTracker;
 		}
 
 		public void OptimizeDaysOff(IList<IScheduleMatrixPro> allPersonMatrixList, 
@@ -67,8 +72,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 					if (resultingArray.Equals(originalArray))
 						continue;
 
+					// find out what have changed
+					IList<DateOnly> addedDaysOff = _lockableBitArrayChangesTracker.DaysOffAdded(resultingArray, originalArray, matrix, optimizationPreferences.DaysOff.ConsiderWeekBefore);
+					IList<DateOnly> removedDaysOff = _lockableBitArrayChangesTracker.DaysOffRemoved(resultingArray, originalArray, matrix, optimizationPreferences.DaysOff.ConsiderWeekBefore);
 
 					// execute do moves
+
 					// ev back to legal state?
 					// if possible reschedule block without clearing
 					// else
@@ -107,6 +116,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			return originalArray;
 		}
 
+
+		// create factory of this
 		private static IEnumerable<IDayOffDecisionMaker> createDecisionMakers(
 			ILockableBitArray scheduleMatrixArray,
 			IOptimizationPreferences optimizerPreferences)

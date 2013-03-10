@@ -1177,25 +1177,24 @@ namespace Teleopti.Ccc.Win.Scheduling
                 OptimizerHelperHelper.CreateDecisionMakers(scheduleMatrixArray, optimizerPreferences);
             IScheduleResultDataExtractor scheduleResultDataExtractor = OptimizerHelperHelper.CreatePersonalSkillsDataExtractor(optimizerPreferences.Advanced, scheduleMatrix);
 
-            IDayOffBackToLegalStateFunctions dayOffBackToLegalStateFunctions = new DayOffBackToLegalStateFunctions(scheduleMatrixArray);
-			IDayOffDecisionMaker cmsbOneFreeWeekendMax5WorkingDaysDecisionMaker = new CMSBOneFreeWeekendMax5WorkingDaysDecisionMaker(new OfficialWeekendDays(), new TrueFalseRandomizer());
-            ISmartDayOffBackToLegalStateService dayOffBackToLegalStateService = new SmartDayOffBackToLegalStateService(dayOffBackToLegalStateFunctions, daysOffPreferences, 25, cmsbOneFreeWeekendMax5WorkingDaysDecisionMaker);
+			ISmartDayOffBackToLegalStateService dayOffBackToLegalStateService = 
+				new SmartDayOffBackToLegalStateService(
+					_container.Resolve<IDayOffBackToLegalStateFunctions>(), 
+					daysOffPreferences,
+					25, 
+					_container.Resolve<IDayOffDecisionMaker>());
 
-            var effectiveRestrictionCreator = _container.Resolve<IEffectiveRestrictionCreator>();
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true, true);
 
             var dayOffOptimizerConflictHandler = new DayOffOptimizerConflictHandler(scheduleMatrix, scheduleService,
-                                                                                    effectiveRestrictionCreator,
+                                                                                    _container.Resolve<IEffectiveRestrictionCreator>(),
                                                                                     rollbackServiceDayOffConflict,
 																					resourceCalculateDelayer);
-
-            var dayOffOptimizerValidator = _container.Resolve<IDayOffOptimizerValidator>();
 
             var restrictionChecker = new RestrictionChecker();
             var optimizationUserPreferences = _container.Resolve<IOptimizationPreferences>();
             var optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(scheduleMatrix, restrictionChecker, optimizationUserPreferences, originalStateContainer);
 
-            var schedulingOptionsSyncronizer = new SchedulingOptionsCreator();
 			var resourceOptimizationHelper = _container.Resolve<IResourceOptimizationHelper>();
 			IDeleteAndResourceCalculateService deleteAndResourceCalculateService =
 				new DeleteAndResourceCalculateService(new DeleteSchedulePartService(_stateHolder), resourceOptimizationHelper);
@@ -1220,15 +1219,15 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                   optimizerPreferences,
                                                   periodValueCalculatorForAllSkills,
                                                   workShiftBackToLegalStateService,
-                                                  effectiveRestrictionCreator,
+                                                  _container.Resolve<IEffectiveRestrictionCreator>(),
                                                   _resourceOptimizationHelper,
                                                   new ResourceCalculateDaysDecider(),
-                                                  dayOffOptimizerValidator,
+												  _container.Resolve<IDayOffOptimizerValidator>(),
                                                   dayOffOptimizerConflictHandler,
                                                   originalStateContainer,
                                                   optimizerOverLimitDecider,
                                                   nightRestWhiteSpotSolverService,
-                                                  schedulingOptionsSyncronizer,
+												  _container.Resolve<ISchedulingOptionsCreator>(),
 												  mainShiftOptimizeActivitySpecificationSetter,
 												  dayOffOptimizerPreMoveResultPredictor);
 
