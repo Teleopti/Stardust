@@ -11,9 +11,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 	public interface ITeamBlockDayOffOptimizerService
 	{
 		void OptimizeDaysOff(IList<IScheduleMatrixPro> allPersonMatrixList, 
-								DateOnlyPeriod selectedPeriod,
-								IList<IPerson> selectedPersons, 
-								IOptimizationPreferences optimizationPreferences);
+			DateOnlyPeriod selectedPeriod,
+			IList<IPerson> selectedPersons, 
+			IOptimizationPreferences optimizationPreferences,
+			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService);
 	}
 
 	public class TeamBlockDayOffOptimizerService : ITeamBlockDayOffOptimizerService
@@ -24,6 +25,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly ISmartDayOffBackToLegalStateService _smartDayOffBackToLegalStateService;
 		private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
 		private readonly ILockableBitArrayChangesTracker _lockableBitArrayChangesTracker;
+		private readonly ISchedulingResultStateHolder _stateHolder;
 
 		public TeamBlockDayOffOptimizerService(
 			ITeamInfoFactory teamInfoFactory, 				
@@ -31,7 +33,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IScheduleResultDataExtractorProvider scheduleResultDataExtractorProvider,
 			ISmartDayOffBackToLegalStateService smartDayOffBackToLegalStateService,
 			ISchedulingOptionsCreator schedulingOptionsCreator,
-			ILockableBitArrayChangesTracker lockableBitArrayChangesTracker
+			ILockableBitArrayChangesTracker lockableBitArrayChangesTracker,
+			ISchedulingResultStateHolder stateHolder
 			)
 		{
 			_teamInfoFactory = teamInfoFactory;
@@ -40,12 +43,14 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_smartDayOffBackToLegalStateService = smartDayOffBackToLegalStateService;
 			_schedulingOptionsCreator = schedulingOptionsCreator;
 			_lockableBitArrayChangesTracker = lockableBitArrayChangesTracker;
+			_stateHolder = stateHolder;
 		}
 
 		public void OptimizeDaysOff(IList<IScheduleMatrixPro> allPersonMatrixList, 
 									DateOnlyPeriod selectedPeriod,
 		                            IList<IPerson> selectedPersons, 
-									IOptimizationPreferences optimizationPreferences)
+									IOptimizationPreferences optimizationPreferences,
+									ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
 		{
 			ISchedulingOptions schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
 			// create a list of all teamInfos
@@ -76,7 +81,22 @@ namespace Teleopti.Ccc.Domain.Optimization
 					IList<DateOnly> addedDaysOff = _lockableBitArrayChangesTracker.DaysOffAdded(resultingArray, originalArray, matrix, optimizationPreferences.DaysOff.ConsiderWeekBefore);
 					IList<DateOnly> removedDaysOff = _lockableBitArrayChangesTracker.DaysOffRemoved(resultingArray, originalArray, matrix, optimizationPreferences.DaysOff.ConsiderWeekBefore);
 
-					// execute do moves
+					if (optimizationPreferences.Extra.KeepSameDaysOffInTeam) // do it on every team member
+					{
+						foreach (var person in teamInfo.GroupPerson.GroupMembers)
+						{
+							// Does the predictor beleve in this?
+
+							// execute do moves
+							foreach (var dateOnly in removedDaysOff)
+							{
+								IScheduleDay scheduleDay = _stateHolder.Schedules[person].ScheduledDay(dateOnly);
+								scheduleDay.DeleteDayOff();
+								schedulePartModifyAndRollbackService.Modify(scheduleDay);
+							}
+						}
+					}
+
 
 					// ev back to legal state?
 					// if possible reschedule block without clearing

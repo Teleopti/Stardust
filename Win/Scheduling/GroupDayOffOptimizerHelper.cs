@@ -442,10 +442,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 					_container.Resolve<IScheduleResultDataExtractorProvider>(),
 					dayOffBackToLegalStateService,
 					_container.Resolve<ISchedulingOptionsCreator>(),
-					_container.Resolve<ILockableBitArrayChangesTracker>()
+					_container.Resolve<ILockableBitArrayChangesTracker>(),
+					_container.Resolve<ISchedulingResultStateHolder>()
 					);
 
-			teamBlockDayOffOptimizerService.OptimizeDaysOff(allMatrixes, selectedPeriod, selectedPersons, optimizationPreferences);
+			teamBlockDayOffOptimizerService.OptimizeDaysOff(allMatrixes, selectedPeriod, selectedPersons, optimizationPreferences,
+			                                                _container.Resolve<ISchedulePartModifyAndRollbackService>());
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
