@@ -1,11 +1,9 @@
-﻿
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
-using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
@@ -15,34 +13,36 @@ namespace Teleopti.Ccc.Domain.Optimization
 		void OptimizeDaysOff(IList<IScheduleMatrixPro> allPersonMatrixList, 
 								DateOnlyPeriod selectedPeriod,
 								IList<IPerson> selectedPersons, 
-								ISchedulingOptions schedulingOptions,
 								IOptimizationPreferences optimizationPreferences);
 	}
 
 	public class TeamBlockDayOffOptimizerService : ITeamBlockDayOffOptimizerService
 	{
 		private readonly ITeamInfoFactory _teamInfoFactory;
-		private readonly IScheduleMatrixLockableBitArrayConverter _converter;
+		private readonly ILockableBitArrayFactory _lockableBitArrayFactory;
 		private readonly IScheduleResultDataExtractorProvider _scheduleResultDataExtractorProvider;
 		private readonly ISmartDayOffBackToLegalStateService _smartDayOffBackToLegalStateService;
+		private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
 
 		public TeamBlockDayOffOptimizerService(ITeamInfoFactory teamInfoFactory, 
-												IScheduleMatrixLockableBitArrayConverter converter,
+												ILockableBitArrayFactory lockableBitArrayFactory,
 												IScheduleResultDataExtractorProvider scheduleResultDataExtractorProvider,
-												ISmartDayOffBackToLegalStateService smartDayOffBackToLegalStateService)
+												ISmartDayOffBackToLegalStateService smartDayOffBackToLegalStateService,
+												ISchedulingOptionsCreator schedulingOptionsCreator)
 		{
 			_teamInfoFactory = teamInfoFactory;
-			_converter = converter;
+			_lockableBitArrayFactory = lockableBitArrayFactory;
 			_scheduleResultDataExtractorProvider = scheduleResultDataExtractorProvider;
 			_smartDayOffBackToLegalStateService = smartDayOffBackToLegalStateService;
+			_schedulingOptionsCreator = schedulingOptionsCreator;
 		}
 
 		public void OptimizeDaysOff(IList<IScheduleMatrixPro> allPersonMatrixList, 
 									DateOnlyPeriod selectedPeriod,
 		                            IList<IPerson> selectedPersons, 
-									ISchedulingOptions schedulingOptions, 
 									IOptimizationPreferences optimizationPreferences)
 		{
+			ISchedulingOptions schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
 			// create a list of all teamInfos
 			var allTeamInfoListOnStartDate = new HashSet<ITeamInfo>();
 			foreach (var selectedPerson in selectedPersons)
@@ -56,11 +56,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 			{
 				foreach (var matrix in teamInfo.MatrixesForGroupMember(0))
 				{
-					ILockableBitArray originalArray = _converter.Convert(optimizationPreferences.DaysOff.ConsiderWeekBefore,
-																   optimizationPreferences.DaysOff.ConsiderWeekAfter);
+					ILockableBitArray originalArray = _lockableBitArrayFactory.ConvertFromMatrix(optimizationPreferences.DaysOff.ConsiderWeekBefore,
+																   optimizationPreferences.DaysOff.ConsiderWeekAfter, matrix);
 
 					IScheduleResultDataExtractor scheduleResultDataExtractor =
-							_scheduleResultDataExtractorProvider.CreatePersonalSkillDataExtractor(matrix);
+							_scheduleResultDataExtractorProvider.CreatePersonalSkillDataExtractor(matrix, optimizationPreferences.Advanced);
 
 					ILockableBitArray resultingArray = tryFindMoves(originalArray, scheduleResultDataExtractor, optimizationPreferences);
 
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IEnumerable<IDayOffDecisionMaker> decisionMakers = createDecisionMakers(originalArray, optimizationPreferences);
 			foreach (var dayOffDecisionMaker in decisionMakers)
 			{
-				ILockableBitArray workingBitArray = (ILockableBitArray)originalArray.Clone();
+				var workingBitArray = (ILockableBitArray)originalArray.Clone();
 
 				if (!dayOffDecisionMaker.Execute(workingBitArray, scheduleResultDataExtractor.Values()))
 				{

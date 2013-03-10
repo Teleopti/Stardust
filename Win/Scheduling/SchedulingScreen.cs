@@ -3875,11 +3875,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 
 			_groupPagePerDateHolder.ShiftCategoryFairnessGroupPagePerDate = _container.Resolve<IGroupPageCreator>().CreateGroupPagePerDate(groupPagePeriod.DayCollection(), _container.Resolve<IGroupScheduleGroupPageDataProvider>(), selectedGroupPage);
+			var currentPersonTimeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
+			var selectedPeriod = new DateOnlyPeriod(OptimizerHelperHelper.GetStartDateInSelectedDays(selectedSchedules, currentPersonTimeZone), OptimizerHelperHelper.GetEndDateInSelectedDays(selectedSchedules, currentPersonTimeZone));
 
 			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizerPreferences);
 			IList<IScheduleMatrixPro> allMatrixes = new List<IScheduleMatrixPro>();
 			switch (options.OptimizationMethod)
 			{
+
 				case OptimizationMethod.BackToLegalState:
 					IList<IDayOffTemplate> displayList = (from item in _schedulerState.CommonStateHolder.DayOffs
 														  where ((IDeleteTag)item).IsDeleted == false
@@ -3887,8 +3890,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					_scheduleOptimizerHelper.DaysOffBackToLegalState(scheduleMatrixOriginalStateContainers, _backgroundWorkerOptimization, displayList[0], false, _optimizerOriginalPreferences.SchedulingOptions, options.DaysOffPreferences);
 					_optimizationHelperWin.ResourceCalculateMarkedDays(e, null, _optimizerOriginalPreferences.SchedulingOptions.ConsiderShortBreaks, true);
 					IList<IScheduleMatrixPro> matrixList = OptimizerHelperHelper.CreateMatrixList(selectedSchedules, _schedulerState.SchedulingResultState, _container);
-					var currentPersonTimeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
-					var selectedPeriod = new DateOnlyPeriod(OptimizerHelperHelper.GetStartDateInSelectedDays(selectedSchedules, currentPersonTimeZone), OptimizerHelperHelper.GetEndDateInSelectedDays(selectedSchedules, currentPersonTimeZone));
+					
 
 
 					if (optimizerPreferences.Extra.UseTeams)
@@ -3904,6 +3906,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 						allMatrixes = OptimizerHelperHelper.CreateMatrixListAll(_schedulerState, _container);
 						_groupDayOffOptimizerHelper.ReOptimize(_backgroundWorkerOptimization, selectedSchedules, allMatrixes);
 						break;
+					}
+
+					if (optimizerPreferences.Extra.BlockFinderTypeForAdvanceOptimization != BlockFinderType.None)
+					{
+						IList<IPerson> selectedPersons =
+							new PersonListExtractorFromScheduleParts(selectedSchedules).ExtractPersons().ToList();
+						_groupDayOffOptimizerHelper.TeamGroupReOptimize(selectedPeriod, selectedPersons, _container.Resolve<IOptimizationPreferences>());
 					}
 
 					if (optimizerPreferences.Extra.UseBlockScheduling)

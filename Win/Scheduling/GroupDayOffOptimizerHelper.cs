@@ -7,6 +7,7 @@ using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -44,6 +45,12 @@ namespace Teleopti.Ccc.Win.Scheduling
             _scheduleDayChangeCallback = _container.Resolve<IScheduleDayChangeCallback>();
             _groupPersonBuilderForOptimization = _container.Resolve<IGroupPersonBuilderForOptimization>();
         }
+
+		public void TeamGroupReOptimize(DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences)
+		{
+			if(optimizationPreferences.General.OptimizationStepDaysOff)
+				optimizeTeamBlockDaysOff(selectedPeriod, selectedPersons, optimizationPreferences);
+		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "matrixListForIntradayOptimization"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
         public void ReOptimize(BackgroundWorker backgroundWorker, IList<IScheduleDay> selectedDays, IList<IScheduleMatrixPro> allMatrixes )
@@ -242,8 +249,8 @@ namespace Teleopti.Ccc.Win.Scheduling
                 var optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(matrix, new RestrictionChecker(),
                                                                                               optimizationPreferences,
                                                                                               originalStateContainer);
-                var dataExtractorProvider = new ScheduleResultDataExtractorProvider(optimizationPreferences.Advanced);
-                var personalSkillsDataExtractor = dataExtractorProvider.CreatePersonalSkillDataExtractor(matrix);
+                var dataExtractorProvider = new ScheduleResultDataExtractorProvider();
+				var personalSkillsDataExtractor = dataExtractorProvider.CreatePersonalSkillDataExtractor(matrix, optimizationPreferences.Advanced);
                 IPeriodValueCalculatorProvider periodValueCalculatorProvider = new PeriodValueCalculatorProvider();
                 var periodValueCalculator = periodValueCalculatorProvider.CreatePeriodValueCalculator(optimizationPreferences.Advanced, personalSkillsDataExtractor);
 
@@ -417,13 +424,25 @@ namespace Teleopti.Ccc.Win.Scheduling
 			//}
         }
 
-		private void optimizeTeamBlockDaysOff()
+		private void optimizeTeamBlockDaysOff(DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences)
 		{
+			var allMatrixes = OptimizerHelperHelper.CreateMatrixListAll(_schedulerState, _container);
+
+			ISmartDayOffBackToLegalStateService dayOffBackToLegalStateService
+				= new SmartDayOffBackToLegalStateService(
+					_container.Resolve<IDayOffBackToLegalStateFunctions>(), 
+					optimizationPreferences.DaysOff,
+					100, 
+					_container.Resolve<IDayOffDecisionMaker>());
+
 			ITeamBlockDayOffOptimizerService teamBlockDayOffOptimizerService = 
 				new TeamBlockDayOffOptimizerService(_container.Resolve<ITeamInfoFactory>(),
-					_container.Resolve<IScheduleMatrixLockableBitArrayConverter>(),
+					_container.Resolve<ILockableBitArrayFactory>(),
 					_container.Resolve<IScheduleResultDataExtractorProvider>(),
-					_container.Resolve<ISmartDayOffBackToLegalStateService>());
+					dayOffBackToLegalStateService,
+					_container.Resolve<ISchedulingOptionsCreator>());
+
+			teamBlockDayOffOptimizerService.OptimizeDaysOff(allMatrixes, selectedPeriod, selectedPersons, optimizationPreferences);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
@@ -539,17 +558,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 
             var dayOffOptimizerValidator = _container.Resolve<IDayOffOptimizerValidator>();
             var resourceCalculateDaysDecider = _container.Resolve<IResourceCalculateDaysDecider>();
-
             var restrictionChecker = new RestrictionChecker();
             var optimizationPreferences = _container.Resolve<IOptimizationPreferences>();
-        	IScheduleResultDataExtractorProvider scheduleResultDataExtractorProvider = new ScheduleResultDataExtractorProvider(optimizerPreferences.Advanced);
-        	var lockableBitArrayChangesTracker =
-        		_container.Resolve<ILockableBitArrayChangesTracker>();
+	        var scheduleResultDataExtractorProvider = _container.Resolve<IScheduleResultDataExtractorProvider>();
+        	var lockableBitArrayChangesTracker = _container.Resolve<ILockableBitArrayChangesTracker>();
 			var groupSchedulingService = _container.Resolve<IGroupSchedulingService>();
-        	//var groupMatrixHelper = _container.Resolve<IGroupMatrixHelper>();
         	var groupMatrixContainerCreator = _container.Resolve<IGroupMatrixContainerCreator>();
-        	var groupPersonConsistentChecker =
-        		_container.Resolve<IGroupPersonConsistentChecker>();
+        	var groupPersonConsistentChecker = _container.Resolve<IGroupPersonConsistentChecker>();
         	var resourceOptimizationHelper = _container.Resolve<IResourceOptimizationHelper>();
 			var mainShiftOptimizeActivitySpecificationSetter = new MainShiftOptimizeActivitySpecificationSetter();
         	IGroupMatrixHelper groupMatrixHelper = new GroupMatrixHelper(groupMatrixContainerCreator,

@@ -102,8 +102,8 @@ namespace Teleopti.Ccc.Win.Scheduling
             DateOnlyPeriod selectedPeriod,
             ISchedulingResultStateHolder stateHolder)
         {
-            IScheduleResultDataExtractorProvider dataExtractorProvider = new ScheduleResultDataExtractorProvider(advancedPreferences);
-            IScheduleResultDataExtractor allSkillsDataExtractor = dataExtractorProvider.CreateAllSkillsDataExtractor(selectedPeriod, stateHolder);
+            IScheduleResultDataExtractorProvider dataExtractorProvider = new ScheduleResultDataExtractorProvider();
+            IScheduleResultDataExtractor allSkillsDataExtractor = dataExtractorProvider.CreateAllSkillsDataExtractor(selectedPeriod, stateHolder, advancedPreferences);
             return allSkillsDataExtractor;
         }
 
@@ -112,8 +112,8 @@ namespace Teleopti.Ccc.Win.Scheduling
             IAdvancedPreferences advancedPreferences,
             IScheduleMatrixPro scheduleMatrix)
         {
-            IScheduleResultDataExtractorProvider dataExtractorProvider = new ScheduleResultDataExtractorProvider(advancedPreferences);
-            return dataExtractorProvider.CreatePersonalSkillDataExtractor(scheduleMatrix);
+            IScheduleResultDataExtractorProvider dataExtractorProvider = new ScheduleResultDataExtractorProvider();
+            return dataExtractorProvider.CreatePersonalSkillDataExtractor(scheduleMatrix, advancedPreferences);
         }
 
         public static DateOnlyPeriod GetSelectedPeriod(IEnumerable<IScheduleDay> scheduleDays)
@@ -200,6 +200,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			return CreateMatrixList(allSchedules, schedulerState.SchedulingResultState, container);
 		}
 
+		[Obsolete("Never used")]
 		public static IList<IScheduleMatrixPro> CreateMatrixList(ClipHandler clipHandler, ISchedulingResultStateHolder resultStateHolder, IComponentContext container)
         {
             if (clipHandler == null) throw new ArgumentNullException("clipHandler");
@@ -313,6 +314,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			return retList;
         }
 
+		[Obsolete("Never used")]
         public static void SetConsiderShortBreaks(ClipHandler clipHandler, DateOnlyPeriod period, IReschedulingPreferences options, IComponentContext container)
         {
             IEnumerable<IPerson> persons = CreatePersonsList(clipHandler);

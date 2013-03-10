@@ -1,8 +1,10 @@
 using Autofac;
 using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Ccc.DayOffPlanning.Scheduling;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -116,9 +118,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			builder.RegisterType<ScheduleRestrictionExtractor>().As<IScheduleRestrictionExtractor>().InstancePerLifetimeScope();
 			builder.RegisterType<ScheduleDayEquator>().As<IScheduleDayEquator>().InstancePerLifetimeScope();
 
-	        registerWorkShiftFilters(builder);
-			registerWorkShiftSelector(builder);
-			registerTeamBlockCommon(builder);
+	        
                     
             builder.RegisterType<GroupSchedulingService>().As<IGroupSchedulingService>().InstancePerLifetimeScope();
             builder.RegisterType<GroupPersonsBuilder>().As<IGroupPersonsBuilder>().InstancePerLifetimeScope();
@@ -206,79 +206,62 @@ namespace Teleopti.Ccc.Win.Scheduling
         	builder.RegisterType<MissingDaysOffScheduler>().As<IMissingDaysOffScheduler>().InstancePerDependency();
 			builder.RegisterType<TeamDayOffScheduler>().As<ITeamDayOffScheduler>().InstancePerDependency();
         	builder.RegisterType<DaysOffSchedulingService>().As<IDaysOffSchedulingService>().InstancePerDependency();
-			
 
+	        builder.RegisterType<ScheduleResultDataExtractorProvider>().As<IScheduleResultDataExtractorProvider>();
+	        builder.RegisterType<DayOffBackToLegalStateFunctions>().As<IDayOffBackToLegalStateFunctions>();
+	        builder.RegisterType<TrueFalseRandomizer>().As<ITrueFalseRandomizer>();
+	        builder.RegisterType<OfficialWeekendDays>().As<IOfficialWeekendDays>();
+	        builder.RegisterType<CMSBOneFreeWeekendMax5WorkingDaysDecisionMaker>().As<IDayOffDecisionMaker>();
+	        builder.RegisterType<SchedulingOptionsCreator>().As<ISchedulingOptionsCreator>();
+
+
+			registerWorkShiftFilters(builder);
+			registerWorkShiftSelector(builder);
+			registerTeamBlockCommon(builder);
+			registerTeamBlockDayOptimizerService(builder);
         }
 
 		private static void registerTeamBlockCommon(ContainerBuilder builder)
 		{
-			builder.RegisterType<GroupPersonSkillAggregator>().As<IGroupPersonSkillAggregator>().InstancePerDependency();
-			builder.RegisterType<DynamicBlockFinder>().As<IDynamicBlockFinder>().InstancePerDependency();
-			builder.RegisterType<TeamBlockInfoFactory>().As<ITeamBlockInfoFactory>().InstancePerDependency();
-			builder.RegisterType<TeamInfoFactory>().As<ITeamInfoFactory>().InstancePerDependency();
+			builder.RegisterType<GroupPersonSkillAggregator>().As<IGroupPersonSkillAggregator>();
+			builder.RegisterType<DynamicBlockFinder>().As<IDynamicBlockFinder>();
+			builder.RegisterType<TeamBlockInfoFactory>().As<ITeamBlockInfoFactory>();
+			builder.RegisterType<TeamInfoFactory>().As<ITeamInfoFactory>();
 		}
 
 		private static void registerTeamBlockDayOptimizerService(ContainerBuilder builder)
 		{
-			
+			builder.RegisterType<LockableBitArrayFactory>().As<ILockableBitArrayFactory>();
 		}
 
-		private static void registerWorkShiftSelector(ContainerBuilder builder)
-		{
-			builder.RegisterType<WorkShiftPeriodValueCalculator>()
-				   .As<IWorkShiftPeriodValueCalculator>()
-				   .InstancePerDependency();
-			builder.RegisterType<WorkShiftLengthValueCalculator>()
-				   .As<IWorkShiftLengthValueCalculator>()
-				   .InstancePerDependency();
-			builder.RegisterType<WorkShiftValueCalculator>().As<IWorkShiftValueCalculator>().InstancePerDependency();
-			builder.RegisterType<EqualWorkShiftValueDecider>().As<IEqualWorkShiftValueDecider>().InstancePerDependency();
-			builder.RegisterType<WorkShiftSelector>().As<IWorkShiftSelector>().InstancePerDependency();
-		}
+	    private static void registerWorkShiftSelector(ContainerBuilder builder)
+	    {
+		    builder.RegisterType<WorkShiftPeriodValueCalculator>().As<IWorkShiftPeriodValueCalculator>();
+		    builder.RegisterType<WorkShiftLengthValueCalculator>().As<IWorkShiftLengthValueCalculator>();
+		    builder.RegisterType<WorkShiftValueCalculator>().As<IWorkShiftValueCalculator>();
+		    builder.RegisterType<EqualWorkShiftValueDecider>().As<IEqualWorkShiftValueDecider>();
+		    builder.RegisterType<WorkShiftSelector>().As<IWorkShiftSelector>();
+	    }
 
 	    private static void registerWorkShiftFilters(ContainerBuilder builder)
 	    {
-		    builder.RegisterType<ActivityRestrictionsShiftFilter>()
-		           .As<IActivityRestrictionsShiftFilter>()
-		           .InstancePerLifetimeScope();
-		    builder.RegisterType<BusinessRulesShiftFilter>().As<IBusinessRulesShiftFilter>().InstancePerLifetimeScope();
-		    builder.RegisterType<CommonMainShiftFilter>().As<ICommonMainShiftFilter>().InstancePerLifetimeScope();
-		    builder.RegisterType<ContractTimeShiftFilter>().As<IContractTimeShiftFilter>().InstancePerLifetimeScope();
-		    builder.RegisterType<DisallowedShiftCategoriesShiftFilter>()
-		           .As<IDisallowedShiftCategoriesShiftFilter>()
-		           .InstancePerLifetimeScope();
-		    builder.RegisterType<EarliestEndTimeLimitationShiftFilter>()
-		           .As<IEarliestEndTimeLimitationShiftFilter>()
-		           .InstancePerLifetimeScope();
-		    builder.RegisterType<EffectiveRestrictionShiftFilter>()
-		           .As<IEffectiveRestrictionShiftFilter>()
-		           .InstancePerLifetimeScope();
-		    builder.RegisterType<LatestStartTimeLimitationShiftFilter>()
-		           .As<ILatestStartTimeLimitationShiftFilter>()
-		           .InstancePerLifetimeScope();
-		    builder.RegisterType<MainShiftOptimizeActivitiesSpecificationShiftFilter>()
-		           .As<IMainShiftOptimizeActivitiesSpecificationShiftFilter>()
-		           .InstancePerLifetimeScope();
-		    builder.RegisterType<NotOverWritableActivitiesShiftFilter>()
-		           .As<INotOverWritableActivitiesShiftFilter>()
-		           .InstancePerLifetimeScope();
-		    builder.RegisterType<PersonalShiftsShiftFilter>().As<IPersonalShiftsShiftFilter>().InstancePerLifetimeScope();
-		    builder.RegisterType<RuleSetToShiftsGenerator>().As<IRuleSetToShiftsGenerator>().InstancePerLifetimeScope();
-		    builder.RegisterType<ShiftCategoryRestrictionShiftFilter>()
-		           .As<IShiftCategoryRestrictionShiftFilter>()
-		           .InstancePerLifetimeScope();
-		    builder.RegisterType<ShiftProjectionCachesFromAdjustedRuleSetBagShiftFilter>()
-		           .As<IShiftProjectionCachesFromAdjustedRuleSetBagShiftFilter>()
-		           .InstancePerLifetimeScope();
-		    builder.RegisterType<ValidDateTimePeriodShiftFilter>()
-		           .As<IValidDateTimePeriodShiftFilter>()
-		           .InstancePerLifetimeScope();
-		    builder.RegisterType<TimeLimitsRestrictionShiftFilter>()
-		           .As<ITimeLimitsRestrictionShiftFilter>()
-		           .InstancePerLifetimeScope();
-		    builder.RegisterType<WorkTimeLimitationShiftFilter>()
-		           .As<IWorkTimeLimitationShiftFilter>()
-		           .InstancePerLifetimeScope();
+		    builder.RegisterType<ActivityRestrictionsShiftFilter>().As<IActivityRestrictionsShiftFilter>();
+		    builder.RegisterType<BusinessRulesShiftFilter>().As<IBusinessRulesShiftFilter>();
+		    builder.RegisterType<CommonMainShiftFilter>().As<ICommonMainShiftFilter>();
+		    builder.RegisterType<ContractTimeShiftFilter>().As<IContractTimeShiftFilter>();
+		    builder.RegisterType<DisallowedShiftCategoriesShiftFilter>().As<IDisallowedShiftCategoriesShiftFilter>();
+		    builder.RegisterType<EarliestEndTimeLimitationShiftFilter>().As<IEarliestEndTimeLimitationShiftFilter>();
+		    builder.RegisterType<EffectiveRestrictionShiftFilter>().As<IEffectiveRestrictionShiftFilter>();
+		    builder.RegisterType<LatestStartTimeLimitationShiftFilter>().As<ILatestStartTimeLimitationShiftFilter>();
+		    builder.RegisterType<MainShiftOptimizeActivitiesSpecificationShiftFilter>().As<IMainShiftOptimizeActivitiesSpecificationShiftFilter>();
+		    builder.RegisterType<NotOverWritableActivitiesShiftFilter>().As<INotOverWritableActivitiesShiftFilter>();
+		    builder.RegisterType<PersonalShiftsShiftFilter>().As<IPersonalShiftsShiftFilter>();
+		    builder.RegisterType<RuleSetToShiftsGenerator>().As<IRuleSetToShiftsGenerator>();
+		    builder.RegisterType<ShiftCategoryRestrictionShiftFilter>().As<IShiftCategoryRestrictionShiftFilter>();
+		    builder.RegisterType<ShiftProjectionCachesFromAdjustedRuleSetBagShiftFilter>().As<IShiftProjectionCachesFromAdjustedRuleSetBagShiftFilter>();
+		    builder.RegisterType<ValidDateTimePeriodShiftFilter>().As<IValidDateTimePeriodShiftFilter>();
+		    builder.RegisterType<TimeLimitsRestrictionShiftFilter>().As<ITimeLimitsRestrictionShiftFilter>();
+		    builder.RegisterType<WorkTimeLimitationShiftFilter>().As<IWorkTimeLimitationShiftFilter>();
 	    }
     }
 }
