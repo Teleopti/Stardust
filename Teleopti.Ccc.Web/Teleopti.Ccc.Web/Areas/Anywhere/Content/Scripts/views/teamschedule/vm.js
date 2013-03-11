@@ -33,7 +33,13 @@ define([
                 read: function() {
                     return self.SelectedDateInternal();
                 },
-                write: function(value) {
+                write: function (value) {
+                    
+                    if (value == undefined) {
+                        value = moment().sod();
+                    } else {
+                        value = moment(value, 'YYYYMMDD');
+                    }
                     if (self.SelectedDateInternal() == undefined || value.toDate() != self.SelectedDateInternal().toDate()) {
                         self.SelectedDateInternal(value);
                     }

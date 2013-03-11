@@ -32,7 +32,7 @@ define([
 		}, null, "gotoagent");
 
 		var loadSchedules = function () {
-		    console.log("LOADING SCHEDULES (ONCE PLEASE)");
+		    //console.log("LOADING SCHEDULES (ONCE PLEASE)");
 		    subscriptions.subscribeTeamSchedule(
                 teamSchedule.SelectedTeam(),
                 helpers.Date.AsUTCDate(teamSchedule.SelectedDate().toDate()),
@@ -65,7 +65,7 @@ define([
 		};
 
 		var loadPersonsAndSchedules = function () {
-		    console.log("LOADING PERSONS (ONCE PLEASE)");
+		    //console.log("LOADING PERSONS (ONCE PLEASE)");
 		    $.ajax({
 		        url: 'Person/PeopleInTeam',
 		        cache: false,
@@ -87,7 +87,7 @@ define([
 		};
 
 		var loadTeams = function () {
-		    console.log("LOADING TEAMS (ONCE PLEASE)");
+		    //console.log("LOADING TEAMS (ONCE PLEASE)");
 		    $.ajax({
 		        url: 'Person/AvailableTeams',
 		        cache: false,
@@ -96,9 +96,9 @@ define([
 		            date: teamSchedule.SelectedDate().toDate().toJSON()
 		        },
 		        success: function (data, textStatus, jqXHR) {
-		            console.log("set teams");
+		            //console.log("set teams");
 		            teamSchedule.SetTeams(data.Teams);
-		            console.log("select first team");
+		            //console.log("select first team");
 		            teamSchedule.SelectedTeam(teamSchedule.Teams()[0].Id);
 		            loadPersonsAndSchedules();
 		        }
@@ -109,7 +109,7 @@ define([
 		return {
 		    initialize: function (options) {
 
-		        console.log("INIT!");
+		        //console.log("INIT!");
 		        
 				options.renderHtml(view);
 
@@ -125,7 +125,7 @@ define([
 					.ready(resize);
 
 				teamSchedule.SelectedTeam.subscribe(function () {
-				    console.log("selected team changed " + teamSchedule.Loading());
+				    //console.log("selected team changed " + teamSchedule.Loading());
 				    if (teamSchedule.Loading())
 				        return;
 				    else
@@ -133,7 +133,7 @@ define([
 				});
 
 			    teamSchedule.SelectedDate.subscribe(function() {
-			        console.log("selected date changed " + teamSchedule.Loading());
+			        //console.log("selected date changed " + teamSchedule.Loading());
 			        if (teamSchedule.Loading())
 			            return;
 			        navigation.GoToTeamSchedule(teamSchedule.SelectedTeam(), teamSchedule.SelectedDate());
@@ -163,17 +163,9 @@ define([
 		    },
 		    
 		    display: function (options) {
-		        
-		        var date = options.date;
-		        if (date == undefined) {
-		            date = moment().sod();
-		        } else {
-		            date = moment(date, 'YYYYMMDD');
-		        }
-
 		        teamSchedule.Loading(true);
 		        
-		        teamSchedule.SelectedDate(date);
+		        teamSchedule.SelectedDate(options.date);
 		        
 		        if (options.id != undefined && teamSchedule.Teams().length != 0)
 		            loadPersonsAndSchedules();
