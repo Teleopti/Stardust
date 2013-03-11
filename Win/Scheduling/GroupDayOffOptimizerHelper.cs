@@ -424,9 +424,48 @@ namespace Teleopti.Ccc.Win.Scheduling
 			//}
         }
 
+		private IGroupPersonBuilderForOptimization callGroupPage(ISchedulingOptions schedulingOptions)
+		{
+			IGroupPageDataProvider groupPageDataProvider = _container.Resolve<IGroupScheduleGroupPageDataProvider>();
+			var groupPagePerDateHolder = _container.Resolve<IGroupPagePerDateHolder>();
+			if (_schedulerState.LoadedPeriod != null)
+			{
+				IList<DateOnly> dates =
+					_schedulerState.LoadedPeriod.Value.ToDateOnlyPeriod(TeleoptiPrincipal.Current.Regional.TimeZone).
+						DayCollection();
+				groupPagePerDateHolder.GroupPersonGroupPagePerDate =
+					_container.Resolve<IGroupPageCreator>().CreateGroupPagePerDate(dates,
+																				   groupPageDataProvider,
+																				   schedulingOptions.GroupOnGroupPageForLevelingPer,
+																				   true);
+			}
+			IGroupPersonFactory groupPersonFactory = new GroupPersonFactory();
+			IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization =
+				new GroupPersonBuilderForOptimization(_schedulerState.SchedulingResultState, groupPersonFactory,
+													  groupPagePerDateHolder);
+			return groupPersonBuilderForOptimization;
+		}
+
 		private void optimizeTeamBlockDaysOff(DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences)
 		{
 			var allMatrixes = OptimizerHelperHelper.CreateMatrixListAll(_schedulerState, _container);
+
+			var schedulingOptionsCreator = new SchedulingOptionsCreator();
+			var schedulingOptions = schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
+
+			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true,
+																		schedulingOptions.ConsiderShortBreaks);
+			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService =
+				new SchedulePartModifyAndRollbackService(_stateHolder, _scheduleDayChangeCallback,
+														 new ScheduleTagSetter(
+															 schedulingOptions.TagToUseOnScheduling));
+			var teamScheduling = new TeamScheduling(resourceCalculateDelayer, schedulePartModifyAndRollbackService);
+
+			ITeamBlockScheduler teamBlockScheduler =
+				new TeamBlockScheduler(_container.Resolve<ISkillDayPeriodIntervalDataGenerator>(),
+									   _container.Resolve<IRestrictionAggregator>(),
+									   _container.Resolve<IWorkShiftFilterService>(), teamScheduling,
+									   _container.Resolve<IWorkShiftSelector>());
 
 			ISmartDayOffBackToLegalStateService dayOffBackToLegalStateService
 				= new SmartDayOffBackToLegalStateService(
@@ -435,19 +474,36 @@ namespace Teleopti.Ccc.Win.Scheduling
 					100, 
 					_container.Resolve<IDayOffDecisionMaker>());
 
+			var groupPersonBuilderForOptimization = callGroupPage(schedulingOptions);
+			ITeamInfoFactory teamInfoFactory = new TeamInfoFactory(groupPersonBuilderForOptimization);
+
 			ITeamBlockDayOffOptimizerService teamBlockDayOffOptimizerService = 
 				new TeamBlockDayOffOptimizerService(
-					_container.Resolve<ITeamInfoFactory>(),
+					teamInfoFactory,
 					_container.Resolve<ILockableBitArrayFactory>(),
 					_container.Resolve<IScheduleResultDataExtractorProvider>(),
 					dayOffBackToLegalStateService,
 					_container.Resolve<ISchedulingOptionsCreator>(),
 					_container.Resolve<ILockableBitArrayChangesTracker>(),
-					_container.Resolve<ISchedulingResultStateHolder>()
+					_container.Resolve<ISchedulingResultStateHolder>(),
+					teamBlockScheduler,
+					_resourceOptimizationHelper,
+					_container.Resolve<ITeamBlockInfoFactory>()
 					);
 
-			teamBlockDayOffOptimizerService.OptimizeDaysOff(allMatrixes, selectedPeriod, selectedPersons, optimizationPreferences,
-			                                                _container.Resolve<ISchedulePartModifyAndRollbackService>());
+			IList<IDayOffTemplate> dayOffTemplates = (from item in _schedulerState.CommonStateHolder.DayOffs
+												  where ((IDeleteTag)item).IsDeleted == false
+												  select item).ToList();
+
+			((List<IDayOffTemplate>)dayOffTemplates).Sort(new DayOffTemplateSorter());
+
+			teamBlockDayOffOptimizerService.OptimizeDaysOff(
+				allMatrixes, 
+				selectedPeriod, 
+				selectedPersons, 
+				optimizationPreferences,
+				schedulePartModifyAndRollbackService,
+				dayOffTemplates[0]);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
