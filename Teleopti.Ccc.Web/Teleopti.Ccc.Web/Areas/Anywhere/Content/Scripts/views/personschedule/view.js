@@ -16,7 +16,7 @@ define([
 	    var personSchedule;
 	    
 		return {
-			display: function (options) {
+			initialize: function (options) {
 
 				options.renderHtml(view);
 
@@ -44,7 +44,11 @@ define([
 				ko.applyBindings(personSchedule, options.bindingElement);
 
 			},
-			
+		    
+			display: function(options) {
+
+			},
+
             clearaction: function(options) {
                 personSchedule.AddingFullDayAbsence(false);
             },

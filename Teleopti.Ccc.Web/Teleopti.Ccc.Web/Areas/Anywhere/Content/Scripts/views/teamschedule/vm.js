@@ -9,7 +9,7 @@ define([
         timeLineViewModel,
         resources) {
 
-        return function(date) {
+        return function() {
 
             var self = this;
             
@@ -20,7 +20,7 @@ define([
             this.Resources = resources;
 
             this.Teams = ko.observableArray();
-            this.SelectedDateInternal = ko.observable(date);
+            this.SelectedDateInternal = ko.observable();
             this.SelectedTeam = ko.observable();
             this.Loading = ko.observable(false);
 
@@ -31,15 +31,16 @@ define([
 
             this.SelectedDate = ko.computed({
                 read: function() {
-                    return self.SelectedDateInternal().clone();
+                    return self.SelectedDateInternal();
                 },
                 write: function(value) {
-                    if (value.toDate() == self.SelectedDateInternal().toDate()) return;
-                    self.SelectedDateInternal(value);
+                    if (self.SelectedDateInternal() == undefined || value.toDate() != self.SelectedDateInternal().toDate()) {
+                        self.SelectedDateInternal(value);
+                    }
                 }
             });
 
-            this.SetTeams = function(teams) {
+            this.SetTeams = function (teams) {
                 self.Teams([]);
                 self.Teams.push.apply(self.Teams, teams);
             };

@@ -49,9 +49,11 @@ require([
 		            if (currentView && currentView.dispose)
 		                currentView.dispose();
 		            currentView = view;
-		            view.display(routeInfo);
+		            view.initialize(routeInfo);
 		        }
 
+		        view.display(routeInfo);
+		        
 		        if (view.clearaction)
 		            view.clearaction(routeInfo);
 		        if (routeInfo.action)
