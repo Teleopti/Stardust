@@ -56,7 +56,7 @@
 
 			$("html").click(function (event) {
 				var children = self._button.children();
-				if (children[0] == event.target || children[1] == event.target)
+				if (children[0] == event.target || children[1] == event.target || self._button[0] == event.target)
 					return;
 				self._displayMenu(false);
 			});
