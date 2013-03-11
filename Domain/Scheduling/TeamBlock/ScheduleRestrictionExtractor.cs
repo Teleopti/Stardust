@@ -32,6 +32,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				foreach (var dateOnly in dateOnlyList)
 				{
 					var schedule = matrix.GetScheduleDayByKey(dateOnly);
+					if (schedule == null)
+						continue;
+
 					var schedulePart = schedule.DaySchedulePart();
 					if (schedulePart.SignificantPart() == SchedulePartView.MainShift)
 					{

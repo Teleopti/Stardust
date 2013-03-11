@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				return null;
             var groupPerson = teamBlockInfo.TeamInfo.GroupPerson;
             var dateOnlyList = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection();
-            var matrixList = teamBlockInfo.TeamInfo.MatrixesForGroup().ToList(); 
+	        var matrixList = teamBlockInfo.MatrixesForGroupAndBlock().ToList();
             var scheduleDictionary = _schedulingResultStateHolder.Schedules;
 			
             IEffectiveRestriction effectiveRestriction = null;

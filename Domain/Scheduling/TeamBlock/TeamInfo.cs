@@ -8,6 +8,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		IGroupPerson GroupPerson { get;	}
 		IEnumerable<IScheduleMatrixPro> MatrixesForGroup();
 		IEnumerable<IScheduleMatrixPro> MatrixesForGroupMember(int index);
+		IEnumerable<IScheduleMatrixPro> MatrixesForGroupAndDate(DateOnly dateOnly);
+		IEnumerable<IScheduleMatrixPro> MatrixesForGroupAndPeriod(DateOnlyPeriod period);
+
 	}
 
 	public class TeamInfo : ITeamInfo
@@ -43,6 +46,30 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		public IEnumerable<IScheduleMatrixPro> MatrixesForGroupMember(int index)
 		{
 			return _matrixesForMembers[index];
+		}
+
+		public IEnumerable<IScheduleMatrixPro> MatrixesForGroupAndDate(DateOnly dateOnly)
+		{
+			IList<IScheduleMatrixPro> ret = new List<IScheduleMatrixPro>();
+			foreach (var scheduleMatrixPro in MatrixesForGroup())
+			{
+				if(scheduleMatrixPro.SchedulePeriod.DateOnlyPeriod.Contains(dateOnly))
+					ret.Add(scheduleMatrixPro);
+			}
+
+			return ret;
+		}
+
+		public IEnumerable<IScheduleMatrixPro> MatrixesForGroupAndPeriod(DateOnlyPeriod period)
+		{
+			IList<IScheduleMatrixPro> ret = new List<IScheduleMatrixPro>();
+			foreach (var scheduleMatrixPro in MatrixesForGroup())
+			{
+				if (scheduleMatrixPro.SchedulePeriod.DateOnlyPeriod.Intersection(period) != null)
+					ret.Add(scheduleMatrixPro);
+			}
+
+			return ret;
 		}
 
 		public override int GetHashCode()

@@ -1,11 +1,15 @@
 
 
+using System.Collections.Generic;
+using Teleopti.Interfaces.Domain;
+
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
 	public interface ITeamBlockInfo
 	{
 		ITeamInfo TeamInfo { get; }
 		IBlockInfo BlockInfo { get; }
+		IEnumerable<IScheduleMatrixPro> MatrixesForGroupAndBlock();
 	}
 
 	public class TeamBlockInfo : ITeamBlockInfo
@@ -27,6 +31,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		public IBlockInfo BlockInfo
 		{
 			get { return _blockInfo; }
+		}
+
+		public IEnumerable<IScheduleMatrixPro> MatrixesForGroupAndBlock()
+		{
+			return TeamInfo.MatrixesForGroupAndPeriod(BlockInfo.BlockPeriod);
 		}
 	}
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -41,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                                                 _schedulingResultStateHolder,
 												_openHoursToRestrictionConverter,
 												_scheduleRestrictionExtractor);
-			_person1 = PersonFactory.CreatePerson("bill");
+		    _person1 = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(new Person(), _dateOnly);
 			_dateOnly = new DateOnly(2012, 12, 7);
 			_scheduleMatrixPro = _mocks.StrictMock<IScheduleMatrixPro>();
 			IGroupPerson groupPerson = new GroupPerson(new List<IPerson> { _person1 }, _dateOnly, "Hej", Guid.NewGuid());
@@ -84,8 +85,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				    {
 					    CommonMainShift = mainShift
 				    };
+
 		    using (_mocks.Record())
 		    {
+			    Expect.Call(_scheduleMatrixPro.SchedulePeriod).Return(_person1.VirtualSchedulePeriod(_dateOnly));
 			    Expect.Call(_schedulingResultStateHolder.Schedules).Return(scheduleDictionary);
 			    Expect.Call(
 				    _effectiveRestrictionCreator.GetEffectiveRestriction(

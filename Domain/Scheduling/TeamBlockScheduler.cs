@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				return false;
 
 			//if teamBlockInfo is fully scheduled, continue;
-		    if (!isTeamBlockScheduled(teamBlockInfo)) return false;
+		    if (isTeamBlockScheduled(teamBlockInfo)) return false;
 
 			var restriction = _restrictionAggregator.Aggregate(teamBlockInfo,schedulingOptions);
 
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
         private bool isTeamBlockScheduled(ITeamBlockInfo teamBlockInfo)
         {
             foreach (var day in teamBlockInfo.BlockInfo.BlockPeriod.DayCollection())
-                foreach (var matrix in teamBlockInfo.TeamInfo.MatrixesForGroup)
+                foreach (var matrix in teamBlockInfo.TeamInfo.MatrixesForGroupAndDate(day))
                     if (!matrix.GetScheduleDayByKey(day).DaySchedulePart().IsScheduled())
                         return false;
             return true;

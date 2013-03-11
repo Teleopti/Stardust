@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 		public void MapFrom(IAdvancedPreferences source)
 		{
-		    if (source == null) return null;
+		    if (source == null) return;
             _targetValueCalculation = source.TargetValueCalculation;
 			_useIntraIntervalDeviation = source.UseIntraIntervalDeviation;
 			_useTweakedValues = source.UseTweakedValues;

@@ -17,6 +17,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private ITeamInfo _target;
 		private IGroupPerson _groupPerson;
 		private IScheduleMatrixPro _matrix;
+		private IScheduleMatrixPro _matrix2;
+		private IVirtualSchedulePeriod _schedulePeriod;
+		private DateOnly _date;
 
 		[SetUp]
 		public void Setup()
@@ -24,10 +27,63 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_mocks = new MockRepository();
 			_groupPerson = _mocks.StrictMock<IGroupPerson>();
 			_matrix = _mocks.StrictMock<IScheduleMatrixPro>();
-			var matrixes = new List<IScheduleMatrixPro> {_matrix, _matrix};
+			_matrix2 = _mocks.StrictMock<IScheduleMatrixPro>();
+			var matrixes = new List<IScheduleMatrixPro> {_matrix, _matrix2};
 			IList<IList<IScheduleMatrixPro>> groupMatrixes = new List<IList<IScheduleMatrixPro>>();
 			groupMatrixes.Add(matrixes);
 				_target = new TeamInfo(_groupPerson, groupMatrixes);
+			_schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
+			_date = new DateOnly(2013, 03, 11);
+		}
+
+		[Test]
+		public void ShouldGiveMeTheCorrectMatrixesForGroupOnAPeriod()
+		{
+			using (_mocks.Record())
+			{
+				Expect.Call(_matrix.SchedulePeriod).Return(_schedulePeriod);
+				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(_date, _date));
+
+				Expect.Call(_matrix2.SchedulePeriod).Return(_schedulePeriod);
+				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(_date.AddDays(1), _date.AddDays(1)));
+
+				Expect.Call(_matrix.SchedulePeriod).Return(_schedulePeriod);
+				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(_date, _date));
+
+				Expect.Call(_matrix2.SchedulePeriod).Return(_schedulePeriod);
+				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(_date.AddDays(1), _date.AddDays(1)));
+			}
+
+			using (_mocks.Playback())
+			{
+				var result = _target.MatrixesForGroupAndPeriod(new DateOnlyPeriod(_date, _date)).ToList();
+				Assert.AreEqual(1, result.Count());
+				Assert.AreSame(_matrix, result.First());
+				result = _target.MatrixesForGroupAndPeriod(new DateOnlyPeriod(_date, _date.AddDays(1))).ToList();
+				Assert.AreEqual(2, result.Count());
+				Assert.IsTrue(result.Contains(_matrix));
+				Assert.IsTrue(result.Contains(_matrix2));
+			}
+		}
+
+		[Test]
+		public void ShouldGiveMeTheCorrectMatrixesForGroupOnADate()
+		{
+			using (_mocks.Record())
+			{
+				Expect.Call(_matrix.SchedulePeriod).Return(_schedulePeriod);
+				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(_date, _date));
+
+				Expect.Call(_matrix2.SchedulePeriod).Return(_schedulePeriod);
+				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(_date.AddDays(1), _date.AddDays(1)));
+			}
+
+			using (_mocks.Playback())
+			{
+				var result = _target.MatrixesForGroupAndDate(_date.AddDays(1)).ToList();
+				Assert.AreEqual(1, result.Count());
+				Assert.AreSame(_matrix2, result.First());
+			}
 		}
 
 		[Test]
