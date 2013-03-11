@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
-using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
@@ -56,8 +56,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 				}
 				block.StandardDeviations = valuesOfOneBlock;
 			}
-			var maxValue = blocks.Max(x => x.Sum);
-			return blocks.FirstOrDefault(x=>x.Sum == maxValue);
+			var maxValue = blocks.Max(x => x.Average);
+            return blocks.FirstOrDefault(x => Math.Abs(x.Average - maxValue) < float.Epsilon);
 		}
 	}
 }
