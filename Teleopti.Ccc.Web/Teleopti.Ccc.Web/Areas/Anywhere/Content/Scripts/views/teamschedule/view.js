@@ -23,7 +23,6 @@ define([
 		view
 	) {
 
-		var agents;
 		var teamSchedule;
 
 		var events = new ko.subscribable();
@@ -32,13 +31,12 @@ define([
 			navigation.GotoPersonSchedule(agentId, teamSchedule.SelectedDate());
 		}, null, "gotoagent");
 
-
 		return {
 		    display: function (options) {
 		        
 				options.renderHtml(view);
 
-				date = options.date;
+				var date = options.date;
 				if (date == undefined) {
 					date = moment().sod();
 				} else {
@@ -60,9 +58,6 @@ define([
 					.ready(resize);
 
 				var loadSchedules = function () {
-					
-					teamSchedule.isLoading(true);
-
 					subscriptions.subscribeTeamSchedule(
 						teamSchedule.SelectedTeam(),
 						helpers.Date.AsUTCDate(teamSchedule.SelectedDate().toDate()),
@@ -89,15 +84,14 @@ define([
 
 							teamSchedule.Agents.valueHasMutated();
 
-							teamSchedule.isLoading(false);
+							teamSchedule.Loading(false);
 
 							resize();
 						});
 
 				};
 
-				var loadAvailableTeams = function () {
-				    
+				var loadTeams = function () {
 				    $.ajax({
 				        url: 'Person/AvailableTeams',
 				        cache: false,
@@ -106,13 +100,13 @@ define([
 				            date: teamSchedule.SelectedDate().toDate().toJSON()
 				        },
 				        success: function (data, textStatus, jqXHR) {
-				            teamSchedule.Teams(data.Teams);
+				            teamSchedule.SetTeams(data.Teams);
 				        }
 				    });
 
 				};
 
-				var loadPeople = function () {
+				var loadPersonsAndSchedules = function () {
 				    $.ajax({
 				        url: 'Person/PeopleInTeam',
 				        cache: false,
@@ -134,19 +128,19 @@ define([
 				};
 
 				teamSchedule.SelectedTeam.subscribe(function () {
-			        loadPeople();
-			        //navigation.GoToTeamSchedule(teamSchedule.SelectedTeam(), teamSchedule.SelectedDate());
-			    });
+				    if (teamSchedule.Loading())
+				        loadPersonsAndSchedules();
+				    else
+				        navigation.GoToTeamSchedule(teamSchedule.SelectedTeam(), teamSchedule.SelectedDate());
+				});
 
 			    teamSchedule.SelectedDate.subscribe(function() {
-			        loadAvailableTeams();
 			        navigation.GoToTeamSchedule(teamSchedule.SelectedTeam(), teamSchedule.SelectedDate());
 			    });
 			    
-			    $(window).ready(function () {
-			        ko.applyBindings(teamSchedule, options.bindingElement);
-				    loadAvailableTeams();
-				});
+			    ko.applyBindings(teamSchedule, options.bindingElement);
+			    teamSchedule.Loading(true);
+			    loadTeams();
 
 				teamScheduleContainer.swipeListener({
 					swipeLeft: function () {

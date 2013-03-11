@@ -37,9 +37,6 @@ require([
 
 			routeInfo.bindingElement = contentPlaceHolder[0];
 
-			if (currentView && currentView.dispose)
-				currentView.dispose();
-
 			var module = 'views/' + routeInfo.view + '/view';
 		    require([module], function(view) {
 
@@ -49,6 +46,8 @@ require([
 		        }
 
 		        if (view != currentView) {
+		            if (currentView && currentView.dispose)
+		                currentView.dispose();
 		            currentView = view;
 		            view.display(routeInfo);
 		        }

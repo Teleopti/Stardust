@@ -22,7 +22,7 @@ define([
             this.Teams = ko.observableArray();
             this.SelectedDateInternal = ko.observable(date);
             this.SelectedTeam = ko.observable();
-            this.isLoading = ko.observable(false);
+            this.Loading = ko.observable(false);
 
             this.SetAgents = function (agents) {
                 self.Agents([]);
@@ -39,7 +39,7 @@ define([
                 }
             });
 
-            this.AddTeams = function(teams) {
+            this.SetTeams = function(teams) {
                 self.Teams([]);
                 self.Teams.push.apply(self.Teams, teams);
             };
