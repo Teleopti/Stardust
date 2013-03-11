@@ -10,6 +10,7 @@ Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (aja
 
 	this.AvailableTemplates = ko.observableArray();
 	this.SelectedTemplate = ko.observable();
+	this.IsTemplateDetailsVisible = ko.observable(true);
 
 	this.PreferenceId = ko.observable();
 	this.EarliestStartTime = ko.observable();
@@ -61,6 +62,12 @@ Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel = function (aja
 	function _disposePreferenceString() {
 		self.PreferenceString.dispose();
 	}
+
+	this.AvailableTemplates.subscribe(function (newValue) {
+		if (newValue.length == 0) {
+			self.IsTemplateDetailsVisible(true);
+		}
+	});
 
 	this.SelectedTemplate.subscribe(function (newValue) {
 		if (newValue) {
