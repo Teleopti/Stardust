@@ -84,7 +84,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 	    public void Execute(ITeamBlockInfo teamBlockInfo, IShiftProjectionCache shiftProjectionCache)
 	    {
-	        var startDateOfBlock = teamBlockInfo.BlockInfo.BlockPeriod.StartDate;
+	        if (teamBlockInfo == null || shiftProjectionCache == null) return null;
+            var startDateOfBlock = teamBlockInfo.BlockInfo.BlockPeriod.StartDate;
 
             foreach (var day in teamBlockInfo.BlockInfo.BlockPeriod.DayCollection() )
             {

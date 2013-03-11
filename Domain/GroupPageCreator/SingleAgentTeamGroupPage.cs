@@ -8,6 +8,8 @@ namespace Teleopti.Ccc.Domain.GroupPageCreator
     {
         public IGroupPage CreateGroupPage(IEnumerable<IPerson> entityCollection, IGroupPageOptions groupPageOptions)
         {
+            if (entityCollection == null) return null;
+            if (groupPageOptions == null) return null;
             //Create the GroupPage object
             IGroupPage groupPage = new GroupPage(groupPageOptions.CurrentGroupPageName) { DescriptionKey = groupPageOptions.CurrentGroupPageNameKey };
 

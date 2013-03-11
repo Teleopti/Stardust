@@ -297,7 +297,8 @@ namespace Teleopti.Interfaces.Domain
         /// 
         /// </summary>
         ISpecification<IMainShift> MainShiftOptimizeActivitySpecification { get; set; }
-		/// <summary>
+		
+        /// <summary>
 		/// 
 		/// </summary>
 		bool UseGroupSchedulingCommonStart { get; set; }
@@ -354,26 +355,31 @@ namespace Teleopti.Interfaces.Domain
         /// <summary>
         /// Used in levelling per same end time
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Levelling")]
         bool UseLevellingSameEndTime { get; set; }
 
         /// <summary>
         /// Used in levelling per same shift category
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Levelling")]
         bool UseLevellingSameShiftCategory { get; set; }
 
         /// <summary>
         /// Used in levelling per same start time
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Levelling")]
         bool UseLevellingSameStartTime { get; set; }
 
         /// <summary>
         /// Used in levelling per same shift
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Levelling")]
         bool UseLevellingSameShift { get; set; }
 
         /// <summary>
         /// Used if the levelling option is checked or not
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Levelling")]
         bool UseLevellingPerOption { get; set; }
     }
 }
