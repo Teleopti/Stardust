@@ -80,7 +80,6 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
                             var skillStaffPeriodList = SchedulingResultStateHolder.SkillStaffPeriodHolder.SkillStaffPeriodList(new List<ISkill> { skill }, sharedPeriod.Value);
                             if (skillStaffPeriodList == null || skillStaffPeriodList.Count == 0)
                             {
-                               //return new Dictionary<string, IList<string>>();
                                 return new UnderStaffingData
                                 {
                                     UnderStaffingDates = underStaffingDaysDict,
@@ -338,13 +337,15 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
             foreach (var underStaffingHoursInterval in exceededUnderstaffingList)
             {
+                count++;
+                if (count > 5)
+                    break;
+                
                 var startTime = underStaffingHoursInterval.Period.StartDateTimeLocal(timeZone).ToString("t", culture);
                 var endTime = underStaffingHoursInterval.Period.EndDateTimeLocal(timeZone).ToString("t", culture);
                 underStaffingHours += startTime + "-" + endTime + ",";
 
-                count++;
-                if (count > 5)
-                    break;
+                
             }
 
 		    if (underStaffingHours.Length > 1)

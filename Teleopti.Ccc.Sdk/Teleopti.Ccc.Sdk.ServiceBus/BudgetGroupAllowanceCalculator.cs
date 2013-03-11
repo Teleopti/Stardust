@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
             _scheduleProjectionReadOnlyRepository = scheduleProjectionReadOnlyRepository;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
         public string CheckBudgetGroup(IAbsenceRequest absenceRequest)
         {
             var timeZone = absenceRequest.Person.PermissionInformation.DefaultTimeZone();
@@ -76,16 +76,16 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
                 var requestedAbsenceMinutes = calculateRequestedMinutes(currentDay, absenceRequest.Period, scheduleRange, personPeriod).TotalMinutes;
                 if (remainingAllowanceMinutes < requestedAbsenceMinutes)
                 {
-                    Logger.DebugFormat(
-                        "There is not enough allowance for day {0}. The remaining allowance is {1} hours, but you request for {2} hours",
-                        budgetDay.Day, remainingAllowanceMinutes / TimeDefinition.MinutesPerHour,
-                        requestedAbsenceMinutes / TimeDefinition.MinutesPerHour);
-                    invalidDays += budgetDay.Day.ToShortDateString(culture) + ",";
                     // only showing first 5 days if a person request conatins more than 5 days.
                     count++;
                     if (count > 5)
                         break;
 
+                    Logger.DebugFormat(
+                        "There is not enough allowance for day {0}. The remaining allowance is {1} hours, but you request for {2} hours",
+                        budgetDay.Day, remainingAllowanceMinutes / TimeDefinition.MinutesPerHour,
+                        requestedAbsenceMinutes / TimeDefinition.MinutesPerHour);
+                    invalidDays += budgetDay.Day.ToShortDateString(culture) + ",";
                 }
             }
 
