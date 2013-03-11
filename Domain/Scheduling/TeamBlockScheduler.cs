@@ -44,8 +44,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				return false;
 
 			//if teamBlockInfo is fully scheduled, continue;
+		    if (!isTeamBlockScheduled(teamBlockInfo)) return false;
 
-			//change signature
 			var restriction = _restrictionAggregator.Aggregate(teamBlockInfo,schedulingOptions);
 
 			// (should we cover for max seats here?) ????
@@ -71,7 +71,16 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			return true;
 		}
 
-		void dayScheduled(object sender, SchedulingServiceBaseEventArgs e)
+        private bool isTeamBlockScheduled(ITeamBlockInfo teamBlockInfo)
+        {
+            foreach (var day in teamBlockInfo.BlockInfo.BlockPeriod.DayCollection())
+                foreach (var matrix in teamBlockInfo.TeamInfo.MatrixesForGroup)
+                    if (!matrix.GetScheduleDayByKey(day).DaySchedulePart().IsScheduled())
+                        return false;
+            return true;
+        }
+
+        void dayScheduled(object sender, SchedulingServiceBaseEventArgs e)
 		{
 			OnDayScheduled(e);
 		}
