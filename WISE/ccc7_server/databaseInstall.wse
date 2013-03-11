@@ -35,7 +35,7 @@ item: Global
   Variable Default3=C:\Windows
   Variable Flags3=00001000
   Variable Name4=_WISE_
-  Variable Default4=C:\PROGRA~2\Altiris\Wise\WISESC~1
+  Variable Default4=C:\Program Files (x86)\Altiris\Wise\WiseScript Package Editor
   Variable Flags4=00001000
   Requested Execution Level=asInvoker
 end
@@ -315,9 +315,11 @@ item: If/While Statement
   Value=0
   Flags=00000001
 end
-item: Display Message
-  Title=Database Installation Failed
-  Text=Database Installation Failed for database: %DCCC%
+item: Execute Program
+  Pathname=cscript
+  Command Line=.\DisplayError.vbs %DCCC%
+  Default Directory=%DIR%
+  Flags=00000110
 end
 remarked item: Exit Installation
   Flags=1
@@ -335,9 +337,11 @@ item: If/While Statement
   Value=0
   Flags=00000001
 end
-item: Display Message
-  Title=Database Installation Failed
-  Text=Database Installation Failed for database: %DAGG%
+item: Execute Program
+  Pathname=cscript
+  Command Line=.\DisplayError.vbs %DAGG%
+  Default Directory=%DIR%
+  Flags=00000110
 end
 remarked item: Exit Installation
   Flags=1
@@ -355,9 +359,11 @@ item: If/While Statement
   Value=0
   Flags=00000001
 end
-item: Display Message
-  Title=Database Installation Failed
-  Text=Database Installation Failed for database: %DANA%
+item: Execute Program
+  Pathname=cscript
+  Command Line=.\DisplayError.vbs %DANA%
+  Default Directory=%DIR%
+  Flags=00000110
 end
 remarked item: Exit Installation
   Flags=1
