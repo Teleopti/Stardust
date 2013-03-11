@@ -28,6 +28,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
             foreach (var skillStaffPeriod in skillStaffPeriodList)
             {
+                count++;
+                if (count > 5)
+                    break;
                 
                 if (skillStaffPeriod.RelativeDifference < _skill.StaffingThresholds.SeriousUnderstaffing.Value)
                 {
@@ -35,14 +38,9 @@ namespace Teleopti.Ccc.Domain.Forecasting
                         skillStaffPeriod.Period.StartDateTimeLocal(timeZone).ToString("t", culture);
                     var endTime =
                         skillStaffPeriod.Period.EndDateTimeLocal(timeZone).ToString("t", culture);
-                    //var startTime = skillStaffPeriod.Period.LocalStartDateTime.TimeOfDay.ToString();
-                    //var endTime = skillStaffPeriod.Period.LocalEndDateTime.TimeOfDay.ToString();
+                   
                     seriousUnderStaffing += startTime + "-" + endTime + ",";
                 }
-
-                count++;
-                if (count > 5)
-                    break;
 
             }
 
