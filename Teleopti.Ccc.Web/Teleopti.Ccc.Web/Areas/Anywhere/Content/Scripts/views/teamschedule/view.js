@@ -174,14 +174,11 @@ define([
 		        teamSchedule.Loading(true);
 		        
 		        teamSchedule.SelectedDate(date);
-		        //if (options.id)
-		        console.log("display: SelectedTeam(id)");
-		        teamSchedule.SelectedTeam(options.id);
-
-		        if (teamSchedule.SelectedTeam() && teamSchedule.Teams().length != 0)
+		        
+		        if (options.id != undefined && teamSchedule.Teams().length != 0)
 		            loadPersonsAndSchedules();
 		        else
-    		        loadTeams();
+		            loadTeams();		        
 		    }
 		};
 	});
