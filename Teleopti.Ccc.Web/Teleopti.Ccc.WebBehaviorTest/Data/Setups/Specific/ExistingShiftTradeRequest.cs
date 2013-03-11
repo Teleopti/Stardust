@@ -34,8 +34,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 
 			var shiftTradeSwapDetail = new ShiftTradeSwapDetail(sender, reciever, new DateOnly(dateTimefrom), new DateOnly(dateTimeTo));
 			var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail> { shiftTradeSwapDetail });
-			
-			PersonRequest = new PersonRequest(reciever)
+
+			PersonRequest = new PersonRequest(sender)
 			{
 				Subject = Subject == string.Empty ? "Swap shift with " + sender.Name : Subject
 			};
