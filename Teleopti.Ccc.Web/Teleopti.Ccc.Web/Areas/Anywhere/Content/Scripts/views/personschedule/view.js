@@ -4,7 +4,7 @@ define([
 		'views/personschedule/vm',
 		'subscriptions',
 		'helpers',
-		'text!templates/personschedule/view.html'
+		'text!templates/personschedule/view.html',
 	], function (
 		ko,
 		personScheduleViewModel,

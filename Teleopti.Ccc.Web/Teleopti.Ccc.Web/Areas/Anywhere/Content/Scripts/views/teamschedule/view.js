@@ -8,11 +8,8 @@ define([
 		'subscriptions',
 		'helpers',
 		'views/teamschedule/vm',
-		'views/teamschedule/timeline',
 		'views/teamschedule/agent',
-		'views/teamschedule/agents',
-		'text!templates/teamschedule/view.html',
-		'noext!application/resources'
+		'text!templates/teamschedule/view.html'
 	], function (
 		ko,
 		$,
@@ -22,15 +19,11 @@ define([
 		subscriptions,
 		helpers,
 		teamScheduleViewModel,
-		timeLineViewModel,
 		agentViewModel,
-		agentsViewModel,
-		view,
-		resources
+		view
 	) {
 
 		var agents;
-		var timeLine;
 		var teamSchedule;
 
 		var events = new ko.subscribable();
@@ -52,15 +45,13 @@ define([
 					date = moment(date, 'YYYYMMDD');
 				}
 
-				agents = new agentsViewModel();
-				timeLine = new timeLineViewModel(agents.Agents, resources.ShortTimePattern);
 				teamSchedule = new teamScheduleViewModel(date);
 
 				var previousOffset;
 				var teamScheduleContainer = $('.team-schedule');
 
 				var resize = function () {
-					timeLine.WidthPixels($('.shift').width());
+				    teamSchedule.TimeLine.WidthPixels($('.shift').width());
 				};
 
 				$(window)
@@ -76,13 +67,13 @@ define([
 						teamSchedule.SelectedTeam(),
 						helpers.Date.AsUTCDate(teamSchedule.SelectedDate().toDate()),
 						function (schedules) {
-							var currentAgents = agents.Agents();
+						    var currentAgents = teamSchedule.Agents();
 
 							var dateClone = teamSchedule.SelectedDate().clone();
 							for (var i = 0; i < schedules.length; i++) {
 								for (var j = 0; j < currentAgents.length; j++) {
 									if (currentAgents[j].Id == schedules[i].Id) {
-										currentAgents[j].SetLayers(schedules[i].Projection, timeLine, dateClone);
+										currentAgents[j].SetLayers(schedules[i].Projection, teamSchedule.TimeLine, dateClone);
 										currentAgents[j].AddContractTime(schedules[i].ContractTimeMinutes);
 										currentAgents[j].AddWorkTime(schedules[i].WorkTimeMinutes);
 										break;
@@ -96,7 +87,7 @@ define([
 								return firstStartMinutes == secondStartMinutes ? (a.LastEndMinute() == b.LastEndMinute() ? 0 : a.LastEndMinute() < b.LastEndMinute() ? -1 : 1) : firstStartMinutes < secondStartMinutes ? -1 : 1;
 							});
 
-							agents.Agents.valueHasMutated();
+							teamSchedule.Agents.valueHasMutated();
 
 							teamSchedule.isLoading(false);
 
@@ -135,7 +126,7 @@ define([
 				            var newItems = ko.utils.arrayMap(people, function (s) {
 				                return new agentViewModel(s, events);
 				            });
-				            agents.SetAgents(newItems);
+				            teamSchedule.SetAgents(newItems);
 
 				            loadSchedules();
 				        }
@@ -153,14 +144,7 @@ define([
 			    });
 			    
 			    $(window).ready(function () {
-
-				    ko.applyBindings({
-						TeamSchedule: teamSchedule,
-						Resources: resources,
-						Timeline: timeLine,
-						Agents: agents
-					}, options.bindingElement);
-
+			        ko.applyBindings(teamSchedule, options.bindingElement);
 				    loadAvailableTeams();
 				});
 
