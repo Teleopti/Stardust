@@ -50,7 +50,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
 		self.ajax.Ajax({
 			url: "Requests/ShiftTradeRequestSwapDetails/" + self.Id(),
 			dataType: "json",
-			type: "POST",
+			type: "GET",
 			success: function (data) {
 				var numberOfShownHours = data.TimeLineHours.length;
 				var showNumberRatio = Math.floor(numberOfShownHours / 24);
