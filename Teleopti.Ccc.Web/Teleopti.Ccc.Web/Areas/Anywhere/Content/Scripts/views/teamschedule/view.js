@@ -31,8 +31,26 @@ define([
 			navigation.GotoPersonSchedule(agentId, teamSchedule.SelectedDate());
 		}, null, "gotoagent");
 
+		var displayOptions;
+	    
+		var currentTeamId = function () {
+		    if (displayOptions.id)
+		        return displayOptions.id;
+		    if (teamSchedule.Teams().length > 0)
+		        return teamSchedule.Teams()[0].Id;
+		    return null;
+		};
+	    
+		var currentDate = function () {
+		    var date = displayOptions.date;
+		    if (date == undefined) {
+		        return moment().sod();
+		    } else {
+		        return moment(date, 'YYYYMMDD');
+		    }
+		};
+
 		var loadSchedules = function () {
-		    //console.log("LOADING SCHEDULES (ONCE PLEASE)");
 		    subscriptions.subscribeTeamSchedule(
                 teamSchedule.SelectedTeam(),
                 helpers.Date.AsUTCDate(teamSchedule.SelectedDate().toDate()),
@@ -64,8 +82,7 @@ define([
 
 		};
 
-		var loadPersonsAndSchedules = function () {
-		    //console.log("LOADING PERSONS (ONCE PLEASE)");
+		var loadPersons = function (success) {
 		    $.ajax({
 		        url: 'Person/PeopleInTeam',
 		        cache: false,
@@ -75,19 +92,16 @@ define([
 		            teamId: teamSchedule.SelectedTeam()
 		        },
 		        success: function (people, textStatus, jqXHR) {
-
 		            var newItems = ko.utils.arrayMap(people, function (s) {
 		                return new agentViewModel(s, events);
 		            });
 		            teamSchedule.SetAgents(newItems);
-
-		            loadSchedules();
+		            success();
 		        }
 		    });
 		};
 
-		var loadTeams = function () {
-		    //console.log("LOADING TEAMS (ONCE PLEASE)");
+		var loadTeams = function (success) {
 		    $.ajax({
 		        url: 'Person/AvailableTeams',
 		        cache: false,
@@ -96,21 +110,15 @@ define([
 		            date: teamSchedule.SelectedDate().toDate().toJSON()
 		        },
 		        success: function (data, textStatus, jqXHR) {
-		            //console.log("set teams");
 		            teamSchedule.SetTeams(data.Teams);
-		            //console.log("select first team");
-		            teamSchedule.SelectedTeam(teamSchedule.Teams()[0].Id);
-		            loadPersonsAndSchedules();
+		            success();
 		        }
 		    });
-
 		};
 
 		return {
 		    initialize: function (options) {
 
-		        //console.log("INIT!");
-		        
 				options.renderHtml(view);
 
 				teamSchedule = new teamScheduleViewModel();
@@ -125,15 +133,12 @@ define([
 					.ready(resize);
 
 				teamSchedule.SelectedTeam.subscribe(function () {
-				    //console.log("selected team changed " + teamSchedule.Loading());
 				    if (teamSchedule.Loading())
 				        return;
-				    else
-				        navigation.GoToTeamSchedule(teamSchedule.SelectedTeam(), teamSchedule.SelectedDate());
+				    navigation.GoToTeamSchedule(teamSchedule.SelectedTeam(), teamSchedule.SelectedDate());
 				});
 
 			    teamSchedule.SelectedDate.subscribe(function() {
-			        //console.log("selected date changed " + teamSchedule.Loading());
 			        if (teamSchedule.Loading())
 			            return;
 			        navigation.GoToTeamSchedule(teamSchedule.SelectedTeam(), teamSchedule.SelectedDate());
@@ -163,14 +168,25 @@ define([
 		    },
 		    
 		    display: function (options) {
+		        displayOptions = options;
+
 		        teamSchedule.Loading(true);
+
+		        teamSchedule.SelectedDate(currentDate());
+
+		        var loadPersonsAndSchedules = function() {
+		            teamSchedule.SelectedTeam(currentTeamId());
+		            loadPersons(function () {
+		                loadSchedules();
+		            });
+		        };
 		        
-		        teamSchedule.SelectedDate(options.date);
-		        
-		        if (options.id != undefined && teamSchedule.Teams().length != 0)
+		        if (teamSchedule.Teams().length != 0) {
 		            loadPersonsAndSchedules();
-		        else
-		            loadTeams();		        
+		        } else {
+		            loadTeams(loadPersonsAndSchedules);
+		        }
+		        
 		    }
 		};
 	});

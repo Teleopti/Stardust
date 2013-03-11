@@ -34,15 +34,11 @@ define([
                     return self.SelectedDateInternal();
                 },
                 write: function (value) {
-                    
-                    if (value == undefined) {
-                        value = moment().sod();
-                    } else {
-                        value = moment(value, 'YYYYMMDD');
+                    if (value.toDate && self.SelectedDateInternal() && self.SelectedDateInternal().toDate) {
+                        if (value.toDate() == self.SelectedDateInternal().toDate())
+                            return;
                     }
-                    if (self.SelectedDateInternal() == undefined || value.toDate() != self.SelectedDateInternal().toDate()) {
-                        self.SelectedDateInternal(value);
-                    }
+                    self.SelectedDateInternal(value);
                 }
             });
 
