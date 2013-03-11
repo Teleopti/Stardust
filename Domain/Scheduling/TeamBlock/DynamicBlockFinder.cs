@@ -24,7 +24,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 					case BlockFinderType.SchedulePeriod:
 				    {
-					    blockPeriod = teamInfo.MatrixesForGroup().First().SchedulePeriod.DateOnlyPeriod;
+					    foreach (var scheduleMatrixPro in teamInfo.MatrixesForGroup())
+					    {
+						    DateOnlyPeriod thisPeriod = scheduleMatrixPro.SchedulePeriod.DateOnlyPeriod;
+						    if (thisPeriod.Contains(blockOnDate))
+						    {
+							    blockPeriod = thisPeriod;
+								break;
+						    }
+					    }
+
 					    break;
 				    }
 		    }

@@ -3,6 +3,7 @@ using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Interfaces.Domain;
 
@@ -14,7 +15,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			DateOnlyPeriod selectedPeriod,
 			IList<IPerson> selectedPersons, 
 			IOptimizationPreferences optimizationPreferences,
-			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService);
+			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
+			IDayOffTemplate dayOffTemplate);
 	}
 
 	public class TeamBlockDayOffOptimizerService : ITeamBlockDayOffOptimizerService
@@ -26,6 +28,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
 		private readonly ILockableBitArrayChangesTracker _lockableBitArrayChangesTracker;
 		private readonly ISchedulingResultStateHolder _stateHolder;
+		private readonly ITeamBlockScheduler _teamBlockScheduler;
+		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
+		private readonly ITeamBlockInfoFactory _teamBlockInfoFactory;
 
 		public TeamBlockDayOffOptimizerService(
 			ITeamInfoFactory teamInfoFactory, 				
@@ -34,7 +39,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 			ISmartDayOffBackToLegalStateService smartDayOffBackToLegalStateService,
 			ISchedulingOptionsCreator schedulingOptionsCreator,
 			ILockableBitArrayChangesTracker lockableBitArrayChangesTracker,
-			ISchedulingResultStateHolder stateHolder
+			ISchedulingResultStateHolder stateHolder,
+			ITeamBlockScheduler teamBlockScheduler,
+			IResourceOptimizationHelper resourceOptimizationHelper,
+			ITeamBlockInfoFactory teamBlockInfoFactory
 			)
 		{
 			_teamInfoFactory = teamInfoFactory;
@@ -44,15 +52,22 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_schedulingOptionsCreator = schedulingOptionsCreator;
 			_lockableBitArrayChangesTracker = lockableBitArrayChangesTracker;
 			_stateHolder = stateHolder;
+			_teamBlockScheduler = teamBlockScheduler;
+			_resourceOptimizationHelper = resourceOptimizationHelper;
+			_teamBlockInfoFactory = teamBlockInfoFactory;
 		}
 
-		public void OptimizeDaysOff(IList<IScheduleMatrixPro> allPersonMatrixList, 
-									DateOnlyPeriod selectedPeriod,
-		                            IList<IPerson> selectedPersons, 
-									IOptimizationPreferences optimizationPreferences,
-									ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
+		public void OptimizeDaysOff(
+			IList<IScheduleMatrixPro> allPersonMatrixList, 
+			DateOnlyPeriod selectedPeriod,
+		    IList<IPerson> selectedPersons, 
+			IOptimizationPreferences optimizationPreferences,
+			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
+			IDayOffTemplate dayOffTemplate
+			)
 		{
 			ISchedulingOptions schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
+			schedulingOptions.DayOffTemplate = dayOffTemplate;
 			// create a list of all teamInfos
 			var allTeamInfoListOnStartDate = new HashSet<ITeamInfo>();
 			foreach (var selectedPerson in selectedPersons)
@@ -66,11 +81,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 			{
 				foreach (var matrix in teamInfo.MatrixesForGroupMember(0))
 				{
-					ILockableBitArray originalArray = _lockableBitArrayFactory.ConvertFromMatrix(optimizationPreferences.DaysOff.ConsiderWeekBefore,
-																   optimizationPreferences.DaysOff.ConsiderWeekAfter, matrix);
+					ILockableBitArray originalArray =
+						_lockableBitArrayFactory.ConvertFromMatrix(optimizationPreferences.DaysOff.ConsiderWeekBefore,
+						                                           optimizationPreferences.DaysOff.ConsiderWeekAfter, matrix);
 
 					IScheduleResultDataExtractor scheduleResultDataExtractor =
-							_scheduleResultDataExtractorProvider.CreatePersonalSkillDataExtractor(matrix, optimizationPreferences.Advanced);
+						_scheduleResultDataExtractorProvider.CreatePersonalSkillDataExtractor(matrix, optimizationPreferences.Advanced);
 
 					ILockableBitArray resultingArray = tryFindMoves(originalArray, scheduleResultDataExtractor, optimizationPreferences);
 
@@ -78,24 +94,58 @@ namespace Teleopti.Ccc.Domain.Optimization
 						continue;
 
 					// find out what have changed
-					IList<DateOnly> addedDaysOff = _lockableBitArrayChangesTracker.DaysOffAdded(resultingArray, originalArray, matrix, optimizationPreferences.DaysOff.ConsiderWeekBefore);
-					IList<DateOnly> removedDaysOff = _lockableBitArrayChangesTracker.DaysOffRemoved(resultingArray, originalArray, matrix, optimizationPreferences.DaysOff.ConsiderWeekBefore);
+					IList<DateOnly> addedDaysOff = _lockableBitArrayChangesTracker.DaysOffAdded(resultingArray, originalArray, matrix,
+					                                                                            optimizationPreferences.DaysOff
+					                                                                                                   .ConsiderWeekBefore);
+					IList<DateOnly> removedDaysOff = _lockableBitArrayChangesTracker.DaysOffRemoved(resultingArray, originalArray,
+					                                                                                matrix,
+					                                                                                optimizationPreferences.DaysOff
+					                                                                                                       .ConsiderWeekBefore);
 
-					if (optimizationPreferences.Extra.KeepSameDaysOffInTeam) // do it on every team member
+					// Does the predictor beleve in this?
+					// execute do moves
+					foreach (var dateOnly in removedDaysOff)
 					{
-						foreach (var person in teamInfo.GroupPerson.GroupMembers)
+						IList<IScheduleDay> toRemove = new List<IScheduleDay>();
+						if (optimizationPreferences.Extra.KeepSameDaysOffInTeam) // do it on every team member
 						{
-							// Does the predictor beleve in this?
-
-							// execute do moves
-							foreach (var dateOnly in removedDaysOff)
-							{
+							foreach (var person in teamInfo.GroupPerson.GroupMembers)
+							{	
 								IScheduleDay scheduleDay = _stateHolder.Schedules[person].ScheduledDay(dateOnly);
+								toRemove.Add((IScheduleDay)scheduleDay.Clone());
 								scheduleDay.DeleteDayOff();
 								schedulePartModifyAndRollbackService.Modify(scheduleDay);
 							}
 						}
+						_resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, true, toRemove, new List<IScheduleDay>());
 					}
+
+					foreach (var dateOnly in addedDaysOff)
+					{
+						IList<IScheduleDay> toRemove = new List<IScheduleDay>();
+						IList<IScheduleDay> toAdd = new List<IScheduleDay>();
+						if (optimizationPreferences.Extra.KeepSameDaysOffInTeam) // do it on every team member
+						{
+							foreach (var person in teamInfo.GroupPerson.GroupMembers)
+							{
+								IScheduleDay scheduleDay = _stateHolder.Schedules[person].ScheduledDay(dateOnly);
+								toRemove.Add((IScheduleDay)scheduleDay.Clone());
+								scheduleDay.CreateAndAddDayOff(schedulingOptions.DayOffTemplate);
+								schedulePartModifyAndRollbackService.Modify(scheduleDay);
+								toAdd.Add(_stateHolder.Schedules[person].ReFetch(scheduleDay));
+							}
+						}
+						_resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, true, toRemove, new List<IScheduleDay>());
+					}
+
+					foreach (var dateOnly in removedDaysOff)
+					{
+						ITeamBlockInfo teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, dateOnly,
+						                                                                         schedulingOptions
+							                                                                         .BlockFinderTypeForAdvanceScheduling);
+						_teamBlockScheduler.ScheduleTeamBlock(teamBlockInfo, dateOnly, schedulingOptions);
+					}
+
 
 
 					// ev back to legal state?

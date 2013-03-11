@@ -49,9 +49,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				IList<IScheduleMatrixPro> memberList = new List<IScheduleMatrixPro>();
 				foreach (var matrixPro in allMatrixesInScheduler)
 				{
-					if (matrixPro.Person.Equals(groupMember) && matrixPro.SchedulePeriod.DateOnlyPeriod.Intersection(period) != null)
+					if (matrixPro.Person.Equals(groupMember))
 					{
-						memberList.Add(matrixPro);	
+						if(matrixPro.SchedulePeriod.DateOnlyPeriod.Intersection(period) != null)
+							memberList.Add(matrixPro);	
 					}
 				}
 				matrixesForGroup.Add(memberList);

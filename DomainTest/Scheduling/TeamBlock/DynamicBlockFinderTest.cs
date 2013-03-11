@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 	    private ITeamInfo _teamInfo;
 	    private DateOnly _date;
 	    private IVirtualSchedulePeriod _schedulePeriod;
+	    private IScheduleMatrixPro _matrixPro2;
 
 	    [SetUp]
         public void Setup()
@@ -24,6 +25,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             _mock = new MockRepository();
             _schedulingOptions = new SchedulingOptions();
             _matrixPro = _mock.StrictMock<IScheduleMatrixPro>();
+			_matrixPro2 = _mock.StrictMock<IScheduleMatrixPro>();
 	        _teamInfo = _mock.StrictMock<ITeamInfo>();
 			_target = new DynamicBlockFinder();
 			_date = new DateOnly(2013, 02, 22);
@@ -72,6 +74,26 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
       
       
         }
+
+		[Test]
+		public void ShouldReturnCorrectBlockPeriodIfMoreThanOneMatrixIsOnTheMembersInTeamInfo()
+		{
+			using (_mock.Record())
+			{
+				Expect.Call(_teamInfo.MatrixesForGroup()).Return(new List<IScheduleMatrixPro> { _matrixPro, _matrixPro2 });
+				Expect.Call(_matrixPro.SchedulePeriod).Return(_schedulePeriod);
+				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(_date, _date));
+
+				Expect.Call(_matrixPro2.SchedulePeriod).Return(_schedulePeriod);
+				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(_date.AddDays(1), _date.AddDays(1)));
+			}
+
+			using (_mock.Playback())
+			{
+				DateOnlyPeriod result = _target.ExtractBlockInfo(_date.AddDays(1), _teamInfo, BlockFinderType.SchedulePeriod).BlockPeriod;
+				Assert.AreEqual(new DateOnlyPeriod(_date.AddDays(1), _date.AddDays(1)), result);
+			}
+		}
 
         [Test]
         public void ShouldReturnNullIfNoPeriodFound()
