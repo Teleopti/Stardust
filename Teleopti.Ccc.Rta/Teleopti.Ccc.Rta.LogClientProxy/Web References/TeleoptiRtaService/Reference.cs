@@ -231,31 +231,29 @@ namespace Teleopti.Ccc.Rta.LogClientProxy.TeleoptiRtaService {
         
         /// <remarks/>
         [System.Web.Services.Protocols.SoapDocumentMethodAttribute("http://tempuri.org/ITeleoptiRtaService/GetUpdatedScheduleChange", RequestNamespace="http://tempuri.org/", ResponseNamespace="http://tempuri.org/", Use=System.Web.Services.Description.SoapBindingUse.Literal, ParameterStyle=System.Web.Services.Protocols.SoapParameterStyle.Wrapped)]
-        public void GetUpdatedScheduleChange(string personId, string bussinessUnitId, [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)] string dataSource, System.DateTime activityTimeStamp, [System.Xml.Serialization.XmlIgnoreAttribute()] bool activityTimeStampSpecified) {
+        public void GetUpdatedScheduleChange(string personId, string businessUnitId, System.DateTime timestamp, [System.Xml.Serialization.XmlIgnoreAttribute()] bool timestampSpecified) {
             this.Invoke("GetUpdatedScheduleChange", new object[] {
                         personId,
-                        bussinessUnitId,
-                        dataSource,
-                        activityTimeStamp,
-                        activityTimeStampSpecified});
+                        businessUnitId,
+                        timestamp,
+                        timestampSpecified});
         }
         
         /// <remarks/>
-        public void GetUpdatedScheduleChangeAsync(string personId, string bussinessUnitId, string dataSource, System.DateTime activityTimeStamp, bool activityTimeStampSpecified) {
-            this.GetUpdatedScheduleChangeAsync(personId, bussinessUnitId, dataSource, activityTimeStamp, activityTimeStampSpecified, null);
+        public void GetUpdatedScheduleChangeAsync(string personId, string businessUnitId, System.DateTime timestamp, bool timestampSpecified) {
+            this.GetUpdatedScheduleChangeAsync(personId, businessUnitId, timestamp, timestampSpecified, null);
         }
         
         /// <remarks/>
-        public void GetUpdatedScheduleChangeAsync(string personId, string bussinessUnitId, string dataSource, System.DateTime activityTimeStamp, bool activityTimeStampSpecified, object userState) {
+        public void GetUpdatedScheduleChangeAsync(string personId, string businessUnitId, System.DateTime timestamp, bool timestampSpecified, object userState) {
             if ((this.GetUpdatedScheduleChangeOperationCompleted == null)) {
                 this.GetUpdatedScheduleChangeOperationCompleted = new System.Threading.SendOrPostCallback(this.OnGetUpdatedScheduleChangeOperationCompleted);
             }
             this.InvokeAsync("GetUpdatedScheduleChange", new object[] {
                         personId,
-                        bussinessUnitId,
-                        dataSource,
-                        activityTimeStamp,
-                        activityTimeStampSpecified}, this.GetUpdatedScheduleChangeOperationCompleted, userState);
+                        businessUnitId,
+                        timestamp,
+                        timestampSpecified}, this.GetUpdatedScheduleChangeOperationCompleted, userState);
         }
         
         private void OnGetUpdatedScheduleChangeOperationCompleted(object arg) {

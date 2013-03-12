@@ -108,6 +108,20 @@ namespace Teleopti.Ccc.Rta.LogClient
             _loggingSvc.Info("Done sending message to server");
         }
 
+		public void UpdateScheduleChange(string personId, string businessId, DateTime timestamp)
+		{
+			_loggingSvc.InfoFormat("Sending UpdateScheduleChange message to server: PersonId {0}, BU {1}, Timestamp {2}", personId, businessId, timestamp);
+			try
+			{
+				_dataHandler.CheckSchedule(Guid.Parse(personId), Guid.Parse(businessId), timestamp);
+			}
+			catch (Exception e)
+			{
+				_loggingSvc.Error(e);
+				throw;
+			}
+		}
+
 		public void SendRtaDataToServer(Guid platformTypeId, int logObjectId, ICollection<ITeleoptiRtaState> rtaStates)
 		{
 			try

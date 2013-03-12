@@ -18,6 +18,7 @@ namespace Teleopti.Ccc.Rta.LogClientProxy
 
 		public void CheckSchedule(Guid personId, Guid businessUnitId, DateTime timestamp)
 		{
+			GetUpdatedScheduleChange(personId.ToString(), businessUnitId.ToString(), timestamp, true);
 		}
 
 	    public WaitHandle ProcessRtaData(Guid platformTypeId, string sourceId, ICollection<ITeleoptiRtaState> rtaStates)
