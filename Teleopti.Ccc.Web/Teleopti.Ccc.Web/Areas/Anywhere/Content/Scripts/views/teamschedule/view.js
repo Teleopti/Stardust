@@ -31,58 +31,38 @@ define([
 			navigation.GotoPersonSchedule(agentId, teamSchedule.SelectedDate());
 		}, null, "gotoagent");
 
-		var displayOptions;
-	    
-		var currentTeamId = function () {
-		    if (displayOptions.id)
-		        return displayOptions.id;
-		    if (teamSchedule.Teams().length > 0)
-		        return teamSchedule.Teams()[0].Id;
-		    return null;
-		};
-	    
-		var currentDate = function () {
-		    var date = displayOptions.date;
-		    if (date == undefined) {
-		        return moment().sod();
-		    } else {
-		        return moment(date, 'YYYYMMDD');
-		    }
-		};
+	    var loadSchedules = function(options) {
+	        subscriptions.subscribeTeamSchedule(
+	            teamSchedule.SelectedTeam(),
+	            helpers.Date.AsUTCDate(teamSchedule.SelectedDate().toDate()),
+	            function(schedules) {
+	                var currentAgents = teamSchedule.Agents();
 
-		var loadSchedules = function () {
-		    subscriptions.subscribeTeamSchedule(
-                teamSchedule.SelectedTeam(),
-                helpers.Date.AsUTCDate(teamSchedule.SelectedDate().toDate()),
-                function (schedules) {
-                    var currentAgents = teamSchedule.Agents();
+	                var dateClone = teamSchedule.SelectedDate().clone();
+	                for (var i = 0; i < schedules.length; i++) {
+	                    for (var j = 0; j < currentAgents.length; j++) {
+	                        if (currentAgents[j].Id == schedules[i].Id) {
+	                            currentAgents[j].SetLayers(schedules[i].Projection, teamSchedule.TimeLine, dateClone);
+	                            currentAgents[j].AddContractTime(schedules[i].ContractTimeMinutes);
+	                            currentAgents[j].AddWorkTime(schedules[i].WorkTimeMinutes);
+	                            break;
+	                        }
+	                    }
+	                }
 
-                    var dateClone = teamSchedule.SelectedDate().clone();
-                    for (var i = 0; i < schedules.length; i++) {
-                        for (var j = 0; j < currentAgents.length; j++) {
-                            if (currentAgents[j].Id == schedules[i].Id) {
-                                currentAgents[j].SetLayers(schedules[i].Projection, teamSchedule.TimeLine, dateClone);
-                                currentAgents[j].AddContractTime(schedules[i].ContractTimeMinutes);
-                                currentAgents[j].AddWorkTime(schedules[i].WorkTimeMinutes);
-                                break;
-                            }
-                        }
-                    }
+	                currentAgents.sort(function(a, b) {
+	                    var firstStartMinutes = a.TimeLineAffectingStartMinute();
+	                    var secondStartMinutes = b.TimeLineAffectingStartMinute();
+	                    return firstStartMinutes == secondStartMinutes ? (a.LastEndMinute() == b.LastEndMinute() ? 0 : a.LastEndMinute() < b.LastEndMinute() ? -1 : 1) : firstStartMinutes < secondStartMinutes ? -1 : 1;
+	                });
 
-                    currentAgents.sort(function (a, b) {
-                        var firstStartMinutes = a.TimeLineAffectingStartMinute();
-                        var secondStartMinutes = b.TimeLineAffectingStartMinute();
-                        return firstStartMinutes == secondStartMinutes ? (a.LastEndMinute() == b.LastEndMinute() ? 0 : a.LastEndMinute() < b.LastEndMinute() ? -1 : 1) : firstStartMinutes < secondStartMinutes ? -1 : 1;
-                    });
+	                teamSchedule.Agents.valueHasMutated();
 
-                    teamSchedule.Agents.valueHasMutated();
+	                options.success();
+	            });
+	    };
 
-                    teamSchedule.Loading(false);
-                });
-
-		};
-
-		var loadPersons = function (success) {
+		var loadPersons = function (options) {
 		    $.ajax({
 		        url: 'Person/PeopleInTeam',
 		        cache: false,
@@ -96,12 +76,12 @@ define([
 		                return new agentViewModel(s, events);
 		            });
 		            teamSchedule.SetAgents(newItems);
-		            success();
+		            options.success();
 		        }
 		    });
 		};
 
-		var loadTeams = function (success) {
+		var loadTeams = function (options) {
 		    $.ajax({
 		        url: 'Person/AvailableTeams',
 		        cache: false,
@@ -111,7 +91,7 @@ define([
 		        },
 		        success: function (data, textStatus, jqXHR) {
 		            teamSchedule.SetTeams(data.Teams);
-		            success();
+		            options.success();
 		        }
 		    });
 		};
@@ -168,7 +148,23 @@ define([
 		    },
 		    
 		    display: function (options) {
-		        displayOptions = options;
+
+		        var currentTeamId = function () {
+		            if (options.id)
+		                return options.id;
+		            if (teamSchedule.Teams().length > 0)
+		                return teamSchedule.Teams()[0].Id;
+		            return null;
+		        };
+
+		        var currentDate = function () {
+		            var date = options.date;
+		            if (date == undefined) {
+		                return moment().sod();
+		            } else {
+		                return moment(date, 'YYYYMMDD');
+		            }
+		        };
 
 		        teamSchedule.Loading(true);
 
@@ -176,15 +172,23 @@ define([
 
 		        var loadPersonsAndSchedules = function() {
 		            teamSchedule.SelectedTeam(currentTeamId());
-		            loadPersons(function () {
-		                loadSchedules();
+		            loadPersons({
+		                success: function() {
+		                    loadSchedules({
+		                        success: function() {
+		                            teamSchedule.Loading(false);
+		                        }
+		                    });
+		                }
 		            });
 		        };
 		        
 		        if (teamSchedule.Teams().length != 0) {
 		            loadPersonsAndSchedules();
 		        } else {
-		            loadTeams(loadPersonsAndSchedules);
+		            loadTeams({
+		                success: loadPersonsAndSchedules
+		            });
 		        }
 		        
 		    }
