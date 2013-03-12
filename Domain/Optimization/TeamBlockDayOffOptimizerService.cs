@@ -130,6 +130,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 							{
 								IScheduleDay scheduleDay = _stateHolder.Schedules[person].ScheduledDay(dateOnly);
 								toRemove.Add((IScheduleDay)scheduleDay.Clone());
+								scheduleDay.DeleteMainShift(scheduleDay);
 								scheduleDay.CreateAndAddDayOff(schedulingOptions.DayOffTemplate);
 								schedulePartModifyAndRollbackService.Modify(scheduleDay);
 								toAdd.Add(_stateHolder.Schedules[person].ReFetch(scheduleDay));
