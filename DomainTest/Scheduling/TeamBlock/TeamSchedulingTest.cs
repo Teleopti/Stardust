@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             using (_mock.Playback())
             {
 
-                _target.Execute(_teamBlockInfo,_shiftProjectionCache );
+                _target.Execute(_teamBlockInfo,_shiftProjectionCache, false);
             }
         }
 
@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             }
             using (_mock.Playback())
             {
-                _target.Execute(_teamBlockInfo, _shiftProjectionCache);
+				_target.Execute(_teamBlockInfo, _shiftProjectionCache, false);
             }
         }
 
@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             }
             using (_mock.Playback())
             {
-                _target.Execute(_teamBlockInfo, _shiftProjectionCache);
+				_target.Execute(_teamBlockInfo, _shiftProjectionCache, false);
             }
         }
 
@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             }
             using (_mock.Playback())
             {
-                _target.Execute(_teamBlockInfo,_shiftProjectionCache );
+				_target.Execute(_teamBlockInfo, _shiftProjectionCache, false);
             }
         }
 
@@ -173,7 +173,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             }
             using (_mock.Playback())
             {
-                _target.Execute(_teamBlockInfo, _shiftProjectionCache);
+				_target.Execute(_teamBlockInfo, _shiftProjectionCache, false);
             }
         }
 
@@ -200,7 +200,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             using (_mock.Playback())
             {
                 _target.DayScheduled += targetDayScheduledNotCanceled;
-                _target.Execute(_teamBlockInfo,_shiftProjectionCache );
+				_target.Execute(_teamBlockInfo, _shiftProjectionCache, false);
                 _target.DayScheduled += targetDayScheduledNotCanceled;
             }
 
@@ -225,7 +225,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             using (_mock.Playback())
             {
                 _target.DayScheduled += targetDayScheduledCanceled;
-                _target.Execute(_teamBlockInfo,_shiftProjectionCache );
+				_target.Execute(_teamBlockInfo, _shiftProjectionCache, false);
                 _target.DayScheduled += targetDayScheduledCanceled;
             }
 

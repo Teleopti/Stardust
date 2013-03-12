@@ -13,6 +13,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
         bool ScheduleTeamBlockDay(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions);
         bool ScheduleTeamBlock(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions);
+		bool ScheduleTeamBlock(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions, bool skipOffset);
 	}
 
 	public class TeamBlockScheduler : ITeamBlockScheduler
@@ -40,7 +41,11 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
         public bool ScheduleTeamBlock(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions)
 		{
-			
+			return ScheduleTeamBlock(teamBlockInfo, datePointer, schedulingOptions, false);
+		}
+
+		public bool ScheduleTeamBlock(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions, bool skipOffset)
+		{
             if (teamBlockInfo == null)
 				return false;
 
@@ -66,7 +71,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 																							 .UseMaximumPersons);
 			//implement
 			_teamScheduling.DayScheduled += dayScheduled;
-			_teamScheduling.Execute(teamBlockInfo, bestShiftProjectionCache);
+			_teamScheduling.Execute(teamBlockInfo, bestShiftProjectionCache, skipOffset);
 			_teamScheduling.DayScheduled -= dayScheduled;
 
 			return true;

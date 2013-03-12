@@ -32,7 +32,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         public bool UseStudentAvailability { get; set; }
 		public bool UseGroupScheduling { get; set; }
 		public IGroupPageLight GroupOnGroupPage { get; set; }
-        
+
+
         public IGroupPageLight GroupOnGroupPageForLevelingPer { get; set; }
         public bool UseLevellingSameEndTime { get; set; }
         public bool UseLevellingSameShiftCategory { get; set; }
