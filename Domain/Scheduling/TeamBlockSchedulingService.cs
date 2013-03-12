@@ -70,6 +70,37 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		    return true;
 	    }
 
+        public bool ScheduleSelectedUpdated(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, TeamSteadyStateHolder teamSteadyStateHolder)
+        {
+            _teamBlockScheduler.DayScheduled += dayScheduled;
+            foreach (var datePointer in selectedPeriod.DayCollection())
+            {
+                var allTeamInfoListOnStartDate = new HashSet<ITeamInfo>();
+                foreach (var selectedPerson in selectedPersons)
+                {
+                    allTeamInfoListOnStartDate.Add(_teamInfoFactory.CreateTeamInfo(selectedPerson, datePointer, allPersonMatrixList));
+                }
+             
+                foreach (var teamInfo in allTeamInfoListOnStartDate.GetRandom(allTeamInfoListOnStartDate.Count, true))
+                {
+
+                    if (!teamSteadyStateHolder.IsSteadyState(teamInfo.GroupPerson))
+                        continue;
+                    ITeamBlockInfo teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, datePointer,
+                                                                                             _schedulingOptions
+                                                                                                 .BlockFinderTypeForAdvanceScheduling);
+                    if (!_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, datePointer, _schedulingOptions ))
+                        continue;
+
+                    if (_cancelMe)
+                        break;
+                }
+            }
+
+            _teamBlockScheduler.DayScheduled -= dayScheduled;
+            return true;
+        }
+
 	    void dayScheduled(object sender, SchedulingServiceBaseEventArgs e)
 	    {
 		    OnDayScheduled(e);
