@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             }
         }
 
-        public void OnAdd(ILayer<IActivity> layer)
+        public virtual void OnAdd(ILayer<IActivity> layer)
         {
             if (!(layer is PersonalShiftActivityLayer))
                 throw new ArgumentException("Only PersonalShiftActivityLayers can be added to a PersonalShift");

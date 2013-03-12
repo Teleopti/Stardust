@@ -119,9 +119,9 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         public void VerifyEstimatedServiceLevel()
         {
             //Email and other except phone
-            ISkillDay skillDayEmail =
-                SkillDayFactory.CreateSkillDay(SkillFactory.CreateSkill("Email", SkillTypeFactory.CreateSkillTypeEmail(), 60), new DateTime(2009,1,1,0,0,0,0,DateTimeKind.Utc));
-            ((IAggregateEntity)_target).SetParent(skillDayEmail);
+			ISkillDay skillDayEmail =
+				SkillDayFactory.CreateSkillDay(SkillFactory.CreateSkill("Email", SkillTypeFactory.CreateSkillTypeEmail(), 60), new DateTime(2009, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc));
+			_target.SetParent(skillDayEmail);
             _target.PickResources65();
 
             //Demand is 0
@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
                                                                 100);
             ISkillDay skillDayPhone =
                 SkillDayFactory.CreateSkillDay(SkillFactory.CreateSkill("Phone", SkillTypeFactory.CreateSkillType(), 60), new DateTime(2009, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc));
-            ((IAggregateEntity)_target).SetParent(skillDayPhone);
+            _target.SetParent(skillDayPhone);
             Assert.AreEqual(new Percent(serviceLevel), _target.EstimatedServiceLevel);
         }
 
@@ -251,7 +251,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
                                                                100);
             ISkillDay skillDayPhone =
                 SkillDayFactory.CreateSkillDay(SkillFactory.CreateSkill("Phone", SkillTypeFactory.CreateSkillType(), 60), new DateTime(2009, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc));
-            ((IAggregateEntity)_target).SetParent(skillDayPhone);
+            
             _target.PickResources65();
             Assert.AreEqual(new Percent(serviceLevel), _target.EstimatedServiceLevel);
         }

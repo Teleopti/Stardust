@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			}
 		}
 
-		public void OnAdd(ILayer<IActivity> layer)
+		public virtual void OnAdd(ILayer<IActivity> layer)
 		{
 			if (!(layer is MainShiftActivityLayer))
 				throw new ArgumentException("Only MainShiftActivityLayers can be added to a MainShift");

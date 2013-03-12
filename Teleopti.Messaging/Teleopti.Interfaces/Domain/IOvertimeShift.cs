@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace Teleopti.Interfaces.Domain
 {
@@ -11,7 +9,7 @@ namespace Teleopti.Interfaces.Domain
     /// Created by: rogerkr
     /// Created date: 2009-02-05
     /// </remarks>
-	public interface IOvertimeShift : IShift, IAggregateEntity, ILayerCollectionOwner<IActivity>
+	public interface IOvertimeShift : IShift, IAggregateEntity
     {
         /// <summary>
         /// Gets the Layercollection with definition set included.

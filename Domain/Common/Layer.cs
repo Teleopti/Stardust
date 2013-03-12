@@ -57,15 +57,30 @@ namespace Teleopti.Ccc.Domain.Common
                 {
                     ret = findOrderIndex();
                 }
+	            
                 return ret;
             }
+			
         }
 
 
         private int findOrderIndex()
         {
-            return ((ILayerCollectionOwner<T>) Parent).LayerCollection.IndexOf(this);
+            return Parent.LayerCollection.IndexOf(this);
         }
+
+		public virtual bool Equals(ILayer other)
+		{
+			if (other == null)
+				return false;
+			if (this == other)
+				return true;
+			return false;
+			//if (!other.Id.HasValue || !Id.HasValue)
+			//	return false;
+
+			//return (Id.Value == other.Id.Value);
+		}
 
         public virtual void ChangeLayerPeriodEnd(TimeSpan timeSpan)
         {
@@ -98,10 +113,15 @@ namespace Teleopti.Ccc.Domain.Common
 		public virtual void SetParent(ILayerCollectionOwner<T> parent)
 		{
 			Parent = parent;
-
+			// mainshift, overtimeshift, personalshift - activitylayer
+			var entity = this as IAggregateEntity;
+			// mainshift, overtimeshift, personalshift
+			var parentEntity = parent as IEntity;
+			if (entity != null && parentEntity != null)
+				entity.SetParent(parentEntity);
 		}
 
-		public ILayerCollectionOwner<T> Parent { get; private set; }
+		public virtual ILayerCollectionOwner<T> Parent { get; private set; }
 
 	    #region ICloneableEntity<Layer<T>> Members
 
@@ -114,8 +134,10 @@ namespace Teleopti.Ccc.Domain.Common
 
         public virtual ILayer<T> NoneEntityClone()
         {
-            Layer<T> retObj = (Layer<T>)MemberwiseClone();
-            ((IEntity)retObj).SetId(null);
+            var retObj = (Layer<T>)MemberwiseClone();
+	        var entity = retObj as IEntity;
+			if(entity != null)
+				entity.SetId(null);
             return retObj;
         }
 

@@ -111,32 +111,32 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             }
         }
 
-        public void OnAdd(ILayer<IActivity> layer)
-        {
-            if (!(layer is OvertimeShiftActivityLayer))
-                throw new ArgumentException("Only OverTimeShiftActivityLayers can be added to a OvertimeShift");
-            if(Parent==null)
-                throw new InvalidOperationException("Cannot add layer to overtime shift before shift is connected to assignment.");
+		public virtual void OnAdd(ILayer<IActivity> layer)
+		{
+			if (!(layer is OvertimeShiftActivityLayer))
+				throw new ArgumentException("Only OverTimeShiftActivityLayers can be added to a OvertimeShift");
+			if (Parent == null)
+				throw new InvalidOperationException("Cannot add layer to overtime shift before shift is connected to assignment.");
 
-            var ass = ((IPersonAssignment) Root());
-            var timeZoneInfo = ass.Person.PermissionInformation.DefaultTimeZone();
-            var dateOnlyPerson = new DateOnly(TimeZoneHelper.ConvertFromUtc(layer.Period.StartDateTime, timeZoneInfo).Date);
-            var period = ass.Person.Period(dateOnlyPerson);
-            if(period!=null)
-            {
-                var castedLayer = (IOvertimeShiftActivityLayer) layer;
-                if(period.PersonContract.Contract.MultiplicatorDefinitionSetCollection.Contains(castedLayer.DefinitionSet))
-                    return;
-            }
-            throw new ArgumentException("Trying to add an overtimeactivitylayer with a definition set not defined for person's period.");
-        }
+			var ass = ((IPersonAssignment)Root());
+			var timeZoneInfo = ass.Person.PermissionInformation.DefaultTimeZone();
+			var dateOnlyPerson = new DateOnly(TimeZoneHelper.ConvertFromUtc(layer.Period.StartDateTime, timeZoneInfo).Date);
+			var period = ass.Person.Period(dateOnlyPerson);
+			if (period != null)
+			{
+				var castedLayer = (IOvertimeShiftActivityLayer)layer;
+				if (period.PersonContract.Contract.MultiplicatorDefinitionSetCollection.Contains(castedLayer.DefinitionSet))
+					return;
+			}
+			throw new ArgumentException("Trying to add an overtimeactivitylayer with a definition set not defined for person's period.");
+		}
 
         public virtual IEnumerable<IOvertimeShiftActivityLayer> LayerCollectionWithDefinitionSet()
         {
             return LayerCollection.Cast<IOvertimeShiftActivityLayer>();
         }
 
-        public IVisualLayerFactory CreateVisualLayerFactory()
+        public virtual IVisualLayerFactory CreateVisualLayerFactory()
         {
             return new VisualLayerOvertimeFactory();
         }

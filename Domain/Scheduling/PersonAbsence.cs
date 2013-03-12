@@ -245,9 +245,9 @@ namespace Teleopti.Ccc.Domain.Scheduling
             get { return Person; }
         }
 
-		// these two is just because we suddenly are a ILayerCollectionOwner
-		public ILayerCollection<ISkillStaff> LayerCollection { get; private set; }
-		public void OnAdd(ILayer<ISkillStaff> layer)
+		// these two is just because we suddenly is a ILayerCollectionOwner
+		public virtual ILayerCollection<ISkillStaff> LayerCollection { get; set; }
+		public virtual void OnAdd(ILayer<ISkillStaff> layer)
 		{
 			throw new NotImplementedException();
 		}

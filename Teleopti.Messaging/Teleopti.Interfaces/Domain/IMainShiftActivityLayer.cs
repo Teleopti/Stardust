@@ -7,7 +7,7 @@ namespace Teleopti.Interfaces.Domain
     /// Created by: rogerkr
     /// Created date: 2008-08-07
     /// </remarks>
-	public interface IMainShiftActivityLayer : IPersistedActivityLayer, IPersistedLayer<IActivity>
+	public interface IMainShiftActivityLayer : IPersistedLayer<IActivity>
     {
     }
 }
