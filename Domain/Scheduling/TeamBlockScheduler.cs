@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
         private bool isTeamBlockScheduled(ITeamBlockInfo teamBlockInfo)
         {
             foreach (var day in teamBlockInfo.BlockInfo.BlockPeriod.DayCollection())
-                foreach (var matrix in teamBlockInfo.TeamInfo.MatrixesForGroup)
+                foreach (var matrix in teamBlockInfo.TeamInfo.MatrixesForGroup())
                     if (!matrix.GetScheduleDayByKey(day).DaySchedulePart().IsScheduled())
                         return false;
             return true;
