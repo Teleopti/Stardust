@@ -430,7 +430,7 @@ Scenario: Show day off in a shifttrade
 	| Name  | DayOff |
 	And there is a dayoff with
 	| Field | Value		|
-	| Name  | Vacation	|
+	| Name  | VacationButWithAReallyLongName |
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
 	And 'I' have a day off with
 	| Field | Value      |
@@ -442,7 +442,7 @@ Scenario: Show day off in a shifttrade
 	| Start date | 2012-06-18 |
 	And 'Ashley Andeen' have a day off with
 	| Field | Value      |
-	| Name  | Vacation   |
+	| Name  | VacationButWithAReallyLongName |
 	| Date  | 2030-01-04 |
 	And I have created a shift trade request
 	| Field    | Value			|
@@ -453,7 +453,7 @@ Scenario: Show day off in a shifttrade
 	And I am viewing requests
 	When I click on the request
 	Then I should see my details scheduled day off 'DayOff'
-	And I should see other details scheduled day off 'Vacation'
+	And I should see other details scheduled day off 'VacationButWithAReallyLongName'
 
 
 Scenario: Show subject of the shift trade in shifttrade details
