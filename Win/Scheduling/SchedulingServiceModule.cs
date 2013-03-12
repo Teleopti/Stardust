@@ -24,6 +24,7 @@ using Teleopti.Ccc.Obfuscated.ResourceCalculation;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Grouping;
 using Teleopti.Ccc.WinCode.Scheduling;
+using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -214,6 +215,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 	        builder.RegisterType<CMSBOneFreeWeekendMax5WorkingDaysDecisionMaker>().As<IDayOffDecisionMaker>();
 	        builder.RegisterType<SchedulingOptionsCreator>().As<ISchedulingOptionsCreator>();
 	        builder.RegisterType<LockableBitArrayChangesTracker>().As<ILockableBitArrayChangesTracker>();
+	        builder.RegisterType<DayOffOptimizationDecisionMakerFactory>().As<IDayOffOptimizationDecisionMakerFactory>();
 
 
 			registerWorkShiftFilters(builder);

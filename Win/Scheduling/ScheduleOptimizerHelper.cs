@@ -1174,7 +1174,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             // create decisionmakers
 
             IEnumerable<IDayOffDecisionMaker> decisionMakers =
-                OptimizerHelperHelper.CreateDecisionMakers(scheduleMatrixArray, optimizerPreferences);
+                OptimizerHelperHelper.CreateDecisionMakers(scheduleMatrixArray, optimizerPreferences, _container);
             IScheduleResultDataExtractor scheduleResultDataExtractor = OptimizerHelperHelper.CreatePersonalSkillsDataExtractor(optimizerPreferences.Advanced, scheduleMatrix);
 
 			ISmartDayOffBackToLegalStateService dayOffBackToLegalStateService = 
