@@ -15,10 +15,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
     [TestFixture]
     public class ResourceOptimizationHelperTest
     {
-       private IResourceOptimizationHelper _target;
+		private IResourceOptimizationHelper _target;
         private ISchedulingResultStateHolder _stateHolder;
         private MockRepository _mocks;
         private IOccupiedSeatCalculator _occupiedSeatCalculator;
+	    private SingleSkillMaxSeatCalculator _singleSkillMaxSeatCalculator;
 
         [SetUp]
         public void Setup()
@@ -26,10 +27,12 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _mocks = new MockRepository();
             _stateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
             _occupiedSeatCalculator = _mocks.StrictMock<IOccupiedSeatCalculator>();
+	        _singleSkillMaxSeatCalculator = new SingleSkillMaxSeatCalculator();
             _target = new ResourceOptimizationHelper(_stateHolder, _occupiedSeatCalculator,
                                                      new NonBlendSkillCalculator(
                                                          new NonBlendSkillImpactOnPeriodForProjection()),
-														 new SingleSkillDictionary());
+														 new SingleSkillDictionary(),
+														 _singleSkillMaxSeatCalculator);
         }
 
         private void expectsForVerifyCalculateDay(ISkill skill1, ISkillStaffPeriodHolder skillStaffPeriodHolder,
@@ -236,7 +239,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		public void ShouldNotUseSingleSkillCalculationOnNoInputDays()
 		{
 			var singleSkillDictionary = _mocks.StrictMock<ISingleSkillDictionary>();
-			var helper = new ResourceOptimizationHelper(_stateHolder, _occupiedSeatCalculator, new NonBlendSkillCalculator(new NonBlendSkillImpactOnPeriodForProjection()), singleSkillDictionary);
+			var helper = new ResourceOptimizationHelper(_stateHolder, _occupiedSeatCalculator, new NonBlendSkillCalculator(new NonBlendSkillImpactOnPeriodForProjection()), singleSkillDictionary, _singleSkillMaxSeatCalculator);
 			var toRemove = new List<IScheduleDay>();
 			var toAdd = new List<IScheduleDay>();	
 
@@ -249,7 +252,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		{
 			var singleSkillDictionary = _mocks.StrictMock<ISingleSkillDictionary>();
 			var scheduleDay = _mocks.StrictMock<IScheduleDay>();
-			var helper = new ResourceOptimizationHelper(_stateHolder, _occupiedSeatCalculator, new NonBlendSkillCalculator(new NonBlendSkillImpactOnPeriodForProjection()), singleSkillDictionary);
+			var helper = new ResourceOptimizationHelper(_stateHolder, _occupiedSeatCalculator, new NonBlendSkillCalculator(new NonBlendSkillImpactOnPeriodForProjection()), singleSkillDictionary, _singleSkillMaxSeatCalculator);
 			var toRemove = new List<IScheduleDay>{scheduleDay};
 			var toAdd = new List<IScheduleDay>();
 			var person = _mocks.StrictMock<IPerson>();
@@ -276,7 +279,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		{
 			var singleSkillDictionary = _mocks.StrictMock<ISingleSkillDictionary>();
 			var scheduleDay = _mocks.StrictMock<IScheduleDay>();
-			var helper = new ResourceOptimizationHelper(_stateHolder, _occupiedSeatCalculator, new NonBlendSkillCalculator(new NonBlendSkillImpactOnPeriodForProjection()), singleSkillDictionary);
+			var helper = new ResourceOptimizationHelper(_stateHolder, _occupiedSeatCalculator, new NonBlendSkillCalculator(new NonBlendSkillImpactOnPeriodForProjection()), singleSkillDictionary, _singleSkillMaxSeatCalculator);
 			var toAdd = new List<IScheduleDay> { scheduleDay };
 			var toRemove = new List<IScheduleDay>();
 			var person = _mocks.StrictMock<IPerson>();
@@ -304,7 +307,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var singleSkillDictionary = _mocks.StrictMock<ISingleSkillDictionary>();
 			var scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
 			var scheduleDay2 = _mocks.StrictMock<IScheduleDay>();
-			var helper = new ResourceOptimizationHelper(_stateHolder, _occupiedSeatCalculator, new NonBlendSkillCalculator(new NonBlendSkillImpactOnPeriodForProjection()), singleSkillDictionary);
+			var helper = new ResourceOptimizationHelper(_stateHolder, _occupiedSeatCalculator, new NonBlendSkillCalculator(new NonBlendSkillImpactOnPeriodForProjection()), singleSkillDictionary, _singleSkillMaxSeatCalculator);
 			var toAdd = new List<IScheduleDay> { scheduleDay1 };
 			var toRemove = new List<IScheduleDay> { scheduleDay2 };
 			var person = _mocks.StrictMock<IPerson>();
@@ -339,7 +342,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var dateOnlyAsDateTimeperiod = _mocks.StrictMock<IDateOnlyAsDateTimePeriod>();
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, new DateTimePeriod(2009, 2, 2, 2009, 2, 2));
 			var singleSkillDictionary = _mocks.StrictMock<ISingleSkillDictionary>();
-			_target = new ResourceOptimizationHelper(_stateHolder, _occupiedSeatCalculator,new NonBlendSkillCalculator(new NonBlendSkillImpactOnPeriodForProjection()),singleSkillDictionary);
+			_target = new ResourceOptimizationHelper(_stateHolder, _occupiedSeatCalculator,new NonBlendSkillCalculator(new NonBlendSkillImpactOnPeriodForProjection()),singleSkillDictionary, _singleSkillMaxSeatCalculator);
 
 			using (_mocks.Record())
 			{

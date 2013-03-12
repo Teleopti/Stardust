@@ -17,16 +17,19 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
     	private readonly IOccupiedSeatCalculator _occupiedSeatCalculator;
     	private readonly INonBlendSkillCalculator _nonBlendSkillCalculator;
     	private readonly ISingleSkillDictionary _singleSkillDictionary;
+	    private readonly ISingleSkillMaxSeatCalculator _singleSkillMaxSeatCalculator;
 
     	public ResourceOptimizationHelper(ISchedulingResultStateHolder stateHolder, 
             IOccupiedSeatCalculator occupiedSeatCalculator, 
             INonBlendSkillCalculator nonBlendSkillCalculator,
-			ISingleSkillDictionary singleSkillDictionary)
+			ISingleSkillDictionary singleSkillDictionary,
+			ISingleSkillMaxSeatCalculator singleSkillMaxSeatCalculator)
 		{
 			_stateHolder = stateHolder;
 			_occupiedSeatCalculator = occupiedSeatCalculator;
     		_nonBlendSkillCalculator = nonBlendSkillCalculator;
     		_singleSkillDictionary = singleSkillDictionary;
+    		_singleSkillMaxSeatCalculator = singleSkillMaxSeatCalculator;
 		}
 
         public void ResourceCalculateDate(DateOnly localDate, bool useOccupancyAdjustment, bool considerShortBreaks)
@@ -128,18 +131,8 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 				}
 				else
 				{
-					var singleMaxSeatCalculator = new SingleSkillMaxSeatCalculator();
-					singleMaxSeatCalculator.Calculate(relevantSkillStaffPeriods, toRemove, toAdd);
+					_singleSkillMaxSeatCalculator.Calculate(relevantSkillStaffPeriods, toRemove, toAdd);
 				}
-
-				//if (isAllSingleSkill)
-				//{
-				//	var singleMaxSeatCalculator = new SingleSkillMaxSeatCalculator();
-				//	singleMaxSeatCalculator.Calculate(relevantSkillStaffPeriods, toRemove, toAdd);
-				//}
-				//else
-				//	_occupiedSeatCalculator.Calculate(localDate, relevantProjections, relevantSkillStaffPeriods);	
-				
             	
 				ordinarySkills = new List<ISkill>();
 				foreach (var skill in _stateHolder.Skills)
