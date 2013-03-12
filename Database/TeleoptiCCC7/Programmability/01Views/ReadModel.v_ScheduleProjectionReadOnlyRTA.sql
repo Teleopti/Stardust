@@ -15,6 +15,6 @@ SELECT [Id]
       ,[ShortName]
       ,[DisplayColor]
 FROM [ReadModel].[ScheduleProjectionReadOnly]
-WHERE BelongsToDate between dateadd(day,-1,GETUTCDATE()) and dateadd(day,3,GETUTCDATE())
+WHERE BelongsToDate between dateadd(day,-1,GETUTCDATE()) and dateadd(day,1,GETUTCDATE())
 
 GO

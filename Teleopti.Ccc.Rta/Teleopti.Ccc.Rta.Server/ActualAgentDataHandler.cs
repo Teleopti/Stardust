@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Rta.Server
 			var dateString = string.Format(CultureInfo.InvariantCulture, onTime.ToString("yyyy-MM-dd HH:mm"));
 			var idString = string.Format(CultureInfo.InvariantCulture, personId.ToString());
 			var query = string.Format(CultureInfo.InvariantCulture,
-			                          @"SELECT TOP 2 PayloadId,StartDateTime,EndDateTime,rta.Name,rta.ShortName,DisplayColor 
+									  @"SELECT TOP 2 PayloadId,StartDateTime,EndDateTime,rta.Name,rta.ShortName,DisplayColor 
 						FROM ReadModel.v_ScheduleProjectionReadOnlyRTA rta
 						WHERE EndDateTime > '{0}' 
 						AND PersonId='{1}'",
