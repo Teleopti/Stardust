@@ -6,6 +6,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WebBehaviorTest.Bindings.Generic;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
 using Teleopti.Interfaces.Domain;
 
@@ -79,30 +80,22 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoStudentAvailability(date);
 		}
 
-		[When(@"I view schedules for date '(.*)'")]
-		public void WhenIViewSchedulesForDate(string date)
+		[When(@"I view schedules for '([0-9\-\\\/]*)'")]
+		public void WhenIViewSchedulesForDate(DateTime date)
 		{
 			TestControllerMethods.Logon();
 			Navigation.GotoAnywhereTeamSchedule(date);
 		}
 		
 		[When(@"I view schedules for '(.*)' on '(.*)'")]
-		public void WhenIViewSchedulesWithTeamAndDate(string teamName, string date)
+		public void WhenIViewSchedulesWithTeamAndDate(string teamName, DateTime date)
 		{
 			TestControllerMethods.Logon();
-			var teamId = "";
-
-			var teams =
-				UserFactory.User().Person.PermissionInformation.ApplicationRoleCollection.Single().AvailableData.AvailableTeams;
-
-			foreach (var team in teams)
-			{
-				if (team.Description.Name.Equals(teamName))
-				{
-					teamId = team.Id.ToString();
-					break;
-				}
-			}
+			var teamSetups = UserFactory.User().UserDatasOfType<TeamConfigurable>();
+			var teamId = (from t in teamSetups
+						  let team = t.Team
+						  where team.Description.Name.Equals(teamName)
+						  select team.Id.Value).First();
 			Navigation.GotoAnywhereTeamSchedule(date, teamId);
 		}
 
