@@ -13,8 +13,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			var rtaChecker = new BusinessUnitInfoFinder(daBus);
 			rtaChecker.SendMessage();
 
-			// var dbConnection = ConfigurationManager.ConnectionStrings["Queue"];
-
+			var dbConnection = ConfigurationManager.ConnectionStrings["Queue"];
+			ClearDelaySendMessages.ClearMessages(dbConnection.ToString());
 		}
 	}
 }
