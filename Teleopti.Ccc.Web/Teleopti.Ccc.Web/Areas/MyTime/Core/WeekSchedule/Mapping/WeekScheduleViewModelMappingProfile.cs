@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				.ForMember(d => d.Date, c => c.MapFrom(s => s.Date.ToShortDateString()))
 				.ForMember(d => d.FixedDate, c => c.MapFrom(s => s.Date.ToFixedClientDateOnlyFormat()))
 				.ForMember(d => d.DayOfWeekNumber, c => c.MapFrom(s => (int)s.Date.DayOfWeek))
-				.ForMember(d => d.Periods, c => c.MapFrom(s =>
+				.ForMember(d => d.Periods, c => c.ResolveUsing(s =>
 															{
 																var projectionList = new List<IVisualLayer>();
 																if (s.ProjectionYesterday != null)

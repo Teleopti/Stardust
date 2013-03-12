@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		{
 			var personScheduleDayReadModelRepository = MockRepository.GenerateMock<IPersonScheduleDayReadModelRepository>();
 			var teamId = Guid.NewGuid();
-			var period = new DateTimePeriod(2013, 3, 4, 2013, 3, 5);
+			var period = new DateTimePeriod(2013, 3, 4, 2013, 3, 5).ChangeEndTime(TimeSpan.FromHours(1));
 			var target = new TeamScheduleHub(personScheduleDayReadModelRepository);
 			var hubBuilder = new TestHubBuilder();
 			hubBuilder.SetupHub(target, hubBuilder.FakeCaller<IEnumerable<dynamic>>("incomingTeamSchedule", a => { }));
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		{
 			var personScheduleDayReadModelRepository = MockRepository.GenerateMock<IPersonScheduleDayReadModelRepository>();
 			var teamId = Guid.NewGuid();
-			var period = new DateTimePeriod(2013, 3, 4, 2013, 3, 5);
+			var period = new DateTimePeriod(2013, 3, 4, 2013, 3, 5).ChangeEndTime(TimeSpan.FromHours(1));
 			var target = new TeamScheduleHub(personScheduleDayReadModelRepository);
 			var hubBuilder = new TestHubBuilder();
 			IEnumerable<dynamic> actual = null;

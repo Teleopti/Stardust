@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				.ForMember(d => d.Subject, o => o.MapFrom(s => s.GetSubject(new NoFormatting())))
 				.ForMember(d => d.Dates,
 									 o => o.MapFrom(s => s.Request.Period.ToShortDateTimeString(_userTimeZone.Invoke().TimeZone())))
-				.ForMember(d => d.Status, o => o.MapFrom(s =>
+				.ForMember(d => d.Status, o => o.ResolveUsing(s =>
 					{
 						var ret = s.StatusText;
 						if (s.IsPending)
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				.ForMember(d => d.IsCreatedByUser, o => o.MapFrom(s => isCreatedByUser(s.Request,_loggedOnUser)))
 				.ForMember(d => d.From, o => o.MapFrom(s => s.Request.PersonFrom == null ? string.Empty : s.Request.PersonFrom.Name.ToString()))
 				.ForMember(d => d.To, o => o.MapFrom(s => s.Request.PersonTo == null ? string.Empty : s.Request.PersonTo.Name.ToString()))
-				.ForMember(d => d.DenyReason, o => o.MapFrom(s =>
+				.ForMember(d => d.DenyReason, o => o.ResolveUsing(s =>
 																											{
 																												Resources.ResourceManager.IgnoreCase = true;
 																												var result = Resources.ResourceManager.GetString(s.DenyReason);
