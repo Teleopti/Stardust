@@ -455,7 +455,6 @@ Scenario: Show day off in a shifttrade
 	Then I should see my details scheduled day off 'DayOff'
 	And I should see other details scheduled day off 'VacationButWithAReallyLongName'
 
-
 Scenario: Show subject of the shift trade in shifttrade details
 Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
