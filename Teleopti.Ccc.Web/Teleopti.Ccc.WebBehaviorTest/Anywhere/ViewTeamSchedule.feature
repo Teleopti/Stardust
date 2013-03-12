@@ -78,7 +78,6 @@ Scenario: View team selection
 	| Team green |
 	| Team other |
 
-@ignore
 Scenario: Change team
 	Given there is a team with
 	| Field | Value      |
@@ -96,7 +95,7 @@ Scenario: Change team
 	| Start date | 2012-12-01 |
 	When I view schedules for 'Team green' on '2012-12-02'
 	And I select team 'Team other'
-	Then I should see schedule for 'Max Persson'
+	Then I should see agent 'Max Persson'
 
 Scenario: Select date
 	Given I have the role 'Anywhere Team Green'

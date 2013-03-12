@@ -14,6 +14,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Robustness
 			element.ClickNoWait();
 		}
 
+		public static void EventualWait<T>(this T element) where T : Element
+		{
+			element.WaitUntilExists(Timeout);
+			element.WaitUntilEnabled();
+		}
+
 		public static T EventualGet<T>(this T element) where T : Element
 		{
 			element.WaitUntilExists(Timeout);

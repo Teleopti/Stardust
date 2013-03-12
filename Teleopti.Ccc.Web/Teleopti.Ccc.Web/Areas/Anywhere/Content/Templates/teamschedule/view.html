@@ -1,7 +1,7 @@
 <div class="container team-schedule">
     <div class="row">
         <div class="span12 nowrap">
-            <select class="team-selector" data-bind="options: Teams, optionsText: 'SiteAndTeam', optionsValue: 'Id', value: SelectedTeam"></select>
+            <select id="team-selector" data-bind="enable: !Loading(), options: Teams, optionsText: 'SiteAndTeam', optionsValue: 'Id', value: SelectedTeam"></select>
             <div class="input-append date input-prepend pull-right" id="dp3" data-bind="datepicker: SelectedDate, datepickerOptions: { pullRight: true, format: Resources.MomentShortDatePattern, weekStart: Resources.FirstDayOfWeek, autoclose: true }">
                 <button class="btn" data-bind="attr: {title: Resources.Previous}, click: PreviousDay"><i class="icon-chevron-left"></i></button>
                 <input class="input-small" size="16" type="text" readonly="readonly"/>

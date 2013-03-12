@@ -1,4 +1,5 @@
 using System;
+using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Pages.jQuery;
 using WatiN.Core;
 using WatiN.Core.Native;
@@ -36,6 +37,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Extensions
 		{
 			element.Value = value;
 			element.Change();
+			element.JQueryChange();
+		}
+
+		public static void SelectNoWait(this SelectList element, string text)
+		{
+			element.EventualWait();
+			var option = element.Option(Find.BySelector(string.Format(":contains('{0}')", text)));
+			option.EventualWait();
+			option.SelectNoWait();
+			element.FireEventNoWait("change");
 			element.JQueryChange();
 		}
 
