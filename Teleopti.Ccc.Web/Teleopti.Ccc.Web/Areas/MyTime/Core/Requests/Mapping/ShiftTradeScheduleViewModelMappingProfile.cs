@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 					                {
 
 											 var myScheduleDay = createPersonDay(o.Person, o);
-											 var timeLineRangeTot = setTimeLineRange(myScheduleDay.ScheduleLayers, new List<ShiftTradePersonDayData>(), myScheduleDay.PersonTimeZone);
+											 var timeLineRangeTot = setTimeLineRange(o.DateOnlyAsPeriod.DateOnly, myScheduleDay.ScheduleLayers, new List<ShiftTradePersonDayData>(), myScheduleDay.PersonTimeZone);
 											 var myScheduleViewModel = new ShiftTradePersonScheduleViewModel
 											 {
 												 Name = o.Person.Name.ToString(),
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 						var possibleTradePersonsSchedule = _shiftTradeRequestProvider.Invoke().RetrievePossibleTradePersonsScheduleDay(dateOnly, possibleShiftTradePersons);
 						var possibleTradePersonDayCollection = createPossibleTradePersonsDayCollection(possibleShiftTradePersons, possibleTradePersonsSchedule);
 
-						var timeLineRangeTot = setTimeLineRange(myScheduleDay.ScheduleLayers, possibleTradePersonDayCollection,
+						var timeLineRangeTot = setTimeLineRange(dateOnly, myScheduleDay.ScheduleLayers, possibleTradePersonDayCollection,
 																			 myScheduleDay.PersonTimeZone);
 
 						var myScheduleViewModel = new ShiftTradePersonScheduleViewModel
@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				string.Empty;
 		}
 
-		private static DateTimePeriod setTimeLineRange(IEnumerable<IVisualLayer> myLayerCollection, IEnumerable<ShiftTradePersonDayData> possibleTradePersonDayCollection, TimeZoneInfo timeZone)
+		private static DateTimePeriod setTimeLineRange(DateOnly theDay, IEnumerable<IVisualLayer> myLayerCollection, IEnumerable<ShiftTradePersonDayData> possibleTradePersonDayCollection, TimeZoneInfo timeZone)
 		{
 			//IVisualLayerCollection has "Period" - use that instead of looping twice to get period?
 			DateTimePeriod? timeLineRangeTot = null;
@@ -143,7 +143,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 
 			if (!timeLineRangeTot.HasValue)
 			{
-				timeLineRangeTot = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(DateTime.Now.Date.AddHours(8), DateTime.Now.Date.AddHours(17), timeZone);
+				timeLineRangeTot = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(theDay.Date.AddHours(8), theDay.Date.AddHours(17), timeZone);
 			}
 
 			timeLineRangeTot = timeLineRangeTot.Value.ChangeStartTime(TimeSpan.FromMinutes(-TimeLineOffset));

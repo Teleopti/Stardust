@@ -240,7 +240,11 @@
 .shift-trade-dayoff-name 
 {
 	position: absolute;
-	left: 50%;
+    left: 0;
+    width: 100%;
+    text-align: center;
+    display: inline-block;
+    overflow: hidden;
 }
 .shift-trade-no-possible-trades 
 {

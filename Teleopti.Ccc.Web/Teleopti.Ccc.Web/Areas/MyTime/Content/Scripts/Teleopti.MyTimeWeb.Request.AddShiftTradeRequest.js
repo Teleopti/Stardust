@@ -212,13 +212,14 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		ajax.Ajax({
 			url: "Requests/ShiftTradeRequest",
 			dataType: "json",
+			contentType: 'application/json; charset=utf-8',
 			type: 'POST',
-			data: {
-				Date: vm.selectedDate().toDate().toJSON(),
-				Subject: vm.subject(),
-				Message: vm.message(),
-				PersonToId: vm.agentChoosed().personId
-			},
+			data: JSON.stringify({
+			    Date: vm.selectedDate().toDate().toJSON(),
+			    Subject: vm.subject(),
+			    Message: vm.message(),
+			    PersonToId: vm.agentChoosed().personId
+			}),
 			success: function (data) {
 				vm.agentChoosed(null);
 				vm.isSendEnabled(true);

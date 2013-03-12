@@ -423,6 +423,38 @@ Given I have the role 'Full access to mytime'
 	| Start time	| 12:00 |
 	| End time		| 22:00 |
 
+Scenario: Show day off in a shifttrade
+	Given I have the role 'Full access to mytime'
+	And there is a dayoff with
+	| Field | Value  |
+	| Name  | DayOff |
+	And there is a dayoff with
+	| Field | Value		|
+	| Name  | VacationButWithAReallyLongName |
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And 'I' have a day off with
+	| Field | Value      |
+	| Name  | DayOff     |
+	| Date  | 2030-01-04 |
+	And Ashley Andeen have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And Ashley Andeen has a person period with
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
+	And 'Ashley Andeen' have a day off with
+	| Field | Value      |
+	| Name  | VacationButWithAReallyLongName |
+	| Date  | 2030-01-04 |
+	And I have created a shift trade request
+	| Field    | Value			|
+	| To       | Ashley Andeen	|
+	| DateTo   | 2030-01-04		|
+	| DateFrom | 2030-01-04		|
+	| Pending  | True			|
+	And I am viewing requests
+	When I click on the request
+	Then I should see my details scheduled day off 'DayOff'
+	And I should see other details scheduled day off 'VacationButWithAReallyLongName'
+
 Scenario: Show subject of the shift trade in shifttrade details
 Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'

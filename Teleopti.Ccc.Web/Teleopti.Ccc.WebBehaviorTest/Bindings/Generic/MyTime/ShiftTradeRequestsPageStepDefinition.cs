@@ -132,6 +132,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeDetailsFromScheduleLayers.Last().Title, Contains.Substring(expectedEnd));
 		}
 
+		[Then(@"I should see my details scheduled day off '(.*)'")]
+		public void ThenIShouldSeeMyDetailsScheduledDayOff(string dayOffText)
+		{
+			EventualAssert.That(()=>Pages.Pages.RequestsPage.MyScheduleDayOff.Text,Is.EqualTo(dayOffText));
+		}
+
+		[Then(@"I should see other details scheduled day off '(.*)'")]
+		public void ThenIShouldSeeOtherDetailsScheduledDayOff(string dayOffText)
+		{
+			EventualAssert.That(() => Pages.Pages.RequestsPage.OtherScheduleDayOff.Text, Is.EqualTo(dayOffText));
+		}
+
 		[Then(@"I should see details with a schedule to")]
 		public void ThenIShouldSeeDetailsWithAScheduleTo(Table table)
 		{

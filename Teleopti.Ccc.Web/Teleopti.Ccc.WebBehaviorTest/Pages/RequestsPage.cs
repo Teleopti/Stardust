@@ -188,6 +188,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "Request-add-shift-trade")]
 		public Div AddShiftTradeContainer { get; set; }
 
+		public Span MyScheduleDayOff 
+		{
+			get { return Document.Spans.Filter(QuicklyFind.ByClass("shift-trade-dayoff-name")).First();  }
+		}
+
+		public Span OtherScheduleDayOff
+		{
+			get { return Document.Spans.Filter(QuicklyFind.ByClass("shift-trade-dayoff-name")).Skip(1).First(); }
+		}
+
 
 		public DivCollection Timelines
 		{
