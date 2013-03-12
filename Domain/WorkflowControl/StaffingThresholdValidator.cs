@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
                             var validatedUnderStaffingResult = ValidateUnderstaffing(skill, skillStaffPeriodList, absenceRequest.Person);
 
-                            if(!validatedUnderStaffingResult.IsValid)
+                            if (!validatedUnderStaffingResult.IsValid)
                             {
                                 underStaffDaysList.Add(string.Format(culture, dateTime.Date.ToString("d", culture)));
                                 underStaffHours = validatedUnderStaffingResult.ValidationErrors;
@@ -238,11 +238,16 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
             var inSufficientDates = "";
             var criticalUnderStaffingDates = "";
             var validationError = "";
+            var underStaffingDaysCount = 0;
+            var criticalUnderStaffingDaysCount = 0;
             var underStaffingValidationError = UserTexts.Resources.ResourceManager.GetString("InsufficientStaffingDays", culture);
             var criticalUnderStaffingValidationError = UserTexts.Resources.ResourceManager.GetString("SeriousUnderstaffing", culture);
 
             foreach (var insufficientStaffDay in underStaffing.UnderStaffingDates[UnderStaffStr])
             {
+                underStaffingDaysCount++;
+                if (underStaffingDaysCount > 5)
+                    break;
                 inSufficientDates += insufficientStaffDay + ",";
             }
 
@@ -254,6 +259,9 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
             foreach (var criticalUnderStaffingDay in underStaffing.UnderStaffingDates[SeriousUnderStaffStr])
             {
+                criticalUnderStaffingDaysCount++;
+                if (criticalUnderStaffingDaysCount > 5)
+                    break;
                 criticalUnderStaffingDates += criticalUnderStaffingDay + ",";
             }
 

@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
             var scheduleRange = _schedulingResultStateHolder.Schedules[absenceRequest.Person];
             var count = 0;
-            foreach (var budgetDay in budgetDays)
+            foreach (var budgetDay in budgetDays.OrderBy(x=>x.Day))
             {
                 var currentDay = budgetDay.Day;
                 var allowanceMinutes = budgetDay.Allowance * budgetDay.FulltimeEquivalentHours * TimeDefinition.MinutesPerHour;

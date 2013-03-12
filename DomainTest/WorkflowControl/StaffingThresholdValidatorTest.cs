@@ -542,8 +542,8 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
         {
             var underStaffDict = new UnderStaffingData();
             underStaffDict.UnderStaffingDates = new Dictionary<string, IList<string>>();
-            underStaffDict.UnderStaffingDates.Add("UnderStaffing", new List<string>(){"2012-12-01, 2012-12-02, 2012-12-03"});
-            underStaffDict.UnderStaffingDates.Add("SeriousUnderStaffing", new List<string>() {"2012-12-01, 2012-12-02,2012-12-03" });
+            underStaffDict.UnderStaffingDates.Add("UnderStaffing", new List<string>(){"2012-12-01, 2012-12-02, 2012-12-03,2012-12,04,2012-12-05,2012-12-06"});
+            underStaffDict.UnderStaffingDates.Add("SeriousUnderStaffing", new List<string>() { "2012-12-01, 2012-12-02,2012-12-03,2012-12,04,2012-12-05,2012-12-06" });
 
             var target = new StaffingThresholdValidator();
             var result = target.GetUnderStaffingDateString(underStaffDict, new CultureInfo(1033));
@@ -556,8 +556,8 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
         {
             var underStaffDict = new UnderStaffingData();
             underStaffDict.UnderStaffingHours = new Dictionary<string, IList<string>>();
-            underStaffDict.UnderStaffingHours.Add("UnderStaffingHours", new List<string>() { "10:00-10:15, 10:15-10:30, 10:30-10:45" });
-            underStaffDict.UnderStaffingHours.Add("SeriousUnderStaffingHours", new List<string>() { "10:00-10:15, 10:15-10:30, 10:30-10:45" });
+            underStaffDict.UnderStaffingHours.Add("UnderStaffingHours", new List<string>() { "10:00-10:15, 10:15-10:30, 10:30-10:45, 10:45-11:00, 11:00-11:15, 11:15-11:30" });
+            underStaffDict.UnderStaffingHours.Add("SeriousUnderStaffingHours", new List<string>() { "10:00-10:15, 10:15-10:30, 10:30-10:45, 10:45-11:00, 11:00-11:15, 11:15-11:30" });
 
             var target = new StaffingThresholdValidator();
             var result = target.GetUnderStaffingHourString(underStaffDict, new CultureInfo(1033),_person.PermissionInformation.DefaultTimeZone(), new DateTime(2012,01,01));
