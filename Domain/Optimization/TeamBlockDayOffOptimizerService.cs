@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
@@ -17,6 +18,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IOptimizationPreferences optimizationPreferences,
 			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 			IDayOffTemplate dayOffTemplate);
+
+		event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
 	}
 
 	public class TeamBlockDayOffOptimizerService : ITeamBlockDayOffOptimizerService
@@ -31,6 +34,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly ITeamBlockScheduler _teamBlockScheduler;
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 		private readonly ITeamBlockInfoFactory _teamBlockInfoFactory;
+		private readonly IPeriodValueCalculator _periodValueCalculatorForAllSkills;
+		private bool _cancelMe;
 
 		public TeamBlockDayOffOptimizerService(
 			ITeamInfoFactory teamInfoFactory, 				
@@ -42,7 +47,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			ISchedulingResultStateHolder stateHolder,
 			ITeamBlockScheduler teamBlockScheduler,
 			IResourceOptimizationHelper resourceOptimizationHelper,
-			ITeamBlockInfoFactory teamBlockInfoFactory
+			ITeamBlockInfoFactory teamBlockInfoFactory,
+			IPeriodValueCalculator periodValueCalculatorForAllSkills
 			)
 		{
 			_teamInfoFactory = teamInfoFactory;
@@ -55,7 +61,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_teamBlockScheduler = teamBlockScheduler;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_teamBlockInfoFactory = teamBlockInfoFactory;
+			_periodValueCalculatorForAllSkills = periodValueCalculatorForAllSkills;
 		}
+
+		public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
 
 		public void OptimizeDaysOff(
 			IList<IScheduleMatrixPro> allPersonMatrixList, 
@@ -77,6 +86,39 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			// find a random selected TeamInfo/matrix
 			var remainingInfoList = new List<ITeamInfo>(allTeamInfoListOnStartDate);
+
+			var teamInfosToRemove = new List<ITeamInfo>();
+			var previousPeriodValue = _periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
+
+			while (remainingInfoList.Count > 0)
+			{
+				runOneOptimizationRound(optimizationPreferences, schedulePartModifyAndRollbackService, remainingInfoList, schedulingOptions, previousPeriodValue, teamInfosToRemove);
+				foreach (var teamInfo in teamInfosToRemove)
+				{
+					remainingInfoList.Remove(teamInfo);
+				}
+			}
+
+			
+		}
+
+		public void OnReportProgress(string message)
+		{
+			var handler = ReportProgress;
+			if (handler != null)
+			{
+				ResourceOptimizerProgressEventArgs args = new ResourceOptimizerProgressEventArgs(null, 0, 0, message);
+				handler(this, args);
+				if (args.Cancel)
+					_cancelMe = true;
+			}
+		}
+
+		private void runOneOptimizationRound(IOptimizationPreferences optimizationPreferences,
+		                                     ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
+		                                     List<ITeamInfo> remainingInfoList, ISchedulingOptions schedulingOptions,
+		                                     double previousPeriodValue, List<ITeamInfo> teamInfosToRemove)
+		{
 			foreach (var teamInfo in remainingInfoList.GetRandom(remainingInfoList.Count, true))
 			{
 				foreach (var matrix in teamInfo.MatrixesForGroupMember(0))
@@ -110,9 +152,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 						if (optimizationPreferences.Extra.KeepSameDaysOffInTeam) // do it on every team member
 						{
 							foreach (var person in teamInfo.GroupPerson.GroupMembers)
-							{	
+							{
 								IScheduleDay scheduleDay = _stateHolder.Schedules[person].ScheduledDay(dateOnly);
-								toRemove.Add((IScheduleDay)scheduleDay.Clone());
+								toRemove.Add((IScheduleDay) scheduleDay.Clone());
 								scheduleDay.DeleteDayOff();
 								schedulePartModifyAndRollbackService.Modify(scheduleDay);
 							}
@@ -129,7 +171,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 							foreach (var person in teamInfo.GroupPerson.GroupMembers)
 							{
 								IScheduleDay scheduleDay = _stateHolder.Schedules[person].ScheduledDay(dateOnly);
-								toRemove.Add((IScheduleDay)scheduleDay.Clone());
+								toRemove.Add((IScheduleDay) scheduleDay.Clone());
 								scheduleDay.DeleteMainShift(scheduleDay);
 								scheduleDay.CreateAndAddDayOff(schedulingOptions.DayOffTemplate);
 								schedulePartModifyAndRollbackService.Modify(scheduleDay);
@@ -144,9 +186,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 						ITeamBlockInfo teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, dateOnly,
 						                                                                         schedulingOptions
 							                                                                         .BlockFinderTypeForAdvanceScheduling);
-						_teamBlockScheduler.ScheduleTeamBlock(teamBlockInfo, dateOnly, schedulingOptions);
+						_teamBlockScheduler.ScheduleTeamBlock(teamBlockInfo, dateOnly, schedulingOptions, true);
 					}
-
 
 
 					// ev back to legal state?
@@ -154,9 +195,16 @@ namespace Teleopti.Ccc.Domain.Optimization
 					// else
 					//	clear involved teamblocks
 					//	reschedule involved teamblocks
-					// rollback id failed or not good
+
 					// remember not to break anything in shifts or restrictions
 				}
+				// rollback id failed or not good
+				var currentPeriodValue = _periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
+				if (currentPeriodValue >= previousPeriodValue)
+					teamInfosToRemove.Add(teamInfo);
+				previousPeriodValue = currentPeriodValue;
+
+				OnReportProgress("Periodvalue: " + currentPeriodValue + " Optimized team " + teamInfo.GroupPerson.Name);
 			}
 		}
 

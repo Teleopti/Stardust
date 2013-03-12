@@ -3625,7 +3625,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				schedulingOptions.OnlyShiftsWhenUnderstaffed = false;
 
-                if(schedulingOptions.BlockFinderTypeForAdvanceScheduling == BlockFinderType.None )
+                if(!schedulingOptions.UseLevellingPerOption)
                 {
                     switch (schedulingOptions.UseBlockScheduling)
                     {
@@ -3912,7 +3912,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					{
 						IList<IPerson> selectedPersons =
 							new PersonListExtractorFromScheduleParts(selectedSchedules).ExtractPersons().ToList();
-						_groupDayOffOptimizerHelper.TeamGroupReOptimize(selectedPeriod, selectedPersons, _container.Resolve<IOptimizationPreferences>());
+						_groupDayOffOptimizerHelper.TeamGroupReOptimize(_backgroundWorkerOptimization, selectedPeriod, selectedPersons, _container.Resolve<IOptimizationPreferences>());
 						break;
 					}
 

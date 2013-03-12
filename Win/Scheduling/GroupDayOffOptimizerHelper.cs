@@ -17,6 +17,7 @@ using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Obfuscated.ResourceCalculation;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Scheduling;
@@ -46,8 +47,9 @@ namespace Teleopti.Ccc.Win.Scheduling
             _groupPersonBuilderForOptimization = _container.Resolve<IGroupPersonBuilderForOptimization>();
         }
 
-		public void TeamGroupReOptimize(DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences)
+		public void TeamGroupReOptimize(BackgroundWorker backgroundWorker, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences)
 		{
+			_backgroundWorker = backgroundWorker;
 			if(optimizationPreferences.General.OptimizationStepDaysOff)
 				optimizeTeamBlockDaysOff(selectedPeriod, selectedPersons, optimizationPreferences);
 		}
@@ -477,6 +479,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var groupPersonBuilderForOptimization = callGroupPage(schedulingOptions);
 			ITeamInfoFactory teamInfoFactory = new TeamInfoFactory(groupPersonBuilderForOptimization);
 
+			IScheduleResultDataExtractor allSkillsDataExtractor =
+				OptimizerHelperHelper.CreateAllSkillsDataExtractor(optimizationPreferences.Advanced, selectedPeriod, _stateHolder);
+			IPeriodValueCalculator periodValueCalculatorForAllSkills =
+				OptimizerHelperHelper.CreatePeriodValueCalculator(optimizationPreferences.Advanced, allSkillsDataExtractor);
+
 			ITeamBlockDayOffOptimizerService teamBlockDayOffOptimizerService = 
 				new TeamBlockDayOffOptimizerService(
 					teamInfoFactory,
@@ -488,7 +495,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 					_container.Resolve<ISchedulingResultStateHolder>(),
 					teamBlockScheduler,
 					_resourceOptimizationHelper,
-					_container.Resolve<ITeamBlockInfoFactory>()
+					_container.Resolve<ITeamBlockInfoFactory>(),
+					periodValueCalculatorForAllSkills
 					);
 
 			IList<IDayOffTemplate> dayOffTemplates = (from item in _schedulerState.CommonStateHolder.DayOffs
@@ -497,6 +505,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			((List<IDayOffTemplate>)dayOffTemplates).Sort(new DayOffTemplateSorter());
 
+			teamBlockDayOffOptimizerService.ReportProgress += resourceOptimizerPersonOptimized;
 			teamBlockDayOffOptimizerService.OptimizeDaysOff(
 				allMatrixes, 
 				selectedPeriod, 
@@ -504,6 +513,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				optimizationPreferences,
 				schedulePartModifyAndRollbackService,
 				dayOffTemplates[0]);
+			teamBlockDayOffOptimizerService.ReportProgress -= resourceOptimizerPersonOptimized;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
