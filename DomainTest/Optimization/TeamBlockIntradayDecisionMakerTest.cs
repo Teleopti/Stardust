@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 	{
 		private MockRepository _mocks;
 		private IBlockProvider _blockProvider;
-		private ILockableData _lockableData;
+		private IDataExtractorValuesForMatrixes _dataExtractorValuesForMatrixes;
 		private TeamBlockIntradayDecisionMaker _target;
 
 		[SetUp]
@@ -25,8 +25,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		{
 			_mocks = new MockRepository();
 			_blockProvider = _mocks.StrictMock<IBlockProvider>();
-			_lockableData = new LockableData();
-			_target = new TeamBlockIntradayDecisionMaker(_blockProvider,_lockableData);
+			_dataExtractorValuesForMatrixes = new DataExtractorValuesForMatrixes();
+			_target = new TeamBlockIntradayDecisionMaker(_blockProvider,_dataExtractorValuesForMatrixes);
 		}
 
 		[Test]
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 					new BlockInfo(new DateOnlyPeriod(date, date)),
 					new BlockInfo(new DateOnlyPeriod(date.AddDays(1), date.AddDays(1)))
 				};
-			_lockableData.Add(matrix1, new IntradayDecisionMakerComponents(converter1, extractor1));
+			_dataExtractorValuesForMatrixes.Add(matrix1, new IntradayDecisionMakerComponents(converter1, extractor1));
 			using (_mocks.Record())
 			{
 				Expect.Call(_blockProvider.Provide(selectedPeriod, new List<IPerson>{person}, matrixes, schedulingOptions)).Return(blocks);

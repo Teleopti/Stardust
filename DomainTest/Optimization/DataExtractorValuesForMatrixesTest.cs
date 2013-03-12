@@ -6,12 +6,11 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Optimization
 {
 	[TestFixture]
-	public class LockableDataTest
+	public class DataExtractorValuesForMatrixesTest
 	{
-		private ILockableData _target;
+		private IDataExtractorValuesForMatrixes _target;
 		private MockRepository _mocks;
-		private IScheduleMatrixLockableBitArrayConverter _converter;
-		private IScheduleResultDataExtractor _extractor;
+	    private IScheduleResultDataExtractor _extractor;
 		private IScheduleMatrixPro _matrix;
 
 		[SetUp]
@@ -19,19 +18,16 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		{
 			_mocks = new MockRepository();
 			_matrix = _mocks.StrictMock<IScheduleMatrixPro>();
-			_converter = _mocks.StrictMock<IScheduleMatrixLockableBitArrayConverter>();
 			_extractor = _mocks.StrictMock<IScheduleResultDataExtractor>();
-			_target = new LockableData();
+			_target = new DataExtractorValuesForMatrixes();
 		}
 
 		[Test]
 		public void ShouldHoldLockableData()
 		{
-			var components = new IntradayDecisionMakerComponents(_converter, _extractor);
-			_target.Add(_matrix, components);
+            _target.Add(_matrix, _extractor);
 
 			Assert.That(_target.Data.Count, Is.EqualTo(1));
-			Assert.That(_target.Data[_matrix], Is.EqualTo(components));
 		}
 	}
 }

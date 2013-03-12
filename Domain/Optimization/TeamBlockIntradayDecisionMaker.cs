@@ -1,30 +1,29 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
-using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
 	public interface ITeamBlockIntradayDecisionMaker
 	{
-		IBlockInfo Decide(DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons,
-		                  IList<IScheduleMatrixPro> allPersonMatrixList, ISchedulingOptions schedulingOptions);
+		IBlockInfo Decide(ILockableBitArray lockableBitArray, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, IList<IScheduleMatrixPro> allPersonMatrixList, ISchedulingOptions schedulingOptions);
 	}
 	
 	public class TeamBlockIntradayDecisionMaker : ITeamBlockIntradayDecisionMaker
 	{
 		private readonly IBlockProvider _blockProvider;
-		private readonly ILockableData _lockableData;
+		private readonly IDataExtractorValuesForMatrixes _dataExtractorValuesForMatrixes;
 
-		public TeamBlockIntradayDecisionMaker(IBlockProvider blockProvider, ILockableData lockableData)
+		public TeamBlockIntradayDecisionMaker(IBlockProvider blockProvider, IDataExtractorValuesForMatrixes dataExtractorValuesForMatrixes)
 		{
 			_blockProvider = blockProvider;
-			_lockableData = lockableData;
+			_dataExtractorValuesForMatrixes = dataExtractorValuesForMatrixes;
 		}
 
-		public IBlockInfo Decide(DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, IList<IScheduleMatrixPro> allPersonMatrixList, ISchedulingOptions schedulingOptions)
+		public IBlockInfo Decide(ILockableBitArray lockableBitArray, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, IList<IScheduleMatrixPro> allPersonMatrixList, ISchedulingOptions schedulingOptions)
 		{
 			var blocks = _blockProvider.Provide(selectedPeriod, selectedPersons, allPersonMatrixList, schedulingOptions);
 			var sourceMatrixes = new HashSet<IScheduleMatrixPro>();
@@ -38,10 +37,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 			var standardDeviationData = new StandardDeviationData();
 			foreach (var matrixPro in sourceMatrixes)
 			{
-				var values = _lockableData.Data[matrixPro].DataExtractor.Values();
+                var values = _dataExtractorValuesForMatrixes.Data[matrixPro].Values();
 				var periodDays = matrixPro.FullWeeksPeriodDays;
-				for (int i = 0; i < periodDays.Count; i++)
+			    for (int i = 0; i < periodDays.Count; i++)
 				{
+                    if (lockableBitArray.UnlockedIndexes.Contains(i) && !lockableBitArray.DaysOffBitArray[i])
 					standardDeviationData.Add(periodDays[i].Day, values[i]);
 				}
 			}
@@ -56,8 +56,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 				}
 				block.StandardDeviations = valuesOfOneBlock;
 			}
-			var maxValue = blocks.Max(x => x.Sum);
-			return blocks.FirstOrDefault(x=>x.Sum == maxValue);
+			var maxValue = blocks.Max(x => x.Average);
+            return blocks.FirstOrDefault(x => Math.Abs(x.Average - maxValue) < float.Epsilon);
 		}
 	}
 }

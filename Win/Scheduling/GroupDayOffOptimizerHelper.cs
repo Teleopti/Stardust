@@ -52,6 +52,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_backgroundWorker = backgroundWorker;
 			if(optimizationPreferences.General.OptimizationStepDaysOff)
 				optimizeTeamBlockDaysOff(selectedPeriod, selectedPersons, optimizationPreferences);
+		    if (optimizationPreferences.General.OptimizationStepShiftsWithinDay)
+		        optimizeTeamBlockIntraday(selectedPeriod, selectedPersons, optimizationPreferences);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "matrixListForIntradayOptimization"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
@@ -515,6 +517,52 @@ namespace Teleopti.Ccc.Win.Scheduling
 				dayOffTemplates[0]);
 			teamBlockDayOffOptimizerService.ReportProgress -= resourceOptimizerPersonOptimized;
 		}
+
+        private void optimizeTeamBlockIntraday(DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences)
+        {
+            var allMatrixes = OptimizerHelperHelper.CreateMatrixListAll(_schedulerState, _container);
+
+            var schedulingOptionsCreator = new SchedulingOptionsCreator();
+            var schedulingOptions = schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
+
+            var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true,
+                                                                        schedulingOptions.ConsiderShortBreaks);
+            ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService =
+                new SchedulePartModifyAndRollbackService(_stateHolder, _scheduleDayChangeCallback,
+                                                         new ScheduleTagSetter(
+                                                             schedulingOptions.TagToUseOnScheduling));
+            var teamScheduling = new TeamScheduling(resourceCalculateDelayer, schedulePartModifyAndRollbackService);
+
+            ITeamBlockScheduler teamBlockScheduler =
+                new TeamBlockScheduler(_container.Resolve<ISkillDayPeriodIntervalDataGenerator>(),
+                                       _container.Resolve<IRestrictionAggregator>(),
+                                       _container.Resolve<IWorkShiftFilterService>(), teamScheduling,
+                                       _container.Resolve<IWorkShiftSelector>());
+
+     
+            var groupPersonBuilderForOptimization = callGroupPage(schedulingOptions);
+            ITeamInfoFactory teamInfoFactory = new TeamInfoFactory(groupPersonBuilderForOptimization);
+
+            ITeamBlockIntradayOptimizationService teamBlockIntradayOptimizationService =
+                new TeamBlockIntradayOptimizationService(
+                    teamInfoFactory,
+                    _container.Resolve<ITeamBlockInfoFactory>(),
+                    _container.Resolve<IBlockProvider>(),
+                    teamBlockScheduler,
+                    _container.Resolve<ILockableBitArrayFactory>(),
+                    _container.Resolve<IScheduleResultDataExtractorProvider>(),
+                    _container.Resolve<ISchedulingOptionsCreator>(),
+                    _container.Resolve<ISchedulingResultStateHolder>(),
+                    _container.Resolve<IDeleteAndResourceCalculateService>()
+                    );
+
+            teamBlockIntradayOptimizationService.Optimize(
+                allMatrixes,
+                selectedPeriod,
+                selectedPersons,
+                optimizationPreferences,
+                schedulePartModifyAndRollbackService);
+        }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		private void optimizeDaysOff(
