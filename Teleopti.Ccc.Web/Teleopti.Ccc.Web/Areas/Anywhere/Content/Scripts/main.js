@@ -63,7 +63,6 @@ window.test = {
         require(['views/' + viewName + '/view'], function (view) {
             
             var callMethodIfReady = function () {
-                console.log(view.ready);
                 if (view.ready)
                     view[method].apply(view, args);
                 else
