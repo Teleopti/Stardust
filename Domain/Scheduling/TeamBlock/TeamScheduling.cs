@@ -11,6 +11,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
         void Execute(IList<DateOnly> daysInBlock, IList<IScheduleMatrixPro> matrixList, IGroupPerson groupPerson, IShiftProjectionCache shiftProjectionCache,
                      IList<DateOnly> unlockedDays, IList<IPerson> selectedPersons);
 		void Execute(ITeamBlockInfo teamBlockInfo, IShiftProjectionCache shiftProjectionCache);
+
+        void ExecutePerDayPerPerson(IPerson person, DateOnly dateOnly, ITeamBlockInfo teamBlockInfo,
+                                    IShiftProjectionCache shiftProjectionCache);
     }
 
     public  class TeamScheduling : ITeamScheduling
@@ -84,7 +87,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 	    public void Execute(ITeamBlockInfo teamBlockInfo, IShiftProjectionCache shiftProjectionCache)
 	    {
-	        if (teamBlockInfo == null || shiftProjectionCache == null) return null;
+	        if (teamBlockInfo == null || shiftProjectionCache == null) return;
             var startDateOfBlock = teamBlockInfo.BlockInfo.BlockPeriod.StartDate;
 
             foreach (var day in teamBlockInfo.BlockInfo.BlockPeriod.DayCollection() )
@@ -158,6 +161,29 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
             _schedulePartModifyAndRollbackService.Modify(destinationScheduleDay);
             return destinationScheduleDay;
+        }
+
+        public void ExecutePerDayPerPerson(IPerson person, DateOnly dateOnly, ITeamBlockInfo teamBlockInfo, IShiftProjectionCache shiftProjectionCache)
+        {
+            var listOfDestinationScheduleDays = new List<IScheduleDay>();
+            var tempMatrixList = teamBlockInfo.TeamInfo.MatrixesForGroup().Where(scheduleMatrixPro => scheduleMatrixPro.Person == person).ToList();
+            if (tempMatrixList.Any())
+            {
+                IScheduleMatrixPro matrix = null;
+                foreach (var scheduleMatrixPro in tempMatrixList)
+                {
+                    if (scheduleMatrixPro.SchedulePeriod.DateOnlyPeriod.Contains(dateOnly))
+                       matrix = scheduleMatrixPro;
+                }
+                if (matrix == null) return;
+                if (matrix.GetScheduleDayByKey(dateOnly).DaySchedulePart().IsScheduled()) return ;
+                IScheduleDay destinationScheduleDay = assignShiftProjection(dateOnly, shiftProjectionCache, listOfDestinationScheduleDays, matrix, dateOnly);
+                OnDayScheduled(new SchedulingServiceBaseEventArgs(destinationScheduleDay));
+                if (destinationScheduleDay != null)
+                    _resourceCalculateDelayer.CalculateIfNeeded(destinationScheduleDay.DateOnlyAsPeriod.DateOnly,
+                                                                    shiftProjectionCache.WorkShiftProjectionPeriod, listOfDestinationScheduleDays);
+            }
+            
         }
     }
 }

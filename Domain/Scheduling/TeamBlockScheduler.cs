@@ -1,6 +1,5 @@
-﻿
-
-using System;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
@@ -12,7 +11,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	public interface ITeamBlockScheduler
 	{
 		event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
-		bool ScheduleTeamBlock(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions);
+        bool ScheduleTeamBlockDay(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions);
+        bool ScheduleTeamBlock(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions);
 	}
 
 	public class TeamBlockScheduler : ITeamBlockScheduler
@@ -38,9 +38,10 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
-		public bool ScheduleTeamBlock(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions)
+        public bool ScheduleTeamBlock(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions)
 		{
-			if (teamBlockInfo == null)
+			
+            if (teamBlockInfo == null)
 				return false;
 
 			//if teamBlockInfo is fully scheduled, continue;
@@ -56,7 +57,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 			var activityInternalData = _skillDayPeriodIntervalDataGenerator.Generate(teamBlockInfo);
 
-			var bestShiftProjectionCache = _workShiftSelector.SelectShiftProjectionCache(shifts, activityInternalData,
+            var bestShiftProjectionCache = _workShiftSelector.SelectShiftProjectionCache(shifts, activityInternalData,
 																						 schedulingOptions
 																							 .WorkShiftLengthHintOption,
 																						 schedulingOptions
@@ -71,10 +72,81 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			return true;
 		}
 
+        public bool ScheduleTeamBlockDay(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions)
+        {
+
+            var suggestedShiftProjectionCache = ScheduleFirstTeamBlockToGetProjectionCache(teamBlockInfo, datePointer,
+                                                                                       schedulingOptions);
+            if (suggestedShiftProjectionCache == null) return false; 
+
+            foreach (var day in teamBlockInfo.BlockInfo.BlockPeriod.DayCollection())
+            {
+                foreach (var person in teamBlockInfo.TeamInfo.GroupPerson.GroupMembers)
+                {
+                    //should pass the suggested shift here
+                    var restriction = _restrictionAggregator.AggregatePerDay(teamBlockInfo.TeamInfo, schedulingOptions, new List<DateOnly> { day });
+
+                    // (should we cover for max seats here?) ????
+                    //should consider the suggested start time
+                    var shifts = _workShiftFilterService.Filter(datePointer, teamBlockInfo, restriction,
+                                                                schedulingOptions, new WorkShiftFinderResult(teamBlockInfo.TeamInfo.GroupPerson, datePointer));
+                    if (shifts == null || shifts.Count <= 0)
+                        return false;
+
+                    var activityInternalData = _skillDayPeriodIntervalDataGenerator.Generate(teamBlockInfo.TeamInfo, new List<DateOnly> { day });
+
+                    var bestShiftProjectionCache = _workShiftSelector.SelectShiftProjectionCache(shifts, activityInternalData,
+                                                                                                 schedulingOptions
+                                                                                                     .WorkShiftLengthHintOption,
+                                                                                                 schedulingOptions
+                                                                                                     .UseMinimumPersons,
+                                                                                                 schedulingOptions
+                                                                                                     .UseMaximumPersons);
+                    //implement
+                    _teamScheduling.DayScheduled += dayScheduled;
+                    _teamScheduling.ExecutePerDayPerPerson(person,day,teamBlockInfo,bestShiftProjectionCache);
+                    _teamScheduling.DayScheduled -= dayScheduled;
+                }
+                
+            }
+
+           
+
+            return true;
+        }
+
+        private IShiftProjectionCache ScheduleFirstTeamBlockToGetProjectionCache(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions)
+        {
+            if (teamBlockInfo == null) return null;
+
+            //if teamBlockInfo is fully scheduled, continue;
+            if (!isTeamBlockScheduled(teamBlockInfo)) return null;
+
+            var restriction = _restrictionAggregator.Aggregate(teamBlockInfo, schedulingOptions);
+
+            // (should we cover for max seats here?) ????
+            var shifts = _workShiftFilterService.Filter(datePointer, teamBlockInfo, restriction,
+                                                        schedulingOptions, new WorkShiftFinderResult(teamBlockInfo.TeamInfo.GroupPerson, datePointer));
+            if (shifts == null || shifts.Count <= 0)
+                return null;
+
+            var activityInternalData = _skillDayPeriodIntervalDataGenerator.Generate(teamBlockInfo);
+
+            var bestShiftProjectionCache = _workShiftSelector.SelectShiftProjectionCache(shifts, activityInternalData,
+                                                                                         schedulingOptions
+                                                                                             .WorkShiftLengthHintOption,
+                                                                                         schedulingOptions
+                                                                                             .UseMinimumPersons,
+                                                                                         schedulingOptions
+                                                                                             .UseMaximumPersons);
+
+            return bestShiftProjectionCache;
+        }
+
         private bool isTeamBlockScheduled(ITeamBlockInfo teamBlockInfo)
         {
             foreach (var day in teamBlockInfo.BlockInfo.BlockPeriod.DayCollection())
-                foreach (var matrix in teamBlockInfo.TeamInfo.MatrixesForGroup)
+                foreach (var matrix in teamBlockInfo.TeamInfo.MatrixesForGroup())
                     if (!matrix.GetScheduleDayByKey(day).DaySchedulePart().IsScheduled())
                         return false;
             return true;
