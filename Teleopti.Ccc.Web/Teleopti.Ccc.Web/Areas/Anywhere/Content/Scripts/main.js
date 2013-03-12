@@ -52,5 +52,5 @@ require([
 	'bootstrap',
 	'layout'
 ], function () {
-	
+
 });

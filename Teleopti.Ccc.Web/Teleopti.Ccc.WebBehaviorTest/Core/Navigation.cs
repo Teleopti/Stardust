@@ -197,13 +197,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
             Pages.Pages.NavigatingTo(Browser.Current.Page<MessagePage>());
 	    }
 
-		public static void GotoAnywhereTeamSchedule(string date = null)
+		public static void GotoAnywhereTeamSchedule(string date = null, string teamId = null)
 		{
 			string hash = string.Empty;
+
+			if (!string.IsNullOrEmpty(teamId))
+			{
+				hash = string.Format(CultureInfo.InvariantCulture, "#teamschedule/{0}", teamId);
+			}
 			if (!string.IsNullOrEmpty(date))
 			{
-				hash = string.Format(CultureInfo.InvariantCulture, "#teamschedule/{0}", date.Replace("-",""));
+				hash = !string.IsNullOrEmpty(hash) ? hash + "/" + date.Replace("-", "") : string.Format(CultureInfo.InvariantCulture, "#teamschedule/{0}", date.Replace("-", ""));
 			}
+
 			GoTo("Anywhere" + hash, new ApplicationStartupTimeout());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<AnywherePage>());
 		}

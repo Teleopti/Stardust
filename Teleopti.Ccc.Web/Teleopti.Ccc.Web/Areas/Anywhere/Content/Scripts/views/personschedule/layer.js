@@ -1,17 +1,28 @@
 define([
-		'knockout'
-	], function (ko) {
+		'knockout',
+		'moment',
+		'noext!application/resources'
+	], function (
+		ko,
+		moment,
+		resources
+	) {
 
 		return function (timeline, data) {
 
 			var self = this;
 
-			var localTime = moment(data.Start, "YYYY-MM-DD hh:mm:ss Z").local();
-			var localStartMinutes = localTime.diff(data.Date, 'minutes');
+			var time = moment(data.Start, "YYYY-MM-DDThh:mm:ssZ").utc();
+			var localStartMinutes = time.diff(data.Date, 'minutes');
 
 			this.StartMinutes = ko.observable(localStartMinutes);
 			this.LengthMinutes = ko.observable(data.Minutes);
 			this.Color = ko.observable(data.Color);
+
+			this.StartTime = ko.computed(function () {
+				var time = moment().startOf('day').add('minutes', self.StartMinutes());
+				return time.format(resources.ShortTimePattern);
+			});
 
 			this.EndMinutes = ko.computed(function () {
 				return self.StartMinutes() + self.LengthMinutes();

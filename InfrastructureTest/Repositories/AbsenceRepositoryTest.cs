@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Tracking;
@@ -98,7 +99,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             PersistAndRemoveFromUnitOfWork(absence3);
 
             AbsenceRepository rep = new AbsenceRepository(UnitOfWork);
-            IList<IAbsence> lst = rep.LoadAllSortByName();
+            IList<IAbsence> lst = rep.LoadAllSortByName().ToList();
 
             Assert.AreEqual(3, lst.Count);
             Assert.AreEqual("Backup", lst[0].Description.Name);

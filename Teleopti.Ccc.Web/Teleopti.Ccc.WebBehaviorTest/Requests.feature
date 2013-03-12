@@ -21,17 +21,42 @@ Scenario: See absence request
 	When I view requests
 	Then I should see my existing absence request
 
-Scenario: Do not show created shift trade request because its not implemented yet
+Scenario: Show created shift trade request
 	Given I am an agent
 	And I have created a shift trade request
+	| Field			| Value				|
+	| Subject		| swap with me		|
 	When I view requests
-	Then I should not see my existing shift trade request
+	Then I should see my existing shift trade request with subject 'swap with me'
 
-Scenario: Do not show received shift trade request because its not implemented yet
+
+Scenario: Show status of a created shift trade request
 	Given I am an agent
-	And I have received a shift trade request from 'Ashley'
+	And I have created a shift trade request
+	| Field   | Value        |
+	| Subject | swap with me |
+	| Pending | true         |
+	And I am viewing requests
+	Then I should see my existing shift trade request with status waiting for other part
+
+Scenario: Show status of a recieved shift trade request
+	Given I am an agent
+	And I have received a shift trade request
+	| Field   | Value         |
+	| Subject | swap with me  |
+	| From    | Ashley Andeen |
+	| Pending | true          |
+	And I am viewing requests
+	Then I should see my existing shift trade request with status waiting for your approval
+
+Scenario: Show received shift trade request
+	Given I am an agent
+	And I have received a shift trade request
+	| Field			| Value         |
+	| Subject		| swap with me  |
+	| From			| Ashley Andeen |
 	When I view requests
-	Then I should not see my existing shift trade request
+	Then I should see my existing shift trade request with subject 'swap with me'
 
 Scenario: Requests tab
 	Given I am an agent
@@ -43,8 +68,6 @@ Scenario: No access to requests tab
 	When I am viewing an application page
 	Then I should not be able to see requests link
 
-@ignore 
-#Henke! Have a look at this one. It´s failing on the "Ready for interaction" thingy
 Scenario: No access to requests page
 	Given I am an agent without access to any requests
 	And I am signed in

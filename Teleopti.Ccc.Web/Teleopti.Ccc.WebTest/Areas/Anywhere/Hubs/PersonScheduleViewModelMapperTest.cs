@@ -1,13 +1,16 @@
 using System;
 using System.Dynamic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using AutoMapper;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
@@ -22,6 +25,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			Mapper.Initialize(c => c.AddProfile(new PersonScheduleViewModelMappingProfile()));
 		}
 
+		// cant get this green with dynamics involved
+		[Test, Ignore]
+		public void ShouldConfigureCorrectly()
+		{
+			Mapper.AssertConfigurationIsValid();
+		}
+		
 		[Test]
 		public void ShouldMapPersonName()
 		{
@@ -65,11 +75,46 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			result.Site.Should().Be("Moon");
 		}
 
-		private dynamic MakeLayer(string Color = "", DateTime Start = new DateTime(), int Minutes = 0)
+		[Test]
+		public void ShouldMapAbsences()
+		{
+			var target = new PersonScheduleViewModelMapper();
+			var absences = new[] {new Absence(), new Absence()};
+
+			var result = target.Map(new PersonScheduleData { Absences = absences });
+
+			result.Absences.Should().Have.Count.EqualTo(2);
+		}
+
+		[Test]
+		public void ShouldMapAbsenceName()
+		{
+			var target = new PersonScheduleViewModelMapper();
+			var absences = new[] { new Absence { Description = new Description("A Name") } };
+
+			var result = target.Map(new PersonScheduleData { Absences = absences });
+
+			result.Absences.Single().Name.Should().Be("A Name");
+		}
+
+		[Test]
+		public void ShouldMapAbsenceId()
+		{
+			var target = new PersonScheduleViewModelMapper();
+			var absence = new Absence { Description = new Description(" ") };
+			absence.SetId(Guid.NewGuid());
+
+			var result = target.Map(new PersonScheduleData {Absences = new[] {absence}});
+
+			result.Absences.Single().Id.Should().Be(absence.Id.Value.ToString());
+		}
+
+		private dynamic MakeLayer(string Color = "", DateTime? Start = null, int Minutes = 0)
 		{
 			dynamic layer = new ExpandoObject();
 			layer.Color = Color;
 			layer.Start = Start;
+			layer.Start = Start.HasValue ? Start : null;
 			layer.Minutes = Minutes;
 			return layer;
 		}
@@ -101,16 +146,20 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		}
 
 		[Test]
-		public void ShouldMapLayerStartTime()
+		public void ShouldMapLayerStartTimeInPersonsTimeZone()
 		{
 			var target = new PersonScheduleViewModelMapper();
+			var person = new Person();
+			var personTimeZone = TimeZoneInfoFactory.HawaiiTimeZoneInfo();
+			person.PermissionInformation.SetDefaultTimeZone(personTimeZone);
+			var startTime = new DateTime(2013, 3, 4, 8, 0, 0, DateTimeKind.Utc);
 
 			dynamic shift = new ExpandoObject();
-			shift.Projection = new[] { MakeLayer("", DateTime.Today.AddHours(8))};
+			shift.Projection = new[] { MakeLayer("", startTime) };
 
-			var result = target.Map(new PersonScheduleData { Shift = shift });
+			var result = target.Map(new PersonScheduleData {Shift = shift, Person = person});
 
-			result.Layers.Single().Start.Should().Be(DateTime.Today.AddHours(8));
+			result.Layers.Single().Start.Should().Be(TimeZoneInfo.ConvertTimeFromUtc(startTime, personTimeZone));
 		}
 
 		[Test]

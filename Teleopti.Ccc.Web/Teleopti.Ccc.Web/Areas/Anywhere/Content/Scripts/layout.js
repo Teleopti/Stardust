@@ -2,7 +2,7 @@
 require([
 		'text!templates/layout.html',
 		'text!templates/menu.html',
-		'text!templates/dummy.html',
+		'text!templates/error.html',
 		'crossroads',
 		'hasher',
 		'knockout',
@@ -14,7 +14,7 @@ require([
 	], function (
 		layoutTemplate,
 		menuTemplate,
-		dummyTemplate,
+		errorTemplate,
 		crossroads,
 		hasher,
 		ko,
@@ -27,30 +27,48 @@ require([
 		var currentView;
 		var defaultView = 'teamschedule';
 		var menu = new menuViewModel(resources);
+		var contentPlaceHolder;
 
 		function _displayView(routeInfo) {
 
-			var placeHolder = $('#content-placeholder');
-			placeHolder.html(dummyTemplate).find("h2").text(routeInfo.view);
 			routeInfo.renderHtml = function (html) {
-				placeHolder.html(html);
+				contentPlaceHolder.html(html);
 			};
 
-			routeInfo.bindingElement = placeHolder[0];
-
-			if (currentView && currentView.dispose)
-				currentView.dispose();
+			routeInfo.bindingElement = contentPlaceHolder[0];
 
 			var module = 'views/' + routeInfo.view + '/view';
-			require([module], function (view) {
-				currentView = view;
-				view.display(routeInfo);
-				_fixBootstrapDropdownForMobileDevices();
-			});
+		    require([module], function(view) {
+
+		        if (view == undefined) {
+		            _displayError("View " + routeInfo.view + " could not be loaded");
+		            return;
+		        }
+
+		        if (view != currentView) {
+		            if (currentView && currentView.dispose)
+		                currentView.dispose();
+		            currentView = view;
+		            view.initialize(routeInfo);
+		        }
+
+		        view.display(routeInfo);
+		        
+		        if (view.clearaction)
+		            view.clearaction(routeInfo);
+		        if (routeInfo.action)
+		            view[routeInfo.action](routeInfo);
+
+		        _fixBootstrapDropdownForMobileDevices();
+		    });
 
 			menu.ActiveView(routeInfo.view);
 		}
 
+        function _displayError(message) {
+            contentPlaceHolder.html(errorTemplate).find('span').text(message);
+        }
+	    
 		function _setupRoutes() {
 			var viewRegex = '[a-z]+';
 			var actionRegex = '[a-z]+';
@@ -111,6 +129,7 @@ require([
 
 		function _render() {
 			$('body').append(layoutTemplate);
+			contentPlaceHolder = $('#content-placeholder');
 			$('#menu-placeholder').replaceWith(menuTemplate);
 		}
 
@@ -152,7 +171,7 @@ require([
 		function _initSignalR() {
 			var promise = subscriptions.start();
 			promise.fail(function () {
-				$('.container > .row:first').html('<div class="alert"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>Warning!</strong> ' + error + '.</div>');
+			    _displayError("SignalR failed to start");
 			});
 		}
 

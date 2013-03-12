@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -11,7 +10,6 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
-using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
@@ -27,7 +25,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
 
-			var target = new ShiftTradeRequestProvider(loggedOnUser, MockRepository.GenerateMock<IScheduleProvider>(), null);
+			var target = new ShiftTradeRequestProvider(loggedOnUser, MockRepository.GenerateMock<IScheduleProvider>());
 
 			var result = target.RetrieveUserWorkflowControlSet();
 
@@ -49,7 +47,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 
 			scheduleProvider.Stub(x => x.GetScheduleForPeriod(new DateOnlyPeriod(date, date))).Return(new[] { scheduleDay });
 
-			var target = new ShiftTradeRequestProvider(MockRepository.GenerateMock<ILoggedOnUser>(), scheduleProvider, null);
+			var target = new ShiftTradeRequestProvider(MockRepository.GenerateMock<ILoggedOnUser>(), scheduleProvider);
 
 			var result = target.RetrieveMyScheduledDay(date);
 
@@ -60,23 +58,20 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 		public void ShouldGetScheduleForPossibleTradePersons()
 		{
 			var scheduleProvider = MockRepository.GenerateMock<IScheduleProvider>();
-			var possibleTradePersonProvider = MockRepository.GenerateMock<IPossibleShiftTradePersonsProvider>();
 			var personList = new[] { new Person() };
 			var date = DateOnly.Today;
-			IScheduleDictionary scheduleDictionary = new ScheduleDictionary(new Scenario("scenario"),
+			var scheduleDictionary = new ScheduleDictionary(new Scenario("scenario"),
 																			new ScheduleDateTimePeriod(
 																				new DateTimePeriod(
 																					DateTime.SpecifyKind(date.Date, DateTimeKind.Utc),
 																					DateTime.SpecifyKind(date.Date, DateTimeKind.Utc))));
-			IScheduleDay scheduleDay = ExtractedSchedule.CreateScheduleDay(scheduleDictionary, personList[0], date);
-
-			possibleTradePersonProvider.Stub(x => x.RetrievePersons(date)).Return(personList);
+			var scheduleDay = ExtractedSchedule.CreateScheduleDay(scheduleDictionary, personList[0], date);
 			scheduleProvider.Stub(x => x.GetScheduleForPersons(date, personList)).Return(new[] { scheduleDay });
 
 			
-			var target = new ShiftTradeRequestProvider(MockRepository.GenerateMock<ILoggedOnUser>(), scheduleProvider, possibleTradePersonProvider);
+			var target = new ShiftTradeRequestProvider(MockRepository.GenerateMock<ILoggedOnUser>(), scheduleProvider);
 
-			var result = target.RetrievePossibleTradePersonsScheduleDay(date);
+			var result = target.RetrievePossibleTradePersonsScheduleDay(date, personList);
 
 			result.FirstOrDefault().Should().Be.SameInstanceAs(scheduleDay);
 		}

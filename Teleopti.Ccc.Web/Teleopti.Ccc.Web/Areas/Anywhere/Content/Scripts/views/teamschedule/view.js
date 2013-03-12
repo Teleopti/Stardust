@@ -8,11 +8,8 @@ define([
 		'subscriptions',
 		'helpers',
 		'views/teamschedule/vm',
-		'views/teamschedule/timeline',
 		'views/teamschedule/agent',
-		'views/teamschedule/agents',
-		'text!templates/teamschedule/view.html',
-		'noext!application/resources'
+		'text!templates/teamschedule/view.html'
 	], function (
 		ko,
 		$,
@@ -22,44 +19,112 @@ define([
 		subscriptions,
 		helpers,
 		teamScheduleViewModel,
-		timeLineViewModel,
 		agentViewModel,
-		agentsViewModel,
-		view,
-		resources
+		view
 	) {
 
-		var agents;
-		var timeLine;
 		var teamSchedule;
 
 		var events = new ko.subscribable();
 
 		events.subscribe(function (agentId) {
-			navigation.GotoPersonSchedule(agentId, teamSchedule.SelectedDate().format('YYYYMMDD'));
+			navigation.GotoPersonSchedule(agentId, teamSchedule.SelectedDate());
 		}, null, "gotoagent");
 
+		var displayOptions;
+	    
+		var currentTeamId = function () {
+		    if (displayOptions.id)
+		        return displayOptions.id;
+		    if (teamSchedule.Teams().length > 0)
+		        return teamSchedule.Teams()[0].Id;
+		    return null;
+		};
+	    
+		var currentDate = function () {
+		    var date = displayOptions.date;
+		    if (date == undefined) {
+		        return moment().sod();
+		    } else {
+		        return moment(date, 'YYYYMMDD');
+		    }
+		};
+
+		var loadSchedules = function () {
+		    subscriptions.subscribeTeamSchedule(
+                teamSchedule.SelectedTeam(),
+                helpers.Date.AsUTCDate(teamSchedule.SelectedDate().toDate()),
+                function (schedules) {
+                    var currentAgents = teamSchedule.Agents();
+
+                    var dateClone = teamSchedule.SelectedDate().clone();
+                    for (var i = 0; i < schedules.length; i++) {
+                        for (var j = 0; j < currentAgents.length; j++) {
+                            if (currentAgents[j].Id == schedules[i].Id) {
+                                currentAgents[j].SetLayers(schedules[i].Projection, teamSchedule.TimeLine, dateClone);
+                                currentAgents[j].AddContractTime(schedules[i].ContractTimeMinutes);
+                                currentAgents[j].AddWorkTime(schedules[i].WorkTimeMinutes);
+                                break;
+                            }
+                        }
+                    }
+
+                    currentAgents.sort(function (a, b) {
+                        var firstStartMinutes = a.TimeLineAffectingStartMinute();
+                        var secondStartMinutes = b.TimeLineAffectingStartMinute();
+                        return firstStartMinutes == secondStartMinutes ? (a.LastEndMinute() == b.LastEndMinute() ? 0 : a.LastEndMinute() < b.LastEndMinute() ? -1 : 1) : firstStartMinutes < secondStartMinutes ? -1 : 1;
+                    });
+
+                    teamSchedule.Agents.valueHasMutated();
+
+                    teamSchedule.Loading(false);
+                });
+
+		};
+
+		var loadPersons = function (success) {
+		    $.ajax({
+		        url: 'Person/PeopleInTeam',
+		        cache: false,
+		        dataType: 'json',
+		        data: {
+		            date: teamSchedule.SelectedDate().toDate().toJSON(),
+		            teamId: teamSchedule.SelectedTeam()
+		        },
+		        success: function (people, textStatus, jqXHR) {
+		            var newItems = ko.utils.arrayMap(people, function (s) {
+		                return new agentViewModel(s, events);
+		            });
+		            teamSchedule.SetAgents(newItems);
+		            success();
+		        }
+		    });
+		};
+
+		var loadTeams = function (success) {
+		    $.ajax({
+		        url: 'Person/AvailableTeams',
+		        cache: false,
+		        dataType: 'json',
+		        data: {
+		            date: teamSchedule.SelectedDate().toDate().toJSON()
+		        },
+		        success: function (data, textStatus, jqXHR) {
+		            teamSchedule.SetTeams(data.Teams);
+		            success();
+		        }
+		    });
+		};
+
 		return {
-			display: function (options) {
+		    initialize: function (options) {
 
 				options.renderHtml(view);
 
-				date = options.date;
-				if (date == undefined) {
-					date = moment().sod();
-				} else {
-					date = moment(date, 'YYYYMMDD');
-				}
-
-				agents = new agentsViewModel();
-				timeLine = new timeLineViewModel(agents.Agents, resources.ShortTimePattern);
-				teamSchedule = new teamScheduleViewModel(date);
-
-				var previousOffset;
-				var teamScheduleContainer = $('.team-schedule');
+				teamSchedule = new teamScheduleViewModel();
 
 				var resize = function () {
-					timeLine.WidthPixels($('.shift').width());
+				    teamSchedule.TimeLine.WidthPixels($('.shift').width());
 				};
 
 				$(window)
@@ -67,134 +132,23 @@ define([
 					.bind('orientationchange', resize)
 					.ready(resize);
 
-				var initialLoad = true;
-				var loadSchedules = function () {
-					
-					teamSchedule.isLoading(true);
-
-					subscriptions.subscribeTeamSchedule(
-						teamSchedule.SelectedTeam().Id,
-						helpers.Date.AsUTCDate(teamSchedule.SelectedDate().toDate()),
-						function (schedules) {
-							var currentAgents = agents.Agents();
-
-							var dateClone = teamSchedule.SelectedDate().clone();
-							for (var i = 0; i < schedules.length; i++) {
-								for (var j = 0; j < currentAgents.length; j++) {
-									if (currentAgents[j].Id == schedules[i].Id) {
-										currentAgents[j].SetLayers(schedules[i].Projection, timeLine, dateClone);
-										currentAgents[j].AddContractTime(schedules[i].ContractTimeMinutes);
-										currentAgents[j].AddWorkTime(schedules[i].WorkTimeMinutes);
-										break;
-									}
-								}
-							}
-
-							currentAgents.sort(function (a, b) {
-								var firstStartMinutes = a.TimeLineAffectingStartMinute();
-								var secondStartMinutes = b.TimeLineAffectingStartMinute();
-								return firstStartMinutes == secondStartMinutes ? (a.LastEndMinute() == b.LastEndMinute() ? 0 : a.LastEndMinute() < b.LastEndMinute() ? -1 : 1) : firstStartMinutes < secondStartMinutes ? -1 : 1;
-							});
-
-							agents.Agents.valueHasMutated();
-
-							teamSchedule.isLoading(false);
-
-							if (initialLoad) {
-								teamSchedule.SelectedTeam.subscribe(function () {
-									loadPeople();
-								});
-
-								teamSchedule.SelectedDate.subscribe(function () {
-									loadAvailableTeams();
-								});
-								initialLoad = false;
-							}
-
-							resize();
-						});
-
-				};
-
-				var arrayIndexOf = function (a, fnc, b) {
-					if (!fnc || typeof (fnc) != 'function') {
-						return -1;
-					}
-					if (!a || !a.length || a.length < 1) return -1;
-					for (var i = 0; i < a.length; i++) {
-						if (fnc(a[i], b)) return i;
-					}
-					return -1;
-				};
-
-				var arrayExcept = function (sourceArray, exceptArray, predicate) {
-					for (var i = 0; i < exceptArray.length; i++) {
-						var index = arrayIndexOf(sourceArray, predicate, exceptArray[i]);
-						if (index > -1) {
-							sourceArray.splice(index, 1);
-						}
-					}
-				};
-
-				var loadAvailableTeams = function () {
-					$.getJSON('Person/AvailableTeams?' + $.now(), { date: teamSchedule.SelectedDate().toDate().toJSON() }).success(function (details, textStatus, jqXHR) {
-						var teams = teamSchedule.Teams();
-						var teamsToRemove = teams.slice(0);
-						var teamsToAdd = details.Teams;
-
-						var teamEqualityComparer = function (a, b) {
-							return a.Id == b.Id;
-						};
-
-						arrayExcept(teamsToRemove, teamsToAdd, teamEqualityComparer);
-						arrayExcept(teamsToAdd, teams, teamEqualityComparer);
-						arrayExcept(teams, teamsToRemove, teamEqualityComparer);
-
-						$.merge(teams, teamsToAdd);
-
-						teamSchedule.Teams.valueHasMutated();
-
-						loadPeople();
-					}).error(function () {
-						window.location.href = 'authentication/signout';
-					});
-				};
-
-				var loadPeople = function () {
-					$.ajax({
-						url: 'Person/PeopleInTeam',
-						cache: false,
-						dataType: 'json',
-						data: {
-							date: teamSchedule.SelectedDate().toDate().toJSON(),
-							teamId: teamSchedule.SelectedTeam().Id
-						},
-						success: function (people, textStatus, jqXHR) {
-
-							var newItems = ko.utils.arrayMap(people, function (s) {
-								return new agentViewModel(s, events);
-							});
-							agents.SetAgents(newItems);
-
-							loadSchedules();
-						}
-					}
-					);
-				};
-
-				$(window).ready(function () {
-
-					ko.applyBindings({
-						TeamSchedule: teamSchedule,
-						Resources: resources,
-						Timeline: timeLine,
-						Agents: agents
-					}, options.bindingElement);
-
-					loadAvailableTeams();
+				teamSchedule.SelectedTeam.subscribe(function () {
+				    if (teamSchedule.Loading())
+				        return;
+				    navigation.GoToTeamSchedule(teamSchedule.SelectedTeam(), teamSchedule.SelectedDate());
 				});
 
-				teamScheduleContainer.swipeListener({
+			    teamSchedule.SelectedDate.subscribe(function() {
+			        if (teamSchedule.Loading())
+			            return;
+			        navigation.GoToTeamSchedule(teamSchedule.SelectedTeam(), teamSchedule.SelectedDate());
+			    });
+			    
+			    ko.applyBindings(teamSchedule, options.bindingElement);
+		        
+			    var previousOffset;
+			    var teamScheduleContainer = $('.team-schedule');
+			    teamScheduleContainer.swipeListener({
 					swipeLeft: function () {
 						teamSchedule.NextDay();
 					},
@@ -211,7 +165,29 @@ define([
 						teamScheduleContainer.offset({ left: -movementX });
 					}
 				});
-			}
+		    },
+		    
+		    display: function (options) {
+		        displayOptions = options;
+
+		        teamSchedule.Loading(true);
+
+		        teamSchedule.SelectedDate(currentDate());
+
+		        var loadPersonsAndSchedules = function() {
+		            teamSchedule.SelectedTeam(currentTeamId());
+		            loadPersons(function () {
+		                loadSchedules();
+		            });
+		        };
+		        
+		        if (teamSchedule.Teams().length != 0) {
+		            loadPersonsAndSchedules();
+		        } else {
+		            loadTeams(loadPersonsAndSchedules);
+		        }
+		        
+		    }
 		};
 	});
 

@@ -13,7 +13,7 @@ Background:
 	| Access to team             | Team green          |
 	| Access to Anywhere         | true                |
 	| View unpublished schedules | true                |
-	And 'Pierre Baldi' have a person period with
+	And 'Pierre Baldi' has a person period with
 	| Field      | Value      |
 	| Team       | Team green |
 	| Start date | 2012-12-01 |
@@ -38,7 +38,7 @@ Scenario: View team schedule
 	| Lunch start time | 11:30        |
 	| Lunch end time   | 12:15        |
 	| Lunch activity   | Lunch        |
-	When I view schedules for '2012-12-02'
+	When I view schedules for date '2012-12-02'
 	Then I should see schedule for 'Pierre Baldi'
 	
 Scenario: View team schedule with night shift from yesterday
@@ -53,15 +53,14 @@ Scenario: View team schedule with night shift from yesterday
 	| Lunch start time | 23:30        |
 	| Lunch end time   | 1.00:15      |
 	| Lunch activity   | Lunch        |
-	When I view schedules for '2012-12-03'
+	When I view schedules for date '2012-12-03'
 	Then I should see schedule for 'Pierre Baldi'
 	
 Scenario: View team schedule, no shift
 	Given I have the role 'Anywhere Team Green'
-	When I view schedules for '2012-12-03'
+	When I view schedules for date '2012-12-03'
 	Then I should see no schedule for 'Pierre Baldi'
 	
-@ignore
 Scenario: View team selection
 	Given there is a team with
 	| Field | Value      |
@@ -73,7 +72,7 @@ Scenario: View team selection
 	| Access to Anywhere         | true                          |
 	| View unpublished schedules | true                          |
 	And I have the role 'Anywhere Team Green And Other'
-	When I view schedules for '2012-12-02'
+	When I view schedules for date '2012-12-02'
 	Then I should be able to select teams
 	| Team       |
 	| Team green |
@@ -91,7 +90,7 @@ Scenario: Change team
 	| Access to Anywhere         | true                          |
 	| View unpublished schedules | true                          |
 	And I have the role 'Anywhere Team Green And Other'
-	And 'Max Persson' have a person period with
+	And 'Max Persson' has a person period with
 	| Field      | Value      |
 	| Team       | Team other |
 	| Start date | 2012-12-01 |
@@ -99,16 +98,15 @@ Scenario: Change team
 	And I select team 'Team other'
 	Then I should see schedule for 'Max Persson'
 
-@ignore
 Scenario: Select date
 	Given I have the role 'Anywhere Team Green'
-	When I view schedules for '2012-12-02'
+	When I view schedules for date '2012-12-02'
 	And I select date '2012-12-03'
 	Then I should be viewing schedules for '2012-12-03'
 
 Scenario: Select person
 	Given I have the role 'Anywhere Team Green'
-	When I view schedules for '2012-12-02'
+	When I view schedules for date '2012-12-02'
 	And I click agent 'Pierre Baldi'
 	Then I should be viewing person schedule for 'Pierre Baldi' on '2012-12-02'
 

@@ -41,8 +41,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 
 		private static void AssertShiftLayer(ShiftLayerInfo shiftLayer)
 		{
+			var minutes = TimeSpan.Parse(shiftLayer.EndTime).Subtract(TimeSpan.Parse(shiftLayer.StartTime)).TotalMinutes;
 			EventualAssert.That(() => Browser.Current.Element(Find.BySelector(string.Format(".shift .layer[data-start-time='{0}']", shiftLayer.StartTime))).Exists, Is.True);
-			EventualAssert.That(() => Browser.Current.Element(Find.BySelector(string.Format(".shift .layer[data-end-time='{0}']", shiftLayer.EndTime))).Exists, Is.True);
+			EventualAssert.That(() => Browser.Current.Element(Find.BySelector(string.Format(".shift .layer[data-length-minutes='{0}']", minutes))).Exists, Is.True);
 			if (shiftLayer.Color != null)
 				EventualAssert.That(() => Browser.Current.Element(Find.BySelector(string.Format(".shift .layer[data-start-time='{0}']", shiftLayer.StartTime))).Style.Color, Is.EqualTo(shiftLayer.Color));
 		}
@@ -65,7 +66,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[Then(@"I should see the add full day absence form")]
 		public void ThenIShouldSeeTheAddFullDayAbsenceForm()
 		{
-			EventualAssert.That(() => Browser.Current.Element(Find.BySelector(".full-day-absence")).Exists, Is.True);
+			EventualAssert.That(() => Browser.Current.Element(Find.BySelector(".full-day-absence-form")).Exists, Is.True);
 		}
 
 		[When(@"I input these full day absence values")]
@@ -74,15 +75,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			var fullDayAbsenceFormInfo = table.CreateInstance<FullDayAbsenceFormInfo>();
 			if (fullDayAbsenceFormInfo.Absence != null)
 			{
-				Browser.Current.SelectList(Find.BySelector(".full-day-absence .absence-type")).SelectByValue(fullDayAbsenceFormInfo.Absence);
+				var select = Browser.Current.SelectList(Find.BySelector(".full-day-absence-form .absence-type"));
+				EventualAssert.That(() => select.Exists, Is.True);
+				select.Option(Find.BySelector(string.Format(":contains('{0}')", fullDayAbsenceFormInfo.Absence))).SelectNoWait();
+				//Browser.Current.SelectList(Find.BySelector(".full-day-absence-form .absence-type"))..Select(fullDayAbsenceFormInfo.Absence);
 			}
-			Browser.Current.TextField(Find.BySelector(".full-day-absence .end-date")).Value = fullDayAbsenceFormInfo.EndDate.ToShortDateString(UserFactory.User().Culture);
+			Browser.Current.TextField(Find.BySelector(".full-day-absence-form .end-date")).Value = fullDayAbsenceFormInfo.EndDate.ToShortDateString(UserFactory.User().Culture);
 		}
 
 		public class ShiftLayerInfo
 		{
-			public DateTime StartTime { get; set; }
-			public DateTime EndTime { get; set; }
+			public string StartTime { get; set; }
+			public string EndTime { get; set; }
 			public string Color { get; set; }
 		}
 

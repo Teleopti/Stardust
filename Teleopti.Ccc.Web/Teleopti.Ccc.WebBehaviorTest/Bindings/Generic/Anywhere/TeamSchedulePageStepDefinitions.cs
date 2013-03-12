@@ -38,8 +38,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[Then(@"I should be able to select teams")]
 		public void ThenIShouldBeAbleToSelectTeams(Table table)
 		{
+			var select = Browser.Current.SelectList(Find.BySelector(".team-selector"));
+			EventualAssert.That(() => select.Exists, Is.True);
+
 			var teams = table.CreateSet<TeamInfo>();
-			teams.ForEach(t => EventualAssert.That(() => Browser.Current.Element(Find.BySelector(string.Format(".team-selector:contains('{0}'", t.Team))).Exists, Is.True));
+			teams.ForEach(t => EventualAssert.That(() => select.Option(Find.BySelector(string.Format(":contains('{0}')", t.Team))).Exists, Is.True));
 		}
 		
 		public class TeamInfo
@@ -50,7 +53,38 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[When(@"I select team '(.*)'")]
 		public void WhenISelectTeam(string teamName)
 		{
-			Browser.Current.Element(Find.BySelector(string.Format(".team-selector li:contains('{0}", teamName))).EventualClick();
+			var select = Browser.Current.SelectList(Find.BySelector(".team-selector"));
+			EventualAssert.That(() => select.Exists, Is.True);
+			
+			var selectOption = select.Option(Find.BySelector(string.Format(":contains('{0}')", teamName)));
+			EventualAssert.That(() => selectOption.Exists, Is.True);
+			
+			//selectOption.SelectNoWait();
+			selectOption.Select();
+		}
+
+		[When(@"I select date '(.*)'")]
+		public void WhenISelectDate(string date)
+		{
+
+			var icon = Browser.Current.Element(Find.BySelector(".icon-calendar"));
+			EventualAssert.That(() => icon.Exists, Is.True);
+			icon.EventualClick();
+			
+			EventualAssert.That(() => Browser.Current.Element(Find.BySelector(".datepicker")).Style.Display == "none", Is.False);
+
+			var dateParts = date.Split('-');
+
+			//Select datepicker year
+			Browser.Current.Element(Find.BySelector(".datepicker .switch")).EventualClick();
+			Browser.Current.Element(Find.BySelector(".datepicker .switch")).EventualClick();
+			Browser.Current.Element(Find.BySelector(string.Format(".datepicker-years .year:contains('{0}')", dateParts[0]))).EventualClick();
+
+			//Select datepicker month
+			Browser.Current.Element(Find.BySelector(string.Format(".datepicker-months .month:nth-child({0})", dateParts[1]))).EventualClick();
+
+			//Select datepicker day
+			Browser.Current.Elements.Filter(Find.BySelector(".datepicker-days .day")).Filter(Find.ByText(t => t.Equals(dateParts[2].TrimStart('0')))).First().EventualClick();
 		}
 	}
 }

@@ -7,6 +7,8 @@ Teleopti.MyTimeWeb.AsmMessageDetail = (function ($) {
     }
 
     function _showEditSection(position) {
+    	$('#AsmMessage-detail-ok-button')
+				.button();
         var topPosition = $('#AsmMessages-list').position().top - 1;
         if (!position)
             position = topPosition;

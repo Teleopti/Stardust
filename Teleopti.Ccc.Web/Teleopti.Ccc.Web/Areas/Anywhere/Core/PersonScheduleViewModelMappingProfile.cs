@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using AutoMapper;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
@@ -21,16 +22,14 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 					}))
 				;
 
+			CreateMap<IAbsence, PersonScheduleViewModelAbsence>();
+
 			CreateMap<dynamic, PersonScheduleViewModelLayer>()
 				.ForMember(x => x.Color, o => o.ResolveUsing(s => s.Color))
-				.ForMember(x => x.Start, o => o.ResolveUsing(s =>
-					{
-						Console.WriteLine(s.GetType().ToString());
-						Console.WriteLine(s.Start.GetType().ToString());
-						return s.Start;
-					}))
+				.ForMember(x => x.Start, o => o.ResolveUsing(s => s.Start))
 				.ForMember(x => x.Minutes, o => o.ResolveUsing(s => s.Minutes))
 				;
+
 		}
 	}
 }

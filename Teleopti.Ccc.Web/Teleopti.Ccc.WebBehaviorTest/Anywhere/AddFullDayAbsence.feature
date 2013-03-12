@@ -1,5 +1,4 @@
-﻿@Ignore 
-Feature: Add full day absence
+﻿Feature: Add full day absence
 	In order to keep track of agents absences
 	As a team leader
 	I want to add absence for an agent
@@ -33,24 +32,25 @@ Background:
 	
 Scenario: View form
 	Given I have the role 'Anywhere Team Green'
-	When I view agent schedule for 'Pierre Baldi' on '2012-12-02'
+	When I view person schedule for 'Pierre Baldi' on '2012-12-02'
 	And I click 'add full day absence'
 	Then I should see the add full day absence form
 	
+@Ignore 
 Scenario: Add
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' have a (read model) shift with
 	| Field      | Value        |
 	| Person     | Pierre Baldi |
-	| Date       | 2012-12-02   |
+	| Date       | 2013-03-06   |
 	| Start time | 08:00        |
 	| End time   | 17:00        |
 	| Activity   | Phone        |
-	When I view agent schedules add full day absence form for 'Pierre Baldi' on '2012-12-02'
+	When I view agent schedules add full day absence form for 'Pierre Baldi' on '2013-03-06'
 	And I input these full day absence values
 	| Field    | Value      |
 	| Absence  | Vacation   |
-	| End date | 2012-12-02 |
+	| End date | 2013-03-06 |
 	And I click 'apply'
 	Then I should see a shift layer with
 	| Field      | Value |
@@ -58,6 +58,7 @@ Scenario: Add
 	| End time   | 17:00 |
 	| Color      | Red   |
 
+@Ignore 
 Scenario: Default values
 	Given I have the role 'Anywhere Team Green'
 	When I view agent schedules add full day absence form for 'Pierre Baldi' on '2012-12-02'
@@ -66,6 +67,7 @@ Scenario: Default values
 	| Start date | 2012-12-02 |
 	| End date   | 2012-12-02 |
 	
+@Ignore 
 Scenario: Invalid values
 	Given I have the role 'Anywhere Team Green'
 	When I view agent schedules add full day absence form for 'Pierre Baldi' on '2012-12-02'

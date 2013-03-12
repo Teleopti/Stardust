@@ -22,10 +22,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly IShiftTradeRequestProvider _shiftTradeRequestprovider;
 		private readonly IShiftTradePeriodViewModelMapper _shiftTradeRequestsPeriodViewModelMapper;
+		private readonly IShiftTradeRequestStatusChecker _shiftTradeRequestStatusChecker;
 
 		public RequestsViewModelFactory(IPersonRequestProvider personRequestProvider, IMappingEngine mapper, IAbsenceTypesProvider absenceTypesProvider, 
 										IPermissionProvider permissionProvider, IShiftTradeRequestProvider shiftTradeRequestprovider, 
-										IShiftTradePeriodViewModelMapper shiftTradeRequestsPeriodViewModelMapper)
+										IShiftTradePeriodViewModelMapper shiftTradeRequestsPeriodViewModelMapper, IShiftTradeRequestStatusChecker shiftTradeRequestStatusChecker)
 		{
 			_personRequestProvider = personRequestProvider;
 			_mapper = mapper;
@@ -33,6 +34,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 			_permissionProvider = permissionProvider;
 			_shiftTradeRequestprovider = shiftTradeRequestprovider;
 			_shiftTradeRequestsPeriodViewModelMapper = shiftTradeRequestsPeriodViewModelMapper;
+			_shiftTradeRequestStatusChecker = shiftTradeRequestStatusChecker;
 		}
 
 		public RequestsViewModel CreatePageViewModel()
@@ -80,6 +82,24 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 		public ShiftTradeScheduleViewModel CreateShiftTradeScheduleViewModel(DateTime selectedDate)
 		{
 			return _mapper.Map<DateOnly, ShiftTradeScheduleViewModel>(new DateOnly(selectedDate));
+		}
+
+		public ShiftTradeSwapDetailsViewModel CreateShiftTradeRequestSwapDetails(Guid id)
+		{
+			var personRequest =  _personRequestProvider.RetrieveRequest(id);
+			
+			_shiftTradeRequestStatusChecker.Check(personRequest.Request as IShiftTradeRequest);
+
+			var shiftTradeSwapDetails = _mapper.Map<IShiftTradeRequest,ShiftTradeSwapDetailsViewModel>(personRequest.Request as IShiftTradeRequest);
+			
+			var startTimeForTimeline = shiftTradeSwapDetails.TimeLineStartDateTime;
+			var startTimeForSchedOne = shiftTradeSwapDetails.From.StartTimeUtc;
+			var startTimeForSchedTwo = shiftTradeSwapDetails.To.StartTimeUtc;
+
+			shiftTradeSwapDetails.From.MinutesSinceTimeLineStart = (int)startTimeForSchedOne.Subtract(startTimeForTimeline).TotalMinutes;
+			shiftTradeSwapDetails.To.MinutesSinceTimeLineStart = (int) startTimeForSchedTwo.Subtract(startTimeForTimeline).TotalMinutes;
+			
+			return shiftTradeSwapDetails;
 		}
 	}
 }

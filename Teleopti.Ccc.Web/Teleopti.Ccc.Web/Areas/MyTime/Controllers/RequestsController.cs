@@ -18,17 +18,20 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		private readonly IRequestsViewModelFactory _requestsViewModelFactory;
 		private readonly ITextRequestPersister _textRequestPersister;
 		private readonly IAbsenceRequestPersister _absenceRequestPersister;
-		private readonly IShiftTradeResponseService _shiftTradeResponseService;
+		private readonly IShiftTradeRequestPersister _shiftTradeRequestPersister;
+		private readonly IRespondToShiftTrade _respondToShiftTrade;
 
 		public RequestsController(IRequestsViewModelFactory requestsViewModelFactory, 
 								ITextRequestPersister textRequestPersister, 
 								IAbsenceRequestPersister absenceRequestPersister, 
-								IShiftTradeResponseService shiftTradeResponseService)
+								IShiftTradeRequestPersister shiftTradeRequestPersister,
+								IRespondToShiftTrade respondToShiftTrade)
 		{
 			_requestsViewModelFactory = requestsViewModelFactory;
 			_textRequestPersister = textRequestPersister;
 			_absenceRequestPersister = absenceRequestPersister;
-			_shiftTradeResponseService = shiftTradeResponseService;
+			_shiftTradeRequestPersister = shiftTradeRequestPersister;
+			_respondToShiftTrade = respondToShiftTrade;
 		}
 
 		[EnsureInPortal]
@@ -67,16 +70,30 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 		[UnitOfWorkAction]
 		[HttpPostOrPut]
-		public void ApproveShiftTrade(Guid id)
+		public JsonResult ShiftTradeRequest(ShiftTradeRequestForm form)
 		{
-			_shiftTradeResponseService.OkByMe(id);
+			if (!ModelState.IsValid)
+			{
+				Response.TrySkipIisCustomErrors = true;
+				Response.StatusCode = 400;
+				return ModelState.ToJson();
+			}
+			return Json(_shiftTradeRequestPersister.Persist(form));
 		}
 
 		[UnitOfWorkAction]
 		[HttpPostOrPut]
-		public void RejectShiftTrade(Guid id)
+		public JsonResult ApproveShiftTrade(Guid id)
 		{
-			_shiftTradeResponseService.Reject(id);
+			return Json(_respondToShiftTrade.OkByMe(id));
+		}
+
+
+		[UnitOfWorkAction]
+		[HttpPostOrPut]
+		public JsonResult DenyShiftTrade(Guid id)
+		{
+			return Json(_respondToShiftTrade.Deny(id));
 		}
 
 		[UnitOfWorkAction]
@@ -122,6 +139,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		public JsonResult ShiftTradeRequestPeriod()
 		{
 			return Json(_requestsViewModelFactory.CreateShiftTradePeriodViewModel(), JsonRequestBehavior.AllowGet);
+		}
+
+		[UnitOfWorkAction]
+		[HttpPost]
+		public JsonResult ShiftTradeRequestSwapDetails(Guid id)
+		{
+			var viewmodel = _requestsViewModelFactory.CreateShiftTradeRequestSwapDetails(id);
+			return Json(viewmodel, JsonRequestBehavior.AllowGet);
 		}
 	}
 }

@@ -7,7 +7,6 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Message.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
 using Teleopti.Ccc.Web.Core;
-using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
@@ -102,33 +101,45 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 
 		private SectionNavigationItem createRequestsNavigationItem()
 		{
-			var toolbarItems = new List<ToolBarItemBase>();
+			var toolBarMenuItems = new List<ToolBarDropDownMenuItem>();
 
-			//if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb))
-			//{
-				
-			//}
-
-			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.TextRequests) ||
-				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb))
+			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.TextRequests))
 			{
-				toolbarItems.AddRange(new ToolBarItemBase[]
-									{
-										new ToolBarButtonItem
-											{
-												Title = Resources.NewRequest,
-												ButtonType = "addRequest"
-											}
-									});
+				toolBarMenuItems.Add(new ToolBarDropDownMenuItem
+				{
+					Title = Resources.NewTextRequest,
+					MenyType = "addTextRequest"
+				});
 			}
 
+			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb))
+			{
+				toolBarMenuItems.Add(new ToolBarDropDownMenuItem
+				{
+					Title = Resources.NewAbsenceRequest,
+					MenyType = "addAbsenceRequest"
+				});
+			}
+
+			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb))
+			{
+				toolBarMenuItems.Add(new ToolBarDropDownMenuItem
+				{
+					Title = Resources.NewShiftTradeRequest,
+					MenyType = "addShiftTradeRequest"
+				});
+			}
+			
 			return new SectionNavigationItem
 					{
 						Action = "Index",
 						Controller = "Requests",
 						Title = Resources.Requests,
 						NavigationItems = new NavigationItem[0],
-						ToolBarItems = toolbarItems
+						ToolBarItems = new List<ToolBarItemBase>
+						               	{
+						               		new ToolBarDropDown { Icon = "toolbar-addRequest", MenuItems = toolBarMenuItems}
+						               	}
 					};
 		}
 

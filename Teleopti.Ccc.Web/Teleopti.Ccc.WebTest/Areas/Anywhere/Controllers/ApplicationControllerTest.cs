@@ -66,7 +66,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			request.Stub(x => x.MapPath("")).IgnoreArguments().Return(
                 Path.GetFullPath(@"..\..\..\Teleopti.Ccc.Web\Areas\Anywhere\Content\Translation\TranslationTemplate.txt"));
 
-			target.Resources().Should().Not.Be.Null();
+			var result = target.Resources() as ContentResult;
+			result.ContentType.Should().Be("text/javascript");
+			result.Content.Should().Not.Be.Null();
 		}
 
 		[TearDown]

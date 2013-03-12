@@ -40,10 +40,13 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
         {
             unchecked
             {
-                var result = (Group1 != null ? Group1.GetHashCode() : 0);
-                result = (result * 397) ^ (Group2 != null ? Group2.GetHashCode() : 0);
-                result = (result * 397) ^ (ShiftCategoryFromGroup1 != null ? ShiftCategoryFromGroup1.GetHashCode() : 0);
-                result = (result * 397) ^ (ShiftCategoryFromGroup2 != null ? ShiftCategoryFromGroup2.GetHashCode() : 0);
+				var g1 = (Group1 != null ? Group1.GetHashCode() : 0);
+				var g2 = (Group2 != null ? Group2.GetHashCode() : 0);
+                var result = (g1 ^ g2) * 397;
+	            var s1 = (ShiftCategoryFromGroup1 != null ? ShiftCategoryFromGroup1.GetHashCode() : 0);
+	            var s2 = (ShiftCategoryFromGroup2 != null ? ShiftCategoryFromGroup2.GetHashCode() : 0);
+				var result2 = (s1 ^ s2) * 397;
+	            result = result ^ result2;
                 return result;
             }
         }

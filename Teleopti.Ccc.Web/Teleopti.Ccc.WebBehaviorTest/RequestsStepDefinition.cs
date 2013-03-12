@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.Helper;
@@ -9,6 +10,7 @@ using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebBehaviorTest
 {
@@ -58,6 +60,14 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => _page.FirstRequest.InnerHtml, Is.StringContaining(UserFactory.User().UserData<ExistingTextRequest>().PersonRequest.GetSubject(new NoFormatting())));
 		}
 
+		[Then(@"I should see a shift trade request in the list with subject '(.*)'")]
+		public void ThenIShouldSeeAShiftTradeRequestInTheListWithSubject(string subject)
+		{
+			EventualAssert.That(() => _page.Requests.Count(), Is.GreaterThan(0));
+			EventualAssert.That(() => _page.FirstRequest.InnerHtml, Is.StringContaining(subject));
+		}
+
+
 		[Then(@"I should see my existing absence request")]
 		public void ThenIShouldSeeMyExistingAbsenceRequest()
 		{
@@ -65,12 +75,32 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => _page.FirstRequest.InnerHtml, Is.StringContaining(UserFactory.User().UserData<ExistingAbsenceRequest>().PersonRequest.GetSubject(new NoFormatting())));
 		}
 
-		[Then(@"I should see my existing shift trade request")]
-		public void ThenIShouldSeeMyExistingShiftTradeRequest()
+
+		[Then(@"I should see my existing shift trade request with subject '(.*)'")]
+		public void ThenIShouldSeeMyExistingShiftTradeRequestWithSubject(string subject)
 		{
 			EventualAssert.That(() => _page.Requests.Count(), Is.GreaterThan(0));
-			EventualAssert.That(() => _page.FirstRequest.InnerHtml, Is.StringContaining(UserFactory.User().UserData<ExistingShiftTradeRequest>().PersonRequest.GetSubject(new NoFormatting())));
+			EventualAssert.That(() => _page.FirstRequest.InnerHtml, Is.StringContaining(subject));
 		}
+
+		[Then(@"I should see my existing shift trade request with status OkByMe")]
+		public void ThenIShouldSeeMyExistingShiftTradeRequestWithStatus()
+		{
+			ThenIShouldSeeMyExistingShiftTradeRequestWithSubject(Resources.WaitingForOtherPart);
+		}
+
+		[Then(@"I should see my existing shift trade request with status waiting for other part")]
+		public void ThenIShouldSeeMyExistingShiftTradeRequestWithStatusWaitingForOtherPart()
+		{
+			ThenIShouldSeeMyExistingShiftTradeRequestWithSubject(Resources.WaitingForOtherPart);
+		}
+
+		[Then(@"I should see my existing shift trade request with status waiting for your approval")]
+		public void ThenIShouldSeeMyExistingShiftTradeRequestWithStatusWaitingForYourApproval()
+		{
+			ThenIShouldSeeMyExistingShiftTradeRequestWithSubject(Resources.WaitingForYourApproval);
+		}
+
 		
 		[Then(@"I should see my existing absence request with absence '(.*)'")]
 		public void ThenIShouldSeeMyExistingAbsenceRequestWithAbsence(string absence)
@@ -135,14 +165,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => _page.MoreToLoadArrow.IsDisplayed(), Is.True);
 		}
 
-		[Then(@"I should see the shift trade request form  with subject '(.*)'")]
-		public void ThenIShouldSeeTheShiftTradeRequestFormWithSubject(string subject)
-		{
-			EventualAssert.That(() => _page.RequestDetailSection.IsDisplayed(),Is.True, "The detailsection should be visible");
-			EventualAssert.That(() => _page.IamAShiftTrade.IsDisplayed(), Is.True, "It should show a shifttrade");
-			EventualAssert.That(()=>_page.RequestDetailSubjectInput.Text, Is.EqualTo(subject),"The subject should match the specific shifttrade-request");
-		}
-
 		[Then(@"I should not see an indication that there are more requests")]
 		public void ThenIShouldNotSeeAnIndicationThatThereAreMoreRequests()
 		{
@@ -155,13 +177,55 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			_page.ApproveShiftTradeButton.EventualClick();
 		}
 
+		[Then(@"I should not see the approve button")]
+		public void WhenIShouldNotSeeTheApproveButton()
+		{
+			EventualAssert.That(()=>_page.ApproveShiftTradeButton.IsDisplayed(),Is.False);
+		}
+
+		[Then(@"I should not see the deny button")]
+		public void WhenIShouldNotSeeTheDenyButton()
+		{
+			EventualAssert.That(() => _page.DenyShiftTradeButton.IsDisplayed(), Is.False);
+		}
+
 		[When(@"I click the Deny button on the shift request")]
 		public void WhenIClickTheDenyButtonOnTheShiftRequest()
 		{
 			_page.DenyShiftTradeButton.EventualClick();
 		}
 
+		[Then(@"I should not see a delete button on the request")]
+		public void ThenIShouldNotSeeADeletebuttonOnTheRequest()
+		{
+			var requestId = UserFactory.User().UserData<ExistingShiftTradeRequest>().PersonRequest.Id.Value;
+			EventualAssert.That(()=>_page.RequestDeleteButtonById(requestId).IsDisplayed(),Is.False);
+		}
 
+		[Then(@"I should see '(.*)' as the sender of the request")]
+		public void ThenIShouldSeeAsTheSenderOfTheRequest(string name)
+		{
+			EventualAssert.That(() => _page.ShiftTradeSender.Text, Is.EqualTo(name));
+		}
+
+		[Then(@"I should see '(.*)' as the receiver of the request")]
+		public void ThenIShouldSeeAsTheReceiverOfTheRequest(string name)
+		{
+			EventualAssert.That(() => _page.ShiftTradeReciever.Text, Is.EqualTo(name));
+		}
+
+		[Then(@"I should see '(.*)' as the date of the request target")]
+		public void ThenIShouldSeeAsTheDateOfTheRequestTarget(string date)
+		{
+			var dateOfTheTrade = DateTime.Parse(date);
+			EventualAssert.That(() => DateTime.Parse(_page.ShiftTradeDateFrom.Text), Is.EqualTo(dateOfTheTrade));
+		}
+
+		[Then(@"I should see '(.*)' as the date of the request source")]
+		public void ThenIShouldSeeAsTheDateOfTheRequestSource(string date)
+		{
+			var dateOfTheTrade = DateTime.Parse(date);
+			EventualAssert.That(() => DateTime.Parse(_page.ShiftTradeDateTo.Text), Is.EqualTo(dateOfTheTrade));
+		}
 	}
-
 }

@@ -4534,7 +4534,7 @@ deny</value>
     <comment>Group  name given to Approval actions in ribbon bar in   Request screen</comment>
   </data>
   <data name="NewShiftTradeRequest" xml:space="preserve">
-    <value>New shift trade request</value>
+    <value>New Shift Trade Request</value>
     <comment>text of context menu item "New Shift trade request"  in Agent portal Schedule</comment>
   </data>
   <data name="EarlyStart" xml:space="preserve">
@@ -11228,8 +11228,8 @@ These options are activated:
     <comment>Remove person from Role</comment>
   </data>
   <data name="SelectWorkload" xml:space="preserve">
-    <value>Select workload</value>
-    <comment>Select workload</comment>
+    <value>Workloads</value>
+    <comment>Select workload in quickforecast</comment>
   </data>
   <data name="YouHaveToSelectAtLeastOneWorkload" xml:space="preserve">
     <value>You have to select at least one workload</value>
@@ -11237,6 +11237,10 @@ These options are activated:
   <data name="MySchedule" xml:space="preserve">
     <value>My Schedule</value>
     <comment>Used in creating Shift Trade on web</comment>
+  </data>
+  <data name="DataHasBeenDeleted" xml:space="preserve">
+    <value>Error when saving your changes. The most possible reason is that you or another user has deleted the data you set. To preserve data consistency, the form will be closed. Sorry, your changes has been lost.</value>
+    <comment>used for SQL Server ForeignKeyException type of errors</comment>
   </data>
   <data name="ResShiftStartDateColon" xml:space="preserve">
     <value>Date (shifts starting):</value>
@@ -11274,9 +11278,9 @@ These options are activated:
     <value>Seasonality and trends data range</value>
     <comment>Quick forecast wizard page</comment>
   </data>
-  <data name="SmoothingStyle" xml:space="preserve">
-    <value>Smoothing style</value>
-    <comment>Quick forecast wizard page</comment>
+  <data name="SmoothingStyleColon" xml:space="preserve">
+    <value>Smoothing style:</value>
+    <comment>Used in Quick forecast wizard page</comment>
   </data>
   <data name="TemplatesHistoricalDataRange" xml:space="preserve">
     <value>Templates historical data range</value>
@@ -11285,5 +11289,17 @@ These options are activated:
   <data name="ShowInfoMessages" xml:space="preserve">
     <value>Show Info Messages</value>
     <comment>if to show these messages in jobhistory in forecast navigator</comment>
+  </data>
+  <data name="Errors" xml:space="preserve">
+    <value>Errors</value>
+    <comment>Errors</comment>
+  </data>
+  <data name="TheQuickForecatWillStartInBackgroundMessage" xml:space="preserve">
+    <value>The quick forecast will be started as a job in the background when this wizard is finished, look in Job History for status.</value>
+    <comment>Information on the last step in quick forecast</comment>
+  </data>
+  <data name="AddFullDayAbsence" xml:space="preserve">
+    <value>Add full day absence</value>
+    <comment>Add full day absence</comment>
   </data>
 </root>

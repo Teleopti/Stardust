@@ -9,6 +9,13 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		public string Site { get; set; }
 		public string Team { get; set; }
 		public IEnumerable<PersonScheduleViewModelLayer> Layers { get; set; }
+		public IEnumerable<PersonScheduleViewModelAbsence> Absences { get; private set; }
+	}
+
+	public class PersonScheduleViewModelAbsence
+	{
+		public string Id { get; set; }
+		public string Name { get; set; }
 	}
 
 	public class PersonScheduleViewModelLayer

@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
@@ -15,6 +16,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 			return OrganisationMembership.FromPerson(loggedOnUser);
 		}
 
+		[DebuggerStepThrough]
 		public virtual string NameForPerson(IPerson person)
 		{
 			try

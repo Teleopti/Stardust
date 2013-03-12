@@ -1,37 +1,58 @@
 define([
-		'knockout'
-	], function (ko) {
+        'knockout',
+        'navigation',
+		'views/personschedule/timeline',
+        'noext!application/resources'
+    ], function(
+        ko,
+        navigation,
+        timeLineViewModel,
+        resources) {
 
-		return function (date) {
+        return function() {
 
-			var self = this;
+            var self = this;
+            
+            this.Agents = ko.observableArray();
 
-			this.Teams = ko.observableArray();
-			this.SelectedDateInternal = ko.observable(date);
-			this.SelectedTeam = ko.observable();
-			this.isLoading = ko.observable(false);
+            this.TimeLine = new timeLineViewModel(this.Agents);
 
-			this.SelectedDate = ko.computed({
-				read: function() {
-					return self.SelectedDateInternal().clone();
-				},
-				write: function(value) {
-					if (value.toDate() == self.SelectedDateInternal().toDate()) return;
-					self.SelectedDateInternal(value);
-				}
-			});
+            this.Resources = resources;
 
-			this.AddTeams = function (teams) {
-				self.Teams([]);
-				self.Teams.push.apply(self.Teams, teams);
-			};
+            this.Teams = ko.observableArray();
+            this.SelectedDateInternal = ko.observable();
+            this.SelectedTeam = ko.observable();
+            this.Loading = ko.observable(false);
 
-			this.NextDay = function () {
-				self.SelectedDate(self.SelectedDate().add('d', 1));
-			};
+            this.SetAgents = function (agents) {
+                self.Agents([]);
+                self.Agents.push.apply(self.Agents, agents);
+            };
 
-			this.PreviousDay = function () {
-				self.SelectedDate(self.SelectedDate().add('d', -1));
-			};
-		};
-	});
+            this.SelectedDate = ko.computed({
+                read: function() {
+                    return self.SelectedDateInternal();
+                },
+                write: function (value) {
+                    if (value.toDate && self.SelectedDateInternal() && self.SelectedDateInternal().toDate) {
+                        if (value.toDate() == self.SelectedDateInternal().toDate())
+                            return;
+                    }
+                    self.SelectedDateInternal(value);
+                }
+            });
+
+            this.SetTeams = function (teams) {
+                self.Teams([]);
+                self.Teams.push.apply(self.Teams, teams);
+            };
+
+            this.NextDay = function() {
+                self.SelectedDate(self.SelectedDate().add('d', 1));
+            };
+
+            this.PreviousDay = function() {
+                self.SelectedDate(self.SelectedDate().add('d', -1));
+            };
+        };
+    });

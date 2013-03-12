@@ -1,13 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using Teleopti.Ccc.Domain.Security;
-using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
@@ -17,7 +9,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 {
     public partial class FormClipboardSpecial : BaseRibbonForm, IClipboardSpecialView
     {
-        private ClipboardSpecialPresenter _clipboardSpecialPresenter;
+        private readonly ClipboardSpecialPresenter _clipboardSpecialPresenter;
 
         public FormClipboardSpecial(bool deleteMode, bool showRestrictions, PasteOptions pasteOptions)
         {
