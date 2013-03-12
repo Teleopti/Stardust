@@ -35,8 +35,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Extensions
 
 		public static void ChangeValue(this TextField element, string value)
 		{
+			element.EventualWait();
 			element.Value = value;
-			element.Change();
+			element.FireEventNoWait("change");
 			element.JQueryChange();
 		}
 

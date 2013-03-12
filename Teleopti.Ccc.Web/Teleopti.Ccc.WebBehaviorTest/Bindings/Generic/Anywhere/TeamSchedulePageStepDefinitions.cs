@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Threading;
 using NUnit.Framework;
@@ -66,27 +67,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		}
 
 		[When(@"I select date '(.*)'")]
-		public void WhenISelectDate(string date)
+		public void WhenISelectDate(DateTime date)
 		{
-
-			var icon = Browser.Current.Element(Find.BySelector(".icon-calendar"));
-			EventualAssert.That(() => icon.Exists, Is.True);
-			icon.EventualClick();
-			
-			EventualAssert.That(() => Browser.Current.Element(Find.BySelector(".datepicker")).Style.Display == "none", Is.False);
-
-			var dateParts = date.Split('-');
-
-			//Select datepicker year
-			Browser.Current.Element(Find.BySelector(".datepicker .switch")).EventualClick();
-			Browser.Current.Element(Find.BySelector(".datepicker .switch")).EventualClick();
-			Browser.Current.Element(Find.BySelector(string.Format(".datepicker-years .year:contains('{0}')", dateParts[0]))).EventualClick();
-
-			//Select datepicker month
-			Browser.Current.Element(Find.BySelector(string.Format(".datepicker-months .month:nth-child({0})", dateParts[1]))).EventualClick();
-
-			//Select datepicker day
-			Browser.Current.Elements.Filter(Find.BySelector(".datepicker-days .day")).Filter(Find.ByText(t => t.Equals(dateParts[2].TrimStart('0')))).First().EventualClick();
+			Browser.Current.Eval(string.Format("test.callViewMethodWhenReady('teamschedule', 'setDateFromTest', '{0}');", date));
 		}
 	}
 }
