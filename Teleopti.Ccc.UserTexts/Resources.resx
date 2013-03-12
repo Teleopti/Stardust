@@ -11309,4 +11309,8 @@ These options are activated:
     <value>Empty preference template name</value>
     <comment>Empty preference template name</comment>
   </data>
+  <data name="Name50CharactersLimit" xml:space="preserve">
+    <value>Name must not be empty or longer than 50 characters.</value>
+    <comment>Name must not be empty or longer than 50 characters.</comment>
+  </data>
 </root>
