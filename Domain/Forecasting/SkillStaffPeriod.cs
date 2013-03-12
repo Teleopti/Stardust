@@ -346,7 +346,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             IntraIntervalRootMeanSquare = 0;
         }
 
-        #endregion Properties 
+	    #endregion Properties 
 
 		#region Methods 
 

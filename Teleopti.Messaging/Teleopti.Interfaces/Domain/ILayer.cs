@@ -54,7 +54,7 @@ namespace Teleopti.Interfaces.Domain
 		/// The Parent
 		/// </summary>
 		ILayerCollectionOwner<T> Parent { get; }
-    }
+	}
 
     /// <summary>
     /// Base interface for all layers
@@ -105,5 +105,12 @@ namespace Teleopti.Interfaces.Domain
         /// Created date: 2008-01-25
         /// </remarks>
         int OrderIndex { get; }
+
+	    /// <summary>
+	    /// 
+	    /// </summary>
+	    /// <param name="other"></param>
+	    /// <returns></returns>
+	    bool Equals(ILayer other);
     }
 }
