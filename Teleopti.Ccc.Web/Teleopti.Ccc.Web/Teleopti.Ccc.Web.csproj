@@ -66,8 +66,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Autofac.Mvc4.3.0.0\lib\net40\Autofac.Integration.Mvc.dll</HintPath>
     </Reference>
-    <Reference Include="AutoMapper">
-      <HintPath>..\..\packages\AutoMapper.1.1.0.118\lib\AutoMapper.dll</HintPath>
+    <Reference Include="AutoMapper, Version=2.2.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\AutoMapper.2.2.1\lib\net40\AutoMapper.dll</HintPath>
     </Reference>
     <Reference Include="Castle.Core, Version=3.1.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -79,8 +80,9 @@
     <Reference Include="Common.Logging.Log4Net1211">
       <HintPath>..\..\packages\Common.Logging.Log4Net1211.2.1.2\lib\net40\Common.Logging.Log4Net1211.dll</HintPath>
     </Reference>
-    <Reference Include="Elmah">
-      <HintPath>..\..\packages\elmah.corelibrary.1.2\lib\Elmah.dll</HintPath>
+    <Reference Include="Elmah, Version=1.2.14706.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\elmah.corelibrary.1.2.2\lib\Elmah.dll</HintPath>
     </Reference>
     <Reference Include="LinFu.DynamicProxy">
       <HintPath>..\..\packages\LinFu.DynamicProxy.OfficialRelease.1.0.5\lib\net\LinFu.DynamicProxy.dll</HintPath>
@@ -694,6 +696,10 @@
     <Content Include="Areas\Anywhere\Content\Templates\menu.html" />
     <Content Include="Areas\Anywhere\Content\Templates\teamschedule\view.html" />
     <Content Include="Areas\Anywhere\Content\Translation\TranslationTemplate.txt" />
+    <Content Include="Content\bootstrap\bootstrap-responsive.css" />
+    <Content Include="Content\bootstrap\bootstrap-responsive.min.css" />
+    <Content Include="Content\bootstrap\bootstrap.css" />
+    <Content Include="Content\bootstrap\bootstrap.min.css" />
     <Content Include="Content\crossroads\crossroads.js" />
     <Content Include="Content\crossroads\crossroads.min.js" />
     <Content Include="Content\hasher\hasher.js" />
@@ -701,8 +707,9 @@
     <Content Include="Content\jquery-plugin\jquery.placeholder.js" />
     <Content Include="Content\jquery-plugin\jquery.placeholder.min.js" />
     <Content Include="Content\jquery-plugin\jquery.swipeListener.js" />
-    <Content Include="Content\jqueryui\jquery-ui-1.9.1.custom.js" />
-    <Content Include="Content\jqueryui\jquery-ui-1.9.1.custom.min.js" />
+    <Content Include="Content\jqueryui\jquery-ui-1.10.1.custom.js" />
+    <Content Include="Content\jqueryui\jquery-ui-1.10.1.custom.min.js" />
+    <Content Include="Content\jqueryui\smoothness\images\animated-overlay.gif" />
     <Content Include="Content\jqueryui\smoothness\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="Content\jqueryui\smoothness\images\ui-bg_flat_75_ffffff_40x100.png" />
     <Content Include="Content\jqueryui\smoothness\images\ui-bg_glass_55_fbf9ee_1x400.png" />
@@ -716,8 +723,8 @@
     <Content Include="Content\jqueryui\smoothness\images\ui-icons_454545_256x240.png" />
     <Content Include="Content\jqueryui\smoothness\images\ui-icons_888888_256x240.png" />
     <Content Include="Content\jqueryui\smoothness\images\ui-icons_cd0a0a_256x240.png" />
-    <Content Include="Content\jqueryui\smoothness\jquery-ui-1.9.1.custom.css" />
-    <Content Include="Content\jqueryui\smoothness\jquery-ui-1.9.1.custom.min.css" />
+    <Content Include="Content\jqueryui\smoothness\jquery-ui-1.10.1.custom.css" />
+    <Content Include="Content\jqueryui\smoothness\jquery-ui-1.10.1.custom.min.css" />
     <Content Include="Content\MobileDateBox\jquery.mobile.datebox-1.0.1.css" />
     <Content Include="Content\MobileDateBox\jquery.mobile.datebox-1.0.1.js" />
     <Content Include="Content\MobileDateBox\jquery.mobile.datebox-1.0.1.min.css" />
@@ -729,10 +736,6 @@
     <Content Include="Content\Mobile\jquery.mobile.structure-1.2.0.min.css" />
     <Content Include="Content\Mobile\jquery.mobile.theme-1.2.0.css" />
     <Content Include="Content\Mobile\jquery.mobile.theme-1.2.0.min.css" />
-    <Content Include="Content\bootstrap\bootstrap-responsive.css" />
-    <Content Include="Content\bootstrap\bootstrap-responsive.min.css" />
-    <Content Include="Content\bootstrap\bootstrap.css" />
-    <Content Include="Content\bootstrap\bootstrap.min.css" />
     <Content Include="Content\Error\404.htm" />
     <Content Include="Content\Error\error.htm" />
     <Content Include="Areas\MyTime\Content\Images\ajax-loader.gif" />
@@ -793,8 +796,6 @@
     <Content Include="Content\Scripts\excanvas.compressed.js" />
     <Content Include="Content\Scripts\excanvas.original.js" />
     <Content Include="Content\Scripts\jquery.hoverIntent.js" />
-    <Content Include="Content\Scripts\knockout-2.2.0.debug.js" />
-    <Content Include="Content\Scripts\knockout-2.2.0.js" />
     <Content Include="Content\Scripts\knockout-jquery-ui-widget.js" />
     <Content Include="Content\Scripts\modernizr-2.6.2.js" />
     <Content Include="Content\Scripts\Pinify\Content\Images\bg_left.png" />
@@ -828,32 +829,34 @@
     <Content Include="Content\Scripts\jquery.ba-hashchange.min.js" />
     <Content Include="Content\Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Content\Scripts\jquery.unobtrusive-ajax.min.js" />
-    <Content Include="Content\Scripts\jquery.validate-vsdoc.js" />
-    <Content Include="Content\Scripts\jquery.validate.js" />
-    <Content Include="Content\Scripts\jquery.validate.min.js" />
     <Content Include="Content\Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Content\Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Areas\MobileReports\Content\Images\body_bg.jpg" />
     <Content Include="Areas\MobileReports\Content\Images\icon_sprite.png" />
-    <Content Include="Content\bootstrap\bootstrap.js" />
-    <Content Include="Content\bootstrap\bootstrap.min.js" />
     <Content Include="Content\Mobile\jquery.mobile-1.2.0.js" />
     <Content Include="Content\Mobile\jquery.mobile-1.2.0.min.js" />
     <Content Include="Content\signalr\broker-hubs.js" />
     <Content Include="Content\signals\signals.js" />
     <Content Include="Content\signals\signals.min.js" />
     <Content Include="Content\jqueryui.touch-punch\jquery.ui.touch-punch.js" />
-    <Content Include="Content\Scripts\jquery-1.8.3-vsdoc.js" />
-    <Content Include="Content\Scripts\jquery-1.8.3.js" />
-    <Content Include="Content\Scripts\jquery-1.8.3.min.js" />
+    <Content Include="Content\signalr\jquery.signalR-1.0.1.js" />
+    <Content Include="Content\signalr\jquery.signalR-1.0.1.min.js" />
+    <Content Include="Content\bootstrap\bootstrap.js" />
+    <Content Include="Content\bootstrap\bootstrap.min.js" />
+    <Content Include="Content\Scripts\jquery-1.9.1-vsdoc.js" />
+    <Content Include="Content\Scripts\jquery-1.9.1.js" />
+    <Content Include="Content\Scripts\jquery-1.9.1.min.js" />
+    <Content Include="Content\Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Content\Scripts\jquery.validate.js" />
+    <Content Include="Content\Scripts\jquery.validate.min.js" />
+    <Content Include="Content\Scripts\knockout-2.2.1.debug.js" />
+    <Content Include="Content\Scripts\knockout-2.2.1.js" />
     <Content Include="Content\moment-datepicker\moment-datepicker-ko.js" />
     <Content Include="Content\moment-datepicker\moment-datepicker.d.ts" />
     <Content Include="Content\moment-datepicker\moment-datepicker.js" />
     <Content Include="Content\moment-datepicker\moment-datepicker.min.js" />
     <Content Include="Content\moment\moment.js" />
     <Content Include="Content\moment\moment.min.js" />
-    <Content Include="Content\signalr\jquery.signalR-1.0.1.js" />
-    <Content Include="Content\signalr\jquery.signalR-1.0.1.min.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -867,6 +870,7 @@
     <None Include="PasswordPolicy.xml.notinuse">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="Content\Scripts\jquery-1.9.1.min.map" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">

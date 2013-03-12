@@ -1,7 +1,6 @@
 using System;
 using System.Dynamic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using AutoMapper;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -9,7 +8,6 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
@@ -67,11 +65,11 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			result.Site.Should().Be("Moon");
 		}
 
-		private dynamic MakeLayer(string Color = "", DateTime? Start = null, int Minutes = 0)
+		private dynamic MakeLayer(string Color = "", DateTime Start = new DateTime(), int Minutes = 0)
 		{
 			dynamic layer = new ExpandoObject();
 			layer.Color = Color;
-			layer.Start = Start.HasValue ? Start : null;
+			layer.Start = Start;
 			layer.Minutes = Minutes;
 			return layer;
 		}
@@ -97,7 +95,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			dynamic shift = new ExpandoObject();
 			shift.Projection = new[] { MakeLayer("Green")};
 
-			var result = target.Map(new PersonScheduleData {Shift = shift});
+			var result = target.Map(new PersonScheduleData {Shift = shift });
 
 			result.Layers.Single().Color.Should().Be("Green");
 		}
@@ -121,7 +119,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var target = new PersonScheduleViewModelMapper();
 
 			dynamic shift = new ExpandoObject();
-			shift.Projection = new[] {MakeLayer("", null, 60)};
+			shift.Projection = new[] { MakeLayer(Color: "",Minutes: 60) };
 
 			var result = target.Map(new PersonScheduleData { Shift = shift });
 

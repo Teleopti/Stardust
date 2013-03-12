@@ -10,22 +10,17 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.Mapping;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.PeriodSelection;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule;
-using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
@@ -85,16 +80,15 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		public void ShouldMapPeriodsFromLegacyFactory()
 		{
 			var domainData = new WeekScheduleDayDomainData();
-			var periodViewModels = new PeriodViewModel[] {};
+			var periodViewModels = new[] { new PeriodViewModel(), };
 
 			periodViewModelFactory.Stub(
-				x =>
-				x.CreatePeriodViewModels(Arg<IVisualLayerCollection>.Is.Anything, Arg<TimePeriod>.Is.Anything,
-				                         Arg<DateTime>.Is.Anything, Arg<TimeZoneInfo>.Is.Anything)).Return(periodViewModels);
+				x => x.CreatePeriodViewModels(Arg<IEnumerable<IVisualLayer>>.Is.Anything, Arg<TimePeriod>.Is.Anything,
+				                              Arg<DateTime>.Is.Anything, Arg<TimeZoneInfo>.Is.Null)).Return(periodViewModels);
 
 			var result = Mapper.Map<WeekScheduleDayDomainData, DayViewModel>(domainData);
 
-			result.Periods.Should().Be.SameInstanceAs(periodViewModels);
+			result.Periods.First().Should().Be.SameInstanceAs(periodViewModels.First());
 		}
 
 		[Test]

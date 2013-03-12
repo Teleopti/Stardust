@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping
 				.ConvertUsing(twoStepMapping<DateOnly, StudentAvailabilityDomainData, StudentAvailabilityViewModel>);
 
 			CreateMap<DateOnly, StudentAvailabilityDomainData>()
-				.ConstructUsing(s => new StudentAvailabilityDomainData(_scheduleProvider(), _loggedOnUser()))
+				.ConstructUsing((DateOnly s) => new StudentAvailabilityDomainData(_scheduleProvider(), _loggedOnUser()))
 				.ForMember(d => d.ChoosenDate, c => c.MapFrom(s => s))
 				.ForMember(d => d.Period, c => c.MapFrom(s => _virtualSchedulePeriodProvider().GetCurrentOrNextVirtualPeriodForDate(s)))
 				.ForMember(d => d.ScheduleDays, c => c.Ignore())
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping
 				.ForMember(d => d.PeriodSelection, c => c.MapFrom(s => s))
 				.ForMember(d => d.Styles, c => c.UseValue(new StyleClassViewModel[] {}))
 				.ForMember(d => d.WeekDayHeaders, c => c.MapFrom(s => (from n in DateHelper.GetWeekdayNames(CultureInfo.CurrentCulture) select new WeekDayHeader {Title = n}).ToList()))
-				.ForMember(d => d.Weeks, c => c.MapFrom(s =>
+				.ForMember(d => d.Weeks, c => c.ResolveUsing(s =>
 					{
 						var firstDatesOfWeeks = new List<DateOnly>();
 						var firstDateOfWeek = s.DisplayedPeriod.StartDate;
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping
 
 			CreateMap<StudentAvailabilityWeekDomainData, WeekViewModel>()
 				.ForMember(d => d.Summary, c => c.UseValue(new WeekSummaryViewModel()))
-				.ForMember(d => d.Days, c => c.MapFrom(s =>
+				.ForMember(d => d.Days, c => c.ResolveUsing(s =>
 					{
 						var dates = s.FirstDateOfWeek.DateRange(7);
 						var dateOnlys = dates.Select(d => new DateOnly(d));
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping
 			CreateMap<StudentAvailabilityDayDomainData, AvailableDayViewModel>()
 				.ForMember(d => d.Date, c => c.MapFrom(s => s.Date))
 				.ForMember(d => d.Header, c => c.MapFrom(s => s))
-				.ForMember(d => d.Editable, c => c.MapFrom(s =>
+				.ForMember(d => d.Editable, c => c.ResolveUsing(s =>
 					{
 						if (s.Person.WorkflowControlSet == null) return false;
 						var insideSchedulePeriod = s.Period.Contains(s.Date);
@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping
 				;
 
 			CreateMap<StudentAvailabilityDayDomainData, HeaderViewModel>()
-				.ForMember(d => d.DayDescription, c => c.MapFrom(s =>
+				.ForMember(d => d.DayDescription, c => c.ResolveUsing(s =>
 					{
 						if (s.Date.Day.Equals(1))
 							return CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(s.Date.Month);

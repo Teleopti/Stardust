@@ -53,7 +53,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 		public HeaderViewModel Header { get; set; }
 		public NoteViewModel Note { get; set; }
 		public PeriodViewModel Summary { get; set; }
-		public IEnumerable<PeriodViewModel> Periods { get; set; }
+		private IEnumerable<PeriodViewModel> _periods;
+
+		public IEnumerable<PeriodViewModel> Periods
+		{
+			get { return _periods; }
+			set
+			{
+				_periods = value;
+			}
+		}
 
 		public bool HasNote
 		{

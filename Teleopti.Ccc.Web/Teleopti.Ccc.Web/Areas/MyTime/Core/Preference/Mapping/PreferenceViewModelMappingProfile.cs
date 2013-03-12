@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 			CreateMap<PreferenceDomainData, PreferenceViewModel>()
 				.ForMember(d => d.PeriodSelection, o => o.MapFrom(s => s))
 				.ForMember(d => d.WeekDayHeaders, o => o.MapFrom(s => DateHelper.GetWeekdayNames(CultureInfo.CurrentCulture)))
-				.ForMember(d => d.Weeks, o => o.MapFrom(s =>
+				.ForMember(d => d.Weeks, o => o.ResolveUsing(s =>
 				                                        	{
 				                                        		var firstDatesOfWeeks = new List<DateOnly>();
 				                                        		var firstDateOfWeek = new DateOnly(DateHelper.GetFirstDateInWeek(s.Period.StartDate, CultureInfo.CurrentCulture).AddDays(-7));
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				;
 
 			CreateMap<PreferenceWeekMappingData, WeekViewModel>()
-				.ForMember(d => d.Days, o => o.MapFrom(s =>
+				.ForMember(d => d.Days, o => o.ResolveUsing(s =>
 				                                       	{
 				                                       		var datesThisWeek = from d in Enumerable.Range(0, 7) select s.FirstDayOfWeek.AddDays(d);
 				                                       		return (
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 			CreateMap<DayMappingData, DayViewModel>()
 				.ForMember(d => d.Date, o => o.MapFrom(s => s.Date))
 				.ForMember(d => d.Header, o => o.MapFrom(s => s))
-				.ForMember(d => d.Editable, o => o.MapFrom(s =>
+				.ForMember(d => d.Editable, o => o.ResolveUsing(s =>
 				                                           	{
 				                                           		if (s.WorkflowControlSet == null)
 				                                           			return false;
@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 
 			CreateMap<DayMappingData, HeaderViewModel>()
 				.ForMember(d => d.DayNumber, o => o.MapFrom(s => s.Date.Day))
-				.ForMember(d => d.DayDescription, o => o.MapFrom(s =>
+				.ForMember(d => d.DayDescription, o => o.ResolveUsing(s =>
 				                                                 	{
 				                                                 		var firstDisplayDate = new DateOnly(DateHelper.GetFirstDateInWeek(s.Period.StartDate, CultureInfo.CurrentCulture).AddDays(-7));
 				                                                 		if (s.Date.Day == 1 || s.Date == firstDisplayDate)
