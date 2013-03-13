@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Rta.LogClientProxy
                                      true, platformTypeId.ToString(), sourceId, batchId, true, isSnapshot, true, out result, out resultSpecified);
         }
 
-		public void CheckSchedule(Guid personId, Guid businessUnitId, DateTime timestamp)
+		public void ProcessScheduleUpdate(Guid personId, Guid businessUnitId, DateTime timestamp)
 		{
 			GetUpdatedScheduleChange(personId.ToString(), businessUnitId.ToString(), timestamp, true);
 		}

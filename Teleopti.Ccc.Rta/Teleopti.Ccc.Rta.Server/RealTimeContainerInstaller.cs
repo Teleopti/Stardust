@@ -1,4 +1,5 @@
-﻿using Autofac;
+﻿using System;
+using Autofac;
 using MbCache.Configuration;
 using MbCache.Core;
 using Teleopti.Ccc.IocCommon.Configuration;
@@ -25,6 +26,7 @@ namespace Teleopti.Ccc.Rta.Server
 				.For<ActualAgentDataHandler>()
 					.CacheMethod(svc => svc.ActivityAlarms())
 					.CacheMethod(svc => svc.StateGroups())
+					.CacheMethod(svc => svc.GetReadModel(Guid.NewGuid()))
 				.As<IActualAgentDataHandler>();
 
 			builder.Register(c =>

@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Rta.Interfaces
     {
         void ProcessRtaData(string logOn, string stateCode, TimeSpan timeInState, DateTime timestamp,
                             Guid platformTypeId, string sourceId, DateTime batchId, bool isSnapshot);
-	    void CheckSchedule(Guid personId, Guid businessUnitId, DateTime timestamp);
+	    void ProcessScheduleUpdate(Guid personId, Guid businessUnitId, DateTime timestamp);
         bool IsAlive { get; }
     }
 }

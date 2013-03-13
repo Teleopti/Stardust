@@ -132,6 +132,7 @@
     <Compile Include="ActualAgentHandler.cs" />
     <Compile Include="ActualAgentDataHandler.cs" />
     <Compile Include="DatabaseConnectionStringHandler.cs" />
+    <Compile Include="IRtaDataHandlerCache.cs" />
     <Compile Include="IPersonResolver.cs" />
     <Compile Include="PersonResolver.cs" />
     <Compile Include="DataSourceResolver.cs" />

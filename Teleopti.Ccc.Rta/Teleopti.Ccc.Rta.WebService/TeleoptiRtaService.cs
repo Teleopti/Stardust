@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.ServiceModel;
-using Teleopti.Interfaces.Domain;
 using log4net;
 using log4net.Config;
 using Teleopti.Ccc.Rta.Interfaces;
@@ -163,7 +162,7 @@ namespace Teleopti.Ccc.Rta.WebService
                 if (_rtaDataHandler == null || !_rtaDataHandler.IsAlive) InitializeClientHandler();
                 if (_rtaDataHandler != null)
                 {
-					_rtaDataHandler.CheckSchedule(personId, businessUnitId, timestamp);
+					_rtaDataHandler.ProcessScheduleUpdate(personId, businessUnitId, timestamp);
                 }
             }
         }

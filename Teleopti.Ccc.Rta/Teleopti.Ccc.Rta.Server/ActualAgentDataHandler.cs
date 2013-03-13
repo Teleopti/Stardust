@@ -13,13 +13,14 @@ namespace Teleopti.Ccc.Rta.Server
 {
 	public interface IActualAgentDataHandler
 	{
-		IList<ScheduleLayer> CurrentLayerAndNext(DateTime onTime, Guid personId);
+		IList<ScheduleLayer> CurrentLayerAndNext(DateTime onTime, Guid personId, IList<ScheduleLayer> layers);
 		IActualAgentState LoadOldState(Guid personToLoad);
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
 		ConcurrentDictionary<string, List<RtaStateGroupLight>> StateGroups();
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
 		Dictionary<Guid, List<RtaAlarmLight>> ActivityAlarms();
 		void AddOrUpdate(IEnumerable<IActualAgentState> states);
+		IList<ScheduleLayer> GetReadModel(Guid personId);
 	}
 
 	public class ActualAgentDataHandler : IActualAgentDataHandler
@@ -32,21 +33,42 @@ namespace Teleopti.Ccc.Rta.Server
 		{
 			_databaseConnectionFactory = databaseConnectionFactory;
 			_databaseConnectionStringHandler = databaseConnectionStringHandler;
-
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security",
 			"CA2100:Review SQL queries for security vulnerabilities")]
-		public IList<ScheduleLayer> CurrentLayerAndNext(DateTime onTime, Guid personId)
+		public IList<ScheduleLayer> CurrentLayerAndNext(DateTime onTime, Guid personId, IList<ScheduleLayer> layers)
 		{
-			var dateString = string.Format(CultureInfo.InvariantCulture, onTime.ToString("yyyy-MM-dd HH:mm"));
+			var scheduleLayers = layers.Where(l => l.EndDateTime > onTime);
+			var enumerable = scheduleLayers as IList<ScheduleLayer> ?? scheduleLayers.ToList();
+			var scheduleLayer = enumerable.FirstOrDefault();
+			ScheduleLayer nextLayer = null;
+
+			// no layer now
+			if (scheduleLayer != null && scheduleLayer.StartDateTime > onTime)
+			{
+				nextLayer = scheduleLayer;
+				scheduleLayer = null;
+			}
+
+			if (nextLayer == null && enumerable.Count() > 1)
+				nextLayer = enumerable.Skip(1).FirstOrDefault();
+
+			if (scheduleLayer != null && nextLayer != null)
+				//scheduleLayer is the last in assignment
+				if (scheduleLayer.EndDateTime != nextLayer.StartDateTime)
+					nextLayer = null;
+
+			return new List<ScheduleLayer> {scheduleLayer, nextLayer};
+		}
+
+		public IList<ScheduleLayer> GetReadModel(Guid personId)
+		{
 			var idString = string.Format(CultureInfo.InvariantCulture, personId.ToString());
 			var query = string.Format(CultureInfo.InvariantCulture,
 									  @"SELECT TOP 2 PayloadId,StartDateTime,EndDateTime,rta.Name,rta.ShortName,DisplayColor 
 						FROM ReadModel.v_ScheduleProjectionReadOnlyRTA rta
-						WHERE EndDateTime > '{0}' 
-						AND PersonId='{1}'",
-			                          dateString, idString);
+						WHERE PersonId='{0}'", idString);
 			var layers = new List<ScheduleLayer>();
 			using (
 				var connection = _databaseConnectionFactory.CreateConnection(_databaseConnectionStringHandler.AppConnectionString())
@@ -67,40 +89,21 @@ namespace Teleopti.Ccc.Rta.Server
 					var displayColor = reader.GetInt32(reader.GetOrdinal("DisplayColor"));
 
 					var layer = new ScheduleLayer
-					            	{
-					            		PayloadId = payloadId,
-					            		StartDateTime = startDateTime,
-					            		EndDateTime = endDateTime,
-					            		Name = name,
-					            		ShortName = shortName,
-					            		DisplayColor = displayColor
-					            	};
+					{
+						PayloadId = payloadId,
+						StartDateTime = startDateTime,
+						EndDateTime = endDateTime,
+						Name = name,
+						ShortName = shortName,
+						DisplayColor = displayColor
+					};
 					layers.Add(layer);
 				}
 				reader.Close();
 			}
-
-			var scheduleLayer = layers.FirstOrDefault();
-			ScheduleLayer nextLayer = null;
-
-			// no layer now
-			if (scheduleLayer != null && scheduleLayer.StartDateTime > onTime)
-			{
-				nextLayer = scheduleLayer;
-				scheduleLayer = null;
-			}
-
-			if (nextLayer == null && layers.Count > 1)
-				nextLayer = layers[1];
-
-			if (scheduleLayer != null && nextLayer != null)
-				//scheduleLayer is the last in assignment
-				if (scheduleLayer.EndDateTime != nextLayer.StartDateTime)
-					nextLayer = null;
-
-			return new List<ScheduleLayer> {scheduleLayer, nextLayer};
-
+			return layers.OrderBy(l => l.EndDateTime).ToList();
 		}
+
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security",
 			"CA2100:Review SQL queries for security vulnerabilities")]
@@ -160,7 +163,6 @@ namespace Teleopti.Ccc.Rta.Server
 						       		Color = color,
 						       		StaffingEffect = staffingEffect
 						       	};
-
 					}
 
 				}

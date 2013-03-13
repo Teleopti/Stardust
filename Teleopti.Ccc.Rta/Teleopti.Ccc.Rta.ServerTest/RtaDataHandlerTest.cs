@@ -72,6 +72,19 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		}
 
 		[Test]
+		public void ShouldClearCacheWhenCheckScheduleIsCalled()
+		{
+			var invalidateCache = MockRepository.GenerateMock<IRtaDataHandlerCache>();
+			var target = new RtaDataHandler(_loggingSvc, _messageSender, ConnectionString, _databaseConnectionFactory, _dataSourceResolver, _personResolver, _stateResolver, _agentHandler);
+			var personId = Guid.NewGuid();
+			var timeStamp = new DateTime(2000, 1, 1);
+
+			target.ProcessScheduleUpdate(personId, Guid.NewGuid(), timeStamp);
+
+			invalidateCache.AssertWasCalled(x => x.InvalidateReadModelCache(personId, timeStamp));
+		}
+
+		[Test]
 		public void VerifyProtectedConstructorWorks()
 		{
 			_messageSender.Expect(e => e.InstantiateBrokerService());
@@ -326,7 +339,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 
 			_target = new RtaDataHandlerForTest(_loggingSvc, _messageSender, ConnectionString, _databaseConnectionFactory,
 												_dataSourceResolver, _personResolver, _stateResolver, _agentHandler);
-			_target.CheckSchedule(_personId, _businessUnitId, _timestamp);
+			_target.ProcessScheduleUpdate(_personId, _businessUnitId, _timestamp);
 			_mocks.VerifyAll();
 		}
 
@@ -339,7 +352,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 
 			_target = new RtaDataHandlerForTest(_loggingSvc, _messageSender, null, _databaseConnectionFactory,
 												_dataSourceResolver, _personResolver, _stateResolver, _agentHandler);
-			_target.CheckSchedule(_personId, _businessUnitId, _timestamp);
+			_target.ProcessScheduleUpdate(_personId, _businessUnitId, _timestamp);
 			_mocks.VerifyAll();
 		}
 
@@ -353,7 +366,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 
 			_target = new RtaDataHandlerForTest(_loggingSvc, _messageSender, ConnectionString, _databaseConnectionFactory,
 												_dataSourceResolver, _personResolver, _stateResolver, _agentHandler);
-			_target.CheckSchedule(_personId, _businessUnitId, _timestamp);
+			_target.ProcessScheduleUpdate(_personId, _businessUnitId, _timestamp);
 			_mocks.VerifyAll();
 		}
 

@@ -52,8 +52,7 @@ namespace Teleopti.Ccc.Rta.Server
 
 		public RtaDataHandler(ILog loggingSvc, IMessageSender messageSender, string connectionStringDataStore,
 		                      IDatabaseConnectionFactory databaseConnectionFactory, IDataSourceResolver dataSourceResolver,
-		                      IPersonResolver personResolver, IStateResolver stateResolver, IActualAgentHandler agentHandler
-			)
+		                      IPersonResolver personResolver, IStateResolver stateResolver, IActualAgentHandler agentHandler)
 		{
 			_loggingSvc = loggingSvc;
 			_messageSender = messageSender;
@@ -61,8 +60,8 @@ namespace Teleopti.Ccc.Rta.Server
 			_databaseConnectionFactory = databaseConnectionFactory;
 			_dataSourceResolver = dataSourceResolver;
 			_personResolver = personResolver;
-			_stateResolver = stateResolver;
 			_agentHandler = agentHandler;
+			_stateResolver = stateResolver;
 
 			if (_messageSender == null) return;
 
@@ -106,14 +105,15 @@ namespace Teleopti.Ccc.Rta.Server
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
-		public void CheckSchedule(Guid personId, Guid businessUnitId, DateTime timestamp)
+		public void ProcessScheduleUpdate(Guid personId, Guid businessUnitId, DateTime timestamp)
 		{
+			_agentHandler.InvalidateReadModelCache(personId, timestamp);
 			if (string.IsNullOrEmpty(_connectionStringDataStore))
 			{
 				_loggingSvc.Error("No connection information avaiable in configuration file.");
 				return;
 			}
-
+			
 			var agentState = _agentHandler.CheckSchedule(personId, businessUnitId, timestamp);
 			if (agentState == null)
 			{
@@ -171,6 +171,7 @@ namespace Teleopti.Ccc.Rta.Server
 						continue;
 					}
 
+					
 					var agentState = _agentHandler.GetState(personWithBusinessUnit.PersonId, personWithBusinessUnit.BusinessUnitId,
 					                                        platformTypeId, stateCode,
 					                                        timestamp, timeInState);

@@ -2,12 +2,12 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using MbCache.Core;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Rta.Server
 {
-	public interface IActualAgentHandler
+	public interface IActualAgentHandler : IRtaDataHandlerCache
 	{
 		RtaAlarmLight GetAlarm(Guid platformTypeId, string stateCode, ScheduleLayer layer, Guid businessUnitId);
 		IActualAgentState GetState(Guid personId, Guid businessUnitId, Guid platformTypeId, string stateCode,
@@ -20,21 +20,28 @@ namespace Teleopti.Ccc.Rta.Server
 	public class ActualAgentHandler : IActualAgentHandler
 	{
 		private readonly IActualAgentDataHandler _actualAgentDataHandler;
+		private readonly IMbCacheFactory _mbCacheFactory;
 		private static readonly ConcurrentDictionary<Guid, IActualAgentState> BatchedAgents = new ConcurrentDictionary<Guid, IActualAgentState>();
 		private static readonly object LockObject = new object();
 		private static DateTime _lastSave = DateTime.UtcNow;
 
-		public ActualAgentHandler(IActualAgentDataHandler actualAgentDataHandler)
+		public ActualAgentHandler(IActualAgentDataHandler actualAgentDataHandler, IMbCacheFactory mbCacheFactory)
 		{
 			_actualAgentDataHandler = actualAgentDataHandler;
+			_mbCacheFactory = mbCacheFactory;
+		}
+
+		protected IActualAgentDataHandler ActualAgentDataHandler
+		{
+			get { return _actualAgentDataHandler; }
 		}
 
 		public IActualAgentState CheckSchedule(Guid personId, Guid businessUnitId, DateTime timestamp)
 		{
 			var platformId = Guid.Empty;
 			var stateCode = "Unknown";
-			var scheduleLayers = _actualAgentDataHandler.CurrentLayerAndNext(timestamp, personId);
-			var previousState = _actualAgentDataHandler.LoadOldState(personId);
+			var scheduleLayers = ActualAgentDataHandler.CurrentLayerAndNext(timestamp, personId, ActualAgentDataHandler.GetReadModel(personId));
+			var previousState = ActualAgentDataHandler.LoadOldState(personId);
 
 			if (previousState == null)
 				return CreateAndSaveState(scheduleLayers, null, personId, platformId, stateCode, timestamp, new TimeSpan(0),
@@ -53,14 +60,16 @@ namespace Teleopti.Ccc.Rta.Server
 		public IActualAgentState GetState(Guid personId, Guid businessUnitId, Guid platformTypeId, string stateCode, DateTime timestamp,
 			TimeSpan timeInState)
 		{
-			var scheduleLayers = _actualAgentDataHandler.CurrentLayerAndNext(timestamp, personId);
-			var previousState = _actualAgentDataHandler.LoadOldState(personId);
+			var scheduleLayers = ActualAgentDataHandler.CurrentLayerAndNext(timestamp, personId, ActualAgentDataHandler.GetReadModel(personId));
+			var previousState = ActualAgentDataHandler.LoadOldState(personId);
 			return CreateAndSaveState(scheduleLayers, previousState, personId, platformTypeId, stateCode, timestamp, timeInState, businessUnitId);
 		}
 
 		public IActualAgentState CreateAndSaveState(IList<ScheduleLayer> scheduleLayers, IActualAgentState previousState, Guid personId, Guid platformTypeId,
 			string stateCode, DateTime timestamp, TimeSpan timeInState, Guid businessUnitId)
 		{
+			if (!scheduleLayers.Any())
+				return null;
 			var scheduleLayer = scheduleLayers[0];
 			var nextLayer = scheduleLayers[1];
 
@@ -104,8 +113,8 @@ namespace Teleopti.Ccc.Rta.Server
 			}
 
 			//if same don't send it (could happen often in batchmode)
-			if (previousState != null && newState.Equals(previousState))
-				return null;
+			//if (previousState != null && newState.Equals(previousState))
+			//    return null;
 
 			BatchedAgents.AddOrUpdate(personId, newState, (guid, state) => newState);
 
@@ -121,7 +130,7 @@ namespace Teleopti.Ccc.Rta.Server
 		private void saveToDataStore(IEnumerable<IActualAgentState> states)
 		{
 			var actualAgentStates = states as List<IActualAgentState> ?? states.ToList();
-			_actualAgentDataHandler.AddOrUpdate(actualAgentStates);
+			ActualAgentDataHandler.AddOrUpdate(actualAgentStates);
 			_lastSave = DateTime.UtcNow;
 
 			foreach (var agentState in actualAgentStates)
@@ -136,7 +145,7 @@ namespace Teleopti.Ccc.Rta.Server
 		public RtaAlarmLight GetAlarm(Guid platformTypeId, string stateCode, ScheduleLayer layer, Guid businessUnitId)
 		{
 			var state = resolveStateGroupId(platformTypeId, stateCode, businessUnitId);
-		    var activityAlarms = _actualAgentDataHandler.ActivityAlarms();
+		    var activityAlarms = ActualAgentDataHandler.ActivityAlarms();
 		    var localPayloadId = payloadId(layer);
 		    return activityAlarms.ContainsKey(localPayloadId)
 		               ? activityAlarms[localPayloadId].SingleOrDefault(
@@ -152,7 +161,7 @@ namespace Teleopti.Ccc.Rta.Server
 		private Guid resolveStateGroupId(Guid platformTypeId, string stateCode, Guid businessUnitId)
 		{
 			List<RtaStateGroupLight> outState;
-			if (_actualAgentDataHandler.StateGroups().TryGetValue(stateCode, out outState))
+			if (ActualAgentDataHandler.StateGroups().TryGetValue(stateCode, out outState))
 			{
 				var foundstate =
 					outState.FirstOrDefault(s => s.BusinessUnitId == businessUnitId && s.PlatformTypeId == platformTypeId);
@@ -165,6 +174,11 @@ namespace Teleopti.Ccc.Rta.Server
 		{
 			return layer.PayloadId == oldState.ScheduledId && layer.StartDateTime == oldState.StateStart &&
 			       layer.EndDateTime == oldState.NextStart;
+		}
+
+		public void InvalidateReadModelCache(Guid personId, DateTime timeStamp)
+		{
+			_mbCacheFactory.Invalidate(ActualAgentDataHandler, x => x.GetReadModel(personId), true);
 		}
 	}
 }

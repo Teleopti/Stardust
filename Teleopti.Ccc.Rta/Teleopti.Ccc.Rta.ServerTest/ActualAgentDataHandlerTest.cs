@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_connection.Dispose();
 			_mock.ReplayAll();
 
-			var result = _target.CurrentLayerAndNext(_dateTime.AddMinutes(15), _guid);
+			var result = _target.CurrentLayerAndNext(_dateTime.AddMinutes(15), _guid, new List<ScheduleLayer>());
 			_mock.VerifyAll();
 
 			result.Count.Should().Be.EqualTo(2);
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_connection.Dispose();
 			_mock.ReplayAll();
 
-			var result = _target.CurrentLayerAndNext(_dateTime.AddMinutes(-15), _guid);
+			var result = _target.CurrentLayerAndNext(_dateTime.AddMinutes(-15), _guid, new List<ScheduleLayer>());
 			_mock.VerifyAll();
 
 			result.Count.Should().Be.EqualTo(2);
@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_connection.Dispose();
 			_mock.ReplayAll();
 
-			var result = _target.CurrentLayerAndNext(_dateTime, _guid);
+			var result = _target.CurrentLayerAndNext(_dateTime, _guid, new List<ScheduleLayer>());
 			_mock.VerifyAll();
 
 			result.Count.Should().Be.EqualTo(2);

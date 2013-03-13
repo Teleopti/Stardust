@@ -1,0 +1,40 @@
+﻿using System;
+using System.Collections.Generic;
+using MbCache.Core;
+using NUnit.Framework;
+using Rhino.Mocks;
+using Teleopti.Ccc.Rta.Server;
+
+namespace Teleopti.Ccc.Rta.ServerTest
+{
+	[TestFixture]
+	public class InvalidateRtaDataHandlerCacheTest
+	{
+		 [Test]
+		 public static void ShouldInvalidate()
+		 {
+			 var mbCacheFactory = MockRepository.GenerateMock<IMbCacheFactory>();
+			 var dataHandler = MockRepository.GenerateMock<IActualAgentDataHandler>();
+			 var personId = Guid.NewGuid();
+			 var timeStamp = DateTime.Now;
+			 var target = new actualAgentHandlerForTest(dataHandler, mbCacheFactory);
+			 
+
+			 target.InvalidateReadModelCache(personId, timeStamp);
+
+			 mbCacheFactory.AssertWasCalled(x => x.Invalidate(target.ExposeActualAgentDataHandler, y => y.CurrentLayerAndNext(timeStamp, personId, new List<ScheduleLayer>()), true), o => o.IgnoreArguments());
+		 }
+
+		private class actualAgentHandlerForTest : ActualAgentHandler
+		{
+			public actualAgentHandlerForTest(IActualAgentDataHandler actualAgentDataHandler, IMbCacheFactory mbCacheFactory) : base(actualAgentDataHandler, mbCacheFactory)
+			{
+			}
+
+			public IActualAgentDataHandler ExposeActualAgentDataHandler
+			{
+				get { return ActualAgentDataHandler; }
+			}
+		}
+	}
+}
