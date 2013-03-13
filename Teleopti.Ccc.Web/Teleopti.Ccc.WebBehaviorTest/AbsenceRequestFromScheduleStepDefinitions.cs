@@ -36,10 +36,14 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			}
 		}
 
-		[Given(@"the absence period is opened between '(.*)' and '(.*)'")]
-		public void GivenTheAbsencePeriodIsOpenedBetweenAnd(DateTime start, DateTime end)
+		[Then(@"I should see a '(.*)' indication for chance of absence request on '(.*)'")]
+		public void ThenIShouldSeeAIndicationForChanceOfAbsenceRequestOn(string color, DateTime date)
 		{
-			ScenarioContext.Current.Pending();
+		}
+
+		[Given(@"there is no allowance left for date '(.*)'")]
+		public void GivenThereIsNoAllowanceLeftForDate(DateTime	date)
+		{
 		}
 	}
 }

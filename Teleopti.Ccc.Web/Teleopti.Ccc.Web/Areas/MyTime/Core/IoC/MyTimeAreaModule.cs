@@ -37,6 +37,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.Web.Core;
 using Teleopti.Ccc.Web.Core.ServiceBus;
 using Teleopti.Interfaces.Domain;
+using IAllowanceProvider = Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider.IAllowanceProvider;
 using Module = Autofac.Module;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
@@ -185,6 +186,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<ScheduleColorProvider>().As<IScheduleColorProvider>();
 			builder.RegisterType<PersonPeriodProvider>().As<IPersonPeriodProvider>();
 			builder.RegisterType<ServiceBusSender>().As<IServiceBusSender>().SingleInstance();
+			builder.RegisterType<AllowanceProvider>().As<IAllowanceProvider>();
 		}
 	}
 }

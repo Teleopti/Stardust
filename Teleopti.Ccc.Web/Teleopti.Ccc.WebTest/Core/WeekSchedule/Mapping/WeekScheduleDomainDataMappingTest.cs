@@ -1,13 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Security.Principal;
 using System.Threading;
 using AutoMapper;
+using Castle.Components.DictionaryAdapter;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -20,6 +23,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping;
 using Teleopti.Ccc.WebTest.Core.Mapping;
 using Teleopti.Interfaces.Domain;
+using IAllowanceProvider = Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider.IAllowanceProvider;
 
 namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 {
@@ -34,6 +38,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		private TimeZoneInfo timeZone;
 		private IPermissionProvider permissionProvider;
 		private INow now;
+		private IAllowanceProvider allowanceProvider;
 
 		[SetUp]
 		public void Setup()
@@ -47,6 +52,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
 			userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
 			now = MockRepository.GenerateMock<INow>();
+			allowanceProvider = MockRepository.GenerateMock<IAllowanceProvider>();
 
 			Mapper.Reset();
 			Mapper.Initialize(c => c.AddProfile(
@@ -56,7 +62,8 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 					Depend.On(personRequestProvider),
 					Depend.On(userTimeZone),
 					Depend.On(permissionProvider),
-					Depend.On(now)
+					Depend.On(now),
+					Depend.On(allowanceProvider)
 					)));
 		}
 
@@ -199,6 +206,22 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			var result = Mapper.Map<DateOnly, WeekScheduleDomainData>(date);
 
 			result.Days.Single(d => d.Date == date).PersonRequests.Single().Should().Be.SameInstanceAs(personRequest);
+		}
+
+		[Test]
+		public void ShouldMapAllowances()
+		{
+			var date = DateOnly.Today;
+			var firstDayOfWeek = new DateOnly(DateHelper.GetFirstDateInWeek(date, CultureInfo.CurrentCulture));
+			var lastDayOfWeek = new DateOnly(DateHelper.GetLastDateInWeek(date, CultureInfo.CurrentCulture));
+			var week = new DateOnlyPeriod(firstDayOfWeek, lastDayOfWeek);
+
+			var allowanceDay = new AllowanceDay {Allowance = 4, Date = date};
+
+			allowanceProvider.Stub(x => x.GetAllowanceForPeriod(week)).Return(new[] {allowanceDay});
+
+			var result = Mapper.Map<DateOnly, WeekScheduleDomainData>(date);
+			result.Days.Single(d => d.Date == date).Allowance.Should().Be.EqualTo(allowanceDay.Allowance);
 		}
 
 		[Test]
