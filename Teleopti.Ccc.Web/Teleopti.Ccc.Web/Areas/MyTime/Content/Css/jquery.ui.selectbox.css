@@ -56,4 +56,9 @@
 }
 .ui-selectbox .menu-icon-delete {
 	cursor: pointer;
+	color: grey;
+}
+
+.ui-selectbox .menu-icon-delete:hover {
+	color: black;
 }
