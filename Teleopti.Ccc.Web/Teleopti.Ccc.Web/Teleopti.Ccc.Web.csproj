@@ -208,6 +208,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\AllowanceProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Common\DataProvider\AllowanceRandomProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\IAllowanceProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\IPossibleShiftTradePersonsProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\DataProvider\MyTimeWebPersonRequestCheckAuthorization.cs" />
