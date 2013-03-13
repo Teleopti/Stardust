@@ -40,11 +40,11 @@ Teleopti.MyTimeWeb.Request = (function ($) {
 	}
 
 	function _activateAddRequestMenu() {
-		$("#Requests-addRequest-dropdown dt span").live("click", function () {
+		$(document).on("click", "#Requests-addRequest-dropdown dt span", function () {
 			$("#Requests-addRequest-dropdown dd ul").toggle();
 		});
 
-		$("#Requests-addRequest-dropdown dd ul").live("click", function () {
+		$(document).on("click", "#Requests-addRequest-dropdown dd ul", function () {
 			_hideAddRequestMenu();
 		});
 

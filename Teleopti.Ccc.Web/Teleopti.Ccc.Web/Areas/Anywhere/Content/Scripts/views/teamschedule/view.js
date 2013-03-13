@@ -53,7 +53,7 @@ define([
 	                currentAgents.sort(function(a, b) {
 	                    var firstStartMinutes = a.TimeLineAffectingStartMinute();
 	                    var secondStartMinutes = b.TimeLineAffectingStartMinute();
-	                    return firstStartMinutes == secondStartMinutes ? (a.LastEndMinute() == b.LastEndMinute() ? 0 : a.LastEndMinute() < b.LastEndMinute() ? -1 : 1) : firstStartMinutes < secondStartMinutes ? -1 : 1;
+	                    return firstStartMinutes == secondStartMinutes ? (a.TimeLineAffectingEndMinute() == b.TimeLineAffectingEndMinute() ? 0 : a.TimeLineAffectingEndMinute() < b.TimeLineAffectingEndMinute() ? -1 : 1) : firstStartMinutes < secondStartMinutes ? -1 : 1;
 	                });
 
 	                teamSchedule.Agents.valueHasMutated();
@@ -160,7 +160,7 @@ define([
 		        var currentDate = function () {
 		            var date = options.date;
 		            if (date == undefined) {
-		                return moment().sod();
+		                return moment().startOf('day');
 		            } else {
 		                return moment(date, 'YYYYMMDD');
 		            }

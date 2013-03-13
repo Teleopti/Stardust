@@ -25,13 +25,13 @@ Teleopti.MobileReports.Index = (function ($) {
 		_initHomeView(cNs);
 	}
 	function _initHomeView(cNs) {
-		$("#home-view").live("pageinit", function () {
+		$(document).on("pageinit", "#home-view", function () {
 			$.mobile.changePage($("#report-settings-view"));
 		});
 	}
 
 	function _initReportSettingsView(cNs) {
-		$("#report-settings-view").live("pageinit", function () {
+		$(document).on("pageinit", "#report-settings-view", function () {
 			$('#sel-date').datebox();
 			$('#sel-skill').skillpicker();
 
@@ -82,7 +82,7 @@ Teleopti.MobileReports.Index = (function ($) {
 			$('#report-view-date-nav-current').width($(window).width() - 110);
 		});
 
-		$("#report-view").live("pageinit", function () {
+		$(document).on("pageinit", "#report-view", function () {
 			$('#report-graph-holder').graph();
 			$('#report-table-holder').table();
 			$('#report-view').bind('report', function () {
@@ -124,7 +124,7 @@ Teleopti.MobileReports.Index = (function ($) {
 				});
 			});
 
-			$('#report-view').live('pageshow', function () {
+			$(document).on('pageshow', '#report-view', function () {
 				$('#report-view').trigger('report');
 			});
 

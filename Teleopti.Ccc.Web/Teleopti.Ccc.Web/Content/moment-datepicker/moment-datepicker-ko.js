@@ -1,4 +1,8 @@
-(function ($, ko, moment) {
+define([
+		'jquery',
+		'knockout',
+		'moment'
+	], function ($, ko, moment) {
 
     //#region Utils
 
@@ -103,4 +107,4 @@
                 .set(ko.utils.unwrapObservable(valueAccessor()));
         }
     };
-})(jQuery, this.ko, this.moment);
+});

@@ -2,7 +2,7 @@
 /// <reference path="~/Content/jqueryui/jquery-ui-1.10.1.custom.js" />
 /// <reference path="~/Content/Scripts/jquery-1.9.1-vsdoc.js" />
 /// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
-/// <reference path="~/Content/Scripts/knockout-2.2.0.js"/>
+/// <reference path="~/Content/Scripts/knockout-2.2.1.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Common.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Portal.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Ajax.js"/>

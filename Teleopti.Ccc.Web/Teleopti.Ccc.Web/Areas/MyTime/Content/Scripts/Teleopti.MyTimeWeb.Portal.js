@@ -364,11 +364,11 @@ Teleopti.MyTimeWeb.Portal.Layout = (function ($) {
 			_hideSettingsMenu();
 		},
 		ActivateSettingsMenu: function () {
-			$("#settings-dropdown dt span").live("click", function () {
+			$(document).on("click", "#settings-dropdown dt span", function () {
 				$("#settings-dropdown dd ul").toggle();
 			});
 
-			$("#settings-dropdown dd ul").live("click", function () {
+			$(document).on("click", "#settings-dropdown dd ul", function () {
 				_hideSettingsMenu();
 			});
 

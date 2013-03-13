@@ -3,7 +3,7 @@ require.config({
 
 	paths: {
 		jquery: '../../../../Content/Scripts/jquery-1.9.1',
-		knockout: '../../../../Content/Scripts/knockout-2.2.0',
+		knockout: '../../../../Content/Scripts/knockout-2.2.1',
 		modernizr: '../../../../Content/modernizr/modernizr-2.6.2.min',
 		respond: '../../../../Content/respondjs/respond.min',
 		moment: '../../../../Content/moment/moment',
@@ -37,7 +37,7 @@ require.config({
 		// wtf!
 		'Areas/Anywhere/Content/Scripts/../../../../signalr/hubs?noext=1&noext=1': ['jquery', 'signalr'],
 		'Areas/Anywhere/Content/Scripts/../../../../signalr/hubs?noext=1': ['jquery', 'signalr'],
-		
+
 		'momentLanguages': ['moment'],
 		'momentDatepicker': ['momentLanguages'],
 		'momentDatepickerKo': ['momentDatepicker'],
