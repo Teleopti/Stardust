@@ -7,7 +7,6 @@ using System.Threading;
 using Newtonsoft.Json;
 using log4net;
 using Microsoft.Practices.Composite.Events;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Helper;
@@ -138,16 +137,11 @@ namespace Teleopti.Ccc.WinCode.Intraday
                                                         DateTime.UtcNow.AddDays(1));
             }
 
-            addSubscriptionForBatchEvents();
-        }
-
-        private void addSubscriptionForBatchEvents()
-        {
-            _messageBroker.RegisterEventSubscription(OnEventActualAgentStateMessageHandler,
-                                                     Guid.Empty,
-                                                     typeof(IActualAgentState),
-                                                     DateTime.UtcNow,
-                                                     DateTime.UtcNow.AddDays(1));
+			_messageBroker.RegisterEventSubscription(OnEventActualAgentStateMessageHandler,
+													 Guid.Empty,
+													 typeof(IActualAgentState),
+													 DateTime.UtcNow,
+													 DateTime.UtcNow.AddDays(1));
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
@@ -164,8 +158,6 @@ namespace Teleopti.Ccc.WinCode.Intraday
             if (stateBytes == null)
                 return;
             IActualAgentState agentState = JsonConvert.DeserializeObject<ActualAgentState>(Encoding.UTF8.GetString(stateBytes));
-            //IExternalAgentState externalAgentState =
-            //        new ExternalAgentStateDecoder().Decode(state as byte[]);
 
             Logger.DebugFormat("Externalstate received: State {0}, PersonId {1}, State start {2}", agentState.State, agentState.PersonId, agentState.StateStart);
             _rtaStateHolder.SetActualAgentState(agentState);
@@ -319,11 +311,6 @@ namespace Teleopti.Ccc.WinCode.Intraday
 
         private void loadExternalAgentStates()
         {
-            using (PerformanceOutput.ForOperation("Loading the schedules before first use"))
-            {
-                _rtaStateHolder.InitializeSchedules();
-            }
-
             if (!_realTimeAdherenceEnabled) return; //If RTA isn't enabled, we don't need the rest of the stuff...
 
             var statisticRepository = _repositoryFactory.CreateStatisticRepository();
@@ -332,7 +319,14 @@ namespace Teleopti.Ccc.WinCode.Intraday
                 var tmp = statisticRepository.LoadActualAgentState(_rtaStateHolder.FilteredPersons);
                 foreach (var actualAgentState in tmp)
                 {
-                    _rtaStateHolder.SetActualAgentState(actualAgentState);
+					// if we have recieved an RTA event that is more recent than what we get from DB
+	                IActualAgentState outState;
+	                if (_rtaStateHolder.ActualAgentStates.TryGetValue(actualAgentState.PersonId, out outState))
+		                _rtaStateHolder.SetActualAgentState(outState.ReceivedTime > actualAgentState.ReceivedTime
+			                                                    ? outState
+			                                                    : actualAgentState);
+	                else
+		                _rtaStateHolder.SetActualAgentState(actualAgentState);
                 }
             }
         }
@@ -347,26 +341,6 @@ namespace Teleopti.Ccc.WinCode.Intraday
             if (!_realTimeAdherenceEnabled) return;
 
             _rtaStateHolder.VerifyDefaultStateGroupExists();
-            _rtaStateHolder.RtaStateCreated += _rtaStateHolder_RtaStateCreated;
-        }
-
-        private void _rtaStateHolder_RtaStateCreated(object sender, CustomEventArgs<IRtaState> e)
-        {
-            using (IUnitOfWork uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
-            {
-                IRtaStateGroupRepository rtaStateGroupRepository = _repositoryFactory.CreateRtaStateGroupRepository(uow);
-                rtaStateGroupRepository.Add(e.Value.StateGroup);
-
-                try
-                {
-                    uow.PersistAll(this);
-                }
-                catch (OptimisticLockException)
-                {
-                    //This is totally ignored as there may be other clients adding the exactly same state any way
-                    //Later on we'll have to reload the state groups but as long as someone has saved the new states, this is not an issue.
-                }
-            }
         }
 
         /// <summary>
@@ -458,7 +432,6 @@ namespace Teleopti.Ccc.WinCode.Intraday
                 {
                     _schedulingResultLoader.ReloadScheduleData(unitOfWork);
                 }
-                _rtaStateHolder.InitializeSchedules();
                 _view.RefreshRealTimeScheduleControls();
                 _view.ToggleSchedulePartModified(true);
                 _view.DrawSkillGrid();
@@ -506,13 +479,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
 		}
 
         public event EventHandler ExternalAgentStateReceived;
-
-        public void RefreshAgentStates(DateTime timestamp, TimeSpan refreshRate)
-        {
-            _rtaStateHolder.UpdateCurrentLayers(timestamp, refreshRate);
-            _rtaStateHolder.AnalyzeAlarmSituations(timestamp);
-        }
-
+		
         public IDayLayerViewModel CreateDayLayerViewModel()
         {
             var viewModel = new DayLayerViewModel(_rtaStateHolder, _eventAggregator, _unitOfWorkFactory, _repositoryFactory, new DispatcherWrapper());
@@ -587,8 +554,6 @@ namespace Teleopti.Ccc.WinCode.Intraday
         {
             UnregisterMessageBrokerEvents();
             _messageForRetryQueue.Clear();
-            if (_rtaStateHolder != null)
-                _rtaStateHolder.RtaStateCreated -= _rtaStateHolder_RtaStateCreated;
             _messageBroker = null;
             _view = null;
             _rtaStateHolder = null;

@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
             foreach (var dayLayerModel in Models)
             {
 	            IActualAgentState agentState;
-	            if (!_rtaStateHolder.ActualAgentStates.TryGetValue(dayLayerModel.Person, out agentState)) continue;
+	            if (!_rtaStateHolder.ActualAgentStates.TryGetValue((Guid)dayLayerModel.Person.Id, out agentState)) continue;
 	            if (haveStateChanged(dayLayerModel, agentState)) continue;
 	            dayLayerModel.CurrentActivityDescription = agentState.Scheduled;
 	            dayLayerModel.EnteredCurrentState = agentState.StateStart;
@@ -145,11 +145,11 @@ namespace Teleopti.Ccc.WinCode.Intraday
 
             rebuildLayerViewModelCollection(model);
 
-            IAgentState agentState;
-            if (_rtaStateHolder.AgentStates.TryGetValue(person, out agentState))
-            {
-                agentState.SetSchedule(_rtaStateHolder.SchedulingResultStateHolder.Schedules);
-            }
+			//IAgentState agentState;
+			//if (_rtaStateHolder.ActualAgentStates.ContainsKey((Guid)person.Id))
+			//{
+			//    agentState.SetSchedule(_rtaStateHolder.SchedulingResultStateHolder.Schedules);
+			//}
         }
 
         private void rebuildLayerViewModelCollection(DayLayerModel model)

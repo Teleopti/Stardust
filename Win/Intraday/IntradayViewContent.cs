@@ -270,11 +270,7 @@ namespace Teleopti.Ccc.Win.Intraday
 
         private void backgroundWorkerFetchData_DoWork(object sender, DoWorkEventArgs e)
         {
-			//using (PerformanceOutput.ForOperation("Refreshing States"))
-			//{
 	        _scheduleView.Presenter.Now = DateTime.UtcNow;
-	        //    _presenter.RefreshAgentStates(_scheduleView.Presenter.Now, TimeSpan.Zero);
-	        //}
         }
 
         private void backgroundWorkerFetchData_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -535,14 +531,8 @@ namespace Teleopti.Ccc.Win.Intraday
 
         public void RefreshPerson(IPerson person)
         {
-            if (person != null)
-            {
-                dayLayerView1.RefreshProjection(person);
-                IAgentState agentState;
-                _presenter.RtaStateHolder.InitializeSchedules();
-                if (_presenter.RtaStateHolder.AgentStates.TryGetValue(person, out agentState))
-                    agentState.ClearAlarmSituations();
-            }
+	        if (person != null)
+		        dayLayerView1.RefreshProjection(person);
         }
 
         private void dayLayerView1_UpdateShiftEditor(object sender, ShiftEditorEventArgs e)

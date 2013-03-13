@@ -117,7 +117,6 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 
 			Expect.Call(_schedulingResultLoader.SchedulerState).Return(_schedulerStateHolder);
 			Expect.Call(scheduleDictionary.DeleteFromBroker(idFromBroker)).Return(null);
-			Expect.Call(_rtaStateHolder.InitializeSchedules);
 			Expect.Call(_view.DrawSkillGrid);
 
 			mocks.ReplayAll();
@@ -137,7 +136,6 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 
 			Expect.Call(_schedulingResultLoader.SchedulerState).Return(_schedulerStateHolder);
 			Expect.Call(()=>scheduleDictionary.DeleteMeetingFromBroker(idFromBroker));
-			Expect.Call(_rtaStateHolder.InitializeSchedules);
 			Expect.Call(_view.DrawSkillGrid);
 
 			mocks.ReplayAll();
@@ -191,7 +189,6 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 				new SchedulingResultStateHolder(personsInOrganisation, scheduleDictionary,
 												new Dictionary<ISkill, IList<ISkillDay>>())).Repeat.AtLeastOnce();
 			Expect.Call(_schedulerStateHolder.Schedules).Return(scheduleDictionary).Repeat.AtLeastOnce();
-			Expect.Call(_rtaStateHolder.InitializeSchedules);
 			Expect.Call(_schedulingResultLoader.InitializeScheduleData);
 
 			Expect.Call(() => unitOfWork.Reassociate(_scenario));

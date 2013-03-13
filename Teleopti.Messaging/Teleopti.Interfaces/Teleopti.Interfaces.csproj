@@ -343,7 +343,6 @@
     <Compile Include="Domain\ExportFormat.cs" />
     <Compile Include="Domain\IActivityRestriction.cs" />
     <Compile Include="Domain\IAffectedPersonSkillService.cs" />
-    <Compile Include="Domain\IAgentState.cs" />
     <Compile Include="Domain\IAggregateSkillStaffPeriod.cs" />
     <Compile Include="Domain\IAlarmType.cs" />
     <Compile Include="Domain\IAvailabilityDay.cs" />

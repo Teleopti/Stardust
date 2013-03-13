@@ -399,6 +399,8 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
             CreateRtaStateHolderExpectation();
 			CreateRealTimeAdherenceInitializeExpectation();
 
+			_rtaStateHolder.Expect(r => r.ActualAgentStates)
+			               .Return(new Dictionary<Guid, IActualAgentState> {{Guid.NewGuid(), new ActualAgentState()}}).IgnoreArguments();
 			Expect.Call(() => _messageBroker.RegisterEventSubscription(MyEventHandler, null)).IgnoreArguments().Repeat.Twice();
         	Expect.Call(
         		() => _messageBroker.RegisterEventSubscription(MyEventHandler, null, DateTime.UtcNow, DateTime.UtcNow)).
@@ -432,7 +434,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			Expect.Call(() => _rtaStateHolder.SetFilteredPersons(_schedulerStateHolder.FilteredPersonDictionary.Values))
 				.IgnoreArguments();
 			Expect.Call(_rtaStateHolder.VerifyDefaultStateGroupExists);
-			Expect.Call(() => _rtaStateHolder.RtaStateCreated += (sender, e) => { }).IgnoreArguments();
+			
 		}
 
 		private static void MyEventHandler(object sender, EventMessageArgs e)
@@ -473,69 +475,6 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 
 			Assert.AreEqual(_rtaStateHolder, _target.RtaStateHolder);
 		}
-
-        [Test]
-        public void VerifyHandlesNewStateAdded()
-        {
-            IUnitOfWork uow = _mocks.StrictMock<IUnitOfWork>();
-            Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow);
-            Expect.Call(uow.PersistAll(_target)).Return(new List<IRootChangeInfo>());
-            uow.Dispose();
-
-            IRtaState theState = _mocks.StrictMock<IRtaState>();
-            IRtaStateGroup theStateGroup = _mocks.StrictMock<IRtaStateGroup>();
-            IRtaStateGroupRepository rtaStateGroupRepository = _mocks.StrictMock<IRtaStateGroupRepository>();
-            Expect.Call(_repositoryFactory.CreateRtaStateGroupRepository(uow)).Return(rtaStateGroupRepository);
-            Expect.Call(theState.StateGroup).Return(theStateGroup);
-            rtaStateGroupRepository.Add(theStateGroup);
-
-            _mocks.ReplayAll();
-
-            _target.GetType().GetMethod("_rtaStateHolder_RtaStateCreated",
-                                        BindingFlags.Instance | BindingFlags.NonPublic).Invoke(_target,
-                                                                                               new object[]
-																								   {
-																									   null,
-																									   new CustomEventArgs
-																										   <IRtaState>(
-																										   theState)
-																								   });
-
-            _mocks.VerifyAll();
-
-            Assert.IsNotNull(_target.RtaStateHolder);
-        }
-
-        [Test]
-        public void VerifyHandlesNewStateAddedOnTwoClientsWithoutException()
-        {
-            IUnitOfWork uow = _mocks.StrictMock<IUnitOfWork>();
-            Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow);
-            Expect.Call(uow.PersistAll(_target)).Throw(new OptimisticLockException());
-            uow.Dispose();
-
-            IRtaState theState = _mocks.StrictMock<IRtaState>();
-            IRtaStateGroup theStateGroup = _mocks.StrictMock<IRtaStateGroup>();
-            IRtaStateGroupRepository rtaStateGroupRepository = _mocks.StrictMock<IRtaStateGroupRepository>();
-            Expect.Call(_repositoryFactory.CreateRtaStateGroupRepository(uow)).Return(rtaStateGroupRepository);
-            Expect.Call(theState.StateGroup).Return(theStateGroup);
-            rtaStateGroupRepository.Add(theStateGroup);
-            _mocks.ReplayAll();
-
-            _target.GetType().GetMethod("_rtaStateHolder_RtaStateCreated",
-                                        BindingFlags.Instance | BindingFlags.NonPublic).Invoke(_target,
-                                                                                               new object[]
-																								   {
-																									   null,
-																									   new CustomEventArgs
-																										   <IRtaState>(
-																										   theState)
-																								   });
-
-            _mocks.VerifyAll();
-
-            Assert.IsNotNull(_target.RtaStateHolder);
-        }
 
         //[Test] And this
         //public void VerifyOnLoadWithPersons()
@@ -609,7 +548,6 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
                 Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow);
                 Expect.Call(() => _schedulingResultLoader.ReloadScheduleData(uow));
                 Expect.Call(uow.Dispose);
-                Expect.Call(_rtaStateHolder.InitializeSchedules);
                 Expect.Call(_view.RefreshRealTimeScheduleControls);
                 Expect.Call(() => _view.ToggleSchedulePartModified(true));
 
@@ -718,20 +656,6 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
         }
 
         [Test]
-        public void VerifyRefreshDataWithoutReceivedEvent()
-        {
-            DateTime timestamp = DateTime.UtcNow;
-            TimeSpan refreshRate = TimeSpan.FromSeconds(2);
-
-            _rtaStateHolder.UpdateCurrentLayers(timestamp, refreshRate);
-            _rtaStateHolder.AnalyzeAlarmSituations(timestamp);
-
-            _mocks.ReplayAll();
-            _target.RefreshAgentStates(timestamp, refreshRate);
-            _mocks.VerifyAll();
-        }
-
-        [Test]
         public void VerifyCanGetAgentStateViewAdapterCollection()
         {
             var stategroups = new ReadOnlyCollection<IRtaStateGroup>(new List<IRtaStateGroup> { new RtaStateGroup("test", true, true) });
@@ -783,19 +707,18 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
         /// </summary>
         protected virtual void ReleaseManagedResources()
         {
-            _mocks.BackToRecord(_messageBroker);
-            _mocks.BackToRecord(_rtaStateHolder);
-            _messageBroker.UnregisterEventSubscription(_target.OnEventForecastDataMessageHandler);
-            _messageBroker.UnregisterEventSubscription(_target.OnEventScheduleMessageHandler);
-            _messageBroker.UnregisterEventSubscription(_target.OnEventStatisticMessageHandler);
-            _messageBroker.UnregisterEventSubscription(_target.OnEventActualAgentStateMessageHandler);
-            _rtaStateHolder.RtaStateCreated -= null;
-            LastCall.IgnoreArguments().Repeat.Any();
-            _mocks.Replay(_rtaStateHolder);
-            _mocks.Replay(_messageBroker);
-            _target.Dispose();
-            _mocks.Verify(_messageBroker);
-            _mocks.Verify(_rtaStateHolder);
+			_mocks.BackToRecord(_messageBroker);
+			_mocks.BackToRecord(_rtaStateHolder);
+			_messageBroker.UnregisterEventSubscription(_target.OnEventForecastDataMessageHandler);
+			//_messageBroker.UnregisterEventSubscription(_target.OnEventScheduleMessageHandler);
+			//_messageBroker.UnregisterEventSubscription(_target.OnEventStatisticMessageHandler);
+			//_messageBroker.UnregisterEventSubscription(_target.OnEventActualAgentStateMessageHandler);
+			LastCall.IgnoreArguments().Repeat.Any();
+			_mocks.Replay(_rtaStateHolder);
+			_mocks.Replay(_messageBroker);
+			_target.Dispose();
+			_mocks.Verify(_messageBroker);
+			_mocks.Verify(_rtaStateHolder);
         }
     }
 }

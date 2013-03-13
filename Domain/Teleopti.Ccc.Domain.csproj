@@ -601,9 +601,7 @@
     </Compile>
     <Compile Include="Payroll\PayrollExport.cs" />
     <Compile Include="Payroll\PayrollResult.cs" />
-    <Compile Include="RealTimeAdherence\AgentStateBatch.cs" />
     <Compile Include="RealTimeAdherence\ExternalLogOnPerson.cs" />
-    <Compile Include="RealTimeAdherence\IAgentStateBatch.cs" />
     <Compile Include="RealTimeAdherence\IRtaStateHolder.cs" />
     <Compile Include="RealTimeAdherence\RtaVisualLayer.cs" />
     <Compile Include="RealTimeAdherence\StateGroupActivityAlarm.cs" />
@@ -647,8 +645,6 @@
     <Compile Include="ResourceCalculation\PopulationStatisticsCalculator.cs" />
     <Compile Include="ResourceCalculation\PopulationStatisticsData.cs" />
     <Compile Include="ResourceCalculation\PreSchedulingStatusChecker.cs" />
-    <Compile Include="RealTimeAdherence\AgentState.cs" />
-    <Compile Include="RealTimeAdherence\AlarmSituation.cs" />
     <Compile Include="RealTimeAdherence\AlarmType.cs" />
     <Compile Include="RealTimeAdherence\RtaStateHolder.cs" />
     <Compile Include="ResourceCalculation\ScheduleFairnessCalculator.cs" />

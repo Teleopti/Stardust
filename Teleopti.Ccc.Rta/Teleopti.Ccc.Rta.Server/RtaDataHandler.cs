@@ -165,11 +165,11 @@ namespace Teleopti.Ccc.Rta.Server
 			{
 				foreach (var personWithBusinessUnit in personWithBusinessUnits)
 				{
-					if (!_stateResolver.HaveStateCodeChanged(personWithBusinessUnit.PersonId, stateCode, timestamp))
-					{
-						_loggingSvc.InfoFormat("Person {0} is already in state {1}", personWithBusinessUnit.PersonId, stateCode);
-						continue;
-					}
+					//if (!_stateResolver.HaveStateCodeChanged(personWithBusinessUnit.PersonId, stateCode, timestamp))
+					//{
+					//    _loggingSvc.InfoFormat("Person {0} is already in state {1}", personWithBusinessUnit.PersonId, stateCode);
+					//    continue;
+					//}
 
 					var agentState = _agentHandler.GetState(personWithBusinessUnit.PersonId, personWithBusinessUnit.BusinessUnitId,
 					                                        platformTypeId, stateCode,

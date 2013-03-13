@@ -58,8 +58,6 @@ namespace Teleopti.Ccc.WinCode.Intraday
             }
 
             _schedulingResultLoader.InitializeScheduleData();
-            if (_rtaStateHolder != null)
-                _rtaStateHolder.InitializeSchedules();
             _view.DrawSkillGrid();
         }
 

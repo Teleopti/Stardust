@@ -1,7 +1,5 @@
-using System;
 using System.Linq;
 using System.ComponentModel;
-using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Intraday
@@ -9,13 +7,11 @@ namespace Teleopti.Ccc.WinCode.Intraday
     public class AgentStateViewAdapter : INotifyPropertyChanged
     {
         private static IDayLayerViewModel _dayLayerViewModel;
-        //private readonly IRtaStateHolder _rtaStateHolder;
         private readonly IRtaStateGroup _stateGroup;
         private int _totalPersons;
 
         public AgentStateViewAdapter(IRtaStateGroup stateGroup, IDayLayerViewModel dayLayerViewModel)
         {
-            //_rtaStateHolder = rtaStateHolder;
             _stateGroup = stateGroup;
             //TODO: Not sure if this is appropriate?
             _dayLayerViewModel = dayLayerViewModel;
@@ -31,11 +27,9 @@ namespace Teleopti.Ccc.WinCode.Intraday
             get { return _totalPersons; }
             private set
             {
-                if (_totalPersons != value)
-                {
-                    _totalPersons = value;
-                    NotifyPropertyChanged("TotalPersons");
-                }
+	            if (_totalPersons == value) return;
+	            _totalPersons = value;
+	            NotifyPropertyChanged("TotalPersons");
             }
         }
 

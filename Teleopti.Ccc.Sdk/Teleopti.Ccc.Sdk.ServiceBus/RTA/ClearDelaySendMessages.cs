@@ -15,7 +15,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
 				command.CommandType = CommandType.Text;
 				command.CommandText = query;
 				command.ExecuteNonQuery();
-				connection.Close();
 			}
 		}
 	}
