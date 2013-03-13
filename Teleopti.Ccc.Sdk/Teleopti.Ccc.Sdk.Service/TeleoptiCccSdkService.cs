@@ -1518,7 +1518,8 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			return invoker.Invoke(queryDto);
 		}
 
-        public CommandResultDto ExecuteCommand(CommandDto commandDto)
+		[SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public CommandResultDto ExecuteCommand(CommandDto commandDto)
         {
             var invoker = _lifetimeScope.Resolve<ICommandDispatcher>();
 			try
