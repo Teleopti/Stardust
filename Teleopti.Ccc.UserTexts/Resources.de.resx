@@ -10292,4 +10292,118 @@ Diese Optionen sind aktiviert:
   <data name="UseAverageShiftLengths" xml:space="preserve">
     <value>benutze durchschnittliche Schichtlänge</value>
   </data>
+  <data name="IncludedInRequestAllowance" xml:space="preserve">
+    <value>In Urlaubsvorgabe einbeziehen</value>
+  </data>
+  <data name="ThePersonsRoles" xml:space="preserve">
+    <value>Rollen der Person</value>
+  </data>
+  <data name="RequestAllowances" xml:space="preserve">
+    <value>Urlaubsvorgabe anzeigen</value>
+  </data>
+  <data name="NotWorking" xml:space="preserve">
+    <value>Funktioniert nicht.</value>
+  </data>
+  <data name="NotReadyTime" xml:space="preserve">
+    <value>Nicht-Bereit-Zeit</value>
+  </data>
+  <data name="ResTotals" xml:space="preserve">
+    <value>Total</value>
+  </data>
+  <data name="YourScheduleTheDATEHasChanged" xml:space="preserve">
+    <value>Ihr Plan am {0} hat sich geändert!</value>
+  </data>
+  <data name="LogOnFailedAccountIsLocked" xml:space="preserve">
+    <value>Anmeldung fehlgeschlagen! Ihr Zugang wurde gesperrt.</value>
+  </data>
+  <data name="LogOnFailedPasswordExpired" xml:space="preserve">
+    <value>Anmeldung fehlgeschlagen! Ihr Passwort ist abgelaufen.</value>
+  </data>
+  <data name="Skip" xml:space="preserve">
+    <value>Weiter</value>
+  </data>
+  <data name="InvalidUserNameOrPassword" xml:space="preserve">
+    <value>Ungültiger Benutzername oder Passwort.</value>
+  </data>
+  <data name="YourPasswordHasAlreadyExpired" xml:space="preserve">
+    <value>Ihr Passwort ist bereits abgelaufen.</value>
+  </data>
+  <data name="YourPasswordWillExpireSoon" xml:space="preserve">
+    <value>Ihr Passwort wird bald ablaufen.</value>
+  </data>
+  <data name="WarningWithExclamatory" xml:space="preserve">
+    <value>Warnung!</value>
+  </data>
+  <data name="Reforecast" xml:space="preserve">
+    <value>Reforecast</value>
+  </data>
+  <data name="PeopleCap" xml:space="preserve">
+    <value>Personen</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Entfernen</value>
+  </data>
+  <data name="SelectWorkload" xml:space="preserve">
+    <value>Workloads</value>
+  </data>
+  <data name="YouHaveToSelectAtLeastOneWorkload" xml:space="preserve">
+    <value>Sie müssen mindestens einen Workload auswählen.</value>
+  </data>
+  <data name="MySchedule" xml:space="preserve">
+    <value>Mein Plan</value>
+  </data>
+  <data name="DataHasBeenDeleted" xml:space="preserve">
+    <value>Fehler beim Speichern. Wahrscheinlich haben Sie oder ein anderer Nutzer Ihre Eingaben gelöscht. Zur Sicherung der Datenkonsistenz wird das Fenster geschlossen. Ihre Änderungen wurden nicht gespeichert.</value>
+  </data>
+  <data name="ResShiftStartDateColon" xml:space="preserve">
+    <value>Datum (Schichtbeginn)</value>
+  </data>
+  <data name="NoAgentsAvailableForShiftTrade" xml:space="preserve">
+    <value>Keine Personen für einen Schichttausch verfügbar.</value>
+  </data>
+  <data name="ResShiftStartDateFromColon" xml:space="preserve">
+    <value>Datum von (Schichtbeginn):</value>
+  </data>
+  <data name="ResShiftStartDateToColon" xml:space="preserve">
+    <value>Datum bis (Schichtbeginn):</value>
+  </data>
+  <data name="Little" xml:space="preserve">
+    <value>wenig</value>
+  </data>
+  <data name="Medium" xml:space="preserve">
+    <value>mittel</value>
+  </data>
+  <data name="Much" xml:space="preserve">
+    <value>stark</value>
+  </data>
+  <data name="QuickForecast" xml:space="preserve">
+    <value>Quick Forecast</value>
+  </data>
+  <data name="SeasonalityDataRange" xml:space="preserve">
+    <value>Zeitraum für Saisonalität und Trend</value>
+  </data>
+  <data name="SmoothingStyleColon" xml:space="preserve">
+    <value>Glättung:</value>
+  </data>
+  <data name="TemplatesHistoricalDataRange" xml:space="preserve">
+    <value>Vorlagen historischer Zeitraum</value>
+  </data>
+  <data name="ShowInfoMessages" xml:space="preserve">
+    <value>Informationen anzeigen</value>
+  </data>
+  <data name="Errors" xml:space="preserve">
+    <value>Fehler</value>
+  </data>
+  <data name="TheQuickForecatWillStartInBackgroundMessage" xml:space="preserve">
+    <value>Der Quick-Forecast wird als Job im Hintergrund gestartet, sobald der Quick-Forecast-Assistent geschlossen wird. Der Status wird in der Job Historie angezeigt.</value>
+  </data>
+  <data name="CannotDisplayScheduleWhenShiftTradeStatusIsNew" xml:space="preserve">
+    <value>Dienstplan kann nicht dargestellt werden, wenn der Status des Schichttausches neu ist.</value>
+  </data>
+  <data name="NewTemplateName" xml:space="preserve">
+    <value>Name für neue Vorlage</value>
+  </data>
+  <data name="EmptyTemplateName" xml:space="preserve">
+    <value>Name leere Präferenz-Vorlage</value>
+  </data>
 </root>
