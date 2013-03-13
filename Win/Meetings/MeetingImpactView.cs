@@ -62,7 +62,8 @@ namespace Teleopti.Ccc.Win.Meetings
                                                                         new SeatImpactOnPeriodForProjection()),
                                                                     new NonBlendSkillCalculator(
                                                                         new NonBlendSkillImpactOnPeriodForProjection()),
-																		new SingleSkillDictionary());
+																		new SingleSkillDictionary(),
+																		new SingleSkillMaxSeatCalculator());
 		    var decider = new PeopleAndSkillLoaderDecider(new PersonRepository(UnitOfWorkFactory.Current));
 		    var gridHandler = new MeetingImpactSkillGridHandler(this, meetingViewModel, schedulerStateHolder,
 		                                                        UnitOfWorkFactory.Current, decider);
