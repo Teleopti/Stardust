@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 
 		public SyncCommandDispatcher(IContainer container) { _container = container; }
 
-		public void Invoke(object command)
+		public void Execute(object command)
 		{
 			var handlerType = typeof(IHandleCommand<>).MakeGenericType(new[] { command.GetType() });
 			var handler = _container.Resolve(handlerType);

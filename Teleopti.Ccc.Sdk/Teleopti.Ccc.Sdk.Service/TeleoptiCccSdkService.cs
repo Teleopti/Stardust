@@ -1523,7 +1523,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
             var invoker = _lifetimeScope.Resolve<ICommandDispatcher>();
 			try
 			{
-				invoker.Invoke(commandDto);
+				invoker.Execute(commandDto);
 			}
 			catch (TargetInvocationException e)
 			{

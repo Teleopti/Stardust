@@ -2,6 +2,6 @@
 {
 	public interface ICommandDispatcher
 	{
-		void Invoke(object command);
+		void Execute(object command);
 	}
 }

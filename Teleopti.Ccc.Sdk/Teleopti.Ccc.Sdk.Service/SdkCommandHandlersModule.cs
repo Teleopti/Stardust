@@ -1,17 +1,13 @@
 ﻿using System;
 using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Persisters;
 using Teleopti.Ccc.Sdk.Logic;
-using Teleopti.Ccc.Sdk.Logic.CommandHandler;
 using Teleopti.Ccc.Sdk.WcfService.Factory;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.WcfService
 {
-    public class CommandHandlerModule : Module
+    public class SdkCommandHandlersModule : Module
     {
         protected override void Load(ContainerBuilder builder)
         {
@@ -20,7 +16,6 @@ namespace Teleopti.Ccc.Sdk.WcfService
                 .AsImplementedInterfaces()
                 .InstancePerLifetimeScope();
             builder.RegisterType<MessageBrokerEnablerFactory>().As<IMessageBrokerEnablerFactory>();
-            builder.RegisterType<SyncCommandDispatcher>().AsImplementedInterfaces();
             builder.RegisterType<ScheduleDictionaryModifiedCallback>().As<IScheduleDictionaryModifiedCallback>();
         }
 
@@ -29,14 +24,4 @@ namespace Teleopti.Ccc.Sdk.WcfService
             return infrastructureType.Name.EndsWith("CommandHandler", StringComparison.Ordinal);
         }
     }
-
-	public class UpdateScheduleModule : Module
-	{
-		protected override void Load(ContainerBuilder builder)
-		{
-			builder.RegisterType<BusinessRulesForPersonalAccountUpdate>().As<IBusinessRulesForPersonalAccountUpdate>().
-				InstancePerDependency();
-			builder.RegisterType<SchedulingResultStateHolder>().As<ISchedulingResultStateHolder>().InstancePerDependency();
-		}
-	}
 }

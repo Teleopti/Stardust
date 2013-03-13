@@ -168,7 +168,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AsyncResult.cs" />
-    <Compile Include="CommandHandlerModule.cs" />
+    <Compile Include="SdkCommandHandlersModule.cs" />
     <Compile Include="CreateScheduleDistributionAsyncResult.cs" />
     <Compile Include="Factory\AbsenceTypeFactory.cs" />
     <Compile Include="Factory\AcceptPreviouslyReferredShiftTradeCommand.cs" />
@@ -238,6 +238,7 @@
     <Compile Include="QueryHandlerModule.cs" />
     <Compile Include="TeleoptiCccSdkService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UpdateScheduleModule.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Domain\Teleopti.Ccc.Domain.csproj">
