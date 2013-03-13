@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.WinCodeTest.Converters.DateTimeConverter
             Assert.AreEqual(localDateTime, _target.LatestConvertedDateTime, "A successful parse should change the LatestConverted");
         }
 
-        [Test]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "LatestConverted"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "NUnit.Framework.Assert.AreEqual(System.Object,System.Object,System.String)"), Test]
         public void VerifyConvertBackReturnsActualDateTime()
         {
             //Create a string that can be parsed:
