@@ -978,4 +978,13 @@
   <data name="ResSignOut" xml:space="preserve">
     <value>Abmelden</value>
   </data>
+  <data name="ResShiftStartDateColon" xml:space="preserve">
+    <value>Datum (Schichtbeginn)</value>
+  </data>
+  <data name="ResShiftStartDateFromColon" xml:space="preserve">
+    <value>Datum vom (Schichtbeginn)</value>
+  </data>
+  <data name="ResShiftStartDateToColon" xml:space="preserve">
+    <value>Datum bis (Schichtbeginn)</value>
+  </data>
 </root>
