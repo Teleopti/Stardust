@@ -230,6 +230,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			builder.RegisterType<DynamicBlockFinder>().As<IDynamicBlockFinder>();
 			builder.RegisterType<TeamBlockInfoFactory>().As<ITeamBlockInfoFactory>();
 			builder.RegisterType<TeamInfoFactory>().As<ITeamInfoFactory>();
+            builder.RegisterType<BlockProvider>().As<IBlockProvider>();
 		}
 
 		private static void registerTeamBlockDayOptimizerService(ContainerBuilder builder)

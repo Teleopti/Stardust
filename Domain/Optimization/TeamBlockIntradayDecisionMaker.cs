@@ -42,7 +42,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			    for (int i = 0; i < periodDays.Count; i++)
 				{
                     if (lockableBitArray.UnlockedIndexes.Contains(i) && !lockableBitArray.DaysOffBitArray[i])
-					standardDeviationData.Add(periodDays[i].Day, values[i]);
+					if(!standardDeviationData.Data.ContainsKey(periodDays[i].Day))
+                        standardDeviationData.Add(periodDays[i].Day, values[i]);
 				}
 			}
 
@@ -51,6 +52,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				var valuesOfOneBlock = new List<double?>();
 				foreach (var day in block.BlockPeriod.DayCollection())
 				{
+				    if (!standardDeviationData.Data.ContainsKey(day)) continue;
 					var value = standardDeviationData.Data[day];
 					valuesOfOneBlock.Add(value);
 				}

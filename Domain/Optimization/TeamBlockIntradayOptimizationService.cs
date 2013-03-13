@@ -64,9 +64,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             foreach (var scheduleMatrixPro in allPersonMatrixList)
             {
                 var scheduleResultDataExtractor =
-                    _scheduleResultDataExtractorProvider.CreatePersonalSkillDataExtractor(scheduleMatrixPro,
-                                                                                          optimizationPreferences
-                                                                                              .Advanced);
+                    new RelativeDailyStandardDeviationsByAllSkillsExtractor(scheduleMatrixPro, schedulingOptions);
                 dataExtractorValuesForMatrixes.Add(scheduleMatrixPro, scheduleResultDataExtractor);
             }
 
