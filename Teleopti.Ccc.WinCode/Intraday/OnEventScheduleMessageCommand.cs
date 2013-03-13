@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using log4net;
-using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
@@ -23,7 +22,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
 	    private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IRepositoryFactory _repositoryFactory;
 
-        public OnEventScheduleMessageCommand(IIntradayView view, ISchedulingResultLoader schedulingResultLoader, IRtaStateHolder rtaStateHolder, IUnitOfWorkFactory unitOfWorkFactory, IRepositoryFactory repositoryFactory) : this()
+        public OnEventScheduleMessageCommand(IIntradayView view, ISchedulingResultLoader schedulingResultLoader, IUnitOfWorkFactory unitOfWorkFactory, IRepositoryFactory repositoryFactory) : this()
         {
             _view = view;
             _schedulingResultLoader = schedulingResultLoader;
