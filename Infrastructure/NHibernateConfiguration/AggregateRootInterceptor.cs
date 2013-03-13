@@ -74,20 +74,17 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 		public override void OnCollectionUpdate(object collection, object key)
 		{
 			var modifiedColl = (IPersistentCollection) collection;
-			IAggregateRoot root;
 			var owner = modifiedColl.Owner;
 			var aggregateRoot = owner as IAggregateRoot;
 			if (aggregateRoot != null)
 			{
-				root = (IAggregateRoot) modifiedColl.Owner;
+				modifiedRoots.Add(new RootChangeInfo(aggregateRoot, DomainUpdateType.Update));
 			}
 			else
 			{
 				var entityOwner = (IAggregateEntity)owner;
-				root = entityOwner.Root();				
+				rootsWithModifiedChildren.Add(entityOwner.Root());
 			}
-			rootsWithModifiedChildren.Add(root);
-			base.OnCollectionUpdate(collection, key);
 		}
 
 		public override void OnDelete(object entity, object id, object[] state, string[] propertyNames, IType[] types)
