@@ -6060,6 +6060,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			if (_scheduleView == null) return;
 			_scheduleView.Presenter.AddActivity(new List<IScheduleDay> { e.SchedulePart }, e.Period);
+			RecalculateResources();
 		}
 
 		private void wpfShiftEditor_AddPersonalShift(object sender, ShiftEditorEventArgs e)
@@ -6072,12 +6073,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			if (_scheduleView == null) return;
 			_scheduleView.Presenter.AddOvertime(new List<IScheduleDay> { e.SchedulePart }, e.Period, MultiplicatorDefinitionSet.Where(m => m.MultiplicatorType == MultiplicatorType.Overtime).ToList());
+			RecalculateResources();
 		}
 
 		private void wpfShiftEditor_AddAbsence(object sender, ShiftEditorEventArgs e)
 		{
 			if (_scheduleView == null) return;
 			_scheduleView.Presenter.AddAbsence(new List<IScheduleDay> { e.SchedulePart }, e.Period);
+			RecalculateResources();
 		}
 
 		private void wpfShiftEditor_Undo(object sender, EventArgs e)
@@ -6814,15 +6817,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			drawSkillGrid();
 		}
 
-		//private void sort(IScheduleSortCommand command)
-		//{
-		//    var selectedSchedulePart = _scheduleView.SelectedSchedules().FirstOrDefault();
-		//    if (selectedSchedulePart == null) return;
-		//    _scheduleView.Presenter.SortCommand = command;
-		//    _scheduleView.Presenter.SortCommand.Execute(selectedSchedulePart.DateOnlyAsPeriod.DateOnly);
-		//    _scheduleView.SetSelectionFromParts(new List<IScheduleDay> {selectedSchedulePart});
-		//    _scheduleView.ViewGrid.Refresh();
-		//}
 		private void ToolStripMenuItemStartAscMouseUp(object sender, MouseEventArgs e)
 		{
 			if (e.Button == MouseButtons.Left) _scheduleView.Sort(new SortByStartAscendingCommand(SchedulerState));
