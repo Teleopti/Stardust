@@ -40,11 +40,21 @@
 			border-radius: 4px 4px 4px 4px;
 }
 
-.person-schedule .start-date {
+
+
+
+.person-schedule .full-day-absence-form  {
+	width: 223px;
+}
+
+.person-schedule .full-day-absence-form .start-date {
 	width: 180px;
 	margin-bottom: 10px;
 }
 
-.person-schedule .end-date {
+.person-schedule .full-day-absence-form .end-date {
 	width: 155px;
+}
+.person-schedule .hero-unit {
+	padding: 30px;
 }

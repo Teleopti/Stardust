@@ -197,20 +197,30 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
             Pages.Pages.NavigatingTo(Browser.Current.Page<MessagePage>());
 	    }
 
-		public static void GotoAnywhereTeamSchedule(string date = null, string teamId = null)
+		public static void GotoAnywhereTeamSchedule()
 		{
-			string hash = string.Empty;
+			GoTo("Anywhere", new ApplicationStartupTimeout());
+			Pages.Pages.NavigatingTo(Browser.Current.Page<AnywherePage>());
+		}
 
-			if (!string.IsNullOrEmpty(teamId))
-			{
-				hash = string.Format(CultureInfo.InvariantCulture, "#teamschedule/{0}", teamId);
-			}
-			if (!string.IsNullOrEmpty(date))
-			{
-				hash = !string.IsNullOrEmpty(hash) ? hash + "/" + date.Replace("-", "") : string.Format(CultureInfo.InvariantCulture, "#teamschedule/{0}", date.Replace("-", ""));
-			}
+		public static void GotoAnywhereTeamSchedule(DateTime date)
+		{
+			GoTo(string.Format("Anywhere#teamschedule/{0}{1}{2}",
+				date.Year.ToString("0000"), 
+				date.Month.ToString("00"), 
+				date.Day.ToString("00")), 
+				new ApplicationStartupTimeout());
+			Pages.Pages.NavigatingTo(Browser.Current.Page<AnywherePage>());
+		}
 
-			GoTo("Anywhere" + hash, new ApplicationStartupTimeout());
+		public static void GotoAnywhereTeamSchedule(DateTime date, Guid teamId)
+		{
+			GoTo(string.Format("Anywhere#teamschedule/{0}/{1}{2}{3}",
+				teamId,
+				date.Year.ToString("0000"), 
+				date.Month.ToString("00"), 
+				date.Day.ToString("00")), 
+				new ApplicationStartupTimeout());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<AnywherePage>());
 		}
 
