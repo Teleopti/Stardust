@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 		private IIntradayView _view;
 		private IScenario _scenario;
 		private ISchedulingResultLoader _schedulingResultLoader;
-		private IRtaStateHolder _rtaStateHolder;
 		private IUnitOfWorkFactory _unitOfWorkFactory;
 		private IRepositoryFactory _repositoryFactory;
 		private ISchedulerStateHolder _schedulerStateHolder;
@@ -41,7 +40,6 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			_person = PersonFactory.CreatePerson();
 			_person.SetId(Guid.NewGuid());
 			_schedulingResultLoader = mocks.DynamicMock<ISchedulingResultLoader>();
-			_rtaStateHolder = mocks.StrictMock<IRtaStateHolder>();
 			_unitOfWorkFactory = mocks.StrictMock<IUnitOfWorkFactory>();
 			_repositoryFactory = mocks.StrictMock<IRepositoryFactory>();
 			_schedulerStateHolder = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_period,TeleoptiPrincipal.Current.Regional.TimeZone), new[]{_person});
