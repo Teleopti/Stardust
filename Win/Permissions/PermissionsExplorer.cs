@@ -2354,7 +2354,7 @@ namespace Teleopti.Ccc.Win.Permissions
             IAvailableData availableData = PermissionsExplorerStateHolder.GetAvailableDataInPermissionsDataDictionary(selectedRole) ??
                                            AvailableData.FindByApplicationRole(_availableDataCollection, selectedRole);
 
-            if (availableData != null) //function explicitly returns null if no AvailableData
+            if (availableData != null && !_availableDataForSelectedRoles.Contains(availableData)) //function explicitly returns null if no AvailableData
             {
                 _availableDataForSelectedRoles.Add(availableData);
                 setDataTreeCheckState(_availableDataForSelectedRoles);
