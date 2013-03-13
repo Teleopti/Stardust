@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
                 foreach (var person in teamBlockInfo.TeamInfo.GroupPerson.GroupMembers)
                 {
                     //should pass the suggested shift here
-                    var restriction = _restrictionAggregator.AggregatePerDay(teamBlockInfo.TeamInfo, schedulingOptions, new List<DateOnly> { day });
+                    var restriction = _restrictionAggregator.AggregatePerDay( teamBlockInfo.TeamInfo, schedulingOptions, new List<DateOnly> { day });
 
                     // (should we cover for max seats here?) ????
                     //should consider the suggested start time

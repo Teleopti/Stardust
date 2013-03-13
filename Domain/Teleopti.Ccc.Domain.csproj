@@ -1399,7 +1399,9 @@
     <EmbeddedResource Include="Security\AuthorizationEntities\ApplicationFunction.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Common\Person.hbm.xml" />
+    <EmbeddedResource Include="Common\Person.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Forecasting\WorkloadDay.hbm.xml" />
@@ -1555,7 +1557,9 @@
     <EmbeddedResource Include="Common\ChildPersonGroup.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Common\OptionalColumn.hbm.xml" />
+    <EmbeddedResource Include="Common\OptionalColumn.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Common\OptionalColumnValue.hbm.xml" />
