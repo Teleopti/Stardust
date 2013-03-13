@@ -43,6 +43,24 @@ namespace Teleopti.Ccc.WinCodeTest.Converters.DateTimeConverter
             Assert.AreEqual(origin, result[0]);
             Assert.AreEqual(_timeZone, result[1]);
             Assert.AreEqual(localDateTime, _target.LatestConvertedDateTime, "A successful parse should change the LatestConverted");
+        }
+
+        [Test]
+        public void VerifyConvertBackReturnsActualDateTime()
+        {
+            //Create a string that can be parsed:
+            DateTime origin = new DateTime(2001, 1, 1, 1, 0, 0, DateTimeKind.Utc);
+            var resultFromConvert = _target.Convert(new object[] { origin, _timeZone }, typeof(DateTime), DateTimeParseMode.DateTime,
+                                                    CultureInfo.CurrentCulture);
+            var localDateTime = TimeZoneInfo.ConvertTimeFromUtc(origin, _timeZone);
+            Assert.AreEqual(string.Concat(localDateTime.ToShortDateString(), " ", localDateTime.ToShortTimeString()),
+                            resultFromConvert);
+            var result = _target.ConvertBack(null, new[] { typeof(string) }, null,
+                                             CultureInfo.CurrentCulture);
+            Assert.AreEqual(2, result.Length);
+            Assert.AreEqual(origin, result[0]);
+            Assert.AreEqual(_timeZone, result[1]);
+            Assert.AreEqual(localDateTime, _target.LatestConvertedDateTime, "A successful parse should change the LatestConverted");
         } 
 
 
