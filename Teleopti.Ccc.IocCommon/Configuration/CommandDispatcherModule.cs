@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterType<SyncCommandDispatcher>().As<ICommandDispatcher>();
+			builder.RegisterType<SyncCommandDispatcher>().As<ICommandDispatcher>().SingleInstance();
 		}
 	}
 }
