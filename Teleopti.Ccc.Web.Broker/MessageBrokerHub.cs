@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNet.SignalR;
+using Microsoft.AspNet.SignalR.Hubs;
 using log4net;
-using SignalR.Hubs;
 using Teleopti.Interfaces.MessageBroker;
 
 namespace Teleopti.Ccc.Web.Broker
@@ -42,7 +43,7 @@ namespace Teleopti.Ccc.Web.Broker
 
 			foreach (var route in routes)
 			{
-				Clients[createRouteHash(route)].onEventMessage(notification, route);
+				Clients.Group(createRouteHash(route)).onEventMessage(notification, route);
 			}
 		}
 

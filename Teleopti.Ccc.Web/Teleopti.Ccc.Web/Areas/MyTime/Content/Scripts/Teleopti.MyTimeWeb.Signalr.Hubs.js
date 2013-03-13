@@ -1,211 +1,108 @@
 /*!
-* SignalR JavaScript Library v0.5.2
+* ASP.NET SignalR JavaScript Library v1.0.1
 * http://signalr.net/
 *
-* Copyright David Fowler and Damian Edwards 2012
-* Licensed under the MIT.
+* Copyright Microsoft Open Technologies, Inc. All rights reserved.
+* Licensed under the Apache 2.0
 * https://github.com/SignalR/SignalR/blob/master/LICENSE.md
 *
 */
 
-/// <reference path="jquery-1.6.2.js" />
+/// <reference path="..\..\SignalR.Client.JS\Scripts\jquery-1.6.4.js" />
+/// <reference path="jquery.signalR.js" />
 (function ($, window) {
 	/// <param name="$" type="jQuery" />
 	"use strict";
 
 	if (typeof ($.signalR) !== "function") {
-		throw "SignalR: SignalR is not loaded. Please ensure jquery.signalR.js is referenced before ~/signalr/hubs.";
+		throw new Error("SignalR: SignalR is not loaded. Please ensure jquery.signalR-x.js is referenced before ~/signalr/hubs.");
 	}
 
-	var hubs = {},
-        signalR = $.signalR,
-        callbackId = 0,
-        callbacks = {};
+	var signalR = $.signalR;
 
-	// Array.prototype.map
-	if (!Array.prototype.hasOwnProperty("map")) {
-		Array.prototype.map = function (fun, thisp) {
-			var arr = this,
-                i,
-                length = arr.length,
-                result = [];
-			for (i = 0; i < length; i += 1) {
-				if (arr.hasOwnProperty(i)) {
-					result[i] = fun.call(thisp, arr[i], i, arr);
-				}
-			}
-			return result;
+	function makeProxyCallback(hub, callback) {
+		return function () {
+			// Call the client hub method
+			callback.apply(hub, $.makeArray(arguments));
 		};
 	}
 
-	function executeCallback(hubName, fn, args, state) {
-		var hub = hubs[hubName],
-            hubMethod;
-
-		if (hub) {
-			signalR.hub.processState(hubName, hub.obj, state);
-
-			hubMethod = hub.obj[fn];
-			if (hubMethod) {
-				hubMethod.apply(hub.obj, args);
-			}
-		}
-	}
-
-	function updateClientMembers(instance) {
-		var newHubs = {},
-            obj,
-            memberValue,
-            key,
-            memberKey,
-            hasSubscription = false;
+	function registerHubProxies(instance, shouldSubscribe) {
+		var key, hub, memberKey, memberValue, subscriptionMethod;
 
 		for (key in instance) {
 			if (instance.hasOwnProperty(key)) {
-				// This is a client hub
-				obj = instance[key];
+				hub = instance[key];
 
-				if ($.type(obj) !== "object" ||
-                        $.inArray(key, ["prototype", "constructor", "fn", "hub", "transports"]) >= 0) {
+				if (!(hub.hubName)) {
+					// Not a client hub
 					continue;
 				}
 
-				hasSubscription = false;
+				if (shouldSubscribe) {
+					// We want to subscribe to the hub events
+					subscriptionMethod = hub.on;
+				}
+				else {
+					// We want to unsubscribe from the hub events
+					subscriptionMethod = hub.off;
+				}
 
-				for (memberKey in obj) {
-					if (obj.hasOwnProperty(memberKey)) {
-						memberValue = obj[memberKey];
+				// Loop through all members on the hub and find client hub functions to subscribe/unsubscribe
+				for (memberKey in hub.client) {
+					if (hub.client.hasOwnProperty(memberKey)) {
+						memberValue = hub.client[memberKey];
 
-						if (memberKey === "_" ||
-                                $.type(memberValue) !== "function" ||
-                                $.inArray(memberKey, obj._.ignoreMembers) >= 0) {
+						if (!$.isFunction(memberValue)) {
+							// Not a client hub function
 							continue;
 						}
 
-						hasSubscription = true;
-						break;
+						subscriptionMethod.call(hub, memberKey, makeProxyCallback(hub, memberValue));
 					}
 				}
-
-				if (hasSubscription === true) {
-					newHubs[obj._.hubName] = { obj: obj };
-				}
 			}
 		}
-
-		hubs = {};
-		$.extend(hubs, newHubs);
 	}
 
-	function getArgValue(a) {
-		return $.isFunction(a)
-            ? null
-            : ($.type(a) === "undefined"
-                ? null
-                : a);
-	}
+	$.hubConnection.prototype.createHubProxies = function () {
+		var proxies = {};
+		this.starting(function () {
+			// Register the hub proxies as subscribed
+			// (instance, shouldSubscribe)
+			registerHubProxies(proxies, true);
 
-	function copy(obj, exclude) {
-		var newObj = {};
-		$.each(obj, function (key, value) {
-			if ($.inArray(key, exclude) === -1) {
-				// We don't use "this" because browser suck!
-				newObj[key] = value;
-			}
+			this._registerSubscribedHubs();
+		}).disconnected(function () {
+			// Unsubscribe all hub proxies when we "disconnect".  This is to ensure that we do not re-add functional call backs.
+			// (instance, shouldSubscribe)
+			registerHubProxies(proxies, false);
 		});
 
-		return newObj;
-	}
-
-	function serverCall(hub, methodName, args) {
-		var callback = args[args.length - 1], // last argument
-            methodArgs = $.type(callback) === "function"
-                ? args.slice(0, -1) // all but last
-                : args,
-            argValues = methodArgs.map(getArgValue),
-            data = { hub: hub._.hubName, method: methodName, args: argValues, state: copy(hub, ["_"]), id: callbackId },
-            d = $.Deferred(),
-            cb = function (result) {
-            	signalR.hub.processState(hub._.hubName, hub, result.State);
-
-            	if (result.Error) {
-            		if (result.StackTrace) {
-            			signalR.hub.log(result.Error + "\n" + result.StackTrace);
-            		}
-            		d.rejectWith(hub, [result.Error]);
-            	} else {
-            		if ($.type(callback) === "function") {
-            			callback.call(hub, result.Result);
-            		}
-            		d.resolveWith(hub, [result.Result]);
-            	}
-            };
-
-		callbacks[callbackId.toString()] = { scope: hub, callback: cb };
-		callbackId += 1;
-		hub._.connection().send(window.JSON.stringify(data));
-		return d;
-	}
-
-	// Create hub signalR instance
-	$.extend(signalR, {
-		messageBrokerHub: {
-			_: {
-				hubName: 'MessageBrokerHub',
-				ignoreMembers: ['addSubscription', 'notifyClients', 'notifyClientsMultiple', 'removeSubscription', 'namespace', 'ignoreMembers', 'callbacks'],
-				connection: function () { return signalR.hub; }
+		proxies.MessageBrokerHub = this.createHubProxy('MessageBrokerHub');
+		proxies.MessageBrokerHub.client = {};
+		proxies.MessageBrokerHub.server = {
+			addSubscription: function (subscription) {
+				return proxies.MessageBrokerHub.invoke.apply(proxies.MessageBrokerHub, $.merge(["AddSubscription"], $.makeArray(arguments)));
 			},
 
-			addSubscription: function (subscription, callback) {
-				return serverCall(this, "AddSubscription", $.makeArray(arguments));
+			notifyClients: function (notification) {
+				return proxies.MessageBrokerHub.invoke.apply(proxies.MessageBrokerHub, $.merge(["NotifyClients"], $.makeArray(arguments)));
 			},
 
-			removeSubscription: function (route, callback) {
-				return serverCall(this, "RemoveSubscription", $.makeArray(arguments));
+			notifyClientsMultiple: function (notifications) {
+				return proxies.MessageBrokerHub.invoke.apply(proxies.MessageBrokerHub, $.merge(["NotifyClientsMultiple"], $.makeArray(arguments)));
 			},
 
-			notifyClients: function (notification, callback) {
-				return serverCall(this, "NotifyClients", $.makeArray(arguments));
-			},
-
-			notifyClientsMultiple: function (notifications, callback) {
-				return serverCall(this, "NotifyClientsMultiple", $.makeArray(arguments));
+			removeSubscription: function (route) {
+				return proxies.MessageBrokerHub.invoke.apply(proxies.MessageBrokerHub, $.merge(["RemoveSubscription"], $.makeArray(arguments)));
 			}
-		}
-	});
+		};
 
-	signalR.hub = signalR("/signalr")
-        .starting(function () {
-        	updateClientMembers(signalR);
-        })
-        .sending(function () {
-        	var localHubs = [];
-
-        	$.each(hubs, function (key) {
-        		localHubs.push({ name: key });
-        	});
-
-        	this.data = window.JSON.stringify(localHubs);
-        })
-        .received(function (result) {
-        	var callbackId, cb;
-        	if (result) {
-        		if (!result.Id) {
-        			executeCallback(result.Hub, result.Method, result.Args, result.State);
-        		} else {
-        			callbackId = result.Id.toString();
-        			cb = callbacks[callbackId];
-        			if (cb) {
-        				callbacks[callbackId] = null;
-        				delete callbacks[callbackId];
-        				cb.callback.call(cb.scope, result);
-        			}
-        		}
-        	}
-        });
-
-	signalR.hub.processState = function (hubName, left, right) {
-		$.extend(left, right);
+		return proxies;
 	};
+
+	signalR.hub = $.hubConnection("/signalr", { useDefaultPath: false });
+	$.extend(signalR, signalR.hub.createHubProxies());
 
 } (window.jQuery, window));
