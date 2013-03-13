@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			_schedulerStateHolder = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_period,TeleoptiPrincipal.Current.Regional.TimeZone), new[]{_person});
 			_schedulerStateHolder.SchedulingResultState.PersonsInOrganization = _schedulerStateHolder.AllPermittedPersons;
 			
-	        target = new OnEventScheduleMessageCommand(_view,_schedulingResultLoader,_rtaStateHolder,_unitOfWorkFactory,_repositoryFactory);
+	        target = new OnEventScheduleMessageCommand(_view,_schedulingResultLoader,_unitOfWorkFactory,_repositoryFactory);
 		}
 
 		[Test]
