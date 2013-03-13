@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0"?>
 <appSettings>
-  <add key="ConnectionTimeout" value="20"/>
-  <add key="KeepAlive" value="30"/>
-  <add key="HeartbeatInterval" value="10"/>
-  <add key="DisconnectTimeout" value="110"/>
+  <add key="ConnectionTimeout" value="110"/>
+  <add key="KeepAlive" value=""/>
+  <add key="DefaultMessageBufferSize" value="1000"/>
+  <add key="DisconnectTimeout" value="30"/>
 </appSettings>

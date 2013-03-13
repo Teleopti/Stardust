@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web;
-using SignalR;
+using System.Web.Routing;
+using Microsoft.AspNet.SignalR;
 
 namespace Teleopti.Ccc.Web.Broker
 {
@@ -13,17 +14,19 @@ namespace Teleopti.Ccc.Web.Broker
 
 			var settingsFromParser = TimeoutSettings.Load();
 
-			if (settingsFromParser.HeartbeatInterval.HasValue)
-				GlobalHost.Configuration.HeartBeatInterval = settingsFromParser.HeartbeatInterval.Value;
-
+			if (settingsFromParser.DefaultMessageBufferSize.HasValue)
+				GlobalHost.Configuration.DefaultMessageBufferSize = settingsFromParser.DefaultMessageBufferSize.Value;
+ 
 			if (settingsFromParser.DisconnectTimeout.HasValue)
 				GlobalHost.Configuration.DisconnectTimeout = settingsFromParser.DisconnectTimeout.Value;
 
 			if (settingsFromParser.KeepAlive.HasValue)
-				GlobalHost.Configuration.KeepAlive = settingsFromParser.KeepAlive.Value.Value;
+				GlobalHost.Configuration.KeepAlive = settingsFromParser.KeepAlive.Value;
 
 			if (settingsFromParser.ConnectionTimeout.HasValue)
 				GlobalHost.Configuration.ConnectionTimeout = settingsFromParser.ConnectionTimeout.Value;
+
+			RouteTable.Routes.MapHubs();
 		}
 
 		protected void Session_Start(object sender, EventArgs e)

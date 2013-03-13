@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Web.Broker
 			if (!string.IsNullOrEmpty(value))
 			{
 				int seconds;
-				settings.KeepAlive = Int32.TryParse(value,NumberStyles.Integer,CultureInfo.InvariantCulture,out seconds) ? new KeepAliveSetting { Value = TimeSpan.FromSeconds(seconds) } : new KeepAliveSetting();
+				settings.KeepAlive = Int32.TryParse(value, NumberStyles.Integer, CultureInfo.InvariantCulture, out seconds) ? TimeSpan.FromSeconds(seconds) : (TimeSpan?)null;
 			}
 
 			value = ConfigurationManager.AppSettings["ConnectionTimeout"];
@@ -29,23 +29,18 @@ namespace Teleopti.Ccc.Web.Broker
 				settings.DisconnectTimeout = TimeSpan.FromSeconds(Convert.ToInt32(value));
 			}
 
-			value = ConfigurationManager.AppSettings["HeartbeatInterval"];
+			value = ConfigurationManager.AppSettings["DefaultMessageBufferSize"];
 			if (!string.IsNullOrEmpty(value))
 			{
-				settings.HeartbeatInterval = TimeSpan.FromSeconds(Convert.ToInt32(value));
+				settings.DefaultMessageBufferSize = Convert.ToInt32(value);
 			}
 
 			return settings;
 		}
 
-		public KeepAliveSetting? KeepAlive { get; set; }
+		public TimeSpan? KeepAlive { get; set; }
 		public TimeSpan? ConnectionTimeout { get; set; }
 		public TimeSpan? DisconnectTimeout { get; set; }
-		public TimeSpan? HeartbeatInterval { get; set; }
+		public int? DefaultMessageBufferSize { get; set; }
 	}
-
-	public struct KeepAliveSetting
-		{
-		public TimeSpan? Value { get; set; }
-		}
 }

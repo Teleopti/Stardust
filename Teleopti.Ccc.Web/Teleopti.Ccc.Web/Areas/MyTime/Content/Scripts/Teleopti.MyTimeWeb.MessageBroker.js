@@ -8,7 +8,7 @@ Teleopti.MyTimeWeb.MessageBroker = (function () {
 			$.connection.hub.error(options.errCallback);			
 		}
 
-		hub.onEventMessage = function (notification, route) {
+		hub.client.onEventMessage = function (notification, route) {
 			//cant use "dictionary" array. may be multiple subscription with same route
 			$.each(listeners, function(key, value) {
 				if (value.Route == route) {
@@ -28,7 +28,7 @@ Teleopti.MyTimeWeb.MessageBroker = (function () {
 
 		conn
 			.done(function () {
-				hub.addSubscription({
+				hub.server.addSubscription({
 					'DomainType': options.domainType,
 					'BusinessUnitId': options.businessUnitId,
 					'DataSource': options.datasource,
