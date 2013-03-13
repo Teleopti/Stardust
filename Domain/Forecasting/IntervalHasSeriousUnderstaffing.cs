@@ -28,12 +28,12 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
             foreach (var skillStaffPeriod in skillStaffPeriodList)
             {
-                count++;
-                if (count > 5)
-                    break;
-                
                 if (skillStaffPeriod.RelativeDifference < _skill.StaffingThresholds.SeriousUnderstaffing.Value)
                 {
+                    count++;
+                    if (count > 5)
+                        break;
+
                     var startTime =
                         skillStaffPeriod.Period.StartDateTimeLocal(timeZone).ToString("t", culture);
                     var endTime =

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using log4net;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
@@ -31,7 +30,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
             get { return UserTexts.Resources.Intraday; }
         }
 
-        // instead return a class object which contains dictionary of all days and hours.
+        // instead return a class object which contains dictionary of all understaffed and serious understaffed days and hours.
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
         private IUnderStaffingData getUnderStaffingDays(IAbsenceRequest absenceRequest)
@@ -40,8 +39,8 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
             var underStaffingHoursDict = new Dictionary<string, IList<string>>();
             var underStaffDaysList = new List<string>();
             var seriousUnderStaffDaysList = new List<string>();
-            var underStaffHours = "";
-            var seriousUnderStaffHours = "";
+            var underStaffHours = string.Empty;
+            var seriousUnderStaffHours = string.Empty;
 
             underStaffingDaysDict.Add(UnderStaffStr, new List<string>());
             underStaffingDaysDict.Add(SeriousUnderStaffStr, new List<string>());
@@ -183,7 +182,6 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
             if (!isUnderStaffed)
             {
-
                 var result = GetValidationErrors(absenceRequest);
                 return new ValidatedRequest() { IsValid = false, ValidationErrors = result.ValidationErrors};
             }
@@ -297,9 +295,9 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
                 validationError += underStaffingHoursValidationError + inSufficientHours + Environment.NewLine;
             }
 
-            foreach (var criticalUnderStaffingDay in underStaffing.UnderStaffingHours[SeriousUnderStaffHoursStr])
+            foreach (var criticalUnderStaffingHour in underStaffing.UnderStaffingHours[SeriousUnderStaffHoursStr])
             {
-                criticalUnderStaffingHours += criticalUnderStaffingDay + ",";
+                criticalUnderStaffingHours += criticalUnderStaffingHour + ",";
             }
 
             if (criticalUnderStaffingHours.Length > 1)
@@ -358,6 +356,8 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
 		    if (underStaffingHours.Length > 1)
 		        underStaffingHours = underStaffingHours.Substring(0, underStaffingHours.Length - 1);
+
+
 
             validatedRequest.IsValid = (exceededRate <= skill.StaffingThresholds.UnderstaffingFor.Value);
 		    validatedRequest.ValidationErrors = underStaffingHours;
