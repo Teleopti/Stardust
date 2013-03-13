@@ -8953,7 +8953,7 @@ Error message: {0}</comment>
     <comment>Difference in percent</comment>
   </data>
   <data name="ForecastedStaff" xml:space="preserve">
-    <value>Prognosticerad bemanning</value>
+    <value>Prognostiserad bemanning</value>
     <comment>Forecasted staff</comment>
   </data>
   <data name="FulltimeEquivalentHoursPerDay" xml:space="preserve">
@@ -10478,19 +10478,19 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <value>Anställda med shrinkage</value>
   </data>
   <data name="ForecastedAverageAfterCustomerWork" xml:space="preserve">
-    <value>Prognosticerad genomsnittlig efterbearbetning</value>
+    <value>Prognostiserad genomsnittlig efterbearbetning</value>
   </data>
   <data name="ForecastedCustomers" xml:space="preserve">
-    <value>Prognosticerade kunder</value>
+    <value>Prognostiserade kunder</value>
   </data>
   <data name="ForecastedCustomersColon" xml:space="preserve">
-    <value>Prognosticerade kunder:</value>
+    <value>Prognostiserade kunder:</value>
   </data>
   <data name="ForecastedEmployees" xml:space="preserve">
-    <value>Prognosticerade anställda</value>
+    <value>Prognostiserade anställda</value>
   </data>
   <data name="ForecastedEmployeesIncoming" xml:space="preserve">
-    <value>Prognosticerade anställda ink.</value>
+    <value>Prognostiserade anställda ink.</value>
   </data>
   <data name="IndexAfterCustomerWork" xml:space="preserve">
     <value>Index efterbearbetning</value>
@@ -10798,7 +10798,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <value>Varning!</value>
   </data>
   <data name="Reforecast" xml:space="preserve">
-    <value>Omprognosticera</value>
+    <value>Omprognostisera</value>
   </data>
   <data name="PeopleCap" xml:space="preserve">
     <value>Personer</value>
@@ -10862,5 +10862,17 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
   </data>
   <data name="TheQuickForecatWillStartInBackgroundMessage" xml:space="preserve">
     <value>Snabbprognosen kommer att startas som ett bakgrundsjobb när denna guide avslutas. Titta i jobbhistoriken för att se status. </value>
+  </data>
+  <data name="CannotDisplayScheduleWhenShiftTradeStatusIsNew" xml:space="preserve">
+    <value>Kan inte visa schema när status på skiftbytesförfrågan är ny eller godkänd. </value>
+  </data>
+  <data name="NewTemplateName" xml:space="preserve">
+    <value>Nytt namn på mall</value>
+  </data>
+  <data name="EmptyTemplateName" xml:space="preserve">
+    <value>Namn på önskemålsmall saknas</value>
+  </data>
+  <data name="Name50CharactersLimit" xml:space="preserve">
+    <value>Namnet får inte vara tomt eller längre än 50 tecken. </value>
   </data>
 </root>
