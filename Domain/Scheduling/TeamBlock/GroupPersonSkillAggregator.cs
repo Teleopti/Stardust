@@ -6,6 +6,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	public interface IGroupPersonSkillAggregator
 	{
 		IEnumerable<ISkill> AggregatedSkills(IGroupPerson groupPerson, DateOnlyPeriod dateOnlyPeriod);
+        IEnumerable<ISkill> AggregatedSkillsPerPerson(IPerson person, DateOnlyPeriod dateOnlyPeriod);
 	}
 
 	public class GroupPersonSkillAggregator : IGroupPersonSkillAggregator
@@ -28,5 +29,20 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 		    return ret;
 		}
+
+        public IEnumerable<ISkill> AggregatedSkillsPerPerson(IPerson person, DateOnlyPeriod dateOnlyPeriod)
+        {
+            var ret = new HashSet<ISkill>();
+                    var personPeriods = person.PersonPeriods(dateOnlyPeriod);
+                    foreach (var personPeriod in personPeriods)
+                    {
+                        foreach (var personSkill in personPeriod.PersonSkillCollection)
+                        {
+                            ret.Add(personSkill.Skill);
+                        }
+                    }
+
+            return ret;
+        }
 	}
 }
