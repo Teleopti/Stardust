@@ -1,6 +1,8 @@
 ﻿using System;
 using Autofac;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Persisters;
 using Teleopti.Ccc.Sdk.Logic;
 using Teleopti.Ccc.Sdk.Logic.CommandHandler;
@@ -18,7 +20,7 @@ namespace Teleopti.Ccc.Sdk.WcfService
                 .AsImplementedInterfaces()
                 .InstancePerLifetimeScope();
             builder.RegisterType<MessageBrokerEnablerFactory>().As<IMessageBrokerEnablerFactory>();
-            builder.RegisterType<InvokeCommand>().AsImplementedInterfaces();
+            builder.RegisterType<SyncCommandDispatcher>().AsImplementedInterfaces();
             builder.RegisterType<ScheduleDictionaryModifiedCallback>().As<IScheduleDictionaryModifiedCallback>();
         }
 

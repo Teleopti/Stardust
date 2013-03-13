@@ -7,12 +7,14 @@ using System.Configuration;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Security.Principal;
 using System.ServiceModel;
 using System.Threading;
 using System.Xml;
 using System.Xml.Linq;
 using Autofac;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using log4net;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
@@ -1518,8 +1520,17 @@ namespace Teleopti.Ccc.Sdk.WcfService
 
         public CommandResultDto ExecuteCommand(CommandDto commandDto)
         {
-            var invoker = _lifetimeScope.Resolve<IInvokeCommand>();
-            return invoker.Invoke(commandDto);
+            var invoker = _lifetimeScope.Resolve<ICommandDispatcher>();
+			try
+			{
+				invoker.Invoke(commandDto);
+			}
+			catch (TargetInvocationException e)
+			{
+				if (e.InnerException != null)
+					throw new FaultException(e.InnerException.Message);
+			}
+	        return commandDto.Result;
         }
 
         public ICollection<AgentPortalSettingsDto> GetAgentPortalSettingsByQuery(QueryDto queryDto)

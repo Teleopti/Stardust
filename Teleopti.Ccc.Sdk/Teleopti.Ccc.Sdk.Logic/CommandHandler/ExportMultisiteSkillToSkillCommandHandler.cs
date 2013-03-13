@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ServiceModel;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -25,7 +26,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-		public CommandResultDto Handle(ExportMultisiteSkillToSkillCommandDto command)
+		public void Handle(ExportMultisiteSkillToSkillCommandDto command)
         {
 			if (!PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ExportForecastToOtherBusinessUnit))
 			{
@@ -79,7 +80,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 
                 _busSender.NotifyServiceBus(message);
             }
-            return new CommandResultDto {AffectedId = jobId, AffectedItems = 1};
+			command.Result = new CommandResultDto { AffectedId = jobId, AffectedItems = 1 };
         }
     }
 }

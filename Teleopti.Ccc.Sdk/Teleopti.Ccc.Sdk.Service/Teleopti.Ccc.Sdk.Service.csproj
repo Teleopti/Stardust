@@ -218,9 +218,7 @@
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Factory\LicenseFactory.cs" />
     <Compile Include="Factory\PersonRequestFactory.cs" />
-    <Compile Include="IInvokeCommand.cs" />
     <Compile Include="IInvokeQuery.cs" />
-    <Compile Include="InvokeCommand.cs" />
     <Compile Include="InvokeQuery.cs" />
     <Compile Include="LogOn\ApplicationDataSourceFromToken.cs" />
     <Compile Include="LogOn\ApplicationUserFromToken.cs" />

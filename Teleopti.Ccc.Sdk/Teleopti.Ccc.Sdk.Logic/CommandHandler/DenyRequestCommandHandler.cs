@@ -1,5 +1,6 @@
 ﻿using System.ServiceModel;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Interfaces.Domain;
@@ -23,7 +24,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public CommandResultDto Handle(DenyRequestCommandDto command)
+		public void Handle(DenyRequestCommandDto command)
         {
             IPersonRequest personRequest;
             using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
@@ -43,7 +44,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                     uow.PersistAll();
                 }
             }
-            return new CommandResultDto { AffectedId = command.PersonRequestId, AffectedItems = 1 };
+			command.Result = new CommandResultDto { AffectedId = command.PersonRequestId, AffectedItems = 1 };
         }
     }
 }

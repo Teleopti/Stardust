@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ServiceModel;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
@@ -27,7 +28,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public CommandResultDto Handle(SavePersonAbsenceRequestCommandDto command)
+		public void Handle(SavePersonAbsenceRequestCommandDto command)
         {
             IPersonRequest result;
             using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
@@ -58,7 +59,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                     });
                 }
             }
-            return new CommandResultDto { AffectedId = result.Id, AffectedItems = 1 };
+			command.Result = new CommandResultDto { AffectedId = result.Id, AffectedItems = 1 };
         }
         
         private void addNewRequest(IPersonRequest personRequest)
