@@ -133,7 +133,6 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             {
                 var result = _target.Validate(absenceRequest);
                 Assert.IsFalse(result.IsValid);
-                //Assert.IsFalse(_target.Validate(absenceRequest));
             }
             _mocks.VerifyAll();
         }
@@ -178,7 +177,6 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             {
                 var result = _target.Validate(absenceRequest);
                 Assert.IsFalse(result.IsValid);
-                //Assert.IsFalse(_target.Validate(absenceRequest));
             }
             _mocks.VerifyAll();
         }
@@ -240,7 +238,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 
             var result = _target.Validate(absenceRequest);
             Assert.IsFalse(result.IsValid);
-            //Assert.IsFalse(_target.Validate(absenceRequest));
+            
         }
 
         [Test]
@@ -279,6 +277,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 
             using (_mocks.Record())
             {
+                _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 01), true, true);
                 _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 01), true, true);
                 _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 02), true, true);
                 _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 02), true, true);

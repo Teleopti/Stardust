@@ -315,14 +315,14 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
     	{
     		if (skillStaffPeriodList == null) throw new ArgumentNullException("skillStaffPeriodList");
     		var intervalHasSeriousUnderstaffing = new IntervalHasSeriousUnderstaffing(skill);
-            var isSeriousUnderStaff = !skillStaffPeriodList.Any(intervalHasSeriousUnderstaffing.IsSatisfiedBy);
+            var isSeriousUnderStaff = skillStaffPeriodList.Any(intervalHasSeriousUnderstaffing.IsSatisfiedBy);
             var seriousUnderStaffHours = string.Empty;
     	    
-            if (!isSeriousUnderStaff)
+            if (isSeriousUnderStaff)
     	        seriousUnderStaffHours = intervalHasSeriousUnderstaffing.GetSeriousUnderstaffingHours(skillStaffPeriodList, requestingAgent);
 
             var validatedRequest = new ValidatedRequest();
-            validatedRequest.IsValid = isSeriousUnderStaff;
+            validatedRequest.IsValid = !isSeriousUnderStaff;
             validatedRequest.ValidationErrors = seriousUnderStaffHours;
             return validatedRequest;
             //return !skillStaffPeriodList.Any(intervalHasSeriousUnderstaffing.IsSatisfiedBy);
