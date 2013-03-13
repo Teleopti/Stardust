@@ -4855,10 +4855,6 @@ Standard</value>
     <value>Ready Time</value>
     <comment>AP: Information grid columns (My Report)</comment>
   </data>
-  <data name="IdleTime" xml:space="preserve">
-    <value>Not Ready Time</value>
-    <comment>AP: Information grid columns (My Report)</comment>
-  </data>
   <data name="LoggedInTime" xml:space="preserve">
     <value>Logged in time</value>
     <comment>AP: Information grid columns (My Report)</comment>
@@ -11124,6 +11120,10 @@ These options are activated:
     <value>Scheduled Agents per Activity</value>
     <comment>Scheduled Agents per Activity</comment>
   </data>
+  <data name="NotReadyTime" xml:space="preserve">
+    <value>Not Ready Time</value>
+    <comment>My report in MyTime</comment>
+  </data>
   <data name="ResTotals" xml:space="preserve">
     <value>Totals</value>
     <comment>Totals</comment>
@@ -11182,5 +11182,9 @@ These options are activated:
   <data name="YourScheduleTheDATEHasChanged" xml:space="preserve">
     <value>Your schedule the {0} has changed!</value>
     <comment>Your schedule the 2/16/2012 has changed!</comment>
+  </data>
+  <data name="DataHasBeenDeleted" xml:space="preserve">
+    <value>Error when saving your changes. The most possible reason is that you or another user has deleted the data you set. To preserve data consistency, the form will be closed. Sorry, your changes has been lost.</value>
+    <comment>used for SQL Server ForeignKeyException type of errors</comment>
   </data>
 </root>

@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         private readonly IStaffingCalculatorService _staffingCalculatorService;
 
         private bool _isAvailable;
-        private volatile bool _isAggregate;
+        private bool _isAggregate;
         private double _aggregatedFStaff;
         private double _aggregatedCalculatedResources;
         private Percent _aggregatedEstimatedServiceLevel;
@@ -59,20 +59,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
 		#endregion Constructors 
 
 		#region Properties (3) 
-
-        private IAggregateSkillStaffPeriod AsAggregated
-        {
-            get
-            {
-                lock (Locker)
-                {
-                    if (!_isAggregate)
-                        throw new InvalidCastException("This instance is not aggregated");
-
-                    return this;
-                }
-            }
-        }
 
         public IStatisticTask StatisticTask { get; set; }
 
@@ -125,7 +111,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 lock (Locker)
                 {
                     if (_isAggregate)
-                        return AsAggregated.AggregatedCalculatedLoggedOn;
+							  return ((IAggregateSkillStaffPeriod)this).AggregatedCalculatedLoggedOn;
 
                     return Payload.CalculatedLoggedOn;
                 }
@@ -150,7 +136,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 lock (Locker)
                 {
                     if (_isAggregate)
-                        return AsAggregated.AggregatedEstimatedServiceLevel;
+							  return ((IAggregateSkillStaffPeriod)this).AggregatedEstimatedServiceLevel;
                     return _estimatedServiceLevel;
                 }
             } 
@@ -179,7 +165,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 lock (Locker)
                 {
                     if (_isAggregate)
-                        return AsAggregated.AggregatedCalculatedResource;
+							  return ((IAggregateSkillStaffPeriod)this).AggregatedCalculatedResource;
 
                     return Payload.CalculatedResource;
                 }
@@ -192,7 +178,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 lock (Locker)
                 {
                     if (_isAggregate)
-                        return AsAggregated.AggregatedFStaff;
+							  return ((IAggregateSkillStaffPeriod)this).AggregatedFStaff;
 
                     double ret = 0;
                     foreach (ISkillStaffSegmentPeriod ySegment in _segmentInThisCollection)
@@ -443,7 +429,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         /// </remarks>
         public TimeSpan ForecastedIncomingDemandWithShrinkage()
         {
-            return TimeSpan.FromMinutes(ForecastedIncomingDemand().TotalMinutes * (1 + Payload.Shrinkage.Value));
+            return TimeSpan.FromMinutes(ForecastedIncomingDemand().TotalMinutes / (1 - Payload.Shrinkage.Value));
         }
 
         /// <summary>

@@ -235,7 +235,7 @@ namespace Teleopti.Ccc.WinCodeTest
         private void ExpectCallsViewBaseOnShouldAddAbsenceWithDefaultPeriod()
         {
             Expect.Call(_viewBase.SelectedSchedules()).Return(_selectedSchedules);
-            Expect.Call(_viewBase.CreateAddAbsenceViewModel(null, null)).IgnoreArguments().Return(_dialog);
+			Expect.Call(_viewBase.CreateAddAbsenceViewModel(null, null, TimeZoneInfo.Local)).IgnoreArguments().Return(_dialog);
         }
 
         private void ExpectCallsDialogOnShouldAddAbsenceWithDefaultPeriod(DateTimePeriod period)

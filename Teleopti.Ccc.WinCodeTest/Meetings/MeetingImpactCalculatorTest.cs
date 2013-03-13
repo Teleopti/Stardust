@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             _meetingDate = new DateOnly(2011, 2, 7);
     		_period =
     			new DateOnlyPeriod(_meetingDate, _meetingDate).ToDateTimePeriod(_person.PermissionInformation.DefaultTimeZone());
-            _scheduleDic =  _mocks.StrictMock<IScheduleDictionary>();
+            _scheduleDic =  _mocks.StrictMultiMock<IScheduleDictionary>(typeof(IPermissionCheck));
             _stateHolder = _mocks.StrictMock<ISchedulerStateHolder>();
             _resourceOpt = _mocks.StrictMock<IResourceOptimizationHelper>();
             _meeting = _mocks.StrictMock<IMeeting>();
@@ -79,6 +79,11 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
 			Expect.Call(_scheduleDic[_person]).Return(range);
 
             Expect.Call(() => _resourceOpt.ResourceCalculateDate(_meetingDate, false, true));
+
+        	var permissionCheck = (IPermissionCheck) _scheduleDic;
+        	Expect.Call(permissionCheck.SynchronizationObject).Return(new object()).Repeat.AtLeastOnce();
+        	Expect.Call(()=>permissionCheck.UsePermissions(true));
+        	Expect.Call(()=>permissionCheck.UsePermissions(false));
             
             _mocks.ReplayAll();
             _target.RecalculateResources(_meetingDate);

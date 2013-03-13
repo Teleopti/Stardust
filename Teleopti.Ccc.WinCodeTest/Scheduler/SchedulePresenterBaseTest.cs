@@ -888,6 +888,23 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Assert.IsNull(_target.LastUnsavedSchedulePart);
         }
 
+		[Test]
+		public void ShouldSkipUpdatesIfNoUnsavedPart()
+		{
+			//no calls to scheduleDictionary.Modify
+			_target.LastUnsavedSchedulePart = null;
+			_target.UpdateFromEditor();
+			_target.UpdateNoteFromEditor();
+			_target.UpdatePublicNoteFromEditor();
+			_target.UpdateRestriction();
+		}
+
+		[Test, ExpectedException(typeof(ArgumentNullException))]
+		public void ShouldThrowExceptionIfNullSchedulePartsOnTryModify()
+		{
+			_target.TryModify(null);
+		}
+
         [Test]
         public void VerifyAddAbsence()
         {
@@ -929,7 +946,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         {
             Expect.Call(_viewBase.CurrentColumnSelectedSchedules()).Return(new List<IScheduleDay> { _day1 });
             Expect.Call(_viewBase.SelectedSchedules()).Return(new List<IScheduleDay> { _day1, _day2 });
-            Expect.Call(_viewBase.CreateAddAbsenceViewModel(null, null)).IgnoreArguments().Return(_dialog);
+			Expect.Call(_viewBase.CreateAddAbsenceViewModel(null, null, TimeZoneInfo.Local)).IgnoreArguments().Return(_dialog);
             Expect.Call(() => _viewBase.RefreshRangeForAgentPeriod(_person, period)).IgnoreArguments().Repeat.AtLeastOnce();
             Expect.Call(_viewBase.TheGrid).Return(_grid).Repeat.AtLeastOnce();
         }
@@ -992,7 +1009,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         private void ExpectCallsViewBaseOnVerifyAddAbsenceMultipleDays(DateTimePeriod period)
         {
             Expect.Call(_viewBase.SelectedSchedules()).Return(_selectedSchedules);
-            Expect.Call(_viewBase.CreateAddAbsenceViewModel(null, null)).Constraints(Is.Anything(), Is.Matching(new Predicate<ISetupDateTimePeriod>(t => t.Period == period.ChangeEndTime(TimeSpan.FromMinutes(-1))))).Return(_dialog);
+			Expect.Call(_viewBase.CreateAddAbsenceViewModel(null, null, TimeZoneInfo.Local)).Constraints(Is.Anything(), Is.Matching(new Predicate<ISetupDateTimePeriod>(t => t.Period == period.ChangeEndTime(TimeSpan.FromMinutes(-1)))), Is.Anything()).Return(_dialog);
             Expect.Call(() => _viewBase.RefreshRangeForAgentPeriod(_person, period)).IgnoreArguments().Repeat.Once();
         	Expect.Call(_viewBase.TheGrid).Return(_grid).Repeat.AtLeastOnce();
 
@@ -1055,7 +1072,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         private void ExpectCallsViewBaseOnShouldNotAddAbsenceOnLockedDay(DateTimePeriod period)
         {
             Expect.Call(_viewBase.SelectedSchedules()).Return(_selectedSchedules);
-            Expect.Call(_viewBase.CreateAddAbsenceViewModel(null, null)).Constraints(Is.Anything(), Is.Matching(new Predicate<ISetupDateTimePeriod>(t => t.Period == period.ChangeEndTime(TimeSpan.FromMinutes(-1))))).Return(_dialog);
+			Expect.Call(_viewBase.CreateAddAbsenceViewModel(null, null, TimeZoneInfo.Local)).Constraints(Is.Anything(), Is.Matching(new Predicate<ISetupDateTimePeriod>(t => t.Period == period.ChangeEndTime(TimeSpan.FromMinutes(-1)))),Is.Anything()).Return(_dialog);
             Expect.Call(() => _viewBase.RefreshRangeForAgentPeriod(_person, period)).IgnoreArguments().Repeat.AtLeastOnce();
             Expect.Call(_viewBase.TheGrid).Return(_grid);
         }
@@ -1106,7 +1123,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         private void ExpectCallsViewBaseOnShouldAddAbsenceWithDefaultPeriod(DateTimePeriod period)
         {
             Expect.Call(_viewBase.SelectedSchedules()).Return(_selectedSchedules);
-            Expect.Call(_viewBase.CreateAddAbsenceViewModel(null, null)).Constraints(Is.Anything(), Is.Matching(new Predicate<ISetupDateTimePeriod>(t => t.Period == period))).Return(_dialog);
+			Expect.Call(_viewBase.CreateAddAbsenceViewModel(null, null, TimeZoneInfo.Local)).Constraints(Is.Anything(), Is.Matching(new Predicate<ISetupDateTimePeriod>(t => t.Period == period)), Is.Anything()).Return(_dialog);
             Expect.Call(() => _viewBase.RefreshRangeForAgentPeriod(_person, period)).IgnoreArguments().Repeat.Once();
             Expect.Call(_viewBase.TheGrid).Return(_grid);
         }
@@ -1130,7 +1147,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Expect.Call(schedulePart.Period).Return(period).Repeat.Any();
             Expect.Call(_viewBase.CurrentColumnSelectedSchedules()).Return(new List<IScheduleDay> { schedulePart });
             Expect.Call(_viewBase.SelectedSchedules()).Return(new List<IScheduleDay> { schedulePart });
-            Expect.Call(_viewBase.CreateAddAbsenceViewModel(null, null)).IgnoreArguments().Return(dialog);
+			Expect.Call(_viewBase.CreateAddAbsenceViewModel(null, null, TimeZoneInfo.Local)).IgnoreArguments().Return(dialog);
             Expect.Call(dialog.Result).Return(true);
             Expect.Call(dialog.SelectedItem).Return(selectedItem);
             Expect.Call(dialog.SelectedPeriod).Return(period);
@@ -1162,7 +1179,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Expect.Call(_viewBase.CurrentColumnSelectedSchedules()).Return(new List<IScheduleDay> { schedulePart });
             Expect.Call(schedulePart.Period).Return(period).Repeat.Any();
             Expect.Call(_viewBase.SelectedSchedules()).Return(new List<IScheduleDay> { schedulePart });
-            Expect.Call(_viewBase.CreateAddAbsenceViewModel(null, null)).IgnoreArguments().Return(dialog);
+			Expect.Call(_viewBase.CreateAddAbsenceViewModel(null, null, TimeZoneInfo.Local)).IgnoreArguments().Return(dialog);
             Expect.Call(dialog.Result).Return(false);
             LastCall.Repeat.Once();
             Expect.Call(schedulePart.TimeZone).Return(TimeZoneInfoFactory.StockholmTimeZoneInfo());
@@ -1361,7 +1378,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         private void ExpectCallsViewBaseOnVerifyAddOvertimeTheNewWay(DateTimePeriod period)
         {
             Expect.Call(_viewBase.SelectedSchedules()).Return(new List<IScheduleDay> { _day1 });
-            Expect.Call(_viewBase.CreateAddOvertimeViewModel(null, null, _multiplicatorDefinitionSets, null, new DateTimePeriod(2001, 1, 1, 2001, 1, 2))).IgnoreArguments().Return(_overtimeDialog);
+			Expect.Call(_viewBase.CreateAddOvertimeViewModel(null, null, _multiplicatorDefinitionSets, null, new DateTimePeriod(2001, 1, 1, 2001, 1, 2), TimeZoneInfo.Local)).IgnoreArguments().Return(_overtimeDialog);
 
             Expect.Call(() => _viewBase.RefreshRangeForAgentPeriod(_person, period));
             Expect.Call(_viewBase.TheGrid).Return(_grid);
@@ -1420,7 +1437,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             var dialog = _mocks.StrictMock<IAddOvertimeViewModel>();
             Expect.Call(schedulePart.Period).Return(new DateTimePeriod(2001, 1, 1, 2001, 1, 2)).Repeat.Twice();
             Expect.Call(_viewBase.SelectedSchedules()).Return(new List<IScheduleDay> { schedulePart });
-            Expect.Call(_viewBase.CreateAddOvertimeViewModel(null, null, multiplicatorDefinitionSets, null, new DateTimePeriod(2001, 1, 1, 2001, 1, 2))).IgnoreArguments().Return(dialog);
+			Expect.Call(_viewBase.CreateAddOvertimeViewModel(null, null, multiplicatorDefinitionSets, null, new DateTimePeriod(2001, 1, 1, 2001, 1, 2), TimeZoneInfo.Local)).IgnoreArguments().Return(dialog);
             Expect.Call(schedulePart.PersonAssignmentCollection()).Return(new List<IPersonAssignment> { ass }.AsReadOnly());
             Expect.Call(ass.Period).Return(period);
             Expect.Call(ass.MainShift).Return(mainShift).Repeat.Twice();
@@ -1617,13 +1634,39 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Assert.AreEqual(28, _target.ColWeekMap.Count);
         }
 
-        [Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1304:SpecifyCultureInfo", MessageId = "Teleopti.Ccc.WinCode.Scheduling.PersonNameComparer.#ctor"), Test]
         public void ShouldHandleNullValuesInPersonNameComparer()
         {
+			//with specified culture
             Assert.AreEqual(0, _personNameComparer.Compare(null, null));
             Assert.AreEqual(-1, _personNameComparer.Compare(null, "a"));
             Assert.AreEqual(1, _personNameComparer.Compare("a", null));
             Assert.AreEqual(-1, _personNameComparer.Compare("a", "b"));
+
+			//and with current culture
+			_personNameComparer = new PersonNameComparer();
+			Assert.AreEqual(0, _personNameComparer.Compare(null, null));
+			Assert.AreEqual(-1, _personNameComparer.Compare(null, "a"));
+			Assert.AreEqual(1, _personNameComparer.Compare("a", null));
+			Assert.AreEqual(-1, _personNameComparer.Compare("a", "b"));
         }
+
+		[Test]
+		public void ShouldSortOnTime()
+		{
+			var dateOnly = new DateOnly();
+			var sortCommand = _mocks.StrictMock<IScheduleSortCommand>();
+
+			using (_mocks.Record())
+			{
+				Expect.Call(() => sortCommand.Execute(dateOnly));
+			}
+
+			using (_mocks.Playback())
+			{
+				_target.SortCommand = sortCommand;
+				_target.SortOnTime(dateOnly);	
+			}	
+		}
     }
 }

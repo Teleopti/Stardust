@@ -182,7 +182,8 @@ namespace Teleopti.Support.Tool.Controls
 
         private bool IsOnSameServer(NHibDataSource nHibDataSource)
         {
-            return _dbHelper.ServerName == nHibDataSource.ServerName;
+            return _dbHelper.ServerName.ToUpperInvariant() ==
+                   nHibDataSource.ServerName.ToUpperInvariant();
         }
 
         private void buttonRefresh_Click(object sender, EventArgs e)

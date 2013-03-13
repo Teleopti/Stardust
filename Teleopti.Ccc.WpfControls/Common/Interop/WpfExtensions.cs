@@ -22,20 +22,20 @@ namespace Teleopti.Ccc.WpfControls.Common.Interop
         /// Created by: henrika
         /// Created date: 2009-06-10
         /// </remarks>
-        public static void ShowFromWinForms(this Window window)
+        public static void ShowFromWinForms(this Window window, TimeZoneInfo timeZoneInfo)
         {
-            SetupWpfWindow(window, true);
+            SetupWpfWindow(window, true, timeZoneInfo);
             window.Show();
         }
 
         //Bug in syncfusion makes databindings go crazy, can start window without visualstyle
-        public static void ShowFromWinForms(this Window window, bool useVisualStyle)
+        public static void ShowFromWinForms(this Window window, bool useVisualStyle, TimeZoneInfo timeZoneInfo)
         {
-            SetupWpfWindow(window, useVisualStyle);
+            SetupWpfWindow(window, useVisualStyle, timeZoneInfo);
             window.Show();
         }
 
-        private static void SetupWpfWindow(Window window, bool useVisualStyle)
+        private static void SetupWpfWindow(Window window, bool useVisualStyle, TimeZoneInfo timeZoneInfo)
         {
             //todos.....
             //timezone
@@ -48,8 +48,9 @@ namespace Teleopti.Ccc.WpfControls.Common.Interop
                     (((IUnsafePerson)TeleoptiPrincipal.Current).Person.PermissionInformation.RightToLeftDisplay) ? FlowDirection.RightToLeft : FlowDirection.LeftToRight;
                 
                 //Set timezone:
-                VisualTreeTimeZoneInfo.SetTimeZoneInfo(window, StateHolder.Instance.StateReader.SessionScopeData.TimeZone);
-                
+                //VisualTreeTimeZoneInfo.SetTimeZoneInfo(window, StateHolder.Instance.StateReader.SessionScopeData.TimeZone);
+				VisualTreeTimeZoneInfo.SetTimeZoneInfo(window, timeZoneInfo);
+				
                 //Set ui-culture
                 //FrameworkElement.LanguageProperty.OverrideMetadata(typeof(FrameworkElement), new FrameworkPropertyMetadata(XmlLanguage.GetLanguage(TeleoptiPrincipal.Current.Regional.Culture.ToString())));
              
@@ -68,9 +69,9 @@ namespace Teleopti.Ccc.WpfControls.Common.Interop
             ElementHost.EnableModelessKeyboardInterop(window);
         }
 
-        public static bool? ShowDialogFromWinForms(this Window window, bool useVisualStyle)
+        public static bool? ShowDialogFromWinForms(this Window window, bool useVisualStyle, TimeZoneInfo timeZoneInfo)
         {
-            SetupWpfWindow(window, useVisualStyle);
+            SetupWpfWindow(window, useVisualStyle, timeZoneInfo);
             return  window.ShowDialog();
         }
     }

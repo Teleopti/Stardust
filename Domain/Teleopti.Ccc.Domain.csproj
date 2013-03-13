@@ -236,6 +236,7 @@
     <Compile Include="Optimization\DaysOffPreferencesPersonalSettings.cs" />
     <Compile Include="Optimization\ExtraPreferencesPersonalSettings.cs" />
     <Compile Include="Optimization\GeneralPreferencesPersonalSettings.cs" />
+    <Compile Include="Optimization\MatrixMultipleShiftsLocker.cs" />
     <Compile Include="Optimization\GroupDayOffOptimizerValidateDayOffToAdd.cs" />
     <Compile Include="Optimization\GroupDayOffOptimizerValidateDayOffToRemove.cs" />
     <Compile Include="Optimization\GroupIntradayOptimizer.cs" />
@@ -257,6 +258,7 @@
     <Compile Include="Optimization\MainShiftOptimizeActivitySpecificationSetter.cs" />
     <Compile Include="Optimization\OptimizationOverLimitByRestrictionDecider.cs" />
     <Compile Include="Optimization\EmptyDaysInBlockOutsideSelectedHandler.cs" />
+    <Compile Include="Optimization\OptimizationOverLimitByRestrictionDeciderCreator.cs" />
     <Compile Include="Optimization\PersonalSettings.cs" />
     <Compile Include="Optimization\RemoveGroupShiftCategoryOnBestDateService.cs" />
     <Compile Include="Optimization\RestrictionOverLimitDecider.cs" />
@@ -387,6 +389,7 @@
     <Compile Include="ResourceCalculation\ISwapAndModifyServiceNew.cs" />
     <Compile Include="ResourceCalculation\OptimizerActivitiesPreferences.cs" />
     <Compile Include="Optimization\SkillExtractorForGroupOfPeople.cs" />
+    <Compile Include="ResourceCalculation\PersonalShiftMeetingTimeChecker.cs" />
     <Compile Include="ResourceCalculation\PossibleCombinationsOfStartEndCategoryRunner.cs" />
     <Compile Include="ResourceCalculation\PossibleStartEndCategory.cs" />
     <Compile Include="ResourceCalculation\ShiftCategoryPeriodValueExtractorThread.cs" />

@@ -77,8 +77,6 @@
 								<span class="floatleft ml5">@day.Header.DayDescription</span><span class="floatright mr5">@day.Header.DayNumber</span>
 							</div>
 							<div class="day-content pdt10" data-bind="style: { borderLeftColor: Color() }">
-								@if (day.InPeriod)
-								{
 									<img class="loading-small-gray-blue" data-bind="visible: IsLoading" src="@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader-small-f8f8f8-A1C7D3.gif")" alt="..." />
 									<!-- ko if: AjaxError().length > 0 -->
 									<h2 class="error" data-bind="text: AjaxError"></h2>
@@ -115,13 +113,17 @@
 												<div class="meeting-tooltip" style="display: none">
 													<!-- ko if: Meetings().length > 0 -->
 													<table>
-														<thead>@Resources.Meeting</thead>
+														<thead>@Resources.Meetings</thead>
 														<tbody data-bind="foreach: Meetings">
 															<tr>
 																	<td data-bind="text: TimeSpan"></td>
 															</tr>
 															<tr>
-																<td data-bind="text: Subject"></td>
+																<td>
+																	<div class="preference-tooltip-subject">
+																		<label class="preference-tooltip-font" data-bind="text : Subject"></label>
+																	</div>
+																</td>
 																<!-- ko if: IsOptional -->
 																<td>(@Resources.Optional)</td>
 																<!-- /ko -->
@@ -162,7 +164,6 @@
 										<span class="displayblock fullwidth" data-bind="text: PersonAssignmentContractTime"></span>
 									</div>
 									<!-- /ko -->
-								}
 								@if (day.InPeriod)
 								{
 									<!-- ko if: Feedback -->

@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		private TimeSpan start;
 		private TimeSpan end;
 		private TimeZoneInfo timeZoneInfo;
+		private IPersonalShiftMeetingTimeChecker _personalShiftMeetingTimeChecker;
 
 		[SetUp]
 		public void Setup()
@@ -39,8 +40,9 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			end = new TimeSpan(17, 0, 0);
 			DateTimePeriod period = new DateTimePeriod(WorkShift.BaseDate.Add(start), WorkShift.BaseDate.Add(end));
 			workShift.LayerCollection.Add(new WorkShiftActivityLayer(activity, period));
+			_personalShiftMeetingTimeChecker = _mocks.StrictMock<IPersonalShiftMeetingTimeChecker>();
 
-			target = new ShiftProjectionCache(workShift);
+			target = new ShiftProjectionCache(workShift, _personalShiftMeetingTimeChecker);
 			timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("W. Central Africa Standard Time"));
 			// blir 7 - 16 med denna tidszon (W. Central Africa Standard Time)
 			target.SetDate(schedulingDate, timeZoneInfo);
@@ -91,29 +93,87 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		}
 
 		[Test]
-		public void CheckIfPersonalShiftsAndMeetingsAreInWorkTimeReturnsTrueWhenAllAreWorkTime()
+		public void ShouldReturnFalseIfMeetingTimeNotOk()
 		{
-			var period = new DateTimePeriod(new DateTime(2009, 2, 2, 10, 0, 0, DateTimeKind.Utc),
-			                                new DateTime(2009, 2, 2, 10, 30, 0, DateTimeKind.Utc));
-			var period2 = new DateTimePeriod(new DateTime(2009, 2, 2, 14, 0, 0, DateTimeKind.Utc),
-			                                 new DateTime(2009, 2, 2, 14, 30, 0, DateTimeKind.Utc));
+			var personMeeting = _mocks.StrictMock<IPersonMeeting>();
+			var meetings = new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting>{personMeeting});
 
-			var meetings = new List<IPersonMeeting>();
-			var meetingPerson = _mocks.StrictMock<IMeetingPerson>();
-			var meeting = _mocks.StrictMock<IMeeting>();
-			var personMeeting = new PersonMeeting(meeting, meetingPerson, period);
-			var personMeeting2 = new PersonMeeting(meeting, meetingPerson, period2);
-			meetings.Add(personMeeting);
-			meetings.Add(personMeeting2);
+			using(_mocks.Record())
+			{
+				Expect.Call(_personalShiftMeetingTimeChecker.CheckTimeMeeting(null, null, null)).IgnoreArguments().Return(false);
+			}
 
-
-			var readMeetings = new ReadOnlyCollection<IPersonMeeting>(meetings);
-
-			var persAss = new List<IPersonAssignment>();
-			var readpersAss = new ReadOnlyCollection<IPersonAssignment>(persAss);
-
-			Assert.IsTrue(target.PersonalShiftsAndMeetingsAreInWorkTime(readMeetings, readpersAss));
+			using(_mocks.Record())
+			{
+				var result = target.PersonalShiftsAndMeetingsAreInWorkTime(meetings, new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>()));
+				Assert.IsFalse(result);
+			}
 		}
+
+		[Test]
+		public void ShouldReturnFalseIfPersonalShiftTimeNotOk()
+		{
+			var personAssignment = _mocks.StrictMock<IPersonAssignment>();
+			var personAssignments = new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> {personAssignment});
+
+
+			using(_mocks.Record())
+			{
+				Expect.Call(_personalShiftMeetingTimeChecker.CheckTimePersonAssignment(null, null, null)).IgnoreArguments().Return(false);
+			}
+
+			using(_mocks.Playback())
+			{
+				var result = target.PersonalShiftsAndMeetingsAreInWorkTime(new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting>()), personAssignments);
+				Assert.IsFalse(result);
+			}	
+		}
+
+		[Test]
+		public void ShouldReturnTrueIfMeetingAndPersonalShiftTimeOk()
+		{
+			var personAssignment = _mocks.StrictMock<IPersonAssignment>();
+			var personAssignments = new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { personAssignment });
+			var personMeeting = _mocks.StrictMock<IPersonMeeting>();
+			var meetings = new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting> { personMeeting });
+
+			using (_mocks.Record())
+			{
+				Expect.Call(_personalShiftMeetingTimeChecker.CheckTimeMeeting(null, null, null)).IgnoreArguments().Return(true);
+				Expect.Call(_personalShiftMeetingTimeChecker.CheckTimePersonAssignment(null, null, null)).IgnoreArguments().Return(true);
+			}
+
+			using (_mocks.Playback())
+			{
+				var result = target.PersonalShiftsAndMeetingsAreInWorkTime(meetings, personAssignments);
+				Assert.IsTrue(result);
+			}	
+		}
+
+		//[Test]
+		//public void CheckIfPersonalShiftsAndMeetingsAreInWorkTimeReturnsTrueWhenAllAreWorkTime()
+		//{
+		//    var period = new DateTimePeriod(new DateTime(2009, 2, 2, 10, 0, 0, DateTimeKind.Utc),
+		//                                    new DateTime(2009, 2, 2, 10, 30, 0, DateTimeKind.Utc));
+		//    var period2 = new DateTimePeriod(new DateTime(2009, 2, 2, 14, 0, 0, DateTimeKind.Utc),
+		//                                     new DateTime(2009, 2, 2, 14, 30, 0, DateTimeKind.Utc));
+
+		//    var meetings = new List<IPersonMeeting>();
+		//    var meetingPerson = _mocks.StrictMock<IMeetingPerson>();
+		//    var meeting = _mocks.StrictMock<IMeeting>();
+		//    var personMeeting = new PersonMeeting(meeting, meetingPerson, period);
+		//    var personMeeting2 = new PersonMeeting(meeting, meetingPerson, period2);
+		//    meetings.Add(personMeeting);
+		//    meetings.Add(personMeeting2);
+
+
+		//    var readMeetings = new ReadOnlyCollection<IPersonMeeting>(meetings);
+
+		//    var persAss = new List<IPersonAssignment>();
+		//    var readpersAss = new ReadOnlyCollection<IPersonAssignment>(persAss);
+
+		//    Assert.IsTrue(target.PersonalShiftsAndMeetingsAreInWorkTime(readMeetings, readpersAss));
+		//}
 
 		[Test]
 		public void CheckIfPersonalShiftsAndMeetingsAreInWorkTimeReturnsFalseWhenMeetingOutsideWorkTime()
@@ -127,7 +187,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			DateTimePeriod lunchPeriod = new DateTimePeriod(WorkShift.BaseDate.Add(start), WorkShift.BaseDate.Add(end));
 			workShift.LayerCollection.Add(new WorkShiftActivityLayer(lunch, lunchPeriod));
 
-			target = new ShiftProjectionCache(workShift);
+			target = new ShiftProjectionCache(workShift, _personalShiftMeetingTimeChecker);
 			target.SetDate(schedulingDate, timeZoneInfo);
 
 			var period = new DateTimePeriod(new DateTime(2009, 2, 2, 11, 0, 0, DateTimeKind.Utc),
@@ -152,63 +212,63 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			Assert.IsFalse(target.PersonalShiftsAndMeetingsAreInWorkTime(readMeetings, readpersAss));
 		}
 
-		[Test]
-		public void CheckIfPersonalShiftsAndMeetingsAreInWorkTimeReturnsFalseWhenPersonalShiftOutsideWorkTime()
-		{
-			IActivity lunch = new Activity("lunch");
-			lunch.InWorkTime = false;
-			start = new TimeSpan(12, 0, 0);
-			end = new TimeSpan(13, 0, 0);
-			// gets one hour erlier in definied timezone 11 - 12
-			// and the meeting 11 - 11:30 is not correct 
-			DateTimePeriod lunchPeriod = new DateTimePeriod(WorkShift.BaseDate.Add(start), WorkShift.BaseDate.Add(end));
-			workShift.LayerCollection.Add(new WorkShiftActivityLayer(lunch, lunchPeriod));
+		//[Test]
+		//public void CheckIfPersonalShiftsAndMeetingsAreInWorkTimeReturnsFalseWhenPersonalShiftOutsideWorkTime()
+		//{
+		//    IActivity lunch = new Activity("lunch");
+		//    lunch.InWorkTime = false;
+		//    start = new TimeSpan(12, 0, 0);
+		//    end = new TimeSpan(13, 0, 0);
+		//    // gets one hour erlier in definied timezone 11 - 12
+		//    // and the meeting 11 - 11:30 is not correct 
+		//    DateTimePeriod lunchPeriod = new DateTimePeriod(WorkShift.BaseDate.Add(start), WorkShift.BaseDate.Add(end));
+		//    workShift.LayerCollection.Add(new WorkShiftActivityLayer(lunch, lunchPeriod));
 
-			target = new ShiftProjectionCache(workShift);
-			target.SetDate(schedulingDate, timeZoneInfo);
+		//    target = new ShiftProjectionCache(workShift, _personalShiftMeetingTimeChecker);
+		//    target.SetDate(schedulingDate, timeZoneInfo);
 
-			var period = new DateTimePeriod(new DateTime(2009, 2, 2, 8, 0, 0, DateTimeKind.Utc),
-			                                new DateTime(2009, 2, 2, 8, 30, 0, DateTimeKind.Utc));
-			var period2 = new DateTimePeriod(new DateTime(2009, 2, 2, 11, 0, 0, DateTimeKind.Utc),
-			                                 new DateTime(2009, 2, 2, 11, 30, 0, DateTimeKind.Utc));
+		//    var period = new DateTimePeriod(new DateTime(2009, 2, 2, 8, 0, 0, DateTimeKind.Utc),
+		//                                    new DateTime(2009, 2, 2, 8, 30, 0, DateTimeKind.Utc));
+		//    var period2 = new DateTimePeriod(new DateTime(2009, 2, 2, 11, 0, 0, DateTimeKind.Utc),
+		//                                     new DateTime(2009, 2, 2, 11, 30, 0, DateTimeKind.Utc));
 
-			var meetings = new List<IPersonMeeting>();
-			//var meetingPerson = _mocks.StrictMock<IMeetingPerson>();
-			//var meeting = _mocks.StrictMock<IMeeting>();
-			//var personMeeting = new PersonMeeting(meeting, meetingPerson, period);
-			//var personMeeting2 = new PersonMeeting(meeting, meetingPerson, period2);
-			//meetings.Add(personMeeting);
-			//meetings.Add(personMeeting2);
+		//    var meetings = new List<IPersonMeeting>();
+		//    //var meetingPerson = _mocks.StrictMock<IMeetingPerson>();
+		//    //var meeting = _mocks.StrictMock<IMeeting>();
+		//    //var personMeeting = new PersonMeeting(meeting, meetingPerson, period);
+		//    //var personMeeting2 = new PersonMeeting(meeting, meetingPerson, period2);
+		//    //meetings.Add(personMeeting);
+		//    //meetings.Add(personMeeting2);
 
 
-			var readMeetings = new ReadOnlyCollection<IPersonMeeting>(meetings);
+		//    var readMeetings = new ReadOnlyCollection<IPersonMeeting>(meetings);
 
-			var persAss = new List<IPersonAssignment>();
-			var personAssignment = _mocks.StrictMock<IPersonAssignment>();
-			persAss.Add(personAssignment);
+		//    var persAss = new List<IPersonAssignment>();
+		//    var personAssignment = _mocks.StrictMock<IPersonAssignment>();
+		//    persAss.Add(personAssignment);
 
-			var personalShift = _mocks.StrictMock<IPersonalShift>();
-			var layerColl = _mocks.StrictMock<ILayerCollection<IActivity>>();
-			var personalShift2 = _mocks.StrictMock<IPersonalShift>();
-			var layerColl2 = _mocks.StrictMock<ILayerCollection<IActivity>>();
+		//    var personalShift = _mocks.StrictMock<IPersonalShift>();
+		//    var layerColl = _mocks.StrictMock<ILayerCollection<IActivity>>();
+		//    var personalShift2 = _mocks.StrictMock<IPersonalShift>();
+		//    var layerColl2 = _mocks.StrictMock<ILayerCollection<IActivity>>();
 
-			var persList = new List<IPersonalShift> {personalShift, personalShift2};
-			var personalShifts = new ReadOnlyCollection<IPersonalShift>(persList);
+		//    var persList = new List<IPersonalShift> {personalShift, personalShift2};
+		//    var personalShifts = new ReadOnlyCollection<IPersonalShift>(persList);
 
-			var readpersAss = new ReadOnlyCollection<IPersonAssignment>(persAss);
-			using (_mocks.Record())
-			{
-				Expect.Call(personAssignment.PersonalShiftCollection).Return(personalShifts).Repeat.AtLeastOnce();
-				Expect.Call(personalShift.LayerCollection).Return(layerColl).Repeat.AtLeastOnce();
-				Expect.Call(layerColl.Period()).Return(period).Repeat.AtLeastOnce();
-				Expect.Call(personalShift2.LayerCollection).Return(layerColl2).Repeat.AtLeastOnce();
-				Expect.Call(layerColl2.Period()).Return(period2).Repeat.AtLeastOnce();
-			}
-			using (_mocks.Playback())
-			{
-				Assert.IsFalse(target.PersonalShiftsAndMeetingsAreInWorkTime(readMeetings, readpersAss));
-			}
-		}
+		//    var readpersAss = new ReadOnlyCollection<IPersonAssignment>(persAss);
+		//    using (_mocks.Record())
+		//    {
+		//        Expect.Call(personAssignment.PersonalShiftCollection).Return(personalShifts).Repeat.AtLeastOnce();
+		//        Expect.Call(personalShift.LayerCollection).Return(layerColl).Repeat.AtLeastOnce();
+		//        Expect.Call(layerColl.Period()).Return(period).Repeat.AtLeastOnce();
+		//        Expect.Call(personalShift2.LayerCollection).Return(layerColl2).Repeat.AtLeastOnce();
+		//        Expect.Call(layerColl2.Period()).Return(period2).Repeat.AtLeastOnce();
+		//    }
+		//    using (_mocks.Playback())
+		//    {
+		//        Assert.IsFalse(target.PersonalShiftsAndMeetingsAreInWorkTime(readMeetings, readpersAss));
+		//    }
+		//}
 
 		[Test]
 		public void WorkShiftEndTimeShouldHandleWorkShiftsCrossingMidnight()
@@ -220,7 +280,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			DateTimePeriod period = new DateTimePeriod(WorkShift.BaseDate.Add(start), WorkShift.BaseDate.Add(end));
 			workShift.LayerCollection.Add(new WorkShiftActivityLayer(activity, period));
 
-			target = new ShiftProjectionCache(workShift);
+			target = new ShiftProjectionCache(workShift, _personalShiftMeetingTimeChecker);
 
 			TimeSpan result;
 

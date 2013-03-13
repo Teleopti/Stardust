@@ -23,12 +23,35 @@ namespace Teleopti.Ccc.Domain.Scheduling
             foreach (var part in sourceParts)
             {
                 var sourceData = destination[part.Person].ScheduledDay(part.DateOnlyAsPeriod.DateOnly);
+				IList<IPersistableScheduleData> absencesNextDay = new List<IPersistableScheduleData>();
+
+				foreach (var dataInDestination in sourceData.PersistableScheduleDataCollection())
+				{
+					if (dataInDestination is IPersonAbsence && !dataInDestination.Period.Intersect(part.Period))
+					{
+						absencesNextDay.Add(dataInDestination);
+					}
+				}
+
                 sourceData.Clear<IExportToAnotherScenario>();
                 foreach (var dataToExport in part.PersistableScheduleDataCollection().OfType<IExportToAnotherScenario>())
                 {
+					// bug #22073, the part contains PersonsAbsence for the next day too, for some reason, so we skip them
+					if(dataToExport is PersonAbsence && !dataToExport.Period.Intersect(part.Period))
+						continue;
                     var clonedWithNewParameters = dataToExport.CloneAndChangeParameters(sourceData);
                     sourceData.Add(clonedWithNewParameters);                        
                 }
+
+				foreach (var dataInDestination in absencesNextDay.OfType<IExportToAnotherScenario>())
+				{
+					if (dataInDestination is IPersonAbsence)
+					{
+						var clonedWithNewParameters = dataInDestination.CloneAndChangeParameters(sourceData);
+						sourceData.Add(clonedWithNewParameters);
+					}
+				}
+
                 ruleBreaks.AddRange(modifyDestination(destination, sourceData));
             }
             return ruleBreaks;

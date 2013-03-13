@@ -4,8 +4,6 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
-using System.Security;
-using System.Security.Permissions;
 using System.Windows.Forms;
 using Microsoft.Practices.Composite.Events;
 using Syncfusion.Windows.Forms.Tools;
@@ -271,7 +269,7 @@ namespace Teleopti.Ccc.Win.Intraday
             _intradayViewContent.SelectChartView(((IntradaySetting)e.ClickedItem.Tag).Name);
         }
 
-        private void SetupGalleryItem(Common.Controls.ToolStripGallery.ToolStripItemClickedEventArgs e)
+    	private void SetupGalleryItem(Common.Controls.ToolStripGallery.ToolStripItemClickedEventArgs e)
         {
             var item = new TupleItem(e.ClickedItem.Text, e.ClickedItem.Tag);
 
@@ -282,24 +280,21 @@ namespace Teleopti.Ccc.Win.Intraday
             e.ContextMenuStrip.Items.Add(itemRemove);
         }
 
-        private void itemRemove_Click(object sender, EventArgs e)
+    	private void itemRemove_Click(object sender, EventArgs e)
         {
-            var item = (TupleItem)((ToolStripItem)sender).Tag;
-            //IntradaySetting intradaySetting = _intradayViewContent.Settings.GetIntradaySetting(item.Text);
+			var toolstripItem = ((ToolStripItem) sender);
+			toolstripItem.Click -= itemRemove_Click;
+			
+			var item = (TupleItem)toolstripItem.Tag;
 			var deletedItemIndex = teleoptiToolStripGalleryViews.Items.IndexOf(FindGalleryItemByName(item.Text));
            
             _settingManager.Remove(item.Text);
-            //_intradayViewContent.Settings.RemoveIntradaySetting(intradaySetting);
 			
             FillGallery();
             toolStripExLayouts.Refresh();
 
-            //select the previous one
 			var previousOne = deletedItemIndex < 1 ? defaultView() : teleoptiToolStripGalleryViews.Items[deletedItemIndex - 1];
             
-            //intradaySetting = _intradayViewContent.Settings.GetIntradaySetting(((IntradaySetting)previousOne.Tag).Name);
-            //_intradayViewContent.LoadDockingState(intradaySetting.DockingState);
-
             var name = ((IntradaySetting) previousOne.Tag).Name;
             _settingManager.LoadDockingState(name);
 

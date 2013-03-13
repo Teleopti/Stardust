@@ -74,10 +74,15 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
             _errorProvider.BlinkStyle = ErrorBlinkStyle.NeverBlink;
         }
 
-        public void SetCulture(CultureInfo cultureInfo)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public void SetCulture(CultureInfo cultureInfo)
         {
             dateTimePickerAdvWorkAStartDate.Culture = cultureInfo;
+        	dateTimePickerAdvWorkAStartDate.Calendar.Iso8601CalenderFormat =
+        		DateHelper.Iso8601Cultures.Contains(cultureInfo.LCID);
             dateTimePickerAdvWorkEndPeriod.Culture = cultureInfo;
+			dateTimePickerAdvWorkEndPeriod.Calendar.Iso8601CalenderFormat =
+				DateHelper.Iso8601Cultures.Contains(cultureInfo.LCID);
         }
 
         private void SetColors()

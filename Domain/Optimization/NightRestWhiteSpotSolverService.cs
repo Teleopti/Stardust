@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         	_resourceCalculateDelayer = resourceCalculateDelayer;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public bool Resolve(IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
         {
             NightRestWhiteSpotSolverResult solverResult = _solver.Resolve(matrix);
@@ -41,7 +41,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 				daysToDelete.Add(scheduleDay);
             }
         	_deleteAndResourceCalculateService.DeleteWithResourceCalculation(daysToDelete,
-        	                                                                 schedulePartModifyAndRollbackService);
+        	                                                                 schedulePartModifyAndRollbackService,
+																			 schedulingOptions.ConsiderShortBreaks);
 
             bool success = false;
             IPerson person = matrix.Person;
@@ -51,7 +52,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 				if (_scheduleService.SchedulePersonOnDay(matrix.GetScheduleDayByKey(dateOnly).DaySchedulePart(), schedulingOptions, _resourceCalculateDelayer, null, schedulePartModifyAndRollbackService))
                 {
-                    //_schedulePartModifyAndRollbackService.Rollback();
                     success = true;
                 }
             }

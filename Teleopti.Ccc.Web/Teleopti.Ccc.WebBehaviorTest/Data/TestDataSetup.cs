@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		{
 			var applicationFunctionRepository = new ApplicationFunctionRepository(uow);
 			var matrixReportsParent = applicationFunctionRepository.LoadAll().First(x => x.FunctionCode == "Reports");
-			var names = new[] { "ResReportAbandonmentAndSpeedOfAnswer", "ResReportForecastvsActualWorkload", "ResReportScheduledAndActualAgents" };
+			var names = new[] { "ResReportAbandonmentAndSpeedOfAnswer", "ResReportForecastvsActualWorkload", "ResReportServiceLevelAndAgentsReady" };
 
 			applicationFunctionRepository.AddRange(
 				names.Select(n => new ApplicationFunction(n, matrixReportsParent) { ForeignSource = DefinedForeignSourceNames.SourceMatrix }));
@@ -190,7 +190,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			var agentRoleWithoutAgentRoleWithoutResReportScheduledAndActualAgentsMatrixFunction =
 				from r in supervisorRoleApplicationFunctions
 				where
-					!(r.FunctionCode == "ResReportScheduledAndActualAgents" && r.ForeignSource == DefinedForeignSourceNames.SourceMatrix)
+					!(r.FunctionCode == "ResReportServiceLevelAndAgentsReady" && r.ForeignSource == DefinedForeignSourceNames.SourceMatrix)
 				select r;
 
 

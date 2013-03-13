@@ -403,8 +403,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                         workShiftsWithinPeriod.Add(proj);
                     }
                 }
-                if (workShiftsWithinPeriod.Count == 0)
-                    workShiftsWithinPeriod = shiftList;
                 finderResult.AddFilterResults(
                     new WorkShiftFilterResult(
                         string.Format(_culture,
@@ -525,7 +523,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             var meetings = part.PersonMeetingCollection();
             var personAssignments = part.PersonAssignmentCollection();
             var cnt = shiftList.Count;
-            
+
+	        if (meetings.Count == 0 && personAssignments.Count == 0)
+		        return shiftList;
+
             foreach (var shift in shiftList)
             {
                 if (shift.MainShiftProjection.Any(x => !((VisualLayer) x).HighestPriorityActivity.AllowOverwrite &&

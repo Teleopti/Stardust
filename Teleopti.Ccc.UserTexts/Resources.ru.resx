@@ -190,7 +190,7 @@
     <comment>Add Day Off menu item</comment>
   </data>
   <data name="AddNewScorecard" xml:space="preserve">
-    <value>Добавить показатели</value>
+    <value>Добавить оценочный лист</value>
     <comment>New scorecard</comment>
   </data>
   <data name="AddOpenHours" xml:space="preserve">
@@ -322,7 +322,7 @@
     <comment>Average tasks</comment>
   </data>
   <data name="AverageWorkTime" xml:space="preserve">
-    <value>Рабочее время в среднем</value>
+    <value>Среднее время работы</value>
     <comment>Average work time</comment>
   </data>
   <data name="Back" xml:space="preserve">
@@ -398,7 +398,7 @@
     <comment>Category</comment>
   </data>
   <data name="ManageContracts" xml:space="preserve">
-    <value>Управление рабочим временем сотрудников</value>
+    <value>Управление контрактами</value>
     <comment>Manage contract settings</comment>
   </data>
   <data name="ChangeYourCultureSettings" xml:space="preserve">
@@ -406,7 +406,7 @@
     <comment>Computer default culture settings</comment>
   </data>
   <data name="ManagePartTimePercentages" xml:space="preserve">
-    <value>Управление частичной занятостью</value>
+    <value>Управление процентами неполной занятости</value>
     <comment>Manage part-time percentages</comment>
   </data>
   <data name="ChangeYourPassword" xml:space="preserve">
@@ -414,7 +414,7 @@
     <comment>Change your password</comment>
   </data>
   <data name="Chart" xml:space="preserve">
-    <value>Таблица</value>
+    <value>График</value>
     <comment>Chart</comment>
   </data>
   <data name="ChartSettings" xml:space="preserve">
@@ -426,7 +426,7 @@
     <comment>Check all</comment>
   </data>
   <data name="ChooseCancelIfYouWouldLikeToCorrectTheErrorsOrCheckEachErrorToOverrideTheBusinessRules" xml:space="preserve">
-    <value>Нажать OK, чтобы игнорировать правила. Нажать «Отмена», чтобы сначала исправить ошибки.</value>
+    <value>Нажмите OK, чтобы проигнорировать правила. Нажмите «Отмена», чтобы сначала исправить ошибки.</value>
     <comment>Press OK to override the Rules. Press cancel to correct the errors first.</comment>
   </data>
   <data name="ChooseCommandsFromColon" xml:space="preserve">
@@ -498,7 +498,7 @@
     <comment>Contract schedules</comment>
   </data>
   <data name="ContractTargetTime" xml:space="preserve">
-    <value>Общее время работы по контракту</value>
+    <value>Целевое время работы по контракту</value>
     <comment>Contract target time</comment>
   </data>
   <data name="Copy" xml:space="preserve">
@@ -510,7 +510,7 @@
     <comment>Copy special MENU ITEM</comment>
   </data>
   <data name="Count" xml:space="preserve">
-    <value>Подсчет</value>
+    <value>Количество</value>
     <comment>Count</comment>
   </data>
   <data name="CreateForecast" xml:space="preserve">
@@ -631,7 +631,7 @@
     <comment>Interval length</comment>
   </data>
   <data name="ManageScorecards" xml:space="preserve">
-    <value>Управление показателями</value>
+    <value>Управление оценочными листами</value>
     <comment>Manage scorecards</comment>
   </data>
   <data name="Delete" xml:space="preserve">
@@ -827,7 +827,7 @@
     <comment>Forecasted agents with shrinkage</comment>
   </data>
   <data name="ForecastedAverageAfterCallWork" xml:space="preserve">
-    <value>Спрогнозированная средняя работа после звонка</value>
+    <value>Спрогнозированное среднее время работы после звонка</value>
     <comment>Forecasted average after call work</comment>
   </data>
   <data name="ForecastedAverageTalkTime" xml:space="preserve">
@@ -919,7 +919,7 @@
     <comment>Index ACW</comment>
   </data>
   <data name="IndexAfterCallWork" xml:space="preserve">
-    <value>Индекс работы после звонка</value>
+    <value>Индекс времени работы после звонка</value>
     <comment>Index after call work</comment>
   </data>
   <data name="IndexCalls" xml:space="preserve">
@@ -943,7 +943,7 @@
     <comment>Insert New Person</comment>
   </data>
   <data name="InsertNewPersonFromClipboard" xml:space="preserve">
-    <value>Вставить нового сотрудникау из буфера</value>
+    <value>Вставить нового сотрудника из буфера</value>
     <comment>Insert New Person From Clipboard</comment>
   </data>
   <data name="AddOptionalColumn" xml:space="preserve">
@@ -967,7 +967,7 @@
     <comment>error message shows when user failed to login in to agent portal</comment>
   </data>
   <data name="IsFullDayAbsence" xml:space="preserve">
-    <value>Отсутствие полный рабочий день</value>
+    <value>Отсутствие на полный рабочий день</value>
     <comment>Full day absence</comment>
   </data>
   <data name="IsIn" xml:space="preserve">
@@ -990,7 +990,7 @@
     <comment>Answered calls per scheduled phone time</comment>
   </data>
   <data name="KpiAverageAfterCallWork" xml:space="preserve">
-    <value>Средняя работа после звонка (с)</value>
+    <value>Средняя время работы после звонка (с)</value>
     <comment>Average after call work (s)</comment>
   </data>
   <data name="KpiAverageHandleTime" xml:space="preserve">
@@ -1006,7 +1006,7 @@
     <comment>Readiness (%)</comment>
   </data>
   <data name="KPIsIncludedInScorecardColon" xml:space="preserve">
-    <value>KPI в показателях:</value>
+    <value>KPI в оценочных листах:</value>
     <comment>KPI's in scorecard:</comment>
   </data>
   <data name="Language" xml:space="preserve">
@@ -1170,7 +1170,7 @@
     <comment>More &gt;&gt;</comment>
   </data>
   <data name="MoreThanColon" xml:space="preserve">
-    <value>&amp;Больше:</value>
+    <value>&amp;Больше чем:</value>
     <comment>&amp;More than:</comment>
   </data>
   <data name="MoreToComeThreeDots" xml:space="preserve">
@@ -1202,7 +1202,7 @@
     <comment>(multiple values)</comment>
   </data>
   <data name="MultisiteDayTemplate" xml:space="preserve">
-    <value>Многоузловой дневной шаблон</value>
+    <value>Мультисайтовый дневной шаблон</value>
     <comment>Multisite day template</comment>
   </data>
   <data name="MultisiteDayTemplatesInvalidOneParameter" xml:space="preserve">
@@ -1210,11 +1210,11 @@
     <comment>The templates cannot be saved because of an error in validation. Check that each interval sums up to 100%.\n\nError information: {0}</comment>
   </data>
   <data name="MultisiteSkillWizard" xml:space="preserve">
-    <value>Мастер многоузловых навыков</value>
+    <value>Мастер мультисайтовых навыков</value>
     <comment>Multisite skill wizard</comment>
   </data>
   <data name="MultisiteTemplate" xml:space="preserve">
-    <value>Многоузловой шаблон</value>
+    <value>Мультисайтовый шаблон</value>
     <comment>Multisite template</comment>
   </data>
   <data name="MustSpecifyValidTime" xml:space="preserve">
@@ -1222,7 +1222,7 @@
     <comment>You must specify a valid time</comment>
   </data>
   <data name="MyCurrentCulture" xml:space="preserve">
-    <value>Диалект</value>
+    <value>Моя текущая культура</value>
     <comment>My current culture</comment>
   </data>
   <data name="MyLanguage" xml:space="preserve">
@@ -1238,7 +1238,7 @@
     <comment>New</comment>
   </data>
   <data name="NewMultisiteSkillThreeDots" xml:space="preserve">
-    <value>Новый многоузловой навык...</value>
+    <value>Новый мультисайтовый навык...</value>
     <comment>New multisite skill...</comment>
   </data>
   <data name="NewOutlier" xml:space="preserve">
@@ -1250,7 +1250,7 @@
     <comment>New password</comment>
   </data>
   <data name="NewScorecard" xml:space="preserve">
-    <value>Новые показатели</value>
+    <value>Новый оценочный лист</value>
     <comment>New scorecard</comment>
   </data>
   <data name="NewShift" xml:space="preserve">
@@ -1350,7 +1350,7 @@
     <comment>Original ACW</comment>
   </data>
   <data name="OriginalAfterCallWork" xml:space="preserve">
-    <value>Фактическая работа после звонка</value>
+    <value>Фактическое время работы после звонка</value>
     <comment>Original after call work</comment>
   </data>
   <data name="OriginalCalls" xml:space="preserve">
@@ -1477,11 +1477,11 @@ Periods</comment>
     <comment>Personalize MyTime</comment>
   </data>
   <data name="PersonalShift" xml:space="preserve">
-    <value>Индивидуальная активность</value>
+    <value>Персональная активность</value>
     <comment>Personal shift</comment>
   </data>
   <data name="PersonalShifts" xml:space="preserve">
-    <value>Индивидуальные активности</value>
+    <value>Персональные активности</value>
     <comment>Personal shifts</comment>
   </data>
   <data name="PersonSkill" xml:space="preserve">
@@ -1541,7 +1541,7 @@ Periods</comment>
     <comment>Do you want to create another workload?</comment>
   </data>
   <data name="QuestionCreateSubSkill" xml:space="preserve">
-    <value>Многоузловой навык не содержит поднавыков. Создать?</value>
+    <value>Мультисайтовый навык не содержит поднавыков. Создать?</value>
     <comment>The multi-site skill does not contain any sub skills. Would you like to create one?</comment>
   </data>
   <data name="QuestionDeleteTheSkillTwoParameters" xml:space="preserve">
@@ -1707,11 +1707,11 @@ Periods</comment>
     <comment>Scheduling screen</comment>
   </data>
   <data name="ScoreCard" xml:space="preserve">
-    <value>Показатели</value>
+    <value>Оценочный лист</value>
     <comment>Scorecard</comment>
   </data>
   <data name="Scorecards" xml:space="preserve">
-    <value>Показатели</value>
+    <value>Оценочные листы</value>
     <comment>Scorecards</comment>
   </data>
   <data name="Segment" xml:space="preserve">
@@ -1731,7 +1731,7 @@ Periods</comment>
     <comment>Select historical data</comment>
   </data>
   <data name="SelectSiteColon" xml:space="preserve">
-    <value>Выбор узла:</value>
+    <value>Выбор сайта:</value>
     <comment>Välj site:</comment>
   </data>
   <data name="ServiceLevelParenthesisPercentSign" xml:space="preserve">
@@ -1739,7 +1739,7 @@ Periods</comment>
     <comment>Service level (%)</comment>
   </data>
   <data name="ServiceLevelPercentageMustBeBetween1And100" xml:space="preserve">
-    <value>Введенный процент уровня сервиса должен быть между 1 и 100%.</value>
+    <value>Введенный процент уровня сервиса должен быть в диапазоне между 1 и 100%.</value>
     <comment>The entered service level percentage must be between 1 and 100 %.</comment>
   </data>
   <data name="ServiceLevelPercentSign" xml:space="preserve">
@@ -1843,7 +1843,7 @@ Periods</comment>
     <comment>Skill data grids</comment>
   </data>
   <data name="SkillDayIsInvalidOneParameter" xml:space="preserve">
-    <value>Данные ошибки: {0} Проверьте, что макс. число операторов – 0 или больше мин. числа операторов, либо распределение между поднавыками добавляется к 100%.</value>
+    <value>Данные ошибки: {0} Проверьте, что макс. число операторов = 0 или больше мин. числа операторов, либо распределение между поднавыками добавляется к 100%.</value>
     <comment>Error information: {0} Check that max agents are 0 or higher than min agents, or that the distribution between the sub skills adds to 100%.</comment>
   </data>
   <data name="SkillDayTemplate" xml:space="preserve">
@@ -1851,7 +1851,7 @@ Periods</comment>
     <comment>Skill day template</comment>
   </data>
   <data name="SkillDayTemplateIsInvalidOneParameter" xml:space="preserve">
-    <value>Шаблоны невозможно сохранить из-за ошибки в проверке. Проверьте, что макс. число операторов – 0 или больше мин. числа операторов. Данные ошибки: {0}</value>
+    <value>Шаблоны невозможно сохранить из-за ошибки в проверке. Проверьте, что макс. число операторов = 0 или больше мин. числа операторов. Данные ошибки: {0}</value>
     <comment>The templates cannot be saved because of an error in validation. Check that max agents are higher than min agents or 0. Error information: {0}</comment>
   </data>
   <data name="SkillDayTemplates" xml:space="preserve">
@@ -1875,7 +1875,7 @@ Periods</comment>
     <comment>Skill template</comment>
   </data>
   <data name="ForecastMethod" xml:space="preserve">
-    <value>Метод прогноза</value>
+    <value>Метод прогнозирования</value>
     <comment>ForecastMethod</comment>
   </data>
   <data name="SkillViews" xml:space="preserve">
@@ -1971,7 +1971,7 @@ Periods</comment>
     <comment>Switch date selection view</comment>
   </data>
   <data name="SystemColor" xml:space="preserve">
-    <value>Цвет системы</value>
+    <value>Системный цвет</value>
     <comment>System color</comment>
   </data>
   <data name="TalkTime" xml:space="preserve">
@@ -2143,11 +2143,11 @@ Periods</comment>
     <comment>Update grid</comment>
   </data>
   <data name="UpdatesStatistics" xml:space="preserve">
-    <value>Статистика обновлений</value>
+    <value>Обновление статистики</value>
     <comment>Updating statistics</comment>
   </data>
   <data name="UpdateStatistics" xml:space="preserve">
-    <value>Статистики обновлений</value>
+    <value>Обновить статистику</value>
     <comment>Update statistics</comment>
   </data>
   <data name="UseAverage" xml:space="preserve">
@@ -2159,7 +2159,7 @@ Periods</comment>
     <comment>Use occupancy adjustment</comment>
   </data>
   <data name="UserCredentialsFor" xml:space="preserve">
-    <value>Реквизиты пользователей для</value>
+    <value>Реквизиты пользователя для</value>
     <comment>User credentials for</comment>
   </data>
   <data name="UseTemplatesForLongtermForecasting" xml:space="preserve">
@@ -2175,7 +2175,7 @@ Periods</comment>
     <comment>Validated ACW</comment>
   </data>
   <data name="ValidatedAfterCallWork" xml:space="preserve">
-    <value>Проверенная работа после звонка</value>
+    <value>Проверенное время работы после звонка</value>
     <comment>Validated after call work</comment>
   </data>
   <data name="ValidatedCalls" xml:space="preserve">
@@ -2448,7 +2448,7 @@ Periods</comment>
     <comment>Print Schedule</comment>
   </data>
   <data name="ScoreCardPreview" xml:space="preserve">
-    <value>Предпросмотр показателей</value>
+    <value>Предпросмотр оценочных листов</value>
     <comment>Scorecard Preview</comment>
   </data>
   <data name="ErrorMessage" xml:space="preserve">
@@ -2620,11 +2620,11 @@ Periods</comment>
     <comment>Initializing</comment>
   </data>
   <data name="MultisiteSkill" xml:space="preserve">
-    <value>Многоузловой навык</value>
+    <value>Мультисайтовый навык</value>
     <comment>Multisite skill</comment>
   </data>
   <data name="MultisiteSkillLoading" xml:space="preserve">
-    <value>Загрузка многоузлового навыка</value>
+    <value>Загрузка мультисайтового навыка</value>
     <comment>Multisite skill loading</comment>
   </data>
   <data name="SkillDaysLoaded" xml:space="preserve">
@@ -2640,7 +2640,7 @@ Periods</comment>
     <comment>Templates loaded</comment>
   </data>
   <data name="TemplateTargetMultisite" xml:space="preserve">
-    <value>Многоузловой навык</value>
+    <value>Мультисайтовый навык</value>
     <comment>Multisite skill</comment>
   </data>
   <data name="TemplateTargetSkill" xml:space="preserve">
@@ -2800,7 +2800,7 @@ Periods</comment>
     <comment>Hours per day</comment>
   </data>
   <data name="Override" xml:space="preserve">
-    <value>Игнорировать</value>
+    <value>Заменить</value>
     <comment>Override</comment>
   </data>
   <data name="PeriodHours" xml:space="preserve">
@@ -2941,7 +2941,7 @@ Periods</comment>
     <comment>Parttime Percentage Colon</comment>
   </data>
   <data name="EnterPartTimePercentageValue" xml:space="preserve">
-    <value>Ввести процентное значение неполной занятости</value>
+    <value>Ввести значение процента неполной занятости</value>
     <comment>Enter Part Time Percentage Value</comment>
   </data>
   <data name="Contracts" xml:space="preserve">
@@ -3021,11 +3021,11 @@ Periods</comment>
     <comment>PeriodColon</comment>
   </data>
   <data name="ScorecardColon" xml:space="preserve">
-    <value>Показатели:</value>
+    <value>Оценочные листы:</value>
     <comment>Scorecard</comment>
   </data>
   <data name="SelectKPIToHandleColon" xml:space="preserve">
-    <value>Выбрать обрабатываемый KPI:</value>
+    <value>Выбрать KPI для обработки:</value>
     <comment>SelectKPItohandleColon</comment>
   </data>
   <data name="EnterPropertyValuesForAbsences" xml:space="preserve">
@@ -3125,7 +3125,7 @@ Periods</comment>
     <comment>Skill</comment>
   </data>
   <data name="ForecastMethodColon" xml:space="preserve">
-    <value>Метод прогноза:</value>
+    <value>Метод прогнозирования:</value>
     <comment>ForecastMethod</comment>
   </data>
   <data name="TimeZoneColon" xml:space="preserve">
@@ -3279,11 +3279,11 @@ Periods</comment>
     <value>Организатор мероприятий</value>
   </data>
   <data name="RestoreAgentPortal" xml:space="preserve">
-    <value>Восстановить My Time</value>
+    <value>Восстановить MyTime</value>
     <comment>Restore Agent Portal from  System Tray</comment>
   </data>
   <data name="RestoreASM" xml:space="preserve">
-    <value>Восстановить службу сообщений операторов</value>
+    <value>Восстановить службу сообщений графика операторов</value>
     <comment>Restore Agent Schedule Messenger from System tray.</comment>
   </data>
   <data name="DuplicatePersonRotationMessage" xml:space="preserve">
@@ -3367,7 +3367,7 @@ Periods</comment>
     <comment>Open the Agent Portal Settings form</comment>
   </data>
   <data name="ExitAgentPortal" xml:space="preserve">
-    <value>Выход из портала агентов</value>
+    <value>Выход из портала операторов</value>
     <comment>Exit from Agent Portal</comment>
   </data>
   <data name="BusinessRuleDayOffErrorMessage1" xml:space="preserve">
@@ -3395,7 +3395,7 @@ Periods</comment>
     <comment>The week contains to much work time ({0}) the max is {1}.</comment>
   </data>
   <data name="BusinessRuleNightlyRestRuleErrorMessage" xml:space="preserve">
-    <value>Ежедневный отдых должен быть как минимум {0} часов между 2 сменами. Между {1} и {2} только {3} час(а,ов).</value>
+    <value>Ежедневный отдых должен быть как минимум {0} часов между 2 сменами. Между {1} и {2} только {3} часа(-ов).</value>
     <comment>There must be a daily rest of at least {0} hours between 2 shifts. Between {1} and {2} there are only {3} hours.</comment>
   </data>
   <data name="BusinessRuleNoContractErrorMessage" xml:space="preserve">
@@ -3477,7 +3477,7 @@ Periods</comment>
     <comment>Agents inc</comment>
   </data>
   <data name="AgentsIncWithShrinkage" xml:space="preserve">
-    <value>Операторы, вкл. с сокращением</value>
+    <value>Операторы, вкл. сокращение</value>
     <comment>Agents inc with shrinkage</comment>
   </data>
   <data name="Emails" xml:space="preserve">
@@ -3781,7 +3781,7 @@ Periods</comment>
     <comment>Optional</comment>
   </data>
   <data name="WeekAbbreviationDot" xml:space="preserve">
-    <value>с</value>
+    <value>н.</value>
     <comment>Abbreviation for week</comment>
   </data>
   <data name="PrepareSkillThreeDots" xml:space="preserve">
@@ -4142,7 +4142,7 @@ Periods</comment>
     <comment>Understaffing</comment>
   </data>
   <data name="BallonTipScheduleChange" xml:space="preserve">
-    <value>График изменен. Щелкните здесь, чтобы просмотреть обновленный график.</value>
+    <value>График изменен. Нажмите здесь, чтобы просмотреть обновленный график.</value>
     <comment>ballon tool tip text</comment>
   </data>
   <data name="Agent" xml:space="preserve">
@@ -4182,7 +4182,7 @@ Periods</comment>
     <comment>Created</comment>
   </data>
   <data name="Denied" xml:space="preserve">
-    <value>Отказано</value>
+    <value>Отклонено</value>
     <comment>Denied</comment>
   </data>
   <data name="Pending" xml:space="preserve">
@@ -4398,7 +4398,7 @@ Periods</comment>
     <comment>Overtime</comment>
   </data>
   <data name="AverageWorkTimeCannotBeMoreThan24Hours" xml:space="preserve">
-    <value>Среднее рабочее время не может превышать 24 часа</value>
+    <value>Среднее время работы не может превышать 24 часа</value>
     <comment>Contract setting page average work time field shouldnt be containing values more than 24 hours</comment>
   </data>
   <data name="FilterOn" xml:space="preserve">
@@ -4511,7 +4511,7 @@ Periods</comment>
     <comment>button text in request reply form</comment>
   </data>
   <data name="SiteTeam" xml:space="preserve">
-    <value>Узел/Группа</value>
+    <value>Сайт/Группа</value>
     <comment>Site and Team</comment>
   </data>
   <data name="ReplyAndApprove" xml:space="preserve">
@@ -4521,7 +4521,7 @@ Periods</comment>
   </data>
   <data name="ReplyAndDeny" xml:space="preserve">
     <value>Ответить и
-отменить</value>
+отклонить</value>
     <comment>Reply and deny button on ribbon for requests</comment>
   </data>
   <data name="PersonRequestEmptySubjectError" xml:space="preserve">
@@ -4537,7 +4537,7 @@ Periods</comment>
     <comment>Request status</comment>
   </data>
   <data name="Site" xml:space="preserve">
-    <value>Узел</value>
+    <value>Сайт</value>
     <comment>Site label text (Common text used in controls, lebels, trees, grids)</comment>
   </data>
   <data name="AddOvertime" xml:space="preserve">
@@ -4609,7 +4609,7 @@ Periods</comment>
     <comment>Copy of</comment>
   </data>
   <data name="DayOffReoptimizerOptions" xml:space="preserve">
-    <value>Опции оптимизаии выходных</value>
+    <value>Опции оптимизации выходных</value>
     <comment>Day Off Reoptimizer options</comment>
   </data>
   <data name="KeepFreeWeekEndDays" xml:space="preserve">
@@ -4791,7 +4791,7 @@ Periods</comment>
     <comment>Are you sure you want to delete '{0}' grouping?</comment>
   </data>
   <data name="CannotDeleteSiteColon" xml:space="preserve">
-    <value>Невозможно удалить узел:</value>
+    <value>Невозможно удалить сайт:</value>
     <comment>Error message when deleteing site. The sites comes afterwards</comment>
   </data>
   <data name="CannotDeleteTeamColon" xml:space="preserve">
@@ -4811,7 +4811,7 @@ Periods</comment>
     <comment>Delete selected rows?</comment>
   </data>
   <data name="EnterANameForTheGrouping" xml:space="preserve">
-    <value>Ввести имя группирования!</value>
+    <value>Введите имя группирования!</value>
     <comment>Enter a name for the grouping</comment>
   </data>
   <data name="NoOptionalColumnIsSelected" xml:space="preserve">
@@ -5042,7 +5042,7 @@ Periods</comment>
     <comment>Delete Confirmation : pop up title</comment>
   </data>
   <data name="AddNewSite" xml:space="preserve">
-    <value>Добавить новый узел</value>
+    <value>Добавить новый сайт</value>
     <comment>Setting forms: Organization Hierarchy</comment>
   </data>
   <data name="AddNewTeam" xml:space="preserve">
@@ -5058,7 +5058,7 @@ Periods</comment>
     <comment>Setting pages : Tree node text cant be null.</comment>
   </data>
   <data name="NodeTextCantBeNulls" xml:space="preserve">
-    <value>Имя узла/группы не может быть пустым!</value>
+    <value>Имя сайта/группы не может быть пустым!</value>
     <comment>Setting form: Hierarchical tree - nodes cant be null for site / team names</comment>
   </data>
   <data name="MessageTooLong" xml:space="preserve">
@@ -5195,7 +5195,7 @@ Periods</comment>
     <comment>Open hour not within midnight break</comment>
   </data>
   <data name="InvalidMultisiteDistribution" xml:space="preserve">
-    <value>Недопустимое многоузловое распределение</value>
+    <value>Недопустимое мультисайтовое распределение</value>
     <comment>Invalid multisite distribution</comment>
   </data>
   <data name="ExternalLogOnView" xml:space="preserve">
@@ -5259,7 +5259,7 @@ Periods</comment>
     <comment>Function CreateAbsenceRequest</comment>
   </data>
   <data name="CreateShiftTradeRequest" xml:space="preserve">
-    <value>Запрос изменения смен</value>
+    <value>Запрос на изменение смен</value>
     <comment>Function CreateShiftTradeRequest</comment>
   </data>
   <data name="CreateTextRequest" xml:space="preserve">
@@ -5267,7 +5267,7 @@ Periods</comment>
     <comment>Function CreateTextRequest</comment>
   </data>
   <data name="OpenScorecard" xml:space="preserve">
-    <value>Показатели</value>
+    <value>Оценочные листы</value>
     <comment>Function OpenScorecard</comment>
   </data>
   <data name="Deleted" xml:space="preserve">
@@ -5359,7 +5359,7 @@ Periods</comment>
     <comment>Add new contract schedule</comment>
   </data>
   <data name="YouHaveToHaveAtLeastOneScoreCard" xml:space="preserve">
-    <value>Необходимы как минимум один показатель. Добавьте их, нажав кнопку +</value>
+    <value>Необходим как минимум один оценочный лист. Добавьте его, нажав на кнопку +</value>
   </data>
   <data name="AnchorColon" xml:space="preserve">
     <value>Привязка:</value>
@@ -5402,11 +5402,11 @@ Periods</comment>
     <comment>Compensation time for trackingdescription</comment>
   </data>
   <data name="HolidayDays" xml:space="preserve">
-    <value>Праздничные дни</value>
+    <value>Дни</value>
     <comment>Holiday days for trackingdescription</comment>
   </data>
   <data name="HolidayTime" xml:space="preserve">
-    <value>Время праздников</value>
+    <value>Время</value>
     <comment>Holiday time for trackingdescription</comment>
   </data>
   <data name="EarlyWarning" xml:space="preserve">
@@ -5557,7 +5557,7 @@ Periods</comment>
     <comment>people</comment>
   </data>
   <data name="SwapCannotBePerformed" xml:space="preserve">
-    <value>Изменение невозможно выполнить</value>
+    <value>Обмен невозможно выполнить</value>
     <comment>Error message in Requests</comment>
   </data>
   <data name="ConfirmPeopleRemove" xml:space="preserve">
@@ -5741,7 +5741,7 @@ Periods</comment>
     <comment>Skill wiz</comment>
   </data>
   <data name="RtaStateGroupsMustBeConfigured" xml:space="preserve">
-    <value>Сначала необходимо конфигурировать группы состояния RTA.</value>
+    <value>Сначала необходимо настроить группы состояния RTA.</value>
     <comment>The RTA state groups must be configured first.</comment>
   </data>
   <data name="ApplyLicense" xml:space="preserve">
@@ -5757,7 +5757,7 @@ Periods</comment>
 * Найдите файл лицензии с помощью кнопки обзора внизу 
 * Применить лицензию
 * Приложение закроется
- * Перезапустите MyTime, чтобы получить новые лицензированные опции
+* Перезапустите MyTime, чтобы получить новые лицензированные опции
 * Снова запустите приложение</value>
     <comment>instructions for applying license in license window</comment>
   </data>
@@ -5785,15 +5785,15 @@ Periods</comment>
     <comment>license upload success message</comment>
   </data>
   <data name="LicenseHasExpiredPleaseApplyANewOne" xml:space="preserve">
-    <value>Лицензия устарела, укажите новую</value>
+    <value>Лицензия устарела, примените новую</value>
     <comment>explanation for license failure in license window</comment>
   </data>
   <data name="LicenseIsInvalidPerhapsForgedPleaseApplyANewOne" xml:space="preserve">
-    <value>Лицензия недействительна, возможно, нелегально изменена, укажите новую</value>
+    <value>Лицензия недействительна, возможно, изменена, примените новую</value>
     <comment>explanation for modified license in license window</comment>
   </data>
   <data name="NewLicenseAlreadyExpired" xml:space="preserve">
-    <value>Указываемая лицензия "{0}" устарела и уже не действует.</value>
+    <value>Применяемая лицензия "{0}" устарела и уже не действует.</value>
     <comment>expiration exception for license file in LogOnScreen</comment>
   </data>
   <data name="NewLicenseCorrupted" xml:space="preserve">
@@ -5807,7 +5807,7 @@ Periods</comment>
     <comment>Xml exception when parcing xml file in LogOnScreen</comment>
   </data>
   <data name="NoLicensePleaseApplyANewOne" xml:space="preserve">
-    <value>Лицензия не была указана, укажите ее</value>
+    <value>Лицензия не была применена, примените ее</value>
     <comment>explanation shown at first startup in license window</comment>
   </data>
   <data name="NoSuchFile" xml:space="preserve">
@@ -5883,7 +5883,7 @@ Periods</comment>
 Лицензия распространяется на максимум {2} активных оператора.
 
 Схема лицензии – "{3}".
-Эти опции активируются:
+Активированы опции:
 {4}</value>
     <comment>license text shown in about box</comment>
   </data>
@@ -6980,7 +6980,7 @@ Periods</comment>
     <value>Отвеченные звонки</value>
   </data>
   <data name="AdherenceReportCalculation" xml:space="preserve">
-    <value>Калькулятор соблюдения графика</value>
+    <value>Расчет соблюдения графика</value>
   </data>
   <data name="AddDays" xml:space="preserve">
     <value>Добавить дни</value>
@@ -7074,7 +7074,7 @@ Periods</comment>
     <value>Другое</value>
   </data>
   <data name="ESL" xml:space="preserve">
-    <value>Расчетный Уровень Сервиса</value>
+    <value>Расчетный уровень сервиса</value>
   </data>
   <data name="ConfidentPayloadShortName" xml:space="preserve">
     <value>N/A</value>
@@ -7179,7 +7179,7 @@ Periods</comment>
     <value>Расписание удалено</value>
   </data>
   <data name="BlockNotValidConflictingCategories" xml:space="preserve">
-    <value>Conflicting pre scheduled shift categories, not a valid block</value>
+    <value>Конфликт предварительно запланированных категорий смен, недопустимый блок</value>
   </data>
   <data name="TrackerType" xml:space="preserve">
     <value>Тип отслеживания</value>
@@ -7418,7 +7418,7 @@ Periods</comment>
     <value>Выбранные дни</value>
   </data>
   <data name="Validate" xml:space="preserve">
-    <value>Утверждено</value>
+    <value>Проверить</value>
   </data>
   <data name="Included" xml:space="preserve">
     <value>Включая</value>
@@ -7538,7 +7538,7 @@ Periods</comment>
     <value>Осталось</value>
   </data>
   <data name="BuiltInSiteManagerRole" xml:space="preserve">
-    <value>Менеджер узла</value>
+    <value>Менеджер сайта</value>
   </data>
   <data name="BuiltInBusinessUnitAdministratorRole" xml:space="preserve">
     <value>Администратор бизнесс-подразделения</value>
@@ -7864,7 +7864,7 @@ Teleopti R&amp;D</value>
     <value>Загрузка</value>
   </data>
   <data name="WaitingForSupervisorApproval" xml:space="preserve">
-    <value>Ожидание утверждения супервизора</value>
+    <value>Ожидание утверждения супервизором</value>
   </data>
   <data name="DefaultIntradaySetting" xml:space="preserve">
     <value>Просмотр по умолчанию</value>
@@ -7894,7 +7894,7 @@ Teleopti R&amp;D</value>
     <value>Справедливое распределение</value>
   </data>
   <data name="BusinessOrientation" xml:space="preserve">
-    <value>Потребность бизнеса</value>
+    <value>Потребности бизнеса</value>
   </data>
   <data name="Unknown" xml:space="preserve">
     <value>Неизвестный</value>
@@ -7933,10 +7933,10 @@ Teleopti R&amp;D</value>
     <value>Время работы в неделю</value>
   </data>
   <data name="FollowUp" xml:space="preserve">
-    <value>Follow up</value>
+    <value>Отклик</value>
   </data>
   <data name="SubskillDistributionMustSumToHundredPercent" xml:space="preserve">
-    <value>Сумма всех распределений между навыками должна быть 100%</value>
+    <value>Сумма всех распределений между поднавыками должна быть 100%</value>
   </data>
   <data name="ManageAlarms" xml:space="preserve">
     <value>Управление предупреждениями</value>
@@ -8292,7 +8292,7 @@ Teleopti R&amp;D</value>
     <value>Анализ расписания</value>
   </data>
   <data name="ServiceLevelAnalysis" xml:space="preserve">
-    <value>Анализ Уровня Сервиса</value>
+    <value>Анализ уровня сервиса</value>
   </data>
   <data name="OptimizingDaysOff" xml:space="preserve">
     <value>Оптимизация выходных дней</value>
@@ -8520,16 +8520,16 @@ Teleopti R&amp;D</value>
     <value>Ушедшие из очереди</value>
   </data>
   <data name="SelectScorecardForTeams" xml:space="preserve">
-    <value>Выбор показателя для группы</value>
+    <value>Выбор оценочного листа для группы</value>
   </data>
   <data name="SetScorecard" xml:space="preserve">
-    <value>Задать показатель</value>
+    <value>Установить оценочный лист</value>
   </data>
   <data name="SetScorecards" xml:space="preserve">
-    <value>Задать показатели</value>
+    <value>Установить оценочные листы</value>
   </data>
   <data name="CopyToScheduler" xml:space="preserve">
-    <value>Копировать в графики</value>
+    <value>Копировать в расписание</value>
   </data>
   <data name="PasteShiftFromShifts" xml:space="preserve">
     <value>Вставить смену из модуля смены</value>
@@ -8538,7 +8538,7 @@ Teleopti R&amp;D</value>
     <value>Неуспешно</value>
   </data>
   <data name="AlterBetween" xml:space="preserve">
-    <value>После между</value>
+    <value>Между</value>
   </data>
   <data name="DoNotMove" xml:space="preserve">
     <value>Не двигать</value>
@@ -8692,7 +8692,7 @@ Teleopti R&amp;D</value>
     <value>Дней в год:</value>
   </data>
   <data name="AttritionRate" xml:space="preserve">
-    <value>Коэффициент сокращения персонала</value>
+    <value>Процент оттока сотрудников</value>
   </data>
   <data name="DaysOffPerWeek" xml:space="preserve">
     <value>Выходных в неделю</value>
@@ -8749,7 +8749,7 @@ Teleopti R&amp;D</value>
     <value>Добавить даты</value>
   </data>
   <data name="ManageSites" xml:space="preserve">
-    <value>Управление узлами</value>
+    <value>Управление сайтами</value>
   </data>
   <data name="MaxSeats" xml:space="preserve">
     <value>Макс. число рабочих мест</value>
@@ -8758,7 +8758,7 @@ Teleopti R&amp;D</value>
     <value>Требуется рабочее место</value>
   </data>
   <data name="Sites" xml:space="preserve">
-    <value>Узлы</value>
+    <value>Сайты</value>
   </data>
   <data name="ForMax" xml:space="preserve">
     <value>для макс.:</value>
@@ -8987,7 +8987,7 @@ Teleopti R&amp;D</value>
     <value>Нет доступных сценариев для просмотра!</value>
   </data>
   <data name="ActualServiceLevel" xml:space="preserve">
-    <value>Фактический Уровень Сервиса</value>
+    <value>Фактический уровень сервиса</value>
   </data>
   <data name="CommonAgentDescriptionForScheduleExports" xml:space="preserve">
     <value>Формат имени оператора для экспорта графиков</value>
@@ -9527,7 +9527,7 @@ Teleopti R&amp;D</value>
     <value>Дата графика по</value>
   </data>
   <data name="EnterPropertiesOnSite" xml:space="preserve">
-    <value>Ввести свойства узла</value>
+    <value>Ввести свойства сайта</value>
   </data>
   <data name="HighestPossibleWorkTimeIsTooLow" xml:space="preserve">
     <value>Максимально возможное время работы слишком низкое!</value>
@@ -9629,7 +9629,7 @@ Teleopti R&amp;D</value>
     <value>Выбор назначения</value>
   </data>
   <data name="SelectMultisiteSkills" xml:space="preserve">
-    <value>Выбор многоузлового навыка</value>
+    <value>Выбор мультисайтового навыка</value>
   </data>
   <data name="TargetBusinessUnit" xml:space="preserve">
     <value>Целевое бизнес-подразделение</value>
@@ -9644,7 +9644,7 @@ Teleopti R&amp;D</value>
     <value>Работает...</value>
   </data>
   <data name="YouHaveToSelectAtLeastOneSkill" xml:space="preserve">
-    <value>Необходимо выбрать хотя бы один нвык.</value>
+    <value>Необходимо выбрать хотя бы один навык.</value>
   </data>
   <data name="AbsencesAvailableForExtendedPreference" xml:space="preserve">
     <value>Отсутствия доступные для предпочтений</value>
@@ -9674,7 +9674,7 @@ Teleopti R&amp;D</value>
     <value>Дополнительно</value>
   </data>
   <data name="AbsenceOverride" xml:space="preserve">
-    <value>Игнорировать</value>
+    <value>Заменить на</value>
   </data>
   <data name="AbsenceThreshold" xml:space="preserve">
     <value>Порог</value>
@@ -9824,7 +9824,7 @@ Teleopti R&amp;D</value>
     <value>Данные введены в неверном формате времени.</value>
   </data>
   <data name="TheServiceLevelForSpecifiedIntervalLengthIsTooLongDot" xml:space="preserve">
-    <value>Уровень Сервиса для заданной длины интервала слишком длинный. </value>
+    <value>Уровень сервиса для заданной длины интервала слишком длинный. </value>
   </data>
   <data name="MeetingOverview" xml:space="preserve">
     <value>Обзор мероприятия</value>
@@ -9836,7 +9836,7 @@ Teleopti R&amp;D</value>
     <value>Навык, соответствующий свойствам текущего навыка, не найден.</value>
   </data>
   <data name="TargetSkillColon" xml:space="preserve">
-    <value>Целеовй навык:</value>
+    <value>Целевой навык:</value>
   </data>
   <data name="DatabaseConnectionLostFormClose" xml:space="preserve">
     <value>Соединение с базой данных утеряно. Для сохранения данных данных  форма будет закрыта. Приносим извинения за причиненные неудобства, изменения, внесенные Вами не будут сохранены.</value>
@@ -9896,7 +9896,7 @@ Teleopti R&amp;D</value>
     <value>Контрольный журнал ведения расписания</value>
   </data>
   <data name="AuditingTurnOnLong" xml:space="preserve">
-    <value>Запустить инициализацию контрольного журанал? Это может занять несколько минут.</value>
+    <value>Запустить инициализацию контрольного журнала? Это может занять несколько минут.</value>
   </data>
   <data name="AdjustTimeBankWithPartTimePercentage" xml:space="preserve">
     <value>Регулировать банк времени в соответствие с процентом неполной занятости</value>
@@ -9905,6 +9905,465 @@ Teleopti R&amp;D</value>
     <value>Регулировать банк времени в соответствие с сезонностью</value>
   </data>
   <data name="TagChangesWithColon" xml:space="preserve">
-    <value>Тег изменен:</value>
+    <value>Изменить тег на:</value>
+  </data>
+  <data name="ResReportScheduledAndActualAgents" xml:space="preserve">
+    <value>Запланированное и фактическое количество операторов</value>
+  </data>
+  <data name="NoPersonPeriodFoundForUser" xml:space="preserve">
+    <value>Не найден персональный период для данного пользователя</value>
+  </data>
+  <data name="DuplicateDaysOffValidationError" xml:space="preserve">
+    <value>Выходные дни дублируются {0}</value>
+  </data>
+  <data name="NoAbsenceDefined" xml:space="preserve">
+    <value>Вам необходимо создать хотя бы одно отсутствие, чтобы выполнить это.</value>
+  </data>
+  <data name="NoAbsenceDefinedCaption" xml:space="preserve">
+    <value>Отсутствие не определено</value>
+  </data>
+  <data name="TheIntervalLengthOfThisSubskillShouldBeTheSameAsItsParentSkillCommaWhichIsParameterMinutesDot" xml:space="preserve">
+    <value>Длина интервала для этого поднавыка должна совпадать с длиной интервала основного навыка, и составлять {0} минут.</value>
+  </data>
+  <data name="AbsenceType" xml:space="preserve">
+    <value>Тип отсутствия:</value>
+  </data>
+  <data name="AbsenceRequestsWeb" xml:space="preserve">
+    <value>Запросы на отсутствие</value>
+  </data>
+  <data name="FullDay" xml:space="preserve">
+    <value>Полный день</value>
+  </data>
+  <data name="YouShouldHaveXDaysOff" xml:space="preserve">
+    <value>У вас должно быть {0} выходных дней.</value>
+  </data>
+  <data name="Anywhere" xml:space="preserve">
+    <value>Anywhere</value>
+  </data>
+  <data name="YouShouldHaveBetweenXAndYDaysOff" xml:space="preserve">
+    <value>У вас должно быть от {0} до {1} выходных дней.</value>
+  </data>
+  <data name="YourPreferencesCanResultXDaysOff" xml:space="preserve">
+    <value>По вашим предпочтениям может быть {0} выходных дней.</value>
+  </data>
+  <data name="YourPreferencesCanResultXHours" xml:space="preserve">
+    <value>По вашим предпочтениям может быть {0} часов.</value>
+  </data>
+  <data name="YourPreferencesCanResultXToYHours" xml:space="preserve">
+    <value>По вашим предпочтениям может быть от {0} до {1} часа(-ов).</value>
+  </data>
+  <data name="YouShouldWorkXHours" xml:space="preserve">
+    <value>Вы должны работать {0} часов.</value>
+  </data>
+  <data name="YouShouldWorkBetweenXAndYHours" xml:space="preserve">
+    <value>Вы должны работать от {0} до {1} часов.</value>
+  </data>
+  <data name="MissingAbsenceType" xml:space="preserve">
+    <value>Отсутствие типа отсутствия</value>
+  </data>
+  <data name="SubmitRequest" xml:space="preserve">
+    <value>Передать</value>
+  </data>
+  <data name="OverridePeriod" xml:space="preserve">
+    <value>Изменить время периода</value>
+  </data>
+  <data name="OverrideHoursPerDay" xml:space="preserve">
+    <value>Изменить кол-во часов в день</value>
+  </data>
+  <data name="OverrideDaysOff" xml:space="preserve">
+    <value>Изменить кол-во выходных</value>
+  </data>
+  <data name="WorkloadWindowAlreadyOpen" xml:space="preserve">
+    <value>Открыто окно рабочей нагрузки {0}. Пожалуйста, закройте его, т.к. оно более не действительно.</value>
+  </data>
+  <data name="LongtermForecast" xml:space="preserve">
+    <value>Долгосрочный прогноз</value>
+  </data>
+  <data name="ManageRuleSets" xml:space="preserve">
+    <value>Управление наборами правил</value>
+  </data>
+  <data name="ManualAgents" xml:space="preserve">
+    <value>Операторы (ручное изменение)</value>
+  </data>
+  <data name="RequestCannotUpdateDelete" xml:space="preserve">
+    <value>Статус вашего запроса был изменен, вы не можете обновить/удалить его.</value>
+  </data>
+  <data name="SkillTypeRetail" xml:space="preserve">
+    <value>Розничная продажа</value>
+  </data>
+  <data name="ActualEmployees" xml:space="preserve">
+    <value>Текущие сотрудники</value>
+  </data>
+  <data name="ExportToBU" xml:space="preserve">
+    <value>Экспорт в бизнес-подразделение</value>
+  </data>
+  <data name="ExportToFile" xml:space="preserve">
+    <value>Экспорт в файл</value>
+  </data>
+  <data name="FileExportDone" xml:space="preserve">
+    <value>Экспорт файла завершен</value>
+  </data>
+  <data name="SelectDateAndScenario" xml:space="preserve">
+    <value>Выбор даты и сценария</value>
+  </data>
+  <data name="SelectFileDestination" xml:space="preserve">
+    <value>Выбор назначения файла</value>
+  </data>
+  <data name="SelectSkill" xml:space="preserve">
+    <value>Выбор навыка</value>
+  </data>
+  <data name="CSVFile" xml:space="preserve">
+    <value>CSV файлы (*.csv)l*.csv</value>
+  </data>
+  <data name="ExportStaffing" xml:space="preserve">
+    <value>Экспорт штата</value>
+  </data>
+  <data name="ExportWorkload" xml:space="preserve">
+    <value>Экспорт рабочей нагрузки</value>
+  </data>
+  <data name="ExportWorkloadAndStaffing" xml:space="preserve">
+    <value>Экспорт рабочей нагрузки и штата</value>
+  </data>
+  <data name="AfterCustomerWorkTime" xml:space="preserve">
+    <value>Время работы после клиента</value>
+  </data>
+  <data name="AverageAfterCustomerWork" xml:space="preserve">
+    <value>Среднее время работы после клиента</value>
+  </data>
+  <data name="AverageCustomers" xml:space="preserve">
+    <value>Среднее количество клиентов</value>
+  </data>
+  <data name="CalculatedCustomers" xml:space="preserve">
+    <value>Расчетное количество клиентов</value>
+  </data>
+  <data name="CampaignCustomersPercent" xml:space="preserve">
+    <value>Клиенты кампании %</value>
+  </data>
+  <data name="SameEndTime" xml:space="preserve">
+    <value>Одинаковое время окончания</value>
+  </data>
+  <data name="SameShiftCategory" xml:space="preserve">
+    <value>Одинаковая категория смены</value>
+  </data>
+  <data name="SameStartTime" xml:space="preserve">
+    <value>Одинаковое время начала</value>
+  </data>
+  <data name="UseRestriction" xml:space="preserve">
+    <value>Использовать ограничения</value>
+  </data>
+  <data name="Customers" xml:space="preserve">
+    <value>Клиенты</value>
+  </data>
+  <data name="DeviationCustomersColon" xml:space="preserve">
+    <value>Отклонения клиентов:</value>
+  </data>
+  <data name="Employee" xml:space="preserve">
+    <value>Сотрудник</value>
+  </data>
+  <data name="Employees" xml:space="preserve">
+    <value>Сотрудники</value>
+  </data>
+  <data name="EmployeesInc" xml:space="preserve">
+    <value>Сотрудники вкл.</value>
+  </data>
+  <data name="EmployeesIncWithShrinkage" xml:space="preserve">
+    <value>Сотрудники, вкл. сокращение</value>
+  </data>
+  <data name="EmployeesWithShrinkage" xml:space="preserve">
+    <value>Сотрудники с сокращением</value>
+  </data>
+  <data name="ForecastedAverageAfterCustomerWork" xml:space="preserve">
+    <value>Спрогнозированное среднее время работы после клиента</value>
+  </data>
+  <data name="ForecastedCustomers" xml:space="preserve">
+    <value>Спрогнозированные клиенты</value>
+  </data>
+  <data name="ForecastedCustomersColon" xml:space="preserve">
+    <value>Спрогнозированные клиенты:</value>
+  </data>
+  <data name="ForecastedEmployees" xml:space="preserve">
+    <value>Спрогнозированные сотрудники</value>
+  </data>
+  <data name="ForecastedEmployeesIncoming" xml:space="preserve">
+    <value>Спрогнозированные сотрудники, входящие</value>
+  </data>
+  <data name="IndexAfterCustomerWork" xml:space="preserve">
+    <value>Индекс времени работы после клиента</value>
+  </data>
+  <data name="IndexCustomers" xml:space="preserve">
+    <value>Индекс клиентов</value>
+  </data>
+  <data name="MaximumEmployees" xml:space="preserve">
+    <value>Максимум сотрудников</value>
+  </data>
+  <data name="MinimumEmployees" xml:space="preserve">
+    <value>Минимум сотрудников</value>
+  </data>
+  <data name="OfferedCustomers" xml:space="preserve">
+    <value>Клиенты</value>
+  </data>
+  <data name="OriginalAfterCustomerWork" xml:space="preserve">
+    <value>Фактическое время работы после клиента</value>
+  </data>
+  <data name="OriginalCustomers" xml:space="preserve">
+    <value>Фактическое количество клиентов</value>
+  </data>
+  <data name="OriginalOfferedCustomers" xml:space="preserve">
+    <value>Фактическое количество клиентов</value>
+  </data>
+  <data name="ScheduledEmployees" xml:space="preserve">
+    <value>Запланированные сотрудники</value>
+  </data>
+  <data name="ScheduledEmployeesIncoming" xml:space="preserve">
+    <value>Запланированные сотрудники, входящие</value>
+  </data>
+  <data name="ServedCustomers" xml:space="preserve">
+    <value>Обслуженные клиенты</value>
+  </data>
+  <data name="TotalCustomers" xml:space="preserve">
+    <value>Всего клиентов</value>
+  </data>
+  <data name="ValidatedAfterCustomerWork" xml:space="preserve">
+    <value>Проверенное время работы после клиента</value>
+  </data>
+  <data name="ValidatedCustomers" xml:space="preserve">
+    <value>Проверенное количество клиентов</value>
+  </data>
+  <data name="WalkAways" xml:space="preserve">
+    <value>Ушедшие</value>
+  </data>
+  <data name="YourPreferenceIsOutOfRange" xml:space="preserve">
+    <value>Ваши предпочтения вне диапазона.</value>
+  </data>
+  <data name="FileExportFailed" xml:space="preserve">
+    <value>Экспорт файла не выполнен</value>
+  </data>
+  <data name="FileExportFinished" xml:space="preserve">
+    <value>Экспорт файла завершен</value>
+  </data>
+  <data name="OptimizationOptionMessageBox" xml:space="preserve">
+    <value>Опции оптимизации</value>
+  </data>
+  <data name="NoActivity" xml:space="preserve">
+    <value>Нет активности</value>
+  </data>
+  <data name="SelectAtleastOneOptimizationOption" xml:space="preserve">
+    <value>Пожалуйста, выберите одну из опций "категория смены", "время начала" или "время завершения" при оптимизации группы.</value>
+  </data>
+  <data name="SchedulingOptionMessageBox" xml:space="preserve">
+    <value>Опции планирования</value>
+  </data>
+  <data name="SelectAtleastOneSchedulingOption" xml:space="preserve">
+    <value>Пожалуйста, выберите одну из опций "категория смены", "время начала" или "время завершения" при планировании группы.</value>
+  </data>
+  <data name="ManageSmsSettings" xml:space="preserve">
+    <value>Управление настройками SMS</value>
+  </data>
+  <data name="SetWhichColumnToGetSmsPhoneNumberFrom" xml:space="preserve">
+    <value>Установите столбец для выбора номера телефона SMS из</value>
+  </data>
+  <data name="SmsSettings" xml:space="preserve">
+    <value>Настройки SMS</value>
+  </data>
+  <data name="YourWorkingHoursHaveChanged" xml:space="preserve">
+    <value>Ваши часы работы были изменены:</value>
+  </data>
+  <data name="GraphLOC" xml:space="preserve">
+    <value>График (loc)</value>
+  </data>
+  <data name="IntervalLOC" xml:space="preserve">
+    <value>Интервал (loc)</value>
+  </data>
+  <data name="TableLOC" xml:space="preserve">
+    <value>Таблица (loc)</value>
+  </data>
+  <data name="TypeLOC" xml:space="preserve">
+    <value>Тип (loc)</value>
+  </data>
+  <data name="FromContract" xml:space="preserve">
+    <value>Из контракта</value>
+  </data>
+  <data name="FromSchedulePeriod" xml:space="preserve">
+    <value>Из периода планирования</value>
+  </data>
+  <data name="FullDayAbsence" xml:space="preserve">
+    <value>Отсутствие на полный день</value>
+  </data>
+  <data name="InsufficientPermissionForWeb" xml:space="preserve">
+    <value>У вас нет прав доступа к веб-порталу.</value>
+  </data>
+  <data name="NotWorking" xml:space="preserve">
+    <value>Не работает.</value>
+  </data>
+  <data name="SchedulePeriodTypeChineseMonth" xml:space="preserve">
+    <value>Месяц 7-8</value>
+  </data>
+  <data name="MobileReports" xml:space="preserve">
+    <value>Мобильные отчеты</value>
+  </data>
+  <data name="SchedulePeriodTypeDay" xml:space="preserve">
+    <value>День</value>
+  </data>
+  <data name="SchedulePeriodTypeMonth" xml:space="preserve">
+    <value>Месяц</value>
+  </data>
+  <data name="SchedulePeriodTypeWeek" xml:space="preserve">
+    <value>Неделя</value>
+  </data>
+  <data name="PleaseChooseAReportType" xml:space="preserve">
+    <value>Выберите тип отчета.</value>
+  </data>
+  <data name="SameDaysOff" xml:space="preserve">
+    <value>Одинаковые выходные дни</value>
+  </data>
+  <data name="ResReportAdherencePerAgent" xml:space="preserve">
+    <value>Соблюдение графика на оператора</value>
+  </data>
+  <data name="ResReportAdherencePerDay" xml:space="preserve">
+    <value>Соблюдение графика за день</value>
+  </data>
+  <data name="PleaseChooseSkillSet" xml:space="preserve">
+    <value>Выберите набор навыков.</value>
+  </data>
+  <data name="ScheduleOnlyPreferenceMustHave" xml:space="preserve">
+    <value>Планировать только обязательные предпочтения</value>
+  </data>
+  <data name="AllowMeetings" xml:space="preserve">
+    <value>Разрешить мероприятия</value>
+  </data>
+  <data name="ShiftCategories" xml:space="preserve">
+    <value>Категории смен</value>
+  </data>
+  <data name="AfterCheckingAgainstActivities" xml:space="preserve">
+    <value>После проверки в отношении активностей</value>
+  </data>
+  <data name="AddExtendedPreference" xml:space="preserve">
+    <value>Добавить расширенное предпочтение</value>
+  </data>
+  <data name="Others" xml:space="preserve">
+    <value>Другие</value>
+  </data>
+  <data name="MyTime" xml:space="preserve">
+    <value>MyTime</value>
+  </data>
+  <data name="AgentScheduleMessengerPermission" xml:space="preserve">
+    <value>Служба сообщений графика операторов</value>
+  </data>
+  <data name="ExtendedPreferencesWeb" xml:space="preserve">
+    <value>Расширенные предпочтения</value>
+  </data>
+  <data name="DistributionBetweenSubskillsMustbeEqualToOneHundredPercent" xml:space="preserve">
+    <value>Рапределение между поднавыками должно быть равно 100%</value>
+  </data>
+  <data name="MaximumAgentOccupancyMustBeLargerThanOrEqualToMinimumAgentOccupancy" xml:space="preserve">
+    <value>Максимальная занятость оператора должна быть больше или равна минимальной занятости оператора</value>
+  </data>
+  <data name="MaximumAgentsMustBeLargerOrEqualToMinimumAgents" xml:space="preserve">
+    <value>Максимум операторов должен быть больше или равен минимуму операторов</value>
+  </data>
+  <data name="ResReportScheduledAgentsPerActivity" xml:space="preserve">
+    <value>Запланированные операторы на активность</value>
+  </data>
+  <data name="NotReadyTime" xml:space="preserve">
+    <value>Время неготовности</value>
+  </data>
+  <data name="ResTotals" xml:space="preserve">
+    <value>Итого</value>
+  </data>
+  <data name="NoMessagesFound" xml:space="preserve">
+    <value>Сообщения не найдены.</value>
+  </data>
+  <data name="FairnessOptimizationOn" xml:space="preserve">
+    <value>Оптимизация справедливости для</value>
+  </data>
+  <data name="FairnessOptimizationRollingBack" xml:space="preserve">
+    <value>- значение после не стало лучше, откат</value>
+  </data>
+  <data name="FairnessOptimizationValueAfter" xml:space="preserve">
+    <value>- значение после =</value>
+  </data>
+  <data name="FairnessOptimizationValueBefore" xml:space="preserve">
+    <value>- значение до =</value>
+  </data>
+  <data name="Sender" xml:space="preserve">
+    <value>Отправитель</value>
+  </data>
+  <data name="Sent" xml:space="preserve">
+    <value>Отправлено</value>
+  </data>
+  <data name="SelectedFileDestinationDoesNotExist" xml:space="preserve">
+    <value>Выбранное назначение файла не существует, пожалуйста, введите правильное назначение файла.</value>
+  </data>
+  <data name="CouldNotExportForecastToFile" xml:space="preserve">
+    <value>Что-то пошло не так с файлом экспорта, попробуйте другое расположение</value>
+  </data>
+  <data name="SelectedFileDestinationIsTooLong" xml:space="preserve">
+    <value>Указанное назначение файла слишком длинное, пожалуйста, введите правильное назначение файла</value>
+  </data>
+  <data name="SameActivity" xml:space="preserve">
+    <value>Одинаковая активность</value>
+  </data>
+  <data name="AfterCheckingAgainstKeepActivity" xml:space="preserve">
+    <value>После проверки в отношении сохранения активности</value>
+  </data>
+  <data name="YourScheduleTheDATEHasChanged" xml:space="preserve">
+    <value>Ваше расписание {0} было изменено!</value>
+  </data>
+  <data name="WindowsLogonWithBrackets" xml:space="preserve">
+    <value>(Windows)</value>
+  </data>
+  <data name="UseAverageShiftLengths" xml:space="preserve">
+    <value>Использовать средние длины смен</value>
+  </data>
+  <data name="LogOnFailedAccountIsLocked" xml:space="preserve">
+    <value>Вход с систему не удался. Профиль заблокирован.</value>
+  </data>
+  <data name="LogOnFailedPasswordExpired" xml:space="preserve">
+    <value>Вход в систему не удался. Действие пароля истекло.</value>
+  </data>
+  <data name="Skip" xml:space="preserve">
+    <value>Пропустить</value>
+  </data>
+  <data name="InvalidUserNameOrPassword" xml:space="preserve">
+    <value>Неверное имя пользователя или пароль.</value>
+  </data>
+  <data name="YourPasswordHasAlreadyExpired" xml:space="preserve">
+    <value>Действие вашего пароля истекло.</value>
+  </data>
+  <data name="YourPasswordWillExpireSoon" xml:space="preserve">
+    <value>Действие вашего пароля скоро истекает.</value>
+  </data>
+  <data name="WarningWithExclamatory" xml:space="preserve">
+    <value>Предупреждение!</value>
+  </data>
+  <data name="Reforecast" xml:space="preserve">
+    <value>Перепрогнозирование</value>
+  </data>
+  <data name="PeopleCap" xml:space="preserve">
+    <value>Сотрудники</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Удалить</value>
+  </data>
+  <data name="SelectWorkload" xml:space="preserve">
+    <value>Выбор рабочей нагрузки</value>
+  </data>
+  <data name="YouHaveToSelectAtLeastOneWorkload" xml:space="preserve">
+    <value>Необходимо выбрать хотя бы одну рабочую нагрузку</value>
+  </data>
+  <data name="MySchedule" xml:space="preserve">
+    <value>Мое расписание</value>
+  </data>
+  <data name="ResShiftStartDateColon" xml:space="preserve">
+    <value>Дата (начала смен):</value>
+  </data>
+  <data name="NoAgentsAvailableForShiftTrade" xml:space="preserve">
+    <value>Нет доступных операторов для обмена сменами</value>
+  </data>
+  <data name="ResShiftStartDateFromColon" xml:space="preserve">
+    <value>Дата с (начала смен):</value>
+  </data>
+  <data name="ResShiftStartDateToColon" xml:space="preserve">
+    <value>Дата по (начала смен):</value>
   </data>
 </root>

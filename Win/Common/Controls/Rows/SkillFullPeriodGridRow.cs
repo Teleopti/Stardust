@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
+using System.Linq;
 using Teleopti.Ccc.Obfuscated.ResourceCalculation;
 using Teleopti.Ccc.WinCode.Common.Rows;
 using Teleopti.Interfaces.Domain;
@@ -42,20 +42,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.Rows
             }
         }
 
-		
-		protected DateOnlyPeriod GetDateOnlyPeriodFromColum(CellInfo cellInfo)
-		{
-			if(cellInfo == null) throw new ArgumentNullException("cellInfo");
-			//var dateForColumn = new DateOnly(_rowManager.BaseDate.AddDays(Math.Max(cellInfo.RowHeaderCount, cellInfo.ColIndex * 7) - cellInfo.RowHeaderCount).Date);
-
-			var dateForColumn = _rowManager.BaseDate.AddMonths(Math.Max(cellInfo.RowHeaderCount, cellInfo.ColIndex) - cellInfo.RowHeaderCount).Date;
-
-			var startDate = DateHelper.GetFirstDateInMonth(dateForColumn.Date, CultureInfo.CurrentCulture);
-			var endDate = DateHelper.GetLastDateInMonth(dateForColumn.Date, CultureInfo.CurrentCulture);
-			var monthPeriod = new DateOnlyPeriod(new DateOnly(startDate), new DateOnly(endDate));
-			return monthPeriod;
-		}
-
 		private IEnumerable<ISkillStaffPeriod> getSkillStaffPeriods()
         {
 			//DateOnlyPeriod period = GetDateOnlyPeriodFromColum(cellInfo);
@@ -71,6 +57,18 @@ namespace Teleopti.Ccc.Win.Common.Controls.Rows
 			return new List<ISkillStaffPeriod>();
         }
 
+		private IEnumerable<IEnumerable<ISkillStaffPeriod>> getSkillStaffPeriodsForFullPeriod()
+		{
+			var period = _rowManager.DataSource.First().Keys.First();
+			var skillStaffPeriodsOfFullPeriod = new List<IList<ISkillStaffPeriod>>();
+			foreach (var day in period.DayCollection())
+			{
+				var dayUtcPeriod = new DateOnlyPeriod(day, day).ToDateTimePeriod(_rowManager.TimeZoneInfo);
+				var skillStaffPeriods = SkillStaffPeriodList.Where(x => dayUtcPeriod.Contains(x.Period)).ToList();
+				skillStaffPeriodsOfFullPeriod.Add(skillStaffPeriods);
+			}
+			return skillStaffPeriodsOfFullPeriod;
+		}
 
         protected object GetValue(CellInfo cellInfo)
         {
@@ -97,7 +95,10 @@ namespace Teleopti.Ccc.Win.Common.Controls.Rows
 			//    return SkillStaffPeriodHelper.SkillDayRootMeanSquare(SkillStaffPeriodList);
 
 			if (DisplayMember == "DailySmoothness")
-				return SkillStaffPeriodHelper.SkillDayGridSmoothness(SkillStaffPeriodList);
+			{
+				var skillStaffPeriodOfFullPeriod = getSkillStaffPeriodsForFullPeriod();
+				return SkillStaffPeriodHelper.SkillPeriodGridSmoothness(skillStaffPeriodOfFullPeriod);
+			}
 
 			//if (DisplayMember == "HighestDeviationInPeriod")
 			//    return SkillStaffPeriodHelper.GetHighestIntraIntervalDeviation(SkillStaffPeriodList);

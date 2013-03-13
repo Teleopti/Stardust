@@ -15,8 +15,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
     public class TextRequest : Request
     {
         private string _typeDescription = UserTexts.Resources.RequestTypeText;
-        private string _textRequestHasBeenApprovedDot = "TextRequestHasBeenApprovedDot";
-        private string _textRequestHasBeenDeniedDot = "TextRequestHasBeenDeniedDot";
+        private string _textRequestHasBeenApprovedDot = UserTexts.Resources.TextRequestHasBeenApprovedDot;
+        private string _textRequestHasBeenDeniedDot = UserTexts.Resources.TextRequestHasBeenDeniedDot;
 
         /// <summary>
         /// Constructor for NHibernate

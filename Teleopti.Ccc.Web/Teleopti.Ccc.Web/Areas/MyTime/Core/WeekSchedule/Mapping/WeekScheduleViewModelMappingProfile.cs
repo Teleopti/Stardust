@@ -79,6 +79,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 			CreateMap<WeekScheduleDayDomainData, DayViewModel>()
 				.ForMember(d => d.Date, c => c.MapFrom(s => s.Date.ToShortDateString()))
 				.ForMember(d => d.FixedDate, c => c.MapFrom(s => s.Date.ToFixedClientDateOnlyFormat()))
+				.ForMember(d => d.DayOfWeekNumber, c => c.MapFrom(s => (int)s.Date.DayOfWeek))
 				.ForMember(d => d.Periods, c => c.MapFrom(s =>
 															{
 																var projectionList = new List<IVisualLayer>();

@@ -20,9 +20,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             foreach (var person in schedulerState.FilteredPersonDictionary.Values)
             {
                 IScheduleRange range = schedulerState.Schedules[person];
+				
                 if (min.TimeOfDay != TimeSpan.Zero)
                 {
                     IScheduleDay yesterDay = range.ScheduledDay(selectedDate.AddDays(-1));
+                	timeZone = yesterDay.TimeZone;
                     foreach (var personAssignment in yesterDay.PersonAssignmentCollection())
                     {
                         

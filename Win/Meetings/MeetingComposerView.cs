@@ -82,20 +82,73 @@ namespace Teleopti.Ccc.Win.Meetings
             base.OnClosing(e);
 
             _meetingComposerPresenter.OnClose();
+			if (_meetingComposerPresenter.TrySave())
+				SaveValidMeeting();
             e.Cancel = !_meetingComposerPresenter.CanClose();
         }
 
-        private void MeetingComposer_Load(object sender, EventArgs e)
+		private void MeetingComposer_Load(object sender, EventArgs e)
         {
             BackColor = ColorHelper.ControlPanelColor;
         }
 
-        private void toolStripButtonMainSave_Click(object sender, EventArgs e)
-        {
-            _meetingComposerPresenter.SaveMeeting();
-        }
+		
+		private void toolStripButtonMainSave_Click(object sender, EventArgs e)
+		{
+			SaveValidMeeting();
+		}
 
-        public void OnModificationOccurred(IMeeting meeting, bool isDeleted)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions")]
+		private void SaveValidMeeting()
+		{
+			var start = String.Empty;
+			var end = String.Empty;
+			if (_currentView is MeetingGeneralView)
+			{
+				start = (_currentView as MeetingGeneralView).GetStartTimeText;
+				end = (_currentView as MeetingGeneralView).GetEndTimeText;
+			}
+			else if (_currentView is MeetingSchedulesView)
+			{
+				start = (_currentView as MeetingSchedulesView).GetStartTimeText;
+				end = (_currentView as MeetingSchedulesView).GetEndTimeText;
+			}
+			if (_currentView is MeetingImpactView)
+			{
+				var meetingGeneralView = _meetingDetailViews[0] as MeetingGeneralView;
+				if (meetingGeneralView != null)
+				{
+					start = meetingGeneralView.GetStartTimeText;
+					end = meetingGeneralView.GetEndTimeText;
+				}
+				
+			}
+			TimeSpan startTime;
+			TimeSpan endTime;
+			try
+			{
+				var shortTimePattern = System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern;
+
+				startTime = DateTime.ParseExact(start, shortTimePattern, System.Globalization.CultureInfo.CurrentCulture).TimeOfDay;
+				endTime = DateTime.ParseExact(end, shortTimePattern, System.Globalization.CultureInfo.CurrentCulture).TimeOfDay;
+			}
+			catch (FormatException error)
+			{
+				MessageBox.Show(this, error.Message);
+				return;
+			}
+			
+			_meetingComposerPresenter.Model.StartTime = startTime;
+			_meetingComposerPresenter.Model.EndTime = endTime;
+			if (endTime < startTime)
+				_meetingComposerPresenter.InvalidTimeInfo();
+			else
+			{
+				_meetingComposerPresenter.SaveMeeting();
+			}
+		}
+
+		public void OnModificationOccurred(IMeeting meeting, bool isDeleted)
         {
         	var handler = ModificationOccurred;
             if (handler!= null)
@@ -144,9 +197,9 @@ namespace Teleopti.Ccc.Win.Meetings
         {
             using (var meetingRecurrenceView = new MeetingRecurrenceView(_meetingComposerPresenter.Model, this))
             {
+                _currentView.Presenter.UpdateView();
                 if (meetingRecurrenceView.ShowDialog(this) != DialogResult.OK) return;
                 _meetingComposerPresenter.RecurrentMeetingUpdated();
-                _currentView.Presenter.UpdateView();
             }
         }
 

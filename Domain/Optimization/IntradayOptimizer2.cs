@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -85,8 +86,12 @@ namespace Teleopti.Ccc.Domain.Optimization
             ISchedulingOptions schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(_optimizerPreferences);
 			schedulingOptions.UseCustomTargetTime = _workShiftOriginalStateContainer.OriginalWorkTime();
 
-			IMainShift originalShift =
-				_workShiftOriginalStateContainer.OldPeriodDaysState[dateToBeRemoved].AssignmentHighZOrder().MainShift;
+        	var personAssignment = _workShiftOriginalStateContainer.OldPeriodDaysState[dateToBeRemoved].AssignmentHighZOrder();
+			if (personAssignment == null) return false;
+
+        	var originalShift = personAssignment.MainShift;
+			if (originalShift == null) return false;
+
 			_mainShiftOptimizeActivitySpecificationSetter.SetSpecification(schedulingOptions, _optimizerPreferences, originalShift, dateToBeRemoved);
 
             _rollbackService.ClearModificationCollection();
@@ -103,7 +108,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                                   PrevoiousSchedule = (IScheduleDay) scheduleDay.Clone()
                               };
             
-            _deleteAndResourceCalculateService.DeleteWithResourceCalculation(listToDelete, _rollbackService);
+            _deleteAndResourceCalculateService.DeleteWithResourceCalculation(listToDelete, _rollbackService, schedulingOptions.ConsiderShortBreaks);
 
             changed.CurrentSchedule = _matrixConverter.SourceMatrix.GetScheduleDayByKey(dateToBeRemoved).DaySchedulePart();
             
@@ -177,7 +182,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			if (!_scheduleService.SchedulePersonOnDay(scheduleDay.DaySchedulePart(), schedulingOptions, effectiveRestriction, resourceCalculateDelayer, null, _rollbackService))
             {
-				var days = _rollbackService.ModificationCollection;
+				var days = _rollbackService.ModificationCollection.ToList();
                 _rollbackService.Rollback();
 				foreach (var schedDay in days)
 				{

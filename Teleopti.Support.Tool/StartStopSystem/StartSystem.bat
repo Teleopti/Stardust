@@ -1,9 +1,17 @@
 @echo off
 ECHO Starting all local Teleopti CCC 7 services and MsDtc
-ECHO Start mode will be set to "Automatic"
-PING -n 4 127.0.0.1>nul
+PING -n 1 127.0.0.1>nul
 
 IF "%ROOTDIR%"=="" SET ROOTDIR=%~dp0
+
+::WinXp and 2003 can't handle start mode: "delayed-auto"
+SET action=delayed-auto
+cscript "%ROOTDIR%OsMajorVersionGet.vbs" //NoLogo
+SET /a OsMajorVersion = %ERRORLEVEL%
+IF %OsMajorVersion% LEQ 5 SET action=auto
+ECHO OsMajorVersion is: %OsMajorVersion%
+ECHO Start mode will be set to "%action%"
+ECHO.
 
 ::Set the list of services to manuipulate
 ::note: Order matters!!
@@ -28,8 +36,26 @@ CSCRIPT "%ROOTDIR%..\WiseIISConfig\adsutil.vbs" START_SERVER "W3SVC/AppPools/Tel
 echo Start App Pools. Done
 echo.
 
-::Kick the local SDK url
-Echo Browsing SDK url
+if exist "%ROOTDIR%\..\..\TeleoptiCCC\SDK\TeleoptiCccSdkService.svc" call:browseSDK
+Echo.
+
+::For each service in list
+goto :processServiceList
+
+:done
+echo done!
+PING -n 2 127.0.0.1>nul
+exit /b 0
+
+:processServiceList
+for /f "tokens=1* delims=;" %%a in ("%serviceList%") do (
+call :SetSvcModeAndAction "%%a" Start %action%
+set serviceList=%%b
+)
+if not "%serviceList%" == "" goto :processServiceList
+goto :done
+
+:browseSDK
 ::32-bit
 reg query HKEY_LOCAL_MACHINE\SOFTWARE\Teleopti\TeleoptiCCC\InstallationSettings /v AGENT_SERVICE > nul
 if %errorlevel% EQU 0 set confirmedPath=HKEY_LOCAL_MACHINE\SOFTWARE\Teleopti\TeleoptiCCC\InstallationSettings
@@ -45,25 +71,11 @@ for /f "tokens=2*" %%A in ('REG QUERY "%confirmedPath%" /v AGENT_SERVICE') DO (
   )
 )
 
+Echo Browsing SDK url
 cscript "%ROOTDIR%BrowseUrl.vbs" "%SDKUrl%"
 if %errorlevel% neq 200 Echo WARNING: could not send GET request to SDK!
-Echo.
-
-::For each service in list
-goto :processServiceList
-
-:done
-echo done!
-PING -n 2 127.0.0.1>nul
 exit /b 0
 
-:processServiceList
-for /f "tokens=1* delims=;" %%a in ("%serviceList%") do (
-call :SetSvcModeAndAction "%%a" Start delayed-auto
-set serviceList=%%b
-)
-if not "%serviceList%" == "" goto :processServiceList
-goto :done
 
 :SetSvcModeAndAction
 ::Check if Service is disabled, then exit

@@ -552,7 +552,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-		public void ReOptimize(BackgroundWorker backgroundWorker, IList<IScheduleDay> selectedDays, IList<IScheduleMatrixPro> allMatrixes)
+		public void ReOptimize(BackgroundWorker backgroundWorker, IList<IScheduleDay> selectedDays)
         {
             _backgroundWorker = backgroundWorker;
             _scheduledCount = 0;
@@ -619,16 +619,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 					runFairness(selectedDays, tagSetter, selectedPersons, optimizerPreferences);
             }
 
-
-            if (optimizerPreferences.General.UseShiftCategoryLimitations)
-            {
-				var schedulingOptionsCreator = new SchedulingOptionsCreator();
-				var schedulingOptions = schedulingOptionsCreator.CreateSchedulingOptions(optimizerPreferences);
-
-            	RemoveShiftCategoryBackToLegalState(matrixListForWorkShiftOptimization, backgroundWorker,
-            	                                    optimizerPreferences, schedulingOptions, selectedPeriod, allMatrixes);
-            }
-
             //set back
             optimizerPreferences.Rescheduling.OnlyShiftsWhenUnderstaffed = onlyShiftsWhenUnderstaffed;
         }
@@ -642,7 +632,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder, new EmptyScheduleDayChangeCallback(), tagSetter);
 			fairnessOpt.ReportProgress += resourceOptimizerPersonOptimized;
 			fairnessOpt.ExecutePersonal(_backgroundWorker, selectedPersons, selectedDates, matrixListForFairness,
-										optimizerPreferences.Extra.GroupPageOnCompareWith, rollbackService);
+										optimizerPreferences, rollbackService);
 			fairnessOpt.ReportProgress -= resourceOptimizerPersonOptimized;
 		}
 
@@ -693,6 +683,8 @@ namespace Teleopti.Ccc.Win.Scheduling
             matrixOvertimeLocker.Execute();
             IMatrixNoMainShiftLocker noMainShiftLocker = new MatrixNoMainShiftLocker(matrixList);
             noMainShiftLocker.Execute();
+			IMatrixMultipleShiftsLocker matrixMultipleShiftsLocker = new MatrixMultipleShiftsLocker(matrixList);
+			matrixMultipleShiftsLocker.Execute();
         }
 
         internal void RunWorkShiftOptimization(

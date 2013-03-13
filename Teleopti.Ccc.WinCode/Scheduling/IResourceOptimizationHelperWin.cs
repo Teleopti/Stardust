@@ -7,6 +7,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
     public interface IResourceOptimizationHelperWin
     {
         void ResourceCalculateAllDays(DoWorkEventArgs e, BackgroundWorker backgroundWorker, bool useOccupancyAdjustment);
-        void OnResourcesChanged(IEnumerable<DateOnly> changedDays);
+        //void OnResourcesChanged(IEnumerable<DateOnly> changedDays);
     }
 }

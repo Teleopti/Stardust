@@ -26,26 +26,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		public bool CalculateIfNeeded(DateOnly scheduleDateOnly, DateTimePeriod? workShiftProjectionPeriod)
 		{
-			if (!_lastDate.HasValue)
-				_lastDate = scheduleDateOnly;
-
-			if(_calculationFrequency == 1)
-			{
-				CalculateIfNeeded(_lastDate.Value, workShiftProjectionPeriod, new List<IScheduleDay>());
-				return true;
-			}
-			if (_counter % _calculationFrequency == 0 || scheduleDateOnly != _lastDate.Value)
-			{
-				CalculateIfNeeded(_lastDate.Value, null, new List<IScheduleDay>(), new List<IScheduleDay>());
-				CalculateIfNeeded(_lastDate.Value.AddDays(1), null, new List<IScheduleDay>(), new List<IScheduleDay>());
-				_lastDate = scheduleDateOnly;
-				_counter = 1;
-
-				return true;
-			}
-
-			_counter++;
-			return false;
+			return CalculateIfNeeded(scheduleDateOnly, workShiftProjectionPeriod, new List<IScheduleDay>(), new List<IScheduleDay>());
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
@@ -56,15 +37,34 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		public bool CalculateIfNeeded(DateOnly scheduleDateOnly, DateTimePeriod? workShiftProjectionPeriod, IList<IScheduleDay> addedSchedules, IList<IScheduleDay> removedSchedules)
 		{
-			_resourceOptimizationHelper.ResourceCalculateDate(scheduleDateOnly, _useOccupancyAdjustment, _considerShortBreaks, removedSchedules, addedSchedules);
-			DateTimePeriod? dateTimePeriod = workShiftProjectionPeriod;
-			if (dateTimePeriod.HasValue)
+			if (!_lastDate.HasValue)
+				_lastDate = scheduleDateOnly;
+
+			if (_calculationFrequency == 1)
 			{
-				DateTimePeriod period = dateTimePeriod.Value;
-				if (period.StartDateTime.Date != period.EndDateTime.Date)
-					_resourceOptimizationHelper.ResourceCalculateDate(scheduleDateOnly.AddDays(1), _useOccupancyAdjustment, _considerShortBreaks, removedSchedules, addedSchedules);
+				_resourceOptimizationHelper.ResourceCalculateDate(scheduleDateOnly, _useOccupancyAdjustment, _considerShortBreaks, removedSchedules, addedSchedules);
+				DateTimePeriod? dateTimePeriod = workShiftProjectionPeriod;
+				if (dateTimePeriod.HasValue)
+				{
+					DateTimePeriod period = dateTimePeriod.Value;
+					if (period.StartDateTime.Date != period.EndDateTime.Date)
+						_resourceOptimizationHelper.ResourceCalculateDate(scheduleDateOnly.AddDays(1), _useOccupancyAdjustment, _considerShortBreaks, removedSchedules, addedSchedules);
+				}
+				return true;
 			}
-			return true;
+
+			if (_counter % _calculationFrequency == 0 || scheduleDateOnly != _lastDate.Value)
+			{
+				_resourceOptimizationHelper.ResourceCalculateDate(_lastDate.Value, _useOccupancyAdjustment, _considerShortBreaks, new List<IScheduleDay>(), new List<IScheduleDay>());
+				_resourceOptimizationHelper.ResourceCalculateDate(_lastDate.Value.AddDays(1), _useOccupancyAdjustment, _considerShortBreaks, new List<IScheduleDay>(), new List<IScheduleDay>());
+				_lastDate = scheduleDateOnly;
+				_counter = 1;
+
+				return true;
+			}
+
+			_counter++;
+			return false;
 		}
 	}
 }

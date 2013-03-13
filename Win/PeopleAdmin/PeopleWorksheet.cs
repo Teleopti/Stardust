@@ -525,6 +525,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
                 FormKill();
                 return;
             }
+            if (KillMode) return;
 
             //Clear validate user credential collection.
             _filteredPeopleHolder.ValidateUserCredentialsCollection.Clear();

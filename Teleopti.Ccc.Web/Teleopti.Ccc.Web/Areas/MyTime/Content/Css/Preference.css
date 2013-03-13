@@ -145,3 +145,12 @@
 	margin-top: 2px;
 	margin-left: 1px;
 }
+
+.preference-tooltip-subject {
+	max-width: 200px; 
+	word-wrap: break-word; 
+}
+
+.preference-tooltip-font {
+	font-family: Arial;
+}

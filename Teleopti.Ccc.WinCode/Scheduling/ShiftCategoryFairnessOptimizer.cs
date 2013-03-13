@@ -14,9 +14,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 	{
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
 		bool Execute(BackgroundWorker backgroundWorker, IList<IPerson> persons, IList<DateOnly> selectedDays, IList<IScheduleMatrixPro> matrixListForFairnessOptimization,
-			IGroupPageLight groupPage, ISchedulePartModifyAndRollbackService rollbackService);
+			IOptimizationPreferences optimizationPreferences, ISchedulePartModifyAndRollbackService rollbackService);
 		bool ExecutePersonal(BackgroundWorker backgroundWorker, IList<IPerson> persons, IList<DateOnly> selectedDays, IList<IScheduleMatrixPro> matrixListForFairnessOptimization,
-			IGroupPageLight groupPage, ISchedulePartModifyAndRollbackService rollbackService);
+			IOptimizationPreferences optimizationPreferences, ISchedulePartModifyAndRollbackService rollbackService);
 		event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
 	}
 
@@ -53,8 +53,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
-		public bool ExecutePersonal(BackgroundWorker backgroundWorker, IList<IPerson> persons, IList<DateOnly> selectedDays, IList<IScheduleMatrixPro> matrixListForFairnessOptimization, 
-			IGroupPageLight groupPage, ISchedulePartModifyAndRollbackService rollbackService)
+		public bool ExecutePersonal(BackgroundWorker backgroundWorker, IList<IPerson> persons, IList<DateOnly> selectedDays, IList<IScheduleMatrixPro> matrixListForFairnessOptimization,
+			IOptimizationPreferences optimizationPreferences, ISchedulePartModifyAndRollbackService rollbackService)
 		{
 			// as we do this from left to right we don't need a list of days that we should not try again
 			foreach (var selectedDay in selectedDays)
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				foreach (var groupPerson in groupPersons)
 				{
 					// run that day
-					runDay(backgroundWorker, groupPerson.GroupMembers, selectedDays, selectedDay, matrixListForFairnessOptimization, groupPage, rollbackService, true);	
+					runDay(backgroundWorker, groupPerson.GroupMembers, selectedDays, selectedDay, matrixListForFairnessOptimization, optimizationPreferences, rollbackService, true);	
 				}
 				
 			}
@@ -72,18 +72,18 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
 		public bool Execute(BackgroundWorker backgroundWorker, IList<IPerson> persons, IList<DateOnly> selectedDays, IList<IScheduleMatrixPro> matrixListForFairnessOptimization,
-			IGroupPageLight groupPage, ISchedulePartModifyAndRollbackService rollbackService)
+			IOptimizationPreferences optimizationPreferences, ISchedulePartModifyAndRollbackService rollbackService)
 		{
 			foreach (var selectedDay in selectedDays)
 			{
 				// run that day
-				runDay(backgroundWorker, persons, selectedDays, selectedDay, matrixListForFairnessOptimization, groupPage, rollbackService,false);
+				runDay(backgroundWorker, persons, selectedDays, selectedDay, matrixListForFairnessOptimization, optimizationPreferences, rollbackService, false);
 			}
 			return true;
 		}
 
 		private void runDay(BackgroundWorker backgroundWorker, IList<IPerson> persons, IList<DateOnly> selectedDays, DateOnly dateOnly,
-			IList<IScheduleMatrixPro> matrixListForFairnessOptimization, IGroupPageLight groupPage, ISchedulePartModifyAndRollbackService rollbackService,
+			IList<IScheduleMatrixPro> matrixListForFairnessOptimization, IOptimizationPreferences optimizationPreferences, ISchedulePartModifyAndRollbackService rollbackService,
 			bool runPersonal)
 		{
 			if (backgroundWorker.CancellationPending)
@@ -94,10 +94,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			IList<IShiftCategoryFairnessCompareResult> fairnessResults;
 			if(runPersonal)
 				// if we run per person (in the team,group), not between teams 
-				fairnessResults = _shiftCategoryFairnessAggregateManager.GetPerPersonsAndGroup(persons, groupPage, dateOnly).OrderBy(
+				fairnessResults = _shiftCategoryFairnessAggregateManager.GetPerPersonsAndGroup(persons, optimizationPreferences.Extra.GroupPageOnCompareWith, dateOnly).OrderBy(
 						x => x.StandardDeviation).ToList();
 			else
-				fairnessResults = _shiftCategoryFairnessAggregateManager.GetForGroups(persons, groupPage, dateOnly, selectedDays).OrderBy(
+				fairnessResults = _shiftCategoryFairnessAggregateManager.GetForGroups(persons, optimizationPreferences.Extra.GroupPageOnTeam, dateOnly, selectedDays).OrderBy(
 					x => x.StandardDeviation).ToList();
 			fairnessResults = stripOutAllZeros(fairnessResults);
 			// if zero it should be fair
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 if (backgroundWorker.CancellationPending)
                     return;
 
-                var success = _shiftCategoryFairnessSwapper.TrySwap(swap, dateOnly, matrixListForFairnessOptimization, rollbackService, backgroundWorker);
+                var success = _shiftCategoryFairnessSwapper.TrySwap(swap, dateOnly, matrixListForFairnessOptimization, rollbackService, backgroundWorker,optimizationPreferences);
                 if (!success)
                 {
                     blackList.Add(swap);
@@ -128,10 +128,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 {
                     // success but did it get better
                     if (runPersonal)
-                        fairnessResults = _shiftCategoryFairnessAggregateManager.GetPerPersonsAndGroup(persons, groupPage, dateOnly).OrderBy(
+						fairnessResults = _shiftCategoryFairnessAggregateManager.GetPerPersonsAndGroup(persons, optimizationPreferences.Extra.GroupPageOnCompareWith, dateOnly).OrderBy(
                                 x => x.StandardDeviation).ToList();
                     else
-                        fairnessResults = _shiftCategoryFairnessAggregateManager.GetForGroups(persons, groupPage, dateOnly, selectedDays).OrderBy(
+						fairnessResults = _shiftCategoryFairnessAggregateManager.GetForGroups(persons, optimizationPreferences.Extra.GroupPageOnTeam, dateOnly, selectedDays).OrderBy(
                             x => x.StandardDeviation).ToList();
 
                     fairnessResults = stripOutAllZeros(fairnessResults);

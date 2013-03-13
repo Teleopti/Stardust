@@ -181,7 +181,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
             Cursor = Cursors.WaitCursor;
             ParentForm.ControlBox = false;
 
-            _owner.Presenter.InitializeCompareHistoricPeriod(new DateOnlyPeriod(dateSelectionFromToHistorical.WorkPeriodStart, dateSelectionFromToHistorical.WorkPeriodEnd.AddDays(1)));
+            _owner.Presenter.InitializeCompareHistoricPeriod(new DateOnlyPeriod(dateSelectionFromToHistorical.WorkPeriodStart, dateSelectionFromToHistorical.WorkPeriodEnd));
             buttonAdvCancelLoad.Visible = true;
             backgroundWorkerStatistics.RunWorkerAsync();
         }

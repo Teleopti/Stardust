@@ -1,14 +1,12 @@
 @echo off
-SETLOCAL
 COLOR A
 cls
 
 ::init
 SET /A ERRORLEV=0
 SET /A msierror=0
-SET msiCommandString=
 SET CCCServer=52613B22-2102-4BFB-AAFB-EF420F3A24B5
-SET tempInstall=%temp%\temp.bat
+SET EtlSrvname=TeleoptiETLService
 
 ::change drive letter
 %~d0
@@ -19,54 +17,98 @@ CD "%~dp0"
 set argC=0
 for %%x in (%*) do Set /A argC+=1
 if %argC% EQU 0 goto :userinput
-if %argC% EQU 3 goto :commandlineInput
+goto :commandlineInput
 goto :help
 
 :userinput
 set /P msipath=Provide the full path to your msi file: 
-::remove any double quotes
-set msipath=%msipath:"=%
-
-set /P config=Provide config name: 
-
-CHOICE /C si /M "Would you like to show (S) the msiExec string or install the product (I)?"
-IF ERRORLEVEL 1 SET action=show
-IF ERRORLEVEL 2 SET action=install
+set /P SvcAccount=Provide a valid SvcAccount: 
+set /P SvcAccountPwd=... and password: 
+set /P machineName=What is your bat file name ^(no extension^): 
 goto :start
 
 :commandlineInput
 set msipath=%~1
-set config=%~2
-set action=%~3
-
+set machineName=%~2
+set SvcAccount=%~3
+set SvcAccountPwd=%~4
 goto :start
+
 :Start
-::concat all parameters into one string
-SETLOCAL EnableDelayedExpansion
-SET S=
-del "%tempInstall%" /Q
-for /f "tokens=* delims= " %%a in (config/%config%.txt) do (
-set S=!S!%%a 
-)
-set S=start /wait MSIExec /i "%msipath%" !S!
- > "%tempInstall%" echo.!S! /qn /l* "install.log"
+::remove any double quotes
+set msipath=%msipath:"=%
 
-echo action is: %action%
-if "%action%"=="show" notepad "%tempInstall%"
-if "%action%"=="install" (
-more "%tempInstall%"
-"%tempInstall%"
-set msierror=%errorloevel%
-)
+::uninstall
+cmd /C "%~dp0UnInstall.bat"
+cls
 
-::this part does not Work ... must get error handling to bubble up to this level
+::set log file path
+CALL :SetLogPath "%msipath%" logFile
+
+::Set machine specific config
+CALL "%~dp0machine\%machineName%.bat" 
+
+::Set common config based on machine specific config
+CALL "%~dp0common.bat" 
+
+::verify default website
+cscript "%~dp0tools\BrowseUrl.vbs" "%DNS_ALIAS%"
+if %errorlevel% neq 200 (
+COLOR E
+ECHO WARNING: could not send GET request to SDK!
+ECHO Your default web site is not answering on: %DNS_ALIAS%
+ECHO Will continue anyway
+ping -n 4 127.0.0.1 > NUL
+)
+ECHO.
+
+::kick msi
+ECHO Running installation ....
+ECHO Please don't close any command line windows!
+ECHO.
+ECHO MSIExec /i "%msipath%" ADDLOCAL="%ADDLOCAL%" CLICKONCE_CLIENT_URL="%CLICKONCE_CLIENT_URL%" CLICKONCE_MYTIME_URL="%CLICKONCE_MYTIME_URL%" CLICKONCE_SIGN_METHOD="TEMP" INSTALLDIR="%INSTALLDIR%" MATRIX_WEB_SITE_URL="%MATRIX_WEB_SITE_URL%" SQL_SERVER_NAME="%SQL_SERVER_NAME%" SQL_SERVER_AUTH="NT" SQL_SERVER_USER="" SQL_SERVER_PASS="" WISE_SQL_CONN_STR="%WISE_SQL_CONN_STR%" SQL_USER_AUTH="NT" SQL_USER_NAME="" SQL_USER_PASSWORD="" SQL_AUTH_STRING="%SQL_AUTH_STRING%" MYPASSWORD="%MYPASSWORD%" MYUSERNAME="%MYUSERNAME%" DB_WINGROUP="%DB_WINGROUP%" DB_ANALYTICS="%DB_ANALYTICS%" DB_ANALYTICS_STAGE="%DB_ANALYTICS_STAGE%" DB_CCC7="%DB_CCC7%" DB_CCCAGG="%DB_CCCAGG%" DB_MESSAGING="%DB_MESSAGING%" DNS_ALIAS="%DNS_ALIAS%" AGENT_SERVICE="%AGENT_SERVICE%" SITEPATH="%SITEPATH%" SDK_CRED_PROT="Ntlm" SDK_SSL_MEX_BINDING="%SDK_SSL_MEX_BINDING%" SDK_SSL_SECURITY_MODE="%SDK_SSL_SECURITY_MODE%" HTTPGETENABLED="%HTTPGETENABLED%" HTTPSGETENABLED="%HTTPSGETENABLED%" CONTEXT_HELP_URL="%CONTEXT_HELP_URL%" WEB_BROKER="%WEB_BROKER%" SERVICEBUSENABLED="true" IIS_AUTH="%IIS_AUTH%" AS_DATABASE="%AS_DATABASE%" AS_SERVER_NAME="%AS_SERVER_NAME%" PM_ANONYMOUS_DOMAINUSER="" PM_ANONYMOUS_PWD="" PM_AUTH_MODE="Windows" PM_PROCESS_CUBE="FALSE" PM_ASMX="PM not installed" PM_INSTALL="false" RTA_SERVICE="%RTA_SERVICE%" /qn /l* "%logfile%"
+start /wait MSIExec /i "%msipath%" ADDLOCAL="%ADDLOCAL%" CLICKONCE_CLIENT_URL="%CLICKONCE_CLIENT_URL%" CLICKONCE_MYTIME_URL="%CLICKONCE_MYTIME_URL%" CLICKONCE_SIGN_METHOD="TEMP" INSTALLDIR="%INSTALLDIR%" MATRIX_WEB_SITE_URL="%MATRIX_WEB_SITE_URL%" SQL_SERVER_NAME="%SQL_SERVER_NAME%" SQL_SERVER_AUTH="NT" SQL_SERVER_USER="" SQL_SERVER_PASS="" WISE_SQL_CONN_STR="%WISE_SQL_CONN_STR%" SQL_USER_AUTH="NT" SQL_USER_NAME="" SQL_USER_PASSWORD="" SQL_AUTH_STRING="%SQL_AUTH_STRING%" MYPASSWORD="%MYPASSWORD%" MYUSERNAME="%MYUSERNAME%" DB_WINGROUP="%DB_WINGROUP%" DB_ANALYTICS="%DB_ANALYTICS%" DB_ANALYTICS_STAGE="%DB_ANALYTICS_STAGE%" DB_CCC7="%DB_CCC7%" DB_CCCAGG="%DB_CCCAGG%" DB_MESSAGING="%DB_MESSAGING%" DNS_ALIAS="%DNS_ALIAS%" AGENT_SERVICE="%AGENT_SERVICE%" SITEPATH="%SITEPATH%" SDK_CRED_PROT="Ntlm" SDK_SSL_MEX_BINDING="%SDK_SSL_MEX_BINDING%" SDK_SSL_SECURITY_MODE="%SDK_SSL_SECURITY_MODE%" HTTPGETENABLED="%HTTPGETENABLED%" HTTPSGETENABLED="%HTTPSGETENABLED%" CONTEXT_HELP_URL="%CONTEXT_HELP_URL%" WEB_BROKER="%WEB_BROKER%" SERVICEBUSENABLED="true" IIS_AUTH="%IIS_AUTH%" AS_DATABASE="%AS_DATABASE%" AS_SERVER_NAME="%AS_SERVER_NAME%" PM_ANONYMOUS_DOMAINUSER="" PM_ANONYMOUS_PWD="" PM_AUTH_MODE="Windows" PM_PROCESS_CUBE="FALSE" PM_ASMX="PM not installed" PM_INSTALL="false" RTA_SERVICE="%RTA_SERVICE%" /qn /l* "%logfile%"
+set msierror=%ERRORLEVEL%
+
 IF %msierror% NEQ 0 (
 SET /A ERRORLEV=2
 GOTO :error
 )
 
+::work around for bug #22203 - ETL Service account can't be set from command line
+net stop %EtlSrvname%
+sc.exe config %EtlSrvname% obj= "%SvcAccount%" password= "%SvcAccountPwd%"
+net start %EtlSrvname%
+
+
+::save value of AGENT_SERVICE
+set BaseRegKey=HKEY_LOCAL_MACHINE\SOFTWARE\Wow6432Node\Teleopti\TeleoptiCCC
+set SDKUrl=
+for /f "tokens=2*" %%A in ('REG QUERY "%BaseRegKey%\InstallationSettings" /v AGENT_SERVICE') DO (
+  for %%F in (%%B) do (
+    set SDKUrl=%%F
+  )
+)
+::remove information registry to clean up machine, but save AGENT_SERVICE
+reg delete %BaseRegKey% /va /f
+reg delete %BaseRegKey% /f
+
+::re-add AGENT_SERVICE to registry needed for "Restart Teleopti CCC"
+reg add %BaseRegKey%\InstallationSettings /v AGENT_SERVICE /d %SDKUrl%
+
 ::done
 GOTO :eof
+
+:SetLogPath
+SETLOCAL
+SET logfile=%~dp0
+SET logfile=%logfile%%~n1
+SET logfile=%logfile%.log
+(
+ENDLOCAL
+set "%~2=%logFile%"
+)
+goto:eof
 
 :help
 COLOR E
@@ -74,7 +116,8 @@ ECHO Run this batch file manully with no paramters, to enter input manually.
 ECHO OR, Run this batch file from command line with paramters:
 ECHO Msipath ^{local path^} ConfigName ^{Name of config file^} Action ^{show^|install^}
 ECHO.
-ECHO Example: SilentInstall.bat "C:\Temp\Teleopti CCC 7.2.0.0.msi" localhostDemoNoPM install
+ECHO Example call:
+ECHO %~nx0 "MyDomain\SvcAccount" "password" "C:\Temp\Teleopti CCC 7.3.374.10701.msi" "MyMachineFile"
 GOTO :EOF
 
 :Error
@@ -90,4 +133,3 @@ GOTO :EOF
 
 
 :EOF
-ENDLOCAL

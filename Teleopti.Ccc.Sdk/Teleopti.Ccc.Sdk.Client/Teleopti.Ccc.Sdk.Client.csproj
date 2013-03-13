@@ -175,6 +175,9 @@
     <None Include="Web References\SdkServiceReference\DefinedRaptorApplicationFunctionPathsDto.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
+    <None Include="Web References\SdkServiceReference\DefinitionSetDto.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
     <None Include="Web References\SdkServiceReference\ExtendedPreferenceTemplateDto.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
@@ -194,6 +197,9 @@
       <DependentUpon>Reference.map</DependentUpon>
     </None>
     <None Include="Web References\SdkServiceReference\MultiplicatorDataDto.datasource">
+      <DependentUpon>Reference.map</DependentUpon>
+    </None>
+    <None Include="Web References\SdkServiceReference\MultiplicatorDto.datasource">
       <DependentUpon>Reference.map</DependentUpon>
     </None>
     <None Include="Web References\SdkServiceReference\OvertimeDefinitionSetDto.datasource">
@@ -287,6 +293,9 @@
       <SubType>Designer</SubType>
     </None>
     <None Include="Web References\SdkServiceReference\TeleoptiCccSdkService14.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Web References\SdkServiceReference\TeleoptiCccSdkService15.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Web References\SdkServiceReference\TeleoptiCccSdkService2.xsd">
