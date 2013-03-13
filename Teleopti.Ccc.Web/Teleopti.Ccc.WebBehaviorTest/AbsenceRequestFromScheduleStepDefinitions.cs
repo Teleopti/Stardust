@@ -36,14 +36,21 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			}
 		}
 
-		[Then(@"I should see a '(.*)' indication for chance of absence request on '(.*)'")]
-		public void ThenIShouldSeeAIndicationForChanceOfAbsenceRequestOn(string color, DateTime date)
+		[Then(@"I should see an indication of the amount of agents that can go on holiday on each day of the week")]
+		public void ThenIShouldSeeAnIndicationOfTheAmountOfAgentsThatCanGoOnHolidayOnEachDayOfTheWeek()
 		{
+			var indicators = Pages.Pages.WeekSchedulePage.AbsenceIndiciators();
+			foreach (var indicator in indicators)
+			{
+				EventualAssert.That(indicator.IsDisplayed, Is.True);
+			}
 		}
 
-		[Given(@"there is no allowance left for date '(.*)'")]
-		public void GivenThereIsNoAllowanceLeftForDate(DateTime	date)
+
+		[Given(@"the absence period is opened between '(.*)' and '(.*)'")]
+		public void GivenTheAbsencePeriodIsOpenedBetweenAnd(DateTime start, DateTime end)
 		{
+			ScenarioContext.Current.Pending();
 		}
 	}
 }
