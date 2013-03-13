@@ -8,6 +8,23 @@
 	}
 };
 
+ko.bindingHandlers.percentageColor = {
+    update: function(element, valueAccessor, allBindingsAccessor, viewmodel) {
+        var value = valueAccessor(), allBindings = allBindingsAccessor();
+        var okPercentage = allBindings.okPercentage || 70;
+        var notOkPercentage = allBindings.notOkPercentage || 30;
+        var fadeDuration = allBindings.fadeDuration || 800;
+        var valueUnwrapped = ko.utils.unwrapObservable(value);
+
+        var colorToSet = 'yellow';
+        if (valueUnwrapped < notOkPercentage) colorToSet = 'red';
+        else if (valueUnwrapped > okPercentage) colorToSet = 'green';
+
+        $(element).stop().animate({ backgroundColor: colorToSet }, fadeDuration);
+
+    }
+};
+
 ko.bindingHandlers['class'] = {
 	update: function (element, valueAccessor) {
 		if (element['__ko__previousClassValue__']) {

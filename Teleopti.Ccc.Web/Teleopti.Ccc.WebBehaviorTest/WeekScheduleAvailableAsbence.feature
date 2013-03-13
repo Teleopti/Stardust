@@ -40,7 +40,7 @@ Scenario: Show indication of agents that can go on holiday
 @ignore
 Scenario: Indicate that no agents that can go on holiday if no allowance left
 	Given I have the role 'Full access to mytime'
-	And I have no absence allowance left
+	And There is no available allowance
 	When I view my week schedule for date '2013-02-15'
 	Then I should see an 'red' indication for chance of absence request on '2013-02-15'
 

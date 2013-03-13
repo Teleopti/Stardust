@@ -26,27 +26,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
             EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.RequestDetailFromDateTextField.Value, Is.StringContaining(date.ToShortDateString(UserFactory.User().Culture)));
 		}
 
-		[Then(@"I should not see any indication of how many agents can go on holiday")]
-		public void ThenIShouldNotSeeAnyIndicationOfHowManyAgentsCanGoOnHoliday()
-		{
-			var indicators = Pages.Pages.WeekSchedulePage.AbsenceIndiciators();
-			foreach (var indicator in indicators)
-			{
-				EventualAssert.That(indicator.IsDisplayed, Is.False);
-			}
-		}
-
-		[Then(@"I should see an indication of the amount of agents that can go on holiday on each day of the week")]
-		public void ThenIShouldSeeAnIndicationOfTheAmountOfAgentsThatCanGoOnHolidayOnEachDayOfTheWeek()
-		{
-			var indicators = Pages.Pages.WeekSchedulePage.AbsenceIndiciators();
-			foreach (var indicator in indicators)
-			{
-				EventualAssert.That(indicator.IsDisplayed, Is.True);
-			}
-		}
-
-
 		[Given(@"the absence period is opened between '(.*)' and '(.*)'")]
 		public void GivenTheAbsencePeriodIsOpenedBetweenAnd(DateTime start, DateTime end)
 		{
