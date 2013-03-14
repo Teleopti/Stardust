@@ -24,6 +24,18 @@ namespace Teleopti.Ccc.DomainTest.Security
         }
 
         [Test]
+        public void GetPasswordValidForDayCount()
+        {
+            Assert.IsNotNull(_target.PasswordValidForDayCount);
+        }
+
+        [Test]
+        public void GetPasswordExpireWarningDayCount()
+        {
+            Assert.IsNotNull(_target.PasswordExpireWarningDayCount);
+        }
+
+        [Test]
         public void VerifyGetsInvalidAttemptWindowFromLoadPasswordPolicyService()
         {
             TimeSpan expected = TimeSpan.FromMinutes(12);

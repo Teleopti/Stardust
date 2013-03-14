@@ -139,5 +139,26 @@ namespace Teleopti.Ccc.DomainTest.Common
 
 			Assert.False(_page.IsUserDefined());
 		}
+
+        [Test]
+        public void VerifyDescriptionKey()
+        {
+            _page.DescriptionKey = "test key";
+            Assert.IsNotNullOrEmpty(_page.Key);
+        }
+
+        [Test]
+        public void VerifyGetHashCode()
+        {
+            Assert.IsNotNull(_page.GetHashCode());
+        }
+
+        [Test]
+        public void ReturnFalseIfNullArgument()
+        {
+            Assert.IsFalse(_page.Equals(null));
+        }
+
+
     }
 }
