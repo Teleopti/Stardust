@@ -121,6 +121,17 @@ IF %ERRORLEVEL% NEQ 0 GOTO noConnection
 ECHO Connect to SQL Server. Done
 ECHO.
 
+::filter trace by database Id?
+CHOICE /C yn /M "Would you like to filter your trace by database_id?"
+IF ERRORLEVEL 1 SET /a Filter=1
+IF ERRORLEVEL 2 SET /a Filter=0
+If %Filter% equ 1 (
+sqlcmd -S%INSTANCE% %Conn% -Q"set nocount on;select database_id,name from sys.databases order by database_id" -W -w 60
+ECHO.
+ECHO Please provide a comma seprated string with integers ^(Example string: 5,8,34^), 
+set /P DBIdString=representing database_id:
+)
+
 ::Get SQL Server version
 sqlcmd -S%INSTANCE% %Conn% -Q"SELECT cast(SERVERPROPERTY('ProductVersion') as nvarchar(20))" -W -h-1 -o ProductVersion.txt 
 set /P ProductVersion= <ProductVersion.txt
@@ -140,7 +151,7 @@ echo.
 
 ::Try create a SQL server side trace
 echo Create SQL Server trace ... 
-SQLCMD -S%INSTANCE% %Conn% -dtempdb -i"%ROOTDIR%\tsql\TraceCaptureDef_ReportMin.sql" -o"%TraceOutput%" -b -v MaxMinutes="%MaxMinutes%" FolderName="%OutPutFolder%" MaxDisc="%MaxDisc%"
+SQLCMD -S%INSTANCE% %Conn% -dtempdb -i"%ROOTDIR%\tsql\TraceCaptureDef_ReportMin.sql" -o"%TraceOutput%" -b -v MaxMinutes="%MaxMinutes%" FolderName="%OutPutFolder%" MaxDisc="%MaxDisc%" DBIdString="%DBIdString%"
 if %ERRORLEVEL% NEQ 0 (
 call :sqlerror
 GOTO :quitError

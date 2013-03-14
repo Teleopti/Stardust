@@ -44,6 +44,7 @@ end
 GO
 
 SET NOCOUNT ON
+SET QUOTED_IDENTIFIER ON
 ---------------------
 -- declare
 ---------------------
@@ -56,6 +57,7 @@ declare @stoptime datetime
 declare @MaxDisc int
 declare @FolderName nvarchar(1000)
 declare @FileName nvarchar(2000)
+DECLARE @DBIdString varchar(1000)
 
 ---------------------
 -- Init
@@ -69,6 +71,7 @@ select @MaxMinutesInt = '$(MaxMinutes)'	-- Stop trace after @MaxMinutes
 select @FolderName = '$(FolderName)'	-- Folder name from batch
 select @MaxDisc = '$(MaxDisc)'			-- maximum disc usage (Gb)
 select @MaxMinutesInt = @MaxMinutesInt +1
+select @DBIdString = '$(DBIdString)'	-- a comma seprated list of Database ids
 
 --Set trace file name
 declare @Now DATETIME
@@ -188,6 +191,47 @@ exec #tmpPPEventEnable @TraceID, 15  --  Audit Logout
 --exec #tmpPPEventEnable @TraceID, 150 --  Trace file closed
 --exec #tmpPPEventEnable @TraceID, 166 --  Statement Recompile
 --exec #tmpPPEventEnable @TraceID, 196 --  CLR Assembly Load
+
+--Filter on Database Id(s)
+SELECT @DBIdString = REPLACE(@DBIdString,' ','')
+DECLARE @DBId table (idx smallint Primary Key IDENTITY(1,1), Databaseb_Id int NOT NULL)
+INSERT INTO @DBId (Databaseb_Id)	
+SELECT Item = y.i.value('(./text())[1]', 'nvarchar(4000)')
+FROM 
+( 
+	SELECT x = CONVERT(XML, '<i>' 
+	+ REPLACE(@DBIdString, ',', '</i><i>') 
+	+ '</i>').query('.')
+) AS a CROSS APPLY x.nodes('i') AS y(i)
+
+-- enumerate the table @DBId
+DECLARE @i int
+DECLARE @And int
+DECLARE @Or int
+DECLARE @numrows int
+DECLARE @Databaseb_Id int
+SET @And = 0
+SET @Or = 1
+SET @i = 1
+SET @numrows = (SELECT COUNT(*) FROM @DBId)
+IF @numrows > 0
+BEGIN
+	WHILE (@i <= (SELECT MAX(idx) FROM @DBId))
+	BEGIN
+
+		-- get the next database_id by primary key
+		SET @Databaseb_Id = (SELECT Databaseb_Id FROM @DBId WHERE idx = @i)
+
+		if @i = 1 --first condition = AND
+			exec sp_trace_setfilter @TraceID, 3, @And, 0, @Databaseb_Id
+		else
+			exec sp_trace_setfilter @TraceID, 3, @Or, 0, @Databaseb_Id
+
+		-- increment counter
+		SET @i = @i + 1
+	END
+END
+
 
 -- SELECT @TraceID back to callint batch file
 print cast(@TraceID as nvarchar(5)) + ',"' + @fileName + '"'
