@@ -67,7 +67,8 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
                 	                                                                	new SeatImpactOnPeriodForProjection()),
                 	                                                                new NonBlendSkillCalculator(
                 	                                                                	new NonBlendSkillImpactOnPeriodForProjection
-                	                                                                		()), new SingleSkillDictionary());
+                	                                                                		()), new SingleSkillDictionary(),
+																							new SingleSkillMaxSeatCalculator());
                     foreach (DateOnly dateTime in periodForResourceCalc.ToDateOnlyPeriod(timeZoneInfo).DayCollection())
                     {
                         resourceOptimizationHelper.ResourceCalculateDate(dateTime, true, true);
