@@ -9,12 +9,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 	{
 		protected override void OnEndStart()
 		{
+			var dbConnection = ConfigurationManager.ConnectionStrings["Queue"];
+			ClearDelaySendMessages.ClearMessages(dbConnection.ToString());
+			
 			//add RTA state checker
 			var rtaChecker = new BusinessUnitInfoFinder(daBus);
 			rtaChecker.SendMessage();
-
-			var dbConnection = ConfigurationManager.ConnectionStrings["Queue"];
-			ClearDelaySendMessages.ClearMessages(dbConnection.ToString());
 		}
 	}
 }

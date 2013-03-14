@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			            .Return(_activityAlarms);
 			_mock.ReplayAll();
 
-			var result = _target.GetState(_guid, _businessUnitId, _platformTypeId, _stateCode, _dateTime, new TimeSpan());
+			var result = _target.GetAndSaveState(_guid, _businessUnitId, _platformTypeId, _stateCode, _dateTime, new TimeSpan());
 			Assert.That(result.AlarmName, Is.EqualTo(alarmLight.Name));
 			Assert.That(result.StateStart, Is.EqualTo(currentLayer.StartDateTime));
 			Assert.That(result.Scheduled, Is.EqualTo(currentLayer.Name));
@@ -197,7 +197,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_dataHandler.Expect(s => s.ActivityAlarms()).Return(_activityAlarms);
 			_mock.ReplayAll();
 
-			var result = _target.GetState(_guid, _businessUnitId, _platformTypeId, _stateCode, _dateTime, new TimeSpan());
+			var result = _target.GetAndSaveState(_guid, _businessUnitId, _platformTypeId, _stateCode, _dateTime, new TimeSpan());
 			Assert.IsNull(result);
 			_mock.VerifyAll();
 			resetEvent.Dispose();

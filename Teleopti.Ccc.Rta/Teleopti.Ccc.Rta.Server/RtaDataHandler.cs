@@ -171,7 +171,7 @@ namespace Teleopti.Ccc.Rta.Server
 					}
 
 					
-					var agentState = _agentHandler.GetState(personWithBusinessUnit.PersonId, personWithBusinessUnit.BusinessUnitId,
+					var agentState = _agentHandler.GetAndSaveState(personWithBusinessUnit.PersonId, personWithBusinessUnit.BusinessUnitId,
 					                                        platformTypeId, stateCode,
 					                                        timestamp, timeInState);
 					if (agentState == null)

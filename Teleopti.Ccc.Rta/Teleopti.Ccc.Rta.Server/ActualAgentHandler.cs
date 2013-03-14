@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Rta.Server
 	public interface IActualAgentHandler : IRtaDataHandlerCache
 	{
 		RtaAlarmLight GetAlarm(Guid platformTypeId, string stateCode, ScheduleLayer layer, Guid businessUnitId);
-		IActualAgentState GetState(Guid personId, Guid businessUnitId, Guid platformTypeId, string stateCode,
+		IActualAgentState GetAndSaveState(Guid personId, Guid businessUnitId, Guid platformTypeId, string stateCode,
 		                           DateTime timestamp,
 		                           TimeSpan timeInState);
 
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Rta.Server
 			                          businessUnitId);
 		}
 
-		public IActualAgentState GetState(Guid personId, Guid businessUnitId, Guid platformTypeId, string stateCode, DateTime timestamp,
+		public IActualAgentState GetAndSaveState(Guid personId, Guid businessUnitId, Guid platformTypeId, string stateCode, DateTime timestamp,
 			TimeSpan timeInState)
 		{
 			var scheduleLayers = ActualAgentDataHandler.CurrentLayerAndNext(timestamp, personId, ActualAgentDataHandler.GetReadModel(personId));

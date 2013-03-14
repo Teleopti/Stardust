@@ -216,7 +216,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_messageSender.Expect(m => m.IsAlive).Return(true);
 			_stateResolver.Expect(s => s.HaveStateCodeChanged(Guid.Empty, _stateCode, _timestamp)).Return(true);
 			_agentHandler.Expect(
-				r => r.GetState(Guid.Empty, Guid.Empty, _platformTypeId, _stateCode, _timestamp, _timeInState)).
+				r => r.GetAndSaveState(Guid.Empty, Guid.Empty, _platformTypeId, _stateCode, _timestamp, _timeInState)).
 				IgnoreArguments().Return(
 					null);
 			
@@ -247,7 +247,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_messageSender.Expect(m => m.IsAlive).Return(true);
 			_stateResolver.Expect(s => s.HaveStateCodeChanged(Guid.Empty, _stateCode, _timestamp)).Return(true);
 			_agentHandler.Expect(
-				r => r.GetState(Guid.Empty, Guid.Empty, _platformTypeId, _stateCode, _timestamp, _timeInState)).
+				r => r.GetAndSaveState(Guid.Empty, Guid.Empty, _platformTypeId, _stateCode, _timestamp, _timeInState)).
 				IgnoreArguments().Return(agentState);
 			_messageSender.Expect(m => m.SendRtaData(Guid.Empty, Guid.Empty, agentState));
 			
@@ -283,7 +283,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_messageSender.Expect(m => m.IsAlive).Return(true);
 			_stateResolver.Expect(s => s.HaveStateCodeChanged(Guid.Empty, _stateCode, _timestamp)).Return(true);
 			_agentHandler.Expect(
-				r => r.GetState(Guid.Empty, Guid.Empty, _platformTypeId, _stateCode, _timestamp, _timeInState)).
+				r => r.GetAndSaveState(Guid.Empty, Guid.Empty, _platformTypeId, _stateCode, _timestamp, _timeInState)).
 				IgnoreArguments().Return(agentState);
 			_messageSender.Expect(m => m.SendRtaData(Guid.Empty, Guid.Empty, agentState)).Throw(new SocketException());
 			_loggingSvc.Expect(l => l.Error("", new SocketException())).IgnoreArguments();
@@ -315,7 +315,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_messageSender.Expect(m => m.IsAlive).Return(true);
 			_stateResolver.Expect(s => s.HaveStateCodeChanged(Guid.Empty, _stateCode, _timestamp)).Return(true);
 			_agentHandler.Expect(
-				r => r.GetState(Guid.Empty, Guid.Empty, _platformTypeId, _stateCode, _timestamp, _timeInState)).
+				r => r.GetAndSaveState(Guid.Empty, Guid.Empty, _platformTypeId, _stateCode, _timestamp, _timeInState)).
 				IgnoreArguments().Return(agentState);
 			_messageSender.Expect(m => m.SendRtaData(Guid.Empty, Guid.Empty, agentState)).Throw(new BrokerNotInstantiatedException());
 			_loggingSvc.Expect(l => l.Error("", new SocketException())).IgnoreArguments();
