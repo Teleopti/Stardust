@@ -1,5 +1,5 @@
 ﻿/*!
-* ASP.NET SignalR JavaScript Library v1.0.0
+* ASP.NET SignalR JavaScript Library v1.0.1
 * http://signalr.net/
 *
 * Copyright Microsoft Open Technologies, Inc. All rights reserved.
@@ -83,9 +83,6 @@
 		proxies.scheduleHub.client = {};
 		proxies.scheduleHub.server = {
 			subscribeTeamSchedule: function (teamId, date) {
-				/// <summary>Calls the SubscribeTeamSchedule method on the server-side scheduleHub hub.&#10;Returns a jQuery.Deferred() promise.</summary>
-				/// <param name=\"teamId\" type=\"Object\">Server side type is System.Guid</param>
-				/// <param name=\"date\" type=\"Object\">Server side type is System.DateTime</param>
 				return proxies.scheduleHub.invoke.apply(proxies.scheduleHub, $.merge(["SubscribeTeamSchedule"], $.makeArray(arguments)));
 			}
 		};

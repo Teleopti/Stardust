@@ -114,7 +114,7 @@ namespace Teleopti.Messaging.SignalR
 
 		public void StartListening()
 		{
-			_hubProxy.Subscribe(EventName).Data += subscription_Data;
+			_hubProxy.Subscribe(EventName).Received += subscription_Data;
 
 			startHubConnection();
 			_hubProxy.Subscribe(EventName);
@@ -167,7 +167,7 @@ namespace Teleopti.Messaging.SignalR
 			}
 		}
 
-		private void subscription_Data(JToken[] obj)
+		private void subscription_Data(IList<JToken> obj)
 		{
 			var handler = OnNotification;
 			if (handler!=null)
@@ -237,7 +237,7 @@ namespace Teleopti.Messaging.SignalR
 			{
 				try
 				{
-					_hubProxy.Subscribe(EventName).Data -= subscription_Data;
+					_hubProxy.Subscribe(EventName).Received -= subscription_Data;
 
 					_hubConnection.Stop();
 					_isRunning = false;
