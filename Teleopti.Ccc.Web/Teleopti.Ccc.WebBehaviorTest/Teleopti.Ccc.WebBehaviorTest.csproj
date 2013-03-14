@@ -115,6 +115,7 @@
     <Compile Include="AsmStepDefinition.cs" />
     <Compile Include="Bindings\Generic\ActivityStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Anywhere\AgentSchedulePageStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\BudgetStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\UIStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\ContractStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Anywhere\TeamSchedulePageStepDefinitions.cs" />
@@ -123,6 +124,8 @@
     <Compile Include="Bindings\Generic\PasswordPolicyStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Start\SignInPageStepDefinitions.cs" />
     <Compile Include="Bindings\StringContainsAnyLanguageResourceConstraint.cs" />
+    <Compile Include="Data\Setups\Generic\BudgetdayConfigurable.cs" />
+    <Compile Include="Data\Setups\Generic\BudgetGroupConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\PersonAbsenceConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\PersonDayOffConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\ReadModelShiftConfigurable.cs" />

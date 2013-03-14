@@ -1,8 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Threading;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Infrastructure.Repositories;

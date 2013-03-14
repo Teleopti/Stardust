@@ -26,6 +26,12 @@ Background:
 	| Field      | Value      |
 	| Start date | 2012-06-18 |
 	
+Scenario: Henkes testscenario for setting up budgetgroups
+	Given there is  a budgetgroup 'test'
+	And 'I' belong to budgetgroup 'test'
+	And there is an allowance '4' for 'test' on '2007-12-2' 
+	When I view my week schedule for date '2013-02-15'
+	Then I should not see any indication of how many agents can go on holiday
 
 Scenario: Do not show indication of the amount of agents that can go on holiday if no permission to absence request
 	Given I have the role 'No access to absence requests'
