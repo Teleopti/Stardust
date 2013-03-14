@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Rhino.ServiceBus;
 using Teleopti.Interfaces.Messages.Denormalize;
 using log4net;
@@ -32,7 +33,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 			{
 				if (messageBrokerIsRunning())
 				{
-					_messageBroker.SendEventMessage(message.Datasource, message.BusinessUnitId, message.Date, message.Date, Guid.Empty, message.PersonId, typeof(Person), Guid.Empty, typeof(IScheduleChangedInDefaultScenario), DomainUpdateType.NotApplicable, null);
+					var messages = new List<IEventMessage>();
+					foreach (var scheduleDay in message.ScheduleDays)
+					{
+						messages.Add(_messageBroker.CreateEventMessage(scheduleDay.Date,scheduleDay.Date,Guid.Empty, message.PersonId, typeof(Person), Guid.Empty, typeof(IScheduleChangedInDefaultScenario), DomainUpdateType.NotApplicable));
+					}
+					_messageBroker.SendEventMessages(message.Datasource,message.BusinessUnitId, messages.ToArray());
 				}
 				else
 				{
