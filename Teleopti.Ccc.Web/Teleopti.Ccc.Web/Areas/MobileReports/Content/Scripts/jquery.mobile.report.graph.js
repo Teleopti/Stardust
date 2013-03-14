@@ -84,7 +84,7 @@
 			X: ['']
 		},
 		_eventHandler: function (event, payload) {
-			var graph = $(this).data('graph'),
+			var graph = $(this).data('mobile-graph'),
 			    o = graph.options;
 			if (!event.isPropagationStopped()) {
 				switch (payload.method) {
@@ -98,7 +98,7 @@
 			}
 		}, // triggered from DOM
 		_orientChange: function (e) {
-			var self = $(e.currentTarget).data('graph');
+			var self = $(e.currentTarget).data('mobile-graph');
 			self._resizeArea();
 			self.element.trigger('graph', { 'method': 'redraw' });
 		},
@@ -209,7 +209,7 @@
 		clean: function () {
 			var self = this;
 			self.canvas.remove();
-			self.caller.removeData('graph');
+			self.caller.removeData('mobile-graph');
 		},
 		setEnabled: function (value) {
 			this.options.disabled = !value;

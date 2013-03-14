@@ -32,9 +32,8 @@ Teleopti.MobileReports.Index = (function ($) {
 
 	function _initReportSettingsView(cNs) {
 		$(document).on("pageinit", "#report-settings-view", function () {
-			$('#sel-date').datebox();
 			$('#sel-skill').skillpicker();
-
+			
 			(function setDefaultSettings() {
 				$('#sel-date').trigger('datebox', { 'method': 'dooffset', 'type': 'd', 'amount': -1 }).trigger('datebox', { 'method': 'doset' });
 				setRadioGrpValue('#report-settings-view', 'sel-report');
@@ -58,7 +57,7 @@ Teleopti.MobileReports.Index = (function ($) {
 				var parent = $('#report-settings-view');
 				var reportRequestParam = {
 					"ReportId": $('input[name="sel-report"]:checked', parent).val(),
-					"ReportDate": cNs.DateToFixedDate($('#sel-date').data('datebox').theDate),
+					"ReportDate": cNs.DateToFixedDate($('#sel-date').data('mobile-datebox').theDate),
 					"ReportIntervalType": $('input[name="sel-interval"]:checked', parent).val(),
 					"SkillSet": ($('#sel-skill').val() || []).join(','),
 					"table": $('#report-settings-type-table').is(':checked'),
