@@ -28,6 +28,8 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		self.possibleTradeSchedules = ko.observableArray();
 		self.agentChoosed = ko.observable(null);
 		self.isSendEnabled = ko.observable(true);
+	        self.IsLoading = ko.observable(false);
+		self.errorMessage = ko.observable();
 		self.isDetailVisible = ko.computed(function () {
 			if (self.agentChoosed() === null) {
 				return false;
@@ -76,6 +78,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		self.clearInputForm = function () {
 			self.subject('');
 			self.message('');
+		    self.errorMessage('');
 			//ugly hack to fire back event that something happened
 			setTimeout(function () { $("#Request-add-shift-trade-message-input").change(); }, 0);
 			setTimeout(function () { $("#Request-add-shift-trade-subject-input").change(); }, 0);
@@ -92,8 +95,10 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		self.requestedDate.subscribe(function (newValue) {
 			self.chooseAgent(null);
 			if (newValue.diff(self.openPeriodStartDate) < 0) {
+			    if (self.selectedDate().diff(self.openPeriodStartDate) == 0) return;
 				self.selectedDate(moment(self.openPeriodStartDate));
 			} else if (self.openPeriodEndDate.diff(newValue) < 0) {
+			    if (self.selectedDate().diff(self.openPeriodEndDate) == 0) return;
 				self.selectedDate(moment(self.openPeriodEndDate));
 			} else {
 				self.selectedDate(newValue);
@@ -124,12 +129,18 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 				dataType: "json",
 				type: 'GET',
 				data: { selectedDate: self.selectedDate().toDate().toJSON() },
+				beforeSend: function () {
+				    self.IsLoading(true);
+				},
 				success: function (data, textStatus, jqXHR) {
 					self.timeLineLengthInMinutes(data.TimeLineLengthInMinutes);
 					self._createMySchedule(data.MySchedule);
 					self._createPossibleTradeSchedules(data.PossibleTradePersons);
 					self._createTimeLine(data.TimeLineHours);
 					self.setScheduleLoadedReady();
+				},
+				complete: function() {
+				    self.IsLoading(false);
 				}
 			});
 		};
@@ -189,7 +200,6 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			.click(function () {
 				vm.isSendEnabled(false);
 				_saveNewShiftTrade();
-				_hideShiftTradeWindow();
 			});
 		$('#Request-add-shift-trade-detail-section .cancel-button')
 			.button()
@@ -202,17 +212,28 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		ajax.Ajax({
 			url: "Requests/ShiftTradeRequest",
 			dataType: "json",
+			contentType: 'application/json; charset=utf-8',
 			type: 'POST',
-			data: {
-				Date: vm.selectedDate().toDate().toJSON(),
-				Subject: vm.subject(),
-				Message: vm.message(),
-				PersonToId: vm.agentChoosed().personId
-			},
+			data: JSON.stringify({
+			    Date: vm.selectedDate().toDate().toJSON(),
+			    Subject: vm.subject(),
+			    Message: vm.message(),
+			    PersonToId: vm.agentChoosed().personId
+			}),
 			success: function (data) {
 				vm.agentChoosed(null);
 				vm.isSendEnabled(true);
+				_hideShiftTradeWindow();
 				Teleopti.MyTimeWeb.Request.List.AddItemAtTop(data);
+			},
+			error: function (jqXHR, textStatus, errorThrown) {
+			    if (jqXHR.status == 400) {
+			        var data = $.parseJSON(jqXHR.responseText);
+			        vm.errorMessage(data.Errors.join('</br>'));
+			        vm.isSendEnabled(true);
+			        return;
+			    }
+			    Teleopti.MyTimeWeb.Common.AjaxFailed(jqXHR, null, textStatus);
 			}
 		});
 	}
@@ -285,35 +306,3 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 	};
 
 })(jQuery);
-
-ko.bindingHandlers.datepicker = {
-	init: function (element, valueAccessor, allBindingsAccessor) {
-		//initialize datepicker with some optional options
-		var options = allBindingsAccessor().datepickerOptions || { showAnim: 'slideDown' };
-		$(element).datepicker(options);
-
-		//handle the field changing
-		ko.utils.registerEventHandler(element, "change", function () {
-			var observable = valueAccessor();
-			observable(moment($(element).datepicker("getDate")));
-		});
-
-		//handle the field keydown for enter key
-		ko.utils.registerEventHandler(element, "keydown", function (key) {
-			if (key.keyCode == 13) {
-				var observable = valueAccessor();
-				observable(moment($(element).datepicker("getDate")));
-			}
-		});
-
-		//handle disposal (if KO removes by the template binding)
-		ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
-			$(element).datepicker("destroy");
-		});
-
-	},
-	update: function (element, valueAccessor) {
-		var value = ko.utils.unwrapObservable(valueAccessor());
-		$(element).datepicker("setDate", new Date(value));
-	}
-};

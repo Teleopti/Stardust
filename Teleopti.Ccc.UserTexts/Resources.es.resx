@@ -8549,4 +8549,127 @@ Las opciones activadas son:
   <data name="ResTotals" xml:space="preserve">
     <value>Totales</value>
   </data>
+  <data name="NoMessagesFound" xml:space="preserve">
+    <value>No se han encontrado mensajes</value>
+  </data>
+  <data name="FairnessOptimizationOn" xml:space="preserve">
+    <value>Optimización de equidad activada</value>
+  </data>
+  <data name="FairnessOptimizationRollingBack" xml:space="preserve">
+    <value> - el valor del resultado no es mejor, Deshaciendo.</value>
+  </data>
+  <data name="FairnessOptimizationValueAfter" xml:space="preserve">
+    <value> - valor después =</value>
+  </data>
+  <data name="FairnessOptimizationValueBefore" xml:space="preserve">
+    <value> - valor antes =</value>
+  </data>
+  <data name="Sender" xml:space="preserve">
+    <value>Remitente</value>
+  </data>
+  <data name="Sent" xml:space="preserve">
+    <value>Enviado</value>
+  </data>
+  <data name="SelectedFileDestinationDoesNotExist" xml:space="preserve">
+    <value>El destino de fichero seleccionado no existe, por favor introduzca un destino válido</value>
+  </data>
+  <data name="CouldNotExportForecastToFile" xml:space="preserve">
+    <value>Error inesperado en la exportación de fichero, por fvor intente con otro destino</value>
+  </data>
+  <data name="SelectedFileDestinationIsTooLong" xml:space="preserve">
+    <value>El destino de fichero es demasiado largo, por favor introduzca un destino válido</value>
+  </data>
+  <data name="SameActivity" xml:space="preserve">
+    <value>La misma actividad</value>
+  </data>
+  <data name="AfterCheckingAgainstKeepActivity" xml:space="preserve">
+    <value>Después de controlar "Mantener actividad"</value>
+  </data>
+  <data name="YourScheduleTheDATEHasChanged" xml:space="preserve">
+    <value>Su planifiación para el {0} ha sido modificada!</value>
+  </data>
+  <data name="UseAverageShiftLengths" xml:space="preserve">
+    <value>Respetar promedio de turno por día</value>
+  </data>
+  <data name="LogOnFailedAccountIsLocked" xml:space="preserve">
+    <value>Intento de inicio de sesión fallido. La cuenta está bloqueada.</value>
+  </data>
+  <data name="LogOnFailedPasswordExpired" xml:space="preserve">
+    <value>Intento de inicio de sesión fallido. La contraseña ha expirado.</value>
+  </data>
+  <data name="Skip" xml:space="preserve">
+    <value>Saltarse</value>
+  </data>
+  <data name="InvalidUserNameOrPassword" xml:space="preserve">
+    <value>Inválido usuario o contraseña.</value>
+  </data>
+  <data name="YourPasswordHasAlreadyExpired" xml:space="preserve">
+    <value>Su contraseña ha expirado.</value>
+  </data>
+  <data name="YourPasswordWillExpireSoon" xml:space="preserve">
+    <value>Su contraseña expira dentro de poco.</value>
+  </data>
+  <data name="WarningWithExclamatory" xml:space="preserve">
+    <value>Advertencia!</value>
+  </data>
+  <data name="Reforecast" xml:space="preserve">
+    <value>Rehacer previsión</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Eliminar</value>
+  </data>
+  <data name="SelectWorkload" xml:space="preserve">
+    <value>Cargas de trabajo</value>
+  </data>
+  <data name="YouHaveToSelectAtLeastOneWorkload" xml:space="preserve">
+    <value>Debe seleccionar al menos una carga de trabajo</value>
+  </data>
+  <data name="MySchedule" xml:space="preserve">
+    <value>Mi planificación</value>
+  </data>
+  <data name="DataHasBeenDeleted" xml:space="preserve">
+    <value>Error al guardar los cambios. La causa más probable es que usted u otro usuario ha borrado estos datos. La ventana se cerrará para preservar consistencia de datos. Sus cambios se perderán.</value>
+  </data>
+  <data name="ResShiftStartDateColon" xml:space="preserve">
+    <value>Fecha (turnos con inicio en):</value>
+  </data>
+  <data name="NoAgentsAvailableForShiftTrade" xml:space="preserve">
+    <value>No hay agentes disponibles para cambio de turnos</value>
+  </data>
+  <data name="ResShiftStartDateFromColon" xml:space="preserve">
+    <value>Fecha desde (turnos con inicio en):</value>
+  </data>
+  <data name="ResShiftStartDateToColon" xml:space="preserve">
+    <value>Fecha hasta (turnos con inicio en):</value>
+  </data>
+  <data name="Little" xml:space="preserve">
+    <value>Poco</value>
+  </data>
+  <data name="Medium" xml:space="preserve">
+    <value>Medio</value>
+  </data>
+  <data name="Much" xml:space="preserve">
+    <value>Mucho</value>
+  </data>
+  <data name="QuickForecast" xml:space="preserve">
+    <value>Previsión Rápida</value>
+  </data>
+  <data name="SeasonalityDataRange" xml:space="preserve">
+    <value>Rango de datos para estacionalidad y tendencias</value>
+  </data>
+  <data name="SmoothingStyleColon" xml:space="preserve">
+    <value>Estilo de suavización:</value>
+  </data>
+  <data name="TemplatesHistoricalDataRange" xml:space="preserve">
+    <value>Plantillas en rango de datos históricos</value>
+  </data>
+  <data name="ShowInfoMessages" xml:space="preserve">
+    <value>Mostrar Mensajes de Información</value>
+  </data>
+  <data name="Errors" xml:space="preserve">
+    <value>Errores</value>
+  </data>
+  <data name="TheQuickForecatWillStartInBackgroundMessage" xml:space="preserve">
+    <value>La previsión rápida comenzará como un trabajo de fondo, al cerrar esta guía. El estado del trabajo puede ser visto en Históricos de Trabajos.</value>
+  </data>
 </root>

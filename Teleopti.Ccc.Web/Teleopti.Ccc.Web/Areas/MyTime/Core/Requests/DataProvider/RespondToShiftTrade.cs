@@ -2,26 +2,47 @@ using System;
 using AutoMapper;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
+using Teleopti.Ccc.Web.Core.RequestContext;
+using Teleopti.Ccc.Web.Core.ServiceBus;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.Messages.Requests;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 {
 	public class RespondToShiftTrade : IRespondToShiftTrade
 	{
 		private readonly IPersonRequestRepository _personRequestRepository;
-		private readonly IShiftTradeRequestSetChecksum _shiftTradeRequestCheckSum;
 		private readonly IPersonRequestCheckAuthorization _personRequestCheckAuthorization;
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IMappingEngine _mapper;
+		private readonly IServiceBusSender _serviceBusSender;
+		private readonly IUnitOfWorkFactory _uowFactory;
+		private readonly ICurrentBusinessUnitProvider _businessUnitProvider;
+		private readonly INow _nu;
+		private readonly IShiftTradeRequestSetChecksum _shiftTradeRequestSetChecksum;
 
-		public RespondToShiftTrade(IPersonRequestRepository personRequestRepository, IShiftTradeRequestSetChecksum shiftTradeRequestCheckSum, IPersonRequestCheckAuthorization personRequestCheckAuthorization, ILoggedOnUser loggedOnUser, IMappingEngine mapper)
+		public RespondToShiftTrade(IPersonRequestRepository personRequestRepository,
+									IShiftTradeRequestSetChecksum shiftTradeRequestSetChecksum,
+									IPersonRequestCheckAuthorization personRequestCheckAuthorization,
+									ILoggedOnUser loggedOnUser,
+									IMappingEngine mapper,
+									IServiceBusSender serviceBusSender,
+									IUnitOfWorkFactory uowFactory,
+									ICurrentBusinessUnitProvider businessUnitProvider,
+									INow nu)
 		{
 			_personRequestRepository = personRequestRepository;
-			_shiftTradeRequestCheckSum = shiftTradeRequestCheckSum;
 			_personRequestCheckAuthorization = personRequestCheckAuthorization;
 			_loggedOnUser = loggedOnUser;
 			_mapper = mapper;
+			_serviceBusSender = serviceBusSender;
+			_uowFactory = uowFactory;
+			_businessUnitProvider = businessUnitProvider;
+			_nu = nu;
+			_shiftTradeRequestSetChecksum = shiftTradeRequestSetChecksum;
 		}
 
 		public RequestViewModel OkByMe(Guid requestId)
@@ -31,8 +52,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			{
 				return new RequestViewModel();
 			}
-			var shiftTrade = personRequest.Request as IShiftTradeRequest;
-			shiftTrade.Accept(_loggedOnUser.CurrentUser(), _shiftTradeRequestCheckSum, _personRequestCheckAuthorization);
+
+			shouldNotBeHere(personRequest);
 
 			return _mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
 		}
@@ -49,5 +70,27 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 
 			return _mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
 		}
+
+		private void shouldNotBeHere(IPersonRequest personRequest)
+		{
+			if (_serviceBusSender.EnsureBus())
+			{
+				_serviceBusSender.NotifyServiceBus(new AcceptShiftTrade
+													   {
+														   BusinessUnitId = _businessUnitProvider.CurrentBusinessUnit().Id.GetValueOrDefault(),
+														   Datasource = _uowFactory.Name,
+														   Timestamp = _nu.UtcDateTime(),
+														   PersonRequestId = personRequest.Id.GetValueOrDefault(),
+														   AcceptingPersonId = _loggedOnUser.CurrentUser().Id.GetValueOrDefault(),
+														   Message = personRequest.GetMessage(new NoFormatting())
+													   });
+			}
+			else
+			{
+				var shittrade = (IShiftTradeRequest)personRequest.Request;
+				shittrade.Accept(_loggedOnUser.CurrentUser(), _shiftTradeRequestSetChecksum, _personRequestCheckAuthorization);
+			}
+		}
+
 	}
 }

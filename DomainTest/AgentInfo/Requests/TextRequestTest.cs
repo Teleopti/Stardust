@@ -111,5 +111,10 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 
         }
 
+        [Test]
+        public void GetRequestType()
+        {
+            Assert.IsNotNull(target.RequestType);
+        }
     }
 }

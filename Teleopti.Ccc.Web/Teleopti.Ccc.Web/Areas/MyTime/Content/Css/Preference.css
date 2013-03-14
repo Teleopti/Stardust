@@ -8,7 +8,7 @@
     float: left;
     font-weight: bold;
     height: 15px;
-    max-width: 97px;
+    max-width: 77px;
     overflow: hidden;
 }
 .preference-must-have {
@@ -137,10 +137,6 @@
     filter: alpha(opacity=40); 
 }
 
-.preference-not-fulfilled {
-	color: red;
-}
-
 .meeting-small {
 	margin-top: 2px;
 	margin-left: 1px;
@@ -153,4 +149,23 @@
 
 .preference-tooltip-font {
 	font-family: Arial;
+}
+
+.collapse-sign{
+	text-decoration: none;
+	min-width: 8px;
+	color: black;
+	display: inline-block;
+	text-align: center;
+	cursor: pointer;
+}
+#Template-name-section {
+	padding-bottom: 0;
+}
+#Template-name-section input 
+{
+	vertical-align: baseline;
+}
+#Preference-add-extended-form {
+	min-width: 268px;
 }

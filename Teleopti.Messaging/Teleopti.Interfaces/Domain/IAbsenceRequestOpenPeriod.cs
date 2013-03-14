@@ -119,12 +119,18 @@ namespace Teleopti.Interfaces.Domain
         /// <param name="resourceOptimizationHelper">The resource optimization helper.</param>
         /// <param name="personAccountBalanceCalculator">The person account balance calculator.</param>
         /// <param name="budgetGroupAllowanceSpecification">The budget group alloance specification.</param>
+        /// <param name="budgetGroupAllowanceCalculator">The budget group alloance calculator.</param>
         /// <returns></returns>
         /// <remarks>
         /// Created by: henryg
         /// Created date: 2010-04-22
         /// </remarks>
-        IEnumerable<IAbsenceRequestValidator> GetSelectedValidatorList(ISchedulingResultStateHolder schedulingResultStateHolder, IResourceOptimizationHelper resourceOptimizationHelper, IPersonAccountBalanceCalculator personAccountBalanceCalculator, IBudgetGroupAllowanceSpecification budgetGroupAllowanceSpecification);
+        IEnumerable<IAbsenceRequestValidator> GetSelectedValidatorList(
+            ISchedulingResultStateHolder schedulingResultStateHolder,
+            IResourceOptimizationHelper resourceOptimizationHelper,
+            IPersonAccountBalanceCalculator personAccountBalanceCalculator,
+            IBudgetGroupAllowanceSpecification budgetGroupAllowanceSpecification,
+            IBudgetGroupAllowanceCalculator budgetGroupAllowanceCalculator);
 
         /// <summary>
         /// Gets the selected process.

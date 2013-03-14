@@ -293,7 +293,10 @@ Scenario: Show my scheduled day off
 
 Scenario: Close details when approving shift trade request
 	Given I have the role 'Full access to mytime'
-	And I have received a shift trade request from 'Some Person'
+	And I have received a shift trade request
+	| Field    | Value         |
+	| From       | Ashley Andeen	|
+	| Pending  | True          |
 	And I am viewing requests
 	When I click on the request
 	And I click the Approve button on the shift request
@@ -301,7 +304,12 @@ Scenario: Close details when approving shift trade request
 
 Scenario: Can not approve or deny shift trade request created by me
 	Given I have the role 'Full access to mytime'
-	And I have created a shift trade request to 'Some Person'
+	And I have created a shift trade request
+	| Field    | Value         |
+	| To       | Ashley Andeen	|
+	| DateTo   | 2030-01-01    |
+	| DateFrom | 2030-01-01    |
+	| Pending  | True          |
 	And I am viewing requests
 	When I click on the request
 	Then I should not see the approve button
@@ -310,8 +318,9 @@ Scenario: Can not approve or deny shift trade request created by me
 Scenario: Deny shift trade request
 	Given I have the role 'Full access to mytime'
 	And I have received a shift trade request
-	| Field		| Value		|
-	| From		| Ashley	|
+	| Field   | Value  |
+	| From    | Ashley |
+	| Pending | True   |
 	And I am viewing requests
 	When I click on the request
 	And I click the Deny button on the shift request
@@ -414,6 +423,38 @@ Given I have the role 'Full access to mytime'
 	| Start time	| 12:00 |
 	| End time		| 22:00 |
 
+Scenario: Show day off in a shifttrade
+	Given I have the role 'Full access to mytime'
+	And there is a dayoff with
+	| Field | Value  |
+	| Name  | DayOff |
+	And there is a dayoff with
+	| Field | Value		|
+	| Name  | VacationButWithAReallyLongName |
+	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And 'I' have a day off with
+	| Field | Value      |
+	| Name  | DayOff     |
+	| Date  | 2030-01-04 |
+	And Ashley Andeen have the workflow control set 'Trade from tomorrow until 30 days forward'
+	And Ashley Andeen has a person period with
+	| Field      | Value      |
+	| Start date | 2012-06-18 |
+	And 'Ashley Andeen' have a day off with
+	| Field | Value      |
+	| Name  | VacationButWithAReallyLongName |
+	| Date  | 2030-01-04 |
+	And I have created a shift trade request
+	| Field    | Value			|
+	| To       | Ashley Andeen	|
+	| DateTo   | 2030-01-04		|
+	| DateFrom | 2030-01-04		|
+	| Pending  | True			|
+	And I am viewing requests
+	When I click on the request
+	Then I should see my details scheduled day off 'DayOff'
+	And I should see other details scheduled day off 'VacationButWithAReallyLongName'
+
 Scenario: Show subject of the shift trade in shifttrade details
 Given I have the role 'Full access to mytime'
 	And I have the workflow control set 'Trade from tomorrow until 30 days forward'
@@ -437,16 +478,40 @@ Given I have the role 'Full access to mytime'
 	| DateTo		| 2030-01-01				|
 	| DateFrom	| 2030-01-01				|
 	| Pending	| True						|
-	| Subject	| Swap shift with me		|
-	| Message	| message of shifttrade	|
+	| Subject	| Swap with me	|
+	| Message	| CornercaseMessageWithAReallyReallyLongWordThatWillProbablyNeverHappenInTheRealWorldButItCausedATestIssueSoWePutItHereForTesting	|
 	And I am viewing requests
 	When I click on the request
-	Then I should see details with subject 'Swap shift with me'
-	And I should see details with message 'message of shifttrade'
+	Then I should see details with subject 'Swap with me'
+	And I should see details with message 'CornercaseMessageWithAReallyReallyLongWordThatWillProbablyNeverHappenInTheRealWorldButItCausedATestIssueSoWePutItHereForTesting'
 
+Scenario: Show information that we dont show schedules in a new shifttrade
+	Given I have the role 'Full access to mytime'
+	And I have created a shift trade request
+	| Field		| Value		|
+	| IsNew		| True		|
+	And I am viewing requests
+	When I click on the request
+	Then I should see details with message that tells the user that the status of the shifttrade is new
+	And I should not see timelines
 
+Scenario: Show information that we dont show schedules in a approved shifttrade
+	Given I have the role 'Full access to mytime'
+	And I have created a shift trade request
+	| Field				| Value		|
+	| Approved			| True		|
+	And I am viewing requests
+	When I click on the request
+	Then I should see details with message that tells the user that the status of the shifttrade is approved
+	And I should not see timelines
 
-
-
-
-
+Scenario: Can not approve or deny shift trade request that is already approved
+	Given I have the role 'Full access to mytime'
+	And I have received a shift trade request
+	| Field			| Value         |
+	| From			| Ashley Andeen	|
+	| Approved		| True          |
+	And I am viewing requests
+	When I click on the request
+	Then I should not see the approve button
+	And I should not see the deny button

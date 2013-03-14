@@ -156,9 +156,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
     	public IEnumerable<IPerson> FindPossibleShiftTrades(IPerson loggedOnUser)
     	{
+    		const int tempTopJustUntilWeHaveSomeUserFilteringAndPaging = 50;
     		return Session.GetNamedQuery("FindPossibleShiftTrades")
-				.SetEntity("loggedOnUser", loggedOnUser)
-				.List<IPerson>();
+					.SetEntity("loggedOnUser", loggedOnUser)
+					.SetMaxResults(tempTopJustUntilWeHaveSomeUserFilteringAndPaging)
+					.List<IPerson>();
     	}
 
 

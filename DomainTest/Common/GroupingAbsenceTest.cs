@@ -148,5 +148,14 @@ namespace Teleopti.Ccc.DomainTest.Common
         {
             myGroupingAbsence.AddAbsence(null);
         }
+
+        [Test]
+        public void VerifySetDeleted()
+        {
+            myGroupingAbsence.SetDeleted();
+            Assert.IsTrue(myGroupingAbsence.IsDeleted);
+        }
+
+
     }
 }

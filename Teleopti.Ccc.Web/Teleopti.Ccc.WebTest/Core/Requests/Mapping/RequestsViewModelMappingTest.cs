@@ -406,6 +406,70 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 					Mapper.Map<IPersonRequest, RequestViewModel>(personRequest));
 		}
 
+		[Test]
+		public void ShouldMapIsNew()
+		{
+			var sender = PersonFactory.CreatePerson();
+			var tradeDate = new DateOnly(2010, 1, 1);
+			var shiftTradeSwapDetail = new ShiftTradeSwapDetail(sender, _loggedOnPerson, tradeDate, tradeDate);
+			var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail> { shiftTradeSwapDetail });
+			var personRequest = new PersonRequest(_loggedOnPerson) { Subject = "Subject of request", Request = shiftTradeRequest };
+			
+			var result = Mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
+
+			Assert.That(personRequest.IsNew);
+			Assert.That(result.IsNew, Is.True);
+
+			shiftTradeRequest.SetShiftTradeStatus(ShiftTradeStatus.Referred, new PersonRequestAuthorizationCheckerForTest());
+			result = Mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
+
+			Assert.That(personRequest.IsNew,Is.False);
+			Assert.That(result.IsNew, Is.False);
+
+		}
+
+		[Test]
+		public void ShouldMapIsPending()
+		{
+			var sender = PersonFactory.CreatePerson();
+			var tradeDate = new DateOnly(2010, 1, 1);
+			var shiftTradeSwapDetail = new ShiftTradeSwapDetail(sender, _loggedOnPerson, tradeDate, tradeDate);
+			var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail> { shiftTradeSwapDetail });
+			var personRequest = new PersonRequest(_loggedOnPerson) { Subject = "Subject of request", Request = shiftTradeRequest };
+			var result = Mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
+
+			Assert.That(personRequest.IsNew);
+			Assert.That(result.IsPending, Is.False);
+
+			personRequest.ForcePending();			
+			result = Mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
+
+			Assert.That(personRequest.IsPending, Is.True);
+			Assert.That(result.IsPending, Is.True);
+		}
+
+
+		[Test]
+		public void ShouldMapIsApproved()
+		{
+			var sender = PersonFactory.CreatePerson();
+			var tradeDate = new DateOnly(2010, 1, 1);
+			var shiftTradeSwapDetail = new ShiftTradeSwapDetail(sender, _loggedOnPerson, tradeDate, tradeDate);
+			var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail> { shiftTradeSwapDetail });
+			var personRequest = new PersonRequest(_loggedOnPerson) { Subject = "Subject of request", Request = shiftTradeRequest };
+			var result = Mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
+
+			Assert.That(personRequest.IsApproved, Is.False); 
+			Assert.That(result.IsApproved, Is.False);
+
+			personRequest.ForcePending();
+			personRequest.Approve(new ApprovalServiceForTest(), new PersonRequestAuthorizationCheckerForTest());
+			result = Mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
+
+			Assert.That(personRequest.IsApproved, Is.True);
+			Assert.That(result.IsApproved, Is.True);
+		}
+
 		private static IPersonRequest createShiftTrade(IPerson from, IPerson to)
 		{
 			var tradeDate = new DateOnly(2010, 1, 1);

@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
         private IAbsenceRequestValidator _validator;
         private IAbsenceRequest _absenceRequest;
         private IPersonRequestCheckAuthorization _authorization;
+        private IValidatedRequest _validatedRequest;
 
         [SetUp]
         public void Setup()
@@ -30,6 +31,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             _personRequest = (IPersonRequest)_absenceRequest.Parent;
             _validator = _mocks.StrictMock<IAbsenceRequestValidator>();
             _validators = new List<IAbsenceRequestValidator>{_validator};
+            _validatedRequest = new ValidatedRequest(){IsValid = true, ValidationErrors = ""};
             _authorization = _mocks.StrictMock<IPersonRequestCheckAuthorization>();
             _target = new PendingAbsenceRequest();
         }
@@ -37,9 +39,12 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
         [Test]
         public void VerifyDenyRequestIfNotValid()
         {
+            _validatedRequest.IsValid = false;
+            _validatedRequest.ValidationErrors = "KeyForInvalidRequest";
+
             using (_mocks.Record())
             {
-                Expect.Call(_validator.Validate(_absenceRequest)).Return(false);
+                Expect.Call(_validator.Validate(_absenceRequest)).Return(_validatedRequest); // false;
                 Expect.Call(_validator.InvalidReason).Return("KeyForInvalidRequest");
                 _authorization.VerifyEditRequestPermission(_personRequest);
             }
@@ -54,9 +59,12 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
         [Test]
         public void VerifyGrantRequestIfValid()
         {
+            _validatedRequest.IsValid = true;
+            _validatedRequest.ValidationErrors = "";
+            
             using (_mocks.Record())
             {
-                Expect.Call(_validator.Validate(_absenceRequest)).Return(true);
+                Expect.Call(_validator.Validate(_absenceRequest)).Return(_validatedRequest);  //true;
                 _authorization.VerifyEditRequestPermission(_personRequest);
             }
 
@@ -71,10 +79,13 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
         public void VerifyDenyRequestAndRollbackIfNotValid()
         {
             IUndoRedoContainer undoRedoContainer = _mocks.StrictMock<IUndoRedoContainer>();
+            _validatedRequest.IsValid = false;
+            _validatedRequest.ValidationErrors = "KeyForInvalidRequest";
+
             using (_mocks.Ordered())
             {
-                Expect.Call(_validator.Validate(_absenceRequest)).Return(false);
-                Expect.Call(_validator.InvalidReason).Return("KeyForInvalidRequest");
+                Expect.Call(_validator.Validate(_absenceRequest)).Return(_validatedRequest);  // false;
+                //Expect.Call(_validator.InvalidReason).Return("KeyForInvalidRequest");
                 undoRedoContainer.UndoAll();
                 Expect.Call(() => _authorization.VerifyEditRequestPermission(_personRequest));
             }
@@ -93,9 +104,12 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
         public void VerifyRollbackAndPendRequestIfValid()
         {
             IUndoRedoContainer undoRedoContainer = _mocks.StrictMock<IUndoRedoContainer>();
+            _validatedRequest.IsValid = true;
+            _validatedRequest.ValidationErrors = "";
+
             using (_mocks.Ordered())
             {
-                Expect.Call(_validator.Validate(_absenceRequest)).Return(true);
+                Expect.Call(_validator.Validate(_absenceRequest)).Return(_validatedRequest);  //true;
                 undoRedoContainer.UndoAll();
             }
 
@@ -126,6 +140,14 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 
             Assert.IsTrue(otherProcessOfSameKind.Equals(_target));
             Assert.IsFalse(_target.Equals(otherProcess));
+        }
+
+        [Test]
+        public void ShouldGetHashCodeInReturn()
+        {
+            var result = _target.GetHashCode();
+            Assert.IsNotNull(result);
+
         }
     }
 }

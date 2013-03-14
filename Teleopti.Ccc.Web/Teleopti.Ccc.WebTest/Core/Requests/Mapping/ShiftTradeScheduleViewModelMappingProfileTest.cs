@@ -54,7 +54,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			Mapper.Initialize(c => c.AddProfile(new ShiftTradeScheduleViewModelMappingProfile(() => _shiftTradeRequestProvider, () => _projectionProvider, Depend.On(_timelineFactory), () => _userCulture, () => _possibleShiftTradePersonsProvider)));
 		}
 
-		#region henke move out mapping of scheduleday
 		[Test]
 		public void ShouldMapScheduleDayTextFromName()
 		{
@@ -160,6 +159,19 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		}
 
 		[Test]
+		public void ShouldMapDayoffDate()
+		{
+			var dayoff = new PersonDayOff(_person, new Scenario("d"), new DayOff(), new DateOnly(2000, 1, 1), TimeZoneInfo.Utc);
+			var scheduleDay = _scheduleFactory.ScheduleDayStub(new DateTime(2000,1,1), _person);
+			scheduleDay.Add(dayoff);
+			_projectionProvider.Expect(p => p.Projection(scheduleDay)).Return(_scheduleFactory.ProjectionStub(new IVisualLayer[0]));
+
+			var result = Mapper.Map<IScheduleDay, ShiftTradePersonScheduleViewModel>(scheduleDay);
+			result.MinutesSinceTimeLineStart.Should().Be.IncludedIn(0, 60*24);
+			result.StartTimeUtc.Should().Be.IncludedIn(new DateTime(1999, 12, 31), new DateTime(2000,1,2));
+		}
+
+		[Test]
 		public void ShouldMapScheduledDayPayloadColor()
 		{
 			var scheduleDay = _scheduleFactory.ScheduleDayStub(new DateTime(), _person);
@@ -240,7 +252,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 
 			result.HasUnderlyingDayOff.Should().Be.True();
 		}
-		#endregion //henke move out
 
 		[Test]
 		public void ShouldMapMinutesSinceTimeLineStartSetWhenOnlyMySchedule()

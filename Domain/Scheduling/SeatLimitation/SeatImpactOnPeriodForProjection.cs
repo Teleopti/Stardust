@@ -47,8 +47,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			{
 				IActivity activity = layer.Payload as IActivity;
 				if (activity == null)
-					continue;
-
+				{
+					activity = layer.Payload.UnderlyingPayload as IActivity;
+					if(activity == null)
+						continue;	
+				}
+					
 				if (!activity.RequiresSeat)
 					continue;
 

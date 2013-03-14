@@ -142,7 +142,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		}
 
 		[UnitOfWorkAction]
-		[HttpPost]
+		[HttpGet]
 		public JsonResult ShiftTradeRequestSwapDetails(Guid id)
 		{
 			var viewmodel = _requestsViewModelFactory.CreateShiftTradeRequestSwapDetails(id);

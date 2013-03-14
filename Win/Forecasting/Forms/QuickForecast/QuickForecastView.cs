@@ -25,10 +25,10 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
 
             if (DesignMode) return;
 
-            Presenter.Initialize();
+            //Presenter.Initialize();
         }
 
-        public QuickForecastPresenter Presenter { get; set; }
+       // public QuickForecastPresenter Presenter { get; set; }
 
         public void SetWorkloadCollection(IEnumerable<WorkloadModel> workloadModels)
         {
@@ -74,11 +74,11 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
             var currentWorkload = (WorkloadModel) checkedListBoxWorkloads.Items[e.Index];
             if (e.NewValue==CheckState.Checked)
             {
-                Presenter.AddWorkload(currentWorkload);
+                Presenter.AddWorkload(currentWorkload.Workload.Id.GetValueOrDefault());
             }
             else
             {
-                Presenter.RemoveWorkload(currentWorkload);
+                Presenter.RemoveWorkload(currentWorkload.Workload.Id.GetValueOrDefault());
             }
         }
 
@@ -108,7 +108,8 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
             Presenter.SetStatisticPeriod(dateSelectionFromToStatistics.GetSelectedDates()[0]);
             Presenter.SetTargetPeriod(dateSelectionFromToTarget.GetSelectedDates()[0]);
 
-            backgroundWorkerAutoForecast.RunWorkerAsync();
+            //backgroundWorkerAutoForecast.RunWorkerAsync();
+			Presenter.ExecuteAutoForecast();
         }
 
         private void DisableInterface()

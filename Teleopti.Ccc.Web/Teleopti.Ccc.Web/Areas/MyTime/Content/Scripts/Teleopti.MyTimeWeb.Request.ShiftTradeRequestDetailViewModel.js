@@ -43,14 +43,17 @@ Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
 	self.otherSchedule = ko.observable(new Teleopti.MyTimeWeb.Request.PersonScheduleViewModel());
 	self.hours = ko.observableArray();
 	self.hourWidth = ko.observable(10);
-	self.loadSwapDetails = function () {
+	
+    self.IsPending = ko.observable(false);
+    self.showInfo = ko.observable(false);
+    self.loadSwapDetails = function () {
 		self.ajax.Ajax({
 			url: "Requests/ShiftTradeRequestSwapDetails/" + self.Id(),
 			dataType: "json",
-			type: "POST",
+			type: "GET",
 			success: function (data) {
 				var numberOfShownHours = data.TimeLineHours.length;
-				var showNumberRatio = Math.floor(numberOfShownHours / 24);
+				var showNumberRatio = Math.floor(numberOfShownHours / 12);
 				self.pixelPerMinute(72 / (numberOfShownHours * 10));
 				self.hours.removeAll();
 				for (var i = 0; i < data.TimeLineHours.length; i++) {
@@ -82,15 +85,19 @@ Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
 };
 
 ko.utils.extend(Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel.prototype, {
-	Initialize: function (data) {
-		var self = this;
+    Initialize: function (data) {
+        var self = this;
+        self.showInfo(data.IsNew || data.IsApproved);
 		self.Subject(data.Subject);
 		self.MessageText(data.Text);
 		self.Id(data.Id);
 		self.IsTradeCreatedByMe(data.IsCreatedByUser);
 		self.From(data.From);
 		self.To(data.To);
-	}
+        self.IsPending(data.IsPending);
+
+
+    }
 });
 
 Teleopti.MyTimeWeb.Request.TimeLineHourViewModel = function (hour, parentViewModel) {

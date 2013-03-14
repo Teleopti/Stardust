@@ -222,6 +222,11 @@ namespace Teleopti.Ccc.AgentPortalCode.Common
             return TranslateString(valueToTranslate);
         }
 
+        public static string TranslateMessage(string valueToTranslate)
+        {
+            return valueToTranslate;
+        }
+
         private static string TranslateString(string stringToTranslate)
         {
             string translatedString = stringToTranslate;

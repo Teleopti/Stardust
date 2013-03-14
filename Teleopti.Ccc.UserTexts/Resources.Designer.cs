@@ -3612,6 +3612,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Can not display schedule when the status of the shifttrade request is new or approved.
+        /// </summary>
+        public static string CannotDisplayScheduleWhenShiftTradeStatusIsNew {
+            get {
+                return ResourceManager.GetString("CannotDisplayScheduleWhenShiftTradeStatusIsNew", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Can&apos;t find a valid period according to the business rules.
         /// </summary>
         public static string CannotFindAValidPeriodAccordingToTheBusinessRules {
@@ -7087,6 +7096,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Empty preference template name.
+        /// </summary>
+        public static string EmptyTemplateName {
+            get {
+                return ResourceManager.GetString("EmptyTemplateName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enabled.
         /// </summary>
         public static string Enabled {
@@ -10055,6 +10073,24 @@ namespace Teleopti.Ccc.UserTexts {
         public static string InsufficientPermissionForWeb {
             get {
                 return ResourceManager.GetString("InsufficientPermissionForWeb", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Insufficient understaffing for : .
+        /// </summary>
+        public static string InsufficientStaffingDays {
+            get {
+                return ResourceManager.GetString("InsufficientStaffingDays", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Insufficient understaffing on : {0} at .
+        /// </summary>
+        public static string InsufficientStaffingHours {
+            get {
+                return ResourceManager.GetString("InsufficientStaffingHours", resourceCulture);
             }
         }
         
@@ -13156,6 +13192,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Name must not be empty or longer than 50 characters..
+        /// </summary>
+        public static string Name50CharactersLimit {
+            get {
+                return ResourceManager.GetString("Name50CharactersLimit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The name already exists.
         /// </summary>
         public static string NameAlreadyExists {
@@ -13761,6 +13806,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to New Template Name.
+        /// </summary>
+        public static string NewTemplateName {
+            get {
+                return ResourceManager.GetString("NewTemplateName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to New Text Request.
         /// </summary>
         public static string NewTextRequest {
@@ -13992,6 +14046,33 @@ namespace Teleopti.Ccc.UserTexts {
         public static string NoAvailableShifts {
             get {
                 return ResourceManager.GetString("NoAvailableShifts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to One or more days during this requested period {0} has no budget..
+        /// </summary>
+        public static string NoBudgetDefineForSomeRequestedDays {
+            get {
+                return ResourceManager.GetString("NoBudgetDefineForSomeRequestedDays", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There is no budget for this period {0}.
+        /// </summary>
+        public static string NoBudgetForThisPeriod {
+            get {
+                return ResourceManager.GetString("NoBudgetForThisPeriod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There is no budget group for person: {0}.
+        /// </summary>
+        public static string NoBudgetGroupForPerson {
+            get {
+                return ResourceManager.GetString("NoBudgetGroupForPerson", resourceCulture);
             }
         }
         
@@ -14424,6 +14505,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string NoTeamsAvailable {
             get {
                 return ResourceManager.GetString("NoTeamsAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There is not enough budget allowance for day {0}..
+        /// </summary>
+        public static string NotEnoughBudgetAllowanceForTheDay {
+            get {
+                return ResourceManager.GetString("NotEnoughBudgetAllowanceForTheDay", resourceCulture);
             }
         }
         
@@ -17724,6 +17814,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Your Request has been denied. Date Period not open for sending requests..
+        /// </summary>
+        public static string RequestDenyReasonClosedPeriodBeforeSendRequest {
+            get {
+                return ResourceManager.GetString("RequestDenyReasonClosedPeriodBeforeSendRequest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Your absence request cannot be granted.There is no workflow connected to your account..
         /// </summary>
         public static string RequestDenyReasonNoWorkflow {
@@ -17738,6 +17837,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string RequestDenyReasonOtherPart {
             get {
                 return ResourceManager.GetString("RequestDenyReasonOtherPart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your Request has been denied. Day not open for requests. Next open date is {0}..
+        /// </summary>
+        public static string RequestDenyReasonPeriodOpenAfterSendRequest {
+            get {
+                return ResourceManager.GetString("RequestDenyReasonPeriodOpenAfterSendRequest", resourceCulture);
             }
         }
         
@@ -20062,11 +20170,20 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Critical understaffing.
+        ///   Looks up a localized string similar to Critical understaffing for :.
         /// </summary>
         public static string SeriousUnderstaffing {
             get {
                 return ResourceManager.GetString("SeriousUnderstaffing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Critical Under Staffing on : {0} at .
+        /// </summary>
+        public static string SeriousUnderStaffingHours {
+            get {
+                return ResourceManager.GetString("SeriousUnderStaffingHours", resourceCulture);
             }
         }
         
@@ -21229,6 +21346,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SkillTypeTime {
             get {
                 return ResourceManager.GetString("SkillTypeTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The request failed the understaffing validation for skill {0}. Since it would bring the needed number of resources below the required threshold..
+        /// </summary>
+        public static string SkillUnderStaffingValidationError {
+            get {
+                return ResourceManager.GetString("SkillUnderStaffingValidationError", resourceCulture);
             }
         }
         

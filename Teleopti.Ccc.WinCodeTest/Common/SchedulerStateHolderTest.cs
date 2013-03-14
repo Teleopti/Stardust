@@ -276,5 +276,12 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             target.LoadSchedules(scheduleRepository, personProvider, scheduleDictionaryLoadOptions, null);
         }
 
+		[Test]
+		public void ShouldGetConsiderShortBreaks()
+		{
+			target.ConsiderShortBreaks = true;
+			Assert.IsTrue(target.ConsiderShortBreaks);
+		}
+
     }
 }

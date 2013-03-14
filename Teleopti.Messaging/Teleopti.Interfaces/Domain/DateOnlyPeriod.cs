@@ -143,6 +143,19 @@ namespace Teleopti.Interfaces.Domain
             }
         }
 
+		
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="formatProvider"></param>
+		/// <returns></returns>
+		public string ToShortDateString(IFormatProvider formatProvider)
+		{
+			
+				return
+					StartDate.ToShortDateString(formatProvider) + DATETIME_SEPARATOR + EndDate.ToShortDateString(formatProvider);
+			
+		}
         /// <summary>
         /// Returns an Arabic calendar safe date string.
         /// </summary>

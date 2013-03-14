@@ -53,44 +53,6 @@ Scenario: See preference on scheduled day
 	| Shift category | Late       |
 	| Preference     | Late       |
 
-Scenario: See that preference is fulfilled
-	Given I have a preference with
-	| Field      | Value      |
-	| Date       | 2012-10-02 |
-	| Preference | Late       |
-	And I have a shift with
-	| Field          | Value            |
-	| Date           | 2012-10-02       |
-	| Shift category | Late             |
-	| StartTime      | 2012-10-02 10:00 |
-	| EndTime        | 2012-10-02 20:00 |
-	When I view preferences for date '2012-10-02'
-	Then I should see the day cell with
-	| Field          | Value      |
-	| Date           | 2012-10-02 |
-	| Shift category | Late       |
-	| Preference     | Late       |
-	| Fulfilled      | true       |
-
-Scenario: See that preference not fulfilled
-	Given I have a preference with
-	| Field      | Value      |
-	| Date       | 2012-10-02 |
-	| Preference | Late       |
-	And I have a shift with
-	| Field          | Value            |
-	| Date           | 2012-10-02       |
-	| Shift category | Night            |
-	| StartTime      | 2012-10-02 20:00 |
-	| EndTime        | 2012-10-03 04:00 |
-	When I view preferences for date '2012-10-02'
-	Then I should see the day cell with
-	| Field          | Value      |
-	| Date           | 2012-10-02 |
-	| Shift category | Night      |
-	| Preference     | Late       |
-	| Fulfilled      | false      |
-
 Scenario: See extended indication on preference on scheduled day
 	Given I have an extended preference with
 	| Field            | Value      |

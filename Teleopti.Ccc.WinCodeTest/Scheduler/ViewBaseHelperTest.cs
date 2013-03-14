@@ -78,8 +78,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         private VisualLayerFactory _layerFactory;
         private DateOnly _baseDateTime;
         private IDictionary<IPerson, IScheduleRange> _underlyingDictionary;
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
+	    private IList<IScheduleDay> _scheduleDays;
+			
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
         public void Setup()
         {
             _layerFactory = new VisualLayerFactory();
@@ -1154,6 +1155,13 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				var period = ViewBaseHelper.GetPeriod(days);
 				Assert.AreEqual(expected, period);
 			}
+		}
+
+		[Test, ExpectedException(typeof(ArgumentNullException))]
+		public void ShouldThrowExceptionWhenDaysIsNull()
+		{
+			_scheduleDays = null;
+			ViewBaseHelper.GetPeriod(_scheduleDays);
 		}
 
 		[Test]

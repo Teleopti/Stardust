@@ -75,10 +75,12 @@
     <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="MbCache">
+    <Reference Include="MbCache, Version=2.1.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\MbCache.2.1\lib\net40\MbCache.dll</HintPath>
     </Reference>
-    <Reference Include="MbCache.ProxyImpl.LinFu">
+    <Reference Include="MbCache.ProxyImpl.LinFu, Version=2.1.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\MbCache.2.1\lib\net40\MbCache.ProxyImpl.LinFu.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AspNet.SignalR.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -123,6 +125,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceTemplatePersisterTest.cs" />
+    <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceTemplateProviderTest.cs" />
+    <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceTemplateInputMappingTest.cs" />
+    <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceTemplateViewModelMappingTest.cs" />
     <Compile Include="Areas\Anywhere\Hubs\PersonScheduleHubTest.cs" />
     <Compile Include="Areas\Anywhere\Hubs\PersonScheduleViewModelFactoryTest.cs" />
     <Compile Include="Areas\Anywhere\Hubs\PersonScheduleViewModelMapperTest.cs" />
