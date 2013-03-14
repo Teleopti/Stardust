@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Rta.Server
 		{
 			var idString = string.Format(CultureInfo.InvariantCulture, personId.ToString());
 			var query = string.Format(CultureInfo.InvariantCulture,
-									  @"SELECT TOP 2 PayloadId,StartDateTime,EndDateTime,rta.Name,rta.ShortName,DisplayColor 
+			                          @"SELECT PayloadId,StartDateTime,EndDateTime,rta.Name,rta.ShortName,DisplayColor 
 						FROM ReadModel.v_ScheduleProjectionReadOnlyRTA rta
 						WHERE PersonId='{0}'", idString);
 			var layers = new List<ScheduleLayer>();
@@ -81,22 +81,15 @@ namespace Teleopti.Ccc.Rta.Server
 				var reader = command.ExecuteReader(CommandBehavior.CloseConnection);
 				while (reader.Read())
 				{
-					var payloadId = reader.GetGuid(reader.GetOrdinal("PayloadId"));
-					var startDateTime = reader.GetDateTime(reader.GetOrdinal("StartDateTime"));
-					var endDateTime = reader.GetDateTime(reader.GetOrdinal("EndDateTime"));
-					var name = reader.GetString(reader.GetOrdinal("Name"));
-					var shortName = reader.GetString(reader.GetOrdinal("ShortName"));
-					var displayColor = reader.GetInt32(reader.GetOrdinal("DisplayColor"));
-
 					var layer = new ScheduleLayer
-					{
-						PayloadId = payloadId,
-						StartDateTime = startDateTime,
-						EndDateTime = endDateTime,
-						Name = name,
-						ShortName = shortName,
-						DisplayColor = displayColor
-					};
+						{
+							PayloadId = reader.GetGuid(reader.GetOrdinal("PayloadId")),
+							StartDateTime = reader.GetDateTime(reader.GetOrdinal("StartDateTime")),
+							EndDateTime = reader.GetDateTime(reader.GetOrdinal("EndDateTime")),
+							Name = reader.GetString(reader.GetOrdinal("Name")),
+							ShortName = reader.GetString(reader.GetOrdinal("ShortName")),
+							DisplayColor = reader.GetInt32(reader.GetOrdinal("DisplayColor"))
+						};
 					layers.Add(layer);
 				}
 				reader.Close();
@@ -110,7 +103,10 @@ namespace Teleopti.Ccc.Rta.Server
 		public IActualAgentState LoadOldState(Guid personToLoad)
 		{
 			var personIdString = personToLoad.ToString();
-			var query = string.Format("SELECT * FROM RTA.ActualAgentState WHERE PersonId ='{0}'", personIdString);
+			var query =
+				string.Format(
+					"SELECT AlarmId, StateStart, ScheduledId, ScheduledNextId, StateId, ScheduledNextId, NextStart, PlatformTypeId, StateCode FROM RTA.ActualAgentState WHERE PersonId ='{0}'",
+					personIdString);
 			using (
 				var connection =
 					_databaseConnectionFactory.CreateConnection(
@@ -124,47 +120,18 @@ namespace Teleopti.Ccc.Rta.Server
 				{
 					while (reader.Read())
 					{
-						var stateCode = reader.GetString(reader.GetOrdinal("StateCode"));
-						var state = reader.GetString(reader.GetOrdinal("State"));
-						var alarmName = reader.GetString(reader.GetOrdinal("AlarmName"));
-						var scheduled = reader.GetString(reader.GetOrdinal("Scheduled"));
-						var scheduledNext = reader.GetString(reader.GetOrdinal("ScheduledNext"));
-
-						var platformTypeId = reader.GetGuid(reader.GetOrdinal("PlatformTypeId"));
-						var scheduledId = reader.GetGuid(reader.GetOrdinal("ScheduledId"));
-						var alarmId = reader.GetGuid(reader.GetOrdinal("AlarmId"));
-						var scheduledNextId = reader.GetGuid(reader.GetOrdinal("ScheduledNextId"));
-						var personId = reader.GetGuid(reader.GetOrdinal("PersonId"));
-						var stateId = reader.GetGuid(reader.GetOrdinal("StateId"));
-
-						var stateStart = reader.GetDateTime(reader.GetOrdinal("StateStart"));
-						var nextStart = reader.GetDateTime(reader.GetOrdinal("NextStart"));
-						var alarmStart = reader.GetDateTime(reader.GetOrdinal("AlarmStart"));
-
-						var color = reader.GetInt32(reader.GetOrdinal("Color"));
-						var staffingEffect = reader.GetDouble(reader.GetOrdinal("StaffingEffect"));
-
 						return new ActualAgentState
-						       	{
-						       		State = state,
-						       		PlatformTypeId = platformTypeId,
-						       		StateCode = stateCode,
-						       		AlarmName = alarmName,
-						       		StateId = stateId,
-						       		Scheduled = scheduled,
-						       		ScheduledNext = scheduledNext,
-						       		ScheduledId = scheduledId,
-						       		AlarmId = alarmId,
-						       		ScheduledNextId = scheduledNextId,
-						       		PersonId = personId,
-						       		StateStart = stateStart,
-						       		NextStart = nextStart,
-						       		AlarmStart = alarmStart,
-						       		Color = color,
-						       		StaffingEffect = staffingEffect
-						       	};
+							{
+								PlatformTypeId = reader.GetGuid(reader.GetOrdinal("PlatformTypeId")),
+								StateCode = reader.GetString(reader.GetOrdinal("StateCode")),
+								StateId = reader.GetGuid(reader.GetOrdinal("StateId")),
+								ScheduledId = reader.GetGuid(reader.GetOrdinal("ScheduledId")),
+								AlarmId = reader.GetGuid(reader.GetOrdinal("AlarmId")),
+								ScheduledNextId = reader.GetGuid(reader.GetOrdinal("ScheduledNextId")),
+								StateStart = reader.GetDateTime(reader.GetOrdinal("StateStart")),
+								NextStart = reader.GetDateTime(reader.GetOrdinal("NextStart"))
+							};
 					}
-
 				}
 			}
 			return null;
