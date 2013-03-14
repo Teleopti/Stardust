@@ -107,13 +107,12 @@ namespace Teleopti.Ccc.Rta.Server
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
 		public void ProcessScheduleUpdate(Guid personId, Guid businessUnitId, DateTime timestamp)
 		{
-			_agentHandler.InvalidateReadModelCache(personId, timestamp);
 			if (string.IsNullOrEmpty(_connectionStringDataStore))
 			{
 				_loggingSvc.Error("No connection information avaiable in configuration file.");
 				return;
 			}
-			
+			_agentHandler.InvalidateReadModelCache(personId, timestamp);
 			var agentState = _agentHandler.CheckSchedule(personId, businessUnitId, timestamp);
 			if (agentState == null)
 			{

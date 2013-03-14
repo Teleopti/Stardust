@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 				};
 
 			_dataHandler.Expect(s => s.CurrentLayerAndNext(_dateTime, _guid, new List<ScheduleLayer>()))
-			            .Return(new List<ScheduleLayer> {currentLayer, nextLayer});
+						.Return(new List<ScheduleLayer> { currentLayer, nextLayer }).IgnoreArguments();
 			_dataHandler.Expect(s => s.LoadOldState(_guid)).Return(previousState);
 			_dataHandler.Expect(s => s.StateGroups())
 			            .Return(new ConcurrentDictionary<string, List<RtaStateGroupLight>>(dictionary));
@@ -190,7 +190,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 
 			var resetEvent = new AutoResetEvent(false);
 			_dataHandler.Expect(s => s.CurrentLayerAndNext(_dateTime, _guid, new List<ScheduleLayer>()))
-			            .Return(new List<ScheduleLayer> {currentLayer, nextLayer});
+						.Return(new List<ScheduleLayer> { currentLayer, nextLayer }).IgnoreArguments();
 			_dataHandler.Expect(s => s.LoadOldState(_guid)).Return(previousState);
 			_dataHandler.Expect(s => s.StateGroups())
 			            .Return(new ConcurrentDictionary<string, List<RtaStateGroupLight>>(dictionary));
@@ -311,7 +311,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			var resetEvent = new AutoResetEvent(false);
 
 			_dataHandler.Expect(s => s.CurrentLayerAndNext(_dateTime, _guid, new List<ScheduleLayer>()))
-			            .Return(new List<ScheduleLayer> {currentLayer, nextLayer});
+			            .Return(new List<ScheduleLayer> {currentLayer, nextLayer}).IgnoreArguments();
 			_dataHandler.Expect(s => s.LoadOldState(_guid)).Return(previousState);
 			_dataHandler.Expect(s => s.StateGroups()).Return(new ConcurrentDictionary<string, List<RtaStateGroupLight>>(dictionary));
 
@@ -356,7 +356,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 					}
 				};
 			_dataHandler.Expect(s => s.CurrentLayerAndNext(_dateTime, _guid, new List<ScheduleLayer>()))
-			            .Return(new List<ScheduleLayer> {currentLayer, nextLayer});
+			            .Return(new List<ScheduleLayer> {currentLayer, nextLayer}).IgnoreArguments();
 			_dataHandler.Expect(s => s.LoadOldState(_guid)).Return(null);
 			_dataHandler.Expect(s => s.StateGroups()).Return(new ConcurrentDictionary<string, List<RtaStateGroupLight>>(dictionary));
 
@@ -386,7 +386,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			var resetEvent = new AutoResetEvent(false);
 
 			_dataHandler.Expect(s => s.CurrentLayerAndNext(_dateTime, _guid, new List<ScheduleLayer>()))
-			            .Return(new List<ScheduleLayer> {currentLayer, new ScheduleLayer()});
+						.Return(new List<ScheduleLayer> { currentLayer, new ScheduleLayer() }).IgnoreArguments();
 			_dataHandler.Expect(s => s.LoadOldState(_guid)).Return(
 				new ActualAgentState
 					{

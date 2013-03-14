@@ -74,14 +74,13 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		[Test]
 		public void ShouldClearCacheWhenCheckScheduleIsCalled()
 		{
-			var invalidateCache = MockRepository.GenerateMock<IRtaDataHandlerCache>();
-			var target = new RtaDataHandler(_loggingSvc, _messageSender, ConnectionString, _databaseConnectionFactory, _dataSourceResolver, _personResolver, _stateResolver, _agentHandler);
+			var agentHandler = MockRepository.GenerateMock<IActualAgentHandler>();
+			var target = new RtaDataHandler(_loggingSvc, _messageSender, ConnectionString, _databaseConnectionFactory, _dataSourceResolver, _personResolver, _stateResolver, agentHandler);
 			var personId = Guid.NewGuid();
 			var timeStamp = new DateTime(2000, 1, 1);
 
 			target.ProcessScheduleUpdate(personId, Guid.NewGuid(), timeStamp);
-
-			invalidateCache.AssertWasCalled(x => x.InvalidateReadModelCache(personId, timeStamp));
+			agentHandler.AssertWasCalled(x => x.InvalidateReadModelCache(personId, timeStamp));
 		}
 
 		[Test]
