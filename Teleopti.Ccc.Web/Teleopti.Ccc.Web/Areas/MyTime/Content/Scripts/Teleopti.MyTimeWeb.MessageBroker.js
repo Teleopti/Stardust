@@ -2,7 +2,7 @@ Teleopti.MyTimeWeb.MessageBroker = (function () {
 	var listeners = [], conn, hub;
 
 	function _oneTime(options) {
-		hub = $.connection.messageBrokerHub;
+		hub = $.connection.MessageBrokerHub;
 		$.connection.hub.url = options.url + '/signalr';
 		if(options.errCallback) {
 			$.connection.hub.error(options.errCallback);			
