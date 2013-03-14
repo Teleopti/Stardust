@@ -26,6 +26,15 @@ namespace Teleopti.Ccc.WebTest.Core
 		}
 
 		[Test]
+		public void ShouldConvertArabicFormatButForceFourDigitYear()
+		{
+			const string dotNetPattern = "dd/MM/yy";
+			const string jQueryPattern = "dd/mm/yy";
+
+			DatePatternConverter.TojQueryPattern(dotNetPattern).Should().Be(jQueryPattern);
+		}
+
+		[Test]
 		public void ShouldConvertLongFormat()
 		{
 			const string dotNetPattern = "dd MMMM yyyy";
