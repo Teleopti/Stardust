@@ -7,6 +7,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
     {
         public IRequestApprovalService RequestApprovalService { get; set; }
         public IUndoRedoContainer UndoRedoContainer { get; set; }
+        public IBudgetGroupAllowanceSpecification BudgetGroupAllowanceSpecification { get; set; }
 
         public abstract string DisplayText { get; }
         public abstract IProcessAbsenceRequest CreateInstance();
@@ -15,11 +16,13 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
         {
             foreach (var absenceRequestValidator in absenceRequestValidatorList)
             {
-                if (!absenceRequestValidator.Validate(absenceRequest))
+                IValidatedRequest validatedRequest = absenceRequestValidator.Validate(absenceRequest);
+
+                if(! validatedRequest.IsValid)
                 {
-                    DenyAbsenceRequest denyAbsenceRequest = new DenyAbsenceRequest
+                    var denyAbsenceRequest = new DenyAbsenceRequest
                                                                 {
-                                                                    DenyReason = absenceRequestValidator.InvalidReason,
+                                                                    DenyReason = validatedRequest.ValidationErrors,
                                                                     UndoRedoContainer = UndoRedoContainer
                                                                 };
                     denyAbsenceRequest.Process(processingPerson, absenceRequest,authorization,null);

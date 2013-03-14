@@ -164,5 +164,6 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
             target = new AuthorizeExternalAvailableData(availableData);
             target.Check(queryingPersonMembership, DateOnly.Today, BusinessUnitFactory.BusinessUnitUsedInTest).Should().Be.True();
         }
+
     }
 }

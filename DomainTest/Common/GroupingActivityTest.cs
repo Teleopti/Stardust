@@ -138,5 +138,12 @@ namespace Teleopti.Ccc.DomainTest.Common
         {
             myGroupingActivity.AddActivity(null);
         }
+
+        [Test]
+        public void VerifySetDeleted()
+        {
+            myGroupingActivity.SetDeleted();
+            Assert.IsTrue(myGroupingActivity.IsDeleted);
+        }
     }
 }
