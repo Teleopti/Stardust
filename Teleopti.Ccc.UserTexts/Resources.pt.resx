@@ -8219,9 +8219,6 @@ Teleopti P&amp;D
   <data name="NoPersonPeriodFoundForUser" xml:space="preserve">
     <value>Nenhum período da pessoa foi encontrado para esse usuário</value>
   </data>
-  <data name="AdherenceReportSettingCalculationMethodReadyTimeVsContractScheduleTime" xml:space="preserve">
-    <value>Tempo Disponível vs. Tempo Contratado Agendado</value>
-  </data>
   <data name="YouShouldHaveXDaysOff" xml:space="preserve">
     <value>Você deverá ter {0} dias de folga.</value>
   </data>

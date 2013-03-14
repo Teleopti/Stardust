@@ -70,6 +70,13 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             Assert.AreEqual(1, _target.AvailablePeriods.Count());
         }
 
+
+        [Test]
+        public void VerifyThatWorkflowControlSetIsInTheConstructor()
+        {
+            Assert.IsNotNull(_target.WorkflowControlSet);
+        }
+
         [Test]
         public void VerifyCanGetProjection()
         {
