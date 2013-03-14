@@ -10,8 +10,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
         IDictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>> Generate(ITeamBlockInfo teamBlockInfo);
 
-	    IDictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>> Generate(ITeamInfo teamInfo,
-	                                                                               IList<DateOnly> dateOnlyList);
+	    IDictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>> Generate(ITeamInfo teamInfo,IBlockInfo blockInfo);
 	}
 
 	public class SkillDayPeriodIntervalDataGenerator : ISkillDayPeriodIntervalDataGenerator
@@ -103,10 +102,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			return activityIntervalData;
 		}
 
-        public IDictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>> Generate(ITeamInfo teamInfo, IList<DateOnly  > dateOnlyList )
+        public IDictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>> Generate(ITeamInfo teamInfo, IBlockInfo blockInfo  )
         {
             var groupPerson = teamInfo.GroupPerson;
-            //var dateOnlyList = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection();
+            var dateOnlyList = blockInfo.BlockPeriod.DayCollection();
             var activityIntervalData = new Dictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>>();
             var skillDays = _schedulingResultStateHolder.SkillDaysOnDateOnly(dateOnlyList);
             var dateOnlyPeriod = new DateOnlyPeriod(dateOnlyList.Min(), dateOnlyList.Max());

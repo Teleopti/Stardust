@@ -89,16 +89,15 @@ namespace Teleopti.Ccc.Domain.Scheduling
                 foreach (var person in teamBlockInfo.TeamInfo.GroupPerson.GroupMembers)
                 {
                     //should pass the suggested shift here
-                    var restriction = _restrictionAggregator.AggregatePerDay( teamBlockInfo.TeamInfo, schedulingOptions, new List<DateOnly> { day });
+                    var blockInfo = new BlockInfo(new DateOnlyPeriod(day, day));
+                    var restriction = _restrictionAggregator.AggregatePerDay(teamBlockInfo.TeamInfo, schedulingOptions, blockInfo);
 
-                    // (should we cover for max seats here?) ????
                     //should consider the suggested start time
                     var shifts = _workShiftFilterService.Filter(datePointer, teamBlockInfo, restriction,
                                                                 schedulingOptions, new WorkShiftFinderResult(teamBlockInfo.TeamInfo.GroupPerson, datePointer));
                     if (shifts == null || shifts.Count <= 0)
                         return false;
-
-                    var activityInternalData = _skillDayPeriodIntervalDataGenerator.Generate(teamBlockInfo.TeamInfo, new List<DateOnly> { day });
+                    var activityInternalData = _skillDayPeriodIntervalDataGenerator.Generate(teamBlockInfo.TeamInfo, blockInfo);
 
                     var bestShiftProjectionCache = _workShiftSelector.SelectShiftProjectionCache(shifts, activityInternalData,
                                                                                                  schedulingOptions
@@ -107,7 +106,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
                                                                                                      .UseMinimumPersons,
                                                                                                  schedulingOptions
                                                                                                      .UseMaximumPersons);
-                    //implement
                     _teamScheduling.DayScheduled += dayScheduled;
                     _teamScheduling.ExecutePerDayPerPerson(person,day,teamBlockInfo,bestShiftProjectionCache);
                     _teamScheduling.DayScheduled -= dayScheduled;

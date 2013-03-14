@@ -8,8 +8,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
     {
         IEffectiveRestriction Aggregate(ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions);
 
-        IEffectiveRestriction AggregatePerDay(ITeamInfo teamInfo, ISchedulingOptions schedulingOptions,
-                                              IList<DateOnly> dateOnlyList);
+        IEffectiveRestriction AggregatePerDay(ITeamInfo teamInfo, ISchedulingOptions schedulingOptions,IBlockInfo blockInfo );
     }
 
     public class RestrictionAggregator : IRestrictionAggregator
@@ -75,12 +74,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	        return null;
         }
 
-        public IEffectiveRestriction AggregatePerDay(ITeamInfo teamInfo, ISchedulingOptions schedulingOptions, IList<DateOnly > dateOnlyList  )
+        public IEffectiveRestriction AggregatePerDay(ITeamInfo teamInfo, ISchedulingOptions schedulingOptions, IBlockInfo blockInfo   )
         {
             if (teamInfo == null)
                 return null;
             var groupPerson = teamInfo.GroupPerson;
-            //var dateOnlyList = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection();
+            var dateOnlyList = blockInfo.BlockPeriod.DayCollection();
             var matrixList = teamInfo.MatrixesForGroup().ToList();
             var scheduleDictionary = _schedulingResultStateHolder.Schedules;
 
