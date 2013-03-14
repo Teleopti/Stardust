@@ -179,7 +179,6 @@
     <Compile Include="Denormalizer\UpdateGroupingReadModelGroupPageConsumer.cs" />
     <Compile Include="Denormalizer\DenormalizeScheduleProjectionConsumer.cs" />
     <Compile Include="Denormalizer\InitialLoadScheduleProjectionConsumer.cs" />
-    <Compile Include="Denormalizer\IScheduleChangedNotification.cs" />
     <Compile Include="Denormalizer\IUpdateGroupingReadModel.cs" />
     <Compile Include="Denormalizer\IUpdatePersonFinderReadModel.cs" />
     <Compile Include="Denormalizer\UpdateGroupingReadModelConsumer.cs" />
