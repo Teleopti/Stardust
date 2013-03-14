@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Web.Broker
 			if (settingsFromParser.ConnectionTimeout.HasValue)
 				GlobalHost.Configuration.ConnectionTimeout = settingsFromParser.ConnectionTimeout.Value;
 
-			RouteTable.Routes.MapHubs();
+			RouteTable.Routes.MapHubs(new HubConfiguration{EnableCrossDomain = true});
 		}
 
 		protected void Session_Start(object sender, EventArgs e)
