@@ -93,14 +93,6 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_reader.Expect(r => r.Read()).Return(true);
 			_reader.Expect(r => r.GetOrdinal("StateCode")).Return(0);
 			_reader.Expect(r => r.GetString(0)).Return("myStateCode");
-			_reader.Expect(r => r.GetOrdinal("State")).Return(1);
-			_reader.Expect(r => r.GetString(1)).Return("myState");
-			_reader.Expect(r => r.GetOrdinal("AlarmName")).Return(2);
-			_reader.Expect(r => r.GetString(2)).Return("myAlarmName");
-			_reader.Expect(r => r.GetOrdinal("Scheduled")).Return(3);
-			_reader.Expect(r => r.GetString(3)).Return("myScheduled");
-			_reader.Expect(r => r.GetOrdinal("ScheduledNext")).Return(4);
-			_reader.Expect(r => r.GetString(4)).Return("myScheduledNext");
 
 			_reader.Expect(r => r.GetOrdinal("PlatformTypeId")).Return(5);
 			_reader.Expect(r => r.GetGuid(5)).Return(_guid);
@@ -110,8 +102,6 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_reader.Expect(r => r.GetGuid(7)).Return(_guid);
 			_reader.Expect(r => r.GetOrdinal("ScheduledNextId")).Return(8);
 			_reader.Expect(r => r.GetGuid(8)).Return(_guid);
-			_reader.Expect(r => r.GetOrdinal("PersonId")).Return(9);
-			_reader.Expect(r => r.GetGuid(9)).Return(_guid);
 			_reader.Expect(r => r.GetOrdinal("StateId")).Return(10);
 			_reader.Expect(r => r.GetGuid(10)).Return(_guid);
 
@@ -119,13 +109,6 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_reader.Expect(r => r.GetDateTime(11)).Return(_dateTime);
 			_reader.Expect(r => r.GetOrdinal("NextStart")).Return(12);
 			_reader.Expect(r => r.GetDateTime(12)).Return(_dateTime);
-			_reader.Expect(r => r.GetOrdinal("AlarmStart")).Return(13);
-			_reader.Expect(r => r.GetDateTime(13)).Return(_dateTime);
-
-			_reader.Expect(r => r.GetOrdinal("Color")).Return(14);
-			_reader.Expect(r => r.GetInt32(14)).Return(123456789);
-			_reader.Expect(r => r.GetOrdinal("StaffingEffect")).Return(15);
-			_reader.Expect(r => r.GetDouble(15)).Return(123456D);
 
 			_reader.Expect(r => r.Dispose());
 			_connection.Expect(c => c.Dispose());
@@ -138,7 +121,6 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			result.StateCode.Should().Be.EqualTo("myStateCode");
 			result.PlatformTypeId.Should().Be.EqualTo(_guid);
 			result.StateStart.Should().Be.EqualTo(_dateTime);
-			result.Color.Should().Be.EqualTo(123456789);
 		}
 
 		[Test]
