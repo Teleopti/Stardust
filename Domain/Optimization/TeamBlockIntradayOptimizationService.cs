@@ -80,15 +80,9 @@ namespace Teleopti.Ccc.Domain.Optimization
             {
                 foreach (var matrix in teamInfo.MatrixesForGroupMember(0))
                 {
-                    ILockableBitArray originalArray =
-                        _lockableBitArrayFactory.ConvertFromMatrix(optimizationPreferences.DaysOff.ConsiderWeekBefore,
-                                                                   optimizationPreferences.DaysOff.ConsiderWeekAfter,
-                                                                   matrix);
-
-                    var decisionMaker = new TeamBlockIntradayDecisionMaker(_blockProvider,
-                                                                           dataExtractorValuesForMatrixes);
-                    var block = decisionMaker.Decide(originalArray, selectedPeriod, selectedPersons, allPersonMatrixList,
-                                                     schedulingOptions);
+                    var decisionMaker = new TeamBlockIntradayDecisionMaker(_lockableBitArrayFactory, _blockProvider);
+                    var block = decisionMaker.Decide(selectedPeriod, selectedPersons, allPersonMatrixList,dataExtractorValuesForMatrixes,
+                                                     schedulingOptions, optimizationPreferences);
 
                     //clear block
                     foreach (var dateOnly in block.BlockPeriod.DayCollection())
