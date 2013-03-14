@@ -17,16 +17,19 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
     	private readonly IOccupiedSeatCalculator _occupiedSeatCalculator;
     	private readonly INonBlendSkillCalculator _nonBlendSkillCalculator;
     	private readonly ISingleSkillDictionary _singleSkillDictionary;
+	    private readonly ISingleSkillMaxSeatCalculator _singleSkillMaxSeatCalculator;
 
     	public ResourceOptimizationHelper(ISchedulingResultStateHolder stateHolder, 
             IOccupiedSeatCalculator occupiedSeatCalculator, 
             INonBlendSkillCalculator nonBlendSkillCalculator,
-			ISingleSkillDictionary singleSkillDictionary)
+			ISingleSkillDictionary singleSkillDictionary,
+			ISingleSkillMaxSeatCalculator singleSkillMaxSeatCalculator)
 		{
 			_stateHolder = stateHolder;
 			_occupiedSeatCalculator = occupiedSeatCalculator;
     		_nonBlendSkillCalculator = nonBlendSkillCalculator;
     		_singleSkillDictionary = singleSkillDictionary;
+    		_singleSkillMaxSeatCalculator = singleSkillMaxSeatCalculator;
 		}
 
         public void ResourceCalculateDate(DateOnly localDate, bool useOccupancyAdjustment, bool considerShortBreaks)
@@ -76,7 +79,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 					removedVisualLayerCollections.Add(collection);
 				}
 
-				resourceCalculateDate(relevantProjections, localDate, useOccupancyAdjustment, calculateMaxSeatsAndNonBlend, considerShortBreaks, removedVisualLayerCollections, addedVisualLayerCollections, useSingleSkillCalculations);
+				resourceCalculateDate(relevantProjections, localDate, useOccupancyAdjustment, calculateMaxSeatsAndNonBlend, considerShortBreaks, removedVisualLayerCollections, addedVisualLayerCollections);
             }
             
         }
@@ -90,8 +93,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 
         private void resourceCalculateDate(IList<IVisualLayerCollection> relevantProjections, 
 			DateOnly localDate, bool useOccupancyAdjustment, bool calculateMaxSeatsAndNonBlend, bool considerShortBreaks
-			, IList<IVisualLayerCollection> toRemove, IList<IVisualLayerCollection> toAdd,
-			bool isAllSingleSkill)
+			, IList<IVisualLayerCollection> toRemove, IList<IVisualLayerCollection> toAdd)
         {
             var timePeriod = getPeriod(localDate);
             var ordinarySkills = new List<ISkill>();
@@ -123,14 +125,14 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 				}
 				relevantSkillStaffPeriods = CreateSkillSkillStaffDictionaryOnSkills(_stateHolder.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary, ordinarySkills, timePeriod);
 
-				if (isAllSingleSkill)
+				if (toRemove.IsEmpty() && toAdd.IsEmpty())
 				{
-					var singleMaxSeatCalculator = new SingleSkillMaxSeatCalculator();
-					singleMaxSeatCalculator.Calculate(relevantSkillStaffPeriods, toRemove, toAdd);
+					_occupiedSeatCalculator.Calculate(localDate, relevantProjections, relevantSkillStaffPeriods);
 				}
 				else
-					_occupiedSeatCalculator.Calculate(localDate, relevantProjections, relevantSkillStaffPeriods);	
-				
+				{
+					_singleSkillMaxSeatCalculator.Calculate(relevantSkillStaffPeriods, toRemove, toAdd);
+				}
             	
 				ordinarySkills = new List<ISkill>();
 				foreach (var skill in _stateHolder.Skills)
