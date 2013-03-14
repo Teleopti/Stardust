@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		public Element CancelButton
 		{
-			get { return Document.Element(QuicklyFind.ByClass("ui-tooltip-close")); }
+			get { return Document.Element(QuicklyFind.ByClass("qtip-close")); }
 		}
 
 		public Div TimeIndicatorForDate(DateTime date)

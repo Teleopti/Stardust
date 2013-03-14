@@ -107,7 +107,6 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 		var data = { LCID: value };
 		ajax.Ajax({
 			url: url,
-			dataType: "json",
 			contentType: 'application/json; charset=utf-8',
 			type: "PUT",
 			data: JSON.stringify(data),

@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		//[FindBy(Id = "StudentAvailability-edit-section")]
 		//public Div InputPanel { get; set; }
 
-		[FindBy(Id = "ui-tooltip-edit-student-availability")]
+		[FindBy(Id = "qtip-edit-student-availability")]
 		public Div EditStudentAvailabilityPanel;
 		[FindBy(Id = "Student-availability-start-time")]
 		public ComboBox StudentAvailabilityStartTime;
