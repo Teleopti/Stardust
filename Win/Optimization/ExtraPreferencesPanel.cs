@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Win.Common;
+using Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences;
 using Teleopti.Ccc.WinCode.Grouping;
 using Teleopti.Ccc.WinCode.Events;
 using Teleopti.Ccc.WinCode.Scheduling;
@@ -20,6 +21,7 @@ namespace Teleopti.Ccc.Win.Optimization
         private IList<IGroupPageLight> _groupPageOnTeamsLevelingPer;
         private IEventAggregator _eventAggregator;
         private IList<IActivity> _availableActivity;
+        private LevellingPerConfiguration _levellingConfiguartion;
 
         public IExtraPreferences Preferences { get; private set; }
 
@@ -116,29 +118,30 @@ namespace Teleopti.Ccc.Win.Optimization
 
             Preferences.GroupPageOnTeam = (IGroupPageLight)comboBoxGroupPageOnTeams.SelectedItem;
 
-            if ((string) comboBoxGroupPageOnTeamsLevelingPer.SelectedValue == "SingleAgentTeam")
-                Preferences.GroupPageOnTeamLevelingPer = null;
-            else
-            Preferences.GroupPageOnTeamLevelingPer = (IGroupPageLight)comboBoxGroupPageOnTeamsLevelingPer .SelectedItem;
+            //if ((string) comboBoxGroupPageOnTeamsLevelingPer.SelectedValue == "SingleAgentTeam")
+            //    Preferences.GroupPageOnTeamLevelingPer = null;
+            //else
+            //Preferences.GroupPageOnTeamLevelingPer = (IGroupPageLight)comboBoxGroupPageOnTeamsLevelingPer .SelectedItem;
 
             Preferences.FairnessValue = (double)trackBar1.Value / 100;
 
             Preferences.GroupPageOnCompareWith = (IGroupPageLight)comboBoxGroupPageOnCompareWith.SelectedItem;
 
-            if(checkBoxLevellingPerBlockScheduling.Checked )
-                Preferences.BlockFinderTypeForAdvanceOptimization = radioButtonBetweenDaysOffAdvOptimization .Checked
-                    ? BlockFinderType.BetweenDayOff
-                    : BlockFinderType.SchedulePeriod;
+            //if(checkBoxLevellingPerBlockScheduling.Checked )
+            //    Preferences.BlockFinderTypeForAdvanceOptimization = radioButtonBetweenDaysOffAdvOptimization .Checked
+            //        ? BlockFinderType.BetweenDayOff
+            //        : BlockFinderType.SchedulePeriod;
                 
-            else
-                Preferences.BlockFinderTypeForAdvanceOptimization = BlockFinderType.None;
-                
+            //else
+            //    Preferences.BlockFinderTypeForAdvanceOptimization = BlockFinderType.None;
 
+            Preferences.UseLevellingOption = checkBoxLevellingPerBlockScheduling.Checked;
         }
 
         private void setDataToControls()
         {
             checkBoxBlock.Checked = Preferences.UseBlockScheduling;
+            checkBoxLevellingPerBlockScheduling.Checked = Preferences.UseLevellingOption;
 
             switch(Preferences.BlockFinderTypeValue)
             {
@@ -165,9 +168,9 @@ namespace Teleopti.Ccc.Win.Optimization
             if (comboBoxGroupPageOnTeams.SelectedValue == null)
                 comboBoxGroupPageOnTeams.SelectedIndex = 0;
 
-            comboBoxGroupPageOnTeamsLevelingPer.SelectedValue = "SingleAgentTeam";
-            if (Preferences.GroupPageOnTeamLevelingPer != null)
-                comboBoxGroupPageOnTeamsLevelingPer.SelectedValue = Preferences.GroupPageOnTeamLevelingPer;
+            //comboBoxGroupPageOnTeamsLevelingPer.SelectedValue = "SingleAgentTeam";
+            //if (Preferences.GroupPageOnTeamLevelingPer != null)
+            //    comboBoxGroupPageOnTeamsLevelingPer.SelectedValue = Preferences.GroupPageOnTeamLevelingPer;
 
             trackBar1.Value = (int)(Preferences.FairnessValue * 100);
 
@@ -259,6 +262,7 @@ namespace Teleopti.Ccc.Win.Optimization
             radioButtonSchedulePeriodAdvOptimization.Enabled = checkBoxLevellingPerBlockScheduling.Checked;
             radioButtonBetweenDaysOffAdvOptimization.Enabled = checkBoxLevellingPerBlockScheduling.Checked;
             comboBoxGroupPageOnTeamsLevelingPer.Enabled = checkBoxLevellingPerBlockScheduling.Checked;
+            btnLevellingPer.Enabled = checkBoxLevellingPerBlockScheduling.Checked;
             if (checkBoxLevellingPerBlockScheduling.Checked)
             {
                 if(Preferences.BlockFinderTypeForAdvanceOptimization != BlockFinderType.BetweenDayOff )
@@ -273,6 +277,35 @@ namespace Teleopti.Ccc.Win.Optimization
                 radioButtonBetweenDaysOffAdvOptimization.Checked = false;
             }
             
+        }
+
+        private void btnLevellingPer_Click(object sender, EventArgs e)
+        {
+            LevellingPerConfiguration levellingPerConfiguration = new LevellingPerConfiguration();
+            levellingPerConfiguration.SelectedBlockFinderType = Preferences.BlockFinderTypeForAdvanceOptimization;
+            levellingPerConfiguration.SelectedGroupPage = Preferences.GroupPageOnTeamLevelingPer;
+            levellingPerConfiguration.UseSameEndTime = Preferences.UseLevellingSameEndTime;
+            levellingPerConfiguration.UseSameShiftCategory = Preferences.UseLevellingSameShiftCategory;
+            levellingPerConfiguration.UseSameStartTime = Preferences.UseLevellingSameStartTime;
+            levellingPerConfiguration.UserSameShift = Preferences.UseLevellingSameShift;
+
+            var levellingPerPrefrences = new LevellingPerPrefrences(levellingPerConfiguration, _groupPageOnTeamsLevelingPer);
+            levellingPerPrefrences.ShowDialog();
+            _levellingConfiguartion = levellingPerPrefrences.LevellingConfiguration;
+            GetLevellingPerDataToSave();
+
+        }
+
+        private void GetLevellingPerDataToSave()
+        {
+            Preferences.BlockFinderTypeForAdvanceOptimization  =
+                _levellingConfiguartion.SelectedBlockFinderType;
+            Preferences.GroupPageOnTeamLevelingPer  = _levellingConfiguartion.SelectedGroupPage;
+            Preferences.UseLevellingSameEndTime = _levellingConfiguartion.UseSameEndTime;
+            Preferences.UseLevellingSameShift = _levellingConfiguartion.UserSameShift;
+            Preferences.UseLevellingSameShiftCategory = _levellingConfiguartion.UseSameShiftCategory;
+            Preferences.UseLevellingSameStartTime = _levellingConfiguartion.UseSameStartTime;
+
         }
     }
     public class ExtraPreferencesPanelUseBlockScheduling

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Grouping;
@@ -48,6 +50,9 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
         	_groupPagesProvider = groupPagesProvider;
         	_groupPages = groupPagesProvider.GetGroups(true);
             _groupPagesForLevelingPer = groupPagesProvider.GetGroups(true);
+            //add the single agent 
+            var singleAgentEntry = new GroupPageLight { Key = "SingleAgentTeam", Name = Resources.SingleAgentTeam };
+            _groupPagesForLevelingPer.Add(singleAgentEntry);
             _scheduleTags = scheduleTags;
             _settingValue = settingValue;
 		    _availableActivity = availableActivity;
@@ -82,7 +87,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             if (hasMissedloadingSettings()) return;
 			_defaultGeneralSettings.MapTo(_schedulingOptions, _scheduleTags);
 			_defaultAdvancedSettings.MapTo(_schedulingOptions, _shiftCategories);
-            _defaultExtraSettings.MapTo(_schedulingOptions, _scheduleTags, _groupPages, _availableActivity);
+            _defaultExtraSettings.MapTo(_schedulingOptions, _scheduleTags, _groupPages,_groupPagesForLevelingPer, _availableActivity);
 		}
 
         private bool hasMissedloadingSettings()

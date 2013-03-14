@@ -46,6 +46,7 @@
             this.radioButtonSchedulePeriodAdvOptimization = new System.Windows.Forms.RadioButton();
             this.radioButtonBetweenDaysOffAdvOptimization = new System.Windows.Forms.RadioButton();
             this.comboBoxGroupPageOnTeamsLevelingPer = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
+            this.btnLevellingPer = new System.Windows.Forms.Button();
             this.tableLayoutPanel6 = new System.Windows.Forms.TableLayoutPanel();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label3 = new System.Windows.Forms.Label();
@@ -102,7 +103,8 @@
             this.tableLayoutPanel5.Controls.Add(this.comboBoxGroupPageOnTeams, 2, 5);
             this.tableLayoutPanel5.Controls.Add(this.radioButtonSchedulePeriodAdvOptimization, 1, 4);
             this.tableLayoutPanel5.Controls.Add(this.radioButtonBetweenDaysOffAdvOptimization, 2, 4);
-            this.tableLayoutPanel5.Controls.Add(this.comboBoxGroupPageOnTeamsLevelingPer, 2, 3);
+            this.tableLayoutPanel5.Controls.Add(this.comboBoxGroupPageOnTeamsLevelingPer, 2, 2);
+            this.tableLayoutPanel5.Controls.Add(this.btnLevellingPer, 2, 3);
             this.tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel5.Location = new System.Drawing.Point(3, 3);
             this.tableLayoutPanel5.Name = "tableLayoutPanel5";
@@ -110,7 +112,7 @@
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27F));
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27F));
-            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27F));
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27F));
             this.tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 27F));
@@ -128,7 +130,7 @@
             this.checkBoxLevellingPerBlockScheduling.Dock = System.Windows.Forms.DockStyle.Fill;
             this.checkBoxLevellingPerBlockScheduling.Location = new System.Drawing.Point(3, 82);
             this.checkBoxLevellingPerBlockScheduling.Name = "checkBoxLevellingPerBlockScheduling";
-            this.checkBoxLevellingPerBlockScheduling.Size = new System.Drawing.Size(207, 19);
+            this.checkBoxLevellingPerBlockScheduling.Size = new System.Drawing.Size(207, 22);
             this.checkBoxLevellingPerBlockScheduling.TabIndex = 42;
             this.checkBoxLevellingPerBlockScheduling.Text = "xxLevellingPer";
             this.checkBoxLevellingPerBlockScheduling.UseVisualStyleBackColor = true;
@@ -139,7 +141,7 @@
             this.checkBoxTeams.AutoSize = true;
             this.tableLayoutPanel5.SetColumnSpan(this.checkBoxTeams, 2);
             this.checkBoxTeams.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.checkBoxTeams.Location = new System.Drawing.Point(3, 134);
+            this.checkBoxTeams.Location = new System.Drawing.Point(3, 137);
             this.checkBoxTeams.Name = "checkBoxTeams";
             this.checkBoxTeams.Size = new System.Drawing.Size(207, 21);
             this.checkBoxTeams.TabIndex = 4;
@@ -217,7 +219,7 @@
             // checkBoxCommonEnd
             // 
             this.checkBoxCommonEnd.AutoSize = true;
-            this.checkBoxCommonEnd.Location = new System.Drawing.Point(33, 215);
+            this.checkBoxCommonEnd.Location = new System.Drawing.Point(33, 218);
             this.checkBoxCommonEnd.Name = "checkBoxCommonEnd";
             this.checkBoxCommonEnd.Size = new System.Drawing.Size(105, 17);
             this.checkBoxCommonEnd.TabIndex = 6;
@@ -227,7 +229,7 @@
             // checkBoxCommonStart
             // 
             this.checkBoxCommonStart.AutoSize = true;
-            this.checkBoxCommonStart.Location = new System.Drawing.Point(33, 188);
+            this.checkBoxCommonStart.Location = new System.Drawing.Point(33, 191);
             this.checkBoxCommonStart.Name = "checkBoxCommonStart";
             this.checkBoxCommonStart.Size = new System.Drawing.Size(108, 17);
             this.checkBoxCommonStart.TabIndex = 6;
@@ -237,7 +239,7 @@
             // checkBoxCommonCategory
             // 
             this.checkBoxCommonCategory.AutoSize = true;
-            this.checkBoxCommonCategory.Location = new System.Drawing.Point(33, 161);
+            this.checkBoxCommonCategory.Location = new System.Drawing.Point(33, 164);
             this.checkBoxCommonCategory.Name = "checkBoxCommonCategory";
             this.checkBoxCommonCategory.Size = new System.Drawing.Size(126, 17);
             this.checkBoxCommonCategory.TabIndex = 6;
@@ -249,7 +251,7 @@
             this.comboBoxGroupPageOnTeams.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.comboBoxGroupPageOnTeams.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
             this.comboBoxGroupPageOnTeams.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxGroupPageOnTeams.Location = new System.Drawing.Point(216, 134);
+            this.comboBoxGroupPageOnTeams.Location = new System.Drawing.Point(216, 137);
             this.comboBoxGroupPageOnTeams.Name = "comboBoxGroupPageOnTeams";
             this.comboBoxGroupPageOnTeams.Size = new System.Drawing.Size(179, 21);
             this.comboBoxGroupPageOnTeams.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
@@ -258,18 +260,19 @@
             // radioButtonSchedulePeriodAdvOptimization
             // 
             this.radioButtonSchedulePeriodAdvOptimization.AutoSize = true;
-            this.radioButtonSchedulePeriodAdvOptimization.Location = new System.Drawing.Point(33, 107);
+            this.radioButtonSchedulePeriodAdvOptimization.Location = new System.Drawing.Point(33, 110);
             this.radioButtonSchedulePeriodAdvOptimization.Name = "radioButtonSchedulePeriodAdvOptimization";
             this.radioButtonSchedulePeriodAdvOptimization.Size = new System.Drawing.Size(110, 17);
             this.radioButtonSchedulePeriodAdvOptimization.TabIndex = 43;
             this.radioButtonSchedulePeriodAdvOptimization.TabStop = true;
             this.radioButtonSchedulePeriodAdvOptimization.Text = "xxSchedulePeriod";
             this.radioButtonSchedulePeriodAdvOptimization.UseVisualStyleBackColor = true;
+            this.radioButtonSchedulePeriodAdvOptimization.Visible = false;
             // 
             // radioButtonBetweenDaysOffAdvOptimization
             // 
             this.radioButtonBetweenDaysOffAdvOptimization.AutoSize = true;
-            this.radioButtonBetweenDaysOffAdvOptimization.Location = new System.Drawing.Point(216, 107);
+            this.radioButtonBetweenDaysOffAdvOptimization.Location = new System.Drawing.Point(216, 110);
             this.radioButtonBetweenDaysOffAdvOptimization.Name = "radioButtonBetweenDaysOffAdvOptimization";
             this.radioButtonBetweenDaysOffAdvOptimization.Size = new System.Drawing.Size(110, 17);
             this.radioButtonBetweenDaysOffAdvOptimization.TabIndex = 44;
@@ -283,11 +286,23 @@
             this.comboBoxGroupPageOnTeamsLevelingPer.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.comboBoxGroupPageOnTeamsLevelingPer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
             this.comboBoxGroupPageOnTeamsLevelingPer.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxGroupPageOnTeamsLevelingPer.Location = new System.Drawing.Point(216, 82);
+            this.comboBoxGroupPageOnTeamsLevelingPer.Location = new System.Drawing.Point(216, 55);
             this.comboBoxGroupPageOnTeamsLevelingPer.Name = "comboBoxGroupPageOnTeamsLevelingPer";
             this.comboBoxGroupPageOnTeamsLevelingPer.Size = new System.Drawing.Size(179, 21);
             this.comboBoxGroupPageOnTeamsLevelingPer.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
             this.comboBoxGroupPageOnTeamsLevelingPer.TabIndex = 45;
+            this.comboBoxGroupPageOnTeamsLevelingPer.Visible = false;
+            // 
+            // btnLevellingPer
+            // 
+            this.btnLevellingPer.Enabled = false;
+            this.btnLevellingPer.Location = new System.Drawing.Point(216, 82);
+            this.btnLevellingPer.Name = "btnLevellingPer";
+            this.btnLevellingPer.Size = new System.Drawing.Size(91, 22);
+            this.btnLevellingPer.TabIndex = 47;
+            this.btnLevellingPer.Text = "xxLevellingPer";
+            this.btnLevellingPer.UseVisualStyleBackColor = true;
+            this.btnLevellingPer.Click += new System.EventHandler(this.btnLevellingPer_Click);
             // 
             // tableLayoutPanel6
             // 
@@ -441,5 +456,6 @@
         private System.Windows.Forms.RadioButton radioButtonSchedulePeriodAdvOptimization;
         private System.Windows.Forms.RadioButton radioButtonBetweenDaysOffAdvOptimization;
         private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxGroupPageOnTeamsLevelingPer;
+        private System.Windows.Forms.Button btnLevellingPer;
     }
 }

@@ -361,6 +361,26 @@ namespace Teleopti.Interfaces.Domain
         /// Group page for Leveling property used for block optimization
         /// </summary>
         IGroupPageLight GroupPageOnTeamLevelingPer { get; set; }
+        /// <summary>
+        /// Use levelling same end time
+        /// </summary>
+        bool UseLevellingSameEndTime { get; set; }
+        /// <summary>
+        /// Use levelling same shift category
+        /// </summary>
+        bool UseLevellingSameShiftCategory { get; set; }
+        /// <summary>
+        /// Use levelling same start time
+        /// </summary>
+        bool UseLevellingSameStartTime { get; set; }
+        /// <summary>
+        /// Use levelling same shift
+        /// </summary>
+        bool UseLevellingSameShift { get; set; }
+        /// <summary>
+        /// This is  used if levelling per is used
+        /// </summary>
+        bool UseLevellingOption { get; set; }
     }
 
     /// <summary>

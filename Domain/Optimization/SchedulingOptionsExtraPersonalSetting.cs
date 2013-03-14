@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public void MapTo(ISchedulingOptions schedulingOptions, IList<IScheduleTag> scheduleTags, IList<IGroupPageLight> groupPages, IList<IActivity> activityList)
+        public void MapTo(ISchedulingOptions schedulingOptions, IList<IScheduleTag> scheduleTags, IList<IGroupPageLight> groupPages,IList<IGroupPageLight> groupPagesForLevelingPer, IList<IActivity> activityList)
         {
             foreach (var scheduleTag in scheduleTags)
             {
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             }
 
             //for leve per
-            foreach (var groupPage in groupPages)
+            foreach (var groupPage in groupPagesForLevelingPer)
             {
                 if (_groupSchedlingForLevelingPerKey  == groupPage.Key)
                     schedulingOptions.GroupOnGroupPageForLevelingPer = groupPage;
