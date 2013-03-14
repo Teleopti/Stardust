@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 
 		private static bool isCreatedByUser(IRequest request, Func<ILoggedOnUser> loggedOnUser)
 		{
-			return request.PersonFrom.Id == loggedOnUser.Invoke().CurrentUser().Id;
+			return request.PersonFrom != null && request.PersonFrom.Equals(loggedOnUser.Invoke().CurrentUser());
 		}
 	}
 }
