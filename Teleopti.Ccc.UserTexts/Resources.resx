@@ -11302,4 +11302,7 @@ These options are activated:
     <value>Add full day absence</value>
     <comment>Add full day absence</comment>
   </data>
+  <data name="InvalidEndDate" xml:space="preserve">
+    <value>Invalid end date</value>
+  </data>
 </root>

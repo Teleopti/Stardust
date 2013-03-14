@@ -52,6 +52,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 					UserTexts.Resources.LoadingThreeDots,
 					UserTexts.Resources.AddFullDayAbsence,
 					UserTexts.Resources.Apply,
+					UserTexts.Resources.InvalidEndDate,
 
 					CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern,
 					MomentShortDatePattern = CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern.ToUpper(),

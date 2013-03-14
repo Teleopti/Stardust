@@ -10185,6 +10185,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid end date.
+        /// </summary>
+        public static string InvalidEndDate {
+            get {
+                return ResourceManager.GetString("InvalidEndDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid multisite distribution.
         /// </summary>
         public static string InvalidMultisiteDistribution {

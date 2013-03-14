@@ -66,8 +66,7 @@ Scenario: Default values
 	| Start date | 2012-12-02 |
 	| End date   | 2012-12-02 |
 	
-@Ignore 
-Scenario: Invalid values
+Scenario: Invalid dates
 	Given I have the role 'Anywhere Team Green'
 	When I view agent schedules add full day absence form for 'Pierre Baldi' on '2012-12-02'
 	And I input these full day absence values
