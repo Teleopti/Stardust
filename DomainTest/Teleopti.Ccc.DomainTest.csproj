@@ -540,9 +540,6 @@
     </Compile>
     <Compile Include="Payroll\PayrollExportTest.cs" />
     <Compile Include="Payroll\PayrollResultTest.cs" />
-    <Compile Include="RealTimeAdherence\AgentStateBatchTest.cs" />
-    <Compile Include="RealTimeAdherence\AgentStateTest.cs" />
-    <Compile Include="RealTimeAdherence\AlarmSituationTest.cs" />
     <Compile Include="RealTimeAdherence\AlarmTypeTest.cs" />
     <Compile Include="RealTimeAdherence\ExternalAgentStateTest.cs" />
     <Compile Include="RealTimeAdherence\ExternalLogOnPersonTest.cs" />

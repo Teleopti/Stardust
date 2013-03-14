@@ -158,8 +158,12 @@
     <Compile Include="BudgetGroupAllowanceSpecification.cs" />
     <Compile Include="BusStartup.cs" />
     <Compile Include="ConfigFileDefaultHost.cs" />
+    <Compile Include="RtaBusBootStrapper.cs" />
+    <Compile Include="Rta\BusinessUnitInfoConsumer.cs" />
     <Compile Include="Denormalizer\PersonScheduleDayReadModelHandler.cs" />
     <Compile Include="Denormalizer\PersonScheduleDayReadModelsCreator.cs" />
+    <Compile Include="Rta\ClearDelaySendMessages.cs" />
+    <Compile Include="Rta\UpdatedScheduleInfoConsumer.cs" />
     <Compile Include="Denormalizer\DenormalizedScheduleMessageBuilder.cs" />
     <Compile Include="Denormalizer\IDenormalizedScheduleMessageBuilder.cs" />
     <Compile Include="Denormalizer\IScheduleDayReadModelCreator.cs" />
@@ -249,10 +253,16 @@
     <Compile Include="BasicState.cs" />
     <Compile Include="NewAbsenceRequestConsumer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Rta\BusinessUnitInfoFinder.cs" />
     <Compile Include="ScheduleIsInvalidSpecification.cs" />
     <Compile Include="SchedulingContainerInstaller.cs" />
     <Compile Include="SdkConfigurationReader.cs" />
     <Compile Include="SerializationContainerInstaller.cs" />
+    <Compile Include="Service References\TeleoptiRtaService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="ServiceBusRunner.cs" />
     <Compile Include="ShiftTrade\ShiftTradeRequestSaga.cs" />
     <Compile Include="UpdateScheduleProjectionReadModel.cs" />
@@ -273,6 +283,16 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
+    <None Include="Service References\TeleoptiRtaService\TeleoptiRtaService.wsdl" />
+    <None Include="Service References\TeleoptiRtaService\TeleoptiRtaService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TeleoptiRtaService\TeleoptiRtaService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TeleoptiRtaService\TeleoptiRtaService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Domain\Teleopti.Ccc.Domain.csproj">
@@ -332,6 +352,27 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\TeleoptiRtaService\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\TeleoptiRtaService\TeleoptiRtaService.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\TeleoptiRtaService\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\TeleoptiRtaService\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\TeleoptiRtaService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
