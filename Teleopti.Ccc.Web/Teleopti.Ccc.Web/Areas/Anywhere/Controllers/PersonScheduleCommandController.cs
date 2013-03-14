@@ -1,22 +1,20 @@
-using System;
 using System.Web.Mvc;
-using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 {
 	public class PersonScheduleCommandController : Controller
 	{
-		public ActionResult AddFullDayAbsence(AddFullDayAbsenceCommand addFullDayAbsenceCommand)
-		{
-			return new EmptyResult();
-		}
-	}
+		private readonly ICommandDispatcher _commandDispatcher;
 
-	public class AddFullDayAbsenceCommand
-	{
-		public Guid PersonId { get; set; }
-		public Guid AbsenceId { get; set; }
-		public DateOnly StartDate { get; set; }
-		public DateOnly EndDate { get; set; }
+		public PersonScheduleCommandController(ICommandDispatcher commandDispatcher)
+		{
+			_commandDispatcher = commandDispatcher;
+		}
+
+		public void AddFullDayAbsence(AddFullDayAbsenceCommand command)
+		{
+			_commandDispatcher.Execute(command);
+		}
 	}
 }

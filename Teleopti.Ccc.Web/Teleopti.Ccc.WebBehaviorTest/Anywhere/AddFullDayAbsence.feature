@@ -58,7 +58,6 @@ Scenario: Add
 	| End time   | 17:00 |
 	| Color      | Red   |
 
-@Ignore 
 Scenario: Default values
 	Given I have the role 'Anywhere Team Green'
 	When I view agent schedules add full day absence form for 'Pierre Baldi' on '2012-12-02'

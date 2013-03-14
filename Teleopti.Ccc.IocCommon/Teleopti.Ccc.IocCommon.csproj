@@ -129,6 +129,8 @@
   <ItemGroup>
     <Compile Include="Configuration\AuthenticationCachedModule.cs" />
     <Compile Include="Configuration\AuthenticationModule.cs" />
+    <Compile Include="Configuration\CommandDispatcherModule.cs" />
+    <Compile Include="Configuration\CommandHandlersModule.cs" />
     <Compile Include="Configuration\RuleSetModule.cs" />
     <Compile Include="Configuration\DateAndTimeModule.cs" />
     <Compile Include="Configuration\EncryptionModule.cs" />

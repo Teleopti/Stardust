@@ -59,6 +59,9 @@ namespace Teleopti.Ccc.Web.Core.IoC
 
 			builder.RegisterModule<ShiftTradeModule>();
 
+			builder.RegisterModule<CommandDispatcherModule>();
+			builder.RegisterModule<CommandHandlersModule>();
+
 			return builder.Build();
 		}
 

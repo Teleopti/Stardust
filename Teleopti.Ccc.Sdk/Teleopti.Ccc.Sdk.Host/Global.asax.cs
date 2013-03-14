@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Web;
 using Autofac;
 using Autofac.Integration.Wcf;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Messaging.SignalR;
 using log4net;
@@ -152,8 +153,9 @@ namespace Teleopti.Ccc.Sdk.WcfHost
             builder.RegisterModule<RequestFactoryModule>();
             builder.RegisterModule<QueryHandlerModule>();
             builder.RegisterModule<ShiftTradeModule>();
-            builder.RegisterModule<CommandHandlerModule>();
-            builder.RegisterModule<UpdateScheduleModule>();
+			builder.RegisterModule<SdkCommandHandlersModule>();
+			builder.RegisterModule<CommandDispatcherModule>();
+			builder.RegisterModule<UpdateScheduleModule>();
 			  builder.RegisterModule<DateAndTimeModule>();
             builder.RegisterType<WebWindowsUserProvider>()
                 .As<IWindowsUserProvider>()

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ServiceModel;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -30,7 +31,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public CommandResultDto Handle(SetPersonAccountForPersonCommandDto command)
+		public void Handle(SetPersonAccountForPersonCommandDto command)
         {
             using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
@@ -53,7 +54,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                             
                 unitOfWork.PersistAll();
             }
-            return new CommandResultDto { AffectedId = command.PersonId, AffectedItems = 1 };
+			command.Result = new CommandResultDto { AffectedId = command.PersonId, AffectedItems = 1 };
         }
 
         private static void checkIfAuthorized(IPerson person, DateOnly dateOnly)

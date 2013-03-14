@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ServiceModel;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -26,7 +27,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
             _jobResultRepository = jobResultRepository;
         }
 
-        public CommandResultDto Handle(ImportForecastsFileCommandDto command)
+        public void Handle(ImportForecastsFileCommandDto command)
         {
             if (command == null)
                 throw new FaultException("Command is null.");
@@ -62,7 +63,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                 ImportMode = (ImportForecastsMode)((int)command.ImportForecastsMode)
             };
             _busSender.NotifyServiceBus(message);
-            return new CommandResultDto { AffectedId = jobResultId, AffectedItems = 1 };
+			command.Result = new CommandResultDto { AffectedId = jobResultId, AffectedItems = 1 };
         }
     }
 }

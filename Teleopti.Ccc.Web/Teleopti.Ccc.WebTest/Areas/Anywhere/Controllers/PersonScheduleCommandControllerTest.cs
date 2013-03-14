@@ -1,9 +1,7 @@
-using System;
-using System.Web.Mvc;
 using NUnit.Framework;
-using SharpTestsEx;
+using Rhino.Mocks;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Web.Areas.Anywhere.Controllers;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 {
@@ -11,19 +9,16 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 	public class PersonScheduleCommandControllerTest
 	{
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
-		public void ShouldReturnEmptyResult() { 
-			var target = new PersonScheduleCommandController();
+		public void ShouldDispatchAddFullDayAbsenceCommand()
+		{
+			var commandDispatcher = MockRepository.GenerateMock<ICommandDispatcher>();
+			var target = new PersonScheduleCommandController(commandDispatcher);
 
-			var result = target.AddFullDayAbsence(
-				new AddFullDayAbsenceCommand
-					{
-						PersonId = Guid.NewGuid(),
-						AbsenceId = Guid.NewGuid(),
-						StartDate = DateOnly.Today,
-						EndDate = DateOnly.Today,
-					});
+			var command = new AddFullDayAbsenceCommand();
 
-			result.Should().Be.OfType<EmptyResult>();
+			target.AddFullDayAbsence(command);
+
+			commandDispatcher.AssertWasCalled(x => x.Execute(command));
 		}
 	}
 }
