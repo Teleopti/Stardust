@@ -114,10 +114,11 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             var mockedPersonAccountBalanceCalculator = mocks.StrictMock<IPersonAccountBalanceCalculator>();
             var mockedResourceOptimizationHelper = mocks.StrictMock<IResourceOptimizationHelper>();
             var allowanceSpecification =  mocks.StrictMock<IBudgetGroupAllowanceSpecification>();
+            var budgetGroupAllowanceCalculator = mocks.DynamicMock<IBudgetGroupAllowanceCalculator>();
 
             var absenceRequestValidators =
                 Target.GetSelectedValidatorList(mockedSchedulingResultStateHolder, mockedResourceOptimizationHelper,
-                                                mockedPersonAccountBalanceCalculator, allowanceSpecification);
+                                                mockedPersonAccountBalanceCalculator, allowanceSpecification, budgetGroupAllowanceCalculator);
             Assert.AreEqual(2, absenceRequestValidators.Count());
             foreach (var absenceRequestValidator in absenceRequestValidators)
             {
