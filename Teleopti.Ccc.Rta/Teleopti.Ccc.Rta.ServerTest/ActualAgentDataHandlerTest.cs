@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity"), Test]
-		public void VerifyCurrentLayerAndNext()
+		public void VerifyGetReadModel()
 		{
 			_stringHandler.Expect(sh => sh.AppConnectionString()).Return("connectionString");
 			_connectionFactory.Expect(cf => cf.CreateConnection("connectionString")).Return(_connection);
@@ -72,90 +72,10 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_connection.Dispose();
 			_mock.ReplayAll();
 
-			var result = _target.CurrentLayerAndNext(_dateTime.AddMinutes(15), _guid, new List<ScheduleLayer>());
+			var result = _target.GetReadModel(_guid);
 			_mock.VerifyAll();
 
 			result.Count.Should().Be.EqualTo(2);
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity"), Test]
-		public void VerifyCurrentLayerAndNextNoCurrentLayer()
-		{
-			_stringHandler.Expect(sh => sh.AppConnectionString()).Return("connectionString");
-			_connectionFactory.Expect(cf => cf.CreateConnection("connectionString")).Return(_connection);
-			_connection.Expect(c => c.CreateCommand()).Return(_command);
-
-			_command.CommandType = CommandType.Text;
-			_command.Expect(c => c.CommandText).SetPropertyAndIgnoreArgument();
-			_connection.Open();
-			_command.Expect(c => c.ExecuteReader(CommandBehavior.CloseConnection)).Return(_reader);
-
-			_reader.Expect(r => r.Read()).Return(true);
-			_reader.Expect(r => r.GetOrdinal("PayloadId")).Return(0);
-			_reader.Expect(r => r.GetGuid(0)).Return(_guid);
-			_reader.Expect(r => r.GetOrdinal("StartDateTime")).Return(1);
-			_reader.Expect(r => r.GetDateTime(1)).Return(_dateTime);
-			_reader.Expect(r => r.GetOrdinal("EndDateTime")).Return(2);
-			_reader.Expect(r => r.GetDateTime(2)).Return(_dateTime);
-			_reader.Expect(r => r.GetOrdinal("Name")).Return(3);
-			_reader.Expect(r => r.GetString(3)).Return("Morning");
-			_reader.Expect(r => r.GetOrdinal("ShortName")).Return(4);
-			_reader.Expect(r => r.GetString(4)).Return("Mo");
-			_reader.Expect(r => r.GetOrdinal("DisplayColor")).Return(5);
-			_reader.Expect(r => r.GetInt32(5)).Return(1234567989);
-
-			_reader.Expect(r => r.Read()).Return(false);
-			_reader.Expect(r => r.Close());
-
-			_connection.Dispose();
-			_mock.ReplayAll();
-
-			var result = _target.CurrentLayerAndNext(_dateTime.AddMinutes(-15), _guid, new List<ScheduleLayer>());
-			_mock.VerifyAll();
-
-			result.Count.Should().Be.EqualTo(2);
-			result[0].Should().Be.Null();
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity"), Test]
-		public void VerifyCurrentLayerAndNextNextLayerStartDelayed()
-		{
-			_stringHandler.Expect(sh => sh.AppConnectionString()).Return("connectionString");
-			_connectionFactory.Expect(cf => cf.CreateConnection("connectionString")).Return(_connection);
-			_connection.Expect(c => c.CreateCommand()).Return(_command);
-
-			_command.CommandType = CommandType.Text;
-			_command.Expect(c => c.CommandText).SetPropertyAndIgnoreArgument();
-			_connection.Open();
-			_command.Expect(c => c.ExecuteReader(CommandBehavior.CloseConnection)).Return(_reader);
-
-			_reader.Expect(r => r.Read()).Return(true).Repeat.Twice();
-			_reader.Expect(r => r.GetOrdinal("PayloadId")).Return(0).Repeat.Twice();
-			_reader.Expect(r => r.GetGuid(0)).Return(_guid).Repeat.Twice();
-			_reader.Expect(r => r.GetOrdinal("StartDateTime")).Return(1).Repeat.Twice();
-			_reader.Expect(r => r.GetDateTime(1)).Return(_dateTime);
-			_reader.Expect(r => r.GetDateTime(1)).Return(_dateTime.AddHours(7));
-			_reader.Expect(r => r.GetOrdinal("EndDateTime")).Return(2).Repeat.Twice();
-			_reader.Expect(r => r.GetDateTime(2)).Return(_dateTime);
-			_reader.Expect(r => r.GetDateTime(2)).Return(_dateTime.AddHours(14));
-			_reader.Expect(r => r.GetOrdinal("Name")).Return(3).Repeat.Twice();
-			_reader.Expect(r => r.GetString(3)).Return("Morning").Repeat.Twice();
-			_reader.Expect(r => r.GetOrdinal("ShortName")).Return(4).Repeat.Twice();
-			_reader.Expect(r => r.GetString(4)).Return("Mo").Repeat.Twice();
-			_reader.Expect(r => r.GetOrdinal("DisplayColor")).Return(5).Repeat.Twice();
-			_reader.Expect(r => r.GetInt32(5)).Return(1234567989).Repeat.Twice();
-
-			_reader.Expect(r => r.Read()).Return(false);
-			_reader.Expect(r => r.Close());
-
-			_connection.Dispose();
-			_mock.ReplayAll();
-
-			var result = _target.CurrentLayerAndNext(_dateTime, _guid, new List<ScheduleLayer>());
-			_mock.VerifyAll();
-
-			result.Count.Should().Be.EqualTo(2);
-			result[1].Should().Be.Null();
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1505:AvoidUnmaintainableCode"), Test]

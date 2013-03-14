@@ -8,7 +8,7 @@ using Teleopti.Ccc.Rta.Server;
 namespace Teleopti.Ccc.Rta.ServerTest
 {
 	[TestFixture]
-	public class InvalidateRtaDataHandlerCacheTest
+	public static class InvalidateRtaDataHandlerCacheTest
 	{
 		 [Test]
 		 public static void ShouldInvalidate()
@@ -22,7 +22,11 @@ namespace Teleopti.Ccc.Rta.ServerTest
 
 			 target.InvalidateReadModelCache(personId, timeStamp);
 
-			 mbCacheFactory.AssertWasCalled(x => x.Invalidate(target.ExposeActualAgentDataHandler, y => y.CurrentLayerAndNext(timeStamp, personId, new List<ScheduleLayer>()), true), o => o.IgnoreArguments());
+			 mbCacheFactory.AssertWasCalled(
+				 x =>
+				 x.Invalidate(target.ExposeActualAgentDataHandler,
+				              y => y.CurrentLayerAndNext(timeStamp, personId, new List<ScheduleLayer>()), true),
+				 o => o.IgnoreArguments());
 		 }
 
 		private class actualAgentHandlerForTest : ActualAgentHandler
