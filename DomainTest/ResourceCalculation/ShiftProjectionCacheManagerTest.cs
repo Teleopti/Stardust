@@ -49,6 +49,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             var readOnlyRuleSets = new ReadOnlyCollection<IWorkShiftRuleSet>(ruleSets);
             var dateOnly = new DateOnly(2009, 2, 2);
             TimeZoneInfo timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time"));
+	        var callback = _mocks.DynamicMock<IWorkShiftAddCallback>();
             using (_mocks.Record())
             {
                 Expect.Call(_ruleSetBag.RuleSetCollection).Return(readOnlyRuleSets);
@@ -56,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(_ruleSet.IsValidDate(dateOnly)).Return(true);
                 Expect.Call(_activityChecker.ContainsDeletedActivity(_ruleSet)).Return(false);
 				Expect.Call(_shiftCategoryChecker.ContainsDeletedActivity(_ruleSet)).Return(false);
-                Expect.Call(_ruleSetProjectionEntityService.ProjectionCollection(_ruleSet)).Return(GetWorkShiftsInfo());
+				Expect.Call(_ruleSetProjectionEntityService.ProjectionCollection(_ruleSet, callback)).Return(GetWorkShiftsInfo()).IgnoreArguments();
                 Expect.Call(_shiftFromMasterActivityService.Generate(GetWorkShifts()[0])).IgnoreArguments().Return(new List<IWorkShift>());
                 Expect.Call(_shiftFromMasterActivityService.Generate(GetWorkShifts()[0])).IgnoreArguments().Return(GetWorkShifts());
                 Expect.Call(_shiftFromMasterActivityService.Generate(GetWorkShifts()[0])).IgnoreArguments().Return(new List<IWorkShift>());    
@@ -131,6 +132,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             var readOnlyRuleSets = new ReadOnlyCollection<IWorkShiftRuleSet>(ruleSets);
             var dateOnly = new DateOnly(2009, 2, 2);
             var timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time"));
+			var callback = _mocks.DynamicMock<IWorkShiftAddCallback>();
             using (_mocks.Record())
             {
                 Expect.Call(_ruleSetBag.RuleSetCollection).Return(readOnlyRuleSets);
@@ -139,7 +141,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(ruleSet2.OnlyForRestrictions).Return(false);
                 Expect.Call(_activityChecker.ContainsDeletedActivity(_ruleSet)).Return(false);
                 Expect.Call(_shiftCategoryChecker.ContainsDeletedActivity(_ruleSet)).Return(false);
-                Expect.Call(_ruleSetProjectionEntityService.ProjectionCollection(_ruleSet)).Return(infos);
+				Expect.Call(_ruleSetProjectionEntityService.ProjectionCollection(_ruleSet, callback)).Return(infos).IgnoreArguments();
                 Expect.Call(_shiftFromMasterActivityService.Generate(workShift)).Return(new List<IWorkShift>());
             }
 

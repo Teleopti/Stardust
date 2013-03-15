@@ -562,6 +562,7 @@ namespace Teleopti.Ccc.Win.Shifts
 
         private void loadSelectedRuleSets()
         {
+	        
             var selectedRuleSets = new List<IWorkShiftRuleSet>();
             var selectedRuleSetBags = new List<IRuleSetBag>();
             ExplorerPresenter.Model.SetFilteredRuleSetCollection(new ReadOnlyCollection<IWorkShiftRuleSet>(selectedRuleSets));
@@ -608,10 +609,43 @@ namespace Teleopti.Ccc.Win.Shifts
                     }
                 }
             }
-            ExplorerPresenter.Model.SetFilteredRuleSetCollection(new ReadOnlyCollection<IWorkShiftRuleSet>(selectedRuleSets));
-            ExplorerPresenter.Model.SetFilteredRuleSetBagCollection(new ReadOnlyCollection<IRuleSetBag>(selectedRuleSetBags));
-            ExplorerPresenter.GeneralPresenter.LoadModelCollection();
-            ExplorerPresenter.VisualizePresenter.LoadModelCollection();// |--|
+
+	        var callback = new WorkShiftAddCallback();
+			callback.RuleSetToComplex += callback_RuleSetToComplex;
+	        using (var status = new ShiftGenerationStatus(callback))
+	        {
+		        try
+		        {
+					ExplorerPresenter.View.SetViewEnabled(false);
+			        status.ShowDelayed(this);
+			        ExplorerPresenter.Model.SetFilteredRuleSetCollection(
+				        new ReadOnlyCollection<IWorkShiftRuleSet>(selectedRuleSets));
+			        ExplorerPresenter.Model.SetFilteredRuleSetBagCollection(
+				        new ReadOnlyCollection<IRuleSetBag>(selectedRuleSetBags));
+			        ExplorerPresenter.GeneralPresenter.LoadModelCollection();
+			        ExplorerPresenter.VisualizePresenter.LoadModelCollection(callback); // |--|
+			        
+		        }
+		        catch (OutOfMemoryException exception)
+		        {
+			        showMessagebox(exception.Message, "Out of memory");
+		        }
+		        finally
+		        {
+					status.Close();
+					ExplorerPresenter.View.SetViewEnabled(true);
+			        ExplorerView.Activate();
+					_defaultTreeView.Select();
+		        }
+	        }
+            
         }
+
+		void callback_RuleSetToComplex(object sender, ComplexRuleSetEventArgs e)
+		{
+			const string mess = @"Stop! These rule sets is too complex and shifts could not be generated within the maximum limit. 
+						No shifts from this rule set will be available for scheduling and optimization. Reduce the complexity to use these shifts.";
+			showMessagebox(mess, e.RuleSetName + " is too complex!");
+		}
     }
 }

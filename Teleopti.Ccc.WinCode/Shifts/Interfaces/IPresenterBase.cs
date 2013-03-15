@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.WinCode.Shifts.Interfaces
+﻿using Teleopti.Interfaces.Domain;
+
+namespace Teleopti.Ccc.WinCode.Shifts.Interfaces
 {
     public interface IPresenterBase :  IValidate
     {
@@ -6,6 +8,6 @@
 
         IExplorerPresenter Explorer { get; }
 
-        void LoadModelCollection();
+		void LoadModelCollection();
     }
 }

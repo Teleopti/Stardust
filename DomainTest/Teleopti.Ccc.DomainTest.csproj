@@ -700,6 +700,7 @@
     <Compile Include="Scheduling\ShiftCreator\RuleSetProjectionServiceTest.cs" />
     <Compile Include="Scheduling\ShiftCreator\ShiftFromMasterActivityServiceTest.cs" />
     <Compile Include="Scheduling\ShiftCreator\StartTimeLimiterTest.cs" />
+    <Compile Include="Scheduling\ShiftCreator\WorkshiftCollectionTest.cs" />
     <Compile Include="Scheduling\ShiftCreator\WorkShiftVisualLayerInfoTest.cs" />
     <Compile Include="Scheduling\ShiftTradeChecksumCalculatorTest.cs" />
     <Compile Include="Scheduling\Restriction\ExtendedPreferenceTemplateTest.cs" />

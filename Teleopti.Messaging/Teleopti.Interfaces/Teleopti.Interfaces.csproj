@@ -108,6 +108,7 @@
     <Compile Include="Domain\ChartSeriesDisplayType.cs" />
     <Compile Include="Domain\ClipboardAction.cs" />
     <Compile Include="Domain\ClipboardItems.cs" />
+    <Compile Include="Domain\ComplexRuleSetEventArgs.cs" />
     <Compile Include="Domain\IActivityRestrictableVisualLayer.cs" />
     <Compile Include="Domain\IEffectiveRestrictionCombiner.cs" />
     <Compile Include="Domain\IChangePasswordResultInfo.cs" />
@@ -328,6 +329,7 @@
     <Compile Include="Domain\IWorkflowControlSet.cs" />
     <Compile Include="Domain\IWorkShiftCalculator.cs" />
     <Compile Include="Domain\IWorkShiftCalculationResultHolder.cs" />
+    <Compile Include="Domain\IWorkShiftAddCallback.cs" />
     <Compile Include="Domain\IWorkShiftFinderService.cs" />
     <Compile Include="Domain\IWorkShiftFinderServiceFactory.cs" />
     <Compile Include="Domain\DateOnlyPeriod.cs" />

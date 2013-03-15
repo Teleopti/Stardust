@@ -22,9 +22,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
 			var shiftCreatorService = MockRepository.GenerateMock<IShiftCreatorService>();
 			var target = new RuleSetProjectionService(shiftCreatorService);
 			var workShift = WorkShiftFactory.CreateWithLunch(new TimePeriod(9, 0, 16, 0), new TimePeriod(11, 0, 12, 0));
-			shiftCreatorService.Stub(x => x.Generate(null)).Return(new List<IWorkShift>(new[] { workShift }));
+			shiftCreatorService.Stub(x => x.Generate(null,null)).Return(new List<IWorkShift>(new[] { workShift }));
 
-			var result = target.ProjectionCollection(null);
+			var result = target.ProjectionCollection(null,null);
 
 			result.Single().ContractTime.Should().Be(workShift.Projection.ContractTime());
 			result.Single().TimePeriod.Should().Be(workShift.ToTimePeriod().Value);
@@ -41,9 +41,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
 			var shiftCreatorService = MockRepository.GenerateMock<IShiftCreatorService>();
 			var target = new RuleSetProjectionService(shiftCreatorService);
 			var workShift = WorkShiftFactory.CreateWithLunch(new TimePeriod(9, 0, 16, 0), new TimePeriod(11, 0, 12, 0));
-			shiftCreatorService.Stub(x => x.Generate(null)).Return(new List<IWorkShift>(new[] {workShift}));
+			shiftCreatorService.Stub(x => x.Generate(null,null)).Return(new List<IWorkShift>(new[] {workShift}));
 
-			var result = target.ProjectionCollection(null);
+			var result = target.ProjectionCollection(null,null);
 
 			var serializer = new BinaryFormatter();
 			IWorkShiftProjection[] deserialized;

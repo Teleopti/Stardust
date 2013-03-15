@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
             templateGen1Return.Add(ws1);
             IList<IWorkShift> templateGen2Return = new List<IWorkShift>();
             templateGen2Return.Add(ws2);
-
+			var callback = new WorkShiftAddStopperCallback();
             using(mocks.Record())
             {
                 Expect.Call(ruleSet.TemplateGenerator)
@@ -68,15 +68,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
                     .Return(lim).Repeat.AtLeastOnce();
                 Expect.Call(templateGen.Generate())
                     .Return(templateGenReturn);
-                Expect.Call(buildFromOneTemplate.Generate(templateGenReturn[0], ext, lim))
-                    .Return(templateGen1Return);
-                Expect.Call(buildFromOneTemplate.Generate(templateGenReturn[1], ext, lim))
-                    .Return(templateGen2Return);
+				Expect.Call(buildFromOneTemplate.Generate(templateGenReturn[0], ext, lim, null))
+                    .Return(templateGen1Return).IgnoreArguments();
+				Expect.Call(buildFromOneTemplate.Generate(templateGenReturn[1], ext, lim, null))
+                    .Return(templateGen2Return).IgnoreArguments();
                 Expect.Call(ruleSet.Description).Return(new Description());
             }
             using(mocks.Playback())
             {     
-                IList<IWorkShift> ret = target.Generate(ruleSet);
+                IList<IWorkShift> ret = target.Generate(ruleSet, callback);
                 Assert.AreEqual(2, ret.Count);
                 Assert.IsTrue(ret.Contains(ws1));
                 Assert.IsTrue(ret.Contains(ws2));

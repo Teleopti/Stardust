@@ -785,6 +785,8 @@
     <Compile Include="Scheduling\ShiftCreator\RuleSetProjectionService.cs" />
     <Compile Include="Scheduling\ShiftCreator\ShiftFromMasterActivityService.cs" />
     <Compile Include="Scheduling\ShiftCreator\StartTimeLimiter.cs" />
+    <Compile Include="Scheduling\ShiftCreator\WorkShiftAddStopperCallback.cs" />
+    <Compile Include="Scheduling\ShiftCreator\WorkshiftCollection.cs" />
     <Compile Include="Scheduling\ShiftCreator\WorkShiftProjection.cs" />
     <Compile Include="Scheduling\ShiftCreator\WorkShiftVisualLayerInfo.cs" />
     <Compile Include="Scheduling\ShiftTradeChecksumCalculator.cs" />

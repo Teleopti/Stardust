@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
             }
             using (mocks.Playback())
             {
-                IList<IWorkShift> ret = target.Generate(template, extenders, limiters);
+                IList<IWorkShift> ret = target.Generate(template, extenders, limiters, null);
                 Assert.AreEqual(1, ret.Count);
                 Assert.AreSame(retShift, ret[0]);
             }
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
             }
             using (mocks.Playback())
             {
-                IList<IWorkShift> ret = target.Generate(template, extenders, limiters);
+				IList<IWorkShift> ret = target.Generate(template, extenders, limiters, null);
                 Assert.AreEqual(0, ret.Count);
             }
         }
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
             }
             using (mocks.Playback())
             {
-                IList<IWorkShift> ret = target.Generate(template, extenders, limiters);
+				IList<IWorkShift> ret = target.Generate(template, extenders, limiters, null);
                 Assert.AreEqual(1, ret.Count);
                 Assert.AreSame(retShift2, ret[0]);
             }
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
             }
             using (mocks.Playback())
             {
-                IList<IWorkShift> ret = target.Generate(template, extenders, limiters);
+				IList<IWorkShift> ret = target.Generate(template, extenders, limiters, null);
                 Assert.AreEqual(0, ret.Count);
             }
         }
@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
             }
             using (mocks.Playback())
             {
-                IList<IWorkShift> ret = target.Generate(template, extenders, limiters);
+				IList<IWorkShift> ret = target.Generate(template, extenders, limiters, null);
                 Assert.AreEqual(0, ret.Count);
             }
         }
@@ -176,7 +176,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
             }
             using (mocks.Playback())
             {
-                IList<IWorkShift> ret = target.Generate(template, extenders, limiters);
+				IList<IWorkShift> ret = target.Generate(template, extenders, limiters, null);
                 Assert.AreEqual(1, ret.Count);
                 Assert.AreSame(retShift1, ret[0]);
             }

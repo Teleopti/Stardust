@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Shifts.Interfaces
 {
@@ -13,5 +14,7 @@ namespace Teleopti.Ccc.WinCode.Shifts.Interfaces
         IList<TimeSpan> ContractTimes();
 
         void CopyWorkShiftToSessionDataClip(int rowIndex);
+
+		void LoadModelCollection(IWorkShiftAddCallback callback);
     }
 }
