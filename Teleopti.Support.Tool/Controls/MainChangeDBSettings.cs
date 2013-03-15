@@ -51,14 +51,12 @@ namespace Teleopti.Support.Tool.Controls
             //fileKey = "ipath";
         
             _li = new LinkedList<UserControl>();
-            dbConnect = new DBConnect();
             _connStringSetting = new ConnectionSettings();
             connSummary = new Summary();
             //_li.AddLast(dbConnect);
             _li.AddLast(_connStringSetting);
             _li.AddLast(connSummary);
 
-            dbConnect.ConnectButton.Click += connectButton_Click;
             connSummary.ViewLog.Click += viewLog_Click;
 
             _connStringSetting.TestConnectButton.Click += testConnectButton_Click;
@@ -165,6 +163,17 @@ namespace Teleopti.Support.Tool.Controls
 
         private void copyNhibFiles()
         {
+            //// This method will only be runned if in develop or debug mode. 
+            //var messagingPath = _confFilesRoot + @"\Teleopti.Messaging\TeleOpti.Messaging.Bin";
+            //const string messagingFile = @"\Teleopti.Messaging.Svc.exe.config";
+            
+            ////if (!System.IO.File.Exists(messagingPath + messagingFile))
+            ////{
+            //    if (!IOHelper.DirectoryExists(messagingPath))
+            //        IOHelper.CreateDirectory(messagingPath);
+            //    IOHelper.Copy(System.IO.Directory.GetCurrentDirectory() + messagingFile,messagingPath + messagingFile, true);
+            //    IOHelper.WriteFile("Added " +  messagingPath + messagingFile + " as a new file.\r\n", _logFile, true);
+            ////}
             string sdkNhibPath = _confFilesRoot + @"\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Host\bin\debug";
             string clientNhibPath = _confFilesRoot + @"\Teleopti.Ccc.SmartClientPortal\Teleopti.Ccc.SmartClientPortal.Shell\bin\debug";
             const string nhibFile = @"\V7Config.nhib.xml";
@@ -198,7 +207,7 @@ namespace Teleopti.Support.Tool.Controls
             IOHelper.CreateDirectory(System.IO.Directory.GetCurrentDirectory() + "\\Logs");
             _logFile = System.IO.Directory.GetCurrentDirectory() + "\\Logs\\ChangeDBConnections" + DateTime.Now.ToString("yyyy-MM-dd HH.mm", System.Globalization.CultureInfo.InvariantCulture) + ".txt";
             IOHelper.WriteFile("Settings\r\n", _logFile, true);
-            IOHelper.WriteFile("SQL Server = " + dbConnect.Server + "\r\n", _logFile, true);
+            IOHelper.WriteFile("SQL Server = " + _db.ServerName + "\r\n", _logFile, true);
             IOHelper.WriteFile("Application Database = " + _connStringSetting.ApplicationDB + "\r\n", _logFile, true);
             IOHelper.WriteFile("Aggregation Database = " + _connStringSetting.AggregationDB + "\r\n", _logFile, true);
             IOHelper.WriteFile("Analytic Database = " + _connStringSetting.AnalyticDB + "\r\n", _logFile, true);
@@ -246,7 +255,7 @@ namespace Teleopti.Support.Tool.Controls
                     { //Check if The file Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Host\v7Config.nhib.xml exists otherwise copy from 
                         copyNhibFiles();   
                     }
-                    xmlMessages = XmlHandler.UpdateAllConfigurationFiles(configFile, _confFilesRoot, _connStringSetting.ApplicationDB, _connStringSetting.AnalyticDB, _connStringSetting.SqlUser, _connStringSetting.SqlUserPassword, dbConnect.Server, _fileKey);
+                    xmlMessages = XmlHandler.UpdateAllConfigurationFiles(configFile, _confFilesRoot, _connStringSetting.ApplicationDB, _connStringSetting.AnalyticDB, _connStringSetting.SqlUser, _connStringSetting.SqlUserPassword, _db.ServerName, _fileKey);
                     _progressList[1].Finished = true;
                     connSummary.ExecuteOk = true;
                     IOHelper.WriteFile("Step 'Update of database references in configuration files' was executed successfully.\r\n", _logFile, true);
@@ -305,7 +314,7 @@ namespace Teleopti.Support.Tool.Controls
         private void setupSummary()
         {
             connSummary.ClearSettings();
-            connSummary.AddSetting("SQL Server", dbConnect.Server);
+            connSummary.AddSetting("SQL Server", _db.ServerName);
             connSummary.AddSetting("Application Database", _connStringSetting.ApplicationDB);
             connSummary.AddSetting("Aggregation Database", _connStringSetting.AggregationDB);
             connSummary.AddSetting("Analytic Database", _connStringSetting.AnalyticDB);
@@ -449,62 +458,5 @@ namespace Teleopti.Support.Tool.Controls
             processHelper.Start(_logFile);
         }
 
-        #region DBCOnnect functionality
-        /// <summary>
-        /// Handels Connect click
-        /// </summary>
-        /// <param name="sender">The sender</param>
-        /// <param name="ea">The Events</param>
-        private void connectButton_Click(object sender, EventArgs ea)
-        {
-
-            //Connect to the database
-            Cursor = Cursors.WaitCursor;
-            dbConnect.ConnectedColor = Color.Black;
-            dbConnect.Connected = "Connecting...";
-            dbConnect.RefreshConnected();
-            if (dbConnect.WindowsAuth)
-                _db = new DBHelper(dbConnect.Server,"master");
-            else
-                _db = new DBHelper(dbConnect.Server, dbConnect.User, dbConnect.Password);
-            List<string> databases = new List<string>();
-            databases.Add("master");
-            bool connected = false;
-            try
-            {
-                switch (_db.ConnectType(databases))
-                {
-                    case DataLayer.Right.SA:
-                        dbConnect.ConnectedColor = Color.Green;
-                        dbConnect.Connected = "Connected as System Admin";
-                        connected = true;
-                        break;
-                    case DataLayer.Right.Limited:
-                        dbConnect.ConnectedColor = Color.Orange;
-                        dbConnect.Connected = "Connected with limited access";
-                        connected = true;
-                        break;
-                    default:
-                        dbConnect.ConnectedColor = Color.Red;
-                        dbConnect.Connected = "Not Connected: ";
-                        break;
-                }
-                if (connected)
-                {
-                    BNext.Enabled = true;
-                    loadDatabases();
-                    loadSqlUsers();
-                    _connStringSetting.SqlUserPassword = "";
-                    _connStringSetting.TestConnection = "";
-                }
-            }
-            catch (SqlException ex)
-            {
-                dbConnect.ConnectedColor = Color.Red;
-                dbConnect.Connected = "Not Connected: " + ex.Message;
-            }
-            Cursor = Cursors.Default;
-        }
-        #endregion
     }
 }

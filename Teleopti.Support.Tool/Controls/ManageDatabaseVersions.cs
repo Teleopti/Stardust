@@ -559,11 +559,12 @@ namespace Teleopti.Support.Tool.Controls
                     listViewItem.SubItems[2].Text = nHibDataSource.Version;
                     if (nHibDataSource.CccDatabaseType == Nhib.AnalyticsDatabaseTextConstant)
                     {
-                        DBHelper dbHelper = new DBHelper(nHibDataSource.ConnectionString);
+                        SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(_dbHelper.ConnectionString);
+                        builder.InitialCatalog = nHibDataSource.DatabaseName;
+                        DBHelper dbHelper = new DBHelper(builder.ConnectionString);
                         string aggDbName = dbHelper.GetAggDatabaseName();
-                        SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(nHibDataSource.ConnectionString);
                         builder.InitialCatalog = aggDbName;
-                        NHibDataSource aggNHibDataSource = new NHibDataSource(nHibDataSource.FactoryName, builder.ConnectionString, Nhib.AggregationDatabaseTextConstant);
+                        NHibDataSource aggNHibDataSource = new NHibDataSource(nHibDataSource.FactoryName, nHibDataSource.ConnectionString, Nhib.AggregationDatabaseTextConstant);
                         ListViewItem aggListViewItem = CreateDatasourceListViewItem(listViewItem.Group, aggNHibDataSource);
                         listViewDatabases.Items.Add(aggListViewItem);
                         SetListviewIcon(aggNHibDataSource, aggListViewItem);
@@ -591,8 +592,9 @@ namespace Teleopti.Support.Tool.Controls
 
         private void SetListviewIcon(NHibDataSource nHibDataSource, ListViewItem listViewItem)
         {
-            
-            DBHelper dbHelper = new DBHelper(nHibDataSource.ConnectionString);
+            SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(_dbHelper.ConnectionString);
+            builder.InitialCatalog = nHibDataSource.DatabaseName;
+            DBHelper dbHelper = new DBHelper(builder.ConnectionString);
             if (dbHelper.TestConnection())
             {
                 nHibDataSource.Version = dbHelper.GetDatabaseVersion();
