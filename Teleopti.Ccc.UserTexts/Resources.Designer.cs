@@ -5068,6 +5068,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Current number of shifts:  .
+        /// </summary>
+        public static string CurrentNumberOfShifts {
+            get {
+                return ResourceManager.GetString("CurrentNumberOfShifts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Current password.
         /// </summary>
         public static string CurrentPassword {
@@ -9037,6 +9046,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string GeneralView {
             get {
                 return ResourceManager.GetString("GeneralView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Generating shifts.
+        /// </summary>
+        public static string GeneratingShifts {
+            get {
+                return ResourceManager.GetString("GeneratingShifts", resourceCulture);
             }
         }
         
@@ -20512,6 +20530,26 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Stop! These rules are too complex and shifts could not be generated within the maximum limit.
+        ///No shifts from this rule set will be available for scheduling and optimization.
+        ///Reduce the complexity to use these shifts..
+        /// </summary>
+        public static string ShiftGenerationStop {
+            get {
+                return ResourceManager.GetString("ShiftGenerationStop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Warning! Generating shifts according to these rules takes too long time. This will hurt scheduling and optimization performance at a later stage!.
+        /// </summary>
+        public static string ShiftGenerationWarning {
+            get {
+                return ResourceManager.GetString("ShiftGenerationWarning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Shift Limits.
         /// </summary>
         public static string ShiftLimits {
@@ -23202,6 +23240,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ToleranceForMatchingContractTime {
             get {
                 return ResourceManager.GetString("ToleranceForMatchingContractTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  is a too complex ruleset!.
+        /// </summary>
+        public static string TooComplexRuleset {
+            get {
+                return ResourceManager.GetString("TooComplexRuleset", resourceCulture);
             }
         }
         

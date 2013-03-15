@@ -1,7 +1,6 @@
 ﻿using Autofac;
 using AutoMapper;
 using Autofac.Extras.DynamicProxy2;
-using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
@@ -131,7 +130,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<PeriodScheduledAndRestrictionDaysOff>().As<IPeriodScheduledAndRestrictionDaysOff>().SingleInstance();
 			builder.RegisterType<SchedulePeriodTargetTimeCalculator>().As<ISchedulePeriodTargetTimeCalculator>().SingleInstance();
 			builder.RegisterType<ExtendedPreferencePredicate>().As<IExtendedPreferencePredicate>().SingleInstance();
-			builder.RegisterType<PreferenceFulfilledChecker>().As<IPreferenceFulfilledChecker>().SingleInstance();
 			builder.RegisterType<RestrictionChecker>().As<ICheckerRestriction>();
 			builder.RegisterType<PreferenceTemplateProvider>().As<IPreferenceTemplateProvider>();
 			builder.RegisterType<PreferenceTemplatePersister>().As<IPreferenceTemplatePersister>();

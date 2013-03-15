@@ -3,7 +3,6 @@ using System.Linq;
 using AutoMapper;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
 using Teleopti.Ccc.Web.Core.IoC;
@@ -14,13 +13,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 	public class PreferenceAndScheduleDayViewModelMappingProfile : Profile
 	{
 		private readonly IResolve<IProjectionProvider> _projectionProvider;
-		private readonly IResolve<IPreferenceFulfilledChecker> _preferenceFulfilledChecker;
 		private readonly IResolve<IUserTimeZone> _userTimeZone;
 
-		public PreferenceAndScheduleDayViewModelMappingProfile(IResolve<IProjectionProvider> projectionProvider, IResolve<IPreferenceFulfilledChecker> preferenceFulfilledChecker, IResolve<IUserTimeZone> userTimeZone)
+		public PreferenceAndScheduleDayViewModelMappingProfile(IResolve<IProjectionProvider> projectionProvider, IResolve<IUserTimeZone> userTimeZone)
 		{
 			_projectionProvider = projectionProvider;
-			_preferenceFulfilledChecker = preferenceFulfilledChecker;
 			_userTimeZone = userTimeZone;
 		}
 
@@ -45,12 +42,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 					                                               : null))
 				.ForMember(s => s.PersonAssignment,
 				           o => o.MapFrom(s => s.SignificantPartForDisplay() == SchedulePartView.MainShift ? s : null))
-				.ForMember(d => d.Fulfilled, o => o.MapFrom(s =>
-					{
-						if (s != null && s.IsScheduled())
-							return _preferenceFulfilledChecker.Invoke().IsPreferenceFulfilled(s);
-						return null;
-					}))
 				.ForMember(d => d.Feedback, o => o.MapFrom(s => s == null || !s.IsScheduled()))
 				.ForMember(d => d.StyleClassName, o => o.MapFrom(s =>
 					{
