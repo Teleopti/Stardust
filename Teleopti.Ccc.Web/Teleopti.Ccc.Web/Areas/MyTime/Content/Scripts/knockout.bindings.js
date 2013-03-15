@@ -100,6 +100,7 @@ ko.bindingHandlers.datepicker = {
 		ko.utils.registerEventHandler(element, "change", function () {
 			var observable = valueAccessor();
 			observable(moment($(element).datepicker("getDate")));
+			$(element).blur();
 		});
 
 		//handle the field keydown for enter key
@@ -107,6 +108,7 @@ ko.bindingHandlers.datepicker = {
 			if (key.keyCode == 13) {
 				var observable = valueAccessor();
 				observable(moment($(element).datepicker("getDate")));
+				$(element).blur();
 			}
 		});
 
