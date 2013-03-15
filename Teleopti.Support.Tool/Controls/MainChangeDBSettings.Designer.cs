@@ -94,7 +94,7 @@ namespace Teleopti.Support.Tool.Controls
         private System.Windows.Forms.Button BNext;
         private System.Windows.Forms.Button BBack;
         private System.Windows.Forms.Button BInstall;
-        private readonly DBConnect dbConnect;
+        //private readonly DBConnect dbConnect;
         private readonly Summary connSummary;
         private readonly string configFile;
     }
