@@ -34,7 +34,7 @@ define([
 		var loadSchedules = function(options) {
 			subscriptions.subscribeTeamSchedule(
 				teamSchedule.SelectedTeam(),
-				helpers.Date.AsUTCDate(teamSchedule.SelectedDate().toDate()),
+				helpers.Date.ToServer(teamSchedule.SelectedDate()),
 				function(schedules) {
 					var currentAgents = teamSchedule.Agents();
 

@@ -49,7 +49,7 @@ define([
 
 			    subscriptions.subscribePersonSchedule(
 					options.id,
-					helpers.Date.AsUTCDate(personSchedule.Date().toDate()),
+					helpers.Date.ToServer(personSchedule.Date()),
 					function (data) {
 					    personSchedule.SetData(data);
 					    personSchedule.Loading(false);
