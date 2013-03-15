@@ -548,10 +548,8 @@ namespace Teleopti.Ccc.Win.Scheduling
                 new TeamBlockIntradayOptimizationService(
                     teamInfoFactory,
                     _container.Resolve<ITeamBlockInfoFactory>(),
-                    _container.Resolve<IBlockProvider>(),
                     teamBlockScheduler,
                     _container.Resolve<ILockableBitArrayFactory>(),
-                    _container.Resolve<IScheduleResultDataExtractorProvider>(),
                     _container.Resolve<ISchedulingOptionsCreator>(),
                     _container.Resolve<ISchedulingResultStateHolder>(),
                     _container.Resolve<IDeleteAndResourceCalculateService>()
