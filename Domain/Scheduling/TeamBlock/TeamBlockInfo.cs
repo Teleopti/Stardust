@@ -37,5 +37,24 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		{
 			return TeamInfo.MatrixesForGroupAndPeriod(BlockInfo.BlockPeriod);
 		}
+
+        public override int GetHashCode()
+        {
+            return _teamInfo.GetHashCode() ^ _blockInfo.GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            var ent = obj as ITeamBlockInfo;
+            return ent != null && Equals(ent);
+        }
+
+        public virtual bool Equals(ITeamBlockInfo other)
+        {
+            if (other == null)
+                return false;
+
+            return GetHashCode() == other.GetHashCode();
+        }
 	}
 }

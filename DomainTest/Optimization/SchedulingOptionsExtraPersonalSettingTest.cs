@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             {
                 _scheduleTags = new List<IScheduleTag> { _scheduleTag };
                 _target.MapFrom(_schedulingOptions);
-                _target.MapTo(_schedulingOptions, _scheduleTags, _groupPages, _activityList);
+                _target.MapTo(_schedulingOptions, _scheduleTags, new List<IGroupPageLight>(), _groupPages, _activityList);
             }
         }
 
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             {
                 _scheduleTags = new List<IScheduleTag>();
                 _target.MapFrom(_schedulingOptions);
-                _target.MapTo(_schedulingOptions, _scheduleTags, _groupPages, _activityList);
+                _target.MapTo(_schedulingOptions, _scheduleTags, new List<IGroupPageLight>(), _groupPages, _activityList);
             }
         }
 

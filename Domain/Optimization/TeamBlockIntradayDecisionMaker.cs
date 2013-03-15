@@ -69,8 +69,8 @@ namespace Teleopti.Ccc.Domain.Optimization
                 }
                 block.StandardDeviations = valuesOfOneBlock;
             }
-            var maxValue = blocks.Max(x => x.Average);
-            return blocks.FirstOrDefault(x => Math.Abs(x.Average - maxValue) < float.Epsilon);
+            var maxValue = blocks.Max(x => x.AverageStandardDeviation);
+            return blocks.FirstOrDefault(x => Math.Abs(x.AverageStandardDeviation - maxValue) < float.Epsilon);
         }
 	}
 }

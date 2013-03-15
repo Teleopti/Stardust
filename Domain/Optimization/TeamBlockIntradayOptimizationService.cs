@@ -76,11 +76,12 @@ namespace Teleopti.Ccc.Domain.Optimization
             }
             var remainingInfoList = new List<ITeamInfo>(allTeamInfoListOnStartDate);
 
+            var allTeamBlocks = new List<ITeamBlockInfo>();
+
+
             foreach (var teamInfo in remainingInfoList.GetRandom(remainingInfoList.Count, true))
             {
-                foreach (var matrix in teamInfo.MatrixesForGroupMember(0))
-                {
-                    var decisionMaker = new TeamBlockIntradayDecisionMaker(_lockableBitArrayFactory, _blockProvider);
+               var decisionMaker = new TeamBlockIntradayDecisionMaker(_lockableBitArrayFactory, _blockProvider);
                     var block = decisionMaker.Decide(selectedPeriod, selectedPersons, allPersonMatrixList,dataExtractorValuesForMatrixes,
                                                      schedulingOptions, optimizationPreferences);
 
@@ -107,7 +108,6 @@ namespace Teleopti.Ccc.Domain.Optimization
                                                                                              schedulingOptions
                                                                                                  .BlockFinderTypeForAdvanceScheduling);
                     _teamBlockScheduler.ScheduleTeamBlock(teamBlockInfo, datePoint, schedulingOptions);
-                }
             }
         }
     }

@@ -7,8 +7,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	{
 		DateOnlyPeriod BlockPeriod { get; }
 		IList<double?> StandardDeviations { get; set; }
-		double Sum { get; }
-		double Average { get; }
+		double AverageStandardDeviation { get; }
 	}
 
 	public class BlockInfo : IBlockInfo
@@ -18,6 +17,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		public BlockInfo(DateOnlyPeriod blockPeriod)
 		{
 			_blockPeriod = blockPeriod;
+		    StandardDeviations = new List<double?>();
 		}
 
 		public DateOnlyPeriod BlockPeriod
@@ -27,21 +27,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 		public IList<double?> StandardDeviations { get; set; }
 
-		public double Sum
-		{
-			get
-			{
-				var sum = 0.0;
-				foreach (var standardDeviation in StandardDeviations)
-				{
-					if (standardDeviation.HasValue)
-						sum += standardDeviation.Value;
-				}
-				return sum;
-			}
-		}
-
-		public double Average
+        public double AverageStandardDeviation
 		{
 			get
 			{
@@ -54,10 +40,29 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					count++;
 					sum += standardDeviation.Value;
 				}
-				if (sum > 0)
+				if (count != 0)
 					return sum / count;
 				return 0;
 			}
 		}
+
+        public override int GetHashCode()
+        {
+            return _blockPeriod.GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            var ent = obj as IBlockInfo;
+            return ent != null && Equals(ent);
+        }
+
+        public virtual bool Equals(IBlockInfo other)
+        {
+            if (other == null)
+                return false;
+
+            return GetHashCode() == other.GetHashCode();
+        }
 	}
 }

@@ -33,23 +33,28 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			Assert.That(_target.StandardDeviations, Is.EqualTo(values));
 		}
-		
-		[Test]
-		public void ShouldGetSumOfStandardDeviations()
-		{
-			var values = new List<double?> {0.1, 0.2, null, 0.3};
-			_target.StandardDeviations = values;
 
-			Assert.That(Math.Round(_target.Sum, 1), Is.EqualTo(0.6));
-		}
-		
 		[Test]
 		public void ShouldGetAverageOfStandardDeviations()
 		{
 			var values = new List<double?> {0.1, 0.2, null, 0.3};
 			_target.StandardDeviations = values;
 
-			Assert.That(Math.Round(_target.Average, 1), Is.EqualTo(0.2));
+            Assert.That(Math.Round(_target.AverageStandardDeviation, 1), Is.EqualTo(0.2));
 		}
+
+        [Test]
+        public void ShouldReturnSameHashIfBlockPeriodAreTheSame()
+        {
+            var blockInfo = new BlockInfo(new DateOnlyPeriod(new DateOnly(2013, 2, 27), new DateOnly(2013, 2, 27)));
+            Assert.AreEqual(blockInfo.GetHashCode(), _target.GetHashCode());
+        }
+
+        [Test]
+        public void ShouldBeEqualWhenBlockPeriodAreTheSame()
+        {
+            var blockInfo = new BlockInfo(new DateOnlyPeriod(new DateOnly(2013, 2, 27), new DateOnly(2013, 2, 27)));
+            Assert.AreEqual(blockInfo, _target);
+        }
 	}
 }
