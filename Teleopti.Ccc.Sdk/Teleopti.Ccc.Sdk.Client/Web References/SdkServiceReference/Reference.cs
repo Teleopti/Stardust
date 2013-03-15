@@ -4719,11 +4719,8 @@ namespace Teleopti.Ccc.Sdk.Client.SdkServiceReference {
     }
     
     /// <remarks/>
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ContractScheduleDto))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(GroupPageGroupDto))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(GroupPageDto))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(PublicNoteDto))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(PersonPeriodDetailDto))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(AgentPortalSettingsDto))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(OvertimeDefinitionSetDto))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(PartTimePercentageDto))]
@@ -4731,9 +4728,7 @@ namespace Teleopti.Ccc.Sdk.Client.SdkServiceReference {
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(PersonSkillPeriodDto))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(DialogueMessageDto))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(PushMessageDialogueDto))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ExternalLogOnDto))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(ScenarioDto))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(PayrollResultDetailDto))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(PayrollResultDto))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(PayrollExportDto))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(ShiftTradeSwapDetailDto))]
@@ -4751,7 +4746,6 @@ namespace Teleopti.Ccc.Sdk.Client.SdkServiceReference {
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(MultiplicatorDto))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(ExtendedPreferenceTemplateDto))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(StudentAvailabilityDayDto))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ActivityRestrictionDto))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(RestrictionBaseDto))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(StudentAvailabilityRestrictionDto))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(PreferenceRestrictionDto))]
@@ -4760,16 +4754,6 @@ namespace Teleopti.Ccc.Sdk.Client.SdkServiceReference {
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(ApplicationFunctionDto))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(BusinessUnitDto))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(SessionDataDto))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ShiftCategoryDto))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(DayOffInfoDto))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(WorkflowControlSetDto))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(TeamDto))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(PersonContractDto))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(DateOnlyPeriodDto))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(PersonDto))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ActivityDto))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ColorDto))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AbsenceDto))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(DateTimePeriodDto))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(LayerDto))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(PersonDayOffDto))]
@@ -4780,6 +4764,22 @@ namespace Teleopti.Ccc.Sdk.Client.SdkServiceReference {
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(AbsenceLayerDto))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(DefinitionSetLayerDto))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(DefinitionSetDto))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ExternalLogOnDto))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(PersonPeriodDetailDto))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(TeamDto))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(PersonContractDto))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(PersonDto))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(PublicNoteDto))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ContractScheduleDto))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(PayrollResultDetailDto))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ActivityRestrictionDto))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AbsenceDto))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(DateOnlyPeriodDto))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ShiftCategoryDto))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(DayOffInfoDto))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ColorDto))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(ActivityDto))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(WorkflowControlSetDto))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -5287,8 +5287,6 @@ namespace Teleopti.Ccc.Sdk.Client.SdkServiceReference {
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(DenormalizeScheduleCommandDto))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(DeletePersonAccountForPersonCommandDto))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(SetPersonAccountForPersonCommandDto))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(CancelPersonalActivityCommandDto))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AddPersonalActivityCommandDto))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(AddActivityCommandDto))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(SaveAgentPortalSettingsCommandDto))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(CancelAbsenceCommandDto))]
@@ -5300,6 +5298,8 @@ namespace Teleopti.Ccc.Sdk.Client.SdkServiceReference {
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(WorkloadOnSkillSelectionDto))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(CancelOvertimeCommandDto))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(AddAbsenceCommandDto))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(CancelPersonalActivityCommandDto))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(AddPersonalActivityCommandDto))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -9152,138 +9152,6 @@ namespace Teleopti.Ccc.Sdk.Client.SdkServiceReference {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.ccc.teleopti.com/sdk/2012/04/")]
-    public partial class CancelPersonalActivityCommandDto : CommandDto {
-        
-        private DateOnlyDto dateField;
-        
-        private DateTimePeriodDto periodField;
-        
-        private string personIdField;
-        
-        private string scenarioIdField;
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
-        public DateOnlyDto Date {
-            get {
-                return this.dateField;
-            }
-            set {
-                this.dateField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
-        public DateTimePeriodDto Period {
-            get {
-                return this.periodField;
-            }
-            set {
-                this.periodField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string PersonId {
-            get {
-                return this.personIdField;
-            }
-            set {
-                this.personIdField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
-        public string ScenarioId {
-            get {
-                return this.scenarioIdField;
-            }
-            set {
-                this.scenarioIdField = value;
-            }
-        }
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.ccc.teleopti.com/sdk/2012/04/")]
-    public partial class AddPersonalActivityCommandDto : CommandDto {
-        
-        private string activityIdField;
-        
-        private DateOnlyDto dateField;
-        
-        private DateTimePeriodDto periodField;
-        
-        private string personIdField;
-        
-        private string scenarioIdField;
-        
-        /// <remarks/>
-        public string ActivityId {
-            get {
-                return this.activityIdField;
-            }
-            set {
-                this.activityIdField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
-        public DateOnlyDto Date {
-            get {
-                return this.dateField;
-            }
-            set {
-                this.dateField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
-        public DateTimePeriodDto Period {
-            get {
-                return this.periodField;
-            }
-            set {
-                this.periodField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string PersonId {
-            get {
-                return this.personIdField;
-            }
-            set {
-                this.personIdField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
-        public string ScenarioId {
-            get {
-                return this.scenarioIdField;
-            }
-            set {
-                this.scenarioIdField = value;
-            }
-        }
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.ccc.teleopti.com/sdk/2011/10/")]
     public partial class AddActivityCommandDto : CommandDto {
         
@@ -9849,6 +9717,138 @@ namespace Teleopti.Ccc.Sdk.Client.SdkServiceReference {
             }
             set {
                 this.absenceIdField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public DateOnlyDto Date {
+            get {
+                return this.dateField;
+            }
+            set {
+                this.dateField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public DateTimePeriodDto Period {
+            get {
+                return this.periodField;
+            }
+            set {
+                this.periodField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string PersonId {
+            get {
+                return this.personIdField;
+            }
+            set {
+                this.personIdField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public string ScenarioId {
+            get {
+                return this.scenarioIdField;
+            }
+            set {
+                this.scenarioIdField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.ccc.teleopti.com/sdk/2012/04/")]
+    public partial class CancelPersonalActivityCommandDto : CommandDto {
+        
+        private DateOnlyDto dateField;
+        
+        private DateTimePeriodDto periodField;
+        
+        private string personIdField;
+        
+        private string scenarioIdField;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public DateOnlyDto Date {
+            get {
+                return this.dateField;
+            }
+            set {
+                this.dateField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public DateTimePeriodDto Period {
+            get {
+                return this.periodField;
+            }
+            set {
+                this.periodField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string PersonId {
+            get {
+                return this.personIdField;
+            }
+            set {
+                this.personIdField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public string ScenarioId {
+            get {
+                return this.scenarioIdField;
+            }
+            set {
+                this.scenarioIdField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.ccc.teleopti.com/sdk/2012/04/")]
+    public partial class AddPersonalActivityCommandDto : CommandDto {
+        
+        private string activityIdField;
+        
+        private DateOnlyDto dateField;
+        
+        private DateTimePeriodDto periodField;
+        
+        private string personIdField;
+        
+        private string scenarioIdField;
+        
+        /// <remarks/>
+        public string ActivityId {
+            get {
+                return this.activityIdField;
+            }
+            set {
+                this.activityIdField = value;
             }
         }
         
@@ -11309,6 +11309,12 @@ namespace Teleopti.Ccc.Sdk.Client.SdkServiceReference {
     }
     
     /// <remarks/>
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(GetGroupsForGroupPageAtDateQueryDto))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(GetAvailableCustomGroupPagesQueryDto))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(GetMultiplicatorDefinitionSetShiftAllowanceDto))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(GetMultiplicatorDefinitionSetOvertimeDto))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(GetMultiplicatorShiftAllowanceQueryDto))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(GetMultiplicatorOvertimeQueryDto))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(GetPersonByEmploymentNumberQueryDto))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(GetPeopleForShiftTradeByGroupPageGroupQueryDto))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(GetSiteByDescriptionNameQueryDto))]
@@ -11320,28 +11326,203 @@ namespace Teleopti.Ccc.Sdk.Client.SdkServiceReference {
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(GetValidatedSchedulePartsForStudentAvailabilityQueryDto))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(GetSiteByIdQueryDto))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(GetPeopleByGroupPageGroupQueryDto))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(GetGroupsForGroupPageAtDateQueryDto))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(GetAvailableCustomGroupPagesQueryDto))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(GetCurrentBusinessUnitQueryDto))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(GetPayrollResultStatusByIdQueryDto))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(GetAgentPortalSettingsQueryDto))]
+    [System.Xml.Serialization.XmlIncludeAttribute(typeof(GetPayrollResultStatusByExportIdQueryDto))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(GetSchedulesForAllPeopleQueryDto))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(GetAllScenariosQueryDto))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(GetSchedulesByGroupPageGroupQueryDto))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(GetSchedulesByTeamQueryDto))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(GetSchedulesBySiteQueryDto))]
     [System.Xml.Serialization.XmlIncludeAttribute(typeof(GetSchedulesByPersonQueryDto))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(GetMultiplicatorDefinitionSetShiftAllowanceDto))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(GetMultiplicatorDefinitionSetOvertimeDto))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(GetMultiplicatorShiftAllowanceQueryDto))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(GetMultiplicatorOvertimeQueryDto))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(GetCurrentBusinessUnitQueryDto))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(GetPayrollResultStatusByIdQueryDto))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(GetAgentPortalSettingsQueryDto))]
-    [System.Xml.Serialization.XmlIncludeAttribute(typeof(GetPayrollResultStatusByExportIdQueryDto))]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.ccc.teleopti.com/sdk/2011/07/")]
     public partial class QueryDto {
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.ccc.teleopti.com/sdk/2011/09/")]
+    public partial class GetGroupsForGroupPageAtDateQueryDto : QueryDto {
+        
+        private string pageIdField;
+        
+        private DateOnlyDto queryDateField;
+        
+        /// <remarks/>
+        public string PageId {
+            get {
+                return this.pageIdField;
+            }
+            set {
+                this.pageIdField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public DateOnlyDto QueryDate {
+            get {
+                return this.queryDateField;
+            }
+            set {
+                this.queryDateField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.ccc.teleopti.com/sdk/2011/09/")]
+    public partial class GetAvailableCustomGroupPagesQueryDto : QueryDto {
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.ccc.teleopti.com/sdk/2012/09/")]
+    public partial class GetMultiplicatorDefinitionSetShiftAllowanceDto : QueryDto {
+        
+        private DateOnlyPeriodDto periodField;
+        
+        private string timeZoneIdField;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public DateOnlyPeriodDto Period {
+            get {
+                return this.periodField;
+            }
+            set {
+                this.periodField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public string TimeZoneId {
+            get {
+                return this.timeZoneIdField;
+            }
+            set {
+                this.timeZoneIdField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.ccc.teleopti.com/sdk/2012/09/")]
+    public partial class GetMultiplicatorDefinitionSetOvertimeDto : QueryDto {
+        
+        private DateOnlyPeriodDto periodField;
+        
+        private string timeZoneIdField;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public DateOnlyPeriodDto Period {
+            get {
+                return this.periodField;
+            }
+            set {
+                this.periodField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public string TimeZoneId {
+            get {
+                return this.timeZoneIdField;
+            }
+            set {
+                this.timeZoneIdField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.ccc.teleopti.com/sdk/2012/09/")]
+    public partial class GetMultiplicatorShiftAllowanceQueryDto : QueryDto {
+        
+        private bool loadDeletedField;
+        
+        private bool loadDeletedFieldSpecified;
+        
+        /// <remarks/>
+        public bool LoadDeleted {
+            get {
+                return this.loadDeletedField;
+            }
+            set {
+                this.loadDeletedField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool LoadDeletedSpecified {
+            get {
+                return this.loadDeletedFieldSpecified;
+            }
+            set {
+                this.loadDeletedFieldSpecified = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.ccc.teleopti.com/sdk/2012/09/")]
+    public partial class GetMultiplicatorOvertimeQueryDto : QueryDto {
+        
+        private bool loadDeletedField;
+        
+        private bool loadDeletedFieldSpecified;
+        
+        /// <remarks/>
+        public bool LoadDeleted {
+            get {
+                return this.loadDeletedField;
+            }
+            set {
+                this.loadDeletedField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool LoadDeletedSpecified {
+            get {
+                return this.loadDeletedFieldSpecified;
+            }
+            set {
+                this.loadDeletedFieldSpecified = value;
+            }
+        }
     }
     
     /// <remarks/>
@@ -11663,31 +11844,27 @@ namespace Teleopti.Ccc.Sdk.Client.SdkServiceReference {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.ccc.teleopti.com/sdk/2011/09/")]
-    public partial class GetGroupsForGroupPageAtDateQueryDto : QueryDto {
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.ccc.teleopti.com/sdk/2011/10/")]
+    public partial class GetCurrentBusinessUnitQueryDto : QueryDto {
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.ccc.teleopti.com/sdk/2011/10/")]
+    public partial class GetPayrollResultStatusByIdQueryDto : QueryDto {
         
-        private string pageIdField;
-        
-        private DateOnlyDto queryDateField;
-        
-        /// <remarks/>
-        public string PageId {
-            get {
-                return this.pageIdField;
-            }
-            set {
-                this.pageIdField = value;
-            }
-        }
+        private string payrollResultIdField;
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
-        public DateOnlyDto QueryDate {
+        public string PayrollResultId {
             get {
-                return this.queryDateField;
+                return this.payrollResultIdField;
             }
             set {
-                this.queryDateField = value;
+                this.payrollResultIdField = value;
             }
         }
     }
@@ -11697,8 +11874,29 @@ namespace Teleopti.Ccc.Sdk.Client.SdkServiceReference {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.ccc.teleopti.com/sdk/2011/09/")]
-    public partial class GetAvailableCustomGroupPagesQueryDto : QueryDto {
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.ccc.teleopti.com/sdk/2011/10/")]
+    public partial class GetAgentPortalSettingsQueryDto : QueryDto {
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.ccc.teleopti.com/sdk/2011/10/")]
+    public partial class GetPayrollResultStatusByExportIdQueryDto : QueryDto {
+        
+        private string payrollExportIdField;
+        
+        /// <remarks/>
+        public string PayrollExportId {
+            get {
+                return this.payrollExportIdField;
+            }
+            set {
+                this.payrollExportIdField = value;
+            }
+        }
     }
     
     /// <remarks/>
@@ -12098,204 +12296,6 @@ namespace Teleopti.Ccc.Sdk.Client.SdkServiceReference {
             }
             set {
                 this.timeZoneIdField = value;
-            }
-        }
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.ccc.teleopti.com/sdk/2012/09/")]
-    public partial class GetMultiplicatorDefinitionSetShiftAllowanceDto : QueryDto {
-        
-        private DateOnlyPeriodDto periodField;
-        
-        private string timeZoneIdField;
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
-        public DateOnlyPeriodDto Period {
-            get {
-                return this.periodField;
-            }
-            set {
-                this.periodField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
-        public string TimeZoneId {
-            get {
-                return this.timeZoneIdField;
-            }
-            set {
-                this.timeZoneIdField = value;
-            }
-        }
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.ccc.teleopti.com/sdk/2012/09/")]
-    public partial class GetMultiplicatorDefinitionSetOvertimeDto : QueryDto {
-        
-        private DateOnlyPeriodDto periodField;
-        
-        private string timeZoneIdField;
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
-        public DateOnlyPeriodDto Period {
-            get {
-                return this.periodField;
-            }
-            set {
-                this.periodField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
-        public string TimeZoneId {
-            get {
-                return this.timeZoneIdField;
-            }
-            set {
-                this.timeZoneIdField = value;
-            }
-        }
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.ccc.teleopti.com/sdk/2012/09/")]
-    public partial class GetMultiplicatorShiftAllowanceQueryDto : QueryDto {
-        
-        private bool loadDeletedField;
-        
-        private bool loadDeletedFieldSpecified;
-        
-        /// <remarks/>
-        public bool LoadDeleted {
-            get {
-                return this.loadDeletedField;
-            }
-            set {
-                this.loadDeletedField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool LoadDeletedSpecified {
-            get {
-                return this.loadDeletedFieldSpecified;
-            }
-            set {
-                this.loadDeletedFieldSpecified = value;
-            }
-        }
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.ccc.teleopti.com/sdk/2012/09/")]
-    public partial class GetMultiplicatorOvertimeQueryDto : QueryDto {
-        
-        private bool loadDeletedField;
-        
-        private bool loadDeletedFieldSpecified;
-        
-        /// <remarks/>
-        public bool LoadDeleted {
-            get {
-                return this.loadDeletedField;
-            }
-            set {
-                this.loadDeletedField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool LoadDeletedSpecified {
-            get {
-                return this.loadDeletedFieldSpecified;
-            }
-            set {
-                this.loadDeletedFieldSpecified = value;
-            }
-        }
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.ccc.teleopti.com/sdk/2011/10/")]
-    public partial class GetCurrentBusinessUnitQueryDto : QueryDto {
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.ccc.teleopti.com/sdk/2011/10/")]
-    public partial class GetPayrollResultStatusByIdQueryDto : QueryDto {
-        
-        private string payrollResultIdField;
-        
-        /// <remarks/>
-        public string PayrollResultId {
-            get {
-                return this.payrollResultIdField;
-            }
-            set {
-                this.payrollResultIdField = value;
-            }
-        }
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.ccc.teleopti.com/sdk/2011/10/")]
-    public partial class GetAgentPortalSettingsQueryDto : QueryDto {
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.ccc.teleopti.com/sdk/2011/10/")]
-    public partial class GetPayrollResultStatusByExportIdQueryDto : QueryDto {
-        
-        private string payrollExportIdField;
-        
-        /// <remarks/>
-        public string PayrollExportId {
-            get {
-                return this.payrollExportIdField;
-            }
-            set {
-                this.payrollExportIdField = value;
             }
         }
     }
@@ -14308,53 +14308,6 @@ namespace Teleopti.Ccc.Sdk.Client.SdkServiceReference {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.ccc.teleopti.com/sdk/2010/05/")]
-    public partial class ContractScheduleDto : Dto {
-        
-        private string descriptionField;
-        
-        private bool isDeletedField;
-        
-        private bool isDeletedFieldSpecified;
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
-        public string Description {
-            get {
-                return this.descriptionField;
-            }
-            set {
-                this.descriptionField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public bool IsDeleted {
-            get {
-                return this.isDeletedField;
-            }
-            set {
-                this.isDeletedField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool IsDeletedSpecified {
-            get {
-                return this.isDeletedFieldSpecified;
-            }
-            set {
-                this.isDeletedFieldSpecified = value;
-            }
-        }
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.ccc.teleopti.com/sdk/2011/09/")]
     public partial class GroupPageGroupDto : Dto {
         
@@ -14390,164 +14343,6 @@ namespace Teleopti.Ccc.Sdk.Client.SdkServiceReference {
             }
             set {
                 this.pageNameField = value;
-            }
-        }
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.ccc.teleopti.com/sdk/2011/01/")]
-    public partial class PublicNoteDto : Dto {
-        
-        private DateOnlyDto dateField;
-        
-        private PersonDto personField;
-        
-        private string scheduleNoteField;
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
-        public DateOnlyDto Date {
-            get {
-                return this.dateField;
-            }
-            set {
-                this.dateField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
-        public PersonDto Person {
-            get {
-                return this.personField;
-            }
-            set {
-                this.personField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
-        public string ScheduleNote {
-            get {
-                return this.scheduleNoteField;
-            }
-            set {
-                this.scheduleNoteField = value;
-            }
-        }
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.ccc.teleopti.com/sdk/2010/10/")]
-    public partial class PersonPeriodDetailDto : Dto {
-        
-        private string contractIdField;
-        
-        private string contractScheduleIdField;
-        
-        private ExternalLogOnDto[] externalLogOnField;
-        
-        private string noteField;
-        
-        private string partTimePercentageIdField;
-        
-        private string personIdField;
-        
-        private DateOnlyDto startDateField;
-        
-        private TeamDto teamField;
-        
-        /// <remarks/>
-        public string ContractId {
-            get {
-                return this.contractIdField;
-            }
-            set {
-                this.contractIdField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string ContractScheduleId {
-            get {
-                return this.contractScheduleIdField;
-            }
-            set {
-                this.contractScheduleIdField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlArrayAttribute(IsNullable=true)]
-        [System.Xml.Serialization.XmlArrayItemAttribute(Namespace="http://schemas.ccc.teleopti.com/sdk/2010/04/")]
-        public ExternalLogOnDto[] ExternalLogOn {
-            get {
-                return this.externalLogOnField;
-            }
-            set {
-                this.externalLogOnField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
-        public string Note {
-            get {
-                return this.noteField;
-            }
-            set {
-                this.noteField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string PartTimePercentageId {
-            get {
-                return this.partTimePercentageIdField;
-            }
-            set {
-                this.partTimePercentageIdField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public string PersonId {
-            get {
-                return this.personIdField;
-            }
-            set {
-                this.personIdField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
-        public DateOnlyDto StartDate {
-            get {
-                return this.startDateField;
-            }
-            set {
-                this.startDateField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
-        public TeamDto Team {
-            get {
-                return this.teamField;
-            }
-            set {
-                this.teamField = value;
             }
         }
     }
@@ -15033,120 +14828,6 @@ namespace Teleopti.Ccc.Sdk.Client.SdkServiceReference {
     [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.ccc.teleopti.com/sdk/2010/05/")]
-    public partial class PayrollResultDetailDto : Dto {
-        
-        private DetailLevel detailLevelField;
-        
-        private bool detailLevelFieldSpecified;
-        
-        private string exceptionMessageField;
-        
-        private string exceptionStackTraceField;
-        
-        private string messageField;
-        
-        private System.DateTime timestampField;
-        
-        private bool timestampFieldSpecified;
-        
-        /// <remarks/>
-        public DetailLevel DetailLevel {
-            get {
-                return this.detailLevelField;
-            }
-            set {
-                this.detailLevelField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool DetailLevelSpecified {
-            get {
-                return this.detailLevelFieldSpecified;
-            }
-            set {
-                this.detailLevelFieldSpecified = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
-        public string ExceptionMessage {
-            get {
-                return this.exceptionMessageField;
-            }
-            set {
-                this.exceptionMessageField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
-        public string ExceptionStackTrace {
-            get {
-                return this.exceptionStackTraceField;
-            }
-            set {
-                this.exceptionStackTraceField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
-        public string Message {
-            get {
-                return this.messageField;
-            }
-            set {
-                this.messageField = value;
-            }
-        }
-        
-        /// <remarks/>
-        public System.DateTime Timestamp {
-            get {
-                return this.timestampField;
-            }
-            set {
-                this.timestampField = value;
-            }
-        }
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlIgnoreAttribute()]
-        public bool TimestampSpecified {
-            get {
-                return this.timestampFieldSpecified;
-            }
-            set {
-                this.timestampFieldSpecified = value;
-            }
-        }
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.datacontract.org/2004/07/Teleopti.Interfaces.Domain")]
-    public enum DetailLevel {
-        
-        /// <remarks/>
-        Info,
-        
-        /// <remarks/>
-        Warning,
-        
-        /// <remarks/>
-        Error,
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
-    [System.SerializableAttribute()]
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.ccc.teleopti.com/sdk/2010/04/")]
     public partial class PayrollResultDto : Dto {
         
@@ -15263,6 +14944,120 @@ namespace Teleopti.Ccc.Sdk.Client.SdkServiceReference {
                 this.timestampFieldSpecified = value;
             }
         }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.ccc.teleopti.com/sdk/2010/05/")]
+    public partial class PayrollResultDetailDto : Dto {
+        
+        private DetailLevel detailLevelField;
+        
+        private bool detailLevelFieldSpecified;
+        
+        private string exceptionMessageField;
+        
+        private string exceptionStackTraceField;
+        
+        private string messageField;
+        
+        private System.DateTime timestampField;
+        
+        private bool timestampFieldSpecified;
+        
+        /// <remarks/>
+        public DetailLevel DetailLevel {
+            get {
+                return this.detailLevelField;
+            }
+            set {
+                this.detailLevelField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool DetailLevelSpecified {
+            get {
+                return this.detailLevelFieldSpecified;
+            }
+            set {
+                this.detailLevelFieldSpecified = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public string ExceptionMessage {
+            get {
+                return this.exceptionMessageField;
+            }
+            set {
+                this.exceptionMessageField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public string ExceptionStackTrace {
+            get {
+                return this.exceptionStackTraceField;
+            }
+            set {
+                this.exceptionStackTraceField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public string Message {
+            get {
+                return this.messageField;
+            }
+            set {
+                this.messageField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public System.DateTime Timestamp {
+            get {
+                return this.timestampField;
+            }
+            set {
+                this.timestampField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool TimestampSpecified {
+            get {
+                return this.timestampFieldSpecified;
+            }
+            set {
+                this.timestampFieldSpecified = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
+    [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.datacontract.org/2004/07/Teleopti.Interfaces.Domain")]
+    public enum DetailLevel {
+        
+        /// <remarks/>
+        Info,
+        
+        /// <remarks/>
+        Warning,
+        
+        /// <remarks/>
+        Error,
     }
     
     /// <remarks/>
@@ -15643,6 +15438,211 @@ namespace Teleopti.Ccc.Sdk.Client.SdkServiceReference {
             }
             set {
                 this.nameField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.ccc.teleopti.com/sdk/2010/10/")]
+    public partial class PersonPeriodDetailDto : Dto {
+        
+        private string contractIdField;
+        
+        private string contractScheduleIdField;
+        
+        private ExternalLogOnDto[] externalLogOnField;
+        
+        private string noteField;
+        
+        private string partTimePercentageIdField;
+        
+        private string personIdField;
+        
+        private DateOnlyDto startDateField;
+        
+        private TeamDto teamField;
+        
+        /// <remarks/>
+        public string ContractId {
+            get {
+                return this.contractIdField;
+            }
+            set {
+                this.contractIdField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string ContractScheduleId {
+            get {
+                return this.contractScheduleIdField;
+            }
+            set {
+                this.contractScheduleIdField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlArrayAttribute(IsNullable=true)]
+        [System.Xml.Serialization.XmlArrayItemAttribute(Namespace="http://schemas.ccc.teleopti.com/sdk/2010/04/")]
+        public ExternalLogOnDto[] ExternalLogOn {
+            get {
+                return this.externalLogOnField;
+            }
+            set {
+                this.externalLogOnField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public string Note {
+            get {
+                return this.noteField;
+            }
+            set {
+                this.noteField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string PartTimePercentageId {
+            get {
+                return this.partTimePercentageIdField;
+            }
+            set {
+                this.partTimePercentageIdField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public string PersonId {
+            get {
+                return this.personIdField;
+            }
+            set {
+                this.personIdField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public DateOnlyDto StartDate {
+            get {
+                return this.startDateField;
+            }
+            set {
+                this.startDateField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public TeamDto Team {
+            get {
+                return this.teamField;
+            }
+            set {
+                this.teamField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.ccc.teleopti.com/sdk/2011/01/")]
+    public partial class PublicNoteDto : Dto {
+        
+        private DateOnlyDto dateField;
+        
+        private PersonDto personField;
+        
+        private string scheduleNoteField;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public DateOnlyDto Date {
+            get {
+                return this.dateField;
+            }
+            set {
+                this.dateField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public PersonDto Person {
+            get {
+                return this.personField;
+            }
+            set {
+                this.personField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public string ScheduleNote {
+            get {
+                return this.scheduleNoteField;
+            }
+            set {
+                this.scheduleNoteField = value;
+            }
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.233")]
+    [System.SerializableAttribute()]
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.ComponentModel.DesignerCategoryAttribute("code")]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="http://schemas.ccc.teleopti.com/sdk/2010/05/")]
+    public partial class ContractScheduleDto : Dto {
+        
+        private string descriptionField;
+        
+        private bool isDeletedField;
+        
+        private bool isDeletedFieldSpecified;
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public string Description {
+            get {
+                return this.descriptionField;
+            }
+            set {
+                this.descriptionField = value;
+            }
+        }
+        
+        /// <remarks/>
+        public bool IsDeleted {
+            get {
+                return this.isDeletedField;
+            }
+            set {
+                this.isDeletedField = value;
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool IsDeletedSpecified {
+            get {
+                return this.isDeletedFieldSpecified;
+            }
+            set {
+                this.isDeletedFieldSpecified = value;
             }
         }
     }

@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.OldTests
 #pragma warning disable 612,618
 			_startTime = new TimeSpan(0, 10, 15, 0);
             _endTime = new TimeSpan(0, 10, 30, 0);
-            _target = new AdherenceDataDto(_startTime.Ticks, _endTime.Ticks, _readyTimeMinutes, _deviationMinutes, _adherence, DateTime.Now,DateTime.Now );
+            _target = new AdherenceDataDto(_startTime.Ticks, _endTime.Ticks, _readyTimeMinutes, _deviationMinutes, _adherence);
 
         }
 
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.OldTests
 		[Test]
 		public void VerifyNullablePropertiesAndConstructor()
 		{
-			_target = new AdherenceDataDto(_startTime.Ticks, _endTime.Ticks, _readyTimeMinutes, _deviationMinutes, _adherenceForPeriod, DateTime.Now, DateTime.Now);
+			_target = new AdherenceDataDto(_startTime.Ticks, _endTime.Ticks, _readyTimeMinutes, _deviationMinutes, _adherenceForPeriod);
 			Assert.IsNotNull(_target);
 			_target.AdherenceForDay = _adherenceForDay;
 			Assert.AreEqual(_adherenceForPeriod, _target.AdherenceForPeriod);
@@ -75,6 +75,22 @@ namespace Teleopti.Ccc.Sdk.LogicTest.OldTests
 
 			Assert.AreEqual(_adherenceForPeriod, _target.AdherenceForPeriod);
 			Assert.AreEqual(_adherenceForDay, _target.AdherenceForDay);
+		}
+
+		[Test]
+		public void VerifyCalendarDateConstructor()
+		{
+			var dateTime = DateTime.Now;
+			_target = new AdherenceDataDto(_startTime.Ticks, _endTime.Ticks, _readyTimeMinutes, _deviationMinutes, _adherenceForPeriod, dateTime, dateTime);
+			Assert.IsNotNull(_target);
+			Assert.AreEqual(dateTime, _target.CalendarDate);
+			Assert.AreEqual(dateTime, _target.ShiftBelongsToDate);
+
+			_target.CalendarDate = dateTime.AddDays(4);
+			_target.ShiftBelongsToDate = dateTime.AddDays(4);
+
+			Assert.AreEqual(dateTime.AddDays(4), _target.CalendarDate);
+			Assert.AreEqual(dateTime.AddDays(4), _target.ShiftBelongsToDate);
 		}
     }
 }

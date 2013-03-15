@@ -4,7 +4,8 @@
 		var observable = options.member;
 		var selected = $(element).find('option:selected');
 		var data = selected.data(options.data);
-		observable(data);
+		if (observable)
+			observable(data);
 	}
 };
 
@@ -89,3 +90,36 @@ ko.bindingHandlers.increaseWidthIf = {
 	}
 };
 
+ko.bindingHandlers.datepicker = {
+	init: function (element, valueAccessor, allBindingsAccessor) {
+		//initialize datepicker with some optional options
+		var options = allBindingsAccessor().datepickerOptions || { showAnim: 'slideDown' };
+		$(element).datepicker(options);
+
+		//handle the field changing
+		ko.utils.registerEventHandler(element, "change", function () {
+			var observable = valueAccessor();
+			observable(moment($(element).datepicker("getDate")));
+			$(element).blur();
+		});
+
+		//handle the field keydown for enter key
+		ko.utils.registerEventHandler(element, "keydown", function (key) {
+			if (key.keyCode == 13) {
+				var observable = valueAccessor();
+				observable(moment($(element).datepicker("getDate")));
+				$(element).blur();
+			}
+		});
+
+		//handle disposal (if KO removes by the template binding)
+		ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
+			$(element).datepicker("destroy");
+		});
+
+	},
+	update: function (element, valueAccessor) {
+		var value = ko.utils.unwrapObservable(valueAccessor());
+		$(element).datepicker("setDate", new Date(value));
+	}
+};

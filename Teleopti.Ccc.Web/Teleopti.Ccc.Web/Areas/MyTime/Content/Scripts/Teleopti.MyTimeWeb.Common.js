@@ -88,7 +88,7 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 			_settings = settings;
 		},
 		PartialInit: function () {
-			Teleopti.MyTimeWeb.Common.Layout.ActivateTooltip();
+			//Teleopti.MyTimeWeb.Common.Layout.ActivateTooltip();
 		},
 		AjaxFailed: function (jqXHR, noIdea, title) {
 			var msg = $.parseJSON(jqXHR.responseText);

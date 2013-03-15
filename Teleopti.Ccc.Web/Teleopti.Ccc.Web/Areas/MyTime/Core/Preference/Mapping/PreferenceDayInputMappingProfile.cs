@@ -108,9 +108,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 					var person = _loggedOnUser.Invoke().CurrentUser();
 					var restriction = _mapper.Invoke().Map<PreferenceDayInput, IPreferenceRestriction>(source);
 					destination = new PreferenceDay(person, source.Date, restriction);
+					destination.TemplateName = source.TemplateName;
 				}
 				else
 				{
+					destination.TemplateName = source.TemplateName;
 					_mapper.Invoke().Map(source, destination.Restriction);
 				}
 				return destination;

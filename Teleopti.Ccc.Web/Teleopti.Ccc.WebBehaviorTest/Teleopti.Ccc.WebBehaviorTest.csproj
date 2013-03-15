@@ -115,6 +115,7 @@
     <Compile Include="AsmStepDefinition.cs" />
     <Compile Include="Bindings\Generic\ActivityStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Anywhere\PersonSchedulePageStepDefinitions.cs" />
+    <Compile Include="Data\Setups\Generic\PreferenceTemplateConfigurable.cs" />
     <Compile Include="Bindings\Generic\UIStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\ContractStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Anywhere\TeamSchedulePageStepDefinitions.cs" />
@@ -123,6 +124,11 @@
     <Compile Include="Bindings\Generic\PasswordPolicyStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Start\SignInPageStepDefinitions.cs" />
     <Compile Include="Bindings\StringContainsAnyLanguageResourceConstraint.cs" />
+    <Compile Include="PreferencesExtendedTemplate.feature.cs">
+      <DependentUpon>PreferencesExtendedTemplate.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Data\Setups\Generic\PersonAbsenceConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\PersonDayOffConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\ReadModelShiftConfigurable.cs" />
@@ -556,6 +562,10 @@
     <None Include="Anywhere\ViewTeamSchedule.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ViewTeamSchedule.feature.cs</LastGenOutput>
+    </None>
+    <None Include="PreferencesExtendedTemplate.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>PreferencesExtendedTemplate.feature.cs</LastGenOutput>
     </None>
     <None Include="StudentAvailabilityMultidays.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

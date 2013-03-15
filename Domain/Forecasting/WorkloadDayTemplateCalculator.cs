@@ -5,8 +5,22 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Forecasting
 {
-    public class WorkloadDayTemplateCalculator
-    {
+	public interface IWorkloadDayTemplateCalculator
+	{
+		/// <summary>
+		/// Loads the workload day templates.
+		/// </summary>
+		/// <param name="dateCollection">The date collection.</param>
+		/// <param name="workload">The workload.</param>
+		/// <remarks>
+		/// Created by: robink
+		/// Created date: 2008-04-09
+		/// </remarks>
+		void LoadWorkloadDayTemplates(IList<DateOnlyPeriod> dateCollection, IWorkload workload);
+	}
+
+	public class WorkloadDayTemplateCalculator : IWorkloadDayTemplateCalculator
+	{
         private readonly IStatisticHelper _statisticHelper;
         private readonly IOutlierRepository _outlierRepository;
 

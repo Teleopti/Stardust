@@ -110,6 +110,7 @@
     <Compile Include="Domain\ClipboardItems.cs" />
     <Compile Include="Domain\ComplexRuleSetEventArgs.cs" />
     <Compile Include="Domain\IActivityRestrictableVisualLayer.cs" />
+    <Compile Include="Domain\IBudgetGroupAllowanceCalculator.cs" />
     <Compile Include="Domain\IEffectiveRestrictionCombiner.cs" />
     <Compile Include="Domain\IChangePasswordResultInfo.cs" />
     <Compile Include="Domain\ILoggedOnUser.cs" />
@@ -316,6 +317,7 @@
     <Compile Include="Domain\ITextFormatter.cs" />
     <Compile Include="Domain\ITimeZoneDim.cs" />
     <Compile Include="Domain\ITrueFalseRandomizer.cs" />
+    <Compile Include="Domain\IUnderStaffingData.cs" />
     <Compile Include="Domain\IUniqueSchedulePartExtractor.cs" />
     <Compile Include="Domain\IUnsafePersonProvider.cs" />
     <Compile Include="Domain\IUnsavedDaysInfo.cs" />
@@ -604,6 +606,7 @@
     <Compile Include="Domain\MultiplicatorType.cs" />
     <Compile Include="Domain\TimeOfDay.cs" />
     <Compile Include="Domain\TimeZoneInfoExtensions.cs" />
+    <Compile Include="Domain\ValidatedRequest.cs" />
     <Compile Include="Domain\WeekNumber.cs" />
     <Compile Include="Domain\WorkShiftLengthHintOption.cs" />
     <Compile Include="Domain\WorkTimeLimitation.cs" />
@@ -776,6 +779,7 @@
     <Compile Include="Domain\IWorkShiftBackToLegalStateServicePro.cs" />
     <Compile Include="Infrastructure\LicenseType.cs" />
     <Compile Include="IPossibleStartEndCategory.cs" />
+    <Compile Include="Domain\IValidatedRequest.cs" />
     <Compile Include="MessageBroker\Client\IConcurrentUsers.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -867,6 +871,8 @@
     <Compile Include="Messages\Denormalize\PersonPeriodChangedMessage.cs" />
     <Compile Include="Messages\Denormalize\ProcessDenormalizeQueue.cs" />
     <Compile Include="Messages\General\ChildSkillSelection.cs" />
+    <Compile Include="Messages\General\QuickForecastWorkloadsMessage.cs" />
+    <Compile Include="Messages\General\QuickForecastWorkloadMessage.cs" />
     <Compile Include="Messages\General\RecalculateForecastOnSkillMessage.cs" />
     <Compile Include="Messages\General\ExportMultisiteSkillsToSkill.cs" />
     <Compile Include="Messages\General\ExportMultisiteSkillToSkill.cs" />
@@ -883,6 +889,7 @@
     <Compile Include="Messages\RaptorDomainMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Domain\SettingValueTypes.cs" />
+    <Compile Include="Domain\UnderStaffingData.cs" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="..\..\CodeAnalysisDictionary.xml">

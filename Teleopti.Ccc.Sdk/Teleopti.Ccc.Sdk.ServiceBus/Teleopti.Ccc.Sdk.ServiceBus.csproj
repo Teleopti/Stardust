@@ -126,9 +126,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Rhino.ServiceBus.Autofac.3.0.2\lib\4.0\Rhino.ServiceBus.Autofac.dll</HintPath>
     </Reference>
-    <Reference Include="Rhino.ServiceBus.SqlQueues, Version=1.0.1.0, Culture=neutral, PublicKeyToken=345d633c75812f60, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Rhino.ServiceBus.SqlQueues.1.0.1.0\lib\net40\Rhino.ServiceBus.SqlQueues.dll</HintPath>
+    <Reference Include="Rhino.ServiceBus.SqlQueues, Version=1.0.1.1, Culture=neutral, PublicKeyToken=345d633c75812f60, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Rhino.ServiceBus.SqlQueues.1.0.1.1\lib\net40\Rhino.ServiceBus.SqlQueues.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -155,6 +154,7 @@
     <Compile Include="ApplicationInfrastructureContainerInstaller.cs" />
     <Compile Include="AuthenticationContainerInstaller.cs" />
     <Compile Include="AuthorizationContainerInstaller.cs" />
+    <Compile Include="BudgetGroupAllowanceCalculator.cs" />
     <Compile Include="BudgetGroupAllowanceSpecification.cs" />
     <Compile Include="BusStartup.cs" />
     <Compile Include="ConfigFileDefaultHost.cs" />
@@ -166,6 +166,8 @@
     <Compile Include="Denormalizer\IScheduleDayReadModelsCreator.cs" />
     <Compile Include="Denormalizer\LoadProjectedScheduleConsumer.cs" />
     <Compile Include="Denormalizer\ScheduleDayReadModelsCreator.cs" />
+    <Compile Include="Forecast\QuickForecastWorkloadMessageConsumer.cs" />
+    <Compile Include="Forecast\QuickForecastWorkloadsMessageConsumer.cs" />
     <Compile Include="Forecast\RecalculateForecastOnSkillConsumer.cs" />
     <Compile Include="Forecast\StatisticLoader.cs" />
     <Compile Include="DateOnlyPeriodSerializer.cs" />
@@ -182,7 +184,6 @@
     <Compile Include="Denormalizer\UpdateGroupingReadModelGroupPageConsumer.cs" />
     <Compile Include="Denormalizer\DenormalizeScheduleProjectionConsumer.cs" />
     <Compile Include="Denormalizer\InitialLoadScheduleProjectionConsumer.cs" />
-    <Compile Include="Denormalizer\IScheduleChangedNotification.cs" />
     <Compile Include="Denormalizer\IUpdateGroupingReadModel.cs" />
     <Compile Include="Denormalizer\IUpdatePersonFinderReadModel.cs" />
     <Compile Include="Denormalizer\UpdateGroupingReadModelConsumer.cs" />

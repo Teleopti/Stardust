@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.UserTexts;
@@ -131,7 +132,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[HttpGet]
 		public JsonResult ShiftTradeRequestSchedule(DateTime selectedDate)
 		{
-			return Json(_requestsViewModelFactory.CreateShiftTradeScheduleViewModel(selectedDate), JsonRequestBehavior.AllowGet);
+			var calendarDate = new DateTime(selectedDate.Year, selectedDate.Month, selectedDate.Day, CultureInfo.CurrentCulture.Calendar);
+			return Json(_requestsViewModelFactory.CreateShiftTradeScheduleViewModel(calendarDate), JsonRequestBehavior.AllowGet);
 		}
 
 		[UnitOfWorkAction]
@@ -142,7 +144,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		}
 
 		[UnitOfWorkAction]
-		[HttpPost]
+		[HttpGet]
 		public JsonResult ShiftTradeRequestSwapDetails(Guid id)
 		{
 			var viewmodel = _requestsViewModelFactory.CreateShiftTradeRequestSwapDetails(id);

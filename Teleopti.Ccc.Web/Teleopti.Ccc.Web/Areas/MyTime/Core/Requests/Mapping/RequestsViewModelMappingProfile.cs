@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				.ForMember(d => d.DenyReason, o => o.MapFrom(s =>
 																											{
 																												Resources.ResourceManager.IgnoreCase = true;
-																												var result = Resources.ResourceManager.GetString(s.DenyReason);
+				                                             	    var result =  UserTexts.Resources.ResourceManager.GetString(s.DenyReason);
 																												if (string.IsNullOrEmpty(result))
 																												{
 																													result = s.DenyReason;
@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 
 		private static bool isCreatedByUser(IRequest request, Func<ILoggedOnUser> loggedOnUser)
 		{
-			return request.PersonFrom == loggedOnUser.Invoke().CurrentUser();
+			return  request.PersonFrom  == null || request.PersonFrom == loggedOnUser.Invoke().CurrentUser();
 		}
 	}
 }

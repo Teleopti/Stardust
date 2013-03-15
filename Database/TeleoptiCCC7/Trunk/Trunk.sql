@@ -187,3 +187,185 @@ EXEC('ALTER TABLE ReadModel.PersonScheduleDay DROP COLUMN Shift')
 GO
 
 sp_rename 'ReadModel.PersonScheduleDay.Shift2','Shift','COLUMN'
+
+----------------  
+--Name: David Jonsson
+--Date: 2013-01-08
+--Desc: PBI #22158 - analysis of readtrace.exe and some missing index reports
+--Note: this change can be applied on 374 if needed, therefor IF NOT EXISTS
+----------------
+--=============
+-- OptionalColumnValue - move clustered key
+--=============
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[dbo].[OptionalColumnValue]') AND name = N'CIX_OptionalColumnValue_ReferenceId')
+BEGIN
+	EXEC dbo.sp_rename @objname = N'[dbo].[OptionalColumnValue]', @newname = N'OptionalColumnValue_old', @objtype = N'OBJECT'
+	EXEC dbo.sp_rename @objname = N'[dbo].[OptionalColumnValue_old].[PK_OptionalColumnValue]', @newname = N'PK_OptionalColumnValue_old', @objtype =N'INDEX'
+
+	CREATE TABLE [dbo].[OptionalColumnValue](
+		[Id] [uniqueidentifier] NOT NULL,
+		[Description] [nvarchar](255) NOT NULL,
+		[ReferenceId] [uniqueidentifier] NULL,
+		[Parent] [uniqueidentifier] NOT NULL,
+	 CONSTRAINT [PK_OptionalColumnValue] PRIMARY KEY NONCLUSTERED 
+	(
+		[Id] ASC
+	)
+	)
+
+	--better access
+	CREATE CLUSTERED INDEX CIX_OptionalColumnValue_ReferenceId
+	ON [dbo].[OptionalColumnValue] ([ReferenceId]) --References person Id most of the times, even though no relation exists
+
+	--get data
+	INSERT INTO [dbo].[OptionalColumnValue] (Id, Description, ReferenceId, Parent)
+	SELECT Id, Description, ReferenceId, Parent
+	FROM [dbo].[OptionalColumnValue_old]
+
+	--create index to support parent (FK) as well, include all columns
+	IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[dbo].[OptionalColumnValue]') AND name = N'IX_OptionalColumnValue_AK1')
+	CREATE NONCLUSTERED INDEX IX_OptionalColumnValue_AK1
+	ON [dbo].[OptionalColumnValue] ([Parent])
+	INCLUDE (Id, Description, ReferenceId)
+
+	DROP TABLE [dbo].[OptionalColumnValue_old]
+
+	ALTER TABLE [dbo].[OptionalColumnValue]  WITH CHECK ADD  CONSTRAINT [FK_OptionalColumnValue_OptionalColumn] FOREIGN KEY([Parent])
+	REFERENCES [dbo].[OptionalColumn] ([Id])
+	ON DELETE CASCADE
+	ALTER TABLE [dbo].[OptionalColumnValue] CHECK CONSTRAINT [FK_OptionalColumnValue_OptionalColumn]
+END
+GO
+
+--=============
+-- SchedulePeriod - add index to support FK
+--=============
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[dbo].[SchedulePeriod]') AND name = N'IX_SchedulePeriod_Parent')
+CREATE NONCLUSTERED INDEX IX_SchedulePeriod_Parent
+ON [dbo].[SchedulePeriod] ([Parent])
+GO
+
+--=============
+-- PersonSkill - move clustered key
+--=============
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[dbo].[PersonSkill]') AND name = N'CIX_PersonSkill_Parent')
+BEGIN
+	EXEC dbo.sp_rename @objname = N'[dbo].[PersonSkill]', @newname = N'PersonSkill_old', @objtype = N'OBJECT'
+	EXEC dbo.sp_rename @objname = N'[dbo].[PersonSkill_old].[PK_PersonSkill]', @newname = N'PK_PersonSkill_old', @objtype =N'INDEX'
+
+	CREATE TABLE [dbo].[PersonSkill](
+		[Id] [uniqueidentifier] NOT NULL,
+		[Parent] [uniqueidentifier] NOT NULL,
+		[Skill] [uniqueidentifier] NOT NULL,
+		[Value] [float] NOT NULL,
+		[Active] [bit] NOT NULL,
+	 CONSTRAINT [PK_PersonSkill] PRIMARY KEY NONCLUSTERED 
+	(
+		[Id] ASC
+	)
+	)
+
+	CREATE CLUSTERED INDEX CIX_PersonSkill_Parent
+	ON [dbo].[PersonSkill] ([Parent])
+
+	INSERT INTO [dbo].[PersonSkill] (Id, Parent, Skill, Value, Active)
+	SELECT Id, Parent, Skill, Value, Active
+	FROM [dbo].[PersonSkill_old]
+
+	DROP TABLE [dbo].[PersonSkill_old]
+
+	ALTER TABLE [dbo].[PersonSkill] ADD  CONSTRAINT [DF_PersonSkill_Active]  DEFAULT ((1)) FOR [Active]
+
+	ALTER TABLE [dbo].[PersonSkill]  WITH CHECK ADD  CONSTRAINT [FK_PersonSkill_PersonPeriod] FOREIGN KEY([Parent])
+	REFERENCES [dbo].[PersonPeriod] ([Id])
+	ALTER TABLE [dbo].[PersonSkill] CHECK CONSTRAINT [FK_PersonSkill_PersonPeriod]
+
+	ALTER TABLE [dbo].[PersonSkill]  WITH CHECK ADD  CONSTRAINT [FK_PersonSkill_Skill] FOREIGN KEY([Skill])
+	REFERENCES [dbo].[Skill] ([Id])
+	ALTER TABLE [dbo].[PersonSkill] CHECK CONSTRAINT [FK_PersonSkill_Skill]
+
+END
+GO
+
+--=============
+-- AgentDayScheduleTag - move clustered key
+--=============
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[dbo].[AgentDayScheduleTag]') AND name = N'CIX_AgentDayScheduleTag')
+BEGIN
+	EXEC dbo.sp_rename @objname = N'[dbo].[AgentDayScheduleTag]', @newname = N'AgentDayScheduleTag_old', @objtype = N'OBJECT'
+	EXEC dbo.sp_rename @objname = N'[dbo].[AgentDayScheduleTag_old].[PK_AgentDayScheduleTag]', @newname = N'PK_AgentDayScheduleTag_old', @objtype =N'INDEX'
+
+	CREATE TABLE [dbo].[AgentDayScheduleTag](
+		[Id] [uniqueidentifier] NOT NULL,
+		[Version] [int] NOT NULL,
+		[CreatedBy] [uniqueidentifier] NOT NULL,
+		[UpdatedBy] [uniqueidentifier] NOT NULL,
+		[CreatedOn] [datetime] NOT NULL,
+		[UpdatedOn] [datetime] NOT NULL,
+		[Person] [uniqueidentifier] NOT NULL,
+		[TagDate] [datetime] NOT NULL,
+		[ScheduleTag] [uniqueidentifier] NOT NULL,
+		[Scenario] [uniqueidentifier] NOT NULL,
+		[BusinessUnit] [uniqueidentifier] NOT NULL,
+	 CONSTRAINT [PK_AgentDayScheduleTag] PRIMARY KEY NONCLUSTERED 
+	(
+		[Id] ASC
+	)
+	)
+
+	CREATE CLUSTERED INDEX CIX_AgentDayScheduleTag
+	ON [dbo].[AgentDayScheduleTag] ([Person], [Scenario], [BusinessUnit],[TagDate])
+
+	INSERT INTO [dbo].[AgentDayScheduleTag] (Id, Version, CreatedBy, UpdatedBy, CreatedOn, UpdatedOn, Person, TagDate, ScheduleTag, Scenario, BusinessUnit)
+	SELECT Id, Version, CreatedBy, UpdatedBy, CreatedOn, UpdatedOn, Person, TagDate, ScheduleTag, Scenario, BusinessUnit
+	FROM [dbo].[AgentDayScheduleTag_old]
+
+	DROP TABLE [dbo].[AgentDayScheduleTag_old]
+
+	ALTER TABLE [dbo].[AgentDayScheduleTag]  WITH CHECK ADD  CONSTRAINT [FK_AgentDayScheduleTag_BusinessUnit] FOREIGN KEY([BusinessUnit])
+	REFERENCES [dbo].[BusinessUnit] ([Id])
+	ALTER TABLE [dbo].[AgentDayScheduleTag] CHECK CONSTRAINT [FK_AgentDayScheduleTag_BusinessUnit]
+
+	ALTER TABLE [dbo].[AgentDayScheduleTag]  WITH CHECK ADD  CONSTRAINT [FK_AgentDayScheduleTag_Person] FOREIGN KEY([Person])
+	REFERENCES [dbo].[Person] ([Id])
+	ALTER TABLE [dbo].[AgentDayScheduleTag] CHECK CONSTRAINT [FK_AgentDayScheduleTag_Person]
+
+	ALTER TABLE [dbo].[AgentDayScheduleTag]  WITH CHECK ADD  CONSTRAINT [FK_AgentDayScheduleTag_Person_CreatedBy] FOREIGN KEY([CreatedBy])
+	REFERENCES [dbo].[Person] ([Id])
+	ALTER TABLE [dbo].[AgentDayScheduleTag] CHECK CONSTRAINT [FK_AgentDayScheduleTag_Person_CreatedBy]
+
+	ALTER TABLE [dbo].[AgentDayScheduleTag]  WITH CHECK ADD  CONSTRAINT [FK_AgentDayScheduleTag_Person_UpdatedBy] FOREIGN KEY([UpdatedBy])
+	REFERENCES [dbo].[Person] ([Id])
+	ALTER TABLE [dbo].[AgentDayScheduleTag] CHECK CONSTRAINT [FK_AgentDayScheduleTag_Person_UpdatedBy]
+
+	ALTER TABLE [dbo].[AgentDayScheduleTag]  WITH CHECK ADD  CONSTRAINT [FK_AgentDayScheduleTag_Scenario] FOREIGN KEY([Scenario])
+	REFERENCES [dbo].[Scenario] ([Id])
+	ALTER TABLE [dbo].[AgentDayScheduleTag] CHECK CONSTRAINT [FK_AgentDayScheduleTag_Scenario]
+
+	ALTER TABLE [dbo].[AgentDayScheduleTag]  WITH CHECK ADD  CONSTRAINT [FK_AgentDayScheduleTag_ScheduleTag] FOREIGN KEY([ScheduleTag])
+	REFERENCES [dbo].[ScheduleTag] ([Id])
+	ALTER TABLE [dbo].[AgentDayScheduleTag] CHECK CONSTRAINT [FK_AgentDayScheduleTag_ScheduleTag]
+END
+
+--=============
+-- PersonAssignment - PersonAssignment with a full coverage index
+--=============
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[dbo].[PersonAssignment]') AND name = N'IX_PersonAssignment_AK1')
+CREATE INDEX IX_PersonAssignment_AK1
+ON [dbo].[PersonAssignment] ([Person], [Scenario], [BusinessUnit],[Minimum], [Maximum]) INCLUDE ([Id], [Version], [CreatedBy], [UpdatedBy], [CreatedOn], [UpdatedOn])
+GO
+
+--=============
+-- Some other indexes, based on missing index stats
+--=============
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[dbo].[PersonPeriod]') AND name = N'IX_PersonPeriod_Team_StartDate')
+CREATE INDEX IX_PersonPeriod_Team_StartDate ON [dbo].[PersonPeriod] ([Team],[StartDate]) INCLUDE ([Parent])
+GO
+
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[Auditing].[PersonDayOff_AUD]') AND name = N'IX_PersonDayOff_AUD_Person_Anchor')
+CREATE INDEX IX_PersonDayOff_AUD_Person_Anchor ON [Auditing].[PersonDayOff_AUD] ([Person],[Anchor]) INCLUDE ([REV])
+GO
+
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE object_id = OBJECT_ID(N'[Auditing].[PersonAssignment_AUD]') AND name = N'IX_PersonAssignment_AUD_Person_min_max')
+CREATE INDEX IX_PersonAssignment_AUD_Person_min_max ON [Auditing].[PersonAssignment_AUD] ([Person],[Minimum], [Maximum]) INCLUDE ([REV])
+GO

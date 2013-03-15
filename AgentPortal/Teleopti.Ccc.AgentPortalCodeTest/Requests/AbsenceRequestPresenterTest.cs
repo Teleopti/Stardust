@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.Requests
             var personRequest = new PersonRequestDto() { DenyReason = "RequestDenyReasonSupervisor", Request = requestDto };
             using (_mocks.Record())
             {
-                _view.DenyReason = LanguageResourceHelper.Translate("RequestDenyReasonSupervisor");      
+                //_view.DenyReason = LanguageResourceHelper.Translate("RequestDenyReasonSupervisor");      
             }
             
             using(_mocks.Playback())
@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.Requests
             var personRequest = new PersonRequestDto() { DenyReason = "", Request = requestDto };
             using (_mocks.Record())
             {
-                _view.DenyReason = LanguageResourceHelper.Translate("");
+                //_view.DenyReason = LanguageResourceHelper.Translate("");
                 _view.SetDenyReasonVisible(false);
             }
 

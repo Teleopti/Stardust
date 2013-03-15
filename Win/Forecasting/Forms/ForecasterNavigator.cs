@@ -14,13 +14,13 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Controls;
 using Teleopti.Ccc.Win.Common.PropertyPageAndWizard;
 using Teleopti.Ccc.Win.ExceptionHandling;
 using Teleopti.Ccc.Win.Forecasting.Forms.ExportPages;
-using Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast;
 using Teleopti.Ccc.Win.Main;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
@@ -28,6 +28,7 @@ using Teleopti.Ccc.WinCode.Common.PropertyPageAndWizard;
 using Teleopti.Ccc.WinCode.Forecasting;
 using Teleopti.Ccc.WinCode.Forecasting.ExportPages;
 using Teleopti.Ccc.WinCode.Forecasting.ImportForecast;
+using Teleopti.Ccc.WinCode.Forecasting.QuickForecastPages;
 using Teleopti.Ccc.WinCode.Forecasting.SkillPages;
 using Teleopti.Ccc.WinCode.Forecasting.WorkloadPages;
 using Teleopti.Common.UI.SmartPartControls.SmartParts;
@@ -41,7 +42,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		private TreeNode _lastActionNode;
 		private TreeNode _lastContextMenuNode;
 		private readonly PortalSettings _portalSettings;
-		private readonly IQuickForecastViewFactory _quickForecastViewFactory;
 	    private readonly IJobHistoryViewFactory _jobHistoryViewFactory;
 	    private readonly IImportForecastViewFactory _importForecastViewFactory;
 	    private readonly ISendCommandToSdk _sendCommandToSdk;
@@ -90,14 +90,12 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 	    public ForecasterNavigator(PortalSettings portalSettings, 
             IRepositoryFactory repositoryFactory, 
             IUnitOfWorkFactory unitOfWorkFactory, 
-            IQuickForecastViewFactory quickForecastViewFactory, 
             IJobHistoryViewFactory jobHistoryViewFactory,
             IImportForecastViewFactory importForecastViewFactory,
             ISendCommandToSdk sendCommandToSdk)
             : this()
         {
             _portalSettings = portalSettings;
-            _quickForecastViewFactory = quickForecastViewFactory;
             _jobHistoryViewFactory = jobHistoryViewFactory;
             _importForecastViewFactory = importForecastViewFactory;
             _sendCommandToSdk = sendCommandToSdk;
@@ -1204,12 +1202,54 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			}
 		}
 
-		private void toolStripMenuItemQuickForecast_Click(object sender, EventArgs e)
+		private void toolStripMenuItemQuickForecastClick(object sender, EventArgs e)
 		{
-			var view = _quickForecastViewFactory.Create();
-			((Control) view).Show();
+			using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+			{
+				var skillRep = _repositoryFactory.CreateSkillRepository(uow);
+				var skills = skillRep.FindAllWithWorkloadAndQueues();
+				skills = skills.Except(skills.OfType<IChildSkill>()).ToList();
+				var quickForecastPages = PropertyPagesHelper.GetQuickForecastPages(skills);
+				var model = new QuickForecastCommandDto {WorkloadIds = getWorkloadIds(treeViewSkills.SelectedNode)};
+				using (var wwp = new QuickForecastWizardPages(model))
+				{
+					wwp.Initialize(quickForecastPages);
+					using (var wizard = new WizardNoRoot<QuickForecastCommandDto>(wwp))
+					{
+						if (wizard.ShowDialog(this) == DialogResult.OK)
+						{
+							var dto = wwp.CreateNewStateObj();
+							var everyStep = Convert.ToInt32((1000 / dto.WorkloadIds.Count )/ 3);
+							dto.IncreaseWith = everyStep;
+							var jobId = _sendCommandToSdk.ExecuteCommand(dto).AffectedId.GetValueOrDefault();
+							using (
+								var statusDialog =
+									new JobStatusView(new JobStatusModel {JobStatusId = jobId, ProgressMax = everyStep*dto.WorkloadIds.Count*3}))
+							{
+								statusDialog.ShowDialog();
+							}
+							//_dataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(() => _jobHistoryViewFactory.Create());
+						}
+					}
+				}
+			}
 		}
 
+		private ICollection<Guid> getWorkloadIds(TreeNode treeNode)
+		{
+			var retList = new List<Guid>();
+			if (treeNode != null)
+			{
+				var workload = treeNode.Tag as WorkloadModel;
+				if (workload != null) retList.Add(workload.Id);
+				foreach (TreeNode node in treeNode.Nodes)
+				{
+					retList.AddRange(getWorkloadIds(node));
+				}
+			}
+			
+			return retList;
+		}
 		private void toolStripMenuItemCopyTo_Click(object sender, EventArgs e)
 		{
 			var workloadModel = _lastActionNode.Tag as WorkloadModel;
@@ -1421,6 +1461,11 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 		{
 			public Guid Id { get; set; }
 			public string Name { get; set; }
+		}
+
+		private void contextMenuStripSkills_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+		{
+
 		}
 	}
 }

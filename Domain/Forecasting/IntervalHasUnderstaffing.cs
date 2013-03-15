@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Specification;
 using Teleopti.Interfaces.Domain;
 
@@ -16,5 +17,6 @@ namespace Teleopti.Ccc.Domain.Forecasting
         {
             return obj.RelativeDifference < _skill.StaffingThresholds.Understaffing.Value;
         }
+
     }
 }

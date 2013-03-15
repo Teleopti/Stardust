@@ -60,13 +60,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		[Test]
 		public void ShouldMapPerson()
 		{
-			var expected = new Person();
-			var id = Guid.NewGuid();
-			personRepository.Expect(x => x.Get(id)).Return(expected);
-			form.PersonToId = id;
-
 			var res = target.Map(form);
-			res.Person.Should().Be.SameInstanceAs(expected);
+			res.Person.Should().Be.SameInstanceAs(loggedOnUser);
 		}
 
 		[Test]

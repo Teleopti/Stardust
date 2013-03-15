@@ -20,9 +20,11 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 			}
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public JobStatusView(JobStatusModel model)  : this()
 		{
 			Presenter = new JobStatusPresenter(this,model, StateHolder.Instance.StateReader.ApplicationScopeData.Messaging);
+			progressBar1.Maximum = model.ProgressMax;
 		}
 
 		protected override void OnLoad(EventArgs e)
@@ -42,9 +44,15 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 			}
 
             if (progressBar1.Value + percentage <= progressBar1.Maximum)
-            {
                 progressBar1.Value += percentage;
-            }
+            else
+				progressBar1.Value = progressBar1.Maximum;
+
+			if (progressBar1.Value == progressBar1.Maximum)
+			{
+				progressBar1.Visible = false;
+				labelTitle.Text = UserTexts.Resources.Ready;
+			}
 		}
 
 		public void SetMessage(string message)
@@ -56,6 +64,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 			}
 
 			labelDetail.Text = message;
+			toolTip1.SetToolTip(labelDetail, toolTip1.GetToolTip(labelDetail) + message + Environment.NewLine);
 		}
 
 	    public void SetJobStatusId(Guid id)
@@ -153,5 +162,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.ExportPages
 	public class JobStatusModel
 	{
 		public Guid JobStatusId { get; set; }
+
+		public int ProgressMax { get; set; }
 	}
 }

@@ -58,19 +58,35 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 			var culture = Person.PermissionInformation.Culture();
 			if (isRequestForOneLocalDay(timeZone))
 			{
-				TextForNotification = string.Format(Person.PermissionInformation.UICulture(),
-				                                    UserTexts.Resources.AbsenceRequestForOneDayHasBeenDeniedDot,
-				                                    Period.StartDateTimeLocal(timeZone).Date.ToString(
-				                                    	culture.DateTimeFormat.ShortDatePattern, culture));
+			    TextForNotification =
+			        string.Format(culture, UserTexts.Resources.ResourceManager.GetString("AbsenceRequestForOneDayHasBeenDeniedDot", culture),
+			            Period.StartDateTimeLocal(timeZone).Date.ToString("d", culture));                
+
+                //TextForNotification = string.Format(Person.PermissionInformation.UICulture(),
+                //                                    UserTexts.Resources.AbsenceRequestForOneDayHasBeenDeniedDot,
+                //                                    Period.StartDateTimeLocal(timeZone).Date.ToString(
+                //                                        culture.DateTimeFormat.ShortDatePattern, culture));
 			}
 			else
 			{
-				TextForNotification = string.Format(Person.PermissionInformation.UICulture(),
-				                                    UserTexts.Resources.AbsenceRequestHasBeenDeniedDot,
-				                                    Period.StartDateTimeLocal(timeZone).Date.ToString(
-				                                    	culture.DateTimeFormat.ShortDatePattern, culture),
-				                                    Period.EndDateTimeLocal(timeZone).Date.ToString(
-				                                    	culture.DateTimeFormat.ShortDatePattern, culture));
+
+			    TextForNotification =
+			        string.Format(culture,UserTexts.Resources.ResourceManager.GetString("AbsenceRequestHasBeenDeniedDot", culture),
+                       Period.StartDateTimeLocal(timeZone).Date.ToString(
+                                                        culture.DateTimeFormat.ShortDatePattern, culture),
+                                                    Period.EndDateTimeLocal(timeZone).Date.ToString(
+                                                        culture.DateTimeFormat.ShortDatePattern, culture));
+			    //                                    Period.EndDateTimeLocal(timeZone).Date.ToString(
+			    //                                        culture.DateTimeFormat.ShortDatePattern, culture))
+			    //                                    Period.EndDateTimeLocal(timeZone).Date.ToString(
+			    //                                        culture.DateTimeFormat.ShortDatePattern, culture))
+
+                //TextForNotification = string.Format(Person.PermissionInformation.UICulture(),
+                //                                    UserTexts.Resources.AbsenceRequestHasBeenDeniedDot,
+                //                                    Period.StartDateTimeLocal(timeZone).Date.ToString(
+                //                                        culture.DateTimeFormat.ShortDatePattern, culture),
+                //                                    Period.EndDateTimeLocal(timeZone).Date.ToString(
+                //                                        culture.DateTimeFormat.ShortDatePattern, culture));
 			}
 		}
 

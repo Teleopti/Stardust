@@ -21,13 +21,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 
 		public IPersonRequest Map(ShiftTradeRequestForm form)
 		{
+			var loggedOnUser = _loggedOnUser.CurrentUser();
 			var personTo = _personRepository.Get(form.PersonToId);
-			var ret = new PersonRequest(personTo);
-			ret.Subject = form.Subject;
+			var shiftTradeSwapDetail = new ShiftTradeSwapDetail(loggedOnUser, personTo, form.Date, form.Date);
+			var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail> { shiftTradeSwapDetail });
+			var ret = new PersonRequest(loggedOnUser) {Request = shiftTradeRequest, Subject = form.Subject};
 			ret.TrySetMessage(form.Message);
-			var shiftTradeSwapDetail = new ShiftTradeSwapDetail(_loggedOnUser.CurrentUser(), personTo, form.Date, form.Date);
-			var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail> {shiftTradeSwapDetail});
-			ret.Request = shiftTradeRequest;
 			return ret;
 		}
 	}

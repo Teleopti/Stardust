@@ -1,7 +1,7 @@
 ﻿Feature: Preferences follow up
 	In order to see my schedule and my preferences side by side
 	As an agent
-	I can easily see where my preferences were fulfilled and where they were not
+	I can easily see my preferences on a scheduled day
 
 Background:
 	Given I have a role with
@@ -53,44 +53,6 @@ Scenario: See preference on scheduled day
 	| Shift category | Late       |
 	| Preference     | Late       |
 
-Scenario: See that preference is fulfilled
-	Given I have a preference with
-	| Field      | Value      |
-	| Date       | 2012-10-02 |
-	| Preference | Late       |
-	And I have a shift with
-	| Field          | Value            |
-	| Date           | 2012-10-02       |
-	| Shift category | Late             |
-	| StartTime      | 2012-10-02 10:00 |
-	| EndTime        | 2012-10-02 20:00 |
-	When I view preferences for date '2012-10-02'
-	Then I should see the day cell with
-	| Field          | Value      |
-	| Date           | 2012-10-02 |
-	| Shift category | Late       |
-	| Preference     | Late       |
-	| Fulfilled      | true       |
-
-Scenario: See that preference not fulfilled
-	Given I have a preference with
-	| Field      | Value      |
-	| Date       | 2012-10-02 |
-	| Preference | Late       |
-	And I have a shift with
-	| Field          | Value            |
-	| Date           | 2012-10-02       |
-	| Shift category | Night            |
-	| StartTime      | 2012-10-02 20:00 |
-	| EndTime        | 2012-10-03 04:00 |
-	When I view preferences for date '2012-10-02'
-	Then I should see the day cell with
-	| Field          | Value      |
-	| Date           | 2012-10-02 |
-	| Shift category | Night      |
-	| Preference     | Late       |
-	| Fulfilled      | false      |
-
 Scenario: See extended indication on preference on scheduled day
 	Given I have an extended preference with
 	| Field            | Value      |
@@ -108,7 +70,6 @@ Scenario: See extended indication on preference on scheduled day
 	| Date                | 2012-10-02 |
 	| Shift category      | Late       |
 	| Preference          | Extended   |
-	| Fulfilled           | true       |
 	| Extended Indication | true       |
 
 Scenario: Display extended preference panel for preference on scheduled day

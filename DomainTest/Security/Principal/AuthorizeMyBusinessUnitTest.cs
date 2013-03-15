@@ -52,7 +52,8 @@ namespace Teleopti.Ccc.DomainTest.Security.Principal
             queryingPersonMembership.AddFromPerson(queryingPerson);
             target.Check(queryingPersonMembership, DateOnly.Today, (IBusinessUnit)null).Should().Be.False();
         }
-        
+
+       
         [Test]
         public void ShouldAuthorizePersonWithPeriod()
         {

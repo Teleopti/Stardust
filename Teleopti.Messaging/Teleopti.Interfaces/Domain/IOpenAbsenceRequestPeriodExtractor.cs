@@ -39,5 +39,10 @@ namespace Teleopti.Interfaces.Domain
         /// Created date: 2010-04-22
         /// </remarks>
         IOpenAbsenceRequestPeriodProjection Projection { get; }
+
+        /// <summary>
+        /// Get Workflow Control Set.
+        /// </summary>
+        IWorkflowControlSet WorkflowControlSet { get; }
     }
 }

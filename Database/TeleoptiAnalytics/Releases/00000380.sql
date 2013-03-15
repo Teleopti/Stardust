@@ -95,15 +95,13 @@ GO
 	SELECT @chunkSizeDays =
 		CASE
 			WHEN  (@schedule_rows/@max_schedule_rows) > 0 THEN @number_of_bu * (DATEDIFF(dd,@min_date,@max_date)/(@schedule_rows/@max_schedule_rows))
-			ELSE 0
+			ELSE 100
 		END
 
 	SELECT @tmp_min_date=@max_date
 	
 	--If we need to Chunk- add a delayed job for periods older than @chunkSizeDays
-	IF @chunkSizeDays > 0
-	BEGIN
-		WHILE @tmp_min_date > @min_date
+		WHILE @tmp_min_date > DATEADD(dd,-@chunkSizeDays,@min_date)
 		BEGIN
 
 			INSERT INTO mart.etl_job_delayed(stored_procedured,parameter_string)
@@ -115,8 +113,6 @@ GO
 			SET @tmp_min_date = DATEADD(dd,-@chunkSizeDays,@tmp_min_date)
 		END
 	PRINT 'Delayed job added for: mart.etl_fact_schedule_deviation_load'
-	
-	END
 GO
 
 --============================

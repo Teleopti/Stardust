@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
 using System.Web.Routing;
@@ -242,8 +243,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			var modelFactory = MockRepository.GenerateMock<IRequestsViewModelFactory>();
 			var date = DateTime.Now;
+			var calendarDate = new DateTime(date.Year, date.Month, date.Day, CultureInfo.CurrentCulture.Calendar);
 			var model = new ShiftTradeScheduleViewModel();
-			modelFactory.Stub(x => x.CreateShiftTradeScheduleViewModel(date)).Return(model);
+			modelFactory.Stub(x => x.CreateShiftTradeScheduleViewModel(calendarDate)).Return(model);
 
 			var target = new RequestsController(modelFactory, null, null, null, null);
 			var result = target.ShiftTradeRequestSchedule(date);

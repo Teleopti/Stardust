@@ -146,5 +146,13 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
                 Assert.AreEqual("MyKeyForAnotherReason", copy.DenyReason);
             }
         }
+
+        [Test]
+        public void ShouldGetHashCodeInReturn()
+        {
+            var result = _target.GetHashCode();
+            Assert.IsNotNull(result);
+
+        }
     }
 }
