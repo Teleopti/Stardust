@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 
 		private void pushSchedule(dynamic target, Guid teamId, DateTime date)
 		{
-			var dateTimePeriod = new DateTimePeriod(date, date.AddHours(24));
+			var dateTimePeriod = new DateTimePeriod(date, date.AddHours(25));
 			var schedule = _personScheduleDayReadModelRepository.ForTeam(dateTimePeriod, teamId);
 			if (schedule != null)
 				target.incomingTeamSchedule(schedule.Select(s => JsonConvert.DeserializeObject<ExpandoObject>(s.Shift)));

@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 				.ForMember(x => x.Name, o => o.MapFrom(s => s.Person.Name.ToString()))
 				.ForMember(x => x.Team, o => o.MapFrom(s => s.Person.MyTeam(new DateOnly(s.Date)).Description.Name))
 				.ForMember(x => x.Site, o => o.MapFrom(s => s.Person.MyTeam(new DateOnly(s.Date)).Site.Description.Name))
-				.ForMember(x => x.Layers, o => o.MapFrom(s =>
+				.ForMember(x => x.Layers, o => o.ResolveUsing(s =>
 					{
 						if (s.Shift == null)
 							return null;
@@ -25,9 +25,9 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 			CreateMap<IAbsence, PersonScheduleViewModelAbsence>();
 
 			CreateMap<dynamic, PersonScheduleViewModelLayer>()
-				.ForMember(x => x.Color, o => o.MapFrom(s => s.Color))
-				.ForMember(x => x.Start, o => o.MapFrom(s => s.Start))
-				.ForMember(x => x.Minutes, o => o.MapFrom(s => s.Minutes))
+				.ForMember(x => x.Color, o => o.ResolveUsing(s => s.Color))
+				.ForMember(x => x.Start, o => o.ResolveUsing(s => s.Start))
+				.ForMember(x => x.Minutes, o => o.ResolveUsing(s => s.Minutes))
 				;
 
 		}

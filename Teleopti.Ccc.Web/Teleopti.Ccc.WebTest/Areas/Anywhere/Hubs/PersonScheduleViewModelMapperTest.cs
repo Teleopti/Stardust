@@ -113,6 +113,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		{
 			dynamic layer = new ExpandoObject();
 			layer.Color = Color;
+			layer.Start = Start;
 			layer.Start = Start.HasValue ? Start : null;
 			layer.Minutes = Minutes;
 			return layer;
@@ -139,7 +140,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			dynamic shift = new ExpandoObject();
 			shift.Projection = new[] { MakeLayer("Green")};
 
-			var result = target.Map(new PersonScheduleData {Shift = shift});
+			var result = target.Map(new PersonScheduleData {Shift = shift });
 
 			result.Layers.Single().Color.Should().Be("Green");
 		}
@@ -167,7 +168,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var target = new PersonScheduleViewModelMapper();
 
 			dynamic shift = new ExpandoObject();
-			shift.Projection = new[] {MakeLayer("", null, 60)};
+			shift.Projection = new[] { MakeLayer(Color: "",Minutes: 60) };
 
 			var result = target.Map(new PersonScheduleData { Shift = shift });
 

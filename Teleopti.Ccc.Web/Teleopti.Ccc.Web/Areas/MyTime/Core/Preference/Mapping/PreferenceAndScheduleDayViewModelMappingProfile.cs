@@ -45,14 +45,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 					                                               : null))
 				.ForMember(s => s.PersonAssignment,
 				           o => o.MapFrom(s => s.SignificantPartForDisplay() == SchedulePartView.MainShift ? s : null))
-				.ForMember(d => d.Fulfilled, o => o.MapFrom(s =>
+				.ForMember(d => d.Fulfilled, o => o.ResolveUsing(s =>
 					{
 						if (s != null && s.IsScheduled())
 							return _preferenceFulfilledChecker.Invoke().IsPreferenceFulfilled(s);
 						return null;
 					}))
 				.ForMember(d => d.Feedback, o => o.MapFrom(s => s == null || !s.IsScheduled()))
-				.ForMember(d => d.StyleClassName, o => o.MapFrom(s =>
+				.ForMember(d => d.StyleClassName, o => o.ResolveUsing(s =>
 					{
 						if (s != null)
 						{
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 						}
 						return null;
 					}))
-				.ForMember(d => d.BorderColor, o => o.MapFrom(s =>
+				.ForMember(d => d.BorderColor, o => o.ResolveUsing(s =>
 					{
 						if (s != null)
 						{
@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 						}
 						return null;
 					}))
-				.ForMember(d => d.Meetings, o => o.MapFrom(s =>
+				.ForMember(d => d.Meetings, o => o.ResolveUsing(s =>
 					{
 						var meetings = s.PersonMeetingCollection();
 						if (meetings.Count > 0)
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 						}
 						return null;
 					}))
-				.ForMember(d => d.PersonalShifts, o => o.MapFrom(s =>
+				.ForMember(d => d.PersonalShifts, o => o.ResolveUsing(s =>
 					{
 						var assignments = s.PersonAssignmentCollection();
 						if (assignments.Count > 0)

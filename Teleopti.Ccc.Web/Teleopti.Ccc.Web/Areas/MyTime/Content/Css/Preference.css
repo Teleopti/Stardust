@@ -154,3 +154,7 @@
 .preference-tooltip-font {
 	font-family: Arial;
 }
+
+div.qtip-content {
+    overflow: visible;
+}

@@ -156,10 +156,10 @@ define([
             for (var i = 0; i < languages.length; i++) {
                 try {
                     moment.lang(languages[i]);
+					if (moment.lang() == languages[i]) return;
                 } catch(e) {
                     continue;
                 }
-                if (moment.lang() == languages[i]) return;
             }
         }
 

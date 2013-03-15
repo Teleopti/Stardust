@@ -37,31 +37,32 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 
 			CreateMap<PreferenceDayInput, ActivityRestriction>()
 				.ForMember(d => d.Activity, o => o.MapFrom(s => _activityRespository.Invoke().Get(s.ActivityPreferenceId.Value)))
-				.ForMember(d => d.StartTimeLimitation, o => o.MapFrom(s =>
+				.ForMember(d => d.StartTimeLimitation, o => o.ResolveUsing(s =>
 							   new StartTimeLimitation(s.ActivityEarliestStartTime.ToTimeSpan(), s.ActivityLatestStartTime.ToTimeSpan())
 							   ))
-				.ForMember(d => d.EndTimeLimitation, o => o.MapFrom(s =>
+				.ForMember(d => d.EndTimeLimitation, o => o.ResolveUsing(s =>
 							   new EndTimeLimitation(s.ActivityEarliestEndTime.ToTimeSpan(), s.ActivityLatestEndTime.ToTimeSpan())
 							   ))
-				.ForMember(d => d.WorkTimeLimitation, o => o.MapFrom(
+				.ForMember(d => d.WorkTimeLimitation, o => o.ResolveUsing(
 							   s => new WorkTimeLimitation(s.ActivityMinimumTime, s.ActivityMaximumTime)
 							   ))
+							   .ForMember(d => d.Parent, o => o.Ignore())
 				;
 
 			CreateMap<PreferenceDayInput, IPreferenceRestriction>()
-				.ConstructUsing(s => new PreferenceRestriction())
+				.ConstructUsing((PreferenceDayInput s) => new PreferenceRestriction())
 				.ForMember(d => d.ShiftCategory, o => o.MapFrom(s => s.PreferenceId != null ? _shiftCategoryRepository.Invoke().Get(s.PreferenceId.Value) : null))
 				.ForMember(d => d.Absence, o => o.MapFrom(s => s.PreferenceId != null ? _absenceRepository.Invoke().Get(s.PreferenceId.Value) : null))
 				.ForMember(d => d.DayOffTemplate, o => o.MapFrom(s => s.PreferenceId != null ? _dayOffRepository.Invoke().Get(s.PreferenceId.Value) : null))
 				.ForMember(d => d.MustHave, o => o.Ignore())
 				.ForMember(d => d.ActivityRestrictionCollection, o => o.Ignore())
-				.ForMember(d => d.StartTimeLimitation, o => o.MapFrom(s =>
+				.ForMember(d => d.StartTimeLimitation, o => o.ResolveUsing(s =>
 							   new StartTimeLimitation(s.EarliestStartTime.ToTimeSpan(), s.LatestStartTime.ToTimeSpan())
 							   ))
-				.ForMember(d => d.EndTimeLimitation, o => o.MapFrom(s =>
+				.ForMember(d => d.EndTimeLimitation, o => o.ResolveUsing(s =>
 							   new EndTimeLimitation(s.EarliestEndTime.ToTimeSpan(s.EarliestEndTimeNextDay), s.LatestEndTime.ToTimeSpan(s.LatestEndTimeNextDay))
 							   ))
-				.ForMember(d => d.WorkTimeLimitation, o => o.MapFrom(
+				.ForMember(d => d.WorkTimeLimitation, o => o.ResolveUsing(
 							   s => new WorkTimeLimitation(s.MinimumWorkTime, s.MaximumWorkTime)
 							   ))
 				.AfterMap((s, d) =>
