@@ -314,13 +314,20 @@ namespace Teleopti.Ccc.Sdk.Common.Contracts
         [OperationContract]
         ICollection<BusinessUnitDto> GetBusinessUnitsByQuery(QueryDto queryDto);
 
-
 		/// <summary>
 		/// Get the scenarios for the given query.
 		/// </summary>
 		/// <param name="queryDto"></param>
 		/// <returns></returns>
 		[OperationContract]
-		    	ICollection<ScenarioDto> GetScenariosByQuery(QueryDto queryDto);
+		ICollection<ScenarioDto> GetScenariosByQuery(QueryDto queryDto);
+
+		/// <summary>
+		/// Get the person optional values for the given query.
+		/// </summary>
+		/// <param name="queryDto"></param>
+		/// <returns></returns>
+		[OperationContract]
+		ICollection<PersonOptionalValuesDto> GetPersonOptionalValuesByQuery(QueryDto queryDto);
     }
 }
