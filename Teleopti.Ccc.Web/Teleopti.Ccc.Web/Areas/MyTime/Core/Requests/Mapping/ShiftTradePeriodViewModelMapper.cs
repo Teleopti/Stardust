@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 {
 	public class ShiftTradePeriodViewModelMapper : IShiftTradePeriodViewModelMapper
 	{
-		public ShiftTradeRequestsPeriodViewModel Map(IWorkflowControlSet workflowControlSet)
+		public ShiftTradeRequestsPeriodViewModel Map(IWorkflowControlSet workflowControlSet, INow now)
 		{
 			var vm = new ShiftTradeRequestsPeriodViewModel { HasWorkflowControlSet = workflowControlSet != null };
 
@@ -14,6 +14,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				vm.OpenPeriodRelativeStart = workflowControlSet.ShiftTradeOpenPeriodDaysForward.Minimum;
 				vm.OpenPeriodRelativeEnd = workflowControlSet.ShiftTradeOpenPeriodDaysForward.Maximum;
 			}
+
+			vm.NowYear = now.DateOnly().Year;
+			vm.NowMonth = now.DateOnly().Month;
+			vm.NowDay = now.DateOnly().Day;
 
 			return vm;
 		}

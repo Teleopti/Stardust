@@ -42,5 +42,59 @@ namespace Teleopti.Ccc.DomainTest.Forecasting.Import
             const string rowString = "Insurance,201203025 02:00,20120325 02:15,17,179,0,4.05";
             _target.Extract(rowString, timeZone);
         }
+
+        [Test]
+        [ExpectedException(typeof (ValidationException))]
+        public void ShouldThrowErrorIfContentAreNotOk()
+        {
+            var timeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            const string rowString = "Insurance";
+            _target.Extract(rowString, timeZone);
+        }
+
+        [Test]
+        [ExpectedException(typeof (ValidationException))]
+        public void ShouldThrowErrorIfCannotParseString()
+        {
+            var timeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            const string rowString = ",20120326 02:00,20120326 02:15,17,179,0,4.05";
+            _target.Extract(rowString, timeZone);
+        }
+
+        [Test]
+        [ExpectedException(typeof(ValidationException))]
+        public void ShouldThrowErrorIfCannotParseDate()
+        {
+            var timeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            const string rowString = "Insurance,20120326 02:00,,17,179,0,4.05";
+            _target.Extract(rowString, timeZone);
+        }
+
+        [Test]
+        [ExpectedException(typeof(ValidationException))]
+        public void ShouldThrowErrorIfCannotParseStartDate()
+        {
+            var timeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            const string rowString = "Insurance,,20120326 02:00,17,179,0,4.05";
+            _target.Extract(rowString, timeZone);
+        }
+
+        [Test]
+        [ExpectedException(typeof(ValidationException))]
+        public void ShouldThrowErrorIfCannotParseInteger()
+        {
+            var timeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            const string rowString = "Insurance,20120326 02:00,20120326 02:00,,179,0,4.05";
+            _target.Extract(rowString, timeZone);
+        }
+
+        [Test]
+        [ExpectedException(typeof(ValidationException))]
+        public void ShouldThrowErrorIfCannotParseDouble()
+        {
+            var timeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+            const string rowString = "Insurance,20120326 02:00,20120326 02:00,17,,0,4.05";
+            _target.Extract(rowString, timeZone);
+        }
     }
 }

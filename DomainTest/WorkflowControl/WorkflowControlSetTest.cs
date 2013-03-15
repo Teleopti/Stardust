@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -176,7 +178,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             Assert.AreEqual(absenceToAdd, _target.AllowedPreferenceAbsences.First());
         }
 
-        
+       
         [Test]
         public void CanRemoveAllowedAbsence()
         {
@@ -285,6 +287,31 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             ((WorkflowControlSet)_target).SetDeleted();
 
             Assert.IsTrue(((WorkflowControlSet)_target).IsDeleted);
+        }
+
+        [Test]
+        public void VerifyAddSkillToMatchList()
+        {
+            var _skill = SkillFactory.CreateSkill("test skill");
+            _target.AddSkillToMatchList(_skill);
+            Assert.IsNotNull(_target.MustMatchSkills);
+        }
+
+        [Test]
+        public void VerifyRemoveSkillFromMatchList()
+        {
+            var _skill = SkillFactory.CreateSkill("test skill");
+            _target.AddSkillToMatchList(_skill);
+            _target.RemoveSkillFromMatchList(_skill);
+            Assert.IsEmpty(_target.MustMatchSkills);
+
+        }
+
+        [Test]
+        public void SetShiftTradeTargetTimeFlexibility()
+        {
+            _target.ShiftTradeTargetTimeFlexibility = new TimeSpan(1,1,1,1);
+            Assert.IsNotNull(_target.ShiftTradeTargetTimeFlexibility);
         }
     }
 }

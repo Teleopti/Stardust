@@ -5,6 +5,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 {
 	public interface IShiftTradePeriodViewModelMapper
 	{
-		ShiftTradeRequestsPeriodViewModel Map(IWorkflowControlSet workflowControlSet);
+		ShiftTradeRequestsPeriodViewModel Map(IWorkflowControlSet workflowControlSet, INow now);
 	}
 }

@@ -177,9 +177,11 @@
     <Compile Include="DataTransferObject\DefinitionSetDto.cs" />
     <Compile Include="DataTransferObject\DefinitionSetLayerDto.cs" />
     <Compile Include="DataTransferObject\ImportForecastsOptionsDto.cs" />
+    <Compile Include="DataTransferObject\OptionalValueDto.cs" />
     <Compile Include="DataTransferObject\PayrollResultDetailDto.cs" />
     <Compile Include="DataTransferObject\PayrollResultDto.cs" />
     <Compile Include="DataTransferObject\GroupPageDto.cs" />
+    <Compile Include="DataTransferObject\PersonOptionalValuesDto.cs" />
     <Compile Include="DataTransferObject\PersonWriteProtectionDto.cs" />
     <Compile Include="DataTransferObject\PlanningTimeBankDto.cs" />
     <Compile Include="DataTransferObject\PublicNoteLoadOptionDto.cs" />
@@ -199,6 +201,7 @@
     <Compile Include="DataTransferObject\QueryDtos\GetMultiplicatorDefinitionSetShiftAllowanceDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetMultiplicatorOvertimeQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetMultiplicatorShiftAllowanceQueryDto.cs" />
+    <Compile Include="DataTransferObject\QueryDtos\GetPersonOptionalValuesByPersonIdQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetSchedulesByGroupPageGroupQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetSchedulesBySiteQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetAllScenariosQueryDto.cs" />

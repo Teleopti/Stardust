@@ -23,10 +23,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 		private readonly IShiftTradeRequestProvider _shiftTradeRequestprovider;
 		private readonly IShiftTradePeriodViewModelMapper _shiftTradeRequestsPeriodViewModelMapper;
 		private readonly IShiftTradeRequestStatusChecker _shiftTradeRequestStatusChecker;
+		private readonly INow _now;
 
 		public RequestsViewModelFactory(IPersonRequestProvider personRequestProvider, IMappingEngine mapper, IAbsenceTypesProvider absenceTypesProvider, 
 										IPermissionProvider permissionProvider, IShiftTradeRequestProvider shiftTradeRequestprovider, 
-										IShiftTradePeriodViewModelMapper shiftTradeRequestsPeriodViewModelMapper, IShiftTradeRequestStatusChecker shiftTradeRequestStatusChecker)
+										IShiftTradePeriodViewModelMapper shiftTradeRequestsPeriodViewModelMapper, 
+										IShiftTradeRequestStatusChecker shiftTradeRequestStatusChecker, INow now)
 		{
 			_personRequestProvider = personRequestProvider;
 			_mapper = mapper;
@@ -35,6 +37,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 			_shiftTradeRequestprovider = shiftTradeRequestprovider;
 			_shiftTradeRequestsPeriodViewModelMapper = shiftTradeRequestsPeriodViewModelMapper;
 			_shiftTradeRequestStatusChecker = shiftTradeRequestStatusChecker;
+			_now = now;
 		}
 
 		public RequestsViewModel CreatePageViewModel()
@@ -76,7 +79,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 		
 		public ShiftTradeRequestsPeriodViewModel CreateShiftTradePeriodViewModel()
 		{
-			return _shiftTradeRequestsPeriodViewModelMapper.Map(_shiftTradeRequestprovider.RetrieveUserWorkflowControlSet());
+			return _shiftTradeRequestsPeriodViewModelMapper.Map(_shiftTradeRequestprovider.RetrieveUserWorkflowControlSet(), _now);
 		}
 
 		public ShiftTradeScheduleViewModel CreateShiftTradeScheduleViewModel(DateTime selectedDate)
