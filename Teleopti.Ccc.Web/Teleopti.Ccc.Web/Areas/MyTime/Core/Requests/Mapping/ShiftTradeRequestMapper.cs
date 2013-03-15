@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using DotNetOpenAuth.OpenId.Extensions.AttributeExchange;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Interfaces.Domain;
@@ -23,7 +23,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		{
 			var loggedOnUser = _loggedOnUser.CurrentUser();
 			var personTo = _personRepository.Get(form.PersonToId);
-			var shiftTradeSwapDetail = new ShiftTradeSwapDetail(loggedOnUser, personTo, form.Date, form.Date);
+			var calendarDate = new DateOnly(new DateTime(form.Date.Year, form.Date.Month, form.Date.Day, CultureInfo.CurrentCulture.Calendar));
+			var shiftTradeSwapDetail = new ShiftTradeSwapDetail(loggedOnUser, personTo, calendarDate, calendarDate);
 			var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail> { shiftTradeSwapDetail });
 			var ret = new PersonRequest(loggedOnUser) {Request = shiftTradeRequest, Subject = form.Subject};
 			ret.TrySetMessage(form.Message);
