@@ -27,9 +27,15 @@ Background:
 	| Start date | 2012-06-18 |
 	
 Scenario: Henkes testscenario for setting up budgetgroups
-	Given there is  a budgetgroup 'test'
-	And 'I' belong to budgetgroup 'test'
-	And there is an allowance '4' for 'test' on '2007-12-2' 
+	Given I have the role 'Full access to mytime'
+	And there is  a budgetgroup 'NameOfTheBudgetGroup'
+	And 'I' belong to budgetgroup 'NameOfTheBudgetGroup'
+	And there is an budgetday
+	| Field				| Value                |
+	| BudgetGroup		| NameOfTheBudgetGroup |
+	| Date				| 2012-08-28           |
+	| Allowance			| 2                    |
+	| TotalAllowance	| 4                    |
 	When I view my week schedule for date '2013-02-15'
 	Then I should not see any indication of how many agents can go on holiday
 

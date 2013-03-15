@@ -1,5 +1,6 @@
 using System;
 using TechTalk.SpecFlow;
+using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
 
@@ -22,14 +23,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
             //ScenarioContext.Current.Pending();
         }
 
-        [Given(@"there is an allowance '(.*)' for '(.*)' on '(.*)'")]
-        public void GivenThereIsAnAllowanceForOn(int allowance, string budgetGroup, DateTime date)
-        {
-            //todo: allowance
-
-            var budgetdayConfigurable = new BudgetdayConfigurable(budgetGroup,date);
-            UserFactory.User().Setup(budgetdayConfigurable);
-        }
+		[Given(@"there is an budgetday")]
+		public void GivenThereIsAnBudgetday(Table table)
+		{
+			var budgetday = table.CreateInstance<BudgetdayConfigurable>();
+			UserFactory.User().Setup(budgetday);
+		}
 
     }
 }
