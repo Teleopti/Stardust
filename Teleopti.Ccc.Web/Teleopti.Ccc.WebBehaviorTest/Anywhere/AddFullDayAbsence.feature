@@ -42,15 +42,15 @@ Scenario: Add
 	And 'Pierre Baldi' have a (read model) shift with
 	| Field      | Value        |
 	| Person     | Pierre Baldi |
-	| Date       | 2013-03-06   |
+	| Date       | 2013-03-15   |
 	| Start time | 08:00        |
 	| End time   | 17:00        |
 	| Activity   | Phone        |
-	When I view agent schedules add full day absence form for 'Pierre Baldi' on '2013-03-06'
+	When I view agent schedules add full day absence form for 'Pierre Baldi' on '2013-03-15'
 	And I input these full day absence values
 	| Field    | Value      |
 	| Absence  | Vacation   |
-	| End date | 2013-03-06 |
+	| End date | 2013-03-15 |
 	And I click 'apply'
 	Then I should see a shift layer with
 	| Field      | Value |
