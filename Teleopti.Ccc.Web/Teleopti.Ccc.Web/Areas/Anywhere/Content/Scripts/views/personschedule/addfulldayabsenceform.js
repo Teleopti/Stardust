@@ -57,16 +57,18 @@ define([
             });
             
             this.Apply = function () {
+                var data = JSON.stringify({
+                    StartDate: self.StartDate().format(),
+                    EndDate: self.EndDate().format(),
+                    AbsenceId: self.AbsenceType(),
+                    PersonId: personId
+                });
                 $.ajax({
                         url: 'PersonScheduleCommand/AddFullDayAbsence',
                         type: 'POST',
                         cache: false,
-                        data: JSON.stringify({
-                            StartDate: self.StartDate().format(),
-                            EndDate: self.EndDate().format(),
-                            AbsenceId: self.AbsenceType(),
-                            PersonId: personId
-                        }),
+                        contentType: 'application/json; charset=utf-8',
+                        data: data,
                         success: function(data, textStatus, jqXHR) {
                             navigation.GotoPersonSchedule(personId, self.StartDate());
                         }
