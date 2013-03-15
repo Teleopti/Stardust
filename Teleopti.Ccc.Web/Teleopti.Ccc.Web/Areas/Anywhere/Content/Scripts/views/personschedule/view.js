@@ -21,8 +21,6 @@ define([
 				options.renderHtml(view);
 
 				personSchedule = new personScheduleViewModel();
-				personSchedule.Id(options.id);
-				personSchedule.Date(moment.utc(options.date, 'YYYYMMDD'));
 
 				var resize = function () {
 				    personSchedule.TimeLine.WidthPixels($('.shift').width());
@@ -33,19 +31,30 @@ define([
                     .bind('orientationchange', resize)
                     .ready(resize);
 
-				subscriptions.subscribePersonSchedule(
-					options.id,
-					helpers.Date.AsUTCDate(personSchedule.Date().toDate()),
-					function (data) {
-						personSchedule.SetData(data);
-					}
-				);
-
 				ko.applyBindings(personSchedule, options.bindingElement);
 
 			},
 		    
 			display: function(options) {
+
+			    var date = moment(options.date, 'YYYYMMDD');
+			    
+			    if (personSchedule.Id() == options.id && personSchedule.Date().diff(date) == 0)
+			        return;
+
+			    personSchedule.Loading(true);
+			    
+			    personSchedule.Id(options.id);
+			    personSchedule.Date(date);
+
+			    subscriptions.subscribePersonSchedule(
+					options.id,
+					helpers.Date.AsUTCDate(personSchedule.Date().toDate()),
+					function (data) {
+					    personSchedule.SetData(data);
+					    personSchedule.Loading(false);
+					}
+				);
 
 			},
 

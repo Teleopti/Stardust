@@ -70,7 +70,7 @@
 
         </div>
     </div>
-        
+
     <!-- ko if: AddingFullDayAbsence -->
     <!-- ko with: AddFullDayAbsenceForm -->
     
@@ -78,11 +78,6 @@
         <div class="span3">
             <blockquote>
                 <form action="#" class="full-day-absence-form">
-                     <!-- ko if: InvalidEndDate -->
-                    <div class="alert message">
-                        <span data-bind="text: $root.Resources.InvalidEndDate"></span>
-                    </div>
-                    <!-- /ko -->
                     <select class="absence-type" data-bind="options: AbsenceTypes, optionsText: 'Name', optionsValue: 'Id', value: AbsenceType">
                     </select>
                             
@@ -93,13 +88,19 @@
                     <div class="input-prepend input-append" >
                         <span class="add-on"><i class="icon-step-forward"></i></span>
                         <span class="date" data-bind="datepicker: EndDate, datepickerOptions: { format: $root.Resources.MomentShortDatePattern, weekStart: $root.Resources.FirstDayOfWeek, autoclose: true }">
-                            <input type="text" class="end-date" id="end-date" data-bind="value: EndDate"/>
+                            <input type="text" class="end-date" id="end-date" data-bind="enable: !$root.Loading(), value: EndDateFormatted"/>
                             <span class="add-on"><i class="icon-calendar"></i></span>
                         </span>
                     </div>
-                            
-                    <button class="btn btn-large btn-success apply btn-block" style="margin-top: 10px" data-bind="text: $root.Resources.Apply, click: Apply"></button>
+                    
+                    <!-- ko if: InvalidEndDate -->
+                    <div class="alert">
+                        <span data-bind="text: $root.Resources.InvalidEndDate"></span>
+                    </div>
+                    <!-- /ko -->
 
+                    <button class="btn btn-large btn-success apply btn-block" style="margin-top: 10px" data-bind="enable: !InvalidEndDate(), text: $root.Resources.Apply, click: Apply"></button>
+                    
                 </form>
             </blockquote>
         </div>

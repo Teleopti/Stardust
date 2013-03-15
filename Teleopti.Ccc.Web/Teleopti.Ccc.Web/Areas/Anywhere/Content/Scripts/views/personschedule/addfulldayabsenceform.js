@@ -16,52 +16,58 @@ define([
 
             this.AbsenceType = ko.observable("");
 
-            this.StartDate = ko.observable();
-            this.EndDate = ko.observable();
+            this.StartDate = ko.observable(moment());
+            this.EndDate = ko.observable(moment());
             
-            this.InvalidEndDate = ko.observable(false);
-
             var personId;
 
             this.SetData = function(data) {
                 personId = data.PersonId;
                 self.StartDate(data.Date);
-                self.EndDate(data.Date.format(resources.MomentShortDatePattern));
+                self.EndDate(data.Date);
                 self.AbsenceTypes(data.Absences);
             };
 
             this.StartDateFormatted = ko.computed(function() {
-                var value = self.StartDate();
-                if (moment.isMoment(value))
-                    return value.format(resources.MomentShortDatePattern);
-                return value;
+                return self.StartDate().format(resources.MomentShortDatePattern);
             });
-            
+
+            this.EndDateFormatted = ko.computed({
+                read: function () {
+                    var value = self.EndDate();
+                    if (moment.isMoment(value))
+                        return value.format(resources.MomentShortDatePattern);
+                    return value;
+                },
+                write: function (value) {
+                    if (moment.isMoment(value))
+                        self.EndDate(value);
+                    self.EndDate(moment(value));
+                }
+            });
+
             this.AbsenceTypes = ko.observableArray();
 
-            var isInValidEndDate = function (startDate, endDate) {
-                var startDate = new Date(startDate).setHours(0,0,0,0);
-                var endDate = new Date(endDate).setHours(0,0,0,0);
-                return endDate.valueOf() < startDate.valueOf();
-            };
+            this.InvalidEndDate = ko.computed(function () {
+                if (!self.EndDate())
+                    return true;
+                if (self.StartDate() && self.StartDate().diff)
+                    return self.StartDate().diff(self.EndDate()) > 0;
+                return false;
+            });
             
             this.Apply = function () {
-                if (isInValidEndDate(self.StartDate(), self.EndDate())) {
-                    self.InvalidEndDate(true);
-                    return;
-                }
                 $.ajax({
                         url: 'PersonScheduleCommand/AddFullDayAbsence',
+                        type: 'POST',
                         cache: false,
-                        dataType: 'json',
-                        data: {
-                            StartDate: self.StartDate,
-                            EndDate: self.EndDate,
-                            Absence: self.AbsenceType,
-                            PersonId: self.PersonId
-                        },
-                        success: function (data, textStatus, jqXHR) {
-                            self.InvalidEndDate(false);
+                        data: JSON.stringify({
+                            StartDate: self.StartDate().format(),
+                            EndDate: self.EndDate().format(),
+                            AbsenceId: self.AbsenceType(),
+                            PersonId: personId
+                        }),
+                        success: function(data, textStatus, jqXHR) {
                             navigation.GotoPersonSchedule(personId, self.StartDate());
                         }
                     }

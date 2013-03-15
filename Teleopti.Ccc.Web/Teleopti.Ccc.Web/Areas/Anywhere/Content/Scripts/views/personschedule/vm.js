@@ -20,6 +20,8 @@ define([
 
 			var self = this;
 
+			this.Loading = ko.observable(false);
+
 			this.Layers = ko.observableArray();
 
 			this.TimeLine = new timeLineViewModel(this.Layers);

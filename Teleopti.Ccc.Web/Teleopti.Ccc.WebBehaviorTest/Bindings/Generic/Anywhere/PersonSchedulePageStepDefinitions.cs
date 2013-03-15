@@ -75,7 +75,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		public void WhenIInputTheseFullDayAbsenceValues(Table table)
 		{
 			var fullDayAbsenceFormInfo = table.CreateInstance<FullDayAbsenceFormInfo>();
-			EventualAssert.That(() => Browser.Current.TextField(Find.BySelector(".full-day-absence-form #end-date")).GetAttributeValue("value"), Is.Not.Null);
 
 			if (fullDayAbsenceFormInfo.Absence != null)
 			{
@@ -84,6 +83,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 				select.Option(Find.BySelector(string.Format(":contains('{0}')", fullDayAbsenceFormInfo.Absence))).SelectNoWait();
 				//Browser.Current.SelectList(Find.BySelector(".full-day-absence-form .absence-type"))..Select(fullDayAbsenceFormInfo.Absence);
 			}
+
 			Browser.Current.TextField(Find.BySelector(".full-day-absence-form #end-date")).ChangeValue(fullDayAbsenceFormInfo.EndDate.ToShortDateString(UserFactory.User().Culture));
 		}
 
