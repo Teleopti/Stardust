@@ -202,7 +202,7 @@
     <Compile Include="DataTransferObject\QueryDtos\GetMultiplicatorDefinitionSetShiftAllowanceDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetMultiplicatorOvertimeQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetMultiplicatorShiftAllowanceQueryDto.cs" />
-    <Compile Include="DataTransferObject\QueryDtos\GetPersonOptionalValuesByPersonIdQueryDto.cs" />
+    <Compile Include="DataTransferObject\QueryDtos\GetPeopleOptionalValuesByPersonIdQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetSchedulesByGroupPageGroupQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetSchedulesBySiteQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetAllScenariosQueryDto.cs" />
