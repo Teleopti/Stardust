@@ -1,4 +1,6 @@
-﻿using NUnit.Framework;
+﻿using System;
+using System.Globalization;
+using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.WorkflowControl;
@@ -52,6 +54,23 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			result.NowYear.Should().Be.EqualTo(dateOnly.Year);
 			result.NowMonth.Should().Be.EqualTo(dateOnly.Month);
 			result.NowDay.Should().Be.EqualTo(dateOnly.Day);
+		}
+
+		[Test, SetCulture("ar-SA")]
+		public void ShouldMapNowWithArabicDateFormat()
+		{
+			var arabicCalendar = new UmAlQuraCalendar();
+			var mapper = new ShiftTradePeriodViewModelMapper();
+			var now = MockRepository.GenerateMock<INow>();
+			var arabicDate = new DateTime(1435, 1, 1, arabicCalendar);
+
+			now.Stub(x => x.DateOnly()).Return(new DateOnly(arabicDate));
+
+			var result = mapper.Map(new WorkflowControlSet(), now);
+
+			result.NowYear.Should().Be.EqualTo(arabicCalendar.GetYear(arabicDate));
+			result.NowMonth.Should().Be.EqualTo(arabicCalendar.GetMonth(arabicDate));
+			result.NowDay.Should().Be.EqualTo(arabicCalendar.GetDayOfMonth(arabicDate));
 		}
 	}
 }

@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
+﻿using System.Globalization;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
@@ -15,9 +16,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				vm.OpenPeriodRelativeEnd = workflowControlSet.ShiftTradeOpenPeriodDaysForward.Maximum;
 			}
 
-			vm.NowYear = now.DateOnly().Year;
-			vm.NowMonth = now.DateOnly().Month;
-			vm.NowDay = now.DateOnly().Day;
+			var calendar = CultureInfo.CurrentCulture.Calendar;
+			vm.NowYear = calendar.GetYear(now.DateOnly());
+			vm.NowMonth = calendar.GetMonth(now.DateOnly());
+			vm.NowDay = calendar.GetDayOfMonth(now.DateOnly());
 
 			return vm;
 		}
