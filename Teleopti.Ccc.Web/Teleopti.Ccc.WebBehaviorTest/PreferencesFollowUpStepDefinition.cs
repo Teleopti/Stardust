@@ -19,14 +19,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 
 			var preference = Pages.Pages.PreferencePage.CalendarCellDataForDate(fields.Date, "preference");
 			if (fields.Preference != null) EventualAssert.That(() => preference.InnerHtml, Is.StringContaining(fields.Preference));
-
-			if (fields.Fulfilled != null)
-			{
-				EventualAssert.That(() => preference.InnerHtml,
-				                    fields.Fulfilled.Value
-					                    ? Is.StringContaining("preference-fulfilled")
-					                    : Is.StringContaining("preference-not-fulfilled"));
-			}
 		}
 
 		private class DayCellFields
@@ -34,7 +26,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			public DateTime Date { get; set; }
 			public string ShiftCategory { get; set; }
 			public string Preference { get; set; }
-			public bool? Fulfilled { get; set; }
 		}
 	}
 
