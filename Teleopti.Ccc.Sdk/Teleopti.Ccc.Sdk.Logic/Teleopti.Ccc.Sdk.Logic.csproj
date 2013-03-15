@@ -190,6 +190,7 @@
     <Compile Include="CommandHandler\RecalculateForecastOnSkillCommandHandler.cs" />
     <Compile Include="CommandHandler\SaveAgentPortalSettingsCommandHandler.cs" />
     <Compile Include="CommandHandler\SavePersonAbsenceRequestCommandHandler.cs" />
+    <Compile Include="CommandHandler\SendPushMessageToPersonCommandHandler.cs" />
     <Compile Include="CommandHandler\SetPersonAccountForPersonCommandHandler.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="IPayrollResultFactory.cs" />

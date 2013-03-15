@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos
 	/// <summary>
 	/// Specify a query to get <see cref="PersonOptionalValuesDto"/> by person Id.
 	/// </summary>
-	[DataContract(Namespace = "http://schemas.ccc.teleopti.com/sdk/2012/03/")]
+	[DataContract(Namespace = "http://schemas.ccc.teleopti.com/sdk/2013/03/")]
 	public class GetPersonOptionalValuesByPersonIdQueryDto : QueryDto
 	{
 		/// <summary>
