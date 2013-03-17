@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
@@ -18,7 +21,14 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 					{
 						if (s.Shift == null)
 							return null;
-						return s.Shift.Projection as IEnumerable<dynamic>;
+						var layers = s.Shift.Projection as IEnumerable<dynamic>;
+						layers.ForEach(l =>
+							{
+								if (s.Person == null)
+									return;
+								l.TimeZoneInfo = s.Person.PermissionInformation.DefaultTimeZone();
+							});
+						return layers;
 					}))
 				;
 
@@ -26,7 +36,16 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 
 			CreateMap<dynamic, PersonScheduleViewModelLayer>()
 				.ForMember(x => x.Color, o => o.ResolveUsing(s => s.Color))
-				.ForMember(x => x.Start, o => o.ResolveUsing(s => s.Start))
+				.ForMember(x => x.Start, o => o.ResolveUsing(s =>
+					{
+						if (s.Start == null)
+							return null;
+						DateTime start = s.Start;
+						if (start == DateTime.MinValue)
+							return null;
+						TimeZoneInfo timeZoneInfo = s.TimeZoneInfo;
+						return TimeZoneInfo.ConvertTimeFromUtc(start, timeZoneInfo).ToString();
+					}))
 				.ForMember(x => x.Minutes, o => o.ResolveUsing(s => s.Minutes))
 				;
 

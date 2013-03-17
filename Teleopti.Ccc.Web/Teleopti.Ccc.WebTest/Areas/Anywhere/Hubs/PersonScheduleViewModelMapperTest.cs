@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using AutoMapper;
 using NUnit.Framework;
+using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
@@ -11,6 +12,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
+using Teleopti.Ccc.WebTest.Core.Mapping;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
@@ -149,17 +151,18 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		public void ShouldMapLayerStartTimeInPersonsTimeZone()
 		{
 			var target = new PersonScheduleViewModelMapper();
+			var startTime = new DateTime(2013, 3, 4, 8, 0, 0, DateTimeKind.Utc);
+
 			var person = new Person();
 			var personTimeZone = TimeZoneInfoFactory.HawaiiTimeZoneInfo();
 			person.PermissionInformation.SetDefaultTimeZone(personTimeZone);
-			var startTime = new DateTime(2013, 3, 4, 8, 0, 0, DateTimeKind.Utc);
-
 			dynamic shift = new ExpandoObject();
 			shift.Projection = new[] { MakeLayer("", startTime) };
 
 			var result = target.Map(new PersonScheduleData {Shift = shift, Person = person});
 
-			result.Layers.Single().Start.Should().Be(TimeZoneInfo.ConvertTimeFromUtc(startTime, personTimeZone));
+			var personStartTime = TimeZoneInfo.ConvertTimeFromUtc(startTime, person.PermissionInformation.DefaultTimeZone()).ToString();
+			result.Layers.Single().Start.Should().Be(personStartTime);
 		}
 
 		[Test]

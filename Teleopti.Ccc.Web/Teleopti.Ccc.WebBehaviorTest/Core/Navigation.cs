@@ -345,4 +345,22 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			TestControllerMethods.WaitUntilCompletelyLoaded();
 		}
 	}
+
+	public class WaitUntil : IGoToInterceptor
+	{
+		private readonly Func<bool> _until;
+
+		public WaitUntil(Func<bool> until) {
+			_until = until;
+		}
+
+		public void Before(GotoArgs args)
+		{
+		}
+
+		public void After(GotoArgs args)
+		{
+			_until.WaitOrThrow(Timeouts.Poll, Timeouts.Timeout);
+		}
+	}
 }

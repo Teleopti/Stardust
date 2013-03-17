@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 	public class PersonScheduleViewModelLayer
 	{
 		public string Color { get; set; }
-		public DateTime Start { get; set; }
+		public string Start { get; set; }
 		public int Minutes { get; set; }
 	}
 }
