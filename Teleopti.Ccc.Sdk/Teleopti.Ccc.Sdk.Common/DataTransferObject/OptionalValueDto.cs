@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
 	/// <summary>
 	/// Contains a key/value pair of optional values.
 	/// </summary>
-	[DataContract(Namespace = "http://schemas.ccc.teleopti.com/sdk/2012/03/")]
+	[DataContract(Namespace = "http://schemas.ccc.teleopti.com/sdk/2013/03/")]
 	public class OptionalValueDto
 	{
 		/// <summary>

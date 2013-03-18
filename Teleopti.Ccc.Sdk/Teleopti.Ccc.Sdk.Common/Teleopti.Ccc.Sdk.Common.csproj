@@ -157,6 +157,7 @@
     <Compile Include="DataTransferObject\Commands\DenormalizeNotificationCommandDto.cs" />
     <Compile Include="DataTransferObject\Commands\DenormalizeScheduleCommandDto.cs" />
     <Compile Include="DataTransferObject\Commands\ImportForecastsFileCommandDto.cs" />
+    <Compile Include="DataTransferObject\Commands\SendPushMessageToPeopleCommandDto.cs" />
     <Compile Include="DataTransferObject\Commands\WorkloadOnSkillSelectionDto.cs" />
     <Compile Include="DataTransferObject\Commands\SaveAgentPortalSettingsCommandDto.cs" />
     <Compile Include="DataTransferObject\Commands\EmployPersonCommandDto.cs" />
@@ -201,7 +202,7 @@
     <Compile Include="DataTransferObject\QueryDtos\GetMultiplicatorDefinitionSetShiftAllowanceDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetMultiplicatorOvertimeQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetMultiplicatorShiftAllowanceQueryDto.cs" />
-    <Compile Include="DataTransferObject\QueryDtos\GetPersonOptionalValuesByPersonIdQueryDto.cs" />
+    <Compile Include="DataTransferObject\QueryDtos\GetPeopleOptionalValuesByPersonIdQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetSchedulesByGroupPageGroupQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetSchedulesBySiteQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetAllScenariosQueryDto.cs" />

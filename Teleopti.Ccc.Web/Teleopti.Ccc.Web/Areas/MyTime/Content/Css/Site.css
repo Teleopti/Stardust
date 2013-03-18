@@ -992,7 +992,7 @@ footer p
 }
 
 #ui-datepicker-div {
-	z-index: 1000 !important;
+	z-index: 99000 !important;
 }
 
 /*

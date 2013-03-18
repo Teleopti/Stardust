@@ -1,36 +1,22 @@
-#region Imports
-
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-#endregion
-
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
-
-    /// <summary>
-    /// Represents a OptionalColumnRepositoryTest
-    /// </summary>
-
     [TestFixture]
     [Category("LongRunning")]
     public class OptionalColumnRepositoryTest : RepositoryTest<IOptionalColumn>
     {
+    	private OptionalColumnRepository repository;
 
-        #region Fields - Instance Member
-
-        private OptionalColumnRepository repository;
-
-        #endregion
-
-        protected override void ConcreteSetup()
+    	protected override void ConcreteSetup()
         {
             repository = new OptionalColumnRepository(UnitOfWork);
         }
@@ -47,7 +33,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             IOptionalColumn opc = CreateAggregateWithCorrectBusinessUnit();
             Assert.AreEqual(opc.Name, loadedAggregateFromDatabase.Name);
             Assert.AreEqual(opc.TableName, loadedAggregateFromDatabase.TableName);
-           // Assert.AreEqual(0, loadedAggregateFromDatabase.ValueCollection.Count);
         }
 
         protected override Repository<IOptionalColumn> TestRepository(IUnitOfWork unitOfWork)
@@ -58,7 +43,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldReturnUniqueValues()
 		{
-			
 			var col = CreateAggregateWithCorrectBusinessUnit();
 			IPerson person1 = PersonFactory.CreatePerson("sdgf");
 			person1.AddOptionalColumnValue(new OptionalColumnValue("VAL1"),col );
@@ -101,6 +85,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 			Assert.AreEqual(1, returnList.Count);
 			Assert.AreEqual(columnName, returnList[0].Name);
+		}
+
+		[Test]
+		public void ShouldHaveFactoryConstructor()
+		{
+			repository = new OptionalColumnRepository(UnitOfWorkFactory.Current);
+			repository.Should().Not.Be.Null();
 		}
     }
 }
