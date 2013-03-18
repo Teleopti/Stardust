@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			_mocks = new MockRepository();
 			_blockProvider = _mocks.StrictMock<IBlockProvider>();
 			_dataExtractorValuesForMatrixes = new DataExtractorValuesForMatrixes();
-			_target = new TeamBlockIntradayDecisionMaker(_blockProvider,_dataExtractorValuesForMatrixes);
+			_target = new TeamBlockIntradayDecisionMaker(null,_blockProvider);
 		}
 
 		//[Test]

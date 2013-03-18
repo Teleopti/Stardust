@@ -80,25 +80,29 @@ namespace Teleopti.Ccc.Domain.Scheduling
         public bool ScheduleTeamBlockDay(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions)
         {
 
-            var suggestedShiftProjectionCache = ScheduleFirstTeamBlockToGetProjectionCache(teamBlockInfo, datePointer,
+           var suggestedShiftProjectionCache = ScheduleFirstTeamBlockToGetProjectionCache(teamBlockInfo, datePointer,
                                                                                        schedulingOptions);
             if (suggestedShiftProjectionCache == null) return false; 
 
             foreach (var day in teamBlockInfo.BlockInfo.BlockPeriod.DayCollection())
             {
+                var blockInfo = new BlockInfo(new DateOnlyPeriod(day, day));
+                var dailyTeamBlockInfo = new TeamBlockInfo(teamBlockInfo.TeamInfo, blockInfo);
+
+                if (isTeamBlockScheduled(dailyTeamBlockInfo)) continue;
+                //should pass the suggested shift here
+                
+                var restriction = _restrictionAggregator.AggregatePerDay(teamBlockInfo.TeamInfo, schedulingOptions, blockInfo);
+
+                //should consider the suggested start time
+                var shifts = _workShiftFilterService.Filter(datePointer, teamBlockInfo, restriction,
+                                                            schedulingOptions, new WorkShiftFinderResult(teamBlockInfo.TeamInfo.GroupPerson, datePointer));
+                if (shifts == null || shifts.Count <= 0)
+                    return false;
+                
                 foreach (var person in teamBlockInfo.TeamInfo.GroupPerson.GroupMembers)
                 {
-                    //should pass the suggested shift here
-                    var blockInfo = new BlockInfo(new DateOnlyPeriod(day, day));
-                    var restriction = _restrictionAggregator.AggregatePerDay(teamBlockInfo.TeamInfo, schedulingOptions, blockInfo);
-
-                    //should consider the suggested start time
-                    var shifts = _workShiftFilterService.Filter(datePointer, teamBlockInfo, restriction,
-                                                                schedulingOptions, new WorkShiftFinderResult(teamBlockInfo.TeamInfo.GroupPerson, datePointer));
-                    if (shifts == null || shifts.Count <= 0)
-                        return false;
                     var activityInternalData = _skillDayPeriodIntervalDataGenerator.Generate(teamBlockInfo.TeamInfo, blockInfo);
-
                     var bestShiftProjectionCache = _workShiftSelector.SelectShiftProjectionCache(shifts, activityInternalData,
                                                                                                  schedulingOptions
                                                                                                      .WorkShiftLengthHintOption,
@@ -123,8 +127,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
             if (teamBlockInfo == null) return null;
 
             //if teamBlockInfo is fully scheduled, continue;
-            if (!isTeamBlockScheduled(teamBlockInfo)) return null;
-
+            if (isTeamBlockScheduled(teamBlockInfo)) return null;
+            
             var restriction = _restrictionAggregator.Aggregate(teamBlockInfo, schedulingOptions);
 
             // (should we cover for max seats here?) ????
