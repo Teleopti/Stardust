@@ -195,15 +195,17 @@ exec #tmpPPEventEnable @TraceID, 15  --  Audit Logout
 --Filter on Database Id(s)
 SELECT @DBIdString = REPLACE(@DBIdString,' ','')
 DECLARE @DBId table (idx smallint Primary Key IDENTITY(1,1), Databaseb_Id int NOT NULL)
-INSERT INTO @DBId (Databaseb_Id)	
-SELECT Item = y.i.value('(./text())[1]', 'nvarchar(4000)')
-FROM 
-( 
-	SELECT x = CONVERT(XML, '<i>' 
-	+ REPLACE(@DBIdString, ',', '</i><i>') 
-	+ '</i>').query('.')
-) AS a CROSS APPLY x.nodes('i') AS y(i)
-
+IF isnumeric(@DBIdString) = 1
+begin
+	INSERT INTO @DBId (Databaseb_Id)	
+	SELECT Item = y.i.value('(./text())[1]', 'nvarchar(4000)')
+	FROM 
+	( 
+		SELECT x = CONVERT(XML, '<i>' 
+		+ REPLACE(@DBIdString, ',', '</i><i>') 
+		+ '</i>').query('.')
+	) AS a CROSS APPLY x.nodes('i') AS y(i)
+end
 -- enumerate the table @DBId
 DECLARE @i int
 DECLARE @And int
