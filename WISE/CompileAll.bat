@@ -224,6 +224,9 @@ COPY "%ARTIFACTDIR%\ServiceBusHostRequestQueue.config" "%DYNAMICCONTENT%\Service
 DEL /F /Q "%WISESOURCEFILE%\ServiceBus\DenormalizeQueue.config"
 COPY "%ARTIFACTDIR%\ServiceBusHostDenormalizeQueue.config" "%DYNAMICCONTENT%\ServiceBus\DenormalizeQueue.config"
 
+DEL /F /Q "%WISESOURCEFILE%\ServiceBus\RTAQueue.config"
+COPY "%ARTIFACTDIR%\ServiceBusHostRTAQueue.config" "%DYNAMICCONTENT%\ServiceBus\RTAQueue.config"
+
 DEL /F /Q "%WISESOURCEFILE%\ServiceBus\log4net.config"
 COPY "%ARTIFACTDIR%\ServiceBuslog4net.config" "%DYNAMICCONTENT%\ServiceBus\log4net.config"
 
