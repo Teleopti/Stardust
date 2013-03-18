@@ -58,8 +58,14 @@ namespace Teleopti.Ccc.Domain.Scheduling
 					                                                                         _schedulingOptions
 						                                                                         .BlockFinderTypeForAdvanceScheduling);
 
-					if (!_teamBlockScheduler.ScheduleTeamBlock(teamBlockInfo, datePointer, _schedulingOptions)) 
-						continue;
+                    //old code that is getting a same shift
+                    //if (!_teamBlockScheduler.ScheduleTeamBlock(teamBlockInfo, datePointer, _schedulingOptions))
+                    //    continue;
+
+                    if (!_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, datePointer, _schedulingOptions))
+                        continue;
+
+				
 
 					if (_cancelMe)
 						break;
