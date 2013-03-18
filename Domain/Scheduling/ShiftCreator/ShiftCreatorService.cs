@@ -18,6 +18,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
             get { return _shiftGenerator; }
         }
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public IList<IWorkShift> Generate(IWorkShiftRuleSet ruleSet, IWorkShiftAddCallback callback)
 	    {
 			var retColl = new List<IWorkShift>();

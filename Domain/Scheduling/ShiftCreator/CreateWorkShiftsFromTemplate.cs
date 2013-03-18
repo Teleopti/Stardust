@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
 			{
 				if (callback != null && callback.IsCanceled)
 					break;
-				workingList = generateForOneExtender(workingList, extender,limiters);
+				workingList = generateForOneExtender(workingList, extender);
 			}
 
 			removeInvalidAtEnd(workingList, limiters,callback);
@@ -45,31 +45,22 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
                 {
 					if (callback != null && callback.IsCanceled)
 						break;
-                    IWorkShift shift = workingList[i];
-                    IVisualLayerCollection shiftProjection = shift.ProjectionService().CreateProjection();
-                    foreach (IWorkShiftLimiter limiter in limiters)
+                    var shift = workingList[i];
+                    var shiftProjection = shift.ProjectionService().CreateProjection();
+                    foreach (var limiter in limiters)
                     {
 						if (callback != null && callback.IsCanceled)
 							break;
-                        if (!limiter.IsValidAtEnd(shiftProjection))
-                        {
-                            workingList.RemoveAt(i);
-                            break;
-                        }
+	                    if (limiter.IsValidAtEnd(shiftProjection)) continue;
+	                    workingList.RemoveAt(i);
+	                    break;
                     }
                 }                
             }
         }
 
-		private static bool checkLimiters(IWorkShift shift, IEnumerable<IWorkShiftLimiter> limiters)
-		{
-			var shiftProjection = shift.ProjectionService().CreateProjection();
-			return limiters.All(limiter => limiter.IsValidAtEnd(shiftProjection));
-		}
-
 		private static WorkShiftCollection generateForOneExtender(WorkShiftCollection workingList,
-                                                                IWorkShiftExtender extender,
-																IList<IWorkShiftLimiter> limiters)
+                                                                IWorkShiftExtender extender)
         {
             var returnCollection = new WorkShiftCollection(workingList.Callback);
 
@@ -85,10 +76,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
 	            var tempShifts = extender.ReplaceWithNewShifts(shift);
 	            foreach (var tempShift in tempShifts)
 	            {
-					//if(checkLimiters(tempShift,limiters))
-						returnCollection.Add(tempShift);
+					returnCollection.Add(tempShift);
 	            }
-                //returnCollection.AddRange();
             }
             return returnCollection;
         }

@@ -14,12 +14,14 @@ namespace Teleopti.Ccc.WinCode.Shifts
 		private int _updateCount;
 		private DateTime _timerStart;
 		private const int warningSeconds = 3;
-		private const int stopSeconds = 100;
+		private const int maxCount = 500000;
 		private bool _sentWarning;
 		private bool _sentStop;
+		private int _totalCount;
 
 		public void BeforeAdd(IWorkShift item)
 		{
+			_totalCount += 1;
 			CurrentCount += 1;
 			sendEvent();
 			Application.DoEvents();
@@ -27,6 +29,7 @@ namespace Teleopti.Ccc.WinCode.Shifts
 
 		public void BeforeRemove()
 		{
+			_totalCount += 1;
 			CurrentCount -= 1;
 			sendEvent();
 			Application.DoEvents();
@@ -46,13 +49,13 @@ namespace Teleopti.Ccc.WinCode.Shifts
 
 		private void checkWarning()
 		{
-			if (_sentWarning == false && _timerStart.AddSeconds(warningSeconds) < DateTime.Now)
+			if (_sentWarning == false &&  _timerStart.AddSeconds(warningSeconds) < DateTime.Now)
 			{
 				_sentWarning = true;
 				if (RuleSetWarning != null)
 					RuleSetWarning.Invoke(this, new EventArgs());
 			}
-			if (_sentStop == false && _timerStart.AddSeconds(stopSeconds) < DateTime.Now)
+			if (_sentStop == false && _totalCount > maxCount)
 			{
 				_sentStop = true;
 				IsCanceled = true;
@@ -74,6 +77,7 @@ namespace Teleopti.Ccc.WinCode.Shifts
 			_sentWarning = false;
 			_sentStop = false;
 			_timerStart = DateTime.Now;
+			_totalCount = 0;
 			CurrentCount = 0;
 			CurrentRuleSetName = ruleSet.Description.Name;
 		}

@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
 		private ISkill _skillCarnaby;
 		private ISkill _skillPhone;
 
-		[SetUp]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
 		public void Setup()
 		{
             _target = new NonBlendSkillImpactOnPeriodForProjection();

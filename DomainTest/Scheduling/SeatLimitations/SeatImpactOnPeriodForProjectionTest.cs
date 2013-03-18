@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
 		private ISkill _skillLondon;
 		private ISkill _skillPhone;
 
-		[SetUp]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
 		public void Setup()
 		{
 			_target = new SeatImpactOnPeriodForProjection();

@@ -28,6 +28,7 @@ namespace Teleopti.Interfaces.Domain
 	/// <summary>
 	/// 
 	/// </summary>
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1040:AvoidEmptyInterfaces")]
 	public interface ILayerCollectionOwner 
 	{
 

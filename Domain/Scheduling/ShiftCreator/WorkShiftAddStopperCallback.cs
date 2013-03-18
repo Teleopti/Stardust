@@ -1,13 +1,12 @@
-﻿using System;
-using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
 {
 	public class WorkShiftAddStopperCallback : IWorkShiftAddCallback
 	{
-		private DateTime _timerStart;
-		private const int stopSeconds = 100;
+		private const int maxCount = 500000;
 		private bool _sentStop;
+		private int _totalCount;
 
 		public void BeforeAdd(IWorkShift item)
 		{
@@ -21,7 +20,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
 
 		private void checkStop()
 		{
-			if (_sentStop == false && _timerStart.AddSeconds(stopSeconds) < DateTime.Now)
+			_totalCount += 1;
+			if (_sentStop == false && _totalCount > maxCount)
 			{
 				_sentStop = true;
 				IsCanceled = true;
@@ -32,12 +32,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
 		public void StartNewRuleSet(IWorkShiftRuleSet ruleSet)
 		{
 			_sentStop = false;
-			_timerStart = DateTime.Now;
+			_totalCount = 0;
 		}
 
 		public void EndRuleSet()
 		{
-			_timerStart = DateTime.Now;
+			_totalCount = 0;
 			IsCanceled = false;
 		}
 	}

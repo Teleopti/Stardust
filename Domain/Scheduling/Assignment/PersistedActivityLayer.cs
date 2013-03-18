@@ -67,6 +67,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			 return Root(_parent);
 		 }
 
+		 [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "IAggregateEntity")]
 		 protected virtual IAggregateRoot Root(IEntity parent)
 		 {
 			 var theParent = parent;
