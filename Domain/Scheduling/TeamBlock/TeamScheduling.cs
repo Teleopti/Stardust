@@ -168,6 +168,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
         public void ExecutePerDayPerPerson(IPerson person, DateOnly dateOnly, ITeamBlockInfo teamBlockInfo, IShiftProjectionCache shiftProjectionCache)
         {
+            var startDateOfBlock = teamBlockInfo.BlockInfo.BlockPeriod.StartDate;
             var listOfDestinationScheduleDays = new List<IScheduleDay>();
             var tempMatrixList = teamBlockInfo.TeamInfo.MatrixesForGroup().Where(scheduleMatrixPro => scheduleMatrixPro.Person == person).ToList();
             if (tempMatrixList.Any())
@@ -180,7 +181,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                 }
                 if (matrix == null) return;
                 if (matrix.GetScheduleDayByKey(dateOnly).DaySchedulePart().IsScheduled()) return ;
-                IScheduleDay destinationScheduleDay = assignShiftProjection(dateOnly, shiftProjectionCache, listOfDestinationScheduleDays, matrix, dateOnly);
+                IScheduleDay destinationScheduleDay = assignShiftProjection(startDateOfBlock, shiftProjectionCache, listOfDestinationScheduleDays, matrix, dateOnly);
                 OnDayScheduled(new SchedulingServiceBaseEventArgs(destinationScheduleDay));
                 if (destinationScheduleDay != null)
                     _resourceCalculateDelayer.CalculateIfNeeded(destinationScheduleDay.DateOnlyAsPeriod.DateOnly,
