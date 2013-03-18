@@ -9,6 +9,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Messages.Denormalize;
+using Teleopti.Interfaces.Messages.Rta;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 {
@@ -132,6 +133,64 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 				               		               	}
 				               	});
 			}
+		}
+
+		[Test]
+		public void ShouldSendUpdatedScheduleDay()
+		{
+			var _serviceBus = MockRepository.GenerateMock<IServiceBus>();
+			target = new DenormalizeScheduleProjectionConsumer(unitOfWorkFactory, scheduleProjectionReadOnlyRepository, _serviceBus);
+			var guid = Guid.NewGuid();
+			var person = PersonFactory.CreatePerson();
+			person.SetId(guid);
+
+			var utcNow = DateTime.UtcNow;
+			var closestPeriod = new DateTimePeriod(utcNow.AddMinutes(-5), utcNow.AddMinutes(5));
+			var notClosestPeriod = new DateTimePeriod(utcNow.AddMinutes(5), utcNow.AddMinutes(10));
+
+			var message = new DenormalizedSchedule
+				{
+					IsDefaultScenario = true,
+					Datasource = "DataSource",
+					BusinessUnitId = guid,
+					PersonId = person.Id.GetValueOrDefault(),
+					ScheduleDays = new[]
+						{
+							new DenormalizedScheduleDay
+								{
+									Label = "ClosestLayer",
+									Date = utcNow.Date,
+									Layers = new Collection<DenormalizedScheduleProjectionLayer>
+										{
+											new DenormalizedScheduleProjectionLayer
+												{
+													StartDateTime = closestPeriod.StartDateTime,
+													EndDateTime = closestPeriod.EndDateTime,
+												},
+											new DenormalizedScheduleProjectionLayer
+												{
+													StartDateTime = notClosestPeriod.StartDateTime,
+													EndDateTime = notClosestPeriod.EndDateTime,
+
+												}
+										}
+								}
+						},
+					Timestamp = utcNow
+				};
+
+			target.Consume(message);
+
+			_serviceBus.AssertWasCalled(s => s.Send(new UpdatedScheduleDay
+				{
+					Datasource = message.Datasource,
+					BusinessUnitId = message.BusinessUnitId,
+					PersonId = message.PersonId,
+					ActivityStartDateTime = closestPeriod.StartDateTime,
+					ActivityEndDateTime = closestPeriod.EndDateTime,
+					Timestamp = utcNow
+				}), o => o.IgnoreArguments());
+
 		}
 	}
 }
