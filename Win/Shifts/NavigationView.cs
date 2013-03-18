@@ -349,7 +349,7 @@ namespace Teleopti.Ccc.Win.Shifts
 
         private static void showMessagebox(string errorMessage,string errorCaption)
         {
-            ViewBase.ShowWarningMessage(errorMessage, errorCaption);
+			ViewBase.ShowWarningMessage(errorMessage, errorCaption);
         }
 
         private void defaultTreeViewAfterSelect(object sender, EventArgs e)
@@ -428,7 +428,6 @@ namespace Teleopti.Ccc.Win.Shifts
                 catch (ArgumentOutOfRangeException ex)
                 {
                     showMessagebox(UserTexts.Resources.YouHaveToHaveAtLeastOnActivityAndShiftCategoryBeforeCreatingARuleset,UserTexts.Resources.ErrorMessage + " " + ex );
-                    return;
                 }
         }
 
@@ -610,7 +609,7 @@ namespace Teleopti.Ccc.Win.Shifts
                 }
             }
 
-	        var callback = new WorkShiftAddCallback();
+			var callback = new WorkShiftAddCallback();
 			callback.RuleSetToComplex += callback_RuleSetToComplex;
 	        using (var status = new ShiftGenerationStatus(callback))
 	        {
@@ -628,7 +627,7 @@ namespace Teleopti.Ccc.Win.Shifts
 		        }
 		        catch (OutOfMemoryException exception)
 		        {
-			        showMessagebox(exception.Message, "Out of memory");
+			        ViewBase.ShowErrorMessage(this, exception.Message, "Out of memory");
 		        }
 		        finally
 		        {
@@ -636,6 +635,7 @@ namespace Teleopti.Ccc.Win.Shifts
 					ExplorerPresenter.View.SetViewEnabled(true);
 			        ExplorerView.Activate();
 					_defaultTreeView.Select();
+					callback.RuleSetToComplex -= callback_RuleSetToComplex;
 		        }
 	        }
             
@@ -643,9 +643,7 @@ namespace Teleopti.Ccc.Win.Shifts
 
 		void callback_RuleSetToComplex(object sender, ComplexRuleSetEventArgs e)
 		{
-			const string mess = @"Stop! These rule sets is too complex and shifts could not be generated within the maximum limit. 
-						No shifts from this rule set will be available for scheduling and optimization. Reduce the complexity to use these shifts.";
-			showMessagebox(mess, e.RuleSetName + " is too complex!");
+			ViewBase.ShowErrorMessage(this, UserTexts.Resources.ShiftGenerationStop, e.RuleSetName + UserTexts.Resources.TooComplexRuleset);
 		}
     }
 }

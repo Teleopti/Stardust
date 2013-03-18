@@ -16,6 +16,9 @@ namespace Teleopti.Interfaces.Domain
 			RuleSetName = ruleSetName;
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
 		public string RuleSetName { get; set; }
 	}
 }

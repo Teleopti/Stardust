@@ -54,7 +54,9 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
 
         private class OvertimeShiftForConversion : OvertimeShift
         {
-            
+            public override void OnAdd(ILayer<IActivity> layer)
+            {
+            }
         }
     }
 }

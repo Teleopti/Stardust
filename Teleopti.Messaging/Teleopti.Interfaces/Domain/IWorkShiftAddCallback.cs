@@ -8,6 +8,35 @@ namespace Teleopti.Interfaces.Domain
 	public interface IWorkShiftAddCallback
 	{
 		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="item"></param>
+		void BeforeAdd(IWorkShift item);
+		/// <summary>
+		/// 
+		/// </summary>
+		void BeforeRemove();
+		/// <summary>
+		/// 
+		/// </summary>
+		bool IsCanceled { get; }
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="ruleSet"></param>
+		void StartNewRuleSet(IWorkShiftRuleSet ruleSet);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		void EndRuleSet();
+	}
+	/// <summary>
+	/// 
+	/// </summary>
+	public interface IWorkShiftAddCallbackWithEvent : IWorkShiftAddCallback
+	{
+		/// <summary>
 		/// Happen on every change of the number of shift generated
 		/// </summary>
 		event EventHandler<EventArgs> CountChanged;
@@ -24,19 +53,7 @@ namespace Teleopti.Interfaces.Domain
 		/// The ruleset will not be used in this case.
 		/// </summary>
 		event EventHandler<ComplexRuleSetEventArgs> RuleSetToComplex;
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="item"></param>
-		void BeforeAdd(IWorkShift item);
-		/// <summary>
-		/// 
-		/// </summary>
-		void BeforeRemove();
-		/// <summary>
-		/// 
-		/// </summary>
-		bool IsCanceled { get; }
+		
 		/// <summary>
 		/// 
 		/// </summary>
@@ -51,15 +68,6 @@ namespace Teleopti.Interfaces.Domain
 		/// </summary>
 		string CurrentRuleSetName { get; }
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="ruleSet"></param>
-		void StartNewRuleSet(IWorkShiftRuleSet ruleSet);
-
-		/// <summary>
-		/// 
-		/// </summary>
-		void EndRuleSet();
+		
 	}
 }

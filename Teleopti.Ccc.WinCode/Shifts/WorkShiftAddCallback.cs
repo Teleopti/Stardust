@@ -4,7 +4,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Shifts
 {
-	public class WorkShiftAddCallback : IWorkShiftAddCallback
+	public class WorkShiftAddCallback : IWorkShiftAddCallbackWithEvent
 	{
 		public event EventHandler<EventArgs> CountChanged;
 		public event EventHandler<EventArgs> RuleSetReady;
@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.WinCode.Shifts
 		private int _updateCount;
 		private DateTime _timerStart;
 		private const int warningSeconds = 3;
-		private const int stopSeconds = 10;
+		private const int stopSeconds = 100;
 		private bool _sentWarning;
 		private bool _sentStop;
 
