@@ -30,7 +30,7 @@ Scenario: Henkes testscenario for setting up budgetgroups
 	Given I have the role 'Full access to mytime'
 	And there is  a budgetgroup 'NameOfTheBudgetGroup'
 	And 'I' belong to budgetgroup 'NameOfTheBudgetGroup'
-	And there is an budgetday
+	And there is a budgetday
 	| Field				| Value                |
 	| BudgetGroup		| NameOfTheBudgetGroup |
 	| Date				| 2012-08-28           |

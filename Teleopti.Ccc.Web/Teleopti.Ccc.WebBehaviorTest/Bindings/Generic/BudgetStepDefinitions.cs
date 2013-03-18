@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
             //ScenarioContext.Current.Pending();
         }
 
-		[Given(@"there is an budgetday")]
+		[Given(@"there is a budgetday")]
 		public void GivenThereIsAnBudgetday(Table table)
 		{
 			var budgetday = table.CreateInstance<BudgetdayConfigurable>();
