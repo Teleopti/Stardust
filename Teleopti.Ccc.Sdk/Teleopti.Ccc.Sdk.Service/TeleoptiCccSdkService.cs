@@ -1516,7 +1516,13 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			return invoker.Invoke(queryDto);
 		}
 
-        public CommandResultDto ExecuteCommand(CommandDto commandDto)
+    	public ICollection<PersonOptionalValuesDto> GetPersonOptionalValuesByQuery(QueryDto queryDto)
+    	{
+			var invoker = _lifetimeScope.Resolve<IInvokeQuery<ICollection<PersonOptionalValuesDto>>>();
+			return invoker.Invoke(queryDto);
+    	}
+
+    	public CommandResultDto ExecuteCommand(CommandDto commandDto)
         {
             var invoker = _lifetimeScope.Resolve<IInvokeCommand>();
             return invoker.Invoke(commandDto);

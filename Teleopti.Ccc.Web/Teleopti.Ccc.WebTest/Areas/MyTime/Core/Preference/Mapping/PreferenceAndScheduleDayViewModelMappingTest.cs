@@ -29,7 +29,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 	public class PreferenceAndScheduleDayViewModelMappingTest
 	{
 		private IProjectionProvider _projectionProvider;
-		private IPreferenceFulfilledChecker _preferenceFulfilledChecker;
 		private IUserTimeZone _userTimeZone;
 		private TimeZoneInfo _timeZone;
 
@@ -37,7 +36,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		public void Setup()
 		{
 			_projectionProvider = MockRepository.GenerateMock<IProjectionProvider>();
-			_preferenceFulfilledChecker = MockRepository.GenerateMock<IPreferenceFulfilledChecker>();
 			_userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
 			_timeZone = TimeZoneInfo.Local;
 			_userTimeZone.Stub(x => x.TimeZone()).Return(_timeZone);
@@ -46,7 +44,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 				{
 					c.AddProfile(new PreferenceAndScheduleDayViewModelMappingProfile(
 						             Depend.On(_projectionProvider),
-						             Depend.On(_preferenceFulfilledChecker),
 						             Depend.On(_userTimeZone)));
 					c.AddProfile(new PreferenceDayViewModelMappingProfile(
 						Depend.On(MockRepository.GenerateMock<IExtendedPreferencePredicate>()
@@ -172,35 +169,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 
 			result.PersonAssignment.Should().Not.Be.Null();
 			result.PersonAssignment.TimeSpan.Should().Be(period.TimePeriod(scheduleDay.TimeZone).ToShortTimeString());
-		}
-
-
-		[Test]
-		public void ShouldMapFulfilled()
-		{
-			var personAssignment = new PersonAssignment(new Person(), new Scenario(" "));
-			personAssignment.SetMainShift(new MainShift(new ShiftCategory("shiftCategory")));
-			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today, SchedulePartView.MainShift, personAssignment);
-			scheduleDay.Stub(x => x.IsScheduled()).Return(true);
-
-			_preferenceFulfilledChecker.Stub(x => x.IsPreferenceFulfilled(scheduleDay)).Return(true);
-
-			var result = Mapper.Map<IScheduleDay, PreferenceAndScheduleDayViewModel>(scheduleDay);
-
-			var fulfilled = result.Fulfilled;
-			(fulfilled != null && fulfilled.Value).Should().Be(true);
-		}
-
-		[Test]
-		public void ShouldMapFulfilledForNonScheduledDay()
-		{
-			var personAssignment = new PersonAssignment(new Person(), new Scenario(" "));
-			personAssignment.SetMainShift(new MainShift(new ShiftCategory("shiftCategory")));
-			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today, SchedulePartView.MainShift, personAssignment);
-
-			var result = Mapper.Map<IScheduleDay, PreferenceAndScheduleDayViewModel>(scheduleDay);
-
-			result.Fulfilled.Should().Be(null);
 		}
 
 		[Test]

@@ -633,7 +633,6 @@
     <Compile Include="Scheduling\Restrictions\ExtendedPreferencePredicateTest.cs" />
     <Compile Include="Scheduling\Restrictions\MustHaveRestrictionSetterTest.cs" />
     <Compile Include="Scheduling\Restrictions\PreferenceAbsenceCheckerTest.cs" />
-    <Compile Include="Scheduling\Restrictions\PreferenceFulfilledCheckerTest.cs" />
     <Compile Include="Scheduling\Restrictions\ScheduleDayAvailabilityRestrictionExtractorTest.cs" />
     <Compile Include="Scheduling\Restrictions\ScheduleDayPreferenceRestrictionExtractorTest.cs" />
     <Compile Include="Scheduling\Restrictions\ScheduleDayRestrictionExtractorTest.cs" />

@@ -4,6 +4,7 @@ using System.Net.Sockets;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Client;
 using Microsoft.AspNet.SignalR.Client.Hubs;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Messaging.Exceptions;

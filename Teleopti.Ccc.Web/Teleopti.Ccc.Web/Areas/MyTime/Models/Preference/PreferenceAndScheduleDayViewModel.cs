@@ -9,7 +9,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 		public DayOffDayViewModel DayOff { get; set; }
 		public AbsenceDayViewModel Absence { get; set; }
 		public PersonAssignmentDayViewModel PersonAssignment { get; set; }
-		public bool? Fulfilled { get; set; }
 		public bool Feedback { get; set; }
 		public string StyleClassName { get; set; }
 		public string BorderColor { get; set; }

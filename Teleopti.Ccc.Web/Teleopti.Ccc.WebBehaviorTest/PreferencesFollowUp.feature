@@ -1,7 +1,7 @@
 ﻿Feature: Preferences follow up
 	In order to see my schedule and my preferences side by side
 	As an agent
-	I can easily see where my preferences were fulfilled and where they were not
+	I can easily see my preferences on a scheduled day
 
 Background:
 	Given I have a role with
@@ -70,7 +70,6 @@ Scenario: See extended indication on preference on scheduled day
 	| Date                | 2012-10-02 |
 	| Shift category      | Late       |
 	| Preference          | Extended   |
-	| Fulfilled           | true       |
 	| Extended Indication | true       |
 
 Scenario: Display extended preference panel for preference on scheduled day
