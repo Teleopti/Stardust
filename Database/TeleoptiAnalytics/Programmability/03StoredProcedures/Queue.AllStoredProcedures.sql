@@ -187,7 +187,7 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 	
-	SELECT TOP 1 *
+	SELECT TOP 1 1 as 'y'
 	FROM Queue.Messages
 	WHERE isnull(ExpiresAt,DATEADD(mi,1,GetUtcDate())) > GetUtcDate()
 	AND Processed=0
@@ -207,17 +207,23 @@ BEGIN
 	SET NOCOUNT ON;
 
     SELECT
-		m.*,
+		m.MessageId,
+		m.QueueId,
+		m.CreatedAt,
+		m.ProcessingUntil,
+		m.Processed,
+		m.Headers,
+		m.Payload,
 		q.QueueName SubQueueName
     FROM Queue.Messages m
     LEFT JOIN Queue.Queues q
 		ON m.QueueId=q.QueueId
 		AND q.ParentQueueId IS NOT NULL
-	WHERE isnull(m.ExpiresAt,DATEADD(mi,1,GetUtcDate())) > GetUtcDate()
+	WHERE m.MessageId = @MessageId
+	AND isnull(m.ExpiresAt,DATEADD(mi,1,GetUtcDate())) > GetUtcDate()
 	AND m.Processed=0
 	AND m.ProcessingUntil<GetUtcDate()
-	AND m.MessageId=@MessageId
-	ORDER BY CreatedAt ASC
+	ORDER BY m.CreatedAt ASC
 END
 GO
 ----
@@ -246,13 +252,27 @@ BEGIN
 			ProcessedCount=ProcessedCount+1
 			WHERE MessageId=@MessageId
 			
-			SELECT *
+			SELECT
+				MessageId,
+				CreatedAt,
+				ProcessingUntil,
+				ProcessedCount,
+				Processed,
+				Headers,
+				Payload
 			FROM Queue.Messages
 			WHERE MessageId=@MessageId
 		END
 	else
 		BEGIN
-			SELECT TOP 0 *
+			SELECT TOP 0
+				MessageId,
+				CreatedAt,
+				ProcessingUntil,
+				ProcessedCount,
+				Processed,
+				Headers,
+				Payload
 			FROM Queue.Messages;
 		END
 END
@@ -277,8 +297,15 @@ BEGIN
 			SET ProcessingUntil = DateAdd(mi,10,GetUtcDate()),
 			ProcessedCount=ProcessedCount+1
 			WHERE QueueId = @QueueId
-			
-			SELECT *
+
+			SELECT
+				MessageId,
+				QueueId,
+				CreatedAt,
+				ProcessingUntil,
+				Processed,
+				Headers,
+				Payload
 			FROM Queue.Messages
 			WHERE QueueId = @QueueId
 END
