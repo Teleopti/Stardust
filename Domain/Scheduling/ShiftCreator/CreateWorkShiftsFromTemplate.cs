@@ -14,6 +14,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
     /// </remarks>
     public class CreateWorkShiftsFromTemplate : ICreateWorkShiftsFromTemplate
     {
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public IList<IWorkShift> Generate(IWorkShift shiftTemplate, IList<IWorkShiftExtender> extenders, IList<IWorkShiftLimiter> limiters,
 	                                         IWorkShiftAddCallback callback)
 	    {

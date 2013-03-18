@@ -6,7 +6,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
 {
 	[TestFixture]
-	public class WorkshiftCollectionTest
+	public class WorkShiftCollectionTest
 	{
 		private MockRepository _mocks;
 		private IWorkShiftAddCallback _callback;
