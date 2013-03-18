@@ -40,7 +40,9 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.View
 
 		private void buttonRefresh_Click(object sender, System.Windows.RoutedEventArgs e)
 		{
+			_model.IsRefreshing = true;
 			_model.UpdateBusinessUnitCollection();
+			_model.IsRefreshing = false;
 			SelectionChanged();
 		}
 
@@ -71,7 +73,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.View
 
 		private void comboBoxBusinessUnit_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
-			if (comboBoxBusinessUnit.SelectedValue == null)
+			if (comboBoxBusinessUnit.SelectedValue == null || _model.IsRefreshing)
 				return;
 
 			//_model.SelectedBusinessUnit = (Guid)comboBoxBusinessUnit.SelectedValue;
