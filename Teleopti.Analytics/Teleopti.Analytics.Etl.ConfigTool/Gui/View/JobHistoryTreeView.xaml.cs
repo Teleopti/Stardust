@@ -47,10 +47,15 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.View
 		private void treeListView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
 		{
 			var treeView = sender as TreeView;
-			if (treeView != null && treeView.SelectedItem != null)
+			var model = DataContext as JobHistoryTreeViewModel;
+			if (treeView != null && model != null && treeView.SelectedItem != null)
 			{
-				((JobHistoryTreeViewModel)DataContext).SelectedItem = (IJobHistory)treeView.SelectedItem;
-				e.Handled = true;
+				var item = treeView.SelectedItem as IJobHistory;
+				if (item != null)
+				{
+					model.SelectedItem = item;
+					e.Handled = true;
+				}
 			}
 		}
 
