@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 
 					projectionModelInitialized = true;
 					scheduleDayModelInitialized = true;
-					personScheduleDayModelInitialized = true;
+					//personScheduleDayModelInitialized = true;
 				}
 				if (!projectionModelInitialized)
 				{
@@ -68,10 +68,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 				{
 					messages.AddRange(initialLoad<ScheduleDayInitialize>(message));
 				}
-				if (!personScheduleDayModelInitialized)
+				/*if (!personScheduleDayModelInitialized)
 				{
 					messages.AddRange(initialLoad<PersonScheduleDayInitialize>(message));
-				}
+				}*/
 				uow.Clear();
 			}
 			messages.ForEach(m => _serviceBus.Send(m));

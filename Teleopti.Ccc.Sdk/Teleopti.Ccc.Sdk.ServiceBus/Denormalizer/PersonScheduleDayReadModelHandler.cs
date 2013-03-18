@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void Consume(DenormalizedSchedule message)
 		{
-			createReadModel(message);
+			//createReadModel(message);
 		}
 
 		private void createReadModel(DenormalizedScheduleBase message)
