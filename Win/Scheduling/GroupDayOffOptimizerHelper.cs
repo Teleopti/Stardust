@@ -543,6 +543,10 @@ namespace Teleopti.Ccc.Win.Scheduling
      
             var groupPersonBuilderForOptimization = callGroupPage(schedulingOptions);
             ITeamInfoFactory teamInfoFactory = new TeamInfoFactory(groupPersonBuilderForOptimization);
+			IScheduleResultDataExtractor allSkillsDataExtractor =
+				OptimizerHelperHelper.CreateAllSkillsDataExtractor(optimizationPreferences.Advanced, selectedPeriod, _stateHolder);
+			IPeriodValueCalculator periodValueCalculatorForAllSkills =
+				OptimizerHelperHelper.CreatePeriodValueCalculator(optimizationPreferences.Advanced, allSkillsDataExtractor);
 
             ITeamBlockIntradayOptimizationService teamBlockIntradayOptimizationService =
                 new TeamBlockIntradayOptimizationService(
@@ -552,7 +556,8 @@ namespace Teleopti.Ccc.Win.Scheduling
                     _container.Resolve<ILockableBitArrayFactory>(),
                     _container.Resolve<ISchedulingOptionsCreator>(),
                     _container.Resolve<ISchedulingResultStateHolder>(),
-                    _container.Resolve<IDeleteAndResourceCalculateService>()
+                    _container.Resolve<IDeleteAndResourceCalculateService>(),
+					periodValueCalculatorForAllSkills
                     );
 
             teamBlockIntradayOptimizationService.Optimize(

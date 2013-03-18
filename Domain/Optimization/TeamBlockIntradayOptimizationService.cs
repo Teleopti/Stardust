@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -15,6 +16,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 					  IList<IPerson> selectedPersons,
 					  IOptimizationPreferences optimizationPreferences,
 					  ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService);
+
+		event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
 	}
 
 	public class TeamBlockIntradayOptimizationService : ITeamBlockIntradayOptimizationService
@@ -26,13 +29,17 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
 		private readonly ISchedulingResultStateHolder _stateHolder;
 		private readonly IDeleteAndResourceCalculateService _deleteAndResourceCalculateService;
+		private readonly IPeriodValueCalculator _periodValueCalculatorForAllSkills;
+		private bool _cancelMe;
 
 		public TeamBlockIntradayOptimizationService(ITeamInfoFactory teamInfoFactory,
-													ITeamBlockInfoFactory teamBlockInfoFactory, ITeamBlockScheduler teamBlockScheduler,
-													ILockableBitArrayFactory lockableBitArrayFactory,
-													ISchedulingOptionsCreator schedulingOptionsCreator,
-													ISchedulingResultStateHolder stateHolder,
-													IDeleteAndResourceCalculateService deleteAndResourceCalculateService)
+		                                            ITeamBlockInfoFactory teamBlockInfoFactory,
+		                                            ITeamBlockScheduler teamBlockScheduler,
+		                                            ILockableBitArrayFactory lockableBitArrayFactory,
+		                                            ISchedulingOptionsCreator schedulingOptionsCreator,
+		                                            ISchedulingResultStateHolder stateHolder,
+		                                            IDeleteAndResourceCalculateService deleteAndResourceCalculateService,
+		                                            IPeriodValueCalculator periodValueCalculatorForAllSkills)
 		{
 			_teamInfoFactory = teamInfoFactory;
 			_teamBlockInfoFactory = teamBlockInfoFactory;
@@ -41,7 +48,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_schedulingOptionsCreator = schedulingOptionsCreator;
 			_stateHolder = stateHolder;
 			_deleteAndResourceCalculateService = deleteAndResourceCalculateService;
+			_periodValueCalculatorForAllSkills = periodValueCalculatorForAllSkills;
 		}
+
+		public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
 
 		public void Optimize(IList<IScheduleMatrixPro> allPersonMatrixList,
 							 DateOnlyPeriod selectedPeriod,
@@ -69,7 +79,41 @@ namespace Teleopti.Ccc.Domain.Optimization
 			}
 			var allTeamBlocks = new List<ITeamBlockInfo>();
 			allTeamBlocks.AddRange(allTeamBlocksInHashSet);
+			
+			//rounds
+			var remainingInfoList = new List<ITeamBlockInfo>(allTeamBlocksInHashSet);
+			var previousPeriodValue = _periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.IntradayOptimization);
+			while (remainingInfoList.Count > 0)
+			{
+				if (_cancelMe)
+					break;
+				var teamBlocksToRemove = optimizeOneRound(allPersonMatrixList, optimizationPreferences,
+				                                          schedulePartModifyAndRollbackService, schedulingOptions, allTeamBlocks,
+				                                          previousPeriodValue);
+				foreach (var teamBlock in teamBlocksToRemove)
+				{
+					remainingInfoList.Remove(teamBlock);
+				}
+			}
+		}
 
+		public void OnReportProgress(string message)
+		{
+			var handler = ReportProgress;
+			if (handler != null)
+			{
+				var args = new ResourceOptimizerProgressEventArgs(null, 0, 0, message);
+				handler(this, args);
+				if (args.Cancel)
+					_cancelMe = true;
+			}
+		}
+
+		private IEnumerable<ITeamBlockInfo> optimizeOneRound(IEnumerable<IScheduleMatrixPro> allPersonMatrixList, IOptimizationPreferences optimizationPreferences,
+		                              ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
+									  ISchedulingOptions schedulingOptions, List<ITeamBlockInfo> allTeamBlocks, double previousPeriodValue)
+		{
+			var teamBlockToRemove = new List<ITeamBlockInfo>();
 			var standardDeviationData = new StandardDeviationData();
 			foreach (var matrixPro in allPersonMatrixList)
 			{
@@ -80,8 +124,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 				{
 					ILockableBitArray originalArray =
 						_lockableBitArrayFactory.ConvertFromMatrix(optimizationPreferences.DaysOff.ConsiderWeekBefore,
-																   optimizationPreferences.DaysOff.ConsiderWeekAfter,
-																   matrixPro);
+						                                           optimizationPreferences.DaysOff.ConsiderWeekAfter,
+						                                           matrixPro);
 					if (originalArray.UnlockedIndexes.Contains(i) && !originalArray.DaysOffBitArray[i])
 						if (!standardDeviationData.Data.ContainsKey(periodDays[i].Day))
 							standardDeviationData.Add(periodDays[i].Day, values[i]);
@@ -103,6 +147,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			foreach (var teamBlock in sortedTeamBlocks)
 			{
+				if (_cancelMe)
+					break;
 				//clear block
 				foreach (var dateOnly in teamBlock.BlockInfo.BlockPeriod.DayCollection())
 				{
@@ -112,18 +158,25 @@ namespace Teleopti.Ccc.Domain.Optimization
 						IScheduleDay scheduleDay = _stateHolder.Schedules[person].ScheduledDay(dateOnly);
 						SchedulePartView significant = scheduleDay.SignificantPart();
 						if (significant != SchedulePartView.FullDayAbsence && significant != SchedulePartView.DayOff &&
-							significant != SchedulePartView.ContractDayOff)
+						    significant != SchedulePartView.ContractDayOff)
 							toRemove.Add(scheduleDay);
 					}
 					_deleteAndResourceCalculateService.DeleteWithResourceCalculation(toRemove,
-																					 schedulePartModifyAndRollbackService,
-																					 schedulingOptions
-																						 .ConsiderShortBreaks);
+					                                                                 schedulePartModifyAndRollbackService,
+					                                                                 schedulingOptions
+						                                                                 .ConsiderShortBreaks);
 				}
 
 				var datePoint = teamBlock.BlockInfo.BlockPeriod.DayCollection().First();
 				_teamBlockScheduler.ScheduleTeamBlock(teamBlock, datePoint, schedulingOptions);
+
+				var currentPeriodValue = _periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
+				if (currentPeriodValue >= previousPeriodValue)
+				{
+					teamBlockToRemove.Add(teamBlock);
+				}
 			}
+			return teamBlockToRemove;
 		}
 	}
 }
