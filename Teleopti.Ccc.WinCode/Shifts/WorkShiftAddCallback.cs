@@ -79,7 +79,8 @@ namespace Teleopti.Ccc.WinCode.Shifts
 			_timerStart = DateTime.Now;
 			_totalCount = 0;
 			CurrentCount = 0;
-			CurrentRuleSetName = ruleSet.Description.Name;
+			if (ruleSet != null)
+				CurrentRuleSetName = ruleSet.Description.Name;
 		}
 
 		public void EndRuleSet()

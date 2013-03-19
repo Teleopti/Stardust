@@ -35,15 +35,17 @@ namespace Teleopti.Ccc.WinCode.Shifts.Presenters
                 var layerCollection = new List<ReadOnlyCollection<VisualPayloadInfo>>();
                 foreach (var ruleSet in filteredRuleSetCollection)
                 {
-						 if ((ruleSet.TemplateGenerator.StartPeriod.Period.StartTime < startTime))
-							 startTime = ruleSet.TemplateGenerator.StartPeriod.Period.StartTime;
-						 if ((ruleSet.TemplateGenerator.EndPeriod.Period.EndTime > endTime))
-							 endTime = ruleSet.TemplateGenerator.EndPeriod.Period.EndTime;
-					callback.StartNewRuleSet(ruleSet);
-						 var layers = getVisualLayers(_ruleSetProjectionEntityService.ProjectionCollection(ruleSet,callback));
-						 layerCollection.AddRange(layers);
-						 _amountList.Add(layers.Count);
-					callback.EndRuleSet();
+					if ((ruleSet.TemplateGenerator.StartPeriod.Period.StartTime < startTime))
+						startTime = ruleSet.TemplateGenerator.StartPeriod.Period.StartTime;
+					if ((ruleSet.TemplateGenerator.EndPeriod.Period.EndTime > endTime))
+						endTime = ruleSet.TemplateGenerator.EndPeriod.Period.EndTime;
+					if (callback != null)
+						callback.StartNewRuleSet(ruleSet);
+					var layers = getVisualLayers(_ruleSetProjectionEntityService.ProjectionCollection(ruleSet,callback));
+					layerCollection.AddRange(layers);
+					_amountList.Add(layers.Count);
+					if (callback != null)
+						callback.EndRuleSet();
                 }
                 SetModelCollection(new ReadOnlyCollection<ReadOnlyCollection<VisualPayloadInfo>>(layerCollection));
 
