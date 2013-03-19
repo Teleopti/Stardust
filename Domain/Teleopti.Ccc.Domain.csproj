@@ -819,6 +819,7 @@
     <Compile Include="Scheduling\TeamBlock\SkillIntervalDataSkillFactorApplyer.cs" />
     <Compile Include="Scheduling\TeamBlock\SkillResolutionProvider.cs" />
     <Compile Include="Scheduling\TeamBlock\SkillStaffPeriodToSkillIntervalDataMapper.cs" />
+    <Compile Include="Scheduling\TeamBlock\SuggestedShiftRestrictionExtractor.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockInfo.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockInfoFactory.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamDayOffScheduler.cs" />

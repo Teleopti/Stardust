@@ -230,6 +230,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 				ret.IsStudentAvailabilityDay = true;
 			if (effectiveRestriction.NotAvailable)
 				ret.NotAvailable = true;
+			ret.CommonMainShift = CommonMainShift;
 			if (CommonMainShift == null)
 			{
 				ret.CommonMainShift = effectiveRestriction.CommonMainShift;

@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
                 if (isTeamBlockScheduled(dailyTeamBlockInfo)) continue;
                 //should pass the suggested shift here
                 
-                var restriction = _restrictionAggregator.AggregatePerDay(teamBlockInfo.TeamInfo, schedulingOptions, blockInfo);
+                var restriction = _restrictionAggregator.AggregatePerDay(teamBlockInfo.TeamInfo, schedulingOptions, blockInfo, suggestedShiftProjectionCache);
 
                 //should consider the suggested start time
                 var shifts = _workShiftFilterService.Filter(datePointer, teamBlockInfo, restriction,

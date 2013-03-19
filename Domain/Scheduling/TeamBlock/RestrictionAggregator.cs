@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
     {
         IEffectiveRestriction Aggregate(ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions);
 
-        IEffectiveRestriction AggregatePerDay(ITeamInfo teamInfo, ISchedulingOptions schedulingOptions,IBlockInfo blockInfo );
+        IEffectiveRestriction AggregatePerDay(ITeamInfo teamInfo, ISchedulingOptions schedulingOptions,IBlockInfo blockInfo, IShiftProjectionCache suggestedShift);
     }
 
     public class RestrictionAggregator : IRestrictionAggregator
@@ -17,17 +17,20 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
         private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
 	    private readonly IOpenHoursToEffectiveRestrictionConverter _openHoursToRestrictionConverter;
 	    private readonly IScheduleRestrictionExtractor _scheduleRestrictionExtractor;
+	    private readonly ISuggestedShiftRestrictionExtractor _suggestedShiftRestrictionExtractor;
 
 	    public RestrictionAggregator(
             IEffectiveRestrictionCreator effectiveRestrictionCreator,
             ISchedulingResultStateHolder schedulingResultStateHolder,
 			IOpenHoursToEffectiveRestrictionConverter openHoursToRestrictionConverter,
-			IScheduleRestrictionExtractor scheduleRestrictionExtractor)
+			IScheduleRestrictionExtractor scheduleRestrictionExtractor,
+			ISuggestedShiftRestrictionExtractor suggestedShiftRestrictionExtractor)
         {
             _effectiveRestrictionCreator = effectiveRestrictionCreator;
             _schedulingResultStateHolder = schedulingResultStateHolder;
 		    _openHoursToRestrictionConverter = openHoursToRestrictionConverter;
 		    _scheduleRestrictionExtractor = scheduleRestrictionExtractor;
+		    _suggestedShiftRestrictionExtractor = suggestedShiftRestrictionExtractor;
         }
 
         public IEffectiveRestriction Aggregate(ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions)
@@ -66,15 +69,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		                                                                             schedulingOptions);
 		        if (restrictionFromSchedules == null)
 			        return null;
-		        if (effectiveRestriction != null)
+				
+				if (effectiveRestriction != null)
 					effectiveRestriction = effectiveRestriction.Combine(restrictionFromSchedules);
-
+				
 		        return effectiveRestriction;
 	        }
 	        return null;
         }
 
-        public IEffectiveRestriction AggregatePerDay(ITeamInfo teamInfo, ISchedulingOptions schedulingOptions, IBlockInfo blockInfo   )
+        public IEffectiveRestriction AggregatePerDay(ITeamInfo teamInfo, ISchedulingOptions schedulingOptions, IBlockInfo blockInfo, IShiftProjectionCache suggestedShift)
         {
             if (teamInfo == null)
                 return null;
@@ -113,6 +117,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                 if (effectiveRestriction != null)
                     effectiveRestriction = effectiveRestriction.Combine(restrictionFromSchedules);
 
+	            var suggestedShiftRestriction = _suggestedShiftRestrictionExtractor.Extract(suggestedShift,
+	                                                                                        schedulingOptions);
+				if (suggestedShiftRestriction == null)
+					return null;
+				if (effectiveRestriction != null)
+					effectiveRestriction = effectiveRestriction.Combine(suggestedShiftRestriction);
+				
                 return effectiveRestriction;
             }
             return null;

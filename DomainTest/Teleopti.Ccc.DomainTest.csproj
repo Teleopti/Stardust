@@ -730,6 +730,7 @@
     <Compile Include="Scheduling\TeamBlock\SkillIntervalDataTest.cs" />
     <Compile Include="Scheduling\TeamBlock\SkillResolutionProviderTest.cs" />
     <Compile Include="Scheduling\TeamBlock\SkillStaffPeriodToSkillIntervalDataMapperTest.cs" />
+    <Compile Include="Scheduling\TeamBlock\SuggestedShiftRestrictionExtractorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockInfoFactoryTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockInfoTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamDayOffSchedulerTest.cs" />

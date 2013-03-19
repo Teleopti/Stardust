@@ -117,6 +117,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			builder.RegisterType<OpenHoursToEffectiveRestrictionConverter>().As<IOpenHoursToEffectiveRestrictionConverter>().InstancePerLifetimeScope();
             builder.RegisterType<WorkShiftFilterService>().As<IWorkShiftFilterService>().InstancePerLifetimeScope();
 			builder.RegisterType<ScheduleRestrictionExtractor>().As<IScheduleRestrictionExtractor>().InstancePerLifetimeScope();
+			builder.RegisterType<SuggestedShiftRestrictionExtractor>().As<ISuggestedShiftRestrictionExtractor>().InstancePerLifetimeScope();
 			builder.RegisterType<ScheduleDayEquator>().As<IScheduleDayEquator>().InstancePerLifetimeScope();
 
 	        
