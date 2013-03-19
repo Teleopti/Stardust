@@ -92,18 +92,18 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
                 if (isTeamBlockScheduled(dailyTeamBlockInfo)) continue;
                 //should pass the suggested shift here
-                
-                var restriction = _restrictionAggregator.AggregatePerDay(teamBlockInfo.TeamInfo, schedulingOptions, blockInfo);
+
+                var restriction = _restrictionAggregator.AggregatePerDay(dailyTeamBlockInfo, schedulingOptions);
 
                 //should consider the suggested start time
-                var shifts = _workShiftFilterService.Filter(datePointer, teamBlockInfo, restriction,
-                                                            schedulingOptions, new WorkShiftFinderResult(teamBlockInfo.TeamInfo.GroupPerson, datePointer));
+                var shifts = _workShiftFilterService.Filter(datePointer, dailyTeamBlockInfo, restriction,
+                                                            schedulingOptions, new WorkShiftFinderResult(dailyTeamBlockInfo.TeamInfo.GroupPerson, datePointer));
                 if (shifts == null || shifts.Count <= 0)
                     return false;
                 
                 foreach (var person in teamBlockInfo.TeamInfo.GroupPerson.GroupMembers)
                 {
-                    var activityInternalData = _skillDayPeriodIntervalDataGenerator.Generate(teamBlockInfo.TeamInfo, blockInfo);
+                    var activityInternalData = _skillDayPeriodIntervalDataGenerator.GeneratePerDay(dailyTeamBlockInfo);
                     var bestShiftProjectionCache = _workShiftSelector.SelectShiftProjectionCache(shifts, activityInternalData,
                                                                                                  schedulingOptions
                                                                                                      .WorkShiftLengthHintOption,
