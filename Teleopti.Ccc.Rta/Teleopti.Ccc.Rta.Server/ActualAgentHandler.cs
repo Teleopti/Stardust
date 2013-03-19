@@ -24,14 +24,13 @@ namespace Teleopti.Ccc.Rta.Server
 		private readonly IMbCacheFactory _mbCacheFactory;
 		private static readonly ConcurrentDictionary<Guid, IActualAgentState> BatchedAgents = new ConcurrentDictionary<Guid, IActualAgentState>();
 		private static readonly object LockObject = new object();
-		private static ILog _loggingSvc;
+		private static readonly ILog LoggingSvc = LogManager.GetLogger(typeof(IActualAgentHandler));
 		private static DateTime _lastSave = DateTime.UtcNow;
 
-		public ActualAgentHandler(IActualAgentDataHandler actualAgentDataHandler, IMbCacheFactory mbCacheFactory, ILog loggingSvc)
+		public ActualAgentHandler(IActualAgentDataHandler actualAgentDataHandler, IMbCacheFactory mbCacheFactory)
 		{
 			_actualAgentDataHandler = actualAgentDataHandler;
 			_mbCacheFactory = mbCacheFactory;
-			_loggingSvc = loggingSvc;
 		}
 
 		protected IActualAgentDataHandler ActualAgentDataHandler
@@ -45,7 +44,7 @@ namespace Teleopti.Ccc.Rta.Server
 			var stateCode = "Unknown";
 			var readModelLayers = ActualAgentDataHandler.GetReadModel(personId);
 			if (!readModelLayers.Any())
-				_loggingSvc.WarnFormat("No readmodel found for Person: {0}", personId);
+				LoggingSvc.WarnFormat("No readmodel found for Person: {0}", personId);
 			var scheduleLayers = ActualAgentDataHandler.CurrentLayerAndNext(timestamp, readModelLayers);
 			var previousState = ActualAgentDataHandler.LoadOldState(personId);
 

@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		{
 			_mock = new MockRepository();
 			_dataHandler = MockRepository.GenerateMock<IActualAgentDataHandler>();
-			_target = new ActualAgentHandler(_dataHandler, null, null);
+			_target = new ActualAgentHandler(_dataHandler, null);
 
 			_stateCode = "AUX2";
 			_platformTypeId = Guid.NewGuid();
@@ -299,6 +299,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 				};
 			var resetEvent = new AutoResetEvent(false);
 
+			_dataHandler.Expect(s => s.GetReadModel(_guid)).Return(new List<ScheduleLayer>());
 			_dataHandler.Expect(s => s.CurrentLayerAndNext(_dateTime, new List<ScheduleLayer>()))
 			            .Return(new List<ScheduleLayer> {currentLayer, nextLayer}).IgnoreArguments();
 			_dataHandler.Expect(s => s.LoadOldState(_guid)).Return(previousState);
@@ -344,6 +345,8 @@ namespace Teleopti.Ccc.Rta.ServerTest
 							}
 					}
 				};
+
+			_dataHandler.Expect(s => s.GetReadModel(_guid)).Return(new List<ScheduleLayer>());
 			_dataHandler.Expect(s => s.CurrentLayerAndNext(_dateTime, new List<ScheduleLayer>()))
 			            .Return(new List<ScheduleLayer> {currentLayer, nextLayer}).IgnoreArguments();
 			_dataHandler.Expect(s => s.LoadOldState(_guid)).Return(null);
@@ -374,6 +377,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 				};
 			var resetEvent = new AutoResetEvent(false);
 
+			_dataHandler.Expect(s => s.GetReadModel(_guid)).Return(new List<ScheduleLayer>());
 			_dataHandler.Expect(s => s.CurrentLayerAndNext(_dateTime, new List<ScheduleLayer>()))
 						.Return(new List<ScheduleLayer> { currentLayer, new ScheduleLayer() }).IgnoreArguments();
 			_dataHandler.Expect(s => s.LoadOldState(_guid)).Return(
