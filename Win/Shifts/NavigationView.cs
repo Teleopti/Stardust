@@ -559,7 +559,8 @@ namespace Teleopti.Ccc.Win.Shifts
             defaultTreeViewAfterSelect(_defaultTreeView, EventArgs.Empty);
         }
 
-        private void loadSelectedRuleSets()
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Win.Common.ViewBase.ShowErrorMessage(System.Windows.Forms.IWin32Window,System.String,System.String)")]
+		private void loadSelectedRuleSets()
         {
 	        
             var selectedRuleSets = new List<IWorkShiftRuleSet>();
@@ -631,7 +632,7 @@ namespace Teleopti.Ccc.Win.Shifts
 		        }
 		        finally
 		        {
-					status.Close();
+					status.Visible = false;
 					ExplorerPresenter.View.SetViewEnabled(true);
 			        ExplorerView.Activate();
 					_defaultTreeView.Select();
