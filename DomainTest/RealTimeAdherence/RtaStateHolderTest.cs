@@ -252,10 +252,58 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
             _mocks.VerifyAll();
         }
 
-        private IExternalAgentState getExternalAgentState(DateTime startDate, string externalLogOn, string stateCode, TimeSpan timeInState, DateTime batchIdentifier, bool isSnapShot)
+		[Test]
+		public void VerifyCanCollectAgentStatesInBatchWithUpdatesBetweenForDifferentDataSources()
+		{
+			DateTime startDate = DateTime.UtcNow;
+			IRtaState rtaState1 = _mocks.StrictMock<IRtaState>();
+			IRtaState rtaState2 = _mocks.StrictMock<IRtaState>();
+			Expect.Call(_rtaStateGroup.StateCollection).Return(
+				new ReadOnlyCollection<IRtaState>(new List<IRtaState> { rtaState1, rtaState2 })).Repeat.AtLeastOnce();
+			Expect.Call(rtaState1.PlatformTypeId).Return(_platformId).Repeat.AtLeastOnce();
+			Expect.Call(rtaState2.PlatformTypeId).Return(_platformId).Repeat.AtLeastOnce();
+			Expect.Call(rtaState1.StateCode).Return("001").Repeat.AtLeastOnce();
+			Expect.Call(rtaState2.StateCode).Return("002").Repeat.AtLeastOnce();
+
+			IPerson person1 = createExpectationForPersonLogOn("LOGON44");
+			IPerson person2 = createExpectationForPersonLogOn("LOGON45",2);
+
+			IExternalAgentState externalAgentState1 = getExternalAgentState(startDate, "", "", TimeSpan.Zero, startDate, true); //End of batch
+			IExternalAgentState externalAgentState2 = getExternalAgentState(startDate.AddSeconds(15), "LOGON45", "002", TimeSpan.Zero, startDate.AddSeconds(15), false, 2);
+			IExternalAgentState externalAgentState3 = getExternalAgentState(startDate.AddSeconds(15), "LOGON44", "002", TimeSpan.Zero, startDate.AddSeconds(15), false);
+			IExternalAgentState externalAgentState4 = getExternalAgentState(startDate.AddSeconds(30), "", "", TimeSpan.Zero, startDate.AddSeconds(30), true); //End of next batch
+
+			Expect.Call(rtaState2.StateGroup).Return(_rtaStateGroup).Repeat.AtLeastOnce();
+			Expect.Call(rtaState2.Name).Return("Name").Repeat.AtLeastOnce();
+			Expect.Call(rtaState1.Name).Return("Name1");
+			Expect.Call(_rtaStateGroup.IsLogOutState).Return(false).Repeat.AtLeastOnce();
+
+			createStateGroupAndAlarmExpectation();
+			createEmptyVisualLayerCollectionExpectation();
+
+			_mocks.ReplayAll();
+			_target.Initialize();
+			_target.SetFilteredPersons(new List<IPerson> { person1, person2 });
+			_target.CollectAgentStates(new List<IExternalAgentState> { externalAgentState1 });
+			_target.CollectAgentStates(new List<IExternalAgentState> { externalAgentState2, externalAgentState3 });
+
+			Assert.AreEqual(2, _target.AgentStates.Count);
+			Assert.IsTrue(_target.AgentStates.ContainsKey(person1));
+			Assert.IsTrue(_target.AgentStates.ContainsKey(person2));
+			Assert.IsFalse(_target.AgentStates[person2].RtaVisualLayerCollection[0].IsLoggedOut);
+			Assert.IsFalse(_target.AgentStates[person1].RtaVisualLayerCollection[0].IsLoggedOut);
+
+			_target.CollectAgentStates(new List<IExternalAgentState> { externalAgentState4 });
+
+			Assert.IsFalse(_target.AgentStates[person2].RtaVisualLayerCollection[0].IsLoggedOut);
+			Assert.IsTrue(_target.AgentStates[person1].RtaVisualLayerCollection[0].IsLoggedOut);
+			_mocks.VerifyAll();
+		}
+
+        private IExternalAgentState getExternalAgentState(DateTime startDate, string externalLogOn, string stateCode, TimeSpan timeInState, DateTime batchIdentifier, bool isSnapShot, int dataSourceId = 1)
         {
             return new ExternalAgentState(externalLogOn, stateCode, timeInState,
-                                                                            startDate, _platformId, 1, batchIdentifier,
+                                                                            startDate, _platformId, dataSourceId, batchIdentifier,
                                                                             isSnapShot);
         }
 
@@ -568,7 +616,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
             _target = new RtaStateHolder(null, _rtaStateGroupProvider, _stateGroupActivityAlarmProvider, new RangeProjectionService());
         }
 
-        private IPerson createExpectationForPersonLogOn(string logon)
+        private IPerson createExpectationForPersonLogOn(string logon, int dataSourceId = 1)
         {
             IPerson person1 = _mocks.StrictMock<IPerson>();
             IPersonPeriod personPeriod1 = _mocks.StrictMock<IPersonPeriod>();
@@ -578,7 +626,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
             Expect.Call(personPeriod1.ExternalLogOnCollection).Return(
                 new ReadOnlyCollection<IExternalLogOn>(new List<IExternalLogOn> { externalLogOn1 })).Repeat.AtLeastOnce();
             Expect.Call(externalLogOn1.AcdLogOnOriginalId).Return(logon).Repeat.AtLeastOnce();
-            Expect.Call(externalLogOn1.DataSourceId).Return(1).Repeat.AtLeastOnce();
+            Expect.Call(externalLogOn1.DataSourceId).Return(dataSourceId).Repeat.AtLeastOnce();
             return person1;
         }
     }
