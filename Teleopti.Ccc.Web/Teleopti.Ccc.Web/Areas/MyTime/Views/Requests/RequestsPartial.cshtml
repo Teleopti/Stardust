@@ -1,4 +1,5 @@
-﻿@using Teleopti.Ccc.UserTexts
+﻿@using System.Globalization
+@using Teleopti.Ccc.UserTexts
 @using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 @using Teleopti.Interfaces.Domain
 @model RequestsViewModel
@@ -43,7 +44,7 @@
 		</div>
 	<div class="floatleft">
 		<span class="edit-module-element floatleft">
-			<input id="Request-detail-fromDate-input" class="date-input" type="text" value="@DateTime.Today.ToShortDateString()" />
+			<input id="Request-detail-fromDate-input" class="date-input" type="text" />
 		</span>
 		<span id="Request-detail-fromTime" class="edit-module-element floatleft">
 			<label class="displayblock" for="Request-detail-fromTime-input-input">@Resources.Time</label>
@@ -57,7 +58,7 @@
 	</div>
 	<div>
 		<span class="edit-module-element clearleftfloat floatleft">
-			<input id="Request-detail-toDate-input" class="date-input" type="text" value="@DateTime.Today.ToShortDateString()"  />
+			<input id="Request-detail-toDate-input" class="date-input" type="text"  />
 		</span>
 		<span id="Request-detail-toTime" class="edit-module-element floatleft">
 			<label class="displayblock" for="Request-detail-toTime-input-input">@Resources.Time</label>
@@ -110,7 +111,7 @@
 		</div>
 	<div class="floatleft">
 		<span class="edit-module-element floatleft">
-			<input id="Request-detail-fromDate-input" class="date-input" type="text" value="@DateTime.Today.ToShortDateString()" />
+			<input id="Request-detail-fromDate-input" class="date-input" type="text" />
 		</span>
 		<span id="Request-detail-fromTime" class="edit-module-element floatleft">
 			<label class="displayblock" for="Request-detail-fromTime-input-input">@Resources.Time</label>
@@ -124,7 +125,7 @@
 	</div>
 	<div>
 		<span class="edit-module-element clearleftfloat floatleft">
-			<input id="Request-detail-toDate-input" class="date-input" type="text" value="@DateTime.Today.ToShortDateString()"  />
+			<input id="Request-detail-toDate-input" class="date-input" type="text"  />
 		</span>
 		<span id="Request-detail-toTime" class="edit-module-element floatleft">
 			<label class="displayblock" for="Request-detail-toTime-input-input">@Resources.Time</label>
@@ -148,72 +149,75 @@
 </script>
 
 <script type="text/Html" id="add-new-request-detail-template">
-		<div id="Schedule-addRequest-title" class="pdb5 request-detail-title">
-			<span id="Text-request-tab" data-bind="visible: TextRequestHeaderVisible">@Resources.TextRequest</span>
-			<span id="Absence-request-tab" data-bind="visible: AbsenceRequestHeaderVisible">@Resources.AbsenceRequest</span>
-		</div>
-		<input type="hidden" id="Request-detail-entityid" />
-		<div class="edit-module-element">
-			<span id="Request-detail-deny-reason"></span>
-		</div>
-		<div class="edit-module-element">
-			<label class="displayblock" for="Request-detail-subject-input">@Resources.Subject</label>
-			<input id="Request-detail-subject-input" type="text" class="request-subject-input" />
-		</div>
-		<div class="edit-module-element">
-			<label class="displayblock" for="Request-detail-message-input">@Resources.Message</label>
-			<textarea id="Request-detail-message-input" class="request-message-input" />
-		</div>
-		<div id="Absence-type-element" class="floatleft" data-bind="visible: AbsenceRequestHeaderVisible">
-			<div class="edit-module-element floatleft">
-				<div class="floatleft absence-type-input-label">@Resources.AbsenceType</div>
-			</div>
-			<div class="edit-module-element floatleft">
-				<select id="Absence-type" class="absence-input combobox">
-					@foreach (var absenceType in Model.AbsenceTypes)
-					{
-						<option value="@Html.AttributeEncode(absenceType.Name)" typeid="@Html.AttributeEncode(absenceType.Id)">@absenceType.Name</option>
-					}
-				</select>
-			</div>
-		</div>
-	<div class="floatleft">
-		<span class="edit-module-element floatleft">
-			<input id="Request-detail-fromDate-input" class="date-input" type="text" value="@DateTime.Today.ToShortDateString()" />
-		</span>
-		<span id="Request-detail-fromTime" class="edit-module-element floatleft">
-			<label class="displayblock" for="Request-detail-fromTime-input-input">@Resources.Time</label>
-			<select id="Request-detail-fromTime-input" class="time-input combobox">
-				@foreach (var timeSpan in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, x * 30, 0)))
-				{
-					<option @(timeSpan.Hours == 8 && timeSpan.Minutes == 0 ? "selected" : "") value="@Html.AttributeEncode(@TimeHelper.TimeOfDayFromTimeSpan(timeSpan))">@TimeHelper.TimeOfDayFromTimeSpan(timeSpan)</option>
-				}
-			</select>
-		</span>
-	</div>
-	<div>
-		<span class="edit-module-element clearleftfloat floatleft">
-			<input id="Request-detail-toDate-input" class="date-input" type="text" value="@DateTime.Today.ToShortDateString()"  />
-		</span>
-		<span id="Request-detail-toTime" class="edit-module-element floatleft">
-			<label class="displayblock" for="Request-detail-toTime-input-input">@Resources.Time</label>
-			<select id="Request-detail-toTime-input" class="time-input combobox">
-				@foreach (var timeSpan in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, x * 30, 0)))
-				{
-					<option @(timeSpan.Hours == 17 && timeSpan.Minutes == 0 ? "selected" : "") value="@Html.AttributeEncode(@TimeHelper.TimeOfDayFromTimeSpan(timeSpan))">@TimeHelper.TimeOfDayFromTimeSpan(timeSpan)</option>
-				}
-			</select>
-		</span>
-		</div>
-		<span class="edit-module-element clearleftfloat floatleft">
-			<input type="checkbox" id="Fullday-check" data-bind="checked: IsFullDay" />
-		</span>
-		<label class="floatleft" for="Fullday-check">
-			@Resources.FullDay
-		</label>
-		<input id="Request-detail-ok-button" type="button" class="button mb5 floatright" update-value="@Html.AttributeEncode(Resources.Update)" new-value="@Html.AttributeEncode(Resources.SubmitRequest)"/>
-		<div id="Request-detail-error" class="error edit-module-element floatleft clearleftfloat">
-		</div>
+	<input id="Request-detail-today-year" type="hidden" value="@CultureInfo.CurrentCulture.Calendar.GetYear(DateTime.Today)"/>
+	<input id="Request-detail-today-month" type="hidden" value="@CultureInfo.CurrentCulture.Calendar.GetMonth(DateTime.Today)"/>
+	<input id="Request-detail-today-day" type="hidden" value="@CultureInfo.CurrentCulture.Calendar.GetDayOfMonth(DateTime.Today)"/>
+    <div id="Schedule-addRequest-title" class="pdb5 request-detail-title">
+        <span id="Text-request-tab" data-bind="visible: TextRequestHeaderVisible">@Resources.TextRequest</span>
+        <span id="Absence-request-tab" data-bind="visible: AbsenceRequestHeaderVisible">@Resources.AbsenceRequest</span>
+    </div>
+    <input type="hidden" id="Request-detail-entityid" />
+    <div class="edit-module-element">
+        <span id="Request-detail-deny-reason"></span>
+    </div>
+    <div class="edit-module-element">
+        <label class="displayblock" for="Request-detail-subject-input">@Resources.Subject</label>
+        <input id="Request-detail-subject-input" type="text" class="request-subject-input" />
+    </div>
+    <div class="edit-module-element">
+        <label class="displayblock" for="Request-detail-message-input">@Resources.Message</label>
+        <textarea id="Request-detail-message-input" class="request-message-input" />
+    </div>
+    <div id="Absence-type-element" class="floatleft" data-bind="visible: AbsenceRequestHeaderVisible">
+        <div class="edit-module-element floatleft">
+            <div class="floatleft absence-type-input-label">@Resources.AbsenceType</div>
+        </div>
+        <div class="edit-module-element floatleft">
+            <select id="Absence-type" class="absence-input combobox">
+                @foreach (var absenceType in Model.AbsenceTypes)
+                {
+                    <option value="@Html.AttributeEncode(absenceType.Name)" typeid="@Html.AttributeEncode(absenceType.Id)">@absenceType.Name</option>
+                }
+            </select>
+        </div>
+    </div>
+    <div class="floatleft">
+        <span class="edit-module-element floatleft">
+            <input id="Request-detail-fromDate-input" class="date-input" type="text" />
+        </span>
+        <span id="Request-detail-fromTime" class="edit-module-element floatleft">
+            <label class="displayblock" for="Request-detail-fromTime-input-input">@Resources.Time</label>
+            <select id="Request-detail-fromTime-input" class="time-input combobox">
+                @foreach (var timeSpan in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, x * 30, 0)))
+                {
+                    <option @(timeSpan.Hours == 8 && timeSpan.Minutes == 0 ? "selected" : "") value="@Html.AttributeEncode(@TimeHelper.TimeOfDayFromTimeSpan(timeSpan))">@TimeHelper.TimeOfDayFromTimeSpan(timeSpan)</option>
+                }
+            </select>
+        </span>
+    </div>
+    <div>
+        <span class="edit-module-element clearleftfloat floatleft">
+            <input id="Request-detail-toDate-input" class="date-input" type="text"  />
+        </span>
+        <span id="Request-detail-toTime" class="edit-module-element floatleft">
+            <label class="displayblock" for="Request-detail-toTime-input-input">@Resources.Time</label>
+            <select id="Request-detail-toTime-input" class="time-input combobox">
+                @foreach (var timeSpan in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, x * 30, 0)))
+                {
+                    <option @(timeSpan.Hours == 17 && timeSpan.Minutes == 0 ? "selected" : "") value="@Html.AttributeEncode(@TimeHelper.TimeOfDayFromTimeSpan(timeSpan))">@TimeHelper.TimeOfDayFromTimeSpan(timeSpan)</option>
+                }
+            </select>
+        </span>
+    </div>
+    <span class="edit-module-element clearleftfloat floatleft">
+        <input type="checkbox" id="Fullday-check" data-bind="checked: IsFullDay" />
+    </span>
+    <label class="floatleft" for="Fullday-check">
+        @Resources.FullDay
+    </label>
+    <input id="Request-detail-ok-button" type="button" class="button mb5 floatright" update-value="@Html.AttributeEncode(Resources.Update)" new-value="@Html.AttributeEncode(Resources.SubmitRequest)"/>
+    <div id="Request-detail-error" class="error edit-module-element floatleft clearleftfloat">
+    </div>
 </script>
 
 <div class="displaynone" id="Request-detail-default-start-time">@TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(0, 0, 0))</div>
