@@ -68,7 +68,7 @@ IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[Queue].[Ext
 DROP PROCEDURE [Queue].[ExtendMessageLease]
 GO
 CREATE PROCEDURE [Queue].[ExtendMessageLease]
-	@MessageId int
+	@MessageId bigint
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -139,7 +139,7 @@ IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[Queue].[Mar
 DROP PROCEDURE [Queue].[MarkMessageAsReady]
 GO
 CREATE PROCEDURE [Queue].[MarkMessageAsReady]
-	@MessageId int
+	@MessageId bigint
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -162,7 +162,7 @@ CREATE PROCEDURE [Queue].[MoveMessage]
 	@Endpoint nvarchar(250),
 	@Queue nvarchar(50),
 	@Subqueue nvarchar(50),
-	@MessageId int
+	@MessageId bigint
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -201,7 +201,7 @@ IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[Queue].[Pee
 DROP PROCEDURE [Queue].[PeekMessageById]
 GO
 CREATE PROCEDURE [Queue].[PeekMessageById]
-	@MessageId int
+	@MessageId bigint
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -236,7 +236,7 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 	
-	DECLARE @MessageId int;
+	DECLARE @MessageId bigint;
 	SELECT TOP 1 @MessageId = MessageId
 	FROM Queue.Messages
 	WHERE isnull(ExpiresAt,DATEADD(mi,1,GetUtcDate())) > GetUtcDate()
@@ -324,6 +324,24 @@ BEGIN
     DELETE FROM Queue.SubscriptionStorage
     WHERE ([Key]=@Key)
     AND (Id=@Id)
+END
+GO
+----
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[Queue].[Clean]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [Queue].[Clean]
+GO
+CREATE PROCEDURE [Queue].[Clean]
+	@Endpoint nvarchar(250),
+	@Queue nvarchar(50)
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+    DECLARE @QueueId int;
+        
+    EXEC Queue.GetAndAddQueue @Endpoint,@Queue,null,@QueueId=@QueueId OUTPUT;
+	
+			DELETE FROM Queue.Messages WHERE QueueId=@QueueId AND ExpiresAt<GetUtcDate()
 END
 GO
 ----
