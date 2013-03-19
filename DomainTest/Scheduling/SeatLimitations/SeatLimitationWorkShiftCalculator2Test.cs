@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
 			ISkillStaffPeriod skillStaffPeriod1 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(_skill, dateTime, 60, 20, 20);
 			skillStaffPeriod1.Payload.CalculatedUsedSeats = 5;
 			skillStaffPeriod1.Payload.MaxSeats = 5;
-			skillStaffPeriod1.SetParent(skillDay);
+			skillStaffPeriod1.SetSkillDay(skillDay);
 			ISkillStaffPeriodDictionary skillStaffPeriodDictionary = new SkillStaffPeriodDictionary(_skill);
 			skillStaffPeriodDictionary.Add(dateTimePeriod, skillStaffPeriod1);
 			IDictionary<ISkill, ISkillStaffPeriodDictionary> dic = new Dictionary<ISkill, ISkillStaffPeriodDictionary>();
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
 			ISkillStaffPeriod skillStaffPeriod1 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(_skill, dateTime, 60, 20, 20);
 			skillStaffPeriod1.Payload.CalculatedUsedSeats = 5;
 			skillStaffPeriod1.Payload.MaxSeats = 5;
-			skillStaffPeriod1.SetParent(skillDay);
+			skillStaffPeriod1.SetSkillDay(skillDay);
 			ISkillStaffPeriodDictionary skillStaffPeriodDictionary = new SkillStaffPeriodDictionary(_skill);
 			skillStaffPeriodDictionary.Add(dateTimePeriod, skillStaffPeriod1);
 			IDictionary<ISkill, ISkillStaffPeriodDictionary> dic = new Dictionary<ISkill, ISkillStaffPeriodDictionary>();
@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
 			ISkillStaffPeriod skillStaffPeriod1 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(_skill, dateTime, 60, 20, 20);
 			skillStaffPeriod1.Payload.CalculatedUsedSeats = 4;
 			skillStaffPeriod1.Payload.MaxSeats = 5;
-			skillStaffPeriod1.SetParent(skillDay);
+			skillStaffPeriod1.SetSkillDay(skillDay);
 			ISkillStaffPeriodDictionary skillStaffPeriodDictionary = new SkillStaffPeriodDictionary(_skill);
 			skillStaffPeriodDictionary.Add(dateTimePeriod, skillStaffPeriod1);
 			IDictionary<ISkill, ISkillStaffPeriodDictionary> dic = new Dictionary<ISkill, ISkillStaffPeriodDictionary>();
@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
 			ISkillStaffPeriod skillStaffPeriod1 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(_skill, dateTime, 60, 20, 20);
 			skillStaffPeriod1.Payload.CalculatedUsedSeats = 5;
 			skillStaffPeriod1.Payload.MaxSeats = 5;
-			skillStaffPeriod1.SetParent(skillDay);
+			skillStaffPeriod1.SetSkillDay(skillDay);
 			ISkillStaffPeriodDictionary skillStaffPeriodDictionary = new SkillStaffPeriodDictionary(_skill);
 			skillStaffPeriodDictionary.Add(dateTimePeriod, skillStaffPeriod1);
 			IDictionary<ISkill, ISkillStaffPeriodDictionary> dic = new Dictionary<ISkill, ISkillStaffPeriodDictionary>();
@@ -171,7 +171,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
 			ISkillStaffPeriod skillStaffPeriod1 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(_skill, dateTime, 60, 20, 20);
 			skillStaffPeriod1.Payload.CalculatedUsedSeats = 5;
 			skillStaffPeriod1.Payload.MaxSeats = 5;
-			skillStaffPeriod1.SetParent(skillDay);
+			skillStaffPeriod1.SetSkillDay(skillDay);
 			ISkillStaffPeriodDictionary skillStaffPeriodDictionary = new SkillStaffPeriodDictionary(_skill);
 			skillStaffPeriodDictionary.Add(dateTimePeriod, skillStaffPeriod1);
 			IDictionary<ISkill, ISkillStaffPeriodDictionary> dic = new Dictionary<ISkill, ISkillStaffPeriodDictionary>();

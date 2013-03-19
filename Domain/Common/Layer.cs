@@ -1,4 +1,5 @@
 using System;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Common
@@ -51,7 +52,7 @@ namespace Teleopti.Ccc.Domain.Common
                 int ret;
                 if (Parent == null)
                 {
-                    ret = -1;
+					ret = -1;
                 }
                 else
                 {
@@ -66,7 +67,7 @@ namespace Teleopti.Ccc.Domain.Common
 
         private int findOrderIndex()
         {
-            return Parent.LayerCollection.IndexOf(this);
+			return ((ILayerCollectionOwner<T>)Parent).LayerCollection.IndexOf(this);
         }
 
 		public virtual bool Equals(ILayer other)
@@ -110,18 +111,18 @@ namespace Teleopti.Ccc.Domain.Common
                         Period.EndDateTime == layer.Period.StartDateTime);
         }
 
-		public virtual void SetParent(ILayerCollectionOwner<T> parent)
+		public virtual void SetParent(IEntity parent)
 		{
-			Parent = parent;
-			// mainshift, overtimeshift, personalshift - activitylayer
-			var entity = this as IAggregateEntity;
-			// mainshift, overtimeshift, personalshift
-			var parentEntity = parent as IEntity;
-			if (entity != null && parentEntity != null)
-				entity.SetParent(parentEntity);
+			throw new NotSupportedException("Only persistedactivity layer supports parenting.");
 		}
 
-		public virtual ILayerCollectionOwner<T> Parent { get; private set; }
+	    public virtual IEntity Parent
+	    {
+		    get
+		    {
+					throw new NotSupportedException("Only persistedactivity layer supports parenting."); 
+		    }
+	    }
 
 	    #region ICloneableEntity<Layer<T>> Members
 

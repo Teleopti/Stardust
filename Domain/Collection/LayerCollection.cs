@@ -36,7 +36,9 @@ namespace Teleopti.Ccc.Domain.Collection
             if(_owner!=null)
                 _owner.OnAdd(item);
             Items.Add(item);
-            item.SetParent(_owner);
+			var owner = _owner as IEntity;
+			if(owner != null)
+				item.SetParent(owner);
         }
 
         public bool LayerIsOverlapping(ILayer<T> layer)

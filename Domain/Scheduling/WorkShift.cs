@@ -96,7 +96,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			retObj._layerCollection = new List<ILayer<IActivity>>();
 			foreach (var newLayer in _layerCollection.Select(layer => layer.NoneEntityClone()))
 			{
-				newLayer.SetParent(retObj);
 				retObj._layerCollection.Add(newLayer);
 			}
 			return retObj;
@@ -108,7 +107,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			retObj._layerCollection = new List<ILayer<IActivity>>();
 			foreach (var newLayer in _layerCollection.Select(layer => layer.EntityClone()))
 			{
-				newLayer.SetParent(retObj);
 				retObj._layerCollection.Add(newLayer);
 			}
 			return retObj;

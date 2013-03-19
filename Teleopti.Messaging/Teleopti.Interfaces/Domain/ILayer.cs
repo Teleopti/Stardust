@@ -48,12 +48,12 @@ namespace Teleopti.Interfaces.Domain
 		/// Added because all layers not are IEntity any longer
 		/// </summary>
 		/// <param name="parent"></param>
-		void SetParent(ILayerCollectionOwner<T> parent);
+		void SetParent(IEntity parent);
 
 		/// <summary>
 		/// The Parent
 		/// </summary>
-		ILayerCollectionOwner<T> Parent { get; }
+		IEntity Parent { get; }
 	}
 
     /// <summary>

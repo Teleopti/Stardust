@@ -1440,7 +1440,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 {
                     var skillStaffPeriod = new SkillStaffPeriod(period, new Task(), new ServiceAgreement(),
                                                                 _skill.SkillType.StaffingCalculatorService);
-                    skillStaffPeriod.SetParent(this);
+                    skillStaffPeriod.SetSkillDay(this);
                     skillStaffPeriod.IsAvailable = false;
                     _skillStaffPeriodCollection.Add(skillStaffPeriod);
                     period = period.MovePeriod(interval);

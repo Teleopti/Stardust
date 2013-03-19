@@ -111,12 +111,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			return Root();
 		}
 
-		void IAggregateEntity.SetParent(IEntity parent)
-		{
-			SetParent(parent);
-		}
+		//void IAggregateEntity.SetParent(IEntity parent)
+		//{
+		//	SetParent(parent);
+		//}
 
-		internal protected virtual void SetParent(IEntity parent)
+		public void SetParent(IEntity parent)
 		{
 			Parent = parent;
 		}

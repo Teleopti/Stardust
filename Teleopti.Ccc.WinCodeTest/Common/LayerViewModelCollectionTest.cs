@@ -382,17 +382,21 @@ namespace Teleopti.Ccc.WinCodeTest.Common
                  orderby l.OrderIndex
                  select l);
 
+	        var multi = mocks.DynamicMock<IMultiplicatorDefinitionSet>();
+			var overtime = new OvertimeShiftActivityLayer(ActivityFactory.CreateActivity("activity"), period, multi);
+	        var personal = new PersonalShiftActivityLayer(ActivityFactory.CreateActivity("activity"), period);
             ActivityLayer fakeActivityLayer = new ActivityLayer(ActivityFactory.CreateActivity("activity"), period);
             AbsenceLayer absenceLayer = new AbsenceLayer(AbsenceFactory.CreateAbsence("absence"), period);
 
 
             MainShiftLayerViewModel mainShiftModel1 = new MainShiftLayerViewModel(firstLayer.First(), shift, null);
             MainShiftLayerViewModel mainShiftModel2 = new MainShiftLayerViewModel(firstLayer.Last(), shift, null);
-            OvertimeLayerViewModel overtimeLayerViewModel = new OvertimeLayerViewModel(fakeActivityLayer, null);
-            PersonalShiftLayerViewModel personalShiftLayerViewModel = new PersonalShiftLayerViewModel(fakeActivityLayer, null);
+			OvertimeLayerViewModel overtimeLayerViewModel = new OvertimeLayerViewModel(overtime, null);
+			PersonalShiftLayerViewModel personalShiftLayerViewModel = new PersonalShiftLayerViewModel(personal, null);
             AbsenceLayerViewModel absenceLayerViewModel = new AbsenceLayerViewModel(absenceLayer, null);
             MeetingLayerViewModel meetingLayerViewModel = new MeetingLayerViewModel(fakeActivityLayer, null);
             #endregion
+			mocks.ReplayAll();
             Stack<ILayerViewModel> stack = new Stack<ILayerViewModel>((from m in 
                                                                        new List<ILayerViewModel>()
                                                                        {

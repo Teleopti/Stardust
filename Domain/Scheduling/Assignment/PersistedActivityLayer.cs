@@ -3,7 +3,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
-	public class PersistedActivityLayer : ActivityLayer, IAggregateEntity
+	public class PersistedActivityLayer : ActivityLayer, IPersistedActivityLayer
 	{
 		private Guid? _id;
 		private IEntity _parent;
@@ -60,7 +60,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			 _id = null;
 		 }
 
-		 IEntity IAggregateEntity.Parent { get { return _parent; } }
+		 public override IEntity Parent
+		{
+			get { return _parent; }
+		}
 
 		 IAggregateRoot IAggregateEntity.Root()
 		 {
@@ -87,12 +90,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			 return root;
 		 }
 
-		 void IAggregateEntity.SetParent(IEntity parent)
-		 {
-			 SetParent(parent);
-		 }
-
-		 public virtual void SetParent(IEntity parent)
+		public override void SetParent(IEntity parent)
 		 {
 			 _parent = parent;
 		 }

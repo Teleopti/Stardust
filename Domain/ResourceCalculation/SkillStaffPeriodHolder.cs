@@ -377,7 +377,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                 asAgg.AggregatedMinMaxStaffAlarm = MinMaxStaffBroken.MinStaffBroken;
             if (staffPeriod.Payload.SkillPersonData.MaximumPersons > 0 && staffPeriod.Payload.SkillPersonData.MaximumPersons < staffPeriod.CalculatedLoggedOn)
                 asAgg.AggregatedMinMaxStaffAlarm = MinMaxStaffBroken.MaxStaffBroken;
-            ISkill skill = ((ISkillDay) staffPeriod.Parent).Skill;
+            ISkill skill = staffPeriod.SkillDay.Skill;
 
             asAgg.AggregatedStaffingThreshold = StaffingThreshold.Ok;
             var overstaffing = new IntervalHasOverstaffing(skill);

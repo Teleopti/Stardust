@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
 			ISkillDay skillDay = new SkillDay(new DateOnly(2010, 1, 1), _skillLondon,
 											  ScenarioFactory.CreateScenarioAggregate(), new List<IWorkloadDay>(),
 											  new List<ISkillDataPeriod>());
-			_skillStaffPeriod.SetParent(skillDay);
+			_skillStaffPeriod.SetSkillDay(skillDay);
 		}
 
 		[Test]
@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
 			ISkillDay skillDay = new SkillDay(new DateOnly(2010, 1, 1), _skillPhone,
 											  ScenarioFactory.CreateScenarioAggregate(), new List<IWorkloadDay>(),
 											  new List<ISkillDataPeriod>());
-			_skillStaffPeriod.SetParent(skillDay);
+			_skillStaffPeriod.SetSkillDay(skillDay);
 			double result = _target.CalculatePeriod(_skillStaffPeriod, _shiftList);
 			Assert.AreEqual(0, result);
 		}

@@ -42,7 +42,6 @@ namespace Teleopti.Ccc.DomainTest.Common
             Assert.AreEqual(per, actL.Period);
             Assert.AreSame(fakeActivity, actL.Payload);
             Assert.AreSame(fakeActivity, ((ILayer)actL).Payload);
-            Assert.IsNull(actL.Parent);
 
             FakeLayerClass actL2 = new FakeLayerClass(fakeActivity, per);
             actL2.Payload = actL.Payload;
@@ -50,6 +49,25 @@ namespace Teleopti.Ccc.DomainTest.Common
             Assert.AreEqual(actL.Payload, actL2.Payload);
         }
 
+		[Test, ExpectedException(typeof(NotSupportedException))]
+		public void ShouldNotSupportParent()
+		{
+			var per =
+				new DateTimePeriod(new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc),
+								   new DateTime(2000, 1, 1, 11, 0, 0, DateTimeKind.Utc));
+			var actL = new FakeLayerClass(fakeActivity, per);
+			Assert.That(actL.Parent, Is.Null); 
+		}
+
+		[Test, ExpectedException(typeof(NotSupportedException))]
+		public void ShouldNotSupportSetParent()
+		{
+			var per =
+				new DateTimePeriod(new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc),
+								   new DateTime(2000, 1, 1, 11, 0, 0, DateTimeKind.Utc));
+			var actL = new FakeLayerClass(fakeActivity, per);
+			actL.SetParent(null);
+		}
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
         public void VerifyProtectedConstructorWorks()
         {
@@ -125,9 +143,6 @@ namespace Teleopti.Ccc.DomainTest.Common
             Assert.AreNotSame(orgLayer, cloneLayer);
             Assert.AreSame(fakeActivity, cloneLayer.Payload);
             Assert.AreEqual(period, cloneLayer.Period);
-
-            Assert.AreEqual(-1, cloneLayer.OrderIndex);
-            Assert.IsNull(cloneLayer.Parent);
         }
 
         [Test]
