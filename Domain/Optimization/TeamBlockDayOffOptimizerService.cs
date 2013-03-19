@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			{
 				var previousPeriodValue = _periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
 				var teamInfosToRemove = runOneOptimizationRound(optimizationPreferences, schedulePartModifyAndRollbackService,
-				                                                remainingInfoList, schedulingOptions, previousPeriodValue, selectedPeriod);
+				                                                remainingInfoList, schedulingOptions, previousPeriodValue, selectedPeriod, selectedPersons);
 
 				if (_cancelMe)
 					break;
@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private IEnumerable<ITeamInfo> runOneOptimizationRound(IOptimizationPreferences optimizationPreferences,
 		                                     ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 		                                     List<ITeamInfo> remainingInfoList, ISchedulingOptions schedulingOptions,
-											 double previousPeriodValue, DateOnlyPeriod selectedPeriod)
+											 double previousPeriodValue, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons)
 		{
 			var teamInfosToRemove = new List<ITeamInfo>();
 			foreach (var teamInfo in remainingInfoList.GetRandom(remainingInfoList.Count, true))
@@ -133,7 +133,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 				foreach (var matrix in teamInfo.MatrixesForGroupMember(0))
 				{
-					runOneMatrix(optimizationPreferences, schedulePartModifyAndRollbackService, schedulingOptions, matrix, teamInfo, selectedPeriod);
+					runOneMatrix(optimizationPreferences, schedulePartModifyAndRollbackService, schedulingOptions, matrix, teamInfo,
+					             selectedPeriod, selectedPersons);
 				}
 				// rollback id failed or not good
 				var currentPeriodValue = _periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
@@ -150,7 +151,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private void runOneMatrix(IOptimizationPreferences optimizationPreferences,
 		                          ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 		                          ISchedulingOptions schedulingOptions, IScheduleMatrixPro matrix,
-									ITeamInfo teamInfo, DateOnlyPeriod selectedPeriod)
+									ITeamInfo teamInfo, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons)
 		{
 			ILockableBitArray originalArray =
 				_lockableBitArrayFactory.ConvertFromMatrix(optimizationPreferences.DaysOff.ConsiderWeekBefore,
@@ -189,7 +190,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				ITeamBlockInfo teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, dateOnly,
 				                                                                         schedulingOptions
 					                                                                         .BlockFinderTypeForAdvanceScheduling);
-				_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, dateOnly, schedulingOptions, selectedPeriod);
+				_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, dateOnly, schedulingOptions, selectedPeriod, selectedPersons);
 			}
 
 
