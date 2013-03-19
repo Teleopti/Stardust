@@ -51,11 +51,8 @@ namespace Teleopti.Messaging.SignalR
 				try
 				{
 					sendAttempt++;
-					//ExternalAgentStateEncoder encoder = new ExternalAgentStateEncoder();
-					//byte[] domainObject = encoder.Encode(externalAgentState);
 					var domainObject = JsonConvert.SerializeObject(actualAgentState);
                     var type = typeof(IActualAgentState);
-					//var type = typeof(IActualAgentState);
 					_wrapper.NotifyClients(new Notification
 								{
 									StartDate =

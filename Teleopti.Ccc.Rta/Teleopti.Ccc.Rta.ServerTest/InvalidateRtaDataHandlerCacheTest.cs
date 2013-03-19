@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 
 		private class actualAgentHandlerForTest : ActualAgentHandler
 		{
-			public actualAgentHandlerForTest(IActualAgentDataHandler actualAgentDataHandler, IMbCacheFactory mbCacheFactory) : base(actualAgentDataHandler, mbCacheFactory)
+			public actualAgentHandlerForTest(IActualAgentDataHandler actualAgentDataHandler, IMbCacheFactory mbCacheFactory) : base(actualAgentDataHandler, mbCacheFactory, null)
 			{
 			}
 

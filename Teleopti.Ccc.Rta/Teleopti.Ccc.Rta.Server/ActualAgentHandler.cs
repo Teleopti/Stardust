@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MbCache.Core;
 using Teleopti.Interfaces.Domain;
+using log4net;
 
 namespace Teleopti.Ccc.Rta.Server
 {
@@ -23,12 +24,14 @@ namespace Teleopti.Ccc.Rta.Server
 		private readonly IMbCacheFactory _mbCacheFactory;
 		private static readonly ConcurrentDictionary<Guid, IActualAgentState> BatchedAgents = new ConcurrentDictionary<Guid, IActualAgentState>();
 		private static readonly object LockObject = new object();
+		private static ILog _loggingSvc;
 		private static DateTime _lastSave = DateTime.UtcNow;
 
-		public ActualAgentHandler(IActualAgentDataHandler actualAgentDataHandler, IMbCacheFactory mbCacheFactory)
+		public ActualAgentHandler(IActualAgentDataHandler actualAgentDataHandler, IMbCacheFactory mbCacheFactory, ILog loggingSvc)
 		{
 			_actualAgentDataHandler = actualAgentDataHandler;
 			_mbCacheFactory = mbCacheFactory;
+			_loggingSvc = loggingSvc;
 		}
 
 		protected IActualAgentDataHandler ActualAgentDataHandler
@@ -40,7 +43,10 @@ namespace Teleopti.Ccc.Rta.Server
 		{
 			var platformId = Guid.Empty;
 			var stateCode = "Unknown";
-			var scheduleLayers = ActualAgentDataHandler.CurrentLayerAndNext(timestamp, ActualAgentDataHandler.GetReadModel(personId));
+			var readModelLayers = ActualAgentDataHandler.GetReadModel(personId);
+			if (!readModelLayers.Any())
+				_loggingSvc.WarnFormat("No readmodel found for Person: {0}", personId);
+			var scheduleLayers = ActualAgentDataHandler.CurrentLayerAndNext(timestamp, readModelLayers);
 			var previousState = ActualAgentDataHandler.LoadOldState(personId);
 
 			if (previousState == null)
@@ -60,7 +66,8 @@ namespace Teleopti.Ccc.Rta.Server
 		public IActualAgentState GetAndSaveState(Guid personId, Guid businessUnitId, Guid platformTypeId, string stateCode, DateTime timestamp,
 			TimeSpan timeInState)
 		{
-			var scheduleLayers = ActualAgentDataHandler.CurrentLayerAndNext(timestamp, ActualAgentDataHandler.GetReadModel(personId));
+			var readModelLayers = ActualAgentDataHandler.GetReadModel(personId);
+			var scheduleLayers = ActualAgentDataHandler.CurrentLayerAndNext(timestamp, readModelLayers);
 			var previousState = ActualAgentDataHandler.LoadOldState(personId);
 			return CreateAndSaveState(scheduleLayers, previousState, personId, platformTypeId, stateCode, timestamp, timeInState, businessUnitId);
 		}

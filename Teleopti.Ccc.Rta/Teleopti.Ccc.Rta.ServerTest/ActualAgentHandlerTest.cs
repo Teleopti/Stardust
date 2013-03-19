@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		{
 			_mock = new MockRepository();
 			_dataHandler = MockRepository.GenerateMock<IActualAgentDataHandler>();
-			_target = new ActualAgentHandler(_dataHandler, null);
+			_target = new ActualAgentHandler(_dataHandler, null, null);
 
 			_stateCode = "AUX2";
 			_platformTypeId = Guid.NewGuid();
