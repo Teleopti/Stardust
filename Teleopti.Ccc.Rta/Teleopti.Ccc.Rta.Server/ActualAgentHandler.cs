@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Rta.Server
 		{
 			var platformId = Guid.Empty;
 			var stateCode = "Unknown";
-			var scheduleLayers = ActualAgentDataHandler.CurrentLayerAndNext(timestamp, personId, ActualAgentDataHandler.GetReadModel(personId));
+			var scheduleLayers = ActualAgentDataHandler.CurrentLayerAndNext(timestamp, ActualAgentDataHandler.GetReadModel(personId));
 			var previousState = ActualAgentDataHandler.LoadOldState(personId);
 
 			if (previousState == null)
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.Rta.Server
 		public IActualAgentState GetAndSaveState(Guid personId, Guid businessUnitId, Guid platformTypeId, string stateCode, DateTime timestamp,
 			TimeSpan timeInState)
 		{
-			var scheduleLayers = ActualAgentDataHandler.CurrentLayerAndNext(timestamp, personId, ActualAgentDataHandler.GetReadModel(personId));
+			var scheduleLayers = ActualAgentDataHandler.CurrentLayerAndNext(timestamp, ActualAgentDataHandler.GetReadModel(personId));
 			var previousState = ActualAgentDataHandler.LoadOldState(personId);
 			return CreateAndSaveState(scheduleLayers, previousState, personId, platformTypeId, stateCode, timestamp, timeInState, businessUnitId);
 		}

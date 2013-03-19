@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			 mbCacheFactory.AssertWasCalled(
 				 x =>
 				 x.Invalidate(target.ExposeActualAgentDataHandler,
-				              y => y.CurrentLayerAndNext(timeStamp, personId, new List<ScheduleLayer>()), true),
+				              y => y.CurrentLayerAndNext(timeStamp, new List<ScheduleLayer>()), true),
 				 o => o.IgnoreArguments());
 		 }
 

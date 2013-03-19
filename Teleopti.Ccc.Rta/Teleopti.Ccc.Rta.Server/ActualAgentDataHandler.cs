@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Rta.Server
 {
 	public interface IActualAgentDataHandler
 	{
-		IList<ScheduleLayer> CurrentLayerAndNext(DateTime onTime, Guid personId, IList<ScheduleLayer> layers);
+		IList<ScheduleLayer> CurrentLayerAndNext(DateTime onTime, IList<ScheduleLayer> layers);
 		IActualAgentState LoadOldState(Guid personToLoad);
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
 		ConcurrentDictionary<string, List<RtaStateGroupLight>> StateGroups();
@@ -35,9 +35,7 @@ namespace Teleopti.Ccc.Rta.Server
 			_databaseConnectionStringHandler = databaseConnectionStringHandler;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security",
-			"CA2100:Review SQL queries for security vulnerabilities")]
-		public IList<ScheduleLayer> CurrentLayerAndNext(DateTime onTime, Guid personId, IList<ScheduleLayer> layers)
+		public IList<ScheduleLayer> CurrentLayerAndNext(DateTime onTime, IList<ScheduleLayer> layers)
 		{
 			var scheduleLayers = layers.Where(l => l.EndDateTime > onTime);
 			var enumerable = scheduleLayers as IList<ScheduleLayer> ?? scheduleLayers.ToList();

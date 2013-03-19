@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Linq;
 using System.Data;
 using NUnit.Framework;
@@ -246,6 +247,71 @@ namespace Teleopti.Ccc.Rta.ServerTest
 
 			_target.AddOrUpdate(new List<IActualAgentState> {agentState});
 			_mock.VerifyAll();
+		}
+
+		[Test]
+		public void VerifyCurrentLayerAndNext()
+		{
+			var dateTime = DateTime.UtcNow;
+			var scheduleLayers = new List<ScheduleLayer>
+				{
+					new ScheduleLayer
+						{
+							StartDateTime = dateTime.AddMinutes(-5),
+							EndDateTime = dateTime.AddMinutes(5)
+						},
+					new ScheduleLayer
+						{
+							StartDateTime = dateTime.AddMinutes(5),
+							EndDateTime = dateTime.AddMinutes(10)
+						}
+				};
+			var result = _target.CurrentLayerAndNext(dateTime, scheduleLayers);
+			Assert.That(result.First().StartDateTime, Is.EqualTo(dateTime.AddMinutes(-5)));
+			Assert.That(result.Last().EndDateTime, Is.EqualTo(dateTime.AddMinutes(10)));
+		}
+
+		[Test]
+		public void VerifyCurrentLayerAndNextNoLayerNow()
+		{
+			var dateTime = DateTime.UtcNow;
+			var scheduleLayers = new List<ScheduleLayer>
+				{
+					new ScheduleLayer
+						{
+							StartDateTime = dateTime.AddMinutes(5),
+							EndDateTime = dateTime.AddMinutes(10)
+						},
+					new ScheduleLayer
+						{
+							StartDateTime = dateTime.AddMinutes(10),
+							EndDateTime = dateTime.AddMinutes(20)
+						}
+				};
+			var result = _target.CurrentLayerAndNext(dateTime, scheduleLayers);
+			Assert.IsNull(result.First());
+			Assert.That(result.Last().EndDateTime, Is.EqualTo(dateTime.AddMinutes(10)));
+		}
+
+		[Test]
+		public void VerifyCurrentLayerAndNextLastAssignment()
+		{
+			var dateTime = DateTime.UtcNow;
+			var scheduleLayers = new List<ScheduleLayer>
+				{
+					new ScheduleLayer
+						{
+							StartDateTime = dateTime.AddMinutes(-5),
+							EndDateTime = dateTime.AddMinutes(5)
+						},
+					new ScheduleLayer
+						{
+							StartDateTime = dateTime.AddDays(1),
+							EndDateTime = dateTime.AddDays(1)
+						}
+				};
+			var result = _target.CurrentLayerAndNext(dateTime, scheduleLayers);
+			Assert.IsNull(result.Last());
 		}
 	}
 }
