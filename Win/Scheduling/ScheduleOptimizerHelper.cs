@@ -1115,7 +1115,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 IDictionary<string, IWorkShiftFinderResult> schedulingResults = new Dictionary<string, IWorkShiftFinderResult>();
 
                 advanceSchedulingService.DayScheduled += schedulingServiceDayScheduled;
-                advanceSchedulingService.ScheduleSelected(allVisibleMatrixes, allVisibleMatrixes[0].SelectedPeriod,
+                advanceSchedulingService.ScheduleSelected(allVisibleMatrixes, selectedPersonMatrixList[0].SelectedPeriod,
                                                   selectedPersonMatrixList.Select(x => x.Person).ToList(),
                                                   teamSteadyStateHolder);
 				advanceSchedulingService.DayScheduled -= schedulingServiceDayScheduled;

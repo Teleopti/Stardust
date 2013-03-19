@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
                     //if (!_teamBlockScheduler.ScheduleTeamBlock(teamBlockInfo, datePointer, _schedulingOptions))
                     //    continue;
 
-                    if (!_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, datePointer, _schedulingOptions))
+                    if (!_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, datePointer, _schedulingOptions, selectedPeriod))
                         continue;
 
 				

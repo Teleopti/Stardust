@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	public interface ITeamBlockScheduler
 	{
 		event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
-        bool ScheduleTeamBlockDay(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions);
+        bool ScheduleTeamBlockDay(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod);
         bool ScheduleTeamBlock(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions);
 		bool ScheduleTeamBlock(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions, bool skipOffset);
 	}
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			return true;
 		}
 
-        public bool ScheduleTeamBlockDay(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions)
+        public bool ScheduleTeamBlockDay(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod)
         {
 
            var suggestedShiftProjectionCache = ScheduleFirstTeamBlockToGetProjectionCache(teamBlockInfo, datePointer,
@@ -86,6 +86,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
             foreach (var day in teamBlockInfo.BlockInfo.BlockPeriod.DayCollection())
             {
+                if (!selectedPeriod.DayCollection().Contains(day)) continue;
                 var blockInfo = new BlockInfo(new DateOnlyPeriod(day, day));
                 var dailyTeamBlockInfo = new TeamBlockInfo(teamBlockInfo.TeamInfo, blockInfo);
 
