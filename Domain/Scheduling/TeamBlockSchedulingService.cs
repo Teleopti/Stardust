@@ -57,12 +57,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
 					ITeamBlockInfo teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, datePointer,
 					                                                                         _schedulingOptions
 						                                                                         .BlockFinderTypeForAdvanceScheduling);
-
+                    if (isTeamBlockScheduled(teamBlockInfo)) continue;
                     //old code that is getting a same shift
                     //if (!_teamBlockScheduler.ScheduleTeamBlock(teamBlockInfo, datePointer, _schedulingOptions))
                     //    continue;
 
-                    if (!_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, datePointer, _schedulingOptions, selectedPeriod, selectedPersons))
+                    if (!_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, datePointer, _schedulingOptions, selectedPeriod,selectedPersons))
                         continue;
 
 				
@@ -111,6 +111,15 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	    {
 		    OnDayScheduled(e);
 	    }
+
+        private bool isTeamBlockScheduled(ITeamBlockInfo teamBlockInfo)
+        {
+            foreach (var day in teamBlockInfo.BlockInfo.BlockPeriod.DayCollection())
+                foreach (var matrix in teamBlockInfo.TeamInfo.MatrixesForGroupAndDate(day))
+                    if (!matrix.GetScheduleDayByKey(day).DaySchedulePart().IsScheduled())
+                        return false;
+            return true;
+        }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		protected virtual void OnDayScheduled(SchedulingServiceBaseEventArgs scheduleServiceBaseEventArgs)

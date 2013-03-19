@@ -87,8 +87,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
             foreach (var day in teamBlockInfo.BlockInfo.BlockPeriod.DayCollection())
             {
                 if (!selectedPeriod.DayCollection().Contains(day)) continue;
-                var blockInfo = new BlockInfo(new DateOnlyPeriod(day, day));
-                var dailyTeamBlockInfo = new TeamBlockInfo(teamBlockInfo.TeamInfo, blockInfo);
+                var dailyTeamBlockInfo = new TeamBlockInfo(teamBlockInfo.TeamInfo, new BlockInfo(new DateOnlyPeriod(day, day)));
 
                 if (isTeamBlockScheduled(dailyTeamBlockInfo)) continue;
                 //should pass the suggested shift here
@@ -96,8 +95,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
                 var restriction = _restrictionAggregator.AggregatePerDay(dailyTeamBlockInfo, schedulingOptions, suggestedShiftProjectionCache);
 
                 //should consider the suggested start time
-                var shifts = _workShiftFilterService.Filter(datePointer, dailyTeamBlockInfo, restriction,
-                                                            schedulingOptions, new WorkShiftFinderResult(dailyTeamBlockInfo.TeamInfo.GroupPerson, datePointer));
+                var shifts = _workShiftFilterService.Filter(day, dailyTeamBlockInfo, restriction,
+                                                            schedulingOptions, new WorkShiftFinderResult(dailyTeamBlockInfo.TeamInfo.GroupPerson, day));
                 if (shifts == null || shifts.Count <= 0)
                     return false;
                 
@@ -114,7 +113,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
                                                                                                      .UseMaximumPersons);
                     _teamScheduling.DayScheduled += dayScheduled;
                     var skipOffset = !schedulingOptions.UseLevellingSameShift;
-                    _teamScheduling.ExecutePerDayPerPerson(person, day, teamBlockInfo, bestShiftProjectionCache, skipOffset);
+                    _teamScheduling.ExecutePerDayPerPerson(person,day,teamBlockInfo,bestShiftProjectionCache,skipOffset);
                     _teamScheduling.DayScheduled -= dayScheduled;
                 }
                 
@@ -128,9 +127,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
         private IShiftProjectionCache ScheduleFirstTeamBlockToGetProjectionCache(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions)
         {
             if (teamBlockInfo == null) return null;
-
-            //if teamBlockInfo is fully scheduled, continue;
-            if (isTeamBlockScheduled(teamBlockInfo)) return null;
             
             var restriction = _restrictionAggregator.Aggregate(teamBlockInfo, schedulingOptions);
 

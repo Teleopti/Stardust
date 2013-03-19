@@ -53,19 +53,24 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		{
             if (matrixListAll == null) return;
             if (groupPersonBuilderForOptimization == null) return;
-            var person = matrixListAll[0].Person;
-			var matrixesOfOnePerson = matrixListAll.Where(x => x.Person == person);
-			var listOfMatrixes = new List<List<IScheduleMatrixPro>>();
-			foreach (var scheduleMatrixPro in matrixesOfOnePerson)
-			{
-				var date = scheduleMatrixPro.UnlockedDays.First().Day;
-				var matrixesInOneSchedulePeriod = matrixListAll.Where(x => x.SchedulePeriod.DateOnlyPeriod.Contains(date)).ToList();
-				listOfMatrixes.Add(matrixesInOneSchedulePeriod);
-			}
+            //var person = matrixListAll[0].Person;
 
-			foreach (var matrixListInOneSchedulePeriod in listOfMatrixes)
-			{
-				var matrixDataList = _matrixDataListCreator.Create(matrixListInOneSchedulePeriod, schedulingOptions);
+            //var listOfMatrixes = new List<List<IScheduleMatrixPro>>();
+            //foreach (var person in matrixListAll.Select(x => x.Person).Distinct())
+            //{
+            //    var matrixesOfOnePerson = matrixListAll.Where(x => x.Person == person);
+
+            //    foreach (var scheduleMatrixPro in matrixesOfOnePerson)
+            //    {
+            //        var date = scheduleMatrixPro.UnlockedDays.First().Day;
+            //        var matrixesInOneSchedulePeriod = matrixListAll.Where(x => x.SchedulePeriod.DateOnlyPeriod.Contains(date)).ToList();
+            //        listOfMatrixes.Add(matrixesInOneSchedulePeriod);
+            //    }
+            //}
+
+            //foreach (var matrixListInOneSchedulePeriod in listOfMatrixes)
+            //{
+            var matrixDataList = _matrixDataListCreator.Create(matrixListAll, schedulingOptions);
 				var useSameDaysOffOnAll = _matrixDataListInSteadyState.IsListInSteadyState(matrixDataList);
 				if (useSameDaysOffOnAll)
 				{
@@ -74,31 +79,31 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 						foreach (var scheduleDayPro in matrixData.Matrix.UnlockedDays)
 						{
 							var scheduleDate = scheduleDayPro.Day;
-							var groupPerson = groupPersonBuilderForOptimization.BuildGroupPerson(person, scheduleDate);
+                            var groupPerson = groupPersonBuilderForOptimization.BuildGroupPerson(matrixData.Matrix.Person , scheduleDate);
 							var scheduleDictionary = _schedulingResultStateHolder.Schedules;
 							var restriction = _effectiveRestrictionCreator.GetEffectiveRestriction(groupPerson.GroupMembers,
 																								   scheduleDate, schedulingOptions,
 																								   scheduleDictionary);
-							addDaysOffForTeam(matrixListInOneSchedulePeriod, schedulingOptions, scheduleDate, restriction);
+                            addDaysOffForTeam(matrixListAll, schedulingOptions, scheduleDate, restriction);
 						}
 						foreach (var scheduleDayPro in matrixData.Matrix.UnlockedDays)
 						{
 							var scheduleDate = scheduleDayPro.Day;
-							var groupPerson =  groupPersonBuilderForOptimization.BuildGroupPerson(person, scheduleDate);
+                            var groupPerson = groupPersonBuilderForOptimization.BuildGroupPerson(matrixData.Matrix.Person, scheduleDate);
 							var scheduleDictionary = _schedulingResultStateHolder.Schedules;
 							var restriction = _effectiveRestrictionCreator.GetEffectiveRestriction(groupPerson.GroupMembers,
 																								   scheduleDate, schedulingOptions,
 																								   scheduleDictionary);
-							addContractDaysOffForTeam(matrixListInOneSchedulePeriod, schedulingOptions, rollbackService, scheduleDate, restriction);
+                            addContractDaysOffForTeam(matrixListAll, schedulingOptions, rollbackService, scheduleDate, restriction);
 						}
 					}
 				}
 				else
 				{
-					addDaysOff(matrixListInOneSchedulePeriod, schedulingOptions);
-					addContractDaysOff(matrixListInOneSchedulePeriod, rollbackService, schedulingOptions);
+                    addDaysOff(matrixListAll, schedulingOptions);
+                    addContractDaysOff(matrixListAll, rollbackService, schedulingOptions);
 				}
-			}
+            //}
 		}
 
 		private void addDaysOffForTeam(IList<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions, DateOnly scheduleDate,
