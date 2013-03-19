@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 				budgetGroup = new BudgetGroup() { Name = BudgetGroup, TimeZone = user.PermissionInformation.DefaultTimeZone() };
 				budgetGroupRepository.Add(budgetGroup);
 			}
-
+		    user.PersonPeriodCollection.First().BudgetGroup = budgetGroup;
 			var scenario = GlobalDataContext.Data().Data<CommonScenario>().Scenario;
 			var budgetDay = new BudgetDay(budgetGroup, scenario, new DateOnly(Date)){Allowance = Allowance, TotalAllowance = TotalAllowance};
             budgetDayRepository.Add(budgetDay);

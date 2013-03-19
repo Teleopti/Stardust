@@ -31,10 +31,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 
 			var allowanceList = new List<IAllowanceDay>();
 
-			foreach (var budgetDay in budgetDays)
+			foreach (var day in period.DayCollection())
 			{
-				if (budgetDay != null)
-					allowanceList.Add(new AllowanceDay() { Allowance = budgetDay.Allowance, Date = budgetDay.Day });
+				var allowanceDay = new AllowanceDay();
+
+				foreach (var budgetDay in budgetDays)
+				{
+					allowanceDay.Allowance = budgetDay.Day == day ? budgetDay.Allowance : 0;
+				}
+				allowanceDay.Date = day;
+				allowanceList.Add(allowanceDay);
 			}
 			return allowanceList;
 

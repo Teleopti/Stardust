@@ -6,7 +6,6 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.WinCodeTest.FakeData;

@@ -27,17 +27,16 @@ Background:
 	| Start date | 2012-06-18 |
 	
 Scenario: Henkes testscenario for setting up budgetgroups
-	Given I have the role 'Full access to mytime'
-	And there is  a budgetgroup 'NameOfTheBudgetGroup'
-	And 'I' belong to budgetgroup 'NameOfTheBudgetGroup'
+	Given there is a budgetgroup 'NameOfTheBudgetGroup'
 	And there is a budgetday
 	| Field				| Value                |
 	| BudgetGroup		| NameOfTheBudgetGroup |
-	| Date				| 2012-08-28           |
-	| Allowance			| 2                    |
-	| TotalAllowance	| 4                    |
+	| Date				| 2013-02-13           |
+	| Allowance			| 50                   |
+	| TotalAllowance	| 85                   |
+	And I have the role 'Full access to mytime'
 	When I view my week schedule for date '2013-02-15'
-	Then I should not see any indication of how many agents can go on holiday
+	Then I should see an indication of the amount of agents that can go on holiday on each day of the week
 
 Scenario: Do not show indication of the amount of agents that can go on holiday if no permission to absence request
 	Given I have the role 'No access to absence requests'

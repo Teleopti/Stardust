@@ -9,18 +9,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
     [Binding]
     public class BudgetStepDefinitions
     {
-        [Given(@"there is  a budgetgroup '(.*)'")]
+        [Given(@"there is a budgetgroup '(.*)'")]
         public void GivenThereIsABudgetgroup(string name)
         {
             var budgetConfigurable = new BudgetGroupConfigurable(name);
             UserFactory.User().Setup(budgetConfigurable);
-        }
-
-        [Given(@"'(.*)' belong to budgetgroup '(.*)'")]
-        public void GivenBelongToBudgetgroup(string userName, string budgetGroupName)
-        {
-            //Henke: keine ahnung.....
-            //ScenarioContext.Current.Pending();
         }
 
 		[Given(@"there is a budgetday")]

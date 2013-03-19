@@ -215,13 +215,27 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			var firstDayOfWeek = new DateOnly(DateHelper.GetFirstDateInWeek(date, CultureInfo.CurrentCulture));
 			var lastDayOfWeek = new DateOnly(DateHelper.GetLastDateInWeek(date, CultureInfo.CurrentCulture));
 			var week = new DateOnlyPeriod(firstDayOfWeek, lastDayOfWeek);
+			var weekWithPreviousDay = new DateOnlyPeriod(firstDayOfWeek.AddDays(-1), lastDayOfWeek);
+			var scheduleDay = new StubFactory().ScheduleDayStub(date);
+			var projection = new StubFactory().ProjectionStub();
 
-			var allowanceDay = new AllowanceDay {Allowance = 4, Date = date};
+			scheduleProvider.Stub(x => x.GetScheduleForPeriod(weekWithPreviousDay)).Return(new[] { scheduleDay });
+			projectionProvider.Stub(x => x.Projection(scheduleDay)).Return(projection);
 
-			allowanceProvider.Stub(x => x.GetAllowanceForPeriod(week)).Return(new[] {allowanceDay});
+			userTimeZone.Stub(x => x.TimeZone()).Return(timeZone);
+
+			var allowanceDay1 = new AllowanceDay { Allowance = 4, Date = week.StartDate };
+			var allowanceDay2 = new AllowanceDay { Allowance = 4, Date = week.StartDate.AddDays(1) };
+			var allowanceDay3 = new AllowanceDay { Allowance = 4, Date = week.StartDate.AddDays(2) };
+			var allowanceDay4 = new AllowanceDay { Allowance = 4, Date = week.StartDate.AddDays(3) };
+			var allowanceDay5 = new AllowanceDay { Allowance = 4, Date = week.StartDate.AddDays(4) };
+			var allowanceDay6 = new AllowanceDay { Allowance = 4, Date = week.StartDate.AddDays(5) };
+			var allowanceDay7 = new AllowanceDay { Allowance = 5, Date = week.StartDate.AddDays(6) };
+
+			allowanceProvider.Stub(x => x.GetAllowanceForPeriod(week)).Return(new[] { allowanceDay1, allowanceDay2, allowanceDay3, allowanceDay4, allowanceDay5, allowanceDay6, allowanceDay7 });
 
 			var result = Mapper.Map<DateOnly, WeekScheduleDomainData>(date);
-			result.Days.Single(d => d.Date == date).Allowance.Should().Be.EqualTo(allowanceDay.Allowance);
+			result.Days.Single(d => d.Date == lastDayOfWeek).Allowance.Should().Be.EqualTo(allowanceDay7.Allowance);
 		}
 
 		[Test]
