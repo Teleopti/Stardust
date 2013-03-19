@@ -37,6 +37,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly ITeamBlockInfoFactory _teamBlockInfoFactory;
 		private readonly IPeriodValueCalculator _periodValueCalculatorForAllSkills;
 		private readonly IDayOffOptimizationDecisionMakerFactory _dayOffOptimizationDecisionMakerFactory;
+		private readonly ISafeRollbackAndResourceCalculation _safeRollbackAndResourceCalculation;
 		private bool _cancelMe;
 
 		public TeamBlockDayOffOptimizerService(
@@ -51,7 +52,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			IResourceOptimizationHelper resourceOptimizationHelper,
 			ITeamBlockInfoFactory teamBlockInfoFactory,
 			IPeriodValueCalculator periodValueCalculatorForAllSkills,
-			IDayOffOptimizationDecisionMakerFactory dayOffOptimizationDecisionMakerFactory
+			IDayOffOptimizationDecisionMakerFactory dayOffOptimizationDecisionMakerFactory,
+			ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation
 			)
 		{
 			_teamInfoFactory = teamInfoFactory;
@@ -66,6 +68,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_teamBlockInfoFactory = teamBlockInfoFactory;
 			_periodValueCalculatorForAllSkills = periodValueCalculatorForAllSkills;
 			_dayOffOptimizationDecisionMakerFactory = dayOffOptimizationDecisionMakerFactory;
+			_safeRollbackAndResourceCalculation = safeRollbackAndResourceCalculation;
 		}
 
 		public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
@@ -132,6 +135,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 				if (_cancelMe)
 					break;
 
+				schedulePartModifyAndRollbackService.ClearModificationCollection();
+
 				foreach (var matrix in teamInfo.MatrixesForGroupMember(0))
 				{
 					runOneMatrix(optimizationPreferences, schedulePartModifyAndRollbackService, schedulingOptions, matrix, teamInfo,
@@ -142,7 +147,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 				if (currentPeriodValue >= previousPeriodValue)
 				{
 					teamInfosToRemove.Add(teamInfo);
-					safeRollbackAndResourceCalculation(schedulePartModifyAndRollbackService, schedulingOptions);
+					_safeRollbackAndResourceCalculation.Execute(schedulePartModifyAndRollbackService, schedulingOptions);
 
 				}
 				previousPeriodValue = currentPeriodValue;
@@ -205,27 +210,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		}
 
 		//to new class
-		private void safeRollbackAndResourceCalculation(ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, ISchedulingOptions schedulingOptions)
-		{
-			var modifyedScheduleDays = schedulePartModifyAndRollbackService.ModificationCollection.ToList();
-			HashSet<DateOnly> dates = new HashSet<DateOnly>();
-			
-			foreach (var modifyedScheduleDay in modifyedScheduleDays)
-			{
-				dates.Add(modifyedScheduleDay.DateOnlyAsPeriod.DateOnly);
-			}
-
-			IList<DateOnly> initialDates = new List<DateOnly>(dates);
-			foreach (var initialDate in initialDates)
-			{
-				dates.Add(initialDate.AddDays(1));
-			}
-
-			foreach (var dateOnly in dates)
-			{
-				_resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, schedulingOptions.ConsiderShortBreaks);
-			}
-		}
+		
 
 		//to new class
 		private void addDayOffAndResourceCalculate(IOptimizationPreferences optimizationPreferences,

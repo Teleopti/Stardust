@@ -811,6 +811,7 @@
     <Compile Include="Scheduling\TeamBlock\IntervalDataMedianCalculator.cs" />
     <Compile Include="Scheduling\TeamBlock\OpenHoursToEffectiveRestrictionConverter.cs" />
     <Compile Include="Scheduling\TeamBlock\RestrictionAggregator.cs" />
+    <Compile Include="Scheduling\TeamBlock\SafeRollbackAndResourceCalculation.cs" />
     <Compile Include="Scheduling\TeamBlock\ScheduleRestrictionExtractor.cs" />
     <Compile Include="Scheduling\TeamBlock\SkillDayPeriodIntervalDataGenerator.cs" />
     <Compile Include="Scheduling\TeamBlock\SkillIntervalData.cs" />

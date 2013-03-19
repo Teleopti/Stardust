@@ -457,7 +457,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var schedulingOptionsCreator = new SchedulingOptionsCreator();
 			var schedulingOptions = schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
 
-			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true,
+			var resourceCalculateDelayer = new ResourceCalculateDelayer(_container.Resolve<IResourceOptimizationHelper>(), 1, true,
 																		schedulingOptions.ConsiderShortBreaks);
 			ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService =
 				new SchedulePartModifyAndRollbackService(_stateHolder, _scheduleDayChangeCallback,
@@ -496,10 +496,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 					_container.Resolve<ILockableBitArrayChangesTracker>(),
 					_container.Resolve<ISchedulingResultStateHolder>(),
 					teamBlockScheduler,
-					_resourceOptimizationHelper,
+					_container.Resolve<IResourceOptimizationHelper>(),
 					_container.Resolve<ITeamBlockInfoFactory>(),
 					periodValueCalculatorForAllSkills,
-					_container.Resolve<IDayOffOptimizationDecisionMakerFactory>()
+					_container.Resolve<IDayOffOptimizationDecisionMakerFactory>(),
+					_container.Resolve<ISafeRollbackAndResourceCalculation>()
 					);
 
 			IList<IDayOffTemplate> dayOffTemplates = (from item in _schedulerState.CommonStateHolder.DayOffs

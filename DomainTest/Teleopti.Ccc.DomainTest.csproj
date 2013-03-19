@@ -722,6 +722,7 @@
     <Compile Include="Scheduling\TeamBlock\IntervalDataMedianCalculatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\OpenHoursToEffectiveRestrictionConverterTest.cs" />
     <Compile Include="Scheduling\TeamBlock\RestrictionAggregatorTest.cs" />
+    <Compile Include="Scheduling\TeamBlock\SafeRollbackAndResourceCalculationTest.cs" />
     <Compile Include="Scheduling\TeamBlock\ScheduleRestrictionExtractorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\SkillDayPeriodIntervalDataGeneratorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\SkillIntervalDataAggregatorTest.cs" />
