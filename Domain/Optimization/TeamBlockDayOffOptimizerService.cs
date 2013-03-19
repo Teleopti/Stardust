@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
@@ -136,10 +137,14 @@ namespace Teleopti.Ccc.Domain.Optimization
 					runOneMatrix(optimizationPreferences, schedulePartModifyAndRollbackService, schedulingOptions, matrix, teamInfo,
 					             selectedPeriod, selectedPersons);
 				}
-				// rollback id failed or not good
+				// rollback if failed or not good
 				var currentPeriodValue = _periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
 				if (currentPeriodValue >= previousPeriodValue)
+				{
 					teamInfosToRemove.Add(teamInfo);
+					safeRollbackAndResourceCalculation(schedulePartModifyAndRollbackService, schedulingOptions);
+
+				}
 				previousPeriodValue = currentPeriodValue;
 
 				OnReportProgress("Periodvalue: " + currentPeriodValue + " Optimized team " + teamInfo.GroupPerson.Name);
@@ -172,17 +177,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 			// Does the predictor beleve in this?
 			foreach (var dateOnly in removedDaysOff)
 			{
-				var toRemove = removeDaysOff(optimizationPreferences, schedulePartModifyAndRollbackService, teamInfo, dateOnly);
-				_resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, true, toRemove, new List<IScheduleDay>());
+				removeDayOffAndResourceCalculate(optimizationPreferences, schedulePartModifyAndRollbackService, teamInfo, dateOnly,
+				                                 schedulingOptions);
 			}
 
 			foreach (var dateOnly in addedDaysOff)
 			{
-				var tupleOfLists = addDaysOff(optimizationPreferences, schedulePartModifyAndRollbackService, teamInfo, dateOnly,
-				                              schedulingOptions);
-				IList<IScheduleDay> toRemove = tupleOfLists.Item1;
-				IList<IScheduleDay> toAdd = tupleOfLists.Item2;
-				_resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, true, toRemove, toAdd);
+				addDayOffAndResourceCalculate(optimizationPreferences, schedulePartModifyAndRollbackService, teamInfo, dateOnly, schedulingOptions);
 			}
 
 			foreach (var dateOnly in removedDaysOff)
@@ -204,7 +205,30 @@ namespace Teleopti.Ccc.Domain.Optimization
 		}
 
 		//to new class
-		private Tuple<IList<IScheduleDay>, IList<IScheduleDay>> addDaysOff(IOptimizationPreferences optimizationPreferences,
+		private void safeRollbackAndResourceCalculation(ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, ISchedulingOptions schedulingOptions)
+		{
+			var modifyedScheduleDays = schedulePartModifyAndRollbackService.ModificationCollection.ToList();
+			HashSet<DateOnly> dates = new HashSet<DateOnly>();
+			
+			foreach (var modifyedScheduleDay in modifyedScheduleDays)
+			{
+				dates.Add(modifyedScheduleDay.DateOnlyAsPeriod.DateOnly);
+			}
+
+			IList<DateOnly> initialDates = new List<DateOnly>(dates);
+			foreach (var initialDate in initialDates)
+			{
+				dates.Add(initialDate.AddDays(1));
+			}
+
+			foreach (var dateOnly in dates)
+			{
+				_resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, schedulingOptions.ConsiderShortBreaks);
+			}
+		}
+
+		//to new class
+		private void addDayOffAndResourceCalculate(IOptimizationPreferences optimizationPreferences,
 								   ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 								   ITeamInfo teamInfo, DateOnly dateOnly, ISchedulingOptions schedulingOptions)
 		{
@@ -222,14 +246,13 @@ namespace Teleopti.Ccc.Domain.Optimization
 					toAdd.Add(_stateHolder.Schedules[person].ReFetch(scheduleDay));
 				}
 			}
-
-			return new Tuple<IList<IScheduleDay>, IList<IScheduleDay>>(toRemove, toAdd);
+			_resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, schedulingOptions.ConsiderShortBreaks, toRemove, toAdd);
 		}
 
 		//to new class
-		private IList<IScheduleDay> removeDaysOff(IOptimizationPreferences optimizationPreferences,
+		private void removeDayOffAndResourceCalculate(IOptimizationPreferences optimizationPreferences,
 		                           ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
-		                           ITeamInfo teamInfo, DateOnly dateOnly)
+		                           ITeamInfo teamInfo, DateOnly dateOnly, ISchedulingOptions schedulingOptions)
 		{
 			IList<IScheduleDay> toRemove = new List<IScheduleDay>();
 			if (optimizationPreferences.Extra.KeepSameDaysOffInTeam) // do it on every team member
@@ -242,7 +265,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 					schedulePartModifyAndRollbackService.Modify(scheduleDay);
 				}
 			}
-			return toRemove;
+
+			_resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, schedulingOptions.ConsiderShortBreaks, toRemove, new List<IScheduleDay>());
+	
 		}
 
 		//to new class
