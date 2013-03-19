@@ -12,8 +12,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                      IList<DateOnly> unlockedDays, IList<IPerson> selectedPersons);
 		void Execute(ITeamBlockInfo teamBlockInfo, IShiftProjectionCache shiftProjectionCache, bool skipOffset);
 
-        void ExecutePerDayPerPerson(IPerson person, DateOnly dateOnly, ITeamBlockInfo teamBlockInfo,
-                                    IShiftProjectionCache shiftProjectionCache);
+        void ExecutePerDayPerPerson(IPerson person, DateOnly dateOnly, ITeamBlockInfo teamBlockInfo, IShiftProjectionCache shiftProjectionCache, bool useLevellingSameShift);
     }
 
     public  class TeamScheduling : ITeamScheduling
@@ -166,9 +165,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             return destinationScheduleDay;
         }
 
-        public void ExecutePerDayPerPerson(IPerson person, DateOnly dateOnly, ITeamBlockInfo teamBlockInfo, IShiftProjectionCache shiftProjectionCache)
+        public void ExecutePerDayPerPerson(IPerson person, DateOnly dateOnly, ITeamBlockInfo teamBlockInfo, IShiftProjectionCache shiftProjectionCache, bool skipOffset)
         {
             var startDateOfBlock = teamBlockInfo.BlockInfo.BlockPeriod.StartDate;
+            if (skipOffset)
+                startDateOfBlock = dateOnly;
             var listOfDestinationScheduleDays = new List<IScheduleDay>();
             var tempMatrixList = teamBlockInfo.TeamInfo.MatrixesForGroup().Where(scheduleMatrixPro => scheduleMatrixPro.Person == person).ToList();
             if (tempMatrixList.Any())
