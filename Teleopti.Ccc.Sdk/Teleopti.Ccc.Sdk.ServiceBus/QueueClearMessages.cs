@@ -1,8 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Data;
+﻿using System.Data;
 using System.Data.SqlClient;
-using System.Globalization;
-using System.Linq;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
 {
@@ -13,7 +10,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			using (var connection = new SqlConnection(connectionString))
 			using (var command = connection.CreateCommand())
 			{
-				connection.Open();			
+				connection.Open();
 				command.CommandText = "Queue.CustomClearMessages";
 				command.CommandType = CommandType.StoredProcedure;
 				command.Parameters.AddWithValue("@QueueName", queueName);
