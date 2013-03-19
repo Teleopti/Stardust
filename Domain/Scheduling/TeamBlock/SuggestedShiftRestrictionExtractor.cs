@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			var startTimeLimitation = new StartTimeLimitation();
 			var endTimeLimitation = new EndTimeLimitation();
 			var workTimeLimitation = new WorkTimeLimitation();
-
+			IMainShift commonMainShift = null;
 			if (schedulingOptions.UseLevellingSameStartTime)
 			{
 				var startTime = shift.WorkShiftStartTime;
@@ -28,10 +28,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				var endTime = shift.WorkShiftEndTime;
 				endTimeLimitation = new EndTimeLimitation(endTime, endTime);
 			}
-			
+
+			if (schedulingOptions.UseLevellingSameShift)
+			{
+				commonMainShift = shift.TheMainShift;
+			}
+
 			var restriction = new EffectiveRestriction(startTimeLimitation, endTimeLimitation,
 			                                           workTimeLimitation, null, null, null,
-			                                           new List<IActivityRestriction>());
+			                                           new List<IActivityRestriction>()) {CommonMainShift = commonMainShift};
+
 			return restriction;
 		}
 	}
