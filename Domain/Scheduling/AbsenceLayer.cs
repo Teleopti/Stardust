@@ -86,7 +86,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_id = null;
 		}
 
-
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "IAggregateEntity")]
 		protected virtual IAggregateRoot Root()
 		{
@@ -112,16 +111,10 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			return Root();
 		}
 
-		//void IAggregateEntity.SetParent(IEntity parent)
-		//{
-		//	SetParent(parent);
-		//}
-
-		public void SetParent(IEntity parent)
+		public override void SetParent(IEntity parent)
 		{
 			Parent = parent;
 		}
-
 
 		public new virtual IEntity Parent
 		{

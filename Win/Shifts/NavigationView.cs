@@ -559,10 +559,8 @@ namespace Teleopti.Ccc.Win.Shifts
             defaultTreeViewAfterSelect(_defaultTreeView, EventArgs.Empty);
         }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Win.Common.ViewBase.ShowErrorMessage(System.Windows.Forms.IWin32Window,System.String,System.String)")]
 		private void loadSelectedRuleSets()
         {
-	        
             var selectedRuleSets = new List<IWorkShiftRuleSet>();
             var selectedRuleSetBags = new List<IRuleSetBag>();
             ExplorerPresenter.Model.SetFilteredRuleSetCollection(new ReadOnlyCollection<IWorkShiftRuleSet>(selectedRuleSets));
@@ -611,38 +609,28 @@ namespace Teleopti.Ccc.Win.Shifts
             }
 
 			var callback = new WorkShiftAddCallback();
-			callback.RuleSetToComplex += callback_RuleSetToComplex;
+			callback.RuleSetToComplex += callbackRuleSetToComplex;
 	        using (var status = new ShiftGenerationStatus(callback))
 	        {
-		        try
-		        {
-					ExplorerPresenter.View.SetViewEnabled(false);
-			        status.ShowDelayed(this);
-			        ExplorerPresenter.Model.SetFilteredRuleSetCollection(
-				        new ReadOnlyCollection<IWorkShiftRuleSet>(selectedRuleSets));
-			        ExplorerPresenter.Model.SetFilteredRuleSetBagCollection(
-				        new ReadOnlyCollection<IRuleSetBag>(selectedRuleSetBags));
-			        ExplorerPresenter.GeneralPresenter.LoadModelCollection();
-			        ExplorerPresenter.VisualizePresenter.LoadModelCollection(callback); // |--|
+				ExplorerPresenter.View.SetViewEnabled(false);
+			    status.ShowDelayed(this);
+			    ExplorerPresenter.Model.SetFilteredRuleSetCollection(
+				    new ReadOnlyCollection<IWorkShiftRuleSet>(selectedRuleSets));
+			    ExplorerPresenter.Model.SetFilteredRuleSetBagCollection(
+				    new ReadOnlyCollection<IRuleSetBag>(selectedRuleSetBags));
+			    ExplorerPresenter.GeneralPresenter.LoadModelCollection();
+			    ExplorerPresenter.VisualizePresenter.LoadModelCollection(callback); // |--|
 			        
-		        }
-		        catch (OutOfMemoryException exception)
-		        {
-			        ViewBase.ShowErrorMessage(this, exception.Message, "Out of memory");
-		        }
-		        finally
-		        {
-					status.Visible = false;
-					ExplorerPresenter.View.SetViewEnabled(true);
-			        ExplorerView.Activate();
-					_defaultTreeView.Select();
-					callback.RuleSetToComplex -= callback_RuleSetToComplex;
-		        }
+				status.Visible = false;
+				ExplorerPresenter.View.SetViewEnabled(true);
+			    ExplorerView.Activate();
+				_defaultTreeView.Select();
+				callback.RuleSetToComplex -= callbackRuleSetToComplex;
 	        }
             
         }
 
-		void callback_RuleSetToComplex(object sender, ComplexRuleSetEventArgs e)
+		void callbackRuleSetToComplex(object sender, ComplexRuleSetEventArgs e)
 		{
 			ViewBase.ShowErrorMessage(this, UserTexts.Resources.ShiftGenerationStop, e.RuleSetName + UserTexts.Resources.TooComplexRuleset);
 		}
