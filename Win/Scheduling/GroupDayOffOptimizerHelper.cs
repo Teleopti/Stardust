@@ -557,15 +557,18 @@ namespace Teleopti.Ccc.Win.Scheduling
                     _container.Resolve<ISchedulingOptionsCreator>(),
                     _container.Resolve<ISchedulingResultStateHolder>(),
                     _container.Resolve<IDeleteAndResourceCalculateService>(),
-					periodValueCalculatorForAllSkills
+					periodValueCalculatorForAllSkills,
+					schedulePartModifyAndRollbackService,
+					_resourceOptimizationHelper
                     );
-
+	        teamBlockIntradayOptimizationService.ReportProgress += resourceOptimizerPersonOptimized;
             teamBlockIntradayOptimizationService.Optimize(
                 allMatrixes,
                 selectedPeriod,
                 selectedPersons,
-                optimizationPreferences,
-                schedulePartModifyAndRollbackService);
+                optimizationPreferences
+                );
+	        teamBlockIntradayOptimizationService.ReportProgress -= resourceOptimizerPersonOptimized;
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
