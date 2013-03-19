@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	public interface ITeamBlockScheduler
 	{
 		event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
-        bool ScheduleTeamBlockDay(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod);
+        bool ScheduleTeamBlockDay(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons);
         bool ScheduleTeamBlock(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions);
 		bool ScheduleTeamBlock(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions, bool skipOffset);
 	}
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			return true;
 		}
 
-        public bool ScheduleTeamBlockDay(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod)
+        public bool ScheduleTeamBlockDay(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons)
         {
 
            var suggestedShiftProjectionCache = ScheduleFirstTeamBlockToGetProjectionCache(teamBlockInfo, datePointer,
@@ -103,6 +103,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
                 
                 foreach (var person in teamBlockInfo.TeamInfo.GroupPerson.GroupMembers)
                 {
+                    if (!selectedPersons.Contains(person)) continue;
                     var activityInternalData = _skillDayPeriodIntervalDataGenerator.GeneratePerDay(dailyTeamBlockInfo);
                     var bestShiftProjectionCache = _workShiftSelector.SelectShiftProjectionCache(shifts, activityInternalData,
                                                                                                  schedulingOptions
@@ -112,7 +113,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
                                                                                                  schedulingOptions
                                                                                                      .UseMaximumPersons);
                     _teamScheduling.DayScheduled += dayScheduled;
-                    _teamScheduling.ExecutePerDayPerPerson(person,day,teamBlockInfo,bestShiftProjectionCache);
+                    var skipOffset = !schedulingOptions.UseLevellingSameShift;
+                    _teamScheduling.ExecutePerDayPerPerson(person, day, teamBlockInfo, bestShiftProjectionCache, skipOffset);
                     _teamScheduling.DayScheduled -= dayScheduled;
                 }
                 
