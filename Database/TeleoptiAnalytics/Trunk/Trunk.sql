@@ -13,7 +13,7 @@ INCLUDE ([CreatedAt],[ExpiresAt])
 --Date: 2013-0-18
 --Desc: PBI New RTA infrastructure
 ----------------
-
+--remove IF EXISTS before deployment
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[RTA].[ActualAgentState]') AND type in (N'P', N'PC'))
 DROP TABLE [RTA].[ActualAgentState]
 GO
@@ -90,4 +90,36 @@ BEGIN
 	INCLUDE ([CreatedAt],[ExpiresAt])
 
 END
+select * from PBI193842_Megafon_TeleoptiAnalytics.Queue.Messages
+select * from PBI193842_Megafon_TeleoptiAnalytics.Queue.Queues
 
+----------------  
+--Name: David
+--Date: 2013-03-19
+--Desc: Purge table
+----------------
+--remove IF EXISTS before deployment
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[Queue].[MessagesPurged]') AND type in (N'P', N'PC'))
+DROP TABLE [Queue].[MessagesPurged]
+GO
+
+CREATE TABLE [Queue].[MessagesPurged](
+	[Id] [bigint] IDENTITY(-9223372036854775808,1) NOT NULL,
+	[PurgedAt] [datetime] NOT NULL,
+	[MessageId] [bigint] NOT NULL,
+	[QueueId] [int] NOT NULL,
+	[CreatedAt] [datetime] NOT NULL,
+	[ProcessingUntil] [datetime] NOT NULL,
+	[ExpiresAt] [datetime] NULL,
+	[Processed] [bit] NOT NULL,
+	[Headers] [nvarchar](2000) NULL,
+	[Payload] [varbinary](max) NULL,
+	[ProcessedCount] [int] NOT NULL,
+ CONSTRAINT [PK_MessagesPurged] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)
+)
+
+ALTER TABLE [Queue].[MessagesPurged] ADD  CONSTRAINT [DF_PurgedAt_CreatedAt]  DEFAULT (getutcdate()) FOR [PurgedAt]
+GO
