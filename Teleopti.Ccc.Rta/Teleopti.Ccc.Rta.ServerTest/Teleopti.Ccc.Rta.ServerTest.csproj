@@ -97,10 +97,19 @@
     <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="log4net">
-      <HintPath>..\..\packages\log4net.1.2.11\lib\net35-full\log4net.dll</HintPath>
+    <Reference Include="LinFu.DynamicProxy">
+      <HintPath>..\..\packages\LinFu.DynamicProxy.OfficialRelease.1.0.5\lib\net\LinFu.DynamicProxy.dll</HintPath>
     </Reference>
-    <Reference Include="MbCache, Version=2.1.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL" />
+    <Reference Include="log4net">
+      <HintPath>..\..\packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="MbCache, Version=2.2.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\MbCache.2.2\lib\net40\MbCache.dll</HintPath>
+    </Reference>
+    <Reference Include="MbCache.ProxyImpl.LinFu">
+      <HintPath>..\..\packages\MbCache.2.2\lib\net40\MbCache.ProxyImpl.LinFu.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\..\packages\NUnit.2.6.0.12054\lib\nunit.framework.dll</HintPath>
     </Reference>
