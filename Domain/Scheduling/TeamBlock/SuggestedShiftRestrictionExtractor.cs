@@ -18,10 +18,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			var workTimeLimitation = new WorkTimeLimitation();
 
 			if (schedulingOptions.UseLevellingSameStartTime)
-				startTimeLimitation = new StartTimeLimitation(shift.WorkShiftStartTime, null);
+			{
+				var startTime = shift.WorkShiftStartTime;
+				startTimeLimitation = new StartTimeLimitation(startTime, startTime);
+			}
+				
 			if (schedulingOptions.UseLevellingSameEndTime)
-				endTimeLimitation = new EndTimeLimitation(null, shift.WorkShiftEndTime);
-
+			{
+				var endTime = shift.WorkShiftEndTime;
+				endTimeLimitation = new EndTimeLimitation(endTime, endTime);
+			}
+			
 			var restriction = new EffectiveRestriction(startTimeLimitation, endTimeLimitation,
 			                                           workTimeLimitation, null, null, null,
 			                                           new List<IActivityRestriction>());
