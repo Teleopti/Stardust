@@ -2,7 +2,6 @@
 using System.Linq;
 using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
@@ -93,8 +92,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			var schedulePeriod = _matrixConverter.SourceMatrix.SchedulePeriod;
 			int targetDaysoff;
-			int currentDaysoff;
-			if (!_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(schedulePeriod, out targetDaysoff, out currentDaysoff))
+			IList<IScheduleDay> dayOffDays = new List<IScheduleDay>();
+			if (!_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(schedulePeriod, out targetDaysoff, out dayOffDays))
 				return false;
 
 			bool success = false;

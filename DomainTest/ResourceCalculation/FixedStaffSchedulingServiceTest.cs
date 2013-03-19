@@ -90,7 +90,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var dayOffCollection = new ReadOnlyCollection<IPersonDayOff>(new List<IPersonDayOff>());
 			var virtualSchedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
 
-			int dayOffsNow;
+			//int dayOffsNow;
+			IList<IScheduleDay> dayOffsNow = new List<IScheduleDay>();
 			int targetDaysOff;
 			
 			Expect.Call(person2.VirtualSchedulePeriod(new DateOnly(2009, 2, 2))).Return(virtualSchedulePeriod).Repeat.AtLeastOnce().IgnoreArguments();
@@ -153,7 +154,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			Expect.Call(person.VirtualSchedulePeriod(new DateOnly(2009, 2, 2))).Return(virtualSchedulePeriod).Repeat.AtLeastOnce().IgnoreArguments();
 			Expect.Call(virtualSchedulePeriod.IsValid).Return(true).Repeat.AtLeastOnce();
 			int targetDaysOff;
-			int dayOffsNow;
+			//int dayOffsNow;
+			IList<IScheduleDay> dayOffsNow = new List<IScheduleDay>();
 			Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(virtualSchedulePeriod, out targetDaysOff,
 																				out dayOffsNow)).Return(true);
             Expect.Call(part1.Person).Return(person).Repeat.AtLeastOnce();
@@ -222,7 +224,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		public void ShouldReturnFalseOnCorrectNumberOfDaysOffIfDaysOffPeriodCalculatorReturnsFalse()
 		{
 			int target;
-			int current;
+			//int current;
+			IList<IScheduleDay> current = new List<IScheduleDay>();
 			var person = new Person { Name = new Name("hej", "svejs") };
 			var virtualPeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
 
