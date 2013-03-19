@@ -99,7 +99,7 @@ select * from PBI193842_Megafon_TeleoptiAnalytics.Queue.Queues
 --Desc: Purge table
 ----------------
 --remove IF EXISTS before deployment
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[Queue].[MessagesPurged]') AND type in (N'P', N'PC'))
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[Queue].[MessagesPurged]') AND type in (N'U'))
 DROP TABLE [Queue].[MessagesPurged]
 GO
 
