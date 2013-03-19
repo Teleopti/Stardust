@@ -154,3 +154,7 @@
 .preference-tooltip-font {
 	font-family: Arial;
 }
+
+.ie9 .preference-ui-tooltip {
+    box-shadow: none;
+}

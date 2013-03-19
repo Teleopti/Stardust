@@ -132,7 +132,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 				},
 				style: {
 					def: false,
-					classes: 'ui-tooltip-custom ui-tooltip-rounded ui-tooltip-shadow',
+					classes: 'ui-tooltip-custom ui-tooltip-rounded ui-tooltip-shadow preference-ui-tooltip',
 					tip: {
 						corner: "top left"
 					}
@@ -155,7 +155,6 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 					}
 				}
 			});
-
 		button.removeAttr('disabled');
 	}
 
