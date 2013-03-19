@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Interfaces.Domain;
 
@@ -32,6 +33,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly IPeriodValueCalculator _periodValueCalculatorForAllSkills;
 		private readonly ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
+		private readonly IScheduleDayEquator _scheduleDayEquator;
 		private bool _cancelMe;
 
 		public TeamBlockIntradayOptimizationService(ITeamInfoFactory teamInfoFactory,
@@ -43,7 +45,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 		                                            IDeleteAndResourceCalculateService deleteAndResourceCalculateService,
 		                                            IPeriodValueCalculator periodValueCalculatorForAllSkills,
 		                                            ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
-		                                            IResourceOptimizationHelper resourceOptimizationHelper)
+		                                            IResourceOptimizationHelper resourceOptimizationHelper,
+		                                            IScheduleDayEquator scheduleDayEquator)
 		{
 			_teamInfoFactory = teamInfoFactory;
 			_teamBlockInfoFactory = teamBlockInfoFactory;
@@ -55,6 +58,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_periodValueCalculatorForAllSkills = periodValueCalculatorForAllSkills;
 			_schedulePartModifyAndRollbackService = schedulePartModifyAndRollbackService;
 			_resourceOptimizationHelper = resourceOptimizationHelper;
+			_scheduleDayEquator = scheduleDayEquator;
 		}
 
 		public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
@@ -88,6 +92,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			//rounds
 			var remainingInfoList = new List<ITeamBlockInfo>(allTeamBlocksInHashSet);
 			var previousPeriodValue = _periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.IntradayOptimization);
+
 			while (remainingInfoList.Count > 0)
 			{
 				if (_cancelMe)
@@ -172,14 +177,44 @@ namespace Teleopti.Ccc.Domain.Optimization
 				}
 
 				var datePoint = teamBlock.BlockInfo.BlockPeriod.DayCollection().First();
-				_teamBlockScheduler.ScheduleTeamBlock(teamBlock, datePoint, schedulingOptions);
+				var success = _teamBlockScheduler.ScheduleTeamBlock(teamBlock, datePoint, schedulingOptions);
+				if (!success)
+				{
+					teamBlockToRemove.Add(teamBlock);
+					continue;
+				}
+				//check over restriction limit
+				foreach (var matrix in teamBlock.MatrixesForGroupAndBlock())
+				{
+					var originalStateContainer = new ScheduleMatrixOriginalStateContainer(matrix, _scheduleDayEquator);
+					var optimizerOverLimitDecider = new OptimizationOverLimitByRestrictionDecider(matrix, new RestrictionChecker(),
+					                                                                              optimizationPreferences,
+					                                                                              originalStateContainer);
+					var moveMaxDaysOverLimit = optimizerOverLimitDecider.MoveMaxDaysOverLimit();
+					if (moveMaxDaysOverLimit)
+					{
+						rollback(teamBlock);
+						teamBlockToRemove.Add(teamBlock);
+						break;
+					}
 
+					var daysOverLimit = optimizerOverLimitDecider.OverLimit();
+					if (daysOverLimit.Count > 0)
+					{
+						rollback(teamBlock);
+						teamBlockToRemove.Add(teamBlock);
+						break;
+					}
+				}
+
+				if (teamBlockToRemove.Count > 0) continue;
+				
 				var currentPeriodValue = _periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
 				var isPeriodWorse = currentPeriodValue >= previousPeriodValue;
 				if (isPeriodWorse)
 				{
 					teamBlockToRemove.Add(teamBlock);
-					Rollback(teamBlock);
+					rollback(teamBlock);
 				}
 
 				OnReportProgress("Periodvalue: " + currentPeriodValue + " Optimized team " + teamBlock.TeamInfo.GroupPerson.Name);
@@ -187,7 +222,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			return teamBlockToRemove;
 		}
 
-		public void Rollback(ITeamBlockInfo teamBlock)
+		private void rollback(ITeamBlockInfo teamBlock)
 		{
 			_schedulePartModifyAndRollbackService.Rollback();
 			recalculateDay(teamBlock.BlockInfo.BlockPeriod);

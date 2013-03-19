@@ -539,8 +539,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                                        _container.Resolve<IRestrictionAggregator>(),
                                        _container.Resolve<IWorkShiftFilterService>(), teamScheduling,
                                        _container.Resolve<IWorkShiftSelector>());
-
-     
+    
             var groupPersonBuilderForOptimization = callGroupPage(schedulingOptions);
             ITeamInfoFactory teamInfoFactory = new TeamInfoFactory(groupPersonBuilderForOptimization);
 			IScheduleResultDataExtractor allSkillsDataExtractor =
@@ -559,7 +558,8 @@ namespace Teleopti.Ccc.Win.Scheduling
                     _container.Resolve<IDeleteAndResourceCalculateService>(),
 					periodValueCalculatorForAllSkills,
 					schedulePartModifyAndRollbackService,
-					_resourceOptimizationHelper
+					_resourceOptimizationHelper,
+					_container.Resolve<IScheduleDayEquator>()
                     );
 	        teamBlockIntradayOptimizationService.ReportProgress += resourceOptimizerPersonOptimized;
             teamBlockIntradayOptimizationService.Optimize(
