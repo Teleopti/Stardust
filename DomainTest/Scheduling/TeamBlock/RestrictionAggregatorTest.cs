@@ -191,7 +191,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			                                          new WorkTimeLimitation(), null, null, null,
 			                                          new List<IActivityRestriction>()) {CommonMainShift = mainShift};
 
-			    var restriction = _target.AggregatePerDay(teamInfo, _schedulingOptions, blockInfo, shift);
+			    var restriction = _target.AggregatePerDay(new TeamBlockInfo(teamInfo,blockInfo), _schedulingOptions,  shift);
 			    Assert.That(restriction, Is.EqualTo(result));
 		    }
 	    }

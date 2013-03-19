@@ -117,7 +117,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                 if (effectiveRestriction != null)
                     effectiveRestriction = effectiveRestriction.Combine(restrictionFromSchedules);
 
-	            var suggestedShiftRestriction = _suggestedShiftRestrictionExtractor.Extract(suggestedShift,
+                var suggestedShiftRestriction = _suggestedShiftRestrictionExtractor.Extract(suggestedShiftProjectionCache,
 	                                                                                        schedulingOptions);
 				if (suggestedShiftRestriction == null)
 					return null;
