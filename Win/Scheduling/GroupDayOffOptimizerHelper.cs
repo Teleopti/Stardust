@@ -468,7 +468,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			ITeamBlockScheduler teamBlockScheduler =
 				new TeamBlockScheduler(_container.Resolve<ISkillDayPeriodIntervalDataGenerator>(),
 									   _container.Resolve<IRestrictionAggregator>(),
-									   _container.Resolve<IWorkShiftFilterService>(), teamScheduling,
+									   _container.Resolve<IWorkShiftFilterService>(), 
+									   teamScheduling,
 									   _container.Resolve<IWorkShiftSelector>());
 
 			ISmartDayOffBackToLegalStateService dayOffBackToLegalStateService
@@ -494,13 +495,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 					dayOffBackToLegalStateService,
 					_container.Resolve<ISchedulingOptionsCreator>(),
 					_container.Resolve<ILockableBitArrayChangesTracker>(),
-					_container.Resolve<ISchedulingResultStateHolder>(),
 					teamBlockScheduler,
-					_container.Resolve<IResourceOptimizationHelper>(),
 					_container.Resolve<ITeamBlockInfoFactory>(),
 					periodValueCalculatorForAllSkills,
 					_container.Resolve<IDayOffOptimizationDecisionMakerFactory>(),
-					_container.Resolve<ISafeRollbackAndResourceCalculation>()
+					_container.Resolve<ISafeRollbackAndResourceCalculation>(),
+					_container.Resolve<ITeamDayOffModifyer>()
 					);
 
 			IList<IDayOffTemplate> dayOffTemplates = (from item in _schedulerState.CommonStateHolder.DayOffs
