@@ -188,8 +188,9 @@ namespace Teleopti.Ccc.Rta.Server
 
 		private static bool haveScheduleChanged(ScheduleLayer layer, IActualAgentState oldState)
 		{
-			return layer.PayloadId == oldState.ScheduledId && layer.StartDateTime == oldState.StateStart &&
-			       layer.EndDateTime == oldState.NextStart;
+			return layer.PayloadId == oldState.ScheduledId 
+				&& layer.StartDateTime == oldState.StateStart 
+				&& layer.EndDateTime == oldState.NextStart;
 		}
 
 		public void InvalidateReadModelCache(Guid personId, DateTime timeStamp)

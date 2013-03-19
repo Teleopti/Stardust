@@ -104,6 +104,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 					}
 				};
 
+			_dataHandler.Expect(s => s.GetReadModel(_guid)).Return(new List<ScheduleLayer>());
 			_dataHandler.Expect(s => s.CurrentLayerAndNext(_dateTime, new List<ScheduleLayer>()))
 						.Return(new List<ScheduleLayer> { currentLayer, nextLayer }).IgnoreArguments();
 			_dataHandler.Expect(s => s.LoadOldState(_guid)).Return(previousState);
@@ -179,6 +180,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 				};
 
 			var resetEvent = new AutoResetEvent(false);
+			_dataHandler.Expect(s => s.GetReadModel(_guid)).Return(new List<ScheduleLayer>());
 			_dataHandler.Expect(s => s.CurrentLayerAndNext(_dateTime, new List<ScheduleLayer>()))
 						.Return(new List<ScheduleLayer> { currentLayer, nextLayer }).IgnoreArguments();
 			_dataHandler.Expect(s => s.LoadOldState(_guid)).Return(previousState);
@@ -427,6 +429,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 							}
 					}
 				};
+			_dataHandler.Expect(s => s.GetReadModel(_guid)).Return(new List<ScheduleLayer>());
 			_dataHandler.Expect(s => s.CurrentLayerAndNext(_dateTime, new List<ScheduleLayer>()))
 						.Return(new List<ScheduleLayer> { currentLayer, nextLayer }).IgnoreArguments();
 			_dataHandler.Expect(s => s.LoadOldState(_guid)).Return(previousState);
