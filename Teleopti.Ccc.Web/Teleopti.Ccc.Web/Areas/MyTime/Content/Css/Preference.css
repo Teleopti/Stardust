@@ -169,3 +169,7 @@
 #Preference-add-extended-form {
 	min-width: 268px;
 }
+
+.ie9 .preference-ui-tooltip {
+    box-shadow: none;
+}
