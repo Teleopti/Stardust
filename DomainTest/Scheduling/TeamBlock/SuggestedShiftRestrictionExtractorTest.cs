@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			}
 			using (_mocks.Playback())
 			{
-				var expected = new EffectiveRestriction(new StartTimeLimitation(startTime, null),
+				var expected = new EffectiveRestriction(new StartTimeLimitation(startTime, startTime),
 				                                        new EndTimeLimitation(),
 				                                        new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
 				var result = _target.Extract(shift, _schedulingOptions);
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			using (_mocks.Playback())
 			{
 				var expected = new EffectiveRestriction(new StartTimeLimitation(),
-				                                        new EndTimeLimitation(null, endTime),
+														new EndTimeLimitation(endTime, endTime),
 				                                        new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
 				var result = _target.Extract(shift, _schedulingOptions);
 
@@ -85,8 +85,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			}
 			using (_mocks.Playback())
 			{
-				var expected = new EffectiveRestriction(new StartTimeLimitation(startTime, null),
-				                                        new EndTimeLimitation(null, endTime),
+				var expected = new EffectiveRestriction(new StartTimeLimitation(startTime, startTime),
+														new EndTimeLimitation(endTime, endTime),
 				                                        new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
 				var result = _target.Extract(shift, _schedulingOptions);
 
