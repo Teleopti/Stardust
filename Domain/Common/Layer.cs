@@ -111,12 +111,14 @@ namespace Teleopti.Ccc.Domain.Common
                         Period.EndDateTime == layer.Period.StartDateTime);
         }
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "persistedactivity")]
 		public virtual void SetParent(IEntity parent)
 		{
 			throw new NotSupportedException("Only persistedactivity layer supports parenting.");
 		}
 
-	    public virtual IEntity Parent
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "persistedactivity")]
+		public virtual IEntity Parent
 	    {
 		    get
 		    {
