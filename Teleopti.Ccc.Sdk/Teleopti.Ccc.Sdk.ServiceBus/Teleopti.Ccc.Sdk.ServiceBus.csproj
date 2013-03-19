@@ -126,8 +126,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Rhino.ServiceBus.Autofac.3.0.2\lib\4.0\Rhino.ServiceBus.Autofac.dll</HintPath>
     </Reference>
-    <Reference Include="Rhino.ServiceBus.SqlQueues, Version=1.0.1.1, Culture=neutral, PublicKeyToken=345d633c75812f60, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Rhino.ServiceBus.SqlQueues.1.0.1.1\lib\net40\Rhino.ServiceBus.SqlQueues.dll</HintPath>
+    <Reference Include="Rhino.ServiceBus.SqlQueues, Version=1.0.1.3, Culture=neutral, PublicKeyToken=345d633c75812f60, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Rhino.ServiceBus.SqlQueues.1.0.1.3\lib\net40\Rhino.ServiceBus.SqlQueues.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -162,7 +163,7 @@
     <Compile Include="Rta\BusinessUnitInfoConsumer.cs" />
     <Compile Include="Denormalizer\PersonScheduleDayReadModelHandler.cs" />
     <Compile Include="Denormalizer\PersonScheduleDayReadModelsCreator.cs" />
-    <Compile Include="ClearQueueMessages.cs" />
+    <Compile Include="QueueClearMessages.cs" />
     <Compile Include="Rta\UpdatedScheduleInfoConsumer.cs" />
     <Compile Include="Denormalizer\DenormalizedScheduleMessageBuilder.cs" />
     <Compile Include="Denormalizer\IDenormalizedScheduleMessageBuilder.cs" />
