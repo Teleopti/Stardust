@@ -90,8 +90,6 @@ BEGIN
 	INCLUDE ([CreatedAt],[ExpiresAt])
 
 END
-select * from PBI193842_Megafon_TeleoptiAnalytics.Queue.Messages
-select * from PBI193842_Megafon_TeleoptiAnalytics.Queue.Queues
 
 ----------------  
 --Name: David
