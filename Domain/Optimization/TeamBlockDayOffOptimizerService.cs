@@ -31,13 +31,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly ISmartDayOffBackToLegalStateService _smartDayOffBackToLegalStateService;
 		private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
 		private readonly ILockableBitArrayChangesTracker _lockableBitArrayChangesTracker;
-		private readonly ISchedulingResultStateHolder _stateHolder;
 		private readonly ITeamBlockScheduler _teamBlockScheduler;
-		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 		private readonly ITeamBlockInfoFactory _teamBlockInfoFactory;
 		private readonly IPeriodValueCalculator _periodValueCalculatorForAllSkills;
 		private readonly IDayOffOptimizationDecisionMakerFactory _dayOffOptimizationDecisionMakerFactory;
 		private readonly ISafeRollbackAndResourceCalculation _safeRollbackAndResourceCalculation;
+		private readonly ITeamDayOffModifyer _teamDayOffModifyer;
 		private bool _cancelMe;
 
 		public TeamBlockDayOffOptimizerService(
@@ -47,13 +46,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 			ISmartDayOffBackToLegalStateService smartDayOffBackToLegalStateService,
 			ISchedulingOptionsCreator schedulingOptionsCreator,
 			ILockableBitArrayChangesTracker lockableBitArrayChangesTracker,
-			ISchedulingResultStateHolder stateHolder,
 			ITeamBlockScheduler teamBlockScheduler,
-			IResourceOptimizationHelper resourceOptimizationHelper,
 			ITeamBlockInfoFactory teamBlockInfoFactory,
 			IPeriodValueCalculator periodValueCalculatorForAllSkills,
 			IDayOffOptimizationDecisionMakerFactory dayOffOptimizationDecisionMakerFactory,
-			ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation
+			ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation,
+			ITeamDayOffModifyer teamDayOffModifyer
 			)
 		{
 			_teamInfoFactory = teamInfoFactory;
@@ -62,13 +60,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_smartDayOffBackToLegalStateService = smartDayOffBackToLegalStateService;
 			_schedulingOptionsCreator = schedulingOptionsCreator;
 			_lockableBitArrayChangesTracker = lockableBitArrayChangesTracker;
-			_stateHolder = stateHolder;
 			_teamBlockScheduler = teamBlockScheduler;
-			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_teamBlockInfoFactory = teamBlockInfoFactory;
 			_periodValueCalculatorForAllSkills = periodValueCalculatorForAllSkills;
 			_dayOffOptimizationDecisionMakerFactory = dayOffOptimizationDecisionMakerFactory;
 			_safeRollbackAndResourceCalculation = safeRollbackAndResourceCalculation;
+			_teamDayOffModifyer = teamDayOffModifyer;
 		}
 
 		public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
@@ -182,13 +179,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 			// Does the predictor beleve in this?
 			foreach (var dateOnly in removedDaysOff)
 			{
-				removeDayOffAndResourceCalculate(optimizationPreferences, schedulePartModifyAndRollbackService, teamInfo, dateOnly,
-				                                 schedulingOptions);
+				_teamDayOffModifyer.RemoveDayOffAndResourceCalculate(schedulePartModifyAndRollbackService, teamInfo, dateOnly, schedulingOptions);
 			}
 
 			foreach (var dateOnly in addedDaysOff)
 			{
-				addDayOffAndResourceCalculate(optimizationPreferences, schedulePartModifyAndRollbackService, teamInfo, dateOnly, schedulingOptions);
+				_teamDayOffModifyer.AddDayOffAndResourceCalculate(schedulePartModifyAndRollbackService, teamInfo, dateOnly, schedulingOptions);
 			}
 
 			foreach (var dateOnly in removedDaysOff)
@@ -209,51 +205,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			// remember not to break anything in shifts or restrictions
 		}
 
-		//to new class
 		
-
-		//to new class
-		private void addDayOffAndResourceCalculate(IOptimizationPreferences optimizationPreferences,
-								   ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
-								   ITeamInfo teamInfo, DateOnly dateOnly, ISchedulingOptions schedulingOptions)
-		{
-			IList<IScheduleDay> toRemove = new List<IScheduleDay>();
-			IList<IScheduleDay> toAdd = new List<IScheduleDay>();
-			if (optimizationPreferences.Extra.KeepSameDaysOffInTeam) // do it on every team member
-			{
-				foreach (var person in teamInfo.GroupPerson.GroupMembers)
-				{
-					IScheduleDay scheduleDay = _stateHolder.Schedules[person].ScheduledDay(dateOnly);
-					toRemove.Add((IScheduleDay)scheduleDay.Clone());
-					scheduleDay.DeleteMainShift(scheduleDay);
-					scheduleDay.CreateAndAddDayOff(schedulingOptions.DayOffTemplate);
-					schedulePartModifyAndRollbackService.Modify(scheduleDay);
-					toAdd.Add(_stateHolder.Schedules[person].ReFetch(scheduleDay));
-				}
-			}
-			_resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, schedulingOptions.ConsiderShortBreaks, toRemove, toAdd);
-		}
-
-		//to new class
-		private void removeDayOffAndResourceCalculate(IOptimizationPreferences optimizationPreferences,
-		                           ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
-		                           ITeamInfo teamInfo, DateOnly dateOnly, ISchedulingOptions schedulingOptions)
-		{
-			IList<IScheduleDay> toRemove = new List<IScheduleDay>();
-			if (optimizationPreferences.Extra.KeepSameDaysOffInTeam) // do it on every team member
-			{
-				foreach (var person in teamInfo.GroupPerson.GroupMembers)
-				{
-					IScheduleDay scheduleDay = _stateHolder.Schedules[person].ScheduledDay(dateOnly);
-					toRemove.Add((IScheduleDay) scheduleDay.Clone());
-					scheduleDay.DeleteDayOff();
-					schedulePartModifyAndRollbackService.Modify(scheduleDay);
-				}
-			}
-
-			_resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, schedulingOptions.ConsiderShortBreaks, toRemove, new List<IScheduleDay>());
-	
-		}
 
 		//to new class
 		private ILockableBitArray tryFindMoves(IScheduleMatrixPro matrix, ILockableBitArray originalArray, IOptimizationPreferences optimizationPreferences)
