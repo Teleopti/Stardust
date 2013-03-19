@@ -120,12 +120,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             {
                 commonMocks();
                 int x;
-                int y;
+				IList<IScheduleDay> y = new List<IScheduleDay>();
                 Expect.Call(_optimizationOverLimitDecider.OverLimit()).Return(new List<DateOnly>()).Repeat.Twice();
                 Expect.Call(_optimizationOverLimitDecider.MoveMaxDaysOverLimit())
                     .Return(false).Repeat.AtLeastOnce();
                 Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulePeriod, out x, out y))
-                    .Return(true).OutRef(1, 0);
+                    .Return(true).OutRef(1, y);
                 Expect.Call(_decisionMaker.Execute(_matrixConverter, _personalScheduleResultDataExtractor,
                                                    _validatorList)).Return(_extendReduceTimeDecisionMakerResult);
                 Expect.Call(_personalSkillPeriodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(10);
@@ -191,11 +191,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             {
                 commonMocks();
                 int x;
-                int y;
+				IList<IScheduleDay> y = new List<IScheduleDay>();
                 Expect.Call(_optimizationOverLimitDecider.OverLimit()).Return(new List<DateOnly>()).Repeat.Twice();
                 Expect.Call(_optimizationOverLimitDecider.MoveMaxDaysOverLimit())
                     .Return(false).Repeat.AtLeastOnce();
-                Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulePeriod, out x, out y)).Return(true).OutRef(1, 0);
+                Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulePeriod, out x, out y)).Return(true).OutRef(1, y);
                 Expect.Call(_decisionMaker.Execute(_matrixConverter, _personalScheduleResultDataExtractor,
                                                    _validatorList)).Return(_extendReduceTimeDecisionMakerResult);
                 Expect.Call(_personalSkillPeriodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(10);
@@ -252,11 +252,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             {
                 commonMocks();
                 int x;
-                int y;
+				IList<IScheduleDay> y = new List<IScheduleDay>();
                 Expect.Call(_optimizationOverLimitDecider.OverLimit()).Return(new List<DateOnly>());
                 Expect.Call(_optimizationOverLimitDecider.MoveMaxDaysOverLimit())
                     .Return(false).Repeat.AtLeastOnce();
-                Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulePeriod, out x, out y)).Return(true).OutRef(1, 0);
+                Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulePeriod, out x, out y)).Return(true).OutRef(1, y);
                 Expect.Call(_decisionMaker.Execute(_matrixConverter, _personalScheduleResultDataExtractor,
                                                    _validatorList)).Return(_extendReduceTimeDecisionMakerResult);
                 Expect.Call(_personalSkillPeriodValueCalculator.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(10);
