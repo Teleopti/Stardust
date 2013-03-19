@@ -162,7 +162,7 @@
     <Compile Include="Rta\BusinessUnitInfoConsumer.cs" />
     <Compile Include="Denormalizer\PersonScheduleDayReadModelHandler.cs" />
     <Compile Include="Denormalizer\PersonScheduleDayReadModelsCreator.cs" />
-    <Compile Include="Rta\ClearDelaySendMessages.cs" />
+    <Compile Include="ClearQueueMessages.cs" />
     <Compile Include="Rta\UpdatedScheduleInfoConsumer.cs" />
     <Compile Include="Denormalizer\DenormalizedScheduleMessageBuilder.cs" />
     <Compile Include="Denormalizer\IDenormalizedScheduleMessageBuilder.cs" />

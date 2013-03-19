@@ -66,6 +66,8 @@ namespace Teleopti.Ccc.Rta.Server
 			TimeSpan timeInState)
 		{
 			var readModelLayers = ActualAgentDataHandler.GetReadModel(personId);
+			if (!readModelLayers.Any())
+				LoggingSvc.WarnFormat("No readmodel found for Person: {0}", personId);
 			var scheduleLayers = ActualAgentDataHandler.CurrentLayerAndNext(timestamp, readModelLayers);
 			var previousState = ActualAgentDataHandler.LoadOldState(personId);
 			return CreateAndSaveState(scheduleLayers, previousState, personId, platformTypeId, stateCode, timestamp, timeInState, businessUnitId);
@@ -136,11 +138,13 @@ namespace Teleopti.Ccc.Rta.Server
 		private void saveToDataStore(IEnumerable<IActualAgentState> states)
 		{
 			var actualAgentStates = states as List<IActualAgentState> ?? states.ToList();
+			LoggingSvc.InfoFormat("Saving {0} states to db.", actualAgentStates.Count);
 			ActualAgentDataHandler.AddOrUpdate(actualAgentStates);
 			_lastSave = DateTime.UtcNow;
-
+			
 			foreach (var agentState in actualAgentStates)
 			{
+				LoggingSvc.DebugFormat("Saving {0} to db.", agentState);
 				IActualAgentState outAgentState;
 				if (BatchedAgents.TryGetValue(agentState.PersonId, out outAgentState)
 				    && agentState.ReceivedTime >= outAgentState.ReceivedTime)
@@ -153,10 +157,13 @@ namespace Teleopti.Ccc.Rta.Server
 			var state = resolveStateGroupId(platformTypeId, stateCode, businessUnitId);
 		    var activityAlarms = ActualAgentDataHandler.ActivityAlarms();
 		    var localPayloadId = payloadId(layer);
-		    return activityAlarms.ContainsKey(localPayloadId)
-		               ? activityAlarms[localPayloadId].SingleOrDefault(
-		                   s => s.StateGroupId == state)
-		               : null;
+			List<RtaAlarmLight> list;
+
+			if (activityAlarms.TryGetValue(localPayloadId, out list))
+				return list.SingleOrDefault(s => s.StateGroupId == state);
+			
+			LoggingSvc.WarnFormat("Could not find alarm for PlatformId: {0}, StateCode: {1}, BU: {2}", platformTypeId, stateCode, businessUnitId);
+			return null;
 		}
 
 		private static Guid payloadId(ScheduleLayer scheduleLayer)
@@ -171,8 +178,11 @@ namespace Teleopti.Ccc.Rta.Server
 			{
 				var foundstate =
 					outState.FirstOrDefault(s => s.BusinessUnitId == businessUnitId && s.PlatformTypeId == platformTypeId);
-				return foundstate != null ? foundstate.StateGroupId : Guid.Empty;
+				if (foundstate != null)
+					return foundstate.StateGroupId;
 			}
+
+			LoggingSvc.WarnFormat("Could not find StateGroup for PlatformId: {0}, StateCode: {1}, BU: {2}", platformTypeId, stateCode, businessUnitId);
 			return Guid.Empty;
 		}
 
@@ -184,6 +194,7 @@ namespace Teleopti.Ccc.Rta.Server
 
 		public void InvalidateReadModelCache(Guid personId, DateTime timeStamp)
 		{
+			LoggingSvc.InfoFormat("Clearing ReadModel cache for Person: {0}", personId);
 			_mbCacheFactory.Invalidate(ActualAgentDataHandler, x => x.GetReadModel(personId), true);
 		}
 	}

@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		protected override void OnEndStart()
 		{
 			var dbConnection = ConfigurationManager.ConnectionStrings["Queue"];
-			ClearDelaySendMessages.ClearMessages(dbConnection.ToString());
+			QueueClearMessages.ClearMessages(dbConnection.ToString(), "rta");
 			
 			//add RTA state checker
 			var rtaChecker = new BusinessUnitInfoFinder(daBus);
