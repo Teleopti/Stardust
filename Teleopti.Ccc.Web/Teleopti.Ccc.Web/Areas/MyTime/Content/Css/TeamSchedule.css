@@ -178,3 +178,24 @@
 .teamschedule-agent-schedule .tooltip-bottom {
 	height: 30px;	
 }
+
+#s2id_Team-Picker {
+	width: 220px;
+		
+}
+.team-select2-container {
+	text-align: left;
+	float: left;
+}
+.team-select2-dropdown {
+	text-align: left;
+}
+.select2-container .select2-choice {
+	height: 20px;
+}
+.select2-container .select2-choice span {
+	line-height: 20px;
+}
+.select2-container .select2-choice div b {
+	background: url('../../../../Content/select2/select2.png') no-repeat 0 -2px;
+}

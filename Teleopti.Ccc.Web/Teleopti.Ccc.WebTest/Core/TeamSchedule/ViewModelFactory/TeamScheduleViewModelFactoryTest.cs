@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule;
 using Teleopti.Interfaces.Domain;
 
@@ -48,13 +49,13 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 
 			var result = target.CreateTeamOptionsViewModel(DateOnly.Today);
 
+			var selectOptionGroup = new SelectOptionGroup {text = "site", children = new ISelectOption[] {new SelectOption {id = teams[0].Id.GetValueOrDefault().ToString(), text = "team"}}};
 			var expected = new[]
 			               	{
-			               		new {Value = "-", Text = "site"},
-			               		new {Value = teams[0].Id.GetValueOrDefault().ToString(), Text = "team"}
+			               		selectOptionGroup
 			               	};
-			result.Select(t => t.Value).Should().Have.SameSequenceAs(expected.Select(t => t.Value));
-			result.Select(t => t.Text).Should().Have.SameSequenceAs(expected.Select(t => t.Text));
+			result.Select(t => t.children[0].text).Should().Have.SameSequenceAs(expected.Select(t => t.children[0].text));
+			result.Select(t => t.text).Should().Have.SameSequenceAs(expected.Select(t => t.text));
 		}
 
 	}

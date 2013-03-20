@@ -2,7 +2,6 @@
 /// <reference path="~/Content/jqueryui/jquery-ui-1.9.1.custom.js" />
 /// <reference path="~/Content/Scripts/jquery-1.8.3-vsdoc.js" />
 /// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
-/// <reference path="~/Content/Scripts/date.js" />
 /// <reference path="Teleopti.MyTimeWeb.Portal.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Common.js"/>
 
@@ -28,45 +27,81 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 	}
 
 	function _initTeamPicker() {
-		$('select.ui-selectbox-init')
-			.removeClass('ui-selectbox-init')
-			.selectbox({
-				changed: function (event, item) {
-					var teamId = item.item.value;
-					_navigateTo(_currentFixedDate(), teamId);
-				},
-				rendered: function () {
-					var teamId = $('#TeamSchedule-body').data('mytime-teamselection');
-					if (!teamId)
-						return;
 
-					var self = $(this);
+		//$('select.ui-selectbox-init')
+		//	.removeClass('ui-selectbox-init')
+		//	.selectbox({
+		//		changed: function (event, item) {
+		//			var teamId = item.item.value;
+		//			_navigateTo(_currentFixedDate(), teamId);
+		//		},
+		//		rendered: function () {
+		//			var teamId = $('#TeamSchedule-body').data('mytime-teamselection');
+		//			if (!teamId)
+		//				return;
 
-					if (self.selectbox('selectableOptions').length < 2)
-						self.selectbox({ visible: false });
-					else
-						self.selectbox({ visible: true });
-					if (self.selectbox('contains', teamId))
-						self.selectbox('select', teamId);
-					else {
-						var date = _currentFixedDate();
-						if (date)
-							_navigateTo(date);
-					}
-					readyForInteraction();
-					completelyLoaded();
-				}
-			})
-			.parent()
-			.hide()
-			;
+		//			var self = $(this);
+
+		//			if (self.selectbox('selectableOptions').length < 2)
+		//				self.selectbox({ visible: false });
+		//			else
+		//				self.selectbox({ visible: true });
+		//			if (self.selectbox('contains', teamId))
+		//				self.selectbox('select', teamId);
+		//			else {
+		//				var date = _currentFixedDate();
+		//				if (date)
+		//					_navigateTo(date);
+		//			}
+		//			readyForInteraction();
+		//			completelyLoaded();
+		//		}
+		//	})
+		//	.parent()
+		//	.hide()
+		//	;
 	}
 
 	function _initTeamPickerSelection() {
-		var selectbox = $('#TeamSchedule-TeamPicker-select');
-		selectbox.selectbox({
-			source: "MyTime/TeamSchedule/Teams/" + _currentUrlDate()
-		});
+
+		$.ajax({
+			url: "MyTime/TeamSchedule/Teams/" + _currentUrlDate(),
+			dataType: "json",
+			type: "GET",
+			global: false,
+			cache: false,
+			success: function(data, textStatus, jqXHR) {
+				$('#Team-Picker').select2(
+					{
+						data:data,
+						//data: [
+						//	{
+						//		text: "Barcelona",
+						//		children: [
+						//			{ id: "3fe4fe40-066e-4df2-820f-9e2c00b7bbe6", text: "Optimization Team 1" },
+						//			{ id: "35a4bfcd-5994-4d00-a048-9e2c00b7cd22", text: "Optimization Team 2" }
+						//		]
+						//	},
+						//	{
+						//		text: "Helsinki",
+						//		children: [
+						//			{ id: "5255a318-1227-4afe-84d7-9e9100f735b6", text: "Team Min-Max" }
+						//		]
+						//	}
+						//],
+						containerCssClass: "team-select2-container",
+						dropdownCssClass: "team-select2-dropdown",
+						matcher: function (term, text) { return text.toUpperCase().indexOf(term.toUpperCase()) == 0; }
+					}
+				);
+			}
+		});		
+		
+		
+		//var selectbox = $('#TeamSchedule-TeamPicker-select');
+		//selectbox.selectbox({
+		//	source: "MyTime/TeamSchedule/Teams/" + _currentUrlDate()
+		//});
 	}
 
 	function _initAgentNameOverflow() {
@@ -104,7 +139,7 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 	return {
 		Init: function () {
 			portal.RegisterPartialCallBack('TeamSchedule/Index', Teleopti.MyTimeWeb.TeamSchedule.TeamSchedulePartialInit);
-			_initTeamPicker();
+			//_initTeamPicker();
 		},
 		TeamSchedulePartialInit: function (readyForInteractionCallback, completelyLoadedCallback) {
 			readyForInteraction = readyForInteractionCallback;

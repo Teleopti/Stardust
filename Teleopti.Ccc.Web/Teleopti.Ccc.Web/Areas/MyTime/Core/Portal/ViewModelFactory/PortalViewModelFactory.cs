@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 
 		private static SectionNavigationItem createTeamScheduleNavigationItem()
 		{
-			return new SectionNavigationItem
+			return new TeamScheduleNavigationItem
 						{
 							Action = "Index",
 							Controller = "TeamSchedule",
@@ -89,12 +89,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			       		               				NextTitle = Resources.NextPeriod,
 			       		               				PrevTitle = Resources.PreviousPeriod
 			       		               			},
-			       		               		new ToolBarSeparatorItem(),
-			       		               		new ToolBarSelectBox
-			       		               			{
-			       		               				Type = "TeamPicker",
-			       		               				Options = new Option[] {}
-			       		               			}
+			       		               		new ToolBarSeparatorItem()
 			       		               	}
 						};
 		}

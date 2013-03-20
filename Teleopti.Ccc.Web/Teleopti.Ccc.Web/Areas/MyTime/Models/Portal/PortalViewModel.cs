@@ -37,6 +37,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 	{
 	}
 
+	public class TeamScheduleNavigationItem : SectionNavigationItem
+	{
+	}
+
 	public abstract class ToolBarItemBase
 	{
 		public string Title { get; set; }
@@ -127,4 +131,27 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 		string Color { get; }
 	}
 
+	public interface ISelectOptionGroup
+	{
+		string text { get; }
+		ISelectOption[] children { get; }
+	}
+
+	public class SelectOptionGroup : ISelectOptionGroup
+	{
+		public string text { get; set; }
+		public ISelectOption[] children { get; set; }
+	}
+
+	public interface ISelectOption
+	{
+		string text { get; }
+		string id { get; }
+	}
+
+	public class SelectOption : ISelectOption
+	{
+		public string text { get; set; }
+		public string id { get; set; }
+	}
 }
