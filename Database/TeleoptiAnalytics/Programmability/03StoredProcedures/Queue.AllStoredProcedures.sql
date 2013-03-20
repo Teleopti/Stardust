@@ -345,18 +345,18 @@ BEGIN
 	ON m.QueueId = q.QueueId
 	AND q.QueueId = @DiscardedQueueId
 
-	--Move timeout messages
-	SELECT @TimeoutQueueId = QueueId
-	FROM Queue.Queues
-	WHERE ParentQueueId=@QueueId
-	AND QueueName=N'Timeout'
+	----Move timeout messages
+	--SELECT @TimeoutQueueId = QueueId
+	--FROM Queue.Queues
+	--WHERE ParentQueueId=@QueueId
+	--AND QueueName=N'Timeout'
 
-	DELETE FROM Queue.Messages
-	OUTPUT deleted.* INTO [Queue].[MessagesPurged](MessageId, QueueId, CreatedAt, ProcessingUntil, ExpiresAt, Processed, Headers, Payload, ProcessedCount)
-	FROM Queue.Messages	m
-	INNER JOIN Queue.Queues q
-	ON m.QueueId = q.QueueId
-	AND q.QueueId = @TimeoutQueueId
+	--DELETE FROM Queue.Messages
+	--OUTPUT deleted.* INTO [Queue].[MessagesPurged](MessageId, QueueId, CreatedAt, ProcessingUntil, ExpiresAt, Processed, Headers, Payload, ProcessedCount)
+	--FROM Queue.Messages	m
+	--INNER JOIN Queue.Queues q
+	--ON m.QueueId = q.QueueId
+	--AND q.QueueId = @TimeoutQueueId
 
 END
 GO
