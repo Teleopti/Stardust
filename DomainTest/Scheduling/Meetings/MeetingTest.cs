@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
             Assert.AreSame(_activity, _target.Activity);
             Assert.AreSame(_scenario, _target.Scenario);
             Assert.AreEqual(_target.StartDate,_target.GetRecurringDates()[0]);
-            Assert.AreEqual(TimeSpan.FromDays(1),_target.MeetingDuration());
+            Assert.AreEqual(TimeSpan.FromHours(1),_target.MeetingDuration());
         }
 
         [Test]
@@ -72,9 +72,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
             IActivity activity = ActivityFactory.CreateActivity("act");
             _target.Activity = activity;
             _target.StartTime = new TimeSpan(8, 0, 0);
-            Assert.AreEqual(TimeSpan.FromDays(1),_target.EndTime);
+			Assert.That(_target.EndTime, Is.EqualTo(TimeSpan.FromHours(9)));
 
-            _target.EndTime = new TimeSpan(9, 0, 0);
+            _target.EndTime = new TimeSpan(10, 0, 0);
 
             Assert.IsNotNull(_target.Organizer);
 			Assert.IsTrue(_target.GetSubject(new NoFormatting()) == "su");
@@ -83,10 +83,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
             Assert.AreSame(activity, _target.Activity);
 
             Assert.AreEqual(_target.StartTime, new TimeSpan(8, 0, 0));
-            Assert.AreEqual(_target.EndTime, new TimeSpan(9, 0, 0));
+            Assert.AreEqual(_target.EndTime, new TimeSpan(10, 0, 0));
 
-            _target.EndTime = TimeSpan.FromHours(6);
-            Assert.AreEqual(TimeSpan.FromHours(30),_target.EndTime);
+            _target.StartTime = TimeSpan.FromHours(9);
+			Assert.That(_target.EndTime, Is.EqualTo(TimeSpan.FromHours(11)));
         }
 
         [Test]
@@ -180,14 +180,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
         }
 
         [Test]
-        public void VerifyStartTimeCannotExceedTwentyFourHours()
-        {
-            _target.StartTime = TimeSpan.FromDays(1);
-
-            Assert.AreEqual(_target.StartTime, TimeSpan.Zero);
-        }
-
-        [Test]
         public void VerifyCanRemoveRecurrence()
         {
             _target.SetRecurrentOption(new RecurrentWeeklyMeeting{IncrementCount = 4});
@@ -203,6 +195,20 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Meetings
 		{
 			var changes = ((IProvideCustomChangeInfo) _target).CustomChanges(DomainUpdateType.Update);
 			changes.Count().Should().Be.GreaterThanOrEqualTo(1);
+		}
+
+		[Test]
+		public void ShouldNotGoOverMidnight()
+		{
+			_target.StartDate = new DateOnly(2013,3,20);
+			_target.StartTime = TimeSpan.FromHours(8);
+			_target.EndTime = TimeSpan.FromHours(10);
+
+			Assert.AreEqual(_target.StartTime, new TimeSpan(8, 0, 0));
+			Assert.AreEqual(_target.EndTime, new TimeSpan(10, 0, 0));
+
+			_target.StartTime = TimeSpan.FromHours(23);
+			Assert.That(_target.EndTime, Is.EqualTo(new TimeSpan(23,59,0)));
 		}
     }
 }

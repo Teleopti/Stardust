@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.Win.Meetings
 			
 			_meetingComposerPresenter.Model.StartTime = startTime;
 			_meetingComposerPresenter.Model.EndTime = endTime;
-			if (endTime < startTime)
+			if (endTime <= startTime)
 				_meetingComposerPresenter.InvalidTimeInfo();
 			else
 			{
