@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
@@ -69,6 +68,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
                 if (_meeting.StartDate != value)
                 {
                     _meeting.StartDate = value;
+					_meeting.EndDate = value;
                     NotifyPropertyChanged("StartDate");
                 }
             }
@@ -101,21 +101,15 @@ namespace Teleopti.Ccc.WinCode.Meetings
         {
             get
             {
-                if (_meeting.EndTime >= TimeSpan.FromDays(1))
-                    return _meeting.EndTime.Add(TimeSpan.FromDays(-1));
-
                 return _meeting.EndTime;
             }
             set
             {
-                if (value != EndTime)
-                {
-                    if (value <= StartTime)
-                        value = value.Add(TimeSpan.FromDays(1));
-
-                    _meeting.EndTime = value;
-                    NotifyPropertyChanged("EndTime");
-                }
+	            if (_meeting.EndTime != value)
+	            {
+		            _meeting.EndTime = value;
+		            NotifyPropertyChanged("EndTime");
+	            }
             }
         }
 
