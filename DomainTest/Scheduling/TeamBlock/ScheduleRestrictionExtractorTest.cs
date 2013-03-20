@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
@@ -23,9 +24,28 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		public void Setup()
 		{
 			_mocks = new MockRepository();
-			_schedulingOptions = _mocks.StrictMock<ISchedulingOptions>();
+			_schedulingOptions = new SchedulingOptions();
+			_schedulingOptions.UseLevellingSameShift = true;
+			_schedulingOptions.UseLevellingPerOption = true;
 			_mainShiftEquator = _mocks.StrictMock<IScheduleDayEquator>();
 			_target = new ScheduleRestrictionExtractor(_mainShiftEquator);
+		}
+
+		[Test]
+		public void ShouldNotAddCommonShiftToTheRestrictionIfNotLevelingIsSameShift()
+		{
+			_schedulingOptions.UseLevellingSameShift = false;
+
+			var dateOnly = new DateOnly(2012, 12, 7);
+			var dateList = new List<DateOnly> { dateOnly };
+			var scheduleMatrixPro = _mocks.StrictMock<IScheduleMatrixPro>();
+			var matrixList = new List<IScheduleMatrixPro> { scheduleMatrixPro };
+
+			var expected = new EffectiveRestriction(new StartTimeLimitation(),
+														   new EndTimeLimitation(),
+														   new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
+			var result = _target.Extract(dateList, matrixList, _schedulingOptions);
+			Assert.That(result, Is.EqualTo(expected));
 		}
 
 		[Test]

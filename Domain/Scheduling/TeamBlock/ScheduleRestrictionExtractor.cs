@@ -25,7 +25,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			var restriction = new EffectiveRestriction(new StartTimeLimitation(),
 														   new EndTimeLimitation(),
 														   new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
-			if (dateOnlyList == null) return restriction;
+
+			if (!schedulingOptions.UseLevellingSameShift)
+				return restriction;
+
+			if (dateOnlyList == null) 
+				return restriction;
 
 			foreach (var matrix in matrixList)
 			{
