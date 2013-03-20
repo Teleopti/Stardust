@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		private IScheduleDay _scheduleDay;
 		private DateOnly _date1;
 		private DateOnly _date3;
+		private DateOnly _date2;
 		private DateOnlyPeriod _dateOnlyPeriod;
 		private IVirtualSchedulePeriod _virtualSchedulePeriod;
 	    private ISchedulingResultStateHolder _stateHolder;
@@ -34,6 +35,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			_scheduleDay = _mocks.StrictMock<IScheduleDay>();
 			_date1 = new DateOnly(2010,10,4);
 			_date3 = new DateOnly(2010,10,6);
+			_date2 = new DateOnly(2010, 1, 1);
 			_dateOnlyPeriod = new DateOnlyPeriod(_date1, _date3);
 		}
 		
@@ -48,8 +50,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.Times(3);
 			_mocks.ReplayAll();
-			int ret = _target.CountDayOffsOnPeriod(_virtualSchedulePeriod);
-			Assert.That(ret, Is.EqualTo(0));
+			IList<IScheduleDay> ret = _target.CountDayOffsOnPeriod(_virtualSchedulePeriod);
+			Assert.That(ret.Count, Is.EqualTo(0));
 			_mocks.VerifyAll();
 		}
 
@@ -65,8 +67,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.DayOff).Repeat.Times(3);
 
 			_mocks.ReplayAll();
-			int ret = _target.CountDayOffsOnPeriod(_virtualSchedulePeriod);
-			Assert.That(ret, Is.EqualTo(3));
+			IList<IScheduleDay> ret = _target.CountDayOffsOnPeriod(_virtualSchedulePeriod);
+			Assert.That(ret.Count, Is.EqualTo(3));
 			_mocks.VerifyAll();
 		}
 
@@ -84,7 +86,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			Expect.Call(contract.EmploymentType).Return(EmploymentType.HourlyStaff);
 			_mocks.ReplayAll();
 			int targetDaysOff;
-			int current;
+			IList<IScheduleDay> current = new List<IScheduleDay>();
 			var ret = _target.HasCorrectNumberOfDaysOff(_virtualSchedulePeriod, out targetDaysOff, out current);
 			Assert.That(ret, Is.True);
 			_mocks.VerifyAll();
@@ -118,11 +120,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			_mocks.ReplayAll();
 			int targetDaysOff;
-			int current;
+			IList<IScheduleDay> current = new List<IScheduleDay>();
 			var ret = _target.HasCorrectNumberOfDaysOff(_virtualSchedulePeriod, out targetDaysOff, out current);
 			Assert.That(ret, Is.False);
 			Assert.That(targetDaysOff,Is.EqualTo(5));
-			Assert.That(current,Is.EqualTo(3));
+			Assert.That(current.Count,Is.EqualTo(3));
 			_mocks.VerifyAll();
 		}
 
@@ -152,11 +154,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			_mocks.ReplayAll();
 			int targetDaysOff;
-			int current;
+			IList<IScheduleDay> current = new List<IScheduleDay>();
 			var ret = _target.HasCorrectNumberOfDaysOff(_virtualSchedulePeriod, out targetDaysOff, out current);
 			Assert.That(ret, Is.False);
 			Assert.That(targetDaysOff, Is.EqualTo(2));
-			Assert.That(current, Is.EqualTo(4));
+			Assert.That(current.Count, Is.EqualTo(4));
 			_mocks.VerifyAll();
 		}
 
@@ -186,11 +188,12 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
 			_mocks.ReplayAll();
 			int targetDaysOff;
-			int current;
+			//int current;
+			IList<IScheduleDay> current = new List<IScheduleDay>();
 			var ret = _target.HasCorrectNumberOfDaysOff(_virtualSchedulePeriod, out targetDaysOff, out current);
 			Assert.That(ret, Is.True);
 			Assert.That(targetDaysOff, Is.EqualTo(3));
-			Assert.That(current, Is.EqualTo(3));
+			Assert.That(current.Count, Is.EqualTo(3));
 			_mocks.VerifyAll();
 		}
 
@@ -437,9 +440,49 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Assert.IsFalse(ret);
 
         }
-	}
 
-	
+		[Test]
+		public void ShouldReturnDayOffInSameWeek()
+		{
+			var scheduleDay = _mocks.StrictMock<IScheduleDay>();
+			var dayOffScheduleDay = _mocks.StrictMock<IScheduleDay>();
+			var dateOnlyPeriodAsDateTimePeriod = _mocks.StrictMock<IDateOnlyAsDateTimePeriod>();
 
-	
+
+			using (_mocks.Record())
+			{
+				Expect.Call(scheduleDay.DateOnlyAsPeriod).Return(dateOnlyPeriodAsDateTimePeriod);
+				Expect.Call(dayOffScheduleDay.DateOnlyAsPeriod).Return(dateOnlyPeriodAsDateTimePeriod);
+				Expect.Call(dateOnlyPeriodAsDateTimePeriod.DateOnly).Return(_date1).Repeat.Twice();
+			}
+			using (_mocks.Playback())
+			{
+				var result = _target.DayOffInScheduleDayWeek(scheduleDay, new List<IScheduleDay> {dayOffScheduleDay});
+				Assert.AreEqual(result, dayOffScheduleDay);
+			}			
+		}
+
+		[Test]
+		public void ShouldReturnNullWhenNoDayOffInSameWeek()
+		{
+			var scheduleDay = _mocks.StrictMock<IScheduleDay>();
+			var dayOffScheduleDay = _mocks.StrictMock<IScheduleDay>();
+			var dateOnlyPeriodAsDateTimePeriod1 = _mocks.StrictMock<IDateOnlyAsDateTimePeriod>();
+			var dateOnlyPeriodAsDateTimePeriod2 = _mocks.StrictMock<IDateOnlyAsDateTimePeriod>();
+
+
+			using (_mocks.Record())
+			{
+				Expect.Call(scheduleDay.DateOnlyAsPeriod).Return(dateOnlyPeriodAsDateTimePeriod1);
+				Expect.Call(dayOffScheduleDay.DateOnlyAsPeriod).Return(dateOnlyPeriodAsDateTimePeriod2);
+				Expect.Call(dateOnlyPeriodAsDateTimePeriod1.DateOnly).Return(_date1);
+				Expect.Call(dateOnlyPeriodAsDateTimePeriod2.DateOnly).Return(_date2);
+			}
+			using (_mocks.Playback())
+			{
+				var result = _target.DayOffInScheduleDayWeek(scheduleDay, new List<IScheduleDay> { dayOffScheduleDay });
+				Assert.IsNull(result);
+			}			
+		}
+	}	
 }

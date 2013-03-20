@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -227,9 +228,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		}
 
 		[Test]
-		public void ShouldMapRawDateInfo()
+		public void ShouldMapRawTimeInfo()
 		{
-			var timeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+			var timeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
 			_userTimeZone.Stub(x => x.TimeZone()).Return(timeZone);
 
 			var start = new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc);
@@ -241,10 +242,34 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 
 			var result = Mapper.Map<IPersonRequest, RequestViewModel>(request);
 
-			result.RawDateFrom.Should().Be.EqualTo(startInCorrectTimezone.ToShortDateString());
-			result.RawDateTo.Should().Be.EqualTo(endInCorrectTimezone.ToShortDateString());
 			result.RawTimeFrom.Should().Be.EqualTo(startInCorrectTimezone.ToShortTimeString());
 			result.RawTimeTo.Should().Be.EqualTo(endInCorrectTimezone.ToShortTimeString());
+		}
+
+		[Test, SetCulture("ar-SA")]
+		public void ShouldMapYearMonthAndDayParts()
+		{
+			var timeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
+			_userTimeZone.Stub(x => x.TimeZone()).Return(timeZone);
+
+			var start = new DateTime(2013, 3, 18, 0, 0, 0, DateTimeKind.Utc);
+			var end = new DateTime(2013, 3, 19, 0, 0, 0, DateTimeKind.Utc);
+			var period = new DateTimePeriod(start, end);
+			var request = new PersonRequest(new Person(), new TextRequest(period));
+
+			var result = Mapper.Map<IPersonRequest, RequestViewModel>(request);
+
+			var calendar = CultureInfo.CurrentCulture.Calendar;
+			var dateFrom = TimeZoneInfo.ConvertTimeFromUtc(request.Request.Period.StartDateTime, timeZone);
+			var dateTo = TimeZoneInfo.ConvertTimeFromUtc(request.Request.Period.EndDateTime, timeZone);
+
+			result.DateFromYear.Should().Be.EqualTo(calendar.GetYear(dateFrom));
+			result.DateFromMonth.Should().Be.EqualTo(calendar.GetMonth(dateFrom));
+			result.DateFromDayOfMonth.Should().Be.EqualTo(calendar.GetDayOfMonth(dateFrom));
+
+			result.DateToYear.Should().Be.EqualTo(calendar.GetYear(dateTo));
+			result.DateToMonth.Should().Be.EqualTo(calendar.GetMonth(dateTo));
+			result.DateToDayOfMonth.Should().Be.EqualTo(calendar.GetDayOfMonth(dateTo));
 		}
 
 		[Test]

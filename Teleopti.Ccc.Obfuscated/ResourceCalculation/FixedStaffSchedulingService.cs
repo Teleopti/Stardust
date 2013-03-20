@@ -166,12 +166,12 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 		public bool HasCorrectNumberOfDaysOff(IVirtualSchedulePeriod schedulePeriod, DateOnly dateOnly)
 		{
 			int targetDaysOff;
-			int dayOffsNow;
+			IList<IScheduleDay> dayOffsNow = new List<IScheduleDay>();
 			var result = _dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(schedulePeriod, out targetDaysOff, out dayOffsNow);
 
 			if (!result)
 				AddFinderResult(schedulePeriod.Person, dateOnly,
-										string.Format(CultureInfo.InvariantCulture, UserTexts.Resources.WrongNumberOfDayOffsInSchedulePeriod, targetDaysOff, dayOffsNow));
+										string.Format(CultureInfo.InvariantCulture, UserTexts.Resources.WrongNumberOfDayOffsInSchedulePeriod, targetDaysOff, dayOffsNow.Count));
 			return result;
 		}
 
