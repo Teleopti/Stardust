@@ -21,13 +21,26 @@ GO
 --				2012-10-08 #20924 Fix Contract Deviation
 --
 -- =============================================
+/*
+set statistics io on
+set statistics time on
+dbcc freeproccache
+dbcc dropcleanbuffers
+exec mart.etl_fact_schedule_deviation_load '2013-02-01 23:00:00','2013-03-01 23:00:00','928DD0BC-BF40-412E-B970-9B5E015AADEA' --Demo
+*/
 
 --exec mart.etl_fact_schedule_deviation_load '2013-02-18 23:00:00','2013-02-21 23:00:00','928DD0BC-BF40-412E-B970-9B5E015AADEA' --Demo
 CREATE PROCEDURE [mart].[etl_fact_schedule_deviation_load]
 @start_date smalldatetime,
 @end_date smalldatetime,
-@business_unit_code uniqueidentifier
+@business_unit_code uniqueidentifier,
+@is_delayed_job bit = 0
 AS
+
+--Execute one delayed jobs, if any
+if (@is_delayed_job=0)
+EXEC mart.etl_execute_delayed_job @stored_procedure='mart.etl_fact_schedule_deviation_load'
+
 
 DECLARE @start_date_id int
 DECLARE @end_date_id int
@@ -67,6 +80,12 @@ CREATE TABLE #fact_schedule (
 	[business_unit_id] [int] NULL
 )
 
+CREATE CLUSTERED INDEX [#CIX_fact_schedule] ON #fact_schedule
+(
+	[schedule_date_id] ASC,
+	[interval_id] ASC
+)
+
 --get the number of intervals outside shift to consider for adherence calc
 SELECT @interval_length_minutes = 1440/COUNT(*) from mart.dim_interval 
 
@@ -80,17 +99,6 @@ SET @start_date_id	=	(SELECT date_id FROM dim_date WHERE @start_date = date_date
 SET @end_date_id	=	(SELECT date_id FROM dim_date WHERE @end_date = date_date)
 
 SET @scenario_id	=	(SELECT scenario_id FROM mart.dim_scenario WHERE business_unit_code = @business_unit_code AND default_scenario = 1)
-
-/*Get max and min date from fact_agent(can not calculate deviation unless data here)*/
---SELECT
---	@max_date_id= max(date_id),
---	@min_date_id= min(date_id)
---FROM
---	mart.fact_agent
-
-/*Change date interval accordning to min and max date in fact_agent*/
---SET	@start_date_id = CASE WHEN @min_date_id > @start_date_id THEN @min_date_id ELSE @start_date_id END
---SET	@end_date_id	= CASE WHEN @max_date_id < @end_date_id	THEN @max_date_id ELSE @end_date_id	END
 
 /*Get business unit id*/
 SET @business_unit_id = (SELECT business_unit_id FROM mart.dim_business_unit WHERE business_unit_code = @business_unit_code)
@@ -128,8 +136,6 @@ GROUP BY
 	fs.interval_id,
 	fs.person_id,
 	fs.business_unit_id
-
-
 
 /* Prepare insert of new data in two steps, a) and b). */
 /* a) Gather agent ready time */
@@ -349,41 +355,4 @@ SET 	deviation_contract_s = ABS(
 	)
 )
 WHERE mart.fact_schedule_deviation.date_id BETWEEN @start_date_id AND @end_date_id
-GO
---================================
---If empty try re-load
---================================
-IF (select COUNT(*) from mart.fact_schedule_deviation) = 0
-	PRINT 'Adherance data will now we re-loaded. This will take some time (DBManager time out = 15 min). Please do not close this Windows!'
-GO
-
-IF (select COUNT(*) from mart.fact_schedule_deviation) = 0
-BEGIN
-	--reload data
-	DECLARE @min_date smalldatetime
-	DECLARE @max_date smalldatetime
-	SET @min_date = (SELECT date_date from mart.dim_date where date_id in (Select MIN(schedule_date_id) from mart.fact_schedule))
-	SET @max_date = (SELECT date_date from mart.dim_date where date_id in (Select MAX(schedule_date_id) from mart.fact_schedule))
-
-	DECLARE @id uniqueidentifier
-	DECLARE @business_unit_code uniqueidentifier 
-
-	DECLARE business_unit_Cursor CURSOR FOR
-		SELECT business_unit_code
-		FROM mart.dim_business_unit
-		WHERE  business_unit_id<>-1
-		ORDER BY business_unit_id
-	OPEN business_unit_Cursor;
-	FETCH NEXT FROM business_unit_Cursor
-	INTO @business_unit_code
-	WHILE @@FETCH_STATUS = 0
-	   BEGIN 
-			exec mart.etl_fact_schedule_deviation_load @min_date,@max_date,@business_unit_code
-			FETCH NEXT FROM business_unit_Cursor
-			INTO @business_unit_code
-	   END;
-	CLOSE business_unit_Cursor;
-	DEALLOCATE business_unit_Cursor;
-END
-
 GO

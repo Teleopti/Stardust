@@ -48,47 +48,61 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 
 		private void createReadModel(DenormalizedScheduleBase message)
 		{
-			using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
+			using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
 				if (!message.IsDefaultScenario) return;
 
-				var date = new DateOnly(message.Date);
 				var person = _personRepository.Get(message.PersonId);
-				var dateOnlyPeriod = new DateOnlyPeriod(date, date);
 
-				var readModel = _scheduleDayReadModelsCreator.GetReadModels(message);
-
-				if (DefinedLicenseDataFactory.LicenseActivator == null)
+				foreach (var denormalizedScheduleDay in message.ScheduleDays)
 				{
-					if (Logger.IsInfoEnabled)
-						Logger.Info("Can't access LicenseActivator to check SMSLink license.");
-					return;
-				}
+					var date = new DateOnly(denormalizedScheduleDay.Date);
+					var dateOnlyPeriod = new DateOnlyPeriod(date, date);
 
-				if (Logger.IsInfoEnabled)
-					Logger.Info("Checking SMSLink license.");
-				//check for SMS license, if none just skip this. Later we maybe have to check against for example EMAIL-license
-				if (
-					DefinedLicenseDataFactory.LicenseActivator.EnabledLicenseOptionPaths.Contains(
-						DefinedLicenseOptionPaths.TeleoptiCccSmsLink))
-				{
-					var smsMessages = _significantChangeChecker.SignificantChangeNotificationMessage(date, person, readModel);
-					if (!string.IsNullOrEmpty(smsMessages.Subject))
+					var readModel = _scheduleDayReadModelsCreator.GetReadModel(denormalizedScheduleDay, person);
+
+					if (!message.IsInitialLoad)
 					{
-						var number = _smsLinkChecker.SmsMobileNumber(person);
-						if (!string.IsNullOrEmpty(number))
-						{
-							var smsSender = _notificationSenderFactory.GetSender();
-							smsSender.SendNotification(smsMessages, number);
-						}
+						notifySmsLink(readModel, date, person);
+					}
+
+					if (!message.IsInitialLoad)
+					{
+						_scheduleDayReadModelRepository.ClearPeriodForPerson(dateOnlyPeriod, message.PersonId);
+					}
+					_scheduleDayReadModelRepository.SaveReadModel(readModel);
+
+					uow.PersistAll();
+				}
+			}
+		}
+
+		private void notifySmsLink(ScheduleDayReadModel readModel, DateOnly date, IPerson person)
+		{
+			if (DefinedLicenseDataFactory.LicenseActivator == null)
+			{
+				if (Logger.IsInfoEnabled)
+					Logger.Info("Can't access LicenseActivator to check SMSLink license.");
+				return;
+			}
+
+			if (Logger.IsInfoEnabled)
+				Logger.Info("Checking SMSLink license.");
+			//check for SMS license, if none just skip this. Later we maybe have to check against for example EMAIL-license
+			if (
+				DefinedLicenseDataFactory.LicenseActivator.EnabledLicenseOptionPaths.Contains(
+					DefinedLicenseOptionPaths.TeleoptiCccSmsLink))
+			{
+				var smsMessages = _significantChangeChecker.SignificantChangeNotificationMessage(date, person, readModel);
+				if (!string.IsNullOrEmpty(smsMessages.Subject))
+				{
+					var number = _smsLinkChecker.SmsMobileNumber(person);
+					if (!string.IsNullOrEmpty(number))
+					{
+						var smsSender = _notificationSenderFactory.GetSender();
+						smsSender.SendNotification(smsMessages, number);
 					}
 				}
-
-				if (!message.IsInitialLoad)
-				{
-					_scheduleDayReadModelRepository.ClearPeriodForPerson(dateOnlyPeriod, message.PersonId);
-				}
-				_scheduleDayReadModelRepository.SaveReadModel(readModel);
 			}
 		}
 

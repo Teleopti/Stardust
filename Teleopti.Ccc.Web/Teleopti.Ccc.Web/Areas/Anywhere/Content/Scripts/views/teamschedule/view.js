@@ -3,58 +3,60 @@ define([
 		'knockout',
 		'jquery',
 		'navigation',
-		'signalrHubs',
 		'swipeListener',
 		'moment',
+		'subscriptions',
+		'helpers',
 		'views/teamschedule/vm',
 		'views/teamschedule/timeline',
 		'views/teamschedule/agent',
+		'views/teamschedule/agents',
 		'text!templates/teamschedule/view.html',
 		'noext!application/resources'
 	], function (
 		ko,
 		$,
+		navigation,
 		swipeListener,
 		momentX,
-		navigation,
-		signalrHubs,
+		subscriptions,
+		helpers,
 		teamScheduleViewModel,
 		timeLineViewModel,
 		agentViewModel,
+		agentsViewModel,
 		view,
-		translations
+		resources
 	) {
+
+		var agents;
+		var timeLine;
+		var teamSchedule;
+
+		var events = new ko.subscribable();
+
+		events.subscribe(function (agentId) {
+			navigation.GotoPersonSchedule(agentId, teamSchedule.SelectedDate().format('YYYYMMDD'));
+		}, null, "gotoagent");
+
 		return {
 			display: function (options) {
 
 				options.renderHtml(view);
 
-				var date = options.date;
+				date = options.date;
 				if (date == undefined) {
 					date = moment().sod();
 				} else {
 					date = moment(date, 'YYYYMMDD');
 				}
 
-				setMomentLangWithFallback(translations.LanguageCode);
-				var agentsViewModel = function () {
-					var self = this;
-
-					this.Agents = ko.observableArray();
-
-					this.AddAgents = function (agentsToAdd) {
-						self.Agents.push.apply(self.Agents, agentsToAdd);
-					};
-				};
-
-				var agents = new agentsViewModel();
-				var timeLine = new timeLineViewModel(agents, translations.ShortTimePattern);
-				var teamSchedule = new teamScheduleViewModel(date);
+				agents = new agentsViewModel();
+				timeLine = new timeLineViewModel(agents.Agents, resources.ShortTimePattern);
+				teamSchedule = new teamScheduleViewModel(date);
 
 				var previousOffset;
 				var teamScheduleContainer = $('.team-schedule');
-
-				var schedule = $.connection.scheduleHub;
 
 				var resize = function () {
 					timeLine.WidthPixels($('.shift').width());
@@ -67,51 +69,51 @@ define([
 
 				var initialLoad = true;
 				var loadSchedules = function () {
-					var queryDate = teamSchedule.SelectedDate().clone();
-					queryDate.utc();
-
+					
 					teamSchedule.isLoading(true);
-					schedule.server.subscribeTeamSchedule(teamSchedule.SelectedTeam().Id, queryDate.toDate()).fail(function () {
-						window.location.href = 'authentication/signout';
-					}).done(function (schedules) {
-						var currentAgents = agents.Agents();
 
-						var dateClone = teamSchedule.SelectedDate().clone();
-						for (var i = 0; i < schedules.length; i++) {
-							for (var j = 0; j < currentAgents.length; j++) {
-								if (currentAgents[j].Id == schedules[i].Id) {
-									currentAgents[j].AddLayers(schedules[i].Projection, timeLine, dateClone);
-									currentAgents[j].AddContractTime(schedules[i].ContractTimeMinutes);
-									currentAgents[j].AddWorkTime(schedules[i].WorkTimeMinutes);
-									break;
+					subscriptions.subscribeTeamSchedule(
+						teamSchedule.SelectedTeam().Id,
+						helpers.Date.AsUTCDate(teamSchedule.SelectedDate().toDate()),
+						function (schedules) {
+							var currentAgents = agents.Agents();
+
+							var dateClone = teamSchedule.SelectedDate().clone();
+							for (var i = 0; i < schedules.length; i++) {
+								for (var j = 0; j < currentAgents.length; j++) {
+									if (currentAgents[j].Id == schedules[i].Id) {
+										currentAgents[j].SetLayers(schedules[i].Projection, timeLine, dateClone);
+										currentAgents[j].AddContractTime(schedules[i].ContractTimeMinutes);
+										currentAgents[j].AddWorkTime(schedules[i].WorkTimeMinutes);
+										break;
+									}
 								}
 							}
-						}
 
-						currentAgents.sort(function (a, b) {
-							var firstStartMinutes = a.FirstStartMinute();
-							var secondStartMinutes = b.FirstStartMinute();
-							return firstStartMinutes == secondStartMinutes ? (a.LastEndMinute() == b.LastEndMinute() ? 0 : a.LastEndMinute() < b.LastEndMinute() ? -1 : 1) : firstStartMinutes < secondStartMinutes ? -1 : 1;
+							currentAgents.sort(function (a, b) {
+								var firstStartMinutes = a.TimeLineAffectingStartMinute();
+								var secondStartMinutes = b.TimeLineAffectingStartMinute();
+								return firstStartMinutes == secondStartMinutes ? (a.TimeLineAffectingEndMinute() == b.TimeLineAffectingEndMinute() ? 0 : a.TimeLineAffectingEndMinute() < b.TimeLineAffectingEndMinute() ? -1 : 1) : firstStartMinutes < secondStartMinutes ? -1 : 1;
+							});
+
+							agents.Agents.valueHasMutated();
+
+							teamSchedule.isLoading(false);
+
+							if (initialLoad) {
+								teamSchedule.SelectedTeam.subscribe(function () {
+									loadPeople();
+								});
+
+								teamSchedule.SelectedDate.subscribe(function () {
+									loadAvailableTeams();
+								});
+								initialLoad = false;
+							}
+
+							resize();
 						});
 
-						agents.Agents.valueHasMutated();
-						timeLine.CalculateTimes();
-
-						teamSchedule.isLoading(false);
-
-						if (initialLoad) {
-							teamSchedule.SelectedTeam.subscribe(function () {
-								loadPeople();
-							});
-
-							teamSchedule.SelectedDate.subscribe(function () {
-								loadAvailableTeams();
-							});
-							initialLoad = false;
-						}
-
-						resize();
-					});
 				};
 
 				var arrayIndexOf = function (a, fnc, b) {
@@ -159,37 +161,38 @@ define([
 				};
 
 				var loadPeople = function () {
-					$.getJSON('Person/PeopleInTeam?' + $.now(), { date: teamSchedule.SelectedDate().toDate().toJSON(), teamId: teamSchedule.SelectedTeam().Id }).success(function (people, textStatus, jqXHR) {
-						agents.Agents([]);
+					$.ajax({
+						url: 'Person/PeopleInTeam',
+						cache: false,
+						dataType: 'json',
+						data: {
+							date: teamSchedule.SelectedDate().toDate().toJSON(),
+							teamId: teamSchedule.SelectedTeam().Id
+						},
+						success: function (people, textStatus, jqXHR) {
 
-						var newItems = ko.utils.arrayMap(people, function (s) {
-							return new agentViewModel(s);
-						});
-						agents.AddAgents(newItems);
+							var newItems = ko.utils.arrayMap(people, function (s) {
+								return new agentViewModel(s, events);
+							});
+							agents.SetAgents(newItems);
 
-						loadSchedules();
-					}).error(function () {
-						window.location.href = 'authentication/signout';
-					});
+							loadSchedules();
+						}
+					}
+					);
 				};
 
-				$.connection.hub.url = 'signalr';
-				$.connection.hub.start()
-					.done(function () {
-						loadAvailableTeams();
+				$(window).ready(function () {
 
-						$(window).ready(function () {
-							ko.applyBindings({
-								TeamSchedule: teamSchedule,
-								Translations: translations,
-								Timeline: timeLine,
-								Agents: agents
-							}, $('body > section')[0]);
-						});
-					})
-					.fail(function (error) {
-						$('.container > .row:first').html('<div class="alert"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>Warning!</strong> ' + error + '.</div>');
-					});
+					ko.applyBindings({
+						TeamSchedule: teamSchedule,
+						Resources: resources,
+						Timeline: timeLine,
+						Agents: agents
+					}, options.bindingElement);
+
+					loadAvailableTeams();
+				});
 
 				teamScheduleContainer.swipeListener({
 					swipeLeft: function () {
@@ -208,20 +211,6 @@ define([
 						teamScheduleContainer.offset({ left: -movementX });
 					}
 				});
-
-				function setMomentLangWithFallback(ietfLanguageTag) {
-					var baseLang = 'en'; //Base
-					var languages = [ietfLanguageTag, ietfLanguageTag.split('-')[0], baseLang];
-
-					for (var i = 0; i < languages.length; i++) {
-						try {
-							moment.lang(languages[i]);
-						} catch (e) {
-							continue;
-						}
-						if (moment.lang() == languages[i]) return;
-					}
-				}
 			}
 		};
 	});

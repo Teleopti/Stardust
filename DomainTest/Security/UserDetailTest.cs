@@ -77,5 +77,27 @@ namespace Teleopti.Ccc.DomainTest.Security
                 Assert.IsFalse(target.IsLocked);
             }
         }
+
+        [Test]
+        public void SetLastPasswordChange()
+        {
+            target.LastPasswordChange = new DateTime(2013,01,01);
+            Assert.IsNotNull(target.LastPasswordChange);
+        }
+
+        [Test]
+        public void SetInvalidAttempts()
+        {
+            target.InvalidAttempts = 1;
+            Assert.AreEqual(1, target.InvalidAttempts);
+        }
+
+        [Test]
+        public void SetInvalidAttemptsSequenceStart()
+        {
+            target.InvalidAttemptsSequenceStart = new DateTime(2013,01,01);
+            Assert.IsNotNull(target.InvalidAttemptsSequenceStart);
+        }
+
     }
 }

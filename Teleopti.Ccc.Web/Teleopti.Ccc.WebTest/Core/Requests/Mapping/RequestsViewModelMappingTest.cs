@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -227,9 +228,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		}
 
 		[Test]
-		public void ShouldMapRawDateInfo()
+		public void ShouldMapRawTimeInfo()
 		{
-			var timeZone = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+			var timeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
 			_userTimeZone.Stub(x => x.TimeZone()).Return(timeZone);
 
 			var start = new DateTime(2000, 1, 1, 10, 0, 0, DateTimeKind.Utc);
@@ -241,10 +242,34 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 
 			var result = Mapper.Map<IPersonRequest, RequestViewModel>(request);
 
-			result.RawDateFrom.Should().Be.EqualTo(startInCorrectTimezone.ToShortDateString());
-			result.RawDateTo.Should().Be.EqualTo(endInCorrectTimezone.ToShortDateString());
 			result.RawTimeFrom.Should().Be.EqualTo(startInCorrectTimezone.ToShortTimeString());
 			result.RawTimeTo.Should().Be.EqualTo(endInCorrectTimezone.ToShortTimeString());
+		}
+
+		[Test, SetCulture("ar-SA")]
+		public void ShouldMapYearMonthAndDayParts()
+		{
+			var timeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
+			_userTimeZone.Stub(x => x.TimeZone()).Return(timeZone);
+
+			var start = new DateTime(2013, 3, 18, 0, 0, 0, DateTimeKind.Utc);
+			var end = new DateTime(2013, 3, 19, 0, 0, 0, DateTimeKind.Utc);
+			var period = new DateTimePeriod(start, end);
+			var request = new PersonRequest(new Person(), new TextRequest(period));
+
+			var result = Mapper.Map<IPersonRequest, RequestViewModel>(request);
+
+			var calendar = CultureInfo.CurrentCulture.Calendar;
+			var dateFrom = TimeZoneInfo.ConvertTimeFromUtc(request.Request.Period.StartDateTime, timeZone);
+			var dateTo = TimeZoneInfo.ConvertTimeFromUtc(request.Request.Period.EndDateTime, timeZone);
+
+			result.DateFromYear.Should().Be.EqualTo(calendar.GetYear(dateFrom));
+			result.DateFromMonth.Should().Be.EqualTo(calendar.GetMonth(dateFrom));
+			result.DateFromDayOfMonth.Should().Be.EqualTo(calendar.GetDayOfMonth(dateFrom));
+
+			result.DateToYear.Should().Be.EqualTo(calendar.GetYear(dateTo));
+			result.DateToMonth.Should().Be.EqualTo(calendar.GetMonth(dateTo));
+			result.DateToDayOfMonth.Should().Be.EqualTo(calendar.GetDayOfMonth(dateTo));
 		}
 
 		[Test]
@@ -255,7 +280,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 
 			var result = Mapper.Map<IPersonRequest, RequestViewModel>(request);
 
-			result.DenyReason.Should().Be.EqualTo(UserTexts.Resources.RequestDenyReasonNoWorkflow);
+			result.DenyReason.Should().Be.EqualTo(Resources.RequestDenyReasonNoWorkflow);
 		}
 
 		[Test]
@@ -338,6 +363,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			str.Expect(c => c.GetShiftTradeStatus(_shiftTradeRequestStatusChecker)).Return(ShiftTradeStatus.OkByMe);
 			str.Expect(c => c.PersonFrom).Return(_loggedOnPerson);
 			var personRequest = new PersonRequest(_loggedOnPerson, str);
+			personRequest.ForcePending();
 			
 			var result = Mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
 			result.Status.Should().Contain(Resources.WaitingForOtherPart);
@@ -350,6 +376,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			str.Expect(c => c.GetShiftTradeStatus(_shiftTradeRequestStatusChecker)).Return(ShiftTradeStatus.OkByMe);
 			str.Expect(c => c.PersonFrom).Return(new Person());
 			var personRequest = new PersonRequest(_loggedOnPerson, str);
+			personRequest.ForcePending();
 			
 			var result = Mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
 			result.Status.Should().Contain(Resources.WaitingForYourApproval);
@@ -361,9 +388,22 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var str = MockRepository.GenerateMock<IShiftTradeRequest>();
 			str.Expect(c => c.GetShiftTradeStatus(_shiftTradeRequestStatusChecker)).Return(ShiftTradeStatus.OkByBothParts);
 			var personRequest = new PersonRequest(new Person(), str);
+			personRequest.ForcePending();
 
 			var result = Mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
 			result.Status.Should().Contain(Resources.WaitingForSupervisorApproval);
+		}
+
+		[Test]
+		public void ShouldOnlyMapShiftTradeStatusWhenPending()
+		{
+			var str = MockRepository.GenerateMock<IShiftTradeRequest>();
+			var personRequest = new PersonRequest(new Person(), str);
+
+			var result = Mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
+			result.Status.Should().Not.Contain(",");
+
+			str.AssertWasNotCalled(x => x.GetShiftTradeStatus(_shiftTradeRequestStatusChecker));
 		}
 
 		[Test]
@@ -372,6 +412,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var str = MockRepository.GenerateMock<IShiftTradeRequest>();
 			str.Expect(c => c.GetShiftTradeStatus(_shiftTradeRequestStatusChecker)).Return(ShiftTradeStatus.Referred);
 			var personRequest = new PersonRequest(new Person(), str);
+			personRequest.ForcePending();
 
 			var result = Mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
 			result.Status.Should().Contain(Resources.TheScheduleHasChanged);
@@ -384,9 +425,74 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var str = MockRepository.GenerateMock<IShiftTradeRequest>();
 			str.Expect(c => c.GetShiftTradeStatus(_shiftTradeRequestStatusChecker)).Return(ShiftTradeStatus.NotValid);
 			var personRequest = new PersonRequest(new Person(), str);
+			personRequest.ForcePending();
 
 			Assert.Throws<AutoMapperMappingException>(() =>
 					Mapper.Map<IPersonRequest, RequestViewModel>(personRequest));
+		}
+
+		[Test]
+		public void ShouldMapIsNew()
+		{
+			var sender = PersonFactory.CreatePerson();
+			var tradeDate = new DateOnly(2010, 1, 1);
+			var shiftTradeSwapDetail = new ShiftTradeSwapDetail(sender, _loggedOnPerson, tradeDate, tradeDate);
+			var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail> { shiftTradeSwapDetail });
+			var personRequest = new PersonRequest(_loggedOnPerson) { Subject = "Subject of request", Request = shiftTradeRequest };
+			
+			var result = Mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
+
+			Assert.That(personRequest.IsNew);
+			Assert.That(result.IsNew, Is.True);
+
+			shiftTradeRequest.SetShiftTradeStatus(ShiftTradeStatus.Referred, new PersonRequestAuthorizationCheckerForTest());
+			result = Mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
+
+			Assert.That(personRequest.IsNew,Is.False);
+			Assert.That(result.IsNew, Is.False);
+
+		}
+
+		[Test]
+		public void ShouldMapIsPending()
+		{
+			var sender = PersonFactory.CreatePerson();
+			var tradeDate = new DateOnly(2010, 1, 1);
+			var shiftTradeSwapDetail = new ShiftTradeSwapDetail(sender, _loggedOnPerson, tradeDate, tradeDate);
+			var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail> { shiftTradeSwapDetail });
+			var personRequest = new PersonRequest(_loggedOnPerson) { Subject = "Subject of request", Request = shiftTradeRequest };
+			var result = Mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
+
+			Assert.That(personRequest.IsNew);
+			Assert.That(result.IsPending, Is.False);
+
+			personRequest.ForcePending();			
+			result = Mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
+
+			Assert.That(personRequest.IsPending, Is.True);
+			Assert.That(result.IsPending, Is.True);
+		}
+
+
+		[Test]
+		public void ShouldMapIsApproved()
+		{
+			var sender = PersonFactory.CreatePerson();
+			var tradeDate = new DateOnly(2010, 1, 1);
+			var shiftTradeSwapDetail = new ShiftTradeSwapDetail(sender, _loggedOnPerson, tradeDate, tradeDate);
+			var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail> { shiftTradeSwapDetail });
+			var personRequest = new PersonRequest(_loggedOnPerson) { Subject = "Subject of request", Request = shiftTradeRequest };
+			var result = Mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
+
+			Assert.That(personRequest.IsApproved, Is.False); 
+			Assert.That(result.IsApproved, Is.False);
+
+			personRequest.ForcePending();
+			personRequest.Approve(new ApprovalServiceForTest(), new PersonRequestAuthorizationCheckerForTest());
+			result = Mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
+
+			Assert.That(personRequest.IsApproved, Is.True);
+			Assert.That(result.IsApproved, Is.True);
 		}
 
 		private static IPersonRequest createShiftTrade(IPerson from, IPerson to)

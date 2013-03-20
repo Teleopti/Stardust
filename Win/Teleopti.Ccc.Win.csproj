@@ -91,13 +91,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Accessibility" />
-    <Reference Include="Autofac, Version=2.6.3.862, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Autofac.2.6.3.862\lib\NET40\Autofac.dll</HintPath>
+    <Reference Include="Autofac">
+      <HintPath>..\packages\Autofac.3.0.1\lib\net40\Autofac.dll</HintPath>
     </Reference>
-    <Reference Include="Autofac.Configuration, Version=2.6.3.862, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Autofac.2.6.3.862\lib\NET40\Autofac.Configuration.dll</HintPath>
+    <Reference Include="Autofac.Configuration">
+      <HintPath>..\packages\Autofac.3.0.1\lib\net40\Autofac.Configuration.dll</HintPath>
     </Reference>
     <Reference Include="LinFu.DynamicProxy">
       <HintPath>..\packages\LinFu.DynamicProxy.OfficialRelease.1.0.5\lib\net\LinFu.DynamicProxy.dll</HintPath>
@@ -105,13 +103,13 @@
     <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\packages\log4net.2.0.0\lib\net35-full\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="MbCache, Version=2.1.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
+    <Reference Include="MbCache, Version=2.2.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\MbCache.2.1\lib\net40\MbCache.dll</HintPath>
+      <HintPath>..\packages\MbCache.2.2\lib\net40\MbCache.dll</HintPath>
     </Reference>
-    <Reference Include="MbCache.ProxyImpl.LinFu, Version=2.1.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
+    <Reference Include="MbCache.ProxyImpl.LinFu, Version=2.2.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\MbCache.2.1\lib\net40\MbCache.ProxyImpl.LinFu.dll</HintPath>
+      <HintPath>..\packages\MbCache.2.2\lib\net40\MbCache.ProxyImpl.LinFu.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.Composite, Version=2.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -694,25 +692,30 @@
     <Compile Include="Forecasting\Forms\JobHistory\JobHistoryDetailedView.Designer.cs">
       <DependentUpon>JobHistoryDetailedView.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forecasting\Forms\QuickForecast\QuickForecastPresenter.cs" />
-    <Compile Include="Forecasting\Forms\QuickForecast\QuickForecastModel.cs" />
-    <Compile Include="Forecasting\Forms\QuickForecast\QuickForecastPeriodProvider.cs" />
-    <Compile Include="Forecasting\Forms\QuickForecast\QuickForecastView.cs">
-      <SubType>Form</SubType>
+    <Compile Include="Forecasting\Forms\QuickForecast\SelectHistoricalDateRangeForTemplates.cs">
+      <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Forecasting\Forms\QuickForecast\QuickForecastView.Designer.cs">
-      <DependentUpon>QuickForecastView.cs</DependentUpon>
+    <Compile Include="Forecasting\Forms\QuickForecast\SelectHistoricalDateRangeForTemplates.Designer.cs">
+      <DependentUpon>SelectHistoricalDateRangeForTemplates.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forecasting\Forms\QuickForecast\QuickForecastModule.cs" />
-    <Compile Include="Forecasting\Forms\QuickForecast\IQuickForecastPeriodProvider.cs" />
-    <Compile Include="Forecasting\Forms\QuickForecast\IQuickForecastView.cs" />
-    <Compile Include="Forecasting\Forms\QuickForecast\IQuickForecastScenarioProvider.cs" />
-    <Compile Include="Forecasting\Forms\QuickForecast\IWorkloadProvider.cs" />
-    <Compile Include="Forecasting\Forms\QuickForecast\QuickForecastCommand.cs" />
-    <Compile Include="Forecasting\Forms\QuickForecast\ScenarioModel.cs" />
-    <Compile Include="Forecasting\Forms\QuickForecast\QuickForecastScenarioProvider.cs" />
-    <Compile Include="Forecasting\Forms\QuickForecast\WorkloadModel.cs" />
-    <Compile Include="Forecasting\Forms\QuickForecast\WorkloadProvider.cs" />
+    <Compile Include="Forecasting\Forms\QuickForecast\SelectTargetDatesAndScenario.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forecasting\Forms\QuickForecast\SelectTargetDatesAndScenario.Designer.cs">
+      <DependentUpon>SelectTargetDatesAndScenario.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forecasting\Forms\QuickForecast\SelectHistoricalDateRange.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forecasting\Forms\QuickForecast\SelectHistoricalDateRange.Designer.cs">
+      <DependentUpon>SelectHistoricalDateRange.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forecasting\Forms\QuickForecast\SelectWorkload.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forecasting\Forms\QuickForecast\SelectWorkload.Designer.cs">
+      <DependentUpon>SelectWorkload.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forecasting\Forms\ForecasterChartSetting.cs" />
     <Compile Include="Forecasting\Forms\ForecastWorkflowDataService.cs" />
     <Compile Include="Forecasting\Forms\ForecastWorkflowModel.cs" />
@@ -2568,6 +2571,20 @@
     <EmbeddedResource Include="Forecasting\Forms\MultiSiteDistributionGrid.resx">
       <DependentUpon>MultiSiteDistributionGrid.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forecasting\Forms\QuickForecast\SelectHistoricalDateRangeForTemplates.resx">
+      <DependentUpon>SelectHistoricalDateRangeForTemplates.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forecasting\Forms\QuickForecast\SelectTargetDatesAndScenario.resx">
+      <DependentUpon>SelectTargetDatesAndScenario.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forecasting\Forms\QuickForecast\SelectHistoricalDateRange.resx">
+      <DependentUpon>SelectHistoricalDateRange.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forecasting\Forms\QuickForecast\SelectWorkload.resx">
+      <DependentUpon>SelectWorkload.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forecasting\Forms\WFControls\FilterDataView.resx">
       <DependentUpon>FilterDataView.cs</DependentUpon>
     </EmbeddedResource>
@@ -2581,9 +2598,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="ExceptionHandling\SimpleExceptionHandlerView.resx">
       <DependentUpon>SimpleExceptionHandlerView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Forecasting\Forms\QuickForecast\QuickForecastView.resx">
-      <DependentUpon>QuickForecastView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Grouping\FindPersonsView.resx">
       <DependentUpon>FindPersonsView.cs</DependentUpon>

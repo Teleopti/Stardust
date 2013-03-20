@@ -4107,7 +4107,7 @@ Accounts</value>
     <comment>Overstaffing</comment>
   </data>
   <data name="SeriousUnderstaffing" xml:space="preserve">
-    <value>Critical understaffing</value>
+    <value>Critical understaffing for :</value>
     <comment>Critical understaffing</comment>
   </data>
   <data name="Thresholds" xml:space="preserve">
@@ -11297,5 +11297,73 @@ These options are activated:
   <data name="TheQuickForecatWillStartInBackgroundMessage" xml:space="preserve">
     <value>The quick forecast will be started as a job in the background when this wizard is finished, look in Job History for status.</value>
     <comment>Information on the last step in quick forecast</comment>
+  </data>
+  <data name="CannotDisplayScheduleWhenShiftTradeStatusIsNew" xml:space="preserve">
+    <value>Can not display schedule when the status of the shifttrade request is new or approved</value>
+  </data>
+  <data name="NewTemplateName" xml:space="preserve">
+    <value>New Template Name</value>
+    <comment>New Template Name</comment>
+  </data>
+  <data name="EmptyTemplateName" xml:space="preserve">
+    <value>Empty preference template name</value>
+    <comment>Empty preference template name</comment>
+  </data>
+  <data name="Name50CharactersLimit" xml:space="preserve">
+    <value>Name must not be empty or longer than 50 characters.</value>
+    <comment>Name must not be empty or longer than 50 characters.</comment>
+  </data>
+  <data name="InsufficientStaffingDays" xml:space="preserve">
+    <value>Insufficient staffing for : </value>
+  </data>
+  <data name="InsufficientStaffingHours" xml:space="preserve">
+    <value>Insufficient staffing on : {0} at </value>
+  </data>
+  <data name="NoBudgetDefineForSomeRequestedDays" xml:space="preserve">
+    <value>One or more days during this requested period {0} has no budget allowance.</value>
+    <comment>One or more days during requested period has no budget.</comment>
+  </data>
+  <data name="NoBudgetForThisPeriod" xml:space="preserve">
+    <value>There is no budget for this period {0}</value>
+    <comment>No budget group is configured for this period</comment>
+  </data>
+  <data name="NoBudgetGroupForPerson" xml:space="preserve">
+    <value>There is no budget group for person: {0}</value>
+    <comment>There is no budget group configured for person.</comment>
+  </data>
+  <data name="NotEnoughBudgetAllowanceForTheDay" xml:space="preserve">
+    <value>There is not enough budget allowance for day {0}.</value>
+    <comment>Not enough budget allowance.</comment>
+  </data>
+  <data name="RequestDenyReasonClosedPeriodBeforeSendRequest" xml:space="preserve">
+    <value>Your Request has been denied. Date Period not open for sending requests.</value>
+  </data>
+  <data name="RequestDenyReasonPeriodOpenAfterSendRequest" xml:space="preserve">
+    <value>Your Request has been denied. Day not open for requests. Next open date is {0}.</value>
+  </data>
+  <data name="SeriousUnderStaffingHours" xml:space="preserve">
+    <value>Critical Understaffing on : {0} at </value>
+  </data>
+  <data name="CurrentNumberOfShifts" xml:space="preserve">
+    <value>Current number of shifts:  </value>
+    <comment>label on window showing during shift generation</comment>
+  </data>
+  <data name="GeneratingShifts" xml:space="preserve">
+    <value>Generating shifts</value>
+    <comment>Caption on window during shift generation</comment>
+  </data>
+  <data name="ShiftGenerationStop" xml:space="preserve">
+    <value>Stop! These rules are too complex and shifts could not be generated within the maximum limit.
+No shifts from this rule set will be available for scheduling and optimization.
+Reduce the complexity to use these shifts.</value>
+    <comment>Message in Shifts</comment>
+  </data>
+  <data name="ShiftGenerationWarning" xml:space="preserve">
+    <value>Warning! Generating shifts according to these rules takes too long time. This will hurt scheduling and optimization performance at a later stage!</value>
+    <comment>warning message in window showing during shift generation</comment>
+  </data>
+  <data name="TooComplexRuleset" xml:space="preserve">
+    <value> is a too complex ruleset!</value>
+    <comment>Caption on messagebox when shift generation is stopped </comment>
   </data>
 </root>

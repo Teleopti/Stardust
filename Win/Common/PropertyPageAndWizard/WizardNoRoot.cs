@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -110,8 +109,8 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
                 treeViewPages.BeginUpdate();
                 treeViewPages.Nodes.Clear();
                 _rootNode = treeViewPages.Nodes.Add(_propertyPages.Name);
-                string[] pageNames = _propertyPages.GetPageNames();
-                foreach (string pageName in pageNames)
+                var pageNames = _propertyPages.GetPageNames();
+                foreach (var pageName in pageNames)
                 {
                     _rootNode.Nodes.Add(pageName, pageName);
                 }
@@ -159,19 +158,9 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
             }
         }
 
-        //private void pp_NameChanged(object sender, WizardNameChangedEventArgs e)
-        //{
-        //    treeViewPages.Nodes[0].Text = e.NewName;
-        //}
-
         private void treeViewPages_BeforeSelect(object sender, TreeViewCancelEventArgs e)
         {
             e.Cancel = true;
-        }
-
-        private void treeViewPages_AfterSelect(object sender, TreeViewEventArgs e)
-        {
-            //e.Node.BackColor = Color.DodgerBlue;
         }
 
         private void treeViewPages_BeforeCollapse(object sender, TreeViewCancelEventArgs e)
@@ -187,14 +176,10 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
 
         private void splitContainerPages_Paint(object sender, PaintEventArgs e)
         {
-            using (SolidBrush brush = new SolidBrush(Color.FromKnownColor(KnownColor.ActiveBorder)))
+            using (var brush = new SolidBrush(Color.FromKnownColor(KnownColor.ActiveBorder)))
             {
                 e.Graphics.FillRectangle(brush, e.ClipRectangle);
             }
-        }
-
-        private void Wizard_FormClosed(object sender, FormClosedEventArgs e)
-        {
         }
 
         private void Wizard_Shown(object sender, EventArgs e)
@@ -243,12 +228,5 @@ namespace Teleopti.Ccc.Win.Common.PropertyPageAndWizard
         }
     }
 
-    internal class CustomComponentResourceManager : ComponentResourceManager
-    {
-        public CustomComponentResourceManager(Type type, string resourceName)
-            : base(type)
-        {
-            BaseNameField = resourceName;
-        }
-    }
+ 
 }

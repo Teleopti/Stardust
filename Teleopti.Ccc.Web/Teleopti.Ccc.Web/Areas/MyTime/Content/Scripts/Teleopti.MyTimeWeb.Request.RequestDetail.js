@@ -100,6 +100,7 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 	}
 
 	function _showRequest(data, position) {
+
 		_hideEditSection();
 		_clearFormData();
 		_showRequestTypeTab(data.TypeEnum);
@@ -218,9 +219,9 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 
 	function _fillFormData(data) {
 		$('#Request-detail-subject-input').val(data.Subject);
-		$('#Request-detail-fromDate-input').val(data.RawDateFrom);
+		$('#Request-detail-fromDate-input').datepicker("setDate", new Date(data.DateFromYear, data.DateFromMonth - 1, data.DateFromDayOfMonth));
 		$('#Request-detail-fromTime-input-input').val(data.RawTimeFrom);
-		$('#Request-detail-toDate-input').val(data.RawDateTo),
+		$('#Request-detail-toDate-input').datepicker("setDate", new Date(data.DateToYear, data.DateToMonth - 1, data.DateToDayOfMonth));
 		$('#Request-detail-toTime-input-input').val(data.RawTimeTo);
 		$('#Request-detail-message-input').val(data.Text);
 		$('#Request-detail-entityid').val(data.Id);
@@ -282,7 +283,6 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 			_addAbsenceRequestClick();
 		}
 	};
-
 })(jQuery);
 
 
@@ -317,6 +317,14 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel() {
 		$('#Request-detail-fromTime-input-input').css("color", "grey");
 		$('#Request-detail-toTime-input-input').css("color", "grey");
 	}
+    
+    function _setDefaultDates() {
+        var year = $('#Request-detail-today-year').val();
+        var month = $('#Request-detail-today-month').val();
+        var day = $('#Request-detail-today-day').val();
+        $('#Request-detail-fromDate-input').datepicker("setDate", new Date(year, month - 1, day));
+        $('#Request-detail-toDate-input').datepicker("setDate", new Date(year, month - 1, day));
+    }
 	
 	self.AddTextRequest = function () {
 		self._clearValidationError();
@@ -324,6 +332,7 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel() {
 		self.TextRequestHeaderVisible(true);
 		self.AbsenceRequestHeaderVisible(false);
 		self.IsFullDay(false);
+	    _setDefaultDates();
 	};
 
 	self.AddAbsenceRequest = function () {
@@ -332,6 +341,7 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel() {
 		self.TextRequestHeaderVisible(false);
 		self.AbsenceRequestHeaderVisible(true);
 		self.IsFullDay(true);
+	    _setDefaultDates();
 	};
 
 	self._clearValidationError = function () {

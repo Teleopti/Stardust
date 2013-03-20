@@ -60,7 +60,7 @@ BEGIN
     
     EXEC Queue.GetAndAddQueue @Endpoint,@Queue,@Subqueue,@QueueId=@QueueId OUTPUT;
 		
-	INSERT INTO Queue.Messages (QueueId,Payload,ProcessingUntil,ExpiresAt,Processed,Headers,CreatedAt) VALUES (@QueueId,@Payload,ISNULL(@ProcessingUntil,GetDate()),@ExpiresAt,0,@Headers,@CreatedAt)
+	INSERT INTO Queue.Messages (QueueId,Payload,ProcessingUntil,ExpiresAt,Processed,Headers,CreatedAt) VALUES (@QueueId,@Payload,ISNULL(@ProcessingUntil,GetUtcDate()),@ExpiresAt,0,@Headers,@CreatedAt)
 END
 GO
 ----
@@ -74,7 +74,7 @@ BEGIN
 	SET NOCOUNT ON;
 
 	UPDATE Queue.Messages
-	SET ProcessingUntil = DateAdd(mi,10,GetDate())
+	SET ProcessingUntil = DateAdd(mi,10,GetUtcDate())
 	WHERE MessageId=@MessageId
 END
 GO
@@ -173,7 +173,7 @@ BEGIN
 
 	UPDATE Queue.Messages
 	SET QueueId = @QueueId,
-	ProcessingUntil = GetDate()
+	ProcessingUntil = GetUtcDate()
 	WHERE MessageId=@MessageId
 END
 GO
@@ -187,11 +187,11 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 	
-	SELECT TOP 1 *
+	SELECT TOP 1 1 as 'y'
 	FROM Queue.Messages
-	WHERE isnull(ExpiresAt,DATEADD(mi,1,GetDate())) > GetDate()
+	WHERE isnull(ExpiresAt,DATEADD(mi,1,GetUtcDate())) > GetUtcDate()
 	AND Processed=0
-	AND ProcessingUntil<GetDate()
+	AND ProcessingUntil<GetUtcDate()
 	AND QueueId = @QueueId
 	ORDER BY CreatedAt ASC
 END
@@ -207,17 +207,23 @@ BEGIN
 	SET NOCOUNT ON;
 
     SELECT
-		m.*,
+		m.MessageId,
+		m.QueueId,
+		m.CreatedAt,
+		m.ProcessingUntil,
+		m.Processed,
+		m.Headers,
+		m.Payload,
 		q.QueueName SubQueueName
     FROM Queue.Messages m
     LEFT JOIN Queue.Queues q
 		ON m.QueueId=q.QueueId
 		AND q.ParentQueueId IS NOT NULL
-	WHERE isnull(m.ExpiresAt,DATEADD(mi,1,GetDate())) > GetDate()
+	WHERE m.MessageId = @MessageId
+	AND isnull(m.ExpiresAt,DATEADD(mi,1,GetUtcDate())) > GetUtcDate()
 	AND m.Processed=0
-	AND m.ProcessingUntil<GetDate()
-	AND m.MessageId=@MessageId
-	ORDER BY CreatedAt ASC
+	AND m.ProcessingUntil<GetUtcDate()
+	ORDER BY m.CreatedAt ASC
 END
 GO
 ----
@@ -233,16 +239,16 @@ BEGIN
 	DECLARE @MessageId int;
 	SELECT TOP 1 @MessageId = MessageId
 	FROM Queue.Messages
-	WHERE isnull(ExpiresAt,DATEADD(mi,1,GetDate())) > GetDate()
+	WHERE isnull(ExpiresAt,DATEADD(mi,1,GetUtcDate())) > GetUtcDate()
 	AND Processed=0
-	AND ProcessingUntil<GetDate()
+	AND ProcessingUntil<GetUtcDate()
 	AND QueueId=@QueueId
 	ORDER BY CreatedAt ASC
 	
 	if (@MessageId is not null)
 		BEGIN
 			UPDATE Queue.Messages
-			SET ProcessingUntil = DateAdd(mi,1,GetDate()),
+			SET ProcessingUntil = DateAdd(mi,1,GetUtcDate()),
 			ProcessedCount=ProcessedCount+1
 			WHERE MessageId=@MessageId
 			
@@ -274,11 +280,18 @@ BEGIN
     EXEC Queue.GetAndAddQueue @Endpoint,@Queue,@Subqueue,@QueueId=@QueueId OUTPUT;
 	
 			UPDATE Queue.Messages
-			SET ProcessingUntil = DateAdd(mi,10,GetDate()),
+			SET ProcessingUntil = DateAdd(mi,10,GetUtcDate()),
 			ProcessedCount=ProcessedCount+1
 			WHERE QueueId = @QueueId
-			
-			SELECT *
+
+			SELECT
+				MessageId,
+				QueueId,
+				CreatedAt,
+				ProcessingUntil,
+				Processed,
+				Headers,
+				Payload
 			FROM Queue.Messages
 			WHERE QueueId = @QueueId
 END

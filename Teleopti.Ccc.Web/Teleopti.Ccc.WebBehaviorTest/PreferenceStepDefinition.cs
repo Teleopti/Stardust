@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Globalization;
 using NUnit.Framework;
 using SharpTestsEx;
@@ -12,7 +11,6 @@ using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
 using Teleopti.Interfaces.Domain;
-using Find = WatiN.Core.Find;
 
 namespace Teleopti.Ccc.WebBehaviorTest
 {
@@ -72,8 +70,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			_page.SelectCalendarCellByClass(data1.Date);
 			_page.SelectCalendarCellByClass(data2.Date);
 		}
-
-
 
 		[Then(@"I should see my existing shift category preference")]
 		public void ThenIShouldSeeMyExistingShiftCategoryPreference()

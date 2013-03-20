@@ -4,6 +4,7 @@ using System.Linq;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
@@ -62,15 +63,30 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			EventualAssert.That(() => Pages.Pages.RequestsPage.MyScheduleLayers[0].Title, Contains.Substring(expectedTimes));
 		}
 
+		[Then(@"I should only see (.*)'s schedule")]
+		public void ThenIShouldOnlySeeOtherAgentSSchedule(string agentName)
+		{
+			EventualAssert.That(() => Pages.Pages.Current.Document.Divs.Filter(QuicklyFind.ByClass("agent")).Count(div => div.IsDisplayed()), Is.EqualTo(1));
+			EventualAssert.That(() => Pages.Pages.Current.Document.Divs.Filter(QuicklyFind.ByClass("agent")).First(div => div.IsDisplayed()).Text, Is.StringContaining(agentName));
+		}
+
+		[Then(@"I should see (.*) in the shift trade list")]
+		public void ThenIShouldSeeOtherAgentSSchedule(string agentName)
+		{
+			EventualAssert.That(() => Pages.Pages.Current.Document.Divs.Filter(QuicklyFind.ByClass("agent")).Any(div => div.IsDisplayed() && div.Text.Trim() == agentName), Is.True);
+		}
+
+
 		[Then(@"I should see a possible schedule trade with")]
 		public void ThenIShouldSeeAPossibleScheduleTradeWith(Table table)
 		{
 			var expectedTimes = table.Rows[0][1] + "-" + table.Rows[1][1];
 
-
 			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeScheduleLayers.Any(), Is.True);
 			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeScheduleLayers[0].Title, Contains.Substring(expectedTimes));
 		}
+
+
 
 		[Then(@"the selected date should be '(.*)'")]
 		public void ThenTheSelectedDateShouldBe(DateTime date)
@@ -116,6 +132,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeDetailsFromScheduleLayers.Last().Title, Contains.Substring(expectedEnd));
 		}
 
+		[Then(@"I should see my details scheduled day off '(.*)'")]
+		public void ThenIShouldSeeMyDetailsScheduledDayOff(string dayOffText)
+		{
+			EventualAssert.That(()=>Pages.Pages.RequestsPage.MyScheduleDayOff.Text,Is.EqualTo(dayOffText));
+		}
+
+		[Then(@"I should see other details scheduled day off '(.*)'")]
+		public void ThenIShouldSeeOtherDetailsScheduledDayOff(string dayOffText)
+		{
+			EventualAssert.That(() => Pages.Pages.RequestsPage.OtherScheduleDayOff.Text, Is.EqualTo(dayOffText));
+		}
+
 		[Then(@"I should see details with a schedule to")]
 		public void ThenIShouldSeeDetailsWithAScheduleTo(Table table)
 		{
@@ -130,18 +158,51 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		}
 
 		[Then(@"I should see details with subject '(.*)'")]
+		[Then(@"I should see details with subject '(.*)'")]
 		public void ThenIShouldSeeDetailsWithSubject(string subject)
 		{
-			
 			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeRequestDetailSubject.Text, Is.EqualTo(subject));
-
 		}
 
 		[Then(@"I should see details with message '(.*)'")]
 		public void ThenIShouldSeeDetailsWithMessage(string message)
 		{
 			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeRequestDetailMessage.Text, Is.EqualTo(message));
+		}
 
+
+		[When(@"I enter subject '(.*)'")]
+		public void WhenIEnterSubject(string subject)
+		{
+			Pages.Pages.RequestsPage.AddShiftTradeSubject.WaitUntilDisplayed();
+			Pages.Pages.RequestsPage.AddShiftTradeSubject.ChangeValue(subject);
+		}
+
+		[When(@"I enter message '(.*)'")]
+		public void WhenIEnterMessage(string message)
+		{
+			Pages.Pages.RequestsPage.AddShiftTradeMessage.WaitUntilDisplayed();
+			Pages.Pages.RequestsPage.AddShiftTradeMessage.ChangeValue(message);
+		}
+		
+		[Then(@"Add Shift Trade Request view should not be visible")]
+		public void ThenAddShiftTradeRequestViewShouldNotBeVisible()
+		{
+			EventualAssert.That(() => Pages.Pages.RequestsPage.AddShiftTradeContainer.DisplayVisible(), Is.False);
+		}
+
+		[Then(@"I should see details with message that tells the user that the status of the shifttrade is approved")]
+		[Then(@"I should see details with message that tells the user that the status of the shifttrade is new")]
+		public void ThenIShouldSeeDetailsWithMessageThatTellsTheUserThatTheStatusOfTheShifttradeIsNew()
+		{
+			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeRequestDetailInfo.Text, Is.EqualTo(Resources.CannotDisplayScheduleWhenShiftTradeStatusIsNew));
+			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeRequestDetailInfo.IsDisplayed(), Is.True);
+		}
+
+		[Then(@"I should not see timelines")]
+		public void ThenIShouldNotSeeTimelines()
+		{
+			EventualAssert.That(() => Pages.Pages.RequestsPage.Timelines.Any(div=>div.IsDisplayed()), Is.False);
 		}
 
 	}

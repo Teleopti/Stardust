@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.UserTexts;
@@ -18,16 +19,19 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		private readonly IRequestsViewModelFactory _requestsViewModelFactory;
 		private readonly ITextRequestPersister _textRequestPersister;
 		private readonly IAbsenceRequestPersister _absenceRequestPersister;
+		private readonly IShiftTradeRequestPersister _shiftTradeRequestPersister;
 		private readonly IRespondToShiftTrade _respondToShiftTrade;
 
 		public RequestsController(IRequestsViewModelFactory requestsViewModelFactory, 
 								ITextRequestPersister textRequestPersister, 
 								IAbsenceRequestPersister absenceRequestPersister, 
+								IShiftTradeRequestPersister shiftTradeRequestPersister,
 								IRespondToShiftTrade respondToShiftTrade)
 		{
 			_requestsViewModelFactory = requestsViewModelFactory;
 			_textRequestPersister = textRequestPersister;
 			_absenceRequestPersister = absenceRequestPersister;
+			_shiftTradeRequestPersister = shiftTradeRequestPersister;
 			_respondToShiftTrade = respondToShiftTrade;
 		}
 
@@ -67,10 +71,24 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 
 		[UnitOfWorkAction]
 		[HttpPostOrPut]
+		public JsonResult ShiftTradeRequest(ShiftTradeRequestForm form)
+		{
+			if (!ModelState.IsValid)
+			{
+				Response.TrySkipIisCustomErrors = true;
+				Response.StatusCode = 400;
+				return ModelState.ToJson();
+			}
+			return Json(_shiftTradeRequestPersister.Persist(form));
+		}
+
+		[UnitOfWorkAction]
+		[HttpPostOrPut]
 		public JsonResult ApproveShiftTrade(Guid id)
 		{
 			return Json(_respondToShiftTrade.OkByMe(id));
 		}
+
 
 		[UnitOfWorkAction]
 		[HttpPostOrPut]
@@ -114,7 +132,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[HttpGet]
 		public JsonResult ShiftTradeRequestSchedule(DateTime selectedDate)
 		{
-			return Json(_requestsViewModelFactory.CreateShiftTradeScheduleViewModel(selectedDate), JsonRequestBehavior.AllowGet);
+			var calendarDate = new DateTime(selectedDate.Year, selectedDate.Month, selectedDate.Day, CultureInfo.CurrentCulture.Calendar);
+			return Json(_requestsViewModelFactory.CreateShiftTradeScheduleViewModel(calendarDate), JsonRequestBehavior.AllowGet);
 		}
 
 		[UnitOfWorkAction]
@@ -125,7 +144,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		}
 
 		[UnitOfWorkAction]
-		[HttpPost]
+		[HttpGet]
 		public JsonResult ShiftTradeRequestSwapDetails(Guid id)
 		{
 			var viewmodel = _requestsViewModelFactory.CreateShiftTradeRequestSwapDetails(id);

@@ -972,4 +972,16 @@
   <data name="ResTotals" xml:space="preserve">
     <value>Totales</value>
   </data>
+  <data name="ResSignOut" xml:space="preserve">
+    <value>Salir</value>
+  </data>
+  <data name="ResShiftStartDateColon" xml:space="preserve">
+    <value>Fecha (turnos con inicio en):</value>
+  </data>
+  <data name="ResShiftStartDateFromColon" xml:space="preserve">
+    <value>Fecha desde (turnos con inicio en):</value>
+  </data>
+  <data name="ResShiftStartDateToColon" xml:space="preserve">
+    <value>Fecha hasta (turnos con inicio en):</value>
+  </data>
 </root>

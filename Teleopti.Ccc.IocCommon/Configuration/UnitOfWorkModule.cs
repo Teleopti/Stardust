@@ -25,6 +25,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				 .As<IUnitOfWorkFactory>()
 				 .InstancePerDependency()
 				 .ExternallyOwned();
+
+			builder.RegisterType<CurrentUnitOfWork>().As<ICurrentUnitOfWork>().SingleInstance();
 		}
 
 		private class NotInitializedUnitOfWorkFactory : IUnitOfWorkFactory

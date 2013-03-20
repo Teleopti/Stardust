@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Rhino.ServiceBus;
 using SharpTestsEx;
+using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Sdk.ServiceBus;
 using Teleopti.Ccc.Sdk.ServiceBus.Denormalizer;
 using Teleopti.Interfaces.Infrastructure;
@@ -33,7 +34,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			builder.RegisterInstance(_serviceBus).As<IServiceBus>();
 			builder.RegisterType<DenormalizeScheduleProjectionConsumer>().As<ConsumerOf<DenormalizedSchedule>>();
 
-			builder.RegisterModule<RepositoryContainerInstaller>();
+			builder.RegisterModule<RepositoryModule>();
 			builder.RegisterModule<ApplicationInfrastructureContainerInstaller>();
 			builder.RegisterModule<ForecastContainerInstaller>();
 			builder.RegisterModule<ExportForecastContainerInstaller>();
@@ -54,7 +55,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			builder.RegisterInstance(_serviceBus).As<IServiceBus>();
 			builder.RegisterType<ScheduleDayReadModelHandler>().As<ConsumerOf<DenormalizedSchedule>>();
 
-			builder.RegisterModule<RepositoryContainerInstaller>();
+			builder.RegisterModule<RepositoryModule>();
 			builder.RegisterModule<ApplicationInfrastructureContainerInstaller>();
 			builder.RegisterModule<ForecastContainerInstaller>();
 			builder.RegisterModule<ExportForecastContainerInstaller>();
@@ -75,7 +76,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			builder.RegisterInstance(_serviceBus).As<IServiceBus>();
 			builder.RegisterType<PersonScheduleDayReadModelHandler>().As<ConsumerOf<DenormalizedSchedule>>();
 
-			builder.RegisterModule<RepositoryContainerInstaller>();
+			builder.RegisterModule<RepositoryModule>();
 			builder.RegisterModule<ApplicationInfrastructureContainerInstaller>();
 			builder.RegisterModule<ForecastContainerInstaller>();
 			builder.RegisterModule<ExportForecastContainerInstaller>();

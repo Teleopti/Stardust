@@ -223,7 +223,15 @@ namespace Teleopti.Ccc.Win.Reporting
             }
         }
 
-        public void SetDateFromLabelText(string text)
+	    public bool EnableNullDates
+	    {
+		    get { return dateTimePickerAdvWorkAStartDate.EnableNullDate; }
+			set { dateTimePickerAdvWorkAStartDate.EnableNullDate = value;
+				dateTimePickerAdvWorkEndPeriod.EnableNullDate = value;
+			}
+	    }
+
+	    public void SetDateFromLabelText(string text)
         {
             labelTargetPeriodFrom.Text = text;
         }

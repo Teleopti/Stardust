@@ -110,8 +110,6 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 		return self.EditableIsInOpenPeriod() && self.EditableHasNoSchedule();
 	});
 
-	this.Fulfilled = ko.observable(true);
-
 	this.Feedback = ko.observable(false);
 
 	this.StyleClassName = ko.observable('');

@@ -1,5 +1,7 @@
+using System;
 using System.Net;
 using System.Web.Mvc;
+using Autofac.Extras.DynamicProxy2;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Filters;
@@ -15,18 +17,20 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 {
 	[PreferencePermission]
-	[Aspects]
+	[Intercept(typeof(AspectInterceptor))]
 	public class PreferenceController : Controller
 	{
 		private readonly IPreferenceViewModelFactory _viewModelFactory;
 		private readonly IVirtualSchedulePeriodProvider _virtualSchedulePeriodProvider;
 		private readonly IPreferencePersister _preferencePersister;
+		private readonly IPreferenceTemplatePersister _preferenceTemplatePersister;
 
-		public PreferenceController(IPreferenceViewModelFactory viewModelFactory, IVirtualSchedulePeriodProvider virtualSchedulePeriodProvider, IPreferencePersister preferencePersister)
+		public PreferenceController(IPreferenceViewModelFactory viewModelFactory, IVirtualSchedulePeriodProvider virtualSchedulePeriodProvider, IPreferencePersister preferencePersister, IPreferenceTemplatePersister preferenceTemplatePersister)
 		{
 			_viewModelFactory = viewModelFactory;
 			_virtualSchedulePeriodProvider = virtualSchedulePeriodProvider;
 			_preferencePersister = preferencePersister;
+			_preferenceTemplatePersister = preferenceTemplatePersister;
 		}
 
 		[EnsureInPortal]
@@ -92,5 +96,33 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 			return Json(_preferencePersister.Delete(date));
 		}
 
+		[HttpGet]
+		[UnitOfWork]
+		public virtual  JsonResult GetPreferenceTemplates()
+		{
+			return Json(_viewModelFactory.CreatePreferenceTemplateViewModels(), JsonRequestBehavior.AllowGet);
+		}
+
+		[UnitOfWork]
+		[HttpPostOrPut]
+		public virtual JsonResult PreferenceTemplate(PreferenceTemplateInput input)
+		{
+			if (!ModelState.IsValid)
+			{
+				Response.TrySkipIisCustomErrors = true;
+				Response.StatusCode = 400;
+				return ModelState.ToJson();
+			}
+			return Json(_preferenceTemplatePersister.Persist(input));
+		}
+
+		[UnitOfWork]
+		[HttpDelete]
+		[ActionName("PreferenceTemplate")]
+		public virtual ActionResult PreferenceTemplateDelete(Guid id)
+		{
+			_preferenceTemplatePersister.Delete(id);
+			return new EmptyResult();
+		}
 	}
 }

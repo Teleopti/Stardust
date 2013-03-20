@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
@@ -40,13 +39,14 @@ namespace Teleopti.Ccc.WinCode.Forecasting
 			}
 		}
 
-        public IList<JobResultDetailModel> GetJobResultDetails(JobResultModel jobResultModel)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public IList<JobResultDetailModel> GetJobResultDetails(JobResultModel jobResultModel, int detailLevel)
         {
-            using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
+	        using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
                 var jobResult = _jobResultRepository.Get(jobResultModel.JobId.GetValueOrDefault());
 
-                return jobResult.Details.Where(d => d.DetailLevel != DetailLevel.Info).OrderByDescending(d => d.Timestamp).Select(m =>
+				return jobResult.Details.Where(d => (int)d.DetailLevel > detailLevel).OrderByDescending(d => d.Timestamp).Select(m =>
                         new JobResultDetailModel
                             {
                                 Message = m.Message,

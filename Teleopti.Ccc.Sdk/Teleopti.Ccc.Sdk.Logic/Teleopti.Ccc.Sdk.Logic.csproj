@@ -175,6 +175,7 @@
     <Compile Include="CommandHandler\CancelPersonalActivityCommandHandler.cs" />
     <Compile Include="CommandHandler\ChangePersonEmploymentCommandHandler.cs" />
     <Compile Include="CommandHandler\ClearMainShiftCommandHandler.cs" />
+    <Compile Include="CommandHandler\QuickForecastCommandHandler.cs" />
     <Compile Include="CommandHandler\CreatePayrollExportCommandHandler.cs" />
     <Compile Include="CommandHandler\DeletePersonAccountForPersonCommandHandler.cs" />
     <Compile Include="CommandHandler\DenormalizeNotificationCommandHandler.cs" />
@@ -189,6 +190,7 @@
     <Compile Include="CommandHandler\RecalculateForecastOnSkillCommandHandler.cs" />
     <Compile Include="CommandHandler\SaveAgentPortalSettingsCommandHandler.cs" />
     <Compile Include="CommandHandler\SavePersonAbsenceRequestCommandHandler.cs" />
+    <Compile Include="CommandHandler\SendPushMessageToPersonCommandHandler.cs" />
     <Compile Include="CommandHandler\SetPersonAccountForPersonCommandHandler.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="IPayrollResultFactory.cs" />
@@ -202,6 +204,7 @@
     <Compile Include="QueryHandler\GetMultiplicatorDefinitionSetShiftAllowanceQueryHandler.cs" />
     <Compile Include="QueryHandler\GetMultiplicatorOvertimeQueryHandler.cs" />
     <Compile Include="QueryHandler\GetMultiplicatorShiftAllowanceQueryHandler.cs" />
+    <Compile Include="QueryHandler\GetPeopleOptionalValuesByPersonIdQueryHandler.cs" />
     <Compile Include="QueryHandler\GetSchedulesByGroupPageGroupQueryHandler.cs" />
     <Compile Include="QueryHandler\GetSchedulesBySiteQueryHandler.cs" />
     <Compile Include="QueryHandler\GetSchedulesForAllPeopleQueryHandler.cs" />

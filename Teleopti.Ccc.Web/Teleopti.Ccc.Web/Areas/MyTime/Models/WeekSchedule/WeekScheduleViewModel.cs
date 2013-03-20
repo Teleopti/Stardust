@@ -55,12 +55,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.WeekSchedule
 		public PeriodViewModel Summary { get; set; }
 		public IEnumerable<PeriodViewModel> Periods { get; set; }
 		public int Allowance { get; set; }
+		public int DayOfWeekNumber { get; set; }
 
 		public bool HasNote
 		{
 			get { return Note != null && !string.IsNullOrWhiteSpace(Note.Message); }
 		}
-
 	}
 
 	public class NoteViewModel

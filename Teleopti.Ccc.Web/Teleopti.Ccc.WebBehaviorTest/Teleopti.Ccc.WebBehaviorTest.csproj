@@ -91,10 +91,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AddFullDayAbsence.feature</DependentUpon>
     </Compile>
-    <Compile Include="Anywhere\ViewAgentSchedule.feature.cs">
+    <Compile Include="Anywhere\ViewPersonSchedule.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>ViewAgentSchedule.feature</DependentUpon>
+      <DependentUpon>ViewPersonSchedule.feature</DependentUpon>
     </Compile>
     <Compile Include="Anywhere\ViewTeamSchedule.feature.cs">
       <AutoGen>True</AutoGen>
@@ -114,8 +114,9 @@
     <Compile Include="Bindings\Generic\AbsenceStepDefinitions.cs" />
     <Compile Include="AsmStepDefinition.cs" />
     <Compile Include="Bindings\Generic\ActivityStepDefinitions.cs" />
-    <Compile Include="Bindings\Generic\Anywhere\AgentSchedulePageStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\Anywhere\PersonSchedulePageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\BudgetStepDefinitions.cs" />
+    <Compile Include="Data\Setups\Generic\PreferenceTemplateConfigurable.cs" />
     <Compile Include="Bindings\Generic\UIStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\ContractStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Anywhere\TeamSchedulePageStepDefinitions.cs" />
@@ -126,6 +127,11 @@
     <Compile Include="Bindings\StringContainsAnyLanguageResourceConstraint.cs" />
     <Compile Include="Data\Setups\Generic\BudgetdayConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\BudgetGroupConfigurable.cs" />
+    <Compile Include="PreferencesExtendedTemplate.feature.cs">
+      <DependentUpon>PreferencesExtendedTemplate.feature</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="Data\Setups\Generic\PersonAbsenceConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\PersonDayOffConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\ReadModelShiftConfigurable.cs" />
@@ -553,9 +559,9 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <None Include="Anywhere\ViewAgentSchedule.feature">
+    <None Include="Anywhere\ViewPersonSchedule.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
-      <LastGenOutput>ViewAgentSchedule.feature.cs</LastGenOutput>
+      <LastGenOutput>ViewPersonSchedule.feature.cs</LastGenOutput>
     </None>
     <None Include="Anywhere\AddFullDayAbsence.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
@@ -564,6 +570,10 @@
     <None Include="Anywhere\ViewTeamSchedule.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>ViewTeamSchedule.feature.cs</LastGenOutput>
+    </None>
+    <None Include="PreferencesExtendedTemplate.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>PreferencesExtendedTemplate.feature.cs</LastGenOutput>
     </None>
     <None Include="StudentAvailabilityMultidays.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>

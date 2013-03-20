@@ -40,7 +40,6 @@
 				})
 				.click(function (e) {
 					self._toggleMenu();
-					e.stopPropagation();
 				})
 				.appendTo(container);
 
@@ -55,7 +54,10 @@
 				.appendTo(menuContainer)
 				;
 
-			$("html").click(function () {
+			$("html").click(function (event) {
+				var children = self._button.children();
+				if (children[0] == event.target || children[1] == event.target || self._button[0] == event.target)
+					return;
 				self._displayMenu(false);
 			});
 
@@ -99,6 +101,42 @@
 
 		},
 
+		_refreshMenu: function () {
+			var self = this;
+
+			var items = this._select
+				.children("option")
+				.map(function () {
+					var text = $(this).text();
+					var value = this.value;
+					var color = $(this).data('color');
+					return {
+						label: text,
+						value: value,
+						color: color,
+						option: this
+					};
+				});
+
+			this._menu.empty();
+			for (var i = 0; i < items.length; i++) {
+				var item = this._createMenuItem(items[i], true);
+				this._menu.append(item);
+			}
+
+			this._menu.menu("refresh");
+			this._menu.menu({
+				select: function (event, ui) {
+					var dataItem = ui.item.data("selectbox-item");
+					self._selectOption(dataItem.option);
+					self._trigger("changed", event, {
+						item: dataItem.option
+					});
+				}
+			});
+
+		},
+
 		_createMenuItems: function () {
 			var items = this._select
 				.children("option")
@@ -121,7 +159,9 @@
 			}
 		},
 
-		_createMenuItem: function (item) {
+		_createMenuItem: function (item, removable) {
+
+			var self = this._self;
 
 			if (item.label == "-")
 				item.label = "";
@@ -136,7 +176,7 @@
 					.append($('<div>').text(item.label));
 			}
 
-			var text = item.label;
+			var text;
 			var secondaryIcon = null;
 			if (item.color) {
 				text = $('<span>')
@@ -145,12 +185,30 @@
 					.addClass('menu-icon-secondary')
 					.addClass('ui-corner-all')
 					.css("background-color", item.color);
+			} else {
+				text = $('<span/>').text(item.label);
+			}
+			var removableLink = null;
+			if (removable && item.value) {
+				removableLink = $('<span>')
+					.addClass('menu-icon-delete')
+					.addClass('floatright')
+					.append('x')
+					.click(function(evt) {
+						self._trigger("removeItem", event, {
+							value: item.value
+						});
+						evt.stopPropagation();
+					});
 			}
 
 			var link = $('<a>')
 				.append(text);
 			if (secondaryIcon)
 				link.append(secondaryIcon);
+			if (removableLink) {
+				link.append(removableLink);
+			}
 
 			var listItem = $('<li>')
 				.data("selectbox-item", item)
@@ -217,6 +275,9 @@
 					break;
 				case "visible":
 					this._setVisibility(value);
+					break;
+				case "refreshMenu":
+					this._refreshMenu(value);
 					break;
 			}
 

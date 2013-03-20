@@ -8,6 +8,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
         public IPersonAccountBalanceCalculator PersonAccountBalanceCalculator { get; set; }
         public IResourceOptimizationHelper ResourceOptimizationHelper { get; set; }
         public IBudgetGroupAllowanceSpecification BudgetGroupAllowanceSpecification { get; set; }
+        public IBudgetGroupAllowanceCalculator BudgetGroupAllowanceCalculator { get; set; }
 
         public string InvalidReason
         {
@@ -19,9 +20,16 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
             get { return UserTexts.Resources.BudgetGroup; }
         }
 
-        public bool Validate(IAbsenceRequest absenceRequest)
+        public IValidatedRequest Validate(IAbsenceRequest absenceRequest)
         {
-            return BudgetGroupAllowanceSpecification != null && BudgetGroupAllowanceSpecification.IsSatisfiedBy(absenceRequest);
+            var validatedRequest = new ValidatedRequest();
+            validatedRequest.IsValid = BudgetGroupAllowanceSpecification.IsSatisfiedBy(absenceRequest);
+            validatedRequest.ValidationErrors = string.Empty;
+
+            if(!validatedRequest.IsValid)
+                validatedRequest.ValidationErrors = BudgetGroupAllowanceCalculator.CheckBudgetGroup(absenceRequest);
+
+            return validatedRequest;
         }
 
         public IAbsenceRequestValidator CreateInstance()
@@ -43,6 +51,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
                 result = (result * 397) ^ (PersonAccountBalanceCalculator != null ? PersonAccountBalanceCalculator.GetHashCode() : 0);
                 result = (result * 397) ^ (ResourceOptimizationHelper != null ? ResourceOptimizationHelper.GetHashCode() : 0);
                 result = (result * 397) ^ (BudgetGroupAllowanceSpecification != null ? BudgetGroupAllowanceSpecification.GetHashCode() : 0);
+                result = (result * 397) ^ (BudgetGroupAllowanceCalculator != null ? BudgetGroupAllowanceCalculator.GetHashCode() : 0);
                 result = (result * 397) ^ (GetType().GetHashCode());
                 return result;
             }

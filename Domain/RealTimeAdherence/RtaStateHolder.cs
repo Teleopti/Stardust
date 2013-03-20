@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
                                 }, person);
 
                     if (_agentStateBatchDictionary.Count > 0 && !externalAgentState.IsSnapshot)
-                        AddPersonToLastBatch(person);
+                        AddPersonToLastBatch(person, externalAgentState);
 
                     IAgentState agentState = FindAgentState(person);
                     if (state.StateGroup.IsLogOutState)
@@ -150,11 +150,13 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
             }
         }
 
-        private void AddPersonToLastBatch(IPerson person)
+        private void AddPersonToLastBatch(IPerson person, IExternalAgentState externalAgentState)
         {
-            IAgentStateBatch lastBatch =
-                    _agentStateBatchDictionary.LastOrDefault().Value;
-            lastBatch.AddPerson(person);
+			var lastBatch = _agentStateBatchDictionary.LastOrDefault(b => b.Key.DataSourceId == externalAgentState.DataSourceId).Value;
+			if (lastBatch != null)
+			{
+				lastBatch.AddPerson(person);
+			}
         }
 
         private IActivity FindDummyActivityForState(IRtaState state)

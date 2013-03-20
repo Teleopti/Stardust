@@ -118,6 +118,16 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		}
 
 		[Test]
+		public void ShouldMapDayOfWeekNumber()
+		{
+			var domainData = new WeekScheduleDayDomainData { Date = DateOnly.Today };
+
+			var result = Mapper.Map<WeekScheduleDayDomainData, DayViewModel>(domainData);
+
+			result.DayOfWeekNumber.Should().Be.EqualTo((int)domainData.Date.DayOfWeek);
+		}
+
+		[Test]
 		public void ShouldMapStateToday()
 		{
 			var domainData = new WeekScheduleDayDomainData {Date = DateOnly.Today};

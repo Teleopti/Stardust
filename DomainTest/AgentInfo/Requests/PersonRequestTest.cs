@@ -5,6 +5,7 @@ using System.Reflection;
 using System.Text;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Helper;
@@ -139,6 +140,14 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 
 			Assert.AreEqual(subject, _target.GetSubject(new NoFormatting()));
         }
+
+
+			[Test]
+			public void SetNullAsMessage()
+			{
+				_target.TrySetMessage(null);
+				_target.GetMessage(new NoFormatting()).Should().Be.Empty();
+			}
 
         /// <summary>
         /// Verifies the message cannot be changed when denied.
@@ -536,5 +545,46 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             
         }
 
+        [Test]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void GetMessageThrowExceptionIfThereIsNoTextFormatter()
+        {
+            _target.GetMessage(null);
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void GetSubjectThrowExceptionIfThereIsNoTextFormatter()
+        {
+            _target.GetSubject(null);
+        }
+
+        [Test]
+        public void VerifyCreateMemento()
+        {
+            Assert.IsNotNull(_target.CreateMemento());
+        }
+
+        [Test]
+        public void VerifyRestore()
+        {
+            var previousState = new PersonRequest(_person);
+            _target.Restore(previousState);
+        }
+
+        [Test]
+        public void ReturnTrueIfMessageIsEmpty()
+        {
+            Assert.IsTrue(_target.Reply(null));
+        }
+
+        [Test]
+        public void VerifyUnderlyingStateId()
+        {
+            var personRequest = new PersonRequest(_person);
+            var result = PersonRequest.GetUnderlyingStateId(personRequest);
+            Assert.AreEqual(result, 3);
+        }
+        
     }
 }

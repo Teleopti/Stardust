@@ -16,7 +16,9 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 					}
 				case ShiftTradeStatus.OkByMe:
 					{
-						return isCreatedByUser ? Resources.WaitingForOtherPart : Resources.WaitingForYourApproval;
+						return isCreatedByUser ? 
+									Resources.WaitingForOtherPart : 
+									Resources.WaitingForYourApproval;
 					}
 				case ShiftTradeStatus.Referred:
 					{

@@ -4,7 +4,7 @@ using System.Net.Sockets;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Client;
 using Microsoft.AspNet.SignalR.Client.Hubs;
-using Microsoft.AspNet.SignalR.Client.Transports;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Messaging.Exceptions;
@@ -114,7 +114,7 @@ namespace Teleopti.Messaging.SignalR
 
 		public void StartListening()
 		{
-			_hubProxy.Subscribe(EventName).Data += subscription_Data;
+			_hubProxy.Subscribe(EventName).Received += subscription_Data;
 
 			startHubConnection();
 			_hubProxy.Subscribe(EventName);
@@ -167,7 +167,7 @@ namespace Teleopti.Messaging.SignalR
 			}
 		}
 
-		private void subscription_Data(JToken[] obj)
+		private void subscription_Data(IList<JToken> obj)
 		{
 			var handler = OnNotification;
 			if (handler!=null)
@@ -237,7 +237,7 @@ namespace Teleopti.Messaging.SignalR
 			{
 				try
 				{
-					_hubProxy.Subscribe(EventName).Data -= subscription_Data;
+					_hubProxy.Subscribe(EventName).Received -= subscription_Data;
 
 					_hubConnection.Stop();
 					_isRunning = false;

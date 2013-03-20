@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using NHibernate;
+using NHibernate.Collection;
 using NHibernate.Type;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -68,6 +69,22 @@ namespace Teleopti.Ccc.Infrastructure.NHibernateConfiguration
 				}
 			}
 			return retVal;
+		}
+
+		public override void OnCollectionUpdate(object collection, object key)
+		{
+			var modifiedColl = (IPersistentCollection) collection;
+			var owner = modifiedColl.Owner;
+			var aggregateRoot = owner as IAggregateRoot;
+			if (aggregateRoot != null)
+			{
+				modifiedRoots.Add(new RootChangeInfo(aggregateRoot, DomainUpdateType.Update));
+			}
+			else
+			{
+				var entityOwner = (IAggregateEntity)owner;
+				rootsWithModifiedChildren.Add(entityOwner.Root());
+			}
 		}
 
 		public override void OnDelete(object entity, object id, object[] state, string[] propertyNames, IType[] types)

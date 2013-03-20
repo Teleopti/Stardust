@@ -6,7 +6,10 @@ require([
 		'crossroads',
 		'hasher',
 		'knockout',
+		'moment',
 		'momentDatepickerKo',
+		'menu',
+		'subscriptions',
 		'noext!application/resources'
 	], function (
 		layoutTemplate,
@@ -15,17 +18,15 @@ require([
 		crossroads,
 		hasher,
 		ko,
+		moment,
 		datepicker,
-		translations) {
+		menuViewModel,
+		subscriptions,
+		resources) {
 
 		var currentView;
 		var defaultView = 'teamschedule';
-
-		var navigationViewModel = {
-			Translations: translations,
-			MyTimeVisible: ko.observable(false),
-			MobileReportsVisible: ko.observable(false)
-		};
+		var menu = new menuViewModel(resources);
 
 		function _displayView(routeInfo) {
 
@@ -34,6 +35,8 @@ require([
 			routeInfo.renderHtml = function (html) {
 				placeHolder.html(html);
 			};
+
+			routeInfo.bindingElement = placeHolder[0];
 
 			if (currentView && currentView.dispose)
 				currentView.dispose();
@@ -45,19 +48,7 @@ require([
 				_fixBootstrapDropdownForMobileDevices();
 			});
 
-			var navList = $('.nav > li');
-			navList.removeClass('active');
-			navList.each(function () {
-				if ($(this).attr('class')) return;
-				var href = $(this).children('a').attr('href');
-				if (href === '#') {
-					href = defaultView;
-				}
-				if (href.indexOf(routeInfo.view) > -1) {
-					$(this).addClass('active');
-					return;
-				}
-			});
+			menu.ActiveView(routeInfo.view);
 		}
 
 		function _setupRoutes() {
@@ -123,30 +114,56 @@ require([
 			$('#menu-placeholder').replaceWith(menuTemplate);
 		}
 
-		function _updateMenu() {
-			$.getJSON('Application/NavigationContent?' + $.now()).success(function (responseData, textStatus, jqXHR) {
-				if (responseData.IsMyTimeAvailable)
-					navigationViewModel.MyTimeVisible(true);
-				if (responseData.IsMobileReportsAvailable)
-					navigationViewModel.MobileReportsVisible(true);
-
-				$('#username').text(responseData.UserName);
-			});
-		}
-
 		function _fixBootstrapDropdownForMobileDevices() {
 			$('.dropdown-menu').on('touchstart.dropdown.data-api', function (e) {
 				e.stopPropagation();
 			});
 		}
 
-		function _bindViewModel() {
-			ko.applyBindings(navigationViewModel, $('nav')[0]);
+		function _initMomentLanguageWithFallback() {
+			var ietfLanguageTag = resources.LanguageCode;
+			var baseLang = 'en'; //Base
+			var languages = [ietfLanguageTag, ietfLanguageTag.split('-')[0], baseLang];
+
+			for (var i = 0; i < languages.length; i++) {
+				try {
+					moment.lang(languages[i]);
+				} catch (e) {
+					continue;
+				}
+				if (moment.lang() == languages[i]) return;
+			}
+		}
+
+		function _bindMenu() {
+			$.ajax({
+				dataType: "json",
+				cache: false,
+				url: "Application/NavigationContent",
+				success: function (responseData, textStatus, jqXHR) {
+					menu.MyTimeVisible(responseData.IsMyTimeAvailable === true);
+					menu.MobileReportsVisible(responseData.IsMobileReportsAvailable === true);
+					menu.UserName(responseData.UserName);
+				}
+			});
+			ko.applyBindings(menu, $('nav')[0]);
+		}
+
+		function _initSignalR() {
+			var promise = subscriptions.start();
+			promise.fail(function () {
+				$('.container > .row:first').html('<div class="alert"><button type="button" class="close" data-dismiss="alert">&times;</button><strong>Warning!</strong> ' + error + '.</div>');
+			});
 		}
 
 		_render();
-		_updateMenu();
+
+		_initSignalR();
+
 		_setupRoutes();
 		_initializeHasher();
-		_bindViewModel();
+
+		_initMomentLanguageWithFallback();
+
+		_bindMenu();
 	});

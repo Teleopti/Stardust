@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using Autofac;
-using AutofacContrib.DynamicProxy2;
+using Autofac.Extras.DynamicProxy2;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Web.Core.Aop.Core;
@@ -143,7 +143,7 @@ namespace Teleopti.Ccc.WebTest.Core.Aop.Core
 			afterInvoked.Should().Be.True();
 		}
 
-		[Aspects]
+		[Intercept(typeof(AspectInterceptor))]
 		public class AspectedClass
 		{
 			public Action AspectedMethodCallback;

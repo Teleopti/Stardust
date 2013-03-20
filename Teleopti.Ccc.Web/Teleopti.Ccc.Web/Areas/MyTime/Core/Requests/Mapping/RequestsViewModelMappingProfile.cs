@@ -1,4 +1,5 @@
 using System;
+using System.Globalization;
 using System.Linq;
 using AutoMapper;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
@@ -40,10 +41,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				.ForMember(d => d.Status, o => o.MapFrom(s =>
 					{
 						var ret = s.StatusText;
-						var shiftTradeRequest = s.Request as IShiftTradeRequest;
-						if (shiftTradeRequest != null)
+						if (s.IsPending)
 						{
-							ret += ", " + shiftTradeRequest.GetShiftTradeStatus(_shiftTradeRequestStatusChecker.Invoke()).ToText(isCreatedByUser(s.Request, _loggedOnUser));
+							var shiftTradeRequest = s.Request as IShiftTradeRequest;
+							if (shiftTradeRequest != null)
+							{
+								ret += ", " + shiftTradeRequest.GetShiftTradeStatus(_shiftTradeRequestStatusChecker.Invoke()).ToText(isCreatedByUser(s.Request, _loggedOnUser));
+							}							
 						}
 						return ret;
 					}))
@@ -53,16 +57,36 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				.ForMember(d => d.UpdatedOn, o => o.MapFrom(s => s.UpdatedOn.HasValue
 																													? TimeZoneInfo.ConvertTimeFromUtc(s.UpdatedOn.Value, _userTimeZone.Invoke().TimeZone()).ToShortDateTimeString()
 																													: null))
-				.ForMember(d => d.RawDateFrom,
-									 o =>
-									 o.MapFrom(
-										s =>
-														TimeZoneInfo.ConvertTimeFromUtc(s.Request.Period.StartDateTime, _userTimeZone.Invoke().TimeZone()).ToShortDateString()))
-				.ForMember(d => d.RawDateTo,
-									 o =>
-									 o.MapFrom(
-										s =>
-														TimeZoneInfo.ConvertTimeFromUtc(s.Request.Period.EndDateTime, _userTimeZone.Invoke().TimeZone()).ToShortDateString()))
+				.ForMember(d => d.DateFromYear, 
+									o => 
+									o.MapFrom(
+									s =>
+														CultureInfo.CurrentCulture.Calendar.GetYear(TimeZoneInfo.ConvertTimeFromUtc(s.Request.Period.StartDateTime, _userTimeZone.Invoke().TimeZone()))))
+				.ForMember(d => d.DateFromMonth,
+									o =>
+									o.MapFrom(
+									s =>
+														CultureInfo.CurrentCulture.Calendar.GetMonth(TimeZoneInfo.ConvertTimeFromUtc(s.Request.Period.StartDateTime, _userTimeZone.Invoke().TimeZone()))))
+				.ForMember(d => d.DateFromDayOfMonth,
+									o =>
+									o.MapFrom(
+									s =>
+														CultureInfo.CurrentCulture.Calendar.GetDayOfMonth(TimeZoneInfo.ConvertTimeFromUtc(s.Request.Period.StartDateTime, _userTimeZone.Invoke().TimeZone()))))
+				.ForMember(d => d.DateToYear,
+									o =>
+									o.MapFrom(
+									s =>
+														CultureInfo.CurrentCulture.Calendar.GetYear(TimeZoneInfo.ConvertTimeFromUtc(s.Request.Period.EndDateTime, _userTimeZone.Invoke().TimeZone()))))
+				.ForMember(d => d.DateToMonth,
+									o =>
+									o.MapFrom(
+									s =>
+														CultureInfo.CurrentCulture.Calendar.GetMonth(TimeZoneInfo.ConvertTimeFromUtc(s.Request.Period.EndDateTime, _userTimeZone.Invoke().TimeZone()))))
+				.ForMember(d => d.DateToDayOfMonth,
+									o =>
+									o.MapFrom(
+									s =>
+														CultureInfo.CurrentCulture.Calendar.GetDayOfMonth(TimeZoneInfo.ConvertTimeFromUtc(s.Request.Period.EndDateTime, _userTimeZone.Invoke().TimeZone()))))
 				.ForMember(d => d.RawTimeFrom,
 									 o =>
 									 o.MapFrom(
@@ -92,7 +116,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				.ForMember(d => d.DenyReason, o => o.MapFrom(s =>
 																											{
 																												Resources.ResourceManager.IgnoreCase = true;
-																												var result = Resources.ResourceManager.GetString(s.DenyReason);
+				                                             	    var result =  Resources.ResourceManager.GetString(s.DenyReason);
 																												if (string.IsNullOrEmpty(result))
 																												{
 																													result = s.DenyReason;
@@ -120,7 +144,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 
 		private static bool isCreatedByUser(IRequest request, Func<ILoggedOnUser> loggedOnUser)
 		{
-			return request.PersonFrom == loggedOnUser.Invoke().CurrentUser();
+			return  request.PersonFrom  == null || request.PersonFrom == loggedOnUser.Invoke().CurrentUser();
 		}
 	}
 }
