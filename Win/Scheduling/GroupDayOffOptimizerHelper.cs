@@ -558,16 +558,17 @@ namespace Teleopti.Ccc.Win.Scheduling
                     _container.Resolve<ISchedulingResultStateHolder>(),
                     _container.Resolve<IDeleteAndResourceCalculateService>(),
 					periodValueCalculatorForAllSkills,
-					schedulePartModifyAndRollbackService,
 					_resourceOptimizationHelper,
-					_container.Resolve<IScheduleDayEquator>()
+					_container.Resolve<IScheduleDayEquator>(),
+					_container.Resolve<ISafeRollbackAndResourceCalculation>()
                     );
 	        teamBlockIntradayOptimizationService.ReportProgress += resourceOptimizerPersonOptimized;
             teamBlockIntradayOptimizationService.Optimize(
                 allMatrixes,
                 selectedPeriod,
                 selectedPersons,
-                optimizationPreferences
+                optimizationPreferences,
+				schedulePartModifyAndRollbackService
                 );
 	        teamBlockIntradayOptimizationService.ReportProgress -= resourceOptimizerPersonOptimized;
         }
