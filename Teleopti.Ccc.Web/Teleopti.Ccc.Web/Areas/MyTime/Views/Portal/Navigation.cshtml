@@ -54,11 +54,8 @@
         </div>
     </div>
 </div>
-<nav id="tabs">
-	<section id="EmptyTab" class="col-2-3 floatleft toolbar-left ui-tabs-panel ui-widget-content ui-corner-bottom">
-		<div class="toolbar-inner">
-		</div>
-	</section>
+<nav id="tabs" style="display: none;">
+
 	@foreach (var navSection in Model.NavigationItems)
 	{
 		<section id="@string.Format("{0}Tab", navSection.Controller)" class="col-2-3 floatleft toolbar-left ui-tabs-panel ui-widget-content ui-corner-bottom">

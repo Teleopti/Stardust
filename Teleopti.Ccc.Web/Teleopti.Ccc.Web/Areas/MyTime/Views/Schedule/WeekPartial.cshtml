@@ -5,17 +5,31 @@
 	Layout = null;
 }
 <script>
-	$(function () {
-		Teleopti.MyTimeWeb.Schedule.SetupViewModel({
-			xRequests: '@Resources.XRequests',
-			subjectColon: '@Resources.SubjectColon',
-			locationColon: '@Resources.LocationColon',
-			descriptionColon: '@Resources.DescriptionColon'
-		});
-		Teleopti.MyTimeWeb.Schedule.LoadAndBindData();
-	});
+    $(function () {
+        Teleopti.MyTimeWeb.Schedule.SetupViewModel({
+            xRequests: '@Resources.XRequests',
+            subjectColon: '@Resources.SubjectColon',
+            locationColon: '@Resources.LocationColon',
+            descriptionColon: '@Resources.DescriptionColon'
+        });
+        Teleopti.MyTimeWeb.Schedule.LoadAndBindData();
+    });
 </script>
-<div id="ScheduleWeek-body" class="body-weekview clearfix" data-bind="attr: {'data-mytime-periodselection' : periodSelection}">
+<div class="navbar">
+    <div class="navbar-inner">
+        <form class="navbar-form pull-left">
+            <div class="input-append input-prepend">
+                <button class="btn"><i class="icon-arrow-left"></i></button>
+                <input type="text" class="span2 datepicker"/>
+                <button class="btn"><i class="icon-arrow-right"></i></button>
+            </div>
+        </form>
+        <ul class="nav">
+            <li><a href="#">@Resources.Today</a></li>
+        </ul>
+    </div>
+</div>
+<div id="ScheduleWeek-body" data-bind="attr: {'data-mytime-periodselection' : periodSelection}">
 	<div class="week-schedule-ASM-permission-granted" data-bind="if : asmPermission">yes</div>
 	<div class="week-schedule-current-week" data-bind="if : isCurrentWeek">yes</div>
 	<div id="ScheduleWeek-body-inner" class="body-weekview-inner clearfix">

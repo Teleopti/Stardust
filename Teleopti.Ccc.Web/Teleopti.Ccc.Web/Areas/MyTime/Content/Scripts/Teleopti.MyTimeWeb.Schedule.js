@@ -67,6 +67,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				tip: true
 			}
 		});
+	    $('.datepicker').datepicker();
 	}
 
 	function _bindData(data) {
