@@ -198,6 +198,8 @@ namespace Teleopti.Ccc.Win.Optimization
                     comboBoxGroupPageOnTeamsLevelingPer.Enabled = false;
                     break;
             }
+            checkBoxTeams.Checked = Preferences.UseTeams;
+            checkBoxLevellingPerBlockScheduling.Checked = Preferences.UseLevellingOption;
         }
 
         private void checkBoxBlock_CheckedChanged(object sender, System.EventArgs e)
@@ -263,19 +265,19 @@ namespace Teleopti.Ccc.Win.Optimization
             radioButtonBetweenDaysOffAdvOptimization.Enabled = checkBoxLevellingPerBlockScheduling.Checked;
             comboBoxGroupPageOnTeamsLevelingPer.Enabled = checkBoxLevellingPerBlockScheduling.Checked;
             btnLevellingPer.Enabled = checkBoxLevellingPerBlockScheduling.Checked;
-            if (checkBoxLevellingPerBlockScheduling.Checked)
-            {
-                if(Preferences.BlockFinderTypeForAdvanceOptimization != BlockFinderType.BetweenDayOff )
-                    radioButtonBetweenDaysOffAdvOptimization.Checked = false;
-                radioButtonSchedulePeriodAdvOptimization.Checked = true;
-                checkBoxTeams.Checked = false ;
-                checkBoxBlock.Checked = false;
-            }
-            else
-            {
-                radioButtonSchedulePeriodAdvOptimization.Checked = false;
-                radioButtonBetweenDaysOffAdvOptimization.Checked = false;
-            }
+            //if (checkBoxLevellingPerBlockScheduling.Checked)
+            //{
+            //    if(Preferences.BlockFinderTypeForAdvanceOptimization != BlockFinderType.BetweenDayOff )
+            //        radioButtonBetweenDaysOffAdvOptimization.Checked = false;
+            //    radioButtonSchedulePeriodAdvOptimization.Checked = true;
+            //    checkBoxTeams.Checked = false ;
+            //    checkBoxBlock.Checked = false;
+            //}
+            //else
+            //{
+            //    radioButtonSchedulePeriodAdvOptimization.Checked = false;
+            //    radioButtonBetweenDaysOffAdvOptimization.Checked = false;
+            //}
             
         }
 

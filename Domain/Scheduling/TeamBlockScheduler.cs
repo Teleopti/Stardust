@@ -39,11 +39,13 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
+        //not used by the latest scheduling
         public bool ScheduleTeamBlock(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions)
 		{
-			return ScheduleTeamBlock(teamBlockInfo, datePointer, schedulingOptions, false);
+            return ScheduleTeamBlock(teamBlockInfo, datePointer, schedulingOptions, false);
 		}
 
+        //not used by the latest scheduling
 		public bool ScheduleTeamBlock(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions, bool skipOffset)
 		{
             if (teamBlockInfo == null)
@@ -80,57 +82,63 @@ namespace Teleopti.Ccc.Domain.Scheduling
         public bool ScheduleTeamBlockDay(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons)
         {
 
-           var suggestedShiftProjectionCache = ScheduleFirstTeamBlockToGetProjectionCache(teamBlockInfo, datePointer,
+            var suggestedShiftProjectionCache = ScheduleFirstTeamBlockToGetProjectionCache(teamBlockInfo, datePointer,
                                                                                        schedulingOptions);
             if (suggestedShiftProjectionCache == null) return false; 
-
             foreach (var day in teamBlockInfo.BlockInfo.BlockPeriod.DayCollection())
             {
                 if (!selectedPeriod.DayCollection().Contains(day)) continue;
-                var dailyTeamBlockInfo = new TeamBlockInfo(teamBlockInfo.TeamInfo, new BlockInfo(new DateOnlyPeriod(day, day)));
-
-                if (isTeamBlockScheduled(dailyTeamBlockInfo)) continue;
-                //should pass the suggested shift here
-
-                var restriction = _restrictionAggregator.AggregatePerDay(dailyTeamBlockInfo, schedulingOptions, suggestedShiftProjectionCache);
-
-                //should consider the suggested start time
-                var shifts = _workShiftFilterService.Filter(day, dailyTeamBlockInfo, restriction,
-                                                            schedulingOptions, new WorkShiftFinderResult(dailyTeamBlockInfo.TeamInfo.GroupPerson, day));
-                if (shifts == null || shifts.Count <= 0)
-                    return false;
-                
-                foreach (var person in teamBlockInfo.TeamInfo.GroupPerson.GroupMembers)
-                {
-                    if (!selectedPersons.Contains(person)) continue;
-                    var activityInternalData = _skillDayPeriodIntervalDataGenerator.GeneratePerDay(dailyTeamBlockInfo);
-                    var bestShiftProjectionCache = _workShiftSelector.SelectShiftProjectionCache(shifts, activityInternalData,
-                                                                                                 schedulingOptions
-                                                                                                     .WorkShiftLengthHintOption,
-                                                                                                 schedulingOptions
-                                                                                                     .UseMinimumPersons,
-                                                                                                 schedulingOptions
-                                                                                                     .UseMaximumPersons);
-                    _teamScheduling.DayScheduled += dayScheduled;
-                    var skipOffset = !schedulingOptions.UseLevellingSameShift;
-                    _teamScheduling.ExecutePerDayPerPerson(person,day,teamBlockInfo,bestShiftProjectionCache,skipOffset);
-                    _teamScheduling.DayScheduled -= dayScheduled;
-                }
-                
+                if (!scheduleSelectedBlock(teamBlockInfo, schedulingOptions, selectedPersons, day, suggestedShiftProjectionCache)) return false;
             }
 
-           
 
             return true;
         }
 
-        private IShiftProjectionCache ScheduleFirstTeamBlockToGetProjectionCache(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions)
+	    private bool scheduleSelectedBlock(ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions,
+	                                       IList<IPerson> selectedPersons, DateOnly day,
+	                                       IShiftProjectionCache suggestedShiftProjectionCache)
+	    {
+	        var dailyTeamBlockInfo = new TeamBlockInfo(teamBlockInfo.TeamInfo, new BlockInfo(new DateOnlyPeriod(day, day)));
+
+	        if (isTeamBlockScheduled(dailyTeamBlockInfo)) return true;
+
+	        var restriction = _restrictionAggregator.AggregatePerDay(dailyTeamBlockInfo, schedulingOptions,
+	                                                                 suggestedShiftProjectionCache);
+
+	        var shifts = _workShiftFilterService.Filter(day, dailyTeamBlockInfo, restriction,
+	                                                    schedulingOptions,
+	                                                    new WorkShiftFinderResult(dailyTeamBlockInfo.TeamInfo.GroupPerson, day));
+	        if (shifts == null || shifts.Count <= 0)
+	            return false;
+
+	        foreach (var person in teamBlockInfo.TeamInfo.GroupPerson.GroupMembers)
+	        {
+	            if (!selectedPersons.Contains(person)) continue;
+	            var activityInternalData = _skillDayPeriodIntervalDataGenerator.GeneratePerDay(dailyTeamBlockInfo);
+	            var bestShiftProjectionCache = _workShiftSelector.SelectShiftProjectionCache(shifts, activityInternalData,
+	                                                                                         schedulingOptions
+	                                                                                             .WorkShiftLengthHintOption,
+	                                                                                         schedulingOptions
+	                                                                                             .UseMinimumPersons,
+	                                                                                         schedulingOptions
+	                                                                                             .UseMaximumPersons);
+	            _teamScheduling.DayScheduled += dayScheduled;
+	            var skipOffset = !schedulingOptions.UseLevellingSameShift;
+	            _teamScheduling.ExecutePerDayPerPerson(person, day, teamBlockInfo, bestShiftProjectionCache, skipOffset);
+	            _teamScheduling.DayScheduled -= dayScheduled;
+	        }
+	        return true;
+	    }
+
+
+	    private IShiftProjectionCache ScheduleFirstTeamBlockToGetProjectionCache(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions)
         {
             if (teamBlockInfo == null) return null;
             
             var restriction = _restrictionAggregator.Aggregate(teamBlockInfo, schedulingOptions);
 
-            // (should we cover for max seats here?) ????
+            // (should we cover for max seats here?) 
             var shifts = _workShiftFilterService.Filter(datePointer, teamBlockInfo, restriction,
                                                         schedulingOptions, new WorkShiftFinderResult(teamBlockInfo.TeamInfo.GroupPerson, datePointer));
             if (shifts == null || shifts.Count <= 0)
