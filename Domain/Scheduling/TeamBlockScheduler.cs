@@ -85,10 +85,21 @@ namespace Teleopti.Ccc.Domain.Scheduling
             var suggestedShiftProjectionCache = ScheduleFirstTeamBlockToGetProjectionCache(teamBlockInfo, datePointer,
                                                                                        schedulingOptions);
             if (suggestedShiftProjectionCache == null) return false; 
+            //need to refactor the code alot i dont like these ifs probably split it into classes
             foreach (var day in teamBlockInfo.BlockInfo.BlockPeriod.DayCollection())
             {
                 if (!selectedPeriod.DayCollection().Contains(day)) continue;
-                if (!scheduleSelectedBlock(teamBlockInfo, schedulingOptions, selectedPersons, day, suggestedShiftProjectionCache)) return false;
+                if (schedulingOptions.UseLevellingSameShift)
+                {
+                    if(!scheduleSelectedBlockForSameShift(teamBlockInfo, schedulingOptions, selectedPersons, day,
+                                                      suggestedShiftProjectionCache)) 
+                        return false;
+                }
+                else
+                {
+                    if (!scheduleSelectedBlock(teamBlockInfo, schedulingOptions, selectedPersons, day, suggestedShiftProjectionCache)) return false;    
+                }
+                
             }
 
 
@@ -130,6 +141,25 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	        }
 	        return true;
 	    }
+
+        private bool scheduleSelectedBlockForSameShift(ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions,
+                                   IList<IPerson> selectedPersons, DateOnly day,
+                                   IShiftProjectionCache suggestedShiftProjectionCache)
+        {
+            var dailyTeamBlockInfo = new TeamBlockInfo(teamBlockInfo.TeamInfo, new BlockInfo(new DateOnlyPeriod(day, day)));
+
+            if (isTeamBlockScheduled(dailyTeamBlockInfo)) return true;
+
+            foreach (var person in teamBlockInfo.TeamInfo.GroupPerson.GroupMembers)
+            {
+                if (!selectedPersons.Contains(person)) continue;
+                _teamScheduling.DayScheduled += dayScheduled;
+                var skipOffset = !schedulingOptions.UseLevellingSameShift;
+                _teamScheduling.ExecutePerDayPerPerson(person, day, teamBlockInfo, suggestedShiftProjectionCache, skipOffset);
+                _teamScheduling.DayScheduled -= dayScheduled;
+            }
+            return true;
+        }
 
 
 	    private IShiftProjectionCache ScheduleFirstTeamBlockToGetProjectionCache(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions)
