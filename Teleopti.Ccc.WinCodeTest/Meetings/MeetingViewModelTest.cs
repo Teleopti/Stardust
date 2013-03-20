@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         }
 
         [Test]
-        public void VerifyCannotCreateMeetingOverMidninght()
+        public void VerifyCannotCreateMeetingOverMidnight()
         {
             _target.EndTime = TimeSpan.FromHours(22.5);
             Assert.AreEqual(TimeSpan.FromHours(14.5), _target.MeetingDuration);
