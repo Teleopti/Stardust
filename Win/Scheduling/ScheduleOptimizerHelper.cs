@@ -1109,14 +1109,15 @@ namespace Teleopti.Ccc.Win.Scheduling
                 advancedaysOffSchedulingService.Execute(allMatrixesOfSelectedPersons, schedulePartModifyAndRollbackServiceForContractDaysOff, schedulingOptions, groupPersonBuilderForOptimization);
 				advancedaysOffSchedulingService.DayScheduled += schedulingServiceDayScheduled;
 
-                var teamSteadyStateHolder = initiateTeamSteadyStateHolder(allVisibleMatrixes, schedulingOptions, scheduleDays);
+                //var teamSteadyStateHolder = initiateTeamSteadyStateHolder(allVisibleMatrixes, schedulingOptions, scheduleDays);
+                var teamSteadyStateHolder = initiateTeamSteadyStateHolder(allMatrixesOfSelectedPersons, schedulingOptions, scheduleDays);
 
                 var advanceSchedulingService = callAdvanceSchedulingService(schedulingOptions, groupPersonBuilderForOptimization);
                 IDictionary<string, IWorkShiftFinderResult> schedulingResults = new Dictionary<string, IWorkShiftFinderResult>();
 
                 advanceSchedulingService.DayScheduled += schedulingServiceDayScheduled;
                 advanceSchedulingService.ScheduleSelected(allVisibleMatrixes, selectedPersonMatrixList[0].SelectedPeriod,
-                                                  selectedPersonMatrixList.Select(x => x.Person).ToList(),
+                                                  selectedPersonMatrixList.Select(x => x.Person).Distinct().ToList(),
                                                   teamSteadyStateHolder);
 				advanceSchedulingService.DayScheduled -= schedulingServiceDayScheduled;
 
