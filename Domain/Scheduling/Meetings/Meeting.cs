@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Meetings
 		private String _description;
 		private IScenario _scenario;
 		private TimeSpan _startTime;
-		private TimeSpan _endTime = TimeSpan.FromDays(1);
+		private TimeSpan _endTime = TimeSpan.FromHours(1);
 		private DateOnly _startDate;
 		private DateOnly _endDate;
 		private IActivity _activity;
@@ -203,13 +203,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.Meetings
 			get { return _startTime; }
 			set
 			{
-                if (value >= TimeSpan.FromDays(1)) value = TimeSpan.Zero;
-
 				verifyLastKnownStateIsSet();
+				var tmpEnd = value.Add(MeetingDuration());
 				_startTime = value;
-				if (_endTime > TimeSpan.FromDays(1)) _endTime = _endTime.Add(TimeSpan.FromDays(-1));
-				if (_endTime < _startTime)
-					_endTime = _endTime.Add(TimeSpan.FromDays(1));
+				// not over midningt
+				if (tmpEnd > new TimeSpan(23, 59, 0))
+				{
+					_endTime = new TimeSpan(23, 59, 0);
+				}
+				else
+				{
+					_endTime = tmpEnd;
+				}
+				
 			}
 		}
 
@@ -219,8 +225,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Meetings
 			set
 			{
 				verifyLastKnownStateIsSet();
-				if (value < _startTime) value = value.Add(TimeSpan.FromDays(1));
-				if (value.Add(TimeSpan.FromDays(-1)) > _startTime) value = value.Add(TimeSpan.FromDays(-1));
+				if (value <= _startTime) value = _startTime.Add(MeetingDuration());
 				_endTime = value;
 			}
 		}
