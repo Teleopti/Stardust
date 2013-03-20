@@ -176,7 +176,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         }
 
         [Test]
-        public void VerifyCanNotSetStartTimeAndEndTimeToTheSame()
+        public void VerifyCannotSetStartTimeAndEndTimeToTheSame()
         {
             _view.SetEndTime(new TimeSpan(23,59,0));
             _view.SetEndTime(new TimeSpan(23,59,0));
