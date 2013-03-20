@@ -42,6 +42,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			using (_mocks.Record())
 			{
 				Expect.Call(_rollbackService.ModificationCollection).Return(_modifyedScheduleDays);
+				Expect.Call(() => _rollbackService.Rollback());
 				Expect.Call(_scheduleDay1.DateOnlyAsPeriod)
 				      .Return(new DateOnlyAsDateTimePeriod(DateOnly.MinValue, TimeZoneInfo.Utc));
 				Expect.Call(_scheduleDay2.DateOnlyAsPeriod)

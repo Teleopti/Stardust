@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		public void Execute(ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, ISchedulingOptions schedulingOptions)
 		{
 			var modifyedScheduleDays = schedulePartModifyAndRollbackService.ModificationCollection.ToList();
+			schedulePartModifyAndRollbackService.Rollback();
 			HashSet<DateOnly> dates = new HashSet<DateOnly>();
 
 			foreach (var modifyedScheduleDay in modifyedScheduleDays)
