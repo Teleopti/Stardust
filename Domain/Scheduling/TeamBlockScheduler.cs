@@ -82,7 +82,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
         public bool ScheduleTeamBlockDay(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons)
         {
 
-            var suggestedShiftProjectionCache = ScheduleFirstTeamBlockToGetProjectionCache(teamBlockInfo, datePointer,
+            var suggestedShiftProjectionCache = scheduleFirstTeamBlockToGetProjectionCache(teamBlockInfo, datePointer,
                                                                                        schedulingOptions);
             if (suggestedShiftProjectionCache == null) return false; 
             //need to refactor the code alot i dont like these ifs probably split it into classes
@@ -162,7 +162,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
         }
 
 
-	    private IShiftProjectionCache ScheduleFirstTeamBlockToGetProjectionCache(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions)
+	    private IShiftProjectionCache scheduleFirstTeamBlockToGetProjectionCache(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions)
         {
             if (teamBlockInfo == null) return null;
             
