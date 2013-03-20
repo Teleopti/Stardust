@@ -6,15 +6,55 @@
 @using Teleopti.Interfaces.Domain
 @model PortalViewModel
 
-<nav id="tabs" class="main-nav">
-	<ul>
-		@foreach (var navSection in Model.NavigationItems)
-		{
-			<li>
-				<a href="@string.Format("#{0}Tab", navSection.Controller)" data-mytime-action="@Html.Portal().GetAction(navSection)"@(navSection.PayAttention ? @Html.Raw("class=\"asm-new-message-indicator\"") : @Html.Raw(""))>@(navSection.UnreadMessageCount > 0 ? string.Format("{0} ({1})", navSection.Title, navSection.UnreadMessageCount) : navSection.Title)</a>
-			</li>
-		}
-	</ul>
+<div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+ 
+            <!-- .btn-navbar is used as the toggle for collapsed navbar content -->
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+ 
+            <!-- Be sure to leave the brand out there if you want it shown -->
+            <a class="brand" href="#">Teleopti</a>
+ 
+            <!-- Everything you want hidden at 940px or less, place within here -->
+            <div class="nav-collapse collapse">
+                <ul class="nav">
+                    @foreach (var navSection in Model.NavigationItems)
+                    {
+                        <li>
+                            <a href="@string.Format("#{0}Tab", navSection.Controller)" data-mytime-action="@Html.Portal().GetAction(navSection)"@(navSection.PayAttention ? @Html.Raw("class=\"asm-new-message-indicator\"") : @Html.Raw(""))>@(navSection.UnreadMessageCount > 0 ? string.Format("{0} ({1})", navSection.Title, navSection.UnreadMessageCount) : navSection.Title)</a>
+                        </li>
+                    }
+                </ul>
+                
+                <ul class="nav pull-right">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-user"></i> @User.Identity.Name <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a data-mytime-action="Settings/Index">@Resources.Settings</a></li>
+                            @if (Model.ShowChangePassword)
+                            {
+                                <li><a data-mytime-action="Settings/Password">@Resources.ChangeYourPassword</a></li>
+                            }
+                            <li class="divider"></li>
+                            @if (Model.HasAsmPermission)
+                            {
+                                <li><a id="asm-link">@Resources.OpenASM</a></li>
+                                <li class="divider"></li>
+                            }
+                            <li>@Html.ActionLink(@Resources.LogOut, "SignOut", "Authentication", new {area = "Start"}, new {id = "signout"})</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<nav id="tabs">
 	<section id="EmptyTab" class="col-2-3 floatleft toolbar-left ui-tabs-panel ui-widget-content ui-corner-bottom">
 		<div class="toolbar-inner">
 		</div>
@@ -331,29 +371,7 @@
 			</div>
 		</section>
 	}
-			
-	<section id="toolbar-right" class="col-main floatright">
-		<div class="toolbar-inner">
-			<dl id="settings-dropdown" class="dropdown">
-				<dt><span class="icon employee icon-left" id="username">@User.Identity.Name</span></dt>
-				<dd>
-					<ul class="ui-widget-content ui-corner-all ui-menu">
-						<li class="ui-menu-item"><a data-mytime-action="Settings/Index" class="ui-corner-all">@Resources.Settings</a></li>
-						@if (Model.ShowChangePassword)
-						{
-							<li class="ui-menu-item"><a data-mytime-action="Settings/Password" class="ui-corner-all">@Resources.ChangeYourPassword</a></li>
-						}
-						@if (Model.HasAsmPermission)
-						{
-							<li class="ui-menu-item"><a id="asm-link" class="ui-corner-all cursorpointer" >@Resources.OpenASM</a></li>
-						}
-						<li>&nbsp;</li>
-						<li class="ui-menu-item">@Html.ActionLink(@Resources.LogOut, "SignOut", "Authentication", new {area = "Start"}, new {id = "signout", @class = "ui-corner-all"})</li>
-					</ul>
-				</dd>
-			</dl>		
-		</div>
-	</section>
+	
 	<div id="warning">
 		
 	</div>
