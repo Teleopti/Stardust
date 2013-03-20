@@ -252,27 +252,13 @@ BEGIN
 			ProcessedCount=ProcessedCount+1
 			WHERE MessageId=@MessageId
 			
-			SELECT
-				MessageId,
-				CreatedAt,
-				ProcessingUntil,
-				ProcessedCount,
-				Processed,
-				Headers,
-				Payload
+			SELECT *
 			FROM Queue.Messages
 			WHERE MessageId=@MessageId
 		END
 	else
 		BEGIN
-			SELECT TOP 0
-				MessageId,
-				CreatedAt,
-				ProcessingUntil,
-				ProcessedCount,
-				Processed,
-				Headers,
-				Payload
+			SELECT TOP 0 *
 			FROM Queue.Messages;
 		END
 END
