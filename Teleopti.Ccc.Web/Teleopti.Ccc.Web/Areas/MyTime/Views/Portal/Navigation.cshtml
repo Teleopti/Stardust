@@ -121,6 +121,11 @@
 						                  };
 				}
 				
+				@if (navSection is TeamScheduleNavigationItem)
+				{
+					<input type="hidden" id="Team-Picker" />
+				}
+
 				@if (navSection is StudentAvailabilityNavigationItem)
 				{
 					<div id="Student-availability-edit-form" class="displaynone">
