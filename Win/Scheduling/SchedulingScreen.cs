@@ -5373,10 +5373,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 					TabPageAdv tab = _tabSkillData.TabPages[_tabSkillData.SelectedIndex];
 					var skill = (ISkill)tab.Tag;
 					IAggregateSkill aggregateSkillSkill = skill;
+					_chartDescription = skill.Name;
 
 					if (_skillResultViewSetting.Equals(SkillResultViewSetting.Week))
 					{
-						_chartDescription = skill.Name;
 						positionControl(_skillWeekGridControl);
 						ActiveControl = _skillWeekGridControl;
 						_skillWeekGridControl.DrawDayGrid(_schedulerState, skill);
@@ -5385,7 +5385,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 					if (_skillResultViewSetting.Equals(SkillResultViewSetting.Month))
 					{
-						_chartDescription = skill.Name;
 						positionControl(_skillMonthGridControl);
 						ActiveControl = _skillMonthGridControl;
 						_skillMonthGridControl.DrawDayGrid(_schedulerState, skill);
@@ -5394,7 +5393,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 					if (_skillResultViewSetting.Equals(SkillResultViewSetting.Period))
 					{
-						_chartDescription = skill.Name;
 						if (StateHolderReader.Instance.StateReader.SessionScopeData.MickeMode)
 						{
 							positionControl(_skillFullPeriodGridControl, SkillFullPeriodGridControl.PreferredGridWidth);
@@ -5423,7 +5421,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 					}
 					if (_skillResultViewSetting.Equals(SkillResultViewSetting.Day))
 					{
-						_chartDescription = skill.Name;
 						positionControl(_skillDayGridControl);
 						ActiveControl = _skillDayGridControl;
 						_skillDayGridControl.DrawDayGrid(_schedulerState, skill);
@@ -5952,6 +5949,19 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_clipboardControl.PasteClicked -= _clipboardControl_PasteClicked;
 				_clipboardControl.CopySpecialClicked -= _clipboardControl_CopySpecialClicked;
 				_clipboardControl.CopyClicked -= _clipboardControl_CopyClicked;
+			}
+
+			if (_editControl != null)
+			{
+				_editControl.NewSpecialClicked -= _editControl_NewSpecialClicked;
+				_editControl.DeleteClicked -= _editControl_DeleteClicked;
+				_editControl.DeleteSpecialClicked -= _editControl_DeleteSpecialClicked;
+				_editControl.NewClicked -= _editControl_NewClicked;
+			}
+
+			if (toolStripMenuItemDeleteSpecial != null)
+			{
+				toolStripMenuItemDeleteSpecial.Click -= toolStripMenuItemDeleteSpecial2_Click;
 			}
 
 			if (_undoRedo != null) _undoRedo.ChangedHandler -= undoRedo_Changed;
