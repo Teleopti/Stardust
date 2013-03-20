@@ -157,6 +157,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			var sortedTeamBlocks = allTeamBlocks.OrderByDescending(x => x.BlockInfo.AverageStandardDeviation);
 
+			schedulePartModifyAndRollbackService.ClearModificationCollection();
 			foreach (var teamBlock in sortedTeamBlocks)
 			{
 				if (_cancelMe)
@@ -164,7 +165,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 				//clear block
 				foreach (var dateOnly in teamBlock.BlockInfo.BlockPeriod.DayCollection())
 				{
-					schedulePartModifyAndRollbackService.ClearModificationCollection();
 					IList<IScheduleDay> toRemove = new List<IScheduleDay>();
 					foreach (var person in teamBlock.TeamInfo.GroupPerson.GroupMembers)
 					{
@@ -219,6 +219,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 				{
 					teamBlockToRemove.Add(teamBlock);
 					_safeRollbackAndResourceCalculation.Execute(schedulePartModifyAndRollbackService, schedulingOptions);
+				}
+				else
+				{
+					previousPeriodValue = currentPeriodValue;
 				}
 
 				OnReportProgress("Periodvalue: " + currentPeriodValue + " Optimized team " + teamBlock.TeamInfo.GroupPerson.Name);
