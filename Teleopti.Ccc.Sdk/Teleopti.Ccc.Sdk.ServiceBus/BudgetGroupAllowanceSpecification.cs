@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
             {
                 var absenceTimeWithinSchedule = requestedPeriod.Intersection(visualLayerCollectionPeriod.Value);
                 if (absenceTimeWithinSchedule.HasValue)
-                    requestedTime += absenceTimeWithinSchedule.Value.ElapsedTime();
+                    requestedTime += visualLayerCollection.ContractTime(visualLayerCollectionPeriod.GetValueOrDefault());
             }
             else
             {
