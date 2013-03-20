@@ -21388,15 +21388,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The request failed the understaffing validation for skill {0}, since it would bring the needed number of resources below the required threshold..
-        /// </summary>
-        public static string SkillUnderStaffingValidationError {
-            get {
-                return ResourceManager.GetString("SkillUnderStaffingValidationError", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Skill Validation.
         /// </summary>
         public static string SkillValidationSmartPart {
