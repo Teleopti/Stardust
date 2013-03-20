@@ -213,7 +213,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
 			using (_mocks.Playback())
 			{
 				_target.Initialize();
-				Assert.AreEqual(TimeSpan.FromHours(17), _target.GetEndTime);
+				Assert.AreEqual(TimeSpan.FromHours(21), _target.GetEndTime);
 			}
 		}
 

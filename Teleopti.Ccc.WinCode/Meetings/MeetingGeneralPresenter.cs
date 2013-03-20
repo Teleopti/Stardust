@@ -76,13 +76,13 @@ namespace Teleopti.Ccc.WinCode.Meetings
         public void SetEndTime(TimeSpan endTime)
         {
             _model.EndTime = endTime;
-            _view.SetEndDate(_model.EndDate);
+            _view.SetEndTime(_model.EndTime);
         }
 
         public void SetStartTime(TimeSpan startTime)
         {
             _model.StartTime = startTime;
-            _view.SetEndDate(_model.EndDate);
+			_view.SetEndTime(_model.EndTime);
         }
 
         public void SetActivity(IActivity activity)
