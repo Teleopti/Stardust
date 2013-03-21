@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
         public void Consume(BusinessUnitInfo message)
         {
-           var persons = _statisticRepository.PersonIdsWithExternalLogOn();
+           var persons = _statisticRepository.PersonIdsWithExternalLogOn(message.BusinessUnitId);
 
             foreach (var person in persons)
             {

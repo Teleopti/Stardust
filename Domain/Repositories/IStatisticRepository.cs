@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.Domain.Repositories
 
         void AddOrUpdateActualAgentState(IActualAgentState actualAgentState);
 
-        ICollection<Guid> PersonIdsWithExternalLogOn();
+		ICollection<Guid> PersonIdsWithExternalLogOn(Guid businessUnitId);
     }
 
 

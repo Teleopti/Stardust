@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			target.LoadActualAgentState(new List<IPerson>()).Count.Should().Be.EqualTo(0);
 			target.LoadOneActualAgentState(Guid.Empty);
 			target.AddOrUpdateActualAgentState(new ActualAgentState());
-			target.PersonIdsWithExternalLogOn().Count.Should().Be.EqualTo(0);
+			target.PersonIdsWithExternalLogOn(Guid.Empty).Count.Should().Be.EqualTo(0);
 		}
 	}
 }

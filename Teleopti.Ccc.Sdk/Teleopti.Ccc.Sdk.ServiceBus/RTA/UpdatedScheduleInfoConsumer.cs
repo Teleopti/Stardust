@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
 			using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
 				startTime =
-					_scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.Now, message.PersonId);
+					_scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow, message.PersonId);
 				Logger.InfoFormat("Next activity for Person: {0}, StartTime: {1}.", message.PersonId, startTime);
 			}
 
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
                 Logger.Error("Exception occured when calling TeleoptiRtaService", exception);
 			}
 
-			_serviceBus.DelaySend(startTime, new PersonWithExternalLogOn
+			_serviceBus.DelaySend(startTime.ToLocalTime(), new PersonWithExternalLogOn
 				{
 				Datasource = message.Datasource,
 				BusinessUnitId = message.BusinessUnitId,
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
 			using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
 				startTime =
-					_scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.Now, message.PersonId);
+					_scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow, message.PersonId);
 				if (startTime.Date.Equals(new DateTime().Date))
 				{
 					Logger.Info("No next activity found. Ignoring this update");
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
                 Logger.Error("Exception occured when calling TeleoptiRtaService", exception);
 			}
 			
-			_serviceBus.DelaySend(startTime, new PersonWithExternalLogOn
+			_serviceBus.DelaySend(startTime.ToLocalTime(), new PersonWithExternalLogOn
 				{
 					Datasource = message.Datasource,
 					BusinessUnitId = message.BusinessUnitId,

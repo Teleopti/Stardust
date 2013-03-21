@@ -375,21 +375,21 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             }
         }
 
-        public ICollection<Guid> PersonIdsWithExternalLogOn()
+		public ICollection<Guid> PersonIdsWithExternalLogOn(Guid businessUnitId)
         {
             const string stringQuery =
                 @"SELECT DISTINCT p.person_code 
 					FROM [mart].[bridge_acd_login_person] balp 
 					INNER JOIN mart.dim_person p ON p.person_id=balp.person_id 
 					INNER JOIN mart.dim_acd_login al ON balp.acd_login_id=al.acd_login_id 
-					WHERE p.person_code IS NOT NULL AND al.datasource_id<>-1";// AND p.business_unit_code =:buid";
+					WHERE p.person_code IS NOT NULL AND al.datasource_id<>-1 
+					AND p.business_unit_code =:buid";
 
             using (var uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
             {
                 return session(uow).CreateSQLQuery(stringQuery)
-                    //.SetGuid("buid",businessUnitId)
+                    .SetGuid("buid",businessUnitId)
                     .List<Guid>();
-
             }
         }
 

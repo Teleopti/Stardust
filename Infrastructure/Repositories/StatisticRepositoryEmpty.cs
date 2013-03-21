@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
-        public ICollection<Guid> PersonIdsWithExternalLogOn()
+		public ICollection<Guid> PersonIdsWithExternalLogOn(Guid businessUnitId)
         {
             return new List<Guid>();
         }

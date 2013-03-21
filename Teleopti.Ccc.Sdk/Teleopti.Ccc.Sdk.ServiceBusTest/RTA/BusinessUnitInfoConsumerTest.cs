@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
             var personList = new List<Guid>();
             personList.Add(person.Id.GetValueOrDefault());
 
-            Expect.Call(statisticRepository.PersonIdsWithExternalLogOn()).Return(personList);
+            Expect.Call(statisticRepository.PersonIdsWithExternalLogOn(Guid.Empty)).Return(personList);
             
             mocks.ReplayAll();
             target.Consume(message);
