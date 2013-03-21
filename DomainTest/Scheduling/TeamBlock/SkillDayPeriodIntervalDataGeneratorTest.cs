@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             }
             using(_mock.Playback())
             {
-				var calculatedResult = _target.Generate(_teamBlockInfo);
+				var calculatedResult = _target.GeneratePerDay(_teamBlockInfo);
 				Assert.That(calculatedResult.Count, Is.EqualTo(2));
 				Assert.That(calculatedResult[activity1][_date.TimeOfDay].ForecastedDemand, Is.EqualTo(activityIntervalData[activity1][_date.TimeOfDay].ForecastedDemand));
 				Assert.That(calculatedResult[activity2][_date.TimeOfDay].ForecastedDemand, Is.EqualTo(activityIntervalData[activity2][_date.TimeOfDay].ForecastedDemand));
@@ -153,13 +153,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                                  {
                                      _date.TimeOfDay,
                                      skillIntervalData1
-                                     }
-                             };
-			var intervalData2 = new Dictionary<TimeSpan, ISkillIntervalData>
-                             {
-                                 {
-                                     _date.TimeOfDay,
-                                     skillIntervalData2
                                      }
                              };
 			var activityIntervalData = new Dictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>>
@@ -204,7 +197,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			}
 			using (_mock.Playback())
 			{
-				var calculatedResult = _target.Generate(_teamBlockInfo);
+                var calculatedResult = _target.GeneratePerDay(_teamBlockInfo);
 				Assert.That(calculatedResult.Count, Is.EqualTo(1));
 				Assert.That(calculatedResult[activity1][_date.TimeOfDay].ForecastedDemand, Is.EqualTo(activityIntervalData[activity1][_date.TimeOfDay].ForecastedDemand));
 			}

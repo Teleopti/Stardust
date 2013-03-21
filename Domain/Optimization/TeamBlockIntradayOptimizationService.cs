@@ -181,7 +181,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 				}
 
 				var datePoint = teamBlock.BlockInfo.BlockPeriod.DayCollection().First();
-				var success = _teamBlockScheduler.ScheduleTeamBlock(teamBlock, datePoint, schedulingOptions);
+                //should use the updated method _teamBlockScheduler.ScheduleTeamBlockDay
+                var success = _teamBlockScheduler.ScheduleTeamBlock(teamBlock, datePoint, schedulingOptions);
 				if (!success)
 				{
 					teamBlockToRemove.Add(teamBlock);
