@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			if (shifts == null || shifts.Count <= 0)
 				return false;
 
-			var activityInternalData = _skillDayPeriodIntervalDataGenerator.Generate(teamBlockInfo);
+			var activityInternalData = _skillDayPeriodIntervalDataGenerator.GeneratePerDay(teamBlockInfo);
 
             var bestShiftProjectionCache = _workShiftSelector.SelectShiftProjectionCache(shifts, activityInternalData,
 																						 schedulingOptions
@@ -174,7 +174,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
             if (shifts == null || shifts.Count <= 0)
                 return null;
 
-            var activityInternalData = _skillDayPeriodIntervalDataGenerator.Generate(teamBlockInfo);
+            var activityInternalData = _skillDayPeriodIntervalDataGenerator.GeneratePerDay(teamBlockInfo);
 
             var bestShiftProjectionCache = _workShiftSelector.SelectShiftProjectionCache(shifts, activityInternalData,
                                                                                          schedulingOptions
