@@ -93,12 +93,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 			
 			//rounds
 			var remainingInfoList = new List<ITeamBlockInfo>(allTeamBlocksInHashSet);
-			var previousPeriodValue = _periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.IntradayOptimization);
-
+			
 			while (remainingInfoList.Count > 0)
 			{
 				if (_cancelMe)
 					break;
+				var previousPeriodValue = _periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.IntradayOptimization);
 				var teamBlocksToRemove = optimizeOneRound(allPersonMatrixList, optimizationPreferences,
 														  schedulingOptions, remainingInfoList,
 				                                          previousPeriodValue, schedulePartModifyAndRollbackService);
