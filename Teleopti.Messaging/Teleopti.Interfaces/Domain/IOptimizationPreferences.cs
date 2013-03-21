@@ -351,6 +351,36 @@ namespace Teleopti.Interfaces.Domain
         /// The actual common activity
         /// </summary>
         IActivity CommonActivity { get; set; }
+
+        /// <summary>
+        /// Block finder service for advance optimization service
+        /// </summary>
+        BlockFinderType BlockFinderTypeForAdvanceOptimization { get; set; }
+
+        /// <summary>
+        /// Group page for Leveling property used for block optimization
+        /// </summary>
+        IGroupPageLight GroupPageOnTeamLevelingPer { get; set; }
+        /// <summary>
+        /// Use levelling same end time
+        /// </summary>
+        bool UseLevellingSameEndTime { get; set; }
+        /// <summary>
+        /// Use levelling same shift category
+        /// </summary>
+        bool UseLevellingSameShiftCategory { get; set; }
+        /// <summary>
+        /// Use levelling same start time
+        /// </summary>
+        bool UseLevellingSameStartTime { get; set; }
+        /// <summary>
+        /// Use levelling same shift
+        /// </summary>
+        bool UseLevellingSameShift { get; set; }
+        /// <summary>
+        /// This is  used if levelling per is used
+        /// </summary>
+        bool UseLevellingOption { get; set; }
     }
 
     /// <summary>

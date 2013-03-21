@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         private bool _cancelMe;
 
         public BlockSchedulingService( IBestBlockShiftCategoryFinder blockShiftCategoryFinder,
-            IScheduleDayService scheduleDayService, IBlockFinderFactory blockFinderFactory)
+            IScheduleDayService scheduleDayService, IBlockFinderFactory blockFinderFactory )
         {
             _blockShiftCategoryFinder = blockShiftCategoryFinder;
             _scheduleDayService = scheduleDayService;

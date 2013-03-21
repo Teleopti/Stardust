@@ -1,8 +1,9 @@
-﻿using NUnit.Framework;
+using NUnit.Framework;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DomainTest.Optimization
+namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 {
 	[TestFixture]
 	public class AdvancedPreferencesPersonalSettingsTest

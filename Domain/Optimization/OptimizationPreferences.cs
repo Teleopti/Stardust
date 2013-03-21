@@ -96,6 +96,15 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public bool UseGroupSchedulingCommonCategory { get; set; }
         public bool UseCommonActivity { get; set; }
         public IActivity CommonActivity { get; set; }
+
+        public BlockFinderType BlockFinderTypeForAdvanceOptimization { get; set; }
+
+	    public IGroupPageLight GroupPageOnTeamLevelingPer{get ; set; }
+	    public bool UseLevellingSameEndTime { get; set; }
+	    public bool UseLevellingSameShiftCategory { get; set; }
+	    public bool UseLevellingSameStartTime { get; set; }
+	    public bool UseLevellingSameShift { get; set; }
+	    public bool UseLevellingOption { get; set; }
 	}
 
     public class ShiftPreferences : IShiftPreferences

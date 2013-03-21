@@ -11366,4 +11366,11 @@ Reduce the complexity to use these shifts.</value>
     <value> is a too complex ruleset!</value>
     <comment>Caption on messagebox when shift generation is stopped </comment>
   </data>
+  <data name="LevellingPer" xml:space="preserve">
+    <value>Levelling Per</value>
+    <comment>Levelling per Block Scheduling</comment>
+  </data>
+  <data name="SingleAgentTeam" xml:space="preserve">
+    <value>Single Agent Team</value>
+  </data>
 </root>

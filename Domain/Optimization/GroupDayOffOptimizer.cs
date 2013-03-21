@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			                                                       _daysOffPreferences.ConsiderWeekAfter);
 
 			IScheduleResultDataExtractor scheduleResultDataExtractor =
-				_scheduleResultDataExtractorProvider.CreatePersonalSkillDataExtractor(matrix);
+				_scheduleResultDataExtractorProvider.CreatePersonalSkillDataExtractor(matrix, optimizationPreferences.Advanced);
 
             bool success = _decisionMaker.Execute(WorkingBitArray, scheduleResultDataExtractor.Values());
 			if (!success)

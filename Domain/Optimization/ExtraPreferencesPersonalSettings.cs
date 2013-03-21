@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 	{
 		private string _groupPageOnTeamKey;
 		private string _groupPageOnCompareWithKey;
+        private string _groupPageOnTeamLevelingPerKey;
 
 		private BlockFinderType _blockFinderTypeValue;
 
@@ -22,13 +23,22 @@ namespace Teleopti.Ccc.Domain.Optimization
 	    private bool _useGroupSchedulingCommonEnd;
 	    private bool _useGroupSchedulingCommonCategory;
 
-		public ExtraPreferencesPersonalSettings()
+	    public bool _useLevellingSameEndTime;
+        public bool _useLevellingSameShiftCategory;
+        public bool _useLevellingSameStartTime;
+        public bool _useLevellingSameShift;
+        public bool _useLevellingOption;
+
+	    private BlockFinderType _blockFinderTypeForAdvanceOptimization;
+	    
+
+	    public ExtraPreferencesPersonalSettings()
 		{
 			SetDefaultValues();
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
-		public void MapTo(IExtraPreferences target, IList<IGroupPageLight> groupPages)
+        public void MapTo(IExtraPreferences target, IList<IGroupPageLight> groupPages, IList<IGroupPageLight> groupPagesForLevellingPer)
 		{
 			InParameter.NotNull("groupPages", groupPages);
 
@@ -40,17 +50,31 @@ namespace Teleopti.Ccc.Domain.Optimization
 					target.GroupPageOnCompareWith = groupPage;
 			}
 
+            foreach (var groupPage in groupPagesForLevellingPer)
+            {
+                if (_groupPageOnTeamLevelingPerKey == groupPage.Key)
+                    target.GroupPageOnTeamLevelingPer = groupPage;
+            }
+
 			target.BlockFinderTypeValue = _blockFinderTypeValue;
 			target.UseBlockScheduling = _useBlockScheduling;
 			target.UseTeams = _useTeams;
 			target.KeepSameDaysOffInTeam = _useSameDaysOffForTeams;
-
+            
            
 			target.FairnessValue = _fairnessValue;
 
 		    target.UseGroupSchedulingCommonCategory = _useGroupSchedulingCommonCategory;
 		    target.UseGroupSchedulingCommonEnd = _useGroupSchedulingCommonEnd;
 		    target.UseGroupSchedulingCommonStart = _useGroupSchedulingCommonStart;
+
+		    target.BlockFinderTypeForAdvanceOptimization = _blockFinderTypeForAdvanceOptimization;
+
+		    target.UseLevellingOption = _useLevellingOption;
+		    target.UseLevellingSameEndTime = _useLevellingSameEndTime;
+		    target.UseLevellingSameShift = _useLevellingSameShift;
+		    target.UseLevellingSameShiftCategory = _useLevellingSameShiftCategory;
+		    target.UseLevellingSameStartTime = _useLevellingSameStartTime;
 		}
 
 		public void MapFrom(IExtraPreferences source)
@@ -59,6 +83,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 				_groupPageOnTeamKey = source.GroupPageOnTeam.Key;
 			if (source.GroupPageOnCompareWith != null)
 				_groupPageOnCompareWithKey = source.GroupPageOnCompareWith.Key;
+            if (source.GroupPageOnTeamLevelingPer != null)
+                _groupPageOnTeamLevelingPerKey = source.GroupPageOnTeamLevelingPer.Key;
 
 			_blockFinderTypeValue = source.BlockFinderTypeValue;
 			_useBlockScheduling = source.UseBlockScheduling;
@@ -70,6 +96,14 @@ namespace Teleopti.Ccc.Domain.Optimization
 		    _useGroupSchedulingCommonCategory = source.UseGroupSchedulingCommonCategory;
 		    _useGroupSchedulingCommonEnd = source.UseGroupSchedulingCommonEnd;
 		    _useGroupSchedulingCommonStart = source.UseGroupSchedulingCommonStart;
+
+		    _blockFinderTypeForAdvanceOptimization = source.BlockFinderTypeForAdvanceOptimization;
+
+		    _useLevellingOption = source.UseLevellingOption;
+		    _useLevellingSameEndTime = source.UseLevellingSameEndTime;
+		    _useLevellingSameShift = source.UseLevellingSameShift;
+		    _useLevellingSameShiftCategory = source.UseLevellingSameShiftCategory;
+		    _useLevellingSameStartTime = source.UseLevellingSameStartTime;
 		}
 
 		/// <summary>
@@ -91,6 +125,16 @@ namespace Teleopti.Ccc.Domain.Optimization
 		{
 			_groupPageOnCompareWithKey = key;
 		}
+
+        /// <summary>
+        /// Sets the group page on cleveling per.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <remarks>Used in tests only</remarks>
+        public void SetGroupPageOnTeamLevellingPerKey(string key)
+        {
+            _groupPageOnTeamLevelingPerKey = key;
+        }
 
 		private void SetDefaultValues()
 		{

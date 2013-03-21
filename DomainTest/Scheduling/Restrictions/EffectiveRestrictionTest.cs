@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         private EndTimeLimitation _endTimeLimitation;
         private WorkTimeLimitation _workTimeLimitation;
         private IShiftCategory _shiftCategory;
+        private IMainShift _commonMainShift;
 
         private IWorkShift _workShift1;
         private IWorkShift _workShift2;
@@ -46,9 +47,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
         	_person = PersonFactory.CreatePerson();
             _shiftCategory = ShiftCategoryFactory.CreateShiftCategory("Test");
 			_shiftCategory.SetId(Guid.NewGuid());
+
             _activity = ActivityFactory.CreateActivity("Test");
 			_activity.SetId(Guid.NewGuid());
             _activity.InContractTime = true;
+			var period = new DateTimePeriod(new DateTime(2012, 12, 7, 8, 0, 0, DateTimeKind.Utc),
+											new DateTime(2012, 12, 7, 8, 30, 0, DateTimeKind.Utc));
+			_commonMainShift = MainShiftFactory.CreateMainShift(_activity, period, _shiftCategory);
             //15h
             _workShift1 = WorkShiftFactory.CreateWorkShift(
                 TimeSpan.FromHours(6),
@@ -139,7 +144,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
                 _workTimeLimitation,
                 _shiftCategory,
                 null, null, new List<IActivityRestriction>());
-
+			
             Assert.IsTrue(_target.ValidateWorkShiftInfo(_info1));
             Assert.IsTrue(_target.ValidateWorkShiftInfo(_info2));
             Assert.IsTrue(_target.ValidateWorkShiftInfo(_info3));
@@ -453,6 +458,52 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             var result = _target.Combine(other);
             Assert.IsNull(result);
         }
+
+		[Test]
+		public void ShouldCombineCommonMainShiftWhenTargetHasNoCommonMainShift()
+		{
+			_target = new EffectiveRestriction(
+			  _startTimeLimitation,
+			  _endTimeLimitation,
+			  _workTimeLimitation,
+			  _shiftCategory,
+			  null, null, new List<IActivityRestriction>());
+			
+			IEffectiveRestriction other = new EffectiveRestriction(
+			_startTimeLimitation,
+			_endTimeLimitation,
+			new WorkTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(8)),
+			null,
+			null, null, new List<IActivityRestriction>()) { CommonMainShift = _commonMainShift };
+			
+			var result = _target.Combine(other);
+			Assert.That(result.CommonMainShift, Is.EqualTo(_commonMainShift));
+		}
+	
+		[Test]
+		public void ShouldCombineCommonMainShiftWhenTargetHasDifferentCommonMainShift()
+		{
+			_target = new EffectiveRestriction(
+				_startTimeLimitation,
+				_endTimeLimitation,
+				_workTimeLimitation,
+				_shiftCategory,
+				null, null, new List<IActivityRestriction>()) {CommonMainShift = _commonMainShift};
+
+			var activity = ActivityFactory.CreateActivity("Test1");
+			var period = new DateTimePeriod(new DateTime(2012, 12, 7, 7, 0, 0, DateTimeKind.Utc),
+											new DateTime(2012, 12, 7, 8, 30, 0, DateTimeKind.Utc));
+			var commonMainShift = MainShiftFactory.CreateMainShift(activity, period, _shiftCategory);
+			var other = new EffectiveRestriction(
+			_startTimeLimitation,
+			_endTimeLimitation,
+			new WorkTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(8)),
+			null,
+			null, null, new List<IActivityRestriction>()) { CommonMainShift = commonMainShift };
+
+			var result = _target.Combine(other);
+			Assert.That(result, Is.Null);
+		}
 
         [Test]
         public void VerifyCombineActivityRestriction()

@@ -297,7 +297,8 @@ namespace Teleopti.Interfaces.Domain
         /// 
         /// </summary>
         ISpecification<IMainShift> MainShiftOptimizeActivitySpecification { get; set; }
-		/// <summary>
+		
+        /// <summary>
 		/// 
 		/// </summary>
 		bool UseGroupSchedulingCommonStart { get; set; }
@@ -327,5 +328,58 @@ namespace Teleopti.Interfaces.Domain
 		/// 	<c>true</c> if [use average shift lengths]; otherwise, <c>false</c>.
 		/// </value>
 		bool UseAverageShiftLengths { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether [use period as block].
+        /// </summary>
+        bool UsePeriodAsBlock { get; set; }
+        /// <summary>
+        /// Gets or sets a value indicating whether [use two days off as block].
+        /// </summary>
+        bool UseTwoDaysOffAsBlock { get; set; }
+        /// <summary>
+        /// Gets or sets a value indicating whether [use calender as block].
+        /// </summary>
+        bool UseCalendarWeekAsBlock { get; set; }
+
+        /// <summary>
+        /// Block finder service for advance scheduling service
+        /// </summary>
+        BlockFinderType BlockFinderTypeForAdvanceScheduling { get; set; }
+
+        /// <summary>
+        /// Group page to be used for leveling oer
+        /// </summary>
+        IGroupPageLight GroupOnGroupPageForLevelingPer { get; set; }
+
+        /// <summary>
+        /// Used in levelling per same end time
+        /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Levelling")]
+        bool UseLevellingSameEndTime { get; set; }
+
+        /// <summary>
+        /// Used in levelling per same shift category
+        /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Levelling")]
+        bool UseLevellingSameShiftCategory { get; set; }
+
+        /// <summary>
+        /// Used in levelling per same start time
+        /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Levelling")]
+        bool UseLevellingSameStartTime { get; set; }
+
+        /// <summary>
+        /// Used in levelling per same shift
+        /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Levelling")]
+        bool UseLevellingSameShift { get; set; }
+
+        /// <summary>
+        /// Used if the levelling option is checked or not
+        /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Levelling")]
+        bool UseLevellingPerOption { get; set; }
     }
 }

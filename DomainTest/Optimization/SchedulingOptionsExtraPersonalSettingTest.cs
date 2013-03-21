@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             {
                 _scheduleTags = new List<IScheduleTag> { _scheduleTag };
                 _target.MapFrom(_schedulingOptions);
-                _target.MapTo(_schedulingOptions, _scheduleTags, _groupPages, _activityList);
+                _target.MapTo(_schedulingOptions, _scheduleTags, new List<IGroupPageLight>(), _groupPages, _activityList);
             }
         }
 
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             {
                 _scheduleTags = new List<IScheduleTag>();
                 _target.MapFrom(_schedulingOptions);
-                _target.MapTo(_schedulingOptions, _scheduleTags, _groupPages, _activityList);
+                _target.MapTo(_schedulingOptions, _scheduleTags, new List<IGroupPageLight>(), _groupPages, _activityList);
             }
         }
 
@@ -107,6 +107,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Expect.Call(_schedulingOptions.UseGroupSchedulingCommonEnd).Return(true);
             Expect.Call(_schedulingOptions.UseGroupSchedulingCommonCategory).Return(false);
             Expect.Call(_schedulingOptions.UseCommonActivity ).Return(false);
+            Expect.Call(_schedulingOptions.BlockFinderTypeForAdvanceScheduling ).Return(BlockFinderType.BetweenDayOff);
+            
+            Expect.Call(_schedulingOptions.GroupOnGroupPageForLevelingPer ).Return(_groupPageLight).Repeat.AtLeastOnce();
+            Expect.Call(_schedulingOptions.UseLevellingPerOption).Return(true);
+            Expect.Call(_schedulingOptions.UseLevellingSameEndTime).Return(true);
+            Expect.Call(_schedulingOptions.UseLevellingSameShift).Return(false);
+            Expect.Call(_schedulingOptions.UseLevellingSameShiftCategory).Return(true);
+            Expect.Call(_schedulingOptions.UseLevellingSameStartTime).Return(true);
         }
 
 
@@ -125,6 +133,16 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Expect.Call(() => _schedulingOptions.UseGroupSchedulingCommonCategory = false);
             Expect.Call(() => _schedulingOptions.UseCommonActivity  = false);
             Expect.Call(() => _schedulingOptions.Fairness = _fairnessValue);
+
+            Expect.Call(() => _schedulingOptions.GroupOnGroupPageForLevelingPer  = _groupPageLight);
+            Expect.Call(() => _schedulingOptions.UseLevellingPerOption = true);
+            Expect.Call(() => _schedulingOptions.UseLevellingSameEndTime  = true);
+            Expect.Call(() => _schedulingOptions.UseLevellingSameShift  = false );
+            Expect.Call(() => _schedulingOptions.UseLevellingSameShiftCategory  = true);
+            Expect.Call(() => _schedulingOptions.UseLevellingSameStartTime   = true);
+
+            Expect.Call(() => _schedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.BetweenDayOff);
+            
         }
     }
 }

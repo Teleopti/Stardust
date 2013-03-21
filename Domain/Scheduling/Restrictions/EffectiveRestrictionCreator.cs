@@ -72,6 +72,28 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			return ret;
 		}
 
+        public IEffectiveRestriction GetEffectiveRestrictionPerPerson(
+            IPerson person,
+            DateOnly dateOnly,
+            ISchedulingOptions options,
+            IScheduleDictionary scheduleDictionary)
+        {
+            InParameter.NotNull("scheduleDictionary", scheduleDictionary);
+            //IEffectiveRestriction ret = null;
+
+            IScheduleDay scheduleDay = scheduleDictionary[person].ScheduledDay(dateOnly);
+            var restriction = GetEffectiveRestriction(scheduleDay, options);
+            //if (restriction == null)
+            //    return null;
+            //if (ret != null)
+            //    ret = ret.Combine(restriction);
+                //else
+            //ret = restriction;
+             //if (ret == null)
+             //       return null;
+            return restriction;
+        }
+
 		public static bool OptionsConflictWithRestrictions(ISchedulingOptions options, IEffectiveRestriction effectiveRestriction)
 		{
 			if (options == null)

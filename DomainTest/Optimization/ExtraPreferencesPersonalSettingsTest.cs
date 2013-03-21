@@ -17,8 +17,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		//private IGroupPage _groupPage2;
 		private IExtraPreferences _extraPreferencesSource;
 		private IExtraPreferences _extraPreferencesTarget;
+	    private IList<IGroupPageLight> _groupPagesForLevellingPer;
 
-		[SetUp]
+	    [SetUp]
 		public void Setup()
 		{
 			_groupPage1Key = "Key1";
@@ -26,6 +27,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			_groupPage1 = new GroupPageLight{Key =_groupPage1Key};
 			
 			_groupPages = new List<IGroupPageLight> { _groupPage1 };
+
+		    _groupPagesForLevellingPer = _groupPages;
+	        var singleAgentTeamGP = new GroupPageLight();
+            singleAgentTeamGP.Key = "SingleAgentTeam";
+            singleAgentTeamGP.Name = "Single Agent Team";
+            _groupPagesForLevellingPer.Add(singleAgentTeamGP);
 			_target = new ExtraPreferencesPersonalSettings();
 			_extraPreferencesSource = new ExtraPreferences();
 			_extraPreferencesTarget = new ExtraPreferences();
@@ -34,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		[Test]
 		public void VerifyDefaultValues()
 		{
-			_target.MapTo(_extraPreferencesTarget, _groupPages);
+            _target.MapTo(_extraPreferencesTarget, _groupPages, _groupPagesForLevellingPer);
 			Assert.AreEqual(BlockFinderType.BetweenDayOff, _extraPreferencesTarget.BlockFinderTypeValue);
 			
 		}
@@ -48,23 +55,66 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             _extraPreferencesSource.FairnessValue = 102d;
 
+		    
+
 			_target.MapFrom(_extraPreferencesSource);
-			_target.MapTo(_extraPreferencesTarget, _groupPages);
+            _target.MapTo(_extraPreferencesTarget, _groupPages, _groupPagesForLevellingPer);
 
 			Assert.AreEqual(_extraPreferencesSource.BlockFinderTypeValue, _extraPreferencesTarget.BlockFinderTypeValue);
 			Assert.AreEqual(_extraPreferencesSource.UseBlockScheduling, _extraPreferencesTarget.UseBlockScheduling);
 			Assert.AreEqual(_extraPreferencesSource.UseTeams, _extraPreferencesTarget.UseTeams);
-
+            
             Assert.AreEqual(_extraPreferencesSource.FairnessValue, _extraPreferencesTarget.FairnessValue);
+
+            
+
 		}
+
+        [Test]
+        public void MappingShouldGetAndSetForLevellingOptions()
+        {
+            _extraPreferencesSource.UseLevellingOption  = true;
+            _extraPreferencesSource.UseLevellingSameEndTime  = true;
+            _extraPreferencesSource.UseLevellingSameStartTime  = true;
+            _extraPreferencesSource.UseLevellingSameShift = true;
+            _extraPreferencesSource.UseLevellingSameShiftCategory  = false;
+            _extraPreferencesSource.BlockFinderTypeForAdvanceOptimization = BlockFinderType.BetweenDayOff;
+            _extraPreferencesSource.GroupPageOnTeamLevelingPer = _groupPage1;
+            _target.MapFrom(_extraPreferencesSource);
+
+            _target.MapTo(_extraPreferencesTarget, _groupPages, _groupPagesForLevellingPer);
+
+            Assert.AreEqual(_extraPreferencesSource.UseLevellingOption, _extraPreferencesTarget.UseLevellingOption);
+            Assert.AreEqual(_extraPreferencesSource.UseLevellingSameEndTime, _extraPreferencesTarget.UseLevellingSameEndTime);
+            Assert.AreEqual(_extraPreferencesSource.UseLevellingSameStartTime, _extraPreferencesTarget.UseLevellingSameStartTime);
+            Assert.AreEqual(_extraPreferencesSource.UseLevellingSameShift, _extraPreferencesTarget.UseLevellingSameShift);
+            Assert.AreEqual(_extraPreferencesSource.UseLevellingSameShiftCategory, _extraPreferencesTarget.UseLevellingSameShiftCategory);
+            Assert.AreEqual(_extraPreferencesSource.GroupPageOnTeamLevelingPer , _extraPreferencesTarget.GroupPageOnTeamLevelingPer);
+            Assert.AreEqual(_extraPreferencesSource.BlockFinderTypeForAdvanceOptimization, _extraPreferencesTarget.BlockFinderTypeForAdvanceOptimization);
+        }
+
+        [Test]
+        public void MappingShouldGetAndSetForLevellingOptionsForSingleAgentPage()
+        {
+            var singleAgentTeamGroupPage = new GroupPageLight { Key = "SingleAgentTeam" ,Name = "Single Agent Team" };
+            _extraPreferencesSource.GroupPageOnTeamLevelingPer = singleAgentTeamGroupPage;
+            _target.MapFrom(_extraPreferencesSource);
+
+            _target.MapTo(_extraPreferencesTarget, _groupPages, _groupPagesForLevellingPer);
+
+            Assert.AreEqual(_extraPreferencesSource.GroupPageOnTeamLevelingPer.Key , _extraPreferencesTarget.GroupPageOnTeamLevelingPer.Key );
+            
+        }
 
 		[Test]
 		public void ShouldFindGroupByIdIfExistInGroupList()
 		{
 			_target.SetGroupPageOnTeamKey(_groupPage1Key);
 			_target.SetGroupPageOnCompareWithKey(_groupPage1Key);
-			_target.MapTo(_extraPreferencesTarget, _groupPages);
+            _target.SetGroupPageOnTeamLevellingPerKey( _groupPage1Key);
+            _target.MapTo(_extraPreferencesTarget, _groupPages, _groupPagesForLevellingPer);
 			Assert.AreEqual(_extraPreferencesTarget.GroupPageOnTeam.Key, _groupPage1Key);
+			Assert.AreEqual(_extraPreferencesTarget.GroupPageOnTeamLevelingPer.Key, _groupPage1Key);
 			Assert.AreEqual(_extraPreferencesTarget.GroupPageOnCompareWith.Key, _groupPage1Key);
 		}
 
@@ -73,8 +123,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		{
 			_target.SetGroupPageOnTeamKey(_groupPage2Key);
 			_target.SetGroupPageOnCompareWithKey(_groupPage2Key);
-			_target.MapTo(_extraPreferencesTarget, _groupPages);
+            _target.SetGroupPageOnTeamLevellingPerKey(_groupPage2Key);
+            _target.MapTo(_extraPreferencesTarget, _groupPages, _groupPagesForLevellingPer);
 			Assert.IsNull(_extraPreferencesTarget.GroupPageOnTeam);
+            Assert.IsNull(_extraPreferencesTarget.GroupPageOnTeamLevelingPer);
 			Assert.IsNull(_extraPreferencesTarget.GroupPageOnCompareWith);
 		}
 	}

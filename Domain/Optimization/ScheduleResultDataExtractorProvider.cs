@@ -5,28 +5,21 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
     public interface IScheduleResultDataExtractorProvider
     {
-        IScheduleResultDataExtractor CreatePersonalSkillDataExtractor(IScheduleMatrixPro scheduleMatrix);
+		IScheduleResultDataExtractor CreatePersonalSkillDataExtractor(IScheduleMatrixPro scheduleMatrix, IAdvancedPreferences optimizerPreferences);
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        IScheduleResultDataExtractor CreateAllSkillsDataExtractor(DateOnlyPeriod selectedPeriod, ISchedulingResultStateHolder stateHolder);
+		IScheduleResultDataExtractor CreateAllSkillsDataExtractor(DateOnlyPeriod selectedPeriod, ISchedulingResultStateHolder stateHolder, IAdvancedPreferences optimizerPreferences);
     }
 
     public class ScheduleResultDataExtractorProvider : IScheduleResultDataExtractorProvider
     {
-        private readonly IAdvancedPreferences _optimizerPreferences;
-
-        public ScheduleResultDataExtractorProvider(IAdvancedPreferences optimizerPreferences)
-        {
-            _optimizerPreferences = optimizerPreferences;
-        }
-
-        public IScheduleResultDataExtractor CreatePersonalSkillDataExtractor(IScheduleMatrixPro scheduleMatrix)
+		public IScheduleResultDataExtractor CreatePersonalSkillDataExtractor(IScheduleMatrixPro scheduleMatrix, IAdvancedPreferences optimizerPreferences)
         {
             if(scheduleMatrix == null)
                 throw new ArgumentNullException("scheduleMatrix");
 
             ISkillExtractor skillExtractor = new ScheduleMatrixPersonalSkillExtractor(scheduleMatrix);
-            if (_optimizerPreferences.UseTweakedValues)
+            if (optimizerPreferences.UseTweakedValues)
             {
                 var dailySkillForecastAndScheduledValueCalculator = new DailyBoostedSkillForecastAndScheduledValueCalculator(scheduleMatrix.SchedulingStateHolder);
                 return new RelativeBoostedDailyDifferencesByPersonalSkillsExtractor(scheduleMatrix, dailySkillForecastAndScheduledValueCalculator, skillExtractor);
@@ -39,11 +32,11 @@ namespace Teleopti.Ccc.Domain.Optimization
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public IScheduleResultDataExtractor CreateAllSkillsDataExtractor(DateOnlyPeriod selectedPeriod, ISchedulingResultStateHolder stateHolder)
+		public IScheduleResultDataExtractor CreateAllSkillsDataExtractor(DateOnlyPeriod selectedPeriod, ISchedulingResultStateHolder stateHolder, IAdvancedPreferences optimizerPreferences)
         {
             ISkillExtractor allSkillExtractor = new SchedulingStateHolderAllSkillExtractor(stateHolder);
             IDailySkillForecastAndScheduledValueCalculator dailySkillForecastAndScheduledValueCalculator;
-            if (_optimizerPreferences.UseTweakedValues)
+            if (optimizerPreferences.UseTweakedValues)
             {
                 dailySkillForecastAndScheduledValueCalculator = new DailyBoostedSkillForecastAndScheduledValueCalculator(stateHolder);
                 return new RelativeBoostedDailyDifferencesByAllSkillsExtractor(selectedPeriod,

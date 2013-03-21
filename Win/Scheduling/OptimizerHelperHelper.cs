@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.WinCode.Scheduling;
+using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.WinCode.Common;
 
@@ -102,8 +103,8 @@ namespace Teleopti.Ccc.Win.Scheduling
             DateOnlyPeriod selectedPeriod,
             ISchedulingResultStateHolder stateHolder)
         {
-            IScheduleResultDataExtractorProvider dataExtractorProvider = new ScheduleResultDataExtractorProvider(advancedPreferences);
-            IScheduleResultDataExtractor allSkillsDataExtractor = dataExtractorProvider.CreateAllSkillsDataExtractor(selectedPeriod, stateHolder);
+            IScheduleResultDataExtractorProvider dataExtractorProvider = new ScheduleResultDataExtractorProvider();
+            IScheduleResultDataExtractor allSkillsDataExtractor = dataExtractorProvider.CreateAllSkillsDataExtractor(selectedPeriod, stateHolder, advancedPreferences);
             return allSkillsDataExtractor;
         }
 
@@ -112,8 +113,8 @@ namespace Teleopti.Ccc.Win.Scheduling
             IAdvancedPreferences advancedPreferences,
             IScheduleMatrixPro scheduleMatrix)
         {
-            IScheduleResultDataExtractorProvider dataExtractorProvider = new ScheduleResultDataExtractorProvider(advancedPreferences);
-            return dataExtractorProvider.CreatePersonalSkillDataExtractor(scheduleMatrix);
+            IScheduleResultDataExtractorProvider dataExtractorProvider = new ScheduleResultDataExtractorProvider();
+            return dataExtractorProvider.CreatePersonalSkillDataExtractor(scheduleMatrix, advancedPreferences);
         }
 
         public static DateOnlyPeriod GetSelectedPeriod(IEnumerable<IScheduleDay> scheduleDays)
@@ -200,6 +201,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			return CreateMatrixList(allSchedules, schedulerState.SchedulingResultState, container);
 		}
 
+		[Obsolete("Never used")]
 		public static IList<IScheduleMatrixPro> CreateMatrixList(ClipHandler clipHandler, ISchedulingResultStateHolder resultStateHolder, IComponentContext container)
         {
             if (clipHandler == null) throw new ArgumentNullException("clipHandler");
@@ -271,48 +273,15 @@ namespace Teleopti.Ccc.Win.Scheduling
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
 		public static IEnumerable<IDayOffDecisionMaker> CreateDecisionMakers(
             ILockableBitArray scheduleMatrixArray,
-            IOptimizationPreferences optimizerPreferences)
-        {
-			var daysOffPreferences = optimizerPreferences.DaysOff;
-            IList<IDayOffLegalStateValidator> legalStateValidators =
-                 CreateLegalStateValidators(scheduleMatrixArray, daysOffPreferences, optimizerPreferences);
+            IOptimizationPreferences optimizerPreferences, IComponentContext container)
+		{
+			IDayOffOptimizationDecisionMakerFactory dayOffOptimizationDecisionMakerFactory =
+				container.Resolve<IDayOffOptimizationDecisionMakerFactory>();
 
-            IList<IDayOffLegalStateValidator> legalStateValidatorsToKeepWeekEnds =
-                CreateLegalStateValidatorsToKeepWeekendNumbers(scheduleMatrixArray, optimizerPreferences);
-
-            IOfficialWeekendDays officialWeekendDays = new OfficialWeekendDays();
-            ILogWriter logWriter = new LogWriter<DayOffOptimizationService>();
-
-            IDayOffDecisionMaker moveDayOffDecisionMaker = new MoveOneDayOffDecisionMaker(legalStateValidators, logWriter);
-            IDayOffDecisionMaker moveWeekEndDecisionMaker = new MoveWeekendDayOffDecisionMaker(legalStateValidatorsToKeepWeekEnds, officialWeekendDays, true, logWriter);
-            IDayOffDecisionMaker moveTwoWeekEndDaysDecisionMaker = new MoveWeekendDayOffDecisionMaker(legalStateValidators, officialWeekendDays, false, logWriter);
-			
-			
-        	bool is2222 = false;
-			if(daysOffPreferences.UseDaysOffPerWeek && daysOffPreferences.DaysOffPerWeekValue.Minimum == 2 && daysOffPreferences.DaysOffPerWeekValue.Maximum == 2)
-			{
-				if(daysOffPreferences.UseConsecutiveDaysOff && daysOffPreferences.ConsecutiveDaysOffValue.Minimum == 2 && daysOffPreferences.ConsecutiveDaysOffValue.Maximum == 2)
-				{
-					if (daysOffPreferences.UseConsecutiveWorkdays)
-						is2222 = true;
-				}
-			}
-			IDayOffDecisionMaker teDataDayOffDecisionMaker = new TeDataDayOffDecisionMaker(legalStateValidators, is2222, logWriter);
-
-			IList<IDayOffDecisionMaker> retList = new List<IDayOffDecisionMaker> { moveDayOffDecisionMaker, moveTwoWeekEndDaysDecisionMaker, moveWeekEndDecisionMaker, teDataDayOffDecisionMaker };
-
-			if(daysOffPreferences.UseConsecutiveWorkdays && daysOffPreferences.ConsecutiveWorkdaysValue.Maximum == 5)
-			{
-				if (daysOffPreferences.UseFullWeekendsOff && daysOffPreferences.FullWeekendsOffValue.Equals(new MinMax<int>(1, 1)))
-				{
-					IDayOffDecisionMaker cMSBOneFreeWeekendMax5WorkingdaysDecisionMaker = new CMSBOneFreeWeekendMax5WorkingDaysDecisionMaker(officialWeekendDays, new TrueFalseRandomizer());
-					retList.Add(cMSBOneFreeWeekendMax5WorkingdaysDecisionMaker);
-				}
-			}
-
-			return retList;
+			return dayOffOptimizationDecisionMakerFactory.CreateDecisionMakers(scheduleMatrixArray, optimizerPreferences);
         }
 
+		[Obsolete("Never used")]
         public static void SetConsiderShortBreaks(ClipHandler clipHandler, DateOnlyPeriod period, IReschedulingPreferences options, IComponentContext container)
         {
             IEnumerable<IPerson> persons = CreatePersonsList(clipHandler);

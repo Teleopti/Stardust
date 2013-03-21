@@ -7,6 +7,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         bool MainShiftEquals(IScheduleDay original, IScheduleDay current);
 		bool MainShiftEquals(IMainShift original, IMainShift current);
         bool DayOffEquals(IScheduleDay original, IScheduleDay current);
+	    bool MainShiftBasicEquals(IMainShift original, IMainShift current);
     }
 
     public class ScheduleDayEquator : IScheduleDayEquator
@@ -74,6 +75,26 @@ namespace Teleopti.Ccc.Domain.Optimization
             }
             return true;
         }
+
+		public bool MainShiftBasicEquals(IMainShift original, IMainShift current)
+		{
+			if (original.ShiftCategory.Id != current.ShiftCategory.Id)
+				return false;
+			if (original.LayerCollection.Count != current.LayerCollection.Count)
+				return false;
+			for (int layerIndex = 0; layerIndex < original.LayerCollection.Count; layerIndex++)
+			{
+				ILayer<IActivity> originalLayer = original.LayerCollection[layerIndex];
+				ILayer<IActivity> currentLayer = current.LayerCollection[layerIndex];
+				if (!originalLayer.Period.StartDateTime.TimeOfDay.Equals(currentLayer.Period.StartDateTime.TimeOfDay))
+					return false;
+				if (!originalLayer.Period.EndDateTime.TimeOfDay.Equals(currentLayer.Period.EndDateTime.TimeOfDay))
+					return false;
+				if (!originalLayer.Payload.Equals(currentLayer.Payload))
+					return false;
+			}
+			return true;
+		}
 
         private static bool activityEquals(ILayer<IActivity> original, ILayer<IActivity> current)
         {
