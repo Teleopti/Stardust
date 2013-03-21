@@ -91,14 +91,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
                     continue;
 
                 int targetDaysOff;
-                int currentDaysOff;
-                bool hasCorrectNumberOfDaysOff = _dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(schedulePeriod,
-                                                                                                      out targetDaysOff,
-                                                                                                      out currentDaysOff);
+
+				IList<IScheduleDay> dayOffDays = new List<IScheduleDay>();
+	            var hasCorrectNumberOfDaysOff = _dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(schedulePeriod, out targetDaysOff, out dayOffDays);
+
+				var currentDaysOff = dayOffDays.Count;
                 if (hasCorrectNumberOfDaysOff && currentDaysOff > 0)
                     continue;
-
-				
 
                 foreach (var scheduleDayPro in matrix.UnlockedDays)
                 {
@@ -115,6 +114,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 					IEffectiveRestriction effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(part, schedulingOptions);
 					if (effectiveRestriction != null && effectiveRestriction.NotAllowedForDayOffs)
 						continue;
+
+					var existingDayOff = _dayOffsInPeriodCalculator.DayOffInScheduleDayWeek(part, dayOffDays);
+					if (existingDayOff != null)
+					{
+						dayOffDays.Remove(existingDayOff);
+						continue;
+					}
 
                     try
                     {
