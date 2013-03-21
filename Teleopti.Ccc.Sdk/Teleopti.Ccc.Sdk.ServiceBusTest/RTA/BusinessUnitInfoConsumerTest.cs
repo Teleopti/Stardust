@@ -43,10 +43,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
             message.Timestamp = period.StartDateTime;
             message.BusinessUnitId = bussinessUnit.Id.GetValueOrDefault();
 
-            var personList = new List<Guid>();
-            personList.Add(person.Id.GetValueOrDefault());
+            var personList = new List<Guid> {person.Id.GetValueOrDefault()};
 
-            Expect.Call(statisticRepository.PersonIdsWithExternalLogOn(Guid.Empty)).Return(personList);
+	        Expect.Call(statisticRepository.PersonIdsWithExternalLogOn(Guid.Empty)).IgnoreArguments().Return(personList);
             
             mocks.ReplayAll();
             target.Consume(message);
