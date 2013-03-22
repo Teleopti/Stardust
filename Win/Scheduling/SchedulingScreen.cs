@@ -2066,7 +2066,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			toolStripMenuItemWriteProtectSchedule.Enabled = toolStripMenuItemWriteProtectSchedule2.Enabled = isPermittedToWriteProtect();
 
-			ToolStripMenuItemRequests.Enabled = _scenario.DefaultScenario;
+			//ToolStripMenuItemRequests.Enabled = _scenario.DefaultScenario;
 
 			toolStripMenuItemViewHistory.Enabled = false;
 			if (_scenario.DefaultScenario)
@@ -4669,13 +4669,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 			toolStripButtonRequestView.Tag = ZoomLevel.Level6;
 			toolStripButtonRestrictions.Tag = ZoomLevel.Level7;
 
-			toolStripMenuItemDayView.Tag = ZoomLevel.Level1;
-			toolStripMenuItemWeekView.Tag = ZoomLevel.Level2;
-			toolStripMenuItemDetailView.Tag = ZoomLevel.Level3;
-			toolStripMenuItemPeriodView.Tag = ZoomLevel.Level4;
-			toolStripMenuItemViewOver.Tag = ZoomLevel.Level5;
-			ToolStripMenuItemRequests.Tag = ZoomLevel.Level6;
-			toolStripMenuItemRestriction.Tag = ZoomLevel.Level7;
+			//toolStripMenuItemDayView.Tag = ZoomLevel.Level1;
+			//toolStripMenuItemWeekView.Tag = ZoomLevel.Level2;
+			//toolStripMenuItemDetailView.Tag = ZoomLevel.Level3;
+			//toolStripMenuItemPeriodView.Tag = ZoomLevel.Level4;
+			//toolStripMenuItemViewOver.Tag = ZoomLevel.Level5;
+			//ToolStripMenuItemRequests.Tag = ZoomLevel.Level6;
+			//toolStripMenuItemRestriction.Tag = ZoomLevel.Level7;
 		}
 
 		#region ribbon
@@ -4850,7 +4850,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			toolStripExActions.Visible = true;
 			toolStripExLocks.Visible = true;
 			toolStripButtonFilterAgents.Enabled = true;
-			toolStripMenuItemFilter.Enabled = true;
+			//toolStripMenuItemFilter.Enabled = true;
 			toolStripMenuItemLock.Enabled = true;
 			toolStripMenuItemLoggedOnUserTimeZone.Enabled = true;
 
