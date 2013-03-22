@@ -1,5 +1,5 @@
 ﻿/// <reference path="~/Content/Scripts/jquery-1.9.1.js" />
-/// <reference path="~/Content/jqueryui/jquery-ui-1.10.1.custom.js" />
+/// <reference path="~/Content/jqueryui/jquery-ui-1.10.2.custom.js" />
 /// <reference path="~/Content/Scripts/jquery-1.9.1-vsdoc.js" />
 /// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js" />
@@ -41,11 +41,6 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 
 	//disable navigation controls on ajax-begin
 	function _disablePortalControls() {
-		var dp = $('.datepicker');
-		dp.css("background-position", "right 0");
-		dp.datepicker("destroy");
-
-
 		$('.ui-buttonset').buttonset("option", "disabled", true);
 		$('nav .ui-button').button("option", "disabled", true);
 
@@ -54,14 +49,9 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 
 	//enable navigation controls on ajax-complete
 	function _enablePortalControls(periodRangeSelectorId) {
-		if (periodRangeSelectorId.substring(0, 1) !== "#") {
-			periodRangeSelectorId = "#" + periodRangeSelectorId;
-		}
-
 		$(periodRangeSelectorId + ' .datepicker').css("background-position", "right -120px");
 		$('.ui-buttonset').buttonset("option", "disabled", false);
 		$('.ui-button').button("option", "disabled", false);
-		$('.selected-date-period').css({ opacity: 1 });
 	}
 
 	function _datePickerPartsToFixedDate(year, month, day) {
@@ -298,7 +288,7 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 				});
 
 				range.find('.datepicker')
-					.datepicker('setDate', common.ParseToDate(periodData.Date));
+					.datepicker('viewDate', moment(common.ParseToDate(periodData.Date)));
 
 				var nextPeriod = periodData.PeriodNavigation.NextPeriod;
 				var prevPeriod = periodData.PeriodNavigation.PrevPeriod;

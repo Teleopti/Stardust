@@ -459,22 +459,6 @@ button.icon-left{padding-left: 35px;}
 #toolbar-right{width: 253px;}
 .toolbar-inner{background-position: right -35px; font-size: 9px; height: 21px; padding: 7px;}
 
-.date-range-selector .datepicker{
-	 background: #fff url(../Images/button_sprite.png) right -120px no-repeat; 
-	 border: 0px;
-	 cursor: pointer;
-	 color: #fff;
-	 font-size: 0;
-	 height: 18px; 
-	 text-indent: -9999px;
-	 margin-left: -5px; 
-	 width: 180px;
-	padding-top: 1px;
-}
-.ie9 .date-range-selector .datepicker, .ie8 .date-range-selector .datepicker{ margin-top: -2px;}
-.ie7 .date-range-selector .datepicker{ margin-top: -8px;}
-.date-range-selector .selected-date-period{margin-top: -16px; margin-left: -15px;}
-
 /*Edit section*/
 .edit-section{
 	background: transparent url(../Images/edit_section_bg_bottom.png) bottom left repeat-x;

@@ -1,5 +1,5 @@
 ﻿/// <reference path="~/Content/Scripts/jquery-1.9.1.js" />
-/// <reference path="~/Content/jqueryui/jquery-ui-1.10.1.custom.js" />
+/// <reference path="~/Content/jqueryui/jquery-ui-1.10.2.custom.js" />
 /// <reference path="~/Content/Scripts/jquery-1.9.1-vsdoc.js" />
 /// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Portal.js" />
@@ -23,9 +23,7 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 	var editFormViewModel = null;
 
 	function _initPeriodSelection() {
-		var rangeSelectorId = '#StudentAvailabilityDateRangeSelector';
-		var periodData = $('#StudentAvailability-body').data('mytime-periodselection');
-		Teleopti.MyTimeWeb.Portal.InitPeriodSelection(rangeSelectorId, periodData);
+		
 	}
 
 	function _initViewModels() {

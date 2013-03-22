@@ -20,12 +20,12 @@
         <form class="navbar-form pull-left">
             <div class="input-append input-prepend">
                 <button class="btn"><i class="icon-arrow-left"></i></button>
-                <input type="text" class="span2 datepicker"/>
+                <input type="text" class="span2" data-bind="datepicker: selectedDate, datepickerOptions: {autoHide: true}" />
                 <button class="btn"><i class="icon-arrow-right"></i></button>
             </div>
         </form>
         <ul class="nav">
-            <li><a href="#">@Resources.Today</a></li>
+            <li><a href="#" data-bind="click: today">@Resources.Today</a></li>
         </ul>
     </div>
 </div>

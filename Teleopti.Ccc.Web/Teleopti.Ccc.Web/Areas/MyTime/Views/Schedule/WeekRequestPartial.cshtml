@@ -47,7 +47,7 @@
 		</div>
 	</div>
 	<div class="edit-module-element floatleft">
-		<input id="Schedule-addRequest-fromDate-input" class="date-input" type="text" />
+		<input id="Schedule-addRequest-fromDate-input" type="text" data-bind="datepicker: requestViewModel.FromDate, datepickerOptions: {autoHide: true}" />
 	</div>
 	<div id="Schedule-addRequest-fromTime" class="edit-module-element floatleft">
 		<label class="displayblock" for="Schedule-addRequest-fromTime-input-input">@Resources.Time</label>
@@ -59,7 +59,7 @@
 		</select>
 	</div>
 	<div class="edit-module-element clearleftfloat floatleft">
-		<input id="Schedule-addRequest-toDate-input" class="date-input" type="text" />
+		<input id="Schedule-addRequest-toDate-input" type="text" data-bind="datepicker: requestViewModel.ToDate, datepickerOptions: {autoHide: true}" />
 	</div>
 	<div id="Schedule-addRequest-toTime" class="edit-module-element floatleft">
 		<label class="displayblock" for="Schedule-addRequest-toTime-input-input">@Resources.Time</label>
@@ -71,7 +71,7 @@
 		</select>
 	</div>
 	<span class="edit-module-element clearleftfloat floatleft">
-		<input class="clearleftfloat floatleft" type="checkbox" id="Fullday-check" data-bind="checked:IsFullDay"/>
+		<input class="clearleftfloat floatleft" type="checkbox" id="Fullday-check" data-bind="checked:requestViewModel.IsFullDay"/>
 		<label class="floatleft pdl5" for="Fullday-check">
 			@Resources.FullDay
 		</label>

@@ -1,5 +1,5 @@
 ﻿/// <reference path="~/Content/Scripts/jquery-1.9.1.js" />
-/// <reference path="~/Content/jqueryui/jquery-ui-1.10.1.custom.js" />
+/// <reference path="~/Content/jqueryui/jquery-ui-1.10.2.custom.js" />
 /// <reference path="~/Content/Scripts/jquery-1.9.1-vsdoc.js" />
 /// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
 /// <reference path="Teleopti.MyTimeWeb.Common.js"/>
@@ -219,9 +219,9 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 
 	function _fillFormData(data) {
 		$('#Request-detail-subject-input').val(data.Subject);
-		$('#Request-detail-fromDate-input').datepicker("setDate", new Date(data.DateFromYear, data.DateFromMonth - 1, data.DateFromDayOfMonth));
+		$('#Request-detail-fromDate-input').datepicker("viewDate", moment(new Date(data.DateFromYear, data.DateFromMonth - 1, data.DateFromDayOfMonth)));
 		$('#Request-detail-fromTime-input-input').val(data.RawTimeFrom);
-		$('#Request-detail-toDate-input').datepicker("setDate", new Date(data.DateToYear, data.DateToMonth - 1, data.DateToDayOfMonth));
+		$('#Request-detail-toDate-input').datepicker("viewDate", moment(new Date(data.DateToYear, data.DateToMonth - 1, data.DateToDayOfMonth)));
 		$('#Request-detail-toTime-input-input').val(data.RawTimeTo);
 		$('#Request-detail-message-input').val(data.Text);
 		$('#Request-detail-entityid').val(data.Id);

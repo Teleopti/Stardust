@@ -1,5 +1,5 @@
 ﻿/// <reference path="~/Content/Scripts/jquery-1.9.1.js" />
-/// <reference path="~/Content/jqueryui/jquery-ui-1.10.1.custom.js" />
+/// <reference path="~/Content/jqueryui/jquery-ui-1.10.2.custom.js" />
 /// <reference path="~/Content/Scripts/jquery-1.9.1-vsdoc.js" />
 /// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
 /// <reference path="~/Content/Scripts/date.js" />
@@ -20,11 +20,7 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 	var completelyLoaded = function () { };
 
 	function _initPeriodSelection() {
-		var rangeSelectorId = '#TeamScheduleDateRangeSelector';
-		var periodData = $('#TeamSchedule-body').data('mytime-periodselection');
-		var teamId = $('#TeamSchedule-body').data('mytime-teamselection');
-		var actionSuffix = "/" + teamId;
-		portal.InitPeriodSelection(rangeSelectorId, periodData, actionSuffix);
+		
 	}
 
 	function _initTeamPicker() {

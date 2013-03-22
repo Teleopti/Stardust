@@ -26,7 +26,14 @@
                     @foreach (var navSection in Model.NavigationItems)
                     {
                         <li>
-                            <a href="@string.Format("#{0}Tab", navSection.Controller)" data-mytime-action="@Html.Portal().GetAction(navSection)"@(navSection.PayAttention ? @Html.Raw("class=\"asm-new-message-indicator\"") : @Html.Raw(""))>@(navSection.UnreadMessageCount > 0 ? string.Format("{0} ({1})", navSection.Title, navSection.UnreadMessageCount) : navSection.Title)</a>
+                            @if (navSection.UnreadMessageCount>0)
+                            {
+                                <a href="@string.Format("#{0}Tab", navSection.Controller)" data-mytime-action="@Html.Portal().GetAction(navSection)"@(navSection.PayAttention ? @Html.Raw("class=\"asm-new-message-indicator \"") : @Html.Raw(""))>@navSection.Title <span class="badge badge-important">@navSection.UnreadMessageCount</span></a>
+                            }
+                            else
+                            {
+                                <a href="@string.Format("#{0}Tab", navSection.Controller)" data-mytime-action="@Html.Portal().GetAction(navSection)">@navSection.Title</a>
+                            }
                         </li>
                     }
                 </ul>
