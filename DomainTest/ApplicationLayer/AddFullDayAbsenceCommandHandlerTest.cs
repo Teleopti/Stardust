@@ -7,6 +7,7 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
@@ -19,14 +20,10 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
 		public void ShouldRaiseFullDayAbsenceAddedEvent()
 		{
-			var person = new Person();
-			person.SetId(Guid.NewGuid());
+			var person = TestEntityFactory.Make<Person>();
 			var personRepository = new WriteSideRepository<IPerson> {person};
-
-			var absence = new Absence();
-			absence.SetId(Guid.NewGuid());
-			var absenceRepository = new WriteSideRepository<IAbsence> {absence};
-
+			var absence = TestEntityFactory.Make<Absence>();
+			var absenceRepository = new WriteSideRepository<IAbsence> { absence };
 			var personAbsenceRepository = new WriteSideRepository<IPersonAbsence>();
 
 			var command = new AddFullDayAbsenceCommand
@@ -46,7 +43,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		}
 	}
 
-	
+	public static class TestEntityFactory
+	{
+		public static T Make<T>()
+		{
+			var entity = Activator.CreateInstance<T>() as Entity;
+			entity.SetId(Guid.NewGuid());
+			return (T) (object) entity;
+		}
+	}
 
 	public class TestCurrentScenario : ICurrentScenario
 	{
