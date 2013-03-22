@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Transactions;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Helper;
@@ -133,6 +134,32 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				Flush();
 
 				modifiedRoots = new List<IRootChangeInfo>(Interceptor.ModifiedRoots);
+
+				//modifiedRoots.ForEach(r =>
+				//	{
+				//		var events = r.PopAllMyEvents();
+				//		var eventType = getTypeSomeHow(r.Root.Name + r.Status.ToString());
+				//		if (!eventType)
+				//			return;
+				//		var @event = Activator.CreateInstance(eventType, r.Root);
+				//		_eventsHandlerThingy.Handle(@event);
+
+				//		// _eventsHandlerThingy == SyncEventRunnerThing / SyncSaveEventToQueueThing
+
+				//		// SyncSaveEventToQueueThing
+				//		// serialize and insert
+
+				//		// SyncEventRunnerThing 
+				//		var eventType = typeof(@event);
+				//		var handlerType = getHandlerType(IHandle<eventType>);
+				//		var handlers = ioc.Resolve(handlerType);
+				//		handlers.ForEach(h =>
+				//		{
+				//			h.Handle(@event);
+				//		});
+
+				//	});
+
 				callDenormalizers(modifiedRoots);
 				if (Transaction.Current == null)
 				{
