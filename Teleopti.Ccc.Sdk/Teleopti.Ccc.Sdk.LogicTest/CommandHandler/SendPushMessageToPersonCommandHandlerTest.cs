@@ -61,9 +61,9 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			{
 				var command = new SendPushMessageToPeopleCommandDto();
 				command.Recipients.Add(person.Id.GetValueOrDefault());
-				var result = target.Handle(command);
-				result.AffectedItems.Should().Be.EqualTo(1);
-				result.AffectedId.Should().Be.EqualTo(messageId);
+				target.Handle(command);
+				command.Result.AffectedItems.Should().Be.EqualTo(1);
+				command.Result.AffectedId.Should().Be.EqualTo(messageId);
 			}
 		}
 
@@ -129,9 +129,9 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			{
 				var command = new SendPushMessageToPeopleCommandDto();
 				command.Recipients.Add(personId);
-				var result = target.Handle(command);
-				result.AffectedItems.Should().Be.EqualTo(0);
-				result.AffectedId.HasValue.Should().Be.False();
+				target.Handle(command);
+				command.Result.AffectedItems.Should().Be.EqualTo(0);
+				command.Result.AffectedId.HasValue.Should().Be.False();
 			}
 		}
 

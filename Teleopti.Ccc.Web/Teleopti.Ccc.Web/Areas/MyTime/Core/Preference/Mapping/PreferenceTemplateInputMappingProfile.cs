@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				;
 
 			CreateMap<PreferenceTemplateInput, IPreferenceRestrictionTemplate>()
-				.ConstructUsing(s => new PreferenceRestrictionTemplate())
+				.ConstructUsing((ResolutionContext s) => new PreferenceRestrictionTemplate())
 				.ForMember(d => d.ShiftCategory, o => o.MapFrom(s => s.PreferenceId != null ? _shiftCategoryRepository.Invoke().Get(s.PreferenceId.Value) : null))
 				.ForMember(d => d.Absence, o => o.MapFrom(s => s.PreferenceId != null ? _absenceRepository.Invoke().Get(s.PreferenceId.Value) : null))
 				.ForMember(d => d.DayOffTemplate, o => o.MapFrom(s => s.PreferenceId != null ? _dayOffRepository.Invoke().Get(s.PreferenceId.Value) : null))
