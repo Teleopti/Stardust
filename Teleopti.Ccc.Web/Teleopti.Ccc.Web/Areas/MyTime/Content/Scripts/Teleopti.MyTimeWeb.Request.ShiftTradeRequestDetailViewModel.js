@@ -53,7 +53,7 @@ Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
 			type: "GET",
 			success: function (data) {
 			    var numberOfShownHours = data.TimeLineHours.length;
-			    console.log('numberOfShownHours: ' + numberOfShownHours);
+			    //console.log('numberOfShownHours: ' + numberOfShownHours);
 				var showNumberRatio = Math.floor(numberOfShownHours / 12);
 				self.pixelPerMinute(72 / (numberOfShownHours * 10));
 				self.hours.removeAll();
