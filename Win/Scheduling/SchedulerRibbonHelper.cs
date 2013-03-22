@@ -1,14 +1,13 @@
 ﻿using System.Windows.Forms;
-using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common.Controls;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Scheduling
 {
-	public class SchedulerRibbonHelper
+	public static class SchedulerRibbonHelper
 	{
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
 		public static void InstantiateEditControl(EditControl editControl)
 		{
 			editControl.ToolStripButtonNew.Text = Resources.Add;
@@ -42,7 +41,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "5"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "6")]
-		public static void EnableRibbonControls(ToolStrip clipboard, ToolStrip edit, ToolStrip actions, ToolStrip locks, ToolStripButton filterAgents, ToolStripMenuItem lockMenuItem, ToolStripMenuItem loggedOnUserTimeZone, SchedulingScreen.ZoomLevel level)
+		public static void EnableRibbonControls(ToolStrip clipboard, ToolStrip edit, Control actions, Control locks, ToolStripItem filterAgents, ToolStripItem lockMenuItem, ToolStripItem loggedOnUserTimeZone, SchedulingScreen.ZoomLevel level)
 		{
 			clipboard.Visible = true;
 			edit.Visible = true;

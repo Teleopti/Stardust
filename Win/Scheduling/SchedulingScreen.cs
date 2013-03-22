@@ -7076,6 +7076,16 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			((AgentRestrictionsDetailView)_scheduleView).DeleteSelectedRestrictions(_undoRedo, _defaultScheduleTag);
 		}
+
+		private void addPreferenceToolStripMenuItemClick(object sender, EventArgs e)
+		{
+
+		}
+
+		private void addStudentAvailabilityToolStripMenuItemClick(object sender, EventArgs e)
+		{
+
+		}
 	}
 }
 //Cake-in-the-kitchen if* this reaches 5000! 
