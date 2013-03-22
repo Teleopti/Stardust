@@ -7,30 +7,32 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 {
 	public class AddFullDayAbsenceCommandHandler : IHandleCommand<AddFullDayAbsenceCommand>
 	{
-		//private readonly IPersonRepository _personRepository;
-		//private readonly IScenarioRepository _scenarioRepository;
-		//private readonly IAbsenceRepository _absenceRepository;
-		//private readonly IPersonAbsenceRepository _personAbsenceRepository;
+		private readonly ICurrentScenario _scenario;
+		private readonly IWriteSideRepository<IPerson> _personRepository;
+		private readonly IWriteSideRepository<IAbsence> _absenceRepository;
+		private readonly IWriteSideRepository<IPersonAbsence> _personAbsenceRepository;
 
-		//public AddFullDayAbsenceCommandHandler(IPersonRepository personRepository, IScenarioRepository scenarioRepository, IAbsenceRepository absenceRepository, IPersonAbsenceRepository personAbsenceRepository)
-		//{
-		//	_personRepository = personRepository;
-		//	_scenarioRepository = scenarioRepository;
-		//	_absenceRepository = absenceRepository;
-		//	_personAbsenceRepository = personAbsenceRepository;
-		//}
-
+		public AddFullDayAbsenceCommandHandler(ICurrentScenario scenario, IWriteSideRepository<IPerson> personRepository, IWriteSideRepository<IAbsence> absenceRepository, IWriteSideRepository<IPersonAbsence> personAbsenceRepository)
+		{
+			_scenario = scenario;
+			_personRepository = personRepository;
+			_absenceRepository = absenceRepository;
+			_personAbsenceRepository = personAbsenceRepository;
+		}
+		
 		public void Handle(AddFullDayAbsenceCommand command)
 		{
-			//var person = _personRepository.Get(command.PersonId);
-			//var absence = _absenceRepository.Get(command.AbsenceId);
+			var person = _personRepository.Get(command.PersonId);
+			var absence = _absenceRepository.Get(command.AbsenceId);
 
 			//var startDate = TimeZoneInfo.ConvertTime(command.StartDate, person.PermissionInformation.DefaultTimeZone(), TimeZoneInfo.Utc);
-			//var endDate = TimeZoneInfo.ConvertTime(command.EndDate.AddDays(1), person.PermissionInformation.DefaultTimeZone(), TimeZoneInfo.Utc);
+			//var endDate = TimeZoneInfo.ConvertTime(command.EndDate, person.PermissionInformation.DefaultTimeZone(), TimeZoneInfo.Utc);
 
-			//var absenceLayer = new AbsenceLayer(absence, new DateTimePeriod(startDate, endDate));
-			//var personAbsence = new PersonAbsence(person, _scenarioRepository.LoadDefaultScenario(), absenceLayer);
-			//_personAbsenceRepository.Add(personAbsence);
+			var personAbsence = new PersonAbsence(_scenario.Current());
+			personAbsence.FullDayAbsence(person, absence, command.StartDate, command.EndDate);
+
+			_personAbsenceRepository.Add(personAbsence);
+
 		}
 	}
 }

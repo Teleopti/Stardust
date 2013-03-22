@@ -120,6 +120,7 @@
     <Compile Include="Analytics\BaseConfiguration.cs" />
     <Compile Include="ApplicationLayer\AddFullDayAbsenceCommand.cs" />
     <Compile Include="ApplicationLayer\AddFullDayAbsenceCommandHandler.cs" />
+    <Compile Include="ApplicationLayer\Event.cs" />
     <Compile Include="Auditing\AuditSetting.cs" />
     <Compile Include="Auditing\Revision.cs" />
     <Compile Include="Auditing\ScheduleAuditingReportData.cs" />
@@ -442,6 +443,7 @@
     <Compile Include="Scheduling\DayOffTemplateSorter.cs" />
     <Compile Include="Scheduling\DeletedDescription.cs" />
     <Compile Include="Scheduling\EmptyScheduleDayChangeCallback.cs" />
+    <Compile Include="ApplicationLayer\FullDayAbsenceAddedEvent.cs" />
     <Compile Include="Scheduling\LoadScheduleByPersonSpecification.cs" />
     <Compile Include="Scheduling\Meetings\AllLayersAreInWorkTimeSpecification.cs" />
     <Compile Include="Scheduling\Meetings\IChangeTracker.cs" />

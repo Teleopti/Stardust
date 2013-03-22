@@ -8,6 +8,7 @@ namespace Teleopti.Interfaces.Domain
     /// </summary>
     public interface IPersonAbsence : IPersistableScheduleData, 
                                         IChangeInfo,
+										IAggregateRootWithEvents,
                                         IVisualLayerFactoryFactory,
                                         ICloneableEntity<IPersonAbsence>
     {
@@ -40,4 +41,5 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         DateTime? LastChange { get; set; }
     }
+
 }

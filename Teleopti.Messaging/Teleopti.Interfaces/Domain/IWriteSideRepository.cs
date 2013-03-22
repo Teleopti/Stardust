@@ -1,0 +1,32 @@
+using System;
+
+namespace Teleopti.Interfaces.Domain
+{
+	/// <summary>
+	/// Generic interface for write side repositorys
+	/// </summary>
+	/// <typeparam name="T"></typeparam>
+	public interface IWriteSideRepository<T>
+	{
+
+		/// <summary>
+		/// Adds the specified entity to repository.
+		/// </summary>
+		/// <param name="entity">The entity.</param>
+		void Add(T entity);
+
+
+		/// <summary>
+		/// Removes the specified entity from repository.
+		/// </summary>
+		/// <param name="entity">The entity.</param>
+		void Remove(T entity);
+
+		/// <summary>
+		/// Gets entity for the id.
+		/// </summary>
+		/// <param name="id">The id.</param>
+		/// <returns></returns>
+		T Get(Guid id);
+	}
+}
