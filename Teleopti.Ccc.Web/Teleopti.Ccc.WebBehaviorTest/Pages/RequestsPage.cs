@@ -145,7 +145,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		public SpanCollection ShiftTradeDetailsToScheduleLayers
 		{
-			get { return Document.Divs.Filter(QuicklyFind.ByClass("shift-trade-swap-detail-schedule")).Skip(1).First().Spans.Filter(QuicklyFind.ByClass("shift-trade-layer")); }
+			get { return Document.Divs.Filter(QuicklyFind.ByClass("shift-trade-swap-detail-schedule-to")).First().Spans.Filter(QuicklyFind.ByClass("shift-trade-layer")); }
 		}
 
 		public TextField AddShiftTradeDatePicker
