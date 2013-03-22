@@ -116,7 +116,16 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 	        self.selectedDate.subscribe(function(d) {
 	            Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(d.format('YYYY-MM-DD')));
 	        });
+		};
+
+	    self.nextWeek = function() {
+	        self.selectedDate(self.nextWeekDate());
 	    };
+
+	    self.previousWeek = function () {
+	        self.selectedDate(self.previousWeekDate());
+	    };
+	    
 		self.today = function () {
 		    Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week");
 		};
