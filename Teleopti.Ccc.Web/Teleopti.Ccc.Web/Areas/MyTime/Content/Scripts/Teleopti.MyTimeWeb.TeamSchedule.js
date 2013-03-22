@@ -14,10 +14,11 @@ if (typeof (Teleopti) === 'undefined') {
 
 Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 
+	var toolBarViewModel = null;
 	var portal = Teleopti.MyTimeWeb.Portal;
 	var readyForInteraction = function () { };
 	var completelyLoaded = function () { };
-
+	
 	function _initPeriodSelection() {
 		var rangeSelectorId = '#TeamScheduleDateRangeSelector';
 		var periodData = $('#TeamSchedule-body').data('mytime-periodselection');
@@ -26,6 +27,13 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 		portal.InitPeriodSelection(rangeSelectorId, periodData, actionSuffix);
 	}
 
+	function _initViewModel() {
+		toolBarViewModel = new (function() {
+			this.SeperatorVisible = ko.observable(false);
+		})();
+		ko.applyBindings(toolBarViewModel, $("#TeamScheduleTab")[0]);
+	}
+	
 	function _initTeamPicker() {
 		$('#Team-Picker').on("change", function (e) {
 			var tid;
@@ -36,7 +44,6 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 			}
 			_navigateTo(_currentFixedDate(), tid);
 		});
-
 	}
 
 	function _initTeamPickerSelection() {
@@ -53,6 +60,7 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 					containerCss = "team-select2-container team-select2-container-hidden";
 				} else {
 					containerCss = "team-select2-container";
+					toolBarViewModel.SeperatorVisible(true);
 				}
 				$('#Team-Picker').select2(
 					{
@@ -116,6 +124,7 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 		Init: function () {
 			portal.RegisterPartialCallBack('TeamSchedule/Index', Teleopti.MyTimeWeb.TeamSchedule.TeamSchedulePartialInit);
 			_initTeamPicker();
+			_initViewModel();
 		},
 		TeamSchedulePartialInit: function (readyForInteractionCallback, completelyLoadedCallback) {
 			readyForInteraction = readyForInteractionCallback;
