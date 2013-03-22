@@ -969,4 +969,13 @@
   <data name="ResSignOut" xml:space="preserve">
     <value>Logout</value>
   </data>
+  <data name="ResShiftStartDateColon" xml:space="preserve">
+    <value>Data (início dos turnos):</value>
+  </data>
+  <data name="ResShiftStartDateFromColon" xml:space="preserve">
+    <value>Data Inicial (início dos turnos):</value>
+  </data>
+  <data name="ResShiftStartDateToColon" xml:space="preserve">
+    <value>Data Final (início dos turnos):</value>
+  </data>
 </root>

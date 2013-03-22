@@ -11314,13 +11314,13 @@ These options are activated:
     <comment>Name must not be empty or longer than 50 characters.</comment>
   </data>
   <data name="InsufficientStaffingDays" xml:space="preserve">
-    <value>Insufficient understaffing for : </value>
+    <value>Insufficient staffing for : </value>
   </data>
   <data name="InsufficientStaffingHours" xml:space="preserve">
-    <value>Insufficient understaffing on : {0} at </value>
+    <value>Insufficient staffing on : {0} at </value>
   </data>
   <data name="NoBudgetDefineForSomeRequestedDays" xml:space="preserve">
-    <value>One or more days during this requested period {0} has no budget.</value>
+    <value>One or more days during this requested period {0} has no budget allowance.</value>
     <comment>One or more days during requested period has no budget.</comment>
   </data>
   <data name="NoBudgetForThisPeriod" xml:space="preserve">
@@ -11342,10 +11342,7 @@ These options are activated:
     <value>Your Request has been denied. Day not open for requests. Next open date is {0}.</value>
   </data>
   <data name="SeriousUnderStaffingHours" xml:space="preserve">
-    <value>Critical Under Staffing on : {0} at </value>
-  </data>
-  <data name="SkillUnderStaffingValidationError" xml:space="preserve">
-    <value>The request failed the understaffing validation for skill {0}. Since it would bring the needed number of resources below the required threshold.</value>
+    <value>Critical Understaffing on : {0} at </value>
   </data>
   <data name="CurrentNumberOfShifts" xml:space="preserve">
     <value>Current number of shifts:  </value>

@@ -44,8 +44,8 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
                                    "my description", _activity, _scenario);
             _meeting.StartDate = new DateOnly(2009,10,14);
             _meeting.EndDate = new DateOnly(2009, 10, 16);
-            _meeting.StartTime = TimeSpan.FromHours(23);
-            _meeting.EndTime = TimeSpan.FromHours(25);
+            _meeting.StartTime = TimeSpan.FromHours(8);
+            _meeting.EndTime = TimeSpan.FromHours(10);
             _meeting.SetId(Guid.NewGuid());
             _commonNameSetting = new CommonNameDescriptionSetting("{LastName}, {FirstName}");
 
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             Assert.AreEqual(_meeting.StartDate,_target.StartDate);
 			Assert.AreEqual(_meeting.StartDate, _target.EndDate);
             Assert.AreEqual(_meeting.EndDate, _target.RecurringEndDate);
-            Assert.AreEqual(TimeSpan.FromHours(1), _target.EndTime);
+            Assert.AreEqual(TimeSpan.FromHours(10), _target.EndTime);
             Assert.AreEqual(_meeting.StartTime, _target.StartTime);
             Assert.AreEqual(_meeting.MeetingDuration(),_target.MeetingDuration);
             Assert.AreEqual(_meeting,_target.OriginalMeeting);
@@ -96,14 +96,14 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             Assert.AreEqual(_target.Meeting.StartTime, _target.StartTime);
             _propertyChanged = false;
 
-            _target.MeetingDuration = TimeSpan.FromHours(2);
+            _target.MeetingDuration = TimeSpan.FromHours(3);
             Assert.IsTrue(_propertyChanged);
             Assert.AreEqual(_target.Meeting.EndTime, _target.EndTime);
             _propertyChanged = false;
 
             _target.EndTime = TimeSpan.FromHours(2);
             Assert.IsTrue(_propertyChanged);
-            Assert.AreEqual(_target.Meeting.EndTime.Add(TimeSpan.FromDays(-1)), _target.EndTime);
+            Assert.That(_target.Meeting.EndTime,Is.EqualTo(TimeSpan.FromHours(23)));
             _propertyChanged = false;
 
             _target.RecurringEndDate = _target.Meeting.StartDate.AddDays(-2);
@@ -112,14 +112,13 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         }
 
         [Test]
-        public void VerifyCannotCreateMeetingLongerThan24Hours()
+        public void VerifyCannotCreateMeetingOverMidnight()
         {
             _target.EndTime = TimeSpan.FromHours(22.5);
-            Assert.AreEqual(TimeSpan.FromHours(23.5), _target.MeetingDuration);
+            Assert.AreEqual(TimeSpan.FromHours(14.5), _target.MeetingDuration);
 
             _target.StartTime = TimeSpan.FromHours(22);
-            Assert.AreEqual(TimeSpan.FromMinutes(30),_target.MeetingDuration);
-            Assert.AreEqual(TimeSpan.FromMinutes(30), _target.Meeting.MeetingDuration());
+			Assert.That(_target.MeetingDuration, Is.EqualTo( new TimeSpan(1,59,0)));
         }
 
         [Test]

@@ -8633,4 +8633,67 @@ Teleopti P&amp;D
   <data name="YouHaveToSelectAtLeastOneWorkload" xml:space="preserve">
     <value>Você deve selecionar pelo menos uma carga de trabalho</value>
   </data>
+  <data name="NotReadyTime" xml:space="preserve">
+    <value>Tempo Indisponível</value>
+  </data>
+  <data name="MySchedule" xml:space="preserve">
+    <value>Minha Agenda</value>
+  </data>
+  <data name="DataHasBeenDeleted" xml:space="preserve">
+    <value>Erro ao salvar as suas alterações. A razão mais provável é que você ou algum outro usuário excluiu os dados que você alterou. Para preservar a consistência dos dados, essa janela será fechada. Infelizmente as alterações que você fez foram perdidas.</value>
+  </data>
+  <data name="ResShiftStartDateColon" xml:space="preserve">
+    <value>Data (início dos turnos):</value>
+  </data>
+  <data name="NoAgentsAvailableForShiftTrade" xml:space="preserve">
+    <value>Nenhum agente está disponível para troca de turnos.</value>
+  </data>
+  <data name="ResShiftStartDateFromColon" xml:space="preserve">
+    <value>Data Inicial (início dos turnos):</value>
+  </data>
+  <data name="ResShiftStartDateToColon" xml:space="preserve">
+    <value>Data Final (início dos turnos):</value>
+  </data>
+  <data name="Little" xml:space="preserve">
+    <value>Pouco</value>
+  </data>
+  <data name="Medium" xml:space="preserve">
+    <value>Médio</value>
+  </data>
+  <data name="Much" xml:space="preserve">
+    <value>Muito</value>
+  </data>
+  <data name="QuickForecast" xml:space="preserve">
+    <value>Previsão Rápida</value>
+  </data>
+  <data name="SeasonalityDataRange" xml:space="preserve">
+    <value>Sazonalidade e tendências no conjunto de dados</value>
+  </data>
+  <data name="SmoothingStyleColon" xml:space="preserve">
+    <value>Estilo de suavização:</value>
+  </data>
+  <data name="TemplatesHistoricalDataRange" xml:space="preserve">
+    <value>Templates do conjunto de dados históricos</value>
+  </data>
+  <data name="ShowInfoMessages" xml:space="preserve">
+    <value>Mostrar Mensagens Informativas</value>
+  </data>
+  <data name="Errors" xml:space="preserve">
+    <value>Erros</value>
+  </data>
+  <data name="TheQuickForecatWillStartInBackgroundMessage" xml:space="preserve">
+    <value>O processo de previsão rápida será executado como uma tarefa em segundo plano assim que esse assistente for finalizado. Por favor acesse o Histórico de Tarefas para verificar o seu status.</value>
+  </data>
+  <data name="CannotDisplayScheduleWhenShiftTradeStatusIsNew" xml:space="preserve">
+    <value>Não foi possível mostrar a agenda quando o status da solicitação de troca de turnos é nova ou aprovada.</value>
+  </data>
+  <data name="NewTemplateName" xml:space="preserve">
+    <value>Nome do Novo Template</value>
+  </data>
+  <data name="EmptyTemplateName" xml:space="preserve">
+    <value>O nome do template de preferência está vazio</value>
+  </data>
+  <data name="Name50CharactersLimit" xml:space="preserve">
+    <value>O nome não pode estar vazio ou ser maior do que 50 caracteres.</value>
+  </data>
 </root>

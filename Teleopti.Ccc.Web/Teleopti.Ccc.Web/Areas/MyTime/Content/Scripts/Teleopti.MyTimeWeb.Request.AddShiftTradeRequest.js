@@ -70,9 +70,11 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 			});
 			if (agent != null) {
 				agent.isVisible(true);
+				//rk - don't really like to put DOM stuff here...
+				$('html').scrollTop();
 			}
 			self.agentChoosed(agent);
-			self.clearInputForm();
+			self.clearInputForm(); 
 		};
 
 		self.clearInputForm = function () {
