@@ -61,7 +61,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 					.As<IRuleSetProjectionEntityService>()
 				.For<WorkShiftWorkTime>()
 					.CacheMethod(m => m.CalculateMinMax(null, null))
-					.PerInstance()
 					.As<IWorkShiftWorkTime>();
 		}
 	}
