@@ -49,7 +49,6 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 
 	//enable navigation controls on ajax-complete
 	function _enablePortalControls(periodRangeSelectorId) {
-		$(periodRangeSelectorId + ' .datepicker').css("background-position", "right -120px");
 		$('.ui-buttonset').buttonset("option", "disabled", false);
 		$('.ui-button').button("option", "disabled", false);
 	}
@@ -265,7 +264,7 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 			return currentFixedDate;
 		},
 		InitPeriodSelection: function (rangeSelectorId, periodData, actionSuffix) {
-			var common = Teleopti.MyTimeWeb.Common;
+			/*var common = Teleopti.MyTimeWeb.Common;
 			var range = $(rangeSelectorId);
 			var actionPrefix = range.data('mytime-action');
 			actionSuffix = actionSuffix || '';
@@ -310,7 +309,7 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 					;
 
 				_enablePortalControls(rangeSelectorId);
-			}
+			}*/
 
 		}
 	};

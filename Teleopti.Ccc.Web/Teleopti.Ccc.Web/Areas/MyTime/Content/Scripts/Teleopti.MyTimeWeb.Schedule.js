@@ -67,7 +67,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 				tip: true
 			}
 		});
-	    $('.datepicker').datepicker();
+	    //$('.datepicker').datepicker();
 	}
 
 	function _bindData(data) {
@@ -104,7 +104,19 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.styles = ko.observable();
 		self.minDate = ko.observable(moment());
 		self.maxDate = ko.observable(moment());
+
+		self.displayDate = ko.observable();
+		self.nextWeekDate = ko.observable(moment());
+		self.previousWeekDate = ko.observable(moment());
+
 		self.selectedDate = ko.observable(moment().startOf('day'));
+
+		self.setCurrentDate = function (date) {
+		    self.selectedDate(date);
+	        self.selectedDate.subscribe(function(d) {
+	            Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(d.format('YYYY-MM-DD')));
+	        });
+	    };
 		self.today = function () {
 		    Teleopti.MyTimeWeb.Portal.NavigateTo("Schedule/Week");
 		};
@@ -123,6 +135,11 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			self.periodSelection(JSON.stringify(data.PeriodSelection));
 			self.asmPermission(data.AsmPermission);
 			self.isCurrentWeek(data.IsCurrentWeek);
+			self.displayDate(data.PeriodSelection.Display);
+			self.setCurrentDate(moment(data.PeriodSelection.Date));
+		    self.nextWeekDate(moment(data.PeriodSelection.PeriodNavigation.NextPeriod));
+		    self.previousWeekDate(moment(data.PeriodSelection.PeriodNavigation.PrevPeriod));
+		    
 			var styleToSet = {};
 			$.each(data.Styles, function (key, value) {
 				styleToSet[value.Name] = 'rgb({0})'.format(value.RgbColor);
