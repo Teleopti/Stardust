@@ -1,4 +1,5 @@
 using System.Linq;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
@@ -69,8 +70,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                 if (effectiveRestriction != null && openHoursRestriction != null)
                     effectiveRestriction = effectiveRestriction.Combine(openHoursRestriction);
 
+	            var timeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
                 var restrictionFromSchedules = _scheduleRestrictionExtractor.Extract(dateOnlyList, matrixList,
-                                                                                     schedulingOptions);
+																					 schedulingOptions, timeZone);
                 if (restrictionFromSchedules == null)
                     return null;
                 if (effectiveRestriction != null)

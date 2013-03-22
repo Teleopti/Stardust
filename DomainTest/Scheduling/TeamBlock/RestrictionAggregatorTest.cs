@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 	    private DateOnly _dateOnly;
 	    private IScheduleMatrixPro _scheduleMatrixPro;
 	    private ISuggestedShiftRestrictionExtractor _suggestedShiftRestrictionExtractor;
+	    private TimeZoneInfo _timeZoneInfo;
 
 	    [SetUp]
         public void Setup()
@@ -36,6 +37,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             _mocks = new MockRepository();
             _effectiveRestrictionCreator = _mocks.StrictMock<IEffectiveRestrictionCreator>();
             _schedulingOptions = new SchedulingOptions();
+			_timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("UTC"));
 			_schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
 			_openHoursToRestrictionConverter = _mocks.StrictMock<IOpenHoursToEffectiveRestrictionConverter>();
 			_scheduleRestrictionExtractor = _mocks.StrictMock<IScheduleRestrictionExtractor>();
@@ -90,7 +92,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 		    using (_mocks.Record())
 		    {
-			    Expect.Call(_scheduleMatrixPro.SchedulePeriod).Return(_person1.VirtualSchedulePeriod(_dateOnly));
 			    Expect.Call(_schedulingResultStateHolder.Schedules).Return(scheduleDictionary);
 			    Expect.Call(
 				    _effectiveRestrictionCreator.GetEffectiveRestriction(
@@ -104,7 +105,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			          .Return(secondDay);
 			    Expect.Call(_openHoursToRestrictionConverter.Convert(_teamBlockInfo.TeamInfo.GroupPerson, _teamBlockInfo.BlockInfo.BlockPeriod.DayCollection()))
 			          .Return(openHoursRestriction);
-			    Expect.Call(_scheduleRestrictionExtractor.Extract(dateList, matrixList, _schedulingOptions))
+			    Expect.Call(_scheduleRestrictionExtractor.Extract(dateList, matrixList, _schedulingOptions, _timeZoneInfo)).IgnoreArguments()
 			          .Return(scheduleRestriction);
 		    }
 
@@ -179,7 +180,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			    Expect.Call(_openHoursToRestrictionConverter.Convert(groupPerson,
 			                                                         blockInfo.BlockPeriod.DayCollection()))
 			          .Return(openHoursRestriction);
-			    Expect.Call(_scheduleRestrictionExtractor.Extract(dateList, matrixList, _schedulingOptions))
+			    Expect.Call(_scheduleRestrictionExtractor.Extract(dateList, matrixList, _schedulingOptions, _timeZoneInfo)).IgnoreArguments()
 			          .Return(scheduleRestriction);
 			    Expect.Call(_suggestedShiftRestrictionExtractor.Extract(shift, _schedulingOptions)).Return(shiftRestriction);
 		    }
