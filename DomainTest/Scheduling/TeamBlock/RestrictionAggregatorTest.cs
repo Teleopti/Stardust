@@ -121,6 +121,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		    }
 	    }
 
+        //should check with morning prefrences
+        
 	    [Test]
 	    public void ShouldAggregateRestrictionsPerDay()
 	    {
