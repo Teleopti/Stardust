@@ -702,7 +702,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			updateShiftEditor();
 		}
 
-		public void _editControl_NewClicked(object sender, EventArgs e)
+		private void _editControl_NewClicked(object sender, EventArgs e)
 		{
 			if (PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment))
 				addNewLayer(ClipboardItems.Shift);
