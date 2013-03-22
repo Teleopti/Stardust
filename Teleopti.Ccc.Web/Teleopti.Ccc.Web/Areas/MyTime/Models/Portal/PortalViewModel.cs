@@ -131,25 +131,28 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 		string Color { get; }
 	}
 
-	public interface ISelectOptionGroup
+	public interface ISelectOption
 	{
 		string text { get; }
-		ISelectOption[] children { get; }
+	}
+
+	public interface ISelectOptionGroup : ISelectOption
+	{
+		ISelectOptionItem[] children { get; }
 	}
 
 	public class SelectOptionGroup : ISelectOptionGroup
 	{
 		public string text { get; set; }
-		public ISelectOption[] children { get; set; }
+		public ISelectOptionItem[] children { get; set; }
 	}
 
-	public interface ISelectOption
+	public interface ISelectOptionItem : ISelectOption
 	{
-		string text { get; }
 		string id { get; }
 	}
 
-	public class SelectOption : ISelectOption
+	public class SelectOptionItem : ISelectOptionItem
 	{
 		public string text { get; set; }
 		public string id { get; set; }
