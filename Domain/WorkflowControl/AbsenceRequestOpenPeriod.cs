@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
         private int _absenceRequestProcess;
 
         private static readonly IList<IAbsenceRequestValidator> _staffingThresholdValidatorList =
-            new List<IAbsenceRequestValidator> { new AbsenceRequestNoneValidator(), new StaffingThresholdValidator(), new BudgetGroupAllowanceValidator()};
+            new List<IAbsenceRequestValidator> { new AbsenceRequestNoneValidator(), new StaffingThresholdValidator(), new BudgetGroupAllowanceValidator(), new BudgetGroupHeadCountValidator()};
 
         private static readonly IList<IProcessAbsenceRequest> _absenceRequestProcessList =
             new List<IProcessAbsenceRequest> {new PendingAbsenceRequest(), new GrantAbsenceRequest(), new DenyAbsenceRequest()};

@@ -14,6 +14,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
         public double AbsoluteDifference { get; set; }
         public Percent RelativeDifference { get; set; }
         public DateDayModel Date { get; set; }
+        public double TotalHeadCounts { get; set; }
+
         public string Week
         {
             get

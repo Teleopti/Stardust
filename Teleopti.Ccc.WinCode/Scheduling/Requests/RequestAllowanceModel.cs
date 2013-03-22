@@ -165,6 +165,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
                 var usedTotalAbsences = absenceDict.Sum(a => a.Value);
                 var absoluteDiff = allowance - usedTotalAbsences;
                 var relativeDiff = new Percent(usedTotalAbsences / allowance);
+                //TODO: we will count number of absence requests for that day by makeing a call to the absnece request table and count the number of rows.
+                var headCounts = 0;
                 var detailModel = new BudgetAbsenceAllowanceDetailModel
                                       {
                                           Date = new DateDayModel(currentDate),
@@ -173,6 +175,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
                                           UsedTotalAbsences = usedTotalAbsences,
                                           AbsoluteDifference = absoluteDiff,
                                           RelativeDifference = relativeDiff,
+                                          TotalHeadCounts = headCounts
                                       };
                 VisibleModel.Add(detailModel);
             }

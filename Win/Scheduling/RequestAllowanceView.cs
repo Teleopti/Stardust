@@ -119,6 +119,14 @@ namespace Teleopti.Ccc.Win.Scheduling
                 CellModel = "PercentReadOnlyCellModel",
                 ReadOnly = true
             });
+            _entityBinder.AddRow(new GridRow<BudgetAbsenceAllowanceDetailModel>
+            {
+                HeaderText     = "Head Counts",
+                ValueMember = new ModelProperty<BudgetAbsenceAllowanceDetailModel>("TotalHeadCounts"),
+                CellValueType = typeof(double),
+                CellModel = "NumericReadOnlyCellModel",
+                ReadOnly = true
+            });
             requestAllowanceGridControl.Rows.HeaderCount = 1;
             requestAllowanceGridControl.Rows.FrozenCount = 1;
             requestAllowanceGridControl.DefaultColWidth = 60;

@@ -24,7 +24,8 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
                     mergedPeriod.AbsenceRequestProcess = absenceRequestOpenPeriod.AbsenceRequestProcess;
                 }
                 if (typeof(StaffingThresholdValidator).IsInstanceOfType(absenceRequestOpenPeriod.StaffingThresholdValidator)
-                    ||typeof(BudgetGroupAllowanceValidator).IsInstanceOfType(absenceRequestOpenPeriod.StaffingThresholdValidator))
+                    ||typeof(BudgetGroupAllowanceValidator).IsInstanceOfType(absenceRequestOpenPeriod.StaffingThresholdValidator)
+                    || typeof(BudgetGroupHeadCountValidator).IsInstanceOfType(absenceRequestOpenPeriod.StaffingThresholdValidator))
                 {
                     mergedPeriod.StaffingThresholdValidator = absenceRequestOpenPeriod.StaffingThresholdValidator;
                 }
