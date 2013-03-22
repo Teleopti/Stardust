@@ -558,7 +558,6 @@ namespace Teleopti.Ccc.Win.Scheduling
                     _container.Resolve<ISchedulingResultStateHolder>(),
                     _container.Resolve<IDeleteAndResourceCalculateService>(),
 					periodValueCalculatorForAllSkills,
-					_resourceOptimizationHelper,
 					_container.Resolve<IScheduleDayEquator>(),
 					_container.Resolve<ISafeRollbackAndResourceCalculation>()
                     );
