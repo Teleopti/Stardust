@@ -1,4 +1,6 @@
-namespace Teleopti.Interfaces.Domain
+using Teleopti.Interfaces.Domain;
+
+namespace Teleopti.Ccc.Domain.Common
 {
 	/// <summary>
 	/// Give me the current scenario please! I dont care how =) 

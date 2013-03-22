@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
         private IUnitOfWorkFactory _uowFactory;
         private IBudgetDayRepository _budgetDayRepository;
         private IBudgetGroupRepository _budgetGroupRepository;
-        private IScenarioRepository _scenarioRepository;
+        private ICurrentScenario _scenarioRepository;
         private IScheduleProjectionReadOnlyRepository _scheduleProjRepository;
         
         [SetUp]
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
             _uowFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
             _budgetDayRepository = MockRepository.GenerateMock<IBudgetDayRepository>();
             _budgetGroupRepository = MockRepository.GenerateMock<IBudgetGroupRepository>();
-            _scenarioRepository = MockRepository.GenerateMock<IScenarioRepository>();
+			_scenarioRepository = MockRepository.GenerateMock<ICurrentScenario>();
             _scheduleProjRepository = MockRepository.GenerateMock<IScheduleProjectionReadOnlyRepository>();
             _target = new RequestAllowanceModel(_uowFactory, _budgetDayRepository, _budgetGroupRepository, _scenarioRepository, _scheduleProjRepository );
         }

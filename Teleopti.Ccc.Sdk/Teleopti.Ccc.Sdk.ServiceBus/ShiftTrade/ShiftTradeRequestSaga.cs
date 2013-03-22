@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ShiftTrade
         private ISchedulingResultStateHolder _schedulingResultStateHolder;
         private IShiftTradeValidator _validator;
         private readonly IRequestFactory _requestFactory;
-        private readonly IScenarioRepository _scenarioRepository;
+        private readonly ICurrentScenario _scenarioRepository;
         private readonly IPersonRequestRepository _personRequestRepository;
         private readonly IScheduleRepository _scheduleRepository;
         private readonly IPersonRepository _personRepository;
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ShiftTrade
         private IPersonRequestCheckAuthorization _authorization;
     	private IScenario _defaultScenario;
 
-    	public ShiftTradeRequestSaga(ISchedulingResultStateHolder schedulingResultStateHolder, IShiftTradeValidator validator, IRequestFactory requestFactory, IScenarioRepository scenarioRepository, IPersonRequestRepository personRequestRepository, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IPersonRequestCheckAuthorization personRequestCheckAuthorization, IScheduleDictionarySaver scheduleDictionarySaver, ILoadSchedulingStateHolderForResourceCalculation loadSchedulingStateHolderForResourceCalculation)
+    	public ShiftTradeRequestSaga(ISchedulingResultStateHolder schedulingResultStateHolder, IShiftTradeValidator validator, IRequestFactory requestFactory, ICurrentScenario scenarioRepository, IPersonRequestRepository personRequestRepository, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IPersonRequestCheckAuthorization personRequestCheckAuthorization, IScheduleDictionarySaver scheduleDictionarySaver, ILoadSchedulingStateHolderForResourceCalculation loadSchedulingStateHolderForResourceCalculation)
         {
             _schedulingResultStateHolder = schedulingResultStateHolder;
             _validator = validator;
@@ -277,7 +277,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ShiftTrade
 
         private void loadDefaultScenario()
         {
-            _defaultScenario = _scenarioRepository.LoadDefaultScenario();
+            _defaultScenario = _scenarioRepository.Current();
             Logger.DebugFormat("Using the default scenario named {0}. (Id = {1})", _defaultScenario.Description, _defaultScenario.Id);
         }
 

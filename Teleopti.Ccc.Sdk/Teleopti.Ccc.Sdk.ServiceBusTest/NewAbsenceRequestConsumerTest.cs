@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
         private IRequestFactory _factory;
         private IScheduleDictionarySaver _scheduleDictionarySaver;
         private IPersonRequestCheckAuthorization _authorization;
-        private IScenarioRepository _scenarioRepository;
+        private ICurrentScenario _scenarioRepository;
         private IScheduleIsInvalidSpecification _scheduleIsInvalidSpecification;
         private IScheduleDictionaryModifiedCallback _scheduleDictionaryModifiedCallback;
         private IAlreadyAbsentSpecification _alreadyAbsentSpecification;
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
             CreatePersonAndRequest();
             CreateRepositories();
             
-            _scenarioRepository = _mockRepository.StrictMock<IScenarioRepository>();
+            _scenarioRepository = _mockRepository.StrictMock<ICurrentScenario>();
             _scheduleIsInvalidSpecification = _mockRepository.DynamicMock<IScheduleIsInvalidSpecification>();
             _scheduleDictionaryModifiedCallback = _mockRepository.DynamicMock<IScheduleDictionaryModifiedCallback>();
             
@@ -683,7 +683,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 
         private void PrepareAbsenceRequest()
         {
-            Expect.Call(_scenarioRepository.LoadDefaultScenario()).Return(_scenario).Repeat.AtLeastOnce();
+            Expect.Call(_scenarioRepository.Current()).Return(_scenario).Repeat.AtLeastOnce();
             Expect.Call(_personRequestRepository.Get(_message.PersonRequestId)).Return(_personRequest).Repeat.AtLeastOnce();
             Expect.Call(_personRequest.IsNew).Return(true);
             Expect.Call(_personRequest.Request).Return(_absenceRequest).Repeat.Any();

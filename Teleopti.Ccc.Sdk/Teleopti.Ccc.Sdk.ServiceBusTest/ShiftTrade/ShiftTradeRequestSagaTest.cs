@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
         private IUnitOfWorkFactory unitOfWorkFactory;
         private Person fromPerson;
         private Person toPerson;
-        private IScenarioRepository scenarioRepository;
+        private ICurrentScenario scenarioRepository;
         private IScheduleRepository scheduleRepository;
         private ISchedulingResultStateHolder schedulingResultState;
         private IScenario scenario;
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
             validator = mocker.StrictMock<IShiftTradeValidator>();
             personRequestRepository = mocker.StrictMock<IPersonRequestRepository>();
             personRepository = mocker.StrictMock<IPersonRepository>();
-            scenarioRepository = mocker.StrictMock<IScenarioRepository>();
+            scenarioRepository = mocker.StrictMock<ICurrentScenario>();
             scheduleRepository = mocker.StrictMock<IScheduleRepository>();
         }
 
@@ -105,7 +105,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
             {
                 Expect.Call(validator.Validate((IShiftTradeRequest)personRequest.Request)).Return(new ShiftTradeRequestValidationResult(true));
                 Expect.Call(personRequestRepository.Get(created.PersonRequestId)).Return(personRequest);
-                Expect.Call(scenarioRepository.LoadDefaultScenario()).Return(scenario).Repeat.AtLeastOnce();
+                Expect.Call(scenarioRepository.Current()).Return(scenario).Repeat.AtLeastOnce();
                 Expect.Call(() => loader.Execute(scenario, new DateTimePeriod(), null)).IgnoreArguments();
                 Expect.Call(requestFactory.GetShiftTradeRequestStatusChecker()).Return(
                           statusChecker);
@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
         private void ExpectCreationOfCommonRepositories(Guid requestId)
         {
             Expect.Call(personRequestRepository.Get(requestId)).Return(personRequest);
-            Expect.Call(scenarioRepository.LoadDefaultScenario()).Return(scenario).Repeat.AtLeastOnce();
+            Expect.Call(scenarioRepository.Current()).Return(scenario).Repeat.AtLeastOnce();
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]

@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
             TimeZoneInfo timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById(timeZoneId));
             using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
-                IScenarioRepository scenarioRepository = repositoryFactory.CreateScenarioRepository(unitOfWork);
+                var scenarioRepository = repositoryFactory.CreateScenarioRepository(unitOfWork);
                 IScenario requestedScenario = scenarioRepository.LoadDefaultScenario();
                 
                 DateTimePeriod period = PreparePeriod(timeZoneInfo, dateOnlyDto);

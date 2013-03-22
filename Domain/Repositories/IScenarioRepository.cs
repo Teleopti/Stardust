@@ -3,11 +3,11 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Repositories
 {
-    /// <summary>
+	/// <summary>
     /// Interface for scenario repository
     /// </summary>
     public interface IScenarioRepository : IRepository<IScenario>
-    {
+	{
 
         /// <summary>
         /// Sets the default scenario.
@@ -37,16 +37,16 @@ namespace Teleopti.Ccc.Domain.Repositories
         /// </remarks>
         IList<IScenario> FindEnabledForReportingSorted();
 
-        /// <summary>
-        /// Loads the defaut scenario.
-        /// </summary>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: Sumeda Herath
-        /// Created date: 2008-03-05
-        /// </remarks>
-        IScenario LoadDefaultScenario();
+		/// <summary>
+		/// Loads the defaut scenario.
+		/// </summary>
+		/// <returns></returns>
+		/// <remarks>
+		/// Created by: Sumeda Herath
+		/// Created date: 2008-03-05
+		/// </remarks>
+		IScenario LoadDefaultScenario();
 
-        IScenario LoadDefaultScenario(IBusinessUnit businessUnit);
+		IScenario LoadDefaultScenario(IBusinessUnit businessUnit);
     }
 }

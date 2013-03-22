@@ -354,6 +354,8 @@
     <Compile Include="Optimization\WorkShiftRuleSetCanHaveShortBreak.cs" />
     <Compile Include="Payroll\PayrollResultDetail.cs" />
     <Compile Include="Payroll\XmlResult.cs" />
+    <Compile Include="Common\DefaultScenarioFromRepository.cs" />
+    <Compile Include="Common\ICurrentScenario.cs" />
     <Compile Include="Repositories\ILicenseStatusRepository.cs" />
     <Compile Include="Repositories\IAgentDayScheduleTagRepository.cs" />
     <Compile Include="Repositories\IApplicationRolePersonRepository.cs" />

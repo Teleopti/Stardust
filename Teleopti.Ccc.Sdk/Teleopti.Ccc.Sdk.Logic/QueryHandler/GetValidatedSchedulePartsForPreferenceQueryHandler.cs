@@ -27,12 +27,12 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 		private readonly IActivityRepository _activityRepository;
 		private readonly IPersonRepository _personRepository;
 		private readonly IScheduleRepository _scheduleRepository;
-		private readonly IScenarioRepository _scenarioRepository;
+		private readonly ICurrentScenario _scenarioRepository;
 		private readonly IAssembler<IPreferenceDay, PreferenceRestrictionDto> _preferenceDayAssembler;
 		private readonly IAssembler<IStudentAvailabilityDay, StudentAvailabilityDayDto> _studentAvailabilityDayAssembler;
     	private readonly IWorkShiftWorkTime _workShiftWorkTime;
 
-		public GetValidatedSchedulePartsForPreferenceQueryHandler(IUnitOfWorkFactory unitOfWorkFactory, IShiftCategoryRepository shiftCategoryRepository, IActivityRepository activityRepository, IPersonRepository personRepository, IScheduleRepository scheduleRepository, IScenarioRepository scenarioRepository, IAssembler<IPreferenceDay, PreferenceRestrictionDto> preferenceDayAssembler, IAssembler<IStudentAvailabilityDay, StudentAvailabilityDayDto> studentAvailabilityDayAssembler, IWorkShiftWorkTime workShiftWorkTime)
+		public GetValidatedSchedulePartsForPreferenceQueryHandler(IUnitOfWorkFactory unitOfWorkFactory, IShiftCategoryRepository shiftCategoryRepository, IActivityRepository activityRepository, IPersonRepository personRepository, IScheduleRepository scheduleRepository, ICurrentScenario scenarioRepository, IAssembler<IPreferenceDay, PreferenceRestrictionDto> preferenceDayAssembler, IAssembler<IStudentAvailabilityDay, StudentAvailabilityDayDto> studentAvailabilityDayAssembler, IWorkShiftWorkTime workShiftWorkTime)
         {
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_shiftCategoryRepository = shiftCategoryRepository;
@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 				period = period.ChangeEndTime(TimeSpan.FromTicks(-1));
 				personList.Add(person);
 
-				IScheduleDictionary scheduleDictionary = _scheduleRepository.FindSchedulesOnlyInGivenPeriod(new PersonProvider(personList), new ScheduleDictionaryLoadOptions(true, false), period, _scenarioRepository.LoadDefaultScenario());
+				IScheduleDictionary scheduleDictionary = _scheduleRepository.FindSchedulesOnlyInGivenPeriod(new PersonProvider(personList), new ScheduleDictionaryLoadOptions(true, false), period, _scenarioRepository.Current());
 				//rk don't know if I break stuff here...
 				//scheduleDictionary.SetTimeZone(timeZoneInfo);
 

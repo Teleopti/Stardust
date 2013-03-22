@@ -110,7 +110,6 @@
     <Compile Include="Domain\ClipboardItems.cs" />
     <Compile Include="Domain\IActivityRestrictableVisualLayer.cs" />
     <Compile Include="Domain\IAggregateRootWithEvents.cs" />
-    <Compile Include="Domain\ICurrentScenario.cs" />
     <Compile Include="Domain\IEffectiveRestrictionCombiner.cs" />
     <Compile Include="Domain\IChangePasswordResultInfo.cs" />
     <Compile Include="Domain\IEvent.cs" />

@@ -2,6 +2,7 @@ using System;
 using System.Globalization;
 using System.ServiceModel;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -37,7 +38,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
                     IPersonRequestRepository personRequestRepository =
                         _repositoryFactory.CreatePersonRequestRepository(uow);
                     ShiftTradeRequestSetChecksum shiftTradeRequestSetChecksum =
-                        new ShiftTradeRequestSetChecksum( _repositoryFactory.CreateScenarioRepository(uow), _repositoryFactory.CreateScheduleRepository(uow));
+						new ShiftTradeRequestSetChecksum(new DefaultScenarioFromRepository(_repositoryFactory.CreateScenarioRepository(uow)), _repositoryFactory.CreateScheduleRepository(uow));
 
                     domainPersonRequest =
                         personRequestRepository.Load(_personRequestDto.Id.GetValueOrDefault(Guid.Empty));

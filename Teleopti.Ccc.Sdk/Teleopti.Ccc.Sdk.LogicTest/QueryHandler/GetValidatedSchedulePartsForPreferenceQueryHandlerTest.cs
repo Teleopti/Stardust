@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 		private IActivityRepository activityRepository;
 		private IPersonRepository personRepository;
 		private IScheduleRepository scheduleRepository;
-		private IScenarioRepository scenarioRepository;
+		private ICurrentScenario scenarioRepository;
 		private IAssembler<IPreferenceDay, PreferenceRestrictionDto> preferenceDayAssembler;
 		private IAssembler<IStudentAvailabilityDay, StudentAvailabilityDayDto> studentAvailabilityDayAssembler;
 		private IWorkShiftWorkTime workShiftWorkTime;
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			activityRepository = mocks.DynamicMock<IActivityRepository>();
 			personRepository = mocks.DynamicMock<IPersonRepository>();
 			scheduleRepository = mocks.DynamicMock<IScheduleRepository>();
-			scenarioRepository = mocks.DynamicMock<IScenarioRepository>();
+			scenarioRepository = mocks.DynamicMock<ICurrentScenario>();
 			unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
 			preferenceDayAssembler = mocks.DynamicMock<IAssembler<IPreferenceDay, PreferenceRestrictionDto>>();
 			studentAvailabilityDayAssembler = mocks.DynamicMock<IAssembler<IStudentAvailabilityDay, StudentAvailabilityDayDto>>();

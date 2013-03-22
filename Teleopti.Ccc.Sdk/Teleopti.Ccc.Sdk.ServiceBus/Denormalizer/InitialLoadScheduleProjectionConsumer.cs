@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Rhino.ServiceBus;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -19,14 +20,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 		private readonly IScheduleDayReadModelRepository _scheduleDayReadModelRepository;
 		private readonly IPersonScheduleDayReadModelRepository _personScheduleDayReadModelRepository;
 		private readonly IPersonAssignmentRepository _personAssignmentRepository;
-		private readonly IScenarioRepository _scenarioRepository;
+		private readonly ICurrentScenario _scenarioRepository;
 		private readonly IServiceBus _serviceBus;
 		private IList<IPerson> _people;
 		private IScenario _defaultScenario;
 		private DateOnlyPeriod _period;
 		private DateTimePeriod _utcPeriod;
 
-		public InitialLoadScheduleProjectionConsumer(IUnitOfWorkFactory unitOfWorkFactory,IPersonRepository personRepository, IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository, IScheduleDayReadModelRepository scheduleDayReadModelRepository, IPersonScheduleDayReadModelRepository personScheduleDayReadModelRepository, IPersonAssignmentRepository personAssignmentRepository, IScenarioRepository scenarioRepository, IServiceBus serviceBus)
+		public InitialLoadScheduleProjectionConsumer(IUnitOfWorkFactory unitOfWorkFactory,IPersonRepository personRepository, IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository, IScheduleDayReadModelRepository scheduleDayReadModelRepository, IPersonScheduleDayReadModelRepository personScheduleDayReadModelRepository, IPersonAssignmentRepository personAssignmentRepository, ICurrentScenario scenarioRepository, IServiceBus serviceBus)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_personRepository = personRepository;
@@ -80,7 +81,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 		private void loadPeopleAndScenario()
 		{
 			_people = _personRepository.LoadAll();
-			_defaultScenario = _scenarioRepository.LoadDefaultScenario();
+			_defaultScenario = _scenarioRepository.Current();
 			_period = new DateOnlyPeriod(DateOnly.Today.AddDays(-3652), DateOnly.Today.AddDays(3652));
 			_utcPeriod = _period.ToDateTimePeriod(TeleoptiPrincipal.Current.Regional.TimeZone);
 		}

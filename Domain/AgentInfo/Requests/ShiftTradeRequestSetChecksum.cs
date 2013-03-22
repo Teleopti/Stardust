@@ -8,11 +8,11 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 {
     public class ShiftTradeRequestSetChecksum : IShiftTradeRequestSetChecksum
     {
-	    private readonly IScenarioRepository _scenarioRepository;
+	    private readonly ICurrentScenario _scenarioRepository;
 	    private readonly IScheduleRepository _scheduleRepository;
         private IScheduleDictionary _scheduleDictionary;
 
-        public ShiftTradeRequestSetChecksum(IScenarioRepository scenarioRepository, IScheduleRepository scheduleRepository)
+        public ShiftTradeRequestSetChecksum(ICurrentScenario scenarioRepository, IScheduleRepository scheduleRepository)
         {
 	        _scenarioRepository = scenarioRepository;
 	        _scheduleRepository = scheduleRepository;
@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
         public void SetChecksum(IRequest request)
         {
-			  var defaultScenario = _scenarioRepository.LoadDefaultScenario();
+			  var defaultScenario = _scenarioRepository.Current();
             IShiftTradeRequest shiftTradeRequest = request as IShiftTradeRequest;
             if (shiftTradeRequest == null) return;
 
