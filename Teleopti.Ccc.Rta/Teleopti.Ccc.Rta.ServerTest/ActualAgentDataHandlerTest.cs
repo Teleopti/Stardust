@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Diagnostics;
 using System.Linq;
 using System.Data;
 using NUnit.Framework;
@@ -26,7 +25,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		private IDbCommand _command;
 		private IDataReader _reader;
 		private readonly Guid _guid = Guid.NewGuid();
-		private DateTime _dateTime = DateTime.UtcNow;
+		private readonly DateTime _dateTime = DateTime.UtcNow;
 
 		[SetUp]
 		public void Setup()

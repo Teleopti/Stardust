@@ -38,8 +38,8 @@ namespace Teleopti.Ccc.Rta.Server
 		public IList<ScheduleLayer> CurrentLayerAndNext(DateTime onTime, IList<ScheduleLayer> layers)
 		{
 			var scheduleLayers = layers.Where(l => l.EndDateTime > onTime);
-			var enumerable = scheduleLayers as IList<ScheduleLayer> ?? scheduleLayers.ToList();
-			var scheduleLayer = enumerable.FirstOrDefault();
+			var enumerable = scheduleLayers as IList<ScheduleLayer> ?? scheduleLayers.ToArray();
+			var scheduleLayer = enumerable[0];
 			ScheduleLayer nextLayer = null;
 
 			// no layer now
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Rta.Server
 			}
 
 			if (nextLayer == null && enumerable.Count() > 1)
-				nextLayer = enumerable.Skip(1).FirstOrDefault();
+				nextLayer = enumerable[1];
 
 			if (scheduleLayer != null && nextLayer != null)
 				//scheduleLayer is the last in assignment

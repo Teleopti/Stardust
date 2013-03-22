@@ -14,8 +14,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
 		private readonly IScheduleProjectionReadOnlyRepository _scheduleProjectionReadOnlyRepository;
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly ITeleoptiRtaService _teleoptiRtaService;
-        private readonly static ILog Logger = LogManager.GetLogger(typeof(UpdatedScheduleInfoConsumer));
-		private static int _addedMilliseconds;
+        private readonly static ILog Logger = LogManager.GetLogger(typeof(UpdatedScheduleInfoConsumer));		
 
         public UpdatedScheduleInfoConsumer(IServiceBus serviceBus, IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository, IUnitOfWorkFactory unitOfWorkFactory, ITeleoptiRtaService teleoptiRtaService)
 		{
@@ -55,7 +54,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
                 Logger.Error("Exception occured when calling TeleoptiRtaService", exception);
 			}
 
-			_serviceBus.DelaySend(((DateTime)startTime).AddMilliseconds(_addedMilliseconds), new PersonWithExternalLogOn
+			_serviceBus.DelaySend(((DateTime)startTime), new PersonWithExternalLogOn
 				{
 				Datasource = message.Datasource,
 				BusinessUnitId = message.BusinessUnitId,
@@ -63,7 +62,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
 				Timestamp = DateTime.Now
 			});
 			Logger.InfoFormat("Delay Message successfully sent to ServiceBus BU: {0}, Person: {1}, SendTime: {2}.", message.BusinessUnitId, message.PersonId, startTime);
-			_addedMilliseconds++;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "excpetion"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
@@ -102,7 +100,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
                 Logger.Error("Exception occured when calling TeleoptiRtaService", exception);
 			}
 
-			_serviceBus.DelaySend(((DateTime)startTime).AddMilliseconds(_addedMilliseconds), new PersonWithExternalLogOn
+			_serviceBus.DelaySend(((DateTime)startTime), new PersonWithExternalLogOn
 				{
 					Datasource = message.Datasource,
 					BusinessUnitId = message.BusinessUnitId,
@@ -110,7 +108,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
 					Timestamp = DateTime.Now
 				});
 			Logger.InfoFormat("Delay Message successfully sent to ServiceBus BU: {0}, Person: {1}, SendTime: {2}.", message.BusinessUnitId, message.PersonId, startTime);
-			_addedMilliseconds++;
 		}
 	}
 }
