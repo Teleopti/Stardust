@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Message.Mapping
             CreateMap<IPushMessageDialogue, MessageViewModel>()
                 .ForMember(d => d.MessageId, o => o.MapFrom(m => m.Id.ToString()))
                 .ForMember(d => d.Title, o => o.MapFrom(m => m.PushMessage.GetTitle(new NoFormatting())))
-                .ForMember(d => d.Message, o => o.MapFrom(m =>
+				.ForMember(d => d.Message, o => o.ResolveUsing(m =>
                                                           	{
                                                           		var message = m.PushMessage.GetMessage(new NoFormatting());
                                                           		return message;

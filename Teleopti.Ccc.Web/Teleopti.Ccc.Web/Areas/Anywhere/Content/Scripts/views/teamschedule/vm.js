@@ -1,37 +1,49 @@
 define([
-		'knockout'
-	], function (ko) {
+        'knockout',
+        'navigation',
+		'views/personschedule/timeline',
+        'noext!application/resources',
+        'moment'
+    ], function(
+        ko,
+        navigation,
+        timeLineViewModel,
+        resources,
+        moment
+    ) {
 
-		return function (date) {
+        return function() {
 
-			var self = this;
+            var self = this;
+            
+            this.Loading = ko.observable(false);
 
-			this.Teams = ko.observableArray();
-			this.SelectedDateInternal = ko.observable(date);
-			this.SelectedTeam = ko.observable();
-			this.isLoading = ko.observable(false);
+            this.Agents = ko.observableArray();
 
-			this.SelectedDate = ko.computed({
-				read: function() {
-					return self.SelectedDateInternal().clone();
-				},
-				write: function(value) {
-					if (value.toDate() == self.SelectedDateInternal().toDate()) return;
-					self.SelectedDateInternal(value);
-				}
-			});
+            this.TimeLine = new timeLineViewModel(this.Agents);
 
-			this.AddTeams = function (teams) {
-				self.Teams([]);
-				self.Teams.push.apply(self.Teams, teams);
-			};
+            this.Resources = resources;
 
-			this.NextDay = function () {
-				self.SelectedDate(self.SelectedDate().add('d', 1));
-			};
+            this.Teams = ko.observableArray();
+            this.SelectedTeam = ko.observable();
+            this.SelectedDate = ko.observable(moment());
 
-			this.PreviousDay = function () {
-				self.SelectedDate(self.SelectedDate().add('d', -1));
-			};
-		};
-	});
+            this.SetAgents = function (agents) {
+                self.Agents([]);
+                self.Agents.push.apply(self.Agents, agents);
+            };
+            
+            this.SetTeams = function (teams) {
+                self.Teams([]);
+                self.Teams.push.apply(self.Teams, teams);
+            };
+
+            this.NextDay = function() {
+                self.SelectedDate(self.SelectedDate().add('d', 1));
+            };
+
+            this.PreviousDay = function() {
+                self.SelectedDate(self.SelectedDate().add('d', -1));
+            };
+        };
+    });

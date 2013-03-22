@@ -9,7 +9,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Helper
 {
-    /// <summary>
+	/// <summary>
     /// Test for DateHelper
     /// </summary>
     [TestFixture]

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -41,7 +42,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public CommandResultDto Handle(ChangePersonEmploymentCommandDto command)
+		public void Handle(ChangePersonEmploymentCommandDto command)
         {
             Guid? result;
             using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
@@ -118,7 +119,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                     result = newPersonPeriod.Id.GetValueOrDefault();
                 }
             }
-            return new CommandResultDto { AffectedId = result, AffectedItems = 1 };
+			command.Result = new CommandResultDto { AffectedId = result, AffectedItems = 1 };
         }
 
         private IPersonPeriod createPersonPeriod(ChangePersonEmploymentCommandDto command)

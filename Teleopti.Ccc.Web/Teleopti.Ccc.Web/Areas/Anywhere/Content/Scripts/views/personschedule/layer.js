@@ -12,7 +12,7 @@ define([
 
 			var self = this;
 
-			var time = moment(data.Start, "YYYY-MM-DDThh:mm:ssZ").utc();
+			var time = moment(data.Start);
 			var localStartMinutes = time.diff(data.Date, 'minutes');
 
 			this.StartMinutes = ko.observable(localStartMinutes);

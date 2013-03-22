@@ -30,7 +30,6 @@ Background:
 	| Name  | Vacation |
 	| Color | Red      |
 	
-@Ignore 
 Scenario: View form
 	Given I have the role 'Anywhere Team Green'
 	When I view person schedule for 'Pierre Baldi' on '2012-12-02'
@@ -43,15 +42,15 @@ Scenario: Add
 	And 'Pierre Baldi' have a (read model) shift with
 	| Field      | Value        |
 	| Person     | Pierre Baldi |
-	| Date       | 2012-12-02   |
+	| Date       | 2013-03-15   |
 	| Start time | 08:00        |
 	| End time   | 17:00        |
 	| Activity   | Phone        |
-	When I view agent schedules add full day absence form for 'Pierre Baldi' on '2012-12-02'
+	When I view agent schedules add full day absence form for 'Pierre Baldi' on '2013-03-15'
 	And I input these full day absence values
 	| Field    | Value      |
 	| Absence  | Vacation   |
-	| End date | 2012-12-02 |
+	| End date | 2013-03-15 |
 	And I click 'apply'
 	Then I should see a shift layer with
 	| Field      | Value |
@@ -59,7 +58,6 @@ Scenario: Add
 	| End time   | 17:00 |
 	| Color      | Red   |
 
-@Ignore 
 Scenario: Default values
 	Given I have the role 'Anywhere Team Green'
 	When I view agent schedules add full day absence form for 'Pierre Baldi' on '2012-12-02'
@@ -68,12 +66,10 @@ Scenario: Default values
 	| Start date | 2012-12-02 |
 	| End date   | 2012-12-02 |
 	
-@Ignore 
-Scenario: Invalid values
+Scenario: Invalid dates
 	Given I have the role 'Anywhere Team Green'
 	When I view agent schedules add full day absence form for 'Pierre Baldi' on '2012-12-02'
 	And I input these full day absence values
 	| Field    | Value      |
 	| End date | 2012-12-01 |
-	And I click 'apply'
-	Then I should see the message 'Invalid end date'
+	Then I should see the alert 'Invalid end date'

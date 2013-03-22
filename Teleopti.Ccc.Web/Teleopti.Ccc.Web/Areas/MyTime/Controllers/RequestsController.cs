@@ -122,10 +122,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[UnitOfWorkAction]
 		[HttpDelete]
 		[ActionName("RequestDetail")]
-		public EmptyResult RequestDelete(Guid id)
+		public JsonResult RequestDelete(Guid id)
 		{
 			_textRequestPersister.Delete(id);
-			return new EmptyResult();
+			return Json("");
 		}
 
 		[UnitOfWorkAction]

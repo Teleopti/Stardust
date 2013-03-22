@@ -1,6 +1,6 @@
-﻿/// <reference path="~/Content/Scripts/jquery-1.8.3.js" />
-/// <reference path="~/Content/jqueryui/jquery-ui-1.9.1.custom.js" />
-/// <reference path="~/Content/Scripts/jquery-1.8.3-vsdoc.js" />
+﻿/// <reference path="~/Content/Scripts/jquery-1.9.1.js" />
+/// <reference path="~/Content/jqueryui/jquery-ui-1.10.1.custom.js" />
+/// <reference path="~/Content/Scripts/jquery-1.9.1-vsdoc.js" />
 /// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js" />
 
@@ -364,11 +364,11 @@ Teleopti.MyTimeWeb.Portal.Layout = (function ($) {
 			_hideSettingsMenu();
 		},
 		ActivateSettingsMenu: function () {
-			$("#settings-dropdown dt span").live("click", function () {
+			$(document).on("click", "#settings-dropdown dt span", function () {
 				$("#settings-dropdown dd ul").toggle();
 			});
 
-			$("#settings-dropdown dd ul").live("click", function () {
+			$(document).on("click", "#settings-dropdown dd ul", function () {
 				_hideSettingsMenu();
 			});
 

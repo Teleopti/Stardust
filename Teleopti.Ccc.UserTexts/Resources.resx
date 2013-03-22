@@ -11369,4 +11369,11 @@ Reduce the complexity to use these shifts.</value>
     <value> is a too complex ruleset!</value>
     <comment>Caption on messagebox when shift generation is stopped </comment>
   </data>
+  <data name="AddFullDayAbsence" xml:space="preserve">
+    <value>Add full day absence</value>
+    <comment>Add full day absence</comment>
+  </data>
+  <data name="InvalidEndDate" xml:space="preserve">
+    <value>Invalid end date</value>
+  </data>
 </root>

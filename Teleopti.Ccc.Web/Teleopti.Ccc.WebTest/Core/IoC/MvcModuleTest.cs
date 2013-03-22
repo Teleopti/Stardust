@@ -10,6 +10,7 @@ using MbCache.Core;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
@@ -504,5 +505,18 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 				.Should().Not.Be.Null();
 		}
 
+		[Test]
+		public void ShouldRegisterCommandDispatcher()
+		{
+			requestContainer.Resolve<ICommandDispatcher>()
+			                .Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldRegisterCommandHandlers()
+		{
+			requestContainer.Resolve<IHandleCommand<AddFullDayAbsenceCommand>>()
+			                .Should().Not.Be.Null();
+		}
 	}
 }

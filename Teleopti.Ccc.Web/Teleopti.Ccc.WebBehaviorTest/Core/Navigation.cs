@@ -197,14 +197,30 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
             Pages.Pages.NavigatingTo(Browser.Current.Page<MessagePage>());
 	    }
 
-		public static void GotoAnywhereTeamSchedule(string date = null)
+		public static void GotoAnywhereTeamSchedule()
 		{
-			string hash = string.Empty;
-			if (!string.IsNullOrEmpty(date))
-			{
-				hash = string.Format(CultureInfo.InvariantCulture, "#teamschedule/{0}", date.Replace("-",""));
-			}
-			GoTo("Anywhere" + hash, new ApplicationStartupTimeout());
+			GoTo("Anywhere", new ApplicationStartupTimeout());
+			Pages.Pages.NavigatingTo(Browser.Current.Page<AnywherePage>());
+		}
+
+		public static void GotoAnywhereTeamSchedule(DateTime date)
+		{
+			GoTo(string.Format("Anywhere#teamschedule/{0}{1}{2}",
+				date.Year.ToString("0000"), 
+				date.Month.ToString("00"), 
+				date.Day.ToString("00")), 
+				new ApplicationStartupTimeout());
+			Pages.Pages.NavigatingTo(Browser.Current.Page<AnywherePage>());
+		}
+
+		public static void GotoAnywhereTeamSchedule(DateTime date, Guid teamId)
+		{
+			GoTo(string.Format("Anywhere#teamschedule/{0}/{1}{2}{3}",
+				teamId,
+				date.Year.ToString("0000"), 
+				date.Month.ToString("00"), 
+				date.Day.ToString("00")), 
+				new ApplicationStartupTimeout());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<AnywherePage>());
 		}
 
@@ -327,6 +343,24 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		public void After(GotoArgs args)
 		{
 			TestControllerMethods.WaitUntilCompletelyLoaded();
+		}
+	}
+
+	public class WaitUntil : IGoToInterceptor
+	{
+		private readonly Func<bool> _until;
+
+		public WaitUntil(Func<bool> until) {
+			_until = until;
+		}
+
+		public void Before(GotoArgs args)
+		{
+		}
+
+		public void After(GotoArgs args)
+		{
+			_until.WaitOrThrow(Timeouts.Poll, Timeouts.Timeout);
 		}
 	}
 }

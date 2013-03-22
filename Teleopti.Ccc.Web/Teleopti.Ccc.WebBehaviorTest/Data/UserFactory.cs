@@ -157,16 +157,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		public IPerson Person { get; private set; }
 
-		public bool HasSetup<T>()
-		{
-			return QueryData<T>().Any();
-		}
-
-		public T UserData<T>()
-		{
-			return QueryData<T>().SingleOrDefault();
-		}
-
 		/// <summary>
 		/// Creates ans persists a person with an automatic number as name, plus creates and persists the list of persons who are in the inner Colleague list.
 		/// </summary>
@@ -256,7 +246,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		}
 
 
-		private IEnumerable<object> AllSpecs
+
+		private IEnumerable<object> AllSetups
 		{
 			get
 			{
@@ -269,10 +260,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			}
 		}
 
-		private IEnumerable<T> QueryData<T>()
+		public IEnumerable<T> UserDatasOfType<T>()
 		{
-			return from s in AllSpecs where typeof(T).IsAssignableFrom(s.GetType()) select (T)s;
+			return from s in AllSetups where typeof(T).IsAssignableFrom(s.GetType()) select (T)s;
 		}
+
+		public bool HasSetup<T>()
+		{
+			return UserDatasOfType<T>().Any();
+		}
+
+		public T UserData<T>()
+		{
+			return UserDatasOfType<T>().SingleOrDefault();
+		}
+
 
 	}
 }

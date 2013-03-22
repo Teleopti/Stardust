@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Mapping
 		{
 			Mapper.Initialize(c =>
 			                  	{
+			                  		c.AllowNullCollections = true;
 									c.ConstructServicesUsing(_container.Resolve);
 									_profiles.ForEach(c.AddProfile);
 			                  	});

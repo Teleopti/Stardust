@@ -118,6 +118,8 @@
     <Compile Include="AgentInfo\Requests\IBatchShiftTradeRequestStatusChecker.cs" />
     <Compile Include="AgentInfo\Requests\ShiftTradeStatusExtensions.cs" />
     <Compile Include="Analytics\BaseConfiguration.cs" />
+    <Compile Include="ApplicationLayer\AddFullDayAbsenceCommand.cs" />
+    <Compile Include="ApplicationLayer\AddFullDayAbsenceCommandHandler.cs" />
     <Compile Include="Auditing\AuditSetting.cs" />
     <Compile Include="Auditing\Revision.cs" />
     <Compile Include="Auditing\ScheduleAuditingReportData.cs" />
@@ -158,6 +160,8 @@
     <Compile Include="Common\PersonProvider.cs" />
     <Compile Include="Common\DateOnlyAsDateTimePeriod.cs" />
     <Compile Include="Common\PersonsInOrganizationProvider.cs" />
+    <Compile Include="ApplicationLayer\ICommandDispatcher.cs" />
+    <Compile Include="ApplicationLayer\IHandleCommand.cs" />
     <Compile Include="Forecasting\DaylightSavingTimeHelper.cs" />
     <Compile Include="Forecasting\Export\ExportForecastDataToFileSerializer.cs" />
     <Compile Include="Forecasting\Export\ExportSkillToFileCommandModel.cs" />

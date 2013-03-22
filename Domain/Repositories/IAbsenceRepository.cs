@@ -5,15 +5,15 @@ namespace Teleopti.Ccc.Domain.Repositories
 {
     public interface IAbsenceRepository : IRepository<IAbsence>
     {
-        /// <summary>
-        /// Loads the All absences by sorting it's by name.
-        /// </summary>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: Sumedah
-        /// Created date: 2008-10-05
-        /// </remarks>
-        IList<IAbsence> LoadAllSortByName();
+	    /// <summary>
+	    /// Loads the All absences by sorting it's by name.
+	    /// </summary>
+	    /// <returns></returns>
+	    /// <remarks>
+	    /// Created by: Sumedah
+	    /// Created date: 2008-10-05
+	    /// </remarks>
+	    IEnumerable<IAbsence> LoadAllSortByName();
 
         /// <summary>
         /// Loads Requestable absences

@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 				.ForMember(d => d.Date, o => o.MapFrom(source => source.Item1))
 				.ForMember(d => d.DisplayTimePeriod, o => o.Ignore())
 				.ForMember(d => d.TeamId, o => o.MapFrom(s => s.Item2))
-				.ForMember(d => d.Days, o => o.MapFrom(source =>
+				.ForMember(d => d.Days, o => o.ResolveUsing(source =>
 				                                       	{
 															var date = source.Item1;
 															var teamId = source.Item2;

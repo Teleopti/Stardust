@@ -25,16 +25,15 @@ Teleopti.MobileReports.Index = (function ($) {
 		_initHomeView(cNs);
 	}
 	function _initHomeView(cNs) {
-		$("#home-view").live("pageinit", function () {
+		$(document).on("pageinit", "#home-view", function () {
 			$.mobile.changePage($("#report-settings-view"));
 		});
 	}
 
 	function _initReportSettingsView(cNs) {
-		$("#report-settings-view").live("pageinit", function () {
-			$('#sel-date').datebox();
+		$(document).on("pageinit", "#report-settings-view", function () {
 			$('#sel-skill').skillpicker();
-
+			
 			(function setDefaultSettings() {
 				$('#sel-date').trigger('datebox', { 'method': 'dooffset', 'type': 'd', 'amount': -1 }).trigger('datebox', { 'method': 'doset' });
 				setRadioGrpValue('#report-settings-view', 'sel-report');
@@ -58,7 +57,7 @@ Teleopti.MobileReports.Index = (function ($) {
 				var parent = $('#report-settings-view');
 				var reportRequestParam = {
 					"ReportId": $('input[name="sel-report"]:checked', parent).val(),
-					"ReportDate": cNs.DateToFixedDate($('#sel-date').data('datebox').theDate),
+					"ReportDate": cNs.DateToFixedDate($('#sel-date').data('mobile-datebox').theDate),
 					"ReportIntervalType": $('input[name="sel-interval"]:checked', parent).val(),
 					"SkillSet": ($('#sel-skill').val() || []).join(','),
 					"table": $('#report-settings-type-table').is(':checked'),
@@ -82,7 +81,7 @@ Teleopti.MobileReports.Index = (function ($) {
 			$('#report-view-date-nav-current').width($(window).width() - 110);
 		});
 
-		$("#report-view").live("pageinit", function () {
+		$(document).on("pageinit", "#report-view", function () {
 			$('#report-graph-holder').graph();
 			$('#report-table-holder').table();
 			$('#report-view').bind('report', function () {
@@ -124,7 +123,7 @@ Teleopti.MobileReports.Index = (function ($) {
 				});
 			});
 
-			$('#report-view').live('pageshow', function () {
+			$(document).on('pageshow', '#report-view', function () {
 				$('#report-view').trigger('report');
 			});
 

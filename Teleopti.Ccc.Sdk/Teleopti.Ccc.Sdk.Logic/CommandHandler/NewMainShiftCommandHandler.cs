@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
@@ -38,7 +39,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public CommandResultDto Handle(NewMainShiftCommandDto command)
+		public void Handle(NewMainShiftCommandDto command)
         {
             using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
@@ -63,7 +64,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                     uow.PersistAll();
                 }
             }
-            return new CommandResultDto { AffectedId = command.PersonId, AffectedItems = 1 };
+			command.Result = new CommandResultDto { AffectedId = command.PersonId, AffectedItems = 1 };
         }
 
     	private IScenario getDesiredScenario(NewMainShiftCommandDto command)

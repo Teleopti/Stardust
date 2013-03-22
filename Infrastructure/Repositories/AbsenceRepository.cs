@@ -27,15 +27,15 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
-        /// <summary>
-        /// Loads the All absences by sorting it's by name.
-        /// </summary>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: Sumedah
-        /// Created date: 2008-10-05
-        /// </remarks>
-        public IList<IAbsence> LoadAllSortByName()
+	    /// <summary>
+	    /// Loads the All absences by sorting it's by name.
+	    /// </summary>
+	    /// <returns></returns>
+	    /// <remarks>
+	    /// Created by: Sumedah
+	    /// Created date: 2008-10-05
+	    /// </remarks>
+	    public IEnumerable<IAbsence> LoadAllSortByName()
         {
             IList<IAbsence> retList = Session.CreateCriteria(typeof(Absence))
                         .AddOrder(Order.Asc("Description.Name"))

@@ -24,19 +24,13 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		[UnitOfWork]
 		public void SubscribeTeamSchedule(Guid teamId, DateTime date)
 		{
-			Groups.Add(Context.ConnectionId, string.Format("{0}-{1}", teamId, date));
 			pushSchedule(Clients.Caller, teamId, date);
 		}
 
-		//[UnitOfWork]
-		//public void PushTeamSchedule(Guid teamId, DateTime date)
-		//{
-		//    pushSchedule(Clients.Group(string.Format("{0}-{1}", teamId, date)), teamId, date);
-		//}
-
 		private void pushSchedule(dynamic target, Guid teamId, DateTime date)
 		{
-			var dateTimePeriod = new DateTimePeriod(date, date.AddHours(24));
+			date = new DateTime(date.Year, date.Month, date.Day, 0, 0, 0, DateTimeKind.Utc);
+			var dateTimePeriod = new DateTimePeriod(date, date.AddHours(25));
 			var schedule = _personScheduleDayReadModelRepository.ForTeam(dateTimePeriod, teamId);
 			if (schedule != null)
 				target.incomingTeamSchedule(schedule.Select(s => JsonConvert.DeserializeObject<ExpandoObject>(s.Shift)));

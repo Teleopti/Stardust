@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "Preference-period")]
 		public Div PreferencePeriod;
 
-		[FindBy(Id = "ui-tooltip-add-extended")]
+		[FindBy(Id = "qtip-add-extended")]
 		public Div ExtendedPreferencePanel;
 		[FindBy(Id = "Preference-template-container")]
 		public SelectBox ExtendedPreferenceTemplateSelectBox;
@@ -118,12 +118,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		
 		public Div ExtendedPreferenceForDate(DateTime date)
 		{
-			return Document.Div("ui-tooltip-extended-" + date.ToString("yyyy-MM-dd"));
+			return Document.Div("qtip-extended-" + date.ToString("yyyy-MM-dd"));
 		}
 
 		public Div MeetingAndPersonalShiftForDate(DateTime date)
 		{
-			return Document.Div("ui-tooltip-meeting-" + date.ToString("yyyy-MM-dd")).EventualGet();
+			return Document.Div("qtip-meeting-" + date.ToString("yyyy-MM-dd")).EventualGet();
 		}
 	}
 }

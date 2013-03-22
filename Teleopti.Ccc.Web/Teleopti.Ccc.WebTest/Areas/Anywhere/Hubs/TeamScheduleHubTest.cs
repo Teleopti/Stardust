@@ -17,12 +17,12 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		{
 			var personScheduleDayReadModelRepository = MockRepository.GenerateMock<IPersonScheduleDayReadModelRepository>();
 			var teamId = Guid.NewGuid();
-			var period = new DateTimePeriod(2013, 3, 4, 2013, 3, 5);
+			var period = new DateTimePeriod(2013, 3, 4, 2013, 3, 5).ChangeEndTime(TimeSpan.FromHours(1));
 			var target = new TeamScheduleHub(personScheduleDayReadModelRepository);
 			var hubBuilder = new TestHubBuilder();
 			hubBuilder.SetupHub(target, hubBuilder.FakeCaller<IEnumerable<dynamic>>("incomingTeamSchedule", a => { }));
 
-			target.SubscribeTeamSchedule(teamId, new DateTime(2013, 3, 4, 0, 0, 0, DateTimeKind.Utc));
+			target.SubscribeTeamSchedule(teamId, new DateTime(2013, 3, 4, 0, 0, 0));
 
 			personScheduleDayReadModelRepository.AssertWasCalled(x => x.ForTeam(period, teamId));
 		}
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		{
 			var personScheduleDayReadModelRepository = MockRepository.GenerateMock<IPersonScheduleDayReadModelRepository>();
 			var teamId = Guid.NewGuid();
-			var period = new DateTimePeriod(2013, 3, 4, 2013, 3, 5);
+			var period = new DateTimePeriod(2013, 3, 4, 2013, 3, 5).ChangeEndTime(TimeSpan.FromHours(1));
 			var target = new TeamScheduleHub(personScheduleDayReadModelRepository);
 			var hubBuilder = new TestHubBuilder();
 			IEnumerable<dynamic> actual = null;
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var data = new[] {new PersonScheduleDayReadModel {Shift = "{FirstName: 'Pierre'}"}};
 			personScheduleDayReadModelRepository.Stub(x => x.ForTeam(period, teamId)).Return(data);
 
-			target.SubscribeTeamSchedule(teamId, new DateTime(2013, 3, 4, 0, 0, 0, DateTimeKind.Utc));
+			target.SubscribeTeamSchedule(teamId, new DateTime(2013, 3, 4, 0, 0, 0));
 
 			Assert.That(actual.Single().FirstName, Is.EqualTo("Pierre"));
 		}
