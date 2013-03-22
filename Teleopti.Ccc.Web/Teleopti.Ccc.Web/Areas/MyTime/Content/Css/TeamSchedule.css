@@ -180,12 +180,16 @@
 }
 
 #s2id_Team-Picker {
-	width: 220px;
-		
+	min-width: 255px;
+	max-width: 350px;
 }
+
 .team-select2-container {
 	text-align: left;
 	float: left;
+}
+.team-select2-container-hidden {
+	display: none;
 }
 .team-select2-dropdown {
 	text-align: left;

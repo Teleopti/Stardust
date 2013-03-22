@@ -27,39 +27,16 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 	}
 
 	function _initTeamPicker() {
+		$('#Team-Picker').on("change", function (e) {
+			var tid;
+			if (e.val)
+				tid = e.val;
+			else {
+				tid = e.target.value;
+			}
+			_navigateTo(_currentFixedDate(), tid);
+		});
 
-		//$('select.ui-selectbox-init')
-		//	.removeClass('ui-selectbox-init')
-		//	.selectbox({
-		//		changed: function (event, item) {
-		//			var teamId = item.item.value;
-		//			_navigateTo(_currentFixedDate(), teamId);
-		//		},
-		//		rendered: function () {
-		//			var teamId = $('#TeamSchedule-body').data('mytime-teamselection');
-		//			if (!teamId)
-		//				return;
-
-		//			var self = $(this);
-
-		//			if (self.selectbox('selectableOptions').length < 2)
-		//				self.selectbox({ visible: false });
-		//			else
-		//				self.selectbox({ visible: true });
-		//			if (self.selectbox('contains', teamId))
-		//				self.selectbox('select', teamId);
-		//			else {
-		//				var date = _currentFixedDate();
-		//				if (date)
-		//					_navigateTo(date);
-		//			}
-		//			readyForInteraction();
-		//			completelyLoaded();
-		//		}
-		//	})
-		//	.parent()
-		//	.hide()
-		//	;
 	}
 
 	function _initTeamPickerSelection() {
@@ -70,38 +47,37 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 			type: "GET",
 			global: false,
 			cache: false,
-			success: function(data, textStatus, jqXHR) {
+			success: function (data, textStatus, jqXHR) {
+				var containerCss;
+				if (data.length < 2) {
+					containerCss = "team-select2-container team-select2-container-hidden";
+				} else {
+					containerCss = "team-select2-container";
+				}
 				$('#Team-Picker').select2(
 					{
-						data:data,
-						//data: [
-						//	{
-						//		text: "Barcelona",
-						//		children: [
-						//			{ id: "3fe4fe40-066e-4df2-820f-9e2c00b7bbe6", text: "Optimization Team 1" },
-						//			{ id: "35a4bfcd-5994-4d00-a048-9e2c00b7cd22", text: "Optimization Team 2" }
-						//		]
-						//	},
-						//	{
-						//		text: "Helsinki",
-						//		children: [
-						//			{ id: "5255a318-1227-4afe-84d7-9e9100f735b6", text: "Team Min-Max" }
-						//		]
-						//	}
-						//],
-						containerCssClass: "team-select2-container",
-						dropdownCssClass: "team-select2-dropdown",
-						matcher: function (term, text) { return text.toUpperCase().indexOf(term.toUpperCase()) == 0; }
+						data: data,
+						containerCssClass: containerCss,
+						dropdownCssClass: "team-select2-dropdown"
 					}
 				);
+
+				var teamId = $('#TeamSchedule-body').data('mytime-teamselection');
+				if (!teamId)
+					return;
+				var team = $.grep(data, function (e) { return e.id == teamId; })[0];
+				if (team) {
+					$('#Team-Picker').select2("data", team);
+				} else {
+					var date = _currentFixedDate();
+					if (date)
+						_navigateTo(date);
+				}
+				
+				readyForInteraction();
+				completelyLoaded();
 			}
-		});		
-		
-		
-		//var selectbox = $('#TeamSchedule-TeamPicker-select');
-		//selectbox.selectbox({
-		//	source: "MyTime/TeamSchedule/Teams/" + _currentUrlDate()
-		//});
+		});
 	}
 
 	function _initAgentNameOverflow() {
@@ -139,7 +115,7 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 	return {
 		Init: function () {
 			portal.RegisterPartialCallBack('TeamSchedule/Index', Teleopti.MyTimeWeb.TeamSchedule.TeamSchedulePartialInit);
-			//_initTeamPicker();
+			_initTeamPicker();
 		},
 		TeamSchedulePartialInit: function (readyForInteractionCallback, completelyLoadedCallback) {
 			readyForInteraction = readyForInteractionCallback;

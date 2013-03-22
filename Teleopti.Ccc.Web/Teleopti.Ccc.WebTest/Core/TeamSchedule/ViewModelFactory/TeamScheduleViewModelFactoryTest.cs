@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 
 			var result = target.CreateTeamOptionsViewModel(DateOnly.Today);
 
-			var selectOptionGroup = new SelectOptionGroup {text = "site", children = new ISelectOption[] {new SelectOption {id = teams[0].Id.GetValueOrDefault().ToString(), text = "team"}}};
+			var selectOptionGroup = new SelectOptionGroup {text = "site", children = new ISelectOptionItem[] {new SelectOptionItem {id = teams[0].Id.GetValueOrDefault().ToString(), text = "team"}}};
 			var expected = new[]
 			               	{
 			               		selectOptionGroup

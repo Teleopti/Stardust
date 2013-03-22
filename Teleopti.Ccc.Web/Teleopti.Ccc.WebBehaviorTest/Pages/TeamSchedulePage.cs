@@ -84,7 +84,24 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 			return Document.Div(QuicklyFind.ByClass("tooltip-container"));
 		}
 
-		[FindBy(Id = "TeamSchedule-TeamPicker-select-container")]
-		public SelectBox TeamPicker { get; set; }
+		[FindBy(Id = "Team-Picker")]
+		public TextField TeamPickerInput { get; set; }
+
+		[FindBy(Id = "s2id_Team-Picker")]
+		public Div TeamPickerSelectDiv { get; set; }
+
+		[FindBy(Class = "team-select2-dropdown")]
+		public Div TeamPickerDropDown { get; set; }
+
+		public IEnumerable<string> TeamPickerSelectTexts()
+		{
+			var items = Document.ListItems.Filter(QuicklyFind.ByClass("select2-result-selectable"));
+			return from item in items select item.Div(QuicklyFind.ByClass("select2-result-label")).Text;
+		}
+
+		public Link TeamPickerSelectLink()
+		{
+			return TeamPickerSelectDiv.Link(QuicklyFind.ByClass("select2-choice"));
+		}
 	}
 }
