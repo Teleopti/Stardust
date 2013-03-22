@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -80,12 +81,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return result.Count > 0;
 		}
 
-        public DateTime GetNextActivityStartTime(DateTime dateTime, Guid personId)
+        public DateTime? GetNextActivityStartTime(DateTime dateTime, Guid personId)
         {
             var uow = _unitOfWorkFactory.CurrentUnitOfWork();
             string query = string.Format(CultureInfo.InvariantCulture,@"SELECT TOP 1 StartDateTime, EndDateTime 
                             FROM ReadModel.v_ScheduleProjectionReadOnlyRTA rta WHERE EndDateTime >= :endDate 
-                            AND PersonId=:personId order by StartDateTime");
+                            AND PersonId=:personId");
 
             var result = ((NHibernateUnitOfWork) uow).Session
                 .CreateSQLQuery(query)
@@ -94,17 +95,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 .SetResultTransformer(Transformers.AliasToBean(typeof(ActivityPeriod)))
                 .List<ActivityPeriod>();
 
-            if (result.Count<1)
-                return new DateTime();
+	        if (result.Count < 1)
+                return null;
 
-            var nextActivityDateTime = new DateTime();
-
-	        foreach (var activityPeriod in result)
-		        nextActivityDateTime = activityPeriod.StartDateTime > dateTime
-			                               ? activityPeriod.StartDateTime
-			                               : activityPeriod.EndDateTime;
-
-	        return nextActivityDateTime;
+	        var activityPeriod = result.First();
+			DateTime? nextActivityDateTime = activityPeriod.StartDateTime > dateTime
+				                                 ? activityPeriod.StartDateTime
+				                                 : activityPeriod.EndDateTime;
+	        return ((DateTime)nextActivityDateTime).ToLocalTime();
         }
 	}
 

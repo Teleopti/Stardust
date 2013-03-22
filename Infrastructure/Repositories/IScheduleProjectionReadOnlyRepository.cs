@@ -12,6 +12,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		void ClearPeriodForPerson(DateOnlyPeriod period, Guid scenarioId, Guid personId);
 		void AddProjectedLayer(DateOnly belongsToDate, Guid scenarioId, Guid personId, DenormalizedScheduleProjectionLayer layer);
 		bool IsInitialized();
-	    DateTime GetNextActivityStartTime(DateTime dateTime, Guid personId);
+	    DateTime? GetNextActivityStartTime(DateTime dateTime, Guid personId);
 	}
 }
