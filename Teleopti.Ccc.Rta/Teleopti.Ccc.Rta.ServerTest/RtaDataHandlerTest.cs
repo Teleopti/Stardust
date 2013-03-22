@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			var timeStamp = new DateTime(2000, 1, 1);
 
 			target.ProcessScheduleUpdate(personId, Guid.NewGuid(), timeStamp);
-			agentHandler.AssertWasCalled(x => x.InvalidateReadModelCache(personId, timeStamp));
+			agentHandler.AssertWasCalled(x => x.InvalidateReadModelCache(personId));
 		}
 
 		[Test]

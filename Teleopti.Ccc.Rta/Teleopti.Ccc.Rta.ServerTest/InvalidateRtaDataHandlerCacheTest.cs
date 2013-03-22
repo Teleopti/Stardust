@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			 var target = new actualAgentHandlerForTest(dataHandler, mbCacheFactory);
 			 
 
-			 target.InvalidateReadModelCache(personId, timeStamp);
+			 target.InvalidateReadModelCache(personId);
 
 			 mbCacheFactory.AssertWasCalled(
 				 x =>

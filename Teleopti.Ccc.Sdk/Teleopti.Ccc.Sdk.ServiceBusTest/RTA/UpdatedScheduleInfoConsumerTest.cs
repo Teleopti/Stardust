@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
             Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
             Expect.Call(scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow,
                                                                                      person.Id.GetValueOrDefault())).IgnoreArguments()
-                 .Return(new DateTime());
+                 .Return(null);
 
             mocks.ReplayAll();
             target.Consume(updatedSchduleDay);

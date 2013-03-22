@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Rta.Server
 			var stateCode = "Unknown";
 			var readModelLayers = ActualAgentDataHandler.GetReadModel(personId);
 			if (!readModelLayers.Any())
-				LoggingSvc.WarnFormat("No readmodel found for Person: {0}", personId);
+				LoggingSvc.InfoFormat("No readmodel found for Person: {0}", personId);
 			var scheduleLayers = ActualAgentDataHandler.CurrentLayerAndNext(timestamp, readModelLayers);
 			var previousState = ActualAgentDataHandler.LoadOldState(personId);
 
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Rta.Server
 		{
 			var readModelLayers = ActualAgentDataHandler.GetReadModel(personId);
 			if (!readModelLayers.Any())
-				LoggingSvc.WarnFormat("No readmodel found for Person: {0}", personId);
+				LoggingSvc.InfoFormat("No readmodel found for Person: {0}", personId);
 			var scheduleLayers = ActualAgentDataHandler.CurrentLayerAndNext(timestamp, readModelLayers);
 			var previousState = ActualAgentDataHandler.LoadOldState(personId);
 			return CreateAndSaveState(scheduleLayers, previousState, personId, platformTypeId, stateCode, timestamp, timeInState, businessUnitId);
@@ -193,7 +193,7 @@ namespace Teleopti.Ccc.Rta.Server
 				&& layer.EndDateTime == oldState.NextStart;
 		}
 
-		public void InvalidateReadModelCache(Guid personId, DateTime timeStamp)
+		public void InvalidateReadModelCache(Guid personId)
 		{
 			LoggingSvc.InfoFormat("Clearing ReadModel cache for Person: {0}", personId);
 			_mbCacheFactory.Invalidate(ActualAgentDataHandler, x => x.GetReadModel(personId), true);

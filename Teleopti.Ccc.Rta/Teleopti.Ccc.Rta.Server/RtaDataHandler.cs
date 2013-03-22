@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.Rta.Server
 				_loggingSvc.Error("No connection information avaiable in configuration file.");
 				return;
 			}
-			_agentHandler.InvalidateReadModelCache(personId, timestamp);
+			_agentHandler.InvalidateReadModelCache(personId);
 			var agentState = _agentHandler.CheckSchedule(personId, businessUnitId, timestamp);
 			if (agentState == null)
 			{

@@ -4,6 +4,6 @@ namespace Teleopti.Ccc.Rta.Server
 {
 	public interface IRtaDataHandlerCache
 	{
-		void InvalidateReadModelCache(Guid personId, DateTime timeStamp);
+		void InvalidateReadModelCache(Guid personId);
 	}
 }
