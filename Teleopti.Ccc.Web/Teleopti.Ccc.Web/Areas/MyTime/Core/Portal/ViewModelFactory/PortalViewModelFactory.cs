@@ -88,8 +88,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			       		               			{
 			       		               				NextTitle = Resources.NextPeriod,
 			       		               				PrevTitle = Resources.PreviousPeriod
-			       		               			},
-			       		               		new ToolBarSeparatorItem()
+			       		               			}
 			       		               	}
 						};
 		}
