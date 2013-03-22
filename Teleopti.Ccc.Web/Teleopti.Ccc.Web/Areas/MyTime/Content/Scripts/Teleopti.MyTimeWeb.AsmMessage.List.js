@@ -87,7 +87,9 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 			vm.chosenMessage(null);
 		});
 		self.confirmReadMessage = function (data, event) {
-			if (self.selectedReply() == undefined) self.selectedReply(self.replyOptions[0].text());
+		    if (self.selectedReply() == undefined && self.replyOptions.length > 0)
+		        self.selectedReply(self.replyOptions[0].text());
+		    
 			self.isSending(true);
 			_replyToMessage(self);
 		};
@@ -179,6 +181,7 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 			success: function (data, textStatus, jqXHR) {
 				messageItem.isRead(true);
 				_noMoreToLoad();
+				messageItem.isSending(false);
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
 				_noMoreToLoad();

@@ -27,21 +27,17 @@ Teleopti.MyTimeWeb.AsmMessage = (function ($) {
 	};
 
 	function _setMessageNotificationOnTab(messageCount) {
-		var countString = '';
-
-		if (messageCount > 0)
-			countString = ' (' + messageCount + ')';
-
-		var messageTab = $('a[href*="#MessageTab"]');
-		
-		if (messageCount > 0) { messageTab.addClass("asm-new-message-indicator"); }
-		else { messageTab.removeClass("asm-new-message-indicator"); }
-
-		var pos = messageTab.text().indexOf(' (', 0);
-		if (pos == -1) {
-			pos = messageTab.text().length;
+		var messageSpan = $('a[href*="#MessageTab"] > span');
+		if (messageCount == 0) {
+		    messageSpan.parent().removeClass("asm-new-message-indicator");
+		    messageSpan.hide();
+		    return;
 		}
-		messageTab.text(messageTab.text().substring(0, pos) + countString);
+
+	    messageSpan.text(messageCount);
+		messageSpan.show();
+		
+		messageSpan.parent().addClass("asm-new-message-indicator");
 	}
 
 	function _setAddNewMessageAtTopOfList(messageItem) {
