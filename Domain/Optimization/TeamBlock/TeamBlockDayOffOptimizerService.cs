@@ -2,13 +2,12 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.Optimization
+namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 {
 	public interface ITeamBlockDayOffOptimizerService
 	{

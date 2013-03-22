@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.Optimization
+namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 {
 	public interface ITeamBlockIntradayOptimizationService
 	{
@@ -32,7 +30,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		private readonly ISchedulingResultStateHolder _stateHolder;
 		private readonly IDeleteAndResourceCalculateService _deleteAndResourceCalculateService;
 		private readonly IPeriodValueCalculator _periodValueCalculatorForAllSkills;
-		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 		private readonly IScheduleDayEquator _scheduleDayEquator;
 		private readonly ISafeRollbackAndResourceCalculation _safeRollbackAndResourceCalculation;
 		private bool _cancelMe;
@@ -45,7 +42,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 		                                            ISchedulingResultStateHolder stateHolder,
 		                                            IDeleteAndResourceCalculateService deleteAndResourceCalculateService,
 		                                            IPeriodValueCalculator periodValueCalculatorForAllSkills,
-		                                            IResourceOptimizationHelper resourceOptimizationHelper,
 		                                            IScheduleDayEquator scheduleDayEquator,
 		                                            ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation)
 		{
@@ -57,7 +53,6 @@ namespace Teleopti.Ccc.Domain.Optimization
 			_stateHolder = stateHolder;
 			_deleteAndResourceCalculateService = deleteAndResourceCalculateService;
 			_periodValueCalculatorForAllSkills = periodValueCalculatorForAllSkills;
-			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_scheduleDayEquator = scheduleDayEquator;
 			_safeRollbackAndResourceCalculation = safeRollbackAndResourceCalculation;
 		}
@@ -157,11 +152,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			var sortedTeamBlocks = allTeamBlocks.OrderByDescending(x => x.BlockInfo.AverageStandardDeviation);
 
-			schedulePartModifyAndRollbackService.ClearModificationCollection();
 			foreach (var teamBlock in sortedTeamBlocks)
 			{
 				if (_cancelMe)
 					break;
+				schedulePartModifyAndRollbackService.ClearModificationCollection();
+			
 				//clear block
 				foreach (var dateOnly in teamBlock.BlockInfo.BlockPeriod.DayCollection())
 				{
