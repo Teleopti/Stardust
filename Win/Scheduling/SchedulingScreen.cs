@@ -185,7 +185,7 @@ namespace Teleopti.Ccc.Win.Scheduling
     	private ISingleSkillDictionary _singleSkillDictionary;
 
 		#region enums
-		public enum ZoomLevel
+		private enum ZoomLevel
 		{
 			Level1,
 			Level2,
@@ -4873,7 +4873,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 
 			enableRibbonForRequests(false);
-			SchedulerRibbonHelper.EnableRibbonControls(toolStripExClipboard, toolStripExEdit2, toolStripExActions, toolStripExLocks, toolStripButtonFilterAgents, toolStripMenuItemLock, toolStripMenuItemLoggedOnUserTimeZone, level);
+			var isRestrictionView = level == ZoomLevel.Level7;
+			SchedulerRibbonHelper.EnableRibbonControls(toolStripExClipboard, toolStripExEdit2, toolStripExActions, toolStripExLocks, toolStripButtonFilterAgents, toolStripMenuItemLock, toolStripMenuItemLoggedOnUserTimeZone, isRestrictionView);
 
 			var callback = new SchedulerStateScheduleDayChangedCallback(new ResourceCalculateDaysDecider(), SchedulerState);
 			switch (level)
