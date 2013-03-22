@@ -803,6 +803,7 @@
     <Compile Include="Scheduling\Restriction\ExtendedPreferenceTemplate.cs" />
     <Compile Include="Scheduling\TeamBlockScheduler.cs" />
     <Compile Include="Scheduling\TeamBlock\BlockInfo.cs" />
+    <Compile Include="Scheduling\TeamBlock\BlockSteadyStateValidator.cs" />
     <Compile Include="Scheduling\TeamBlock\DayIntervalDataCalculator.cs" />
     <Compile Include="Scheduling\TeamBlock\DynamicBlockFinder.cs" />
     <Compile Include="Scheduling\TeamBlock\GroupPersonBuilderBasedOnContractTime.cs" />

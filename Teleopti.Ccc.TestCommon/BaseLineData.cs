@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -23,7 +25,10 @@ namespace Teleopti.Ccc.TestCommon
 
         public DateOnly BaseDateOnly { get; set; }
 
-        public IGroupPageOptions GroupPageOptions { get; set; } 
+        public IGroupPageOptions GroupPageOptions { get; set; }
+
+        public IScenario Scenario { get; set; }
+
 
         public BaseLineData()
         {
@@ -40,6 +45,9 @@ namespace Teleopti.Ccc.TestCommon
             SchedulingOptions = new SchedulingOptions();
             
             GroupPageOptions = new GroupPageOptions(PersonList );
+
+            Scenario  = new Scenario("test");
+
         }
 
 
