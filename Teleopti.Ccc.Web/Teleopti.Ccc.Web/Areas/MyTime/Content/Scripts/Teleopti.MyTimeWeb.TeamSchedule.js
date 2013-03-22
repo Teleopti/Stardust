@@ -2,7 +2,6 @@
 /// <reference path="~/Content/jqueryui/jquery-ui-1.10.2.custom.js" />
 /// <reference path="~/Content/Scripts/jquery-1.9.1-vsdoc.js" />
 /// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
-/// <reference path="~/Content/Scripts/date.js" />
 /// <reference path="Teleopti.MyTimeWeb.Portal.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Common.js"/>
 
@@ -18,51 +17,111 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 	var portal = Teleopti.MyTimeWeb.Portal;
 	var readyForInteraction = function () { };
 	var completelyLoaded = function () { };
+    var vm;
+
+    var teamScheduleViewModel = function (urlDate) {
+        var self = this;
+
+        this.selectedDate = ko.observable(moment().startOf('day'));
+        if (urlDate) {
+            this.selectedDate(moment(urlDate));
+        }
+        this.selectedTeam = ko.observable();
+        this.availableTeams = ko.observableArray();
+
+        this.nextDay = function() {
+            self.selectedDate().add('days', 1);
+            self.selectedDate.valueHasMutated();
+        };
+
+        this.previousDay = function () {
+            self.selectedDate().add('days', -1);
+            self.selectedDate.valueHasMutated();
+        };
+
+        this.displayDate = ko.computed(function() {
+            return self.selectedDate().format('YYYY-MM-DD');
+        });
+
+        this.today = function() {
+            self.selectedDate(moment().startOf('day'));
+        };
+
+        this.findTeamById = function (teamId) {
+            var team;
+            ko.utils.arrayForEach(self.availableTeams(), function (t) {
+                if (t.Value == teamId) {
+                    team = t;
+                }
+            });
+            return team;
+        };
+        
+        this.findFirstTeam = function () {
+            var team;
+            ko.utils.arrayForEach(self.availableTeams(), function(t) {
+                if (t.Value != '-') {
+                    team = t;
+                }
+            });
+            return team;
+        };
+
+        this.dateAndTeamKey = ko.computed(function() {
+            var selectedTeam = self.selectedTeam();
+            var teamId = '';
+            if (selectedTeam != undefined && selectedTeam != null) {
+                teamId = selectedTeam.Value;
+            }
+            return self.selectedDate().format('YYYY-MM-DD') + '-' + teamId;
+        });
+    };
 
 	function _initPeriodSelection() {
 		
 	}
 
 	function _initTeamPicker() {
-		$('select.ui-selectbox-init')
-			.removeClass('ui-selectbox-init')
-			.selectbox({
-				changed: function (event, item) {
-					var teamId = item.item.value;
-					_navigateTo(_currentFixedDate(), teamId);
-				},
-				rendered: function () {
-					var teamId = $('#TeamSchedule-body').data('mytime-teamselection');
-					if (!teamId)
-						return;
-
-					var self = $(this);
-
-					if (self.selectbox('selectableOptions').length < 2)
-						self.selectbox({ visible: false });
-					else
-						self.selectbox({ visible: true });
-					if (self.selectbox('contains', teamId))
-						self.selectbox('select', teamId);
-					else {
-						var date = _currentFixedDate();
-						if (date)
-							_navigateTo(date);
-					}
-					readyForInteraction();
-					completelyLoaded();
-				}
-			})
-			.parent()
-			.hide()
-			;
+		
 	}
 
 	function _initTeamPickerSelection() {
-		var selectbox = $('#TeamSchedule-TeamPicker-select');
-		selectbox.selectbox({
-			source: "MyTime/TeamSchedule/Teams/" + _currentUrlDate()
-		});
+
+	    vm = new teamScheduleViewModel(_currentUrlDate());
+
+	    $.ajax({
+	        url: "MyTime/TeamSchedule/Teams/" + _currentUrlDate(),
+	        dataType: "json",
+	        type: "GET",
+	        global: false,
+	        cache: false,
+	        success: function (data, textStatus, jqXHR) {
+	            
+	            var list = vm.availableTeams();
+	            ko.utils.arrayForEach(data, function (t) {
+	                if (t.Value != '-') {
+	                    list.push(t);
+	                }
+	            });
+	            vm.availableTeams.valueHasMutated();
+
+	            var teamId = _currentId();
+	            var foundTeam = undefined;
+	            if (teamId)
+	                foundTeam = vm.findTeamById(teamId);
+
+	            if (foundTeam === undefined)
+	                foundTeam = vm.findFirstTeam();
+
+	            vm.selectedTeam(foundTeam);
+
+                vm.dateAndTeamKey.subscribe(function() {
+                    var team = vm.selectedTeam();
+                    if (team === undefined || team == null) return;
+                    _navigateTo(vm.selectedDate().format('YYYY-MM-DD'), team.Value);
+                });
+	        }
+	    });
 	}
 
 	function _initAgentNameOverflow() {
@@ -92,10 +151,18 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 			return undefined;
 		}
 	}
+    
+	function _bindData() {
+	    ko.applyBindings(vm, $('#page')[0]);
+	};
 
 	function _currentUrlDate() {
 		return Teleopti.MyTimeWeb.Portal.ParseHash().dateHash;
 	}
+    
+    function _currentId() {
+        return Teleopti.MyTimeWeb.Portal.ParseHash().parts[5];
+    }
 
 	return {
 		Init: function () {
@@ -112,6 +179,7 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 			}
 			_initPeriodSelection();
 			_initTeamPickerSelection();
+			_bindData();
 			_initAgentNameOverflow();
 		}
 	};
