@@ -16,8 +16,8 @@
         <div>
             <div id="Request-shift-trade-detail-info" data-bind="visible: showInfo">@Resources.CannotDisplayScheduleWhenShiftTradeStatusIsNew</div>
             <br/>
-            <span class="request-caption">@Resources.From: </span><span class="shift-trade-swap-detail-agent-name request-data-type" id="Request-shift-trade-sender" data-bind="text: mySchedule().agentName" ></span>
-            <span class="request-caption">@Resources.To: </span><span class="shift-trade-swap-detail-agent-name request-data-type" id="Request-shift-trade-reciever" data-bind="text: otherSchedule().agentName" ></span>
+            <span class="request-caption">@Resources.From: </span><span class="shift-trade-swap-detail-agent-name request-data-type" id="Request-shift-trade-sender" data-bind="text: personFrom" ></span>
+            <span class="request-caption">@Resources.To: </span><span class="shift-trade-swap-detail-agent-name request-data-type" id="Request-shift-trade-reciever" data-bind="text: personTo" ></span>
         </div>
         <br/>
 
