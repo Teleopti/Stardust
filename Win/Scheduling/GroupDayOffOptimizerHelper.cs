@@ -452,7 +452,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void optimizeTeamBlockDaysOff(DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences)
 		{
-			var allMatrixes = OptimizerHelperHelper.CreateMatrixListAll(_schedulerState, _container);
+			var allMatrixes = OptimizerHelperHelper.CreateMatrixListAll(_schedulerState, _container);  //this one handles userlocks as well
+			OptimizerHelperHelper.LockDaysForDayOffOptimization(allMatrixes, _container);
 
 			var schedulingOptionsCreator = new SchedulingOptionsCreator();
 			var schedulingOptions = schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
