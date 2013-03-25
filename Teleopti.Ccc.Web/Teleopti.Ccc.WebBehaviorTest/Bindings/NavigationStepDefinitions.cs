@@ -121,6 +121,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoTeamSchedule(DateTime.Today.AddDays(1));
 		}
 
+		[When(@"I view team schedule for '(.*)'")]
+		public void WhenIViewTeamScheduleFor(DateTime date)
+		{
+			TestControllerMethods.Logon();
+			Navigation.GotoTeamSchedule(date);
+		}
+
+
 		[Given(@"I am viewing requests")]
 		[When(@"I am viewing requests")]
 		[When(@"I view requests")]

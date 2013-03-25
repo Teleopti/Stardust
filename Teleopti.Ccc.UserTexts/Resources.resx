@@ -10077,7 +10077,7 @@ These options are activated:
     <value>Turn on?</value>
   </data>
   <data name="ViewCustomTeamSchedule" xml:space="preserve">
-    <value>View custom team schedule</value>
+    <value>View Custom Team Schedule</value>
   </data>
   <data name="ChangeDateFromColon" xml:space="preserve">
     <value>Change Date From:</value>
@@ -11366,5 +11366,9 @@ Reduce the complexity to use these shifts.</value>
   <data name="TooComplexRuleset" xml:space="preserve">
     <value> is a too complex ruleset!</value>
     <comment>Caption on messagebox when shift generation is stopped </comment>
+  </data>
+  <data name="ViewAllGroupPages" xml:space="preserve">
+    <value>View All Group Pages</value>
+    <comment>View All Group Pages</comment>
   </data>
 </root>
