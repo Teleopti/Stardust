@@ -21,7 +21,7 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 	}
 
 	function _initButton() {
-		$("input#passwordButton")
+		$("#passwordButton")
 			.click(function () {
 				_updatePassword($("input#oldPassword").val(), $("input#password").val());
 			});
@@ -30,15 +30,15 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 	function _passwordEvents() {
 		$("input#password, input#passwordValidation").keyup(function () {
 			var incorrectLabel = $("#nonMatchingPassword");
-			var passwordButton = $("input#passwordButton");
+			var passwordButton = $("#passwordButton");
 			var pw = $("input#password").val();
 			var pw2 = $("input#passwordValidation").val();
 			if (pw != pw2) {
 				incorrectLabel.show();
-				passwordButton.button("disable");
+				passwordButton.attr('disabled','disabled');
 			} else {
 				incorrectLabel.hide();
-				passwordButton.button("enable");
+				passwordButton.removeAttr('disabled');
 			}
 		});
 
@@ -67,7 +67,7 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 				updatedLabel.show();
 				$("#incorrectOldPassword").hide();
 				$("#invalidNewPassword").hide();
-				$("#passwordDiv input").reset();
+				$("#settings input").reset();
 				setTimeout(function () { updatedLabel.hide(); }, 2000);
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
