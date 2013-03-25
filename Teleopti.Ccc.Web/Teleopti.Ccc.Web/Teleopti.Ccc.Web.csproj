@@ -939,6 +939,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Content\Scripts\jquery-1.9.1.min.map" />
+    <None Include="Properties\PublishProfiles\Local iis.pubxml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">

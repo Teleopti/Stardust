@@ -82,15 +82,17 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 
 		tabs = $('#tabs')
 			.tabberiet({
-				click: function () {
+			    click: function (e) {
+			        e.preventDefault();
 					_navigateTo($(this).data('mytime-action'));
 				},
 				emptyContentSelector: '#EmptyTab'
 			})
 			;
 
-		$('#toolbar-right .ui-menu-item [data-mytime-action]')
-			.click(function () {
+	    $('.dropdown-menu a[data-mytime-action]')
+			.click(function (e) {
+			    e.preventDefault();
 				_navigateTo($(this).data('mytime-action'));
 			})
 			;

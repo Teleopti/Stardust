@@ -87,17 +87,19 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 
 	function _initSelectors() {
 		$('#cultureSelect')
-			.selectbox({
-				changed: function () {
-					_selectorChanged($(this).val(), "Settings/UpdateCulture");
-				}
+			.select2({
+			    width: 'resolve',
+			    triggerChange: true,
+			}).on('change', function () {
+			    _selectorChanged($(this).val(), "Settings/UpdateCulture");
 			})
 			;
 		$('#cultureUiSelect')
-			.selectbox({
-				changed: function () {
-					_selectorChanged($(this).val(), "Settings/UpdateUiCulture");
-				}
+			.select2({
+			    width: 'resolve',
+			    triggerChange: true
+			}).on('change', function () {
+			    _selectorChanged($(this).val(), "Settings/UpdateUiCulture");
 			})
 			;
 	}

@@ -494,37 +494,11 @@ button.icon-left{padding-left: 35px;}
 	padding-top: 10px;
 	padding-right: 10px;
 }
-.edit-module-element 
-{
-	position: relative;
-	padding-left: 10px;
-	padding-bottom: 10px;
-}
-.edit-module-element label {
-	margin-bottom: 5px;
-	display: block;
-}
-
-.edit-module-element textarea {
-	resize: none;
-}
-
-.edit-button-bar
-{
-	padding: 10px;
-	height: 24px;
-}
 .ui-autocomplete
 {
 	max-height: 180px;
 	overflow-y: auto;
 	overflow-x: hidden;
-}
-.edit-module input.ui-autocomplete-input {
-	height: 16px;
-}
-.ie9 .edit-module input.ui-autocomplete-input {
-	height: 15px;
 }
 .date-input
 {
@@ -534,17 +508,6 @@ select.time-input
 {
 	width: 8em;
 }
-.edit-module-inner button.ui-button-icon-only {
-	height: 20px; 
-	width: 1.7em; 
-	margin-left: -20px;
-	background-position: -12px -90px;
-	border: 0;
-}
-.ie9 .edit-module-inner button.ui-button-icon-only {
-	 height: 19px;
-}
-
 #Schedule-addTextRequest-subject-input {
 	width: 680px;
 }
