@@ -32,7 +32,6 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
         [Test]
         public void ShouldSaveRebuildReadModelForPersonToQueue()
         {
-            var session = _mocks.DynamicMock<IRunSql>();
             var person = new Person();
             Guid[] ids = new Guid[] {};
             var message = new PersonChangedMessage();
@@ -55,7 +54,6 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
         [Test]
         public void ShouldNotRebuildReadModelForScenario()
         {
-            var session = _mocks.DynamicMock<IRunSql>();
             var scenario = _mocks.DynamicMock<IScenario>();
 
             using (_mocks.Record())

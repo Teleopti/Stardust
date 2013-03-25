@@ -35,8 +35,6 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(person, scenario);
 			IRootChangeInfo rootChangeInfo = new RootChangeInfo(personAssignment, DomainUpdateType.Insert);
 
-			var runSql = mocks.DynamicMock<IRunSql>();
-			
 			using (mocks.Record())
 			{
 				Expect.Call(sendDenormalizeNotification.Notify);
@@ -55,8 +53,6 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			var personAssignment = PersonAssignmentFactory.CreatePersonAssignment(person, null);
 			IRootChangeInfo rootChangeInfo = new RootChangeInfo(personAssignment, DomainUpdateType.Insert);
 
-			var runSql = mocks.DynamicMock<IRunSql>();
-
 			using (mocks.Record())
 			{
 				Expect.Call(sendDenormalizeNotification.Notify).Repeat.Never();
@@ -72,8 +68,6 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		{
 			var person = PersonFactory.CreatePerson();
 			IRootChangeInfo rootChangeInfo = new RootChangeInfo(person, DomainUpdateType.Insert);
-
-			var runSql = mocks.DynamicMock<IRunSql>();
 
 			using (mocks.Record())
 			{
@@ -93,8 +87,6 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			var note = new Note(person,DateOnly.Today,scenario,"my note");
 			IRootChangeInfo rootChangeInfo = new RootChangeInfo(note, DomainUpdateType.Insert);
 
-			var runSql = mocks.DynamicMock<IRunSql>();
-
 			using (mocks.Record())
 			{
 				Expect.Call(sendDenormalizeNotification.Notify).Repeat.Never();
@@ -112,8 +104,6 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			var scenario = ScenarioFactory.CreateScenarioAggregate();
 			var note = new PublicNote(person, DateOnly.Today, scenario, "my note");
 			IRootChangeInfo rootChangeInfo = new RootChangeInfo(note, DomainUpdateType.Insert);
-
-			var runSql = mocks.DynamicMock<IRunSql>();
 
 			using (mocks.Record())
 			{

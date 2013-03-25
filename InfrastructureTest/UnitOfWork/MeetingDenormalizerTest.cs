@@ -38,8 +38,6 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 
 			IRootChangeInfo rootChangeInfo = new RootChangeInfo(meeting, DomainUpdateType.Insert);
 
-			var runSql = mocks.DynamicMock<IRunSql>();
-
 			using (mocks.Record())
 			{
 				Expect.Call(sendDenormalizeNotification.Notify);
@@ -56,8 +54,6 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		{
 			var person = PersonFactory.CreatePerson();
 			IRootChangeInfo rootChangeInfo = new RootChangeInfo(person, DomainUpdateType.Insert);
-
-			var runSql = mocks.DynamicMock<IRunSql>();
 
 			using (mocks.Record())
 			{
