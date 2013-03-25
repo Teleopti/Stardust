@@ -452,7 +452,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void optimizeTeamBlockDaysOff(DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences)
 		{
-			var allMatrixes = OptimizerHelperHelper.CreateMatrixListAll(_schedulerState, _container);
+			var allMatrixes = OptimizerHelperHelper.CreateMatrixListAll(_schedulerState, _container);  //this one handles userlocks as well
+			OptimizerHelperHelper.LockDaysForDayOffOptimization(allMatrixes, _container);
 
 			var schedulingOptionsCreator = new SchedulingOptionsCreator();
 			var schedulingOptions = schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
@@ -500,7 +501,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 					periodValueCalculatorForAllSkills,
 					_container.Resolve<IDayOffOptimizationDecisionMakerFactory>(),
 					_container.Resolve<ISafeRollbackAndResourceCalculation>(),
-					_container.Resolve<ITeamDayOffModifyer>()
+					_container.Resolve<ITeamDayOffModifyer>(),
+					_container.Resolve<IBlockSteadyStateValidator>(),
+					_container.Resolve<ITeamBlockClearer>()
 					);
 
 			IList<IDayOffTemplate> dayOffTemplates = (from item in _schedulerState.CommonStateHolder.DayOffs
@@ -554,12 +557,12 @@ namespace Teleopti.Ccc.Win.Scheduling
                     _container.Resolve<ITeamBlockInfoFactory>(),
                     teamBlockScheduler,
                     _container.Resolve<ISchedulingOptionsCreator>(),
-                    _container.Resolve<ISchedulingResultStateHolder>(),
-                    _container.Resolve<IDeleteAndResourceCalculateService>(),
 					periodValueCalculatorForAllSkills,
 					_container.Resolve<ISafeRollbackAndResourceCalculation>(),
 					_container.Resolve<ITeamBlockIntradayDecisionMaker>(),
 					_container.Resolve<ITeamBlockRestrictionOverLimitValidator>()
+					_container.Resolve<ISafeRollbackAndResourceCalculation>(),
+					_container.Resolve<ITeamBlockClearer>()
                     );
 	        teamBlockIntradayOptimizationService.ReportProgress += resourceOptimizerPersonOptimized;
             teamBlockIntradayOptimizationService.Optimize(

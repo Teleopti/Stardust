@@ -234,6 +234,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			builder.RegisterType<TeamInfoFactory>().As<ITeamInfoFactory>();
 			builder.RegisterType<SafeRollbackAndResourceCalculation>().As<ISafeRollbackAndResourceCalculation>();
 			builder.RegisterType<ScheduleMatrixOriginalStateContainerFactory>().As<IScheduleMatrixOriginalStateContainerFactory>();
+			builder.RegisterType<TeamBlockClearer>().As<ITeamBlockClearer>();
 			builder.RegisterType<OptimizationOverLimitByRestrictionDeciderFactory>().As<IOptimizationOverLimitByRestrictionDeciderFactory>();
 			builder.RegisterType<TeamBlockRestrictionOverLimitValidator>().As<ITeamBlockRestrictionOverLimitValidator>();
 		}
