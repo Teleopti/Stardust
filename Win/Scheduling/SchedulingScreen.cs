@@ -3615,8 +3615,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			//Extend period with 10 days to handle block scheduling
 			DateOnlyPeriod groupPagePeriod = _schedulerState.RequestedPeriod.DateOnlyPeriod;
-			if (schedulingOptions.UseBlockScheduling != BlockFinderType.None)
-				groupPagePeriod = new DateOnlyPeriod(groupPagePeriod.StartDate.AddDays(-10), groupPagePeriod.EndDate.AddDays(10));
+            //if (schedulingOptions.UseBlockScheduling != BlockFinderType.None)
+            //    groupPagePeriod = new DateOnlyPeriod(groupPagePeriod.StartDate.AddDays(-10), groupPagePeriod.EndDate.AddDays(10));
 
 			_groupPagePerDateHolder.ShiftCategoryFairnessGroupPagePerDate = _container.Resolve<IGroupPageCreator>()
 				   .CreateGroupPagePerDate(groupPagePeriod.DayCollection(), _container.Resolve<IGroupScheduleGroupPageDataProvider>(), _optimizerOriginalPreferences.SchedulingOptions.GroupPageForShiftCategoryFairness);
@@ -3627,10 +3627,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 
                 if(!schedulingOptions.UseLevellingPerOption)
                 {
-                    switch (schedulingOptions.UseBlockScheduling)
-                    {
-                        case BlockFinderType.None:
-                            {
+                    //switch (BlockFinderType.None)
+                    //{
+                    //    case BlockFinderType.None:
+                    //        {
                                 if (schedulingOptions.UseGroupScheduling)
                                 {
                                     var allMatrixes = OptimizerHelperHelper.CreateMatrixListAll(_schedulerState, _container);
@@ -3638,18 +3638,18 @@ namespace Teleopti.Ccc.Win.Scheduling
                                 }
                                 else
                                     _scheduleOptimizerHelper.ScheduleSelectedPersonDays(scheduleDays, matrixesOfSelectedScheduleDays, allMatrixesOfSelectedPersons, true, _backgroundWorkerScheduling, schedulingOptions);
-                                break;
-                            }
-                        case BlockFinderType.BetweenDayOff:
-                        case BlockFinderType.SchedulePeriod:
-                            {
-                                var periodFinder = new ScheduleMatrixListPeriodFinder(matrixesOfSelectedScheduleDays);
-                                var period = periodFinder.FindOuterWeekPeriod();
-                                if (period.StartDate == DateOnly.MinValue) break;
-                                _scheduleOptimizerHelper.BlockSchedule(scheduleDays, matrixesOfSelectedScheduleDays, allMatrixesOfSelectedPersons, _backgroundWorkerScheduling, schedulingOptions);
-                                break;
-                            }
-                    }
+                                //break;
+                            //}
+                        //case BlockFinderType.BetweenDayOff:
+                        //case BlockFinderType.SchedulePeriod:
+                        //    {
+                        //        var periodFinder = new ScheduleMatrixListPeriodFinder(matrixesOfSelectedScheduleDays);
+                        //        var period = periodFinder.FindOuterWeekPeriod();
+                        //        if (period.StartDate == DateOnly.MinValue) break;
+                        //        _scheduleOptimizerHelper.BlockSchedule(scheduleDays, matrixesOfSelectedScheduleDays, allMatrixesOfSelectedPersons, _backgroundWorkerScheduling, schedulingOptions);
+                        //        break;
+                        //    }
+                    //}
                 }
                 else
                 {

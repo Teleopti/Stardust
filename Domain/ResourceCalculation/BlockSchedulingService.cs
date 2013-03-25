@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         {
             bool success = true;
             _cancelMe = false;
-            IList<IBlockFinder> finders = CreateFinders(matrixList, schedulingOptions.UseBlockScheduling);
+            IList<IBlockFinder> finders = CreateFinders(matrixList, BlockFinderType.None );
 
             IBlockFinderResult result;
             int blockCounter = 0;

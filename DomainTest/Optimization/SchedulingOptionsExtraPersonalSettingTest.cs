@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
         private void MapFromExpectations()
         {
-            Expect.Call(_schedulingOptions.UseBlockScheduling).Return(BlockFinderType.BetweenDayOff);
+            //Expect.Call(_schedulingOptions.UseBlockScheduling).Return(BlockFinderType.BetweenDayOff);
             Expect.Call(_schedulingOptions.UseGroupScheduling).Return(true);
             Expect.Call(_groupPageLight.Key).Return("groupPageKey");
             Expect.Call(_schedulingOptions.GroupOnGroupPage).Return(_groupPageLight);
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
         private void MapToExpectations()
         {
-            Expect.Call(() => _schedulingOptions.UseBlockScheduling = BlockFinderType.BetweenDayOff);
+            //Expect.Call(() => _schedulingOptions.UseBlockScheduling = BlockFinderType.BetweenDayOff);
             Expect.Call(() => _schedulingOptions.UseGroupScheduling = true);
             Expect.Call(_groupPageLight.Key).Return("groupPageKey").Repeat.AtLeastOnce();
             Expect.Call(() => _schedulingOptions.GroupOnGroupPage = _groupPageLight);

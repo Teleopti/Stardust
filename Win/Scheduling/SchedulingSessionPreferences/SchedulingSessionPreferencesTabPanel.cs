@@ -64,11 +64,11 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 				labelScheduleOrSchedules1.Visible = false;
 			}
 
-			if (StateHolderReader.Instance.StateReader.SessionScopeData.MickeMode)
-			{
-				radioButtonBetweenDaysOffAdvScheduling.Visible = true;
-				radioButtonSingleDayAdvScheduling.Visible = true;
-			}
+            //if (StateHolderReader.Instance.StateReader.SessionScopeData.MickeMode)
+            //{
+            //    radioButtonBetweenDaysOffAdvScheduling.Visible = true;
+            //    //radioButtonSingleDayAdvScheduling.Visible = true;
+            //}
 
             _schedulingOptions = schedulingOptions;
             _shiftCategories = (from s in shiftCategories where ((IDeleteTag)s).IsDeleted == false select s).ToList();
@@ -92,23 +92,23 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			}
 		}
 
-        public bool UseBlockSchedulingVisible
-        {
-            get { return checkBoxUseBlockScheduling.Visible; }
-            set { checkBoxUseBlockScheduling.Visible = value; }
-        }
+        //public bool UseBlockSchedulingVisible
+        //{
+        //    get { return checkBoxUseBlockScheduling.Visible; }
+        //    set { checkBoxUseBlockScheduling.Visible = value; }
+        //}
 
-        public bool BetweenDayOffVisible
-        {
-            get { return radioButtonBetweenDayOff.Visible; }
-            set { radioButtonBetweenDayOff.Visible = value; }
-        }
+        //public bool BetweenDayOffVisible
+        //{
+        //    get { return radioButtonBetweenDayOff.Visible; }
+        //    set { radioButtonBetweenDayOff.Visible = value; }
+        //}
 
-        public bool SchedulePeriodVisible
-        {
-            get { return radioButtonSchedulePeriod.Visible; }
-            set { radioButtonSchedulePeriod.Visible = value; }
-        }
+        //public bool SchedulePeriodVisible
+        //{
+        //    get { return radioButtonSchedulePeriod.Visible; }
+        //    set { radioButtonSchedulePeriod.Visible = value; }
+        //}
 
 
         public bool ScheduleOnlyRotationDaysVisible
@@ -272,7 +272,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             _schedulingOptions.Fairness = _localSchedulingOptions.Fairness;
             _schedulingOptions.UseShiftCategoryLimitations = _localSchedulingOptions.UseShiftCategoryLimitations;
             _schedulingOptions.UsePreferencesMustHaveOnly = _localSchedulingOptions.UsePreferencesMustHaveOnly;
-            _schedulingOptions.UseBlockScheduling = _localSchedulingOptions.UseBlockScheduling;
+            //_schedulingOptions.UseBlockScheduling = _localSchedulingOptions.UseBlockScheduling;
             _schedulingOptions.BlockFinderTypeForAdvanceScheduling =
                 _localSchedulingOptions.BlockFinderTypeForAdvanceScheduling;
         	_schedulingOptions.UseGroupScheduling = _localSchedulingOptions.UseGroupScheduling;
@@ -283,7 +283,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
         	_schedulingOptions.UseMaxSeats = _localSchedulingOptions.UseMaxSeats;
         	_schedulingOptions.DoNotBreakMaxSeats = _localSchedulingOptions.DoNotBreakMaxSeats;
             _schedulingOptions.UseSameDayOffs = _localSchedulingOptions.UseSameDayOffs;
-            _schedulingOptions.UseBlockOptimizing = _localSchedulingOptions.UseBlockScheduling;
+            //_schedulingOptions.UseBlockOptimizing = _localSchedulingOptions.UseBlockScheduling;
             _schedulingOptions.TagToUseOnScheduling = _localSchedulingOptions.TagToUseOnScheduling;
         	_schedulingOptions.ResourceCalculateFrequency = _localSchedulingOptions.ResourceCalculateFrequency;
 			_schedulingOptions.ShowTroubleshot = _localSchedulingOptions.ShowTroubleshot;
@@ -323,15 +323,15 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
                 _localSchedulingOptions.ShiftCategory = null;
 
             
-            if (!checkBoxUseBlockScheduling.Checked)
-                _localSchedulingOptions.UseBlockScheduling = BlockFinderType.None;
-            else
-            {
-                if (radioButtonBetweenDayOff.Checked)
-                    _localSchedulingOptions.UseBlockScheduling = BlockFinderType.BetweenDayOff;
-                else
-                    _localSchedulingOptions.UseBlockScheduling = BlockFinderType.SchedulePeriod;
-            }
+            //if (!checkBoxUseBlockScheduling.Checked)
+            //    _localSchedulingOptions.UseBlockScheduling = BlockFinderType.None;
+            //else
+            //{
+            //    if (radioButtonBetweenDayOff.Checked)
+            //        _localSchedulingOptions.UseBlockScheduling = BlockFinderType.BetweenDayOff;
+            //    else
+            //        _localSchedulingOptions.UseBlockScheduling = BlockFinderType.SchedulePeriod;
+            //}
 
             //if (!checkBoxLevellingPerBlockScheduling.Checked)
             //    _localSchedulingOptions.BlockFinderTypeForAdvanceScheduling  = BlockFinderType.None;
@@ -413,59 +413,59 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             
             trackBar1.Value = (int)(_localSchedulingOptions.Fairness.Value*100);
 
-            switch (_localSchedulingOptions.UseBlockScheduling)
-            {
-                case BlockFinderType.None :
-                    radioButtonBetweenDayOff.Enabled = false;
-                    radioButtonSchedulePeriod.Enabled = false;
-                    break;
+            //switch (_localSchedulingOptions.UseBlockScheduling)
+            //{
+            //    case BlockFinderType.None :
+            //        radioButtonBetweenDayOff.Enabled = false;
+            //        radioButtonSchedulePeriod.Enabled = false;
+            //        break;
 
-                case BlockFinderType.BetweenDayOff :
-                    checkBoxUseBlockScheduling.Checked = true;
-                    radioButtonBetweenDayOff.Enabled = true;
-                    radioButtonBetweenDayOff.Checked = true;
-                    radioButtonSchedulePeriod.Enabled = true;
-                    break;
+            //    case BlockFinderType.BetweenDayOff :
+            //        checkBoxUseBlockScheduling.Checked = true;
+            //        radioButtonBetweenDayOff.Enabled = true;
+            //        radioButtonBetweenDayOff.Checked = true;
+            //        radioButtonSchedulePeriod.Enabled = true;
+            //        break;
 
-                case BlockFinderType.SchedulePeriod :
-                    checkBoxUseBlockScheduling.Checked = true;
-                    radioButtonBetweenDayOff.Enabled = true;
-                    radioButtonSchedulePeriod.Enabled = true;
-                    radioButtonSchedulePeriod.Checked = true;
-                    break;
+            //    case BlockFinderType.SchedulePeriod :
+            //        checkBoxUseBlockScheduling.Checked = true;
+            //        radioButtonBetweenDayOff.Enabled = true;
+            //        radioButtonSchedulePeriod.Enabled = true;
+            //        radioButtonSchedulePeriod.Checked = true;
+            //        break;
 
-            }
+            //}
 
-            switch (_localSchedulingOptions.BlockFinderTypeForAdvanceScheduling )
-            {
-                case BlockFinderType.None:
-                    radioButtonBetweenDaysOffAdvScheduling .Enabled = false;
-                    radioButtonSchedulePeriodAdvScheduling.Enabled = false;
-                    break;
+            //switch (_localSchedulingOptions.BlockFinderTypeForAdvanceScheduling )
+            //{
+            //    case BlockFinderType.None:
+            //        radioButtonBetweenDaysOffAdvScheduling .Enabled = false;
+            //        radioButtonSchedulePeriodAdvScheduling.Enabled = false;
+            //        break;
 
-                case BlockFinderType.BetweenDayOff:
-                    checkBoxLevellingPerBlockScheduling .Checked = true;
-                    radioButtonBetweenDaysOffAdvScheduling.Enabled = true;
-                    radioButtonBetweenDaysOffAdvScheduling.Checked = true;
-                    radioButtonSchedulePeriodAdvScheduling.Enabled = true;
-		            radioButtonSingleDayAdvScheduling.Enabled = true;
-                    break;
+            //    case BlockFinderType.BetweenDayOff:
+            //        checkBoxLevellingPerBlockScheduling .Checked = true;
+            //        radioButtonBetweenDaysOffAdvScheduling.Enabled = true;
+            //        radioButtonBetweenDaysOffAdvScheduling.Checked = true;
+            //        radioButtonSchedulePeriodAdvScheduling.Enabled = true;
+            //        //radioButtonSingleDayAdvScheduling.Enabled = true;
+            //        break;
 
-                case BlockFinderType.SchedulePeriod:
-                    checkBoxLevellingPerBlockScheduling .Checked = true;
-                    radioButtonBetweenDaysOffAdvScheduling.Enabled = true;
-                    radioButtonSchedulePeriodAdvScheduling.Checked = true;
-                    radioButtonSchedulePeriodAdvScheduling.Enabled = true;
-					radioButtonSingleDayAdvScheduling.Enabled = true;
-                    break;
-				case BlockFinderType.SingleDay:
-					checkBoxLevellingPerBlockScheduling.Checked = true;
-					radioButtonBetweenDaysOffAdvScheduling.Enabled = true;
-                    radioButtonSchedulePeriodAdvScheduling.Enabled = true;
-					radioButtonSingleDayAdvScheduling.Enabled = true;
-					radioButtonSingleDayAdvScheduling.Checked = true;
-					break;
-            }
+            //    case BlockFinderType.SchedulePeriod:
+            //        checkBoxLevellingPerBlockScheduling .Checked = true;
+            //        radioButtonBetweenDaysOffAdvScheduling.Enabled = true;
+            //        radioButtonSchedulePeriodAdvScheduling.Checked = true;
+            //        radioButtonSchedulePeriodAdvScheduling.Enabled = true;
+            //        //radioButtonSingleDayAdvScheduling.Enabled = true;
+            //        break;
+            //    case BlockFinderType.SingleDay:
+            //        checkBoxLevellingPerBlockScheduling.Checked = true;
+            //        radioButtonBetweenDaysOffAdvScheduling.Enabled = true;
+            //        radioButtonSchedulePeriodAdvScheduling.Enabled = true;
+            //        //radioButtonSingleDayAdvScheduling.Enabled = true;
+            //        //radioButtonSingleDayAdvScheduling.Checked = true;
+            //        break;
+            //}
 
         	checkBoxUseGroupScheduling.Checked = _localSchedulingOptions.UseGroupScheduling;
         	comboBoxGrouping.Enabled = checkBoxUseGroupScheduling.Checked;
@@ -548,9 +548,9 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 
         private void checkBoxUseShiftCategoryCheckedChanged(object sender, EventArgs e)
         {
-            if (checkBoxUseShiftCategory.Checked)
-                checkBoxUseBlockScheduling.Checked = false;
-            checkBoxUseBlockScheduling.Enabled = !checkBoxUseShiftCategory.Checked;
+            //if (checkBoxUseShiftCategory.Checked)
+            //    checkBoxUseBlockScheduling.Checked = false;
+            //checkBoxUseBlockScheduling.Enabled = !checkBoxUseShiftCategory.Checked;
             comboBoxAdvShiftCategory.Enabled = checkBoxUseShiftCategory.Checked;
         }
 
@@ -600,44 +600,44 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             }
         }
 
-        private void checkBoxUseBlockSchedulingCheckedChanged(object sender, EventArgs e)
-        {
-            if (checkBoxUseBlockScheduling.Checked)
-            {
-                checkBoxUseShiftCategory.Checked = false;
-                radioButtonBetweenDayOff.Checked = true;
-            }
-            checkBoxLevellingPerBlockScheduling.Enabled = !checkBoxUseBlockScheduling.Checked;
-            checkBoxUseShiftCategory.Enabled = !checkBoxUseBlockScheduling.Checked;
-            comboBoxAdvShiftCategory.Enabled = !checkBoxUseBlockScheduling.Checked;
-            radioButtonSchedulePeriod.Enabled = checkBoxUseBlockScheduling.Checked;
-            radioButtonBetweenDayOff.Enabled = checkBoxUseBlockScheduling.Checked;
-			checkBoxUseGroupScheduling.Enabled = !checkBoxUseBlockScheduling.Checked;
-			if (checkBoxUseGroupScheduling.Checked && checkBoxUseBlockScheduling.Checked)
-				checkBoxUseGroupScheduling.Checked = false;
-        }
+        //private void checkBoxUseBlockSchedulingCheckedChanged(object sender, EventArgs e)
+        //{
+        //    if (checkBoxUseBlockScheduling.Checked)
+        //    {
+        //        checkBoxUseShiftCategory.Checked = false;
+        //        radioButtonBetweenDayOff.Checked = true;
+        //    }
+        //    checkBoxLevellingPerBlockScheduling.Enabled = !checkBoxUseBlockScheduling.Checked;
+        //    checkBoxUseShiftCategory.Enabled = !checkBoxUseBlockScheduling.Checked;
+        //    comboBoxAdvShiftCategory.Enabled = !checkBoxUseBlockScheduling.Checked;
+        //    radioButtonSchedulePeriod.Enabled = checkBoxUseBlockScheduling.Checked;
+        //    radioButtonBetweenDayOff.Enabled = checkBoxUseBlockScheduling.Checked;
+        //    checkBoxUseGroupScheduling.Enabled = !checkBoxUseBlockScheduling.Checked;
+        //    if (checkBoxUseGroupScheduling.Checked && checkBoxUseBlockScheduling.Checked)
+        //        checkBoxUseGroupScheduling.Checked = false;
+        //}
 
-        private void radioButtonBetweenDayOffCheckedChanged(object sender, EventArgs e)
-        {
-            if(radioButtonBetweenDayOff.Checked)
-                radioButtonSchedulePeriod.Checked = false;
-        }
+        //private void radioButtonBetweenDayOffCheckedChanged(object sender, EventArgs e)
+        //{
+        //    if(radioButtonBetweenDayOff.Checked)
+        //        radioButtonSchedulePeriod.Checked = false;
+        //}
 
-        private void radioButtonSchedulePeriodCheckedChanged(object sender, EventArgs e)
-        {
-            if(radioButtonSchedulePeriod.Checked)
-                radioButtonBetweenDayOff.Checked = false;
-        }
+        //private void radioButtonSchedulePeriodCheckedChanged(object sender, EventArgs e)
+        //{
+        //    if(radioButtonSchedulePeriod.Checked)
+        //        radioButtonBetweenDayOff.Checked = false;
+        //}
 
 		private void checkBoxUseGroupSchedulingCheckedChanged(object sender, EventArgs e)
 		{
 			comboBoxGrouping.Enabled = checkBoxUseGroupScheduling.Checked;
 
 
-			checkBoxUseBlockScheduling.Enabled = !checkBoxUseGroupScheduling.Checked;
+			//checkBoxUseBlockScheduling.Enabled = !checkBoxUseGroupScheduling.Checked;
             checkBoxLevellingPerBlockScheduling.Enabled = !checkBoxUseGroupScheduling.Checked;
-			if (checkBoxUseGroupScheduling.Checked && checkBoxUseBlockScheduling.Checked)
-				checkBoxUseBlockScheduling.Checked = false;
+            //if (checkBoxUseGroupScheduling.Checked && checkBoxUseBlockScheduling.Checked)
+            //    checkBoxUseBlockScheduling.Checked = false;
 
 		    changeGrpSchedulingCommonOptionState(checkBoxUseGroupScheduling.Checked);
 		}
@@ -727,22 +727,22 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
         {
             if (checkBoxLevellingPerBlockScheduling.Checked)
             {
-                radioButtonSchedulePeriodAdvScheduling .Checked = true ;
-                radioButtonBetweenDaysOffAdvScheduling .Checked = false ;
+                //radioButtonSchedulePeriodAdvScheduling .Checked = true ;
+                //radioButtonBetweenDaysOffAdvScheduling .Checked = false ;
                 checkBoxUseGroupScheduling.Checked = false;
-                checkBoxUseBlockScheduling.Checked = false;
+                //checkBoxUseBlockScheduling.Checked = false;
 
             }
-            else
-            {
-                radioButtonSchedulePeriodAdvScheduling.Checked = false ;
-                radioButtonBetweenDaysOffAdvScheduling.Checked = false;
-            }
-            radioButtonSchedulePeriodAdvScheduling.Enabled = checkBoxLevellingPerBlockScheduling.Checked;
-            radioButtonBetweenDaysOffAdvScheduling.Enabled = checkBoxLevellingPerBlockScheduling.Checked;
+            //else
+            //{
+            //    radioButtonSchedulePeriodAdvScheduling.Checked = false ;
+            //    radioButtonBetweenDaysOffAdvScheduling.Checked = false;
+            //}
+            //radioButtonSchedulePeriodAdvScheduling.Enabled = checkBoxLevellingPerBlockScheduling.Checked;
+            //radioButtonBetweenDaysOffAdvScheduling.Enabled = checkBoxLevellingPerBlockScheduling.Checked;
             comboBoxGroupingLevelingPer.Enabled = checkBoxLevellingPerBlockScheduling.Checked;
             checkBoxUseGroupScheduling.Enabled  = !checkBoxLevellingPerBlockScheduling.Checked;
-            checkBoxUseBlockScheduling.Enabled = !checkBoxLevellingPerBlockScheduling.Checked;
+            //checkBoxUseBlockScheduling.Enabled = !checkBoxLevellingPerBlockScheduling.Checked;
             btnLevellingPer.Enabled = checkBoxLevellingPerBlockScheduling.Checked;
             
 

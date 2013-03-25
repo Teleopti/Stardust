@@ -45,8 +45,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             _target.DayOffTemplate = template;
             Assert.AreEqual(template, _target.DayOffTemplate);
             _target.ShiftCategory = category;
-            _target.UseBlockScheduling = BlockFinderType.BetweenDayOff;
-            Assert.AreEqual(BlockFinderType.BetweenDayOff, _target.UseBlockScheduling);
+            //_target.UseBlockScheduling = BlockFinderType.BetweenDayOff;
+            //Assert.AreEqual(BlockFinderType.BetweenDayOff, _target.UseBlockScheduling);
             Assert.IsNull(_target.ShiftCategory);
 
             _target.BlockFinderTypeForAdvanceScheduling  = BlockFinderType.BetweenDayOff;
@@ -72,16 +72,16 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             
         }
 
-        [Test]
-        public void VerifyBlockOptions()
-        {
-            _target.UsePeriodAsBlock = true;
-            Assert.IsTrue(_target.UsePeriodAsBlock);
-            _target.UseTwoDaysOffAsBlock = true;
-            Assert.IsTrue(_target.UseTwoDaysOffAsBlock);
-            _target.UseCalendarWeekAsBlock = true;
-            Assert.IsTrue(_target.UseCalendarWeekAsBlock);
-        }
+        //[Test]
+        //public void VerifyBlockOptions()
+        //{
+        //    _target.UsePeriodAsBlock = true;
+        //    Assert.IsTrue(_target.UsePeriodAsBlock);
+        //    _target.UseTwoDaysOffAsBlock = true;
+        //    Assert.IsTrue(_target.UseTwoDaysOffAsBlock);
+        //    _target.UseCalendarWeekAsBlock = true;
+        //    Assert.IsTrue(_target.UseCalendarWeekAsBlock);
+        //}
 
         [Test]
         public void VerifyRotationDaysOnlyCannotBeTrueIfUseRotationsIsFalse()

@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             if (schedulingOptions.TagToUseOnScheduling == null)
                 schedulingOptions.TagToUseOnScheduling = NullScheduleTag.Instance;
 
-           schedulingOptions.UseBlockScheduling = _blockFinderType;
+            //schedulingOptions.UseBlockScheduling = _blockFinderType;
             schedulingOptions.BlockFinderTypeForAdvanceScheduling = _blockFinderTypeForAdvanceScheduling;
             schedulingOptions.UseGroupScheduling = _useGroupScheduling;
 
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         public void MapFrom(ISchedulingOptions schedulingOptions)
         {
             _scheduleTagId = schedulingOptions.TagToUseOnScheduling.Id;
-             _blockFinderType = schedulingOptions.UseBlockScheduling;
+             //_blockFinderType = schedulingOptions.UseBlockScheduling;
             _blockFinderTypeForAdvanceScheduling = schedulingOptions.BlockFinderTypeForAdvanceScheduling;
             _useGroupScheduling = schedulingOptions.UseGroupScheduling;
             _groupSchedulingGroupPageKey = schedulingOptions.GroupOnGroupPage.Key;

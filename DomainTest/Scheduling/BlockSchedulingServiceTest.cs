@@ -68,11 +68,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 
             var scheduleDayPro = _mocks.StrictMock<IScheduleDayPro>();
             var schedulePart = _mocks.StrictMock<IScheduleDay>();
-			_schedulingOptions.UseBlockScheduling = BlockFinderType.SchedulePeriod;
+			//_schedulingOptions.UseBlockScheduling = BlockFinderType.SchedulePeriod;
 			var poss = new PossibleStartEndCategory();
             using (_mocks.Record())
             {
-				Expect.Call(_blockFinderFactory.CreateFinder(_matrix0, _schedulingOptions.UseBlockScheduling)).Return(_blockFinder).Repeat.Any();
+				//Expect.Call(_blockFinderFactory.CreateFinder(_matrix0, _schedulingOptions.UseBlockScheduling)).Return(_blockFinder).Repeat.Any();
                 Expect.Call(_blockFinder.ScheduleMatrix).Return(_matrix0).Repeat.Any();
                 Expect.Call(_blockFinder.NextBlock()).Return(new BlockFinderResult(null, new List<DateOnly> { new DateOnly(2010, 1, 1) }, _reportList)).Repeat.
                     Twice();
@@ -309,7 +309,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
         {
             var scheduleDayPro = _mocks.StrictMock<IScheduleDayPro>();
             var schedulePart = _mocks.StrictMock<IScheduleDay>();
-			_schedulingOptions.UseBlockScheduling = BlockFinderType.SchedulePeriod;
+			//_schedulingOptions.UseBlockScheduling = BlockFinderType.SchedulePeriod;
 			var poss = new PossibleStartEndCategory { ShiftCategory = ShiftCategoryFactory.CreateShiftCategory("xx") };
             using (_mocks.Record())
             {
@@ -319,7 +319,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
                     Once();
                 _blockFinder.ResetBlockPointer();
                 LastCall.Repeat.Any();
-				Expect.Call(_blockFinderFactory.CreateFinder(_matrix0, _schedulingOptions.UseBlockScheduling)).Return(_blockFinder).Repeat.Any();
+				//Expect.Call(_blockFinderFactory.CreateFinder(_matrix0, _schedulingOptions.UseBlockScheduling)).Return(_blockFinder).Repeat.Any();
                 Expect.Call(_blockFinder.ScheduleMatrix).Return(_matrix0).Repeat.Any();
                 Expect.Call(_blockFinder.NextBlock()).Return(new BlockFinderResult(null, new List<DateOnly> { new DateOnly(2010, 1, 1) }, _reportList)).Repeat.
                     Once();
