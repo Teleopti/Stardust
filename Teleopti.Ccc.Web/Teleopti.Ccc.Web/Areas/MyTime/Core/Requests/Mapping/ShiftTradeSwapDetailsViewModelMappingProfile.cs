@@ -34,15 +34,31 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			var schedpartTo = shiftTradeRequest.ShiftTradeSwapDetails.First().SchedulePartTo;
 			if (schedpartFrom == null || schedpartTo == null)
 			{
+				//RK - when will this happen?
 				return shiftTradeRequest.Period;
+			}
+			const int extraHourBeforeAndAfter = 1;
+			DateTimePeriod totalPeriod;
+			var fromTotalPeriod = shiftTradeRequest.ShiftTradeSwapDetails.First().SchedulePartFrom.TotalPeriod();
+			var toTotalPeriod = shiftTradeRequest.ShiftTradeSwapDetails.First().SchedulePartTo.TotalPeriod();
+			if (fromTotalPeriod.HasValue && toTotalPeriod.HasValue)
+			{
+				totalPeriod = fromTotalPeriod.Value.MaximumPeriod(toTotalPeriod.Value);
+			}
+			else if (fromTotalPeriod.HasValue)
+			{
+				totalPeriod = fromTotalPeriod.Value;
+			}
+			else if(toTotalPeriod.HasValue)
+			{
+				totalPeriod = toTotalPeriod.Value;					
 			}
 			else
 			{
-				var fromPeriod = shiftTradeRequest.ShiftTradeSwapDetails.First().SchedulePartFrom.Period;
-				var toPeriod = shiftTradeRequest.ShiftTradeSwapDetails.First().SchedulePartTo.Period;
-				return fromPeriod.MaximumPeriod(toPeriod);
+				totalPeriod = shiftTradeRequest.Period;
 			}
-		
+			return new DateTimePeriod(totalPeriod.StartDateTime.AddHours(-extraHourBeforeAndAfter), 
+			                          totalPeriod.EndDateTime.AddHours(extraHourBeforeAndAfter));
 		}
 	}
 }
