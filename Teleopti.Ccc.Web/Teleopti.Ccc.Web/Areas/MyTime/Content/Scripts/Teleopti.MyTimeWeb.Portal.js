@@ -25,7 +25,6 @@ Teleopti.MyTimeWeb.Portal = (function ($) {
 
 	function _layout() {
 		Teleopti.MyTimeWeb.Common.Layout.ActivateTabs();
-		Teleopti.MyTimeWeb.Common.Layout.ActivateStdButtons();
 		Teleopti.MyTimeWeb.Common.Layout.ActivateCustomInput();
 		Teleopti.MyTimeWeb.Portal.Layout.ActivateToolbarButtons();
 		Teleopti.MyTimeWeb.Portal.Layout.ActivateDateButtons();

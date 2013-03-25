@@ -42,9 +42,10 @@
 				</select>
 			</div>
 		</div>
-	<div class="floatleft">
-		<span class="edit-module-element floatleft">
-			<input id="Request-detail-fromDate-input" class="date-input" type="text" />
+    <div class="floatleft">
+        <span class="edit-module-element floatleft input-append">
+            <input id="Request-detail-fromDate-input" data-bind="datepicker: DateFrom, datepickerOptions: {autoHide: true}" type="text" />
+            <span class="add-on"><i class="icon-th"></i></span>
 		</span>
 		<span id="Request-detail-fromTime" class="edit-module-element floatleft">
 			<label class="displayblock" for="Request-detail-fromTime-input-input">@Resources.Time</label>
@@ -55,10 +56,11 @@
 				}
 			</select>
 		</span>
-	</div>
-	<div>
-		<span class="edit-module-element clearleftfloat floatleft">
-			<input id="Request-detail-toDate-input" class="date-input" type="text"  />
+    </div>
+    <div>
+        <span class="edit-module-element clearleftfloat floatleft input-append">
+            <input id="Request-detail-toDate-input" data-bind="datepicker: DateTo, datepickerOptions: {autoHide: true}" type="text"  />
+            <span class="add-on"><i class="icon-th"></i></span>
 		</span>
 		<span id="Request-detail-toTime" class="edit-module-element floatleft">
 			<label class="displayblock" for="Request-detail-toTime-input-input">@Resources.Time</label>
@@ -76,7 +78,7 @@
 		<label class="floatleft" for="Fullday-check">
 			@Resources.FullDay
 		</label>
-		<input id="Request-detail-ok-button" type="button" class="button mb5 floatright" update-value="@Html.AttributeEncode(Resources.Update)" new-value="@Html.AttributeEncode(Resources.SubmitRequest)" />
+		<button id="Request-detail-ok-button" class="btn btn-primary pull-right" update-value="@Html.AttributeEncode(Resources.Update)" new-value="@Html.AttributeEncode(Resources.SubmitRequest)" />
 		<div id="Request-detail-error" class="error edit-module-element floatleft clearleftfloat">
 		</div>
 </script>
@@ -109,9 +111,10 @@
 				</select>
 			</div>
 		</div>
-	<div class="floatleft">
-		<span class="edit-module-element floatleft">
-			<input id="Request-detail-fromDate-input" class="date-input" type="text" />
+    <div class="floatleft">
+        <span class="edit-module-element floatleft input-append">
+            <input id="Request-detail-fromDate-input" data-bind="datepicker: DateFrom, datepickerOptions: {autoHide: true}" type="text" />
+            <span class="add-on"><i class="icon-th"></i></span>
 		</span>
 		<span id="Request-detail-fromTime" class="edit-module-element floatleft">
 			<label class="displayblock" for="Request-detail-fromTime-input-input">@Resources.Time</label>
@@ -122,10 +125,11 @@
 				}
 			</select>
 		</span>
-	</div>
-	<div>
-		<span class="edit-module-element clearleftfloat floatleft">
-			<input id="Request-detail-toDate-input" class="date-input" type="text"  />
+    </div>
+    <div>
+        <span class="edit-module-element clearleftfloat floatleft input-append">
+            <input id="Request-detail-toDate-input" data-bind="datepicker: DateTo, datepickerOptions: {autoHide: true}" type="text"  />
+            <span class="add-on"><i class="icon-th"></i></span>
 		</span>
 		<span id="Request-detail-toTime" class="edit-module-element floatleft">
 			<label class="displayblock" for="Request-detail-toTime-input-input">@Resources.Time</label>
@@ -143,7 +147,7 @@
 		<label class="floatleft" for="Fullday-check">
 			@Resources.FullDay
 		</label>
-		<input id="Request-detail-ok-button" type="button" class="button mb5 floatright" update-value="@Html.AttributeEncode(Resources.Update)" new-value="@Html.AttributeEncode(Resources.SubmitRequest)"/>
+		<button id="Request-detail-ok-button" class="btn btn-primary pull-right" update-value="@Html.AttributeEncode(Resources.Update)" new-value="@Html.AttributeEncode(Resources.SubmitRequest)"/>
 		<div id="Request-detail-error" class="error edit-module-element floatleft clearleftfloat">
 		</div>
 </script>
@@ -182,8 +186,9 @@
         </div>
     </div>
     <div class="floatleft">
-        <span class="edit-module-element floatleft">
-            <input id="Request-detail-fromDate-input" class="date-input" type="text" />
+        <span class="edit-module-element floatleft input-append">
+            <input id="Request-detail-fromDate-input" data-bind="datepicker: DateFrom, datepickerOptions: {autoHide: true}" type="text" />
+            <span class="add-on"><i class="icon-th"></i></span>
         </span>
         <span id="Request-detail-fromTime" class="edit-module-element floatleft">
             <label class="displayblock" for="Request-detail-fromTime-input-input">@Resources.Time</label>
@@ -196,8 +201,9 @@
         </span>
     </div>
     <div>
-        <span class="edit-module-element clearleftfloat floatleft">
-            <input id="Request-detail-toDate-input" class="date-input" type="text"  />
+        <span class="edit-module-element clearleftfloat floatleft input-append">
+            <input id="Request-detail-toDate-input" data-bind="datepicker: DateTo, datepickerOptions: {autoHide: true}" type="text"  />
+            <span class="add-on"><i class="icon-th"></i></span>
         </span>
         <span id="Request-detail-toTime" class="edit-module-element floatleft">
             <label class="displayblock" for="Request-detail-toTime-input-input">@Resources.Time</label>
@@ -215,7 +221,7 @@
     <label class="floatleft" for="Fullday-check">
         @Resources.FullDay
     </label>
-    <input id="Request-detail-ok-button" type="button" class="button mb5 floatright" update-value="@Html.AttributeEncode(Resources.Update)" new-value="@Html.AttributeEncode(Resources.SubmitRequest)"/>
+    <button id="Request-detail-ok-button" class="btn btn-primary pull-right" update-value="@Html.AttributeEncode(Resources.Update)" new-value="@Html.AttributeEncode(Resources.SubmitRequest)"/>
     <div id="Request-detail-error" class="error edit-module-element floatleft clearleftfloat">
     </div>
 </script>
@@ -223,6 +229,16 @@
 <div class="displaynone" id="Request-detail-default-start-time">@TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(0, 0, 0))</div>
 <div class="displaynone" id="Request-detail-default-end-time" >@TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(23, 59, 0))</div>
 
+
+<div class="navbar">
+    <div class="navbar-inner">
+        <ul class="nav">
+            <li><a href="#" data-bind="click: Teleopti.MyTimeWeb.Request.RequestDetail.AddTextRequestClick"><i class="icon-plus"></i>&nbsp;@Resources.TextRequest</a></li>
+            <li><a href="#" data-bind="click: Teleopti.MyTimeWeb.Request.RequestDetail.AddAbsenceRequestClick"><i class="icon-plus"></i>&nbsp;@Resources.AbsenceRequest</a></li>
+            <li><a href="#" data-bind="click: Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.OpenAddShiftTradeWindow"><i class="icon-plus"></i>&nbsp;@Resources.ShiftTradeRequest</a></li>
+        </ul>
+    </div>
+</div>
 <div id="Requests-body-inner" class="request-body-inner relative">
 	@Html.Partial("NewShiftTradeRequest")
 	<div id="Requests-data-binding-area" >
@@ -245,7 +261,7 @@
 				</div>
 		
 				<div>
-					<button class="request-delete-button icon" title="@Resources.Delete" data-bind="click: $parent.Delete,clickBubble: false, visible: CanDelete" />
+					<button class="close" data-bind="click: $parent.Delete,clickBubble: false, visible: CanDelete" title="@Resources.Delete">&times;</button>
 				</div>
 				<div class="request-subject">
 					<h3 class="request-data-subject" data-bind="html: Subject">

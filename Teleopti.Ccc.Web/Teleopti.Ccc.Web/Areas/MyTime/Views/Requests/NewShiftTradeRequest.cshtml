@@ -7,9 +7,9 @@
 		@Resources.MissingWorkflowControlSet
 	</div>
 	<div data-bind="visible : !missingWorkflowControlSet()">
-		<button type="button" class="shift-trade-add-previous-date" data-bind="click : previousDate, enable: !IsLoading()"></button>
-		<input class="shift-trade-add-datepicker ui-corner-all" type="text" data-bind="datepicker: requestedDate, enable: !IsLoading()" />
-		<button type="button" class="shift-trade-add-next-date" data-bind="click : nextDate, enable: !IsLoading()"></button>
+		<button class="btn" data-bind="click : previousDate, enable: !IsLoading()"><i class="icon-arrow-left"></i></button>
+		<input class="shift-trade-add-datepicker ui-corner-all" type="text" data-bind="datepicker: requestedDate, datepickerOptions: {minDate: openPeriodStartDate, maxDate: openPeriodEndDate}, enable: !IsLoading()" />
+		<button class="btn" data-bind="click : nextDate, enable: !IsLoading()"><i class="icon-arrow-right"></i></button>
 	</div>
 	
   
@@ -57,8 +57,8 @@
 				<textarea id="Request-add-shift-trade-message-input" data-bind="value: message" class="request-message-input"/>
 			</div>
 		<div class="edit-module-element">
-			<button type="button" class="send-button floatright" data-bind="enable: isSendEnabled">@Resources.Send</button>
-			<button type="button" class="cancel-button floatright mr5">@Resources.Cancel</button>
+			<button class="btn btn-primary pull-right send-button" data-bind="enable: isSendEnabled">@Resources.Send</button>
+			<button class="btn pull-right cancel-button">@Resources.Cancel</button>
 		</div>
 		<div class="error" data-bind="html: errorMessage"></div>
 		</div>

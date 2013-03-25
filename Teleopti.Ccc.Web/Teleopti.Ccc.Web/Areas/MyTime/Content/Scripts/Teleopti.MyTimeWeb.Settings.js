@@ -22,7 +22,6 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 
 	function _initButton() {
 		$("input#passwordButton")
-			.button()
 			.click(function () {
 				_updatePassword($("input#oldPassword").val(), $("input#password").val());
 			});

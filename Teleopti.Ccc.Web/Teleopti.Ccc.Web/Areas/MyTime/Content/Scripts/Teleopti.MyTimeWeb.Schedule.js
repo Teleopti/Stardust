@@ -398,7 +398,6 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		},
 		PartialInit: function (readyForInteractionCallback, completelyLoadedCallback) {
 			Teleopti.MyTimeWeb.Common.Layout.ActivateCustomInput();
-			Teleopti.MyTimeWeb.Common.Layout.ActivateStdButtons();
 			readyForInteractionCallback();
 			completelyLoaded = completelyLoadedCallback;
 		},

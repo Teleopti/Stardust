@@ -114,12 +114,10 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 				events: {
 					render: function () {
 						$('#Student-availability-reset')
-							.button()
 							.click(function () {
 								editFormViewModel.reset();
 							});
 						$('#Student-availability-apply')
-							.button()
 							.click(function () {
 								_setStudentAvailability(ko.toJS(editFormViewModel));
 							});

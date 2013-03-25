@@ -48,16 +48,13 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 			return;
 		ko.applyBindings(requestViewModel, $('#Request-detail-section')[0]);
 
-		$('#Request-detail-section .date-input')
-			.datepicker()
-			;
 		$("#Request-detail-section .combobox.time-input")
 			.combobox()
 			;
 		$("#Request-detail-section .combobox.absence-input").combobox();
 		$("#Absence-type-input").prop('readonly', true);
 
-		$('#Request-detail-ok-button').button()
+		$('#Request-detail-ok-button')
 			.click(function () {
 				$(this).prop('disabled', true);
 				if (requestViewModel.TypeEnum() == 0) {
@@ -173,10 +170,10 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 
 	function _SetOkButtonValue() {
 		if ($('#Request-detail-entityid').val() == '') {
-			$('#Request-detail-ok-button').val($('#Request-detail-ok-button').attr('new-value'));
+			$('#Request-detail-ok-button').text($('#Request-detail-ok-button').attr('new-value'));
 		}
 		else {
-			$('#Request-detail-ok-button').val($('#Request-detail-ok-button').attr('update-value'));
+			$('#Request-detail-ok-button').text($('#Request-detail-ok-button').attr('update-value'));
 		}
 	}
 
@@ -207,9 +204,9 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 			Subject: $('#Request-detail-subject-input').val(),
 			AbsenceId: absenceId,
 			Period: {
-				StartDate: $('#Request-detail-fromDate-input').val(),
+				StartDate: requestViewModel.DateFrom().format('YYYY-MM-DD'),
 				StartTime: $('#Request-detail-fromTime-input-input').val(),
-				EndDate: $('#Request-detail-toDate-input').val(),
+				EndDate: requestViewModel.DateTo().format('YYYY-MM-DD'),
 				EndTime: $('#Request-detail-toTime-input-input').val()
 			},
 			Message: $('#Request-detail-message-input').val(),
@@ -219,9 +216,9 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 
 	function _fillFormData(data) {
 		$('#Request-detail-subject-input').val(data.Subject);
-		$('#Request-detail-fromDate-input').datepicker("viewDate", moment(new Date(data.DateFromYear, data.DateFromMonth - 1, data.DateFromDayOfMonth)));
+		requestViewModel.DateTo(moment(new Date(data.DateFromYear, data.DateFromMonth - 1, data.DateFromDayOfMonth)));
 		$('#Request-detail-fromTime-input-input').val(data.RawTimeFrom);
-		$('#Request-detail-toDate-input').datepicker("viewDate", moment(new Date(data.DateToYear, data.DateToMonth - 1, data.DateToDayOfMonth)));
+		requestViewModel.DateFrom(moment(new Date(data.DateToYear, data.DateToMonth - 1, data.DateToDayOfMonth)));
 		$('#Request-detail-toTime-input-input').val(data.RawTimeTo);
 		$('#Request-detail-message-input').val(data.Text);
 		$('#Request-detail-entityid').val(data.Id);
@@ -294,7 +291,9 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel() {
 	self.AbsenceRequestHeaderVisible = ko.observable(false);
 	self.IsFullDay = ko.observable(false);
 	self.IsUpdate = ko.observable(false);
-	self.TypeEnum = ko.observable(0);
+    self.DateFrom = ko.observable(moment().startOf('day'));
+    self.DateTo = ko.observable(moment().startOf('day'));
+    self.TypeEnum = ko.observable(0);
 	self.Template = ko.computed(function () {
 		return self.IsUpdate() ? self.Templates[self.TypeEnum()] : "add-new-request-detail-template";
 	});
@@ -322,8 +321,8 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel() {
         var year = $('#Request-detail-today-year').val();
         var month = $('#Request-detail-today-month').val();
         var day = $('#Request-detail-today-day').val();
-        $('#Request-detail-fromDate-input').datepicker("setDate", new Date(year, month - 1, day));
-        $('#Request-detail-toDate-input').datepicker("setDate", new Date(year, month - 1, day));
+        self.DateFrom(moment(new Date(year, month - 1, day)));
+        self.DateTo(moment(new Date(year, month - 1, day)));
     }
 	
 	self.AddTextRequest = function () {

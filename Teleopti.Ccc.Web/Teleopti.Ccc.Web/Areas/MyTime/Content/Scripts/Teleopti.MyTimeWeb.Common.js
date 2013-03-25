@@ -142,11 +142,6 @@ Teleopti.MyTimeWeb.Common.Layout = (function ($) {
 			$("#tabs").tabs();
 		},
 
-		// Activating buttons
-		ActivateStdButtons: function () {
-			$(".button").button();
-		},
-
 		// Activate custom inputs
 		ActivateCustomInput: function () {
 			$('.edit-module input[type="checkbox"], .edit-module input[type="radio"]').customInput();

@@ -215,17 +215,14 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 						});
 						
 						$('#Preference-extended-reset')
-							.button()
 							.click(function () {
 								_reset();
 							});
 						$('#Preference-extended-apply')
-							.button()
 							.click(function () {
 								_setPreference(ko.toJS(addExtendedPreferenceFormViewModel));
 							});
 						$('#Preference-extended-save-template')
-							.button()
 							.click(function () {
 								_savePreferenceTemplate(ko.toJS(addExtendedPreferenceFormViewModel));
 							});
