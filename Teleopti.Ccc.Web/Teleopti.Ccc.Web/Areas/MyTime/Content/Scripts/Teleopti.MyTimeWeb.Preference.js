@@ -333,7 +333,9 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 	}
 
 	function _initViewModels(loader) {
-		var date = portal ? portal.CurrentFixedDate() : null;
+	    var date = portal ? portal.CurrentFixedDate() : null;
+	    if (date == null)
+	        date = moment().startOf('day').format('YYYY-MM-DD');
 
 		var dayViewModels = {};
 		var dayViewModelsInPeriod = {};
