@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 	[TestFixture]
 	public class SyncEventsPublisherTest
 	{
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
 		public void ShouldPublishEachEvent()
 		{
 			var eventPublisher = MockRepository.GenerateMock<IEventPublisher>();
