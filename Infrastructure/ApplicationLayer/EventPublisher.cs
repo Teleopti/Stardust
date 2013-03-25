@@ -12,6 +12,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 
 		public EventPublisher(IComponentContext componentContext) { _componentContext = componentContext; }
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void Publish(IEvent @event)
 		{
 			var handlerType = typeof(IHandleEvent<>).MakeGenericType(@event.GetType());
