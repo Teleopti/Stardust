@@ -28,10 +28,13 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 	}
 
 	function _initViewModel() {
-		toolBarViewModel = new (function() {
-			this.SeperatorVisible = ko.observable(false);
-		})();
-		ko.applyBindings(toolBarViewModel, $("#TeamScheduleTab")[0]);
+		var tab = $("#TeamScheduleTab")[0];
+		if (tab) {
+			toolBarViewModel = new (function () {
+				this.SeperatorVisible = ko.observable(false);
+			})();
+			ko.applyBindings(toolBarViewModel, tab);
+		}
 	}
 	
 	function _initTeamPicker() {
@@ -124,6 +127,7 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 		Init: function () {
 			portal.RegisterPartialCallBack('TeamSchedule/Index', Teleopti.MyTimeWeb.TeamSchedule.TeamSchedulePartialInit);
 			_initTeamPicker();
+			_initViewModel();
 		},
 		TeamSchedulePartialInit: function (readyForInteractionCallback, completelyLoadedCallback) {
 			readyForInteraction = readyForInteractionCallback;
@@ -135,7 +139,6 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 			}
 			_initPeriodSelection();
 			_initTeamPickerSelection();
-			_initViewModel();
 			_initAgentNameOverflow();
 		}
 	};
