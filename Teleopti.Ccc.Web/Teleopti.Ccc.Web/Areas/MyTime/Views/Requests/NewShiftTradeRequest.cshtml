@@ -6,9 +6,9 @@
 	<div id="Request-add-shift-trade-missing-wcs-message" class="friendly-message ui-corner-all" data-bind="visible : missingWorkflowControlSet">
 		@Resources.MissingWorkflowControlSet
 	</div>
-	<div data-bind="visible : !missingWorkflowControlSet()">
+	<div data-bind="visible : !missingWorkflowControlSet()" class="input-append input-prepend">
 		<button class="btn" data-bind="click : previousDate, enable: !IsLoading()"><i class="icon-arrow-left"></i></button>
-		<input class="shift-trade-add-datepicker ui-corner-all" type="text" data-bind="datepicker: requestedDate, datepickerOptions: {minDate: openPeriodStartDate, maxDate: openPeriodEndDate}, enable: !IsLoading()" />
+		<input type="text" class="span2" data-bind="datepicker: requestedDate, datepickerOptions: {minDate: openPeriodStartDate, maxDate: openPeriodEndDate}, enable: !IsLoading()" />
 		<button class="btn" data-bind="click : nextDate, enable: !IsLoading()"><i class="icon-arrow-right"></i></button>
 	</div>
 	
