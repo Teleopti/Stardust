@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			personAbsenceRepository.Single().PopAllEvents().Single().Should().Be.OfType<FullDayAbsenceAddedEvent>();
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
 		public void ShouldSetupEntityState()
 		{
 			var personRepository = new TestWriteSideRepository<IPerson> { PersonFactory.CreatePersonWithId() };
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			absenceLayer.Period.EndDateTime.Should().Be(command.EndDate.AddHours(24));
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
 		public void ShouldConvertFromAgentsTimeZone()
 		{
 			var person = PersonFactory.CreatePersonWithId();
