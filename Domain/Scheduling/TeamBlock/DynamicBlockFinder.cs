@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		    DateOnlyPeriod? blockPeriod = null;
 		    switch (blockType)
 		    {
-			    case BlockFinderType.SingleDay:
+			        case BlockFinderType.SingleDay:
 				    {
 					    blockPeriod = new DateOnlyPeriod(blockOnDate, blockOnDate);
 					    break;

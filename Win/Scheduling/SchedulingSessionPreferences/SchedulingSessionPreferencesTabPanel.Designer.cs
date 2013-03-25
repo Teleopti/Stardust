@@ -67,7 +67,9 @@
             this.checkBoxCommonStart = new System.Windows.Forms.CheckBox();
             this.checkBoxCommonCategory = new System.Windows.Forms.CheckBox();
             this.comboBoxGrouping = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
-            this.btnLevellingPer = new System.Windows.Forms.Button();
+            this.comboBoxTeamBlockType = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
+            this.checkBoxLevellingSameShiftCategory = new System.Windows.Forms.CheckBox();
+            this.checkBoxLevellingSameStartTime = new System.Windows.Forms.CheckBox();
             this.tabPageAdvance = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.lblShiftSelection = new System.Windows.Forms.Label();
@@ -88,7 +90,6 @@
             this.checkBoxUseMinimumPersons = new System.Windows.Forms.CheckBox();
             this.checkBoxDoNotBreakMaxSeats = new System.Windows.Forms.CheckBox();
             this.checkBoxUseAverageShiftLengths = new System.Windows.Forms.CheckBox();
-            this.comboBoxGroupingLevelingPer = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
             this.tabControl1.SuspendLayout();
             this.tabPageGeneral.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -105,6 +106,7 @@
             this.tableLayoutPanel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.comboBoxActivity)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.comboBoxGrouping)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.comboBoxTeamBlockType)).BeginInit();
             this.tabPageAdvance.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
             this.pnlShiftCategory.SuspendLayout();
@@ -114,7 +116,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownRefreshRate)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownResourceCalculateEvery)).BeginInit();
             this.tableLayoutPanel6.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.comboBoxGroupingLevelingPer)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -504,8 +505,9 @@
             this.tableLayoutPanel4.Controls.Add(this.checkBoxCommonStart, 1, 7);
             this.tableLayoutPanel4.Controls.Add(this.checkBoxCommonCategory, 1, 6);
             this.tableLayoutPanel4.Controls.Add(this.comboBoxGrouping, 2, 5);
-            this.tableLayoutPanel4.Controls.Add(this.btnLevellingPer, 2, 0);
-            this.tableLayoutPanel4.Controls.Add(this.comboBoxGroupingLevelingPer, 2, 1);
+            this.tableLayoutPanel4.Controls.Add(this.comboBoxTeamBlockType, 2, 0);
+            this.tableLayoutPanel4.Controls.Add(this.checkBoxLevellingSameShiftCategory, 1, 1);
+            this.tableLayoutPanel4.Controls.Add(this.checkBoxLevellingSameStartTime, 1, 3);
             this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel4.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
@@ -618,16 +620,38 @@
             this.comboBoxGrouping.TabIndex = 35;
             this.comboBoxGrouping.SelectedIndexChanged += new System.EventHandler(this.comboBoxGroupingSelectedIndexChanged);
             // 
-            // btnLevellingPer
+            // comboBoxTeamBlockType
             // 
-            this.btnLevellingPer.Enabled = false;
-            this.btnLevellingPer.Location = new System.Drawing.Point(165, 3);
-            this.btnLevellingPer.Name = "btnLevellingPer";
-            this.btnLevellingPer.Size = new System.Drawing.Size(91, 19);
-            this.btnLevellingPer.TabIndex = 46;
-            this.btnLevellingPer.Text = "xxLevellingPer";
-            this.btnLevellingPer.UseVisualStyleBackColor = true;
-            this.btnLevellingPer.Click += new System.EventHandler(this.btnLevellingPer_Click);
+            this.comboBoxTeamBlockType.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
+            this.comboBoxTeamBlockType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxTeamBlockType.FlatBorderColor = System.Drawing.SystemColors.ControlDark;
+            this.comboBoxTeamBlockType.Location = new System.Drawing.Point(165, 3);
+            this.comboBoxTeamBlockType.Name = "comboBoxTeamBlockType";
+            this.comboBoxTeamBlockType.Size = new System.Drawing.Size(117, 21);
+            this.comboBoxTeamBlockType.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
+            this.comboBoxTeamBlockType.TabIndex = 47;
+            // 
+            // checkBoxLevellingSameShiftCategory
+            // 
+            this.checkBoxLevellingSameShiftCategory.AutoSize = true;
+            this.checkBoxLevellingSameShiftCategory.Enabled = false;
+            this.checkBoxLevellingSameShiftCategory.Location = new System.Drawing.Point(33, 28);
+            this.checkBoxLevellingSameShiftCategory.Name = "checkBoxLevellingSameShiftCategory";
+            this.checkBoxLevellingSameShiftCategory.Size = new System.Drawing.Size(126, 17);
+            this.checkBoxLevellingSameShiftCategory.TabIndex = 48;
+            this.checkBoxLevellingSameShiftCategory.Text = "xxSameShiftCategory";
+            this.checkBoxLevellingSameShiftCategory.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxLevellingSameStartTime
+            // 
+            this.checkBoxLevellingSameStartTime.AutoSize = true;
+            this.checkBoxLevellingSameStartTime.Enabled = false;
+            this.checkBoxLevellingSameStartTime.Location = new System.Drawing.Point(33, 55);
+            this.checkBoxLevellingSameStartTime.Name = "checkBoxLevellingSameStartTime";
+            this.checkBoxLevellingSameStartTime.Size = new System.Drawing.Size(108, 17);
+            this.checkBoxLevellingSameStartTime.TabIndex = 49;
+            this.checkBoxLevellingSameStartTime.Text = "xxSameStartTime";
+            this.checkBoxLevellingSameStartTime.UseVisualStyleBackColor = true;
             // 
             // tabPageAdvance
             // 
@@ -907,19 +931,6 @@
             this.checkBoxUseAverageShiftLengths.Text = "xxUseAverageShiftLengths";
             this.checkBoxUseAverageShiftLengths.UseVisualStyleBackColor = true;
             // 
-            // comboBoxGroupingLevelingPer
-            // 
-            this.comboBoxGroupingLevelingPer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
-            this.comboBoxGroupingLevelingPer.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxGroupingLevelingPer.FlatBorderColor = System.Drawing.SystemColors.ControlDark;
-            this.comboBoxGroupingLevelingPer.Location = new System.Drawing.Point(165, 28);
-            this.comboBoxGroupingLevelingPer.Name = "comboBoxGroupingLevelingPer";
-            this.comboBoxGroupingLevelingPer.Size = new System.Drawing.Size(117, 21);
-            this.comboBoxGroupingLevelingPer.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
-            this.comboBoxGroupingLevelingPer.TabIndex = 44;
-            this.comboBoxGroupingLevelingPer.Visible = false;
-            this.comboBoxGroupingLevelingPer.SelectedIndexChanged += new System.EventHandler(this.comboBoxGroupingLevelingPer_SelectedIndexChanged);
-            // 
             // SchedulingSessionPreferencesTabPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -951,6 +962,7 @@
             this.tableLayoutPanel4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.comboBoxActivity)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.comboBoxGrouping)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.comboBoxTeamBlockType)).EndInit();
             this.tabPageAdvance.ResumeLayout(false);
             this.tableLayoutPanel3.ResumeLayout(false);
             this.tableLayoutPanel3.PerformLayout();
@@ -963,7 +975,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownResourceCalculateEvery)).EndInit();
             this.tableLayoutPanel6.ResumeLayout(false);
             this.tableLayoutPanel6.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.comboBoxGroupingLevelingPer)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1028,7 +1039,8 @@
         private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxActivity;
 		private System.Windows.Forms.CheckBox checkBoxUseAverageShiftLengths;
         private System.Windows.Forms.CheckBox checkBoxLevellingPerBlockScheduling;
-        private System.Windows.Forms.Button btnLevellingPer;
-        private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxGroupingLevelingPer;
+        private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxTeamBlockType;
+        private System.Windows.Forms.CheckBox checkBoxLevellingSameShiftCategory;
+        private System.Windows.Forms.CheckBox checkBoxLevellingSameStartTime;
     }
 }
