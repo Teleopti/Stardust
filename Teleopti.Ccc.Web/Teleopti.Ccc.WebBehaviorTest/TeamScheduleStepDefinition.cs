@@ -34,6 +34,15 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			Browser.Current.Eval("$('#" + Pages.Pages.TeamSchedulePage.TeamPickerInput.Id + "').select2('data', {id:'" + team.Id + "', text:'" + site + "/" + team.Description.Name + "'}).trigger('change')");
 		}
 
+		//[When(@"I select '(.*)' in the team picker")]
+		//public void WhenISelectInTheTeamPicker(string optionText)
+		//{
+		//	var team = UserFactory.User().UserData<AnotherTeam>().TheTeam;
+		//	var site = GlobalDataContext.Data().Data<CommonSite>().Site.Description.Name;
+		//	Browser.Current.Eval("$('#" + Pages.Pages.TeamSchedulePage.TeamPickerInput.Id + "').select2('data', {id:'" + team.Id + "', text:'" + site + "/" + team.Description.Name + "'}).trigger('change')");
+		//}
+
+
 		[Then(@"I should see the team schedule tab")]
 		public void ThenIShouldSeeTheTeamScheduleTab()
 		{
@@ -62,6 +71,14 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => layers.Count, Is.GreaterThan(0));
 		}
 
+		[Then(@"I should see '(.*)' schedule")]
+		public void ThenIShouldSeeSchedule(string name)
+		{
+			var layers = Pages.Pages.TeamSchedulePage.LayersByAgentName(name);
+			EventualAssert.That(() => layers.Count, Is.GreaterThan(0));
+		}
+
+
 		[Then(@"I should see my colleague's absence")]
 		public void ThenIShouldMyColleagueSAbsence()
 		{
@@ -75,6 +92,13 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			AssertShowingDay(DateOnly.Today.AddDays(1));
 		}
+
+		[Then(@"I should see date '(.*)'")]
+		public void ThenIShouldSeeDate(DateTime date)
+		{
+			AssertShowingDay(new DateOnly(date));
+		}
+
 
 		[Then(@"I should see the previous day")]
 		public void ThenIShouldSeeThePreviousDay()
@@ -135,6 +159,12 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			AssertAgentIsNotDisplayed(UserFactory.User().TeamColleague().Person.Name.ToString());
 		}
 
+		[Then(@"I should not see '(.*)' schedule")]
+		public void ThenIShouldNotSeeSchedule(string name)
+		{
+			AssertAgentIsNotDisplayed(name);
+		}
+
 		[Then(@"I should not see the other colleague's schedule")]
 		public void ThenIShouldNotSeeTheOtherColleagueSSchedule()
 		{
@@ -154,6 +184,21 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			all.IndexOf(colleague)
 				.Should().Be.LessThan(all.IndexOf(mySelf));
 		}
+
+		[Then(@"I should see '(.*)' before myself")]
+		public void ThenIShouldSeeBeforeMyself(string name)
+		{
+			var colleague = Pages.Pages.TeamSchedulePage.AgentByName(name);
+			var mySelf = Pages.Pages.TeamSchedulePage.AgentByName(UserFactory.User().Person.Name.ToString());
+
+			EventualAssert.That(() => colleague.Exists, Is.True);
+			EventualAssert.That(() => mySelf.Exists, Is.True);
+
+			var all = new List<Div>(Pages.Pages.TeamSchedulePage.Agents());
+			all.IndexOf(colleague)
+				.Should().Be.LessThan(all.IndexOf(mySelf));
+		}
+
 
 		[Then(@"I should see myself without schedule")]
 		public void ThenIShouldSeeMyselfWithoutSchedule()
@@ -216,6 +261,13 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			AssertAgentIsDisplayed(UserFactory.User().LastColleague().Person.Name.ToString());
 		}
+
+		[Then(@"I should see colleague '(.*)'")]
+		public void ThenIShouldSeeColleague(string personName)
+		{
+			AssertAgentIsDisplayed(personName);
+		}
+
 
 		[Then(@"I should not see myself")]
 		public void ThenIShouldNotSeeMySchedule()

@@ -10,13 +10,23 @@ Given there is a team with
 	| Name  | Team green |
 	And there is a team with
 	| Field | Value    |
-	| Name  | Team Red |
+	| Name  | Team red |
+	And there is a contract with
+	| Field                     | Value         |
+	| Name                      | 8 hours a day |
+	| Average work time per day | 8:00          |
 	And there is a role with
-	| Field                          | Value                            |
-	| Name                           | Test for viewing all group pages |
-	| Access to team                 | Team red                         |
-	| Access to team schedule        | true                             |
-	| Access to view all group pages | true                             |
+	| Field                          | Value                          |
+	| Name                           | Access to view all group pages |
+	| Access to team                 | Team red                       |
+	| Access to team schedule        | true                           |
+	| Access to view all group pages | true                           |
+	And there is a role with
+	| Field                          | Value                               |
+	| Name                           | Without view group pages permission |
+	| Access to team                 | Team red                            |
+	| Access to team schedule        | true                                |
+	| Access to view all group pages | false                               |
 	And there is a workflow control set with
 	| Field                      | Value              |
 	| Name                       | Published schedule |
@@ -32,234 +42,87 @@ Given there is a team with
 	| Team       | Team green |
 	| Start date | 2013-03-25 |
 	And 'Pierre Baldi' have a person period with
-	| Field      | Value      |
-	| Team       | Team green |
-	| Start date | 2013-03-25 |
+	| Field      | Value         |
+	| Team       | Team green    |
+	| Start date | 2013-03-25    |
+	| Contract   | 8 hours a day |
 	And 'John Smith' have a person period with
 	| Field      | Value      |
-	| Team       | Team Red |
+	| Team       | Team red   |
 	| Start date | 2013-03-25 |
-	#And I have the role 'Test for viewing all group pages'
 
 
-Scenario: View team schedule
-	Given I have the role 'Test for viewing all group pages'
+Scenario: View available custom group options
+	Given I have the role 'Access to view all group pages'
 	When I view team schedule for '2013-03-25' with read model updated
-	Then I should see schedule for 'Pierre Baldi'
+	And I open the team-picker
+	Then I should see available group options
+	| Value                                          |
+	| Common Site/Team green                         |
+	| Common Site/Team red                           |
+	| Contract/Common contract                       |
+	| Contract/8 hours a day                         |
+	| Contract Schedule/Common contract schedule     |
+	| Part-Time Percentage/Common PartTimePercentage |
 
-
-Scenario: View only my team's schedule
-	Given I am an agent in a team with access to the whole site
-	And I have a shift today
-	And I have a colleague
-	And My colleague has a shift today
-	And I have a colleague in another team
-	And The colleague in the other team has a shift today
-	When I view team schedule
+Scenario: View group schedule
+	Given I have the role 'Access to view all group pages'
+	And I have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2013-03-25 09:00 |
+	| EndTime               | 2013-03-25 18:00 |
+	And John Smith have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2013-03-25 10:00 |
+	| EndTime               | 2013-03-25 19:00 |
+	And Pierre Baldi have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2013-03-25 11:00 |
+	| EndTime               | 2013-03-25 20:00 |
+	When I view team schedule for '2013-03-25' with read model updated
+	And I select 'Contract/Common contract' in the team picker
 	Then I should see my schedule
-	And I should see my colleague's schedule
-	And I should not see the other colleague's schedule
+	And I should see 'John Smith' schedule
+	And I should not see 'Pierre Baldi' schedule
 
-Scenario: View team schedule, day off
-	Given I am an agent in a team
-	And I have a colleague
-	And My colleague has a dayoff today
-	When I view team schedule
-	Then I should see my colleague's day off
-
-Scenario: View team schedule, absence 
-	Given I am an agent in a team
-	And I have a colleague
-	And My colleague has an absence today
-	When I view team schedule
-	Then I should see my colleague's absence
-
-Scenario: View team schedule, no shift
-	Given I am an agent in a team
-	And I have a colleague
-	When I view team schedule
-	Then I should see myself without schedule
-	And I should see my colleague without schedule
-
-Scenario: Can't see confidential absence
-	Given I am an agent in a team
-	And I have a colleague
-	And My colleague has a confidential absence
-	When I view team schedule
-	Then I should see my colleague's schedule
-	And I should not see the absence's color
- 
-Scenario: Can't see the team schedule tab without permission 
-	Given I am an agent with no access to team schedule
-	When I am viewing an application page
-	Then I should not see the team schedule tab
-
-Scenario: Can't navigate to team schedule without permission 
-	Given I am an agent with no access to team schedule
-	When I am viewing an application page
-	And I navigate to the team schedule
-	Then I should see an error message
-
-Scenario: Can't see colleagues schedule without permission
-	Given I am an agent in a team with access only to my own data
-	And I have a colleague
-	And My colleague has a shift today
-	When I view team schedule
-	Then I should not see my colleagues schedule
-
-Scenario: View time line +/- whole quarter of an hour
-	Given I am an agent in a team
-	And I have a shift from 7:56 to 17:00
-	And I have a colleague
-	And My colleague has a shift from 9:00 to 18:01
-	When I view team schedule
-	Then The time line should span from 7:30 to 18:30
-
-Scenario: View time line default
-	Given I am an agent in my own team
-	When I view team schedule
-	Then The time line should span from 7:45 to 17:15
-
-Scenario: View time line default in hawaii
-	Given I am an agent in my own team
-	And I am located in hawaii
-	When I view team schedule
-	Then The time line should span from 7:45 to 17:15
-
-Scenario: Navigate to the next day
-	Given I am an agent
-	And I view team schedule
-	When I click the next day button
-	Then I should see the next day
-
-Scenario: Navigate to the previous day
-	Given I am an agent
-	And I view team schedule
-	When I click the previous day button
-	Then I should see the previous day
- 
 Scenario: Sort late shifts after early shifts
-	Given I am an agent in a team
-	And I have a shift from 9:00 to 17:00
-	And I have a colleague
-	And My colleague has a shift from 8:00 to 18:00
-	When I view team schedule
-	Then I should see my colleague before myself
-
-Scenario: Sort full-day absences after shifts
-	Given I am an agent in a team
-	And I have a full-day absence today
-	And I have a colleague
-	And My colleague has a shift from 9:00 to 17:00
-	When I view team schedule
-	Then I should see my colleague before myself
-
-Scenario: Sort day offs after the absences
-	Given I am an agent in a team
-	And I have a dayoff today
-	And I have a colleague
-	And My colleague has a full-day absence today
-	When I view team schedule
-	Then I should see my colleague before myself
-
-Scenario: Sort no schedule last
-	Given I am an agent in a team
-	And I have a colleague
-	And My colleague has a dayoff today
-	When I view team schedule
-	Then I should see my colleague before myself
-
-Scenario: Show tooltip with activity name and times
-	Given I am an agent in a team
-	And I have an activity from 8:00 to 12:00
-	When I view team schedule
-	Then The layer's start time attibute value should be 08:00
-	And The layer's end time attibute value should be 12:00
-	And The layer's activity name attibute value should be Phone
-
-Scenario: Show team-picker with multiple teams
-	Given I am an agent in a team with access to the whole site
-	And the site has another team
-	And I am viewing team schedule
-	When I open the team-picker
-	Then I should see the team-picker with both teams
-	And the teams should be sorted alphabetically
-	
-Scenario: Show other team's schedule
-	Given I am an agent in a team with access to the whole site
-	And I have a colleague in another team
-	And I am viewing team schedule
-	When I select the other team in the team picker
-	Then I should see my colleague
-	And I should not see myself
-
-Scenario: Keep selected team when changing date
-	Given I am an agent in a team with access to the whole site
-	And I have a colleague in another team
-	And I am viewing team schedule
-	When I select the other team in the team picker
-	And I click the next day button
-	Then I should see my colleague
-	And I should not see myself
-
-Scenario: Keep selected date when changing team
-	Given I am an agent in a team with access to the whole site
-	And the site has another team
-	And I am viewing team schedule for tomorrow
-	When I select the other team in the team picker
-	Then I should see tomorrow
-
-Scenario: Show team-picker with teams for my site for another day
-	Given I am an agent in a team with access to the whole site
-	And I belong to another site's team tomorrow
-	And the other site has 2 teams
-	And I am viewing team schedule for today
-	When I click the next day button
-	Then I should see the team-picker with the other site's team
-
-Scenario: Show default team when no access to a team on a date
-	Given I am an agent in a team with access to the whole site
-	And I belong to another site's team tomorrow
-	And the other site has 2 teams
-	And I am viewing team schedule for today
-	When I click the next day button
-	Then I should see the other site's team
+	Given I have the role 'Access to view all group pages'
+	And I have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2013-03-25 09:00 |
+	| EndTime               | 2013-03-25 18:00 |
+	And John Smith have a shift with
+	| Field                 | Value            |
+	| StartTime             | 2013-03-25 08:00 |
+	| EndTime               | 2013-03-25 17:00 |
+	When I view team schedule for '2013-03-25' with read model updated
+	And I select 'Contract/Common contract' in the team picker
+	Then I should see 'John Smith' before myself
 
 Scenario: Default to my team
-	Given I am an agent in a team with access to the whole site
-	And the site has another team
-	And I am viewing team schedule
-	Then the team-picker should have my team selected
+	Given I have the role 'Access to view all group pages'
+	When I view team schedule for '2013-03-25' with read model updated
+	Then The team picker should have 'Common Site/Team green' selected
 
-Scenario: Default to first team if no access to my team
-	Given I am an agent in a team with access to another site
-	And the other site has 2 teams
-	And I am viewing team schedule
-	Then the team-picker should have the first of the other site's teams selected
+Scenario: Keep selected group when changing date
+	Given I have the role 'Access to view all group pages'
+	When I view team schedule for '2013-03-25' with read model updated
+	And I select 'Contract/8 hours a day' in the team picker
+	And I click the next day button
+	Then I should see colleague 'Pierre Baldi'
+	And I should not see myself
 
-Scenario: Don't show team-picker with no team access
-	Given I am an agent in a team with access only to my own data
-	When I view team schedule
-	Then I should not see the team-picker
+Scenario: Keep selected date when changing group
+	Given I have the role 'Access to view all group pages'
+	When I view team schedule for '2013-03-26' with read model updated
+	And I select 'Contract/8 hours a day' in the team picker
+	Then I should see date '2013-03-26'
 
-Scenario: Don't show team-picker with only one team
-	Given I am an agent in a team with access to my team
-	When I view team schedule
-	Then I should not see the team-picker
-
-Scenario: Default team when no own team but everyone access
-	Given I am a user with everyone access
-	And the site has another team
-	When I view team schedule
-	Then I should see the team-picker
-
-Scenario: Show error message when acces to my team but no own team
-	Given I am an agent in no team with access to my team
-	When I view team schedule
-	Then I should see a user-friendly message explaining I dont have anything to view
-
-Scenario: Show friendly message when after leaving date
-	Given I am an agent in a team that leaves tomorrow
-	And I am viewing team schedule for today
-	When I click the next day button
-	Then I should see a user-friendly message explaining I dont have anything to view
+Scenario: View available team options if not have view all group pages permission
+	Given I have the role 'Without view group pages permission'
+	When I view team schedule for '2013-03-25' with read model updated
+	And I open the team-picker
+	Then I should see available team options
+	| Value                  |
+	| Common Site/Team green |
+	| Common Site/Team red   |
