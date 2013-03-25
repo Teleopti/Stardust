@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 	[TestFixture]
 	public class DenormalizationQueueEventsPublisherTest
 	{
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
 		public void ShouldSaveToDenormalizationQueue()
 		{
 			var saveToQueue = MockRepository.GenerateMock<ISaveToDenormalizationQueue>();
