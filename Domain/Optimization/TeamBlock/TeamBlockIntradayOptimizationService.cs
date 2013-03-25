@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				if (_cancelMe)
 					break;
 				var previousPeriodValue = _periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.IntradayOptimization);
-				var teamBlocksToRemove = optimizeOneRound(optimizationPreferences,
+				var teamBlocksToRemove = optimizeOneRound(selectedPeriod, selectedPersons, optimizationPreferences,
 														  schedulingOptions, remainingInfoList,
 				                                          previousPeriodValue, schedulePartModifyAndRollbackService);
 				foreach (var teamBlock in teamBlocksToRemove)
@@ -112,7 +112,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			}
 		}
 
-		private IEnumerable<ITeamBlockInfo> optimizeOneRound(IOptimizationPreferences optimizationPreferences,
+		private IEnumerable<ITeamBlockInfo> optimizeOneRound(DateOnlyPeriod selectedPeriod,
+							 IList<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences,
 									  ISchedulingOptions schedulingOptions, List<ITeamBlockInfo> allTeamBlocks, double previousPeriodValue,
 										ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
 		{
@@ -131,7 +132,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				_teamBlockClearer.ClearTeamBlock(schedulingOptions, schedulePartModifyAndRollbackService, teamBlock);
 
 				var datePoint = teamBlock.BlockInfo.BlockPeriod.DayCollection().First();
-				var success = _teamBlockScheduler.ScheduleTeamBlock(teamBlock, datePoint, schedulingOptions);
+				var success = _teamBlockScheduler.ScheduleTeamBlockDay(teamBlock, datePoint, schedulingOptions, selectedPeriod, selectedPersons);
 				if (!success)
 				{
 					teamBlockToRemove.Add(teamBlock);
