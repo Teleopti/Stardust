@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_saveToDenormalizationQueue = saveToDenormalizationQueue;
 		}
 
-		public void Execute(IRunSql runSql, IEnumerable<IRootChangeInfo> modifiedRoots)
+		public void Execute(IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
 			var meetings =
 				modifiedRoots.Select(r => new { ProvideCustomChangeInfo = r.Root as IProvideCustomChangeInfo, UpdateType = r.Status });
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 					              		EndDateTime = customChange.Period.EndDateTime,
 					              		PersonId = customChange.MainRoot.Id.GetValueOrDefault()
 					              	};
-					_saveToDenormalizationQueue.Execute(message,runSql);
+					_saveToDenormalizationQueue.Execute(message);
 				}
 			}
 

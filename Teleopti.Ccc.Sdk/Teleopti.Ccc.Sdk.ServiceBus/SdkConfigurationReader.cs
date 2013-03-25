@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
                         "No NHibernate configurations received. Verify that the SDK is up and running.");
 
             	var notify = new BusDenormalizeNotification(serviceBus);
-            	var saveToDenormalizationQueue = new SaveToDenormalizationQueue();
+				var saveToDenormalizationQueue = new SaveToDenormalizationQueue(new RunSql(CurrentUnitOfWork.Make()));
                 encryptedAppSettings.DecryptDictionary(EncryptionConstants.Image1, EncryptionConstants.Image2);
             	var application =
             		new InitializeApplication(

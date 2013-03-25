@@ -43,11 +43,11 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			using (mocks.Record())
 			{
 				Expect.Call(sendDenormalizeNotification.Notify);
-				Expect.Call(()=>saveToDenormalizationQueue.Execute<ScheduleChanged>(null, runSql)).IgnoreArguments();
+				Expect.Call(()=>saveToDenormalizationQueue.Execute<ScheduleChanged>(null)).IgnoreArguments();
 			}
 			using (mocks.Playback())
 			{
-				target.Execute(runSql, new[] { rootChangeInfo });
+				target.Execute(new[] { rootChangeInfo });
 			}
 		}
 
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			}
 			using (mocks.Playback())
 			{
-				target.Execute(runSql, new[] { rootChangeInfo });
+				target.Execute(new[] { rootChangeInfo });
 			}
 		}
 	}

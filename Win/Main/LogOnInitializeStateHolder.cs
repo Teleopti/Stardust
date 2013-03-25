@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.Win.Main
                 messageBrokerDisabled = true;
             }
         	var sendDenormalizeNotification = new SendDenormalizeNotificationToSdk(new SendCommandToSdk(new SdkAuthentication()));
-        	var saveToDenormalizationQueue = new SaveToDenormalizationQueue();
+        	var saveToDenormalizationQueue = new SaveToDenormalizationQueue(new RunSql(CurrentUnitOfWork.Make()));
         	var initializeApplication =
         		new InitializeApplication(
         			new DataSourcesFactory(new EnversConfiguration(),

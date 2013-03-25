@@ -13,19 +13,20 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 	{
 		private ISaveToDenormalizationQueue target;
 		private MockRepository mocks;
+		private IRunSql runSql;
 
 		[SetUp]
 		public void Setup()
 		{
 			mocks = new MockRepository();
-			target = new SaveToDenormalizationQueue();
+			runSql = mocks.DynamicMock<IRunSql>();
+			target = new SaveToDenormalizationQueue(runSql);
 		}
 
 		[Test]
 		public void ShouldSaveMessageToDenormalizationQueue()
 		{
 			var message = new ScheduleChanged();
-			var runSql = mocks.DynamicMock<IRunSql>();
 			var sqlQuery = mocks.DynamicMock<ISqlQuery>();
 			using (mocks.Record())
 			{
@@ -37,7 +38,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			}
 			using (mocks.Playback())
 			{
-				target.Execute(message, runSql);
+				target.Execute(message);
 
 				message.Timestamp.Should().Be.GreaterThan(DateTime.UtcNow.AddMinutes(-1));
 				message.Datasource.Should().Be.EqualTo(UnitOfWorkFactory.Current.Name);

@@ -5,6 +5,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1711:IdentifiersShouldNotHaveIncorrectSuffix")]
 	public interface ISaveToDenormalizationQueue
 	{
-		void Execute<T>(T message, IRunSql runSql) where T : RaptorDomainMessage;
+		void Execute<T>(T message) where T : RaptorDomainMessage;
 	}
 }

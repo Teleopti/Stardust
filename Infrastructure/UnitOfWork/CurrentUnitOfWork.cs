@@ -1,24 +1,28 @@
+using System;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
 	public class CurrentUnitOfWork : ICurrentUnitOfWork
 	{
-		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+		private IUnitOfWorkFactory _unitOfWorkFactory;
+		private readonly Func<IUnitOfWorkFactory> _unitOfWorkFactoryGetter;
 
-		public CurrentUnitOfWork(IUnitOfWorkFactory unitOfWorkFactory)
+		public CurrentUnitOfWork(Func<IUnitOfWorkFactory> unitOfWorkFactory)
 		{
-			_unitOfWorkFactory = unitOfWorkFactory;
+			_unitOfWorkFactoryGetter = unitOfWorkFactory;
 		}
 
 		public IUnitOfWork Current()
 		{
+			if (_unitOfWorkFactory == null)
+				_unitOfWorkFactory = _unitOfWorkFactoryGetter.Invoke();
 			return _unitOfWorkFactory.CurrentUnitOfWork();
 		}
 
 		public static ICurrentUnitOfWork Make()
 		{
-			return new CurrentUnitOfWork(UnitOfWorkFactory.Current);
+			return new CurrentUnitOfWork(() => UnitOfWorkFactory.Current);
 		}
 	}
 }

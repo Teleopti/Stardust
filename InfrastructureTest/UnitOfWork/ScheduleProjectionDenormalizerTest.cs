@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			}
 			using (mocks.Playback())
 			{
-				target.Execute(runSql,new []{rootChangeInfo});
+				target.Execute(new []{rootChangeInfo});
 			}
 		}
 
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			}
 			using (mocks.Playback())
 			{
-				target.Execute(runSql, new[] { rootChangeInfo });
+				target.Execute(new[] { rootChangeInfo });
 			}
 		}
 		
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			}
 			using (mocks.Playback())
 			{
-				target.Execute(runSql, new[] { rootChangeInfo });
+				target.Execute(new[] { rootChangeInfo });
 			}
 		}
 
@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			}
 			using (mocks.Playback())
 			{
-				target.Execute(runSql, new[] { rootChangeInfo });
+				target.Execute(new[] { rootChangeInfo });
 			}
 		}
 
@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			}
 			using (mocks.Playback())
 			{
-				target.Execute(runSql, new[] { rootChangeInfo });
+				target.Execute(new[] { rootChangeInfo });
 			}
 		}
 	}

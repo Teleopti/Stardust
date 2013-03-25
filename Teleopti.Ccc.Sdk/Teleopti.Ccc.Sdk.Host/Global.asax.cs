@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
             Logger.InfoFormat("The Application is starting. {0}", _sitePath);
 
         	var busSender = new SendDenormalizeNotificationToBus(denormalizeHandler);
-        	var saveToDenormalizationQueue = new SaveToDenormalizationQueue();
+        	var saveToDenormalizationQueue = new SaveToDenormalizationQueue(new RunSql(CurrentUnitOfWork.Make()));
         	var initializeApplication =
         		new InitializeApplication(
         			new DataSourcesFactory(new EnversConfiguration(),
