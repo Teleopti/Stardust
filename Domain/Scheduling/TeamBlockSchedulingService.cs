@@ -60,12 +60,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
 					ITeamBlockInfo teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, datePointer,
 					                                                                         _schedulingOptions
 						                                                                         .BlockFinderTypeForAdvanceScheduling);
+				    if (teamBlockInfo == null) continue;
                     if (isTeamBlockScheduled(teamBlockInfo)) continue;
 
                     if (_blockSteadyStateValidator.IsBlockInSteadyState(teamBlockInfo,_schedulingOptions))
-
-                    if (!_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, datePointer, _schedulingOptions, selectedPeriod,selectedPersons))
-                        continue;
+                        if (!_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, datePointer, _schedulingOptions, selectedPeriod,selectedPersons))
+                            continue;
 
 				
 

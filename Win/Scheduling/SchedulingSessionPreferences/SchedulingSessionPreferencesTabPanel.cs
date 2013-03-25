@@ -4,6 +4,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.GroupPageCreator;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Grouping;
@@ -24,7 +25,8 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
         private IList<IGroupPageLight> _groupPagesLevelingPer;
         private IList<IScheduleTag> _scheduleTags;
     	private ISchedulerGroupPagesProvider _groupPagesProvider;
-        private LevellingPerConfiguration _levellingConfiguartion;
+        private GroupPageLight _singleAgentEntry;
+        //private LevellingPerConfiguration _levellingConfiguartion;
 
         public SchedulingSessionPreferencesTabPanel()
         {
@@ -78,8 +80,8 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 			_groupPagesFairness = _groupPages.ToList();
 		    //adding an extra entry for single Agent
             _groupPagesLevelingPer = _groupPages.ToList();
-		    var singleAgentEntry = new GroupPageLight {Key = "SingleAgentTeam", Name = Resources.SingleAgentTeam};
-			_groupPagesLevelingPer.Add(singleAgentEntry );
+		    _singleAgentEntry = new GroupPageLight {Key = "SingleAgentTeam", Name = Resources.SingleAgentTeam};
+			_groupPagesLevelingPer.Add(_singleAgentEntry );
             ExchangeData(ExchangeDataOption.DataSourceToControls);
             _dataLoaded = true;
         }
@@ -173,6 +175,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
                 dataOffline();
                 initShiftCategories();
                 initGroupPages();
+                initBlockType();
                 initCommonActivity();
 				initGroupPagesFairness();
                 initTags();
@@ -203,6 +206,16 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             }
         }
 
+        private void initBlockType()
+        {
+            var blockFinderTypes = new BlockFinderTypeCreator();
+            comboBoxTeamBlockType.DataSource = blockFinderTypes.GetBlockFinderTypes();
+            comboBoxTeamBlockType.DisplayMember = "Name";
+            comboBoxTeamBlockType.ValueMember = "Key";
+            if (_localSchedulingOptions.BlockFinderTypeForAdvanceScheduling == BlockFinderType.None)
+                comboBoxTeamBlockType.SelectedValue = BlockFinderType.BetweenDayOff.ToString();
+        }
+
 		private void initGroupPages()
 		{
 			comboBoxGrouping.DataSource = _groupPages;
@@ -213,12 +226,12 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
                 comboBoxGrouping.SelectedValue  = _localSchedulingOptions.GroupOnGroupPage.Key ;
 			}
 
-            comboBoxGroupingLevelingPer.DataSource = _groupPagesLevelingPer;
-            comboBoxGroupingLevelingPer.DisplayMember = "Name";
-            comboBoxGroupingLevelingPer.ValueMember = "Key";
-            comboBoxGroupingLevelingPer.SelectedValue = "SingleAgentTeam";
-            if (_localSchedulingOptions.GroupOnGroupPageForLevelingPer != null)
-                comboBoxGroupingLevelingPer.SelectedValue = _localSchedulingOptions.GroupOnGroupPageForLevelingPer.Key;
+            //comboBoxGroupingLevelingPer.DataSource = _groupPagesLevelingPer;
+            //comboBoxGroupingLevelingPer.DisplayMember = "Name";
+            //comboBoxGroupingLevelingPer.ValueMember = "Key";
+            //comboBoxGroupingLevelingPer.SelectedValue = "SingleAgentTeam";
+            ////if (_localSchedulingOptions.GroupOnGroupPageForLevelingPer != null)
+            //comboBoxGroupingLevelingPer.SelectedValue = _localSchedulingOptions.GroupOnGroupPageForLevelingPer.Key;
             
 		}
         private void initCommonActivity()
@@ -363,7 +376,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             if (checkBoxCommonActivity.Checked)
                 _localSchedulingOptions.CommonActivity = (IActivity) comboBoxActivity.SelectedItem;
         	_localSchedulingOptions.UseAverageShiftLengths = checkBoxUseAverageShiftLengths.Checked;
-            //GetLevellingPerDataToSave();
+            getLevellingPerDataToSave();
         }
 
         private void setDataInControls()
@@ -486,6 +499,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
         	checkBoxUseAverageShiftLengths.Checked = _localSchedulingOptions.UseAverageShiftLengths;
 
             checkBoxLevellingPerBlockScheduling.Checked = _localSchedulingOptions.UseLevellingPerOption;
+            setLevellingPerDataToSave();
         }
 
         private bool mustHaveSetAndOnlyPreferenceDaysVisible()
@@ -725,13 +739,17 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 
         private void checkBoxLevellingPerBlockScheduling_CheckedChanged(object sender, EventArgs e)
         {
+            checkBoxLevellingSameStartTime.Enabled = checkBoxLevellingPerBlockScheduling.Checked;
+            checkBoxLevellingSameShiftCategory.Enabled = checkBoxLevellingPerBlockScheduling.Checked;
+            comboBoxTeamBlockType.Enabled = checkBoxLevellingPerBlockScheduling.Checked; 
             if (checkBoxLevellingPerBlockScheduling.Checked)
             {
                 //radioButtonSchedulePeriodAdvScheduling .Checked = true ;
                 //radioButtonBetweenDaysOffAdvScheduling .Checked = false ;
                 checkBoxUseGroupScheduling.Checked = false;
                 //checkBoxUseBlockScheduling.Checked = false;
-
+                //default value
+                checkBoxLevellingSameShiftCategory.Checked = true;
             }
             //else
             //{
@@ -740,55 +758,68 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             //}
             //radioButtonSchedulePeriodAdvScheduling.Enabled = checkBoxLevellingPerBlockScheduling.Checked;
             //radioButtonBetweenDaysOffAdvScheduling.Enabled = checkBoxLevellingPerBlockScheduling.Checked;
-            comboBoxGroupingLevelingPer.Enabled = checkBoxLevellingPerBlockScheduling.Checked;
+            //comboBoxGroupingLevelingPer.Enabled = checkBoxLevellingPerBlockScheduling.Checked;
             checkBoxUseGroupScheduling.Enabled  = !checkBoxLevellingPerBlockScheduling.Checked;
             //checkBoxUseBlockScheduling.Enabled = !checkBoxLevellingPerBlockScheduling.Checked;
-            btnLevellingPer.Enabled = checkBoxLevellingPerBlockScheduling.Checked;
+            //btnLevellingPer.Enabled = checkBoxLevellingPerBlockScheduling.Checked;
             
 
         }
 
-        private void comboBoxGroupingLevelingPer_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (_dataLoaded)
-            {
-                getDataFromControls();
-                setDataInControls();
-            }
-        }
+        //private void comboBoxGroupingLevelingPer_SelectedIndexChanged(object sender, EventArgs e)
+        //{
+        //    if (_dataLoaded)
+        //    {
+        //        getDataFromControls();
+        //        setDataInControls();
+        //    }
+        //}
 
-        private void btnLevellingPer_Click(object sender, EventArgs e)
-        {
-            LevellingPerConfiguration levellingPerConfiguration = new LevellingPerConfiguration();
+        //private void btnLevellingPer_Click(object sender, EventArgs e)
+        //{
+        //    LevellingPerConfiguration levellingPerConfiguration = new LevellingPerConfiguration();
 
-            levellingPerConfiguration.SelectedBlockFinderType =
-                _localSchedulingOptions.BlockFinderTypeForAdvanceScheduling;
-            levellingPerConfiguration.SelectedGroupPage = _localSchedulingOptions.GroupOnGroupPageForLevelingPer;
-            levellingPerConfiguration.UseSameEndTime = _localSchedulingOptions.UseLevellingSameEndTime;
-            levellingPerConfiguration.UseSameShiftCategory = _localSchedulingOptions.UseLevellingSameShiftCategory;
-            levellingPerConfiguration.UseSameStartTime = _localSchedulingOptions.UseLevellingSameStartTime;
-            levellingPerConfiguration.UserSameShift = _localSchedulingOptions.UseLevellingSameShift;
+        //    levellingPerConfiguration.SelectedBlockFinderType =
+        //        _localSchedulingOptions.BlockFinderTypeForAdvanceScheduling;
+        //    levellingPerConfiguration.SelectedGroupPage = _localSchedulingOptions.GroupOnGroupPageForLevelingPer;
+        //    levellingPerConfiguration.UseSameEndTime = _localSchedulingOptions.UseLevellingSameEndTime;
+        //    levellingPerConfiguration.UseSameShiftCategory = _localSchedulingOptions.UseLevellingSameShiftCategory;
+        //    levellingPerConfiguration.UseSameStartTime = _localSchedulingOptions.UseLevellingSameStartTime;
+        //    levellingPerConfiguration.UserSameShift = _localSchedulingOptions.UseLevellingSameShift;
             
                 
-            var levellingPerPrefrences = new LevellingPerPrefrences(levellingPerConfiguration, _groupPagesLevelingPer);
-             levellingPerPrefrences.ShowDialog();
-                _levellingConfiguartion = levellingPerPrefrences.LevellingConfiguration;
-                GetLevellingPerDataToSave();
+        //    var levellingPerPrefrences = new LevellingPerPrefrences(levellingPerConfiguration, _groupPagesLevelingPer);
+        //     levellingPerPrefrences.ShowDialog();
+        //        _levellingConfiguartion = levellingPerPrefrences.LevellingConfiguration;
+        //        GetLevellingPerDataToSave();
             
             
             
+        //}
+
+        private void getLevellingPerDataToSave()
+        {
+            if (comboBoxTeamBlockType.SelectedValue == BlockFinderType.BetweenDayOff.ToString())
+                _localSchedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.BetweenDayOff;
+            else if (comboBoxTeamBlockType.SelectedValue == BlockFinderType.SchedulePeriod.ToString())
+                _localSchedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.SchedulePeriod;
+            _localSchedulingOptions.GroupOnGroupPageForLevelingPer = _singleAgentEntry ;
+            _localSchedulingOptions.UseLevellingSameEndTime = false;
+            _localSchedulingOptions.UseLevellingSameShift = false;
+            _localSchedulingOptions.UseLevellingSameShiftCategory = checkBoxLevellingSameShiftCategory.Checked ;
+            _localSchedulingOptions.UseLevellingSameStartTime = checkBoxLevellingSameStartTime.Checked ;
+
         }
 
-        private void GetLevellingPerDataToSave()
+        private void setLevellingPerDataToSave()
         {
-            _localSchedulingOptions.BlockFinderTypeForAdvanceScheduling =
-                _levellingConfiguartion.SelectedBlockFinderType;
-            _localSchedulingOptions.GroupOnGroupPageForLevelingPer = _levellingConfiguartion.SelectedGroupPage;
-            _localSchedulingOptions.UseLevellingSameEndTime = _levellingConfiguartion.UseSameEndTime;
-            _localSchedulingOptions.UseLevellingSameShift = _levellingConfiguartion.UserSameShift;
-            _localSchedulingOptions.UseLevellingSameShiftCategory = _levellingConfiguartion.UseSameShiftCategory;
-            _localSchedulingOptions.UseLevellingSameStartTime = _levellingConfiguartion.UseSameStartTime;
-
+            if (_localSchedulingOptions.BlockFinderTypeForAdvanceScheduling != BlockFinderType.None)
+                comboBoxTeamBlockType.SelectedValue =
+                    _localSchedulingOptions.BlockFinderTypeForAdvanceScheduling.ToString();
+            //if (_localSchedulingOptions.GroupOnGroupPageForLevelingPer != null)
+            //    comboBoxGroupingLevelingPer.SelectedValue = _localSchedulingOptions.GroupOnGroupPageForLevelingPer;
+            checkBoxLevellingSameShiftCategory.Checked = _localSchedulingOptions.UseLevellingSameShiftCategory;
+            checkBoxLevellingSameStartTime.Checked = _localSchedulingOptions.UseLevellingSameStartTime;
         }
     }
     
