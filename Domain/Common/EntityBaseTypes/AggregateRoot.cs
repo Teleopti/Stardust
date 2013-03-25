@@ -32,6 +32,8 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 			return allEvents;
 		}
 
+		public virtual IEnumerable<IEvent> AllEvents() { return _events; }
+
 		protected void AddEvent(IEvent @event)
 		{
 			_events.Add(@event);

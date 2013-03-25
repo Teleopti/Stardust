@@ -334,6 +334,7 @@
     <Compile Include="UnitOfWork\DenormalizerContextTest.cs" />
     <Compile Include="UnitOfWork\DifferentPersistAllTest.cs" />
     <Compile Include="UnitOfWork\DisableFilterScopeTest.cs" />
+    <Compile Include="UnitOfWork\EventsMessageSenderTest.cs" />
     <Compile Include="UnitOfWork\GroupPageChangedMessageSenderTest.cs" />
     <Compile Include="UnitOfWork\HandlingOfUowTest.cs" />
     <Compile Include="UnitOfWork\MeetingMessageSenderTest.cs" />
