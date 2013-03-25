@@ -30,9 +30,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		{
 			var shift = _mocks.StrictMock<IShiftProjectionCache>();
 			var startTime = new TimeSpan(8, 0, 0);
-			_schedulingOptions.UseLevellingSameShift = false;
 			_schedulingOptions.UseLevellingSameStartTime = true;
-			_schedulingOptions.UseLevellingSameEndTime = false;
 
 			using (_mocks.Record())
 			{
@@ -54,8 +52,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		{
 			var shift = _mocks.StrictMock<IShiftProjectionCache>();
 			var endTime = new TimeSpan(17, 0, 0);
-			_schedulingOptions.UseLevellingSameShift = false;
-			_schedulingOptions.UseLevellingSameStartTime = false;
 			_schedulingOptions.UseLevellingSameEndTime = true;
 
 			using (_mocks.Record())
@@ -80,7 +76,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			var startTime = new TimeSpan(8, 0, 0);
 			var endTime = new TimeSpan(17, 0, 0);
 
-			_schedulingOptions.UseLevellingSameShift = false;
 			_schedulingOptions.UseLevellingSameStartTime = true;
 			_schedulingOptions.UseLevellingSameEndTime = true;
 
@@ -113,8 +108,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 														 activity, category);
 
 			_schedulingOptions.UseLevellingSameShift = true;
-			_schedulingOptions.UseLevellingSameStartTime = false;
-			_schedulingOptions.UseLevellingSameEndTime = true;
 
 			using (_mocks.Record())
 			{
