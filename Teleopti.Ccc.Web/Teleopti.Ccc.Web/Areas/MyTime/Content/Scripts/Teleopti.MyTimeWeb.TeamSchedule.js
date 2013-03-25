@@ -144,14 +144,6 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 		portal.NavigateTo("TeamSchedule/Index", date, teamid);
 	}
 
-	function _currentFixedDate() {
-		if ($('#TeamSchedule-body').data('mytime-periodselection')) {
-			return $('#TeamSchedule-body').data('mytime-periodselection').Date;
-		} else {
-			return undefined;
-		}
-	}
-    
 	function _bindData() {
 	    ko.applyBindings(vm, $('#page')[0]);
 	};

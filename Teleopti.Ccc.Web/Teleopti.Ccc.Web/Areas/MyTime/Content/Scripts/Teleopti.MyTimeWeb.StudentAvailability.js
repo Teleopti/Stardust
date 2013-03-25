@@ -21,9 +21,45 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 	var dayViewModels = {};
 	var studentAvailabilityToolTip = null;
 	var editFormViewModel = null;
+    var vm = null;
+
+    var selectionViewModel = function() {
+        var self = this;
+        
+        self.minDate = ko.observable(moment());
+        self.maxDate = ko.observable(moment());
+
+        self.displayDate = ko.observable();
+        self.nextPeriodDate = ko.observable(moment());
+        self.previousPeriodDate = ko.observable(moment());
+
+        self.selectedDate = ko.observable(moment().startOf('day'));
+
+        self.setCurrentDate = function (date) {
+            self.selectedDate(date);
+            self.selectedDate.subscribe(function (d) {
+                Teleopti.MyTimeWeb.Portal.NavigateTo("StudentAvailability/Index" + Teleopti.MyTimeWeb.Common.FixedDateToPartsUrl(d.format('YYYY-MM-DD')));
+            });
+        };
+
+        self.nextPeriod = function () {
+            self.selectedDate(self.nextPeriodDate());
+        };
+
+        self.previousPeriod = function () {
+            self.selectedDate(self.previousPeriodDate());
+        };
+    };
 
 	function _initPeriodSelection() {
-		
+	    var periodData = $('#StudentAvailability-body').data('mytime-periodselection');
+	    vm = new selectionViewModel();
+	    vm.displayDate(periodData.Display);
+	    vm.nextPeriodDate(moment(periodData.PeriodNavigation.NextPeriod));
+	    vm.previousPeriodDate(moment(periodData.PeriodNavigation.PrevPeriod));
+	    vm.setCurrentDate(moment(periodData.Date));
+	    
+	    ko.applyBindings(vm, $('div.navbar')[1]);
 	}
 
 	function _initViewModels() {
