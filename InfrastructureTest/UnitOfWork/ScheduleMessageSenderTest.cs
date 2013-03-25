@@ -11,7 +11,7 @@ using Teleopti.Interfaces.MessageBroker.Events;
 namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 {
 	[TestFixture]
-	public class ScheduleProjectionDenormalizerTest
+	public class ScheduleMessageSenderTest
 	{
 		private IMessageSender target;
 		private MockRepository mocks;

@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
                                                 new MeetingMessageSender(busSender,saveToDenormalizationQueue),
                                                 new GroupPageChangedMessageSender(busSender,saveToDenormalizationQueue  ),
                                                 new PersonChangedMessageSender(busSender,saveToDenormalizationQueue ),
-                                                new PersonPeriodChangedMessageSender(busSender,saveToDenormalizationQueue )
+                                                new PersonPeriodChangedMessageSender(busSender,saveToDenormalizationQueue)
                                             },
 													DataSourceConfigurationSetter.ForSdk()),
         			new SignalBroker(MessageFilterManager.Instance.FilterDictionary))

@@ -12,7 +12,7 @@ using Teleopti.Interfaces.Messages.Denormalize;
 namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 {
 	[TestFixture]
-	public class MeetingDenormalizerTest
+	public class MeetingMessageSenderTest
 	{
 		private IMessageSender target;
 		private MockRepository mocks;
