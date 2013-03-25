@@ -10032,6 +10032,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to In process...
+        /// </summary>
+        public static string InProcess {
+            get {
+                return ResourceManager.GetString("InProcess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Input error.
         /// </summary>
         public static string InputError {
