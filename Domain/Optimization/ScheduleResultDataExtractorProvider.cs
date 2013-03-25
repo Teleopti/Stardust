@@ -9,6 +9,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		IScheduleResultDataExtractor CreateAllSkillsDataExtractor(DateOnlyPeriod selectedPeriod, ISchedulingResultStateHolder stateHolder, IAdvancedPreferences optimizerPreferences);
+
+	    IScheduleResultDataExtractor CreateRelativeDailyStandardDeviationsByAllSkillsExtractor(IScheduleMatrixPro scheduleMatrix, ISchedulingOptions schedulingOptions);
     }
 
     public class ScheduleResultDataExtractorProvider : IScheduleResultDataExtractorProvider
@@ -49,5 +51,10 @@ namespace Teleopti.Ccc.Domain.Optimization
                 dailySkillForecastAndScheduledValueCalculator,
                 allSkillExtractor);
         }
+
+		public IScheduleResultDataExtractor CreateRelativeDailyStandardDeviationsByAllSkillsExtractor(IScheduleMatrixPro scheduleMatrix, ISchedulingOptions schedulingOptions)
+		{
+			return new RelativeDailyStandardDeviationsByAllSkillsExtractor(scheduleMatrix, schedulingOptions);
+		}
     }
 }
