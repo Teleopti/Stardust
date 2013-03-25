@@ -20,32 +20,55 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
 		public void ShouldRaiseFullDayAbsenceAddedEvent()
 		{
-			var person = TestEntityFactory.Make<Person>();
-			var personRepository = new WriteSideRepository<IPerson> {person};
-			var absence = TestEntityFactory.Make<Absence>();
-			var absenceRepository = new WriteSideRepository<IAbsence> { absence };
+			var personRepository = new WriteSideRepository<IPerson> {TestEntityFactory.MakeWithId<Person>()};
+			var absenceRepository = new WriteSideRepository<IAbsence> {TestEntityFactory.MakeWithId<Absence>()};
 			var personAbsenceRepository = new WriteSideRepository<IPersonAbsence>();
 
 			var command = new AddFullDayAbsenceCommand
 				{
-					AbsenceId = absence.Id.Value,
-					PersonId = person.Id.Value,
-					StartDate = DateTime.Today.Date,
-					EndDate = DateTime.Today.Date
+					AbsenceId = absenceRepository.Single().Id.Value,
+					PersonId = personRepository.Single().Id.Value,
+					StartDate = new DateTime(2013, 3, 25, 0, 0, 0, DateTimeKind.Utc),
+					EndDate = new DateTime(2013, 3, 25, 0, 0, 0, DateTimeKind.Utc),
+				};
+
+			var target = new AddFullDayAbsenceCommandHandler(new TestCurrentScenario(), personRepository, absenceRepository, personAbsenceRepository);
+			target.Handle(command);
+
+			personAbsenceRepository.Single().PopAllEvents().Single().Should().Be.OfType<FullDayAbsenceAddedEvent>();
+		}
+
+		[Test]
+		public void ShouldSetupEntityState()
+		{
+			var personRepository = new WriteSideRepository<IPerson> { TestEntityFactory.MakeWithId<Person>() };
+			var absenceRepository = new WriteSideRepository<IAbsence> { TestEntityFactory.MakeWithId<Absence>() };
+			var personAbsenceRepository = new WriteSideRepository<IPersonAbsence>();
+
+			var command = new AddFullDayAbsenceCommand
+				{
+					AbsenceId = absenceRepository.Single().Id.Value,
+					PersonId = personRepository.Single().Id.Value,
+					StartDate = new DateTime(2013, 3, 25, 0, 0, 0, DateTimeKind.Utc),
+					EndDate = new DateTime(2013, 3, 25, 0, 0, 0, DateTimeKind.Utc),
 				};
 
 			var target = new AddFullDayAbsenceCommandHandler(new TestCurrentScenario(), personRepository, absenceRepository, personAbsenceRepository);
 			target.Handle(command);
 
 			var personAbsence = personAbsenceRepository.Single();
-			personAbsence.PopAllEvents().Single().Should().Be.OfType<FullDayAbsenceAddedEvent>();
-			personAbsence.PopAllEvents().Should().Have.Count.EqualTo(0);
+			var absenceLayer = personAbsence.Layer as AbsenceLayer;
+			personAbsence.Person.Should().Be(personRepository.Single());
+			absenceLayer.Payload.Should().Be(absenceRepository.Single());
+			absenceLayer.Period.StartDateTime.Should().Be(command.StartDate);
+			absenceLayer.Period.EndDateTime.Should().Be(command.StartDate.AddHours(24));
 		}
+
 	}
 
 	public static class TestEntityFactory
 	{
-		public static T Make<T>()
+		public static T MakeWithId<T>()
 		{
 			var entity = Activator.CreateInstance<T>() as Entity;
 			entity.SetId(Guid.NewGuid());

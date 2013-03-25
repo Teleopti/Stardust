@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		public virtual void FullDayAbsence(IPerson person, IAbsence absence, DateTime startDate, DateTime endDate)
 		{
 			_person = person;
-			var absenceLayer = new AbsenceLayer(absence, new DateTimePeriod());
+			var absenceLayer = new AbsenceLayer(absence, new DateTimePeriod(startDate.Date, endDate.Date.AddHours(24)));
 			_layer = absenceLayer;
 			AddEvent(new FullDayAbsenceAddedEvent());
 		}
