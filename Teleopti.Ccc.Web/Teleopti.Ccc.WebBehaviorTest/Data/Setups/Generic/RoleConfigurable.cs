@@ -37,6 +37,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
         public bool AccessToShiftTradeRequests { get; set; }
 		public bool AccessToStudentAvailability { get; set; }
 
+		public bool AccessToViewAllGroupPages { get; set; }
+
 		public RoleConfigurable()
 		{
 			BusinessUnit = GlobalDataContext.Data().Data<CommonBusinessUnit>().BusinessUnit.Description.Name;
@@ -50,6 +52,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
             AccessToAbsenceRequests = true;
             AccessToShiftTradeRequests = true;
 			AccessToAnywhere = false;
+			AccessToViewAllGroupPages = false;
 		}
 
 		public void Apply(IUnitOfWork uow)
@@ -141,12 +144,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			if (!AccessToStudentAvailability)
 				applicationFunctions = from f in applicationFunctions
 				                       where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.StudentAvailability
-				                       select f;		                       
-		       if (!AccessToShiftTradeRequests)
-				applicationFunctions = from f in applicationFunctions 
-				                       where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb 
 				                       select f;
-
+			if (!AccessToShiftTradeRequests)
+				applicationFunctions = from f in applicationFunctions
+				                       where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb
+				                       select f;
+			if(!AccessToViewAllGroupPages)
+				applicationFunctions = from f in applicationFunctions
+									   where f.FunctionPath != DefinedRaptorApplicationFunctionPaths.ViewAllGroupPages
+									   select f;
 			return applicationFunctions;
 		}
 	}

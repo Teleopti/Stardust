@@ -49,9 +49,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			InnerLogon(userName, password);
 		}
 
+		public static void LogonWithReadModelsUpdated()
+		{
+			var userName = UserFactory.User().MakeUser(true);
+			var password = TestData.CommonPassword;
+			InnerLogon(userName, password);
+		}
+
 		public static void LogonForSpecificUser(string userName, string password)
 		{
-			UserFactory.User().MakeUser(userName, userName, password);
+			UserFactory.User().MakeUser(userName, userName, password, false);
 			InnerLogon(userName, password);
 		}
 
