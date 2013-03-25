@@ -222,7 +222,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			registerWorkShiftFilters(builder);
 			registerWorkShiftSelector(builder);
 			registerTeamBlockCommon(builder);
-			registerTeamBlockDayOptimizerService(builder);
+			registerTeamBlockDayOffOptimizerService(builder);
+			registerTeamBlockIntradayOptimizerService(builder);
         }
 
 		private static void registerTeamBlockCommon(ContainerBuilder builder)
@@ -232,9 +233,17 @@ namespace Teleopti.Ccc.Win.Scheduling
 			builder.RegisterType<TeamBlockInfoFactory>().As<ITeamBlockInfoFactory>();
 			builder.RegisterType<TeamInfoFactory>().As<ITeamInfoFactory>();
 			builder.RegisterType<SafeRollbackAndResourceCalculation>().As<ISafeRollbackAndResourceCalculation>();
+			builder.RegisterType<ScheduleMatrixOriginalStateContainerFactory>().As<IScheduleMatrixOriginalStateContainerFactory>();
+			builder.RegisterType<OptimizationOverLimitByRestrictionDeciderFactory>().As<IOptimizationOverLimitByRestrictionDeciderFactory>();
+			builder.RegisterType<TeamBlockRestrictionOverLimitValidator>().As<ITeamBlockRestrictionOverLimitValidator>();
 		}
 
-		private static void registerTeamBlockDayOptimizerService(ContainerBuilder builder)
+		private static void registerTeamBlockDayOffOptimizerService(ContainerBuilder builder)
+		{
+			builder.RegisterType<TeamBlockIntradayDecisionMaker>().As<ITeamBlockIntradayDecisionMaker>();
+		}
+	
+		private static void registerTeamBlockIntradayOptimizerService(ContainerBuilder builder)
 		{
 			builder.RegisterType<LockableBitArrayFactory>().As<ILockableBitArrayFactory>();
 			builder.RegisterType<TeamDayOffModifyer>().As<ITeamDayOffModifyer>();

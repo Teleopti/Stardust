@@ -2,6 +2,7 @@ using System;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Optimization
@@ -44,6 +45,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			var result = _target.CreatePersonalSkillDataExtractor(_scheduleMatrix, _advancedPreferences);
             Assert.That(result, Is.TypeOf(typeof(RelativeDailyDifferencesByPersonalSkillsExtractor)));
         }
+
+		[Test]
+		public void ShouldReturnRelativeDailyStandardDeviationsByAllSkillsExtractor()
+		{
+			var schedulingOptions = new SchedulingOptions();
+			var result = _target.CreateRelativeDailyStandardDeviationsByAllSkillsExtractor(_scheduleMatrix, schedulingOptions);
+			Assert.That(result, Is.TypeOf(typeof (RelativeDailyStandardDeviationsByAllSkillsExtractor)));
+		}
     }
 
     

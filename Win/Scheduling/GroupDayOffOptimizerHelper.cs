@@ -553,13 +553,13 @@ namespace Teleopti.Ccc.Win.Scheduling
                     teamInfoFactory,
                     _container.Resolve<ITeamBlockInfoFactory>(),
                     teamBlockScheduler,
-                    _container.Resolve<ILockableBitArrayFactory>(),
                     _container.Resolve<ISchedulingOptionsCreator>(),
                     _container.Resolve<ISchedulingResultStateHolder>(),
                     _container.Resolve<IDeleteAndResourceCalculateService>(),
 					periodValueCalculatorForAllSkills,
-					_container.Resolve<IScheduleDayEquator>(),
-					_container.Resolve<ISafeRollbackAndResourceCalculation>()
+					_container.Resolve<ISafeRollbackAndResourceCalculation>(),
+					_container.Resolve<ITeamBlockIntradayDecisionMaker>(),
+					_container.Resolve<ITeamBlockRestrictionOverLimitValidator>()
                     );
 	        teamBlockIntradayOptimizationService.ReportProgress += resourceOptimizerPersonOptimized;
             teamBlockIntradayOptimizationService.Optimize(
