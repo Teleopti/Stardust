@@ -28,18 +28,18 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				.ForMember(d=> d.TimeLineStartDateTime, o=>o.MapFrom(s=> createTimelinePeriod(s).StartDateTime));
 		}
 
-		private static DateTimePeriod createTimelinePeriod(IShiftTradeRequest shiftTRadeRequest)
+		private static DateTimePeriod createTimelinePeriod(IShiftTradeRequest shiftTradeRequest)
 		{
-			var schedpartFrom = shiftTRadeRequest.ShiftTradeSwapDetails.First().SchedulePartFrom;
-			var schedpartTo = shiftTRadeRequest.ShiftTradeSwapDetails.First().SchedulePartTo;
+			var schedpartFrom = shiftTradeRequest.ShiftTradeSwapDetails.First().SchedulePartFrom;
+			var schedpartTo = shiftTradeRequest.ShiftTradeSwapDetails.First().SchedulePartTo;
 			if (schedpartFrom == null || schedpartTo == null)
 			{
-				return shiftTRadeRequest.Period;
+				return shiftTradeRequest.Period;
 			}
 			else
 			{
-				var fromPeriod = shiftTRadeRequest.ShiftTradeSwapDetails.First().SchedulePartFrom.Period;
-				var toPeriod = shiftTRadeRequest.ShiftTradeSwapDetails.First().SchedulePartTo.Period;
+				var fromPeriod = shiftTradeRequest.ShiftTradeSwapDetails.First().SchedulePartFrom.Period;
+				var toPeriod = shiftTradeRequest.ShiftTradeSwapDetails.First().SchedulePartTo.Period;
 				return fromPeriod.MaximumPeriod(toPeriod);
 			}
 		
