@@ -8,7 +8,6 @@ namespace Teleopti.Interfaces.Domain
 	/// <typeparam name="T"></typeparam>
 	public interface IWriteSideRepository<T> : ILoadAggregateById<T>
 	{
-
 		/// <summary>
 		/// Adds the specified entity to repository.
 		/// </summary>
@@ -22,10 +21,10 @@ namespace Teleopti.Interfaces.Domain
 		void Remove(T entity);
 
 		/// <summary>
-		/// Gets entity for the id.
+		/// Loads entity for the id.
 		/// </summary>
 		/// <param name="id">The id.</param>
 		/// <returns></returns>
-		T Get(Guid id);
+		T Load(Guid id);
 	}
 }

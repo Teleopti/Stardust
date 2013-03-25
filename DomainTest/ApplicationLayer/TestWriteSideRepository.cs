@@ -13,6 +13,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 		public void Add(T entity)
 		{
+			if (!entity.Id.HasValue)
+				entity.SetId(Guid.NewGuid());
 			_entities.Add(entity);
 		}
 
@@ -21,14 +23,14 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			_entities.Remove(entity);
 		}
 
-		public T Get(Guid id)
+		public T Load(Guid id)
 		{
 			return _entities.Single(e => e.Id.Equals(id));
 		}
 
 		public T LoadAggregate(Guid id)
 		{
-			return Get(id);
+			return Load(id);
 		}
 
 		public IEnumerator<T> GetEnumerator()

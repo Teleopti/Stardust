@@ -24,8 +24,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void Handle(AddFullDayAbsenceCommand command)
 		{
-			var person = _personRepository.Get(command.PersonId);
-			var absence = _absenceRepository.Get(command.AbsenceId);
+			var person = _personRepository.Load(command.PersonId);
+			var absence = _absenceRepository.Load(command.AbsenceId);
 
 			var personAbsence = new PersonAbsence(_scenario.Current());
 			personAbsence.FullDayAbsence(person, absence, command.StartDate, command.EndDate);
