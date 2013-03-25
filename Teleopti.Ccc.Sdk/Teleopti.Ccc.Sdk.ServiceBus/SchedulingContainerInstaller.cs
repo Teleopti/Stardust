@@ -49,6 +49,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			builder.RegisterType<UpdateScheduleProjectionReadModel>().As<IUpdateScheduleProjectionReadModel>();
 			builder.RegisterType<SingleSkillDictionary>().As<ISingleSkillDictionary>().InstancePerLifetimeScope();
 			builder.RegisterType<DenormalizedScheduleMessageBuilder>().As<IDenormalizedScheduleMessageBuilder>();
+			builder.RegisterType<SingleSkillMaxSeatCalculator>().As<ISingleSkillMaxSeatCalculator>();
 		}
 
 		private static ISchedulingResultStateHolder getSchedulingResultStateHolder(IComponentContext componentContext)
