@@ -18,10 +18,10 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             schedulingOptions.TagToUseOnScheduling = optimizationPreferences.General.ScheduleTag;
 	       
-            schedulingOptions.UseBlockScheduling =
-                optimizationPreferences.Extra.UseBlockScheduling 
-                ? optimizationPreferences.Extra.BlockFinderTypeValue 
-                : BlockFinderType.None;
+            //schedulingOptions.UseBlockScheduling =
+            //    optimizationPreferences.Extra.UseBlockScheduling 
+            //    ? optimizationPreferences.Extra.BlockFinderTypeValue 
+            //    : BlockFinderType.None;
 
             schedulingOptions.UseGroupScheduling = optimizationPreferences.Extra.UseTeams;
         	schedulingOptions.UseGroupSchedulingCommonCategory =

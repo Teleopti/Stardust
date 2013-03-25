@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         private bool _availabilityDaysOnly;
         private bool _usePreferences;
         private bool _preferencesDaysOnly;
-        private BlockFinderType _blockFinderType;
+        //private BlockFinderType _blockFinderType;
 		private ISpecification<IMainShift> _mainShiftOptimizeActivitySpecification;
         public bool UseMinimumPersons { get; set; }
         public bool UseMaximumPersons { get; set; }
@@ -98,16 +98,16 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             new SchedulingOptionsExtraPersonalSetting().MapTo(this, new List<IScheduleTag>(), new List<IGroupPageLight>(), new List<IGroupPageLight>(), new List<IActivity>());
 		}
 
-    	public BlockFinderType UseBlockScheduling
-        {
-            get { return _blockFinderType; }
-            set
-            {
-                _blockFinderType = value;
-                if(_blockFinderType != BlockFinderType.None)
-                    ShiftCategory = null;
-            }
-        }
+        //public BlockFinderType UseBlockScheduling
+        //{
+        //    get { return _blockFinderType; }
+        //    set
+        //    {
+        //        _blockFinderType = value;
+        //        if(_blockFinderType != BlockFinderType.None)
+        //            ShiftCategory = null;
+        //    }
+        //}
 
         public bool UsePreferences
         {

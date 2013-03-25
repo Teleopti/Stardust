@@ -61,19 +61,12 @@
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.checkBoxLevellingPerBlockScheduling = new System.Windows.Forms.CheckBox();
             this.checkBoxUseGroupScheduling = new System.Windows.Forms.CheckBox();
-            this.checkBoxUseBlockScheduling = new System.Windows.Forms.CheckBox();
-            this.radioButtonBetweenDayOff = new System.Windows.Forms.RadioButton();
-            this.radioButtonSchedulePeriod = new System.Windows.Forms.RadioButton();
             this.checkBoxCommonActivity = new System.Windows.Forms.CheckBox();
             this.comboBoxActivity = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
             this.checkBoxCommonEnd = new System.Windows.Forms.CheckBox();
             this.checkBoxCommonStart = new System.Windows.Forms.CheckBox();
             this.checkBoxCommonCategory = new System.Windows.Forms.CheckBox();
             this.comboBoxGrouping = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
-            this.radioButtonSchedulePeriodAdvScheduling = new System.Windows.Forms.RadioButton();
-            this.radioButtonBetweenDaysOffAdvScheduling = new System.Windows.Forms.RadioButton();
-            this.comboBoxGroupingLevelingPer = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
-            this.radioButtonSingleDayAdvScheduling = new System.Windows.Forms.RadioButton();
             this.btnLevellingPer = new System.Windows.Forms.Button();
             this.tabPageAdvance = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
@@ -95,6 +88,7 @@
             this.checkBoxUseMinimumPersons = new System.Windows.Forms.CheckBox();
             this.checkBoxDoNotBreakMaxSeats = new System.Windows.Forms.CheckBox();
             this.checkBoxUseAverageShiftLengths = new System.Windows.Forms.CheckBox();
+            this.comboBoxGroupingLevelingPer = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
             this.tabControl1.SuspendLayout();
             this.tabPageGeneral.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -111,7 +105,6 @@
             this.tableLayoutPanel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.comboBoxActivity)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.comboBoxGrouping)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.comboBoxGroupingLevelingPer)).BeginInit();
             this.tabPageAdvance.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
             this.pnlShiftCategory.SuspendLayout();
@@ -121,6 +114,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownRefreshRate)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownResourceCalculateEvery)).BeginInit();
             this.tableLayoutPanel6.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.comboBoxGroupingLevelingPer)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -346,7 +340,7 @@
             this.comboBoxAdvTag.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxAdvTag.Location = new System.Drawing.Point(136, 3);
             this.comboBoxAdvTag.Name = "comboBoxAdvTag";
-            this.comboBoxAdvTag.Size = new System.Drawing.Size(200, 19);
+            this.comboBoxAdvTag.Size = new System.Drawing.Size(200, 21);
             this.comboBoxAdvTag.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
             this.comboBoxAdvTag.TabIndex = 11;
             // 
@@ -481,7 +475,7 @@
             this.comboBoxGroupingFairness.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxGroupingFairness.Location = new System.Drawing.Point(165, 94);
             this.comboBoxGroupingFairness.Name = "comboBoxGroupingFairness";
-            this.comboBoxGroupingFairness.Size = new System.Drawing.Size(173, 19);
+            this.comboBoxGroupingFairness.Size = new System.Drawing.Size(173, 21);
             this.comboBoxGroupingFairness.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
             this.comboBoxGroupingFairness.TabIndex = 40;
             this.comboBoxGroupingFairness.SelectedIndexChanged += new System.EventHandler(this.comboBoxGroupingFairnessSelectedIndexChanged);
@@ -502,22 +496,16 @@
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 184F));
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 123F));
-            this.tableLayoutPanel4.Controls.Add(this.checkBoxLevellingPerBlockScheduling, 0, 3);
+            this.tableLayoutPanel4.Controls.Add(this.checkBoxLevellingPerBlockScheduling, 0, 0);
             this.tableLayoutPanel4.Controls.Add(this.checkBoxUseGroupScheduling, 0, 5);
-            this.tableLayoutPanel4.Controls.Add(this.checkBoxUseBlockScheduling, 0, 0);
-            this.tableLayoutPanel4.Controls.Add(this.radioButtonBetweenDayOff, 1, 1);
-            this.tableLayoutPanel4.Controls.Add(this.radioButtonSchedulePeriod, 1, 2);
             this.tableLayoutPanel4.Controls.Add(this.checkBoxCommonActivity, 1, 9);
             this.tableLayoutPanel4.Controls.Add(this.comboBoxActivity, 2, 9);
             this.tableLayoutPanel4.Controls.Add(this.checkBoxCommonEnd, 1, 8);
             this.tableLayoutPanel4.Controls.Add(this.checkBoxCommonStart, 1, 7);
             this.tableLayoutPanel4.Controls.Add(this.checkBoxCommonCategory, 1, 6);
             this.tableLayoutPanel4.Controls.Add(this.comboBoxGrouping, 2, 5);
-            this.tableLayoutPanel4.Controls.Add(this.radioButtonSchedulePeriodAdvScheduling, 1, 4);
-            this.tableLayoutPanel4.Controls.Add(this.radioButtonBetweenDaysOffAdvScheduling, 2, 4);
-            this.tableLayoutPanel4.Controls.Add(this.comboBoxGroupingLevelingPer, 3, 3);
-            this.tableLayoutPanel4.Controls.Add(this.radioButtonSingleDayAdvScheduling, 3, 4);
-            this.tableLayoutPanel4.Controls.Add(this.btnLevellingPer, 2, 3);
+            this.tableLayoutPanel4.Controls.Add(this.btnLevellingPer, 2, 0);
+            this.tableLayoutPanel4.Controls.Add(this.comboBoxGroupingLevelingPer, 2, 1);
             this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel4.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
@@ -541,9 +529,9 @@
             this.checkBoxLevellingPerBlockScheduling.AutoSize = true;
             this.tableLayoutPanel4.SetColumnSpan(this.checkBoxLevellingPerBlockScheduling, 2);
             this.checkBoxLevellingPerBlockScheduling.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.checkBoxLevellingPerBlockScheduling.Location = new System.Drawing.Point(3, 78);
+            this.checkBoxLevellingPerBlockScheduling.Location = new System.Drawing.Point(3, 3);
             this.checkBoxLevellingPerBlockScheduling.Name = "checkBoxLevellingPerBlockScheduling";
-            this.checkBoxLevellingPerBlockScheduling.Size = new System.Drawing.Size(156, 24);
+            this.checkBoxLevellingPerBlockScheduling.Size = new System.Drawing.Size(156, 19);
             this.checkBoxLevellingPerBlockScheduling.TabIndex = 41;
             this.checkBoxLevellingPerBlockScheduling.Text = "xxLevellingPer";
             this.checkBoxLevellingPerBlockScheduling.UseVisualStyleBackColor = true;
@@ -554,7 +542,7 @@
             this.checkBoxUseGroupScheduling.AutoSize = true;
             this.tableLayoutPanel4.SetColumnSpan(this.checkBoxUseGroupScheduling, 2);
             this.checkBoxUseGroupScheduling.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.checkBoxUseGroupScheduling.Location = new System.Drawing.Point(3, 137);
+            this.checkBoxUseGroupScheduling.Location = new System.Drawing.Point(3, 114);
             this.checkBoxUseGroupScheduling.Name = "checkBoxUseGroupScheduling";
             this.checkBoxUseGroupScheduling.Size = new System.Drawing.Size(156, 22);
             this.checkBoxUseGroupScheduling.TabIndex = 34;
@@ -562,50 +550,11 @@
             this.checkBoxUseGroupScheduling.UseVisualStyleBackColor = true;
             this.checkBoxUseGroupScheduling.CheckedChanged += new System.EventHandler(this.checkBoxUseGroupSchedulingCheckedChanged);
             // 
-            // checkBoxUseBlockScheduling
-            // 
-            this.checkBoxUseBlockScheduling.AutoSize = true;
-            this.tableLayoutPanel4.SetColumnSpan(this.checkBoxUseBlockScheduling, 2);
-            this.checkBoxUseBlockScheduling.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.checkBoxUseBlockScheduling.Location = new System.Drawing.Point(3, 3);
-            this.checkBoxUseBlockScheduling.Name = "checkBoxUseBlockScheduling";
-            this.checkBoxUseBlockScheduling.Size = new System.Drawing.Size(156, 19);
-            this.checkBoxUseBlockScheduling.TabIndex = 31;
-            this.checkBoxUseBlockScheduling.Text = "xxUseBlockScheduling";
-            this.checkBoxUseBlockScheduling.UseVisualStyleBackColor = true;
-            this.checkBoxUseBlockScheduling.CheckedChanged += new System.EventHandler(this.checkBoxUseBlockSchedulingCheckedChanged);
-            // 
-            // radioButtonBetweenDayOff
-            // 
-            this.radioButtonBetweenDayOff.AutoSize = true;
-            this.radioButtonBetweenDayOff.Enabled = false;
-            this.radioButtonBetweenDayOff.Location = new System.Drawing.Point(33, 28);
-            this.radioButtonBetweenDayOff.Name = "radioButtonBetweenDayOff";
-            this.radioButtonBetweenDayOff.Size = new System.Drawing.Size(110, 17);
-            this.radioButtonBetweenDayOff.TabIndex = 32;
-            this.radioButtonBetweenDayOff.TabStop = true;
-            this.radioButtonBetweenDayOff.Text = "xxBetweenDayOff";
-            this.radioButtonBetweenDayOff.UseVisualStyleBackColor = true;
-            this.radioButtonBetweenDayOff.CheckedChanged += new System.EventHandler(this.radioButtonBetweenDayOffCheckedChanged);
-            // 
-            // radioButtonSchedulePeriod
-            // 
-            this.radioButtonSchedulePeriod.AutoSize = true;
-            this.radioButtonSchedulePeriod.Enabled = false;
-            this.radioButtonSchedulePeriod.Location = new System.Drawing.Point(33, 55);
-            this.radioButtonSchedulePeriod.Name = "radioButtonSchedulePeriod";
-            this.radioButtonSchedulePeriod.Size = new System.Drawing.Size(110, 17);
-            this.radioButtonSchedulePeriod.TabIndex = 33;
-            this.radioButtonSchedulePeriod.TabStop = true;
-            this.radioButtonSchedulePeriod.Text = "xxSchedulePeriod";
-            this.radioButtonSchedulePeriod.UseVisualStyleBackColor = true;
-            this.radioButtonSchedulePeriod.CheckedChanged += new System.EventHandler(this.radioButtonSchedulePeriodCheckedChanged);
-            // 
             // checkBoxCommonActivity
             // 
             this.checkBoxCommonActivity.AutoSize = true;
             this.checkBoxCommonActivity.Enabled = false;
-            this.checkBoxCommonActivity.Location = new System.Drawing.Point(33, 243);
+            this.checkBoxCommonActivity.Location = new System.Drawing.Point(33, 220);
             this.checkBoxCommonActivity.Name = "checkBoxCommonActivity";
             this.checkBoxCommonActivity.Size = new System.Drawing.Size(97, 17);
             this.checkBoxCommonActivity.TabIndex = 39;
@@ -618,9 +567,9 @@
             this.comboBoxActivity.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
             this.comboBoxActivity.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxActivity.Enabled = false;
-            this.comboBoxActivity.Location = new System.Drawing.Point(165, 243);
+            this.comboBoxActivity.Location = new System.Drawing.Point(165, 220);
             this.comboBoxActivity.Name = "comboBoxActivity";
-            this.comboBoxActivity.Size = new System.Drawing.Size(173, 19);
+            this.comboBoxActivity.Size = new System.Drawing.Size(173, 21);
             this.comboBoxActivity.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
             this.comboBoxActivity.TabIndex = 40;
             // 
@@ -628,7 +577,7 @@
             // 
             this.checkBoxCommonEnd.AutoSize = true;
             this.checkBoxCommonEnd.Enabled = false;
-            this.checkBoxCommonEnd.Location = new System.Drawing.Point(33, 219);
+            this.checkBoxCommonEnd.Location = new System.Drawing.Point(33, 196);
             this.checkBoxCommonEnd.Name = "checkBoxCommonEnd";
             this.checkBoxCommonEnd.Size = new System.Drawing.Size(105, 17);
             this.checkBoxCommonEnd.TabIndex = 38;
@@ -639,7 +588,7 @@
             // 
             this.checkBoxCommonStart.AutoSize = true;
             this.checkBoxCommonStart.Enabled = false;
-            this.checkBoxCommonStart.Location = new System.Drawing.Point(33, 192);
+            this.checkBoxCommonStart.Location = new System.Drawing.Point(33, 169);
             this.checkBoxCommonStart.Name = "checkBoxCommonStart";
             this.checkBoxCommonStart.Size = new System.Drawing.Size(108, 17);
             this.checkBoxCommonStart.TabIndex = 37;
@@ -650,7 +599,7 @@
             // 
             this.checkBoxCommonCategory.AutoSize = true;
             this.checkBoxCommonCategory.Enabled = false;
-            this.checkBoxCommonCategory.Location = new System.Drawing.Point(33, 165);
+            this.checkBoxCommonCategory.Location = new System.Drawing.Point(33, 142);
             this.checkBoxCommonCategory.Name = "checkBoxCommonCategory";
             this.checkBoxCommonCategory.Size = new System.Drawing.Size(126, 17);
             this.checkBoxCommonCategory.TabIndex = 36;
@@ -662,70 +611,19 @@
             this.comboBoxGrouping.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
             this.comboBoxGrouping.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxGrouping.FlatBorderColor = System.Drawing.SystemColors.ControlDark;
-            this.comboBoxGrouping.Location = new System.Drawing.Point(165, 137);
+            this.comboBoxGrouping.Location = new System.Drawing.Point(165, 114);
             this.comboBoxGrouping.Name = "comboBoxGrouping";
-            this.comboBoxGrouping.Size = new System.Drawing.Size(173, 19);
+            this.comboBoxGrouping.Size = new System.Drawing.Size(173, 21);
             this.comboBoxGrouping.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
             this.comboBoxGrouping.TabIndex = 35;
             this.comboBoxGrouping.SelectedIndexChanged += new System.EventHandler(this.comboBoxGroupingSelectedIndexChanged);
             // 
-            // radioButtonSchedulePeriodAdvScheduling
-            // 
-            this.radioButtonSchedulePeriodAdvScheduling.AutoSize = true;
-            this.radioButtonSchedulePeriodAdvScheduling.Enabled = false;
-            this.radioButtonSchedulePeriodAdvScheduling.Location = new System.Drawing.Point(33, 108);
-            this.radioButtonSchedulePeriodAdvScheduling.Name = "radioButtonSchedulePeriodAdvScheduling";
-            this.radioButtonSchedulePeriodAdvScheduling.Size = new System.Drawing.Size(110, 17);
-            this.radioButtonSchedulePeriodAdvScheduling.TabIndex = 42;
-            this.radioButtonSchedulePeriodAdvScheduling.TabStop = true;
-            this.radioButtonSchedulePeriodAdvScheduling.Text = "xxSchedulePeriod";
-            this.radioButtonSchedulePeriodAdvScheduling.UseVisualStyleBackColor = true;
-            this.radioButtonSchedulePeriodAdvScheduling.Visible = false;
-            // 
-            // radioButtonBetweenDaysOffAdvScheduling
-            // 
-            this.radioButtonBetweenDaysOffAdvScheduling.AutoSize = true;
-            this.radioButtonBetweenDaysOffAdvScheduling.Enabled = false;
-            this.radioButtonBetweenDaysOffAdvScheduling.Location = new System.Drawing.Point(165, 108);
-            this.radioButtonBetweenDaysOffAdvScheduling.Name = "radioButtonBetweenDaysOffAdvScheduling";
-            this.radioButtonBetweenDaysOffAdvScheduling.Size = new System.Drawing.Size(110, 17);
-            this.radioButtonBetweenDaysOffAdvScheduling.TabIndex = 43;
-            this.radioButtonBetweenDaysOffAdvScheduling.TabStop = true;
-            this.radioButtonBetweenDaysOffAdvScheduling.Text = "xxBetweenDayOff";
-            this.radioButtonBetweenDaysOffAdvScheduling.UseVisualStyleBackColor = true;
-            this.radioButtonBetweenDaysOffAdvScheduling.Visible = false;
-            // 
-            // comboBoxGroupingLevelingPer
-            // 
-            this.comboBoxGroupingLevelingPer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
-            this.comboBoxGroupingLevelingPer.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBoxGroupingLevelingPer.FlatBorderColor = System.Drawing.SystemColors.ControlDark;
-            this.comboBoxGroupingLevelingPer.Location = new System.Drawing.Point(349, 78);
-            this.comboBoxGroupingLevelingPer.Name = "comboBoxGroupingLevelingPer";
-            this.comboBoxGroupingLevelingPer.Size = new System.Drawing.Size(117, 19);
-            this.comboBoxGroupingLevelingPer.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
-            this.comboBoxGroupingLevelingPer.TabIndex = 44;
-            this.comboBoxGroupingLevelingPer.Visible = false;
-            this.comboBoxGroupingLevelingPer.SelectedIndexChanged += new System.EventHandler(this.comboBoxGroupingLevelingPer_SelectedIndexChanged);
-            // 
-            // radioButtonSingleDayAdvScheduling
-            // 
-            this.radioButtonSingleDayAdvScheduling.AutoSize = true;
-            this.radioButtonSingleDayAdvScheduling.Location = new System.Drawing.Point(349, 108);
-            this.radioButtonSingleDayAdvScheduling.Name = "radioButtonSingleDayAdvScheduling";
-            this.radioButtonSingleDayAdvScheduling.Size = new System.Drawing.Size(83, 17);
-            this.radioButtonSingleDayAdvScheduling.TabIndex = 45;
-            this.radioButtonSingleDayAdvScheduling.TabStop = true;
-            this.radioButtonSingleDayAdvScheduling.Text = "xxSingleDay";
-            this.radioButtonSingleDayAdvScheduling.UseVisualStyleBackColor = true;
-            this.radioButtonSingleDayAdvScheduling.Visible = false;
-            // 
             // btnLevellingPer
             // 
             this.btnLevellingPer.Enabled = false;
-            this.btnLevellingPer.Location = new System.Drawing.Point(165, 78);
+            this.btnLevellingPer.Location = new System.Drawing.Point(165, 3);
             this.btnLevellingPer.Name = "btnLevellingPer";
-            this.btnLevellingPer.Size = new System.Drawing.Size(91, 23);
+            this.btnLevellingPer.Size = new System.Drawing.Size(91, 19);
             this.btnLevellingPer.TabIndex = 46;
             this.btnLevellingPer.Text = "xxLevellingPer";
             this.btnLevellingPer.UseVisualStyleBackColor = true;
@@ -1009,6 +907,19 @@
             this.checkBoxUseAverageShiftLengths.Text = "xxUseAverageShiftLengths";
             this.checkBoxUseAverageShiftLengths.UseVisualStyleBackColor = true;
             // 
+            // comboBoxGroupingLevelingPer
+            // 
+            this.comboBoxGroupingLevelingPer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
+            this.comboBoxGroupingLevelingPer.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxGroupingLevelingPer.FlatBorderColor = System.Drawing.SystemColors.ControlDark;
+            this.comboBoxGroupingLevelingPer.Location = new System.Drawing.Point(165, 28);
+            this.comboBoxGroupingLevelingPer.Name = "comboBoxGroupingLevelingPer";
+            this.comboBoxGroupingLevelingPer.Size = new System.Drawing.Size(117, 21);
+            this.comboBoxGroupingLevelingPer.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
+            this.comboBoxGroupingLevelingPer.TabIndex = 44;
+            this.comboBoxGroupingLevelingPer.Visible = false;
+            this.comboBoxGroupingLevelingPer.SelectedIndexChanged += new System.EventHandler(this.comboBoxGroupingLevelingPer_SelectedIndexChanged);
+            // 
             // SchedulingSessionPreferencesTabPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1040,7 +951,6 @@
             this.tableLayoutPanel4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.comboBoxActivity)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.comboBoxGrouping)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.comboBoxGroupingLevelingPer)).EndInit();
             this.tabPageAdvance.ResumeLayout(false);
             this.tableLayoutPanel3.ResumeLayout(false);
             this.tableLayoutPanel3.PerformLayout();
@@ -1053,6 +963,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownResourceCalculateEvery)).EndInit();
             this.tableLayoutPanel6.ResumeLayout(false);
             this.tableLayoutPanel6.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.comboBoxGroupingLevelingPer)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1080,10 +991,7 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
         private System.Windows.Forms.CheckBox checkBoxUseGroupScheduling;
-        private System.Windows.Forms.CheckBox checkBoxUseBlockScheduling;
-		private System.Windows.Forms.RadioButton radioButtonBetweenDayOff;
         private System.Windows.Forms.CheckBox checkBoxCommonCategory;
-        private System.Windows.Forms.RadioButton radioButtonSchedulePeriod;
         private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxGrouping;
         private System.Windows.Forms.CheckBox checkBoxCommonStart;
         private System.Windows.Forms.CheckBox checkBoxCommonEnd;
@@ -1120,10 +1028,7 @@
         private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxActivity;
 		private System.Windows.Forms.CheckBox checkBoxUseAverageShiftLengths;
         private System.Windows.Forms.CheckBox checkBoxLevellingPerBlockScheduling;
-        private System.Windows.Forms.RadioButton radioButtonSchedulePeriodAdvScheduling;
-        private System.Windows.Forms.RadioButton radioButtonBetweenDaysOffAdvScheduling;
-        private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxGroupingLevelingPer;
-		private System.Windows.Forms.RadioButton radioButtonSingleDayAdvScheduling;
         private System.Windows.Forms.Button btnLevellingPer;
+        private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxGroupingLevelingPer;
     }
 }

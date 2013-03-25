@@ -207,11 +207,11 @@ namespace Teleopti.Interfaces.Domain
         /// </value>
         bool UseShiftCategoryLimitations { get; set; }
 
-        /// <summary>
-        /// Gets or sets the use block scheduling.
-        /// </summary>
-        /// <value>The use block scheduling.</value>
-        BlockFinderType UseBlockScheduling { get; set; }
+        ///// <summary>
+        ///// Gets or sets the use block scheduling.
+        ///// </summary>
+        ///// <value>The use block scheduling.</value>
+        //BlockFinderType UseBlockScheduling { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether [use group scheduling].
@@ -329,18 +329,18 @@ namespace Teleopti.Interfaces.Domain
 		/// </value>
 		bool UseAverageShiftLengths { get; set; }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether [use period as block].
-        /// </summary>
-        bool UsePeriodAsBlock { get; set; }
-        /// <summary>
-        /// Gets or sets a value indicating whether [use two days off as block].
-        /// </summary>
-        bool UseTwoDaysOffAsBlock { get; set; }
-        /// <summary>
-        /// Gets or sets a value indicating whether [use calender as block].
-        /// </summary>
-        bool UseCalendarWeekAsBlock { get; set; }
+        ///// <summary>
+        ///// Gets or sets a value indicating whether [use period as block].
+        ///// </summary>
+        //bool UsePeriodAsBlock { get; set; }
+        ///// <summary>
+        ///// Gets or sets a value indicating whether [use two days off as block].
+        ///// </summary>
+        //bool UseTwoDaysOffAsBlock { get; set; }
+        ///// <summary>
+        ///// Gets or sets a value indicating whether [use calender as block].
+        ///// </summary>
+        //bool UseCalendarWeekAsBlock { get; set; }
 
         /// <summary>
         /// Block finder service for advance scheduling service
