@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 	[TestFixture]
 	public class EventsMessageSenderTest
 	{
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
 		public void ShouldPopEventsFromAggregates()
 		{
 			var target = new EventsMessageSender(MockRepository.GenerateMock<IEventsPublisher>());
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			root.AssertWasCalled(x => x.PopAllEvents());
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
 		public void ShouldPublishEvents()
 		{
 			var eventsPublisher = MockRepository.GenerateMock<IEventsPublisher>();
