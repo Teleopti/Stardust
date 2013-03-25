@@ -3,10 +3,10 @@ using System;
 namespace Teleopti.Interfaces.Domain
 {
 	/// <summary>
-	/// Generic interface for write side repositorys
+	/// Generic interface for write side repositories
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
-	public interface IWriteSideRepository<T>
+	public interface IWriteSideRepository<T> : ILoadAggregateById<T>
 	{
 
 		/// <summary>
@@ -14,7 +14,6 @@ namespace Teleopti.Interfaces.Domain
 		/// </summary>
 		/// <param name="entity">The entity.</param>
 		void Add(T entity);
-
 
 		/// <summary>
 		/// Removes the specified entity from repository.

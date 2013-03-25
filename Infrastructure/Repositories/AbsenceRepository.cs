@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using NHibernate.Criterion;
 using NHibernate.Transform;
@@ -11,7 +12,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     /// <summary>
     /// Repository for absences
     /// </summary>
-    public class AbsenceRepository : Repository<IAbsence>, IAbsenceRepository
+    public class AbsenceRepository : Repository<IAbsence>, IAbsenceRepository, IWriteSideRepository<IAbsence>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="AbsenceRepository"/> class.
@@ -69,5 +70,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             return Session.GetNamedQuery("FindAbsenceTrackerUsedByPersonAccount")
                             .List<IAbsence>();
         }
+
+	    public IAbsence LoadAggregate(Guid id) { return Load(id); }
     }
 }

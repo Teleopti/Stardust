@@ -25,6 +25,11 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			return _entities.Single(e => e.Id.Equals(id));
 		}
 
+		public T LoadAggregate(Guid id)
+		{
+			return Get(id);
+		}
+
 		public IEnumerator<T> GetEnumerator()
 		{
 			return _entities.GetEnumerator();
@@ -34,5 +39,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		{
 			return _entities.GetEnumerator();
 		}
+
 	}
 }

@@ -8,8 +8,29 @@ namespace Teleopti.Interfaces.Domain
     /// Base interface for all repositories
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public interface IRepository<T> : IWriteSideRepository<T>
+    public interface IRepository<T>
     {
+
+		/// <summary>
+		/// Adds the specified entity to repository.
+		/// </summary>
+		/// <param name="entity">The entity.</param>
+		void Add(T entity);
+
+
+		/// <summary>
+		/// Removes the specified entity from repository.
+		/// </summary>
+		/// <param name="entity">The entity.</param>
+		void Remove(T entity);
+
+		/// <summary>
+		/// Gets entity for the id.
+		/// </summary>
+		/// <param name="id">The id.</param>
+		/// <returns></returns>
+		T Get(Guid id);
+
         /// <summary>
         /// Loads all entities.
         /// </summary>

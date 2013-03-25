@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     /// Created by: rogerkr
     /// Created date: 2007-11-28
     /// </remarks>
-    public class PersonRepository : Repository<IPerson>, IPersonRepository
+    public class PersonRepository : Repository<IPerson>, IPersonRepository, IWriteSideRepository<IPerson>
     {
         public PersonRepository(IUnitOfWork unitOfWork)
             : base(unitOfWork)
@@ -776,6 +776,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             }
             return result;
         }
+
+	    public IPerson LoadAggregate(Guid id) { return Load(id); }
     }
 }
 
