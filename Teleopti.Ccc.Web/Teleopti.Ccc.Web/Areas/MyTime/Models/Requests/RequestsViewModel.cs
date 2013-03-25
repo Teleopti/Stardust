@@ -33,6 +33,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 		public bool IsNew;
 		public bool IsPending;
 		public bool IsApproved;
+		public bool IsDenied;
 		public int DateFromYear { get; set; }
 		public int DateFromMonth { get; set; }
 		public int DateFromDayOfMonth { get; set; }

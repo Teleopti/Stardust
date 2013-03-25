@@ -473,7 +473,6 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			Assert.That(result.IsPending, Is.True);
 		}
 
-
 		[Test]
 		public void ShouldMapIsApproved()
 		{
@@ -493,6 +492,27 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 
 			Assert.That(personRequest.IsApproved, Is.True);
 			Assert.That(result.IsApproved, Is.True);
+		}
+
+		[Test]
+		public void ShouldMapIsDenied()
+		{
+			var sender = PersonFactory.CreatePerson();
+			var tradeDate = new DateOnly(2010, 1, 1);
+			var shiftTradeSwapDetail = new ShiftTradeSwapDetail(sender, _loggedOnPerson, tradeDate, tradeDate);
+			var shiftTradeRequest = new ShiftTradeRequest(new List<IShiftTradeSwapDetail> { shiftTradeSwapDetail });
+			var personRequest = new PersonRequest(_loggedOnPerson) { Subject = "Subject of request", Request = shiftTradeRequest };
+			var result = Mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
+
+			Assert.That(personRequest.IsDenied, Is.False);
+			Assert.That(result.IsApproved, Is.False);
+
+			personRequest.ForcePending();
+			personRequest.Deny(null, "MyDenyReason", new PersonRequestAuthorizationCheckerForTest());
+			result = Mapper.Map<IPersonRequest, RequestViewModel>(personRequest);
+
+			Assert.That(personRequest.IsDenied, Is.True);
+			Assert.That(result.IsDenied, Is.True);
 		}
 
 		private static IPersonRequest createShiftTrade(IPerson from, IPerson to)

@@ -32,6 +32,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
         self.IsSelected = ko.observable(false);
         self.IsLoading = ko.observable(false);
         self.CanDelete = ko.observable(true);
+        self.StatusClass = ko.observable();
 
         self.Type = ko.computed(function () {
             var payload = (self.RequestPayload() != '') ? ', ' + self.RequestPayload() : '';
@@ -181,6 +182,15 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 		self.CanDelete = ko.observable(true);
     }
 
+    _classFromStatus = function(data) {
+        if (data.IsApproved)
+            return 'label-success';
+        if (data.IsDenied)
+            return 'label-important';
+
+        return 'label-warning';
+    };
+    
     ko.utils.extend(RequestItemViewModel.prototype, {
         Initialize: function (data) {
             var self = this;
@@ -192,9 +202,9 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
             self.Text(data.Text);
             self.Link(data.Link.href);
             self.Id(data.Id);
+            self.StatusClass(_classFromStatus(data));
             self.RequestPayload(data.Payload);
 			self.CanDelete((data.Link.Methods.indexOf("DELETE") != -1) && data.IsCreatedByUser);
-
         }
     });
 
