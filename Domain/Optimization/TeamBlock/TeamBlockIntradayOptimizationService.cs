@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Interfaces.Domain;
@@ -27,11 +26,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly ITeamBlockInfoFactory _teamBlockInfoFactory;
 		private readonly ILockableBitArrayFactory _lockableBitArrayFactory;
 		private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
-		private readonly ISchedulingResultStateHolder _stateHolder;
-		private readonly IDeleteAndResourceCalculateService _deleteAndResourceCalculateService;
 		private readonly IPeriodValueCalculator _periodValueCalculatorForAllSkills;
 		private readonly IScheduleDayEquator _scheduleDayEquator;
 		private readonly ISafeRollbackAndResourceCalculation _safeRollbackAndResourceCalculation;
+		private readonly ITeamBlockClearer _teamBlockClearer;
 		private bool _cancelMe;
 
 		public TeamBlockIntradayOptimizationService(ITeamInfoFactory teamInfoFactory,
@@ -39,22 +37,20 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		                                            ITeamBlockScheduler teamBlockScheduler,
 		                                            ILockableBitArrayFactory lockableBitArrayFactory,
 		                                            ISchedulingOptionsCreator schedulingOptionsCreator,
-		                                            ISchedulingResultStateHolder stateHolder,
-		                                            IDeleteAndResourceCalculateService deleteAndResourceCalculateService,
 		                                            IPeriodValueCalculator periodValueCalculatorForAllSkills,
 		                                            IScheduleDayEquator scheduleDayEquator,
-		                                            ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation)
+		                                            ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation,
+													ITeamBlockClearer teamBlockClearer)
 		{
 			_teamInfoFactory = teamInfoFactory;
 			_teamBlockInfoFactory = teamBlockInfoFactory;
 			_teamBlockScheduler = teamBlockScheduler;
 			_lockableBitArrayFactory = lockableBitArrayFactory;
 			_schedulingOptionsCreator = schedulingOptionsCreator;
-			_stateHolder = stateHolder;
-			_deleteAndResourceCalculateService = deleteAndResourceCalculateService;
 			_periodValueCalculatorForAllSkills = periodValueCalculatorForAllSkills;
 			_scheduleDayEquator = scheduleDayEquator;
 			_safeRollbackAndResourceCalculation = safeRollbackAndResourceCalculation;
+			_teamBlockClearer = teamBlockClearer;
 		}
 
 		public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
@@ -159,22 +155,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				schedulePartModifyAndRollbackService.ClearModificationCollection();
 			
 				//clear block
-				foreach (var dateOnly in teamBlock.BlockInfo.BlockPeriod.DayCollection())
-				{
-					IList<IScheduleDay> toRemove = new List<IScheduleDay>();
-					foreach (var person in teamBlock.TeamInfo.GroupPerson.GroupMembers)
-					{
-						IScheduleDay scheduleDay = _stateHolder.Schedules[person].ScheduledDay(dateOnly);
-						SchedulePartView significant = scheduleDay.SignificantPart();
-						if (significant != SchedulePartView.FullDayAbsence && significant != SchedulePartView.DayOff &&
-						    significant != SchedulePartView.ContractDayOff)
-							toRemove.Add(scheduleDay);
-					}
-					_deleteAndResourceCalculateService.DeleteWithResourceCalculation(toRemove,
-					                                                                 schedulePartModifyAndRollbackService,
-					                                                                 schedulingOptions
-						                                                                 .ConsiderShortBreaks);
-				}
+				_teamBlockClearer.ClearTeamBlock(schedulingOptions, schedulePartModifyAndRollbackService, teamBlock);
 
 				var datePoint = teamBlock.BlockInfo.BlockPeriod.DayCollection().First();
 				var success = _teamBlockScheduler.ScheduleTeamBlock(teamBlock, datePoint, schedulingOptions);
@@ -225,5 +206,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			}
 			return teamBlockToRemove;
 		}
+
+		
 	}
 }

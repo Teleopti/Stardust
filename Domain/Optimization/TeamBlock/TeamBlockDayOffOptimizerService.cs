@@ -35,6 +35,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly IDayOffOptimizationDecisionMakerFactory _dayOffOptimizationDecisionMakerFactory;
 		private readonly ISafeRollbackAndResourceCalculation _safeRollbackAndResourceCalculation;
 		private readonly ITeamDayOffModifyer _teamDayOffModifyer;
+		private readonly IBlockSteadyStateValidator _teamBlockSteadyStateValidator;
+		private readonly ITeamBlockClearer _teamBlockClearer;
 		private bool _cancelMe;
 
 		public TeamBlockDayOffOptimizerService(
@@ -49,7 +51,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			IPeriodValueCalculator periodValueCalculatorForAllSkills,
 			IDayOffOptimizationDecisionMakerFactory dayOffOptimizationDecisionMakerFactory,
 			ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation,
-			ITeamDayOffModifyer teamDayOffModifyer
+			ITeamDayOffModifyer teamDayOffModifyer,
+			IBlockSteadyStateValidator teamBlockSteadyStateValidator,
+			ITeamBlockClearer teamBlockClearer
 			)
 		{
 			_teamInfoFactory = teamInfoFactory;
@@ -64,6 +68,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_dayOffOptimizationDecisionMakerFactory = dayOffOptimizationDecisionMakerFactory;
 			_safeRollbackAndResourceCalculation = safeRollbackAndResourceCalculation;
 			_teamDayOffModifyer = teamDayOffModifyer;
+			_teamBlockSteadyStateValidator = teamBlockSteadyStateValidator;
+			_teamBlockClearer = teamBlockClearer;
 		}
 
 		public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
@@ -180,7 +186,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 			removeAllDecidedDaysOff(rollbackService, schedulingOptions, teamInfo, removedDaysOff);
 			addAllDecidedDaysOf(rollbackService, schedulingOptions, teamInfo, addedDaysOff);
-			reScheduleAllMovedDaysOff(schedulingOptions, teamInfo, selectedPeriod, selectedPersons, removedDaysOff);
+			reScheduleAllMovedDaysOff(schedulingOptions, teamInfo, selectedPeriod, selectedPersons, removedDaysOff, rollbackService);
 
 
 			// ev back to legal state?
@@ -194,13 +200,16 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 		private void reScheduleAllMovedDaysOff(ISchedulingOptions schedulingOptions, ITeamInfo teamInfo,
 		                                       DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons,
-		                                       IEnumerable<DateOnly> removedDaysOff)
+		                                       IEnumerable<DateOnly> removedDaysOff, ISchedulePartModifyAndRollbackService rollbackService)
 		{
 			foreach (DateOnly dateOnly in removedDaysOff)
 			{
 				TeamBlockInfo teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, dateOnly,
 				                                                                        schedulingOptions
 					                                                                        .BlockFinderTypeForAdvanceScheduling);
+				if (!_teamBlockSteadyStateValidator.IsBlockInSteadyState(teamBlockInfo, schedulingOptions))
+					_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo);
+
 				_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, dateOnly, schedulingOptions, selectedPeriod, selectedPersons);
 			}
 		}

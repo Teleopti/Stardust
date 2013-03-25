@@ -501,7 +501,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 					periodValueCalculatorForAllSkills,
 					_container.Resolve<IDayOffOptimizationDecisionMakerFactory>(),
 					_container.Resolve<ISafeRollbackAndResourceCalculation>(),
-					_container.Resolve<ITeamDayOffModifyer>()
+					_container.Resolve<ITeamDayOffModifyer>(),
+					_container.Resolve<IBlockSteadyStateValidator>(),
+					_container.Resolve<ITeamBlockClearer>()
 					);
 
 			IList<IDayOffTemplate> dayOffTemplates = (from item in _schedulerState.CommonStateHolder.DayOffs
@@ -556,11 +558,10 @@ namespace Teleopti.Ccc.Win.Scheduling
                     teamBlockScheduler,
                     _container.Resolve<ILockableBitArrayFactory>(),
                     _container.Resolve<ISchedulingOptionsCreator>(),
-                    _container.Resolve<ISchedulingResultStateHolder>(),
-                    _container.Resolve<IDeleteAndResourceCalculateService>(),
 					periodValueCalculatorForAllSkills,
 					_container.Resolve<IScheduleDayEquator>(),
-					_container.Resolve<ISafeRollbackAndResourceCalculation>()
+					_container.Resolve<ISafeRollbackAndResourceCalculation>(),
+					_container.Resolve<ITeamBlockClearer>()
                     );
 	        teamBlockIntradayOptimizationService.ReportProgress += resourceOptimizerPersonOptimized;
             teamBlockIntradayOptimizationService.Optimize(

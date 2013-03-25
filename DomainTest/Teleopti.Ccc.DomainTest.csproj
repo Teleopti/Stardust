@@ -710,6 +710,7 @@
     <Compile Include="Scheduling\ShiftTradeChecksumCalculatorTest.cs" />
     <Compile Include="Scheduling\Restriction\ExtendedPreferenceTemplateTest.cs" />
     <Compile Include="Scheduling\TeamBlock\BlockInfoTest.cs" />
+    <Compile Include="Scheduling\TeamBlock\TeamBlockClearerTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockSteadyStateValidatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\DayIntervalDataCalculatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\DynamicBlockFinderTest.cs" />

@@ -232,6 +232,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			builder.RegisterType<TeamBlockInfoFactory>().As<ITeamBlockInfoFactory>();
 			builder.RegisterType<TeamInfoFactory>().As<ITeamInfoFactory>();
 			builder.RegisterType<SafeRollbackAndResourceCalculation>().As<ISafeRollbackAndResourceCalculation>();
+			builder.RegisterType<TeamBlockClearer>().As<ITeamBlockClearer>();
 		}
 
 		private static void registerTeamBlockDayOptimizerService(ContainerBuilder builder)
