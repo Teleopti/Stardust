@@ -365,6 +365,7 @@
     <Compile Include="UnitOfWork\QueryFilterTest.cs" />
     <Compile Include="UnitOfWork\SaveToDenormalizationQueueTest.cs" />
     <Compile Include="UnitOfWork\ScheduleMessageSenderTest.cs" />
+    <Compile Include="UnitOfWork\DenormalizationQueueEventsPublisherTest.cs" />
     <Compile Include="UnitOfWork\SqlQueryTest.cs" />
   </ItemGroup>
   <ItemGroup>
