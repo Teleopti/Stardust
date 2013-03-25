@@ -156,6 +156,7 @@
     <Compile Include="SqlExceptionConstructor.cs" />
     <Compile Include="StateHolderProxyHelper.cs" />
     <Compile Include="StubFactory.cs" />
+    <Compile Include="TestCurrentScenario.cs" />
     <Compile Include="TestData\Analytics\AQueue.cs" />
     <Compile Include="TestData\Analytics\AWorkload.cs" />
     <Compile Include="TestData\Analytics\BusinessUnit.cs" />
