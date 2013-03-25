@@ -18,27 +18,32 @@ Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
 	self.CanApproveAndDeny = ko.observable(true);
 	self.Approve = function () {
 		self.CanApproveAndDeny(false);
-		self.respondToRequest("Requests/ApproveShiftTrade/" + self.Id());
+		self.ajax.Ajax({
+			url: "Requests/ApproveShiftTrade/" + self.Id(),
+			dataType: "json",
+			type: "POST",
+			success: function (data) {
+				Teleopti.MyTimeWeb.Request.List.AddItemAtTop(data, true);
+				self.CanApproveAndDeny(true);
+			}
+		});
 		Teleopti.MyTimeWeb.Request.RequestDetail.FadeEditSection();
 	};
 	self.pixelPerMinute = ko.observable(0.3);
 	self.Deny = function () {
 		self.CanApproveAndDeny(false);
-		self.respondToRequest("Requests/DenyShiftTrade/" + self.Id());
-		Teleopti.MyTimeWeb.Request.RequestDetail.FadeEditSection();
-	};
-	self.respondToRequest = function (url) {
-
 		self.ajax.Ajax({
-			url: url,
+			url: "Requests/DenyShiftTrade/" + self.Id(),
 			dataType: "json",
 			type: "POST",
 			success: function (data) {
-				Teleopti.MyTimeWeb.Request.List.AddItemAtTop(data);
+				Teleopti.MyTimeWeb.Request.List.AddItemAtTop(data,false);
 				self.CanApproveAndDeny(true);
 			}
 		});
+		Teleopti.MyTimeWeb.Request.RequestDetail.FadeEditSection();
 	};
+	
 	self.mySchedule = ko.observable(new Teleopti.MyTimeWeb.Request.PersonScheduleViewModel());
 	self.otherSchedule = ko.observable(new Teleopti.MyTimeWeb.Request.PersonScheduleViewModel());
 	self.hours = ko.observableArray();
