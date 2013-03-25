@@ -39,8 +39,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		                                            IPeriodValueCalculator periodValueCalculatorForAllSkills,
 		                                            ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation,
 		                                            ITeamBlockIntradayDecisionMaker teamBlockIntradayDecisionMaker,
-		                                            ITeamBlockRestrictionOverLimitValidator restrictionOverLimitValidator)
-		                                            ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation,
+		                                            ITeamBlockRestrictionOverLimitValidator restrictionOverLimitValidator,
 													ITeamBlockClearer teamBlockClearer)
 		{
 			_teamInfoFactory = teamInfoFactory;

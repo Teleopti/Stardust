@@ -560,8 +560,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					periodValueCalculatorForAllSkills,
 					_container.Resolve<ISafeRollbackAndResourceCalculation>(),
 					_container.Resolve<ITeamBlockIntradayDecisionMaker>(),
-					_container.Resolve<ITeamBlockRestrictionOverLimitValidator>()
-					_container.Resolve<ISafeRollbackAndResourceCalculation>(),
+					_container.Resolve<ITeamBlockRestrictionOverLimitValidator>(),
 					_container.Resolve<ITeamBlockClearer>()
                     );
 	        teamBlockIntradayOptimizationService.ReportProgress += resourceOptimizerPersonOptimized;
