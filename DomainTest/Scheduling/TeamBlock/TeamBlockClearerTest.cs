@@ -18,7 +18,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 	{
 		private MockRepository _mocks;
 		private ITeamBlockClearer _target;
-		private ISchedulingResultStateHolder _stateHolder;
 		private IDeleteAndResourceCalculateService _deleteAndResourceCalculateService;
 		private SchedulingOptions _schedulingOptions;
 		private ISchedulePartModifyAndRollbackService _rollbackService;
@@ -35,9 +34,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		public void Setup()
 		{
 			_mocks = new MockRepository();
-			_stateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
 			_deleteAndResourceCalculateService = _mocks.StrictMock<IDeleteAndResourceCalculateService>();
-			_target = new TeamBlockClearer(_stateHolder, _deleteAndResourceCalculateService);
+			_target = new TeamBlockClearer(_deleteAndResourceCalculateService);
 			_schedulingOptions = new SchedulingOptions();
 			_rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
 			_person1 = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue, new List<ISkill>());
