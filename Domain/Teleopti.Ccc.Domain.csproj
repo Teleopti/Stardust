@@ -121,6 +121,7 @@
     <Compile Include="ApplicationLayer\AddFullDayAbsenceCommand.cs" />
     <Compile Include="ApplicationLayer\AddFullDayAbsenceCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Event.cs" />
+    <Compile Include="ApplicationLayer\IEventPublisher.cs" />
     <Compile Include="Auditing\AuditSetting.cs" />
     <Compile Include="Auditing\Revision.cs" />
     <Compile Include="Auditing\ScheduleAuditingReportData.cs" />
