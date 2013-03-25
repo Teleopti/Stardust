@@ -1,12 +1,14 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
@@ -60,6 +62,64 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			Assert.That(result.To, Is.EqualTo(shiftTradePersonScheduleViewModelStub), "Should have been set from the mapper (we are using the same result for To and For");
 		}
 
+		[Test]
+		public void CreateTimelineWhenOneNightShift()
+		{
+			Mapper.AddProfile(new MappingProfileForProbing<IScheduleDay, ShiftTradePersonScheduleViewModel>());
+			var expectedStart = new DateTime(2000, 1, 1, 8, 0, 0, DateTimeKind.Utc);
+			var expectedEnd = expectedStart.AddHours(23);
+			var scheduleDayFrom = _scheduleFactory.ScheduleDayStub(new DateTimePeriod(expectedStart, expectedStart.AddHours(1)));
+			var scheduleDayTo = _scheduleFactory.ScheduleDayStub(new DateTimePeriod(expectedStart.AddHours(2), expectedEnd));
+
+			var shiftTradeRequest = CreateShiftTrade(_dateFrom, _dateTo, scheduleDayFrom, scheduleDayTo);
+			Mapper.Map<IShiftTradeRequest, ShiftTradeSwapDetailsViewModel>(shiftTradeRequest);
+
+			_timeLineFactory.AssertWasCalled(x => x.CreateTimeLineHours(new DateTimePeriod(expectedStart.AddHours(-1), expectedEnd.AddHours(1))));
+		}
+
+		[Test]
+		public void CreateTimelineWhenToScheduleDayIsEmpty()
+		{
+			Mapper.AddProfile(new MappingProfileForProbing<IScheduleDay, ShiftTradePersonScheduleViewModel>());
+			var expectedStart = new DateTime(2000, 1, 1, 8, 0, 0, DateTimeKind.Utc);
+			var expectedEnd = expectedStart.AddHours(10);
+			var scheduleDayFrom = _scheduleFactory.ScheduleDayStub(new DateTimePeriod(expectedStart, expectedEnd));
+			var scheduleDayTo = _scheduleFactory.ScheduleDayStub();
+
+			var shiftTradeRequest = CreateShiftTrade(_dateFrom, _dateTo, scheduleDayFrom, scheduleDayTo);
+			Mapper.Map<IShiftTradeRequest, ShiftTradeSwapDetailsViewModel>(shiftTradeRequest);
+
+			_timeLineFactory.AssertWasCalled(x => x.CreateTimeLineHours(new DateTimePeriod(expectedStart.AddHours(-1), expectedEnd.AddHours(1))));
+		}
+
+		[Test]
+		public void CreateTimelineWhenFromScheduleDayIsEmpty()
+		{
+			Mapper.AddProfile(new MappingProfileForProbing<IScheduleDay, ShiftTradePersonScheduleViewModel>());
+			var expectedStart = new DateTime(2000, 1, 1, 8, 0, 0, DateTimeKind.Utc);
+			var expectedEnd = expectedStart.AddHours(10);
+			var scheduleDayTo = _scheduleFactory.ScheduleDayStub(new DateTimePeriod(expectedStart, expectedEnd));
+			var scheduleDayFrom = _scheduleFactory.ScheduleDayStub();
+
+			var shiftTradeRequest = CreateShiftTrade(_dateFrom, _dateTo, scheduleDayFrom, scheduleDayTo);
+			Mapper.Map<IShiftTradeRequest, ShiftTradeSwapDetailsViewModel>(shiftTradeRequest);
+
+			_timeLineFactory.AssertWasCalled(x => x.CreateTimeLineHours(new DateTimePeriod(expectedStart.AddHours(-1), expectedEnd.AddHours(1))));
+		}
+
+		[Test]
+		public void CreateTimelineWhenBothScheduleDayIsEmpty()
+		{
+			Mapper.AddProfile(new MappingProfileForProbing<IScheduleDay, ShiftTradePersonScheduleViewModel>());
+			var scheduleDayTo = _scheduleFactory.ScheduleDayStub();
+			var scheduleDayFrom = _scheduleFactory.ScheduleDayStub();
+
+			var shiftTradeRequest = CreateShiftTrade(_dateFrom, _dateTo, scheduleDayFrom, scheduleDayTo);
+			Mapper.Map<IShiftTradeRequest, ShiftTradeSwapDetailsViewModel>(shiftTradeRequest);
+
+			_timeLineFactory.AssertWasCalled(x => x.CreateTimeLineHours(
+				new DateTimePeriod(shiftTradeRequest.Period.StartDateTime.AddHours(-1), shiftTradeRequest.Period.EndDateTime.AddHours(1))));
+		}
 
 
 		[Test]
