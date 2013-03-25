@@ -92,12 +92,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
                 if (schedulingOptions.UseLevellingSameShift)
                 {
                     if(!scheduleSelectedBlockForSameShift(teamBlockInfo, schedulingOptions, selectedPersons, day,
-                                                      suggestedShiftProjectionCache)) 
+                                                      suggestedShiftProjectionCache,selectedPeriod)) 
                         return false;
                 }
                 else
                 {
-                    if (!scheduleSelectedBlock(teamBlockInfo, schedulingOptions, selectedPersons, day, suggestedShiftProjectionCache)) return false;    
+                    if (!scheduleSelectedBlock(teamBlockInfo, schedulingOptions, selectedPersons, day, suggestedShiftProjectionCache,selectedPeriod)) return false;    
                 }
                 
             }
@@ -106,9 +106,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
             return true;
         }
 
-	    private bool scheduleSelectedBlock(ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions,
-	                                       IList<IPerson> selectedPersons, DateOnly day,
-	                                       IShiftProjectionCache suggestedShiftProjectionCache)
+	    private bool scheduleSelectedBlock(ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, IList<IPerson> selectedPersons, DateOnly day, IShiftProjectionCache suggestedShiftProjectionCache, DateOnlyPeriod selectedPeriod)
 	    {
 	        var dailyTeamBlockInfo = new TeamBlockInfo(teamBlockInfo.TeamInfo, new BlockInfo(new DateOnlyPeriod(day, day)));
 
@@ -136,15 +134,13 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	                                                                                             .UseMaximumPersons);
 	            _teamScheduling.DayScheduled += dayScheduled;
 	            var skipOffset = !schedulingOptions.UseLevellingSameShift;
-	            _teamScheduling.ExecutePerDayPerPerson(person, day, teamBlockInfo, bestShiftProjectionCache, skipOffset);
+                _teamScheduling.ExecutePerDayPerPerson(person, day, teamBlockInfo, bestShiftProjectionCache, skipOffset, selectedPeriod);
 	            _teamScheduling.DayScheduled -= dayScheduled;
 	        }
 	        return true;
 	    }
 
-        private bool scheduleSelectedBlockForSameShift(ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions,
-                                   IList<IPerson> selectedPersons, DateOnly day,
-                                   IShiftProjectionCache suggestedShiftProjectionCache)
+        private bool scheduleSelectedBlockForSameShift(ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, IList<IPerson> selectedPersons, DateOnly day, IShiftProjectionCache suggestedShiftProjectionCache, DateOnlyPeriod selectedPeriod)
         {
             var dailyTeamBlockInfo = new TeamBlockInfo(teamBlockInfo.TeamInfo, new BlockInfo(new DateOnlyPeriod(day, day)));
 
@@ -155,7 +151,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
                 if (!selectedPersons.Contains(person)) continue;
                 _teamScheduling.DayScheduled += dayScheduled;
                 var skipOffset = !schedulingOptions.UseLevellingSameShift;
-                _teamScheduling.ExecutePerDayPerPerson(person, day, teamBlockInfo, suggestedShiftProjectionCache, skipOffset);
+                _teamScheduling.ExecutePerDayPerPerson(person, day, teamBlockInfo, suggestedShiftProjectionCache, skipOffset, selectedPeriod);
                 _teamScheduling.DayScheduled -= dayScheduled;
             }
             return true;

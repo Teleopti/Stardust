@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	    private readonly ITeamInfoFactory _teamInfoFactory;
 	    private readonly ITeamBlockInfoFactory _teamBlockInfoFactory;
 	    private readonly ITeamBlockScheduler _teamBlockScheduler;
+        private readonly IBlockSteadyStateValidator _blockSteadyStateValidator;
         private readonly ISchedulingOptions _schedulingOptions;
 	    private bool _cancelMe;
 
@@ -27,13 +28,15 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		    ISchedulingOptions schedulingOptions,
 		    ITeamInfoFactory teamInfoFactory,
 		    ITeamBlockInfoFactory teamBlockInfoFactory,
-		    ITeamBlockScheduler teamBlockScheduler
+		    ITeamBlockScheduler teamBlockScheduler,
+            IBlockSteadyStateValidator blockSteadyStateValidator 
 		    )
 	    {
 		    _teamInfoFactory = teamInfoFactory;
 		    _teamBlockInfoFactory = teamBlockInfoFactory;
 		    _teamBlockScheduler = teamBlockScheduler;
-		    _schedulingOptions = schedulingOptions;
+	        _blockSteadyStateValidator = blockSteadyStateValidator;
+	        _schedulingOptions = schedulingOptions;
 	    }
 
 	    public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
@@ -58,6 +61,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 					                                                                         _schedulingOptions
 						                                                                         .BlockFinderTypeForAdvanceScheduling);
                     if (isTeamBlockScheduled(teamBlockInfo)) continue;
+
+                    if (_blockSteadyStateValidator.IsBlockInSteadyState(teamBlockInfo,_schedulingOptions))
 
                     if (!_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, datePointer, _schedulingOptions, selectedPeriod,selectedPersons))
                         continue;

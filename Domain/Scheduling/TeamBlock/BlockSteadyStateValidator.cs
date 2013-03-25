@@ -53,10 +53,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                     foreach (var matrix in teamBlockInfo.TeamInfo.MatrixesForGroupAndDate(day))
                     {
                         var scheduleDay = matrix.GetScheduleDayByKey(day).DaySchedulePart();
-                        if (scheduleDay.IsScheduled())
+                        if (scheduleDay.IsScheduled() && (scheduleDay.SignificantPart() != SchedulePartView.DayOff) && (scheduleDay.SignificantPart() != SchedulePartView.ContractDayOff) && (scheduleDay.SignificantPart() != SchedulePartView.FullDayAbsence) && (scheduleDay.SignificantPart() != SchedulePartView.Absence ))
                         {
                             var startDateTime = getStartTimeLocal(scheduleDay);
-                            if (startDateTime != sampleStartTime)
+                            if (startDateTime.TimeOfDay != sampleStartTime.TimeOfDay)
                                 return false;
                         }
 
@@ -95,8 +95,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                     var scheduleDay = matrix.GetScheduleDayByKey(day).DaySchedulePart();
                     //scheduleDay.AssignmentHighZOrder().MainShift.ProjectionService().CreateProjection().Period().Value.StartDateTimeLocal(schedulePart.TimeZone)
                     if (scheduleDay.IsScheduled())
-                        if (!equator.MainShiftEquals(sampleScheduleDay, scheduleDay))
-                            return false;
+                    {
+                        var sourceZOrder = sampleScheduleDay.AssignmentHighZOrder();
+                        var destZOrder = scheduleDay.AssignmentHighZOrder();
+                        if ((sourceZOrder != null && destZOrder != null) && (sourceZOrder.MainShift != null && destZOrder.MainShift != null ))
+                            if ((!equator.MainShiftEqualsWithoutPeriod(sourceZOrder.MainShift, destZOrder.MainShift)))
+                                return false;
+                    }
+                       
 
                 }
 

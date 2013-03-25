@@ -1059,7 +1059,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			    new TeamBlockSchedulingService(schedulingOptions,
 			                                 teamInfoFactory, 
 											 _container.Resolve<ITeamBlockInfoFactory>(),
-											 teamBlockScheduler);
+											 teamBlockScheduler,new BlockSteadyStateValidator());
 
 		    return advanceSchedulingService;
 	    }
