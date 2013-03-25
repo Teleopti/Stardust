@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 {
@@ -136,15 +137,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 		string text { get; }
 	}
 
-	public interface ISelectOptionGroup : ISelectOption
+	public interface ISelectGroup : ISelectOption
 	{
 		ISelectOptionItem[] children { get; }
 	}
 
-	public class SelectOptionGroup : ISelectOptionGroup
+	public class SelectSelectGroup : ISelectGroup
 	{
 		public string text { get; set; }
 		public ISelectOptionItem[] children { get; set; }
+		public Guid PageId { get; set; }
 	}
 
 	public interface ISelectOptionItem : ISelectOption

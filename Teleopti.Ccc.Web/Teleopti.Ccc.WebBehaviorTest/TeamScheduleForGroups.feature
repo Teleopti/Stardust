@@ -39,12 +39,12 @@ Given there is a team with
 	| Field      | Value      |
 	| Team       | Team Red |
 	| Start date | 2013-03-25 |
-	And I have the role 'Test for viewing all group pages'
+	#And I have the role 'Test for viewing all group pages'
 
 
 Scenario: View team schedule
 	Given I have the role 'Test for viewing all group pages'
-	When I view team schedule for '2013-03-25'
+	When I view team schedule for '2013-03-25' with read model updated
 	Then I should see schedule for 'Pierre Baldi'
 
 

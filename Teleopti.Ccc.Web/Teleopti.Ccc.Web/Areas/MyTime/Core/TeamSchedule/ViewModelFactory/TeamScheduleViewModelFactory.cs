@@ -4,6 +4,9 @@ using System.Linq;
 using AutoMapper;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.UserTexts;
+using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
@@ -16,11 +19,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 	{
 		private readonly IMappingEngine _mapper;
 		private readonly ITeamProvider _teamProvider;
+		private readonly IPermissionProvider _permissionProvider;
+		private readonly IGroupingReadOnlyRepository _groupingReadOnlyRepository;
 
-		public TeamScheduleViewModelFactory(IMappingEngine mapper, ITeamProvider teamProvider)
+		public TeamScheduleViewModelFactory(IMappingEngine mapper, ITeamProvider teamProvider, IPermissionProvider permissionProvider, IGroupingReadOnlyRepository groupingReadOnlyRepository)
 		{
 			_mapper = mapper;
 			_teamProvider = teamProvider;
+			_permissionProvider = permissionProvider;
+			_groupingReadOnlyRepository = groupingReadOnlyRepository;
 		}
 
 		public TeamScheduleViewModel CreateViewModel(DateOnly date, Guid id)
@@ -31,7 +38,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 
 		public IEnumerable<ISelectOption> CreateTeamOptionsViewModel(DateOnly date)
 		{
-			var teams = _teamProvider.GetPermittedTeams(date, DefinedRaptorApplicationFunctionPaths.TeamSchedule);
+			return _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ViewAllGroupPages) ?
+				       createGroupPagesOptions(date) : createTeamOptions(date);
+		}
+
+		private IEnumerable<ISelectOption> createTeamOptions(DateOnly date)
+		{
+			var teams = _teamProvider.GetPermittedTeams(date, DefinedRaptorApplicationFunctionPaths.TeamSchedule).ToList();
 			var sites = teams
 				.Select(t => t.Site)
 				.Distinct()
@@ -44,13 +57,47 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 					                  where t.Site == s
 					                  select new SelectOptionItem
 						                  {
-							                  id = t.Id.Value.ToString(),
+							                  id = t.Id.ToString(),
 							                  text = s.Description.Name + "/" + t.Description.Name
 						                  };
 					options.AddRange(teamOptions);
 				});
 
 			return options;
+		}
+
+		private IEnumerable<ISelectOption> createGroupPagesOptions(DateOnly date)
+		{
+			var groupPages = _groupingReadOnlyRepository.AvailableGroupPages().Select(
+				p =>
+					{
+						if (p.PageName.StartsWith("xx", StringComparison.OrdinalIgnoreCase))
+						{
+							p.PageName = Resources.ResourceManager.GetString(p.PageName.Substring(2));
+						}
+						return new SelectSelectGroup {text = p.PageName, PageId = p.PageId};
+					}).ToList();
+
+			foreach (var page in groupPages)
+			{
+				var details = _groupingReadOnlyRepository.AvailableGroups(new ReadOnlyGroupPage {PageId = page.PageId}, date);
+
+				var detailsByGroup = from d in details
+				                     group d by new {d.GroupId, d.GroupName}
+				                     into g
+				                     select g;
+
+				var groups = detailsByGroup.Where(
+					p => p.Any(d =>
+					           _permissionProvider.HasOrganisationDetailPermission(
+						           DefinedRaptorApplicationFunctionPaths.ViewSchedules,
+						           date, d))).Select(
+							           p =>
+							           new SelectOptionItem {text = p.Key.GroupName, id = p.Key.GroupId.ToString()});
+				page.children = groups.ToArray();
+			}
+
+			return groupPages;
 		}
 	}
 }

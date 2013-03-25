@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
 using TechTalk.SpecFlow;
@@ -167,14 +168,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			return QueryData<T>().SingleOrDefault();
 		}
 
+
 		/// <summary>
 		/// Creates ans persists a person with an automatic number as name, plus creates and persists the list of persons who are in the inner Colleague list.
 		/// </summary>
+		/// <param name="updateReadModels"></param>
 		/// <returns></returns>
-		public string MakeUser()
+		public string MakeUser(bool updateReadModels)
 		{
 			var userName = NextUserName();
-			return MakeUser(userName.LogOnName, userName.LastName, TestData.CommonPassword);
+			return MakeUser(userName.LogOnName, userName.LastName, TestData.CommonPassword, updateReadModels);
+		}
+
+		public string MakeUser()
+		{
+			return MakeUser(false);
 		}
 
 		/// <summary>
@@ -183,8 +191,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		/// <param name="logonName">Name of the logon.</param>
 		/// <param name="lastName">The last name.</param>
 		/// <param name="password">The password.</param>
+		/// <param name="updateReadModel"></param>
 		/// <returns>Returns the given logonName</returns>
-		public string MakeUser(string logonName, string lastName, string password)
+		public string MakeUser(string logonName, string lastName, string password, bool updateReadModel)
 		{
 			Person = PersonFactory.CreatePersonWithBasicPermissionInfo(logonName, password);
 			Person.Name = new Name("Agent", lastName);
@@ -205,7 +214,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			_colleagues.ForEach(c => c.doPostSetups());
 			Resources.Culture = Culture;
 
+			if (updateReadModel)
+			{
+				updateReadModels();
+			}
+
 			return logonName;
+		}
+
+		private void updateReadModels()
+		{
+			var uowf = GlobalUnitOfWorkState.UnitOfWorkFactory;
+			var groupingReadOnlyRepository = new GroupingReadOnlyRepository(uowf);
+			groupingReadOnlyRepository.UpdateGroupingReadModel(new Collection<Guid>());
 		}
 
 		private void doPostSetups()

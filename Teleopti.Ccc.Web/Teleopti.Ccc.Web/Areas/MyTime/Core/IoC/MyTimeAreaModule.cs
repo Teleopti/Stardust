@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.ViewModelFactory;
@@ -157,6 +158,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<TeamScheduleProjectionProvider>().As<ITeamScheduleProjectionProvider>();
 			builder.RegisterType<TeamProvider>().As<ITeamProvider>();
 			builder.RegisterType<DefaultTeamCalculator>().As<IDefaultTeamCalculator>();
+			builder.RegisterType<GroupingReadOnlyRepository>().As<IGroupingReadOnlyRepository>();
 		}
 
 		private static void registerPortalTypes(ContainerBuilder builder)
