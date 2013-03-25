@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		public void MappingShouldGetAndSetSimpleProperties()
 		{
 			_extraPreferencesSource.BlockFinderTypeValue = BlockFinderType.SchedulePeriod;
-			_extraPreferencesSource.UseBlockScheduling = !_extraPreferencesSource.UseBlockScheduling;
+			//_extraPreferencesSource.UseBlockScheduling = !_extraPreferencesSource.UseBlockScheduling;
 			_extraPreferencesSource.UseTeams = !_extraPreferencesSource.UseTeams;
 
             _extraPreferencesSource.FairnessValue = 102d;
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _target.MapTo(_extraPreferencesTarget, _groupPages, _groupPagesForLevellingPer);
 
 			Assert.AreEqual(_extraPreferencesSource.BlockFinderTypeValue, _extraPreferencesTarget.BlockFinderTypeValue);
-			Assert.AreEqual(_extraPreferencesSource.UseBlockScheduling, _extraPreferencesTarget.UseBlockScheduling);
+			//Assert.AreEqual(_extraPreferencesSource.UseBlockScheduling, _extraPreferencesTarget.UseBlockScheduling);
 			Assert.AreEqual(_extraPreferencesSource.UseTeams, _extraPreferencesTarget.UseTeams);
             
             Assert.AreEqual(_extraPreferencesSource.FairnessValue, _extraPreferencesTarget.FairnessValue);

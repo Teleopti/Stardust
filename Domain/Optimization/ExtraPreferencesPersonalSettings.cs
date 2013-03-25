@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		private BlockFinderType _blockFinderTypeValue;
 
-		private bool _useBlockScheduling;
+		//private bool _useBlockScheduling;
 		private bool _useTeams;
 		private bool _useSameDaysOffForTeams;
        	private double _fairnessValue;
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             }
 
 			target.BlockFinderTypeValue = _blockFinderTypeValue;
-			target.UseBlockScheduling = _useBlockScheduling;
+			//target.UseBlockScheduling = _useBlockScheduling;
 			target.UseTeams = _useTeams;
 			target.KeepSameDaysOffInTeam = _useSameDaysOffForTeams;
             
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                 _groupPageOnTeamLevelingPerKey = source.GroupPageOnTeamLevelingPer.Key;
 
 			_blockFinderTypeValue = source.BlockFinderTypeValue;
-			_useBlockScheduling = source.UseBlockScheduling;
+			//_useBlockScheduling = source.UseBlockScheduling;
 			_useTeams = source.UseTeams;
 			_useSameDaysOffForTeams = source.KeepSameDaysOffInTeam;
 

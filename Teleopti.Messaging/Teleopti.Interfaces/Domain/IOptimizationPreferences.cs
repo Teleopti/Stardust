@@ -287,11 +287,11 @@ namespace Teleopti.Interfaces.Domain
     /// </summary>
     public interface IExtraPreferences
     {
-        /// <summary>
-        /// Gets or sets a value indicating whether to use block scheduling.
-        /// </summary>
-        /// <value><c>true</c> if use block; otherwise, <c>false</c>.</value>
-        bool UseBlockScheduling { get; set; }
+        ///// <summary>
+        ///// Gets or sets a value indicating whether to use block scheduling.
+        ///// </summary>
+        ///// <value><c>true</c> if use block; otherwise, <c>false</c>.</value>
+        //bool UseBlockScheduling { get; set; }
 
         /// <summary>
         /// Gets or sets the block finder type.

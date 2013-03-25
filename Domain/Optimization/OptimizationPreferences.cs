@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 	public class ExtraPreferences : IExtraPreferences
 	{
 
-		public bool UseBlockScheduling { get; set; }
+		//public bool UseBlockScheduling { get; set; }
 
 		public BlockFinderType BlockFinderTypeValue { get; set; }
 

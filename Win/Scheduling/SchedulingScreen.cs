@@ -3860,8 +3860,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var scheduleMatrixOriginalStateContainers = _scheduleOptimizerHelper.CreateScheduleMatrixOriginalStateContainers(selectedSchedules);
 			var optimizerPreferences = _container.Resolve<IOptimizationPreferences>();
 			DateOnlyPeriod groupPagePeriod = _schedulerState.RequestedPeriod.DateOnlyPeriod;
-			if (optimizerPreferences.Extra.UseBlockScheduling)
-				groupPagePeriod = new DateOnlyPeriod(groupPagePeriod.StartDate.AddDays(-10), groupPagePeriod.EndDate.AddDays(10));
+            //if (optimizerPreferences.Extra.UseBlockScheduling)
+            //    groupPagePeriod = new DateOnlyPeriod(groupPagePeriod.StartDate.AddDays(-10), groupPagePeriod.EndDate.AddDays(10));
 
 			IGroupPageLight selectedGroupPage = null;
 			// ***** temporary cope
@@ -3916,12 +3916,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 						break;
 					}
 
-					if (optimizerPreferences.Extra.UseBlockScheduling)
-					{
-						_blockOptimizerHelper.ReOptimize(_backgroundWorkerOptimization, selectedSchedules, schedulingOptions, allMatrixes);
-					}
-					else
-					{
+                    //if (optimizerPreferences.Extra.UseBlockScheduling)
+                    //{
+                    //    _blockOptimizerHelper.ReOptimize(_backgroundWorkerOptimization, selectedSchedules, schedulingOptions, allMatrixes);
+                    //}
+					//else
+					//{
 						// we need it here for fairness opt. for example
 						_groupPagePerDateHolder.GroupPersonGroupPagePerDate = _groupPagePerDateHolder.ShiftCategoryFairnessGroupPagePerDate;
 
@@ -3929,7 +3929,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 						
 
 						_scheduleOptimizerHelper.ReOptimize(_backgroundWorkerOptimization, selectedSchedules);
-					}
+					//}
 					break;
 			}
 
