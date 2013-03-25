@@ -227,6 +227,7 @@ SET shift_startdate_id = shifts.shift_startdate_id, shift_startinterval_id=shift
 FROM #fact_schedule_deviation shifts
 INNER JOIN #fact_schedule_deviation stat
 ON stat.date_id=shifts.date_id AND stat.interval_id=shifts.interval_id AND stat.person_id=shifts.person_id
+WHERE shifts.shift_startdate_id IS NOT NULL
 
 --ALL ROWS BEFORE SHIFT WITH NO SHIFT_STARTDATE_ID TO NEAREST SHIFT +-SOMETHING 
 UPDATE stat
