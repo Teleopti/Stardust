@@ -21,9 +21,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
 		public void ShouldRaiseFullDayAbsenceAddedEvent()
 		{
-			var personRepository = new WriteSideRepository<IPerson> {TestEntityFactory.MakeWithId<Person>()};
-			var absenceRepository = new WriteSideRepository<IAbsence> {TestEntityFactory.MakeWithId<Absence>()};
-			var personAbsenceRepository = new WriteSideRepository<IPersonAbsence>();
+			var personRepository = new TestWriteSideRepository<IPerson> {TestEntityFactory.MakeWithId<Person>()};
+			var absenceRepository = new TestWriteSideRepository<IAbsence> {TestEntityFactory.MakeWithId<Absence>()};
+			var personAbsenceRepository = new TestWriteSideRepository<IPersonAbsence>();
 
 			var command = new AddFullDayAbsenceCommand
 				{
@@ -42,9 +42,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldSetupEntityState()
 		{
-			var personRepository = new WriteSideRepository<IPerson> { TestEntityFactory.MakeWithId<Person>() };
-			var absenceRepository = new WriteSideRepository<IAbsence> { TestEntityFactory.MakeWithId<Absence>() };
-			var personAbsenceRepository = new WriteSideRepository<IPersonAbsence>();
+			var personRepository = new TestWriteSideRepository<IPerson> { TestEntityFactory.MakeWithId<Person>() };
+			var absenceRepository = new TestWriteSideRepository<IAbsence> { TestEntityFactory.MakeWithId<Absence>() };
+			var personAbsenceRepository = new TestWriteSideRepository<IPersonAbsence>();
 
 			var command = new AddFullDayAbsenceCommand
 				{
@@ -71,9 +71,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var person = TestEntityFactory.MakeWithId<Person>();
 			var agentsTimeZone = TimeZoneInfoFactory.HawaiiTimeZoneInfo();
 			person.PermissionInformation.SetDefaultTimeZone(agentsTimeZone);
-			var personRepository = new WriteSideRepository<IPerson> { person };
-			var absenceRepository = new WriteSideRepository<IAbsence> { TestEntityFactory.MakeWithId<Absence>() };
-			var personAbsenceRepository = new WriteSideRepository<IPersonAbsence>();
+			var personRepository = new TestWriteSideRepository<IPerson> { person };
+			var absenceRepository = new TestWriteSideRepository<IAbsence> { TestEntityFactory.MakeWithId<Absence>() };
+			var personAbsenceRepository = new TestWriteSideRepository<IPersonAbsence>();
 
 			var command = new AddFullDayAbsenceCommand
 			{
@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		}
 	}
 
-	public class WriteSideRepository<T> : IEnumerable<T>, IWriteSideRepository<T> where T : IAggregateRoot
+	public class TestWriteSideRepository<T> : IEnumerable<T>, IWriteSideRepository<T> where T : IAggregateRoot
 	{
 		private readonly IList<T> _entities = new List<T>();
 
