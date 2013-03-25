@@ -26,9 +26,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			var person = _personRepository.Get(command.PersonId);
 			var absence = _absenceRepository.Get(command.AbsenceId);
 
-			//var startDate = TimeZoneInfo.ConvertTime(command.StartDate, person.PermissionInformation.DefaultTimeZone(), TimeZoneInfo.Utc);
-			//var endDate = TimeZoneInfo.ConvertTime(command.EndDate, person.PermissionInformation.DefaultTimeZone(), TimeZoneInfo.Utc);
-
 			var personAbsence = new PersonAbsence(_scenario.Current());
 			personAbsence.FullDayAbsence(person, absence, command.StartDate, command.EndDate);
 

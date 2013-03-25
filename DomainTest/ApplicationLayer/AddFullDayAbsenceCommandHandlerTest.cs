@@ -10,6 +10,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
@@ -28,8 +29,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				{
 					AbsenceId = absenceRepository.Single().Id.Value,
 					PersonId = personRepository.Single().Id.Value,
-					StartDate = new DateTime(2013, 3, 25, 0, 0, 0, DateTimeKind.Utc),
-					EndDate = new DateTime(2013, 3, 25, 0, 0, 0, DateTimeKind.Utc),
+					StartDate = new DateTime(2013, 3, 25),
+					EndDate = new DateTime(2013, 3, 25),
 				};
 
 			var target = new AddFullDayAbsenceCommandHandler(new TestCurrentScenario(), personRepository, absenceRepository, personAbsenceRepository);
@@ -49,8 +50,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				{
 					AbsenceId = absenceRepository.Single().Id.Value,
 					PersonId = personRepository.Single().Id.Value,
-					StartDate = new DateTime(2013, 3, 25, 0, 0, 0, DateTimeKind.Utc),
-					EndDate = new DateTime(2013, 3, 25, 0, 0, 0, DateTimeKind.Utc),
+					StartDate = new DateTime(2013, 3, 25),
+					EndDate = new DateTime(2013, 3, 26),
 				};
 
 			var target = new AddFullDayAbsenceCommandHandler(new TestCurrentScenario(), personRepository, absenceRepository, personAbsenceRepository);
@@ -60,10 +61,38 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var absenceLayer = personAbsence.Layer as AbsenceLayer;
 			personAbsence.Person.Should().Be(personRepository.Single());
 			absenceLayer.Payload.Should().Be(absenceRepository.Single());
-			absenceLayer.Period.StartDateTime.Should().Be(command.StartDate);
-			absenceLayer.Period.EndDateTime.Should().Be(command.StartDate.AddHours(24));
+			absenceLayer.Period.StartDateTime.Should().Be(command.StartDate.ToUniversalTime());
+			absenceLayer.Period.EndDateTime.Should().Be(command.EndDate.AddHours(24).ToUniversalTime());
 		}
 
+		[Test]
+		public void ShouldConvertFromAgentsTimeZone()
+		{
+			var person = TestEntityFactory.MakeWithId<Person>();
+			var agentsTimeZone = TimeZoneInfoFactory.HawaiiTimeZoneInfo();
+			person.PermissionInformation.SetDefaultTimeZone(agentsTimeZone);
+			var personRepository = new WriteSideRepository<IPerson> { person };
+			var absenceRepository = new WriteSideRepository<IAbsence> { TestEntityFactory.MakeWithId<Absence>() };
+			var personAbsenceRepository = new WriteSideRepository<IPersonAbsence>();
+
+			var command = new AddFullDayAbsenceCommand
+			{
+				AbsenceId = absenceRepository.Single().Id.Value,
+				PersonId = personRepository.Single().Id.Value,
+				StartDate = new DateTime(2013, 3, 25),
+				EndDate = new DateTime(2013, 3, 26),
+			};
+
+			var target = new AddFullDayAbsenceCommandHandler(new TestCurrentScenario(), personRepository, absenceRepository, personAbsenceRepository);
+			target.Handle(command);
+
+			var personAbsence = personAbsenceRepository.Single();
+			var absenceLayer = personAbsence.Layer as AbsenceLayer;
+			personAbsence.Person.Should().Be(personRepository.Single());
+			absenceLayer.Payload.Should().Be(absenceRepository.Single());
+			absenceLayer.Period.StartDateTime.Should().Be(TimeZoneInfo.ConvertTimeToUtc(command.StartDate, agentsTimeZone));
+			absenceLayer.Period.EndDateTime.Should().Be(TimeZoneInfo.ConvertTimeToUtc(command.EndDate.AddHours(24), agentsTimeZone));
+		}
 	}
 
 	public static class TestEntityFactory

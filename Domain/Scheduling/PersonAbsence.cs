@@ -50,8 +50,11 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		/// </summary>
 		public virtual void FullDayAbsence(IPerson person, IAbsence absence, DateTime startDate, DateTime endDate)
 		{
+			var startDateTime = TimeZoneInfo.ConvertTimeToUtc(startDate.Date, person.PermissionInformation.DefaultTimeZone());
+			var endDateTime = TimeZoneInfo.ConvertTimeToUtc(endDate.Date.AddHours(24), person.PermissionInformation.DefaultTimeZone());
+
 			_person = person;
-			var absenceLayer = new AbsenceLayer(absence, new DateTimePeriod(startDate.Date, endDate.Date.AddHours(24)));
+			var absenceLayer = new AbsenceLayer(absence, new DateTimePeriod(startDateTime, endDateTime));
 			_layer = absenceLayer;
 			AddEvent(new FullDayAbsenceAddedEvent());
 		}
