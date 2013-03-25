@@ -11367,4 +11367,7 @@ Reduce the complexity to use these shifts.</value>
     <value> is a too complex ruleset!</value>
     <comment>Caption on messagebox when shift generation is stopped </comment>
   </data>
+  <data name="InProcess" xml:space="preserve">
+    <value>In process..</value>
+  </data>
 </root>
