@@ -85,10 +85,25 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 					var scenario = _scenarioRepository.Get(message.ScenarioId);
 					//Load statistic data
 					var statisticHelper = _forecastClassesCreator.CreateStatisticHelper(_repositoryFactory, unitOfWork);
+					var stat = statisticHelper.LoadStatisticData(message.StatisticPeriod, workload);
+					
+					var validated = new List<IValidatedVolumeDay>(0);
+
+					var rep = _repositoryFactory.CreateValidatedVolumeDayRepository(unitOfWork);
+					var validatedVolumeDays = rep.FindRange(message.StatisticPeriod, workload);
+					if (validatedVolumeDays != null && stat != null)
+					{
+						_feedback.ReportProgress(message.IncreaseWith, "Found " + validatedVolumeDays.Count() + " validated days.");
+						var daysResult = rep.MatchDays(workload, stat, validatedVolumeDays, false);
+
+						if (daysResult != null)
+							validated = daysResult.OfType<IValidatedVolumeDay>().ToList();
+					}
+
 					var daysWithValidatedStatistics =
 						statisticHelper.GetWorkloadDaysWithValidatedStatistics(message.StatisticPeriod,
 						                                                       workload, scenario,
-						                                                       new List<IValidatedVolumeDay>());
+						                                                       validated);
 					if (!daysWithValidatedStatistics.Any())
 					{
 						// this never happens because we always get empty days back if we don't have statistcs, how should we check that?
