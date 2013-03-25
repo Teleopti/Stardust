@@ -63,7 +63,7 @@
 </div>
 <nav id="tabs" style="display: none;">
 
-	@foreach (var navSection in Model.NavigationItems)
+	@foreach (var navSection in Model.NavigationItems.Where(n => n.UnreadMessageCount == -1))
 	{
 		<section id="@string.Format("{0}Tab", navSection.Controller)" class="col-2-3 floatleft toolbar-left ui-tabs-panel ui-widget-content ui-corner-bottom">
 			<div class="toolbar-inner">
@@ -163,43 +163,6 @@
 							                  Value = value,
 							                  Text = text
 						                  };
-				}
-				
-				@if (navSection is StudentAvailabilityNavigationItem)
-				{
-					<div id="Student-availability-edit-form" class="displaynone">
-						<div>
-							<div class="time-limitation-label icon leftarrow"></div>
-						
-							<select id="Student-availability-start-time" class="time-input" data-bind="combobox: StartTime" title="@Resources.StartTime">
-								<option value="">&nbsp;</option>
-								@foreach (var timeSpan in times)
-								{
-									<option value="@timeSpan.Value">@timeSpan.Text</option>
-								}
-							</select>
-						</div>
-						<div>
-							<div class="time-limitation-label icon rightarrow"></div>
-						
-							<select id="Student-availability-end-time" class="time-input" data-bind="combobox: EndTime" title="@Resources.EndTime">
-								<option value="">&nbsp;</option>
-								@foreach (var timeSpan in times)
-								{
-									<option value="@timeSpan.Value">@timeSpan.Text</option>
-								}
-							</select>
-							<input type="checkbox" id="Student-availability-end-time-next-day" class="student-availability-next-day-checkbox" data-bind="checked: NextDay" title="@Resources.NextDay" />
-						</div>
-						<div class="mt5">
-							<button id="Student-availability-reset" class="ml15 mt10 mb5 mr5 floatleft">@Resources.Reset</button>
-							<button id="Student-availability-apply" class="mr15 mt10 mb5 ml5 floatleft">@Resources.Apply</button>
-						</div>
-						<div>
-							<div id="Student-availability-apply-error" class="error floatleft" data-bind="html: ValidationError"></div>
-							<div class="clearboth"></div>
-						</div>
-					</div>
 				}
 
 				@if (navSection is PreferenceNavigationItem)
