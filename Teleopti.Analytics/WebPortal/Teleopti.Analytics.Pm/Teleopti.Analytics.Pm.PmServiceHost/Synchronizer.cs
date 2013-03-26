@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using System.Globalization;
 using log4net;
+using System.Linq;
 using Teleopti.Analytics.Portal.AnalyzerProxy.AnalyzerRef;
+using Teleopti.Analytics.Portal.AnalyzerProxy;
 
 namespace Teleopti.Analytics.PM.PMServiceHost
 {
@@ -11,6 +13,7 @@ namespace Teleopti.Analytics.PM.PMServiceHost
 		private readonly Dictionary<string, User> _analyzerUsersDictionary;
 		private readonly Dictionary<string, UserDto> _clientUsersDictionary;
 		readonly ILog _logger = LogManager.GetLogger(typeof(Synchronizer));
+		private bool _isWindowsInstallation { get { return PermissionInformation.IsPmAuthenticationWindows; }}
 
 		private Synchronizer() { }
 
@@ -33,16 +36,23 @@ namespace Teleopti.Analytics.PM.PMServiceHost
 				}
 			}
 
-			if (analyzerUsers != null)
+			if (!_isWindowsInstallation) //If Anonymous mode fake the Analyzer users
 			{
-				foreach (User analyzerUser in analyzerUsers)
-				{
-					_analyzerUsersDictionary.Add(analyzerUser.Name.Trim().ToUpperInvariant(), analyzerUser);
-				}
+				_analyzerUsersDictionary = _clientUsersDictionary.ToDictionary(k => k.Key, v => new User { Name = v.Value.UserName });
 			}
+			else
+			{
+				if (analyzerUsers != null)
+				{
+					foreach (User analyzerUser in analyzerUsers)
+					{
+						_analyzerUsersDictionary.Add(analyzerUser.Name.Trim().ToUpperInvariant(), analyzerUser);
+					}
+				}
 
-			_logger.DebugFormat("Client users to synchronize: {0}", _clientUsersDictionary.Count);
-			_logger.DebugFormat("Existing Analyzer users: {0}", _analyzerUsersDictionary.Count);
+				_logger.DebugFormat("Client users to synchronize: {0}", _clientUsersDictionary.Count);
+				_logger.DebugFormat("Existing Analyzer users: {0}", _analyzerUsersDictionary.Count);
+			}
 		}
 
 		public ResultDto SynchronizeUsers()
@@ -56,12 +66,20 @@ namespace Teleopti.Analytics.PM.PMServiceHost
 			foreach (UserDto userDto in _clientUsersDictionary.Values)
 			{
 				bool userExists = _analyzerUsersDictionary.ContainsKey(userDto.UserName.ToUpperInvariant());
+				bool userUpdated;
 
 				if (userExists)
 				{
 					User analyzerUser = _analyzerUsersDictionary[userDto.UserName.ToUpperInvariant()];
 					// Update users role membership
-					if (_userHandler.UpdateRoleMembership(userDto, analyzerUser))
+					if (_isWindowsInstallation)
+					{
+						userUpdated = _userHandler.UpdateRoleMembership(userDto, analyzerUser);
+					}
+					else
+						userUpdated = true;
+
+					if (userUpdated)
 					{
 						resultDto.AddUsersUpdated(userDto);
 						resultDto.AddValidAnalyzerUser(userDto);
@@ -72,7 +90,10 @@ namespace Teleopti.Analytics.PM.PMServiceHost
 				else
 				{
 					// Need to create the user
-					_userHandler.Add(userDto);
+					if (_isWindowsInstallation)
+					{
+						_userHandler.Add(userDto);
+					}
 					resultDto.AddUsersInserted(userDto);
 					resultDto.AddValidAnalyzerUser(userDto);
 				}
@@ -84,7 +105,7 @@ namespace Teleopti.Analytics.PM.PMServiceHost
 				if (!_clientUsersDictionary.ContainsKey(user.Name.Trim().ToUpperInvariant()))
 				{
 					// Delete user from analyzer, do not remove analyzer admin
-					if (_userHandler.Delete(user))
+					if (_isWindowsInstallation && _userHandler.Delete(user))
 					{
 						var userDto = new UserDto { UserName = user.Name.Trim() };
 						resultDto.AddUsersDeleted(userDto);
