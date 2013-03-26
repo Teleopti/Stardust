@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
 
         public string PageName
         {
-			get { return Resources.LongtermForecast; }
+			get { return Resources.SelectHistoricalData; }
         }
 
         public ICollection<string> ErrorMessages
