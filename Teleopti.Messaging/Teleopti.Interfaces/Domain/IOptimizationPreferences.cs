@@ -364,22 +364,27 @@ namespace Teleopti.Interfaces.Domain
         /// <summary>
         /// Use levelling same end time
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Levelling")]
         bool UseLevellingSameEndTime { get; set; }
         /// <summary>
         /// Use levelling same shift category
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Levelling")]
         bool UseLevellingSameShiftCategory { get; set; }
         /// <summary>
         /// Use levelling same start time
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Levelling")]
         bool UseLevellingSameStartTime { get; set; }
         /// <summary>
         /// Use levelling same shift
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Levelling")]
         bool UseLevellingSameShift { get; set; }
         /// <summary>
         /// This is  used if levelling per is used
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Levelling")]
         bool UseLevellingOption { get; set; }
     }
 
