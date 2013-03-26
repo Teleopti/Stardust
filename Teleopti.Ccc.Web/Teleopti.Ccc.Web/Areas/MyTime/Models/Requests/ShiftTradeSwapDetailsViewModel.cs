@@ -5,6 +5,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 {
 	public class ShiftTradeSwapDetailsViewModel
 	{
+		public string PersonFrom { get; set; }
+
+		public string PersonTo { get; set; }
+
 		public ShiftTradePersonScheduleViewModel From { get; set; }
 
 		public ShiftTradePersonScheduleViewModel To { get; set; }

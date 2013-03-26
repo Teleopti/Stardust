@@ -24,8 +24,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 		public string Status;
 		public string Payload;
 		public bool IsCreatedByUser;
-		public string RawDateFrom;
-		public string RawDateTo;
 		public string RawTimeFrom;
 		public string RawTimeTo;
 		public bool IsFullDay;
@@ -35,5 +33,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 		public bool IsNew;
 		public bool IsPending;
 		public bool IsApproved;
+		public int DateFromYear { get; set; }
+		public int DateFromMonth { get; set; }
+		public int DateFromDayOfMonth { get; set; }
+		public int DateToYear { get; set; }
+		public int DateToMonth { get; set; }
+		public int DateToDayOfMonth { get; set; }
 	}
 }

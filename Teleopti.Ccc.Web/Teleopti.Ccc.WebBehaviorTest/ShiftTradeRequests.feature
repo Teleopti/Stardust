@@ -353,10 +353,10 @@ Scenario: Show name of sender of a received shifttrade
 	| Shift category			| Day	           |
 	And I have received a shift trade request
 	| Field    | Value         |
-	| From       | Ashley Andeen	|
+	| From     | Ashley Andeen	|
 	| DateTo   | 2030-01-01    |
 	| DateFrom | 2030-01-01    |
-	| Pending  | True          |
+	| Approved | True          |
 	And I am viewing requests
 	When I click on the request
 	Then I should see 'Ashley Andeen' as the sender of the request
@@ -485,24 +485,14 @@ Given I have the role 'Full access to mytime'
 	Then I should see details with subject 'Swap with me'
 	And I should see details with message 'CornercaseMessageWithAReallyReallyLongWordThatWillProbablyNeverHappenInTheRealWorldButItCausedATestIssueSoWePutItHereForTesting'
 
-Scenario: Show information that we dont show schedules in a new shifttrade
+Scenario: Show information that we dont show schedules in a shifttrade that isnt pending
 	Given I have the role 'Full access to mytime'
 	And I have created a shift trade request
-	| Field		| Value		|
-	| IsNew		| True		|
+	| Field			| Value		|
+	| IsPending		| False		|
 	And I am viewing requests
 	When I click on the request
 	Then I should see details with message that tells the user that the status of the shifttrade is new
-	And I should not see timelines
-
-Scenario: Show information that we dont show schedules in a approved shifttrade
-	Given I have the role 'Full access to mytime'
-	And I have created a shift trade request
-	| Field				| Value		|
-	| Approved			| True		|
-	And I am viewing requests
-	When I click on the request
-	Then I should see details with message that tells the user that the status of the shifttrade is approved
 	And I should not see timelines
 
 Scenario: Can not approve or deny shift trade request that is already approved
