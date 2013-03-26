@@ -11374,4 +11374,8 @@ Reduce the complexity to use these shifts.</value>
   <data name="InProcess" xml:space="preserve">
     <value>In process..</value>
   </data>
+  <data name="SelectedAbsences" xml:space="preserve">
+    <value>Selected absences</value>
+    <comment>Selected absences</comment>
+  </data>
 </root>
