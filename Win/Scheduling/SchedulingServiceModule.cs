@@ -248,6 +248,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			builder.RegisterType<LockableBitArrayFactory>().As<ILockableBitArrayFactory>();
 			builder.RegisterType<TeamDayOffModifyer>().As<ITeamDayOffModifyer>();
+			builder.RegisterType<BlockSteadyStateValidator>().As<IBlockSteadyStateValidator>();
 		}
 
 	    private static void registerWorkShiftSelector(ContainerBuilder builder)

@@ -4,10 +4,8 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
@@ -44,17 +42,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 		[Test]
 		public void ShouldRollbackIfTeamBlockExceedsMoveMaxDayLimit()
 		{
-			var dateOnly = new DateOnly();
 			var scheduleMatrixPro1 = _mocks.StrictMock<IScheduleMatrixPro>();
-			var schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
 			var matrixList = new List<IScheduleMatrixPro> {scheduleMatrixPro1 };
-		    var groupMatrixList = new List<IList<IScheduleMatrixPro>> {matrixList};
-
-			var person = PersonFactory.CreatePerson();
-			var groupPerson = new GroupPerson(new List<IPerson>{person}, DateOnly.MinValue, "Hej", null);
-			var teaminfo = new TeamInfo(groupPerson, groupMatrixList);
-            var blockInfo = new BlockInfo(new DateOnlyPeriod(dateOnly, dateOnly));
-            var teamBlockInfo = new TeamBlockInfo(teaminfo, blockInfo);
 
 			var originalStateContainer = _mocks.StrictMock<IScheduleMatrixOriginalStateContainer>();
 			var optimizationOverLimitByRestrictionDecider = _mocks.StrictMock<IOptimizationOverLimitByRestrictionDecider>();
@@ -62,8 +51,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 
 			using (_mocks.Record())
 			{
-				Expect.Call(scheduleMatrixPro1.SchedulePeriod).Return(schedulePeriod);
-				Expect.Call(schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(dateOnly, dateOnly));
 				Expect.Call(
 					_scheduleMatrixOriginalStateContainerFactory.CreateScheduleMatrixOriginalStateContainer(scheduleMatrixPro1,
 					                                                                                        _scheduleDayEquator))
@@ -77,7 +64,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.Validate(teamBlockInfo, _optimizerPreferences, _schedulingOptions,
+				var result = _target.Validate(matrixList, _optimizerPreferences, _schedulingOptions,
 											  _schedulePartModifyAndRollbackService, restrictionChecker);
 				Assert.IsFalse(result);
 			}
@@ -86,26 +73,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 		[Test]
 		public void ShouldValidateIfTeamBlockNotExceedsMoveMaxDayLimit()
 		{
-			var dateOnly = new DateOnly();
 			var scheduleMatrixPro1 = _mocks.StrictMock<IScheduleMatrixPro>();
-			var schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
 			var matrixList = new List<IScheduleMatrixPro> { scheduleMatrixPro1 };
-			var groupMatrixList = new List<IList<IScheduleMatrixPro>> { matrixList };
-
-			var person = PersonFactory.CreatePerson();
-			var groupPerson = new GroupPerson(new List<IPerson> { person }, DateOnly.MinValue, "Hej", null);
-			var teaminfo = new TeamInfo(groupPerson, groupMatrixList);
-			var blockInfo = new BlockInfo(new DateOnlyPeriod(dateOnly, dateOnly));
-			var teamBlockInfo = new TeamBlockInfo(teaminfo, blockInfo);
-
 			var originalStateContainer = _mocks.StrictMock<IScheduleMatrixOriginalStateContainer>();
 			var optimizationOverLimitByRestrictionDecider = _mocks.StrictMock<IOptimizationOverLimitByRestrictionDecider>();
 			var restrictionChecker = new RestrictionChecker();
 
 			using (_mocks.Record())
 			{
-				Expect.Call(scheduleMatrixPro1.SchedulePeriod).Return(schedulePeriod);
-				Expect.Call(schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(dateOnly, dateOnly));
 				Expect.Call(
 					_scheduleMatrixOriginalStateContainerFactory.CreateScheduleMatrixOriginalStateContainer(scheduleMatrixPro1,
 																											_scheduleDayEquator))
@@ -119,7 +94,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.Validate(teamBlockInfo, _optimizerPreferences, _schedulingOptions,
+				var result = _target.Validate(matrixList, _optimizerPreferences, _schedulingOptions,
 											  _schedulePartModifyAndRollbackService, restrictionChecker);
 				Assert.IsTrue(result);
 			}
@@ -132,13 +107,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			var scheduleMatrixPro1 = _mocks.StrictMock<IScheduleMatrixPro>();
 			var schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
 			var matrixList = new List<IScheduleMatrixPro> { scheduleMatrixPro1 };
-			var groupMatrixList = new List<IList<IScheduleMatrixPro>> { matrixList };
-
-			var person = PersonFactory.CreatePerson();
-			var groupPerson = new GroupPerson(new List<IPerson> { person }, DateOnly.MinValue, "Hej", null);
-			var teaminfo = new TeamInfo(groupPerson, groupMatrixList);
-			var blockInfo = new BlockInfo(new DateOnlyPeriod(dateOnly, dateOnly));
-			var teamBlockInfo = new TeamBlockInfo(teaminfo, blockInfo);
 
 			var originalStateContainer = _mocks.StrictMock<IScheduleMatrixOriginalStateContainer>();
 			var optimizationOverLimitByRestrictionDecider = _mocks.StrictMock<IOptimizationOverLimitByRestrictionDecider>();
@@ -146,8 +114,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 
 			using (_mocks.Record())
 			{
-				Expect.Call(scheduleMatrixPro1.SchedulePeriod).Return(schedulePeriod);
-				Expect.Call(schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(dateOnly, dateOnly));
 				Expect.Call(
 					_scheduleMatrixOriginalStateContainerFactory.CreateScheduleMatrixOriginalStateContainer(scheduleMatrixPro1,
 																											_scheduleDayEquator))
@@ -162,7 +128,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.Validate(teamBlockInfo, _optimizerPreferences, _schedulingOptions,
+				var result = _target.Validate(matrixList, _optimizerPreferences, _schedulingOptions,
 											  _schedulePartModifyAndRollbackService, restrictionChecker);
 				Assert.IsFalse(result);
 			}
@@ -171,17 +137,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 		[Test]
 		public void ShouldValidateIfTeamBlockNoOverLimit()
 		{
-			var dateOnly = new DateOnly();
 			var scheduleMatrixPro1 = _mocks.StrictMock<IScheduleMatrixPro>();
-			var schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
 			var matrixList = new List<IScheduleMatrixPro> { scheduleMatrixPro1 };
-			var groupMatrixList = new List<IList<IScheduleMatrixPro>> { matrixList };
-
-			var person = PersonFactory.CreatePerson();
-			var groupPerson = new GroupPerson(new List<IPerson> { person }, DateOnly.MinValue, "Hej", null);
-			var teaminfo = new TeamInfo(groupPerson, groupMatrixList);
-			var blockInfo = new BlockInfo(new DateOnlyPeriod(dateOnly, dateOnly));
-			var teamBlockInfo = new TeamBlockInfo(teaminfo, blockInfo);
 
 			var originalStateContainer = _mocks.StrictMock<IScheduleMatrixOriginalStateContainer>();
 			var optimizationOverLimitByRestrictionDecider = _mocks.StrictMock<IOptimizationOverLimitByRestrictionDecider>();
@@ -189,8 +146,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 
 			using (_mocks.Record())
 			{
-				Expect.Call(scheduleMatrixPro1.SchedulePeriod).Return(schedulePeriod);
-				Expect.Call(schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(dateOnly, dateOnly));
 				Expect.Call(
 					_scheduleMatrixOriginalStateContainerFactory.CreateScheduleMatrixOriginalStateContainer(scheduleMatrixPro1,
 																											_scheduleDayEquator))
@@ -204,7 +159,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.Validate(teamBlockInfo, _optimizerPreferences, _schedulingOptions,
+				var result = _target.Validate(matrixList, _optimizerPreferences, _schedulingOptions,
 											  _schedulePartModifyAndRollbackService, restrictionChecker);
 				Assert.True(result);
 			}

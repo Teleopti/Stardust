@@ -22,7 +22,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 	{
 		private readonly ITeamBlockScheduler _teamBlockScheduler;
 		private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
-		private readonly IPeriodValueCalculator _periodValueCalculatorForAllSkills;
 		private readonly ISafeRollbackAndResourceCalculation _safeRollbackAndResourceCalculation;
 		private readonly ITeamBlockIntradayDecisionMaker _teamBlockIntradayDecisionMaker;
 		private readonly ITeamBlockClearer _teamBlockClearer;
@@ -34,7 +33,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		public TeamBlockIntradayOptimizationService(ITeamBlockGenerator teamBlockGenerator,
 		                                            ITeamBlockScheduler teamBlockScheduler,
 		                                            ISchedulingOptionsCreator schedulingOptionsCreator,
-		                                            IPeriodValueCalculator periodValueCalculatorForAllSkills,
 		                                            ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation,
 		                                            ITeamBlockIntradayDecisionMaker teamBlockIntradayDecisionMaker,
 		                                            ITeamBlockRestrictionOverLimitValidator restrictionOverLimitValidator,
@@ -43,7 +41,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		{
 			_teamBlockScheduler = teamBlockScheduler;
 			_schedulingOptionsCreator = schedulingOptionsCreator;
-			_periodValueCalculatorForAllSkills = periodValueCalculatorForAllSkills;
 			_safeRollbackAndResourceCalculation = safeRollbackAndResourceCalculation;
 			_teamBlockIntradayDecisionMaker = teamBlockIntradayDecisionMaker;
 			_teamBlockClearer = teamBlockClearer;
@@ -69,10 +66,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			{
 				if (_cancelMe)
 					break;
-				var previousPeriodValue = _periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.IntradayOptimization);
-				var teamBlocksToRemove = optimizeOneRound(selectedPeriod, selectedPersons, optimizationPreferences,
+				var teamBlocksToRemove = optimizeOneRound(allPersonMatrixList, selectedPeriod, selectedPersons, optimizationPreferences,
 														  schedulingOptions, remainingInfoList,
-				                                          previousPeriodValue, schedulePartModifyAndRollbackService);
+				                                          schedulePartModifyAndRollbackService);
 				foreach (var teamBlock in teamBlocksToRemove)
 				{
 					remainingInfoList.Remove(teamBlock);
@@ -92,9 +88,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			}
 		}
 
-		private IEnumerable<ITeamBlockInfo> optimizeOneRound(DateOnlyPeriod selectedPeriod,
+		private IEnumerable<ITeamBlockInfo> optimizeOneRound(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod,
 							 IList<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences,
-									  ISchedulingOptions schedulingOptions, List<ITeamBlockInfo> allTeamBlocks, double previousPeriodValue,
+									  ISchedulingOptions schedulingOptions, List<ITeamBlockInfo> allTeamBlocks,
 										ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
 		{
 			var teamBlockToRemove = new List<ITeamBlockInfo>();
@@ -107,7 +103,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				if (_cancelMe)
 					break;
 				schedulePartModifyAndRollbackService.ClearModificationCollection();
-			
+
+				var previousStandardDevation = teamBlock.BlockInfo.AverageStandardDeviation; 
 				_teamBlockClearer.ClearTeamBlock(schedulingOptions, schedulePartModifyAndRollbackService, teamBlock);
 
 				var datePoint = teamBlock.BlockInfo.BlockPeriod.DayCollection().First();
@@ -118,23 +115,20 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 					continue;
 				}
 
-				if (!_restrictionOverLimitValidator.Validate(teamBlock, optimizationPreferences, schedulingOptions,
+				if (!_restrictionOverLimitValidator.Validate(allPersonMatrixList, optimizationPreferences, schedulingOptions,
 				                                            schedulePartModifyAndRollbackService, _restrictionChecker))
 					continue;
-				
-				var currentPeriodValue = _periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.IntradayOptimization);
-				var isPeriodWorse = currentPeriodValue >= previousPeriodValue;
-				if (isPeriodWorse)
+
+				var newStandardDeviation = _teamBlockIntradayDecisionMaker.RecalculateTeamBlock(teamBlock, optimizationPreferences,
+				                                                                                schedulingOptions).BlockInfo.AverageStandardDeviation;
+				var isWorse = newStandardDeviation >= previousStandardDevation;
+				if (isWorse)
 				{
 					teamBlockToRemove.Add(teamBlock);
 					_safeRollbackAndResourceCalculation.Execute(schedulePartModifyAndRollbackService, schedulingOptions);
 				}
-				else
-				{
-					previousPeriodValue = currentPeriodValue;
-				}
 
-				OnReportProgress("xxPeriodvalue: " + currentPeriodValue + " xxOptimized team " + teamBlock.TeamInfo.GroupPerson.Name);
+				OnReportProgress("xxStandardardDeviation: " + newStandardDeviation + " xxOptimized team " + teamBlock.TeamInfo.GroupPerson.Name);
 			}
 			return teamBlockToRemove;
 		}
