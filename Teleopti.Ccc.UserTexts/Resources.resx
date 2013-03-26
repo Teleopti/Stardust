@@ -11187,4 +11187,8 @@ These options are activated:
     <value>Error when saving your changes. The most possible reason is that you or another user has deleted the data you set. To preserve data consistency, the form will be closed. Sorry, your changes has been lost.</value>
     <comment>used for SQL Server ForeignKeyException type of errors</comment>
   </data>
+  <data name="SelectedAbsences" xml:space="preserve">
+    <value>Selected absences</value>
+    <comment>Selected absences</comment>
+  </data>
 </root>
