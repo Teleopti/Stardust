@@ -13,7 +13,7 @@ namespace Teleopti.Analytics.PM.PMServiceHost
 		private readonly Dictionary<string, User> _analyzerUsersDictionary;
 		private readonly Dictionary<string, UserDto> _clientUsersDictionary;
 		readonly ILog _logger = LogManager.GetLogger(typeof(Synchronizer));
-		private bool _isWindowsInstallation { get { return PermissionInformation.IsPmAuthenticationWindows; }}
+		static private bool _isWindowsInstallation { get { return PermissionInformation.IsPmAuthenticationWindows; }}
 
 		private Synchronizer() { }
 
