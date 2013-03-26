@@ -20,7 +20,17 @@ namespace Teleopti.Ccc.WpfControls.Common
 			{
 				OkButton.Focus();
 				if (OkButton.IsEnabled)
+				{
+					e.Handled = true;
 					DialogResult = true;
+					Close();
+				}
+			}
+			if (e.Key == Key.Escape)
+			{
+				e.Handled = true;
+				DialogResult = false;
+				Close();
 			}
 			base.OnPreviewKeyUp(e);
 		}
