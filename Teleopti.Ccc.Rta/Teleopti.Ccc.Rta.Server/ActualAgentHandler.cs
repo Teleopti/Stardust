@@ -76,10 +76,8 @@ namespace Teleopti.Ccc.Rta.Server
 		public IActualAgentState CreateAndSaveState(IList<ScheduleLayer> scheduleLayers, IActualAgentState previousState, Guid personId, Guid platformTypeId,
 			string stateCode, DateTime timestamp, TimeSpan timeInState, Guid businessUnitId)
 		{
-			if (!scheduleLayers.Any())
-				return null;
-			var scheduleLayer = scheduleLayers[0];
-			var nextLayer = scheduleLayers[1];
+			var scheduleLayer = scheduleLayers.FirstOrDefault();
+			var nextLayer = scheduleLayers.LastOrDefault();
 
 			var foundAlarm = GetAlarm(platformTypeId, stateCode, scheduleLayer, businessUnitId);
 
