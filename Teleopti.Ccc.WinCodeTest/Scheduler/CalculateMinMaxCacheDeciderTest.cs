@@ -123,6 +123,24 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			}
 		}
 
+		[Test]
+		public void ShouldHandlePersonsWithNoShiftBag()
+		{
+			_person1.Period(DateOnly.MinValue).RuleSetBag = null;
+			_person2.Period(DateOnly.MinValue).RuleSetBag = null;
+
+			using (_mocks.Record())
+			{
+				commonMocks();
+			}
+
+			using (_mocks.Playback())
+			{
+				bool result = _target.ShouldCacheBeDisabled(_stateHolder, _schedulingOptions, _effectiveRestrictionCreator, 0);
+				Assert.IsFalse(result);
+			}
+		}
+
 		private void commonMocks()
 		{
 			Expect.Call(_stateHolder.FilteredPersonDictionary).Return(_personDic);
