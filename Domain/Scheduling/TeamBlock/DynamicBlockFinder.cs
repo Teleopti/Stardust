@@ -37,10 +37,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                         IEnumerable<IScheduleMatrixPro> matrixes = teamInfo.MatrixesForGroupAndDate(blockOnDate).ToList();
                         if (matrixes.Any())
                         {
-                            //getting the start date of the (what if the start date is a dayoff
                             DateOnly startDate = matrixes.First().SchedulePeriod.DateOnlyPeriod.StartDate;
+                            while (isAnyTypeOfDayOff(matrixes.First().GetScheduleDayByKey(startDate).DaySchedulePart()))
+                            {
+                                startDate = startDate.AddDays(1);
+                            }
                             foreach (var dateOnly in matrixes.First().SchedulePeriod.DateOnlyPeriod.DayCollection())
                             {
+                                if (startDate > dateOnly) continue;
                                 if (isAnyTypeOfDayOff(matrixes.First().GetScheduleDayByKey(dateOnly).DaySchedulePart()))
                                 {
                                     //TODO: should we include the DO in the period?

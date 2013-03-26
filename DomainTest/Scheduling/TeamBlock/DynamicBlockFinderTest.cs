@@ -50,8 +50,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		public void ShouldReturnSameDateAsAskedForIfBlockFinderTypeIsSingleDay()
 		{	_schedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.SingleDay;
 			
-			
-            using (_mock.Record())
+			using (_mock.Record())
             {
                 
             }
@@ -62,10 +61,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Assert.AreEqual(1, result.Count);
 			}
       
-      
 		}
-
-       
 
         [Test]
         public void ShouldReturnSamePeriodAsSchedulePeriodIfBlockFinderTypeIsSchedulePeriod()
@@ -83,7 +79,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				DateOnlyPeriod result = _target.ExtractBlockInfo(_date, _teamInfo, BlockFinderType.SchedulePeriod).BlockPeriod;
 				Assert.AreEqual(new DateOnlyPeriod(_date, _date), result);
 			}
-      
       
         }
 
@@ -120,17 +115,17 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 Expect.Call(_matrixPro.SchedulePeriod).Return(_schedulePeriod).Repeat.AtLeastOnce();
                 Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(_date.AddDays(1), _date.AddDays(3))).Repeat.AtLeastOnce() ;
                 
-                Expect.Call(_matrixPro.GetScheduleDayByKey(_date.AddDays(1))).Return(_scheduleDayPro1);
-                Expect.Call(_scheduleDayPro1.DaySchedulePart()).Return(_scheduleDay1);
-                Expect.Call(_scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift);
-                
-                Expect.Call(_matrixPro.GetScheduleDayByKey(_date.AddDays(2))).Return(_scheduleDayPro2);
-                Expect.Call(_scheduleDayPro2.DaySchedulePart()).Return(_scheduleDay2);
-                Expect.Call(_scheduleDay2.SignificantPart()).Return(SchedulePartView.MainShift);
-                
-                Expect.Call(_matrixPro.GetScheduleDayByKey(_date.AddDays(3))).Return(_scheduleDayPro3);
-                Expect.Call(_scheduleDayPro3.DaySchedulePart()).Return(_scheduleDay3);
-                Expect.Call(_scheduleDay3.SignificantPart()).Return(SchedulePartView.DayOff);
+                Expect.Call(_matrixPro.GetScheduleDayByKey(_date.AddDays(1))).Return(_scheduleDayPro1).Repeat.AtLeastOnce() ;
+                Expect.Call(_scheduleDayPro1.DaySchedulePart()).Return(_scheduleDay1).Repeat.AtLeastOnce();
+                Expect.Call(_scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
+
+                Expect.Call(_matrixPro.GetScheduleDayByKey(_date.AddDays(2))).Return(_scheduleDayPro2).Repeat.AtLeastOnce();
+                Expect.Call(_scheduleDayPro2.DaySchedulePart()).Return(_scheduleDay2).Repeat.AtLeastOnce();
+                Expect.Call(_scheduleDay2.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
+
+                Expect.Call(_matrixPro.GetScheduleDayByKey(_date.AddDays(3))).Return(_scheduleDayPro3).Repeat.AtLeastOnce();
+                Expect.Call(_scheduleDayPro3.DaySchedulePart()).Return(_scheduleDay3).Repeat.AtLeastOnce();
+                Expect.Call(_scheduleDay3.SignificantPart()).Return(SchedulePartView.DayOff).Repeat.AtLeastOnce();
 
             }
 
