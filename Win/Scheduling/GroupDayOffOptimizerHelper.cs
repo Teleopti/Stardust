@@ -545,23 +545,24 @@ namespace Teleopti.Ccc.Win.Scheduling
                                        _container.Resolve<IWorkShiftSelector>());
     
             var groupPersonBuilderForOptimization = callGroupPage(schedulingOptions);
-            ITeamInfoFactory teamInfoFactory = new TeamInfoFactory(groupPersonBuilderForOptimization);
-			IScheduleResultDataExtractor allSkillsDataExtractor =
+            var teamInfoFactory = new TeamInfoFactory(groupPersonBuilderForOptimization);
+			var allSkillsDataExtractor =
 				OptimizerHelperHelper.CreateAllSkillsDataExtractor(optimizationPreferences.Advanced, selectedPeriod, _stateHolder);
-			IPeriodValueCalculator periodValueCalculatorForAllSkills =
+			var periodValueCalculatorForAllSkills =
 				OptimizerHelperHelper.CreatePeriodValueCalculator(optimizationPreferences.Advanced, allSkillsDataExtractor);
+	        var teamBlockGenerator = new TeamBlockGenerator(teamInfoFactory, _container.Resolve<ITeamBlockInfoFactory>());
 
             ITeamBlockIntradayOptimizationService teamBlockIntradayOptimizationService =
                 new TeamBlockIntradayOptimizationService(
-                    teamInfoFactory,
-                    _container.Resolve<ITeamBlockInfoFactory>(),
+                    teamBlockGenerator,
                     teamBlockScheduler,
                     _container.Resolve<ISchedulingOptionsCreator>(),
 					periodValueCalculatorForAllSkills,
 					_container.Resolve<ISafeRollbackAndResourceCalculation>(),
 					_container.Resolve<ITeamBlockIntradayDecisionMaker>(),
 					_container.Resolve<ITeamBlockRestrictionOverLimitValidator>(),
-					_container.Resolve<ITeamBlockClearer>()
+					_container.Resolve<ITeamBlockClearer>(),
+					new RestrictionChecker()
                     );
 	        teamBlockIntradayOptimizationService.ReportProgress += resourceOptimizerPersonOptimized;
             teamBlockIntradayOptimizationService.Optimize(
