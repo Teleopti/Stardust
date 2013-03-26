@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 			var groups = detailsByGroup.Where(
 				p => p.Any(d =>
 				           _permissionProvider.HasOrganisationDetailPermission(
-					           DefinedRaptorApplicationFunctionPaths.ViewSchedules,
+					           DefinedRaptorApplicationFunctionPaths.TeamSchedule,
 					           date, d))).Select(
 						           p =>
 						           new SelectOptionItem {text = p.Key.GroupName, id = p.Key.GroupId.ToString()});
