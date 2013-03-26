@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 
 			var result = Mapper.Map<Tuple<DateOnly, Guid>, TeamScheduleDomainData>(new Tuple<DateOnly, Guid>(DateOnly.Today, id));
 
-			result.TeamId.Should().Be(id);
+			result.TeamOrGroupId.Should().Be(id);
 		}
 
 		[Test]
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 			var persons = new IPerson[] { };
 			var id = Guid.NewGuid();
 
-			personProvider.Stub(x => x.GetPermittedPersonsForTeam(DateOnly.Today, id, DefinedRaptorApplicationFunctionPaths.TeamSchedule)).Return(persons);
+			personProvider.Stub(x => x.GetPermittedPersonsForGroup(DateOnly.Today, id, DefinedRaptorApplicationFunctionPaths.TeamSchedule)).Return(persons);
 
 			Mapper.Map<Tuple<DateOnly, Guid>, TeamScheduleDomainData>(new Tuple<DateOnly, Guid>(DateOnly.Today, id));
 
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 		{
 			var person = new Person();
 
-			personProvider.Stub(x => x.GetPermittedPersonsForTeam(DateOnly.Today, Guid.Empty, DefinedRaptorApplicationFunctionPaths.TeamSchedule)).Return(new[] { person });
+			personProvider.Stub(x => x.GetPermittedPersonsForGroup(DateOnly.Today, Guid.Empty, DefinedRaptorApplicationFunctionPaths.TeamSchedule)).Return(new[] { person });
 
 			var result = Mapper.Map<DateOnly, TeamScheduleDomainData>(DateOnly.Today);
 
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today, persons.Single());
 			var teamScheduleProjection = new TeamScheduleProjection(new[] { new TeamScheduleLayer() }, DateTime.MaxValue);
 
-			personProvider.Stub(x => x.GetPermittedPersonsForTeam(DateOnly.Today, Guid.Empty, DefinedRaptorApplicationFunctionPaths.TeamSchedule)).Return(persons);
+			personProvider.Stub(x => x.GetPermittedPersonsForGroup(DateOnly.Today, Guid.Empty, DefinedRaptorApplicationFunctionPaths.TeamSchedule)).Return(persons);
 			scheduleProvider.Stub(x => x.GetScheduleForPersons(DateOnly.Today, persons)).Return(new[] { scheduleDay });
 			projectionProvider.Stub(x => x.Projection(scheduleDay)).Return(teamScheduleProjection);
 
@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 			var eveningProjection = new TeamScheduleProjection { SortDate = DateTime.Now.Date.AddHours(20) };
 			var morningProjection = new TeamScheduleProjection { SortDate = DateTime.Now.Date.AddHours(7) };
 
-			personProvider.Stub(x => x.GetPermittedPersonsForTeam(DateOnly.Today, Guid.Empty, DefinedRaptorApplicationFunctionPaths.TeamSchedule)).Return(persons);
+			personProvider.Stub(x => x.GetPermittedPersonsForGroup(DateOnly.Today, Guid.Empty, DefinedRaptorApplicationFunctionPaths.TeamSchedule)).Return(persons);
 			scheduleProvider.Stub(x => x.GetScheduleForPersons(DateOnly.Today, persons)).Return(scheduleDays);
 			projectionProvider.Stub(x => x.Projection(scheduleDays.ElementAt(0))).Return(eveningProjection);
 			projectionProvider.Stub(x => x.Projection(scheduleDays.ElementAt(1))).Return(morningProjection);
@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 			             				Period = period
 			             			}
 			             	}, DateTime.MaxValue);
-			personProvider.Stub(x => x.GetPermittedPersonsForTeam(DateOnly.Today, Guid.Empty, DefinedRaptorApplicationFunctionPaths.TeamSchedule)).Return(persons);
+			personProvider.Stub(x => x.GetPermittedPersonsForGroup(DateOnly.Today, Guid.Empty, DefinedRaptorApplicationFunctionPaths.TeamSchedule)).Return(persons);
 			scheduleProvider.Stub(x => x.GetScheduleForPersons(DateOnly.Today, persons)).Return(new[] { scheduleDay });
 			projectionProvider.Stub(x => x.Projection(null)).IgnoreArguments().Return(layers);
 
@@ -174,7 +174,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 			             				Period = period
 			             			}
 			             	}, DateTime.MaxValue);
-			personProvider.Stub(x => x.GetPermittedPersonsForTeam(DateOnly.Today, Guid.Empty, DefinedRaptorApplicationFunctionPaths.TeamSchedule)).Return(persons);
+			personProvider.Stub(x => x.GetPermittedPersonsForGroup(DateOnly.Today, Guid.Empty, DefinedRaptorApplicationFunctionPaths.TeamSchedule)).Return(persons);
 			scheduleProvider.Stub(x => x.GetScheduleForPersons(DateOnly.Today, persons)).Return(new[] { scheduleDay });
 			projectionProvider.Stub(x => x.Projection(null)).IgnoreArguments().Return(layers);
 
@@ -200,7 +200,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 			             				Period = period
 			             			}
 			             	}, DateTime.MaxValue);
-			personProvider.Stub(x => x.GetPermittedPersonsForTeam(DateOnly.Today, Guid.Empty, DefinedRaptorApplicationFunctionPaths.TeamSchedule)).Return(persons);
+			personProvider.Stub(x => x.GetPermittedPersonsForGroup(DateOnly.Today, Guid.Empty, DefinedRaptorApplicationFunctionPaths.TeamSchedule)).Return(persons);
 			scheduleProvider.Stub(x => x.GetScheduleForPersons(DateOnly.Today, persons)).Return(new[] { scheduleDay });
 			projectionProvider.Stub(x => x.Projection(null)).IgnoreArguments().Return(layers);
 
@@ -242,7 +242,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 			var persons = new[] { new Person() };
 			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today, persons.Single(),SchedulePartView.ContractDayOff, PersonDayOffFactory.CreatePersonDayOff(), null, null, null);
 
-			personProvider.Stub(x => x.GetPermittedPersonsForTeam(DateOnly.Today, Guid.Empty, DefinedRaptorApplicationFunctionPaths.TeamSchedule)).Return(persons);
+			personProvider.Stub(x => x.GetPermittedPersonsForGroup(DateOnly.Today, Guid.Empty, DefinedRaptorApplicationFunctionPaths.TeamSchedule)).Return(persons);
 			scheduleProvider.Stub(x => x.GetScheduleForPersons(DateOnly.Today, persons)).Return(new[] { scheduleDay });
 
 			var result = Mapper.Map<DateOnly, TeamScheduleDomainData>(DateOnly.Today);

@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 		public static TimePeriod DefaultDisplayTime = new TimePeriod(8, 0, 17, 0);
 
 		public DateOnly Date { get; set; }
-		public Guid TeamId { get; set; }
+		public Guid TeamOrGroupId { get; set; }
 		public IEnumerable<TeamScheduleDayDomainData> Days { get; set; }
 		public DateTimePeriod DisplayTimePeriod { get; set; }
 	}

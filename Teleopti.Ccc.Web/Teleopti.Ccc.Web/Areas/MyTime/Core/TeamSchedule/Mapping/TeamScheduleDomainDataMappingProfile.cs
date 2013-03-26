@@ -38,12 +38,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 			CreateMap<Tuple<DateOnly, Guid>, TeamScheduleDomainData>()
 				.ForMember(d => d.Date, o => o.MapFrom(source => source.Item1))
 				.ForMember(d => d.DisplayTimePeriod, o => o.Ignore())
-				.ForMember(d => d.TeamId, o => o.MapFrom(s => s.Item2))
+				.ForMember(d => d.TeamOrGroupId, o => o.MapFrom(s => s.Item2))
 				.ForMember(d => d.Days, o => o.MapFrom(source =>
 				                                       	{
 															var date = source.Item1;
-															var teamId = source.Item2;
-															var persons = _personProvider().GetPermittedPersonsForTeam(date, teamId, DefinedRaptorApplicationFunctionPaths.TeamSchedule);
+															var teamOrGroupId = source.Item2;
+															var persons = _personProvider().GetPermittedPersonsForGroup(date, teamOrGroupId, DefinedRaptorApplicationFunctionPaths.TeamSchedule);
 															var scheduleDays = _scheduleProvider().GetScheduleForPersons(date, persons);
 
 															if (scheduleDays == null)

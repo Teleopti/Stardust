@@ -57,7 +57,7 @@ Given there is a team with
 
 Scenario: View available custom group options
 	Given I have the role 'Access to view all group pages'
-	When I view team schedule for '2013-03-25' with read model updated
+	When I view team schedule for '2013-03-25'
 	And I open the team-picker
 	Then I should see available group options
 	| Value                                    |
@@ -85,8 +85,8 @@ Scenario: View group schedule
 	| StartTime      | 2013-03-25 11:00 |
 	| EndTime        | 2013-03-25 20:00 |
 	| Shift category | Day              |
-	When I view team schedule for '2013-03-25' with read model updated
-	And I select 'Contract/Common contract' in the team picker
+	When I view team schedule for '2013-03-25'
+	And I select 'Kontrakt/Common contract' in the team picker
 	Then I should see my schedule
 	And I should see 'John Smith' schedule
 	And I should not see 'Pierre Baldi' schedule
@@ -103,32 +103,32 @@ Scenario: Sort late shifts after early shifts
 	| StartTime      | 2013-03-25 08:00 |
 	| EndTime        | 2013-03-25 17:00 |
 	| Shift category | Day              |
-	When I view team schedule for '2013-03-25' with read model updated
-	And I select 'Contract/Common contract' in the team picker
+	When I view team schedule for '2013-03-25'
+	And I select 'Kontrakt/Common contract' in the team picker
 	Then I should see 'John Smith' before myself
 
 Scenario: Default to my team
 	Given I have the role 'Access to view all group pages'
-	When I view team schedule for '2013-03-25' with read model updated
+	When I view team schedule for '2013-03-25'
 	Then The team picker should have 'Common Site/Team green' selected
 
 Scenario: Keep selected group when changing date
 	Given I have the role 'Access to view all group pages'
-	When I view team schedule for '2013-03-25' with read model updated
-	And I select 'Contract/8 hours a day' in the team picker
+	When I view team schedule for '2013-03-25'
+	And I select 'Kontrakt/8 hours a day' in the team picker
 	And I click the next day button
 	Then I should see colleague 'Pierre Baldi'
 	And I should not see myself
 
 Scenario: Keep selected date when changing group
 	Given I have the role 'Access to view all group pages'
-	When I view team schedule for '2013-03-26' with read model updated
-	And I select 'Contract/8 hours a day' in the team picker
+	When I view team schedule for '2013-03-26'
+	And I select 'Kontrakt/8 hours a day' in the team picker
 	Then I should see date '2013-03-26'
 
 Scenario: View available team options if not have view all group pages permission
 	Given I have the role 'Without view group pages permission'
-	When I view team schedule for '2013-03-25' with read model updated
+	When I view team schedule for '2013-03-25'
 	And I open the team-picker
 	Then I should see available team options
 	| Value                  |
