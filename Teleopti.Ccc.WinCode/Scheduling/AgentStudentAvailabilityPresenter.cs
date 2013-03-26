@@ -32,18 +32,26 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 		public void Add(IAgentStudentAvailabilityAddCommand addCommand)
 		{
+			if(addCommand == null) throw new ArgumentNullException("addCommand");
+
 			addCommand.Execute();
 			UpdateView();
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
 		public void Remove(IAgentStudentAvailabilityRemoveCommand removeCommand)
 		{
+			if(removeCommand == null) throw new ArgumentNullException("removeCommand");
+
 			removeCommand.Execute();
 			UpdateView();
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
 		public void Edit(IAgentStudentAvailabilityEditCommand editCommand)
 		{
+			if(editCommand == null) throw new ArgumentNullException("editCommand");
+
 			editCommand.Execute();
 			UpdateView();
 		}

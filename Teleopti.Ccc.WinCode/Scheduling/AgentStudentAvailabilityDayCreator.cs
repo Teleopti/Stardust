@@ -15,6 +15,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 	{
 		public IStudentAvailabilityDay Create(IScheduleDay scheduleDay, TimeSpan? startTime, TimeSpan? endTime, bool endNextDay)
 		{
+			if(scheduleDay == null) throw new ArgumentNullException("scheduleDay");
+
 			if (!CanCreate(startTime, endTime, endNextDay)) return null;
 
 			var restriction = new StudentAvailabilityRestriction();
