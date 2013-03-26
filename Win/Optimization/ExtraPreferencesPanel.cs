@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Win.Optimization
         private IList<IGroupPageLight> _groupPageOnTeams;
         private IList<IGroupPageLight> _groupPageOnCompareWith;
         private IList<IGroupPageLight> _groupPageOnTeamsLevelingPer;
-        private IEventAggregator _eventAggregator;
+        //private IEventAggregator _eventAggregator;
         private IList<IActivity> _availableActivity;
         //private LevellingPerConfiguration _levellingConfiguartion;
         private GroupPageLight _singleAgentEntry;
@@ -320,9 +320,9 @@ namespace Teleopti.Ccc.Win.Optimization
         }
         private void getLevellingPerDataToSave()
         {
-            if(comboBoxTeamBlockType.SelectedValue == BlockFinderType.BetweenDayOff.ToString( ) )
+            if((string) comboBoxTeamBlockType.SelectedValue == BlockFinderType.BetweenDayOff.ToString( ) )
                 Preferences.BlockFinderTypeForAdvanceOptimization  =  BlockFinderType.BetweenDayOff ;
-            else if(comboBoxTeamBlockType.SelectedValue == BlockFinderType.SchedulePeriod.ToString( ) )
+            else if((string) comboBoxTeamBlockType.SelectedValue == BlockFinderType.SchedulePeriod.ToString( ) )
                 Preferences.BlockFinderTypeForAdvanceOptimization = BlockFinderType.SchedulePeriod;
             Preferences.GroupPageOnTeamLevelingPer = _singleAgentEntry;
             Preferences.UseLevellingSameEndTime =false ;

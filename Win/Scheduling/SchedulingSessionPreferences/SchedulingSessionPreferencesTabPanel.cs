@@ -798,9 +798,9 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 
         private void getLevellingPerDataToSave()
         {
-            if (comboBoxTeamBlockType.SelectedValue == BlockFinderType.BetweenDayOff.ToString())
+            if ((string) comboBoxTeamBlockType.SelectedValue == BlockFinderType.BetweenDayOff.ToString())
                 _localSchedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.BetweenDayOff;
-            else if (comboBoxTeamBlockType.SelectedValue == BlockFinderType.SchedulePeriod.ToString())
+            else if ((string) comboBoxTeamBlockType.SelectedValue == BlockFinderType.SchedulePeriod.ToString())
                 _localSchedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.SchedulePeriod;
             _localSchedulingOptions.GroupOnGroupPageForLevelingPer = _singleAgentEntry ;
             _localSchedulingOptions.UseLevellingSameEndTime = false;
