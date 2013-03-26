@@ -89,8 +89,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "s2id_Team-Picker")]
 		public Div TeamPickerSelectDiv { get; set; }
 
-		[FindBy(Class = "team-select2-dropdown")]
-		public Div TeamPickerDropDown { get; set; }
+		public Div TeamPickerDropDownClosed()
+		{
+			return Document.Div(QuicklyFind.ByClass("select2-offscreen"));
+		}
+
+		public Div TeamPickerDropDownOpened()
+		{
+			return Document.Div(QuicklyFind.ByClass("select2-search")).Parent as Div;
+		}
 
 		public IEnumerable<string> TeamPickerSelectTexts()
 		{
