@@ -11284,7 +11284,7 @@ These options are activated:
     <comment>Used in Quick forecast wizard page</comment>
   </data>
   <data name="TemplatesHistoricalDataRange" xml:space="preserve">
-    <value>Templates historical data range</value>
+    <value>Select historical data for templates</value>
     <comment>Quick forecast wizard page</comment>
   </data>
   <data name="ShowInfoMessages" xml:space="preserve">
@@ -11366,5 +11366,9 @@ Reduce the complexity to use these shifts.</value>
   <data name="TooComplexRuleset" xml:space="preserve">
     <value> is a too complex ruleset!</value>
     <comment>Caption on messagebox when shift generation is stopped </comment>
+  </data>
+  <data name="GenerateForecastFor" xml:space="preserve">
+    <value>Generate forecast for</value>
+    <comment>Period and scenario selection in quick forecast</comment>
   </data>
 </root>

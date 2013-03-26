@@ -58,7 +58,7 @@
 			// 
 			this.comboBoxSmoothing.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxSmoothing.FormattingEnabled = true;
-			this.comboBoxSmoothing.Location = new System.Drawing.Point(345, 9);
+			this.comboBoxSmoothing.Location = new System.Drawing.Point(364, 9);
 			this.comboBoxSmoothing.Margin = new System.Windows.Forms.Padding(5, 9, 6, 6);
 			this.comboBoxSmoothing.Name = "comboBoxSmoothing";
 			this.comboBoxSmoothing.Size = new System.Drawing.Size(166, 23);
@@ -67,7 +67,7 @@
 			// label2
 			// 
 			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(204, 0);
+			this.label2.Location = new System.Drawing.Point(223, 0);
 			this.label2.Name = "label2";
 			this.label2.Padding = new System.Windows.Forms.Padding(0, 12, 0, 0);
 			this.label2.Size = new System.Drawing.Size(133, 27);
@@ -76,12 +76,13 @@
 			// 
 			// TemplatesDatesFromTo
 			// 
+			this.TemplatesDatesFromTo.EnableNullDates = true;
 			this.TemplatesDatesFromTo.Font = new System.Drawing.Font("Segoe UI", 9F);
 			this.TemplatesDatesFromTo.Location = new System.Drawing.Point(3, 6);
 			this.TemplatesDatesFromTo.Margin = new System.Windows.Forms.Padding(3, 6, 3, 3);
 			this.TemplatesDatesFromTo.Name = "TemplatesDatesFromTo";
 			this.TemplatesDatesFromTo.NullString = "xxNoDateIsSelected";
-			this.TemplatesDatesFromTo.Size = new System.Drawing.Size(195, 61);
+			this.TemplatesDatesFromTo.Size = new System.Drawing.Size(214, 61);
 			this.TemplatesDatesFromTo.TabIndex = 0;
 			this.TemplatesDatesFromTo.WorkPeriodEnd = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("TemplatesDatesFromTo.WorkPeriodEnd")));
 			this.TemplatesDatesFromTo.WorkPeriodStart = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("TemplatesDatesFromTo.WorkPeriodStart")));
