@@ -4,6 +4,7 @@ using System.Linq;
 using NUnit.Framework;
 using SharpTestsEx;
 using TechTalk.SpecFlow;
+using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
@@ -34,13 +35,13 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			Browser.Current.Eval("$('#" + Pages.Pages.TeamSchedulePage.TeamPickerInput.Id + "').select2('data', {id:'" + team.Id + "', text:'" + site + "/" + team.Description.Name + "'}).trigger('change')");
 		}
 
-		//[When(@"I select '(.*)' in the team picker")]
-		//public void WhenISelectInTheTeamPicker(string optionText)
-		//{
-		//	var team = UserFactory.User().UserData<AnotherTeam>().TheTeam;
-		//	var site = GlobalDataContext.Data().Data<CommonSite>().Site.Description.Name;
-		//	Browser.Current.Eval("$('#" + Pages.Pages.TeamSchedulePage.TeamPickerInput.Id + "').select2('data', {id:'" + team.Id + "', text:'" + site + "/" + team.Description.Name + "'}).trigger('change')");
-		//}
+		[When(@"I select '(.*)' in the team picker")]
+		public void WhenISelectInTheTeamPicker(string optionText)
+		{
+			var team = UserFactory.User().UserData<AnotherTeam>().TheTeam;
+			var site = GlobalDataContext.Data().Data<CommonSite>().Site.Description.Name;
+			Browser.Current.Eval("$('#" + Pages.Pages.TeamSchedulePage.TeamPickerInput.Id + "').select2('data', {id:'" + team.Id + "', text:'" + site + "/" + team.Description.Name + "'}).trigger('change')");
+		}
 
 
 		[Then(@"I should see the team schedule tab")]
@@ -234,15 +235,26 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			AssertTeamPickerHasTeams(new[] {myTeam, otherTeam});
 		}
 
+		[Then(@"I should see available group options")]
+		public void ThenIShouldSeeAvailableGroupOptions(Table table)
+		{
+			var options = table.CreateSet<SingleValue>();
+			AssertTeamPickerHasTeams(from o in options select o.Value);
+		}
+
+		private class SingleValue
+		{
+			public string Value { get; set; }
+		}
+
+
 		private static void AssertTeamPickerHasTeams(IEnumerable<string> teamNames)
 		{
 			var page = Pages.Pages.TeamSchedulePage;
-			if (!page.TeamPickerDropDown.Exists)
+			if (page.TeamPickerDropDownClosed().Exists)
 				Browser.Current.Eval("$('#" + page.TeamPickerInput.Id + "').select2('open')");
 
-			EventualAssert.That(() => page.TeamPickerSelectDiv.Exists, Is.True);
-			EventualAssert.That(() => page.TeamPickerSelectDiv.JQueryVisible(), Is.True);
-			EventualAssert.That(() => page.TeamPickerSelectDiv.DisplayVisible(), Is.True);
+			EventualAssert.That(() => page.TeamPickerDropDownOpened().Exists, Is.True);
 			var texts = Pages.Pages.TeamSchedulePage.TeamPickerSelectTexts();
 			teamNames.ToList().ForEach(e => EventualAssert.That(() => texts.Contains(e), Is.True));
 		}
