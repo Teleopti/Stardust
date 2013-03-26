@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Win.Optimization
         private IList<IGroupPageLight> _groupPageOnTeams;
         private IList<IGroupPageLight> _groupPageOnCompareWith;
         private IList<IGroupPageLight> _groupPageOnTeamsLevelingPer;
-        //private IEventAggregator _eventAggregator;
+        private IEventAggregator _eventAggregator;
         private IList<IActivity> _availableActivity;
         //private LevellingPerConfiguration _levellingConfiguartion;
         private GroupPageLight _singleAgentEntry;
