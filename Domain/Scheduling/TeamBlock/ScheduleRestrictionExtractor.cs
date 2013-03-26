@@ -50,6 +50,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				if (sameEndRestriction == null) return null;
 				restriction = restriction.Combine(sameEndRestriction);
 			}
+			if (schedulingOptions.UseLevellingSameShiftCategory)
+			{
+				var sameShiftCategory = extractSameShiftCategory(dateOnlyList, matrixList);
+				if (sameShiftCategory == null) return null;
+				restriction = restriction.Combine(sameShiftCategory);
+			}
 			return restriction;
 		}
 
@@ -85,6 +91,46 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 							var mainShift = assignment.MainShift;
 							if (mainShift == null) continue;
 							if (!_scheduleDayEquator.MainShiftBasicEquals(mainShift, restriction.CommonMainShift))
+								return null;
+						}
+					}
+				}
+			}
+			return restriction;
+		}
+		
+		private IEffectiveRestriction extractSameShiftCategory(IList<DateOnly> dateOnlyList, IEnumerable<IScheduleMatrixPro> matrixList)
+		{
+			var restriction = new EffectiveRestriction(new StartTimeLimitation(),
+													   new EndTimeLimitation(),
+													   new WorkTimeLimitation(), null, null, null,
+													   new List<IActivityRestriction>());
+			foreach (var matrix in matrixList)
+			{
+				foreach (var dateOnly in dateOnlyList)
+				{
+					var schedule = matrix.GetScheduleDayByKey(dateOnly);
+					if (schedule == null)
+						continue;
+
+					var schedulePart = schedule.DaySchedulePart();
+					if (schedulePart.SignificantPart() == SchedulePartView.MainShift)
+					{
+						if (restriction.ShiftCategory == null)
+						{
+							var assignment = schedulePart.AssignmentHighZOrder();
+							if (assignment == null) continue;
+							var mainShift = assignment.MainShift;
+							if (mainShift == null) continue;
+							restriction.ShiftCategory = mainShift.ShiftCategory;
+						}
+						else
+						{
+							var assignment = schedulePart.AssignmentHighZOrder();
+							if (assignment == null) continue;
+							var mainShift = assignment.MainShift;
+							if (mainShift == null) continue;
+							if (restriction.ShiftCategory != mainShift.ShiftCategory)
 								return null;
 						}
 					}

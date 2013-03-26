@@ -87,6 +87,45 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		}
 
 		[Test]
+		public void ShouldExtractSameShiftCategoryRestrictionFromScheduleDay()
+		{
+			_schedulingOptions.UseLevellingSameShiftCategory = true;
+			var dateOnly = new DateOnly(2012, 12, 7);
+			var dateList = new List<DateOnly> { dateOnly };
+			var scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
+			var personAssignment = _mocks.StrictMock<IPersonAssignment>();
+			IActivity activity = new Activity("bo");
+			var period = new DateTimePeriod(new DateTime(2012, 12, 7, 8, 0, 0, DateTimeKind.Utc),
+			                                new DateTime(2012, 12, 7, 8, 30, 0, DateTimeKind.Utc));
+			var shiftCategory = new ShiftCategory("cat");
+			IMainShift mainShift = MainShiftFactory.CreateMainShift(activity, period, shiftCategory);
+			var scheduleMatrixPro = _mocks.StrictMock<IScheduleMatrixPro>();
+			var scheduleDayPro = _mocks.StrictMock<IScheduleDayPro>();
+			var matrixList = new List<IScheduleMatrixPro> { scheduleMatrixPro };
+			using (_mocks.Record())
+			{
+				Expect.Call(scheduleMatrixPro.GetScheduleDayByKey(dateOnly)).Return(scheduleDayPro);
+				Expect.Call(scheduleDayPro.DaySchedulePart()).Return(scheduleDay1);
+				Expect.Call(scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift);
+				Expect.Call(scheduleDay1.AssignmentHighZOrder()).Return(personAssignment);
+				Expect.Call(personAssignment.MainShift).Return(mainShift);
+			}
+			using (_mocks.Playback())
+			{
+				var expected = new EffectiveRestriction(new StartTimeLimitation(),
+				                                        new EndTimeLimitation(),
+				                                        new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>())
+					{
+						ShiftCategory = shiftCategory
+					};
+
+				var result = _target.Extract(dateList, matrixList, _schedulingOptions, _timeZoneInfo);
+
+				Assert.That(result, Is.EqualTo(expected));
+			}
+		}
+
+		[Test]
 		public void ShouldExtractNullRestrictionWhenHasTwoDifferentSchedules()
 		{
 			_schedulingOptions.UseLevellingSameShift = true;
