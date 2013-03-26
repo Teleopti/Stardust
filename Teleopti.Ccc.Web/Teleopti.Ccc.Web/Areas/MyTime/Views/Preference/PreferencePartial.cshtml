@@ -19,7 +19,7 @@
         <ul class="nav">
             <li class="divider-vertical"></li>
             <li><a href="#" id="Preference-edit-button"><i class="icon-edit"></i>&nbsp;@Resources.Preference</a></li>
-            <li><a href="#" id="Preference-delete-button"><i class="icon-remove"></i>&nbsp;@Resources.Remove</a></li>
+            <li><a href="#" data-bind="click: deletePreference"><i class="icon-remove"></i>&nbsp;@Resources.Remove</a></li>
             <li class="divider-vertical"></li>
             <li data-bind="if: mustHaveEnabled"><span class="navbar-text">@Resources.MustHave</span></li>
             <li data-bind="if: mustHaveEnabled"><a href="#" data-bind="click: removeMustHave"><i class="icon-minus"></i></a></li>

@@ -16,7 +16,7 @@ if (typeof (Teleopti) === 'undefined') {
 	}
 }
 
-Teleopti.MyTimeWeb.Preference.SelectionViewModel = function (dayViewModels, maxMustHave, setMustHaveMethod) {
+Teleopti.MyTimeWeb.Preference.SelectionViewModel = function (dayViewModels, maxMustHave, setMustHaveMethod, deletePreferenceMethod) {
     var self = this;
 
     self.minDate = ko.observable(moment());
@@ -68,4 +68,6 @@ Teleopti.MyTimeWeb.Preference.SelectionViewModel = function (dayViewModels, maxM
     self.addMustHaveEnabled = ko.computed(function() {
         return self.currentMustHaves() < maxMustHave;
     });
+
+    self.deletePreference = deletePreferenceMethod;
 };

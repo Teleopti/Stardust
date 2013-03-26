@@ -54,24 +54,20 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			});
 	}
 
-	function _initDeleteButton() {
-		$('#Preference-delete-button')
-			.click(function () {
-				_hideExtendedPanels();
-				var promises = [];
-				$('#Preference-body-inner .ui-selected')
-					.each(function (index, cell) {
-						var date = $(cell).data('mytime-date');
-						var promise = preferencesAndScheduleViewModel.DayViewModels[date].DeletePreference();
-						promises.push(promise);
-					});
-				$.when.apply(null, promises)
-					.done(function () { periodFeedbackViewModel.LoadFeedback(); });
-			})
-			.removeAttr('disabled');
-	}
-	
-	function _deletePreferenceTemplate(templateId) {
+    function _deletePreference() {
+        _hideExtendedPanels();
+        var promises = [];
+        $('#Preference-body-inner .ui-selected')
+            .each(function(index, cell) {
+                var date = $(cell).data('mytime-date');
+                var promise = preferencesAndScheduleViewModel.DayViewModels[date].DeletePreference();
+                promises.push(promise);
+            });
+        $.when.apply(null, promises)
+            .done(function() { periodFeedbackViewModel.LoadFeedback(); });
+    }
+
+    function _deletePreferenceTemplate(templateId) {
 		ajax.Ajax({
 			url: "Preference/PreferenceTemplate/" + templateId,
 			dataType: "json",
@@ -339,7 +335,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 		var to = $('li[data-mytime-date]').last().data('mytime-date');
 
 		preferencesAndScheduleViewModel = new Teleopti.MyTimeWeb.Preference.PreferencesAndSchedulesViewModel(ajax, dayViewModels);
-		selectionViewModel = new Teleopti.MyTimeWeb.Preference.SelectionViewModel(dayViewModelsInPeriod, $('#Preference-body').data('mytime-maxmusthave'), _setMustHave);
+		selectionViewModel = new Teleopti.MyTimeWeb.Preference.SelectionViewModel(dayViewModelsInPeriod, $('#Preference-body').data('mytime-maxmusthave'), _setMustHave, _deletePreference);
 		periodFeedbackViewModel = new Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel(ajax, dayViewModelsInPeriod, date);
 
 		var periodFeedbackElement = $('#Preference-period-feedback-view')[0];
@@ -419,7 +415,6 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 				Teleopti.MyTimeWeb.Preference.PreferencePartialDispose
 			);
 			_initSplitButton();
-			_initDeleteButton();
 			_initAddExtendedButton();
 		},
 		PreferencePartialInit: function (readyForInteractionCallback, completelyLoadedCallback) {
