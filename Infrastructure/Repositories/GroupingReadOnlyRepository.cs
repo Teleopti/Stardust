@@ -48,6 +48,21 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			}
 		}
 
+		public IEnumerable<ReadOnlyGroupDetail> AvailableGroups(DateOnly queryDate)
+		{
+			using (var uow = _unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork())
+			{
+				return ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(
+					"SELECT PageId, GroupName,GroupId,PersonId,FirstName,LastName,EmploymentNumber,TeamId,SiteId,BusinessUnitId FROM ReadModel.groupingreadonly WHERE businessunitid=:businessUnitId AND :currentDate BETWEEN StartDate and isnull(EndDate,'2059-12-31') AND (LeavingDate >= :currentDate OR LeavingDate IS NULL) ORDER BY groupname")
+					.SetGuid("businessUnitId",
+							 ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit.Id.GetValueOrDefault())
+					.SetDateTime("currentDate", queryDate.Date)
+					.SetResultTransformer(Transformers.AliasToBean(typeof(ReadOnlyGroupDetail)))
+					.SetReadOnly(true)
+					.List<ReadOnlyGroupDetail>();
+			}
+		}
+
 		public IEnumerable<ReadOnlyGroupDetail> DetailsForGroup(Guid groupId, DateOnly queryDate)
 		{
 			using (var uow = _unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork())
@@ -103,6 +118,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 	public class ReadOnlyGroupDetail : IAuthorizeOrganisationDetail
 	{
+		public Guid PageId { get; set; }
 		public string GroupName { get; set; }
 		public Guid GroupId { get; set; }
 		public Guid PersonId { get; set; }
