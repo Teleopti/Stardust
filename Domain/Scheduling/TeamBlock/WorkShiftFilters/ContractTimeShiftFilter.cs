@@ -32,7 +32,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			MinMax<TimeSpan>? allowedMinMax = null;
 			if (matrixList == null)
 				return workShifts;
-			foreach (var matrix in matrixList)
+		    if (shiftList == null) throw new ArgumentNullException("shiftList");
+		    if (finderResult == null) throw new ArgumentNullException("finderResult");
+		    foreach (var matrix in matrixList)
 			{
 				_workShiftMinMaxCalculator.ResetCache();
 				var minMax = _workShiftMinMaxCalculator.MinMaxAllowedShiftContractTime(dateOnly, matrix, schedulingOptions);

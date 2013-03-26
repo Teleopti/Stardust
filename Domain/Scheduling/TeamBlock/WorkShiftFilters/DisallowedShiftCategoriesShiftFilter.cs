@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -12,9 +13,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 	
 	public class DisallowedShiftCategoriesShiftFilter : IDisallowedShiftCategoriesShiftFilter
 	{
-		public IList<IShiftProjectionCache> Filter(IList<IShiftCategory> categories, IList<IShiftProjectionCache> shiftList, IWorkShiftFinderResult finderResult)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Domain.ResourceCalculation.WorkShiftFilterResult.#ctor(System.String,System.Int32,System.Int32)")]
+        public IList<IShiftProjectionCache> Filter(IList<IShiftCategory> categories, IList<IShiftProjectionCache> shiftList, IWorkShiftFinderResult finderResult)
 		{
-			if (shiftList.Count == 0)
+		    if (shiftList == null) throw new ArgumentNullException("shiftList");
+		    if (finderResult == null) throw new ArgumentNullException("finderResult");
+		    if (shiftList.Count == 0)
 				return shiftList;
 			if (categories.Count == 0)
 				return shiftList;

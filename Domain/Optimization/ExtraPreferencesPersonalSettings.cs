@@ -23,11 +23,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 	    private bool _useGroupSchedulingCommonEnd;
 	    private bool _useGroupSchedulingCommonCategory;
 
-	    public bool UseLevellingSameEndTime;
-        public bool UseLevellingSameShiftCategory;
-        public bool UseLevellingSameStartTime;
-        public bool UseLevellingSameShift;
-        public bool UseLevellingOption;
+        private bool _useLevellingSameEndTime;
+        private bool _useLevellingSameShiftCategory;
+        private bool _useLevellingSameStartTime;
+        private bool _useLevellingSameShift;
+        private bool _useLevellingOption;
 
 	    private BlockFinderType _blockFinderTypeForAdvanceOptimization;
 	    
@@ -70,11 +70,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		    target.BlockFinderTypeForAdvanceOptimization = _blockFinderTypeForAdvanceOptimization;
 
-		    target.UseLevellingOption = UseLevellingOption;
-		    target.UseLevellingSameEndTime = UseLevellingSameEndTime;
-		    target.UseLevellingSameShift = UseLevellingSameShift;
-		    target.UseLevellingSameShiftCategory = UseLevellingSameShiftCategory;
-		    target.UseLevellingSameStartTime = UseLevellingSameStartTime;
+		    target.UseLevellingOption = _useLevellingOption;
+		    target.UseLevellingSameEndTime = _useLevellingSameEndTime;
+		    target.UseLevellingSameShift = _useLevellingSameShift;
+		    target.UseLevellingSameShiftCategory = _useLevellingSameShiftCategory;
+		    target.UseLevellingSameStartTime = _useLevellingSameStartTime;
 		}
 
 		public void MapFrom(IExtraPreferences source)
@@ -99,11 +99,11 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		    _blockFinderTypeForAdvanceOptimization = source.BlockFinderTypeForAdvanceOptimization;
 
-		    UseLevellingOption = source.UseLevellingOption;
-		    UseLevellingSameEndTime = source.UseLevellingSameEndTime;
-		    UseLevellingSameShift = source.UseLevellingSameShift;
-		    UseLevellingSameShiftCategory = source.UseLevellingSameShiftCategory;
-		    UseLevellingSameStartTime = source.UseLevellingSameStartTime;
+		    _useLevellingOption = source.UseLevellingOption;
+		    _useLevellingSameEndTime = source.UseLevellingSameEndTime;
+		    _useLevellingSameShift = source.UseLevellingSameShift;
+		    _useLevellingSameShiftCategory = source.UseLevellingSameShiftCategory;
+		    _useLevellingSameStartTime = source.UseLevellingSameStartTime;
 		}
 
 		/// <summary>

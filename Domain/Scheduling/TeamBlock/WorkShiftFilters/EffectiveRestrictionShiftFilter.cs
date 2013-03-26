@@ -1,3 +1,4 @@
+using System;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
@@ -12,14 +13,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 	{
 		public bool Filter(ISchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction, IWorkShiftFinderResult finderResult)
 		{
-			if (effectiveRestriction == null)
+		    if (schedulingOptions == null) throw new ArgumentNullException("schedulingOptions");
+		    if (effectiveRestriction == null)
 			{
 				finderResult.AddFilterResults(new WorkShiftFilterResult(UserTexts.Resources.ConflictingRestrictions, 0,
 																		 0));
 				return false;
 			}
+		    if (finderResult == null) throw new ArgumentNullException("finderResult");
 
-			if (effectiveRestriction.ShiftCategory != null && schedulingOptions.ShiftCategory != null)
+		    if (effectiveRestriction.ShiftCategory != null && schedulingOptions.ShiftCategory != null)
 			{
 				if (effectiveRestriction.ShiftCategory.Id != schedulingOptions.ShiftCategory.Id)
 				{

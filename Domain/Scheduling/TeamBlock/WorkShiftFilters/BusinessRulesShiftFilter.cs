@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
@@ -28,7 +29,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 		public IList<IShiftProjectionCache> Filter(IPerson person, IList<IShiftProjectionCache> shiftList,
 												   DateOnly dateToCheck, IWorkShiftFinderResult finderResult)
 		{
-			if (shiftList.Count == 0) return shiftList;
+		    if (shiftList == null) throw new ArgumentNullException("shiftList");
+		    if (finderResult == null) throw new ArgumentNullException("finderResult");
+		    if (shiftList.Count == 0) return shiftList;
 			var scheduleRange = _resultStateHolder.Schedules[person];
 			var rulePeriod = _longestPeriodForAssignmentCalculator.PossiblePeriod(scheduleRange, dateToCheck);
 			if (!rulePeriod.HasValue)

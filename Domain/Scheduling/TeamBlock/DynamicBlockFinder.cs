@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Interfaces.Domain;
@@ -14,7 +15,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 	    public IBlockInfo ExtractBlockInfo(DateOnly blockOnDate, ITeamInfo teamInfo, BlockFinderType blockType)
 	    {
-		    DateOnlyPeriod? blockPeriod = null;
+	        if (teamInfo == null) throw new ArgumentNullException("teamInfo");
+	        DateOnlyPeriod? blockPeriod = null;
 		    switch (blockType)
 		    {
 			        case BlockFinderType.SingleDay:

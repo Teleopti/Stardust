@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Domain.Optimization
     [Serializable]
     public class SchedulingOptionsExtraPersonalSetting : SettingValue
     {
-        private BlockFinderType _blockFinderType = BlockFinderType.None;
+        //private BlockFinderType _blockFinderType = BlockFinderType.None;
         private bool _useGroupScheduling;
         private string _groupSchedulingGroupPageKey;
 

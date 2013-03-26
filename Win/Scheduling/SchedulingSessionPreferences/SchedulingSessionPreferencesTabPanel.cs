@@ -208,8 +208,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
 
         private void initBlockType()
         {
-            var blockFinderTypes = new BlockFinderTypeCreator();
-            comboBoxTeamBlockType.DataSource = blockFinderTypes.GetBlockFinderTypes();
+            comboBoxTeamBlockType.DataSource = BlockFinderTypeCreator.GetBlockFinderTypes;
             comboBoxTeamBlockType.DisplayMember = "Name";
             comboBoxTeamBlockType.ValueMember = "Key";
             if (_localSchedulingOptions.BlockFinderTypeForAdvanceScheduling == BlockFinderType.None)

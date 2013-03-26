@@ -59,8 +59,7 @@ namespace Teleopti.Ccc.Win.Optimization
 
         private void initBlockFinderType()
         {
-            var blockFinderTypes = new BlockFinderTypeCreator();
-            comboBoxTeamBlockType.DataSource = blockFinderTypes.GetBlockFinderTypes();
+            comboBoxTeamBlockType.DataSource = BlockFinderTypeCreator.GetBlockFinderTypes;
             comboBoxTeamBlockType.DisplayMember = "Name";
             comboBoxTeamBlockType.ValueMember = "Key";
             if (Preferences.BlockFinderTypeForAdvanceOptimization != BlockFinderType.None)

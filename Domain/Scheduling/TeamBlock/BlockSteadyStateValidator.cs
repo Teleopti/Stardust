@@ -17,6 +17,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
     {
         public bool IsBlockInSteadyState(ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions)
         {
+            if (teamBlockInfo == null) throw new ArgumentNullException("teamBlockInfo");
+            if (schedulingOptions == null ) throw new ArgumentNullException("schedulingOptions");
             var dayList = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection();
             if (dayList.Count > 0)
             {
