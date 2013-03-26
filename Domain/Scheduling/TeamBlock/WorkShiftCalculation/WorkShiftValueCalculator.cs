@@ -28,7 +28,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation
 		                                   WorkShiftLengthHintOption lengthFactor, bool useMinimumPersons,
 		                                   bool useMaximumPersons)
 		{
-			if (skillIntervalDataList != null && skillIntervalDataList.Count == 0)
+		    if (mainShiftLayers == null) throw new ArgumentNullException("mainShiftLayers");
+		    if (skillIntervalDataList != null && skillIntervalDataList.Count == 0)
 				return null;
 
 			double periodValue = 0;

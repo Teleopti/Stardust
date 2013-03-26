@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Interfaces.Domain;
@@ -21,7 +22,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 		public TeamInfo CreateTeamInfo(IPerson person, DateOnly date, IList<IScheduleMatrixPro> allMatrixesInScheduler)
 		{
-			DateOnly firstDateOfMatrix = date;
+		    if (allMatrixesInScheduler == null) throw new ArgumentNullException("allMatrixesInScheduler");
+		    DateOnly firstDateOfMatrix = date;
 			IGroupPerson groupPerson = _groupPersonBuilderForOptimization.BuildGroupPerson(person, firstDateOfMatrix);
 			IList<IList<IScheduleMatrixPro>> matrixesForGroup = new List<IList<IScheduleMatrixPro>>();
 			foreach (var groupMember in groupPerson.GroupMembers)
@@ -42,7 +44,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 		public TeamInfo CreateTeamInfo(IPerson person, DateOnlyPeriod period, IList<IScheduleMatrixPro> allMatrixesInScheduler)
 		{
-			IGroupPerson groupPerson = _groupPersonBuilderForOptimization.BuildGroupPerson(person, period.StartDate);
+		    if (allMatrixesInScheduler == null) throw new ArgumentNullException("allMatrixesInScheduler");
+		    IGroupPerson groupPerson = _groupPersonBuilderForOptimization.BuildGroupPerson(person, period.StartDate);
 			IList<IList<IScheduleMatrixPro>> matrixesForGroup = new List<IList<IScheduleMatrixPro>>();
 			foreach (var groupMember in groupPerson.GroupMembers)
 			{

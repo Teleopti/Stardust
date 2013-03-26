@@ -12,6 +12,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                      IList<DateOnly> unlockedDays, IList<IPerson> selectedPersons);
 		void Execute(ITeamBlockInfo teamBlockInfo, IShiftProjectionCache shiftProjectionCache, bool skipOffset);
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Levelling")]
         void ExecutePerDayPerPerson(IPerson person, DateOnly dateOnly, ITeamBlockInfo teamBlockInfo, IShiftProjectionCache shiftProjectionCache, bool useLevellingSameShift, DateOnlyPeriod selectedPeriod);
     }
 
@@ -167,6 +168,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
         public void ExecutePerDayPerPerson(IPerson person, DateOnly dateOnly, ITeamBlockInfo teamBlockInfo, IShiftProjectionCache shiftProjectionCache, bool skipOffset, DateOnlyPeriod selectedPeriod)
         {
+            if (teamBlockInfo == null) throw new ArgumentNullException("teamBlockInfo");
+            if (shiftProjectionCache == null) throw new ArgumentNullException("shiftProjectionCache");
             var startDateOfBlock = teamBlockInfo.BlockInfo.BlockPeriod.StartDate;
             if (!selectedPeriod.DayCollection().Contains(startDateOfBlock))
                 startDateOfBlock = selectedPeriod.StartDate;

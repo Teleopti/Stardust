@@ -1,5 +1,6 @@
 ﻿
 
+using System;
 using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
@@ -50,7 +51,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		public void RemoveDayOffAndResourceCalculate(ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 								   ITeamInfo teamInfo, DateOnly dateOnly, ISchedulingOptions schedulingOptions)
 		{
-			IScheduleDictionary scheduleDictionary = _stateHolder.Schedules;
+		    if (schedulePartModifyAndRollbackService == null)
+		        throw new ArgumentNullException("schedulePartModifyAndRollbackService");
+		    IScheduleDictionary scheduleDictionary = _stateHolder.Schedules;
 			IList<IScheduleDay> toRemove = new List<IScheduleDay>();
 			IList<IScheduleDay> toAdd = new List<IScheduleDay>();
 			if (schedulingOptions.UseSameDayOffs) // do it on every team member
