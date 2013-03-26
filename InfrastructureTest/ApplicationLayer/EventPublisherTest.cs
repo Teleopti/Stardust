@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 	[TestFixture]
 	public class EventPublisherTest
 	{
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
 		public void ShouldInvokeHandler()
 		{
 			var handler = MockRepository.GenerateMock<IHandleEvent<TestEvent>>();
@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 			handler.AssertWasCalled(x => x.Handle(@event));
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
 		public void ShouldInvokeMultipleHandlers()
 		{
 			var handler1 = MockRepository.GenerateMock<IHandleEvent<TestEvent>>();
@@ -39,6 +39,7 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 			handler2.AssertWasCalled(x => x.Handle(@event));
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible")]
 		public class TestEvent : Event
 		{
 		}
