@@ -162,6 +162,9 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 	function _initAddExtendedButton() {
 		var button = $('#Preference-add-extended-button');
 		var template = $('#Preference-add-extended-form');
+	    
+		button.click(function (e) { e.preventDefault(); });
+
 		addExtendedPreferenceFormViewModel = new Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel(ajax);
 		addExtendedTooltip = $('<div/>')
 			.qtip({
@@ -184,11 +187,11 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 				},
 				show: {
 					target: button,
-					event: 'click'
+					event: 'mousedown'
 				},
 				hide: {
 					target: button,
-					event: 'click'
+					event: 'mousedown'
 				},
 				style: {
 					def: false,
@@ -243,6 +246,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 					}
 				}
 			});
+	    
 		button.removeAttr('disabled');
 	}
 
@@ -414,8 +418,6 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 				Teleopti.MyTimeWeb.Preference.PreferencePartialInit,
 				Teleopti.MyTimeWeb.Preference.PreferencePartialDispose
 			);
-			_initSplitButton();
-			_initAddExtendedButton();
 		},
 		PreferencePartialInit: function (readyForInteractionCallback, completelyLoadedCallback) {
 			readyForInteraction = readyForInteractionCallback;
@@ -425,6 +427,8 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 				completelyLoaded();
 				return;
 			}
+			_initSplitButton();
+			_initAddExtendedButton();
 			_initViewModels(_soon);
 			_initPeriodSelection();
 			_initExtendedPanels();

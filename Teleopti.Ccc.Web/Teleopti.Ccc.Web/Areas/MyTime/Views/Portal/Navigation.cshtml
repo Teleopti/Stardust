@@ -62,90 +62,8 @@
     </div>
 </div>
 <nav id="tabs" style="display: none;">
-
-	@foreach (var navSection in Model.NavigationItems.Where(n => n.UnreadMessageCount == -1))
-	{
-		<section id="@string.Format("{0}Tab", navSection.Controller)" class="col-2-3 floatleft toolbar-left ui-tabs-panel ui-widget-content ui-corner-bottom">
-			<div class="toolbar-inner">
-				@{ int index = 0; }
-				@foreach (var toolbarItem in navSection.ToolBarItems)
-				{
-					if (toolbarItem is ToolBarSeparatorItem)
-					{
-						{
-							index = 0;
-						}
-						<div class="seperator"></div>
-					}
-					if (toolbarItem is ToolBarDatePicker)
-					{
-						var dpicker = toolbarItem as ToolBarDatePicker;
-						<div id="@string.Format("{0}DateRangeSelector", navSection.Controller)" class="date-range-selector floatleft ml10">
-							<button data-mytime-action="#" class="first">@dpicker.PrevTitle</button>
-							<input id="@string.Format("{0}DatePicker", navSection.Controller)" type="text" class="datepicker" />
-							<button data-mytime-action="#" class="last">@dpicker.NextTitle</button>
-							<span class="selected-date-period displayblock"></span>
-							<a class="displaynone" data-mytime-action="#"></a>
-						</div>
-					}
-					if (toolbarItem is ToolBarButtonItem)
-					{
-						var button = toolbarItem as ToolBarButtonItem;
-						var id = string.Format("{0}-{1}", navSection.Controller, button.ButtonType);
-						var buttonId = id + "-button";
-						<button title="@Html.AttributeEncode(button.Title)" id="@buttonId" disabled="disabled" class="toolbar-@Html.Raw(button.ButtonType) icon @button.Icon ir floatleft@((index > 1) ? " ml10" : "")">@button.Title</button>
-					}
-					if (toolbarItem is ToolBarTextItem)
-					{
-						var id = string.Format("{0}-{1}", navSection.Controller, (toolbarItem as ToolBarTextItem).Id);
-						<span id="@id" class="ml10"></span>
-					}
-					if (toolbarItem is ToolBarSplitButton)
-					{
-						var splitButton = toolbarItem as ToolBarSplitButton;
-						<div class="floatleft" id="@string.Format("{0}", navSection.Controller)">
-							<button title="@Html.AttributeEncode(splitButton.Title)" id="@string.Format("{0}-set-button", navSection.Controller)"></button>
-							<select title="@Html.AttributeEncode(splitButton.Title)" id="@string.Format("{0}-list", navSection.Controller)">
-								@foreach (var option in splitButton.Options)
-								{
-									<option value="@option.Value" data-color="@option.Color">@option.Text</option>
-								}
-							</select>
-						</div>
-					}
-					if (toolbarItem is ToolBarSelectBox)
-					{
-						var selectBox = toolbarItem as ToolBarSelectBox;
-						<select class="ui-selectbox-init floatleft" id="@string.Format("{0}-{1}-select", navSection.Controller, selectBox.Type)">
-							@foreach (var option in selectBox.Options)
-							{
-								<option value="@option.Value" data-color="@option.Color">@option.Text</option>
-							}
-						</select>
-					}
-					if (toolbarItem is ToolBarDropDown)
-					{
-						var dropDown = toolbarItem as ToolBarDropDown;
-						var dropDownId = string.Format("{0}-{1}-{2}", navSection.Controller, "addRequest", "dropdown");
-						<div class="ml10 displayblock floatleft">
-							<dl id="@dropDownId" class="dropdown">
-								<dt><span class="icon icon-left @dropDown.Icon"></span></dt>
-								<dd>
-									<ul class="ui-widget-content ui-corner-all ui-menu">
-										@foreach (var menuItem in dropDown.MenuItems)
-										{
-											var menuItemId = string.Format("{0}-{1}-{2}", navSection.Controller, menuItem.MenyType, "menuItem");
-											<li class="ui-menu-item"><a id="@menuItemId" class="ui-corner-all cursorpointer">@menuItem.Title</a></li>
-										}
-									</ul>
-								</dd>
-							</dl>		
-						</div>
-					}
-					{
-						index++;
-					}
-				}
+    
+		
 				@{
 					var times = from t in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, x * 30, 0))
 					            let value = Html.AttributeEncode(TimeHelper.TimeOfDayFromTimeSpan(t))
@@ -165,7 +83,9 @@
 						                  };
 				}
 
-				@if (navSection is PreferenceNavigationItem)
+	@foreach (var navSection in Model.NavigationItems)
+	{
+				if (navSection is PreferenceNavigationItem)
 				{
 					var preferenceNavigation = navSection as PreferenceNavigationItem;
 
@@ -335,8 +255,6 @@
 						</div>
 					</div>
 				}
-			</div>
-		</section>
 	}
 	
 	<div id="warning">
