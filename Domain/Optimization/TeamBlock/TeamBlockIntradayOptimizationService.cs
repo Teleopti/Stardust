@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Interfaces.Domain;
 
@@ -21,35 +20,35 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 	public class TeamBlockIntradayOptimizationService : ITeamBlockIntradayOptimizationService
 	{
-		private readonly ITeamInfoFactory _teamInfoFactory;
 		private readonly ITeamBlockScheduler _teamBlockScheduler;
-		private readonly ITeamBlockInfoFactory _teamBlockInfoFactory;
 		private readonly ISchedulingOptionsCreator _schedulingOptionsCreator;
 		private readonly IPeriodValueCalculator _periodValueCalculatorForAllSkills;
 		private readonly ISafeRollbackAndResourceCalculation _safeRollbackAndResourceCalculation;
 		private readonly ITeamBlockIntradayDecisionMaker _teamBlockIntradayDecisionMaker;
 		private readonly ITeamBlockClearer _teamBlockClearer;
+		private readonly ICheckerRestriction _restrictionChecker;
+		private readonly ITeamBlockGenerator _teamBlockGenerator;
 		private readonly ITeamBlockRestrictionOverLimitValidator _restrictionOverLimitValidator;
 		private bool _cancelMe;
 
-		public TeamBlockIntradayOptimizationService(ITeamInfoFactory teamInfoFactory,
-		                                            ITeamBlockInfoFactory teamBlockInfoFactory,
+		public TeamBlockIntradayOptimizationService(ITeamBlockGenerator teamBlockGenerator,
 		                                            ITeamBlockScheduler teamBlockScheduler,
 		                                            ISchedulingOptionsCreator schedulingOptionsCreator,
 		                                            IPeriodValueCalculator periodValueCalculatorForAllSkills,
 		                                            ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation,
 		                                            ITeamBlockIntradayDecisionMaker teamBlockIntradayDecisionMaker,
 		                                            ITeamBlockRestrictionOverLimitValidator restrictionOverLimitValidator,
-													ITeamBlockClearer teamBlockClearer)
+		                                            ITeamBlockClearer teamBlockClearer,
+		                                            ICheckerRestriction restrictionChecker)
 		{
-			_teamInfoFactory = teamInfoFactory;
-			_teamBlockInfoFactory = teamBlockInfoFactory;
 			_teamBlockScheduler = teamBlockScheduler;
 			_schedulingOptionsCreator = schedulingOptionsCreator;
 			_periodValueCalculatorForAllSkills = periodValueCalculatorForAllSkills;
 			_safeRollbackAndResourceCalculation = safeRollbackAndResourceCalculation;
 			_teamBlockIntradayDecisionMaker = teamBlockIntradayDecisionMaker;
 			_teamBlockClearer = teamBlockClearer;
+			_restrictionChecker = restrictionChecker;
+			_teamBlockGenerator = teamBlockGenerator;
 			_restrictionOverLimitValidator = restrictionOverLimitValidator;
 		}
 
@@ -61,29 +60,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 							 IOptimizationPreferences optimizationPreferences,
 							 ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
 		{
-			ISchedulingOptions schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
-
-			var allTeamInfoListOnStartDate = new HashSet<ITeamInfo>();
-			foreach (var selectedPerson in selectedPersons)
-			{
-				allTeamInfoListOnStartDate.Add(_teamInfoFactory.CreateTeamInfo(selectedPerson, selectedPeriod,
-																			   allPersonMatrixList));
-			}
-			var allTeamBlocksInHashSet = new HashSet<ITeamBlockInfo>();
-			foreach (var teamInfo in allTeamInfoListOnStartDate)
-			{
-				foreach (var day in selectedPeriod.DayCollection())
-				{
-					var teamBlock = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, day,
-																			  schedulingOptions.BlockFinderTypeForAdvanceScheduling);
-					allTeamBlocksInHashSet.Add(teamBlock);
-				}
-			}
-			var allTeamBlocks = new List<ITeamBlockInfo>();
-			allTeamBlocks.AddRange(allTeamBlocksInHashSet);
+			var schedulingOptions = _schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
+			var teamBlocks = _teamBlockGenerator.Generate(allPersonMatrixList, selectedPeriod, selectedPersons, schedulingOptions);
 			
-			//rounds
-			var remainingInfoList = new List<ITeamBlockInfo>(allTeamBlocksInHashSet);
+			var remainingInfoList = new List<ITeamBlockInfo>(teamBlocks);
 			
 			while (remainingInfoList.Count > 0)
 			{
@@ -128,7 +108,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 					break;
 				schedulePartModifyAndRollbackService.ClearModificationCollection();
 			
-				//clear block
 				_teamBlockClearer.ClearTeamBlock(schedulingOptions, schedulePartModifyAndRollbackService, teamBlock);
 
 				var datePoint = teamBlock.BlockInfo.BlockPeriod.DayCollection().First();
@@ -140,10 +119,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				}
 
 				if (!_restrictionOverLimitValidator.Validate(teamBlock, optimizationPreferences, schedulingOptions,
-				                                            schedulePartModifyAndRollbackService, new RestrictionChecker()))
+				                                            schedulePartModifyAndRollbackService, _restrictionChecker))
 					continue;
 				
-				var currentPeriodValue = _periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
+				var currentPeriodValue = _periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.IntradayOptimization);
 				var isPeriodWorse = currentPeriodValue >= previousPeriodValue;
 				if (isPeriodWorse)
 				{
@@ -155,7 +134,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 					previousPeriodValue = currentPeriodValue;
 				}
 
-				OnReportProgress("Periodvalue: " + currentPeriodValue + " Optimized team " + teamBlock.TeamInfo.GroupPerson.Name);
+				OnReportProgress("xxPeriodvalue: " + currentPeriodValue + " xxOptimized team " + teamBlock.TeamInfo.GroupPerson.Name);
 			}
 			return teamBlockToRemove;
 		}
