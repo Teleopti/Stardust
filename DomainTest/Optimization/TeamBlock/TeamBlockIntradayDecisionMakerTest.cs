@@ -35,22 +35,61 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 		}
 
 		[Test]
-		public void ShouldDecideTheRightOptimizeOrder()
+		public void ShouldRecalculateStandardDeviationOfOneTeamBlock()
 		{
 			var dateOnly = new DateOnly();
 			var scheduleMatrixPro1 = _mocks.StrictMock<IScheduleMatrixPro>();
-			var scheduleMatrixPro2 = _mocks.StrictMock<IScheduleMatrixPro>();
-			var matrixList = new List<IScheduleMatrixPro> {scheduleMatrixPro1, scheduleMatrixPro2 };
+			var matrixList = new List<IScheduleMatrixPro> {scheduleMatrixPro1 };
 		    var groupMatrixList = new List<IList<IScheduleMatrixPro>> {matrixList};
 
 			var person = PersonFactory.CreatePerson();
 			var groupPerson = new GroupPerson(new List<IPerson>{person}, DateOnly.MinValue, "Hej", null);
 			var teaminfo = new TeamInfo(groupPerson, groupMatrixList);
             var blockInfo1 = new BlockInfo(new DateOnlyPeriod(dateOnly, dateOnly));
-            var blockInfo2 = new BlockInfo(new DateOnlyPeriod(dateOnly.AddDays(1), dateOnly.AddDays(1)));
             var teamBlockInfo1 = new TeamBlockInfo(teaminfo, blockInfo1);
-            var teamBlockInfo2 = new TeamBlockInfo(teaminfo, blockInfo2);
-			var teamBlocks = new List<ITeamBlockInfo> {teamBlockInfo1, teamBlockInfo2};
+			var dataExtractor1 = _mocks.StrictMock<IScheduleResultDataExtractor>();
+			var scheduleDayPro1 = _mocks.StrictMock<IScheduleDayPro>();
+			IList<IScheduleDayPro> periodList1 = new List<IScheduleDayPro>
+				{
+					scheduleDayPro1
+				};
+			
+			using (_mocks.Record())
+			{
+				Expect.Call(_dataExtractorProvider.CreateRelativeDailyStandardDeviationsByAllSkillsExtractor(scheduleMatrixPro1,
+				                                                                                             _schedulingOptions))
+				      .Return(dataExtractor1);
+				Expect.Call(dataExtractor1.Values()).Return(new List<double?> {0.2, 0.2, 0.2});
+				Expect.Call(scheduleMatrixPro1.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(periodList1));
+				Expect.Call(_lockableBitArrayFactory.ConvertFromMatrix(false, false, scheduleMatrixPro1))
+				      .Return(new LockableBitArray(1, false, false, null));
+				Expect.Call(scheduleDayPro1.Day).Return(dateOnly).Repeat.AtLeastOnce();
+			}
+			using (_mocks.Playback())
+			{
+				var result = _target.RecalculateTeamBlock(teamBlockInfo1, _optimizerPreferences, _schedulingOptions);
+
+				Assert.That(result, Is.EqualTo(teamBlockInfo1));
+			}
+		}
+
+		[Test]
+		public void ShouldDecideInADescOrder()
+		{
+			var dateOnly = new DateOnly();
+			var scheduleMatrixPro1 = _mocks.StrictMock<IScheduleMatrixPro>();
+			var scheduleMatrixPro2 = _mocks.StrictMock<IScheduleMatrixPro>();
+			var matrixList = new List<IScheduleMatrixPro> { scheduleMatrixPro1, scheduleMatrixPro2 };
+			var groupMatrixList = new List<IList<IScheduleMatrixPro>> { matrixList };
+
+			var person = PersonFactory.CreatePerson();
+			var groupPerson = new GroupPerson(new List<IPerson> { person }, DateOnly.MinValue, "Hej", null);
+			var teaminfo = new TeamInfo(groupPerson, groupMatrixList);
+			var blockInfo1 = new BlockInfo(new DateOnlyPeriod(dateOnly, dateOnly));
+			var blockInfo2 = new BlockInfo(new DateOnlyPeriod(dateOnly.AddDays(1), dateOnly.AddDays(1)));
+			var teamBlockInfo1 = new TeamBlockInfo(teaminfo, blockInfo1);
+			var teamBlockInfo2 = new TeamBlockInfo(teaminfo, blockInfo2);
+			var teamBlocks = new List<ITeamBlockInfo> { teamBlockInfo1, teamBlockInfo2 };
 
 			var dataExtractor1 = _mocks.StrictMock<IScheduleResultDataExtractor>();
 			var dataExtractor2 = _mocks.StrictMock<IScheduleResultDataExtractor>();
@@ -70,26 +109,26 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			using (_mocks.Record())
 			{
 				Expect.Call(_dataExtractorProvider.CreateRelativeDailyStandardDeviationsByAllSkillsExtractor(scheduleMatrixPro1,
-				                                                                                             _schedulingOptions))
-				      .Return(dataExtractor1).Repeat.Twice();
-				Expect.Call(dataExtractor1.Values()).Return(new List<double?> {0.2, 0.2, 0.2}).Repeat.Twice();
+																											 _schedulingOptions))
+					  .Return(dataExtractor1).Repeat.Twice();
+				Expect.Call(dataExtractor1.Values()).Return(new List<double?> { 0.2, 0.2, 0.2 }).Repeat.Twice();
 				Expect.Call(_dataExtractorProvider.CreateRelativeDailyStandardDeviationsByAllSkillsExtractor(scheduleMatrixPro2,
-				                                                                                             _schedulingOptions))
-				      .Return(dataExtractor2).Repeat.Twice();
-				Expect.Call(dataExtractor2.Values()).Return(new List<double?> {0.4, 0.4, 0.4}).Repeat.Twice();
+																											 _schedulingOptions))
+					  .Return(dataExtractor2).Repeat.Twice();
+				Expect.Call(dataExtractor2.Values()).Return(new List<double?> { 0.4, 0.4, 0.4 }).Repeat.Twice();
 				Expect.Call(scheduleMatrixPro1.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(periodList1)).Repeat.Twice();
 				Expect.Call(scheduleMatrixPro2.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(periodList2)).Repeat.Twice();
 				Expect.Call(_lockableBitArrayFactory.ConvertFromMatrix(false, false, scheduleMatrixPro1))
-				      .Return(new LockableBitArray(1, false, false, null)).Repeat.Twice();
+					  .Return(new LockableBitArray(1, false, false, null)).Repeat.Twice();
 				Expect.Call(_lockableBitArrayFactory.ConvertFromMatrix(false, false, scheduleMatrixPro2))
-				      .Return(new LockableBitArray(1, false, false, null)).Repeat.Twice();
+					  .Return(new LockableBitArray(1, false, false, null)).Repeat.Twice();
 				Expect.Call(scheduleDayPro1.Day).Return(dateOnly).Repeat.AtLeastOnce();
 				Expect.Call(scheduleDayPro2.Day).Return(dateOnly.AddDays(1)).Repeat.AtLeastOnce();
 			}
 			using (_mocks.Playback())
 			{
-				var expected = new List<ITeamBlockInfo> {teamBlockInfo2, teamBlockInfo1};
-				
+				var expected = new List<ITeamBlockInfo> { teamBlockInfo2, teamBlockInfo1 };
+
 				var result = _target.Decide(teamBlocks, _optimizerPreferences, _schedulingOptions);
 
 				Assert.That(result, Is.EqualTo(expected));

@@ -10,6 +10,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		IList<ITeamBlockInfo> Decide(IList<ITeamBlockInfo> originalTeamBlocks,
 		                                             IOptimizationPreferences optimizationPreferences,
 		                                             ISchedulingOptions schedulingOptions);
+
+		ITeamBlockInfo RecalculateTeamBlock(ITeamBlockInfo teamBlock,
+		                                                    IOptimizationPreferences optimizationPreferences,
+		                                                    ISchedulingOptions schedulingOptions);
 	}
 
 	public class TeamBlockIntradayDecisionMaker : ITeamBlockIntradayDecisionMaker
@@ -28,42 +32,46 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		                                    IOptimizationPreferences optimizationPreferences,
 		                                    ISchedulingOptions schedulingOptions)
 		{
-			var standardDeviationData = new StandardDeviationData();
 			var sortedTeamBlocks = new List<ITeamBlockInfo>();
-			foreach (var teamBlock in originalTeamBlocks)
+			sortedTeamBlocks.AddRange(
+				originalTeamBlocks.OrderByDescending(
+					x => RecalculateTeamBlock(x, optimizationPreferences, schedulingOptions).BlockInfo.AverageStandardDeviation));
+			return sortedTeamBlocks;
+		}
+
+		public ITeamBlockInfo RecalculateTeamBlock(ITeamBlockInfo teamBlock,
+		                                           IOptimizationPreferences optimizationPreferences,
+		                                           ISchedulingOptions schedulingOptions)
+		{
+			var standardDeviationData = new StandardDeviationData();
+
+			foreach (var matrix in teamBlock.TeamInfo.MatrixesForGroup())
 			{
-				foreach (var matrix in teamBlock.TeamInfo.MatrixesForGroup())
+				var scheduleResultDataExtractor =
+					_scheduleResultDataExtractorProvider.CreateRelativeDailyStandardDeviationsByAllSkillsExtractor(matrix,
+					                                                                                               schedulingOptions);
+				var values = scheduleResultDataExtractor.Values();
+				var periodDays = matrix.EffectivePeriodDays;
+				for (var i = 0; i < periodDays.Count; i++)
 				{
-					var scheduleResultDataExtractor =
-						_scheduleResultDataExtractorProvider.CreateRelativeDailyStandardDeviationsByAllSkillsExtractor(matrix,
-						                                                                                               schedulingOptions);
-					var values = scheduleResultDataExtractor.Values();
-					var periodDays = matrix.EffectivePeriodDays;
-					for (var i = 0; i < periodDays.Count; i++)
-					{
-						var originalArray = _lockableBitArrayFactory.ConvertFromMatrix(optimizationPreferences.DaysOff.ConsiderWeekBefore,
-						                                                               optimizationPreferences.DaysOff.ConsiderWeekAfter,
-						                                                               matrix);
-						if (originalArray.UnlockedIndexes.Contains(i) && !originalArray.DaysOffBitArray[i])
-							if (!standardDeviationData.Data.ContainsKey(periodDays[i].Day))
-								standardDeviationData.Add(periodDays[i].Day, values[i]);
-					}
+					var originalArray = _lockableBitArrayFactory.ConvertFromMatrix(optimizationPreferences.DaysOff.ConsiderWeekBefore,
+					                                                               optimizationPreferences.DaysOff.ConsiderWeekAfter,
+					                                                               matrix);
+					if (originalArray.UnlockedIndexes.Contains(i) && !originalArray.DaysOffBitArray[i])
+						if (!standardDeviationData.Data.ContainsKey(periodDays[i].Day))
+							standardDeviationData.Add(periodDays[i].Day, values[i]);
 				}
 			}
 
-			foreach (var teamBlockInfo in originalTeamBlocks)
+			var valuesOfOneBlock = new List<double?>();
+			foreach (var blockDay in teamBlock.BlockInfo.BlockPeriod.DayCollection())
 			{
-				var valuesOfOneBlock = new List<double?>();
-				foreach (var blockDay in teamBlockInfo.BlockInfo.BlockPeriod.DayCollection())
-				{
-					if (!standardDeviationData.Data.ContainsKey(blockDay)) continue;
-					var value = standardDeviationData.Data[blockDay];
-					valuesOfOneBlock.Add(value);
-				}
-				teamBlockInfo.BlockInfo.StandardDeviations = valuesOfOneBlock;
+				if (!standardDeviationData.Data.ContainsKey(blockDay)) continue;
+				var value = standardDeviationData.Data[blockDay];
+				valuesOfOneBlock.Add(value);
 			}
-			sortedTeamBlocks.AddRange(originalTeamBlocks.OrderByDescending(x => x.BlockInfo.AverageStandardDeviation));
-			return sortedTeamBlocks;
+			teamBlock.BlockInfo.StandardDeviations = valuesOfOneBlock;
+			return teamBlock;
 		}
 	}
 }

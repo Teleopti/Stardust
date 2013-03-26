@@ -18,7 +18,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 	{
 		private ITeamBlockScheduler _teamBlockScheduler;
 		private ISchedulingOptionsCreator _schedulingOptionsCreator;
-		private IPeriodValueCalculator _periodValueCalculatorForAllSkills;
 		private ISafeRollbackAndResourceCalculation _safeRollbackAndResourceCalculation;
 		private ITeamBlockIntradayDecisionMaker _teamBlockIntradayDecisionMaker;
 		private ITeamBlockClearer _teamBlockClearer;
@@ -36,7 +35,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			_teamBlockGenerator = _mocks.StrictMock<ITeamBlockGenerator>();
 			_teamBlockScheduler = _mocks.StrictMock<ITeamBlockScheduler>();
 			_schedulingOptionsCreator = _mocks.StrictMock<ISchedulingOptionsCreator>();
-			_periodValueCalculatorForAllSkills = _mocks.StrictMock<IPeriodValueCalculator>();
 			_safeRollbackAndResourceCalculation = _mocks.StrictMock<ISafeRollbackAndResourceCalculation>();
 			_teamBlockIntradayDecisionMaker = _mocks.StrictMock<ITeamBlockIntradayDecisionMaker>();
 			_teamBlockClearer = _mocks.StrictMock<ITeamBlockClearer>();
@@ -44,7 +42,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			_schedulePartModifyAndRollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
 			_restrictionChecker = new RestrictionChecker();
 			_target = new TeamBlockIntradayOptimizationService(_teamBlockGenerator, _teamBlockScheduler,
-			                                                   _schedulingOptionsCreator, _periodValueCalculatorForAllSkills,
+			                                                   _schedulingOptionsCreator, 
 			                                                   _safeRollbackAndResourceCalculation,
 			                                                   _teamBlockIntradayDecisionMaker, _restrictionOverLimitValidator,
 			                                                   _teamBlockClearer, _restrictionChecker);
@@ -73,8 +71,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 				Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences)).Return(schedulingOptions);
 				Expect.Call(_teamBlockGenerator.Generate(matrixes, selectedPeriod, persons, schedulingOptions))
 				      .Return(teamBlocks);
-				Expect.Call(_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.IntradayOptimization))
-				      .Return(0.04);
 				Expect.Call(_teamBlockIntradayDecisionMaker.Decide(teamBlocks, optimizationPreferences,
 				                                                   schedulingOptions)).Return(teamBlocks);
 				Expect.Call(() => _schedulePartModifyAndRollbackService.ClearModificationCollection());
@@ -83,11 +79,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, dateOnly, schedulingOptions, selectedPeriod,
 				                                                     persons))
 				      .Return(true);
-				Expect.Call(_restrictionOverLimitValidator.Validate(teamBlockInfo, optimizationPreferences, schedulingOptions,
+				Expect.Call(_restrictionOverLimitValidator.Validate(matrixes, optimizationPreferences, schedulingOptions,
 				                                                    _schedulePartModifyAndRollbackService, _restrictionChecker))
 				      .Return(true);
-				Expect.Call(_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.IntradayOptimization))
-					  .Return(0.05);
+				Expect.Call(_teamBlockIntradayDecisionMaker.RecalculateTeamBlock(teamBlockInfo, optimizationPreferences,
+				                                                                 schedulingOptions)).Return(teamBlockInfo);
 				Expect.Call(()=>_safeRollbackAndResourceCalculation.Execute(_schedulePartModifyAndRollbackService, schedulingOptions));
 			}
 			using (_mocks.Playback())

@@ -1,11 +1,12 @@
-﻿using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
+﻿using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 {
 	public interface ITeamBlockRestrictionOverLimitValidator
 	{
-		bool Validate(ITeamBlockInfo teamBlock,
+		bool Validate(IList<IScheduleMatrixPro> allPersonMatrixList,
 									  IOptimizationPreferences optimizationPreferences,
 									  ISchedulingOptions schedulingOptions,
 									  ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, ICheckerRestriction restrictionChecker);
@@ -29,12 +30,12 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_optimizationOverLimitByRestrictionDeciderFactory = optimizationOverLimitByRestrictionDeciderFactory;
 		}
 
-		public bool Validate(ITeamBlockInfo teamBlock,
+		public bool Validate(IList<IScheduleMatrixPro> allPersonMatrixList,
 		                     IOptimizationPreferences optimizationPreferences, 
 		                     ISchedulingOptions schedulingOptions, 
 		                     ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, ICheckerRestriction restrictionChecker)
 		{
-			foreach (var matrix in teamBlock.MatrixesForGroupAndBlock())
+			foreach (var matrix in allPersonMatrixList)
 			{
 				var originalStateContainer = _scheduleMatrixOriginalStateContainerFactory.CreateScheduleMatrixOriginalStateContainer(matrix, _scheduleDayEquator);
 				var optimizerOverLimitDecider = _optimizationOverLimitByRestrictionDeciderFactory.CreateOptimizationOverLimitByRestrictionDecider(matrix, restrictionChecker,
