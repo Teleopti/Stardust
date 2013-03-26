@@ -59,6 +59,16 @@ namespace Teleopti.Ccc.Win.Scheduling
             }
         }
 
+		public static void LockDaysForIntradayOptimization(IList<IScheduleMatrixPro> matrixList)
+		{
+			IMatrixOvertimeLocker matrixOvertimeLocker = new MatrixOvertimeLocker(matrixList);
+			matrixOvertimeLocker.Execute();
+			IMatrixNoMainShiftLocker noMainShiftLocker = new MatrixNoMainShiftLocker(matrixList);
+			noMainShiftLocker.Execute();
+			IMatrixMultipleShiftsLocker matrixMultipleShiftsLocker = new MatrixMultipleShiftsLocker(matrixList);
+			matrixMultipleShiftsLocker.Execute();
+		}
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "optimizerPreferences"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
         public static void LockDaysForDayOffOptimization(IList<IScheduleMatrixPro> matrixList, ILifetimeScope container)
         {
@@ -67,9 +77,10 @@ namespace Teleopti.Ccc.Win.Scheduling
             var schedulingOptionsCreator = new SchedulingOptionsCreator();
             var schedulingOptions = schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
 
-            IMatrixRestrictionLocker restrictionLocker = new MatrixRestrictionLocker(schedulingOptions, restrictionExtractor);
-            foreach (IScheduleMatrixPro scheduleMatrixPro in matrixList)
-                lockRestrictionDaysInMatrix(scheduleMatrixPro, restrictionLocker);
+			//Not needed anymore i think, 
+			IMatrixRestrictionLocker restrictionLocker = new MatrixRestrictionLocker(schedulingOptions, restrictionExtractor);
+			foreach (IScheduleMatrixPro scheduleMatrixPro in matrixList)
+				lockRestrictionDaysInMatrix(scheduleMatrixPro, restrictionLocker);
             IMatrixMeetingDayLocker meetingDayLocker = new MatrixMeetingDayLocker(matrixList);
             meetingDayLocker.Execute();
             IMatrixPersonalShiftLocker personalShiftLocker = new MatrixPersonalShiftLocker(matrixList);
@@ -80,15 +91,15 @@ namespace Teleopti.Ccc.Win.Scheduling
             noMainShiftLocker.Execute();
         }
 
-        private static void lockRestrictionDaysInMatrix(IScheduleMatrixPro matrix, IMatrixRestrictionLocker locker)
-        {
+		private static void lockRestrictionDaysInMatrix(IScheduleMatrixPro matrix, IMatrixRestrictionLocker locker)
+		{
 
-            IList<DateOnly> daysToLock = locker.Execute(matrix);
-            foreach (var dateOnly in daysToLock)
-            {
-                matrix.LockPeriod(new DateOnlyPeriod(dateOnly, dateOnly));
-            }
-        }
+			IList<DateOnly> daysToLock = locker.Execute(matrix);
+			foreach (var dateOnly in daysToLock)
+			{
+				matrix.LockPeriod(new DateOnlyPeriod(dateOnly, dateOnly));
+			}
+		}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public static IPeriodValueCalculator CreatePeriodValueCalculator(IAdvancedPreferences advancedPreferences,

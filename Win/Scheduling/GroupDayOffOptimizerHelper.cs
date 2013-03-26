@@ -503,7 +503,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 					_container.Resolve<ISafeRollbackAndResourceCalculation>(),
 					_container.Resolve<ITeamDayOffModifyer>(),
 					_container.Resolve<IBlockSteadyStateValidator>(),
-					_container.Resolve<ITeamBlockClearer>()
+					_container.Resolve<ITeamBlockClearer>(),
+					_container.Resolve<ITeamBlockRestrictionOverLimitValidator>(),
+					new RestrictionChecker()
 					);
 
 			IList<IDayOffTemplate> dayOffTemplates = (from item in _schedulerState.CommonStateHolder.DayOffs
