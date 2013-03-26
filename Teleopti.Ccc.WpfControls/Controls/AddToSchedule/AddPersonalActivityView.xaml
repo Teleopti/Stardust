@@ -3,10 +3,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:DateTimePeriodControl="clr-namespace:Teleopti.Ccc.WpfControls.Controls.DateTimePeriodControl"
     xmlns:UserTexts="clr-namespace:Teleopti.Ccc.UserTexts;assembly=Teleopti.Ccc.UserTexts"
-    xmlns:Converters="clr-namespace:Teleopti.Ccc.WpfControls.Converters"
-    xmlns:Views="clr-namespace:Teleopti.Ccc.WpfControls.Controls.Editor.Views"
+	xmlns:Views="clr-namespace:Teleopti.Ccc.WpfControls.Controls.Editor.Views"
     xmlns:Scheduling="clr-namespace:Teleopti.Ccc.Domain.Scheduling;assembly=Teleopti.Ccc.Domain"
     xmlns:Common="clr-namespace:Teleopti.Ccc.WpfControls.Common"
+	Loaded="AddPersonalActivityView_OnLoaded"
     >
     <UserControl.Resources>
         <Style TargetType="ComboBox" x:Key="BasicComboBox">
@@ -39,7 +39,7 @@
         <Label Grid.Row="1" Content="{x:Static UserTexts:Resources.FromColon}" Margin="1,2,1,4" />
         <Label Grid.Row="2" Content="{x:Static UserTexts:Resources.ToColon}" Margin="1,2,1,4" />
         <ComboBox Background="AliceBlue" Height="22" Width="182" HorizontalAlignment="Left" ItemsSource="{Binding Path=Payloads}" Grid.Column="1" IsSynchronizedWithCurrentItem="True"
-                  Style="{StaticResource BasicComboBox}"/>
+                  Style="{StaticResource BasicComboBox}" x:Name="Payloads"/>
         <DateTimePeriodControl:EditableDateTimePeriodView Grid.RowSpan="2" DataContext="{Binding Path=PeriodViewModel}" Grid.Row="1" Grid.Column="1">
         </DateTimePeriodControl:EditableDateTimePeriodView>
        <Common:ErrorBorder HorizontalAlignment="Stretch" 
