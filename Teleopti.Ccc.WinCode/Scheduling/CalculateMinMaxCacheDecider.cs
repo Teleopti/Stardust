@@ -36,6 +36,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 						continue;
 					
 					var bag = person.Period(date).RuleSetBag;
+					if (bag == null)
+						continue;
+
 					uniqueBags.Add(bag);
 				}
 			}
