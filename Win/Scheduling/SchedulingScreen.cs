@@ -7085,7 +7085,26 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void addStudentAvailabilityToolStripMenuItemClick(object sender, EventArgs e)
 		{
+			var selectedDay =  _scheduleView.SelectedSchedules()[0];
+			using (var view = new AgentStudentAvailabilityView(selectedDay))
+			{
+				view.ShowDialog(this);
+				updateRestrictions(view.ScheduleDay);
+			}
+		}
 
+		private void updateRestrictions(IScheduleDay scheduleDay)
+		{
+			if (_scheduleView == null || scheduleDay == null) return;
+			_scheduleView.Presenter.LastUnsavedSchedulePart = scheduleDay;
+			_scheduleView.Presenter.UpdateRestriction();
+			if (_scheduleView is AgentRestrictionsDetailView)
+			{
+				schedulerSplitters1.RecalculateRestrictions();
+				schedulerSplitters1.AgentRestrictionGrid.LoadData(schedulerSplitters1.SchedulingOptions);
+			}
+
+			enableSave();
 		}
 	}
 }

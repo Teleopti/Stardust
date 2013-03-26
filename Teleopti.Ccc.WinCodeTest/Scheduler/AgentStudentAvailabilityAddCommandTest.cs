@@ -34,10 +34,13 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		[Test]
 		public void ShouldAdd()
 		{
+			
 			using (_mock.Record())
 			{
+				bool startTimeError;
+				bool endTimeError;
 				Expect.Call(_scheduleDay.PersistableScheduleDataCollection()).Return(new ReadOnlyCollection<IPersistableScheduleData>(new List<IPersistableScheduleData>()));
-				Expect.Call(_studentAvailabilityDayCreator.CanCreate(_startTime, _endTime, false)).Return(true);
+				Expect.Call(_studentAvailabilityDayCreator.CanCreate(_startTime, _endTime, false, out startTimeError, out endTimeError)).Return(true);
 				Expect.Call(_studentAvailabilityDayCreator.Create(_scheduleDay, _startTime, _endTime, false)).Return(_studentAvailabilityDay);
 				Expect.Call(() => _scheduleDay.Add(_studentAvailabilityDay));
 			}
@@ -53,8 +56,10 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		{
 			using (_mock.Record())
 			{
+				bool startTimeError;
+				bool endTimeError;
 				Expect.Call(_scheduleDay.PersistableScheduleDataCollection()).Return(new ReadOnlyCollection<IPersistableScheduleData>(new List<IPersistableScheduleData>()));
-				Expect.Call(_studentAvailabilityDayCreator.CanCreate(_startTime, _endTime, false)).Return(false);
+				Expect.Call(_studentAvailabilityDayCreator.CanCreate(_startTime, _endTime, false, out startTimeError, out endTimeError)).Return(false);
 			}
 
 			using (_mock.Playback())

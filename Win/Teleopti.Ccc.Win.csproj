@@ -339,6 +339,9 @@
     <Compile Include="Common\Configuration\SmsSettingsControl.Designer.cs">
       <DependentUpon>SmsSettingsControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Common\Controls\OutlookTimePicker.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Common\Controls\Rows\SkillFullPeriodGridRowStaffingIssuesSummary.cs" />
     <Compile Include="Common\Controls\Rows\SkillFullPeriodGridRowStaffingIssues.cs" />
     <Compile Include="Common\Controls\Rows\SkillFullPeriodGridRowMinMaxIssuesSummary.cs" />

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.WinCode.Scheduling;
@@ -44,7 +45,11 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			using (_mock.Playback())
 			{
 				var result = _target.Create(_scheduleDay, startTime, endTime, false);
-				Assert.IsNotNull(result);	
+				Assert.IsNotNull(result);
+				var restriction = result.RestrictionCollection.FirstOrDefault();
+				Assert.IsNotNull(restriction);
+				Assert.AreEqual(startTime, restriction.StartTimeLimitation.StartTime);
+				Assert.AreEqual(endTime, restriction.EndTimeLimitation.EndTime);
 			}	
 		}
 
@@ -84,6 +89,34 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		{
 			var result = _target.Create(_scheduleDay, null, null, false);
 			Assert.IsNull(result);	
+		}
+
+		[Test]
+		public void ShouldNotValidateWhenStartIsNull()
+		{
+			bool startTimeError;
+			bool endTimeError;
+
+			var result = _target.CanCreate(null, TimeSpan.FromHours(1), false, out startTimeError, out endTimeError);
+			Assert.IsFalse(result);
+			Assert.IsTrue(startTimeError);
+		}
+
+		[Test]
+		public void ShouldNotValidateWhenEndIsNull()
+		{
+			bool startTimeError;
+			bool endTimeError;
+
+			var result = _target.CanCreate(TimeSpan.FromHours(1), null, false, out startTimeError, out endTimeError);
+			Assert.IsFalse(result);
+			Assert.IsTrue(endTimeError);
+		}
+
+		[Test, ExpectedException(typeof(ArgumentNullException))]
+		public void ShouldThrowExceptionOnNullScheduleDay()
+		{
+			_target.Create(null, null, null, false);
 		}
 	}
 }

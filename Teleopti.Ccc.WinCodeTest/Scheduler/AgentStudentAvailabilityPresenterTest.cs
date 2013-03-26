@@ -43,7 +43,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_addCommand = _mock.StrictMock<IAgentStudentAvailabilityAddCommand>();
 			_removeCommand = _mock.StrictMock<IAgentStudentAvailabilityRemoveCommand>();
 			_editCommand = _mock.StrictMock<IAgentStudentAvailabilityEditCommand>();
-
 		}
 
 		[Test]
@@ -59,7 +58,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			using (_mock.Record())
 			{
 				Expect.Call(_scheduleDay.PersistableScheduleDataCollection()).Return(new ReadOnlyCollection<IPersistableScheduleData>(new List<IPersistableScheduleData> { _studentAvailabilityDay }));
-				Expect.Call(() => _view.Update(_studentAvailabilityRestriction.StartTimeLimitation.StartTime, _studentAvailabilityRestriction.EndTimeLimitation.StartTime, false));
+				Expect.Call(() => _view.Update(_studentAvailabilityRestriction.StartTimeLimitation.StartTime, _studentAvailabilityRestriction.EndTimeLimitation.EndTime, false));
 			}
 
 			using (_mock.Playback())
@@ -75,7 +74,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			{
 				Expect.Call(() => _addCommand.Execute());
 				Expect.Call(_scheduleDay.PersistableScheduleDataCollection()).Return(new ReadOnlyCollection<IPersistableScheduleData>(new List<IPersistableScheduleData> { _studentAvailabilityDay }));
-				Expect.Call(() => _view.Update(_studentAvailabilityRestriction.StartTimeLimitation.StartTime, _studentAvailabilityRestriction.EndTimeLimitation.StartTime, false));
+				Expect.Call(() => _view.Update(_studentAvailabilityRestriction.StartTimeLimitation.StartTime, _studentAvailabilityRestriction.EndTimeLimitation.EndTime, false));
 			}
 
 			using (_mock.Playback())
@@ -107,13 +106,31 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			{
 				Expect.Call(() => _editCommand.Execute());
 				Expect.Call(_scheduleDay.PersistableScheduleDataCollection()).Return(new ReadOnlyCollection<IPersistableScheduleData>(new List<IPersistableScheduleData> { _studentAvailabilityDay }));
-				Expect.Call(() => _view.Update(_studentAvailabilityRestriction.StartTimeLimitation.StartTime, _studentAvailabilityRestriction.EndTimeLimitation.StartTime, false));
+				Expect.Call(() => _view.Update(_studentAvailabilityRestriction.StartTimeLimitation.StartTime, _studentAvailabilityRestriction.EndTimeLimitation.EndTime, false));
 			}
 
 			using (_mock.Playback())
 			{
 				_presenter.Edit(_editCommand);
 			}
+		}
+
+		[Test, ExpectedException(typeof(ArgumentNullException))]
+		public void ShouldThrowExceptionWhenNullCommandEdit()
+		{
+			_presenter.Edit(null);	
+		}
+
+		[Test, ExpectedException(typeof(ArgumentNullException))]
+		public void ShouldThrowExceptionWhenNullCommandAdd()
+		{
+			_presenter.Add(null);
+		}
+
+		[Test, ExpectedException(typeof(ArgumentNullException))]
+		public void ShouldThrowExceptionWhenNullCommandRemove()
+		{
+			_presenter.Remove(null);
 		}
 	}
 }

@@ -7,6 +7,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 	public interface IAgentStudentAvailabilityPresenter
 	{
 		void Add(IAgentStudentAvailabilityAddCommand addCommand);
+		void Edit(IAgentStudentAvailabilityEditCommand editCommand);
+		void Remove(IAgentStudentAvailabilityRemoveCommand removeCommand);
+		void UpdateView();
+		IScheduleDay ScheduleDay { get; }
 	}
 
 	public class AgentStudentAvailabilityPresenter : IAgentStudentAvailabilityPresenter
@@ -71,7 +75,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					if (restriction != null)
 					{
 						startTime = restriction.StartTimeLimitation.StartTime;
-						endTime = restriction.EndTimeLimitation.StartTime;
+						endTime = restriction.EndTimeLimitation.EndTime;
 						if (startTime.HasValue && endTime.HasValue && startTime.Value > endTime.Value)
 							endNextDay = true;
 					}
@@ -79,6 +83,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			}
 
 			_view.Update(startTime, endTime, endNextDay);
-		}	
+		}
 	}
 }

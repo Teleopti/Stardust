@@ -42,7 +42,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				if (persistableScheduleData is IStudentAvailabilityDay) return false;
 			}
 
-			if (!_studentAvailabilityDayCreator.CanCreate(_startTime, _endTime, _endNextDay)) return false;
+			bool startTimeError;
+			bool endTimeError;
+			if (!_studentAvailabilityDayCreator.CanCreate(_startTime, _endTime, _endNextDay, out startTimeError, out endTimeError)) return false;
 
 			return true;
 		}
