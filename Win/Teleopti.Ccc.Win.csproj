@@ -2467,6 +2467,12 @@
     <Compile Include="Shifts\PromptDialog.Designer.cs">
       <DependentUpon>PromptDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="Shifts\ShiftGenerationStatus.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Shifts\ShiftGenerationStatus.Designer.cs">
+      <DependentUpon>ShiftGenerationStatus.cs</DependentUpon>
+    </Compile>
     <Compile Include="Shifts\ShiftsModule.cs" />
     <Compile Include="Shifts\ShiftsNavigationPanel.cs">
       <SubType>UserControl</SubType>
@@ -3618,6 +3624,9 @@
     <EmbeddedResource Include="Shifts\PromptDialog.resx">
       <DependentUpon>PromptDialog.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Shifts\ShiftGenerationStatus.resx">
+      <DependentUpon>ShiftGenerationStatus.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Shifts\ShiftsNavigationPanel.resx">
       <DependentUpon>ShiftsNavigationPanel.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -3630,6 +3639,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\warning.png" />
     <None Include="Resources\XSDSchema_GraphLeftToRight.png" />
     <None Include="..\Teleopti.Ccc.snk">
       <Link>Teleopti.Ccc.snk</Link>
@@ -3639,6 +3649,7 @@
     <None Include="Resources\ccc_Activities_settings2.png" />
     <None Include="Resources\avaya_ccc.png" />
     <None Include="Resources\16x16empty.png" />
+    <None Include="Resources\animated circle.bmp" />
     <Content Include="Resources\Browse.png" />
     <Content Include="Resources\bullet_black.png" />
     <Content Include="Resources\bullet_white.png" />
@@ -3894,6 +3905,7 @@
     <Content Include="Resources\ccc_validation.png" />
     <None Include="Resources\forecaster.ico" />
     <None Include="Resources\desktop.png" />
+    <None Include="Resources\circle-ball-dark-antialiased.gif" />
     <Content Include="Resources\double_arrow_down.png" />
     <Content Include="Resources\double_arrow_up.png" />
     <Content Include="Resources\heart_8x8.png" />

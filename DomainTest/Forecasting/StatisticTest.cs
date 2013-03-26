@@ -230,8 +230,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Expect.Call(skillStaffPeriod1.ActiveAgentCount).Return(new ActiveAgentCount()).PropertyBehavior().Repeat.Once();
             Expect.Call(skillStaffPeriod2.ActiveAgentCount).Return(new ActiveAgentCount()).PropertyBehavior().Repeat.Once();
 
-            Expect.Call(skillStaffPeriod1.Parent).Return(skillDay).Repeat.Once();
-            Expect.Call(skillStaffPeriod2.Parent).Return(skillDay).Repeat.Once();
+            Expect.Call(skillStaffPeriod1.SkillDay).Return(skillDay).Repeat.Once();
+            Expect.Call(skillStaffPeriod2.SkillDay).Return(skillDay).Repeat.Once();
 
             Expect.Call(skillDay.Skill).Return(_skill).Repeat.AtLeastOnce();
             Expect.Call(skillDay.SkillDayCalculator).Return(skillDayCalculator).Repeat.Twice();
@@ -287,8 +287,8 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             Expect.Call(skillStaffPeriod1.ActiveAgentCount).Return(new ActiveAgentCount()).PropertyBehavior().Repeat.Once();
             Expect.Call(skillStaffPeriod2.ActiveAgentCount).Return(new ActiveAgentCount()).PropertyBehavior().Repeat.Once();
 
-            Expect.Call(skillStaffPeriod1.Parent).Return(skillDay).Repeat.Once();
-            Expect.Call(skillStaffPeriod2.Parent).Return(skillDay).Repeat.Once();
+            Expect.Call(skillStaffPeriod1.SkillDay).Return(skillDay).Repeat.Once();
+            Expect.Call(skillStaffPeriod2.SkillDay).Return(skillDay).Repeat.Once();
 
             Expect.Call(skillDay.Skill).Return(_skill).Repeat.AtLeastOnce();
             Expect.Call(skillDay.SkillDayCalculator).Return(skillDayCalculator).Repeat.Twice();

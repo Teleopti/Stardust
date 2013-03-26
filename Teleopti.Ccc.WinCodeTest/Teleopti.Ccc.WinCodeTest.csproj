@@ -649,6 +649,7 @@
     <Compile Include="Security\PasswordPolicyServiceViewModelTest.cs" />
     <Compile Include="Settings\AbsenceViewTest.cs" />
     <Compile Include="Settings\PageHelperTest.cs" />
+    <Compile Include="ShiftCreator\WorkShiftAddCallbackTest.cs" />
     <Compile Include="Shifts\AbsolutePositionViewModelTest.cs">
       <SubType>Code</SubType>
     </Compile>

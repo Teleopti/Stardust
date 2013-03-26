@@ -446,5 +446,16 @@ namespace Teleopti.Interfaces.Domain
         /// Clears the intra interval distribution.
         /// </summary>
         void ClearIntraIntervalDistribution();
+
+	    /// <summary>
+	    /// Set the skillday the period belongs to
+	    /// </summary>
+	    /// <param name="skillDay"></param>
+	    void SetSkillDay(ISkillDay skillDay);
+
+		/// <summary>
+		/// The skillday the period belongs to
+		/// </summary>
+		ISkillDay SkillDay { get; }
     }
 }

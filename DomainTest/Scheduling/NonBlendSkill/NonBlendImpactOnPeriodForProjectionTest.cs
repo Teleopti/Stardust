@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
 		private ISkill _skillCarnaby;
 		private ISkill _skillPhone;
 
-		[SetUp]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
 		public void Setup()
 		{
             _target = new NonBlendSkillImpactOnPeriodForProjection();
@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
 			ISkillDay skillDay = new SkillDay(new DateOnly(2010, 1, 1), _skillCarnaby,
 											  ScenarioFactory.CreateScenarioAggregate(), new List<IWorkloadDay>(),
 											  new List<ISkillDataPeriod>());
-			_skillStaffPeriod.SetParent(skillDay);
+			_skillStaffPeriod.SetSkillDay(skillDay);
 		}
 
 		[Test]
@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
 			ISkillDay skillDay = new SkillDay(new DateOnly(2010, 1, 1), _skillPhone,
 											  ScenarioFactory.CreateScenarioAggregate(), new List<IWorkloadDay>(),
 											  new List<ISkillDataPeriod>());
-			_skillStaffPeriod.SetParent(skillDay);
+			_skillStaffPeriod.SetSkillDay(skillDay);
             double result = _target.CalculatePeriod(_skillStaffPeriod, _shiftList, _skillPhone);
 			Assert.AreEqual(0, result);
 		}

@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             DateTimePeriod period2 =
                 new DateTimePeriod(new DateTime(2002, 1, 1, 0, 0, 0, DateTimeKind.Utc),
                                    new DateTime(2003, 1, 1, 0, 0, 0, DateTimeKind.Utc));
-            target.SetId(Guid.NewGuid());
+            
             target.LayerCollection.Add(new WorkShiftActivityLayer(ActivityFactory.CreateActivity("hej"), period1));
             target.LayerCollection.Add(new WorkShiftActivityLayer(ActivityFactory.CreateActivity("hej"), period2));
             WorkShift clone = (WorkShift) target.Clone();
@@ -72,8 +72,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
             Assert.AreSame(target.LayerCollection[1].Payload, clone.LayerCollection[1].Payload);
             Assert.AreEqual(target.LayerCollection[0].Period, clone.LayerCollection[0].Period);
             Assert.AreEqual(target.LayerCollection[1].Period, clone.LayerCollection[1].Period);
-            //Assert.IsNull(clone.Id);
-            Assert.AreEqual(target.Id, clone.Id);
         }
 
         /// <summary>

@@ -313,6 +313,7 @@
     <Content Include="Resources\Teleoptibkgrnd2.bmp" />
     <Content Include="Resources\Teleoptibkgrnd3.bmp" />
     <Content Include="Resources\Users.png" />
+    <None Include="Resources\warning.png" />
     <Content Include="Resources\WorkloadSmartPart.dll" />
     <Content Include="TeleoptiCCCv7.ico" />
   </ItemGroup>

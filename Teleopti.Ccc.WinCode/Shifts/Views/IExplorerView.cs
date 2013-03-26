@@ -22,6 +22,8 @@ namespace Teleopti.Ccc.WinCode.Shifts.Views
 
         void RefreshActivityGridView();
 
+	    void RefreshVisualizeView();
+
         void AddControlHelpContext(Control control);
 
         IExplorerPresenter Presenter { get; set; }
@@ -34,5 +36,8 @@ namespace Teleopti.Ccc.WinCode.Shifts.Views
 
         void UpdateNavigationViewTreeIcons();
 
+	    void SetViewEnabled(bool enabled);
+
+	    void Activate();
     }
 }

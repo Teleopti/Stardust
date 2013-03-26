@@ -100,6 +100,7 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
         /// </remarks>
         internal override void QueryCellInfo(GridQueryCellInfoEventArgs e)
         {
+			if (Presenter.ModelCollection.Count == 0) return;
             if (ValidCell(e.ColIndex, e.RowIndex))
             {
                 GridColumns[e.ColIndex].GetCellInfo(e, Presenter.ModelCollection);

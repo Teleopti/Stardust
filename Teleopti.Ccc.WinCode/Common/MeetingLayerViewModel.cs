@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.WinCode.Common
         {
             get { return 300; }
         }
-
+		
         public override bool IsMovePermitted()
         {
             return false;

@@ -132,9 +132,9 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 				SkillStaffPeriodFactory.CreateSkillStaffPeriod(smallPeriod.MovePeriod(TimeSpan.FromMinutes(15).Add(TimeSpan.FromDays(1))),
 									 new Task(), ServiceAgreement.DefaultValues());
 
-			skillStaffPeriod1.SetParent(skillDay);
-			skillStaffPeriod2.SetParent(skillDay);
-			skillStaffPeriod3.SetParent(skillDay);
+			skillStaffPeriod1.SetSkillDay(skillDay);
+			skillStaffPeriod2.SetSkillDay(skillDay);
+			skillStaffPeriod3.SetSkillDay(skillDay);
 
 			Expect.Call(skill.Name).Return("SkillTest").Repeat.AtLeastOnce();
 			Expect.Call(skillDay.SkillStaffPeriodCollection).Return(

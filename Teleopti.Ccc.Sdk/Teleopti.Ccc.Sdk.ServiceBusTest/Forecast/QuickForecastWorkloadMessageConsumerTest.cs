@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Rhino.ServiceBus;
@@ -94,6 +95,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 			var scenario = _mocks.DynamicMock<IScenario>();
 			var skillDayCalc = _mocks.DynamicMock<ISkillDayCalculator>();
 			var totalVolume = _mocks.DynamicMock<ITotalVolume>();
+			var validatedRep = _mocks.DynamicMock<IValidatedVolumeDayRepository>();
 			var workloadDayTemplateCalculator = _mocks.DynamicMock<IWorkloadDayTemplateCalculator>();
 			var taskOwner = _mocks.DynamicMock<ITaskOwner>();
 			var teskOwners = new List<ITaskOwner> {taskOwner};
@@ -107,6 +109,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 			Expect.Call(() =>_jobResultFeedback.SetJobResult(jobResult, _messBroker));
 			Expect.Call(_scenarioRep.Get(Guid.NewGuid())).IgnoreArguments().Return(scenario);
 			Expect.Call(_forecastClassesCreator.CreateStatisticHelper(_repFactory, _unitOfWork)).Return(_statisticHelper);
+			Expect.Call(_statisticHelper.LoadStatisticData(_statPeriod, workload)).Return(new List<IWorkloadDayBase>());
+			Expect.Call(_repFactory.CreateValidatedVolumeDayRepository(_unitOfWork)).Return(validatedRep);
+
+			Expect.Call(validatedRep.FindRange(_statPeriod, workload)).Return(new Collection<IValidatedVolumeDay>());
+			Expect.Call(validatedRep.MatchDays(workload, new BindingList<ITaskOwner>(), new Collection<IValidatedVolumeDay>(),
+												false)).Return(new List<ITaskOwner>()).IgnoreArguments();
+
 			Expect.Call(_statisticHelper.GetWorkloadDaysWithValidatedStatistics(_statPeriod, workload, scenario,
 			                                                                    new List<IValidatedVolumeDay>()))
 				  .Return(teskOwners);
@@ -149,9 +158,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 			Expect.Call(() => _jobResultFeedback.SetJobResult(jobResult, _messBroker));
 			Expect.Call(_scenarioRep.Get(Guid.NewGuid())).IgnoreArguments().Return(scenario);
 			Expect.Call(_forecastClassesCreator.CreateStatisticHelper(_repFactory, _unitOfWork)).Return(_statisticHelper);
-			Expect.Call(_statisticHelper.GetWorkloadDaysWithValidatedStatistics(_statPeriod, workload, scenario,
-																				new List<IValidatedVolumeDay>()))
-				  .Return(new List<ITaskOwner>());
+			Expect.Call(_statisticHelper.LoadStatisticData(_statPeriod,workload)).Return(new List<IWorkloadDayBase>());
 
 			_mocks.ReplayAll();
 			_target.Consume(_mess);

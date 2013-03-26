@@ -1,15 +1,15 @@
 using System;
-using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Common
 {
-    public abstract class Layer<T> : AggregateEntity, ILayer<T>
+    public abstract class Layer<T> : ILayer<T>
     {
         private DateTimePeriod _period;
         private T _payload;
 
-        protected Layer(T payload, DateTimePeriod period)
+	    protected Layer(T payload, DateTimePeriod period)
         {
             InParameter.NotNull("payload", payload);
             _period = period;
@@ -52,21 +52,36 @@ namespace Teleopti.Ccc.Domain.Common
                 int ret;
                 if (Parent == null)
                 {
-                    ret = -1;
+					ret = -1;
                 }
                 else
                 {
                     ret = findOrderIndex();
                 }
+	            
                 return ret;
             }
+			
         }
 
 
         private int findOrderIndex()
         {
-            return ((ILayerCollectionOwner<T>) Parent).LayerCollection.IndexOf(this);
+			return ((ILayerCollectionOwner<T>)Parent).LayerCollection.IndexOf(this);
         }
+
+		public virtual bool Equals(ILayer other)
+		{
+			if (other == null)
+				return false;
+			if (this == other)
+				return true;
+			return false;
+			//if (!other.Id.HasValue || !Id.HasValue)
+			//	return false;
+
+			//return (Id.Value == other.Id.Value);
+		}
 
         public virtual void ChangeLayerPeriodEnd(TimeSpan timeSpan)
         {
@@ -96,7 +111,22 @@ namespace Teleopti.Ccc.Domain.Common
                         Period.EndDateTime == layer.Period.StartDateTime);
         }
 
-        #region ICloneableEntity<Layer<T>> Members
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "persistedactivity")]
+		public virtual void SetParent(IEntity parent)
+		{
+			throw new NotSupportedException("Only persistedactivity layer supports parenting.");
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "persistedactivity")]
+		public virtual IEntity Parent
+	    {
+		    get
+		    {
+					throw new NotSupportedException("Only persistedactivity layer supports parenting."); 
+		    }
+	    }
+
+	    #region ICloneableEntity<Layer<T>> Members
 
         public virtual object Clone()
         {
@@ -107,8 +137,10 @@ namespace Teleopti.Ccc.Domain.Common
 
         public virtual ILayer<T> NoneEntityClone()
         {
-            Layer<T> retObj = (Layer<T>)MemberwiseClone();
-            ((IEntity)retObj).SetId(null);
+            var retObj = (Layer<T>)MemberwiseClone();
+	        var entity = retObj as IEntity;
+			if(entity != null)
+				entity.SetId(null);
             return retObj;
         }
 

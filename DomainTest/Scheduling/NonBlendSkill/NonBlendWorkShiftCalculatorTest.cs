@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
 			ISkillDay skillDay = SkillDayFactory.CreateSkillDay(_skill, dateTime);
 			ISkillStaffPeriod skillStaffPeriod1 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(_skill, dateTime, 60, 20, 20);
 			
-			skillStaffPeriod1.SetParent(skillDay);
+			skillStaffPeriod1.SetSkillDay(skillDay);
 			ISkillStaffPeriodDictionary skillStaffPeriodDictionary = new SkillStaffPeriodDictionary(_skill)
 			                                                             {{dateTimePeriod, skillStaffPeriod1}};
 		    IDictionary<ISkill, ISkillStaffPeriodDictionary> dic = new Dictionary<ISkill, ISkillStaffPeriodDictionary>
@@ -84,8 +84,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
             ISkillStaffPeriod skillStaffPeriod1 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(_skill, dateTime, 60, 20, 20);
             ISkillStaffPeriod skillStaffPeriod2 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(skill2, dateTime, 60, 10, 10);
 
-            skillStaffPeriod1.SetParent(skillDay);
-            skillStaffPeriod2.SetParent(skillDay2);
+            skillStaffPeriod1.SetSkillDay(skillDay);
+			skillStaffPeriod2.SetSkillDay(skillDay2);
             ISkillStaffPeriodDictionary skillStaffPeriodDictionary = new SkillStaffPeriodDictionary(_skill) { { dateTimePeriod, skillStaffPeriod1 } };
             ISkillStaffPeriodDictionary skillStaffPeriodDictionary2 = new SkillStaffPeriodDictionary(skill2) { { dateTimePeriod, skillStaffPeriod2 } };
 
@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
             ISkillDay skillDay = SkillDayFactory.CreateSkillDay(_skill, dateTime);
             ISkillStaffPeriod skillStaffPeriod1 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(_skill, dateTime, 60, 20, 20);
 
-            skillStaffPeriod1.SetParent(skillDay);
+			skillStaffPeriod1.SetSkillDay(skillDay);
             ISkillStaffPeriodDictionary skillStaffPeriodDictionary = new SkillStaffPeriodDictionary(_skill) { { dateTimePeriod, skillStaffPeriod1 } };
             IDictionary<ISkill, ISkillStaffPeriodDictionary> dic = new Dictionary<ISkill, ISkillStaffPeriodDictionary> { { _skill, skillStaffPeriodDictionary } };
             var visualLayerCollection = _mocks.StrictMock<IVisualLayerCollection>();
@@ -155,8 +155,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
 			var dateTimePeriod = new DateTimePeriod(dateTime, dateTime.AddHours(1));
 			ISkillDay skillDay = SkillDayFactory.CreateSkillDay(_skill, dateTime);
 			ISkillStaffPeriod skillStaffPeriod1 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(_skill, dateTime, 60, 20, 20);
-			
-			skillStaffPeriod1.SetParent(skillDay);
+
+			skillStaffPeriod1.SetSkillDay(skillDay);
 			ISkillStaffPeriodDictionary skillStaffPeriodDictionary = new SkillStaffPeriodDictionary(_skill)
 			                                                             {{dateTimePeriod, skillStaffPeriod1}};
 		    IDictionary<ISkill, ISkillStaffPeriodDictionary> dic = new Dictionary<ISkill, ISkillStaffPeriodDictionary>
@@ -186,8 +186,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.NonBlendSkill
 			var dateTimePeriod = new DateTimePeriod(dateTime, dateTime.AddHours(1));
 			ISkillDay skillDay = SkillDayFactory.CreateSkillDay(_skill, dateTime);
 			ISkillStaffPeriod skillStaffPeriod1 = SkillStaffPeriodFactory.CreateSkillStaffPeriod(_skill, dateTime, 60, 20, 20);
-			
-			skillStaffPeriod1.SetParent(skillDay);
+
+			skillStaffPeriod1.SetSkillDay(skillDay);
 			ISkillStaffPeriodDictionary skillStaffPeriodDictionary = new SkillStaffPeriodDictionary(_skill)
 			                                                             {{dateTimePeriod, skillStaffPeriod1}};
 		    IDictionary<ISkill, ISkillStaffPeriodDictionary> dic = new Dictionary<ISkill, ISkillStaffPeriodDictionary>
