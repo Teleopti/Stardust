@@ -24,11 +24,6 @@ namespace Teleopti.Analytics.PM.PMServiceHost
         [OperationBehavior(Impersonation = ImpersonationOption.Allowed)]
         public ResultDto AddUsersToSynchronize(UserDto[] users)
         {
-			if (!PermissionInformation.IsPmAuthenticationWindows)
-			{
-				return new ResultDto { Success = true };
-			}
-
             var resultDto = new ResultDto {Success = false};
 
             if (_clientUsersToSynchronize == null)
