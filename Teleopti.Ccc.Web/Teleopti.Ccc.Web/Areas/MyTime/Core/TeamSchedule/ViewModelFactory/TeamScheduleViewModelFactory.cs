@@ -70,34 +70,38 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 		{
 			var groupPages = _groupingReadOnlyRepository.AvailableGroupPages().Select(
 				p =>
+				{
+					if (p.PageName.StartsWith("xx", StringComparison.OrdinalIgnoreCase))
 					{
-						if (p.PageName.StartsWith("xx", StringComparison.OrdinalIgnoreCase))
-						{
-							p.PageName = Resources.ResourceManager.GetString(p.PageName.Substring(2));
-						}
-						return new SelectSelectGroup {text = p.PageName, PageId = p.PageId};
-					}).ToList();
+						p.PageName = Resources.ResourceManager.GetString(p.PageName.Substring(2));
+					}
+					return new SelectSelectGroup { text = p.PageName, PageId = p.PageId };
+				}).ToList();
+
+
+			var details = _groupingReadOnlyRepository.AvailableGroups(date);
 
 			foreach (var page in groupPages)
 			{
-				var details = _groupingReadOnlyRepository.AvailableGroups(new ReadOnlyGroupPage {PageId = page.PageId}, date);
 
 				var detailsByGroup = from d in details
-				                     group d by new {d.GroupId, d.GroupName}
-				                     into g
-				                     select g;
+									 where d.PageId.Equals(page.PageId)
+									 group d by new { d.GroupId, d.GroupName }
+										 into g
+										 select g;
 
 				var groups = detailsByGroup.Where(
 					p => p.Any(d =>
-					           _permissionProvider.HasOrganisationDetailPermission(
-						           DefinedRaptorApplicationFunctionPaths.ViewSchedules,
-						           date, d))).Select(
-							           p =>
-							           new SelectOptionItem {text = p.Key.GroupName, id = p.Key.GroupId.ToString()});
+							   _permissionProvider.HasOrganisationDetailPermission(
+								   DefinedRaptorApplicationFunctionPaths.ViewSchedules,
+								   date, d))).Select(
+									   p =>
+									   new SelectOptionItem { text = p.Key.GroupName, id = p.Key.GroupId.ToString() });
 				page.children = groups.ToArray();
 			}
 
 			return groupPages;
+
 		}
 	}
 }
