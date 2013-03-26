@@ -15,13 +15,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 	public class TeamBlockClearer : ITeamBlockClearer
 	{
-		private readonly ISchedulingResultStateHolder _stateHolder;
 		private readonly IDeleteAndResourceCalculateService _deleteAndResourceCalculateService;
 
-		public TeamBlockClearer(ISchedulingResultStateHolder stateHolder,
-		                        IDeleteAndResourceCalculateService deleteAndResourceCalculateService)
+		public TeamBlockClearer(IDeleteAndResourceCalculateService deleteAndResourceCalculateService)
 		{
-			_stateHolder = stateHolder;
 			_deleteAndResourceCalculateService = deleteAndResourceCalculateService;
 		}
 
@@ -33,20 +30,32 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 			foreach (var person in teamBlock.TeamInfo.GroupPerson.GroupMembers)
 			{
-				IScheduleRange range = _stateHolder.Schedules[person];
-				foreach (var dateOnly in teamBlock.BlockInfo.BlockPeriod.DayCollection())
-				{
-					IScheduleDay scheduleDay = range.ScheduledDay(dateOnly);
-					SchedulePartView significant = scheduleDay.SignificantPart();
-					if (significant != SchedulePartView.FullDayAbsence && significant != SchedulePartView.DayOff &&
-					    significant != SchedulePartView.ContractDayOff)
-						toRemove.Add(scheduleDay);
-				}
+				addDaysToRemove(teamBlock, person, toRemove);
 			}
 
 			_deleteAndResourceCalculateService.DeleteWithResourceCalculation(toRemove,
 			                                                                 schedulePartModifyAndRollbackService,
 			                                                                 schedulingOptions.ConsiderShortBreaks);
+		}
+
+		private static void addDaysToRemove(ITeamBlockInfo teamBlock, IPerson person, IList<IScheduleDay> toRemove)
+		{
+			foreach (var dateOnly in teamBlock.BlockInfo.BlockPeriod.DayCollection())
+			{
+				IScheduleMatrixPro matrix = teamBlock.TeamInfo.MatrixesForMemberAndDate(person, dateOnly);
+				if (matrix == null)
+					continue;
+
+				IScheduleDayPro scheduleDayPro = matrix.GetScheduleDayByKey(dateOnly);
+				if (!matrix.UnlockedDays.Contains(scheduleDayPro))
+					continue;
+
+				IScheduleDay scheduleDay = scheduleDayPro.DaySchedulePart();
+				SchedulePartView significant = scheduleDay.SignificantPart();
+				if (significant != SchedulePartView.FullDayAbsence && significant != SchedulePartView.DayOff &&
+				    significant != SchedulePartView.ContractDayOff)
+					toRemove.Add(scheduleDay);
+			}
 		}
 	}
 }
