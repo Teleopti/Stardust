@@ -38,6 +38,7 @@ Scenario: Henkes testscenario for setting up budgetgroups
 	When I view my week schedule for date '2013-02-15'
 	Then I should see an indication of the amount of agents that can go on holiday on each day of the week
 
+@ignore
 Scenario: Do not show indication of the amount of agents that can go on holiday if no permission to absence request
 	Given I have the role 'No access to absence requests'
 	When I view my week schedule for date '2013-02-15'

@@ -210,7 +210,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			var indicators = Pages.Pages.WeekSchedulePage.AbsenceIndiciators();
 			foreach (var indicator in indicators)
 			{
-				EventualAssert.That(indicator.IsDisplayed, Is.False);
+				EventualAssert.That(()=>indicator.IsDisplayed(), Is.False);
 			}
 		}
 
@@ -220,7 +220,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			var indicators = Pages.Pages.WeekSchedulePage.AbsenceIndiciators();
 			foreach (var indicator in indicators)
 			{
-				EventualAssert.That(indicator.IsDisplayed, Is.True);
+				EventualAssert.That(()=>indicator.IsDisplayed(), Is.True);
 			}
 		}
 
