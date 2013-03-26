@@ -19828,6 +19828,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Selected absences.
+        /// </summary>
+        public static string SelectedAbsences {
+            get {
+                return ResourceManager.GetString("SelectedAbsences", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Selected Activities.
         /// </summary>
         public static string SelectedActivities {
