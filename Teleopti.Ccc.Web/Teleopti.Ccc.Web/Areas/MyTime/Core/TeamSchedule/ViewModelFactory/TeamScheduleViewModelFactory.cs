@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 		private readonly ITeamProvider _teamProvider;
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly IGroupingReadOnlyRepository _groupingReadOnlyRepository;
+		private const string PageMain = "6CE00B41-0722-4B36-91DD-0A3B63C545CF";
 
 		public TeamScheduleViewModelFactory(IMappingEngine mapper, ITeamProvider teamProvider, IPermissionProvider permissionProvider, IGroupingReadOnlyRepository groupingReadOnlyRepository)
 		{
@@ -70,38 +71,50 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 		{
 			var groupPages = _groupingReadOnlyRepository.AvailableGroupPages().Select(
 				p =>
-				{
-					if (p.PageName.StartsWith("xx", StringComparison.OrdinalIgnoreCase))
 					{
-						p.PageName = Resources.ResourceManager.GetString(p.PageName.Substring(2));
-					}
-					return new SelectSelectGroup { text = p.PageName, PageId = p.PageId };
-				}).ToList();
+						if (p.PageName.StartsWith("xx", StringComparison.OrdinalIgnoreCase))
+						{
+							p.PageName = Resources.ResourceManager.GetString(p.PageName.Substring(2));
+						}
+						return new SelectSelectGroup {text = p.PageName, PageId = p.PageId};
+					}).ToList();
 
 
-			var details = _groupingReadOnlyRepository.AvailableGroups(date);
+			var details = _groupingReadOnlyRepository.AvailableGroups(date).ToArray();
 
 			foreach (var page in groupPages)
 			{
+				var pageId = page.PageId;
 
-				var detailsByGroup = from d in details
-									 where d.PageId.Equals(page.PageId)
-									 group d by new { d.GroupId, d.GroupName }
-										 into g
-										 select g;
-
-				var groups = detailsByGroup.Where(
-					p => p.Any(d =>
-							   _permissionProvider.HasOrganisationDetailPermission(
-								   DefinedRaptorApplicationFunctionPaths.ViewSchedules,
-								   date, d))).Select(
-									   p =>
-									   new SelectOptionItem { text = p.Key.GroupName, id = p.Key.GroupId.ToString() });
-				page.children = groups.ToArray();
+				if (pageId.ToString().ToUpperInvariant() == PageMain)
+				{
+					constructOptions(date, page, details, pageId, "");
+				}
+				else
+				{
+					var prefix = page.text + "/";
+					constructOptions(date, page, details, pageId, prefix);
+				}
 			}
 
 			return groupPages;
+		}
 
+		private void constructOptions(DateOnly date, SelectSelectGroup page, IEnumerable<ReadOnlyGroupDetail> details, Guid pageId, string prefix)
+		{
+			var detailsByGroup = from d in details
+			                     where d.PageId == pageId
+			                     group d by new {d.GroupId, GroupName = prefix + d.GroupName}
+			                     into g
+			                     select g;
+			var groups = detailsByGroup.Where(
+				p => p.Any(d =>
+				           _permissionProvider.HasOrganisationDetailPermission(
+					           DefinedRaptorApplicationFunctionPaths.ViewSchedules,
+					           date, d))).Select(
+						           p =>
+						           new SelectOptionItem {text = p.Key.GroupName, id = p.Key.GroupId.ToString()});
+			page.children = groups.ToArray();
 		}
 	}
 }
