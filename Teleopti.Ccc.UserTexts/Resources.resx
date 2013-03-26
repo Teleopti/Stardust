@@ -11258,4 +11258,8 @@ These options are activated:
     <value>Date To (shifts starting):</value>
     <comment>Date To (shifts starting):</comment>
   </data>
+  <data name="SelectedAbsences" xml:space="preserve">
+    <value>Selected absences</value>
+    <comment>Selected absences</comment>
+  </data>
 </root>
