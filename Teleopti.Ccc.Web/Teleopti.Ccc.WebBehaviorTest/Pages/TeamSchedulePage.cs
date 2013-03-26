@@ -105,6 +105,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 			return from item in items select item.Div(QuicklyFind.ByClass("select2-result-label")).Text;
 		}
 
+		public ListItem TeamPickerListItemByText(string text)
+		{
+			var items = Document.ListItems.Filter(QuicklyFind.ByClass("select2-result-selectable"));
+			return items.First(x => x.Children().First().InnerHtml.Contains(text));
+		}
+
 		public Link TeamPickerSelectLink()
 		{
 			return TeamPickerSelectDiv.Link(QuicklyFind.ByClass("select2-choice"));
