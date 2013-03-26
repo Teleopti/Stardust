@@ -313,5 +313,30 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Assert.IsFalse(_schedulingOptions.UseStudentAvailability);
         }
 
+        [Test]
+        public void VerifyLevellingOptions()
+        {
+            _optimizationPreferences.Extra.UseLevellingOption = true;
+            _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
+            Assert.IsTrue(_schedulingOptions.UseLevellingPerOption );
+
+            _optimizationPreferences.Extra.UseLevellingSameEndTime  = false;
+            _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
+            Assert.IsFalse(_schedulingOptions.UseLevellingSameEndTime);
+
+            _optimizationPreferences.Extra.UseLevellingSameShift  = false ;
+            _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
+            Assert.IsFalse(_schedulingOptions.UseLevellingSameShift);
+
+            _optimizationPreferences.Extra.UseLevellingSameShiftCategory  = true;
+            _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
+            Assert.IsTrue(_schedulingOptions.UseLevellingSameShiftCategory);
+
+            _optimizationPreferences.Extra.UseLevellingSameStartTime  = true;
+            _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
+            Assert.IsTrue(_schedulingOptions.UseLevellingSameStartTime);
+
+        }
+
     }
 }

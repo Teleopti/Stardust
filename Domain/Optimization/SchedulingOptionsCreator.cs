@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             schedulingOptions.ConsiderShortBreaks = optimizationPreferences.Rescheduling.ConsiderShortBreaks;
             schedulingOptions.OnlyShiftsWhenUnderstaffed = optimizationPreferences.Rescheduling.OnlyShiftsWhenUnderstaffed;
 
-           
+            setLevellingOptions(optimizationPreferences, schedulingOptions);
 
             return schedulingOptions;
         }
@@ -119,6 +119,16 @@ namespace Teleopti.Ccc.Domain.Optimization
             double value = optimizationPreferences.General.StudentAvailabilitiesValue;
 
             schedulingOptions.UseStudentAvailability = use && value == 1d;
+        }
+
+        private static void setLevellingOptions(IOptimizationPreferences optimizationPreferences,
+                                                ISchedulingOptions schedulingOptions)
+        {
+            schedulingOptions.UseLevellingPerOption = optimizationPreferences.Extra.UseLevellingOption;
+            schedulingOptions.UseLevellingSameEndTime = optimizationPreferences.Extra.UseLevellingSameEndTime;
+            schedulingOptions.UseLevellingSameStartTime = optimizationPreferences.Extra.UseLevellingSameStartTime;
+            schedulingOptions.UseLevellingSameShift = optimizationPreferences.Extra.UseLevellingSameShift;
+            schedulingOptions.UseLevellingSameShiftCategory = optimizationPreferences.Extra.UseLevellingSameShiftCategory;
         }
     }
 }
