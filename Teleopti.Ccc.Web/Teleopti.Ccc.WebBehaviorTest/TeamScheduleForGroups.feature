@@ -60,13 +60,13 @@ Scenario: View available custom group options
 	When I view team schedule for '2013-03-25' with read model updated
 	And I open the team-picker
 	Then I should see available group options
-	| Value                                          |
-	| Common Site/Team green                         |
-	| Common Site/Team red                           |
-	| Contract/Common contract                       |
-	| Contract/8 hours a day                         |
-	| Contract Schedule/Common contract schedule     |
-	| Part-Time Percentage/Common PartTimePercentage |
+	| Value                                    |
+	| Common Site/Team green                   |
+	| Common Site/Team red                     |
+	| Kontrakt/Common contract                 |
+	| Kontrakt/8 hours a day                   |
+	| Kontraktsschema/Common contract schedule |
+	| Deltidsprocent/Common PartTimePercentage |
 
 Scenario: View group schedule
 	Given I have the role 'Access to view all group pages'
@@ -86,8 +86,7 @@ Scenario: View group schedule
 	| EndTime        | 2013-03-25 20:00 |
 	| Shift category | Day              |
 	When I view team schedule for '2013-03-25' with read model updated
-	#And I select 'Contract/Common contract' in the team picker
-	And I select 'Common contract' in the team picker
+	And I select 'Contract/Common contract' in the team picker
 	Then I should see my schedule
 	And I should see 'John Smith' schedule
 	And I should not see 'Pierre Baldi' schedule
