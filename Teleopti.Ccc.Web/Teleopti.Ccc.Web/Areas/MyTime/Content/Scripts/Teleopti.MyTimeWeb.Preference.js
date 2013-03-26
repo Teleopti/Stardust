@@ -1,13 +1,13 @@
 ﻿/// <reference path="~/Content/Scripts/jquery-1.9.1-vsdoc.js" />
 /// <reference path="~/Content/Scripts/jquery-1.9.1.js" />
-/// <reference path="~/Content/Scripts/jquery-ui-1.8.16.js" />
+/// <reference path="~/Content/Scripts/jquery-ui-1.10.2.js" />
 /// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Preference.AddExtendedPreferenceFormViewModel.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Preference.DayViewModel.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Preference.PreferencesAndScheduleViewModel.js" />
-/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Preference.MustHaveCountViewModel.js" />
+/// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Preference.SelectionViewModel.js" />
 
 
 if (typeof (Teleopti) === 'undefined') {
@@ -24,7 +24,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 	var addExtendedTooltip = null;
 	var addExtendedPreferenceFormViewModel = null;
 	var preferencesAndScheduleViewModel = null;
-	var mustHaveCountViewModel = null;
+	var selectionViewModel = null;
 	var readyForInteraction = function () { };
 	var completelyLoaded = function () { };
 
@@ -35,12 +35,14 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 	if (ajax.CallWhenAllAjaxCompleted)
 		callWhenAjaxIsCompleted = ajax.CallWhenAllAjaxCompleted;
 
-
-
 	function _initPeriodSelection() {
-		var rangeSelectorId = '#PreferenceDateRangeSelector';
-		var periodData = $('#Preference-body').data('mytime-periodselection');
-		portal.InitPeriodSelection(rangeSelectorId, periodData);
+	    var periodData = $('#Preference-body').data('mytime-periodselection');
+	    selectionViewModel.displayDate(periodData.Display);
+	    selectionViewModel.nextPeriodDate(moment(periodData.PeriodNavigation.NextPeriod));
+	    selectionViewModel.previousPeriodDate(moment(periodData.PeriodNavigation.PrevPeriod));
+	    selectionViewModel.setCurrentDate(moment(periodData.Date));
+
+	    ko.applyBindings(selectionViewModel, $('div.navbar')[1]);
 	}
 
 	function _initSplitButton() {
@@ -281,21 +283,6 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 		});
 	}
 
-	function _initMustHaveButton() {
-		$('#Preference-must-have-button')
-			.click(function () {
-				_setMustHave(true);
-			})
-			.removeAttr("disabled")
-			;
-		$('#Preference-must-have-delete-button')
-			.click(function () {
-				_setMustHave(false);
-			})
-			.removeAttr("disabled")
-			;
-	}
-
 	function _hideAddExtendedTooltip() {
 		addExtendedTooltip.qtip('toggle', false);
 	}
@@ -352,18 +339,12 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 		var to = $('li[data-mytime-date]').last().data('mytime-date');
 
 		preferencesAndScheduleViewModel = new Teleopti.MyTimeWeb.Preference.PreferencesAndSchedulesViewModel(ajax, dayViewModels);
-		mustHaveCountViewModel = new Teleopti.MyTimeWeb.Preference.MustHaveCountViewModel(dayViewModelsInPeriod, $('#Preference-body').data('mytime-maxmusthave'));
+		selectionViewModel = new Teleopti.MyTimeWeb.Preference.SelectionViewModel(dayViewModelsInPeriod, $('#Preference-body').data('mytime-maxmusthave'), _setMustHave);
 		periodFeedbackViewModel = new Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel(ajax, dayViewModelsInPeriod, date);
 
 		var periodFeedbackElement = $('#Preference-period-feedback-view')[0];
 		if (periodFeedbackElement)
 			ko.applyBindings(periodFeedbackViewModel, periodFeedbackElement);
-
-		var mustHaveTextElement = $('#Preference-must-have-numbers');
-		if (mustHaveTextElement.length > 0) {
-			mustHaveTextElement.attr("data-bind", "text: MustHaveText");
-			ko.applyBindings(mustHaveCountViewModel, mustHaveTextElement[0]);
-		}
 
 		loader = loader || function (call) { call(); };
 		loader(function () {
@@ -440,10 +421,6 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			_initSplitButton();
 			_initDeleteButton();
 			_initAddExtendedButton();
-			_initMustHaveButton();
-		},
-		InitViewModels: function () {
-			_initViewModels();
 		},
 		PreferencePartialInit: function (readyForInteractionCallback, completelyLoadedCallback) {
 			readyForInteraction = readyForInteractionCallback;
@@ -453,8 +430,8 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 				completelyLoaded();
 				return;
 			}
-			_initPeriodSelection();
 			_initViewModels(_soon);
+			_initPeriodSelection();
 			_initExtendedPanels();
 		},
 		PreferencePartialDispose: function () {
