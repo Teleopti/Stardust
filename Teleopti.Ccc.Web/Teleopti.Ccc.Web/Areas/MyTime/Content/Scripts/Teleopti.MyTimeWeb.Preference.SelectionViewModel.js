@@ -50,6 +50,10 @@ Teleopti.MyTimeWeb.Preference.SelectionViewModel = function (dayViewModels, maxM
     self.removeMustHave = function () {
         setMustHaveMethod(false);
     };
+
+    self.mustHaveEnabled = function() {
+        return self.maxMustHave() > 0;
+    };
     
     self.maxMustHave = ko.observable(maxMustHave);
     self.currentMustHaves = ko.computed(function() {
