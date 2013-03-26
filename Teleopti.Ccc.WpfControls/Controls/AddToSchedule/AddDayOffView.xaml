@@ -7,6 +7,7 @@
     xmlns:Views="clr-namespace:Teleopti.Ccc.WpfControls.Controls.Editor.Views"
     xmlns:Common1="clr-namespace:Teleopti.Ccc.WpfControls.Common"
     xmlns:Scheduling="clr-namespace:Teleopti.Ccc.Domain.Scheduling;assembly=Teleopti.Ccc.Domain"
+	Loaded="AddDayOffView_OnLoaded"
     >
     <UserControl.Resources>
         <Style TargetType="ComboBox" x:Key="BasicComboBox">
@@ -39,6 +40,6 @@
             <Label Content="{Binding Path=SelectedPeriod.LocalDateString}" Margin="1,2,1,4" />
          </StackPanel>
         <Label Grid.Row="2" Content="{x:Static UserTexts:Resources.PeriodColon}" Margin="1,2,1,4" />
-        <ComboBox Style="{StaticResource BasicComboBox}" Height="22" Width="182" HorizontalAlignment="Left" ItemsSource="{Binding Path=Payloads}" Grid.Column="1" IsSynchronizedWithCurrentItem="True"/>
+        <ComboBox Style="{StaticResource BasicComboBox}" Height="22" Width="182" HorizontalAlignment="Left" ItemsSource="{Binding Path=Payloads}" Grid.Column="1" IsSynchronizedWithCurrentItem="True" x:Name="Payloads"/>
     </Grid>
 </UserControl>
