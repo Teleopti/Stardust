@@ -36,7 +36,8 @@
                     Grid.Column="0" 
                     Margin="6,6,0,6" 
                     Content="{x:Static UserTexts:Resources.Ok}" Click="OKButton_Click" 
-                    HorizontalAlignment="Right">
+                    HorizontalAlignment="Right"
+					x:Name="OkButton">
                     <Button.IsEnabled>
                         <MultiBinding Converter="{StaticResource andConverter}" >
                             <Binding Path="PeriodViewModel.IsValid"/>

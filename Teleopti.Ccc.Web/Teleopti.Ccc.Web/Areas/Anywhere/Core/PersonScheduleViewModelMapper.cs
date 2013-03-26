@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Linq;
 using AutoMapper;
-using Newtonsoft.Json.Linq;
 using Teleopti.Ccc.Domain.Collection;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Core

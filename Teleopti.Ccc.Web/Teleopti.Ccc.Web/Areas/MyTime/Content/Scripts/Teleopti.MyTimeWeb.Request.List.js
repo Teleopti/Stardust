@@ -19,6 +19,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 
         var self = this;
 
+	    self.isProcessing = ko.observable(false);
         self.Subject = ko.observable();
         self.RequestType = ko.observable();
         self.RequestPayload = ko.observable();
@@ -98,7 +99,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
         self.ShowRequests = function (data) {
             ko.utils.arrayForEach(data, function (item) {
                 var vm = new RequestItemViewModel();
-                vm.Initialize(item);
+                vm.Initialize(item,false);
                 self.Requests.push(vm);
             });
         };
@@ -121,7 +122,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
             });
         };
 
-        self.AddRequest = function (request) {
+        self.AddRequest = function (request,isProcessing) {
             var selectedViewModel = ko.utils.arrayFirst(self.Requests(), function (item) {
                 return item.Id() == request.Id;
             });
@@ -139,7 +140,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
                 dataType: "json",
                 type: 'GET',
                 success: function (data) {
-                    selectedViewModel.Initialize(data);
+                	selectedViewModel.Initialize(data, isProcessing);
                     self.Requests.unshift(selectedViewModel);
                     self.SetSelected(selectedViewModel);
                 }
@@ -182,8 +183,9 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
     }
 
     ko.utils.extend(RequestItemViewModel.prototype, {
-        Initialize: function (data) {
-            var self = this;
+        Initialize: function (data, isProcessing) {
+        	var self = this;
+	        self.isProcessing(isProcessing);
             self.Subject(data.Subject == null ? '<br>' : data.Subject);
             self.RequestType(data.Type);
             self.Status(data.Status);
@@ -228,8 +230,8 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 
             if (element) ko.applyBindings(pageViewModel, element);
         },
-        AddItemAtTop: function (request) {
-            pageViewModel.AddRequest(request);
+        AddItemAtTop: function (request,isProcessing) {
+        	pageViewModel.AddRequest(request, isProcessing);
         }
     };
 
