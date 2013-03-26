@@ -7,6 +7,7 @@
     xmlns:Views="clr-namespace:Teleopti.Ccc.WpfControls.Controls.Editor.Views"
     xmlns:Scheduling="clr-namespace:Teleopti.Ccc.Domain.Scheduling;assembly=Teleopti.Ccc.Domain"
     xmlns:Common="clr-namespace:Teleopti.Ccc.WpfControls.Common"
+	Loaded="AddAbsenceView_OnLoaded"
     Height="Auto" Width="Auto">
 
     <UserControl.Resources>
@@ -46,7 +47,8 @@
                   ItemsSource="{Binding Path=Payloads}"
                   IsSynchronizedWithCurrentItem="True"
                   IsTextSearchEnabled="True" 
-                  TextSearch.TextPath="Description" Style="{StaticResource BasicComboBox}">
+                  TextSearch.TextPath="Description" Style="{StaticResource BasicComboBox}"
+				  x:Name="Payloads">
 
         </ComboBox>
         <DateTimePeriodControl:EditableDateTimePeriodView Grid.RowSpan="2" DataContext="{Binding Path=PeriodViewModel}" Grid.Row="1" Grid.Column="1">

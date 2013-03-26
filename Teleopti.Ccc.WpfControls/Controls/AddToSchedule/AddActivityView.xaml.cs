@@ -1,4 +1,6 @@
-﻿using System.Windows.Controls;
+﻿using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace Teleopti.Ccc.WpfControls.Controls.AddToSchedule
 {
@@ -11,5 +13,11 @@ namespace Teleopti.Ccc.WpfControls.Controls.AddToSchedule
         {
             InitializeComponent();
         }
+
+	    private void AddActivityView_OnLoaded(object sender, RoutedEventArgs e)
+	    {
+		    Payloads.Focus();
+		    Keyboard.Focus(Payloads);
+	    }
     }
 }
