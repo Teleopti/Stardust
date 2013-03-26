@@ -104,24 +104,40 @@ namespace Teleopti.Ccc.Rta.Server
 			}
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"
+			)]
 		public void ProcessScheduleUpdate(Guid personId, Guid businessUnitId, DateTime timestamp)
 		{
-			if (string.IsNullOrEmpty(_connectionStringDataStore))
+			try
 			{
-				_loggingSvc.Error("No connection information avaiable in configuration file.");
-				return;
-			}
-			_agentHandler.InvalidateReadModelCache(personId);
-			var agentState = _agentHandler.CheckSchedule(personId, businessUnitId, timestamp);
-			if (agentState == null)
-			{
-				_loggingSvc.InfoFormat("Schedule for {0} has not changed", personId);
-				return;
-			}
+				if (string.IsNullOrEmpty(_connectionStringDataStore))
+				{
+					_loggingSvc.Error("No connection information avaiable in configuration file.");
+					return;
+				}
+				_agentHandler.InvalidateReadModelCache(personId);
+				var agentState = _agentHandler.CheckSchedule(personId, businessUnitId, timestamp);
+				if (agentState == null)
+				{
+					_loggingSvc.InfoFormat("Schedule for {0} has not changed", personId);
+					return;
+				}
 
-			_loggingSvc.InfoFormat("Trying to send object {0} through Message Broker", agentState);
-			_messageSender.SendRtaData(personId, businessUnitId, agentState);
+				_loggingSvc.InfoFormat("Trying to send object {0} through Message Broker", agentState);
+				_messageSender.SendRtaData(personId, businessUnitId, agentState);
+			}
+			catch (SocketException exception)
+			{
+				_loggingSvc.Error("The message broker seems to be down.", exception);
+			}
+			catch (BrokerNotInstantiatedException exception)
+			{
+				_loggingSvc.Error("The message broker seems to be down.", exception);
+			}
+			catch (Exception exception)
+			{
+				_loggingSvc.Error("An error occured while handling RTA-Event", exception);
+			}
 		}
 
 		public bool IsAlive
@@ -131,7 +147,8 @@ namespace Teleopti.Ccc.Rta.Server
 
 		// Probably a WaitHandle object isnt a best choice, but same applies to QueueUserWorkItem method.
 		// An alternative using Tasks should be looked at instead.
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"
+			)]
 		public void ProcessRtaData(string logOn, string stateCode, TimeSpan timeInState, DateTime timestamp,
 		                           Guid platformTypeId, string sourceId, DateTime batchId, bool isSnapshot)
 		{
@@ -170,10 +187,11 @@ namespace Teleopti.Ccc.Rta.Server
 						continue;
 					}
 
-					
-					var agentState = _agentHandler.GetAndSaveState(personWithBusinessUnit.PersonId, personWithBusinessUnit.BusinessUnitId,
-					                                        platformTypeId, stateCode,
-					                                        timestamp, timeInState);
+
+					var agentState = _agentHandler.GetAndSaveState(personWithBusinessUnit.PersonId,
+					                                               personWithBusinessUnit.BusinessUnitId,
+					                                               platformTypeId, stateCode,
+					                                               timestamp, timeInState);
 					if (agentState == null)
 					{
 						_loggingSvc.WarnFormat("Could not get state for Person {0}", personWithBusinessUnit.PersonId);
@@ -190,6 +208,10 @@ namespace Teleopti.Ccc.Rta.Server
 			catch (BrokerNotInstantiatedException exception)
 			{
 				_loggingSvc.Error("The message broker seems to be down.", exception);
+			}
+			catch (Exception exception)
+			{
+				_loggingSvc.Error("An error occured while handling RTA-Event", exception);
 			}
 		}
 	}
