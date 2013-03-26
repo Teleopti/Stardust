@@ -526,7 +526,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         private void optimizeTeamBlockIntraday(DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences)
         {
             var allMatrixes = OptimizerHelperHelper.CreateMatrixListAll(_schedulerState, _container);
-			OptimizerHelperHelper.LockDaysForDayOffOptimization(allMatrixes, _container);
+			//OptimizerHelperHelper.(allMatrixes, _container);
 
             var schedulingOptionsCreator = new SchedulingOptionsCreator();
             var schedulingOptions = schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
