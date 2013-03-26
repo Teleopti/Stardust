@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
 
         public string PageName
         {
-			get { return Resources.WorkloadDayTemplates; }
+			get { return Resources.TemplatesHistoricalDataRange; }
         }
 
         public ICollection<string> ErrorMessages

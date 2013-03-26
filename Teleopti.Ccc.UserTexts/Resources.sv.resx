@@ -10849,7 +10849,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <value>Utjämning:</value>
   </data>
   <data name="TemplatesHistoricalDataRange" xml:space="preserve">
-    <value>Historikdataperiod för mallar</value>
+    <value>Välj historisk data för mallar</value>
   </data>
   <data name="ShowInfoMessages" xml:space="preserve">
     <value>Visa informationsmeddelanden</value>
@@ -10874,28 +10874,6 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
   </data>
   <data name="Name50CharactersLimit" xml:space="preserve">
     <value>Namnet får inte vara tomt eller längre än 50 tecken. </value>
-  </data>
-  <data name="CurrentNumberOfShifts" xml:space="preserve">
-    <value>Nuvarande antal skift: </value>
-    <comment>label on window showing during shift generation</comment>
-  </data>
-  <data name="GeneratingShifts" xml:space="preserve">
-    <value>Genererar skift</value>
-    <comment>Caption on window during shift generation</comment>
-  </data>
-  <data name="ShiftGenerationStop" xml:space="preserve">
-    <value>Stopp! Dessa regler är för komplexa och skiften kunde inte skapas upp i tid.
-Inga skift från denna regeluppsättning kommer vara tillgängliga för schemaläggning och optimering.
-Minska komplexiteten för att kunna använda dessa skift.</value>
-    <comment>Message in Shifts</comment>
-  </data>
-  <data name="ShiftGenerationWarning" xml:space="preserve">
-    <value>Varning! Det tar för lång tid att skapa upp skift enligt dessa regler. Det kommer påverka prestanda i schemaläggning och optimering negativt!</value>
-    <comment>warning message in window showing during shift generation</comment>
-  </data>
-  <data name="TooComplexRuleset" xml:space="preserve">
-    <value> är en för komplex regeluppsättning.</value>
-    <comment>Caption on messagebox when shift generation is stopped </comment>
   </data>
   <data name="CurrentNumberOfShifts" xml:space="preserve">
     <value>Nuvarande antal skift: </value>
@@ -10948,5 +10926,9 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   </data>
   <data name="SkillUnderStaffingValidationError" xml:space="preserve">
     <value>Förfrågan klarade inte kontrollen av underbemanning på kompetensen {0} eftersom den skulle göra att antalet resurser hamnade under det angivna tröskelvärdet.  </value>
+  </data>
+  <data name="GenerateForecastFor" xml:space="preserve">
+    <value>Generera prognos för</value>
+    <comment>Period and scenario selection in quick forecast</comment>
   </data>
 </root>

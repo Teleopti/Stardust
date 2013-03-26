@@ -75,7 +75,7 @@
 			// 
 			this.comboBoxScenario.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxScenario.FormattingEnabled = true;
-			this.comboBoxScenario.Location = new System.Drawing.Point(319, 9);
+			this.comboBoxScenario.Location = new System.Drawing.Point(325, 9);
 			this.comboBoxScenario.Margin = new System.Windows.Forms.Padding(5, 9, 6, 6);
 			this.comboBoxScenario.Name = "comboBoxScenario";
 			this.comboBoxScenario.Size = new System.Drawing.Size(166, 23);
@@ -83,11 +83,12 @@
 			// 
 			// TargetFromTo
 			// 
+			this.TargetFromTo.EnableNullDates = true;
 			this.TargetFromTo.Location = new System.Drawing.Point(3, 6);
 			this.TargetFromTo.Margin = new System.Windows.Forms.Padding(3, 6, 3, 3);
 			this.TargetFromTo.Name = "TargetFromTo";
 			this.TargetFromTo.NullString = "xxNoDateIsSelected";
-			this.TargetFromTo.Size = new System.Drawing.Size(208, 61);
+			this.TargetFromTo.Size = new System.Drawing.Size(214, 61);
 			this.TargetFromTo.TabIndex = 0;
 			this.TargetFromTo.WorkPeriodEnd = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("TargetFromTo.WorkPeriodEnd")));
 			this.TargetFromTo.WorkPeriodStart = ((Teleopti.Interfaces.Domain.DateOnly)(resources.GetObject("TargetFromTo.WorkPeriodStart")));
@@ -95,7 +96,7 @@
 			// labelScenario
 			// 
 			this.labelScenario.AutoSize = true;
-			this.labelScenario.Location = new System.Drawing.Point(217, 0);
+			this.labelScenario.Location = new System.Drawing.Point(223, 0);
 			this.labelScenario.Name = "labelScenario";
 			this.labelScenario.Padding = new System.Windows.Forms.Padding(0, 12, 0, 0);
 			this.labelScenario.Size = new System.Drawing.Size(94, 27);

@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.QuickForecast
 
         public string PageName
         {
-            get { return Resources.Forecasts; }
+            get { return Resources.GenerateForecastFor; }
         }
 
         public ICollection<string> ErrorMessages
