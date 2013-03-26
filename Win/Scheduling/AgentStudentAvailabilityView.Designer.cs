@@ -111,6 +111,7 @@
 			this.outlookTimePickerTo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
 			this.outlookTimePickerTo.DefaultResolution = 0;
 			this.outlookTimePickerTo.EnableNull = true;
+			this.outlookTimePickerTo.FormatFromCulture = true;
 			this.outlookTimePickerTo.Location = new System.Drawing.Point(80, 53);
 			this.outlookTimePickerTo.MaxTime = System.TimeSpan.Parse("23:59:00");
 			this.outlookTimePickerTo.Name = "outlookTimePickerTo";
@@ -134,6 +135,7 @@
 			this.outlookTimePickerFrom.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
 			this.outlookTimePickerFrom.DefaultResolution = 0;
 			this.outlookTimePickerFrom.EnableNull = true;
+			this.outlookTimePickerFrom.FormatFromCulture = true;
 			this.outlookTimePickerFrom.Location = new System.Drawing.Point(80, 18);
 			this.outlookTimePickerFrom.MaxTime = System.TimeSpan.Parse("23:59:00");
 			this.outlookTimePickerFrom.Name = "outlookTimePickerFrom";
@@ -193,6 +195,7 @@
 			this.ShowIcon = false;
 			this.ShowInTaskbar = false;
 			this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
+			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "xxStudentAvailability";
 			this.Load += new System.EventHandler(this.agentStudentAvailabilityViewLoad);
 			((System.ComponentModel.ISupportInitialize)(this.ribbonControlAdv1)).EndInit();
