@@ -312,5 +312,32 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			var result = _target.CurrentLayerAndNext(dateTime, scheduleLayers);
 			Assert.IsNull(result.Last());
 		}
+
+		[Test]
+		public void ShouldWorkWithNoReadModel()
+		{
+			var result = _target.CurrentLayerAndNext(DateTime.Now, new List<ScheduleLayer>());
+			Assert.IsNull(result.First());
+			Assert.IsNull(result.Last());
+		}
+
+		[Test]
+		public void ShouldWorkWhenReadModelIsOld()
+		{
+			var layers = new List<ScheduleLayer>
+				{
+					new ScheduleLayer
+						{
+							EndDateTime = _dateTime.AddDays(-1)
+						},
+					new ScheduleLayer
+						{
+							EndDateTime = _dateTime.AddDays(-1)
+						}
+				};
+			var result = _target.CurrentLayerAndNext(_dateTime, layers);
+			Assert.IsNull(result.First());
+			Assert.IsNull(result.Last());
+		}	
 	}
 }

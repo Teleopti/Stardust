@@ -4,6 +4,7 @@ using MbCache.Core;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Rta.Server;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Rta.ServerTest
 {

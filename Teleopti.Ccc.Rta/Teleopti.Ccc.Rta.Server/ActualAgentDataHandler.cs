@@ -37,11 +37,14 @@ namespace Teleopti.Ccc.Rta.Server
 
 		public IList<ScheduleLayer> CurrentLayerAndNext(DateTime onTime, IList<ScheduleLayer> layers)
 		{
+			if (!layers.Any()) return new List<ScheduleLayer> {null, null};
 			var scheduleLayers = layers.Where(l => l.EndDateTime > onTime);
 			var enumerable = scheduleLayers as IList<ScheduleLayer> ?? scheduleLayers.ToArray();
-			var scheduleLayer = enumerable[0];
+			ScheduleLayer scheduleLayer = null;
 			ScheduleLayer nextLayer = null;
-
+			if (enumerable.Any())
+				scheduleLayer = enumerable[0];
+			
 			// no layer now
 			if (scheduleLayer != null && scheduleLayer.StartDateTime > onTime)
 			{

@@ -138,6 +138,7 @@
     <Compile Include="DataSourceResolver.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="IDataSourceResolver.cs" />
+    <Compile Include="PersonStateHolder.cs" />
     <Compile Include="RealTimeContainerInstaller.cs" />
     <Compile Include="RtaDataHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
