@@ -18,29 +18,47 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		protected override void Configure()
 		{
 			CreateMap<IShiftTradeRequest, ShiftTradeSwapDetailsViewModel>()
-				.ForMember(d=>d.To,o=>o.NullSubstitute(new ShiftTradePersonScheduleViewModel()))
-				.ForMember(d=>d.From,o=>o.NullSubstitute(new ShiftTradePersonScheduleViewModel()))
+				.ForMember(d=>d.To, o=>o.NullSubstitute(new ShiftTradePersonScheduleViewModel()))
+				.ForMember(d=>d.From, o=>o.NullSubstitute(new ShiftTradePersonScheduleViewModel()))
+				.ForMember(d => d.PersonFrom, o => o.MapFrom(s => s.ShiftTradeSwapDetails.First().PersonFrom.Name.ToString()))
+				.ForMember(d => d.PersonTo, o => o.MapFrom(s => s.ShiftTradeSwapDetails.First().PersonTo.Name.ToString()))
 				.ForMember(d => d.To, o => o.MapFrom(s => s.ShiftTradeSwapDetails.First().SchedulePartTo))
 				.ForMember(d => d.From, o => o.MapFrom(s => s.ShiftTradeSwapDetails.First().SchedulePartFrom))
 				.ForMember(d=> d.TimeLineHours, o=>o.MapFrom(s=> _timelineViewModelFactory.Invoke().CreateTimeLineHours(createTimelinePeriod(s))))
 				.ForMember(d=> d.TimeLineStartDateTime, o=>o.MapFrom(s=> createTimelinePeriod(s).StartDateTime));
 		}
 
-		private static DateTimePeriod createTimelinePeriod(IShiftTradeRequest shiftTRadeRequest)
+		private static DateTimePeriod createTimelinePeriod(IShiftTradeRequest shiftTradeRequest)
 		{
-			var schedpartFrom = shiftTRadeRequest.ShiftTradeSwapDetails.First().SchedulePartFrom;
-			var schedpartTo = shiftTRadeRequest.ShiftTradeSwapDetails.First().SchedulePartTo;
+			var schedpartFrom = shiftTradeRequest.ShiftTradeSwapDetails.First().SchedulePartFrom;
+			var schedpartTo = shiftTradeRequest.ShiftTradeSwapDetails.First().SchedulePartTo;
 			if (schedpartFrom == null || schedpartTo == null)
 			{
-				return shiftTRadeRequest.Period;
+				//RK - when will this happen?
+				return shiftTradeRequest.Period;
+			}
+			const int extraHourBeforeAndAfter = 1;
+			DateTimePeriod totalPeriod;
+			var fromTotalPeriod = shiftTradeRequest.ShiftTradeSwapDetails.First().SchedulePartFrom.TotalPeriod();
+			var toTotalPeriod = shiftTradeRequest.ShiftTradeSwapDetails.First().SchedulePartTo.TotalPeriod();
+			if (fromTotalPeriod.HasValue && toTotalPeriod.HasValue)
+			{
+				totalPeriod = fromTotalPeriod.Value.MaximumPeriod(toTotalPeriod.Value);
+			}
+			else if (fromTotalPeriod.HasValue)
+			{
+				totalPeriod = fromTotalPeriod.Value;
+			}
+			else if(toTotalPeriod.HasValue)
+			{
+				totalPeriod = toTotalPeriod.Value;					
 			}
 			else
 			{
-				var fromPeriod = shiftTRadeRequest.ShiftTradeSwapDetails.First().SchedulePartFrom.Period;
-				var toPeriod = shiftTRadeRequest.ShiftTradeSwapDetails.First().SchedulePartTo.Period;
-				return fromPeriod.MaximumPeriod(toPeriod);
+				totalPeriod = shiftTradeRequest.Period;
 			}
-		
+			return new DateTimePeriod(totalPeriod.StartDateTime.AddHours(-extraHourBeforeAndAfter), 
+			                          totalPeriod.EndDateTime.AddHours(extraHourBeforeAndAfter));
 		}
 	}
 }

@@ -198,6 +198,7 @@ select.absence-input
 	height: 10px;
 	text-align: center;
 	overflow: hidden;
+	white-space: pre-wrap;
 }
 .rgba .weekview-timeline-label {
 	border: 1px solid rgba(0, 0, 0, 0.15);

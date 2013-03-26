@@ -8619,7 +8619,8 @@ Period: {3}</value>
     <value>Your absence request cannot be granted. Some dates are not open for requests at this time.</value>
   </data>
   <data name="RequestDenyReasonNoWorkflow" xml:space="preserve">
-    <value>Your absence request cannot be granted.There is no workflow connected to your account.</value>
+    <value>No Workflow Control Set defined!</value>
+    <comment>No Workflow control set defined.</comment>
   </data>
   <data name="ActivityAvailableForExtendedPreference" xml:space="preserve">
     <value>Activity available for extended preference</value>
@@ -11365,5 +11366,8 @@ Reduce the complexity to use these shifts.</value>
   <data name="TooComplexRuleset" xml:space="preserve">
     <value> is a too complex ruleset!</value>
     <comment>Caption on messagebox when shift generation is stopped </comment>
+  </data>
+  <data name="InProcess" xml:space="preserve">
+    <value>In process..</value>
   </data>
 </root>

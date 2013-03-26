@@ -6,15 +6,15 @@
 @{
 	Layout = null;
 }
-<script type="text/Html" id="request-detail-not-set">
+<script type="text/html" id="request-detail-not-set">
 	<div></div>
 </script>
 
-<script type="text/Html" id="shifttrade-request-detail-template">  
+<script type="text/html" id="shifttrade-request-detail-template">  
 	@Html.Partial("ShiftTradeRequestDetailView")
 </script>
 
-<script type="text/Html" id="text-request-detail-template">
+<script type="text/html" id="text-request-detail-template">
 	<div class="pdb5 request-detail-title">@Resources.TextRequest</div>
 			<input type="hidden" id="Request-detail-entityid" />
 
@@ -81,7 +81,7 @@
 		</div>
 </script>
 
-<script type="text/Html" id="absence-request-detail-template">
+<script type="text/html" id="absence-request-detail-template">
 	<div class="pdb5 request-detail-title">@Resources.AbsenceRequest</div>
 			<input type="hidden" id="Request-detail-entityid" />
 
@@ -148,7 +148,7 @@
 		</div>
 </script>
 
-<script type="text/Html" id="add-new-request-detail-template">
+<script type="text/html" id="add-new-request-detail-template">
 	<input id="Request-detail-today-year" type="hidden" value="@CultureInfo.CurrentCulture.Calendar.GetYear(DateTime.Today)"/>
 	<input id="Request-detail-today-month" type="hidden" value="@CultureInfo.CurrentCulture.Calendar.GetMonth(DateTime.Today)"/>
 	<input id="Request-detail-today-day" type="hidden" value="@CultureInfo.CurrentCulture.Calendar.GetDayOfMonth(DateTime.Today)"/>
@@ -255,7 +255,8 @@
 				<div class="request-details" >
 					<div>
 						<span class="request-caption">@Resources.Type: </span><span data-bind="text: Type" class="request-data-type"></span>
-						<span class="request-caption">@Resources.Status: </span><span data-bind="text: Status"></span>
+					    <span class="request-caption">@Resources.Status:  <span class="request-caption" data-bind="visible: isProcessing"> (@Resources.InProcess) </span></span><span data-bind="text: Status"></span>
+                       
 					</div>
 					<span class="request-caption">@Resources.Date: </span><span class="request-data-date" data-bind="text: Dates"></span>
 					<span class="request-caption">@Resources.UpdatedOn: </span><span data-bind="text: UpdatedOn" ></span>
