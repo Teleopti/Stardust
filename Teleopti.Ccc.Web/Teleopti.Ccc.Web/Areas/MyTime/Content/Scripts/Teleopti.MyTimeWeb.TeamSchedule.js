@@ -76,7 +76,15 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 				var teamId = $('#TeamSchedule-body').data('mytime-teamselection');
 				if (!teamId)
 					return;
-				var team = $.grep(data, function (e) { return e.id == teamId; })[0];
+				var selectables = [];
+				if (data[0] && data[0].children) {
+					$.each(data, function(index) {
+						$.merge(selectables, data[index].children);
+					});
+				} else {
+					selectables = data;
+				}
+				var team = $.grep(selectables, function (e) { return e.id == teamId; })[0];
 				if (team) {
 					$('#Team-Picker').select2("data", team);
 				} else {

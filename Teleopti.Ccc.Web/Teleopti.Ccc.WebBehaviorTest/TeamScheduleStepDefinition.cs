@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using NUnit.Framework;
 using SharpTestsEx;
 using TechTalk.SpecFlow;
@@ -38,9 +39,13 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I select '(.*)' in the team picker")]
 		public void WhenISelectInTheTeamPicker(string optionText)
 		{
-			var team = UserFactory.User().UserData<AnotherTeam>().TheTeam;
-			var site = GlobalDataContext.Data().Data<CommonSite>().Site.Description.Name;
-			Browser.Current.Eval("$('#" + Pages.Pages.TeamSchedulePage.TeamPickerInput.Id + "').select2('data', {id:'" + team.Id + "', text:'" + site + "/" + team.Description.Name + "'}).trigger('change')");
+			IOpenTheTeamPicker();
+
+			Pages.Pages.TeamSchedulePage.TeamPickerListItemByText(optionText).EventualClick();
+
+			//var team = UserFactory.User().UserData<AnotherTeam>().TheTeam;
+			//var site = GlobalDataContext.Data().Data<CommonSite>().Site.Description.Name;
+			//Browser.Current.Eval("$('#" + Pages.Pages.TeamSchedulePage.TeamPickerInput.Id + "').select2('data', {id:'" + team.Id + "', text:'" + site + "/" + team.Description.Name + "'}).trigger('change')");
 		}
 
 
@@ -222,7 +227,11 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I open the team-picker")]
 		public void IOpenTheTeamPicker()
 		{
-			Browser.Current.Eval("$('#" + Pages.Pages.TeamSchedulePage.TeamPickerInput.Id + "').select2('open')");
+			var page = Pages.Pages.TeamSchedulePage;
+			if (page.TeamPickerDropDownClosed().Exists)
+				Browser.Current.Eval("$('#" + page.TeamPickerInput.Id + "').select2('open')");
+
+			EventualAssert.That(() => page.TeamPickerDropDownOpened().Exists, Is.True);
 		}
 
 		[Then(@"I should see the team-picker with both teams")]
@@ -248,13 +257,10 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		}
 
 
-		private static void AssertTeamPickerHasTeams(IEnumerable<string> teamNames)
+		private void AssertTeamPickerHasTeams(IEnumerable<string> teamNames)
 		{
-			var page = Pages.Pages.TeamSchedulePage;
-			if (page.TeamPickerDropDownClosed().Exists)
-				Browser.Current.Eval("$('#" + page.TeamPickerInput.Id + "').select2('open')");
+			IOpenTheTeamPicker();
 
-			EventualAssert.That(() => page.TeamPickerDropDownOpened().Exists, Is.True);
 			var texts = Pages.Pages.TeamSchedulePage.TeamPickerSelectTexts();
 			teamNames.ToList().ForEach(e => EventualAssert.That(() => texts.Contains(e), Is.True));
 		}
@@ -317,7 +323,16 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			var site = GlobalDataContext.Data().Data<AnotherSite>().Site.Description.Name;
 			var theOtherSitesTeam = site + "/" + UserFactory.User().UserData<AnotherSitesTeam>().TheTeam.Description.Name;
 
+			var name = UserFactory.User().Person.Name.ToString();
+			AssertAgentIsDisplayed(name);
+
 			AssertTeamPickerHasTeams(new[] {theOtherSitesTeam});
+		}
+
+		[Then(@"The team picker should have '(.*)' selected")]
+		public void ThenTheTeamPickerShouldHaveSelected(string optionSelected)
+		{
+			EventualAssert.That(() => Pages.Pages.TeamSchedulePage.TeamPickerSelectDiv.InnerHtml, Contains.Substring(optionSelected));
 		}
 
 		[Then(@"I should see the other site's team")]

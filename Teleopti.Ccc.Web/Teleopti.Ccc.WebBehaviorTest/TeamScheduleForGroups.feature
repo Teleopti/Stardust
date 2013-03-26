@@ -31,6 +31,9 @@ Given there is a team with
 	| Field                      | Value              |
 	| Name                       | Published schedule |
 	| Schedule published to date | 2014-02-25         |
+	And there are shift categories
+	| Name |
+	| Day  |
 	And I have the workflow control set 'Published schedule'
 	And I have a schedule period with 
 	| Field      | Value      |
@@ -68,19 +71,23 @@ Scenario: View available custom group options
 Scenario: View group schedule
 	Given I have the role 'Access to view all group pages'
 	And I have a shift with
-	| Field                 | Value            |
-	| StartTime             | 2013-03-25 09:00 |
-	| EndTime               | 2013-03-25 18:00 |
+	| Field          | Value            |
+	| StartTime      | 2013-03-25 09:00 |
+	| EndTime        | 2013-03-25 18:00 |
+	| Shift category | Day              |
 	And John Smith have a shift with
-	| Field                 | Value            |
-	| StartTime             | 2013-03-25 10:00 |
-	| EndTime               | 2013-03-25 19:00 |
+	| Field          | Value            |
+	| StartTime      | 2013-03-25 10:00 |
+	| EndTime        | 2013-03-25 19:00 |
+	| Shift category | Day              |
 	And Pierre Baldi have a shift with
-	| Field                 | Value            |
-	| StartTime             | 2013-03-25 11:00 |
-	| EndTime               | 2013-03-25 20:00 |
+	| Field          | Value            |
+	| StartTime      | 2013-03-25 11:00 |
+	| EndTime        | 2013-03-25 20:00 |
+	| Shift category | Day              |
 	When I view team schedule for '2013-03-25' with read model updated
-	And I select 'Contract/Common contract' in the team picker
+	#And I select 'Contract/Common contract' in the team picker
+	And I select 'Common contract' in the team picker
 	Then I should see my schedule
 	And I should see 'John Smith' schedule
 	And I should not see 'Pierre Baldi' schedule
@@ -88,13 +95,15 @@ Scenario: View group schedule
 Scenario: Sort late shifts after early shifts
 	Given I have the role 'Access to view all group pages'
 	And I have a shift with
-	| Field                 | Value            |
-	| StartTime             | 2013-03-25 09:00 |
-	| EndTime               | 2013-03-25 18:00 |
+	| Field          | Value            |
+	| StartTime      | 2013-03-25 09:00 |
+	| EndTime        | 2013-03-25 18:00 |
+	| Shift category | Day              |
 	And John Smith have a shift with
-	| Field                 | Value            |
-	| StartTime             | 2013-03-25 08:00 |
-	| EndTime               | 2013-03-25 17:00 |
+	| Field          | Value            |
+	| StartTime      | 2013-03-25 08:00 |
+	| EndTime        | 2013-03-25 17:00 |
+	| Shift category | Day              |
 	When I view team schedule for '2013-03-25' with read model updated
 	And I select 'Contract/Common contract' in the team picker
 	Then I should see 'John Smith' before myself
