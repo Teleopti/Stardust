@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
-        public void MapTo(IExtraPreferences target, IList<IGroupPageLight> groupPages, IList<IGroupPageLight> groupPagesForLevellingPer)
+        public void MapTo(IExtraPreferences target, IList<IGroupPageLight> groupPages, IList<IGroupPageLight> groupPagesForLevelingPer)
 		{
 			InParameter.NotNull("groupPages", groupPages);
 
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 					target.GroupPageOnCompareWith = groupPage;
 			}
 
-            foreach (var groupPage in groupPagesForLevellingPer)
+            foreach (var groupPage in groupPagesForLevelingPer)
             {
                 if (_groupPageOnTeamLevelingPerKey == groupPage.Key)
                     target.GroupPageOnTeamLevelingPer = groupPage;
