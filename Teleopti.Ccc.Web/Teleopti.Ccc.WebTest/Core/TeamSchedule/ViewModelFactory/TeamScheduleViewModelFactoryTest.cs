@@ -57,6 +57,7 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			result.Select(t => t.text).Should().Have.SameSequenceAs("site/team");
 		}
 
+
 		[Test]
 		public void ShouldCreateGroupPageOptionsViewModelIfHaveViewAllGroupPagesPermission()
 		{
@@ -66,9 +67,9 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.ViewModelFactory
 			permissionProvider.Stub(x => x.HasOrganisationDetailPermission(DefinedRaptorApplicationFunctionPaths.ViewSchedules, DateOnly.Today, null)).IgnoreArguments().Return(true);
 			var groupingReadOnlyRepository = MockRepository.GenerateMock<IGroupingReadOnlyRepository>();
 			var pageId = Guid.NewGuid();
-			var readOnlyGroupPage = new ReadOnlyGroupPage {PageId = pageId, PageName = "xxMain"};
-			groupingReadOnlyRepository.Stub(x => x.AvailableGroupPages()).Return(new List<ReadOnlyGroupPage> {readOnlyGroupPage});
-			groupingReadOnlyRepository.Stub(x => x.AvailableGroups(new ReadOnlyGroupPage { PageId = pageId }, DateOnly.Today)).IgnoreArguments().Return(new List<ReadOnlyGroupDetail> { new ReadOnlyGroupDetail { GroupName = "team", GroupId = teamId } });
+			var readOnlyGroupPage = new ReadOnlyGroupPage { PageId = pageId, PageName = "xxMain" };
+			groupingReadOnlyRepository.Stub(x => x.AvailableGroupPages()).Return(new List<ReadOnlyGroupPage> { readOnlyGroupPage });
+			groupingReadOnlyRepository.Stub(x => x.AvailableGroups(DateOnly.Today)).IgnoreArguments().Return(new List<ReadOnlyGroupDetail> { new ReadOnlyGroupDetail { PageId = pageId, GroupName = "team", GroupId = teamId } });
 			var target = new TeamScheduleViewModelFactory(null, null, permissionProvider, groupingReadOnlyRepository);
 
 			var result = target.CreateTeamOptionsViewModel(DateOnly.Today) as IEnumerable<ISelectGroup>;
