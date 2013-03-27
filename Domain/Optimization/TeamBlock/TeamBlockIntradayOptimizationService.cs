@@ -112,6 +112,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				if (!success)
 				{
 					teamBlockToRemove.Add(teamBlock);
+					_safeRollbackAndResourceCalculation.Execute(schedulePartModifyAndRollbackService, schedulingOptions);
 					continue;
 				}
 
