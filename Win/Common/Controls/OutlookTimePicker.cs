@@ -158,7 +158,8 @@ namespace Teleopti.Ccc.Win.Common.Controls
             CreateAndBindList(TimeSpan.Zero, new TimeSpan(23, 59, 59), timeList);
         }
 
-        public void CreateAndBindList(TimeSpan from, TimeSpan to, IList<string> timeList)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
+		public void CreateAndBindList(TimeSpan from, TimeSpan to, IList<string> timeList)
         {
             DataSource = null;
             Items.Clear();
@@ -298,7 +299,8 @@ namespace Teleopti.Ccc.Win.Common.Controls
                 Text = timeAsText;
         }
 
-        protected override void OnKeyDown(KeyEventArgs e)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		protected override void OnKeyDown(KeyEventArgs e)
         {
             base.OnKeyDown(e);
             if (e.KeyCode==Keys.Delete && _enableNull)
