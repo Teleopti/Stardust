@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.ViewModelFactory
 							p.PageName = Resources.ResourceManager.GetString(p.PageName.Substring(2));
 						}
 						return new SelectSelectGroup {text = p.PageName, PageId = p.PageId};
-					}).ToList();
+					}).OrderBy(x => x.text).ToArray();
 
 
 			var details = _groupingReadOnlyRepository.AvailableGroups(date).ToArray();
