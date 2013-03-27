@@ -20,8 +20,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private IScheduleMatrixPro _matrix2;
 		private IVirtualSchedulePeriod _schedulePeriod;
 		private DateOnly _date;
+	    private IPerson _person1;
 
-		[SetUp]
+	    [SetUp]
 		public void Setup()
 		{
 			_mocks = new MockRepository();
@@ -108,8 +109,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		[Test]
 		public void ShouldReturnSameHashAsContainedGroupPersonAndStartDateForTheTeam()
 		{
-			IPerson person = PersonFactory.CreatePerson();
-			IGroupPerson groupPerson1 = new GroupPerson(new List<IPerson> { person }, DateOnly.MinValue, "Hej", Guid.NewGuid());
+			_person1 = PersonFactory.CreatePerson();
+            IGroupPerson groupPerson1 = new GroupPerson(new List<IPerson> { _person1 }, DateOnly.MinValue, "Hej", Guid.NewGuid());
 			_target = new TeamInfo(groupPerson1, new List<IList<IScheduleMatrixPro>>());
 
 			Assert.AreEqual(groupPerson1.GetHashCode(), _target.GetHashCode());
@@ -118,9 +119,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		[Test]
 		public void EqualsShouldWorkWithDifferentGroupPersonsOnSameDate()
 		{
-			IPerson person = PersonFactory.CreatePerson();
-			IGroupPerson groupPerson1 = new GroupPerson(new List<IPerson> { person }, DateOnly.MinValue, "Hej", Guid.NewGuid());
-			IGroupPerson groupPerson2 = new GroupPerson(new List<IPerson> { person }, DateOnly.MinValue, "Hej", Guid.NewGuid());
+			_person1 = PersonFactory.CreatePerson();
+            IGroupPerson groupPerson1 = new GroupPerson(new List<IPerson> { _person1 }, DateOnly.MinValue, "Hej", Guid.NewGuid());
+            IGroupPerson groupPerson2 = new GroupPerson(new List<IPerson> { _person1 }, DateOnly.MinValue, "Hej", Guid.NewGuid());
 			
 			Assert.IsFalse(groupPerson1.Equals(groupPerson2));
 			Assert.IsTrue(groupPerson1.Equals(groupPerson1));
@@ -137,12 +138,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		[Test]
 		public void EqualsShouldWorkWithSameGroupPersonsButDifferentMembers()
 		{
-			IPerson person1 = PersonFactory.CreatePerson();
+			_person1 = PersonFactory.CreatePerson();
 			IPerson person2 = PersonFactory.CreatePerson();
 			Guid sameGuid = Guid.NewGuid();
-			IGroupPerson groupPerson1 = new GroupPerson(new List<IPerson> { person1 }, DateOnly.MinValue, "Hej", sameGuid);
-			IGroupPerson groupPerson2 = new GroupPerson(new List<IPerson> { person1, person2 }, DateOnly.MinValue, "Hej", Guid.NewGuid());
-			IGroupPerson groupPerson3 = new GroupPerson(new List<IPerson> { person1, person2 }, DateOnly.MinValue, "Hej", sameGuid);
+            IGroupPerson groupPerson1 = new GroupPerson(new List<IPerson> { _person1 }, DateOnly.MinValue, "Hej", sameGuid);
+            IGroupPerson groupPerson2 = new GroupPerson(new List<IPerson> { _person1, person2 }, DateOnly.MinValue, "Hej", Guid.NewGuid());
+            IGroupPerson groupPerson3 = new GroupPerson(new List<IPerson> { _person1, person2 }, DateOnly.MinValue, "Hej", sameGuid);
 
 			Assert.IsFalse(groupPerson1.Equals(groupPerson2));
 			Assert.IsTrue(groupPerson1.Equals(groupPerson3));

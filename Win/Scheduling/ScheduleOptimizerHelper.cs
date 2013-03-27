@@ -1094,6 +1094,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                       ISchedulingOptions schedulingOptions,
                                                       IList<IScheduleDay > scheduleDays )
         {
+            if (selectedPersonMatrixList == null) throw new ArgumentNullException("selectedPersonMatrixList");
             var fixedStaffSchedulingService = _container.Resolve<IFixedStaffSchedulingService>();
             fixedStaffSchedulingService.ClearFinderResults();
             _backgroundWorker = backgroundWorker;

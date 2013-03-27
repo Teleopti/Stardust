@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private ResourceOptimizationHelperWin _optimizationHelperWin;
 		private ScheduleOptimizerHelper _scheduleOptimizerHelper;
 		private GroupDayOffOptimizerHelper _groupDayOffOptimizerHelper;
-		private BlockOptimizerHelper _blockOptimizerHelper;
+		//private BlockOptimizerHelper _blockOptimizerHelper;
 		private readonly IVirtualSkillHelper _virtualSkillHelper;
 		private SchedulerMeetingHelper _schedulerMeetingHelper;
 		private readonly IGridlockManager _gridLockManager;
@@ -3878,7 +3878,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var currentPersonTimeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
 			var selectedPeriod = new DateOnlyPeriod(OptimizerHelperHelper.GetStartDateInSelectedDays(selectedSchedules, currentPersonTimeZone), OptimizerHelperHelper.GetEndDateInSelectedDays(selectedSchedules, currentPersonTimeZone));
 
-			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizerPreferences);
+			//var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizerPreferences);
 			IList<IScheduleMatrixPro> allMatrixes = new List<IScheduleMatrixPro>();
 			switch (options.OptimizationMethod)
 			{
@@ -4056,7 +4056,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_scheduleOptimizerHelper = new ScheduleOptimizerHelper(_container);
 
 			_groupDayOffOptimizerHelper = new GroupDayOffOptimizerHelper(_container);
-			_blockOptimizerHelper = new BlockOptimizerHelper(_container, _scheduleOptimizerHelper);
+			//_blockOptimizerHelper = new BlockOptimizerHelper(_container, _scheduleOptimizerHelper);
 
 			if (!_schedulerState.SchedulingResultState.SkipResourceCalculation)
 				backgroundWorkerLoadData.ReportProgress(1, Resources.CalculatingResourcesDotDotDot);

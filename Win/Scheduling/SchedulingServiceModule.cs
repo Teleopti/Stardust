@@ -260,7 +260,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 		    builder.RegisterType<WorkShiftSelector>().As<IWorkShiftSelector>();
 	    }
 
-	    private static void registerWorkShiftFilters(ContainerBuilder builder)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+        private static void registerWorkShiftFilters(ContainerBuilder builder)
 	    {
 		    builder.RegisterType<ActivityRestrictionsShiftFilter>().As<IActivityRestrictionsShiftFilter>();
 		    builder.RegisterType<BusinessRulesShiftFilter>().As<IBusinessRulesShiftFilter>();

@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 				Expect.Call(ruleSetBag.RuleSetCollection).Return(new ReadOnlyCollection<IWorkShiftRuleSet>(ruleSets));
 				expectCodeCanAdjustWorkShiftsFromRuleSetBag(startPeriod2, startPeriod1, templateGenerator3, endPeriod3,
 															startPeriod3, endPeriod2, templateGenerator2, ruleSet2,
-															ruleSet1, readOnlyRuleSets, templateGenerator1, dateOnly,
+															ruleSet1, templateGenerator1, dateOnly,
 															ruleSet3);
 			}
 
@@ -92,7 +92,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 																 TimePeriodWithSegment endPeriod2,
 																 IWorkShiftTemplateGenerator templateGenerator2,
 																 IWorkShiftRuleSet ruleSet2, IWorkShiftRuleSet ruleSet1,
-																 ReadOnlyCollection<IWorkShiftRuleSet> readOnlyRuleSets,
 																 IWorkShiftTemplateGenerator templateGenerator1,
 																 DateOnly dateOnly, IWorkShiftRuleSet ruleSet3)
 		{
