@@ -538,6 +538,11 @@
     <Compile Include="Scheduler\AgentRestrictions\AgentRestrictionsPreferencePainterDeciderTest.cs" />
     <Compile Include="Scheduler\AgentRestrictions\AgentRestrictionsPresenterTest.cs" />
     <Compile Include="Scheduler\AgentRestrictions\AgentRestrictionsSchedulePainterDeciderTest.cs" />
+    <Compile Include="Scheduler\AgentStudentAvailabilityAddCommandTest.cs" />
+    <Compile Include="Scheduler\AgentStudentAvailabilityDayCreatorTest.cs" />
+    <Compile Include="Scheduler\AgentStudentAvailabilityEditCommandTest.cs" />
+    <Compile Include="Scheduler\AgentStudentAvailabilityPresenterTest.cs" />
+    <Compile Include="Scheduler\AgentStudentAvailabilityRemoveCommandTest.cs" />
     <Compile Include="Scheduler\AuditHistory\AuditHistoryModelTest.cs" />
     <Compile Include="Scheduler\AuditHistory\AuditHistoryPresenterTest.cs" />
     <Compile Include="Scheduler\AuditHistory\AuditHistoryScheduleDayCreatorTest.cs" />
