@@ -4,6 +4,14 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling
 {
+	public enum AgentStudentAvailabilityExecuteCommand
+	{
+		Add,
+		Edit,
+		Remove,
+		None
+	}
+
 	public interface IAgentStudentAvailabilityPresenter
 	{
 		void Add(IAgentStudentAvailabilityAddCommand addCommand);
@@ -11,6 +19,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		void Remove(IAgentStudentAvailabilityRemoveCommand removeCommand);
 		void UpdateView();
 		IScheduleDay ScheduleDay { get; }
+		AgentStudentAvailabilityExecuteCommand CommandToExecute(TimeSpan? startTime, TimeSpan? endTime, bool endNextDay, IAgentStudentAvailabilityDayCreator dayCreator);
 	}
 
 	public class AgentStudentAvailabilityPresenter : IAgentStudentAvailabilityPresenter
@@ -66,23 +75,35 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			TimeSpan? endTime = null;
 			bool endNextDay = false;
 
-			foreach (var persistableScheduleData in _scheduleDay.PersistableScheduleDataCollection())
+			var availiabilityRestriction = _scheduleDay.PersistableScheduleDataCollection().OfType<IStudentAvailabilityDay>().Select(studentAvailabilityDay => studentAvailabilityDay.RestrictionCollection.FirstOrDefault()).FirstOrDefault(restriction => restriction != null);
+			if (availiabilityRestriction != null)
 			{
-				var studentAvailabilityDay = persistableScheduleData as IStudentAvailabilityDay;
-				if (studentAvailabilityDay != null)
-				{
-					var restriction = studentAvailabilityDay.RestrictionCollection.FirstOrDefault();
-					if (restriction != null)
-					{
-						startTime = restriction.StartTimeLimitation.StartTime;
-						endTime = restriction.EndTimeLimitation.EndTime;
-						if (startTime.HasValue && endTime.HasValue && startTime.Value > endTime.Value)
-							endNextDay = true;
-					}
-				}
+				startTime = availiabilityRestriction.StartTimeLimitation.StartTime;
+				endTime = availiabilityRestriction.EndTimeLimitation.EndTime;
+				if (startTime.HasValue && endTime.HasValue && startTime.Value > endTime.Value)
+					endNextDay = true;
 			}
 
 			_view.Update(startTime, endTime, endNextDay);
+		}
+
+		public AgentStudentAvailabilityExecuteCommand CommandToExecute(TimeSpan? startTime, TimeSpan? endTime, bool endNextDay, IAgentStudentAvailabilityDayCreator dayCreator)
+		{
+			var studentAvailabilityday = _scheduleDay.PersistableScheduleDataCollection().OfType<IStudentAvailabilityDay>().FirstOrDefault();
+			bool startError;
+			bool endError;
+			var canCreate = dayCreator.CanCreate(startTime, endTime, endNextDay, out startError, out endError);
+			
+			if (studentAvailabilityday != null && !canCreate && startError && endError)
+				return AgentStudentAvailabilityExecuteCommand.Remove;
+
+			if (studentAvailabilityday == null && canCreate)
+				return AgentStudentAvailabilityExecuteCommand.Add;
+
+			if (studentAvailabilityday != null && canCreate)
+				return AgentStudentAvailabilityExecuteCommand.Edit;
+
+			return AgentStudentAvailabilityExecuteCommand.None;
 		}
 	}
 }

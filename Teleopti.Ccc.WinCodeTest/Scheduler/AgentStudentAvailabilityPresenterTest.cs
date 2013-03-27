@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		private IAgentStudentAvailabilityRemoveCommand _removeCommand;
 		private IStudentAvailabilityDay _studentAvailabilityDay;
 		private IAgentStudentAvailabilityEditCommand _editCommand;
+		private IAgentStudentAvailabilityDayCreator _dayCreator;
 
 		[SetUp]
 		public void Setup()
@@ -43,6 +44,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_addCommand = _mock.StrictMock<IAgentStudentAvailabilityAddCommand>();
 			_removeCommand = _mock.StrictMock<IAgentStudentAvailabilityRemoveCommand>();
 			_editCommand = _mock.StrictMock<IAgentStudentAvailabilityEditCommand>();
+			_dayCreator = _mock.StrictMock<IAgentStudentAvailabilityDayCreator>();
 		}
 
 		[Test]
@@ -131,6 +133,88 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		public void ShouldThrowExceptionWhenNullCommandRemove()
 		{
 			_presenter.Remove(null);
+		}
+
+		[Test]
+		public void ShouldRemoveWhenExistingAndNoStartEndTime()
+		{
+			using (_mock.Record())
+			{
+				bool startError;
+				bool endError;
+
+				Expect.Call(_scheduleDay.PersistableScheduleDataCollection()).Return(new ReadOnlyCollection<IPersistableScheduleData>(new List<IPersistableScheduleData> { _studentAvailabilityDay }));
+				Expect.Call(_dayCreator.CanCreate(null, null, false, out startError, out endError)).OutRef(true, true).Return(false);
+			}
+
+			using (_mock.Playback())
+			{
+				var toExecute = _presenter.CommandToExecute(null, null, false, _dayCreator);
+				Assert.AreEqual(AgentStudentAvailabilityExecuteCommand.Remove, toExecute);
+			}
+		}
+
+		[Test]
+		public void ShouldAddWhenNoExisting()
+		{
+			var startTime = TimeSpan.FromHours(1);
+			var endTime = TimeSpan.FromHours(2);
+
+			using (_mock.Record())
+			{
+				bool startError;
+				bool endError;
+				Expect.Call(_scheduleDay.PersistableScheduleDataCollection()).Return(new ReadOnlyCollection<IPersistableScheduleData>(new List<IPersistableScheduleData> ()));
+				Expect.Call(_dayCreator.CanCreate(startTime, endTime, false, out startError, out endError)).Return(true);
+			}
+
+			using (_mock.Playback())
+			{
+				var toExecute = _presenter.CommandToExecute(startTime, endTime, false, _dayCreator);
+				Assert.AreEqual(AgentStudentAvailabilityExecuteCommand.Add, toExecute);
+			}	
+		}
+
+		[Test]
+		public void ShouldEditWhenExisting()
+		{
+			var startTime = TimeSpan.FromHours(1);
+			var endTime = TimeSpan.FromHours(2);
+
+			using (_mock.Record())
+			{
+				bool startError;
+				bool endError;
+				Expect.Call(_scheduleDay.PersistableScheduleDataCollection()).Return(new ReadOnlyCollection<IPersistableScheduleData>(new List<IPersistableScheduleData> { _studentAvailabilityDay }));
+				Expect.Call(_dayCreator.CanCreate(startTime, endTime, false, out startError, out endError)).Return(true);
+			}
+
+			using (_mock.Playback())
+			{
+				var toExecute = _presenter.CommandToExecute(startTime, endTime, false, _dayCreator);
+				Assert.AreEqual(AgentStudentAvailabilityExecuteCommand.Edit, toExecute);
+			}		
+		}
+
+		[Test]
+		public void ShouldNoneWhenNotValidTimes()
+		{
+			var startTime = TimeSpan.FromHours(1);
+			var endTime = TimeSpan.FromHours(1);
+
+			using (_mock.Record())
+			{
+				bool startError;
+				bool endError;
+				Expect.Call(_scheduleDay.PersistableScheduleDataCollection()).Return(new ReadOnlyCollection<IPersistableScheduleData>(new List<IPersistableScheduleData> { _studentAvailabilityDay }));
+				Expect.Call(_dayCreator.CanCreate(startTime, endTime, false, out startError, out endError)).OutRef(true, false).Return(false);
+			}
+
+			using (_mock.Playback())
+			{
+				var toExecute = _presenter.CommandToExecute(startTime, endTime, false, _dayCreator);
+				Assert.AreEqual(AgentStudentAvailabilityExecuteCommand.None, toExecute);
+			}	
 		}
 	}
 }

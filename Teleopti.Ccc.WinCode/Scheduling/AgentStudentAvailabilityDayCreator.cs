@@ -34,8 +34,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		{
 			if (startTime == null && endTime == null)
 			{
-				startTimeError = false;
-				endTimeError = false;
+				startTimeError = true;
+				endTimeError = true;
 				return false;	
 			}
 				
