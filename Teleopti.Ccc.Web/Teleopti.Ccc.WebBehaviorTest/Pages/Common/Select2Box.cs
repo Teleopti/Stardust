@@ -50,16 +50,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 
 		public void SelectTeamByText(string text)
 		{
-			//var items = Document.ListItems.Filter(QuicklyFind.ByClass("select2-result-selectable"));
-			//var item = items.First(x => x.Children().First().InnerHtml.Contains(text));
-			//item.MouseEnter();
-			//item.EventualClick();
-			//item.ev
-
-			//JQuery.Select(string.Format(".select2-result-selectable div:contains('{0}')", text))
-			//	.Trigger("mouseover")
-			//	.Trigger("click");
-			//	//.EvalIn(Element.DomContainer);
+			Element.DomContainer.Eval("$('.select2-result-selectable div:contains(\""+text+"\")').trigger('mouseup')");
 		}
 
 	}
