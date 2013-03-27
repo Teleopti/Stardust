@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		{
 			_target.SetGroupPageOnTeamKey(_groupPage1Key);
 			_target.SetGroupPageOnCompareWithKey(_groupPage1Key);
-            _target.SetGroupPageOnTeamLevellingPerKey( _groupPage1Key);
+            _target.SetGroupPageOnTeamLevelingPerKey( _groupPage1Key);
             _target.MapTo(_extraPreferencesTarget, _groupPages, _groupPagesForLevellingPer);
 			Assert.AreEqual(_extraPreferencesTarget.GroupPageOnTeam.Key, _groupPage1Key);
 			Assert.AreEqual(_extraPreferencesTarget.GroupPageOnTeamLevelingPer.Key, _groupPage1Key);
@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		{
 			_target.SetGroupPageOnTeamKey(_groupPage2Key);
 			_target.SetGroupPageOnCompareWithKey(_groupPage2Key);
-            _target.SetGroupPageOnTeamLevellingPerKey(_groupPage2Key);
+            _target.SetGroupPageOnTeamLevelingPerKey(_groupPage2Key);
             _target.MapTo(_extraPreferencesTarget, _groupPages, _groupPagesForLevellingPer);
 			Assert.IsNull(_extraPreferencesTarget.GroupPageOnTeam);
             Assert.IsNull(_extraPreferencesTarget.GroupPageOnTeamLevelingPer);

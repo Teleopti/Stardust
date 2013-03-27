@@ -40,7 +40,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
         public void MapTo(IExtraPreferences target, IList<IGroupPageLight> groupPages, IList<IGroupPageLight> groupPagesForLevelingPer)
 		{
-			InParameter.NotNull("groupPages", groupPages);
+		    if (groupPagesForLevelingPer == null) throw new ArgumentNullException("groupPagesForLevelingPer");
+		    InParameter.NotNull("groupPages", groupPages);
 
 			foreach (var groupPage in groupPages)
 			{
@@ -131,7 +132,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         /// </summary>
         /// <param name="key">The key.</param>
         /// <remarks>Used in tests only</remarks>
-        public void SetGroupPageOnTeamLevellingPerKey(string key)
+        public void SetGroupPageOnTeamLevelingPerKey(string key)
         {
             _groupPageOnTeamLevelingPerKey = key;
         }
