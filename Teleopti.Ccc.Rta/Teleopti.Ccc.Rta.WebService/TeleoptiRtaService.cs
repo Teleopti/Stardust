@@ -157,6 +157,7 @@ namespace Teleopti.Ccc.Rta.WebService
 
 		public void GetUpdatedScheduleChange(Guid personId, Guid businessUnitId, DateTime timestamp)
         {
+			Log.InfoFormat("Recieved message from servicebus to check schedule for Person: {0}, BusinessUnit: {1}, Timestamp: {2}", personId, businessUnitId, timestamp);
             lock (_lockObject)
             {
                 if (_rtaDataHandler == null || !_rtaDataHandler.IsAlive) InitializeClientHandler();

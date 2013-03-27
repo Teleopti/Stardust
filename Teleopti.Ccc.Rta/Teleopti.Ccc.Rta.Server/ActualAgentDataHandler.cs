@@ -8,6 +8,7 @@ using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Rta.Interfaces;
 using Teleopti.Interfaces.Domain;
+using log4net;
 
 namespace Teleopti.Ccc.Rta.Server
 {
@@ -18,7 +19,7 @@ namespace Teleopti.Ccc.Rta.Server
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
 		ConcurrentDictionary<string, List<RtaStateGroupLight>> StateGroups();
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
-		Dictionary<Guid, List<RtaAlarmLight>> ActivityAlarms();
+		ConcurrentDictionary<Guid, List<RtaAlarmLight>> ActivityAlarms();
 		void AddOrUpdate(IEnumerable<IActualAgentState> states);
 		IList<ScheduleLayer> GetReadModel(Guid personId);
 	}
@@ -27,6 +28,7 @@ namespace Teleopti.Ccc.Rta.Server
 	{
 		private readonly IDatabaseConnectionFactory _databaseConnectionFactory;
 		private readonly IDatabaseConnectionStringHandler _databaseConnectionStringHandler;
+		private static readonly ILog LoggingSvc = LogManager.GetLogger(typeof(IActualAgentDataHandler));
 
 		public ActualAgentDataHandler(IDatabaseConnectionFactory databaseConnectionFactory,
 		                                   IDatabaseConnectionStringHandler databaseConnectionStringHandler)
@@ -37,7 +39,9 @@ namespace Teleopti.Ccc.Rta.Server
 
 		public IList<ScheduleLayer> CurrentLayerAndNext(DateTime onTime, IList<ScheduleLayer> layers)
 		{
-			if (!layers.Any()) return new List<ScheduleLayer> {null, null};
+			LoggingSvc.Info("Finding current layer and next");
+			if (!layers.Any())
+				return new List<ScheduleLayer> {null, null};
 			var scheduleLayers = layers.Where(l => l.EndDateTime > onTime);
 			var enumerable = scheduleLayers as IList<ScheduleLayer> ?? scheduleLayers.ToArray();
 			ScheduleLayer scheduleLayer = null;
@@ -60,6 +64,10 @@ namespace Teleopti.Ccc.Rta.Server
 				if (scheduleLayer.EndDateTime != nextLayer.StartDateTime)
 					nextLayer = null;
 
+			if (scheduleLayer != null)
+				LoggingSvc.InfoFormat(CultureInfo.InvariantCulture, "Current layer = Name: {0}, StartTime: {1}, EndTime: {2}", scheduleLayer.Name, scheduleLayer.StartDateTime, scheduleLayer.EndDateTime);
+			if (nextLayer != null)
+				LoggingSvc.InfoFormat(CultureInfo.InvariantCulture, "Next layer = Name: {0}, StartTime: {1}, EndTime: {2}", nextLayer.Name, nextLayer.StartDateTime, nextLayer.EndDateTime);
 			return new List<ScheduleLayer> {scheduleLayer, nextLayer};
 		}
 
@@ -71,9 +79,7 @@ namespace Teleopti.Ccc.Rta.Server
 						FROM ReadModel.v_ScheduleProjectionReadOnlyRTA rta
 						WHERE PersonId='{0}'", idString);
 			var layers = new List<ScheduleLayer>();
-			using (
-				var connection = _databaseConnectionFactory.CreateConnection(_databaseConnectionStringHandler.AppConnectionString())
-				)
+			using (var connection = _databaseConnectionFactory.CreateConnection(_databaseConnectionStringHandler.AppConnectionString()))
 			{
 				var command = connection.CreateCommand();
 				command.CommandType = CommandType.Text;
@@ -103,6 +109,7 @@ namespace Teleopti.Ccc.Rta.Server
 			"CA2100:Review SQL queries for security vulnerabilities")]
 		public IActualAgentState LoadOldState(Guid personToLoad)
 		{
+			LoggingSvc.InfoFormat("Getting old state for person: {0}", personToLoad);
 			var personIdString = personToLoad.ToString();
 			var query =
 				string.Format(
@@ -121,7 +128,7 @@ namespace Teleopti.Ccc.Rta.Server
 				{
 					while (reader.Read())
 					{
-						return new ActualAgentState
+						var agentState = new ActualAgentState
 							{
 								PlatformTypeId = reader.GetGuid(reader.GetOrdinal("PlatformTypeId")),
 								StateCode = reader.GetString(reader.GetOrdinal("StateCode")),
@@ -132,9 +139,12 @@ namespace Teleopti.Ccc.Rta.Server
 								StateStart = reader.GetDateTime(reader.GetOrdinal("StateStart")),
 								NextStart = reader.GetDateTime(reader.GetOrdinal("NextStart"))
 							};
+						LoggingSvc.InfoFormat("Found old state for person: {0}, old statecode: {1}", personToLoad, agentState.StateCode);
+						return agentState;
 					}
 				}
 			}
+			LoggingSvc.InfoFormat("Found no state for person: {0}", personToLoad);
 			return null;
 		}
 
@@ -180,7 +190,7 @@ namespace Teleopti.Ccc.Rta.Server
 			return new ConcurrentDictionary<string, List<RtaStateGroupLight>>(stateGroups.GroupBy(s => s.StateCode).ToDictionary(g => g.Key, g => g.ToList()));
 		}
 
-		public Dictionary<Guid, List<RtaAlarmLight>> ActivityAlarms()
+		public ConcurrentDictionary<Guid, List<RtaAlarmLight>> ActivityAlarms()
 		{
 			const string query =
 				@"SELECT sg.Id StateGroupId , sg.Name StateGroupName, Activity ActivityId, t.Name, t.Id AlarmTypeId,
@@ -227,7 +237,7 @@ namespace Teleopti.Ccc.Rta.Server
 				}
 				reader.Close();
 			}
-			return stateGroups.GroupBy(g => g.ActivityId).ToDictionary(k => k.Key, v => v.ToList());
+			return new ConcurrentDictionary<Guid, List<RtaAlarmLight>>(stateGroups.GroupBy(g => g.ActivityId).ToDictionary(k => k.Key, v => v.ToList()));
 
 		}
 
@@ -366,6 +376,7 @@ namespace Teleopti.Ccc.Rta.Server
 							Value = newState.ReceivedTime
 						});
 					command.ExecuteNonQuery();
+					LoggingSvc.InfoFormat("Saved state: {0} to database", newState);
 				}
 			}
 		}

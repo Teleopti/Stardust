@@ -170,17 +170,17 @@ namespace Teleopti.Ccc.Rta.Server
 			IEnumerable<PersonWithBusinessUnit> personWithBusinessUnits;
 			if (!_personResolver.TryResolveId(dataSourceId, logOn, out personWithBusinessUnits))
 			{
-				_loggingSvc.WarnFormat(
-					"No person available for datasource id = {0} and log on {1}. Event will not be sent through message broker before person is set up.",
+				_loggingSvc.InfoFormat(
+					"No person available for datasource id = {0} and log on {1}. Event will not be handled before person is set up.",
 					dataSourceId, logOn);
 				return;
 			}
-
-			if (!_messageSender.IsAlive) return;
+			
 			try
 			{
 				foreach (var personWithBusinessUnit in personWithBusinessUnits)
 				{
+					_loggingSvc.InfoFormat("ACD-Logon: {0} is connected to PersonId: {1}", logOn, personWithBusinessUnit.PersonId);
 					if (!_stateResolver.HaveStateCodeChanged(personWithBusinessUnit.PersonId, stateCode, timestamp))
 					{
 						_loggingSvc.InfoFormat("Person {0} is already in state {1}", personWithBusinessUnit.PersonId, stateCode);
@@ -197,8 +197,9 @@ namespace Teleopti.Ccc.Rta.Server
 						_loggingSvc.WarnFormat("Could not get state for Person {0}", personWithBusinessUnit.PersonId);
 						continue;
 					}
-					_loggingSvc.InfoFormat("Trying to send object {0} through Message Broker", agentState);
-					_messageSender.SendRtaData(personWithBusinessUnit.PersonId, personWithBusinessUnit.BusinessUnitId, agentState);
+					_loggingSvc.InfoFormat("Sending AgentState: {0} through Message Broker", agentState);
+					if (_messageSender.IsAlive)
+						_messageSender.SendRtaData(personWithBusinessUnit.PersonId, personWithBusinessUnit.BusinessUnitId, agentState);
 				}
 			}
 			catch (SocketException exception)

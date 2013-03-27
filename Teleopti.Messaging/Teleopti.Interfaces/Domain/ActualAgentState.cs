@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 
 namespace Teleopti.Interfaces.Domain
 {
@@ -162,6 +163,14 @@ namespace Teleopti.Interfaces.Domain
 				result = (result*397) ^ NextStart.GetHashCode();
 				return result;
 			}
+		}
+
+		public override string ToString()
+		{
+			return
+				string.Format(CultureInfo.InvariantCulture,
+					"PersonId: {0}, State: {1}, Scheduled: {2}, StateStart: {3}, Scheduled next: {4}, NextStart: {5}, Alarm: {6}, AlarmStart: {7}",
+					PersonId, State, Scheduled, StateStart, ScheduledNext, NextStart, AlarmName, AlarmStart);
 		}
 	}
 }
