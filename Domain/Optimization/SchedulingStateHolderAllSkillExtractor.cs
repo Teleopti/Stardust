@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         public IEnumerable<ISkill> ExtractSkills()
         {
-            return _stateHolder.Skills;
+			return _stateHolder.VisibleSkills;
         }
     }
 }

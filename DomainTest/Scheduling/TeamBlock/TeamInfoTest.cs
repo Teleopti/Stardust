@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private IScheduleMatrixPro _matrix2;
 		private IVirtualSchedulePeriod _schedulePeriod;
 		private DateOnly _date;
-	    private IPerson _person1;
+		private IPerson _groupMember;
 
 	    [SetUp]
 		public void Setup()
@@ -32,9 +32,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			var matrixes = new List<IScheduleMatrixPro> {_matrix, _matrix2};
 			IList<IList<IScheduleMatrixPro>> groupMatrixes = new List<IList<IScheduleMatrixPro>>();
 			groupMatrixes.Add(matrixes);
-				_target = new TeamInfo(_groupPerson, groupMatrixes);
+			_target = new TeamInfo(_groupPerson, groupMatrixes);
 			_schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
 			_date = new DateOnly(2013, 03, 11);
+			_groupMember = PersonFactory.CreatePerson("kalle");
 		}
 
 		[Test]
@@ -84,6 +85,27 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				var result = _target.MatrixesForGroupAndDate(_date.AddDays(1)).ToList();
 				Assert.AreEqual(1, result.Count());
 				Assert.AreSame(_matrix2, result.First());
+			}
+		}
+
+		[Test]
+		public void ShouldGiveMeCorrectMatrixForMemberAndDate()
+		{
+			using (_mocks.Record())
+			{
+				Expect.Call(_matrix.SchedulePeriod).Return(_schedulePeriod);
+				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(_date, _date));
+
+				Expect.Call(_matrix2.SchedulePeriod).Return(_schedulePeriod);
+				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(_date.AddDays(1), _date.AddDays(1)));
+
+				Expect.Call(_matrix2.Person).Return(_groupMember);
+			}
+
+			using (_mocks.Playback())
+			{
+				IScheduleMatrixPro result = _target.MatrixesForMemberAndDate(_groupMember, _date.AddDays(1));
+				Assert.AreSame(_matrix2, result);
 			}
 		}
 

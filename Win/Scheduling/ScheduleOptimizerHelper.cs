@@ -1092,7 +1092,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                       IList<IScheduleMatrixPro> allVisibleMatrixes, 
                                                       BackgroundWorker backgroundWorker, 
                                                       ISchedulingOptions schedulingOptions,
-                                                      IList<IScheduleDay > scheduleDays )
+													  IList<IScheduleDay> selectedSchedules)
         {
             if (selectedPersonMatrixList == null) throw new ArgumentNullException("selectedPersonMatrixList");
             var fixedStaffSchedulingService = _container.Resolve<IFixedStaffSchedulingService>();
@@ -1111,13 +1111,15 @@ namespace Teleopti.Ccc.Win.Scheduling
 				advancedaysOffSchedulingService.DayScheduled += schedulingServiceDayScheduled;
 
                 //var teamSteadyStateHolder = initiateTeamSteadyStateHolder(allVisibleMatrixes, schedulingOptions, scheduleDays);
-                var teamSteadyStateHolder = initiateTeamSteadyStateHolder(allMatrixesOfSelectedPersons, schedulingOptions, scheduleDays);
+				var selectedPeriod = OptimizerHelperHelper.GetSelectedPeriod(selectedSchedules);
+				var teamSteadyStateHolder = initiateTeamSteadyStateHolder(allMatrixesOfSelectedPersons, schedulingOptions, selectedPeriod);
 
                 var advanceSchedulingService = callAdvanceSchedulingService(schedulingOptions, groupPersonBuilderForOptimization);
                 IDictionary<string, IWorkShiftFinderResult> schedulingResults = new Dictionary<string, IWorkShiftFinderResult>();
 
+	            
                 advanceSchedulingService.DayScheduled += schedulingServiceDayScheduled;
-                advanceSchedulingService.ScheduleSelected(allVisibleMatrixes, selectedPersonMatrixList[0].SelectedPeriod,
+                advanceSchedulingService.ScheduleSelected(allVisibleMatrixes, selectedPeriod,
                                                   selectedPersonMatrixList.Select(x => x.Person).Distinct().ToList(),
                                                   teamSteadyStateHolder);
 				advanceSchedulingService.DayScheduled -= schedulingServiceDayScheduled;
@@ -1131,10 +1133,9 @@ namespace Teleopti.Ccc.Win.Scheduling
         }
 
         private TeamSteadyStateHolder initiateTeamSteadyStateHolder(IList<IScheduleMatrixPro> selectedPersonAllMatrixList,
-                                                                    ISchedulingOptions schedulingOptions, 
-                                                                    IEnumerable<IScheduleDay> scheduleDays)
+                                                                    ISchedulingOptions schedulingOptions,
+																	DateOnlyPeriod selectedPeriod)
         {
-            DateOnlyPeriod selectedPeriod = OptimizerHelperHelper.GetSelectedPeriod(scheduleDays);
             var targetTimeCalculator = new SchedulePeriodTargetTimeCalculator();
             var groupPersonsBuilder = _container.Resolve<IGroupPersonsBuilder>();
  
