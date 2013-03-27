@@ -37,6 +37,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly ITeamDayOffModifyer _teamDayOffModifyer;
 		private readonly IBlockSteadyStateValidator _teamBlockSteadyStateValidator;
 		private readonly ITeamBlockClearer _teamBlockClearer;
+		private readonly ITeamBlockRestrictionOverLimitValidator _restrictionOverLimitValidator;
+		private readonly ICheckerRestriction _restrictionChecker;
 		private bool _cancelMe;
 
 		public TeamBlockDayOffOptimizerService(
@@ -53,7 +55,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation,
 			ITeamDayOffModifyer teamDayOffModifyer,
 			IBlockSteadyStateValidator teamBlockSteadyStateValidator,
-			ITeamBlockClearer teamBlockClearer
+			ITeamBlockClearer teamBlockClearer,
+			ITeamBlockRestrictionOverLimitValidator restrictionOverLimitValidator,
+			ICheckerRestriction restrictionChecker
 			)
 		{
 			_teamInfoFactory = teamInfoFactory;
@@ -70,6 +74,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_teamDayOffModifyer = teamDayOffModifyer;
 			_teamBlockSteadyStateValidator = teamBlockSteadyStateValidator;
 			_teamBlockClearer = teamBlockClearer;
+			_restrictionOverLimitValidator = restrictionOverLimitValidator;
+			_restrictionChecker = restrictionChecker;
 		}
 
 		public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
@@ -141,18 +147,23 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 				rollbackService.ClearModificationCollection();
 
+				bool success = true;
 				foreach (IScheduleMatrixPro matrix in teamInfo.MatrixesForGroupMember(0))
 				{
-					runOneMatrix(optimizationPreferences, rollbackService, schedulingOptions, matrix, teamInfo,
+					success = runOneMatrix(optimizationPreferences, rollbackService, schedulingOptions, matrix, teamInfo,
 					             selectedPeriod, selectedPersons);
+					if (!success)
+						break;
 				}
 				// rollback if failed or not good
 				double currentPeriodValue =
 					_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
-				if (currentPeriodValue >= previousPeriodValue)
+				if (currentPeriodValue >= previousPeriodValue || !success)
 				{
 					teamInfosToRemove.Add(teamInfo);
 					_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
+					currentPeriodValue =
+					_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
 				}
 				previousPeriodValue = currentPeriodValue;
 
@@ -162,7 +173,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			return teamInfosToRemove;
 		}
 
-		private void runOneMatrix(IOptimizationPreferences optimizationPreferences,
+		private bool runOneMatrix(IOptimizationPreferences optimizationPreferences,
 		                          ISchedulePartModifyAndRollbackService rollbackService,
 		                          ISchedulingOptions schedulingOptions, IScheduleMatrixPro matrix,
 		                          ITeamInfo teamInfo, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons)
@@ -174,7 +185,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			ILockableBitArray resultingArray = tryFindMoves(matrix, originalArray, optimizationPreferences);
 
 			if (resultingArray.Equals(originalArray))
-				return;
+				return false;
 
 			// find out what have changed
 			IList<DateOnly> addedDaysOff = _lockableBitArrayChangesTracker.DaysOffAdded(resultingArray, originalArray, matrix,
@@ -186,19 +197,23 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 			removeAllDecidedDaysOff(rollbackService, schedulingOptions, teamInfo, removedDaysOff);
 			addAllDecidedDaysOf(rollbackService, schedulingOptions, teamInfo, addedDaysOff);
-			reScheduleAllMovedDaysOff(schedulingOptions, teamInfo, selectedPeriod, selectedPersons, removedDaysOff, rollbackService);
-
+			bool success = reScheduleAllMovedDaysOff(schedulingOptions, teamInfo, selectedPeriod, selectedPersons, removedDaysOff, rollbackService);
+			if (!success)
+				return false;
 
 			// ev back to legal state?
 			// if possible reschedule block without clearing
 			// else
 			//	clear involved teamblocks
 			//	reschedule involved teamblocks
-
+			//if (!_restrictionOverLimitValidator.Validate(teamInfo.teamBlock, optimizationPreferences, schedulingOptions,
+			//												rollbackService, _restrictionChecker))
+			//	continue;
 			// remember not to break anything in shifts or restrictions
+			return true;
 		}
 
-		private void reScheduleAllMovedDaysOff(ISchedulingOptions schedulingOptions, ITeamInfo teamInfo,
+		private bool reScheduleAllMovedDaysOff(ISchedulingOptions schedulingOptions, ITeamInfo teamInfo,
 		                                       DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons,
 		                                       IEnumerable<DateOnly> removedDaysOff, ISchedulePartModifyAndRollbackService rollbackService)
 		{
@@ -210,8 +225,12 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				if (!_teamBlockSteadyStateValidator.IsBlockInSteadyState(teamBlockInfo, schedulingOptions))
 					_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo);
 
-				_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, dateOnly, schedulingOptions, selectedPeriod, selectedPersons);
+				bool success = _teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, dateOnly, schedulingOptions, selectedPeriod, selectedPersons);
+				if (!success)
+					return false;
 			}
+
+			return true;
 		}
 
 		private void addAllDecidedDaysOf(ISchedulePartModifyAndRollbackService rollbackService,

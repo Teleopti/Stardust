@@ -503,7 +503,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 					_container.Resolve<ISafeRollbackAndResourceCalculation>(),
 					_container.Resolve<ITeamDayOffModifyer>(),
 					_container.Resolve<IBlockSteadyStateValidator>(),
-					_container.Resolve<ITeamBlockClearer>()
+					_container.Resolve<ITeamBlockClearer>(),
+					_container.Resolve<ITeamBlockRestrictionOverLimitValidator>(),
+					new RestrictionChecker()
 					);
 
 			IList<IDayOffTemplate> dayOffTemplates = (from item in _schedulerState.CommonStateHolder.DayOffs
@@ -526,6 +528,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         private void optimizeTeamBlockIntraday(DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences)
         {
             var allMatrixes = OptimizerHelperHelper.CreateMatrixListAll(_schedulerState, _container);
+			//OptimizerHelperHelper.(allMatrixes, _container);
 
             var schedulingOptionsCreator = new SchedulingOptionsCreator();
             var schedulingOptions = schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences);
