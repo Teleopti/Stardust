@@ -32,7 +32,7 @@
 	height: 57px;
 }
 
-.person-schedule .layer 
+.person-schedule  .shift .layer 
 {
 	height: 40px;
 	-webkit-border-radius: 4px 4px 4px 4px;
@@ -40,8 +40,18 @@
 			border-radius: 4px 4px 4px 4px;
 }
 
-
-
+.person-schedule .shift .layer:first-of-type
+{
+	-webkit-border-radius: 4px 0px 0px 4px;
+	   -moz-border-radius: 4px 0px 0px 4px;
+			border-radius: 4px 0px 0px 4px;
+}
+.person-schedule .shift .layer:last-of-type
+{
+	-webkit-border-radius: 0px 4px 4px 0px;
+	   -moz-border-radius: 0px 4px 4px 0px;
+			border-radius: 0px 4px 4px 0px;
+}
 
 .person-schedule .full-day-absence-form  {
 	width: 223px;
@@ -54,6 +64,10 @@
 
 .person-schedule .full-day-absence-form .end-date {
 	width: 155px;
+    background-color: #FFFFFF;
+    cursor: pointer;
+    text-align: left;
+    padding-left: 6px;
 }
 .person-schedule .hero-unit {
 	padding: 30px;

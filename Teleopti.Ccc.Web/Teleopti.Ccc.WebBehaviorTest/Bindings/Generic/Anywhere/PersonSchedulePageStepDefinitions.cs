@@ -61,8 +61,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		{
 			var fullDayAbsenceFormInfo = table.CreateInstance<FullDayAbsenceFormInfo>();
 
-			EventualAssert.That(() => DateTime.Parse(Browser.Current.Element(Find.BySelector(".full-day-absence-form #start-date")).GetAttributeValue("value")), Is.EqualTo(fullDayAbsenceFormInfo.StartDate));
-			EventualAssert.That(() => DateTime.Parse(Browser.Current.Element(Find.BySelector(".full-day-absence-form #end-date")).GetAttributeValue("value")), Is.EqualTo(fullDayAbsenceFormInfo.EndDate));
+			EventualAssert.That(() => DateTime.Parse(Browser.Current.Element(Find.BySelector(".full-day-absence-form .start-date")).GetAttributeValue("value")), Is.EqualTo(fullDayAbsenceFormInfo.StartDate));
+			EventualAssert.That(() => DateTime.Parse(Browser.Current.Element(Find.BySelector(".full-day-absence-form .end-date")).GetAttributeValue("value")), Is.EqualTo(fullDayAbsenceFormInfo.EndDate));
 		}
 
 		[Then(@"I should see the add full day absence form")]
@@ -81,10 +81,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 				var select = Browser.Current.SelectList(Find.BySelector(".full-day-absence-form .absence-type"));
 				EventualAssert.That(() => select.Exists, Is.True);
 				select.Option(Find.BySelector(string.Format(":contains('{0}')", fullDayAbsenceFormInfo.Absence))).SelectNoWait();
-				//Browser.Current.SelectList(Find.BySelector(".full-day-absence-form .absence-type"))..Select(fullDayAbsenceFormInfo.Absence);
 			}
-
-			Browser.Current.TextField(Find.BySelector(".full-day-absence-form #end-date")).ChangeValue(fullDayAbsenceFormInfo.EndDate.ToShortDateString(UserFactory.User().Culture));
+			Retrying.Javascript(string.Format("test.callViewMethodWhenReady('personschedule', 'setDateFromTest', '{0}');", fullDayAbsenceFormInfo.EndDate));
 		}
 
 		public class ShiftLayerInfo

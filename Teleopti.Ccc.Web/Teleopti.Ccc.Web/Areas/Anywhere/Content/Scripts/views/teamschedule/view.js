@@ -31,6 +31,10 @@ define([
 			navigation.GotoPersonSchedule(agentId, teamSchedule.SelectedDate());
 		}, null, "gotoagent");
 
+		var resize = function () {
+		    teamSchedule.TimeLine.WidthPixels($('.shift').width());
+		};
+
 		var loadSchedules = function(options) {
 			subscriptions.subscribeTeamSchedule(
 				teamSchedule.SelectedTeam(),
@@ -102,11 +106,7 @@ define([
 				options.renderHtml(view);
 
 				teamSchedule = new teamScheduleViewModel();
-
-				var resize = function () {
-					teamSchedule.TimeLine.WidthPixels($('.shift').width());
-				};
-
+                
 				$(window)
 					.resize(resize)
 					.bind('orientationchange', resize)
@@ -179,6 +179,7 @@ define([
 							loadSchedules({
 								success: function() {
 								    teamSchedule.Loading(false);
+								    resize();
 								    deferred.resolve();
 								}
 							});
