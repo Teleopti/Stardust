@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
@@ -127,6 +128,7 @@ namespace Teleopti.Interfaces.Domain
     	/// <summary>
     	/// 
     	/// </summary>
+		[Obsolete("Do not use this as it can return any period, not just the period in this matrix")]
     	DateOnlyPeriod SelectedPeriod { get; set; }
     	
     }
