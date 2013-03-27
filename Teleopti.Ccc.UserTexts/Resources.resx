@@ -11372,11 +11372,11 @@ Reduce the complexity to use these shifts.</value>
     <value>Generate forecast for</value>
     <comment>Period and scenario selection in quick forecast</comment>
   </data>
-  <data name="InProcess" xml:space="preserve">
-    <value>In process..</value>
-  </data>
   <data name="SelectedAbsences" xml:space="preserve">
     <value>Selected absences</value>
     <comment>Selected absences</comment>
+  </data>
+  <data name="ProcessingDotDotDot" xml:space="preserve">
+    <value>Processing...</value>
   </data>
 </root>
