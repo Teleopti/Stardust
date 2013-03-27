@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 
 		public PortalViewModel CreatePortalViewModel()
 		{
-			var navigationItems = new List<SectionNavigationItem> { createWeekScheduleNavigationItem() };
+			var navigationItems = new List<NavigationItem> { createWeekScheduleNavigationItem() };
 			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.TeamSchedule))
 			{
 				navigationItems.Add(createTeamScheduleNavigationItem());
@@ -74,100 +74,41 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 			return agent != null && agent.ApplicationAuthenticationInfo != null && !string.IsNullOrEmpty(agent.ApplicationAuthenticationInfo.ApplicationLogOnName);
 		}
 
-		private static SectionNavigationItem createTeamScheduleNavigationItem()
+		private static NavigationItem createTeamScheduleNavigationItem()
 		{
-			return new SectionNavigationItem
+			return new NavigationItem
 						{
 							Action = "Index",
 							Controller = "TeamSchedule",
-							Title = Resources.TeamSchedule,
-							NavigationItems = new NavigationItem[0],
-							ToolBarItems = new ToolBarItemBase[]
-			       		               	{
-			       		               		new ToolBarDatePicker
-			       		               			{
-			       		               				NextTitle = Resources.NextPeriod,
-			       		               				PrevTitle = Resources.PreviousPeriod
-			       		               			},
-			       		               		new ToolBarSeparatorItem(),
-			       		               		new ToolBarSelectBox
-			       		               			{
-			       		               				Type = "TeamPicker",
-			       		               				Options = new Option[] {}
-			       		               			}
-			       		               	}
+							Title = Resources.TeamSchedule
 						};
 		}
 
-		private SectionNavigationItem createRequestsNavigationItem()
+		private NavigationItem createRequestsNavigationItem()
 		{
-			var toolBarMenuItems = new List<ToolBarDropDownMenuItem>();
-
-			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.TextRequests))
-			{
-				toolBarMenuItems.Add(new ToolBarDropDownMenuItem
-				{
-					Title = Resources.NewTextRequest,
-					MenyType = "addTextRequest"
-				});
-			}
-
-			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb))
-			{
-				toolBarMenuItems.Add(new ToolBarDropDownMenuItem
-				{
-					Title = Resources.NewAbsenceRequest,
-					MenyType = "addAbsenceRequest"
-				});
-			}
-
-			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb))
-			{
-				toolBarMenuItems.Add(new ToolBarDropDownMenuItem
-				{
-					Title = Resources.NewShiftTradeRequest,
-					MenyType = "addShiftTradeRequest"
-				});
-			}
-			
-			return new SectionNavigationItem
+			return new NavigationItem
 					{
 						Action = "Index",
 						Controller = "Requests",
-						Title = Resources.Requests,
-						NavigationItems = new NavigationItem[0],
-						ToolBarItems = new List<ToolBarItemBase>
-						               	{
-						               		new ToolBarDropDown { Icon = "toolbar-addRequest", MenuItems = toolBarMenuItems}
-						               	}
+						Title = Resources.Requests
 					};
 		}
 
-		private static SectionNavigationItem createMessageNavigationItem(int unreadMessageCount)
+		private static NavigationItem createMessageNavigationItem(int unreadMessageCount)
 		{
-			return new SectionNavigationItem
+			return new NavigationItem
 			{
 				Action = "Index",
 				Controller = "Message",
 				Title = Resources.Messages,
-				NavigationItems = new NavigationItem[0],
-				ToolBarItems = new List<ToolBarItemBase>(),
 				PayAttention = unreadMessageCount != 0,
 				UnreadMessageCount = unreadMessageCount
 			};
 		}
 
-		private PreferenceNavigationItem createPreferenceNavigationItem()
+		private NavigationItem createPreferenceNavigationItem()
 		{
-			var preferenceOptions = PreferenceOptions();
-			var toolbarItems = new List<ToolBarItemBase>
-			                   	{
-			                   		new ToolBarDatePicker
-			                   			{
-			                   				NextTitle = Resources.NextPeriod,
-			                   				PrevTitle = Resources.PreviousPeriod
-			                   			}
-			                   	};
+			/*var preferenceOptions = PreferenceOptions();
 			if (!_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb))
 			{
 				toolbarItems.AddRange(
@@ -198,137 +139,32 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 				toolbarItems.Add(new ToolBarButtonItem { Title = Resources.Delete, ButtonType = "must-have-delete", Icon = "heart-delete" });
 				toolbarItems.Add(new ToolBarTextItem { Id = "must-have-numbers", Text = "0(0)" });
 			}
-
-			return new PreferenceNavigationItem
+			*/
+			return new NavigationItem
 						{
 							Action = "Index",
 							Controller = "Preference",
 							Title = Resources.Preference,
-							NavigationItems = new NavigationItem[0],
-							ToolBarItems = toolbarItems,
-							PreferenceOptions = preferenceOptions,
-							ActivityOptions = ActivityOptions()
 						};
 		}
 
-		private IEnumerable<IOption> ActivityOptions()
+		private static NavigationItem createStudentAvailabilityNavigationItem()
 		{
-			return from a in _preferenceOptionsProvider.RetrieveActivityOptions().MakeSureNotNull()
-				   select new Option
-							  {
-								  Value = a.Id.ToString(),
-								  Text = a.Description.Name,
-								  Color = a.DisplayColor.ToHtml()
-							  };
-		}
-
-		private IEnumerable<IPreferenceOption> PreferenceOptions()
-		{
-			var shiftCategories =
-				_preferenceOptionsProvider
-					.RetrieveShiftCategoryOptions()
-					.MakeSureNotNull()
-					.Select(s => new PreferenceOption
-										{
-											Value = s.Id.ToString(),
-											Text = s.Description.Name,
-											Color = s.DisplayColor.ToHtml(),
-											Extended = true
-										})
-					.ToArray();
-
-			var dayOffs = _preferenceOptionsProvider
-				.RetrieveDayOffOptions()
-				.MakeSureNotNull()
-				.Select(s => new PreferenceOption
-									{
-										Value = s.Id.ToString(),
-										Text = s.Description.Name,
-										Color = s.DisplayColor.ToHtml(),
-										Extended = false
-									})
-				.ToArray();
-
-			var absences = _preferenceOptionsProvider
-				.RetrieveAbsenceOptions()
-				.MakeSureNotNull()
-				.Select(s => new PreferenceOption
-									{
-										Value = s.Id.ToString(),
-										Text = s.Description.Name,
-										Color = s.DisplayColor.ToHtml(),
-										Extended = false
-									})
-				.ToArray();
-
-			var options = new List<IPreferenceOption>();
-			options.AddRange(shiftCategories);
-			if (options.Count > 0 && dayOffs.Any())
-				options.Add(new PreferenceOptionSplit());
-			options.AddRange(dayOffs);
-			if (options.Count > 0 && absences.Any())
-				options.Add(new PreferenceOptionSplit());
-			options.AddRange(absences);
-
-			return options;
-		}
-
-		private static StudentAvailabilityNavigationItem createStudentAvailabilityNavigationItem()
-		{
-			return new StudentAvailabilityNavigationItem
+			return new NavigationItem
 					{
 						Action = "Index",
 						Controller = "StudentAvailability",
-						Title = Resources.StudentAvailability,
-						NavigationItems = new List<NavigationItem>(),
-						ToolBarItems =
-							new ToolBarItemBase[]
-			       				{
-			       					new ToolBarDatePicker
-			       						{
-			       							NextTitle = Resources.NextPeriod,
-			       							PrevTitle = Resources.PreviousPeriod
-			       						},
-			       					new ToolBarSeparatorItem(),
-			       					new ToolBarButtonItem {Title = Resources.Edit, ButtonType = "edit"},
-			       					new ToolBarButtonItem {Title = Resources.Delete, ButtonType = "delete"},
-			       					new ToolBarSeparatorItem()
-			       				}
+						Title = Resources.StudentAvailability
 					};
 		}
 
-		private static SectionNavigationItem createWeekScheduleNavigationItem()
+		private static NavigationItem createWeekScheduleNavigationItem()
 		{
-			var toolBarItems = new List<ToolBarItemBase>
-			                   	{
-			                   		new ToolBarDatePicker
-			                   			{
-			                   				NextTitle = Resources.NextPeriod,
-			                   				PrevTitle = Resources.PreviousPeriod
-			                   			},
-									new ToolBarButtonItem
-										{
-											Title = Resources.Today,
-											ButtonType = "today"
-										}
-			                   	};
-			return new SectionNavigationItem
+			return new NavigationItem
 					{
 						Action = "Week",
 						Controller = "Schedule",
-						Title = Resources.Schedule,
-						//Commented this until we add Month schedule view
-						//NavigationItems =
-						//    new[]
-						//        {
-						//            new NavigationItem
-						//                {
-						//                    Action = "Week",
-						//                    Controller = "Schedule",
-						//                    Title = Resources.Week
-						//                }
-						//        },
-						ToolBarItems = toolBarItems
+						Title = Resources.Schedule
 					};
 		}
 	}

@@ -204,9 +204,9 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 					render: function () {
 
 						$('#Expend-Template').toggle(function () {
-							addExtendedPreferenceFormViewModel.IsTemplateDetailsVisible(!addExtendedPreferenceFormViewModel.IsTemplateDetailsVisible());
+						    addExtendedPreferenceFormViewModel.IsTemplateDetailsVisible(false);
 						}, function () {
-							addExtendedPreferenceFormViewModel.IsTemplateDetailsVisible(!addExtendedPreferenceFormViewModel.IsTemplateDetailsVisible());
+						    addExtendedPreferenceFormViewModel.IsTemplateDetailsVisible(true);
 						});
 						
 						$('#Template-save').toggle(function () {
