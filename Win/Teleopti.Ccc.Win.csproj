@@ -1271,7 +1271,9 @@
     <Compile Include="Scheduling\OverViewDrawDayOff.cs" />
     <Compile Include="Scheduling\OverViewDrawMainShift.cs" />
     <Compile Include="Scheduling\PermissionClipboardControl.cs" />
+    <Compile Include="Scheduling\PermissionClipboardRestrictionControl.cs" />
     <Compile Include="Scheduling\PermissionEditControl.cs" />
+    <Compile Include="Scheduling\PermissionEditRestrictionControl.cs" />
     <Compile Include="Scheduling\QuickAccessState.cs" />
     <Compile Include="Scheduling\SchedulerRibbonHelper.cs" />
     <Compile Include="Scheduling\SkillFullPeriodGridControl.cs">

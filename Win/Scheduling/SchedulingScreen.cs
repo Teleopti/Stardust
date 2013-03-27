@@ -325,9 +325,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 			toggleRibbonTexts(toolStripPanelItemViews2.Items);
 			//Edit
 			toggleRibbonTexts(_editControl.PanelItem.Items);
+			toggleRibbonTexts(_editControlRestrictions.PanelItem.Items);
 			//Clipboard
 			toggleRibbonTexts(_clipboardControl.PanelItem.Items);
-
+			toggleRibbonTexts(_clipboardControlRestrictions.PanelItem.Items);
 			//REQUESTS
 			toggleRibbonTexts(toolStripExHandleRequests.Items);
 
@@ -640,7 +641,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void setPermissionOnEditControl()
 		{
 			var permissionSetter = new PermissionEditControl(_editControl);
+			var permissionSetterRestriction = new PermissionEditRestrictionControl(_editControlRestrictions);
 			permissionSetter.SetPermission();
+			permissionSetterRestriction.SetPermission();
 		}
 
 		private void _editControl_DeleteSpecialClicked(object sender, ToolStripItemClickedEventArgs e)
@@ -835,12 +838,19 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				_clipboardControl.SetButtonState(ClipboardAction.Paste, false);
 			}
+
+			if (_clipboardControlRestrictions != null)
+			{
+				_clipboardControlRestrictions.SetButtonState(ClipboardAction.Paste, false);
+			}
 		}
 
 		private void setPermissionOnClipboardControl()
 		{
 			var permissionSetter = new PermissionClipboardControl(_clipboardControl);
+			var permissionSetterRestriction = new PermissionClipboardRestrictionControl(_clipboardControlRestrictions);
 			permissionSetter.SetPermission();
+			permissionSetterRestriction.SetPermission();
 		}
 
 		private void _clipboardControl_CutClicked(object sender, EventArgs e)
@@ -946,6 +956,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			Application.DoEvents();
 			_splitContainerAdvMain.Visible = false;
 			_clipboardControl.SetButtonState(ClipboardAction.Paste, true);
+			_clipboardControlRestrictions.SetButtonState(ClipboardAction.Paste, true);
 			Show();
 			Application.DoEvents();
 			loadQuickAccessState();
@@ -1426,6 +1437,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_scheduleView.GridClipboardCopy(false);
 				checkPastePermissions();
 				_clipboardControl.SetButtonState(ClipboardAction.Paste, true);
+				_clipboardControlRestrictions.SetButtonState(ClipboardAction.Paste, true);
 			}
 		}
 
@@ -2699,7 +2711,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 			toolStripMenuItemDelete.Enabled = isEditable;
 			toolStripMenuItemDeleteSpecial.Enabled = isEditable;
 			_editControl.Enabled = isEditable;
+			_editControlRestrictions.Enabled = isEditable;
 			_clipboardControl.Enabled = isEditable;
+			_clipboardControlRestrictions.Enabled = isEditable;
 
 			checkModifyPermissions();
 		}
@@ -4010,6 +4024,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 			toolStripMenuItemInsertDayOff.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonDayOff);
 			toolStripMenuItemDelete.Enabled = toolStripMenuItemDeleteSpecial.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment);
 			toolStripMenuItemWriteProtectSchedule.Enabled = toolStripMenuItemWriteProtectSchedule2.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.SetWriteProtection);
+			toolStripMenuItemAddStudentAvailabilityRestriction.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonRestriction);
+			toolStripMenuItemAddStudentAvailability.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonRestriction);
+			toolStripMenuItemAddPreferenceRestriction.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonRestriction);
+			toolStripMenuItemAddPreference.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonRestriction);
 			//reports
 			toolStripMenuItemViewReport.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.AccessToOnlineReports);
 			toolStripMenuItemScheduledTimePerActivity.Enabled = authorization.IsPermitted(DefinedRaptorApplicationFunctionPaths.ScheduledTimePerActivityReport);
@@ -5944,12 +5962,25 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_clipboardControl.CopyClicked -= _clipboardControl_CopyClicked;
 			}
 
+			if (_clipboardControlRestrictions != null)
+			{
+				_clipboardControlRestrictions.CopyClicked -= toolStripMenuItemRestrictionCopy_Click;
+				_clipboardControlRestrictions.PasteClicked -= toolStripMenuItemRestrictionPaste_Click;
+			}
+
 			if (_editControl != null)
 			{
 				_editControl.NewSpecialClicked -= _editControl_NewSpecialClicked;
 				_editControl.DeleteClicked -= _editControl_DeleteClicked;
 				_editControl.DeleteSpecialClicked -= _editControl_DeleteSpecialClicked;
 				_editControl.NewClicked -= _editControl_NewClicked;
+			}
+
+			if (_editControlRestrictions != null)
+			{
+				_editControlRestrictions.NewClicked -= _editControlRestrictions_NewClicked;
+				_editControlRestrictions.NewSpecialClicked -= _editControlRestrictions_NewSpecialClicked;
+				_editControlRestrictions.DeleteClicked -= toolStripMenuItemRestrictionDelete_Click;	
 			}
 
 			if (toolStripMenuItemDeleteSpecial != null)
@@ -7056,6 +7087,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			toolStripMenuItemCopy_Click(sender, e);
 		}
+
 		private void toolStripMenuItemRestrictionPaste_Click(object sender, EventArgs e)
 		{
 			((AgentRestrictionsDetailView)_scheduleView).PasteSelectedRestrictions(_undoRedo);
