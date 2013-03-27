@@ -628,16 +628,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			editControlHostRestrictions.Visible = false;
 		}
 
-		void _editControlRestrictions_NewClicked(object sender, EventArgs e)
-		{
-			//
-		}
-
-		void _editControlRestrictions_NewSpecialClicked(object sender, ToolStripItemClickedEventArgs e)
-		{
-			//
-		}
-
 		private void setPermissionOnEditControl()
 		{
 			var permissionSetter = new PermissionEditControl(_editControl);
@@ -7098,9 +7088,23 @@ namespace Teleopti.Ccc.Win.Scheduling
 			((AgentRestrictionsDetailView)_scheduleView).DeleteSelectedRestrictions(_undoRedo, _defaultScheduleTag);
 		}
 
+		void _editControlRestrictions_NewClicked(object sender, EventArgs e)
+		{
+			//preference
+		}
+
+		void _editControlRestrictions_NewSpecialClicked(object sender, ToolStripItemClickedEventArgs e)
+		{
+			_editControlRestrictions.CloseDropDown();
+			if ((ClipboardItems)e.ClickedItem.Tag == ClipboardItems.StudentAvailability)
+				addStudentAvailabilityToolStripMenuItemClick(sender, e);
+			//else
+				//preference
+		}
+
 		private void addPreferenceToolStripMenuItemClick(object sender, EventArgs e)
 		{
-
+			//preference	
 		}
 
 		private void addStudentAvailabilityToolStripMenuItemClick(object sender, EventArgs e)
