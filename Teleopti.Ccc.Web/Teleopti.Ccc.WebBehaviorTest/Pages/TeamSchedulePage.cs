@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
@@ -84,36 +83,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		}
 
 		[FindBy(Id = "Team-Picker")]
-		public TextField TeamPickerInput { get; set; }
-
-		[FindBy(Id = "s2id_Team-Picker")]
-		public Div TeamPickerSelectDiv { get; set; }
-
-		public Div TeamPickerDropDownClosed()
-		{
-			return Document.Div(QuicklyFind.ByClass("select2-offscreen"));
-		}
-
-		public Div TeamPickerDropDownOpened()
-		{
-			return Document.Div(QuicklyFind.ByClass("select2-search")).Parent as Div;
-		}
-
-		public IEnumerable<string> TeamPickerSelectTexts()
-		{
-			var items = Document.ListItems.Filter(QuicklyFind.ByClass("select2-result-selectable"));
-			return from item in items select item.Div(QuicklyFind.ByClass("select2-result-label")).Text;
-		}
-
-		public ListItem TeamPickerListItemByText(string text)
-		{
-			var items = Document.ListItems.Filter(QuicklyFind.ByClass("select2-result-selectable"));
-			return items.First(x => x.Children().First().InnerHtml.Contains(text));
-		}
-
-		public Link TeamPickerSelectLink()
-		{
-			return TeamPickerSelectDiv.Link(QuicklyFind.ByClass("select2-choice"));
-		}
+		public Select2Box TeamPicker { get; set; }
 	}
 }
