@@ -76,7 +76,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			var person = PersonFactory.CreatePerson("Bill");
 			var scheduleDayProList = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro });
 			var date = new DateOnly(2013, 2, 1);
-			var dateOnlyPeriod = new DateOnlyPeriod(date, date);
 			var matrixData1 = _mocks.StrictMock<IMatrixData>();
 			var matrixDataList = new List<IMatrixData> {matrixData1};
 			var groupPerson = _mocks.StrictMock<IGroupPerson>();
@@ -98,10 +97,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_scheduleDayPro.Day).Return(date).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleMatrixPro.SchedulePeriod).Return(_schedulePeriod).Repeat.AtLeastOnce();
 				Expect.Call(_schedulePeriod.IsValid).Return(false).Repeat.AtLeastOnce();
-				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(dateOnlyPeriod);
 				Expect.Call(_matrixDataListCreator.Create(matrixList, _schedulingOptions)).Return(matrixDataList);
 				Expect.Call(_matrixDataListInSteadyState.IsListInSteadyState(matrixDataList)).Return(true);
-				Expect.Call(matrixData1.Matrix).Return(_scheduleMatrixPro).Repeat.Twice();
+				Expect.Call(matrixData1.Matrix).Return(_scheduleMatrixPro).Repeat.AtLeastOnce();
 				Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(person, date)).Return(groupPerson).Repeat.Twice();
 				Expect.Call(_schedulingResultStateHolder.Schedules).Return(scheduleDictionary).Repeat.Twice();
 				Expect.Call(groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(new List<IPerson> { person })).Repeat.Twice();
@@ -126,7 +124,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			var person = PersonFactory.CreatePerson("Bill");
 			var scheduleDayProList = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro });
 			var date = new DateOnly(2013, 2, 1);
-			var dateOnlyPeriod = new DateOnlyPeriod(date, date);
 			var matrixData1 = _mocks.StrictMock<IMatrixData>();
 			var matrixDataList = new List<IMatrixData> { matrixData1 };
 			var groupPerson = _mocks.StrictMock<IGroupPerson>();
@@ -145,10 +142,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_scheduleDayPro.Day).Return(date).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleMatrixPro.SchedulePeriod).Return(_schedulePeriod).Repeat.AtLeastOnce();
 				Expect.Call(_schedulePeriod.IsValid).Return(true).Repeat.AtLeastOnce();
-				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(dateOnlyPeriod);
 				Expect.Call(_matrixDataListCreator.Create(matrixList, _schedulingOptions)).Return(matrixDataList);
 				Expect.Call(_matrixDataListInSteadyState.IsListInSteadyState(matrixDataList)).Return(true);
-				Expect.Call(matrixData1.Matrix).Return(_scheduleMatrixPro).Repeat.Twice();
+				Expect.Call(matrixData1.Matrix).Return(_scheduleMatrixPro).Repeat.AtLeastOnce();
 				Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(person, date)).Return(groupPerson).Repeat.Twice();
 				Expect.Call(_schedulingResultStateHolder.Schedules).Return(scheduleDictionary).Repeat.Twice();
 				Expect.Call(groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(new List<IPerson> { person })).Repeat.Twice();
@@ -160,7 +156,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				int target;
 			    IList<IScheduleDay> currentScheduleDayList;
                 Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulePeriod, out target, out currentScheduleDayList)).Return(true)
-					  .OutRef(1, 0);
+					  .OutRef(1, new List<IScheduleDay>());
 				Expect.Call(_scheduleDayAvailableForDayOffSpecification.IsSatisfiedBy(scheduleDay)).Return(true);
 				Expect.Call(_hasContractDayOffDefinition.IsDayOff(scheduleDay)).Return(true);
 			}
@@ -175,10 +171,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		public void ShouldAddPreferenceDayOffIndividually()
 		{
 			var matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
-			var person = PersonFactory.CreatePerson("Bill");
 			var scheduleDayProList = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro });
-			var date = new DateOnly(2013, 2, 1);
-			var dateOnlyPeriod = new DateOnlyPeriod(date, date);
 			var matrixData1 = _mocks.StrictMock<IMatrixData>();
 			var matrixDataList = new List<IMatrixData> { matrixData1 };
 			var scheduleDay = _mocks.StrictMock<IScheduleDay>();
@@ -193,12 +186,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_scheduleMatrixPro.Person).Return(person).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(scheduleDayProList).Repeat.AtLeastOnce();
-				Expect.Call(_scheduleDayPro.Day).Return(date).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleMatrixPro.SchedulePeriod).Return(_schedulePeriod).Repeat.AtLeastOnce();
 				Expect.Call(_schedulePeriod.IsValid).Return(false).Repeat.AtLeastOnce();
-				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(dateOnlyPeriod);
 				Expect.Call(_matrixDataListCreator.Create(matrixList, _schedulingOptions)).Return(matrixDataList);
 				Expect.Call(_matrixDataListInSteadyState.IsListInSteadyState(matrixDataList)).Return(false);
 				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(scheduleDay, _schedulingOptions)).Return(effectiveRestriction);
@@ -218,10 +208,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		public void ShouldAddContractDayOffIndividually()
 		{
 			var matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
-			var person = PersonFactory.CreatePerson("Bill");
 			var scheduleDayProList = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro });
-			var date = new DateOnly(2013, 2, 1);
-			var dateOnlyPeriod = new DateOnlyPeriod(date, date);
 			var matrixData1 = _mocks.StrictMock<IMatrixData>();
 			var matrixDataList = new List<IMatrixData> { matrixData1 };
 			var scheduleDay = _mocks.StrictMock<IScheduleDay>();
@@ -233,12 +220,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			using (_mocks.Record())
 			{
-				Expect.Call(_scheduleMatrixPro.Person).Return(person).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(scheduleDayProList).Repeat.AtLeastOnce();
-				Expect.Call(_scheduleDayPro.Day).Return(date).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleMatrixPro.SchedulePeriod).Return(_schedulePeriod).Repeat.AtLeastOnce();
 				Expect.Call(_schedulePeriod.IsValid).Return(true).Repeat.AtLeastOnce();
-				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(dateOnlyPeriod);
 				Expect.Call(_matrixDataListCreator.Create(matrixList, _schedulingOptions)).Return(matrixDataList);
 				Expect.Call(_matrixDataListInSteadyState.IsListInSteadyState(matrixDataList)).Return(false);
 				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(scheduleDay, _schedulingOptions)).Return(effectiveRestriction).Repeat.AtLeastOnce();
@@ -249,7 +233,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				int target;
                 IList<IScheduleDay> currentScheduleDayList;
                 Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulePeriod, out target, out currentScheduleDayList)).Return(true)
-					  .OutRef(1, 0);
+					  .OutRef(1, new List<IScheduleDay>());
 				Expect.Call(_scheduleDayAvailableForDayOffSpecification.IsSatisfiedBy(scheduleDay)).Return(true);
 				Expect.Call(_hasContractDayOffDefinition.IsDayOff(scheduleDay)).Return(true);
 			}
@@ -267,7 +251,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			var person = PersonFactory.CreatePerson("Bill");
 			var scheduleDayProList = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro });
 			var date = new DateOnly(2013, 2, 1);
-			var dateOnlyPeriod = new DateOnlyPeriod(date, date);
 			var matrixData1 = _mocks.StrictMock<IMatrixData>();
 			var matrixDataList = new List<IMatrixData> { matrixData1 };
 			var groupPerson = _mocks.StrictMock<IGroupPerson>();
@@ -285,14 +268,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			using (_mocks.Record())
 			{
 				Expect.Call(_scheduleMatrixPro.Person).Return(person).Repeat.AtLeastOnce();
-				Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(scheduleDayProList).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleDayPro.Day).Return(date).Repeat.AtLeastOnce();
+				Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(scheduleDayProList).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleMatrixPro.SchedulePeriod).Return(_schedulePeriod).Repeat.AtLeastOnce();
 				Expect.Call(_schedulePeriod.IsValid).Return(true).Repeat.AtLeastOnce();
-				Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(dateOnlyPeriod);
 				Expect.Call(_matrixDataListCreator.Create(matrixList, _schedulingOptions)).Return(matrixDataList);
 				Expect.Call(_matrixDataListInSteadyState.IsListInSteadyState(matrixDataList)).Return(true);
-				Expect.Call(matrixData1.Matrix).Return(_scheduleMatrixPro).Repeat.Twice();
+				Expect.Call(matrixData1.Matrix).Return(_scheduleMatrixPro).Repeat.AtLeastOnce();
 				Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(person, date)).Return(groupPerson).Repeat.Twice();
 				Expect.Call(_schedulingResultStateHolder.Schedules).Return(scheduleDictionary).Repeat.Twice();
 				Expect.Call(groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(new List<IPerson> { person })).Repeat.Twice();
@@ -305,7 +287,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				int target;
                 IList<IScheduleDay> currentScheduleDayList;
 				Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulePeriod, out target, out currentScheduleDayList )).Return(true)
-					  .OutRef(1, 0);
+					  .OutRef(1, new List<IScheduleDay>());
 				Expect.Call(_scheduleDayAvailableForDayOffSpecification.IsSatisfiedBy(scheduleDay)).Return(true);
 				Expect.Call(_hasContractDayOffDefinition.IsDayOff(scheduleDay)).Return(true);
 			}
