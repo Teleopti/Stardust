@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             int skillNumber = _skillList.Count;
             using (_mock.Record())
             {
-                Expect.Call(_stateHolder.Skills)
+                Expect.Call(_stateHolder.VisibleSkills)
                     .Return(_skillList);
             }
             using (_mock.Playback())
