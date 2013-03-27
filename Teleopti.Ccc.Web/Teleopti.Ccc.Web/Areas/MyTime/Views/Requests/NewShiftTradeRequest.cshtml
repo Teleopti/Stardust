@@ -3,7 +3,7 @@
 	 
 	<span id="Request-add-loaded-date" class="displaynone" data-bind="text: loadedDateSwedishFormat"></span>
 	<div class="request-detail-title pdb5">@Resources.ShiftTradeRequest</div>
-	<div id="Request-add-shift-trade-missing-wcs-message" class="friendly-message ui-corner-all" data-bind="visible : missingWorkflowControlSet">
+	<div id="Request-add-shift-trade-missing-wcs-message" class="alert alert-block" data-bind="visible : missingWorkflowControlSet">
 		@Resources.MissingWorkflowControlSet
 	</div>
 	<div data-bind="visible : !missingWorkflowControlSet()" class="input-append input-prepend">
