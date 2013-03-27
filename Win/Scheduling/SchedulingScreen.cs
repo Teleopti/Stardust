@@ -127,7 +127,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private SingleAgentRestrictionPresenter _singleAgentRestrictionPresenter;
 		private readonly IEventAggregator _eventAggregator = new EventAggregator();
 		private ClipboardControl _clipboardControl;
+		private ClipboardControl _clipboardControlRestrictions;
 		private EditControl _editControl;
+		private EditControl _editControlRestrictions;
 		private bool _uIEnabled = true;
 		private SchedulePartFilter SchedulePartFilter = SchedulePartFilter.None;
 		private bool _chartInIntradayMode;
@@ -437,6 +439,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			setEventHandlers();
 			instantiateClipboardControl();
 			instantiateEditControl();
+			instantiateEditControlRestrictions();
+			instantiateClipboardControlRestrictions();
 
 			AddControlHelpContext(_grid);
 			AddControlHelpContext(_chartControlSkillData);
@@ -602,21 +606,35 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void instantiateEditControl()
 		{
 			_editControl = new EditControl();
-			var editControlHost = new ToolStripControlHost(_editControl);
-			toolStripExEdit2.Items.Add(editControlHost);
-			_editControl.ToolStripButtonNew.Text = Resources.Add;
-
-			_editControl.NewSpecialItems.Add(new ToolStripButton { Text = Resources.Activity, Tag = ClipboardItems.Shift });
-			_editControl.NewSpecialItems.Add(new ToolStripButton { Text = Resources.PersonalActivity, Tag = ClipboardItems.PersonalShift });
-			_editControl.NewSpecialItems.Add(new ToolStripButton { Text = Resources.Overtime, Tag = ClipboardItems.Overtime });
-			_editControl.NewSpecialItems.Add(new ToolStripButton { Text = Resources.Absence, Tag = ClipboardItems.Absence });
-			_editControl.NewSpecialItems.Add(new ToolStripButton { Text = Resources.DayOff, Tag = ClipboardItems.DayOff });
+			SchedulerRibbonHelper.InstantiateEditControl(_editControl);
 			_editControl.NewClicked += _editControl_NewClicked;
 			_editControl.NewSpecialClicked += _editControl_NewSpecialClicked;
-
-			_editControl.DeleteSpecialItems.Add(new ToolStripButton { Text = Resources.DeleteSpecial, Tag = ClipboardItems.Special });
 			_editControl.DeleteClicked += _editControl_DeleteClicked;
 			_editControl.DeleteSpecialClicked += _editControl_DeleteSpecialClicked;
+			var editControlHost = new ToolStripControlHost(_editControl);
+			toolStripExEdit2.Items.Add(editControlHost);
+		}
+
+		private void instantiateEditControlRestrictions()
+		{
+			_editControlRestrictions = new EditControl();
+			SchedulerRibbonHelper.InstantiateEditControlRestrictions(_editControlRestrictions);
+			_editControlRestrictions.NewClicked += _editControlRestrictions_NewClicked;
+			_editControlRestrictions.NewSpecialClicked += _editControlRestrictions_NewSpecialClicked;
+			_editControlRestrictions.DeleteClicked += toolStripMenuItemRestrictionDelete_Click;
+			var editControlHostRestrictions = new ToolStripControlHost(_editControlRestrictions);
+			toolStripExEdit2.Items.Add(editControlHostRestrictions);
+			editControlHostRestrictions.Visible = false;
+		}
+
+		void _editControlRestrictions_NewClicked(object sender, EventArgs e)
+		{
+			//
+		}
+
+		void _editControlRestrictions_NewSpecialClicked(object sender, ToolStripItemClickedEventArgs e)
+		{
+			//
 		}
 
 		private void setPermissionOnEditControl()
@@ -787,15 +805,25 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void instantiateClipboardControl()
 		{
 			_clipboardControl = new ClipboardControl();
-			var clipboardhost = new ToolStripControlHost(_clipboardControl);
-			toolStripExClipboard.Items.Add(clipboardhost);
+			SchedulerRibbonHelper.InstantiateClipboardControl(_clipboardControl);
 			_clipboardControl.CopyClicked += _clipboardControl_CopyClicked;
-			var clipboardControlBuilder = new ClipboardControlBuilder(_clipboardControl);
-			clipboardControlBuilder.Build();
 			_clipboardControl.CutSpecialClicked += _clipboardControl_CutSpecialClicked;
 			_clipboardControl.CutClicked += _clipboardControl_CutClicked;
 			_clipboardControl.PasteSpecialClicked += _clipboardControl_PasteSpecialClicked;
 			_clipboardControl.PasteClicked += _clipboardControl_PasteClicked;
+			var clipboardhost = new ToolStripControlHost(_clipboardControl);
+			toolStripExClipboard.Items.Add(clipboardhost);	
+		}
+
+		private void instantiateClipboardControlRestrictions()
+		{
+			_clipboardControlRestrictions = new ClipboardControl();
+			SchedulerRibbonHelper.InstantiateClipboardControlRestrictions(_clipboardControlRestrictions);
+			_clipboardControlRestrictions.CopyClicked += toolStripMenuItemRestrictionCopy_Click;
+			_clipboardControlRestrictions.PasteClicked += toolStripMenuItemRestrictionPaste_Click;
+			var clipboardhost = new ToolStripControlHost(_clipboardControlRestrictions);
+			toolStripExClipboard.Items.Add(clipboardhost);
+			clipboardhost.Visible = false;	
 		}
 
 		/// <summary>
@@ -2067,7 +2095,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			toolStripMenuItemWriteProtectSchedule.Enabled = toolStripMenuItemWriteProtectSchedule2.Enabled = isPermittedToWriteProtect();
 
-			ToolStripMenuItemRequests.Enabled = _scenario.DefaultScenario;
+			//ToolStripMenuItemRequests.Enabled = _scenario.DefaultScenario;
 
 			toolStripMenuItemViewHistory.Enabled = false;
 			if (_scenario.DefaultScenario)
@@ -4684,13 +4712,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 			toolStripButtonRequestView.Tag = ZoomLevel.Level6;
 			toolStripButtonRestrictions.Tag = ZoomLevel.Level7;
 
-			toolStripMenuItemDayView.Tag = ZoomLevel.Level1;
-			toolStripMenuItemWeekView.Tag = ZoomLevel.Level2;
-			toolStripMenuItemDetailView.Tag = ZoomLevel.Level3;
-			toolStripMenuItemPeriodView.Tag = ZoomLevel.Level4;
-			toolStripMenuItemViewOver.Tag = ZoomLevel.Level5;
-			ToolStripMenuItemRequests.Tag = ZoomLevel.Level6;
-			toolStripMenuItemRestriction.Tag = ZoomLevel.Level7;
+			//toolStripMenuItemDayView.Tag = ZoomLevel.Level1;
+			//toolStripMenuItemWeekView.Tag = ZoomLevel.Level2;
+			//toolStripMenuItemDetailView.Tag = ZoomLevel.Level3;
+			//toolStripMenuItemPeriodView.Tag = ZoomLevel.Level4;
+			//toolStripMenuItemViewOver.Tag = ZoomLevel.Level5;
+			//ToolStripMenuItemRequests.Tag = ZoomLevel.Level6;
+			//toolStripMenuItemRestriction.Tag = ZoomLevel.Level7;
 		}
 
 		#region ribbon
@@ -4860,14 +4888,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 
 			enableRibbonForRequests(false);
-			toolStripExClipboard.Visible = true;
-			toolStripExEdit2.Visible = true;
-			toolStripExActions.Visible = true;
-			toolStripExLocks.Visible = true;
-			toolStripButtonFilterAgents.Enabled = true;
-			toolStripMenuItemFilter.Enabled = true;
-			toolStripMenuItemLock.Enabled = true;
-			toolStripMenuItemLoggedOnUserTimeZone.Enabled = true;
+			var isRestrictionView = level == ZoomLevel.Level7;
+			SchedulerRibbonHelper.EnableRibbonControls(toolStripExClipboard, toolStripExEdit2, toolStripExActions, toolStripExLocks, toolStripButtonFilterAgents, toolStripMenuItemLock, toolStripMenuItemLoggedOnUserTimeZone, isRestrictionView);
 
 			var callback = new SchedulerStateScheduleDayChangedCallback(new ResourceCalculateDaysDecider(), SchedulerState);
 			switch (level)
@@ -4913,11 +4935,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 					//restriction view
 					Cursor = Cursors.WaitCursor;
 					_grid.BringToFront();
-					toolStripButtonFilterAgents.Enabled = false;
-					toolStripExClipboard.Visible = false;
-					toolStripExEdit2.Visible = false;
-					toolStripExActions.Visible = false;
-					toolStripExLocks.Visible = false;
 					_scheduleView = new AgentRestrictionsDetailView(schedulerSplitters1.AgentRestrictionGrid, _grid, SchedulerState, _gridLockManager, SchedulePartFilter, _clipHandlerSchedule, _overriddenBusinessRulesHolder, callback, _defaultScheduleTag, _workShiftWorkTime);
 					_scheduleView.TheGrid.ContextMenuStrip = contextMenuStripRestrictionView;
 					prepareAgentRestrictionView(selectedPart, _scheduleView, selectedPersons);
@@ -7074,6 +7091,35 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void toolStripMenuItemRestrictionDelete_Click(object sender, EventArgs e)
 		{
 			((AgentRestrictionsDetailView)_scheduleView).DeleteSelectedRestrictions(_undoRedo, _defaultScheduleTag);
+		}
+
+		private void addPreferenceToolStripMenuItemClick(object sender, EventArgs e)
+		{
+
+		}
+
+		private void addStudentAvailabilityToolStripMenuItemClick(object sender, EventArgs e)
+		{
+			var selectedDay =  _scheduleView.SelectedSchedules()[0];
+			using (var view = new AgentStudentAvailabilityView(selectedDay))
+			{
+				view.ShowDialog(this);
+				updateRestrictions(view.ScheduleDay);
+			}
+		}
+
+		private void updateRestrictions(IScheduleDay scheduleDay)
+		{
+			if (_scheduleView == null || scheduleDay == null) return;
+			_scheduleView.Presenter.LastUnsavedSchedulePart = scheduleDay;
+			_scheduleView.Presenter.UpdateRestriction();
+			if (_scheduleView is AgentRestrictionsDetailView)
+			{
+				schedulerSplitters1.RecalculateRestrictions();
+				schedulerSplitters1.AgentRestrictionGrid.LoadData(schedulerSplitters1.SchedulingOptions);
+			}
+
+			enableSave();
 		}
 	}
 }
