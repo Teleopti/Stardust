@@ -210,9 +210,9 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 						});
 						
 						$('#Template-save').toggle(function () {
-							addExtendedPreferenceFormViewModel.IsSaveAsNewTemplate(!addExtendedPreferenceFormViewModel.IsSaveAsNewTemplate());
+							addExtendedPreferenceFormViewModel.IsSaveAsNewTemplate(false);
 						}, function () {
-							addExtendedPreferenceFormViewModel.IsSaveAsNewTemplate(!addExtendedPreferenceFormViewModel.IsSaveAsNewTemplate());
+						    addExtendedPreferenceFormViewModel.IsSaveAsNewTemplate(true);
 						});
 						
 						$('#Preference-extended-reset')
