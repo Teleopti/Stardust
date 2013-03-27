@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 				                                       	{
 															var date = source.Item1;
 															var teamOrGroupId = source.Item2;
-															var persons = _personProvider().GetPermittedPersonsForGroup(date, teamOrGroupId, DefinedRaptorApplicationFunctionPaths.TeamSchedule);
+															var persons = _personProvider().GetPermittedPersonsForGroup(date, teamOrGroupId, DefinedRaptorApplicationFunctionPaths.ViewSchedules);
 															var scheduleDays = _scheduleProvider().GetScheduleForPersons(date, persons);
 
 															if (scheduleDays == null)
