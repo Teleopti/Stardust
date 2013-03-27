@@ -213,6 +213,9 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             comboBoxTeamBlockType.ValueMember = "Key";
             if (_localSchedulingOptions.BlockFinderTypeForAdvanceScheduling == BlockFinderType.None)
                 comboBoxTeamBlockType.SelectedValue = BlockFinderType.BetweenDayOff.ToString();
+            else
+                comboBoxTeamBlockType.SelectedValue = _localSchedulingOptions.BlockFinderTypeForAdvanceScheduling;
+            comboBoxTeamBlockType.Enabled = _localSchedulingOptions.UseLevellingPerOption;
         }
 
 		private void initGroupPages()

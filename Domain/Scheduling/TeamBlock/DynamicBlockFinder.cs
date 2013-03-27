@@ -17,6 +17,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	    {
 	        if (teamInfo == null) throw new ArgumentNullException("teamInfo");
 	        DateOnlyPeriod? blockPeriod = null;
+            IEnumerable<IScheduleMatrixPro> matrixesToVerify = teamInfo.MatrixesForGroupAndDate(blockOnDate).ToList();
+            if (matrixesToVerify.Any())
+                if (isAnyTypeOfDayOff(matrixesToVerify.First().GetScheduleDayByKey(blockOnDate).DaySchedulePart())) return null;
+
 		    switch (blockType)
 		    {
 			    case BlockFinderType.SingleDay:
@@ -34,14 +38,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				    }
                 case BlockFinderType.BetweenDayOff :
 		            {
+                        //THE DATE POINTERT SHOULD NEVER BE A DAYOFF
                         IEnumerable<IScheduleMatrixPro> matrixes = teamInfo.MatrixesForGroupAndDate(blockOnDate).ToList();
                         if (matrixes.Any())
                         {
-                            DateOnly startDate = matrixes.First().SchedulePeriod.DateOnlyPeriod.StartDate;
-                            while (isAnyTypeOfDayOff(matrixes.First().GetScheduleDayByKey(startDate).DaySchedulePart()))
+                            //move to left side to get the starting date
+                            DateOnly startDate = blockOnDate;
+                            while (!isAnyTypeOfDayOff((matrixes.First().GetScheduleDayByKey(startDate).DaySchedulePart())))
                             {
-                                startDate = startDate.AddDays(1);
+                                startDate = startDate.AddDays(-1);
                             }
+                            startDate = startDate.AddDays(1);
+                            
                             foreach (var dateOnly in matrixes.First().SchedulePeriod.DateOnlyPeriod.DayCollection())
                             {
                                 if (startDate > dateOnly) continue;
@@ -50,7 +58,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                                     blockPeriod = new DateOnlyPeriod(startDate,dateOnly.AddDays(-1));
                                     break;
                                 }
+                                if (dateOnly == matrixes.First().SchedulePeriod.DateOnlyPeriod.EndDate)
+                                {
+                                    blockPeriod = new DateOnlyPeriod(startDate, dateOnly);
+                                    break;
+                                }
                                     
+
                             }
                         }
                         break;
