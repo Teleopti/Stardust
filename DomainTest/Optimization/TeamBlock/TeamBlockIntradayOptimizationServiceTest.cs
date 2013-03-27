@@ -92,5 +92,45 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 				                 _schedulePartModifyAndRollbackService);
 			}
 		}
+		
+		[Test]
+		public void ShouldShouldReschedulingFailed()
+		{
+			var dateOnly = new DateOnly();
+			var matrix1 = _mocks.StrictMock<IScheduleMatrixPro>();
+			var matrix2 = _mocks.StrictMock<IScheduleMatrixPro>();
+			var matrixes = new List<IScheduleMatrixPro> {matrix1, matrix2};
+			var selectedPeriod = new DateOnlyPeriod(dateOnly, dateOnly);
+			var person = PersonFactory.CreatePerson("Bill");
+			var persons = new List<IPerson> {person};
+			var schedulingOptions = new SchedulingOptions();
+			var groupMatrixList = new List<IList<IScheduleMatrixPro>> {matrixes};
+			var groupPerson = new GroupPerson(new List<IPerson> {person}, DateOnly.MinValue, "Hej", null);
+			var teaminfo = new TeamInfo(groupPerson, groupMatrixList);
+			var blockInfo = new BlockInfo(new DateOnlyPeriod(dateOnly, dateOnly));
+			var teamBlockInfo = new TeamBlockInfo(teaminfo, blockInfo);
+			var optimizationPreferences = new OptimizationPreferences();
+			var teamBlocks = new List<ITeamBlockInfo> {teamBlockInfo};
+			using (_mocks.Record())
+			{
+				Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(optimizationPreferences)).Return(schedulingOptions);
+				Expect.Call(_teamBlockGenerator.Generate(matrixes, selectedPeriod, persons, schedulingOptions))
+				      .Return(teamBlocks);
+				Expect.Call(_teamBlockIntradayDecisionMaker.Decide(teamBlocks, optimizationPreferences,
+				                                                   schedulingOptions)).Return(teamBlocks);
+				Expect.Call(() => _schedulePartModifyAndRollbackService.ClearModificationCollection());
+				Expect.Call(
+					() => _teamBlockClearer.ClearTeamBlock(schedulingOptions, _schedulePartModifyAndRollbackService, teamBlockInfo));
+				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, dateOnly, schedulingOptions, selectedPeriod,
+				                                                     persons))
+				      .Return(false);
+				Expect.Call(()=>_safeRollbackAndResourceCalculation.Execute(_schedulePartModifyAndRollbackService, schedulingOptions));
+			}
+			using (_mocks.Playback())
+			{
+				_target.Optimize(matrixes, selectedPeriod, persons, optimizationPreferences,
+				                 _schedulePartModifyAndRollbackService);
+			}
+		}
 	}
 }
