@@ -40,9 +40,7 @@ define([
                     return value;
                 },
                 write: function (value) {
-                    if (moment.isMoment(value))
-                        self.EndDate(value);
-                    self.EndDate(moment(value));
+                    self.EndDate(value);
                 }
             });
 
