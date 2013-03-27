@@ -3612,7 +3612,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Can not display schedule when the status of the shifttrade request is new or approved.
+        ///   Looks up a localized string similar to Can not display schedule when the status of the shift trade request is new, denied or approved.
         /// </summary>
         public static string CannotDisplayScheduleWhenShiftTradeStatusIsNew {
             get {
@@ -10037,15 +10037,6 @@ namespace Teleopti.Ccc.UserTexts {
         public static string InitializingTreeDots {
             get {
                 return ResourceManager.GetString("InitializingTreeDots", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to In process...
-        /// </summary>
-        public static string InProcess {
-            get {
-                return ResourceManager.GetString("InProcess", resourceCulture);
             }
         }
         
@@ -17036,6 +17027,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Processing....
+        /// </summary>
+        public static string ProcessingDotDotDot {
+            get {
+                return ResourceManager.GetString("ProcessingDotDotDot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Product name:.
         /// </summary>
         public static string ProductNameColon {
@@ -19824,6 +19824,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SelectDestination {
             get {
                 return ResourceManager.GetString("SelectDestination", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Selected absences.
+        /// </summary>
+        public static string SelectedAbsences {
+            get {
+                return ResourceManager.GetString("SelectedAbsences", resourceCulture);
             }
         }
         

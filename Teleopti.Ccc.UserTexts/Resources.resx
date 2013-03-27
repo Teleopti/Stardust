@@ -11300,7 +11300,8 @@ These options are activated:
     <comment>Information on the last step in quick forecast</comment>
   </data>
   <data name="CannotDisplayScheduleWhenShiftTradeStatusIsNew" xml:space="preserve">
-    <value>Can not display schedule when the status of the shifttrade request is new or approved</value>
+    <value>Can not display schedule when the status of the shift trade request is new, denied or approved</value>
+    <comment>A message in shifttrade with an explanation of why no schedules are shown</comment>
   </data>
   <data name="NewTemplateName" xml:space="preserve">
     <value>New Template Name</value>
@@ -11375,7 +11376,11 @@ Reduce the complexity to use these shifts.</value>
     <value>Generate forecast for</value>
     <comment>Period and scenario selection in quick forecast</comment>
   </data>
-  <data name="InProcess" xml:space="preserve">
-    <value>In process..</value>
+  <data name="SelectedAbsences" xml:space="preserve">
+    <value>Selected absences</value>
+    <comment>Selected absences</comment>
+  </data>
+  <data name="ProcessingDotDotDot" xml:space="preserve">
+    <value>Processing...</value>
   </data>
 </root>

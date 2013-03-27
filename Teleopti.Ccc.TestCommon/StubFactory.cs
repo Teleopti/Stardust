@@ -6,6 +6,8 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -301,6 +303,15 @@ namespace Teleopti.Ccc.TestCommon
 			projectionMerger.Stub(x => x.MergedCollection(visualLayers, null)).IgnoreArguments().Return(visualLayers);
 			var projection = new VisualLayerCollection(null, visualLayers, projectionMerger);
 			return projection;
+		}
+
+		public IVisualLayerCollection ProjectionStub(DateTimePeriod period)
+		{
+			return
+				ProjectionStub(new List<IVisualLayer>
+					{
+						new VisualLayer(new Activity("for test"), period, new Activity("also for test"), new Person())
+					});
 		}
 
 		public IVisualLayer VisualLayerStub() { return VisualLayerStub(Color.Transparent); }

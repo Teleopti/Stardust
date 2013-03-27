@@ -31,21 +31,24 @@ namespace Teleopti.Analytics.PM.PMServiceHost
 		private void SetUserRoles()
 		{
 			_userRoleDictionary = new Dictionary<int, Dictionary<int, Role>>();
-			
-			foreach (User analyzerUser in AnalyzerUsers)
+
+			if (AnalyzerUsers != null)
 			{
-				Role[] userRoles = _analyzerProxy.GetUserRoles(analyzerUser.Name.Trim());
-				var roleDictionary = new Dictionary<int, Role>();
-
-				foreach (Role userRole in userRoles)
+				foreach (User analyzerUser in AnalyzerUsers)
 				{
-					SetAdminUser(analyzerUser, userRole);
-					roleDictionary.Add(userRole.Id, userRole);
-				}
+					Role[] userRoles = _analyzerProxy.GetUserRoles(analyzerUser.Name.Trim());
+					var roleDictionary = new Dictionary<int, Role>();
 
-				if (roleDictionary.Count > 0)
-				{
-					_userRoleDictionary.Add(analyzerUser.Id, roleDictionary);
+					foreach (Role userRole in userRoles)
+					{
+						SetAdminUser(analyzerUser, userRole);
+						roleDictionary.Add(userRole.Id, userRole);
+					}
+
+					if (roleDictionary.Count > 0)
+					{
+						_userRoleDictionary.Add(analyzerUser.Id, roleDictionary);
+					}
 				}
 			}
 		}
@@ -277,7 +280,7 @@ namespace Teleopti.Analytics.PM.PMServiceHost
 		{
 			get
 			{
-				if (_analyzerUsers == null)
+				if (PermissionInformation.IsPmAuthenticationWindows && _analyzerUsers == null)
 				{
 					User[] users = _analyzerProxy.GetUsers();
 
