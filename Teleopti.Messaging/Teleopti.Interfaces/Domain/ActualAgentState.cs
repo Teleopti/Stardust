@@ -165,6 +165,9 @@ namespace Teleopti.Interfaces.Domain
 			}
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
 		public override string ToString()
 		{
 			return
