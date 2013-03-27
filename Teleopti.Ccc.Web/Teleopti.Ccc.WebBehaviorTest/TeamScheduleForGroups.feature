@@ -1,4 +1,4 @@
-﻿@ignore
+﻿
 Feature: Team schedule for groups
 In order to know when my colleagues work
 As an agent
@@ -35,21 +35,18 @@ Given there is a team with
 	| Name |
 	| Day  |
 	And I have the workflow control set 'Published schedule'
-	And I have a schedule period with 
-	| Field      | Value      |
-	| Start date | 2013-03-25 |
-	| Type       | Week       |
-	| Length     | 1          |
+	And Pierre Baldi have the workflow control set 'Published schedule'
+	And John Smith have the workflow control set 'Published schedule'
 	And I have a person period with 
 	| Field      | Value      |
 	| Team       | Team green |
 	| Start date | 2013-03-25 |
-	And 'Pierre Baldi' have a person period with
+	And Pierre Baldi have a person period with
 	| Field      | Value         |
 	| Team       | Team green    |
 	| Start date | 2013-03-25    |
 	| Contract   | 8 hours a day |
-	And 'John Smith' have a person period with
+	And John Smith have a person period with
 	| Field      | Value      |
 	| Team       | Team red   |
 	| Start date | 2013-03-25 |
