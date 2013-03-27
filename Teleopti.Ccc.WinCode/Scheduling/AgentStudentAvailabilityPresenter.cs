@@ -89,6 +89,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 		public AgentStudentAvailabilityExecuteCommand CommandToExecute(TimeSpan? startTime, TimeSpan? endTime, bool endNextDay, IAgentStudentAvailabilityDayCreator dayCreator)
 		{
+			if(dayCreator == null) throw new ArgumentNullException("dayCreator");
+
 			var studentAvailabilityday = _scheduleDay.PersistableScheduleDataCollection().OfType<IStudentAvailabilityDay>().FirstOrDefault();
 			bool startError;
 			bool endError;

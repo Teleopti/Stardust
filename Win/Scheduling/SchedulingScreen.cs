@@ -4148,7 +4148,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 				TabPageAdv tab = ColorHelper.CreateTabPage(skill.Name, skill.Description);
 				tab.Tag = skill;
-				tab.ImageIndex = imageIndexSkillType(skill.SkillType.ForecastSource);
+				tab.ImageIndex = GuiHelper.ImageIndexSkillType(skill.SkillType.ForecastSource);
 
 				_tabSkillData.TabPages.Add(tab);
 			}
@@ -4711,14 +4711,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			toolStripButtonSummaryView.Tag = ZoomLevel.Level5;
 			toolStripButtonRequestView.Tag = ZoomLevel.Level6;
 			toolStripButtonRestrictions.Tag = ZoomLevel.Level7;
-
-			//toolStripMenuItemDayView.Tag = ZoomLevel.Level1;
-			//toolStripMenuItemWeekView.Tag = ZoomLevel.Level2;
-			//toolStripMenuItemDetailView.Tag = ZoomLevel.Level3;
-			//toolStripMenuItemPeriodView.Tag = ZoomLevel.Level4;
-			//toolStripMenuItemViewOver.Tag = ZoomLevel.Level5;
-			//ToolStripMenuItemRequests.Tag = ZoomLevel.Level6;
-			//toolStripMenuItemRestriction.Tag = ZoomLevel.Level7;
 		}
 
 		#region ribbon
@@ -4778,30 +4770,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				TabPageAdv tab = ColorHelper.CreateTabPage(skill.Name, skill.Description);
 				tab.Tag = skill;
-				tab.ImageIndex = imageIndexSkillType(skill.SkillType.ForecastSource);
+				tab.ImageIndex = GuiHelper.ImageIndexSkillType(skill.SkillType.ForecastSource);
 
 				_tabSkillData.TabPages.Add(tab);
 			}
 			schedulerSplitters1.PinSavedSkills(_currentSchedulingScreenSettings);
-		}
-
-		private static int imageIndexSkillType(ForecastSource skillType)
-		{
-			switch (skillType)
-			{
-				case ForecastSource.Email:
-					return 0;
-				case ForecastSource.Facsimile:
-					return 1;
-				case ForecastSource.Backoffice:
-					return 3;
-				case ForecastSource.MaxSeatSkill:
-					return 5;
-				case ForecastSource.Retail:
-					return 6;
-				default:
-					return 2;
-			}
 		}
 
 		private PersonsFilterView _cachedPersonsFilterView;

@@ -113,6 +113,18 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			Assert.IsTrue(endTimeError);
 		}
 
+		[Test]
+		public void ShouldNotValidateWhenStartAndEndIsNull()
+		{
+			bool startTimeError;
+			bool endTimeError;
+
+			var result = _target.CanCreate(null, null, false, out startTimeError, out endTimeError);
+			Assert.IsFalse(result);
+			Assert.IsTrue(startTimeError);
+			Assert.IsTrue(endTimeError);
+		}
+
 		[Test, ExpectedException(typeof(ArgumentNullException))]
 		public void ShouldThrowExceptionOnNullScheduleDay()
 		{

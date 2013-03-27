@@ -135,6 +135,12 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_presenter.Remove(null);
 		}
 
+		[Test, ExpectedException(typeof(ArgumentNullException))]
+		public void ShouldThrowExceptionWhenNullDayCreator()
+		{
+			_presenter.CommandToExecute(TimeSpan.FromHours(1), TimeSpan.FromHours(2), false, null);
+		}
+
 		[Test]
 		public void ShouldRemoveWhenExistingAndNoStartEndTime()
 		{
