@@ -9,10 +9,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 	public class ShiftTradeSwapDetailsViewModelMappingProfile : Profile
 	{
 		private readonly IResolve<IShiftTradeTimeLineHoursViewModelFactory> _timelineViewModelFactory;
+		private readonly IResolve<IProjectionProvider> _projectionProvider;
 
-		public ShiftTradeSwapDetailsViewModelMappingProfile(IResolve<IShiftTradeTimeLineHoursViewModelFactory> timelineViewModelFactory)
+		public ShiftTradeSwapDetailsViewModelMappingProfile(IResolve<IShiftTradeTimeLineHoursViewModelFactory> timelineViewModelFactory,
+																												IResolve<IProjectionProvider> projectionProvider)
 		{
 			_timelineViewModelFactory = timelineViewModelFactory;
+			_projectionProvider = projectionProvider;
 		}
 
 		protected override void Configure()
@@ -28,7 +31,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				.ForMember(d=> d.TimeLineStartDateTime, o=>o.MapFrom(s=> createTimelinePeriod(s).StartDateTime));
 		}
 
-		private static DateTimePeriod createTimelinePeriod(IShiftTradeRequest shiftTradeRequest)
+		private DateTimePeriod createTimelinePeriod(IShiftTradeRequest shiftTradeRequest)
 		{
 			var schedpartFrom = shiftTradeRequest.ShiftTradeSwapDetails.First().SchedulePartFrom;
 			var schedpartTo = shiftTradeRequest.ShiftTradeSwapDetails.First().SchedulePartTo;
@@ -39,8 +42,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			}
 			const int extraHourBeforeAndAfter = 1;
 			DateTimePeriod totalPeriod;
-			var fromTotalPeriod = shiftTradeRequest.ShiftTradeSwapDetails.First().SchedulePartFrom.TotalPeriod();
-			var toTotalPeriod = shiftTradeRequest.ShiftTradeSwapDetails.First().SchedulePartTo.TotalPeriod();
+			var fromTotalPeriod = _projectionProvider.Invoke().Projection(schedpartFrom).Period();
+			var toTotalPeriod = _projectionProvider.Invoke().Projection(schedpartTo).Period();
 			if (fromTotalPeriod.HasValue && toTotalPeriod.HasValue)
 			{
 				totalPeriod = fromTotalPeriod.Value.MaximumPeriod(toTotalPeriod.Value);
