@@ -54,6 +54,10 @@
 
 .person-schedule .full-day-absence-form .end-date {
 	width: 155px;
+    background-color: #FFFFFF;
+    cursor: pointer;
+    text-align: left;
+    padding-left: 6px;
 }
 .person-schedule .hero-unit {
 	padding: 30px;

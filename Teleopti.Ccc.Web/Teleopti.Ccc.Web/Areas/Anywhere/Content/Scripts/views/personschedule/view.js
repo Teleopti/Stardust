@@ -64,6 +64,10 @@ define([
 			
             addfulldayabsence: function(options) {
                 personSchedule.AddingFullDayAbsence(true);
+            },
+			
+            setDateFromTest: function (date) {
+                personSchedule.AddFullDayAbsenceForm.EndDate(moment(date));
             }
 		};
 	});

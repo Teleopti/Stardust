@@ -31,19 +31,7 @@ define([
             this.StartDateFormatted = ko.computed(function() {
                 return self.StartDate().format(resources.MomentShortDatePattern);
             });
-
-            this.EndDateFormatted = ko.computed({
-                read: function () {
-                    var value = self.EndDate();
-                    if (moment.isMoment(value))
-                        return value.format(resources.MomentShortDatePattern);
-                    return value;
-                },
-                write: function (value) {
-                    self.EndDate(value);
-                }
-            });
-
+            
             this.AbsenceTypes = ko.observableArray();
 
             this.InvalidEndDate = ko.computed(function () {
