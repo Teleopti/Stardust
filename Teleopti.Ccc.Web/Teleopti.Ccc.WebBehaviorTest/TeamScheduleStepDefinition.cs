@@ -242,7 +242,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		}
 
 		[Then(@"I should see available (team|group) options")]
-		public void ThenIShouldSeeAvailableGroupOptions(Table table)
+		public void ThenIShouldSeeAvailableGroupOptions(string teamGroup,Table table)
 		{
 			var options = table.CreateSet<SingleValue>();
 			AssertTeamPickerHasTeams(from o in options select o.Value);
