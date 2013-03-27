@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             return DateTime.MinValue ;
         }
 
-        private DateTimePeriod? getShiftPeriod(IScheduleDay scheduleDay)
+        private static DateTimePeriod? getShiftPeriod(IScheduleDay scheduleDay)
         {
             var samplePersonAssignment = scheduleDay.AssignmentHighZOrder();
             if (samplePersonAssignment != null && samplePersonAssignment.MainShift!=null)
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             return null;
         }
 
-        private bool verifySameShift(ITeamBlockInfo teamBlockInfo, IList<DateOnly> dayList, IScheduleDay sampleScheduleDay)
+        private static bool verifySameShift(ITeamBlockInfo teamBlockInfo, IList<DateOnly> dayList, IScheduleDay sampleScheduleDay)
         {
             var equator = new ScheduleDayEquator();
             foreach (var day in dayList)

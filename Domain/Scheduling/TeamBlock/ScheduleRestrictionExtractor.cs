@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			return restriction;
 		}
 		
-		private IEffectiveRestriction extractSameShiftCategory(IList<DateOnly> dateOnlyList, IEnumerable<IScheduleMatrixPro> matrixList)
+		private static IEffectiveRestriction extractSameShiftCategory(IList<DateOnly> dateOnlyList, IEnumerable<IScheduleMatrixPro> matrixList)
 		{
 			var restriction = new EffectiveRestriction(new StartTimeLimitation(),
 													   new EndTimeLimitation(),

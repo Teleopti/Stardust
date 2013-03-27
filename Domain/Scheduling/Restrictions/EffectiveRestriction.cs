@@ -253,7 +253,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
         }
 
-		private bool areMainShiftsEqual(IMainShift original, IMainShift current)
+		private static bool areMainShiftsEqual(IMainShift original, IMainShift current)
 		{
 			if (original.ShiftCategory.Id != current.ShiftCategory.Id)
 				return false;

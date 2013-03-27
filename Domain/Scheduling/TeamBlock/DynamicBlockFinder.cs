@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			return new BlockInfo(blockPeriod.Value);
 	    }
 
-        private bool isAnyTypeOfDayOff(IScheduleDay scheduleDay)
+        private static bool isAnyTypeOfDayOff(IScheduleDay scheduleDay)
         {
             var significantPart = scheduleDay.SignificantPart();
             if (significantPart == SchedulePartView.DayOff ||
