@@ -52,18 +52,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			var minMaxcontractTime = new MinMax<TimeSpan>(new TimeSpan(7, 0, 0), new TimeSpan(8, 0, 0));
 			using (_mocks.Record())
 			{
-				Expect.Call(workShift1.ToMainShift(new DateTime(2009, 1, 1), _timeZoneInfo)).Return(mainshift1);
-				Expect.Call(workShift2.ToMainShift(new DateTime(2009, 1, 1), _timeZoneInfo)).Return(mainshift2);
-				Expect.Call(workShift1.ProjectionService()).Return(ps1);
-				Expect.Call(workShift2.ProjectionService()).Return(ps2);
-				Expect.Call(ps1.CreateProjection()).Return(lc1);
-				Expect.Call(ps2.CreateProjection()).Return(lc2);
-
-				Expect.Call(lc1.ContractTime()).Return(new TimeSpan(7, 0, 0));
-				Expect.Call(lc2.ContractTime()).Return(new TimeSpan(10, 0, 0));
-				Expect.Call(()=>_workShiftMinMaxCalculator.ResetCache());
-				Expect.Call(_workShiftMinMaxCalculator.MinMaxAllowedShiftContractTime(dateOnly, _matrix, _scheduleOptions))
-				      .Return(minMaxcontractTime);
+				ExpectCallForShouldFilterAccordingToContractTime(workShift1, mainshift1, workShift2, mainshift2, ps1, ps2, lc1, lc2, dateOnly, minMaxcontractTime);
 			}
 
 			IList<IShiftProjectionCache> retShifts;
@@ -83,5 +72,25 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			retShifts.Should().Contain(c1);
 			retShifts.Count.Should().Be.EqualTo(1);
 		}
+
+	    private void ExpectCallForShouldFilterAccordingToContractTime(IWorkShift workShift1, IMainShift mainshift1,
+	                                                                  IWorkShift workShift2, IMainShift mainshift2,
+	                                                                  IProjectionService ps1, IProjectionService ps2,
+	                                                                  IVisualLayerCollection lc1, IVisualLayerCollection lc2,
+	                                                                  DateOnly dateOnly, MinMax<TimeSpan> minMaxcontractTime)
+	    {
+	        Expect.Call(workShift1.ToMainShift(new DateTime(2009, 1, 1), _timeZoneInfo)).Return(mainshift1);
+	        Expect.Call(workShift2.ToMainShift(new DateTime(2009, 1, 1), _timeZoneInfo)).Return(mainshift2);
+	        Expect.Call(workShift1.ProjectionService()).Return(ps1);
+	        Expect.Call(workShift2.ProjectionService()).Return(ps2);
+	        Expect.Call(ps1.CreateProjection()).Return(lc1);
+	        Expect.Call(ps2.CreateProjection()).Return(lc2);
+
+	        Expect.Call(lc1.ContractTime()).Return(new TimeSpan(7, 0, 0));
+	        Expect.Call(lc2.ContractTime()).Return(new TimeSpan(10, 0, 0));
+	        Expect.Call(() => _workShiftMinMaxCalculator.ResetCache());
+	        Expect.Call(_workShiftMinMaxCalculator.MinMaxAllowedShiftContractTime(dateOnly, _matrix, _scheduleOptions))
+	              .Return(minMaxcontractTime);
+	    }
 	}
 }

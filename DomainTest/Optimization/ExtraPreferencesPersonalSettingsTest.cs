@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 		}
 
-        [Test]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Levelling"), Test]
         public void MappingShouldGetAndSetForLevellingOptions()
         {
             _extraPreferencesSource.UseLevellingOption  = true;
@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Assert.AreEqual(_extraPreferencesSource.BlockFinderTypeForAdvanceOptimization, _extraPreferencesTarget.BlockFinderTypeForAdvanceOptimization);
         }
 
-        [Test]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Levelling"), Test]
         public void MappingShouldGetAndSetForLevellingOptionsForSingleAgentPage()
         {
             var singleAgentTeamGroupPage = new GroupPageLight { Key = "SingleAgentTeam" ,Name = "Single Agent Team" };

@@ -9,12 +9,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
     [TestFixture]
     public class BlockFinderTypeCreatorTest
     {
-        [SetUp]
-        public void Setup()
-        {
-           
-        }
-
         [Test]
         public void CheckCorrectNumberOfOptions()
         {
@@ -22,7 +16,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         }
 
         [Test]
-        public void CheckCorrectContentsAreRecieved()
+        public void CheckCorrectContentsAreReceived()
         {
             var blockType = BlockFinderTypeCreator.GetBlockFinderTypes.OrderBy(x => x.Key).ToList();
             Assert.AreEqual(blockType[0].Key , BlockFinderType.BetweenDayOff.ToString() );

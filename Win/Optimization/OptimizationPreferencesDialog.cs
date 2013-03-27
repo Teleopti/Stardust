@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Win.Optimization
 			LoadPersonalSettings();
             generalPreferencesPanel1.Initialize(Preferences.General, _scheduleTags, _eventAggregator);
             dayOffPreferencesPanel1.Initialize(Preferences.DaysOff);
-            extraPreferencesPanel1.Initialize(Preferences.Extra, _groupPagesProvider, _eventAggregator, _availableActivity);
+            extraPreferencesPanel1.Initialize(Preferences.Extra, _groupPagesProvider, _availableActivity);
             advancedPreferencesPanel1.Initialize(Preferences.Advanced);
             shiftsPreferencesPanel1.Initialize(Preferences.Shifts, _availableActivity, _resolution);
             panels = new List<IDataExchange>{generalPreferencesPanel1, dayOffPreferencesPanel1, extraPreferencesPanel1, shiftsPreferencesPanel1, advancedPreferencesPanel1};

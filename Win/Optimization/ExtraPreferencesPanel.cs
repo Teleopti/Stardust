@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Win.Optimization
         private IList<IGroupPageLight> _groupPageOnTeams;
         private IList<IGroupPageLight> _groupPageOnCompareWith;
         private IList<IGroupPageLight> _groupPageOnTeamsLevelingPer;
-        private IEventAggregator _eventAggregator;
+        //private IEventAggregator _eventAggregator;
         private IList<IActivity> _availableActivity;
         //private LevellingPerConfiguration _levellingConfiguartion;
         private GroupPageLight _singleAgentEntry;
@@ -36,12 +36,11 @@ namespace Teleopti.Ccc.Win.Optimization
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public void Initialize(
             IExtraPreferences extraPreferences,
-			ISchedulerGroupPagesProvider groupPagesProvider,
-            IEventAggregator eventAggregator, IList<IActivity> availableActivity)
+			ISchedulerGroupPagesProvider groupPagesProvider, IList<IActivity> availableActivity)
         {
             Preferences = extraPreferences;
 			_groupPageOnTeams = groupPagesProvider.GetGroups(false);
-        	_eventAggregator = eventAggregator;
+        	//_eventAggregator = eventAggregator;
 		    _availableActivity = availableActivity;
 			_groupPageOnCompareWith = groupPagesProvider.GetGroups(false);
 			_groupPageOnTeamsLevelingPer  = groupPagesProvider.GetGroups(false);
