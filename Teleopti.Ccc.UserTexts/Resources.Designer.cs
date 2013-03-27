@@ -10041,15 +10041,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to In process...
-        /// </summary>
-        public static string InProcess {
-            get {
-                return ResourceManager.GetString("InProcess", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Input error.
         /// </summary>
         public static string InputError {
@@ -17032,6 +17023,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string PriorityColon {
             get {
                 return ResourceManager.GetString("PriorityColon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Processing....
+        /// </summary>
+        public static string ProcessingDotDotDot {
+            get {
+                return ResourceManager.GetString("ProcessingDotDotDot", resourceCulture);
             }
         }
         
