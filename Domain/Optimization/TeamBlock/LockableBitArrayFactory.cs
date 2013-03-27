@@ -11,6 +11,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 	public class LockableBitArrayFactory : ILockableBitArrayFactory
 	{
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
 		public ILockableBitArray ConvertFromMatrix(bool useWeekBefore, bool useWeekAfter, IScheduleMatrixPro matrix)
 		{
 			if (!useWeekBefore && !useWeekAfter)

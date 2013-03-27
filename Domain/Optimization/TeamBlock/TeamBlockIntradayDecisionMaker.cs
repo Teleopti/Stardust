@@ -39,6 +39,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			return sortedTeamBlocks;
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public ITeamBlockInfo RecalculateTeamBlock(ITeamBlockInfo teamBlock,
 		                                           IOptimizationPreferences optimizationPreferences,
 		                                           ISchedulingOptions schedulingOptions)

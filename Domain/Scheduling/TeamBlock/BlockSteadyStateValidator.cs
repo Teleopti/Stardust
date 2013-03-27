@@ -36,7 +36,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             return true;
         }
 
-        public bool IsBlockScheduled(ITeamBlockInfo teamBlockInfo)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public bool IsBlockScheduled(ITeamBlockInfo teamBlockInfo)
         {
             foreach (var day in teamBlockInfo.BlockInfo.BlockPeriod.DayCollection())
                 foreach (var matrix in teamBlockInfo.TeamInfo.MatrixesForGroupAndDate(day))

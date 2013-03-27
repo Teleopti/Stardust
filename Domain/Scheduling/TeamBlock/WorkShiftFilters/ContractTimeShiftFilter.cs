@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			_workShiftMinMaxCalculator = workShiftMinMaxCalculator;
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
 		public IList<IShiftProjectionCache> Filter(DateOnly dateOnly, IList<IScheduleMatrixPro> matrixList,
 		                                           IList<IShiftProjectionCache> shiftList,
 		                                           ISchedulingOptions schedulingOptions, IWorkShiftFinderResult finderResult)

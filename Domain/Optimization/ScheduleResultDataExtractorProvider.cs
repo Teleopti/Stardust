@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
     public class ScheduleResultDataExtractorProvider : IScheduleResultDataExtractorProvider
     {
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public IScheduleResultDataExtractor CreatePersonalSkillDataExtractor(IScheduleMatrixPro scheduleMatrix, IAdvancedPreferences optimizerPreferences)
         {
             if(scheduleMatrix == null)
@@ -33,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             }
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public IScheduleResultDataExtractor CreateAllSkillsDataExtractor(DateOnlyPeriod selectedPeriod, ISchedulingResultStateHolder stateHolder, IAdvancedPreferences optimizerPreferences)
         {
             ISkillExtractor allSkillExtractor = new SchedulingStateHolderAllSkillExtractor(stateHolder);

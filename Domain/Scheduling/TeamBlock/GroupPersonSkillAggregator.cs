@@ -30,7 +30,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		    return ret;
 		}
 
-        public IEnumerable<ISkill> AggregatedSkillsPerPerson(IPerson person, DateOnlyPeriod dateOnlyPeriod)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public IEnumerable<ISkill> AggregatedSkillsPerPerson(IPerson person, DateOnlyPeriod dateOnlyPeriod)
         {
             var ret = new HashSet<ISkill>();
                     var personPeriods = person.PersonPeriods(dateOnlyPeriod);

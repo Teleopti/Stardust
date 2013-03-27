@@ -80,6 +80,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 		public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
 		public void OptimizeDaysOff(
 			IList<IScheduleMatrixPro> allPersonMatrixList,
 			DateOnlyPeriod selectedPeriod,

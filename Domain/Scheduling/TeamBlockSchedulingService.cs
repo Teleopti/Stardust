@@ -41,7 +41,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 	    public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
-	    public bool ScheduleSelected(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, TeamSteadyStateHolder teamSteadyStateHolder)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
+		public bool ScheduleSelected(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, TeamSteadyStateHolder teamSteadyStateHolder)
 	    {
 			_teamBlockScheduler.DayScheduled += dayScheduled;
 		    foreach (var datePointer in selectedPeriod.DayCollection())

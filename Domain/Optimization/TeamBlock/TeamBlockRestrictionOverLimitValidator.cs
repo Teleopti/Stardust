@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_optimizationOverLimitByRestrictionDeciderFactory = optimizationOverLimitByRestrictionDeciderFactory;
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public bool Validate(IList<IScheduleMatrixPro> allPersonMatrixList,
 		                     IOptimizationPreferences optimizationPreferences, 
 		                     ISchedulingOptions schedulingOptions, 

@@ -102,7 +102,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
         //    return activityIntervalData;
         //}
 
-        public IDictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>> GeneratePerDay(ITeamBlockInfo teamBlockInfo )
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public IDictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>> GeneratePerDay(ITeamBlockInfo teamBlockInfo )
         {
             var groupPerson =teamBlockInfo.TeamInfo .GroupPerson;
             var dateOnlyList =teamBlockInfo.BlockInfo .BlockPeriod.DayCollection();

@@ -77,6 +77,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             return true;
         }
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public bool MainShiftBasicEquals(IMainShift original, IMainShift current)
 		{
 			if (original.ShiftCategory.Id != current.ShiftCategory.Id)
@@ -97,7 +98,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 			return true;
 		}
 
-        public bool MainShiftEqualsWithoutPeriod(IMainShift original, IMainShift current)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public bool MainShiftEqualsWithoutPeriod(IMainShift original, IMainShift current)
         {
             if (original.ShiftCategory.Id != current.ShiftCategory.Id)
                 return false;

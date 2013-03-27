@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void Execute(ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService, ISchedulingOptions schedulingOptions)
 		{
 			var modifyedScheduleDays = schedulePartModifyAndRollbackService.ModificationCollection.ToList();

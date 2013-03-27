@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			_deleteAndResourceCalculateService = deleteAndResourceCalculateService;
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
 		public void ClearTeamBlock(ISchedulingOptions schedulingOptions,
 		                           ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 		                           ITeamBlockInfo teamBlock)

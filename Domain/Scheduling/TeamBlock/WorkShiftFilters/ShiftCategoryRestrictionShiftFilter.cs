@@ -13,6 +13,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 	
 	public class ShiftCategoryRestrictionShiftFilter : IShiftCategoryRestrictionShiftFilter
 	{
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public IList<IShiftProjectionCache> Filter(IShiftCategory category, IList<IShiftProjectionCache> shiftList,
 		                                           IWorkShiftFinderResult finderResult)
 		{
