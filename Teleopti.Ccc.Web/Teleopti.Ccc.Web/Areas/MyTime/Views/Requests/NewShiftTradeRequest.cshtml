@@ -48,15 +48,15 @@
 		</div>
 		
 		<div id="Request-add-shift-trade-detail-section" data-bind="visible: isDetailVisible" class="well well-small mt10" style="width: 50%; overflow: hidden;">
-            <div>
+			<div>
 				<input id="Request-add-shift-trade-subject-input" type="text" data-bind="value: subject" class="input-block-level" placeholder="@Resources.Subject" />
 			</div>
 			<div>
 				<textarea id="Request-add-shift-trade-message-input" data-bind="value: message" rows="4" class="input-block-level" placeholder="@Resources.Message" />
 			</div>
 		<div class="pull-right">
-		    <button class="btn cancel-button">@Resources.Cancel</button>
-            <button class="btn btn-primary send-button" data-bind="enable: isSendEnabled">@Resources.Send</button>
+			<button class="btn cancel-button">@Resources.Cancel</button>
+			<button class="btn btn-primary send-button" data-bind="enable: isSendEnabled">@Resources.Send</button>
 		</div>
 		<div class="error" data-bind="html: errorMessage"></div>
 		</div>
