@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			IOpenTheTeamPicker();
 
-			//Pages.Pages.TeamSchedulePage.SelectTeamByText(optionText);
+			Pages.Pages.TeamSchedulePage.TeamPicker.SelectTeamByText(optionText);
 		}
 
 
