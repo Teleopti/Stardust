@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		}
 
 		[Test]
-		public void ShouldCalculateAllModifyedDaysAndTheDaysAfter()
+		public void ShouldCalculateAllModifiedDaysAndTheDaysAfter()
 		{
 
 			using (_mocks.Record())

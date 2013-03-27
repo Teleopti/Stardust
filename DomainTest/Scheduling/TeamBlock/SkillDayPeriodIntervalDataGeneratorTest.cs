@@ -101,36 +101,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			
             using (_mock.Record())
             {
-	            Expect.Call(_teamBlockInfo.TeamInfo).Return(_teamInfo);
-	            Expect.Call(_teamInfo.GroupPerson).Return(_groupPerson);
-	            Expect.Call(_teamBlockInfo.BlockInfo).Return(_blockInfo);
-				Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly>())).IgnoreArguments().
-			   Return(_skillDayList);
-				Expect.Call(_groupPersonSkillAggregator.AggregatedSkills(_groupPerson,
-																		 new DateOnlyPeriod(new DateOnly(_date),
-																							new DateOnly(_date))))
-					  .Return(new List<ISkill> { skill1, skill2 });
-				Expect.Call(_skillDay1.Skill).Return(skill1).Repeat.AtLeastOnce();
-				Expect.Call(_skillDay1.CurrentDate).Return(new DateOnly());
-				Expect.Call(_skillDay1.SkillStaffPeriodCollection).Return(_skillStaffPeriodCollection).Repeat.AtLeastOnce();
-				Expect.Call(_skillDay2.Skill).Return(skill2).Repeat.AtLeastOnce();
-				Expect.Call(_skillDay2.CurrentDate).Return(new DateOnly());
-				Expect.Call(_skillDay2.SkillStaffPeriodCollection).Return(_skillStaffPeriodCollection).Repeat.AtLeastOnce();
-				Expect.Call(_resolutionProvider.MinimumResolution(new List<ISkill>())).IgnoreArguments().Return(15);
-				Expect.Call(_intervalMapper.MapSkillIntervalData(new List<ISkillStaffPeriod>())).IgnoreArguments().Return(
-					skillIntervalDataList).Repeat.AtLeastOnce();
-				Expect.Call(_intervalDivider.SplitSkillIntervalData(new List<ISkillIntervalData>(), 15)).IgnoreArguments().
-					Return(skillIntervalDataList).Repeat.AtLeastOnce();
-
-				Expect.Call(_factorApplier.ApplyFactors(new SkillIntervalData(new DateTimePeriod(), 0, 0, 0, null, null),
-														skill1)).IgnoreArguments().Return(skillIntervalData1).Repeat.Times(2);
-				Expect.Call(_factorApplier.ApplyFactors(new SkillIntervalData(new DateTimePeriod(), 0, 0, 0, null, null),
-														skill2)).IgnoreArguments().Return(skillIntervalData2).Repeat.Times(2);
-
-				Expect.Call(_dayIntervalDataCalculator.Calculate(15, new Dictionary<DateOnly, IList<ISkillIntervalData>>())).
-					IgnoreArguments().Return(intervalData1);
-				Expect.Call(_dayIntervalDataCalculator.Calculate(15, new Dictionary<DateOnly, IList<ISkillIntervalData>>())).
-					IgnoreArguments().Return(intervalData2);
+	            ExpectCallForShouldCreateIntervalsFromSkillDay(skill1, skill2, skillIntervalDataList, skillIntervalData1, skillIntervalData2, intervalData1, intervalData2);
             }
             using(_mock.Playback())
             {
@@ -141,7 +112,45 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             }
         }
 
-		[Test]
+        private void ExpectCallForShouldCreateIntervalsFromSkillDay(ISkill skill1, ISkill skill2,
+                                                                    SkillIntervalData[] skillIntervalDataList,
+                                                                    SkillIntervalData skillIntervalData1,
+                                                                    SkillIntervalData skillIntervalData2,
+                                                                    Dictionary<TimeSpan, ISkillIntervalData> intervalData1, Dictionary<TimeSpan, ISkillIntervalData> intervalData2)
+        {
+            Expect.Call(_teamBlockInfo.TeamInfo).Return(_teamInfo);
+            Expect.Call(_teamInfo.GroupPerson).Return(_groupPerson);
+            Expect.Call(_teamBlockInfo.BlockInfo).Return(_blockInfo);
+            Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly>())).IgnoreArguments().
+                   Return(_skillDayList);
+            Expect.Call(_groupPersonSkillAggregator.AggregatedSkills(_groupPerson,
+                                                                     new DateOnlyPeriod(new DateOnly(_date),
+                                                                                        new DateOnly(_date))))
+                  .Return(new List<ISkill> {skill1, skill2});
+            Expect.Call(_skillDay1.Skill).Return(skill1).Repeat.AtLeastOnce();
+            Expect.Call(_skillDay1.CurrentDate).Return(new DateOnly());
+            Expect.Call(_skillDay1.SkillStaffPeriodCollection).Return(_skillStaffPeriodCollection).Repeat.AtLeastOnce();
+            Expect.Call(_skillDay2.Skill).Return(skill2).Repeat.AtLeastOnce();
+            Expect.Call(_skillDay2.CurrentDate).Return(new DateOnly());
+            Expect.Call(_skillDay2.SkillStaffPeriodCollection).Return(_skillStaffPeriodCollection).Repeat.AtLeastOnce();
+            Expect.Call(_resolutionProvider.MinimumResolution(new List<ISkill>())).IgnoreArguments().Return(15);
+            Expect.Call(_intervalMapper.MapSkillIntervalData(new List<ISkillStaffPeriod>())).IgnoreArguments().Return(
+                skillIntervalDataList).Repeat.AtLeastOnce();
+            Expect.Call(_intervalDivider.SplitSkillIntervalData(new List<ISkillIntervalData>(), 15)).IgnoreArguments().
+                   Return(skillIntervalDataList).Repeat.AtLeastOnce();
+
+            Expect.Call(_factorApplier.ApplyFactors(new SkillIntervalData(new DateTimePeriod(), 0, 0, 0, null, null),
+                                                    skill1)).IgnoreArguments().Return(skillIntervalData1).Repeat.Times(2);
+            Expect.Call(_factorApplier.ApplyFactors(new SkillIntervalData(new DateTimePeriod(), 0, 0, 0, null, null),
+                                                    skill2)).IgnoreArguments().Return(skillIntervalData2).Repeat.Times(2);
+
+            Expect.Call(_dayIntervalDataCalculator.Calculate(15, new Dictionary<DateOnly, IList<ISkillIntervalData>>())).
+                   IgnoreArguments().Return(intervalData1);
+            Expect.Call(_dayIntervalDataCalculator.Calculate(15, new Dictionary<DateOnly, IList<ISkillIntervalData>>())).
+                   IgnoreArguments().Return(intervalData2);
+        }
+
+        [Test]
 		public void ShouldSkipSkillsNotInAggregatedSkills()
 		{
 			var skillIntervalData1 = new SkillIntervalData(new DateTimePeriod(_date, _date.AddMinutes(15)), 6.0, 0, 0, 0, 0);
@@ -169,31 +178,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			using (_mock.Record())
 			{
-				Expect.Call(_teamBlockInfo.TeamInfo).Return(_teamInfo);
-				Expect.Call(_teamInfo.GroupPerson).Return(_groupPerson);
-				Expect.Call(_teamBlockInfo.BlockInfo).Return(_blockInfo);
-				Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly>())).IgnoreArguments().
-			   Return(_skillDayList);
-				Expect.Call(_groupPersonSkillAggregator.AggregatedSkills(_groupPerson,
-																		 new DateOnlyPeriod(new DateOnly(_date),
-																							new DateOnly(_date))))
-					  .Return(new List<ISkill> { skill1 });
-				Expect.Call(_skillDay1.Skill).Return(skill1).Repeat.AtLeastOnce();
-				Expect.Call(_skillDay1.CurrentDate).Return(new DateOnly());
-				Expect.Call(_skillDay1.SkillStaffPeriodCollection).Return(_skillStaffPeriodCollection).Repeat.AtLeastOnce();
-				Expect.Call(_skillDay2.Skill).Return(skill2).Repeat.AtLeastOnce();
-				Expect.Call(_skillDay2.CurrentDate).Return(new DateOnly());
-				Expect.Call(_resolutionProvider.MinimumResolution(new List<ISkill>())).IgnoreArguments().Return(15);
-				Expect.Call(_intervalMapper.MapSkillIntervalData(new List<ISkillStaffPeriod>())).IgnoreArguments().Return(
-					skillIntervalDataList).Repeat.AtLeastOnce();
-				Expect.Call(_intervalDivider.SplitSkillIntervalData(new List<ISkillIntervalData>(), 15)).IgnoreArguments().
-					Return(skillIntervalDataList).Repeat.AtLeastOnce();
-
-				Expect.Call(_factorApplier.ApplyFactors(new SkillIntervalData(new DateTimePeriod(), 0, 0, 0, null, null),
-														skill1)).IgnoreArguments().Return(skillIntervalData1).Repeat.Times(2);
-
-				Expect.Call(_dayIntervalDataCalculator.Calculate(15, new Dictionary<DateOnly, IList<ISkillIntervalData>>())).
-					IgnoreArguments().Return(intervalData1);
+				ExpectCallForShouldSkipSkillsNotInAggregatedSkills(skill1, skill2, skillIntervalDataList, skillIntervalData1, intervalData1);
 			}
 			using (_mock.Playback())
 			{
@@ -202,5 +187,37 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Assert.That(calculatedResult[activity1][_date.TimeOfDay].ForecastedDemand, Is.EqualTo(activityIntervalData[activity1][_date.TimeOfDay].ForecastedDemand));
 			}
 		}
+
+        private void ExpectCallForShouldSkipSkillsNotInAggregatedSkills(ISkill skill1, ISkill skill2,
+                                                                        SkillIntervalData[] skillIntervalDataList,
+                                                                        SkillIntervalData skillIntervalData1,
+                                                                        Dictionary<TimeSpan, ISkillIntervalData> intervalData1)
+        {
+            Expect.Call(_teamBlockInfo.TeamInfo).Return(_teamInfo);
+            Expect.Call(_teamInfo.GroupPerson).Return(_groupPerson);
+            Expect.Call(_teamBlockInfo.BlockInfo).Return(_blockInfo);
+            Expect.Call(_schedulingResultStateHolder.SkillDaysOnDateOnly(new List<DateOnly>())).IgnoreArguments().
+                   Return(_skillDayList);
+            Expect.Call(_groupPersonSkillAggregator.AggregatedSkills(_groupPerson,
+                                                                     new DateOnlyPeriod(new DateOnly(_date),
+                                                                                        new DateOnly(_date))))
+                  .Return(new List<ISkill> {skill1});
+            Expect.Call(_skillDay1.Skill).Return(skill1).Repeat.AtLeastOnce();
+            Expect.Call(_skillDay1.CurrentDate).Return(new DateOnly());
+            Expect.Call(_skillDay1.SkillStaffPeriodCollection).Return(_skillStaffPeriodCollection).Repeat.AtLeastOnce();
+            Expect.Call(_skillDay2.Skill).Return(skill2).Repeat.AtLeastOnce();
+            Expect.Call(_skillDay2.CurrentDate).Return(new DateOnly());
+            Expect.Call(_resolutionProvider.MinimumResolution(new List<ISkill>())).IgnoreArguments().Return(15);
+            Expect.Call(_intervalMapper.MapSkillIntervalData(new List<ISkillStaffPeriod>())).IgnoreArguments().Return(
+                skillIntervalDataList).Repeat.AtLeastOnce();
+            Expect.Call(_intervalDivider.SplitSkillIntervalData(new List<ISkillIntervalData>(), 15)).IgnoreArguments().
+                   Return(skillIntervalDataList).Repeat.AtLeastOnce();
+
+            Expect.Call(_factorApplier.ApplyFactors(new SkillIntervalData(new DateTimePeriod(), 0, 0, 0, null, null),
+                                                    skill1)).IgnoreArguments().Return(skillIntervalData1).Repeat.Times(2);
+
+            Expect.Call(_dayIntervalDataCalculator.Calculate(15, new Dictionary<DateOnly, IList<ISkillIntervalData>>())).
+                   IgnoreArguments().Return(intervalData1);
+        }
     }
 }

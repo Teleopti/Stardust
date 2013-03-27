@@ -13,7 +13,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 {
 	[TestFixture]
-	public class TeamDayOffModifyerTest
+	public class TeamDayOffModifierTest
 	{
 		private MockRepository _mocks;
 		private ITeamDayOffModifyer _target;

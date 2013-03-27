@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		}
 
 		[Test]
-		public void ShouldReturnNllIfTeamInfoIsNull()
+		public void ShouldReturnNullIfTeamInfoIsNull()
 		{
 			ITeamBlockInfo result = _target.CreateTeamBlockInfo(null, new DateOnly(2013, 2, 27), BlockFinderType.None);
 			Assert.IsNull(result);

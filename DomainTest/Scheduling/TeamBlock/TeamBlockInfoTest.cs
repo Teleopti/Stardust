@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         }
 
         [Test]
-        public void ShouldBeSameWhenHashcodeOfTeamBlocksAreTheSame()
+        public void ShouldBeSameWhenHashCodeOfTeamBlocksAreTheSame()
         {
             var teamBlock = new TeamBlockInfo(_teamInfo, _blockInfo);
 
