@@ -47,7 +47,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                                 if (startDate > dateOnly) continue;
                                 if (isAnyTypeOfDayOff(matrixes.First().GetScheduleDayByKey(dateOnly).DaySchedulePart()))
                                 {
-                                    //TODO: should we include the DO in the period?
                                     blockPeriod = new DateOnlyPeriod(startDate,dateOnly.AddDays(-1));
                                     break;
                                 }

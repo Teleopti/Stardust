@@ -62,8 +62,10 @@ namespace Teleopti.Ccc.Win.Optimization
             comboBoxTeamBlockType.DataSource = BlockFinderTypeCreator.GetBlockFinderTypes;
             comboBoxTeamBlockType.DisplayMember = "Name";
             comboBoxTeamBlockType.ValueMember = "Key";
-            if (Preferences.BlockFinderTypeForAdvanceOptimization != BlockFinderType.None)
+            if (Preferences.BlockFinderTypeForAdvanceOptimization == BlockFinderType.None)
                 comboBoxTeamBlockType.SelectedValue = BlockFinderType.BetweenDayOff.ToString();
+            else
+                comboBoxTeamBlockType.SelectedValue = Preferences.BlockFinderTypeForAdvanceOptimization.ToString();
         }
 
         public bool ValidateData(ExchangeDataOption direction)
