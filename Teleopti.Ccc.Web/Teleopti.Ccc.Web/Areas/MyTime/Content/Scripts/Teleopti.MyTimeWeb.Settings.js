@@ -122,6 +122,10 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 		});
 	}
 
+	function _activatePlaceHolderText() {
+	    $(':text, :password').placeholder();
+	}
+
 	return {
 		Init: function () {
 			_init();
@@ -130,6 +134,7 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 			_partialInit();
 			readyForInteraction();
 			completelyLoaded();
+		    _activatePlaceHolderText();
 		}
 	};
 })(jQuery);

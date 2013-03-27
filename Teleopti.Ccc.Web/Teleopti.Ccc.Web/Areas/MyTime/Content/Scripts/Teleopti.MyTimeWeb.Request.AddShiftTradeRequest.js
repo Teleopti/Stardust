@@ -76,12 +76,12 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		};
 
 		self.clearInputForm = function () {
-			self.subject('');
-			self.message('');
+			self.subject(undefined);
+			self.message(undefined);
 			self.errorMessage('');
 			//ugly hack to fire back event that something happened
-			setTimeout(function () { $("#Request-add-shift-trade-message-input").change(); }, 0);
-			setTimeout(function () { $("#Request-add-shift-trade-subject-input").change(); }, 0);
+			/*setTimeout(function () { $("#Request-add-shift-trade-message-input").change(); }, 0);
+			setTimeout(function () { $("#Request-add-shift-trade-subject-input").change(); }, 0);*/
 		};
 
 		self._createTimeLine = function (hours) {
@@ -166,7 +166,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		if (_hasPermission(elementToBind)) {
 			vm = new shiftTradeViewModel();
 			ko.applyBindings(vm, elementToBind);
-		_initButtons();
+			_initButtons();
 		}
 	}
 
@@ -174,16 +174,6 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 		return element!==undefined;
 	}
 	
-	function _initDatePicker() {
-
-	}
-
-	function _initLabels() {
-		$('#Request-add-shift-trade-detail-section input[type=text], #Request-add-shift-trade-detail-section textarea')
-			.labeledinput()
-			;
-	}
-
 	function _initButtons() {
 		$('#Request-add-shift-trade-detail-section .send-button')
 			.click(function () {
@@ -275,7 +265,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 
 	return {
 		Init: function () {
-			_init();
+		    _init();
 		},
 		SetShiftTradeRequestDate: function (date) {
 			setShiftTradeRequestDate(date);

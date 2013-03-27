@@ -21,6 +21,10 @@ Teleopti.MyTimeWeb.Request = (function ($) {
         ko.applyBindings({}, $('div.navbar')[1]);
 	}
 
+    function _activatePlaceHolderText() {
+        $('textarea, :text, :password').placeholder();
+    }
+
 	return {
 		Init: function () {
 			Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack('Requests/Index', Teleopti.MyTimeWeb.Request.RequestPartialInit);
@@ -31,6 +35,7 @@ Teleopti.MyTimeWeb.Request = (function ($) {
 
 			_initNavigationViewModel();
 			Teleopti.MyTimeWeb.Request.RequestDetail.Init();
+		    _activatePlaceHolderText();
 		}
 	};
 
