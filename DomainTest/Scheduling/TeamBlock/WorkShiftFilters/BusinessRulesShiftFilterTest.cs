@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -17,7 +18,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		private IValidDateTimePeriodShiftFilter _validDateTimePeriodShiftFilter;
 		private ILongestPeriodForAssignmentCalculator _longestPeriodForAssignmentCalculator;
 		private BusinessRulesShiftFilter _target;
-		private IScheduleRange _scheduleRange;
 		private IScheduleDictionary _scheduleDictionary;
 		private IPersonalShiftMeetingTimeChecker _personalShiftMeetingTimeChecker;
 		private DateOnly _dateOnly;
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			_resultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
 			_validDateTimePeriodShiftFilter = _mocks.StrictMock<IValidDateTimePeriodShiftFilter>();
 			_longestPeriodForAssignmentCalculator = _mocks.StrictMock<ILongestPeriodForAssignmentCalculator>();
-			_scheduleRange = _mocks.StrictMock<IScheduleRange>();
+			
 			_scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
 			_personalShiftMeetingTimeChecker = _mocks.StrictMock<IPersonalShiftMeetingTimeChecker>();
 			_target = new BusinessRulesShiftFilter(_resultStateHolder, _validDateTimePeriodShiftFilter,
@@ -38,20 +38,61 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		}
 
 		[Test]
-		public void ShouldFilterAccordingToBusinessRules()
+		public void ShouldFilterAccordingToBusinessRulesIfNoCommonPeriod()
 		{
-			var person = PersonFactory.CreatePerson("Bill");
-			var finderResult = new WorkShiftFinderResult(person, new DateOnly());
+			var person1 = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue, new List<ISkill>());
+			var person2 = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue, new List<ISkill>());
+			var groupPerson = new GroupPerson(new List<IPerson> { person1, person2 }, DateOnly.MinValue, "team1", null);
+			var finderResult = new WorkShiftFinderResult(groupPerson, new DateOnly());
+			var scheduleRange1 = _mocks.StrictMock<IScheduleRange>();
+			var scheduleRange2 = _mocks.StrictMock<IScheduleRange>();
+			var period1 = new DateTimePeriod(new DateTime(2013, 3, 1, 7, 30, 0, DateTimeKind.Utc),
+											 new DateTime(2013, 3, 1, 17, 30, 0, DateTimeKind.Utc));
+			var shiftList = getCashes();
 			using (_mocks.Record())
 			{
-				Expect.Call(_resultStateHolder.Schedules).Return(_scheduleDictionary);
-				Expect.Call(_scheduleDictionary[person]).Return(_scheduleRange);
-				Expect.Call(_longestPeriodForAssignmentCalculator.PossiblePeriod(_scheduleRange, _dateOnly)).Return(null);
+				Expect.Call(_resultStateHolder.Schedules).Return(_scheduleDictionary).Repeat.Twice();
+				Expect.Call(_scheduleDictionary[person1]).Return(scheduleRange1);
+				Expect.Call(_scheduleDictionary[person2]).Return(scheduleRange2);
+				Expect.Call(_longestPeriodForAssignmentCalculator.PossiblePeriod(scheduleRange1, _dateOnly)).Return(period1);
+				Expect.Call(_longestPeriodForAssignmentCalculator.PossiblePeriod(scheduleRange2, _dateOnly)).Return(null);
 			}
 			using (_mocks.Playback())
 			{
-				var ret = _target.Filter(person, getCashes(), _dateOnly, finderResult);
-				Assert.AreEqual(0, ret.Count);
+				var result = _target.Filter(groupPerson, shiftList, _dateOnly, finderResult);
+				Assert.That(result.Count, Is.EqualTo(0));
+			}
+		}
+
+		[Test]
+		public void ShouldFilterAccordingToIntersectionOfBusinessRules()
+		{
+			var person1 = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue, new List<ISkill>());
+			var person2 = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue, new List<ISkill>());
+			var groupPerson = new GroupPerson(new List<IPerson> {person1, person2}, DateOnly.MinValue, "team1", null);
+			var finderResult = new WorkShiftFinderResult(groupPerson, new DateOnly());
+			var scheduleRange1 = _mocks.StrictMock<IScheduleRange>();
+			var scheduleRange2 = _mocks.StrictMock<IScheduleRange>();
+			var period1 = new DateTimePeriod(new DateTime(2013, 3, 1, 7, 30, 0, DateTimeKind.Utc),
+			                                 new DateTime(2013, 3, 1, 17, 30, 0, DateTimeKind.Utc));
+			var period2 = new DateTimePeriod(new DateTime(2013, 3, 1, 8, 0, 0, DateTimeKind.Utc),
+			                                 new DateTime(2013, 3, 1, 18, 00, 0, DateTimeKind.Utc));
+			var intesectedPeriod = new DateTimePeriod(new DateTime(2013, 3, 1, 8, 0, 0, DateTimeKind.Utc),
+			                                          new DateTime(2013, 3, 1, 17, 30, 0, DateTimeKind.Utc));
+			var shiftList = getCashes();
+			using (_mocks.Record())
+			{
+				Expect.Call(_resultStateHolder.Schedules).Return(_scheduleDictionary).Repeat.Twice();
+				Expect.Call(_scheduleDictionary[person1]).Return(scheduleRange1);
+				Expect.Call(_scheduleDictionary[person2]).Return(scheduleRange2);
+				Expect.Call(_longestPeriodForAssignmentCalculator.PossiblePeriod(scheduleRange1, _dateOnly)).Return(period1);
+				Expect.Call(_longestPeriodForAssignmentCalculator.PossiblePeriod(scheduleRange2, _dateOnly)).Return(period2);
+				Expect.Call(_validDateTimePeriodShiftFilter.Filter(shiftList, intesectedPeriod, finderResult))
+				      .Return(new List<IShiftProjectionCache>());
+			}
+			using (_mocks.Playback())
+			{
+				_target.Filter(groupPerson, shiftList, _dateOnly, finderResult);
 			}
 		}
 
