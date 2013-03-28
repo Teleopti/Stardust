@@ -12,9 +12,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		public static int PageSize = 20;
 
-		public Div AgentByName(string name)
+		public Div AgentByName(string name, bool eventualGet = true)
 		{
-			return Document.Div(AgentConstraint && Find.ByText(name)).EventualGet();
+			return eventualGet ? Document.Div(AgentConstraint && Find.ByText(name)).EventualGet() : Document.Div(AgentConstraint && Find.ByText(name));
 		}
 
 		public DivCollection Agents()

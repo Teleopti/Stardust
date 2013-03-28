@@ -83,8 +83,14 @@ Scenario: View group schedule
 	| Shift category | Day              |
 	When I view team schedule for '2013-03-25'
 	And I select 'Kontrakt/Common contract' in the team picker
-	Then I should see my schedule
-	And I should see 'John Smith' schedule
+	Then I should see my schedule in team schedule with
+	| Field     | Value |
+	| StartTime | 09:00 |
+	| EndTime   | 18:00 |
+	And I should see 'John Smith' schedule in team schedule with
+	| Field     | Value |
+	| StartTime | 10:00 |
+	| EndTime   | 19:00 |
 	And I should not see 'Pierre Baldi' schedule
 
 Scenario: Sort late shifts after early shifts
