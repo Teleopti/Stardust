@@ -156,9 +156,8 @@ namespace Teleopti.Ccc.Sdk.WcfHost
             builder.RegisterModule<ShiftTradeModule>();
 			builder.RegisterModule<SdkCommandHandlersModule>();
 			builder.RegisterModule<CommandDispatcherModule>();
-			builder.RegisterModule<EventsPublisherModule>();
+			builder.RegisterModule<ServiceBusEventsPublisherModule>();
 			builder.RegisterModule<CommandHandlersModule>();
-			builder.RegisterModule<EventHandlersModule>();
 			builder.RegisterModule<UpdateScheduleModule>();
 			  builder.RegisterModule<DateAndTimeModule>();
             builder.RegisterType<WebWindowsUserProvider>()

@@ -130,6 +130,7 @@
     <Compile Include="ApplicationLayer\EventPublisher.cs" />
     <Compile Include="ApplicationLayer\IResolve.cs" />
     <Compile Include="ApplicationLayer\IServiceBusSender.cs" />
+    <Compile Include="ApplicationLayer\ServiceBusEventPublisher.cs" />
     <Compile Include="ApplicationLayer\SyncCommandDispatcher.cs" />
     <Compile Include="Foundation\ConfigReader.cs" />
     <Compile Include="Foundation\ConfigurationDictionaryWrapper.cs" />

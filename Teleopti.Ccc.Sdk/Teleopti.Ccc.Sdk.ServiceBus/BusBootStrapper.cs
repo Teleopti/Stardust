@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
         	build.RegisterModule<ImportForecastContainerInstaller>();
 			build.RegisterModule<ForecastContainerInstaller>();
 			build.RegisterModule<CommandDispatcherModule>();
-			build.RegisterModule<EventsPublisherModule>();
+			build.RegisterModule<LocalEventsPublisherModule>();
 			build.RegisterModule<CommandHandlersModule>();
 			build.RegisterModule<EventHandlersModule>();
 
