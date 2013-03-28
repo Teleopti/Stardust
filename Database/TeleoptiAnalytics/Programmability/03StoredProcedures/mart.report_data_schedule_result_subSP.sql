@@ -231,7 +231,6 @@ FROM mart.fact_schedule fs
 INNER JOIN #person a
 	ON fs.person_id = a.person_id
 WHERE fs.schedule_date_id BETWEEN @date_from_id AND @date_to_id
-AND fs.person_id in (select distinct acd_login_id from #person)	--will be ok on deploy, but will fail in runtime!
 AND fs.scenario_id = @scenario_id
 GROUP BY fs.schedule_date_id, fs.interval_id, fs.person_id
 
