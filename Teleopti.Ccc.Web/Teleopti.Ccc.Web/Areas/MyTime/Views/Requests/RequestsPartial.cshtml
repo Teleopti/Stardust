@@ -197,6 +197,10 @@
 				}
 			</select>
 		</span>
+        <div class="input-append bootstrap-timepicker">
+            <input id="timepickerFrom" type="text" class="input-small" data-bind="timepicker: TimeFrom, timepickerOptions: {showMeridian: ShowMeridian}" />
+            <span class="add-on"><i class="icon-time"></i></span>
+        </div>
 	</div>
 	<div>
 		<span class="input-append">
@@ -212,6 +216,10 @@
 				}
 			</select>
 		</span>
+        <div class="input-append bootstrap-timepicker">
+            <input id="timepickerTo" type="text" class="input-small" data-bind="timepicker: TimeTo, timepickerOptions: {showMeridian: ShowMeridian}"  />
+            <span class="add-on"><i class="icon-time"></i></span>
+        </div>
 	</div>
 	<span>
 		<input type="checkbox" id="Fullday-check" data-bind="checked: IsFullDay" />
@@ -239,16 +247,15 @@
 </div>
 <div id="Requests-body-inner" class="request-body-inner relative">
 	@Html.Partial("NewShiftTradeRequest")
+    <div id="Request-detail-section" class="well well-small displaynone" data-bind=" css: { 'request-selected': IsUpdate() == true , 'request-not-selected': IsUpdate() == false}">
+		<div data-bind="template : Template">
+		</div>
+	</div>
     <div id="Requests-data-binding-area" >
         <div class="alert alert-block" data-bind="visible: Requests().length == 0 && !isLoadingRequests(), hideWhenFadedOut: true" id="Requests-no-requests-found">
             @Resources.NoRequestsFound
         </div>
         
-        <div id="Request-detail-section" class="well well-small displaynone" data-bind=" css: { 'request-selected': IsUpdate() == true , 'request-not-selected': IsUpdate() == false}">
-			<div data-bind="template : Template">
-			</div>
-		</div>
-	  
         <div data-bind="visible: isLoadingRequests">	   
             <div class="loading-gradient">
                 <div class="loading"></div>
