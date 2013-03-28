@@ -54,51 +54,49 @@
         </ul>
     </div>
 </div>
-<div class="alert alert-danger">
-    <div id="Preference-period-feedback-view">
-        <div>
-            <!-- ko if: TargetContractTimeLower() == TargetContractTimeUpper() -->
-            @Html.Raw(string.Format(Resources.YouShouldWorkXHours, "<span data-bind='text: TargetContractTimeLower' class='feedback-detail'>-</span>"))
-            <!-- /ko -->
-            <!-- ko if: TargetContractTimeLower() != TargetContractTimeUpper() -->
-            @Html.Raw(string.Format(Resources.YouShouldWorkBetweenXAndYHours, "<span data-bind='text: TargetContractTimeLower' class='feedback-detail'>-</span>", "<span data-bind='text: TargetContractTimeUpper' class='feedback-detail'>-</span>"))
-            <!-- /ko -->
+<div class="alert" data-bind="css: PreferenceFeedbackClass" id="Preference-period-feedback-view">
+    <div>
+        <!-- ko if: TargetContractTimeLower() == TargetContractTimeUpper() -->
+        @Html.Raw(string.Format(Resources.YouShouldWorkXHours, "<span data-bind='text: TargetContractTimeLower' class='feedback-detail'>-</span>"))
+        <!-- /ko -->
+        <!-- ko if: TargetContractTimeLower() != TargetContractTimeUpper() -->
+        @Html.Raw(string.Format(Resources.YouShouldWorkBetweenXAndYHours, "<span data-bind='text: TargetContractTimeLower' class='feedback-detail'>-</span>", "<span data-bind='text: TargetContractTimeUpper' class='feedback-detail'>-</span>"))
+        <!-- /ko -->
 		
-            <!-- ko if: PossibleResultContractTimeLower() == PossibleResultContractTimeUpper() -->
-            @Html.Raw(string.Format(Resources.YourPreferencesCanResultXHours, "<span data-bind='text: PossibleResultContractTimeLower' class='feedback-detail'>-</span>"))
-            <!-- /ko -->
-            <!-- ko if: PossibleResultContractTimeLower() != PossibleResultContractTimeUpper() -->
-            @Html.Raw(string.Format(Resources.YourPreferencesCanResultXToYHours, "<span data-bind='text: PossibleResultContractTimeLower' class='feedback-detail'>-</span>", "<span data-bind='text: PossibleResultContractTimeUpper' class='feedback-detail'>-</span>"))
-            <!-- /ko -->
-            <!-- ko if: PossibleResultContractTimeUpper() < TargetContractTimeLower() || TargetContractTimeUpper() < PossibleResultContractTimeLower() -->
-            <span class="icon preference-warning" title="@Resources.YourPreferenceIsOutOfRange"/>
-            <!-- /ko -->
-        </div>
-        <div>
-            <!-- ko if: TargetDaysOffLower() == TargetDaysOffUpper() -->
-            @Html.Raw(string.Format(Resources.YouShouldHaveXDaysOff, "<span data-bind='text: TargetDaysOffLower' class='feedback-detail'>-</span>"))
-            <!-- /ko -->
-            <!-- ko if: TargetDaysOffLower() != TargetDaysOffUpper() -->
-            @Html.Raw(string.Format(Resources.YouShouldHaveBetweenXAndYDaysOff, "<span data-bind='text: TargetDaysOffLower' class='feedback-detail'>-</span>", "<span data-bind='text: TargetDaysOffUpper' class='feedback-detail'>-</span>"))
-            <!-- /ko -->
-            @Html.Raw(string.Format(Resources.YourPreferencesCanResultXDaysOff, "<span data-bind='text: PossibleResultDaysOff' class='feedback-detail'>-</span>"))
-            <!-- ko if: PossibleResultDaysOff() > TargetDaysOffUpper() || PossibleResultDaysOff() < TargetDaysOffLower()-->
-            <span class="icon preference-warning" title="@Resources.YourPreferenceIsOutOfRange"/>
-            <!-- /ko -->
-        </div>
+        <!-- ko if: PossibleResultContractTimeLower() == PossibleResultContractTimeUpper() -->
+        @Html.Raw(string.Format(Resources.YourPreferencesCanResultXHours, "<span data-bind='text: PossibleResultContractTimeLower' class='feedback-detail'>-</span>"))
+        <!-- /ko -->
+        <!-- ko if: PossibleResultContractTimeLower() != PossibleResultContractTimeUpper() -->
+        @Html.Raw(string.Format(Resources.YourPreferencesCanResultXToYHours, "<span data-bind='text: PossibleResultContractTimeLower' class='feedback-detail'>-</span>", "<span data-bind='text: PossibleResultContractTimeUpper' class='feedback-detail'>-</span>"))
+        <!-- /ko -->
+        <!-- ko if: PreferenceTimeIsOutOfRange -->
+        <span class="icon preference-warning" title="@Resources.YourPreferenceIsOutOfRange"/>
+        <!-- /ko -->
     </div>
-    <hr />
-	<div id="Preference-period">
-		@if (Model.PreferencePeriod == null)
-		{
-			@String.Format("{0} : {1}", Resources.PreferencePeriod, Resources.MissingWorkflowControlSet)
-		}
-		else
-		{
-			@String.Format("{0} : {1} | ", Resources.PreferencePeriod, Model.PreferencePeriod.Period)
-			@String.Format("{0} : {1}", Resources.IsOpen, Model.PreferencePeriod.OpenPeriod)
-		}
-	</div>
+    <div>
+        <!-- ko if: TargetDaysOffLower() == TargetDaysOffUpper() -->
+        @Html.Raw(string.Format(Resources.YouShouldHaveXDaysOff, "<span data-bind='text: TargetDaysOffLower' class='feedback-detail'>-</span>"))
+        <!-- /ko -->
+        <!-- ko if: TargetDaysOffLower() != TargetDaysOffUpper() -->
+        @Html.Raw(string.Format(Resources.YouShouldHaveBetweenXAndYDaysOff, "<span data-bind='text: TargetDaysOffLower' class='feedback-detail'>-</span>", "<span data-bind='text: TargetDaysOffUpper' class='feedback-detail'>-</span>"))
+        <!-- /ko -->
+        @Html.Raw(string.Format(Resources.YourPreferencesCanResultXDaysOff, "<span data-bind='text: PossibleResultDaysOff' class='feedback-detail'>-</span>"))
+        <!-- ko if: PreferenceDaysOffIsOutOfRange-->
+        <span class="icon preference-warning" title="@Resources.YourPreferenceIsOutOfRange"/>
+        <!-- /ko -->
+    </div>
+    <p></p>
+    <div>
+            @if (Model.PreferencePeriod == null)
+            {
+                @String.Format("{0} : {1}", Resources.PreferencePeriod, Resources.MissingWorkflowControlSet)
+            }
+            else
+            {
+                @String.Format("{0} : {1} | ", Resources.PreferencePeriod, Model.PreferencePeriod.Period)
+                @String.Format("{0} : {1}", Resources.IsOpen, Model.PreferencePeriod.OpenPeriod)
+            }
+    </div>
 </div>
 
 <div id="Preference-body" class="body-calendarview clearfix" data-mytime-periodselection='@Html.Schedule().PeriodSelectionAsJson(Model.PeriodSelection)' data-mytime-maxmusthave="@Model.MaxMustHave">

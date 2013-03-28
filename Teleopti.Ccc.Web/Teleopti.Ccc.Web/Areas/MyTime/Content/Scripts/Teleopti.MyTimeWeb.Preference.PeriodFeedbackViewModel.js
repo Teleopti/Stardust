@@ -44,25 +44,25 @@ Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel = function (ajax, dayViewM
 
 	this.PossibleResultContractTimeMinutesLower = ko.computed(function () {
 		var sum = 0;
-		$.each(dayViewModels, function (index, day) {
+		$.each(dayViewModels, function (index,day) {
 			var value = day.PossibleContractTimeMinutesLower();
 			if (value)
 				sum += parseInt(value);
 			sum += day.ContractTimeMinutes();
 		});
 		return sum;
-	});
+	}).extend({ throttle: 200 });
 
 	this.PossibleResultContractTimeMinutesUpper = ko.computed(function () {
 		var sum = 0;
-		$.each(dayViewModels, function (index, day) {
+		$.each(dayViewModels, function (index,day) {
 			var value = day.PossibleContractTimeMinutesUpper();
 			if (value)
 				sum += parseInt(value);
 			sum += day.ContractTimeMinutes();
 		});
 		return sum;
-	});
+	}).extend({ throttle: 200 });
 
 	this.PossibleResultContractTimeLower = ko.computed(function () {
 		return Teleopti.MyTimeWeb.Preference.formatTimeSpan(self.PossibleResultContractTimeMinutesLower());
@@ -71,5 +71,18 @@ Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel = function (ajax, dayViewM
 	this.PossibleResultContractTimeUpper = ko.computed(function () {
 		return Teleopti.MyTimeWeb.Preference.formatTimeSpan(self.PossibleResultContractTimeMinutesUpper());
 	});
+
+	this.PreferenceTimeIsOutOfRange = ko.computed(function () {
+	    return self.PossibleResultContractTimeUpper() < self.TargetContractTimeLower() || self.TargetContractTimeUpper() < self.PossibleResultContractTimeLower();
+	});
+
+	this.PreferenceDaysOffIsOutOfRange = ko.computed(function () {
+	    return self.PossibleResultDaysOff() > self.TargetDaysOffUpper() || self.PossibleResultDaysOff() < self.TargetDaysOffLower();
+	});
+
+	this.PreferenceFeedbackClass = ko.computed(function () {
+	    return self.PreferenceDaysOffIsOutOfRange() || self.PreferenceTimeIsOutOfRange() ? 'alert-danger' : 'alert-info';
+	});
+
 };
 
