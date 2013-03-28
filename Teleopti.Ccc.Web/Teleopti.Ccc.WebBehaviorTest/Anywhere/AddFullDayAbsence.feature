@@ -59,8 +59,8 @@ Scenario: Add
 	| Color      | Red   |
 	And I should see an absence in the absence list with
 	| Field      | Value            |
-	| Start date | 2013-03-15 08:00 |
-	| End date   | 2013-03-15 17:00 |
+	| Start time | 2013-03-15 08:00 |
+	| End time   | 2013-03-15 17:00 |
 	| Absence    | Vacation         |
 	
 

@@ -32,13 +32,13 @@ Scenario: View absence on this day in list
 	And 'Pierre Baldi' has an absence with
 	| Field      | Value            |
 	| Name       | Vacation         |
-	| Start date | 2013-03-10 00:00 |
-	| End date   | 2013-03-10 23:59 |
+	| Start time | 2013-03-10 00:00 |
+	| End time   | 2013-03-10 23:59 |
 	When I view person schedule for 'Pierre Baldi' on '2013-03-10'
 	Then I should see an absence in the absence list with
 	| Field      | Value            |
-	| Start date | 2013-03-10 00:00 |
-	| End date   | 2013-03-10 23:59 |
+	| Start time | 2013-03-10 00:00 |
+	| End time   | 2013-03-10 23:59 |
 	| Absence    | Vacation         |
 
 Scenario: View absence starting yesterday in list
@@ -46,13 +46,13 @@ Scenario: View absence starting yesterday in list
 	And 'Pierre Baldi' has an absence with
 	| Field      | Value            |
 	| Name       | Vacation         |
-	| Start date | 2013-03-09 00:00 |
-	| End date   | 2013-03-10 15:00 |
+	| Start time | 2013-03-09 00:00 |
+	| End time   | 2013-03-10 15:00 |
 	When I view person schedule for 'Pierre Baldi' on '2013-03-10'
 	Then I should see an absence in the absence list with
 	| Field      | Value            |
-	| Start date | 2013-03-09 00:00 |
-	| End date   | 2013-03-10 15:00 |
+	| Start time | 2013-03-09 00:00 |
+	| End time   | 2013-03-10 15:00 |
 	| Absence    | Vacation         |
 
 Scenario: View absence ending tomorrow in list
@@ -60,13 +60,13 @@ Scenario: View absence ending tomorrow in list
 	And 'Pierre Baldi' has an absence with
 	| Field      | Value            |
 	| Name       | Vacation         |
-	| Start date | 2013-03-10 00:00 |
-	| End date   | 2013-03-11 15:00 |
+	| Start time | 2013-03-10 00:00 |
+	| End time   | 2013-03-11 15:00 |
 	When I view person schedule for 'Pierre Baldi' on '2013-03-10'
 	Then I should see an absence in the absence list with
 	| Field      | Value            |
-	| Start date | 2013-03-10 00:00 |
-	| End date   | 2013-03-11 15:00 |
+	| Start time | 2013-03-10 00:00 |
+	| End time   | 2013-03-11 15:00 |
 	| Absence    | Vacation         |
 
 Scenario: Show confirmation button
@@ -74,8 +74,8 @@ Scenario: Show confirmation button
 	And 'Pierre Baldi' has an absence with
 	| Field      | Value            |
 	| Name       | Vacation         |
-	| Start date | 2013-03-10 00:00 |
-	| End date   | 2013-03-10 23:59 |
+	| Start time | 2013-03-10 00:00 |
+	| End time   | 2013-03-10 23:59 |
 	When I view person schedule for 'Pierre Baldi' on '2013-03-10'
 	And I click 'Remove'
 	Then I should see the button 'Confirm removal'
@@ -85,8 +85,8 @@ Scenario: No absence removal without confirmation
 	And 'Pierre Baldi' has an absence with
 	| Field      | Value            |
 	| Name       | Vacation         |
-	| Start date | 2013-03-10 00:00 |
-	| End date   | 2013-03-10 23:59 |
+	| Start time | 2013-03-10 00:00 |
+	| End time   | 2013-03-10 23:59 |
 	When I view person schedule for 'Pierre Baldi' on '2013-03-10'
 	And I click 'Remove'
 	Then I should see one absence in the absence list
@@ -96,8 +96,8 @@ Scenario: Remove absence
 	And 'Pierre Baldi' has an absence with
 	| Field      | Value            |
 	| Name       | Vacation         |
-	| Start date | 2013-03-10 00:00 |
-	| End date   | 2013-03-10 23:59 |
+	| Start time | 2013-03-10 00:00 |
+	| End time   | 2013-03-10 23:59 |
 	When I view person schedule for 'Pierre Baldi' on '2013-03-10'
 	And I click 'Remove'
 	And I click 'Confirm removal'
@@ -108,13 +108,13 @@ Scenario: Remove one of two absences
 	And 'Pierre Baldi' has an absence with
 	| Field      | Value            |
 	| Name       | Vacation         |
-	| Start date | 2013-03-10 10:00 |
-	| End date   | 2013-03-10 11:00 |
+	| Start time | 2013-03-10 10:00 |
+	| End time   | 2013-03-10 11:00 |
 	And 'Pierre Baldi' has an absence with
 	| Field      | Value            |
 	| Name       | Illness			|
-	| Start date | 2013-03-10 15:00 |
-	| End date   | 2013-03-10 23:59 |
+	| Start time | 2013-03-10 15:00 |
+	| End time   | 2013-03-10 23:59 |
 	When I view person schedule for 'Pierre Baldi' on '2013-03-10'
 	And I click 'Remove'
 	And I click 'Confirm removal'	
