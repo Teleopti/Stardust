@@ -1,3 +1,4 @@
+using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Common;
@@ -8,22 +9,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 {
 	public class TeamConfigurable : IDataSetup
 	{
-		private readonly ISite site;
+		public string Site { get; set; }
 
 		public TeamConfigurable()
-			: this(GlobalDataContext.Data().Data<CommonSite>().Site)
 		{
-		}
-
-		private TeamConfigurable(ISite site)
-		{
-			this.site = site;
+			Site = GlobalDataContext.Data().Data<CommonSite>().Site.Description.Name;
 		}
 
 		public string Name { get; set; }
 
 		public void Apply(IUnitOfWork uow)
 		{
+			var siteRepository = new SiteRepository(uow);
+			var site = siteRepository.LoadAll().Single(c => c.Description.Name == Site);
 			var team = new Team
 			           	{
 			           		Description = new Description(Name),

@@ -4,12 +4,14 @@ As an agent
 I want to see team schedule for other groups on any group page
  
 Background:
-Given there is a team with
-	| Field | Value      |
-	| Name  | Team green |
+	Given there is a team with
+	| Field | Value       |
+	| Name  | Team green  |
+	| Site  | Common Site |
 	And there is a team with
-	| Field | Value    |
-	| Name  | Team red |
+	| Field | Value       |
+	| Name  | Team red    |
+	| Site  | Common Site |
 	And there is a contract with
 	| Field                     | Value         |
 	| Name                      | 8 hours a day |
@@ -37,18 +39,26 @@ Given there is a team with
 	And Pierre Baldi have the workflow control set 'Published schedule'
 	And John Smith have the workflow control set 'Published schedule'
 	And I have a person period with 
-	| Field      | Value      |
-	| Team       | Team green |
-	| Start date | 2013-03-25 |
+	| Field                | Value                     |
+	| Team                 | Team green                |
+	| Start date           | 2013-03-25                |
+	| Contract             | Common contract           |
+	| Part time percentage | Common PartTimePercentage |
+	| Contract schedule    | Common contract schedule  |
 	And Pierre Baldi have a person period with
-	| Field      | Value         |
-	| Team       | Team green    |
-	| Start date | 2013-03-25    |
-	| Contract   | 8 hours a day |
+	| Field                | Value                     |
+	| Team                 | Team green                |
+	| Start date           | 2013-03-25                |
+	| Contract             | 8 hours a day             |
+	| Part time percentage | Common PartTimePercentage |
+	| Contract schedule    | Common contract schedule  |
 	And John Smith have a person period with
-	| Field      | Value      |
-	| Team       | Team red   |
-	| Start date | 2013-03-25 |
+	| Field                | Value                     |
+	| Team                 | Team red                  |
+	| Start date           | 2013-03-25                |
+	| Contract             | Common contract           |
+	| Part time percentage | Common PartTimePercentage |
+	| Contract schedule    | Common contract schedule  |
 
 
 Scenario: View available custom group options
