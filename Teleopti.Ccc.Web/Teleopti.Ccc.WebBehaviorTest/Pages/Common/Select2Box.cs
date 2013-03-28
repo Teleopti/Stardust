@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using NUnit.Framework;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using WatiN.Core;
 
@@ -51,6 +52,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 		public void SelectTeamByText(string text)
 		{
 			Element.DomContainer.Eval("$('.select2-result-selectable div:contains(\""+text+"\")').trigger('mouseup')");
+
+			EventualAssert.That(() => Container.InnerHtml, Contains.Substring(text));
 		}
 
 	}
