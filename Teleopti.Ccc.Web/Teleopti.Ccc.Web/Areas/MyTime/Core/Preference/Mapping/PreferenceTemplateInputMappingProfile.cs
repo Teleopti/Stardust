@@ -47,6 +47,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				.ForMember(d => d.WorkTimeLimitation, o => o.MapFrom(
 							   s => new WorkTimeLimitation(s.ActivityMinimumTime, s.ActivityMaximumTime)
 							   ))
+				.ForMember(d => d.Parent, o => o.Ignore())
 				;
 
 			CreateMap<PreferenceTemplateInput, IPreferenceRestrictionTemplate>()

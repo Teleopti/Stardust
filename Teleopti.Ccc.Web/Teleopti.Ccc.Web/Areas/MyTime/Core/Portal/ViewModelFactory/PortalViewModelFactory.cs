@@ -14,19 +14,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 	public class PortalViewModelFactory : IPortalViewModelFactory
 	{
 		private readonly IPermissionProvider _permissionProvider;
-		private readonly IPreferenceOptionsProvider _preferenceOptionsProvider;
 		private readonly ILicenseActivator _licenseActivator;
 		private readonly IPushMessageProvider _pushMessageProvider;
 		private readonly ILoggedOnUser _loggedOnUser;
 
 		public PortalViewModelFactory(IPermissionProvider permissionProvider,
-												  IPreferenceOptionsProvider preferenceOptionsProvider,
 												  ILicenseActivator licenseActivator,
 												  IPushMessageProvider pushMessageProvider,
 												  ILoggedOnUser loggedOnUser)
 		{
 			_permissionProvider = permissionProvider;
-			_preferenceOptionsProvider = preferenceOptionsProvider;
 			_licenseActivator = licenseActivator;
 			_pushMessageProvider = pushMessageProvider;
 			_loggedOnUser = loggedOnUser;
@@ -108,38 +105,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 
 		private NavigationItem createPreferenceNavigationItem()
 		{
-			/*var preferenceOptions = PreferenceOptions();
-			if (!_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb))
-			{
-				toolbarItems.AddRange(
-					new ToolBarItemBase[]
-						{
-							new ToolBarSeparatorItem(),
-							new ToolBarSplitButton
-								{
-									Title = Resources.Preference,
-									Options = preferenceOptions
-								}
-						});
-			}
-
-			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb))
-			{
-				toolbarItems.Add(new ToolBarSeparatorItem());
-				toolbarItems.Add(new ToolBarButtonItem { Title = Resources.Preference, ButtonType = "add-extended" });
-			}
-			toolbarItems.Add(new ToolBarButtonItem { Title = Resources.Delete, ButtonType = "delete" });
-
-
-			if (_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.StandardPreferences) ||
-				_permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.ExtendedPreferencesWeb))
-			{
-				toolbarItems.Add(new ToolBarSeparatorItem());
-				toolbarItems.Add(new ToolBarButtonItem { Title = Resources.MustHave, ButtonType = "must-have", Icon = "heart" });
-				toolbarItems.Add(new ToolBarButtonItem { Title = Resources.Delete, ButtonType = "must-have-delete", Icon = "heart-delete" });
-				toolbarItems.Add(new ToolBarTextItem { Id = "must-have-numbers", Text = "0(0)" });
-			}
-			*/
 			return new NavigationItem
 						{
 							Action = "Index",
