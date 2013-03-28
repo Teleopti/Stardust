@@ -60,5 +60,35 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			}
 
 		}
+
+		[Test]
+		public void ShouldNotAddAnEmptyTeamBlock()
+		{
+			var dateOnly = new DateOnly();
+			var matrix1 = _mocks.StrictMock<IScheduleMatrixPro>();
+			var matrix2 = _mocks.StrictMock<IScheduleMatrixPro>();
+			var matrixes = new List<IScheduleMatrixPro> { matrix1, matrix2 };
+			var selectedPeriod = new DateOnlyPeriod(dateOnly, dateOnly);
+			var person = PersonFactory.CreatePerson("Bill");
+			var persons = new List<IPerson> { person };
+			var schedulingOptions = new SchedulingOptions();
+			var groupMatrixList = new List<IList<IScheduleMatrixPro>> { matrixes };
+			var groupPerson = new GroupPerson(new List<IPerson> { person }, DateOnly.MinValue, "Hej", null);
+			var teaminfo = new TeamInfo(groupPerson, groupMatrixList);
+			using (_mocks.Record())
+			{
+				Expect.Call(_teamInfoFactory.CreateTeamInfo(person, selectedPeriod, matrixes)).Return(teaminfo);
+				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(teaminfo, dateOnly,
+																	  schedulingOptions.BlockFinderTypeForAdvanceScheduling))
+					  .Return(null);
+			}
+			using (_mocks.Playback())
+			{
+				var result = _target.Generate(matrixes, selectedPeriod, persons, schedulingOptions);
+
+				Assert.That(result.Count, Is.EqualTo(0));
+			}
+
+		}
 	}
 }
