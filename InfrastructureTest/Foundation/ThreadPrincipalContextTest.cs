@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 	[TestFixture]
 	public class ThreadPrincipalContextTest
 	{
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
 		public void ShouldBeCovered()
 		{
 			var storedPrincipal = Thread.CurrentPrincipal;

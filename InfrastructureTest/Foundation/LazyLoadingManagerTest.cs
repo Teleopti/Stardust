@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
             Assert.IsTrue(LazyLoadingManager.IsInitialized(null));
         }
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
 		public void WrapperShouldHaveCoverage()
 		{
 			var wrapper = new LazyLoadingManagerWrapper();
