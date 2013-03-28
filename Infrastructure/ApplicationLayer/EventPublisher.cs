@@ -1,31 +1,10 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
-using Autofac;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {
-	public interface IResolve
-	{
-		object Resolve(Type type);
-	}
-
-	public class AutofacResolve : IResolve
-	{
-		private readonly IComponentContext _componentContext;
-
-		public AutofacResolve(IComponentContext componentContext) {
-			_componentContext = componentContext;
-		}
-
-		public object Resolve(Type type)
-		{
-			return _componentContext.Resolve(type);
-		}
-	}
-
 	public class EventPublisher : IEventPublisher
 	{
 		private readonly IResolve _resolver;
