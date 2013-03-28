@@ -8,7 +8,7 @@
 	</div>
 	<div data-bind="visible : !missingWorkflowControlSet()" class="input-append input-prepend">
 		<button class="btn" data-bind="click : previousDate, enable: !IsLoading()"><i class="icon-arrow-left"></i></button>
-		<input type="text" class="span2" data-bind="datepicker: requestedDate, datepickerOptions: {minDate: openPeriodStartDate, maxDate: openPeriodEndDate}, enable: !IsLoading()" />
+		<input type="text" class="span2" data-bind="datepicker: requestedDate, datepickerOptions: {startDate: openPeriodStartDate, endDate: openPeriodEndDate}, enable: !IsLoading()" />
 		<button class="btn" data-bind="click : nextDate, enable: !IsLoading()"><i class="icon-arrow-right"></i></button>
 	</div>
 	
