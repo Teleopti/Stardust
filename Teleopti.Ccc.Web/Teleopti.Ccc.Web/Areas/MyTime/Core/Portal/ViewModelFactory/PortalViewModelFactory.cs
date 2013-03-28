@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
@@ -61,7 +62,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 							NavigationItems = navigationItems,
 							CustomerName = _licenseActivator.CustomerName,
 							ShowChangePassword = showChangePassword(),
-							HasAsmPermission = _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger)
+							HasAsmPermission = _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger),
+							ShowMeridian = CultureInfo.CurrentCulture.DateTimeFormat.PMDesignator == "PM"
 						};
 		}
 
