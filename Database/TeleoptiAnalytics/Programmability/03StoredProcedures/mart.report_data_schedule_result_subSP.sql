@@ -33,6 +33,58 @@ CREATE PROCEDURE [mart].[report_data_schedule_result_subSP]
 AS
 SET NOCOUNT ON
 
+--for testing, create tables that are created by calling SPs
+if not exists (select  * from tempdb.dbo.sysobjects o where o.xtype in ('U') and o.id = object_id(N'tempdb..#person_acd_subSP'))
+CREATE TABLE #person_acd_subSP
+	(
+	person_id int,
+	acd_login_id int
+	)
+
+if not exists (select  * from tempdb.dbo.sysobjects o where o.xtype in ('U') and o.id = object_id(N'tempdb..#rights_agents'))
+CREATE TABLE  #rights_agents
+	(
+	right_id int
+	)
+
+if not exists (select  * from tempdb.dbo.sysobjects o where o.xtype in ('U') and o.id = object_id(N'tempdb..#agents'))
+CREATE TABLE #agents
+	(
+	id int
+	)
+
+if not exists (select  * from tempdb.dbo.sysobjects o where o.xtype in ('U') and o.id = object_id(N'tempdb..#bridge_time_zone'))
+CREATE TABLE #bridge_time_zone
+	(
+	local_date_id int not null,
+	local_interval_id int not null,
+	date_id int not null,
+	interval_id int not null,
+	date_date_local smalldatetime not null
+	)
+
+if not exists (select  * from tempdb.dbo.sysobjects o where o.xtype in ('U') and o.id = object_id(N'tempdb..#pre_result_subSP'))
+CREATE TABLE #pre_result_subSP
+	(
+	date_id int,
+	date_date smalldatetime,
+	interval_id int,
+	acd_login_id int,
+	person_id int,
+	team_id int,
+	answered_calls int DEFAULT 0,		
+	talk_time_s decimal(20,2),
+	after_call_work_time_s decimal(20,2),
+	handling_time_s decimal(20,2),
+	ready_time_s int DEFAULT 0,
+	scheduled_ready_time_m int DEFAULT 0,
+	scheduled_time_m int,
+	scheduled_contract_time_m int,
+	deviation_s decimal(18,3),
+	adherence_calc_s decimal(18,3)	
+	)
+
+
 CREATE TABLE #agent_queue_statistics_subSP
 	(
 	date_id int,
@@ -178,7 +230,7 @@ SELECT	fs.schedule_date_id,
 FROM mart.fact_schedule fs
 INNER JOIN #person a
 	ON fs.person_id = a.person_id
-WHERE fs.schedule_date_id BETWEEN @date_from_id AND @date_to_id		
+WHERE fs.schedule_date_id BETWEEN @date_from_id AND @date_to_id
 AND fs.scenario_id = @scenario_id
 GROUP BY fs.schedule_date_id, fs.interval_id, fs.person_id
 
