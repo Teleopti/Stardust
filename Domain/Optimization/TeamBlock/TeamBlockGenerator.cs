@@ -41,6 +41,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				{
 					var teamBlock = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, day,
 					                                                          schedulingOptions.BlockFinderTypeForAdvanceScheduling);
+					if (teamBlock == null) continue;
 					allTeamBlocksInHashSet.Add(teamBlock);
 				}
 			}

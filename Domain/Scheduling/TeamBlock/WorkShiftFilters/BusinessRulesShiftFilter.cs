@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
@@ -7,7 +8,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 {
 	public interface IBusinessRulesShiftFilter
 	{
-		IList<IShiftProjectionCache> Filter(IPerson person, IList<IShiftProjectionCache> shiftList, DateOnly dateToCheck,
+		IList<IShiftProjectionCache> Filter(IGroupPerson groupPerson, IList<IShiftProjectionCache> shiftList, DateOnly dateToCheck,
 											IWorkShiftFinderResult finderResult);
 	}
 
@@ -26,23 +27,42 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			_longestPeriodForAssignmentCalculator = longestPeriodForAssignmentCalculator;
 		}
 
-		public IList<IShiftProjectionCache> Filter(IPerson person, IList<IShiftProjectionCache> shiftList,
+		public IList<IShiftProjectionCache> Filter(IGroupPerson groupPerson, IList<IShiftProjectionCache> shiftList,
 												   DateOnly dateToCheck, IWorkShiftFinderResult finderResult)
 		{
 		    if (shiftList == null) throw new ArgumentNullException("shiftList");
 		    if (finderResult == null) throw new ArgumentNullException("finderResult");
 		    if (shiftList.Count == 0) return shiftList;
-			var scheduleRange = _resultStateHolder.Schedules[person];
-			var rulePeriod = _longestPeriodForAssignmentCalculator.PossiblePeriod(scheduleRange, dateToCheck);
-			if (!rulePeriod.HasValue)
+			
+			DateTime approximateTime = new DateTime(dateToCheck.Year, dateToCheck.Month, dateToCheck.Day, 12, 0, 0, DateTimeKind.Unspecified);
+            DateTime approxUtc = TimeZoneHelper.ConvertToUtc(approximateTime,
+                                                             groupPerson.GroupMembers.First().PermissionInformation.DefaultTimeZone());
+            DateTimePeriod? returnPeriod = new DateTimePeriod(approxUtc.AddDays(-2), approxUtc.AddDays(2));
+            
+			foreach (var person in groupPerson.GroupMembers)
 			{
-				finderResult.AddFilterResults(
-					new WorkShiftFilterResult(UserTexts.Resources.CannotFindAValidPeriodAccordingToTheBusinessRules,
-											  shiftList.Count, 0));
-				return new List<IShiftProjectionCache>();
+				var scheduleRange = _resultStateHolder.Schedules[person];
+				var newRulePeriod = _longestPeriodForAssignmentCalculator.PossiblePeriod(scheduleRange, dateToCheck);
+				if (!newRulePeriod.HasValue)
+				{
+					return filterResults(shiftList, finderResult);
+				}
+				returnPeriod = returnPeriod.Value.Intersection(newRulePeriod.Value);
+				if (!returnPeriod.HasValue)
+				{
+					return filterResults(shiftList, finderResult);
+				}
 			}
+			
+			return _validDateTimePeriodShiftFilter.Filter(shiftList, returnPeriod.Value, finderResult);
+		}
 
-			return _validDateTimePeriodShiftFilter.Filter(shiftList, rulePeriod.Value, finderResult);
+		private static IList<IShiftProjectionCache> filterResults(IList<IShiftProjectionCache> shiftList, IWorkShiftFinderResult finderResult)
+		{
+			finderResult.AddFilterResults(
+				new WorkShiftFilterResult(UserTexts.Resources.CannotFindAValidPeriodAccordingToTheBusinessRules,
+				                          shiftList.Count, 0));
+			return new List<IShiftProjectionCache>();
 		}
 	}
 }
