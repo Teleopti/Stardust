@@ -25,7 +25,6 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 				var method = handler.GetType().GetMethod("Handle");
 				method.Invoke(handler, new[] { @event });
 			}
-
 		}
 	}
 }
