@@ -6,8 +6,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	public interface IBlockInfo
 	{
 		DateOnlyPeriod BlockPeriod { get; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
-        IList<double?> StandardDeviations { get; set; }
+		 [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+		 IList<double?> StandardDeviations { get; set; }
 		double AverageStandardDeviation { get; }
 	}
 
@@ -26,6 +26,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			get { return _blockPeriod; }
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 		public IList<double?> StandardDeviations { get; set; }
 
         public double AverageStandardDeviation

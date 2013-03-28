@@ -5,8 +5,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
 	public interface IStandardDeviationData
 	{
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
 		IDictionary<DateOnly, double?> Data { get; }
-		void Add(DateOnly day, double? d);
+		void Add(DateOnly day, double? standardDeviation);
 	}
 
 	public class StandardDeviationData : IStandardDeviationData
@@ -18,9 +19,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 			Data = new Dictionary<DateOnly, double?>();
 		}
 
-		public void Add(DateOnly day, double? d)
+		public void Add(DateOnly day, double? standardDeviation)
 		{
-			Data.Add(day, d);
+			Data.Add(day, standardDeviation);
 		}
 	}
 }

@@ -89,7 +89,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			return restriction;
 		}
 
-        public IEffectiveRestriction ConvertPerPerson(IPerson person, IList<DateOnly> dateOnlyList)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+		public IEffectiveRestriction ConvertPerPerson(IPerson person, IList<DateOnly> dateOnlyList)
         {
             //if (groupPerson == null) return null;
             if (dateOnlyList == null) return null;

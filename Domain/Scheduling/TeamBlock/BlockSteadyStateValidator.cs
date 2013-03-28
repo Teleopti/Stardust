@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             return true;
         }
 
-        private bool verifySameStartTime(ITeamBlockInfo teamBlockInfo, IEnumerable<DateOnly> dayList, IScheduleDay sampleScheduleDay)
+        private static bool verifySameStartTime(ITeamBlockInfo teamBlockInfo, IEnumerable<DateOnly> dayList, IScheduleDay sampleScheduleDay)
         {
             var dateTimePeriod = getShiftPeriod(sampleScheduleDay);
             if (dateTimePeriod.HasValue)
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             return true;
         }
 
-        private DateTime getStartTimeLocal(IScheduleDay scheduleDay)
+        private static DateTime getStartTimeLocal(IScheduleDay scheduleDay)
         {
             var dateTimePeriod = getShiftPeriod(scheduleDay);
             if (dateTimePeriod.HasValue)
