@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterAssemblyTypes(typeof (AddFullDayAbsenceCommandHandler).Assembly)
+			builder.RegisterAssemblyTypes(typeof(IHandleCommand<>).Assembly)
 			       .Where(t => t.GetInterfaces().Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof (IHandleCommand<>)))
 			       .As(t => t.GetInterfaces().Single(i => i.GetGenericTypeDefinition() == typeof (IHandleCommand<>)))
 				;

@@ -117,6 +117,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AbsenceRequestResolveTest.cs" />
+    <Compile Include="ApplicationLayer\EventsConsumerTest.cs" />
     <Compile Include="BudgetGroupAllowanceSpecificationTest.cs" />
     <Compile Include="Denormalizer\CreateAnywherePersonScheduleReadModelTest.cs" />
     <Compile Include="Denormalizer\ScheduleDayReadModelHandlerTest.cs" />

@@ -37,4 +37,5 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 			}
 		}
 	}
+
 }
