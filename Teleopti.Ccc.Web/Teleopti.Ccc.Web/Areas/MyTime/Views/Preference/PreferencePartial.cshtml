@@ -36,7 +36,12 @@
                             <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu" data-bind="foreach: availablePreferences">
-                                <li><a href="#" data-bind="click: $parent.selectedPreference, 'text': Text"></a></li>
+                            <!-- ko if: Value != '-' -->
+                            <li><a href="#" data-bind="click: $parent.selectedPreference, 'text': Text"></a></li>
+                            <!-- /ko -->
+                            <!-- ko if: Value == '-' -->
+                            <li class="divider"></li>
+                            <!-- /ko -->
                         </ul>
                     </div></li>
             }
