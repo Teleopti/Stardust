@@ -337,6 +337,9 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see the team-picker with the other site's team")]
 		public void ThenIShouldSeeTheTeam_PickerWithTheOtherSiteSTeam()
 		{
+			var loading = Browser.Current.Div("loading");
+			loading.WaitUntilHidden();
+
 			var site = GlobalDataContext.Data().Data<AnotherSite>().Site.Description.Name;
 			var theOtherSitesTeam = site + "/" + UserFactory.User().UserData<AnotherSitesTeam>().TheTeam.Description.Name;
 

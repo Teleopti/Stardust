@@ -8,18 +8,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 {
 	public class TeamSchedulePage : PortalPage, IDateRangeSelector
 	{
-		private readonly Constraint AgentConstraint = QuicklyFind.ByClass("teamschedule-agent-name");
+		private readonly Constraint _agentConstraint = QuicklyFind.ByClass("teamschedule-agent-name");
 
 		public static int PageSize = 20;
 
 		public Div AgentByName(string name, bool eventualGet = true)
 		{
-			return eventualGet ? Document.Div(AgentConstraint && Find.ByText(name)).EventualGet() : Document.Div(AgentConstraint && Find.ByText(name));
+			return eventualGet ? Document.Div(_agentConstraint && Find.ByText(name)).EventualGet() : Document.Div(_agentConstraint && Find.ByText(name));
 		}
 
 		public DivCollection Agents()
 		{
-			return Document.Divs.Filter(AgentConstraint);
+			return Document.Divs.Filter(_agentConstraint);
 		}
 
 		public ListItem RowByAgentName(string name)

@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 			get
 			{
 				var items = Element.DomContainer.ListItems.Filter(QuicklyFind.ByClass("select2-result-selectable"));
-				return from item in items select item.Div(QuicklyFind.ByClass("select2-result-label")).Text;
+				return from item in items select item.Children().First().Text;
 			}
 		}
 
