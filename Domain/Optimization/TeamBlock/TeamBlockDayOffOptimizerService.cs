@@ -4,6 +4,7 @@ using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
@@ -37,7 +38,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly ITeamDayOffModifier _teamDayOffModifier;
 		private readonly IBlockSteadyStateValidator _teamBlockSteadyStateValidator;
 		private readonly ITeamBlockClearer _teamBlockClearer;
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
 		private readonly ITeamBlockRestrictionOverLimitValidator _restrictionOverLimitValidator;
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
 		private readonly ICheckerRestriction _restrictionChecker;
 		private bool _cancelMe;
 
@@ -133,6 +136,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			}
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Domain.Optimization.TeamBlock.TeamBlockDayOffOptimizerService.OnReportProgress(System.String)")]
 		private IEnumerable<ITeamInfo> runOneOptimizationRound(IOptimizationPreferences optimizationPreferences,
 		                                                       ISchedulePartModifyAndRollbackService rollbackService,
 		                                                       List<ITeamInfo> remainingInfoList,
@@ -168,7 +172,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				}
 				previousPeriodValue = currentPeriodValue;
 
-				OnReportProgress("xxPeriodvalue: " + currentPeriodValue + " xxOptimized team " + teamInfo.GroupPerson.Name);
+				OnReportProgress(Resources.OptimizingDaysOff + Resources.Colon + teamInfo.GroupPerson.Name +"(" + currentPeriodValue +")");
 			}
 
 			return teamInfosToRemove;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
@@ -88,6 +89,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			}
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Domain.Optimization.TeamBlock.TeamBlockIntradayOptimizationService.OnReportProgress(System.String)")]
 		private IEnumerable<ITeamBlockInfo> optimizeOneRound(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod,
 							 IList<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences,
 									  ISchedulingOptions schedulingOptions, List<ITeamBlockInfo> allTeamBlocks,
@@ -129,7 +131,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 					_safeRollbackAndResourceCalculation.Execute(schedulePartModifyAndRollbackService, schedulingOptions);
 				}
 
-				OnReportProgress("xxStandardardDeviation: " + newStandardDeviation + " xxOptimized team " + teamBlock.TeamInfo.GroupPerson.Name);
+				OnReportProgress(Resources.OptimizingIntraday + Resources.Colon + teamBlock.TeamInfo.GroupPerson.Name + "(" + newStandardDeviation + ")");
 			}
 			return teamBlockToRemove;
 		}

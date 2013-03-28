@@ -240,7 +240,6 @@
     <Compile Include="Optimization\DaysOffPreferencesPersonalSettings.cs" />
     <Compile Include="Optimization\ExtraPreferencesPersonalSettings.cs" />
     <Compile Include="Optimization\GeneralPreferencesPersonalSettings.cs" />
-    <Compile Include="Optimization\IntradayBlock.cs" />
     <Compile Include="Optimization\IntradayDecisionMakerComponents.cs" />
     <Compile Include="Optimization\MatrixMultipleShiftsLocker.cs" />
     <Compile Include="Optimization\GroupDayOffOptimizationResourceHelper.cs" />

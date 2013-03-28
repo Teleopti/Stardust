@@ -248,7 +248,6 @@
     <Compile Include="Optimization\GroupMoveTimeOptimizerServiceTest.cs" />
     <Compile Include="Optimization\GroupMoveTimeOptimizerTest.cs" />
     <Compile Include="Optimization\GroupMoveTimeValidatorRunnerTest.cs" />
-    <Compile Include="Optimization\IntradayBlockTest.cs" />
     <Compile Include="Optimization\IntradayDecisionMakerComponentsTest.cs" />
     <Compile Include="Optimization\DataExtractorValuesForMatrixesTest.cs" />
     <Compile Include="Optimization\MatrixMultipleShiftsLockerTest.cs" />
