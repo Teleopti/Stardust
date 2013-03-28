@@ -12,7 +12,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 	{
 		public IList<DateOnly> CheckDates(IList<DateOnly> blockDates, IScheduleMatrixPro matrixPro)
 		{
+// ReSharper disable CSharpWarnings::CS0612
 			var insidePeriod = matrixPro.SelectedPeriod;
+// ReSharper restore CSharpWarnings::CS0612
 			var datesOutside = new List<DateOnly>();
 			foreach (var blockDate in blockDates)
 			{
