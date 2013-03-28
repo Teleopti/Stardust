@@ -61,15 +61,17 @@ BEGIN TRY
 	declare @time_zone_id int = 1
 	declare @workload_set nvarchar(100) = '3,4,5'
 	declare @request_type_id int = -2
+	declare @date_from_id int = 200
+	declare @date_to_id int = 300
+
 
 	--All stored procedures used(?)
 		DECLARE ReportSPs CURSOR FOR
 		SELECT Id, replace(proc_name,'mart.','') FROM mart.report where proc_name <> ''
 		UNION ALL
 		select Id,replace(fill_proc_name,'mart.','') from mart.report_control where fill_proc_name<>'1'
-		--UNION ALL
-		-- if we want to this it must be done separately
-		--SELECT 1,name FROM sys.procedures WHERE name like '%raptor%'
+		UNION ALL
+		SELECT NEWID(),name FROM sys.procedures WHERE name like 'report_data_%'
 
 		OPEN ReportSPs;
 				FETCH NEXT FROM ReportSPs INTO @report_id, @SPname;
@@ -177,6 +179,8 @@ BEGIN TRY
 							WHEN  @param_name = '@time_zone_code' THEN CAST(@time_zone_code AS nvarchar(50))
 							WHEN  @param_name = '@scenario_code' THEN CAST(@scenario_code AS nvarchar(50))
 							WHEN  @param_name = '@request_type_id' THEN CAST(@request_type_id AS nvarchar(50))
+							WHEN  @param_name = '@date_from_id' THEN CAST(@date_from_id AS nvarchar(50))
+							WHEN  @param_name = '@date_to_id' THEN CAST(@date_to_id AS nvarchar(50))
 						
 							ELSE 'noDataTypeFound'
 						END
