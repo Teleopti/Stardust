@@ -10931,4 +10931,10 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Generera prognos för</value>
     <comment>Period and scenario selection in quick forecast</comment>
   </data>
+  <data name="SelectedAbsences" xml:space="preserve">
+    <value>Valda frånvarotyper</value>
+  </data>
+  <data name="ProcessingDotDotDot" xml:space="preserve">
+    <value>Behandlas...</value>
+  </data>
 </root>
