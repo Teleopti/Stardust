@@ -27,44 +27,56 @@ Background:
 	| Name  | Illness |
 	| Color | Gray    |
 	
-Scenario: View absence form with one full day absence
+Scenario: View absence on this day in list
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' has an absence with
 	| Field      | Value            |
 	| Name       | Vacation         |
-	| Start time | 2013-03-10 00:00 |
-	| End time   | 2013-03-10 23:59 |
+	| Start date | 2013-03-10 00:00 |
+	| End date   | 2013-03-10 23:59 |
 	When I view person schedule for 'Pierre Baldi' on '2013-03-10'
-	And I click 'absence layer' 
-	Then I should see the absence form with
+	Then I should see an absence in the absence list with
 	| Field      | Value            |
-	| Name       | Vacation         |
-	| Start time | 2013-03-10 00:00 |
-	| End time   | 2013-03-10 23:59 |
+	| Start date | 2013-03-10 00:00 |
+	| End date   | 2013-03-10 23:59 |
+	| Absence    | Vacation         |
 
-Scenario: View absence form with multiple full days absences
+Scenario: View absence starting yesterday in list
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' has an absence with
 	| Field      | Value            |
 	| Name       | Vacation         |
-	| Start time | 2013-03-09 00:00 |
-	| End time   | 2013-03-10 23:59 |
+	| Start date | 2013-03-09 00:00 |
+	| End date   | 2013-03-10 15:00 |
 	When I view person schedule for 'Pierre Baldi' on '2013-03-10'
-	And I click 'absence layer' 
-	Then I should see the absence form with
+	Then I should see an absence in the absence list with
+	| Field      | Value            |
+	| Start date | 2013-03-09 00:00 |
+	| End date   | 2013-03-10 15:00 |
+	| Absence    | Vacation         |
+
+Scenario: View absence ending tomorrow in list
+	Given I have the role 'Anywhere Team Green'
+	And 'Pierre Baldi' has an absence with
 	| Field      | Value            |
 	| Name       | Vacation         |
-	| Start time | 2013-03-09 00:00 |
-	| End time   | 2013-03-10 23:59 |
+	| Start date | 2013-03-10 00:00 |
+	| End date   | 2013-03-11 15:00 |
+	When I view person schedule for 'Pierre Baldi' on '2013-03-10'
+	Then I should see an absence in the absence list with
+	| Field      | Value            |
+	| Start date | 2013-03-10 00:00 |
+	| End date   | 2013-03-11 15:00 |
+	| Absence    | Vacation         |
 
 Scenario: Show confirmation button
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' has an absence with
 	| Field      | Value            |
 	| Name       | Vacation         |
-	| Start time | 2013-03-10 00:00 |
-	| End time   | 2013-03-10 23:59 |
-	When I view person schedule absence form for 'Pierre Baldi' on '2013-03-10'
+	| Start date | 2013-03-10 00:00 |
+	| End date   | 2013-03-10 23:59 |
+	When I view person schedule for 'Pierre Baldi' on '2013-03-10'
 	And I click 'Remove'
 	Then I should see the button 'Confirm removal'
 
@@ -73,51 +85,38 @@ Scenario: No absence removal without confirmation
 	And 'Pierre Baldi' has an absence with
 	| Field      | Value            |
 	| Name       | Vacation         |
-	| Start time | 2013-03-10 00:00 |
-	| End time   | 2013-03-10 23:59 |
-	When I view person schedule absence form for 'Pierre Baldi' on '2013-03-10'
+	| Start date | 2013-03-10 00:00 |
+	| End date   | 2013-03-10 23:59 |
+	When I view person schedule for 'Pierre Baldi' on '2013-03-10'
 	And I click 'Remove'
-	Then I should see one absence for 'Pierre Baldi' on '2013-03-10'
-
-Scenario: Remove one full day absence
+	Then I should see one absence in the absence list
+	
+Scenario: Remove absence
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' has an absence with
 	| Field      | Value            |
 	| Name       | Vacation         |
-	| Start time | 2013-03-10 00:00 |
-	| End time   | 2013-03-10 23:59 |
-	When I view person schedule absence form for 'Pierre Baldi' on '2013-03-10'
+	| Start date | 2013-03-10 00:00 |
+	| End date   | 2013-03-10 23:59 |
+	When I view person schedule for 'Pierre Baldi' on '2013-03-10'
 	And I click 'Remove'
 	And I click 'Confirm removal'
-	Then I should not see any absence for 'Pierre Baldi' on '2013-03-10'
-
-Scenario: Remove multiple full days absences
-	Given I have the role 'Anywhere Team Green'
-	And 'Pierre Baldi' has an absence with
-	| Field      | Value            |
-	| Name       | Vacation         |
-	| Start time | 2013-03-09 00:00 |
-	| End time   | 2013-03-10 23:59 |
-	When I view person schedule absence form for 'Pierre Baldi' on '2013-03-10'
-	And I click 'Remove'
-	And I click 'Confirm removal'
-	Then I should not see any absence for 'Pierre Baldi' on '2013-03-09'
-	And I should not see any absence for 'Pierre Baldi' on '2013-03-10'
+	Then I should not see any absence in the absence list
 
 Scenario: Remove one of two absences
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' has an absence with
 	| Field      | Value            |
 	| Name       | Vacation         |
-	| Start time | 2013-03-10 10:00 |
-	| End time   | 2013-03-10 11:00 |
+	| Start date | 2013-03-10 10:00 |
+	| End date   | 2013-03-10 11:00 |
 	And 'Pierre Baldi' has an absence with
 	| Field      | Value            |
 	| Name       | Illness			|
-	| Start time | 2013-03-10 15:00 |
-	| End time   | 2013-03-10 23:59 |
-	When I view person schedule absence form for 'Pierre Baldi' on '2013-03-10'
+	| Start date | 2013-03-10 15:00 |
+	| End date   | 2013-03-10 23:59 |
+	When I view person schedule for 'Pierre Baldi' on '2013-03-10'
 	And I click 'Remove'
 	And I click 'Confirm removal'	
-	Then I should only see absence 'Illness' for 'Pierre Baldi' on '2013-03-10'
+	Then I should only see absence 'Illness' in the absence list
 	
