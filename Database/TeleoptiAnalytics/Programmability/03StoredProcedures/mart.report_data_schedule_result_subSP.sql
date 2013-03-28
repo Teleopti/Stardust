@@ -80,6 +80,10 @@ CREATE TABLE #person (
 	person_id int
 	)
 
+CREATE TABLE #acd_login (
+	acd_login_id int
+	)
+
 ---------
 --DECLARE
 ---------           
@@ -94,7 +98,10 @@ IF (SELECT COUNT(*) FROM mart.dim_time_zone tz WHERE tz.time_zone_code<>'UTC') <
 ELSE
 	SET @hide_time_zone = 0
 
---get person_id only into #person
+--get distinct person_id and acd_login_id
+INSERT INTO #acd_login
+SELECT DISTINCT acd_login_id FROM #person_acd_subSP
+
 INSERT INTO #person
 SELECT DISTINCT person_id FROM #person_acd_subSP
 
@@ -125,7 +132,7 @@ SELECT	faq.date_id,
 		SUM(faq.talk_time_s),
 		SUM(faq.after_call_work_time_s)
 FROM mart.fact_agent_queue faq
-INNER JOIN #person_acd_subSP acd
+INNER JOIN #acd_login acd
 	ON acd.acd_login_id = faq.acd_login_id
 WHERE faq.date_id BETWEEN @date_from_id AND @date_to_id		
 GROUP BY faq.date_id, faq.date_id, faq.interval_id, faq.acd_login_id
@@ -138,7 +145,7 @@ SELECT	faq.date_id,
 		-1,
 		SUM(ISNULL(faq.ready_time_s,0))
 FROM mart.fact_agent faq
-INNER JOIN #person_acd_subSP acd
+INNER JOIN #acd_login acd
 	ON acd.acd_login_id = faq.acd_login_id
 WHERE faq.date_id BETWEEN @date_from_id AND @date_to_id		
 GROUP BY faq.date_id, faq.interval_id, faq.acd_login_id
@@ -149,7 +156,7 @@ FROM #agent_queue_statistics_subSP aqs
 INNER JOIN #agent_statistics_subSP a ON aqs.date_id = a.date_id AND aqs.interval_id = a.interval_id AND aqs.acd_login_id = a.acd_login_id
 
 UPDATE #agent_queue_statistics_subSP
-SET person_id	= acd.person_id
+SET person_id	= acd.person_id --potential bug: may result in random update on person_id if multiple person_id share same acd_login_id
 FROM #agent_queue_statistics_subSP ags
 INNER JOIN #person_acd_subSP acd
 	ON ags.acd_login_id = acd.acd_login_id
