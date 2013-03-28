@@ -67,6 +67,16 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => layers.Count, Is.GreaterThan(0));
 		}
 
+		[Then(@"I should see my schedule in team schedule with")]
+		public void WhenIShouldSeeMyScheduleInTeamScheduleWith(Table table)
+		{
+			var layers = Pages.Pages.TeamSchedulePage.LayersByAgentName(UserFactory.User().Person.Name.ToString());
+			EventualAssert.That(() => layers.Count, Is.GreaterThan(0));
+			var layer = layers.FirstOrDefault();
+			layer.GetAttributeValue("tooltip-text").Should().Contain(table.Rows[0][1]);
+			layer.GetAttributeValue("tooltip-text").Should().Contain(table.Rows[1][1]);
+		}
+
 		[Then(@"I should see my colleague's schedule")]
 		public void ThenIShouldSeeMyColleagueSSchedule()
 		{
@@ -79,6 +89,16 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			var layers = Pages.Pages.TeamSchedulePage.LayersByAgentName(name);
 			EventualAssert.That(() => layers.Count, Is.GreaterThan(0));
+		}
+
+		[Then(@"I should see '(.*)' schedule in team schedule with")]
+		public void ThenIShouldSeeScheduleInTeamScheduleWith(string name, Table table)
+		{
+			var layers = Pages.Pages.TeamSchedulePage.LayersByAgentName(name);
+			EventualAssert.That(() => layers.Count, Is.GreaterThan(0));
+			var layer = layers.FirstOrDefault();
+			layer.GetAttributeValue("tooltip-text").Should().Contain(table.Rows[0][1]);
+			layer.GetAttributeValue("tooltip-text").Should().Contain(table.Rows[1][1]);
 		}
 
 
@@ -381,7 +401,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 
 		private static void AssertAgentIsNotDisplayed(string name)
 		{
-			var agent = Pages.Pages.TeamSchedulePage.AgentByName(name);
+			var agent = Pages.Pages.TeamSchedulePage.AgentByName(name, false);
 			EventualAssert.That(() => agent.Exists, Is.False, name + " found");
 		}
 
