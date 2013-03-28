@@ -57,6 +57,12 @@ Scenario: Add
 	| Start time | 08:00 |
 	| End time   | 17:00 |
 	| Color      | Red   |
+	And I should see an absence in the absence list with
+	| Field      | Value            |
+	| Start date | 2013-03-15 08:00 |
+	| End date   | 2013-03-15 17:00 |
+	| Absence    | Vacation         |
+	
 
 Scenario: Default values
 	Given I have the role 'Anywhere Team Green'
@@ -64,7 +70,7 @@ Scenario: Default values
 	Then I should see the add full day absence form with
 	| Field      | Value      |
 	| Start date | 2012-12-02 |
-	| End date   | 2012-12-02 |
+	| End date   | 2012-12-02 |	
 	
 Scenario: Invalid dates
 	Given I have the role 'Anywhere Team Green'
