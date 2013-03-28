@@ -119,5 +119,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
         {
             Assert.IsTrue(LazyLoadingManager.IsInitialized(null));
         }
+
+		[Test]
+		public void WrapperShouldHaveCoverage()
+		{
+			var wrapper = new LazyLoadingManagerWrapper();
+			wrapper.Initialize(null);
+			wrapper.IsInitialized(null);
+		}
     }
 }
