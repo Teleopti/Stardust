@@ -223,8 +223,6 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 
 	function _openAddShiftTradeWindow() {
 		Teleopti.MyTimeWeb.Request.RequestDetail.HideEditSection();
-		_initDatePicker();
-		_initLabels();
 		$('#Request-add-shift-trade').show();
 	}
 

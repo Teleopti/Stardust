@@ -751,6 +751,10 @@
     <Content Include="Areas\Anywhere\Content\Templates\menu.html" />
     <Content Include="Areas\Anywhere\Content\Templates\teamschedule\view.html" />
     <Content Include="Areas\Anywhere\Content\Translation\TranslationTemplate.txt" />
+    <Content Include="Content\bootstrap-timepicker\css\bootstrap-timepicker.css" />
+    <Content Include="Content\bootstrap-timepicker\css\bootstrap-timepicker.min.css" />
+    <Content Include="Content\bootstrap-timepicker\js\bootstrap-timepicker.js" />
+    <Content Include="Content\bootstrap-timepicker\js\bootstrap-timepicker.min.js" />
     <Content Include="Content\bootstrap\bootstrap-responsive.css" />
     <Content Include="Content\bootstrap\bootstrap-responsive.min.css" />
     <Content Include="Content\bootstrap\bootstrap.css" />
