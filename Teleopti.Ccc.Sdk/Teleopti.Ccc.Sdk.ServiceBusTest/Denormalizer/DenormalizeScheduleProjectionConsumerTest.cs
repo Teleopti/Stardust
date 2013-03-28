@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			}
 			using (mocks.Playback())
 			{
-				target.Consume(new DenormalizedSchedule
+				target.Consume(new ProjectionChangedEvent
 				               	{
 				               		IsDefaultScenario = true,
 				               		PersonId = person.Id.GetValueOrDefault(),
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			}
 			using (mocks.Playback())
 			{
-				target.Consume(new DenormalizedSchedule
+				target.Consume(new ProjectionChangedEvent
 				               	{
 				               		IsDefaultScenario = true,
 				               		PersonId = person.Id.GetValueOrDefault(),
@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			}
 			using (mocks.Playback())
 			{
-				target.Consume(new DenormalizedSchedule
+				target.Consume(new ProjectionChangedEvent
 				               	{
 				               		IsDefaultScenario = false,
 				               		PersonId = person.Id.GetValueOrDefault(),

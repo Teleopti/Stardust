@@ -10,7 +10,7 @@ using log4net;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 {
-	public class ScheduleDayReadModelHandler : ConsumerOf<DenormalizedSchedule>, ConsumerOf<DenormalizedScheduleForScheduleDay>
+	public class ScheduleDayReadModelHandler : ConsumerOf<ProjectionChangedEvent>, ConsumerOf<ProjectionChangedEventForScheduleDay>
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(ScheduleDayReadModelHandler));
 
@@ -41,12 +41,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public void Consume(DenormalizedSchedule message)
+		public void Consume(ProjectionChangedEvent message)
 		{
 			createReadModel(message);
 		}
 
-		private void createReadModel(DenormalizedScheduleBase message)
+		private void createReadModel(ProjectionChangedEventBase message)
 		{
 			using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 			}
 		}
 
-		public void Consume(DenormalizedScheduleForScheduleDay message)
+		public void Consume(ProjectionChangedEventForScheduleDay message)
 		{
 			createReadModel(message);
 		}

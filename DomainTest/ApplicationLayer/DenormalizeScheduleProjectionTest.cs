@@ -1,6 +1,8 @@
 ﻿using System;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleHandlers;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Messages.Denormalize;
 
@@ -9,14 +11,14 @@ namespace Teleopti.Ccc.DomainTest.Helper
     [TestFixture]
 	public class DenormalizeScheduleProjectionTest
     {
-    	private ScheduleChanged target;
+    	private ScheduleChangedEvent target;
     	private DateTimePeriod period;
 
     	[SetUp]
 		public void Setup()
     	{
     		period = new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow);
-    		target = new ScheduleChanged
+    		target = new ScheduleChangedEvent
     		         	{
     		         		BusinessUnitId = Guid.NewGuid(),
     		         		Datasource = "test",

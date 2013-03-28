@@ -2,7 +2,7 @@ using System;
 
 namespace Teleopti.Interfaces.Messages
 {
-    /// <summary>
+	/// <summary>
     /// Generic message base class that will log on the raptor domain
     /// </summary>
     /// <remarks>
@@ -10,7 +10,7 @@ namespace Teleopti.Interfaces.Messages
     /// Created date: 2010-03-30
     /// </remarks>
     [Serializable]
-    public abstract class RaptorDomainMessage
+	public abstract class RaptorDomainMessage : IRaptorDomainMessageInfo
     {
         ///<summary>
         /// Definies an identity for this message (typically the Id of the root this message refers to.

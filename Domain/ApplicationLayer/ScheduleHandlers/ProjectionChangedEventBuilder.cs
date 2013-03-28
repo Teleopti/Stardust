@@ -5,27 +5,27 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Messages.Denormalize;
 
-namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
+namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleHandlers
 {
-	public class DenormalizedScheduleMessageBuilder : IDenormalizedScheduleMessageBuilder
+	public class ProjectionChangedEventBuilder : IProjectionChangedEventBuilder
 	{
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-		public void Build<T>(ScheduleDenormalizeBase message, IScheduleRange range, DateOnlyPeriod realPeriod, Action<T> actionForItems) where T : DenormalizedScheduleBase, new()
+		public void Build<T>(ScheduleChangedEventBase message, IScheduleRange range, DateOnlyPeriod realPeriod, Action<T> actionForItems) where T : ProjectionChangedEventBase, new()
 		{
 			foreach (var scheduleDayBatch in range.ScheduledDayCollection(realPeriod).Batch(50))
 			{
 				var messageList = new List<DenormalizedScheduleDay>();
 				var result = new T
-				             	{
-				             		IsInitialLoad = message.SkipDelete,
-				             		IsDefaultScenario = range.Scenario.DefaultScenario,
-				             		Datasource = message.Datasource,
-				             		BusinessUnitId = message.BusinessUnitId,
-				             		Timestamp = DateTime.UtcNow,
-				             		ScenarioId = message.ScenarioId,
-				             		PersonId = message.PersonId,
-									ScheduleDays = messageList
-				             	};
+					{
+						IsInitialLoad = message.SkipDelete,
+						IsDefaultScenario = range.Scenario.DefaultScenario,
+						Datasource = message.Datasource,
+						BusinessUnitId = message.BusinessUnitId,
+						Timestamp = DateTime.UtcNow,
+						ScenarioId = message.ScenarioId,
+						PersonId = message.PersonId,
+						ScheduleDays = messageList
+					};
 				foreach (var scheduleDay in scheduleDayBatch)
 				{
 					var date = scheduleDay.DateOnlyAsPeriod.DateOnly;
@@ -37,15 +37,15 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 					if (significantPart == SchedulePartView.None) continue;
 
 					var denormalizedScheduleDay = new DenormalizedScheduleDay
-					{
-						TeamId = personPeriod.Team.Id.GetValueOrDefault(),
-						SiteId = personPeriod.Team.Site.Id.GetValueOrDefault(),
-						Date = date.Date,
-						Layers = new Collection<DenormalizedScheduleProjectionLayer>(),
-						WorkTime = projection.WorkTime(),
-						ContractTime = projection.ContractTime(),
-						IsWorkday = isWorkDay(significantPart),
-					};
+						{
+							TeamId = personPeriod.Team.Id.GetValueOrDefault(),
+							SiteId = personPeriod.Team.Site.Id.GetValueOrDefault(),
+							Date = date.Date,
+							Layers = new Collection<DenormalizedScheduleProjectionLayer>(),
+							WorkTime = projection.WorkTime(),
+							ContractTime = projection.ContractTime(),
+							IsWorkday = isWorkDay(significantPart),
+						};
 
 					switch (significantPart)
 					{
@@ -75,17 +75,17 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 						var contractTime = projection.ContractTime(layer.Period);
 
 						denormalizedScheduleDay.Layers.Add(new DenormalizedScheduleProjectionLayer
-						{
-							Name = description.Name,
-							ShortName = description.ShortName,
-							ContractTime = contractTime,
-							PayloadId = layer.Payload.UnderlyingPayload.Id.GetValueOrDefault(),
-							IsAbsence = layer.Payload.UnderlyingPayload is IAbsence,
-							DisplayColor = layer.DisplayColor().ToArgb(),
-							WorkTime = layer.WorkTime(),
-							StartDateTime = layer.Period.StartDateTime,
-							EndDateTime = layer.Period.EndDateTime,
-						});
+							{
+								Name = description.Name,
+								ShortName = description.ShortName,
+								ContractTime = contractTime,
+								PayloadId = layer.Payload.UnderlyingPayload.Id.GetValueOrDefault(),
+								IsAbsence = layer.Payload.UnderlyingPayload is IAbsence,
+								DisplayColor = layer.DisplayColor().ToArgb(),
+								WorkTime = layer.WorkTime(),
+								StartDateTime = layer.Period.StartDateTime,
+								EndDateTime = layer.Period.EndDateTime,
+							});
 					}
 					messageList.Add(denormalizedScheduleDay);
 				}

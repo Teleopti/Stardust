@@ -4,79 +4,6 @@ using System.Collections.Generic;
 namespace Teleopti.Interfaces.Messages.Denormalize
 {
 	/// <summary>
-	/// Schedule needs to be redenormalized for one person.
-	/// </summary>
-	public abstract class ScheduleDenormalizeBase : RaptorDomainMessage
-	{
-		private readonly Guid _messageId = Guid.NewGuid();
-
-		/// <summary>
-		/// Gets the message identity.
-		/// </summary>
-		public override Guid Identity
-		{
-			get { return _messageId; }
-		}
-
-		/// <summary>
-		/// Gets or sets the start date time.
-		/// </summary>
-		public DateTime StartDateTime { get; set; }
-
-		/// <summary>
-		/// Gets or sets the end date time.
-		/// </summary>
-		public DateTime EndDateTime { get; set; }
-
-		/// <summary>
-		/// Gets or sets the scenario id.
-		/// </summary>
-		public Guid ScenarioId { get; set; }
-
-		/// <summary>
-		/// Gets or sets the person id.
-		/// </summary>
-		public Guid PersonId { get; set; }
-
-		///<summary>
-		/// Gets or sets the skip delete option to be used in the initial load.
-		///</summary>
-		public bool SkipDelete { get; set; }
-	}
-
-	/// <summary>
-	/// Schedule have changed for one person.
-	/// </summary>
-	[Serializable]
-	public class ScheduleChanged : ScheduleDenormalizeBase
-	{
-	}
-
-	/// <summary>
-	/// Schedule day read model needs to be initialized for one person.
-	/// </summary>
-	[Serializable]
-	public class ScheduleDayInitialize : ScheduleDenormalizeBase
-	{
-	}
-
-	/// <summary>
-	/// Person schedule day read model needs to be initialized for one person.
-	/// </summary>
-	[Serializable]
-	public class PersonScheduleDayInitialize : ScheduleDenormalizeBase
-	{
-	}
-
-	/// <summary>
-	/// Schedule day projection read model needs to be initialized for one person.
-	/// </summary>
-	[Serializable]
-	public class ScheduleProjectionInitialize : ScheduleDenormalizeBase
-	{
-	}
-
-	/// <summary>
 	/// A denormalized schedule day
 	/// </summary>
 	public class DenormalizedScheduleDay
@@ -130,17 +57,18 @@ namespace Teleopti.Interfaces.Messages.Denormalize
 		public ICollection<DenormalizedScheduleProjectionLayer> Layers { get; set; }
 	}
 
+
 	/// <summary>
 	/// Denormalized schedule message
 	/// </summary>
-	public class DenormalizedScheduleBase : RaptorDomainMessage
+	public class ProjectionChangedEventBase : RaptorDomainMessage
 	{
 		private readonly Guid _messageId = Guid.NewGuid();
 
 		/// <summary>
 		/// creates a thingy
 		/// </summary>
-		public DenormalizedScheduleBase() { IsDefaultScenario = true; }
+		public ProjectionChangedEventBase() { IsDefaultScenario = true; }
 
 		/// <summary>
 		/// Gets the message identity.
@@ -178,28 +106,28 @@ namespace Teleopti.Interfaces.Messages.Denormalize
 	/// <summary>
 	/// Denormalized schedule for normal usage
 	/// </summary>
-	public class DenormalizedSchedule : DenormalizedScheduleBase
+	public class ProjectionChangedEvent : ProjectionChangedEventBase
 	{
 	}
 
 	/// <summary>
 	/// Denormalized schedule for use in initial load of schedule projection read model
 	/// </summary>
-	public class DenormalizedScheduleForScheduleProjection : DenormalizedScheduleBase
+	public class ProjectionChangedEventForScheduleProjection : ProjectionChangedEventBase
 	{
 	}
 
 	/// <summary>
 	/// Denormalized schedule for use in initial load of schedule projection read model
 	/// </summary>
-	public class DenormalizedScheduleForScheduleDay : DenormalizedScheduleBase
+	public class ProjectionChangedEventForScheduleDay : ProjectionChangedEventBase
 	{
 	}
 
 	/// <summary>
 	/// Denormalized schedule for use in initial load of schedule projection read model
 	/// </summary>
-	public class DenormalizedScheduleForPersonScheduleDay : DenormalizedScheduleBase
+	public class ProjectionChangedEventForPersonScheduleDay : ProjectionChangedEventBase
 	{
 	}
 

@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 		public void ShouldConvertMessageToReadModel() {
 			var fromDenormalizedScheduleToReadModel = MockRepository.GenerateMock<IAnywherePersonScheduleFromDenormalizedSchedule>();
 			var target = new CreateAnywherePersonScheduleReadModel(fromDenormalizedScheduleToReadModel, MockRepository.GenerateMock<IAnywherePersonScheduleReadModelRepository>());
-			var message = new DenormalizedSchedule();
+			var message = new ProjectionChangedEvent();
 
 			target.Consume(message);
 
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			var fromDenormalizedScheduleToReadModel = MockRepository.GenerateMock<IAnywherePersonScheduleFromDenormalizedSchedule>();
 			var anywherePersonScheduleReadModelRepository = MockRepository.GenerateMock<IAnywherePersonScheduleReadModelRepository>();
 			var target = new CreateAnywherePersonScheduleReadModel(fromDenormalizedScheduleToReadModel,anywherePersonScheduleReadModelRepository);
-			var message = new DenormalizedSchedule();
+			var message = new ProjectionChangedEvent();
 			var anywherePersonScheduleReadModel = new AnywherePersonScheduleReadModel();
 			fromDenormalizedScheduleToReadModel.Stub(x => x.Convert(message)).Return(anywherePersonScheduleReadModel);
 
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 		{
 			var fromDenormalizedScheduleToReadModel = MockRepository.GenerateMock<IAnywherePersonScheduleFromDenormalizedSchedule>();
 			var target = new CreateAnywherePersonScheduleReadModel(fromDenormalizedScheduleToReadModel, MockRepository.GenerateMock<IAnywherePersonScheduleReadModelRepository>());
-			var message = new DenormalizedSchedule {IsDefaultScenario = false};
+			var message = new ProjectionChangedEvent {IsDefaultScenario = false};
 
 			target.Consume(message);
 
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 		{
 			var personId = Guid.NewGuid();
 			var target = new AnywherePersonScheduleFromDenormalizedSchedule();
-			var result = target.Convert(new DenormalizedSchedule {PersonId = personId});
+			var result = target.Convert(new ProjectionChangedEvent {PersonId = personId});
 
 			result.PersonId.Should().Be.EqualTo(personId);
 		}
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 		public void ShouldSetProjectedLayers() { 
 			var layer = new DenormalizedScheduleProjectionLayer {StartDateTime = new DateTime(2012, 12, 12, 8, 0, 0, DateTimeKind.Utc), EndDateTime = new DateTime(2012, 12, 12, 15, 0, 0, DateTimeKind.Utc), DisplayColor = -3, Name = "Lunch"};
 			var target = new AnywherePersonScheduleFromDenormalizedSchedule();
-			var message = new DenormalizedSchedule
+			var message = new ProjectionChangedEvent
 			              	{
 			              		ScheduleDays = new []
 			              		               	{
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public AnywherePersonScheduleReadModel Convert(DenormalizedSchedule message)
+		public AnywherePersonScheduleReadModel Convert(ProjectionChangedEvent message)
 		{
 			var model = new AnywherePersonScheduleReadModel
 				{
@@ -109,7 +109,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 
 	public interface IAnywherePersonScheduleFromDenormalizedSchedule
 	{
-		AnywherePersonScheduleReadModel Convert(DenormalizedSchedule message);
+		AnywherePersonScheduleReadModel Convert(ProjectionChangedEvent message);
 	}
 
 	public class AnywherePersonScheduleReadModel
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 		public string ProjectedLayers { get; set; }
 	}
 
-	public class CreateAnywherePersonScheduleReadModel : ConsumerOf<DenormalizedSchedule>
+	public class CreateAnywherePersonScheduleReadModel : ConsumerOf<ProjectionChangedEvent>
 	{
 		private readonly IAnywherePersonScheduleFromDenormalizedSchedule _fromDenormalizedScheduleToReadModel;
 		private readonly IAnywherePersonScheduleReadModelRepository _anywherePersonScheduleReadModelRepository;
@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public void Consume(DenormalizedSchedule message)
+		public void Consume(ProjectionChangedEvent message)
 		{
 			if (!message.IsDefaultScenario) return;
 			var readModel = _fromDenormalizedScheduleToReadModel.Convert(message);

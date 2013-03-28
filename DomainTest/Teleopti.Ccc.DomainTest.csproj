@@ -201,7 +201,7 @@
     <Compile Include="GroupPageCreator\PersonGroupPageTest.cs" />
     <Compile Include="GroupPageCreator\SkillGroupPageTest.cs" />
     <Compile Include="ApplicationLayer\AddFullDayAbsenceCommandHandlerTest.cs" />
-    <Compile Include="Helper\DenormalizeScheduleProjectionTest.cs" />
+    <Compile Include="ApplicationLayer\DenormalizeScheduleProjectionTest.cs" />
     <Compile Include="Helper\GroupPageChangedMessageTest.cs" />
     <Compile Include="Helper\InitialLoadScheduleProjectionTest.cs" />
     <Compile Include="Helper\LogPointOutputTest.cs" />

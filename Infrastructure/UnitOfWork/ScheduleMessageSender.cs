@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleHandlers;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Messages.Denormalize;
@@ -40,7 +42,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 					var startDateTime = matchedItems.Min(s => s.Period.StartDateTime);
 					var endDateTime = matchedItems.Max(s => s.Period.EndDateTime);
 
-					var message = new ScheduleChanged
+					var message = new ScheduleChangedEvent
 					              	{
 					              		ScenarioId = scenario.Id.GetValueOrDefault(),
 					              		StartDateTime = startDateTime,

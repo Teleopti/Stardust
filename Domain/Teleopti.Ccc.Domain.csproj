@@ -124,6 +124,17 @@
     <Compile Include="ApplicationLayer\IEventPublisher.cs" />
     <Compile Include="ApplicationLayer\IEventsPublisher.cs" />
     <Compile Include="ApplicationLayer\IHandleEvent.cs" />
+    <Compile Include="ApplicationLayer\ScheduleHandlers\DenormalizedScheduleDay.cs" />
+    <Compile Include="ApplicationLayer\ScheduleHandlers\ProjectionChangedEventBuilder.cs" />
+    <Compile Include="ApplicationLayer\ScheduleHandlers\IProjectionChangedEventBuilder.cs" />
+    <Compile Include="ApplicationLayer\ScheduleHandlers\IQuestionablyPublishMoreEvents.cs" />
+    <Compile Include="ApplicationLayer\ScheduleHandlers\PersonScheduleDayInitializeTriggeredEvent.cs" />
+    <Compile Include="ApplicationLayer\ScheduleHandlers\RaptorDomainEvent.cs" />
+    <Compile Include="ApplicationLayer\ScheduleHandlers\ScheduleChangedEvent.cs" />
+    <Compile Include="ApplicationLayer\ScheduleHandlers\ScheduleChangedEventBase.cs" />
+    <Compile Include="ApplicationLayer\ScheduleHandlers\ScheduleChangedHandler.cs" />
+    <Compile Include="ApplicationLayer\ScheduleHandlers\ScheduleDayInitializeTriggeredEvent.cs" />
+    <Compile Include="ApplicationLayer\ScheduleHandlers\ScheduleProjectionInitializeTriggeredEvent.cs" />
     <Compile Include="ApplicationLayer\SyncEventsPublisher.cs" />
     <Compile Include="Auditing\AuditSetting.cs" />
     <Compile Include="Auditing\Revision.cs" />

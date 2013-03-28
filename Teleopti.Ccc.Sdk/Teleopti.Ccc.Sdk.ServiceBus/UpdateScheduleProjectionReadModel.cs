@@ -1,3 +1,5 @@
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleHandlers;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Sdk.ServiceBus.Denormalizer;
 using Teleopti.Interfaces.Domain;
@@ -7,27 +9,27 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 {
 	public class UpdateScheduleProjectionReadModel : IUpdateScheduleProjectionReadModel
 	{
-		private readonly IDenormalizedScheduleMessageBuilder _denormalizedScheduleMessageBuilder;
+		private readonly IProjectionChangedEventBuilder _projectionChangedEventBuilder;
 		private readonly IScheduleProjectionReadOnlyRepository _scheduleProjectionReadOnlyRepository;
 
-		public UpdateScheduleProjectionReadModel(IDenormalizedScheduleMessageBuilder denormalizedScheduleMessageBuilder, IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository)
+		public UpdateScheduleProjectionReadModel(IProjectionChangedEventBuilder projectionChangedEventBuilder, IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository)
 		{
-			_denormalizedScheduleMessageBuilder = denormalizedScheduleMessageBuilder;
+			_projectionChangedEventBuilder = projectionChangedEventBuilder;
 			_scheduleProjectionReadOnlyRepository = scheduleProjectionReadOnlyRepository;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void Execute(IScheduleRange scheduleRange, DateOnlyPeriod dateOnlyPeriod)
 		{
-			_denormalizedScheduleMessageBuilder.Build<DenormalizedSchedule>(
-				new ScheduleChanged
+			_projectionChangedEventBuilder.Build<ProjectionChangedEvent>(
+				new ScheduleChangedEvent
 					{
 						ScenarioId = scheduleRange.Scenario.Id.GetValueOrDefault(),
 						PersonId = scheduleRange.Person.Id.GetValueOrDefault()
 					}, scheduleRange, dateOnlyPeriod, updateReadModel);
 		}
 
-		private void updateReadModel(DenormalizedSchedule message)
+		private void updateReadModel(ProjectionChangedEvent message)
 		{
 			foreach (var scheduleDay in message.ScheduleDays)
 			{

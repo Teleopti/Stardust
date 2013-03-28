@@ -18,12 +18,12 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 
 			target.Publish(events);
 
-			saveToQueue.AssertWasCalled(x => x.Execute(Arg<EventsMessage>.Matches(m => matchMessage(m, events))));
+			saveToQueue.AssertWasCalled(x => x.Execute(Arg<EventsPackageMessage>.Matches(m => matchMessage(m, events))));
 		}
 
-		private static bool matchMessage(EventsMessage eventsMessage, Event[] events)
+		private static bool matchMessage(EventsPackageMessage eventsPackageMessage, Event[] events)
 		{
-			eventsMessage.Events.Should().Have.SameValuesAs(events);
+			eventsPackageMessage.Events.Should().Have.SameValuesAs(events);
 			return true;
 		}
 

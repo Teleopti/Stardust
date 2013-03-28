@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 
 			var builder = new ContainerBuilder();
 			builder.RegisterInstance(_serviceBus).As<IServiceBus>();
-			builder.RegisterType<DenormalizeScheduleProjectionConsumer>().As<ConsumerOf<DenormalizedSchedule>>();
+			builder.RegisterType<DenormalizeScheduleProjectionConsumer>().As<ConsumerOf<ProjectionChangedEvent>>();
 
 			builder.RegisterModule<RepositoryModule>();
 			builder.RegisterModule<ApplicationInfrastructureContainerInstaller>();
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 
 			using (var container = builder.Build())
 			{
-				container.Resolve<ConsumerOf<DenormalizedSchedule>>().Should().Not.Be.Null();
+				container.Resolve<ConsumerOf<ProjectionChangedEvent>>().Should().Not.Be.Null();
 			}
 		}
 
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 
 			var builder = new ContainerBuilder();
 			builder.RegisterInstance(_serviceBus).As<IServiceBus>();
-			builder.RegisterType<ScheduleDayReadModelHandler>().As<ConsumerOf<DenormalizedSchedule>>();
+			builder.RegisterType<ScheduleDayReadModelHandler>().As<ConsumerOf<ProjectionChangedEvent>>();
 
 			builder.RegisterModule<RepositoryModule>();
 			builder.RegisterModule<ApplicationInfrastructureContainerInstaller>();
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 
 			using (var container = builder.Build())
 			{
-				container.Resolve<ConsumerOf<DenormalizedSchedule>>().Should().Not.Be.Null();
+				container.Resolve<ConsumerOf<ProjectionChangedEvent>>().Should().Not.Be.Null();
 			}
 		}
 
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 
 			var builder = new ContainerBuilder();
 			builder.RegisterInstance(_serviceBus).As<IServiceBus>();
-			builder.RegisterType<PersonScheduleDayReadModelHandler>().As<ConsumerOf<DenormalizedSchedule>>();
+			builder.RegisterType<PersonScheduleDayReadModelHandler>().As<ConsumerOf<ProjectionChangedEvent>>();
 
 			builder.RegisterModule<RepositoryModule>();
 			builder.RegisterModule<ApplicationInfrastructureContainerInstaller>();
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 
 			using (var container = builder.Build())
 			{
-				container.Resolve<ConsumerOf<DenormalizedSchedule>>().Should().Not.Be.Null();
+				container.Resolve<ConsumerOf<ProjectionChangedEvent>>().Should().Not.Be.Null();
 			}
 		}
 	}

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ServiceModel;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleHandlers;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
@@ -26,7 +27,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 			}
 
 			var identity = (ITeleoptiIdentity) TeleoptiPrincipal.Current.Identity;
-			var message = new ScheduleChanged
+			var message = new ScheduleChangedEvent
 			              	{
 			              		BusinessUnitId = identity.BusinessUnit.Id.GetValueOrDefault(Guid.Empty),
 			              		Datasource = identity.DataSource.Application.Name,

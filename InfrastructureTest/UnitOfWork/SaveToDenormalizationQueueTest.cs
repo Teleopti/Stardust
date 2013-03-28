@@ -4,6 +4,7 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Interfaces.Messages;
 using Teleopti.Interfaces.Messages.Denormalize;
 
 namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
@@ -26,7 +27,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		[Test]
 		public void ShouldSaveMessageToDenormalizationQueue()
 		{
-			var message = new ScheduleChanged();
+			var message = new TestMessage();
 			var sqlQuery = mocks.DynamicMock<ISqlQuery>();
 			using (mocks.Record())
 			{
@@ -45,5 +46,17 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 				message.BusinessUnitId.Should().Be.EqualTo(((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit.Id.GetValueOrDefault());
 			}
 		}
+	}
+
+	public class TestMessage : RaptorDomainMessage
+	{
+		private readonly Guid _identity;
+
+		public TestMessage()
+		{
+			_identity = Guid.NewGuid();
+		}
+
+		public override Guid Identity { get { return _identity; } }
 	}
 }

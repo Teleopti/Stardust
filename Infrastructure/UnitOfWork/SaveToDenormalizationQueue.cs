@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
-		public void Execute<T>(T message) where T : RaptorDomainMessage
+		public void Execute<T>(T message) where T : IRaptorDomainMessageInfo
 		{
 			var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity);
 
@@ -32,4 +32,5 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				.Execute();
 		}
 	}
+
 }

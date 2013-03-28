@@ -1,5 +1,7 @@
 ﻿using System;
 using Autofac;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleHandlers;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.NonBlendSkill;
@@ -48,7 +50,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			builder.RegisterType<ScheduleDayReadModelComparer>().As<IScheduleDayReadModelComparer>();
 			builder.RegisterType<UpdateScheduleProjectionReadModel>().As<IUpdateScheduleProjectionReadModel>();
 			builder.RegisterType<SingleSkillDictionary>().As<ISingleSkillDictionary>().InstancePerLifetimeScope();
-			builder.RegisterType<DenormalizedScheduleMessageBuilder>().As<IDenormalizedScheduleMessageBuilder>();
+			builder.RegisterType<ProjectionChangedEventBuilder>().As<IProjectionChangedEventBuilder>();
 		}
 
 		private static ISchedulingResultStateHolder getSchedulingResultStateHolder(IComponentContext componentContext)

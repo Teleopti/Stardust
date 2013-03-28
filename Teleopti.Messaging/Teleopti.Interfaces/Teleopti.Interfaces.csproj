@@ -863,7 +863,6 @@
     <Compile Include="MessageBroker\Subscription.cs" />
     <Compile Include="Messages\Denormalize\GroupPageChangedMessage.cs" />
     <Compile Include="Messages\Denormalize\PersonChangedMessage.cs" />
-    <Compile Include="Messages\Denormalize\ScheduleChanged.cs" />
     <Compile Include="Messages\Denormalize\InitialLoadScheduleProjection.cs" />
     <Compile Include="Messages\Denormalize\PersonPeriodChangedMessage.cs" />
     <Compile Include="Messages\Denormalize\ProcessDenormalizeQueue.cs" />
@@ -876,6 +875,7 @@
     <Compile Include="Messages\General\MultisiteSkillSelection.cs" />
     <Compile Include="Messages\General\OpenAndSplitChildSkills.cs" />
     <Compile Include="Messages\General\OpenAndSplitTargetSkill.cs" />
+    <Compile Include="Messages\IRaptorDomainMessageInfo.cs" />
     <Compile Include="Messages\Payroll\RunPayrollExport.cs" />
     <Compile Include="Messages\General\ImportForecastsFileToSkill.cs" />
     <Compile Include="Messages\Requests\AcceptShiftTrade.cs" />

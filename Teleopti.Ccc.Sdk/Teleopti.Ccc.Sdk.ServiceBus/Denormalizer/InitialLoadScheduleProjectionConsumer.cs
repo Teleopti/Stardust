@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Rhino.ServiceBus;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleHandlers;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -41,7 +43,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 
 		public void Consume(InitialLoadScheduleProjection message)
 		{
-			var messages = new List<ScheduleDenormalizeBase>();
+			var messages = new List<ScheduleChangedEventBase>();
 			using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
 				var projectionModelInitialized = _scheduleProjectionReadOnlyRepository.IsInitialized();
@@ -55,7 +57,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 
 				if (!projectionModelInitialized && !scheduleDayModelInitialized && !personScheduleDayModelInitialized)
 				{
-					messages.AddRange(initialLoad<ScheduleChanged>(message));
+					messages.AddRange(initialLoad<ScheduleChangedEvent>(message));
 
 					projectionModelInitialized = true;
 					scheduleDayModelInitialized = true;
@@ -63,15 +65,15 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 				}
 				if (!projectionModelInitialized)
 				{
-					messages.AddRange(initialLoad<ScheduleProjectionInitialize>(message));
+					messages.AddRange(initialLoad<ScheduleProjectionInitializeTriggeredEvent>(message));
 				}
 				if (!scheduleDayModelInitialized)
 				{
-					messages.AddRange(initialLoad<ScheduleDayInitialize>(message));
+					messages.AddRange(initialLoad<ScheduleDayInitializeTriggeredEvent>(message));
 				}
 				if (!personScheduleDayModelInitialized)
 				{
-					messages.AddRange(initialLoad<PersonScheduleDayInitialize>(message));
+					messages.AddRange(initialLoad<PersonScheduleDayInitializeTriggeredEvent>(message));
 				}
 				uow.Clear();
 			}
@@ -86,7 +88,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 			_utcPeriod = _period.ToDateTimePeriod(TeleoptiPrincipal.Current.Regional.TimeZone);
 		}
 
-		private IEnumerable<T> initialLoad<T>(InitialLoadScheduleProjection message) where T : ScheduleDenormalizeBase, new()
+		private IEnumerable<T> initialLoad<T>(InitialLoadScheduleProjection message) where T : ScheduleChangedEventBase, new()
 		{
 			return _people.Select(
 				p =>

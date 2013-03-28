@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			Expect.Call(uow.Dispose);
 
 			_mocks.ReplayAll();
-			_target.Consume(new DenormalizedSchedule
+			_target.Consume(new ProjectionChangedEvent
 			{
 				PersonId = _person.Id.GetValueOrDefault(),
 				IsDefaultScenario = false,
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 				StartDateTime = period.StartDateTime,
 				EndDateTime = period.EndDateTime,
 			};
-			var message = new DenormalizedSchedule
+			var message = new ProjectionChangedEvent
 			              	{
 				          		PersonId = _person.Id.GetValueOrDefault(),
 								IsDefaultScenario = true,
@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			                              		StartDateTime = period.StartDateTime,
 			                              		EndDateTime = period.EndDateTime,
 			                              	};
-			var message = new DenormalizedSchedule
+			var message = new ProjectionChangedEvent
 			              	{
 								PersonId = _person.Id.GetValueOrDefault(),
 			              		IsDefaultScenario = true,

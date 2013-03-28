@@ -1,75 +1,78 @@
 using System.Linq;
-using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Messages.Denormalize;
 
-namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
+namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleHandlers
 {
-	public class LoadProjectedScheduleConsumer : ConsumerOf<ScheduleChanged>, ConsumerOf<ScheduleProjectionInitialize>, ConsumerOf<ScheduleDayInitialize>, ConsumerOf<PersonScheduleDayInitialize>
+	public class ScheduleChangedHandler : 
+		IHandleEvent<ScheduleChangedEvent>, 
+		IHandleEvent<ScheduleProjectionInitializeTriggeredEvent>,
+		IHandleEvent<ScheduleDayInitializeTriggeredEvent>,
+		IHandleEvent<PersonScheduleDayInitializeTriggeredEvent>
 	{
-		private readonly IServiceBus _bus;
+		private readonly IQuestionablyPublishMoreEvents _bus;
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IPersonRepository _personRepository;
 		private readonly IScheduleRepository _scheduleRepository;
-		private readonly IDenormalizedScheduleMessageBuilder _denormalizedScheduleMessageBuilder;
+		private readonly IProjectionChangedEventBuilder _projectionChangedEventBuilder;
 		private IScheduleRange _range;
 		private DateOnlyPeriod _realPeriod;
 
-		public LoadProjectedScheduleConsumer(IServiceBus bus, IUnitOfWorkFactory unitOfWorkFactory, IScenarioRepository scenarioRepository, IPersonRepository personRepository, IScheduleRepository scheduleRepository, IDenormalizedScheduleMessageBuilder denormalizedScheduleMessageBuilder)
+		public ScheduleChangedHandler(IQuestionablyPublishMoreEvents bus, IUnitOfWorkFactory unitOfWorkFactory, IScenarioRepository scenarioRepository, IPersonRepository personRepository, IScheduleRepository scheduleRepository, IProjectionChangedEventBuilder projectionChangedEventBuilder)
 		{
 			_bus = bus;
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_scenarioRepository = scenarioRepository;
 			_personRepository = personRepository;
 			_scheduleRepository = scheduleRepository;
-			_denormalizedScheduleMessageBuilder = denormalizedScheduleMessageBuilder;
+			_projectionChangedEventBuilder = projectionChangedEventBuilder;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public void Consume(ScheduleChanged message)
+		public void Handle(ScheduleChangedEvent message)
 		{
 			using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
 				if (!getPeriodAndScenario(message)) return;
-				_denormalizedScheduleMessageBuilder.Build<DenormalizedSchedule>(message, _range, _realPeriod, d => _bus.SendToSelf(d));
+				_projectionChangedEventBuilder.Build<ProjectionChangedEvent>(message, _range, _realPeriod, d => _bus.Publish(d));
 			}
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public void Consume(PersonScheduleDayInitialize message)
+		public void Handle(PersonScheduleDayInitializeTriggeredEvent message)
 		{
 			using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
 				if (!getPeriodAndScenario(message)) return;
-				_denormalizedScheduleMessageBuilder.Build<DenormalizedScheduleForPersonScheduleDay>(message, _range, _realPeriod, d => _bus.SendToSelf(d));
+				_projectionChangedEventBuilder.Build<ProjectionChangedEventForPersonScheduleDay>(message, _range, _realPeriod, d => _bus.Publish(d));
 			}
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public void Consume(ScheduleDayInitialize message)
+		public void Handle(ScheduleDayInitializeTriggeredEvent message)
 		{
 			using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
 				if (!getPeriodAndScenario(message)) return;
-				_denormalizedScheduleMessageBuilder.Build<DenormalizedScheduleForScheduleDay>(message, _range, _realPeriod, d => _bus.SendToSelf(d));
+				_projectionChangedEventBuilder.Build<ProjectionChangedEventForScheduleDay>(message, _range, _realPeriod, d => _bus.Publish(d));
 			}
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public void Consume(ScheduleProjectionInitialize message)
+		public void Handle(ScheduleProjectionInitializeTriggeredEvent message)
 		{
 			using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
 				if (!getPeriodAndScenario(message)) return;
-				_denormalizedScheduleMessageBuilder.Build<DenormalizedScheduleForScheduleProjection>(message, _range, _realPeriod, d => _bus.SendToSelf(d));
+				_projectionChangedEventBuilder.Build<ProjectionChangedEventForScheduleProjection>(message, _range, _realPeriod, d => _bus.Publish(d));
 			}
 		}
 
-		private bool getPeriodAndScenario(ScheduleDenormalizeBase message)
+		private bool getPeriodAndScenario(ScheduleChangedEventBase message)
 		{
 			var scenario = _scenarioRepository.Get(message.ScenarioId);
 			if (!scenario.DefaultScenario) return false;

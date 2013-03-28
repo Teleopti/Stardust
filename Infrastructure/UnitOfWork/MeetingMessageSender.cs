@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleHandlers;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
@@ -46,7 +48,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 					var customChange = changedRoot.Root as ICustomChangedEntity;
 					if (customChange == null) return;
 
-					var message = new ScheduleChanged
+					var message = new ScheduleChangedEvent
 					              	{
 					              		ScenarioId =
 					              			((IMeeting) changedMeeting.Meeting.ProvideCustomChangeInfo).
