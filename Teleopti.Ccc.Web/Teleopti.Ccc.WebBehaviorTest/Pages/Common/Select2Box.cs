@@ -51,8 +51,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 
 		public void SelectTeamByText(string text)
 		{
+			EventualAssert.That(() => OptionsTexts.Contains(text), Is.True);
 			Element.DomContainer.Eval("$('.select2-result-selectable div:contains(\""+text+"\")').trigger('mouseup')");
-
 			EventualAssert.That(() => Container.InnerHtml, Contains.Substring(text));
 		}
 
