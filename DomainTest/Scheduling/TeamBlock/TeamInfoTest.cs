@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private IVirtualSchedulePeriod _schedulePeriod;
 		private DateOnly _date;
 		private IPerson _groupMember;
+	    private IPerson _person1;
 
 	    [SetUp]
 		public void Setup()
