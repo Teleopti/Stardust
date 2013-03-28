@@ -293,23 +293,32 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel() {
 	self.IsUpdate = ko.observable(false);
     self.DateFrom = ko.observable(moment().startOf('day'));
     self.DateTo = ko.observable(moment().startOf('day'));
-    self.TimeFrom = ko.observable('08:00 AM');
-    self.TimeTo = ko.observable('05:00 PM');
+    self.TimeFrom = ko.observable($('#Request-detail-default-start-time').text());
+    self.TimeTo = ko.observable($('#Request-detail-default-end-time').text());
     self.ShowMeridian = ($('div[data-culture-show-meridian]').attr('data-culture-show-meridian') == 'true');
+    self.IsTimeInputEnabled = ko.observable(!self.IsFullDay());
     self.TypeEnum = ko.observable(0);
 	self.Template = ko.computed(function () {
 		return self.IsUpdate() ? self.Templates[self.TypeEnum()] : "add-new-request-detail-template";
 	});
 
 	self.IsFullDay.subscribe(function (newValue) {
-		if (newValue) {
-			$('#Request-detail-fromTime-input-input').val($('#Request-detail-default-start-time').text());
-			$('#Request-detail-toTime-input-input').val($('#Request-detail-default-end-time').text());
-			_disableTimeinput();
-		} else {
+	    if (newValue) {
+	        $('#Request-detail-fromTime-input-input').val($('#Request-detail-default-fullday-start-time').text());
+	        $('#Request-detail-toTime-input-input').val($('#Request-detail-default-fullday-end-time').text());
+	        _disableTimeinput($('#Request-detail-default-fullday-end-time').text());
+	        
+	        self.TimeFrom($('#Request-detail-default-fullday-start-time').text());
+	        self.TimeTo($('#Request-detail-default-fullday-end-time').text());
+	        self.IsTimeInputEnabled(false);
+	    } else {
 			$('#Request-detail-fromTime-input-input').reset();
 			$('#Request-detail-toTime-input-input').reset();
 			Teleopti.MyTimeWeb.Request.RequestDetail.EnableTimeinput();
+	        
+			self.TimeFrom($('#Request-detail-default-start-time').text());
+			self.TimeTo($('#Request-detail-default-end-time').text());
+			self.IsTimeInputEnabled(true);
 		}
 	});
 

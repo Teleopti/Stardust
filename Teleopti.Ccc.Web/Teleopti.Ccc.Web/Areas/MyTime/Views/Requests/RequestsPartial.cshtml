@@ -198,8 +198,8 @@
 			</select>
 		</span>
         <div class="input-append bootstrap-timepicker">
-            <input id="timepickerFrom" type="text" class="input-small" data-bind="timepicker: TimeFrom, timepickerOptions: {showMeridian: ShowMeridian}" />
-            <span class="add-on"><i class="icon-time"></i></span>
+            <input id="timepickerFrom" type="text" class="input-small" data-bind="timepicker: TimeFrom, timepickerOptions: {showMeridian: ShowMeridian}, enable: IsTimeInputEnabled" />
+            <span class="add-on"><i class="icon-time" data-bind="enable: false"></i></span>
         </div>
 	</div>
 	<div>
@@ -217,7 +217,7 @@
 			</select>
 		</span>
         <div class="input-append bootstrap-timepicker">
-            <input id="timepickerTo" type="text" class="input-small" data-bind="timepicker: TimeTo, timepickerOptions: {showMeridian: ShowMeridian}" />
+            <input id="timepickerTo" type="text" class="input-small" data-bind="timepicker: TimeTo, timepickerOptions: {showMeridian: ShowMeridian}, enable: IsTimeInputEnabled" />
             <span class="add-on"><i class="icon-time"></i></span>
         </div>
 	</div>
@@ -232,8 +232,11 @@
 	</div>
 </script>
 
-<div class="displaynone" id="Request-detail-default-start-time">@TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(0, 0, 0))</div>
-<div class="displaynone" id="Request-detail-default-end-time" >@TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(23, 59, 0))</div>
+<div class="displaynone" id="Request-detail-default-start-time">@TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(8, 0, 0))</div>
+<div class="displaynone" id="Request-detail-default-end-time" >@TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(17, 0, 0))</div>
+<div class="displaynone" id="Request-detail-default-fullday-start-time">@TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(0, 0, 0))</div>
+<div class="displaynone" id="Request-detail-default-fullday-end-time" >@TimeHelper.TimeOfDayFromTimeSpan(new TimeSpan(23, 59, 0))</div>
+
 
 
 <div class="navbar">
