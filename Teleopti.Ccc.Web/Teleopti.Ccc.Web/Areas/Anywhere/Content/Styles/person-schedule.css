@@ -32,12 +32,9 @@
 	height: 57px;
 }
 
-.person-schedule  .shift .layer 
+.person-schedule .shift .layer 
 {
 	height: 40px;
-	-webkit-border-radius: 4px 4px 4px 4px;
-	   -moz-border-radius: 4px 4px 4px 4px;
-			border-radius: 4px 4px 4px 4px;
 }
 
 .person-schedule .shift .layer:first-of-type
