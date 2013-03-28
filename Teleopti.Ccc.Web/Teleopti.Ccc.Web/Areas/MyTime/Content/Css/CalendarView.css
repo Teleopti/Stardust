@@ -31,7 +31,12 @@
 
 .calendarview-week li:first-child{border-left-color: transparent; color: #fff; font-size: 11px; text-align: center; width: 38px;}
 .calendarview-week li:first-child > div{margin-top: 58px; padding-bottom: 0px;}
-.weekdays{font-size: 0; padding-left: 40px;}
+.weekdays {
+    font-size: 0; 
+    padding-left: 40px;
+    margin: 0;
+    line-height: normal;
+}
 .weekdays li{
 	font-size: 11px;
 	display: inline-block;
@@ -46,6 +51,8 @@
 	padding-left: 0px;
 	font-size: 0;
 	white-space: nowrap;
+    margin: 0;
+    line-height: normal;
 }
 .body-calendarview-inner ul:nth-child(2){background-image: none;}
 .calendarview-week li{
