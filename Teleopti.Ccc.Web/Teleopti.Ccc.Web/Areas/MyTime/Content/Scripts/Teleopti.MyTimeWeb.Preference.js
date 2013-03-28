@@ -42,6 +42,10 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 	    selectionViewModel.previousPeriodDate(moment(periodData.PeriodNavigation.PrevPeriod));
 	    selectionViewModel.setCurrentDate(moment(periodData.Date));
 
+	    var availablePreferences = eval($("#preference-split-button").data("mytime-preference-option"));
+	    selectionViewModel.availablePreferences(availablePreferences);
+	    selectionViewModel.selectedPreference(availablePreferences[0]);
+
 	    ko.applyBindings(selectionViewModel, $('div.navbar')[1]);
 	}
 
@@ -339,7 +343,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 		var to = $('li[data-mytime-date]').last().data('mytime-date');
 
 		preferencesAndScheduleViewModel = new Teleopti.MyTimeWeb.Preference.PreferencesAndSchedulesViewModel(ajax, dayViewModels);
-		selectionViewModel = new Teleopti.MyTimeWeb.Preference.SelectionViewModel(dayViewModelsInPeriod, $('#Preference-body').data('mytime-maxmusthave'), _setMustHave, _deletePreference);
+		selectionViewModel = new Teleopti.MyTimeWeb.Preference.SelectionViewModel(dayViewModelsInPeriod, $('#Preference-body').data('mytime-maxmusthave'), _setMustHave, _setPreference, _deletePreference);
 		periodFeedbackViewModel = new Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel(ajax, dayViewModelsInPeriod, date);
 
 		var periodFeedbackElement = $('#Preference-period-feedback-view')[0];

@@ -27,13 +27,16 @@
             }
             else
             {
-                <li><div class="btn-group">
-                        <button class="btn">Preference</button>
+                <li><div class="btn-group" id="preference-split-button" data-mytime-preference-option="[@foreach (var option in Model.Options.PreferenceOptions)
+                                                                           {
+                                                                               @Html.Raw("{'Color': '" + @option.Color + "', 'Value': '" + @option.Value + "', 'Text': '" + @option.Text + "'},");
+                                                                           }]">
+                        <button class="btn" data-bind="click: applyPreference, 'text': selectedPreference().Text">Preference</button>
                         <button class="btn dropdown-toggle" data-toggle="dropdown">
                             <span class="caret"></span>
                         </button>
-                        <ul class="dropdown-menu">
-                            <li><a href="#"></a></li>
+                        <ul class="dropdown-menu" data-bind="foreach: availablePreferences">
+                                <li><a href="#" data-bind="click: $parent.selectedPreference, 'text': Text"></a></li>
                         </ul>
                     </div></li>
             }

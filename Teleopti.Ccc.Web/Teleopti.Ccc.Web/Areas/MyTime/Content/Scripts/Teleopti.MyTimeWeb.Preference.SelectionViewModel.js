@@ -16,7 +16,7 @@ if (typeof (Teleopti) === 'undefined') {
 	}
 }
 
-Teleopti.MyTimeWeb.Preference.SelectionViewModel = function (dayViewModels, maxMustHave, setMustHaveMethod, deletePreferenceMethod) {
+Teleopti.MyTimeWeb.Preference.SelectionViewModel = function (dayViewModels, maxMustHave, setMustHaveMethod, setPreferenceMethod, deletePreferenceMethod) {
     var self = this;
 
     self.minDate = ko.observable(moment());
@@ -64,6 +64,13 @@ Teleopti.MyTimeWeb.Preference.SelectionViewModel = function (dayViewModels, maxM
         });
         return total;
     });
+
+    self.selectedPreference = ko.observable();
+    self.availablePreferences = ko.observableArray();
+    
+    self.applyPreference = function() {
+        setPreferenceMethod(self.selectedPreference().Value);
+    };
 
     self.addMustHaveEnabled = ko.computed(function() {
         return self.currentMustHaves() < maxMustHave;
