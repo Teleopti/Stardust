@@ -52,8 +52,9 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
                 },
                 success: function (data) {
 					Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.HideShiftTradeWindow();
-					var distanceFromTop = Math.max(15, $(event.currentTarget).position().top - 30);
-                    Teleopti.MyTimeWeb.Request.RequestDetail.ShowRequest(data, distanceFromTop);
+					//var distanceFromTop = Math.max(15, $(event.currentTarget).position().top - 30);
+                    //Teleopti.MyTimeWeb.Request.RequestDetail.ShowRequest(data, distanceFromTop);
+                    Teleopti.MyTimeWeb.Request.RequestDetail.ShowRequest(data);
                 }
             });
         };
