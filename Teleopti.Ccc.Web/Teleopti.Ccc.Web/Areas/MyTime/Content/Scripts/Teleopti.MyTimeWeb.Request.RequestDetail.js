@@ -293,6 +293,9 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel() {
 	self.IsUpdate = ko.observable(false);
     self.DateFrom = ko.observable(moment().startOf('day'));
     self.DateTo = ko.observable(moment().startOf('day'));
+    self.TimeFrom = ko.observable('08:00 AM');
+    self.TimeTo = ko.observable('05:00 PM');
+    self.ShowMeridian = true;
     self.TypeEnum = ko.observable(0);
 	self.Template = ko.computed(function () {
 		return self.IsUpdate() ? self.Templates[self.TypeEnum()] : "add-new-request-detail-template";

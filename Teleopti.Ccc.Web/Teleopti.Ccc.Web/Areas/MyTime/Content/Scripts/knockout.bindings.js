@@ -89,3 +89,14 @@ ko.bindingHandlers.increaseWidthIf = {
 			$(element).animate({ width: element.initialWidthForIncreaseIfBinding }, increaseDuration);
 	}
 };
+
+ko.bindingHandlers.timepicker = {
+    init: function(element, valueAccessor, allBindingsAccessor) {
+        var options = allBindingsAccessor().timepickerOptions || {};
+        $(element).timepicker(options);
+    },
+    update: function(element, valueAccessor) {
+        var value = ko.utils.unwrapObservable(valueAccessor());
+        $(element).timepicker("setTime", value);
+    }
+};
