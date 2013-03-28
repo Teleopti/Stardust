@@ -10849,7 +10849,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <value>Utjämning:</value>
   </data>
   <data name="TemplatesHistoricalDataRange" xml:space="preserve">
-    <value>Historikdataperiod för mallar</value>
+    <value>Välj historisk data för mallar</value>
   </data>
   <data name="ShowInfoMessages" xml:space="preserve">
     <value>Visa informationsmeddelanden</value>
@@ -10926,5 +10926,15 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   </data>
   <data name="SkillUnderStaffingValidationError" xml:space="preserve">
     <value>Förfrågan klarade inte kontrollen av underbemanning på kompetensen {0} eftersom den skulle göra att antalet resurser hamnade under det angivna tröskelvärdet.  </value>
+  </data>
+  <data name="GenerateForecastFor" xml:space="preserve">
+    <value>Generera prognos för</value>
+    <comment>Period and scenario selection in quick forecast</comment>
+  </data>
+  <data name="SelectedAbsences" xml:space="preserve">
+    <value>Valda frånvarotyper</value>
+  </data>
+  <data name="ProcessingDotDotDot" xml:space="preserve">
+    <value>Behandlas...</value>
   </data>
 </root>
