@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		public Div AgentByName(string name)
 		{
-			return Document.Div(AgentConstraint && Find.ByText(name));
+			return Document.Div(AgentConstraint && Find.ByText(name)).EventualGet();
 		}
 
 		public DivCollection Agents()
