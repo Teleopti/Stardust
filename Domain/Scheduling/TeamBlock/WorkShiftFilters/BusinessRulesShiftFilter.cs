@@ -30,6 +30,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 		public IList<IShiftProjectionCache> Filter(IGroupPerson groupPerson, IList<IShiftProjectionCache> shiftList,
 												   DateOnly dateToCheck, IWorkShiftFinderResult finderResult)
 		{
+		    if (groupPerson == null) throw new ArgumentNullException("groupPerson");
 		    if (shiftList == null) throw new ArgumentNullException("shiftList");
 		    if (finderResult == null) throw new ArgumentNullException("finderResult");
 		    if (shiftList.Count == 0) return shiftList;

@@ -12,7 +12,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 
 	public class EarliestEndTimeLimitationShiftFilter : IEarliestEndTimeLimitationShiftFilter
 	{
-		public IList<IShiftProjectionCache> Filter(IList<IShiftProjectionCache> shiftList, DateTime earliestEnd, IWorkShiftFinderResult finderResult)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Domain.ResourceCalculation.WorkShiftFilterResult.#ctor(System.String,System.Int32,System.Int32)")]
+        public IList<IShiftProjectionCache> Filter(IList<IShiftProjectionCache> shiftList, DateTime earliestEnd, IWorkShiftFinderResult finderResult)
 		{
 		    if (shiftList == null) throw new ArgumentNullException("shiftList");
 		    if (finderResult == null) throw new ArgumentNullException("finderResult");

@@ -116,41 +116,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             var activityData = new Dictionary<IActivity, IDictionary<DateOnly, IList<ISkillIntervalData>>>();
             foreach (var skillDay in skillDays)
             {
-                var currentDate = skillDay.CurrentDate;
-                var skill = skillDay.Skill;
-                if (!skills.Contains(skill)) continue;
-                var activity = skill.Activity;
-                if (skillDay.SkillStaffPeriodCollection.Count == 0) continue;
-                var mappedData = _skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(skillDay.SkillStaffPeriodCollection);
-                mappedData = _intervalDataDivider.SplitSkillIntervalData(mappedData, minimumResolution);
-                var adjustedMapedData = new List<ISkillIntervalData>();
-                foreach (var data in mappedData)
-                {
-                    var appliedData = _skillIntervalDataSkillFactorApplier.ApplyFactors(data, skill);
-                    adjustedMapedData.Add(appliedData);
-                }
-                IDictionary<DateOnly, IList<ISkillIntervalData>> intervalData;
-                activityData.TryGetValue(activity, out intervalData);
-                if (intervalData == null)
-                {
-                    var dayIntevalData = new Dictionary<DateOnly, IList<ISkillIntervalData>> { { currentDate, adjustedMapedData } };
-                    activityData.Add(activity, dayIntevalData);
-                }
-                else
-                {
-                    IList<ISkillIntervalData> skillIntervalData;
-                    activityData[activity].TryGetValue(skillDay.CurrentDate, out skillIntervalData);
-                    if (skillIntervalData == null)
-                    {
-                        activityData[activity].Add(currentDate, adjustedMapedData);
-                    }
-                    else
-                    {
-                        var data = new List<IList<ISkillIntervalData>> { adjustedMapedData, skillIntervalData };
-                        var dayIntervalData = _intervalDataAggregator.AggregateSkillIntervalData(data);
-                        activityData[activity][currentDate] = dayIntervalData;
-                    }
-                }
+                aggregateDataOnSkill(skillDay, skills, minimumResolution, activityData);
             }
 
             foreach (var activityBasedData in activityData)
@@ -161,5 +127,44 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
             return activityIntervalData;
         }
+
+	    private void aggregateDataOnSkill(ISkillDay skillDay, List<ISkill> skills, int minimumResolution, Dictionary<IActivity, IDictionary<DateOnly, IList<ISkillIntervalData>>> activityData)
+	    {
+	        var currentDate = skillDay.CurrentDate;
+	        var skill = skillDay.Skill;
+	        if (!skills.Contains(skill)) return;
+	        var activity = skill.Activity;
+	        if (skillDay.SkillStaffPeriodCollection.Count == 0) return;
+	        var mappedData = _skillStaffPeriodToSkillIntervalDataMapper.MapSkillIntervalData(skillDay.SkillStaffPeriodCollection);
+	        mappedData = _intervalDataDivider.SplitSkillIntervalData(mappedData, minimumResolution);
+	        var adjustedMapedData = new List<ISkillIntervalData>();
+	        foreach (var data in mappedData)
+	        {
+	            var appliedData = _skillIntervalDataSkillFactorApplier.ApplyFactors(data, skill);
+	            adjustedMapedData.Add(appliedData);
+	        }
+	        IDictionary<DateOnly, IList<ISkillIntervalData>> intervalData;
+	        activityData.TryGetValue(activity, out intervalData);
+	        if (intervalData == null)
+	        {
+	            var dayIntevalData = new Dictionary<DateOnly, IList<ISkillIntervalData>> {{currentDate, adjustedMapedData}};
+	            activityData.Add(activity, dayIntevalData);
+	        }
+	        else
+	        {
+	            IList<ISkillIntervalData> skillIntervalData;
+	            activityData[activity].TryGetValue(skillDay.CurrentDate, out skillIntervalData);
+	            if (skillIntervalData == null)
+	            {
+	                activityData[activity].Add(currentDate, adjustedMapedData);
+	            }
+	            else
+	            {
+	                var data = new List<IList<ISkillIntervalData>> {adjustedMapedData, skillIntervalData};
+	                var dayIntervalData = _intervalDataAggregator.AggregateSkillIntervalData(data);
+	                activityData[activity][currentDate] = dayIntervalData;
+	            }
+	        }
+	    }
 	}
 }

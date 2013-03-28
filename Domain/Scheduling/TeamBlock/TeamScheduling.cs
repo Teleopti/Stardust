@@ -166,6 +166,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             return destinationScheduleDay;
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1725:ParameterNamesShouldMatchBaseDeclaration", MessageId = "4#")]
         public void ExecutePerDayPerPerson(IPerson person, DateOnly dateOnly, ITeamBlockInfo teamBlockInfo, IShiftProjectionCache shiftProjectionCache, bool skipOffset, DateOnlyPeriod selectedPeriod)
         {
             if (teamBlockInfo == null) throw new ArgumentNullException("teamBlockInfo");

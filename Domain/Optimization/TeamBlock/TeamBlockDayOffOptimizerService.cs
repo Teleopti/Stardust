@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly IPeriodValueCalculator _periodValueCalculatorForAllSkills;
 		private readonly IDayOffOptimizationDecisionMakerFactory _dayOffOptimizationDecisionMakerFactory;
 		private readonly ISafeRollbackAndResourceCalculation _safeRollbackAndResourceCalculation;
-		private readonly ITeamDayOffModifyer _teamDayOffModifyer;
+		private readonly ITeamDayOffModifier _teamDayOffModifier;
 		private readonly IBlockSteadyStateValidator _teamBlockSteadyStateValidator;
 		private readonly ITeamBlockClearer _teamBlockClearer;
 		private readonly ITeamBlockRestrictionOverLimitValidator _restrictionOverLimitValidator;
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			IPeriodValueCalculator periodValueCalculatorForAllSkills,
 			IDayOffOptimizationDecisionMakerFactory dayOffOptimizationDecisionMakerFactory,
 			ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation,
-			ITeamDayOffModifyer teamDayOffModifyer,
+			ITeamDayOffModifier teamDayOffModifier,
 			IBlockSteadyStateValidator teamBlockSteadyStateValidator,
 			ITeamBlockClearer teamBlockClearer,
 			ITeamBlockRestrictionOverLimitValidator restrictionOverLimitValidator,
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_periodValueCalculatorForAllSkills = periodValueCalculatorForAllSkills;
 			_dayOffOptimizationDecisionMakerFactory = dayOffOptimizationDecisionMakerFactory;
 			_safeRollbackAndResourceCalculation = safeRollbackAndResourceCalculation;
-			_teamDayOffModifyer = teamDayOffModifyer;
+			_teamDayOffModifier = teamDayOffModifier;
 			_teamBlockSteadyStateValidator = teamBlockSteadyStateValidator;
 			_teamBlockClearer = teamBlockClearer;
 			_restrictionOverLimitValidator = restrictionOverLimitValidator;
@@ -240,7 +240,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		{
 			foreach (DateOnly dateOnly in addedDaysOff)
 			{
-				_teamDayOffModifyer.AddDayOffAndResourceCalculate(rollbackService, teamInfo, dateOnly, schedulingOptions);
+				_teamDayOffModifier.AddDayOffAndResourceCalculate(rollbackService, teamInfo, dateOnly, schedulingOptions);
 			}
 		}
 
@@ -250,7 +250,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		{
 			foreach (DateOnly dateOnly in removedDaysOff)
 			{
-				_teamDayOffModifyer.RemoveDayOffAndResourceCalculate(rollbackService, teamInfo, dateOnly, schedulingOptions);
+				_teamDayOffModifier.RemoveDayOffAndResourceCalculate(rollbackService, teamInfo, dateOnly, schedulingOptions);
 			}
 		}
 

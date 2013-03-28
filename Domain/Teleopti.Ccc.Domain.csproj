@@ -827,7 +827,7 @@
     <Compile Include="Scheduling\TeamBlock\BlockFinderTypeCreator.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockInfo.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockInfoFactory.cs" />
-    <Compile Include="Scheduling\TeamBlock\TeamDayOffModifyer.cs" />
+    <Compile Include="Scheduling\TeamBlock\TeamDayOffModifier.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamDayOffScheduler.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamInfo.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamInfoFactory.cs" />

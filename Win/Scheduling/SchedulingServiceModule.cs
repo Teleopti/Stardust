@@ -248,7 +248,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private static void registerTeamBlockIntradayOptimizerService(ContainerBuilder builder)
 		{
 			builder.RegisterType<LockableBitArrayFactory>().As<ILockableBitArrayFactory>();
-			builder.RegisterType<TeamDayOffModifyer>().As<ITeamDayOffModifyer>();
+			builder.RegisterType<TeamDayOffModifier>().As<ITeamDayOffModifier>();
 			builder.RegisterType<BlockSteadyStateValidator>().As<IBlockSteadyStateValidator>();
 		}
 

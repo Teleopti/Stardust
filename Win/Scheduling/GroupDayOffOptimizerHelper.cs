@@ -501,7 +501,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					periodValueCalculatorForAllSkills,
 					_container.Resolve<IDayOffOptimizationDecisionMakerFactory>(),
 					_container.Resolve<ISafeRollbackAndResourceCalculation>(),
-					_container.Resolve<ITeamDayOffModifyer>(),
+					_container.Resolve<ITeamDayOffModifier>(),
 					_container.Resolve<IBlockSteadyStateValidator>(),
 					_container.Resolve<ITeamBlockClearer>(),
 					_container.Resolve<ITeamBlockRestrictionOverLimitValidator>(),

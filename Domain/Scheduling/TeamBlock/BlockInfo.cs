@@ -6,7 +6,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	public interface IBlockInfo
 	{
 		DateOnlyPeriod BlockPeriod { get; }
-		IList<double?> StandardDeviations { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
+        IList<double?> StandardDeviations { get; set; }
 		double AverageStandardDeviation { get; }
 	}
 

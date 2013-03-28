@@ -6,7 +6,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
-	public interface ITeamDayOffModifyer
+	public interface ITeamDayOffModifier
 	{
 		void AddDayOffAndResourceCalculate(ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService,
 		                                                   ITeamInfo teamInfo, DateOnly dateOnly, ISchedulingOptions schedulingOptions);
@@ -15,12 +15,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		                                                      ITeamInfo teamInfo, DateOnly dateOnly, ISchedulingOptions schedulingOptions);
 	}
 
-	public class TeamDayOffModifyer : ITeamDayOffModifyer
+	public class TeamDayOffModifier : ITeamDayOffModifier
 	{
 		private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 		private readonly ISchedulingResultStateHolder _stateHolder;
 
-		public TeamDayOffModifyer(IResourceOptimizationHelper resourceOptimizationHelper, ISchedulingResultStateHolder stateHolder)
+		public TeamDayOffModifier(IResourceOptimizationHelper resourceOptimizationHelper, ISchedulingResultStateHolder stateHolder)
 		{
 			_resourceOptimizationHelper = resourceOptimizationHelper;
 			_stateHolder = stateHolder;
