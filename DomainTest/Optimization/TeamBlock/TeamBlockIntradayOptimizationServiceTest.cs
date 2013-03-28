@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			                                                   _schedulingOptionsCreator, 
 			                                                   _safeRollbackAndResourceCalculation,
 			                                                   _teamBlockIntradayDecisionMaker, _restrictionOverLimitValidator,
-			                                                   _teamBlockClearer, _restrictionChecker);
+			                                                   _teamBlockClearer);
 		}
 
 		[Test]
@@ -79,8 +79,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 				Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, dateOnly, schedulingOptions, selectedPeriod,
 				                                                     persons))
 				      .Return(true);
-				Expect.Call(_restrictionOverLimitValidator.Validate(matrixes, optimizationPreferences, schedulingOptions,
-				                                                    _schedulePartModifyAndRollbackService, _restrictionChecker))
+				Expect.Call(_restrictionOverLimitValidator.Validate(teamBlockInfo, optimizationPreferences))
 				      .Return(true);
 				Expect.Call(_teamBlockIntradayDecisionMaker.RecalculateTeamBlock(teamBlockInfo, optimizationPreferences,
 				                                                                 schedulingOptions)).Return(teamBlockInfo);

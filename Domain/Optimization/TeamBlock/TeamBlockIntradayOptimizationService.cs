@@ -26,7 +26,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly ISafeRollbackAndResourceCalculation _safeRollbackAndResourceCalculation;
 		private readonly ITeamBlockIntradayDecisionMaker _teamBlockIntradayDecisionMaker;
 		private readonly ITeamBlockClearer _teamBlockClearer;
-		private readonly ICheckerRestriction _restrictionChecker;
 		private readonly ITeamBlockGenerator _teamBlockGenerator;
 		private readonly ITeamBlockRestrictionOverLimitValidator _restrictionOverLimitValidator;
 		private bool _cancelMe;
@@ -37,15 +36,13 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		                                            ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation,
 		                                            ITeamBlockIntradayDecisionMaker teamBlockIntradayDecisionMaker,
 		                                            ITeamBlockRestrictionOverLimitValidator restrictionOverLimitValidator,
-		                                            ITeamBlockClearer teamBlockClearer,
-		                                            ICheckerRestriction restrictionChecker)
+		                                            ITeamBlockClearer teamBlockClearer)
 		{
 			_teamBlockScheduler = teamBlockScheduler;
 			_schedulingOptionsCreator = schedulingOptionsCreator;
 			_safeRollbackAndResourceCalculation = safeRollbackAndResourceCalculation;
 			_teamBlockIntradayDecisionMaker = teamBlockIntradayDecisionMaker;
 			_teamBlockClearer = teamBlockClearer;
-			_restrictionChecker = restrictionChecker;
 			_teamBlockGenerator = teamBlockGenerator;
 			_restrictionOverLimitValidator = restrictionOverLimitValidator;
 		}
@@ -67,7 +64,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			{
 				if (_cancelMe)
 					break;
-				var teamBlocksToRemove = optimizeOneRound(allPersonMatrixList, selectedPeriod, selectedPersons, optimizationPreferences,
+				var teamBlocksToRemove = optimizeOneRound(selectedPeriod, selectedPersons, optimizationPreferences,
 														  schedulingOptions, remainingInfoList,
 				                                          schedulePartModifyAndRollbackService);
 				foreach (var teamBlock in teamBlocksToRemove)
@@ -90,48 +87,47 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Domain.Optimization.TeamBlock.TeamBlockIntradayOptimizationService.OnReportProgress(System.String)")]
-		private IEnumerable<ITeamBlockInfo> optimizeOneRound(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod,
+		private IEnumerable<ITeamBlockInfo> optimizeOneRound(DateOnlyPeriod selectedPeriod,
 							 IList<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences,
-									  ISchedulingOptions schedulingOptions, List<ITeamBlockInfo> allTeamBlocks,
+									  ISchedulingOptions schedulingOptions, List<ITeamBlockInfo> allTeamBlockInfos,
 										ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
 		{
 			var teamBlockToRemove = new List<ITeamBlockInfo>();
 			
-			var sortedTeamBlocks = _teamBlockIntradayDecisionMaker.Decide(allTeamBlocks, optimizationPreferences,
+			var sortedTeamBlockInfos = _teamBlockIntradayDecisionMaker.Decide(allTeamBlockInfos, optimizationPreferences,
 			                                                              schedulingOptions);
 
-			foreach (var teamBlock in sortedTeamBlocks)
+			foreach (var teamBlockInfo in sortedTeamBlockInfos)
 			{
 				if (_cancelMe)
 					break;
 				schedulePartModifyAndRollbackService.ClearModificationCollection();
 
-				var previousStandardDevation = teamBlock.BlockInfo.AverageStandardDeviation; 
-				_teamBlockClearer.ClearTeamBlock(schedulingOptions, schedulePartModifyAndRollbackService, teamBlock);
+				var previousStandardDevation = teamBlockInfo.BlockInfo.AverageStandardDeviation; 
+				_teamBlockClearer.ClearTeamBlock(schedulingOptions, schedulePartModifyAndRollbackService, teamBlockInfo);
 
-				var datePoint = teamBlock.BlockInfo.BlockPeriod.DayCollection().First();
-				var success = _teamBlockScheduler.ScheduleTeamBlockDay(teamBlock, datePoint, schedulingOptions, selectedPeriod, selectedPersons);
+				var datePoint = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection().First();
+				var success = _teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, datePoint, schedulingOptions, selectedPeriod, selectedPersons);
 				if (!success)
 				{
-					teamBlockToRemove.Add(teamBlock);
+					teamBlockToRemove.Add(teamBlockInfo);
 					_safeRollbackAndResourceCalculation.Execute(schedulePartModifyAndRollbackService, schedulingOptions);
 					continue;
 				}
 
-				if (!_restrictionOverLimitValidator.Validate(allPersonMatrixList, optimizationPreferences, schedulingOptions,
-				                                            schedulePartModifyAndRollbackService, _restrictionChecker))
+				if (!_restrictionOverLimitValidator.Validate(teamBlockInfo, optimizationPreferences))
 					continue;
 
-				var newStandardDeviation = _teamBlockIntradayDecisionMaker.RecalculateTeamBlock(teamBlock, optimizationPreferences,
+				var newStandardDeviation = _teamBlockIntradayDecisionMaker.RecalculateTeamBlock(teamBlockInfo, optimizationPreferences,
 				                                                                                schedulingOptions).BlockInfo.AverageStandardDeviation;
 				var isWorse = newStandardDeviation >= previousStandardDevation;
 				if (isWorse)
 				{
-					teamBlockToRemove.Add(teamBlock);
+					teamBlockToRemove.Add(teamBlockInfo);
 					_safeRollbackAndResourceCalculation.Execute(schedulePartModifyAndRollbackService, schedulingOptions);
 				}
 
-				OnReportProgress(Resources.OptimizingIntraday + Resources.Colon + teamBlock.TeamInfo.GroupPerson.Name + "(" + newStandardDeviation + ")");
+				OnReportProgress(Resources.OptimizingIntraday + Resources.Colon + teamBlockInfo.TeamInfo.GroupPerson.Name + "(" + newStandardDeviation + ")");
 			}
 			return teamBlockToRemove;
 		}

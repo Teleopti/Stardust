@@ -22,6 +22,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 		private ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
 		private IScheduleMatrixOriginalStateContainerFactory _scheduleMatrixOriginalStateContainerFactory;
 		private IOptimizationOverLimitByRestrictionDeciderFactory _optimizationOverLimitByRestrictionDeciderFactory;
+		private IRestrictionOverLimitDecider _restrictionOverLimitDecider;
+		private ITeamBlockInfo _teamBlockInfo;
 
 		[SetUp]
 		public void Setup()
@@ -34,9 +36,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			_schedulePartModifyAndRollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
 			_scheduleMatrixOriginalStateContainerFactory = _mocks.StrictMock<IScheduleMatrixOriginalStateContainerFactory>();
 			_optimizationOverLimitByRestrictionDeciderFactory = _mocks.StrictMock<IOptimizationOverLimitByRestrictionDeciderFactory>();
-			_target = new TeamBlockRestrictionOverLimitValidator(_scheduleDayEquator, _safeRollbackAndResourceCalculation,
-			                                                     _scheduleMatrixOriginalStateContainerFactory,
-			                                                     _optimizationOverLimitByRestrictionDeciderFactory);
+			_restrictionOverLimitDecider = _mocks.StrictMock<IRestrictionOverLimitDecider>();
+			_target = new TeamBlockRestrictionOverLimitValidator(_restrictionOverLimitDecider, new Dictionary<IPerson, IScheduleRange>(), _scheduleDayEquator);
+			_teamBlockInfo = _mocks.StrictMock<ITeamBlockInfo>();
 		}
 
 		[Test]
@@ -64,8 +66,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.Validate(matrixList, _optimizerPreferences, _schedulingOptions,
-											  _schedulePartModifyAndRollbackService, restrictionChecker);
+				var result = _target.Validate(_teamBlockInfo, _optimizerPreferences);
 				Assert.IsFalse(result);
 			}
 		}
@@ -94,8 +95,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.Validate(matrixList, _optimizerPreferences, _schedulingOptions,
-											  _schedulePartModifyAndRollbackService, restrictionChecker);
+				var result = _target.Validate(_teamBlockInfo, _optimizerPreferences);
 				Assert.IsTrue(result);
 			}
 		}
@@ -128,8 +128,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.Validate(matrixList, _optimizerPreferences, _schedulingOptions,
-											  _schedulePartModifyAndRollbackService, restrictionChecker);
+				var result = _target.Validate(_teamBlockInfo, _optimizerPreferences);
 				Assert.IsFalse(result);
 			}
 		}
@@ -159,8 +158,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.Validate(matrixList, _optimizerPreferences, _schedulingOptions,
-											  _schedulePartModifyAndRollbackService, restrictionChecker);
+				var result = _target.Validate(_teamBlockInfo, _optimizerPreferences);
 				Assert.True(result);
 			}
 		}

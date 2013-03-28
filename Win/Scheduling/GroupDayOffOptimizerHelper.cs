@@ -559,8 +559,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					_container.Resolve<ISafeRollbackAndResourceCalculation>(),
 					_container.Resolve<ITeamBlockIntradayDecisionMaker>(),
 					_container.Resolve<ITeamBlockRestrictionOverLimitValidator>(),
-					_container.Resolve<ITeamBlockClearer>(),
-					new RestrictionChecker()
+					_container.Resolve<ITeamBlockClearer>()
                     );
 	        teamBlockIntradayOptimizationService.ReportProgress += resourceOptimizerPersonOptimized;
             teamBlockIntradayOptimizationService.Optimize(
