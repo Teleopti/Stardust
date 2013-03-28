@@ -352,7 +352,6 @@
     <Compile Include="Core\DateTimeExtensions.cs" />
     <Compile Include="Core\RequestContext\CurrentBusinessUnitProvider.cs" />
     <Compile Include="Core\RequestContext\ICurrentBusinessUnitProvider.cs" />
-    <Compile Include="Core\ServiceBus\IServiceBusSender.cs" />
     <Compile Include="Core\ServiceBus\ServiceBusSender.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\AbsenceTypesProvider.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\IAbsenceTypesProvider.cs" />

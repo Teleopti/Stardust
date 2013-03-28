@@ -7,6 +7,11 @@ using Teleopti.Ccc.Infrastructure.UnitOfWork;
 namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 {
 	[TestFixture]
+	public class ServiceBusEventPublisherTest
+	{
+		
+	}
+	[TestFixture]
 	public class DenormalizationQueueEventsPublisherTest
 	{
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]

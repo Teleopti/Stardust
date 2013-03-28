@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.ServiceModel;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Interfaces.Messages.General;
 
@@ -48,7 +49,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                         });
 
             }
-            _busSender.NotifyServiceBus(message);
+            _busSender.Send(message);
 			command.Result = new CommandResultDto { AffectedId = Guid.Empty, AffectedItems = 1 };
 		}
 	}

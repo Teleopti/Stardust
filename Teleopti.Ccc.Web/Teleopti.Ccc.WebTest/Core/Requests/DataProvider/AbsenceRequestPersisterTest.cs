@@ -4,7 +4,9 @@ using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.Web.Core.RequestContext;
@@ -99,7 +101,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var target = new AbsenceRequestPersister(personRequestRepository, mapper, serviceBusSender, currentBusinessUnitProvider, currentDataSourceProvider, now, uowFactory);
 			target.Persist(form);
 
-			currUow.Expect(c => c.AfterSuccessfulTx(() => serviceBusSender.NotifyServiceBus(message)));
+			currUow.Expect(c => c.AfterSuccessfulTx(() => serviceBusSender.Send(message)));
 		}
 
 		[Test]
@@ -135,7 +137,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var target = new AbsenceRequestPersister(personRequestRepository, mapper, serviceBusSender, currentBusinessUnitProvider, currentDataSourceProvider, now, null);
 			target.Persist(form);
 
-			serviceBusSender.AssertWasNotCalled(x => x.NotifyServiceBus(Arg<RaptorDomainMessage>.Is.Anything));
+			serviceBusSender.AssertWasNotCalled(x => x.Send(Arg<RaptorDomainMessage>.Is.Anything));
 			personRequest.AssertWasCalled(x => x.Pending());
 		}
 

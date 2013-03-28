@@ -190,9 +190,9 @@
     <Compile Include="CommandHandler\SavePersonAbsenceRequestCommandHandler.cs" />
     <Compile Include="CommandHandler\SetPersonAccountForPersonCommandHandler.cs" />
     <Compile Include="GlobalSuppressions.cs" />
+    <Compile Include="IMessageBrokerEnablerFactory.cs" />
     <Compile Include="IPayrollResultFactory.cs" />
     <Compile Include="IPersistPersonRequest.cs" />
-    <Compile Include="IServiceBusSender.cs" />
     <Compile Include="Payroll\PayrollFormatHandler.cs" />
     <Compile Include="Payroll\PayrollResultService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

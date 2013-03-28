@@ -4,6 +4,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Interfaces.Domain;
@@ -78,7 +79,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 					message.MultisiteSkillSelections.Add(selection);
                 }
 
-                _busSender.NotifyServiceBus(message);
+                _busSender.Send(message);
             }
 			command.Result = new CommandResultDto { AffectedId = jobId, AffectedItems = 1 };
         }

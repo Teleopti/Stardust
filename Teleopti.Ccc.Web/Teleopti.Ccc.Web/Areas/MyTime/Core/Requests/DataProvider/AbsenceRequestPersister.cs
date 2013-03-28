@@ -1,6 +1,8 @@
 using System;
 using AutoMapper;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Ccc.Web.Core.ServiceBus;
@@ -75,7 +77,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 				              		PersonRequestId = personRequest.Id.GetValueOrDefault(Guid.Empty),
 				              		Timestamp = _now.UtcDateTime()
 				              	};
-				_uowFactory.CurrentUnitOfWork().AfterSuccessfulTx(() => _serviceBusSender.NotifyServiceBus(message));
+				_uowFactory.CurrentUnitOfWork().AfterSuccessfulTx(() => _serviceBusSender.Send(message));
 			}
 			else
 			{
