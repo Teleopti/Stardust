@@ -339,6 +339,9 @@
     <Compile Include="Common\Configuration\SmsSettingsControl.Designer.cs">
       <DependentUpon>SmsSettingsControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Common\Controls\OutlookTimePicker.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Common\Controls\Rows\SkillFullPeriodGridRowStaffingIssuesSummary.cs" />
     <Compile Include="Common\Controls\Rows\SkillFullPeriodGridRowStaffingIssues.cs" />
     <Compile Include="Common\Controls\Rows\SkillFullPeriodGridRowMinMaxIssuesSummary.cs" />
@@ -1246,6 +1249,12 @@
     <Compile Include="Scheduling\AgentSkillExplorer.Designer.cs">
       <DependentUpon>AgentSkillExplorer.cs</DependentUpon>
     </Compile>
+    <Compile Include="Scheduling\AgentStudentAvailabilityView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Scheduling\AgentStudentAvailabilityView.Designer.cs">
+      <DependentUpon>AgentStudentAvailabilityView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Scheduling\BlockOptimizerHelper.cs" />
     <Compile Include="Scheduling\AuditHistoryView.cs">
       <SubType>Form</SubType>
@@ -1262,8 +1271,11 @@
     <Compile Include="Scheduling\OverViewDrawDayOff.cs" />
     <Compile Include="Scheduling\OverViewDrawMainShift.cs" />
     <Compile Include="Scheduling\PermissionClipboardControl.cs" />
+    <Compile Include="Scheduling\PermissionClipboardRestrictionControl.cs" />
     <Compile Include="Scheduling\PermissionEditControl.cs" />
+    <Compile Include="Scheduling\PermissionEditRestrictionControl.cs" />
     <Compile Include="Scheduling\QuickAccessState.cs" />
+    <Compile Include="Scheduling\SchedulerRibbonHelper.cs" />
     <Compile Include="Scheduling\SkillFullPeriodGridControl.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -2783,6 +2795,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\AgentSkillExplorer.resx">
       <DependentUpon>AgentSkillExplorer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Scheduling\AgentStudentAvailabilityView.resx">
+      <DependentUpon>AgentStudentAvailabilityView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\AuditHistoryView.resx">
       <DependentUpon>AuditHistoryView.cs</DependentUpon>

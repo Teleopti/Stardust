@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         /// Required method for Designer support - do not modify
         /// the contents of this method with the code editor.
         /// </summary>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxOldFilter"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxMonth"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Syncfusion.Windows.Forms.Tools.RibbonControlAdv.set_MaximizeToolTip(System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Syncfusion.Windows.Forms.Tools.RibbonControlAdv.set_MinimizeToolTip(System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxRestrictionViewTemp"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxExportToPDFShiftsPerDay"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxRemoveWriteProtection"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxTags"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxChangeTag"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAutoTag"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUntagged"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxLockTags"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAllFulFilledAbsences"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAllAbsences"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAllMustHave"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAllFulfilledMustHave"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxLockStudentAvailability"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxLockRotations"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxLockRestrictions"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxLockPreferences"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxLockAvailability"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAllUnavailable"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAllUnAvailable"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAllShifts"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAllFulFilledShifts"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAllFulFilledDaysOff"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAllFulFilled"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAllDaysOff"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAllAvailable"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAll"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxExportToPDFGraphical"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxExport"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxSwapRaw")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxFind"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAddPreferenceRestriction"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAddStudentAvailability"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxOldFilter"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxMonth"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Syncfusion.Windows.Forms.Tools.RibbonControlAdv.set_MaximizeToolTip(System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Syncfusion.Windows.Forms.Tools.RibbonControlAdv.set_MinimizeToolTip(System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxRestrictionViewTemp"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxExportToPDFShiftsPerDay"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxRemoveWriteProtection"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxTags"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxChangeTag"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAutoTag"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUntagged"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxLockTags"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAllFulFilledAbsences"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAllAbsences"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAllMustHave"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAllFulfilledMustHave"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxLockStudentAvailability"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxLockRotations"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxLockRestrictions"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxLockPreferences"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxLockAvailability"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAllUnavailable"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAllUnAvailable"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAllShifts"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAllFulFilledShifts"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAllFulFilledDaysOff"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAllFulFilled"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAllDaysOff"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAllAvailable"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAll"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxExportToPDFGraphical"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxExport"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxSwapRaw")]
 		private void InitializeComponent()
         {
 			this.components = new System.ComponentModel.Container();
@@ -87,20 +87,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripMenuItemAddOverTime = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemInsertAbsence = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemInsertDayOff = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItemAddPreference = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItemAddStudentAvailability = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
-			this.ToolStripMenuItemSearch = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItemFilter = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemFindMatching = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemViewHistory = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemAgentInfo = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItemViews = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItemDayView = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItemWeekView = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItemDetailView = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItemPeriodView = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItemViewOver = new System.Windows.Forms.ToolStripMenuItem();
-			this.ToolStripMenuItemRequests = new System.Windows.Forms.ToolStripMenuItem();
-			this.toolStripMenuItemRestriction = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemViewPointTimeZone = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemLoggedOnUserTimeZone = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemSortBy = new System.Windows.Forms.ToolStripMenuItem();
@@ -187,7 +179,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripButtonRequestView = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButtonRestrictions = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButtonAgentInfo = new System.Windows.Forms.ToolStripButton();
-			this.toolStripButtonFilterAgentsx = new System.Windows.Forms.ToolStripButton();
+			this.toolStripButtonFindAgents = new System.Windows.Forms.ToolStripButton();
 			this.toolStripExActions = new Syncfusion.Windows.Forms.Tools.ToolStripEx();
 			this.toolStripPanelItemAssignments = new Syncfusion.Windows.Forms.Tools.ToolStripPanelItem();
 			this.toolStripSplitButtonSchedule = new System.Windows.Forms.ToolStripSplitButton();
@@ -312,6 +304,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripMenuItemUsePreference = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemUseStudentAvailability = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemUseSchedule = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItemAddPreferenceRestriction = new System.Windows.Forms.ToolStripMenuItem();
+			this.toolStripMenuItemAddStudentAvailabilityRestriction = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripMenuItemRestrictionCopy = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItemRestrictionPaste = new System.Windows.Forms.ToolStripMenuItem();
@@ -367,13 +361,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 			// toolStripSpinningProgressControl1
 			// 
 			this.toolStripSpinningProgressControl1.ActiveSegmentColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(146)))), ((int)(((byte)(33)))));
-			this.toolStripSpinningProgressControl1.BehindTransitionSegmentIsActive = true;
+			this.toolStripSpinningProgressControl1.BehindTransitionSegmentIsActive = false;
 			this.toolStripSpinningProgressControl1.InactiveSegmentColor = System.Drawing.Color.Silver;
 			this.toolStripSpinningProgressControl1.Name = "ToolStripSpinningProgress";
 			this.SetShortcut(this.toolStripSpinningProgressControl1, System.Windows.Forms.Keys.None);
 			this.toolStripSpinningProgressControl1.Size = new System.Drawing.Size(20, 24);
 			this.toolStripSpinningProgressControl1.Text = "toolStripSpinningProgressControl1";
-			this.toolStripSpinningProgressControl1.TransitionSegment = 9;
+			this.toolStripSpinningProgressControl1.TransitionSegment = 3;
 			this.toolStripSpinningProgressControl1.TransitionSegmentColor = System.Drawing.Color.FromArgb(((int)(((byte)(129)))), ((int)(((byte)(242)))), ((int)(((byte)(121)))));
 			this.toolStripSpinningProgressControl1.Visible = false;
 			// 
@@ -433,13 +427,12 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.toolStripMenuItemAddOverTime,
             this.toolStripMenuItemInsertAbsence,
             this.toolStripMenuItemInsertDayOff,
+            this.toolStripMenuItemAddPreference,
+            this.toolStripMenuItemAddStudentAvailability,
             this.toolStripMenuItem3,
-            this.ToolStripMenuItemSearch,
-            this.toolStripMenuItemFilter,
             this.toolStripMenuItemFindMatching,
             this.toolStripMenuItemViewHistory,
             this.toolStripMenuItemAgentInfo,
-            this.toolStripMenuItemViews,
             this.toolStripMenuItemViewPointTimeZone,
             this.toolStripMenuItemSortBy,
             this.toolStripSeparator1,
@@ -452,7 +445,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.xxExportToolStripMenuItem,
             this.toolStripMenuItemChangeTagRM});
 			this.contextMenuViews.Name = "contextMenuStrip1";
-			this.contextMenuViews.Size = new System.Drawing.Size(283, 688);
+			this.contextMenuViews.Size = new System.Drawing.Size(283, 644);
 			this.contextMenuViews.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuViews_Opening);
 			// 
 			// toolStripMenuItemCut
@@ -589,29 +582,27 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripMenuItemInsertDayOff.Text = "xxAddDayOffThreeDots";
 			this.toolStripMenuItemInsertDayOff.Click += new System.EventHandler(this.toolStripButtonInsertDayOff_Click);
 			// 
+			// toolStripMenuItemAddPreference
+			// 
+			this.toolStripMenuItemAddPreference.Name = "toolStripMenuItemAddPreference";
+			this.SetShortcut(this.toolStripMenuItemAddPreference, System.Windows.Forms.Keys.None);
+			this.toolStripMenuItemAddPreference.Size = new System.Drawing.Size(282, 22);
+			this.toolStripMenuItemAddPreference.Text = "xxPreference";
+			this.toolStripMenuItemAddPreference.Click += new System.EventHandler(this.addPreferenceToolStripMenuItemClick);
+			// 
+			// toolStripMenuItemAddStudentAvailability
+			// 
+			this.toolStripMenuItemAddStudentAvailability.Name = "toolStripMenuItemAddStudentAvailability";
+			this.SetShortcut(this.toolStripMenuItemAddStudentAvailability, System.Windows.Forms.Keys.None);
+			this.toolStripMenuItemAddStudentAvailability.Size = new System.Drawing.Size(282, 22);
+			this.toolStripMenuItemAddStudentAvailability.Text = "xxStudentAvailability";
+			this.toolStripMenuItemAddStudentAvailability.Click += new System.EventHandler(this.addStudentAvailabilityToolStripMenuItemClick);
+			// 
 			// toolStripMenuItem3
 			// 
 			this.toolStripMenuItem3.Name = "toolStripMenuItem3";
 			this.SetShortcut(this.toolStripMenuItem3, System.Windows.Forms.Keys.None);
 			this.toolStripMenuItem3.Size = new System.Drawing.Size(279, 6);
-			// 
-			// ToolStripMenuItemSearch
-			// 
-			this.ToolStripMenuItemSearch.Name = "ToolStripMenuItemSearch";
-			this.SetShortcut(this.ToolStripMenuItemSearch, System.Windows.Forms.Keys.None);
-			this.ToolStripMenuItemSearch.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
-			this.ToolStripMenuItemSearch.Size = new System.Drawing.Size(282, 22);
-			this.ToolStripMenuItemSearch.Text = "xxSearchThreeDots";
-			this.ToolStripMenuItemSearch.Click += new System.EventHandler(this.ToolStripMenuItemSearch_Click);
-			// 
-			// toolStripMenuItemFilter
-			// 
-			this.toolStripMenuItemFilter.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Filter;
-			this.toolStripMenuItemFilter.Name = "toolStripMenuItemFilter";
-			this.SetShortcut(this.toolStripMenuItemFilter, System.Windows.Forms.Keys.None);
-			this.toolStripMenuItemFilter.Size = new System.Drawing.Size(282, 22);
-			this.toolStripMenuItemFilter.Text = "xxFilter";
-			this.toolStripMenuItemFilter.Click += new System.EventHandler(this.toolStripMenuItemFilter_Click);
 			// 
 			// toolStripMenuItemFindMatching
 			// 
@@ -640,78 +631,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripMenuItemAgentInfo.Size = new System.Drawing.Size(282, 22);
 			this.toolStripMenuItemAgentInfo.Text = "xxAgentInfo";
 			this.toolStripMenuItemAgentInfo.Click += new System.EventHandler(this.toolStripButtonAgentInfo_Click);
-			// 
-			// toolStripMenuItemViews
-			// 
-			this.toolStripMenuItemViews.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripMenuItemDayView,
-            this.toolStripMenuItemWeekView,
-            this.toolStripMenuItemDetailView,
-            this.toolStripMenuItemPeriodView,
-            this.toolStripMenuItemViewOver,
-            this.ToolStripMenuItemRequests,
-            this.toolStripMenuItemRestriction});
-			this.toolStripMenuItemViews.Name = "toolStripMenuItemViews";
-			this.SetShortcut(this.toolStripMenuItemViews, System.Windows.Forms.Keys.None);
-			this.toolStripMenuItemViews.Size = new System.Drawing.Size(282, 22);
-			this.toolStripMenuItemViews.Text = "xxViews";
-			// 
-			// toolStripMenuItemDayView
-			// 
-			this.toolStripMenuItemDayView.Name = "toolStripMenuItemDayView";
-			this.SetShortcut(this.toolStripMenuItemDayView, System.Windows.Forms.Keys.None);
-			this.toolStripMenuItemDayView.Size = new System.Drawing.Size(160, 22);
-			this.toolStripMenuItemDayView.Text = "xxDayView";
-			this.toolStripMenuItemDayView.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ToolStripMenuItemZoomMouseUp);
-			// 
-			// toolStripMenuItemWeekView
-			// 
-			this.toolStripMenuItemWeekView.Name = "toolStripMenuItemWeekView";
-			this.SetShortcut(this.toolStripMenuItemWeekView, System.Windows.Forms.Keys.None);
-			this.toolStripMenuItemWeekView.Size = new System.Drawing.Size(160, 22);
-			this.toolStripMenuItemWeekView.Text = "xxWeeklyView";
-			this.toolStripMenuItemWeekView.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ToolStripMenuItemZoomMouseUp);
-			// 
-			// toolStripMenuItemDetailView
-			// 
-			this.toolStripMenuItemDetailView.Name = "toolStripMenuItemDetailView";
-			this.SetShortcut(this.toolStripMenuItemDetailView, System.Windows.Forms.Keys.None);
-			this.toolStripMenuItemDetailView.Size = new System.Drawing.Size(160, 22);
-			this.toolStripMenuItemDetailView.Text = "xxDetailView";
-			this.toolStripMenuItemDetailView.Visible = false;
-			this.toolStripMenuItemDetailView.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ToolStripMenuItemZoomMouseUp);
-			// 
-			// toolStripMenuItemPeriodView
-			// 
-			this.toolStripMenuItemPeriodView.Name = "toolStripMenuItemPeriodView";
-			this.SetShortcut(this.toolStripMenuItemPeriodView, System.Windows.Forms.Keys.None);
-			this.toolStripMenuItemPeriodView.Size = new System.Drawing.Size(160, 22);
-			this.toolStripMenuItemPeriodView.Text = "xxPeriodView";
-			this.toolStripMenuItemPeriodView.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ToolStripMenuItemZoomMouseUp);
-			// 
-			// toolStripMenuItemViewOver
-			// 
-			this.toolStripMenuItemViewOver.Name = "toolStripMenuItemViewOver";
-			this.SetShortcut(this.toolStripMenuItemViewOver, System.Windows.Forms.Keys.None);
-			this.toolStripMenuItemViewOver.Size = new System.Drawing.Size(160, 22);
-			this.toolStripMenuItemViewOver.Text = "xxSummaryView";
-			this.toolStripMenuItemViewOver.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ToolStripMenuItemZoomMouseUp);
-			// 
-			// ToolStripMenuItemRequests
-			// 
-			this.ToolStripMenuItemRequests.Name = "ToolStripMenuItemRequests";
-			this.SetShortcut(this.ToolStripMenuItemRequests, System.Windows.Forms.Keys.None);
-			this.ToolStripMenuItemRequests.Size = new System.Drawing.Size(160, 22);
-			this.ToolStripMenuItemRequests.Text = "xxRequests";
-			this.ToolStripMenuItemRequests.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ToolStripMenuItemZoomMouseUp);
-			// 
-			// toolStripMenuItemRestriction
-			// 
-			this.toolStripMenuItemRestriction.Name = "toolStripMenuItemRestriction";
-			this.SetShortcut(this.toolStripMenuItemRestriction, System.Windows.Forms.Keys.None);
-			this.toolStripMenuItemRestriction.Size = new System.Drawing.Size(160, 22);
-			this.toolStripMenuItemRestriction.Text = "xxRestrictions";
-			this.toolStripMenuItemRestriction.MouseUp += new System.Windows.Forms.MouseEventHandler(this.ToolStripMenuItemZoomMouseUp);
 			// 
 			// toolStripMenuItemViewPointTimeZone
 			// 
@@ -1533,7 +1452,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.toolStripButtonRequestView,
             this.toolStripButtonRestrictions,
             this.toolStripButtonAgentInfo,
-            this.toolStripButtonFilterAgentsx});
+            this.toolStripButtonFindAgents});
 			this.toolStripPanelItemViews2.Name = "toolStripPanelItemViews2";
 			this.SetShortcut(this.toolStripPanelItemViews2, System.Windows.Forms.Keys.None);
 			this.toolStripPanelItemViews2.Size = new System.Drawing.Size(178, 81);
@@ -1607,19 +1526,18 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripButtonAgentInfo, false);
 			this.toolStripButtonAgentInfo.Click += new System.EventHandler(this.toolStripButtonAgentInfo_Click);
 			// 
-			// toolStripButtonFilterAgentsx
+			// toolStripButtonFindAgents
 			// 
-			this.ribbonControlAdv1.SetDescription(this.toolStripButtonFilterAgentsx, "");
-			this.toolStripButtonFilterAgentsx.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Filter;
-			this.toolStripButtonFilterAgentsx.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.toolStripButtonFilterAgentsx.Name = "toolStripButtonFilterAgentsx";
-			this.SetShortcut(this.toolStripButtonFilterAgentsx, System.Windows.Forms.Keys.None);
-			this.toolStripButtonFilterAgentsx.Size = new System.Drawing.Size(75, 20);
-			this.toolStripButtonFilterAgentsx.Text = "xxOldFilter";
-			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonFilterAgentsx, false);
-			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripButtonFilterAgentsx, false);
-			this.toolStripButtonFilterAgentsx.Visible = false;
-			this.toolStripButtonFilterAgentsx.Click += new System.EventHandler(this.toolStripButtonFilterAgents_Click);
+			this.ribbonControlAdv1.SetDescription(this.toolStripButtonFindAgents, "");
+			this.toolStripButtonFindAgents.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_FindAgent;
+			this.toolStripButtonFindAgents.ImageTransparentColor = System.Drawing.Color.Magenta;
+			this.toolStripButtonFindAgents.Name = "toolStripButtonFindAgents";
+			this.SetShortcut(this.toolStripButtonFindAgents, ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F))));
+			this.toolStripButtonFindAgents.Size = new System.Drawing.Size(57, 20);
+			this.toolStripButtonFindAgents.Text = "xxFind";
+			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonFindAgents, false);
+			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripButtonFindAgents, false);
+			this.toolStripButtonFindAgents.Click += new System.EventHandler(this.ToolStripMenuItemSearch_Click);
 			// 
 			// toolStripExActions
 			// 
@@ -3101,6 +3019,8 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.toolStripMenuItemUsePreference,
             this.toolStripMenuItemUseStudentAvailability,
             this.toolStripMenuItemUseSchedule,
+            this.toolStripMenuItemAddPreferenceRestriction,
+            this.toolStripMenuItemAddStudentAvailabilityRestriction,
             this.toolStripSeparator5,
             this.toolStripMenuItemRestrictionCopy,
             this.toolStripMenuItemRestrictionPaste,
@@ -3108,7 +3028,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.toolStripSeparator6,
             this.xxAgentInfoToolStripMenuItem});
 			this.contextMenuStripRestrictionView.Name = "contextMenuStripRestrictionView";
-			this.contextMenuStripRestrictionView.Size = new System.Drawing.Size(184, 214);
+			this.contextMenuStripRestrictionView.Size = new System.Drawing.Size(184, 258);
 			// 
 			// toolStripMenuItemUseRotation
 			// 
@@ -3166,12 +3086,27 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripMenuItemUseSchedule.Visible = false;
 			this.toolStripMenuItemUseSchedule.Click += new System.EventHandler(this.toolStripMenuItemUseSchedule_Click);
 			// 
+			// toolStripMenuItemAddPreferenceRestriction
+			// 
+			this.toolStripMenuItemAddPreferenceRestriction.Name = "toolStripMenuItemAddPreferenceRestriction";
+			this.SetShortcut(this.toolStripMenuItemAddPreferenceRestriction, System.Windows.Forms.Keys.None);
+			this.toolStripMenuItemAddPreferenceRestriction.Size = new System.Drawing.Size(183, 22);
+			this.toolStripMenuItemAddPreferenceRestriction.Text = "xxPreference";
+			this.toolStripMenuItemAddPreferenceRestriction.Click += new System.EventHandler(this.addPreferenceToolStripMenuItemClick);
+			// 
+			// toolStripMenuItemAddStudentAvailabilityRestriction
+			// 
+			this.toolStripMenuItemAddStudentAvailabilityRestriction.Name = "toolStripMenuItemAddStudentAvailabilityRestriction";
+			this.SetShortcut(this.toolStripMenuItemAddStudentAvailabilityRestriction, System.Windows.Forms.Keys.None);
+			this.toolStripMenuItemAddStudentAvailabilityRestriction.Size = new System.Drawing.Size(183, 22);
+			this.toolStripMenuItemAddStudentAvailabilityRestriction.Text = "xxStudentAvailability";
+			this.toolStripMenuItemAddStudentAvailabilityRestriction.Click += new System.EventHandler(this.addStudentAvailabilityToolStripMenuItemClick);
+			// 
 			// toolStripSeparator5
 			// 
 			this.toolStripSeparator5.Name = "toolStripSeparator5";
 			this.SetShortcut(this.toolStripSeparator5, System.Windows.Forms.Keys.None);
 			this.toolStripSeparator5.Size = new System.Drawing.Size(180, 6);
-			this.toolStripSeparator5.Visible = false;
 			// 
 			// toolStripMenuItemRestrictionCopy
 			// 
@@ -3363,14 +3298,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemOccupancyAdjustment;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemNextAssignment;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemShowAssignmentBefore;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemFilter;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemViews;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemDayView;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemWeekView;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemDetailView;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemPeriodView;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemViewOver;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemShowAssignmentBefore;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemLock;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemUnlock;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemLockSelectionRM;
@@ -3429,8 +3357,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         private Syncfusion.Windows.Forms.Tools.ToolStripEx toolStripEx3;
         private System.Windows.Forms.ToolStripButton toolStripButton2;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemCreateMeeting;
-        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemAddActivity;
-        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemRequests;
+		private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemAddActivity;
         private System.Windows.Forms.ToolStripButton toolStripButtonEditNote;
         private System.Windows.Forms.ToolStripButton toolStripButtonReplyAndApprove;
         private System.Windows.Forms.ToolStripButton toolStripButtonReplyAndDeny;
@@ -3470,7 +3397,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private Syncfusion.Windows.Forms.Tools.OfficeDropDownButton officeDropDownButtonMainMenuExportTo;
-        private System.Windows.Forms.ToolStripButton toolStripButtonFilterAgentsx;
+        private System.Windows.Forms.ToolStripButton toolStripButtonFindAgents;
         private Syncfusion.Windows.Forms.Tools.ToolStripEx toolStripExFilterDays;
         private Syncfusion.Windows.Forms.Tools.ToolStripComboBoxEx toolStripComboBoxExFilterDays;
         private System.Windows.Forms.ToolStripLabel xxShowLastNumberOfDays;
@@ -3486,8 +3413,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         private System.Windows.Forms.ToolStripButton toolStripButtonShowGraph;
         private System.Windows.Forms.ToolStripButton toolStripButtonShowResult;
         private System.Windows.Forms.ToolStripButton toolStripButtonShowEditor;
-        private SchedulerSplitters schedulerSplitters1;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemRestriction;
+		private SchedulerSplitters schedulerSplitters1;
         private Syncfusion.Windows.Forms.Tools.ToolStripEx toolStripExLoadOptions;
         private Syncfusion.Windows.Forms.Tools.ToolStripPanelItem toolStripPanelItemLoadOptions;
         private System.Windows.Forms.ToolStripButton toolStripButtonShrinkage;
@@ -3495,8 +3421,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         private System.Windows.Forms.ToolStripButton toolStripButtonValidation;
         private System.Windows.Forms.ToolStripButton toolStripButtonShowTexts;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemViewReport;
-        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemScheduledTimePerActivity;
-        private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemSearch;
+		private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemScheduledTimePerActivity;
 		private Syncfusion.Windows.Forms.Tools.ContextMenuStripEx contextMenuViews;
 		private System.Windows.Forms.ContextMenuStrip contextMenuStripRequests;
 		private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemViewDetails;
@@ -3599,6 +3524,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private ToolStripMenuItem toolStripMenuItemRestrictionDelete;
 		private ToolStripSeparator toolStripSeparator6;
 		private ToolStripMenuItem xxAgentInfoToolStripMenuItem;
+		private ToolStripMenuItem toolStripMenuItemAddPreference;
+		private ToolStripMenuItem toolStripMenuItemAddStudentAvailability;
+		private ToolStripMenuItem toolStripMenuItemAddPreferenceRestriction;
+		private ToolStripMenuItem toolStripMenuItemAddStudentAvailabilityRestriction;
         
         
     }

@@ -556,6 +556,11 @@
     <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsSchedulePainterDecider.cs" />
     <Compile Include="Scheduling\AgentRestrictions\IAgentRestrictionsDetailView.cs" />
     <Compile Include="Scheduling\AgentRestrictions\IAgentRestrictionsDetailViewCellModel.cs" />
+    <Compile Include="Scheduling\AgentStudentAvailabilityAddCommand.cs" />
+    <Compile Include="Scheduling\AgentStudentAvailabilityDayCreator.cs" />
+    <Compile Include="Scheduling\AgentStudentAvailabilityEditCommand.cs" />
+    <Compile Include="Scheduling\AgentStudentAvailabilityPresenter.cs" />
+    <Compile Include="Scheduling\AgentStudentAvailabilityRemoveCommand.cs" />
     <Compile Include="Scheduling\AuditHistory\AuditHistoryDirection.cs" />
     <Compile Include="Scheduling\AuditHistory\AuditHistoryModel.cs" />
     <Compile Include="Scheduling\AuditHistory\AuditHistoryPresenter.cs" />
@@ -565,6 +570,7 @@
     <Compile Include="Scheduling\AuditHistory\PreviousPageCommand.cs" />
     <Compile Include="Scheduling\AuditHistory\RevisionDisplayRow.cs" />
     <Compile Include="Scheduling\CalculateMinMaxCacheDecider.cs" />
+    <Compile Include="Scheduling\IAgentStudentAvailabilityView.cs" />
     <Compile Include="Scheduling\ShiftCategoryFairnessOptimizer.cs" />
     <Compile Include="Scheduling\ShiftCategoryFairnessValueHelper.cs" />
     <Compile Include="Scheduling\SkillFullPeriodGridControlPresenter.cs" />
