@@ -34,26 +34,38 @@ AS
 SET NOCOUNT ON
 
 --for testing, create tables that are created by calling SPs
-if not exists (select  * from tempdb.dbo.sysobjects o where o.xtype in ('U') and o.id = object_id(N'tempdb..#person_acd_subSP'))
+BEGIN TRY
 CREATE TABLE #person_acd_subSP
 	(
 	person_id int,
 	acd_login_id int
 	)
+END TRY
+BEGIN CATCH
+  PRINT 'Table #person_acd_subSP already exist'
+END CATCH
 
-if not exists (select  * from tempdb.dbo.sysobjects o where o.xtype in ('U') and o.id = object_id(N'tempdb..#rights_agents'))
+BEGIN TRY
 CREATE TABLE  #rights_agents
 	(
 	right_id int
 	)
+END TRY
+BEGIN CATCH
+  PRINT 'Table #rights_agents already exist'
+END CATCH
 
-if not exists (select  * from tempdb.dbo.sysobjects o where o.xtype in ('U') and o.id = object_id(N'tempdb..#agents'))
+BEGIN TRY
 CREATE TABLE #agents
 	(
 	id int
 	)
+END TRY
+BEGIN CATCH
+  PRINT 'Table #agents already exist'
+END CATCH
 
-if not exists (select  * from tempdb.dbo.sysobjects o where o.xtype in ('U') and o.id = object_id(N'tempdb..#bridge_time_zone'))
+BEGIN TRY
 CREATE TABLE #bridge_time_zone
 	(
 	local_date_id int not null,
@@ -62,8 +74,12 @@ CREATE TABLE #bridge_time_zone
 	interval_id int not null,
 	date_date_local smalldatetime not null
 	)
+END TRY
+BEGIN CATCH
+  PRINT 'Table #bridge_time_zone already exist'
+END CATCH
 
-if not exists (select  * from tempdb.dbo.sysobjects o where o.xtype in ('U') and o.id = object_id(N'tempdb..#pre_result_subSP'))
+BEGIN TRY
 CREATE TABLE #pre_result_subSP
 	(
 	date_id int,
@@ -83,7 +99,10 @@ CREATE TABLE #pre_result_subSP
 	deviation_s decimal(18,3),
 	adherence_calc_s decimal(18,3)	
 	)
-
+END TRY
+BEGIN CATCH
+  PRINT 'Table #pre_result_subSP already exist'
+END CATCH
 
 CREATE TABLE #agent_queue_statistics_subSP
 	(
