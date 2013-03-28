@@ -6,15 +6,19 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
 	public class DenormalizationQueueEventsPublisher : IEventsPublisher
 	{
-		private readonly ISaveToDenormalizationQueue _saveToDenormalizationQueue;
+		private readonly ISaveToDenormalizationQueue _saver;
+		private readonly ISendDenormalizeNotification _notifier;
 
-		public DenormalizationQueueEventsPublisher(ISaveToDenormalizationQueue saveToDenormalizationQueue) {
-			_saveToDenormalizationQueue = saveToDenormalizationQueue;
+		public DenormalizationQueueEventsPublisher(ISaveToDenormalizationQueue saver, ISendDenormalizeNotification notifier)
+		{
+			_saver = saver;
+			_notifier = notifier;
 		}
 
 		public void Publish(IEnumerable<IEvent> events)
 		{
-			_saveToDenormalizationQueue.Execute(new EventsMessage() {Events = events});
+			_saver.Execute(new EventsMessage() {Events = events});
+			_notifier.Notify();
 		}
 	}
 }

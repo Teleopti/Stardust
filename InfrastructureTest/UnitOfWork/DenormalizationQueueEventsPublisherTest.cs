@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		public void ShouldSaveToDenormalizationQueue()
 		{
 			var saveToQueue = MockRepository.GenerateMock<ISaveToDenormalizationQueue>();
-			var target = new DenormalizationQueueEventsPublisher(saveToQueue);
+			var target = new DenormalizationQueueEventsPublisher(saveToQueue, MockRepository.GenerateMock<ISendDenormalizeNotification>());
 			var events = new[] {new Event(), new Event()};
 
 			target.Publish(events);
@@ -25,6 +25,18 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		{
 			eventsMessage.Events.Should().Have.SameValuesAs(events);
 			return true;
+		}
+
+		[Test]
+		public void ShouldSendDenormalizationQueueNotification()
+		{
+			var notifier = MockRepository.GenerateMock<ISendDenormalizeNotification>();
+			var target = new DenormalizationQueueEventsPublisher(MockRepository.GenerateMock<ISaveToDenormalizationQueue>(), notifier);
+			var events = new[] { new Event() };
+
+			target.Publish(events);
+
+			notifier.AssertWasCalled(x => x.Notify());
 		}
 	}
 
