@@ -20,10 +20,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			_groupPersonBuilderForOptimization = groupPersonBuilderForOptimization;
 		}
 
-		public TeamInfo CreateTeamInfo(IPerson person, DateOnly date, IList<IScheduleMatrixPro> allMatrixesInScheduler)
+		public TeamInfo CreateTeamInfo(IPerson person, DateOnly dateOnly, IList<IScheduleMatrixPro> allMatrixesInScheduler)
 		{
 		    if (allMatrixesInScheduler == null) throw new ArgumentNullException("allMatrixesInScheduler");
-		    DateOnly firstDateOfMatrix = date;
+            DateOnly firstDateOfMatrix = dateOnly;
 			IGroupPerson groupPerson = _groupPersonBuilderForOptimization.BuildGroupPerson(person, firstDateOfMatrix);
 			IList<IList<IScheduleMatrixPro>> matrixesForGroup = new List<IList<IScheduleMatrixPro>>();
 			foreach (var groupMember in groupPerson.GroupMembers)

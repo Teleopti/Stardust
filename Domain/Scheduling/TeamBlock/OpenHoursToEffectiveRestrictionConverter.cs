@@ -106,32 +106,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                         dayOffDays.Add(dateOnly);
                 }
 
-            var filteredSkillDays = skillDays.Where(s => skills.Contains(s.Skill) && !dayOffDays.Contains(s.CurrentDate)).ToList();
-            if (filteredSkillDays.Count == 0) return null;
-            foreach (var skillDay in filteredSkillDays)
-            {
-                openHours.AddRange(skillDay.OpenHours());
-            }
-            reducedOpenHours.Add(new TimePeriod(TimeSpan.MinValue, TimeSpan.MaxValue));
-            foreach (var timePeriod in openHours)
-            {
-                for (var i = 0; i < reducedOpenHours.Count; i++)
-                {
-                    var intersection = reducedOpenHours[i].Intersection(timePeriod);
-                    if (intersection != null)
-                    {
-                        if (!reducedOpenHours.Contains(intersection.Value))
-                        {
-                            reducedOpenHours.RemoveAt(i);
-                            reducedOpenHours.Add(intersection.Value);
-                        }
-                    }
-                    else
-                    {
-                        reducedOpenHours.Add(timePeriod);
-                    }
-                }
-            }
+            if (extractFilteredSkillDay(skillDays, skills, dayOffDays, openHours, reducedOpenHours)) return null;
             var latestStartTime = TimeSpan.MinValue;
             var earliestEndTime = TimeSpan.MaxValue;
             foreach (var timePeriod in reducedOpenHours)
@@ -149,5 +124,38 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                                                                    new List<IActivityRestriction>());
             return restriction;
         }
+
+	    private static bool extractFilteredSkillDay(IList<ISkillDay> skillDays, IEnumerable<ISkill> skills, HashSet<DateOnly> dayOffDays, List<TimePeriod> openHours,
+	                                                List<TimePeriod> reducedOpenHours)
+	    {
+	        var filteredSkillDays =
+	            skillDays.Where(s => skills.Contains(s.Skill) && !dayOffDays.Contains(s.CurrentDate)).ToList();
+	        if (filteredSkillDays.Count == 0) return true;
+	        foreach (var skillDay in filteredSkillDays)
+	        {
+	            openHours.AddRange(skillDay.OpenHours());
+	        }
+	        reducedOpenHours.Add(new TimePeriod(TimeSpan.MinValue, TimeSpan.MaxValue));
+	        foreach (var timePeriod in openHours)
+	        {
+	            for (var i = 0; i < reducedOpenHours.Count; i++)
+	            {
+	                var intersection = reducedOpenHours[i].Intersection(timePeriod);
+	                if (intersection != null)
+	                {
+	                    if (!reducedOpenHours.Contains(intersection.Value))
+	                    {
+	                        reducedOpenHours.RemoveAt(i);
+	                        reducedOpenHours.Add(intersection.Value);
+	                    }
+	                }
+	                else
+	                {
+	                    reducedOpenHours.Add(timePeriod);
+	                }
+	            }
+	        }
+	        return false;
+	    }
 	}
 }
