@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 	[TestFixture]
 	public class ServiceBusEventPublisherTest
 	{
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
 		public void ShouldSendToBus()
 		{
 			var serviceBusSender = MockRepository.GenerateMock<IServiceBusSender>();
@@ -22,8 +22,8 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			serviceBusSender.AssertWasCalled(x => x.Send(@event));
 		}
 
-		[Test]
-		public void ShouldThrowIfBusCanNotBeEnsured()
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
+		public void ShouldThrowIfBusCannotBeEnsured()
 		{
 			var serviceBusSender = MockRepository.GenerateMock<IServiceBusSender>();
 			var target = new ServiceBusEventPublisher(serviceBusSender);
