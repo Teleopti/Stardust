@@ -13,6 +13,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			_sender = sender;
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2201:DoNotRaiseReservedExceptionTypes")]
 		public void Publish(IEvent @event)
 		{
 			if (!_sender.EnsureBus())
