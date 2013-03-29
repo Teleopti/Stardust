@@ -475,6 +475,55 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             }
 
         }
+
+        [Test]
+        public void ShouldNotSchedulePerDayWithContractDayOffWithSchedulePeriodStartDate()
+        {
+            DateOnly dateOnly = DateOnly.Today;
+            using (_mock.Record())
+            {
+                Expect.Call(_scheduleMatrixPro.Person).Return(_baseLineData.Person1).Repeat.AtLeastOnce();
+                Expect.Call(_scheduleMatrixPro.SchedulePeriod).Return(_virtualSchedulePeriod);
+                Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod);
+                Expect.Call(_scheduleMatrixPro.GetScheduleDayByKey(new DateOnly())).IgnoreArguments().Return(
+                _scheduleDayPro).Repeat.AtLeastOnce();
+                Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay).Repeat.AtLeastOnce();
+                Expect.Call(_scheduleDay.IsScheduled()).Return(false);
+                Expect.Call(_scheduleMatrixPro.UnlockedDays).Return(
+                new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro }));
+                Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.ContractDayOff);
+
+                Expect.Call(_resourceCalculateDelayer.CalculateIfNeeded(_dateOnlyAsDateTimePeriod.DateOnly, _dateTimePeriod,
+                                                                    new List<IScheduleDay> { _scheduleDay })).
+                IgnoreArguments().Return(true);
+                Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod);
+                Expect.Call(_shiftProjectionCache.WorkShiftProjectionPeriod).Return(_dateTimePeriod);
+            }
+
+            using (_mock.Playback())
+            {
+                _target.DayScheduled += targetDayScheduledCanceled;
+                _target.ExecutePerDayPerPerson(_baseLineData.Person1, dateOnly, new TeamBlockInfo(_teaminfo, new BlockInfo(new DateOnlyPeriod(_startDateOfBlock.AddDays(2), _startDateOfBlock.AddDays(2)))), _shiftProjectionCache, false, _dateOnlyPeriod);
+                _target.DayScheduled += targetDayScheduledCanceled;
+            }
+
+        }
+
+        [Test]
+        public void ShouldReturnIfTeamBlockInfoNull()
+        {
+            Assert.Throws<ArgumentNullException >(() => _target.ExecutePerDayPerPerson(_baseLineData.Person1, new DateOnly(), null,
+                                                              _shiftProjectionCache,
+                                                              false, _dateOnlyPeriod));
+        }
+
+        [Test]
+        public void ShouldReturnIfShiftProjectionCacheNull()
+        {
+            Assert.Throws<ArgumentNullException>(() => _target.ExecutePerDayPerPerson(_baseLineData.Person1, new DateOnly(), _teamBlockInfo ,
+                                                              null,
+                                                              false, _dateOnlyPeriod));
+        }
     }
 
 
