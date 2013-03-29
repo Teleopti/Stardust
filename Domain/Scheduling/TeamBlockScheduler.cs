@@ -12,8 +12,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	{
 		event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
         bool ScheduleTeamBlockDay(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons);
-        bool ScheduleTeamBlock(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions);
-		bool ScheduleTeamBlock(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions, bool skipOffset);
+        //bool ScheduleTeamBlock(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions);
+		//bool ScheduleTeamBlock(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions, bool skipOffset);
 	}
 
 	public class TeamBlockScheduler : ITeamBlockScheduler
@@ -39,47 +39,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
-        //not used by the latest scheduling
-        public bool ScheduleTeamBlock(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions)
-		{
-            return ScheduleTeamBlock(teamBlockInfo, datePointer, schedulingOptions, false);
-		}
-
-        //not used by the latest scheduling
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
-		public bool ScheduleTeamBlock(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions, bool skipOffset)
-		{
-            if (teamBlockInfo == null)
-				return false;
-
-			//if teamBlockInfo is fully scheduled, continue;
-		    if (isTeamBlockScheduled(teamBlockInfo)) return false;
-
-			var restriction = _restrictionAggregator.Aggregate(teamBlockInfo,schedulingOptions);
-
-			// (should we cover for max seats here?) ????
-			var shifts = _workShiftFilterService.Filter(datePointer, teamBlockInfo, restriction,
-														schedulingOptions, new WorkShiftFinderResult(teamBlockInfo.TeamInfo.GroupPerson, datePointer));
-			if (shifts == null || shifts.Count <= 0)
-				return false;
-
-			var activityInternalData = _skillDayPeriodIntervalDataGenerator.GeneratePerDay(teamBlockInfo);
-
-            var bestShiftProjectionCache = _workShiftSelector.SelectShiftProjectionCache(shifts, activityInternalData,
-																						 schedulingOptions
-																							 .WorkShiftLengthHintOption,
-																						 schedulingOptions
-																							 .UseMinimumPersons,
-																						 schedulingOptions
-																							 .UseMaximumPersons);
-			//implement
-			_teamScheduling.DayScheduled += dayScheduled;
-			_teamScheduling.Execute(teamBlockInfo, bestShiftProjectionCache, skipOffset);
-			_teamScheduling.DayScheduled -= dayScheduled;
-
-			return true;
-		}
-
+        
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public bool ScheduleTeamBlockDay(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons)
         {
