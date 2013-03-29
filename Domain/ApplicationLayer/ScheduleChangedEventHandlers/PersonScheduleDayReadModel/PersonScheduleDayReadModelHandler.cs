@@ -1,12 +1,8 @@
-﻿using System;
-using System.Linq;
-using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Infrastructure.Repositories;
+﻿using System.Linq;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.Messages.Denormalize;
 
-namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
+namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel
 {
 	public class PersonScheduleDayReadModelHandler : 
 		IHandleEvent<ProjectionChangedEvent>, 

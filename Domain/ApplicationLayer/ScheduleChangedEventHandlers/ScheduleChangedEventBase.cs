@@ -1,6 +1,6 @@
 using System;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleHandlers
+namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 {
 	public abstract class ScheduleChangedEventBase : RaptorDomainEvent
 	{

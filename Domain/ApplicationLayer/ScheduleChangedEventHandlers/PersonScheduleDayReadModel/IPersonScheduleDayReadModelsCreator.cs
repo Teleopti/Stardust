@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
-using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Interfaces.Messages.Denormalize;
 
-namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
+namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel
 {
 	public interface IPersonScheduleDayReadModelsCreator
 	{

@@ -1,8 +1,7 @@
 using System;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Messages.Denormalize;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleHandlers
+namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 {
 	public interface IProjectionChangedEventBuilder
 	{

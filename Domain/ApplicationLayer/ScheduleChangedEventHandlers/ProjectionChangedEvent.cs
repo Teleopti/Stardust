@@ -1,4 +1,4 @@
-﻿namespace Teleopti.Interfaces.Messages.Denormalize
+﻿namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 {
 	/// <summary>
 	/// Denormalized schedule for normal usage

@@ -1,4 +1,4 @@
-namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleHandlers
+namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 {
 	public interface IQuestionablyPublishMoreEvents
 	{

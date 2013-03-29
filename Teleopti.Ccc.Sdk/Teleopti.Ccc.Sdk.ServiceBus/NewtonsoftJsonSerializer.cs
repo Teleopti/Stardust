@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Sdk.ServiceBus.Denormalizer;
+﻿using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
+using Teleopti.Ccc.Sdk.ServiceBus.Denormalizer;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
 {

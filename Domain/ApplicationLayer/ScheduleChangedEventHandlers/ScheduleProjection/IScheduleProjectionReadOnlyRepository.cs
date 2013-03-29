@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Messages.Denormalize;
 
-namespace Teleopti.Ccc.Domain.Repositories
+namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection
 {
 	public interface IScheduleProjectionReadOnlyRepository
 	{
