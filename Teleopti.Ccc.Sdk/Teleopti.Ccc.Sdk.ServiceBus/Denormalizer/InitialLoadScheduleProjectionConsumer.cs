@@ -65,15 +65,15 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 				}
 				if (!projectionModelInitialized)
 				{
-					messages.AddRange(initialLoad<ScheduleProjectionInitializeTriggeredEvent>(message));
+					messages.AddRange(initialLoad<ScheduleInitializeTriggeredEventForScheduleProjection>(message));
 				}
 				if (!scheduleDayModelInitialized)
 				{
-					messages.AddRange(initialLoad<ScheduleDayInitializeTriggeredEvent>(message));
+					messages.AddRange(initialLoad<ScheduleInitializeTriggeredEventForScheduleDay>(message));
 				}
 				if (!personScheduleDayModelInitialized)
 				{
-					messages.AddRange(initialLoad<PersonScheduleDayInitializeTriggeredEvent>(message));
+					messages.AddRange(initialLoad<ScheduleInitializeTriggeredEventForPersonScheduleDay>(message));
 				}
 				uow.Clear();
 			}

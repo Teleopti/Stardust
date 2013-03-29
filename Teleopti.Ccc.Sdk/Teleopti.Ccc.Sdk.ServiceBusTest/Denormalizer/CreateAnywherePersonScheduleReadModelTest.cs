@@ -65,15 +65,15 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
 		public void ShouldSetProjectedLayers() { 
-			var layer = new DenormalizedScheduleProjectionLayer {StartDateTime = new DateTime(2012, 12, 12, 8, 0, 0, DateTimeKind.Utc), EndDateTime = new DateTime(2012, 12, 12, 15, 0, 0, DateTimeKind.Utc), DisplayColor = -3, Name = "Lunch"};
+			var layer = new ProjectionChangedEventLayer {StartDateTime = new DateTime(2012, 12, 12, 8, 0, 0, DateTimeKind.Utc), EndDateTime = new DateTime(2012, 12, 12, 15, 0, 0, DateTimeKind.Utc), DisplayColor = -3, Name = "Lunch"};
 			var target = new AnywherePersonScheduleFromDenormalizedSchedule();
 			var message = new ProjectionChangedEvent
 			              	{
 			              		ScheduleDays = new []
 			              		               	{
-			              		               		new DenormalizedScheduleDay
+			              		               		new ProjectionChangedEventScheduleDay
 			              		               			{
-			              		               				Layers = new Collection<DenormalizedScheduleProjectionLayer>{layer}
+			              		               				Layers = new Collection<ProjectionChangedEventLayer>{layer}
 			              		               			}
 			              		               	}
 			              	};

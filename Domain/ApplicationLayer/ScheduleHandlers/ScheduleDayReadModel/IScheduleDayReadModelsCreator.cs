@@ -6,6 +6,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 {
 	public interface IScheduleDayReadModelsCreator
 	{
-		ScheduleDayReadModel GetReadModel(DenormalizedScheduleDay schedule, IPerson person);
+		ScheduleDayReadModel GetReadModel(ProjectionChangedEventScheduleDay schedule, IPerson person);
 	}
 }

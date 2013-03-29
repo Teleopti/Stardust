@@ -1,4 +1,4 @@
-﻿using Rhino.ServiceBus;
+﻿using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -10,38 +10,30 @@ using log4net;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 {
-	public class ScheduleDayReadModelHandler : ConsumerOf<ProjectionChangedEvent>, ConsumerOf<ProjectionChangedEventForScheduleDay>
+	public class ScheduleDayReadModelHandler : IHandleEvent<ProjectionChangedEvent>, IHandleEvent<ProjectionChangedEventForScheduleDay>
 	{
-		private static readonly ILog Logger = LogManager.GetLogger(typeof(ScheduleDayReadModelHandler));
-
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IPersonRepository _personRepository;
-		private readonly ISignificantChangeChecker _significantChangeChecker;
-		private readonly ISmsLinkChecker _smsLinkChecker;
-		private readonly INotificationSenderFactory _notificationSenderFactory;
+		private readonly IDoNotifySmsLink _doNotifySmsLink;
 		private readonly IScheduleDayReadModelsCreator _scheduleDayReadModelsCreator;
 		private readonly IScheduleDayReadModelRepository _scheduleDayReadModelRepository;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "sms")]
 		public ScheduleDayReadModelHandler(IUnitOfWorkFactory unitOfWorkFactory,
 		                           IPersonRepository personRepository,
-		                           ISignificantChangeChecker significantChangeChecker, 
-								   ISmsLinkChecker smsLinkChecker,
-								   INotificationSenderFactory notificationSenderFactory,
+			IDoNotifySmsLink doNotifySmsLink,
 									IScheduleDayReadModelsCreator scheduleDayReadModelsCreator,
 									IScheduleDayReadModelRepository scheduleDayReadModelRepository)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_personRepository = personRepository;
-			_significantChangeChecker = significantChangeChecker;
-			_smsLinkChecker = smsLinkChecker;
-			_notificationSenderFactory = notificationSenderFactory;
+			_doNotifySmsLink = doNotifySmsLink;
 			_scheduleDayReadModelsCreator = scheduleDayReadModelsCreator;
 			_scheduleDayReadModelRepository = scheduleDayReadModelRepository;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public void Consume(ProjectionChangedEvent message)
+		public void Handle(ProjectionChangedEvent message)
 		{
 			createReadModel(message);
 		}
@@ -63,7 +55,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 
 					if (!message.IsInitialLoad)
 					{
-						notifySmsLink(readModel, date, person);
+						_doNotifySmsLink.NotifySmsLink(readModel, date, person);
 					}
 
 					if (!message.IsInitialLoad)
@@ -77,36 +69,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 			}
 		}
 
-		private void notifySmsLink(ScheduleDayReadModel readModel, DateOnly date, IPerson person)
-		{
-			if (DefinedLicenseDataFactory.LicenseActivator == null)
-			{
-				if (Logger.IsInfoEnabled)
-					Logger.Info("Can't access LicenseActivator to check SMSLink license.");
-				return;
-			}
-
-			if (Logger.IsInfoEnabled)
-				Logger.Info("Checking SMSLink license.");
-			//check for SMS license, if none just skip this. Later we maybe have to check against for example EMAIL-license
-			if (
-				DefinedLicenseDataFactory.LicenseActivator.EnabledLicenseOptionPaths.Contains(
-					DefinedLicenseOptionPaths.TeleoptiCccSmsLink))
-			{
-				var smsMessages = _significantChangeChecker.SignificantChangeNotificationMessage(date, person, readModel);
-				if (!string.IsNullOrEmpty(smsMessages.Subject))
-				{
-					var number = _smsLinkChecker.SmsMobileNumber(person);
-					if (!string.IsNullOrEmpty(number))
-					{
-						var smsSender = _notificationSenderFactory.GetSender();
-						smsSender.SendNotification(smsMessages, number);
-					}
-				}
-			}
-		}
-
-		public void Consume(ProjectionChangedEventForScheduleDay message)
+		public void Handle(ProjectionChangedEventForScheduleDay message)
 		{
 			createReadModel(message);
 		}

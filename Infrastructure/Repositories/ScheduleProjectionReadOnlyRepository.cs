@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Budgeting;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -48,7 +49,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3")]
-		public void AddProjectedLayer(DateOnly belongsToDate,Guid scenarioId,Guid personId, DenormalizedScheduleProjectionLayer layer)
+		public void AddProjectedLayer(DateOnly belongsToDate,Guid scenarioId,Guid personId, ProjectionChangedEventLayer layer)
 		{
 			var uow = _unitOfWorkFactory.CurrentUnitOfWork();
 			

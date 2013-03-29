@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 
 			var builder = new ContainerBuilder();
 			builder.RegisterInstance(_serviceBus).As<IServiceBus>();
-			builder.RegisterType<DenormalizeScheduleProjectionConsumer>().As<ConsumerOf<ProjectionChangedEvent>>();
+			builder.RegisterType<ScheduleProjectionHandler>().As<ConsumerOf<ProjectionChangedEvent>>();
 
 			builder.RegisterModule<RepositoryModule>();
 			builder.RegisterModule<ApplicationInfrastructureContainerInstaller>();

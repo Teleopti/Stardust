@@ -9,9 +9,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleHandlers
 {
 	public class ScheduleChangedHandler : 
 		IHandleEvent<ScheduleChangedEvent>, 
-		IHandleEvent<ScheduleProjectionInitializeTriggeredEvent>,
-		IHandleEvent<ScheduleDayInitializeTriggeredEvent>,
-		IHandleEvent<PersonScheduleDayInitializeTriggeredEvent>
+		IHandleEvent<ScheduleInitializeTriggeredEventForScheduleProjection>,
+		IHandleEvent<ScheduleInitializeTriggeredEventForScheduleDay>,
+		IHandleEvent<ScheduleInitializeTriggeredEventForPersonScheduleDay>
 	{
 		private readonly IQuestionablyPublishMoreEvents _bus;
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleHandlers
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public void Handle(PersonScheduleDayInitializeTriggeredEvent message)
+		public void Handle(ScheduleInitializeTriggeredEventForPersonScheduleDay message)
 		{
 			using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleHandlers
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public void Handle(ScheduleDayInitializeTriggeredEvent message)
+		public void Handle(ScheduleInitializeTriggeredEventForScheduleDay message)
 		{
 			using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleHandlers
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public void Handle(ScheduleProjectionInitializeTriggeredEvent message)
+		public void Handle(ScheduleInitializeTriggeredEventForScheduleProjection message)
 		{
 			using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{

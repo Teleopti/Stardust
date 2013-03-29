@@ -1,24 +1,24 @@
-﻿using Rhino.ServiceBus;
-using Teleopti.Ccc.Infrastructure.Repositories;
+﻿using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Messages.Denormalize;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 {
-	public class DenormalizeScheduleProjectionConsumer : ConsumerOf<ProjectionChangedEvent>, ConsumerOf<ProjectionChangedEventForScheduleProjection>
+	public class ScheduleProjectionHandler : IHandleEvent<ProjectionChangedEvent>, IHandleEvent<ProjectionChangedEventForScheduleProjection>
 	{
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IScheduleProjectionReadOnlyRepository _scheduleProjectionReadOnlyRepository;
 
-		public DenormalizeScheduleProjectionConsumer(IUnitOfWorkFactory unitOfWorkFactory, IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository)
+		public ScheduleProjectionHandler(IUnitOfWorkFactory unitOfWorkFactory, IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_scheduleProjectionReadOnlyRepository = scheduleProjectionReadOnlyRepository;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public void Consume(ProjectionChangedEvent message)
+		public void Handle(ProjectionChangedEvent message)
 		{
 			createReadModel(message);
 		}
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 			}
 		}
 
-		public void Consume(ProjectionChangedEventForScheduleProjection message)
+		public void Handle(ProjectionChangedEventForScheduleProjection message)
 		{
 			createReadModel(message);
 		}

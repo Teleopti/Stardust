@@ -7,6 +7,7 @@ using NHibernate;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Budgeting;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -72,7 +73,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			var period =
 				new DateOnlyPeriod(DateOnly.Today, DateOnly.Today).ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
-			var layer = new DenormalizedScheduleProjectionLayer
+			var layer = new ProjectionChangedEventLayer
 			            	{
 			            		ContractTime = TimeSpan.FromHours(8),
 			            		WorkTime = TimeSpan.FromHours(8),
@@ -114,7 +115,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			var period =
 				new DateOnlyPeriod(DateOnly.Today, DateOnly.Today).ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
-			var layer = new DenormalizedScheduleProjectionLayer
+			var layer = new ProjectionChangedEventLayer
 			{
 				ContractTime = TimeSpan.FromHours(8),
 				WorkTime = TimeSpan.FromHours(8),

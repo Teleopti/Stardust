@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 	public class ScheduleDayReadModelsCreator : IScheduleDayReadModelsCreator
 	{
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
-		public ScheduleDayReadModel GetReadModel(DenormalizedScheduleDay schedule, IPerson person)
+		public ScheduleDayReadModel GetReadModel(ProjectionChangedEventScheduleDay schedule, IPerson person)
 		{
 			var ret = new ScheduleDayReadModel();
 			var tz = person.PermissionInformation.DefaultTimeZone();

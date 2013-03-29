@@ -1,5 +1,6 @@
-﻿using System.Linq;
-using Rhino.ServiceBus;
+﻿using System;
+using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -7,7 +8,7 @@ using Teleopti.Interfaces.Messages.Denormalize;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 {
-	public class PersonScheduleDayReadModelHandler : ConsumerOf<ProjectionChangedEvent>, ConsumerOf<ProjectionChangedEventForPersonScheduleDay>
+	public class PersonScheduleDayReadModelHandler : IHandleEvent<ProjectionChangedEvent>, IHandleEvent<ProjectionChangedEventForPersonScheduleDay>
 	{
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IPersonScheduleDayReadModelsCreator _scheduleDayReadModelsCreator;
@@ -23,7 +24,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public void Consume(ProjectionChangedEvent message)
+		public void Handle(ProjectionChangedEvent message)
 		{
 			createReadModel(message);
 		}
@@ -52,9 +53,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 			}
 		}
 
-		public void Consume(ProjectionChangedEventForPersonScheduleDay message)
+		public void Handle(ProjectionChangedEventForPersonScheduleDay message)
 		{
 			createReadModel(message);
 		}
 	}
+
 }

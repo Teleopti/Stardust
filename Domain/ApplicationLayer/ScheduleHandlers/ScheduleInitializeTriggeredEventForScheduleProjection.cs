@@ -3,7 +3,7 @@ using System;
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleHandlers
 {
 	[Serializable]
-	public class ScheduleDayInitializeTriggeredEvent : ScheduleChangedEventBase
+	public class ScheduleInitializeTriggeredEventForScheduleProjection : ScheduleChangedEventBase
 	{
 	}
 }

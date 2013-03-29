@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleHandlers
 		{
 			foreach (var scheduleDayBatch in range.ScheduledDayCollection(realPeriod).Batch(50))
 			{
-				var messageList = new List<DenormalizedScheduleDay>();
+				var messageList = new List<ProjectionChangedEventScheduleDay>();
 				var result = new T
 					{
 						IsInitialLoad = message.SkipDelete,
@@ -36,12 +36,12 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleHandlers
 					var significantPart = scheduleDay.SignificantPart();
 					if (significantPart == SchedulePartView.None) continue;
 
-					var denormalizedScheduleDay = new DenormalizedScheduleDay
+					var eventScheduleDay = new ProjectionChangedEventScheduleDay
 						{
 							TeamId = personPeriod.Team.Id.GetValueOrDefault(),
 							SiteId = personPeriod.Team.Site.Id.GetValueOrDefault(),
 							Date = date.Date,
-							Layers = new Collection<DenormalizedScheduleProjectionLayer>(),
+							Layers = new Collection<ProjectionChangedEventLayer>(),
 							WorkTime = projection.WorkTime(),
 							ContractTime = projection.ContractTime(),
 							IsWorkday = isWorkDay(significantPart),
@@ -51,22 +51,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleHandlers
 					{
 						case SchedulePartView.MainShift:
 							var cat = scheduleDay.AssignmentHighZOrder().MainShift.ShiftCategory;
-							denormalizedScheduleDay.Label = cat.Description.ShortName;
-							denormalizedScheduleDay.DisplayColor = cat.DisplayColor.ToArgb();
+							eventScheduleDay.Label = cat.Description.ShortName;
+							eventScheduleDay.DisplayColor = cat.DisplayColor.ToArgb();
 							break;
 						case SchedulePartView.FullDayAbsence:
-							denormalizedScheduleDay.Label = scheduleDay.PersonAbsenceCollection()[0].Layer.Payload.Description.ShortName;
+							eventScheduleDay.Label = scheduleDay.PersonAbsenceCollection()[0].Layer.Payload.Description.ShortName;
 							break;
 						case SchedulePartView.DayOff:
-							denormalizedScheduleDay.Label = scheduleDay.PersonDayOffCollection()[0].DayOff.Description.ShortName;
+							eventScheduleDay.Label = scheduleDay.PersonDayOffCollection()[0].DayOff.Description.ShortName;
 							break;
 					}
 
 					var projectedPeriod = projection.Period();
 					if (projectedPeriod != null)
 					{
-						denormalizedScheduleDay.StartDateTime = projectedPeriod.Value.StartDateTime;
-						denormalizedScheduleDay.EndDateTime = projectedPeriod.Value.EndDateTime;
+						eventScheduleDay.StartDateTime = projectedPeriod.Value.StartDateTime;
+						eventScheduleDay.EndDateTime = projectedPeriod.Value.EndDateTime;
 					}
 
 					foreach (var layer in projection)
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleHandlers
 						var description = layer.DisplayDescription();
 						var contractTime = projection.ContractTime(layer.Period);
 
-						denormalizedScheduleDay.Layers.Add(new DenormalizedScheduleProjectionLayer
+						eventScheduleDay.Layers.Add(new ProjectionChangedEventLayer
 							{
 								Name = description.Name,
 								ShortName = description.ShortName,
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleHandlers
 								EndDateTime = layer.Period.EndDateTime,
 							});
 					}
-					messageList.Add(denormalizedScheduleDay);
+					messageList.Add(eventScheduleDay);
 				}
 				actionForItems(result);
 			}

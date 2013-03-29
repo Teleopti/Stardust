@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Sdk.ServiceBus.Denormalizer;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -14,7 +15,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 	[TestFixture]
 	public class DenormalizeScheduleProjectionConsumerTest
 	{
-		private DenormalizeScheduleProjectionConsumer target;
+		private ScheduleProjectionHandler target;
 		private MockRepository mocks;
 		private IUnitOfWorkFactory unitOfWorkFactory;
 		private IUnitOfWork unitOfWork;
@@ -27,7 +28,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			scheduleProjectionReadOnlyRepository = mocks.DynamicMock<IScheduleProjectionReadOnlyRepository>();
 			unitOfWork = mocks.DynamicMock<IUnitOfWork>();
 			unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
-			target = new DenormalizeScheduleProjectionConsumer(unitOfWorkFactory,scheduleProjectionReadOnlyRepository);
+			target = new ScheduleProjectionHandler(unitOfWorkFactory,scheduleProjectionReadOnlyRepository);
 		}
 
 		[Test]
@@ -45,19 +46,19 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			}
 			using (mocks.Playback())
 			{
-				target.Consume(new ProjectionChangedEvent
+				target.Handle(new ProjectionChangedEvent
 				               	{
 				               		IsDefaultScenario = true,
 				               		PersonId = person.Id.GetValueOrDefault(),
 				               		ScheduleDays = new[]
 				               		               	{
-				               		               		new DenormalizedScheduleDay
+				               		               		new ProjectionChangedEventScheduleDay
 				               		               			{
 				               		               				StartDateTime = period.StartDateTime,
 				               		               				EndDateTime = period.EndDateTime,
 				               		               				Layers =
-				               		               					new Collection<DenormalizedScheduleProjectionLayer>
-				               		               						{new DenormalizedScheduleProjectionLayer()}
+				               		               					new Collection<ProjectionChangedEventLayer>
+				               		               						{new ProjectionChangedEventLayer()}
 				               		               			}
 				               		               	}
 				               	});
@@ -79,19 +80,19 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			}
 			using (mocks.Playback())
 			{
-				target.Consume(new ProjectionChangedEvent
+				target.Handle(new ProjectionChangedEvent
 				               	{
 				               		IsDefaultScenario = true,
 				               		PersonId = person.Id.GetValueOrDefault(),
 				               		ScheduleDays = new[]
 				               		               	{
-				               		               		new DenormalizedScheduleDay
+				               		               		new ProjectionChangedEventScheduleDay
 				               		               			{
 				               		               				StartDateTime = period.StartDateTime,
 				               		               				EndDateTime = period.EndDateTime,
 				               		               				Layers =
-				               		               					new Collection<DenormalizedScheduleProjectionLayer>
-				               		               						{new DenormalizedScheduleProjectionLayer()}
+				               		               					new Collection<ProjectionChangedEventLayer>
+				               		               						{new ProjectionChangedEventLayer()}
 				               		               			}
 				               		               	},
 				               		IsInitialLoad = true,
@@ -112,19 +113,19 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			}
 			using (mocks.Playback())
 			{
-				target.Consume(new ProjectionChangedEvent
+				target.Handle(new ProjectionChangedEvent
 				               	{
 				               		IsDefaultScenario = false,
 				               		PersonId = person.Id.GetValueOrDefault(),
 				               		ScheduleDays = new[]
 				               		               	{
-				               		               		new DenormalizedScheduleDay
+				               		               		new ProjectionChangedEventScheduleDay
 				               		               			{
 				               		               				StartDateTime = period.StartDateTime,
 				               		               				EndDateTime = period.EndDateTime,
 				               		               				Layers =
-				               		               					new Collection<DenormalizedScheduleProjectionLayer>
-				               		               						{new DenormalizedScheduleProjectionLayer()}
+				               		               					new Collection<ProjectionChangedEventLayer>
+				               		               						{new ProjectionChangedEventLayer()}
 				               		               			}
 				               		               	}
 				               	});

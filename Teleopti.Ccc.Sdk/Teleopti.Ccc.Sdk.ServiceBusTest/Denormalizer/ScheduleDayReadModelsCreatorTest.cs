@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
 
 			var ret =
-				_target.GetReadModel(new DenormalizedScheduleDay
+				_target.GetReadModel(new ProjectionChangedEventScheduleDay
 				                     	{
 				                     		ContractTime = TimeSpan.FromHours(8),
 				                     		WorkTime = TimeSpan.FromHours(7),

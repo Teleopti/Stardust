@@ -9,20 +9,6 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
-	public interface IPersonScheduleDayReadModelRepository
-	{
-		IEnumerable<PersonScheduleDayReadModel> ForPerson(DateOnly startDate, DateOnly endDate, Guid personId);
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1716:IdentifiersShouldNotMatchKeywords", MessageId = "Date")]
-		PersonScheduleDayReadModel ForPerson(DateOnly date, Guid personId);
-		IEnumerable<PersonScheduleDayReadModel> ForTeam(DateTimePeriod period, Guid teamId);
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
-		void ClearPeriodForPerson(DateOnlyPeriod period, Guid personId);
-
-		void SaveReadModel(PersonScheduleDayReadModel model);
-		bool IsInitialized();
-	}
-
 	public class PersonScheduleDayReadModelRepository : IPersonScheduleDayReadModelRepository
 	{
 		private readonly ICurrentUnitOfWork _unitOfWork;
@@ -99,16 +85,4 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		}
 	}
 
-	public class PersonScheduleDayReadModel
-	{
-		public Guid PersonId { get; set; }
-		public Guid TeamId { get; set; }
-		public Guid SiteId { get; set; }
-		public Guid BusinessUnitId { get; set; }
-		public DateTime Date { get; set; }
-		public DateOnly BelongsToDate { get{return new DateOnly(Date);} }
-		public DateTime? ShiftStart { get; set; }
-		public DateTime? ShiftEnd { get; set; }
-		public string Shift { get; set; }
-	}
 }
