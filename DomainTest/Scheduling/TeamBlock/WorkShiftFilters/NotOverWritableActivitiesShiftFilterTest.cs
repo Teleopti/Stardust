@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			_target = new NotOverWritableActivitiesShiftFilter(_resultStateHolder);
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void CanFilterOutShiftsWhichCannotBeOverwritten()
 		{
 			_personAssignment = _mocks.StrictMock<IPersonAssignment>();
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			_mocks.VerifyAll();
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void VerifyIfPersonalShiftCannotOverrideActivity()
 		{
 			_personAssignment = _mocks.StrictMock<IPersonAssignment>();

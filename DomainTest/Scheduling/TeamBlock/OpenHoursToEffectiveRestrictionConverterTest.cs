@@ -194,7 +194,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			}
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldNotAggregateDaysWithoutDayOff()
 		{
 			var dateOnly = new DateOnly(2012, 12, 7);

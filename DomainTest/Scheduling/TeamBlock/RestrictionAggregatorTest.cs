@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_teamBlockInfo = new TeamBlockInfo(teamInfo, new BlockInfo(new DateOnlyPeriod(_dateOnly, _dateOnly.AddDays(1))));
         }
 
-	    [Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 	    public void ShouldAggregateRestrictions()
 	    {
 		    var dateList = new List<DateOnly> {_dateOnly, _dateOnly.AddDays(1)};
@@ -122,8 +122,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 	    }
 
         //should check with morning prefrences
-        
-	    [Test]
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 	    public void ShouldAggregateRestrictionsPerDay()
 	    {
 		    var dateList = new List<DateOnly> {_dateOnly, _dateOnly.AddDays(1)};

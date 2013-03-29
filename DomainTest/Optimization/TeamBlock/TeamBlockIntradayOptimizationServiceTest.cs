@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			                                                   _teamBlockClearer);
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldOptimizeTeamBlockIntraday()
 		{
 			var dateOnly = new DateOnly();
@@ -91,8 +91,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 				                 _schedulePartModifyAndRollbackService);
 			}
 		}
-		
-		[Test]
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldShouldReschedulingFailed()
 		{
 			var dateOnly = new DateOnly();

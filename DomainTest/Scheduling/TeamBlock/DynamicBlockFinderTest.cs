@@ -13,33 +13,33 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
     public class DynamicBlockFinderTest
     {
         private IDynamicBlockFinder _target;
-        private SchedulingOptions  _schedulingOptions;
+		//private SchedulingOptions  _schedulingOptions;
         private MockRepository _mock;
         private IScheduleMatrixPro _matrixPro;
 	    private ITeamInfo _teamInfo;
 	    private DateOnly _date;
 	    private IVirtualSchedulePeriod _schedulePeriod;
 	    private IScheduleMatrixPro _matrixPro2;
-        private IScheduleDayPro _scheduleDayPro1;
-        private IScheduleDay _scheduleDay1;
-        private IScheduleDayPro _scheduleDayPro2;
-        private IScheduleDay _scheduleDay2;
-        private IScheduleDayPro _scheduleDayPro3;
-        private IScheduleDay _scheduleDay3;
+		//private IScheduleDayPro _scheduleDayPro1;
+		//private IScheduleDay _scheduleDay1;
+		//private IScheduleDayPro _scheduleDayPro2;
+		//private IScheduleDay _scheduleDay2;
+		//private IScheduleDayPro _scheduleDayPro3;
+		//private IScheduleDay _scheduleDay3;
 
         [SetUp]
         public void Setup()
         {
             _mock = new MockRepository();
-            _schedulingOptions = new SchedulingOptions();
+			//_schedulingOptions = new SchedulingOptions();
             _matrixPro = _mock.StrictMock<IScheduleMatrixPro>();
 			_matrixPro2 = _mock.StrictMock<IScheduleMatrixPro>();
-            _scheduleDayPro1 = _mock.StrictMock<IScheduleDayPro>();
-            _scheduleDay1 = _mock.StrictMock<IScheduleDay>();
-            _scheduleDayPro2 = _mock.StrictMock<IScheduleDayPro>();
-            _scheduleDay2 = _mock.StrictMock<IScheduleDay>();
-            _scheduleDayPro3 = _mock.StrictMock<IScheduleDayPro>();
-            _scheduleDay3 = _mock.StrictMock<IScheduleDay>();
+			//_scheduleDayPro1 = _mock.StrictMock<IScheduleDayPro>();
+			//_scheduleDay1 = _mock.StrictMock<IScheduleDay>();
+			//_scheduleDayPro2 = _mock.StrictMock<IScheduleDayPro>();
+			//_scheduleDay2 = _mock.StrictMock<IScheduleDay>();
+			//_scheduleDayPro3 = _mock.StrictMock<IScheduleDayPro>();
+			//_scheduleDay3 = _mock.StrictMock<IScheduleDay>();
 	        _teamInfo = _mock.StrictMock<ITeamInfo>();
 			_target = new DynamicBlockFinder();
 			_date = new DateOnly(2013, 02, 22);

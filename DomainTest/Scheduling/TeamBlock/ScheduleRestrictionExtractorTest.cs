@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			Assert.That(result, Is.EqualTo(expected));
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldExtractSameShiftRestrictionFromScheduleDay()
 		{
 			_schedulingOptions.UseLevellingSameShift = true;

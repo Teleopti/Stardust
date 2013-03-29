@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 		private IScheduleMatrixPro _scheduleMatrixPro1;
 		private IVirtualSchedulePeriod _schedulePeriod;
 
-		[SetUp]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
 		public void Setup()
 		{
 			_mocks = new MockRepository();

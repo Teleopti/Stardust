@@ -112,7 +112,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             }
         }
 
-        private void ExpectCallForShouldCreateIntervalsFromSkillDay(ISkill skill1, ISkill skill2,
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+		private void ExpectCallForShouldCreateIntervalsFromSkillDay(ISkill skill1, ISkill skill2,
                                                                     SkillIntervalData[] skillIntervalDataList,
                                                                     SkillIntervalData skillIntervalData1,
                                                                     SkillIntervalData skillIntervalData2,
@@ -188,7 +189,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			}
 		}
 
-        private void ExpectCallForShouldSkipSkillsNotInAggregatedSkills(ISkill skill1, ISkill skill2,
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+		private void ExpectCallForShouldSkipSkillsNotInAggregatedSkills(ISkill skill1, ISkill skill2,
                                                                         SkillIntervalData[] skillIntervalDataList,
                                                                         SkillIntervalData skillIntervalData1,
                                                                         Dictionary<TimeSpan, ISkillIntervalData> intervalData1)

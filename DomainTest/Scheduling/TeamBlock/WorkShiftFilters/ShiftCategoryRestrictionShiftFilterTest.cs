@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			return retList;
 		}
 
-		private IEnumerable<IWorkShift> getWorkShifts()
+		private static IEnumerable<IWorkShift> getWorkShifts()
 		{
 			var activity = ActivityFactory.CreateActivity("sd");
 			var category = ShiftCategoryFactory.CreateShiftCategory("dv");

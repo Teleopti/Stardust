@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			_target = new TeamBlockIntradayDecisionMaker(_lockableBitArrayFactory, _dataExtractorProvider);
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldRecalculateStandardDeviationOfOneTeamBlock()
 		{
 			var dateOnly = new DateOnly();
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			}
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldDecideInADescOrder()
 		{
 			var dateOnly = new DateOnly();

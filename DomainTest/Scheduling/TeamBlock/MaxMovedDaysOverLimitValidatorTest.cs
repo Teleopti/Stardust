@@ -25,6 +25,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_target = new MaxMovedDaysOverLimitValidator(_allSelectedScheduleRangeClones, _scheduleDayEquator);
 			_optimizationPreferences = new OptimizationPreferences();
 			_matrix = _mocks.StrictMock<IScheduleMatrixPro>();
+			_allSelectedScheduleRangeClones = new Dictionary<IPerson, IScheduleRange>();
+			_scheduleDayEquator = _mocks.StrictMock<IScheduleDayEquator>();
 		}
 
 		[Test]

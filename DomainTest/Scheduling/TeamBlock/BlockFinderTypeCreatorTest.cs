@@ -9,14 +9,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
     [TestFixture]
     public class BlockFinderTypeCreatorTest
     {
-        [Test]
-        public void CheckCorrectNumberOfOptions()
+		[Test]
+        public static void CheckCorrectNumberOfOptions()
         {
             Assert.AreEqual(BlockFinderTypeCreator.GetBlockFinderTypes.Count, 2);
         }
 
-        [Test]
-        public void CheckCorrectContentsAreReceived()
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
+        public static void CheckCorrectContentsAreReceived()
         {
             var blockType = BlockFinderTypeCreator.GetBlockFinderTypes.OrderBy(x => x.Key).ToList();
             Assert.AreEqual(blockType[0].Key , BlockFinderType.BetweenDayOff.ToString() );
