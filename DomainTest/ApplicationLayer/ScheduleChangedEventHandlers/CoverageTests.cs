@@ -6,6 +6,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -49,6 +50,25 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			target.Handle(new ScheduleInitializeTriggeredEventForPersonScheduleDay {StartDateTime = DateTime.UtcNow, EndDateTime = DateTime.UtcNow});
 			target.Handle(new ScheduleInitializeTriggeredEventForScheduleDay {StartDateTime = DateTime.UtcNow, EndDateTime = DateTime.UtcNow});
 			target.Handle(new ScheduleInitializeTriggeredEventForScheduleProjection {StartDateTime = DateTime.UtcNow, EndDateTime = DateTime.UtcNow});
+		}
+
+		[Test]
+		public void PersonScheduleDayReadModelHandlerShouldBeCovered()
+		{
+			var person = PersonFactory.CreatePerson(" ");
+			var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
+			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(MockRepository.GenerateMock<IUnitOfWork>());
+			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
+			personRepository.Stub(x => x.Load(Arg<Guid>.Is.Anything)).Return(person);
+			var jsonSerializer = MockRepository.GenerateMock<IJsonSerializer>();
+			var repository = MockRepository.GenerateMock<IPersonScheduleDayReadModelRepository>();
+
+			var target = new PersonScheduleDayReadModelHandler(unitOfWorkFactory, new PersonScheduleDayReadModelsCreator(personRepository, jsonSerializer), repository);
+
+			var layers = new List<ProjectionChangedEventLayer> {new ProjectionChangedEventLayer()};
+			var scheduleDays = new List<ProjectionChangedEventScheduleDay> { new ProjectionChangedEventScheduleDay { Layers = layers } };
+			target.Handle(new ProjectionChangedEvent { IsDefaultScenario = true, ScheduleDays = scheduleDays });
+			target.Handle(new ProjectionChangedEventForPersonScheduleDay { IsDefaultScenario = true, ScheduleDays = scheduleDays });
 		}
 	}
 }
