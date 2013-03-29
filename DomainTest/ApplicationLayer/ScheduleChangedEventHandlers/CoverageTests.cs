@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 	[TestFixture]
 	public class CoverageTests
 	{
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ScheduleChangedHandlerShouldBeCovered()
 		{
 			var team = TeamFactory.CreateTeam(" ", " ");
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			target.Handle(new ScheduleInitializeTriggeredEventForScheduleProjection {StartDateTime = DateTime.UtcNow, EndDateTime = DateTime.UtcNow});
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ScheduleChangedHandlerShouldBeCovered4()
 		{
 			var team = TeamFactory.CreateTeam(" ", " ");
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			target.Handle(new ScheduleInitializeTriggeredEventForScheduleDay { StartDateTime = DateTime.UtcNow, EndDateTime = DateTime.UtcNow });
 			target.Handle(new ScheduleInitializeTriggeredEventForScheduleProjection { StartDateTime = DateTime.UtcNow, EndDateTime = DateTime.UtcNow });
 		}
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
 		public void ScheduleChangedHandlerShouldBeCovered2()
 		{
 			var scenario = ScenarioFactory.CreateScenarioAggregate(" ", false);
@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			target.Handle(new ScheduleInitializeTriggeredEventForScheduleProjection { StartDateTime = DateTime.UtcNow, EndDateTime = DateTime.UtcNow });
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
 		public void ScheduleChangedHandlerShouldBeCovered3()
 		{
 			var scenario = ScenarioFactory.CreateScenarioAggregate(" ", true);
@@ -126,13 +126,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			target.Handle(new ScheduleInitializeTriggeredEventForScheduleProjection { StartDateTime = DateTime.UtcNow, EndDateTime = DateTime.UtcNow });
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "nothing"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
 		public void ScheduleChangedEventShouldBeCovered()
 		{
 			var nothing = new ScheduleChangedEvent().Identity;
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
 		public void PersonScheduleDayReadModelHandlerShouldBeCovered()
 		{
 			var person = PersonFactory.CreatePerson(" ");
@@ -151,13 +151,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			target.Handle(new ProjectionChangedEventForPersonScheduleDay { IsDefaultScenario = true, ScheduleDays = scheduleDays });
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "nothing"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
 		public void ProjectionChangedEventShouldBeCovered()
 		{
 			var nothing = new ProjectionChangedEvent().Identity;
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "bus"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void UpdateScheduleProjectionReadModelShouldHaveCoverage()
 		{
 			var team = TeamFactory.CreateTeam(" ", " ");
