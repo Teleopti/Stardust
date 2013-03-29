@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_maxMovedDaysOverLimitValidator = maxMovedDaysOverLimitValidator;
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public bool Validate(ITeamBlockInfo teamBlockInfo, IOptimizationPreferences optimizationPreferences)
 		{
 			foreach (var matrix in teamBlockInfo.MatrixesForGroupAndBlock())

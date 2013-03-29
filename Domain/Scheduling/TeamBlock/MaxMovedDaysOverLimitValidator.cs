@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			_scheduleDayEquator = scheduleDayEquator;
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public bool ValidateMatrix(IScheduleMatrixPro matrix, IOptimizationPreferences optimizationPreferences)
 		{
 			int originalNumberOfDaysOff = 0;
