@@ -22,11 +22,11 @@ namespace Teleopti.Ccc.Domain.Optimization
             return false;
         }
 
-        public bool CanHaveShortBreak(ISkillExtractor skillExtractor, IEnumerable<TimeSpan> timespans)
+        public bool CanHaveShortBreak(ISkillExtractor skillExtractor, IEnumerable<TimeSpan> timeSpans)
         {
             int skillResolution = MinimumSkillResolution(skillExtractor);
 
-            foreach (TimeSpan timeSpan in timespans)
+            foreach (TimeSpan timeSpan in timeSpans)
             {
                 if (!skillResolutionFitsToSegmentPeriodResolution(timeSpan, skillResolution))
                     return true;

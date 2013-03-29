@@ -19,6 +19,6 @@ namespace Teleopti.Ccc.Domain.Optimization
         /// </returns>
         bool CanHaveShortBreak(ISkillExtractor skillExtractor, TimePeriodWithSegment timePeriodWithSegment);
 
-        bool CanHaveShortBreak(ISkillExtractor skillExtractor, IEnumerable<TimeSpan> timespans);
+        bool CanHaveShortBreak(ISkillExtractor skillExtractor, IEnumerable<TimeSpan> timeSpans);
     }
 }
