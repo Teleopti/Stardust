@@ -184,6 +184,77 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         }
 
         [Test]
+        public void ShouldReturnTrueWhenPersonAssignmentIsNullIfAllAreSameShiftForSameStartTime()
+        {
+            _matrixList = new List<IScheduleMatrixPro>();
+            _matrixList.Add(_scheduleMatrixPro);
+            _teamInfo = new TeamInfo(_baseLineData.GroupPerson, new List<IList<IScheduleMatrixPro>> { _matrixList });
+            _blockInfo = new BlockInfo(new DateOnlyPeriod(_today, _today.AddDays(2)));
+            var teamBlockInfo = new TeamBlockInfo(_teamInfo, _blockInfo);
+            var schedulingOptions = new SchedulingOptions();
+            schedulingOptions.UseLevellingSameStartTime = true;
+            using (_mock.Record())
+            {
+                Expect.Call(_scheduleMatrixPro.SchedulePeriod).Return(_virtualSchedulePeriod).Repeat.AtLeastOnce();
+                Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod)
+                      .Return(new DateOnlyPeriod(_today, _today.AddDays(2))).Repeat.AtLeastOnce();
+                Expect.Call(_scheduleMatrixPro.GetScheduleDayByKey(_today)).Return(_todayScheduleDayPro);
+                Expect.Call(_todayScheduleDayPro.DaySchedulePart()).Return(_todayScheduleDay);
+
+                Expect.Call(_todayScheduleDay.AssignmentHighZOrder()).Return(null).Repeat.AtLeastOnce();
+                
+
+            }
+            Assert.IsTrue(_target.IsBlockInSteadyState(teamBlockInfo, schedulingOptions));
+        }
+
+        [Test]
+        public void ShouldReturnTrueWhenShiftPeriodIsNullIfAllAreSameShiftForSameStartTime()
+        {
+            _matrixList = new List<IScheduleMatrixPro>();
+            _matrixList.Add(_scheduleMatrixPro);
+            _teamInfo = new TeamInfo(_baseLineData.GroupPerson, new List<IList<IScheduleMatrixPro>> { _matrixList });
+            _blockInfo = new BlockInfo(new DateOnlyPeriod(_today, _today.AddDays(2)));
+            var teamBlockInfo = new TeamBlockInfo(_teamInfo, _blockInfo);
+            var schedulingOptions = new SchedulingOptions();
+            schedulingOptions.UseLevellingSameStartTime = true;
+            var now = DateTime.UtcNow;
+            using (_mock.Record())
+            {
+                Expect.Call(_scheduleMatrixPro.SchedulePeriod).Return(_virtualSchedulePeriod).Repeat.AtLeastOnce();
+                Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod)
+                      .Return(new DateOnlyPeriod(_today, _today.AddDays(1))).Repeat.AtLeastOnce();
+                Expect.Call(_scheduleMatrixPro.GetScheduleDayByKey(_today)).Return(_todayScheduleDayPro);
+                Expect.Call(_todayScheduleDayPro.DaySchedulePart()).Return(_todayScheduleDay);
+
+                //day1
+                expectCallForDayForSameStartTime(_todayScheduleDay, _today, now, true);
+
+                //day2
+                //expectCallForDayForSameStartTime(_todayScheduleDay, _tomorrow, now, true);
+
+                var mainShift = _mock.StrictMock<IMainShift>();
+                IProjectionService projectionService = _mock.StrictMock<IProjectionService>();
+                var personAssignment = _mock.StrictMock<IPersonAssignment>();
+                IVisualLayerCollection visualLayerCollection = _mock.StrictMock<IVisualLayerCollection>();
+
+                Expect.Call(_tomorrowScheduleDay  .AssignmentHighZOrder()).Return(null);
+                Expect.Call(personAssignment.MainShift).Return(mainShift).Repeat.AtLeastOnce();
+                Expect.Call(mainShift.ProjectionService()).Return(projectionService).Repeat.AtLeastOnce();
+                Expect.Call(projectionService.CreateProjection()).Return(visualLayerCollection).Repeat.AtLeastOnce();
+                Expect.Call(visualLayerCollection.Period()).Return(new DateTimePeriod(now, now.AddHours(1))).Repeat.AtLeastOnce();
+                Expect.Call(_tomorrowScheduleDay.TimeZone).Return(TimeZoneInfo.Local).Repeat.AtLeastOnce();
+                Expect.Call(_scheduleMatrixPro.GetScheduleDayByKey(_tomorrow  )).Return(_tomorrowScheduleDayPro );
+                Expect.Call(_tomorrowScheduleDayPro.DaySchedulePart()).Return(_tomorrowScheduleDay );
+                Expect.Call(_tomorrowScheduleDay.IsScheduled()).Return(true);
+                Expect.Call(_tomorrowScheduleDay.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
+
+
+            }
+            Assert.IsTrue(_target.IsBlockInSteadyState(teamBlockInfo, schedulingOptions));
+        }
+
+        [Test]
         public void ShouldReturnTrueIfSomeAreSameShiftForSameStartTime()
         {
             _matrixList = new List<IScheduleMatrixPro>();
@@ -269,6 +340,18 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 Expect.Call(_todayScheduleDay.IsScheduled()).Return(true).Repeat.AtLeastOnce();
             }
             Assert.IsFalse(_target.IsBlockScheduled(teamBlockInfo));
+        }
+
+        [Test]
+        public void ReturnFalseIfTeamBlockIsNull()
+        {
+            Assert.IsFalse(_target.IsBlockInSteadyState(null,new SchedulingOptions()));
+        }
+
+        [Test]
+        public void ReturnFalseIfSchedulingOptionsAreNull()
+        {
+            Assert.IsFalse(_target.IsBlockInSteadyState(new TeamBlockInfo(_teamInfo,_blockInfo ), null));
         }
 
         private void expectCallForDayForSameShift(IScheduleDay scheduleDay, DateOnly dateOnly)

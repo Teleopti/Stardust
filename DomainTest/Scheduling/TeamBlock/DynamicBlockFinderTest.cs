@@ -108,13 +108,36 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		}
 
         [Test]
-        public void ShouldReturnNullIfNoMatrixesFound()
+        public void ShouldReturnNullIfIfBlockFinderIsNone()
         {
 	        var result = _target.ExtractBlockInfo(_date, _teamInfo, BlockFinderType.None);
 			Assert.IsNull(result);
         }
 
-        
+        [Test]
+        public void ShouldReturnNullIfIfNoMatrixFound()
+        {
+            using (_mock.Record())
+            {
+                Expect.Call(_teamInfo.MatrixesForGroupAndDate(_date)).Return(new List<IScheduleMatrixPro> ());
+                
+            }
+
+            var result = _target.ExtractBlockInfo(_date, _teamInfo, BlockFinderType.SchedulePeriod );
+            Assert.IsNull(result);
+        }
+
+        [Test]
+        public void ShouldReturnNullForBetweenDaysOff()
+        {
+            using (_mock.Record())
+            {
+                Expect.Call(_teamInfo.MatrixesForGroupAndDate(_date)).Return(new List<IScheduleMatrixPro> { _matrixPro });
+            }
+
+            var result = _target.ExtractBlockInfo(_date, _teamInfo, BlockFinderType.BetweenDayOff );
+            Assert.IsNull(result);
+        }
         
     }
 

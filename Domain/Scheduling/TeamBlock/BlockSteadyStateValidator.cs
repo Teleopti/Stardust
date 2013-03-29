@@ -17,8 +17,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
     {
         public bool IsBlockInSteadyState(ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions)
         {
-            if (teamBlockInfo == null) throw new ArgumentNullException("teamBlockInfo");
-            if (schedulingOptions == null ) throw new ArgumentNullException("schedulingOptions");
+            if (teamBlockInfo == null || schedulingOptions == null) return false ;
+            //if (schedulingOptions == null ) throw new ArgumentNullException("schedulingOptions");
             var dayList = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection();
             if (dayList.Count > 0)
             {
@@ -59,8 +59,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                         if (scheduleDay.IsScheduled() && (scheduleDay.SignificantPart() != SchedulePartView.DayOff) && (scheduleDay.SignificantPart() != SchedulePartView.ContractDayOff) && (scheduleDay.SignificantPart() != SchedulePartView.FullDayAbsence) && (scheduleDay.SignificantPart() != SchedulePartView.Absence ))
                         {
                             var startDateTime = getStartTimeLocal(scheduleDay);
-                            if (startDateTime.TimeOfDay != sampleStartTime.TimeOfDay)
+                            //VERIFY IT FROM MICKE
+                            if (startDateTime != DateTime.MinValue && startDateTime.TimeOfDay != sampleStartTime.TimeOfDay)
                                 return false;
+                            
                         }
 
                     }
