@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
-		public void ShouldDecideInADescOrder()
+		public void ShouldDecideInADescendOrder()
 		{
 			var dateOnly = new DateOnly();
 			var scheduleMatrixPro1 = _mocks.StrictMock<IScheduleMatrixPro>();

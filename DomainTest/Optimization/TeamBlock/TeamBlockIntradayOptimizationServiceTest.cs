@@ -26,7 +26,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 		private ITeamBlockIntradayOptimizationService _target;
 		private ITeamBlockGenerator _teamBlockGenerator;
 		private ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
-		private RestrictionChecker _restrictionChecker;
 
 		[SetUp]
 		public void Setup()
@@ -40,7 +39,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			_teamBlockClearer = _mocks.StrictMock<ITeamBlockClearer>();
 			_restrictionOverLimitValidator = _mocks.StrictMock<ITeamBlockRestrictionOverLimitValidator>();
 			_schedulePartModifyAndRollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
-			_restrictionChecker = new RestrictionChecker();
 			_target = new TeamBlockIntradayOptimizationService(_teamBlockGenerator, _teamBlockScheduler,
 			                                                   _schedulingOptionsCreator, 
 			                                                   _safeRollbackAndResourceCalculation,
