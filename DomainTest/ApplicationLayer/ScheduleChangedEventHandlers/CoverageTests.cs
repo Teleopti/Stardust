@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
@@ -10,6 +11,7 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonSc
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -17,11 +19,12 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 {
+	// dont blame me, there were no tests
 	[TestFixture]
 	public class CoverageTests
 	{
 		[Test]
-		public void ScheduleChangedHandlerShouldBeCovered() // dont blame me, there were no tests
+		public void ScheduleChangedHandlerShouldBeCovered()
 		{
 			var team = TeamFactory.CreateTeam(" ", " ");
 			team.SetId(Guid.NewGuid());
@@ -54,6 +57,82 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 		}
 
 		[Test]
+		public void ScheduleChangedHandlerShouldBeCovered4()
+		{
+			var team = TeamFactory.CreateTeam(" ", " ");
+			team.SetId(Guid.NewGuid());
+			var person = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.Today, new ISkill[] { });
+			person.PersonPeriodCollection.Single().Team = team;
+			var scenario = ScenarioFactory.CreateScenarioAggregate(" ", true);
+			var period = new DateTimePeriod(DateTime.SpecifyKind(DateTime.Today, DateTimeKind.Utc), DateTime.SpecifyKind(DateTime.Today.AddHours(24), DateTimeKind.Utc));
+			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, null, new Dictionary<IPerson, IScheduleRange>());
+			var range = new ScheduleRange(scheduleDictionary, new ScheduleParameters(scenario, person, period));
+			var personDayOff = new PersonDayOff(person, scenario, DayOffFactory.CreateDayOff(), new DateOnly(DateTime.SpecifyKind(DateTime.Today, DateTimeKind.Utc)), TimeZoneInfoFactory.UtcTimeZoneInfo());
+			range.Add(personDayOff);
+			scheduleDictionary.AddTestItem(person, range);
+			var bus = MockRepository.GenerateMock<IQuestionablyPublishMoreEvents>();
+			var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
+			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(MockRepository.GenerateMock<IUnitOfWork>());
+			var scenarioRepository = MockRepository.GenerateMock<IScenarioRepository>();
+			scenarioRepository.Stub(x => x.Get(Arg<Guid>.Is.Anything)).Return(scenario);
+			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
+			personRepository.Stub(x => x.FindPeople(Arg<IEnumerable<Guid>>.Is.Anything)).Return(new[] { person });
+			var scheduleRepository = MockRepository.GenerateMock<IScheduleRepository>();
+			scheduleRepository.Stub(x => x.FindSchedulesOnlyInGivenPeriod(null, null, new DateTimePeriod(), null)).IgnoreArguments()
+							  .Return(scheduleDictionary);
+
+			var target = new ScheduleChangedHandler(bus, unitOfWorkFactory, scenarioRepository, personRepository, scheduleRepository, new ProjectionChangedEventBuilder());
+
+			target.Handle(new ScheduleChangedEvent { StartDateTime = DateTime.UtcNow, EndDateTime = DateTime.UtcNow });
+			target.Handle(new ScheduleInitializeTriggeredEventForPersonScheduleDay { StartDateTime = DateTime.UtcNow, EndDateTime = DateTime.UtcNow });
+			target.Handle(new ScheduleInitializeTriggeredEventForScheduleDay { StartDateTime = DateTime.UtcNow, EndDateTime = DateTime.UtcNow });
+			target.Handle(new ScheduleInitializeTriggeredEventForScheduleProjection { StartDateTime = DateTime.UtcNow, EndDateTime = DateTime.UtcNow });
+		}
+		[Test]
+		public void ScheduleChangedHandlerShouldBeCovered2()
+		{
+			var scenario = ScenarioFactory.CreateScenarioAggregate(" ", false);
+			var bus = MockRepository.GenerateMock<IQuestionablyPublishMoreEvents>();
+			var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
+			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(MockRepository.GenerateMock<IUnitOfWork>());
+			var scenarioRepository = MockRepository.GenerateMock<IScenarioRepository>();
+			scenarioRepository.Stub(x => x.Get(Arg<Guid>.Is.Anything)).Return(scenario);
+
+			var target = new ScheduleChangedHandler(bus, unitOfWorkFactory, scenarioRepository, null, null, null);
+
+			target.Handle(new ScheduleChangedEvent { StartDateTime = DateTime.UtcNow, EndDateTime = DateTime.UtcNow });
+			target.Handle(new ScheduleInitializeTriggeredEventForPersonScheduleDay { StartDateTime = DateTime.UtcNow, EndDateTime = DateTime.UtcNow });
+			target.Handle(new ScheduleInitializeTriggeredEventForScheduleDay { StartDateTime = DateTime.UtcNow, EndDateTime = DateTime.UtcNow });
+			target.Handle(new ScheduleInitializeTriggeredEventForScheduleProjection { StartDateTime = DateTime.UtcNow, EndDateTime = DateTime.UtcNow });
+		}
+
+		[Test]
+		public void ScheduleChangedHandlerShouldBeCovered3()
+		{
+			var scenario = ScenarioFactory.CreateScenarioAggregate(" ", true);
+			var bus = MockRepository.GenerateMock<IQuestionablyPublishMoreEvents>();
+			var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
+			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(MockRepository.GenerateMock<IUnitOfWork>());
+			var scenarioRepository = MockRepository.GenerateMock<IScenarioRepository>();
+			scenarioRepository.Stub(x => x.Get(Arg<Guid>.Is.Anything)).Return(scenario);
+			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
+			personRepository.Stub(x => x.FindPeople(new Guid[] {})).IgnoreArguments().Return(new Collection<IPerson>());
+
+			var target = new ScheduleChangedHandler(bus, unitOfWorkFactory, scenarioRepository, personRepository, null, null);
+
+			target.Handle(new ScheduleChangedEvent { StartDateTime = DateTime.UtcNow, EndDateTime = DateTime.UtcNow });
+			target.Handle(new ScheduleInitializeTriggeredEventForPersonScheduleDay { StartDateTime = DateTime.UtcNow, EndDateTime = DateTime.UtcNow });
+			target.Handle(new ScheduleInitializeTriggeredEventForScheduleDay { StartDateTime = DateTime.UtcNow, EndDateTime = DateTime.UtcNow });
+			target.Handle(new ScheduleInitializeTriggeredEventForScheduleProjection { StartDateTime = DateTime.UtcNow, EndDateTime = DateTime.UtcNow });
+		}
+
+		[Test]
+		public void ScheduleChangedEventShouldBeCovered()
+		{
+			var nothing = new ScheduleChangedEvent().Identity;
+		}
+
+		[Test]
 		public void PersonScheduleDayReadModelHandlerShouldBeCovered()
 		{
 			var person = PersonFactory.CreatePerson(" ");
@@ -73,17 +152,36 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 		}
 
 		[Test]
+		public void ProjectionChangedEventShouldBeCovered()
+		{
+			var nothing = new ProjectionChangedEvent().Identity;
+		}
+
+		[Test]
 		public void UpdateScheduleProjectionReadModelShouldHaveCoverage()
 		{
-			var person = PersonFactory.CreatePerson(" ");
+			var team = TeamFactory.CreateTeam(" ", " ");
+			team.SetId(Guid.NewGuid());
+			var person = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.Today, new ISkill[] { });
+			person.PersonPeriodCollection.Single().Team = team;
 			var scenario = ScenarioFactory.CreateScenarioAggregate(" ", true);
-			var repository = MockRepository.GenerateMock<IScheduleProjectionReadOnlyRepository>();
-						var period = new DateTimePeriod(DateTime.SpecifyKind(DateTime.Today, DateTimeKind.Utc), DateTime.SpecifyKind(DateTime.Today.AddHours(24), DateTimeKind.Utc));
+			var period = new DateTimePeriod(DateTime.SpecifyKind(DateTime.Today, DateTimeKind.Utc), DateTime.SpecifyKind(DateTime.Today.AddHours(24), DateTimeKind.Utc));
 			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, null, new Dictionary<IPerson, IScheduleRange>());
 			var range = new ScheduleRange(scheduleDictionary, new ScheduleParameters(scenario, person, period));
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person, period);
 			range.Add(personAssignment);
 			scheduleDictionary.AddTestItem(person, range);
+			var bus = MockRepository.GenerateMock<IQuestionablyPublishMoreEvents>();
+			var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
+			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(MockRepository.GenerateMock<IUnitOfWork>());
+			var scenarioRepository = MockRepository.GenerateMock<IScenarioRepository>();
+			scenarioRepository.Stub(x => x.Get(Arg<Guid>.Is.Anything)).Return(scenario);
+			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
+			personRepository.Stub(x => x.FindPeople(Arg<IEnumerable<Guid>>.Is.Anything)).Return(new[] { person });
+			var scheduleRepository = MockRepository.GenerateMock<IScheduleRepository>();
+			scheduleRepository.Stub(x => x.FindSchedulesOnlyInGivenPeriod(null, null, new DateTimePeriod(), null)).IgnoreArguments()
+							  .Return(scheduleDictionary);
+			var repository = MockRepository.GenerateMock<IScheduleProjectionReadOnlyRepository>();
 
 			var target = new UpdateScheduleProjectionReadModel(new ProjectionChangedEventBuilder(), repository);
 
