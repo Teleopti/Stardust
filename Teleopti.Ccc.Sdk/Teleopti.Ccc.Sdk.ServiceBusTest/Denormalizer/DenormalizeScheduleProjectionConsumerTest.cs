@@ -68,6 +68,40 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 		}
 
 		[Test]
+		public void ShouldDenormalizeProjectionToo()
+		{
+			var person = PersonFactory.CreatePerson();
+			person.SetId(Guid.NewGuid());
+
+			var period = new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow);
+
+			using (mocks.Record())
+			{
+				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+				Expect.Call(unitOfWork.PersistAll());
+			}
+			using (mocks.Playback())
+			{
+				target.Handle(new ProjectionChangedEventForScheduleProjection
+				{
+					IsDefaultScenario = true,
+					PersonId = person.Id.GetValueOrDefault(),
+					ScheduleDays = new[]
+				               		               	{
+				               		               		new ProjectionChangedEventScheduleDay
+				               		               			{
+				               		               				StartDateTime = period.StartDateTime,
+				               		               				EndDateTime = period.EndDateTime,
+				               		               				Layers =
+				               		               					new Collection<ProjectionChangedEventLayer>
+				               		               						{new ProjectionChangedEventLayer()}
+				               		               			}
+				               		               	}
+				});
+			}
+		}
+
+		[Test]
 		public void ShouldSkipDeleteWhenDenormalizeProjectionGivenThatOptionIsSet()
 		{
 			var person = PersonFactory.CreatePerson();
