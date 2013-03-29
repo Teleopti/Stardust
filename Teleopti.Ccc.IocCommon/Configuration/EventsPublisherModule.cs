@@ -9,9 +9,9 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterType<AutofacResolve>().As<IResolve>().SingleInstance();
 			builder.RegisterType<SyncEventsPublisher>().As<IEventsPublisher>().SingleInstance();
 			builder.RegisterType<EventPublisher>().As<IEventPublisher>().SingleInstance();
+			builder.RegisterType<AutofacResolve>().As<IResolve>().SingleInstance();
 		}
 	}
 
@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterType<AutofacResolve>().As<IResolve>().SingleInstance();
 			builder.RegisterType<SyncEventsPublisher>().As<IEventsPublisher>().SingleInstance();
 			builder.RegisterType<ServiceBusEventPublisher>().As<IEventPublisher>().SingleInstance();
 		}
@@ -29,8 +28,8 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterType<AutofacResolve>().As<IResolve>().SingleInstance();
 			builder.RegisterType<DenormalizationQueueEventsPublisher>().As<IEventsPublisher>().SingleInstance();
+			builder.RegisterType<SaveToDenormalizationQueue>().As<ISaveToDenormalizationQueue>().SingleInstance();
 		}
 	}
 
