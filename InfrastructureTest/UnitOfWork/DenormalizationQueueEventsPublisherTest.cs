@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			return true;
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
 		public void ShouldSendDenormalizationQueueNotification()
 		{
 			var notifier = MockRepository.GenerateMock<ISendDenormalizeNotification>();
