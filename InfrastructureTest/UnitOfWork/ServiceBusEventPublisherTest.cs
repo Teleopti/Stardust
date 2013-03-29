@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			var @event = new Event();
 			serviceBusSender.Stub(x => x.EnsureBus()).Return(false);
 
-			Assert.Throws<Exception>(() => target.Publish(@event));
+			Assert.Throws<ApplicationException>(() => target.Publish(@event));
 		}
 	}
 }
