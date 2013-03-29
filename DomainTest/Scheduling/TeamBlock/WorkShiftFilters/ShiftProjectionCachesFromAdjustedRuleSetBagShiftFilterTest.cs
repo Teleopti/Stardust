@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			                                                                     _ruleSetToShiftsGenerator);
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "readOnlyRuleSets"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void CanAdjustWorkShiftsFromRuleSetBag()
 		{
 			var personPeriod = _mocks.StrictMock<IPersonPeriod>();

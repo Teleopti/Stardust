@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
         }
 
-        [Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Levelling"), Test]
         public void VerifyPreferenceToBeSavedForLevelling()
         {
             _target.UseLevellingSameEndTime  = true;

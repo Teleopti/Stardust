@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         private DateOnly _dayAfterTomorrow;
 
         [SetUp]
-        public void SetUp()
+        public void Setup()
         {
             _mock = new MockRepository();
             _target = new BlockSteadyStateValidator();
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         }
 
         [Test]
-        public void ShouldReturnTrueForNonScheduledDays()
+        public void ShouldReturnTrueForNonscheduledDays()
         {
             _matrixList = new List<IScheduleMatrixPro>();
             _matrixList.Add(_scheduleMatrixPro);
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 
         [Test]
-        public void ShouldRerurnFalseIfAllAreNotSameStartTimeForSameStartTime()
+        public void ShouldReturnFalseIfAllAreNotSameStartTimeForSameStartTime()
         {
             _matrixList = new List<IScheduleMatrixPro>();
             _matrixList.Add(_scheduleMatrixPro);
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         }
 
         [Test]
-        public void ShouldRerurnTrueIfAllAreSameShiftForSameShift()
+        public void ShouldReturnTrueIfAllAreSameShiftForSameShift()
         {
             _matrixList = new List<IScheduleMatrixPro>();
             _matrixList.Add(_scheduleMatrixPro);
@@ -208,7 +208,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             Assert.IsTrue(_target.IsBlockInSteadyState(teamBlockInfo, schedulingOptions));
         }
 
-        [Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void ShouldReturnTrueWhenShiftPeriodIsNullIfAllAreSameShiftForSameStartTime()
         {
             _matrixList = new List<IScheduleMatrixPro>();

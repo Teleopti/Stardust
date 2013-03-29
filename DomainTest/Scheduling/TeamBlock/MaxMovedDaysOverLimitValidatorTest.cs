@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_scheduleDayEquator = _mocks.StrictMock<IScheduleDayEquator>();
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "MaxIs"), Test]
 		public void ShouldReturnTrueIfMoveMaxIsNotUsed()
 		{
 
