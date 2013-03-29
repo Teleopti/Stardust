@@ -1,7 +1,5 @@
 ﻿using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Sdk.ServiceBus.Denormalizer;
 using Teleopti.Interfaces.Domain;
 using log4net;
 

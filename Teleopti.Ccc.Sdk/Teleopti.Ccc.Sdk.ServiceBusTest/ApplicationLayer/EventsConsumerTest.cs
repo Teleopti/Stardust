@@ -1,23 +1,16 @@
-﻿using Autofac;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Rhino.Mocks;
 using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Ccc.IocCommon.Configuration;
-using Teleopti.Ccc.Sdk.ServiceBus;
 using Teleopti.Ccc.Sdk.ServiceBus.ApplicationLayer;
-using Teleopti.Ccc.Sdk.ServiceBus.Denormalizer;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.Messages.Denormalize;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.ApplicationLayer
 {
 	[TestFixture]
 	public class EventsConsumerTest
 	{
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
 		public void ShouldPublishEvents()
 		{
 			var publisher = MockRepository.GenerateMock<IEventPublisher>();
@@ -29,7 +22,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ApplicationLayer
 			publisher.AssertWasCalled(x => x.Publish(@event));
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
 		public void ShouldSendEventsFromPackageMessage()
 		{
 			var bus = MockRepository.GenerateMock<IServiceBus>();
