@@ -15,12 +15,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 	    public IBlockInfo ExtractBlockInfo(DateOnly blockOnDate, ITeamInfo teamInfo, BlockFinderType blockType)
 	    {
-	        if (teamInfo == null) throw new ArgumentNullException("teamInfo");
 	        DateOnlyPeriod? blockPeriod = null;
-            IEnumerable<IScheduleMatrixPro> matrixesToVerify = teamInfo.MatrixesForGroupAndDate(blockOnDate).ToList();
-            if (matrixesToVerify.Any())
-                if (isAnyTypeOfDayOff(matrixesToVerify.First().GetScheduleDayByKey(blockOnDate).DaySchedulePart())) return null;
+		    if (blockType == BlockFinderType.None)
+			    return null;
 
+			IEnumerable<IScheduleMatrixPro> matrixes = teamInfo.MatrixesForGroupAndDate(blockOnDate).ToList();
+		    if (!matrixes.Any())
+			    return null;
+
+		    IScheduleMatrixPro roleModelMatrix = matrixes.First();
+            
 		    switch (blockType)
 		    {
 			    case BlockFinderType.SingleDay:
@@ -31,45 +35,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 				case BlockFinderType.SchedulePeriod:
 				    {
-						IEnumerable<IScheduleMatrixPro> matrixes = teamInfo.MatrixesForGroupAndDate(blockOnDate).ToList();
-					    if (matrixes.Any())
-						    blockPeriod = matrixes.First().SchedulePeriod.DateOnlyPeriod;
+						blockPeriod = roleModelMatrix.SchedulePeriod.DateOnlyPeriod;
 					    break;
 				    }
-                case BlockFinderType.BetweenDayOff :
-		            {
-                        //THE DATE POINTERT SHOULD NEVER BE A DAYOFF
-                        IEnumerable<IScheduleMatrixPro> matrixes = teamInfo.MatrixesForGroupAndDate(blockOnDate).ToList();
-                        if (matrixes.Any())
-                        {
-                            //move to left side to get the starting date
-                            DateOnly startDate = blockOnDate;
-                            while (!isAnyTypeOfDayOff((matrixes.First().GetScheduleDayByKey(startDate).DaySchedulePart())))
-                            {
-                                startDate = startDate.AddDays(-1);
-                            }
-                            startDate = startDate.AddDays(1);
-                            
-                            foreach (var dateOnly in matrixes.First().SchedulePeriod.DateOnlyPeriod.DayCollection())
-                            {
-                                if (startDate > dateOnly) continue;
-                                if (isAnyTypeOfDayOff(matrixes.First().GetScheduleDayByKey(dateOnly).DaySchedulePart()))
-                                {
-                                    blockPeriod = new DateOnlyPeriod(startDate,dateOnly.AddDays(-1));
-                                    break;
-                                }
-                                if (dateOnly == matrixes.First().SchedulePeriod.DateOnlyPeriod.EndDate)
-                                {
-                                    blockPeriod = new DateOnlyPeriod(startDate, dateOnly);
-                                    break;
-                                }
-                                    
 
-                            }
-                        }
-                        break;
-		            }
-
+				case BlockFinderType.BetweenDayOff:
+				    {
+						break;
+				    }
 		    }
 
 		    if (!blockPeriod.HasValue)
@@ -80,16 +53,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			return new BlockInfo(blockPeriod.Value);
 	    }
 
-        private static bool isAnyTypeOfDayOff(IScheduleDay scheduleDay)
-        {
-            var significantPart = scheduleDay.SignificantPart();
-            if (significantPart == SchedulePartView.DayOff ||
-                                   significantPart == SchedulePartView.ContractDayOff ||
-                                   significantPart == SchedulePartView.Absence)
-            {
-                return true;
-            }
-            return false;
-        }
+		////Absence can not be a block breaker when using teams
+		//private static bool isDayOff(IScheduleDay scheduleDay)
+		//{
+		//	var significantPart = scheduleDay.SignificantPart();
+		//	if (significantPart == SchedulePartView.DayOff ||
+		//						   significantPart == SchedulePartView.ContractDayOff)
+		//	{
+		//		return true;
+		//	}
+		//	return false;
+		//}
     }
 }

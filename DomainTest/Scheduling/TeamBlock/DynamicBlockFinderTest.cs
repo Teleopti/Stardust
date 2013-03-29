@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Interfaces.Domain;
 
@@ -48,11 +50,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 		[Test]
 		public void ShouldReturnSameDateAsAskedForIfBlockFinderTypeIsSingleDay()
-		{	_schedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.SingleDay;
-			
+		{	
 			using (_mock.Record())
             {
-                
+				Expect.Call(_teamInfo.MatrixesForGroupAndDate(_date)).Return(new List<IScheduleMatrixPro> { _matrixPro });
             }
             using (_mock.Playback())
 			{
@@ -99,42 +100,21 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			}
 		}
 
+		[Test]
+		public void ShouldReturnNullIfBlockFinderTypeNone()
+		{
+			var result = _target.ExtractBlockInfo(_date, _teamInfo, BlockFinderType.None);
+			Assert.IsNull(result);
+		}
+
         [Test]
-        public void ShouldReturnNullIfNoPeriodFound()
+        public void ShouldReturnNullIfNoMatrixesFound()
         {
 	        var result = _target.ExtractBlockInfo(_date, _teamInfo, BlockFinderType.None);
 			Assert.IsNull(result);
         }
 
-        [Test]
-        public void ShouldReturnCorrectBlockPeriodIfThereIsADayOff()
-        {
-            using (_mock.Record())
-            {
-                Expect.Call(_teamInfo.MatrixesForGroupAndDate(_date.AddDays(1))).Return(new List<IScheduleMatrixPro> { _matrixPro, _matrixPro2 });
-                Expect.Call(_matrixPro.SchedulePeriod).Return(_schedulePeriod).Repeat.AtLeastOnce();
-                Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(_date.AddDays(1), _date.AddDays(3))).Repeat.AtLeastOnce() ;
-                
-                Expect.Call(_matrixPro.GetScheduleDayByKey(_date.AddDays(1))).Return(_scheduleDayPro1).Repeat.AtLeastOnce() ;
-                Expect.Call(_scheduleDayPro1.DaySchedulePart()).Return(_scheduleDay1).Repeat.AtLeastOnce();
-                Expect.Call(_scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
-
-                Expect.Call(_matrixPro.GetScheduleDayByKey(_date.AddDays(2))).Return(_scheduleDayPro2).Repeat.AtLeastOnce();
-                Expect.Call(_scheduleDayPro2.DaySchedulePart()).Return(_scheduleDay2).Repeat.AtLeastOnce();
-                Expect.Call(_scheduleDay2.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
-
-                Expect.Call(_matrixPro.GetScheduleDayByKey(_date.AddDays(3))).Return(_scheduleDayPro3).Repeat.AtLeastOnce();
-                Expect.Call(_scheduleDayPro3.DaySchedulePart()).Return(_scheduleDay3).Repeat.AtLeastOnce();
-                Expect.Call(_scheduleDay3.SignificantPart()).Return(SchedulePartView.DayOff).Repeat.AtLeastOnce();
-
-            }
-
-            using (_mock.Playback())
-            {
-                DateOnlyPeriod result = _target.ExtractBlockInfo(_date.AddDays(1), _teamInfo, BlockFinderType.BetweenDayOff).BlockPeriod ;
-                Assert.AreEqual(new DateOnlyPeriod(_date.AddDays(1), _date.AddDays(2)), result);
-            }
-        }
+        
         
     }
 

@@ -44,10 +44,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             IDayOffTemplate template = new DayOffTemplate(new Description("template"));
             _target.DayOffTemplate = template;
             Assert.AreEqual(template, _target.DayOffTemplate);
-            _target.ShiftCategory = category;
-            //_target.UseBlockScheduling = BlockFinderType.BetweenDayOff;
-            //Assert.AreEqual(BlockFinderType.BetweenDayOff, _target.UseBlockScheduling);
-            Assert.IsNull(_target.ShiftCategory);
+
 
             _target.BlockFinderTypeForAdvanceScheduling  = BlockFinderType.BetweenDayOff;
             Assert.AreEqual(BlockFinderType.BetweenDayOff, _target.BlockFinderTypeForAdvanceScheduling);

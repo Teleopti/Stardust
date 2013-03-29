@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Interfaces.Domain;
 
@@ -13,21 +12,20 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 	public class TeamBlockRestrictionOverLimitValidator : ITeamBlockRestrictionOverLimitValidator
 	{
 		private readonly IRestrictionOverLimitDecider _restrictionOverLimitDecider;
-		private readonly IDictionary<IPerson, IScheduleRange> _allSelectedScheduleRangeClones;
-		private readonly IScheduleDayEquator _scheduleDayEquator;
+		private readonly IMaxMovedDaysOverLimitValidator _maxMovedDaysOverLimitValidator;
 
-		public TeamBlockRestrictionOverLimitValidator(IRestrictionOverLimitDecider restrictionOverLimitDecider, IDictionary<IPerson, IScheduleRange> allSelectedScheduleRangeClones, IScheduleDayEquator scheduleDayEquator)
+		public TeamBlockRestrictionOverLimitValidator(IRestrictionOverLimitDecider restrictionOverLimitDecider, 
+			IMaxMovedDaysOverLimitValidator maxMovedDaysOverLimitValidator)
 		{
 			_restrictionOverLimitDecider = restrictionOverLimitDecider;
-			_allSelectedScheduleRangeClones = allSelectedScheduleRangeClones;
-			_scheduleDayEquator = scheduleDayEquator;
+			_maxMovedDaysOverLimitValidator = maxMovedDaysOverLimitValidator;
 		}
 
 		public bool Validate(ITeamBlockInfo teamBlockInfo, IOptimizationPreferences optimizationPreferences)
 		{
 			foreach (var matrix in teamBlockInfo.MatrixesForGroupAndBlock())
 			{
-				if (!validateMatrixMinMaxDays(matrix, optimizationPreferences, _allSelectedScheduleRangeClones, _scheduleDayEquator))
+				if (!_maxMovedDaysOverLimitValidator.ValidateMatrix(matrix, optimizationPreferences))
 					return false;
 
 				if (preferencesOverLimit(matrix, optimizationPreferences))
@@ -50,44 +48,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		}
 
 		// class
-		private bool validateMatrixMinMaxDays(IScheduleMatrixPro matrix, IOptimizationPreferences optimizationPreferences, IDictionary<IPerson, IScheduleRange> allSelectedScheduleRangeClones, IScheduleDayEquator scheduleDayEquator)
-		{
-			int originalNumberOfDaysOff = 0;
-			int originalNumberOfWorkShifts = 0;
-			int changedDaysOff = 0;
-			int changedShifts = 0;
-
-			if (!optimizationPreferences.Shifts.KeepShifts && !optimizationPreferences.DaysOff.UseKeepExistingDaysOff)
-				return true;
-
-			IScheduleRange rangeCloneForMatrix = allSelectedScheduleRangeClones[matrix.Person];
-			foreach (var scheduleDayPro in matrix.EffectivePeriodDays)
-			{
-				IScheduleDay currentScheduleDay = scheduleDayPro.DaySchedulePart();
-				IScheduleDay originalScheduleDay = rangeCloneForMatrix.ScheduledDay(scheduleDayPro.Day);
-
-				var originalSignificantPart = originalScheduleDay.SignificantPart();
-				if (originalSignificantPart == SchedulePartView.DayOff)
-					originalNumberOfDaysOff++;
-
-				if (originalSignificantPart == SchedulePartView.MainShift)
-					originalNumberOfWorkShifts++;
-
-				if (!scheduleDayEquator.DayOffEquals(originalScheduleDay, currentScheduleDay))
-                    changedDaysOff++;
-
-				if (!scheduleDayEquator.MainShiftEquals(originalScheduleDay, currentScheduleDay))
-					changedShifts++;
-
-			}
-			if (optimizationPreferences.Shifts.KeepShifts && optimizationPreferences.Shifts.KeepShiftsValue > 1 - ((double)changedShifts / originalNumberOfWorkShifts))
-				return false;
-
-			if (optimizationPreferences.DaysOff.UseKeepExistingDaysOff && optimizationPreferences.DaysOff.KeepExistingDaysOffValue > 1 - ((double)changedDaysOff/originalNumberOfDaysOff))
-				return false;
-
-			return true;
-		}
+		
 
 		private bool preferencesOverLimit(IScheduleMatrixPro matrix, IOptimizationPreferences optimizationPreferences)
 		{

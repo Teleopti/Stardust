@@ -810,6 +810,7 @@
     <Compile Include="Scheduling\TeamBlock\GroupPersonBuilderBasedOnContractTime.cs" />
     <Compile Include="Scheduling\TeamBlock\GroupPersonSkillAggregator.cs" />
     <Compile Include="Scheduling\TeamBlock\IntervalDataMedianCalculator.cs" />
+    <Compile Include="Scheduling\TeamBlock\MaxMovedDaysOverLimitValidator.cs" />
     <Compile Include="Scheduling\TeamBlock\OpenHoursToEffectiveRestrictionConverter.cs" />
     <Compile Include="Scheduling\TeamBlock\RestrictionAggregator.cs" />
     <Compile Include="Scheduling\TeamBlock\SafeRollbackAndResourceCalculation.cs" />

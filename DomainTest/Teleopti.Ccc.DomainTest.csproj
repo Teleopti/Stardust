@@ -716,6 +716,7 @@
     <Compile Include="Scheduling\Restriction\ExtendedPreferenceTemplateTest.cs" />
     <Compile Include="Scheduling\TeamBlock\BlockFinderTypeCreatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\BlockInfoTest.cs" />
+    <Compile Include="Scheduling\TeamBlock\MaxMovedDaysOverLimitValidatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockClearerTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockSteadyStateValidatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\DayIntervalDataCalculatorTest.cs" />
