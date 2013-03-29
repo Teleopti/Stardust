@@ -9,6 +9,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private readonly ISaveToDenormalizationQueue _saver;
 		private readonly ISendDenormalizeNotification _notifier;
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "notifier")]
 		public DenormalizationQueueEventsPublisher(ISaveToDenormalizationQueue saver, ISendDenormalizeNotification notifier)
 		{
 			_saver = saver;
