@@ -32,52 +32,52 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public void Handle(ScheduleChangedEvent message)
+		public void Handle(ScheduleChangedEvent @event)
 		{
 			using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
-				if (!getPeriodAndScenario(message)) return;
-				_projectionChangedEventBuilder.Build<ProjectionChangedEvent>(message, _range, _realPeriod, d => _bus.Publish(d));
+				if (!getPeriodAndScenario(@event)) return;
+				_projectionChangedEventBuilder.Build<ProjectionChangedEvent>(@event, _range, _realPeriod, d => _bus.Publish(d));
 			}
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public void Handle(ScheduleInitializeTriggeredEventForPersonScheduleDay message)
+		public void Handle(ScheduleInitializeTriggeredEventForPersonScheduleDay @event)
 		{
 			using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
-				if (!getPeriodAndScenario(message)) return;
-				_projectionChangedEventBuilder.Build<ProjectionChangedEventForPersonScheduleDay>(message, _range, _realPeriod, d => _bus.Publish(d));
+				if (!getPeriodAndScenario(@event)) return;
+				_projectionChangedEventBuilder.Build<ProjectionChangedEventForPersonScheduleDay>(@event, _range, _realPeriod, d => _bus.Publish(d));
 			}
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public void Handle(ScheduleInitializeTriggeredEventForScheduleDay message)
+		public void Handle(ScheduleInitializeTriggeredEventForScheduleDay @event)
 		{
 			using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
-				if (!getPeriodAndScenario(message)) return;
-				_projectionChangedEventBuilder.Build<ProjectionChangedEventForScheduleDay>(message, _range, _realPeriod, d => _bus.Publish(d));
+				if (!getPeriodAndScenario(@event)) return;
+				_projectionChangedEventBuilder.Build<ProjectionChangedEventForScheduleDay>(@event, _range, _realPeriod, d => _bus.Publish(d));
 			}
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public void Handle(ScheduleInitializeTriggeredEventForScheduleProjection message)
+		public void Handle(ScheduleInitializeTriggeredEventForScheduleProjection @event)
 		{
 			using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
-				if (!getPeriodAndScenario(message)) return;
-				_projectionChangedEventBuilder.Build<ProjectionChangedEventForScheduleProjection>(message, _range, _realPeriod, d => _bus.Publish(d));
+				if (!getPeriodAndScenario(@event)) return;
+				_projectionChangedEventBuilder.Build<ProjectionChangedEventForScheduleProjection>(@event, _range, _realPeriod, d => _bus.Publish(d));
 			}
 		}
 
-		private bool getPeriodAndScenario(ScheduleChangedEventBase message)
+		private bool getPeriodAndScenario(ScheduleChangedEventBase @event)
 		{
-			var scenario = _scenarioRepository.Get(message.ScenarioId);
+			var scenario = _scenarioRepository.Get(@event.ScenarioId);
 			if (!scenario.DefaultScenario) return false;
 
-			var period = new DateTimePeriod(message.StartDateTime, message.EndDateTime);
-			var person = _personRepository.FindPeople(new []{ message.PersonId}).FirstOrDefault();
+			var period = new DateTimePeriod(@event.StartDateTime, @event.EndDateTime);
+			var person = _personRepository.FindPeople(new []{ @event.PersonId}).FirstOrDefault();
 			if (person == null) return false;
 
 			var timeZone = person.PermissionInformation.DefaultTimeZone();
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 
 			_range = schedule[person];
 
-			DateTimePeriod? actualPeriod = message.SkipDelete ? _range.TotalPeriod() : period;
+			DateTimePeriod? actualPeriod = @event.SkipDelete ? _range.TotalPeriod() : period;
 
 			if (!actualPeriod.HasValue) return false;
 

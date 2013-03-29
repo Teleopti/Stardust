@@ -22,9 +22,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public void Handle(ProjectionChangedEvent message)
+		public void Handle(ProjectionChangedEvent @event)
 		{
-			createReadModel(message);
+			createReadModel(@event);
 		}
 
 		private void createReadModel(ProjectionChangedEventBase message)
@@ -51,9 +51,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 			}
 		}
 
-		public void Handle(ProjectionChangedEventForPersonScheduleDay message)
+		public void Handle(ProjectionChangedEventForPersonScheduleDay @event)
 		{
-			createReadModel(message);
+			createReadModel(@event);
 		}
 	}
 

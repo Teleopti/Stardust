@@ -8,28 +8,28 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 	{
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IPersonRepository _personRepository;
-		private readonly IDoNotifySmsLink _doNotifySmsLink;
+		private readonly IDoNotifySmsLink _notifySmsLink;
 		private readonly IScheduleDayReadModelsCreator _scheduleDayReadModelsCreator;
 		private readonly IScheduleDayReadModelRepository _scheduleDayReadModelRepository;
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "sms")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sms"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "sms")]
 		public ScheduleDayReadModelHandler(IUnitOfWorkFactory unitOfWorkFactory,
-		                           IPersonRepository personRepository,
-			IDoNotifySmsLink doNotifySmsLink,
-									IScheduleDayReadModelsCreator scheduleDayReadModelsCreator,
-									IScheduleDayReadModelRepository scheduleDayReadModelRepository)
+		                                   IPersonRepository personRepository,
+		                                   IDoNotifySmsLink notifySmsLink,
+		                                   IScheduleDayReadModelsCreator scheduleDayReadModelsCreator,
+		                                   IScheduleDayReadModelRepository scheduleDayReadModelRepository)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_personRepository = personRepository;
-			_doNotifySmsLink = doNotifySmsLink;
+			_notifySmsLink = notifySmsLink;
 			_scheduleDayReadModelsCreator = scheduleDayReadModelsCreator;
 			_scheduleDayReadModelRepository = scheduleDayReadModelRepository;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public void Handle(ProjectionChangedEvent message)
+		public void Handle(ProjectionChangedEvent @event)
 		{
-			createReadModel(message);
+			createReadModel(@event);
 		}
 
 		private void createReadModel(ProjectionChangedEventBase message)
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 
 					if (!message.IsInitialLoad)
 					{
-						_doNotifySmsLink.NotifySmsLink(readModel, date, person);
+						_notifySmsLink.NotifySmsLink(readModel, date, person);
 					}
 
 					if (!message.IsInitialLoad)
@@ -63,9 +63,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 			}
 		}
 
-		public void Handle(ProjectionChangedEventForScheduleDay message)
+		public void Handle(ProjectionChangedEventForScheduleDay @event)
 		{
-			createReadModel(message);
+			createReadModel(@event);
 		}
 	}
 }

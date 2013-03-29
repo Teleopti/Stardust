@@ -2,6 +2,6 @@
 {
 	public interface IJsonSerializer
 	{
-		string SerializeObject(object obj);
+		string SerializeObject(object value);
 	}
 }
