@@ -7,6 +7,7 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -69,6 +70,24 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			var scheduleDays = new List<ProjectionChangedEventScheduleDay> { new ProjectionChangedEventScheduleDay { Layers = layers } };
 			target.Handle(new ProjectionChangedEvent { IsDefaultScenario = true, ScheduleDays = scheduleDays });
 			target.Handle(new ProjectionChangedEventForPersonScheduleDay { IsDefaultScenario = true, ScheduleDays = scheduleDays });
+		}
+
+		[Test]
+		public void UpdateScheduleProjectionReadModelShouldHaveCoverage()
+		{
+			var person = PersonFactory.CreatePerson(" ");
+			var scenario = ScenarioFactory.CreateScenarioAggregate(" ", true);
+			var repository = MockRepository.GenerateMock<IScheduleProjectionReadOnlyRepository>();
+						var period = new DateTimePeriod(DateTime.SpecifyKind(DateTime.Today, DateTimeKind.Utc), DateTime.SpecifyKind(DateTime.Today.AddHours(24), DateTimeKind.Utc));
+			var scheduleDictionary = new ScheduleDictionaryForTest(scenario, null, new Dictionary<IPerson, IScheduleRange>());
+			var range = new ScheduleRange(scheduleDictionary, new ScheduleParameters(scenario, person, period));
+			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person, period);
+			range.Add(personAssignment);
+			scheduleDictionary.AddTestItem(person, range);
+
+			var target = new UpdateScheduleProjectionReadModel(new ProjectionChangedEventBuilder(), repository);
+
+			target.Execute(range, new DateOnlyPeriod(DateOnly.Today, DateOnly.Today));
 		}
 	}
 }
