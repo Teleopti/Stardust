@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Rhino.ServiceBus;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Sdk.ServiceBus;
 using Teleopti.Ccc.Sdk.ServiceBus.Denormalizer;
@@ -32,7 +33,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 
 			var builder = new ContainerBuilder();
 			builder.RegisterInstance(_serviceBus).As<IServiceBus>();
-			builder.RegisterType<ScheduleProjectionHandler>().As<ConsumerOf<ProjectionChangedEvent>>();
+			builder.RegisterType<ScheduleProjectionHandler>().As<IHandleEvent<ProjectionChangedEvent>>();
 
 			builder.RegisterModule<RepositoryModule>();
 			builder.RegisterModule<ApplicationInfrastructureContainerInstaller>();
@@ -42,7 +43,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 
 			using (var container = builder.Build())
 			{
-				container.Resolve<ConsumerOf<ProjectionChangedEvent>>().Should().Not.Be.Null();
+				container.Resolve<IHandleEvent<ProjectionChangedEvent>>().Should().Not.Be.Null();
 			}
 		}
 
@@ -53,7 +54,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 
 			var builder = new ContainerBuilder();
 			builder.RegisterInstance(_serviceBus).As<IServiceBus>();
-			builder.RegisterType<ScheduleDayReadModelHandler>().As<ConsumerOf<ProjectionChangedEvent>>();
+			builder.RegisterType<ScheduleDayReadModelHandler>().As<IHandleEvent<ProjectionChangedEvent>>();
 
 			builder.RegisterModule<RepositoryModule>();
 			builder.RegisterModule<ApplicationInfrastructureContainerInstaller>();
@@ -63,7 +64,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 
 			using (var container = builder.Build())
 			{
-				container.Resolve<ConsumerOf<ProjectionChangedEvent>>().Should().Not.Be.Null();
+				container.Resolve<IHandleEvent<ProjectionChangedEvent>>().Should().Not.Be.Null();
 			}
 		}
 
@@ -74,7 +75,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 
 			var builder = new ContainerBuilder();
 			builder.RegisterInstance(_serviceBus).As<IServiceBus>();
-			builder.RegisterType<PersonScheduleDayReadModelHandler>().As<ConsumerOf<ProjectionChangedEvent>>();
+			builder.RegisterType<PersonScheduleDayReadModelHandler>().As<IHandleEvent<ProjectionChangedEvent>>();
 
 			builder.RegisterModule<RepositoryModule>();
 			builder.RegisterModule<ApplicationInfrastructureContainerInstaller>();
@@ -84,7 +85,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 
 			using (var container = builder.Build())
 			{
-				container.Resolve<ConsumerOf<ProjectionChangedEvent>>().Should().Not.Be.Null();
+				container.Resolve<IHandleEvent<ProjectionChangedEvent>>().Should().Not.Be.Null();
 			}
 		}
 	}

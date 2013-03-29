@@ -51,6 +51,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			builder.RegisterType<UpdateScheduleProjectionReadModel>().As<IUpdateScheduleProjectionReadModel>();
 			builder.RegisterType<SingleSkillDictionary>().As<ISingleSkillDictionary>().InstancePerLifetimeScope();
 			builder.RegisterType<ProjectionChangedEventBuilder>().As<IProjectionChangedEventBuilder>();
+			builder.RegisterType<NewtonsoftJsonSerializer>().As<IJsonSerializer>();
+			builder.RegisterType<DoNotifySmsLink>().As<IDoNotifySmsLink>();
 		}
 
 		private static ISchedulingResultStateHolder getSchedulingResultStateHolder(IComponentContext componentContext)
