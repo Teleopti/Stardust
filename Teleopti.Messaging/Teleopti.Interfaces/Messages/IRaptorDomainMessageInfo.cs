@@ -10,6 +10,7 @@ namespace Teleopti.Interfaces.Messages
 		/// <summary>
 		/// Sourced data
 		/// </summary>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Datasource")]
 		string Datasource { get; set; }
 		/// <summary>
 		/// A time stamped thing
