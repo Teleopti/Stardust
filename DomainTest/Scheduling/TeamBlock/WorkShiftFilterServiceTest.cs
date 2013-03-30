@@ -166,8 +166,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Assert.IsNotNull(retShift);
 			}
 		}
-	
-		[Test]
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldReturnNullFilteredWorkShiftsListIsEmpty()
 		{
 			IEffectiveRestriction effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(), new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
@@ -224,8 +224,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Assert.IsNull(retShift);
 			}
 		}
-	
-		[Test]
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldReturnGetShiftCategoryFromSchedulingOptions()
 		{
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("cat");

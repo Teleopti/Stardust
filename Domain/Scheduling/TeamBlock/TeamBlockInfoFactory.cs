@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
 	public interface ITeamBlockInfoFactory
 	{
-		TeamBlockInfo CreateTeamBlockInfo(ITeamInfo teamInfo, DateOnly dateOnPeriod, BlockFinderType blockType);
+		ITeamBlockInfo CreateTeamBlockInfo(ITeamInfo teamInfo, DateOnly dateOnPeriod, BlockFinderType blockType);
 	}
 
 	public class TeamBlockInfoFactory : ITeamBlockInfoFactory
@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			_dynamicBlockFinder = dynamicBlockFinder;
 		}
 
-		public TeamBlockInfo CreateTeamBlockInfo(ITeamInfo teamInfo, DateOnly dateOnPeriod, BlockFinderType blockType)
+		public ITeamBlockInfo CreateTeamBlockInfo(ITeamInfo teamInfo, DateOnly dateOnPeriod, BlockFinderType blockType)
 		{
 			if (teamInfo == null)
 				return null;

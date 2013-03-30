@@ -38,10 +38,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		private readonly ITeamDayOffModifier _teamDayOffModifier;
 		private readonly IBlockSteadyStateValidator _teamBlockSteadyStateValidator;
 		private readonly ITeamBlockClearer _teamBlockClearer;
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
 		private readonly ITeamBlockRestrictionOverLimitValidator _restrictionOverLimitValidator;
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
-		private readonly ICheckerRestriction _restrictionChecker;
 		private bool _cancelMe;
 
 		public TeamBlockDayOffOptimizerService(
@@ -59,8 +56,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			ITeamDayOffModifier teamDayOffModifier,
 			IBlockSteadyStateValidator teamBlockSteadyStateValidator,
 			ITeamBlockClearer teamBlockClearer,
-			ITeamBlockRestrictionOverLimitValidator restrictionOverLimitValidator,
-			ICheckerRestriction restrictionChecker
+			ITeamBlockRestrictionOverLimitValidator restrictionOverLimitValidator
 			)
 		{
 			_teamInfoFactory = teamInfoFactory;
@@ -78,7 +74,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_teamBlockSteadyStateValidator = teamBlockSteadyStateValidator;
 			_teamBlockClearer = teamBlockClearer;
 			_restrictionOverLimitValidator = restrictionOverLimitValidator;
-			_restrictionChecker = restrictionChecker;
 		}
 
 		public event EventHandler<ResourceOptimizerProgressEventArgs> ReportProgress;
@@ -107,12 +102,9 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 			while (remainingInfoList.Count > 0)
 			{
-				double previousPeriodValue =
-					_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
 				var teamInfosToRemove = runOneOptimizationRound(optimizationPreferences, rollbackService,
 				                                                remainingInfoList, schedulingOptions,
-				                                                previousPeriodValue, selectedPeriod,
-				                                                selectedPersons);
+				                                                selectedPeriod, selectedPersons);
 
 				if (_cancelMe)
 					break;
@@ -141,10 +133,12 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		                                                       ISchedulePartModifyAndRollbackService rollbackService,
 		                                                       List<ITeamInfo> remainingInfoList,
 		                                                       ISchedulingOptions schedulingOptions,
-		                                                       double previousPeriodValue, DateOnlyPeriod selectedPeriod,
+		                                                       DateOnlyPeriod selectedPeriod,
 		                                                       IList<IPerson> selectedPersons)
 		{
 			var teamInfosToRemove = new List<ITeamInfo>();
+			double previousPeriodValue =
+					_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
 			foreach (ITeamInfo teamInfo in remainingInfoList.GetRandom(remainingInfoList.Count, true))
 			{
 				if (_cancelMe)
@@ -224,7 +218,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		{
 			foreach (DateOnly dateOnly in removedDaysOff)
 			{
-				TeamBlockInfo teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, dateOnly,
+				ITeamBlockInfo teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, dateOnly,
 				                                                                        schedulingOptions
 					                                                                        .BlockFinderTypeForAdvanceScheduling);
 				if (!_teamBlockSteadyStateValidator.IsBlockInSteadyState(teamBlockInfo, schedulingOptions))
