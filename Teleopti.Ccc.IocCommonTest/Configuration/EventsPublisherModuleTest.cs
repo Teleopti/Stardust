@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 	[TestFixture]
 	public class EventsPublisherModuleTest
 	{
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
 		public void ShouldResolveLocalEventPublisher()
 		{
 			var containerBuilder = new ContainerBuilder();
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			container.Resolve<IEventPublisher>().Should().Be.OfType<EventPublisher>();
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
 		public void ShouldResolveServiceBusEventPublisher()
 		{
 			var containerBuilder = new ContainerBuilder();
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			container.Resolve<IEventPublisher>().Should().Be.OfType<ServiceBusEventPublisher>();
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
 		public void ShouldResolveDenormalizationQueueEventsPublisher()
 		{
 			var containerBuilder = new ContainerBuilder();
