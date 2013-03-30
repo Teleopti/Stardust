@@ -313,7 +313,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Assert.IsFalse(_schedulingOptions.UseStudentAvailability);
         }
 
-        [Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Levelling"), Test]
         public void VerifyLevellingOptions()
         {
             _optimizationPreferences.Extra.UseLevellingOption = true;

@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 {
 	//moved from WorkShiftRuleSetTest
 
-	[TestFixture]
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "ShiftWork"), TestFixture]
 	public class WorkShiftWorkTimeTest
 	{
 		private IWorkShiftWorkTime target;
