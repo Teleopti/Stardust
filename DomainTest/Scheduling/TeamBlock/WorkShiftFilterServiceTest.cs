@@ -47,7 +47,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private DateOnly _dateOnly;
 		private WorkShiftFinderResult _finderResult;
 		private ITeamBlockInfo _teamBlockInfo;
-		private ITeamInfo _teamInfo;
 		private GroupPerson _groupPerson;
 		private List<IScheduleMatrixPro> _matrixList;
 
@@ -104,9 +103,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		public void ShouldReturnNullIfEffectiveRestrictionIsNull()
 		{
 			var dateOnly = new DateOnly(2012, 12, 12);
-			IEffectiveRestriction effectiveRestriction = null;
 
-			var retShift = _target.Filter(dateOnly, _teamBlockInfo, effectiveRestriction,
+			var retShift = _target.Filter(dateOnly, _teamBlockInfo, null,
 			                              _schedulingOptions, _finderResult);
 			Assert.IsNull(retShift);
 		}
