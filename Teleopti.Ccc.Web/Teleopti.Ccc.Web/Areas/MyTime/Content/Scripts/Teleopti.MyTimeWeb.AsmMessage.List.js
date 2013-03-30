@@ -71,7 +71,6 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 		}));
 		self.isRead.subscribe(function () {
 			vm.asmMessageList.remove(self);
-			vm.chosenMessage(null);
 		});
 		self.confirmReadMessage = function (data, event) {
 		    if (self.selectedReply() == undefined && self.replyOptions.length > 0)
@@ -202,9 +201,6 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 			return list.messageId() == messageId;
 		});
 		if (result.length == 1) {
-			if (vm.chosenMessageId() == messageId) {
-				vm.chosenMessage(null);
-			}
 			var messageIndex = $.inArray(result[0], vm.asmMessageList());
 			vm.asmMessageList.splice(messageIndex, 1);
 		}
