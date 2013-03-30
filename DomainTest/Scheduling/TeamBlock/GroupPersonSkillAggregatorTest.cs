@@ -42,5 +42,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			Assert.AreEqual(3, result.Count);
 		}
 
+		[Test]
+		public void ShouldReturnUnionOfAllSkillsOfOnePerson()
+		{
+			IList<ISkill> result = new List<ISkill>(_target.AggregatedSkillsPerPerson(_person1, new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue)));
+			Assert.IsTrue(result.Contains(_skill1));
+			Assert.IsTrue(result.Contains(_skill2));
+			Assert.AreEqual(2, result.Count);
+		}
+
 	}
 }
