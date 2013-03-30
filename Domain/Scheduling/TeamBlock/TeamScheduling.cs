@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
     {
         private readonly IResourceCalculateDelayer _resourceCalculateDelayer;
         private readonly ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
-	    private bool _cancelMe;
+	    //private bool _cancelMe;
 
         public TeamScheduling(IResourceCalculateDelayer  resourceCalculateDelayer,ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
         {
@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			if (temp != null)
 			{
 				temp(this, scheduleServiceBaseEventArgs);
-				_cancelMe = scheduleServiceBaseEventArgs.Cancel;
+				//_cancelMe = scheduleServiceBaseEventArgs.Cancel;
 			}
 		}
 

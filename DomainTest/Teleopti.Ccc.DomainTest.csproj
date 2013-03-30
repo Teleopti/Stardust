@@ -718,6 +718,7 @@
     <Compile Include="Scheduling\TeamBlock\BlockInfoTest.cs" />
     <Compile Include="Scheduling\TeamBlock\MaxMovedDaysOverLimitValidatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockClearerTest.cs" />
+    <Compile Include="Scheduling\TeamBlock\TeamBlockDayOffOptimizerServiceTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockSteadyStateValidatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\DayIntervalDataCalculatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\DynamicBlockFinderTest.cs" />

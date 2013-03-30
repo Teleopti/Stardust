@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			}
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldExtractSameShiftCategoryRestrictionFromScheduleDay()
 		{
 			_schedulingOptions.UseLevellingSameShiftCategory = true;
