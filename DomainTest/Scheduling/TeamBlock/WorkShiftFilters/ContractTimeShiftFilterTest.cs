@@ -68,9 +68,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 				c2.SetDate(new DateOnly(2009, 1, 1), _timeZoneInfo);
 				shifts.Add(c2);
 				retShifts = _target.Filter(dateOnly, _allMatrixes, shifts, _scheduleOptions, new WorkShiftFinderResultForTest());
+
+
+				retShifts.Should().Contain(c1);
+				retShifts.Count.Should().Be.EqualTo(1);
 			}
-			retShifts.Should().Contain(c1);
-			retShifts.Count.Should().Be.EqualTo(1);
 		}
 
 	    private void ExpectCallForShouldFilterAccordingToContractTime(IWorkShift workShift1, IMainShift mainshift1,
