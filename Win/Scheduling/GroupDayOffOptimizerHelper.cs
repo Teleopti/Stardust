@@ -52,10 +52,17 @@ namespace Teleopti.Ccc.Win.Scheduling
 		public void TeamGroupReOptimize(BackgroundWorker backgroundWorker, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences)
 		{
 			_backgroundWorker = backgroundWorker;
+
+			IDictionary<IPerson, IScheduleRange> allSelectedScheduleRangeClones = new Dictionary<IPerson, IScheduleRange>();
+			IMaxMovedDaysOverLimitValidator maxMovedDaysOverLimitValidator =
+				new MaxMovedDaysOverLimitValidator(allSelectedScheduleRangeClones, _container.Resolve<IScheduleDayEquator>());
+			ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator = new TeamBlockRestrictionOverLimitValidator(
+				_container.Resolve<IRestrictionOverLimitDecider>(), maxMovedDaysOverLimitValidator);
+
 			if(optimizationPreferences.General.OptimizationStepDaysOff)
-				optimizeTeamBlockDaysOff(selectedPeriod, selectedPersons, optimizationPreferences);
+				optimizeTeamBlockDaysOff(selectedPeriod, selectedPersons, optimizationPreferences, teamBlockRestrictionOverLimitValidator);
 		    if (optimizationPreferences.General.OptimizationStepShiftsWithinDay)
-		        optimizeTeamBlockIntraday(selectedPeriod, selectedPersons, optimizationPreferences);
+				optimizeTeamBlockIntraday(selectedPeriod, selectedPersons, optimizationPreferences, teamBlockRestrictionOverLimitValidator);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "matrixListForIntradayOptimization"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
@@ -453,7 +460,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-		private void optimizeTeamBlockDaysOff(DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences)
+		private void optimizeTeamBlockDaysOff(DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences, ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator)
 		{
 			var allMatrixes = OptimizerHelperHelper.CreateMatrixListAll(_schedulerState, _container);  //this one handles userlocks as well
 			OptimizerHelperHelper.LockDaysForDayOffOptimization(allMatrixes, _container);
@@ -490,11 +497,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				OptimizerHelperHelper.CreateAllSkillsDataExtractor(optimizationPreferences.Advanced, selectedPeriod, _stateHolder);
 			IPeriodValueCalculator periodValueCalculatorForAllSkills =
 				OptimizerHelperHelper.CreatePeriodValueCalculator(optimizationPreferences.Advanced, allSkillsDataExtractor);
-			IDictionary<IPerson, IScheduleRange> allSelectedScheduleRangeClones = new Dictionary<IPerson, IScheduleRange>();
-			IMaxMovedDaysOverLimitValidator maxMovedDaysOverLimitValidator =
-				new MaxMovedDaysOverLimitValidator(allSelectedScheduleRangeClones, _container.Resolve<IScheduleDayEquator>());
-			ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator = new TeamBlockRestrictionOverLimitValidator(
-				_container.Resolve<IRestrictionOverLimitDecider>(), maxMovedDaysOverLimitValidator);
+			
 
 			ITeamBlockDayOffOptimizerService teamBlockDayOffOptimizerService = 
 				new TeamBlockDayOffOptimizerService(
@@ -533,7 +536,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-		private void optimizeTeamBlockIntraday(DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences)
+		private void optimizeTeamBlockIntraday(DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, IOptimizationPreferences optimizationPreferences, ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator)
         {
             var allMatrixes = OptimizerHelperHelper.CreateMatrixListAll(_schedulerState, _container);
 		
@@ -565,7 +568,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                     _container.Resolve<ISchedulingOptionsCreator>(),
 					_container.Resolve<ISafeRollbackAndResourceCalculation>(),
 					_container.Resolve<ITeamBlockIntradayDecisionMaker>(),
-					_container.Resolve<ITeamBlockRestrictionOverLimitValidator>(),
+					teamBlockRestrictionOverLimitValidator,
 					_container.Resolve<ITeamBlockClearer>()
                     );
 
