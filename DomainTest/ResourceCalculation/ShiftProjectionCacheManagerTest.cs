@@ -144,7 +144,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Expect.Call(templateGenerator3.EndPeriod).Return(endPeriod3).Repeat.AtLeastOnce();
             Expect.Call(_activityChecker.ContainsDeletedActivity(ruleSet2)).Return(false);
             Expect.Call(_shiftCategoryChecker.ContainsDeletedActivity(ruleSet2)).Return(false);
-            Expect.Call(_ruleSetProjectionEntityService.ProjectionCollection(ruleSet2)).Return(GetWorkShiftsInfo());
+            Expect.Call(_ruleSetProjectionEntityService.ProjectionCollection(ruleSet2, null)).IgnoreArguments().Return(GetWorkShiftsInfo());
             Expect.Call(_shiftFromMasterActivityService.Generate(GetWorkShifts()[0])).IgnoreArguments().Return(
                 new List<IWorkShift>());
             Expect.Call(_shiftFromMasterActivityService.Generate(GetWorkShifts()[0])).IgnoreArguments().Return(GetWorkShifts());

@@ -3897,7 +3897,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var currentPersonTimeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
 			var selectedPeriod = new DateOnlyPeriod(OptimizerHelperHelper.GetStartDateInSelectedDays(selectedSchedules, currentPersonTimeZone), OptimizerHelperHelper.GetEndDateInSelectedDays(selectedSchedules, currentPersonTimeZone));
 
-			//var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizerPreferences);
+			var schedulingOptions = new SchedulingOptionsCreator().CreateSchedulingOptions(optimizerPreferences);
 			turnOffCalculateMinMaxCacheIfNeeded(schedulingOptions);
 			IList<IScheduleMatrixPro> allMatrixes = new List<IScheduleMatrixPro>();
 			switch (options.OptimizationMethod)

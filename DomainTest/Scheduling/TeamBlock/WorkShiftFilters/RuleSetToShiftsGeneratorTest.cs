@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			var workShiftsInfo = getWorkShiftsInfo();
 			using (_mocks.Record())
 			{
-				Expect.Call(_ruleSetProjectionEntityService.ProjectionCollection(ruleSet1)).Return(workShiftsInfo);
+				Expect.Call(_ruleSetProjectionEntityService.ProjectionCollection(ruleSet1, null)).IgnoreArguments().Return(workShiftsInfo);
 				Expect.Call(_shiftFromMasterActivityService.Generate(_workShift1)).Return(workShifts).Repeat.Twice();
 			}
 
