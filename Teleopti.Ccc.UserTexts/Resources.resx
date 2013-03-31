@@ -11379,4 +11379,11 @@ Reduce the complexity to use these shifts.</value>
   <data name="ProcessingDotDotDot" xml:space="preserve">
     <value>Processing...</value>
   </data>
+  <data name="LevellingPer" xml:space="preserve">
+    <value>Levelling Per</value>
+    <comment>Levelling per Block Scheduling</comment>
+  </data>
+  <data name="SingleAgentTeam" xml:space="preserve">
+    <value>Single Agent Team</value>
+  </data>
 </root>

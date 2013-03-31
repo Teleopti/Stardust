@@ -60,8 +60,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         		IScheduleMatrixLockableBitArrayConverter matrixConverter =
                     new ScheduleMatrixLockableBitArrayConverter(scheduleMatrixPro);
 
-                IScheduleResultDataExtractorProvider dataExtractorProvider = new ScheduleResultDataExtractorProvider(_optimizerPreferences.Advanced);
-                IScheduleResultDataExtractor personalSkillsDataExtractor = dataExtractorProvider.CreatePersonalSkillDataExtractor(scheduleMatrixPro);
+                IScheduleResultDataExtractorProvider dataExtractorProvider = new ScheduleResultDataExtractorProvider();
+				IScheduleResultDataExtractor personalSkillsDataExtractor = dataExtractorProvider.CreatePersonalSkillDataExtractor(scheduleMatrixPro, _optimizerPreferences.Advanced);
 
                 IPeriodValueCalculatorProvider periodValueCalculatorProvider = new PeriodValueCalculatorProvider();
         	    IPeriodValueCalculator periodValueCalculator =

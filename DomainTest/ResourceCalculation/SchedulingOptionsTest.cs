@@ -44,10 +44,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             IDayOffTemplate template = new DayOffTemplate(new Description("template"));
             _target.DayOffTemplate = template;
             Assert.AreEqual(template, _target.DayOffTemplate);
-            _target.ShiftCategory = category;
-            _target.UseBlockScheduling = BlockFinderType.BetweenDayOff;
-            Assert.AreEqual(BlockFinderType.BetweenDayOff, _target.UseBlockScheduling);
-            Assert.IsNull(_target.ShiftCategory);
+
+
+            _target.BlockFinderTypeForAdvanceScheduling  = BlockFinderType.BetweenDayOff;
+            Assert.AreEqual(BlockFinderType.BetweenDayOff, _target.BlockFinderTypeForAdvanceScheduling);
+
             _target.UsePreferences = true;
             _target.UsePreferencesMustHaveOnly = true;
             Assert.IsTrue(_target.UsePreferencesMustHaveOnly);
@@ -65,7 +66,19 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Assert.IsFalse(_target.UseSameDayOffs);
             _target.UseSameDayOffs = true;
             Assert.IsTrue(_target.UseSameDayOffs);
+            
         }
+
+        //[Test]
+        //public void VerifyBlockOptions()
+        //{
+        //    _target.UsePeriodAsBlock = true;
+        //    Assert.IsTrue(_target.UsePeriodAsBlock);
+        //    _target.UseTwoDaysOffAsBlock = true;
+        //    Assert.IsTrue(_target.UseTwoDaysOffAsBlock);
+        //    _target.UseCalendarWeekAsBlock = true;
+        //    Assert.IsTrue(_target.UseCalendarWeekAsBlock);
+        //}
 
         [Test]
         public void VerifyRotationDaysOnlyCannotBeTrueIfUseRotationsIsFalse()
@@ -115,6 +128,29 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Assert.IsFalse(_target.UsePreferencesMustHaveOnly);
             Assert.IsFalse(_target.UsePreferences);
 
+        }
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Levelling"), Test]
+        public void VerifyPreferenceToBeSavedForLevelling()
+        {
+            _target.UseLevellingSameEndTime  = true;
+            _target.UseLevellingSameShift = true;
+            _target.UseLevellingSameStartTime = true;
+            _target.UseLevellingSameShiftCategory = true;
+            Assert.IsTrue(_target.UseLevellingSameEndTime );
+            Assert.IsTrue(_target.UseLevellingSameShift );
+            Assert.IsTrue(_target.UseLevellingSameShiftCategory );
+            Assert.IsTrue(_target.UseLevellingSameStartTime );
+
+
+            _target.UseLevellingSameEndTime = false;
+            _target.UseLevellingSameShift = false;
+            _target.UseLevellingSameStartTime = false;
+            _target.UseLevellingSameShiftCategory = false;
+            Assert.IsFalse(_target.UseLevellingSameEndTime);
+            Assert.IsFalse(_target.UseLevellingSameShift);
+            Assert.IsFalse(_target.UseLevellingSameShiftCategory);
+            Assert.IsFalse(_target.UseLevellingSameStartTime);
         }
 
         [Test]

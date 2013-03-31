@@ -1,0 +1,117 @@
+using System;
+using System.Collections.Generic;
+using NUnit.Framework;
+using Rhino.Mocks;
+using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
+using Teleopti.Ccc.DomainTest.ResourceCalculation;
+using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Interfaces.Domain;
+
+namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
+{
+	public class ShiftCategoryRestrictionShiftFilterTest
+	{
+		private MockRepository _mocks;
+		private IShiftCategoryRestrictionShiftFilter _target;
+		private IPerson _person;
+		private WorkShiftFinderResult _finderResult;
+		private IPersonalShiftMeetingTimeChecker _personalShiftMeetingTimeChecker;
+		private DateOnly _dateOnly;
+		private TimeZoneInfo _timeZoneInfo;
+
+		[SetUp]
+		public void Setup()
+		{
+			_mocks = new MockRepository();
+			_person = PersonFactory.CreatePerson("Bill");
+			_dateOnly = new DateOnly(2013, 3, 1);
+			_timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("UTC"));
+			_personalShiftMeetingTimeChecker = _mocks.StrictMock<IPersonalShiftMeetingTimeChecker>();
+			_finderResult = new WorkShiftFinderResult(_person, new DateOnly(2009, 2, 3));
+			_target = new ShiftCategoryRestrictionShiftFilter();
+		}
+
+		[Test]
+		public void CanFilterOnCategoryWithEmptyList()
+		{
+			var category = ShiftCategoryFactory.CreateShiftCategory("dv");
+			var ret = _target.Filter(category, new List<IShiftProjectionCache>(), _finderResult);
+			Assert.IsNotNull(ret);
+		}
+
+		[Test]
+		public void CanFilterOnCategoryWithCategoryIsNull()
+		{
+			var ret = _target.Filter(null, getCashes(), _finderResult);
+			Assert.AreEqual(3, ret.Count);
+		}
+
+		[Test]
+		public void CanFilterOnShiftCategories()
+		{
+			IShiftCategory shiftCategory1 = new ShiftCategory("wanted");
+			IShiftCategory shiftCategory2 = new ShiftCategory("not wanted");
+
+			var workShift1 = _mocks.StrictMock<IWorkShift>();
+			var workShift2 = _mocks.StrictMock<IWorkShift>();
+			var workShift3 = _mocks.StrictMock<IWorkShift>();
+
+			var cache1 = _mocks.StrictMock<IShiftProjectionCache>();
+			var cache2 = _mocks.StrictMock<IShiftProjectionCache>();
+			var cache3 = _mocks.StrictMock<IShiftProjectionCache>();
+
+			IList<IShiftProjectionCache> caches = new List<IShiftProjectionCache> { cache1, cache2, cache3 };
+			IWorkShiftFinderResult finderResult = new WorkShiftFinderResultForTest();
+			using (_mocks.Record())
+			{
+				Expect.Call(cache1.TheWorkShift).Return(workShift1).Repeat.AtLeastOnce();
+				Expect.Call(cache2.TheWorkShift).Return(workShift2).Repeat.AtLeastOnce();
+				Expect.Call(cache3.TheWorkShift).Return(workShift3).Repeat.AtLeastOnce();
+
+				Expect.Call(workShift1.ShiftCategory).Return(shiftCategory1).Repeat.AtLeastOnce();
+				Expect.Call(workShift2.ShiftCategory).Return(shiftCategory2).Repeat.AtLeastOnce();
+				Expect.Call(workShift3.ShiftCategory).Return(shiftCategory2).Repeat.AtLeastOnce();
+
+			}
+
+			using (_mocks.Playback())
+			{
+				var ret = _target.Filter(shiftCategory1, caches, finderResult);
+				Assert.AreEqual(1, ret.Count);
+				Assert.AreEqual(shiftCategory1, ret[0].TheWorkShift.ShiftCategory);
+				ret = _target.Filter(shiftCategory2, caches, finderResult);
+				Assert.AreEqual(2, ret.Count);
+			}
+		}
+
+		private IList<IShiftProjectionCache> getCashes()
+		{
+			var tmpList = getWorkShifts();
+			var retList = new List<IShiftProjectionCache>();
+			foreach (IWorkShift shift in tmpList)
+			{
+				var cache = new ShiftProjectionCache(shift, _personalShiftMeetingTimeChecker);
+				cache.SetDate(_dateOnly, _timeZoneInfo);
+				retList.Add(cache);
+			}
+			return retList;
+		}
+
+		private static IEnumerable<IWorkShift> getWorkShifts()
+		{
+			var activity = ActivityFactory.CreateActivity("sd");
+			var category = ShiftCategoryFactory.CreateShiftCategory("dv");
+			var workShift1 = WorkShiftFactory.CreateWorkShift(new TimeSpan(7, 0, 0), new TimeSpan(15, 0, 0),
+														  activity, category);
+			var workShift2 = WorkShiftFactory.CreateWorkShift(new TimeSpan(8, 0, 0), new TimeSpan(17, 0, 0),
+														  activity, category);
+			var workShift3 = WorkShiftFactory.CreateWorkShift(new TimeSpan(10, 0, 0), new TimeSpan(19, 0, 0),
+																	  activity, category);
+
+			return new List<IWorkShift> { workShift1, workShift2, workShift3 };
+		}
+
+	}
+}

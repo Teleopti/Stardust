@@ -1254,6 +1254,7 @@
       <DependentUpon>AuditHistoryView.cs</DependentUpon>
     </Compile>
     <Compile Include="Scheduling\ClipboardControlBuilder.cs" />
+    <Compile Include="Scheduling\DayOffOptimizationDecisionMakerFactory.cs" />
     <Compile Include="Scheduling\ExportToPdf.cs" />
     <Compile Include="Scheduling\ExportToPdfGraphical.cs" />
     <Compile Include="Scheduling\LockExecuter.cs" />

@@ -615,6 +615,7 @@
     <Compile Include="Domain\IReplyOptionTarget.cs" />
     <Compile Include="Domain\ILogWriter.cs" />
     <Compile Include="Domain\WorkTimeSource.cs" />
+    <Compile Include="IDayOffOptimizationDecisionMakerFactory.cs" />
     <Compile Include="IMapiMailMessage.cs" />
     <Compile Include="Domain\ISchedulePeriodTargetTimeCalculator.cs" />
     <Compile Include="Infrastructure\EncryptionConstants.cs" />
