@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
@@ -24,7 +25,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 
 		public IEnumerable<IShiftProjectionCache> Generate(IWorkShiftRuleSet ruleSet)
 		{
-			var infoList = _ruleSetProjectionEntityService.ProjectionCollection(ruleSet);
+			var callback = new WorkShiftAddStopperCallback();
+			callback.StartNewRuleSet(ruleSet);
+			var infoList = _ruleSetProjectionEntityService.ProjectionCollection(ruleSet, callback);
 			IList<IWorkShift> tmpList = infoList.Select(workShiftVisualLayerInfo => workShiftVisualLayerInfo.WorkShift).ToList();
 
 			IList<IShiftProjectionCache> retList = new List<IShiftProjectionCache>();
