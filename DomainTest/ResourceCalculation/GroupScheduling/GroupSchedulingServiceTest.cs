@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
@@ -444,7 +445,109 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 			}
 		}
 
-    	private void commonMocks(bool failOnBestShiftCategoryForDays)
+	    [Test]
+	    public void ShouldScheduleOneDayOnOnePerson()
+	    {
+		    var date = new DateOnly(2013, 1, 15);
+		    var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(2013, 1, 10), new DateOnly(2013, 1, 20));
+		    var person = PersonFactory.CreatePerson();
+		    var groupPerson = _mock.StrictMock<IGroupPerson>();
+		    var allScheduleMatrixes = new List<IScheduleMatrixPro>();
+		    var activeScheduleMatrix = _mock.StrictMock<IScheduleMatrixPro>();
+		    var minMax = new MinMax<TimeSpan>(TimeSpan.FromHours(8), TimeSpan.FromHours(17));
+		    allScheduleMatrixes.Add(activeScheduleMatrix);
+
+		    IBlockFinderResult blockFinderResult = new BlockFinderResult(null, new List<DateOnly> {date},
+		                                                                 new Dictionary<string, IWorkShiftFinderResult>());
+		    var bestShiftCategoryResult = _mock.StrictMock<IBestShiftCategoryResult>();
+		    
+		    using (_mock.Record())
+		    {
+			    Expect.Call(activeScheduleMatrix.SchedulePeriod.DateOnlyPeriod).Return(dateOnlyPeriod);
+			    Expect.Call(_stateHolder.Schedules).Return(_scheduleDictionary).Repeat.AtLeastOnce();
+			    Expect.Call(groupPerson.Id).Return(Guid.NewGuid());
+			    Expect.Call(groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(new List<IPerson> {person}));
+			    Expect.Call(_scheduleDictionary.AverageFairnessPoints(new List<IPerson>())).Return(null).IgnoreArguments();
+			    Expect.Call(groupPerson.CommonPossibleStartEndCategory).Return(null);
+			    Expect.Call(activeScheduleMatrix.Person).Return(person);
+			    Expect.Call(() => _workShiftMinMaxCalculator.ResetCache());
+			    Expect.Call(_workShiftMinMaxCalculator.MinMaxAllowedShiftContractTime(date, activeScheduleMatrix,
+			                                                                          _schedulingOptions))
+			          .Return(minMax);
+			    Expect.Call(_bestBlockShiftCategoryFinder.BestShiftCategoryForDays(blockFinderResult, person, _schedulingOptions,
+			                                                                       null, minMax)).IgnoreArguments().Return(bestShiftCategoryResult);
+				Expect.Call(bestShiftCategoryResult.BestPossible).Return(null);
+			    Expect.Call(bestShiftCategoryResult.FailureCause).Return(FailureCause.NoValidPeriod).Repeat.Twice();
+		    }
+		    using (_mock.Playback())
+		    {
+			    var result = _target.ScheduleOneDayOnOnePerson(date, person, _schedulingOptions, groupPerson, allScheduleMatrixes);
+			    Assert.That(result, Is.False);
+		    }
+	    }
+		
+	    [Test]
+	    public void ShouldScheduleOneDayOnOnePersonWithBestShiftCategory()
+	    {
+		    var date = new DateOnly(2013, 1, 15);
+		    var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(2013, 1, 10), new DateOnly(2013, 1, 20));
+		    var person = PersonFactory.CreatePerson();
+		    var groupPerson = _mock.StrictMock<IGroupPerson>();
+		    var allScheduleMatrixes = new List<IScheduleMatrixPro>();
+		    var activeScheduleMatrix = _mock.StrictMock<IScheduleMatrixPro>();
+		    var minMax = new MinMax<TimeSpan>(TimeSpan.FromHours(8), TimeSpan.FromHours(17));
+		    allScheduleMatrixes.Add(activeScheduleMatrix);
+			var bestPossible = new PossibleStartEndCategory
+			{
+				ShiftCategory = ShiftCategoryFactory.CreateShiftCategory("cat"),
+				StartTime = TimeSpan.FromHours(7),
+				EndTime = TimeSpan.FromHours(17)
+			};
+		    var scheduleRange = _mock.StrictMock<IScheduleRange>();
+		    var scheduleDay = _mock.StrictMock<IScheduleDay>();
+		    var schedulePeriod = _mock.StrictMock<IVirtualSchedulePeriod>();
+		    var scheduleDayPro = _mock.StrictMock<IScheduleDayPro>();
+			IBlockFinderResult blockFinderResult = new BlockFinderResult(null, new List<DateOnly> {date},
+		                                                                 new Dictionary<string, IWorkShiftFinderResult>());
+		    var bestShiftCategoryResult = _mock.StrictMock<IBestShiftCategoryResult>();
+		    using (_mock.Record())
+		    {
+			    Expect.Call(activeScheduleMatrix.SchedulePeriod).Return(schedulePeriod).Repeat.AtLeastOnce();
+				Expect.Call(schedulePeriod.DateOnlyPeriod).Return(dateOnlyPeriod).Repeat.AtLeastOnce();
+			    Expect.Call(_stateHolder.Schedules).Return(_scheduleDictionary).Repeat.AtLeastOnce();
+			    Expect.Call(groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(new List<IPerson> {person}));
+			    Expect.Call(_scheduleDictionary.AverageFairnessPoints(new List<IPerson>())).Return(null).IgnoreArguments();
+			    Expect.Call(groupPerson.CommonPossibleStartEndCategory).Return(null);
+			    Expect.Call(() => _workShiftMinMaxCalculator.ResetCache());
+			    Expect.Call(_scheduleDictionary[person]).Return(scheduleRange);
+			    Expect.Call(scheduleRange.ScheduledDay(date)).Return(scheduleDay);
+			    Expect.Call(scheduleDay.IsScheduled()).Return(false);
+			    Expect.Call(scheduleDay.Person).Return(person);
+			    Expect.Call(activeScheduleMatrix.Person).Return(person).Repeat.AtLeastOnce();
+			    Expect.Call(activeScheduleMatrix.UnlockedDays)
+			          .Return(new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> {scheduleDayPro}));
+			    Expect.Call(activeScheduleMatrix.GetScheduleDayByKey(date)).Return(scheduleDayPro);
+			    Expect.Call(_workShiftMinMaxCalculator.MinMaxAllowedShiftContractTime(date, activeScheduleMatrix,
+			                                                                          _schedulingOptions))
+			          .Return(minMax);
+			    Expect.Call(_bestBlockShiftCategoryFinder.BestShiftCategoryForDays(blockFinderResult, person, _schedulingOptions,
+			                                                                       null, minMax)).IgnoreArguments().Return(bestShiftCategoryResult);
+			    Expect.Call(bestShiftCategoryResult.BestPossible).Return(bestPossible);
+				Expect.Call(_effectiveRestrictionCreator.GetEffectiveRestriction(_persons, _date1, _schedulingOptions,
+																			 _scheduleDictionary)).IgnoreArguments().Return(
+																				_effectiveRestriction);
+			    Expect.Call(_scheduleService.SchedulePersonOnDay(scheduleDay, _schedulingOptions, _effectiveRestriction,
+			                                                     _resourceCalculateDelayer, bestPossible, _rollbackService)).IgnoreArguments()
+			          .Return(true);
+		    }
+		    using (_mock.Playback())
+		    {
+			    var result = _target.ScheduleOneDayOnOnePerson(date, person, _schedulingOptions, groupPerson, allScheduleMatrixes);
+			    Assert.That(result, Is.True);
+		    }
+	    }
+
+	    private void commonMocks(bool failOnBestShiftCategoryForDays)
     	{
     		var returnPoss = new PossibleStartEndCategory {ShiftCategory = _shiftCategory};
 			if (failOnBestShiftCategoryForDays)

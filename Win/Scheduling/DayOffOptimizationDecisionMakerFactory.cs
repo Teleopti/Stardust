@@ -11,6 +11,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 {
 	public class DayOffOptimizationDecisionMakerFactory : IDayOffOptimizationDecisionMakerFactory
 	{
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public IEnumerable<IDayOffDecisionMaker> CreateDecisionMakers(
 			ILockableBitArray scheduleMatrixArray,
 			IOptimizationPreferences optimizerPreferences)
