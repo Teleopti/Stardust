@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.ServiceModel.Channels;
 using Autofac;
 using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Ccc.Domain.Common;
@@ -489,6 +490,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 				OptimizerHelperHelper.CreateAllSkillsDataExtractor(optimizationPreferences.Advanced, selectedPeriod, _stateHolder);
 			IPeriodValueCalculator periodValueCalculatorForAllSkills =
 				OptimizerHelperHelper.CreatePeriodValueCalculator(optimizationPreferences.Advanced, allSkillsDataExtractor);
+			IDictionary<IPerson, IScheduleRange> allSelectedScheduleRangeClones = new Dictionary<IPerson, IScheduleRange>();
+			IMaxMovedDaysOverLimitValidator maxMovedDaysOverLimitValidator =
+				new MaxMovedDaysOverLimitValidator(allSelectedScheduleRangeClones, _container.Resolve<IScheduleDayEquator>());
+			ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator = new TeamBlockRestrictionOverLimitValidator(
+				_container.Resolve<IRestrictionOverLimitDecider>(), maxMovedDaysOverLimitValidator);
 
 			ITeamBlockDayOffOptimizerService teamBlockDayOffOptimizerService = 
 				new TeamBlockDayOffOptimizerService(
@@ -506,7 +512,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					_container.Resolve<ITeamDayOffModifier>(),
 					_container.Resolve<IBlockSteadyStateValidator>(),
 					_container.Resolve<ITeamBlockClearer>(),
-					_container.Resolve<ITeamBlockRestrictionOverLimitValidator>()
+					teamBlockRestrictionOverLimitValidator
 					);
 
 			IList<IDayOffTemplate> dayOffTemplates = (from item in _schedulerState.CommonStateHolder.DayOffs

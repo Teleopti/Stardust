@@ -233,11 +233,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 			builder.RegisterType<TeamBlockInfoFactory>().As<ITeamBlockInfoFactory>();
 			builder.RegisterType<TeamInfoFactory>().As<ITeamInfoFactory>();
 			builder.RegisterType<SafeRollbackAndResourceCalculation>().As<ISafeRollbackAndResourceCalculation>();
-			builder.RegisterType<ScheduleMatrixOriginalStateContainerFactory>().As<IScheduleMatrixOriginalStateContainerFactory>();
 			builder.RegisterType<TeamBlockClearer>().As<ITeamBlockClearer>();
-			builder.RegisterType<OptimizationOverLimitByRestrictionDeciderFactory>().As<IOptimizationOverLimitByRestrictionDeciderFactory>();
 			builder.RegisterType<TeamBlockRestrictionOverLimitValidator>().As<ITeamBlockRestrictionOverLimitValidator>();
 			builder.RegisterType<BlockSteadyStateValidator>().As<IBlockSteadyStateValidator>();
+			builder.RegisterType<RestrictionOverLimitDecider>().As<IRestrictionOverLimitDecider>();
+			builder.RegisterType<RestrictionChecker>().As<ICheckerRestriction>();
 		}
 
 		private static void registerTeamBlockDayOffOptimizerService(ContainerBuilder builder)

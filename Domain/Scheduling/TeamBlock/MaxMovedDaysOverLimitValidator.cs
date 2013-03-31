@@ -40,16 +40,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				IScheduleDay originalScheduleDay = rangeCloneForMatrix.ScheduledDay(scheduleDayPro.Day);
 
 				var originalSignificantPart = originalScheduleDay.SignificantPart();
-				if (originalSignificantPart == SchedulePartView.DayOff)
+				if (optimizationPreferences.DaysOff.UseKeepExistingDaysOff && originalSignificantPart == SchedulePartView.DayOff)
 					originalNumberOfDaysOff++;
 
-				if (originalSignificantPart == SchedulePartView.MainShift)
+				if (optimizationPreferences.Shifts.KeepShifts && originalSignificantPart == SchedulePartView.MainShift)
 					originalNumberOfWorkShifts++;
 
-				if (!_scheduleDayEquator.DayOffEquals(originalScheduleDay, currentScheduleDay))
+				if (optimizationPreferences.DaysOff.UseKeepExistingDaysOff && !_scheduleDayEquator.DayOffEquals(originalScheduleDay, currentScheduleDay))
 					changedDaysOff++;
 
-				if (!_scheduleDayEquator.MainShiftEquals(originalScheduleDay, currentScheduleDay))
+				if (optimizationPreferences.Shifts.KeepShifts && !_scheduleDayEquator.MainShiftEquals(originalScheduleDay, currentScheduleDay))
 					changedShifts++;
 
 			}
