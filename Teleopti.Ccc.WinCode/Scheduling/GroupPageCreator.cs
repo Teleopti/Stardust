@@ -162,7 +162,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
 		IGroupPageCreator<IRuleSetBag> GetRuleSetBagsGroupPageCreator();
 
-	    IGroupPageCreator<IPerson> GetSingleAgentTeamCreator();
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
+		IGroupPageCreator<IPerson> GetSingleAgentTeamCreator();
 	}
 
 	public class GroupPageFactory : IGroupPageFactory
