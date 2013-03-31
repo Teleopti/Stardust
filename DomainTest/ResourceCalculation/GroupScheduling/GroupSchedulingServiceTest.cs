@@ -445,7 +445,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 			}
 		}
 
-	    [Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 	    public void ShouldScheduleOneDayOnOnePerson()
 	    {
 		    var date = new DateOnly(2013, 1, 15);
@@ -485,8 +485,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 			    Assert.That(result, Is.False);
 		    }
 	    }
-		
-	    [Test]
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 	    public void ShouldScheduleOneDayOnOnePersonWithBestShiftCategory()
 	    {
 		    var date = new DateOnly(2013, 1, 15);

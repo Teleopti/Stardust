@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
             Assert.IsFalse(_target.ValidateWorkShiftInfo(_info5));
         }
 
-        [Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "ShiftWork"), Test]
         public void VerifyValidateWorkShiftWorkTime()
         {
             _workTimeLimitation = new WorkTimeLimitation(TimeSpan.FromHours(15), TimeSpan.FromHours(17));
