@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 		{
 			get
 			{
-				return Element.DomContainer.Div(QuicklyFind.ByClass("select2-search")).Parent.Exists;
+				return Element.DomContainer.Div(QuicklyFind.ByClass("team-select2-dropdown")).Exists;
 			}
 		}
 
