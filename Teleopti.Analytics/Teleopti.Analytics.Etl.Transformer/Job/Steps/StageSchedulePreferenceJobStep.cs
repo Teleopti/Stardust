@@ -21,6 +21,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 			: this(jobParameters, new DefaultNeedToRunChecker())
 		{}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "ToRun")]
 		public StageSchedulePreferenceJobStep(IJobParameters jobParameters, INeedToRunChecker needToRunChecker)
 			: base(jobParameters)
 		{

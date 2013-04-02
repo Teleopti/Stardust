@@ -18,6 +18,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
             : this(jobParameters, new ScheduleTransformer())
         {}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "ToRun")]
 		public StageScheduleJobStep(IJobParameters jobParameters, INeedToRunChecker needToRunChecker)
 			: this(jobParameters, new ScheduleTransformer(), needToRunChecker)
 		{}
@@ -26,6 +27,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 			: this(jobParameters, raptorTransformer, new DefaultNeedToRunChecker())
         {}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "ToRun")]
 		public StageScheduleJobStep(IJobParameters jobParameters, IScheduleTransformer raptorTransformer, INeedToRunChecker needToRunChecker)
 			: base(jobParameters)
 		{
