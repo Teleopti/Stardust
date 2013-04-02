@@ -39,7 +39,31 @@ BEGIN
 	AND BusinessUnit = @buId
 END
 
--- add check to more steps later
+IF @stepName = 'stg_schedule_day_off_count, stg_day_off, dim_day_off'
+	SELECT @thisTime = sum(cast(checksum(Version,id) as bigint)) from dbo.PersonDayOff
+	where Anchor between @startDate AND @endDate
+	AND BusinessUnit = @buId
+
+IF @stepName = 'stg_schedule_preference, stg_day_off, dim_day_off'
+BEGIN
+	SELECT @thisTime = sum(cast(checksum(Version,id) as bigint)) from dbo.PersonAssignment
+	where minimum between @startDate AND @endDate
+	AND BusinessUnit = @buId
+
+	SELECT @thisTime = @thisTime + sum(cast(checksum(Version,id) as bigint)) from dbo.PreferenceDay
+	where RestrictionDate between @startDate AND @endDate -- AND  maximum ??
+	AND BusinessUnit = @buId
+
+	SELECT @thisTime = @thisTime + sum(cast(checksum(Version,id) as bigint)) from dbo.PersonDayOff
+	where Anchor between @startDate AND @endDate
+	AND BusinessUnit = @buId
+END
+
+-- add check to more steps later??
+
+-- stg_permission ??
+-- [dbo].[AvailableData], [dbo].[Person], [dbo].[ApplicationRole]
+
 
 IF @thisTime <> @lastTime
 BEGIN

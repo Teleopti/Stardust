@@ -51,13 +51,13 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 				return 0;
 			}
 
-            foreach (IScenario scenario in _jobParameters.StateHolder.ScenarioCollectionDeletedExcluded)
+            foreach (var scenario in _jobParameters.StateHolder.ScenarioCollectionDeletedExcluded)
             {
                 //Get data from Raptor
-                IScheduleDictionary scheduleDictionary = _jobParameters.StateHolder.GetSchedules(period, scenario);
+                var scheduleDictionary = _jobParameters.StateHolder.GetSchedules(period, scenario);
 
                 // Extract one schedulepart per each person and date
-                IList<IScheduleDay> rootList = _jobParameters.StateHolder.GetSchedulePartPerPersonAndDate(scheduleDictionary);    
+                var rootList = _jobParameters.StateHolder.GetSchedulePartPerPersonAndDate(scheduleDictionary);    
 
                 _raptorTransformer.Transform(rootList, DateTime.Now, _jobParameters, new ThreadPool());
             }

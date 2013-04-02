@@ -20,6 +20,14 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
 	[TestFixture]
 	public class StageSchedulePreferenceJobStepTest
 	{
+		private MockRepository _mock;
+
+		[SetUp]
+		public void Setup()
+		{
+			_mock = new MockRepository();
+		}
+
 		[Test]
 		public void VerifyDefaultProperties()
 		{
@@ -75,6 +83,24 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
 			target.DayOffSubStep.VerifyAllExpectations();
 			result.RowsAffected.Should().Be.EqualTo(2);
 
+		}
+
+		[Test]
+		public void ShouldCheckIfNeedRun()
+		{
+			var raptorRepository = _mock.StrictMock<IRaptorRepository>();
+			var currentBusinessUnit = _mock.DynamicMock<IBusinessUnit>();
+			var jobParameters = JobParametersFactory.SimpleParameters(false);
+			jobParameters.Helper = new JobHelper(raptorRepository, null, null);
+			var needRunChecker = _mock.DynamicMock<INeedToRunChecker>();
+			var stageSchedulePrefJobStep = new StageSchedulePreferenceJobStep(jobParameters, needRunChecker);
+
+			Expect.Call(needRunChecker.NeedToRun(new DateTimePeriod(), raptorRepository, currentBusinessUnit, ""))
+				.Return(false)
+				.IgnoreArguments();
+			_mock.ReplayAll();
+			stageSchedulePrefJobStep.Run(new List<IJobStep>(), currentBusinessUnit, null, false);
+			_mock.VerifyAll();
 		}
 	}
 }
