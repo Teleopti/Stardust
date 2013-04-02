@@ -15,72 +15,42 @@
 </script>
 
 <script type="text/Html" id="text-request-detail-template">
-	<div class="pdb5 request-detail-title">@Resources.TextRequest</div>
-			<input type="hidden" id="Request-detail-entityid" />
-
-		<div class="edit-module-element">
-			<span id="Request-detail-deny-reason"></span>
-		</div>
-		<div class="edit-module-element">
-			<label class="displayblock" for="Request-detail-subject-input">@Resources.Subject</label>
-			<input id="Request-detail-subject-input" class="request-subject-input" type="text" />
-		</div>
-		<div class="edit-module-element">
-			<label class="displayblock" for="Request-detail-message-input">@Resources.Message</label>
-			<textarea id="Request-detail-message-input" class="request-message-input" />
-		</div>
-		<div id="Absence-type-element" class="floatleft displaynone">
-			<div class="edit-module-element floatleft">
-				<div class="floatleft absence-type-input-label">@Resources.AbsenceType</div>
-			</div>
-			<div class="edit-module-element floatleft">
-				<select id="Absence-type" class="absence-input combobox">
-					@foreach (var absenceType in Model.AbsenceTypes)
-					{
-						<option value="@Html.AttributeEncode(absenceType.Name)" typeid="@Html.AttributeEncode(absenceType.Id)">@absenceType.Name</option>
-					}
-				</select>
-			</div>
-		</div>
-	<div class="floatleft">
-		<span class="edit-module-element floatleft input-append">
-			<input id="Request-detail-fromDate-input" data-bind="datepicker: DateFrom, datepickerOptions: {autoHide: true}" type="text" />
-			<span class="add-on"><i class="icon-th"></i></span>
-		</span>
-		<span id="Request-detail-fromTime" class="edit-module-element floatleft">
-			<label class="displayblock" for="Request-detail-fromTime-input-input">@Resources.Time</label>
-			<select id="Request-detail-fromTime-input" class="time-input combobox">
-				@foreach (var timeSpan in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, x * 30, 0)))
-				{
-					<option @(timeSpan.Hours == 8 && timeSpan.Minutes == 0 ? "selected" : "") value="@Html.AttributeEncode(@TimeHelper.TimeOfDayFromTimeSpan(timeSpan))">@TimeHelper.TimeOfDayFromTimeSpan(timeSpan)</option>
-				}
-			</select>
-		</span>
-	</div>
 	<div>
-		<span class="edit-module-element clearleftfloat floatleft input-append">
-			<input id="Request-detail-toDate-input" data-bind="datepicker: DateTo, datepickerOptions: {autoHide: true}" type="text"  />
-			<span class="add-on"><i class="icon-th"></i></span>
-		</span>
-		<span id="Request-detail-toTime" class="edit-module-element floatleft">
-			<label class="displayblock" for="Request-detail-toTime-input-input">@Resources.Time</label>
-			<select id="Request-detail-toTime-input" class="time-input combobox">
-				@foreach (var timeSpan in Enumerable.Range(0, 48).Select(x => new TimeSpan(0, x * 30, 0)))
-				{
-					<option @(timeSpan.Hours == 17 && timeSpan.Minutes == 0 ? "selected" : "") value="@Html.AttributeEncode(@TimeHelper.TimeOfDayFromTimeSpan(timeSpan))">@TimeHelper.TimeOfDayFromTimeSpan(timeSpan)</option>
-				}
-			</select>
-		</span>
-		</div>
-		<span class="edit-module-element clearleftfloat floatleft">
-			<input type="checkbox" id="Fullday-check" data-bind="checked: IsFullDay" />
-		</span>
-		<label class="floatleft" for="Fullday-check">
-			@Resources.FullDay
-		</label>
-		<button id="Request-detail-ok-button" class="btn btn-primary pull-right" update-value="@Html.AttributeEncode(Resources.Update)" new-value="@Html.AttributeEncode(Resources.SubmitRequest)" />
-		<div id="Request-detail-error" class="error edit-module-element floatleft clearleftfloat">
-		</div>
+        <span data-bind="text: DenyReason"></span>
+    </div>
+    <div>
+        <input type="text" class="input-block-level" placeholder="@Resources.Subject" data-bind="value: Subject, enable: IsEditable" />
+    </div>
+    <div>
+        <textarea class="input-block-level" placeholder="@Resources.Message" data-bind="value: Message, enable: IsEditable" />
+    </div>
+    <div>
+        <span class="input-append">
+            <input data-bind="datepicker: DateFrom, datepickerOptions: {autoHide: true}, enable: IsEditable" type="text" />
+            <span class="add-on"><i class="icon-th"></i></span>
+        </span>
+        <div class="input-append bootstrap-timepicker">
+            <input type="text" class="input-small" data-bind="timepicker: TimeFrom, timepickerOptions: {showMeridian: ShowMeridian}, enable: IsTimeInputEnabled" />
+            <span class="add-on"><i class="icon-time" data-bind="enable: false"></i></span>
+        </div>
+    </div>
+    <div>
+        <span class="input-append">
+            <input data-bind="datepicker: DateTo, datepickerOptions: {autoHide: true}" type="text"  />
+            <span class="add-on"><i class="icon-th"></i></span>
+        </span>
+        <div class="input-append bootstrap-timepicker">
+            <input type="text" class="input-small" data-bind="timepicker: TimeTo, timepickerOptions: {showMeridian: ShowMeridian}, enable: IsTimeInputEnabled" />
+            <span class="add-on"><i class="icon-time"></i></span>
+        </div>
+    </div>
+    <label class="checkbox">
+        <input type="checkbox" data-bind="checked: IsFullDay, enable: IsEditable" /> @Resources.FullDay
+    </label>
+    <div class="alert alert-danger" data-bind="visible: ShowError, html: ErrorMessage" />    
+    <div class="clearfix" data-bind="visible: IsEditable">
+        <button class="btn btn-primary pull-right" data-bind="click: AddRequest, text: EntityId > 0 ? '@Html.AttributeEncode(Resources.Update)' : '@Html.AttributeEncode(Resources.SubmitRequest)'"/>
+    </div>
 </script>
 
 <script type="text/Html" id="absence-request-detail-template">

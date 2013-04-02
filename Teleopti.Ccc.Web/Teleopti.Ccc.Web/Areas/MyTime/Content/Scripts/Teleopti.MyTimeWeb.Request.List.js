@@ -58,6 +58,10 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
                     },
                     success: function(data) {
                         self.DetailItem = Teleopti.MyTimeWeb.Request.RequestDetail.ShowRequest(data);
+                        self.DetailItem.AddRequestCallback = function () {
+                            self.IsSelected(false);
+                            self.DetailItem = undefined;
+                        };
                         self.IsSelected(true);
                     }
                 });
