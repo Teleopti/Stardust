@@ -8,7 +8,6 @@ using Teleopti.Analytics.Etl.Transformer.ScheduleThreading;
 using Teleopti.Analytics.Etl.TransformerTest.FakeData;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using ScenarioFactory=Teleopti.Ccc.TestCommon.FakeData.ScenarioFactory;
 
@@ -68,9 +67,9 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 			jobParameters.Helper = new JobHelper(raptorRepository, null, null);
 			var needRunChecker = _mock.DynamicMock<INeedToRunChecker>();
 			var stageScheduleJobStep = new StageScheduleJobStep(jobParameters, needRunChecker);
-			
 
-			Expect.Call(needRunChecker.NeedToRun(new DateTimePeriod(), raptorRepository, currentBusinessUnit))
+			Expect.Call(() => raptorRepository.TruncateSchedule());
+			Expect.Call(needRunChecker.NeedToRun(new DateTimePeriod(), raptorRepository, currentBusinessUnit,""))
 				.Return(false)
 				.IgnoreArguments();
 			_mock.ReplayAll();
