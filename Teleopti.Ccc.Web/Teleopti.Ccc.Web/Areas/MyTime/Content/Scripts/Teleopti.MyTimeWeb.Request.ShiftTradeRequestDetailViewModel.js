@@ -18,6 +18,10 @@ Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
 	self.From = ko.observable("");
 	self.To = ko.observable("");
 	self.CanApproveAndDeny = ko.observable(true);
+	self.IsSelected = ko.observable(false);
+	self.ToggleSelected = function () {
+	    self.IsSelected(!self.IsSelected());
+	};
 	self.Approve = function () {
 		self.CanApproveAndDeny(false);
 		self.respondToRequest("Requests/ApproveShiftTrade/" + self.Id());

@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Requests
 		public string UpdatedOn;
 		public string Status;
 		public string Payload;
+		public string PayloadId;
 		public bool IsCreatedByUser;
 		public string RawTimeFrom;
 		public string RawTimeTo;

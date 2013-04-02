@@ -110,6 +110,22 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			Assert.That(target.CreatePortalViewModel().HasAsmPermission, Is.False);
 		}
 
+		[Test, SetCulture("en-US")]
+		public void ShouldShowMeridianWhenUsCulture()
+		{
+			var target = CreateTarget(MockRepository.GenerateMock<IPermissionProvider>());
+
+			target.CreatePortalViewModel().ShowMeridian.Should().Be.True();
+		}
+
+		[Test, SetCulture("sv-SE")]
+		public void ShouldShowMeridianWhenSwedishCulture()
+		{
+			var target = CreateTarget(MockRepository.GenerateMock<IPermissionProvider>());
+
+			target.CreatePortalViewModel().ShowMeridian.Should().Be.False();
+		}
+
 		private static PortalViewModelFactory CreateTarget(IPermissionProvider permissionProvider)
 		{
 			return new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateMock<IPushMessageProvider>(), MockRepository.GenerateMock<ILoggedOnUser>()); 

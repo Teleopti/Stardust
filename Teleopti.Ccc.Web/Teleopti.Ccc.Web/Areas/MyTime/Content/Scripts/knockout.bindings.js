@@ -94,9 +94,17 @@ ko.bindingHandlers.timepicker = {
     init: function(element, valueAccessor, allBindingsAccessor) {
         var options = allBindingsAccessor().timepickerOptions || {};
         $(element).timepicker(options);
+        
+        ko.utils.registerEventHandler(element, "changeTime.timepicker", function (e) {
+            var observable = valueAccessor();
+            observable(e.time.value);
+        });
     },
     update: function(element, valueAccessor) {
         var value = ko.utils.unwrapObservable(valueAccessor());
+        if (typeof value === 'function') {
+            return;
+        }
         $(element).timepicker("setTime", value);
     }
 };
