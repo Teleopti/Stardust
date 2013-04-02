@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             }
         }
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Interfaces.Domain.IPushMessage.set_Message(System.String)"), Test]
 		public void ShouldTransformToDtoWithInvalidCharacter()
 		{
 			var dialogueMessage = CreateDo();
