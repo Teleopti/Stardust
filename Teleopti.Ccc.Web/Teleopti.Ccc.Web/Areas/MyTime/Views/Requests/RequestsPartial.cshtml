@@ -15,7 +15,7 @@
 </script>
 
 <script type="text/Html" id="text-request-detail-template">
-	<div class="alert alert-info" data-bind="html: DenyReason, visible: DenyReason() != ''" />
+	<div class="alert" data-bind="html: DenyReason, visible: DenyReason() != ''" />
     <div>
         <input type="text" class="input-block-level" placeholder="@Resources.Subject" data-bind="value: Subject, enable: IsEditable" />
     </div>
@@ -52,7 +52,7 @@
 </script>
 
 <script type="text/Html" id="absence-request-detail-template">
-	<div class="alert alert-info" data-bind="html: DenyReason, visible: DenyReason() != ''" />
+	<div class="alert" data-bind="html: DenyReason, visible: DenyReason() != ''" />
     <div>
         <input type="text" class="input-block-level" placeholder="@Resources.Subject" data-bind="value: Subject, enable: IsEditable" />
     </div>
