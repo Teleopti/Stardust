@@ -16,6 +16,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
@@ -518,6 +519,15 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		{
 			requestContainer.Resolve<IHandleCommand<AddFullDayAbsenceCommand>>()
 			                .Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldRegisterEventsMessageSender()
+		{
+			requestContainer.Resolve<IEnumerable<IMessageSender>>()
+				.OfType<EventsMessageSender>()
+				.Single()
+				.Should().Not.Be.Null();
 		}
 	}
 }

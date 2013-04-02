@@ -4,6 +4,7 @@ using Autofac.Integration.Mvc;
 using MbCache.Configuration;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core.IoC;
 using Teleopti.Ccc.Web.Areas.MobileReports.Core.IoC;
@@ -60,9 +61,10 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterModule<ShiftTradeModule>();
 
 			builder.RegisterModule<CommandDispatcherModule>();
-			builder.RegisterModule<LocalEventsPublisherModule>();
+			builder.RegisterModule<LocalInMemoryEventsPublisherModule>();
 			builder.RegisterModule<CommandHandlersModule>();
 			builder.RegisterModule<EventHandlersModule>();
+			builder.RegisterType<EventsMessageSender>().As<IMessageSender>().SingleInstance();
 
 			return builder.Build();
 		}
