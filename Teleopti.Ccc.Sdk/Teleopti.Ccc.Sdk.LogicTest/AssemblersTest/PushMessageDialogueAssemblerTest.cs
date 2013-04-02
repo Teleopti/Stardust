@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
@@ -71,6 +72,37 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
                 Assert.AreEqual("Glöm det!!", dialogueMessageDtos[0].Text);
             }
         }
+
+		[Test]
+		public void ShouldTransformToDtoWithInvalidCharacter()
+		{
+			var dialogueMessage = CreateDo();
+			dialogueMessage.PushMessage.Message = "invalid character: ";
+			using (_mocks.Record())
+			{
+				var senderDto = new PersonDto
+				{
+					Id = _person.Id,
+					Name = _person.Name.ToString()
+				};
+				var recieverDto = new PersonDto
+				{
+					Id = _receiver.Id,
+					Name = _receiver.Name.ToString(),
+					TimeZoneId = TimeZoneInfo.Utc.Id
+				};
+				Expect.Call(_personAssembler.DomainEntityToDto(_receiver)).Return(recieverDto);
+				Expect.Call(_dialogueMessageAssembler.DomainEntityToDto(dialogueMessage.DialogueMessages[0])).Return(
+					new DialogueMessageDto { Text = dialogueMessage.DialogueMessages[0].Text });
+				Expect.Call(_pushMessageAssembler.DomainEntityToDto(dialogueMessage.PushMessage)).Return(
+					new PushMessageDto { Sender = senderDto });
+			}
+			using (_mocks.Playback())
+			{
+				var result = _target.DomainEntityToDto(dialogueMessage);
+				result.Message.Should().Not.Contain("");
+			}
+		}
 
         [Test, ExpectedException(typeof(NotSupportedException))]
         public void VerifyDtoToDo()
