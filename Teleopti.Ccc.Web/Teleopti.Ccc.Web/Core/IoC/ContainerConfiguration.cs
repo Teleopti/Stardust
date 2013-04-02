@@ -2,6 +2,10 @@
 using Autofac;
 using Autofac.Integration.Mvc;
 using MbCache.Configuration;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -65,15 +69,26 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterModule<CommandHandlersModule>();
 			builder.RegisterModule<EventHandlersModule>();
 			builder.RegisterType<EventsMessageSender>().As<IMessageSender>().SingleInstance();
+			builder.RegisterType<DoNotNotifySmsLink>().As<IDoNotifySmsLink>().SingleInstance();
+			builder.RegisterType<NewtonsoftJsonSerializer>().As<IJsonSerializer>().SingleInstance();
 
 			return builder.Build();
 		}
-
+	
 		private static void registerAopComponents(ContainerBuilder builder)
 		{
 			builder.RegisterModule<AspectsModule>();
 			builder.RegisterType<UnitOfWorkAspect>();
 		}
 
+	}
+
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Newtonsoft")]
+	public class NewtonsoftJsonSerializer : IJsonSerializer
+	{
+		public string SerializeObject(object value)
+		{
+			return Newtonsoft.Json.JsonConvert.SerializeObject(value);
+		}
 	}
 }

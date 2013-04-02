@@ -11,6 +11,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
@@ -528,6 +529,17 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 				.OfType<EventsMessageSender>()
 				.Single()
 				.Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldResolveEventHandlers()
+		{
+			requestContainer.Resolve<IEnumerable<IHandleEvent<FullDayAbsenceAddedEvent>>>()
+							.Should().Not.Be.Null();
+			requestContainer.Resolve<IEnumerable<IHandleEvent<ScheduleChangedEvent>>>()
+			                .Should().Not.Be.Null();
+			requestContainer.Resolve<IEnumerable<IHandleEvent<ProjectionChangedEvent>>>()
+			                .Should().Not.Be.Null();
 		}
 	}
 }

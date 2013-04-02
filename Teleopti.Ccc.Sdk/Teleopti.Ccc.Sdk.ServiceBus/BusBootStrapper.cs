@@ -8,7 +8,10 @@ using Rhino.ServiceBus.Internal;
 using Rhino.ServiceBus.MessageModules;
 using Rhino.ServiceBus.Sagas.Persisters;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
 using Teleopti.Ccc.IocCommon.Configuration;
+using Teleopti.Ccc.Sdk.ServiceBus.Notification;
 using Teleopti.Ccc.Sdk.ServiceBus.ShiftTrade;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
@@ -55,6 +58,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			build.RegisterType<LocalServiceBusPublisher>().As<IPublishEventsFromEventHandlers>().SingleInstance();
 			build.RegisterModule<CommandHandlersModule>();
 			build.RegisterModule<EventHandlersModule>();
+			build.RegisterType<NewtonsoftJsonSerializer>().As<IJsonSerializer>();
+			build.RegisterType<DoNotifySmsLink>().As<IDoNotifySmsLink>();
 
 			build.Update(Container);
         }
