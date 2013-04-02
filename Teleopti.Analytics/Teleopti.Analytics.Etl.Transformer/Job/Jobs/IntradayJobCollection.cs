@@ -27,7 +27,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Jobs
 			Add(new StageAbsenceJobStep(jobParameters));
 			Add(new StageScenarioJobStep(jobParameters));
 			Add(new StageShiftCategoryJobStep(jobParameters));
-			Add(new StageScheduleJobStep(jobParameters));
+			Add(new StageScheduleJobStep(jobParameters, new IntradyScheduleStepNeedToRunChecker()));
 			//Add(new StageScheduleForecastSkillJobStep(jobParameters)); //removed 2010-02-24 to reduce duration/Load (scheduling resource calculation)
 			Add(new StageScheduleDayOffCountJobStep(jobParameters));
 			Add(new StageSchedulePreferenceJobStep(jobParameters));

@@ -18,8 +18,9 @@ namespace Teleopti.Analytics.Etl.TransformerTest
     public class StageScheduleJobStepTest
     {
         private IScheduleDictionary _scheduleDictionary;
+	    private MockRepository _mock;
 
-        [SetUp]
+	    [SetUp]
         public void Setup()
         {
             var mocks = new MockRepository();
@@ -27,37 +28,54 @@ namespace Teleopti.Analytics.Etl.TransformerTest
             var period2 = new ScheduleDateTimePeriod(new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
             IScenario scenario = ScenarioFactory.CreateScenarioAggregate();
             _scheduleDictionary = new ScheduleDictionary(scenario, period2, diffSvc);
+			_mock = new MockRepository();
         }
 
         [Test]
         public void Verify()
         {
-            MockRepository mockRepository = new MockRepository();
-            IRaptorRepository raptorRepository = mockRepository.StrictMock<IRaptorRepository>();
-            IScenario scenario = mockRepository.StrictMock<IScenario>();
-            ICommonStateHolder commonStateHolder = mockRepository.StrictMock<ICommonStateHolder>();
+            
+            var raptorRepository = _mock.StrictMock<IRaptorRepository>();
+            var scenario = _mock.StrictMock<IScenario>();
+            var commonStateHolder = _mock.StrictMock<ICommonStateHolder>();
+			var scheduleTransformer = _mock.DynamicMock<IScheduleTransformer>();
+			var jobParameters = JobParametersFactory.SimpleParameters(false);
+			jobParameters.Helper = new JobHelper(raptorRepository, null, null);
+			var stageScheduleJobStep = new StageScheduleJobStep(jobParameters, scheduleTransformer);
 
-            using (mockRepository.Record())
-            {
-                Expect.On(raptorRepository)
-                    .Call(raptorRepository.LoadSchedule(new DateTimePeriod(), scenario, commonStateHolder)).IgnoreArguments()
-                    .Return(_scheduleDictionary)
-                    .Repeat.Any();
+	        Expect.Call(() => raptorRepository.TruncateSchedule());
+	        Expect.Call(raptorRepository.LoadScenario()).Return(new List<IScenario>{scenario});
+            Expect.Call(raptorRepository.LoadSchedule(new DateTimePeriod(), scenario, commonStateHolder)).IgnoreArguments()
+                .Return(_scheduleDictionary)
+                .Repeat.Any();
 
-                Expect.On(raptorRepository)
-                    .Call(raptorRepository.LoadPerson(commonStateHolder))
-                    .Return(new List<IPerson>())
-                    .Repeat.Any();
+            Expect.Call(raptorRepository.LoadPerson(commonStateHolder))
+                .Return(new List<IPerson>())
+                .Repeat.Any();
 
-            }
-
-            IJobParameters jobParameters = JobParametersFactory.SimpleParameters(false);
-
-            jobParameters.Helper = new JobHelper(raptorRepository, null,null);
-
-            IScheduleTransformer scheduleTransformer = mockRepository.StrictMock<IScheduleTransformer>();
-            StageScheduleJobStep stageScheduleJobStep = new StageScheduleJobStep(jobParameters, scheduleTransformer);
+            _mock.ReplayAll();
+            
             stageScheduleJobStep.Run(new List<IJobStep>(), null, null, false);
+			_mock.VerifyAll();
         }
+
+		[Test]
+		public void ShouldCheckIfNeedRun()
+		{
+			var raptorRepository = _mock.StrictMock<IRaptorRepository>();
+            var currentBusinessUnit = _mock.DynamicMock<IBusinessUnit>();
+			var jobParameters = JobParametersFactory.SimpleParameters(false);
+			jobParameters.Helper = new JobHelper(raptorRepository, null, null);
+			var needRunChecker = _mock.DynamicMock<INeedToRunChecker>();
+			var stageScheduleJobStep = new StageScheduleJobStep(jobParameters, needRunChecker);
+			
+
+			Expect.Call(needRunChecker.NeedToRun(new DateTimePeriod(), raptorRepository, currentBusinessUnit))
+				.Return(false)
+				.IgnoreArguments();
+			_mock.ReplayAll();
+			stageScheduleJobStep.Run(new List<IJobStep>(), currentBusinessUnit, null, false);
+			_mock.VerifyAll();
+		}
     }
 }

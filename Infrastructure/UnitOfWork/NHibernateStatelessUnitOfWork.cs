@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
         /// Gets the session.
         /// </summary>
         /// <value>The session.</value>
-        protected internal virtual IStatelessSession Session
+        public virtual IStatelessSession Session
         {
             get { return _session; }
         }
