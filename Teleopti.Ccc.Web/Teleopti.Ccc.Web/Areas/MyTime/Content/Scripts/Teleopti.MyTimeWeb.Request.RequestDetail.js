@@ -164,8 +164,8 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
 	self.IsUpdate = ko.observable(false);
     self.DateFrom = ko.observable(moment().startOf('day'));
     self.DateTo = ko.observable(moment().startOf('day'));
-
     self.TimeFromInternal = ko.observable($('#Request-detail-default-start-time').text());
+    self.TimeToInternal = ko.observable($('#Request-detail-default-end-time').text());
     self.TimeFrom = ko.computed({
         read: function() {
             if (self.IsFullDay()) {
@@ -178,8 +178,6 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
             self.TimeFromInternal(value);
         }
     });
-
-    self.TimeToInternal = ko.observable($('#Request-detail-default-end-time').text());
     self.TimeTo = ko.computed({
         read: function () {
             if (self.IsFullDay()) {
@@ -192,7 +190,6 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
             self.TimeToInternal(value);
         }
     });
-
     self.ShowMeridian = ($('div[data-culture-show-meridian]').attr('data-culture-show-meridian') == 'true');
     self.TypeEnum = ko.observable(0);
     self.ShowError = ko.observable(false);
@@ -218,18 +215,6 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
     self.AddRequest = function() {
         addRequestMethod(self, self.AddRequestCallback);
     };
-
-
-
-	self.IsFullDay.subscribe(function (newValue) {
-	    //if (newValue) {
-	    //    self.TimeFrom();
-	    //    self.TimeTo($('#Request-detail-default-fullday-end-time').text());
-	    //} else {
-		//	self.TimeFrom($('#Request-detail-default-start-time').text());
-		//	self.TimeTo($('#Request-detail-default-end-time').text());
-		//}
-	});
 	
     function _setDefaultDates() {
         var year = $('#Request-detail-today-year').val();
