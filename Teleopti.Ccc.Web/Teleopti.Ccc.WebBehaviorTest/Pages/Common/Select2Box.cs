@@ -34,6 +34,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 		{
 			get
 			{
+				EventualAssert.That(() => IsOpen, Is.True);
 				var items = Element.DomContainer.ListItems.Filter(QuicklyFind.ByClass("select2-result-selectable"));
 				return from item in items select item.Children().First().Text;
 			}
