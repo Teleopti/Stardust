@@ -50,42 +50,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 		                var blockPeriodFinderBetweenDayOff = new BlockPeriodFinderBetweenDayOff();
 		                blockPeriod = blockPeriodFinderBetweenDayOff.GetBlockPeriod(tempMatrixes.First(), blockOnDate);
-
-                        ////THE DATE POINTERT SHOULD NEVER BE A DAYOFF
-                        ////IEnumerable<IScheduleMatrixPro> matrixes = teamInfo.MatrixesForGroupAndDate(blockOnDate).ToList();
-                        ////if (matrixes.Any())
-                        ////{
-                        //    //move to left side to get the starting date
-                        //DateOnly startDate = blockOnDate;
-                        //scheduleDayProTemp = tempMatrixes.First().GetScheduleDayByKey(startDate);
-                        //while (scheduleDayProTemp != null && !isDayOff(scheduleDayProTemp.DaySchedulePart()))
-                        //{
-                        //    startDate = startDate.AddDays(-1);
-                        //    scheduleDayProTemp = tempMatrixes.First().GetScheduleDayByKey(startDate);
-                        //}
-                        //startDate = startDate.AddDays(1);
-
-                        //foreach (var dateOnly in tempMatrixes.First().SchedulePeriod.DateOnlyPeriod.DayCollection())
-                        //{
-                        //    if (startDate > dateOnly) continue;
-
-                        //    scheduleDayProTemp = tempMatrixes.First().GetScheduleDayByKey(dateOnly);
-                        //    if (scheduleDayProTemp == null) continue;
-
-                        //    if (isDayOff(scheduleDayProTemp.DaySchedulePart()))
-                        //    {
-                        //        blockPeriod = new DateOnlyPeriod(startDate, dateOnly.AddDays(-1));
-                        //        break;
-                        //    }
-                        //    if (dateOnly == tempMatrixes.First().SchedulePeriod.DateOnlyPeriod.EndDate)
-                        //    {
-                        //        blockPeriod = new DateOnlyPeriod(startDate, dateOnly);
-                        //        break;
-                        //    }
-
-
-                        //}
-                        //}
+                        
                         break;
 
 				    }
