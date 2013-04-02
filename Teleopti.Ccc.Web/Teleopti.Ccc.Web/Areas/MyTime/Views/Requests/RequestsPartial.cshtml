@@ -165,19 +165,19 @@
         <span id="Request-detail-deny-reason"></span>
     </div>
     <div>
-        <input id="Request-detail-subject-input" type="text" class="request-subject-input input-block-level" placeholder="@Resources.Subject" />
+        <input id="Request-detail-subject-input" type="text" class="request-subject-input input-block-level" placeholder="@Resources.Subject" data-bind="value: Subject" />
     </div>
     <div>
-        <textarea id="Request-detail-message-input" class="request-message-input input-block-level" placeholder="@Resources.Message" />
+        <textarea id="Request-detail-message-input" class="request-message-input input-block-level" placeholder="@Resources.Message" data-bind="value: Message" />
     </div>
     <div id="Absence-type-element" data-bind="visible: AbsenceRequestHeaderVisible">
         <label for="Absence-type">
             @Resources.AbsenceType
         </label>
-        <select id="Absence-type">
+        <select id="Absence-type" data-bind="value: AbsenceId">
 			@foreach (var absenceType in Model.AbsenceTypes)
 			{
-				<option value="@Html.AttributeEncode(absenceType.Name)" typeid="@Html.AttributeEncode(absenceType.Id)">@absenceType.Name</option>
+				<option value="@Html.AttributeEncode(absenceType.Id)">@absenceType.Name</option>
 			}
 		</select>
     </div>
@@ -206,7 +206,7 @@
     </label>
     <div class="alert alert-danger" data-bind="visible: ShowError, html: ErrorMessage" />    
     <div class="clearfix">
-        <button id="Request-detail-ok-button" class="btn btn-primary pull-right" update-value="@Html.AttributeEncode(Resources.Update)" new-value="@Html.AttributeEncode(Resources.SubmitRequest)"/>
+        <button id="Request-detail-ok-button" class="btn btn-primary pull-right" data-bind="click: AddRequest, text: EntityId > 0 ? '@Html.AttributeEncode(Resources.Update)' : '@Html.AttributeEncode(Resources.SubmitRequest)'"/>
     </div>
 </script>
 
@@ -237,7 +237,7 @@
 </div>
 <div id="Requests-body-inner" class="request-body-inner relative">
 	@Html.Partial("NewShiftTradeRequest")
-    <div id="Request-detail-section" class="well well-small displaynone" data-bind=" css: { 'request-selected': IsUpdate() == true , 'request-not-selected': IsUpdate() == false}">
+    <div id="Request-detail-section" class="well well-small" data-bind="visible: IsNewInProgress">
 		<div data-bind="template : Template">
 		</div>
 	</div>
@@ -255,7 +255,7 @@
         <div data-bind="foreach: ColumnRequests">
             <div class="row" data-bind="foreach: Items">
                 <div class="span6">
-                    <div class="well well-small">
+                    <div class="well well-small" data-bind="click: ShowDetails" style="cursor: pointer">
                         <div>
                             <button class="close" data-bind="click: $root.Delete,clickBubble: false, visible: CanDelete" title="@Resources.Delete">&times;</button>
                         </div>
@@ -271,6 +271,11 @@
                             <span class="request-caption">@Resources.UpdatedOn: </span><span data-bind="text: UpdatedOn" ></span>
                         </div>
                         <div class="request-text" data-bind="text: Text">
+                        </div>
+                        <div data-bind="visible: IsSelected, with: DetailItem">
+                            <hr />
+                            <div data-bind="template : Template">
+                            </div>
                         </div>
                     </div>    
                 </div>

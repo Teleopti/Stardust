@@ -33,6 +33,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
         self.IsLoading = ko.observable(false);
         self.CanDelete = ko.observable(true);
         self.StatusClass = ko.observable();
+        self.DetailItem = undefined;
 
         self.Type = ko.computed(function () {
             var payload = (self.RequestPayload() != '') ? ', ' + self.RequestPayload() : '';
@@ -51,10 +52,8 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
                     self.IsLoading(false);
                 },
                 success: function (data) {
-					Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.HideShiftTradeWindow();
-					//var distanceFromTop = Math.max(15, $(event.currentTarget).position().top - 30);
-                    //Teleopti.MyTimeWeb.Request.RequestDetail.ShowRequest(data, distanceFromTop);
-                    Teleopti.MyTimeWeb.Request.RequestDetail.ShowRequest(data);
+                    self.DetailItem = Teleopti.MyTimeWeb.Request.RequestDetail.ShowRequest(data);
+                    self.IsSelected(true);
                 }
             });
         };
@@ -71,28 +70,16 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 
         self.Ready = readyForInteraction;
         self.Completed = completelyLoaded;
-
         self.IsUpdate = ko.computed(function () {
             return false;
         });
-
+        
         self.Template = ko.computed(function () {
             return "request-detail-not-set";
         });
 
         self.Requests = ko.observableArray();
-
-        self.SelectItem = function (requestItemViewModel, event) {
-            self.SetSelected(requestItemViewModel);
-            requestItemViewModel.ShowDetails(requestItemViewModel, event);
-        };
-
-        self.SetSelected = function (requestItemViewModel) {
-            ko.utils.arrayForEach(self.Requests(), function (item) {
-                item.IsSelected(item == requestItemViewModel);
-            });
-        };
-
+        
         self.MoreToLoad = ko.observable(false);
 
         self.isLoadingRequests = ko.observable(true);
@@ -159,7 +146,6 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
                 success: function (data) {
                     selectedViewModel.Initialize(data);
                     self.Requests.unshift(selectedViewModel);
-                    self.SetSelected(selectedViewModel);
                 }
             });
         };
