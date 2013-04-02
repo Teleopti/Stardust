@@ -99,6 +99,10 @@ Teleopti.MyTimeWeb.AsmMessageList = (function ($) {
 
 			self.dialogueMessages(dialogueMessageArray);
 		};
+
+	    self.toggleSelected = function() {
+	        self.isSelected(!self.isSelected());
+	    };
 	}
 
 	var dialogueMessageViewModel = function (dialogueMessage) {

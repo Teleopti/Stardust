@@ -12,7 +12,7 @@
     <div id="AsmMessages-list" data-bind="foreach: asmMessageColumnList">
         <div class="row" data-bind="foreach: Items">
             <div class="span6">
-                <div class="well well-small" data-bind="css: { 'asmMessage-selected': isSelected }, click: isSelected">
+                <div class="well well-small" data-bind="css: { 'asmMessage-selected': isSelected }, click: toggleSelected" style="cursor: pointer">
                     <span class="displaynone" data-bind="text : messageId"></span>
                     <div>
                         <h3 data-bind="text : title">
