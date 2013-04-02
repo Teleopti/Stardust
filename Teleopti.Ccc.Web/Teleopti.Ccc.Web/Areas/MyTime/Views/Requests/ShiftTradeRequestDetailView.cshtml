@@ -16,9 +16,13 @@
         <div>
             <div id="Request-shift-trade-detail-info" data-bind="visible: showInfo">@Resources.CannotDisplayScheduleWhenShiftTradeStatusIsNew</div>
             <br/>
-            <span class="request-caption">@Resources.From: </span><span class="shift-trade-swap-detail-agent-name request-data-type" id="Request-shift-trade-sender" data-bind="text: personFrom" ></span>
-            <span class="request-caption">@Resources.To: </span><span class="shift-trade-swap-detail-agent-name request-data-type" id="Request-shift-trade-reciever" data-bind="text: personTo" ></span>
-        </div>
+            <div id="sender-info">
+                <span class="request-caption">@Resources.From: </span><span class="shift-trade-swap-detail-agent-name request-data-type" id="Request-shift-trade-sender" data-bind="text: personFrom" ></span>
+            </div>
+            <div id="reciever-info">
+                <span class="request-caption">@Resources.To: </span><span class="shift-trade-swap-detail-agent-name request-data-type" id="Request-shift-trade-reciever" data-bind="text: personTo" ></span>
+            </div>
+            </div>
         <br/>
 
         <div  class="shift-trade-swap-detail-timeline" data-bind="foreach: hours, visible: !showInfo()" >
@@ -28,12 +32,12 @@
         </div>
         <div class="shift-trade-swap-detail-schedule-row">
 			
-            <div class="shift-trade-swap-detail-schedule" data-bind="foreach: mySchedule().layers">
+            <div class="shift-trade-swap-detail-schedule" data-bind="foreach: mySchedule().layers, hoverToggle: 'hoverBorder', hoverTarget: '#sender-info'">
                 <span class="shift-trade-layer " data-bind="style: { left : leftPx, backgroundColor : backgroundColor, paddingLeft : paddingLeft}, attr: {'title' : title}, css:{ striped : $parent.mySchedule().showDayOffStyle(), dayoff : $parent.mySchedule().showDayOffStyle() }">
                     <span class="shift-trade-dayoff-name" data-bind="text: $parent.mySchedule().dayOffText"></span>
                 </span>
             </div>
-            <div class="shift-trade-swap-detail-schedule-to" data-bind="foreach: otherSchedule().layers">
+            <div class="shift-trade-swap-detail-schedule-to" data-bind="foreach: otherSchedule().layers, hoverToggle: 'hoverBorder', hoverTarget: '#reciever-info'">
                 <span class="shift-trade-layer" data-bind="style: { left : leftPx, backgroundColor : backgroundColor, paddingLeft : paddingLeft}, attr: {'title' : title}, css:{ striped : $parent.otherSchedule().showDayOffStyle(), dayoff : $parent.otherSchedule().showDayOffStyle() }">
                     <span class="shift-trade-dayoff-name" data-bind="text: $parent.otherSchedule().dayOffText"></span>
                 </span>					

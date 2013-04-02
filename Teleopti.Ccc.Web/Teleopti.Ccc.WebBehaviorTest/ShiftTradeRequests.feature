@@ -356,7 +356,7 @@ Scenario: Show name of sender of a received shifttrade
 	| From     | Ashley Andeen	|
 	| DateTo   | 2030-01-01    |
 	| DateFrom | 2030-01-01    |
-	| Approved | True          |
+	| Pending | True          |
 	And I am viewing requests
 	When I click on the request
 	Then I should see 'Ashley Andeen' as the sender of the request
