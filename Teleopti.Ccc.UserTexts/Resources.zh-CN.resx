@@ -3099,7 +3099,7 @@
     <comment>New state group</comment>
   </data>
   <data name="NewTextRequest" xml:space="preserve">
-    <value>填写新的申请</value>
+    <value>新建文本申请</value>
     <comment>Agent Portal Context menu item text for Text Request</comment>
   </data>
   <data name="NewThreeDots" xml:space="preserve">
@@ -4906,7 +4906,7 @@ Periods</comment>
     <comment>Test</comment>
   </data>
   <data name="TextRequest" xml:space="preserve">
-    <value>填写申请</value>
+    <value>文本申请</value>
     <comment>Ribbon menu item name for Text request</comment>
   </data>
   <data name="TextTooLong" xml:space="preserve">
