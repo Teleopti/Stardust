@@ -164,6 +164,7 @@
     <Compile Include="Forecast\StatisticLoader.cs" />
     <Compile Include="DateOnlyPeriodSerializer.cs" />
     <Compile Include="DenormalizeBusBootStrapper.cs" />
+    <Compile Include="LocalServiceBusPublisher.cs" />
     <Compile Include="NewtonsoftJsonSerializer.cs" />
     <Compile Include="Notification\NotificationConfigReader.cs" />
     <Compile Include="Denormalizer\UpdateGroupingReadModelDataConsumer.cs" />

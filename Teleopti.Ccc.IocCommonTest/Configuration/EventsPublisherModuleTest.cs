@@ -17,10 +17,20 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 	public class EventsPublisherModuleTest
 	{
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
-		public void ShouldResolveLocalEventPublisher()
+		public void ShouldResolveServiceBusLocalEventPublisher()
 		{
 			var containerBuilder = new ContainerBuilder();
-			containerBuilder.RegisterModule<LocalEventsPublisherModule>();
+			containerBuilder.RegisterModule<LocalServiceBusEventsPublisherModule>();
+			var container = containerBuilder.Build();
+			container.Resolve<IEventsPublisher>().Should().Not.Be.Null();
+			container.Resolve<IEventPublisher>().Should().Be.OfType<EventPublisher>();
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
+		public void ShouldResolveLocalInMemoryEventPublisher()
+		{
+			var containerBuilder = new ContainerBuilder();
+			containerBuilder.RegisterModule<LocalInMemoryEventsPublisherModule>();
 			var container = containerBuilder.Build();
 			container.Resolve<IEventsPublisher>().Should().Not.Be.Null();
 			container.Resolve<IEventPublisher>().Should().Be.OfType<EventPublisher>();

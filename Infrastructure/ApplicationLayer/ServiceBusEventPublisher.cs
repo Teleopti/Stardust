@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2201:DoNotRaiseReservedExceptionTypes")]
-		public void Publish(IEvent @event)
+		public void Publish(object @event)
 		{
 			if (!_sender.EnsureBus())
 				throw new ApplicationException("Cant find the bus, cant publish the event!");

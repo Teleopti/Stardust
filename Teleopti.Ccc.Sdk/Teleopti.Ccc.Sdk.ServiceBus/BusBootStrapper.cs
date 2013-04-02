@@ -7,6 +7,7 @@ using Rhino.ServiceBus.Autofac;
 using Rhino.ServiceBus.Internal;
 using Rhino.ServiceBus.MessageModules;
 using Rhino.ServiceBus.Sagas.Persisters;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Sdk.ServiceBus.ShiftTrade;
 
@@ -50,14 +51,15 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
         	build.RegisterModule<ImportForecastContainerInstaller>();
 			build.RegisterModule<ForecastContainerInstaller>();
 			build.RegisterModule<CommandDispatcherModule>();
-			build.RegisterModule<LocalEventsPublisherModule>();
+			build.RegisterModule<LocalServiceBusEventsPublisherModule>();
+			build.RegisterType<LocalServiceBusPublisher>().As<IPublishEventsFromEventHandlers>().SingleInstance();
 			build.RegisterModule<CommandHandlersModule>();
 			build.RegisterModule<EventHandlersModule>();
 
 			build.Update(Container);
         }
 
-		protected override void ConfigureBusFacility(Rhino.ServiceBus.Impl.AbstractRhinoServiceBusConfiguration configuration)
+	    protected override void ConfigureBusFacility(Rhino.ServiceBus.Impl.AbstractRhinoServiceBusConfiguration configuration)
 		{
 			base.ConfigureBusFacility(configuration);
 

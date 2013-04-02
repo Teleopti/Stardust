@@ -8,15 +8,13 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 		IHandleEvent<ProjectionChangedEvent>, 
 		IHandleEvent<ProjectionChangedEventForPersonScheduleDay>
 	{
-		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IPersonScheduleDayReadModelsCreator _scheduleDayReadModelsCreator;
 		private readonly IPersonScheduleDayReadModelRepository _scheduleDayReadModelRepository;
 
-		public PersonScheduleDayReadModelHandler(IUnitOfWorkFactory unitOfWorkFactory,
-									IPersonScheduleDayReadModelsCreator scheduleDayReadModelsCreator,
-									IPersonScheduleDayReadModelRepository scheduleDayReadModelRepository)
+		public PersonScheduleDayReadModelHandler(
+			IPersonScheduleDayReadModelsCreator scheduleDayReadModelsCreator,
+			IPersonScheduleDayReadModelRepository scheduleDayReadModelRepository)
 		{
-			_unitOfWorkFactory = unitOfWorkFactory;
 			_scheduleDayReadModelsCreator = scheduleDayReadModelsCreator;
 			_scheduleDayReadModelRepository = scheduleDayReadModelRepository;
 		}

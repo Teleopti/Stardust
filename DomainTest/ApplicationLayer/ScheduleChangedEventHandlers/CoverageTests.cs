@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person, period);
 			range.Add(personAssignment);
 			scheduleDictionary.AddTestItem(person, range);
-			var bus = MockRepository.GenerateMock<IQuestionablyPublishMoreEvents>();
+			var bus = MockRepository.GenerateMock<IPublishEventsFromEventHandlers>();
 			var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
 			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(MockRepository.GenerateMock<IUnitOfWork>());
 			var scenarioRepository = MockRepository.GenerateMock<IScenarioRepository>();
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			scheduleRepository.Stub(x => x.FindSchedulesOnlyInGivenPeriod(null, null, new DateTimePeriod(), null)).IgnoreArguments()
 			                  .Return(scheduleDictionary);
 
-			var target = new ScheduleChangedHandler(bus, unitOfWorkFactory, scenarioRepository, personRepository, scheduleRepository, new ProjectionChangedEventBuilder());
+			var target = new ScheduleChangedHandler(bus, scenarioRepository, personRepository, scheduleRepository, new ProjectionChangedEventBuilder());
 
 			target.Handle(new FullDayAbsenceAddedEvent { StartDateTime = DateTime.UtcNow, EndDateTime = DateTime.UtcNow });
 			target.Handle(new ScheduleChangedEvent {StartDateTime = DateTime.UtcNow, EndDateTime = DateTime.UtcNow});
@@ -72,7 +72,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			var personDayOff = new PersonDayOff(person, scenario, DayOffFactory.CreateDayOff(), new DateOnly(DateTime.SpecifyKind(DateTime.Today, DateTimeKind.Utc)), TimeZoneInfoFactory.UtcTimeZoneInfo());
 			range.Add(personDayOff);
 			scheduleDictionary.AddTestItem(person, range);
-			var bus = MockRepository.GenerateMock<IQuestionablyPublishMoreEvents>();
+			var bus = MockRepository.GenerateMock<IPublishEventsFromEventHandlers>();
 			var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
 			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(MockRepository.GenerateMock<IUnitOfWork>());
 			var scenarioRepository = MockRepository.GenerateMock<IScenarioRepository>();
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			scheduleRepository.Stub(x => x.FindSchedulesOnlyInGivenPeriod(null, null, new DateTimePeriod(), null)).IgnoreArguments()
 							  .Return(scheduleDictionary);
 
-			var target = new ScheduleChangedHandler(bus, unitOfWorkFactory, scenarioRepository, personRepository, scheduleRepository, new ProjectionChangedEventBuilder());
+			var target = new ScheduleChangedHandler(bus, scenarioRepository, personRepository, scheduleRepository, new ProjectionChangedEventBuilder());
 
 			target.Handle(new ScheduleChangedEvent { StartDateTime = DateTime.UtcNow, EndDateTime = DateTime.UtcNow });
 			target.Handle(new ScheduleInitializeTriggeredEventForPersonScheduleDay { StartDateTime = DateTime.UtcNow, EndDateTime = DateTime.UtcNow });
@@ -94,13 +94,13 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 		public void ScheduleChangedHandlerShouldBeCovered2()
 		{
 			var scenario = ScenarioFactory.CreateScenarioAggregate(" ", false);
-			var bus = MockRepository.GenerateMock<IQuestionablyPublishMoreEvents>();
+			var bus = MockRepository.GenerateMock<IPublishEventsFromEventHandlers>();
 			var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
 			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(MockRepository.GenerateMock<IUnitOfWork>());
 			var scenarioRepository = MockRepository.GenerateMock<IScenarioRepository>();
 			scenarioRepository.Stub(x => x.Get(Arg<Guid>.Is.Anything)).Return(scenario);
 
-			var target = new ScheduleChangedHandler(bus, unitOfWorkFactory, scenarioRepository, null, null, null);
+			var target = new ScheduleChangedHandler(bus, scenarioRepository, null, null, null);
 
 			target.Handle(new ScheduleChangedEvent { StartDateTime = DateTime.UtcNow, EndDateTime = DateTime.UtcNow });
 			target.Handle(new ScheduleInitializeTriggeredEventForPersonScheduleDay { StartDateTime = DateTime.UtcNow, EndDateTime = DateTime.UtcNow });
@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 		public void ScheduleChangedHandlerShouldBeCovered3()
 		{
 			var scenario = ScenarioFactory.CreateScenarioAggregate(" ", true);
-			var bus = MockRepository.GenerateMock<IQuestionablyPublishMoreEvents>();
+			var bus = MockRepository.GenerateMock<IPublishEventsFromEventHandlers>();
 			var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
 			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(MockRepository.GenerateMock<IUnitOfWork>());
 			var scenarioRepository = MockRepository.GenerateMock<IScenarioRepository>();
@@ -120,7 +120,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
 			personRepository.Stub(x => x.FindPeople(new Guid[] {})).IgnoreArguments().Return(new Collection<IPerson>());
 
-			var target = new ScheduleChangedHandler(bus, unitOfWorkFactory, scenarioRepository, personRepository, null, null);
+			var target = new ScheduleChangedHandler(bus, scenarioRepository, personRepository, null, null);
 
 			target.Handle(new ScheduleChangedEvent { StartDateTime = DateTime.UtcNow, EndDateTime = DateTime.UtcNow });
 			target.Handle(new ScheduleInitializeTriggeredEventForPersonScheduleDay { StartDateTime = DateTime.UtcNow, EndDateTime = DateTime.UtcNow });
@@ -145,7 +145,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			var jsonSerializer = MockRepository.GenerateMock<IJsonSerializer>();
 			var repository = MockRepository.GenerateMock<IPersonScheduleDayReadModelRepository>();
 
-			var target = new PersonScheduleDayReadModelHandler(unitOfWorkFactory, new PersonScheduleDayReadModelsCreator(personRepository, jsonSerializer), repository);
+			var target = new PersonScheduleDayReadModelHandler(new PersonScheduleDayReadModelsCreator(personRepository, jsonSerializer), repository);
 
 			var layers = new List<ProjectionChangedEventLayer> {new ProjectionChangedEventLayer()};
 			var scheduleDays = new List<ProjectionChangedEventScheduleDay> { new ProjectionChangedEventScheduleDay { Layers = layers } };
@@ -173,7 +173,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			var personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person, period);
 			range.Add(personAssignment);
 			scheduleDictionary.AddTestItem(person, range);
-			var bus = MockRepository.GenerateMock<IQuestionablyPublishMoreEvents>();
+			var bus = MockRepository.GenerateMock<IPublishEventsFromEventHandlers>();
 			var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
 			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(MockRepository.GenerateMock<IUnitOfWork>());
 			var scenarioRepository = MockRepository.GenerateMock<IScenarioRepository>();

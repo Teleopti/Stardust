@@ -13,8 +13,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		IHandleEvent<ScheduleInitializeTriggeredEventForScheduleDay>,
 		IHandleEvent<ScheduleInitializeTriggeredEventForPersonScheduleDay>
 	{
-		private readonly IQuestionablyPublishMoreEvents _bus;
-		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+		private readonly IPublishEventsFromEventHandlers _bus;
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IPersonRepository _personRepository;
 		private readonly IScheduleRepository _scheduleRepository;
@@ -22,10 +21,9 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		private IScheduleRange _range;
 		private DateOnlyPeriod _realPeriod;
 
-		public ScheduleChangedHandler(IQuestionablyPublishMoreEvents bus, IUnitOfWorkFactory unitOfWorkFactory, IScenarioRepository scenarioRepository, IPersonRepository personRepository, IScheduleRepository scheduleRepository, IProjectionChangedEventBuilder projectionChangedEventBuilder)
+		public ScheduleChangedHandler(IPublishEventsFromEventHandlers bus, IScenarioRepository scenarioRepository, IPersonRepository personRepository, IScheduleRepository scheduleRepository, IProjectionChangedEventBuilder projectionChangedEventBuilder)
 		{
 			_bus = bus;
-			_unitOfWorkFactory = unitOfWorkFactory;
 			_scenarioRepository = scenarioRepository;
 			_personRepository = personRepository;
 			_scheduleRepository = scheduleRepository;

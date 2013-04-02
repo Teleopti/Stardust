@@ -1,11 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {
-	public class EventPublisher : IEventPublisher
+	public class EventPublisher : IEventPublisher, IPublishEventsFromEventHandlers
 	{
 		private readonly IResolve _resolver;
 
@@ -15,7 +16,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public void Publish(IEvent @event)
+		public void Publish(object @event)
 		{
 			var handlerType = typeof(IHandleEvent<>).MakeGenericType(@event.GetType());
 			var enumerableHandlerType = typeof (IEnumerable<>).MakeGenericType(handlerType);
@@ -26,5 +27,6 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 				method.Invoke(handler, new[] { @event });
 			}
 		}
+
 	}
 }

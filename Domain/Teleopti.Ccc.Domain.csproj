@@ -147,7 +147,7 @@
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ProjectionChangedEventScheduleDay.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ProjectionChangedEventBuilder.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\IProjectionChangedEventBuilder.cs" />
-    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\IQuestionablyPublishMoreEvents.cs" />
+    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\IPublishEventsFromEventHandlers.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleInitializeTriggeredEventForPersonScheduleDay.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\RaptorDomainEvent.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleChangedEvent.cs" />
