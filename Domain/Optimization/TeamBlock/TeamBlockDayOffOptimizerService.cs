@@ -201,16 +201,32 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			if (!success)
 				return false;
 
+			if (!_restrictionOverLimitValidator.Validate(teamInfo, optimizationPreferences))
+			{
+				_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
+				lockDaysInMatrixes(addedDaysOff, teamInfo);
+				lockDaysInMatrixes(removedDaysOff, teamInfo);
+
+				return true;
+			}
 			// ev back to legal state?
 			// if possible reschedule block without clearing
 			// else
 			//	clear involved teamblocks
 			//	reschedule involved teamblocks
-			//if (!_restrictionOverLimitValidator.Validate(teamInfo.teamBlock, optimizationPreferences, schedulingOptions,
-			//												rollbackService, _restrictionChecker))
-			//	continue;
-			// remember not to break anything in shifts or restrictions
+			
 			return true;
+		}
+
+		private static void lockDaysInMatrixes(IList<DateOnly> datesToLock , ITeamInfo teamInfo)
+		{
+			foreach (var dateOnly in datesToLock)
+			{
+				foreach (var scheduleMatrixPro in teamInfo.MatrixesForGroupAndDate(dateOnly))
+				{
+					scheduleMatrixPro.LockPeriod(new DateOnlyPeriod(dateOnly, dateOnly));
+				}
+			}
 		}
 
 		private bool reScheduleAllMovedDaysOff(ISchedulingOptions schedulingOptions, ITeamInfo teamInfo,

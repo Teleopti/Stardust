@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Interfaces.Domain;
 
@@ -7,6 +8,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 	public interface ITeamBlockRestrictionOverLimitValidator
 	{
 		bool Validate(ITeamBlockInfo teamBlockInfo, IOptimizationPreferences optimizationPreferences);
+		bool Validate(ITeamInfo teamInfo, IOptimizationPreferences optimizationPreferences);
 	}
 
 	public class TeamBlockRestrictionOverLimitValidator : ITeamBlockRestrictionOverLimitValidator
@@ -21,10 +23,22 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			_maxMovedDaysOverLimitValidator = maxMovedDaysOverLimitValidator;
 		}
 
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public bool Validate(ITeamInfo teamInfo, IOptimizationPreferences optimizationPreferences)
+		{
+			return validateMatrixes(teamInfo.MatrixesForGroup(), optimizationPreferences);
+		}
+
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public bool Validate(ITeamBlockInfo teamBlockInfo, IOptimizationPreferences optimizationPreferences)
 		{
-			foreach (var matrix in teamBlockInfo.MatrixesForGroupAndBlock())
+			return validateMatrixes(teamBlockInfo.MatrixesForGroupAndBlock(), optimizationPreferences);
+		}
+
+		private bool validateMatrixes(IEnumerable<IScheduleMatrixPro> matrixes, IOptimizationPreferences optimizationPreferences)
+		{
+			foreach (var matrix in matrixes)
 			{
 				if (!_maxMovedDaysOverLimitValidator.ValidateMatrix(matrix, optimizationPreferences))
 					return false;
@@ -47,8 +61,6 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 			return true;
 		}
-
-		// class
 		
 
 		private bool preferencesOverLimit(IScheduleMatrixPro matrix, IOptimizationPreferences optimizationPreferences)
