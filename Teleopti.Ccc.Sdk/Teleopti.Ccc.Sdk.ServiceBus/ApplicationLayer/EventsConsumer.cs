@@ -2,6 +2,7 @@
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.ApplicationLayer
 {
@@ -11,16 +12,22 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ApplicationLayer
 	{
 		private readonly IEventPublisher _publisher;
 		private readonly IServiceBus _bus;
+		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 
-		public EventsConsumer(IEventPublisher publisher, IServiceBus bus)
+		public EventsConsumer(IEventPublisher publisher, IServiceBus bus, IUnitOfWorkFactory unitOfWorkFactory)
 		{
 			_publisher = publisher;
 			_bus = bus;
+			_unitOfWorkFactory = unitOfWorkFactory;
 		}
 
 		public void Consume(IEvent message)
 		{
-			_publisher.Publish(message);
+			using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+			{
+				_publisher.Publish(message);
+				unitOfWork.PersistAll();
+			}
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]

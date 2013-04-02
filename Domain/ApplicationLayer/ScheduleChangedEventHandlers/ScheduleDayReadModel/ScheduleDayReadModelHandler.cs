@@ -34,32 +34,28 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 
 		private void createReadModel(ProjectionChangedEventBase message)
 		{
-			using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
-			{
 				if (!message.IsDefaultScenario) return;
 
 				var person = _personRepository.Get(message.PersonId);
 
-				foreach (var denormalizedScheduleDay in message.ScheduleDays)
+			foreach (var denormalizedScheduleDay in message.ScheduleDays)
+			{
+				var date = new DateOnly(denormalizedScheduleDay.Date);
+				var dateOnlyPeriod = new DateOnlyPeriod(date, date);
+
+				var readModel = _scheduleDayReadModelsCreator.GetReadModel(denormalizedScheduleDay, person);
+
+				if (!message.IsInitialLoad)
 				{
-					var date = new DateOnly(denormalizedScheduleDay.Date);
-					var dateOnlyPeriod = new DateOnlyPeriod(date, date);
-
-					var readModel = _scheduleDayReadModelsCreator.GetReadModel(denormalizedScheduleDay, person);
-
-					if (!message.IsInitialLoad)
-					{
-						_notifySmsLink.NotifySmsLink(readModel, date, person);
-					}
-
-					if (!message.IsInitialLoad)
-					{
-						_scheduleDayReadModelRepository.ClearPeriodForPerson(dateOnlyPeriod, message.PersonId);
-					}
-					_scheduleDayReadModelRepository.SaveReadModel(readModel);
-
-					uow.PersistAll();
+					_notifySmsLink.NotifySmsLink(readModel, date, person);
 				}
+
+				if (!message.IsInitialLoad)
+				{
+					_scheduleDayReadModelRepository.ClearPeriodForPerson(dateOnlyPeriod, message.PersonId);
+				}
+				_scheduleDayReadModelRepository.SaveReadModel(readModel);
+
 			}
 		}
 

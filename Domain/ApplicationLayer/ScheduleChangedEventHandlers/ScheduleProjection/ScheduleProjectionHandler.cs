@@ -22,25 +22,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 
 		private void createReadModel(ProjectionChangedEventBase @event)
 		{
-			using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+			if (!@event.IsDefaultScenario) return;
+
+			foreach (var scheduleDay in @event.ScheduleDays)
 			{
-				if (!@event.IsDefaultScenario) return;
-
-				foreach (var scheduleDay in @event.ScheduleDays)
+				var date = new DateOnly(scheduleDay.Date);
+				if (!@event.IsInitialLoad)
 				{
-					var date = new DateOnly(scheduleDay.Date);
-					if (!@event.IsInitialLoad)
-					{
-						_scheduleProjectionReadOnlyRepository.ClearPeriodForPerson(
-							new DateOnlyPeriod(date, date), @event.ScenarioId, @event.PersonId);
-					}
-
-					foreach (var layer in scheduleDay.Layers)
-					{
-						_scheduleProjectionReadOnlyRepository.AddProjectedLayer(date, @event.ScenarioId, @event.PersonId, layer);
-					}
+					_scheduleProjectionReadOnlyRepository.ClearPeriodForPerson(
+						new DateOnlyPeriod(date, date), @event.ScenarioId, @event.PersonId);
 				}
-				unitOfWork.PersistAll();
+
+				foreach (var layer in scheduleDay.Layers)
+				{
+					_scheduleProjectionReadOnlyRepository.AddProjectedLayer(date, @event.ScenarioId, @event.PersonId, layer);
+				}
 			}
 		}
 
