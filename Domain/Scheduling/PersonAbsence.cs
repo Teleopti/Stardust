@@ -62,8 +62,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				{
 					AbsenceId = absence.Id.Value,
 					PersonId = person.Id.Value,
-					StartDateTime = startDate,
-					EndDateTime = endDate,
+					StartDateTime = startDateTime,
+					EndDateTime = endDateTime,
 					ScenarioId = _scenario.Id.Value
 				});
 		}

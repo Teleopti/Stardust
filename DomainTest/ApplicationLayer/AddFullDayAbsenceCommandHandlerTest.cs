@@ -36,8 +36,8 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			@event.AbsenceId.Should().Be(absenceRepository.Single().Id.Value);
 			@event.PersonId.Should().Be(personRepository.Single().Id.Value);
 			@event.ScenarioId.Should().Be(currentScenario.Current().Id.Value);
-			@event.StartDateTime.Should().Be(new DateTime(2013, 3, 25));
-			@event.EndDateTime.Should().Be(new DateTime(2013, 3, 25));
+			@event.StartDateTime.Should().Be(command.StartDate);
+			@event.EndDateTime.Should().Be(command.EndDate.AddHours(24));
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
@@ -93,6 +93,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			absenceLayer.Payload.Should().Be(absenceRepository.Single());
 			absenceLayer.Period.StartDateTime.Should().Be(TimeZoneInfo.ConvertTimeToUtc(command.StartDate, agentsTimeZone));
 			absenceLayer.Period.EndDateTime.Should().Be(TimeZoneInfo.ConvertTimeToUtc(command.EndDate.AddHours(24), agentsTimeZone));
+			var @event = personAbsenceRepository.Single().PopAllEvents().Single() as FullDayAbsenceAddedEvent;
+			@event.StartDateTime.Should().Be(TimeZoneInfo.ConvertTimeToUtc(command.StartDate, agentsTimeZone));
+			@event.EndDateTime.Should().Be(TimeZoneInfo.ConvertTimeToUtc(command.EndDate.AddHours(24), agentsTimeZone));
 		}
 	}
 }
