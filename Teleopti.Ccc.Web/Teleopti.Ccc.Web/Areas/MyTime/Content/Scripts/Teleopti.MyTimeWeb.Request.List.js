@@ -41,21 +41,29 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
         });
 
         self.ShowDetails = function (viewmodel, event) {
-            ajax.Ajax({
-                url: self.Link(),
-                dataType: "json",
-                type: 'GET',
-                beforeSend: function () {
-                    self.IsLoading(true);
-                },
-                complete: function () {
-                    self.IsLoading(false);
-                },
-                success: function (data) {
-                    self.DetailItem = Teleopti.MyTimeWeb.Request.RequestDetail.ShowRequest(data);
-                    self.IsSelected(true);
-                }
-            });
+            if (self.IsSelected()) {
+                self.IsSelected(false);
+                return;
+            }
+            if (self.DetailItem === undefined) {
+                ajax.Ajax({
+                    url: self.Link(),
+                    dataType: "json",
+                    type: 'GET',
+                    beforeSend: function() {
+                        self.IsLoading(true);
+                    },
+                    complete: function() {
+                        self.IsLoading(false);
+                    },
+                    success: function(data) {
+                        self.DetailItem = Teleopti.MyTimeWeb.Request.RequestDetail.ShowRequest(data);
+                        self.IsSelected(true);
+                    }
+                });
+            } else {
+                self.IsSelected(true);
+            }
         };
 
         self.ToggleMouseOver = function () {

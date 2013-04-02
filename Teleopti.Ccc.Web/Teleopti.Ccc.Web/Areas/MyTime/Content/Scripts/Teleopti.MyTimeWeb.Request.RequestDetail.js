@@ -87,6 +87,7 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 	function _enableDisableDetailSection(data) {
 		if (data.Link.Methods.indexOf("PUT") == -1) {
 		    requestViewModel.IsEditable(false);
+		    requestViewModel.IsTimeInputEnabled(false);
 		} else {
 		    requestViewModel.IsEditable(true);
 		}
@@ -125,7 +126,8 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 		requestViewModel.TimeFrom(data.RawTimeFrom);
 		requestViewModel.DateFrom(moment(new Date(data.DateToYear, data.DateToMonth - 1, data.DateToDayOfMonth)));
 		requestViewModel.TimeTo(data.RawTimeTo);
-	    requestViewModel.EntityId(data.Id);
+		requestViewModel.EntityId(data.Id);
+	    requestViewModel.AbsenceId(data.PayloadId);
 		requestViewModel.DenyReason(data.DenyReason);
 		requestViewModel.IsFullDay(data.IsFullDay);
 	};
@@ -183,15 +185,15 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
     };
 
 	self.IsFullDay.subscribe(function (newValue) {
-	    if (newValue) {
-	        self.TimeFrom($('#Request-detail-default-fullday-start-time').text());
-	        self.TimeTo($('#Request-detail-default-fullday-end-time').text());
-	        self.IsTimeInputEnabled(false);
-	    } else {
-			self.TimeFrom($('#Request-detail-default-start-time').text());
-			self.TimeTo($('#Request-detail-default-end-time').text());
-			self.IsTimeInputEnabled(true);
-		}
+	    //if (newValue) {
+	    //    self.TimeFrom($('#Request-detail-default-fullday-start-time').text());
+	    //    self.TimeTo($('#Request-detail-default-fullday-end-time').text());
+	    //    self.IsTimeInputEnabled(false);
+	    //} else {
+		//	self.TimeFrom($('#Request-detail-default-start-time').text());
+		//	self.TimeTo($('#Request-detail-default-end-time').text());
+		//	self.IsTimeInputEnabled(true);
+		//}
 	});
 	
     function _setDefaultDates() {
