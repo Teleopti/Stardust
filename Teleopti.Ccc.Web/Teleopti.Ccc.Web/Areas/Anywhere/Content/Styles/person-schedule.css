@@ -50,6 +50,13 @@
 			border-radius: 0px 4px 4px 0px;
 }
 
+.person-schedule .shift .layer:only-child
+{
+	-webkit-border-radius: 4px 4px 4px 4px;
+	   -moz-border-radius: 4px 4px 4px 4px;
+			border-radius: 4px 4px 4px 4px;
+}
+
 .person-schedule .full-day-absence-form  {
 	width: 223px;
 }
