@@ -279,7 +279,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			IOpenTheTeamPicker();
 
 			var texts = Pages.Pages.TeamSchedulePage.TeamPicker.OptionsTexts;
-			teamNames.ToList().ForEach(e => EventualAssert.That(() => texts.Contains(e), Is.True));
+			teamNames.ToList().ForEach(e => EventualAssert.That(() => texts.Contains(e), Is.True, "options:" + texts.Aggregate((i, j) => i + "," + j + ";" + " should contain" + e)));
 		}
 
 		[Then(@"the teams should be sorted alphabetically")]
