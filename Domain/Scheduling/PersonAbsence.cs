@@ -51,8 +51,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public virtual void FullDayAbsence(IPerson person, IAbsence absence, DateTime startDate, DateTime endDate)
 		{
-			var startDateTime = TimeZoneInfo.ConvertTimeToUtc(startDate.Date, person.PermissionInformation.DefaultTimeZone());
-			var endDateTime = TimeZoneInfo.ConvertTimeToUtc(endDate.Date.AddHours(24), person.PermissionInformation.DefaultTimeZone());
+			var startDateTime = TimeZoneInfo.ConvertTimeToUtc(DateTime.SpecifyKind(startDate.Date, DateTimeKind.Unspecified), person.PermissionInformation.DefaultTimeZone());
+			var endDateTime = TimeZoneInfo.ConvertTimeToUtc(DateTime.SpecifyKind(endDate.Date.AddHours(24), DateTimeKind.Unspecified), person.PermissionInformation.DefaultTimeZone());
 
 			_person = person;
 			var absenceLayer = new AbsenceLayer(absence, new DateTimePeriod(startDateTime, endDateTime));

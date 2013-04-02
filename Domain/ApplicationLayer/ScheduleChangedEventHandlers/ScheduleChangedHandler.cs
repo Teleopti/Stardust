@@ -11,7 +11,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		IHandleEvent<ScheduleChangedEvent>, 
 		IHandleEvent<ScheduleInitializeTriggeredEventForScheduleProjection>,
 		IHandleEvent<ScheduleInitializeTriggeredEventForScheduleDay>,
-		IHandleEvent<ScheduleInitializeTriggeredEventForPersonScheduleDay>
+		IHandleEvent<ScheduleInitializeTriggeredEventForPersonScheduleDay>,
+		IHandleEvent<FullDayAbsenceAddedEvent>
 	{
 		private readonly IPublishEventsFromEventHandlers _bus;
 		private readonly IScenarioRepository _scenarioRepository;
