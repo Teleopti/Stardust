@@ -1,16 +1,13 @@
 ﻿using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection
 {
 	public class ScheduleProjectionHandler : IHandleEvent<ProjectionChangedEvent>, IHandleEvent<ProjectionChangedEventForScheduleProjection>
 	{
-		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IScheduleProjectionReadOnlyRepository _scheduleProjectionReadOnlyRepository;
 
-		public ScheduleProjectionHandler(IUnitOfWorkFactory unitOfWorkFactory, IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository)
+		public ScheduleProjectionHandler(IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository)
 		{
-			_unitOfWorkFactory = unitOfWorkFactory;
 			_scheduleProjectionReadOnlyRepository = scheduleProjectionReadOnlyRepository;
 		}
 

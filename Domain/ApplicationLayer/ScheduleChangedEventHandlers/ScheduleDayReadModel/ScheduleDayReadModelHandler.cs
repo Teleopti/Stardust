@@ -1,25 +1,21 @@
 ﻿using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel
 {
 	public class ScheduleDayReadModelHandler : IHandleEvent<ProjectionChangedEvent>, IHandleEvent<ProjectionChangedEventForScheduleDay>
 	{
-		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IPersonRepository _personRepository;
 		private readonly IDoNotifySmsLink _notifySmsLink;
 		private readonly IScheduleDayReadModelsCreator _scheduleDayReadModelsCreator;
 		private readonly IScheduleDayReadModelRepository _scheduleDayReadModelRepository;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sms"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "sms")]
-		public ScheduleDayReadModelHandler(IUnitOfWorkFactory unitOfWorkFactory,
-		                                   IPersonRepository personRepository,
+		public ScheduleDayReadModelHandler(IPersonRepository personRepository,
 		                                   IDoNotifySmsLink notifySmsLink,
 		                                   IScheduleDayReadModelsCreator scheduleDayReadModelsCreator,
 		                                   IScheduleDayReadModelRepository scheduleDayReadModelRepository)
 		{
-			_unitOfWorkFactory = unitOfWorkFactory;
 			_personRepository = personRepository;
 			_notifySmsLink = notifySmsLink;
 			_scheduleDayReadModelsCreator = scheduleDayReadModelsCreator;
@@ -55,7 +51,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 					_scheduleDayReadModelRepository.ClearPeriodForPerson(dateOnlyPeriod, message.PersonId);
 				}
 				_scheduleDayReadModelRepository.SaveReadModel(readModel);
-
 			}
 		}
 
