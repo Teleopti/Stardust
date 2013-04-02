@@ -39,10 +39,31 @@ namespace Teleopti.Ccc.InfrastructureTest.ApplicationLayer
 			handler2.AssertWasCalled(x => x.Handle(@event));
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1034:NestedTypesShouldNotBeVisible")]
-		public class TestEvent : Event
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
+		public void ShouldCallCorrectHandleMethod()
 		{
+			var handler = MockRepository.GenerateMock<ITestHandler>();
+			var resolver = MockRepository.GenerateMock<IResolve>();
+			resolver.Stub(x => x.Resolve(typeof(IEnumerable<IHandleEvent<TestEventTwo>>))).Return(new[] { handler });
+			var target = new EventPublisher(resolver);
+			var @event = new TestEventTwo();
+
+			target.Publish(@event);
+
+			handler.AssertWasCalled(x => x.Handle(@event));
 		}
+	}
+
+	public class TestEvent : Event
+	{
+	}
+
+	public class TestEventTwo : Event
+	{
+	}
+
+	public interface ITestHandler : IHandleEvent<TestEvent>, IHandleEvent<TestEventTwo>
+	{
 	}
 
 }

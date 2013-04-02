@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Interfaces.Domain;
@@ -23,7 +24,8 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			var handlers = _resolver.Resolve(enumerableHandlerType) as IEnumerable;
 			foreach (var handler in handlers)
 			{
-				var method = handler.GetType().GetMethod("Handle");
+				var method = handler.GetType().GetMethods()
+					.Single(m => m.Name == "Handle" && m.GetParameters().Single().ParameterType == @event.GetType());
 				method.Invoke(handler, new[] { @event });
 			}
 		}
