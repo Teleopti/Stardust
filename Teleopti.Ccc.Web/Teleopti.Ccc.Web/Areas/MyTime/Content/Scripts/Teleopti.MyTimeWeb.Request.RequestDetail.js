@@ -90,7 +90,6 @@ Teleopti.MyTimeWeb.Request.RequestDetail = (function ($) {
 	function _enableDisableDetailSection(data) {
 		if (data.Link.Methods.indexOf("PUT") == -1) {
 		    requestViewModel.IsEditable(false);
-		    requestViewModel.IsTimeInputEnabled(false);
 		} else {
 		    requestViewModel.IsEditable(true);
 		}

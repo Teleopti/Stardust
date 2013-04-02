@@ -15,9 +15,7 @@
 </script>
 
 <script type="text/Html" id="text-request-detail-template">
-	<div>
-        <span data-bind="text: DenyReason"></span>
-    </div>
+	<div class="alert alert-info" data-bind="html: DenyReason, visible: DenyReason() != ''" />
     <div>
         <input type="text" class="input-block-level" placeholder="@Resources.Subject" data-bind="value: Subject, enable: IsEditable" />
     </div>
@@ -36,7 +34,7 @@
     </div>
     <div>
         <span class="input-append">
-            <input data-bind="datepicker: DateTo, datepickerOptions: {autoHide: true}" type="text"  />
+            <input data-bind="datepicker: DateTo, datepickerOptions: {autoHide: true}, enable: IsEditable" type="text"  />
             <span class="add-on"><i class="icon-th"></i></span>
         </span>
         <div class="input-append bootstrap-timepicker">
@@ -54,9 +52,7 @@
 </script>
 
 <script type="text/Html" id="absence-request-detail-template">
-	<div>
-        <span data-bind="text: DenyReason"></span>
-    </div>
+	<div class="alert alert-info" data-bind="html: DenyReason, visible: DenyReason() != ''" />
     <div>
         <input type="text" class="input-block-level" placeholder="@Resources.Subject" data-bind="value: Subject, enable: IsEditable" />
     </div>
@@ -86,7 +82,7 @@
     </div>
     <div>
         <span class="input-append">
-            <input data-bind="datepicker: DateTo, datepickerOptions: {autoHide: true}" type="text"  />
+            <input data-bind="datepicker: DateTo, datepickerOptions: {autoHide: true}, enable: IsEditable" type="text"  />
             <span class="add-on"><i class="icon-th"></i></span>
         </span>
         <div class="input-append bootstrap-timepicker">

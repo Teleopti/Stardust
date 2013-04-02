@@ -129,7 +129,6 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
                 contentType: 'application/json; charset=utf-8',
                 type: "DELETE",
                 success: function () {
-                    Teleopti.MyTimeWeb.Request.RequestDetail.HideEditSection();
                     self.Requests.remove(requestItemViewModel);
                 },
                 error: function (jqXHR, textStatus) {
