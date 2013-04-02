@@ -57,7 +57,15 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			_person = person;
 			var absenceLayer = new AbsenceLayer(absence, new DateTimePeriod(startDateTime, endDateTime));
 			_layer = absenceLayer;
-			AddEvent(new FullDayAbsenceAddedEvent());
+
+			AddEvent(new FullDayAbsenceAddedEvent
+				{
+					AbsenceId = absence.Id.Value,
+					PersonId = person.Id.Value,
+					StartDateTime = startDate,
+					EndDateTime = endDate,
+					ScenarioId = _scenario.Id.Value
+				});
 		}
 
         /// <summary>

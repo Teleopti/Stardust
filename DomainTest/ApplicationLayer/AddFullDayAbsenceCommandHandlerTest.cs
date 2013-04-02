@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 			var personRepository = new TestWriteSideRepository<IPerson> {PersonFactory.CreatePersonWithId()};
 			var absenceRepository = new TestWriteSideRepository<IAbsence> {AbsenceFactory.CreateAbsenceWithId()};
 			var personAbsenceRepository = new TestWriteSideRepository<IPersonAbsence>();
+			var currentScenario = new TestCurrentScenario();
 
 			var command = new AddFullDayAbsenceCommand
 				{
@@ -28,10 +29,15 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 					EndDate = new DateTime(2013, 3, 25),
 				};
 
-			var target = new AddFullDayAbsenceCommandHandler(new TestCurrentScenario(), personRepository, absenceRepository, personAbsenceRepository);
+			var target = new AddFullDayAbsenceCommandHandler(currentScenario, personRepository, absenceRepository, personAbsenceRepository);
 			target.Handle(command);
 
-			personAbsenceRepository.Single().PopAllEvents().Single().Should().Be.OfType<FullDayAbsenceAddedEvent>();
+			var @event = personAbsenceRepository.Single().PopAllEvents().Single() as FullDayAbsenceAddedEvent;
+			@event.AbsenceId.Should().Be(absenceRepository.Single().Id.Value);
+			@event.PersonId.Should().Be(personRepository.Single().Id.Value);
+			@event.ScenarioId.Should().Be(currentScenario.Current().Id.Value);
+			@event.StartDateTime.Should().Be(new DateTime(2013, 3, 25));
+			@event.EndDateTime.Should().Be(new DateTime(2013, 3, 25));
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
