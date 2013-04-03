@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
@@ -55,7 +56,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			// used for worktime aswell, dont know why, just not changing the behavior for now
 			var contractTimeMinutes = EndTimeAsTimeSpan().Subtract(StartTimeAsTimeSpan()).TotalMinutes;
 
-			var reposistory = new PersonScheduleDayReadModelStorage(new CurrentUnitOfWork(() => GlobalUnitOfWorkState.UnitOfWorkFactory), new DoNotSend(), TODO);
+			var reposistory = new PersonScheduleDayReadModelStorage(new CurrentUnitOfWork(() => GlobalUnitOfWorkState.UnitOfWorkFactory), new DoNotSend(), new SpecificDataSource(TestData.DataSource));
 			reposistory.SaveReadModel(new PersonScheduleDayReadModel
 				{
 					BusinessUnitId = mainActivity.BusinessUnit.Id.GetValueOrDefault(),
