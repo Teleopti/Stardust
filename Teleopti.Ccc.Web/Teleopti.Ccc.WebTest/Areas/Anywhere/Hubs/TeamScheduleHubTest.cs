@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldQueryReadModelsForTeam()
 		{
-			var personScheduleDayReadModelRepository = MockRepository.GenerateMock<IPersonScheduleDayReadModelRepository>();
+			var personScheduleDayReadModelRepository = MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>();
 			var teamId = Guid.NewGuid();
 			var period = new DateTimePeriod(2013, 3, 4, 2013, 3, 5).ChangeEndTime(TimeSpan.FromHours(1));
 			var target = new TeamScheduleHub(personScheduleDayReadModelRepository);
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldPushDataToCallerOnSubscribe()
 		{
-			var personScheduleDayReadModelRepository = MockRepository.GenerateMock<IPersonScheduleDayReadModelRepository>();
+			var personScheduleDayReadModelRepository = MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>();
 			var teamId = Guid.NewGuid();
 			var period = new DateTimePeriod(2013, 3, 4, 2013, 3, 5).ChangeEndTime(TimeSpan.FromHours(1));
 			var target = new TeamScheduleHub(personScheduleDayReadModelRepository);

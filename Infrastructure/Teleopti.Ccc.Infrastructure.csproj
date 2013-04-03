@@ -256,7 +256,7 @@
     <Compile Include="Persisters\ScheduleScreenRetryingPersister.cs" />
     <Compile Include="Repositories\ApplicationRolePersonRepository.cs" />
     <Compile Include="Repositories\CurrentUnitOfWorkExtensions.cs" />
-    <Compile Include="Repositories\PersonScheduleDayReadModelRepository.cs" />
+    <Compile Include="Repositories\PersonScheduleDayReadModelStorage.cs" />
     <Compile Include="Repositories\IJobResultRepository.cs" />
     <Compile Include="Repositories\LicenseStatusRepository.cs" />
     <Compile Include="Repositories\IImportForecastsRepository.cs" />
@@ -399,7 +399,7 @@
     <Compile Include="UnitOfWork\SaveToDenormalizationQueue.cs" />
     <Compile Include="UnitOfWork\ScheduleMessageSender.cs" />
     <Compile Include="UnitOfWork\SqlQuery.cs" />
-    <Compile Include="UnitOfWork\TransactionCallbacks.cs" />
+    <Compile Include="UnitOfWork\TransactionCallback.cs" />
     <Compile Include="UnitOfWork\UnitOfWorkFactory.cs" />
   </ItemGroup>
   <ItemGroup>

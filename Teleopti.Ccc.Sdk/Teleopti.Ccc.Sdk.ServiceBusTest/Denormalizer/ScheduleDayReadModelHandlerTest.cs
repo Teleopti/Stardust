@@ -141,5 +141,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			_target.Handle(message);
 			_mocks.VerifyAll();
 		}
+
 	}
 }

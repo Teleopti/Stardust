@@ -251,7 +251,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		//right now only supporting one callback. if you call this twice - the latter will overwrite the first one
 		public void AfterSuccessfulTx(Action func)
 		{
-			Session.Transaction.RegisterSynchronization(new TransactionCallbacks(func));
+			Session.Transaction.RegisterSynchronization(new TransactionCallback(func));
 		}
 
 		private static bool hasOuterTransaction()

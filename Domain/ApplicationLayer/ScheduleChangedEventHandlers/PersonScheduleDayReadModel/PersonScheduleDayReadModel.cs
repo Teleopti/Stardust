@@ -5,7 +5,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel
 {
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1724:TypeNamesShouldNotMatchNamespaces")]
-	public class PersonScheduleDayReadModel
+	public class PersonScheduleDayReadModel : IPersonScheduleDayReadModel
 	{
 		public Guid PersonId { get; set; }
 		public Guid TeamId { get; set; }

@@ -150,6 +150,7 @@
     <Compile Include="Domain\IOptimizationPreferences.cs" />
     <Compile Include="Domain\IPersonFinderDisplayRow.cs" />
     <Compile Include="Domain\IPersonFinderSearchCriteria.cs" />
+    <Compile Include="Domain\IPersonScheduleDayReadModel.cs" />
     <Compile Include="Domain\IPreferenceAbsenceChecker.cs" />
     <Compile Include="Domain\IJobResult.cs" />
     <Compile Include="Domain\IJobResultDetail.cs" />
@@ -859,6 +860,7 @@
     <Compile Include="MessageBroker\Events\IEventSubscriber.cs" />
     <Compile Include="MessageBroker\Events\IEventUser.cs" />
     <Compile Include="MessageBroker\Events\IMessageBroker.cs" />
+    <Compile Include="MessageBroker\Events\IMessageBrokerSender.cs" />
     <Compile Include="MessageBroker\Notification.cs" />
     <Compile Include="MessageBroker\Subscription.cs" />
     <Compile Include="Messages\Denormalize\GroupPageChangedMessage.cs" />

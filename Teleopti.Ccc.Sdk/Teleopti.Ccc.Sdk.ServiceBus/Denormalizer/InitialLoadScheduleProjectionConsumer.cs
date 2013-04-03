@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 		private readonly IPersonRepository _personRepository;
 		private readonly IScheduleProjectionReadOnlyRepository _scheduleProjectionReadOnlyRepository;
 		private readonly IScheduleDayReadModelRepository _scheduleDayReadModelRepository;
-		private readonly IPersonScheduleDayReadModelRepository _personScheduleDayReadModelRepository;
+		private readonly IPersonScheduleDayReadModelPersister _personScheduleDayReadModelRepository;
 		private readonly IPersonAssignmentRepository _personAssignmentRepository;
 		private readonly ICurrentScenario _scenarioRepository;
 		private readonly IServiceBus _serviceBus;
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 		private DateOnlyPeriod _period;
 		private DateTimePeriod _utcPeriod;
 
-		public InitialLoadScheduleProjectionConsumer(IUnitOfWorkFactory unitOfWorkFactory,IPersonRepository personRepository, IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository, IScheduleDayReadModelRepository scheduleDayReadModelRepository, IPersonScheduleDayReadModelRepository personScheduleDayReadModelRepository, IPersonAssignmentRepository personAssignmentRepository, ICurrentScenario scenarioRepository, IServiceBus serviceBus)
+		public InitialLoadScheduleProjectionConsumer(IUnitOfWorkFactory unitOfWorkFactory, IPersonRepository personRepository, IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository, IScheduleDayReadModelRepository scheduleDayReadModelRepository, IPersonScheduleDayReadModelPersister personScheduleDayReadModelRepository, IPersonAssignmentRepository personAssignmentRepository, ICurrentScenario scenarioRepository, IServiceBus serviceBus)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_personRepository = personRepository;

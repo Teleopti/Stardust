@@ -143,7 +143,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
 			personRepository.Stub(x => x.Load(Arg<Guid>.Is.Anything)).Return(person);
 			var jsonSerializer = MockRepository.GenerateMock<IJsonSerializer>();
-			var repository = MockRepository.GenerateMock<IPersonScheduleDayReadModelRepository>();
+			var repository = MockRepository.GenerateMock<IPersonScheduleDayReadModelPersister>();
 
 			var target = new PersonScheduleDayReadModelHandler(new PersonScheduleDayReadModelsCreator(personRepository, jsonSerializer), repository);
 

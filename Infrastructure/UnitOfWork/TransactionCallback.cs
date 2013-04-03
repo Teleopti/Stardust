@@ -4,11 +4,11 @@ using NHibernate.Transaction;
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
 	//tested by NHibernateUnitOfWorkCommitCallbackTest
-	public class TransactionCallbacks : ISynchronization
+	public class TransactionCallback : ISynchronization
 	{
 		private readonly Action _callback;
 
-		public TransactionCallbacks(Action callback)
+		public TransactionCallback(Action callback)
 		{
 			_callback = callback;
 		}

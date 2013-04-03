@@ -15,9 +15,9 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 	[HubName("teamScheduleHub")]
 	public class TeamScheduleHub : Hub
 	{
-		private readonly IPersonScheduleDayReadModelRepository _personScheduleDayReadModelRepository;
-		
-		public TeamScheduleHub(IPersonScheduleDayReadModelRepository personScheduleDayReadModelRepository)
+		private readonly IPersonScheduleDayReadModelFinder _personScheduleDayReadModelRepository;
+
+		public TeamScheduleHub(IPersonScheduleDayReadModelFinder personScheduleDayReadModelRepository)
 		{
 			_personScheduleDayReadModelRepository = personScheduleDayReadModelRepository;
 		}

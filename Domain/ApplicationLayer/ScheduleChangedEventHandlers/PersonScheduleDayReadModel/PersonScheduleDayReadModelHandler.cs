@@ -9,11 +9,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 		IHandleEvent<ProjectionChangedEventForPersonScheduleDay>
 	{
 		private readonly IPersonScheduleDayReadModelsCreator _scheduleDayReadModelsCreator;
-		private readonly IPersonScheduleDayReadModelRepository _scheduleDayReadModelRepository;
+		private readonly IPersonScheduleDayReadModelPersister _scheduleDayReadModelRepository;
 
 		public PersonScheduleDayReadModelHandler(
 			IPersonScheduleDayReadModelsCreator scheduleDayReadModelsCreator,
-			IPersonScheduleDayReadModelRepository scheduleDayReadModelRepository)
+			IPersonScheduleDayReadModelPersister scheduleDayReadModelRepository)
 		{
 			_scheduleDayReadModelsCreator = scheduleDayReadModelsCreator;
 			_scheduleDayReadModelRepository = scheduleDayReadModelRepository;
