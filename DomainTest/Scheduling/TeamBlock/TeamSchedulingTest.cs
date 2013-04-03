@@ -26,7 +26,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         private ISchedulePartModifyAndRollbackService _schedulePartModifyAndRollbackService;
         private IVirtualSchedulePeriod _virtualSchedulePeriod;
         private BaseLineData _baseLineData;
-        private int _numberOfEventsFired;
         private ITeamBlockInfo _teamBlockInfo;
         private ITeamInfo _teaminfo;
         private IBlockInfo _blockInfo;
@@ -185,7 +184,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro }));
                 Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.MainShift);
 
-                ExpectCallsForMainShift();
+                expectCallsForMainShift();
             }
 
             using (_mock.Playback())
@@ -197,7 +196,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
         }
 
-        private void ExpectCallsForMainShift()
+        private void expectCallsForMainShift()
         {
             Expect.Call(_shiftProjectionCache.TheMainShift).Return(_mainShift);
             Expect.Call(() => _schedulePartModifyAndRollbackService.Modify(_scheduleDay)).IgnoreArguments();
