@@ -107,5 +107,17 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			Assert.AreEqual(result.ForecastedDemand, _skillIntervalData.ForecastedDemand);
 			Assert.AreEqual(result.CurrentDemand, _skillIntervalData.CurrentDemand);
 		}
+
+        [Test]
+        public void ShouldReturnNullIfSkillIntervalDataIsNull()
+        {
+            Assert.IsNull(_target.ApplyFactors(null, _skill)) ;
+        }
+
+        [Test]
+        public void ShouldReturnNullIfSkillIsNull()
+        {
+            Assert.IsNull(_target.ApplyFactors(_skillIntervalData , null));
+        }
 	}
 }

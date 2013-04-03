@@ -7,8 +7,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		double ForecastedDemand { get; set; }
 		DateTimePeriod Period { get; }
 		double CurrentHeads { get; set; }
-		int? MaximumHeads { get; set; }
-		int? MinimumHeads { get; set; }
+		double? MaximumHeads { get; set; }
+        double? MinimumHeads { get; set; }
 		double CurrentDemand { get; set; }
 	}
 
@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	{
 		private readonly DateTimePeriod _period;
 
-		public SkillIntervalData(DateTimePeriod period, double forecastedDemand, double currentDemand, double currentHeads, int? minimumHeads, int? maximumHeads)
+        public SkillIntervalData(DateTimePeriod period, double forecastedDemand, double currentDemand, double currentHeads, double? minimumHeads, double? maximumHeads)
 		{
 			_period = period;
 			ForecastedDemand = forecastedDemand;
@@ -35,9 +35,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 		public double CurrentHeads { get; set; }
 
-		public int? MaximumHeads { get; set; }
+        public double? MaximumHeads { get; set; }
 
-		public int? MinimumHeads { get; set; }
+        public double? MinimumHeads { get; set; }
 
 		public double CurrentDemand { get; set; }
 	}
