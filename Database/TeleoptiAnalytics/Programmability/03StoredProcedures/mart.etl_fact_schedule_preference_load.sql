@@ -159,7 +159,7 @@ ON
 LEFT JOIN				--vi kör tills vidare på day_off_name som "primary key"
 	mart.dim_day_off ddo
 ON
-	f.day_off_name = ddo.day_off_name
+	f.day_off_name = ddo.day_off_name  AND ddo.business_unit_id = @business_unit_id
 
 --LEFT JOIN				--behöver inte denna om de sätts hårt
 --	dim_preference_type dpt
