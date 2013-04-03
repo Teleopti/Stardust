@@ -26,7 +26,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
         {
 
             var processXMLA = string.Format(CultureInfo.InvariantCulture, "<Process xmlns=\"http://schemas.microsoft.com/analysisservices/2003/engine\"><Object><DatabaseID>{0}</DatabaseID></Object><Type>ProcessFull</Type><WriteBackTableCreation>UseExisting</WriteBackTableCreation></Process>", _ASdatabaseName);
-            var setDefaultMembersMDX = string.Format(CultureInfo.InvariantCulture, "ALTER CUBE [{0}] UPDATE DIMENSION [time zone], DEFAULT_MEMBER=[time zone].[{1}]", _ASCubeName, _defaultTimeZoneId);
+            var setDefaultMembersMDX = string.Format(CultureInfo.InvariantCulture, "ALTER CUBE [{0}] UPDATE DIMENSION [time zone], DEFAULT_MEMBER=[time zone].&[{1}]", _ASCubeName, _defaultTimeZoneId);
             var connectionString = string.Format(CultureInfo.InvariantCulture, "Data Source={0};", _ASserver);
                                   
             using (AdomdConnection connection = new AdomdConnection(connectionString))
