@@ -31,6 +31,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 			_projectionChangedEventBuilder = projectionChangedEventBuilder;
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void Handle(FullDayAbsenceAddedEvent @event)
 		{
 			_bus.Publish(new ScheduleChangedEvent
@@ -99,29 +100,5 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 			_realPeriod = actualPeriod.Value.ToDateOnlyPeriod(timeZone);
 			return true;
 		}
-
-		private bool getPeriodAndScenario(FullDayAbsenceAddedEvent @event)
-		{
-			var scenario = _scenarioRepository.Get(@event.ScenarioId);
-			if (!scenario.DefaultScenario) return false;
-
-			var period = new DateTimePeriod(@event.StartDateTime, @event.EndDateTime);
-			var person = _personRepository.FindPeople(new[] { @event.PersonId }).FirstOrDefault();
-			if (person == null) return false;
-
-			var timeZone = person.PermissionInformation.DefaultTimeZone();
-			var dateOnlyPeriod = period.ToDateOnlyPeriod(timeZone);
-			var schedule =
-				_scheduleRepository.FindSchedulesOnlyInGivenPeriod(new PersonProvider(new[] { person }) { DoLoadByPerson = true },
-																   new ScheduleDictionaryLoadOptions(false, false),
-																   dateOnlyPeriod.ToDateTimePeriod(timeZone), scenario);
-
-			_range = schedule[person];
-
-			_realPeriod = period.ToDateOnlyPeriod(timeZone);
-			return true;
-		}
-
-
 	}
 }
