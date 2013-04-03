@@ -72,6 +72,7 @@ BEGIN TRY
 		select Id,replace(fill_proc_name,'mart.','') from mart.report_control where fill_proc_name<>'1'
 		UNION ALL
 		SELECT NEWID(),name FROM sys.procedures WHERE name like 'report_data_%'
+		AND name <>'report_data_schedule_result_subSP'
 
 		OPEN ReportSPs;
 				FETCH NEXT FROM ReportSPs INTO @report_id, @SPname;
