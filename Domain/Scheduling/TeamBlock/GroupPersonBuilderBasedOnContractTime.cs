@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
     public interface IGroupPersonBuilderBasedOnContractTime
     {
-        IList<IGroupPerson> SplitTeams(IGroupPerson groupPerson, DateOnly dateOnly);
+        IList<IGroupPerson> SplitTeams(IList<IPerson > groupMembers, DateOnly dateOnly);
     }
 
     public  class GroupPersonBuilderBasedOnContractTime : IGroupPersonBuilderBasedOnContractTime
@@ -19,15 +19,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             _groupPersonFactory = groupPersonFactory;
         }
 
-        public IList<IGroupPerson> SplitTeams(IGroupPerson groupPerson, DateOnly dateOnly)
+        public IList<IGroupPerson> SplitTeams(IList<IPerson> groupMembers, DateOnly dateOnly)
         {
             var groupPersonList = new List<IGroupPerson>();
             var differentContractTimes = new Dictionary<TimeSpan,List<IPerson >>();
-            if (groupPerson != null)
-                foreach(var person in groupPerson.GroupMembers )
+            if (groupMembers.Count > 0)
+                foreach (var person in groupMembers)
                 {
                     var personPeriod= person.Period(dateOnly);
-                    if (personPeriod == null) return null ;
+                    if (personPeriod == null) continue ;
                     var contract = personPeriod.PersonContract.Contract;
                     var contractTime = new TimeSpan( );
                     switch (contract.WorkTimeSource)
