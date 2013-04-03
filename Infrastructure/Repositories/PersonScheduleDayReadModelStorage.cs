@@ -4,6 +4,7 @@ using System.Linq;
 using NHibernate;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -15,11 +16,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	{
 		private readonly ICurrentUnitOfWork _unitOfWork;
 		private readonly IMessageBrokerSender _messageBroker;
+		private readonly ICurrentDataSource _currentDataSource;
 
-		public PersonScheduleDayReadModelStorage(ICurrentUnitOfWork unitOfWork, IMessageBrokerSender messageBroker)
+		public PersonScheduleDayReadModelStorage(ICurrentUnitOfWork unitOfWork, IMessageBrokerSender messageBroker, ICurrentDataSource currentDataSource)
 		{
 			_unitOfWork = unitOfWork;
 			_messageBroker = messageBroker;
+			_currentDataSource = currentDataSource;
 		}
 
 		public IEnumerable<PersonScheduleDayReadModel> ForPerson(DateOnly startDate, DateOnly endDate, Guid personId)
@@ -79,7 +82,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.SetParameter("Shift", model.Shift,NHibernateUtil.StringClob)
 				.ExecuteUpdate();
 
-			_unitOfWork.Current().AfterSuccessfulTx(() => _messageBroker.SendEventMessage(null, model.BusinessUnitId, model.BelongsToDate, model.BelongsToDate, Guid.Empty, model.PersonId, typeof(IPerson), Guid.Empty, typeof(IPersonScheduleDayReadModel), DomainUpdateType.NotApplicable, null));
+			_unitOfWork.Current().AfterSuccessfulTx(() => _messageBroker.SendEventMessage(_currentDataSource.CurrentName(), model.BusinessUnitId, model.BelongsToDate, model.BelongsToDate, Guid.Empty, model.PersonId, typeof(IPerson), Guid.Empty, typeof(IPersonScheduleDayReadModel), DomainUpdateType.NotApplicable, null));
 		}
 
 		public bool IsInitialized()

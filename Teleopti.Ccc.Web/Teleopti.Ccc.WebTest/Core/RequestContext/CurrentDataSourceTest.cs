@@ -35,18 +35,19 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 			target.Current().Should().Be.Null();
 		}
 
-		//[Test]
-		//public void ShouldReturnCurrentApplicationDatasourceName()
-		//{
-		//	var identityProvider = MockRepository.GenerateMock<ICurrentIdentity>();
-		//	var target = new CurrentDataSource(identityProvider);
-		//	var dataSource = MockRepository.GenerateMock<IDataSource>();
-		//	var identity = new TeleoptiIdentity("hej", dataSource, null, null);
+		[Test]
+		public void ShouldReturnCurrentDataSourceName()
+		{
+			var identityProvider = MockRepository.GenerateMock<ICurrentIdentity>();
+			var target = new CurrentDataSource(identityProvider);
+			var dataSource = MockRepository.GenerateMock<IDataSource>();
+			dataSource.Stub(x => x.DataSourceName).Return("datasource");
+			var identity = new TeleoptiIdentity("hej", dataSource, null, null);
 
-		//	identityProvider.Stub(x => x.Current()).Return(identity);
-		//	dataSource.Stub(x => x.Application).Return("datasource");
+			identityProvider.Stub(x => x.Current()).Return(identity);
 
-		//	target.CurrentApplicationDataSourceName().Should().Be("datasource");
-		//}
+			target.CurrentName().Should().Be("datasource");
+		}
+
 	}
 }

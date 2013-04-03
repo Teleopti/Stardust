@@ -17,5 +17,9 @@ namespace Teleopti.Ccc.Domain.Common
 			return identity == null ? null : identity.DataSource;
 		}
 
+		public string CurrentName()
+		{
+			return Current().DataSourceName;
+		}
 	}
 }
