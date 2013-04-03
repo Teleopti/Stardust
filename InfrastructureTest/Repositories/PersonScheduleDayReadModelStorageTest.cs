@@ -12,7 +12,7 @@ using Teleopti.Interfaces.MessageBroker.Events;
 namespace Teleopti.Ccc.InfrastructureTest.Repositories
 {
 	[TestFixture, Category("LongRunning")]
-	public class PersonScheduleDayReadModelRepositoryTest : DatabaseTest
+	public class PersonScheduleDayReadModelStorageTest : DatabaseTest
 	{
 		private PersonScheduleDayReadModelStorage _target;
  

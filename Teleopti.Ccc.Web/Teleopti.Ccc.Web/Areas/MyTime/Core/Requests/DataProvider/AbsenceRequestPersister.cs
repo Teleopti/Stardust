@@ -1,6 +1,7 @@
 using System;
 using AutoMapper;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
@@ -18,7 +19,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		private readonly IMappingEngine _mapper;
 		private readonly IServiceBusSender _serviceBusSender;
 		private readonly ICurrentBusinessUnitProvider _businessUnitProvider;
-		private readonly IDataSourceProvider _dataSourceProvider;
+		private readonly ICurrentDataSource _currentDataSource;
 		private readonly INow _now;
 		private readonly IUnitOfWorkFactory _uowFactory;
 
@@ -26,7 +27,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 											IMappingEngine mapper, 
 											IServiceBusSender serviceBusSender, 
 											ICurrentBusinessUnitProvider businessUnitProvider, 
-											IDataSourceProvider dataSourceProvider, 
+											ICurrentDataSource currentDataSource, 
 											INow now,
 											IUnitOfWorkFactory uowFactory)
 		{
@@ -34,7 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			_mapper = mapper;
 			_serviceBusSender = serviceBusSender;
 			_businessUnitProvider = businessUnitProvider;
-			_dataSourceProvider = dataSourceProvider;
+			_currentDataSource = currentDataSource;
 			_now = now;
 			_uowFactory = uowFactory;
 		}
@@ -73,7 +74,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 				var message = new NewAbsenceRequestCreated
 				              	{
 				              		BusinessUnitId = _businessUnitProvider.CurrentBusinessUnit().Id.GetValueOrDefault(Guid.Empty),
-				              		Datasource = _dataSourceProvider.CurrentDataSource().DataSourceName,
+				              		Datasource = _currentDataSource.Current().DataSourceName,
 				              		PersonRequestId = personRequest.Id.GetValueOrDefault(Guid.Empty),
 				              		Timestamp = _now.UtcDateTime()
 				              	};

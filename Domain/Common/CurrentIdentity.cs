@@ -1,8 +1,8 @@
 using Teleopti.Ccc.Domain.Security.Principal;
 
-namespace Teleopti.Ccc.Web.Core.RequestContext
+namespace Teleopti.Ccc.Domain.Common
 {
-	public class IdentityProvider : IIdentityProvider
+	public class CurrentIdentity : ICurrentIdentity
 	{
 		public ITeleoptiIdentity Current()
 		{

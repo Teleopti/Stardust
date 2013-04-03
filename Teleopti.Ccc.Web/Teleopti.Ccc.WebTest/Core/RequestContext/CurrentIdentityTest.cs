@@ -11,7 +11,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.WebTest.Core.RequestContext
 {
 	[TestFixture]
-	public class IdentityProviderTest
+	public class CurrentIdentityTest
 	{
 		private IPrincipal _savedPrincipal;
 
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 
 			Thread.CurrentPrincipal = principal;
 
-			var target = new IdentityProvider();
+			var target = new CurrentIdentity();
 
 			target.Current().Should().Be.SameInstanceAs(identity);
 		}

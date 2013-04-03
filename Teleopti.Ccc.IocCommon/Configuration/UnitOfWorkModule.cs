@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using Autofac;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
@@ -28,6 +29,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 
 			builder.RegisterType<CurrentUnitOfWork>().As<ICurrentUnitOfWork>().SingleInstance();
 			builder.RegisterType<RunSql>().As<IRunSql>().SingleInstance();
+
+			builder.RegisterType<CurrentDataSource>().As<ICurrentDataSource>().SingleInstance();
+			builder.Register(c => c.Resolve<ICurrentDataSource>().Current())
+				.As<IDataSource>()
+				.ExternallyOwned();
 		}
 
 		private class NotInitializedUnitOfWorkFactory : IUnitOfWorkFactory

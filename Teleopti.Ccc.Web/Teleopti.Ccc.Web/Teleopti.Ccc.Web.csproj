@@ -366,8 +366,6 @@
     <Compile Include="Core\Aop\Core\ResolvedAspectAttribute.cs" />
     <Compile Include="Core\RequestContext\CurrentHttpContext.cs" />
     <Compile Include="Core\RequestContext\ICurrentHttpContext.cs" />
-    <Compile Include="Core\RequestContext\IdentityProvider.cs" />
-    <Compile Include="Core\RequestContext\IIdentityProvider.cs" />
     <Compile Include="Core\RequestContext\Initialize\WebRequestPrincipalContext.cs" />
     <Compile Include="Areas\MyTime\Core\TimeSpanModelBinder.cs" />
     <Compile Include="Areas\Start\Core\AuthenticationModelBinder.cs" />
@@ -425,8 +423,6 @@
     <Compile Include="Areas\Start\Core\Menu\MenuViewModelFactory.cs" />
     <Compile Include="Areas\Start\Models\Menu\ApplicationArea.cs" />
     <Compile Include="Areas\Start\Models\Menu\ApplicationViewModel.cs" />
-    <Compile Include="Core\RequestContext\DataSourceProvider.cs" />
-    <Compile Include="Core\RequestContext\IDataSourceProvider.cs" />
     <Compile Include="Core\RequestContext\Cookie\ISessionSpecificDataStringSerializer.cs" />
     <Compile Include="Core\RequestContext\Cookie\SessionSpecificDataStringSerializer.cs" />
     <Compile Include="Core\Aop\Aspects\UnitOfWorkAspect.cs" />

@@ -209,7 +209,7 @@
     <Compile Include="Core\Common\DataProvider\PersonPeriodProviderTest.cs" />
     <Compile Include="Core\Common\DataProvider\SchedulePersonProviderTest.cs" />
     <Compile Include="Core\Mapping\FakeMappingDependency.cs" />
-    <Compile Include="Core\RequestContext\IdentityProviderTest.cs" />
+    <Compile Include="Core\RequestContext\CurrentIdentityTest.cs" />
     <Compile Include="FakePermissionProvider.cs" />
     <Compile Include="Core\Portal\ViewModelFactory\PortalViewModelFactoryPreferencesTest.cs" />
     <Compile Include="Core\Portal\ViewModelFactory\PortalViewModelFactoryStudentAvailabilityTest.cs" />
@@ -217,7 +217,7 @@
     <Compile Include="Core\Portal\ViewModelFactory\PortalViewModelFactoryMessageTest.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceFeedbackProviderTest.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceDayFeedbackViewModelMappingTest.cs" />
-    <Compile Include="Core\RequestContext\DataSourceProviderTest.cs" />
+    <Compile Include="Core\RequestContext\CurrentDataSourceTest.cs" />
     <Compile Include="Core\RequestContext\CultureProviderTest.cs" />
     <Compile Include="Core\RequestContext\CurrentBusinessUnitProviderTest.cs" />
     <Compile Include="Core\RequestContext\SessionSpecificDataStringSerializerTest.cs" />
