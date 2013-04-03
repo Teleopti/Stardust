@@ -34,16 +34,14 @@ ko.bindingHandlers.hoverToggle = {
 				hoverIf = true;
 			}
 			if (hoverIf) {
-				targetElements.each(function (index, value) {
+				$.each(targetElements, function (index, value) {
 					ko.utils.toggleDomNodeCssClass(value, ko.utils.unwrapObservable(css), true);
 				});
-
 			}
 		});
 
 		ko.utils.registerEventHandler(element, "mouseleave", function () {
-
-			targetElements.each(function (index, value) {
+			$.each(targetElements, function (index, value) {
 				ko.utils.toggleDomNodeCssClass(value, ko.utils.unwrapObservable(css), false);
 			});
 		});
