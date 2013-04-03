@@ -1,58 +1,49 @@
-﻿using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
     public interface IBlockPeriodFinderBetweenDayOff
     {
-        DateOnlyPeriod? GetBlockPeriod(IScheduleMatrixPro scheduleMatrixPro, DateOnly dateOnly);
+		DateOnlyPeriod? GetBlockPeriod(IScheduleMatrixPro scheduleMatrixPro, DateOnly providedDateOnly);
     }
 
     public class BlockPeriodFinderBetweenDayOff : IBlockPeriodFinderBetweenDayOff
     {
         public DateOnlyPeriod? GetBlockPeriod(IScheduleMatrixPro scheduleMatrixPro, DateOnly providedDateOnly)
         {
-            //move to left side to get the starting date
-            DateOnlyPeriod? blockPeriod = null;
-            DateOnly startDate = providedDateOnly;
-            var scheduleDayProTemp = scheduleMatrixPro.GetScheduleDayByKey(startDate);
-            while (scheduleDayProTemp != null && !isDayOff(scheduleDayProTemp.DaySchedulePart()))
-            {
-                startDate = startDate.AddDays(-1);
-                scheduleDayProTemp = scheduleMatrixPro.GetScheduleDayByKey(startDate);
-            }
-            startDate = startDate.AddDays(1);
+	        IScheduleRange rangeForPerson = scheduleMatrixPro.SchedulingStateHolder.Schedules[scheduleMatrixPro.Person];
+	        
+			IScheduleDay scheduleDay = rangeForPerson.ScheduledDay(providedDateOnly);
+	        if (isDayOff(scheduleDay))
+		        return null;
 
-            foreach (var dateOnly in scheduleMatrixPro.SchedulePeriod.DateOnlyPeriod.DayCollection())
-            {
-                if (startDate >= dateOnly) continue;
+			DateOnlyPeriod rangePeriod = rangeForPerson.Period.ToDateOnlyPeriod(TeleoptiPrincipal.Current.Regional.TimeZone);
+			var schedulePeriod = scheduleMatrixPro.SchedulePeriod.DateOnlyPeriod;
 
-                scheduleDayProTemp = scheduleMatrixPro.GetScheduleDayByKey(dateOnly);
-                if (scheduleDayProTemp == null) continue;
+	        DateOnly startDate = traverse(rangeForPerson, rangePeriod, providedDateOnly.AddDays(-1), -1,schedulePeriod);
+			DateOnly endDate = traverse(rangeForPerson, rangePeriod, providedDateOnly.AddDays(1), 1, schedulePeriod);
 
-                if (isDayOff(scheduleDayProTemp.DaySchedulePart()))
-                {
-                    blockPeriod = new DateOnlyPeriod(startDate, dateOnly.AddDays(-1));
-                    break;
-                }
-                if (dateOnly == scheduleMatrixPro.SchedulePeriod.DateOnlyPeriod.EndDate)
-                {
-                    var outerDateOnly = dateOnly.AddDays(1);
-                    var outerScheduleDayPro = scheduleMatrixPro.GetScheduleDayByKey(outerDateOnly);
-
-                    while (outerScheduleDayPro != null && !isDayOff(outerScheduleDayPro.DaySchedulePart()))
-                    {
-                        outerDateOnly = outerDateOnly.AddDays(1);
-                        outerScheduleDayPro = scheduleMatrixPro.GetScheduleDayByKey(outerDateOnly);
-                    }
-                    outerDateOnly =  outerDateOnly.AddDays(-1);
-                    blockPeriod = new DateOnlyPeriod(startDate, outerDateOnly);
-                    break;
-                }
-
-
-            }
-            return blockPeriod;
+	        return new DateOnlyPeriod(startDate, endDate);
         }
+
+		private static DateOnly traverse(IScheduleRange rangeForPerson, DateOnlyPeriod rangePeriod, DateOnly providedDateOnly,
+								  int stepDays, DateOnlyPeriod currentSchedulePeriod)
+		{
+			DateOnly edgeDate = providedDateOnly;
+			currentSchedulePeriod = new DateOnlyPeriod(currentSchedulePeriod.StartDate.AddDays(-10),
+			                                           currentSchedulePeriod.EndDate.AddDays(10));
+			while (rangePeriod.Contains(edgeDate) && currentSchedulePeriod.Contains(edgeDate))
+			{
+				IScheduleDay scheduleDay = rangeForPerson.ScheduledDay(edgeDate);
+				if (isDayOff(scheduleDay))
+					break;
+
+				edgeDate = edgeDate.AddDays(stepDays);
+			}
+
+			return edgeDate.AddDays(-stepDays);
+		}
 
         //Absence can not be a block breaker when using teams
         private static bool isDayOff(IScheduleDay scheduleDay)
