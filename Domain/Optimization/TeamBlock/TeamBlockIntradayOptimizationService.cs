@@ -116,7 +116,11 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				}
 
 				if (!_restrictionOverLimitValidator.Validate(teamBlockInfo, optimizationPreferences))
+				{
+					teamBlockToRemove.Add(teamBlockInfo);
+					_safeRollbackAndResourceCalculation.Execute(schedulePartModifyAndRollbackService, schedulingOptions);
 					continue;
+				}
 
 				var newStandardDeviation = _teamBlockIntradayDecisionMaker.RecalculateTeamBlock(teamBlockInfo, optimizationPreferences,
 				                                                                                schedulingOptions).BlockInfo.AverageStandardDeviation;
