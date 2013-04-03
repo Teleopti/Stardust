@@ -31,10 +31,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                     {
                         if(j+1<skillIntervalDataList.Count)
                         {
-                            aggregatedList.Add(AggregateTwoIntervals(sortedSkillList[j], sortedSkillList[j + 1]));
+                            aggregatedList.Add(aggregateTwoIntervals(sortedSkillList[j], sortedSkillList[j + 1]));
                             j++;
                         }else
-                            aggregatedList.Add(AggregateTwoIntervals(sortedSkillList[j], null));
+                            aggregatedList.Add(aggregateTwoIntervals(sortedSkillList[j], null));
                     
                     }
                     skillIntervalDataList = aggregatedList;
@@ -46,8 +46,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                     var startPeriod = skillIntervalItem.Period.StartDateTime ;
                     for (int j = 0; j < totallDiffInMin; j++)
                     {
-                        int? minHead = null;
-                        int? maxHead = null;
+                        double? minHead = null;
+                        double? maxHead = null;
                         if (skillIntervalItem.MinimumHeads.HasValue)
                             minHead = skillIntervalItem.MinimumHeads.Value;
                         if (skillIntervalItem.MaximumHeads.HasValue)
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             return resultingskillIntervalDataList;
         }
 
-        private static ISkillIntervalData AggregateTwoIntervals(ISkillIntervalData skillIntervalData1,ISkillIntervalData skillIntervalData2  )
+        private static ISkillIntervalData aggregateTwoIntervals(ISkillIntervalData skillIntervalData1,ISkillIntervalData skillIntervalData2  )
         {
             if(skillIntervalData2 == null )
             {
@@ -77,27 +77,31 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                                              skillIntervalData1.CurrentDemand ,
                                              skillIntervalData1.CurrentHeads , skillIntervalData1.MinimumHeads  , skillIntervalData1.MaximumHeads );
             }
-            int? minHead1 = skillIntervalData1.MinimumHeads.HasValue ? skillIntervalData1.MinimumHeads.Value : (int?)null;
-            int? maxHead1 = skillIntervalData1.MaximumHeads.HasValue ? skillIntervalData1.MaximumHeads.Value : (int?)null;
-            int? minHead2 = skillIntervalData2.MinimumHeads.HasValue ? skillIntervalData2.MinimumHeads.Value : (int?)null;
-            int? maxHead2 = skillIntervalData2.MaximumHeads.HasValue ? skillIntervalData2.MaximumHeads.Value : (int?)null;
+            double? minHead1 = skillIntervalData1.MinimumHeads.HasValue ? skillIntervalData1.MinimumHeads.Value : (double?)null;
+            double? maxHead1 = skillIntervalData1.MaximumHeads.HasValue ? skillIntervalData1.MaximumHeads.Value : (double?)null;
+            double? minHead2 = skillIntervalData2.MinimumHeads.HasValue ? skillIntervalData2.MinimumHeads.Value : (double?)null;
+            double? maxHead2 = skillIntervalData2.MaximumHeads.HasValue ? skillIntervalData2.MaximumHeads.Value : (double?)null;
 
-            int? aggMin = null;
-            if (minHead1.HasValue)
+            double? aggMin = null;
+            if (minHead1.HasValue && minHead2.HasValue)
+                aggMin = (minHead1 + minHead2)/2;
+            else if (minHead1.HasValue)
                 aggMin = minHead1;
-            if (minHead2.HasValue)
-                aggMin += minHead2;
+            else if (minHead2.HasValue)
+                aggMin = minHead2;
 
-            int? aggMax = null;
-            if (maxHead1.HasValue)
-                aggMax = minHead1;
-            if (maxHead2.HasValue)
-                aggMax += minHead2;
+            double? aggMax = null;
+            if (maxHead1.HasValue && maxHead2.HasValue)
+                aggMax = (maxHead1 + maxHead2)/2;
+            else if (maxHead1.HasValue)
+                aggMax = maxHead1;
+            else if (maxHead2.HasValue)
+                aggMax = maxHead2;
 
             return new SkillIntervalData(new DateTimePeriod(skillIntervalData1.Period.StartDateTime, skillIntervalData2.Period.EndDateTime),
-                                         skillIntervalData1.ForecastedDemand + skillIntervalData2.ForecastedDemand,
-                                         skillIntervalData1.CurrentDemand + skillIntervalData2.CurrentDemand,
-                                         skillIntervalData1.CurrentHeads + skillIntervalData2.CurrentHeads, aggMin, aggMax);
+                                         (skillIntervalData1.ForecastedDemand + skillIntervalData2.ForecastedDemand)/2,
+                                         (skillIntervalData1.CurrentDemand + skillIntervalData2.CurrentDemand)/2,
+                                         (skillIntervalData1.CurrentHeads + skillIntervalData2.CurrentHeads)/2, aggMin, aggMax);
         }
     }
 }

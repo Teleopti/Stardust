@@ -44,22 +44,22 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                                              skillIntervalData1.CurrentDemand,
                                              skillIntervalData1.CurrentHeads, skillIntervalData1.MinimumHeads , skillIntervalData1.MaximumHeads );
             }
-            int? minHead1 = skillIntervalData1.MinimumHeads.HasValue ? skillIntervalData1.MinimumHeads.Value : (int?)null;
-            int? maxHead1 = skillIntervalData1.MaximumHeads.HasValue ? skillIntervalData1.MaximumHeads.Value : (int?)null;
-            int? minHead2 = skillIntervalData2.MinimumHeads.HasValue ? skillIntervalData2.MinimumHeads.Value : (int?)null;
-            int? maxHead2 = skillIntervalData2.MaximumHeads.HasValue ? skillIntervalData2.MaximumHeads.Value : (int?)null;
+            double? minHead1 = skillIntervalData1.MinimumHeads.HasValue ? skillIntervalData1.MinimumHeads.Value : (double?)null;
+            double? maxHead1 = skillIntervalData1.MaximumHeads.HasValue ? skillIntervalData1.MaximumHeads.Value : (double?)null;
+            double? minHead2 = skillIntervalData2.MinimumHeads.HasValue ? skillIntervalData2.MinimumHeads.Value : (double?)null;
+            double? maxHead2 = skillIntervalData2.MaximumHeads.HasValue ? skillIntervalData2.MaximumHeads.Value : (double?)null;
 
-            int? aggMin = null;
+            double? aggMin = null;
             if (minHead1.HasValue)
                 aggMin = minHead1;
             if (minHead2.HasValue)
                 aggMin += minHead2;
 
-            int? aggMax = null;
+            double? aggMax = null;
             if (maxHead1.HasValue)
-                aggMax = minHead1;
+                aggMax = maxHead1;
             if (maxHead2.HasValue)
-                aggMax += minHead2;
+                aggMax += maxHead2;
 
             return new SkillIntervalData(new DateTimePeriod(skillIntervalData1.Period.StartDateTime, skillIntervalData2.Period.EndDateTime),
                                          skillIntervalData1.ForecastedDemand + skillIntervalData2.ForecastedDemand,

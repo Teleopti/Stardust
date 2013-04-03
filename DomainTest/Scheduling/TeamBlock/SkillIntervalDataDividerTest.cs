@@ -14,9 +14,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         private MockRepository _mock;
         private ISkillIntervalDataDivider _target;
         private IList<ISkillIntervalData> _skillIntervalDataList;
-        private ISkillIntervalData _skillIntervalData1;
-        private ISkillIntervalData _skillIntervalData2;
-        private ISkillIntervalData _skillIntervalData3;
 
         [SetUp]
         public void Setup()
@@ -25,71 +22,358 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             _target = new SkillIntervalDataDivider();
         }
 
+       
         [Test]
         public void ShouldTestTheSplitForFifteenMin()
         {
-            SetUpIntervalList(30);
-            using(_mock.Record())
+            var startDateTime = new DateTime(2001, 01, 01, 8, 0, 0).ToUniversalTime();
+            _skillIntervalDataList = new List<ISkillIntervalData>();
+            _skillIntervalDataList.Add(createSkillIntervalData(0, 30, 8, null, 7, 0, 0));
+            _skillIntervalDataList.Add(createSkillIntervalData(30, 60, 9, null, 7, 0, 0));
+            _skillIntervalDataList.Add(createSkillIntervalData(60, 90, 11, null, 7, 0, 0));
+
+            using (_mock.Playback())
             {
-                
-            }
-            using(_mock.Playback())
-            {
-                Assert.AreEqual(_target.SplitSkillIntervalData(_skillIntervalDataList, 15).Count(), 6);
+                var skillIntervalData = _target.SplitSkillIntervalData(_skillIntervalDataList, 15);
+                Assert.AreEqual(skillIntervalData.Count(), 6);
+                int min = 0;
+                foreach (var si in skillIntervalData)
+                {
+                    Assert.AreEqual(si.Period, new DateTimePeriod(startDateTime.AddMinutes(min), startDateTime.AddMinutes(min+15)));
+                    min = min + 15;
+                }
             }
         }
 
         [Test]
         public void ShouldTestTheSplitForTenMin()
         {
-            SetUpIntervalList(30);
-            using (_mock.Record())
-            {
+            var startDateTime = new DateTime(2001, 01, 01, 8, 0, 0).ToUniversalTime();
+            _skillIntervalDataList = new List<ISkillIntervalData>();
+            _skillIntervalDataList.Add(createSkillIntervalData(0, 30, 8, null, 7, 0, 0));
+            _skillIntervalDataList.Add(createSkillIntervalData(30, 60, 9, null, 7, 0, 0));
+            _skillIntervalDataList.Add(createSkillIntervalData(60, 90, 11, null, 7, 0, 0));
 
-            }
             using (_mock.Playback())
             {
-                Assert.AreEqual(_target.SplitSkillIntervalData(_skillIntervalDataList, 10).Count(), 9);
+                var skillIntervalData = _target.SplitSkillIntervalData(_skillIntervalDataList, 10);
+                Assert.AreEqual(skillIntervalData.Count(), 9);
+                int min = 0;
+                foreach (var si in skillIntervalData)
+                {
+                    Assert.AreEqual(si.Period, new DateTimePeriod(startDateTime.AddMinutes(min), startDateTime.AddMinutes(min + 10)));
+                    min = min + 10;
+                }
             }
         }
 
         [Test]
         public void ShouldTestTheSplitForFiveMin()
         {
-            SetUpIntervalList(30);
-            using (_mock.Record())
-            {
+            var startDateTime = new DateTime(2001, 01, 01, 8, 0, 0).ToUniversalTime();
+            _skillIntervalDataList = new List<ISkillIntervalData>();
+            _skillIntervalDataList.Add(createSkillIntervalData(0, 30, 8, null, 7, 0, 0));
+            _skillIntervalDataList.Add(createSkillIntervalData(30, 60, 9, null, 7, 0, 0));
+            _skillIntervalDataList.Add(createSkillIntervalData(60, 90, 11, null, 7, 0, 0));
 
-            }
             using (_mock.Playback())
             {
-                Assert.AreEqual(_target.SplitSkillIntervalData(_skillIntervalDataList, 5).Count(), 18);
+                var skillIntervalData = _target.SplitSkillIntervalData(_skillIntervalDataList, 5);
+                Assert.AreEqual(skillIntervalData.Count(), 18);
+                int min = 0;
+                foreach (var si in skillIntervalData)
+                {
+                    Assert.AreEqual(si.Period, new DateTimePeriod(startDateTime.AddMinutes(min), startDateTime.AddMinutes(min + 5)));
+                    min = min + 5;
+                }
             }
         }
 
         [Test]
         public void ShouldTestTheSplitForTenMinResolutionWith15MinInterval()
         {
-            SetUpIntervalList(15);
-            using (_mock.Record())
-            {
+            var startDateTime = new DateTime(2001, 01, 01, 8, 0, 0).ToUniversalTime();
+            _skillIntervalDataList = new List<ISkillIntervalData>();
+            _skillIntervalDataList.Add(createSkillIntervalData(0, 15, 8, null, 7, 0, 0));
+            _skillIntervalDataList.Add(createSkillIntervalData(15, 30, 9, null, 7, 0, 0));
+            _skillIntervalDataList.Add(createSkillIntervalData(30, 45, 11, null, 7, 0, 0));
 
-            }
             using (_mock.Playback())
             {
-                Assert.AreEqual(_target.SplitSkillIntervalData(_skillIntervalDataList,10).Count(), 6);
+                var skillIntervalData = _target.SplitSkillIntervalData(_skillIntervalDataList,10);
+                Assert.AreEqual(skillIntervalData.Count(), 6);
+                int min = 0;
+                foreach (var si in skillIntervalData)
+                {
+                    Assert.AreEqual(si.Period, new DateTimePeriod(startDateTime.AddMinutes(min), startDateTime.AddMinutes(min + 10)));
+                    min = min + 10;
+                }
             }
         }
 
-        private void SetUpIntervalList(int min)
+        [Test]
+        public void VerifyMinimumHeadsArePoppulatedWithCorrectSplit()
         {
-            var startDateTime = new DateTime(2001,01,01,8,0,0).ToUniversalTime() ;
-            _skillIntervalData1 = new SkillIntervalData(new DateTimePeriod(startDateTime, startDateTime.AddMinutes(min)), 10, 20, 0, null, null);
-            _skillIntervalData2 = new SkillIntervalData(new DateTimePeriod(startDateTime.AddMinutes(min), startDateTime.AddMinutes(min + min)), 10, 20, 0, null, null);
-            _skillIntervalData3 = new SkillIntervalData(new DateTimePeriod(startDateTime.AddMinutes(min + min), startDateTime.AddMinutes(min + min + min)), 10, 20, 0, null, null);
+            
+            _skillIntervalDataList = new List<ISkillIntervalData>();
+            _skillIntervalDataList.Add(createSkillIntervalData(0, 15, 8, null, 7, 0, 0));
+            _skillIntervalDataList.Add(createSkillIntervalData(15, 30, 9, null, 7, 0, 0));
+            _skillIntervalDataList.Add(createSkillIntervalData(30, 45, 11, null, 7, 0, 0));
 
-            _skillIntervalDataList = new List<ISkillIntervalData> { _skillIntervalData1, _skillIntervalData2, _skillIntervalData3 };
+            using (_mock.Playback())
+            {
+                var skillIntervalData = _target.SplitSkillIntervalData(_skillIntervalDataList, 10);
+                Assert.AreEqual(skillIntervalData.Count(), 6);
+                Assert.IsTrue(verifyResult(skillIntervalData[0].MinimumHeads, 8.5));
+                Assert.IsTrue(verifyResult(skillIntervalData[1].MinimumHeads, 8.5));
+                Assert.IsTrue(verifyResult(skillIntervalData[2].MinimumHeads, 8.5));
+                Assert.IsTrue(verifyResult(skillIntervalData[3].MinimumHeads, 11));
+                Assert.IsTrue(verifyResult(skillIntervalData[4].MinimumHeads, 11));
+                Assert.IsTrue(verifyResult(skillIntervalData[5].MinimumHeads, 11));
+                
+
+            }
         }
+
+        [Test]
+        public void VerifyMinimumHeadsArePopulatedWithNullWithCorrectSplit()
+        {
+            
+            _skillIntervalDataList = new List<ISkillIntervalData>();
+            _skillIntervalDataList.Add(createSkillIntervalData(0, 15, 8, null, 7, 0, 0));
+            _skillIntervalDataList.Add(createSkillIntervalData(15, 30, null, null, 7, 0, 0));
+            _skillIntervalDataList.Add(createSkillIntervalData(30, 45, 11, null, 7, 0, 0));
+
+            using (_mock.Playback())
+            {
+                var skillIntervalData = _target.SplitSkillIntervalData(_skillIntervalDataList, 10);
+                Assert.AreEqual(skillIntervalData.Count(), 6);
+                Assert.IsTrue(verifyResult(skillIntervalData[0].MinimumHeads, 8));
+                Assert.IsTrue(verifyResult(skillIntervalData[1].MinimumHeads, 8));
+                Assert.IsTrue(verifyResult(skillIntervalData[2].MinimumHeads, 8));
+                Assert.IsTrue(verifyResult(skillIntervalData[3].MinimumHeads, 11));
+                Assert.IsTrue(verifyResult(skillIntervalData[4].MinimumHeads, 11));
+                Assert.IsTrue(verifyResult(skillIntervalData[5].MinimumHeads, 11));
+
+
+            }
+        }
+
+        [Test]
+        public void MinimumHeadsPopulatedWithFirstIntervalWithoutMinHead()
+        {
+
+            _skillIntervalDataList = new List<ISkillIntervalData>();
+            _skillIntervalDataList.Add(createSkillIntervalData(0, 15, null, null, 7, 0, 0));
+            _skillIntervalDataList.Add(createSkillIntervalData(15, 30, 8, null, 7, 0, 0));
+            _skillIntervalDataList.Add(createSkillIntervalData(30, 45, 11, null, 7, 0, 0));
+
+            using (_mock.Playback())
+            {
+                var skillIntervalData = _target.SplitSkillIntervalData(_skillIntervalDataList, 10);
+                Assert.AreEqual(skillIntervalData.Count(), 6);
+                Assert.IsTrue(verifyResult(skillIntervalData[0].MinimumHeads, 8));
+                Assert.IsTrue(verifyResult(skillIntervalData[1].MinimumHeads, 8));
+                Assert.IsTrue(verifyResult(skillIntervalData[2].MinimumHeads, 8));
+                Assert.IsTrue(verifyResult(skillIntervalData[3].MinimumHeads, 11));
+                Assert.IsTrue(verifyResult(skillIntervalData[4].MinimumHeads, 11));
+                Assert.IsTrue(verifyResult(skillIntervalData[5].MinimumHeads, 11));
+
+
+            }
+        }
+
+        [Test]
+        public void VerifyMaximumHeadsArePoppulatedWithCorrectSplit()
+        {
+            
+            _skillIntervalDataList = new List<ISkillIntervalData>();
+            _skillIntervalDataList.Add(createSkillIntervalData(0, 15, null, 12, 7, 0, 0));
+            _skillIntervalDataList.Add(createSkillIntervalData(15, 30, null, 9, 7, 0, 0));
+            _skillIntervalDataList.Add(createSkillIntervalData(30, 45, null, 4, 7, 0, 0));
+
+            using (_mock.Playback())
+            {
+                var skillIntervalData = _target.SplitSkillIntervalData(_skillIntervalDataList, 10);
+                Assert.AreEqual(skillIntervalData.Count(), 6);
+                Assert.IsTrue(verifyResult(skillIntervalData[0].MaximumHeads, 10.5));
+                Assert.IsTrue(verifyResult(skillIntervalData[1].MaximumHeads, 10.5));
+                Assert.IsTrue(verifyResult(skillIntervalData[2].MaximumHeads, 10.5));
+                Assert.IsTrue(verifyResult(skillIntervalData[3].MaximumHeads, 4));
+                Assert.IsTrue(verifyResult(skillIntervalData[4].MaximumHeads, 4));
+                Assert.IsTrue(verifyResult(skillIntervalData[5].MaximumHeads, 4));
+
+
+            }
+        }
+
+        [Test]
+        public void MaximumHeadsPopulatedWithFirstIntervalWithoutMinHead()
+        {
+
+            _skillIntervalDataList = new List<ISkillIntervalData>();
+            _skillIntervalDataList.Add(createSkillIntervalData(0, 15, null,null, 7, 0, 0));
+            _skillIntervalDataList.Add(createSkillIntervalData(15, 30, null, 9, 7, 0, 0));
+            _skillIntervalDataList.Add(createSkillIntervalData(30, 45, null, 4, 7, 0, 0));
+
+            using (_mock.Playback())
+            {
+                var skillIntervalData = _target.SplitSkillIntervalData(_skillIntervalDataList, 10);
+                Assert.AreEqual(skillIntervalData.Count(), 6);
+                Assert.IsTrue(verifyResult(skillIntervalData[0].MaximumHeads, 9));
+                Assert.IsTrue(verifyResult(skillIntervalData[1].MaximumHeads, 9));
+                Assert.IsTrue(verifyResult(skillIntervalData[2].MaximumHeads, 9));
+                Assert.IsTrue(verifyResult(skillIntervalData[3].MaximumHeads, 4));
+                Assert.IsTrue(verifyResult(skillIntervalData[4].MaximumHeads, 4));
+                Assert.IsTrue(verifyResult(skillIntervalData[5].MaximumHeads, 4));
+
+
+            }
+        }
+
+        [Test]
+        public void MaximumHeadsPopulatedWithSecondIntervalWithoutMinHead()
+        {
+
+            _skillIntervalDataList = new List<ISkillIntervalData>();
+            _skillIntervalDataList.Add(createSkillIntervalData(0, 15, null, 3, 7, 0, 0));
+            _skillIntervalDataList.Add(createSkillIntervalData(15, 30, null, null, 7, 0, 0));
+            _skillIntervalDataList.Add(createSkillIntervalData(30, 45, null, 4, 7, 0, 0));
+
+            using (_mock.Playback())
+            {
+                var skillIntervalData = _target.SplitSkillIntervalData(_skillIntervalDataList, 10);
+                Assert.AreEqual(skillIntervalData.Count(), 6);
+                Assert.IsTrue(verifyResult(skillIntervalData[0].MaximumHeads, 3));
+                Assert.IsTrue(verifyResult(skillIntervalData[1].MaximumHeads, 3));
+                Assert.IsTrue(verifyResult(skillIntervalData[2].MaximumHeads, 3));
+                Assert.IsTrue(verifyResult(skillIntervalData[3].MaximumHeads, 4));
+                Assert.IsTrue(verifyResult(skillIntervalData[4].MaximumHeads, 4));
+                Assert.IsTrue(verifyResult(skillIntervalData[5].MaximumHeads, 4));
+
+
+            }
+        }
+
+        [Test]
+        public void VerifyMaximumHeadsArePopulatedWithNullWithCorrectSplit()
+        {
+            
+            _skillIntervalDataList = new List<ISkillIntervalData>();
+            _skillIntervalDataList.Add(createSkillIntervalData(0, 15, null, 6, 7, 0, 0));
+            _skillIntervalDataList.Add(createSkillIntervalData(15, 30, null, 5, 7, 0, 0));
+            _skillIntervalDataList.Add(createSkillIntervalData(30, 45, null, null, 7, 0, 0));
+            using (_mock.Playback())
+            {
+                var skillIntervalData = _target.SplitSkillIntervalData(_skillIntervalDataList, 10);
+                Assert.AreEqual(skillIntervalData.Count(), 6);
+                Assert.IsTrue(verifyResult(skillIntervalData[0].MaximumHeads, 5.5));
+                Assert.IsTrue(verifyResult(skillIntervalData[1].MaximumHeads, 5.5));
+                Assert.IsTrue(verifyResult(skillIntervalData[2].MaximumHeads, 5.5));
+                Assert.IsFalse( skillIntervalData[3].MaximumHeads.HasValue );
+                Assert.IsFalse( skillIntervalData[4].MaximumHeads.HasValue );
+                Assert.IsFalse( skillIntervalData[5].MaximumHeads.HasValue );
+                
+
+            }
+        }
+
+        [Test]
+        public void VerifyMinMaxHeadsArePopulated()
+        {
+            _skillIntervalDataList = new List<ISkillIntervalData>();
+            _skillIntervalDataList.Add(createSkillIntervalData(0, 15, 8, 6, 7, 0, 0));
+            _skillIntervalDataList.Add(createSkillIntervalData(15, 30, 2, 5, 7, 0, 0));
+            _skillIntervalDataList.Add(createSkillIntervalData(30, 45, 8, 15, 7, 0, 0));
+
+            using (_mock.Playback())
+            {
+                var skillIntervalData = _target.SplitSkillIntervalData(_skillIntervalDataList, 10);
+                Assert.AreEqual(skillIntervalData.Count(), 6);
+
+                Assert.IsTrue(verifyResult(skillIntervalData[0].MinimumHeads, 5));
+                Assert.IsTrue(verifyResult(skillIntervalData[1].MinimumHeads, 5));
+                Assert.IsTrue(verifyResult(skillIntervalData[2].MinimumHeads, 5));
+                Assert.IsTrue(verifyResult(skillIntervalData[3].MinimumHeads, 8));
+                Assert.IsTrue(verifyResult(skillIntervalData[4].MinimumHeads, 8));
+                Assert.IsTrue(verifyResult(skillIntervalData[5].MinimumHeads, 8));
+
+                Assert.IsTrue(verifyResult(skillIntervalData[0].MaximumHeads, 5.5));
+                Assert.IsTrue(verifyResult(skillIntervalData[1].MaximumHeads, 5.5));
+                Assert.IsTrue(verifyResult(skillIntervalData[2].MaximumHeads, 5.5));
+                Assert.IsTrue(verifyResult(skillIntervalData[3].MaximumHeads, 15));
+                Assert.IsTrue(verifyResult(skillIntervalData[4].MaximumHeads, 15));
+                Assert.IsTrue(verifyResult(skillIntervalData[5].MaximumHeads, 15));
+                
+            }
+        }
+
+        [Test]
+        public void ForecastedDemandShouldBeSplitedCorrectly()
+        {
+            _skillIntervalDataList = new List<ISkillIntervalData>();
+            _skillIntervalDataList.Add(createSkillIntervalData(0, 15, null,null,10,0,0));
+            _skillIntervalDataList.Add(createSkillIntervalData(15, 30,null,null,5,0,0));
+            _skillIntervalDataList.Add(createSkillIntervalData(30, 45, null,null,7,0,0));
+            var skillIntervalData = _target.SplitSkillIntervalData(_skillIntervalDataList, 10);
+            Assert.AreEqual(skillIntervalData.Count(), 6);
+            Assert.AreEqual(skillIntervalData[0].ForecastedDemand,7.5);
+            Assert.AreEqual(skillIntervalData[1].ForecastedDemand,7.5);
+            Assert.AreEqual(skillIntervalData[2].ForecastedDemand,7.5);
+            Assert.AreEqual(skillIntervalData[3].ForecastedDemand,7);
+            Assert.AreEqual(skillIntervalData[4].ForecastedDemand,7);
+            Assert.AreEqual(skillIntervalData[5].ForecastedDemand,7);
+         }
+
+        [Test]
+        public void CurrentDemandShouldBeSplitedCorrectly()
+        {
+            _skillIntervalDataList = new List<ISkillIntervalData>();
+            _skillIntervalDataList.Add(createSkillIntervalData(0, 15, null, null, 0, 11, 0));
+            _skillIntervalDataList.Add(createSkillIntervalData(15, 30, null, null, 0, 19, 0));
+            _skillIntervalDataList.Add(createSkillIntervalData(30, 45, null, null, 0, 5, 0));
+            var skillIntervalData = _target.SplitSkillIntervalData(_skillIntervalDataList, 10);
+            Assert.AreEqual(skillIntervalData.Count(), 6);
+            Assert.AreEqual(skillIntervalData[0].CurrentDemand, 15);
+            Assert.AreEqual(skillIntervalData[1].CurrentDemand, 15);
+            Assert.AreEqual(skillIntervalData[2].CurrentDemand, 15);
+            Assert.AreEqual(skillIntervalData[3].CurrentDemand, 5);
+            Assert.AreEqual(skillIntervalData[4].CurrentDemand, 5);
+            Assert.AreEqual(skillIntervalData[5].CurrentDemand, 5);
+        }
+
+        [Test]
+        public void CurrentHeadsShouldBeSplitedCorrectly()
+        {
+            _skillIntervalDataList = new List<ISkillIntervalData>();
+            _skillIntervalDataList.Add(createSkillIntervalData(0, 15, null, null, 0, 0, 7));
+            _skillIntervalDataList.Add(createSkillIntervalData(15, 30, null, null, 0, 0, 1));
+            _skillIntervalDataList.Add(createSkillIntervalData(30, 45, null, null, 0, 0, 3));
+            var skillIntervalData = _target.SplitSkillIntervalData(_skillIntervalDataList, 10);
+            Assert.AreEqual(skillIntervalData.Count(), 6);
+            Assert.AreEqual(skillIntervalData[0].CurrentHeads , 4);
+            Assert.AreEqual(skillIntervalData[1].CurrentHeads, 4);
+            Assert.AreEqual(skillIntervalData[2].CurrentHeads, 4);
+            Assert.AreEqual(skillIntervalData[3].CurrentHeads, 3);
+            Assert.AreEqual(skillIntervalData[4].CurrentHeads, 3);
+            Assert.AreEqual(skillIntervalData[5].CurrentHeads, 3);
+        }
+
+        private bool verifyResult(double? valueToVerify,double resultValue )
+        {
+            if (!valueToVerify.HasValue) return false;
+            if (valueToVerify.Value == resultValue)
+                return true;
+            return false;
+        }
+
+        private SkillIntervalData createSkillIntervalData(int startMin, int endMin, double? minHead, double? maxHead, double forecastedDemand, double currentDemand, double currentHeads)
+        {
+            var startDateTime = new DateTime(2001, 01, 01, 8, 0, 0).ToUniversalTime();
+            return new SkillIntervalData(new DateTimePeriod(startDateTime.AddMinutes(startMin), startDateTime.AddMinutes(endMin)), forecastedDemand, currentDemand, currentHeads, minHead, maxHead);
+        }
+
+        
     }
 
     
