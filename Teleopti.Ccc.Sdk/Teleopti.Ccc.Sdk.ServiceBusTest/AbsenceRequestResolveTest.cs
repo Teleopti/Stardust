@@ -15,20 +15,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
     [TestFixture]
     public class AbsenceRequestResolveTest
     {
-        private IUnitOfWorkFactory _unitOfWorkFactory;
-
-        [SetUp]
-        public void Setup()
-        {
-            var mocks = new MockRepository();
-            _unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
-        }
 
         [Test]
         public void ShouldResolveNewAbsenceRequestConsumer()
         {
-            UnitOfWorkFactoryContainer.Current = _unitOfWorkFactory;
-
 			var builder = new ContainerBuilder();
 			builder.RegisterType<NewAbsenceRequestConsumer>().As<ConsumerOf<NewAbsenceRequestCreated>>();
 
@@ -37,6 +27,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 			builder.RegisterModule<ForecastContainerInstaller>();
 			builder.RegisterModule<RequestContainerInstaller>();
 			builder.RegisterModule<SchedulingContainerInstaller>();
+			builder.RegisterModule<EventHandlersModule>();
 
 			using (var container = builder.Build())
 			{
@@ -47,7 +38,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 		[Test]
 		public void ShouldResolveMessageModule()
 		{
-			UnitOfWorkFactoryContainer.Current = _unitOfWorkFactory;
 			var appData = MockRepository.GenerateMock<IApplicationData>();
 			appData.Expect(c => c.LoadPasswordPolicyService).Return(MockRepository.GenerateMock<ILoadPasswordPolicyService>());
 

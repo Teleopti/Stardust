@@ -19,22 +19,18 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 	[TestFixture]
 	public class DenormalizeScheduleProjectionResolveTest
 	{
-		private IUnitOfWorkFactory _unitOfWorkFactory;
 		private IServiceBus _serviceBus;
 
 		[SetUp]
 		public void Setup()
 		{
 			var mocks = new MockRepository();
-			_unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
 			_serviceBus = mocks.DynamicMock<IServiceBus>();
 		}
 
 		[Test]
 		public void ShouldResolveProcessDenormalizeQueueConsumer()
 		{
-			UnitOfWorkFactoryContainer.Current = _unitOfWorkFactory;
-
 			var builder = new ContainerBuilder();
 			builder.RegisterInstance(_serviceBus).As<IServiceBus>();
 			builder.RegisterType<ScheduleProjectionHandler>().As<IHandleEvent<ProjectionChangedEvent>>();
@@ -44,6 +40,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			builder.RegisterModule<ForecastContainerInstaller>();
 			builder.RegisterModule<ExportForecastContainerInstaller>();
 			builder.RegisterModule<SchedulingContainerInstaller>();
+			builder.RegisterModule<EventHandlersModule>();
+			builder.RegisterType<NoJsonSerializer>().As<IJsonSerializer>();
 
 			using (var container = builder.Build())
 			{
@@ -54,8 +52,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 		[Test]
 		public void ShouldResolveScheduleDayReadModelHandlerConsumer()
 		{
-			UnitOfWorkFactoryContainer.Current = _unitOfWorkFactory;
-
 			var builder = new ContainerBuilder();
 			builder.RegisterInstance(_serviceBus).As<IServiceBus>();
 			builder.RegisterType<ScheduleDayReadModelHandler>().As<IHandleEvent<ProjectionChangedEvent>>();
@@ -65,6 +61,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			builder.RegisterModule<ForecastContainerInstaller>();
 			builder.RegisterModule<ExportForecastContainerInstaller>();
 			builder.RegisterModule<SchedulingContainerInstaller>();
+			builder.RegisterModule<EventHandlersModule>();
+			builder.RegisterType<NoJsonSerializer>().As<IJsonSerializer>();
 
 			using (var container = builder.Build())
 			{
@@ -75,8 +73,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 		[Test]
 		public void ShouldResolvePersonScheduleDayReadModelHandlerConsumer()
 		{
-			UnitOfWorkFactoryContainer.Current = _unitOfWorkFactory;
-
 			var builder = new ContainerBuilder();
 			builder.RegisterInstance(_serviceBus).As<IServiceBus>();
 			builder.RegisterType<PersonScheduleDayReadModelHandler>().As<IHandleEvent<ProjectionChangedEvent>>();
@@ -86,11 +82,21 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			builder.RegisterModule<ForecastContainerInstaller>();
 			builder.RegisterModule<ExportForecastContainerInstaller>();
 			builder.RegisterModule<SchedulingContainerInstaller>();
+			builder.RegisterModule<EventHandlersModule>();
+			builder.RegisterType<NoJsonSerializer>().As<IJsonSerializer>();
 
 			using (var container = builder.Build())
 			{
 				container.Resolve<IHandleEvent<ProjectionChangedEvent>>().Should().Not.Be.Null();
 			}
+		}
+	}
+
+	public class NoJsonSerializer : IJsonSerializer
+	{
+		public string SerializeObject(object value)
+		{
+			throw new System.NotImplementedException();
 		}
 	}
 }

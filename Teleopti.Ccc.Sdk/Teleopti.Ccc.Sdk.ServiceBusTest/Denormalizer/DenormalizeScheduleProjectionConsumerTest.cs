@@ -19,8 +19,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 	{
 		private ScheduleProjectionHandler target;
 		private MockRepository mocks;
-		private IUnitOfWorkFactory unitOfWorkFactory;
-		private IUnitOfWork unitOfWork;
 		private IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository;
 
 		[SetUp]
@@ -28,8 +26,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 		{
 			mocks = new MockRepository();
 			scheduleProjectionReadOnlyRepository = mocks.DynamicMock<IScheduleProjectionReadOnlyRepository>();
-			unitOfWork = mocks.DynamicMock<IUnitOfWork>();
-			unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
 			target = new ScheduleProjectionHandler(scheduleProjectionReadOnlyRepository);
 		}
 
@@ -43,8 +39,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 
 			using (mocks.Record())
 			{
-				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-				Expect.Call(unitOfWork.PersistAll());
 			}
 			using (mocks.Playback())
 			{
@@ -77,8 +71,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 
 			using (mocks.Record())
 			{
-				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-				Expect.Call(unitOfWork.PersistAll());
 			}
 			using (mocks.Playback())
 			{
@@ -111,8 +103,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 
 			using (mocks.Record())
 			{
-				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-				Expect.Call(unitOfWork.PersistAll());
 			}
 			using (mocks.Playback())
 			{
