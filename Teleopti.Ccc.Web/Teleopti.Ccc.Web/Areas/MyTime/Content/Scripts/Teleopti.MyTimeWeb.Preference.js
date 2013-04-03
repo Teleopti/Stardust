@@ -456,8 +456,8 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 				return;
 			}
 			_initPeriodSelection();
-			_initViewModels(_soon);
 			_initExtendedPanels();
+			_initViewModels(_soon);
 		},
 		PreferencePartialDispose: function () {
 			_hideAddExtendedTooltip();
