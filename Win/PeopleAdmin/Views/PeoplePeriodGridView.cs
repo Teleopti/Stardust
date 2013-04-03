@@ -1699,19 +1699,22 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 		internal override void SetSelectedPersons(IList<IPerson> selectedPersons)
 		{
 			// Selection events will not be raised
-			Grid.Selections.Clear(false);
+			Grid.Model.Selections.Clear(false);
 
+			IList<GridRangeInfo> ranges = new List<GridRangeInfo>();
 			foreach (var person in selectedPersons)
 			{
 				for (int i = 0; i < FilteredPeopleHolder.PersonPeriodGridViewCollection.Count; i++)
 				{
 					if (FilteredPeopleHolder.PersonPeriodGridViewCollection[i].Parent.Id == person.Id)
 					{
-						Grid.Selections.SelectRange(GridRangeInfo.Rows(i + PeopleAdminConstants.GridCollectionMapValue,
-							i + PeopleAdminConstants.GridCollectionMapValue), true);
+						ranges.Add(GridRangeInfo.Row(i + PeopleAdminConstants.GridCollectionMapValue));
+
 					}
 				}
 			}
+
+			Grid.Model.SelectedRanges.AddRange(ranges.ToArray());
 		}
 
 		internal override void DisposeChildGrids()

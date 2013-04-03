@@ -1645,22 +1645,22 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 		internal override void SetSelectedPersons(IList<IPerson> selectedPersons)
 		{
 			// Selection events will not be raised
-			Grid.Selections.Clear(false);
+			Grid.Model.Selections.Clear(false);
 
+			var ranges = new List<GridRangeInfo>();
 			foreach (var person in selectedPersons)
 			{
 				for (var i = 0; i < _parentAdapterCollection.Count; i++)
 				{
 					if (_parentAdapterCollection[i].Person.Id == person.Id)
 					{
-						//TODO: explicitly creating a current cell info due to currentcellinfo checking 
-						//when adding a new rotation /availability 
-						Grid.Selections.SelectRange(GridRangeInfo.Rows(i + 1, i + 1), true);
+						ranges.Add(GridRangeInfo.Row(i + 1));
 					}
 				}
 			}
 
 			Grid.CurrentCellInfo = new GridCurrentCellInfo(null, null, 0, 0);
+			Grid.Model.SelectedRanges.AddRange(ranges.ToArray());
 		}
 
 		private void ChildGridCopyHelper(int index, IList<TAdapterChild> adapterChildCollection)

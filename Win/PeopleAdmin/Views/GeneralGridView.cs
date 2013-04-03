@@ -652,16 +652,19 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			// Selection events will not be raised
 			Grid.Selections.Clear(false);
 
+			var ranges = new List<GridRangeInfo>();
 			foreach (IPerson person in selectedPersons)
 			{
 				for (int i = 0; i < FilteredPeopleHolder.FilteredPeopleGridData.Count; i++)
 				{
 					if (FilteredPeopleHolder.FilteredPeopleGridData[i].Id == person.Id)
 					{
-						Grid.Selections.SelectRange(GridRangeInfo.Rows(i + 1, i + 1), true);
+						ranges.Add(GridRangeInfo.Row(i + 1));
 					}
 				}
 			}
+
+			Grid.Model.SelectedRanges.AddRange(ranges.ToArray());
 		}
 
 		public void RefreshOnOptionalColumnChange()
