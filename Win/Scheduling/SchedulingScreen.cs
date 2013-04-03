@@ -3927,7 +3927,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 						break;
 					}
 
-					if (optimizerPreferences.Extra.BlockFinderTypeForAdvanceOptimization != BlockFinderType.None)
+					if (optimizerPreferences.Extra.UseLevellingOption)
 					{
 						IList<IPerson> selectedPersons =
 							new PersonListExtractorFromScheduleParts(selectedSchedules).ExtractPersons().ToList();

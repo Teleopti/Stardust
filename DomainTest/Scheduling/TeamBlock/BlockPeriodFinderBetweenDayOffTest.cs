@@ -204,56 +204,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(matrixPeriod);
 		}
 
-        [Test]
-        public void ShouldReturnTheLastDateOfRangeFromRightSide()
-        {
-            //period was 2013-03-31 to 2013-04-02
-            //2013-04-04 and 2013-03-31 is DO should return from 01 to 03
-            DateOnly dateOnly = new DateOnly(2013, 04, 01);
-            IVirtualSchedulePeriod virtualSchedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
-            IScheduleDayPro scheduleDayProToday = _mocks.StrictMock<IScheduleDayPro>();
-            IScheduleDay scheduleDayToday = _mocks.StrictMock<IScheduleDay>();
-
-            using (_mocks.Record())
-            {
-
-                Expect.Call(_matrix.GetScheduleDayByKey(dateOnly)).Return(scheduleDayProToday);
-                Expect.Call(scheduleDayProToday.DaySchedulePart()).Return(scheduleDayToday);
-                Expect.Call(scheduleDayToday.SignificantPart()).Return(SchedulePartView.MainShift);
-
-                Expect.Call(_matrix.GetScheduleDayByKey(dateOnly.AddDays(-1))).Return(scheduleDayProToday);
-                Expect.Call(scheduleDayProToday.DaySchedulePart()).Return(scheduleDayToday);
-                Expect.Call(scheduleDayToday.SignificantPart()).Return(SchedulePartView.DayOff);
-
-                Expect.Call(_matrix.SchedulePeriod).Return(virtualSchedulePeriod).Repeat.AtLeastOnce();
-                Expect.Call(virtualSchedulePeriod.DateOnlyPeriod)
-                      .Return(new DateOnlyPeriod(dateOnly.AddDays(-1), dateOnly.AddDays(1))).Repeat.AtLeastOnce();
-
-                Expect.Call(_matrix.GetScheduleDayByKey(dateOnly.AddDays(1))).Return(scheduleDayProToday);
-                Expect.Call(scheduleDayProToday.DaySchedulePart()).Return(scheduleDayToday);
-                Expect.Call(scheduleDayToday.SignificantPart()).Return(SchedulePartView.MainShift);
-
-                Expect.Call(_matrix.GetScheduleDayByKey(dateOnly.AddDays(2))).Return(scheduleDayProToday);
-                Expect.Call(scheduleDayProToday.DaySchedulePart()).Return(scheduleDayToday);
-                Expect.Call(scheduleDayToday.SignificantPart()).Return(SchedulePartView.None);
-
-
-            }
-            using (_mocks.Playback())
-            {
-                var period = _target.GetBlockPeriod(_matrix, dateOnly);
-                if (period.HasValue)
-                {
-                    Assert.AreEqual(period.Value.StartDate, dateOnly);
-                    Assert.AreEqual(period.Value.EndDate, dateOnly.AddDays(1));
-                }
-                else
-                {
-                    Assert.Fail();
-                }
-
-            }
-        }
+        
 
     }
 
