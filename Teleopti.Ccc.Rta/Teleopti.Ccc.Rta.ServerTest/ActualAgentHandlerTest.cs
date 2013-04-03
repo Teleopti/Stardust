@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Rta.ServerTest
 		private IActualAgentHandler _target;
 
 		private RtaAlarmLight _rtaAlarmLight;
-		private Dictionary<Guid, List<RtaAlarmLight>> _activityAlarms;
+		private ConcurrentDictionary<Guid, List<RtaAlarmLight>> _activityAlarms;
 
 		private Guid _platformTypeId;
 		private string _stateCode;
@@ -55,10 +55,11 @@ namespace Teleopti.Ccc.Rta.ServerTest
 					StateGroupName = "SomeStateGroupName",
 					AlarmTypeId = _guid
 				};
-			_activityAlarms = new Dictionary<Guid, List<RtaAlarmLight>>
+			var temp = new Dictionary<Guid, List<RtaAlarmLight>>
 				{
 					{_payloadId, new List<RtaAlarmLight> {_rtaAlarmLight}}
 				};
+			_activityAlarms = new ConcurrentDictionary<Guid, List<RtaAlarmLight>>(temp);
 
 		}
 
@@ -158,11 +159,13 @@ namespace Teleopti.Ccc.Rta.ServerTest
 					StateGroupName = "SomeStateGroupName",
 					AlarmTypeId = _guid
 				};
-			_activityAlarms = new Dictionary<Guid, List<RtaAlarmLight>>
+			var temp = new Dictionary<Guid, List<RtaAlarmLight>>
 				{
 					{_stateGroupId, new List<RtaAlarmLight> {_rtaAlarmLight}}
 				};
 
+			_activityAlarms = new ConcurrentDictionary<Guid, List<RtaAlarmLight>>(temp);
+				
 			var dictionary = new Dictionary<string, List<RtaStateGroupLight>>
 				{
 					{
