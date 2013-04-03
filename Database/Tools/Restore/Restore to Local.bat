@@ -290,16 +290,10 @@ SQLCMD -S%INSTANCE% -E -d"%Branch%_%Customer%_TeleoptiCCC7" -i"%ROOTDIR%\tsql\Ad
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=13 & GOTO :Error
 )
 
-::Build the Support Tool
-ECHO msbuild "%ROOTDIR%\..\..\..\Teleopti.Support.Tool\Teleopti.Support.Tool.csproj" 
-%MSBUILD% "%ROOTDIR%\..\..\..\Teleopti.Support.Tool\Teleopti.Support.Tool.csproj" > "%temp%\build.log"
-IF %ERRORLEVEL% EQU 0 (
-CD "%ROOTDIR%\..\..\..\Teleopti.Support.Tool\Bin\Debug"
-Teleopti.Support.Tool.exe
-) else (
-SET /A ERRORLEV=7
-GOTO :Error
-)
+::FixMyConfig
+ECHO.
+CHOICE /C yn /M "Fix my config?"
+IF ERRORLEVEL 1 CALL "%ROOTDIR%\..\..\..\BuildArtifacts\FixMyConfig\RefreshConfig.bat" "%Branch%_%Customer%_TeleoptiCCC7" "%Branch%_%Customer%_TeleoptiAnalytics"
 
 IF "%BUS%"=="BUS" (
 ::Build and install + start
@@ -325,7 +319,6 @@ IF %ERRORLEV% EQU 3 ECHO CCC7 DB have a bad trunk or the database is out of vers
 IF %ERRORLEV% EQU 4 ECHO Agg DB have a bad trunk or the database is out of version sync
 IF %ERRORLEV% EQU 5 ECHO Could not create views in Mart: EXEC %Branch%_%Customer%_TeleoptiAnalytics.mart.sys_crossDatabaseView_load
 IF %ERRORLEV% EQU 6 ECHO Could not build DBManager.exe & notepad "%temp%\build.log"
-IF %ERRORLEV% EQU 7 ECHO Could not build Teleopti.Support.Tool & notepad "%temp%\build.log"
 IF %ERRORLEV% EQU 10 ECHO An error occured while encrypting
 IF %ERRORLEV% EQU 11 ECHO Could not restore databases
 IF %ERRORLEV% EQU 12 ECHO Could not build Teleopti.Support.Security & notepad "%temp%\build.log"
