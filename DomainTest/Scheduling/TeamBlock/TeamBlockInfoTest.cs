@@ -46,7 +46,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
             using (_mocks.Playback())
             {
-                Assert.That(_target.Equals(teamBlock), Is.True);
+                Assert.IsTrue(_target.Equals(teamBlock));
+            }
+        }
+
+        [Test]
+        public void ShouldNotBeSameWhenTeamBlockIsNull()
+        {
+           using (_mocks.Playback())
+            {
+                Assert.IsFalse(_target.Equals(null));
             }
         }
     }

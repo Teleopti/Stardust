@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -106,5 +107,22 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Assert.AreEqual(2, result.MatrixesForGroup().Count());
 			}
 		}
+
+        [Test]
+        public void ShouldReturnIfTeamBlockInfoNull()
+        {
+            Assert.Throws<ArgumentNullException>(
+                () =>
+                _target.CreateTeamInfo(_baseLineData.Person1,
+                                       new DateOnlyPeriod(new DateOnly(2013, 2, 26), new DateOnly(2013, 2, 27)), null));
+        }
+
+        [Test]
+        public void ShouldReturnIfShiftProjectionCacheNull()
+        {
+            Assert.Throws<ArgumentNullException>(
+                () =>
+                _target.CreateTeamInfo(_baseLineData.Person1,new DateOnly(2013, 2, 26), null));
+        }
 	}
 }
