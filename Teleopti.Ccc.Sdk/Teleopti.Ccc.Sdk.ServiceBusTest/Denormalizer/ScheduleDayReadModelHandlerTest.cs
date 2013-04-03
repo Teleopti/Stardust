@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			_scheduleDayReadModelsCreator = _mocks.StrictMock<IScheduleDayReadModelsCreator>();
 			_scheduleDayReadModelRepository = _mocks.StrictMock<IScheduleDayReadModelRepository>();
 
-			_target = new ScheduleDayReadModelHandler(_unitOfWorkFactory, _personRepository, new DoNotifySmsLink(_significantChangeChecker,
+			_target = new ScheduleDayReadModelHandler(_personRepository, new DoNotifySmsLink(_significantChangeChecker,
 				_smsLinkChecker, _notificationSenderFactory), _scheduleDayReadModelsCreator, _scheduleDayReadModelRepository);
 
 			DefinedLicenseDataFactory.LicenseActivator = new LicenseActivator("", DateTime.Today.AddDays(100), 1000, 1000,

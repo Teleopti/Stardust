@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			scheduleProjectionReadOnlyRepository = mocks.DynamicMock<IScheduleProjectionReadOnlyRepository>();
 			unitOfWork = mocks.DynamicMock<IUnitOfWork>();
 			unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
-			target = new ScheduleProjectionHandler(unitOfWorkFactory,scheduleProjectionReadOnlyRepository);
+			target = new ScheduleProjectionHandler(scheduleProjectionReadOnlyRepository);
 		}
 
 		[Test]
