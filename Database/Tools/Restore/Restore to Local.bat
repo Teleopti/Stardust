@@ -25,7 +25,6 @@ SET DriveLetter=%ROOTDIR:~0,2%
 SET CustomPathConfig=%DriveLetter%\CustomPath.txt
 SET SQLLogin=sa
 SET SQLPwd=cadadi
-SET SUPPORTTOOL=
 SET CreateAgg=
 SET CreateAnalytics=
 SET Tfiles=\\gigantes\Customer Databases\CCC\RestoreToLocal\Baselines
@@ -55,10 +54,6 @@ SET DBMANAGERPATH="%ROOTDIR%\..\..\..\Teleopti.Ccc.DBManager\Teleopti.Ccc.DBMana
 SET /A ERRORLEV=6
 GOTO :error
 )
-
-::Init some static paths
-SET IDE=Microsoft Visual Studio 10.0\Common7\IDE
-SET WEBDEV=Common Files\microsoft shared\DevServer\10.0\WebDev.WebServer.EXE
 
 ::Used for check: Did we copy a new file?
 SET FINDTHIS=0 File(s) copied
@@ -132,9 +127,6 @@ IF "%IFFLOW%"=="y" GOTO Flow
 GOTO UserInput
 
 :Flow
-SET SUPPORTTOOL=SUPPORTTOOL
-SET MB=
-SET BUS=
 SET DBPath=%Tfiles%
 GOTO Start
 
@@ -167,9 +159,6 @@ SET LOADSTAT=0
 SET /P IFLOADSTAT=Would like to restore the corresponding Agg and Analytics databases? [Y/N]
 IF "%IFLOADSTAT%"=="Y" SET LOADSTAT=1
 IF "%IFLOADSTAT%"=="y" SET LOADSTAT=1
-
-::use support tool?
-SET SUPPORTTOOL=SUPPORTTOOL
 
 :Start
 ECHO.
@@ -294,17 +283,6 @@ IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=13 & GOTO :Error
 ECHO.
 CHOICE /C yn /M "Fix my config?"
 IF ERRORLEVEL 1 CALL "%ROOTDIR%\..\..\..\BuildArtifacts\FixMyConfig\RefreshConfig.bat" "%Branch%_%Customer%_TeleoptiCCC7" "%Branch%_%Customer%_TeleoptiAnalytics"
-
-IF "%BUS%"=="BUS" (
-::Build and install + start
-ECHO CALL "%ROOTDIR%\ServiceBus\BuildAndInstall.bat"
-CALL "%ROOTDIR%\ServiceBus\BuildAndInstall.bat"
-::SDK start debug web server
-%Cassini% /port:1335 /path:"%ROOTDIR%\..\..\..\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.Host\bin"
-::Kick it
-NET START TeleoptiServiceBus
-IF %ERRORLEVEL% NEQ 0 ECHO Check Windows Application log for errors! & eventvwr
-)
 
 GOTO :Finish
 
