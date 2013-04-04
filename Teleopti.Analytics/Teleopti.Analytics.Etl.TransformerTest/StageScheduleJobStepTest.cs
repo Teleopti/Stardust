@@ -58,7 +58,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 			_mock.VerifyAll();
         }
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldCheckIfNeedRun()
 		{
 			var raptorRepository = _mock.StrictMock<IRaptorRepository>();

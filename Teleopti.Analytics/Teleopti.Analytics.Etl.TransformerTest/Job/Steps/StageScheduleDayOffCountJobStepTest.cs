@@ -81,7 +81,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
 
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldCheckIfNeedRun()
 		{
 			var raptorRepository = _mock.StrictMock<IRaptorRepository>();
