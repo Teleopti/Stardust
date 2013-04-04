@@ -4,7 +4,6 @@ using System.Data;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -56,8 +55,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.AreEqual(0, target.LoadSpecificDates(new List<IQueueSource>(),new DateTimePeriod()).Count);
 			Assert.AreEqual(0, target.LoadQueues().Count);
 			Assert.AreEqual(0, target.LoadActiveAgentCount(skill,new DateTimePeriod()).Count);
-			Assert.AreEqual(0, target.LoadRtaAgentStates(new DateTimePeriod(), new List<ExternalLogOnPerson>()).Count);
-
+			
 			//Does nothing!
 			using(var dt = new DataTable())
 			{

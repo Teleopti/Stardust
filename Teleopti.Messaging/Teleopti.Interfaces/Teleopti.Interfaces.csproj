@@ -372,7 +372,6 @@
     <Compile Include="Domain\IAnnotatable.cs" />
     <Compile Include="Domain\IAnnotatableGrid.cs" />
     <Compile Include="Domain\IAbsenceRequest.cs" />
-    <Compile Include="Domain\IExternalAgentState.cs" />
     <Compile Include="Domain\IFilterOnPeriodOptimizer.cs" />
     <Compile Include="Domain\IFurnessData.cs" />
     <Compile Include="Domain\IFurnessEvaluator.cs" />
@@ -586,7 +585,6 @@
     <Compile Include="Domain\IMinMaxContractTimeCalculator.cs" />
     <Compile Include="Domain\ModifyEventArgs.cs" />
     <Compile Include="Domain\PeriodValueCalculationMethodOption.cs" />
-    <Compile Include="Domain\ExternalAgentState.cs" />
     <Compile Include="Domain\ScheduleChangedInDefaultScenario.cs" />
     <Compile Include="Domain\ScheduleModifier.cs" />
     <Compile Include="Domain\SchedulePartView.cs" />

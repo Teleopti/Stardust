@@ -116,7 +116,6 @@ namespace Teleopti.Messaging.Composites
         private static void AddTypeFilterExceptions(IDictionary<Type, IList<Type>> aggregateRoots)
         {
             aggregateRoots.Add(typeof(IStatisticTask), new List<Type> { typeof(IStatisticTask) });
-            aggregateRoots.Add(typeof(IExternalAgentState), new List<Type> { typeof(IExternalAgentState) });
             aggregateRoots.Add(typeof(IActualAgentState), new List<Type> { typeof(IActualAgentState) });
             aggregateRoots.Add(typeof(IJobResultProgress), new List<Type> { typeof(IJobResultProgress) });
 			aggregateRoots.Add(typeof(IMeetingChangedEntity),new List<Type>{typeof(IMeetingChangedEntity)});

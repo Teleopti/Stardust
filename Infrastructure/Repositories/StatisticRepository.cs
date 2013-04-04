@@ -5,12 +5,10 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Text;
 using NHibernate;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -91,15 +89,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             }
         }
 
-        public ICollection<IExternalAgentState> LoadRtaAgentStates(DateTimePeriod period, IList<ExternalLogOnPerson> externalLogOnPersons)
-        {
-            using (IStatelessUnitOfWork uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
-            {
-                IQuery query = createExternalAgentStateQuery(uow, period, externalLogOnPersons);
-                return query.List<IExternalAgentState>();
-            }
-        }
-
+        
         public void PersistFactQueues(DataTable queueDataTable)
         {
             using (IStatelessUnitOfWork uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
@@ -113,37 +103,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                     bulkCopy.WriteToServer(queueDataTable);
                 }
             }
-        }
-
-        private static IQuery createExternalAgentStateQuery(IStatelessUnitOfWork uow, DateTimePeriod period, IList<ExternalLogOnPerson> externalLogOnPersons)
-        {
-            StringBuilder externalLogOnList = new StringBuilder();
-            StringBuilder externalLogOnLogObjectIdList = new StringBuilder();
-            foreach (ExternalLogOnPerson externalLogOnPerson in externalLogOnPersons)
-            {
-                if (externalLogOnList.Length > 0)
-                {
-                    externalLogOnList.Append(",");
-                    externalLogOnLogObjectIdList.Append(",");
-                }
-                externalLogOnList.Append(externalLogOnPerson.ExternalLogOn);
-                externalLogOnLogObjectIdList.Append(externalLogOnPerson.DataSourceId);
-            }
-
-            return session(uow).CreateSQLQuery("exec RTA.rta_load_agentstate @start_date=:start_date, @end_date=:end_date, @externallogonlist=:externallogonlist")
-                .AddScalar("ExternalLogOn", NHibernateUtil.String)
-                .AddScalar("StateCode", NHibernateUtil.String)
-                .AddScalar("Timestamp", NHibernateUtil.DateTime)
-                .AddScalar("TimeInState", NHibernateUtil.TimeSpan)
-                .AddScalar("PlatformTypeId", NHibernateUtil.Guid)
-                .AddScalar("DataSourceId", NHibernateUtil.Int32)
-                .AddScalar("BatchId", NHibernateUtil.DateTime)
-                .AddScalar("IsSnapshot", NHibernateUtil.Boolean)
-                .SetReadOnly(true)
-                .SetDateTime("start_date", period.StartDateTime)
-                .SetDateTime("end_date", period.EndDateTime)
-                .SetParameter("externallogonlist", externalLogOnList.ToString(), NHibernateUtil.StringClob)
-                .SetResultTransformer(Transformers.AliasToBean(typeof(ExternalAgentState)));
         }
 
         private static string buildStringQueueList(IEnumerable<IQueueSource> sources)
@@ -188,7 +147,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 .AddScalar("ActiveAgents", NHibernateUtil.Int32)
                 .AddScalar("Interval", NHibernateUtil.DateTime)
                 .SetReadOnly(true)
-                .SetGuid("skill", skill.Id.Value)
+                .SetGuid("skill", skill.Id.GetValueOrDefault())
                 .SetDateTime("start_date", period.StartDateTime)
                 .SetDateTime("end_date", period.EndDateTime)
                 .SetResultTransformer(Transformers.AliasToBean(typeof(ActiveAgentCount)));
@@ -313,7 +272,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
         public IList<IActualAgentState> LoadActualAgentState(IEnumerable<IPerson> persons)
         {
-            var guids = persons.Select(person => person.Id.Value).ToList();
+            var guids = persons.Select(person => person.Id.GetValueOrDefault()).ToList();
             using (var uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
             {
                 var ret = new List<IActualAgentState>();
