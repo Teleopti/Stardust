@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
@@ -19,11 +15,7 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
         private MockRepository _mocks;
         private RtaStateHolder _target;
         private ISchedulingResultStateHolder _schedulingResultStateHolder;
-        private IRtaStateGroup _rtaStateGroup;
-        private readonly Guid _platformId = Guid.NewGuid();
-        private IStateGroupActivityAlarm _stateGroupActivityAlarm;
-        private IList<IRtaStateGroup> _rtaStateGroupList;
-        private IRangeProjectionService _rangeProjectionService;
+
         private IRtaStateGroupRepository _rtaStateGroupRepository;
         private IStateGroupActivityAlarmRepository _stateGroupActivityAlarmRepository;
 
@@ -32,13 +24,9 @@ namespace Teleopti.Ccc.DomainTest.RealTimeAdherence
         {
             _mocks = new MockRepository();
             _schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
-            _rtaStateGroup = _mocks.StrictMock<IRtaStateGroup>();
-            _stateGroupActivityAlarm = _mocks.StrictMock<IStateGroupActivityAlarm>();
-            _rangeProjectionService = _mocks.StrictMock<IRangeProjectionService>();
+
             _rtaStateGroupRepository = _mocks.StrictMock<IRtaStateGroupRepository>();
             _stateGroupActivityAlarmRepository = _mocks.StrictMock<IStateGroupActivityAlarmRepository>();
-
-            _rtaStateGroupList = new List<IRtaStateGroup> { _rtaStateGroup };
 
             _target = new RtaStateHolder(_schedulingResultStateHolder, _rtaStateGroupRepository,
                                          _stateGroupActivityAlarmRepository);
