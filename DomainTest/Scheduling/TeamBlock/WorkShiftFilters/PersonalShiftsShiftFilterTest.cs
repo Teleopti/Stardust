@@ -101,5 +101,43 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 				Assert.That(shiftsList.Count, Is.EqualTo(1));
 			}
 		}
+
+		[Test]
+		public void ShouldCheckParameters()
+		{
+			var shiftsList = _target.Filter(_dateOnly, _person, new List<IShiftProjectionCache>(), _finderResult);
+			Assert.That(shiftsList.Count, Is.EqualTo(0));
+		}
+
+		[Test]
+		public void ShouldSkipIfThereIsNoMeetingAndPersonalShift()
+		{
+			_personAssignment = _mocks.StrictMock<IPersonAssignment>();
+			_personAssignments = new List<IPersonAssignment> { _personAssignment };
+
+			var phone = ActivityFactory.CreateActivity("phone");
+			phone.AllowOverwrite = true;
+			phone.InWorkTime = true;
+
+			IList<IShiftProjectionCache> shifts = new List<IShiftProjectionCache>();
+			var c1 = _mocks.StrictMock<IShiftProjectionCache>();
+			shifts.Add(c1);
+
+			using (_mocks.Record())
+			{
+				Expect.Call(_resultStateHolder.Schedules).Return(_scheduleDictionary);
+				Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange);
+				Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(_part);
+				Expect.Call(_part.PersonMeetingCollection()).Return(new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting>())).Repeat.AtLeastOnce();
+				Expect.Call(_part.PersonAssignmentCollection()).Return(
+				new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>())).Repeat.AtLeastOnce();
+			}
+
+			using (_mocks.Playback())
+			{
+				var shiftsList = _target.Filter(_dateOnly, _person, shifts, _finderResult);
+				Assert.That(shiftsList.Count, Is.EqualTo(1));
+			}
+		}
 	}
 }

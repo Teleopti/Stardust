@@ -20,11 +20,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		private MockRepository _mocks;
 		private IPersonalShiftMeetingTimeChecker _personalShiftMeetingTimeChecker;
 		private IPerson _person;
+		private DateOnly _dateOnly;
 
 		[SetUp]
 		public void Setup()
 		{
 			_mocks = new MockRepository();
+			_dateOnly = new DateOnly(2009, 2, 2);
 			_person = PersonFactory.CreatePerson("bill");
 			_personalShiftMeetingTimeChecker = _mocks.StrictMock<IPersonalShiftMeetingTimeChecker>();
 			_target = new ActivityRestrictionsShiftFilter();
@@ -33,11 +35,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldFilterActivityRestriction()
 		{
-			var dateOnly = new DateOnly(2009, 2, 2);
-			var finderResult = new WorkShiftFinderResult(new Person(), new DateOnly(2009, 2, 3));
+			var finderResult = new WorkShiftFinderResult(new Person(), new DateOnly(2009, 2, 2));
 			IActivity testActivity = ActivityFactory.CreateActivity("test");
 			IActivity breakActivity = ActivityFactory.CreateActivity("lunch");
-			var breakPeriod = new DateTimePeriod(new DateTime(1800, 1, 1, 12, 0, 0, DateTimeKind.Utc), new DateTime(2009, 2, 2, 13, 0, 0, DateTimeKind.Utc));
+			var breakPeriod = new DateTimePeriod(new DateTime(2009, 2, 2, 12, 0, 0, DateTimeKind.Utc), new DateTime(2009, 2, 2, 13, 0, 0, DateTimeKind.Utc));
 
 
 			IWorkShift ws1 = WorkShiftFactory.CreateWorkShift(TimeSpan.FromHours(8), TimeSpan.FromHours(21), testActivity);
@@ -46,12 +47,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			ws2.LayerCollection.Add(new WorkShiftActivityLayer(breakActivity, breakPeriod.MovePeriod(new TimeSpan(1, 0, 0))));
 			IList<IWorkShift> listOfWorkShifts = new List<IWorkShift> { ws1, ws2 };
 
-			var timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+			var timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("UTC"));
 			var casheList = new List<IShiftProjectionCache>();
 			foreach (IWorkShift shift in listOfWorkShifts)
 			{
 				var cache = new ShiftProjectionCache(shift, _personalShiftMeetingTimeChecker);
-				cache.SetDate(dateOnly, timeZoneInfo);
+				cache.SetDate(_dateOnly, timeZoneInfo);
 				casheList.Add(cache);
 			}
 
@@ -60,7 +61,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 																				  new EndTimeLimitation(),
 																				  new WorkTimeLimitation(), null, null, null,
 																				  activityRestrictions);
-			var ret = _target.Filter(dateOnly, _person, casheList, effectiveRestriction, finderResult);
+			var ret = _target.Filter(_dateOnly, _person, casheList, effectiveRestriction, finderResult);
 			Assert.AreEqual(2, ret.Count);
 
 			var activityRestriction = new ActivityRestriction(breakActivity)
@@ -74,8 +75,27 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 																				  new WorkTimeLimitation(), null, null, null,
 																				  activityRestrictions);
 
-			ret = _target.Filter(dateOnly, _person, casheList, effectiveRestriction, finderResult);
-			Assert.AreEqual(0, ret.Count);
+			ret = _target.Filter(_dateOnly, _person, casheList, effectiveRestriction, finderResult);
+			Assert.AreEqual(1, ret.Count);
+		}
+
+		[Test]
+		public void ShouldCheckParameters()
+		{
+			var casheList = new List<IShiftProjectionCache>();
+			IList<IActivityRestriction> activityRestrictions = new List<IActivityRestriction>();
+			IEffectiveRestriction effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(),
+																				  new EndTimeLimitation(),
+																				  new WorkTimeLimitation(), null, null, null,
+																				  activityRestrictions);
+			var finderResult = new WorkShiftFinderResult(new Person(), new DateOnly(2009, 2, 3));
+			var result = _target.Filter(_dateOnly, _person, casheList, null, finderResult);
+			Assert.IsNull(result);
+			
+			result = _target.Filter(_dateOnly, null, casheList, effectiveRestriction, finderResult);
+			Assert.IsNull(result);
+			result = _target.Filter(_dateOnly, _person, casheList, effectiveRestriction, null);
+			Assert.IsNull(result);
 		}
 	}
 }

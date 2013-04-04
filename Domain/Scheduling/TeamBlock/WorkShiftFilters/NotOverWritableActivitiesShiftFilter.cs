@@ -25,9 +25,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 		public IList<IShiftProjectionCache> Filter(DateOnly dateToSchedule, IPerson person,
 		                                           IList<IShiftProjectionCache> shiftList, IWorkShiftFinderResult finderResult)
 		{
-			if (shiftList == null) throw new ArgumentNullException("shiftList");
-			if (person == null) throw new ArgumentNullException("person");
-			if (finderResult == null) throw new ArgumentNullException("finderResult");
+			if (shiftList == null) return null;
+			if (person == null) return null;
+			if (finderResult == null) return null;
 			
 			if (shiftList.Count == 0) return shiftList;
 			var part = _resultStateHolder.Schedules[person].ScheduledDay(dateToSchedule);

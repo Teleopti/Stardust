@@ -56,5 +56,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             var blockInfo = new BlockInfo(new DateOnlyPeriod(new DateOnly(2013, 2, 27), new DateOnly(2013, 2, 27)));
             Assert.AreEqual(blockInfo, _target);
         }
+
+		[Test]
+		public void ShouldCheckIfEqualsNull()
+		{
+			IBlockInfo blockInfo = null;
+			Assert.IsFalse(_target.Equals(blockInfo));
+		}
 	}
 }

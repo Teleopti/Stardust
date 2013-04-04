@@ -5,6 +5,7 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
 using Teleopti.Interfaces.Domain;
 
@@ -152,6 +153,24 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			Assert.That(ret, Is.False);
 			Assert.That(finderResult.FilterResults.Count, Is.GreaterThan(0));
 			_mocks.VerifyAll();
+		}
+
+
+		[Test]
+		public void ShouldCheckParameters()
+		{
+			var effectiveRestriction = new EffectiveRestriction(
+				new StartTimeLimitation(new TimeSpan(8, 0, 0), new TimeSpan(10, 0, 0)),
+				new EndTimeLimitation(new TimeSpan(15, 0, 0), new TimeSpan(18, 0, 0)),
+				new WorkTimeLimitation(new TimeSpan(5, 0, 0), new TimeSpan(8, 0, 0)),
+				null, null, null, new List<IActivityRestriction>());
+			var options = new SchedulingOptions();
+			var result = _target.Filter(options, effectiveRestriction, null);
+			Assert.IsFalse(result);
+
+			var finderResult = new WorkShiftFinderResult(new Person(), new DateOnly(2009, 2, 3));
+			result = _target.Filter(null, effectiveRestriction, finderResult);
+			Assert.IsFalse(result);
 		}
 	}
 }
