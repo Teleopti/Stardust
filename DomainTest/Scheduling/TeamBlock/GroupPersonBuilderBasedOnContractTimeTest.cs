@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         }
 
         [Test]
-        public void ShouldSplitTeamsBasedOnDifferentAvgContractTime()
+        public void ShouldSplitTeamsBasedOnDifferentAveragContractTime()
         {
             var personList = new List<IPerson> { _person1, _person2 };
 
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
        
 
         [Test]
-        public void ShouldNotSplitTeamsBasedOnSameAvgContractTime()
+        public void ShouldNotSplitTeamsBasedOnSameAverageContractTime()
         {
             var personList = new List<IPerson> { _person1, _person2 };
 

@@ -303,7 +303,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             }
         }
 
-        private bool verifyResult(double? valueToVerify, double resultValue)
+        private static bool verifyResult(double? valueToVerify, double resultValue)
         {
             if (!valueToVerify.HasValue) return false;
             if (valueToVerify.Value == resultValue)

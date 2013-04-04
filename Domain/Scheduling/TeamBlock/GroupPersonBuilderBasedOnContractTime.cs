@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
         public IList<IGroupPerson> SplitTeams(IList<IPerson> groupMembers, DateOnly dateOnly)
         {
+            if (groupMembers == null) throw new ArgumentNullException("groupMembers");
             var groupPersonList = new List<IGroupPerson>();
             var differentContractTimes = new Dictionary<TimeSpan,List<IPerson >>();
             if (groupMembers.Count > 0)

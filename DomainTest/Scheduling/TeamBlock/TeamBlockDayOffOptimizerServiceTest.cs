@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		}
 
 		[Test]
-		public void ShouldRunUntilEqualOrHigherPeriodValueButRollBackAndLockInMatrixesIfRestrictionValidatorFails()
+		public void ShouldRunUntilEqualOrHigherPeriodValueButRollbackAndLockInMatrixesIfRestrictionValidatorFails()
 		{
 
 			using (_mocks.Record())

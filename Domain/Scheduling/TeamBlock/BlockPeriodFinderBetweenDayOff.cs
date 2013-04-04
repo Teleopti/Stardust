@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Domain.Security.Principal;
+﻿using System;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
@@ -12,7 +13,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
     {
         public DateOnlyPeriod? GetBlockPeriod(IScheduleMatrixPro scheduleMatrixPro, DateOnly providedDateOnly)
         {
-	        IScheduleRange rangeForPerson = scheduleMatrixPro.SchedulingStateHolder.Schedules[scheduleMatrixPro.Person];
+            if (scheduleMatrixPro == null) throw new ArgumentNullException("scheduleMatrixPro");
+            IScheduleRange rangeForPerson = scheduleMatrixPro.SchedulingStateHolder.Schedules[scheduleMatrixPro.Person];
 	        
 			IScheduleDay scheduleDay = rangeForPerson.ScheduledDay(providedDateOnly);
 	        if (isDayOff(scheduleDay))
