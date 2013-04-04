@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         int ColHeaders { get; }
         int RowHeaders { get; }
         void SetCellBackTextAndBackColor(GridQueryCellInfoEventArgs e, DateTime dateTime, bool backColor, bool textColor, IScheduleDay schedulePart);
-        string DayHeaderTooltipText(GridStyleInfo gridStyle,DateTime currentDate);
+        string DayHeaderTooltipText(GridStyleInfo gridStyle,DateOnly currentDate);
         bool IsRightToLeft { get; }
         bool IsOverviewColumnsHidden { get; }
         IHandleBusinessRuleResponse HandleBusinessRuleResponse { get; }

@@ -518,7 +518,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             if (e.RowIndex == 1 && columnType >= ColumnType.StartScheduleColumns)
             {
                 //text date header
-                DateTime localDate = SelectedPeriod.Period().StartDateTimeLocal(_schedulerState.TimeZoneInfo).Date.AddDays(e.ColIndex - (int)ColumnType.StartScheduleColumns);
+                var localDate = SelectedPeriod.DateOnlyPeriod.StartDate.AddDays(e.ColIndex - (int)ColumnType.StartScheduleColumns);
 
                 e.Style.Text = CultureInfo.CurrentCulture.Calendar.
                     GetDayOfMonth(localDate).ToString(CultureInfo.CurrentCulture);
