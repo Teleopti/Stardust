@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         }
 
         [Test]
-        public void VerifyMinimumHeadsArePoppulatedWithCorrectSplit()
+        public void VerifyMinimumHeadsArePopulatedWithCorrectSplit()
         {
             
             _skillIntervalDataList = new List<ISkillIntervalData>();
@@ -184,7 +184,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         }
 
         [Test]
-        public void VerifyMaximumHeadsArePoppulatedWithCorrectSplit()
+        public void VerifyMaximumHeadsArePopulatedWithCorrectSplit()
         {
             
             _skillIntervalDataList = new List<ISkillIntervalData>();
@@ -309,7 +309,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         }
 
         [Test]
-        public void ForecastedDemandShouldBeSplitedCorrectly()
+        public void ForecastedDemandShouldBeSplitCorrectly()
         {
             _skillIntervalDataList = new List<ISkillIntervalData>();
             _skillIntervalDataList.Add(createSkillIntervalData(0, 15, null,null,10,0,0));
@@ -326,7 +326,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
          }
 
         [Test]
-        public void CurrentDemandShouldBeSplitedCorrectly()
+        public void CurrentDemandShouldBeSplitCorrectly()
         {
             _skillIntervalDataList = new List<ISkillIntervalData>();
             _skillIntervalDataList.Add(createSkillIntervalData(0, 15, null, null, 0, 11, 0));
@@ -343,7 +343,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         }
 
         [Test]
-        public void CurrentHeadsShouldBeSplitedCorrectly()
+        public void CurrentHeadsShouldBeSplitCorrectly()
         {
             _skillIntervalDataList = new List<ISkillIntervalData>();
             _skillIntervalDataList.Add(createSkillIntervalData(0, 15, null, null, 0, 0, 7));
@@ -359,7 +359,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             Assert.AreEqual(skillIntervalData[5].CurrentHeads, 3);
         }
 
-        private bool verifyResult(double? valueToVerify,double resultValue )
+        private static bool verifyResult(double? valueToVerify,double resultValue )
         {
             if (!valueToVerify.HasValue) return false;
             if (valueToVerify.Value == resultValue)
@@ -367,7 +367,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             return false;
         }
 
-        private SkillIntervalData createSkillIntervalData(int startMin, int endMin, double? minHead, double? maxHead, double forecastedDemand, double currentDemand, double currentHeads)
+        private static  SkillIntervalData createSkillIntervalData(int startMin, int endMin, double? minHead, double? maxHead, double forecastedDemand, double currentDemand, double currentHeads)
         {
             var startDateTime = new DateTime(2001, 01, 01, 8, 0, 0).ToUniversalTime();
             return new SkillIntervalData(new DateTimePeriod(startDateTime.AddMinutes(startMin), startDateTime.AddMinutes(endMin)), forecastedDemand, currentDemand, currentHeads, minHead, maxHead);

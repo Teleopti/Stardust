@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         private Activity _activity1;
         private Activity _activity2;
 
-        [SetUp]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
         public void Setup()
         {
             //TODO Should refactor these tests as most of the classes are finished
@@ -83,10 +83,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             _skill2.DefaultResolution = 15;
         }
 
-        
 
-        [Test]
-        public void ShouldReturnForEmptySkillStaffperiodCollection()
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+        public void ShouldReturnForEmptySkillStaffPeriodCollection()
         {
             
             using (_mock.Record())
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             }
         }
 
-        [Test]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void ShouldNotSkipSkills()
         {
             var skillIntervalData1 = createSkillIntervalData(6.0);
@@ -170,7 +170,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             }
         }
 
-        private Dictionary<TimeSpan, ISkillIntervalData> getIntervalData(TimeSpan timeSpan,
+        private static  Dictionary<TimeSpan, ISkillIntervalData> getIntervalData(TimeSpan timeSpan,
                                                                          SkillIntervalData skillIntervalData)
         {
             return new Dictionary<TimeSpan, ISkillIntervalData>
@@ -187,7 +187,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             return new SkillIntervalData(new DateTimePeriod(_date, _date.AddMinutes(15)), forcastedDemand, 0, 0, 0, 0);
         }
 
-        [Test]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void ShouldCreateIntervalsFromSkillDay()
         {
             var skillIntervalData1 = createSkillIntervalData(6.0);
@@ -241,8 +241,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             }
         }
 
-		
-        [Test]
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldSkipSkillsNotInAggregatedSkills()
 		{
             var skillIntervalData1 = createSkillIntervalData(6.0);
