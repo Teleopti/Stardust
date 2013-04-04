@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Win.Intraday
         }
 
         //return tip for a day header
-        public string DayHeaderTooltipText(GridStyleInfo gridStyle,DateTime currentDate)
+        public string DayHeaderTooltipText(GridStyleInfo gridStyle,DateOnly currentDate)
         {
             return string.Empty;
         }
