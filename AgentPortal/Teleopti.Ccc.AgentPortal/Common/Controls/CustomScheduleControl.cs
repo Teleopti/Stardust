@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms;
-using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Schedule;
 using Teleopti.Ccc.AgentPortalCode.Common;
 using Teleopti.Ccc.AgentPortalCode.ScheduleControlDataProvider;
 using System.Globalization;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.AgentPortal.Common.Controls
 {
@@ -160,7 +158,6 @@ namespace Teleopti.Ccc.AgentPortal.Common.Controls
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public override ScheduleGrid CreateScheduleGrid(NavigationCalendar calendar, ScheduleControl schedule, DateTime initialDate)
         {
-			calendar.CalenderGrid.QueryCellInfo += CalendarQueryCellInfo;
             CustomScheduleGrid scheduleGrid = new CustomScheduleGrid(calendar, schedule, initialDate);
             scheduleGrid.MouseDown += ScheduleGridMouseDown;
             scheduleGrid.KeyDown += ScheduleGrid_KeyDown;
@@ -171,25 +168,7 @@ namespace Teleopti.Ccc.AgentPortal.Common.Controls
             return scheduleGrid;
         }
 
-	    private static void CalendarQueryCellInfo(object sender, GridQueryCellInfoEventArgs e)
-	    {
-			const int rowsPerCal = 8;
-			int rest = e.RowIndex % rowsPerCal;
-			if ((e.ColIndex > 0) && (rest == 1))
-			{
-				var weekdays = DateHelper.GetDaysOfWeek(CultureInfo.CurrentCulture);
-				e.Style.CellValue = CultureInfo.CurrentCulture.DateTimeFormat.GetShortestDayName(weekdays[e.ColIndex-1])[0];
-			}
-	    }
 
-	    /// <summary>
-        /// Raises a ScheduleAppointmentClick event.
-        /// </summary>
-        /// <param name="e"></param>
-        /// <remarks>
-        /// Created by: Sumedah
-        /// Created date: 2008-11-20
-        /// </remarks>
         public override void OnScheduleAppointmentClick(ScheduleAppointmentClickEventArgs e)
         {
             CustomScheduleGrid scheduleGrid = (CustomScheduleGrid)GetScheduleHost();
@@ -249,6 +228,7 @@ namespace Teleopti.Ccc.AgentPortal.Common.Controls
                     _nextButton.Visible = true;
                 }
             }
+			
         }
         /// <summary>
         /// Sets the seven day week.
@@ -292,8 +272,7 @@ namespace Teleopti.Ccc.AgentPortal.Common.Controls
 
             //ScheduleType = ScheduleViewType.CustomWeek;
             GetScheduleHost().SwitchTo(ScheduleViewType.CustomWeek, true);
-
-            Appearance.ScheduleAppointmentTipsEnabled = true;
+			Appearance.ScheduleAppointmentTipsEnabled = true;
             _previousButton.Visible = true;
             _nextButton.Visible = true;
         }
