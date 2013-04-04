@@ -28,9 +28,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 		public IList<IShiftProjectionCache> Filter(DateOnly scheduleDayDateOnly, IPerson person, IList<IShiftProjectionCache> shiftList,
 																  IEffectiveRestriction restriction, IWorkShiftFinderResult finderResult)
 		{
-		    if (person == null) throw new ArgumentNullException("person");
-		    if (shiftList == null) throw new ArgumentNullException("shiftList");
-		    if (restriction == null) throw new ArgumentNullException("restriction");
+			if (person == null) return null;
+			if (shiftList == null) return null;
+			if (restriction == null) return null;
 		    if (shiftList.Count == 0)
 				return shiftList;
 			var timeZone = person.PermissionInformation.DefaultTimeZone();

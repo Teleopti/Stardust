@@ -15,9 +15,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 	{
 		public IList<IShiftProjectionCache> Filter(IList<IShiftProjectionCache> shiftList, IEffectiveRestriction restriction, IWorkShiftFinderResult finderResult)
 		{
-		    if (shiftList == null) throw new ArgumentNullException("shiftList");
-		    if (restriction == null) throw new ArgumentNullException("restriction");
-		    if (finderResult == null) throw new ArgumentNullException("finderResult");
+			if (shiftList == null) return null;
+			if (restriction == null) return null;
+			if (finderResult == null) return null;
 		    if (shiftList.Count == 0) return shiftList;
 			IList<IShiftProjectionCache> workShiftsWithinMinMax = new List<IShiftProjectionCache>();
 			if (restriction.WorkTimeLimitation.EndTime.HasValue || restriction.WorkTimeLimitation.StartTime.HasValue)

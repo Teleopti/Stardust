@@ -4,6 +4,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -87,6 +88,23 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			}
 		}
 
+		[Test]
+		public void ShouldCheckParameters()
+		{
+			var effectiveRestriction = new EffectiveRestriction(
+				new StartTimeLimitation(new TimeSpan(8, 0, 0), new TimeSpan(10, 0, 0)),
+				new EndTimeLimitation(new TimeSpan(15, 0, 0), new TimeSpan(18, 0, 0)),
+				new WorkTimeLimitation(new TimeSpan(5, 0, 0), new TimeSpan(8, 0, 0)),
+				null, null, null, new List<IActivityRestriction>());
+			var result = _target.Filter(new List<IShiftProjectionCache>(), effectiveRestriction);
+			Assert.That(result.Count, Is.EqualTo(0));
+
+			result = _target.Filter(getCashes(), effectiveRestriction);
+			Assert.That(result.Count, Is.EqualTo(3));
+
+			result = _target.Filter(null, effectiveRestriction);
+			Assert.IsNull(result);
+		}
 
 		private IList<IShiftProjectionCache> getCashes()
 		{

@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
 using Teleopti.Ccc.DomainTest.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
@@ -67,6 +69,18 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 				ret = _target.Filter(new List<IShiftCategory>(), caches, finderResult);
 				Assert.AreEqual(3, ret.Count);
 			}
+		}
+
+		[Test]
+		public void ShouldCheckParameters()
+		{
+			IWorkShiftFinderResult finderResult = new WorkShiftFinderResultForTest();
+			
+			var result = _target.Filter(new List<IShiftCategory>(), null, finderResult);
+			Assert.IsNull(result);
+			
+			result = _target.Filter(new List<IShiftCategory>(), new List<IShiftProjectionCache>(), null);
+			Assert.IsNull(result);
 		}
 	}
 }

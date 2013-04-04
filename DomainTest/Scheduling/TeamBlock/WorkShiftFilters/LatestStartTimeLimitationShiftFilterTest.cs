@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
 using Teleopti.Ccc.DomainTest.ResourceCalculation;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -42,6 +44,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			var earlistEnd = new DateTime(2013, 3, 1, 7, 30, 0, DateTimeKind.Utc);
 			var result = _target.Filter(getCashes(), earlistEnd, new WorkShiftFinderResultForTest());
 			Assert.That(result.Count, Is.EqualTo(1));
+		}
+
+		[Test]
+		public void ShouldCheckParameters()
+		{
+			var result = _target.Filter(new List<IShiftProjectionCache>(), new DateTime(), new WorkShiftFinderResultForTest());
+			Assert.That(result.Count, Is.EqualTo(0));
 		}
 
 		private IList<IShiftProjectionCache> getCashes()

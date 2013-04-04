@@ -14,14 +14,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
 		public bool Filter(ISchedulingOptions schedulingOptions, IEffectiveRestriction effectiveRestriction, IWorkShiftFinderResult finderResult)
 		{
-		    if (schedulingOptions == null) throw new ArgumentNullException("schedulingOptions");
+			if (schedulingOptions == null) return false;
 		    if (effectiveRestriction == null)
 			{
 				finderResult.AddFilterResults(new WorkShiftFilterResult(UserTexts.Resources.ConflictingRestrictions, 0,
 																		 0));
 				return false;
 			}
-		    if (finderResult == null) throw new ArgumentNullException("finderResult");
+			if (finderResult == null) return false;
 
 		    if (effectiveRestriction.ShiftCategory != null && schedulingOptions.ShiftCategory != null)
 			{

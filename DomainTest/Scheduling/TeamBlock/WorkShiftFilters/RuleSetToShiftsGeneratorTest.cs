@@ -49,6 +49,24 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 				Assert.That(ret.Count(), Is.EqualTo(2));
 			}
 		}
+	
+		[Test]
+		public void CanAdjustWorkShiftsFromRuleSetBagWithNoMasterActivity()
+		{
+			var ruleSet1 = _mocks.StrictMock<IWorkShiftRuleSet>();
+			var workShiftsInfo = getWorkShiftsInfo();
+			using (_mocks.Record())
+			{
+				Expect.Call(_ruleSetProjectionEntityService.ProjectionCollection(ruleSet1, null)).IgnoreArguments().Return(workShiftsInfo);
+				Expect.Call(_shiftFromMasterActivityService.Generate(_workShift1)).Return(null).Repeat.Twice();
+			}
+
+			using (_mocks.Playback())
+			{
+				var ret = _target.Generate(ruleSet1);
+				Assert.That(ret.Count(), Is.EqualTo(2));
+			}
+		}
 
 		private IList<IWorkShift> getWorkShifts()
 		{

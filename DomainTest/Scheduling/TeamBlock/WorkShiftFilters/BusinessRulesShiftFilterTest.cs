@@ -30,11 +30,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			_resultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
 			_validDateTimePeriodShiftFilter = _mocks.StrictMock<IValidDateTimePeriodShiftFilter>();
 			_longestPeriodForAssignmentCalculator = _mocks.StrictMock<ILongestPeriodForAssignmentCalculator>();
-			
+
 			_scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
 			_personalShiftMeetingTimeChecker = _mocks.StrictMock<IPersonalShiftMeetingTimeChecker>();
 			_target = new BusinessRulesShiftFilter(_resultStateHolder, _validDateTimePeriodShiftFilter,
-												   _longestPeriodForAssignmentCalculator);
+			                                       _longestPeriodForAssignmentCalculator);
 		}
 
 		[Test]
@@ -42,12 +42,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		{
 			var person1 = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue, new List<ISkill>());
 			var person2 = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue, new List<ISkill>());
-			var groupPerson = new GroupPerson(new List<IPerson> { person1, person2 }, DateOnly.MinValue, "team1", null);
+			var groupPerson = new GroupPerson(new List<IPerson> {person1, person2}, DateOnly.MinValue, "team1", null);
 			var finderResult = new WorkShiftFinderResult(groupPerson, new DateOnly());
 			var scheduleRange1 = _mocks.StrictMock<IScheduleRange>();
 			var scheduleRange2 = _mocks.StrictMock<IScheduleRange>();
 			var period1 = new DateTimePeriod(new DateTime(2013, 3, 1, 7, 30, 0, DateTimeKind.Utc),
-											 new DateTime(2013, 3, 1, 17, 30, 0, DateTimeKind.Utc));
+			                                 new DateTime(2013, 3, 1, 17, 30, 0, DateTimeKind.Utc));
 			var shiftList = getCashes();
 			using (_mocks.Record())
 			{
@@ -108,6 +108,23 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 				retList.Add(cache);
 			}
 			return retList;
+		}
+
+		[Test]
+		public void ShouldCheckParameters()
+		{
+			var person1 = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue, new List<ISkill>());
+			var person2 = PersonFactory.CreatePersonWithPersonPeriod(DateOnly.MinValue, new List<ISkill>());
+			var groupPerson = new GroupPerson(new List<IPerson> { person1, person2 }, DateOnly.MinValue, "team1", null);
+			var finderResult = new WorkShiftFinderResult(groupPerson, new DateOnly());
+			var shiftList = getCashes();
+			var result = _target.Filter(null, shiftList, _dateOnly, finderResult);
+			Assert.IsNull(result);
+			 result = _target.Filter(groupPerson, null, _dateOnly, finderResult);
+			Assert.IsNull(result);
+
+			result = _target.Filter(groupPerson, new List<IShiftProjectionCache>(), _dateOnly, finderResult);
+			Assert.That(result.Count, Is.EqualTo(0));
 		}
 
 		private static IEnumerable<IWorkShift> getWorkShifts()

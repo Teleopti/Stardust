@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 
 		public IList<IShiftProjectionCache> Filter(IList<IShiftProjectionCache> shiftList, IEffectiveRestriction effectiveRestriction)
 		{
-		    if (shiftList == null) throw new ArgumentNullException("shiftList");
+			if (shiftList == null) return null;
 		    if (shiftList.Count == 0) return shiftList;
 			if (effectiveRestriction.CommonMainShift != null)
 			{

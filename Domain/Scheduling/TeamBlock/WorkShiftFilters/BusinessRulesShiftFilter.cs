@@ -30,9 +30,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 		public IList<IShiftProjectionCache> Filter(IGroupPerson groupPerson, IList<IShiftProjectionCache> shiftList,
 												   DateOnly dateToCheck, IWorkShiftFinderResult finderResult)
 		{
-		    if (groupPerson == null) throw new ArgumentNullException("groupPerson");
-		    if (shiftList == null) throw new ArgumentNullException("shiftList");
-		    if (finderResult == null) throw new ArgumentNullException("finderResult");
+			if (groupPerson == null) return null;
+			if (shiftList == null) return null;
+			if (finderResult == null) return null;
 		    if (shiftList.Count == 0) return shiftList;
 			
 			DateTime approximateTime = new DateTime(dateToCheck.Year, dateToCheck.Month, dateToCheck.Day, 12, 0, 0, DateTimeKind.Unspecified);
