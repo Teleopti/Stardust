@@ -11,7 +11,7 @@ namespace Teleopti.Interfaces.MessageBroker
 	[Serializable]
 	public class Subscription
 	{
-		private static readonly StringCollection TypesWithException = new StringCollection {typeof (IExternalAgentState).Name, typeof(IActualAgentState).Name};
+		private static readonly StringCollection TypesWithException = new StringCollection {typeof(IActualAgentState).Name};
 		private static readonly StringCollection TypesWithBusinessUnitException = new StringCollection {typeof(IStatisticTask).Name};
 
 		/// <summary>

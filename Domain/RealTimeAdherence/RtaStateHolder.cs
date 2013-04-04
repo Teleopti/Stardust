@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Domain.RealTimeAdherence
 
         public void SetActualAgentState(IActualAgentState actualAgentState)
         {
-	        var person = FilteredPersons.FirstOrDefault(p => p.Id.Value == actualAgentState.PersonId);
+	        var person = FilteredPersons.FirstOrDefault(p => p.Id.GetValueOrDefault() == actualAgentState.PersonId);
 	        if (person == null || person.Id == null)
                 return;
 			_actualAgentStates.AddOrUpdate((Guid)person.Id, actualAgentState, (key, oldState) => actualAgentState);

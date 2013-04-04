@@ -87,11 +87,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         //    return -1;
         //}
 
-        public ICollection<IExternalAgentState> LoadRtaAgentStates(DateTimePeriod period, IList<ExternalLogOnPerson> externalLogOnPersons)
-        {
-            return new List<IExternalAgentState>();
-        }
-
         public void DeleteStgQueues()
         {
 

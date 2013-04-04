@@ -129,8 +129,6 @@
     <Compile Include="Client\MessageSenderFactory.cs" />
     <Compile Include="Coders\JobResultProgressDecoder.cs" />
     <Compile Include="Coders\JobResultProgressEncoder.cs" />
-    <Compile Include="Coders\ExternalAgentStateDecoder.cs" />
-    <Compile Include="Coders\ExternalAgentStateEncoder.cs" />
     <Compile Include="Composites\MessageFilterManager.cs">
       <SubType>Code</SubType>
     </Compile>

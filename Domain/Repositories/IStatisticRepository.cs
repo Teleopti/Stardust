@@ -64,18 +64,6 @@ namespace Teleopti.Ccc.Domain.Repositories
         void PersistFactQueues(DataTable queueDataTable);
 
         /// <summary>
-        /// Loads the rta agent states.
-        /// </summary>
-        /// <param name="period">The period.</param>
-        /// <param name="externalLogOnPersons">The external log on persons.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: robink
-        /// Created date: 2008-11-18
-        /// </remarks>
-        ICollection<IExternalAgentState> LoadRtaAgentStates(DateTimePeriod period, IList<ExternalLogOnPerson> externalLogOnPersons);
-
-        /// <summary>
         /// Runs the "raptor_v_stg_queue_delete.sql proc"
         /// </summary>
         /// <remarks>
