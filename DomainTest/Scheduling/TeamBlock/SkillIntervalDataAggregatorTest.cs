@@ -96,10 +96,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             _skillBIntervalDataList = new List<ISkillIntervalData> { _skillBIntervalData1, _skillBIntervalData2, _skillBIntervalData3, _skillBIntervalData4 };
 
             _multipleSkillIntervalDataList = new List<IList<ISkillIntervalData>> { _skillAIntervalDataList, _skillBIntervalDataList };
-            using (_mock.Record())
-            {
 
-            }
             using (_mock.Playback())
             {
                 var result = _target.AggregateSkillIntervalData(_multipleSkillIntervalDataList);
@@ -176,10 +173,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             _skillBIntervalDataList = new List<ISkillIntervalData> { _skillBIntervalData1, _skillBIntervalData2, _skillBIntervalData3, _skillBIntervalData4 };
 
             _multipleSkillIntervalDataList = new List<IList<ISkillIntervalData>> { _skillAIntervalDataList, _skillBIntervalDataList };
-            using (_mock.Record())
-            {
 
-            }
             using (_mock.Playback())
             {
                 var result = _target.AggregateSkillIntervalData(_multipleSkillIntervalDataList);
@@ -214,10 +208,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             _skillBIntervalDataList = new List<ISkillIntervalData> { _skillBIntervalData1, _skillBIntervalData2, _skillBIntervalData3, _skillBIntervalData4 };
 
             _multipleSkillIntervalDataList = new List<IList<ISkillIntervalData>> { _skillAIntervalDataList, _skillBIntervalDataList };
-            using (_mock.Record())
-            {
 
-            }
             using (_mock.Playback())
             {
                 var result = _target.AggregateSkillIntervalData(_multipleSkillIntervalDataList);
