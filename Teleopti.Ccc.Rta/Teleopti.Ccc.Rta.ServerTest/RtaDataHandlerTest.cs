@@ -187,7 +187,6 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_dataSourceResolver.Expect(d => d.TryResolveId("1", out dataSource)).Return(true).OutRef(1);
 			_personResolver.Expect(p => p.TryResolveId(1, _logOn, out outPersonBusinessUnits)).Return(true).OutRef(
 				retPersonBusinessUnits);
-			_messageSender.Expect(m => m.IsAlive).Return(true);
 			_stateResolver.Expect(s => s.HaveStateCodeChanged(Guid.Empty, _stateCode, _timestamp)).Return(false);
 			
 			_mocks.ReplayAll();
@@ -213,7 +212,6 @@ namespace Teleopti.Ccc.Rta.ServerTest
 			_dataSourceResolver.Expect(d => d.TryResolveId("1", out dataSource)).Return(true).OutRef(1);
 			_personResolver.Expect(p => p.TryResolveId(1, _logOn, out outPersonBusinessUnits)).Return(true).OutRef(
 				retPersonBusinessUnits);
-			_messageSender.Expect(m => m.IsAlive).Return(true);
 			_stateResolver.Expect(s => s.HaveStateCodeChanged(Guid.Empty, _stateCode, _timestamp)).Return(true);
 			_agentHandler.Expect(
 				r => r.GetAndSaveState(Guid.Empty, Guid.Empty, _platformTypeId, _stateCode, _timestamp, _timeInState)).
