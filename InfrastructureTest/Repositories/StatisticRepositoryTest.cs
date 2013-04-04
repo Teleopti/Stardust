@@ -89,17 +89,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             target.LoadSpecificDates(sources, new DateTimePeriod(2006, 1, 1, 2006, 1, 2));
         }
 
-        [Test]
-        public void VerifyLoadRtaAgentStates()
-        {
-            ICollection<IExternalAgentState> externalAgentStates =
-                target.LoadRtaAgentStates(DateTimeFactory.CreateDateTimePeriod(new DateTime(2008, 12, 5, 0, 0, 0, DateTimeKind.Utc), 0),
-                                          new List<ExternalLogOnPerson>
-                                              {new ExternalLogOnPerson {ExternalLogOn = "007", DataSourceId = 1}});
-            Assert.AreEqual(0, externalAgentStates.Count);
-        }
-
-        [Test]
+       [Test]
         public void VerifyLoadAgentStat()
         {
             IList returnList = target.LoadAgentStat(Guid.NewGuid(), DateTime.Now, DateTime.Now, "W. Europe Standard Time", Guid.NewGuid());

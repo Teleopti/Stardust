@@ -16,8 +16,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
             Assert.IsNotNull(filterManager.FilterDictionary);
             Assert.IsTrue(filterManager.FilterDictionary.Keys.Contains(typeof(IStatisticTask)));
             Assert.AreEqual(1,filterManager.FilterDictionary[typeof(IStatisticTask)].Count);
-            Assert.IsTrue(filterManager.FilterDictionary.Keys.Contains(typeof(IExternalAgentState)));
-            Assert.AreEqual(1, filterManager.FilterDictionary[typeof(IExternalAgentState)].Count);
             Assert.IsTrue(filterManager.FilterDictionary.Keys.Contains(typeof(IJobResultProgress)));
             Assert.AreEqual(1, filterManager.FilterDictionary[typeof(IJobResultProgress)].Count);
             Assert.AreEqual(1, filterManager.FilterDictionary[typeof(IScheduleChangedInDefaultScenario)].Count);
