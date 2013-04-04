@@ -220,9 +220,13 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
             t.Tick += updateMem;
         }
 
+	    private long maxMem = 0;
         private void updateMem(object sender, EventArgs e)
         {
-            Roger65("Mem: " + string.Format(CultureInfo.CurrentCulture, "{0:#.00}", (double)GC.GetTotalMemory(true)/1024/1024) + " MB");
+	        var mem = GC.GetTotalMemory(true);
+	        if (mem > maxMem)
+		        maxMem = mem;
+            Roger65(string.Format(CultureInfo.CurrentCulture, "Mem: {0:#.00} MB (max mem: {1:#} MB)", (double)mem/1024/1024, maxMem/1024/1024));
         }
 
         private void licensedToText()
