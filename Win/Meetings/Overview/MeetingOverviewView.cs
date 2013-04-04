@@ -308,7 +308,7 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
             _calendarAndTextPanel.SelectDateRange(scheduleControl1.Calendar.SelectedDates);
 
             DateTime dt = (scheduleControl1.Calendar.SelectedDates.Count > 0) ? scheduleControl1.Calendar.SelectedDates[0] : scheduleControl1.Calendar.DateValue;
-			scheduleControl1.HeaderLabel.Text = string.Concat(Resources.Starting, " ", dt.ToString("D",CultureInfo.CurrentUICulture));
+			scheduleControl1.HeaderLabel.Text = string.Concat(Resources.Starting, " ", dt.ToShortDateString());
             _eventAggregator.GetEvent<AppointmentSelectionChanged>().Publish(string.Empty);
         }
 
