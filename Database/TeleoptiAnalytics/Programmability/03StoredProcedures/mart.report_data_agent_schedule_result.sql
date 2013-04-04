@@ -31,6 +31,7 @@ GO
 --				2012-01-09 Passed BU to ReportAgents
 --				2012-01-23 Change parameters @group_page_group_id and @team_id to sets and nvarchar(max)
 --				2012-02-15 Changed to uniqueidentifier as report_id - Ola
+--				2013-04-04 #22960 - replaced mart.DimPersonLocalized(@date_from, @date_to)
 -- Description:	Agent Metrics Report
 -- =============================================
 CREATE PROCEDURE [mart].[report_data_agent_schedule_result] 
@@ -182,6 +183,20 @@ EXEC [mart].[report_data_schedule_result_subSP]
 
 --select * from #bridge_time_zone btz order by date_id,interval_id
 
+--get person info
+UPDATE #pre_result_subSP
+SET person_id	= dp.person_id
+FROM #pre_result_subSP me
+INNER JOIN #person_acd_subSP acd
+	ON me.acd_login_id = acd.acd_login_id
+INNER JOIN mart.dim_person dp
+	ON acd.person_id = dp.person_id
+	AND me.date_date between dp.valid_from_date and dp.valid_to_date
+
+--Delete ACD-logins that have been logged on without being a agent in CCC7
+DELETE FROM #pre_result_subSP
+WHERE person_id = -1 --Not Defined
+
 --switch utc date to local date
 update #pre_result_subSP
 set
@@ -198,20 +213,6 @@ DELETE FROM #pre_result_subSP
 WHERE date_date < @date_from
 OR date_date > @date_to
 OR date_date IS NULL
-
---Delete ACD-logins that have been logged on without being a agent in CCC7
-DELETE FROM #pre_result_subSP
-WHERE person_id = -1 --Not Defined
-
---get person info
-UPDATE #pre_result_subSP
-SET person_id	= dpl.person_id
-FROM #pre_result_subSP me
-INNER JOIN #person_acd_subSP acd
-	ON me.acd_login_id = acd.acd_login_id
-INNER JOIN mart.DimPersonLocalized(@date_from, @date_to) dpl
-	ON acd.person_id = dpl.person_id
-	AND me.date_date between dpl.valid_from_date_local and dpl.valid_to_date_local
 
 SELECT	r.date_date AS 'date',
 		p.person_code,
