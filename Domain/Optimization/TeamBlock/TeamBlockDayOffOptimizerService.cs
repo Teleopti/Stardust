@@ -235,9 +235,11 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		{
 			foreach (DateOnly dateOnly in removedDaysOff)
 			{
-				ITeamBlockInfo teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, dateOnly,
+                bool singleAgentTeam = schedulingOptions.GroupOnGroupPageForLevelingPer != null &&
+                                           schedulingOptions.GroupOnGroupPageForLevelingPer.Key == "SingleAgentTeam";
+                ITeamBlockInfo teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, dateOnly,
 				                                                                        schedulingOptions
-					                                                                        .BlockFinderTypeForAdvanceScheduling,schedulingOptions.GroupOnGroupPageForLevelingPer.Key == "SingleAgentTeam");
+                                                                                            .BlockFinderTypeForAdvanceScheduling, singleAgentTeam);
 				if (!_teamBlockSteadyStateValidator.IsBlockInSteadyState(teamBlockInfo, schedulingOptions))
 					_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo);
 

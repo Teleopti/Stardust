@@ -58,7 +58,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 					if (!teamSteadyStateHolder.IsSteadyState(teamInfo.GroupPerson))
 						continue;
 
-				    bool singleAgentTeam = _schedulingOptions.GroupOnGroupPageForLevelingPer.Key == "SingleAgentTeam";
+                    bool singleAgentTeam = _schedulingOptions.GroupOnGroupPageForLevelingPer != null &&
+                                           _schedulingOptions.GroupOnGroupPageForLevelingPer.Key == "SingleAgentTeam";
 				    ITeamBlockInfo teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, datePointer,
 					                                                                         _schedulingOptions
                                                                                                  .BlockFinderTypeForAdvanceScheduling, singleAgentTeam);

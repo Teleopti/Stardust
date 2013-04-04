@@ -39,8 +39,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			{
 				foreach (var day in selectedPeriod.DayCollection())
 				{
-					var teamBlock = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, day,
-					                                                          schedulingOptions.BlockFinderTypeForAdvanceScheduling,schedulingOptions.GroupOnGroupPageForLevelingPer.Key == "SingleAgentTeam");
+				    bool singleAgentTeam = schedulingOptions.GroupOnGroupPageForLevelingPer != null &&
+				                           schedulingOptions.GroupOnGroupPageForLevelingPer.Key == "SingleAgentTeam";
+				    var teamBlock = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, day,
+                                                                              schedulingOptions.BlockFinderTypeForAdvanceScheduling, singleAgentTeam);
 					if (teamBlock == null) continue;
 					allTeamBlocksInHashSet.Add(teamBlock);
 				}
