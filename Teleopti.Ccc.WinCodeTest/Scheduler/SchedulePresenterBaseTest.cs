@@ -437,7 +437,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Expect.Call(_viewBase.ColHeaders).Return(1).Repeat.AtLeastOnce();
             _viewBase.SetCellBackTextAndBackColor(null, _date, false, false, null);
             LastCall.IgnoreArguments().Repeat.AtLeastOnce();
-            Expect.Call(_viewBase.DayHeaderTooltipText(null, DateTime.MinValue)).IgnoreArguments().Return("test").Repeat.Once();
+            Expect.Call(_viewBase.DayHeaderTooltipText(null, DateOnly.MinValue)).IgnoreArguments().Return("test").Repeat.Once();
             Expect.Call(_viewBase.TheGrid).Return(_grid).Repeat.AtLeastOnce();
 
             _mocks.ReplayAll();
