@@ -523,7 +523,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 e.Style.Text = CultureInfo.CurrentCulture.Calendar.
                     GetDayOfMonth(localDate).ToString(CultureInfo.CurrentCulture);
 
-                e.Style.Tag = new DateOnly(localDate);
+                e.Style.Tag = localDate;
                 e.Style.CellTipText = View.DayHeaderTooltipText(e.Style, localDate);
 
                 View.SetCellBackTextAndBackColor(e, localDate, false, true, null);

@@ -491,7 +491,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         public virtual string DayHeaderTooltipText(GridStyleInfo gridStyle,DateOnly currentDate)
         {
             return gridStyle.CellTipText = string.Concat(CultureInfo.CurrentUICulture.DateTimeFormat.GetDayName(CultureInfo.CurrentUICulture.Calendar.GetDayOfWeek(currentDate)), " ",
-               currentDate.ToShortDateString());
+               currentDate.ToShortDateString(CultureInfo.CurrentCulture));
         }
 
         protected void DrawSchedule(GridDrawCellEventArgs e, DateDateTimePeriodDictionary timeSpans, SchedulePartView significantPart)
