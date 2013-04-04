@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			{
 				Expect.Call(repository.LoadActiveAgentCount(skill, dayPeriod)).Return(activeAgentCounts).Repeat.Once();
 				Expect.Call(repository.LoadSpecificDates(workload.QueueSourceCollection, dayPeriod)).Return(statisticTasks).Repeat.Once();
-				Expect.Call(skillStaffPeriod1.Parent).Return(skillDay).Repeat.AtLeastOnce();
+				Expect.Call(skillStaffPeriod1.SkillDay).Return(skillDay).Repeat.AtLeastOnce();
 				Expect.Call(skillStaffPeriod1.Period).Return(smallPeriod).Repeat.AtLeastOnce();
 				Expect.Call(workloadDay.Workload.Equals(workload)).Return(true);
 				Expect.Call(workloadDay.OpenTaskPeriodList).Return(new ReadOnlyCollection<ITemplateTaskPeriod>(new List<ITemplateTaskPeriod>()));
@@ -89,8 +89,8 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			{
 				Expect.Call(repository.LoadActiveAgentCount(skill, dayPeriod)).Return(activeAgentCounts).Repeat.Once();
 				Expect.Call(repository.LoadSpecificDates(workload.QueueSourceCollection, dayPeriod)).Return(statisticTasks).Repeat.Once();
-				Expect.Call(skillStaffPeriod1.Parent).Return(skillDay1).Repeat.AtLeastOnce();
-				Expect.Call(skillStaffPeriod2.Parent).Return(skillDay2).Repeat.AtLeastOnce();
+				Expect.Call(skillStaffPeriod1.SkillDay).Return(skillDay1).Repeat.AtLeastOnce();
+				Expect.Call(skillStaffPeriod2.SkillDay).Return(skillDay2).Repeat.AtLeastOnce();
 				Expect.Call(skillStaffPeriod1.Period).Return(smallPeriod).Repeat.AtLeastOnce();
 				Expect.Call(skillStaffPeriod2.Period).Return(smallPeriod.MovePeriod(TimeSpan.FromMinutes(15))).Repeat.AtLeastOnce();
 				Expect.Call(workloadDay1.Workload.Equals(workload)).Return(true);

@@ -1608,7 +1608,9 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
         internal override void SetSelectedPersons(IList<IPerson> selectedPersons)
         {
             // Selection events will not be raised
-            Grid.Selections.Clear(false);
+            Grid.Model.Selections.Clear(false);
+
+			var ranges = new List<GridRangeInfo>();
             foreach (var person in selectedPersons)
             {
                 for (int i = 0; i < FilteredPeopleHolder.PersonAccountGridViewAdaptorCollection.Count; i++)
@@ -1616,10 +1618,11 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
                     int actualIndex = i + 1;
                     if (FilteredPeopleHolder.PersonAccountGridViewAdaptorCollection[i].Parent.Person.Equals(person))
                     {
-                        Grid.Selections.SelectRange(GridRangeInfo.Rows(actualIndex, actualIndex), true);
+                        ranges.Add(GridRangeInfo.Row(actualIndex));
                     }
                 }
             }
+			Grid.Model.SelectedRanges.AddRange(ranges.ToArray());
         }
 
         public ReadOnlyCollection<IPersonAccountModel> GetSelectedPersonAccounts

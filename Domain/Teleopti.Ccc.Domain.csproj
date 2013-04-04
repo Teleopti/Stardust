@@ -443,6 +443,7 @@
     <Compile Include="Scheduling\Meetings\IChangeTracker.cs" />
     <Compile Include="Scheduling\Meetings\MeetingChangeTracker.cs" />
     <Compile Include="Scheduling\DayOffScheduling\MissingDaysOffScheduler.cs" />
+    <Compile Include="Scheduling\Assignment\PersistedActivityLayer.cs" />
     <Compile Include="Scheduling\PublicNoteByDateSorter.cs" />
     <Compile Include="Scheduling\PublicNote.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessHolder.cs" />
@@ -779,6 +780,8 @@
     <Compile Include="Scheduling\ShiftCreator\RuleSetProjectionService.cs" />
     <Compile Include="Scheduling\ShiftCreator\ShiftFromMasterActivityService.cs" />
     <Compile Include="Scheduling\ShiftCreator\StartTimeLimiter.cs" />
+    <Compile Include="Scheduling\ShiftCreator\WorkShiftAddStopperCallback.cs" />
+    <Compile Include="Scheduling\ShiftCreator\WorkshiftCollection.cs" />
     <Compile Include="Scheduling\ShiftCreator\WorkShiftProjection.cs" />
     <Compile Include="Scheduling\ShiftCreator\WorkShiftVisualLayerInfo.cs" />
     <Compile Include="Scheduling\ShiftTradeChecksumCalculator.cs" />
@@ -1160,7 +1163,6 @@
     <Compile Include="Scheduling\Assignment\PersonAssignmentRestrictionSet.cs" />
     <Compile Include="Scheduling\Assignment\GapsInAssignment.cs" />
     <Compile Include="Scheduling\WorkShift.cs" />
-    <Compile Include="Scheduling\Assignment\Shift.cs" />
     <Compile Include="Scheduling\ShiftCategory.cs" />
     <Compile Include="Security\AuthorizationEntities\ApplicationAuthenticationInfo.cs" />
     <Compile Include="Security\AuthorizationEntities\ApplicationFunction.cs" />

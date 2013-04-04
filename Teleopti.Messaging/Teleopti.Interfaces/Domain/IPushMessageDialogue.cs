@@ -53,15 +53,15 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         bool IsReplied { get; }
 
-        /// <summary>
-        /// Gets the message.
-        /// </summary>
-        /// <value>The message.</value>
-        /// <remarks>
-        /// Created by: henrika
-        /// Created date: 2009-11-02
-        /// </remarks>
-        string Message { get; }
+	    /// <summary>
+	    /// Gets the message.
+	    /// </summary>
+	    /// <value>The message.</value>
+	    /// <remarks>
+	    /// Created by: henrika
+	    /// Created date: 2009-11-02
+	    /// </remarks>
+	    string Message(ITextFormatter textFormatter);
 
         /// <summary>
         /// Replies to the PushMessage. Text replies are only allowed when AllowDialogueReply is true for the PushMessage this dialogue belongs to.

@@ -14,11 +14,13 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 	public class RuleSetTest
 	{
 		private ContainerBuilder containerBuilder;
+		private IWorkShiftAddCallback _callback;
 
 		[SetUp]
 		public void Setup()
 		{
 			containerBuilder = new ContainerBuilder();
+			_callback = new WorkShiftAddStopperCallback();
 		}
 
 		[Test]
@@ -34,7 +36,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 				var projSvc = container.Resolve<IRuleSetProjectionEntityService>();
 				var projSvc2 = container.Resolve<IRuleSetProjectionEntityService>();
 
-				Assert.AreSame(projSvc.ProjectionCollection(wsRs), projSvc2.ProjectionCollection(wsRs));
+				Assert.AreSame(projSvc.ProjectionCollection(wsRs, _callback), projSvc2.ProjectionCollection(wsRs, _callback));
 
 			}
 		}
@@ -60,7 +62,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 					projSvc2 = inner2.Resolve<IRuleSetProjectionEntityService>();
 				}
 
-				Assert.AreNotSame(projSvc.ProjectionCollection(wsRs), projSvc2.ProjectionCollection(wsRs));
+				Assert.AreNotSame(projSvc.ProjectionCollection(wsRs, _callback), projSvc2.ProjectionCollection(wsRs, _callback));
 			}
 		}
 
@@ -93,10 +95,10 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 				using (var inner1 = container.BeginLifetimeScope())
 				{
 					projSvc = inner1.Resolve<IRuleSetProjectionEntityService>();
-					proj = projSvc.ProjectionCollection(wsRs);
+					proj = projSvc.ProjectionCollection(wsRs, _callback);
 
 				}
-				Assert.AreNotSame(proj, projSvc.ProjectionCollection(wsRs));
+				Assert.AreNotSame(proj, projSvc.ProjectionCollection(wsRs, _callback));
 			}
 		}
 
@@ -113,7 +115,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 				using (var inner1 = container.BeginLifetimeScope())
 				{
 					var projSvc = inner1.Resolve<IRuleSetProjectionEntityService>();
-					Assert.AreNotSame(projSvc.ProjectionCollection(wsRs), projSvc.ProjectionCollection(wsRs));
+					Assert.AreNotSame(projSvc.ProjectionCollection(wsRs, _callback), projSvc.ProjectionCollection(wsRs, _callback));
 				}
 			}
 		}

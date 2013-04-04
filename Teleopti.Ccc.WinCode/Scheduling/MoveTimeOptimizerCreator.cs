@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					new NonBlendSkillCalculator(new NonBlendSkillImpactOnPeriodForProjection());
 
 				IResourceOptimizationHelper resourceOptimizationHelper =
-					new ResourceOptimizationHelper(_schedulingResultStateHolder, occupiedSeatCalculator, nonBlendSkillCalculator, _singleSkillDictionary);
+					new ResourceOptimizationHelper(_schedulingResultStateHolder, occupiedSeatCalculator, nonBlendSkillCalculator, _singleSkillDictionary, new SingleSkillMaxSeatCalculator());
 
 				IRestrictionExtractor restrictionExtractor =
 					new RestrictionExtractor(_schedulingResultStateHolder);

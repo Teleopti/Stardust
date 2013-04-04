@@ -14,56 +14,71 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
     /// </remarks>
     public class CreateWorkShiftsFromTemplate : ICreateWorkShiftsFromTemplate
     {
-        public IList<IWorkShift> Generate(IWorkShift shiftTemplate, 
-                                            IList<IWorkShiftExtender> extenders,
-                                            IList<IWorkShiftLimiter> limiters)
-        {
-            if(tryJumpOutEarly(limiters, shiftTemplate, extenders))
-                return new List<IWorkShift>();
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
+		public IList<IWorkShift> Generate(IWorkShift shiftTemplate, IList<IWorkShiftExtender> extenders, IList<IWorkShiftLimiter> limiters,
+	                                         IWorkShiftAddCallback callback)
+	    {
+			if (tryJumpOutEarly(limiters, shiftTemplate, extenders))
+				return new List<IWorkShift>();
 
-            IList<IWorkShift> workingList = new List<IWorkShift> { shiftTemplate };
-            foreach (IWorkShiftExtender extender in extenders)
-            {
-                workingList = generateForOneExtender(workingList, extender);
-            }
+			var workingList = new WorkShiftCollection(callback) { shiftTemplate };
+			foreach (var extender in extenders)
+			{
+				if (callback != null && callback.IsCanceled)
+					break;
+				workingList = generateForOneExtender(workingList, extender);
+			}
 
-            removeInvalidAtEnd(workingList, limiters);
-            return workingList;
-        }
+			removeInvalidAtEnd(workingList, limiters,callback);
+			return workingList;
+	    }
 
-        private static bool tryJumpOutEarly(IEnumerable<IWorkShiftLimiter> limiters, IWorkShift shiftTemplate, IList<IWorkShiftExtender> extenders)
+	    private static bool tryJumpOutEarly(IEnumerable<IWorkShiftLimiter> limiters, IWorkShift shiftTemplate, IList<IWorkShiftExtender> extenders)
         {
             return !limiters.All(limiter => limiter.IsValidAtStart(shiftTemplate, extenders));
         }
 
-        private static void removeInvalidAtEnd(IList<IWorkShift> workingList, ICollection<IWorkShiftLimiter> limiters)
+		private static void removeInvalidAtEnd(WorkShiftCollection workingList, ICollection<IWorkShiftLimiter> limiters, IWorkShiftAddCallback callback)
         {
             if(limiters.Count>0)
             {
                 for (int i = workingList.Count - 1; i >= 0; i--)
                 {
-                    IWorkShift shift = workingList[i];
-                    IVisualLayerCollection shiftProjection = shift.ProjectionService().CreateProjection();
-                    foreach (IWorkShiftLimiter limiter in limiters)
+					if (callback != null && callback.IsCanceled)
+						break;
+                    var shift = workingList[i];
+                    var shiftProjection = shift.ProjectionService().CreateProjection();
+                    foreach (var limiter in limiters)
                     {
-                        if (!limiter.IsValidAtEnd(shiftProjection))
-                        {
-                            workingList.RemoveAt(i);
-                            break;
-                        }
+						if (callback != null && callback.IsCanceled)
+							break;
+	                    if (limiter.IsValidAtEnd(shiftProjection)) continue;
+	                    workingList.RemoveAt(i);
+	                    break;
                     }
                 }                
             }
         }
 
-        private static IList<IWorkShift> generateForOneExtender(IEnumerable<IWorkShift> workingList,
+		private static WorkShiftCollection generateForOneExtender(WorkShiftCollection workingList,
                                                                 IWorkShiftExtender extender)
         {
-            List<IWorkShift> returnCollection = new List<IWorkShift>();
+            var returnCollection = new WorkShiftCollection(workingList.Callback);
 
-            foreach (IWorkShift shift in workingList)
+            foreach (var shift in workingList)
             {
-                returnCollection.AddRange(extender.ReplaceWithNewShifts(shift));
+				if (workingList.Callback != null)
+				{
+					workingList.Callback.BeforeRemove();
+					if (workingList.Callback.IsCanceled)
+						break;
+				}
+				
+	            var tempShifts = extender.ReplaceWithNewShifts(shift);
+	            foreach (var tempShift in tempShifts)
+	            {
+					returnCollection.Add(tempShift);
+	            }
             }
             return returnCollection;
         }

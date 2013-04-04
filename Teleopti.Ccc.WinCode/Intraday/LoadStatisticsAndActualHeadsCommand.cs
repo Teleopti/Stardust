@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
 			var period = new DateOnlyPeriod(dateOnly, dateOnly).ToDateTimePeriod(skill.TimeZone);
 			period = period.ChangeEndTime(skill.MidnightBreakOffset.Add(TimeSpan.FromHours(1)));
 
-			var skillDays = skillStaffPeriods.Select(s => (ISkillDay) s.Parent).Distinct();
+			var skillDays = skillStaffPeriods.Select(s => s.SkillDay).Distinct();
 			foreach (var workload in skill.WorkloadCollection)
 			{
 				var workloadDays = _workloadDayHelper.GetWorkloadDaysFromSkillDays(skillDays, workload);

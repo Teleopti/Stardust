@@ -1645,43 +1645,25 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			}
 		}
 
-		/// <summary>
-		/// Sets the selected persons.
-		/// </summary>
-		/// <param name="selectedPersons">The selected persons.</param>
-		/// <remarks>
-		/// Created by: Madhuranga Pinnagoda
-		/// Created date: 2008-09-16
-		/// </remarks>
-		/// <remarks>
-		/// Created by: Madhuranga Pinnagoda
-		/// Created date: 2008-10-08
-		/// </remarks>
 		internal override void SetSelectedPersons(IList<IPerson> selectedPersons)
 		{
 			// Selection events will not be raised
-			Grid.Selections.Clear(false);
+			Grid.Model.Selections.Clear(false);
+
+			var ranges = new List<GridRangeInfo>();
 			foreach (IPerson person in selectedPersons)
 			{
 				for (int i = 0; i < FilteredPeopleHolder.SchedulePeriodGridViewCollection.Count; i++)
 				{
 					if (FilteredPeopleHolder.SchedulePeriodGridViewCollection[i].Parent.Id == person.Id)
 					{
-						Grid.Selections.SelectRange(GridRangeInfo.Rows(i + 1, i + 1), true);
+						ranges.Add(GridRangeInfo.Row(i + 1));
 					}
 				}
 			}
+			Grid.Model.SelectedRanges.AddRange(ranges.ToArray());
 		}
 
-
-		/// <summary>
-		/// Gets the selected persons in GRD.
-		/// </summary>
-		/// <returns></returns>
-		/// <remarks>
-		/// Created by: Madhuranga Pinnagoda
-		/// Created date: 2008-10-08
-		/// </remarks>
 		internal override IList<IPerson> GetSelectedPersons()
 		{
 			IList<IPerson> selectedPersons = new List<IPerson>();

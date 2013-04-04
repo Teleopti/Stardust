@@ -115,8 +115,8 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
             
            scheduleControl1.Calendar.Visible = false;
             _calendarAndTextPanel.BringToFront();
-           scheduleControl1.Culture = CultureInfo.CurrentCulture;
-            scheduleControl1.Appearance.WorkWeekHeaderFormat = "d dddd";
+           scheduleControl1.Culture = CultureInfo.CurrentUICulture;
+		   scheduleControl1.Appearance.WorkWeekHeaderFormat = "d dddd";
            selectWholeWeekInCalendar(scheduleControl1.Calendar.DateValue);
            if (scheduleControl1.RightToLeft == RightToLeft.Yes)
                scheduleControl1.NavigationPanelPosition = CalendarNavigationPanelPosition.Right;
@@ -308,7 +308,7 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
             _calendarAndTextPanel.SelectDateRange(scheduleControl1.Calendar.SelectedDates);
 
             DateTime dt = (scheduleControl1.Calendar.SelectedDates.Count > 0) ? scheduleControl1.Calendar.SelectedDates[0] : scheduleControl1.Calendar.DateValue;
-            scheduleControl1.HeaderLabel.Text = string.Concat(Resources.Starting, " ", dt.ToLongDateString());
+			scheduleControl1.HeaderLabel.Text = string.Concat(Resources.Starting, " ", dt.ToShortDateString());
             _eventAggregator.GetEvent<AppointmentSelectionChanged>().Publish(string.Empty);
         }
 

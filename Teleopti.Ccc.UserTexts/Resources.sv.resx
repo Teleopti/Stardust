@@ -10849,7 +10849,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <value>Utjämning:</value>
   </data>
   <data name="TemplatesHistoricalDataRange" xml:space="preserve">
-    <value>Historikdataperiod för mallar</value>
+    <value>Välj historisk data för mallar</value>
   </data>
   <data name="ShowInfoMessages" xml:space="preserve">
     <value>Visa informationsmeddelanden</value>
@@ -10890,11 +10890,51 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <comment>Message in Shifts</comment>
   </data>
   <data name="ShiftGenerationWarning" xml:space="preserve">
-    <value>Varning! Det tar för lång tid att skapa upp skift enligt dessa regler. Det kommer påverka prestanda i schemaläggning och optimering negativt!</value>
+    <value>Varning! Det tar för lång tid att skapa upp skift enligt dessa regler. Det kommer påverka prestandan vid schemaläggning och optimering negativt!</value>
     <comment>warning message in window showing during shift generation</comment>
   </data>
   <data name="TooComplexRuleset" xml:space="preserve">
     <value> är en för komplex regeluppsättning.</value>
     <comment>Caption on messagebox when shift generation is stopped </comment>
+  </data>
+  <data name="InsufficientStaffingDays" xml:space="preserve">
+    <value>Otillräcklig bemanning för:</value>
+  </data>
+  <data name="InsufficientStaffingHours" xml:space="preserve">
+    <value>Otillräcklig bemanning den: {0} vid </value>
+  </data>
+  <data name="NoBudgetDefineForSomeRequestedDays" xml:space="preserve">
+    <value>En eller flera dagar under den efterfrågade perioden {0} har ingen tilldelning.</value>
+  </data>
+  <data name="NoBudgetForThisPeriod" xml:space="preserve">
+    <value>Det finns ingen budget för denna period {0}</value>
+  </data>
+  <data name="NoBudgetGroupForPerson" xml:space="preserve">
+    <value>Ingen budgetgrupp är vald för personen: {0}</value>
+  </data>
+  <data name="NotEnoughBudgetAllowanceForTheDay" xml:space="preserve">
+    <value>Tilldelningen räcker inte till för dagen {0}.</value>
+  </data>
+  <data name="RequestDenyReasonClosedPeriodBeforeSendRequest" xml:space="preserve">
+    <value>Din förfrågan har avslagits. Datumperioden är inte öppen för förfrågningar.</value>
+  </data>
+  <data name="RequestDenyReasonPeriodOpenAfterSendRequest" xml:space="preserve">
+    <value>Din förfrågan har avslagits. Dagen är inte öppen för förfrågningar. Nästa öppna datum är {0}.</value>
+  </data>
+  <data name="SeriousUnderStaffingHours" xml:space="preserve">
+    <value>Kritisk underbemanning {0} vid </value>
+  </data>
+  <data name="SkillUnderStaffingValidationError" xml:space="preserve">
+    <value>Förfrågan klarade inte kontrollen av underbemanning på kompetensen {0} eftersom den skulle göra att antalet resurser hamnade under det angivna tröskelvärdet.  </value>
+  </data>
+  <data name="GenerateForecastFor" xml:space="preserve">
+    <value>Generera prognos för</value>
+    <comment>Period and scenario selection in quick forecast</comment>
+  </data>
+  <data name="SelectedAbsences" xml:space="preserve">
+    <value>Valda frånvarotyper</value>
+  </data>
+  <data name="ProcessingDotDotDot" xml:space="preserve">
+    <value>Behandlas...</value>
   </data>
 </root>

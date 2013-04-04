@@ -54,11 +54,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
             _activity2 = new Activity("act2");
             _activity3 = new Activity("act3");
 
-            _shift.LayerCollection.Add(new ActivityLayer(_activity1, _period1));
-            _shift.LayerCollection.Add(new ActivityLayer(_activity2, _period2));
-            _shift.LayerCollection.Add(new ActivityLayer(_activity3, _period3));
-            _shift.LayerCollection.Add(new ActivityLayer(_activity3, _period4));
-            _shift.LayerCollection.Add(new ActivityLayer(_activity3, _period5));
+			_shift.LayerCollection.Add(new MainShiftActivityLayer(_activity1, _period1));
+			_shift.LayerCollection.Add(new MainShiftActivityLayer(_activity2, _period2));
+			_shift.LayerCollection.Add(new MainShiftActivityLayer(_activity3, _period3));
+			_shift.LayerCollection.Add(new MainShiftActivityLayer(_activity3, _period4));
+			_shift.LayerCollection.Add(new MainShiftActivityLayer(_activity3, _period5));
 
             IProjectionService svc = _shift.ProjectionService();
             _visualLayerCollection = svc.CreateProjection();
@@ -281,14 +281,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
     /// <summary>
     /// Class to fake an implementation of shift
     /// </summary>
-    internal class FakeShift : Shift
+    internal class FakeShift : MainShift
     {
-        /// <summary>
-        /// Called before layer is added to collection.
-        /// </summary>
-        /// <param name="layer">The layer.</param>
-        public override void OnAdd(ILayer<IActivity> layer)
-        {
-        }
+        
     }
 }

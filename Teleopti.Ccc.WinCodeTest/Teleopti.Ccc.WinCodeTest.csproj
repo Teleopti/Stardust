@@ -120,8 +120,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Microsoft.Practices.Composite.Presentation.dll</HintPath>
     </Reference>
-    <Reference Include="nunit.framework">
-      <HintPath>..\packages\NUnit.2.6.0.12054\lib\nunit.framework.dll</HintPath>
+    <Reference Include="nunit.framework, Version=2.6.2.12296, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
@@ -546,6 +547,7 @@
     <Compile Include="Scheduler\AuditHistory\PreviousPageCommandTest.cs" />
     <Compile Include="Scheduler\BusinessRuleResponseListViewModelTest.cs" />
     <Compile Include="Scheduler\BusinessRuleResponseViewModelTest.cs" />
+    <Compile Include="Scheduler\CalculateMinMaxCacheDeciderTest.cs" />
     <Compile Include="Scheduler\ShiftCategoryFairnessValueHelperTest.cs" />
     <Compile Include="Scheduler\SkillFullPeriodGridControlPresenterTest.cs" />
     <Compile Include="Scheduler\DateTimePeriodIsValidTest.cs" />
@@ -649,6 +651,7 @@
     <Compile Include="Security\PasswordPolicyServiceViewModelTest.cs" />
     <Compile Include="Settings\AbsenceViewTest.cs" />
     <Compile Include="Settings\PageHelperTest.cs" />
+    <Compile Include="ShiftCreator\WorkShiftAddCallbackTest.cs" />
     <Compile Include="Shifts\AbsolutePositionViewModelTest.cs">
       <SubType>Code</SubType>
     </Compile>

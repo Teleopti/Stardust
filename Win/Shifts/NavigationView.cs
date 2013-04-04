@@ -349,7 +349,7 @@ namespace Teleopti.Ccc.Win.Shifts
 
         private static void showMessagebox(string errorMessage,string errorCaption)
         {
-            ViewBase.ShowWarningMessage(errorMessage, errorCaption);
+			ViewBase.ShowWarningMessage(errorMessage, errorCaption);
         }
 
         private void defaultTreeViewAfterSelect(object sender, EventArgs e)
@@ -428,7 +428,6 @@ namespace Teleopti.Ccc.Win.Shifts
                 catch (ArgumentOutOfRangeException ex)
                 {
                     showMessagebox(UserTexts.Resources.YouHaveToHaveAtLeastOnActivityAndShiftCategoryBeforeCreatingARuleset,UserTexts.Resources.ErrorMessage + " " + ex );
-                    return;
                 }
         }
 
@@ -560,7 +559,7 @@ namespace Teleopti.Ccc.Win.Shifts
             defaultTreeViewAfterSelect(_defaultTreeView, EventArgs.Empty);
         }
 
-        private void loadSelectedRuleSets()
+		private void loadSelectedRuleSets()
         {
             var selectedRuleSets = new List<IWorkShiftRuleSet>();
             var selectedRuleSetBags = new List<IRuleSetBag>();
@@ -608,10 +607,32 @@ namespace Teleopti.Ccc.Win.Shifts
                     }
                 }
             }
-            ExplorerPresenter.Model.SetFilteredRuleSetCollection(new ReadOnlyCollection<IWorkShiftRuleSet>(selectedRuleSets));
-            ExplorerPresenter.Model.SetFilteredRuleSetBagCollection(new ReadOnlyCollection<IRuleSetBag>(selectedRuleSetBags));
-            ExplorerPresenter.GeneralPresenter.LoadModelCollection();
-            ExplorerPresenter.VisualizePresenter.LoadModelCollection();// |--|
+
+			var callback = new WorkShiftAddCallback();
+			callback.RuleSetToComplex += callbackRuleSetToComplex;
+	        using (var status = new ShiftGenerationStatus(callback))
+	        {
+				ExplorerPresenter.View.SetViewEnabled(false);
+			    status.ShowDelayed(this);
+			    ExplorerPresenter.Model.SetFilteredRuleSetCollection(
+				    new ReadOnlyCollection<IWorkShiftRuleSet>(selectedRuleSets));
+			    ExplorerPresenter.Model.SetFilteredRuleSetBagCollection(
+				    new ReadOnlyCollection<IRuleSetBag>(selectedRuleSetBags));
+			    ExplorerPresenter.GeneralPresenter.LoadModelCollection();
+			    ExplorerPresenter.VisualizePresenter.LoadModelCollection(callback); // |--|
+			        
+				status.Visible = false;
+				ExplorerPresenter.View.SetViewEnabled(true);
+			    ExplorerView.Activate();
+				_defaultTreeView.Select();
+				callback.RuleSetToComplex -= callbackRuleSetToComplex;
+	        }
+            
         }
+
+		void callbackRuleSetToComplex(object sender, ComplexRuleSetEventArgs e)
+		{
+			ViewBase.ShowErrorMessage(this, UserTexts.Resources.ShiftGenerationStop, e.RuleSetName + UserTexts.Resources.TooComplexRuleset);
+		}
     }
 }

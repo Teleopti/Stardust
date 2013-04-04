@@ -278,17 +278,20 @@
 	position: absolute;
 	left: 0px;
 	display: inline;
+	margin-top: 3px
+}
+
+.shift-trade-swap-detail-schedule-to
+{
+	position: absolute;
+	left: 0px;
+	display: inline;
+	margin-top: 24px
 }
 
 .shift-trade-swap-detail-schedule-row {
 	height: 22px;
 	position: relative;
-}
-
-.shift-trade-swap-detail-timeline 
-{
-	height: 30px;
-	position: absolute;
 }
 
 .shift-trade-swap-detail-agent-name {
@@ -330,13 +333,6 @@
 	z-index: 11;
 }
 
-.shift-trade-swap-detail-schedule
-{
-	position: absolute;
-	left: 0px;
-	display: inline;
-}
-
 .shift-trade-swap-detail-timeline-line 
 {
 	height: 100%;
@@ -344,18 +340,17 @@
 	border-left: 1px solid rgb(216, 216, 216);
 }
 
-.shift-trade-swap-detail-schedule-row {
-	height: 22px;
-	position: relative;
-}
-
 .shift-trade-swap-detail-timeline 
 {
-	height: 26px;
+	height: 46px;
 	position: absolute;
+	/*hack to make LTR work - remove when were using "true" LTR in requests"". See bug 22898*/
+	width: 450px;
 }
 
-.shift-trade-swap-detail-agent-name {
-	
+.shift-trade-swap-detail-agent-name 
+{
 	height: 30px;
+	/*hack to make LTR work - remove when were using "true" LTR in requests"". See bug 22898*/
+	padding-left: 0;
 }

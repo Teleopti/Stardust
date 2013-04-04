@@ -30,15 +30,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		public void CannotAddIfNull()
 		{
 			var proj = new VisualLayerProjectionService(person);
-			proj.Add((Shift)null);
+			proj.Add((MainShift)null);
 		}
 
 		[Test]
 		public void VerifyCombineReturnTwoWhenNotIntersecting()
 		{
 			IActivity act = ActivityFactory.CreateActivity("test");
-			var layer1 = new ActivityLayer(act, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
-			var layer2 = new ActivityLayer(act, new DateTimePeriod(1910, 1, 5, 1911, 1, 6));
+			var layer1 = new MainShiftActivityLayer(act, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
+			var layer2 = new MainShiftActivityLayer(act, new DateTimePeriod(1910, 1, 5, 1911, 1, 6));
 			shift.LayerCollection.Add(layer1);
 			shift.LayerCollection.Add(layer2);
 
@@ -77,8 +77,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			IActivity act = ActivityFactory.CreateActivity("test");
 			IActivity newActivity = ActivityFactory.CreateActivity("sdfsdf");
-			ActivityLayer layer2 = new ActivityLayer(newActivity, new DateTimePeriod(2000, 1, 5, 2010, 1, 1));
-			ActivityLayer layer1 = new ActivityLayer(act, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
+			ActivityLayer layer2 = new MainShiftActivityLayer(newActivity, new DateTimePeriod(2000, 1, 5, 2010, 1, 1));
+			ActivityLayer layer1 = new MainShiftActivityLayer(act, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
 			shift.LayerCollection.Add(layer1);
 			shift.LayerCollection.Add(layer2);
 
@@ -98,8 +98,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			IActivity act = ActivityFactory.CreateActivity("test");
 			IActivity newActivity = ActivityFactory.CreateActivity("sdfsdf");
-			ActivityLayer layer2 = new ActivityLayer(newActivity, new DateTimePeriod(1900, 1, 5, 2000, 1, 5));
-			ActivityLayer layer1 = new ActivityLayer(act, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
+			ActivityLayer layer2 = new MainShiftActivityLayer(newActivity, new DateTimePeriod(1900, 1, 5, 2000, 1, 5));
+			ActivityLayer layer1 = new MainShiftActivityLayer(act, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
 			shift.LayerCollection.Add(layer1);
 			shift.LayerCollection.Add(layer2);
 
@@ -117,8 +117,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		public void VerifyCombineReturnOneWhenIntersectingOneActivity()
 		{
 			IActivity act = ActivityFactory.CreateActivity("test");
-			ActivityLayer layer2 = new ActivityLayer(act, new DateTimePeriod(2000, 1, 5, 2010, 1, 1));
-			ActivityLayer layer1 = new ActivityLayer(act, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
+			ActivityLayer layer2 = new MainShiftActivityLayer(act, new DateTimePeriod(2000, 1, 5, 2010, 1, 1));
+			ActivityLayer layer1 = new MainShiftActivityLayer(act, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
 			shift.LayerCollection.Add(layer1);
 			shift.LayerCollection.Add(layer2);
 
@@ -135,8 +135,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			IActivity act = ActivityFactory.CreateActivity("test");
 			IActivity newActivity = ActivityFactory.CreateActivity("sdfsdf");
-			ActivityLayer layer2 = new ActivityLayer(newActivity, new DateTimePeriod(2000, 1, 5, 2000, 1, 6));
-			ActivityLayer layer1 = new ActivityLayer(act, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
+			ActivityLayer layer2 = new MainShiftActivityLayer(newActivity, new DateTimePeriod(2000, 1, 5, 2000, 1, 6));
+			ActivityLayer layer1 = new MainShiftActivityLayer(act, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
 			shift.LayerCollection.Add(layer1);
 			shift.LayerCollection.Add(layer2);
 
@@ -157,8 +157,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		public void VerifyCombineReturnOneWhenInsideAndOneActivity()
 		{
 			IActivity act = ActivityFactory.CreateActivity("test");
-			ActivityLayer layer2 = new ActivityLayer(act, new DateTimePeriod(2000, 1, 5, 2000, 1, 6));
-			ActivityLayer layer1 = new ActivityLayer(act, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
+			ActivityLayer layer2 = new MainShiftActivityLayer(act, new DateTimePeriod(2000, 1, 5, 2000, 1, 6));
+			ActivityLayer layer1 = new MainShiftActivityLayer(act, new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
 			shift.LayerCollection.Add(layer1);
 			shift.LayerCollection.Add(layer2);
 
@@ -197,17 +197,17 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 				new DateTimePeriod(new DateTime(2001, 1, 1, 12, 00, 0, DateTimeKind.Utc), new DateTime(2001, 1, 1, 13, 30, 0, DateTimeKind.Utc));
 
 			//Original layers in list
-			ActivityLayer layer1 = new ActivityLayer(act1, period1);
-			ActivityLayer layer2 = new ActivityLayer(act2, period2);
-			ActivityLayer layer3 = new ActivityLayer(act3, period3);
-			ActivityLayer layer4 = new ActivityLayer(act5, period6);
+			ActivityLayer layer1 = new MainShiftActivityLayer(act1, period1);
+			ActivityLayer layer2 = new MainShiftActivityLayer(act2, period2);
+			ActivityLayer layer3 = new MainShiftActivityLayer(act3, period3);
+			ActivityLayer layer4 = new MainShiftActivityLayer(act5, period6);
 
 			//Expected layers
-			ActivityLayer layer5 = new ActivityLayer(act1, period1);
-			ActivityLayer layer6 = new ActivityLayer(act2, period2);
-			ActivityLayer layer7 = new ActivityLayer(act3, period8);
-			ActivityLayer layer8 = new ActivityLayer(act5, period6);
-			ActivityLayer layer9 = new ActivityLayer(act3, period7);
+			ActivityLayer layer5 = new MainShiftActivityLayer(act1, period1);
+			ActivityLayer layer6 = new MainShiftActivityLayer(act2, period2);
+			ActivityLayer layer7 = new MainShiftActivityLayer(act3, period8);
+			ActivityLayer layer8 = new MainShiftActivityLayer(act5, period6);
+			ActivityLayer layer9 = new MainShiftActivityLayer(act3, period7);
 
 			shift.LayerCollection.Add(layer1);
 			shift.LayerCollection.Add(layer2);
@@ -274,16 +274,16 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 								   new DateTime(2001, 1, 1, 17, 00, 0, DateTimeKind.Utc));
 
 			//Original layers in list
-			ActivityLayer layer1 = new ActivityLayer(act1, period1);
-			ActivityLayer layer2 = new ActivityLayer(act2, period2);
-			ActivityLayer layer3 = new ActivityLayer(act3, period3);
-			ActivityLayer layer4 = new ActivityLayer(act5, period6);
+			ActivityLayer layer1 = new MainShiftActivityLayer(act1, period1);
+			ActivityLayer layer2 = new MainShiftActivityLayer(act2, period2);
+			ActivityLayer layer3 = new MainShiftActivityLayer(act3, period3);
+			ActivityLayer layer4 = new MainShiftActivityLayer(act5, period6);
 
 			//Expected layers
-			ActivityLayer layer5 = new ActivityLayer(act2, period4);
-			ActivityLayer layer6 = new ActivityLayer(act3, period5);
-			ActivityLayer layer7 = new ActivityLayer(act5, period6);
-			ActivityLayer layer8 = new ActivityLayer(act3, period7);
+			ActivityLayer layer5 = new MainShiftActivityLayer(act2, period4);
+			ActivityLayer layer6 = new MainShiftActivityLayer(act3, period5);
+			ActivityLayer layer7 = new MainShiftActivityLayer(act5, period6);
+			ActivityLayer layer8 = new MainShiftActivityLayer(act3, period7);
 
 			shift.LayerCollection.Add(layer1);
 			shift.LayerCollection.Add(layer2);
@@ -345,15 +345,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 								   new DateTime(2001, 1, 1, 18, 00, 0, DateTimeKind.Utc));
 
 			//Original layers in list
-			ActivityLayer layer1 = new ActivityLayer(act1, period1);
-			ActivityLayer layer2 = new ActivityLayer(act2, period2);
-			ActivityLayer layer3 = new ActivityLayer(act3, period3);
-			ActivityLayer layer4 = new ActivityLayer(act5, period6);
+			ActivityLayer layer1 = new MainShiftActivityLayer(act1, period1);
+			ActivityLayer layer2 = new MainShiftActivityLayer(act2, period2);
+			ActivityLayer layer3 = new MainShiftActivityLayer(act3, period3);
+			ActivityLayer layer4 = new MainShiftActivityLayer(act5, period6);
 
 			//Expected layers
-			ActivityLayer layer5 = new ActivityLayer(act2, period4); //10-12 Rast
-			ActivityLayer layer6 = new ActivityLayer(act3, period5); //12-15:30 M�te
-			ActivityLayer layer7 = new ActivityLayer(act5, period6); //15:30-18 M�lsamtal
+			ActivityLayer layer5 = new MainShiftActivityLayer(act2, period4); //10-12 Rast
+			ActivityLayer layer6 = new MainShiftActivityLayer(act3, period5); //12-15:30 M�te
+			ActivityLayer layer7 = new MainShiftActivityLayer(act5, period6); //15:30-18 M�lsamtal
 
 			shift.LayerCollection.Add(layer1);
 			shift.LayerCollection.Add(layer2);
@@ -395,9 +395,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 				new DateTimePeriod(new DateTime(2001, 1, 1, 16, 48, 0, DateTimeKind.Utc),
 								   new DateTime(2001, 1, 1, 16, 55, 0, DateTimeKind.Utc));
 
-			ActivityLayer layer1 = new ActivityLayer(act1, period1);
-			ActivityLayer layer2 = new ActivityLayer(act2, period2);
-			ActivityLayer layer3 = new ActivityLayer(act3, period3);
+			ActivityLayer layer1 = new MainShiftActivityLayer(act1, period1);
+			ActivityLayer layer2 = new MainShiftActivityLayer(act2, period2);
+			ActivityLayer layer3 = new MainShiftActivityLayer(act3, period3);
 
 			shift.LayerCollection.Add(layer1);
 			shift.LayerCollection.Add(layer2);
@@ -570,23 +570,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			return new DateTimePeriod(start, end);
 		}
 
-		private class fakeShift : Shift
+		private class fakeShift : MainShift
 		{
-			/// <summary>
-			/// Called before layer is added to collection.
-			/// </summary>
-			/// <param name="layer">The layer.</param>
-			/// <remarks>
-			/// Check here on shift because we want activity layers to be persisted in different tables
-			/// (eg adding an activity layer to a MainShift shouldn't be possible even though it makes
-			/// perfect sence regarding objects)
-			/// Created by: rogerkr
-			/// Created date: 2008-01-25
-			/// </remarks>
-			public override void OnAdd(ILayer<IActivity> layer)
-			{
-			}
-
 		}
 	}
 }

@@ -8,7 +8,7 @@ exit
 
 :start
 
-set nunit=..\..\..\packages\NUnit.Runners.2.6.0.12051\tools\nunit-console.exe
+set nunit=..\..\..\packages\NUnit.Runners.2.6.2\tools\nunit-console.exe
 set assembly=..\bin\Debug\Teleopti.Ccc.WebBehaviorTest.dll
 set tests=/run=Teleopti.Ccc.WebBehaviorTest.PreferencesFeature.AddStandardPreference
 

@@ -239,7 +239,8 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 										var selected = $.grep(addExtendedPreferenceFormViewModel.AvailableTemplates(), function (e) { return e.Value == ui.item.value; })[0];
 										addExtendedPreferenceFormViewModel.SelectedTemplate(selected);
 									},
-									removeItem: function(event, ui) {
+									removeItem: function (event, ui) {
+									    $(this).mouseout();
 										_deletePreferenceTemplate(ui.value);
 									}
 								});
@@ -455,8 +456,8 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 				return;
 			}
 			_initPeriodSelection();
-			_initViewModels(_soon);
 			_initExtendedPanels();
+			_initViewModels(_soon);
 		},
 		PreferencePartialDispose: function () {
 			_hideAddExtendedTooltip();

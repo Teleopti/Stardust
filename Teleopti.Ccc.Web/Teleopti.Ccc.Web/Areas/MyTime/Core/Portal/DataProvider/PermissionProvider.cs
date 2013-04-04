@@ -26,5 +26,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider
 		{
 			return _principalAuthorization.IsPermitted(applicationFunctionPath, date, team);
 		}
+
+		public bool HasOrganisationDetailPermission(string applicationFunctionPath, DateOnly date, IAuthorizeOrganisationDetail authorizeOrganisationDetail)
+		{
+			return _principalAuthorization.IsPermitted(applicationFunctionPath, date, authorizeOrganisationDetail);
+		}
 	}
 }

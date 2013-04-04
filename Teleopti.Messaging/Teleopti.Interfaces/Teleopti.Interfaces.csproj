@@ -109,12 +109,14 @@
     <Compile Include="Domain\ChartSeriesDisplayType.cs" />
     <Compile Include="Domain\ClipboardAction.cs" />
     <Compile Include="Domain\ClipboardItems.cs" />
+    <Compile Include="Domain\ComplexRuleSetEventArgs.cs" />
     <Compile Include="Domain\IActivityRestrictableVisualLayer.cs" />
     <Compile Include="Domain\IActualAgentState.cs" />
     <Compile Include="Domain\IBudgetGroupAllowanceCalculator.cs" />
     <Compile Include="Domain\IEffectiveRestrictionCombiner.cs" />
     <Compile Include="Domain\IChangePasswordResultInfo.cs" />
     <Compile Include="Domain\ILoggedOnUser.cs" />
+    <Compile Include="Domain\IPersistedActivityLayer.cs" />
     <Compile Include="Domain\IPersonalShiftRestrictionCombiner.cs" />
     <Compile Include="Domain\IActivityNormalExtender.cs" />
     <Compile Include="Domain\IActivityRestrictionTemplate.cs" />
@@ -332,6 +334,7 @@
     <Compile Include="Domain\IWorkflowControlSet.cs" />
     <Compile Include="Domain\IWorkShiftCalculator.cs" />
     <Compile Include="Domain\IWorkShiftCalculationResultHolder.cs" />
+    <Compile Include="Domain\IWorkShiftAddCallback.cs" />
     <Compile Include="Domain\IWorkShiftFinderService.cs" />
     <Compile Include="Domain\IWorkShiftFinderServiceFactory.cs" />
     <Compile Include="Domain\DateOnlyPeriod.cs" />
@@ -779,87 +782,19 @@
     <Compile Include="Infrastructure\LicenseType.cs" />
     <Compile Include="IPossibleStartEndCategory.cs" />
     <Compile Include="Domain\IValidatedRequest.cs" />
-    <Compile Include="MessageBroker\Client\IConcurrentUsers.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MessageBroker\Client\IMessageDispatcher.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="MessageBroker\Client\IMessageSender.cs" />
-    <Compile Include="MessageBroker\Client\IStaticDataManager.cs">
+    <Compile Include="MessageBroker\Core\Consts.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MessageBroker\Coders\IEventFilterDecoder.cs" />
-    <Compile Include="MessageBroker\Coders\IEventFilterEncoder.cs" />
-    <Compile Include="MessageBroker\Coders\IEventHeartbeatDecoder.cs" />
-    <Compile Include="MessageBroker\Coders\IEventHeartbeatEncoder.cs" />
-    <Compile Include="MessageBroker\Coders\IEventMessageDecoder.cs" />
-    <Compile Include="MessageBroker\Coders\IEventMessageEncoder.cs" />
-    <Compile Include="MessageBroker\Coders\IEventSubscriberDecoder.cs" />
-    <Compile Include="MessageBroker\Coders\IEventSubscriberEncoder.cs" />
-    <Compile Include="MessageBroker\Coders\IEventUserDecoder.cs" />
-    <Compile Include="MessageBroker\Coders\IEventUserEncoder.cs" />
-    <Compile Include="MessageBroker\Core\BroadcastDirection.cs" />
-    <Compile Include="MessageBroker\Core\Consts.cs" />
-    <Compile Include="MessageBroker\Core\IBrokerProcessor.cs" />
-    <Compile Include="MessageBroker\Core\IBrokerService.cs" />
-    <Compile Include="MessageBroker\Core\ICache.cs" />
-    <Compile Include="MessageBroker\Core\IChat.cs" />
-    <Compile Include="MessageBroker\Core\IConfigurationInfo.cs" />
-    <Compile Include="MessageBroker\Core\ICustomTcpListener.cs">
+    <Compile Include="MessageBroker\Core\IFramer.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MessageBroker\Core\ICustomThreadPool.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MessageBroker\Core\ICustomUdpListener.cs" />
-    <Compile Include="MessageBroker\Core\IDataMapper.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MessageBroker\Core\IDomainObjectFactory.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MessageBroker\Core\IFramer.cs" />
-    <Compile Include="MessageBroker\Core\ILogbookEntry.cs" />
-    <Compile Include="MessageBroker\Core\ILogEntry.cs" />
-    <Compile Include="MessageBroker\Core\ILogEntryDecoder.cs" />
-    <Compile Include="MessageBroker\Core\ILogEntryEncoder.cs" />
-    <Compile Include="MessageBroker\Core\IMapperBase.cs" />
     <Compile Include="MessageBroker\Core\IMessageFilterManager.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MessageBroker\Core\IMessageRegistrationManager.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MessageBroker\Core\IMessagingProtocol.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MessageBroker\Core\IMulticastAddressInfo.cs" />
-    <Compile Include="MessageBroker\Core\ISubscriber.cs" />
-    <Compile Include="MessageBroker\Core\IObjectInserter.cs" />
-    <Compile Include="MessageBroker\Core\IObjectReader.cs" />
-    <Compile Include="MessageBroker\Core\IPollingManager.cs" />
-    <Compile Include="MessageBroker\Core\IProtocol.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MessageBroker\Core\IPublisher.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MessageBroker\Core\ISocketInfo.cs" />
-    <Compile Include="MessageBroker\Core\IStartedService.cs" />
-    <Compile Include="MessageBroker\Core\ITcpSender.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MessageBroker\Core\IUdpSender.cs" />
-    <Compile Include="MessageBroker\Core\ThreadPoolThreadSettings.cs" />
     <Compile Include="MessageBroker\Events\DomainUpdateType.cs" />
     <Compile Include="MessageBroker\Events\EventMessageArgs.cs" />
-    <Compile Include="MessageBroker\Events\IEventFilter.cs" />
-    <Compile Include="MessageBroker\Events\IEventHeartbeat.cs" />
     <Compile Include="MessageBroker\Events\IEventMessage.cs" />
-    <Compile Include="MessageBroker\Events\IEventReceipt.cs" />
-    <Compile Include="MessageBroker\Events\IEventSubscriber.cs" />
-    <Compile Include="MessageBroker\Events\IEventUser.cs" />
     <Compile Include="MessageBroker\Events\IMessageBroker.cs" />
     <Compile Include="MessageBroker\Notification.cs" />
     <Compile Include="MessageBroker\Subscription.cs" />

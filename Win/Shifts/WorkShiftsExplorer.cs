@@ -332,7 +332,8 @@ namespace Teleopti.Ccc.Win.Shifts
         {
             if (validateGrid())
             {
-                Presenter.VisualizePresenter.LoadModelCollection();
+				_navigationView.ForceRefresh();
+                //Presenter.VisualizePresenter.LoadModelCollection();
                 _visualizeView.RefreshView();
                 var amountList = Presenter.VisualizePresenter.RuleSetAmounts();
                 _generalView.Amounts(amountList);
@@ -467,7 +468,12 @@ namespace Teleopti.Ccc.Win.Shifts
             _visualizeView.RefreshView();
         }
 
-        public void RefreshActivityGridView()
+	    public void RefreshVisualizeView()
+	    {
+			_visualizeView.RefreshView();
+	    }
+
+	    public void RefreshActivityGridView()
         {
             _generalView.RefreshView();
         }
@@ -520,7 +526,13 @@ namespace Teleopti.Ccc.Win.Shifts
             _navigationView.UpdateTreeIcons();
         }
 
-        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+	    public void SetViewEnabled(bool enabled)
+	    {
+		    Enabled = enabled;
+		    _generalView.Enabled = enabled;
+	    }
+
+	    protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
             const int WM_KEYDOWN = 0x100;
             const int WM_SYSKEYDOWN = 0x104;

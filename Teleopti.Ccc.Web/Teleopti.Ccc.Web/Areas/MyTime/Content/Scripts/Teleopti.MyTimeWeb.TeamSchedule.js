@@ -2,7 +2,6 @@
 /// <reference path="~/Content/jqueryui/jquery-ui-1.9.1.custom.js" />
 /// <reference path="~/Content/Scripts/jquery-1.8.3-vsdoc.js" />
 /// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
-/// <reference path="~/Content/Scripts/date.js" />
 /// <reference path="Teleopti.MyTimeWeb.Portal.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Common.js"/>
 
@@ -14,7 +13,8 @@ if (typeof (Teleopti) === 'undefined') {
 }
 
 Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
-
+	var ajax = new Teleopti.MyTimeWeb.Ajax();
+	var toolBarViewModel = null;
 	var portal = Teleopti.MyTimeWeb.Portal;
 	var readyForInteraction = function () { };
 	var completelyLoaded = function () { };
@@ -27,45 +27,75 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 		portal.InitPeriodSelection(rangeSelectorId, periodData, actionSuffix);
 	}
 
+	function _initViewModel() {
+		var tab = $("#TeamScheduleTab")[0];
+		if (tab) {
+			toolBarViewModel = new (function () {
+				this.SeperatorVisible = ko.observable(false);
+			})();
+			ko.applyBindings(toolBarViewModel, tab);
+		}
+	}
+
 	function _initTeamPicker() {
-		$('select.ui-selectbox-init')
-			.removeClass('ui-selectbox-init')
-			.selectbox({
-				changed: function (event, item) {
-					var teamId = item.item.value;
-					_navigateTo(_currentFixedDate(), teamId);
-				},
-				rendered: function () {
-					var teamId = $('#TeamSchedule-body').data('mytime-teamselection');
-					if (!teamId)
-						return;
-
-					var self = $(this);
-
-					if (self.selectbox('selectableOptions').length < 2)
-						self.selectbox({ visible: false });
-					else
-						self.selectbox({ visible: true });
-					if (self.selectbox('contains', teamId))
-						self.selectbox('select', teamId);
-					else {
-						var date = _currentFixedDate();
-						if (date)
-							_navigateTo(date);
-					}
-					readyForInteraction();
-					completelyLoaded();
-				}
-			})
-			.parent()
-			.hide()
-			;
+		$('#Team-Picker').on("change", function (e) {
+			var tid;
+			if (e.val)
+				tid = e.val;
+			else {
+				tid = e.target.value;
+			}
+			_navigateTo(_currentFixedDate(), tid);
+		});
 	}
 
 	function _initTeamPickerSelection() {
-		var selectbox = $('#TeamSchedule-TeamPicker-select');
-		selectbox.selectbox({
-			source: "MyTime/TeamSchedule/Teams/" + _currentUrlDate()
+		$('#Team-Picker').select2("destroy");
+		ajax.Ajax({
+			url: "TeamSchedule/Teams/" + _currentUrlDate(),
+			dataType: "json",
+			type: "GET",
+			global: false,
+			cache: false,
+			success: function (data, textStatus, jqXHR) {
+				var containerCss;
+				if (data.length < 2) {
+					containerCss = "team-select2-container team-select2-container-hidden";
+				} else {
+					containerCss = "team-select2-container";
+					toolBarViewModel.SeperatorVisible(true);
+				}
+				$('#Team-Picker').select2(
+					{
+						data: data,
+						containerCssClass: containerCss,
+						dropdownCssClass: "team-select2-dropdown"
+					}
+				);
+
+				var teamId = $('#TeamSchedule-body').data('mytime-teamselection');
+				if (!teamId)
+					return;
+				var selectables = [];
+				if (data[0] && data[0].children) {
+					$.each(data, function (index) {
+						$.merge(selectables, data[index].children);
+					});
+				} else {
+					selectables = data;
+				}
+				var team = $.grep(selectables, function (e) { return e.id == teamId; })[0];
+				if (team) {
+					$('#Team-Picker').select2("data", team);
+				} else {
+					var date = _currentFixedDate();
+					if (date)
+						_navigateTo(date);
+				}
+
+				readyForInteraction();
+				completelyLoaded();
+			}
 		});
 	}
 
@@ -82,7 +112,7 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 					$(this).removeClass('teamschedule-agent-name-hover');
 				}
 			})
-			;
+		;
 	}
 
 	function _navigateTo(date, teamid) {
@@ -103,8 +133,12 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 
 	return {
 		Init: function () {
-			portal.RegisterPartialCallBack('TeamSchedule/Index', Teleopti.MyTimeWeb.TeamSchedule.TeamSchedulePartialInit);
+			portal.RegisterPartialCallBack('TeamSchedule/Index', 
+				Teleopti.MyTimeWeb.TeamSchedule.TeamSchedulePartialInit,
+				Teleopti.MyTimeWeb.TeamSchedule.TeamSchedulePartialDispose
+			);
 			_initTeamPicker();
+			_initViewModel();
 		},
 		TeamSchedulePartialInit: function (readyForInteractionCallback, completelyLoadedCallback) {
 			readyForInteraction = readyForInteractionCallback;
@@ -117,6 +151,9 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 			_initPeriodSelection();
 			_initTeamPickerSelection();
 			_initAgentNameOverflow();
+		},
+		TeamSchedulePartialDispose: function () {
+			ajax.AbortAll();
 		}
 	};
 

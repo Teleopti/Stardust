@@ -168,7 +168,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         [Test]
         public void VerifyCanSetStartTime()
         {
-			_view.SetEndDate(new DateOnly(2009, 10, 14));
+			_view.SetEndTime(new TimeSpan(23,59,0));
             _mocks.ReplayAll();
             _target.SetStartTime(TimeSpan.FromHours(22));
             Assert.AreEqual(TimeSpan.FromHours(22), _model.StartTime);
@@ -176,57 +176,25 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         }
 
         [Test]
-        public void VerifyCanSetStartTimeAndEndTimeToTheSame()
+        public void VerifyCannotSetStartTimeAndEndTimeToTheSame()
         {
-            _view.SetEndDate(new DateOnly(2009, 10, 14));
-            _view.SetEndDate(new DateOnly(2009, 10, 14));
-            _mocks.ReplayAll();
+            _view.SetEndTime(new TimeSpan(23,59,0));
+            _view.SetEndTime(new TimeSpan(23,59,0));
+           _mocks.ReplayAll();
             _target.SetStartTime(TimeSpan.FromHours(22));
             _target.SetEndTime(TimeSpan.FromHours(22));
             Assert.AreEqual(TimeSpan.FromHours(22), _model.StartTime);
-            Assert.AreEqual(TimeSpan.FromHours(22), _model.EndTime);
+			Assert.AreEqual(new TimeSpan(23, 59, 0), _model.EndTime);
             Assert.AreEqual(new DateOnly(2009, 10, 14),_model.StartDate);
             Assert.AreEqual(new DateOnly(2009, 10, 14), _model.EndDate);
-            Assert.AreEqual(TimeSpan.FromDays(1),_model.Meeting.MeetingDuration());
-            _mocks.VerifyAll();
-        }
-
-        [Test]
-        public void VerifyCanSetStartTimeAndEndTimeToZero()
-        {
-            _view.SetEndDate(new DateOnly(2009, 10, 14));
-            _view.SetEndDate(new DateOnly(2009, 10, 14));
-            _mocks.ReplayAll();
-            _target.SetStartTime(TimeSpan.FromHours(0));
-            _target.SetEndTime(TimeSpan.FromHours(0));
-            Assert.AreEqual(TimeSpan.FromHours(0), _model.StartTime);
-            Assert.AreEqual(TimeSpan.FromHours(0), _model.EndTime);
-            Assert.AreEqual(new DateOnly(2009, 10, 14), _model.StartDate);
-            Assert.AreEqual(new DateOnly(2009, 10, 14), _model.EndDate);
-            Assert.AreEqual(TimeSpan.FromDays(1), _model.Meeting.MeetingDuration());
-            _mocks.VerifyAll();
-        }
-
-        [Test]
-        public void VerifyCanSetEndTimeAndStartTimeToZero()
-        {
-            _view.SetEndDate(new DateOnly(2009, 10, 14));
-            _view.SetEndDate(new DateOnly(2009, 10, 14));
-            _mocks.ReplayAll();
-            _target.SetEndTime(TimeSpan.FromHours(0));
-            _target.SetStartTime(TimeSpan.FromHours(0));
-            Assert.AreEqual(TimeSpan.FromHours(0), _model.StartTime);
-            Assert.AreEqual(TimeSpan.FromHours(0), _model.EndTime);
-            Assert.AreEqual(new DateOnly(2009, 10, 14), _model.StartDate);
-            Assert.AreEqual(new DateOnly(2009, 10, 14), _model.EndDate);
-            Assert.AreEqual(TimeSpan.FromDays(1), _model.Meeting.MeetingDuration());
+            Assert.AreEqual(new TimeSpan(1,59,0),_model.Meeting.MeetingDuration());
             _mocks.VerifyAll();
         }
 
         [Test]
         public void VerifyCanSetEndTime()
         {
-            _view.SetEndDate(new DateOnly(2009, 10, 14));
+            _view.SetEndTime(TimeSpan.FromHours(21));
             _mocks.ReplayAll();
             _target.SetEndTime(TimeSpan.FromHours(21));
             Assert.AreEqual(TimeSpan.FromHours(21), _model.EndTime);
@@ -271,7 +239,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
 		{
 			using(_mocks.Record())
 			{
-				Expect.Call(() => _view.SetEndDate(_model.EndDate));
+				Expect.Call(() => _view.SetEndTime(TimeSpan.FromHours(9)));
 				Expect.Call(() => _view.NotifyMeetingTimeChanged());
 			}
 
@@ -300,7 +268,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
 		{
 			using (_mocks.Record())
 			{
-				Expect.Call(() => _view.SetEndDate(_model.EndDate));
+				Expect.Call(() => _view.SetEndTime(TimeSpan.FromHours(9)));
 				Expect.Call(() => _view.NotifyMeetingTimeChanged());
 			}
 
@@ -329,13 +297,13 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
 		{
 			using (_mocks.Record())
 			{
-				Expect.Call(() => _view.SetEndDate(_model.EndDate));
+				Expect.Call(() => _view.SetEndTime(_model.EndTime));
 				Expect.Call(() => _view.NotifyMeetingTimeChanged());
 			}
 
 			using (_mocks.Playback())
 			{
-				_target.OnOutlookTimePickerEndTimeLeave("20:00");
+				_target.OnOutlookTimePickerEndTimeLeave("21:00");
 			}
 		}
 
@@ -358,13 +326,13 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
 		{
 			using (_mocks.Record())
 			{
-				Expect.Call(() => _view.SetEndDate(_model.EndDate));
+				Expect.Call(() => _view.SetEndTime(_model.EndTime));
 				Expect.Call(() => _view.NotifyMeetingTimeChanged());
 			}
 
 			using (_mocks.Playback())
 			{
-				_target.OnOutlookTimePickerEndTimeKeyDown(Keys.Enter, "20:00");
+				_target.OnOutlookTimePickerEndTimeKeyDown(Keys.Enter, "21:00");
 			}
 		}
 

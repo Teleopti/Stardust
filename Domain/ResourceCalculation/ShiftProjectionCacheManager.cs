@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ResourceCalculation
@@ -59,8 +60,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
             if (!_ruleSetListDictionary.TryGetValue(ruleSet, out retList))
             {
-
-                IEnumerable<IWorkShiftVisualLayerInfo> infoList = _ruleSetProjectionEntityService.ProjectionCollection(ruleSet);
+				var callback = new WorkShiftAddStopperCallback();
+				callback.StartNewRuleSet(ruleSet);
+				IEnumerable<IWorkShiftVisualLayerInfo> infoList = _ruleSetProjectionEntityService.ProjectionCollection(ruleSet, callback);
                 IList<IWorkShift> tmpList = new List<IWorkShift>();
                 foreach (var workShiftVisualLayerInfo in infoList)
                 {

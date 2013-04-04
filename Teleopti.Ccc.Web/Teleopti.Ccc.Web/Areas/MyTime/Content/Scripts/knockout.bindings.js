@@ -23,18 +23,27 @@ ko.bindingHandlers['class'] = {
 ko.bindingHandlers.hoverToggle = {
 	init: function (element, valueAccessor, allBindingsAccessor) {
 		var css = valueAccessor();
+		var targetElements = [element];
+		if (allBindingsAccessor().hoverTarget) {
+			targetElements = $(allBindingsAccessor().hoverTarget);
+		}
+
 		ko.utils.registerEventHandler(element, "mouseover", function () {
 			var hoverIf = allBindingsAccessor().hoverIf;
 			if (hoverIf === undefined) {
 				hoverIf = true;
 			}
 			if (hoverIf) {
-				ko.utils.toggleDomNodeCssClass(element, ko.utils.unwrapObservable(css), true);
+				$.each(targetElements, function (index, value) {
+					ko.utils.toggleDomNodeCssClass(value, ko.utils.unwrapObservable(css), true);
+				});
 			}
 		});
 
 		ko.utils.registerEventHandler(element, "mouseleave", function () {
-			ko.utils.toggleDomNodeCssClass(element, ko.utils.unwrapObservable(css), false);
+			$.each(targetElements, function (index, value) {
+				ko.utils.toggleDomNodeCssClass(value, ko.utils.unwrapObservable(css), false);
+			});
 		});
 	}
 };

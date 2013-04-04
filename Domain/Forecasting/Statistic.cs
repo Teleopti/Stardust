@@ -452,7 +452,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
         {
             foreach (ISkillStaffPeriod skillStaffPeriod in targetSkillStaffPeriods)
             {
-                ISkillDay skillDay = (ISkillDay) skillStaffPeriod.Parent;
+                ISkillDay skillDay = skillStaffPeriod.SkillDay;
                 DateTimePeriod dateTimePeriod = skillStaffPeriod.Period;
                 ITemplateTaskPeriod taskPeriod =
                     templateTaskPeriodsWithStatistics.FirstOrDefault(

@@ -20,7 +20,6 @@ namespace Teleopti.Ccc.DomainTest.Common.Messaging
         private MockRepository _mocker;
         private CultureInfo _swedish;
         private CultureInfo _english;
-   
 
         [SetUp]
         public void Setup()
@@ -31,8 +30,6 @@ namespace Teleopti.Ccc.DomainTest.Common.Messaging
             _target = new PushMessageDialogue(_pushMessage, _person);
             _swedish = CultureInfo.GetCultureInfoByIetfLanguageTag("sv-SE");
             _english = CultureInfo.GetCultureInfoByIetfLanguageTag("en-US");
-            
-
         }
 
         [Test]
@@ -115,7 +112,6 @@ namespace Teleopti.Ccc.DomainTest.Common.Messaging
             _target.ClearReply();
 			Assert.AreEqual(defaultReply, _target.GetReply(new NoFormatting()));
             Assert.IsFalse(_target.IsReplied);
-
         }
 
         [Test]
@@ -134,16 +130,16 @@ namespace Teleopti.Ccc.DomainTest.Common.Messaging
             _target.DialogueReply("blah", anotherPerson);
             Assert.IsFalse(_target.IsReplied, "target is cleared if a message is added from ANY other person");
 			Assert.AreEqual(defaultReply, _target.GetReply(new NoFormatting()));
-
         }
-
 
         [Test]
         public void VerifyTranslateMessageReturnsOriginalTextIfNotInResources()
         {
             _pushMessage.TranslateMessage = true;
             _pushMessage.Message = "a text that is guaranteed to not exist in resources eftersom halva texten är på english ock makes no sence";
-			Assert.AreEqual(_target.Message, _pushMessage.GetMessage(new NoFormatting()));
+
+			var noFormatting = new NoFormatting();
+			Assert.AreEqual(_target.Message(noFormatting), _pushMessage.GetMessage(noFormatting));
         }
 
         [Test]
@@ -161,21 +157,19 @@ namespace Teleopti.Ccc.DomainTest.Common.Messaging
 
             Assert.AreNotEqual(swedishString,englishString,"Make sure they are different, otherwise this test will not really check anything");
 
-       
-            var notTranslatedPushMessage = new PushMessage(){Message = str,TranslateMessage = false};
-            var translatedPushMessage = new PushMessage() { Message = str, TranslateMessage = true };
+	        var notTranslatedPushMessage = new PushMessage {Message = str, TranslateMessage = false};
+            var translatedPushMessage = new PushMessage { Message = str, TranslateMessage = true };
           
             PushMessageDialogue dialogue1 = new PushMessageDialogue(notTranslatedPushMessage,swedishPerson);
             PushMessageDialogue dialogue2 = new PushMessageDialogue(notTranslatedPushMessage,englishPerson);
             PushMessageDialogue dialogue3 = new PushMessageDialogue(translatedPushMessage, swedishPerson);
             PushMessageDialogue dialogue4 = new PushMessageDialogue(translatedPushMessage,englishPerson);
 
-            Assert.AreEqual(dialogue1.Message,englishString,"Should be english because not translated");
-            Assert.AreEqual(dialogue2.Message, englishString, "Should be english because not translated");
-            Assert.AreEqual(dialogue3.Message, swedishString, "Should be swedish because translated and receiver has swedish UICulture");
-            Assert.AreEqual(dialogue4.Message, englishString, "Should be english because  translated, but receiver has english UICulture");
+	        var noFormatting = new NoFormatting();
+	        Assert.AreEqual(dialogue1.Message(noFormatting), englishString, "Should be english because not translated");
+			Assert.AreEqual(dialogue2.Message(noFormatting), englishString, "Should be english because not translated");
+			Assert.AreEqual(dialogue3.Message(noFormatting), swedishString, "Should be swedish because translated and receiver has swedish UICulture");
+			Assert.AreEqual(dialogue4.Message(noFormatting), englishString, "Should be english because  translated, but receiver has english UICulture");
         }
-
-      
     }
 }

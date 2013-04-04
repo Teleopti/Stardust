@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Reflection;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -119,9 +118,9 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
         public void VerifyEstimatedServiceLevel()
         {
             //Email and other except phone
-            ISkillDay skillDayEmail =
-                SkillDayFactory.CreateSkillDay(SkillFactory.CreateSkill("Email", SkillTypeFactory.CreateSkillTypeEmail(), 60), new DateTime(2009,1,1,0,0,0,0,DateTimeKind.Utc));
-            ((IAggregateEntity)_target).SetParent(skillDayEmail);
+			ISkillDay skillDayEmail =
+				SkillDayFactory.CreateSkillDay(SkillFactory.CreateSkill("Email", SkillTypeFactory.CreateSkillTypeEmail(), 60), new DateTime(2009, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc));
+			_target.SetSkillDay(skillDayEmail);
             _target.PickResources65();
 
             //Demand is 0
@@ -155,7 +154,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
                                                                 100);
             ISkillDay skillDayPhone =
                 SkillDayFactory.CreateSkillDay(SkillFactory.CreateSkill("Phone", SkillTypeFactory.CreateSkillType(), 60), new DateTime(2009, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc));
-            ((IAggregateEntity)_target).SetParent(skillDayPhone);
+            _target.SetSkillDay(skillDayPhone);
             Assert.AreEqual(new Percent(serviceLevel), _target.EstimatedServiceLevel);
         }
 
@@ -233,12 +232,14 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
             ITask taskWithLongAfterTalk = new Task(100, TimeSpan.FromSeconds(120), TimeSpan.FromSeconds(320));
             
             _sa = new ServiceAgreement(new ServiceLevel(new Percent(0.8), 20), new Percent(0), new Percent(1));
-            _target = new SkillStaffPeriod(_tp, taskWithLongAfterTalk, _sa, _staffingCalculatorService);
-            _target.IsAvailable = true;
-            _target.SetCalculatedResource65(20);
+            _target = new SkillStaffPeriod(_tp, taskWithLongAfterTalk, _sa, _staffingCalculatorService)
+	            {
+		            IsAvailable = true
+	            };
+	        _target.SetCalculatedResource65(20);
             _target.Payload.CalculatedLoggedOn = 321;
             _target.Payload.Efficiency = new Percent(1);
-            double serviceLevel =
+            var serviceLevel =
                _staffingCalculatorService.ServiceLevelAchieved(_target.Payload.CalculatedResource,
                                                                _target.Payload.ServiceAgreementData.ServiceLevel.
                                                                    Seconds,
@@ -249,9 +250,7 @@ namespace Teleopti.Ccc.DomainTest.Forecasting
                                                                _target.Payload.ServiceAgreementData.ServiceLevel.
                                                                    Percent.Value *
                                                                100);
-            ISkillDay skillDayPhone =
-                SkillDayFactory.CreateSkillDay(SkillFactory.CreateSkill("Phone", SkillTypeFactory.CreateSkillType(), 60), new DateTime(2009, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc));
-            ((IAggregateEntity)_target).SetParent(skillDayPhone);
+            
             _target.PickResources65();
             Assert.AreEqual(new Percent(serviceLevel), _target.EstimatedServiceLevel);
         }

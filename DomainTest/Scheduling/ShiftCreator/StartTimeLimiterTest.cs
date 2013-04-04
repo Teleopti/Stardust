@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -58,11 +55,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
             _activity2 = new Activity("act2");
             _activity3 = new Activity("act3");
 
-            _shift.LayerCollection.Add(new ActivityLayer(_activity1, _period1));
-            _shift.LayerCollection.Add(new ActivityLayer(_activity2, _period2));
-            _shift.LayerCollection.Add(new ActivityLayer(_activity3, _period3));
-            _shift.LayerCollection.Add(new ActivityLayer(_activity3, _period4));
-            _shift.LayerCollection.Add(new ActivityLayer(_activity3, _period5));
+			_shift.LayerCollection.Add(new MainShiftActivityLayer(_activity1, _period1));
+			_shift.LayerCollection.Add(new MainShiftActivityLayer(_activity2, _period2));
+			_shift.LayerCollection.Add(new MainShiftActivityLayer(_activity3, _period3));
+			_shift.LayerCollection.Add(new MainShiftActivityLayer(_activity3, _period4));
+			_shift.LayerCollection.Add(new MainShiftActivityLayer(_activity3, _period5));
 
             IProjectionService svc = _shift.ProjectionService();
             _visualLayerCollection = svc.CreateProjection();

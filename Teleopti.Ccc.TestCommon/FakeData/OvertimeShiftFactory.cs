@@ -20,16 +20,16 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         {
             OvertimeShift shift = new OvertimeShiftForTest();
             assignment.AddOvertimeShift(shift);
-            OvertimeShiftActivityLayer layer = new OvertimeShiftActivityLayer(activity, period, definitionSet);
+            var layer = new OvertimeShiftActivityLayer(activity, period, definitionSet);
             shift.LayerCollection.Add(layer);
             return shift;
         }
     }
 
-    public class OvertimeShiftForTest : OvertimeShift
+	public class OvertimeShiftForTest : OvertimeShift, ILayerCollectionOwner<IActivity>
     {
-        public override void OnAdd(ILayer<IActivity> layer)
-        {
-        }
+		public new void OnAdd(ILayer<IActivity> layer)
+       {
+       }
     }
 }

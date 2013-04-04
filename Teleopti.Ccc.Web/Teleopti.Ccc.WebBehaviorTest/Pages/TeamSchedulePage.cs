@@ -1,6 +1,4 @@
-using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
 using WatiN.Core;
@@ -10,18 +8,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 {
 	public class TeamSchedulePage : PortalPage, IDateRangeSelector
 	{
-		private readonly Constraint AgentConstraint = QuicklyFind.ByClass("teamschedule-agent-name");
+		private readonly Constraint _agentConstraint = QuicklyFind.ByClass("teamschedule-agent-name");
 
 		public static int PageSize = 20;
 
-		public Div AgentByName(string name)
+		public Div AgentByName(string name, bool eventualGet = true)
 		{
-			return Document.Div(AgentConstraint && Find.ByText(name));
+			return eventualGet ? Document.Div(_agentConstraint && Find.ByText(name)).EventualGet() : Document.Div(_agentConstraint && Find.ByText(name));
 		}
 
 		public DivCollection Agents()
 		{
-			return Document.Divs.Filter(AgentConstraint);
+			return Document.Divs.Filter(_agentConstraint);
 		}
 
 		public ListItem RowByAgentName(string name)
@@ -84,7 +82,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 			return Document.Div(QuicklyFind.ByClass("tooltip-container"));
 		}
 
-		[FindBy(Id = "TeamSchedule-TeamPicker-select-container")]
-		public SelectBox TeamPicker { get; set; }
+		[FindBy(Id = "Team-Picker")]
+		public Select2Box TeamPicker { get; set; }
 	}
 }

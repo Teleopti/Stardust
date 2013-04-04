@@ -4,7 +4,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.Sdk.Logic.Assemblers
 {
     public class ActivityLayerAssembler<TLayerType> : Assembler<TLayerType,ActivityLayerDto>, IActivityLayerAssembler<TLayerType>
-        where TLayerType : ILayer<IActivity>
+		where TLayerType : IPersistedLayer<IActivity>
     {
         private readonly ILayerConstructor<TLayerType> _layerConstructor;
         private readonly IAssembler<DateTimePeriod, DateTimePeriodDto> _dateTimePeriodAssembler;
