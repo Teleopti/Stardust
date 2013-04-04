@@ -237,7 +237,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			{
 				ITeamBlockInfo teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, dateOnly,
 				                                                                        schedulingOptions
-					                                                                        .BlockFinderTypeForAdvanceScheduling);
+					                                                                        .BlockFinderTypeForAdvanceScheduling,schedulingOptions.GroupOnGroupPageForLevelingPer.Key == "SingleAgentTeam");
 				if (!_teamBlockSteadyStateValidator.IsBlockInSteadyState(teamBlockInfo, schedulingOptions))
 					_teamBlockClearer.ClearTeamBlock(schedulingOptions, rollbackService, teamBlockInfo);
 

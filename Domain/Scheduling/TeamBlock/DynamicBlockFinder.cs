@@ -7,14 +7,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
     public interface IDynamicBlockFinder
     {
-	    IBlockInfo ExtractBlockInfo(DateOnly blockOnDate, ITeamInfo teamInfo, BlockFinderType blockType);
+	    IBlockInfo ExtractBlockInfo(DateOnly blockOnDate, ITeamInfo teamInfo, BlockFinderType blockType, bool singleAgentTeam);
     }
 
     public class DynamicBlockFinder : IDynamicBlockFinder
     {
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
-		public IBlockInfo ExtractBlockInfo(DateOnly blockOnDate, ITeamInfo teamInfo, BlockFinderType blockType)
+		public IBlockInfo ExtractBlockInfo(DateOnly blockOnDate, ITeamInfo teamInfo, BlockFinderType blockType, bool singleAgentTeam)
 	    {
 	        DateOnlyPeriod? blockPeriod = null;
 		    if (blockType == BlockFinderType.None)
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                         }
 
 		                var blockPeriodFinderBetweenDayOff = new BlockPeriodFinderBetweenDayOff();
-		                blockPeriod = blockPeriodFinderBetweenDayOff.GetBlockPeriod(tempMatrixes.First(), blockOnDate);
+		                blockPeriod = blockPeriodFinderBetweenDayOff.GetBlockPeriod(tempMatrixes.First(), blockOnDate,singleAgentTeam);
                         
                         break;
 

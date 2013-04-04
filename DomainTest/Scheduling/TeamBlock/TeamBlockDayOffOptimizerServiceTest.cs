@@ -197,7 +197,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				_teamDayOffModifier.AddDayOffAndResourceCalculate(_rollbackService, _teamInfo, DateOnly.MinValue,
 																	 _schedulingOptions));
 			Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, DateOnly.MinValue.AddDays(1),
-			                                                      _schedulingOptions.BlockFinderTypeForAdvanceScheduling))
+                                                                  _schedulingOptions.BlockFinderTypeForAdvanceScheduling, false))
 			      .Return(_teamBlockInfo);
 
 			Expect.Call(_teamBlockSteadyStateValidator.IsBlockInSteadyState(_teamBlockInfo, _schedulingOptions)).Return(true);

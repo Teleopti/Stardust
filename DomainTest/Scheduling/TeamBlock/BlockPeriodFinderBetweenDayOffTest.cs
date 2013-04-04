@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			using (_mocks.Playback())
 			{
-				var period = _target.GetBlockPeriod(_matrix, new DateOnly(2013, 4, 2));
+                var period = _target.GetBlockPeriod(_matrix, new DateOnly(2013, 4, 2), false);
 				Assert.IsNull(period);
 			}
 		}
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			using (_mocks.Playback())
 			{
-				var period = _target.GetBlockPeriod(_matrix, new DateOnly(2013, 4, 2));
+                var period = _target.GetBlockPeriod(_matrix, new DateOnly(2013, 4, 2), false);
 				Assert.IsNull(period);
 			}
 		}
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			using (_mocks.Playback())
 			{
-				var period = _target.GetBlockPeriod(_matrix, new DateOnly(2013, 4, 2));
+                var period = _target.GetBlockPeriod(_matrix, new DateOnly(2013, 4, 2), false);
 				Assert.AreEqual(new DateOnlyPeriod(2013, 4, 1, 2013, 4, 3), period);
 			}
 		}
@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			using (_mocks.Playback())
 			{
-				var period = _target.GetBlockPeriod(_matrix, new DateOnly(2013, 4, 11));
+                var period = _target.GetBlockPeriod(_matrix, new DateOnly(2013, 4, 11), false);
 				Assert.AreEqual(new DateOnlyPeriod(2013, 4, 1, 2013, 4, 21), period);
 			}
 		}
@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			using (_mocks.Playback())
 			{
-				var period = _target.GetBlockPeriod(_matrix, new DateOnly(2013, 4, 1));
+                var period = _target.GetBlockPeriod(_matrix, new DateOnly(2013, 4, 1), false);
 				Assert.AreEqual(new DateOnlyPeriod(2013, 4, 1, 2013, 4, 1), period);
 			}
 		}
@@ -182,17 +182,134 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			using (_mocks.Playback())
 			{
-				var period = _target.GetBlockPeriod(_matrix, new DateOnly(2013, 4, 3));
+                var period = _target.GetBlockPeriod(_matrix, new DateOnly(2013, 4, 3), false);
 				Assert.AreEqual(new DateOnlyPeriod(2013, 4, 3, 2013, 4, 3), period);
 			}
 		}
 
-		[Ignore, Test]
-		public void AbsenceShouldNotCountAsBlockDelimiterWhenUsingAnythingButSingleAgentTeam()
+		[Test]
+		public void AbsenceShouldCountAsBlockDelimiterWhenUsingSingleAgentTeam()
 		{
-			//TODO implement this
-            Assert.Fail();
+            //range period is 365 days
+            var rangePeriod = new DateTimePeriod(2013, 1, 1, 2013, 12, 31);
+            //matrix is 2 days
+            var matrixPeriod = new DateOnlyPeriod(2013, 4, 1, 2013, 4, 2);
+
+            using (_mocks.Record())
+            {
+                commonMocks(rangePeriod, matrixPeriod);
+
+                //1 is first because of nullcheck
+                Expect.Call(_range.ScheduledDay(new DateOnly(2013, 4, 1))).Return(_scheduleDay);
+                Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.None  );
+                Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.None);
+
+                Expect.Call(_range.ScheduledDay(new DateOnly(2013, 3, 31))).Return(_scheduleDay);
+                Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.Absence);
+                Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.Absence);
+
+                Expect.Call(_range.ScheduledDay(new DateOnly(2013, 4, 2))).Return(_scheduleDay);
+                Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.DayOff);
+            }
+
+            using (_mocks.Playback())
+            {
+                var period = _target.GetBlockPeriod(_matrix, new DateOnly(2013, 4, 1), true);
+                Assert.AreEqual(new DateOnlyPeriod(2013, 4, 1, 2013, 4, 1), period);
+            }
 		}
+
+        [Test]
+        public void FullAbsenceShouldCountAsBlockDelimiterWhenUsingSingleAgentTeam()
+        {
+            //range period is 365 days
+            var rangePeriod = new DateTimePeriod(2013, 1, 1, 2013, 12, 31);
+            //matrix is 2 days
+            var matrixPeriod = new DateOnlyPeriod(2013, 4, 1, 2013, 4, 2);
+
+            using (_mocks.Record())
+            {
+                commonMocks(rangePeriod, matrixPeriod);
+
+                //1 is first because of nullcheck
+                Expect.Call(_range.ScheduledDay(new DateOnly(2013, 4, 1))).Return(_scheduleDay);
+                Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.None);
+                Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.None);
+
+                Expect.Call(_range.ScheduledDay(new DateOnly(2013, 3, 31))).Return(_scheduleDay);
+                Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.FullDayAbsence );
+                Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.FullDayAbsence);
+
+                Expect.Call(_range.ScheduledDay(new DateOnly(2013, 4, 2))).Return(_scheduleDay);
+                Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.DayOff);
+            }
+
+            using (_mocks.Playback())
+            {
+                var period = _target.GetBlockPeriod(_matrix, new DateOnly(2013, 4, 1), true);
+                Assert.AreEqual(new DateOnlyPeriod(2013, 4, 1, 2013, 4, 1), period);
+            }
+        }
+
+        [Test]
+        public void AbsenceShouldNotCountAsBlockDelimiterWithAbsence()
+        {
+            //range period is 365 days
+            var rangePeriod = new DateTimePeriod(2013, 1, 1, 2013, 12, 31);
+            //matrix is 2 days
+            var matrixPeriod = new DateOnlyPeriod(2013, 4, 1, 2013, 4, 2);
+
+            using (_mocks.Record())
+            {
+                commonMocks(rangePeriod, matrixPeriod);
+
+                //1 is first because of nullcheck
+                Expect.Call(_range.ScheduledDay(new DateOnly(2013, 4, 1))).Return(_scheduleDay);
+                Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.Absence);
+
+                Expect.Call(_range.ScheduledDay(new DateOnly(2013, 3, 31))).Return(_scheduleDay);
+                Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.DayOff);
+
+                Expect.Call(_range.ScheduledDay(new DateOnly(2013, 4, 2))).Return(_scheduleDay);
+                Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.DayOff);
+            }
+
+            using (_mocks.Playback())
+            {
+                var period = _target.GetBlockPeriod(_matrix, new DateOnly(2013, 4, 1), false);
+                Assert.AreEqual(new DateOnlyPeriod(2013, 4, 1, 2013, 4, 1), period);
+            }
+        }
+
+        [Test]
+        public void AbsenceShouldNotCountAsBlockDelimiterWithFullDayAbsence()
+        {
+            //range period is 365 days
+            var rangePeriod = new DateTimePeriod(2013, 1, 1, 2013, 12, 31);
+            //matrix is 2 days
+            var matrixPeriod = new DateOnlyPeriod(2013, 4, 1, 2013, 4, 2);
+
+            using (_mocks.Record())
+            {
+                commonMocks(rangePeriod, matrixPeriod);
+
+                //1 is first because of nullcheck
+                Expect.Call(_range.ScheduledDay(new DateOnly(2013, 4, 1))).Return(_scheduleDay);
+                Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.FullDayAbsence);
+
+                Expect.Call(_range.ScheduledDay(new DateOnly(2013, 3, 31))).Return(_scheduleDay);
+                Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.DayOff);
+
+                Expect.Call(_range.ScheduledDay(new DateOnly(2013, 4, 2))).Return(_scheduleDay);
+                Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.DayOff);
+            }
+
+            using (_mocks.Playback())
+            {
+                var period = _target.GetBlockPeriod(_matrix, new DateOnly(2013, 4, 1), false);
+                Assert.AreEqual(new DateOnlyPeriod(2013, 4, 1, 2013, 4, 1), period);
+            }
+        }
 
 		private void commonMocks(DateTimePeriod rangePeriod, DateOnlyPeriod matrixPeriod)
 		{
