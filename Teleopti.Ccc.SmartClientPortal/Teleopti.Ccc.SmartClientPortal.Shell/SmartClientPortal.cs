@@ -226,7 +226,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 	        var mem = GC.GetTotalMemory(true);
 	        if (mem > maxMem)
 		        maxMem = mem;
-            Roger65(string.Format(CultureInfo.CurrentCulture, "Mem: {0:#.00} MB (max mem: {1:#} MB)", (double)GC.GetTotalMemory(true)/1024/1024, maxMem/1024/1024));
+            Roger65(string.Format(CultureInfo.CurrentCulture, "Mem: {0:#.00} MB (max mem: {1:#} MB)", (double)mem/1024/1024, maxMem/1024/1024));
         }
 
         private void licensedToText()
