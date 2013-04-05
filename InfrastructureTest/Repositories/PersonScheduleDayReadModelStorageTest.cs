@@ -143,7 +143,7 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 			_target.SaveReadModel(model);
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
 		public void ShouldSendToMessageBrokerOnCommit()
 		{
 			var messageBroker = MockRepository.GenerateMock<IMessageBroker>();
