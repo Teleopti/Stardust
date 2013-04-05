@@ -42,18 +42,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 				case BlockFinderType.BetweenDayOff:
 		            {
-		                var scheduleDayProTemp = tempMatrixes.First().GetScheduleDayByKey(blockOnDate);
-                        if (scheduleDayProTemp != null)
-                        {
-                            if (isDayOff(tempMatrixes.First().GetScheduleDayByKey(blockOnDate).DaySchedulePart())) return null;
-                        }
-
 		                var blockPeriodFinderBetweenDayOff = new BlockPeriodFinderBetweenDayOff();
 		                blockPeriod = blockPeriodFinderBetweenDayOff.GetBlockPeriod(tempMatrixes.First(), blockOnDate,singleAgentTeam);
-                        
                         break;
-
-				    }
+                    }
 		    }
 
 		    if (!blockPeriod.HasValue)
@@ -64,16 +56,5 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			return new BlockInfo(blockPeriod.Value);
 	    }
 
-        //Absence can not be a block breaker when using teams
-        private static bool isDayOff(IScheduleDay scheduleDay)
-        {
-            var significantPart = scheduleDay.SignificantPart();
-            if (significantPart == SchedulePartView.DayOff ||
-                                   significantPart == SchedulePartView.ContractDayOff)
-            {
-                return true;
-            }
-            return false;
-        }
     }
 }
