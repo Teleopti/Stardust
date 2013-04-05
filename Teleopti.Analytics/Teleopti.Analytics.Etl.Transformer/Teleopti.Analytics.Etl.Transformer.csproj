@@ -96,6 +96,7 @@
     <Compile Include="ConfigurationHandler.cs" />
     <Compile Include="Job\Steps\DimQualityQuestLoadJobStep.cs" />
     <Compile Include="Job\Steps\EtlDayOffSubStep.cs" />
+    <Compile Include="Job\Steps\DimTimeZoneDeleteJobStep.cs" />
     <Compile Include="Job\Steps\FactQualityLoadJobStep.cs" />
     <Compile Include="Job\Steps\LicenseCheckJobStep.cs" />
     <Compile Include="Job\Steps\PurgeJobStep.cs" />
