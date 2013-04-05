@@ -103,12 +103,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 	    }
 
 	    [Test]
-		public void ShouldFilterIfOneMinMaxIsNull()
+		public void ShouldFilterIfOneMinMaximumIsNull()
 		{
-			IList<IShiftProjectionCache> shifts = new List<IShiftProjectionCache>();
+	        ShiftProjectionCache c1;
+	        MinMax<TimeSpan> minMaxcontractTime1;
+            var shifts = definitionOfShouldFilterIfOneMinMaximumIsNull(out c1, out minMaxcontractTime1);
 
-			var minMaxcontractTime1 = new MinMax<TimeSpan>(new TimeSpan(7, 0, 0), new TimeSpan(8, 0, 0));
-			using (_mocks.Record())
+	        using (_mocks.Record())
 			{
                 commonExpectCalls();
 				
@@ -119,12 +120,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 					  .Return(null);
 			}
 
-			var c1 = new ShiftProjectionCache(_workShift1, _personalShiftMeetingTimeChecker);
-			c1.SetDate(new DateOnly(2009, 1, 1), _timeZoneInfo);
-			shifts.Add(c1);
-			var c2 = new ShiftProjectionCache(_workShift2, _personalShiftMeetingTimeChecker);
-			c2.SetDate(new DateOnly(2009, 1, 1), _timeZoneInfo);
-			shifts.Add(c2);
+			
 				
 			using (_mocks.Playback())
 			{
@@ -135,7 +131,20 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			}
 		}
 
-		[Test]
+        private IList<IShiftProjectionCache> definitionOfShouldFilterIfOneMinMaximumIsNull(out ShiftProjectionCache c1, out MinMax<TimeSpan> minMaxcontractTime1)
+	    {
+	        IList<IShiftProjectionCache> shifts = new List<IShiftProjectionCache>();
+	        c1 = new ShiftProjectionCache(_workShift1, _personalShiftMeetingTimeChecker);
+	        c1.SetDate(new DateOnly(2009, 1, 1), _timeZoneInfo);
+	        shifts.Add(c1);
+	        var c2 = new ShiftProjectionCache(_workShift2, _personalShiftMeetingTimeChecker);
+	        c2.SetDate(new DateOnly(2009, 1, 1), _timeZoneInfo);
+	        shifts.Add(c2);
+	        minMaxcontractTime1 = new MinMax<TimeSpan>(new TimeSpan(7, 0, 0), new TimeSpan(8, 0, 0));
+	        return shifts;
+	    }
+
+	    [Test]
 		public void ShouldMergeMinMax()
 		{
 			IList<IShiftProjectionCache> shifts = new List<IShiftProjectionCache>();
