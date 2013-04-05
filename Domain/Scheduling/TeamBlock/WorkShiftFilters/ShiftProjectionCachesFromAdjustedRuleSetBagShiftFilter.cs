@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -41,65 +40,90 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 
 			foreach (IWorkShiftRuleSet ruleSet in ruleSets)
 			{
-				if (ruleSet.IsValidDate(scheduleDateOnly))
+				if (!ruleSet.IsValidDate(scheduleDateOnly))
+					continue;
+
+				if (_ruleSetDeletedActivityChecker.ContainsDeletedActivity(ruleSet))
+					continue;
+
+				if (_rulesSetDeletedShiftCategoryChecker.ContainsDeletedActivity(ruleSet))
+					continue;
+
+				if (!rulesetPassesRestrictions(ruleSet))
+					continue;
+
+				//var clonedRuleSet = (IWorkShiftRuleSet) ruleSet.Clone();
+
+				//if (restriction != null)
+				//{
+				//	var start = resolveTime(clonedRuleSet.TemplateGenerator.StartPeriod.Period.StartTime,
+				//							restriction.StartTimeLimitation.StartTime, false);
+				//	var end = resolveTime(clonedRuleSet.TemplateGenerator.StartPeriod.Period.EndTime,
+				//						  restriction.StartTimeLimitation.EndTime, true);
+				//	if (start > end)
+				//		continue;
+
+				//	var startTimePeriod = new TimePeriod(start, end);
+				//	start = resolveTime(clonedRuleSet.TemplateGenerator.EndPeriod.Period.StartTime,
+				//						restriction.EndTimeLimitation.StartTime, false);
+				//	end = resolveTime(clonedRuleSet.TemplateGenerator.EndPeriod.Period.EndTime, restriction.EndTimeLimitation.EndTime,
+				//					  true);
+				//	if (start > end)
+				//		continue;
+
+				//	var endTimePeriod = new TimePeriod(start, end);
+				//	if (endTimePeriod.EndTime < startTimePeriod.StartTime)
+				//		continue;
+
+				//	if (startTimePeriod.EndTime > endTimePeriod.EndTime)
+				//		startTimePeriod = new TimePeriod(startTimePeriod.StartTime, endTimePeriod.EndTime);
+
+				//	if (endTimePeriod.StartTime < startTimePeriod.StartTime)
+				//		endTimePeriod = new TimePeriod(startTimePeriod.StartTime, endTimePeriod.EndTime);
+
+				//	clonedRuleSet.TemplateGenerator.StartPeriod = new TimePeriodWithSegment(startTimePeriod,
+				//																			clonedRuleSet.TemplateGenerator.StartPeriod
+				//																						 .Segment);
+				//	clonedRuleSet.TemplateGenerator.EndPeriod = new TimePeriodWithSegment(endTimePeriod,
+				//																		  clonedRuleSet.TemplateGenerator.EndPeriod
+				//																					   .Segment);
+				//}
+
+				//if (!_ruleSetDeletedActivityChecker.ContainsDeletedActivity(clonedRuleSet) &&
+				//	!_rulesSetDeletedShiftCategoryChecker.ContainsDeletedActivity(clonedRuleSet))
+				//{
+
+				IEnumerable<IShiftProjectionCache> ruleSetList = getShiftsForRuleset(ruleSet);
+				if (ruleSetList != null)
 				{
-					var clonedRuleSet = (IWorkShiftRuleSet)ruleSet.Clone();
-
-					if (restriction != null)
+					foreach (var projectionCache in ruleSetList)
 					{
-						var start = resolveTime(clonedRuleSet.TemplateGenerator.StartPeriod.Period.StartTime, restriction.StartTimeLimitation.StartTime, false);
-						var end = resolveTime(clonedRuleSet.TemplateGenerator.StartPeriod.Period.EndTime, restriction.StartTimeLimitation.EndTime, true);
-						if (start > end)
-							continue;
-						var startTimePeriod = new TimePeriod(start, end);
-
-						start = resolveTime(clonedRuleSet.TemplateGenerator.EndPeriod.Period.StartTime, restriction.EndTimeLimitation.StartTime, false);
-						end = resolveTime(clonedRuleSet.TemplateGenerator.EndPeriod.Period.EndTime, restriction.EndTimeLimitation.EndTime, true);
-						if (start > end)
-							continue;
-						var endTimePeriod = new TimePeriod(start, end);
-
-						if (endTimePeriod.EndTime < startTimePeriod.StartTime)
-							continue;
-
-						if (startTimePeriod.EndTime > endTimePeriod.EndTime)
-							startTimePeriod = new TimePeriod(startTimePeriod.StartTime, endTimePeriod.EndTime);
-
-						if (endTimePeriod.StartTime < startTimePeriod.StartTime)
-							endTimePeriod = new TimePeriod(startTimePeriod.StartTime, endTimePeriod.EndTime);
-
-						clonedRuleSet.TemplateGenerator.StartPeriod = new TimePeriodWithSegment(startTimePeriod, clonedRuleSet.TemplateGenerator.StartPeriod.Segment);
-						clonedRuleSet.TemplateGenerator.EndPeriod = new TimePeriodWithSegment(endTimePeriod, clonedRuleSet.TemplateGenerator.EndPeriod.Segment);
-					}
-
-					if (!_ruleSetDeletedActivityChecker.ContainsDeletedActivity(clonedRuleSet) && !_rulesSetDeletedShiftCategoryChecker.ContainsDeletedActivity(clonedRuleSet))
-					{
-						IEnumerable<IShiftProjectionCache> ruleSetList = getShiftsForRuleset(clonedRuleSet);
-						if (ruleSetList != null)
-						{
-							foreach (var projectionCache in ruleSetList)
-							{
-								shiftProjectionCaches.Add(projectionCache);
-								projectionCache.SetDate(scheduleDateOnly, timeZone);
-							}
-						}
+						shiftProjectionCaches.Add(projectionCache);
+						projectionCache.SetDate(scheduleDateOnly, timeZone);
 					}
 				}
+				//}
+
 			}
 
 			return shiftProjectionCaches;
 		}
 
-		private static TimeSpan resolveTime(TimeSpan thisTime, TimeSpan? otherTime, bool min)
+		private static bool rulesetPassesRestrictions(IWorkShiftRuleSet ruleset)
 		{
-			if (!otherTime.HasValue)
-				return thisTime;
-
-			if (min)
-				return TimeSpan.FromTicks(Math.Min(otherTime.Value.Ticks, thisTime.Ticks));
-
-			return TimeSpan.FromTicks(Math.Max(otherTime.Value.Ticks, thisTime.Ticks));
+			return true;
 		}
+
+		//private static TimeSpan resolveTime(TimeSpan thisTime, TimeSpan? otherTime, bool min)
+		//{
+		//	if (!otherTime.HasValue)
+		//		return thisTime;
+
+		//	if (min)
+		//		return TimeSpan.FromTicks(Math.Min(otherTime.Value.Ticks, thisTime.Ticks));
+
+		//	return TimeSpan.FromTicks(Math.Max(otherTime.Value.Ticks, thisTime.Ticks));
+		//}
 
 		private IEnumerable<IShiftProjectionCache> getShiftsForRuleset(IWorkShiftRuleSet ruleSet)
 		{
