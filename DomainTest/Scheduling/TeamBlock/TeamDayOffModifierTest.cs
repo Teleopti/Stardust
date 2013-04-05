@@ -89,33 +89,25 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		}
 
 		[Test]
-		public void ShouldRemoveOnEveryTeamMemberAndResourceCalculate()
+		public void ShouldRemoveOnEveryTeamMemberAndNotResourceCalculate()
 		{
 			using (_mocks.Record())
 			{
 				Expect.Call(_stateHolder.Schedules).Return(_dic);
 
 				Expect.Call(_range1.ScheduledDay(DateOnly.MinValue)).Return(_scheduleDay1);
-				Expect.Call(_scheduleDay1.Clone()).Return(_scheduleDay1);
 				Expect.Call(() => _scheduleDay1.DeleteDayOff());
 				Expect.Call(() => _rollbackService.Modify(_scheduleDay1));
-				Expect.Call(_range1.ReFetch(_scheduleDay1)).Return(_scheduleDay1);
 
 				Expect.Call(_range2.ScheduledDay(DateOnly.MinValue)).Return(_scheduleDay2);
-				Expect.Call(_scheduleDay2.Clone()).Return(_scheduleDay2);
 				Expect.Call(() => _scheduleDay2.DeleteDayOff());
 				Expect.Call(() => _rollbackService.Modify(_scheduleDay2));
-				Expect.Call(_range2.ReFetch(_scheduleDay2)).Return(_scheduleDay2);
 
-				Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(DateOnly.MinValue, true,
-																			  _schedulingOptions.ConsiderShortBreaks,
-																			  new List<IScheduleDay> { _scheduleDay1, _scheduleDay2 },
-																			  new List<IScheduleDay> { _scheduleDay1, _scheduleDay2 }));
 			}
 
 			using (_mocks.Playback())
 			{
-				_target.RemoveDayOffAndResourceCalculate(_rollbackService, _teamInfo, DateOnly.MinValue, _schedulingOptions);
+				_target.RemoveDayOff(_rollbackService, _teamInfo, DateOnly.MinValue, _schedulingOptions);
 			}
 		}
 

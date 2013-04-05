@@ -266,7 +266,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		{
 			foreach (DateOnly dateOnly in removedDaysOff)
 			{
-				_teamDayOffModifier.RemoveDayOffAndResourceCalculate(rollbackService, teamInfo, dateOnly, schedulingOptions);
+				_teamDayOffModifier.RemoveDayOff(rollbackService, teamInfo, dateOnly, schedulingOptions);
 			}
 		}
 

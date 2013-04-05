@@ -222,7 +222,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 			Expect.Call(
 				() =>
-				_teamDayOffModifier.RemoveDayOffAndResourceCalculate(_rollbackService, _teamInfo, DateOnly.MinValue.AddDays(1),
+				_teamDayOffModifier.RemoveDayOff(_rollbackService, _teamInfo, DateOnly.MinValue.AddDays(1),
 				                                                     _schedulingOptions));
 			Expect.Call(
 				() =>
