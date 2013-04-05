@@ -126,6 +126,7 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: henryg
         /// Created date: 2010-04-22
         /// </remarks>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "HeadCount")]
         IEnumerable<IAbsenceRequestValidator> GetSelectedValidatorList(
             ISchedulingResultStateHolder schedulingResultStateHolder,
             IResourceOptimizationHelper resourceOptimizationHelper,
