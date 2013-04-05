@@ -10937,4 +10937,7 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   <data name="ProcessingDotDotDot" xml:space="preserve">
     <value>Behandlas...</value>
   </data>
+  <data name="ViewAllGroupPages" xml:space="preserve">
+    <value>Visa alla grupperingar</value>
+  </data>
 </root>
