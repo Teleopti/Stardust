@@ -105,43 +105,40 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 	    [Test]
 		public void ShouldFilterIfOneMinMaximumIsNull()
 		{
-	        ShiftProjectionCache c1;
-	        MinMax<TimeSpan> minMaxcontractTime1;
-            var shifts = definitionOfShouldFilterIfOneMinMaximumIsNull(out c1, out minMaxcontractTime1);
+            IList<IShiftProjectionCache> shifts = new List<IShiftProjectionCache>();
 
-	        using (_mocks.Record())
-			{
+            var minMaxcontractTime1 = new MinMax<TimeSpan>(new TimeSpan(7, 0, 0), new TimeSpan(8, 0, 0));
+            using (_mocks.Record())
+            {
                 commonExpectCalls();
-				
-                Expect.Call(() => _workShiftMinMaxCalculator.ResetCache()).Repeat.AtLeastOnce();
-				Expect.Call(_workShiftMinMaxCalculator.MinMaxAllowedShiftContractTime(_dateOnly, _matrix1, _scheduleOptions))
-					  .Return(minMaxcontractTime1);
-				Expect.Call(_workShiftMinMaxCalculator.MinMaxAllowedShiftContractTime(_dateOnly, _matrix2, _scheduleOptions))
-					  .Return(null);
-			}
 
-			
-				
-			using (_mocks.Playback())
-			{
-				IList<IShiftProjectionCache> retShifts = _target.Filter(_dateOnly, _allMatrixes, shifts, _scheduleOptions, new WorkShiftFinderResultForTest());
-				
-				retShifts.Should().Contain(c1);
-				retShifts.Count.Should().Be.EqualTo(1);
-			}
+                expectForShouldFilterIfOneMinMaximumIsNull(minMaxcontractTime1);
+            }
+
+	        var c1 = new ShiftProjectionCache(_workShift1, _personalShiftMeetingTimeChecker);
+            c1.SetDate(new DateOnly(2009, 1, 1), _timeZoneInfo);
+            shifts.Add(c1);
+            var c2 = new ShiftProjectionCache(_workShift2, _personalShiftMeetingTimeChecker);
+            c2.SetDate(new DateOnly(2009, 1, 1), _timeZoneInfo);
+            shifts.Add(c2);
+
+            using (_mocks.Playback())
+            {
+                IList<IShiftProjectionCache> retShifts = _target.Filter(_dateOnly, _allMatrixes, shifts, _scheduleOptions, new WorkShiftFinderResultForTest());
+
+                retShifts.Should().Contain(c1);
+                retShifts.Count.Should().Be.EqualTo(1);
+            }
+
 		}
 
-        private IList<IShiftProjectionCache> definitionOfShouldFilterIfOneMinMaximumIsNull(out ShiftProjectionCache c1, out MinMax<TimeSpan> minMaxcontractTime1)
+	    private void expectForShouldFilterIfOneMinMaximumIsNull(MinMax<TimeSpan> minMaxcontractTime1)
 	    {
-	        IList<IShiftProjectionCache> shifts = new List<IShiftProjectionCache>();
-	        c1 = new ShiftProjectionCache(_workShift1, _personalShiftMeetingTimeChecker);
-	        c1.SetDate(new DateOnly(2009, 1, 1), _timeZoneInfo);
-	        shifts.Add(c1);
-	        var c2 = new ShiftProjectionCache(_workShift2, _personalShiftMeetingTimeChecker);
-	        c2.SetDate(new DateOnly(2009, 1, 1), _timeZoneInfo);
-	        shifts.Add(c2);
-	        minMaxcontractTime1 = new MinMax<TimeSpan>(new TimeSpan(7, 0, 0), new TimeSpan(8, 0, 0));
-	        return shifts;
+	        Expect.Call(() => _workShiftMinMaxCalculator.ResetCache()).Repeat.AtLeastOnce();
+	        Expect.Call(_workShiftMinMaxCalculator.MinMaxAllowedShiftContractTime(_dateOnly, _matrix1, _scheduleOptions))
+	              .Return(minMaxcontractTime1);
+	        Expect.Call(_workShiftMinMaxCalculator.MinMaxAllowedShiftContractTime(_dateOnly, _matrix2, _scheduleOptions))
+	              .Return(null);
 	    }
 
 	    [Test]
