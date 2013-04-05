@@ -28,6 +28,7 @@ WHERE time_zone_id NOT IN	(
 							FROM 
 								mart.bridge_time_zone
 							)
+AND to_be_deleted = 0
 
 SELECT
 	@period_start_date = min(date_date),
