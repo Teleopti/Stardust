@@ -38,59 +38,57 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             return AggregatePerDay(teamBlockInfo, schedulingOptions, null);
         }
 
-        public IEffectiveRestriction AggregatePerDay(ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, IShiftProjectionCache suggestedShiftProjectionCache)
-        {
-            if (teamBlockInfo == null)
-                return null;
-            var groupPerson = teamBlockInfo.TeamInfo .GroupPerson;
-            var dateOnlyList =teamBlockInfo.BlockInfo .BlockPeriod.DayCollection();
-            var matrixList = teamBlockInfo.TeamInfo .MatrixesForGroup().ToList();
-            var scheduleDictionary = _schedulingResultStateHolder.Schedules;
+	    public IEffectiveRestriction AggregatePerDay(ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions,
+	                                                 IShiftProjectionCache suggestedShiftProjectionCache)
+	    {
+		    if (teamBlockInfo == null)
+			    return null;
+		    var groupPerson = teamBlockInfo.TeamInfo.GroupPerson;
+		    var dateOnlyList = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection();
+		    var matrixList = teamBlockInfo.TeamInfo.MatrixesForGroup().ToList();
+		    var scheduleDictionary = _schedulingResultStateHolder.Schedules;
 
-            IEffectiveRestriction effectiveRestriction = null;
-            if (dateOnlyList != null)
-            {
-                foreach (var dateOnly in dateOnlyList)
-                {
-                    var restriction = _effectiveRestrictionCreator.GetEffectiveRestriction(groupPerson.GroupMembers,
-                                                                                           dateOnly, schedulingOptions,
-                                                                                           scheduleDictionary);
-                    if (restriction == null)
-                        return null;
-                    if (effectiveRestriction != null)
-                        effectiveRestriction = effectiveRestriction.Combine(restriction);
-                    else
-                        effectiveRestriction = restriction;
-                    if (effectiveRestriction == null)
-                        return null;
-                }
+		    if (dateOnlyList == null) return null;
+		    IEffectiveRestriction effectiveRestriction = null;
 
-                var openHoursRestriction = _openHoursToRestrictionConverter.Convert(groupPerson, dateOnlyList);
+		    foreach (var dateOnly in dateOnlyList)
+		    {
+			    var restriction = _effectiveRestrictionCreator.GetEffectiveRestriction(groupPerson.GroupMembers,
+			                                                                           dateOnly, schedulingOptions,
+			                                                                           scheduleDictionary);
+			    if (restriction == null)
+				    return null;
+			    if (effectiveRestriction != null)
+				    effectiveRestriction = effectiveRestriction.Combine(restriction);
+			    else
+				    effectiveRestriction = restriction;
+			    if (effectiveRestriction == null)
+				    return null;
+		    }
 
-                if (effectiveRestriction != null && openHoursRestriction != null)
-                    effectiveRestriction = effectiveRestriction.Combine(openHoursRestriction);
+		    var openHoursRestriction = _openHoursToRestrictionConverter.Convert(groupPerson, dateOnlyList);
 
-	            var timeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
-                var restrictionFromSchedules = _scheduleRestrictionExtractor.Extract(dateOnlyList, matrixList,
-																					 schedulingOptions, timeZone);
-                if (restrictionFromSchedules == null)
-                    return null;
-                if (effectiveRestriction != null)
-                    effectiveRestriction = effectiveRestriction.Combine(restrictionFromSchedules);
-                if (suggestedShiftProjectionCache != null)
-                {
-                    var suggestedShiftRestriction = _suggestedShiftRestrictionExtractor.Extract(suggestedShiftProjectionCache,
-                                                                                            schedulingOptions);
-                    if (suggestedShiftRestriction == null)
-                        return null;
-                    if (effectiveRestriction != null)
-                        effectiveRestriction = effectiveRestriction.Combine(suggestedShiftRestriction);
-                }
-                
-                return effectiveRestriction;
-            }
-            return null;
-        }
+		    if (effectiveRestriction != null && openHoursRestriction != null)
+			    effectiveRestriction = effectiveRestriction.Combine(openHoursRestriction);
 
+		    var timeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
+		    var restrictionFromSchedules = _scheduleRestrictionExtractor.Extract(dateOnlyList, matrixList,
+		                                                                         schedulingOptions, timeZone);
+		    if (restrictionFromSchedules == null)
+			    return null;
+		    if (effectiveRestriction != null)
+			    effectiveRestriction = effectiveRestriction.Combine(restrictionFromSchedules);
+		    if (suggestedShiftProjectionCache != null)
+		    {
+			    var suggestedShiftRestriction = _suggestedShiftRestrictionExtractor.Extract(suggestedShiftProjectionCache,
+			                                                                                schedulingOptions);
+			    if (suggestedShiftRestriction == null)
+				    return null;
+			    if (effectiveRestriction != null)
+				    effectiveRestriction = effectiveRestriction.Combine(suggestedShiftRestriction);
+		    }
+
+		    return effectiveRestriction;
+	    }
     }
 }

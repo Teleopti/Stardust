@@ -138,6 +138,38 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		}
 
 		[Test]
+		public void ShouldCancelOptimization()
+		{
+			_target.ReportProgress += _target_ReportProgress;
+			using (_mocks.Record())
+			{
+				Expect.Call(_schedulingOptionsCreator.CreateSchedulingOptions(_optimizationPreferences)).Return(_schedulingOptions);
+				Expect.Call(_teamInfoFactory.CreateTeamInfo(_person, new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue.AddDays(1)), _matrixList))
+					  .Return(_teamInfo);
+
+				//round1
+				Expect.Call(_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(3);
+				Expect.Call(() => _rollbackService.ClearModificationCollection());
+				runOneMatrixMocks(false);
+				Expect.Call(_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization)).Return(2);			
+			}
+
+			using (_mocks.Playback())
+			{
+				_target.OptimizeDaysOff(_matrixList, 
+					new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue.AddDays(1)), 
+					_selectedPersons, _optimizationPreferences, _rollbackService, 
+					_dayOffTemplate);
+				_target.ReportProgress -= _target_ReportProgress;
+			}
+		}
+
+		void _target_ReportProgress(object sender, ResourceOptimizerProgressEventArgs e)
+		{
+			e.Cancel = true;
+		}
+		
+		[Test]
 		public void ShouldRunUntilEqualOrHigherPeriodValueButRollbackAndLockInMatrixesIfRestrictionValidatorFails()
 		{
 

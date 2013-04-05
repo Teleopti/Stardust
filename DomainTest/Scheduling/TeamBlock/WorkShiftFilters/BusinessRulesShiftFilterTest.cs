@@ -123,6 +123,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			 result = _target.Filter(groupPerson, null, _dateOnly, finderResult);
 			Assert.IsNull(result);
 
+			result = _target.Filter(groupPerson, shiftList, _dateOnly, null);
+			Assert.IsNull(result);
+
 			result = _target.Filter(groupPerson, new List<IShiftProjectionCache>(), _dateOnly, finderResult);
 			Assert.That(result.Count, Is.EqualTo(0));
 		}

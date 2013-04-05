@@ -63,5 +63,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			Assert.AreEqual(_advancedPreferencesSource.RefreshScreenInterval, _advancedPreferencesTarget.RefreshScreenInterval);
 		}
 
+		[Test]
+		public void ShouldCheckParameters()
+		{
+			_target.MapFrom(null);
+			_target.MapTo(null);
+		}
 	}
 }

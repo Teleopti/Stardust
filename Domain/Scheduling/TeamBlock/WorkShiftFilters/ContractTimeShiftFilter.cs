@@ -27,14 +27,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 		                                           IList<IShiftProjectionCache> shiftList,
 		                                           ISchedulingOptions schedulingOptions, IWorkShiftFinderResult finderResult)
 		{
+			if (shiftList == null) return null;
+			if (finderResult == null) return null;
+			if (matrixList == null) return null;
 			if (shiftList.Count == 0) return shiftList;
 			
 			IList<IShiftProjectionCache> workShifts = new List<IShiftProjectionCache>();
 			MinMax<TimeSpan>? allowedMinMax = null;
-			if (matrixList == null)
-				return workShifts;
-		    if (shiftList == null) throw new ArgumentNullException("shiftList");
-		    if (finderResult == null) throw new ArgumentNullException("finderResult");
+			
 		    foreach (var matrix in matrixList)
 			{
 				_workShiftMinMaxCalculator.ResetCache();

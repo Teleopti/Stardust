@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 		private IMaxMovedDaysOverLimitValidator _maxMovedDaysOverLimitValidator;
 		private IScheduleMatrixPro _scheduleMatrixPro1;
 		private IVirtualSchedulePeriod _schedulePeriod;
+		private TeamInfo _teamInfo;
 
 		[SetUp]
 		public void Setup()
@@ -36,7 +37,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			_scheduleMatrixPro1 = _mocks.StrictMock<IScheduleMatrixPro>();
 			var matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro1 };
 			matrixes.Add(matrixList);
-			_teamBlockInfo = new TeamBlockInfo(new TeamInfo(groupPerson, matrixes),
+			_teamInfo = new TeamInfo(groupPerson, matrixes);
+			_teamBlockInfo = new TeamBlockInfo(_teamInfo,
 			                                   new BlockInfo(new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue)));
 			_schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
 		}
@@ -54,6 +56,21 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			using (_mocks.Playback())
 			{
 				var result = _target.Validate(_teamBlockInfo, _optimizerPreferences);
+				Assert.IsFalse(result);
+			}
+		}
+	
+		[Test]
+		public void ShouldReturnFalseIfOverMoveMaxDayLimitWithTeamInfo()
+		{
+			using (_mocks.Record())
+			{
+				Expect.Call(_maxMovedDaysOverLimitValidator.ValidateMatrix(_scheduleMatrixPro1, _optimizerPreferences))
+				      .Return(false);
+			}
+			using (_mocks.Playback())
+			{
+				var result = _target.Validate(_teamInfo, _optimizerPreferences);
 				Assert.IsFalse(result);
 			}
 		}
