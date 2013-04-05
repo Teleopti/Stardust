@@ -43,5 +43,26 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Assert.AreEqual(skillNumber, result.Count);
             }
         }
+
+		[Test]
+		public void MaxSeatSkillsShouldNotBeIncluded()
+		{
+			var skill2 = SkillFactory.CreateSiteSkill("maxSeat");
+			_skillList.Add(skill2);
+
+			using (_mock.Record())
+			{
+				Expect.Call(_stateHolder.VisibleSkills)
+					.Return(_skillList);
+			}
+			using (_mock.Playback())
+			{
+				IList<ISkill> result = _target.ExtractSkills().ToList();
+				Assert.AreEqual(1, result.Count);
+				Assert.AreSame(_skill1, result[0]);
+			}
+      
+      
+		}
     }
 }
