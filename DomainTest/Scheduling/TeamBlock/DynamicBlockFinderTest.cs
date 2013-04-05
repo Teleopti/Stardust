@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -184,6 +185,42 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             using (_mock.Playback())
             {
                 Assert.IsNull(_target.ExtractBlockInfo(_date.AddDays(1), _teamInfo, BlockFinderType.BetweenDayOff, true));
+            }
+        }
+
+        [Test]
+        public void ShouldReturnCorrectPeriodForBetweenDayOff()
+        {
+            var date = new DateOnly(2013, 4, 1);
+            var rangePeriod = new DateTimePeriod(2013, 1, 1, 2013, 12, 31);
+            var matrixPeriod = new DateOnlyPeriod(2013, 4, 1, 2013, 4, 2);
+            using (_mock.Record())
+            {
+                Expect.Call(_teamInfo.MatrixesForGroupAndDate(date)).Return(new List<IScheduleMatrixPro> { _matrixPro });
+                Expect.Call(_matrixPro.SchedulingStateHolder).Return(_schedulingResultStateHolder);
+                Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary);
+                Expect.Call(_scheduleDictionary[_person]).Return(_range);
+                Expect.Call(_matrixPro.Person).Return(_person);
+                Expect.Call(_range.Period).Return(rangePeriod);
+
+                Expect.Call(_matrixPro.SchedulePeriod).Return(_schedulePeriod);
+                Expect.Call(_schedulePeriod.DateOnlyPeriod).Return(matrixPeriod);
+                
+                Expect.Call(_range.ScheduledDay(date)).Return(_scheduleDay);
+                Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.None);
+
+                Expect.Call(_range.ScheduledDay(new DateOnly(2013, 3, 31))).Return(_scheduleDay);
+                Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.DayOff);
+
+                Expect.Call(_range.ScheduledDay(new DateOnly(2013, 4, 2))).Return(_scheduleDay);
+                Expect.Call(_scheduleDay.SignificantPart()).Return(SchedulePartView.DayOff);
+                
+            }
+
+            using (_mock.Playback())
+            {
+                DateOnlyPeriod result = _target.ExtractBlockInfo(date, _teamInfo, BlockFinderType.BetweenDayOff, false).BlockPeriod;
+                Assert.AreEqual(new DateOnlyPeriod(date, date), result);
             }
         }
     }
