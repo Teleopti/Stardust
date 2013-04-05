@@ -232,7 +232,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			}
 		}
 
-		[Test]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldReturnNullIfCombinationOfEffectiveRestrictionsIsNull()
 		{
 			var scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
@@ -268,7 +268,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			}
 		}
 
-		[Test]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldReturnNullIfScheduleRestrictionIsNull()
 		{
 			var dateList = new List<DateOnly> { _dateOnly, _dateOnly.AddDays(1) };
@@ -322,7 +322,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			}
 		}
 
-	    [Test]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 	    public void ShouldReturnNullIfSuggestedShiftRestrictionIsNull()
 	    {
 		    var dateList = new List<DateOnly> {_dateOnly, _dateOnly.AddDays(1)};

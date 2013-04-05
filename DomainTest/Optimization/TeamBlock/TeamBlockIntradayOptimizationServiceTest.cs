@@ -172,7 +172,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			}
 		}
 
-		[Test]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldReportProgress()
 		{
 			var dateOnly = new DateOnly();

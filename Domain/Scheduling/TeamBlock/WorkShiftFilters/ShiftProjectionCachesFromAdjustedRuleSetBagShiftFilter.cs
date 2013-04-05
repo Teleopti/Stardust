@@ -109,7 +109,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			return shiftProjectionCaches;
 		}
 
-		private static bool rulesetPassesRestrictions(IWorkShiftRuleSet ruleset)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "ruleset")]
+        private static bool rulesetPassesRestrictions(IWorkShiftRuleSet ruleset)
 		{
 			return true;
 		}
