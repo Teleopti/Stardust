@@ -17,6 +17,7 @@
         /// </summary>
         /// <param name="absenceRequest"></param>
         /// <returns></returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "HeadCount")]
         string CheckHeadCountInBudgetGroup(IAbsenceRequest absenceRequest);
     }
 }

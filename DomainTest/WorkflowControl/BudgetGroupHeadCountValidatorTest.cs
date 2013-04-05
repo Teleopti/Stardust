@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
         [Test]
         public void ShouldHaveDisplayText()
         {
-            Assert.AreEqual("BG head count", _target.DisplayText);
+            Assert.AreEqual("BG Head Count", _target.DisplayText);
         }
 
         [Test]

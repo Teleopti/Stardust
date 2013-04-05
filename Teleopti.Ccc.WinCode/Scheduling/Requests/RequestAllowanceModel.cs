@@ -184,7 +184,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
         private int getHeadCounts(IBudgetGroup selectedBudgetGroup, DateOnly currentDate)
         {
             // Need to check CurrentDateUTC...
-            var currentDateUtc = TimeZoneHelper.ConvertToUtc(currentDate, selectedBudgetGroup.TimeZone);
+            //var currentDateUtc = TimeZoneHelper.ConvertToUtc(currentDate, selectedBudgetGroup.TimeZone);
             return _scheduleProjectionReadOnlyRepository.GetNumberOfAbsencesPerDayAndBudgetGroup(selectedBudgetGroup.Id.GetValueOrDefault(), currentDate);
         }
 
