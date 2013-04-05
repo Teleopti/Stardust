@@ -33,8 +33,18 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		{
 			var eventsPublisher = MockRepository.GenerateMock<IEventsPublisher>();
 			var target = new EventsMessageSender(eventsPublisher);
-			var root = new PersonAbsence(new Scenario(" "));
-			root.FullDayAbsence(new Person(), new Absence(), DateTime.Today, DateTime.Today);
+
+			var scenario = new Scenario(" ");
+			scenario.SetId(new Guid());
+			var root = new PersonAbsence(scenario);
+
+			var person = new Person();
+			person.SetId(new Guid());
+
+			var absence = new Absence();
+			absence.SetId(new Guid());
+
+			root.FullDayAbsence(person, absence, DateTime.Today, DateTime.Today);
 			var expected = root.AllEvents();
 			var roots = new IRootChangeInfo[] { new RootChangeInfo(root, DomainUpdateType.Insert) };
 

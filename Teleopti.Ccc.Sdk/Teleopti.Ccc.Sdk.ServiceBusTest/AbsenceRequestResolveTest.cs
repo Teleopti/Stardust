@@ -15,11 +15,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
     [TestFixture]
     public class AbsenceRequestResolveTest
     {
+	    private ContainerBuilder builder;
 
         [Test]
         public void ShouldResolveNewAbsenceRequestConsumer()
         {
-			var builder = new ContainerBuilder();
+			builder = new ContainerBuilder();
 			builder.RegisterType<NewAbsenceRequestConsumer>().As<ConsumerOf<NewAbsenceRequestCreated>>();
 
 			builder.RegisterModule<RepositoryModule>();
@@ -40,9 +41,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 		{
 			var appData = MockRepository.GenerateMock<IApplicationData>();
 			appData.Expect(c => c.LoadPasswordPolicyService).Return(MockRepository.GenerateMock<ILoadPasswordPolicyService>());
-
-
-			var builder = new ContainerBuilder();
+			
+			builder = new ContainerBuilder();
 			builder.RegisterType<RaptorDomainMessageModule>().As<IMessageModule>().Named<IMessageModule>("1");
 
 			builder.RegisterModule<RepositoryModule>();
