@@ -6,7 +6,7 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.WorkflowControl
 {
-    [TestFixture]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "HeadCount"), TestFixture]
     public class BudgetGroupHeadCountValidatorTest
     {
         private IAbsenceRequestValidator _target;
@@ -58,6 +58,28 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
         {
             var result = _target.GetHashCode();
             Assert.IsNotNull(result);
+        }
+
+        [Test]
+        public void ShouldReturnFalseIfNotEnoughAllowanceLeft()
+        {
+            var specification = _mocks.StrictMock<IBudgetGroupHeadCountSpecification>();
+            var calculator = _mocks.StrictMock<IBudgetGroupAllowanceCalculator>();
+            var absenceRequest = _mocks.StrictMock<IAbsenceRequest>();
+            const string validationErrors = "Not Enough Allowance left";
+
+            using (_mocks.Record())
+            {
+                Expect.Call(specification.IsSatisfiedBy(absenceRequest)).IgnoreArguments().Return(false);
+                Expect.Call(calculator.CheckHeadCountInBudgetGroup(absenceRequest)).IgnoreArguments().Return(validationErrors);
+            }
+            using (_mocks.Playback())
+            {
+                _target.BudgetGroupHeadCountSpecification = specification;
+                _target.BudgetGroupAllowanceCalculator = calculator;
+                var result = _target.Validate(absenceRequest);
+                Assert.IsFalse(result.IsValid);
+            }
         }
     }
 }

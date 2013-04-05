@@ -51,6 +51,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
         private IScheduleDictionaryModifiedCallback _scheduleDictionaryModifiedCallback;
         private IAlreadyAbsentSpecification _alreadyAbsentSpecification;
         private IBudgetGroupAllowanceSpecification _budgetGroupAllowanceSpecification;
+        private IBudgetGroupHeadCountSpecification _budgetGroupHeadCountSpecification;
         private IBudgetGroupAllowanceCalculator _budgetGroupAllowanceCalculator;
         private IUpdateScheduleProjectionReadModel _updateScheduleProjectionReadModel;
     	private ILoadSchedulingStateHolderForResourceCalculation _loader;
@@ -77,6 +78,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
             _loader = _mockRepository.DynamicMock<ILoadSchedulingStateHolderForResourceCalculation>();
             _budgetGroupAllowanceSpecification = _mockRepository.StrictMock<IBudgetGroupAllowanceSpecification>();
     	    _budgetGroupAllowanceCalculator = _mockRepository.DynamicMock<IBudgetGroupAllowanceCalculator>();
+    	    _budgetGroupHeadCountSpecification = _mockRepository.DynamicMock<IBudgetGroupHeadCountSpecification>();
             _resourceOptimizationHelper = _mockRepository.StrictMock<IResourceOptimizationHelper>();
             _updateScheduleProjectionReadModel = _mockRepository.StrictMock<IUpdateScheduleProjectionReadModel>();
 
@@ -90,7 +92,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
                                                     _schedulingResultStateHolder, _merger,
                                                     _factory, _scheduleDictionarySaver,
                                                     _scheduleIsInvalidSpecification, _authorization,
-													_scheduleDictionaryModifiedCallback, _resourceOptimizationHelper, _updateScheduleProjectionReadModel, _budgetGroupAllowanceSpecification, _loader, _alreadyAbsentSpecification, _budgetGroupAllowanceCalculator
+													_scheduleDictionaryModifiedCallback, _resourceOptimizationHelper, 
+                                                    _updateScheduleProjectionReadModel, _budgetGroupAllowanceSpecification, _loader, _alreadyAbsentSpecification, 
+                                                    _budgetGroupAllowanceCalculator, _budgetGroupHeadCountSpecification
                                                     );
         }
 
@@ -233,7 +237,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
                 Expect.Call(absenceRequestOpenDatePeriod.GetSelectedProcess(null, null)).IgnoreArguments().Return(
                     processAbsenceRequest);
                 Expect.Call(absenceRequestOpenDatePeriod.GetSelectedValidatorList(_schedulingResultStateHolder, null,
-                                                                                  null,null, null))
+                                                                                  null,null, null, null))
                     .IgnoreArguments().Return(validatorList);
                 Expect.Call(_factory.GetRequestApprovalService(null, _scenario)).IgnoreArguments().Return(
                     _requestApprovalService);
@@ -294,7 +298,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
                 Expect.Call(absenceRequestOpenDatePeriod.GetSelectedProcess(null, null)).IgnoreArguments().Return(
                     processAbsenceRequest);
                 Expect.Call(absenceRequestOpenDatePeriod.GetSelectedValidatorList(_schedulingResultStateHolder, null,
-                                                                                  null, null, null))
+                                                                                  null, null, null, null))
                     .IgnoreArguments().Return(validatorList);
                 Expect.Call(_factory.GetRequestApprovalService(null, _scenario)).IgnoreArguments().Return(
                     _requestApprovalService);
@@ -355,7 +359,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 				Expect.Call(absenceRequestOpenDatePeriod.GetSelectedProcess(null, null)).IgnoreArguments().Return(
 					processAbsenceRequest);
 				Expect.Call(absenceRequestOpenDatePeriod.GetSelectedValidatorList(_schedulingResultStateHolder, null,
-																				  null, null, null))
+																				  null, null, null, null))
 					.IgnoreArguments().Return(validatorList);
 				Expect.Call(_factory.GetRequestApprovalService(null, _scenario)).IgnoreArguments().Return(
 					_requestApprovalService);
@@ -417,7 +421,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 				Expect.Call(absenceRequestOpenDatePeriod.GetSelectedProcess(null, null)).IgnoreArguments().Return(
 					processAbsenceRequest);
 				Expect.Call(absenceRequestOpenDatePeriod.GetSelectedValidatorList(_schedulingResultStateHolder, null,
-																				  null, null, null))
+																				  null, null, null, null))
 					.IgnoreArguments().Return(validatorList);
 
 				processAbsenceRequest.Process(null, _absenceRequest, _authorization, validatorList);
@@ -481,7 +485,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 				Expect.Call(absenceRequestOpenDatePeriod.GetSelectedProcess(null, null)).IgnoreArguments().Return(
 					processAbsenceRequest);
 				Expect.Call(absenceRequestOpenDatePeriod.GetSelectedValidatorList(_schedulingResultStateHolder, null,
-																				  null, null, null))
+																				  null, null, null, null))
 					.IgnoreArguments().Return(validatorList);
 				Expect.Call(_factory.GetRequestApprovalService(null, _scenario)).IgnoreArguments().Return(
 					_requestApprovalService);
@@ -544,7 +548,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
                 Expect.Call(absenceRequestOpenDatePeriod.GetSelectedProcess(null, null)).IgnoreArguments().Return(
                     processAbsenceRequest);
                 Expect.Call(absenceRequestOpenDatePeriod.GetSelectedValidatorList(_schedulingResultStateHolder, null,
-                                                                                  null, null, null))
+                                                                                  null, null, null, null))
                     .IgnoreArguments().Return(validatorList);
                 Expect.Call(_factory.GetRequestApprovalService(null, _scenario)).IgnoreArguments().Return(
                     _requestApprovalService);
@@ -603,7 +607,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
                 Expect.Call(absenceRequestOpenDatePeriod.GetSelectedProcess(null, null)).IgnoreArguments().Return(
                     processAbsenceRequest);
                 Expect.Call(absenceRequestOpenDatePeriod.GetSelectedValidatorList(_schedulingResultStateHolder, null,
-                                                                                  null, null, null))
+                                                                                  null, null, null, null))
                     .IgnoreArguments().Return(validatorList);
                 Expect.Call(_factory.GetRequestApprovalService(null, _scenario)).IgnoreArguments().Return(
                     _requestApprovalService);

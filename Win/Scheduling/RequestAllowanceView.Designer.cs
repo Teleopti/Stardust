@@ -187,7 +187,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.comboBoxAdvBudgetGroup.Location = new System.Drawing.Point(93, 14);
             this.comboBoxAdvBudgetGroup.Name = "comboBoxAdvBudgetGroup";
             this.tableLayoutPanel.SetRowSpan(this.comboBoxAdvBudgetGroup, 2);
-            this.comboBoxAdvBudgetGroup.Size = new System.Drawing.Size(140, 21);
+            this.comboBoxAdvBudgetGroup.Size = new System.Drawing.Size(140, 19);
             this.comboBoxAdvBudgetGroup.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
             this.comboBoxAdvBudgetGroup.TabIndex = 0;
             this.comboBoxAdvBudgetGroup.SelectedIndexChanged += new System.EventHandler(this.comboBoxAdvBudgetGroupSelectedIndexChanged);

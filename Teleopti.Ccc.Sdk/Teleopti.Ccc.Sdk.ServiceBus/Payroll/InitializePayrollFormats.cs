@@ -12,7 +12,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
     {
         private static readonly ILog Logger = LogManager.GetLogger(typeof(InitializePayrollFormats));
         private readonly IPlugInLoader _plugInLoader;
-        
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "plugIn")]
         public InitializePayrollFormats(IPlugInLoader plugInLoader)
         {
             _plugInLoader = plugInLoader;

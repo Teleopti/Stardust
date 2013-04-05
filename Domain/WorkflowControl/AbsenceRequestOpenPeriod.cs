@@ -107,7 +107,9 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
             }
         }
 
-        public virtual IEnumerable<IAbsenceRequestValidator> GetSelectedValidatorList(ISchedulingResultStateHolder schedulingResultStateHolder, IResourceOptimizationHelper resourceOptimizationHelper, IPersonAccountBalanceCalculator personAccountBalanceCalculator, IBudgetGroupAllowanceSpecification budgetGroupAllowanceSpecification, IBudgetGroupAllowanceCalculator budgetGroupAllowanceCalculator)
+        public virtual IEnumerable<IAbsenceRequestValidator> GetSelectedValidatorList(ISchedulingResultStateHolder schedulingResultStateHolder, IResourceOptimizationHelper resourceOptimizationHelper, 
+                                                                                      IPersonAccountBalanceCalculator personAccountBalanceCalculator, IBudgetGroupAllowanceSpecification budgetGroupAllowanceSpecification, 
+                                                                                      IBudgetGroupAllowanceCalculator budgetGroupAllowanceCalculator, IBudgetGroupHeadCountSpecification budgetGroupHeadCountSpecification)
         {
             IList<IAbsenceRequestValidator> validatorList = new List<IAbsenceRequestValidator>
                                                                 { PersonAccountValidator, StaffingThresholdValidator};
@@ -118,6 +120,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
                 requestValidator.ResourceOptimizationHelper = resourceOptimizationHelper;
                 requestValidator.BudgetGroupAllowanceSpecification = budgetGroupAllowanceSpecification;
                 requestValidator.BudgetGroupAllowanceCalculator = budgetGroupAllowanceCalculator;
+                requestValidator.BudgetGroupHeadCountSpecification = budgetGroupHeadCountSpecification;
             }
             return validatorList;
         }

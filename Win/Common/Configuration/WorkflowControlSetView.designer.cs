@@ -407,7 +407,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.comboBoxAdvWorkflowControlSet.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxAdvWorkflowControlSet.Location = new System.Drawing.Point(178, 4);
             this.comboBoxAdvWorkflowControlSet.Name = "comboBoxAdvWorkflowControlSet";
-            this.comboBoxAdvWorkflowControlSet.Size = new System.Drawing.Size(216, 21);
+            this.comboBoxAdvWorkflowControlSet.Size = new System.Drawing.Size(216, 19);
             this.comboBoxAdvWorkflowControlSet.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
             this.comboBoxAdvWorkflowControlSet.TabIndex = 3;
             this.comboBoxAdvWorkflowControlSet.SelectedIndexChanged += new System.EventHandler(this.comboBoxAdvWorkflowControlSet_SelectedIndexChanged);
@@ -926,7 +926,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.dateTimePickerAdvPublishedTo.Calendar.Name = "monthCalendar";
             this.dateTimePickerAdvPublishedTo.Calendar.ScrollButtonSize = new System.Drawing.Size(24, 24);
             this.dateTimePickerAdvPublishedTo.Calendar.SelectedDates = new System.DateTime[0];
-            this.dateTimePickerAdvPublishedTo.Calendar.Size = new System.Drawing.Size(202, 174);
+            this.dateTimePickerAdvPublishedTo.Calendar.Size = new System.Drawing.Size(198, 174);
             this.dateTimePickerAdvPublishedTo.Calendar.SizeToFit = true;
             this.dateTimePickerAdvPublishedTo.Calendar.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
             this.dateTimePickerAdvPublishedTo.Calendar.TabIndex = 0;
@@ -937,7 +937,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             // 
             // 
             this.dateTimePickerAdvPublishedTo.Calendar.NoneButton.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
-            this.dateTimePickerAdvPublishedTo.Calendar.NoneButton.Location = new System.Drawing.Point(130, 0);
+            this.dateTimePickerAdvPublishedTo.Calendar.NoneButton.Location = new System.Drawing.Point(126, 0);
             this.dateTimePickerAdvPublishedTo.Calendar.NoneButton.Size = new System.Drawing.Size(72, 20);
             this.dateTimePickerAdvPublishedTo.Calendar.NoneButton.Text = "None";
             this.dateTimePickerAdvPublishedTo.Calendar.NoneButton.UseVisualStyle = true;
@@ -946,7 +946,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             // 
             this.dateTimePickerAdvPublishedTo.Calendar.TodayButton.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
             this.dateTimePickerAdvPublishedTo.Calendar.TodayButton.Location = new System.Drawing.Point(0, 0);
-            this.dateTimePickerAdvPublishedTo.Calendar.TodayButton.Size = new System.Drawing.Size(130, 20);
+            this.dateTimePickerAdvPublishedTo.Calendar.TodayButton.Size = new System.Drawing.Size(126, 20);
             this.dateTimePickerAdvPublishedTo.Calendar.TodayButton.Text = "Today";
             this.dateTimePickerAdvPublishedTo.Calendar.TodayButton.UseVisualStyle = true;
             this.dateTimePickerAdvPublishedTo.CalendarTitleBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252)))));
@@ -1401,7 +1401,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.dateTimePickerAdvViewpoint.Calendar.Name = "monthCalendar";
             this.dateTimePickerAdvViewpoint.Calendar.ScrollButtonSize = new System.Drawing.Size(24, 24);
             this.dateTimePickerAdvViewpoint.Calendar.SelectedDates = new System.DateTime[0];
-            this.dateTimePickerAdvViewpoint.Calendar.Size = new System.Drawing.Size(202, 174);
+            this.dateTimePickerAdvViewpoint.Calendar.Size = new System.Drawing.Size(198, 174);
             this.dateTimePickerAdvViewpoint.Calendar.SizeToFit = true;
             this.dateTimePickerAdvViewpoint.Calendar.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
             this.dateTimePickerAdvViewpoint.Calendar.TabIndex = 0;
@@ -1411,7 +1411,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             // 
             // 
             this.dateTimePickerAdvViewpoint.Calendar.NoneButton.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
-            this.dateTimePickerAdvViewpoint.Calendar.NoneButton.Location = new System.Drawing.Point(130, 0);
+            this.dateTimePickerAdvViewpoint.Calendar.NoneButton.Location = new System.Drawing.Point(126, 0);
             this.dateTimePickerAdvViewpoint.Calendar.NoneButton.Size = new System.Drawing.Size(72, 20);
             this.dateTimePickerAdvViewpoint.Calendar.NoneButton.Text = "None";
             this.dateTimePickerAdvViewpoint.Calendar.NoneButton.UseVisualStyle = true;
@@ -1421,7 +1421,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             // 
             this.dateTimePickerAdvViewpoint.Calendar.TodayButton.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
             this.dateTimePickerAdvViewpoint.Calendar.TodayButton.Location = new System.Drawing.Point(0, 0);
-            this.dateTimePickerAdvViewpoint.Calendar.TodayButton.Size = new System.Drawing.Size(202, 20);
+            this.dateTimePickerAdvViewpoint.Calendar.TodayButton.Size = new System.Drawing.Size(198, 20);
             this.dateTimePickerAdvViewpoint.Calendar.TodayButton.Text = "Today";
             this.dateTimePickerAdvViewpoint.Calendar.TodayButton.UseVisualStyle = true;
             this.dateTimePickerAdvViewpoint.CalendarTitleBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252)))));

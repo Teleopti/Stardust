@@ -46,12 +46,16 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
     	private readonly ILoadSchedulingStateHolderForResourceCalculation _loadSchedulingStateHolderForResourceCalculation;
     	private readonly IAlreadyAbsentSpecification _alreadyAbsentSpecification;
         private readonly IBudgetGroupAllowanceCalculator _budgetGroupAllowanceCalculator;
+        private readonly IBudgetGroupHeadCountSpecification _budgetGroupHeadCountSpecification;
         private IProcessAbsenceRequest _process;
     	private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 
-    	public NewAbsenceRequestConsumer(IScheduleRepository scheduleRepository, IPersonAbsenceAccountProvider personAbsenceAccountProvider, IScenarioRepository scenarioRepository, IPersonRequestRepository personRequestRepository, ISchedulingResultStateHolder schedulingResultStateHolder, 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "HeadCount")]
+        public NewAbsenceRequestConsumer(IScheduleRepository scheduleRepository, IPersonAbsenceAccountProvider personAbsenceAccountProvider, IScenarioRepository scenarioRepository, IPersonRequestRepository personRequestRepository, ISchedulingResultStateHolder schedulingResultStateHolder, 
                                          IAbsenceRequestOpenPeriodMerger absenceRequestOpenPeriodMerger, IRequestFactory factory,
-                                         IScheduleDictionarySaver scheduleDictionarySaver, IScheduleIsInvalidSpecification scheduleIsInvalidSpecification, IPersonRequestCheckAuthorization authorization, IScheduleDictionaryModifiedCallback scheduleDictionaryModifiedCallback, IResourceOptimizationHelper resourceOptimizationHelper, IUpdateScheduleProjectionReadModel updateScheduleProjectionReadModel, IBudgetGroupAllowanceSpecification budgetGroupAllowanceSpecification, ILoadSchedulingStateHolderForResourceCalculation loadSchedulingStateHolderForResourceCalculation, IAlreadyAbsentSpecification alreadyAbsentSpecification, IBudgetGroupAllowanceCalculator budgetGroupAllowanceCalculator)
+                                         IScheduleDictionarySaver scheduleDictionarySaver, IScheduleIsInvalidSpecification scheduleIsInvalidSpecification, IPersonRequestCheckAuthorization authorization, IScheduleDictionaryModifiedCallback scheduleDictionaryModifiedCallback, 
+                                         IResourceOptimizationHelper resourceOptimizationHelper, IUpdateScheduleProjectionReadModel updateScheduleProjectionReadModel, IBudgetGroupAllowanceSpecification budgetGroupAllowanceSpecification, 
+                                         ILoadSchedulingStateHolderForResourceCalculation loadSchedulingStateHolderForResourceCalculation, IAlreadyAbsentSpecification alreadyAbsentSpecification, IBudgetGroupAllowanceCalculator budgetGroupAllowanceCalculator, IBudgetGroupHeadCountSpecification budgetGroupHeadCountSpecification)
         {
             _scheduleRepository = scheduleRepository;
             _personAbsenceAccountProvider = personAbsenceAccountProvider;
@@ -70,6 +74,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
     		_loadSchedulingStateHolderForResourceCalculation = loadSchedulingStateHolderForResourceCalculation;
     		_alreadyAbsentSpecification = alreadyAbsentSpecification;
     	    _budgetGroupAllowanceCalculator = budgetGroupAllowanceCalculator;
+    	    _budgetGroupHeadCountSpecification = budgetGroupHeadCountSpecification;
 
     	    _loadDataActions = new List<LoadDataAction>
                                    {
@@ -195,7 +200,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
                                                                           _resourceOptimizationHelper,
                                                                           personAccountBalanceCalculator,
                                                                           _budgetGroupAllowanceSpecification,
-                                                                           _budgetGroupAllowanceCalculator);
+                                                                           _budgetGroupAllowanceCalculator,
+                                                                           _budgetGroupHeadCountSpecification);
                     
                 	_process = mergedPeriod.GetSelectedProcess(requestApprovalServiceScheduler, undoRedoContainer);
 

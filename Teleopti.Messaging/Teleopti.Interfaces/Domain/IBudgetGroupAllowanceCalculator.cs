@@ -16,5 +16,7 @@ namespace Teleopti.Interfaces.Domain
         /// <param name="absenceRequest"></param>
         /// <returns></returns>
         string CheckBudgetGroup(IAbsenceRequest absenceRequest);
+
+        string CheckHeadCountInBudgetGroup(IAbsenceRequest absenceRequest);
     }
 }

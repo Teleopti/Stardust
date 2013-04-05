@@ -156,6 +156,7 @@
     <Compile Include="AuthorizationContainerInstaller.cs" />
     <Compile Include="BudgetGroupAllowanceCalculator.cs" />
     <Compile Include="BudgetGroupAllowanceSpecification.cs" />
+    <Compile Include="BudgetGroupHeadCountSpecification.cs" />
     <Compile Include="BusStartup.cs" />
     <Compile Include="ConfigFileDefaultHost.cs" />
     <Compile Include="Denormalizer\PersonScheduleDayReadModelHandler.cs" />

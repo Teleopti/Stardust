@@ -119,7 +119,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             return periods;
         }
 
-
         /// <summary>
         /// Finds the specified period.
         /// </summary>
@@ -189,5 +188,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             }
             return retObj;
         }
+    }
+
+    public class Test
+    {
+        public Guid Id { get; set; }
     }
 }

@@ -119,6 +119,7 @@
     <Compile Include="AbsenceRequestResolveTest.cs" />
     <Compile Include="BudgetGroupAllowanceCalculatorTest.cs" />
     <Compile Include="BudgetGroupAllowanceSpecificationTest.cs" />
+    <Compile Include="BudgetGroupHeadCountSpecificationTest.cs" />
     <Compile Include="Denormalizer\CreateAnywherePersonScheduleReadModelTest.cs" />
     <Compile Include="Denormalizer\ScheduleDayReadModelHandlerTest.cs" />
     <Compile Include="Denormalizer\ScheduleDayReadModelsCreatorTest.cs" />

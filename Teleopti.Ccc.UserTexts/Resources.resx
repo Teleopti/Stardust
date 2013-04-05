@@ -11369,4 +11369,12 @@ Reduce the complexity to use these shifts.</value>
     <value> is a too complex ruleset!</value>
     <comment>Caption on messagebox when shift generation is stopped </comment>
   </data>
+  <data name="BudgetGroupHeadCount" xml:space="preserve">
+    <value>BG Head Count</value>
+    <comment>new option in workflow control set Budget Group Head Count</comment>
+  </data>
+  <data name="NotEnoughAllowance" xml:space="preserve">
+    <value>There is not enough allowance for day:</value>
+    <comment>There is not enough budget allowance for that day.</comment>
+  </data>
 </root>

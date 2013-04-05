@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
         public bool CheckBalance(IScheduleRange scheduleRange, DateOnlyPeriod period)
         {
             var rangePeriod = scheduleRange.Period.ToDateOnlyPeriod(scheduleRange.Person.PermissionInformation.DefaultTimeZone());
-
+            
             foreach (IAccount account in _accounts)
             {
                 var intersectingPeriod = account.Period().Intersection(rangePeriod);

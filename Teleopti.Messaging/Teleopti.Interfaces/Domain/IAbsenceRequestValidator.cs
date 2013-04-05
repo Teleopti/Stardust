@@ -90,5 +90,10 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         IBudgetGroupAllowanceCalculator BudgetGroupAllowanceCalculator { get; set; }
 
-       }
+        /// <summary>
+        /// 
+        /// </summary>
+        IBudgetGroupHeadCountSpecification BudgetGroupHeadCountSpecification { get; set; }
+
+     }
 }

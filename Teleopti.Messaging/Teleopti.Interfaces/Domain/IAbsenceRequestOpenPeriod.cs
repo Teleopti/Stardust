@@ -120,6 +120,7 @@ namespace Teleopti.Interfaces.Domain
         /// <param name="personAccountBalanceCalculator">The person account balance calculator.</param>
         /// <param name="budgetGroupAllowanceSpecification">The budget group alloance specification.</param>
         /// <param name="budgetGroupAllowanceCalculator">The budget group alloance calculator.</param>
+        /// <param name="budgetGroupHeadCountSpecification">The budget group head count specification.</param>
         /// <returns></returns>
         /// <remarks>
         /// Created by: henryg
@@ -130,7 +131,8 @@ namespace Teleopti.Interfaces.Domain
             IResourceOptimizationHelper resourceOptimizationHelper,
             IPersonAccountBalanceCalculator personAccountBalanceCalculator,
             IBudgetGroupAllowanceSpecification budgetGroupAllowanceSpecification,
-            IBudgetGroupAllowanceCalculator budgetGroupAllowanceCalculator);
+            IBudgetGroupAllowanceCalculator budgetGroupAllowanceCalculator,
+            IBudgetGroupHeadCountSpecification budgetGroupHeadCountSpecification);
 
         /// <summary>
         /// Gets the selected process.
