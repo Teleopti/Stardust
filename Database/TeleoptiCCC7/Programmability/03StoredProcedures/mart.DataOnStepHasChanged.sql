@@ -15,16 +15,21 @@ CREATE PROCEDURE [mart].[DataOnStepHasChanged]
 -- Date			Who	Description
 -- =============================================
 AS
---exec mart.DataOnStepHasChanged 'stg_schedule, stg_schedule_day_absence_count', '2013-01-03', '2013-01-10', 'fc2f309c-3e3c-4cfb-9c11-a1570077b92b'
+-- exec mart.DataOnStepHasChanged 'fact_schedule', '2013-03-03', '2013-03-09', 'fc2f309c-3e3c-4cfb-9c11-a1570077b92b'
 DECLARE @lastTime bigint
 SELECT @lastTime = 0
+
+-- do the same check on fact step as on stage step
+IF @stepName = 'fact_schedule' SELECT @stepName = 'stg_schedule, stg_schedule_day_absence_count'
+IF @stepName = 'fact_schedule_day_count' SELECT @stepName = 'stg_schedule_day_off_count, stg_day_off, dim_day_off'
+IF @stepName = 'fact_schedule_preference' SELECT @stepName = 'stg_schedule_preference, stg_day_off, dim_day_off'
 
 IF EXISTS (SELECT * FROM mart.LastUpdatedPerStep WHERE StepName = @stepName AND BusinessUnit = @buId)
 	SELECT @lastTime = LastChecksum FROM LastUpdatedPerStep WHERE StepName = @stepName AND BusinessUnit = @buId
 
 DECLARE @thisTime bigint
 
-IF @stepName = 'stg_schedule, stg_schedule_day_absence_count'
+IF @stepName = 'stg_schedule, stg_schedule_day_absence_count' 
 BEGIN
 	SELECT @thisTime = sum(cast(checksum(Version,id) as bigint)) from dbo.PersonAssignment
 	where minimum between @startDate AND @endDate
@@ -39,7 +44,7 @@ BEGIN
 	AND BusinessUnit = @buId
 END
 
-IF @stepName = 'stg_schedule_day_off_count, stg_day_off, dim_day_off'
+IF @stepName = 'stg_schedule_day_off_count, stg_day_off, dim_day_off' 
 	SELECT @thisTime = sum(cast(checksum(Version,id) as bigint)) from dbo.PersonDayOff
 	where Anchor between @startDate AND @endDate
 	AND BusinessUnit = @buId
@@ -63,7 +68,6 @@ END
 
 -- stg_permission ??
 -- [dbo].[AvailableData], [dbo].[Person], [dbo].[ApplicationRole]
-
 
 IF @thisTime <> @lastTime
 BEGIN

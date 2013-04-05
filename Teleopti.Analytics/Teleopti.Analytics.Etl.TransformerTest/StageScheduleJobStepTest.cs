@@ -68,7 +68,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 			var needRunChecker = _mock.DynamicMock<INeedToRunChecker>();
 			var stageScheduleJobStep = new StageScheduleJobStep(jobParameters, needRunChecker);
 
-			Expect.Call(() => raptorRepository.TruncateSchedule());
+			Expect.Call(raptorRepository.TruncateSchedule);
 			Expect.Call(needRunChecker.NeedToRun(new DateTimePeriod(), raptorRepository, currentBusinessUnit,""))
 				.Return(false)
 				.IgnoreArguments();

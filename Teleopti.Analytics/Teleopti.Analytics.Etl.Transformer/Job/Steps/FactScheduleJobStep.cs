@@ -7,20 +7,28 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 {
     public class FactScheduleJobStep : JobStepBase
     {
-        public FactScheduleJobStep(IJobParameters jobParameters)
+	    private readonly INeedToRunChecker _needToRunChecker;
+
+	    public FactScheduleJobStep(IJobParameters jobParameters)
+			:this(jobParameters, new DefaultNeedToRunChecker())
+		{}
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "ToRun")]
+		public FactScheduleJobStep(IJobParameters jobParameters, INeedToRunChecker needToRunChecker)
             : base(jobParameters)
         {
-            Name = "fact_schedule";
+	        _needToRunChecker = needToRunChecker;
+	        Name = "fact_schedule";
             JobCategory = JobCategoryType.Schedule;
         }
 
         protected override int RunStep(IList<IJobResult> jobResultCollection, bool isLastBusinessUnit)
         {
+			var period = new DateTimePeriod(JobCategoryDatePeriod.StartDateUtcFloor, JobCategoryDatePeriod.EndDateUtcCeiling);
+			if (!_needToRunChecker.NeedToRun(period, _jobParameters.Helper.Repository, RaptorTransformerHelper.CurrentBusinessUnit, Name))
+		        return 0;
             //Load data from stage to datamart
             return
-                _jobParameters.Helper.Repository.FillScheduleDataMart(
-                    new DateTimePeriod(JobCategoryDatePeriod.StartDateUtcFloor,
-                                       JobCategoryDatePeriod.EndDateUtcCeiling), RaptorTransformerHelper.CurrentBusinessUnit);
+				_jobParameters.Helper.Repository.FillScheduleDataMart(period, RaptorTransformerHelper.CurrentBusinessUnit);
         }
     }
 }

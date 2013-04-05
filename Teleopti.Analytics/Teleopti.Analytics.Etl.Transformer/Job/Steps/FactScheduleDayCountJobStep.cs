@@ -7,20 +7,28 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 {
     public class FactScheduleDayCountJobStep : JobStepBase
     {
-        public FactScheduleDayCountJobStep(IJobParameters jobParameters)
+	    private readonly INeedToRunChecker _needToRunChecker;
+
+	    public FactScheduleDayCountJobStep(IJobParameters jobParameters)
+			:this(jobParameters, new DefaultNeedToRunChecker())
+		{}
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "ToRun")]
+		public FactScheduleDayCountJobStep(IJobParameters jobParameters, INeedToRunChecker needToRunChecker)
             : base(jobParameters)
         {
-            Name = "fact_schedule_day_count";
+	        _needToRunChecker = needToRunChecker;
+	        Name = "fact_schedule_day_count";
             JobCategory = JobCategoryType.Schedule;
         }
 
         protected override int RunStep(IList<IJobResult> jobResultCollection, bool isLastBusinessUnit)
         {
+			var period = new DateTimePeriod(JobCategoryDatePeriod.StartDateUtcFloor, JobCategoryDatePeriod.EndDateUtcCeiling);
+			if (!_needToRunChecker.NeedToRun(period, _jobParameters.Helper.Repository, RaptorTransformerHelper.CurrentBusinessUnit, Name))
+				return 0;
             //Load datamart
             return
-                _jobParameters.Helper.Repository.FillScheduleDayCountDataMart(
-                    new DateTimePeriod(JobCategoryDatePeriod.StartDateUtc.Date,
-                                       JobCategoryDatePeriod.EndDateUtc.Date),
+				_jobParameters.Helper.Repository.FillScheduleDayCountDataMart(period,
                     RaptorTransformerHelper.CurrentBusinessUnit);
         }
     }

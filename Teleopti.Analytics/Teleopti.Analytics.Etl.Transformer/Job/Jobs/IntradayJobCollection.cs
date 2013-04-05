@@ -27,10 +27,10 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Jobs
 			Add(new StageAbsenceJobStep(jobParameters));
 			Add(new StageScenarioJobStep(jobParameters));
 			Add(new StageShiftCategoryJobStep(jobParameters));
-			Add(new StageScheduleJobStep(jobParameters, new IntradayScheduleStepNeedToRunChecker()));
+			Add(new StageScheduleJobStep(jobParameters, new IntradayStepNeedToRunChecker()));
 			//Add(new StageScheduleForecastSkillJobStep(jobParameters)); //removed 2010-02-24 to reduce duration/Load (scheduling resource calculation)
-			Add(new StageScheduleDayOffCountJobStep(jobParameters, new IntradayScheduleStepNeedToRunChecker()));
-			Add(new StageSchedulePreferenceJobStep(jobParameters, new IntradayScheduleStepNeedToRunChecker()));
+			Add(new StageScheduleDayOffCountJobStep(jobParameters, new IntradayStepNeedToRunChecker()));
+			Add(new StageSchedulePreferenceJobStep(jobParameters, new IntradayStepNeedToRunChecker()));
 			Add(new StageSkillJobStep(jobParameters));
 			Add(new StageWorkloadJobStep(jobParameters));
 			Add(new StageForecastWorkloadJobStep(jobParameters));
@@ -70,9 +70,9 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Jobs
 			Add(new BridgeGroupPagePersonJobStep(jobParameters));
 
 			// FACT TABLES
-			Add(new FactScheduleJobStep(jobParameters));
-			Add(new FactScheduleDayCountJobStep(jobParameters));
-			Add(new FactSchedulePreferenceJobStep(jobParameters));
+			Add(new FactScheduleJobStep(jobParameters, new IntradayStepNeedToRunChecker()));
+			Add(new FactScheduleDayCountJobStep(jobParameters, new IntradayStepNeedToRunChecker()));
+			Add(new FactSchedulePreferenceJobStep(jobParameters, new IntradayStepNeedToRunChecker()));
 			Add(new FactQueueJobStep(jobParameters));                   // BU independent
 			Add(new FactAgentJobStep(jobParameters));                   // BU independent
 			Add(new StatisticsUpdateNotificationJobStep(jobParameters));                   // BU independent

@@ -20,7 +20,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 	}
 
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "ToRun")]
-	public class IntradayScheduleStepNeedToRunChecker : INeedToRunChecker
+	public class IntradayStepNeedToRunChecker : INeedToRunChecker
 	{
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public bool NeedToRun(DateTimePeriod onPeriod, IRaptorRepository raptorRepository, IBusinessUnit currentBusinessUnit, string stepName)
