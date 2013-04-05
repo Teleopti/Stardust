@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Globalization;
 using Teleopti.Ccc.WinCode.Budgeting.Models;

@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			target.IsInitialized().Should().Be.False();
 		}
 
-        [Test]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "HeadCounts"), Test]
         public void ShouldReturnNumberOfHeadCountsHavingAbsenceApproved()
         {
             var budgetGroupId = budgetGroup.Id.GetValueOrDefault();
