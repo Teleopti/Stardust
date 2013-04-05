@@ -16,7 +16,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 	public class ShiftProjectionCachesFromAdjustedRuleSetBagShiftFilterTest
 	{
 		private MockRepository _mocks;
-		private IShiftProjectionCachesFromAdjustedRuleSetBagShiftFilter _target;
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1823:AvoidUnusedPrivateFields")]
+        private IShiftProjectionCachesFromAdjustedRuleSetBagShiftFilter _target;
 		private IRuleSetDeletedActivityChecker _ruleSetDeletedActivityChecker;
 		private IRuleSetDeletedShiftCategoryChecker _rulesSetDeletedShiftCategoryChecker;
 		private IRuleSetToShiftsGenerator _ruleSetToShiftsGenerator;
