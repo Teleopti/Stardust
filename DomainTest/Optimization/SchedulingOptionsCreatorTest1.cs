@@ -35,12 +35,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         [Test]
         public void ShouldUseBlockSchedulingSetInSchedulingOptions()
         {
-            _schedulingOptions.UseBlockScheduling = BlockFinderType.None;
-            Assert.AreEqual(_schedulingOptions.UseBlockScheduling, BlockFinderType.None);
-            _optimizationPreferences.Extra.UseBlockScheduling = true;
+          //  _schedulingOptions.UseBlockScheduling = BlockFinderType.None;
+            //Assert.AreEqual(_schedulingOptions.UseBlockScheduling, BlockFinderType.None);
+            //_optimizationPreferences.Extra.UseBlockScheduling = true;
             _optimizationPreferences.Extra.BlockFinderTypeValue = BlockFinderType.BetweenDayOff;
             _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
-            Assert.AreEqual(_schedulingOptions.UseBlockScheduling, BlockFinderType.BetweenDayOff);
+            //Assert.AreEqual(_schedulingOptions.UseBlockScheduling, BlockFinderType.BetweenDayOff);
         }
 
         [Test]
@@ -311,6 +311,31 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _optimizationPreferences.General.StudentAvailabilitiesValue = 0;
             _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
             Assert.IsFalse(_schedulingOptions.UseStudentAvailability);
+        }
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Levelling"), Test]
+        public void VerifyLevellingOptions()
+        {
+            _optimizationPreferences.Extra.UseLevellingOption = true;
+            _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
+            Assert.IsTrue(_schedulingOptions.UseLevellingPerOption );
+
+            _optimizationPreferences.Extra.UseLevellingSameEndTime  = false;
+            _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
+            Assert.IsFalse(_schedulingOptions.UseLevellingSameEndTime);
+
+            _optimizationPreferences.Extra.UseLevellingSameShift  = false ;
+            _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
+            Assert.IsFalse(_schedulingOptions.UseLevellingSameShift);
+
+            _optimizationPreferences.Extra.UseLevellingSameShiftCategory  = true;
+            _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
+            Assert.IsTrue(_schedulingOptions.UseLevellingSameShiftCategory);
+
+            _optimizationPreferences.Extra.UseLevellingSameStartTime  = true;
+            _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
+            Assert.IsTrue(_schedulingOptions.UseLevellingSameStartTime);
+
         }
 
     }

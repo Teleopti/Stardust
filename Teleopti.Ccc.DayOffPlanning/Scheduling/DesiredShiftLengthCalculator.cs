@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.DayOffPlanning.Scheduling
 		System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public TimeSpan FindAverageLength(IWorkShiftMinMaxCalculator workShiftMinMaxCalculator, IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions)
 		{
+			workShiftMinMaxCalculator.ResetCache();
 			var lengths = workShiftMinMaxCalculator.PossibleMinMaxWorkShiftLengths(matrix, schedulingOptions);
 			var currentAverage = matrix.SchedulePeriod.AverageWorkTimePerDay;
 			var targetTime = _schedulePeriodTargetTimeCalculator.TargetTime(matrix);
