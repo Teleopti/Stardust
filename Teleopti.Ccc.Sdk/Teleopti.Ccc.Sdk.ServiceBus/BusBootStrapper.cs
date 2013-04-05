@@ -32,7 +32,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			return Container.Resolve<IServiceBus>();
 		}
 
-        protected override void ConfigureContainer()
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+		protected override void ConfigureContainer()
         {
             base.ConfigureContainer();
 

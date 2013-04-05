@@ -860,6 +860,7 @@
     <Compile Include="MessageBroker\Events\IEventSubscriber.cs" />
     <Compile Include="MessageBroker\Events\IEventUser.cs" />
     <Compile Include="MessageBroker\Events\IMessageBroker.cs" />
+    <Compile Include="MessageBroker\Events\IMessageBrokerListener.cs" />
     <Compile Include="MessageBroker\Events\IMessageBrokerSender.cs" />
     <Compile Include="MessageBroker\Notification.cs" />
     <Compile Include="MessageBroker\Subscription.cs" />
