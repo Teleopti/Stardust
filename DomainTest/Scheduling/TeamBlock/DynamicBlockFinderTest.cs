@@ -20,12 +20,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 	    private DateOnly _date;
 	    private IVirtualSchedulePeriod _schedulePeriod;
 	    private IScheduleMatrixPro _matrixPro2;
-        private IBlockPeriodFinderBetweenDayOff _blockPeriodFinderBetweenDayOff;
-        private BaseLineData _baseLineData;
-        private ISchedulingResultStateHolder _stateHolder;
-        private IScheduleDictionary _scheduleDictionary;
-        private IScheduleRange _range;
-        private IScheduleDay _scheduleDay;
+
 
 
         [SetUp]
@@ -38,13 +33,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_target = new DynamicBlockFinder();
 			_date = new DateOnly(2013, 02, 22);
 		    _schedulePeriod = _mock.StrictMock<IVirtualSchedulePeriod>();
-            _blockPeriodFinderBetweenDayOff = _mock.StrictMock<IBlockPeriodFinderBetweenDayOff>();
-            _baseLineData = new BaseLineData();
-
-            _range = _mock.StrictMock<IScheduleRange>();
-            _stateHolder = _mock.StrictMock<ISchedulingResultStateHolder>();
-            _scheduleDictionary = _mock.StrictMock<IScheduleDictionary>();
-            _scheduleDay = _mock.StrictMock<IScheduleDay>();
         }
 
       
