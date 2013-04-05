@@ -169,7 +169,6 @@
     <Compile Include="Areas\Start\Controllers\ApplicationAuthenticationModelTest.cs" />
     <Compile Include="Areas\Start\Controllers\AuthenticationApiControllerTest.cs" />
     <Compile Include="Areas\Start\Controllers\AuthenticationControllerTest.cs" />
-    <Compile Include="Areas\Start\Controllers\FakeDataSource.cs" />
     <Compile Include="Areas\Start\Controllers\WindowsAuthenticationModelTest.cs" />
     <Compile Include="Areas\Start\Core\Authentication\ViewModelFactory\DataSourcesViewModelFactoryTest.cs" />
     <Compile Include="Core\Asm\ViewModelFactory\AsmViewModelFactoryTest.cs" />

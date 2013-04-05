@@ -79,6 +79,7 @@
     <Compile Include="ConnectionStringHelper.cs" />
     <Compile Include="DatabaseHelper.cs" />
     <Compile Include="DateTimeExtensions.cs" />
+    <Compile Include="FakeData\FakeDataSource.cs" />
     <Compile Include="GenericDisposable.cs" />
     <Compile Include="IniFileInfo.cs" />
     <Compile Include="CrossThreadTestRunner.cs" />

@@ -366,6 +366,7 @@
     <Compile Include="UnitOfWork\SaveToDenormalizationQueueTest.cs" />
     <Compile Include="UnitOfWork\ScheduleProjectionDenormalizerTest.cs" />
     <Compile Include="UnitOfWork\SqlQueryTest.cs" />
+    <Compile Include="UnitOfWork\UnitOfWorkFactoryProviderTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Domain\Teleopti.Ccc.Domain.csproj">
