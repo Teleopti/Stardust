@@ -209,5 +209,20 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 				retShifts.Count.Should().Be.EqualTo(0);
 			}
 		}
+
+
+		[Test]
+		public void ShouldCheckParameters()
+		{
+			var dateOnly = new DateOnly(2013, 3, 1);
+			var result = _target.Filter(dateOnly, _allMatrixes, null, _scheduleOptions, new WorkShiftFinderResultForTest());
+			Assert.IsNull(result);
+			result = _target.Filter(dateOnly, _allMatrixes, new List<IShiftProjectionCache>(), _scheduleOptions,null);
+			Assert.IsNull(result);
+			result = _target.Filter(dateOnly, null, new List<IShiftProjectionCache>(), _scheduleOptions, new WorkShiftFinderResultForTest());
+			Assert.IsNull(result);
+			result = _target.Filter(dateOnly, _allMatrixes, new List<IShiftProjectionCache>(), _scheduleOptions, new WorkShiftFinderResultForTest());
+			Assert.That(result.Count, Is.EqualTo(0)); 
+		}
 	}
 }

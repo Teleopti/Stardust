@@ -45,6 +45,22 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			Assert.That(result.Count, Is.EqualTo(1));
 		}
 
+		[Test]
+		public void ShouldCheckParameters()
+		{
+			var startTime = new DateTime(2013, 3, 1, 7, 30, 0, DateTimeKind.Utc);
+			var endTime = new DateTime(2013, 3, 1, 17, 30, 0, DateTimeKind.Utc);
+			
+			var result = _target.Filter(null, new DateTimePeriod(startTime, endTime), new WorkShiftFinderResultForTest());
+			Assert.IsNull(result);
+
+			result = _target.Filter(new List<IShiftProjectionCache>(), new DateTimePeriod(startTime, endTime), null);
+			Assert.IsNull(result);
+			
+			result = _target.Filter(new List<IShiftProjectionCache>(), new DateTimePeriod(startTime, endTime), new WorkShiftFinderResultForTest());
+			Assert.That(result.Count, Is.EqualTo(0));
+		}
+
 		private IList<IShiftProjectionCache> getCashes()
 		{
 			var tmpList = getWorkShifts();

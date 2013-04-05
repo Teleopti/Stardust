@@ -205,5 +205,187 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             Assert.That(_target.Aggregate(null, _schedulingOptions), Is.Null);
         }
 
+		[Test]
+		public void ShouldReturnNullIfEffectiveRestrictionIsNull()
+		{
+			var scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
+			var matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
+			IGroupPerson groupPerson = new GroupPerson(new List<IPerson> { _person1 }, _dateOnly, "Hej", Guid.NewGuid());
+			IList<IList<IScheduleMatrixPro>> groupMatrixes = new List<IList<IScheduleMatrixPro>> { matrixList };
+			ITeamInfo teamInfo = new TeamInfo(groupPerson, groupMatrixes);
+			var blockInfo = new BlockInfo(new DateOnlyPeriod(_dateOnly, _dateOnly.AddDays(1)));
+			var shift = _mocks.StrictMock<IShiftProjectionCache>();
+			_schedulingOptions.UseLevellingSameStartTime = true;
+			using (_mocks.Record())
+			{
+				Expect.Call(_schedulingResultStateHolder.Schedules).Return(scheduleDictionary);
+				Expect.Call(
+					_effectiveRestrictionCreator.GetEffectiveRestriction(
+						new ReadOnlyCollection<IPerson>(new List<IPerson> { _person1 }), _dateOnly.AddDays(1),
+						_schedulingOptions, scheduleDictionary)).IgnoreArguments()
+					  .Return(null);
+			}
+			using (_mocks.Playback())
+			{
+				var restriction = _target.AggregatePerDay(new TeamBlockInfo(teamInfo, blockInfo), _schedulingOptions, shift);
+				Assert.IsNull(restriction);
+			}
+		}
+
+		[Test]
+		public void ShouldReturnNullIfCombinationOfEffectiveRestrictionsIsNull()
+		{
+			var scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
+			var matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
+			IGroupPerson groupPerson = new GroupPerson(new List<IPerson> { _person1 }, _dateOnly, "Hej", Guid.NewGuid());
+			IList<IList<IScheduleMatrixPro>> groupMatrixes = new List<IList<IScheduleMatrixPro>> { matrixList };
+			ITeamInfo teamInfo = new TeamInfo(groupPerson, groupMatrixes);
+			var blockInfo = new BlockInfo(new DateOnlyPeriod(_dateOnly, _dateOnly.AddDays(1)));
+			var shift = _mocks.StrictMock<IShiftProjectionCache>();
+			_schedulingOptions.UseLevellingSameStartTime = true;
+			var firstDay =
+			 new EffectiveRestriction(new StartTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(12)),
+									  new EndTimeLimitation(TimeSpan.FromHours(15), TimeSpan.FromHours(18)),
+									  new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
+			using (_mocks.Record())
+			{
+				Expect.Call(_schedulingResultStateHolder.Schedules).Return(scheduleDictionary);
+				Expect.Call(
+					_effectiveRestrictionCreator.GetEffectiveRestriction(
+						new ReadOnlyCollection<IPerson>(new List<IPerson> { _person1 }), _dateOnly.AddDays(1),
+						_schedulingOptions, scheduleDictionary)).IgnoreArguments()
+					  .Return(firstDay);	
+				Expect.Call(
+					_effectiveRestrictionCreator.GetEffectiveRestriction(
+						new ReadOnlyCollection<IPerson>(new List<IPerson> { _person1 }), _dateOnly.AddDays(1),
+						_schedulingOptions, scheduleDictionary)).IgnoreArguments()
+					  .Return(null);
+			}
+			using (_mocks.Playback())
+			{
+				var restriction = _target.AggregatePerDay(new TeamBlockInfo(teamInfo, blockInfo), _schedulingOptions, shift);
+				Assert.IsNull(restriction);
+			}
+		}
+
+		[Test]
+		public void ShouldReturnNullIfScheduleRestrictionIsNull()
+		{
+			var dateList = new List<DateOnly> { _dateOnly, _dateOnly.AddDays(1) };
+
+			var scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
+
+			var matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
+			var firstDay =
+				new EffectiveRestriction(new StartTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(12)),
+										 new EndTimeLimitation(TimeSpan.FromHours(15), TimeSpan.FromHours(18)),
+										 new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
+			var secondDay =
+				new EffectiveRestriction(new StartTimeLimitation(TimeSpan.FromHours(10), TimeSpan.FromHours(13)),
+										 new EndTimeLimitation(TimeSpan.FromHours(17), TimeSpan.FromHours(18)),
+										 new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
+			var openHoursRestriction =
+				new EffectiveRestriction(new StartTimeLimitation(TimeSpan.FromHours(11), null),
+										 new EndTimeLimitation(null, TimeSpan.FromHours(17.5)),
+										 new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
+
+			IGroupPerson groupPerson = new GroupPerson(new List<IPerson> { _person1 }, _dateOnly, "Hej", Guid.NewGuid());
+			IList<IList<IScheduleMatrixPro>> groupMatrixes = new List<IList<IScheduleMatrixPro>> { matrixList };
+			ITeamInfo teamInfo = new TeamInfo(groupPerson, groupMatrixes);
+			var blockInfo = new BlockInfo(new DateOnlyPeriod(_dateOnly, _dateOnly.AddDays(1)));
+			var shift = _mocks.StrictMock<IShiftProjectionCache>();
+			_schedulingOptions.UseLevellingSameStartTime = true;
+			using (_mocks.Record())
+			{
+				Expect.Call(_schedulingResultStateHolder.Schedules).Return(scheduleDictionary);
+				Expect.Call(
+					_effectiveRestrictionCreator.GetEffectiveRestriction(
+						new ReadOnlyCollection<IPerson>(new List<IPerson> { _person1 }), _dateOnly,
+						_schedulingOptions, scheduleDictionary)).IgnoreArguments()
+					  .Return(firstDay);
+				Expect.Call(
+					_effectiveRestrictionCreator.GetEffectiveRestriction(
+						new ReadOnlyCollection<IPerson>(new List<IPerson> { _person1 }), _dateOnly.AddDays(1),
+						_schedulingOptions, scheduleDictionary)).IgnoreArguments()
+					  .Return(secondDay);
+				Expect.Call(_openHoursToRestrictionConverter.Convert(groupPerson,
+																	 blockInfo.BlockPeriod.DayCollection()))
+					  .Return(openHoursRestriction);
+				Expect.Call(_scheduleRestrictionExtractor.Extract(dateList, matrixList, _schedulingOptions, _timeZoneInfo)).IgnoreArguments()
+					  .Return(null);
+			}
+
+			using (_mocks.Playback())
+			{
+				var restriction = _target.AggregatePerDay(new TeamBlockInfo(teamInfo, blockInfo), _schedulingOptions, shift);
+				Assert.IsNull(restriction);
+			}
+		}
+
+	    [Test]
+	    public void ShouldReturnNullIfSuggestedShiftRestrictionIsNull()
+	    {
+		    var dateList = new List<DateOnly> {_dateOnly, _dateOnly.AddDays(1)};
+
+		    var scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
+		    IActivity activity = new Activity("bo");
+		    var period = new DateTimePeriod(new DateTime(2012, 12, 7, 8, 0, 0, DateTimeKind.Utc),
+		                                    new DateTime(2012, 12, 7, 8, 30, 0, DateTimeKind.Utc));
+		    IMainShift mainShift = MainShiftFactory.CreateMainShift(activity, period, new ShiftCategory("cat"));
+
+		    var matrixList = new List<IScheduleMatrixPro> {_scheduleMatrixPro};
+		    var firstDay =
+			    new EffectiveRestriction(new StartTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(12)),
+			                             new EndTimeLimitation(TimeSpan.FromHours(15), TimeSpan.FromHours(18)),
+			                             new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
+		    var secondDay =
+			    new EffectiveRestriction(new StartTimeLimitation(TimeSpan.FromHours(10), TimeSpan.FromHours(13)),
+			                             new EndTimeLimitation(TimeSpan.FromHours(17), TimeSpan.FromHours(18)),
+			                             new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
+		    var openHoursRestriction =
+			    new EffectiveRestriction(new StartTimeLimitation(TimeSpan.FromHours(11), null),
+			                             new EndTimeLimitation(null, TimeSpan.FromHours(17.5)),
+			                             new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
+		    var scheduleRestriction =
+			    new EffectiveRestriction(new StartTimeLimitation(),
+			                             new EndTimeLimitation(),
+			                             new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>())
+				    {
+					    CommonMainShift = mainShift
+				    };
+		    IGroupPerson groupPerson = new GroupPerson(new List<IPerson> {_person1}, _dateOnly, "Hej", Guid.NewGuid());
+		    IList<IList<IScheduleMatrixPro>> groupMatrixes = new List<IList<IScheduleMatrixPro>> {matrixList};
+		    ITeamInfo teamInfo = new TeamInfo(groupPerson, groupMatrixes);
+		    var blockInfo = new BlockInfo(new DateOnlyPeriod(_dateOnly, _dateOnly.AddDays(1)));
+		    var shift = _mocks.StrictMock<IShiftProjectionCache>();
+		    _schedulingOptions.UseLevellingSameStartTime = true;
+		    using (_mocks.Record())
+		    {
+			    Expect.Call(_schedulingResultStateHolder.Schedules).Return(scheduleDictionary);
+			    Expect.Call(
+				    _effectiveRestrictionCreator.GetEffectiveRestriction(
+					    new ReadOnlyCollection<IPerson>(new List<IPerson> {_person1}), _dateOnly,
+					    _schedulingOptions, scheduleDictionary)).IgnoreArguments()
+			          .Return(firstDay);
+			    Expect.Call(
+				    _effectiveRestrictionCreator.GetEffectiveRestriction(
+					    new ReadOnlyCollection<IPerson>(new List<IPerson> {_person1}), _dateOnly.AddDays(1),
+					    _schedulingOptions, scheduleDictionary)).IgnoreArguments()
+			          .Return(secondDay);
+			    Expect.Call(_openHoursToRestrictionConverter.Convert(groupPerson,
+			                                                         blockInfo.BlockPeriod.DayCollection()))
+			          .Return(openHoursRestriction);
+			    Expect.Call(_scheduleRestrictionExtractor.Extract(dateList, matrixList, _schedulingOptions, _timeZoneInfo))
+			          .IgnoreArguments()
+			          .Return(scheduleRestriction);
+			    Expect.Call(_suggestedShiftRestrictionExtractor.Extract(shift, _schedulingOptions)).Return(null);
+		    }
+
+		    using (_mocks.Playback())
+		    {
+			    var restriction = _target.AggregatePerDay(new TeamBlockInfo(teamInfo, blockInfo), _schedulingOptions, shift);
+			    Assert.IsNull(restriction);
+		    }
+	    }
     }
 }

@@ -15,8 +15,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 	{
 		public IList<IShiftProjectionCache> Filter(IList<IShiftProjectionCache> shiftList, DateTimePeriod validPeriod, IWorkShiftFinderResult finderResult)
 		{
-		    if (shiftList == null) throw new ArgumentNullException("shiftList");
-		    if (finderResult == null) throw new ArgumentNullException("finderResult");
+			if (shiftList == null) return null;
+			if (finderResult == null) return null;
 		    if (shiftList.Count == 0) return shiftList;
 			var cntBefore = shiftList.Count;
 			IList<IShiftProjectionCache> workShiftsWithinPeriod = new List<IShiftProjectionCache>();

@@ -430,5 +430,277 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Assert.That(result, Is.EqualTo(expected));
 			}
 		}
+
+		[Test]
+		public void ShouldExtractSameShiftRestrictionWhenPersonAssignmentIsNull()
+		{
+			_schedulingOptions.UseLevellingSameShift = true;
+			var dateOnly = new DateOnly(2012, 12, 7);
+			var dateList = new List<DateOnly> { dateOnly };
+			var scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
+			var scheduleMatrixPro = _mocks.StrictMock<IScheduleMatrixPro>();
+			var scheduleDayPro = _mocks.StrictMock<IScheduleDayPro>();
+			var matrixList = new List<IScheduleMatrixPro> { scheduleMatrixPro };
+			using (_mocks.Record())
+			{
+				Expect.Call(scheduleMatrixPro.GetScheduleDayByKey(dateOnly)).Return(scheduleDayPro);
+				Expect.Call(scheduleDayPro.DaySchedulePart()).Return(scheduleDay1);
+				Expect.Call(scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift);
+				Expect.Call(scheduleDay1.AssignmentHighZOrder()).Return(null);
+			}
+			using (_mocks.Playback())
+			{
+				var expected = new EffectiveRestriction(new StartTimeLimitation(),
+													   new EndTimeLimitation(),
+													   new WorkTimeLimitation(), null, null, null,
+													   new List<IActivityRestriction>());
+				var result = _target.Extract(dateList, matrixList, _schedulingOptions, _timeZoneInfo);
+				Assert.That(result, Is.EqualTo(expected));
+			}
+		}
+
+		[Test]
+		public void ShouldExtractSameShiftRestrictionWhenMainShiftIsNull()
+		{
+			_schedulingOptions.UseLevellingSameShift = true;
+			var dateOnly = new DateOnly(2012, 12, 7);
+			var dateList = new List<DateOnly> { dateOnly };
+			var personAssignment = _mocks.StrictMock<IPersonAssignment>();
+			var scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
+			var scheduleMatrixPro = _mocks.StrictMock<IScheduleMatrixPro>();
+			var scheduleDayPro = _mocks.StrictMock<IScheduleDayPro>();
+			var matrixList = new List<IScheduleMatrixPro> { scheduleMatrixPro };
+			using (_mocks.Record())
+			{
+				Expect.Call(scheduleMatrixPro.GetScheduleDayByKey(dateOnly)).Return(scheduleDayPro);
+				Expect.Call(scheduleDayPro.DaySchedulePart()).Return(scheduleDay1);
+				Expect.Call(scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift);
+				Expect.Call(scheduleDay1.AssignmentHighZOrder()).Return(personAssignment);
+				Expect.Call(personAssignment.MainShift).Return(null);
+			}
+			using (_mocks.Playback())
+			{
+				var expected = new EffectiveRestriction(new StartTimeLimitation(),
+													   new EndTimeLimitation(),
+													   new WorkTimeLimitation(), null, null, null,
+													   new List<IActivityRestriction>());
+				var result = _target.Extract(dateList, matrixList, _schedulingOptions, _timeZoneInfo);
+				Assert.That(result, Is.EqualTo(expected));
+			}
+		}
+
+		[Test]
+		public void ShouldExtractSameShiftRestrictionWhenScheduleIsNull()
+		{
+			_schedulingOptions.UseLevellingSameShift = true;
+			var dateOnly = new DateOnly(2012, 12, 7);
+			var dateList = new List<DateOnly> { dateOnly };
+			var scheduleMatrixPro = _mocks.StrictMock<IScheduleMatrixPro>();
+			var matrixList = new List<IScheduleMatrixPro> { scheduleMatrixPro };
+			using (_mocks.Record())
+			{
+				Expect.Call(scheduleMatrixPro.GetScheduleDayByKey(dateOnly)).Return(null);
+			}
+			using (_mocks.Playback())
+			{
+				var expected = new EffectiveRestriction(new StartTimeLimitation(),
+													   new EndTimeLimitation(),
+													   new WorkTimeLimitation(), null, null, null,
+													   new List<IActivityRestriction>());
+				var result = _target.Extract(dateList, matrixList, _schedulingOptions, _timeZoneInfo);
+				Assert.That(result, Is.EqualTo(expected));
+			}
+		}
+
+		[Test]
+		public void ShouldExtractSameShiftCategoryWhenPersonAssignmentIsNull()
+		{
+			_schedulingOptions.UseLevellingSameShiftCategory = true;
+			var dateOnly = new DateOnly(2012, 12, 7);
+			var dateList = new List<DateOnly> { dateOnly };
+			var scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
+			var scheduleMatrixPro = _mocks.StrictMock<IScheduleMatrixPro>();
+			var scheduleDayPro = _mocks.StrictMock<IScheduleDayPro>();
+			var matrixList = new List<IScheduleMatrixPro> { scheduleMatrixPro };
+			using (_mocks.Record())
+			{
+				Expect.Call(scheduleMatrixPro.GetScheduleDayByKey(dateOnly)).Return(scheduleDayPro);
+				Expect.Call(scheduleDayPro.DaySchedulePart()).Return(scheduleDay1);
+				Expect.Call(scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift);
+				Expect.Call(scheduleDay1.AssignmentHighZOrder()).Return(null);
+			}
+			using (_mocks.Playback())
+			{
+				var expected = new EffectiveRestriction(new StartTimeLimitation(),
+													   new EndTimeLimitation(),
+													   new WorkTimeLimitation(), null, null, null,
+													   new List<IActivityRestriction>());
+				var result = _target.Extract(dateList, matrixList, _schedulingOptions, _timeZoneInfo);
+				Assert.That(result, Is.EqualTo(expected));
+			}
+		}
+
+		[Test]
+		public void ShouldExtractSameShiftCategoryWhenMainShiftIsNull()
+		{
+			_schedulingOptions.UseLevellingSameShiftCategory = true;
+			var dateOnly = new DateOnly(2012, 12, 7);
+			var dateList = new List<DateOnly> { dateOnly };
+			var personAssignment = _mocks.StrictMock<IPersonAssignment>();
+			var scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
+			var scheduleMatrixPro = _mocks.StrictMock<IScheduleMatrixPro>();
+			var scheduleDayPro = _mocks.StrictMock<IScheduleDayPro>();
+			var matrixList = new List<IScheduleMatrixPro> { scheduleMatrixPro };
+			using (_mocks.Record())
+			{
+				Expect.Call(scheduleMatrixPro.GetScheduleDayByKey(dateOnly)).Return(scheduleDayPro);
+				Expect.Call(scheduleDayPro.DaySchedulePart()).Return(scheduleDay1);
+				Expect.Call(scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift);
+				Expect.Call(scheduleDay1.AssignmentHighZOrder()).Return(personAssignment);
+				Expect.Call(personAssignment.MainShift).Return(null);
+			}
+			using (_mocks.Playback())
+			{
+				var expected = new EffectiveRestriction(new StartTimeLimitation(),
+													   new EndTimeLimitation(),
+													   new WorkTimeLimitation(), null, null, null,
+													   new List<IActivityRestriction>());
+				var result = _target.Extract(dateList, matrixList, _schedulingOptions, _timeZoneInfo);
+				Assert.That(result, Is.EqualTo(expected));
+			}
+		}
+
+		[Test]
+		public void ShouldExtractSameShiftCategoryWhenScheduleIsNull()
+		{
+			_schedulingOptions.UseLevellingSameShiftCategory = true;
+			var dateOnly = new DateOnly(2012, 12, 7);
+			var dateList = new List<DateOnly> { dateOnly };
+			var scheduleMatrixPro = _mocks.StrictMock<IScheduleMatrixPro>();
+			var matrixList = new List<IScheduleMatrixPro> { scheduleMatrixPro };
+			using (_mocks.Record())
+			{
+				Expect.Call(scheduleMatrixPro.GetScheduleDayByKey(dateOnly)).Return(null);
+			}
+			using (_mocks.Playback())
+			{
+				var expected = new EffectiveRestriction(new StartTimeLimitation(),
+													   new EndTimeLimitation(),
+													   new WorkTimeLimitation(), null, null, null,
+													   new List<IActivityRestriction>());
+				var result = _target.Extract(dateList, matrixList, _schedulingOptions, _timeZoneInfo);
+				Assert.That(result, Is.EqualTo(expected));
+			}
+		}
+
+		[Test]
+		public void ShouldExtractSameStartTimeWhenScheduleIsNull()
+		{
+			_schedulingOptions.UseLevellingSameStartTime = true;
+			var dateOnly = new DateOnly(2012, 12, 7);
+			var dateList = new List<DateOnly> { dateOnly };
+			var scheduleMatrixPro = _mocks.StrictMock<IScheduleMatrixPro>();
+			var matrixList = new List<IScheduleMatrixPro> { scheduleMatrixPro };
+			using (_mocks.Record())
+			{
+				Expect.Call(scheduleMatrixPro.GetScheduleDayByKey(dateOnly)).Return(null);
+			}
+			using (_mocks.Playback())
+			{
+				var expected = new EffectiveRestriction(new StartTimeLimitation(),
+													   new EndTimeLimitation(),
+													   new WorkTimeLimitation(), null, null, null,
+													   new List<IActivityRestriction>());
+				var result = _target.Extract(dateList, matrixList, _schedulingOptions, _timeZoneInfo);
+				Assert.That(result, Is.EqualTo(expected));
+			}
+		}
+
+		[Test]
+		public void ShouldExtractSameStartTimeWhenSchedulePartPeriodIsNull()
+		{
+			_schedulingOptions.UseLevellingSameStartTime = true;
+			var dateOnly = new DateOnly(2012, 12, 7);
+			var dateList = new List<DateOnly> { dateOnly };
+			var scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
+			var scheduleMatrixPro = _mocks.StrictMock<IScheduleMatrixPro>();
+			var scheduleDayPro1 = _mocks.StrictMock<IScheduleDayPro>();
+			var matrixList = new List<IScheduleMatrixPro> { scheduleMatrixPro };
+			var projectionService1 = _mocks.StrictMock<IProjectionService>();
+			var visualLayerCollection1 = _mocks.StrictMock<IVisualLayerCollection>();
+
+			using (_mocks.Record())
+			{
+				Expect.Call(scheduleMatrixPro.GetScheduleDayByKey(dateOnly)).Return(scheduleDayPro1);
+				Expect.Call(scheduleDayPro1.DaySchedulePart()).Return(scheduleDay1);
+				Expect.Call(scheduleDay1.ProjectionService()).Return(projectionService1);
+				Expect.Call(projectionService1.CreateProjection()).Return(visualLayerCollection1);
+				Expect.Call(visualLayerCollection1.Period()).Return(null);
+			}
+			using (_mocks.Playback())
+			{
+				var expected = new EffectiveRestriction(new StartTimeLimitation(),
+													   new EndTimeLimitation(),
+													   new WorkTimeLimitation(), null, null, null,
+													   new List<IActivityRestriction>());
+				var result = _target.Extract(dateList, matrixList, _schedulingOptions, _timeZoneInfo);
+				Assert.That(result, Is.EqualTo(expected));
+			}
+		}
+
+		[Test]
+		public void ShouldExtractSameEndTimeWhenScheduleIsNull()
+		{
+			_schedulingOptions.UseLevellingSameEndTime = true;
+			var dateOnly = new DateOnly(2012, 12, 7);
+			var dateList = new List<DateOnly> { dateOnly };
+			var scheduleMatrixPro = _mocks.StrictMock<IScheduleMatrixPro>();
+			var matrixList = new List<IScheduleMatrixPro> { scheduleMatrixPro };
+			using (_mocks.Record())
+			{
+				Expect.Call(scheduleMatrixPro.GetScheduleDayByKey(dateOnly)).Return(null);
+			}
+			using (_mocks.Playback())
+			{
+				var expected = new EffectiveRestriction(new StartTimeLimitation(),
+													   new EndTimeLimitation(),
+													   new WorkTimeLimitation(), null, null, null,
+													   new List<IActivityRestriction>());
+				var result = _target.Extract(dateList, matrixList, _schedulingOptions, _timeZoneInfo);
+				Assert.That(result, Is.EqualTo(expected));
+			}
+		}
+
+		[Test]
+		public void ShouldExtractSameEndTimeWhenSchedulePartPeriodIsNull()
+		{
+			_schedulingOptions.UseLevellingSameEndTime = true;
+			var dateOnly = new DateOnly(2012, 12, 7);
+			var dateList = new List<DateOnly> { dateOnly };
+			var scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
+			var scheduleMatrixPro = _mocks.StrictMock<IScheduleMatrixPro>();
+			var scheduleDayPro1 = _mocks.StrictMock<IScheduleDayPro>();
+			var matrixList = new List<IScheduleMatrixPro> { scheduleMatrixPro };
+			var projectionService1 = _mocks.StrictMock<IProjectionService>();
+			var visualLayerCollection1 = _mocks.StrictMock<IVisualLayerCollection>();
+
+			using (_mocks.Record())
+			{
+				Expect.Call(scheduleMatrixPro.GetScheduleDayByKey(dateOnly)).Return(scheduleDayPro1);
+				Expect.Call(scheduleDayPro1.DaySchedulePart()).Return(scheduleDay1);
+				Expect.Call(scheduleDay1.ProjectionService()).Return(projectionService1);
+				Expect.Call(projectionService1.CreateProjection()).Return(visualLayerCollection1);
+				Expect.Call(visualLayerCollection1.Period()).Return(null);
+			}
+			using (_mocks.Playback())
+			{
+				var expected = new EffectiveRestriction(new StartTimeLimitation(),
+													   new EndTimeLimitation(),
+													   new WorkTimeLimitation(), null, null, null,
+													   new List<IActivityRestriction>());
+				var result = _target.Extract(dateList, matrixList, _schedulingOptions, _timeZoneInfo);
+				Assert.That(result, Is.EqualTo(expected));
+			}
+		}
 	}
 }

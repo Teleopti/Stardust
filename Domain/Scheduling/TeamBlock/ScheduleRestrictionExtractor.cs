@@ -76,20 +76,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					var schedulePart = schedule.DaySchedulePart();
 					if (schedulePart.SignificantPart() == SchedulePartView.MainShift)
 					{
+						var assignment = schedulePart.AssignmentHighZOrder();
+						if (assignment == null) continue;
+						var mainShift = assignment.MainShift;
+						if (mainShift == null) continue;
 						if (restriction.CommonMainShift == null)
 						{
-							var assignment = schedulePart.AssignmentHighZOrder();
-							if (assignment == null) continue;
-							var mainShift = assignment.MainShift;
-							if (mainShift == null) continue;
 							restriction.CommonMainShift = mainShift;
 						}
 						else
 						{
-							var assignment = schedulePart.AssignmentHighZOrder();
-							if (assignment == null) continue;
-							var mainShift = assignment.MainShift;
-							if (mainShift == null) continue;
 							if (!_scheduleDayEquator.MainShiftBasicEquals(mainShift, restriction.CommonMainShift))
 								return null;
 						}
@@ -116,20 +112,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					var schedulePart = schedule.DaySchedulePart();
 					if (schedulePart.SignificantPart() == SchedulePartView.MainShift)
 					{
+						var assignment = schedulePart.AssignmentHighZOrder();
+						if (assignment == null) continue;
+						var mainShift = assignment.MainShift;
+						if (mainShift == null) continue;
 						if (restriction.ShiftCategory == null)
 						{
-							var assignment = schedulePart.AssignmentHighZOrder();
-							if (assignment == null) continue;
-							var mainShift = assignment.MainShift;
-							if (mainShift == null) continue;
 							restriction.ShiftCategory = mainShift.ShiftCategory;
 						}
 						else
 						{
-							var assignment = schedulePart.AssignmentHighZOrder();
-							if (assignment == null) continue;
-							var mainShift = assignment.MainShift;
-							if (mainShift == null) continue;
 							if (restriction.ShiftCategory != mainShift.ShiftCategory)
 								return null;
 						}
