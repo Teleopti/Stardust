@@ -366,8 +366,6 @@
     <Compile Include="Areas\Start\Core\Authentication\ViewModelFactory\IDataSourcesViewModelFactory.cs" />
     <Compile Include="Areas\Start\Models\Test\TestMessageViewModel.cs" />
     <Compile Include="Core\DateTimeExtensions.cs" />
-    <Compile Include="Core\RequestContext\CurrentBusinessUnitProvider.cs" />
-    <Compile Include="Core\RequestContext\ICurrentBusinessUnitProvider.cs" />
     <Compile Include="Core\ServiceBus\ServiceBusSender.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\AbsenceTypesProvider.cs" />
     <Compile Include="Areas\MyTime\Core\WeekSchedule\DataProvider\IAbsenceTypesProvider.cs" />
@@ -933,9 +931,6 @@
     <Content Include="Content\moment-datepicker\moment-datepicker.min.js" />
     <Content Include="Content\moment\moment.js" />
     <Content Include="Content\moment\moment.min.js" />
-    <Content Include="Web.config">
-      <SubType>Designer</SubType>
-    </Content>
     <Content Include="Content\Scripts\MicrosoftAjax.js" />
     <Content Include="Content\Scripts\MicrosoftAjax.debug.js" />
     <Content Include="Content\Scripts\MicrosoftMvcAjax.js" />
@@ -957,6 +952,13 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Content\Scripts\jquery-1.9.1.min.map" />
+    <Content Include="web.config" />
+    <None Include="web.Debug.config">
+      <DependentUpon>web.config</DependentUpon>
+    </None>
+    <None Include="web.Release.config">
+      <DependentUpon>web.config</DependentUpon>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">

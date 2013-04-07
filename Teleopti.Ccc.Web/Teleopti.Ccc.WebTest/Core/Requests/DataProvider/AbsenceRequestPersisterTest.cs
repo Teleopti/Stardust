@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var personRequestRepository = MockRepository.GenerateMock<IPersonRequestRepository>();
 			var personRequest = MockRepository.GenerateMock<IPersonRequest>();
 			var serviceBusSender = MockRepository.GenerateMock<IServiceBusSender>();
-			var currentBusinessUnitProvider = MockRepository.GenerateMock<ICurrentBusinessUnitProvider>();
+			var currentBusinessUnitProvider = MockRepository.GenerateMock<ICurrentBusinessUnit>();
 			var currentDataSourceProvider = MockRepository.GenerateMock<ICurrentDataSource>();
 			var now = MockRepository.GenerateMock<INow>();
 			var time = new DateTime(2012, 05, 08, 12, 01, 01);
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var bu = MockRepository.GenerateMock<IBusinessUnit>();
 			var buId = Guid.NewGuid();
 			bu.Stub(x => x.Id).Return(buId);
-			currentBusinessUnitProvider.Stub(x => x.CurrentBusinessUnit()).Return(bu);
+			currentBusinessUnitProvider.Stub(x => x.Current()).Return(bu);
 
 			var personRequestId = Guid.NewGuid();
 			personRequest.Stub(x => x.Id).Return(personRequestId);
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var personRequest = MockRepository.GenerateMock<IPersonRequest>();
 			var serviceBusSender = MockRepository.GenerateMock<IServiceBusSender>();
 			serviceBusSender.Stub(x => x.EnsureBus()).Return(true);
-			var currentBusinessUnitProvider = MockRepository.GenerateMock<ICurrentBusinessUnitProvider>();
+			var currentBusinessUnitProvider = MockRepository.GenerateMock<ICurrentBusinessUnit>();
 			var currentDataSourceProvider = MockRepository.GenerateMock<ICurrentDataSource>();
 			var now = MockRepository.GenerateMock<INow>();
 			var time = new DateTime(2012, 05, 08, 12, 01, 01);
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var bu = MockRepository.GenerateMock<IBusinessUnit>();
 			var buId = Guid.NewGuid();
 			bu.Stub(x => x.Id).Return(buId);
-			currentBusinessUnitProvider.Stub(x => x.CurrentBusinessUnit()).Return(bu);
+			currentBusinessUnitProvider.Stub(x => x.Current()).Return(bu);
 
 			var personRequestId = Guid.NewGuid();
 			personRequest.Stub(x => x.Id).Return(personRequestId);
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var personRequest = MockRepository.GenerateMock<IPersonRequest>();
 			var serviceBusSender = MockRepository.GenerateMock<IServiceBusSender>();
 			serviceBusSender.Stub(x => x.EnsureBus()).Return(false);
-			var currentBusinessUnitProvider = MockRepository.GenerateMock<ICurrentBusinessUnitProvider>();
+			var currentBusinessUnitProvider = MockRepository.GenerateMock<ICurrentBusinessUnit>();
 			var currentDataSourceProvider = MockRepository.GenerateMock<ICurrentDataSource>();
 			var now = MockRepository.GenerateMock<INow>();
 			var time = new DateTime(2012, 05, 08, 12, 01, 01);
@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var bu = MockRepository.GenerateMock<IBusinessUnit>();
 			var buId = Guid.NewGuid();
 			bu.Stub(x => x.Id).Return(buId);
-			currentBusinessUnitProvider.Stub(x => x.CurrentBusinessUnit()).Return(bu);
+			currentBusinessUnitProvider.Stub(x => x.Current()).Return(bu);
 
 			var personRequestId = Guid.NewGuid();
 			personRequest.Stub(x => x.Id).Return(personRequestId);
@@ -149,7 +149,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var personRequestRepository = MockRepository.GenerateMock<IPersonRequestRepository>();
 			var personRequest = MockRepository.GenerateMock<IPersonRequest>();
 			var serviceBusSender = MockRepository.GenerateMock<IServiceBusSender>();
-			var currentBusinessUnitProvider = MockRepository.GenerateMock<ICurrentBusinessUnitProvider>();
+			var currentBusinessUnitProvider = MockRepository.GenerateMock<ICurrentBusinessUnit>();
 			var currentDataSourceProvider = MockRepository.GenerateMock<ICurrentDataSource>();
 			var now = MockRepository.GenerateMock<INow>();
 

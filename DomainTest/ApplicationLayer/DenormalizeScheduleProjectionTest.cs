@@ -33,7 +33,6 @@ namespace Teleopti.Ccc.DomainTest.Helper
         [Test]
         public void PropertiesShouldWork()
         {
-        	target.Identity.Should().Not.Be.EqualTo(Guid.Empty);
         	target.PersonId.Should().Be.EqualTo(target.PersonId);
         	target.StartDateTime.Should().Be.EqualTo(period.StartDateTime);
         	target.EndDateTime.Should().Be.EqualTo(period.EndDateTime);

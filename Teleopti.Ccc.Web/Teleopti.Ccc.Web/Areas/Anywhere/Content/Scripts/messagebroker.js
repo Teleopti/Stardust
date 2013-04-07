@@ -36,13 +36,15 @@ define([
 		    if (options.lowerBoundary) subscription.LowerBoundary = options.lowerBoundary;
 		    if (options.upperBoundary) subscription.UpperBoundary = options.upperBoundary;
 
-		    subscriptions.push({
-		        route: route,
-		        callback: options.callback
-		    });
-
 		    startPromise.done(function() {
-		        hub.server.addSubscription(subscription);
+		        hub.server
+		            .addSubscription(subscription)
+		            .done(function(route) {
+		                subscriptions.push({
+		                    route: route,
+		                    callback: options.callback
+		                });
+		            });
 		    });
 		};
 	    

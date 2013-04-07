@@ -8,14 +8,14 @@ namespace Teleopti.Interfaces.Messages
 	public interface IRaptorDomainMessageInfo
 	{
 		/// <summary>
+		/// A time stamped thing
+		/// </summary>
+		DateTime Timestamp { get; set; }
+		/// <summary>
 		/// Sourced data
 		/// </summary>
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Datasource")]
 		string Datasource { get; set; }
-		/// <summary>
-		/// A time stamped thing
-		/// </summary>
-		DateTime Timestamp { get; set; }
 		/// <summary>
 		/// United business
 		/// </summary>

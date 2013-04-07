@@ -8,13 +8,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 {
 	public class AddFullDayAbsenceCommandHandler : IHandleCommand<AddFullDayAbsenceCommand>
 	{
+		private readonly ICurrentDataSource _dataSource;
 		private readonly ICurrentScenario _scenario;
 		private readonly IWriteSideRepository<IPerson> _personRepository;
 		private readonly IWriteSideRepository<IAbsence> _absenceRepository;
 		private readonly IWriteSideRepository<IPersonAbsence> _personAbsenceRepository;
 
-		public AddFullDayAbsenceCommandHandler(ICurrentScenario scenario, IWriteSideRepository<IPerson> personRepository, IWriteSideRepository<IAbsence> absenceRepository, IWriteSideRepository<IPersonAbsence> personAbsenceRepository)
+		public AddFullDayAbsenceCommandHandler(ICurrentDataSource dataSource, ICurrentScenario scenario, IWriteSideRepository<IPerson> personRepository, IWriteSideRepository<IAbsence> absenceRepository, IWriteSideRepository<IPersonAbsence> personAbsenceRepository)
 		{
+			_dataSource = dataSource;
 			_scenario = scenario;
 			_personRepository = personRepository;
 			_absenceRepository = absenceRepository;
@@ -28,7 +30,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 			var absence = _absenceRepository.Load(command.AbsenceId);
 
 			var personAbsence = new PersonAbsence(_scenario.Current());
-			personAbsence.FullDayAbsence(person, absence, command.StartDate, command.EndDate);
+			personAbsence.FullDayAbsence(_dataSource.CurrentName(), person, absence, command.StartDate, command.EndDate);
 
 			_personAbsenceRepository.Add(personAbsence);
 

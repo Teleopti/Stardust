@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -49,7 +50,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		/// Make this person absence a full day absence
 		/// </summary>
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public virtual void FullDayAbsence(IPerson person, IAbsence absence, DateTime startDate, DateTime endDate)
+		public virtual void FullDayAbsence(string dataSource, IPerson person, IAbsence absence, DateTime startDate, DateTime endDate)
 		{
 			var startDateTime = TimeZoneInfo.ConvertTimeToUtc(DateTime.SpecifyKind(startDate.Date, DateTimeKind.Unspecified), person.PermissionInformation.DefaultTimeZone());
 			var endDateTime = TimeZoneInfo.ConvertTimeToUtc(DateTime.SpecifyKind(endDate.Date.AddHours(24), DateTimeKind.Unspecified), person.PermissionInformation.DefaultTimeZone());
@@ -60,6 +61,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 			AddEvent(new FullDayAbsenceAddedEvent
 				{
+					Datasource = dataSource,
+					BusinessUnitId = _scenario.BusinessUnit.Id.Value,
 					AbsenceId = absence.Id.Value,
 					PersonId = person.Id.Value,
 					StartDateTime = startDateTime,

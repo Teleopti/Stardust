@@ -4,14 +4,17 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon
 {
-	public class TestCurrentScenario : ICurrentScenario
+	public class FakeCurrentScenario : ICurrentScenario
 	{
 		private readonly IScenario _scenario;
 
-		public TestCurrentScenario()
+		public FakeCurrentScenario()
 		{
-			_scenario = ScenarioFactory.CreateScenarioWithId(" ", true);
+			var scenario = ScenarioFactory.CreateScenarioWithId(" ", true);
+			scenario.BusinessUnit = BusinessUnitFactory.CreateWithId(" ");
+			_scenario = scenario;
 		}
+
 		public IScenario Current()
 		{
 			return _scenario;

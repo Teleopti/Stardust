@@ -36,10 +36,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		{
 			_bus.Publish(new ScheduleChangedEvent
 				{
-					BusinessUnitId = Guid.Empty,
-					Datasource = null,
 					SkipDelete = false,
-					Timestamp = DateTime.Now,
+					Timestamp = @event.Timestamp,
+					BusinessUnitId = @event.BusinessUnitId,
+					Datasource = @event.Datasource,
 					PersonId = @event.PersonId,
 					ScenarioId = @event.ScenarioId,
 					StartDateTime = @event.StartDateTime,

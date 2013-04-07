@@ -8,20 +8,10 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 	/// </summary>
 	public class ProjectionChangedEventBase : RaptorDomainEvent
 	{
-		private readonly Guid _messageId = Guid.NewGuid();
-
 		/// <summary>
 		/// creates a thingy
 		/// </summary>
 		public ProjectionChangedEventBase() { IsDefaultScenario = true; }
-
-		/// <summary>
-		/// Gets the message identity.
-		/// </summary>
-		public override Guid Identity
-		{
-			get { return _messageId; }
-		}
 
 		/// <summary>
 		/// Is this default scenario

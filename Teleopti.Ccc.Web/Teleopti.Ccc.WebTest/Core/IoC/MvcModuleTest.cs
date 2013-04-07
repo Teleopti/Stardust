@@ -12,6 +12,7 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
@@ -170,7 +171,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		[Test]
 		public void ShouldRegisterCurrentBusinessUnitProvider()
 		{
-			requestContainer.Resolve<ICurrentBusinessUnitProvider>()
+			requestContainer.Resolve<ICurrentBusinessUnit>()
 				.Should().Not.Be.Null();
 		}
 

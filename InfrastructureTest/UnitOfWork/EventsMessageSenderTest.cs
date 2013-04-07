@@ -7,6 +7,7 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -35,8 +36,8 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			var eventsPublisher = MockRepository.GenerateMock<IEventsPublisher>();
 			var target = new EventsMessageSender(eventsPublisher);
 
-			var root = new PersonAbsence(ScenarioFactory.CreateScenarioWithId(" ", true));
-			root.FullDayAbsence(PersonFactory.CreatePersonWithId(), AbsenceFactory.CreateAbsenceWithId(), DateTime.Today, DateTime.Today);
+			var root = new PersonAbsence(new FakeCurrentScenario().Current());
+			root.FullDayAbsence("", PersonFactory.CreatePersonWithId(), AbsenceFactory.CreateAbsenceWithId(), DateTime.Today, DateTime.Today);
 			var expected = root.AllEvents();
 			var roots = new IRootChangeInfo[] { new RootChangeInfo(root, DomainUpdateType.Insert) };
 

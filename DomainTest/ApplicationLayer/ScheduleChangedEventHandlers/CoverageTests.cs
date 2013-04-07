@@ -128,12 +128,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			target.Handle(new ScheduleInitializeTriggeredEventForScheduleProjection { StartDateTime = DateTime.UtcNow, EndDateTime = DateTime.UtcNow });
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "nothing"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
-		public void ScheduleChangedEventShouldBeCovered()
-		{
-			var nothing = new ScheduleChangedEvent().Identity;
-		}
-
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
 		public void PersonScheduleDayReadModelHandlerShouldBeCovered()
 		{
@@ -151,12 +145,6 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 			var scheduleDays = new List<ProjectionChangedEventScheduleDay> { new ProjectionChangedEventScheduleDay { Layers = layers } };
 			target.Handle(new ProjectionChangedEvent { IsDefaultScenario = true, ScheduleDays = scheduleDays });
 			target.Handle(new ProjectionChangedEventForPersonScheduleDay { IsDefaultScenario = true, ScheduleDays = scheduleDays });
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "nothing"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
-		public void ProjectionChangedEventShouldBeCovered()
-		{
-			var nothing = new ProjectionChangedEvent().Identity;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "bus"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
