@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 
         protected override void OnKeyDown(KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.M && e.Modifiers == Keys.Alt)
+            if (e.KeyCode == Keys.M && e.Shift && e.Alt)
             {
                 StateHolderReader.Instance.StateReader.SessionScopeData.MickeMode = true;
             }
