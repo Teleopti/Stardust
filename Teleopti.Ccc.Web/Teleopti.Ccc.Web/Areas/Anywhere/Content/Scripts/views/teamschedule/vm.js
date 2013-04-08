@@ -18,9 +18,9 @@ define([
             
             this.Loading = ko.observable(false);
             
-            this.Agents = ko.observableArray();
+            this.Persons = ko.observableArray();
 
-            this.TimeLine = new timeLineViewModel(this.Agents);
+            this.TimeLine = new timeLineViewModel(this.Persons);
 
             this.Resources = resources;
 
@@ -28,9 +28,9 @@ define([
             this.SelectedTeam = ko.observable();
             this.SelectedDate = ko.observable(moment());
 
-            this.SetAgents = function (agents) {
-                self.Agents([]);
-                self.Agents.push.apply(self.Agents, agents);
+            this.SetPersons = function (persons) {
+                self.Persons([]);
+                self.Persons.push.apply(self.Persons, persons);
             };
             
             this.SetTeams = function (teams) {

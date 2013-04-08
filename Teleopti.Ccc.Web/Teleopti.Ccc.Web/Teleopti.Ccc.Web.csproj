@@ -637,7 +637,7 @@
     <Content Include="Areas\Anywhere\Content\Scripts\layout.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\main.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\navigation.js" />
-    <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\agent.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\person.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\layer.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\timeline-time.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\teamschedule\timeline.js" />

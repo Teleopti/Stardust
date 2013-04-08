@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 	public class PersonSchedulePageStepDefinitions
 	{
 		[Then(@"I should be viewing person schedule for '(.*)' on '(.*)'")]
-		public void ThenIShouldSeePersonScheduleForAgentOnDate(string name, string date)
+		public void ThenIShouldSeePersonScheduleForPersonOnDate(string name, string date)
 		{
 			var id = UserFactory.User(name).Person.Id.ToString();
 			EventualAssert.That(() => Browser.Current.Url.Contains(id), Is.True);
