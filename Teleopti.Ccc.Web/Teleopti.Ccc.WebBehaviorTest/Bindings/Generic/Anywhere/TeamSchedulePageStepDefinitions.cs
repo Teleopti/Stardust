@@ -21,28 +21,28 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 	public class TeamSchedulePageStepDefinitions
 	{
 		[Then(@"I should be viewing schedules for '(.*)'")]
-		public void ThenIShouldSeeAgentScheduleForAgentOnDate(string date)
+		public void ThenIShouldSeePersonScheduleForPersonOnDate(string date)
 		{
 			EventualAssert.That(() => Browser.Current.Url.Contains(date.Replace("-", "")), Is.True);
 		}
 
-		[Then(@"I should see agent '(.*)'")]
-		public void ThenIShouldSeeAgent(string personName)
+		[Then(@"I should see person '(.*)'")]
+		public void ThenIShouldSeePerson(string personName)
 		{
-			EventualAssert.That(() => Browser.Current.Element(Find.BySelector(string.Format(".agent:contains('{0}')", personName))).Exists, Is.True);
+			EventualAssert.That(() => Browser.Current.Element(Find.BySelector(string.Format(".person:contains('{0}')", personName))).Exists, Is.True);
 		}
 
 		[Then(@"I should see schedule for '(.*)'")]
 		public void ThenIShouldSeeScheduleFor(string personName)
 		{
-			EventualAssert.That(() => Browser.Current.Element(Find.BySelector(string.Format(".agent:contains('{0}') .shift li", personName))).Exists, Is.True);
+			EventualAssert.That(() => Browser.Current.Element(Find.BySelector(string.Format(".person:contains('{0}') .shift li", personName))).Exists, Is.True);
 		}
 
 		[Then(@"I should see no schedule for '(.*)'")]
 		public void ThenIShouldSeeNoScheduleFor(string personName)
 		{
-			EventualAssert.That(() => Browser.Current.Element(Find.BySelector(string.Format(".agent:contains('{0}')", personName))).Exists, Is.True);
-			EventualAssert.That(() => Browser.Current.Element(Find.BySelector(string.Format(".agent:contains('{0}') .shift li", personName))).Exists, Is.False);
+			EventualAssert.That(() => Browser.Current.Element(Find.BySelector(string.Format(".person:contains('{0}')", personName))).Exists, Is.True);
+			EventualAssert.That(() => Browser.Current.Element(Find.BySelector(string.Format(".person:contains('{0}') .shift li", personName))).Exists, Is.False);
 		}
 
 		[Then(@"I should be able to select teams")]

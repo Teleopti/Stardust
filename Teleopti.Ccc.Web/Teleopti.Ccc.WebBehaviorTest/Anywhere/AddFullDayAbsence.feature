@@ -1,7 +1,7 @@
 ﻿Feature: Add full day absence
-	In order to keep track of agents absences
+	In order to keep track of persons absences
 	As a team leader
-	I want to add absence for an agent
+	I want to add absence for an person
 	
 Background:
 	Given there is a team with
@@ -50,7 +50,7 @@ Scenario: Add
 	| Shift category | Day              |
 	| Start time     | 2013-04-08 08:00 |
 	| End time       | 2013-04-08 17:00 |
-	When I view agent schedules add full day absence form for 'Pierre Baldi' on '2013-04-08'
+	When I view person schedules add full day absence form for 'Pierre Baldi' on '2013-04-08'
 	And I input these full day absence values
 	| Field    | Value      |
 	| Absence  | Vacation   |
@@ -69,7 +69,7 @@ Scenario: Add
 
 Scenario: Default values
 	Given I have the role 'Anywhere Team Green'
-	When I view agent schedules add full day absence form for 'Pierre Baldi' on '2012-12-02'
+	When I view person schedules add full day absence form for 'Pierre Baldi' on '2012-12-02'
 	Then I should see the add full day absence form with
 	| Field      | Value      |
 	| Start date | 2012-12-02 |
@@ -77,7 +77,7 @@ Scenario: Default values
 	
 Scenario: Invalid dates
 	Given I have the role 'Anywhere Team Green'
-	When I view agent schedules add full day absence form for 'Pierre Baldi' on '2012-12-02'
+	When I view person schedules add full day absence form for 'Pierre Baldi' on '2012-12-02'
 	And I input these full day absence values
 	| Field    | Value      |
 	| End date | 2012-12-01 |
