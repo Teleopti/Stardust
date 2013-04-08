@@ -178,8 +178,8 @@ define([
 						success: function() {
 							loadSchedules({
 								success: function() {
-								    teamSchedule.Loading(false);
 								    resize();
+								    teamSchedule.Loading(false);
 								    deferred.resolve();
 								}
 							});
