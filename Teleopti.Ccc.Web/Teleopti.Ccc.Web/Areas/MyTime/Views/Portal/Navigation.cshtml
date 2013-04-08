@@ -6,11 +6,16 @@
 @model PortalViewModel
 
 <nav id="tabs" class="main-nav">
+    @*<input id="message-count-text" type="hidden" value="@Resources.MessagesParenthesis"/>
+    <input id="message-text" type="hidden" value="@Resources.Messages"/>*@
 	<ul>
 		@foreach (var navSection in Model.NavigationItems)
 		{
 			<li>
-				<a href="@string.Format("#{0}Tab", navSection.Controller)" data-mytime-action="@Html.Portal().GetAction(navSection)"@(navSection.PayAttention ? @Html.Raw("class=\"asm-new-message-indicator\"") : @Html.Raw(""))>@(navSection.UnreadMessageCount > 0 ? string.Format("{0} ({1})", navSection.Title, navSection.UnreadMessageCount) : navSection.Title)</a>
+			    <a href="@string.Format("#{0}Tab", navSection.Controller)" data-mytime-action="@Html.Portal().GetAction(navSection)"@(navSection.PayAttention ? 
+			                                                                                                                              @Html.Raw("class=\"asm-new-message-indicator\"") : 
+			                                                                                                                              @Html.Raw(""))>@(navSection.UnreadMessageCount > 0 ? navSection.TitleCount : navSection.Title)</a>
+
 			</li>
 		}
 	</ul>

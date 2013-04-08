@@ -139,6 +139,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 				Action = "Index",
 				Controller = "Message",
 				Title = Resources.Messages,
+				TitleCount = string.Format(Resources.MessagesParenthesis, unreadMessageCount),
 				NavigationItems = new NavigationItem[0],
 				ToolBarItems = new List<ToolBarItemBase>(),
 				PayAttention = unreadMessageCount != 0,
