@@ -179,6 +179,28 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 			Assert.IsTrue(result);
 		}
+
+        [Test]
+        public void TestPeriodValue()
+        {
+            using (_mock.Record())
+            {
+                Expect.Call(_periodValueCalculator.DayValue(new DateOnly())).Return(2.0);
+            }
+            Assert.AreEqual(_target.PeriodValue(new DateOnly() ),2.0);
+
+        }
+
+        [Test]
+        public void TestPeriodValueWithNullValue()
+        {
+            using (_mock.Record())
+            {
+                Expect.Call(_periodValueCalculator.DayValue(new DateOnly())).Return(null);
+            }
+            Assert.AreEqual(_target.PeriodValue(new DateOnly()), 0.0);
+
+        }
 		
 		private void commomMocks()
 		{
