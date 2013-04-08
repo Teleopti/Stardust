@@ -161,11 +161,21 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 					string messageBrokerConnection;
 					if (appSettings.TryGetValue("MessageBroker", out messageBrokerConnection))
 					{
-						Uri serverUrl;
-						if (Uri.TryCreate(messageBrokerConnection, UriKind.Absolute, out serverUrl))
+						// if connection string already is set and my config has no value, try to start anyway
+						// this is used from the web to start the client and automagically connect to the local server
+						// bad me for writing this comment ;)
+						if (!string.IsNullOrEmpty(MessageBroker.ConnectionString) && string.IsNullOrEmpty(messageBrokerConnection))
 						{
-							MessageBroker.ConnectionString = messageBrokerConnection;
 							MessageBroker.StartMessageBroker();
+						}
+						else
+						{
+							Uri serverUrl;
+							if (Uri.TryCreate(messageBrokerConnection, UriKind.Absolute, out serverUrl))
+							{
+								MessageBroker.ConnectionString = messageBrokerConnection;
+								MessageBroker.StartMessageBroker();
+							}
 						}
 					}
 
