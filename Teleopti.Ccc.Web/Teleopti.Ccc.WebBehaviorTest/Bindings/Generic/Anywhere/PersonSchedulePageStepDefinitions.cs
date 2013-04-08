@@ -76,13 +76,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		{
 			var fullDayAbsenceFormInfo = table.CreateInstance<FullDayAbsenceFormInfo>();
 
+			var select = Browser.Current.SelectList(Find.BySelector(".full-day-absence-form .absence-type"));
 			if (fullDayAbsenceFormInfo.Absence != null)
-			{
-				var select = Browser.Current.SelectList(Find.BySelector(".full-day-absence-form .absence-type"));
 				select.SelectNoWait(fullDayAbsenceFormInfo.Absence);
-				//EventualAssert.That(() => select.Exists, Is.True);
-				//select.Option(Find.BySelector(string.Format(":contains('{0}')", fullDayAbsenceFormInfo.Absence))).SelectNoWait();
-			}
+			else
+				select.WaitUntilEnabled();
+
 			Retrying.Javascript(string.Format("test.callViewMethodWhenReady('personschedule', 'setDateFromTest', '{0}');", fullDayAbsenceFormInfo.EndDate));
 		}
 
