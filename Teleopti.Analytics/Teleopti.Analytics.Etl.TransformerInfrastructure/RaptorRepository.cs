@@ -860,6 +860,13 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 											  _dataMartConnectionString);
 		}
 
+		public int DimTimeZoneDeleteData(IBusinessUnit businessUnit)
+		{
+			return
+				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_dim_time_zone_delete", null,
+											  _dataMartConnectionString);
+		}
+
 		public int PersistScenario(DataTable dataTable)
 		{
 			HelperFunctions.TruncateTable("stage.etl_stg_scenario_delete", _dataMartConnectionString);

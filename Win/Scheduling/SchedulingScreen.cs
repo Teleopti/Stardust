@@ -702,7 +702,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				toggleCalculation();
 			}
-			if (e.KeyCode == Keys.M && e.Modifiers == Keys.Alt)
+			if (e.KeyCode == Keys.M && e.Alt && e.Shift)
 			{
 				StateHolderReader.Instance.StateReader.SessionScopeData.MickeMode = !StateHolderReader.Instance.StateReader.SessionScopeData.MickeMode;
 				toolStripMenuItemFindMatching.Visible = StateHolderReader.Instance.StateReader.SessionScopeData.MickeMode;
