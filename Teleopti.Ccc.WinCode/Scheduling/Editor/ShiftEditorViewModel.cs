@@ -25,7 +25,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
         public TimeSpan SurroundingTime { get; private set; }
         public TimelineControlViewModel Timeline { get; private set; }
         public LayerViewModelCollection Layers { get; private set; }
-        public ExpandedLayersViewModel AllLayers { get; private set; }
+	    public bool ShowMeetingsInContextMenu { get; private set; }
+	    public ExpandedLayersViewModel AllLayers { get; private set; }
         public EditLayerViewModel EditLayer { get; private set; }
         public IScheduleDay SchedulePart { get; private set; }
         public ShiftEditorSettings Settings { get; private set; }
@@ -85,12 +86,13 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
         private IEventAggregator _eventAggregator;
 
         #region ctor
-        public ShiftEditorViewModel(LayerViewModelCollection layerCollection,IEventAggregator eventAggregator,ICreateLayerViewModelService createLayerViewModelService)
+		public ShiftEditorViewModel(LayerViewModelCollection layerCollection, IEventAggregator eventAggregator, ICreateLayerViewModelService createLayerViewModelService, bool showMeetingsInContextMenu)
         {
             _eventAggregator = eventAggregator;
             SurroundingTime = TimeSpan.FromHours(4);
             Layers = layerCollection;
-            Timeline = new TimelineControlViewModel(eventAggregator,createLayerViewModelService);
+			ShowMeetingsInContextMenu = showMeetingsInContextMenu;
+			Timeline = new TimelineControlViewModel(eventAggregator,createLayerViewModelService);
             AllLayers = new ExpandedLayersViewModel(Layers) {Expanded = ExpandSize };
             EditLayer = new EditLayerViewModel();
             EditLayer.LayerUpdated += EditLayer_LayerUpdated;
@@ -98,9 +100,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
             SetUpCommandModels();
         }
 
-       
-        public ShiftEditorViewModel(IEventAggregator eventAggregator,ICreateLayerViewModelService createLayerViewModelService)
-            : this(new LayerViewModelCollection(eventAggregator, createLayerViewModelService), eventAggregator, createLayerViewModelService)
+
+		public ShiftEditorViewModel(IEventAggregator eventAggregator, ICreateLayerViewModelService createLayerViewModelService, bool showMeetingsInContextMenu)
+            : this(new LayerViewModelCollection(eventAggregator, createLayerViewModelService), eventAggregator, createLayerViewModelService, showMeetingsInContextMenu)
         {
 
         }

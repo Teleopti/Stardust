@@ -101,7 +101,6 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
 
             if (Presenter.Model.WorkloadDaysWithStatistics.Count > 0)
             {
-                enableTabs(true);
                 createTabs(selectedDates);
             }
         }
@@ -110,48 +109,97 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WFControls
         {
             Presenter.InitializeTaskOwnerPeriod(DateOnly.Today, TaskOwnerPeriodType.Other);
 
-            VolumeYear volumeMonthYear = new MonthOfYear(Presenter.Model.TaskOwnerPeriod, new MonthOfYearCreator()); 
-            VolumeYear volumeWeekYear = new WeekOfMonth(Presenter.Model.TaskOwnerPeriod, new WeekOfMonthCreator());
-            VolumeYear volumeDayYear = new DayOfWeeks(Presenter.Model.TaskOwnerPeriod, new DaysOfWeekCreator());
+            clearAllTabs();
 
-            WorkflowSeasonView monthOfYear = new WorkflowSeasonView(volumeMonthYear, selectedDates, this);
-            WorkflowSeasonView weekOfMonth = new WorkflowSeasonView(volumeWeekYear, selectedDates, this);
-            WorkflowSeasonView dayOfWeek = new WorkflowSeasonView(volumeDayYear, selectedDates, this);
-
-            monthOfYear.Name = "MonthOfYear";
-            weekOfMonth.Name = "WeekOfMonth";
-            dayOfWeek.Name = "DayOfWeek";
-            
-            IList<IVolumeYear> volumeYears = new List<IVolumeYear>
+            IList<IVolumeYear> volumeYears;
+            if (Presenter.Model.HasOnlyOutliersInStatisticsSelection())
             {
-                volumeMonthYear,
-                volumeWeekYear,
-                volumeDayYear
-            };
+                enableOnlyTotalTab();
 
+                volumeYears = new List<IVolumeYear>();
+            }
+            else
+            {
+                enableTabs(true);
+
+                VolumeYear volumeMonthYear = new MonthOfYear(Presenter.Model.TaskOwnerPeriod, new MonthOfYearCreator());
+                VolumeYear volumeWeekYear = new WeekOfMonth(Presenter.Model.TaskOwnerPeriod, new WeekOfMonthCreator());
+                VolumeYear volumeDayYear = new DayOfWeeks(Presenter.Model.TaskOwnerPeriod, new DaysOfWeekCreator());
+
+                volumeYears = new List<IVolumeYear>
+                {
+                    volumeMonthYear,
+                    volumeWeekYear,
+                    volumeDayYear
+                };
+
+                setupTrendView(volumeYears);
+                setupMonthOfYearView(selectedDates, volumeMonthYear);
+                setupWeekOfMonthView(selectedDates, volumeWeekYear);
+                setupDayOfWeekView(selectedDates, volumeDayYear);
+            }
+            
+            setupTotalView(volumeYears);
+        }
+
+        private void setupTrendView(IList<IVolumeYear> volumeYears)
+        {
             _workflowTrendView = new WorkflowTrendView(volumeYears, Presenter.Model.WorkloadDaysWithoutOutliers, this);
-            _workflowTotalView = new WorkflowTotalView(volumeYears, this); 
-
-            monthOfYear.Dock = DockStyle.Fill;
-            weekOfMonth.Dock = DockStyle.Fill;
-            dayOfWeek.Dock = DockStyle.Fill;
             _workflowTrendView.Dock = DockStyle.Fill;
+            tabPageTrend.Controls.Add(_workflowTrendView);
+        }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
+        private void setupMonthOfYearView(IList<DateOnlyPeriod> selectedDates, VolumeYear volumeMonthYear)
+        {
+            WorkflowSeasonView monthOfYear = new WorkflowSeasonView(volumeMonthYear, selectedDates, this);
+            monthOfYear.Name = "MonthOfYear";
+            monthOfYear.Dock = DockStyle.Fill;
+            tabPageMonthOfYear.Controls.Add(monthOfYear);
+        }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
+        private void setupWeekOfMonthView(IList<DateOnlyPeriod> selectedDates, VolumeYear volumeWeekYear)
+        {
+            WorkflowSeasonView weekOfMonth = new WorkflowSeasonView(volumeWeekYear, selectedDates, this);
+            weekOfMonth.Name = "WeekOfMonth";
+            weekOfMonth.Dock = DockStyle.Fill;
+            tabPageWeekOfMonth.Controls.Add(weekOfMonth);
+        }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
+        private void setupDayOfWeekView(IList<DateOnlyPeriod> selectedDates, VolumeYear volumeDayYear)
+        {
+            WorkflowSeasonView dayOfWeek = new WorkflowSeasonView(volumeDayYear, selectedDates, this);
+            dayOfWeek.Name = "DayOfWeek";
+            dayOfWeek.Dock = DockStyle.Fill;
+            tabPageDayOfWeek.Controls.Add(dayOfWeek);
+        }
+
+        private void setupTotalView(IList<IVolumeYear> volumeYears)
+        {
+            _workflowTotalView = new WorkflowTotalView(volumeYears, this);
             _workflowTotalView.Dock = DockStyle.Fill;
 
-			disposeAndClearChildControls(tabPageDayOfWeek);
-			disposeAndClearChildControls(tabPageMonthOfYear);
-			disposeAndClearChildControls(tabPageWeekOfMonth);
-			disposeAndClearChildControls(tabPageTrend);
-			disposeAndClearChildControls(tabPageTotal);
-
-            tabPageDayOfWeek.Controls.Add(dayOfWeek);
-            tabPageMonthOfYear.Controls.Add(monthOfYear);
-            tabPageWeekOfMonth.Controls.Add(weekOfMonth);
-            tabPageTrend.Controls.Add(_workflowTrendView);
             tabPageTotal.Controls.Add(_workflowTotalView);
         }
 
-		private static void disposeAndClearChildControls(Control control)
+        private void enableOnlyTotalTab()
+        {
+            enableTabs(false);
+            tabPageTotal.TabEnabled = true;
+        }
+
+        private void clearAllTabs()
+        {
+            disposeAndClearChildControls(tabPageDayOfWeek);
+            disposeAndClearChildControls(tabPageMonthOfYear);
+            disposeAndClearChildControls(tabPageWeekOfMonth);
+            disposeAndClearChildControls(tabPageTotal);
+            disposeAndClearChildControls(tabPageTrend);
+        }
+
+        private static void disposeAndClearChildControls(Control control)
 		{
 			foreach (IDisposable disposable in control.Controls)
 			{

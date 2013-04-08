@@ -11383,4 +11383,8 @@ Reduce the complexity to use these shifts.</value>
   <data name="ProcessingDotDotDot" xml:space="preserve">
     <value>Processing...</value>
   </data>
+  <data name="MessagesParenthesis" xml:space="preserve">
+    <value>Messages ({0})</value>
+    <comment>Messages title with number of unread messages</comment>
+  </data>
 </root>

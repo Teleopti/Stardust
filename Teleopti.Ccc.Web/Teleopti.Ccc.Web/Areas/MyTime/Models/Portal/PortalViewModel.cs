@@ -24,6 +24,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 		public IEnumerable<ToolBarItemBase> ToolBarItems { get; set; }
 		public bool PayAttention { get; set; }
 		public int UnreadMessageCount { get; set; }
+		public string TitleCount { get; set; }
+
 	}
 
 	public class PreferenceNavigationItem : SectionNavigationItem
