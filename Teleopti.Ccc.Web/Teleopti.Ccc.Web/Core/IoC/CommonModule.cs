@@ -76,6 +76,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 				.As<IStudentAvailabilityProvider>();
 			builder.RegisterType<VirtualSchedulePeriodProvider>().As<IVirtualSchedulePeriodProvider>();
 			builder.RegisterType<DefaultDateCalculator>().As<IDefaultDateCalculator>();
+			builder.RegisterType<UrlHelperProvider>().As<IUrlHelper>().SingleInstance();
 		}
 	}
 }
