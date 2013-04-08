@@ -613,6 +613,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Areas\Anywhere\Content\Scripts\resizeevent.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\messagebroker.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\menu.js" />

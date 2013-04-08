@@ -5,12 +5,14 @@ define([
 		'subscriptions',
 		'helpers',
 		'text!templates/personschedule/view.html',
+        'resizeevent'
 	], function (
 		ko,
 		personScheduleViewModel,
 		subscriptions,
 		helpers,
-		view
+		view,
+	    resize
 	) {
 
 	    var personSchedule;
@@ -22,15 +24,10 @@ define([
 
 				personSchedule = new personScheduleViewModel();
 
-				var resize = function () {
-				    personSchedule.TimeLine.WidthPixels($('.shift').width());
-				};
-
-				$(window)
-                    .resize(resize)
-                    .bind('orientationchange', resize)
-                    .ready(resize);
-
+			    resize.onresize(function() {
+			        personSchedule.TimeLine.WidthPixels($('.shift').width());
+			    });
+			    
 				ko.applyBindings(personSchedule, options.bindingElement);
 
 			},
@@ -51,6 +48,7 @@ define([
 					options.id,
 					helpers.Date.ToServer(personSchedule.Date()),
 					function (data) {
+					    resize.notify();
 					    personSchedule.SetData(data);
 					    personSchedule.Loading(false);
 					}

@@ -1,12 +1,10 @@
 define([
-        'jQuery',
         'knockout',
         'navigation',
 		'views/personschedule/timeline',
         'noext!application/resources',
         'moment'
     ], function(
-        $,
         ko,
         navigation,
         timeLineViewModel,

@@ -9,7 +9,8 @@ define([
 		'helpers',
 		'views/teamschedule/vm',
 		'views/teamschedule/agent',
-		'text!templates/teamschedule/view.html'
+		'text!templates/teamschedule/view.html',
+        'resizeevent'
 	], function (
 		ko,
 		$,
@@ -20,7 +21,8 @@ define([
 		helpers,
 		teamScheduleViewModel,
 		agentViewModel,
-		view
+		view,
+	    resize
 	) {
 
 		var teamSchedule;
@@ -31,9 +33,9 @@ define([
 			navigation.GotoPersonSchedule(agentId, teamSchedule.SelectedDate());
 		}, null, "gotoagent");
 
-		var resize = function () {
-		    teamSchedule.TimeLine.WidthPixels($('.shift').width());
-		};
+	    resize.onresize(function() {
+	        teamSchedule.TimeLine.WidthPixels($('.shift').width());
+	    });
 
 		var loadSchedules = function(options) {
 			subscriptions.subscribeTeamSchedule(
@@ -61,6 +63,8 @@ define([
 					});
 
 					teamSchedule.Agents.valueHasMutated();
+
+				    resize.notify();
 
 					options.success();
 				});
@@ -107,11 +111,6 @@ define([
 
 				teamSchedule = new teamScheduleViewModel();
                 
-				$(window)
-					.resize(resize)
-					.bind('orientationchange', resize)
-					.ready(resize);
-
 				teamSchedule.SelectedTeam.subscribe(function () {
 					if (teamSchedule.Loading())
 						return;
@@ -178,7 +177,6 @@ define([
 						success: function() {
 							loadSchedules({
 								success: function() {
-								    resize();
 								    teamSchedule.Loading(false);
 								    deferred.resolve();
 								}
