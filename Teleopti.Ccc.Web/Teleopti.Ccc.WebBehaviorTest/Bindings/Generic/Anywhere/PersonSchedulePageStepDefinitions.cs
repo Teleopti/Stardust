@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			EventualAssert.That(() => Browser.Current.Element(Find.BySelector(string.Format(".shift .layer[data-start-time='{0}']", shiftLayer.StartTime))).Exists, Is.True);
 			EventualAssert.That(() => Browser.Current.Element(Find.BySelector(string.Format(".shift .layer[data-length-minutes='{0}']", minutes))).Exists, Is.True);
 			if (shiftLayer.Color != null)
-				EventualAssert.That(() => Browser.Current.Element(Find.BySelector(string.Format(".shift .layer[data-start-time='{0}']", shiftLayer.StartTime))).Style.Color, Is.EqualTo(shiftLayer.Color));
+				EventualAssert.That(() => Browser.Current.Element(Find.BySelector(string.Format(".shift .layer[data-start-time='{0}']", shiftLayer.StartTime))).Style.BackgroundColor.ToName, Is.EqualTo(shiftLayer.Color));
 		}
 
 		[Then(@"I should not see any shift")]
@@ -79,8 +79,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			if (fullDayAbsenceFormInfo.Absence != null)
 			{
 				var select = Browser.Current.SelectList(Find.BySelector(".full-day-absence-form .absence-type"));
-				EventualAssert.That(() => select.Exists, Is.True);
-				select.Option(Find.BySelector(string.Format(":contains('{0}')", fullDayAbsenceFormInfo.Absence))).SelectNoWait();
+				select.SelectNoWait(fullDayAbsenceFormInfo.Absence);
+				//EventualAssert.That(() => select.Exists, Is.True);
+				//select.Option(Find.BySelector(string.Format(":contains('{0}')", fullDayAbsenceFormInfo.Absence))).SelectNoWait();
 			}
 			Retrying.Javascript(string.Format("test.callViewMethodWhenReady('personschedule', 'setDateFromTest', '{0}');", fullDayAbsenceFormInfo.EndDate));
 		}

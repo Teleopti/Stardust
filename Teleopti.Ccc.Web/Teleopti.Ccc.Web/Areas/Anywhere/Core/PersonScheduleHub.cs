@@ -17,17 +17,10 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		}
 
 		[UnitOfWork]
-		public void SubscribePersonSchedule(Guid personId, DateTime date)
+		public void PersonSchedule(Guid personId, DateTime date)
 		{
 			var data = _viewModelFactory.CreateViewModel(personId, date);
 			Clients.Caller.incomingPersonSchedule(data);
-		}
-
-		[UnitOfWork]
-		public void PublishPersonSchedule(Guid personId, DateTime date)
-		{
-			var data = _viewModelFactory.CreateViewModel(personId, date);
-			Clients.All.incomingPersonSchedule(data);
 		}
 
 	}

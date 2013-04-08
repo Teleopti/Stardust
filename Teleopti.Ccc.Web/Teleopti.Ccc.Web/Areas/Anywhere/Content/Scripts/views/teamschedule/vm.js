@@ -1,10 +1,12 @@
 define([
+        'jQuery',
         'knockout',
         'navigation',
 		'views/personschedule/timeline',
         'noext!application/resources',
         'moment'
     ], function(
+        $,
         ko,
         navigation,
         timeLineViewModel,
@@ -17,7 +19,7 @@ define([
             var self = this;
             
             this.Loading = ko.observable(false);
-
+            
             this.Agents = ko.observableArray();
 
             this.TimeLine = new timeLineViewModel(this.Agents);

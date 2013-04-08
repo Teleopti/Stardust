@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			hubBuilder.SetupHub(target, hubBuilder.FakeCaller("incomingPersonSchedule", new Action<PersonScheduleViewModel>(a => { })));
 			var personId = Guid.NewGuid();
 
-			target.SubscribePersonSchedule(personId, DateTime.Today);
+			target.PersonSchedule(personId, DateTime.Today);
 
 			viewModelFactory.AssertWasCalled(x => x.CreateViewModel(personId, DateTime.Today));
 		}
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 
 			viewModelFactory.Stub(x => x.CreateViewModel(personId, DateTime.Today)).Return(data);
 
-			target.SubscribePersonSchedule(personId, DateTime.Today);
+			target.PersonSchedule(personId, DateTime.Today);
 
 			actual.Should().Be.SameInstanceAs(data);
 		}

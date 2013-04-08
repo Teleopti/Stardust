@@ -36,12 +36,11 @@ Scenario: View form
 	And I click 'add full day absence'
 	Then I should see the add full day absence form
 	
-@Ignore 
 Scenario: Add
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' have a (read model) shift with
 	| Field      | Value        |
-	| Date       | 2013-04-03   |
+	| Date       | 2013-04-08   |
 	| Start time | 08:00        |
 	| End time   | 17:00        |
 	| Activity   | Phone        |
@@ -49,13 +48,13 @@ Scenario: Add
 	And 'Pierre Baldi' have a shift with
 	| Field          | Value            |
 	| Shift category | Day              |
-	| Start time     | 2013-04-03 08:00 |
-	| End time       | 2013-04-03 17:00 |
-	When I view agent schedules add full day absence form for 'Pierre Baldi' on '2013-04-03'
+	| Start time     | 2013-04-08 08:00 |
+	| End time       | 2013-04-08 17:00 |
+	When I view agent schedules add full day absence form for 'Pierre Baldi' on '2013-04-08'
 	And I input these full day absence values
 	| Field    | Value      |
 	| Absence  | Vacation   |
-	| End date | 2013-04-03 |
+	| End date | 2013-04-08 |
 	And I click 'apply'
 	Then I should see a shift layer with
 	| Field      | Value |
@@ -64,8 +63,8 @@ Scenario: Add
 	| Color      | Red   |
 #	And I should see an absence in the absence list with
 #	| Field      | Value            |
-#	| Start time | 2013-04-03 08:00 |
-#	| End time   | 2013-04-03 17:00 |
+#	| Start time | 2013-04-08 08:00 |
+#	| End time   | 2013-04-08 17:00 |
 #	| Absence    | Vacation         |
 
 Scenario: Default values
