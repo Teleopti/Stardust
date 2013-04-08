@@ -1,12 +1,12 @@
 define([
 		'jquery',
-		'noext!../../../../signalr/hubs',
         'messagebroker',
+        'signalrhubs',
         'helpers'
 	], function (
 		$,
-		signalrHubs,
 	    messagebroker,
+	    signalRHubs,
 	    helpers
 	) {
 		

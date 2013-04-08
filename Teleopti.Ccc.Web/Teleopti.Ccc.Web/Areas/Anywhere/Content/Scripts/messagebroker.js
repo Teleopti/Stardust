@@ -1,6 +1,6 @@
 define([
 		'jquery',
-		'noext!../../../../signalr/hubs'
+        'signalrhubs'
 	], function (
 		$,
 		signalrHubs
@@ -20,8 +20,7 @@ define([
 	    };
 
 		var start = function () {
-			$.connection.hub.url = 'signalr';
-			startPromise = $.connection.hub.start();
+			startPromise = signalrHubs.start();
 		    return startPromise;
 		};
 
