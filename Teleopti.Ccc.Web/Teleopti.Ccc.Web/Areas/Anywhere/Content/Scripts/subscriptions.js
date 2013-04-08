@@ -1,11 +1,13 @@
 define([
 		'jquery',
 		'noext!../../../../signalr/hubs',
-        'messagebroker'
+        'messagebroker',
+        'helpers'
 	], function (
 		$,
 		signalrHubs,
-	    messagebroker
+	    messagebroker,
+	    helpers
 	) {
 		
 		var startPromise;
@@ -47,14 +49,23 @@ define([
 	        },
 	        subscribePersonSchedule: function (personId, date, callback) {
 	            incomingPersonSchedule = callback;
-	            startPromise.done(function() {
+	            startPromise.done(function () {
+	                
 	                personScheduleHub.server.personSchedule(personId, date);
-	            });
-	            messagebroker.subscribe({
-	                domainType: 'IPersonScheduleDayReadModel',
-	                callback: function (notification) {
-	                    personScheduleHub.server.personSchedule(personId, date);
-	                }
+
+	                messagebroker.subscribe({
+	                    domainReferenceType: 'Person',
+	                    domainReferenceId: personId,
+	                    domainType: 'IPersonScheduleDayReadModel',
+	                    callback: function(notification) {
+	                        var momentDate = moment(date);
+	                        var startDate = helpers.Date.ToMoment(notification.StartDate);
+	                        var endDate = helpers.Date.ToMoment(notification.EndDate);
+	                        if (momentDate.diff(startDate) >= 0 && momentDate.diff(endDate) <= 0)
+	                            personScheduleHub.server.personSchedule(personId, date);
+	                    }
+	                });
+	                
 	            });
 	        }
 	    };

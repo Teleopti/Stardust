@@ -41,7 +41,15 @@ define(
                     return date;
                     
                     // recreate the date as UTC, then convert it to local clock, and send it to the server which will then convert it correctly
-                    return new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+                    //return new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+                },
+                ToMoment: function (date) {
+                    if (moment.isMoment(date))
+                        return date;
+                    // "D" is added by the message broker
+                    if (date.substring(0, 1) == "D")
+                        return moment(date.substring(1));
+                    return moment(date);
                 }
             }
         };

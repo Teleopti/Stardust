@@ -31,8 +31,8 @@ define([
 		    if (options.businessUnitId) subscription.BusinessUnitId = options.businessUnitId;
 		    if (options.domainType) subscription.DomainType = options.domainType;
 		    if (options.domainId) subscription.DomainId = options.domainId;
-		    if (options.referenceType) subscription.DomainReferenceId = options.referenceType;
-		    if (options.referenceId) subscription.DomainReferenceId = options.referenceId;
+		    if (options.domainReferenceType) subscription.DomainReferenceType = options.domainReferenceType;
+		    if (options.domainReferenceId) subscription.DomainReferenceId = options.domainReferenceId;
 		    if (options.lowerBoundary) subscription.LowerBoundary = options.lowerBoundary;
 		    if (options.upperBoundary) subscription.UpperBoundary = options.upperBoundary;
 
