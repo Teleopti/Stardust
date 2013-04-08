@@ -239,7 +239,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		}
 
 		[Test]
-		public void ShouldRollbackIfRehedulingFails()
+		public void ShouldRollbackIfReshedulingFails()
 		{
 			using (_mocks.Record())
 			{
@@ -267,7 +267,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		}
 
 		[Test]
-		public void ShouldPutDaysOffBackToLegalIfDecisionmakerFails()
+		public void ShouldPutDaysOffBackToLegalIfDecisionMakerFails()
 		{
 			using (_mocks.Record())
 			{

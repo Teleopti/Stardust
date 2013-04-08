@@ -340,8 +340,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         		IgnoreArguments().Repeat.Any();
         }
 
-        [Test]
-        public void ShouldNotContinueIfRestrcitionOverMaxIsGreaterThenZero()
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "MaxIs"), Test]
+        public void ShouldNotContinueIfRestrictionOverMaxIsGreaterThenZero()
         {
             using (_mocks.Record())
             {

@@ -683,7 +683,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
-        public void ShouldContinueForTeamIfscheduleDayAvailableForDayOffSpecificationNotSatisfied()
+        public void ShouldContinueForTeamIfScheduleDayAvailableForDayOffSpecificationNotSatisfied()
         {
             var matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
             var person = PersonFactory.CreatePerson("Bill");
