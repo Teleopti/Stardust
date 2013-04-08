@@ -31,8 +31,8 @@ namespace Teleopti.Ccc.Web.Core.IoC
 
 		private static void registerReportTypes(ContainerBuilder builder)
 		{
-			builder.RegisterType<WebReportRepository>().As<IWebReportRepository>().SingleInstance();
-			builder.RegisterType<DataSourceProvider>().As<IDataSourceProvider>().SingleInstance();
+			builder.RegisterType<WebReportRepository>().As<IWebReportRepository>();
+			builder.RegisterType<DataSourceProvider>().As<IDataSourceProvider>();
 			builder.Register(c => c.Resolve<IDataSourceProvider>().CurrentDataSource())
 				.As<IDataSource>()
 				.ExternallyOwned();
@@ -40,43 +40,42 @@ namespace Teleopti.Ccc.Web.Core.IoC
 
 		private static void registerRequestContextTypes(ContainerBuilder builder)
 		{
-			builder.RegisterType<SessionPrincipalFactory>().As<ISessionPrincipalFactory>().SingleInstance();
-			builder.RegisterType<IdentityProvider>().As<IIdentityProvider>().SingleInstance();
-			builder.RegisterType<RequestContextInitializer>().As<IRequestContextInitializer>().SingleInstance();
-			builder.RegisterType<SessionSpecificCookieDataProvider>().As<ISessionSpecificDataProvider>().SingleInstance();
-			builder.RegisterType<DefaultSessionSpecificCookieDataProviderSettings>().As<ISessionSpecificCookieDataProviderSettings>().SingleInstance();
-			builder.RegisterType<SetThreadCulture>().As<ISetThreadCulture>().SingleInstance();
-			builder.RegisterType<PermissionProvider>().As<IPermissionProvider>().SingleInstance();
-			builder.RegisterType<AbsenceTypesProvider>().As<IAbsenceTypesProvider>().SingleInstance();
-			builder.RegisterType<CurrentBusinessUnitProvider>().As<ICurrentBusinessUnitProvider>().SingleInstance();
-			builder.RegisterType<PushMessageProvider>().As<IPushMessageProvider>().SingleInstance();
+			builder.RegisterType<SessionPrincipalFactory>().As<ISessionPrincipalFactory>();
+			builder.RegisterType<IdentityProvider>().As<IIdentityProvider>();
+			builder.RegisterType<RequestContextInitializer>().As<IRequestContextInitializer>();
+			builder.RegisterType<SessionSpecificCookieDataProvider>().As<ISessionSpecificDataProvider>();
+			builder.RegisterType<DefaultSessionSpecificCookieDataProviderSettings>().As<ISessionSpecificCookieDataProviderSettings>();
+			builder.RegisterType<SetThreadCulture>().As<ISetThreadCulture>();
+			builder.RegisterType<PermissionProvider>().As<IPermissionProvider>();
+			builder.RegisterType<AbsenceTypesProvider>().As<IAbsenceTypesProvider>();
+			builder.RegisterType<CurrentBusinessUnitProvider>().As<ICurrentBusinessUnitProvider>();
+			builder.RegisterType<PushMessageProvider>().As<IPushMessageProvider>();
 		}
 
 		private static void registerPortalTypes(ContainerBuilder builder)
 		{
-			builder.RegisterType<LayoutBaseViewModelFactory>().As<ILayoutBaseViewModelFactory>().SingleInstance();
-			builder.RegisterType<PortalViewModelFactory>().As<IPortalViewModelFactory>().SingleInstance();
-			builder.RegisterType<CultureSpecificViewModelFactory>().As<ICultureSpecificViewModelFactory>().SingleInstance();
-			builder.RegisterType<DatePickerGlobalizationViewModelFactory>().As<IDatePickerGlobalizationViewModelFactory>().SingleInstance();
+			builder.RegisterType<LayoutBaseViewModelFactory>().As<ILayoutBaseViewModelFactory>();
+			builder.RegisterType<PortalViewModelFactory>().As<IPortalViewModelFactory>();
+			builder.RegisterType<CultureSpecificViewModelFactory>().As<ICultureSpecificViewModelFactory>();
+			builder.RegisterType<DatePickerGlobalizationViewModelFactory>().As<IDatePickerGlobalizationViewModelFactory>();
 			builder.Register(c =>
 			                 	{
 			                 		if (DefinedLicenseDataFactory.LicenseActivator == null)
 			                 			throw new DataSourceException("Missing datasource (no *.hbm.xml file available)!");
 			                 		return DefinedLicenseDataFactory.LicenseActivator;
 			                 	})
-				.As<ILicenseActivator>().SingleInstance();
+				.As<ILicenseActivator>();
 		}
 
 		private static void registerCommonTypes(ContainerBuilder builder)
 		{
-			builder.RegisterType<ErrorMessageProvider>().As<IErrorMessageProvider>().SingleInstance();
-			builder.RegisterType<LazyLoadingManagerWrapper>().As<ILazyLoadingManager>().SingleInstance();
+			builder.RegisterType<ErrorMessageProvider>().As<IErrorMessageProvider>();
+			builder.RegisterType<LazyLoadingManagerWrapper>().As<ILazyLoadingManager>();
 			builder.RegisterType<DefaultScenarioScheduleProvider>()
 				.As<IScheduleProvider>()
-				.As<IStudentAvailabilityProvider>()
-				.SingleInstance();
-			builder.RegisterType<VirtualSchedulePeriodProvider>().As<IVirtualSchedulePeriodProvider>().SingleInstance();
-			builder.RegisterType<DefaultDateCalculator>().As<IDefaultDateCalculator>().SingleInstance();
+				.As<IStudentAvailabilityProvider>();
+			builder.RegisterType<VirtualSchedulePeriodProvider>().As<IVirtualSchedulePeriodProvider>();
+			builder.RegisterType<DefaultDateCalculator>().As<IDefaultDateCalculator>();
 		}
 	}
 }
