@@ -3000,7 +3000,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to BG Head Count.
+        ///   Looks up a localized string similar to Budget Group Head Count.
         /// </summary>
         public static string BudgetGroupHeadCount {
             get {

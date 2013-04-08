@@ -11370,7 +11370,7 @@ Reduce the complexity to use these shifts.</value>
     <comment>Caption on messagebox when shift generation is stopped </comment>
   </data>
   <data name="BudgetGroupHeadCount" xml:space="preserve">
-    <value>BG Head Count</value>
+    <value>Budget Group Head Count</value>
     <comment>new option in workflow control set Budget Group Head Count</comment>
   </data>
   <data name="NotEnoughAllowance" xml:space="preserve">
