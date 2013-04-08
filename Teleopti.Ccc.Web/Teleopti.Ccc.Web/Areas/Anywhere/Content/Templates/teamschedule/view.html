@@ -34,10 +34,10 @@
                         </tr>
                     </thead>
                     <tbody data-bind="foreach: Agents">
-                        <tr class="agent" data-bind="attr: { 'data-agent-id': Id }, click: Select">
-                            <td class="agent-name">
+                        <tr class="person" data-bind="attr: { 'data-agent-id': Id }, click: Select">
+                            <td class="person-name">
                                 <!-- Must do it this way to get correct overflow: hidden in IE -->
-                                <div class="agent-name nowrap" data-bind="text: Name"></div>
+                                <div class="person-name nowrap" data-bind="text: Name"></div>
                             </td>
                             <td class="shift">
                                 <ul class="relative unstyled" data-bind="template: { name: 'layerTemplate', foreach: Layers }"></ul>

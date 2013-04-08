@@ -28,13 +28,13 @@
 	z-index: 111;
  }
  
-.team-schedule .agent
+.team-schedule .person
 {
 }
-.team-schedule .agent:last-child
+.team-schedule .person:last-child
 {
 }
-.team-schedule .agent-name 
+.team-schedule .person-name 
 {
 	max-width: 105px !important;
 	min-width: 105px !important;
