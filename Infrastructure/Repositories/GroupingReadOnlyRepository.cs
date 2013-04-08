@@ -11,16 +11,16 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 {
 	public class GroupingReadOnlyRepository : IGroupingReadOnlyRepository
 	{
-		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+		private readonly IUnitOfWorkFactoryProvider _unitOfWorkFactoryProvider;
 
-		public GroupingReadOnlyRepository(IUnitOfWorkFactory unitOfWorkFactory)
+		public GroupingReadOnlyRepository(IUnitOfWorkFactoryProvider unitOfWorkFactoryProvider)
 		{
-			_unitOfWorkFactory = unitOfWorkFactory;
+			_unitOfWorkFactoryProvider = unitOfWorkFactoryProvider;
 		}
 
 		public IEnumerable<ReadOnlyGroupPage> AvailableGroupPages()
 		{
-			using(var uow = _unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork())
+			using (var uow = _unitOfWorkFactoryProvider.LoggedOnUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
 			{
 				return ((NHibernateStatelessUnitOfWork) uow).Session.CreateSQLQuery(
 					"SELECT DISTINCT PageName,PageId FROM ReadModel.groupingreadonly WHERE businessunitid=:businessUnitId ORDER BY pagename")
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IEnumerable<ReadOnlyGroupDetail> AvailableGroups(ReadOnlyGroupPage groupPage,DateOnly queryDate)
 		{
-			using (var uow = _unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork())
+			using (var uow = _unitOfWorkFactoryProvider.LoggedOnUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
 			{
 				return ((NHibernateStatelessUnitOfWork) uow).Session.CreateSQLQuery(
 					"SELECT GroupName,GroupId,PersonId,FirstName,LastName,EmploymentNumber,TeamId,SiteId,BusinessUnitId FROM ReadModel.groupingreadonly WHERE businessunitid=:businessUnitId AND pageid=:pageId AND :currentDate BETWEEN StartDate and isnull(EndDate,'2059-12-31') AND (LeavingDate >= :currentDate OR LeavingDate IS NULL) ORDER BY groupname")
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IEnumerable<ReadOnlyGroupDetail> AvailableGroups(DateOnly queryDate)
 		{
-			using (var uow = _unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork())
+			using (var uow = _unitOfWorkFactoryProvider.LoggedOnUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
 			{
 				return ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(
 					"SELECT PageId, GroupName,GroupId,PersonId,FirstName,LastName,EmploymentNumber,TeamId,SiteId,BusinessUnitId FROM ReadModel.groupingreadonly WHERE businessunitid=:businessUnitId AND :currentDate BETWEEN StartDate and isnull(EndDate,'2059-12-31') AND (LeavingDate >= :currentDate OR LeavingDate IS NULL) ORDER BY groupname")
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IEnumerable<ReadOnlyGroupDetail> DetailsForGroup(Guid groupId, DateOnly queryDate)
 		{
-			using (var uow = _unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork())
+			using (var uow = _unitOfWorkFactoryProvider.LoggedOnUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
 			{
 				return ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(
 					"SELECT PersonId,FirstName,LastName,EmploymentNumber,TeamId,SiteId,BusinessUnitId FROM ReadModel.groupingreadonly WHERE businessunitid=:businessUnitId AND groupid=:groupId AND :currentDate BETWEEN StartDate and isnull(EndDate,'2059-12-31') AND (LeavingDate >= :currentDate OR LeavingDate IS NULL) ORDER BY groupname")
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
             //change the array to comma seperated string
             string ids = String.Join(",", (from p in inputIds select p.ToString()).ToArray());
-            using(var uow = _unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork())
+						using (var uow = _unitOfWorkFactoryProvider.LoggedOnUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
             {
             	((NHibernateStatelessUnitOfWork) uow).Session.CreateSQLQuery(
             		"exec [ReadModel].[UpdateGroupingReadModel] :idList").SetString("idList", ids).ExecuteUpdate();
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
             //change the array to comma seperated string
             string ids = String.Join(",", (from p in inputIds select p.ToString()).ToArray());
-            using (var uow = _unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork())
+						using (var uow = _unitOfWorkFactoryProvider.LoggedOnUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
             {
             	((NHibernateStatelessUnitOfWork) uow).Session.CreateSQLQuery(
             		"exec [ReadModel].[UpdateGroupingReadModelGroupPage] :idList").SetString("idList", ids).ExecuteUpdate();
@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
             //change the array to comma seperated string
             string ids = String.Join(",", (from p in inputIds select p.ToString()).ToArray());
-            using (var uow = _unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork())
+						using (var uow = _unitOfWorkFactoryProvider.LoggedOnUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
             {
             	((NHibernateStatelessUnitOfWork) uow).Session.CreateSQLQuery(
             		"exec [ReadModel].[UpdateGroupingReadModelData] :idList").SetString("idList", ids).ExecuteUpdate();

@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IMappingEngine _mapper;
 		private readonly IServiceBusSender _serviceBusSender;
-		private readonly IUnitOfWorkFactory _uowFactory;
+		private readonly IUnitOfWorkFactoryProvider _unitOfWorkFactoryProvider;
 		private readonly ICurrentBusinessUnitProvider _businessUnitProvider;
 		private readonly INow _nu;
 		private readonly IShiftTradeRequestSetChecksum _shiftTradeRequestSetChecksum;
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 									ILoggedOnUser loggedOnUser,
 									IMappingEngine mapper,
 									IServiceBusSender serviceBusSender,
-									IUnitOfWorkFactory uowFactory,
+									IUnitOfWorkFactoryProvider unitOfWorkFactoryProvider,
 									ICurrentBusinessUnitProvider businessUnitProvider,
 									INow nu)
 		{
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			_loggedOnUser = loggedOnUser;
 			_mapper = mapper;
 			_serviceBusSender = serviceBusSender;
-			_uowFactory = uowFactory;
+			_unitOfWorkFactoryProvider = unitOfWorkFactoryProvider;
 			_businessUnitProvider = businessUnitProvider;
 			_nu = nu;
 			_shiftTradeRequestSetChecksum = shiftTradeRequestSetChecksum;
@@ -77,7 +77,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 				_serviceBusSender.NotifyServiceBus(new AcceptShiftTrade
 													   {
 														   BusinessUnitId = _businessUnitProvider.CurrentBusinessUnit().Id.GetValueOrDefault(),
-														   Datasource = _uowFactory.Name,
+														   Datasource = _unitOfWorkFactoryProvider.LoggedOnUnitOfWorkFactory().Name,
 														   Timestamp = _nu.UtcDateTime(),
 														   PersonRequestId = personRequest.Id.GetValueOrDefault(),
 														   AcceptingPersonId = _loggedOnUser.CurrentUser().Id.GetValueOrDefault(),

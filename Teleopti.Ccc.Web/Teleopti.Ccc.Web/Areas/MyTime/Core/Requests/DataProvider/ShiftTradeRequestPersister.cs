@@ -19,8 +19,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		private readonly INow _now;
 		private readonly IDataSourceProvider _dataSourceProvider;
 		private readonly ICurrentBusinessUnitProvider _businessUnitProvider;
+		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 		private readonly IServiceBusSender _serviceBusSender;
-		private readonly IUnitOfWorkFactory _uowFactory;
 		private readonly IShiftTradeRequestSetChecksum _shiftTradeSetChecksum;
 
 		public ShiftTradeRequestPersister(IPersonRequestRepository personRequestRepository, 
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 																		INow now,
 																		IDataSourceProvider dataSourceProvider,
 																		ICurrentBusinessUnitProvider businessUnitProvider,
-																		IUnitOfWorkFactory uowFactory,
+																		ICurrentUnitOfWork currentUnitOfWork,
 																		IShiftTradeRequestSetChecksum shiftTradeSetChecksum)
 		{
 			_personRequestRepository = personRequestRepository;
@@ -39,8 +39,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			_now = now;
 			_dataSourceProvider = dataSourceProvider;
 			_businessUnitProvider = businessUnitProvider;
+			_currentUnitOfWork = currentUnitOfWork;
 			_serviceBusSender = serviceBusSender;
-			_uowFactory = uowFactory;
 			_shiftTradeSetChecksum = shiftTradeSetChecksum;
 		}
 
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 						PersonRequestId = personRequest.Id.GetValueOrDefault(Guid.Empty),
 						Timestamp = _now.UtcDateTime()
 					};
-				_uowFactory.CurrentUnitOfWork().AfterSuccessfulTx(() => _serviceBusSender.NotifyServiceBus(message));
+				_currentUnitOfWork.Current().AfterSuccessfulTx(() => _serviceBusSender.NotifyServiceBus(message));
 			}
 		}
 	}

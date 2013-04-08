@@ -31,8 +31,6 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				var parameters = constructorInfo.GetParameters();
 				if (parameters.Count() == 1)
 				{
-					if (parameters[0].ParameterType.Equals(typeof(IUnitOfWorkFactory)))
-						return true;
 					if (parameters[0].ParameterType.Equals(typeof(ICurrentUnitOfWork)))
 						return true;
 				}
