@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterAssemblyTypes(typeof(PersonRepository).Assembly)
 				.Where(t => isRepository(t) && hasCorrectCtor(t))
 				.AsImplementedInterfaces()
-				.InstancePerDependency();
+				.SingleInstance();
 
 			builder.Register(c => StatisticRepositoryFactory.Create())
 				.As<IStatisticRepository>();
