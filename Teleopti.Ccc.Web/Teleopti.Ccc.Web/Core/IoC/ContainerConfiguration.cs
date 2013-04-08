@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 
 			builder.RegisterControllers(Assembly.GetExecutingAssembly());
 
-			builder.RegisterModule(new AutofacWebTypesModuleFromRepository20111123());
+			builder.RegisterModule(new AutofacWebTypesModule());
 			builder.RegisterType<CurrentHttpContext>().As<ICurrentHttpContext>().SingleInstance();
 
 			builder.RegisterFilterProvider();

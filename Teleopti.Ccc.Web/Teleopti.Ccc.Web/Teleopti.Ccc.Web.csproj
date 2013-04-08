@@ -468,7 +468,6 @@
     <Compile Include="Areas\Start\Core\Authentication\Services\WebLogOn.cs" />
     <Compile Include="Areas\Start\Core\IoC\StartAreaModule.cs" />
     <Compile Include="Areas\MyTime\Core\DatePatternConverter.cs" />
-    <Compile Include="Core\IoC\AutofacWebTypesModuleFromRepository20111123.cs" />
     <Compile Include="Core\IoC\CommonModule.cs">
       <SubType>Code</SubType>
     </Compile>
