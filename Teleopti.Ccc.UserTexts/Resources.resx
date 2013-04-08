@@ -11191,4 +11191,8 @@ These options are activated:
     <value>Selected absences</value>
     <comment>Selected absences</comment>
   </data>
+  <data name="MessagesParenthesis" xml:space="preserve">
+    <value>Messages ({0})</value>
+    <comment>Messages title with number of unread messages</comment>
+  </data>
 </root>
