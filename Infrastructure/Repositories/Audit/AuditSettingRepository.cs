@@ -10,13 +10,15 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 		public const string MissingAuditSetting = "Missing audit setting in database!";
 
 		public AuditSettingRepository(IUnitOfWork unitOfWork)
-			:base(unitOfWork)
+			: base(unitOfWork)
 		{
+			
 		}
 
-		public AuditSettingRepository(IUnitOfWorkFactory unitOfWorkFactory)
-			:base(unitOfWorkFactory)
+		public AuditSettingRepository(ICurrentUnitOfWork currentUnitOfWork)
+			:base(currentUnitOfWork)
 		{
+			
 		}
 
 		public void TruncateAndMoveScheduleFromCurrentToAuditTables()

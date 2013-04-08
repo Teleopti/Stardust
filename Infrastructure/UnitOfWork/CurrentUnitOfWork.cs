@@ -4,21 +4,21 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
 	public class CurrentUnitOfWork : ICurrentUnitOfWork
 	{
-		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+		private readonly IUnitOfWorkFactoryProvider _unitOfWorkFactoryProvider;
 
-		public CurrentUnitOfWork(IUnitOfWorkFactory unitOfWorkFactory)
+		public CurrentUnitOfWork(IUnitOfWorkFactoryProvider unitOfWorkFactoryProvider)
 		{
-			_unitOfWorkFactory = unitOfWorkFactory;
+			_unitOfWorkFactoryProvider = unitOfWorkFactoryProvider;
 		}
 
 		public IUnitOfWork Current()
 		{
-			return _unitOfWorkFactory.CurrentUnitOfWork();
+			return _unitOfWorkFactoryProvider.LoggedOnUnitOfWorkFactory().CurrentUnitOfWork();
 		}
 
 		public static ICurrentUnitOfWork Make()
 		{
-			return new CurrentUnitOfWork(UnitOfWorkFactory.Current);
+			return new CurrentUnitOfWork(UnitOfWorkFactory.LoggedOnProvider());
 		}
 	}
 }

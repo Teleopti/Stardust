@@ -17,28 +17,40 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     /// </remarks>
     public class Repository : IRepository
     {
-        private readonly IUnitOfWork _uow;
+	    private readonly ICurrentUnitOfWork _currentUnitOfWork;
+	    private readonly IUnitOfWork _uow;
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 
-        //old way
+        //old way - avoid using this one
         public Repository(IUnitOfWork unitOfWork)
         {
             InParameter.NotNull("unitOfWork", unitOfWork);
             _uow = unitOfWork;
         }
 
-        //new way
+        //old way - don't use this one
         public Repository(IUnitOfWorkFactory unitOfWorkFactory)
         {
             _unitOfWorkFactory = unitOfWorkFactory;
         }
 
+			//new, safe way
+	    public Repository(ICurrentUnitOfWork currentUnitOfWork)
+	    {
+		    _currentUnitOfWork = currentUnitOfWork;
+	    }
 
-        public IUnitOfWork UnitOfWork
+
+	    public IUnitOfWork UnitOfWork
         {
             get 
             {
-                return _uow ?? _unitOfWorkFactory.CurrentUnitOfWork();
+							//fix this
+	            if (_uow != null)
+		            return _uow;
+	            if (_unitOfWorkFactory != null)
+		            return _unitOfWorkFactory.CurrentUnitOfWork();
+	            return _currentUnitOfWork.Current();
             }
         }
 
