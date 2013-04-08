@@ -1229,6 +1229,12 @@
       <DependentUpon>SchedulerReportsViewer.cs</DependentUpon>
     </Compile>
     <Compile Include="Reporting\ViewerFoldingChangedEvent.cs" />
+    <Compile Include="Scheduling\AgentPreferenceView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Scheduling\AgentPreferenceView.Designer.cs">
+      <DependentUpon>AgentPreferenceView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionGrid.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -2792,6 +2798,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Reporting\ReportSettingsScheduledTimePerActivityView.resx">
       <DependentUpon>ReportSettingsScheduledTimePerActivityView.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Scheduling\AgentPreferenceView.resx">
+      <DependentUpon>AgentPreferenceView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\AgentSkillExplorer.resx">
       <DependentUpon>AgentSkillExplorer.cs</DependentUpon>
