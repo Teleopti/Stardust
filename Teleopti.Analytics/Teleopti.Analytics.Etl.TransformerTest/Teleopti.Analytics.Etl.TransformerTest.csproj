@@ -99,6 +99,7 @@
     <Compile Include="FakeData\OvertimeFactory.cs" />
     <Compile Include="Job\Jobs\RequestJobTest.cs" />
     <Compile Include="Job\Steps\EtlDayOffSubStepTest.cs" />
+    <Compile Include="Job\Steps\FactWithNeedToRunTest.cs" />
     <Compile Include="Job\Steps\StageScheduleDayOffCountJobStepTest.cs" />
     <Compile Include="Job\Steps\FactScheduleDeviationJobStepTest.cs" />
     <Compile Include="Job\Steps\LicenseCheckJobStepTest.cs" />

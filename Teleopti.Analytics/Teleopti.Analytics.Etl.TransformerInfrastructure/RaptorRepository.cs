@@ -647,7 +647,24 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
                                               _dataMartConnectionString);
 	    }
 
-	    public IList<IScheduleDay> LoadSchedulePartsPerPersonAndDate(DateTimePeriod period, IScheduleDictionary dictionary)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
+		public bool DataOnStepHasChanged(DateTimePeriod onPeriod, IBusinessUnit currentBusinessUnit, string stepName)
+		{
+			using(var uow = UnitOfWorkFactory.Current.CreateAndOpenStatelessUnitOfWork())
+			{
+				var res = ((NHibernateStatelessUnitOfWork) uow).Session.CreateSQLQuery(
+					"exec mart.DataOnStepHasChanged :stepName, :fromDate, :toDate, :businessUnitId")
+					.SetString("stepName", stepName)
+					.SetDateTime("fromDate", onPeriod.StartDateTime)
+					.SetDateTime("toDate", onPeriod.EndDateTime)
+					.SetGuid("businessUnitId",currentBusinessUnit.Id.GetValueOrDefault())
+					.SetReadOnly(true)
+					.UniqueResult<int>();
+				return res > 0;
+			}	
+		}
+
+		public IList<IScheduleDay> LoadSchedulePartsPerPersonAndDate(DateTimePeriod period, IScheduleDictionary dictionary)
 		{
 			List<IScheduleDay> scheduleParts = new List<IScheduleDay>();
 			foreach (IPerson person in dictionary.Keys)

@@ -211,5 +211,7 @@ namespace Teleopti.Analytics.Etl.Interfaces.Transformer
         ILicenseStatusUpdater LicenseStatusUpdater { get; }
         int LoadQualityQuestDataMart(int dataSourceId, IBusinessUnit currentBusinessUnit);
         int FillFactQualityDataMart(DateTimePeriod period, int dataSourceId, TimeZoneInfo defaultTimeZone, IBusinessUnit currentBusinessUnit);
+
+	    bool DataOnStepHasChanged(DateTimePeriod onPeriod, IBusinessUnit currentBusinessUnit, string stepName);
     }
 }

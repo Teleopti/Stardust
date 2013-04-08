@@ -96,6 +96,7 @@
     <Compile Include="Common\PmPermissionType.cs" />
     <Compile Include="Transformer\DayOffEtlLoadSource.cs" />
     <Compile Include="Transformer\IEtlDayOffSubStep.cs" />
+    <Compile Include="Transformer\IRaptorRepository.cs" />
     <Compile Include="Transformer\IScheduleDayOffCountTransformer.cs" />
     <Compile Include="Transformer\IScheduleProjection.cs" />
     <Compile Include="PerformanceManager\IPmPermissionExtractor.cs" />
@@ -131,7 +132,6 @@
     <Compile Include="Transformer\ISchedulePreferenceTransformer.cs" />
     <Compile Include="Transformer\JobCategoryType.cs" />
     <Compile Include="Transformer\JobResultStatusType.cs" />
-    <Compile Include="Transformer\IRaptorRepository.cs" />
     <Compile Include="Transformer\CustomEventArgs.cs" />
     <Compile Include="Transformer\IJob.cs" />
     <Compile Include="Transformer\IJobResult.cs" />

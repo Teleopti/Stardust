@@ -98,6 +98,7 @@
     <Compile Include="Job\Steps\EtlDayOffSubStep.cs" />
     <Compile Include="Job\Steps\DimTimeZoneDeleteJobStep.cs" />
     <Compile Include="Job\Steps\FactQualityLoadJobStep.cs" />
+    <Compile Include="Job\Steps\INeedToRunChecker.cs" />
     <Compile Include="Job\Steps\LicenseCheckJobStep.cs" />
     <Compile Include="Job\Steps\PurgeJobStep.cs" />
     <Compile Include="Job\Steps\FactRequestedDaysJobStep.cs" />
