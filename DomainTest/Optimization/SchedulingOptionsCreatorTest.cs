@@ -8,7 +8,7 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.Optimization
 {
     [TestFixture]
-    public class SchedulingOptionsCreatorTest1
+    public class SchedulingOptionsCreatorTest
     {
         private SchedulingOptionsCreator _target;
         private IOptimizationPreferences _optimizationPreferences;
@@ -48,8 +48,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         {
             Assert.IsFalse(_schedulingOptions.UseGroupScheduling);
             _optimizationPreferences.Extra.UseTeams = true;
+	        _optimizationPreferences.Extra.KeepSameDaysOffInTeam = false;
             _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
 			Assert.IsTrue(_schedulingOptions.UseGroupScheduling);
+			Assert.IsFalse(_schedulingOptions.UseSameDayOffs);
         }
 
         [Test]
@@ -315,10 +317,13 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Levelling"), Test]
         public void VerifyLevellingOptions()
-        {
+		{
+			_optimizationPreferences.Extra.KeepSameDaysOffInTeam = false;
+
             _optimizationPreferences.Extra.UseLevellingOption = true;
             _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
             Assert.IsTrue(_schedulingOptions.UseLevellingPerOption );
+			Assert.IsTrue(_schedulingOptions.UseSameDayOffs);
 
             _optimizationPreferences.Extra.UseLevellingSameEndTime  = false;
             _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);

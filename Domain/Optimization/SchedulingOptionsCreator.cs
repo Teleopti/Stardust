@@ -55,8 +55,14 @@ namespace Teleopti.Ccc.Domain.Optimization
 			schedulingOptions.BlockFinderTypeForAdvanceScheduling =
 			   optimizationPreferences.Extra.BlockFinderTypeForAdvanceOptimization;
 	        schedulingOptions.GroupOnGroupPageForLevelingPer = optimizationPreferences.Extra.GroupPageOnTeamLevelingPer;
-	        if (schedulingOptions.BlockFinderTypeForAdvanceScheduling != BlockFinderType.None)
-		        schedulingOptions.UseSameDayOffs = true;
+			if (optimizationPreferences.Extra.UseLevellingOption)
+			{
+				schedulingOptions.UseSameDayOffs = true;
+			}
+			else
+			{
+				schedulingOptions.UseSameDayOffs = optimizationPreferences.Extra.KeepSameDaysOffInTeam;
+			}
 
 			//if (optimizationPreferences.Shifts.KeepShiftCategories)
 			//    schedulingOptions.RescheduleOptions = OptimizationRestriction.KeepShiftCategory;
