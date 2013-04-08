@@ -5,16 +5,17 @@ namespace Teleopti.Ccc.Web.Core.Aop.Aspects
 {
 	public class UnitOfWorkAspect : IAspect
 	{
-		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+		private readonly IUnitOfWorkFactoryProvider _unitOfWorkFactoryProvider;
 		private IUnitOfWork _unitOfWork;
 
-		public UnitOfWorkAspect(IUnitOfWorkFactory unitOfWorkFactory) {
-			_unitOfWorkFactory = unitOfWorkFactory;
+		public UnitOfWorkAspect(IUnitOfWorkFactoryProvider unitOfWorkFactoryProvider)
+		{
+			_unitOfWorkFactoryProvider = unitOfWorkFactoryProvider;
 		}
 
 		public void OnBeforeInvokation()
 		{
-			_unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork();
+			_unitOfWork = _unitOfWorkFactoryProvider.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork();
 		}
 
 		public void OnAfterInvokation()
