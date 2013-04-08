@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.Win.Intraday
 
         private void IntradayViewContent_Load(object sender, EventArgs e)
         {
-            wpfShiftEditor1 = new WpfShiftEditor(_eventAggregator, new CreateLayerViewModelService()) { MinHeight = 80 };
+			wpfShiftEditor1 = new WpfShiftEditor(_eventAggregator, new CreateLayerViewModelService(), false) { MinHeight = 80 };
             pinnedLayerView = new PinnedLayerView();
             elementHostShiftEditor.Child = wpfShiftEditor1;
             elementHostPinnedLayerView.Child = pinnedLayerView;

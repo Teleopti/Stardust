@@ -36,15 +36,15 @@ namespace Teleopti.Ccc.WpfControls.Controls.Editor
         public event EventHandler<CustomEventArgs<IPersonMeeting>> CreateMeeting;
         public event EventHandler<EventArgs> Undo;
         #endregion
-
+		
         private ShiftEditorViewModel _model;
         private GenericEvent<TriggerShiftEditorUpdate> _triggerShiftEditoEvent;
         private SubscriptionToken _subscriptionToken;
        
 
-        public WpfShiftEditor(IEventAggregator eventAggregator,ICreateLayerViewModelService createLayerViewModelService)
+        public WpfShiftEditor(IEventAggregator eventAggregator,ICreateLayerViewModelService createLayerViewModelService, bool showMeetingsInContextMenu)
         {
-            _model = new ShiftEditorViewModel(eventAggregator, createLayerViewModelService);
+			_model = new ShiftEditorViewModel(eventAggregator, createLayerViewModelService, showMeetingsInContextMenu);
             _model.AddObserver(this); //Because we are using events for now. We could add schedscreen (if implementing IShiftEditorObserver)here instead of events..
             DataContext = _model;
             setupforEventAggregator(eventAggregator);
