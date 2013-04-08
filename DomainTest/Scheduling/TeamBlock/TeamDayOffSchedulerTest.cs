@@ -383,7 +383,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         }
 
         [Test]
-        public void ShouldContinueIfscheduleDayAvailableForDayOffSpecificationNotSatisfied()
+        public void ShouldContinueIfScheduleDayAvailableForDayOffSpecificationNotSatisfied()
         {
             var matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
             var scheduleDayProList = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro });
@@ -491,7 +491,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         }
 
         [Test]
-        public void ShouldThrowExceptionWhenRoolbackIsNull()
+        public void ShouldThrowExceptionWhenRollbackIsNull()
         {
             var matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
             var scheduleDayProList = new ReadOnlyCollection<IScheduleDayPro>(new List<IScheduleDayPro> { _scheduleDayPro });
@@ -552,7 +552,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             }
         }
 
-        [Test ]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void ShouldReturnForTeamWhenNotAllowedForDayOffsIsTrue()
         {
             var matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
@@ -591,7 +591,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             }
         }
 
-        [Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void ShouldContinueForTeamWhenCurrentDayOffIsPopulated()
         {
             var matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
@@ -637,7 +637,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             }
         }
 
-        [Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void ShouldContinueForTeamWhenCurrentEqualsTarget()
         {
             var matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
@@ -682,7 +682,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             }
         }
 
-        [Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void ShouldContinueForTeamIfscheduleDayAvailableForDayOffSpecificationNotSatisfied()
         {
             var matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
@@ -731,7 +731,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             }
         }
 
-        [Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void ShouldContinueForTeamDayOffIsFromContract()
         {
             var matrixList = new List<IScheduleMatrixPro> { _scheduleMatrixPro };
