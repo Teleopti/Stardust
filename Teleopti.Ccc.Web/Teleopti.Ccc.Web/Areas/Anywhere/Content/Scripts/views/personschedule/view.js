@@ -56,6 +56,10 @@ define([
 
 			},
 
+            dispose: function(options) {
+                subscriptions.unsubscribePersonSchedule();
+            },
+			
             clearaction: function(options) {
                 personSchedule.AddingFullDayAbsence(false);
             },

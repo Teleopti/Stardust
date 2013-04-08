@@ -26,6 +26,8 @@ define([
 		};
 
 		var subscribe = function (options) {
+		    var deferred = $.Deferred();
+		    
 		    var subscription = {};
 		    if (options.datasource) subscription.DataSource = options.datasource;
 		    if (options.businessUnitId) subscription.BusinessUnitId = options.businessUnitId;
@@ -35,22 +37,34 @@ define([
 		    if (options.domainReferenceId) subscription.DomainReferenceId = options.domainReferenceId;
 		    if (options.lowerBoundary) subscription.LowerBoundary = options.lowerBoundary;
 		    if (options.upperBoundary) subscription.UpperBoundary = options.upperBoundary;
+		    subscription.callback = options.callback;
+		    subscription.promise = deferred.promise();
 
 		    startPromise.done(function() {
 		        hub.server
 		            .addSubscription(subscription)
-		            .done(function(route) {
-		                subscriptions.push({
-		                    route: route,
-		                    callback: options.callback
-		                });
+		            .done(function (route) {
+		                subscription.route = route;
+		                subscriptions.push(subscription);
+		                deferred.resolve();
 		            });
 		    });
+
+		    return subscription;
 		};
+
+		var unsubscribe = function (subscription) {
+		    subscription.promise
+		        .done(function() {
+		            hub.server.removeSubscription(subscription.route);
+		            subscriptions.splice(subscriptions.indexOf(subscription), 1);
+		        });
+	    };
 	    
 		return {
 		    start: start,
-		    subscribe: subscribe
+		    subscribe: subscribe,
+		    unsubscribe: unsubscribe
 		};
 
 	});

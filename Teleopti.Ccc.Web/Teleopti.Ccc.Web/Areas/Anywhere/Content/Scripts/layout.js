@@ -49,7 +49,7 @@ define([
                 
                 if (view != currentView) {
                     if (currentView && currentView.dispose)
-                        currentView.dispose();
+                        currentView.dispose(routeInfo);
                     currentView = view;
                     view.initialize(routeInfo);
                 }

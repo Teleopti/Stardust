@@ -23,15 +23,18 @@ define([
 	    };
 	    
 		var teamScheduleHub = $.connection.teamScheduleHub;
-	    var incomingTeamSchedule = function() { };
+	    var incomingTeamSchedule = null;
 	    teamScheduleHub.client.incomingTeamSchedule = function (data) {
-	        logException(function() { incomingTeamSchedule(data); });
+	        if (incomingTeamSchedule != null)
+    	        logException(function() { incomingTeamSchedule(data); });
 	    };
 	    
-		var personScheduleHub = $.connection.personScheduleHub;
-		var incomingPersonSchedule = function() { };
-		personScheduleHub.client.incomingPersonSchedule = function(data) {
-		    logException(function () { incomingPersonSchedule(data); });
+	    var personScheduleHub = $.connection.personScheduleHub;
+	    var personScheduleSubscription = null;
+	    var incomingPersonSchedule = null;
+	    personScheduleHub.client.incomingPersonSchedule = function (data) {
+	        if (incomingPersonSchedule != null)
+    		    logException(function () { incomingPersonSchedule(data); });
 		};
 
 		var start = function () {
@@ -41,19 +44,21 @@ define([
 
 	    return {
 	        start: start,
+	        
 	        subscribeTeamSchedule: function(teamId, date, callback) {
 	            incomingTeamSchedule = callback;
 	            startPromise.done(function() {
 	                teamScheduleHub.server.subscribeTeamSchedule(teamId, date);
 	            });
 	        },
+	        
 	        subscribePersonSchedule: function (personId, date, callback) {
 	            incomingPersonSchedule = callback;
 	            startPromise.done(function () {
 	                
 	                personScheduleHub.server.personSchedule(personId, date);
 
-	                messagebroker.subscribe({
+	                personScheduleSubscription = messagebroker.subscribe({
 	                    domainReferenceType: 'Person',
 	                    domainReferenceId: personId,
 	                    domainType: 'IPersonScheduleDayReadModel',
@@ -66,6 +71,13 @@ define([
 	                    }
 	                });
 	                
+	            });
+	        },
+	        
+	        unsubscribePersonSchedule: function () {
+	            startPromise.done(function() {
+	                incomingPersonSchedule = null;
+	                messagebroker.unsubscribe(personScheduleSubscription);
 	            });
 	        }
 	    };
