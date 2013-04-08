@@ -20,6 +20,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
+				public AgentDayScheduleTagRepository(ICurrentUnitOfWork currentUnitOfWork)
+					: base(currentUnitOfWork)
+	    {
+	    }
+
+
         public IList<IAgentDayScheduleTag> Find(DateTimePeriod period, IScenario scenario)
         {
             ICriteria crit = Session.CreateCriteria(typeof(AgentDayScheduleTag))

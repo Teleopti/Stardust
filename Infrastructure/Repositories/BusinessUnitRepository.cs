@@ -29,6 +29,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     	{
     	}
 
+			public BusinessUnitRepository(ICurrentUnitOfWork currentUnitOfWork)
+				: base(currentUnitOfWork)
+	    {
+		    
+	    }
+
         /// <summary>
         /// Finds all business units sorted by name.
         /// </summary>

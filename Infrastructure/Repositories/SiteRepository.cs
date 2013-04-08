@@ -26,6 +26,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
+				public SiteRepository(ICurrentUnitOfWork currentUnitOfWork)
+					: base(currentUnitOfWork)
+	    {
+		    
+	    }
+
         public ISite CreateInstance(string name)
         {
             return new Site(name);

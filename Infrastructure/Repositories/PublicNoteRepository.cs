@@ -21,6 +21,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
+				public PublicNoteRepository(ICurrentUnitOfWork currentUnitOfWork)
+					: base(currentUnitOfWork)
+	    {
+		    
+	    }
+
         public IList<IPublicNote> Find(DateTimePeriod period, IScenario scenario)
         {
             ICriteria crit = Session.CreateCriteria(typeof(PublicNote))

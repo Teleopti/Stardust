@@ -28,6 +28,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
+				public ContractRepository(ICurrentUnitOfWork currentUnitOfWork)
+					: base(currentUnitOfWork)
+	    {
+		    
+	    }
+
         /// <summary>
         /// Finds all contract by description.
         /// </summary>

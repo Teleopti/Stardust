@@ -30,6 +30,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
+				public TeamRepository(ICurrentUnitOfWork currentUnitOfWork)
+					: base(currentUnitOfWork)
+	    {
+		    
+	    }
+
         /// <summary>
         /// Finds all team by order.
         /// </summary>

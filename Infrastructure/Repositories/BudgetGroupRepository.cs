@@ -11,5 +11,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         public BudgetGroupRepository(IUnitOfWorkFactory unitOfWorkFactory) : base(unitOfWorkFactory)
         {    
         }
+
+				public BudgetGroupRepository(ICurrentUnitOfWork currentUnitOfWork)
+					: base(currentUnitOfWork)
+	    {
+		    
+	    }
     }
 }

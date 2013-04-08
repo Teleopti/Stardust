@@ -27,6 +27,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
+	    public AbsenceRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
+	    {
+	    }
+
         /// <summary>
         /// Loads the All absences by sorting it's by name.
         /// </summary>

@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
         public BudgetDayRepository(IUnitOfWork unitOfWork) : base(unitOfWork) { }
 
+
         public DateOnly FindLastDayWithStaffEmployed(IScenario scenario, IBudgetGroup budgetGroup, DateOnly lastDateToSearch)
         {
             var foundBudgetDays = Session.CreateCriteria(typeof(BudgetDay))

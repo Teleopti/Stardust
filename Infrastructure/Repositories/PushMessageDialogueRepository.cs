@@ -27,6 +27,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 		}
 
+		public PushMessageDialogueRepository(ICurrentUnitOfWork currentUnitOfWork)
+			: base(currentUnitOfWork)
+		{
+			
+		}
+
 		/// <summary>
 		/// Finds the the dialogues that belongs to the pushMessage.
 		/// </summary>

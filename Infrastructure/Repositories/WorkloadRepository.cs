@@ -29,6 +29,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
+				public WorkloadRepository(ICurrentUnitOfWork currentUnitOfWork)
+					: base(currentUnitOfWork)
+	    {
+		    
+	    }
+
         /// <summary>
         /// Removes the specified workload.
         /// Also deletes its WorkloadDays.

@@ -28,6 +28,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
+				public ContractScheduleRepository(ICurrentUnitOfWork currentUnitOfWork)
+					: base(currentUnitOfWork)
+	    {
+		    
+	    }
+
         /// <summary>
         /// Finds all contract schedule by description.
         /// </summary>

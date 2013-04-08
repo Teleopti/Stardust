@@ -34,6 +34,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
+				public LicenseRepository(ICurrentUnitOfWork currentUnitOfWork)
+					: base(currentUnitOfWork)
+	    {
+		    
+	    }
+
         /// <summary>
         /// Adds the specified license to repository.
         /// Will be persisted when PersistAll is called (or sooner).

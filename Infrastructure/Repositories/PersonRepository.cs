@@ -44,6 +44,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
+				public PersonRepository(ICurrentUnitOfWork currentUnitOfWork)
+					: base(currentUnitOfWork)
+	    {
+		    
+	    }
+
         /// <summary>
         /// Tries to find a basic authenticated user.
         /// </summary>

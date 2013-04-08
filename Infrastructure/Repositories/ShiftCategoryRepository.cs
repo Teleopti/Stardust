@@ -26,6 +26,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
+				public ShiftCategoryRepository(ICurrentUnitOfWork currentUnitOfWork)
+					: base(currentUnitOfWork)
+	    {
+		    
+	    }
+
         public IList<IShiftCategory> FindAll()
         {
             return Session.CreateCriteria(typeof (ShiftCategory))

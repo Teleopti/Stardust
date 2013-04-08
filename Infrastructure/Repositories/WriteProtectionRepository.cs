@@ -18,5 +18,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             : base(unitOfWorkFactory)
         {
         }
+
+				public WriteProtectionRepository(ICurrentUnitOfWork currentUnitOfWork)
+					: base(currentUnitOfWork)
+	    {
+		    
+	    }
     }
 }

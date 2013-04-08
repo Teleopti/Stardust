@@ -14,5 +14,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             : base(unitOfWorkFactory)
         {
         }
+
+				public ImportForecastsRepository(ICurrentUnitOfWork currentUnitOfWork)
+					: base(currentUnitOfWork)
+	    {
+		    
+	    }
     }
 }

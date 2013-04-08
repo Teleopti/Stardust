@@ -26,6 +26,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
+	    public ExtendedPreferenceTemplateRepository(ICurrentUnitOfWork currentUnitOfWork)
+					: base(currentUnitOfWork)
+	    {
+		    
+	    }
+
         public IList<IExtendedPreferenceTemplate> FindByUser(IPerson user)
         {
             var extendedPreferenceTemplates = Session.CreateCriteria(typeof(IExtendedPreferenceTemplate))

@@ -42,6 +42,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             :base(unitOfWorkFactory)
         {
         }
+
+				public MultiplicatorRepository(ICurrentUnitOfWork currentUnitOfWork)
+					: base(currentUnitOfWork)
+	    {
+		    
+	    }
         #endregion
 
         #region Overrides - (1)

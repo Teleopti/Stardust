@@ -22,6 +22,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
+				public WorkflowControlSetRepository(ICurrentUnitOfWork currentUnitOfWork)
+					: base(currentUnitOfWork)
+	    {
+		    
+	    }
+
         public IList<IWorkflowControlSet> LoadAllSortByName()
         {
             var list = Session.CreateCriteria<WorkflowControlSet>()

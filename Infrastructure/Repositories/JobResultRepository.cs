@@ -25,6 +25,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
+				public JobResultRepository(ICurrentUnitOfWork currentUnitOfWork)
+					: base(currentUnitOfWork)
+	    {
+		    
+	    }
+
 		public ICollection<IJobResult> LoadHistoryWithPaging(PagingDetail pagingDetail, params string[] jobCategories)
 		{
 			var rowCount = Session.CreateCriteria<JobResult>()

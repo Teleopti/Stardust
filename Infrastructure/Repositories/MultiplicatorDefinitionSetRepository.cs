@@ -26,6 +26,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
+				public MultiplicatorDefinitionSetRepository(ICurrentUnitOfWork currentUnitOfWork)
+					: base(currentUnitOfWork)
+	    {
+		    
+	    }
+
         public IList<IMultiplicatorDefinitionSet> LoadAllSortByName()
         {
             return LoadAll();

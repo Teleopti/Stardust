@@ -29,6 +29,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
+				public SkillRepository(ICurrentUnitOfWork currentUnitOfWork)
+					: base(currentUnitOfWork)
+	    {
+		    
+	    }
+
         /// <summary>
         /// Finds all and include workload and queues.
         /// </summary>
