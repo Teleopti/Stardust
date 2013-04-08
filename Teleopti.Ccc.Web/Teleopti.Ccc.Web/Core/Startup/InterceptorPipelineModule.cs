@@ -7,10 +7,10 @@ namespace Teleopti.Ccc.Web.Core.Startup
 {
 	public class InterceptorPipelineModule : HubPipelineModule
 	{
-		private readonly Lazy<IUnitOfWorkFactoryProvider> _unitOfWorkFactorProvider;
+		private readonly Lazy<ICurrentUnitOfWorkFactory> _unitOfWorkFactorProvider;
 		private IUnitOfWork _unitOfWork;
 
-		public InterceptorPipelineModule(Lazy<IUnitOfWorkFactoryProvider> unitOfWorkFactory)
+		public InterceptorPipelineModule(Lazy<ICurrentUnitOfWorkFactory> unitOfWorkFactory)
 		{
 			_unitOfWorkFactorProvider = unitOfWorkFactory;
 		}

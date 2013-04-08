@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests
 			var mapper = MockRepository.GenerateMock<IMappingEngine>();
 			var personRequestCheckAuthorization = MockRepository.GenerateMock<IPersonRequestCheckAuthorization>();
 			var busSender = MockRepository.GenerateMock<IServiceBusSender>();
-			var unitOfWorkFactoryProvider = MockRepository.GenerateMock<IUnitOfWorkFactoryProvider>();
+			var unitOfWorkFactoryProvider = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
 			var uowFactory = MockRepository.GenerateStub<IUnitOfWorkFactory>();
 			uowFactory.Expect(x => x.Name).Return("gegga");
 			unitOfWorkFactoryProvider.Expect(x => x.LoggedOnUnitOfWorkFactory()).Return(uowFactory);

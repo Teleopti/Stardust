@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<CurrentUnitOfWork>().As<ICurrentUnitOfWork>().SingleInstance();
-			builder.RegisterType<UnitOfWorkFactoryProvider>().As<IUnitOfWorkFactoryProvider>().SingleInstance();
+			builder.RegisterType<CurrentUnitOfWorkFactory>().As<ICurrentUnitOfWorkFactory>().SingleInstance();
 		}
 	}
 }

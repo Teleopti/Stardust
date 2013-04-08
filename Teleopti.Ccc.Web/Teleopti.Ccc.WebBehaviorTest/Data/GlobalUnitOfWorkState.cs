@@ -5,11 +5,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 {
 	public static class GlobalUnitOfWorkState
 	{
-		public static IUnitOfWorkFactoryProvider UnitOfWorkFactoryProvider;
+		public static ICurrentUnitOfWorkFactory CurrentUnitOfWorkFactory;
 
 		public static void UnitOfWorkAction(Action<IUnitOfWork> action)
 		{
-			using (var unitOfWork = UnitOfWorkFactoryProvider.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+			using (var unitOfWork = CurrentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
 				action.Invoke(unitOfWork);
 				unitOfWork.PersistAll();

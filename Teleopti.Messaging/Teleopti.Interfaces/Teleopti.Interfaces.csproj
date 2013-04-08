@@ -775,7 +775,7 @@
     <Compile Include="Infrastructure\IStatelessUnitOfWork.cs" />
     <Compile Include="Infrastructure\IUnitOfWork.cs" />
     <Compile Include="Infrastructure\IUnitOfWorkFactory.cs" />
-    <Compile Include="Infrastructure\IUnitOfWorkFactoryProvider.cs" />
+    <Compile Include="Infrastructure\ICurrentUnitOfWorkFactory.cs" />
     <Compile Include="Infrastructure\IWriteToFile.cs" />
     <Compile Include="Domain\IWorkShiftBackToLegalStateServicePro.cs" />
     <Compile Include="Infrastructure\LicenseType.cs" />

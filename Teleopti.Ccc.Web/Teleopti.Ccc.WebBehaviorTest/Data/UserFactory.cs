@@ -224,14 +224,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		private void updateReadModels()
 		{
-			var uowf = GlobalUnitOfWorkState.UnitOfWorkFactoryProvider;
+			var uowf = GlobalUnitOfWorkState.CurrentUnitOfWorkFactory;
 			var groupingReadOnlyRepository = new GroupingReadOnlyRepository(uowf);
 			groupingReadOnlyRepository.UpdateGroupingReadModel(new Collection<Guid>());
 		}
 
 		private void doPostSetups()
 		{
-			using (var uow = GlobalUnitOfWorkState.UnitOfWorkFactoryProvider.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+			using (var uow = GlobalUnitOfWorkState.CurrentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
 				_postSetups.ForEach(s =>
 				{

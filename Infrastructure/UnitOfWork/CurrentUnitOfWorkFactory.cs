@@ -4,12 +4,12 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
-	public class UnitOfWorkFactoryProvider : IUnitOfWorkFactoryProvider
+	public class CurrentUnitOfWorkFactory : ICurrentUnitOfWorkFactory
 	{
 		private const string youAreNotLoggedOn ="You are not logged on.";
 		private readonly ICurrentTeleoptiPrincipal _currentTeleoptiPrincipal;
 
-		public UnitOfWorkFactoryProvider(ICurrentTeleoptiPrincipal currentTeleoptiPrincipal)
+		public CurrentUnitOfWorkFactory(ICurrentTeleoptiPrincipal currentTeleoptiPrincipal)
 		{
 			_currentTeleoptiPrincipal = currentTeleoptiPrincipal;
 		}

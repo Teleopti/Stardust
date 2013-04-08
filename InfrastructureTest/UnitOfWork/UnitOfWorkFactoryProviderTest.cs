@@ -13,14 +13,14 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 	[TestFixture]
 	public class UnitOfWorkFactoryProviderTest
 	{
-		private IUnitOfWorkFactoryProvider target;
+		private ICurrentUnitOfWorkFactory target;
 		private ICurrentTeleoptiPrincipal currentTeleoptiPrincipal;
 
 		[SetUp]
 		public void Setup()
 		{
 			currentTeleoptiPrincipal = MockRepository.GenerateMock<ICurrentTeleoptiPrincipal>();
-			target = new UnitOfWorkFactoryProvider(currentTeleoptiPrincipal);
+			target = new CurrentUnitOfWorkFactory(currentTeleoptiPrincipal);
 		}
 
 		[Test]

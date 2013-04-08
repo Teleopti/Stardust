@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Web.Filters
 		{
 			base.OnActionExecuting(filterContext);
 
-			var unitOfWorkFactory = DependencyResolver.Current.GetService<IUnitOfWorkFactoryProvider>();
+			var unitOfWorkFactory = DependencyResolver.Current.GetService<ICurrentUnitOfWorkFactory>();
 			unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork();
 		}
 

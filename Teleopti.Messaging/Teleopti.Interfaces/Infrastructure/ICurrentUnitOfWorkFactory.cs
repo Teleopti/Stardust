@@ -3,8 +3,12 @@
 	/// <summary>
 	/// Finds correct <see cref="IUnitOfWorkFactory"/>
 	/// </summary>
-	public interface IUnitOfWorkFactoryProvider
+	public interface ICurrentUnitOfWorkFactory
 	{
+		/// <summary>
+		/// Returns <see cref="IUnitOfWorkFactory"/> for current logged on user
+		/// </summary>
+		/// <returns></returns>
 		IUnitOfWorkFactory LoggedOnUnitOfWorkFactory();
 	}
 }

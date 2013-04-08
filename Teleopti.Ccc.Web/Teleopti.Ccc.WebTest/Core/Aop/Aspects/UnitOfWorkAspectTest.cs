@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.WebTest.Core.Aop.Aspects
 		[Test]
 		public void ShouldOpenUnitOfWorkBeforeInvokation()
 		{
-			var uowFactoryProvider = MockRepository.GenerateMock<IUnitOfWorkFactoryProvider>();
+			var uowFactoryProvider = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
 			var target = new UnitOfWorkAspect(uowFactoryProvider);
 			var uowFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
 			uowFactoryProvider.Expect(x => x.LoggedOnUnitOfWorkFactory()).Return(uowFactory);
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WebTest.Core.Aop.Aspects
 		[Test]
 		public void ShouldPersistAndDisposeUnitOfWorkAfterInvocation()
 		{
-			var unitOfWorkFactoryProvider = MockRepository.GenerateMock<IUnitOfWorkFactoryProvider>();
+			var unitOfWorkFactoryProvider = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
 			var uowFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
 			var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
 			var target = new UnitOfWorkAspect(unitOfWorkFactoryProvider);
