@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         public void UpdateGroupingReadModel(ICollection<Guid> inputIds)
         {
             //change the array to comma seperated string
-            string ids = String.Join(",", (from p in inputIds select p.ToString()).ToArray());
+            string ids = String.Join(",", inputIds.Select(p => p.ToString()).ToArray());
             using(var uow = _unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork())
             {
             	((NHibernateStatelessUnitOfWork) uow).Session.CreateSQLQuery(
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         public void UpdateGroupingReadModelGroupPage(ICollection<Guid> inputIds)
         {
             //change the array to comma seperated string
-            string ids = String.Join(",", (from p in inputIds select p.ToString()).ToArray());
+			string ids = String.Join(",", inputIds.Select(p => p.ToString()).ToArray());
             using (var uow = _unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork())
             {
             	((NHibernateStatelessUnitOfWork) uow).Session.CreateSQLQuery(
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         public void UpdateGroupingReadModelData(ICollection<Guid> inputIds)
         {
             //change the array to comma seperated string
-            string ids = String.Join(",", (from p in inputIds select p.ToString()).ToArray());
+			string ids = String.Join(",", inputIds.Select(p => p.ToString()).ToArray());
             using (var uow = _unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork())
             {
             	((NHibernateStatelessUnitOfWork) uow).Session.CreateSQLQuery(
