@@ -155,17 +155,18 @@ SET ready_time_s = a.ready_time_s
 FROM #agent_queue_statistics_subSP aqs
 INNER JOIN #agent_statistics_subSP a ON aqs.date_id = a.date_id AND aqs.interval_id = a.interval_id AND aqs.acd_login_id = a.acd_login_id
 
+INSERT INTO #agent_queue_statistics_subSP (date_id,interval_id,acd_login_id,person_id,ready_time_s)
+SELECT a.date_id,a.interval_id,a.acd_login_id,a.person_id,ISNULL(a.ready_time_s,0)
+FROM #agent_statistics_subSP a
+WHERE NOT EXISTS (SELECT 1 FROM #agent_queue_statistics_subSP aqs
+					WHERE aqs.date_id = a.date_id AND aqs.interval_id = a.interval_id AND aqs.acd_login_id = a.acd_login_id)
+
 UPDATE #agent_queue_statistics_subSP
 SET person_id	= acd.person_id --potential bug: may result in random update on person_id if multiple person_id share same acd_login_id
 FROM #agent_queue_statistics_subSP ags
 INNER JOIN #person_acd_subSP acd
 	ON ags.acd_login_id = acd.acd_login_id
 
-INSERT INTO #agent_queue_statistics_subSP (date_id,interval_id,acd_login_id,person_id,ready_time_s)
-SELECT a.date_id,a.interval_id,a.acd_login_id,a.person_id,ISNULL(a.ready_time_s,0)
-FROM #agent_statistics_subSP a
-WHERE NOT EXISTS (SELECT 1 FROM #agent_queue_statistics_subSP aqs
-					WHERE aqs.date_id = a.date_id AND aqs.interval_id = a.interval_id AND aqs.acd_login_id = a.acd_login_id)
 
 --Get agent schedule
 INSERT INTO #fact_schedule_subSP(schedule_date_id, interval_id, person_id, scheduled_time_m, scheduled_ready_time_m, scheduled_contract_time_m)
