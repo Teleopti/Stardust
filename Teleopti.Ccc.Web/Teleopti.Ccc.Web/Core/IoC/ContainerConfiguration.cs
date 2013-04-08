@@ -65,8 +65,8 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterModule<ShiftTradeModule>();
 
 			builder.RegisterModule<CommandDispatcherModule>();
-			//builder.RegisterModule<LocalInMemoryEventsPublisherModule>();
-			builder.RegisterModule<ServiceBusEventsPublisherModule>();
+			builder.RegisterModule<LocalInMemoryEventsPublisherModule>();
+			//builder.RegisterModule<ServiceBusEventsPublisherModule>();
 			builder.RegisterModule<CommandHandlersModule>();
 			builder.RegisterModule<EventHandlersModule>();
 			builder.RegisterType<EventsMessageSender>().As<IMessageSender>().SingleInstance();
