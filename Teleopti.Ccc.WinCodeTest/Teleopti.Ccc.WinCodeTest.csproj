@@ -528,6 +528,7 @@
     <Compile Include="Scheduler\AddOvertimeViewModelTest.cs" />
     <Compile Include="Scheduler\AddPersonalActivityViewModelTest.cs" />
     <Compile Include="Scheduler\AgentInfoHelperTest.cs" />
+    <Compile Include="Scheduler\AgentPreferenceAddCommandTest.cs" />
     <Compile Include="Scheduler\AgentPreferenceCanCreateResultTest.cs" />
     <Compile Include="Scheduler\AgentPreferenceDayCreatorTest.cs" />
     <Compile Include="Scheduler\AgentPreferencePresenterTest.cs" />

@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		}
 
 		[Test]
-		public void ShouldInitalizePresenter()
+		public void ShouldInitializePresenter()
 		{
 			Assert.AreEqual(_view, _presenter.View);
 			Assert.AreEqual(_scheduleDay, _presenter.ScheduleDay);

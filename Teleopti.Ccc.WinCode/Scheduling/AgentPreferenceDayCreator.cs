@@ -31,54 +31,87 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		public IAgentPreferenceCanCreateResult CanCreate(TimeSpan? minStart, TimeSpan? maxStart, TimeSpan? minEnd, TimeSpan? maxEnd, TimeSpan? minLength, TimeSpan? maxLength, bool endNextDay)
 		{
 			var result = new AgentPreferenceCanCreateResult();
+			result.Result = true;
 
 			if(endNextDay && maxEnd != null)
 				maxEnd = maxEnd.Value.Add(TimeSpan.FromDays(1));
 
+			result = validateStartTimes(minStart, maxStart, result);
+			if (!result.Result) return result;
+
+			result = validateEndTimes(minEnd, maxEnd, result);
+			if (!result.Result) return result;
+
+			result = validateLengths(minLength, maxLength, result);
+			if (!result.Result) return result;
+
+			result = validateStartTimesVersusEndTimes(minStart, maxStart, minEnd, maxEnd, result);
+			if (!result.Result) return result;
+
+			result = validateLengthsVersusTimes(minStart, maxStart, minEnd, maxEnd, minLength, maxLength, result);
+			if (!result.Result) return result;
+
+			return result;
+		}
+
+		private static AgentPreferenceCanCreateResult validateStartTimes(TimeSpan? minStart, TimeSpan? maxStart, AgentPreferenceCanCreateResult result)
+		{
 			if (minStart != null && maxStart != null)
 			{
 				if (minStart.Value > maxStart.Value)
 				{
 					result.Result = false;
 					result.StartTimeMinError = true;
-					return result;
 				}
 			}
 
+			return result;
+		}
+
+		private static AgentPreferenceCanCreateResult validateEndTimes(TimeSpan? minEnd, TimeSpan? maxEnd, AgentPreferenceCanCreateResult result)
+		{
 			if (minEnd != null && maxEnd != null)
 			{
 				if (minEnd.Value > maxEnd.Value)
 				{
 					result.Result = false;
 					result.EndTimeMinError = true;
-					return result;
 				}
 			}
 
+			return result;
+		}
+
+		private static AgentPreferenceCanCreateResult validateLengths(TimeSpan? minLength, TimeSpan? maxLength, AgentPreferenceCanCreateResult result)
+		{
 			if (minLength != null && maxLength != null)
 			{
 				if (minLength.Value > maxLength.Value)
 				{
 					result.Result = false;
 					result.LengthMinError = true;
-					return result;
 				}
 			}
 
+			return result;
+		}
+
+		private static AgentPreferenceCanCreateResult validateStartTimesVersusEndTimes(TimeSpan? minStart, TimeSpan? maxStart, TimeSpan? minEnd, TimeSpan? maxEnd, AgentPreferenceCanCreateResult result)
+		{
 			if (minStart != null)
 			{
-				if (minEnd != null && minStart.Value >= minEnd.Value )
+				if (minEnd != null && minStart.Value >= minEnd.Value)
 				{
 					result.Result = false;
 					result.StartTimeMinError = true;
-					return result;	
+					return result;
 				}
 
 				if (maxEnd != null && minStart.Value >= maxEnd.Value)
 				{
 					result.Result = false;
 					result.StartTimeMinError = true;
-					return result;		
+					return result;
 				}
 			}
 
@@ -99,6 +132,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				}
 			}
 
+			return result;
+		}
+
+		private static AgentPreferenceCanCreateResult validateLengthsVersusTimes(TimeSpan? minStart, TimeSpan? maxStart, TimeSpan? minEnd, TimeSpan? maxEnd,  TimeSpan? minLength,  TimeSpan? maxLength, AgentPreferenceCanCreateResult result)
+		{
 			if (minLength != null)
 			{
 				if (minStart != null && maxEnd != null)
@@ -111,7 +149,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 						result.LengthMinError = true;
 						return result;
 					}
-				}				
+				}
 			}
 
 			if (maxLength != null)
@@ -130,7 +168,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				}
 			}
 
-			result.Result = true;
 			return result;
 		}
 	}

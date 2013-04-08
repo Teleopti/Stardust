@@ -448,7 +448,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		}
 
 		[Test]
-		public void ShouldDetectCantFulfillMinLength()
+		public void ShouldDetectCannotFulfillMinLength()
 		{
 			TimeSpan? minStart = TimeSpan.FromHours(1);
 			TimeSpan? maxStart = TimeSpan.FromHours(2);
@@ -468,7 +468,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		}
 
 		[Test]
-		public void ShouldDetectCantFulfillMaxLength()
+		public void ShouldDetectCannotFulfillMaxLength()
 		{
 			TimeSpan? minStart = TimeSpan.FromHours(1);
 			TimeSpan? maxStart = TimeSpan.FromHours(2);

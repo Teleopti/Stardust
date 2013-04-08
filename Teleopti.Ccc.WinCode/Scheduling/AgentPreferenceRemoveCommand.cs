@@ -1,21 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling
 {
 	public class AgentPreferenceRemoveCommand : IExecutableCommand, ICanExecute
 	{
+		private readonly IScheduleDay _scheduleDay;
+ 
+		public AgentPreferenceRemoveCommand(IScheduleDay scheduleDay)
+		{
+			_scheduleDay = scheduleDay;
+
+		}
 		public void Execute()
 		{
-			throw new NotImplementedException();
+			if (CanExecute())
+			{
+				_scheduleDay.DeletePreferenceRestriction();
+			}
 		}
 
 		public bool CanExecute()
 		{
-			throw new NotImplementedException();
+			foreach (var persistableScheduleData in _scheduleDay.PersistableScheduleDataCollection())
+			{
+				if (persistableScheduleData is IPreferenceDay) return true;
+			}
+
+			return false;
 		}
 	}
 }
