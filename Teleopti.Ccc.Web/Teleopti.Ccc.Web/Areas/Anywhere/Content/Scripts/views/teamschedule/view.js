@@ -33,10 +33,6 @@ define([
 			navigation.GotoPersonSchedule(agentId, teamSchedule.SelectedDate());
 		}, null, "gotoagent");
 
-	    resize.onresize(function() {
-	        teamSchedule.TimeLine.WidthPixels($('.shift').width());
-	    });
-
 		var loadSchedules = function(options) {
 			subscriptions.subscribeTeamSchedule(
 				teamSchedule.SelectedTeam(),
@@ -110,7 +106,11 @@ define([
 				options.renderHtml(view);
 
 				teamSchedule = new teamScheduleViewModel();
-                
+
+				resize.onresize(function () {
+				    teamSchedule.TimeLine.WidthPixels($('.shift').width());
+				});
+
 				teamSchedule.SelectedTeam.subscribe(function () {
 					if (teamSchedule.Loading())
 						return;
