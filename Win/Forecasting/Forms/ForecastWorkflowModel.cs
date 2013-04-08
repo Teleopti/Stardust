@@ -168,6 +168,11 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
             _taskOwnerPeriod = new TaskOwnerPeriod(dateTime, _workloadDaysWithoutOutliers, taskOwnerPeriodType);
         }
 
+        public bool HasOnlyOutliersInStatisticsSelection()
+        {
+            return _workloadDaysWithStatistics.Count > 0 && _workloadDaysWithoutOutliers.Count == 0;
+        }
+
         public void InitializeLatestValidateDay(bool locked)
         {
             if (locked)
