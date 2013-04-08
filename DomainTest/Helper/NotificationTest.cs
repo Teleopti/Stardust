@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
 		}
 
 		[Test]
-		public void ShouldRouteToEmptyDatasource()
+		public void ShouldRouteToEmptyDataSource()
 		{
 			var routes = target.Routes();
 			routes.Should().Contain("/" + target.BusinessUnitId + "/type");
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.DomainTest.Helper
 		}
 
 		[Test]
-		public void ShouldRouteToEmptyBusinessUnitAndDatasource()
+		public void ShouldRouteToEmptyBusinessUnitAndDataSource()
 		{
 			var routes = target.Routes();
 			routes.Should().Contain("/" + Guid.Empty.ToString() + "/type");

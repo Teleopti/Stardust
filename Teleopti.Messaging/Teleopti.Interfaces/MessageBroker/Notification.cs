@@ -46,7 +46,7 @@ namespace Teleopti.Interfaces.MessageBroker
 			              from domainId in domainIds
 			              from domainReferenceId in domainReferenceIds
 			              from shortTerm in shortTermOrNot
-			              let route = MakeRoute(
+			              let route = makeRoute(
 				              dataSource,
 				              businessUnit,
 				              domainType,
@@ -58,7 +58,7 @@ namespace Teleopti.Interfaces.MessageBroker
 			return routes.ToArray();
 		}
 
-		private string MakeRoute(string dataSource, string businessUnit, string domainType, string domainId, string domainReferenceId, string shortTerm)
+		private static string makeRoute(string dataSource, string businessUnit, string domainType, string domainId, string domainReferenceId, string shortTerm)
 		{
 			// exclude this combo for some reason
 			if (domainReferenceId != null && domainId != null)
