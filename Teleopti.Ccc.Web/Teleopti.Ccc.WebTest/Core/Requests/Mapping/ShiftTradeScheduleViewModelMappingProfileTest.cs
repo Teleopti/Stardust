@@ -45,13 +45,13 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			var userTimeZoneStub = MockRepository.GenerateStub<IUserTimeZone>();
 			userTimeZoneStub.Expect(u => u.TimeZone()).Repeat.Any().Return(timeZone);
 			ICreateHourText createHourText2 = new CreateHourText(userCultureStub, userTimeZoneStub);
-			_timelineFactory = new ShiftTradeTimeLineHoursViewModelFactory(Depend.On(createHourText2));
+			_timelineFactory = new ShiftTradeTimeLineHoursViewModelFactory(createHourText2);
 			_possibleShiftTradePersonsProvider = MockRepository.GenerateMock<IPossibleShiftTradePersonsProvider>();
 
 			_scheduleFactory = new StubFactory();
 			
 			Mapper.Reset();
-			Mapper.Initialize(c => c.AddProfile(new ShiftTradeScheduleViewModelMappingProfile(() => _shiftTradeRequestProvider, () => _projectionProvider, Depend.On(_timelineFactory), () => _userCulture, () => _possibleShiftTradePersonsProvider)));
+			Mapper.Initialize(c => c.AddProfile(new ShiftTradeScheduleViewModelMappingProfile(_shiftTradeRequestProvider, _projectionProvider, _timelineFactory, _userCulture, _possibleShiftTradePersonsProvider)));
 		}
 
 		[Test]

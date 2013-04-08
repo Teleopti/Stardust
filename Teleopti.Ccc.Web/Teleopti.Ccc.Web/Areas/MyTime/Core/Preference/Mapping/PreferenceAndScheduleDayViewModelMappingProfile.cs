@@ -5,17 +5,16 @@ using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared;
-using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 {
 	public class PreferenceAndScheduleDayViewModelMappingProfile : Profile
 	{
-		private readonly IResolve<IProjectionProvider> _projectionProvider;
-		private readonly IResolve<IUserTimeZone> _userTimeZone;
+		private readonly IProjectionProvider _projectionProvider;
+		private readonly IUserTimeZone _userTimeZone;
 
-		public PreferenceAndScheduleDayViewModelMappingProfile(IResolve<IProjectionProvider> projectionProvider, IResolve<IUserTimeZone> userTimeZone)
+		public PreferenceAndScheduleDayViewModelMappingProfile(IProjectionProvider projectionProvider, IUserTimeZone userTimeZone)
 		{
 			_projectionProvider = projectionProvider;
 			_userTimeZone = userTimeZone;
@@ -82,7 +81,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 								{
 									Subject = personMeeting.BelongsToMeeting.GetSubject(new NoFormatting()),
 									TimeSpan = ScheduleDayStringVisualizer.ToLocalStartEndTimeString(personMeeting.Period,
-									                                     _userTimeZone.Invoke().TimeZone(), CultureInfo.CurrentCulture),
+									                                     _userTimeZone.TimeZone(), CultureInfo.CurrentCulture),
 									IsOptional = personMeeting.Optional
 								}).ToList();
 						}
@@ -101,7 +100,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 									        Subject =
 										        layer.Payload.ConfidentialDescription(personAssignment.Person, s.DateOnlyAsPeriod.DateOnly).Name,
 									        TimeSpan =
-												ScheduleDayStringVisualizer.ToLocalStartEndTimeString(layer.Period, _userTimeZone.Invoke().TimeZone(), CultureInfo.CurrentCulture)
+												ScheduleDayStringVisualizer.ToLocalStartEndTimeString(layer.Period, _userTimeZone.TimeZone(), CultureInfo.CurrentCulture)
 								        }).ToList();
 						}
 						return null;
@@ -118,9 +117,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 
 			CreateMap<IScheduleDay, PersonAssignmentDayViewModel>()
 				.ForMember(d => d.ShiftCategory, o => o.MapFrom(s => s.AssignmentHighZOrder().MainShift.ShiftCategory.Description.Name))
-				.ForMember(d => d.ContractTime, o => o.MapFrom(s => TimeHelper.GetLongHourMinuteTimeString(_projectionProvider.Invoke().Projection(s).ContractTime(), CultureInfo.CurrentUICulture)))
+				.ForMember(d => d.ContractTime, o => o.MapFrom(s => TimeHelper.GetLongHourMinuteTimeString(_projectionProvider.Projection(s).ContractTime(), CultureInfo.CurrentUICulture)))
 				.ForMember(d => d.TimeSpan, o => o.MapFrom(s => s.AssignmentHighZOrder().Period.TimePeriod(s.TimeZone).ToShortTimeString()))
-				.ForMember(d => d.ContractTimeMinutes, o => o.MapFrom(s => _projectionProvider.Invoke().Projection(s).ContractTime().TotalMinutes));
+				.ForMember(d => d.ContractTimeMinutes, o => o.MapFrom(s => _projectionProvider.Projection(s).ContractTime().TotalMinutes));
 		}
 	}
 }

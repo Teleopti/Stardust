@@ -42,12 +42,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			Mapper.Reset();
 			Mapper.Initialize(c =>
 				{
-					c.AddProfile(new PreferenceAndScheduleDayViewModelMappingProfile(
-						             Depend.On(_projectionProvider),
-						             Depend.On(_userTimeZone)));
-					c.AddProfile(new PreferenceDayViewModelMappingProfile(
-						Depend.On(MockRepository.GenerateMock<IExtendedPreferencePredicate>()
-						)));
+					c.AddProfile(new PreferenceAndScheduleDayViewModelMappingProfile(_projectionProvider, _userTimeZone));
+					c.AddProfile(new PreferenceDayViewModelMappingProfile(MockRepository.GenerateMock<IExtendedPreferencePredicate>()));
 					c.AddProfile(new PreferenceViewModelMappingProfile());
 					c.AddProfile(new CommonViewModelMappingProfile());
 				});

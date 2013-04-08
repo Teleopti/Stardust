@@ -6,20 +6,19 @@ using AutoMapper;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
-using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 {
 	public class PreferenceTemplateInputMappingProfile : Profile
 	{
-		private readonly Func<IShiftCategoryRepository> _shiftCategoryRepository;
-		private readonly Func<IDayOffRepository> _dayOffRepository;
-		private readonly Func<IAbsenceRepository> _absenceRepository;
-		private readonly Func<IActivityRepository> _activityRespository;
-		private readonly IResolve<IMappingEngine> _mapper;
+		private readonly IShiftCategoryRepository _shiftCategoryRepository;
+		private readonly IDayOffRepository _dayOffRepository;
+		private readonly IAbsenceRepository _absenceRepository;
+		private readonly IActivityRepository _activityRespository;
+		private readonly IMappingEngine _mapper;
 
-		public PreferenceTemplateInputMappingProfile(Func<IShiftCategoryRepository> shiftCategoryRepository, Func<IDayOffRepository> dayOffRepository, Func<IAbsenceRepository> absenceRepository, Func<IActivityRepository> activityRespository, IResolve<IMappingEngine> mapper)
+		public PreferenceTemplateInputMappingProfile(IShiftCategoryRepository shiftCategoryRepository, IDayOffRepository dayOffRepository, IAbsenceRepository absenceRepository, IActivityRepository activityRespository, IMappingEngine mapper)
 		{
 			_shiftCategoryRepository = shiftCategoryRepository;
 			_dayOffRepository = dayOffRepository;
@@ -37,7 +36,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				;
 
 			CreateMap<PreferenceTemplateInput, ActivityRestrictionTemplate>()
-				.ForMember(d => d.Activity, o => o.MapFrom(s => _activityRespository.Invoke().Get(s.ActivityPreferenceId.Value)))
+				.ForMember(d => d.Activity, o => o.MapFrom(s => _activityRespository.Get(s.ActivityPreferenceId.Value)))
 				.ForMember(d => d.StartTimeLimitation, o => o.MapFrom(s =>
 							   new StartTimeLimitation(s.ActivityEarliestStartTime.ToTimeSpan(), s.ActivityLatestStartTime.ToTimeSpan())
 							   ))
@@ -51,9 +50,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 
 			CreateMap<PreferenceTemplateInput, IPreferenceRestrictionTemplate>()
 				.ConstructUsing(s => new PreferenceRestrictionTemplate())
-				.ForMember(d => d.ShiftCategory, o => o.MapFrom(s => s.PreferenceId != null ? _shiftCategoryRepository.Invoke().Get(s.PreferenceId.Value) : null))
-				.ForMember(d => d.Absence, o => o.MapFrom(s => s.PreferenceId != null ? _absenceRepository.Invoke().Get(s.PreferenceId.Value) : null))
-				.ForMember(d => d.DayOffTemplate, o => o.MapFrom(s => s.PreferenceId != null ? _dayOffRepository.Invoke().Get(s.PreferenceId.Value) : null))
+				.ForMember(d => d.ShiftCategory, o => o.MapFrom(s => s.PreferenceId != null ? _shiftCategoryRepository.Get(s.PreferenceId.Value) : null))
+				.ForMember(d => d.Absence, o => o.MapFrom(s => s.PreferenceId != null ? _absenceRepository.Get(s.PreferenceId.Value) : null))
+				.ForMember(d => d.DayOffTemplate, o => o.MapFrom(s => s.PreferenceId != null ? _dayOffRepository.Get(s.PreferenceId.Value) : null))
 				.ForMember(d => d.MustHave, o => o.Ignore())
 				.ForMember(d => d.ActivityRestrictionCollection, o => o.Ignore())
 				.ForMember(d => d.StartTimeLimitation, o => o.MapFrom(s =>
@@ -72,11 +71,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 						if (d.ActivityRestrictionCollection.Any())
 						{
 							var activityRestriction = d.ActivityRestrictionCollection.Cast<ActivityRestrictionTemplate>().Single();
-							_mapper.Invoke().Map(s, activityRestriction);
+							_mapper.Map(s, activityRestriction);
 						}
 						else
 						{
-							var activityRestriction = _mapper.Invoke().Map<PreferenceTemplateInput, ActivityRestrictionTemplate>(s);
+							var activityRestriction = _mapper.Map<PreferenceTemplateInput, ActivityRestrictionTemplate>(s);
 							d.AddActivityRestriction(activityRestriction);
 						}
 					}

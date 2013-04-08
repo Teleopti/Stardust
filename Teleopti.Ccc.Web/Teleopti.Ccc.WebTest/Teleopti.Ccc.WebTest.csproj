@@ -210,7 +210,6 @@
     <Compile Include="Core\Aop\Core\AspectsTest.cs" />
     <Compile Include="Core\Common\DataProvider\PersonPeriodProviderTest.cs" />
     <Compile Include="Core\Common\DataProvider\SchedulePersonProviderTest.cs" />
-    <Compile Include="Core\Mapping\FakeMappingDependency.cs" />
     <Compile Include="Core\RequestContext\IdentityProviderTest.cs" />
     <Compile Include="FakePermissionProvider.cs" />
     <Compile Include="Core\Portal\ViewModelFactory\PortalViewModelFactoryPreferencesTest.cs" />
@@ -239,7 +238,6 @@
     <Compile Include="Core\WeekSchedule\DataProvider\AbsenceTypesProviderTest.cs" />
     <Compile Include="Filters\AsyncTaskAttributeTest.cs" />
     <Compile Include="MappingProfileForProbing.cs" />
-    <Compile Include="ResolveExtensions.cs" />
     <Compile Include="Areas\MobileReports\MobileReportsAreaRegistrationTest.cs" />
     <Compile Include="Areas\MyTime\Core\HtmlHelperExtensionTest.cs" />
     <Compile Include="Areas\Start\Core\HtmlHelperExtensionTest.cs" />

@@ -4,16 +4,15 @@ using AutoMapper;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
-using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 {
 	public class PreferenceDayViewModelMappingProfile : Profile
 	{
-		private readonly IResolve<IExtendedPreferencePredicate> _extendedPreferencePredicate;
+		private readonly IExtendedPreferencePredicate _extendedPreferencePredicate;
 
-		public PreferenceDayViewModelMappingProfile(IResolve<IExtendedPreferencePredicate> extendedPreferencePredicate)
+		public PreferenceDayViewModelMappingProfile(IExtendedPreferencePredicate extendedPreferencePredicate)
 		{
 			_extendedPreferencePredicate = extendedPreferencePredicate;
 		}
@@ -33,7 +32,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 							return s.Restriction.Absence.Description.Name;
 						if (s.Restriction.ShiftCategory != null)
 							return s.Restriction.ShiftCategory.Description.Name;
-						if (_extendedPreferencePredicate.Invoke().IsExtended(s))
+						if (_extendedPreferencePredicate.IsExtended(s))
 							return Resources.Extended;
 						return null;
 					}))
@@ -47,7 +46,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 							return s.Restriction.ShiftCategory.DisplayColor.ToHtml();
 						return "";
 					}))
-				.ForMember(d => d.Extended, o => o.MapFrom(s => _extendedPreferencePredicate.Invoke().IsExtended(s)))
+				.ForMember(d => d.Extended, o => o.MapFrom(s => _extendedPreferencePredicate.IsExtended(s)))
 				.ForMember(d => d.MustHave, o => o.MapFrom(s => s.Restriction.MustHave))
 				.ForMember(d => d.ExtendedTitle, o => o.MapFrom(s =>
 					{

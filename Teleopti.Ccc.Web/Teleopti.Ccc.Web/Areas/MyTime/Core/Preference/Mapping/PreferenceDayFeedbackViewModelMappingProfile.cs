@@ -3,17 +3,16 @@ using AutoMapper;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
-using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 {
 	public class PreferenceDayFeedbackViewModelMappingProfile : Profile
 	{
-		private readonly IResolve<IPreferenceFeedbackProvider> _preferenceFeedbackProvider;
-		private readonly IResolve<IMappingEngine> _mapper;
+		private readonly IPreferenceFeedbackProvider _preferenceFeedbackProvider;
+		private readonly IMappingEngine _mapper;
 
-		public PreferenceDayFeedbackViewModelMappingProfile(IResolve<IPreferenceFeedbackProvider> preferenceFeedbackProvider, IResolve<IMappingEngine> mapper)
+		public PreferenceDayFeedbackViewModelMappingProfile(IPreferenceFeedbackProvider preferenceFeedbackProvider, IMappingEngine mapper)
 		{
 			_preferenceFeedbackProvider = preferenceFeedbackProvider;
 			_mapper = mapper;
@@ -24,15 +23,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 			CreateMap<DateOnly, PreferenceDayFeedbackViewModel>()
 				.ConvertUsing(s =>
 				              	{
-				              		var result = _preferenceFeedbackProvider.Invoke().WorkTimeMinMaxForDate(s) ?? new WorkTimeMinMaxCalculationResult();
+				              		var result = _preferenceFeedbackProvider.WorkTimeMinMaxForDate(s) ?? new WorkTimeMinMaxCalculationResult();
 				              		if (result.WorkTimeMinMax == null)
 				              		{
 				              			if (result.RestrictionNeverHadThePossibilityToMatchWithShifts)
-											return _mapper.Invoke().Map<Tuple<DateOnly, string>, PreferenceDayFeedbackViewModel>(new Tuple<DateOnly, string>(s, ""));
-										return _mapper.Invoke().Map<Tuple<DateOnly, string>, PreferenceDayFeedbackViewModel>(new Tuple<DateOnly, string>(s, Resources.NoAvailableShifts));
+											return _mapper.Map<Tuple<DateOnly, string>, PreferenceDayFeedbackViewModel>(new Tuple<DateOnly, string>(s, ""));
+										return _mapper.Map<Tuple<DateOnly, string>, PreferenceDayFeedbackViewModel>(new Tuple<DateOnly, string>(s, Resources.NoAvailableShifts));
 									}
 				              		var source = new Tuple<DateOnly, IWorkTimeMinMax>(s, result.WorkTimeMinMax);
-				              		return _mapper.Invoke().Map<Tuple<DateOnly, IWorkTimeMinMax>, PreferenceDayFeedbackViewModel>(source);
+				              		return _mapper.Map<Tuple<DateOnly, IWorkTimeMinMax>, PreferenceDayFeedbackViewModel>(source);
 				              	});
 
 			CreateMap<Tuple<DateOnly, string>, PreferenceDayFeedbackViewModel>()

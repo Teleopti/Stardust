@@ -27,9 +27,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			extendedPreferencePredicate = MockRepository.GenerateMock<IExtendedPreferencePredicate>();
 
 			Mapper.Reset();
-			Mapper.Initialize(c => c.AddProfile(new PreferenceDayViewModelMappingProfile(
-				Depend.On(extendedPreferencePredicate)
-				)));
+			Mapper.Initialize(c => c.AddProfile(new PreferenceDayViewModelMappingProfile(extendedPreferencePredicate)));
 		}
 
 		[Test]

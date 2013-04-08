@@ -42,10 +42,10 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 
 			Mapper.Reset();
 			Mapper.Initialize(c => c.AddProfile(new RequestsViewModelMappingProfile(
-				() => _userTimeZone, 
-				() => _linkProvider,
-				() => _loggedOnUser,
-				Depend.On(_shiftTradeRequestStatusChecker)
+				_userTimeZone, 
+				_linkProvider,
+				_loggedOnUser,
+				_shiftTradeRequestStatusChecker
 				)));
 		}
 

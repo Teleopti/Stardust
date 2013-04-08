@@ -1,18 +1,17 @@
 ﻿using System.Linq;
 using AutoMapper;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
-using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 {
 	public class ShiftTradeSwapDetailsViewModelMappingProfile : Profile
 	{
-		private readonly IResolve<IShiftTradeTimeLineHoursViewModelFactory> _timelineViewModelFactory;
-		private readonly IResolve<IProjectionProvider> _projectionProvider;
+		private readonly IShiftTradeTimeLineHoursViewModelFactory _timelineViewModelFactory;
+		private readonly IProjectionProvider _projectionProvider;
 
-		public ShiftTradeSwapDetailsViewModelMappingProfile(IResolve<IShiftTradeTimeLineHoursViewModelFactory> timelineViewModelFactory,
-																												IResolve<IProjectionProvider> projectionProvider)
+		public ShiftTradeSwapDetailsViewModelMappingProfile(IShiftTradeTimeLineHoursViewModelFactory timelineViewModelFactory,
+																												IProjectionProvider projectionProvider)
 		{
 			_timelineViewModelFactory = timelineViewModelFactory;
 			_projectionProvider = projectionProvider;
@@ -27,7 +26,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				.ForMember(d => d.PersonTo, o => o.MapFrom(s => s.ShiftTradeSwapDetails.First().PersonTo.Name.ToString()))
 				.ForMember(d => d.To, o => o.MapFrom(s => s.ShiftTradeSwapDetails.First().SchedulePartTo))
 				.ForMember(d => d.From, o => o.MapFrom(s => s.ShiftTradeSwapDetails.First().SchedulePartFrom))
-				.ForMember(d=> d.TimeLineHours, o=>o.MapFrom(s=> _timelineViewModelFactory.Invoke().CreateTimeLineHours(createTimelinePeriod(s))))
+				.ForMember(d=> d.TimeLineHours, o=>o.MapFrom(s=> _timelineViewModelFactory.CreateTimeLineHours(createTimelinePeriod(s))))
 				.ForMember(d=> d.TimeLineStartDateTime, o=>o.MapFrom(s=> createTimelinePeriod(s).StartDateTime));
 		}
 
@@ -42,8 +41,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			}
 			const int extraHourBeforeAndAfter = 1;
 			DateTimePeriod totalPeriod;
-			var fromTotalPeriod = _projectionProvider.Invoke().Projection(schedpartFrom).Period();
-			var toTotalPeriod = _projectionProvider.Invoke().Projection(schedpartTo).Period();
+			var fromTotalPeriod = _projectionProvider.Projection(schedpartFrom).Period();
+			var toTotalPeriod = _projectionProvider.Projection(schedpartTo).Period();
 			if (fromTotalPeriod.HasValue && toTotalPeriod.HasValue)
 			{
 				totalPeriod = fromTotalPeriod.Value.MaximumPeriod(toTotalPeriod.Value);
