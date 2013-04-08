@@ -2402,7 +2402,7 @@ namespace Teleopti.Ccc.Win.Permissions
 
         private void permissionsExplorerKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.M && (e.Alt))
+			if (e.KeyCode == Keys.M && e.Shift && e.Alt)
             {
                 toolStripExViewer.Visible = !toolStripExViewer.Visible;
             }
