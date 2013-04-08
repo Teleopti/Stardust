@@ -81,8 +81,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			if (schedulingOptions.ShiftCategory != null)
 				effectiveRestriction.ShiftCategory = schedulingOptions.ShiftCategory;
 
-			var shiftList = _shiftProjectionCachesFromAdjustedRuleSetBagShiftFilter.Filter(dateOnly, groupPerson, false,
-																						   effectiveRestriction);
+			var shiftList = _shiftProjectionCachesFromAdjustedRuleSetBagShiftFilter.Filter(dateOnly, groupPerson, false);
 			shiftList = _commonMainShiftFilter.Filter(shiftList, effectiveRestriction);
 			shiftList = _mainShiftOptimizeActivitiesSpecificationShiftFilter.Filter(shiftList,
 																					schedulingOptions

@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 {
 	public interface IShiftProjectionCachesFromAdjustedRuleSetBagShiftFilter
 	{
-		IList<IShiftProjectionCache> Filter(DateOnly scheduleDateOnly, IPerson person, bool forRestrictionsOnly, IEffectiveRestriction restriction);
+		IList<IShiftProjectionCache> Filter(DateOnly scheduleDateOnly, IPerson person, bool forRestrictionsOnly);
 	}
 
 	public class ShiftProjectionCachesFromAdjustedRuleSetBagShiftFilter : IShiftProjectionCachesFromAdjustedRuleSetBagShiftFilter
@@ -26,12 +26,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 			_ruleSetToShiftsGenerator = ruleSetToShiftsGenerator;
 		}
 
-		public IList<IShiftProjectionCache> Filter(DateOnly scheduleDateOnly, IPerson person,  bool forRestrictionsOnly, IEffectiveRestriction restriction)
+		public IList<IShiftProjectionCache> Filter(DateOnly scheduleDateOnly, IPerson person,  bool forRestrictionsOnly)
 		{
-			var shiftProjectionCaches = new List<IShiftProjectionCache>();
 			if (person == null)
-				return shiftProjectionCaches;
-
+				return null;
+			var shiftProjectionCaches = new List<IShiftProjectionCache>();
+			
 			var timeZone = person.PermissionInformation.DefaultTimeZone();
 			var personPeriod = person.Period(scheduleDateOnly);
 			var bag = personPeriod.RuleSetBag;
@@ -49,50 +49,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 				if (_rulesSetDeletedShiftCategoryChecker.ContainsDeletedActivity(ruleSet))
 					continue;
 
-				if (!rulesetPassesRestrictions(ruleSet))
-					continue;
-
-				//var clonedRuleSet = (IWorkShiftRuleSet) ruleSet.Clone();
-
-				//if (restriction != null)
-				//{
-				//	var start = resolveTime(clonedRuleSet.TemplateGenerator.StartPeriod.Period.StartTime,
-				//							restriction.StartTimeLimitation.StartTime, false);
-				//	var end = resolveTime(clonedRuleSet.TemplateGenerator.StartPeriod.Period.EndTime,
-				//						  restriction.StartTimeLimitation.EndTime, true);
-				//	if (start > end)
-				//		continue;
-
-				//	var startTimePeriod = new TimePeriod(start, end);
-				//	start = resolveTime(clonedRuleSet.TemplateGenerator.EndPeriod.Period.StartTime,
-				//						restriction.EndTimeLimitation.StartTime, false);
-				//	end = resolveTime(clonedRuleSet.TemplateGenerator.EndPeriod.Period.EndTime, restriction.EndTimeLimitation.EndTime,
-				//					  true);
-				//	if (start > end)
-				//		continue;
-
-				//	var endTimePeriod = new TimePeriod(start, end);
-				//	if (endTimePeriod.EndTime < startTimePeriod.StartTime)
-				//		continue;
-
-				//	if (startTimePeriod.EndTime > endTimePeriod.EndTime)
-				//		startTimePeriod = new TimePeriod(startTimePeriod.StartTime, endTimePeriod.EndTime);
-
-				//	if (endTimePeriod.StartTime < startTimePeriod.StartTime)
-				//		endTimePeriod = new TimePeriod(startTimePeriod.StartTime, endTimePeriod.EndTime);
-
-				//	clonedRuleSet.TemplateGenerator.StartPeriod = new TimePeriodWithSegment(startTimePeriod,
-				//																			clonedRuleSet.TemplateGenerator.StartPeriod
-				//																						 .Segment);
-				//	clonedRuleSet.TemplateGenerator.EndPeriod = new TimePeriodWithSegment(endTimePeriod,
-				//																		  clonedRuleSet.TemplateGenerator.EndPeriod
-				//																					   .Segment);
-				//}
-
-				//if (!_ruleSetDeletedActivityChecker.ContainsDeletedActivity(clonedRuleSet) &&
-				//	!_rulesSetDeletedShiftCategoryChecker.ContainsDeletedActivity(clonedRuleSet))
-				//{
-
 				IEnumerable<IShiftProjectionCache> ruleSetList = getShiftsForRuleset(ruleSet);
 				if (ruleSetList != null)
 				{
@@ -102,29 +58,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters
 						projectionCache.SetDate(scheduleDateOnly, timeZone);
 					}
 				}
-				//}
-
 			}
 
 			return shiftProjectionCaches;
 		}
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "ruleset")]
-        private static bool rulesetPassesRestrictions(IWorkShiftRuleSet ruleset)
-		{
-			return true;
-		}
-
-		//private static TimeSpan resolveTime(TimeSpan thisTime, TimeSpan? otherTime, bool min)
-		//{
-		//	if (!otherTime.HasValue)
-		//		return thisTime;
-
-		//	if (min)
-		//		return TimeSpan.FromTicks(Math.Min(otherTime.Value.Ticks, thisTime.Ticks));
-
-		//	return TimeSpan.FromTicks(Math.Max(otherTime.Value.Ticks, thisTime.Ticks));
-		//}
 
 		private IEnumerable<IShiftProjectionCache> getShiftsForRuleset(IWorkShiftRuleSet ruleSet)
 		{
