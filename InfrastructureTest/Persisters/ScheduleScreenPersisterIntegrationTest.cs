@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 
 		protected void MakeTarget()
 		{
-			Target = new ScheduleScreenRetryingPersister(UnitOfWorkFactory.Current,
+			Target = new ScheduleScreenRetryingPersister(UnitOfWorkFactory.LoggedOnProvider(),
 													   new WriteProtectionRepository(UnitOfWorkFactory.Current),
 													   //ScheduleRepository,
 													   new PersonRequestRepository(UnitOfWorkFactory.Current),
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 													   //new ScheduleDictionaryModifiedCallback(),
 													   _messageBrokerModule,
 													   new ScheduleDictionaryBatchPersister(
-														   UnitOfWorkFactory.Current,
+														   UnitOfWorkFactory.LoggedOnProvider(),
 														   ScheduleRepository,
 														   ScheduleDictionarySaver,
 														   new DifferenceEntityCollectionService<IPersistableScheduleData>(),

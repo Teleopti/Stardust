@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
@@ -16,14 +15,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 		[Test]
 		public void ShouldMarkAndPersistDiff()
 		{
+			var currUowFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
 			var uowFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
 			var uow = MockRepository.GenerateMock<IUnitOfWork>();
 			var scheduleDictionaryPersister = MockRepository.GenerateMock<IScheduleDictionarySaver>();
-			var target = new ScheduleDictionaryBatchPersister(uowFactory, null, scheduleDictionaryPersister, null, null, null, null);
+			var target = new ScheduleDictionaryBatchPersister(currUowFactory, null, scheduleDictionaryPersister, null, null, null, null);
 
 			var difference = new DifferenceCollection<IPersistableScheduleData>() { new DifferenceCollectionItem<IPersistableScheduleData>() };
 			var scheduleDictionary = StubScheduleDictionary(difference);
-
+			currUowFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(uowFactory);
 			uowFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow);
 
 			target.Persist(scheduleDictionary);
@@ -34,16 +34,18 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
 		public void ShouldCreateOneTransactionPerModifiedRange()
 		{
+			var currUowFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
 			var uowFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
 			var uow1 = MockRepository.GenerateMock<IUnitOfWork>();
 			var uow2 = MockRepository.GenerateMock<IUnitOfWork>();
 			var scheduleDictionaryPersister = MockRepository.GenerateMock<IScheduleDictionarySaver>();
-			var target = new ScheduleDictionaryBatchPersister(uowFactory, null, scheduleDictionaryPersister, null, null, null, null);
+			var target = new ScheduleDictionaryBatchPersister(currUowFactory, null, scheduleDictionaryPersister, null, null, null, null);
 
 			var scheduleDictionary = MockRepository.GenerateMock<IScheduleDictionary>();
 			var ranges = new[] { MockRepository.GenerateMock<IScheduleRange>(), MockRepository.GenerateMock<IScheduleRange>() };
 			var difference = new DifferenceCollection<IPersistableScheduleData>() { new DifferenceCollectionItem<IPersistableScheduleData>() };
 
+			currUowFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(uowFactory);
 			uowFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow1).Repeat.Once();
 			uowFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow2).Repeat.Once();
 			scheduleDictionary.Stub(x => x.Values).Return(ranges);
@@ -59,12 +61,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 		[Test]
 		public void ShouldNotCreateTransactionIfNotModified()
 		{
+			var currUowFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
 			var uowFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
-			var target = new ScheduleDictionaryBatchPersister(uowFactory, null, null, null, null, null, null);
+			var target = new ScheduleDictionaryBatchPersister(currUowFactory, null, null, null, null, null, null);
 			var scheduleDictionary = StubScheduleDictionary(new DifferenceCollection<IPersistableScheduleData>());
 			var range = MockRepository.GenerateMock<IScheduleRange>();
 			var difference = new DifferenceCollection<IPersistableScheduleData>();
 
+			currUowFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(uowFactory);
 			scheduleDictionary.Stub(x => x.Values).Return(new[] { range });
 			range.Stub(x => x.DifferenceSinceSnapshot(null)).Return(difference);
 
@@ -76,15 +80,17 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 		[Test]
 		public void ShouldReassociate()
 		{
+			var currUowFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
 			var uowFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
 			var uow = MockRepository.GenerateMock<IUnitOfWork>();
 			var scheduleDictionaryPersister = MockRepository.GenerateMock<IScheduleDictionarySaver>();
 			var reassociateData = MockRepository.GenerateMock<IReassociateData>();
 			var data = new[] { new[] { MockRepository.GenerateMock<IAggregateRoot>(), MockRepository.GenerateMock<IAggregateRoot>() } };
-			var target = new ScheduleDictionaryBatchPersister(uowFactory, null, scheduleDictionaryPersister, null, null, reassociateData, null);
+			var target = new ScheduleDictionaryBatchPersister(currUowFactory, null, scheduleDictionaryPersister, null, null, reassociateData, null);
 
 			var scheduleDictionary = StubScheduleDictionary();
 
+			currUowFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(uowFactory);
 			reassociateData.Stub(x => x.DataToReassociate(scheduleDictionary.Values.Single().Person)).Return(data);
 			uowFactory.Stub(x => x.CreateAndOpenUnitOfWork(data)).Return(uow);
 
@@ -94,17 +100,19 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 		}
 
 		[Test]
-		public void ShouldCallbackOnModified() {
-
+		public void ShouldCallbackOnModified() 
+		{
+			var currUowFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
 			var uowFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
 			var uow = MockRepository.GenerateMock<IUnitOfWork>();
 			var callback = MockRepository.GenerateMock<IScheduleDictionaryModifiedCallback>();
 			var scheduleDictionaryPersister = MockRepository.GenerateMock<IScheduleDictionarySaver>();
-			var target = new ScheduleDictionaryBatchPersister(uowFactory , null, scheduleDictionaryPersister, null, null, null, callback);
+			var target = new ScheduleDictionaryBatchPersister(currUowFactory , null, scheduleDictionaryPersister, null, null, null, callback);
 			var result = new ScheduleDictionaryPersisterResult();
 			var scheduleDictionary = StubScheduleDictionary();
 			var range = scheduleDictionary.Values.Single();
 
+			currUowFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(uowFactory);
 			uowFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(uow);
 			scheduleDictionaryPersister.Stub(x => x.MarkForPersist(uow, null, null)).IgnoreArguments().Return(result);
 

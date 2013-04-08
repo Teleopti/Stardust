@@ -12,8 +12,8 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 {
 	public class ScheduleScreenRetryingPersister : IScheduleScreenPersister
 	{
-		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-        private readonly IWriteProtectionRepository _writeProtectionRepository;
+		private readonly ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
+		private readonly IWriteProtectionRepository _writeProtectionRepository;
 		private readonly IPersonRequestRepository _personRequestRepository;
 		private readonly IPersonAbsenceAccountRepository _personAbsenceAccountRepository;
 		private readonly IPersonRequestPersister _personRequestPersister;
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 		private readonly IScheduleDictionaryBatchPersister _scheduleDictionaryBatchPersister;
 		private readonly IOwnMessageQueue _messageQueueUpdater;
 
-        public ScheduleScreenRetryingPersister(IUnitOfWorkFactory unitOfWorkFactory,  IWriteProtectionRepository writeProtectionRepository,
+        public ScheduleScreenRetryingPersister(ICurrentUnitOfWorkFactory currentUnitOfWorkFactory,  IWriteProtectionRepository writeProtectionRepository,
 		                                       IPersonRequestRepository personRequestRepository,
 		                                       IPersonAbsenceAccountRepository personAbsenceAccountRepository,
 		                                       IPersonRequestPersister personRequestPersister,
@@ -37,8 +37,8 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 												IScheduleDictionaryBatchPersister scheduleDictionaryBatchPersister,
 												IOwnMessageQueue messageQueueUpdater)
 		{
-			_unitOfWorkFactory = unitOfWorkFactory;
-            _writeProtectionRepository = writeProtectionRepository;
+			_currentUnitOfWorkFactory = currentUnitOfWorkFactory;
+	        _writeProtectionRepository = writeProtectionRepository;
 			_personRequestRepository = personRequestRepository;
 			_personAbsenceAccountRepository = personAbsenceAccountRepository;
 			_personRequestPersister = personRequestPersister;
@@ -56,25 +56,26 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 															IEnumerable<IPersonRequest> personRequests,
 															ICollection<IPersonAbsenceAccount> personAbsenceAccounts)
 		{
+			var unitOfWorkFactory = _currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory();
 			if(!persons.IsEmpty())
-				saveWriteProtectionInSeparateTransaction(persons);
+				saveWriteProtectionInSeparateTransaction(unitOfWorkFactory, persons);
 			bool retry;
 			IEnumerable<IPersonAbsenceAccount> conflictedPersonAbsenceAccounts = null;
 			do
 			{
 				try
 				{
-					transactions(conflictedPersonAbsenceAccounts, personAbsenceAccounts, scheduleDictionary, personRequests);
+					transactions(unitOfWorkFactory, conflictedPersonAbsenceAccounts, personAbsenceAccounts, scheduleDictionary, personRequests);
 					retry = false;
 				} 
 				catch (OptimisticLockExceptionOnPersonAccount)
 				{
-					conflictedPersonAbsenceAccounts = GetPersonAbsenceAccountConflicts(personAbsenceAccounts);
+					conflictedPersonAbsenceAccounts = GetPersonAbsenceAccountConflicts(unitOfWorkFactory, personAbsenceAccounts);
 					retry = true;
 				} 
 				catch (OptimisticLockExceptionOnScheduleDictionary)
 				{
-					var conflicts = GetScheduleDictionaryConflicts(scheduleDictionary);
+					var conflicts = GetScheduleDictionaryConflicts(unitOfWorkFactory, scheduleDictionary);
 					return new ScheduleScreenPersisterResult {Saved = false, ScheduleDictionaryConflicts = conflicts};
 				} 
 				catch (OptimisticLockException)
@@ -85,57 +86,59 @@ namespace Teleopti.Ccc.Infrastructure.Persisters
 			return new ScheduleScreenPersisterResult {Saved = true};
 		}
 
-		private void saveWriteProtectionInSeparateTransaction(ICollection<IPersonWriteProtectionInfo> personWriteProtectionInfos)
+		private void saveWriteProtectionInSeparateTransaction(IUnitOfWorkFactory unitOfWorkFactory, ICollection<IPersonWriteProtectionInfo> personWriteProtectionInfos)
 		{
-			using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+			using (var unitOfWork = unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
-                _writeProtectionRepository.AddRange(personWriteProtectionInfos);
+				_writeProtectionRepository.AddRange(personWriteProtectionInfos);
 				unitOfWork.PersistAll(_messageBrokerModule);
 				personWriteProtectionInfos.Clear();
 			}
 		}
 
-		private IEnumerable<IPersonAbsenceAccount> GetPersonAbsenceAccountConflicts(IEnumerable<IPersonAbsenceAccount> personAbsenceAccounts)
+		private IEnumerable<IPersonAbsenceAccount> GetPersonAbsenceAccountConflicts(IUnitOfWorkFactory unitOfWorkFactory, IEnumerable<IPersonAbsenceAccount> personAbsenceAccounts)
 		{
-			using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+			using (var uow = unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
 				return _personAbsenceAccountConflictCollector.GetConflicts(uow, personAbsenceAccounts);
 			}
 		}
 
-		private IEnumerable<IPersistConflict> GetScheduleDictionaryConflicts(IScheduleDictionary scheduleDictionary)
+		private IEnumerable<IPersistConflict> GetScheduleDictionaryConflicts(IUnitOfWorkFactory unitOfWorkFactory, IScheduleDictionary scheduleDictionary)
 		{
-			using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
+			using (unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
 				return _scheduleDictionaryConflictCollector.GetConflicts(scheduleDictionary,_messageQueueUpdater);
 			}
 		}
 
-		private void transactions(IEnumerable<IPersonAbsenceAccount> refreshPersonAbsenceAccounts,
+		private void transactions(IUnitOfWorkFactory unitOfWorkFactory, 
+									IEnumerable<IPersonAbsenceAccount> refreshPersonAbsenceAccounts,
 									ICollection<IPersonAbsenceAccount> personAbsenceAccounts, 
 									IScheduleDictionary scheduleDictionary, 
 									IEnumerable<IPersonRequest> personRequests)
 		{
 			PersistScheduleDictionary(scheduleDictionary);
-			PersistPersonAbsenceAccount(refreshPersonAbsenceAccounts, personAbsenceAccounts);
-			PersistRequests(personRequests);
+			PersistPersonAbsenceAccount(unitOfWorkFactory, refreshPersonAbsenceAccounts, personAbsenceAccounts);
+			PersistRequests(unitOfWorkFactory, personRequests);
 		}
 
-		private void PersistRequests(IEnumerable<IPersonRequest> personRequests)
+		private void PersistRequests(IUnitOfWorkFactory unitOfWorkFactory, IEnumerable<IPersonRequest> personRequests)
 		{
-			using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+			using (var unitOfWork = unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
 				_personRequestPersister.MarkForPersist(_personRequestRepository, personRequests);
 				unitOfWork.PersistAll(_messageBrokerModule);
 			}
 		}
 
-		private void PersistPersonAbsenceAccount(IEnumerable<IPersonAbsenceAccount> refreshPersonAbsenceAccounts,
+		private void PersistPersonAbsenceAccount(IUnitOfWorkFactory unitOfWorkFactory, 
+																						IEnumerable<IPersonAbsenceAccount> refreshPersonAbsenceAccounts,
 		                                         ICollection<IPersonAbsenceAccount> personAbsenceAccounts)
 		{
 			try
 			{
-				using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+				using (var unitOfWork = unitOfWorkFactory.CreateAndOpenUnitOfWork())
 				{
 					_messageQueueUpdater.ReassociateDataWithAllPeople();
 					RefreshConflictedPersonAbsenceAccounts(unitOfWork, refreshPersonAbsenceAccounts);
