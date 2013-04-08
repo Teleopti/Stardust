@@ -66,6 +66,23 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			return retList;
 		}
 
+        [Test]
+        public void TestIfEmptyListIsReturnedForNullMainShiftProjection()
+        {
+            var cache1 = _mocks.StrictMock<IShiftProjectionCache>();
+            var shiftList = new List<IShiftProjectionCache> {cache1};
+            IVisualLayerCollection visualLayerCollection = _mocks.StrictMock<IVisualLayerCollection>();
+            using (_mocks.Record())
+            {
+                Expect.Call(cache1.MainShiftProjection).Return(visualLayerCollection);
+                Expect.Call(visualLayerCollection.Period()).Return(null);
+            }
+
+            var earlistEnd = new DateTime(2013, 3, 1, 7, 30, 0, DateTimeKind.Utc);
+            var result = _target.Filter(shiftList, earlistEnd, new WorkShiftFinderResultForTest());
+            Assert.AreEqual(result.Count ,0);
+        }
+
 		private IEnumerable<IWorkShift> getWorkShifts()
 		{
 			var workShift1 = WorkShiftFactory.CreateWorkShift(new TimeSpan(7, 0, 0), new TimeSpan(15, 0, 0),
