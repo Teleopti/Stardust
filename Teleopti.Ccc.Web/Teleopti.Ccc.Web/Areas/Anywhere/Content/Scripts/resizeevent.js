@@ -11,9 +11,12 @@ define(
             onresize: function (func) {
                 callback = func;
                 $(window)
-                    .resize(callback)
-                    .bind('orientationchange', callback)
-                    .ready(callback)
+                    .off('resize')
+                    .off('orientationchange')
+                    .off('ready')
+                    .on('resize', callback)
+                    .on('orientationchange', callback)
+                    .on('ready', callback)
                     ;
             },
             

@@ -64,9 +64,9 @@ define([
 
 					teamSchedule.Agents.valueHasMutated();
 
-				    resize.notify();
-
 					options.success();
+				    
+					resize.notify();
 				});
 		};
 
