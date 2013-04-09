@@ -800,7 +800,7 @@
     <Compile Include="Scheduling\ShiftCreator\WorkShiftVisualLayerInfo.cs" />
     <Compile Include="Scheduling\ShiftTradeChecksumCalculator.cs" />
     <Compile Include="Scheduling\Restriction\ExtendedPreferenceTemplate.cs" />
-    <Compile Include="Scheduling\TeamBlockScheduler.cs" />
+    <Compile Include="Scheduling\TeamBlock\TeamBlockScheduler.cs" />
     <Compile Include="Scheduling\TeamBlock\BlockFinderTypeHelper.cs" />
     <Compile Include="Scheduling\TeamBlock\BlockInfo.cs" />
     <Compile Include="Scheduling\TeamBlock\BlockPeriodFinderBetweenDayOff.cs" />
