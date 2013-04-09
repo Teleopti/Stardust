@@ -7,7 +7,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 {
     public abstract class SettingDataRepository
     {
-        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IUnitOfWork _unitOfWork;
 
         protected SettingDataRepository(IUnitOfWork unitOfWork)
@@ -24,7 +23,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
             get
             {
-                return _unitOfWork ?? _unitOfWorkFactory.CurrentUnitOfWork();
+                return _unitOfWork;
             }
         }
 
