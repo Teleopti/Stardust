@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Globalization;
 using System.IdentityModel.Claims;
 using System.Threading;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using log4net;
 using Rhino.ServiceBus;
 using Rhino.ServiceBus.Internal;
@@ -160,11 +161,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
     public static class UnitOfWorkFactoryContainer
     {
         [ThreadStatic]
-        private static IUnitOfWorkFactory _current;
+			private static ICurrentUnitOfWorkFactory _current;
 
-        public static IUnitOfWorkFactory Current
+        public static ICurrentUnitOfWorkFactory Current
         {
-            get { return _current ?? ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).DataSource.Application; }
+            get { return _current ?? UnitOfWorkFactory.LoggedOnProvider(); }
             set { _current = value; }
         }
     }

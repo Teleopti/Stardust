@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 	{
 		private DenormalizeScheduleProjectionConsumer target;
 		private MockRepository mocks;
-		private IUnitOfWorkFactory unitOfWorkFactory;
+		private ICurrentUnitOfWorkFactory unitOfWorkFactory;
 		private IUnitOfWork unitOfWork;
 		private IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository;
 	    private IServiceBus serviceBus;
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			mocks = new MockRepository();
 			scheduleProjectionReadOnlyRepository = mocks.DynamicMock<IScheduleProjectionReadOnlyRepository>();
 			unitOfWork = mocks.DynamicMock<IUnitOfWork>();
-			unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
+			unitOfWorkFactory = mocks.DynamicMock<ICurrentUnitOfWorkFactory>();
 		    serviceBus = mocks.DynamicMock<IServiceBus>();
 			target = new DenormalizeScheduleProjectionConsumer(unitOfWorkFactory,scheduleProjectionReadOnlyRepository, serviceBus);
 		}
@@ -44,7 +44,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 
 			using (mocks.Record())
 			{
-				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+				var uowFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
+				Expect.Call(unitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(uowFactory);
+				Expect.Call(uowFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
 				Expect.Call(unitOfWork.PersistAll());
 			}
 			using (mocks.Playback())
@@ -78,7 +80,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 
 			using (mocks.Record())
 			{
-				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+				var uowFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
+				Expect.Call(unitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(uowFactory);
+				Expect.Call(uowFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
 				Expect.Call(unitOfWork.PersistAll());
 			}
 			using (mocks.Playback())
@@ -113,6 +117,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 
 			using (mocks.Record())
 			{
+				Expect.Call(unitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(mocks.DynamicMock<IUnitOfWorkFactory>());
 			}
 			using (mocks.Playback())
 			{

@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
                                    message.PersonRequestId, message.Timestamp);
             }
 
-            using (IUnitOfWork unitOfWork = UnitOfWorkFactoryContainer.Current.CreateAndOpenUnitOfWork())
+            using (IUnitOfWork unitOfWork = UnitOfWorkFactoryContainer.Current.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
             {
                 foreach (var action in _loadDataActions)
                 {

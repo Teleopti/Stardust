@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 	public class SmsLinkCheckerTest
 	{
 		private MockRepository _mocks;
-		private IUnitOfWorkFactory _unitOfWorkFactory;
+		private ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private IRepositoryFactory _repositoryFactory;
 		private SmsLinkChecker _target;
 		private IPerson _person;
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 		public void Setup()
 		{
 			_mocks = new MockRepository();
-			_unitOfWorkFactory = _mocks.StrictMock<IUnitOfWorkFactory>();
+			_unitOfWorkFactory = _mocks.StrictMock<ICurrentUnitOfWorkFactory>();
 			_repositoryFactory = _mocks.StrictMock<IRepositoryFactory>();
 			_target = new SmsLinkChecker(_unitOfWorkFactory, _repositoryFactory);
 			_uow = _mocks.StrictMock<IUnitOfWork>();
@@ -37,7 +37,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 		[Test]
 		public void ShouldReturnEmptyIfNoColumnDefined()
 		{
-			Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_uow);
+			var uowFactory = _mocks.DynamicMock<IUnitOfWorkFactory>();
+			Expect.Call(_unitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(uowFactory);
+			Expect.Call(uowFactory.CreateAndOpenUnitOfWork()).Return(_uow);
 			Expect.Call(_repositoryFactory.CreateGlobalSettingDataRepository(_uow)).Return(_rep);
 			Expect.Call(_rep.FindValueByKey("SmsSettings", new SmsSettings())).Return(new SmsSettings()).IgnoreArguments();
 			Expect.Call(_uow.Dispose);
@@ -51,7 +53,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 		public void ShouldReturnEmptyIfNoOptionalValues()
 		{
 			var settings = new SmsSettings{OptionalColumnId = Guid.NewGuid()};
-			Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_uow);
+			var uowFactory = _mocks.DynamicMock<IUnitOfWorkFactory>();
+			Expect.Call(_unitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(uowFactory);
+			Expect.Call(uowFactory.CreateAndOpenUnitOfWork()).Return(_uow);
 			Expect.Call(_repositoryFactory.CreateGlobalSettingDataRepository(_uow)).Return(_rep);
 			Expect.Call(_rep.FindValueByKey("SmsSettings", new SmsSettings())).Return(settings).IgnoreArguments();
 			Expect.Call(_person.OptionalColumnValueCollection).Return(
@@ -70,7 +74,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 			var val = _mocks.StrictMock<IOptionalColumnValue>();
 			
 			var settings = new SmsSettings { OptionalColumnId = Guid.NewGuid() };
-			Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_uow);
+			var uowFactory = _mocks.DynamicMock<IUnitOfWorkFactory>();
+			Expect.Call(_unitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(uowFactory);
+			Expect.Call(uowFactory.CreateAndOpenUnitOfWork()).Return(_uow);
 			Expect.Call(_repositoryFactory.CreateGlobalSettingDataRepository(_uow)).Return(_rep);
 			Expect.Call(_rep.FindValueByKey("SmsSettings", new SmsSettings())).Return(settings).IgnoreArguments();
 			Expect.Call(_person.OptionalColumnValueCollection).Return(
@@ -91,7 +97,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Notification
 			var val = _mocks.StrictMock<IOptionalColumnValue>();
 			var id = Guid.NewGuid();
 			var settings = new SmsSettings { OptionalColumnId = id };
-			Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_uow);
+			var uowFactory = _mocks.DynamicMock<IUnitOfWorkFactory>();
+			Expect.Call(_unitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(uowFactory);
+			Expect.Call(uowFactory.CreateAndOpenUnitOfWork()).Return(_uow);
 			Expect.Call(_repositoryFactory.CreateGlobalSettingDataRepository(_uow)).Return(_rep);
 			Expect.Call(_rep.FindValueByKey("SmsSettings", new SmsSettings())).Return(settings).IgnoreArguments();
 			Expect.Call(_person.OptionalColumnValueCollection).Return(

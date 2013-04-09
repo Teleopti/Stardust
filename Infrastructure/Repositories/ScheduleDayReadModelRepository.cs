@@ -21,16 +21,16 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 	public class ScheduleDayReadModelRepository : IScheduleDayReadModelRepository
 	{
-		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 
-		public ScheduleDayReadModelRepository(IUnitOfWorkFactory unitOfWorkFactory)
+		public ScheduleDayReadModelRepository(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			_unitOfWorkFactory = unitOfWorkFactory;
+			_currentUnitOfWork = currentUnitOfWork;
 		}
 
 		public IList<ScheduleDayReadModel> ReadModelsOnPerson(DateOnly startDate, DateOnly toDate, Guid personId)
 		{
-			return ((NHibernateUnitOfWork) _unitOfWorkFactory.CurrentUnitOfWork()).Session.CreateSQLQuery(
+			return ((NHibernateUnitOfWork) _currentUnitOfWork.Current()).Session.CreateSQLQuery(
 				"SELECT PersonId, BelongsToDate AS Date, StartDateTime, EndDateTime, Workday, Label, DisplayColor AS ColorCode, WorkTime AS WorkTimeTicks, ContractTime AS ContractTimeTicks FROM ReadModel.ScheduleDay WHERE PersonId=:personid AND BelongsToDate Between :startdate AND :enddate")
 				.SetGuid("personid", personId)
 				.SetDateTime("startdate", startDate)
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public void ClearPeriodForPerson(DateOnlyPeriod period, Guid personId)
 		{
-			((NHibernateUnitOfWork)_unitOfWorkFactory.CurrentUnitOfWork()).Session.CreateSQLQuery(
+			((NHibernateUnitOfWork)_currentUnitOfWork.Current()).Session.CreateSQLQuery(
 				"DELETE FROM ReadModel.ScheduleDay WHERE PersonId=:person AND BelongsToDate BETWEEN :StartDate AND :EndDate")
 				.SetGuid("person", personId)
 				.SetDateTime("StartDate", period.StartDate)
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void SaveReadModel(ScheduleDayReadModel model)
 		{
-			((NHibernateUnitOfWork)_unitOfWorkFactory.CurrentUnitOfWork()).Session.CreateSQLQuery(
+			((NHibernateUnitOfWork)_currentUnitOfWork.Current()).Session.CreateSQLQuery(
 					"INSERT INTO ReadModel.ScheduleDay (PersonId,BelongsToDate,StartDateTime,EndDateTime,Workday,WorkTime,ContractTime,Label,DisplayColor,InsertedOn) VALUES (:PersonId,:Date,:StartDateTime,:EndDateTime,:Workday,:WorkTime,:ContractTime,:Label,:DisplayColor,:InsertedOn)")
 					.SetGuid("PersonId", model.PersonId)
 					.SetDateTime("StartDateTime", model.StartDateTime)
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public bool IsInitialized()
 		{
-			var result = ((NHibernateUnitOfWork)_unitOfWorkFactory.CurrentUnitOfWork()).Session.CreateSQLQuery(
+			var result = ((NHibernateUnitOfWork)_currentUnitOfWork.Current()).Session.CreateSQLQuery(
 				"SELECT TOP 1 * FROM ReadModel.ScheduleDay")
 				.List();
 			return result.Count > 0;

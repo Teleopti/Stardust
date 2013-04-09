@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			builder.RegisterType<BusStartup>().As<IServiceBusAware>().SingleInstance();
 			builder.Register(c => StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging).As<IMessageBroker>().ExternallyOwned();
 			builder.Register(c => StateHolderReader.Instance.StateReader.ApplicationScopeData).As<IApplicationData>().ExternallyOwned();
-			builder.Register(c => UnitOfWorkFactoryContainer.Current).As<IUnitOfWorkFactory>().ExternallyOwned();
+			builder.Register(c => UnitOfWorkFactoryContainer.Current).As<ICurrentUnitOfWorkFactory>().ExternallyOwned();
 			builder.RegisterType<CurrentUnitOfWork>().As<ICurrentUnitOfWork>().SingleInstance();
 			builder.Register(getThreadJobResultFeedback).As<IJobResultFeedback>().ExternallyOwned();
 			builder.RegisterType<SendPushMessageWhenRootAlteredService>().As<ISendPushMessageWhenRootAlteredService>().InstancePerDependency();

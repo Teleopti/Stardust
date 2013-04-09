@@ -15,13 +15,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
     [TestFixture]
     public class AbsenceRequestResolveTest
     {
-        private IUnitOfWorkFactory _unitOfWorkFactory;
+        private ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 
         [SetUp]
         public void Setup()
         {
             var mocks = new MockRepository();
-            _unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
+						_unitOfWorkFactory = mocks.DynamicMock<ICurrentUnitOfWorkFactory>();
         }
 
         [Test]

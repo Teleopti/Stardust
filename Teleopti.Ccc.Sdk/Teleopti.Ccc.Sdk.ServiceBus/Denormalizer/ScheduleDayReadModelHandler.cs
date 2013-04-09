@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 	{
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(ScheduleDayReadModelHandler));
 
-		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IPersonRepository _personRepository;
 		private readonly ISignificantChangeChecker _significantChangeChecker;
 		private readonly ISmsLinkChecker _smsLinkChecker;
@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 		private readonly IScheduleDayReadModelRepository _scheduleDayReadModelRepository;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "sms")]
-		public ScheduleDayReadModelHandler(IUnitOfWorkFactory unitOfWorkFactory,
+		public ScheduleDayReadModelHandler(ICurrentUnitOfWorkFactory unitOfWorkFactory,
 		                           IPersonRepository personRepository,
 		                           ISignificantChangeChecker significantChangeChecker, 
 								   ISmsLinkChecker smsLinkChecker,
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 
 		private void createReadModel(DenormalizedScheduleBase message)
 		{
-			using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+			using (var uow = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
 				if (!message.IsDefaultScenario) return;
 
