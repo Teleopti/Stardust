@@ -30,8 +30,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		{
 			_mock = new MockRepository();
 			_scheduleDay = _mock.StrictMock<IScheduleDay>();
-			minStart = TimeSpan.FromHours(2);
-			maxStart = TimeSpan.FromHours(1);
+			minStart = TimeSpan.FromHours(1);
+			maxStart = TimeSpan.FromHours(2);
 			minEnd = TimeSpan.FromHours(3);
 			maxEnd = TimeSpan.FromHours(4);
 			minLength = TimeSpan.FromHours(2);

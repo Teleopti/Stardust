@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		}
 
 		[Test]
-		public void ShouldReturnNullWhenCantCreate()
+		public void ShouldReturnNullWhenCannotCreate()
 		{
 			TimeSpan? minStart = TimeSpan.FromHours(2);
 			TimeSpan? maxStart = TimeSpan.FromHours(1);

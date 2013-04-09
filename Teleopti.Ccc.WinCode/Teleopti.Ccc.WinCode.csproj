@@ -547,6 +547,7 @@
     <Compile Include="Scheduling\AgentPreferenceAddCommand.cs" />
     <Compile Include="Scheduling\AgentPreferenceCanCreateResult.cs" />
     <Compile Include="Scheduling\AgentPreferenceDayCreator.cs" />
+    <Compile Include="Scheduling\AgentPreferenceEditCommand.cs" />
     <Compile Include="Scheduling\AgentPreferencePresenter.cs" />
     <Compile Include="Scheduling\AgentPreferenceRemoveCommand.cs" />
     <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsDetailEffectiveRestrictionExtractor.cs" />
