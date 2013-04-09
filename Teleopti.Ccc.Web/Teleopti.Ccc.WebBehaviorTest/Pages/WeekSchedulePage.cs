@@ -166,8 +166,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		public Button NextPeriodButton { get { return DateRangeSelectorContainer.Buttons.Last(); } }
 		public Button PreviousPeriodButton { get { return DateRangeSelectorContainer.Buttons.First(); } }
 
-		[FindBy(Id = "Schedule-today-button")]
-		public Button TodayButton { get; set; }
+		public Link TodayButton 
+		{
+			get
+			{
+				return Document.Link(QuicklyFind.ByClass("week-schedule-today"));
+			}
+		}
 
 		public DivCollection DayLayers(DateTime date)
         {

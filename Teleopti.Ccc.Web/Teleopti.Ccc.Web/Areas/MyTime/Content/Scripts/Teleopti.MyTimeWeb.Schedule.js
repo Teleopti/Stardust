@@ -131,7 +131,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		};
 
 		self.isWithinSelected = function (startDate, endDate) {
-			return (startDate <= self.maxDate && endDate >= self.minDate);
+			return (startDate <= self.maxDate() && endDate >= self.minDate());
 		};
 	    
 		self.requestViewModel = new Teleopti.MyTimeWeb.Schedule.RequestViewModel();
