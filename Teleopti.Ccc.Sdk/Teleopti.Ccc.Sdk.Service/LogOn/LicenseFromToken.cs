@@ -7,7 +7,8 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
 {
     public class LicenseFromToken
     {
-        public void SetLicense(IDataSourceContainer dataSourceContainer)
+				[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "dataSourceContainer")]
+				public void SetLicense(IDataSourceContainer dataSourceContainer)
         {
             LicenseFactory factory = new LicenseFactory(new LicenseCache(), UnitOfWorkFactory.CurrentUnitOfWorkFactory());
             factory.VerifyLicense();
