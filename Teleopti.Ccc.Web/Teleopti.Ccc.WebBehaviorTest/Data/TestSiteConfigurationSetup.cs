@@ -8,8 +8,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 {
 	public static class TestSiteConfigurationSetup
 	{
-		private static readonly string AgentPortalWebNhibConfPath = Path.Combine(IniFileInfo.SitePath, "bin");
-		private static readonly string TargetTestDataNHibFile = Path.Combine(AgentPortalWebNhibConfPath, "TestData.nhib.xml");
+		private static readonly string TargetTestDataNHibFile = Path.Combine(Paths.WebBinPath(), "TestData.nhib.xml");
 
 		public static Uri Url;
 		

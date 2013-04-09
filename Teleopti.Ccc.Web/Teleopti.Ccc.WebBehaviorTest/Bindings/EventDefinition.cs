@@ -48,6 +48,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 				CreateData();
 
 				TestDataSetup.BackupCcc7Data();
+
+				ServiceBusSetup.Setup();
 			}
 			catch(Exception)
 			{
@@ -86,9 +88,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		{
 			if (Browser.IsStarted())
 				Browser.Close();
+			ServiceBusSetup.TearDown();
 			TestSiteConfigurationSetup.TearDown();
 		}
-
 
 		private static void CreateData()
 		{
