@@ -4,6 +4,7 @@ using NUnit.Framework;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Licensing.Agreements;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Interfaces.Infrastructure;
@@ -49,7 +50,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Ctors"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1307:SpecifyStringComparison", MessageId = "System.String.EndsWith(System.String)"), Test]
 		public void RunRepositoryCtors()
 		{
-			foreach (var repositoryType in typeof(PersonAssignment).Assembly.GetTypes().Where(t => t.Name.EndsWith("Repository")))
+			foreach (var repositoryType in typeof(PersonAssignmentRepository).Assembly.GetTypes().Where(t => t.Name.EndsWith("Repository")))
 			{
 				if (repositoryType.GetConstructor(new[]{typeof (IUnitOfWorkFactory)}) != null)
 				{
