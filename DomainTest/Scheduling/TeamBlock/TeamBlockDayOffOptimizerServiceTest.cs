@@ -239,7 +239,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		}
 
 		[Test]
-		public void ShouldRollbackIfReshedulingFails()
+		public void ShouldRollbackIfReschedulingFails()
 		{
 			using (_mocks.Record())
 			{

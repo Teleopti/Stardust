@@ -163,7 +163,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         }
 
         [Test]
-        public void ShouldContinueIfScheduleBlockDayIsSuccessfull()
+        public void ShouldContinueIfScheduleBlockDayIsSuccessful()
         {
             var teamInfo = new TeamInfo(_groupPerson, new List<IList<IScheduleMatrixPro>>() { _matrixList });
 
@@ -195,7 +195,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         }
 
         [Test]
-        public void ShouldStillContinueIfScheduleBlockDayIsSuccessfull()
+        public void ShouldStillContinueIfScheduleBlockDayIsSuccessful()
         {
             var teamInfo = new TeamInfo(_groupPerson, new List<IList<IScheduleMatrixPro>>() { _matrixList });
 
