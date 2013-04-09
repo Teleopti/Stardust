@@ -342,6 +342,7 @@
     <Compile Include="ResourceCalculation\AbsencePreferenceSchedulerTest.cs" />
     <Compile Include="ResourceCalculation\AvailableHourlyEmployeeFinderTest.cs" />
     <Compile Include="ResourceCalculation\BusinessRuleResponseContainsDateSpecificationTest.cs" />
+    <Compile Include="Scheduling\TeamBlock\TeamBlockSteadyStateDictionaryCreatorTest.cs" />
     <Compile Include="Scheduling\DayOffScheduling\AdvanceDayOffSchedulingServiceTest.cs" />
     <Compile Include="Scheduling\DayOffScheduling\DayOffSchedulerTest.cs" />
     <Compile Include="ResourceCalculation\DayOffsInPeriodCalculatorTest.cs" />
@@ -721,7 +722,7 @@
     <Compile Include="Scheduling\TeamBlock\TeamBlockClearerTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockDayOffOptimizerServiceTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockSchedulingServiceTest.cs" />
-	<Compile Include="Scheduling\TeamBlock\TeamBlockSchedulerTest.cs" />
+    <Compile Include="Scheduling\TeamBlock\TeamBlockSchedulerTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockSteadyStateValidatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\DayIntervalDataCalculatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\DynamicBlockFinderTest.cs" />

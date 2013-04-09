@@ -1140,7 +1140,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             var groupPersonsBuilder = _container.Resolve<IGroupPersonsBuilder>();
  
             var teamSteadyStateRunner = new TeamSteadyStateRunner(selectedPersonAllMatrixList, targetTimeCalculator);
-            var teamSteadyStateCreator = new TeamSteadyStateDictionaryCreator(teamSteadyStateRunner, selectedPersonAllMatrixList,
+			var teamSteadyStateCreator = new TeamBlockSteadyStateDictionaryCreator(teamSteadyStateRunner, selectedPersonAllMatrixList,
                                                                               groupPersonsBuilder, schedulingOptions);
             var teamSteadyStateDictionary = teamSteadyStateCreator.Create(selectedPeriod);
             var teamSteadyStateHolder = new TeamSteadyStateHolder(teamSteadyStateDictionary);
