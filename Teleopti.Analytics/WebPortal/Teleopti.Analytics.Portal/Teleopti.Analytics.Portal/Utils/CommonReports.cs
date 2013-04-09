@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
@@ -21,15 +22,23 @@ namespace Teleopti.Analytics.Portal.Utils
         private string _sub2ProcedureName;
         private string _name;
         private readonly SqlConnection _connection = new SqlConnection();
+	    private int _dbTimeout;
         
 
         public CommonReports(string connectionString,Guid reportId)
         {
-            _connection.ConnectionString = connectionString;
-            _reportId = reportId;
+	        _connection.ConnectionString = connectionString;
+	        _reportId = reportId;
+	        int dbTimeOutFromConfig;
+	        if (int.TryParse(ConfigurationManager.AppSettings["DbTimeout"], out dbTimeOutFromConfig))
+		        _dbTimeout = dbTimeOutFromConfig > 600
+			                     ? 600
+			                     : dbTimeOutFromConfig;
+	        else
+		        _dbTimeout = 180;
         }
 
-        public DataSet GetReportData(Guid reportId, Guid personCode, Guid businessUnitCode, IList<SqlParameter> parameters)
+	    public DataSet GetReportData(Guid reportId, Guid personCode, Guid businessUnitCode, IList<SqlParameter> parameters)
         {
             LoadReportInfo(reportId);
 
@@ -115,7 +124,7 @@ namespace Teleopti.Analytics.Portal.Utils
             var sqlCommand = new SqlCommand
                                  {
                                      CommandText = procedureName,
-                                     CommandTimeout = 600,
+									 CommandTimeout = _dbTimeout,
                                      CommandType = CommandType.StoredProcedure
                                  };
 
