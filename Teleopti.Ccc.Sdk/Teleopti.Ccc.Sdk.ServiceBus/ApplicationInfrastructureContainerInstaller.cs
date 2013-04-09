@@ -22,10 +22,15 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<BusStartup>().As<IServiceBusAware>().SingleInstance();
-			builder.Register(c => StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging).As<IMessageBroker>().ExternallyOwned();
+			builder.Register(c => StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging)
+				.As<IMessageBroker>()
+				.As<IMessageBrokerSender>()
+				.As<IMessageBrokerListener>()
+				.ExternallyOwned();
 			builder.Register(c => StateHolderReader.Instance.StateReader.ApplicationScopeData).As<IApplicationData>().ExternallyOwned();
 			builder.Register(c => UnitOfWorkFactoryContainer.Current).As<IUnitOfWorkFactory>().ExternallyOwned();
 			builder.RegisterType<CurrentUnitOfWork>().As<ICurrentUnitOfWork>().SingleInstance();
+			builder.RegisterType<CurrentDataSource>().As<ICurrentDataSource>().SingleInstance();
 			builder.Register(getThreadJobResultFeedback).As<IJobResultFeedback>().ExternallyOwned();
 			builder.RegisterType<SendPushMessageWhenRootAlteredService>().As<ISendPushMessageWhenRootAlteredService>().InstancePerDependency();
 			builder.RegisterType<RepositoryFactory>().As<IRepositoryFactory>().InstancePerDependency();
