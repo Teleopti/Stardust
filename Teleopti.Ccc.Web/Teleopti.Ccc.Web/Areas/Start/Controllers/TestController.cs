@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.MessageBroker;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
 using Teleopti.Ccc.Web.Areas.Start.Models.Test;
@@ -17,7 +18,14 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		private readonly IWebLogOn _logon;
 		private readonly IBusinessUnitProvider _businessUnitProvider;
 
-		public TestController(IModifyNow modifyNow, ISessionSpecificDataProvider sessionSpecificDataProvider, IAuthenticator authenticator, IWebLogOn logon, IBusinessUnitProvider businessUnitProvider)
+		public TestController(IModifyNow 
+			modifyNow, 
+			ISessionSpecificDataProvider 
+			sessionSpecificDataProvider, 
+			IAuthenticator authenticator, 
+			IWebLogOn logon, 
+			IBusinessUnitProvider businessUnitProvider
+			)
 		{
 			_modifyNow = modifyNow;
 			_sessionSpecificDataProvider = sessionSpecificDataProvider;
@@ -26,10 +34,11 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			_businessUnitProvider = businessUnitProvider;
 		}
 
-		public ViewResult BeforeScenario()
+		public ViewResult BeforeScenario(bool enableMyTimeMessageBroker)
 		{
 			_sessionSpecificDataProvider.RemoveCookie();
 			updateIocNow(null);
+			updateMyTimeMessageBrokerConfiguration(enableMyTimeMessageBroker);
 			var viewModel = new TestMessageViewModel
 								{
 									Title = "Setting up for scenario",
@@ -111,6 +120,11 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		private void updateIocNow(DateTime? dateTimeSet)
 		{
 			_modifyNow.SetNow(dateTimeSet);
+		}
+
+		private void updateMyTimeMessageBrokerConfiguration(bool enableMyTimeMessageBroker)
+		{
+			UserDataFactory.EnableMyTimeMessageBroker = enableMyTimeMessageBroker;
 		}
 	}
 }
