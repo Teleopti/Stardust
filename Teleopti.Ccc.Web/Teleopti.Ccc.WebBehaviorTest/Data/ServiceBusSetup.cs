@@ -71,12 +71,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			return contents.Replace(variableTag, value);
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
 		private static void StartProcess()
 		{
 			_process = Process.Start(ProcessStartInfo());
 			WaitForServiceBusToStart();
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
 		private static ProcessStartInfo ProcessStartInfo()
 		{
 			var startInfo = new ProcessStartInfo(ConsoleHostExecutablePath())
@@ -87,6 +89,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			return startInfo;
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
 		private static void WaitForServiceBusToStart()
 		{
 			Func<string> readLine = _process.StandardOutput.ReadLine;
@@ -104,6 +107,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			throw new Exception("Timeout starting service bus console host");
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
 		private static void CloseProcess()
 		{
 			_process.Kill();
