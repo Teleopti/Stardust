@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -242,5 +243,19 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Assert.That(restriction, Is.Null);
 			}
 		}
+
+        [Test]
+        public void ShouldNotContinueIfGroupPersonIsNull()
+        {
+            _target.Convert(null, new List<DateOnly>());
+        }
+
+        [Test]
+        public void ShouldNotContinueIfDateOnlyListIsNull()
+        {
+            var groupPerson = _mocks.StrictMock<IGroupPerson>();
+            _target.Convert(groupPerson, null);
+        }
+
 	}
 }

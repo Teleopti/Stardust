@@ -107,5 +107,75 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			Expect.Call(_scheduleDayPro.Day).Return(DateOnly.MinValue);
 			Expect.Call(_range.ScheduledDay(DateOnly.MinValue)).Return(_originalScheduleDay);
 		}
+
+        [Test]
+        public void ShouldAddOriginalNumberOfDaysOff()
+        {
+            
+            var optimizerPrefrences = _optimizationPreferences;
+            optimizerPrefrences.Shifts.KeepShifts = true;
+            optimizerPrefrences.Shifts.KeepShiftsValue = 0;
+            optimizerPrefrences.DaysOff.UseKeepExistingDaysOff = false;
+
+            using (_mocks.Record())
+            {
+                commonMocks();
+
+                Expect.Call(_originalScheduleDay.SignificantPart()).Return(SchedulePartView.DayOff);
+                Expect.Call(_scheduleDayEquator.MainShiftEquals(_originalScheduleDay, _currentScheduleDay)).Return(true);
+            }
+
+            using (_mocks.Playback())
+            {
+                bool result = _target.ValidateMatrix(_matrix, _optimizationPreferences);
+                Assert.IsTrue(result);
+            }
+        }
+
+        [Test]
+        public void ShouldAddChangedDaysOff()
+        {
+
+            var optimizerPrefrences = _optimizationPreferences;
+            optimizerPrefrences.DaysOff.UseKeepExistingDaysOff = true;
+            var scheduleDay = _mocks.StrictMock<IScheduleDay>();
+            using (_mocks.Record())
+            {
+                commonMocks();
+
+                Expect.Call(_originalScheduleDay.SignificantPart()).Return(SchedulePartView.DayOff);
+                //Expect.Call(_scheduleDayEquator.MainShiftEquals(_originalScheduleDay, _currentScheduleDay)).Return(true);
+                Expect.Call(_scheduleDayEquator.DayOffEquals(scheduleDay, scheduleDay)).IgnoreArguments().Return(false );
+            }
+
+            using (_mocks.Playback())
+            {
+                bool result = _target.ValidateMatrix(_matrix, _optimizationPreferences);
+                Assert.IsTrue(result);
+            }
+        }
+
+        [Test]
+        public void ShouldReturnFalseWhenUseKeepExistingDaysOffIsUsed()
+        {
+
+            var optimizerPrefrences = _optimizationPreferences;
+            optimizerPrefrences.DaysOff.UseKeepExistingDaysOff = true;
+            optimizerPrefrences.DaysOff.KeepExistingDaysOffValue = 50;
+            var scheduleDay = _mocks.StrictMock<IScheduleDay>();
+            using (_mocks.Record())
+            {
+                commonMocks();
+
+                Expect.Call(_originalScheduleDay.SignificantPart()).Return(SchedulePartView.DayOff);
+               Expect.Call(_scheduleDayEquator.DayOffEquals(scheduleDay, scheduleDay)).IgnoreArguments().Return(false);
+            }
+
+            using (_mocks.Playback())
+            {
+                bool result = _target.ValidateMatrix(_matrix, _optimizationPreferences);
+                Assert.IsFalse(result);
+            }
+        }
 	}
 }
