@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                            new BudgetDayRepository(currentUowFactory),
                                                            new BudgetGroupRepository(currentUowFactory),
                                                            new ScenarioRepository(currentUowFactory),
-                                                           new ScheduleProjectionReadOnlyRepository(currentUowFactory)));
+                                                           new ScheduleProjectionReadOnlyRepository(new CurrentUnitOfWork(UnitOfWorkFactory.LoggedOnProvider()))));
             _presenter.Initialize(budgetGroup, defaultDate);
             initializeGrid();
             _presenter.InitializeGridBinding();

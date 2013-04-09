@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			PersistAndRemoveFromUnitOfWork(personPeriod.PersonContract.PartTimePercentage);
 			PersistAndRemoveFromUnitOfWork(person);
 
-			target = new ScheduleProjectionReadOnlyRepository(UnitOfWorkFactory.Current);
+			target = new ScheduleProjectionReadOnlyRepository(UnitOfWorkFactory.CurrentUnitOfWork());
 		}
 
 		[Test]
