@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		}
 	
 		[Test]
-		public void ShouldReturnFalseIfValidationFailded()
+		public void ShouldReturnFalseIfValidationFailed()
 		{
 			var person = PersonFactory.CreatePerson("bill");
 			var dateOnly = new DateOnly(2013, 4, 8);
