@@ -11,10 +11,13 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 	{
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterAssemblyTypes(typeof(PersonRepository).Assembly)
-				.Where(t => isRepository(t) && hasCorrectCtor(t))
-				.AsImplementedInterfaces()
-				.SingleInstance();
+			foreach (var type in typeof(PersonRepository).Assembly.GetTypes().Where(t => isRepository(t) && hasCorrectCtor(t)))
+			{
+				builder.RegisterType(type)
+				       .UsingConstructor(typeof (ICurrentUnitOfWork))
+				       .AsImplementedInterfaces()
+				       .SingleInstance();
+			}
 
 			builder.Register(c => StatisticRepositoryFactory.Create())
 				.As<IStatisticRepository>();
