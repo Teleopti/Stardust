@@ -54,6 +54,10 @@ GOTO Error
 SET ConfigPath=%ConfigPath%\AzureConfig
 IF NOT EXIST "%ConfigPath%\DummyFolder" mkdir "%ConfigPath%\DummyFolder"
 
+::ETL nhibConfigPaths are wrong at this stage, replace with emtpy string
+cscript replace.vbs "%ConfigPath%\ETL\Tool" "" "%ConfigPath%\ETL\Tool\Teleopti.Analytics.Etl.ConfigTool.exe.config"
+cscript replace.vbs "%ConfigPath%\ETL\Service" "" "%ConfigPath%\ETL\Service\Teleopti.Analytics.Etl.ServiceHost.exe.config"
+
 ::Replace dataSouceName in nhib
 cscript replace.vbs "Teleopti CCC" "%DataSourceName%" "%ConfigPath%\SDK\TeleoptiCCC7.nhib.xml"
 cscript replace.vbs "Teleopti CCC" "%DataSourceName%" "%ConfigPath%\ETL\Tool\TeleoptiCCC7.nhib.xml"
