@@ -22,14 +22,14 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			}
 		}
 
-		public static ICurrentUnitOfWorkFactory LoggedOnProvider()
+		public static ICurrentUnitOfWorkFactory CurrentUnitOfWorkFactory()
 		{
 			return new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal());
 		}
 
 		public static ICurrentUnitOfWork CurrentUnitOfWork()
 		{
-			return new CurrentUnitOfWork(LoggedOnProvider());
+			return new CurrentUnitOfWork(CurrentUnitOfWorkFactory());
 		}
 	}
 }

@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			StateHolderProxyHelper.SetupFakeState(TestData.DataSource, TestData.PersonThatCreatesTestData, CommonBusinessUnit.BusinessUnitFromFakeState, new ThreadPrincipalContext(new TeleoptiPrincipalFactory()));
 
 			GlobalPrincipalState.Principal = Thread.CurrentPrincipal as TeleoptiPrincipal;
-			GlobalUnitOfWorkState.CurrentUnitOfWorkFactory = UnitOfWorkFactory.LoggedOnProvider();
+			GlobalUnitOfWorkState.CurrentUnitOfWorkFactory = UnitOfWorkFactory.CurrentUnitOfWorkFactory();
 		}
 
 
