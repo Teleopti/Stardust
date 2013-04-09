@@ -6,29 +6,66 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 {
 	public interface  IAgentPreferenceDayCreator
 	{
-		IPreferenceDay Create(IScheduleDay scheduleDay, TimeSpan? minStart, TimeSpan? maxStart, TimeSpan? minEnd, TimeSpan? maxEnd, TimeSpan? minLength, TimeSpan? maxLength, bool endNextDay);
-		IAgentPreferenceCanCreateResult CanCreate(TimeSpan? minStart, TimeSpan? maxStart, TimeSpan? minEnd, TimeSpan? maxEnd, TimeSpan? minLength, TimeSpan? maxLength, bool endNextDay);
+		IPreferenceDay Create(IScheduleDay scheduleDay, IShiftCategory shiftCategory, IAbsence absence,
+		                      IDayOffTemplate dayOffTemplate, IActivity activity, TimeSpan? minStart, TimeSpan? maxStart,
+		                      TimeSpan? minEnd, TimeSpan? maxEnd, TimeSpan? minLength, TimeSpan? maxLength, bool endNextDay,
+		                      TimeSpan? minStartActivity, TimeSpan? maxStartActivity, TimeSpan? minEndActivity,
+		                      TimeSpan? maxEndActivity, TimeSpan? minLengthActivity, TimeSpan? maxLengthActivity);
+
+		IAgentPreferenceCanCreateResult CanCreate(IShiftCategory shiftCategory, IAbsence absence,
+		                                          IDayOffTemplate dayOffTemplate, IActivity activity, TimeSpan? minStart,
+		                                          TimeSpan? maxStart, TimeSpan? minEnd, TimeSpan? maxEnd, TimeSpan? minLength, TimeSpan? maxLength, bool endNextDay,
+		                                          TimeSpan? minStartActivity, TimeSpan? maxStartActivity,
+		                                          TimeSpan? minEndActivity, TimeSpan? maxEndActivity,
+		                                          TimeSpan? minLengthActivity, TimeSpan? maxLengthActivity);
 	}
 
 	public class AgentPreferenceDayCreator : IAgentPreferenceDayCreator
 	{
-		public IPreferenceDay Create(IScheduleDay scheduleDay, TimeSpan? minStart, TimeSpan? maxStart, TimeSpan? minEnd, TimeSpan? maxEnd, TimeSpan? minLength, TimeSpan? maxLength, bool endNextDay)
-		{
+		public IPreferenceDay Create(IScheduleDay scheduleDay, IShiftCategory shiftCategory, IAbsence absence, IDayOffTemplate dayOffTemplate, IActivity activity, TimeSpan? minStart, TimeSpan? maxStart, 
+									TimeSpan? minEnd, TimeSpan? maxEnd, TimeSpan? minLength, TimeSpan? maxLength, bool endNextDay,
+									TimeSpan? minStartActivity, TimeSpan? maxStartActivity, TimeSpan? minEndActivity, TimeSpan? maxEndActivity, 
+									TimeSpan? minLengthActivity, TimeSpan? maxLengthActivity)
+
+		{	
 			if(scheduleDay == null) throw new ArgumentNullException("scheduleDay");
 
-			var result = CanCreate(minStart, maxStart, minEnd, maxEnd, minLength, maxLength, endNextDay);
+			var result = CanCreate(shiftCategory, absence, dayOffTemplate, activity, minStart, maxStart, minEnd, maxEnd, minLength, maxLength, endNextDay, minStartActivity, maxStartActivity, minEndActivity, maxEndActivity, minLengthActivity, maxLengthActivity);
 			if (!result.Result) return null;
-
+	
 			var restriction = new PreferenceRestriction();
-			restriction.StartTimeLimitation = new StartTimeLimitation(minStart, maxStart);
-			restriction.EndTimeLimitation = new EndTimeLimitation(minEnd, maxEnd);
-			restriction.WorkTimeLimitation = new WorkTimeLimitation(minLength, maxLength);
+
+			restriction.ShiftCategory = shiftCategory;
+			restriction.Absence = absence;
+			restriction.DayOffTemplate = dayOffTemplate;
+
+			if (activity != null)
+			{
+				var activityRestriction = new ActivityRestriction(activity);
+				activityRestriction.StartTimeLimitation = new StartTimeLimitation(minStartActivity, maxStartActivity);
+				activityRestriction.EndTimeLimitation = new EndTimeLimitation(minEndActivity, maxEndActivity);
+				activityRestriction.WorkTimeLimitation = new WorkTimeLimitation(minLengthActivity, maxLengthActivity);
+				restriction.AddActivityRestriction(activityRestriction);
+			}
+
+			if (absence == null && dayOffTemplate == null)
+			{
+				restriction.StartTimeLimitation = new StartTimeLimitation(minStart, maxStart);
+				restriction.EndTimeLimitation = new EndTimeLimitation(minEnd, maxEnd);
+				restriction.WorkTimeLimitation = new WorkTimeLimitation(minLength, maxLength);
+			}
+
 			var preferenceDay = new PreferenceDay(scheduleDay.Person, scheduleDay.DateOnlyAsPeriod.DateOnly, restriction);
 
 			return preferenceDay;
 		}
 
-		public IAgentPreferenceCanCreateResult CanCreate(TimeSpan? minStart, TimeSpan? maxStart, TimeSpan? minEnd, TimeSpan? maxEnd, TimeSpan? minLength, TimeSpan? maxLength, bool endNextDay)
+		public IAgentPreferenceCanCreateResult CanCreate(IShiftCategory shiftCategory, IAbsence absence,
+												  IDayOffTemplate dayOffTemplate, IActivity activity, TimeSpan? minStart,
+												  TimeSpan? maxStart, TimeSpan? minEnd, TimeSpan? maxEnd, TimeSpan? minLength, TimeSpan? maxLength, bool endNextDay,
+												  TimeSpan? minStartActivity, TimeSpan? maxStartActivity,
+												  TimeSpan? minEndActivity, TimeSpan? maxEndActivity,
+												  TimeSpan? minLengthActivity, TimeSpan? maxLengthActivity)
 		{
 			var result = new AgentPreferenceCanCreateResult();
 			result.Result = true;
@@ -49,6 +86,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			if (!result.Result) return result;
 
 			result = validateLengthsVersusTimes(minStart, maxStart, minEnd, maxEnd, minLength, maxLength, result);
+			if (!result.Result) return result;
+
+			result = validTypes(shiftCategory, absence, dayOffTemplate, activity, result);
 			if (!result.Result) return result;
 
 			return result;
@@ -165,6 +205,42 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 							return result;
 						}
 					}
+				}
+			}
+
+			return result;
+		}
+
+		private static AgentPreferenceCanCreateResult validTypes(IShiftCategory shiftCategory, IAbsence absence,IDayOffTemplate dayOffTemplate, IActivity activity, AgentPreferenceCanCreateResult result)
+		{
+
+			if (shiftCategory != null)
+			{
+				if (absence != null || dayOffTemplate != null)
+				{
+					result.Result = false;
+					result.ConflictingTypeError = true;
+					return result;
+				}
+			}
+	
+			if (absence != null)
+			{
+				if (dayOffTemplate != null || activity != null)
+				{
+					result.Result = false;
+					result.ConflictingTypeError = true;
+					return result;
+				}
+			}
+
+			if (dayOffTemplate != null)
+			{
+				if(activity != null)
+				{
+					result.Result = false;
+					result.ConflictingTypeError = true;
+					return result;
 				}
 			}
 

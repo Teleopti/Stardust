@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using NUnit.Framework;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Rhino.Mocks;
 using Teleopti.Interfaces.Domain;
@@ -22,6 +23,10 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		private TimeSpan? maxEnd;
 		private TimeSpan? minLength;
 		private TimeSpan? maxLength;
+		//private IShiftCategory _shiftCategory;
+		//private IAbsence _absence;
+		//private IDayOffTemplate _dayOffTemplate;
+		//private IActivity _activity;
 
 		[SetUp]
 		public void Setup()
@@ -36,7 +41,11 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			maxEnd = TimeSpan.FromHours(4);
 			minLength = TimeSpan.FromHours(2);
 			maxLength = TimeSpan.FromHours(3);
-			_target = new AgentPreferenceEditCommand(_scheduleDay, minStart, maxStart, minEnd, maxEnd, minLength, maxLength, false, _agentPreferenceDayCreator);
+			//_shiftCategory = new ShiftCategory("shiftCatgory");
+			//_absence = new Absence();
+			//_dayOffTemplate = new DayOffTemplate(new Description("dayOffTemplate"));
+			//_activity = new Activity("activity");
+			_target = new AgentPreferenceEditCommand(_scheduleDay, null, null, null, null, minStart, maxStart, minEnd, maxEnd, minLength, maxLength, false, _agentPreferenceDayCreator, null, null, null, null, null, null);
 		}
 
 		[Test]
@@ -47,8 +56,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				var result = new AgentPreferenceCanCreateResult();
 				result.Result = true;
 				Expect.Call(_scheduleDay.PersistableScheduleDataCollection()).Return(new ReadOnlyCollection<IPersistableScheduleData>(new List<IPersistableScheduleData> { _preferenceDay }));
-				Expect.Call(_agentPreferenceDayCreator.CanCreate(minStart, maxStart, minEnd, maxEnd, minLength, maxLength, false)).Return(result);
-				Expect.Call(_agentPreferenceDayCreator.Create(_scheduleDay, minStart, maxStart, minEnd, maxEnd, minLength, maxLength, false)).Return(_preferenceDay);
+				Expect.Call(_agentPreferenceDayCreator.CanCreate(null, null, null, null, minStart, maxStart, minEnd, maxEnd, minLength, maxLength, false, null, null, null, null, null, null)).Return(result);
+				Expect.Call(_agentPreferenceDayCreator.Create(_scheduleDay, null, null, null, null, minStart, maxStart, minEnd, maxEnd, minLength, maxLength, false, null, null, null, null, null, null)).Return(_preferenceDay);
 				Expect.Call(() => _scheduleDay.DeletePreferenceRestriction());
 				Expect.Call(() => _scheduleDay.Add(_preferenceDay));
 			}
@@ -67,7 +76,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				var result = new AgentPreferenceCanCreateResult();
 				result.Result = false;
 				Expect.Call(_scheduleDay.PersistableScheduleDataCollection()).Return(new ReadOnlyCollection<IPersistableScheduleData>(new List<IPersistableScheduleData> { _preferenceDay }));
-				Expect.Call(_agentPreferenceDayCreator.CanCreate(minStart, maxStart, minEnd, maxEnd, minLength, maxLength, false)).Return(result);
+				Expect.Call(_agentPreferenceDayCreator.CanCreate(null, null, null, null, minStart, maxStart, minEnd, maxEnd, minLength, maxLength, false, null, null, null, null, null, null)).Return(result);
 			}
 
 			using (_mock.Playback())

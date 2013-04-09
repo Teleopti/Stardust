@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_result.EndTimeMaxError = true;
 			_result.LengthMinError = true;
 			_result.LengthMaxError = true;
+			_result.ConflictingTypeError = true;
 			_result.Result = true;
 
 			Assert.IsTrue(_result.StartTimeMinError);
@@ -31,6 +32,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			Assert.IsTrue(_result.EndTimeMaxError);
 			Assert.IsTrue(_result.LengthMinError);
 			Assert.IsTrue(_result.LengthMaxError);
+			Assert.IsTrue(_result.ConflictingTypeError);
 			Assert.IsTrue(_result.Result);
 		}
 	}

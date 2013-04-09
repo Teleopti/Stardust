@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		bool EndTimeMaxError { get; set; }
 		bool LengthMinError { get; set; }
 		bool LengthMaxError { get; set; }
+		bool ConflictingTypeError { get; set; }
 		bool Result { get; set; }
 	}
 	public class AgentPreferenceCanCreateResult : IAgentPreferenceCanCreateResult
@@ -21,6 +22,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private bool _lengthMinError;
 		private bool _lengthMaxError;
 		private bool _result;
+		private bool _conflictingTypeError;
 
 
 		public bool StartTimeMinError
@@ -57,6 +59,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		{
 			get { return _lengthMaxError; }
 			set { _lengthMaxError = value; }
+		}
+
+		public bool ConflictingTypeError
+		{
+			get { return _conflictingTypeError; }
+			set { _conflictingTypeError = value; }
 		}
 
 		public bool Result
