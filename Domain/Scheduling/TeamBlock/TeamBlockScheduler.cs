@@ -1,18 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.Scheduling
+namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
 	public interface ITeamBlockScheduler
 	{
 		event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
         bool ScheduleTeamBlockDay(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons);
-        //bool ScheduleTeamBlock(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions);
-		//bool ScheduleTeamBlock(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions, bool skipOffset);
+		void OnDayScheduled(object sender, SchedulingServiceBaseEventArgs e);
 	}
 
 	public class TeamBlockScheduler : ITeamBlockScheduler
@@ -52,9 +50,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
                 if (!selectedPeriod.DayCollection().Contains(day)) continue;
                 if (schedulingOptions.UseLevellingSameShift)
                 {
-                    if(!scheduleSelectedBlockForSameShift(teamBlockInfo, schedulingOptions, selectedPersons, day,
-                                                      suggestedShiftProjectionCache,selectedPeriod)) 
-                        return false;
+					scheduleSelectedBlockForSameShift(teamBlockInfo, schedulingOptions, selectedPersons, day,
+													  suggestedShiftProjectionCache, selectedPeriod);
                 }
                 else
                 {
@@ -93,10 +90,10 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	                                                                                             .UseMinimumPersons,
 	                                                                                         schedulingOptions
 	                                                                                             .UseMaximumPersons);
-	            _teamScheduling.DayScheduled += dayScheduled;
+				_teamScheduling.DayScheduled += OnDayScheduled;
 	            var skipOffset = !schedulingOptions.UseLevellingSameShift;
                 _teamScheduling.ExecutePerDayPerPerson(person, day, teamBlockInfo, bestShiftProjectionCache, skipOffset, selectedPeriod);
-	            _teamScheduling.DayScheduled -= dayScheduled;
+				_teamScheduling.DayScheduled -= OnDayScheduled;
 	        }
 	        return true;
 	    }
@@ -110,10 +107,10 @@ namespace Teleopti.Ccc.Domain.Scheduling
             foreach (var person in teamBlockInfo.TeamInfo.GroupPerson.GroupMembers)
             {
                 if (!selectedPersons.Contains(person)) continue;
-                _teamScheduling.DayScheduled += dayScheduled;
+				_teamScheduling.DayScheduled += OnDayScheduled;
                 var skipOffset = !schedulingOptions.UseLevellingSameShift;
                 _teamScheduling.ExecutePerDayPerPerson(person, day, teamBlockInfo, suggestedShiftProjectionCache, skipOffset, selectedPeriod);
-                _teamScheduling.DayScheduled -= dayScheduled;
+				_teamScheduling.DayScheduled -= OnDayScheduled;
             }
             return true;
         }
@@ -153,18 +150,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
             return true;
         }
 
-        void dayScheduled(object sender, SchedulingServiceBaseEventArgs e)
-		{
-			OnDayScheduled(e);
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		protected virtual void OnDayScheduled(SchedulingServiceBaseEventArgs scheduleServiceBaseEventArgs)
+        public void OnDayScheduled(object sender, SchedulingServiceBaseEventArgs e)
 		{
 			EventHandler<SchedulingServiceBaseEventArgs> temp = DayScheduled;
 			if (temp != null)
 			{
-				temp(this, scheduleServiceBaseEventArgs);
+				temp(this, e);
 			}
 		}
 	}

@@ -250,6 +250,7 @@
     <Compile Include="Optimization\GroupMoveTimeOptimizerServiceTest.cs" />
     <Compile Include="Optimization\GroupMoveTimeOptimizerTest.cs" />
     <Compile Include="Optimization\GroupMoveTimeValidatorRunnerTest.cs" />
+    <Compile Include="Optimization\GroupOptimizationValidatorRunnerTest.cs" />
     <Compile Include="Optimization\IntradayDecisionMakerComponentsTest.cs" />
     <Compile Include="Optimization\DataExtractorValuesForMatrixesTest.cs" />
     <Compile Include="Optimization\MatrixMultipleShiftsLockerTest.cs" />
@@ -720,6 +721,7 @@
     <Compile Include="Scheduling\TeamBlock\TeamBlockClearerTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockDayOffOptimizerServiceTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockSchedulingServiceTest.cs" />
+	<Compile Include="Scheduling\TeamBlock\TeamBlockSchedulerTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockSteadyStateValidatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\DayIntervalDataCalculatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\DynamicBlockFinderTest.cs" />
