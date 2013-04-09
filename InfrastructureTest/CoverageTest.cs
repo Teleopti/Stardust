@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Linq;
 using NUnit.Framework;
-using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Infrastructure.Config;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Licensing.Agreements;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -21,7 +19,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 	[TestFixture]
 	public class CoverageTest : DatabaseTest
 	{
-		 [Test]
+		 [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
 		 public void LazyLoadingManagerWrapper()
 		 {
 			 var target = new LazyLoadingManagerWrapper();
@@ -29,13 +27,13 @@ namespace Teleopti.Ccc.InfrastructureTest
 			 target.Initialize(new object());
 		 }
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "sdf"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = "Teleopti.Ccc.Infrastructure.Foundation.OptimisticLockException"), Test]
 		public void OptimisticLockException()
 		{
 			new OptimisticLockException("sdf", Guid.NewGuid(), "sdf");
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
 		public void WindowsPrincipal()
 		{
 			var target = new WindowsAppDomainPrincipalContext(null);
@@ -48,7 +46,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 			UnitOfWork.GetHashCode();
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Ctors"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1307:SpecifyStringComparison", MessageId = "System.String.EndsWith(System.String)"), Test]
 		public void RunRepositoryCtors()
 		{
 			foreach (var repositoryType in typeof(PersonAssignment).Assembly.GetTypes().Where(t => t.Name.EndsWith("Repository")))
@@ -64,7 +62,7 @@ namespace Teleopti.Ccc.InfrastructureTest
 			}
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
 		public void Agreement()
 		{
 			var target = new AgreementProvider();
