@@ -10,11 +10,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
-        public ScheduleTagRepository(IUnitOfWorkFactory unitOfWorkFactory)
-            : base(unitOfWorkFactory)
-        {
-        }
-
 				public ScheduleTagRepository(ICurrentUnitOfWork currentUnitOfWork)
 					: base(currentUnitOfWork)
 	    {

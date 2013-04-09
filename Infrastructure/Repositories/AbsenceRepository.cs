@@ -22,11 +22,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
-        public AbsenceRepository(IUnitOfWorkFactory unitOfWorkFactory)
-            : base(unitOfWorkFactory)
-        {
-        }
-
 	    public AbsenceRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
 	    {
 	    }

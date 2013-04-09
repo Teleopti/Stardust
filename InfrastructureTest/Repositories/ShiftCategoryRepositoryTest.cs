@@ -75,13 +75,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(2, loadedCat[0].DayOfWeekJusticeValues[DayOfWeek.Sunday]);
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
-        public void ShouldCreateRepositoryWithUnitOfWorkFactory()
-        {
-            var repository = new ShiftCategoryRepository(UnitOfWorkFactory.Current);
-            Assert.IsNotNull(repository);
-        }
-
         /// <summary>
         /// Determines whether this instance can be created.
         /// </summary>

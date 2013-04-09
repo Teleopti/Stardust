@@ -21,11 +21,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
-        public ShiftCategoryRepository(IUnitOfWorkFactory unitOfWorkFactory)
-            : base(unitOfWorkFactory)
-        {
-        }
-
 				public ShiftCategoryRepository(ICurrentUnitOfWork currentUnitOfWork)
 					: base(currentUnitOfWork)
 	    {

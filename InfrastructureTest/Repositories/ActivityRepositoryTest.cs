@@ -94,13 +94,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(true, loadedAbctivity.AllowOverwrite );
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
-        public void ShouldCreateRepositoryWithUnitOfWorkFactory()
-        {
-            var repository = new ActivityRepository(UnitOfWorkFactory.Current);
-            Assert.IsNotNull(repository);
-        }
-
         protected override Repository<IActivity> TestRepository(IUnitOfWork unitOfWork)
         {
             return new ActivityRepository(unitOfWork);

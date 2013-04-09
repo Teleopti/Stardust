@@ -15,11 +15,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             _unitOfWork = unitOfWork;
         }
 
-        protected SettingDataRepository(IUnitOfWorkFactory unitOfWorkFactory)
-        {
-            _unitOfWorkFactory = unitOfWorkFactory;
-        }
-
         protected ISession Session
         {
             get { return ((NHibernateUnitOfWork) UnitOfWork).Session; }

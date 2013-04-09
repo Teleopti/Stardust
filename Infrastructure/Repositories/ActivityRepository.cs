@@ -20,11 +20,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
-        public ActivityRepository(IUnitOfWorkFactory unitOfWorkFactory)
-            : base(unitOfWorkFactory)
-        {
-        }
-
 	    public ActivityRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
 	    {
 	    }

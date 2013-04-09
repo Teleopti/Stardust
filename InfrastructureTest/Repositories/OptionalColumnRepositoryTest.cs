@@ -86,12 +86,5 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.AreEqual(1, returnList.Count);
 			Assert.AreEqual(columnName, returnList[0].Name);
 		}
-
-		[Test]
-		public void ShouldHaveFactoryConstructor()
-		{
-			repository = new OptionalColumnRepository(UnitOfWorkFactory.Current);
-			repository.Should().Not.Be.Null();
-		}
     }
 }

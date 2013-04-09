@@ -115,12 +115,5 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.IsNotNull(note.Id);
             Assert.AreEqual(note, _repository.LoadAggregate(note.Id.Value));
         }
-
-        [Test]
-        public void ShouldCreateRepositoryWithUnitOfWorkFactory()
-        {
-            _repository = new PublicNoteRepository(UnitOfWorkFactory.Current);
-            Assert.IsNotNull(_repository);
-        }
     }
 }

@@ -21,11 +21,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
-        public MultiplicatorDefinitionSetRepository(IUnitOfWorkFactory unitOfWorkFactory)
-            : base(unitOfWorkFactory)
-        {
-        }
-
 				public MultiplicatorDefinitionSetRepository(ICurrentUnitOfWork currentUnitOfWork)
 					: base(currentUnitOfWork)
 	    {

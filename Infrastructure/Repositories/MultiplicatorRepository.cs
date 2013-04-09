@@ -38,11 +38,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
-        public MultiplicatorRepository(IUnitOfWorkFactory unitOfWorkFactory)
-            :base(unitOfWorkFactory)
-        {
-        }
-
 				public MultiplicatorRepository(ICurrentUnitOfWork currentUnitOfWork)
 					: base(currentUnitOfWork)
 	    {

@@ -21,11 +21,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
-		public ExtendedPreferenceTemplateRepository(IUnitOfWorkFactory unitOfWorkFactory)
-            : base(unitOfWorkFactory)
-        {
-        }
-
 	    public ExtendedPreferenceTemplateRepository(ICurrentUnitOfWork currentUnitOfWork)
 					: base(currentUnitOfWork)
 	    {

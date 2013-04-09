@@ -10,10 +10,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
-        public PayrollExportRepository(IUnitOfWorkFactory unitOfWorkFactory)
-            : base(unitOfWorkFactory)
-        {
-        }
 
 				public PayrollExportRepository(ICurrentUnitOfWork currentUnitOfWork)
 					: base(currentUnitOfWork)

@@ -21,11 +21,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
-        public SiteRepository(IUnitOfWorkFactory unitOfWorkFactory)
-            : base(unitOfWorkFactory)
-        {
-        }
-
 				public SiteRepository(ICurrentUnitOfWork currentUnitOfWork)
 					: base(currentUnitOfWork)
 	    {
