@@ -15,9 +15,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 		private readonly IDayOffRepository _dayOffRepository;
 		private readonly IAbsenceRepository _absenceRepository;
 		private readonly IActivityRepository _activityRespository;
-		private readonly IMappingEngine _mapper;
+		private readonly Lazy<IMappingEngine> _mapper;
 
-		public PreferenceDayInputMappingProfile(IShiftCategoryRepository shiftCategoryRepository, IDayOffRepository dayOffRepository, IAbsenceRepository absenceRepository, IActivityRepository activityRespository, IMappingEngine mapper)
+		public PreferenceDayInputMappingProfile(IShiftCategoryRepository shiftCategoryRepository, IDayOffRepository dayOffRepository, IAbsenceRepository absenceRepository, IActivityRepository activityRespository, Lazy<IMappingEngine> mapper)
 		{
 			_shiftCategoryRepository = shiftCategoryRepository;
 			_dayOffRepository = dayOffRepository;
@@ -70,11 +70,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 							if (d.ActivityRestrictionCollection.Any())
 							{
 								var activityRestriction = d.ActivityRestrictionCollection.Cast<ActivityRestriction>().Single();
-								_mapper.Map(s, activityRestriction);
+								_mapper.Value.Map(s, activityRestriction);
 							}
 							else
 							{
-								var activityRestriction = _mapper.Map<PreferenceDayInput, ActivityRestriction>(s);
+								var activityRestriction = _mapper.Value.Map<PreferenceDayInput, ActivityRestriction>(s);
 								d.AddActivityRestriction(activityRestriction);
 							}
 						}

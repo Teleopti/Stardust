@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 						        dayOffRepository,
 						        absenceRepository,
 								activityRepository,
-								Mapper.Engine)
+								new Lazy<IMappingEngine>(() => Mapper.Engine))
 							);
 					}
 				);
