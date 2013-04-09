@@ -1,17 +1,15 @@
 using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
-using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftCalculation;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.Scheduling
+namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
 
     public interface ITeamBlockSchedulingService
     {
 		event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
-		bool ScheduleSelected(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, TeamSteadyStateHolder teamSteadyStateHolder);
+        bool ScheduleSelected(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, ITeamSteadyStateHolder teamSteadyStateHolder);
     }
 
     public class TeamBlockSchedulingService : ITeamBlockSchedulingService
@@ -42,7 +40,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 	    public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
-		public bool ScheduleSelected(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, TeamSteadyStateHolder teamSteadyStateHolder)
+		public bool ScheduleSelected(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, ITeamSteadyStateHolder teamSteadyStateHolder)
 	    {
 			_teamBlockScheduler.DayScheduled += dayScheduled;
 		    foreach (var datePointer in selectedPeriod.DayCollection())
@@ -105,5 +103,11 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			}
 			_cancelMe = scheduleServiceBaseEventArgs.Cancel;
 		}
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1030:UseEventsWhereAppropriate")]
+        public void RaiseEventForTest(object sender, SchedulingServiceBaseEventArgs e)
+        {
+            dayScheduled(sender, e);
+        }
     }
 }
