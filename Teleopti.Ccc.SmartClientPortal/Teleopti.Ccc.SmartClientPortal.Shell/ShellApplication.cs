@@ -122,8 +122,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				builder.RegisterModule(new EncryptionModule());
                 builder.RegisterModule(new AuthenticationModule());
                 builder.RegisterModule(new EventAggregatorModule());
-                builder.RegisterModule(new UnitOfWorkModule());
-                builder.RegisterModule(new RepositoryModule());
                 builder.RegisterModule(new StartupModule());
                 builder.RegisterModule(new NavigationModule());
                 builder.RegisterModule(new BudgetModule());
@@ -139,6 +137,9 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
                 builder.RegisterModule(new RequestHistoryModule());
 							//hack to get old behavior work
 	            builder.Register(context => context.Resolve<ICurrentUnitOfWorkFactory>().LoggedOnUnitOfWorkFactory());
+							builder.RegisterModule(new RepositoryModule() { ConstructorTypeToUse = typeof(IUnitOfWorkFactory) });
+							builder.RegisterType<CurrentUnitOfWorkFactory>().As<ICurrentUnitOfWorkFactory>().SingleInstance();
+							//////
                 return builder.Build();
             }
 
