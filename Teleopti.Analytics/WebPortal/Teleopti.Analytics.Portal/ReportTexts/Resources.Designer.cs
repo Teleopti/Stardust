@@ -116,7 +116,7 @@ namespace Teleopti.Analytics.ReportTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Connection to database timed out, try selecting less data..
+        ///   Looks up a localized string similar to Connection to database timed out, try to limit your search conditions..
         /// </summary>
         public static string DatabaseTimedOutSelectLessData {
             get {
