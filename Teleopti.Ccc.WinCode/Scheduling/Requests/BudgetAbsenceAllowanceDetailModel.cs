@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Globalization;
 using Teleopti.Ccc.WinCode.Budgeting.Models;
@@ -14,6 +13,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
         public double AbsoluteDifference { get; set; }
         public Percent RelativeDifference { get; set; }
         public DateDayModel Date { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "HeadCounts")]
+        public double TotalHeadCounts { get; set; }
+
         public string Week
         {
             get

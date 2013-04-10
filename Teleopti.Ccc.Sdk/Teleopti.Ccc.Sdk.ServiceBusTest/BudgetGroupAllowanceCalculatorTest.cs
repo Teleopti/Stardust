@@ -51,8 +51,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
             _target = new BudgetGroupAllowanceCalculator(_schedulingResultStateHolder, _scenarioRepository, _budgetDayRepository,
                                                             _scheduleProjectionReadOnlyRepository);
         }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+        
+        [Test]
         public void ShouldBeEmptyStringIfEnoughAllowanceLeft()
         {
             var budgetDay = _mocks.StrictMock<IBudgetDay>();
@@ -63,26 +63,35 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
             _person.PermissionInformation.SetDefaultTimeZone(TimeZoneHelper.CurrentSessionTimeZone);
             using (_mocks.Record())
             {
-                Expect.Call(_scenarioRepository.LoadDefaultScenario()).Return(ScenarioFactory.CreateScenarioAggregate());
-                Expect.Call(_absenceRequest.Person).Return(_person).Repeat.AtLeastOnce();
-                Expect.Call(_absenceRequest.Period).Return(shortPeriod()).Repeat.AtLeastOnce();
-                Expect.Call(_budgetDayRepository.Find(null, null, _defaultDatePeriod)).IgnoreArguments().Return(new List<IBudgetDay> { budgetDay });
-                Expect.Call(budgetDay.Allowance).Return(2d);
-                Expect.Call(budgetDay.Day).Return(_defaultDay).Repeat.Twice();
-                Expect.Call(budgetDay.FulltimeEquivalentHours).Return(8d);
-                Expect.Call(_scheduleProjectionReadOnlyRepository.AbsenceTimePerBudgetGroup(_defaultDatePeriod, null, null)).IgnoreArguments().
-                    Return(usedAbsenceTime);
-                Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDict);
-                Expect.Call(_scheduleDict[_person].ScheduledDay(_defaultDay)).IgnoreArguments().Return(_scheduleDay);
-                Expect.Call(_scheduleDay.IsScheduled()).Return(true);
-                Expect.Call(_scheduleDay.ProjectionService()).Return(_projectionService);
-                Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
-                Expect.Call(_visualLayerCollection.Period()).Return(null);
+                getExpectIfEnoughAllowanceLeft(budgetDay, usedAbsenceTime);
             }
             using (_mocks.Playback())
             {
                 Assert.IsNullOrEmpty(_target.CheckBudgetGroup(_absenceRequest));
             }
+        }
+
+        private void getExpectIfEnoughAllowanceLeft(IBudgetDay budgetDay, IEnumerable<PayloadWorkTime> usedAbsenceTime)
+        {
+            Expect.Call(_scenarioRepository.LoadDefaultScenario()).Return(ScenarioFactory.CreateScenarioAggregate());
+            Expect.Call(_absenceRequest.Person).Return(_person).Repeat.AtLeastOnce();
+            Expect.Call(_absenceRequest.Period).Return(shortPeriod()).Repeat.AtLeastOnce();
+            Expect.Call(_budgetDayRepository.Find(null, null, _defaultDatePeriod))
+                  .IgnoreArguments()
+                  .Return(new List<IBudgetDay> {budgetDay});
+            Expect.Call(budgetDay.Allowance).Return(2d);
+            Expect.Call(budgetDay.Day).Return(_defaultDay).Repeat.Twice();
+            Expect.Call(budgetDay.FulltimeEquivalentHours).Return(8d);
+            Expect.Call(_scheduleProjectionReadOnlyRepository.AbsenceTimePerBudgetGroup(_defaultDatePeriod, null, null))
+                  .IgnoreArguments()
+                  .
+                   Return(usedAbsenceTime);
+            Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDict);
+            Expect.Call(_scheduleDict[_person].ScheduledDay(_defaultDay)).IgnoreArguments().Return(_scheduleDay);
+            Expect.Call(_scheduleDay.IsScheduled()).Return(true);
+            Expect.Call(_scheduleDay.ProjectionService()).Return(_projectionService);
+            Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
+            Expect.Call(_visualLayerCollection.Period()).Return(null);
         }
 
         private static DateTimePeriod shortPeriod()
@@ -97,7 +106,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
                                       new DateTime(2011, 12, 1, 14, 1, 0, DateTimeKind.Utc));
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+        //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+        [Test]
         public void ShouldBeInvalidIfNotEnoughAllowanceLeft()
         {
             var budgetDay = _mocks.StrictMock<IBudgetDay>();
@@ -109,26 +119,35 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
             _person.PermissionInformation.SetDefaultTimeZone(TimeZoneHelper.CurrentSessionTimeZone);
             using (_mocks.Record())
             {
-                Expect.Call(_scenarioRepository.LoadDefaultScenario()).Return(ScenarioFactory.CreateScenarioAggregate());
-                Expect.Call(_absenceRequest.Person).Return(_person).Repeat.AtLeastOnce();
-                Expect.Call(_absenceRequest.Period).Return(longPeriod()).Repeat.AtLeastOnce();
-                Expect.Call(_budgetDayRepository.Find(null, null, _defaultDatePeriod)).IgnoreArguments().Return(new List<IBudgetDay> { budgetDay });
-                Expect.Call(budgetDay.Day).Return(_defaultDay).Repeat.Times(4);
-                Expect.Call(budgetDay.Allowance).Return(2d);
-                Expect.Call(budgetDay.FulltimeEquivalentHours).Return(8d);
-                Expect.Call(_scheduleProjectionReadOnlyRepository.AbsenceTimePerBudgetGroup(_defaultDatePeriod, null, null)).IgnoreArguments().
-                    Return(usedAbsenceTime);
-                Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDict);
-                Expect.Call(_scheduleDict[_person].ScheduledDay(_defaultDay)).IgnoreArguments().Return(_scheduleDay);
-                Expect.Call(_scheduleDay.IsScheduled()).Return(true);
-                Expect.Call(_scheduleDay.ProjectionService()).Return(_projectionService);
-                Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
-                Expect.Call(_visualLayerCollection.Period()).Return(null);
+                getExpectCallsIfNotEnoughAllowanceLeft(budgetDay, usedAbsenceTime);
             }
             using (_mocks.Playback())
             {
                 Assert.IsNotNullOrEmpty(_target.CheckBudgetGroup(_absenceRequest));
             }
+        }
+
+        private void getExpectCallsIfNotEnoughAllowanceLeft(IBudgetDay budgetDay, IEnumerable<PayloadWorkTime> usedAbsenceTime)
+        {
+            Expect.Call(_scenarioRepository.LoadDefaultScenario()).Return(ScenarioFactory.CreateScenarioAggregate());
+            Expect.Call(_absenceRequest.Person).Return(_person).Repeat.AtLeastOnce();
+            Expect.Call(_absenceRequest.Period).Return(longPeriod()).Repeat.AtLeastOnce();
+            Expect.Call(_budgetDayRepository.Find(null, null, _defaultDatePeriod))
+                  .IgnoreArguments()
+                  .Return(new List<IBudgetDay> {budgetDay});
+            Expect.Call(budgetDay.Day).Return(_defaultDay).Repeat.Times(4);
+            Expect.Call(budgetDay.Allowance).Return(2d);
+            Expect.Call(budgetDay.FulltimeEquivalentHours).Return(8d);
+            Expect.Call(_scheduleProjectionReadOnlyRepository.AbsenceTimePerBudgetGroup(_defaultDatePeriod, null, null))
+                  .IgnoreArguments()
+                  .
+                   Return(usedAbsenceTime);
+            Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDict);
+            Expect.Call(_scheduleDict[_person].ScheduledDay(_defaultDay)).IgnoreArguments().Return(_scheduleDay);
+            Expect.Call(_scheduleDay.IsScheduled()).Return(true);
+            Expect.Call(_scheduleDay.ProjectionService()).Return(_projectionService);
+            Expect.Call(_projectionService.CreateProjection()).Return(_visualLayerCollection);
+            Expect.Call(_visualLayerCollection.Period()).Return(null);
         }
 
         [Test]

@@ -11,6 +11,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		IEnumerable<PayloadWorkTime> AbsenceTimePerBudgetGroup(DateOnlyPeriod period,IBudgetGroup budgetGroup,IScenario scenario);
 		void ClearPeriodForPerson(DateOnlyPeriod period, Guid scenarioId, Guid personId);
 		void AddProjectedLayer(DateOnly belongsToDate, Guid scenarioId, Guid personId, DenormalizedScheduleProjectionLayer layer);
+	    int GetNumberOfAbsencesPerDayAndBudgetGroup(Guid budgetGroupId, DateOnly currentDate);
 		bool IsInitialized();
 	    DateTime? GetNextActivityStartTime(DateTime dateTime, Guid personId);
 	}

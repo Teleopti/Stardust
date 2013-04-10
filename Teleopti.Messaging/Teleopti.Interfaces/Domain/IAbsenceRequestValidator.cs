@@ -90,5 +90,11 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         IBudgetGroupAllowanceCalculator BudgetGroupAllowanceCalculator { get; set; }
 
-       }
+        /// <summary>
+        /// 
+        /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "HeadCount")]
+        IBudgetGroupHeadCountSpecification BudgetGroupHeadCountSpecification { get; set; }
+
+     }
 }
