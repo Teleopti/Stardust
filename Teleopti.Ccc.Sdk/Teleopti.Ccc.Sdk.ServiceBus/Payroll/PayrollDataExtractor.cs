@@ -18,6 +18,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
         private readonly IChannelCreator _channelCreator;
         private readonly static ILog Logger = LogManager.GetLogger(typeof(PayrollExportConsumer));
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "plugIn")]
         public PayrollDataExtractor(IPlugInLoader plugInLoader,
                                     ILogOnSdkForPayrollExport logOnSdkForPayrollExport,
                                     IChannelCreator channelCreator)

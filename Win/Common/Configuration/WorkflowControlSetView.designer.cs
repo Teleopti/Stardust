@@ -177,6 +177,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.panelBasic.SuspendLayout();
             this.tableLayoutPanelBasicSchedule.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dateTimePickerAdvPublishedTo)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dateTimePickerAdvPublishedTo.Calendar)).BeginInit();
             this.tableLayoutPanelOpenPreference.SuspendLayout();
             this.panelOpenPreference.SuspendLayout();
             this.panel6.SuspendLayout();
@@ -190,6 +191,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.contextMenuStripOpenPeriodsGrid.SuspendLayout();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dateTimePickerAdvViewpoint)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dateTimePickerAdvViewpoint.Calendar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridControlVisualisation)).BeginInit();
             this.tableLayoutPanelNextPreviousPeriod.SuspendLayout();
             this.tabPageAdvShiftTradeRequest.SuspendLayout();
@@ -405,7 +407,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.comboBoxAdvWorkflowControlSet.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxAdvWorkflowControlSet.Location = new System.Drawing.Point(178, 4);
             this.comboBoxAdvWorkflowControlSet.Name = "comboBoxAdvWorkflowControlSet";
-            this.comboBoxAdvWorkflowControlSet.Size = new System.Drawing.Size(216, 21);
+            this.comboBoxAdvWorkflowControlSet.Size = new System.Drawing.Size(216, 19);
             this.comboBoxAdvWorkflowControlSet.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
             this.comboBoxAdvWorkflowControlSet.TabIndex = 3;
             this.comboBoxAdvWorkflowControlSet.SelectedIndexChanged += new System.EventHandler(this.comboBoxAdvWorkflowControlSet_SelectedIndexChanged);
@@ -457,6 +459,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.tabPageBasic.ImageSize = new System.Drawing.Size(16, 16);
             this.tabPageBasic.Location = new System.Drawing.Point(1, 22);
             this.tabPageBasic.Name = "tabPageBasic";
+            this.tabPageBasic.ShowCloseButton = true;
             this.tabPageBasic.Size = new System.Drawing.Size(826, 351);
             this.tabPageBasic.TabIndex = 2;
             this.tabPageBasic.Text = "xxBasic";
@@ -721,6 +724,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             // 
             this.dateOnlyPeriodsVisualizer1.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.tableLayoutPanelBasic.SetColumnSpan(this.dateOnlyPeriodsVisualizer1, 2);
+            this.dateOnlyPeriodsVisualizer1.ContainedPeriod = ((Teleopti.Interfaces.Domain.DateOnlyPeriod)(resources.GetObject("dateOnlyPeriodsVisualizer1.ContainedPeriod")));
             this.dateOnlyPeriodsVisualizer1.Culture = new System.Globalization.CultureInfo("sv-SE");
             this.dateOnlyPeriodsVisualizer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dateOnlyPeriodsVisualizer1.Location = new System.Drawing.Point(0, 0);
@@ -814,7 +818,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.comboBoxAdvAllowedPreferenceActivity.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxAdvAllowedPreferenceActivity.Location = new System.Drawing.Point(3, 1192);
             this.comboBoxAdvAllowedPreferenceActivity.Name = "comboBoxAdvAllowedPreferenceActivity";
-            this.comboBoxAdvAllowedPreferenceActivity.Size = new System.Drawing.Size(171, 21);
+            this.comboBoxAdvAllowedPreferenceActivity.Size = new System.Drawing.Size(171, 19);
             this.comboBoxAdvAllowedPreferenceActivity.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
             this.comboBoxAdvAllowedPreferenceActivity.TabIndex = 15;
             this.comboBoxAdvAllowedPreferenceActivity.SelectedIndexChanged += new System.EventHandler(this.comboBoxAdvAllowedPreferenceActivity_SelectedIndexChanged);
@@ -917,11 +921,12 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.dateTimePickerAdvPublishedTo.Calendar.HeaderStartColor = System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252)))));
             this.dateTimePickerAdvPublishedTo.Calendar.HeadForeColor = System.Drawing.SystemColors.ControlText;
             this.dateTimePickerAdvPublishedTo.Calendar.HeadGradient = true;
+            this.dateTimePickerAdvPublishedTo.Calendar.Iso8601CalenderFormat = false;
             this.dateTimePickerAdvPublishedTo.Calendar.Location = new System.Drawing.Point(0, 0);
             this.dateTimePickerAdvPublishedTo.Calendar.Name = "monthCalendar";
             this.dateTimePickerAdvPublishedTo.Calendar.ScrollButtonSize = new System.Drawing.Size(24, 24);
             this.dateTimePickerAdvPublishedTo.Calendar.SelectedDates = new System.DateTime[0];
-            this.dateTimePickerAdvPublishedTo.Calendar.Size = new System.Drawing.Size(206, 174);
+            this.dateTimePickerAdvPublishedTo.Calendar.Size = new System.Drawing.Size(198, 174);
             this.dateTimePickerAdvPublishedTo.Calendar.SizeToFit = true;
             this.dateTimePickerAdvPublishedTo.Calendar.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
             this.dateTimePickerAdvPublishedTo.Calendar.TabIndex = 0;
@@ -932,7 +937,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             // 
             // 
             this.dateTimePickerAdvPublishedTo.Calendar.NoneButton.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
-            this.dateTimePickerAdvPublishedTo.Calendar.NoneButton.Location = new System.Drawing.Point(134, 0);
+            this.dateTimePickerAdvPublishedTo.Calendar.NoneButton.Location = new System.Drawing.Point(126, 0);
             this.dateTimePickerAdvPublishedTo.Calendar.NoneButton.Size = new System.Drawing.Size(72, 20);
             this.dateTimePickerAdvPublishedTo.Calendar.NoneButton.Text = "None";
             this.dateTimePickerAdvPublishedTo.Calendar.NoneButton.UseVisualStyle = true;
@@ -941,7 +946,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             // 
             this.dateTimePickerAdvPublishedTo.Calendar.TodayButton.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
             this.dateTimePickerAdvPublishedTo.Calendar.TodayButton.Location = new System.Drawing.Point(0, 0);
-            this.dateTimePickerAdvPublishedTo.Calendar.TodayButton.Size = new System.Drawing.Size(134, 20);
+            this.dateTimePickerAdvPublishedTo.Calendar.TodayButton.Size = new System.Drawing.Size(126, 20);
             this.dateTimePickerAdvPublishedTo.Calendar.TodayButton.Text = "Today";
             this.dateTimePickerAdvPublishedTo.Calendar.TodayButton.UseVisualStyle = true;
             this.dateTimePickerAdvPublishedTo.CalendarTitleBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252)))));
@@ -1137,6 +1142,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.tabPageAdvAbsenceRequests.ImageSize = new System.Drawing.Size(16, 16);
             this.tabPageAdvAbsenceRequests.Location = new System.Drawing.Point(1, 22);
             this.tabPageAdvAbsenceRequests.Name = "tabPageAdvAbsenceRequests";
+            this.tabPageAdvAbsenceRequests.ShowCloseButton = true;
             this.tabPageAdvAbsenceRequests.Size = new System.Drawing.Size(826, 351);
             this.tabPageAdvAbsenceRequests.TabIndex = 1;
             this.tabPageAdvAbsenceRequests.Text = "xxAbsenceRequests";
@@ -1236,13 +1242,13 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             gridBaseStyle2.Name = "Standard";
             gridBaseStyle2.StyleInfo.Font.Facename = "Tahoma";
             gridBaseStyle2.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(System.Drawing.SystemColors.Window);
-            gridBaseStyle3.Name = "Row Header";
+            gridBaseStyle3.Name = "Column Header";
             gridBaseStyle3.StyleInfo.BaseStyle = "Header";
-            gridBaseStyle3.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Left;
-            gridBaseStyle3.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Horizontal, System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(199)))), ((int)(((byte)(184))))), System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(234)))), ((int)(((byte)(216))))));
-            gridBaseStyle4.Name = "Column Header";
+            gridBaseStyle3.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Center;
+            gridBaseStyle4.Name = "Row Header";
             gridBaseStyle4.StyleInfo.BaseStyle = "Header";
-            gridBaseStyle4.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Center;
+            gridBaseStyle4.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Left;
+            gridBaseStyle4.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Horizontal, System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(199)))), ((int)(((byte)(184))))), System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(234)))), ((int)(((byte)(216))))));
             this.gridControlAbsenceRequestOpenPeriods.BaseStylesMap.AddRange(new Syncfusion.Windows.Forms.Grid.GridBaseStyle[] {
             gridBaseStyle1,
             gridBaseStyle2,
@@ -1378,7 +1384,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             // 
             // 
             this.dateTimePickerAdvViewpoint.Calendar.AllowMultipleSelection = false;
-            this.dateTimePickerAdvViewpoint.Calendar.Culture = new System.Globalization.CultureInfo("en-GB");
+            this.dateTimePickerAdvViewpoint.Calendar.Culture = new System.Globalization.CultureInfo("sv-SE");
             this.dateTimePickerAdvViewpoint.Calendar.DaysFont = new System.Drawing.Font("Verdana", 8F);
             this.dateTimePickerAdvViewpoint.Calendar.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dateTimePickerAdvViewpoint.Calendar.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -1390,11 +1396,12 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.dateTimePickerAdvViewpoint.Calendar.HeaderStartColor = System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252)))));
             this.dateTimePickerAdvViewpoint.Calendar.HeadForeColor = System.Drawing.SystemColors.ControlText;
             this.dateTimePickerAdvViewpoint.Calendar.HeadGradient = true;
+            this.dateTimePickerAdvViewpoint.Calendar.Iso8601CalenderFormat = false;
             this.dateTimePickerAdvViewpoint.Calendar.Location = new System.Drawing.Point(0, 0);
             this.dateTimePickerAdvViewpoint.Calendar.Name = "monthCalendar";
             this.dateTimePickerAdvViewpoint.Calendar.ScrollButtonSize = new System.Drawing.Size(24, 24);
             this.dateTimePickerAdvViewpoint.Calendar.SelectedDates = new System.DateTime[0];
-            this.dateTimePickerAdvViewpoint.Calendar.Size = new System.Drawing.Size(206, 174);
+            this.dateTimePickerAdvViewpoint.Calendar.Size = new System.Drawing.Size(198, 174);
             this.dateTimePickerAdvViewpoint.Calendar.SizeToFit = true;
             this.dateTimePickerAdvViewpoint.Calendar.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
             this.dateTimePickerAdvViewpoint.Calendar.TabIndex = 0;
@@ -1404,7 +1411,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             // 
             // 
             this.dateTimePickerAdvViewpoint.Calendar.NoneButton.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
-            this.dateTimePickerAdvViewpoint.Calendar.NoneButton.Location = new System.Drawing.Point(134, 0);
+            this.dateTimePickerAdvViewpoint.Calendar.NoneButton.Location = new System.Drawing.Point(126, 0);
             this.dateTimePickerAdvViewpoint.Calendar.NoneButton.Size = new System.Drawing.Size(72, 20);
             this.dateTimePickerAdvViewpoint.Calendar.NoneButton.Text = "None";
             this.dateTimePickerAdvViewpoint.Calendar.NoneButton.UseVisualStyle = true;
@@ -1414,7 +1421,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             // 
             this.dateTimePickerAdvViewpoint.Calendar.TodayButton.Appearance = Syncfusion.Windows.Forms.ButtonAppearance.Office2007;
             this.dateTimePickerAdvViewpoint.Calendar.TodayButton.Location = new System.Drawing.Point(0, 0);
-            this.dateTimePickerAdvViewpoint.Calendar.TodayButton.Size = new System.Drawing.Size(206, 20);
+            this.dateTimePickerAdvViewpoint.Calendar.TodayButton.Size = new System.Drawing.Size(198, 20);
             this.dateTimePickerAdvViewpoint.Calendar.TodayButton.Text = "Today";
             this.dateTimePickerAdvViewpoint.Calendar.TodayButton.UseVisualStyle = true;
             this.dateTimePickerAdvViewpoint.CalendarTitleBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(179)))), ((int)(((byte)(209)))), ((int)(((byte)(252)))));
@@ -1464,13 +1471,13 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             gridBaseStyle6.Name = "Standard";
             gridBaseStyle6.StyleInfo.Font.Facename = "Tahoma";
             gridBaseStyle6.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(System.Drawing.SystemColors.Window);
-            gridBaseStyle7.Name = "Row Header";
+            gridBaseStyle7.Name = "Column Header";
             gridBaseStyle7.StyleInfo.BaseStyle = "Header";
-            gridBaseStyle7.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Left;
-            gridBaseStyle7.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Horizontal, System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(199)))), ((int)(((byte)(184))))), System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(234)))), ((int)(((byte)(216))))));
-            gridBaseStyle8.Name = "Column Header";
+            gridBaseStyle7.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Center;
+            gridBaseStyle8.Name = "Row Header";
             gridBaseStyle8.StyleInfo.BaseStyle = "Header";
-            gridBaseStyle8.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Center;
+            gridBaseStyle8.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Left;
+            gridBaseStyle8.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Horizontal, System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(199)))), ((int)(((byte)(184))))), System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(234)))), ((int)(((byte)(216))))));
             this.gridControlVisualisation.BaseStylesMap.AddRange(new Syncfusion.Windows.Forms.Grid.GridBaseStyle[] {
             gridBaseStyle5,
             gridBaseStyle6,
@@ -1551,6 +1558,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.tabPageAdvShiftTradeRequest.ImageSize = new System.Drawing.Size(16, 16);
             this.tabPageAdvShiftTradeRequest.Location = new System.Drawing.Point(1, 22);
             this.tabPageAdvShiftTradeRequest.Name = "tabPageAdvShiftTradeRequest";
+            this.tabPageAdvShiftTradeRequest.ShowCloseButton = true;
             this.tabPageAdvShiftTradeRequest.Size = new System.Drawing.Size(826, 351);
             this.tabPageAdvShiftTradeRequest.TabIndex = 3;
             this.tabPageAdvShiftTradeRequest.Text = "xxShiftTradeRequests";
@@ -1814,6 +1822,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.panelBasic.PerformLayout();
             this.tableLayoutPanelBasicSchedule.ResumeLayout(false);
             this.tableLayoutPanelBasicSchedule.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dateTimePickerAdvPublishedTo.Calendar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dateTimePickerAdvPublishedTo)).EndInit();
             this.tableLayoutPanelOpenPreference.ResumeLayout(false);
             this.tableLayoutPanelOpenPreference.PerformLayout();
@@ -1833,6 +1842,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             this.contextMenuStripOpenPeriodsGrid.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dateTimePickerAdvViewpoint.Calendar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dateTimePickerAdvViewpoint)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridControlVisualisation)).EndInit();
             this.tableLayoutPanelNextPreviousPeriod.ResumeLayout(false);
