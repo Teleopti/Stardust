@@ -53,8 +53,13 @@ define([
 	            if (skills.length > 0) {
 	            	self.Skills.push.apply(self.Skills, skills);
 		            self.SelectedSkill(skills[0]);
+	            } else {
+		            self.SelectedSkill(undefined);
 	            }
             };
+	        this.DisplayStaffingMetrics = ko.computed(function() {
+		        return self.Skills().length > 0;
+	        });
             this.SelectedSkill = ko.observable();
             this.SelectSkill = function (skill) {
             	self.SelectedSkill(skill);
