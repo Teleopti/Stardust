@@ -3,6 +3,7 @@ using System.Linq;
 using System.ServiceModel;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Security.Authentication;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.WcfExtensions;
 using Teleopti.Ccc.Sdk.Logic.Assemblers;
@@ -33,7 +34,8 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
             //Must do a check for license here the first time the service is started
             if (_licenseCache.Get()==null)
             {
-                _licenseFactory.VerifyLicense();
+							//wrong - if multidb
+                _licenseFactory.VerifyLicense(UnitOfWorkFactory.Current);
             }
         }
 

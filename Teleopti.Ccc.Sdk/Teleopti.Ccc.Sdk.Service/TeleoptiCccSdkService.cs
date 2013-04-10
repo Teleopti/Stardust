@@ -260,7 +260,8 @@ namespace Teleopti.Ccc.Sdk.WcfService
 		/// <returns>A <see cref="LicenseVerificationResultDto"/>.</returns>
 		public LicenseVerificationResultDto VerifyLicense()
 		{
-			return _factoryProvider.CreateLicenseFactory().VerifyLicense();
+			//wrong - if multidb...
+			return _factoryProvider.CreateLicenseFactory().VerifyLicense(UnitOfWorkFactory.Current);
 		}
 
 		/// <summary>
