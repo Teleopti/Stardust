@@ -12,6 +12,8 @@ namespace Teleopti.Ccc.Win.Common
         private readonly string _name;
         private readonly string _type;
         private readonly int _maxLength;
+	    private readonly bool _validate;
+	    private readonly Func<string, bool> _validationMethod; 
         private string _helpId;
 
         protected PromptTextBox()
@@ -34,7 +36,15 @@ namespace Teleopti.Ccc.Win.Common
             _name = name;
             _type = type;
             _maxLength = maxLength;
+	        _validate = false;
         }
+
+		public PromptTextBox(object tag, string name, string type, int maxLength, Func<string, bool> validationMethod)
+			: this(tag, name, type, maxLength)
+		{
+			_validate = true;
+			_validationMethod = validationMethod;
+		}
 
         protected override void OnLoad(EventArgs e)
         {
@@ -61,7 +71,12 @@ namespace Teleopti.Ccc.Win.Common
                 ShowErrorMessage(UserTexts.Resources.TextTooLong, UserTexts.Resources.TextTooLong);
                 return;
             }
-            Hide();
+			if (_validate && _validationMethod != null && !_validationMethod.Invoke(viewName))
+			{
+				ShowErrorMessage(UserTexts.Resources.NameAlreadyExists, UserTexts.Resources.NameAlreadyExists);
+				return;
+			}
+	        Hide();
 
         	var handler = NameThisView;
             if (handler!= null)

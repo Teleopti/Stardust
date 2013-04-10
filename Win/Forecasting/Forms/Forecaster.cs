@@ -5,8 +5,6 @@ using System.Drawing;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using System.Security;
-using System.Security.Permissions;
 using System.Windows.Forms;
 using Teleopti.Interfaces.MessageBroker.Events;
 using log4net;
@@ -2121,13 +2119,20 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
         private void RenameTemplate(TemplateTarget target, string originalTemplateName)
         {
             var ctrl = new PromptTextBox(new RenameTemplateTag { Target = target, OriginalTemplateName = originalTemplateName },
-                originalTemplateName, UserTexts.Resources.Template, templateNameMaxLength);
+                originalTemplateName, UserTexts.Resources.Template, templateNameMaxLength, ValidateWorkloadRenameName);
             ctrl.SetHelpId("NameForecastTemplate");
             ctrl.NameThisView += ctrl_RenameTemplate;
             ctrl.ShowDialog(this);
-        }
+		}
 
-        private class RenameTemplateTag
+	    private bool ValidateWorkloadRenameName(string newName)
+	    {
+		    return
+			    ((WorkloadDetailView) GetCurrentWorkloadDetailView()).Workload.TemplateWeekCollection
+			                                                         .All(t => t.Value.Name != newName);
+	    }
+
+	    private class RenameTemplateTag
         {
             public TemplateTarget Target { get; set; }
             public string OriginalTemplateName { get; set; }
@@ -2136,7 +2141,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
         private void ctrl_RenameTemplate(object sender, CustomEventArgs<TupleItem> e)
         {
             RenameTemplateTag templateTag = (RenameTemplateTag)e.Value.ValueMember;
-            string newName = e.Value.Text;
+            string newName = e.Value.Text;			
             if (newName != templateTag.OriginalTemplateName)
             {
                 try
@@ -2153,18 +2158,17 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
         private void SaveTemplateWithNewName(string newName, RenameTemplateTag templateTag)
         {
             IForecastTemplateOwner rootEntity = GetRefreshedAggregateRoot(templateTag.Target, false);
-
+			
             IEnumerable<IRootChangeInfo> changedRoots;
             using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
                 IForecastTemplateOwner templateOwnerOriginal =
                     ForecastingTemplateRefresher.LoadNewInstance(rootEntity,
                                                                  uow);
-
                 IForecastDayTemplate template =
                     templateOwnerOriginal.TryFindTemplateByName(templateTag.Target,
                                                                 templateTag.OriginalTemplateName);
-				if (template== null) return;
+				if (template == null) return;
                 template.Name = newName;
 
                 changedRoots = uow.PersistAll();
