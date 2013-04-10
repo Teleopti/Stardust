@@ -85,9 +85,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			EventualAssert.That(() => skillDropDown.Exists, Is.True);
 
 			var skillList = skillDropDown.List(Find.First());
-			EventualAssert.That(() => skillList.Exists, Is.True);
+			EventualAssert.That(() => skillList.ListItems.Count > 0, Is.True);
 
-			skillList.ListItem(Find.BySelector(string.Format(":contains('{0}')", name))).EventualClick();
+			skillList.ListItem(Find.BySelector(string.Format(":contains('{0}')", name))).Link(Find.First()).EventualClick();
+
+			var selectedSkill = skillDropDown.Link(Find.First()).Span(Find.First());
+			EventualAssert.That(() => selectedSkill.InnerHtml.Contains(name), Is.True);
 		}
 
 		[When(@"I select date '(.*)'")]

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
@@ -16,8 +17,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 		public int Hours { get; set; }
 		public int ServiceLevelSeconds { get; set; }
 		public int ServiceLevelPercentage { get; set; }
-		public DateTime OpenFrom { get; set; }
-		public DateTime OpenTo { get; set; }
+		public string OpenFrom { get; set; }
+		public string OpenTo { get; set; }
 
 		public void Apply(IUnitOfWork uow)
 		{
@@ -28,7 +29,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 				var workload = WorkloadFactory.CreateWorkload(Skill, skill);
 				var workloadRepository = new WorkloadRepository(uow);
 				workloadRepository.Add(workload);
-
 				skill.AddWorkload(workload);
 			}
 
@@ -38,13 +38,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			var date = new DateOnly(Date);
 			var skillDayRepository = new SkillDayRepository(uow);
 			var skillDays = skillDayRepository.GetAllSkillDays(new DateOnlyPeriod(date, date), new Collection<ISkillDay>(), skill, defaultScenario, true);
-			skillDays.First().WorkloadDayCollection[0].MakeOpen24Hours();
-			skillDays.First().WorkloadDayCollection[0].Tasks = Hours*4;
-			skillDays.First().WorkloadDayCollection[0].AverageTaskTime = TimeSpan.FromMinutes(15);
-			skillDays.First().SkillDataPeriodCollection[0].ServiceLevelPercent = new Percent(ServiceLevelPercentage / 100.0);
-			skillDays.First().SkillDataPeriodCollection[0].ServiceLevelSeconds = ServiceLevelSeconds;
+			var skillDay = skillDays.First();
+			skillDay.MergeSkillDataPeriods(skillDay.SkillDataPeriodCollection.ToList());
+			var workloadDay = skillDay.WorkloadDayCollection[0];
 
+			workloadDay.ChangeOpenHours(new List<TimePeriod> {new TimePeriod(TimeSpan.Parse(OpenFrom), TimeSpan.Parse(OpenTo))});
+			workloadDay.Tasks = Hours*4;
+			workloadDay.AverageTaskTime = TimeSpan.FromMinutes(15);
 
+			if (ServiceLevelPercentage > 0)
+				skillDay.SkillDataPeriodCollection[0].ServiceLevelPercent = new Percent(ServiceLevelPercentage / 100.0);
+			if (ServiceLevelSeconds>0)
+				skillDay.SkillDataPeriodCollection[0].ServiceLevelSeconds = ServiceLevelSeconds;
 		}
 	}
 }
