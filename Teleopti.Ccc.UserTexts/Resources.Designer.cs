@@ -9392,6 +9392,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Head Count.
+        /// </summary>
+        public static string HeadCount {
+            get {
+                return ResourceManager.GetString("HeadCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Header.
         /// </summary>
         public static string Header {

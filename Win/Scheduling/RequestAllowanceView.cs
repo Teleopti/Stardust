@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             });
             _entityBinder.AddRow(new GridRow<BudgetAbsenceAllowanceDetailModel>
             {
-                HeaderText     = "Head Counts",
+                HeaderText = UserTexts.Resources.HeadCount,
                 ValueMember = new ModelProperty<BudgetAbsenceAllowanceDetailModel>("TotalHeadCounts"),
                 CellValueType = typeof(double),
                 CellModel = "NumericReadOnlyCellModel",

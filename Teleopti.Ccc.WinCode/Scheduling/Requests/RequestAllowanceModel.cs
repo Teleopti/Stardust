@@ -166,7 +166,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
                 var absoluteDiff = allowance - usedTotalAbsences;
                 var relativeDiff = new Percent(usedTotalAbsences / allowance);
                 var headCounts = getHeadCounts(SelectedBudgetGroup, currentDate);
-                //TODO: we will count number of absence requests for that day by makeing a call to the absnece request table and count the number of rows.
+                
                 var detailModel = new BudgetAbsenceAllowanceDetailModel
                                       {
                                           Date = new DateDayModel(currentDate),

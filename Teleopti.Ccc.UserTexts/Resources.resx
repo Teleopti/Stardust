@@ -11373,6 +11373,10 @@ Reduce the complexity to use these shifts.</value>
     <value>Budget Group Head Count</value>
     <comment>new option in workflow control set Budget Group Head Count</comment>
   </data>
+  <data name="HeadCount" xml:space="preserve">
+    <value>Head Count</value>
+    <comment>Head count</comment>
+  </data>
   <data name="NotEnoughAllowance" xml:space="preserve">
     <value>There is not enough allowance for day:</value>
     <comment>There is not enough budget allowance for that day.</comment>
