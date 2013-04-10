@@ -17,7 +17,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			var possiblePaths = new[]
 				{
 					Path.Combine(IniFileInfo.SitePath, @"..\..\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost\bin\Debug"),
-					Path.Combine(IniFileInfo.SitePath, @"..\..\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost\bin\Release")
+					Path.Combine(IniFileInfo.SitePath, @"..\..\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost\bin\Release"),
+					Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost\bin\Release"),
+					Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost\bin\Debug"),
+					Path.Combine(Directory.GetCurrentDirectory(), @"..\..\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost\bin\Release"),
+					Path.Combine(Directory.GetCurrentDirectory(), @"..\..\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost\bin\Debug"),
 				};
 			var path = possiblePaths.FirstOrDefault(Directory.Exists);
 			if (path == null)
