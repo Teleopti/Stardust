@@ -191,7 +191,6 @@
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "xxNameType";
-			this.TopMost = true;
 			((System.ComponentModel.ISupportInitialize)(this.ribbonControlAdv1)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.gradientPanelTop)).EndInit();
 			this.gradientPanelTop.ResumeLayout(false);
