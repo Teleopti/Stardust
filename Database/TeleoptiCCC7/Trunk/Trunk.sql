@@ -3,8 +3,8 @@
 CREATE TABLE [mart].[LastUpdatedPerStep](
 	[StepName] [varchar](500) NOT NULL,
 	[BusinessUnit] [uniqueidentifier] NULL,
-	[LastChecksum] [bigint] NOT NULL
-) ON [PRIMARY]
+	[Date] [datetime] NOT NULL
+) 
 
 GO
 ----------------  
