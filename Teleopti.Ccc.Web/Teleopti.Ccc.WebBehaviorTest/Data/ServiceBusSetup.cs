@@ -12,32 +12,50 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 	{
 		private static Process _process;
 
-		private static string ConsoleHostPath()
+		private static string FindProjectPath(params string[] projectPaths)
 		{
-			var rootPaths = new[] {IniFileInfo.SitePath, AppDomain.CurrentDomain.BaseDirectory, Directory.GetCurrentDirectory()};
-			var relativePaths = new[] {"", @"..\", @"..\..\", @"..\..\..\", @"..\..\..\..\"};
-			var buildConfigPaths = new[] {"Debug", "Release"};
+			var rootPaths = new[] { IniFileInfo.SitePath, AppDomain.CurrentDomain.BaseDirectory, Directory.GetCurrentDirectory() };
+			var relativePaths = new[] { "", @"..\", @"..\..\", @"..\..\..\", @"..\..\..\..\" };
 			var possiblePaths = (from root in rootPaths
-			                     from reletive in relativePaths
-			                     from build in buildConfigPaths
-			                     select Path.Combine(root, reletive, @"Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost\bin\", build)
-			                    ).ToArray();
+								 from reletive in relativePaths
+								 from projectPath in projectPaths
+								 select Path.Combine(root, reletive, projectPath)
+								).ToArray();
 			var path = possiblePaths.FirstOrDefault(Directory.Exists);
 			if (path == null)
 				throw new Exception(
-					"Service bus console host executable not found. Has it been built? And you may have to build the .Host project first aswell. Tried with paths: " +
+					"project paths " + string.Join(Environment.NewLine, projectPaths) + 
+					" not found. Has it been built? Tried with paths: " +
 					string.Join(Environment.NewLine, possiblePaths));
 			return new DirectoryInfo(path).FullName;
 		}
 
-		private static string ConsoleHostExecutablePath()
+		private static string ConsoleHostBuildPath()
 		{
-			return Path.Combine(ConsoleHostPath(), "Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost.exe");
+			return FindProjectPath(
+				@"Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost\bin\Debug\",
+				@"Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost\bin\Release\"
+				);
 		}
 
-		private static string ConsoleHostConfigPath()
+		private static string BuildArtifactsPath()
 		{
-			return Path.Combine(ConsoleHostPath(), "Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost.exe.config");
+			return FindProjectPath(@"BuildArtifacts\");
+		}
+
+		private static string ConsoleHostExecutablePath()
+		{
+			return Path.Combine(ConsoleHostBuildPath(), "Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost.exe");
+		}
+
+		private static string ConsoleHostConfigTargetPath()
+		{
+			return Path.Combine(ConsoleHostBuildPath(), "Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost.exe.config");
+		}
+
+		private static string ConsoleHostConfigSourcePath()
+		{
+			return Path.Combine(BuildArtifactsPath(), "ServiceBusHost.config");
 		}
 
 
@@ -57,11 +75,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		private static void Configure()
 		{
-			var contents = File.ReadAllText(ConsoleHostConfigPath());
+			var contents = File.ReadAllText(ConsoleHostConfigSourcePath());
 			contents = ReplaceTag(contents, "ConfigPath", Paths.WebBinPath());
 			contents = ReplaceTag(contents, "MessageBroker", TestSiteConfigurationSetup.Url.ToString());
 			contents = ReplaceTag(contents, "AnalyticsDB", new SqlConnectionStringBuilder(IniFileInfo.ConnectionStringMatrix).InitialCatalog);
-			File.WriteAllText(ConsoleHostConfigPath(), contents);
+			File.WriteAllText(ConsoleHostConfigTargetPath(), contents);
 		}
 
 		private static string ReplaceTag(string contents, string tag, string value)
