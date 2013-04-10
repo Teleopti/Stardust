@@ -51,12 +51,16 @@ define([
             this.SetSkills = function (skills) {
             	self.Skills([]);
 	            if (skills.length > 0) {
-	            	self.Skills.push.apply(self.Skills, skills);
-		            self.SelectedSkill(skills[0]);
-	            } else {
-		            self.SelectedSkill(undefined);
+		            self.Skills.push.apply(self.Skills, skills);
 	            }
             };
+	        this.SelectSkillById = function(id) {
+	        	var skills = self.Skills();
+		        var foundItem = ko.utils.arrayFirst(skills, function(item) {
+			        return item.Id == id;
+		        });
+		        self.SelectedSkill(foundItem);
+	        };
 	        this.DisplayStaffingMetrics = ko.computed(function() {
 		        return self.Skills().length > 0;
 	        });
