@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
@@ -21,15 +22,23 @@ namespace Teleopti.Analytics.Portal.Utils
         private string _sub2ProcedureName;
         private string _name;
         private readonly SqlConnection _connection = new SqlConnection();
+	    private readonly int _dbTimeout;
         
 
         public CommonReports(string connectionString,Guid reportId)
         {
-            _connection.ConnectionString = connectionString;
-            _reportId = reportId;
+	        _connection.ConnectionString = connectionString;
+	        _reportId = reportId;
+	        int dbTimeOutFromConfig;
+	        if (int.TryParse(ConfigurationManager.AppSettings["DbTimeout"], out dbTimeOutFromConfig))
+		        _dbTimeout = dbTimeOutFromConfig > 600
+			                     ? 600
+			                     : dbTimeOutFromConfig;
+	        else
+		        _dbTimeout = 180;
         }
 
-        public DataSet GetReportData(Guid reportId, Guid personCode, Guid businessUnitCode, IList<SqlParameter> parameters)
+	    public DataSet GetReportData(Guid reportId, Guid personCode, Guid businessUnitCode, IList<SqlParameter> parameters)
         {
             LoadReportInfo(reportId);
 
@@ -107,35 +116,33 @@ namespace Teleopti.Analytics.Portal.Utils
                 _name = myRow.Field<string>("report_name");
             }
         }
-        
-        public DataSet ExecuteDataSet(string procedureName, IEnumerable<SqlParameter> parameters)
-        {
-            var returnValue = new DataSet {Locale = CultureInfo.CurrentCulture};
-            var adapter = new SqlDataAdapter();
-            var sqlCommand = new SqlCommand
-                                 {
-                                     CommandText = procedureName,
-                                     CommandTimeout = 600,
-                                     CommandType = CommandType.StoredProcedure
-                                 };
 
-            sqlCommand.Parameters.AddRange(parameters.ToArray());
-            sqlCommand.Connection = _connection;
+	    public DataSet ExecuteDataSet(string procedureName, IEnumerable<SqlParameter> parameters)
+	    {
+		    var returnValue = new DataSet {Locale = CultureInfo.CurrentCulture};
+		    var adapter = new SqlDataAdapter();
+		    var sqlCommand = new SqlCommand
+			    {
+				    CommandText = procedureName,
+					CommandTimeout = _dbTimeout,
+				    CommandType = CommandType.StoredProcedure
+			    };
 
-            if (_connection.State != ConnectionState.Open)
-            {
-                _connection.Open();
-            }
+		    sqlCommand.Parameters.AddRange(parameters.ToArray());
+		    sqlCommand.Connection = _connection;
 
-            adapter.SelectCommand = sqlCommand;
-            adapter.Fill(returnValue, "Data");
-            sqlCommand.Parameters.Clear();
-            _connection.Close();
+		    if (_connection.State != ConnectionState.Open)
+			    _connection.Open();
 
-            return returnValue;
-        }
+		    adapter.SelectCommand = sqlCommand;
+		    adapter.Fill(returnValue, "Data");
+		    sqlCommand.Parameters.Clear();
+		    _connection.Close();
 
-        public void Dispose()
+		    return returnValue;
+	    }
+
+	    public void Dispose()
         {
             Dispose(true);
             GC.SuppressFinalize(this);

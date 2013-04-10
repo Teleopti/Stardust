@@ -1217,4 +1217,8 @@ Schedule</value>
     <value>Date To (shifts starting):</value>
     <comment>Date To (shifts starting):</comment>
   </data>
+  <data name="DatabaseTimedOutSelectLessData" xml:space="preserve">
+    <value>Connection to database timed out, try to limit your search conditions.</value>
+    <comment>Connection to database timed out, try to limit your search conditions.</comment>
+  </data>
 </root>
