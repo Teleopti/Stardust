@@ -14,6 +14,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 		public string Skill { get; set; }
 		public DateTime Date { get; set; }
 		public int Hours { get; set; }
+		public int ServiceLevelSeconds { get; set; }
+		public int ServiceLevelPercentage { get; set; }
+		public DateTime OpenFrom { get; set; }
+		public DateTime OpenTo { get; set; }
 
 		public void Apply(IUnitOfWork uow)
 		{
@@ -37,6 +41,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			skillDays.First().WorkloadDayCollection[0].MakeOpen24Hours();
 			skillDays.First().WorkloadDayCollection[0].Tasks = Hours*4;
 			skillDays.First().WorkloadDayCollection[0].AverageTaskTime = TimeSpan.FromMinutes(15);
+			skillDays.First().SkillDataPeriodCollection[0].ServiceLevelPercent = new Percent(ServiceLevelPercentage / 100.0);
+			skillDays.First().SkillDataPeriodCollection[0].ServiceLevelSeconds = ServiceLevelSeconds;
+
 
 		}
 	}

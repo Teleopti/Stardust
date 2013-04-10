@@ -13,10 +13,10 @@
 			</ul>
 		</span>
 		
-		<span >Forecasted: 100h</span>
-		<span >Scheduled: 90h</span>
-		<span class="text-error">Diff: -10h  -10%</span>
-		<span class="text-warning">ESL: 77%</span>	
+		<span id="forecasted-hours" data-bind="text: ForcastedHoursDisplay"></span>
+		<span id="scheduled-hours" data-bind="text: ScheduledHoursDisplay"></span>
+		<span id="difference-forecasted-scheduled" class="text-error" data-bind="text: DifferenceDisplay"></span>
+		<span id="estimated-service-level" class="text-warning" data-bind="text: ESLDisplay"></span>	
 	</div>
 	
 	<div class="row">

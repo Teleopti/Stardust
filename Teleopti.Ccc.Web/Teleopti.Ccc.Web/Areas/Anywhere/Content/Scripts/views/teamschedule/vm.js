@@ -76,9 +76,21 @@ define([
 		            return skill.Name;
             });
             this.ForcastedHours = ko.observable();
+            this.ForcastedHoursDisplay = ko.computed(function () {
+            	return self.Resources.Forecasted + self.ForcastedHours();
+            });
             this.ScheduledHours = ko.observable();
+	        this.ScheduledHoursDisplay = ko.computed(function() {
+	        	return self.Resources.Scheduled + self.ScheduledHours();
+	        });
             this.DiffHours = ko.observable();
             this.DiffPercentage = ko.observable();
+            this.DifferenceDisplay = ko.computed(function () {
+            	return self.Resources.Difference + self.DiffHours() + self.DiffPercentage();
+            });
             this.ESL = ko.observable();
+            this.ESLDisplay = ko.computed(function () {
+            	return self.Resources.ESL + self.ESL();
+            });
         };
     });

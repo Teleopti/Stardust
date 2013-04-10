@@ -105,5 +105,32 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			EventualAssert.That(() => selectedSkill.InnerHtml.Contains(name), Is.True);
 		}
 
+		[Then(@"I should see metrics for skill '(.*)' with")]
+		public void ThenIShouldSeeMetricsForSkillWith(string name, Table table)
+		{
+			var skillDropDown = Browser.Current.Span(Find.BySelector("#skill-selector"));
+			EventualAssert.That(() => skillDropDown.Exists, Is.True);
+			var selectedSkill = skillDropDown.Link(Find.First()).Span(Find.First());
+			EventualAssert.That(() => selectedSkill.InnerHtml.Contains(name), Is.True);
+
+			var staffingMetric = table.CreateInstance<StaffingMetricInfo>();
+
+			EventualAssert.That(() => Browser.Current.Span(Find.BySelector("#forecasted-hours")).InnerHtml.Contains(staffingMetric.ForecastedHours.ToString()), Is.True);
+			EventualAssert.That(() => Browser.Current.Span(Find.BySelector("#scheduled-hours")).InnerHtml.Contains(staffingMetric.ScheduledHours.ToString()), Is.True);
+			EventualAssert.That(() => Browser.Current.Span(Find.BySelector("#difference-forecasted-scheduled")).InnerHtml.Contains(staffingMetric.DifferenceHours.ToString()), Is.True);
+			EventualAssert.That(() => Browser.Current.Span(Find.BySelector("#difference-forecasted-scheduled")).InnerHtml.Contains(staffingMetric.DifferencePercentage.ToString()), Is.True);
+			EventualAssert.That(() => Browser.Current.Span(Find.BySelector("#estimated-service-level")).InnerHtml.Contains(staffingMetric.EstimatedServiceLevel.ToString()), Is.True);
+		}
+
+
+	}
+
+	public class StaffingMetricInfo
+	{
+		public double ForecastedHours { get; set; }
+		public double ScheduledHours { get; set; }
+		public double DifferenceHours { get; set; }
+		public double DifferencePercentage { get; set; }
+		public double EstimatedServiceLevel { get; set; }
 	}
 }
