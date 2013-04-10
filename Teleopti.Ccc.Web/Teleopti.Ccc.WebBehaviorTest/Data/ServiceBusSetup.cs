@@ -2,8 +2,7 @@
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
+
 using Teleopti.Ccc.TestCommon;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data
@@ -11,28 +10,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 	public static class ServiceBusSetup
 	{
 		private static Process _process;
-
-		private static string FindProjectPath(params string[] projectPaths)
-		{
-			var rootPaths = new[] { IniFileInfo.SitePath, AppDomain.CurrentDomain.BaseDirectory, Directory.GetCurrentDirectory() };
-			var relativePaths = new[] { "", @"..\", @"..\..\", @"..\..\..\", @"..\..\..\..\" };
-			var possiblePaths = (from root in rootPaths
-								 from reletive in relativePaths
-								 from projectPath in projectPaths
-								 select Path.Combine(root, reletive, projectPath)
-								).ToArray();
-			var path = possiblePaths.FirstOrDefault(Directory.Exists);
-			if (path == null)
-				throw new Exception(
-					"project paths " + string.Join(Environment.NewLine, projectPaths) + 
-					" not found. Has it been built? Tried with paths: " +
-					string.Join(Environment.NewLine, possiblePaths));
-			return new DirectoryInfo(path).FullName;
-		}
-
+		
 		private static string ConsoleHostBuildPath()
 		{
-			return FindProjectPath(
+			return Paths.FindProjectPath(
 				@"Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost\bin\Debug\",
 				@"Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost\bin\Release\"
 				);
@@ -40,7 +21,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		private static string BuildArtifactsPath()
 		{
-			return FindProjectPath(@"BuildArtifacts\");
+			return Paths.FindProjectPath(@"BuildArtifacts\");
 		}
 
 		private static string ConsoleHostExecutablePath()

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Data.SqlClient;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using CassiniDev;
 using Teleopti.Ccc.TestCommon;
@@ -9,6 +11,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 	public static class TestSiteConfigurationSetup
 	{
 		private static readonly string TargetTestDataNHibFile = Path.Combine(Paths.WebBinPath(), "TestData.nhib.xml");
+		private static readonly string TargetWebConfig = Path.Combine(Paths.WebPath(), "web.config");
 
 		public static Uri Url;
 		
@@ -27,6 +30,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			{
 				Url = new Uri(IniFileInfo.Url);
 			}
+			UpdateWebConfigFromTemplate();
 			GenerateAndWriteTestDataNHibFileFromTemplate();
 		}
 
@@ -53,6 +57,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			contents = contents.Replace("_connectionStringMatrix_", IniFileInfo.ConnectionStringMatrix);
 			contents = contents.Replace("_database_", IniFileInfo.Database);
 			File.WriteAllText(TargetTestDataNHibFile, contents);
+		}
+		
+		private static void UpdateWebConfigFromTemplate()
+		{
+			var contents = File.ReadAllText(Path.Combine(Paths.FindProjectPath(@"BuildArtifacts\"), "web.root.web.config"));
+			contents = contents.Replace("$(AgentPortalWebURL)", Url.ToString());
+			contents = contents.Replace("$(AnalyticsDB)", new SqlConnectionStringBuilder(IniFileInfo.ConnectionStringMatrix).InitialCatalog);
+			File.WriteAllText(TargetWebConfig, contents);
 		}
 	}
 }
