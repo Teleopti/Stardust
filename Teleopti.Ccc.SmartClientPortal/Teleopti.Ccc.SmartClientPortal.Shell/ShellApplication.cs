@@ -48,7 +48,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
     /// Note that the class derives from CAB supplied base class FormSmartClientShellApplication, and the 
     /// main form will be SmartClientShellForm, also created by default by this solution template
     /// </summary>
-    class SmartClientShellApplication : SmartClientApplication<WorkItem, SmartClientShellForm>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+		class SmartClientShellApplication : SmartClientApplication<WorkItem, SmartClientShellForm>
     {
         /// <summary>
         /// Shell application entry point.
@@ -110,7 +111,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
         {
         }
 
-        private static IContainer configureContainer()
+				[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+				private static IContainer configureContainer()
         {
             using (PerformanceOutput.ForOperation("Building Ioc container"))
             {
