@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 
 				TestControllerMethods.BeforeTestRun();
 
-				TestSiteConfigurationSetup.Setup();
+				TestSiteConfigurationSetup.RecycleApplication();
 
 				log4net.Config.XmlConfigurator.Configure();
 				Timeouts.Set(TimeSpan.FromSeconds(10));
@@ -48,6 +48,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 				CreateData();
 
 				TestDataSetup.BackupCcc7Data();
+
+				TestSiteConfigurationSetup.Setup();
 
 				ServiceBusSetup.Setup();
 			}
