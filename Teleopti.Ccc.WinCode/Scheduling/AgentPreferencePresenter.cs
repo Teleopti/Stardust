@@ -26,5 +26,18 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		{
 			get { return _scheduleDay; }
 		}
+
+		public void UpdateView()
+		{
+			foreach (var persistableScheduleData in _scheduleDay.PersistableScheduleDataCollection())
+			{
+				if (!(persistableScheduleData is IPreferenceDay)) continue;
+				var preferenceRestriction = ((IPreferenceDay) persistableScheduleData).Restriction;
+				_view.Update(preferenceRestriction);
+				break;
+			}
+	
+			_view.Update(null);
+		}
 	}
 }

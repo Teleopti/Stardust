@@ -184,6 +184,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private SkillResultViewSetting _skillResultViewSetting;
     	private ISingleSkillDictionary _singleSkillDictionary;
 		private const int maxCalculatMinMaxCacheEnries = 100000;
+		public IList<IWorkflowControlSet> WorkflowControlSets { get; private set; }
 
 		#region enums
 		private enum ZoomLevel
@@ -4056,6 +4057,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				methods.Add(new LoaderMethod(loadDefinitionSets, null));
 				methods.Add(new LoaderMethod(loadContractSchedule, null));
 				methods.Add(new LoaderMethod(loadAccounts, null));
+				methods.Add(new LoaderMethod(loadWorkflowControlSets, null));
 
 				using (PerformanceOutput.ForOperation("Loading all data for scheduler"))
 				{
@@ -4219,6 +4221,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			IMultiplicatorDefinitionSetRepository multiplicatorDefinitionSetRepository = new MultiplicatorDefinitionSetRepository(uow);
 			MultiplicatorDefinitionSet = multiplicatorDefinitionSetRepository.FindAllDefinitions();
+		}
+		
+		private void loadWorkflowControlSets(IUnitOfWork uow, ISchedulerStateHolder stateHolder, IPeopleAndSkillLoaderDecider decider)
+		{
+			IWorkflowControlSetRepository workflowControlSetRepository = new WorkflowControlSetRepository(uow);
+			WorkflowControlSets = workflowControlSetRepository.LoadAllSortByName();	
 		}
 
 		private void filteringPeopleAndSkills(IUnitOfWork uow, ISchedulerStateHolder stateHolder, IPeopleAndSkillLoaderDecider decider)
@@ -7090,7 +7098,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		void _editControlRestrictions_NewClicked(object sender, EventArgs e)
 		{
-			//preference
+			addPreferenceToolStripMenuItemClick(sender, e);
 		}
 
 		void _editControlRestrictions_NewSpecialClicked(object sender, ToolStripItemClickedEventArgs e)
@@ -7098,18 +7106,24 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_editControlRestrictions.CloseDropDown();
 			if ((ClipboardItems)e.ClickedItem.Tag == ClipboardItems.StudentAvailability)
 				addStudentAvailabilityToolStripMenuItemClick(sender, e);
-			//else
-				//preference
+			if ((ClipboardItems)e.ClickedItem.Tag == ClipboardItems.Preference)
+				addPreferenceToolStripMenuItemClick(sender, e);
 		}
 
 		private void addPreferenceToolStripMenuItemClick(object sender, EventArgs e)
 		{
-			//preference	
+			var selectedDay = _scheduleView.SelectedSchedules()[0];
+
+			using (var view = new AgentPreferenceView(selectedDay, _schedulerState.CommonStateHolder.ShiftCategories, _schedulerState.CommonStateHolder.Absences, WorkflowControlSets))
+			{
+				view.ShowDialog(this);
+				updateRestrictions(view.ScheduleDay);
+			}
 		}
 
 		private void addStudentAvailabilityToolStripMenuItemClick(object sender, EventArgs e)
 		{
-			var selectedDay =  _scheduleView.SelectedSchedules()[0];
+			var selectedDay = _scheduleView.SelectedSchedules()[0];
 			using (var view = new AgentStudentAvailabilityView(selectedDay))
 			{
 				view.ShowDialog(this);
