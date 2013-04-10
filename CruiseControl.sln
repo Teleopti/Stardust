@@ -167,6 +167,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.WebTest", "Teleopti.Ccc.Web\Teleopti.Ccc.WebTest\Teleopti.Ccc.WebTest.csproj", "{040557EE-947F-460B-8860-CFC92139725E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.WebBehaviorTest", "Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\Teleopti.Ccc.WebBehaviorTest.csproj", "{7784CC87-2CAD-416B-A254-CDE14C589FF5}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3266BFDE-8B39-458E-B0B7-063434806C96} = {3266BFDE-8B39-458E-B0B7-063434806C96}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Support.LicTool", "Teleopti.Support.LicTool\Teleopti.Support.LicTool.csproj", "{3036552C-25FF-4641-B939-96AD01E3F900}"
 EndProject
