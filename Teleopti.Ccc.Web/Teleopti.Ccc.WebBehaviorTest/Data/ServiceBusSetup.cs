@@ -15,12 +15,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		private static string ConsoleHostPath()
 		{
 			var rootPaths = new[] {IniFileInfo.SitePath, AppDomain.CurrentDomain.BaseDirectory, Directory.GetCurrentDirectory()};
-			var relativePaths = new[] {"", @"..\", @"..\..\", @"..\..\..\"};
+			var relativePaths = new[] {"", @"..\", @"..\..\", @"..\..\..\", @"..\..\..\..\"};
 			var buildConfigPaths = new[] {"Debug", "Release"};
 			var possiblePaths = (from root in rootPaths
 			                     from reletive in relativePaths
 			                     from build in buildConfigPaths
-			                     select Path.Combine(root, reletive, @"..\..\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost\bin\", build)
+			                     select Path.Combine(root, reletive, @"Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost\bin\", build)
 			                    ).ToArray();
 			var path = possiblePaths.FirstOrDefault(Directory.Exists);
 			if (path == null)
