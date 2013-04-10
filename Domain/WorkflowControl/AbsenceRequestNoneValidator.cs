@@ -9,6 +9,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
         public IResourceOptimizationHelper ResourceOptimizationHelper { get; set; }
         public IBudgetGroupAllowanceSpecification BudgetGroupAllowanceSpecification { get; set; }
         public IBudgetGroupAllowanceCalculator BudgetGroupAllowanceCalculator { get; set; }
+        public IBudgetGroupHeadCountSpecification BudgetGroupHeadCountSpecification { get; set; }
 
         public string InvalidReason
         {
@@ -49,6 +50,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
                 result = (result * 397) ^ (ResourceOptimizationHelper != null ? ResourceOptimizationHelper.GetHashCode() : 0);
                 result = (result * 397) ^ (BudgetGroupAllowanceSpecification != null ? BudgetGroupAllowanceSpecification.GetHashCode() : 0);
                 result = (result * 397) ^ (BudgetGroupAllowanceCalculator != null ? BudgetGroupAllowanceCalculator.GetHashCode() : 0);
+                result = (result * 397) ^ (BudgetGroupHeadCountSpecification != null ? BudgetGroupHeadCountSpecification.GetHashCode() : 0);
                 result = (result * 397) ^ (GetType().GetHashCode());
                 return result;
             }
