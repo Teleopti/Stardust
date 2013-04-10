@@ -9,16 +9,15 @@ namespace Teleopti.Ccc.Web.Filters
 		{
 			base.OnActionExecuting(filterContext);
 
-			var unitOfWorkFactory = DependencyResolver.Current.GetService<IUnitOfWorkFactory>();
-			unitOfWorkFactory.CreateAndOpenUnitOfWork();
+			var unitOfWorkFactory = DependencyResolver.Current.GetService<ICurrentUnitOfWorkFactory>();
+			unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork();
 		}
 
 		public override void OnResultExecuted(ResultExecutedContext filterContext)
 		{
 			base.OnResultExecuted(filterContext);
 
-			var unitOfWorkFactory = DependencyResolver.Current.GetService<IUnitOfWorkFactory>();
-			var currentUnitOfWork = unitOfWorkFactory.CurrentUnitOfWork();
+			var currentUnitOfWork = DependencyResolver.Current.GetService<ICurrentUnitOfWork>().Current();
 			if (currentUnitOfWork != null)
 			{
 				currentUnitOfWork.PersistAll();

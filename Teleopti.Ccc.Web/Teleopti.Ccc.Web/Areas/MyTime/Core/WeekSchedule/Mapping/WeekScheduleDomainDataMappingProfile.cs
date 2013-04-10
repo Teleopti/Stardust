@@ -7,21 +7,20 @@ using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
-using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 {
 	public class WeekScheduleDomainDataMappingProfile : Profile
 	{
-		private readonly IResolve<IScheduleProvider> _scheduleProvider;
-		private readonly IResolve<IProjectionProvider> _projectionProvider;
-		private readonly IResolve<IPersonRequestProvider> _personRequestProvider;
-		private readonly IResolve<IUserTimeZone> _userTimeZone;
-		private readonly IResolve<IPermissionProvider> _permissionProvider;
-		private readonly IResolve<INow> _now;
+		private readonly IScheduleProvider _scheduleProvider;
+		private readonly IProjectionProvider _projectionProvider;
+		private readonly IPersonRequestProvider _personRequestProvider;
+		private readonly IUserTimeZone _userTimeZone;
+		private readonly IPermissionProvider _permissionProvider;
+		private readonly INow _now;
 
-		public WeekScheduleDomainDataMappingProfile(IResolve<IScheduleProvider> scheduleProvider, IResolve<IProjectionProvider> projectionProvider, IResolve<IPersonRequestProvider> personRequestProvider, IResolve<IUserTimeZone> userTimeZone, IResolve<IPermissionProvider> permissionProvider, IResolve<INow> now)
+		public WeekScheduleDomainDataMappingProfile(IScheduleProvider scheduleProvider, IProjectionProvider projectionProvider, IPersonRequestProvider personRequestProvider, IUserTimeZone userTimeZone, IPermissionProvider permissionProvider, INow now)
 		{
 			_scheduleProvider = scheduleProvider;
 			_projectionProvider = projectionProvider;
@@ -43,16 +42,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 									var week = new DateOnlyPeriod(firstDayOfWeek, firstDayOfWeek.AddDays(6));
                                     var weekWithPreviousDay = new DateOnlyPeriod(firstDayOfWeek.AddDays(-1), firstDayOfWeek.AddDays(6));
 
-                                    var scheduleDays = _scheduleProvider.Invoke().GetScheduleForPeriod(weekWithPreviousDay) ?? new IScheduleDay[] { };
-									var personRequests = _personRequestProvider.Invoke().RetrieveRequests(week);
+                                    var scheduleDays = _scheduleProvider.GetScheduleForPeriod(weekWithPreviousDay) ?? new IScheduleDay[] { };
+									var personRequests = _personRequestProvider.RetrieveRequests(week);
 
 									var earliest =
 										scheduleDays.Min(
 											x =>
 												{
-													var period = _projectionProvider.Invoke().Projection(x).Period();
+													var period = _projectionProvider.Projection(x).Period();
 												   	var earlyStart = new TimeSpan(23, 59, 59);
-													if (period != null && _projectionProvider.Invoke().Projection(x).HasLayers)
+													if (period != null && _projectionProvider.Projection(x).HasLayers)
 													{
 														var startTime = period.Value.TimePeriod(TeleoptiPrincipal.Current.Regional.TimeZone).StartTime;
 														var endTime = period.Value.TimePeriod(TeleoptiPrincipal.Current.Regional.TimeZone).EndTime;
@@ -70,9 +69,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 										scheduleDays.Max(
 											x =>
 												{
-													var period = _projectionProvider.Invoke().Projection(x).Period();
+													var period = _projectionProvider.Projection(x).Period();
 												    var lateEnd = new TimeSpan(0, 0, 0);
-													if (period != null && _projectionProvider.Invoke().Projection(x).HasLayers)
+													if (period != null && _projectionProvider.Projection(x).HasLayers)
 													{
 														var startTime = period.Value.TimePeriod(TeleoptiPrincipal.Current.Regional.TimeZone).StartTime;
 														var endTime = period.Value.TimePeriod(TeleoptiPrincipal.Current.Regional.TimeZone).EndTime;
@@ -105,9 +104,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 									var days = (from day in firstDayOfWeek.Date.DateRange(7)
 												let scheduleDay = scheduleDays.SingleOrDefault(d => d.DateOnlyAsPeriod.DateOnly == day)
 												let scheduleYesterday = scheduleDays.SingleOrDefault(d => d.DateOnlyAsPeriod.DateOnly == day.AddDays(-1))
-												let projection = scheduleDay == null ? null : _projectionProvider.Invoke().Projection(scheduleDay)
-                                                let projectionYesterday = scheduleYesterday == null ? null : _projectionProvider.Invoke().Projection(scheduleYesterday)
-                                                let personRequestsForDay = personRequests == null ? null : (from i in personRequests where TimeZoneInfo.ConvertTimeFromUtc(i.Request.Period.StartDateTime, _userTimeZone.Invoke().TimeZone()).Date == day select i).ToArray()
+												let projection = scheduleDay == null ? null : _projectionProvider.Projection(scheduleDay)
+                                                let projectionYesterday = scheduleYesterday == null ? null : _projectionProvider.Projection(scheduleYesterday)
+                                                let personRequestsForDay = personRequests == null ? null : (from i in personRequests where TimeZoneInfo.ConvertTimeFromUtc(i.Request.Period.StartDateTime, _userTimeZone.TimeZone()).Date == day select i).ToArray()
 												select new WeekScheduleDayDomainData
 														{
 															Date = new DateOnly(day),
@@ -125,8 +124,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 															Projections = (from d in days where d.Projection != null select d.Projection).ToArray()
 									                  	};
 
-									var asmPermission = _permissionProvider.Invoke().HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger);
-									var isCurrentWeek = week.Contains(_now.Invoke().DateOnly());
+									var asmPermission = _permissionProvider.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AgentScheduleMessenger);
+									var isCurrentWeek = week.Contains(_now.DateOnly());
 
 									return new WeekScheduleDomainData
 											{

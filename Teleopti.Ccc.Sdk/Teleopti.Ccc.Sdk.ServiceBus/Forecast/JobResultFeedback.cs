@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
             {
                 if (MessageBrokerIsRunning())
                 {
-                	_messageBroker.SendEventMessage(UnitOfWorkFactoryContainer.Current.Name,
+                	_messageBroker.SendEventMessage(UnitOfWorkFactoryContainer.Current.LoggedOnUnitOfWorkFactory().Name,
                 	                                ((IBelongsToBusinessUnit) _jobResult).BusinessUnit.Id.GetValueOrDefault
                 	                                	(), DateTime.UtcNow, DateTime.UtcNow, Guid.Empty, Guid.Empty,
                 	                                typeof (IJobResultProgress), DomainUpdateType.NotApplicable, binaryData);

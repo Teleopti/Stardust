@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 			_dateFrom = new DateTime(2001, 12, 12, 0, 0, 0, DateTimeKind.Utc);
 			_dateTo = new DateTime(2001, 12, 13, 0, 0, 0, DateTimeKind.Utc);
 			Mapper.Reset();
-			Mapper.Initialize(c => c.AddProfile(new ShiftTradeSwapDetailsViewModelMappingProfile(Depend.On(_timeLineFactory), Depend.On(_projectionProvider))));
+			Mapper.Initialize(c => c.AddProfile(new ShiftTradeSwapDetailsViewModelMappingProfile(_timeLineFactory, _projectionProvider)));
 		}
 
 		[Test]
@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 
 			Mapper.Reset();
 
-			Mapper.Initialize(c => c.AddProfile(new ShiftTradeSwapDetailsViewModelMappingProfile(Depend.On(timeLineHoursViewModelFactory), Depend.On(_projectionProvider))));
+			Mapper.Initialize(c => c.AddProfile(new ShiftTradeSwapDetailsViewModelMappingProfile(timeLineHoursViewModelFactory, _projectionProvider)));
 			AddNeededMappingProfiles();
 
 			var from = new DateTime(2001, 1, 1, 0, 0, 0, DateTimeKind.Utc);

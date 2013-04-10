@@ -25,9 +25,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
-    	public OptionalColumnRepository(IUnitOfWorkFactory unitOfWorkFactory) : base(unitOfWorkFactory)
-    	{
-    	}
+			public OptionalColumnRepository(ICurrentUnitOfWork currentUnitOfWork)
+				: base(currentUnitOfWork)
+	    {
+		    
+	    }
 
     	/// <summary>
         /// 

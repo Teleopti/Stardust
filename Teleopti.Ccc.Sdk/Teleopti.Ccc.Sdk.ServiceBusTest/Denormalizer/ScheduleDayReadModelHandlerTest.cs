@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 		private ISignificantChangeChecker _significantChangeChecker;
 		private INotificationSender _notificationSender;
 		private ScheduleDayReadModelHandler _target;
-		private IUnitOfWorkFactory _unitOfWorkFactory;
+		private ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private IPersonRepository _personRepository;
 		private ISmsLinkChecker _smsLinkChecker;
 		private INotificationSenderFactory _notificationSenderFactory;
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 		public void Setup()
 		{
 			_mocks = new MockRepository();
-			_unitOfWorkFactory = _mocks.StrictMock<IUnitOfWorkFactory>();
+			_unitOfWorkFactory = _mocks.StrictMock<ICurrentUnitOfWorkFactory>();
 			_personRepository = _mocks.StrictMock<IPersonRepository>();
 			_significantChangeChecker = _mocks.StrictMock<ISignificantChangeChecker>();
 			_smsLinkChecker = _mocks.StrictMock<ISmsLinkChecker>();
@@ -67,7 +67,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 
 			var uow = _mocks.StrictMock<IUnitOfWork>();
 
-			Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow);
+			var uowFactory = _mocks.DynamicMock<IUnitOfWorkFactory>();
+			Expect.Call(_unitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(uowFactory);
+			Expect.Call(uowFactory.CreateAndOpenUnitOfWork()).Return(uow);
 			Expect.Call(uow.Dispose);
 
 			_mocks.ReplayAll();
@@ -101,7 +103,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 								ScheduleDays = new[] { denormalizedScheduleDay }
 			              	};
 
-			Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow);
+			var uowFactory = _mocks.DynamicMock<IUnitOfWorkFactory>();
+			Expect.Call(_unitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(uowFactory);
+			Expect.Call(uowFactory.CreateAndOpenUnitOfWork()).Return(uow);
+
 			Expect.Call(_personRepository.Get(_person.Id.GetValueOrDefault())).Return(_person);
 			Expect.Call(_scheduleDayReadModelsCreator.GetReadModel(denormalizedScheduleDay,_person)).Return(model);
 			Expect.Call(() => _scheduleDayReadModelRepository.ClearPeriodForPerson(dateOnlyPeriod, _person.Id.GetValueOrDefault()));
@@ -138,7 +143,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 								ScheduleDays = new []{denormalizedScheduleDay}
 			              	};
 
-			Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow);
+			var uowFactory = _mocks.DynamicMock<IUnitOfWorkFactory>();
+			Expect.Call(_unitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(uowFactory);
+			Expect.Call(uowFactory.CreateAndOpenUnitOfWork()).Return(uow);
 			Expect.Call(_personRepository.Get(_person.Id.GetValueOrDefault())).Return(_person);
 			Expect.Call(_scheduleDayReadModelsCreator.GetReadModel(denormalizedScheduleDay,_person)).Return(model);
 			Expect.Call(_significantChangeChecker.SignificantChangeNotificationMessage(dateOnlyPeriod.StartDate, _person, model)).Return(mess);

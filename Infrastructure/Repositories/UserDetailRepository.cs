@@ -29,6 +29,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     	{
     	}
 
+			public UserDetailRepository(ICurrentUnitOfWork currentUnitOfWork)
+				: base(currentUnitOfWork)
+	    {
+		    
+	    }
+
         public IUserDetail FindByUser(IPerson user)
         {
             var userDetail = Session.CreateCriteria(typeof(UserDetail))

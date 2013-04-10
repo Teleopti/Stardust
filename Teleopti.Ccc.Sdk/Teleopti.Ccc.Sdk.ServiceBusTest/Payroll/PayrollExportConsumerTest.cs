@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Payroll
         private PayrollExportConsumer target;
         readonly MockRepository mock = new MockRepository();
         private IRepositoryFactory repositoryFactory;
-        private IUnitOfWorkFactory unitOfWorkFactory;
+				private ICurrentUnitOfWorkFactory unitOfWorkFactory;
         private IUnitOfWork unitOfWork;
         private IPayrollExportRepository payrollExportRepository;
         private IPayrollPeopleLoader payrollPeopleLoader;
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Payroll
             payrollExportRepository = mock.StrictMock<IPayrollExportRepository>();
             payrollPeopleLoader = mock.StrictMock<IPayrollPeopleLoader>();
             payrollResultRepository = mock.StrictMock<IPayrollResultRepository>();
-            unitOfWorkFactory = mock.StrictMock<IUnitOfWorkFactory>();
+						unitOfWorkFactory = mock.StrictMock<ICurrentUnitOfWorkFactory>();
             unitOfWork = mock.StrictMock<IUnitOfWork>();
             payrollDataExtractor = mock.StrictMock<IPayrollDataExtractor>();
             personBusAssembler = mock.StrictMock<IPersonBusAssembler>();
@@ -156,7 +156,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Payroll
 
         private void prepareUnitOfWork(int times, bool persistAll)
         {
-            Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork).Repeat.Times(times);
+	        var uowFactory = mock.DynamicMock<IUnitOfWorkFactory>();
+	        Expect.Call(unitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(uowFactory);
+            Expect.Call(uowFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork).Repeat.Times(times);
             Expect.Call(unitOfWork.Dispose).Repeat.Times(times);
             if (persistAll)
             {

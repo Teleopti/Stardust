@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 	[TestFixture]
 	public class ExportMultisiteSkillsToSkillTest
 	{
-		private IUnitOfWorkFactory unitOfWorkFactory;
+		private ICurrentUnitOfWorkFactory unitOfWorkFactory;
 		private ExportMultisiteSkillsToSkillConsumer target;
 		private MockRepository mocks;
 		private IJobResultRepository jobResultRepository;
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 		public void Setup()
 		{
 			mocks = new MockRepository();
-			unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
+			unitOfWorkFactory = mocks.DynamicMock<ICurrentUnitOfWorkFactory>();
 			jobResultRepository = mocks.DynamicMock<IJobResultRepository>();
 			jobResultFeedback = mocks.DynamicMock<IJobResultFeedback>();
 			messageBroker = mocks.DynamicMock<IMessageBroker>();
@@ -49,7 +49,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 			var jobId = Guid.NewGuid();
 			using (mocks.Record())
 			{
-				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+				var uowFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
+				Expect.Call(unitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(uowFactory);
+				Expect.Call(uowFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
 				Expect.Call(jobResult.FinishedOk).Return(false);
 				Expect.Call(jobResultRepository.Get(jobId)).Return(jobResult);
 				Expect.Call(() => jobResultFeedback.SetJobResult(jobResult, messageBroker));
@@ -72,7 +74,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 			var jobId = Guid.NewGuid();
 			using (mocks.Record())
 			{
-				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+				var uowFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
+				Expect.Call(unitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(uowFactory);
+				Expect.Call(uowFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
 				Expect.Call(jobResult.FinishedOk).Return(true);
 				Expect.Call(jobResultRepository.Get(jobId)).Return(jobResult);
 			}

@@ -105,11 +105,5 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(tag, _repository.LoadAggregate(tag.Id.Value));
         }
 
-        [Test]
-        public void ShouldCreateRepositoryWithUnitOfWorkFactory()
-        {
-            _repository = new AgentDayScheduleTagRepository(UnitOfWorkFactory.Current);
-            Assert.IsNotNull(_repository);
-        }
     }
 }

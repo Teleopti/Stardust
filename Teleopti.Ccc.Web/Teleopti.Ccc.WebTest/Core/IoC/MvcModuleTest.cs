@@ -504,5 +504,12 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 				.Should().Not.Be.Null();
 		}
 
+		[Test]
+		public void ShouldNotRegisterUnitOfWorkFactory()
+		{
+			//make sure IUnitOfWork isn't registered - it should NOT!
+			requestContainer.IsRegistered<IUnitOfWorkFactory>()
+				.Should().Be.False();
+		}
 	}
 }

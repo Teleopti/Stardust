@@ -17,10 +17,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Sms")]
 	public class SmsLinkChecker : ISmsLinkChecker
 	{
-		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IRepositoryFactory _repositoryFactory;
 
-		public SmsLinkChecker(IUnitOfWorkFactory unitOfWorkFactory, IRepositoryFactory repositoryFactory)
+		public SmsLinkChecker(ICurrentUnitOfWorkFactory unitOfWorkFactory, IRepositoryFactory repositoryFactory)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_repositoryFactory = repositoryFactory;
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 		public string SmsMobileNumber(IPerson person)
 		{
 			// get wich optional column to use
-			using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+			using (var uow = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
 				var smsSettingsSetting = _repositoryFactory.CreateGlobalSettingDataRepository(uow).FindValueByKey("SmsSettings", new SmsSettings());
 				if (smsSettingsSetting.OptionalColumnId.Equals(Guid.Empty)) // no column set

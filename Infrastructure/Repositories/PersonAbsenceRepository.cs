@@ -27,6 +27,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
+				public PersonAbsenceRepository(ICurrentUnitOfWork currentUnitOfWork)
+					: base(currentUnitOfWork)
+	    {
+		    
+	    }
+
         /// <summary>
         /// Finds the specified PersonAbsence.
         /// </summary>

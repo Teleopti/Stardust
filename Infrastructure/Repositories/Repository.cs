@@ -22,6 +22,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
+	    protected Repository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
+	    {
+	    }
+
         public IList<T> LoadAll()
         {
             return Session.CreateCriteria(typeof(T)).List<T>();

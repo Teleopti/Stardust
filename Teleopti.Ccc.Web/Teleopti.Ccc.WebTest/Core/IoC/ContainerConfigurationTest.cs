@@ -45,17 +45,6 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		}
 
 		[Test]
-		public void UnitOfWorkModuleHasBeenRegistered()
-		{
-			using (var container = builder.Configure())
-			{
-				container.IsRegistered<IUnitOfWorkFactory>()
-					.Should().Be.True();
-			}
-		}
-
-
-		[Test]
 		public void MvcModuleHasBeenRegistered()
 		{
 			using (var container = builder.Configure())

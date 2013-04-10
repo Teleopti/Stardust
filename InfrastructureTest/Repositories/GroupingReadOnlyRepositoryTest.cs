@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		protected override void SetupForRepositoryTest()
 		{
-			_target = new GroupingReadOnlyRepository(UnitOfWorkFactory.Current);
+			_target = new GroupingReadOnlyRepository(UnitOfWorkFactory.CurrentUnitOfWorkFactory());
 		}
 
 		[Test]

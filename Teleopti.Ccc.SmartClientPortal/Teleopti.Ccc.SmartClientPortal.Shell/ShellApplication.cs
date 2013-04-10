@@ -48,7 +48,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
     /// Note that the class derives from CAB supplied base class FormSmartClientShellApplication, and the 
     /// main form will be SmartClientShellForm, also created by default by this solution template
     /// </summary>
-    class SmartClientShellApplication : SmartClientApplication<WorkItem, SmartClientShellForm>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+		class SmartClientShellApplication : SmartClientApplication<WorkItem, SmartClientShellForm>
     {
         /// <summary>
         /// Shell application entry point.
@@ -110,7 +111,8 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
         {
         }
 
-        private static IContainer configureContainer()
+				[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+				private static IContainer configureContainer()
         {
             using (PerformanceOutput.ForOperation("Building Ioc container"))
             {
@@ -122,8 +124,6 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
 				builder.RegisterModule(new EncryptionModule());
                 builder.RegisterModule(new AuthenticationModule());
                 builder.RegisterModule(new EventAggregatorModule());
-                builder.RegisterModule(new UnitOfWorkModule());
-                builder.RegisterModule(new RepositoryModule());
                 builder.RegisterModule(new StartupModule());
                 builder.RegisterModule(new NavigationModule());
                 builder.RegisterModule(new BudgetModule());
@@ -137,6 +137,11 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
                 builder.RegisterModule(new PersonSelectorModule());
                 builder.RegisterModule(new PermissionsModule());
                 builder.RegisterModule(new RequestHistoryModule());
+							//hack to get old behavior work
+	            builder.Register(context => context.Resolve<ICurrentUnitOfWorkFactory>().LoggedOnUnitOfWorkFactory()).ExternallyOwned().As<IUnitOfWorkFactory>();
+							builder.RegisterModule(new RepositoryModule() { ConstructorTypeToUse = typeof(IUnitOfWorkFactory) });
+							builder.RegisterType<CurrentUnitOfWorkFactory>().As<ICurrentUnitOfWorkFactory>().SingleInstance();
+							//////
                 return builder.Build();
             }
 

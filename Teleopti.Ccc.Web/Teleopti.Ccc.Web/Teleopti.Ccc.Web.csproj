@@ -199,6 +199,8 @@
     <Reference Include="System.Configuration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Areas\MyTime\Core\Common\DataProvider\IUrlHelper.cs" />
+    <Compile Include="Areas\MyTime\Core\Common\DataProvider\UrlHelperProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\IPreferenceTemplatePersister.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\IPreferenceTemplateProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceTemplatePersister.cs" />

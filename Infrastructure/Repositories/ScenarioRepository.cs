@@ -31,6 +31,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
+				public ScenarioRepository(ICurrentUnitOfWork currentUnitOfWork)
+					: base(currentUnitOfWork)
+	    {
+		    
+	    }
+
         /// <param name="myScenario">SetDefault</param>
         public void SetDefault(IScenario myScenario)
         {

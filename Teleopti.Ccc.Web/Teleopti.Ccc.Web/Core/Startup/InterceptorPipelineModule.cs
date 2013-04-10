@@ -7,19 +7,19 @@ namespace Teleopti.Ccc.Web.Core.Startup
 {
 	public class InterceptorPipelineModule : HubPipelineModule
 	{
-		private readonly Lazy<IUnitOfWorkFactory> _unitOfWorkFactory;
+		private readonly Lazy<ICurrentUnitOfWorkFactory> _unitOfWorkFactorProvider;
 		private IUnitOfWork _unitOfWork;
 
-		public InterceptorPipelineModule(Lazy<IUnitOfWorkFactory> unitOfWorkFactory)
+		public InterceptorPipelineModule(Lazy<ICurrentUnitOfWorkFactory> unitOfWorkFactory)
 		{
-			_unitOfWorkFactory = unitOfWorkFactory;
+			_unitOfWorkFactorProvider = unitOfWorkFactory;
 		}
 
 		protected override bool OnBeforeIncoming(IHubIncomingInvokerContext context)
 		{
 			if (context.MethodDescriptor.Attributes.Any(a => a.GetType().Name.Contains("UnitOfWork")))
 			{
-				_unitOfWork = _unitOfWorkFactory.Value.CreateAndOpenUnitOfWork();
+				_unitOfWork = _unitOfWorkFactorProvider.Value.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork();
 			}
 			return base.OnBeforeIncoming(context);
 		}

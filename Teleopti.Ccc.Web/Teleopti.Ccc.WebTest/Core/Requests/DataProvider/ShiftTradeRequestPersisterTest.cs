@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			dataSourceProvider.Expect(x => x.CurrentDataSource()).Return(MockRepository.GenerateMock<IDataSource>());
 			var businessUnitProvider = MockRepository.GenerateMock<ICurrentBusinessUnitProvider>();
 			businessUnitProvider.Expect(x => x.CurrentBusinessUnit()).Return(new BusinessUnit("d"));
-			var uowFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
+			var currentUnitOfWork = MockRepository.GenerateMock<ICurrentUnitOfWork>();
 			var form = new ShiftTradeRequestForm();
 			mapper.Stub(x => x.Map(form)).Return(new PersonRequest(new Person()));
 			var target = new ShiftTradeRequestPersister(MockRepository.GenerateMock<IPersonRequestRepository>(),
@@ -74,10 +74,10 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			                                            now,
 			                                            dataSourceProvider,
 			                                            businessUnitProvider,
-			                                            uowFactory,
+			                                            currentUnitOfWork,
 																									shiftTradeSetChecksum);
 			var uow = MockRepository.GenerateMock<IUnitOfWork>();
-			uowFactory.Expect(x => x.CurrentUnitOfWork()).Return(uow);
+			currentUnitOfWork.Expect(x => x.Current()).Return(uow);
 			serviceBusSender.Expect(x => x.EnsureBus()).Return(true);
 
 			target.Persist(form);
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			now.Expect(x => x.UtcDateTime()).Return(DateTime.Now);
 			var dataSourceProvider = MockRepository.GenerateMock<IDataSourceProvider>();
 			var businessUnitProvider = MockRepository.GenerateMock<ICurrentBusinessUnitProvider>();
-			var uowFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
+			var currentUnitOfWork = MockRepository.GenerateMock<ICurrentUnitOfWork>();
 			var form = new ShiftTradeRequestForm();
 			mapper.Stub(x => x.Map(form)).Return(new PersonRequest(new Person()));
 			var target = new ShiftTradeRequestPersister(MockRepository.GenerateMock<IPersonRequestRepository>(),
@@ -104,10 +104,10 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 																									now,
 																									dataSourceProvider,
 																									businessUnitProvider,
-																									uowFactory,
+																									currentUnitOfWork,
 																									shiftTradeSetChecksum);
 			var uow = MockRepository.GenerateMock<IUnitOfWork>();
-			uowFactory.Expect(x => x.CurrentUnitOfWork()).Return(uow);
+			currentUnitOfWork.Expect(x => x.Current()).Return(uow);
 			serviceBusSender.Expect(x => x.EnsureBus()).Return(false);
 
 			target.Persist(form);

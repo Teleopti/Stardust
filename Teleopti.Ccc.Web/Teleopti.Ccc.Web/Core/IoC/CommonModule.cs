@@ -1,7 +1,4 @@
-﻿using System;
-using System.Web;
-using System.Web.Mvc;
-using Autofac;
+﻿using Autofac;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
@@ -79,33 +76,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 				.As<IStudentAvailabilityProvider>();
 			builder.RegisterType<VirtualSchedulePeriodProvider>().As<IVirtualSchedulePeriodProvider>();
 			builder.RegisterType<DefaultDateCalculator>().As<IDefaultDateCalculator>();
-
-			builder.RegisterGeneric(typeof (ResolveUsingDependencyResolver<>)).As(typeof (IResolve<>));
-		}
-	}
-
-	public interface IResolve<T>
-	{
-		T Invoke();
-	}
-
-	public class ResolveUsingDependencyResolver<T> : IResolve<T>
-	{
-		private readonly IComponentContext _resolver;
-
-		public ResolveUsingDependencyResolver(IComponentContext resolver) 
-		{
-			_resolver = resolver;
-		}
-
-		public T Invoke()
-		{
-			var result = HttpContext.Current == null ? 
-				_resolver.Resolve<T>() : 
-				DependencyResolver.Current.GetService<T>();
-			if (result == null)
-				throw new Exception("Failed to resolve " + typeof(T).Name);
-			return result;
+			builder.RegisterType<UrlHelperProvider>().As<IUrlHelper>().SingleInstance();
 		}
 	}
 }

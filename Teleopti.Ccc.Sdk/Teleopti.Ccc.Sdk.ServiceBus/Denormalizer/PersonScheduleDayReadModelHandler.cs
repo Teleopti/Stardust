@@ -9,11 +9,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 {
 	public class PersonScheduleDayReadModelHandler : ConsumerOf<DenormalizedSchedule>, ConsumerOf<DenormalizedScheduleForPersonScheduleDay>
 	{
-		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IPersonScheduleDayReadModelsCreator _scheduleDayReadModelsCreator;
 		private readonly IPersonScheduleDayReadModelRepository _scheduleDayReadModelRepository;
 
-		public PersonScheduleDayReadModelHandler(IUnitOfWorkFactory unitOfWorkFactory,
+		public PersonScheduleDayReadModelHandler(ICurrentUnitOfWorkFactory unitOfWorkFactory,
 									IPersonScheduleDayReadModelsCreator scheduleDayReadModelsCreator,
 									IPersonScheduleDayReadModelRepository scheduleDayReadModelRepository)
 		{
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 			if (!message.IsDefaultScenario) return;
 			if (message.ScheduleDays == null || message.ScheduleDays.Count == 0) return;
 
-			using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+			using (var uow = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
 				var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(message.ScheduleDays.Min(s => s.Date.Date)),
 				                                        new DateOnly(message.ScheduleDays.Max(s => s.Date.Date)));

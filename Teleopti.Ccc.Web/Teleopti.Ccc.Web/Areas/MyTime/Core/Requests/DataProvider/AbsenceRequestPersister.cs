@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		private readonly ICurrentBusinessUnitProvider _businessUnitProvider;
 		private readonly IDataSourceProvider _dataSourceProvider;
 		private readonly INow _now;
-		private readonly IUnitOfWorkFactory _uowFactory;
+		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 
 		public AbsenceRequestPersister(IPersonRequestRepository personRequestRepository, 
 											IMappingEngine mapper, 
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 											ICurrentBusinessUnitProvider businessUnitProvider, 
 											IDataSourceProvider dataSourceProvider, 
 											INow now,
-											IUnitOfWorkFactory uowFactory)
+											ICurrentUnitOfWork currentUnitOfWork)
 		{
 			_personRequestRepository = personRequestRepository;
 			_mapper = mapper;
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			_businessUnitProvider = businessUnitProvider;
 			_dataSourceProvider = dataSourceProvider;
 			_now = now;
-			_uowFactory = uowFactory;
+			_currentUnitOfWork = currentUnitOfWork;
 		}
 
 		public RequestViewModel Persist(AbsenceRequestForm form)
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 				              		PersonRequestId = personRequest.Id.GetValueOrDefault(Guid.Empty),
 				              		Timestamp = _now.UtcDateTime()
 				              	};
-				_uowFactory.CurrentUnitOfWork().AfterSuccessfulTx(() => _serviceBusSender.NotifyServiceBus(message));
+				_currentUnitOfWork.Current().AfterSuccessfulTx(() => _serviceBusSender.NotifyServiceBus(message));
 			}
 			else
 			{

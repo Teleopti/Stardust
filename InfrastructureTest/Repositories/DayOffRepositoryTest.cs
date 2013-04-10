@@ -83,13 +83,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual("AAA", _dayOffList[0].Description.Name);
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
-        public void ShouldCreateRepositoryWithUnitOfWorkFactory()
-        {
-            var repository = new DayOffRepository(UnitOfWorkFactory.Current);
-            Assert.IsNotNull(repository);
-        }
-
         private void AddFewDayOffs()
         {
             _dayOff = new DayOffTemplate(new Description("BBB"));

@@ -2,7 +2,7 @@ using System;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
+namespace Teleopti.Ccc.TestCommon.FakeData
 {
 	public sealed class FakeDataSource : IDataSource
 	{

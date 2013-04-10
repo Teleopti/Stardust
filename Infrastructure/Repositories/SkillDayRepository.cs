@@ -38,6 +38,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 		}
 
+		public SkillDayRepository(ICurrentUnitOfWork currentUnitOfWork)
+			: base(currentUnitOfWork)
+		{
+			
+		}
+
 		/// <summary>
 		/// Finds the range.
 		/// </summary>

@@ -9,12 +9,26 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 {
 	public class RepositoryModule : Module
 	{
+		public RepositoryModule()
+		{
+			ConstructorTypeToUse = typeof (ICurrentUnitOfWork);
+		}
+
+		//hack to get desktop app use old behavior
+		public Type ConstructorTypeToUse { get; set; }
+
 		protected override void Load(ContainerBuilder builder)
 		{
-			builder.RegisterAssemblyTypes(typeof(PersonRepository).Assembly)
-				.Where(t => isRepository(t) && hasCorrectCtor(t))
-				.AsImplementedInterfaces()
-				.InstancePerDependency();
+			foreach (var type in typeof(PersonRepository).Assembly.GetTypes().Where(t => isRepository(t) && hasCorrectCtor(t)))
+			{
+				if (type.GetConstructor(new[]{ConstructorTypeToUse}) != null)
+				{
+					builder.RegisterType(type)
+								 .UsingConstructor(ConstructorTypeToUse)
+								 .AsImplementedInterfaces()
+								 .SingleInstance();					
+				}
+			}
 
 			builder.Register(c => StatisticRepositoryFactory.Create())
 				.As<IStatisticRepository>();
@@ -24,16 +38,14 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 				.InstancePerDependency();
 		}
 
-		private static bool hasCorrectCtor(Type repositoryType)
+		private bool hasCorrectCtor(Type repositoryType)
 		{
 			foreach (var constructorInfo in repositoryType.GetConstructors())
 			{
 				var parameters = constructorInfo.GetParameters();
 				if (parameters.Count() == 1)
 				{
-					if (parameters[0].ParameterType.Equals(typeof(IUnitOfWorkFactory)))
-						return true;
-					if (parameters[0].ParameterType.Equals(typeof(ICurrentUnitOfWork)))
+					if (parameters[0].ParameterType == ConstructorTypeToUse)
 						return true;
 				}
 			}

@@ -43,12 +43,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 							                         ));
 						c.AddProfile(
 							new PreferenceTemplateInputMappingProfile(
-								() => shiftCategoryRepository,
-								() => dayOffRepository,
-								() => absenceRepository,
-								() => activityRepository,
-								Depend.On(Mapper.Engine)
-								)
+								shiftCategoryRepository,
+								dayOffRepository,
+								absenceRepository,
+								activityRepository,
+								new Lazy<IMappingEngine>(() => Mapper.Engine))
 							);
 					}
 				);

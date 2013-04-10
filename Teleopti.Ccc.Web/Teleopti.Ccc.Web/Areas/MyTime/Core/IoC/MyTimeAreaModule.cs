@@ -98,8 +98,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.Register(c => Mapper.Engine).As<IMappingEngine>();
 			builder.RegisterAssemblyTypes(GetType().Assembly)
 				.AssignableTo<Profile>()
-				.As<Profile>()
-				.InstancePerDependency();
+				.SingleInstance()
+				.As<Profile>();
 			builder.RegisterType<StudentAvailabilityDomainData>();
 			builder.RegisterType<StudentAvailabilityDayFormMappingProfile.StudentAvailabilityDayFormToStudentAvailabilityDay>().SingleInstance();
 			builder.RegisterType<PreferenceDayInputMappingProfile.PreferenceDayInputToPreferenceDay>().SingleInstance();

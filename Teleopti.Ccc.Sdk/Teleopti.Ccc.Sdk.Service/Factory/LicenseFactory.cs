@@ -10,10 +10,10 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
     public class LicenseFactory : ILicenseFeedback
     {
         private readonly ILicenseCache _licenseCache;
-        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+				private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
         private LicenseVerificationResultDto _licenseVerificationResultDto;
 
-        public LicenseFactory(ILicenseCache licenseCache, IUnitOfWorkFactory unitOfWorkFactory)
+        public LicenseFactory(ILicenseCache licenseCache, ICurrentUnitOfWorkFactory unitOfWorkFactory)
         {
             _licenseCache = licenseCache;
             _unitOfWorkFactory = unitOfWorkFactory;
@@ -33,8 +33,8 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
             if (_licenseVerificationResultDto == null)
             {
                 _licenseVerificationResultDto = new LicenseVerificationResultDto(false);
-
-                var verifier = new LicenseVerifier(this, _unitOfWorkFactory, new LicenseRepository(_unitOfWorkFactory));
+	            var uowFactory = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory();
+							var verifier = new LicenseVerifier(this, uowFactory, new LicenseRepository(uowFactory));
                 var licenseService = verifier.LoadAndVerifyLicense();
 
                 if (licenseService != null)

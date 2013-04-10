@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
     {
         private NewAbsenceRequestConsumer _target;
         private MockRepository _mockRepository;
-        private IUnitOfWorkFactory _unitOfWorkFactory;
+				private ICurrentUnitOfWorkFactory _unitOfWorkFactory;
         private IUnitOfWork _unitOfWork;
         private IPersonRequestRepository _personRequestRepository;
         private IPersonRequest _personRequest;
@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 
         private void CreateInfrastructure()
         {
-            _unitOfWorkFactory = _mockRepository.StrictMock<IUnitOfWorkFactory>();
+            _unitOfWorkFactory = _mockRepository.StrictMock<ICurrentUnitOfWorkFactory>();
             _unitOfWork = _mockRepository.StrictMock<IUnitOfWork>();
             _authorization = new PersonRequestAuthorizationCheckerForTest();
             _factory = _mockRepository.StrictMock<IRequestFactory>();
@@ -706,7 +706,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 
         private void PrepareUnitOfWork(bool persistAll)
         {
-            Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
+	        var currentUowFactory = _mockRepository.DynamicMock<IUnitOfWorkFactory>();
+					Expect.Call(currentUowFactory.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
+					Expect.Call(_unitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(currentUowFactory);
             Expect.Call(() => _unitOfWork.Dispose());
             if (persistAll)
             {

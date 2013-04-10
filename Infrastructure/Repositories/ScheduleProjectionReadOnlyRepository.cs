@@ -13,17 +13,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 {
 	public class ScheduleProjectionReadOnlyRepository : IScheduleProjectionReadOnlyRepository
 	{
-		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 
-		public ScheduleProjectionReadOnlyRepository(IUnitOfWorkFactory unitOfWorkFactory)
+		public ScheduleProjectionReadOnlyRepository(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			_unitOfWorkFactory = unitOfWorkFactory;
+			_currentUnitOfWork = currentUnitOfWork;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
 		public IEnumerable<PayloadWorkTime> AbsenceTimePerBudgetGroup(DateOnlyPeriod period,IBudgetGroup budgetGroup,IScenario scenario)
 		{
-			var uow = _unitOfWorkFactory.CurrentUnitOfWork();
+			var uow = _currentUnitOfWork.Current();
 
 			return ((NHibernateUnitOfWork) uow).Session.CreateSQLQuery(
 				"exec ReadModel.LoadBudgetAllowanceReadModel @BudgetGroupId	= :budgetGroupId, @ScenarioId = :scenarioId, @DateFrom = :StartDate, @DateTo = :EndDate")
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public void ClearPeriodForPerson(DateOnlyPeriod period,Guid scenarioId,Guid personId)
 		{
-			var uow = _unitOfWorkFactory.CurrentUnitOfWork();
+			var uow = _currentUnitOfWork.Current();
 			((NHibernateUnitOfWork) uow).Session.CreateSQLQuery(
 				"DELETE FROM ReadModel.ScheduleProjectionReadOnly WHERE BelongsToDate BETWEEN :StartDate AND :EndDate AND ScenarioId=:scenario AND PersonId=:person")
 				.SetGuid("person", personId)
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3")]
 		public void AddProjectedLayer(DateOnly belongsToDate,Guid scenarioId,Guid personId, DenormalizedScheduleProjectionLayer layer)
 		{
-			var uow = _unitOfWorkFactory.CurrentUnitOfWork();
+			var uow = _currentUnitOfWork.Current();
 			
 			((NHibernateUnitOfWork) uow).Session.CreateSQLQuery(
 				"INSERT INTO ReadModel.ScheduleProjectionReadOnly (ScenarioId,PersonId,BelongsToDate,PayloadId,StartDateTime,EndDateTime,WorkTime,ContractTime,Name,ShortName,DisplayColor,PayrollCode,InsertedOn) VALUES (:ScenarioId,:PersonId,:Date,:PayloadId,:StartDateTime,:EndDateTime,:WorkTime,:ContractTime,:Name,:ShortName,:DisplayColor,:PayrollCode,:InsertedOn)")
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public bool IsInitialized()
 		{
-			var uow = _unitOfWorkFactory.CurrentUnitOfWork();
+			var uow = _currentUnitOfWork.Current();
 			var result = ((NHibernateUnitOfWork) uow).Session.CreateSQLQuery(
 				"SELECT TOP 1 * FROM ReadModel.ScheduleProjectionReadOnly")
 				.List();
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
         public DateTime? GetNextActivityStartTime(DateTime dateTime, Guid personId)
         {
-            var uow = _unitOfWorkFactory.CurrentUnitOfWork();
+            var uow = _currentUnitOfWork.Current();
             string query = string.Format(CultureInfo.InvariantCulture,@"SELECT TOP 1 StartDateTime, EndDateTime 
                             FROM ReadModel.v_ScheduleProjectionReadOnlyRTA rta WHERE EndDateTime >= :endDate 
                             AND PersonId=:personId");

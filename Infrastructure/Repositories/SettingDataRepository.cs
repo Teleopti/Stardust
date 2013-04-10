@@ -7,18 +7,20 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 {
     public abstract class SettingDataRepository
     {
-        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IUnitOfWork _unitOfWork;
+				private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 
         protected SettingDataRepository(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
 
-        protected SettingDataRepository(IUnitOfWorkFactory unitOfWorkFactory)
-        {
-            _unitOfWorkFactory = unitOfWorkFactory;
-        }
+
+				protected SettingDataRepository(IUnitOfWorkFactory unitOfWorkFactory)
+				{
+					_unitOfWorkFactory = unitOfWorkFactory;
+				}
+
 
         protected ISession Session
         {
@@ -29,8 +31,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
             get
             {
-                return _unitOfWork ?? _unitOfWorkFactory.CurrentUnitOfWork();
-            }
+							return _unitOfWork ?? _unitOfWorkFactory.CurrentUnitOfWork();
+						}
         }
 
         public abstract ISettingData FindByKey(string key);

@@ -10,11 +10,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 {
 	public class DenormalizeScheduleProjectionConsumer : ConsumerOf<DenormalizedSchedule>, ConsumerOf<DenormalizedScheduleForScheduleProjection>
 	{
-		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IScheduleProjectionReadOnlyRepository _scheduleProjectionReadOnlyRepository;
 	    private readonly IServiceBus _serviceBus;
 
-	    public DenormalizeScheduleProjectionConsumer(IUnitOfWorkFactory unitOfWorkFactory, IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository, IServiceBus serviceBus)
+	    public DenormalizeScheduleProjectionConsumer(ICurrentUnitOfWorkFactory unitOfWorkFactory, IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository, IServiceBus serviceBus)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_scheduleProjectionReadOnlyRepository = scheduleProjectionReadOnlyRepository;
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 		{
 			var nearestLayerToNow = new DenormalizedScheduleProjectionLayer();
 			nearestLayerToNow.StartDateTime = DateTime.MaxValue;
-			using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+			using (var unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
 				if (!message.IsDefaultScenario) return;
 

@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldDequeueItems()
 		{
-			target = new DenormalizerQueueRepository(UnitOfWorkFactory.Current);
+			target = new DenormalizerQueueRepository(UnitOfWorkFactory.CurrentUnitOfWork());
 			target.DequeueDenormalizerMessages(((ITeleoptiIdentity) TeleoptiPrincipal.Current.Identity).BusinessUnit).Should().Be.
 				Empty();
 		}
