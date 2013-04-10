@@ -572,10 +572,10 @@ Teleopti.MyTimeWeb.Schedule.Request = (function ($) {
 		var date = $.datepicker.parseDate($.datepicker._defaults.dateFormat, inputDate);
 		var formattedDate = $.datepicker.formatDate('yy-mm-dd', date);
 		var textRequestCount = $('ul[data-mytime-date="' + formattedDate + '"] .text-request');
-		var title = textRequestCount.attr('title');
-		if (title == undefined)
-			return;
-		var newTitle = title.replace(/[\d\.]+/g, parseInt(textRequestCount.text()) + 1);
+		var decodedTitle = $('<div/>').html(textRequestCount.attr('title')).text();
+		if (decodedTitle == undefined)
+		    return;
+		var newTitle = decodedTitle.replace(/[\d\.]+/g, parseInt(textRequestCount.text()) + 1);
 		textRequestCount.attr('title', newTitle);
 		textRequestCount
 			.show()
