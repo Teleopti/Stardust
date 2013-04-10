@@ -507,7 +507,6 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             var periodFirst = new DateTimePeriod(startFirst, endFirst);
             var expectedStart = new DateTime(2009, 10, 27, 0, 0, 0, DateTimeKind.Utc);
             var expectedEnd = expectedStart.AddDays(1);
-            var expectedPeriod  = new DateTimePeriod(expectedStart, expectedEnd);
             var expectedPeriod  = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(expectedStart, expectedEnd, _timeZone);
 
             using (_mocks.Record())
