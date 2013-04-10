@@ -39,7 +39,8 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 					Is.TypeOf(typeof (WebState)),
 					Is.Equal(Path.Combine("applicationPath", "path")),
 					Is.TypeOf(typeof (LoadPasswordPolicyService)),
-					Is.TypeOf(typeof (ConfigurationManagerWrapper))
+					Is.TypeOf(typeof (ConfigurationManagerWrapper)),
+					Is.Equal(true)
 					);
 			}
 			using (mocks.Playback())
