@@ -135,9 +135,9 @@ namespace Teleopti.Messaging.SignalR
 				                       		}
 				                       	}, TaskContinuationOptions.OnlyOnFaulted);
 				
-				if (!startTask.Wait(TimeSpan.FromSeconds(10)))
+				if (!startTask.Wait(TimeSpan.FromSeconds(30)))
 				{
-					exception = new InvalidOperationException("Could not start within given time limit.");
+					exception = new InvalidOperationException("Could not start message broker client within 30 seconds.");
 				}
 				if (exception!=null)
 				{

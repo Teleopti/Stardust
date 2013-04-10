@@ -12,6 +12,7 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 		/// <param name="xmlDirectory">The directory to nhibernate's conf file(s)</param>
 		/// <param name="loadPasswordPolicyService">The password policy loading service</param>
 		/// <param name="configurationWrapper">The configuration wrapper.</param>
-		void Start(IState clientCache, string xmlDirectory, ILoadPasswordPolicyService loadPasswordPolicyService, IConfigurationWrapper configurationWrapper);
+		/// <param name="startMessageBroker"></param>
+		void Start(IState clientCache, string xmlDirectory, ILoadPasswordPolicyService loadPasswordPolicyService, IConfigurationWrapper configurationWrapper, bool startMessageBroker);
 	}
 }

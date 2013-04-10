@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Teleopti.Ccc.Web.Core.Startup.Booter;
 using log4net;
 using Teleopti.Ccc.Domain.Security;
@@ -23,7 +24,7 @@ namespace Teleopti.Ccc.Web.Core.Startup.VerifyLicense
 			_logger = logger;
 		}
 
-		public void Execute()
+		public Task Execute()
 		{
 			foreach (var dataSource in _applicationData.Value.RegisteredDataSourceCollection)
 			{
@@ -33,6 +34,7 @@ namespace Teleopti.Ccc.Web.Core.Startup.VerifyLicense
 				var licenseService = licenseVerifier.LoadAndVerifyLicense();
 				LicenseProvider.ProvideLicenseActivator(licenseService);
 			}
+			return null;
 		}
 
 		public void Warning(string warning)

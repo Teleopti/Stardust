@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using AutoMapper;
 using Autofac;
 using Teleopti.Ccc.Domain.Collection;
@@ -18,7 +19,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Mapping
 			_container = container;
 		}
 
-		public void Execute()
+		public Task Execute()
 		{
 			Mapper.Initialize(c =>
 			                  	{
@@ -26,6 +27,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Mapping
 									c.ConstructServicesUsing(_container.Resolve);
 									_profiles.ForEach(c.AddProfile);
 			                  	});
+			return null;
 		}
 	}
 }

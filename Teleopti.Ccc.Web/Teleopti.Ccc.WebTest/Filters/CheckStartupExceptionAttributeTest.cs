@@ -12,12 +12,12 @@ namespace Teleopti.Ccc.WebTest.Filters
 	[TestFixture]
 	public class CheckStartupExceptionAttributeTest
 	{
-		private CheckStartupExceptionAttribute target;
+		private CheckStartupResultAttribute target;
 
 		[SetUp]
 		public void Setup()
 		{
-			target = new CheckStartupExceptionAttribute();
+			target = new CheckStartupResultAttribute();
 			ApplicationStartModule.ErrorAtStartup = null;
 		}
 
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.WebTest.Filters
 		[Test]
 		public void ShouldHaveLowestOrdeOfAll()
 		{
-			var definedAuthorizeAttributes = from type in typeof (CheckStartupExceptionAttribute).Assembly.GetTypes()
+			var definedAuthorizeAttributes = from type in typeof (CheckStartupResultAttribute).Assembly.GetTypes()
 			                                       where typeof (AuthorizeAttribute).IsAssignableFrom(type)
 			                                       select (AuthorizeAttribute) Activator.CreateInstance(type);
 			var targetAttributeExcluded = definedAuthorizeAttributes.Where(authorizeAttribute => authorizeAttribute.GetType() != target.GetType());
