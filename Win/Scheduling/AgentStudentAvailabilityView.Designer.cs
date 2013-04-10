@@ -30,7 +30,6 @@
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			this.ribbonControlAdv1 = new Syncfusion.Windows.Forms.Tools.RibbonControlAdv();
 			this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
 			this.checkBoxAdvNextDay = new Syncfusion.Windows.Forms.Tools.CheckBoxAdv();
 			this.outlookTimePickerTo = new Teleopti.Ccc.Win.Common.Controls.OutlookTimePicker();
@@ -39,35 +38,15 @@
 			this.labelFrom = new System.Windows.Forms.Label();
 			this.buttonAdvOk = new Syncfusion.Windows.Forms.ButtonAdv();
 			this.buttonAdvCancel = new Syncfusion.Windows.Forms.ButtonAdv();
+			this.ribbonControlAdv1 = new Syncfusion.Windows.Forms.Tools.RibbonControlAdv();
 			this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
-			((System.ComponentModel.ISupportInitialize)(this.ribbonControlAdv1)).BeginInit();
 			this.tableLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvNextDay)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.outlookTimePickerTo)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.outlookTimePickerFrom)).BeginInit();
+			((System.ComponentModel.ISupportInitialize)(this.ribbonControlAdv1)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
 			this.SuspendLayout();
-			// 
-			// ribbonControlAdv1
-			// 
-			this.ribbonControlAdv1.Location = new System.Drawing.Point(1, 0);
-			this.ribbonControlAdv1.MaximizeToolTip = "Maximize Ribbon";
-			this.ribbonControlAdv1.MenuButtonText = "";
-			this.ribbonControlAdv1.MenuButtonVisible = false;
-			this.ribbonControlAdv1.MinimizeToolTip = "Minimize Ribbon";
-			this.ribbonControlAdv1.Name = "ribbonControlAdv1";
-			// 
-			// ribbonControlAdv1.OfficeMenu
-			// 
-			this.ribbonControlAdv1.OfficeMenu.Name = "OfficeMenu";
-			this.ribbonControlAdv1.OfficeMenu.ShowItemToolTips = true;
-			this.ribbonControlAdv1.OfficeMenu.Size = new System.Drawing.Size(12, 65);
-			this.ribbonControlAdv1.QuickPanelVisible = false;
-			this.ribbonControlAdv1.SelectedTab = null;
-			this.ribbonControlAdv1.Size = new System.Drawing.Size(277, 33);
-			this.ribbonControlAdv1.SystemText.QuickAccessDialogDropDownName = "Start menu";
-			this.ribbonControlAdv1.TabIndex = 0;
-			this.ribbonControlAdv1.Text = "ribbonControlAdv1";
 			// 
 			// tableLayoutPanel1
 			// 
@@ -176,6 +155,27 @@
 			this.buttonAdvCancel.UseVisualStyle = true;
 			this.buttonAdvCancel.Click += new System.EventHandler(this.buttonAdvCancelClick);
 			// 
+			// ribbonControlAdv1
+			// 
+			this.ribbonControlAdv1.Location = new System.Drawing.Point(1, 0);
+			this.ribbonControlAdv1.MaximizeToolTip = "Maximize Ribbon";
+			this.ribbonControlAdv1.MenuButtonText = "";
+			this.ribbonControlAdv1.MenuButtonVisible = false;
+			this.ribbonControlAdv1.MinimizeToolTip = "Minimize Ribbon";
+			this.ribbonControlAdv1.Name = "ribbonControlAdv1";
+			// 
+			// ribbonControlAdv1.OfficeMenu
+			// 
+			this.ribbonControlAdv1.OfficeMenu.Name = "OfficeMenu";
+			this.ribbonControlAdv1.OfficeMenu.ShowItemToolTips = true;
+			this.ribbonControlAdv1.OfficeMenu.Size = new System.Drawing.Size(12, 65);
+			this.ribbonControlAdv1.QuickPanelVisible = false;
+			this.ribbonControlAdv1.SelectedTab = null;
+			this.ribbonControlAdv1.Size = new System.Drawing.Size(277, 33);
+			this.ribbonControlAdv1.SystemText.QuickAccessDialogDropDownName = "Start menu";
+			this.ribbonControlAdv1.TabIndex = 0;
+			this.ribbonControlAdv1.Text = "ribbonControlAdv1";
+			// 
 			// errorProvider1
 			// 
 			this.errorProvider1.BlinkStyle = System.Windows.Forms.ErrorBlinkStyle.NeverBlink;
@@ -198,12 +198,12 @@
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "xxStudentAvailability";
 			this.Load += new System.EventHandler(this.agentStudentAvailabilityViewLoad);
-			((System.ComponentModel.ISupportInitialize)(this.ribbonControlAdv1)).EndInit();
 			this.tableLayoutPanel1.ResumeLayout(false);
 			this.tableLayoutPanel1.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.checkBoxAdvNextDay)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.outlookTimePickerTo)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.outlookTimePickerFrom)).EndInit();
+			((System.ComponentModel.ISupportInitialize)(this.ribbonControlAdv1)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
 			this.ResumeLayout(false);
 

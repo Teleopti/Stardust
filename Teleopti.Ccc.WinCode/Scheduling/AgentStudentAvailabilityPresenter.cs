@@ -80,8 +80,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			{
 				startTime = availiabilityRestriction.StartTimeLimitation.StartTime;
 				endTime = availiabilityRestriction.EndTimeLimitation.EndTime;
-				if (startTime.HasValue && endTime.HasValue && startTime.Value > endTime.Value)
+
+				if (endTime.HasValue && endTime.Value.Days > 0)
 					endNextDay = true;
+				//if (startTime.HasValue && endTime.HasValue && startTime.Value > endTime.Value)
+				//	endNextDay = true;
 			}
 
 			_view.Update(startTime, endTime, endNextDay);
