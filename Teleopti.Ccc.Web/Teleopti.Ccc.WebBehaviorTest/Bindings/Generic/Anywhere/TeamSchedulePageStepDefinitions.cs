@@ -78,10 +78,32 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Browser.Current.SelectList(Find.BySelector("#team-selector")).SelectNoWait(teamName);
 		}
 
+		[When(@"I select skill '(.*)'")]
+		public void WhenISelectSkill(string name)
+		{
+			var skillDropDown = Browser.Current.Span(Find.BySelector("#skill-selector"));
+			EventualAssert.That(() => skillDropDown.Exists, Is.True);
+
+			var skillList = skillDropDown.List(Find.First());
+			EventualAssert.That(() => skillList.Exists, Is.True);
+
+			skillList.ListItem(Find.BySelector(string.Format(":contains('{0}')", name))).EventualClick();
+		}
+
 		[When(@"I select date '(.*)'")]
 		public void WhenISelectDate(DateTime date)
 		{
 			Retrying.Javascript(string.Format("test.callViewMethodWhenReady('teamschedule', 'setDateFromTest', '{0}');", date));
 		}
+
+		[Then(@"I should see metrics for skill '(.*)'")]
+		public void ThenIShouldSeeMetricsForSkill(string name)
+		{
+			var skillDropDown = Browser.Current.Span(Find.BySelector("#skill-selector"));
+			EventualAssert.That(() => skillDropDown.Exists, Is.True);
+			var selectedSkill = skillDropDown.Link(Find.First()).Span(Find.First());
+			EventualAssert.That(() => selectedSkill.InnerHtml.Contains(name), Is.True);
+		}
+
 	}
 }

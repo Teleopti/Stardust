@@ -124,6 +124,7 @@
     <Compile Include="Bindings\Generic\AbsenceStepDefinitions.cs" />
     <Compile Include="AsmStepDefinition.cs" />
     <Compile Include="Bindings\Generic\ActivityStepDefinitions.cs" />
+    <Compile Include="Bindings\Generic\ForecastStepDefinitions.cs" />
     <Compile Include="Data\Setups\Generic\ForecastConfigurable.cs" />
     <Compile Include="Bindings\Generic\Anywhere\PersonSchedulePageStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\SkillStepDefinitions.cs" />

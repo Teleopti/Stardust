@@ -197,9 +197,11 @@ define([
 				teamSchedule.Loading(true);
 
 				teamSchedule.SelectedDate(currentDate());
-				loadSkills({success: function() {
-					teamSchedule.SelectSkillById(currentSkillId());
-				}});
+				loadSkills({
+					success: function() {
+						teamSchedule.SelectSkillById(currentSkillId());
+					}
+				});
 
 				var deferred = $.Deferred();
 				var loadPersonsAndSchedules = function() {

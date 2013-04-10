@@ -58,8 +58,9 @@ Scenario: View staffing metrics
 	| StartTime      | 2013-04-09 09:00 |
 	| EndTime        | 2013-04-09 16:00 |
 	| Shift category | Day              |
-	And skill 'Direct Sales' is forecasted as
+	And there is a forecast with
 	| Field                  | Value            |
+	| Skill                  | Direct Sales     |
 	| Date                   | 2013-04-09       |
 	| Hours                  | 8                |
 	| ServiceLevelSeconds    | 20               |
@@ -79,6 +80,16 @@ Scenario: View staffing metrics
 
 Scenario: Remember skill selection when changing date
 	Given I have the role 'Anywhere Team Green'
+	And there is a forecast with
+	| Field | Value        |
+	| Skill | Direct Sales |
+	| Date  | 2013-04-09   |
+	| Hours | 8            |
+	And there is a forecast with
+	| Field | Value        |
+	| Skill | Direct Sales |
+	| Date  | 2013-04-10   |
+	| Hours | 8            |
 	And I view schedules for '2013-04-09'
 	When I select skill 'Direct Sales'
 	And I select date '2013-04-10'
@@ -88,6 +99,11 @@ Scenario: Remember skill selection when changing team
 	Given there is a team with
 	| Field | Value      |
 	| Name  | Team other |
+	And there is a forecast with
+	| Field | Value        |
+	| Skill | Direct Sales |
+	| Date  | 2013-04-09   |
+	| Hours | 8            |
 	And there is a role with
 	| Field                      | Value                         |
 	| Name                       | Anywhere Team Green And Other |
@@ -97,5 +113,5 @@ Scenario: Remember skill selection when changing team
 	And I have the role 'Anywhere Team Green And Other'
 	And I view schedules for '2013-04-09'
 	When I select skill 'Direct Sales'
-	And I change team to 'Team other'
+	And I select team 'Team other'
 	Then I should see metrics for skill 'Direct Sales'

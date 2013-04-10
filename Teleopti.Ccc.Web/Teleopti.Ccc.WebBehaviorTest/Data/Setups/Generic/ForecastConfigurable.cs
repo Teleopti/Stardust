@@ -4,11 +4,10 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
-using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
+namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 {
 	public class ForecastConfigurable : IDataSetup
 	{
