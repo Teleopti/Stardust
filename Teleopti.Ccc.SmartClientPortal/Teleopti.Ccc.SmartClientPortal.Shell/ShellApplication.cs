@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.SmartClientPortal.Shell
                 builder.RegisterModule(new PermissionsModule());
                 builder.RegisterModule(new RequestHistoryModule());
 							//hack to get old behavior work
-	            builder.Register(context => context.Resolve<ICurrentUnitOfWorkFactory>().LoggedOnUnitOfWorkFactory());
+	            builder.Register(context => context.Resolve<ICurrentUnitOfWorkFactory>().LoggedOnUnitOfWorkFactory()).ExternallyOwned().As<IUnitOfWorkFactory>();
 							builder.RegisterModule(new RepositoryModule() { ConstructorTypeToUse = typeof(IUnitOfWorkFactory) });
 							builder.RegisterType<CurrentUnitOfWorkFactory>().As<ICurrentUnitOfWorkFactory>().SingleInstance();
 							//////
