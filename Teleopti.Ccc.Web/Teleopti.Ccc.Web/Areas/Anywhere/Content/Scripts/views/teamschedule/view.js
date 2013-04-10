@@ -84,6 +84,20 @@ define([
 				}
 			});
 		};
+		
+		var loadSkills = function (options) {
+			$.ajax({
+				url: 'StaffingMetrics/AvailableSkills',
+				cache: false,
+				dataType: 'json',
+				data: {
+					date: teamSchedule.SelectedDate().toDate().toJSON()
+				},
+				success: function (data, textStatus, jqXHR) {
+					teamSchedule.SetSkills(data.Skills);
+				}
+			});
+		};
 
 		var loadTeams = function (options) {
 			$.ajax({
@@ -164,19 +178,18 @@ define([
 						return moment(date, 'YYYYMMDD');
 					}
 				};
-
 				teamSchedule.Loading(true);
 
 				teamSchedule.SelectedDate(currentDate());
+				loadSkills();
 
 				var deferred = $.Deferred();
-			    
 				var loadPersonsAndSchedules = function() {
 					teamSchedule.SelectedTeam(currentTeamId());
 					loadPersons({
 						success: function() {
 							loadSchedules({
-								success: function() {
+								success: function () {
 								    teamSchedule.Loading(false);
 								    deferred.resolve();
 								}

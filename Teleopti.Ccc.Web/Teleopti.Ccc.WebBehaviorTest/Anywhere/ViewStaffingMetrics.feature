@@ -4,7 +4,10 @@
 	I want to see the staffing metrics for skills
 
 Background:
-	Given there is an activity with
+	Given there is a team with
+	| Field | Value      |
+	| Name  | Team green |
+	And there is an activity with
 	| Field | Value |
 	| Name  | Phone |
 	And there is a skill with
@@ -32,6 +35,16 @@ Background:
 
 Scenario: View skill selection
 	Given I have the role 'Anywhere Team Green'
+	And there is a forecast with
+	| Field | Value        |
+	| Skill | Direct Sales |
+	| Date  | 2013-04-09   |
+	| Hours | 8            |
+	And there is a forecast with
+	| Field | Value         |
+	| Skill | Channel Sales |
+	| Date  | 2013-04-09    |
+	| Hours | 8             |
 	When I view schedules for '2013-04-09'
 	Then I should be able to select skills
 	| Skill         |

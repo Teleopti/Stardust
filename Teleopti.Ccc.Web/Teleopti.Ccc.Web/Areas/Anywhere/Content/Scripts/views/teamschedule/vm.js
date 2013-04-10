@@ -45,5 +45,31 @@ define([
             this.PreviousDay = function() {
                 self.SelectedDate(self.SelectedDate().add('d', -1));
             };
+
+	        
+            this.Skills = ko.observableArray();
+            this.SetSkills = function (skills) {
+            	self.Skills([]);
+	            if (skills.length > 0) {
+	            	self.Skills.push.apply(self.Skills, skills);
+		            self.SelectedSkill(skills[0]);
+	            }
+            };
+            this.SelectedSkill = ko.observable();
+            this.SelectSkill = function (skill) {
+            	self.SelectedSkill(skill);
+            };
+            this.SelectedSkillName = ko.computed(function () {
+            	var skill = self.SelectedSkill();
+	            if (!skill)
+		            return undefined;
+	            else
+		            return skill.Name;
+            });
+            this.ForcastedHours = ko.observable();
+            this.ScheduledHours = ko.observable();
+            this.DiffHours = ko.observable();
+            this.DiffPercentage = ko.observable();
+            this.ESL = ko.observable();
         };
     });

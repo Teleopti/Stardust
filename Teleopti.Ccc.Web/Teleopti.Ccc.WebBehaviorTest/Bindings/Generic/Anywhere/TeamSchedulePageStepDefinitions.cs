@@ -1,19 +1,13 @@
 using System;
-using System.Linq;
-using System.Threading;
 using NUnit.Framework;
-using SharpTestsEx;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
-using Teleopti.Ccc.WebBehaviorTest.Data;
-using Teleopti.Ccc.WebBehaviorTest.Pages.jQuery;
 using WatiN.Core;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 using Table = TechTalk.SpecFlow.Table;
-using TableRow = TechTalk.SpecFlow.TableRow;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 {
@@ -54,10 +48,28 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			var teams = table.CreateSet<TeamInfo>();
 			teams.ForEach(t => EventualAssert.That(() => select.Option(Find.BySelector(string.Format(":contains('{0}')", t.Team))).Exists, Is.True));
 		}
+
+		[Then(@"I should be able to select skills")]
+		public void ThenIShouldBeAbleToSelectSkills(Table table)
+		{
+			var skillDropDown = Browser.Current.Span(Find.BySelector("#skill-selector"));
+			EventualAssert.That(() => skillDropDown.Exists, Is.True);
+
+			var skillList = skillDropDown.List(Find.First());
+			EventualAssert.That(() => skillList.Exists, Is.True);
+
+			var skills = table.CreateSet<SkillInfo>();
+			skills.ForEach(s => EventualAssert.That(() => skillList.ListItem(Find.BySelector(string.Format(":contains('{0}')", s.Skill))).Exists, Is.True));
+		}
 		
 		public class TeamInfo
 		{
 			public string Team { get; set; }
+		}
+
+		public class SkillInfo
+		{
+			public string Skill { get; set; }
 		}
 
 		[When(@"I select team '(.*)'")]

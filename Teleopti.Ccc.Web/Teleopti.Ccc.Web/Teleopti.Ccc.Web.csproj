@@ -230,6 +230,7 @@
       <Link>Core\MessageBroker\TimeoutSettings.cs</Link>
     </Compile>
     <Compile Include="Areas\Anywhere\Controllers\PersonScheduleCommandController.cs" />
+    <Compile Include="Areas\Anywhere\Controllers\StaffingMetricsController.cs" />
     <Compile Include="Areas\Anywhere\Core\IPersonScheduleViewModelFactory.cs" />
     <Compile Include="Areas\Anywhere\Core\IPersonScheduleViewModelMapper.cs" />
     <Compile Include="Areas\Anywhere\Core\PersonScheduleData.cs" />
