@@ -10,8 +10,8 @@ namespace Teleopti.Ccc.Sdk.WcfService.LogOn
 				[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "dataSourceContainer")]
 				public void SetLicense(IDataSourceContainer dataSourceContainer)
         {
-            LicenseFactory factory = new LicenseFactory(new LicenseCache(), UnitOfWorkFactory.CurrentUnitOfWorkFactory());
-            factory.VerifyLicense();
+					LicenseFactory factory = new LicenseFactory(new LicenseCache());
+            factory.VerifyLicense(dataSourceContainer.DataSource.Application);
         }
     }
 }

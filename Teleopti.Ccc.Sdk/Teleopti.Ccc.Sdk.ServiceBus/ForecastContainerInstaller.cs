@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			builder.RegisterType<Statistic>().As<IStatistic>();
 			builder.RegisterType<ForecastClassesCreator>().As<IForecastClassesCreator>();
 		    builder.RegisterType<BudgetGroupAllowanceCalculator>().As<IBudgetGroupAllowanceCalculator>();
+            builder.RegisterType<BudgetGroupHeadCountSpecification>().As<IBudgetGroupHeadCountSpecification>();
         }
     }
 }

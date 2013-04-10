@@ -291,6 +291,6 @@ BEGIN
 END
 
 
-SELECT * FROM #result order by weekday_number
+SELECT * FROM #result order by weekday_number, period
 
 GO
