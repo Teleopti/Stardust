@@ -297,7 +297,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
             {
                 if (start.Minute != 0) start = start.AddMinutes(start.Minute * -1);
                 if (end.Minute != 0) end = end.AddMinutes(60 - end.Minute);
-                if (!start.Date.Equals(end.Date)) return new DateTimePeriod(TimeZoneHelper.ConvertToUtc(Model.StartDate), end.AddHours(1));
+                if (!start.Date.Equals(end.Date)) return new DateTimePeriod(TimeZoneHelper.ConvertToUtc(Model.StartDate, Model.TimeZone), end.AddHours(1));
             }
 
            
