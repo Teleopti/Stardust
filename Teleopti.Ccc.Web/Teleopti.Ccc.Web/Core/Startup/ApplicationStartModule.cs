@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 		private IContainerConfiguration _containerConfiguration = new ContainerConfiguration();
 		private bool _testMode;
 
-		public void HackForTest(IBootstrapper injectedBootstrapper, IContainerConfiguration injectedContainerConfiguration)
+		public void InjectForTest(IBootstrapper injectedBootstrapper, IContainerConfiguration injectedContainerConfiguration)
 		{
 			_bootstrapper = injectedBootstrapper;
 			_containerConfiguration = injectedContainerConfiguration;

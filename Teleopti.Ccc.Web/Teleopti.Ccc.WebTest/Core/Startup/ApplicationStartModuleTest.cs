@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using System.Web;
 using System.Collections.Generic;
 using Autofac;
@@ -14,64 +15,57 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 	[TestFixture]
 	public class ApplicationStartModuleTest
 	{
-		private ApplicationStartModule target;
-		private ApplicationStartModule target2;
-		private IBootstrapper _bootstrapper;
-		private containerConfForBootstrapperTasks containerConfiguration;
-		private MockRepository mocks;
-		private HttpApplication httpApplication;
-
-
-		[SetUp]
-		public void Startup()
-		{
-			target = new ApplicationStartModule();
-			target2 = new ApplicationStartModule();
-			mocks = new MockRepository();
-			_bootstrapper = mocks.StrictMock<IBootstrapper>();
-			containerConfiguration = new containerConfForBootstrapperTasks(new List<IBootstrapperTask>());
-			target.HackForTest(_bootstrapper, containerConfiguration);
-			target2.HackForTest(_bootstrapper, containerConfiguration);
-			httpApplication = mocks.DynamicMock<HttpApplication>();
-		}
-
 		[Test]
 		public void ShouldOnlyRunOncePerModuleType()
 		{
-			using (mocks.Record())
-			{
-				_bootstrapper.Run(containerConfiguration.Tasks);
-			}
-			using (mocks.Playback())
-			{
-				target.Init(httpApplication);
-				target2.Init(httpApplication);
-			}
-			ApplicationStartModule.ErrorAtStartup
-				.Should().Be.Null();
+			var httpApplication =  MockRepository.GenerateMock<HttpApplication>();
+			var bootstrapper = MockRepository.GenerateMock<IBootstrapper>();
+			var target = new ApplicationStartModule();
+			var target2 = new ApplicationStartModule();
+			target.InjectForTest(bootstrapper, new containerConfForBootstrapperTasks(new List<IBootstrapperTask>()));
+
+			target.Init(httpApplication);
+			target2.Init(httpApplication);
+
+			bootstrapper.AssertWasCalled(x => x.Run(null), o => o.IgnoreArguments().Repeat.Times(1));
 		}
 
 		[Test]
 		public void ShouldRecordException()
 		{
+			var httpApplication = MockRepository.GenerateMock<HttpApplication>();
+			var bootstrapper = MockRepository.GenerateMock<IBootstrapper>();
+			var target = new ApplicationStartModule();
+			target.InjectForTest(bootstrapper, new containerConfForBootstrapperTasks(new List<IBootstrapperTask>()));
 			var ex = new Exception();
-			using (mocks.Record())
-			{
-				_bootstrapper.Run(containerConfiguration.Tasks);
-				LastCall.Throw(ex);
-			}
-			using (mocks.Playback())
-			{
-				target.Init(httpApplication);
-				target2.Init(httpApplication); //should do nothing
-			}
-			ApplicationStartModule.ErrorAtStartup
-				.Should().Be.SameInstanceAs(ex);
+			bootstrapper.Stub(x => x.Run(null)).IgnoreArguments().Throw(ex);
+
+			target.Init(httpApplication);
+
+			ApplicationStartModule.ErrorAtStartup.Should().Be.SameInstanceAs(ex);
+		}
+
+		[Test]
+		public void ShouldRecordTasksReturned()
+		{
+			var httpApplication = MockRepository.GenerateMock<HttpApplication>();
+			var bootstrapper = MockRepository.GenerateMock<IBootstrapper>();
+			var tasks = new[] {new Task(() => { })};
+			bootstrapper.Stub(x => x.Run(null)).IgnoreArguments().Return(tasks);
+
+			var target = new ApplicationStartModule();
+			target.InjectForTest(bootstrapper, new containerConfForBootstrapperTasks(new List<IBootstrapperTask>()));
+
+			target.Init(httpApplication);
+
+			ApplicationStartModule.TasksFromStartup.Should().Have.SameValuesAs(tasks);
 		}
 
 		[Test]
 		public void ShouldDoNothingAtDispose()
 		{
+			var target = new ApplicationStartModule();
+			var target2 = new ApplicationStartModule();
 			target.Dispose();
 			target2.Dispose();
 		}
