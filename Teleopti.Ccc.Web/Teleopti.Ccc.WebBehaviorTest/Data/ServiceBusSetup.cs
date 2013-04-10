@@ -25,7 +25,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 				};
 			var path = possiblePaths.FirstOrDefault(Directory.Exists);
 			if (path == null)
-				throw new Exception("Service bus console host executable not found. Has it been built? And you may have to build the .Host project first aswell.");
+				throw new Exception(
+					"Service bus console host executable not found. Has it been built? And you may have to build the .Host project first aswell. Tried with paths: " +
+					string.Join(Environment.NewLine, possiblePaths));
 			return new DirectoryInfo(path).FullName;
 		}
 
