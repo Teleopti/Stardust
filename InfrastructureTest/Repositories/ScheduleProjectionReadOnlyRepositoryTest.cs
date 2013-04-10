@@ -151,5 +151,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			target.IsInitialized().Should().Be.False();
 		}
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "HeadCounts"), Test]
+        public void ShouldReturnNumberOfHeadCountsHavingAbsenceApproved()
+        {
+            var budgetGroupId = budgetGroup.Id.GetValueOrDefault();
+            var currentDate = new DateOnly(1800, 01, 01);
+            var headCounts = target.GetNumberOfAbsencesPerDayAndBudgetGroup(budgetGroupId, currentDate);
+            Assert.AreEqual(headCounts,0);
+        }
 	}
 }

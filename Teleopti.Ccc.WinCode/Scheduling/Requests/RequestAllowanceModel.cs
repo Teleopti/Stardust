@@ -165,6 +165,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
                 var usedTotalAbsences = absenceDict.Sum(a => a.Value);
                 var absoluteDiff = allowance - usedTotalAbsences;
                 var relativeDiff = new Percent(usedTotalAbsences / allowance);
+                var headCounts = getHeadCounts(SelectedBudgetGroup, currentDate);
+                
                 var detailModel = new BudgetAbsenceAllowanceDetailModel
                                       {
                                           Date = new DateDayModel(currentDate),
@@ -173,9 +175,17 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
                                           UsedTotalAbsences = usedTotalAbsences,
                                           AbsoluteDifference = absoluteDiff,
                                           RelativeDifference = relativeDiff,
+                                          TotalHeadCounts = headCounts
                                       };
                 VisibleModel.Add(detailModel);
             }
+        }
+
+        private int getHeadCounts(IBudgetGroup selectedBudgetGroup, DateOnly currentDate)
+        {
+            // Need to check CurrentDateUTC...
+            //var currentDateUtc = TimeZoneHelper.ConvertToUtc(currentDate, selectedBudgetGroup.TimeZone);
+            return _scheduleProjectionReadOnlyRepository.GetNumberOfAbsencesPerDayAndBudgetGroup(selectedBudgetGroup.Id.GetValueOrDefault(), currentDate);
         }
 
         private void loadAbsencesInBudgetGroup()
