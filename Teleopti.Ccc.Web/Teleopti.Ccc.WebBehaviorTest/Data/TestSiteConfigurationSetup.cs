@@ -41,13 +41,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 				_server.ShutDown();
 		}
 
-		public static void RestartApplication()
+		public static void RecycleApplication()
 		{
-			// just to make sure we'r not on the same second.
-			// Not even sure this is required to make the touch valid at all times
-			Thread.Sleep(1010);
-			// touch the nhib file in the bin folder to make the app restart
-			File.SetLastWriteTimeUtc(TargetTestDataNHibFile, DateTime.UtcNow);
+			var file = Path.Combine(Paths.WebBinPath(), "touch");
+			File.WriteAllText(file, "can't touch this");
+			File.Delete(file);
 		}
 
 		private static void GenerateAndWriteTestDataNHibFileFromTemplate()
