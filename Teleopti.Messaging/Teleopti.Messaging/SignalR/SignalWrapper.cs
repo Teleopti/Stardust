@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Client;
@@ -125,6 +126,7 @@ namespace Teleopti.Messaging.SignalR
 			try
 			{
 				Exception exception = null;
+				_hubConnection.Credentials = CredentialCache.DefaultNetworkCredentials;
 				var startTask = _hubConnection.Start();
 				startTask.ContinueWith(t =>
 				                       	{
@@ -135,7 +137,7 @@ namespace Teleopti.Messaging.SignalR
 				                       		}
 				                       	}, TaskContinuationOptions.OnlyOnFaulted);
 				
-				if (!startTask.Wait(TimeSpan.FromSeconds(60)))
+				if (!startTask.Wait(TimeSpan.FromSeconds(30)))
 				{
 					exception = new InvalidOperationException("Could not start message broker client within 30 seconds.");
 				}
