@@ -56,7 +56,6 @@
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>
     </DocumentationFile>
-    <RunCodeAnalysis>false</RunCodeAnalysis>
     <CodeAnalysisRules>
     </CodeAnalysisRules>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>

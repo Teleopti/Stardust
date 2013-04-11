@@ -59,7 +59,6 @@
     <CodeAnalysisRules>
     </CodeAnalysisRules>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
-    <RunCodeAnalysis>false</RunCodeAnalysis>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <CodeAnalysisIgnoreGeneratedCode>true</CodeAnalysisIgnoreGeneratedCode>
   </PropertyGroup>
