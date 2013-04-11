@@ -59,6 +59,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			var contents = File.ReadAllText(ConsoleHostConfigSourcePath());
 			contents = ReplaceTag(contents, "ConfigPath", Paths.WebBinPath());
 			contents = ReplaceTag(contents, "MessageBroker", TestSiteConfigurationSetup.Url.ToString());
+			contents = ReplaceTag(contents, "MessagesOnBoot", "false");
 			contents = ReplaceTag(contents, "AnalyticsDB", new SqlConnectionStringBuilder(IniFileInfo.ConnectionStringMatrix).InitialCatalog);
 			File.WriteAllText(ConsoleHostConfigTargetPath(), contents);
 		}

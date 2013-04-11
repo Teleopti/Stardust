@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using Rhino.ServiceBus;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -19,6 +20,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
 		public void Check()
 		{
+			var messagesOnBoot = true;
+			if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["MessagesOnBoot"]))
+				bool.TryParse(ConfigurationManager.AppSettings["MessagesOnBoot"], out messagesOnBoot);
+			if (!messagesOnBoot)
+				return;
+
 			var bus = _serviceBusFinder.Invoke();
 
 			foreach (var dataSource in StateHolderReader.Instance.StateReader.ApplicationScopeData.RegisteredDataSourceCollection.ToList())
