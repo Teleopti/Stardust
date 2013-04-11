@@ -15,6 +15,20 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 	[TestFixture]
 	public class ApplicationStartModuleTest
 	{
+		[SetUp]
+		public void Setup()
+		{
+			ApplicationStartModule.ErrorAtStartup = null;
+			ApplicationStartModule.TasksFromStartup = null;
+		}
+
+		[TearDown]
+		public void TearDown()
+		{
+			ApplicationStartModule.ErrorAtStartup = null;
+			ApplicationStartModule.TasksFromStartup = null;
+		}
+
 		[Test]
 		public void ShouldOnlyRunOncePerModuleType()
 		{

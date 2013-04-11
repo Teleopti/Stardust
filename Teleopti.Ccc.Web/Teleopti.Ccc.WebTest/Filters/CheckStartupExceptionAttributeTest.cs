@@ -22,6 +22,13 @@ namespace Teleopti.Ccc.WebTest.Filters
 			ApplicationStartModule.TasksFromStartup = null;
 		}
 
+		[TearDown]
+		public void TearDown()
+		{
+			ApplicationStartModule.ErrorAtStartup = null;
+			ApplicationStartModule.TasksFromStartup = null;
+		}
+
 		//todo: remarked for now - to expensive to test
 		//[Test]
 		//public void ShouldPassThroughIfNoException()
