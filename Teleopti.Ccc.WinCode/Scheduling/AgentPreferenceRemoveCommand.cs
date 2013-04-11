@@ -2,7 +2,12 @@
 
 namespace Teleopti.Ccc.WinCode.Scheduling
 {
-	public class AgentPreferenceRemoveCommand : IExecutableCommand, ICanExecute
+	public interface IAgentPreferenceRemoveCommand : IExecutableCommand, ICanExecute
+	{
+		//
+	}
+
+	public class AgentPreferenceRemoveCommand : IAgentPreferenceRemoveCommand
 	{
 		private readonly IScheduleDay _scheduleDay;
  

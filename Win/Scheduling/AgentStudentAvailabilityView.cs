@@ -26,11 +26,21 @@ namespace Teleopti.Ccc.Win.Scheduling
 			get{return _isDirty ? _presenter.ScheduleDay : null;}
 		}
 
-		public void Update(TimeSpan? startTime, TimeSpan? endTime, bool endNextDay)
+		public void Update(TimeSpan? startTime, TimeSpan? endTime)
 		{
 			outlookTimePickerFrom.SetTimeValue(startTime);
+
+			if (endTime.HasValue && endTime.Value.Days > 0)
+			{
+				endTime = endTime.Value.Subtract(TimeSpan.FromDays(1));
+				checkBoxAdvNextDay.Checked = true;
+			}
+			else
+			{
+				checkBoxAdvNextDay.Checked = false;
+			}
+
 			outlookTimePickerTo.SetTimeValue(endTime);
-			checkBoxAdvNextDay.Checked = endNextDay;
 		}
 
 		private void agentStudentAvailabilityViewLoad(object sender, EventArgs e)
@@ -42,7 +52,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			clearTimeErrorMessages();
 
-			var commandToExecute = _presenter.CommandToExecute(outlookTimePickerFrom.TimeValue(), outlookTimePickerTo.TimeValue(), checkBoxAdvNextDay.Checked, _dayCreator);
+			var startTime = outlookTimePickerFrom.TimeValue();
+			var endTime = outlookTimePickerTo.TimeValue();
+			if (checkBoxAdvNextDay.Checked && endTime.HasValue)
+				endTime = endTime.Value.Add(TimeSpan.FromDays(1));
+
+			var commandToExecute = _presenter.CommandToExecute(startTime, endTime, _dayCreator);
 
 			if (commandToExecute == AgentStudentAvailabilityExecuteCommand.Remove)
 			{
@@ -57,7 +72,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			if (commandToExecute == AgentStudentAvailabilityExecuteCommand.Add)
 			{
-				var addCommand = new AgentStudentAvailabilityAddCommand(_presenter.ScheduleDay, outlookTimePickerFrom.TimeValue(), outlookTimePickerTo.TimeValue(), checkBoxAdvNextDay.Checked, _dayCreator);
+				var addCommand = new AgentStudentAvailabilityAddCommand(_presenter.ScheduleDay, startTime, endTime, _dayCreator);
 				_presenter.Add(addCommand);
 				_isDirty = true;
 				Hide();
@@ -66,7 +81,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			if (commandToExecute == AgentStudentAvailabilityExecuteCommand.Edit)
 			{
-				var editCommand = new AgentStudentAvailabilityEditCommand(_presenter.ScheduleDay, outlookTimePickerFrom.TimeValue(), outlookTimePickerTo.TimeValue(), checkBoxAdvNextDay.Checked, _dayCreator);
+				var editCommand = new AgentStudentAvailabilityEditCommand(_presenter.ScheduleDay, startTime, endTime, _dayCreator);
 				_presenter.Edit(editCommand);
 				_isDirty = true;
 				Hide();
@@ -84,9 +99,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private bool validateTimes()
 		{
+			var startTime = outlookTimePickerFrom.TimeValue();
+			var endTime = outlookTimePickerTo.TimeValue();
+			if (checkBoxAdvNextDay.Checked && endTime.HasValue)
+				endTime = endTime.Value.Add(TimeSpan.FromDays(1));
+
 			bool startTimeError;
 			bool endTimeError;
-			var result = _dayCreator.CanCreate(outlookTimePickerFrom.TimeValue(), outlookTimePickerTo.TimeValue(), checkBoxAdvNextDay.Checked, out startTimeError, out endTimeError);
+			var result = _dayCreator.CanCreate(startTime, endTime,  out startTimeError, out endTimeError);
 
 			if (!result && startTimeError != endTimeError)
 			{

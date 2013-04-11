@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		private IPerson _person;
 		private DateOnly _dateOnly;
 		private IPreferenceRestriction _preferenceRestriction;
+		private IAgentPreferenceDayCreator _dayCreator;
 
 		[SetUp]
 		public void Setup()
@@ -36,6 +37,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_dateOnly = new DateOnly(2013,1,1);
 			_preferenceRestriction = new PreferenceRestriction();
 			_preferenceDay = new PreferenceDay(_person, _dateOnly, _preferenceRestriction);
+			_dayCreator = _mock.StrictMock<IAgentPreferenceDayCreator>();
 
 		}
 
@@ -198,6 +200,87 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			{
 				_presenter.UpdateView();
 			}	
+		}
+
+		[Test]
+		public void ShouldRemoveWhenExistingAndAllEmpty()
+		{
+			var result = new AgentPreferenceCanCreateResult();
+			result.Result = false;
+			result.EmptyError = true;
+
+			using (_mock.Record())
+			{
+				Expect.Call(_scheduleDay.PersistableScheduleDataCollection()).Return(new ReadOnlyCollection<IPersistableScheduleData>(new List<IPersistableScheduleData> { _preferenceDay }));
+				Expect.Call(_dayCreator.CanCreate(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null)).Return(result);
+			}
+
+			using (_mock.Playback())
+			{
+				var toExecute = _presenter.CommandToExecute(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, _dayCreator);
+				Assert.AreEqual(AgentPreferenceExecuteCommand.Remove, toExecute);
+			}
+		}
+
+		[Test]
+		public void ShouldAddWhenNoExisting()
+		{
+			var result = new AgentPreferenceCanCreateResult();
+			result.Result = true;
+			var shiftCategory = new ShiftCategory("shiftCategory");
+
+			using (_mock.Record())
+			{
+				Expect.Call(_scheduleDay.PersistableScheduleDataCollection()).Return(new ReadOnlyCollection<IPersistableScheduleData>(new List<IPersistableScheduleData> ()));
+				Expect.Call(_dayCreator.CanCreate(shiftCategory, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null)).Return(result);
+			}
+
+			using (_mock.Playback())
+			{
+				var toExecute = _presenter.CommandToExecute(shiftCategory, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, _dayCreator);
+				Assert.AreEqual(AgentPreferenceExecuteCommand.Add, toExecute);
+			}
+		}
+
+		[Test]
+		public void ShouldEditWhenExisting()
+		{
+			var result = new AgentPreferenceCanCreateResult();
+			result.Result = true;
+			var shiftCategory = new ShiftCategory("shiftCategory");
+
+			using (_mock.Record())
+			{
+				Expect.Call(_scheduleDay.PersistableScheduleDataCollection()).Return(new ReadOnlyCollection<IPersistableScheduleData>(new List<IPersistableScheduleData>{_preferenceDay}));
+				Expect.Call(_dayCreator.CanCreate(shiftCategory, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null)).Return(result);
+			}
+
+			using (_mock.Playback())
+			{
+				var toExecute = _presenter.CommandToExecute(shiftCategory, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, _dayCreator);
+				Assert.AreEqual(AgentPreferenceExecuteCommand.Edit, toExecute);
+			}
+		}
+
+		[Test]
+		public void ShouldNoneWhenNotValidData()
+		{
+			var result = new AgentPreferenceCanCreateResult();
+			result.Result = false;
+			result.StartTimeMinError = true;
+			result.StartTimeMaxError = true;
+
+			using (_mock.Record())
+			{
+				Expect.Call(_scheduleDay.PersistableScheduleDataCollection()).Return(new ReadOnlyCollection<IPersistableScheduleData>(new List<IPersistableScheduleData>()));
+				Expect.Call(_dayCreator.CanCreate(null, null, null, null, TimeSpan.FromHours(2), TimeSpan.FromHours(1), null, null, null, null, null, null, null, null, null, null)).Return(result);
+			}
+
+			using (_mock.Playback())
+			{
+				var toExecute = _presenter.CommandToExecute(null, null, null, null, TimeSpan.FromHours(2), TimeSpan.FromHours(1), null, null, null, null, null, null, null, null, null, null, _dayCreator);
+				Assert.AreEqual(AgentPreferenceExecuteCommand.None, toExecute);
+			}
 		}
 	}
 }

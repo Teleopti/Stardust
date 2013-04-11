@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
 			using (_mock.Playback())
 			{
-				var result = _target.Create(_scheduleDay, startTime, endTime, false);
+				var result = _target.Create(_scheduleDay, startTime, endTime);
 				Assert.IsNotNull(result);
 				var restriction = result.RestrictionCollection.FirstOrDefault();
 				Assert.IsNotNull(restriction);
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		public void ShouldCreateWhenEndIsOnNextDay()
 		{
 			var startTime = TimeSpan.FromHours(8);
-			var endTime = TimeSpan.FromHours(7);
+			var endTime = TimeSpan.FromHours(25);
 
 			using (_mock.Record())
 			{
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
 			using (_mock.Playback())
 			{
-				var result = _target.Create(_scheduleDay, startTime, endTime, true);
+				var result = _target.Create(_scheduleDay, startTime, endTime);
 				Assert.IsNotNull(result);
 			}
 		}
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			var startTime = TimeSpan.FromHours(8);
 			var endTime = TimeSpan.FromHours(8);
 
-			var result = _target.Create(_scheduleDay, startTime, endTime, false);
+			var result = _target.Create(_scheduleDay, startTime, endTime);
 			Assert.IsNull(result);
 	
 		}
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		[Test]
 		public void ShouldNotCreateWhenNoStartAndEndTime()
 		{
-			var result = _target.Create(_scheduleDay, null, null, false);
+			var result = _target.Create(_scheduleDay, null, null);
 			Assert.IsNull(result);	
 		}
 
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			bool startTimeError;
 			bool endTimeError;
 
-			var result = _target.CanCreate(null, TimeSpan.FromHours(1), false, out startTimeError, out endTimeError);
+			var result = _target.CanCreate(null, TimeSpan.FromHours(1), out startTimeError, out endTimeError);
 			Assert.IsFalse(result);
 			Assert.IsTrue(startTimeError);
 		}
@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			bool startTimeError;
 			bool endTimeError;
 
-			var result = _target.CanCreate(TimeSpan.FromHours(1), null, false, out startTimeError, out endTimeError);
+			var result = _target.CanCreate(TimeSpan.FromHours(1), null, out startTimeError, out endTimeError);
 			Assert.IsFalse(result);
 			Assert.IsTrue(endTimeError);
 		}
@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			bool startTimeError;
 			bool endTimeError;
 
-			var result = _target.CanCreate(null, null, false, out startTimeError, out endTimeError);
+			var result = _target.CanCreate(null, null, out startTimeError, out endTimeError);
 			Assert.IsFalse(result);
 			Assert.IsTrue(startTimeError);
 			Assert.IsTrue(endTimeError);
@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		[Test, ExpectedException(typeof(ArgumentNullException))]
 		public void ShouldThrowExceptionOnNullScheduleDay()
 		{
-			_target.Create(null, null, null, false);
+			_target.Create(null, null, null);
 		}
 	}
 }

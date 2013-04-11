@@ -8,6 +8,14 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling
 {
+	public enum AgentPreferenceExecuteCommand
+	{
+		Add,
+		Edit,
+		Remove,
+		None
+	}
+
 	public class AgentPreferencePresenter
 	{
 		private readonly IAgentPreferenceView _view;
@@ -27,6 +35,32 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		public IScheduleDay ScheduleDay
 		{
 			get { return _scheduleDay; }
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
+		public void Remove(IAgentPreferenceRemoveCommand removeCommand)
+		{
+			if (removeCommand == null) throw new ArgumentNullException("removeCommand");
+
+			removeCommand.Execute();
+			UpdateView();
+		}
+
+		public void Add(IAgentPreferenceAddCommand addCommand)
+		{
+			if (addCommand == null) throw new ArgumentNullException("addCommand");
+
+			addCommand.Execute();
+			UpdateView();
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
+		public void Edit(IAgentPreferenceEditCommand editCommand)
+		{
+			if (editCommand == null) throw new ArgumentNullException("editCommand");
+
+			editCommand.Execute();
+			UpdateView();
 		}
 
 		public void UpdateView()
@@ -112,6 +146,31 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				_view.ClearDayOff();
 				_view.ClearActivity();	
 			}	
-		}	
+		}
+
+		public AgentPreferenceExecuteCommand CommandToExecute(IShiftCategory shiftCategory, IAbsence absence, IDayOffTemplate dayOffTemplate, IActivity activity, TimeSpan? minStart, TimeSpan? maxStart,
+									TimeSpan? minEnd, TimeSpan? maxEnd, TimeSpan? minLength, TimeSpan? maxLength,
+									TimeSpan? minStartActivity, TimeSpan? maxStartActivity, TimeSpan? minEndActivity, TimeSpan? maxEndActivity,
+									TimeSpan? minLengthActivity, TimeSpan? maxLengthActivity, IAgentPreferenceDayCreator dayCreator)
+		{
+			if (dayCreator == null) throw new ArgumentNullException("dayCreator");
+
+			var preferenceDay = _scheduleDay.PersistableScheduleDataCollection().OfType<IPreferenceDay>().FirstOrDefault();
+
+			var canCreate = dayCreator.CanCreate(shiftCategory, absence, dayOffTemplate, activity, minStart, maxStart, minEnd,
+			                                     maxEnd, minLength, maxLength, minStartActivity, maxStartActivity, minEndActivity,
+			                                     maxEndActivity, minLengthActivity, maxLengthActivity);
+
+			if (preferenceDay == null && canCreate.Result)
+				return AgentPreferenceExecuteCommand.Add;
+			
+			if(preferenceDay != null && canCreate.Result)
+				return AgentPreferenceExecuteCommand.Edit;
+
+			if(preferenceDay != null && !canCreate.Result && canCreate.EmptyError)
+				return AgentPreferenceExecuteCommand.Remove;
+
+			return AgentPreferenceExecuteCommand.None;
+		}
 	}
 }

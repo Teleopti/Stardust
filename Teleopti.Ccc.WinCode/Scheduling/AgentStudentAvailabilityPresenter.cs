@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		void Remove(IAgentStudentAvailabilityRemoveCommand removeCommand);
 		void UpdateView();
 		IScheduleDay ScheduleDay { get; }
-		AgentStudentAvailabilityExecuteCommand CommandToExecute(TimeSpan? startTime, TimeSpan? endTime, bool endNextDay, IAgentStudentAvailabilityDayCreator dayCreator);
+		AgentStudentAvailabilityExecuteCommand CommandToExecute(TimeSpan? startTime, TimeSpan? endTime, IAgentStudentAvailabilityDayCreator dayCreator);
 	}
 
 	public class AgentStudentAvailabilityPresenter : IAgentStudentAvailabilityPresenter
@@ -73,31 +73,25 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		{
 			TimeSpan? startTime = null;
 			TimeSpan? endTime = null;
-			bool endNextDay = false;
 
 			var availiabilityRestriction = _scheduleDay.PersistableScheduleDataCollection().OfType<IStudentAvailabilityDay>().Select(studentAvailabilityDay => studentAvailabilityDay.RestrictionCollection.FirstOrDefault()).FirstOrDefault(restriction => restriction != null);
 			if (availiabilityRestriction != null)
 			{
 				startTime = availiabilityRestriction.StartTimeLimitation.StartTime;
-				endTime = availiabilityRestriction.EndTimeLimitation.EndTime;
-
-				if (endTime.HasValue && endTime.Value.Days > 0)
-					endNextDay = true;
-				//if (startTime.HasValue && endTime.HasValue && startTime.Value > endTime.Value)
-				//	endNextDay = true;
+				endTime = availiabilityRestriction.EndTimeLimitation.EndTime;	
 			}
 
-			_view.Update(startTime, endTime, endNextDay);
+			_view.Update(startTime, endTime);
 		}
 
-		public AgentStudentAvailabilityExecuteCommand CommandToExecute(TimeSpan? startTime, TimeSpan? endTime, bool endNextDay, IAgentStudentAvailabilityDayCreator dayCreator)
+		public AgentStudentAvailabilityExecuteCommand CommandToExecute(TimeSpan? startTime, TimeSpan? endTime, IAgentStudentAvailabilityDayCreator dayCreator)
 		{
 			if(dayCreator == null) throw new ArgumentNullException("dayCreator");
 
 			var studentAvailabilityday = _scheduleDay.PersistableScheduleDataCollection().OfType<IStudentAvailabilityDay>().FirstOrDefault();
 			bool startError;
 			bool endError;
-			var canCreate = dayCreator.CanCreate(startTime, endTime, endNextDay, out startError, out endError);
+			var canCreate = dayCreator.CanCreate(startTime, endTime, out startError, out endError);
 			
 			if (studentAvailabilityday != null && !canCreate && startError && endError)
 				return AgentStudentAvailabilityExecuteCommand.Remove;

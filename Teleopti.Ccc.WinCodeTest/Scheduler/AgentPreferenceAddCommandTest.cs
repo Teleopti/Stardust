@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			//_dayOffTemplate = new DayOffTemplate(new Description("dayOffTemplate"));
 			//_activity = new Activity("activity");
 			_preferenceDayCreator = _mock.StrictMock<IAgentPreferenceDayCreator>();
-			_target = new AgentPreferenceAddCommand(_scheduleDay, null, null, null, null, minStart, maxStart, minEnd, maxEnd, minLength, maxLength, false, _preferenceDayCreator, null, null, null, null, null, null);
+			_target = new AgentPreferenceAddCommand(_scheduleDay, null, null, null, null, minStart, maxStart, minEnd, maxEnd, minLength, maxLength,  null, null, null, null, null, null, _preferenceDayCreator);
 			_preferenceDay = _mock.StrictMock<IPreferenceDay>();
 			
 		}
@@ -59,8 +59,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				var result = new AgentPreferenceCanCreateResult();
 				result.Result = true;
 				Expect.Call(_scheduleDay.PersistableScheduleDataCollection()).Return(new ReadOnlyCollection<IPersistableScheduleData>(new List<IPersistableScheduleData>()));
-				Expect.Call(_preferenceDayCreator.CanCreate(null, null, null, null, minStart, maxStart, minEnd, maxEnd, minLength, maxLength, false, null, null, null, null, null, null)).Return(result);
-				Expect.Call(_preferenceDayCreator.Create(_scheduleDay, null, null, null, null, minStart, maxStart, minEnd, maxEnd, minLength, maxLength, false, null, null, null, null, null, null)).Return(_preferenceDay);
+				Expect.Call(_preferenceDayCreator.CanCreate(null, null, null, null, minStart, maxStart, minEnd, maxEnd, minLength, maxLength, null, null, null, null, null, null)).Return(result);
+				Expect.Call(_preferenceDayCreator.Create(_scheduleDay, null, null, null, null, minStart, maxStart, minEnd, maxEnd, minLength, maxLength, null, null, null, null, null, null)).Return(_preferenceDay);
 				Expect.Call(() => _scheduleDay.Add(_preferenceDay));
 			}
 
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				var result = new AgentPreferenceCanCreateResult();
 				result.Result = false;
 				Expect.Call(_scheduleDay.PersistableScheduleDataCollection()).Return(new ReadOnlyCollection<IPersistableScheduleData>(new List<IPersistableScheduleData>()));
-				Expect.Call(_preferenceDayCreator.CanCreate(null, null, null, null, minStart, maxStart, minEnd, maxEnd, minLength, maxLength, false, null, null, null, null, null, null)).Return(result);
+				Expect.Call(_preferenceDayCreator.CanCreate(null, null, null, null, minStart, maxStart, minEnd, maxEnd, minLength, maxLength, null, null, null, null, null, null)).Return(result);
 			}
 
 			using (_mock.Playback())

@@ -7,20 +7,20 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 {
 	public interface IAgentStudentAvailabilityDayCreator
 	{
-		IStudentAvailabilityDay Create(IScheduleDay scheduleDay, TimeSpan? startTime, TimeSpan? endTime, bool endNextDay);
+		IStudentAvailabilityDay Create(IScheduleDay scheduleDay, TimeSpan? startTime, TimeSpan? endTime);
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "3#"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "4#")]
-		bool CanCreate(TimeSpan? startTime, TimeSpan? endTime, bool endNextDay, out bool startTimeError, out bool endTimeError);
+		bool CanCreate(TimeSpan? startTime, TimeSpan? endTime, out bool startTimeError, out bool endTimeError);
 	}
 
 	public class AgentStudentAvailabilityDayCreator : IAgentStudentAvailabilityDayCreator
 	{
-		public IStudentAvailabilityDay Create(IScheduleDay scheduleDay, TimeSpan? startTime, TimeSpan? endTime, bool endNextDay)
+		public IStudentAvailabilityDay Create(IScheduleDay scheduleDay, TimeSpan? startTime, TimeSpan? endTime)
 		{
 			if(scheduleDay == null) throw new ArgumentNullException("scheduleDay");
 
 			bool startTimeError;
 			bool endTimeError;
-			if (!CanCreate(startTime, endTime, endNextDay, out startTimeError, out endTimeError)) return null;
+			if (!CanCreate(startTime, endTime, out startTimeError, out endTimeError)) return null;
 
 			var restriction = new StudentAvailabilityRestriction();
 			restriction.StartTimeLimitation = new StartTimeLimitation(startTime, null);
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			return studentAvailabilityDay;
 		}
 
-		public bool CanCreate(TimeSpan? startTime, TimeSpan? endTime, bool endNextDay, out bool startTimeError, out bool endTimeError)
+		public bool CanCreate(TimeSpan? startTime, TimeSpan? endTime, out bool startTimeError, out bool endTimeError)
 		{
 			if (startTime == null && endTime == null)
 			{
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				return false;	
 			}
 				
-			if (startTime != null && endTime != null && endNextDay == false)
+			if (startTime != null && endTime != null)
 			{
 				if (startTime.Value >= endTime.Value)
 				{

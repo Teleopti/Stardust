@@ -20,7 +20,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private readonly TimeSpan? _maxEnd;
 		private readonly TimeSpan? _minLength;
 		private readonly TimeSpan? _maxLength;
-		private readonly bool _endNextDay;
 		private readonly IAgentPreferenceDayCreator _agentPreferenceDayCreator;
 		private readonly TimeSpan? _minStartActivity;
 		private readonly TimeSpan? _maxStartActivity;
@@ -29,10 +28,10 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private readonly TimeSpan? _minLengthActivity;
 		private readonly TimeSpan? _maxLengthActivity;
 
-		public AgentPreferenceAddCommand(IScheduleDay scheduleDay, IShiftCategory shiftCategory, IAbsence absence, IDayOffTemplate dayOffTemplate, IActivity activity, TimeSpan? minStart, TimeSpan? maxStart, TimeSpan? minEnd, TimeSpan? maxEnd, TimeSpan? minLength, TimeSpan? maxLength, bool endNextDay, IAgentPreferenceDayCreator agentPreferenceDayCreator,
+		public AgentPreferenceAddCommand(IScheduleDay scheduleDay, IShiftCategory shiftCategory, IAbsence absence, IDayOffTemplate dayOffTemplate, IActivity activity, TimeSpan? minStart, TimeSpan? maxStart, TimeSpan? minEnd, TimeSpan? maxEnd, TimeSpan? minLength, TimeSpan? maxLength,
 												  TimeSpan? minStartActivity, TimeSpan? maxStartActivity,
 												  TimeSpan? minEndActivity, TimeSpan? maxEndActivity,
-												  TimeSpan? minLengthActivity, TimeSpan? maxLengthActivity)
+												  TimeSpan? minLengthActivity, TimeSpan? maxLengthActivity, IAgentPreferenceDayCreator agentPreferenceDayCreator)
 		{
 			_scheduleDay = scheduleDay;
 			_shiftCategory = shiftCategory;
@@ -45,7 +44,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			_maxEnd = maxEnd;
 			_minLength = minLength;
 			_maxLength = maxLength;
-			_endNextDay = endNextDay;
 			_agentPreferenceDayCreator = agentPreferenceDayCreator;
 			_minStartActivity = minStartActivity;
 			_maxStartActivity = maxStartActivity;
@@ -59,7 +57,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		{
 			if (CanExecute())
 			{
-				var preferenceDay = _agentPreferenceDayCreator.Create(_scheduleDay, _shiftCategory, _absence, _dayOffTemplate, _activity, _minStart, _maxStart, _minEnd, _maxEnd, _minLength, _maxLength, _endNextDay, _minStartActivity, _maxStartActivity, _minEndActivity, _maxEndActivity, _minLengthActivity, _maxLengthActivity);
+				var preferenceDay = _agentPreferenceDayCreator.Create(_scheduleDay, _shiftCategory, _absence, _dayOffTemplate, _activity, _minStart, _maxStart, _minEnd, _maxEnd, _minLength, _maxLength, _minStartActivity, _maxStartActivity, _minEndActivity, _maxEndActivity, _minLengthActivity, _maxLengthActivity);
 				if (preferenceDay != null)
 					_scheduleDay.Add(preferenceDay);
 			}
@@ -72,7 +70,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				if (persistableScheduleData is IPreferenceDay) return false;
 			}
 
-			var result = _agentPreferenceDayCreator.CanCreate(_shiftCategory, _absence, _dayOffTemplate, _activity, _minStart, _maxStart, _minEnd, _maxEnd, _minLength, _maxLength, _endNextDay, _minStartActivity, _maxStartActivity, _minEndActivity, _maxEndActivity, _minLengthActivity, _maxLengthActivity);
+			var result = _agentPreferenceDayCreator.CanCreate(_shiftCategory, _absence, _dayOffTemplate, _activity, _minStart, _maxStart, _minEnd, _maxEnd, _minLength, _maxLength, _minStartActivity, _maxStartActivity, _minEndActivity, _maxEndActivity, _minLengthActivity, _maxLengthActivity);
 			return result.Result;
 		}
 	}

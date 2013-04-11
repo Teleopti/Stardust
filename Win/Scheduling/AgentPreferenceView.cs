@@ -28,6 +28,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private readonly IList<IShiftCategory> _shiftCategories;
 		private readonly IList<IAbsence> _absences;
 		private readonly IList<IWorkflowControlSet> _workflowControlSets;
+		private bool _isInitialized;
 
 		public AgentPreferenceView(IScheduleDay scheduleDay, IList<IShiftCategory> shiftCategories, IList<IAbsence> absences, IList<IWorkflowControlSet> workflowControlSets)
 		{
@@ -153,6 +154,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (comboItem != null)
 			{
 				comboBoxAdvActivity.SelectedItem = comboItem;
+				if (comboItem.Id != null)
+				{
+					EnableActivityTimes(true);
+				}
 			}
 		}
 
@@ -172,20 +177,46 @@ namespace Teleopti.Ccc.Win.Scheduling
 			outlookTimePickerContractShiftCategoryMax.SetTimeValue(maxLength);
 			outlookTimePickerShiftCategoryStartMin.SetTimeValue(minStart);
 			outlookTimePickerShiftCategoryStartMax.SetTimeValue(maxStart);
+			
+			if (minEnd.HasValue && minEnd.Value.Days > 0)
+			{
+				minEnd = minEnd.Value.Subtract(TimeSpan.FromDays(1));
+				checkBoxAdvShiftCategoryNextDayMin.Checked = true;
+			}
+			else
+			{
+				checkBoxAdvShiftCategoryNextDayMin.Checked = false;
+			}
+			
 			outlookTimePickerShiftCategoryEndMin.SetTimeValue(minEnd);
+
+			if (maxEnd.HasValue && maxEnd.Value.Days > 0)
+			{
+				maxEnd = maxEnd.Value.Subtract(TimeSpan.FromDays(1));
+				checkBoxAdvShiftCategoryNextDayMax.Checked = true;
+			}
+			else
+			{
+				checkBoxAdvShiftCategoryNextDayMax.Checked = false;
+			}
+
 			outlookTimePickerShiftCategoryEndMax.SetTimeValue(maxEnd);
 		}
 
 		public void UpdateMustHave(bool mustHave)
 		{
-			checkBoxMustHaveStandard.Checked = mustHave;
-			checkBoxAdvShiftCategoryMustHave.Checked = mustHave;
-			checkBoxAdvMustHaveActivity.Checked = mustHave;
+			checkBoxMustHave.Checked = mustHave;
 		}
 
 		private void agentPreferenceViewLoad(object sender, EventArgs e)
 		{
+			tabControlAgentInfo.SelectedIndex = 2;
+			tabControlAgentInfo.SelectedIndex = 1;
+			tabControlAgentInfo.SelectedIndex = 0;
+			
 			_presenter.UpdateView();
+
+			_isInitialized = true;
 		}
 
 		public void PopulateShiftCategories()
@@ -317,7 +348,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			outlookTimePickerShiftCategoryStartMax.SetTimeValue(null);
 			outlookTimePickerShiftCategoryEndMin.SetTimeValue(null);
 			outlookTimePickerShiftCategoryEndMax.SetTimeValue(null);
-			checkBoxAdvShiftCategoryNextDay.Checked = false;
+			checkBoxAdvShiftCategoryNextDayMax.Checked = false;
+			checkBoxAdvShiftCategoryNextDayMin.Checked = false;
 		}
 
 		public void ClearAbsence()
@@ -339,13 +371,276 @@ namespace Teleopti.Ccc.Win.Scheduling
 			outlookTimePickerActivityStartMax.SetTimeValue(null);
 			outlookTimePickerActivityEndMin.SetTimeValue(null);
 			outlookTimePickerActivityEndMax.SetTimeValue(null);
+
+			EnableActivityTimes(false);
 		}
 
-		private void tabControlAgentInfoSelectedIndexChanged(object sender, EventArgs e)
+		public void EnableActivityTimes(bool enable)
 		{
-			_presenter.UpdateView();
+			outlookTimePickerActivityLengthMin.Enabled = enable;
+			outlookTimePickerActivityLengthMax.Enabled = enable;
+			outlookTimePickerActivityStartMin.Enabled = enable;
+			outlookTimePickerActivityStartMax.Enabled = enable;
+			outlookTimePickerActivityEndMin.Enabled = enable;
+			outlookTimePickerActivityEndMax.Enabled = enable;	
 		}
 
+		private void buttonAdvOk_Click(object sender, EventArgs e)
+		{
+			TimeSpan? minStart = outlookTimePickerShiftCategoryStartMin.TimeValue();
+			TimeSpan? maxStart = outlookTimePickerShiftCategoryStartMax.TimeValue();
+			TimeSpan? minEnd = outlookTimePickerShiftCategoryEndMin.TimeValue();
+			TimeSpan? maxEnd = outlookTimePickerShiftCategoryEndMax.TimeValue();
+			TimeSpan? minLength = outlookTimePickerContractShiftCategoryMin.TimeValue();
+			TimeSpan? maxLength = outlookTimePickerContractShiftCategoryMax.TimeValue();
+
+			if (checkBoxAdvShiftCategoryNextDayMin.Checked && minEnd != null)
+				minEnd = minEnd.Value.Add(TimeSpan.FromDays(1));
+
+			if (checkBoxAdvShiftCategoryNextDayMax.Checked && maxEnd != null)
+				maxEnd = maxEnd.Value.Add(TimeSpan.FromDays(1));
+			
+
+			TimeSpan? minStartActivity = outlookTimePickerActivityStartMin.TimeValue();
+			TimeSpan? maxStartActivity = outlookTimePickerActivityStartMax.TimeValue();
+			TimeSpan? minEndActivity = outlookTimePickerActivityEndMin.TimeValue();
+			TimeSpan? maxEndActivity = outlookTimePickerActivityEndMax.TimeValue();
+			TimeSpan? minLengthActivity = outlookTimePickerActivityLengthMin.TimeValue();
+			TimeSpan? maxLengthActivity = outlookTimePickerActivityLengthMax.TimeValue();
+
+			var comboShiftCategory = comboBoxAdvShiftCategory.SelectedItem as ComboBoxAdvShiftCategory;
+			IShiftCategory currentShiftCategory = null;
+			currentShiftCategory = comboShiftCategory.ShiftCategory;
+			if (currentShiftCategory.Id == null)
+			{
+				currentShiftCategory = null;
+			}
+
+			var currentAbsence = comboBoxAdvAbsence.SelectedItem as Absence;
+			if (currentAbsence.Id == null)
+			{
+				currentAbsence = null;
+			}
+
+			var comboDayOff = comboBoxAdvDayOff.SelectedItem as ComboBoxAdvDayOffTemplate;
+			IDayOffTemplate currentDayOff = null;
+			currentDayOff = comboDayOff.DayOffTemplate;
+			if (currentDayOff.Id == null)
+			{
+				currentDayOff = null;
+			}
+
+			var currentActivity = comboBoxAdvActivity.SelectedItem as Activity;
+			if (currentActivity.Id == null)
+			{
+				currentActivity = null;
+			}
+
+			var commandToExecute = _presenter.CommandToExecute(currentShiftCategory, currentAbsence, currentDayOff, currentActivity, minStart, maxStart, minEnd, maxEnd, minLength, maxLength, minStartActivity, maxStartActivity, minEndActivity, maxEndActivity, minLengthActivity, maxLengthActivity, _dayCreator);
+
+			if (commandToExecute == AgentPreferenceExecuteCommand.Remove)
+			{
+				var removeCommand = new AgentPreferenceRemoveCommand(_presenter.ScheduleDay);
+				_presenter.Remove(removeCommand);
+				_isDirty = true;
+				Hide();
+				return;
+			}
+
+			if (!validateTimes(currentShiftCategory, currentAbsence, currentDayOff, currentActivity, minStart, maxStart, minEnd, maxEnd, minLength, maxLength, minStartActivity, maxStartActivity, minEndActivity, maxEndActivity, minLengthActivity, maxLengthActivity)) return;
+
+			if (commandToExecute == AgentPreferenceExecuteCommand.Add)
+			{
+				var addCommand = new AgentPreferenceAddCommand(_presenter.ScheduleDay, currentShiftCategory, currentAbsence, currentDayOff, currentActivity, minStart, maxStart, minEnd, maxEnd, minLength, maxLength, minStartActivity, maxStartActivity, minEndActivity, maxEndActivity, minLengthActivity, maxLengthActivity, _dayCreator);
+				_presenter.Add(addCommand);
+				_isDirty = true;
+				Hide();
+				return;
+			}
+
+			if (commandToExecute == AgentPreferenceExecuteCommand.Edit)
+			{
+				var editCommand = new AgentPreferenceEditCommand(_presenter.ScheduleDay, currentShiftCategory, currentAbsence, currentDayOff, currentActivity, minStart, maxStart, minEnd, maxEnd, minLength, maxLength, minStartActivity, maxStartActivity, minEndActivity, maxEndActivity, minLengthActivity, maxLengthActivity, _dayCreator);
+				_presenter.Edit(editCommand);
+				_isDirty = true;
+				Hide();
+				return;
+			}
+
+			_isDirty = false;
+		}
+
+		private void buttonAdvCancel_Click(object sender, EventArgs e)
+		{
+			_isDirty = false;
+			Hide();
+		}
+
+		private bool validateTimes(IShiftCategory shiftCategory, IAbsence absence, IDayOffTemplate dayOffTemplate, IActivity activity, TimeSpan? minStart, TimeSpan? maxStart,
+									TimeSpan? minEnd, TimeSpan? maxEnd, TimeSpan? minLength, TimeSpan? maxLength,
+									TimeSpan? minStartActivity, TimeSpan? maxStartActivity, TimeSpan? minEndActivity, TimeSpan? maxEndActivity,
+									TimeSpan? minLengthActivity, TimeSpan? maxLengthActivity)
+		{
+
+
+			var result = _dayCreator.CanCreate(shiftCategory, absence, dayOffTemplate, activity, minStart, maxStart, minEnd, maxEnd, minLength, maxLength, minStartActivity, maxStartActivity, minEndActivity, maxEndActivity, minLengthActivity, maxLengthActivity);
+
+			if (!result.Result && !result.EmptyError)
+			{
+					
+			}
+
+			//if (!result && startTimeError != endTimeError)
+			//{
+			//	if (startTimeError) setTimeErrorMessage(outlookTimePickerFrom, Resources.MustSpecifyValidTime);
+			//	if (endTimeError) setTimeErrorMessage(outlookTimePickerTo, Resources.MustSpecifyValidTime);
+			//}
+
+			return result.Result;
+		}
+
+		private void comboBoxAdvShiftCategory_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			var comboShiftCategory = comboBoxAdvShiftCategory.SelectedItem as ComboBoxAdvShiftCategory;
+			if (comboShiftCategory != null && comboShiftCategory.Id != null)
+			{
+				ClearAbsence();
+				ClearDayOff();
+			}	
+		}
+
+		private void comboBoxAdvAbsence_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			var currentAbsence = comboBoxAdvAbsence.SelectedItem as Absence;
+			if (currentAbsence != null && currentAbsence.Id != null)
+			{
+				ClearShiftCategory();
+				ClearShiftCategoryExtended();
+				ClearDayOff();
+				ClearActivity();
+			}
+		}
+
+		private void comboBoxAdvDayOff_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			var comboDayOff = comboBoxAdvDayOff.SelectedItem as ComboBoxAdvDayOffTemplate;
+			if (comboDayOff != null && comboDayOff.Id != null)
+			{
+				ClearShiftCategory();
+				ClearShiftCategoryExtended();
+				ClearAbsence();
+				ClearActivity();
+			}
+		}
+
+		private void comboBoxAdvShiftCategoryExtended_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			var comboShiftCategory = comboBoxAdvShiftCategoryExtended.SelectedItem as ComboBoxAdvShiftCategory;
+			if (comboShiftCategory != null && comboShiftCategory.Id != null)
+			{
+				ClearAbsence();
+				ClearDayOff();
+			}	
+		}
+
+		private void comboBoxAdvActivity_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			var comboActivity = comboBoxAdvActivity.SelectedItem as Activity;
+			if (comboActivity != null && comboActivity.Id != null)
+			{
+				ClearAbsence();
+				ClearDayOff();
+				EnableActivityTimes(true);
+			}
+			else
+			{
+				ClearActivity();
+			}
+		}
+
+		private void outlookTimePickerContractShiftCategoryMin_TextChanged(object sender, EventArgs e)
+		{
+			if (!_isInitialized) return;
+			ClearAbsence();
+			ClearDayOff();	
+		}
+
+		private void outlookTimePickerContractShiftCategoryMax_TextChanged(object sender, EventArgs e)
+		{
+			if (!_isInitialized) return;
+			ClearAbsence();
+			ClearDayOff();
+		}
+
+		private void outlookTimePickerShiftCategoryStartMin_TextChanged(object sender, EventArgs e)
+		{
+			if (!_isInitialized) return;
+			ClearAbsence();
+			ClearDayOff();
+		}
+
+		private void outlookTimePickerShiftCategoryStartMax_TextChanged(object sender, EventArgs e)
+		{
+			if (!_isInitialized) return;
+			ClearAbsence();
+			ClearDayOff();
+		}
+
+		private void outlookTimePickerShiftCategoryEndMin_TextChanged(object sender, EventArgs e)
+		{
+			if (!_isInitialized) return;
+			ClearAbsence();
+			ClearDayOff();
+		}
+
+		private void outlookTimePickerShiftCategoryEndMax_TextChanged(object sender, EventArgs e)
+		{
+			if (!_isInitialized) return;
+			ClearAbsence();
+			ClearDayOff();
+		}
+
+		private void outlookTimePickerActivityLengthMin_TextChanged(object sender, EventArgs e)
+		{
+			if (!_isInitialized) return;
+			ClearAbsence();
+			ClearDayOff();
+		}
+
+		private void outlookTimePickerActivityLengthMax_TextChanged(object sender, EventArgs e)
+		{
+			if (!_isInitialized) return;
+			ClearAbsence();
+			ClearDayOff();
+		}
+
+		private void outlookTimePickerActivityStartMin_TextChanged(object sender, EventArgs e)
+		{
+			if (!_isInitialized) return;
+			ClearAbsence();
+			ClearDayOff();
+		}
+
+		private void outlookTimePickerActivityStartMax_TextChanged(object sender, EventArgs e)
+		{
+			if (!_isInitialized) return;
+			ClearAbsence();
+			ClearDayOff();
+		}
+
+		private void outlookTimePickerActivityEndMin_TextChanged(object sender, EventArgs e)
+		{
+			if (!_isInitialized) return;
+			ClearAbsence();
+			ClearDayOff();
+		}
+
+		private void outlookTimePickerActivityEndMax_TextChanged(object sender, EventArgs e)
+		{
+			if (!_isInitialized) return;
+			ClearAbsence();
+			ClearDayOff();
+		}
 	}
 
 	class ComboBoxAdvShiftCategory
@@ -369,6 +664,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			get { return _shiftCategory.Id; }
 		}
+
+		public IShiftCategory ShiftCategory
+		{
+			get { return _shiftCategory; }
+		}
 	}
 
 	class ComboBoxAdvDayOffTemplate
@@ -390,6 +690,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 		public Guid? Id
 		{
 			get { return _dayOffTemplate.Id; }
+		}
+
+		public IDayOffTemplate DayOffTemplate
+		{
+			get { return _dayOffTemplate; }
 		}
 	}
 }

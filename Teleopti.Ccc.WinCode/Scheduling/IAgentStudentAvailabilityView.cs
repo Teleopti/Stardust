@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 {
 	public interface IAgentStudentAvailabilityView
 	{
-		void Update(TimeSpan? startTime, TimeSpan? endTime, bool endNextDay);
+		void Update(TimeSpan? startTime, TimeSpan? endTime);
 		IScheduleDay ScheduleDay { get; }
 	}
 }
