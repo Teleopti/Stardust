@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
     public interface ITeamBlockSchedulingService
     {
 		event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
-        bool ScheduleSelected(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, ITeamSteadyStateHolder teamSteadyStateHolder);
+		bool ScheduleSelected(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, ITeamSteadyStateHolder teamSteadyStateHolder, ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService);
     }
 
     public class TeamBlockSchedulingService : ITeamBlockSchedulingService
@@ -18,7 +18,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	    private readonly ITeamBlockInfoFactory _teamBlockInfoFactory;
 	    private readonly ITeamBlockScheduler _teamBlockScheduler;
         private readonly IBlockSteadyStateValidator _blockSteadyStateValidator;
-        private readonly ISchedulingOptions _schedulingOptions;
+	    private readonly ISafeRollbackAndResourceCalculation _safeRollbackAndResourceCalculation;
+	    private readonly ISchedulingOptions _schedulingOptions;
 	    private bool _cancelMe;
 
 	    public TeamBlockSchedulingService
@@ -27,20 +28,22 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		    ITeamInfoFactory teamInfoFactory,
 		    ITeamBlockInfoFactory teamBlockInfoFactory,
 		    ITeamBlockScheduler teamBlockScheduler,
-            IBlockSteadyStateValidator blockSteadyStateValidator 
+            IBlockSteadyStateValidator blockSteadyStateValidator,
+			ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation
 		    )
 	    {
 		    _teamInfoFactory = teamInfoFactory;
 		    _teamBlockInfoFactory = teamBlockInfoFactory;
 		    _teamBlockScheduler = teamBlockScheduler;
 	        _blockSteadyStateValidator = blockSteadyStateValidator;
-	        _schedulingOptions = schedulingOptions;
+		    _safeRollbackAndResourceCalculation = safeRollbackAndResourceCalculation;
+		    _schedulingOptions = schedulingOptions;
 	    }
 
 	    public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
-		public bool ScheduleSelected(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, ITeamSteadyStateHolder teamSteadyStateHolder)
+		public bool ScheduleSelected(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, ITeamSteadyStateHolder teamSteadyStateHolder,ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
 	    {
 			_teamBlockScheduler.DayScheduled += dayScheduled;
 		    foreach (var datePointer in selectedPeriod.DayCollection())
@@ -64,9 +67,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				    if (teamBlockInfo == null) continue;
                     if (isTeamBlockScheduled(teamBlockInfo)) continue;
 
+					
                     if (_blockSteadyStateValidator.IsBlockInSteadyState(teamBlockInfo,_schedulingOptions))
-                        if (!_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, datePointer, _schedulingOptions, selectedPeriod,selectedPersons))
-                            continue;
+                        if (!_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, datePointer, _schedulingOptions,
+                                                                      selectedPeriod, selectedPersons))
+                        {
+	                        _safeRollbackAndResourceCalculation.Execute(schedulePartModifyAndRollbackService,
+	                                                                    _schedulingOptions);
+							continue;
+                        }
 
 				
 
