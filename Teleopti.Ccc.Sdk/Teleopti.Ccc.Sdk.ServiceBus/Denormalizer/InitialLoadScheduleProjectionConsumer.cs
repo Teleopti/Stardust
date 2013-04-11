@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 {
 	public class InitialLoadScheduleProjectionConsumer : ConsumerOf<InitialLoadScheduleProjection>
 	{
-		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IPersonRepository _personRepository;
 		private readonly IScheduleProjectionReadOnlyRepository _scheduleProjectionReadOnlyRepository;
 		private readonly IScheduleDayReadModelRepository _scheduleDayReadModelRepository;
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 		private DateOnlyPeriod _period;
 		private DateTimePeriod _utcPeriod;
 
-		public InitialLoadScheduleProjectionConsumer(IUnitOfWorkFactory unitOfWorkFactory,IPersonRepository personRepository, IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository, IScheduleDayReadModelRepository scheduleDayReadModelRepository, IPersonScheduleDayReadModelRepository personScheduleDayReadModelRepository, IPersonAssignmentRepository personAssignmentRepository, IScenarioRepository scenarioRepository, IServiceBus serviceBus)
+		public InitialLoadScheduleProjectionConsumer(ICurrentUnitOfWorkFactory unitOfWorkFactory, IPersonRepository personRepository, IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository, IScheduleDayReadModelRepository scheduleDayReadModelRepository, IPersonScheduleDayReadModelRepository personScheduleDayReadModelRepository, IPersonAssignmentRepository personAssignmentRepository, IScenarioRepository scenarioRepository, IServiceBus serviceBus)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_personRepository = personRepository;
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 		public void Consume(InitialLoadScheduleProjection message)
 		{
 			var messages = new List<ScheduleDenormalizeBase>();
-			using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+			using (var uow = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
 				var projectionModelInitialized = _scheduleProjectionReadOnlyRepository.IsInitialized();
 				var scheduleDayModelInitialized = _scheduleDayReadModelRepository.IsInitialized();

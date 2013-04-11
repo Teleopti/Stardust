@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 		private readonly IWorkloadRepository _workloadRepository;
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IRepositoryFactory _repositoryFactory;
-		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IJobResultRepository _jobResultRepository;
 		private readonly IJobResultFeedback _feedback;
 		private readonly IMessageBroker _messageBroker;
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 													IWorkloadRepository workloadRepository,
 													IScenarioRepository scenarioRepository,
 													IRepositoryFactory repositoryFactory,
-													IUnitOfWorkFactory unitOfWorkFactory,
+													ICurrentUnitOfWorkFactory unitOfWorkFactory,
 													IJobResultRepository jobResultRepository,
 													IJobResultFeedback feedback,
 													IMessageBroker messageBroker,
@@ -57,7 +57,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Domain.Common.JobResultDetail.#ctor(Teleopti.Interfaces.Domain.DetailLevel,System.String,System.DateTime,System.Exception)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		public void Consume(QuickForecastWorkloadMessage message)
 		{
-			using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+			using (var unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
 				var jobResult = _jobResultRepository.Get(message.JobId);
 				if (jobResult == null) return;
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 				unitOfWork.PersistAll();
 			}
 
-			using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+			using (var unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
 				var jobResult = _jobResultRepository.Get(message.JobId);
 				_feedback.SetJobResult(jobResult, _messageBroker);
