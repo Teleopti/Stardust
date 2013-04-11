@@ -112,7 +112,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.IsTrue(result.GetType().Equals(typeof(testData2)));
             Assert.AreEqual(14, result.Data);
         }
-        
 
         private static testData dummyValue()
         {
