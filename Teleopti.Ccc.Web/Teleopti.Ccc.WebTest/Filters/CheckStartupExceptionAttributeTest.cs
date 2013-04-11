@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.WebTest.Filters
 		{
 			target = new CheckStartupResultAttribute();
 			ApplicationStartModule.ErrorAtStartup = null;
+			ApplicationStartModule.TasksFromStartup = null;
 		}
 
 		//todo: remarked for now - to expensive to test
