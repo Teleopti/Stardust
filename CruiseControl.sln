@@ -194,6 +194,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Startpage", "Teleopti.Ccc.Startpage\Teleopti.Ccc.Startpage.csproj", "{BF7E4697-98E5-47B1-8C2E-DA24E308453F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost", "Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost\Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost.csproj", "{3266BFDE-8B39-458E-B0B7-063434806C96}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B37A5C3F-C1EE-4BCF-AF07-767E52E7C34D} = {B37A5C3F-C1EE-4BCF-AF07-767E52E7C34D}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Web.Broker.Backplane", "Teleopti.Ccc.Web.Broker.Backplane\Teleopti.Ccc.Web.Broker.Backplane.csproj", "{31C00166-E856-49D3-A664-424224D90C2C}"
 EndProject
