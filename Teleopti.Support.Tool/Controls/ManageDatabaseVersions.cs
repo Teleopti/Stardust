@@ -196,6 +196,7 @@ namespace Teleopti.Support.Tool.Controls
             _mainForm.Cursor = Cursors.WaitCursor;
             SetButtonStates(false);
             listViewDatabases.Visible = false;
+            textBoxOutput.Clear();
             textBoxOutput.Visible = true;
             execute();
             buttonBack.Enabled = true;
@@ -563,8 +564,9 @@ namespace Teleopti.Support.Tool.Controls
                         builder.InitialCatalog = nHibDataSource.DatabaseName;
                         DBHelper dbHelper = new DBHelper(builder.ConnectionString);
                         string aggDbName = dbHelper.GetAggDatabaseName();
-                        builder.InitialCatalog = aggDbName;
-                        NHibDataSource aggNHibDataSource = new NHibDataSource(nHibDataSource.FactoryName, nHibDataSource.ConnectionString, Nhib.AggregationDatabaseTextConstant);
+                        SqlConnectionStringBuilder builderForAgg = new SqlConnectionStringBuilder(nHibDataSource.ConnectionString);
+                        builderForAgg.InitialCatalog = aggDbName;
+                        NHibDataSource aggNHibDataSource = new NHibDataSource(nHibDataSource.FactoryName, builderForAgg.ConnectionString, Nhib.AggregationDatabaseTextConstant);
                         ListViewItem aggListViewItem = CreateDatasourceListViewItem(listViewItem.Group, aggNHibDataSource);
                         listViewDatabases.Items.Add(aggListViewItem);
                         SetListviewIcon(aggNHibDataSource, aggListViewItem);
