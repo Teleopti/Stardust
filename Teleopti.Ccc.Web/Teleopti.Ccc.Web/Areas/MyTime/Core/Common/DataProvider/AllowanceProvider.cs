@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
@@ -12,6 +14,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 		public readonly IBudgetDayRepository _budgetDayRepository;
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IUserTimeZone _userTimeZone;
+		private readonly IScheduleProjectionReadOnlyRepository _scheduleProjectionReadOnlyRepository;
 
 		public AllowanceProvider(IBudgetDayRepository budgetDayRepository, IUserTimeZone userTimeZone, ILoggedOnUser loggedOnUser, IScenarioRepository scenarioRepository)
 		{
@@ -19,6 +22,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			_userTimeZone = userTimeZone;
 			_loggedOnUser = loggedOnUser;
 			_scenarioRepository = scenarioRepository;
+			_scheduleProjectionReadOnlyRepository = new ScheduleProjectionReadOnlyRepository(UnitOfWorkFactory.Current);
 		}
 
 		public IEnumerable<IAllowanceDay> GetAllowanceForPeriod(DateOnlyPeriod period)
@@ -37,10 +41,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 
 				foreach (var budgetDay in budgetDays)
 				{
-					allowanceDay.Allowance = budgetDay.Day == day ? budgetDay.Allowance : 0;
+					if (budgetDay.Day == day)
+					{
+						allowanceDay.Allowance = budgetDay.Allowance;
+						allowanceDay.Date = day;
+						allowanceList.Add(allowanceDay);
+					}
 				}
-				allowanceDay.Date = day;
-				allowanceList.Add(allowanceDay);
 			}
 			return allowanceList;
 

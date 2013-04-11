@@ -22,8 +22,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 		private readonly IResolve<IPermissionProvider> _permissionProvider;
 		private readonly IResolve<INow> _now;
 		private readonly IResolve<IAllowanceProvider> _allowanceProvider;
+		private readonly IResolve<IAbsenceTimeRandomProvider> _absenceTimeProvider;
 
-		public WeekScheduleDomainDataMappingProfile(IResolve<IScheduleProvider> scheduleProvider, IResolve<IProjectionProvider> projectionProvider, IResolve<IPersonRequestProvider> personRequestProvider, IResolve<IUserTimeZone> userTimeZone, IResolve<IPermissionProvider> permissionProvider, IResolve<INow> now, IResolve<IAllowanceProvider> allowanceProvider)
+		public WeekScheduleDomainDataMappingProfile(IResolve<IScheduleProvider> scheduleProvider, IResolve<IProjectionProvider> projectionProvider, IResolve<IPersonRequestProvider> personRequestProvider, IResolve<IUserTimeZone> userTimeZone, IResolve<IPermissionProvider> permissionProvider, IResolve<INow> now, IResolve<IAllowanceProvider> allowanceProvider, IResolve<IAbsenceTimeRandomProvider> absenceTimeProvider)
+		//public WeekScheduleDomainDataMappingProfile(IResolve<IScheduleProvider> scheduleProvider, IResolve<IProjectionProvider> projectionProvider, IResolve<IPersonRequestProvider> personRequestProvider, IResolve<IUserTimeZone> userTimeZone, IResolve<IPermissionProvider> permissionProvider, IResolve<INow> now, IResolve<IAllowanceProvider> allowanceProvider)
 		{
 			_scheduleProvider = scheduleProvider;
 			_projectionProvider = projectionProvider;
@@ -32,6 +34,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 			_permissionProvider = permissionProvider;
 			_now = now;
 			_allowanceProvider = allowanceProvider;
+			_absenceTimeProvider = absenceTimeProvider;
 		}
 
 		protected override void Configure()
@@ -49,6 +52,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
                                     var scheduleDays = _scheduleProvider.Invoke().GetScheduleForPeriod(weekWithPreviousDay) ?? new IScheduleDay[] { };
 									var personRequests = _personRequestProvider.Invoke().RetrieveRequests(week);
 									var allowanceCollection = _allowanceProvider.Invoke().GetAllowanceForPeriod(week);
+									var absenceTimeCollection = _absenceTimeProvider.Invoke().GetAbsenceTimeForPeriod(week);
 
 									var earliest =
 										scheduleDays.Min(
@@ -113,6 +117,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
                                                 let projectionYesterday = scheduleYesterday == null ? null : _projectionProvider.Invoke().Projection(scheduleYesterday)
                                                 let personRequestsForDay = personRequests == null ? null : (from i in personRequests where TimeZoneInfo.ConvertTimeFromUtc(i.Request.Period.StartDateTime, _userTimeZone.Invoke().TimeZone()).Date == day select i).ToArray()
 												let allowanceForDay = allowanceCollection == null ? 0 : allowanceCollection.First(a=>a.Date==day).Allowance
+												let absenceTimeForDay = absenceTimeCollection == null ? 0 : absenceTimeCollection.First(a => a.Date == day).AbsenceTime
 												
 												select new WeekScheduleDayDomainData
 														{
@@ -122,7 +127,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 															ProjectionYesterday = projectionYesterday,
 															ScheduleDay = scheduleDay,
 															MinMaxTime = minMaxTime,
-															Allowance = allowanceForDay
+															Allowance = allowanceForDay,
+															AbsenceTime = absenceTimeForDay
 														}
 											   ).ToArray();
 

@@ -14,5 +14,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
         public IVisualLayerCollection ProjectionYesterday { get; set; }
         public TimePeriod MinMaxTime { get; set; }
 		public double Allowance { get; set; }
+		public double AbsenceTime { get; set; }
 	}
 }

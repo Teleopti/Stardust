@@ -32,14 +32,12 @@ Scenario: Henkes testscenario for setting up budgetgroups
 	| Field				| Value                |
 	| BudgetGroup		| NameOfTheBudgetGroup |
 	| Date				| 2013-04-01           |
-	| Allowance			| 86                   |
-	| TotalAllowance	| 88                   |
-	And there is an absence with
-	| Field | Value    |
-	| Name  | Vacation |
-	| Color | Red      |
+	| Allowance			| 10                   |
+	| TotalAllowance	| 12                   |
 	And I have the role 'Full access to mytime'
-	And I have stuff for '2013-04-01' to '2013-04-04'
+	And there is absence time for
+	| Field | Value			|
+	| Date	| 2013-04-01    |
 	When I view my week schedule for date '2013-04-01'
 	Then I should see an indication of the amount of agents that can go on holiday on each day of the week
 

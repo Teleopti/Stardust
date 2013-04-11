@@ -39,6 +39,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		private IPermissionProvider permissionProvider;
 		private INow now;
 		private IAllowanceProvider allowanceProvider;
+		private IAbsenceTimeRandomProvider absenceTimeProvider;
 
 		[SetUp]
 		public void Setup()
@@ -53,6 +54,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
 			now = MockRepository.GenerateMock<INow>();
 			allowanceProvider = MockRepository.GenerateMock<IAllowanceProvider>();
+			absenceTimeProvider = MockRepository.GenerateMock<IAbsenceTimeRandomProvider>();
 
 			Mapper.Reset();
 			Mapper.Initialize(c => c.AddProfile(
@@ -63,7 +65,8 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 					Depend.On(userTimeZone),
 					Depend.On(permissionProvider),
 					Depend.On(now),
-					Depend.On(allowanceProvider)
+					Depend.On(allowanceProvider),
+					Depend.On(absenceTimeProvider)
 					)));
 		}
 
