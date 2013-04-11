@@ -1,4 +1,3 @@
-using System;
 using System.Linq;
 using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.Common;
@@ -12,7 +11,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 	public class LoadProjectedScheduleConsumer : ConsumerOf<ScheduleChanged>, ConsumerOf<ScheduleProjectionInitialize>, ConsumerOf<ScheduleDayInitialize>, ConsumerOf<PersonScheduleDayInitialize>
 	{
 		private readonly IServiceBus _bus;
-		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IPersonRepository _personRepository;
 		private readonly IScheduleRepository _scheduleRepository;
@@ -20,7 +19,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 		private IScheduleRange _range;
 		private DateOnlyPeriod _realPeriod;
 
-		public LoadProjectedScheduleConsumer(IServiceBus bus, IUnitOfWorkFactory unitOfWorkFactory, IScenarioRepository scenarioRepository, IPersonRepository personRepository, IScheduleRepository scheduleRepository, IDenormalizedScheduleMessageBuilder denormalizedScheduleMessageBuilder)
+		public LoadProjectedScheduleConsumer(IServiceBus bus, ICurrentUnitOfWorkFactory unitOfWorkFactory, IScenarioRepository scenarioRepository, IPersonRepository personRepository, IScheduleRepository scheduleRepository, IDenormalizedScheduleMessageBuilder denormalizedScheduleMessageBuilder)
 		{
 			_bus = bus;
 			_unitOfWorkFactory = unitOfWorkFactory;
@@ -34,7 +33,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void Consume(ScheduleChanged message)
 		{
-			using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
+			using (_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
 				if (!getPeriodAndScenario(message)) return;
 				_denormalizedScheduleMessageBuilder.Build<DenormalizedSchedule>(message, _range, _realPeriod, d => _bus.SendToSelf(d));
@@ -44,7 +43,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void Consume(PersonScheduleDayInitialize message)
 		{
-			using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
+			using (_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
 				if (!getPeriodAndScenario(message)) return;
 				_denormalizedScheduleMessageBuilder.Build<DenormalizedScheduleForPersonScheduleDay>(message, _range, _realPeriod, d => _bus.SendToSelf(d));
@@ -54,7 +53,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void Consume(ScheduleDayInitialize message)
 		{
-			using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
+			using (_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
 				if (!getPeriodAndScenario(message)) return;
 				_denormalizedScheduleMessageBuilder.Build<DenormalizedScheduleForScheduleDay>(message, _range, _realPeriod, d => _bus.SendToSelf(d));
@@ -64,7 +63,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void Consume(ScheduleProjectionInitialize message)
 		{
-			using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
+			using (_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
 				if (!getPeriodAndScenario(message)) return;
 				_denormalizedScheduleMessageBuilder.Build<DenormalizedScheduleForScheduleProjection>(message, _range, _realPeriod, d => _bus.SendToSelf(d));
