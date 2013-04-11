@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling
 {
 	public interface IAgentPreferenceView
 	{
-		void Update(IPreferenceRestriction preferenceRestriction);
 		void PopulateShiftCategories();
 		void PopulateAbsences();
 		void PopulateDayOffs();

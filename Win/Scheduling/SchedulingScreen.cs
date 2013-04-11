@@ -621,8 +621,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			_editControlRestrictions = new EditControl();
 			SchedulerRibbonHelper.InstantiateEditControlRestrictions(_editControlRestrictions);
-			_editControlRestrictions.NewClicked += _editControlRestrictions_NewClicked;
-			_editControlRestrictions.NewSpecialClicked += _editControlRestrictions_NewSpecialClicked;
+			_editControlRestrictions.NewClicked += editControlRestrictionsNewClicked;
+			_editControlRestrictions.NewSpecialClicked += editControlRestrictionsNewSpecialClicked;
 			_editControlRestrictions.DeleteClicked += toolStripMenuItemRestrictionDelete_Click;
 			var editControlHostRestrictions = new ToolStripControlHost(_editControlRestrictions);
 			toolStripExEdit2.Items.Add(editControlHostRestrictions);
@@ -5976,8 +5976,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			if (_editControlRestrictions != null)
 			{
-				_editControlRestrictions.NewClicked -= _editControlRestrictions_NewClicked;
-				_editControlRestrictions.NewSpecialClicked -= _editControlRestrictions_NewSpecialClicked;
+				_editControlRestrictions.NewClicked -= editControlRestrictionsNewClicked;
+				_editControlRestrictions.NewSpecialClicked -= editControlRestrictionsNewSpecialClicked;
 				_editControlRestrictions.DeleteClicked -= toolStripMenuItemRestrictionDelete_Click;	
 			}
 
@@ -7096,12 +7096,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 			((AgentRestrictionsDetailView)_scheduleView).DeleteSelectedRestrictions(_undoRedo, _defaultScheduleTag);
 		}
 
-		void _editControlRestrictions_NewClicked(object sender, EventArgs e)
+		void editControlRestrictionsNewClicked(object sender, EventArgs e)
 		{
 			addPreferenceToolStripMenuItemClick(sender, e);
 		}
 
-		void _editControlRestrictions_NewSpecialClicked(object sender, ToolStripItemClickedEventArgs e)
+		void editControlRestrictionsNewSpecialClicked(object sender, ToolStripItemClickedEventArgs e)
 		{
 			_editControlRestrictions.CloseDropDown();
 			if ((ClipboardItems)e.ClickedItem.Tag == ClipboardItems.StudentAvailability)
@@ -7114,7 +7114,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			var selectedDay = _scheduleView.SelectedSchedules()[0];
 
-			using (var view = new AgentPreferenceView(selectedDay, _schedulerState.CommonStateHolder.ShiftCategories, _schedulerState.CommonStateHolder.Absences, WorkflowControlSets))
+			using (var view = new AgentPreferenceView(selectedDay, WorkflowControlSets))
 			{
 				view.ShowDialog(this);
 				updateRestrictions(view.ScheduleDay);

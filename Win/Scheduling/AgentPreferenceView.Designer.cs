@@ -187,7 +187,7 @@
 			this.comboBoxAdvActivity.Size = new System.Drawing.Size(115, 21);
 			this.comboBoxAdvActivity.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.comboBoxAdvActivity.TabIndex = 4;
-			this.comboBoxAdvActivity.SelectedIndexChanged += new System.EventHandler(this.comboBoxAdvActivity_SelectedIndexChanged);
+			this.comboBoxAdvActivity.SelectedIndexChanged += new System.EventHandler(this.comboBoxAdvActivitySelectedIndexChanged);
 			// 
 			// label9
 			// 
@@ -229,7 +229,7 @@
 			this.outlookTimePickerActivityLengthMin.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.outlookTimePickerActivityLengthMin.TabIndex = 9;
 			this.outlookTimePickerActivityLengthMin.Text = "00:00";
-			this.outlookTimePickerActivityLengthMin.TextChanged += new System.EventHandler(this.outlookTimePickerActivityLengthMin_TextChanged);
+			this.outlookTimePickerActivityLengthMin.TextChanged += new System.EventHandler(this.outlookTimePickerActivityLengthMinTextChanged);
 			// 
 			// outlookTimePickerActivityLengthMax
 			// 
@@ -244,7 +244,7 @@
 			this.outlookTimePickerActivityLengthMax.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.outlookTimePickerActivityLengthMax.TabIndex = 10;
 			this.outlookTimePickerActivityLengthMax.Text = "00:00";
-			this.outlookTimePickerActivityLengthMax.TextChanged += new System.EventHandler(this.outlookTimePickerActivityLengthMax_TextChanged);
+			this.outlookTimePickerActivityLengthMax.TextChanged += new System.EventHandler(this.outlookTimePickerActivityLengthMaxTextChanged);
 			// 
 			// outlookTimePickerActivityStartMin
 			// 
@@ -259,7 +259,7 @@
 			this.outlookTimePickerActivityStartMin.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.outlookTimePickerActivityStartMin.TabIndex = 11;
 			this.outlookTimePickerActivityStartMin.Text = "00:00";
-			this.outlookTimePickerActivityStartMin.TextChanged += new System.EventHandler(this.outlookTimePickerActivityStartMin_TextChanged);
+			this.outlookTimePickerActivityStartMin.TextChanged += new System.EventHandler(this.outlookTimePickerActivityStartMinTextChanged);
 			// 
 			// outlookTimePickerActivityStartMax
 			// 
@@ -274,7 +274,7 @@
 			this.outlookTimePickerActivityStartMax.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.outlookTimePickerActivityStartMax.TabIndex = 12;
 			this.outlookTimePickerActivityStartMax.Text = "00:00";
-			this.outlookTimePickerActivityStartMax.TextChanged += new System.EventHandler(this.outlookTimePickerActivityStartMax_TextChanged);
+			this.outlookTimePickerActivityStartMax.TextChanged += new System.EventHandler(this.outlookTimePickerActivityStartMaxTextChanged);
 			// 
 			// outlookTimePickerActivityEndMin
 			// 
@@ -289,7 +289,7 @@
 			this.outlookTimePickerActivityEndMin.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.outlookTimePickerActivityEndMin.TabIndex = 13;
 			this.outlookTimePickerActivityEndMin.Text = "00:00";
-			this.outlookTimePickerActivityEndMin.TextChanged += new System.EventHandler(this.outlookTimePickerActivityEndMin_TextChanged);
+			this.outlookTimePickerActivityEndMin.TextChanged += new System.EventHandler(this.outlookTimePickerActivityEndMinTextChanged);
 			// 
 			// outlookTimePickerActivityEndMax
 			// 
@@ -304,7 +304,7 @@
 			this.outlookTimePickerActivityEndMax.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.outlookTimePickerActivityEndMax.TabIndex = 14;
 			this.outlookTimePickerActivityEndMax.Text = "00:00";
-			this.outlookTimePickerActivityEndMax.TextChanged += new System.EventHandler(this.outlookTimePickerActivityEndMax_TextChanged);
+			this.outlookTimePickerActivityEndMax.TextChanged += new System.EventHandler(this.outlookTimePickerActivityEndMaxTextChanged);
 			// 
 			// tabPageAdvExtended
 			// 
@@ -371,7 +371,7 @@
 			this.comboBoxAdvShiftCategoryExtended.Size = new System.Drawing.Size(104, 21);
 			this.comboBoxAdvShiftCategoryExtended.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.comboBoxAdvShiftCategoryExtended.TabIndex = 4;
-			this.comboBoxAdvShiftCategoryExtended.SelectedIndexChanged += new System.EventHandler(this.comboBoxAdvShiftCategoryExtended_SelectedIndexChanged);
+			this.comboBoxAdvShiftCategoryExtended.SelectedIndexChanged += new System.EventHandler(this.comboBoxAdvShiftCategoryExtendedSelectedIndexChanged);
 			// 
 			// label5
 			// 
@@ -413,7 +413,7 @@
 			this.outlookTimePickerContractShiftCategoryMin.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.outlookTimePickerContractShiftCategoryMin.TabIndex = 9;
 			this.outlookTimePickerContractShiftCategoryMin.Text = "00:00";
-			this.outlookTimePickerContractShiftCategoryMin.TextChanged += new System.EventHandler(this.outlookTimePickerContractShiftCategoryMin_TextChanged);
+			this.outlookTimePickerContractShiftCategoryMin.TextChanged += new System.EventHandler(this.outlookTimePickerContractShiftCategoryMinTextChanged);
 			// 
 			// outlookTimePickerShiftCategoryStartMin
 			// 
@@ -428,7 +428,7 @@
 			this.outlookTimePickerShiftCategoryStartMin.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.outlookTimePickerShiftCategoryStartMin.TabIndex = 11;
 			this.outlookTimePickerShiftCategoryStartMin.Text = "00:00";
-			this.outlookTimePickerShiftCategoryStartMin.TextChanged += new System.EventHandler(this.outlookTimePickerShiftCategoryStartMin_TextChanged);
+			this.outlookTimePickerShiftCategoryStartMin.TextChanged += new System.EventHandler(this.outlookTimePickerShiftCategoryStartMinTextChanged);
 			// 
 			// outlookTimePickerShiftCategoryEndMin
 			// 
@@ -443,7 +443,7 @@
 			this.outlookTimePickerShiftCategoryEndMin.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.outlookTimePickerShiftCategoryEndMin.TabIndex = 13;
 			this.outlookTimePickerShiftCategoryEndMin.Text = "00:00";
-			this.outlookTimePickerShiftCategoryEndMin.TextChanged += new System.EventHandler(this.outlookTimePickerShiftCategoryEndMin_TextChanged);
+			this.outlookTimePickerShiftCategoryEndMin.TextChanged += new System.EventHandler(this.outlookTimePickerShiftCategoryEndMinTextChanged);
 			// 
 			// checkBoxAdvShiftCategoryNextDayMax
 			// 
@@ -468,7 +468,7 @@
 			this.outlookTimePickerShiftCategoryEndMax.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.outlookTimePickerShiftCategoryEndMax.TabIndex = 14;
 			this.outlookTimePickerShiftCategoryEndMax.Text = "00:00";
-			this.outlookTimePickerShiftCategoryEndMax.TextChanged += new System.EventHandler(this.outlookTimePickerShiftCategoryEndMax_TextChanged);
+			this.outlookTimePickerShiftCategoryEndMax.TextChanged += new System.EventHandler(this.outlookTimePickerShiftCategoryEndMaxTextChanged);
 			// 
 			// outlookTimePickerShiftCategoryStartMax
 			// 
@@ -483,7 +483,7 @@
 			this.outlookTimePickerShiftCategoryStartMax.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.outlookTimePickerShiftCategoryStartMax.TabIndex = 12;
 			this.outlookTimePickerShiftCategoryStartMax.Text = "00:00";
-			this.outlookTimePickerShiftCategoryStartMax.TextChanged += new System.EventHandler(this.outlookTimePickerShiftCategoryStartMax_TextChanged);
+			this.outlookTimePickerShiftCategoryStartMax.TextChanged += new System.EventHandler(this.outlookTimePickerShiftCategoryStartMaxTextChanged);
 			// 
 			// outlookTimePickerContractShiftCategoryMax
 			// 
@@ -498,7 +498,7 @@
 			this.outlookTimePickerContractShiftCategoryMax.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.outlookTimePickerContractShiftCategoryMax.TabIndex = 10;
 			this.outlookTimePickerContractShiftCategoryMax.Text = "00:00";
-			this.outlookTimePickerContractShiftCategoryMax.TextChanged += new System.EventHandler(this.outlookTimePickerContractShiftCategoryMax_TextChanged);
+			this.outlookTimePickerContractShiftCategoryMax.TextChanged += new System.EventHandler(this.outlookTimePickerContractShiftCategoryMaxTextChanged);
 			// 
 			// checkBoxAdvShiftCategoryNextDayMin
 			// 
@@ -519,7 +519,7 @@
 			this.buttonAdvOk.TabIndex = 9;
 			this.buttonAdvOk.Text = "xxOk";
 			this.buttonAdvOk.UseVisualStyle = true;
-			this.buttonAdvOk.Click += new System.EventHandler(this.buttonAdvOk_Click);
+			this.buttonAdvOk.Click += new System.EventHandler(this.buttonAdvOkClick);
 			// 
 			// buttonAdvCancel
 			// 
@@ -530,7 +530,7 @@
 			this.buttonAdvCancel.TabIndex = 10;
 			this.buttonAdvCancel.Text = "xxCancel";
 			this.buttonAdvCancel.UseVisualStyle = true;
-			this.buttonAdvCancel.Click += new System.EventHandler(this.buttonAdvCancel_Click);
+			this.buttonAdvCancel.Click += new System.EventHandler(this.buttonAdvCancelClick);
 			// 
 			// tabPageAdvStandard
 			// 
@@ -605,7 +605,7 @@
 			this.comboBoxAdvShiftCategory.Size = new System.Drawing.Size(176, 21);
 			this.comboBoxAdvShiftCategory.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.comboBoxAdvShiftCategory.TabIndex = 3;
-			this.comboBoxAdvShiftCategory.SelectedIndexChanged += new System.EventHandler(this.comboBoxAdvShiftCategory_SelectedIndexChanged);
+			this.comboBoxAdvShiftCategory.SelectedIndexChanged += new System.EventHandler(this.comboBoxAdvShiftCategorySelectedIndexChanged);
 			// 
 			// comboBoxAdvAbsence
 			// 
@@ -617,7 +617,7 @@
 			this.comboBoxAdvAbsence.Size = new System.Drawing.Size(176, 21);
 			this.comboBoxAdvAbsence.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.comboBoxAdvAbsence.TabIndex = 4;
-			this.comboBoxAdvAbsence.SelectedIndexChanged += new System.EventHandler(this.comboBoxAdvAbsence_SelectedIndexChanged);
+			this.comboBoxAdvAbsence.SelectedIndexChanged += new System.EventHandler(this.comboBoxAdvAbsenceSelectedIndexChanged);
 			// 
 			// comboBoxAdvDayOff
 			// 
@@ -629,7 +629,7 @@
 			this.comboBoxAdvDayOff.Size = new System.Drawing.Size(176, 21);
 			this.comboBoxAdvDayOff.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.comboBoxAdvDayOff.TabIndex = 5;
-			this.comboBoxAdvDayOff.SelectedIndexChanged += new System.EventHandler(this.comboBoxAdvDayOff_SelectedIndexChanged);
+			this.comboBoxAdvDayOff.SelectedIndexChanged += new System.EventHandler(this.comboBoxAdvDayOffSelectedIndexChanged);
 			// 
 			// checkBoxMustHave
 			// 
