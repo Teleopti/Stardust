@@ -18903,6 +18903,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Same Shift.
+        /// </summary>
+        public static string SameShift {
+            get {
+                return ResourceManager.GetString("SameShift", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Same shift category.
         /// </summary>
         public static string SameShiftCategory {

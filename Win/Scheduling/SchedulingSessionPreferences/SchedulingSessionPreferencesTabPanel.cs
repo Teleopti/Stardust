@@ -742,6 +742,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
         private void checkBoxLevellingPerBlockScheduling_CheckedChanged(object sender, EventArgs e)
         {
             checkBoxLevellingSameStartTime.Enabled = checkBoxLevellingPerBlockScheduling.Checked;
+            checkBoxLevellingSameShift.Enabled = checkBoxLevellingPerBlockScheduling.Checked;
             checkBoxLevellingSameShiftCategory.Enabled = checkBoxLevellingPerBlockScheduling.Checked;
             comboBoxTeamBlockType.Enabled = checkBoxLevellingPerBlockScheduling.Checked; 
             if (checkBoxLevellingPerBlockScheduling.Checked)
@@ -810,6 +811,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             _localSchedulingOptions.UseLevellingSameShift = false;
             _localSchedulingOptions.UseLevellingSameShiftCategory = checkBoxLevellingSameShiftCategory.Checked ;
             _localSchedulingOptions.UseLevellingSameStartTime = checkBoxLevellingSameStartTime.Checked ;
+            _localSchedulingOptions.UseLevellingSameShift = checkBoxLevellingSameShift.Checked;
 
         }
 
@@ -822,6 +824,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             //    comboBoxGroupingLevelingPer.SelectedValue = _localSchedulingOptions.GroupOnGroupPageForLevelingPer;
             checkBoxLevellingSameShiftCategory.Checked = _localSchedulingOptions.UseLevellingSameShiftCategory;
             checkBoxLevellingSameStartTime.Checked = _localSchedulingOptions.UseLevellingSameStartTime;
+            checkBoxLevellingSameShift.Checked = _localSchedulingOptions.UseLevellingSameShift;
         }
     }
     

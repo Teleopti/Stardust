@@ -317,6 +317,7 @@ namespace Teleopti.Ccc.Win.Optimization
         {
             checkBoxLevellingSameShiftCategory.Checked = Preferences.UseLevellingSameShiftCategory;
             checkBoxSameStartTime.Checked = Preferences.UseLevellingSameStartTime;
+            checkBoxLevellingSameShift.Checked = Preferences.UseLevellingSameShift;
             comboBoxTeamBlockType.SelectedValue = Preferences.BlockFinderTypeForAdvanceOptimization.ToString();
         }
         private void getLevellingPerDataToSave()
@@ -330,6 +331,7 @@ namespace Teleopti.Ccc.Win.Optimization
             Preferences.UseLevellingSameShift = false;
             Preferences.UseLevellingSameShiftCategory = checkBoxLevellingSameShiftCategory.Checked ;
             Preferences.UseLevellingSameStartTime = checkBoxSameStartTime.Checked ;
+            Preferences.UseLevellingSameShift = checkBoxLevellingSameShift.Checked;
 
         }
     }

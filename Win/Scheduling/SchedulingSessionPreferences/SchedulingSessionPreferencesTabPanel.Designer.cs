@@ -70,6 +70,7 @@
             this.comboBoxTeamBlockType = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
             this.checkBoxLevellingSameShiftCategory = new System.Windows.Forms.CheckBox();
             this.checkBoxLevellingSameStartTime = new System.Windows.Forms.CheckBox();
+            this.checkBoxLevellingSameShift = new System.Windows.Forms.CheckBox();
             this.tabPageAdvance = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.lblShiftSelection = new System.Windows.Forms.Label();
@@ -508,6 +509,7 @@
             this.tableLayoutPanel4.Controls.Add(this.comboBoxTeamBlockType, 2, 0);
             this.tableLayoutPanel4.Controls.Add(this.checkBoxLevellingSameShiftCategory, 1, 1);
             this.tableLayoutPanel4.Controls.Add(this.checkBoxLevellingSameStartTime, 1, 3);
+            this.tableLayoutPanel4.Controls.Add(this.checkBoxLevellingSameShift, 1, 4);
             this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel4.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
@@ -652,6 +654,17 @@
             this.checkBoxLevellingSameStartTime.TabIndex = 49;
             this.checkBoxLevellingSameStartTime.Text = "xxSameStartTime";
             this.checkBoxLevellingSameStartTime.UseVisualStyleBackColor = true;
+            // 
+            // checkBoxLevellingSameShift
+            // 
+            this.checkBoxLevellingSameShift.AutoSize = true;
+            this.checkBoxLevellingSameShift.Enabled = false;
+            this.checkBoxLevellingSameShift.Location = new System.Drawing.Point(33, 85);
+            this.checkBoxLevellingSameShift.Name = "checkBoxLevellingSameShift";
+            this.checkBoxLevellingSameShift.Size = new System.Drawing.Size(84, 17);
+            this.checkBoxLevellingSameShift.TabIndex = 50;
+            this.checkBoxLevellingSameShift.Text = "xxSameShift";
+            this.checkBoxLevellingSameShift.UseVisualStyleBackColor = true;
             // 
             // tabPageAdvance
             // 
@@ -1042,5 +1055,6 @@
         private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxTeamBlockType;
         private System.Windows.Forms.CheckBox checkBoxLevellingSameShiftCategory;
         private System.Windows.Forms.CheckBox checkBoxLevellingSameStartTime;
+        private System.Windows.Forms.CheckBox checkBoxLevellingSameShift;
     }
 }
