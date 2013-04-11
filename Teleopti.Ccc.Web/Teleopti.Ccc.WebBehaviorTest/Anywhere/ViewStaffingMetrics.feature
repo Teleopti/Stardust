@@ -75,7 +75,7 @@ Scenario: View staffing metrics
 	And I select skill 'Direct Sales'
 	Then I should see metrics for skill 'Direct Sales' with
 	| Field                   | Value |
-	| Forecasted hours        | 8.0   |
+	| Forecasted hours        | 11.50   |
 	| Scheduled hours         | 7.0   |
 	| Difference hours        | -1.0  |
 	| Difference percentage   | -12.5 |

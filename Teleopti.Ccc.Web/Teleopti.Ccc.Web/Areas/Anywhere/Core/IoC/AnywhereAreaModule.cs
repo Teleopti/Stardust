@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core.IoC
 
 			builder.RegisterType<PersonScheduleViewModelFactory>().As<IPersonScheduleViewModelFactory>().SingleInstance();
 			builder.RegisterType<PersonScheduleViewModelMapper>().As<IPersonScheduleViewModelMapper>().SingleInstance();
+			builder.RegisterType<DailyStaffingMetricsViewModelFactory>().As<IDailyStaffingMetricsViewModelFactory>().SingleInstance();
 		}
 	}
 }

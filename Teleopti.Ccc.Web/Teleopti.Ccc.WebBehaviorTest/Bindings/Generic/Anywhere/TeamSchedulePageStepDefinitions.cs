@@ -118,11 +118,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 
 			var staffingMetric = table.CreateInstance<StaffingMetricInfo>();
 
-			EventualAssert.That(() => Browser.Current.Span(Find.BySelector("#forecasted-hours")).InnerHtml.Contains(staffingMetric.ForecastedHours.ToString()), Is.True);
-			EventualAssert.That(() => Browser.Current.Span(Find.BySelector("#scheduled-hours")).InnerHtml.Contains(staffingMetric.ScheduledHours.ToString()), Is.True);
-			EventualAssert.That(() => Browser.Current.Span(Find.BySelector("#difference-forecasted-scheduled")).InnerHtml.Contains(staffingMetric.DifferenceHours.ToString()), Is.True);
-			EventualAssert.That(() => Browser.Current.Span(Find.BySelector("#difference-forecasted-scheduled")).InnerHtml.Contains(staffingMetric.DifferencePercentage.ToString()), Is.True);
-			EventualAssert.That(() => Browser.Current.Span(Find.BySelector("#estimated-service-level")).InnerHtml.Contains(staffingMetric.EstimatedServiceLevel.ToString()), Is.True);
+			EventualAssert.That(() => Browser.Current.Span(Find.BySelector("#forecasted-hours")).InnerHtml, Is.StringContaining(staffingMetric.ForecastedHours));
+			EventualAssert.That(() => Browser.Current.Span(Find.BySelector("#scheduled-hours")).InnerHtml, Is.StringContaining(staffingMetric.ScheduledHours));
+			EventualAssert.That(() => Browser.Current.Span(Find.BySelector("#difference-forecasted-scheduled")).InnerHtml, Is.StringContaining(staffingMetric.DifferenceHours));
+			EventualAssert.That(() => Browser.Current.Span(Find.BySelector("#difference-forecasted-scheduled")).InnerHtml, Is.StringContaining(staffingMetric.DifferencePercentage));
+			EventualAssert.That(() => Browser.Current.Span(Find.BySelector("#estimated-service-level")).InnerHtml, Is.StringContaining(staffingMetric.EstimatedServiceLevel));
 		}
 
 
@@ -130,10 +130,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 
 	public class StaffingMetricInfo
 	{
-		public double ForecastedHours { get; set; }
-		public double ScheduledHours { get; set; }
-		public double DifferenceHours { get; set; }
-		public double DifferencePercentage { get; set; }
-		public double EstimatedServiceLevel { get; set; }
+		public string ForecastedHours { get; set; }
+		public string ScheduledHours { get; set; }
+		public string DifferenceHours { get; set; }
+		public string DifferencePercentage { get; set; }
+		public string EstimatedServiceLevel { get; set; }
 	}
 }

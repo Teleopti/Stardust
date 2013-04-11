@@ -75,9 +75,14 @@ define([
 	            else
 		            return skill.Name;
             });
-            this.ForcastedHours = ko.observable();
-            this.ForcastedHoursDisplay = ko.computed(function () {
-            	return self.Resources.Forecasted + self.ForcastedHours();
+	        
+            this.ForecastedHours = ko.observable();
+            this.ForecastedHoursDisplay = ko.computed(function () {
+            	var forecastedHours = self.ForecastedHours();
+            	if (forecastedHours != undefined) {
+            		forecastedHours = forecastedHours.toFixed(2);
+            	}
+            	return self.Resources.Forecasted + ': ' + forecastedHours;
             });
             this.ScheduledHours = ko.observable();
 	        this.ScheduledHoursDisplay = ko.computed(function() {
@@ -92,5 +97,8 @@ define([
             this.ESLDisplay = ko.computed(function () {
             	return self.Resources.ESL + self.ESL();
             });
+            this.SetDailyMetrics = function (data) {
+	            self.ForecastedHours(data.ForecastedHours);
+            };
         };
     });

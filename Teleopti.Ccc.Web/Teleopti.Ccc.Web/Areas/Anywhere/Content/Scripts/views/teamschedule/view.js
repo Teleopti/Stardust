@@ -100,6 +100,20 @@ define([
 			});
 		};
 
+		var getDailyStaffingMetrics = function (options) {
+			$.ajax({
+				url: 'StaffingMetrics/DailyStaffingMetrics',
+				cache: false,
+				dataType: 'json',
+				data: {
+					skillId: teamSchedule.SelectedSkill().Id,
+					date: teamSchedule.SelectedDate().toDate().toJSON()
+				},
+				success: function (data, textStatus, jqXHR) {
+					teamSchedule.SetDailyMetrics(data);
+				}
+			});
+		};
 		var loadTeams = function (options) {
 			$.ajax({
 				url: 'Person/AvailableTeams',
@@ -200,6 +214,7 @@ define([
 				loadSkills({
 					success: function() {
 						teamSchedule.SelectSkillById(currentSkillId());
+						getDailyStaffingMetrics();
 					}
 				});
 
