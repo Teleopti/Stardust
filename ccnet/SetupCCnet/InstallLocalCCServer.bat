@@ -1,31 +1,38 @@
 @echo off
 COLOR A
-::Get a local IIS for Windows 7 only
-CHOICE /C yn /M "Do you want to install IIS on your Windows 7 box?"
-IF ERRORLEVEL 1 SET iis=add
-if %iis%=="add" call "\\a380\hangaren\#PROGRAM\Develop\IIS7\install.bat"
 
+::Get path to this batchfile
+SET ROOTDIR=%~dp0
+SET ROOTDIR=%ROOTDIR:~0,-1%
+CD "%ROOTDIR%"
+
+SET SrcArtifacts=\\A380\Hangaren\#PROGRAM\Develop\Cruise control\Artifacts
+SET TargetArtifacts=C:\Temp\CCService
+
+::Get Files
+Echo copying setup files ...
+ECHO ROBOCOPY "%SrcArtifacts%" "%TargetArtifacts%" /MIR
+ROBOCOPY "%SrcArtifacts%" "%TargetArtifacts%" /MIR > NUL
+Echo Done!
+ECHO.
+
+::IIS available?
+:IISAvailable
+cscript "%TargetArtifacts%\Tools\BrowseUrl.vbs" "http://localhost/"
+if %errorlevel% neq 200 Call :IISInstall
+cscript "%TargetArtifacts%\Tools\BrowseUrl.vbs" "http://localhost/"
+if %errorlevel% neq 200 Call :IISAvailable
+
+cls
 CHOICE /C yn /M "Do you want to open your IIS and CCtray for remote access?"
 IF ERRORLEVEL 1 SET /a remoteaccess=1
 IF ERRORLEVEL 2 SET /a remoteaccess=0
 
 ::uninstall CruiseControl
-SC qc CCService | FIND "The specified service does not exist as an installed service" > NUL
-IF %errorlevel% NEQ 0 (
-"C:\Program Files (x86)\CruiseControl.NET\uninst.exe"
-"%systemroot%\System32\inetsrv\appcmd" delete app "Default Web Site/ccnet"
-echo.
-echo ========================
-echo can not control the uninstall process. Press any key when it's done!
-echo ========================
-echo.
-COLOR E
-pause
-COLOR A
-)
+CALL "%ROOTDIR%\UnInstallLocalCCServer.bat"
 
 ::install
-start /wait "SomeName" "\\a380\hangaren\#PROGRAM\Develop\Cruise control\CruiseControl.NET-1.8.2.0-Setup.exe" /S
+start /wait "SomeName" "%TargetArtifacts%\CruiseControl.NET-1.8.2.0-Setup.exe" /S
 
 ::if this is a re-install, some extra steps are needed
 "%systemroot%\System32\inetsrv\appcmd" delete app "Default Web Site/ccnet"
@@ -39,24 +46,26 @@ start /wait "SomeName" "\\a380\hangaren\#PROGRAM\Develop\Cruise control\CruiseCo
 ::stop sevice
 NET STOP CCService
 
-::CCNet needs to run under your credetials to fetch your SyncFusion license registry values
+::CCService needs to run under your credetials in order to fetch your SyncFusion license registry values
+cls
 ECHO.
-ECHO CCNet needs to run under your personal credentials, SyncFusion license sits in CURRENT_USER registry hive.
+ECHO CCNet needs to run under your personal credentials, In order to access
+ECHO the SyncFusion license sits in the CURRENT_USER registry hive.
 ECHO.
-ECHO And .... sorry, I can't hide your password, make sure you are alone.
+ECHO Sorry, I can't hide your password, make sure you are alone.
 SET /P password=Please provide the password for %USERDOMAIN%\%USERNAME%:
 
+::Grant LogON as a Service
+"%TargetArtifacts%\Tools\ntrights.exe" +r SeServiceLogonRight -u "%USERDOMAIN%\%USERNAME%"
 ::Set CCService to run with your credentials
 sc config CCService obj= "%USERDOMAIN%\%USERNAME%" password= "%password%"
 
 ::fix local ccService config
-COPY "\\a380\hangaren\#PROGRAM\Develop\Cruise control\Artifacts\ccService.config" "C:\Program Files (x86)\CruiseControl.NET\server\ccservice.exe.config" /Y
-cscript "\\a380\hangaren\#PROGRAM\Develop\Cruise control\Artifacts\replace.vbs" $COMPUTERNAME$ %COMPUTERNAME% "C:\Program Files (x86)\CruiseControl.NET\server\ccservice.exe.config"
+COPY "%TargetArtifacts%\Tools\ccService.config" "C:\Program Files (x86)\CruiseControl.NET\server\ccservice.exe.config" /Y
+cscript "%TargetArtifacts%\Tools\replace.vbs" $COMPUTERNAME$ %COMPUTERNAME% "C:\Program Files (x86)\CruiseControl.NET\server\ccservice.exe.config"
 
-::Get a working webdashboard kit
-ROBOCOPY "\\a380\T-files\Develop\Test\Baselines\7zip" "C:\temp"
-COPY "\\a380\hangaren\#PROGRAM\Develop\Cruise control\Artifacts\webdashboard.zip" "C:\temp\webdashboard.zip" /Y
-C:\temp\7z.exe x -y -o"c:\Program Files (x86)\CruiseControl.NET\webdashboard" "C:\temp\webdashboard.zip"
+::deploy a working webdashboard
+ROBOCOPY "%TargetArtifacts%\webdashboard" "c:\Program Files (x86)\CruiseControl.NET\webdashboard" /MIR > NUL
 
 ::open/close firewall
 if %remoteaccess% equ 1 (
@@ -69,9 +78,9 @@ netsh advfirewall firewall delete rule name = IIS_80
 netsh advfirewall firewall delete rule name = CCTray
 )
 
-::get TFS config
+::get one project config
 MKDIR "C:\Program Files (x86)\CruiseControl.NET\server\ccnetserver\WorkingDirectory"
-COPY "\\a380\hangaren\#PROGRAM\Develop\Cruise control\Artifacts\ccnet.config" "C:\Program Files (x86)\CruiseControl.NET\server\ccnetserver\WorkingDirectory\%COMPUTERNAME%_ccnet.config" /Y
+COPY "%TargetArtifacts%\Tools\ccnet.config" "C:\Program Files (x86)\CruiseControl.NET\server\ccnetserver\WorkingDirectory\%COMPUTERNAME%_ccnet.config" /Y
 
 ::Before first build => register NCover64 once
 CD %~dp0
@@ -86,3 +95,22 @@ explorer "http://localhost/ccnet"
 
 ::edit and add your own projects
 notepad "C:\Program Files (x86)\CruiseControl.NET\server\ccnetserver\WorkingDirectory\%COMPUTERNAME%_ccnet.config"
+
+goto :eof
+
+:IISInstall
+::Get a local IIS for Windows 7 only
+cls
+ECHO I can't  browse your localhost, are you missing IIS?
+CHOICE /C yn /M "Do you want to install IIS on your Windows 7 box?"
+IF ERRORLEVEL 1 set /A addIIS
+if addIIS equ 1 (
+ECHO installing IIS ...
+call "\\a380\hangaren\#PROGRAM\Develop\IIS7\install.bat"
+ECHO Done IIS!
+) else (
+echo.
+echo Cruise Control wont be working without IIS
+ping 127.0.0.1 > NUL
+)
+exit /b
