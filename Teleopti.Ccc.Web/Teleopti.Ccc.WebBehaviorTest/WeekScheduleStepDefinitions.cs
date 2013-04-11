@@ -1,16 +1,11 @@
 ﻿using System;
-using System.Globalization;
-using System.Threading;
 using System.Xml;
 using NUnit.Framework;
 using SharpTestsEx;
 using TechTalk.SpecFlow;
-using Teleopti.Ccc.UserTexts;
-using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data;
-using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
 using Teleopti.Interfaces.Domain;
 using WatiN.Core;
@@ -209,7 +204,38 @@ namespace Teleopti.Ccc.WebBehaviorTest
 
 			EventualAssert.That(() => layers[0].Style.GetAttributeValue("color").ToLower(), Is.StringContaining(color));
 		}
+		[Then(@"I should not see any indication of how many agents can go on holiday")]
+		public void ThenIShouldNotSeeAnyIndicationOfHowManyAgentsCanGoOnHoliday()
+		{
+			var indicators = Pages.Pages.WeekSchedulePage.AbsenceIndiciators();
+			foreach (var indicator in indicators)
+			{
+				EventualAssert.That(()=>indicator.IsDisplayed(), Is.False);
+			}
+		}
 
+		[Then(@"I should see an indication of the amount of agents that can go on holiday on each day of the week")]
+		public void ThenIShouldSeeAnIndicationOfTheAmountOfAgentsThatCanGoOnHolidayOnEachDayOfTheWeek()
+		{
+			var indicators = Pages.Pages.WeekSchedulePage.AbsenceIndiciators();
+			foreach (var indicator in indicators)
+			{
+				EventualAssert.That(()=>indicator.IsDisplayed(), Is.True);
+			}
+		}
+
+		[Given(@"There is no available allowance")]
+		public void GivenThereIsNoAvailableAllowance()
+		{
+			//Henke: Här behöver vi göra en hel del....
+			ScenarioContext.Current.Pending();
+		}
+
+		[Then(@"I should see an '(.*)' indication for chance of absence request on '(.*)'")]
+		public void ThenIShouldSeeAnIndicationForChanceOfAbsenceRequestOn(HtmlColor color, DateTime date)
+		{
+			ScenarioContext.Current.Pending();
+		}
 
 		private void AssertShowingWeekForDay(DateTime anyDayOfWeek)
 		{

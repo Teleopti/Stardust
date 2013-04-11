@@ -1,0 +1,55 @@
+using System;
+using TechTalk.SpecFlow;
+using TechTalk.SpecFlow.Assist;
+using Teleopti.Ccc.WebBehaviorTest.Data;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
+
+namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
+{
+	[Binding]
+	public class BudgetStepDefinitions
+	{
+		[Given(@"there is a budgetgroup '(.*)'")]
+		public void GivenThereIsABudgetgroup(string name)
+		{
+			var budgetConfigurable = new BudgetGroupConfigurable(name);
+			UserFactory.User().Setup(budgetConfigurable);
+		}
+
+		[Given(@"there is a budgetday")]
+		public void GivenThereIsAnBudgetday(Table table)
+		{
+			var budgetday = table.CreateInstance<BudgetdayConfigurable>();
+			UserFactory.User().Setup(budgetday);
+		}
+
+		//henke hitta på ett bättre namn
+		[Given(@"there is a \(readonly\) PersonScheduleDayModel")]
+		public void GivenThereIsAReadonlyPersonScheduleDayModel(Table table)
+		{
+			var scheduleReadOnlyProjection = table.CreateInstance<ReadModelScheduleProjectionConfigurable>();
+			UserFactory.User().Setup(scheduleReadOnlyProjection);
+		}
+
+		//henke
+		[Then(@"I should see stuff for '(.*)' to '(.*)'")]
+		public void ThenIShouldSeeStuffForTo(DateTime from, DateTime to)
+		{
+			//
+		}
+
+//		[Given(@"I have stuff for '(.*)' to '(.*)'")]
+//		public void GivenIHaveStuffForTo(DateTime from, DateTime to)
+//		{
+//			var absenceTimeConfigurable = new AbsenceTimeConfigurable() { From = from, To = to };
+//			UserFactory.User().Setup(absenceTimeConfigurable);
+//		}
+
+		[Given(@"there is absence time for")]
+		public void GivenThereIsAbsenceTimeForTo(Table table)
+		{
+			var absenceTimeConfigurable = table.CreateInstance<AbsenceTimeConfigurable>();
+			UserFactory.User().Setup(absenceTimeConfigurable);
+		}
+	}
+}

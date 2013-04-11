@@ -50,10 +50,10 @@
 					</div>
 					<div class="icon text-request ir floatright" />
 				</div>
-			    @*<div class="holiday-agents text-request floatright" data-bind="visible: true, attr: {title : holidayAgents}">
-					<div data-bind="text:holidayAgents">
-					</div
-				</div>*@
+			    <div class="holiday-agents text-request floatright" data-bind="visible: absenceRequestPermission, attr: {title : 'xxHolidayChance: ' + holidayChance()+ '%'}">
+			        <div class="small-circle" data-bind="percentageColor: holidayChance"></div>
+			        
+			    </div>
 				<!-- ko if: hasNote -->
 				<div class="icon comment-day ir tooltip floatright" data-bind="attr: {'tooltip-text': noteMessage}">
 				</div>

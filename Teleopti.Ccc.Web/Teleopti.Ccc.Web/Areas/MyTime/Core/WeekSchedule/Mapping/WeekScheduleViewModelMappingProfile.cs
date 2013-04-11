@@ -91,6 +91,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 																																s.ScheduleDay == null ? null : s.ScheduleDay.TimeZone);
 															}))
 				.ForMember(d => d.TextRequestCount, o => o.MapFrom(s => s.PersonRequests == null ? 0 : s.PersonRequests.Count(r => (r.Request is TextRequest || r.Request is AbsenceRequest))))
+				.ForMember(d => d.Allowance, c => c.MapFrom(s => s.Allowance))
+				.ForMember(d => d.AbsenceAgents, c => c.MapFrom(s => s.AbsenceTime))
+
 				.ForMember(d => d.State, o => o.MapFrom(s =>
 															{
 																if (s.Date == DateOnly.Today)

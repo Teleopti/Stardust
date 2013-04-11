@@ -1,13 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Security.Principal;
 using System.Threading;
 using AutoMapper;
+using Castle.Components.DictionaryAdapter;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -15,12 +18,12 @@ using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping;
 using Teleopti.Ccc.WebTest.Core.Mapping;
 using Teleopti.Interfaces.Domain;
+using IAllowanceProvider = Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider.IAllowanceProvider;
 
 namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 {
@@ -35,6 +38,8 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		private TimeZoneInfo timeZone;
 		private IPermissionProvider permissionProvider;
 		private INow now;
+		private IAllowanceProvider allowanceProvider;
+		private IAbsenceTimeRandomProvider absenceTimeProvider;
 
 		[SetUp]
 		public void Setup()
@@ -48,16 +53,20 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
 			userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
 			now = MockRepository.GenerateMock<INow>();
+			allowanceProvider = MockRepository.GenerateMock<IAllowanceProvider>();
+			absenceTimeProvider = MockRepository.GenerateMock<IAbsenceTimeRandomProvider>();
 
 			Mapper.Reset();
 			Mapper.Initialize(c => c.AddProfile(
 				new WeekScheduleDomainDataMappingProfile(
-					scheduleProvider,
-					projectionProvider,
-					personRequestProvider,
-					userTimeZone,
-					permissionProvider,
-					now
+					Depend.On(scheduleProvider),
+					Depend.On(projectionProvider),
+					Depend.On(personRequestProvider),
+					Depend.On(userTimeZone),
+					Depend.On(permissionProvider),
+					Depend.On(now),
+					Depend.On(allowanceProvider),
+					Depend.On(absenceTimeProvider)
 					)));
 		}
 
@@ -200,6 +209,36 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			var result = Mapper.Map<DateOnly, WeekScheduleDomainData>(date);
 
 			result.Days.Single(d => d.Date == date).PersonRequests.Single().Should().Be.SameInstanceAs(personRequest);
+		}
+
+		[Test]
+		public void ShouldMapAllowances()
+		{
+			var date = DateOnly.Today;
+			var firstDayOfWeek = new DateOnly(DateHelper.GetFirstDateInWeek(date, CultureInfo.CurrentCulture));
+			var lastDayOfWeek = new DateOnly(DateHelper.GetLastDateInWeek(date, CultureInfo.CurrentCulture));
+			var week = new DateOnlyPeriod(firstDayOfWeek, lastDayOfWeek);
+			var weekWithPreviousDay = new DateOnlyPeriod(firstDayOfWeek.AddDays(-1), lastDayOfWeek);
+			var scheduleDay = new StubFactory().ScheduleDayStub(date);
+			var projection = new StubFactory().ProjectionStub();
+
+			scheduleProvider.Stub(x => x.GetScheduleForPeriod(weekWithPreviousDay)).Return(new[] { scheduleDay });
+			projectionProvider.Stub(x => x.Projection(scheduleDay)).Return(projection);
+
+			userTimeZone.Stub(x => x.TimeZone()).Return(timeZone);
+
+			var allowanceDay1 = new AllowanceDay { Allowance = 4, Date = week.StartDate };
+			var allowanceDay2 = new AllowanceDay { Allowance = 4, Date = week.StartDate.AddDays(1) };
+			var allowanceDay3 = new AllowanceDay { Allowance = 4, Date = week.StartDate.AddDays(2) };
+			var allowanceDay4 = new AllowanceDay { Allowance = 4, Date = week.StartDate.AddDays(3) };
+			var allowanceDay5 = new AllowanceDay { Allowance = 4, Date = week.StartDate.AddDays(4) };
+			var allowanceDay6 = new AllowanceDay { Allowance = 4, Date = week.StartDate.AddDays(5) };
+			var allowanceDay7 = new AllowanceDay { Allowance = 5, Date = week.StartDate.AddDays(6) };
+
+			allowanceProvider.Stub(x => x.GetAllowanceForPeriod(week)).Return(new[] { allowanceDay1, allowanceDay2, allowanceDay3, allowanceDay4, allowanceDay5, allowanceDay6, allowanceDay7 });
+
+			var result = Mapper.Map<DateOnly, WeekScheduleDomainData>(date);
+			result.Days.Single(d => d.Date == lastDayOfWeek).Allowance.Should().Be.EqualTo(allowanceDay7.Allowance);
 		}
 
 		[Test]
@@ -387,6 +426,33 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			var result = Mapper.Map<DateOnly, WeekScheduleDomainData>(firstDayOfWeek);
 
 			result.AsmPermission.Should().Be.True();
+		}
+
+		[Test]
+		public void ShouldMapRequestPermission()
+		{
+			var date = new DateOnly(2012, 08, 26);
+			var firstDayOfWeek = new DateOnly(DateHelper.GetFirstDateInWeek(date, CultureInfo.CurrentCulture));
+			var lastDayOfWeek = new DateOnly(DateHelper.GetLastDateInWeek(date, CultureInfo.CurrentCulture));
+			var period = new DateOnlyPeriod(firstDayOfWeek.AddDays(-1), lastDayOfWeek);
+
+			var scheduleDay = new StubFactory().ScheduleDayStub(lastDayOfWeek.Date);
+
+			userTimeZone.Stub(x => x.TimeZone()).Return(timeZone);
+			var localMidnightInUtc = timeZone.SafeConvertTimeToUtc(lastDayOfWeek.Date);
+			var projectionPeriod = new DateTimePeriod(localMidnightInUtc.AddHours(20), localMidnightInUtc.AddHours(28));
+
+			var layer = new StubFactory().VisualLayerStub();
+			layer.Period = projectionPeriod;
+			var projection = new StubFactory().ProjectionStub(new[] { layer });
+
+			scheduleProvider.Stub(x => x.GetScheduleForPeriod(period)).Return(new[] { scheduleDay });
+			projectionProvider.Stub(x => x.Projection(Arg<IScheduleDay>.Is.Anything)).Return(projection);
+			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb)).Return(true);
+
+			var result = Mapper.Map<DateOnly, WeekScheduleDomainData>(firstDayOfWeek);
+
+			result.AbsenceRequestPermission.Should().Be.True();
 		}
 
 		[Test]
