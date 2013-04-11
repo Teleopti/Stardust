@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 		private ISkillDayRepository _skillDayRepository;
 		private ISkillRepository _skillRepository;
 		private IUnitOfWorkFactory _unitOfWorkFactory;
+		private ICurrentUnitOfWorkFactory _currentunitOfWorkFactory;
 		private IStatisticLoader _statisticLoader;
 		private IReforecastPercentCalculator _reforecastPercentCalculator;
 		private IUnitOfWork _uow;
@@ -33,11 +34,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 			_scenarioRepository = _mocks.DynamicMock<IScenarioRepository>();
 			_skillDayRepository = _mocks.DynamicMock<ISkillDayRepository>();
 			_skillRepository = _mocks.DynamicMock<ISkillRepository>();
+			_currentunitOfWorkFactory = _mocks.DynamicMock<ICurrentUnitOfWorkFactory>();
 			_unitOfWorkFactory = _mocks.DynamicMock<IUnitOfWorkFactory>();
 			_statisticLoader = _mocks.DynamicMock<IStatisticLoader>();
 			_reforecastPercentCalculator = _mocks.DynamicMock<IReforecastPercentCalculator>();
 			_target = new RecalculateForecastOnSkillConsumer(_scenarioRepository, _skillDayRepository, _skillRepository,
-			                                                 _unitOfWorkFactory, _statisticLoader, _reforecastPercentCalculator);
+															 _currentunitOfWorkFactory, _statisticLoader, _reforecastPercentCalculator);
 			_uow = _mocks.DynamicMock<IUnitOfWork>();
 		}
 
@@ -47,6 +49,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 			var scenarioId = Guid.NewGuid();
 			_scenario = _mocks.StrictMock<IScenario>();
 			var message = new RecalculateForecastOnSkillMessageCollection {ScenarioId = scenarioId};
+			Expect.Call(_currentunitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+			Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_uow);
 			Expect.Call(_scenarioRepository.Get(scenarioId)).Return(_scenario);
 			Expect.Call(_scenario.DefaultScenario).Return(false);
 			_mocks.ReplayAll();
@@ -65,6 +69,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 			              		ScenarioId = scenarioId,
 			              		MessageCollection = new Collection<RecalculateForecastOnSkillMessage> {skillMessage}
 			              	};
+			Expect.Call(_currentunitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
 			Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_uow);
 			Expect.Call(_scenarioRepository.Get(scenarioId)).Return(_scenario);
 			Expect.Call(_scenario.DefaultScenario).Return(true);
@@ -92,6 +97,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 			var skillDay = _mocks.DynamicMock<ISkillDay>();
 			var workloadDay = _mocks.DynamicMock<IWorkloadDay>();
 			var workload = _mocks.DynamicMock<IWorkload>();
+			Expect.Call(_currentunitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
 			Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_uow);
 			Expect.Call(_scenarioRepository.Get(scenarioId)).Return(_scenario);
 			Expect.Call(_scenario.DefaultScenario).Return(true);
@@ -125,6 +131,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 			var skillDay = _mocks.DynamicMock<ISkillDay>();
 			var workloadDay = _mocks.DynamicMock<IWorkloadDay>();
 			var workload = _mocks.DynamicMock<IWorkload>();
+			Expect.Call(_currentunitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
 			Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_uow);
 			Expect.Call(_scenarioRepository.Get(scenarioId)).Return(_scenario);
 			Expect.Call(_scenario.DefaultScenario).Return(true);

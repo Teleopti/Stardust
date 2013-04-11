@@ -416,7 +416,7 @@ namespace Teleopti.Analytics.Parameters
 			string scriptKey = "MoveItemToListBox:" + "1000";
 		{
 			string scriptBlock =
-                @"<script language=""JavaScript"">
+				@"<script language=""JavaScript"">
                <!--
 				
 				function changepic(button,pic) 
@@ -427,6 +427,7 @@ namespace Teleopti.Analytics.Parameters
 
 				function moveListItem(ListFrom, ListTo, Type, ListVal, TextVal)
 				{
+					document.body.style.cursor  = 'wait';
 					var lstFrom = document.getElementById(ListFrom);
 					var lstTo = document.getElementById(ListTo);
 					var lstVal = document.getElementById(ListVal);
@@ -454,6 +455,7 @@ namespace Teleopti.Analytics.Parameters
 
 					str = str.substring(0, str.length -1);			
 					txtVal.value = str;
+					document.body.style.cursor  = 'default';
 				}
                 -->
                </script>";
