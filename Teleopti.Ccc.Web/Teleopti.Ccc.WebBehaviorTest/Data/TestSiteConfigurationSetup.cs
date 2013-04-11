@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		{
 			var contents = File.ReadAllText(Path.Combine(Paths.FindProjectPath(@"BuildArtifacts\"), "web.root.web.config"));
 			contents = contents.Replace("$(AgentPortalWebURL)", Url.ToString());
-			contents = contents.Replace("$(AnalyticsDB)", new SqlConnectionStringBuilder(IniFileInfo.ConnectionStringMatrix).InitialCatalog);
+			contents = contents.Replace("$(AnalyticsConnectionString)", IniFileInfo.ConnectionStringMatrix);
 			File.WriteAllText(TargetWebConfig, contents);
 		}
 	}
