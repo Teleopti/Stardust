@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
 using NUnit.Framework;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
 using Rhino.Mocks;
@@ -17,38 +14,29 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		private MockRepository _mock;
 		private AgentPreferenceAddCommand _target;
 		private IScheduleDay _scheduleDay;
-		private TimeSpan? minStart;
-		private TimeSpan? maxStart;
-		private TimeSpan? minEnd;
-		private TimeSpan? maxEnd;
-		private TimeSpan? minLength;
-		private TimeSpan? maxLength;
 		private IPreferenceDay _preferenceDay;
 		private IAgentPreferenceDayCreator _preferenceDayCreator;
-		//private IShiftCategory _shiftCategory;
-		//private IAbsence _absence;
-		//private IDayOffTemplate _dayOffTemplate;
-		//private IActivity _activity;
-
+		private IAgentPreferenceData _data;
+		
 		[SetUp]
 		public void Setup()
 		{
 			_mock = new MockRepository();
 			_scheduleDay = _mock.StrictMock<IScheduleDay>();
-			minStart = TimeSpan.FromHours(1);
-			maxStart = TimeSpan.FromHours(2);
-			minEnd = TimeSpan.FromHours(3);
-			maxEnd = TimeSpan.FromHours(4);
-			minLength = TimeSpan.FromHours(2);
-			maxLength = TimeSpan.FromHours(3);
-			//_shiftCategory = new ShiftCategory("shiftCatgory");
-			//_absence = new Absence();
-			//_dayOffTemplate = new DayOffTemplate(new Description("dayOffTemplate"));
-			//_activity = new Activity("activity");
-			_preferenceDayCreator = _mock.StrictMock<IAgentPreferenceDayCreator>();
-			_target = new AgentPreferenceAddCommand(_scheduleDay, null, null, null, null, minStart, maxStart, minEnd, maxEnd, minLength, maxLength,  null, null, null, null, null, null, _preferenceDayCreator);
-			_preferenceDay = _mock.StrictMock<IPreferenceDay>();
 			
+			_data = new AgentPreferenceData
+				{
+					MinStart = TimeSpan.FromHours(1),
+					MaxStart = TimeSpan.FromHours(2),
+					MinEnd = TimeSpan.FromHours(3),
+					MaxEnd = TimeSpan.FromHours(4),
+					MinLength = TimeSpan.FromHours(2),
+					MaxLength = TimeSpan.FromHours(3)
+				};
+
+			_preferenceDayCreator = _mock.StrictMock<IAgentPreferenceDayCreator>();
+			_target = new AgentPreferenceAddCommand(_scheduleDay,_data, _preferenceDayCreator);
+			_preferenceDay = _mock.StrictMock<IPreferenceDay>();	
 		}
 
 		[Test]
@@ -56,11 +44,10 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		{
 			using (_mock.Record())
 			{
-				var result = new AgentPreferenceCanCreateResult();
-				result.Result = true;
+				var result = new AgentPreferenceCanCreateResult {Result = true};
 				Expect.Call(_scheduleDay.PersistableScheduleDataCollection()).Return(new ReadOnlyCollection<IPersistableScheduleData>(new List<IPersistableScheduleData>()));
-				Expect.Call(_preferenceDayCreator.CanCreate(null, null, null, null, minStart, maxStart, minEnd, maxEnd, minLength, maxLength, null, null, null, null, null, null)).Return(result);
-				Expect.Call(_preferenceDayCreator.Create(_scheduleDay, null, null, null, null, minStart, maxStart, minEnd, maxEnd, minLength, maxLength, null, null, null, null, null, null)).Return(_preferenceDay);
+				Expect.Call(_preferenceDayCreator.CanCreate(_data)).Return(result);
+				Expect.Call(_preferenceDayCreator.Create(_scheduleDay, _data)).Return(_preferenceDay);
 				Expect.Call(() => _scheduleDay.Add(_preferenceDay));
 			}
 
@@ -75,10 +62,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		{
 			using (_mock.Record())
 			{
-				var result = new AgentPreferenceCanCreateResult();
-				result.Result = false;
+				var result = new AgentPreferenceCanCreateResult {Result = false};
 				Expect.Call(_scheduleDay.PersistableScheduleDataCollection()).Return(new ReadOnlyCollection<IPersistableScheduleData>(new List<IPersistableScheduleData>()));
-				Expect.Call(_preferenceDayCreator.CanCreate(null, null, null, null, minStart, maxStart, minEnd, maxEnd, minLength, maxLength, null, null, null, null, null, null)).Return(result);
+				Expect.Call(_preferenceDayCreator.CanCreate(_data)).Return(result);
 			}
 
 			using (_mock.Playback())

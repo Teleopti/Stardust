@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
@@ -205,19 +203,20 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		[Test]
 		public void ShouldRemoveWhenExistingAndAllEmpty()
 		{
-			var result = new AgentPreferenceCanCreateResult();
-			result.Result = false;
-			result.EmptyError = true;
+			var result = new AgentPreferenceCanCreateResult {Result = false, EmptyError = true};
+
+			var data = new AgentPreferenceData();
+			
 
 			using (_mock.Record())
 			{
 				Expect.Call(_scheduleDay.PersistableScheduleDataCollection()).Return(new ReadOnlyCollection<IPersistableScheduleData>(new List<IPersistableScheduleData> { _preferenceDay }));
-				Expect.Call(_dayCreator.CanCreate(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null)).Return(result);
+				Expect.Call(_dayCreator.CanCreate(data)).Return(result);
 			}
 
 			using (_mock.Playback())
 			{
-				var toExecute = _presenter.CommandToExecute(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, _dayCreator);
+				var toExecute = _presenter.CommandToExecute(data, _dayCreator);
 				Assert.AreEqual(AgentPreferenceExecuteCommand.Remove, toExecute);
 			}
 		}
@@ -225,19 +224,23 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		[Test]
 		public void ShouldAddWhenNoExisting()
 		{
-			var result = new AgentPreferenceCanCreateResult();
-			result.Result = true;
+			var result = new AgentPreferenceCanCreateResult {Result = true};
 			var shiftCategory = new ShiftCategory("shiftCategory");
+
+			var data = new AgentPreferenceData
+			{
+				ShiftCategory = shiftCategory
+			};
 
 			using (_mock.Record())
 			{
 				Expect.Call(_scheduleDay.PersistableScheduleDataCollection()).Return(new ReadOnlyCollection<IPersistableScheduleData>(new List<IPersistableScheduleData> ()));
-				Expect.Call(_dayCreator.CanCreate(shiftCategory, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null)).Return(result);
+				Expect.Call(_dayCreator.CanCreate(data)).Return(result);
 			}
 
 			using (_mock.Playback())
 			{
-				var toExecute = _presenter.CommandToExecute(shiftCategory, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, _dayCreator);
+				var toExecute = _presenter.CommandToExecute(data, _dayCreator);
 				Assert.AreEqual(AgentPreferenceExecuteCommand.Add, toExecute);
 			}
 		}
@@ -245,19 +248,23 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		[Test]
 		public void ShouldEditWhenExisting()
 		{
-			var result = new AgentPreferenceCanCreateResult();
-			result.Result = true;
+			var result = new AgentPreferenceCanCreateResult {Result = true};
 			var shiftCategory = new ShiftCategory("shiftCategory");
+
+			var data = new AgentPreferenceData
+			{
+				ShiftCategory = shiftCategory
+			};
 
 			using (_mock.Record())
 			{
 				Expect.Call(_scheduleDay.PersistableScheduleDataCollection()).Return(new ReadOnlyCollection<IPersistableScheduleData>(new List<IPersistableScheduleData>{_preferenceDay}));
-				Expect.Call(_dayCreator.CanCreate(shiftCategory, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null)).Return(result);
+				Expect.Call(_dayCreator.CanCreate(data)).Return(result);
 			}
 
 			using (_mock.Playback())
 			{
-				var toExecute = _presenter.CommandToExecute(shiftCategory, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, _dayCreator);
+				var toExecute = _presenter.CommandToExecute(data, _dayCreator);
 				Assert.AreEqual(AgentPreferenceExecuteCommand.Edit, toExecute);
 			}
 		}
@@ -265,20 +272,23 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		[Test]
 		public void ShouldNoneWhenNotValidData()
 		{
-			var result = new AgentPreferenceCanCreateResult();
-			result.Result = false;
-			result.StartTimeMinError = true;
-			result.StartTimeMaxError = true;
+			var result = new AgentPreferenceCanCreateResult {Result = false, StartTimeMinError = true, StartTimeMaxError = true};
+
+			var data = new AgentPreferenceData
+			{
+				MinStart = TimeSpan.FromHours(2),
+				MaxStart = TimeSpan.FromHours(1)
+			};
 
 			using (_mock.Record())
 			{
 				Expect.Call(_scheduleDay.PersistableScheduleDataCollection()).Return(new ReadOnlyCollection<IPersistableScheduleData>(new List<IPersistableScheduleData>()));
-				Expect.Call(_dayCreator.CanCreate(null, null, null, null, TimeSpan.FromHours(2), TimeSpan.FromHours(1), null, null, null, null, null, null, null, null, null, null)).Return(result);
+				Expect.Call(_dayCreator.CanCreate(data)).Return(result);
 			}
 
 			using (_mock.Playback())
 			{
-				var toExecute = _presenter.CommandToExecute(null, null, null, null, TimeSpan.FromHours(2), TimeSpan.FromHours(1), null, null, null, null, null, null, null, null, null, null, _dayCreator);
+				var toExecute = _presenter.CommandToExecute(data, _dayCreator);
 				Assert.AreEqual(AgentPreferenceExecuteCommand.None, toExecute);
 			}
 		}

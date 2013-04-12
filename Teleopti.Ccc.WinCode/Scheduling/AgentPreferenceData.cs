@@ -3,7 +3,27 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling
 {
-	public class AgentPreferenceData
+	public interface IAgentPreferenceData
+	{
+		IShiftCategory ShiftCategory { get; set; }
+		IAbsence Absence { get; set; }
+		IDayOffTemplate DayOffTemplate { get; set; }
+		IActivity Activity { get; set; }
+		TimeSpan? MinStart { get; set; }
+		TimeSpan? MaxStart { get; set; }
+		TimeSpan? MinEnd { get; set; }
+		TimeSpan? MaxEnd { get; set; }
+		TimeSpan? MinLength { get; set; }
+		TimeSpan? MaxLength { get; set; }
+		TimeSpan? MinStartActivity { get; set; }
+		TimeSpan? MaxStartActivity { get; set; }
+		TimeSpan? MinEndActivity { get; set; }
+		TimeSpan? MaxEndActivity { get; set; }
+		TimeSpan? MinLengthActivity { get; set; }
+		TimeSpan? MaxLengthActivity { get; set; }
+	}
+
+	public class AgentPreferenceData : IAgentPreferenceData
 	{
 		public IShiftCategory ShiftCategory { get; set; }
 		public IAbsence Absence { get; set; }

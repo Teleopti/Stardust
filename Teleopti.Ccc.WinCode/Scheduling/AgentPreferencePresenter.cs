@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling
@@ -148,18 +144,13 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			}	
 		}
 
-		public AgentPreferenceExecuteCommand CommandToExecute(IShiftCategory shiftCategory, IAbsence absence, IDayOffTemplate dayOffTemplate, IActivity activity, TimeSpan? minStart, TimeSpan? maxStart,
-									TimeSpan? minEnd, TimeSpan? maxEnd, TimeSpan? minLength, TimeSpan? maxLength,
-									TimeSpan? minStartActivity, TimeSpan? maxStartActivity, TimeSpan? minEndActivity, TimeSpan? maxEndActivity,
-									TimeSpan? minLengthActivity, TimeSpan? maxLengthActivity, IAgentPreferenceDayCreator dayCreator)
+		public AgentPreferenceExecuteCommand CommandToExecute(IAgentPreferenceData data, IAgentPreferenceDayCreator dayCreator)
 		{
 			if (dayCreator == null) throw new ArgumentNullException("dayCreator");
 
 			var preferenceDay = _scheduleDay.PersistableScheduleDataCollection().OfType<IPreferenceDay>().FirstOrDefault();
 
-			var canCreate = dayCreator.CanCreate(shiftCategory, absence, dayOffTemplate, activity, minStart, maxStart, minEnd,
-			                                     maxEnd, minLength, maxLength, minStartActivity, maxStartActivity, minEndActivity,
-			                                     maxEndActivity, minLengthActivity, maxLengthActivity);
+			var canCreate = dayCreator.CanCreate(data);
 
 			if (preferenceDay == null && canCreate.Result)
 				return AgentPreferenceExecuteCommand.Add;

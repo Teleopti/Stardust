@@ -40,14 +40,17 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		}
 
 		[Test]
-		public void ShouldCreate()
+		public void ShouldCreateTimes()
 		{
-			TimeSpan? minStart = TimeSpan.FromHours(1);
-			TimeSpan? maxStart = TimeSpan.FromHours(2);
-			TimeSpan? minEnd = TimeSpan.FromHours(3);
-			TimeSpan? maxEnd = TimeSpan.FromHours(4);
-			TimeSpan? minLength = TimeSpan.FromHours(2);
-			TimeSpan? maxLength = TimeSpan.FromHours(3);
+			var data = new AgentPreferenceData
+				{
+					MinStart = TimeSpan.FromHours(1),
+					MaxStart = TimeSpan.FromHours(2),
+					MinEnd = TimeSpan.FromHours(3),
+					MaxEnd = TimeSpan.FromHours(4),
+					MinLength = TimeSpan.FromHours(2),
+					MaxLength = TimeSpan.FromHours(3)
+				};
 
 			using (_mock.Record())
 			{
@@ -58,28 +61,32 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
 			using (_mock.Playback())
 			{
-				var result = _preferenceDayCreator.Create(_scheduleDay, null, null, null, null, minStart, maxStart, minEnd, maxEnd, minLength, maxLength, null, null, null, null, null, null);
+				var result = _preferenceDayCreator.Create(_scheduleDay, data);
 				Assert.IsNotNull(result);
 				var restriction = result.Restriction;
 				Assert.IsNotNull(restriction);
-				Assert.AreEqual(minStart, restriction.StartTimeLimitation.StartTime);
-				Assert.AreEqual(maxStart,restriction.StartTimeLimitation.EndTime);
-				Assert.AreEqual(minEnd, restriction.EndTimeLimitation.StartTime);
-				Assert.AreEqual(maxEnd, restriction.EndTimeLimitation.EndTime);
-				Assert.AreEqual(minLength, restriction.WorkTimeLimitation.StartTime);
-				Assert.AreEqual(maxLength, restriction.WorkTimeLimitation.EndTime);
+				Assert.AreEqual(data.MinStart, restriction.StartTimeLimitation.StartTime);
+				Assert.AreEqual(data.MaxStart, restriction.StartTimeLimitation.EndTime);
+				Assert.AreEqual(data.MinEnd, restriction.EndTimeLimitation.StartTime);
+				Assert.AreEqual(data.MaxEnd, restriction.EndTimeLimitation.EndTime);
+				Assert.AreEqual(data.MinLength, restriction.WorkTimeLimitation.StartTime);
+				Assert.AreEqual(data.MaxLength, restriction.WorkTimeLimitation.EndTime);
 			}	
 		}
 
 		[Test]
 		public void ShouldCreateShiftCategory()
 		{
-			TimeSpan? minStart = TimeSpan.FromHours(1);
-			TimeSpan? maxStart = TimeSpan.FromHours(2);
-			TimeSpan? minEnd = TimeSpan.FromHours(3);
-			TimeSpan? maxEnd = TimeSpan.FromHours(4);
-			TimeSpan? minLength = TimeSpan.FromHours(2);
-			TimeSpan? maxLength = TimeSpan.FromHours(3);
+			var data = new AgentPreferenceData
+				{
+					ShiftCategory = _shiftCategory,
+					MinStart = TimeSpan.FromHours(1),
+					MaxStart = TimeSpan.FromHours(2),
+					MinEnd = TimeSpan.FromHours(3),
+					MaxEnd = TimeSpan.FromHours(4),
+					MinLength = TimeSpan.FromHours(2),
+					MaxLength = TimeSpan.FromHours(3)
+				};
 
 			using (_mock.Record())
 			{
@@ -90,29 +97,33 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
 			using (_mock.Playback())
 			{
-				var result = _preferenceDayCreator.Create(_scheduleDay, _shiftCategory, null, null, null, minStart, maxStart, minEnd, maxEnd, minLength, maxLength, null, null, null, null, null, null);
+				var result = _preferenceDayCreator.Create(_scheduleDay, data);
 				Assert.IsNotNull(result);
 				var restriction = result.Restriction;
 				Assert.IsNotNull(restriction);
 				Assert.AreEqual(_shiftCategory, restriction.ShiftCategory);
-				Assert.AreEqual(minStart, restriction.StartTimeLimitation.StartTime);
-				Assert.AreEqual(maxStart, restriction.StartTimeLimitation.EndTime);
-				Assert.AreEqual(minEnd, restriction.EndTimeLimitation.StartTime);
-				Assert.AreEqual(maxEnd, restriction.EndTimeLimitation.EndTime);
-				Assert.AreEqual(minLength, restriction.WorkTimeLimitation.StartTime);
-				Assert.AreEqual(maxLength, restriction.WorkTimeLimitation.EndTime);
+				Assert.AreEqual(data.MinStart, restriction.StartTimeLimitation.StartTime);
+				Assert.AreEqual(data.MaxStart, restriction.StartTimeLimitation.EndTime);
+				Assert.AreEqual(data.MinEnd, restriction.EndTimeLimitation.StartTime);
+				Assert.AreEqual(data.MaxEnd, restriction.EndTimeLimitation.EndTime);
+				Assert.AreEqual(data.MinLength, restriction.WorkTimeLimitation.StartTime);
+				Assert.AreEqual(data.MaxLength, restriction.WorkTimeLimitation.EndTime);
 			}
 		}
 
 		[Test]
 		public void ShouldCreateActivity()
 		{
-			TimeSpan? minStart = TimeSpan.FromHours(1);
-			TimeSpan? maxStart = TimeSpan.FromHours(2);
-			TimeSpan? minEnd = TimeSpan.FromHours(3);
-			TimeSpan? maxEnd = TimeSpan.FromHours(4);
-			TimeSpan? minLength = TimeSpan.FromHours(2);
-			TimeSpan? maxLength = TimeSpan.FromHours(3);
+			var data = new AgentPreferenceData
+			{
+				Activity = _activity,
+				MinStartActivity = TimeSpan.FromHours(1),
+				MaxStartActivity = TimeSpan.FromHours(2),
+				MinEndActivity = TimeSpan.FromHours(3),
+				MaxEndActivity = TimeSpan.FromHours(4),
+				MinLengthActivity = TimeSpan.FromHours(2),
+				MaxLengthActivity = TimeSpan.FromHours(3)
+			};
 
 			using (_mock.Record())
 			{
@@ -123,30 +134,42 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
 			using (_mock.Playback())
 			{
-				var result = _preferenceDayCreator.Create(_scheduleDay, null, null, null, _activity, null, null, null, null, null, null, minStart, maxStart, minEnd, maxEnd, minLength, maxLength);
+				var result = _preferenceDayCreator.Create(_scheduleDay, data);
 				Assert.IsNotNull(result);
 				var restriction = result.Restriction;
 				Assert.IsNotNull(restriction);
 				var activityRestriction = restriction.ActivityRestrictionCollection[0];
 				Assert.AreEqual(_activity, activityRestriction.Activity);
-				Assert.AreEqual(minStart, activityRestriction.StartTimeLimitation.StartTime);
-				Assert.AreEqual(maxStart, activityRestriction.StartTimeLimitation.EndTime);
-				Assert.AreEqual(minEnd, activityRestriction.EndTimeLimitation.StartTime);
-				Assert.AreEqual(maxEnd, activityRestriction.EndTimeLimitation.EndTime);
-				Assert.AreEqual(minLength, activityRestriction.WorkTimeLimitation.StartTime);
-				Assert.AreEqual(maxLength, activityRestriction.WorkTimeLimitation.EndTime);
+				Assert.AreEqual(data.MinStartActivity, activityRestriction.StartTimeLimitation.StartTime);
+				Assert.AreEqual(data.MaxStartActivity, activityRestriction.StartTimeLimitation.EndTime);
+				Assert.AreEqual(data.MinEndActivity, activityRestriction.EndTimeLimitation.StartTime);
+				Assert.AreEqual(data.MaxEndActivity, activityRestriction.EndTimeLimitation.EndTime);
+				Assert.AreEqual(data.MinLengthActivity, activityRestriction.WorkTimeLimitation.StartTime);
+				Assert.AreEqual(data.MaxLengthActivity, activityRestriction.WorkTimeLimitation.EndTime);
 			}
 		}
 
 		[Test]
 		public void ShouldCreateShiftCategoryAndActivity()
 		{
-			TimeSpan? minStart = TimeSpan.FromHours(1);
-			TimeSpan? maxStart = TimeSpan.FromHours(2);
-			TimeSpan? minEnd = TimeSpan.FromHours(3);
-			TimeSpan? maxEnd = TimeSpan.FromHours(4);
-			TimeSpan? minLength = TimeSpan.FromHours(2);
-			TimeSpan? maxLength = TimeSpan.FromHours(3);
+			var data = new AgentPreferenceData
+			{
+				ShiftCategory = _shiftCategory,
+				Activity = _activity,
+				MinStart = TimeSpan.FromHours(1),
+				MaxStart = TimeSpan.FromHours(2),
+				MinEnd = TimeSpan.FromHours(3),
+				MaxEnd = TimeSpan.FromHours(4),
+				MinLength = TimeSpan.FromHours(2),
+				MaxLength = TimeSpan.FromHours(3),
+
+				MinStartActivity = TimeSpan.FromHours(1),
+				MaxStartActivity = TimeSpan.FromHours(2),
+				MinEndActivity = TimeSpan.FromHours(3),
+				MaxEndActivity = TimeSpan.FromHours(4),
+				MinLengthActivity = TimeSpan.FromHours(2),
+				MaxLengthActivity = TimeSpan.FromHours(3)
+			};
 
 			using (_mock.Record())
 			{
@@ -157,38 +180,42 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
 			using (_mock.Playback())
 			{
-				var result = _preferenceDayCreator.Create(_scheduleDay, _shiftCategory, null, null, _activity, minStart, maxStart, minEnd, maxEnd, minLength, maxLength, minStart, maxStart, minEnd, maxEnd, minLength, maxLength);
+				var result = _preferenceDayCreator.Create(_scheduleDay, data);
 				Assert.IsNotNull(result);
 				var restriction = result.Restriction;
 				Assert.IsNotNull(restriction);
 				Assert.AreEqual(_shiftCategory, restriction.ShiftCategory);
-				Assert.AreEqual(minStart, restriction.StartTimeLimitation.StartTime);
-				Assert.AreEqual(maxStart, restriction.StartTimeLimitation.EndTime);
-				Assert.AreEqual(minEnd, restriction.EndTimeLimitation.StartTime);
-				Assert.AreEqual(maxEnd, restriction.EndTimeLimitation.EndTime);
-				Assert.AreEqual(minLength, restriction.WorkTimeLimitation.StartTime);
-				Assert.AreEqual(maxLength, restriction.WorkTimeLimitation.EndTime);
+				Assert.AreEqual(data.MinStart, restriction.StartTimeLimitation.StartTime);
+				Assert.AreEqual(data.MaxStart, restriction.StartTimeLimitation.EndTime);
+				Assert.AreEqual(data.MinEnd, restriction.EndTimeLimitation.StartTime);
+				Assert.AreEqual(data.MaxEnd, restriction.EndTimeLimitation.EndTime);
+				Assert.AreEqual(data.MinLength, restriction.WorkTimeLimitation.StartTime);
+				Assert.AreEqual(data.MaxLength, restriction.WorkTimeLimitation.EndTime);
 
 				var activityRestriction = restriction.ActivityRestrictionCollection[0];
 				Assert.AreEqual(_activity, activityRestriction.Activity);
-				Assert.AreEqual(minStart, activityRestriction.StartTimeLimitation.StartTime);
-				Assert.AreEqual(maxStart, activityRestriction.StartTimeLimitation.EndTime);
-				Assert.AreEqual(minEnd, activityRestriction.EndTimeLimitation.StartTime);
-				Assert.AreEqual(maxEnd, activityRestriction.EndTimeLimitation.EndTime);
-				Assert.AreEqual(minLength, activityRestriction.WorkTimeLimitation.StartTime);
-				Assert.AreEqual(maxLength, activityRestriction.WorkTimeLimitation.EndTime);
+				Assert.AreEqual(data.MinStart, activityRestriction.StartTimeLimitation.StartTime);
+				Assert.AreEqual(data.MaxStart, activityRestriction.StartTimeLimitation.EndTime);
+				Assert.AreEqual(data.MinEnd, activityRestriction.EndTimeLimitation.StartTime);
+				Assert.AreEqual(data.MaxEnd, activityRestriction.EndTimeLimitation.EndTime);
+				Assert.AreEqual(data.MinLength, activityRestriction.WorkTimeLimitation.StartTime);
+				Assert.AreEqual(data.MaxLength, activityRestriction.WorkTimeLimitation.EndTime);
 			}	
 		}
 
 		[Test]
 		public void ShouldCreateAbsence()
 		{
-			TimeSpan? minStart = TimeSpan.FromHours(1);
-			TimeSpan? maxStart = TimeSpan.FromHours(2);
-			TimeSpan? minEnd = TimeSpan.FromHours(3);
-			TimeSpan? maxEnd = TimeSpan.FromHours(4);
-			TimeSpan? minLength = TimeSpan.FromHours(2);
-			TimeSpan? maxLength = TimeSpan.FromHours(3);
+			var data = new AgentPreferenceData
+			{
+				Absence = _absence,
+				MinStartActivity = TimeSpan.FromHours(1),
+				MaxStartActivity = TimeSpan.FromHours(2),
+				MinEndActivity = TimeSpan.FromHours(3),
+				MaxEndActivity = TimeSpan.FromHours(4),
+				MinLengthActivity = TimeSpan.FromHours(2),
+				MaxLengthActivity = TimeSpan.FromHours(3)
+			};
 
 			using (_mock.Record())
 			{
@@ -199,7 +226,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
 			using (_mock.Playback())
 			{
-				var result = _preferenceDayCreator.Create(_scheduleDay, null, _absence, null, null, minStart, maxStart, minEnd, maxEnd, minLength, maxLength, null, null, null, null, null, null);
+				var result = _preferenceDayCreator.Create(_scheduleDay, data);
 				Assert.IsNotNull(result);
 				var restriction = result.Restriction;
 				Assert.IsNotNull(restriction);
@@ -216,12 +243,16 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		[Test]
 		public void ShouldCreateDayOffTemplate()
 		{
-			TimeSpan? minStart = TimeSpan.FromHours(1);
-			TimeSpan? maxStart = TimeSpan.FromHours(2);
-			TimeSpan? minEnd = TimeSpan.FromHours(3);
-			TimeSpan? maxEnd = TimeSpan.FromHours(4);
-			TimeSpan? minLength = TimeSpan.FromHours(2);
-			TimeSpan? maxLength = TimeSpan.FromHours(3);
+			var data = new AgentPreferenceData
+			{
+				DayOffTemplate = _dayOffTemplate,
+				MinStartActivity = TimeSpan.FromHours(1),
+				MaxStartActivity = TimeSpan.FromHours(2),
+				MinEndActivity = TimeSpan.FromHours(3),
+				MaxEndActivity = TimeSpan.FromHours(4),
+				MinLengthActivity = TimeSpan.FromHours(2),
+				MaxLengthActivity = TimeSpan.FromHours(3)
+			};
 
 			using (_mock.Record())
 			{
@@ -232,7 +263,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
 			using (_mock.Playback())
 			{
-				var result = _preferenceDayCreator.Create(_scheduleDay, null, null, _dayOffTemplate, null, minStart, maxStart, minEnd, maxEnd, minLength, maxLength, null, null, null, null, null, null);
+				var result = _preferenceDayCreator.Create(_scheduleDay, data);
 				Assert.IsNotNull(result);
 				var restriction = result.Restriction;
 				Assert.IsNotNull(restriction);
@@ -249,41 +280,48 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		[Test]
 		public void ShouldReturnNullWhenCannotCreate()
 		{
-			TimeSpan? minStart = TimeSpan.FromHours(2);
-			TimeSpan? maxStart = TimeSpan.FromHours(1);
-			TimeSpan? minEnd = TimeSpan.FromHours(3);
-			TimeSpan? maxEnd = TimeSpan.FromHours(4);
-			TimeSpan? minLength = TimeSpan.FromHours(2);
-			TimeSpan? maxLength = TimeSpan.FromHours(3);
+			var data = new AgentPreferenceData
+			{
+				MinStartActivity = TimeSpan.FromHours(2),
+				MaxStartActivity = TimeSpan.FromHours(1),
+				MinEndActivity = TimeSpan.FromHours(3),
+				MaxEndActivity = TimeSpan.FromHours(4),
+				MinLengthActivity = TimeSpan.FromHours(2),
+				MaxLengthActivity = TimeSpan.FromHours(3)
+			};
 
-			var result = _preferenceDayCreator.Create(_scheduleDay, null, null, null, null, minStart, maxStart, minEnd, maxEnd, minLength, maxLength, null, null, null, null, null, null);
+			var result = _preferenceDayCreator.Create(_scheduleDay, data);
 			Assert.IsNull(result);
 		}
 
 		[Test, ExpectedException(typeof(ArgumentNullException))]
 		public void ShouldThrowExceptionOnEmptyDay()
 		{
-			_preferenceDayCreator.Create(null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);	
+			var data = new AgentPreferenceData();
+			_preferenceDayCreator.Create(null, data);	
 		}
 
 		[Test]
 		public void ShouldBeAbleToCreateWithValidTimes()
 		{
-			TimeSpan? minStart = TimeSpan.FromHours(1);
-			TimeSpan? maxStart = TimeSpan.FromHours(2);
-			TimeSpan? minEnd = TimeSpan.FromHours(3);
-			TimeSpan? maxEnd = TimeSpan.FromHours(4);
-			TimeSpan? minLength = TimeSpan.FromHours(2);
-			TimeSpan? maxLength = TimeSpan.FromHours(3);
+			var data = new AgentPreferenceData
+			{
+				MinStart = TimeSpan.FromHours(1),
+				MaxStart = TimeSpan.FromHours(2),
+				MinEnd = TimeSpan.FromHours(3),
+				MaxEnd = TimeSpan.FromHours(4),
+				MinLength = TimeSpan.FromHours(2),
+				MaxLength = TimeSpan.FromHours(3),
 
-			TimeSpan? minStartActivity = TimeSpan.FromHours(1);
-			TimeSpan? maxStartActivity = TimeSpan.FromHours(2);
-			TimeSpan? minEndActivity = TimeSpan.FromHours(3);
-			TimeSpan? maxEndActivity = TimeSpan.FromHours(4);
-			TimeSpan? minLengthActivity = TimeSpan.FromHours(2);
-			TimeSpan? maxLengthActivity = TimeSpan.FromHours(3);
+				MinStartActivity = TimeSpan.FromHours(1),
+				MaxStartActivity = TimeSpan.FromHours(2),
+				MinEndActivity = TimeSpan.FromHours(3),
+				MaxEndActivity = TimeSpan.FromHours(4),
+				MinLengthActivity = TimeSpan.FromHours(2),
+				MaxLengthActivity = TimeSpan.FromHours(3)
+			};
 
-			var result = _preferenceDayCreator.CanCreate(null, null, null, null, minStart, maxStart, minEnd, maxEnd, minLength, maxLength, minStartActivity, maxStartActivity, minEndActivity, maxEndActivity, minLengthActivity, maxLengthActivity);
+			var result = _preferenceDayCreator.CanCreate(data);
 
 			Assert.IsTrue(result.Result);
 			Assert.IsFalse(result.StartTimeMinError);
@@ -292,25 +330,35 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			Assert.IsFalse(result.EndTimeMaxError);
 			Assert.IsFalse(result.LengthMinError);
 			Assert.IsFalse(result.LengthMaxError);
+
+			Assert.IsFalse(result.StartTimeMinErrorActivity);
+			Assert.IsFalse(result.StartTimeMaxErrorActivity);
+			Assert.IsFalse(result.EndTimeMinErrorActivity);
+			Assert.IsFalse(result.EndTimeMaxErrorActivity);
+			Assert.IsFalse(result.LengthMinErrorActivity);
+			Assert.IsFalse(result.LengthMaxErrorActivity);
 		}
 
 		[Test]
 		public void ShouldHandleEmptyStartTimeMin()
 		{
-			TimeSpan? maxStart = TimeSpan.FromHours(2);
-			TimeSpan? minEnd = TimeSpan.FromHours(3);
-			TimeSpan? maxEnd = TimeSpan.FromHours(4);
-			TimeSpan? minLength = TimeSpan.FromHours(2);
-			TimeSpan? maxLength = TimeSpan.FromHours(3);
+			var data = new AgentPreferenceData
+			{
+				
+				MaxStart = TimeSpan.FromHours(2),
+				MinEnd = TimeSpan.FromHours(3),
+				MaxEnd = TimeSpan.FromHours(4),
+				MinLength = TimeSpan.FromHours(2),
+				MaxLength = TimeSpan.FromHours(3),
 
-			
-			TimeSpan? maxStartActivity = TimeSpan.FromHours(2);
-			TimeSpan? minEndActivity = TimeSpan.FromHours(3);
-			TimeSpan? maxEndActivity = TimeSpan.FromHours(4);
-			TimeSpan? minLengthActivity = TimeSpan.FromHours(2);
-			TimeSpan? maxLengthActivity = TimeSpan.FromHours(3);
+				MaxStartActivity = TimeSpan.FromHours(2),
+				MinEndActivity = TimeSpan.FromHours(3),
+				MaxEndActivity = TimeSpan.FromHours(4),
+				MinLengthActivity = TimeSpan.FromHours(2),
+				MaxLengthActivity = TimeSpan.FromHours(3)
+			};
 
-			var result = _preferenceDayCreator.CanCreate(null, null, null, null, null, maxStart, minEnd, maxEnd, minLength, maxLength, null, maxStartActivity, minEndActivity, maxEndActivity, minLengthActivity, maxLengthActivity);
+			var result = _preferenceDayCreator.CanCreate(data);
 
 			Assert.IsTrue(result.Result);
 			Assert.IsFalse(result.StartTimeMinError);
@@ -331,19 +379,22 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		[Test]
 		public void ShouldHandleEmptyStartTimeMax()
 		{
-			TimeSpan? minStart = TimeSpan.FromHours(1);
-			TimeSpan? minEnd = TimeSpan.FromHours(3);
-			TimeSpan? maxEnd = TimeSpan.FromHours(4);
-			TimeSpan? minLength = TimeSpan.FromHours(2);
-			TimeSpan? maxLength = TimeSpan.FromHours(3);
+			var data = new AgentPreferenceData
+			{
+				MinStart = TimeSpan.FromHours(1),
+				MinEnd = TimeSpan.FromHours(3),
+				MaxEnd = TimeSpan.FromHours(4),
+				MinLength = TimeSpan.FromHours(2),
+				MaxLength = TimeSpan.FromHours(3),
 
-			TimeSpan? minStartActivity = TimeSpan.FromHours(1);
-			TimeSpan? minEndActivity = TimeSpan.FromHours(3);
-			TimeSpan? maxEndActivity = TimeSpan.FromHours(4);
-			TimeSpan? minLengthActivity = TimeSpan.FromHours(2);
-			TimeSpan? maxLengthActivity = TimeSpan.FromHours(3);
+				MinStartActivity = TimeSpan.FromHours(1),
+				MinEndActivity = TimeSpan.FromHours(3),
+				MaxEndActivity = TimeSpan.FromHours(4),
+				MinLengthActivity = TimeSpan.FromHours(2),
+				MaxLengthActivity = TimeSpan.FromHours(3)
+			};
 
-			var result = _preferenceDayCreator.CanCreate(null, null, null, null, minStart, null, minEnd, maxEnd, minLength, maxLength, minStartActivity, null, minEndActivity, maxEndActivity, minLengthActivity, maxLengthActivity);
+			var result = _preferenceDayCreator.CanCreate(data);
 
 			Assert.IsTrue(result.Result);
 			Assert.IsFalse(result.StartTimeMinError);
@@ -364,17 +415,21 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		[Test]
 		public void ShouldHandleEmptyStartTime()
 		{
-			TimeSpan? minEnd = TimeSpan.FromHours(3);
-			TimeSpan? maxEnd = TimeSpan.FromHours(4);
-			TimeSpan? minLength = TimeSpan.FromHours(2);
-			TimeSpan? maxLength = TimeSpan.FromHours(3);
+			
+			var data = new AgentPreferenceData
+			{
+				MinEnd = TimeSpan.FromHours(3),
+				MaxEnd = TimeSpan.FromHours(4),
+				MinLength = TimeSpan.FromHours(2),
+				MaxLength = TimeSpan.FromHours(3),
 
-			TimeSpan? minEndActivity = TimeSpan.FromHours(3);
-			TimeSpan? maxEndActivity = TimeSpan.FromHours(4);
-			TimeSpan? minLengthActivity = TimeSpan.FromHours(2);
-			TimeSpan? maxLengthActivity = TimeSpan.FromHours(3);
+				MinEndActivity = TimeSpan.FromHours(3),
+				MaxEndActivity = TimeSpan.FromHours(4),
+				MinLengthActivity = TimeSpan.FromHours(2),
+				MaxLengthActivity = TimeSpan.FromHours(3)
+			};
 
-			var result = _preferenceDayCreator.CanCreate(null, null, null, null, null, null, minEnd, maxEnd, minLength, maxLength, null, null, minEndActivity, maxEndActivity, minLengthActivity, maxLengthActivity);
+			var result = _preferenceDayCreator.CanCreate(data);
 
 			Assert.IsTrue(result.Result);
 			Assert.IsFalse(result.StartTimeMinError);
@@ -395,21 +450,24 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		[Test]
 		public void ShouldDetectStartTimeMinGreaterThanStartTimeMax()
 		{
-			TimeSpan? minStart = TimeSpan.FromHours(2);
-			TimeSpan? maxStart = TimeSpan.FromHours(1);
-			TimeSpan? minEnd = TimeSpan.FromHours(3);
-			TimeSpan? maxEnd = TimeSpan.FromHours(4);
-			TimeSpan? minLength = TimeSpan.FromHours(2);
-			TimeSpan? maxLength = TimeSpan.FromHours(3);
+			var data = new AgentPreferenceData
+			{
+				MinStart = TimeSpan.FromHours(2),
+				MaxStart = TimeSpan.FromHours(1),
+				MinEnd = TimeSpan.FromHours(3),
+				MaxEnd = TimeSpan.FromHours(4),
+				MinLength = TimeSpan.FromHours(2),
+				MaxLength = TimeSpan.FromHours(3),
 
-			TimeSpan? minStartActivity = TimeSpan.FromHours(2);
-			TimeSpan? maxStartActivity = TimeSpan.FromHours(1);
-			TimeSpan? minEndActivity = TimeSpan.FromHours(3);
-			TimeSpan? maxEndActivity = TimeSpan.FromHours(4);
-			TimeSpan? minLengthActivity = TimeSpan.FromHours(2);
-			TimeSpan? maxLengthActivity = TimeSpan.FromHours(3);
+				MinStartActivity = TimeSpan.FromHours(2),
+				MaxStartActivity = TimeSpan.FromHours(1),
+				MinEndActivity = TimeSpan.FromHours(3),
+				MaxEndActivity = TimeSpan.FromHours(4),
+				MinLengthActivity = TimeSpan.FromHours(2),
+				MaxLengthActivity = TimeSpan.FromHours(3)
+			};
 
-			var result = _preferenceDayCreator.CanCreate(null, null, null, null, minStart, maxStart, minEnd, maxEnd, minLength, maxLength, minStartActivity, maxStartActivity, minEndActivity, maxEndActivity, minLengthActivity, maxLengthActivity);
+			var result = _preferenceDayCreator.CanCreate(data);
 
 			Assert.IsFalse(result.Result);
 			Assert.IsTrue(result.StartTimeMinError);
@@ -430,19 +488,22 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		[Test]
 		public void ShouldHandleEmptyEndTimeMin()
 		{
-			TimeSpan? minStart = TimeSpan.FromHours(1);
-			TimeSpan? maxStart = TimeSpan.FromHours(2);
-			TimeSpan? maxEnd = TimeSpan.FromHours(4);
-			TimeSpan? minLength = TimeSpan.FromHours(2);
-			TimeSpan? maxLength = TimeSpan.FromHours(3);
+			var data = new AgentPreferenceData
+			{
+				MinStart = TimeSpan.FromHours(1),
+				MaxStart = TimeSpan.FromHours(2),
+				MaxEnd = TimeSpan.FromHours(4),
+				MinLength = TimeSpan.FromHours(2),
+				MaxLength = TimeSpan.FromHours(3),
 
-			TimeSpan? minStartActivity = TimeSpan.FromHours(1);
-			TimeSpan? maxStartActivity = TimeSpan.FromHours(2);
-			TimeSpan? maxEndActivity = TimeSpan.FromHours(4);
-			TimeSpan? minLengthActivity = TimeSpan.FromHours(2);
-			TimeSpan? maxLengthActivity = TimeSpan.FromHours(3);
+				MinStartActivity = TimeSpan.FromHours(1),
+				MaxStartActivity = TimeSpan.FromHours(2),
+				MaxEndActivity = TimeSpan.FromHours(4),
+				MinLengthActivity = TimeSpan.FromHours(2),
+				MaxLengthActivity = TimeSpan.FromHours(3)
+			};
 
-			var result = _preferenceDayCreator.CanCreate(null, null, null, null, minStart, maxStart, null, maxEnd, minLength, maxLength, minStartActivity, maxStartActivity, null, maxEndActivity, minLengthActivity, maxLengthActivity);
+			var result = _preferenceDayCreator.CanCreate(data);
 
 			Assert.IsTrue(result.Result);
 			Assert.IsFalse(result.StartTimeMinError);
@@ -463,19 +524,22 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		[Test]
 		public void ShouldHandleEmptyEndTimeMax()
 		{
-			TimeSpan? minStart = TimeSpan.FromHours(1);
-			TimeSpan? maxStart = TimeSpan.FromHours(2);
-			TimeSpan? minEnd = TimeSpan.FromHours(3);
-			TimeSpan? minLength = TimeSpan.FromHours(2);
-			TimeSpan? maxLength = TimeSpan.FromHours(3);
+			var data = new AgentPreferenceData
+			{
+				MinStart = TimeSpan.FromHours(1),
+				MaxStart = TimeSpan.FromHours(2),
+				MinEnd = TimeSpan.FromHours(3),
+				MinLength = TimeSpan.FromHours(2),
+				MaxLength = TimeSpan.FromHours(3),
 
-			TimeSpan? minStartActivity = TimeSpan.FromHours(1);
-			TimeSpan? maxStartActivity = TimeSpan.FromHours(2);
-			TimeSpan? minEndActivity = TimeSpan.FromHours(3);
-			TimeSpan? minLengthActivity = TimeSpan.FromHours(2);
-			TimeSpan? maxLengthActivity = TimeSpan.FromHours(3);
+				MinStartActivity = TimeSpan.FromHours(1),
+				MaxStartActivity = TimeSpan.FromHours(2),
+				MinEndActivity = TimeSpan.FromHours(3),
+				MinLengthActivity = TimeSpan.FromHours(2),
+				MaxLengthActivity = TimeSpan.FromHours(3)
+			};
 
-			var result = _preferenceDayCreator.CanCreate(null, null, null, null, minStart, maxStart, minEnd, null, minLength, maxLength, minStartActivity, maxStartActivity, minEndActivity,null, minLengthActivity, maxLengthActivity);
+			var result = _preferenceDayCreator.CanCreate(data);
 
 			Assert.IsTrue(result.Result);
 			Assert.IsFalse(result.StartTimeMinError);
@@ -496,17 +560,20 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		[Test]
 		public void ShouldHandleEmptyEndTime()
 		{
-			TimeSpan? minStart = TimeSpan.FromHours(1);
-			TimeSpan? maxStart = TimeSpan.FromHours(2);
-			TimeSpan? minLength = TimeSpan.FromHours(2);
-			TimeSpan? maxLength = TimeSpan.FromHours(3);
+			var data = new AgentPreferenceData
+			{
+				MinStart = TimeSpan.FromHours(1),
+				MaxStart = TimeSpan.FromHours(2),
+				MinLength = TimeSpan.FromHours(2),
+				MaxLength = TimeSpan.FromHours(3),
 
-			TimeSpan? minStartActivity = TimeSpan.FromHours(1);
-			TimeSpan? maxStartActivity = TimeSpan.FromHours(2);
-			TimeSpan? minLengthActivity = TimeSpan.FromHours(2);
-			TimeSpan? maxLengthActivity = TimeSpan.FromHours(3);
+				MinStartActivity = TimeSpan.FromHours(1),
+				MaxStartActivity = TimeSpan.FromHours(2),
+				MinLengthActivity = TimeSpan.FromHours(2),
+				MaxLengthActivity = TimeSpan.FromHours(3)
+			};
 
-			var result = _preferenceDayCreator.CanCreate(null, null, null, null, minStart, maxStart, null, null, minLength, maxLength, minStartActivity, maxStartActivity, null, null, minLengthActivity, maxLengthActivity);
+			var result = _preferenceDayCreator.CanCreate(data);
 
 			Assert.IsTrue(result.Result);
 			Assert.IsFalse(result.StartTimeMinError);
@@ -527,21 +594,24 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		[Test]
 		public void ShouldDetectEndTimeMinGreaterThanEndTimeMax()
 		{
-			TimeSpan? minStart = TimeSpan.FromHours(1);
-			TimeSpan? maxStart = TimeSpan.FromHours(2);
-			TimeSpan? minEnd = TimeSpan.FromHours(4);
-			TimeSpan? maxEnd = TimeSpan.FromHours(3);
-			TimeSpan? minLength = TimeSpan.FromHours(2);
-			TimeSpan? maxLength = TimeSpan.FromHours(3);
+			var data = new AgentPreferenceData
+			{
+				MinStart = TimeSpan.FromHours(1),
+				MaxStart = TimeSpan.FromHours(2),
+				MinEnd = TimeSpan.FromHours(4),
+				MaxEnd = TimeSpan.FromHours(3),
+				MinLength = TimeSpan.FromHours(2),
+				MaxLength = TimeSpan.FromHours(3),
 
-			TimeSpan? minStartActivity = TimeSpan.FromHours(1);
-			TimeSpan? maxStartActivity = TimeSpan.FromHours(2);
-			TimeSpan? minEndActivity = TimeSpan.FromHours(4);
-			TimeSpan? maxEndActivity = TimeSpan.FromHours(3);
-			TimeSpan? minLengthActivity = TimeSpan.FromHours(2);
-			TimeSpan? maxLengthActivity = TimeSpan.FromHours(3);
+				MinStartActivity = TimeSpan.FromHours(1),
+				MaxStartActivity = TimeSpan.FromHours(2),
+				MinEndActivity = TimeSpan.FromHours(4),
+				MaxEndActivity = TimeSpan.FromHours(3),
+				MinLengthActivity = TimeSpan.FromHours(2),
+				MaxLengthActivity = TimeSpan.FromHours(3)
+			};
 
-			var result = _preferenceDayCreator.CanCreate(null, null, null, null, minStart, maxStart, minEnd, maxEnd, minLength, maxLength, minStartActivity, maxStartActivity, minEndActivity, maxEndActivity, minLengthActivity, maxLengthActivity);
+			var result = _preferenceDayCreator.CanCreate(data);
 
 			Assert.IsFalse(result.Result);
 			Assert.IsFalse(result.StartTimeMinError);
@@ -562,14 +632,17 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		[Test]
 		public void ShouldHandleEndTimeNextDay()
 		{
-			TimeSpan? minStart = TimeSpan.FromHours(1);
-			TimeSpan? maxStart = TimeSpan.FromHours(2);
-			TimeSpan? minEnd = TimeSpan.FromHours(25);
-			TimeSpan? maxEnd = TimeSpan.FromHours(26);
-			TimeSpan? minLength = TimeSpan.FromHours(2);
-			TimeSpan? maxLength = TimeSpan.FromHours(24);
+			var data = new AgentPreferenceData
+			{
+				MinStart = TimeSpan.FromHours(1),
+				MaxStart = TimeSpan.FromHours(2),
+				MinEnd = TimeSpan.FromHours(25),
+				MaxEnd = TimeSpan.FromHours(26),
+				MinLength = TimeSpan.FromHours(2),
+				MaxLength = TimeSpan.FromHours(24),
+			};
 
-			var result = _preferenceDayCreator.CanCreate(null, null, null, null, minStart, maxStart, minEnd, maxEnd, minLength, maxLength, null, null, null, null, null, null);
+			var result = _preferenceDayCreator.CanCreate(data);
 
 			Assert.IsTrue(result.Result);
 			Assert.IsFalse(result.StartTimeMinError);
@@ -578,31 +651,27 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			Assert.IsFalse(result.EndTimeMaxError);
 			Assert.IsFalse(result.LengthMinError);
 			Assert.IsFalse(result.LengthMaxError);
-
-			Assert.IsFalse(result.StartTimeMinErrorActivity);
-			Assert.IsFalse(result.StartTimeMaxErrorActivity);
-			Assert.IsFalse(result.EndTimeMinErrorActivity);
-			Assert.IsFalse(result.EndTimeMaxErrorActivity);
-			Assert.IsFalse(result.LengthMinErrorActivity);
-			Assert.IsFalse(result.LengthMaxErrorActivity);	
 		}
 
 		[Test]
 		public void ShouldHandleEmptyMinLength()
 		{
-			TimeSpan? minStart = TimeSpan.FromHours(1);
-			TimeSpan? maxStart = TimeSpan.FromHours(2);
-			TimeSpan? minEnd = TimeSpan.FromHours(3);
-			TimeSpan? maxEnd = TimeSpan.FromHours(4);
-			TimeSpan? maxLength = TimeSpan.FromHours(3);
+			var data = new AgentPreferenceData
+			{
+				MinStart = TimeSpan.FromHours(1),
+				MaxStart = TimeSpan.FromHours(2),
+				MinEnd = TimeSpan.FromHours(3),
+				MaxEnd = TimeSpan.FromHours(4),
+				MaxLength = TimeSpan.FromHours(3),
 
-			TimeSpan? minStartActivity = TimeSpan.FromHours(1);
-			TimeSpan? maxStartActivity = TimeSpan.FromHours(2);
-			TimeSpan? minEndActivity = TimeSpan.FromHours(3);
-			TimeSpan? maxEndActivity = TimeSpan.FromHours(4);
-			TimeSpan? maxLengthActivity = TimeSpan.FromHours(3);
+				MinStartActivity = TimeSpan.FromHours(1),
+				MaxStartActivity = TimeSpan.FromHours(2),
+				MinEndActivity = TimeSpan.FromHours(3),
+				MaxEndActivity = TimeSpan.FromHours(4),
+				MaxLengthActivity = TimeSpan.FromHours(3)
+			};
 
-			var result = _preferenceDayCreator.CanCreate(null, null, null, null, minStart, maxStart, minEnd, maxEnd, null, maxLength, minStartActivity, maxStartActivity, minEndActivity, maxEndActivity, null, maxLengthActivity);
+			var result = _preferenceDayCreator.CanCreate(data);
 
 			Assert.IsTrue(result.Result);
 			Assert.IsFalse(result.StartTimeMinError);
@@ -623,19 +692,22 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		[Test]
 		public void ShouldHandleEmptyMaxLength()
 		{
-			TimeSpan? minStart = TimeSpan.FromHours(1);
-			TimeSpan? maxStart = TimeSpan.FromHours(2);
-			TimeSpan? minEnd = TimeSpan.FromHours(3);
-			TimeSpan? maxEnd = TimeSpan.FromHours(4);
-			TimeSpan? minLength = TimeSpan.FromHours(2);
+			var data = new AgentPreferenceData
+			{
+				MinStart = TimeSpan.FromHours(1),
+				MaxStart = TimeSpan.FromHours(2),
+				MinEnd = TimeSpan.FromHours(3),
+				MaxEnd = TimeSpan.FromHours(4),
+				MinLength = TimeSpan.FromHours(2),
 
-			TimeSpan? minStartActivity = TimeSpan.FromHours(1);
-			TimeSpan? maxStartActivity = TimeSpan.FromHours(2);
-			TimeSpan? minEndActivity = TimeSpan.FromHours(3);
-			TimeSpan? maxEndActivity = TimeSpan.FromHours(4);
-			TimeSpan? minLengthActivity = TimeSpan.FromHours(2);
+				MinStartActivity = TimeSpan.FromHours(1),
+				MaxStartActivity = TimeSpan.FromHours(2),
+				MinEndActivity = TimeSpan.FromHours(3),
+				MaxEndActivity = TimeSpan.FromHours(4),
+				MinLengthActivity = TimeSpan.FromHours(2),
+			};
 
-			var result = _preferenceDayCreator.CanCreate(null, null, null, null, minStart, maxStart, minEnd, maxEnd, minLength, null, minStartActivity, maxStartActivity, minEndActivity, maxEndActivity, minLengthActivity, null);
+			var result = _preferenceDayCreator.CanCreate(data);
 
 			Assert.IsTrue(result.Result);
 			Assert.IsFalse(result.StartTimeMinError);
@@ -656,17 +728,20 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		[Test]
 		public void ShouldHandleEmptyLength()
 		{
-			TimeSpan? minStart = TimeSpan.FromHours(1);
-			TimeSpan? maxStart = TimeSpan.FromHours(2);
-			TimeSpan? minEnd = TimeSpan.FromHours(3);
-			TimeSpan? maxEnd = TimeSpan.FromHours(4);
+			var data = new AgentPreferenceData
+			{
+				MinStart = TimeSpan.FromHours(1),
+				MaxStart = TimeSpan.FromHours(2),
+				MinEnd = TimeSpan.FromHours(3),
+				MaxEnd = TimeSpan.FromHours(4),
+				
+				MinStartActivity = TimeSpan.FromHours(1),
+				MaxStartActivity = TimeSpan.FromHours(2),
+				MinEndActivity = TimeSpan.FromHours(3),
+				MaxEndActivity = TimeSpan.FromHours(4),
+			};
 
-			TimeSpan? minStartActivity = TimeSpan.FromHours(1);
-			TimeSpan? maxStartActivity = TimeSpan.FromHours(2);
-			TimeSpan? minEndActivity = TimeSpan.FromHours(3);
-			TimeSpan? maxEndActivity = TimeSpan.FromHours(4);
-
-			var result = _preferenceDayCreator.CanCreate(null, null, null, null, minStart, maxStart, minEnd, maxEnd, null, null, minStartActivity, maxStartActivity, minEndActivity, maxEndActivity, null, null);
+			var result = _preferenceDayCreator.CanCreate(data);
 
 			Assert.IsTrue(result.Result);
 			Assert.IsFalse(result.StartTimeMinError);
@@ -687,21 +762,24 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		[Test]
 		public void ShouldDetectMinLengthGreaterThanMaxLength()
 		{
-			TimeSpan? minStart = TimeSpan.FromHours(1);
-			TimeSpan? maxStart = TimeSpan.FromHours(2);
-			TimeSpan? minEnd = TimeSpan.FromHours(3);
-			TimeSpan? maxEnd = TimeSpan.FromHours(4);
-			TimeSpan? minLength = TimeSpan.FromHours(3);
-			TimeSpan? maxLength = TimeSpan.FromHours(2);
+			var data = new AgentPreferenceData
+			{
+				MinStart = TimeSpan.FromHours(1),
+				MaxStart = TimeSpan.FromHours(2),
+				MinEnd = TimeSpan.FromHours(3),
+				MaxEnd = TimeSpan.FromHours(4),
+				MinLength = TimeSpan.FromHours(3),
+				MaxLength = TimeSpan.FromHours(2),
 
-			TimeSpan? minStartActivity = TimeSpan.FromHours(1);
-			TimeSpan? maxStartActivity = TimeSpan.FromHours(2);
-			TimeSpan? minEndActivity = TimeSpan.FromHours(3);
-			TimeSpan? maxEndActivity = TimeSpan.FromHours(4);
-			TimeSpan? minLengthActivity = TimeSpan.FromHours(3);
-			TimeSpan? maxLengthActivity = TimeSpan.FromHours(2);
+				MinStartActivity = TimeSpan.FromHours(1),
+				MaxStartActivity = TimeSpan.FromHours(2),
+				MinEndActivity = TimeSpan.FromHours(3),
+				MaxEndActivity = TimeSpan.FromHours(4),
+				MinLengthActivity = TimeSpan.FromHours(3),
+				MaxLengthActivity = TimeSpan.FromHours(2)
+			};
 
-			var result = _preferenceDayCreator.CanCreate(null, null, null, null, minStart, maxStart, minEnd, maxEnd, minLength, maxLength, minStartActivity, maxStartActivity, minEndActivity, maxEndActivity, minLengthActivity, maxLengthActivity);
+			var result = _preferenceDayCreator.CanCreate(data);
 
 			Assert.IsFalse(result.Result);
 			Assert.IsFalse(result.StartTimeMinErrorActivity);
@@ -722,32 +800,27 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		[Test]
 		public void ShouldDetectStartTimeMinGreaterThanEndTimeMin()
 		{
-			TimeSpan? minStart = TimeSpan.FromHours(3);
-			TimeSpan? maxStart = TimeSpan.FromHours(4);
-			TimeSpan? minEnd = TimeSpan.FromHours(3);
-			TimeSpan? maxEnd = TimeSpan.FromHours(4);
-			TimeSpan? minLength = TimeSpan.FromHours(2);
-			TimeSpan? maxLength = TimeSpan.FromHours(3);
+			var data = new AgentPreferenceData
+			{
+				MinStart = TimeSpan.FromHours(3),
+				MinEnd = TimeSpan.FromHours(3),
 
-			TimeSpan? minStartActivity = TimeSpan.FromHours(3);
-			TimeSpan? maxStartActivity = TimeSpan.FromHours(4);
-			TimeSpan? minEndActivity = TimeSpan.FromHours(3);
-			TimeSpan? maxEndActivity = TimeSpan.FromHours(4);
-			TimeSpan? minLengthActivity = TimeSpan.FromHours(2);
-			TimeSpan? maxLengthActivity = TimeSpan.FromHours(3);
+				MinStartActivity = TimeSpan.FromHours(3),
+				MinEndActivity = TimeSpan.FromHours(3),
+			};
 
-			var result = _preferenceDayCreator.CanCreate(null, null, null, null, minStart, maxStart, minEnd, maxEnd, null, null, minStartActivity, maxStartActivity, minEndActivity, maxEndActivity, null, null);
+			var result = _preferenceDayCreator.CanCreate(data);
 
 			Assert.IsFalse(result.Result);
 			Assert.IsTrue(result.StartTimeMinError);
-			Assert.IsTrue(result.StartTimeMaxError);
+			Assert.IsFalse(result.StartTimeMaxError);
 			Assert.IsFalse(result.EndTimeMinError);
 			Assert.IsFalse(result.EndTimeMaxError);
 			Assert.IsFalse(result.LengthMinError);
 			Assert.IsFalse(result.LengthMaxError);
 
 			Assert.IsTrue(result.StartTimeMinErrorActivity);
-			Assert.IsTrue(result.StartTimeMaxErrorActivity);
+			Assert.IsFalse(result.StartTimeMaxErrorActivity);
 			Assert.IsFalse(result.EndTimeMinErrorActivity);
 			Assert.IsFalse(result.EndTimeMaxErrorActivity);
 			Assert.IsFalse(result.LengthMinErrorActivity);
@@ -757,21 +830,17 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		[Test]
 		public void ShouldDetectStartTimeMinGreaterThanEndTimeMax()
 		{
-			TimeSpan? minStart = TimeSpan.FromHours(4);
-			TimeSpan? maxStart = TimeSpan.FromHours(5);
-			TimeSpan? minEnd = TimeSpan.FromHours(3);
-			TimeSpan? maxEnd = TimeSpan.FromHours(4);
-			TimeSpan? minLength = TimeSpan.FromHours(2);
-			TimeSpan? maxLength = TimeSpan.FromHours(3);
 
-			TimeSpan? minStartActivity = TimeSpan.FromHours(4);
-			TimeSpan? maxStartActivity = TimeSpan.FromHours(5);
-			TimeSpan? minEndActivity = TimeSpan.FromHours(3);
-			TimeSpan? maxEndActivity = TimeSpan.FromHours(4);
-			TimeSpan? minLengthActivity = TimeSpan.FromHours(2);
-			TimeSpan? maxLengthActivity = TimeSpan.FromHours(3);
+			var data = new AgentPreferenceData
+			{
+				MinStart = TimeSpan.FromHours(4),
+				MaxEnd = TimeSpan.FromHours(4),
 
-			var result = _preferenceDayCreator.CanCreate(null, null, null, null, minStart, null, minEnd, maxEnd, null, null, minStartActivity, null, minEndActivity, maxEndActivity, null, null);
+				MinStartActivity = TimeSpan.FromHours(4),
+				MaxEndActivity = TimeSpan.FromHours(4),
+			};
+
+			var result = _preferenceDayCreator.CanCreate(data);
 
 			Assert.IsFalse(result.Result);
 			Assert.IsTrue(result.StartTimeMinError);
@@ -792,21 +861,16 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		[Test]
 		public void ShouldDetectStartTimeMaxGreaterThanEndTimeMin()
 		{
-			TimeSpan? minStart = TimeSpan.FromHours(2);
-			TimeSpan? maxStart = TimeSpan.FromHours(4);
-			TimeSpan? minEnd = TimeSpan.FromHours(3);
-			TimeSpan? maxEnd = TimeSpan.FromHours(4);
-			TimeSpan? minLength = TimeSpan.FromHours(2);
-			TimeSpan? maxLength = TimeSpan.FromHours(3);
+			var data = new AgentPreferenceData
+			{
+				MaxStart = TimeSpan.FromHours(4),
+				MinEnd = TimeSpan.FromHours(3),
 
-			TimeSpan? minStartActivity = TimeSpan.FromHours(2);
-			TimeSpan? maxStartActivity = TimeSpan.FromHours(4);
-			TimeSpan? minEndActivity = TimeSpan.FromHours(3);
-			TimeSpan? maxEndActivity = TimeSpan.FromHours(4);
-			TimeSpan? minLengthActivity = TimeSpan.FromHours(2);
-			TimeSpan? maxLengthActivity = TimeSpan.FromHours(3);
+				MaxStartActivity = TimeSpan.FromHours(4),
+				MinEndActivity = TimeSpan.FromHours(3),
+			};
 
-			var result = _preferenceDayCreator.CanCreate(null, null, null, null, minStart, maxStart, minEnd, maxEnd, minLength, maxLength, minStartActivity, maxStartActivity, minEndActivity, maxEndActivity, minLengthActivity, maxLengthActivity);
+			var result = _preferenceDayCreator.CanCreate(data);
 
 			Assert.IsFalse(result.Result);
 			Assert.IsFalse(result.StartTimeMinError);
@@ -827,19 +891,17 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		[Test]
 		public void ShouldDetectStartTimeMaxGreaterThanEndTimeMax()
 		{
-			TimeSpan? minStart = TimeSpan.FromHours(2);
-			TimeSpan? maxStart = TimeSpan.FromHours(4);
-			TimeSpan? maxEnd = TimeSpan.FromHours(4);
-			TimeSpan? minLength = TimeSpan.FromHours(2);
-			TimeSpan? maxLength = TimeSpan.FromHours(3);
+			var data = new AgentPreferenceData
+			{
+				MaxStart = TimeSpan.FromHours(4),
+				MaxEnd = TimeSpan.FromHours(4),
 
-			TimeSpan? minStartActivity = TimeSpan.FromHours(2);
-			TimeSpan? maxStartActivity = TimeSpan.FromHours(4);
-			TimeSpan? maxEndActivity = TimeSpan.FromHours(4);
-			TimeSpan? minLengthActivity = TimeSpan.FromHours(2);
-			TimeSpan? maxLengthActivity = TimeSpan.FromHours(3);
+				MaxStartActivity = TimeSpan.FromHours(4),
+				MaxEndActivity = TimeSpan.FromHours(4),
+				
+			};
 
-			var result = _preferenceDayCreator.CanCreate(null, null, null, null, minStart, maxStart, null, maxEnd, minLength, maxLength, minStartActivity, maxStartActivity, null, maxEndActivity, minLengthActivity, maxLengthActivity);
+			var result = _preferenceDayCreator.CanCreate(data);
 
 			Assert.IsFalse(result.Result);
 			Assert.IsFalse(result.StartTimeMinError);
@@ -860,19 +922,22 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		[Test]
 		public void ShouldDetectCannotFulfillMinLength()
 		{
-			TimeSpan? minStart = TimeSpan.FromHours(1);
-			TimeSpan? maxStart = TimeSpan.FromHours(2);
-			TimeSpan? minEnd = TimeSpan.FromHours(3);
-			TimeSpan? maxEnd = TimeSpan.FromHours(4);
-			TimeSpan? minLength = TimeSpan.FromHours(5);
+			var data = new AgentPreferenceData
+			{
+				MinStart = TimeSpan.FromHours(1),
+				MaxStart = TimeSpan.FromHours(2),
+				MinEnd = TimeSpan.FromHours(3),
+				MaxEnd = TimeSpan.FromHours(4),
+				MinLength = TimeSpan.FromHours(5),
 
-			TimeSpan? minStartActivity = TimeSpan.FromHours(1);
-			TimeSpan? maxStartActivity = TimeSpan.FromHours(2);
-			TimeSpan? minEndActivity = TimeSpan.FromHours(3);
-			TimeSpan? maxEndActivity = TimeSpan.FromHours(4);
-			TimeSpan? minLengthActivity = TimeSpan.FromHours(5);
+				MinStartActivity = TimeSpan.FromHours(1),
+				MaxStartActivity = TimeSpan.FromHours(2),
+				MinEndActivity = TimeSpan.FromHours(3),
+				MaxEndActivity = TimeSpan.FromHours(4),
+				MinLengthActivity = TimeSpan.FromHours(5)
+			};
 
-			var result = _preferenceDayCreator.CanCreate(null, null, null, null, minStart, maxStart, minEnd, maxEnd, minLength, null, minStartActivity, maxStartActivity, minEndActivity, maxEndActivity, minLengthActivity, null);
+			var result = _preferenceDayCreator.CanCreate(data);
 
 			Assert.IsFalse(result.Result);
 			Assert.IsFalse(result.StartTimeMinError);
@@ -893,17 +958,20 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		[Test]
 		public void ShouldDetectCannotFulfillMaxLength()
 		{
-			TimeSpan? minStart = TimeSpan.FromHours(1);
-			TimeSpan? maxStart = TimeSpan.FromHours(2);
-			TimeSpan? minEnd = TimeSpan.FromHours(6);
-			TimeSpan? maxLength = TimeSpan.FromHours(1);
+			var data = new AgentPreferenceData
+			{
+				MinStart = TimeSpan.FromHours(1),
+				MaxStart = TimeSpan.FromHours(2),
+				MinEnd = TimeSpan.FromHours(6),
+				MaxLength = TimeSpan.FromHours(1),
 
-			TimeSpan? minStartActivity = TimeSpan.FromHours(1);
-			TimeSpan? maxStartActivity = TimeSpan.FromHours(2);
-			TimeSpan? minEndActivity = TimeSpan.FromHours(6);
-			TimeSpan? maxLengthActivity = TimeSpan.FromHours(1);
+				MinStartActivity = TimeSpan.FromHours(1),
+				MaxStartActivity = TimeSpan.FromHours(2),
+				MinEndActivity = TimeSpan.FromHours(6),
+				MaxLengthActivity = TimeSpan.FromHours(1)
+			};
 
-			var result = _preferenceDayCreator.CanCreate(null, null, null, null, minStart, maxStart, minEnd, null, null, maxLength, minStartActivity, maxStartActivity, minEndActivity, null, null, maxLengthActivity);
+			var result = _preferenceDayCreator.CanCreate(data);
 
 			Assert.IsFalse(result.Result);
 			Assert.IsFalse(result.StartTimeMinError);
@@ -924,7 +992,13 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		[Test]
 		public void ShouldNotBeAbleToCreateWhenDayOffTemplateAndShiftCategory()
 		{
-			var result = _preferenceDayCreator.CanCreate(_shiftCategory, null, _dayOffTemplate, null, null, null, null, null, null, null, null, null, null, null, null, null);
+			var data = new AgentPreferenceData
+			{
+				ShiftCategory = _shiftCategory,
+				DayOffTemplate = _dayOffTemplate
+			};
+
+			var result = _preferenceDayCreator.CanCreate(data);
 			Assert.IsFalse(result.Result);
 			Assert.IsTrue(result.ConflictingTypeError);
 		}
@@ -932,7 +1006,13 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		[Test]
 		public void ShouldNotBeAbleToCreateWhenDayOffTemplateAndAbsence()
 		{
-			var result = _preferenceDayCreator.CanCreate(null, _absence, _dayOffTemplate, null, null, null, null, null, null, null, null, null, null, null, null, null);
+			var data = new AgentPreferenceData
+			{
+				Absence = _absence,
+				DayOffTemplate = _dayOffTemplate
+			};
+
+			var result = _preferenceDayCreator.CanCreate(data);
 			Assert.IsFalse(result.Result);
 			Assert.IsTrue(result.ConflictingTypeError);
 		}
@@ -940,7 +1020,13 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		[Test]
 		public void ShouldNotBeAbleToCreateWhenDayOffTemplateAndActivity()
 		{
-			var result = _preferenceDayCreator.CanCreate(null, null, _dayOffTemplate, _activity, null, null, null, null, null, null, null, null, null, null, null, null);
+			var data = new AgentPreferenceData
+			{
+				Activity = _activity,
+				DayOffTemplate = _dayOffTemplate
+			};
+
+			var result = _preferenceDayCreator.CanCreate(data);
 			Assert.IsFalse(result.Result);
 			Assert.IsTrue(result.ConflictingTypeError);
 		}
@@ -948,23 +1034,28 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		[Test]
 		public void ShouldNotBeAbleToCreateWhenShiftCategoryAndAbsence()
 		{
-			var result = _preferenceDayCreator.CanCreate(_shiftCategory, _absence, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+			var data = new AgentPreferenceData
+			{
+				ShiftCategory = _shiftCategory,
+				Absence = _absence
+			};
+
+			var result = _preferenceDayCreator.CanCreate(data);
 			Assert.IsFalse(result.Result);
 			Assert.IsTrue(result.ConflictingTypeError);
 		}
 
-		[Test]
-		public void ShouldNotBeAbleToCreateWhenShiftCategoryAndDayOffTemplate()
-		{
-			var result = _preferenceDayCreator.CanCreate(_shiftCategory, null, _dayOffTemplate, null, null, null, null, null, null, null, null, null, null, null, null, null);
-			Assert.IsFalse(result.Result);
-			Assert.IsTrue(result.ConflictingTypeError);
-		}
-
+		
 		[Test]
 		public void ShouldNotBeAbleToCreateWhenActivityAndAbsence()
 		{
-			var result = _preferenceDayCreator.CanCreate(null, _absence, null, _activity, null, null, null, null, null, null, null, null, null, null, null, null);
+			var data = new AgentPreferenceData
+			{
+				Absence = _absence,
+				Activity = _activity
+			};
+
+			var result = _preferenceDayCreator.CanCreate(data);
 			Assert.IsFalse(result.Result);
 			Assert.IsTrue(result.ConflictingTypeError);
 		}

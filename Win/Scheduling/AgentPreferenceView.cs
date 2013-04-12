@@ -226,7 +226,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 
 			var sortedAbsences = (from a in absences orderby a.Name select a).ToList();
-			var noneAbsence = new Absence() { Description = new Description(Resources.None) };
+			var noneAbsence = new Absence { Description = new Description(Resources.None) };
 			sortedAbsences.Insert(0, noneAbsence);
 
 			comboBoxAdvAbsence.DisplayMember = "Name";
@@ -340,56 +340,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void buttonAdvOkClick(object sender, EventArgs e)
 		{
-			var minStart = outlookTimePickerShiftCategoryStartMin.TimeValue();
-			var maxStart = outlookTimePickerShiftCategoryStartMax.TimeValue();
-			var minEnd = outlookTimePickerShiftCategoryEndMin.TimeValue();
-			var maxEnd = outlookTimePickerShiftCategoryEndMax.TimeValue();
-			var minLength = outlookTimePickerContractShiftCategoryMin.TimeValue();
-			var maxLength = outlookTimePickerContractShiftCategoryMax.TimeValue();
+			var data = viewData();
 
-			if (checkBoxAdvShiftCategoryNextDayMin.Checked && minEnd != null)
-				minEnd = minEnd.Value.Add(TimeSpan.FromDays(1));
-
-			if (checkBoxAdvShiftCategoryNextDayMax.Checked && maxEnd != null)
-				maxEnd = maxEnd.Value.Add(TimeSpan.FromDays(1));
-			
-
-			var minStartActivity = outlookTimePickerActivityStartMin.TimeValue();
-			var maxStartActivity = outlookTimePickerActivityStartMax.TimeValue();
-			var minEndActivity = outlookTimePickerActivityEndMin.TimeValue();
-			var maxEndActivity = outlookTimePickerActivityEndMax.TimeValue();
-			var minLengthActivity = outlookTimePickerActivityLengthMin.TimeValue();
-			var maxLengthActivity = outlookTimePickerActivityLengthMax.TimeValue();
-
-			var comboShiftCategory = comboBoxAdvShiftCategory.SelectedItem as ComboBoxAdvShiftCategory;
-			IShiftCategory currentShiftCategory = null;
-			currentShiftCategory = comboShiftCategory.ShiftCategory;
-			if (currentShiftCategory.Id == null)
-			{
-				currentShiftCategory = null;
-			}
-
-			var currentAbsence = comboBoxAdvAbsence.SelectedItem as Absence;
-			if (currentAbsence.Id == null)
-			{
-				currentAbsence = null;
-			}
-
-			var comboDayOff = comboBoxAdvDayOff.SelectedItem as ComboBoxAdvDayOffTemplate;
-			IDayOffTemplate currentDayOff = null;
-			currentDayOff = comboDayOff.DayOffTemplate;
-			if (currentDayOff.Id == null)
-			{
-				currentDayOff = null;
-			}
-
-			var currentActivity = comboBoxAdvActivity.SelectedItem as Activity;
-			if (currentActivity.Id == null)
-			{
-				currentActivity = null;
-			}
-
-			var commandToExecute = _presenter.CommandToExecute(currentShiftCategory, currentAbsence, currentDayOff, currentActivity, minStart, maxStart, minEnd, maxEnd, minLength, maxLength, minStartActivity, maxStartActivity, minEndActivity, maxEndActivity, minLengthActivity, maxLengthActivity, _dayCreator);
+			var commandToExecute = _presenter.CommandToExecute(data, _dayCreator);
 
 			if (commandToExecute == AgentPreferenceExecuteCommand.Remove)
 			{
@@ -400,11 +353,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 				return;
 			}
 
-			if (!validateTimes(viewData())) return;
+			if (!validateTimes(data)) return;
 
 			if (commandToExecute == AgentPreferenceExecuteCommand.Add)
 			{
-				var addCommand = new AgentPreferenceAddCommand(_presenter.ScheduleDay, currentShiftCategory, currentAbsence, currentDayOff, currentActivity, minStart, maxStart, minEnd, maxEnd, minLength, maxLength, minStartActivity, maxStartActivity, minEndActivity, maxEndActivity, minLengthActivity, maxLengthActivity, _dayCreator);
+				var addCommand = new AgentPreferenceAddCommand(_presenter.ScheduleDay, data, _dayCreator);
 				_presenter.Add(addCommand);
 				_isDirty = true;
 				Hide();
@@ -413,7 +366,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			if (commandToExecute == AgentPreferenceExecuteCommand.Edit)
 			{
-				var editCommand = new AgentPreferenceEditCommand(_presenter.ScheduleDay, currentShiftCategory, currentAbsence, currentDayOff, currentActivity, minStart, maxStart, minEnd, maxEnd, minLength, maxLength, minStartActivity, maxStartActivity, minEndActivity, maxEndActivity, minLengthActivity, maxLengthActivity, _dayCreator);
+				var editCommand = new AgentPreferenceEditCommand(_presenter.ScheduleDay, data, _dayCreator);
 				_presenter.Edit(editCommand);
 				_isDirty = true;
 				Hide();
@@ -429,13 +382,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 			Hide();
 		}
 
-		private bool validateTimes(AgentPreferenceData data)
+		private bool validateTimes(IAgentPreferenceData data)
 		{
 
 			clearTimeErrorMessagesActivity();
 			clearTimeErrorMessagesExtended();
 
-			var result = _dayCreator.CanCreate(data.ShiftCategory, data.Absence, data.DayOffTemplate, data.Activity, data.MinStart, data.MaxStart, data.MinEnd, data.MaxEnd, data.MinLength, data.MaxLength, data.MinStartActivity, data.MaxStartActivity, data.MinEndActivity, data.MaxEndActivity, data.MinLengthActivity, data.MaxLengthActivity);
+			var result = _dayCreator.CanCreate(data);
 
 			if (!result.Result && !result.EmptyError)
 			{
@@ -475,6 +428,30 @@ namespace Teleopti.Ccc.Win.Scheduling
 			setTimeErrorMessageExtended(outlookTimePickerShiftCategoryStartMax,null);
 			setTimeErrorMessageExtended(outlookTimePickerShiftCategoryEndMin,null);
 			setTimeErrorMessageExtended(outlookTimePickerShiftCategoryEndMax, null);
+		}
+
+		private bool timesActivityError()
+		{
+			if (errorProviderActivity.GetError(outlookTimePickerActivityLengthMin) != string.Empty) return true;
+			if (errorProviderActivity.GetError(outlookTimePickerActivityLengthMax) != string.Empty) return true;
+			if (errorProviderActivity.GetError(outlookTimePickerActivityStartMin) != string.Empty) return true;
+			if (errorProviderActivity.GetError(outlookTimePickerActivityStartMax) != string.Empty) return true;
+			if (errorProviderActivity.GetError(outlookTimePickerActivityEndMin) != string.Empty) return true;
+			if (errorProviderActivity.GetError(outlookTimePickerActivityEndMax) != string.Empty) return true;
+
+			return false;
+		}
+
+		private bool timesExtendedError()
+		{
+			if (errorProviderExtended.GetError(outlookTimePickerContractShiftCategoryMin) != string.Empty) return true;
+			if (errorProviderExtended.GetError(outlookTimePickerContractShiftCategoryMax) != string.Empty) return true;
+			if (errorProviderExtended.GetError(outlookTimePickerShiftCategoryStartMin) != string.Empty) return true;
+			if (errorProviderExtended.GetError(outlookTimePickerShiftCategoryStartMax) != string.Empty) return true;
+			if (errorProviderExtended.GetError(outlookTimePickerShiftCategoryEndMin) != string.Empty) return true;
+			if (errorProviderExtended.GetError(outlookTimePickerShiftCategoryEndMax) != string.Empty) return true;
+
+			return false;
 		}
 
 		private void setTimeErrorMessageExtended(Control timeControl, string value)
@@ -543,8 +520,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void outlookTimePickerContractShiftCategoryMinTextChanged(object sender, EventArgs e)
 		{
 			if (!_isInitialized) return;
-			if (errorProviderExtended.GetError(outlookTimePickerContractShiftCategoryMin) != string.Empty) validateTimes(viewData());
-			if (errorProviderExtended.GetError(outlookTimePickerContractShiftCategoryMax) != string.Empty) validateTimes(viewData());
+			if (timesExtendedError()) validateTimes(viewData());
 			ClearAbsence();
 			ClearDayOff();	
 		}
@@ -552,8 +528,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void outlookTimePickerContractShiftCategoryMaxTextChanged(object sender, EventArgs e)
 		{
 			if (!_isInitialized) return;
-			if (errorProviderExtended.GetError(outlookTimePickerContractShiftCategoryMin) != string.Empty) validateTimes(viewData());
-			if (errorProviderExtended.GetError(outlookTimePickerContractShiftCategoryMax) != string.Empty) validateTimes(viewData());
+			if (timesExtendedError()) validateTimes(viewData());
 			ClearAbsence();
 			ClearDayOff();
 		}
@@ -561,8 +536,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void outlookTimePickerShiftCategoryStartMinTextChanged(object sender, EventArgs e)
 		{
 			if (!_isInitialized) return;
-			if (errorProviderExtended.GetError(outlookTimePickerShiftCategoryStartMin) != string.Empty) validateTimes(viewData());
-			if (errorProviderExtended.GetError(outlookTimePickerShiftCategoryStartMax) != string.Empty) validateTimes(viewData());
+			if (timesExtendedError()) validateTimes(viewData());
 			ClearAbsence();
 			ClearDayOff();
 		}
@@ -570,8 +544,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void outlookTimePickerShiftCategoryStartMaxTextChanged(object sender, EventArgs e)
 		{
 			if (!_isInitialized) return;
-			if (errorProviderExtended.GetError(outlookTimePickerShiftCategoryStartMin) != string.Empty) validateTimes(viewData());
-			if (errorProviderExtended.GetError(outlookTimePickerShiftCategoryStartMax) != string.Empty) validateTimes(viewData());
+			if (timesExtendedError()) validateTimes(viewData());
 			ClearAbsence();
 			ClearDayOff();
 		}
@@ -579,8 +552,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void outlookTimePickerShiftCategoryEndMinTextChanged(object sender, EventArgs e)
 		{
 			if (!_isInitialized) return;
-			if (errorProviderExtended.GetError(outlookTimePickerShiftCategoryEndMin) != string.Empty) validateTimes(viewData());
-			if (errorProviderExtended.GetError(outlookTimePickerShiftCategoryEndMax) != string.Empty) validateTimes(viewData());
+			if (timesExtendedError()) validateTimes(viewData());
 			ClearAbsence();
 			ClearDayOff();
 		}
@@ -588,8 +560,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void outlookTimePickerShiftCategoryEndMaxTextChanged(object sender, EventArgs e)
 		{
 			if (!_isInitialized) return;
-			if (errorProviderExtended.GetError(outlookTimePickerShiftCategoryEndMin) != string.Empty) validateTimes(viewData());
-			if (errorProviderExtended.GetError(outlookTimePickerShiftCategoryEndMax) != string.Empty) validateTimes(viewData());
+			if (timesExtendedError()) validateTimes(viewData());
 			ClearAbsence();
 			ClearDayOff();
 		}
@@ -597,8 +568,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void outlookTimePickerActivityLengthMinTextChanged(object sender, EventArgs e)
 		{
 			if (!_isInitialized) return;
-			if (errorProviderExtended.GetError(outlookTimePickerActivityLengthMin) != string.Empty) validateTimes(viewData());
-			if (errorProviderExtended.GetError(outlookTimePickerActivityLengthMax) != string.Empty) validateTimes(viewData());
+			if (timesActivityError()) validateTimes(viewData());
 			ClearAbsence();
 			ClearDayOff();
 		}
@@ -606,8 +576,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void outlookTimePickerActivityLengthMaxTextChanged(object sender, EventArgs e)
 		{
 			if (!_isInitialized) return;
-			if (errorProviderExtended.GetError(outlookTimePickerActivityLengthMin) != string.Empty) validateTimes(viewData());
-			if (errorProviderExtended.GetError(outlookTimePickerActivityLengthMax) != string.Empty) validateTimes(viewData());
+			if (timesActivityError()) validateTimes(viewData());
 			ClearAbsence();
 			ClearDayOff();
 		}
@@ -615,8 +584,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void outlookTimePickerActivityStartMinTextChanged(object sender, EventArgs e)
 		{
 			if (!_isInitialized) return;
-			if (errorProviderExtended.GetError(outlookTimePickerActivityStartMin) != string.Empty) validateTimes(viewData());
-			if (errorProviderExtended.GetError(outlookTimePickerActivityStartMax) != string.Empty) validateTimes(viewData());
+			if (timesActivityError()) validateTimes(viewData());
 			ClearAbsence();
 			ClearDayOff();
 		}
@@ -624,8 +592,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void outlookTimePickerActivityStartMaxTextChanged(object sender, EventArgs e)
 		{
 			if (!_isInitialized) return;
-			if (errorProviderExtended.GetError(outlookTimePickerActivityStartMin) != string.Empty) validateTimes(viewData());
-			if (errorProviderExtended.GetError(outlookTimePickerActivityStartMax) != string.Empty) validateTimes(viewData());
+			if (timesActivityError()) validateTimes(viewData());
 			ClearAbsence();
 			ClearDayOff();
 		}
@@ -633,8 +600,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void outlookTimePickerActivityEndMinTextChanged(object sender, EventArgs e)
 		{
 			if (!_isInitialized) return;
-			if (errorProviderExtended.GetError(outlookTimePickerActivityEndMin) != string.Empty) validateTimes(viewData());
-			if (errorProviderExtended.GetError(outlookTimePickerActivityEndMax) != string.Empty) validateTimes(viewData());
+			if (timesActivityError()) validateTimes(viewData());
 			ClearAbsence();
 			ClearDayOff();
 		}
@@ -642,8 +608,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void outlookTimePickerActivityEndMaxTextChanged(object sender, EventArgs e)
 		{
 			if (!_isInitialized) return;
-			if (errorProviderExtended.GetError(outlookTimePickerActivityEndMin) != string.Empty) validateTimes(viewData());
-			if (errorProviderExtended.GetError(outlookTimePickerActivityEndMax) != string.Empty) validateTimes(viewData());
+			if (timesActivityError()) validateTimes(viewData());
 			ClearAbsence();
 			ClearDayOff();
 		}
@@ -651,15 +616,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void checkBoxAdvShiftCategoryNextDayMinCheckStateChanged(object sender, EventArgs e)
 		{
 			if (!_isInitialized) return;
-			if (errorProviderExtended.GetError(outlookTimePickerActivityEndMin) != string.Empty) validateTimes(viewData());
-			if (errorProviderExtended.GetError(outlookTimePickerActivityEndMax) != string.Empty) validateTimes(viewData());
+			if (timesExtendedError()) validateTimes(viewData());
 		}
 
 		private void checkBoxAdvShiftCategoryNextDayMaxCheckStateChanged(object sender, EventArgs e)
 		{
 			if (!_isInitialized) return;
-			if (errorProviderExtended.GetError(outlookTimePickerShiftCategoryEndMin) != string.Empty) validateTimes(viewData());
-			if (errorProviderExtended.GetError(outlookTimePickerShiftCategoryEndMax) != string.Empty) validateTimes(viewData());
+			if (timesExtendedError()) validateTimes(viewData());
 		}
 
 		private AgentPreferenceData viewData()
@@ -686,8 +649,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			var maxLengthActivity = outlookTimePickerActivityLengthMax.TimeValue();
 
 			var comboShiftCategory = comboBoxAdvShiftCategory.SelectedItem as ComboBoxAdvShiftCategory;
-			IShiftCategory currentShiftCategory = null;
-			currentShiftCategory = comboShiftCategory.ShiftCategory;
+			var currentShiftCategory = comboShiftCategory.ShiftCategory;
 			if (currentShiftCategory.Id == null)
 			{
 				currentShiftCategory = null;
@@ -700,8 +662,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			}
 
 			var comboDayOff = comboBoxAdvDayOff.SelectedItem as ComboBoxAdvDayOffTemplate;
-			IDayOffTemplate currentDayOff = null;
-			currentDayOff = comboDayOff.DayOffTemplate;
+			var currentDayOff = comboDayOff.DayOffTemplate;
 			if (currentDayOff.Id == null)
 			{
 				currentDayOff = null;
