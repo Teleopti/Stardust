@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				var allTeamInfoListOnStartDate = new HashSet<ITeamInfo>();
 			    foreach (var selectedPerson in selectedPersons)
 			    {
-				    allTeamInfoListOnStartDate.Add(_teamInfoFactory.CreateTeamInfo(selectedPerson, datePointer, allPersonMatrixList));
+                    allTeamInfoListOnStartDate.Add(_teamInfoFactory.CreateTeamInfo(selectedPerson, selectedPeriod, allPersonMatrixList));
 			    }
 
 				foreach (var teamInfo in allTeamInfoListOnStartDate.GetRandom(allTeamInfoListOnStartDate.Count, true))
@@ -65,17 +65,21 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					                                                                         _schedulingOptions
                                                                                                  .BlockFinderTypeForAdvanceScheduling, singleAgentTeam);
 				    if (teamBlockInfo == null) continue;
-                    if (isTeamBlockScheduled(teamBlockInfo)) continue;
+                    if (TeamBlockScheduledDayChecker.IsDayScheduledInTeamBlock(teamBlockInfo, datePointer)) continue;
 
 					
-                    if (_blockSteadyStateValidator.IsBlockInSteadyState(teamBlockInfo,_schedulingOptions))
+                    if (_blockSteadyStateValidator.IsBlockInSteadyState(teamBlockInfo, _schedulingOptions))
+                    {
+                        schedulePartModifyAndRollbackService.ClearModificationCollection();
                         if (!_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, datePointer, _schedulingOptions,
                                                                       selectedPeriod, selectedPersons))
                         {
-	                        _safeRollbackAndResourceCalculation.Execute(schedulePartModifyAndRollbackService,
-	                                                                    _schedulingOptions);
-							continue;
+                            _safeRollbackAndResourceCalculation.Execute(schedulePartModifyAndRollbackService,
+                                                                        _schedulingOptions);
+                            continue;
                         }
+                    }
+                        
 
 				
 
@@ -87,20 +91,32 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			_teamBlockScheduler.DayScheduled -= dayScheduled;
 		    return true;
 	    }
-        
+
+       
 	    void dayScheduled(object sender, SchedulingServiceBaseEventArgs e)
 	    {
 		    OnDayScheduled(e);
 	    }
 
-        private static bool isTeamBlockScheduled(ITeamBlockInfo teamBlockInfo)
-        {
-            foreach (var day in teamBlockInfo.BlockInfo.BlockPeriod.DayCollection())
-                foreach (var matrix in teamBlockInfo.TeamInfo.MatrixesForGroupAndDate(day))
-                    if (!matrix.GetScheduleDayByKey(day).DaySchedulePart().IsScheduled())
-                        return false;
-            return true;
-        }
+        //private static bool isTeamBlockScheduled(ITeamBlockInfo teamBlockInfo, DateOnly dateOnly )
+        //{
+        //    IScheduleRange rangeForPerson = null;
+        //    foreach (var matrix in teamBlockInfo.TeamInfo.MatrixesForGroup())
+        //    {
+        //        rangeForPerson = matrix.SchedulingStateHolder.Schedules[matrix.Person];
+        //        break;
+        //    }
+        //    if (rangeForPerson == null) return false;
+
+        //        IScheduleDay scheduleDay = rangeForPerson.ScheduledDay(dateOnly);
+        //        if (!scheduleDay.IsScheduled())
+        //            return false;
+
+
+        //    return true;
+        //}
+
+      
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		protected virtual void OnDayScheduled(SchedulingServiceBaseEventArgs scheduleServiceBaseEventArgs)

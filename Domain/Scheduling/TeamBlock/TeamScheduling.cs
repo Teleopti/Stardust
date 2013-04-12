@@ -172,12 +172,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             if (teamBlockInfo == null) throw new ArgumentNullException("teamBlockInfo");
             if (shiftProjectionCache == null) throw new ArgumentNullException("shiftProjectionCache");
             var startDateOfBlock = teamBlockInfo.BlockInfo.BlockPeriod.StartDate;
-            if (!selectedPeriod.DayCollection().Contains(startDateOfBlock))
-                startDateOfBlock = selectedPeriod.StartDate;
+            //if (!selectedPeriod.DayCollection().Contains(startDateOfBlock))
+            //    startDateOfBlock = selectedPeriod.StartDate;
+            
             if (skipOffset)
                 startDateOfBlock = dateOnly;
             var listOfDestinationScheduleDays = new List<IScheduleDay>();
-            var tempMatrixList = teamBlockInfo.TeamInfo.MatrixesForGroup().Where(scheduleMatrixPro => scheduleMatrixPro.Person == person).ToList();
+            var tempMatrixList = teamBlockInfo.TeamInfo.MatrixesForGroupAndDate(dateOnly ).Where(scheduleMatrixPro => scheduleMatrixPro.Person == person).ToList();
             if (tempMatrixList.Any())
             {
                 IScheduleMatrixPro matrix = null;

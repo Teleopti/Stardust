@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		public bool ScheduleTeamBlockDay(ITeamBlockInfo teamBlockInfo, DateOnly datePointer, ISchedulingOptions schedulingOptions, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons)
         {
 
-            var suggestedShiftProjectionCache = scheduleFirstTeamBlockToGetProjectionCache(teamBlockInfo, datePointer,
+            var suggestedShiftProjectionCache = scheduleFirstTeamBlockToGetProjectionCache(teamBlockInfo, teamBlockInfo.BlockInfo.BlockPeriod.StartDate ,
                                                                                        schedulingOptions);
             if (suggestedShiftProjectionCache == null) return false; 
             //need to refactor the code alot i dont like these ifs probably split it into classes
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	    {
 	        var dailyTeamBlockInfo = new TeamBlockInfo(teamBlockInfo.TeamInfo, new BlockInfo(new DateOnlyPeriod(day, day)));
 
-	        if (isTeamBlockScheduled(dailyTeamBlockInfo)) return true;
+            if (TeamBlockScheduledDayChecker.IsDayScheduledInTeamBlock(dailyTeamBlockInfo, day)) return true;
 
 	        var restriction = _restrictionAggregator.AggregatePerDay(dailyTeamBlockInfo, schedulingOptions,
 	                                                                 suggestedShiftProjectionCache);
@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
         {
             var dailyTeamBlockInfo = new TeamBlockInfo(teamBlockInfo.TeamInfo, new BlockInfo(new DateOnlyPeriod(day, day)));
 
-            if (isTeamBlockScheduled(dailyTeamBlockInfo)) return true;
+            if (TeamBlockScheduledDayChecker.IsDayScheduledInTeamBlock( dailyTeamBlockInfo, day)) return true;
 
             foreach (var person in teamBlockInfo.TeamInfo.GroupPerson.GroupMembers)
             {
@@ -141,14 +141,25 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             return bestShiftProjectionCache;
         }
 
-        private static bool isTeamBlockScheduled(ITeamBlockInfo teamBlockInfo)
-        {
-            foreach (var day in teamBlockInfo.BlockInfo.BlockPeriod.DayCollection())
-                foreach (var matrix in teamBlockInfo.TeamInfo.MatrixesForGroupAndDate(day))
-                    if (!matrix.GetScheduleDayByKey(day).DaySchedulePart().IsScheduled())
-                        return false;
-            return true;
-        }
+        
+        //private static bool isTeamBlockScheduled(ITeamBlockInfo teamBlockInfo,DateOnly dateOnly)
+        //{
+        //    IScheduleRange rangeForPerson = null;
+        //    foreach (var matrix in teamBlockInfo.TeamInfo.MatrixesForGroup())
+        //    {
+        //        rangeForPerson = matrix.SchedulingStateHolder.Schedules[matrix.Person];
+        //        break;
+        //    }
+        //    if (rangeForPerson == null) return false;
+        //    //foreach (var day in selectedPeriod.DayCollection())
+        //    //{
+        //        IScheduleDay scheduleDay = rangeForPerson.ScheduledDay(dateOnly);
+        //        if (!scheduleDay.IsScheduled())
+        //            return false;
+        //    //}
+            
+        //    return true;
+        //}
 
         public void OnDayScheduled(object sender, SchedulingServiceBaseEventArgs e)
 		{
