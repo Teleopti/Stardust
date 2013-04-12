@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			var site = GlobalDataContext.Data().Data<CommonSite>().Site.Description.Name;
 			var id = team.Id.ToString();
 			var text = site + "/" + team.Description.Name;
-			Pages.Pages.TeamSchedulePage.TeamPicker.SelectTeamByIdAndText(id, text);
+			Pages.Pages.TeamSchedulePage.TeamPicker.SelectItemByIdAndText(id, text);
 		}
 
 		[When(@"I select '(.*)' in the team picker")]
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			IOpenTheTeamPicker();
 
-			Pages.Pages.TeamSchedulePage.TeamPicker.SelectTeamByText(optionText);
+			Pages.Pages.TeamSchedulePage.TeamPicker.SelectItemByText(optionText);
 		}
 
 
