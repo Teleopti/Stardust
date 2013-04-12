@@ -10,5 +10,10 @@ namespace Teleopti.Ccc.Domain.Security.LicenseOptions
 			: base(DefinedLicenseOptionPaths.TeleoptiCccSmsLink, DefinedLicenseOptionNames.TeleoptiCccSmsLink)
 		{
 		}
+
+		public override void EnableApplicationFunctions(System.Collections.Generic.IList<Interfaces.Domain.IApplicationFunction> allApplicationFunctions)
+		{
+			EnabledApplicationFunctions.Clear();
+		}
 	}
 }
