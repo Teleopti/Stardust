@@ -2,9 +2,16 @@
 
 namespace Teleopti.Interfaces
 {
+	/// <summary>
+	/// blah
+	/// </summary>
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "WTFDEBUG")]
 	public static class WTFDEBUG
 	{
+		/// <summary>
+		/// Blah!
+		/// </summary>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
 		public static void Clear()
 		{
 			try
@@ -36,6 +43,10 @@ namespace Teleopti.Interfaces
 			{
 			}
 		}
+		/// <summary>
+		/// Blah!!
+		/// </summary>
+		/// <param name="stuff"></param>
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
 		public static void Log(string stuff)
 		{
