@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
     public class SavePersonAbsenceRequestCommandHandlerTest
     {
         private IPersistPersonRequest _persistPersonRequest;
-        private IUnitOfWorkFactory _unitOfWorkFactory;
+        private ICurrentUnitOfWorkFactory _unitOfWorkFactory;
         private IPersonRequestRepository _personRequestRepository;
         private IServiceBusSender _serviceBusSender;
         private MockRepository _mock;
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         {
             _mock = new MockRepository();
             _persistPersonRequest = _mock.StrictMock<IPersistPersonRequest>();
-            _unitOfWorkFactory = _mock.StrictMock<IUnitOfWorkFactory>();
+            _unitOfWorkFactory = _mock.StrictMock<ICurrentUnitOfWorkFactory>();
             _personRequestRepository = _mock.StrictMock<IPersonRequestRepository>();
             _serviceBusSender = _mock.StrictMock<IServiceBusSender>();
             _target = new SavePersonAbsenceRequestCommandHandler(_persistPersonRequest,_unitOfWorkFactory,_personRequestRepository,_serviceBusSender);
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             
             using (_mock.Record())
             {
-                Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+                Expect.Call(_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork()).Return(unitOfWork);
                 Expect.Call(_serviceBusSender.EnsureBus()).Return(true);
                 Expect.Call(_persistPersonRequest.Persist(_savePersonAbsenceRequestCommandDto.PersonRequestDto,
                                                           unitOfWork, null)).IgnoreArguments().Return(_personRequest);
@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             
             using (_mock.Record())
             {
-                Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+                Expect.Call(_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork()).Return(unitOfWork);
                 Expect.Call(unitOfWork.Dispose);
             }
             using (_mock.Playback())
@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 
             using (_mock.Record())
             {
-                Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+                Expect.Call(_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork()).Return(unitOfWork);
                 Expect.Call(()=>_personRequestRepository.Add(_personRequest));
                 Expect.Call(_serviceBusSender.EnsureBus()).Return(false);
                 Expect.Call(_persistPersonRequest.Persist(_savePersonAbsenceRequestCommandDto.PersonRequestDto,
