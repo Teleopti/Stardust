@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
         private readonly bool _backToLegal;
     	private readonly ISchedulerGroupPagesProvider _groupPagesProvider;
     	private readonly IList<IGroupPageLight> _groupPages;
-        private readonly IList<IGroupPageLight> _groupPagesForLevelingPer;
+        private readonly IList<IGroupPageLight> _groupPagesForTeamBlockPer;
         private readonly IList<IScheduleTag> _scheduleTags;
         private readonly string _settingValue;
         private readonly IList<IActivity> _availableActivity;
@@ -49,10 +49,10 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             _backToLegal = backToLegal;
         	_groupPagesProvider = groupPagesProvider;
         	_groupPages = groupPagesProvider.GetGroups(true);
-            _groupPagesForLevelingPer = groupPagesProvider.GetGroups(true);
+            _groupPagesForTeamBlockPer = groupPagesProvider.GetGroups(true);
             //add the single agent 
             var singleAgentEntry = new GroupPageLight { Key = "SingleAgentTeam", Name = Resources.SingleAgentTeam };
-            _groupPagesForLevelingPer.Add(singleAgentEntry);
+            _groupPagesForTeamBlockPer.Add(singleAgentEntry);
             _scheduleTags = scheduleTags;
             _settingValue = settingValue;
 		    _availableActivity = availableActivity;
@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             if (hasMissedloadingSettings()) return;
 			_defaultGeneralSettings.MapTo(_schedulingOptions, _scheduleTags);
 			_defaultAdvancedSettings.MapTo(_schedulingOptions, _shiftCategories);
-            _defaultExtraSettings.MapTo(_schedulingOptions, _scheduleTags, _groupPages,_groupPagesForLevelingPer, _availableActivity);
+            _defaultExtraSettings.MapTo(_schedulingOptions, _scheduleTags, _groupPages,_groupPagesForTeamBlockPer, _availableActivity);
 		}
 
         private bool hasMissedloadingSettings()

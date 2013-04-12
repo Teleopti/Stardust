@@ -176,7 +176,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				                                                          _schedulingOptions.UseMaximumPersons)).Return(shifts[0]).Repeat.AtLeastOnce();
 				Expect.Call(() => _teamScheduling.DayScheduled += _target.OnDayScheduled);
 				Expect.Call(() => _teamScheduling.ExecutePerDayPerPerson(_person, _dateOnly, _teamBlockInfo, shifts[0],
-				                                                         !_schedulingOptions.UseLevellingSameShift, _selectedPeriod));
+				                                                         !_schedulingOptions.UseTeamBlockSameShift, _selectedPeriod));
 				Expect.Call(() => _teamScheduling.DayScheduled -= _target.OnDayScheduled);
 				Expect.Call(_matrix1.SchedulePeriod).Return(schedulePeriod);
 				Expect.Call(schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(_dateOnly, _dateOnly));
@@ -327,7 +327,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			var schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
 			var scheduleDayPro = _mocks.StrictMock<IScheduleDayPro>();
 			var scheduleDay = _mocks.StrictMock<IScheduleDay>();
-			_schedulingOptions.UseLevellingSameShift = true;
+			_schedulingOptions.UseTeamBlockSameShift = true;
 			using (_mocks.Record())
 			{
 				Expect.Call(_groupPerson.Id).Return(Guid.Empty).Repeat.AtLeastOnce();
@@ -345,7 +345,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				      .Repeat.AtLeastOnce();
 				Expect.Call(() => _teamScheduling.DayScheduled += _target.OnDayScheduled);
 				Expect.Call(() => _teamScheduling.ExecutePerDayPerPerson(_person, _dateOnly, _teamBlockInfo, shifts[0],
-				                                                         !_schedulingOptions.UseLevellingSameShift, _selectedPeriod));
+				                                                         !_schedulingOptions.UseTeamBlockSameShift, _selectedPeriod));
 				Expect.Call(() => _teamScheduling.DayScheduled -= _target.OnDayScheduled);
 				Expect.Call(_matrix1.SchedulePeriod).Return(schedulePeriod);
 				Expect.Call(schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(_dateOnly, _dateOnly));
@@ -386,7 +386,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			var schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
 			var scheduleDayPro = _mocks.StrictMock<IScheduleDayPro>();
 			var scheduleDay = _mocks.StrictMock<IScheduleDay>();
-			_schedulingOptions.UseLevellingSameShift = true;
+			_schedulingOptions.UseTeamBlockSameShift = true;
 			using (_mocks.Record())
 			{
 				Expect.Call(_groupPerson.Id).Return(Guid.Empty).Repeat.AtLeastOnce();
@@ -425,7 +425,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			var schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
 			var scheduleDayPro = _mocks.StrictMock<IScheduleDayPro>();
 			var scheduleDay = _mocks.StrictMock<IScheduleDay>();
-			_schedulingOptions.UseLevellingSameShift = true;
+			_schedulingOptions.UseTeamBlockSameShift = true;
 			using (_mocks.Record())
 			{
 				Expect.Call(_groupPerson.Id).Return(Guid.Empty).Repeat.AtLeastOnce();

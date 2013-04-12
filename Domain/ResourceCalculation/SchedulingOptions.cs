@@ -34,12 +34,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		public IGroupPageLight GroupOnGroupPage { get; set; }
 
 
-        public IGroupPageLight GroupOnGroupPageForLevelingPer { get; set; }
-        public bool UseLevellingSameEndTime { get; set; }
-        public bool UseLevellingSameShiftCategory { get; set; }
-        public bool UseLevellingSameStartTime { get; set; }
-        public bool UseLevellingSameShift { get; set; }
-        public bool UseLevellingPerOption { get; set; }
+        public IGroupPageLight GroupOnGroupPageForTeamBlockPer { get; set; }
+        public bool UseTeamBlockSameEndTime { get; set; }
+        public bool UseTeamBlockSameShiftCategory { get; set; }
+        public bool UseTeamBlockSameStartTime { get; set; }
+        public bool UseTeamBlockSameShift { get; set; }
+        public bool UseTeamBlockPerOption { get; set; }
 
         public bool DoNotBreakMaxStaffing { get; set; }
         public IGroupPageLight GroupPageForShiftCategoryFairness { get; set; }

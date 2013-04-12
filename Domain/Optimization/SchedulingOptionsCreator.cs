@@ -54,8 +54,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			schedulingOptions.BlockFinderTypeForAdvanceScheduling =
 			   optimizationPreferences.Extra.BlockFinderTypeForAdvanceOptimization;
-	        schedulingOptions.GroupOnGroupPageForLevelingPer = optimizationPreferences.Extra.GroupPageOnTeamLevelingPer;
-			if (optimizationPreferences.Extra.UseLevellingOption)
+	        schedulingOptions.GroupOnGroupPageForTeamBlockPer = optimizationPreferences.Extra.GroupPageOnTeamBlockPer;
+			if (optimizationPreferences.Extra.UseTeamBlockOption)
 			{
 				schedulingOptions.UseSameDayOffs = true;
 			}
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             schedulingOptions.ConsiderShortBreaks = optimizationPreferences.Rescheduling.ConsiderShortBreaks;
             schedulingOptions.OnlyShiftsWhenUnderstaffed = optimizationPreferences.Rescheduling.OnlyShiftsWhenUnderstaffed;
 
-            setLevellingOptions(optimizationPreferences, schedulingOptions);
+            setTeamBlockOptions(optimizationPreferences, schedulingOptions);
 
             return schedulingOptions;
         }
@@ -127,14 +127,14 @@ namespace Teleopti.Ccc.Domain.Optimization
             schedulingOptions.UseStudentAvailability = use && value == 1d;
         }
 
-        private static void setLevellingOptions(IOptimizationPreferences optimizationPreferences,
+        private static void setTeamBlockOptions(IOptimizationPreferences optimizationPreferences,
                                                 ISchedulingOptions schedulingOptions)
         {
-            schedulingOptions.UseLevellingPerOption = optimizationPreferences.Extra.UseLevellingOption;
-            schedulingOptions.UseLevellingSameEndTime = optimizationPreferences.Extra.UseLevellingSameEndTime;
-            schedulingOptions.UseLevellingSameStartTime = optimizationPreferences.Extra.UseLevellingSameStartTime;
-            schedulingOptions.UseLevellingSameShift = optimizationPreferences.Extra.UseLevellingSameShift;
-            schedulingOptions.UseLevellingSameShiftCategory = optimizationPreferences.Extra.UseLevellingSameShiftCategory;
+            schedulingOptions.UseTeamBlockPerOption = optimizationPreferences.Extra.UseTeamBlockOption;
+            schedulingOptions.UseTeamBlockSameEndTime = optimizationPreferences.Extra.UseTeamBlockSameEndTime;
+            schedulingOptions.UseTeamBlockSameStartTime = optimizationPreferences.Extra.UseTeamBlockSameStartTime;
+            schedulingOptions.UseTeamBlockSameShift = optimizationPreferences.Extra.UseTeamBlockSameShift;
+            schedulingOptions.UseTeamBlockSameShiftCategory = optimizationPreferences.Extra.UseTeamBlockSameShiftCategory;
         }
     }
 }

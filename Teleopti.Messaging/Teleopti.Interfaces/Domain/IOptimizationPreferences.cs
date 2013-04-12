@@ -358,34 +358,29 @@ namespace Teleopti.Interfaces.Domain
         BlockFinderType BlockFinderTypeForAdvanceOptimization { get; set; }
 
         /// <summary>
-        /// Group page for Leveling property used for block optimization
+        /// Group page for TeamBlock property used for block optimization
         /// </summary>
-        IGroupPageLight GroupPageOnTeamLevelingPer { get; set; }
+        IGroupPageLight GroupPageOnTeamBlockPer { get; set; }
         /// <summary>
-        /// Use levelling same end time
+        /// Use TeamBlock same end time
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Levelling")]
-        bool UseLevellingSameEndTime { get; set; }
+        bool UseTeamBlockSameEndTime { get; set; }
         /// <summary>
-        /// Use levelling same shift category
+        /// Use TeamBlock same shift category
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Levelling")]
-        bool UseLevellingSameShiftCategory { get; set; }
+        bool UseTeamBlockSameShiftCategory { get; set; }
         /// <summary>
-        /// Use levelling same start time
+        /// Use TeamBlock same start time
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Levelling")]
-        bool UseLevellingSameStartTime { get; set; }
+        bool UseTeamBlockSameStartTime { get; set; }
         /// <summary>
-        /// Use levelling same shift
+        /// Use TeamBlock same shift
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Levelling")]
-        bool UseLevellingSameShift { get; set; }
+        bool UseTeamBlockSameShift { get; set; }
         /// <summary>
-        /// This is  used if levelling per is used
+        /// This is  used if TeamBlock per is used
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Levelling")]
-        bool UseLevellingOption { get; set; }
+        bool UseTeamBlockOption { get; set; }
     }
 
     /// <summary>

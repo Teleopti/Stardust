@@ -130,27 +130,27 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 
         }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Levelling"), Test]
-        public void VerifyPreferenceToBeSavedForLevelling()
+		[Test]
+        public void VerifyPreferenceToBeSavedForTeamBlock()
         {
-            _target.UseLevellingSameEndTime  = true;
-            _target.UseLevellingSameShift = true;
-            _target.UseLevellingSameStartTime = true;
-            _target.UseLevellingSameShiftCategory = true;
-            Assert.IsTrue(_target.UseLevellingSameEndTime );
-            Assert.IsTrue(_target.UseLevellingSameShift );
-            Assert.IsTrue(_target.UseLevellingSameShiftCategory );
-            Assert.IsTrue(_target.UseLevellingSameStartTime );
+            _target.UseTeamBlockSameEndTime  = true;
+            _target.UseTeamBlockSameShift = true;
+            _target.UseTeamBlockSameStartTime = true;
+            _target.UseTeamBlockSameShiftCategory = true;
+            Assert.IsTrue(_target.UseTeamBlockSameEndTime );
+            Assert.IsTrue(_target.UseTeamBlockSameShift );
+            Assert.IsTrue(_target.UseTeamBlockSameShiftCategory );
+            Assert.IsTrue(_target.UseTeamBlockSameStartTime );
 
 
-            _target.UseLevellingSameEndTime = false;
-            _target.UseLevellingSameShift = false;
-            _target.UseLevellingSameStartTime = false;
-            _target.UseLevellingSameShiftCategory = false;
-            Assert.IsFalse(_target.UseLevellingSameEndTime);
-            Assert.IsFalse(_target.UseLevellingSameShift);
-            Assert.IsFalse(_target.UseLevellingSameShiftCategory);
-            Assert.IsFalse(_target.UseLevellingSameStartTime);
+            _target.UseTeamBlockSameEndTime = false;
+            _target.UseTeamBlockSameShift = false;
+            _target.UseTeamBlockSameStartTime = false;
+            _target.UseTeamBlockSameShiftCategory = false;
+            Assert.IsFalse(_target.UseTeamBlockSameEndTime);
+            Assert.IsFalse(_target.UseTeamBlockSameShift);
+            Assert.IsFalse(_target.UseTeamBlockSameShiftCategory);
+            Assert.IsFalse(_target.UseTeamBlockSameStartTime);
         }
 
         [Test]

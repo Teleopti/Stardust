@@ -99,12 +99,12 @@ namespace Teleopti.Ccc.Domain.Optimization
 
         public BlockFinderType BlockFinderTypeForAdvanceOptimization { get; set; }
 
-	    public IGroupPageLight GroupPageOnTeamLevelingPer{get ; set; }
-	    public bool UseLevellingSameEndTime { get; set; }
-	    public bool UseLevellingSameShiftCategory { get; set; }
-	    public bool UseLevellingSameStartTime { get; set; }
-	    public bool UseLevellingSameShift { get; set; }
-	    public bool UseLevellingOption { get; set; }
+	    public IGroupPageLight GroupPageOnTeamBlockPer{get ; set; }
+	    public bool UseTeamBlockSameEndTime { get; set; }
+	    public bool UseTeamBlockSameShiftCategory { get; set; }
+	    public bool UseTeamBlockSameStartTime { get; set; }
+	    public bool UseTeamBlockSameShift { get; set; }
+	    public bool UseTeamBlockOption { get; set; }
 	}
 
     public class ShiftPreferences : IShiftPreferences

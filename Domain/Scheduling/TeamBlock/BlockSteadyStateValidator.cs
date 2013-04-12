@@ -26,9 +26,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                 if (matrixList.Any())
                 {
                     var sampleScheduleDay = matrixList[0].GetScheduleDayByKey(dayList[0]).DaySchedulePart();
-                    if (schedulingOptions.UseLevellingSameStartTime)
+                    if (schedulingOptions.UseTeamBlockSameStartTime)
                         return verifySameStartTime(teamBlockInfo, dayList, sampleScheduleDay);
-                    if (schedulingOptions.UseLevellingSameShift)
+                    if (schedulingOptions.UseTeamBlockSameShift)
                         return verifySameShift(teamBlockInfo, dayList, sampleScheduleDay);
                 }
             }

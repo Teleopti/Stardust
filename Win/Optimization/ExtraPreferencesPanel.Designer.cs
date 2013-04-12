@@ -26,12 +26,12 @@
         /// Required method for Designer support - do not modify 
         /// the contents of this method with the code editor.
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxLevellingPer"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxSameDaysOff"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseSameDayOffs"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxGroupings"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxNotBreakMaxStaffing")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxSameDaysOff"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseSameDayOffs"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxGroupings"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxNotBreakMaxStaffing")]
         private void InitializeComponent()
         {
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
-            this.checkBoxLevellingPerBlockScheduling = new System.Windows.Forms.CheckBox();
+            this.checkBoxTeamBlockPerBlockScheduling = new System.Windows.Forms.CheckBox();
             this.checkBoxTeams = new System.Windows.Forms.CheckBox();
             this.checkBoxKeepWeekEndsTogether = new System.Windows.Forms.CheckBox();
             this.checkBoxCommonActivity = new System.Windows.Forms.CheckBox();
@@ -40,7 +40,7 @@
             this.checkBoxCommonStart = new System.Windows.Forms.CheckBox();
             this.checkBoxCommonCategory = new System.Windows.Forms.CheckBox();
             this.comboBoxGroupPageOnTeams = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
-            this.checkBoxLevellingSameShiftCategory = new System.Windows.Forms.CheckBox();
+            this.checkBoxTeamBlockSameShiftCategory = new System.Windows.Forms.CheckBox();
             this.checkBoxSameStartTime = new System.Windows.Forms.CheckBox();
             this.comboBoxTeamBlockType = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
             this.checkBoxLevellingSameShift = new System.Windows.Forms.CheckBox();
@@ -86,7 +86,7 @@
             this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 183F));
             this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel5.Controls.Add(this.checkBoxLevellingPerBlockScheduling, 0, 0);
+            this.tableLayoutPanel5.Controls.Add(this.checkBoxTeamBlockPerBlockScheduling, 0, 0);
             this.tableLayoutPanel5.Controls.Add(this.checkBoxTeams, 0, 5);
             this.tableLayoutPanel5.Controls.Add(this.checkBoxKeepWeekEndsTogether, 1, 10);
             this.tableLayoutPanel5.Controls.Add(this.checkBoxCommonActivity, 1, 9);
@@ -95,7 +95,7 @@
             this.tableLayoutPanel5.Controls.Add(this.checkBoxCommonStart, 1, 7);
             this.tableLayoutPanel5.Controls.Add(this.checkBoxCommonCategory, 1, 6);
             this.tableLayoutPanel5.Controls.Add(this.comboBoxGroupPageOnTeams, 2, 5);
-            this.tableLayoutPanel5.Controls.Add(this.checkBoxLevellingSameShiftCategory, 1, 1);
+            this.tableLayoutPanel5.Controls.Add(this.checkBoxTeamBlockSameShiftCategory, 1, 1);
             this.tableLayoutPanel5.Controls.Add(this.checkBoxSameStartTime, 1, 2);
             this.tableLayoutPanel5.Controls.Add(this.comboBoxTeamBlockType, 2, 0);
             this.tableLayoutPanel5.Controls.Add(this.checkBoxLevellingSameShift, 1, 3);
@@ -117,18 +117,18 @@
             this.tableLayoutPanel5.Size = new System.Drawing.Size(418, 294);
             this.tableLayoutPanel5.TabIndex = 24;
             // 
-            // checkBoxLevellingPerBlockScheduling
+            // checkBoxTeamBlockPerBlockScheduling
             // 
-            this.checkBoxLevellingPerBlockScheduling.AutoSize = true;
-            this.tableLayoutPanel5.SetColumnSpan(this.checkBoxLevellingPerBlockScheduling, 2);
-            this.checkBoxLevellingPerBlockScheduling.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.checkBoxLevellingPerBlockScheduling.Location = new System.Drawing.Point(3, 3);
-            this.checkBoxLevellingPerBlockScheduling.Name = "checkBoxLevellingPerBlockScheduling";
-            this.checkBoxLevellingPerBlockScheduling.Size = new System.Drawing.Size(207, 19);
-            this.checkBoxLevellingPerBlockScheduling.TabIndex = 42;
-            this.checkBoxLevellingPerBlockScheduling.Text = "xxLevellingPer";
-            this.checkBoxLevellingPerBlockScheduling.UseVisualStyleBackColor = true;
-            this.checkBoxLevellingPerBlockScheduling.CheckedChanged += new System.EventHandler(this.checkBoxLevellingPerBlockScheduling_CheckedChanged);
+            this.checkBoxTeamBlockPerBlockScheduling.AutoSize = true;
+            this.tableLayoutPanel5.SetColumnSpan(this.checkBoxTeamBlockPerBlockScheduling, 2);
+            this.checkBoxTeamBlockPerBlockScheduling.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.checkBoxTeamBlockPerBlockScheduling.Location = new System.Drawing.Point(3, 3);
+            this.checkBoxTeamBlockPerBlockScheduling.Name = "checkBoxTeamBlockPerBlockScheduling";
+            this.checkBoxTeamBlockPerBlockScheduling.Size = new System.Drawing.Size(207, 19);
+            this.checkBoxTeamBlockPerBlockScheduling.TabIndex = 42;
+            this.checkBoxTeamBlockPerBlockScheduling.Text = "xxBlock";
+            this.checkBoxTeamBlockPerBlockScheduling.UseVisualStyleBackColor = true;
+            this.checkBoxTeamBlockPerBlockScheduling.CheckedChanged += new System.EventHandler(this.checkBoxTeamBlockPerBlockScheduling_CheckedChanged);
             // 
             // checkBoxTeams
             // 
@@ -216,15 +216,15 @@
             this.comboBoxGroupPageOnTeams.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
             this.comboBoxGroupPageOnTeams.TabIndex = 5;
             // 
-            // checkBoxLevellingSameShiftCategory
+            // checkBoxTeamBlockSameShiftCategory
             // 
-            this.checkBoxLevellingSameShiftCategory.AutoSize = true;
-            this.checkBoxLevellingSameShiftCategory.Location = new System.Drawing.Point(33, 28);
-            this.checkBoxLevellingSameShiftCategory.Name = "checkBoxLevellingSameShiftCategory";
-            this.checkBoxLevellingSameShiftCategory.Size = new System.Drawing.Size(126, 17);
-            this.checkBoxLevellingSameShiftCategory.TabIndex = 48;
-            this.checkBoxLevellingSameShiftCategory.Text = "xxSameShiftCategory";
-            this.checkBoxLevellingSameShiftCategory.UseVisualStyleBackColor = true;
+            this.checkBoxTeamBlockSameShiftCategory.AutoSize = true;
+            this.checkBoxTeamBlockSameShiftCategory.Location = new System.Drawing.Point(33, 28);
+            this.checkBoxTeamBlockSameShiftCategory.Name = "checkBoxTeamBlockSameShiftCategory";
+            this.checkBoxTeamBlockSameShiftCategory.Size = new System.Drawing.Size(126, 17);
+            this.checkBoxTeamBlockSameShiftCategory.TabIndex = 48;
+            this.checkBoxTeamBlockSameShiftCategory.Text = "xxSameShiftCategory";
+            this.checkBoxTeamBlockSameShiftCategory.UseVisualStyleBackColor = true;
             // 
             // checkBoxSameStartTime
             // 
@@ -402,8 +402,8 @@
         private System.Windows.Forms.CheckBox checkBoxKeepWeekEndsTogether;
         private System.Windows.Forms.CheckBox checkBoxCommonActivity;
         private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxActivity;
-        private System.Windows.Forms.CheckBox checkBoxLevellingPerBlockScheduling;
-        private System.Windows.Forms.CheckBox checkBoxLevellingSameShiftCategory;
+        private System.Windows.Forms.CheckBox checkBoxTeamBlockPerBlockScheduling;
+        private System.Windows.Forms.CheckBox checkBoxTeamBlockSameShiftCategory;
         private System.Windows.Forms.CheckBox checkBoxSameStartTime;
         private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxTeamBlockType;
         private System.Windows.Forms.CheckBox checkBoxLevellingSameShift;

@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		    ITeamInfo teamInfo = new TeamInfo(groupPerson, groupMatrixes);
 		    var blockInfo = new BlockInfo(new DateOnlyPeriod(_dateOnly, _dateOnly.AddDays(1)));
 		    var shift = _mocks.StrictMock<IShiftProjectionCache>();
-		    _schedulingOptions.UseLevellingSameStartTime = true;
+		    _schedulingOptions.UseTeamBlockSameStartTime = true;
 		    using (_mocks.Record())
 		    {
 			    Expect.Call(_schedulingResultStateHolder.Schedules).Return(scheduleDictionary);
@@ -215,7 +215,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			ITeamInfo teamInfo = new TeamInfo(groupPerson, groupMatrixes);
 			var blockInfo = new BlockInfo(new DateOnlyPeriod(_dateOnly, _dateOnly.AddDays(1)));
 			var shift = _mocks.StrictMock<IShiftProjectionCache>();
-			_schedulingOptions.UseLevellingSameStartTime = true;
+			_schedulingOptions.UseTeamBlockSameStartTime = true;
 			using (_mocks.Record())
 			{
 				Expect.Call(_schedulingResultStateHolder.Schedules).Return(scheduleDictionary);
@@ -242,7 +242,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			ITeamInfo teamInfo = new TeamInfo(groupPerson, groupMatrixes);
 			var blockInfo = new BlockInfo(new DateOnlyPeriod(_dateOnly, _dateOnly.AddDays(1)));
 			var shift = _mocks.StrictMock<IShiftProjectionCache>();
-			_schedulingOptions.UseLevellingSameStartTime = true;
+			_schedulingOptions.UseTeamBlockSameStartTime = true;
 			var firstDay =
 			 new EffectiveRestriction(new StartTimeLimitation(TimeSpan.FromHours(8), TimeSpan.FromHours(12)),
 									  new EndTimeLimitation(TimeSpan.FromHours(15), TimeSpan.FromHours(18)),
@@ -294,7 +294,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			ITeamInfo teamInfo = new TeamInfo(groupPerson, groupMatrixes);
 			var blockInfo = new BlockInfo(new DateOnlyPeriod(_dateOnly, _dateOnly.AddDays(1)));
 			var shift = _mocks.StrictMock<IShiftProjectionCache>();
-			_schedulingOptions.UseLevellingSameStartTime = true;
+			_schedulingOptions.UseTeamBlockSameStartTime = true;
 			using (_mocks.Record())
 			{
 				Expect.Call(_schedulingResultStateHolder.Schedules).Return(scheduleDictionary);
@@ -358,7 +358,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		    ITeamInfo teamInfo = new TeamInfo(groupPerson, groupMatrixes);
 		    var blockInfo = new BlockInfo(new DateOnlyPeriod(_dateOnly, _dateOnly.AddDays(1)));
 		    var shift = _mocks.StrictMock<IShiftProjectionCache>();
-		    _schedulingOptions.UseLevellingSameStartTime = true;
+		    _schedulingOptions.UseTeamBlockSameStartTime = true;
 		    using (_mocks.Record())
 		    {
 			    Expect.Call(_schedulingResultStateHolder.Schedules).Return(scheduleDictionary);

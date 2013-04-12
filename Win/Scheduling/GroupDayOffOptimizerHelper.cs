@@ -449,7 +449,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				groupPagePerDateHolder.GroupPersonGroupPagePerDate =
 					_container.Resolve<IGroupPageCreator>().CreateGroupPagePerDate(dates,
 																				   groupPageDataProvider,
-																				   schedulingOptions.GroupOnGroupPageForLevelingPer,
+																				   schedulingOptions.GroupOnGroupPageForTeamBlockPer,
 																				   true);
 			}
 			IGroupPersonFactory groupPersonFactory = new GroupPersonFactory();

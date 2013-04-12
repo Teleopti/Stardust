@@ -12,8 +12,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
         //             IList<DateOnly> unlockedDays, IList<IPerson> selectedPersons);
 		//void Execute(ITeamBlockInfo teamBlockInfo, IShiftProjectionCache shiftProjectionCache, bool skipOffset);
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Levelling")]
-        void ExecutePerDayPerPerson(IPerson person, DateOnly dateOnly, ITeamBlockInfo teamBlockInfo, IShiftProjectionCache shiftProjectionCache, bool useLevellingSameShift, DateOnlyPeriod selectedPeriod);
+        void ExecutePerDayPerPerson(IPerson person, DateOnly dateOnly, ITeamBlockInfo teamBlockInfo, IShiftProjectionCache shiftProjectionCache, bool useTeamBlockSameShift, DateOnlyPeriod selectedPeriod);
     }
 
     public  class TeamScheduling : ITeamScheduling

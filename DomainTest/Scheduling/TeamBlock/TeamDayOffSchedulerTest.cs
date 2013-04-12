@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
 			_schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
 			_schedulingOptions.DayOffTemplate = new DayOffTemplate(new Description("DayOff"));
-			_schedulingOptions.GroupOnGroupPageForLevelingPer = new GroupPageLight
+			_schedulingOptions.GroupOnGroupPageForTeamBlockPer = new GroupPageLight
 				{
 					Key = "Root",
 					Name = "BU"
