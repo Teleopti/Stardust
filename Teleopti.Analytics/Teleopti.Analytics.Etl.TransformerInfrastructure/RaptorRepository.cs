@@ -539,8 +539,13 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 
 		public IScheduleDictionary LoadSchedule(DateTimePeriod period, IScenario scenario, ICommonStateHolder stateHolder)
 		{
-			IEnumerable<IPerson> persons = stateHolder.PersonCollection;
-			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			var persons = stateHolder.PersonCollection;
+			return LoadSchedule(period, scenario, persons.ToList());
+		}
+
+		public IScheduleDictionary LoadSchedule(DateTimePeriod period, IScenario scenario, IList<IPerson> persons)
+		{
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				//Avoid lazy load error
 				avoidLazyLoadForLoadSchedule(uow, persons);
@@ -549,8 +554,8 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 				IPersonProvider personsInOrganizationProvider = new PersonsInOrganizationProvider(persons);
 				IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true);
 
-				ScheduleDateTimePeriod scheduleDateTimePeriod = new ScheduleDateTimePeriod(period);
-				IScheduleDictionary schedulesDictionary =
+				var scheduleDateTimePeriod = new ScheduleDateTimePeriod(period);
+				var schedulesDictionary =
 					scheduleRepository.FindSchedulesForPersons(scheduleDateTimePeriod, scenario, personsInOrganizationProvider, scheduleDictionaryLoadOptions, persons);
 
 				//Clean ScheduleDictionary from all persons not present in PersonsInOrganization
@@ -568,7 +573,6 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 				return schedulesDictionary;
 			}
 		}
-
 		private static void avoidLazyLoadForLoadSchedule(IUnitOfWork uow, IEnumerable<IPerson> persons)
 		{
 			//just dirty fix for now

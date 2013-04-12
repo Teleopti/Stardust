@@ -85,22 +85,5 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
 
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
-		public void ShouldCheckIfNeedRun()
-		{
-			var raptorRepository = _mock.StrictMock<IRaptorRepository>();
-			var currentBusinessUnit = _mock.DynamicMock<IBusinessUnit>();
-			var jobParameters = JobParametersFactory.SimpleParameters(false);
-			jobParameters.Helper = new JobHelper(raptorRepository, null, null);
-			var needRunChecker = _mock.DynamicMock<IChangedDataChecker>();
-			var stageSchedulePrefJobStep = new StageSchedulePreferenceJobStep(jobParameters, needRunChecker);
-
-			Expect.Call(needRunChecker.NeedToRun(new DateTimePeriod(), raptorRepository, currentBusinessUnit, ""))
-				.Return(false)
-				.IgnoreArguments();
-			_mock.ReplayAll();
-			stageSchedulePrefJobStep.Run(new List<IJobStep>(), currentBusinessUnit, null, false);
-			_mock.VerifyAll();
-		}
 	}
 }

@@ -53,7 +53,7 @@
     <DefineConstants>TRACE;DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-      <CodeAnalysisRuleSet>$(SolutionDir)\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>$(SolutionDir)\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -62,7 +62,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-      <CodeAnalysisRuleSet>$(SolutionDir)\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>$(SolutionDir)\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="nunit.framework, Version=2.6.2.12296, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
@@ -99,7 +99,6 @@
     <Compile Include="FakeData\OvertimeFactory.cs" />
     <Compile Include="Job\Jobs\RequestJobTest.cs" />
     <Compile Include="Job\Steps\EtlDayOffSubStepTest.cs" />
-    <Compile Include="Job\Steps\FactWithNeedToRunTest.cs" />
     <Compile Include="Job\Steps\StageScheduleDayOffCountJobStepTest.cs" />
     <Compile Include="Job\Steps\FactScheduleDeviationJobStepTest.cs" />
     <Compile Include="Job\Steps\LicenseCheckJobStepTest.cs" />

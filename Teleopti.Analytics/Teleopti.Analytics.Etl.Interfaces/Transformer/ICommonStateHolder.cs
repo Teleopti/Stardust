@@ -34,5 +34,7 @@ namespace Teleopti.Analytics.Etl.Interfaces.Transformer
 
 	    IList<IScheduleDay> GetSchedulePartPerPersonAndDate(
 		    IDictionary<DateTimePeriod, IScheduleDictionary> dictionary);
+
+	    IList<IPerson> PersonsWithIds(List<Guid> ids);
     }
 }

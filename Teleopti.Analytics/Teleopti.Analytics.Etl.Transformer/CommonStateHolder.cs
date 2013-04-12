@@ -259,7 +259,12 @@ namespace Teleopti.Analytics.Etl.Transformer
             }
         }
 
-        public IEnumerable<IContract> ContractCollection
+		public IList<IPerson> PersonsWithIds(List<Guid> ids)
+		{
+			return PersonCollection.Where(person => ids.Contains(person.Id.GetValueOrDefault())).ToList();
+		}
+
+	    public IEnumerable<IContract> ContractCollection
         {
             get
             {
@@ -346,13 +351,15 @@ namespace Teleopti.Analytics.Etl.Transformer
 			_dictionaryCashe = new Dictionary<DateTimePeriod, IScheduleDictionary>();
 
 			var groupedChanged = changed.GroupBy(c => c.Date);
-			foreach (var date in groupedChanged)
+			foreach (var changedReadModels in groupedChanged)
 			{
-				var theDate = date.Key;
+				var theDate = changedReadModels.Key;
 				// detta måste fixas med tidszon
 				var utcDate = new DateTime(theDate.Date.Ticks, DateTimeKind.Utc);
-				var period = new DateTimePeriod(utcDate, utcDate.AddDays(1));
-				var scheduleDictionary = _jobParameters.Helper.Repository.LoadSchedule(period, scenario, this);
+				var period = new DateTimePeriod(utcDate, utcDate);
+				var personsIds = changedReadModels.Select(scheduleChangedReadModel => scheduleChangedReadModel.Person).ToList();
+				var persons = PersonsWithIds(personsIds);
+				var scheduleDictionary = _jobParameters.Helper.Repository.LoadSchedule(period, scenario, persons);
 				_dictionaryCashe.Add(period, scheduleDictionary);
 			}
 				

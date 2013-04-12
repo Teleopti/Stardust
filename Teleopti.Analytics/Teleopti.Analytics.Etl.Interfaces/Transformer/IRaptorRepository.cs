@@ -26,6 +26,7 @@ namespace Teleopti.Analytics.Etl.Interfaces.Transformer
         int PersistAcdLogOnPerson(DataTable dataTable);
         int FillPersonDataMart(IBusinessUnit currentBusinessUnit);
         IScheduleDictionary LoadSchedule(DateTimePeriod period, IScenario scenario, ICommonStateHolder stateHolder);
+	    IScheduleDictionary LoadSchedule(DateTimePeriod period, IScenario scenario, IList<IPerson> persons);
         void TruncateSchedule();
         int PersistSchedule(DataTable scheduleDataTable, DataTable absenceDayCountDataTable);
 
@@ -214,5 +215,6 @@ namespace Teleopti.Analytics.Etl.Interfaces.Transformer
         int FillFactQualityDataMart(DateTimePeriod period, int dataSourceId, TimeZoneInfo defaultTimeZone, IBusinessUnit currentBusinessUnit);
 
 		IList<IScheduleChangedReadModel> ChangedDataOnStep(DateTimePeriod onPeriod, IBusinessUnit currentBusinessUnit, string stepName);
+		int PersistScheduleChanged(DataTable dataTable);
     }
 }

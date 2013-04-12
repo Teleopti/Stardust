@@ -112,7 +112,12 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
             return new ScheduleDictionary(scenario, scheduleDateTimePeriod);
         }
 
-        public void TruncateSchedule()
+	    public IScheduleDictionary LoadSchedule(DateTimePeriod period, IScenario scenario, IList<IPerson> persons)
+	    {
+		    throw new NotImplementedException();
+	    }
+
+	    public void TruncateSchedule()
         {
         }
 

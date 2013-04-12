@@ -287,5 +287,26 @@ namespace Teleopti.Analytics.Etl.TransformerTest
                 Assert.AreEqual(0, _target.UserDefinedGroupings.Count());
             }
         }
+
+		[Test]
+		public void ShouldReturnPersonsWithId()
+		{
+			var id1 = Guid.NewGuid();
+			var id2 = Guid.NewGuid();
+			var person1 = new Person();
+			person1.SetId(id1);
+			var person2 = new Person();
+			person2.SetId(id2);
+
+			var persons = new List<IPerson> {person1, person2};
+			var ids = new List<Guid> {id1};
+			Expect.Call(_raptorRepository.LoadPerson(_target)).Return(persons);
+
+			_mocks.ReplayAll();
+			var thePersons = _target.PersonsWithIds(ids);
+			Assert.That(thePersons.Count,Is.EqualTo(1));
+			Assert.That(thePersons.Contains(person1),Is.True);
+			_mocks.VerifyAll();
+		}
     }
 }
