@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		{
 			_mocks = new MockRepository();
 			_schedulingOptions = new SchedulingOptions();
-			_schedulingOptions.UseLevellingPerOption = true;
+			_schedulingOptions.UseTeamBlockPerOption = true;
 			_mainShiftEquator = _mocks.StrictMock<IScheduleDayEquator>();
 			_timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("UTC"));
 			_target = new ScheduleRestrictionExtractor(_mainShiftEquator);
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		[Test]
 		public void ShouldNotAddCommonShiftToTheRestrictionIfNotLevelingIsSameShift()
 		{
-			_schedulingOptions.UseLevellingSameShift = false;
+			_schedulingOptions.UseTeamBlockSameShift = false;
 
 			var dateOnly = new DateOnly(2012, 12, 7);
 			var dateList = new List<DateOnly> { dateOnly };
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldExtractSameShiftRestrictionFromScheduleDay()
 		{
-			_schedulingOptions.UseLevellingSameShift = true;
+			_schedulingOptions.UseTeamBlockSameShift = true;
 			var dateOnly = new DateOnly(2012, 12, 7);
 			var dateList = new List<DateOnly> { dateOnly };
 			var scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldExtractSameShiftCategoryRestrictionFromScheduleDay()
 		{
-			_schedulingOptions.UseLevellingSameShiftCategory = true;
+			_schedulingOptions.UseTeamBlockSameShiftCategory = true;
 			var dateOnly = new DateOnly(2012, 12, 7);
 			var dateList = new List<DateOnly> { dateOnly,dateOnly.AddDays(1) };
 			var scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldNotExtractDifferentShiftCategoryRestrictionFromScheduleDay()
 		{
-			_schedulingOptions.UseLevellingSameShiftCategory = true;
+			_schedulingOptions.UseTeamBlockSameShiftCategory = true;
 			var dateOnly = new DateOnly(2012, 12, 7);
 			var dateList = new List<DateOnly> { dateOnly,dateOnly.AddDays(1) };
 			var scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
@@ -176,7 +176,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		[Test]
 		public void ShouldExtractNullRestrictionWhenHasTwoDifferentSchedules()
 		{
-			_schedulingOptions.UseLevellingSameShift = true;
+			_schedulingOptions.UseTeamBlockSameShift = true;
 			var dateOnly = new DateOnly(2012, 12, 7);
 			var dateList = new List<DateOnly> { dateOnly, dateOnly.AddDays(1) };
 			var scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
@@ -219,7 +219,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		[Test]
 		public void ShouldExtractSameStartTimeRestrictionFromScheduleDay()
 		{
-			_schedulingOptions.UseLevellingSameStartTime = true;
+			_schedulingOptions.UseTeamBlockSameStartTime = true;
 			var dateOnly = new DateOnly(2012, 12, 7);
 			var dateList = new List<DateOnly> { dateOnly, dateOnly.AddDays(1) };
 			var scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
@@ -263,7 +263,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		[Test]
 		public void ShouldExtractNullRestrictionWhenHasTwoDifferentStartTimeSchedules()
 		{
-			_schedulingOptions.UseLevellingSameStartTime = true;
+			_schedulingOptions.UseTeamBlockSameStartTime = true;
 			var dateOnly = new DateOnly(2012, 12, 7);
 			var dateList = new List<DateOnly> { dateOnly, dateOnly.AddDays(1) };
 			var scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
@@ -304,7 +304,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		[Test]
 		public void ShouldExtractSameEndTimeRestrictionFromScheduleDay()
 		{
-			_schedulingOptions.UseLevellingSameEndTime = true;
+			_schedulingOptions.UseTeamBlockSameEndTime = true;
 			var dateOnly = new DateOnly(2012, 12, 7);
 			var dateList = new List<DateOnly> { dateOnly, dateOnly.AddDays(1) };
 			var scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
@@ -348,7 +348,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		[Test]
 		public void ShouldExtractNullRestrictionWhenHasTwoDifferentEndTimeSchedules()
 		{
-			_schedulingOptions.UseLevellingSameEndTime = true;
+			_schedulingOptions.UseTeamBlockSameEndTime = true;
 			var dateOnly = new DateOnly(2012, 12, 7);
 			var dateList = new List<DateOnly> { dateOnly, dateOnly.AddDays(1) };
 			var scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
@@ -389,8 +389,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		[Test]
 		public void ShouldExtractSameStartAndEndTimeRestrictionFromScheduleDay()
 		{
-			_schedulingOptions.UseLevellingSameStartTime = true;
-			_schedulingOptions.UseLevellingSameEndTime = true;
+			_schedulingOptions.UseTeamBlockSameStartTime = true;
+			_schedulingOptions.UseTeamBlockSameEndTime = true;
 			var dateOnly = new DateOnly(2012, 12, 7);
 			var dateList = new List<DateOnly> { dateOnly, dateOnly.AddDays(1) };
 			var scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
@@ -434,7 +434,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		[Test]
 		public void ShouldExtractSameShiftRestrictionWhenPersonAssignmentIsNull()
 		{
-			_schedulingOptions.UseLevellingSameShift = true;
+			_schedulingOptions.UseTeamBlockSameShift = true;
 			var dateOnly = new DateOnly(2012, 12, 7);
 			var dateList = new List<DateOnly> { dateOnly };
 			var scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
@@ -462,7 +462,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		[Test]
 		public void ShouldExtractSameShiftRestrictionWhenMainShiftIsNull()
 		{
-			_schedulingOptions.UseLevellingSameShift = true;
+			_schedulingOptions.UseTeamBlockSameShift = true;
 			var dateOnly = new DateOnly(2012, 12, 7);
 			var dateList = new List<DateOnly> { dateOnly };
 			var personAssignment = _mocks.StrictMock<IPersonAssignment>();
@@ -492,7 +492,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		[Test]
 		public void ShouldExtractSameShiftRestrictionWhenScheduleIsNull()
 		{
-			_schedulingOptions.UseLevellingSameShift = true;
+			_schedulingOptions.UseTeamBlockSameShift = true;
 			var dateOnly = new DateOnly(2012, 12, 7);
 			var dateList = new List<DateOnly> { dateOnly };
 			var scheduleMatrixPro = _mocks.StrictMock<IScheduleMatrixPro>();
@@ -515,7 +515,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		[Test]
 		public void ShouldExtractSameShiftCategoryWhenPersonAssignmentIsNull()
 		{
-			_schedulingOptions.UseLevellingSameShiftCategory = true;
+			_schedulingOptions.UseTeamBlockSameShiftCategory = true;
 			var dateOnly = new DateOnly(2012, 12, 7);
 			var dateList = new List<DateOnly> { dateOnly };
 			var scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
@@ -543,7 +543,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		[Test]
 		public void ShouldExtractSameShiftCategoryWhenMainShiftIsNull()
 		{
-			_schedulingOptions.UseLevellingSameShiftCategory = true;
+			_schedulingOptions.UseTeamBlockSameShiftCategory = true;
 			var dateOnly = new DateOnly(2012, 12, 7);
 			var dateList = new List<DateOnly> { dateOnly };
 			var personAssignment = _mocks.StrictMock<IPersonAssignment>();
@@ -573,7 +573,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		[Test]
 		public void ShouldExtractSameShiftCategoryWhenScheduleIsNull()
 		{
-			_schedulingOptions.UseLevellingSameShiftCategory = true;
+			_schedulingOptions.UseTeamBlockSameShiftCategory = true;
 			var dateOnly = new DateOnly(2012, 12, 7);
 			var dateList = new List<DateOnly> { dateOnly };
 			var scheduleMatrixPro = _mocks.StrictMock<IScheduleMatrixPro>();
@@ -596,7 +596,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		[Test]
 		public void ShouldExtractSameStartTimeWhenScheduleIsNull()
 		{
-			_schedulingOptions.UseLevellingSameStartTime = true;
+			_schedulingOptions.UseTeamBlockSameStartTime = true;
 			var dateOnly = new DateOnly(2012, 12, 7);
 			var dateList = new List<DateOnly> { dateOnly };
 			var scheduleMatrixPro = _mocks.StrictMock<IScheduleMatrixPro>();
@@ -619,7 +619,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		[Test]
 		public void ShouldExtractSameStartTimeWhenSchedulePartPeriodIsNull()
 		{
-			_schedulingOptions.UseLevellingSameStartTime = true;
+			_schedulingOptions.UseTeamBlockSameStartTime = true;
 			var dateOnly = new DateOnly(2012, 12, 7);
 			var dateList = new List<DateOnly> { dateOnly };
 			var scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
@@ -651,7 +651,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		[Test]
 		public void ShouldExtractSameEndTimeWhenScheduleIsNull()
 		{
-			_schedulingOptions.UseLevellingSameEndTime = true;
+			_schedulingOptions.UseTeamBlockSameEndTime = true;
 			var dateOnly = new DateOnly(2012, 12, 7);
 			var dateList = new List<DateOnly> { dateOnly };
 			var scheduleMatrixPro = _mocks.StrictMock<IScheduleMatrixPro>();
@@ -674,7 +674,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		[Test]
 		public void ShouldExtractSameEndTimeWhenSchedulePartPeriodIsNull()
 		{
-			_schedulingOptions.UseLevellingSameEndTime = true;
+			_schedulingOptions.UseTeamBlockSameEndTime = true;
 			var dateOnly = new DateOnly(2012, 12, 7);
 			var dateList = new List<DateOnly> { dateOnly };
 			var scheduleDay1 = _mocks.StrictMock<IScheduleDay>();

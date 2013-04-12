@@ -19,24 +19,24 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			var workTimeLimitation = new WorkTimeLimitation();
 			IMainShift commonMainShift = null;
 			IShiftCategory shiftCategory = null;
-			if (schedulingOptions.UseLevellingSameStartTime)
+			if (schedulingOptions.UseTeamBlockSameStartTime)
 			{
 				var startTime = shift.WorkShiftStartTime;
 				startTimeLimitation = new StartTimeLimitation(startTime, startTime);
 			}
 				
-			if (schedulingOptions.UseLevellingSameEndTime)
+			if (schedulingOptions.UseTeamBlockSameEndTime)
 			{
 				var endTime = shift.WorkShiftEndTime;
 				endTimeLimitation = new EndTimeLimitation(endTime, endTime);
 			}
 
-			if (schedulingOptions.UseLevellingSameShift)
+			if (schedulingOptions.UseTeamBlockSameShift)
 			{
 				commonMainShift = shift.TheMainShift;
 			}
 
-			if (schedulingOptions.UseLevellingSameShiftCategory)
+			if (schedulingOptions.UseTeamBlockSameShiftCategory)
 			{
 				shiftCategory = shift.TheWorkShift.ShiftCategory;
 			}

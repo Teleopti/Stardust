@@ -32,25 +32,25 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			if (dateOnlyList == null)
 				return restriction;
 
-			if (schedulingOptions.UseLevellingSameShift)
+			if (schedulingOptions.UseTeamBlockSameShift)
 			{
 				var sameShiftRestriction = extractSameShift(dateOnlyList, matrixList);
 				if (sameShiftRestriction == null) return null;
 				restriction = restriction.Combine(sameShiftRestriction);
 			}
-			if (schedulingOptions.UseLevellingSameStartTime)
+			if (schedulingOptions.UseTeamBlockSameStartTime)
 			{
 				var sameStartRestriction = extractSameStartTime(dateOnlyList, matrixList, timeZone);
 				if (sameStartRestriction == null) return null;
 				restriction = restriction.Combine(sameStartRestriction);
 			}
-			if (schedulingOptions.UseLevellingSameEndTime)
+			if (schedulingOptions.UseTeamBlockSameEndTime)
 			{
 				var sameEndRestriction = extractSameEndTime(dateOnlyList, matrixList, timeZone);
 				if (sameEndRestriction == null) return null;
 				restriction = restriction.Combine(sameEndRestriction);
 			}
-			if (schedulingOptions.UseLevellingSameShiftCategory)
+			if (schedulingOptions.UseTeamBlockSameShiftCategory)
 			{
 				var sameShiftCategory = extractSameShiftCategory(dateOnlyList, matrixList);
 				if (sameShiftCategory == null) return null;

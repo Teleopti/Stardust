@@ -315,31 +315,31 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Assert.IsFalse(_schedulingOptions.UseStudentAvailability);
         }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Levelling"), Test]
-        public void VerifyLevellingOptions()
+		[Test]
+        public void VerifyTeamBlockOptions()
 		{
 			_optimizationPreferences.Extra.KeepSameDaysOffInTeam = false;
 
-            _optimizationPreferences.Extra.UseLevellingOption = true;
+            _optimizationPreferences.Extra.UseTeamBlockOption = true;
             _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
-            Assert.IsTrue(_schedulingOptions.UseLevellingPerOption );
+            Assert.IsTrue(_schedulingOptions.UseTeamBlockPerOption );
 			Assert.IsTrue(_schedulingOptions.UseSameDayOffs);
 
-            _optimizationPreferences.Extra.UseLevellingSameEndTime  = false;
+            _optimizationPreferences.Extra.UseTeamBlockSameEndTime  = false;
             _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
-            Assert.IsFalse(_schedulingOptions.UseLevellingSameEndTime);
+            Assert.IsFalse(_schedulingOptions.UseTeamBlockSameEndTime);
 
-            _optimizationPreferences.Extra.UseLevellingSameShift  = false ;
+            _optimizationPreferences.Extra.UseTeamBlockSameShift  = false ;
             _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
-            Assert.IsFalse(_schedulingOptions.UseLevellingSameShift);
+            Assert.IsFalse(_schedulingOptions.UseTeamBlockSameShift);
 
-            _optimizationPreferences.Extra.UseLevellingSameShiftCategory  = true;
+            _optimizationPreferences.Extra.UseTeamBlockSameShiftCategory  = true;
             _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
-            Assert.IsTrue(_schedulingOptions.UseLevellingSameShiftCategory);
+            Assert.IsTrue(_schedulingOptions.UseTeamBlockSameShiftCategory);
 
-            _optimizationPreferences.Extra.UseLevellingSameStartTime  = true;
+            _optimizationPreferences.Extra.UseTeamBlockSameStartTime  = true;
             _schedulingOptions = _target.CreateSchedulingOptions(_optimizationPreferences);
-            Assert.IsTrue(_schedulingOptions.UseLevellingSameStartTime);
+            Assert.IsTrue(_schedulingOptions.UseTeamBlockSameStartTime);
 
         }
 

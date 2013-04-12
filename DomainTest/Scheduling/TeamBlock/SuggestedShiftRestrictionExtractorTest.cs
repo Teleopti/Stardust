@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		{
 			var shift = _mocks.StrictMock<IShiftProjectionCache>();
 			var startTime = new TimeSpan(8, 0, 0);
-			_schedulingOptions.UseLevellingSameStartTime = true;
+			_schedulingOptions.UseTeamBlockSameStartTime = true;
 
 			using (_mocks.Record())
 			{
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		{
 			var shift = _mocks.StrictMock<IShiftProjectionCache>();
 			var endTime = new TimeSpan(17, 0, 0);
-			_schedulingOptions.UseLevellingSameEndTime = true;
+			_schedulingOptions.UseTeamBlockSameEndTime = true;
 
 			using (_mocks.Record())
 			{
@@ -76,8 +76,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			var startTime = new TimeSpan(8, 0, 0);
 			var endTime = new TimeSpan(17, 0, 0);
 
-			_schedulingOptions.UseLevellingSameStartTime = true;
-			_schedulingOptions.UseLevellingSameEndTime = true;
+			_schedulingOptions.UseTeamBlockSameStartTime = true;
+			_schedulingOptions.UseTeamBlockSameEndTime = true;
 
 			using (_mocks.Record())
 			{
@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			var mainShift = MainShiftFactory.CreateMainShift(new TimeSpan(11, 0, 0), new TimeSpan(19, 0, 0),
 														 activity, category);
 
-			_schedulingOptions.UseLevellingSameShift = true;
+			_schedulingOptions.UseTeamBlockSameShift = true;
 
 			using (_mocks.Record())
 			{
@@ -133,7 +133,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		public void ShouldExtractSameShiftCategoryRestrictionFromSuggestedShift()
 		{
 			var shift = _mocks.StrictMock<IShiftProjectionCache>();
-			_schedulingOptions.UseLevellingSameShiftCategory = true;
+			_schedulingOptions.UseTeamBlockSameShiftCategory = true;
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("shiftcategory");
 			using (_mocks.Record())
 			{

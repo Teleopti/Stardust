@@ -14,12 +14,12 @@ namespace Teleopti.Ccc.Domain.Optimization
         private bool _useGroupScheduling;
         private string _groupSchedulingGroupPageKey;
 
-        private string _groupSchedlingForLevelingPerKey;
-        private bool _useLevellingSameEndTime;
-        private bool _useLevellingSameShiftCategory;
-        private bool _useLevellingSameStartTime;
-        private bool _useLevellingSameShift;
-        private bool _useLevellingPerOption;
+        private string _groupSchedlingForTeamBlockPerKey;
+        private bool _useTeamBlockSameEndTime;
+        private bool _useTeamBlockSameShiftCategory;
+        private bool _useTeamBlockSameStartTime;
+        private bool _useTeamBlockSameShift;
+        private bool _useTeamBlockPerOption;
         
         private Guid? _scheduleTagId;
         private bool _useGroupSchedulingCommonStart;
@@ -36,9 +36,9 @@ namespace Teleopti.Ccc.Domain.Optimization
         
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public void MapTo(ISchedulingOptions schedulingOptions, IList<IScheduleTag> scheduleTags, IList<IGroupPageLight> groupPages,IList<IGroupPageLight> groupPagesForLevelingPer, IList<IActivity> activityList)
+        public void MapTo(ISchedulingOptions schedulingOptions, IList<IScheduleTag> scheduleTags, IList<IGroupPageLight> groupPages,IList<IGroupPageLight> groupPagesForTeamBlockPer, IList<IActivity> activityList)
         {
-            if (groupPagesForLevelingPer == null) throw new ArgumentNullException("groupPagesForLevelingPer");
+            if (groupPagesForTeamBlockPer == null) throw new ArgumentNullException("groupPagesForTeamBlockPer");
             foreach (var scheduleTag in scheduleTags)
             {
                 if (_scheduleTagId == scheduleTag.Id)
@@ -58,16 +58,16 @@ namespace Teleopti.Ccc.Domain.Optimization
             }
 
             //for leve per
-            foreach (var groupPage in groupPagesForLevelingPer)
+            foreach (var groupPage in groupPagesForTeamBlockPer)
             {
-                if (_groupSchedlingForLevelingPerKey  == groupPage.Key)
-                    schedulingOptions.GroupOnGroupPageForLevelingPer = groupPage;
+                if (_groupSchedlingForTeamBlockPerKey  == groupPage.Key)
+                    schedulingOptions.GroupOnGroupPageForTeamBlockPer = groupPage;
             }
-            schedulingOptions.UseLevellingSameEndTime = _useLevellingSameEndTime;
-            schedulingOptions.UseLevellingSameShift = _useLevellingSameShift;
-            schedulingOptions.UseLevellingSameShiftCategory = _useLevellingSameShiftCategory;
-            schedulingOptions.UseLevellingSameStartTime = _useLevellingSameStartTime;
-            schedulingOptions.UseLevellingPerOption = _useLevellingPerOption;
+            schedulingOptions.UseTeamBlockSameEndTime = _useTeamBlockSameEndTime;
+            schedulingOptions.UseTeamBlockSameShift = _useTeamBlockSameShift;
+            schedulingOptions.UseTeamBlockSameShiftCategory = _useTeamBlockSameShiftCategory;
+            schedulingOptions.UseTeamBlockSameStartTime = _useTeamBlockSameStartTime;
+            schedulingOptions.UseTeamBlockPerOption = _useTeamBlockPerOption;
 
             schedulingOptions.UseGroupSchedulingCommonStart = _useGroupSchedulingCommonStart;
             schedulingOptions.UseGroupSchedulingCommonEnd = _useGroupSchedulingCommonEnd;
@@ -113,13 +113,13 @@ namespace Teleopti.Ccc.Domain.Optimization
             _screenRefreshRate = schedulingOptions.RefreshRate;
             _commonActivtyId = schedulingOptions.CommonActivity != null ? schedulingOptions.CommonActivity.Id : null;
 
-            if (schedulingOptions.GroupOnGroupPageForLevelingPer!=null)
-                _groupSchedlingForLevelingPerKey = schedulingOptions.GroupOnGroupPageForLevelingPer.Key;
-            _useLevellingSameEndTime = schedulingOptions.UseLevellingSameEndTime;
-            _useLevellingSameShift = schedulingOptions.UseLevellingSameShift;
-            _useLevellingSameShiftCategory = schedulingOptions.UseLevellingSameShiftCategory;
-            _useLevellingSameStartTime  = schedulingOptions.UseLevellingSameStartTime ;
-            _useLevellingPerOption = schedulingOptions.UseLevellingPerOption;
+            if (schedulingOptions.GroupOnGroupPageForTeamBlockPer!=null)
+                _groupSchedlingForTeamBlockPerKey = schedulingOptions.GroupOnGroupPageForTeamBlockPer.Key;
+            _useTeamBlockSameEndTime = schedulingOptions.UseTeamBlockSameEndTime;
+            _useTeamBlockSameShift = schedulingOptions.UseTeamBlockSameShift;
+            _useTeamBlockSameShiftCategory = schedulingOptions.UseTeamBlockSameShiftCategory;
+            _useTeamBlockSameStartTime  = schedulingOptions.UseTeamBlockSameStartTime ;
+            _useTeamBlockPerOption = schedulingOptions.UseTeamBlockPerOption;
         }
     }
 }

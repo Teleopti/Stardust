@@ -10824,15 +10824,6 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Levelling Per.
-        /// </summary>
-        public static string LevellingPer {
-            get {
-                return ResourceManager.GetString("LevellingPer", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to This system is licensed to &quot;{0}&quot; according to the terms and conditions of the license agreement and the license key will expire {1}.
         ///
         ///The license covers a maximum of {2} active agents.

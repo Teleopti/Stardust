@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		//private IGroupPage _groupPage2;
 		private IExtraPreferences _extraPreferencesSource;
 		private IExtraPreferences _extraPreferencesTarget;
-	    private IList<IGroupPageLight> _groupPagesForLevellingPer;
+	    private IList<IGroupPageLight> _groupPagesForTeamBlockPer;
 
 	    [SetUp]
 		public void Setup()
@@ -28,11 +28,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			
 			_groupPages = new List<IGroupPageLight> { _groupPage1 };
 
-		    _groupPagesForLevellingPer = _groupPages;
+		    _groupPagesForTeamBlockPer = _groupPages;
 	        var singleAgentTeamGP = new GroupPageLight();
             singleAgentTeamGP.Key = "SingleAgentTeam";
             singleAgentTeamGP.Name = "Single Agent Team";
-            _groupPagesForLevellingPer.Add(singleAgentTeamGP);
+            _groupPagesForTeamBlockPer.Add(singleAgentTeamGP);
 			_target = new ExtraPreferencesPersonalSettings();
 			_extraPreferencesSource = new ExtraPreferences();
 			_extraPreferencesTarget = new ExtraPreferences();
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		[Test]
 		public void VerifyDefaultValues()
 		{
-            _target.MapTo(_extraPreferencesTarget, _groupPages, _groupPagesForLevellingPer);
+            _target.MapTo(_extraPreferencesTarget, _groupPages, _groupPagesForTeamBlockPer);
 			Assert.AreEqual(BlockFinderType.BetweenDayOff, _extraPreferencesTarget.BlockFinderTypeValue);
 			
 		}
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		    
 
 			_target.MapFrom(_extraPreferencesSource);
-            _target.MapTo(_extraPreferencesTarget, _groupPages, _groupPagesForLevellingPer);
+            _target.MapTo(_extraPreferencesTarget, _groupPages, _groupPagesForTeamBlockPer);
 
 			Assert.AreEqual(_extraPreferencesSource.BlockFinderTypeValue, _extraPreferencesTarget.BlockFinderTypeValue);
 			//Assert.AreEqual(_extraPreferencesSource.UseBlockScheduling, _extraPreferencesTarget.UseBlockScheduling);
@@ -70,39 +70,39 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 		}
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Levelling"), Test]
-        public void MappingShouldGetAndSetForLevellingOptions()
+        [Test]
+        public void MappingShouldGetAndSetForTeamBlockOptions()
         {
-            _extraPreferencesSource.UseLevellingOption  = true;
-            _extraPreferencesSource.UseLevellingSameEndTime  = true;
-            _extraPreferencesSource.UseLevellingSameStartTime  = true;
-            _extraPreferencesSource.UseLevellingSameShift = true;
-            _extraPreferencesSource.UseLevellingSameShiftCategory  = false;
+            _extraPreferencesSource.UseTeamBlockOption  = true;
+            _extraPreferencesSource.UseTeamBlockSameEndTime  = true;
+            _extraPreferencesSource.UseTeamBlockSameStartTime  = true;
+            _extraPreferencesSource.UseTeamBlockSameShift = true;
+            _extraPreferencesSource.UseTeamBlockSameShiftCategory  = false;
             _extraPreferencesSource.BlockFinderTypeForAdvanceOptimization = BlockFinderType.BetweenDayOff;
-            _extraPreferencesSource.GroupPageOnTeamLevelingPer = _groupPage1;
+            _extraPreferencesSource.GroupPageOnTeamBlockPer = _groupPage1;
             _target.MapFrom(_extraPreferencesSource);
 
-            _target.MapTo(_extraPreferencesTarget, _groupPages, _groupPagesForLevellingPer);
+            _target.MapTo(_extraPreferencesTarget, _groupPages, _groupPagesForTeamBlockPer);
 
-            Assert.AreEqual(_extraPreferencesSource.UseLevellingOption, _extraPreferencesTarget.UseLevellingOption);
-            Assert.AreEqual(_extraPreferencesSource.UseLevellingSameEndTime, _extraPreferencesTarget.UseLevellingSameEndTime);
-            Assert.AreEqual(_extraPreferencesSource.UseLevellingSameStartTime, _extraPreferencesTarget.UseLevellingSameStartTime);
-            Assert.AreEqual(_extraPreferencesSource.UseLevellingSameShift, _extraPreferencesTarget.UseLevellingSameShift);
-            Assert.AreEqual(_extraPreferencesSource.UseLevellingSameShiftCategory, _extraPreferencesTarget.UseLevellingSameShiftCategory);
-            Assert.AreEqual(_extraPreferencesSource.GroupPageOnTeamLevelingPer , _extraPreferencesTarget.GroupPageOnTeamLevelingPer);
+            Assert.AreEqual(_extraPreferencesSource.UseTeamBlockOption, _extraPreferencesTarget.UseTeamBlockOption);
+            Assert.AreEqual(_extraPreferencesSource.UseTeamBlockSameEndTime, _extraPreferencesTarget.UseTeamBlockSameEndTime);
+            Assert.AreEqual(_extraPreferencesSource.UseTeamBlockSameStartTime, _extraPreferencesTarget.UseTeamBlockSameStartTime);
+            Assert.AreEqual(_extraPreferencesSource.UseTeamBlockSameShift, _extraPreferencesTarget.UseTeamBlockSameShift);
+            Assert.AreEqual(_extraPreferencesSource.UseTeamBlockSameShiftCategory, _extraPreferencesTarget.UseTeamBlockSameShiftCategory);
+            Assert.AreEqual(_extraPreferencesSource.GroupPageOnTeamBlockPer , _extraPreferencesTarget.GroupPageOnTeamBlockPer);
             Assert.AreEqual(_extraPreferencesSource.BlockFinderTypeForAdvanceOptimization, _extraPreferencesTarget.BlockFinderTypeForAdvanceOptimization);
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Levelling"), Test]
-        public void MappingShouldGetAndSetForLevellingOptionsForSingleAgentPage()
+        [Test]
+        public void MappingShouldGetAndSetForTeamBlockOptionsForSingleAgentPage()
         {
             var singleAgentTeamGroupPage = new GroupPageLight { Key = "SingleAgentTeam" ,Name = "Single Agent Team" };
-            _extraPreferencesSource.GroupPageOnTeamLevelingPer = singleAgentTeamGroupPage;
+            _extraPreferencesSource.GroupPageOnTeamBlockPer = singleAgentTeamGroupPage;
             _target.MapFrom(_extraPreferencesSource);
 
-            _target.MapTo(_extraPreferencesTarget, _groupPages, _groupPagesForLevellingPer);
+            _target.MapTo(_extraPreferencesTarget, _groupPages, _groupPagesForTeamBlockPer);
 
-            Assert.AreEqual(_extraPreferencesSource.GroupPageOnTeamLevelingPer.Key , _extraPreferencesTarget.GroupPageOnTeamLevelingPer.Key );
+            Assert.AreEqual(_extraPreferencesSource.GroupPageOnTeamBlockPer.Key , _extraPreferencesTarget.GroupPageOnTeamBlockPer.Key );
             
         }
 
@@ -111,10 +111,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		{
 			_target.SetGroupPageOnTeamKey(_groupPage1Key);
 			_target.SetGroupPageOnCompareWithKey(_groupPage1Key);
-            _target.SetGroupPageOnTeamLevelingPerKey( _groupPage1Key);
-            _target.MapTo(_extraPreferencesTarget, _groupPages, _groupPagesForLevellingPer);
+            _target.SetGroupPageOnTeamBlockPerKey( _groupPage1Key);
+            _target.MapTo(_extraPreferencesTarget, _groupPages, _groupPagesForTeamBlockPer);
 			Assert.AreEqual(_extraPreferencesTarget.GroupPageOnTeam.Key, _groupPage1Key);
-			Assert.AreEqual(_extraPreferencesTarget.GroupPageOnTeamLevelingPer.Key, _groupPage1Key);
+			Assert.AreEqual(_extraPreferencesTarget.GroupPageOnTeamBlockPer.Key, _groupPage1Key);
 			Assert.AreEqual(_extraPreferencesTarget.GroupPageOnCompareWith.Key, _groupPage1Key);
 		}
 
@@ -123,10 +123,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		{
 			_target.SetGroupPageOnTeamKey(_groupPage2Key);
 			_target.SetGroupPageOnCompareWithKey(_groupPage2Key);
-            _target.SetGroupPageOnTeamLevelingPerKey(_groupPage2Key);
-            _target.MapTo(_extraPreferencesTarget, _groupPages, _groupPagesForLevellingPer);
+            _target.SetGroupPageOnTeamBlockPerKey(_groupPage2Key);
+            _target.MapTo(_extraPreferencesTarget, _groupPages, _groupPagesForTeamBlockPer);
 			Assert.IsNull(_extraPreferencesTarget.GroupPageOnTeam);
-            Assert.IsNull(_extraPreferencesTarget.GroupPageOnTeamLevelingPer);
+            Assert.IsNull(_extraPreferencesTarget.GroupPageOnTeamBlockPer);
 			Assert.IsNull(_extraPreferencesTarget.GroupPageOnCompareWith);
 		}
 	}

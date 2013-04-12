@@ -234,8 +234,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 		{
 			foreach (DateOnly dateOnly in removedDaysOff)
 			{
-                bool singleAgentTeam = schedulingOptions.GroupOnGroupPageForLevelingPer != null &&
-                                           schedulingOptions.GroupOnGroupPageForLevelingPer.Key == "SingleAgentTeam";
+                bool singleAgentTeam = schedulingOptions.GroupOnGroupPageForTeamBlockPer != null &&
+                                           schedulingOptions.GroupOnGroupPageForTeamBlockPer.Key == "SingleAgentTeam";
                 ITeamBlockInfo teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, dateOnly,
 				                                                                        schedulingOptions
                                                                                             .BlockFinderTypeForAdvanceScheduling, singleAgentTeam);

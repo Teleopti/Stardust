@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Win.Optimization
         private readonly IList<IActivity> _availableActivity;
 
         private readonly int _resolution;
-        private IList<IGroupPageLight> _groupPagesForLevellingPer;
+        private IList<IGroupPageLight> _groupPagesForTeamBlockPer;
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public OptimizationPreferencesDialog(
@@ -49,11 +49,11 @@ namespace Teleopti.Ccc.Win.Optimization
             Preferences = preferences;
 			_groupPagesProvider = groupPagesProvider;
 			_groupPages = _groupPagesProvider.GetGroups(true);
-            _groupPagesForLevellingPer = _groupPages;
+            _groupPagesForTeamBlockPer = _groupPages;
             var singleAgentGroupPage = new GroupPageLight();
             singleAgentGroupPage.Key = "SingleAgentTeam";
             singleAgentGroupPage.Name = "Single Agent Team";
-            _groupPagesForLevellingPer.Add(singleAgentGroupPage);
+            _groupPagesForTeamBlockPer.Add(singleAgentGroupPage);
         	_scheduleTags = scheduleTags;
             _availableActivity = availableActivity;
             _resolution = resolution;
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.Win.Optimization
             if (hasMissedloadingSettings()) return;
 			_defaultGeneralPreferences.MapTo(Preferences.General, _scheduleTags);
 			_defaultDaysOffPreferences.MapTo(Preferences.DaysOff);
-			_defaultExtraPreferences.MapTo(Preferences.Extra, _groupPages,_groupPagesForLevellingPer);
+			_defaultExtraPreferences.MapTo(Preferences.Extra, _groupPages,_groupPagesForTeamBlockPer);
 			_defaultAdvancedPreferences.MapTo(Preferences.Advanced);
             _defaultshiftsPreferences.MapTo(Preferences.Shifts, _availableActivity);
             

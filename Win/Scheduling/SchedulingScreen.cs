@@ -3628,7 +3628,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				schedulingOptions.OnlyShiftsWhenUnderstaffed = false;
 
-                if(!schedulingOptions.UseLevellingPerOption)
+                if(!schedulingOptions.UseTeamBlockPerOption)
                 {
                     //switch (BlockFinderType.None)
                     //{
@@ -3927,7 +3927,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 						break;
 					}
 
-					if (optimizerPreferences.Extra.UseLevellingOption)
+					if (optimizerPreferences.Extra.UseTeamBlockOption)
 					{
 						IList<IPerson> selectedPersons =
 							new PersonListExtractorFromScheduleParts(selectedSchedules).ExtractPersons().ToList();

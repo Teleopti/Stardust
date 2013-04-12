@@ -26,7 +26,7 @@
         /// Required method for Designer support - do not modify 
         /// the contents of this method with the code editor.
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxLevellingPer"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxStudentAvailability"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxShiftCategoryLimitations"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxScheduleOnlyPreferenceMustHave"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxRotations"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxPreferences"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAvailability"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxSameEndTime"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseTeamScheduling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseStudentAvailability"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseShiftCategoryRestrictions"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseShiftCategory"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseSameDayOffs"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseRotations"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseRestriction"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUsePreferencesMustHavesOnly"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUsePreferences"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseMinStaffing"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseMaxStaffing"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseMaxSeats"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseBlockScheduling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseAvailability"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxTagChangesWithColon"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxShiftSelection"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxSchedulePeriod"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxScheduleOrSchedules"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxScheduleOnlyRotationDays"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxScheduleOnlyPreferenceDays"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxScheduleOnlyAvailabilityDays"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxSameStartTime"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxSameShiftCategory"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxResourceCalculateEveryColon"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxRefreshScreenEveryColon"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxGeneral"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxIncludeTroubleshootingInformation"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxFairness"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxExtra"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxDoNotBreakMaxSeats"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxCompareWith"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxBusiness"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxBetweenDayOff"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAdvanced"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.Control.set_Text(System.String)")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxStudentAvailability"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxShiftCategoryLimitations"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxScheduleOnlyPreferenceMustHave"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxRotations"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxPreferences"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAvailability"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxSameEndTime"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseTeamScheduling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseStudentAvailability"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseShiftCategoryRestrictions"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseShiftCategory"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseSameDayOffs"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseRotations"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseRestriction"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUsePreferencesMustHavesOnly"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUsePreferences"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseMinStaffing"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseMaxStaffing"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseMaxSeats"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseBlockScheduling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxUseAvailability"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxTagChangesWithColon"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxShiftSelection"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxSchedulePeriod"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxScheduleOrSchedules"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxScheduleOnlyRotationDays"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxScheduleOnlyPreferenceDays"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxScheduleOnlyAvailabilityDays"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxSameStartTime"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxSameShiftCategory"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxResourceCalculateEveryColon"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxRefreshScreenEveryColon"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxGeneral"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxIncludeTroubleshootingInformation"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxFairness"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxExtra"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxDoNotBreakMaxSeats"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxCompareWith"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxBusiness"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxBetweenDayOff"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "xxAdvanced"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Windows.Forms.Control.set_Text(System.String)")]
         private void InitializeComponent()
         {
             this.tabControl1 = new System.Windows.Forms.TabControl();
@@ -59,7 +59,7 @@
             this.comboBoxGroupingFairness = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
             this.pnlBlockTeamScheduling = new System.Windows.Forms.Panel();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
-            this.checkBoxLevellingPerBlockScheduling = new System.Windows.Forms.CheckBox();
+            this.checkBoxTeamBlockPerBlockScheduling = new System.Windows.Forms.CheckBox();
             this.checkBoxUseGroupScheduling = new System.Windows.Forms.CheckBox();
             this.checkBoxCommonActivity = new System.Windows.Forms.CheckBox();
             this.comboBoxActivity = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
@@ -68,8 +68,8 @@
             this.checkBoxCommonCategory = new System.Windows.Forms.CheckBox();
             this.comboBoxGrouping = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
             this.comboBoxTeamBlockType = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
-            this.checkBoxLevellingSameShiftCategory = new System.Windows.Forms.CheckBox();
-            this.checkBoxLevellingSameStartTime = new System.Windows.Forms.CheckBox();
+            this.checkBoxTeamBlockSameShiftCategory = new System.Windows.Forms.CheckBox();
+            this.checkBoxTeamBlockSameStartTime = new System.Windows.Forms.CheckBox();
             this.tabPageAdvance = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.lblShiftSelection = new System.Windows.Forms.Label();
@@ -497,7 +497,7 @@
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 184F));
             this.tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 123F));
-            this.tableLayoutPanel4.Controls.Add(this.checkBoxLevellingPerBlockScheduling, 0, 0);
+            this.tableLayoutPanel4.Controls.Add(this.checkBoxTeamBlockPerBlockScheduling, 0, 0);
             this.tableLayoutPanel4.Controls.Add(this.checkBoxUseGroupScheduling, 0, 5);
             this.tableLayoutPanel4.Controls.Add(this.checkBoxCommonActivity, 1, 9);
             this.tableLayoutPanel4.Controls.Add(this.comboBoxActivity, 2, 9);
@@ -506,8 +506,8 @@
             this.tableLayoutPanel4.Controls.Add(this.checkBoxCommonCategory, 1, 6);
             this.tableLayoutPanel4.Controls.Add(this.comboBoxGrouping, 2, 5);
             this.tableLayoutPanel4.Controls.Add(this.comboBoxTeamBlockType, 2, 0);
-            this.tableLayoutPanel4.Controls.Add(this.checkBoxLevellingSameShiftCategory, 1, 1);
-            this.tableLayoutPanel4.Controls.Add(this.checkBoxLevellingSameStartTime, 1, 3);
+            this.tableLayoutPanel4.Controls.Add(this.checkBoxTeamBlockSameShiftCategory, 1, 1);
+            this.tableLayoutPanel4.Controls.Add(this.checkBoxTeamBlockSameStartTime, 1, 3);
             this.tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel4.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
@@ -526,18 +526,18 @@
             this.tableLayoutPanel4.Size = new System.Drawing.Size(426, 303);
             this.tableLayoutPanel4.TabIndex = 1;
             // 
-            // checkBoxLevellingPerBlockScheduling
+            // checkBoxTeamBlockPerBlockScheduling
             // 
-            this.checkBoxLevellingPerBlockScheduling.AutoSize = true;
-            this.tableLayoutPanel4.SetColumnSpan(this.checkBoxLevellingPerBlockScheduling, 2);
-            this.checkBoxLevellingPerBlockScheduling.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.checkBoxLevellingPerBlockScheduling.Location = new System.Drawing.Point(3, 3);
-            this.checkBoxLevellingPerBlockScheduling.Name = "checkBoxLevellingPerBlockScheduling";
-            this.checkBoxLevellingPerBlockScheduling.Size = new System.Drawing.Size(156, 19);
-            this.checkBoxLevellingPerBlockScheduling.TabIndex = 41;
-            this.checkBoxLevellingPerBlockScheduling.Text = "xxLevellingPer";
-            this.checkBoxLevellingPerBlockScheduling.UseVisualStyleBackColor = true;
-            this.checkBoxLevellingPerBlockScheduling.CheckedChanged += new System.EventHandler(this.checkBoxLevellingPerBlockScheduling_CheckedChanged);
+            this.checkBoxTeamBlockPerBlockScheduling.AutoSize = true;
+            this.tableLayoutPanel4.SetColumnSpan(this.checkBoxTeamBlockPerBlockScheduling, 2);
+            this.checkBoxTeamBlockPerBlockScheduling.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.checkBoxTeamBlockPerBlockScheduling.Location = new System.Drawing.Point(3, 3);
+            this.checkBoxTeamBlockPerBlockScheduling.Name = "checkBoxTeamBlockPerBlockScheduling";
+            this.checkBoxTeamBlockPerBlockScheduling.Size = new System.Drawing.Size(156, 19);
+            this.checkBoxTeamBlockPerBlockScheduling.TabIndex = 41;
+            this.checkBoxTeamBlockPerBlockScheduling.Text = "xxBlock";
+            this.checkBoxTeamBlockPerBlockScheduling.UseVisualStyleBackColor = true;
+            this.checkBoxTeamBlockPerBlockScheduling.CheckedChanged += new System.EventHandler(this.checkBoxTeamBlockPerBlockScheduling_CheckedChanged);
             // 
             // checkBoxUseGroupScheduling
             // 
@@ -631,27 +631,27 @@
             this.comboBoxTeamBlockType.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
             this.comboBoxTeamBlockType.TabIndex = 47;
             // 
-            // checkBoxLevellingSameShiftCategory
+            // checkBoxTeamBlockSameShiftCategory
             // 
-            this.checkBoxLevellingSameShiftCategory.AutoSize = true;
-            this.checkBoxLevellingSameShiftCategory.Enabled = false;
-            this.checkBoxLevellingSameShiftCategory.Location = new System.Drawing.Point(33, 28);
-            this.checkBoxLevellingSameShiftCategory.Name = "checkBoxLevellingSameShiftCategory";
-            this.checkBoxLevellingSameShiftCategory.Size = new System.Drawing.Size(126, 17);
-            this.checkBoxLevellingSameShiftCategory.TabIndex = 48;
-            this.checkBoxLevellingSameShiftCategory.Text = "xxSameShiftCategory";
-            this.checkBoxLevellingSameShiftCategory.UseVisualStyleBackColor = true;
+            this.checkBoxTeamBlockSameShiftCategory.AutoSize = true;
+            this.checkBoxTeamBlockSameShiftCategory.Enabled = false;
+            this.checkBoxTeamBlockSameShiftCategory.Location = new System.Drawing.Point(33, 28);
+            this.checkBoxTeamBlockSameShiftCategory.Name = "checkBoxTeamBlockSameShiftCategory";
+            this.checkBoxTeamBlockSameShiftCategory.Size = new System.Drawing.Size(126, 17);
+            this.checkBoxTeamBlockSameShiftCategory.TabIndex = 48;
+            this.checkBoxTeamBlockSameShiftCategory.Text = "xxSameShiftCategory";
+            this.checkBoxTeamBlockSameShiftCategory.UseVisualStyleBackColor = true;
             // 
-            // checkBoxLevellingSameStartTime
+            // checkBoxTeamBlockSameStartTime
             // 
-            this.checkBoxLevellingSameStartTime.AutoSize = true;
-            this.checkBoxLevellingSameStartTime.Enabled = false;
-            this.checkBoxLevellingSameStartTime.Location = new System.Drawing.Point(33, 55);
-            this.checkBoxLevellingSameStartTime.Name = "checkBoxLevellingSameStartTime";
-            this.checkBoxLevellingSameStartTime.Size = new System.Drawing.Size(108, 17);
-            this.checkBoxLevellingSameStartTime.TabIndex = 49;
-            this.checkBoxLevellingSameStartTime.Text = "xxSameStartTime";
-            this.checkBoxLevellingSameStartTime.UseVisualStyleBackColor = true;
+            this.checkBoxTeamBlockSameStartTime.AutoSize = true;
+            this.checkBoxTeamBlockSameStartTime.Enabled = false;
+            this.checkBoxTeamBlockSameStartTime.Location = new System.Drawing.Point(33, 55);
+            this.checkBoxTeamBlockSameStartTime.Name = "checkBoxTeamBlockSameStartTime";
+            this.checkBoxTeamBlockSameStartTime.Size = new System.Drawing.Size(108, 17);
+            this.checkBoxTeamBlockSameStartTime.TabIndex = 49;
+            this.checkBoxTeamBlockSameStartTime.Text = "xxSameStartTime";
+            this.checkBoxTeamBlockSameStartTime.UseVisualStyleBackColor = true;
             // 
             // tabPageAdvance
             // 
@@ -1038,9 +1038,9 @@
         private System.Windows.Forms.CheckBox checkBoxCommonActivity;
         private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxActivity;
 		private System.Windows.Forms.CheckBox checkBoxUseAverageShiftLengths;
-        private System.Windows.Forms.CheckBox checkBoxLevellingPerBlockScheduling;
+        private System.Windows.Forms.CheckBox checkBoxTeamBlockPerBlockScheduling;
         private Syncfusion.Windows.Forms.Tools.ComboBoxAdv comboBoxTeamBlockType;
-        private System.Windows.Forms.CheckBox checkBoxLevellingSameShiftCategory;
-        private System.Windows.Forms.CheckBox checkBoxLevellingSameStartTime;
+        private System.Windows.Forms.CheckBox checkBoxTeamBlockSameShiftCategory;
+        private System.Windows.Forms.CheckBox checkBoxTeamBlockSameStartTime;
     }
 }

@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             _blockInfo = new BlockInfo(new DateOnlyPeriod(_today, _today.AddDays(2)));
             var teamBlockInfo = new TeamBlockInfo(_teamInfo, _blockInfo);
             var schedulingOptions =new SchedulingOptions();
-            schedulingOptions.UseLevellingSameShift = true;
+            schedulingOptions.UseTeamBlockSameShift = true;
             using (_mock.Record())
             {
                 Expect.Call(_scheduleMatrixPro.SchedulePeriod).Return(_virtualSchedulePeriod).Repeat.AtLeastOnce();
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             _blockInfo = new BlockInfo(new DateOnlyPeriod(_today, _today.AddDays(2)));
             var teamBlockInfo = new TeamBlockInfo(_teamInfo, _blockInfo);
             var schedulingOptions = new SchedulingOptions();
-            schedulingOptions.UseLevellingSameStartTime = true;
+            schedulingOptions.UseTeamBlockSameStartTime = true;
             var now = DateTime.UtcNow;
             using (_mock.Record())
             {
@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             _blockInfo = new BlockInfo(new DateOnlyPeriod(_today, _today.AddDays(2)));
             var teamBlockInfo = new TeamBlockInfo(_teamInfo, _blockInfo);
             var schedulingOptions = new SchedulingOptions();
-            schedulingOptions.UseLevellingSameShift = true;
+            schedulingOptions.UseTeamBlockSameShift = true;
             using (_mock.Record())
             {
                 Expect.Call(_scheduleMatrixPro.SchedulePeriod).Return(_virtualSchedulePeriod).Repeat.AtLeastOnce();
@@ -160,7 +160,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             _blockInfo = new BlockInfo(new DateOnlyPeriod(_today, _today.AddDays(2)));
             var teamBlockInfo = new TeamBlockInfo(_teamInfo, _blockInfo);
             var schedulingOptions = new SchedulingOptions();
-            schedulingOptions.UseLevellingSameStartTime  = true;
+            schedulingOptions.UseTeamBlockSameStartTime  = true;
             var now = DateTime.UtcNow;
             using (_mock.Record())
             {
@@ -192,7 +192,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             _blockInfo = new BlockInfo(new DateOnlyPeriod(_today, _today.AddDays(2)));
             var teamBlockInfo = new TeamBlockInfo(_teamInfo, _blockInfo);
             var schedulingOptions = new SchedulingOptions();
-            schedulingOptions.UseLevellingSameStartTime = true;
+            schedulingOptions.UseTeamBlockSameStartTime = true;
             using (_mock.Record())
             {
                 Expect.Call(_scheduleMatrixPro.SchedulePeriod).Return(_virtualSchedulePeriod).Repeat.AtLeastOnce();
@@ -217,7 +217,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             _blockInfo = new BlockInfo(new DateOnlyPeriod(_today, _today.AddDays(2)));
             var teamBlockInfo = new TeamBlockInfo(_teamInfo, _blockInfo);
             var schedulingOptions = new SchedulingOptions();
-            schedulingOptions.UseLevellingSameStartTime = true;
+            schedulingOptions.UseTeamBlockSameStartTime = true;
             var now = DateTime.UtcNow;
             using (_mock.Record())
             {
@@ -263,7 +263,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             _blockInfo = new BlockInfo(new DateOnlyPeriod(_today, _today.AddDays(2)));
             var teamBlockInfo = new TeamBlockInfo(_teamInfo, _blockInfo);
             var schedulingOptions = new SchedulingOptions();
-            schedulingOptions.UseLevellingSameStartTime = true;
+            schedulingOptions.UseTeamBlockSameStartTime = true;
             var now = DateTime.UtcNow;
             using (_mock.Record())
             {

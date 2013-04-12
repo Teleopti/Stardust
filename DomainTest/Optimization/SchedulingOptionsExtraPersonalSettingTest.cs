@@ -109,12 +109,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Expect.Call(_schedulingOptions.UseCommonActivity ).Return(false);
             Expect.Call(_schedulingOptions.BlockFinderTypeForAdvanceScheduling ).Return(BlockFinderType.BetweenDayOff);
             
-            Expect.Call(_schedulingOptions.GroupOnGroupPageForLevelingPer ).Return(_groupPageLight).Repeat.AtLeastOnce();
-            Expect.Call(_schedulingOptions.UseLevellingPerOption).Return(true);
-            Expect.Call(_schedulingOptions.UseLevellingSameEndTime).Return(true);
-            Expect.Call(_schedulingOptions.UseLevellingSameShift).Return(false);
-            Expect.Call(_schedulingOptions.UseLevellingSameShiftCategory).Return(true);
-            Expect.Call(_schedulingOptions.UseLevellingSameStartTime).Return(true);
+            Expect.Call(_schedulingOptions.GroupOnGroupPageForTeamBlockPer ).Return(_groupPageLight).Repeat.AtLeastOnce();
+            Expect.Call(_schedulingOptions.UseTeamBlockPerOption).Return(true);
+            Expect.Call(_schedulingOptions.UseTeamBlockSameEndTime).Return(true);
+            Expect.Call(_schedulingOptions.UseTeamBlockSameShift).Return(false);
+            Expect.Call(_schedulingOptions.UseTeamBlockSameShiftCategory).Return(true);
+            Expect.Call(_schedulingOptions.UseTeamBlockSameStartTime).Return(true);
         }
 
 
@@ -134,12 +134,12 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             Expect.Call(() => _schedulingOptions.UseCommonActivity  = false);
             Expect.Call(() => _schedulingOptions.Fairness = _fairnessValue);
 
-            Expect.Call(() => _schedulingOptions.GroupOnGroupPageForLevelingPer  = _groupPageLight);
-            Expect.Call(() => _schedulingOptions.UseLevellingPerOption = true);
-            Expect.Call(() => _schedulingOptions.UseLevellingSameEndTime  = true);
-            Expect.Call(() => _schedulingOptions.UseLevellingSameShift  = false );
-            Expect.Call(() => _schedulingOptions.UseLevellingSameShiftCategory  = true);
-            Expect.Call(() => _schedulingOptions.UseLevellingSameStartTime   = true);
+            Expect.Call(() => _schedulingOptions.GroupOnGroupPageForTeamBlockPer  = _groupPageLight);
+            Expect.Call(() => _schedulingOptions.UseTeamBlockPerOption = true);
+            Expect.Call(() => _schedulingOptions.UseTeamBlockSameEndTime  = true);
+            Expect.Call(() => _schedulingOptions.UseTeamBlockSameShift  = false );
+            Expect.Call(() => _schedulingOptions.UseTeamBlockSameShiftCategory  = true);
+            Expect.Call(() => _schedulingOptions.UseTeamBlockSameStartTime   = true);
 
             Expect.Call(() => _schedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.BetweenDayOff);
             
