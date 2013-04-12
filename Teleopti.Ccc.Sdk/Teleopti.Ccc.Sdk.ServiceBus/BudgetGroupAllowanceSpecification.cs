@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
@@ -58,6 +59,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
             foreach (var budgetDay in budgetDays)
             {
                 var currentDay = budgetDay.Day;
+
+                if (!IsSkillOpenForDateOnly(currentDay, budgetGroup.SkillCollection))
+                    continue;
+
                 var allowanceMinutes = budgetDay.Allowance * budgetDay.FulltimeEquivalentHours * TimeDefinition.MinutesPerHour;
                 var usedAbsenceMinutes = TimeSpan.FromTicks(
                     _scheduleProjectionReadOnlyRepository.AbsenceTimePerBudgetGroup(new DateOnlyPeriod(currentDay, currentDay),
@@ -100,5 +105,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
             }
             return requestedTime;
         }
+
+        protected static bool IsSkillOpenForDateOnly(DateOnly date, IEnumerable<ISkill> skills)
+        {
+            return skills.Any(s => s.WorkloadCollection.Any(w => w.TemplateWeekCollection.Any(t => t.Key == (int)date.DayOfWeek && t.Value.OpenForWork.IsOpen)));
+        }
+
+
     }
 }
