@@ -46,6 +46,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		public bool ScheduleSelected(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, ITeamSteadyStateHolder teamSteadyStateHolder,ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
 	    {
 			_teamBlockScheduler.DayScheduled += dayScheduled;
+		    if (schedulePartModifyAndRollbackService == null) return false;
 		    foreach (var datePointer in selectedPeriod.DayCollection())
 		    {
 				var allTeamInfoListOnStartDate = new HashSet<ITeamInfo>();

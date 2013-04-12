@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         }
 
         [Test]
-        public void ShouldRerturnTrueIfDateIsScheduled()
+        public void ShouldReturnTrueIfDateIsScheduled()
         {
             var period = new DateOnlyPeriod(2013, 04, 09, 2013, 04, 11);
             var dateOnly = new DateOnly(2013, 04, 10);
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         }
 
         [Test]
-        public void ShouldRerturnFalseIfDateIsNotScheduled()
+        public void ShouldReturnFalseIfDateIsNotScheduled()
         {
             var period = new DateOnlyPeriod(2013, 04, 09, 2013, 04, 11);
             var dateOnly = new DateOnly(2013, 04, 10);
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         }
 
         [Test]
-        public void ShouldRerturnFalseIfRangeIsNull()
+        public void ShouldReturnFalseIfRangeIsNull()
         {
             var period = new DateOnlyPeriod(2013, 04, 09, 2013, 04, 11);
             var dateOnly = new DateOnly(2013, 04, 10);
@@ -105,6 +105,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             }
 
             Assert.IsFalse(TeamBlockScheduledDayChecker.IsDayScheduledInTeamBlock(teamBlockInfo, dateOnly));
+        }
+
+        [Test]
+        public void ShouldReturnFalseIfTeamBlockIsNull()
+        {
+            var dateOnly = new DateOnly(2013, 04, 10);
+            Assert.IsFalse(TeamBlockScheduledDayChecker.IsDayScheduledInTeamBlock(null, dateOnly));
         }
     }
 }
