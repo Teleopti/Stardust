@@ -60,7 +60,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			contents = ReplaceTag(contents, "ConfigPath", Paths.WebBinPath());
 			contents = ReplaceTag(contents, "MessageBroker", TestSiteConfigurationSetup.Url.ToString());
 			contents = ReplaceTag(contents, "MessagesOnBoot", "false");
-			contents = ReplaceTag(contents, "AnalyticsDB", new SqlConnectionStringBuilder(IniFileInfo.ConnectionStringMatrix).InitialCatalog);
+			contents = ReplaceTag(contents, "AnalyticsConnectionString", IniFileInfo.ConnectionStringMatrix);
 			File.WriteAllText(ConsoleHostConfigTargetPath(), contents);
 		}
 
