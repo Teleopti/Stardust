@@ -2,8 +2,7 @@
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
+
 using Teleopti.Ccc.TestCommon;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data
@@ -11,28 +10,33 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 	public static class ServiceBusSetup
 	{
 		private static Process _process;
-
-		private static string ConsoleHostPath()
+		
+		private static string ConsoleHostBuildPath()
 		{
-			var possiblePaths = new[]
-				{
-					Path.Combine(IniFileInfo.SitePath, @"..\..\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost\bin\Debug"),
-					Path.Combine(IniFileInfo.SitePath, @"..\..\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost\bin\Release")
-				};
-			var path = possiblePaths.FirstOrDefault(Directory.Exists);
-			if (path == null)
-				throw new Exception("Service bus console host executable not found. Has it been built? And you may have to build the .Host project first aswell.");
-			return new DirectoryInfo(path).FullName;
+			return Paths.FindProjectPath(
+				@"Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost\bin\Debug\",
+				@"Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost\bin\Release\"
+				);
+		}
+
+		private static string BuildArtifactsPath()
+		{
+			return Paths.FindProjectPath(@"BuildArtifacts\");
 		}
 
 		private static string ConsoleHostExecutablePath()
 		{
-			return Path.Combine(ConsoleHostPath(), "Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost.exe");
+			return Path.Combine(ConsoleHostBuildPath(), "Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost.exe");
 		}
 
-		private static string ConsoleHostConfigPath()
+		private static string ConsoleHostConfigTargetPath()
 		{
-			return Path.Combine(ConsoleHostPath(), "Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost.exe.config");
+			return Path.Combine(ConsoleHostBuildPath(), "Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost.exe.config");
+		}
+
+		private static string ConsoleHostConfigSourcePath()
+		{
+			return Path.Combine(BuildArtifactsPath(), "ServiceBusHost.config");
 		}
 
 
@@ -52,11 +56,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		private static void Configure()
 		{
-			var contents = File.ReadAllText(ConsoleHostConfigPath());
+			var contents = File.ReadAllText(ConsoleHostConfigSourcePath());
 			contents = ReplaceTag(contents, "ConfigPath", Paths.WebBinPath());
 			contents = ReplaceTag(contents, "MessageBroker", TestSiteConfigurationSetup.Url.ToString());
-			contents = ReplaceTag(contents, "AnalyticsDB", new SqlConnectionStringBuilder(IniFileInfo.ConnectionStringMatrix).InitialCatalog);
-			File.WriteAllText(ConsoleHostConfigPath(), contents);
+			contents = ReplaceTag(contents, "MessagesOnBoot", "false");
+			contents = ReplaceTag(contents, "AnalyticsConnectionString", IniFileInfo.ConnectionStringMatrix);
+			File.WriteAllText(ConsoleHostConfigTargetPath(), contents);
 		}
 
 		private static string ReplaceTag(string contents, string tag, string value)

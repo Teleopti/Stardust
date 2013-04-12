@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Areas.Start.Core;
@@ -19,9 +20,10 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			_authenticatorTypes = authenticatorTypes;
 		}
 
-		public void Execute()
+		public Task Execute()
 		{
 			RegisterModelBinders(ModelBinders.Binders);
+			return null;
 		}
 
 		public void RegisterModelBinders(ModelBinderDictionary binders)

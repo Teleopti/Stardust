@@ -393,7 +393,7 @@
     <Compile Include="Areas\Start\Models\Authentication\IAuthenticationType.cs" />
     <Compile Include="Areas\Start\Models\Authentication\WindowsAuthenticationModel.cs" />
     <Compile Include="Areas\Start\Models\Authentication\WindowsAuthenticationType.cs" />
-    <Compile Include="Core\Startup\InitializeApplication\SignalBrokerTask.cs" />
+    <Compile Include="Core\Startup\InitializeApplication\MessageBrokerTask.cs" />
     <Compile Include="Core\Startup\InterceptorPipelineModule.cs" />
     <Compile Include="Filters\AsyncTaskAttribute.cs" />
     <Compile Include="Areas\MyTime\Controllers\PreferenceFeedbackController.cs" />
@@ -604,7 +604,7 @@
     <Compile Include="Areas\MyTime\Core\StudentAvailability\ViewModelFactory\IStudentAvailabilityViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\StudentAvailability\ViewModelFactory\StudentAvailabilityViewModelFactory.cs" />
     <Compile Include="Filters\AjaxHandleErrorAttribute.cs" />
-    <Compile Include="Filters\CheckStartupExceptionAttribute.cs" />
+    <Compile Include="Filters\CheckStartupResultAttribute.cs" />
     <Compile Include="Areas\MyTime\Core\Filters\EnsureInPortalAttribute.cs" />
     <Compile Include="Filters\TeleoptiPrincipalAuthorizeAttribute.cs" />
     <Compile Include="Filters\UnitOfWorkActionAttribute.cs" />

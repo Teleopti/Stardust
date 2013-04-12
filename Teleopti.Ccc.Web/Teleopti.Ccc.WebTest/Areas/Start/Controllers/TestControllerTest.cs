@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 			var sessionSpecificDataProvider = MockRepository.GenerateMock<ISessionSpecificDataProvider>();
 			using (var target = new TestController(new Now(null), sessionSpecificDataProvider, null, null, null))
 			{
-				target.BeforeScenario();
+				target.BeforeScenario(true);
 				target.CorruptMyCookie();
 				target.ExpireMyCookie();
 				target.NonExistingDatasourceCookie();

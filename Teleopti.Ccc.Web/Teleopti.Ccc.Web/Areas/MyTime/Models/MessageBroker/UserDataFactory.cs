@@ -1,6 +1,5 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -13,6 +12,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.MessageBroker
 		private readonly IConfigReader _configReader;
 		private readonly ILoggedOnUser _loggedOnUser;
 		public const string MessageBrokerUrlKey = "MessageBroker";
+		public static bool EnableMyTimeMessageBroker = true;
 
 		public UserDataFactory(ICurrentBusinessUnit businessUnitProvider, 
 												Func<IDataSource> dataSource, 
@@ -30,15 +30,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.MessageBroker
 			var currentBu = _businessUnitProvider.Current();
 			var appSettings = _configReader.AppSettings;
 			var loggedOnUser = _loggedOnUser.CurrentUser();
-			var ret = new UserData();
-			if(currentBu!=null)
-				ret.BusinessUnitId = currentBu.Id.Value;
-			ret.DataSourceName = _dataSource().DataSourceName;
-			if(appSettings!=null)
-				ret.Url = appSettings[MessageBrokerUrlKey];
-			if(loggedOnUser!=null)
-				ret.AgentId = loggedOnUser.Id.Value;
-			return ret;
+			var userData = new UserData();
+			if (currentBu != null)
+				userData.BusinessUnitId = currentBu.Id.Value;
+			userData.DataSourceName = _dataSource().DataSourceName;
+			if (appSettings != null)
+				userData.Url = EnableMyTimeMessageBroker ? appSettings[MessageBrokerUrlKey] : "http://disabledmessagebroker/";
+			if (loggedOnUser != null)
+				userData.AgentId = loggedOnUser.Id.Value;
+			return userData;
 		}
+
 	}
 }

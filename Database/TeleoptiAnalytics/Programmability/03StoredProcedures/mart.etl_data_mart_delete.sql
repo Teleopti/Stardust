@@ -84,6 +84,7 @@ BEGIN
 			DELETE FROM mart.dim_date
 			DELETE FROM mart.dim_interval
 			DELETE FROM mart.sys_datasource WHERE datasource_id > 1
+			TRUNCATE TABLE Queue.Messages
 		END
 END
 ELSE --Only from a certain date!

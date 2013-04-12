@@ -1,30 +1,37 @@
 ﻿using System;
 using System.Configuration;
 using System.Text;
+using System.Threading.Tasks;
 using System.Web;
 using Teleopti.Ccc.Web.Core.Startup.Booter;
 using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 {
-	[TaskPriority(3)]//before InitializeApplicationTask please
-	public class SignalBrokerTask : IBootstrapperTask
+	[TaskPriority(5)]
+	public class MessageBrokerTask : IBootstrapperTask
 	{
 		private readonly IMessageBroker _messageBroker;
 
-		public SignalBrokerTask(IMessageBroker messageBroker)
+		public MessageBrokerTask(IMessageBroker messageBroker)
 		{
 			_messageBroker = messageBroker;
 		}
 
-		public void Execute()
+		public Task Execute()
 		{
-			if (HttpContext.Current == null)
-				return;
-			if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings["MessageBroker"]))
-				return;
+			_messageBroker.ConnectionString = ConnectionString();
+			return Task.Factory.StartNew(() => _messageBroker.StartMessageBroker());
+		}
 
-			_messageBroker.ConnectionString = ApplicationRootUrl();
+		private string ConnectionString()
+		{
+			var appSetting = ConfigurationManager.AppSettings["MessageBroker"];
+			if (!string.IsNullOrEmpty(appSetting))
+				return appSetting;
+			if (HttpContext.Current != null)
+				return ApplicationRootUrl();
+			throw new Exception("No connection string (url) found for message broker client!");
 		}
 
 		private string ApplicationRootUrl()

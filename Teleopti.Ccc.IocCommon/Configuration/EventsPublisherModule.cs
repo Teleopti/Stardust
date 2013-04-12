@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 		{
 			builder.RegisterType<SyncEventsPublisher>().As<IEventsPublisher>().SingleInstance();
 			builder.RegisterType<ServiceBusEventPublisher>().As<IEventPublisher>().SingleInstance();
-			builder.RegisterType<CanNotPublishEventsFromEventHandlers>().As<IPublishEventsFromEventHandlers>().SingleInstance();
+			builder.RegisterType<CannotPublishEventsFromEventHandlers>().As<IPublishEventsFromEventHandlers>().SingleInstance();
 		}
 	}
 

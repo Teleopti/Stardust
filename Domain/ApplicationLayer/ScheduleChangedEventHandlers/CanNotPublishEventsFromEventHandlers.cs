@@ -1,6 +1,6 @@
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 {
-	public class CanNotPublishEventsFromEventHandlers : IPublishEventsFromEventHandlers
+	public class CannotPublishEventsFromEventHandlers : IPublishEventsFromEventHandlers
 	{
 		public void Publish(object @event)
 		{

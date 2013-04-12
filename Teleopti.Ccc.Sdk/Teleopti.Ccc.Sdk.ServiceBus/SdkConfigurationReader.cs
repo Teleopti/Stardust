@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 						new DataSourcesFactory(new EnversConfiguration(), creator.Create(),
 						                       DataSourceConfigurationSetter.ForServiceBus()),
 						new SignalBroker(MessageFilterManager.Instance.FilterDictionary));
-				application.Start(new BasicState(), _xmlFilePath, null, new ConfigurationManagerWrapper());
+				application.Start(new BasicState(), _xmlFilePath, null, new ConfigurationManagerWrapper(), true);
 
 				Logger.Info("Initialized application");
 			}

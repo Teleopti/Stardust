@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
@@ -29,6 +31,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 		}
 
 		public static Exception ErrorAtStartup { get; set; }
+		public static Task[] TasksFromStartup { get; set; }
 
 		public static bool HasStartupError
 		{
@@ -64,7 +67,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 		private IContainerConfiguration _containerConfiguration = new ContainerConfiguration();
 		private bool _testMode;
 
-		public void HackForTest(IBootstrapper injectedBootstrapper, IContainerConfiguration injectedContainerConfiguration)
+		public void InjectForTest(IBootstrapper injectedBootstrapper, IContainerConfiguration injectedContainerConfiguration)
 		{
 			_bootstrapper = injectedBootstrapper;
 			_containerConfiguration = injectedContainerConfiguration;
@@ -106,7 +109,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 					GlobalHost.HubPipeline.AddModule(container.Resolve<IHubPipelineModule>());
 					SignalRConfiguration.Configure(new HubConfiguration());
 				}
-				_bootstrapper.Run(container.Resolve<IEnumerable<IBootstrapperTask>>());
+				TasksFromStartup = _bootstrapper.Run(container.Resolve<IEnumerable<IBootstrapperTask>>()).ToArray();
 			}
 			catch (Exception ex)
 			{

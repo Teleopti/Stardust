@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
         bool transport_MessageArrived(Rhino.ServiceBus.Impl.CurrentMessageInformation arg)
         {
-            RaptorDomainMessage raptorDomainMessage = arg.Message as RaptorDomainMessage;
+			var raptorDomainMessage = arg.Message as IRaptorDomainMessageInfo;
             if (Logger.IsDebugEnabled)
             {
                 Logger.DebugFormat("Message recieved. Message Id = {0}", arg.MessageId);
