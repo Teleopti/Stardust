@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			_userTimeZone = userTimeZone;
 			_loggedOnUser = loggedOnUser;
 			_scenarioRepository = scenarioRepository;
-			_scheduleProjectionReadOnlyRepository = new ScheduleProjectionReadOnlyRepository(UnitOfWorkFactory.Current);
+			_scheduleProjectionReadOnlyRepository = new ScheduleProjectionReadOnlyRepository(UnitOfWorkFactory.CurrentUnitOfWork());
 		}
 
 		public IEnumerable<IAllowanceDay> GetAllowanceForPeriod(DateOnlyPeriod period)

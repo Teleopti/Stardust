@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Security.Principal;
 using System.Threading;
 using AutoMapper;
-using Castle.Components.DictionaryAdapter;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
-using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -21,7 +18,6 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping;
-using Teleopti.Ccc.WebTest.Core.Mapping;
 using Teleopti.Interfaces.Domain;
 using IAllowanceProvider = Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider.IAllowanceProvider;
 
@@ -59,14 +55,14 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			Mapper.Reset();
 			Mapper.Initialize(c => c.AddProfile(
 				new WeekScheduleDomainDataMappingProfile(
-					Depend.On(scheduleProvider),
-					Depend.On(projectionProvider),
-					Depend.On(personRequestProvider),
-					Depend.On(userTimeZone),
-					Depend.On(permissionProvider),
-					Depend.On(now),
-					Depend.On(allowanceProvider),
-					Depend.On(absenceTimeProvider)
+					scheduleProvider,
+					projectionProvider,
+					personRequestProvider,
+					userTimeZone,
+					permissionProvider,
+					now,
+					allowanceProvider,
+					absenceTimeProvider
 					)));
 		}
 
