@@ -2,10 +2,12 @@ using System;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
+//using NHibernate;
 using NHibernate;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Budgeting;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -30,6 +32,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 
 		protected virtual void SetupForRepositoryTest() { }
 
+
+		//
+
 		protected void PersistAndRemoveFromUnitOfWork(IEntity obj)
 		{
 			Session.SaveOrUpdate(obj);
@@ -37,8 +42,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			Session.Evict(obj);
 		}
 
-		public void Apply(IPerson user, IUnitOfWork uow)
-		{
+ 		public void Apply(IPerson user, IUnitOfWork uow)
+ 		{
 			IScheduleProjectionReadOnlyRepository target;
 			IScenario scenario;
 			IPerson person;
@@ -118,10 +123,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			PersistAndRemoveFromUnitOfWork(personPeriod.PersonContract.ContractSchedule);
 			PersistAndRemoveFromUnitOfWork(personPeriod.PersonContract.PartTimePercentage);
 			PersistAndRemoveFromUnitOfWork(person);
-			target = new ScheduleProjectionReadOnlyRepository(new CurrentUnitOfWork(GlobalUnitOfWorkState.CurrentUnitOfWorkFactory));
+			//target = new ScheduleProjectionReadOnlyRepository(new CurrentUnitOfWork(GlobalUnitOfWorkState.CurrentUnitOfWorkFactory));
+			
+
+		//
+
+			target = new ScheduleProjectionReadOnlyRepository(new FixedCurrentUnitOfWork(uow));
+
+			scenario = new Scenario("sdf");
+			scenario.SetId(Guid.NewGuid());
 
 			var period =
-				new DateOnlyPeriod(new DateOnly(Date), new DateOnly(Date)).ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
+				new DateOnlyPeriod(new DateOnly(Date), new DateOnly(Date)).ToDateTimePeriod(user.PermissionInformation.DefaultTimeZone());
 			var layer = new DenormalizedScheduleProjectionLayer
 			{
 				ContractTime = TimeSpan.FromHours(8),
@@ -131,18 +144,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 				ShortName = "ho",
 				StartDateTime = period.StartDateTime,
 				EndDateTime = period.EndDateTime,
-				PayloadId = absence.Id.GetValueOrDefault()
+				PayloadId = Guid.NewGuid() //absence.Id.GetValueOrDefault()
 			};
 
-			target.AddProjectedLayer(new DateOnly(Date), scenarioId, person.Id.GetValueOrDefault(), layer);
+			target.AddProjectedLayer(new DateOnly(Date), scenarioId, user.Id.GetValueOrDefault(), layer);
 
-			//var result = target.AbsenceTimePerBudgetGroup(new DateOnlyPeriod(new DateOnly(Date).AddDays(-1), new DateOnly(Date).AddDays(1)),
-			//										 budgetGroup, scenario);
+ 			double usedAbsenceMinutes = 0;
 
-			var usedAbsenceMinutes = TimeSpan.FromTicks(
-				   target.AbsenceTimePerBudgetGroup(new DateOnlyPeriod(new DateOnly(Date).AddDays(-1), new DateOnly(Date).AddDays(1)),
-													 budgetGroup, scenario).Sum(p => p.TotalContractTime)).TotalMinutes;
-			Assert.That(usedAbsenceMinutes, Is.GreaterThan(0));
-		}
+			//var budgetGrouprep = new BudgetGroupRepository(uow);
+			//foreach (var budgetGroup in budgetGrouprep.LoadAll())
+			//{
+				usedAbsenceMinutes = TimeSpan.FromTicks(
+					 target.AbsenceTimePerBudgetGroup(new DateOnlyPeriod(new DateOnly(Date).AddDays(-1), new DateOnly(Date).AddDays(1)),
+										 budgetGroup, scenario).Sum(p => p.TotalContractTime)).TotalMinutes;
+			//}
+ 			var x = usedAbsenceMinutes;
+ 		}
 	}
 }

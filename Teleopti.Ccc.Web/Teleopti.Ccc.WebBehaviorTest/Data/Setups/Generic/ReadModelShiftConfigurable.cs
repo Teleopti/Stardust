@@ -135,7 +135,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			var scenario = GlobalDataContext.Data().Data<CommonScenario>().Scenario;
 
 		
-			var rogersFavvoRepo = new ScheduleProjectionReadOnlyRepository(GlobalUnitOfWorkState.UnitOfWorkFactory);
+			//var rogersFavvoRepo = new ScheduleProjectionReadOnlyRepository(GlobalUnitOfWorkState.UnitOfWorkFactory);
 			
 
 			var projectionLayer = new DenormalizedScheduleProjectionLayer()
@@ -153,7 +153,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 									  };
 
 // ReSharper disable PossibleInvalidOperationException
-			rogersFavvoRepo.AddProjectedLayer(new DateOnly(BelongsToDate), scenario.Id.Value, user.Id.Value, projectionLayer);
+			//rogersFavvoRepo.AddProjectedLayer(new DateOnly(BelongsToDate), scenario.Id.Value, user.Id.Value, projectionLayer);
 // ReSharper restore PossibleInvalidOperationException
 
 			
