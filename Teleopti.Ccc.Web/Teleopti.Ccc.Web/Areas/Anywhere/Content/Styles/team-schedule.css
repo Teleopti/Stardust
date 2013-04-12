@@ -108,6 +108,9 @@
 	overflow: hidden;
 }
 
+.team-schedule .date-input {
+    cursor: pointer;
+}
 
 @media (max-width: 1199px) {
 
@@ -117,6 +120,5 @@
 	.team-schedule .work-time {
 		display: none;
 	}
-
 }
 
