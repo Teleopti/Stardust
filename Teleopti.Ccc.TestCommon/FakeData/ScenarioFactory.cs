@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
 
@@ -44,5 +45,12 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             scenarioList.Add(CreateScenarioAggregate("Scenario 2", true));
             return scenarioList;
         }
+
+				public static IScenario ScenarioWithId()
+				{
+					var scenario = new Scenario("sdf");
+					scenario.SetId(Guid.NewGuid());
+					return scenario;
+				}
     }
 }
