@@ -34,88 +34,103 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		public void UpdateShiftCategory(IShiftCategory shiftCategory)
 		{
-			ComboBoxAdvShiftCategory comboItem = null;
+			if (shiftCategory == null) return;
+
+			ComboBoxAdvShiftCategory currentCategory = null;
 
 			foreach (var item in comboBoxAdvShiftCategory.Items)
 			{
-				if (((ComboBoxAdvShiftCategory) item).Id != shiftCategory.Id) continue;
-				comboItem = item as ComboBoxAdvShiftCategory;
+				var comboItem  = item as ComboBoxAdvShiftCategory;
+				if (comboItem == null || comboItem.Id != shiftCategory.Id) continue;
+				currentCategory = comboItem;
 				break;
 			}
-			
-			if (comboItem != null)
+
+			if (currentCategory != null)
 			{
-				comboBoxAdvShiftCategory.SelectedItem = comboItem;
+				comboBoxAdvShiftCategory.SelectedItem = currentCategory;
 			}
 			
 		}
 
 		public void UpdateShiftCategoryExtended(IShiftCategory shiftCategory)
 		{
-			ComboBoxAdvShiftCategory comboItem = null;
+			if (shiftCategory == null) return;
+
+			ComboBoxAdvShiftCategory currentCategory = null;
 
 			foreach (var item in comboBoxAdvShiftCategoryExtended.Items)
 			{
-				if (((ComboBoxAdvShiftCategory) item).Id != shiftCategory.Id) continue;
-				comboItem = item as ComboBoxAdvShiftCategory;
+				var comboItem = item as ComboBoxAdvShiftCategory;
+				if (comboItem == null || comboItem.Id != shiftCategory.Id) continue;
+				currentCategory = comboItem;
 				break;
 			}
 
-			if (comboItem != null)
+			if (currentCategory != null)
 			{
-				comboBoxAdvShiftCategoryExtended.SelectedItem = comboItem;
+				comboBoxAdvShiftCategoryExtended.SelectedItem = currentCategory;
 			}
 		}
 
 		public void UpdateAbsence(IAbsence absence)
 		{
-			Absence comboItem = null;
+			if (absence == null) return;
+
+			Absence currentAbsence = null;
 
 			foreach (var item in comboBoxAdvAbsence.Items)
 			{
-				if (((Absence) item).Id != absence.Id) continue;
-				comboItem = item as Absence;
+				var comboItem = item as Absence;
+				if (comboItem == null || comboItem.Id != absence.Id) continue;
+				currentAbsence = comboItem;
 				break;
 			}
 
-			if (comboItem != null)
+			if (currentAbsence != null)
 			{
-				comboBoxAdvAbsence.SelectedItem = comboItem;
+				comboBoxAdvAbsence.SelectedItem = currentAbsence;
 			}
 		}
 
 		public void UpdateDayOff(IDayOffTemplate dayOffTemplate)
 		{
-			ComboBoxAdvDayOffTemplate comboItem = null;
+			if (dayOffTemplate == null) return;
+
+			ComboBoxAdvDayOffTemplate currentDayOff = null;
 
 			foreach (var item in comboBoxAdvDayOff.Items)
 			{
-				if (((ComboBoxAdvDayOffTemplate) item).Id != dayOffTemplate.Id) continue;
-				comboItem = item as ComboBoxAdvDayOffTemplate;
+				var comboItem = item as ComboBoxAdvDayOffTemplate;
+				if (comboItem == null ||  comboItem.Id != dayOffTemplate.Id) continue;
+				currentDayOff = comboItem;
 				break;
 			}
 
-			if (comboItem != null)
+			if (currentDayOff != null)
 			{
-				comboBoxAdvDayOff.SelectedItem = comboItem;
+				comboBoxAdvDayOff.SelectedItem = currentDayOff;
 			}
 		}
 
 		public void UpdateActivity(IActivity activity)
 		{
-			Activity comboItem = null;
+			if (activity == null) return;
+
+			Activity currentActivity = null;
 
 			foreach (var item in comboBoxAdvActivity.Items)
 			{
-				if (((Activity) item).Id != activity.Id) continue;
-				comboItem = item as Activity;
+				var comboItem = item as Activity;
+				if (comboItem == null ||  comboItem.Id != activity.Id) continue;
+				currentActivity = comboItem;
 				break;
 			}
 
-			if (comboItem != null)
+			if (currentActivity != null)
 			{
-				comboBoxAdvActivity.SelectedItem = comboItem;
-				if (comboItem.Id != null)
+				comboBoxAdvActivity.SelectedItem = currentActivity;
+				if (currentActivity.Id != null)
 				{
 					EnableActivityTimes(true);
 				}
@@ -432,24 +447,24 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private bool timesActivityError()
 		{
-			if (errorProviderActivity.GetError(outlookTimePickerActivityLengthMin) != string.Empty) return true;
-			if (errorProviderActivity.GetError(outlookTimePickerActivityLengthMax) != string.Empty) return true;
-			if (errorProviderActivity.GetError(outlookTimePickerActivityStartMin) != string.Empty) return true;
-			if (errorProviderActivity.GetError(outlookTimePickerActivityStartMax) != string.Empty) return true;
-			if (errorProviderActivity.GetError(outlookTimePickerActivityEndMin) != string.Empty) return true;
-			if (errorProviderActivity.GetError(outlookTimePickerActivityEndMax) != string.Empty) return true;
+			if (string.IsNullOrEmpty(errorProviderActivity.GetError(outlookTimePickerActivityLengthMin))) return true;
+			if (string.IsNullOrEmpty(errorProviderActivity.GetError(outlookTimePickerActivityLengthMax))) return true;
+			if (string.IsNullOrEmpty(errorProviderActivity.GetError(outlookTimePickerActivityStartMin))) return true;
+			if (string.IsNullOrEmpty(errorProviderActivity.GetError(outlookTimePickerActivityStartMax))) return true;
+			if (string.IsNullOrEmpty(errorProviderActivity.GetError(outlookTimePickerActivityEndMin))) return true;
+			if (string.IsNullOrEmpty(errorProviderActivity.GetError(outlookTimePickerActivityEndMax))) return true;
 
 			return false;
 		}
 
 		private bool timesExtendedError()
 		{
-			if (errorProviderExtended.GetError(outlookTimePickerContractShiftCategoryMin) != string.Empty) return true;
-			if (errorProviderExtended.GetError(outlookTimePickerContractShiftCategoryMax) != string.Empty) return true;
-			if (errorProviderExtended.GetError(outlookTimePickerShiftCategoryStartMin) != string.Empty) return true;
-			if (errorProviderExtended.GetError(outlookTimePickerShiftCategoryStartMax) != string.Empty) return true;
-			if (errorProviderExtended.GetError(outlookTimePickerShiftCategoryEndMin) != string.Empty) return true;
-			if (errorProviderExtended.GetError(outlookTimePickerShiftCategoryEndMax) != string.Empty) return true;
+			if (string.IsNullOrEmpty(errorProviderExtended.GetError(outlookTimePickerContractShiftCategoryMin))) return true;
+			if (string.IsNullOrEmpty(errorProviderExtended.GetError(outlookTimePickerContractShiftCategoryMax))) return true;
+			if (string.IsNullOrEmpty(errorProviderExtended.GetError(outlookTimePickerShiftCategoryStartMin))) return true;
+			if (string.IsNullOrEmpty(errorProviderExtended.GetError(outlookTimePickerShiftCategoryStartMax))) return true;
+			if (string.IsNullOrEmpty(errorProviderExtended.GetError(outlookTimePickerShiftCategoryEndMin))) return true;
+			if (string.IsNullOrEmpty(errorProviderExtended.GetError(outlookTimePickerShiftCategoryEndMax))) return true;
 
 			return false;
 		}

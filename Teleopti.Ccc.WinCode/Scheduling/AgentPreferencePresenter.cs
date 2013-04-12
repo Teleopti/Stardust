@@ -42,6 +42,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			UpdateView();
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters")]
 		public void Add(IAgentPreferenceAddCommand addCommand)
 		{
 			if (addCommand == null) throw new ArgumentNullException("addCommand");
@@ -70,8 +71,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 			foreach (var persistableScheduleData in _scheduleDay.PersistableScheduleDataCollection())
 			{
-				if (!(persistableScheduleData is IPreferenceDay)) continue;
-				var preferenceRestriction = ((IPreferenceDay) persistableScheduleData).Restriction;
+				var preferenceDay = persistableScheduleData as IPreferenceDay;
+				if(preferenceDay == null) continue;
+				var preferenceRestriction = preferenceDay.Restriction;
 
 				if (preferenceRestriction != null)
 				{

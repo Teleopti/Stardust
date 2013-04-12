@@ -153,7 +153,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			return result;
 		}
 
-		private bool validateEmpty(IAgentPreferenceData data)
+		private static bool validateEmpty(IAgentPreferenceData data)
 		{
 			if (data.ShiftCategory == null && data.Absence == null && data.DayOffTemplate == null && data.Activity == null && data.MinStart == null
 				&& data.MaxStart == null && data.MinEnd == null && data.MaxEnd == null && data.MinLength == null && data.MaxLength == null &&
