@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
+using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -18,6 +20,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		public void Execute(IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
 			WTFDEBUG.Log("EventsMessageSender");
+			modifiedRoots.ForEach(r => WTFDEBUG.Log("EventsMessageSender.Root " + r.Root.GetType().Name));
 			var events = (from i in modifiedRoots
 			              let r = i.Root
 			              let withEvents = r as IAggregateRootWithEvents

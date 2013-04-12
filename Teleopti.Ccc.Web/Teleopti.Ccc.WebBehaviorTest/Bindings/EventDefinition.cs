@@ -25,15 +25,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[BeforeScenario("WTFDEBUG")]
 		public static void WTFDEBUG()
 		{
-			Infrastructure.ApplicationLayer.WTFDEBUG.Clear();
-			Infrastructure.ApplicationLayer.WTFDEBUG.Log("BEFORE SCENARIO");
+			Interfaces.WTFDEBUG.Clear();
+			Interfaces.WTFDEBUG.Log("BEFORE SCENARIO");
 		}
 
 
 		[AfterScenario("WTFDEBUG")]
 		public static void WTFDEBUGAfter()
 		{
-			Infrastructure.ApplicationLayer.WTFDEBUG.Log("AFTER SCENARIO");
+			Interfaces.WTFDEBUG.Log("AFTER SCENARIO");
 		}
 
 		[BeforeTestRun]
