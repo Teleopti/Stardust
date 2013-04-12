@@ -22,5 +22,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		void UpdateActivityTimes(TimeSpan? minLength, TimeSpan? maxLength, TimeSpan? minStart, TimeSpan? maxStart, TimeSpan? minEnd, TimeSpan? maxEnd);
 		void UpdateTimesExtended(TimeSpan? minLength, TimeSpan? maxLength, TimeSpan? minStart, TimeSpan? maxStart, TimeSpan? minEnd, TimeSpan? maxEnd);
 		void UpdateMustHave(bool mustHave);
+		void UpdateMustHaveText(string text);
 	}
 }

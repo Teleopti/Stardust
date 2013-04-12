@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		TimeSpan? MaxEndActivity { get; set; }
 		TimeSpan? MinLengthActivity { get; set; }
 		TimeSpan? MaxLengthActivity { get; set; }
+		bool MustHave { get; set; }
 	}
 
 	public class AgentPreferenceData : IAgentPreferenceData
@@ -43,5 +44,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		public TimeSpan? MaxEndActivity { get; set; }
 		public TimeSpan? MinLengthActivity { get; set; }
 		public TimeSpan? MaxLengthActivity { get; set; }
+
+		public bool MustHave { get; set; }
 	}
 }

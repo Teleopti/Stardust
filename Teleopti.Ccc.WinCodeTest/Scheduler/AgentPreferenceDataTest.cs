@@ -44,6 +44,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_target.MinLengthActivity = TimeSpan.FromHours(11);
 			_target.MaxLengthActivity = TimeSpan.FromHours(12);
 
+			_target.MustHave = true;
+
 			Assert.AreEqual(shiftCategory, _target.ShiftCategory);
 			Assert.AreEqual(absence, _target.Absence);
 			Assert.AreEqual(dayOff, _target.DayOffTemplate);
@@ -62,6 +64,8 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			Assert.AreEqual(TimeSpan.FromHours(10),_target.MaxEndActivity);
 			Assert.AreEqual(TimeSpan.FromHours(11),_target.MinLengthActivity);
 			Assert.AreEqual(TimeSpan.FromHours(12), _target.MaxLengthActivity);
+
+			Assert.IsTrue(_target.MustHave);
 		}
 	}
 }

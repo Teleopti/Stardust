@@ -146,7 +146,7 @@
 			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50.17668F));
 			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 49.82332F));
 			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 108F));
-			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 106F));
+			this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 107F));
 			this.tableLayoutPanel3.Controls.Add(this.label8, 0, 0);
 			this.tableLayoutPanel3.Controls.Add(this.comboBoxAdvActivity, 0, 1);
 			this.tableLayoutPanel3.Controls.Add(this.label9, 0, 2);
@@ -239,7 +239,7 @@
 			this.outlookTimePickerActivityLengthMax.DefaultResolution = 0;
 			this.outlookTimePickerActivityLengthMax.EnableNull = true;
 			this.outlookTimePickerActivityLengthMax.FormatFromCulture = true;
-			this.outlookTimePickerActivityLengthMax.Location = new System.Drawing.Point(241, 67);
+			this.outlookTimePickerActivityLengthMax.Location = new System.Drawing.Point(240, 67);
 			this.outlookTimePickerActivityLengthMax.MaxTime = System.TimeSpan.Parse("23:59:00");
 			this.outlookTimePickerActivityLengthMax.Name = "outlookTimePickerActivityLengthMax";
 			this.outlookTimePickerActivityLengthMax.Size = new System.Drawing.Size(74, 19);
@@ -269,7 +269,7 @@
 			this.outlookTimePickerActivityStartMax.DefaultResolution = 0;
 			this.outlookTimePickerActivityStartMax.EnableNull = true;
 			this.outlookTimePickerActivityStartMax.FormatFromCulture = true;
-			this.outlookTimePickerActivityStartMax.Location = new System.Drawing.Point(241, 109);
+			this.outlookTimePickerActivityStartMax.Location = new System.Drawing.Point(240, 109);
 			this.outlookTimePickerActivityStartMax.MaxTime = System.TimeSpan.Parse("23:59:00");
 			this.outlookTimePickerActivityStartMax.Name = "outlookTimePickerActivityStartMax";
 			this.outlookTimePickerActivityStartMax.Size = new System.Drawing.Size(74, 19);
@@ -299,7 +299,7 @@
 			this.outlookTimePickerActivityEndMax.DefaultResolution = 0;
 			this.outlookTimePickerActivityEndMax.EnableNull = true;
 			this.outlookTimePickerActivityEndMax.FormatFromCulture = true;
-			this.outlookTimePickerActivityEndMax.Location = new System.Drawing.Point(241, 147);
+			this.outlookTimePickerActivityEndMax.Location = new System.Drawing.Point(240, 147);
 			this.outlookTimePickerActivityEndMax.MaxTime = System.TimeSpan.Parse("23:59:00");
 			this.outlookTimePickerActivityEndMax.Name = "outlookTimePickerActivityEndMax";
 			this.outlookTimePickerActivityEndMax.Size = new System.Drawing.Size(74, 19);
@@ -328,7 +328,7 @@
 			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 41.70616F));
 			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 72F));
 			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 91F));
-			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 105F));
+			this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 106F));
 			this.tableLayoutPanel2.Controls.Add(this.label4, 0, 0);
 			this.tableLayoutPanel2.Controls.Add(this.comboBoxAdvShiftCategoryExtended, 0, 1);
 			this.tableLayoutPanel2.Controls.Add(this.label5, 0, 2);
@@ -411,7 +411,7 @@
 			this.outlookTimePickerContractShiftCategoryMin.Location = new System.Drawing.Point(110, 67);
 			this.outlookTimePickerContractShiftCategoryMin.MaxTime = System.TimeSpan.Parse("23:59:00");
 			this.outlookTimePickerContractShiftCategoryMin.Name = "outlookTimePickerContractShiftCategoryMin";
-			this.outlookTimePickerContractShiftCategoryMin.Size = new System.Drawing.Size(71, 19);
+			this.outlookTimePickerContractShiftCategoryMin.Size = new System.Drawing.Size(70, 19);
 			this.outlookTimePickerContractShiftCategoryMin.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.outlookTimePickerContractShiftCategoryMin.TabIndex = 9;
 			this.outlookTimePickerContractShiftCategoryMin.Text = "00:00";
@@ -426,7 +426,7 @@
 			this.outlookTimePickerShiftCategoryStartMin.Location = new System.Drawing.Point(110, 109);
 			this.outlookTimePickerShiftCategoryStartMin.MaxTime = System.TimeSpan.Parse("23:59:00");
 			this.outlookTimePickerShiftCategoryStartMin.Name = "outlookTimePickerShiftCategoryStartMin";
-			this.outlookTimePickerShiftCategoryStartMin.Size = new System.Drawing.Size(71, 19);
+			this.outlookTimePickerShiftCategoryStartMin.Size = new System.Drawing.Size(70, 19);
 			this.outlookTimePickerShiftCategoryStartMin.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.outlookTimePickerShiftCategoryStartMin.TabIndex = 11;
 			this.outlookTimePickerShiftCategoryStartMin.Text = "00:00";
@@ -441,7 +441,7 @@
 			this.outlookTimePickerShiftCategoryEndMin.Location = new System.Drawing.Point(110, 147);
 			this.outlookTimePickerShiftCategoryEndMin.MaxTime = System.TimeSpan.Parse("23:59:00");
 			this.outlookTimePickerShiftCategoryEndMin.Name = "outlookTimePickerShiftCategoryEndMin";
-			this.outlookTimePickerShiftCategoryEndMin.Size = new System.Drawing.Size(71, 19);
+			this.outlookTimePickerShiftCategoryEndMin.Size = new System.Drawing.Size(70, 19);
 			this.outlookTimePickerShiftCategoryEndMin.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.outlookTimePickerShiftCategoryEndMin.TabIndex = 13;
 			this.outlookTimePickerShiftCategoryEndMin.Text = "00:00";
@@ -449,7 +449,7 @@
 			// 
 			// checkBoxAdvShiftCategoryNextDayMax
 			// 
-			this.checkBoxAdvShiftCategoryNextDayMax.Location = new System.Drawing.Point(350, 147);
+			this.checkBoxAdvShiftCategoryNextDayMax.Location = new System.Drawing.Point(349, 147);
 			this.checkBoxAdvShiftCategoryNextDayMax.Name = "checkBoxAdvShiftCategoryNextDayMax";
 			this.checkBoxAdvShiftCategoryNextDayMax.Size = new System.Drawing.Size(80, 21);
 			this.checkBoxAdvShiftCategoryNextDayMax.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Office2007;
@@ -464,7 +464,7 @@
 			this.outlookTimePickerShiftCategoryEndMax.DefaultResolution = 0;
 			this.outlookTimePickerShiftCategoryEndMax.EnableNull = true;
 			this.outlookTimePickerShiftCategoryEndMax.FormatFromCulture = true;
-			this.outlookTimePickerShiftCategoryEndMax.Location = new System.Drawing.Point(259, 147);
+			this.outlookTimePickerShiftCategoryEndMax.Location = new System.Drawing.Point(258, 147);
 			this.outlookTimePickerShiftCategoryEndMax.MaxTime = System.TimeSpan.Parse("23:59:00");
 			this.outlookTimePickerShiftCategoryEndMax.Name = "outlookTimePickerShiftCategoryEndMax";
 			this.outlookTimePickerShiftCategoryEndMax.Size = new System.Drawing.Size(74, 19);
@@ -479,7 +479,7 @@
 			this.outlookTimePickerShiftCategoryStartMax.DefaultResolution = 0;
 			this.outlookTimePickerShiftCategoryStartMax.EnableNull = true;
 			this.outlookTimePickerShiftCategoryStartMax.FormatFromCulture = true;
-			this.outlookTimePickerShiftCategoryStartMax.Location = new System.Drawing.Point(259, 109);
+			this.outlookTimePickerShiftCategoryStartMax.Location = new System.Drawing.Point(258, 109);
 			this.outlookTimePickerShiftCategoryStartMax.MaxTime = System.TimeSpan.Parse("23:59:00");
 			this.outlookTimePickerShiftCategoryStartMax.Name = "outlookTimePickerShiftCategoryStartMax";
 			this.outlookTimePickerShiftCategoryStartMax.Size = new System.Drawing.Size(74, 19);
@@ -494,7 +494,7 @@
 			this.outlookTimePickerContractShiftCategoryMax.DefaultResolution = 0;
 			this.outlookTimePickerContractShiftCategoryMax.EnableNull = true;
 			this.outlookTimePickerContractShiftCategoryMax.FormatFromCulture = true;
-			this.outlookTimePickerContractShiftCategoryMax.Location = new System.Drawing.Point(259, 67);
+			this.outlookTimePickerContractShiftCategoryMax.Location = new System.Drawing.Point(258, 67);
 			this.outlookTimePickerContractShiftCategoryMax.MaxTime = System.TimeSpan.Parse("23:59:00");
 			this.outlookTimePickerContractShiftCategoryMax.Name = "outlookTimePickerContractShiftCategoryMax";
 			this.outlookTimePickerContractShiftCategoryMax.Size = new System.Drawing.Size(74, 19);
@@ -505,7 +505,7 @@
 			// 
 			// checkBoxAdvShiftCategoryNextDayMin
 			// 
-			this.checkBoxAdvShiftCategoryNextDayMin.Location = new System.Drawing.Point(187, 147);
+			this.checkBoxAdvShiftCategoryNextDayMin.Location = new System.Drawing.Point(186, 147);
 			this.checkBoxAdvShiftCategoryNextDayMin.Name = "checkBoxAdvShiftCategoryNextDayMin";
 			this.checkBoxAdvShiftCategoryNextDayMin.Size = new System.Drawing.Size(66, 21);
 			this.checkBoxAdvShiftCategoryNextDayMin.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Office2007;
@@ -555,7 +555,7 @@
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 36.14776F));
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 63.85224F));
 			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 39F));
-			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 112F));
+			this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 113F));
 			this.tableLayoutPanel1.Controls.Add(this.labelShiftCategory, 0, 0);
 			this.tableLayoutPanel1.Controls.Add(this.labelAbsence, 0, 1);
 			this.tableLayoutPanel1.Controls.Add(this.labelDayOff, 0, 2);
@@ -606,7 +606,7 @@
 			this.comboBoxAdvShiftCategory.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxAdvShiftCategory.Location = new System.Drawing.Point(132, 28);
 			this.comboBoxAdvShiftCategory.Name = "comboBoxAdvShiftCategory";
-			this.comboBoxAdvShiftCategory.Size = new System.Drawing.Size(176, 19);
+			this.comboBoxAdvShiftCategory.Size = new System.Drawing.Size(176, 21);
 			this.comboBoxAdvShiftCategory.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.comboBoxAdvShiftCategory.TabIndex = 3;
 			this.comboBoxAdvShiftCategory.SelectedIndexChanged += new System.EventHandler(this.comboBoxAdvShiftCategorySelectedIndexChanged);
@@ -618,7 +618,7 @@
 			this.comboBoxAdvAbsence.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxAdvAbsence.Location = new System.Drawing.Point(132, 105);
 			this.comboBoxAdvAbsence.Name = "comboBoxAdvAbsence";
-			this.comboBoxAdvAbsence.Size = new System.Drawing.Size(176, 19);
+			this.comboBoxAdvAbsence.Size = new System.Drawing.Size(176, 21);
 			this.comboBoxAdvAbsence.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.comboBoxAdvAbsence.TabIndex = 4;
 			this.comboBoxAdvAbsence.SelectedIndexChanged += new System.EventHandler(this.comboBoxAdvAbsenceSelectedIndexChanged);
@@ -630,7 +630,7 @@
 			this.comboBoxAdvDayOff.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.comboBoxAdvDayOff.Location = new System.Drawing.Point(132, 167);
 			this.comboBoxAdvDayOff.Name = "comboBoxAdvDayOff";
-			this.comboBoxAdvDayOff.Size = new System.Drawing.Size(176, 19);
+			this.comboBoxAdvDayOff.Size = new System.Drawing.Size(176, 21);
 			this.comboBoxAdvDayOff.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.comboBoxAdvDayOff.TabIndex = 5;
 			this.comboBoxAdvDayOff.SelectedIndexChanged += new System.EventHandler(this.comboBoxAdvDayOffSelectedIndexChanged);
@@ -639,7 +639,7 @@
 			// 
 			this.checkBoxMustHave.Location = new System.Drawing.Point(18, 403);
 			this.checkBoxMustHave.Name = "checkBoxMustHave";
-			this.checkBoxMustHave.Size = new System.Drawing.Size(108, 21);
+			this.checkBoxMustHave.Size = new System.Drawing.Size(256, 21);
 			this.checkBoxMustHave.Style = Syncfusion.Windows.Forms.Tools.CheckBoxAdvStyle.Office2007;
 			this.checkBoxMustHave.TabIndex = 6;
 			this.checkBoxMustHave.Text = "xxMustHave";

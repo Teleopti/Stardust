@@ -25,7 +25,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				{
 					ShiftCategory = data.ShiftCategory,
 					Absence = data.Absence,
-					DayOffTemplate = data.DayOffTemplate
+					DayOffTemplate = data.DayOffTemplate,
+					MustHave = data.MustHave
 				};
 
 			if (data.Activity != null)

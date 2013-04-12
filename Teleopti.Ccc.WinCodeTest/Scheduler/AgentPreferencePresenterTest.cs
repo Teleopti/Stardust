@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WinCode.Scheduling;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -23,6 +24,12 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 		private DateOnly _dateOnly;
 		private IPreferenceRestriction _preferenceRestriction;
 		private IAgentPreferenceDayCreator _dayCreator;
+		private ISchedulingResultStateHolder _schedulingResultStateHolder;
+		private IDateOnlyAsDateTimePeriod _dateOnlyAsDateTimePeriod;
+		private IScheduleDictionary _scheduleDictionary;
+		private IScheduleRange _scheduleRange;
+		private IVirtualSchedulePeriod _virtualSchedulePeriod;
+		private DateOnlyPeriod _dateOnlyPeriod;
 
 		[SetUp]
 		public void Setup()
@@ -30,13 +37,19 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_mock = new MockRepository();
 			_view = _mock.StrictMock<IAgentPreferenceView>();
 			_scheduleDay = _mock.StrictMock<IScheduleDay>();
-			_presenter = new AgentPreferencePresenter(_view, _scheduleDay);
-			_person = new Person();
+			_schedulingResultStateHolder = _mock.StrictMock<ISchedulingResultStateHolder>();
+			_presenter = new AgentPreferencePresenter(_view, _scheduleDay, _schedulingResultStateHolder);
+			_person = _mock.StrictMock<IPerson>();
 			_dateOnly = new DateOnly(2013,1,1);
 			_preferenceRestriction = new PreferenceRestriction();
+			_preferenceRestriction.MustHave = true;
 			_preferenceDay = new PreferenceDay(_person, _dateOnly, _preferenceRestriction);
 			_dayCreator = _mock.StrictMock<IAgentPreferenceDayCreator>();
-
+			_dateOnlyAsDateTimePeriod = _mock.StrictMock<IDateOnlyAsDateTimePeriod>();
+			_scheduleDictionary = _mock.StrictMock<IScheduleDictionary>();
+			_scheduleRange = _mock.StrictMock<IScheduleRange>();
+			_virtualSchedulePeriod = _mock.StrictMock<IVirtualSchedulePeriod>();
+			_dateOnlyPeriod = new DateOnlyPeriod(_dateOnly, _dateOnly);
 		}
 
 		[Test]
@@ -46,18 +59,29 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			Assert.AreEqual(_scheduleDay, _presenter.ScheduleDay);
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.WinCode.Scheduling.IAgentPreferenceView.UpdateMustHaveText(System.String)"), Test]
 		public void ShouldUpdateView()
 		{
 			using (_mock.Record())
 			{
 				Expect.Call(_scheduleDay.PersistableScheduleDataCollection()).Return(new ReadOnlyCollection<IPersistableScheduleData>(new List<IPersistableScheduleData> { _preferenceDay }));
 				Expect.Call(() => _view.UpdateTimesExtended(null, null, null, null, null, null));
-				Expect.Call(() => _view.UpdateMustHave(false));
 				Expect.Call(() => _view.PopulateShiftCategories());
 				Expect.Call(() => _view.PopulateAbsences());
 				Expect.Call(() => _view.PopulateDayOffs());
 				Expect.Call(() => _view.PopulateActivities());
+				Expect.Call(_scheduleDay.Person).Return(_person).Repeat.AtLeastOnce();
+				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod).Repeat.AtLeastOnce();
+				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(_dateOnly).Repeat.AtLeastOnce();
+				Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary);
+				Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange);
+				Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(_scheduleDay);
+				Expect.Call(_scheduleDay.RestrictionCollection()).Return(new List<IRestrictionBase> { _preferenceRestriction });
+				Expect.Call(_person.VirtualSchedulePeriod(_dateOnly)).Return(_virtualSchedulePeriod).Repeat.AtLeastOnce();
+				Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod);
+				Expect.Call(_virtualSchedulePeriod.MustHavePreference).Return(1);
+				Expect.Call(() => _view.UpdateMustHaveText(Resources.MustHave + "(1/1)"));
+				Expect.Call(() => _view.UpdateMustHave(true));
 			}
 
 			using (_mock.Playback())
@@ -66,7 +90,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			}
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.WinCode.Scheduling.IAgentPreferenceView.UpdateMustHaveText(System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldUpdateAndClearDayOffAndAbsenceWhenShiftCategory()
 		{
 			var shiftCategory = new ShiftCategory("shiftCategory");
@@ -80,11 +104,23 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				Expect.Call(() => _view.ClearAbsence());
 				Expect.Call(() => _view.ClearDayOff());
 				Expect.Call(() => _view.UpdateTimesExtended(null, null, null, null, null, null));
-				Expect.Call(() => _view.UpdateMustHave(false));
 				Expect.Call(() => _view.PopulateShiftCategories());
 				Expect.Call(() => _view.PopulateAbsences());
 				Expect.Call(() => _view.PopulateDayOffs());
 				Expect.Call(() => _view.PopulateActivities());
+
+				Expect.Call(_scheduleDay.Person).Return(_person).Repeat.AtLeastOnce();
+				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod).Repeat.AtLeastOnce();
+				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(_dateOnly).Repeat.AtLeastOnce();
+				Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary);
+				Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange);
+				Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(_scheduleDay);
+				Expect.Call(_scheduleDay.RestrictionCollection()).Return(new List<IRestrictionBase> { _preferenceRestriction });
+				Expect.Call(_person.VirtualSchedulePeriod(_dateOnly)).Return(_virtualSchedulePeriod).Repeat.AtLeastOnce();
+				Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod);
+				Expect.Call(_virtualSchedulePeriod.MustHavePreference).Return(1);
+				Expect.Call(() => _view.UpdateMustHaveText(Resources.MustHave + "(1/1)"));
+				Expect.Call(() => _view.UpdateMustHave(true));
 			}
 
 			using (_mock.Playback())
@@ -93,7 +129,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			}	
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.WinCode.Scheduling.IAgentPreferenceView.UpdateMustHaveText(System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity"), Test]
 		public void ShouldUpdateAndClearAllElseWhenAbsence()
 		{
 			var absence = new Absence();
@@ -108,11 +144,23 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				Expect.Call(() => _view.ClearDayOff());
 				Expect.Call(() => _view.ClearActivity());
 				Expect.Call(() => _view.UpdateTimesExtended(null, null, null, null, null, null));
-				Expect.Call(() => _view.UpdateMustHave(false));
 				Expect.Call(() => _view.PopulateShiftCategories());
 				Expect.Call(() => _view.PopulateAbsences());
 				Expect.Call(() => _view.PopulateDayOffs());
 				Expect.Call(() => _view.PopulateActivities());
+
+				Expect.Call(_scheduleDay.Person).Return(_person).Repeat.AtLeastOnce();
+				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod).Repeat.AtLeastOnce();
+				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(_dateOnly).Repeat.AtLeastOnce();
+				Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary);
+				Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange);
+				Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(_scheduleDay);
+				Expect.Call(_scheduleDay.RestrictionCollection()).Return(new List<IRestrictionBase> { _preferenceRestriction });
+				Expect.Call(_person.VirtualSchedulePeriod(_dateOnly)).Return(_virtualSchedulePeriod).Repeat.AtLeastOnce();
+				Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod);
+				Expect.Call(_virtualSchedulePeriod.MustHavePreference).Return(1);
+				Expect.Call(() => _view.UpdateMustHaveText(Resources.MustHave + "(1/1)"));
+				Expect.Call(() => _view.UpdateMustHave(true));
 			}
 
 			using (_mock.Playback())
@@ -121,7 +169,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			}
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.WinCode.Scheduling.IAgentPreferenceView.UpdateMustHaveText(System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity"), Test]
 		public void ShouldUpdateAndClearAllElseWhenDayOff()
 		{
 			var dayOffTemplate = new DayOffTemplate(new Description("dayOff"));
@@ -136,11 +184,23 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				Expect.Call(() => _view.ClearAbsence());
 				Expect.Call(() => _view.ClearActivity());
 				Expect.Call(() => _view.UpdateTimesExtended(null, null, null, null, null, null));
-				Expect.Call(() => _view.UpdateMustHave(false));
 				Expect.Call(() => _view.PopulateShiftCategories());
 				Expect.Call(() => _view.PopulateAbsences());
 				Expect.Call(() => _view.PopulateDayOffs());
 				Expect.Call(() => _view.PopulateActivities());
+
+				Expect.Call(_scheduleDay.Person).Return(_person).Repeat.AtLeastOnce();
+				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod).Repeat.AtLeastOnce();
+				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(_dateOnly).Repeat.AtLeastOnce();
+				Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary);
+				Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange);
+				Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(_scheduleDay);
+				Expect.Call(_scheduleDay.RestrictionCollection()).Return(new List<IRestrictionBase> { _preferenceRestriction });
+				Expect.Call(_person.VirtualSchedulePeriod(_dateOnly)).Return(_virtualSchedulePeriod).Repeat.AtLeastOnce();
+				Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod);
+				Expect.Call(_virtualSchedulePeriod.MustHavePreference).Return(1);
+				Expect.Call(() => _view.UpdateMustHaveText(Resources.MustHave + "(1/1)"));
+				Expect.Call(() => _view.UpdateMustHave(true));
 			}
 
 			using (_mock.Playback())
@@ -149,7 +209,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			}
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.WinCode.Scheduling.IAgentPreferenceView.UpdateMustHaveText(System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldClearDayOffAndAbsenceWhenActivity()
 		{
 			var activity = new Activity("activity");
@@ -164,11 +224,23 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				Expect.Call(() => _view.ClearDayOff());
 				Expect.Call(() => _view.UpdateActivityTimes(null, null, null, null, null, null));
 				Expect.Call(() => _view.UpdateTimesExtended(null, null, null, null, null, null));
-				Expect.Call(() => _view.UpdateMustHave(false));
 				Expect.Call(() => _view.PopulateShiftCategories());
 				Expect.Call(() => _view.PopulateAbsences());
 				Expect.Call(() => _view.PopulateDayOffs());
 				Expect.Call(() => _view.PopulateActivities());
+
+				Expect.Call(_scheduleDay.Person).Return(_person).Repeat.AtLeastOnce();
+				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod).Repeat.AtLeastOnce();
+				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(_dateOnly).Repeat.AtLeastOnce();
+				Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary);
+				Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange);
+				Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(_scheduleDay);
+				Expect.Call(_scheduleDay.RestrictionCollection()).Return(new List<IRestrictionBase> { _preferenceRestriction });
+				Expect.Call(_person.VirtualSchedulePeriod(_dateOnly)).Return(_virtualSchedulePeriod).Repeat.AtLeastOnce();
+				Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod);
+				Expect.Call(_virtualSchedulePeriod.MustHavePreference).Return(1);
+				Expect.Call(() => _view.UpdateMustHaveText(Resources.MustHave + "(1/1)"));
+				Expect.Call(() => _view.UpdateMustHave(true));
 			}
 
 			using (_mock.Playback())
@@ -177,7 +249,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			}
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.WinCode.Scheduling.IAgentPreferenceView.UpdateMustHaveText(System.String)"), Test]
 		public void ShouldClearAllWhenNoRestriction()
 		{
 			using (_mock.Record())
@@ -192,6 +264,18 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				Expect.Call(() => _view.PopulateAbsences());
 				Expect.Call(() => _view.PopulateDayOffs());
 				Expect.Call(() => _view.PopulateActivities());
+
+				Expect.Call(_scheduleDay.Person).Return(_person).Repeat.AtLeastOnce();
+				Expect.Call(_scheduleDay.DateOnlyAsPeriod).Return(_dateOnlyAsDateTimePeriod).Repeat.AtLeastOnce();
+				Expect.Call(_dateOnlyAsDateTimePeriod.DateOnly).Return(_dateOnly).Repeat.AtLeastOnce();
+				Expect.Call(_schedulingResultStateHolder.Schedules).Return(_scheduleDictionary);
+				Expect.Call(_scheduleDictionary[_person]).Return(_scheduleRange);
+				Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(_scheduleDay);
+				Expect.Call(_scheduleDay.RestrictionCollection()).Return(new List<IRestrictionBase> { _preferenceRestriction });
+				Expect.Call(_person.VirtualSchedulePeriod(_dateOnly)).Return(_virtualSchedulePeriod).Repeat.AtLeastOnce();
+				Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod);
+				Expect.Call(_virtualSchedulePeriod.MustHavePreference).Return(1);
+				Expect.Call(() => _view.UpdateMustHaveText(Resources.MustHave + "(1/1)"));
 			}
 
 			using (_mock.Playback())
@@ -290,6 +374,21 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			{
 				var toExecute = _presenter.CommandToExecute(data, _dayCreator);
 				Assert.AreEqual(AgentPreferenceExecuteCommand.None, toExecute);
+			}
+		}
+
+		[Test]
+		public void ShouldGetPreferenceRestriction()
+		{
+			using (_mock.Record())
+			{
+				Expect.Call(_scheduleDay.PersistableScheduleDataCollection()).Return(new ReadOnlyCollection<IPersistableScheduleData>(new List<IPersistableScheduleData> { _preferenceDay }));
+			}
+
+			using (_mock.Playback())
+			{
+				var restriction = _presenter.PreferenceRestriction();
+				Assert.AreEqual(_preferenceRestriction, restriction);
 			}
 		}
 	}

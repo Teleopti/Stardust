@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Scheduling
@@ -16,11 +17,13 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 	{
 		private readonly IAgentPreferenceView _view;
 		private readonly IScheduleDay _scheduleDay;
+		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
 
-		public AgentPreferencePresenter(IAgentPreferenceView view, IScheduleDay scheduleDay)
+		public AgentPreferencePresenter(IAgentPreferenceView view, IScheduleDay scheduleDay, ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
 			_view = view;
 			_scheduleDay = scheduleDay;
+			_schedulingResultStateHolder = schedulingResultStateHolder;
 		}
 
 		public IAgentPreferenceView View
@@ -60,6 +63,18 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			UpdateView();
 		}
 
+		public IPreferenceRestriction PreferenceRestriction()
+		{
+			foreach (var persistableScheduleData in _scheduleDay.PersistableScheduleDataCollection())
+			{
+				var preferenceDay = persistableScheduleData as IPreferenceDay;
+				if (preferenceDay == null) continue;
+				return preferenceDay.Restriction;
+			}
+
+			return null;
+		}
+
 		public void UpdateView()
 		{
 			var hasRestriction = false;
@@ -69,72 +84,67 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			_view.PopulateDayOffs();
 			_view.PopulateActivities();
 
-			foreach (var persistableScheduleData in _scheduleDay.PersistableScheduleDataCollection())
+			var preferenceRestriction = PreferenceRestriction();
+
+			if (preferenceRestriction != null)
 			{
-				var preferenceDay = persistableScheduleData as IPreferenceDay;
-				if(preferenceDay == null) continue;
-				var preferenceRestriction = preferenceDay.Restriction;
+				hasRestriction = true;
 
-				if (preferenceRestriction != null)
+				if (preferenceRestriction.ShiftCategory != null)
 				{
-					hasRestriction = true;
-
-					if (preferenceRestriction.ShiftCategory != null)
-					{
-						_view.UpdateShiftCategory(preferenceRestriction.ShiftCategory);
-						_view.UpdateShiftCategoryExtended(preferenceRestriction.ShiftCategory);
-						_view.ClearDayOff();
-						_view.ClearAbsence();
-					}
-
-					if (preferenceRestriction.Absence != null)
-					{
-						_view.UpdateAbsence(preferenceRestriction.Absence);
-						_view.ClearShiftCategory();
-						_view.ClearShiftCategoryExtended();
-						_view.ClearDayOff();
-						_view.ClearActivity();
-					}
-
-					if (preferenceRestriction.DayOffTemplate != null)
-					{
-						_view.UpdateDayOff(preferenceRestriction.DayOffTemplate);
-						_view.ClearShiftCategory();
-						_view.ClearShiftCategoryExtended();
-						_view.ClearAbsence();
-						_view.ClearActivity();
-					}
-
-					if (preferenceRestriction.ActivityRestrictionCollection.FirstOrDefault() != null)
-					{
-						var activityRestriction = preferenceRestriction.ActivityRestrictionCollection[0];
-						_view.UpdateActivity(activityRestriction.Activity);
-
-						var minLengthActivity = activityRestriction.WorkTimeLimitation.StartTime;
-						var maxLengthActivity = activityRestriction.WorkTimeLimitation.EndTime;
-						var minStartActivity = activityRestriction.StartTimeLimitation.StartTime;
-						var maxStartActivity = activityRestriction.StartTimeLimitation.EndTime;
-						var minEndActivity = activityRestriction.EndTimeLimitation.StartTime;
-						var maxEndActivity = activityRestriction.EndTimeLimitation.EndTime;
-						_view.UpdateActivityTimes(minLengthActivity, maxLengthActivity, minStartActivity, maxStartActivity, minEndActivity, maxEndActivity);
-
-						_view.ClearDayOff();
-						_view.ClearAbsence();
-					}
-
-					var minLength = preferenceRestriction.WorkTimeLimitation.StartTime;
-					var maxLength = preferenceRestriction.WorkTimeLimitation.EndTime;
-					var minStart = preferenceRestriction.StartTimeLimitation.StartTime;
-					var maxStart = preferenceRestriction.StartTimeLimitation.EndTime;
-					var minEnd = preferenceRestriction.EndTimeLimitation.StartTime;
-					var maxEnd = preferenceRestriction.EndTimeLimitation.EndTime;
-
-					_view.UpdateTimesExtended(minLength, maxLength, minStart, maxStart, minEnd, maxEnd);
-					_view.UpdateMustHave(preferenceRestriction.MustHave);
+					_view.UpdateShiftCategory(preferenceRestriction.ShiftCategory);
+					_view.UpdateShiftCategoryExtended(preferenceRestriction.ShiftCategory);
+					_view.ClearDayOff();
+					_view.ClearAbsence();
 				}
 
-				break;
+				if (preferenceRestriction.Absence != null)
+				{
+					_view.UpdateAbsence(preferenceRestriction.Absence);
+					_view.ClearShiftCategory();
+					_view.ClearShiftCategoryExtended();
+					_view.ClearDayOff();
+					_view.ClearActivity();
+				}
+
+				if (preferenceRestriction.DayOffTemplate != null)
+				{
+					_view.UpdateDayOff(preferenceRestriction.DayOffTemplate);
+					_view.ClearShiftCategory();
+					_view.ClearShiftCategoryExtended();
+					_view.ClearAbsence();
+					_view.ClearActivity();
+				}
+
+				if (preferenceRestriction.ActivityRestrictionCollection.FirstOrDefault() != null)
+				{
+					var activityRestriction = preferenceRestriction.ActivityRestrictionCollection[0];
+					_view.UpdateActivity(activityRestriction.Activity);
+
+					var minLengthActivity = activityRestriction.WorkTimeLimitation.StartTime;
+					var maxLengthActivity = activityRestriction.WorkTimeLimitation.EndTime;
+					var minStartActivity = activityRestriction.StartTimeLimitation.StartTime;
+					var maxStartActivity = activityRestriction.StartTimeLimitation.EndTime;
+					var minEndActivity = activityRestriction.EndTimeLimitation.StartTime;
+					var maxEndActivity = activityRestriction.EndTimeLimitation.EndTime;
+					_view.UpdateActivityTimes(minLengthActivity, maxLengthActivity, minStartActivity, maxStartActivity, minEndActivity, maxEndActivity);
+
+					_view.ClearDayOff();
+					_view.ClearAbsence();
+				}
+
+				var minLength = preferenceRestriction.WorkTimeLimitation.StartTime;
+				var maxLength = preferenceRestriction.WorkTimeLimitation.EndTime;
+				var minStart = preferenceRestriction.StartTimeLimitation.StartTime;
+				var maxStart = preferenceRestriction.StartTimeLimitation.EndTime;
+				var minEnd = preferenceRestriction.EndTimeLimitation.StartTime;
+				var maxEnd = preferenceRestriction.EndTimeLimitation.EndTime;
+
+				_view.UpdateTimesExtended(minLength, maxLength, minStart, maxStart, minEnd, maxEnd);
+				_view.UpdateMustHave(preferenceRestriction.MustHave);
 			}
+
+			_view.UpdateMustHaveText(MustHavesText());
 
 			if (!hasRestriction)
 			{
@@ -144,6 +154,41 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				_view.ClearDayOff();
 				_view.ClearActivity();	
 			}	
+		}
+
+		public string MustHavesText()
+		{
+			return Resources.MustHave + "(" + CurrentMustHaves() + "/" + MaxMustHaves() + ")";	
+		}
+
+		public int MaxMustHaves()
+		{
+			var schedulePeriod = _scheduleDay.Person.VirtualSchedulePeriod(ScheduleDay.DateOnlyAsPeriod.DateOnly);
+			return schedulePeriod.MustHavePreference;
+		}
+
+		public int CurrentMustHaves()
+		{
+			var schedulePeriod = _scheduleDay.Person.VirtualSchedulePeriod(ScheduleDay.DateOnlyAsPeriod.DateOnly);
+			var person = _scheduleDay.Person;
+			int currentMustHaves = 0;
+
+			foreach (var dateOnly in schedulePeriod.DateOnlyPeriod.DayCollection())
+			{
+				var scheduleDay = _schedulingResultStateHolder.Schedules[person].ScheduledDay(dateOnly);
+
+				foreach (var restrictionBase in scheduleDay.RestrictionCollection())
+				{
+					var preferenceRestriction = restrictionBase as IPreferenceRestriction;
+
+					if (preferenceRestriction != null && preferenceRestriction.MustHave)
+					{
+						currentMustHaves++;
+					}
+				}
+			}
+
+			return currentMustHaves;
 		}
 
 		public AgentPreferenceExecuteCommand CommandToExecute(IAgentPreferenceData data, IAgentPreferenceDayCreator dayCreator)

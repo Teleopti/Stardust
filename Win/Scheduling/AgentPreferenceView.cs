@@ -18,12 +18,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private readonly IList<IWorkflowControlSet> _workflowControlSets;
 		private bool _isInitialized;
 
-		public AgentPreferenceView(IScheduleDay scheduleDay, IList<IWorkflowControlSet> workflowControlSets)
+		public AgentPreferenceView(IScheduleDay scheduleDay, IList<IWorkflowControlSet> workflowControlSets, ISchedulingResultStateHolder schedulingResultStateHolder)
 		{
 			InitializeComponent();
 			SetTexts();
 			_dayCreator = new AgentPreferenceDayCreator();
-			_presenter = new AgentPreferencePresenter(this, scheduleDay);
+			_presenter = new AgentPreferencePresenter(this, scheduleDay, schedulingResultStateHolder);
 			_workflowControlSets = workflowControlSets;
 		}
 
@@ -181,7 +181,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		public void UpdateMustHave(bool mustHave)
 		{
-			checkBoxMustHave.Checked = mustHave;
+			checkBoxMustHave.Checked = mustHave;	
+		}
+
+		public void UpdateMustHaveText(string text)
+		{
+			checkBoxMustHave.Text = text;	
 		}
 
 		private void agentPreferenceViewLoad(object sender, EventArgs e)
@@ -195,6 +200,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		public void PopulateShiftCategories()
 		{
+			
 			var workflowControlSet = _presenter.ScheduleDay.Person.WorkflowControlSet;
 			var comboCategories = new List<ComboBoxAdvShiftCategory>();
 
@@ -209,7 +215,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				comboCategories.Add((new ComboBoxAdvShiftCategory(shiftCategory)));	
 			}
-			
+
+			var currentPreferenceRestriction = _presenter.PreferenceRestriction();
+			if (currentPreferenceRestriction != null && currentPreferenceRestriction.ShiftCategory != null && !workflowControlSet.AllowedPreferenceShiftCategories.Contains(currentPreferenceRestriction.ShiftCategory))
+			{
+				comboCategories.Add(new ComboBoxAdvShiftCategory(currentPreferenceRestriction.ShiftCategory));	
+			}
+
 			var sortedCategories = (from c in comboCategories orderby c.Name select c).ToList();
 			var noneCategory = new ShiftCategory(Resources.None);
 			sortedCategories.Insert(0, new ComboBoxAdvShiftCategory(noneCategory));
@@ -240,6 +252,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 				absences.Add(absence);
 			}
 
+			var currentPreferenceRestriction = _presenter.PreferenceRestriction();
+			if (currentPreferenceRestriction != null && currentPreferenceRestriction.Absence != null && !workflowControlSet.AllowedPreferenceAbsences.Contains(currentPreferenceRestriction.Absence))
+			{
+				absences.Add(currentPreferenceRestriction.Absence);
+			}
+
 			var sortedAbsences = (from a in absences orderby a.Name select a).ToList();
 			var noneAbsence = new Absence { Description = new Description(Resources.None) };
 			sortedAbsences.Insert(0, noneAbsence);
@@ -266,6 +284,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 				comboDayOffs.Add((new ComboBoxAdvDayOffTemplate(dayOff)));
 			}
 
+			var currentPreferenceRestriction = _presenter.PreferenceRestriction();
+			if (currentPreferenceRestriction != null && currentPreferenceRestriction.DayOffTemplate != null && !workflowControlSet.AllowedPreferenceDayOffs.Contains(currentPreferenceRestriction.DayOffTemplate))
+			{
+				comboDayOffs.Add(new ComboBoxAdvDayOffTemplate(currentPreferenceRestriction.DayOffTemplate));
+			}
+
 			var sortedDayOffs = (from d in comboDayOffs orderby d.Name select d).ToList();
 			var noneDayOff = new DayOffTemplate(new Description(Resources.None));
 			sortedDayOffs.Insert(0, new ComboBoxAdvDayOffTemplate(noneDayOff));
@@ -290,6 +314,16 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			if(workflowControlSet.AllowedPreferenceActivity != null)
 				activities.Add(workflowControlSet.AllowedPreferenceActivity);
+
+			var currentPreferenceRestriction = _presenter.PreferenceRestriction();
+			if (currentPreferenceRestriction != null)
+			{
+				var activityRestriction = currentPreferenceRestriction.ActivityRestrictionCollection.FirstOrDefault();
+				if (activityRestriction != null && workflowControlSet.AllowedPreferenceActivity != activityRestriction.Activity)
+				{
+					activities.Add(activityRestriction.Activity);		
+				}
+			}
 
 			var noneActivity = new Activity(Resources.None);
 			activities.Insert(0, noneActivity);
@@ -689,6 +723,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 				currentActivity = null;
 			}
 
+			bool mustHave = checkBoxMustHave.Checked;
+
 			var data = new AgentPreferenceData
 				{
 					ShiftCategory = currentShiftCategory,
@@ -706,7 +742,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 					MinEndActivity = minEndActivity,
 					MaxEndActivity = maxEndActivity,
 					MinLengthActivity = minLengthActivity,
-					MaxLengthActivity = maxLengthActivity
+					MaxLengthActivity = maxLengthActivity,
+					MustHave = mustHave
 				};
 
 			return data;
