@@ -38,11 +38,21 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 					var person = _personRepository.Get(message.PersonId);
 
 					// Get list of readmodels from class that fetch for person and period and turn into list of readmodels
-					_scheduleDayReadModelsCreator.SetInitialLoad(true);
+					if (message.SkipDelete)
+					{
+						_scheduleDayReadModelsCreator.SetInitialLoad(true);
+					}
+					else
+					{
+						_scheduleDayReadModelRepository.ClearPeriodForPerson(
+							period.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone()), message.PersonId);
+					}
 					var readModels = _scheduleDayReadModelsCreator.GetReadModels(scenario, period, person);
 					// save them
-					if(readModels.Count > 0)
-					    _scheduleDayReadModelRepository.SaveReadModels(readModels);
+					if (readModels.Count > 0)
+					{
+						_scheduleDayReadModelRepository.SaveReadModels(readModels);
+					}
 				}
 			}
 		}
