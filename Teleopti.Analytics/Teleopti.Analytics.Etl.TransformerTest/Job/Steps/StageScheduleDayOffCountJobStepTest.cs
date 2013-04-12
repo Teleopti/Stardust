@@ -88,7 +88,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
 			var currentBusinessUnit = _mock.DynamicMock<IBusinessUnit>();
 			var jobParameters = JobParametersFactory.SimpleParameters(false);
 			jobParameters.Helper = new JobHelper(raptorRepository, null, null);
-			var needRunChecker = _mock.DynamicMock<INeedToRunChecker>();
+			var needRunChecker = _mock.DynamicMock<IChangedDataChecker>();
 			var stageScheduleDayOffCountJobStep = new StageScheduleDayOffCountJobStep(jobParameters, needRunChecker);
 
 			Expect.Call(needRunChecker.NeedToRun(new DateTimePeriod(), raptorRepository, currentBusinessUnit, ""))

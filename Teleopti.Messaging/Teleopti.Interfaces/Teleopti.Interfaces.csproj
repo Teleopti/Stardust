@@ -827,6 +827,7 @@
     <Compile Include="Messages\Rta\PersonWithExternalLogon.cs" />
     <Compile Include="Messages\Rta\BusinessUnitInfo.cs" />
     <Compile Include="Messages\Rta\UpdatedScheduleDay.cs" />
+    <Compile Include="ReadModel\IScheduleChangedReadModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="..\..\CodeAnalysisDictionary.xml">

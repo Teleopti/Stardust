@@ -8,17 +8,17 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 {
 	public class StageScheduleDayOffCountJobStep : JobStepBase
 	{
-		private readonly INeedToRunChecker _needToRunChecker;
+		private readonly IChangedDataChecker _changedDataChecker;
 
 		public StageScheduleDayOffCountJobStep(IJobParameters jobParameters)
 			: this(jobParameters, new DefaultNeedToRunChecker())
 		{}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "ToRun")]
-		public StageScheduleDayOffCountJobStep(IJobParameters jobParameters, INeedToRunChecker needToRunChecker)
+		public StageScheduleDayOffCountJobStep(IJobParameters jobParameters, IChangedDataChecker changedDataChecker)
 			: base(jobParameters)
 		{
-			_needToRunChecker = needToRunChecker;
+			_changedDataChecker = changedDataChecker;
 			Name = "stg_schedule_day_off_count, stg_day_off, dim_day_off";
 			JobCategory = JobCategoryType.Schedule;
 			Transformer = new ScheduleDayOffCountTransformer();
@@ -34,7 +34,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 			var period = new DateTimePeriod(JobCategoryDatePeriod.StartDateUtcFloor,
 													   JobCategoryDatePeriod.EndDateUtcCeiling);
 
-			if (!_needToRunChecker.NeedToRun(period, _jobParameters.Helper.Repository, Result.CurrentBusinessUnit, Name))
+			if (!_changedDataChecker.NeedToRun(period, _jobParameters.Helper.Repository, Result.CurrentBusinessUnit, Name))
 			{
 				//gets resetted to Done later :(
 				Result.Status = "No need to run";

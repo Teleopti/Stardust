@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 
 					var projection = scheduleDay.ProjectionService().CreateProjection();
 					var significantPart = scheduleDay.SignificantPart();
-					if (significantPart == SchedulePartView.None) continue;
+					//if (significantPart == SchedulePartView.None) continue;
 
 					var denormalizedScheduleDay = new DenormalizedScheduleDay
 					{
@@ -59,6 +59,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 							break;
 						case SchedulePartView.DayOff:
 							denormalizedScheduleDay.Label = scheduleDay.PersonDayOffCollection()[0].DayOff.Description.ShortName;
+							break;
+						case SchedulePartView.None:
+							denormalizedScheduleDay.Label = "";
+							denormalizedScheduleDay.NotScheduled = true;
 							break;
 					}
 

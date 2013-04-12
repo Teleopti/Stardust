@@ -5,6 +5,7 @@ using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.ReadModel;
 
 namespace Teleopti.Analytics.Etl.Transformer
 {
@@ -339,6 +340,18 @@ namespace Teleopti.Analytics.Etl.Transformer
             }
             return scheduleDictionary;
         }
+
+		public IScheduleDictionary GetSchedules(IList<IScheduleChangedReadModel> changed, IScenario scenario)
+		{
+			var scheduleDictionary = _scheduleCache[scenario].GetFromCacheIfAvailable(period);
+			if (scheduleDictionary == null)
+			{
+				scheduleDictionary = _jobParameters.Helper.Repository.LoadSchedule(period, scenario, this);
+				_scheduleCache[scenario].Add(period, scheduleDictionary);
+			}
+			
+			return scheduleDictionary;
+		}
 
         public IList<IScheduleDay> LoadSchedulePartsPerPersonAndDate(DateTimePeriod period, IScenario scenario)
         {

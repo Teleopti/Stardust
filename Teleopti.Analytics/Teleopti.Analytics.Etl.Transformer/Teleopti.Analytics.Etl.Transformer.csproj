@@ -94,11 +94,11 @@
     <Compile Include="AbsenceTransformer.cs" />
     <Compile Include="ActivityTransformer.cs" />
     <Compile Include="ConfigurationHandler.cs" />
+    <Compile Include="Job\Steps\IntradayStageScheduleJobStep.cs" />
     <Compile Include="Job\Steps\DimQualityQuestLoadJobStep.cs" />
     <Compile Include="Job\Steps\EtlDayOffSubStep.cs" />
     <Compile Include="Job\Steps\DimTimeZoneDeleteJobStep.cs" />
     <Compile Include="Job\Steps\FactQualityLoadJobStep.cs" />
-    <Compile Include="Job\Steps\INeedToRunChecker.cs" />
     <Compile Include="Job\Steps\LicenseCheckJobStep.cs" />
     <Compile Include="Job\Steps\PurgeJobStep.cs" />
     <Compile Include="Job\Steps\FactRequestedDaysJobStep.cs" />

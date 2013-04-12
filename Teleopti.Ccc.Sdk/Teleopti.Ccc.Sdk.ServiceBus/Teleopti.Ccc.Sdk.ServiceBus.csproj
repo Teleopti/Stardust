@@ -160,7 +160,6 @@
     <Compile Include="BudgetGroupHeadCountSpecification.cs" />
     <Compile Include="BusStartup.cs" />
     <Compile Include="ConfigFileDefaultHost.cs" />
-    <Compile Include="Denormalizer\EtlScheduledChangedConsumer.cs" />
     <Compile Include="RtaBusBootStrapper.cs" />
     <Compile Include="Rta\BusinessUnitInfoConsumer.cs" />
     <Compile Include="Denormalizer\PersonScheduleDayReadModelHandler.cs" />

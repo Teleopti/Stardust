@@ -5,6 +5,7 @@ using System.Data;
 using Teleopti.Ccc.Domain.Security.Matrix;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.ReadModel;
 
 namespace Teleopti.Analytics.Etl.Interfaces.Transformer
 {
@@ -212,6 +213,6 @@ namespace Teleopti.Analytics.Etl.Interfaces.Transformer
         int LoadQualityQuestDataMart(int dataSourceId, IBusinessUnit currentBusinessUnit);
         int FillFactQualityDataMart(DateTimePeriod period, int dataSourceId, TimeZoneInfo defaultTimeZone, IBusinessUnit currentBusinessUnit);
 
-	    bool DataOnStepHasChanged(DateTimePeriod onPeriod, IBusinessUnit currentBusinessUnit, string stepName);
+		IList<IScheduleChangedReadModel> ChangedDataOnStep(DateTimePeriod onPeriod, IBusinessUnit currentBusinessUnit, string stepName);
     }
 }

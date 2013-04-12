@@ -1,12 +1,3 @@
-/****** Object:  Table [mart].[LastUpdatedPerStep]    Script Date: onsdag 2013 04 03 10:50:56 ******/
-
-CREATE TABLE [mart].[LastUpdatedPerStep](
-	[StepName] [varchar](500) NOT NULL,
-	[BusinessUnit] [uniqueidentifier] NULL,
-	[Date] [datetime] NOT NULL
-) 
-
-GO
 ----------------  
 --Name: tamasb, kunning
 --Date: 2013-03-25 
@@ -50,3 +41,29 @@ UPDATE [dbo].[ApplicationFunction] SET [ForeignId]=@ForeignId, [Parent]=@ParentI
 
 SET NOCOUNT OFF
 GO
+
+/****** Object:  Table [mart].[LastUpdatedPerStep]    Script Date: onsdag 2013 04 03 10:50:56 ******/
+
+CREATE TABLE [mart].[LastUpdatedPerStep](
+	[StepName] [varchar](500) NOT NULL,
+	[BusinessUnit] [uniqueidentifier] NULL,
+	[Date] [datetime] NOT NULL
+) 
+
+GO
+
+ALTER TABLE ReadModel.ScheduleDay ADD
+	NotScheduled bit NULL
+GO
+ALTER TABLE ReadModel.ScheduleDay ADD CONSTRAINT
+	DF_ScheduleDay_InsertedOn DEFAULT getdate() FOR InsertedOn
+GO
+ALTER TABLE ReadModel.ScheduleDay ADD CONSTRAINT
+	DF_ScheduleDay_NotScheduled DEFAULT 0 FOR NotScheduled
+GO
+UPDATE ReadModel.ScheduleDay SET NotScheduled = 0
+GO
+ALTER TABLE ReadModel.ScheduleDay ALTER COLUMN
+	NotScheduled bit NOT NULL
+GO
+

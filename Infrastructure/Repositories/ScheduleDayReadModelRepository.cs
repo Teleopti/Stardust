@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public void SaveReadModel(ScheduleDayReadModel model)
 		{
 			((NHibernateUnitOfWork)_currentUnitOfWork.Current()).Session.CreateSQLQuery(
-					"INSERT INTO ReadModel.ScheduleDay (PersonId,BelongsToDate,StartDateTime,EndDateTime,Workday,WorkTime,ContractTime,Label,DisplayColor,InsertedOn) VALUES (:PersonId,:Date,:StartDateTime,:EndDateTime,:Workday,:WorkTime,:ContractTime,:Label,:DisplayColor,:InsertedOn)")
+					"INSERT INTO ReadModel.ScheduleDay (PersonId,BelongsToDate,StartDateTime,EndDateTime,Workday,WorkTime,ContractTime,Label,DisplayColor,NotScheduled) VALUES (:PersonId,:Date,:StartDateTime,:EndDateTime,:Workday,:WorkTime,:ContractTime,:Label,:DisplayColor,:NotScheduled)")
 					.SetGuid("PersonId", model.PersonId)
 					.SetDateTime("StartDateTime", model.StartDateTime)
 					.SetDateTime("EndDateTime", model.EndDateTime)
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					.SetString("Label", model.Label)
 					.SetInt32("DisplayColor", model.DisplayColor.ToArgb())
 					.SetDateTime("Date", model.BelongsToDate)
-					.SetDateTime("InsertedOn", DateTime.UtcNow)
+					.SetBoolean("NotScheduled", model.NotScheduled)
 					.ExecuteUpdate();
 		}
 
@@ -110,5 +110,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public TimeSpan WorkTime { get { return TimeSpan.FromTicks(WorkTimeTicks); } }
 		public long ContractTimeTicks { get; set; }
 		public TimeSpan ContractTime { get { return TimeSpan.FromTicks(ContractTimeTicks); } }
+
+		public bool NotScheduled { get; set; }
 	}
 }

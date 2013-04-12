@@ -1,37 +1,42 @@
 ﻿using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.ReadModel;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
 	public interface IEtlReadModelRepository
 	{
-		void InsertScheduledChanged(ScheduleChangedReadModel model);
+		IList<IScheduleChangedReadModel> ChangedDataOnStep(DateTimePeriod onPeriod, IBusinessUnit currentBusinessUnit, string stepName);
 	}
 	public class EtlReadModelRepository : IEtlReadModelRepository
 	{
-		private readonly ICurrentUnitOfWork _currentUnitOfWork;
+		private readonly IUnitOfWork _currentUnitOfWork;
 
-		public EtlReadModelRepository(ICurrentUnitOfWork currentUnitOfWork)
+		public EtlReadModelRepository(IUnitOfWork currentUnitOfWork)
 		{
 			_currentUnitOfWork = currentUnitOfWork;
 		}
 
- 		public void InsertScheduledChanged(ScheduleChangedReadModel model)
+		public IList<IScheduleChangedReadModel> ChangedDataOnStep(DateTimePeriod onPeriod, IBusinessUnit currentBusinessUnit, string stepName)
  		{
-			((NHibernateUnitOfWork)_currentUnitOfWork.Current()).Session.CreateSQLQuery(
-					"INSERT INTO [ReadModel].[EtlScheduledChanged] (Scenario,Person,Date) VALUES (:ScenarioId,:PersonId,:Date)")
-					.SetGuid("ScenarioId", model.ScenarioId)
-					.SetGuid("PersonId", model.PersonId)
-					.SetDateTime("Date", model.DateTime)
-					.ExecuteUpdate();
+			return ((NHibernateUnitOfWork)_currentUnitOfWork).Session.CreateSQLQuery(
+					"exec mart.[ChangedDataOnStep] :step, :startdate, :enddate, :bu ")
+					.SetDateTime("startdate", onPeriod.StartDateTime)
+					.SetDateTime("enddate", onPeriod.EndDateTime)
+					.SetGuid("bu", currentBusinessUnit.Id.GetValueOrDefault())
+					.SetString("step", stepName)
+					.List<IScheduleChangedReadModel>();
+			
  		}
 	}
 
-	public class ScheduleChangedReadModel
+
+	public class ScheduleChangedReadModel : IScheduleChangedReadModel
 	{
-		public Guid ScenarioId { get; set; }
-		public Guid PersonId { get; set; }
-		public DateTime DateTime { get; set; }
+		public Guid Person { get; set; }
+		public DateOnly Date { get; set; }
 	}
 }

@@ -22,6 +22,7 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.ReadModel;
 
 namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 {
@@ -647,20 +648,13 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
                                               _dataMartConnectionString);
 	    }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
-		public bool DataOnStepHasChanged(DateTimePeriod onPeriod, IBusinessUnit currentBusinessUnit, string stepName)
+		
+		public IList<IScheduleChangedReadModel> ChangedDataOnStep(DateTimePeriod onPeriod, IBusinessUnit currentBusinessUnit, string stepName)
 		{
-			using(var uow = UnitOfWorkFactory.Current.CreateAndOpenStatelessUnitOfWork())
+			using (var uow = UnitOfWorkFactory.CurrentUnitOfWorkFactory().LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
-				var res = ((NHibernateStatelessUnitOfWork) uow).Session.CreateSQLQuery(
-					"exec mart.DataOnStepHasChanged :stepName, :fromDate, :toDate, :businessUnitId")
-					.SetString("stepName", stepName)
-					.SetDateTime("fromDate", onPeriod.StartDateTime)
-					.SetDateTime("toDate", onPeriod.EndDateTime)
-					.SetGuid("businessUnitId",currentBusinessUnit.Id.GetValueOrDefault())
-					.SetReadOnly(true)
-					.UniqueResult<int>();
-				return res > 0;
+				var rep = new EtlReadModelRepository(uow);
+				return rep.ChangedDataOnStep(onPeriod, currentBusinessUnit, stepName);
 			}	
 		}
 

@@ -128,6 +128,11 @@ namespace Teleopti.Interfaces.Messages.Denormalize
 		/// </summary>
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
 		public ICollection<DenormalizedScheduleProjectionLayer> Layers { get; set; }
+
+		/// <summary>
+		/// True if the schedules are removed on that day
+		/// </summary>
+		public bool NotScheduled { get; set; }
 	}
 
 	/// <summary>
