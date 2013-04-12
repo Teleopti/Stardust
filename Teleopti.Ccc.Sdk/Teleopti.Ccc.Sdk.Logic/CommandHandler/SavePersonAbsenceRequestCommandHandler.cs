@@ -13,12 +13,12 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
     public class SavePersonAbsenceRequestCommandHandler : IHandleCommand<SavePersonAbsenceRequestCommandDto>
     {
         private readonly IPersistPersonRequest _persistPersonRequest;
-        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+        private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IPersonRequestRepository _personRequestRepository;
         private readonly IServiceBusSender _serviceBusSender;
 
 
-        public SavePersonAbsenceRequestCommandHandler(IPersistPersonRequest persistPersonRequest, IUnitOfWorkFactory unitOfWorkFactory, IPersonRequestRepository personRequestRepository, IServiceBusSender serviceBusSender)
+        public SavePersonAbsenceRequestCommandHandler(IPersistPersonRequest persistPersonRequest, ICurrentUnitOfWorkFactory unitOfWorkFactory, IPersonRequestRepository personRequestRepository, IServiceBusSender serviceBusSender)
         {
             _persistPersonRequest = persistPersonRequest;
             _unitOfWorkFactory = unitOfWorkFactory;
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 		public CommandResultDto Handle(SavePersonAbsenceRequestCommandDto command)
         {
             IPersonRequest result;
-            using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+            using (var unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
             {
                 if (!(command.PersonRequestDto.Request is AbsenceRequestDto))
                 {
