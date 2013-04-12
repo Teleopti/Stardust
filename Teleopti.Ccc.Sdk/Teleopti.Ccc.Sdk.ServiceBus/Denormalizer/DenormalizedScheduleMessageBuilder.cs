@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 
 				var projection = scheduleDay.ProjectionService().CreateProjection();
 				var significantPart = scheduleDay.SignificantPart();
-				if (significantPart == SchedulePartView.None) continue;
+				if (emptyScheduleOnInitialLoad<T>(message, significantPart)) continue;
 
 				var result = new T
 				             	{
@@ -87,6 +87,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 			}
 
 			messageList.Batch(50).ForEach(b => actionForItems(b.ToArray()));
+		}
+
+		private static bool emptyScheduleOnInitialLoad<T>(ScheduleDenormalizeBase message, SchedulePartView significantPart) where T : DenormalizedScheduleBase, new()
+		{
+			return message.SkipDelete && significantPart == SchedulePartView.None;
 		}
 
 		private static bool IsWorkDay(SchedulePartView significantPart)
