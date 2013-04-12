@@ -55,7 +55,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
     </Reference>
-    </Reference>
     <Reference Include="Rhino.Mocks, Version=3.6.0.0, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\RhinoMocks.3.6.1\lib\net\Rhino.Mocks.dll</HintPath>
@@ -122,9 +121,9 @@
     <Compile Include="Bindings\Generic\ActivityStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Anywhere\PersonSchedulePageStepDefinitions.cs" />
     <Compile Include="Pages\Common\Select2Box.cs" />
-    <Compile Include="TeamScheduleForGroups.feature.cs">
+    <Compile Include="TeamScheduleForGroups.feature.cs"/>
     <Compile Include="Bindings\Generic\BudgetStepDefinitions.cs" />
-    <Compile Include="Data\Setups\Generic\AbsenceTimeConfigurable.cs" />
+    <Compile Include="Data\Setups\Generic\AbsenceTimeConfigurable.cs" >
       <DependentUpon>TeamScheduleForGroups.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
