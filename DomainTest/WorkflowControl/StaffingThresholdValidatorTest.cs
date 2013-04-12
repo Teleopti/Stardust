@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Globalization;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -96,7 +96,8 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
         {
             DateTimePeriod requestedDateTimePeriod = DateTimeFactory.CreateDateTimePeriod(new DateTime(2010, 02, 01, 0, 0, 0, DateTimeKind.Utc), 1);
             IAbsence absence = AbsenceFactory.CreateAbsence("Holiday");
-            IAbsenceRequest absenceRequest = _personRequestFactory.CreateAbsenceRequest(absence, requestedDateTimePeriod);
+            var absenceRequest = GetAbsenceRequest(absence, requestedDateTimePeriod);
+
             IScheduleRange range = _mocks.StrictMock<IScheduleRange>();
             IScheduleDay scheduleDay = _mocks.StrictMock<IScheduleDay>();
             IProjectionService projectionService = _mocks.StrictMock<IProjectionService>();
@@ -115,8 +116,6 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 
             using (_mocks.Record())
             {
-                //_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 01), true, true);
-                //_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 02), true, true);
                 Expect.Call(()=>_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 01), true, true)).Repeat.Times(2);
                 Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 02), true, true)).Repeat.Times(3);
                 Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 03), true, true));
@@ -137,12 +136,35 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             _mocks.VerifyAll();
         }
 
+        private IAbsenceRequest GetAbsenceRequest(IAbsence absence, DateTimePeriod requestedDateTimePeriod)
+        {
+            IAbsenceRequest absenceRequest = _personRequestFactory.CreateAbsenceRequest(absence, requestedDateTimePeriod);
+            absenceRequest.Person.SetId(Guid.NewGuid());
+            var personPeriod = new PersonPeriod(new DateOnly(2010, 01, 01),
+                                                PersonContractFactory
+                                                    .CreateFulltimePersonContractWithWorkingWeekContractSchedule
+                                                    (), TeamFactory.CreateSimpleTeam("Test Team"));
+            var skill = PersonSkillFactory.CreatePersonSkill("Test Skill1", 0.5).Skill;
+            var wl = WorkloadFactory.CreateWorkloadWithFullOpenHours(skill);
+            foreach (var day in wl.TemplateWeekCollection)
+            {
+                day.Value.OpenForWork.IsOpen = true;
+                day.Value.OpenForWork.IsOpenForIncomingWork = true;
+            }
+
+            skill.AddWorkload(wl);
+            personPeriod.AddPersonSkill(new PersonSkill(skill, new Percent(0.5)));
+            absenceRequest.Person.AddPersonPeriod(personPeriod);
+            return absenceRequest;
+        }
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void CanValidateIfRequestedOnlyOneDayOfAbsence()
         {
             DateTimePeriod requestedDateTimePeriod = DateTimeFactory.CreateDateTimePeriod(new DateTime(2010, 02, 01, 0, 0, 0, DateTimeKind.Utc), 0);
             IAbsence absence = AbsenceFactory.CreateAbsence("Holiday");
-            IAbsenceRequest absenceRequest = _personRequestFactory.CreateAbsenceRequest(absence, requestedDateTimePeriod);
+            var absenceRequest = GetAbsenceRequest(absence, requestedDateTimePeriod);
+           
             IScheduleRange range = _mocks.StrictMock<IScheduleRange>();
             IScheduleDay scheduleDay = _mocks.StrictMock<IScheduleDay>();
             IProjectionService projectionService = _mocks.StrictMock<IProjectionService>();
@@ -161,8 +183,6 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 
             using (_mocks.Record())
             {
-                //_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 01), true, true);
-                //_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 02), true, true);
                 Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 01), true, true)).Repeat.Times(2);
                 Expect.Call(() => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 02), true, true)).Repeat.Times(2);
                 Expect.Call(_dictionary[absenceRequest.Person]).Return(range).Repeat.AtLeastOnce();
@@ -187,8 +207,8 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
         {
             DateTimePeriod requestedDateTimePeriod = DateTimeFactory.CreateDateTimePeriod(new DateTime(2010, 02, 01, 0, 0, 0, DateTimeKind.Utc), 1);
             IAbsence absence = AbsenceFactory.CreateAbsence("Holiday");
-            IAbsenceRequest absenceRequest = _personRequestFactory.CreateAbsenceRequest(absence, requestedDateTimePeriod);
-            absenceRequest.Person.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.Utc));
+            var absenceRequest = GetAbsenceRequest(absence, requestedDateTimePeriod);
+
             IScheduleRange range = _mocks.StrictMock<IScheduleRange>();
             IScheduleDay scheduleDay = _mocks.StrictMock<IScheduleDay>();
             IProjectionService projectionService = _mocks.StrictMock<IProjectionService>();
@@ -207,12 +227,6 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 
             using (_mocks.Record())
             {
-                //_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 01), true, true);
-                //_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 02), true, true);
-                //_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 02), true, true);
-                //_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 03), true, true);
-                //_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 03), true, true);
-                //_resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 04), true, true);
                 Expect.Call(
                     () => _resourceOptimizationHelper.ResourceCalculateDate(new DateOnly(2010, 02, 01), true, true))
                       .Repeat.Twice();
@@ -246,7 +260,9 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
         {
             DateTimePeriod requestedDateTimePeriod = DateTimeFactory.CreateDateTimePeriod(new DateTime(2010, 02, 01, 0, 0, 0, DateTimeKind.Utc), 1);
             IAbsence absence = AbsenceFactory.CreateAbsence("Holiday");
-            IAbsenceRequest absenceRequest = _personRequestFactory.CreateAbsenceRequest(absence, requestedDateTimePeriod);
+            var absenceRequest = GetAbsenceRequest(absence, requestedDateTimePeriod);
+
+
             IScheduleRange range = _mocks.StrictMock<IScheduleRange>();
             IScheduleDay scheduleDay = _mocks.StrictMock<IScheduleDay>();
             IProjectionService projectionService = _mocks.StrictMock<IProjectionService>();
@@ -470,7 +486,8 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
         {
             DateTimePeriod requestedDateTimePeriod = DateTimeFactory.CreateDateTimePeriod(new DateTime(2010, 02, 01, 0, 0, 0, DateTimeKind.Utc), 1);
             IAbsence absence = AbsenceFactory.CreateAbsence("Holiday");
-            IAbsenceRequest absenceRequest = _personRequestFactory.CreateAbsenceRequest(absence, requestedDateTimePeriod);
+            var absenceRequest = GetAbsenceRequest(absence, requestedDateTimePeriod);
+
             IScheduleRange range = _mocks.StrictMock<IScheduleRange>();
             IScheduleDay scheduleDay = _mocks.StrictMock<IScheduleDay>();
             IProjectionService projectionService = _mocks.StrictMock<IProjectionService>();

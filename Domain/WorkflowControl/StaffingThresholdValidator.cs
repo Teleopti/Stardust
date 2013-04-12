@@ -142,6 +142,12 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
                 var calculatedPeriod = datesToResourceCalculate.ToDateTimePeriod(TeleoptiPrincipal.Current.Regional.TimeZone);
                 var scheduleDay = SchedulingResultStateHolder.Schedules[absenceRequest.Person].ScheduledDay(dateTime);
                 var absenceLayers = scheduleDay.ProjectionService().CreateProjection().FilterLayers(absenceRequest.Absence);
+
+                var skillCollection = absenceRequest.Person.Period(dateTime).PersonSkillCollection.Select(p =>p.Skill);
+
+                if (!IsSkillOpenForDateOnly(dateTime, skillCollection))
+                    continue; 
+
                 foreach (var absenceLayer in absenceLayers)
                 {
                     var sharedPeriod = calculatedPeriod.Intersection(absenceLayer.Period);
@@ -390,6 +396,11 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
                 result = (result * 397) ^ (GetType().GetHashCode());
                 return result;
             }
+        }
+
+        protected static bool IsSkillOpenForDateOnly(DateOnly date, IEnumerable<ISkill> skills)
+        {
+            return skills.Any(s => s.WorkloadCollection.Any(w => w.TemplateWeekCollection.Any(t => t.Key == (int)date.DayOfWeek && t.Value.OpenForWork.IsOpen)));
         }
     }
 }
