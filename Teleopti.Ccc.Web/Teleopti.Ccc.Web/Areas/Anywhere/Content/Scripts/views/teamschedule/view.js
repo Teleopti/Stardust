@@ -100,7 +100,8 @@ define([
 			});
 		};
 
-		var getDailyStaffingMetrics = function (options) {
+		var loadDailyStaffingMetrics = function (options) {
+			if (teamSchedule.SelectedSkill() == null) return;
 			$.ajax({
 				url: 'StaffingMetrics/DailyStaffingMetrics',
 				cache: false,
@@ -111,6 +112,7 @@ define([
 				},
 				success: function (data, textStatus, jqXHR) {
 					teamSchedule.SetDailyMetrics(data);
+					options.success();
 				}
 			});
 		};
@@ -214,7 +216,12 @@ define([
 				loadSkills({
 					success: function() {
 						teamSchedule.SelectSkillById(currentSkillId());
-						getDailyStaffingMetrics();
+						teamSchedule.LoadingStaffingMetrics(true);
+						loadDailyStaffingMetrics({
+							success: function () {
+								teamSchedule.LoadingStaffingMetrics(false);
+							}
+						});
 					}
 				});
 

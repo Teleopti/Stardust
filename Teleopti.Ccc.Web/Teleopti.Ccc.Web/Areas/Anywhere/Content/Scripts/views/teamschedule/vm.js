@@ -76,29 +76,48 @@ define([
 		            return skill.Name;
             });
 	        
+
+            this.LoadingStaffingMetrics = ko.observable(false);
+	        
             this.ForecastedHours = ko.observable();
             this.ForecastedHoursDisplay = ko.computed(function () {
             	var forecastedHours = self.ForecastedHours();
             	if (forecastedHours != undefined) {
-            		forecastedHours = forecastedHours.toFixed(2);
+            		return self.Resources.Forecasted + ': ' + forecastedHours.toFixed(2);
             	}
-            	return self.Resources.Forecasted + ': ' + forecastedHours;
+            	return '';
             });
             this.ScheduledHours = ko.observable();
-	        this.ScheduledHoursDisplay = ko.computed(function() {
-	        	return self.Resources.Scheduled + self.ScheduledHours();
+            this.ScheduledHoursDisplay = ko.computed(function () {
+            	var scheduledHours = self.ScheduledHours();
+            	if (scheduledHours != undefined) {
+            		return self.Resources.Scheduled + ': ' + scheduledHours.toFixed(2);
+            	}
+            	return '';
 	        });
             this.DiffHours = ko.observable();
             this.DiffPercentage = ko.observable();
             this.DifferenceDisplay = ko.computed(function () {
-            	return self.Resources.Difference + self.DiffHours() + self.DiffPercentage();
+	            var diffHours = self.DiffHours();
+	            var diffPercentage = self.DiffPercentage();
+	            if (diffHours!=undefined && diffPercentage!=undefined)
+	            	return self.Resources.Difference + ': ' + diffPercentage.toFixed(2) + ', ' + (diffHours * 100).toFixed(2) + ' %';
+
+	            return '';
             });
             this.ESL = ko.observable();
             this.ESLDisplay = ko.computed(function () {
-            	return self.Resources.ESL + self.ESL();
+            	var esl = self.ESL();
+	            if (esl)
+	            	return self.Resources.ESL + esl;
+	            return '';
             });
             this.SetDailyMetrics = function (data) {
 	            self.ForecastedHours(data.ForecastedHours);
+	            self.ESL(data.ESL);
+	            self.ScheduledHours(data.ScheduledHours);
+	            self.DiffHours(data.RelativeDifference);
+	            self.DiffPercentage(data.AbsoluteDifferenceHours);
             };
         };
     });

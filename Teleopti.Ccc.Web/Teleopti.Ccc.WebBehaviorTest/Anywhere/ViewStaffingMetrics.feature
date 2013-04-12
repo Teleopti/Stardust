@@ -62,6 +62,7 @@ Scenario: View staffing metrics
 	| StartTime      | 2013-04-09 09:00 |
 	| EndTime        | 2013-04-09 16:00 |
 	| Shift category | Day              |
+	| Activity       | Phone            |
 	And there is a forecast with
 	| Field                  | Value        |
 	| Skill                  | Direct Sales |

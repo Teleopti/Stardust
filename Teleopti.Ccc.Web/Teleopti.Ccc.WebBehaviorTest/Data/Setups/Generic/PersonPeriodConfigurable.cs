@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			{
 				var skillRepository = new SkillRepository(uow);
 				var skill = skillRepository.LoadAll().Single(c => c.Name == PersonSkill);
-				personPeriod.AddPersonSkill(new PersonSkill(skill,new Percent(1.0)));
+				personPeriod.AddPersonSkill(new PersonSkill(skill,new Percent(1.0)){Active = true});
 			}
 
 			user.AddPersonPeriod(personPeriod);

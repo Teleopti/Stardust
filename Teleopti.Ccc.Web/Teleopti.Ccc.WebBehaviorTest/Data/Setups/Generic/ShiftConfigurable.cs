@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 		public bool Lunch3HoursAfterStart { get; set; }
 		public string ShiftColor { get; set; }
 		public string AllActivityColor { get; set; }
+		public string Activity { get; set; }
 
 		public IScenario Scenario = GlobalDataContext.Data().Data<CommonScenario>().Scenario;
 
@@ -50,8 +51,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			}
 			else
 			{
-				var activityPhone = TestData.ActivityPhone; 
-				assignment.SetMainShift(MainShiftFactory.CreateMainShift(activityPhone, _assignmentPeriod, shiftCat));
+				if (Activity == null)
+				{
+					var activityPhone = TestData.ActivityPhone;
+					assignment.SetMainShift(MainShiftFactory.CreateMainShift(activityPhone, _assignmentPeriod, shiftCat));
+				}
+			}
+
+			if (Activity != null)
+			{
+				var activityRepository = new ActivityRepository(uow);
+				var activities = activityRepository.LoadAll();
+				var mainActivity = activities.Single(a => a.Name == Activity);
+				assignment.SetMainShift(MainShiftFactory.CreateMainShift(mainActivity, _assignmentPeriod, shiftCat));
 			}
 
 

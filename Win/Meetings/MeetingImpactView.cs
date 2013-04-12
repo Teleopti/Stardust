@@ -9,6 +9,7 @@ using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Scheduling.NonBlendSkill;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Obfuscated.ResourceCalculation;
@@ -62,7 +63,7 @@ namespace Teleopti.Ccc.Win.Meetings
                                                                         new SeatImpactOnPeriodForProjection()),
                                                                     new NonBlendSkillCalculator(
                                                                         new NonBlendSkillImpactOnPeriodForProjection()),
-																		new SingleSkillDictionary());
+																		new SingleSkillDictionary(), new CurrentTeleoptiPrincipal());
 		    var decider = new PeopleAndSkillLoaderDecider(new PersonRepository(UnitOfWorkFactory.Current));
 		    var gridHandler = new MeetingImpactSkillGridHandler(this, meetingViewModel, schedulerStateHolder,
 		                                                        UnitOfWorkFactory.Current, decider);
