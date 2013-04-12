@@ -23,6 +23,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ApplicationLayer
 			_unitOfWorkFactory = unitOfWorkFactory;
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void Consume(IEvent message)
 		{
 			WTFDEBUG.Log("EventsConsumer " + message.GetType().Name);

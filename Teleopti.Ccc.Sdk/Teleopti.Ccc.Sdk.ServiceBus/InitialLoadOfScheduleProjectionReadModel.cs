@@ -18,6 +18,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			_serviceBusFinder = serviceBusFinder;
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1806:DoNotIgnoreMethodResults", MessageId = "System.Boolean.TryParse(System.String,System.Boolean@)")]
 		public void Check()
 		{
 			var messagesOnBoot = true;
