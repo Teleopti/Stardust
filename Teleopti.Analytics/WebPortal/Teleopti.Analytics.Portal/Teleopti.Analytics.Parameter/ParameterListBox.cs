@@ -415,6 +415,7 @@ namespace Teleopti.Analytics.Parameters
 
 				function moveListItem(ListFrom, ListTo, Type, ListVal, TextVal, TextText, SubmitOrNo)
 				{
+					document.body.style.cursor  = 'wait';
 					var lstFrom = document.getElementById(ListFrom);
 					var lstTo = document.getElementById(ListTo);
 					var lstVal = document.getElementById(ListVal);
@@ -443,7 +444,7 @@ namespace Teleopti.Analytics.Parameters
 
 					str = str.substring(0, str.length -1);			
 					txtVal.value = str;
-					
+					document.body.style.cursor  = 'default';
 					if (SubmitOrNo == 'Yes')
 						{window.document.getElementById('aspnetForm').submit();}
 				}
