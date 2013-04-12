@@ -69,6 +69,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void SaveReadModel(PersonScheduleDayReadModel model)
 		{
+			System.IO.File.AppendAllText("wtfdebug.log", "PersonScheduleDayReadModelStorage");
 			_unitOfWork.Session().CreateSQLQuery(
 				"INSERT INTO ReadModel.PersonScheduleDay (Id,PersonId,TeamId,SiteId,BusinessUnitId,ShiftStart,ShiftEnd,BelongsToDate,Shift) VALUES (:Id,:PersonId,:TeamId,:SiteId,:BusinessUnitId,:ShiftStart,:ShiftEnd,:BelongsToDate,:Shift)")
 				.SetGuid("Id", Guid.NewGuid())
@@ -82,7 +83,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.SetParameter("Shift", model.Shift,NHibernateUtil.StringClob)
 				.ExecuteUpdate();
 
-			_unitOfWork.Current().AfterSuccessfulTx(() => _messageBroker.SendEventMessage(_currentDataSource.CurrentName(), model.BusinessUnitId, model.BelongsToDate, model.BelongsToDate, Guid.Empty, model.PersonId, typeof(Person), Guid.Empty, typeof(IPersonScheduleDayReadModel), DomainUpdateType.NotApplicable, null));
+			_unitOfWork.Current().AfterSuccessfulTx(() =>
+				{
+					System.IO.File.AppendAllText("wtfdebug.log", "PersonScheduleDayReadModelStorage SendEventMessage");
+					_messageBroker.SendEventMessage(_currentDataSource.CurrentName(), model.BusinessUnitId, model.BelongsToDate, model.BelongsToDate, Guid.Empty, model.PersonId, typeof (Person), Guid.Empty, typeof (IPersonScheduleDayReadModel), DomainUpdateType.NotApplicable, null);
+				});
+			System.IO.File.AppendAllText("wtfdebug.log", "/PersonScheduleDayReadModelStorage");
 		}
 
 		public bool IsInitialized()

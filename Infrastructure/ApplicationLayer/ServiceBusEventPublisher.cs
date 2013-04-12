@@ -16,9 +16,12 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2201:DoNotRaiseReservedExceptionTypes")]
 		public void Publish(object @event)
 		{
+			System.IO.File.AppendAllText("wtfdebug.log", "ServiceBusEventPublisher " + @event.GetType().Name);
 			if (!_sender.EnsureBus())
 				throw new ApplicationException("Cant find the bus, cant publish the event!");
+			System.IO.File.AppendAllText("wtfdebug.log", "ServiceBusEventPublisher Send " + @event.GetType().Name);
 			_sender.Send(@event);
+			System.IO.File.AppendAllText("wtfdebug.log", "/ServiceBusEventPublisher " + @event.GetType().Name);
 		}
 	}
 }

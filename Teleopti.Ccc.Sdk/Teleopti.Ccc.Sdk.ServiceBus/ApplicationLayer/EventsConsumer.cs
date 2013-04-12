@@ -23,11 +23,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ApplicationLayer
 
 		public void Consume(IEvent message)
 		{
+			System.IO.File.AppendAllText("wtfdebug.log", "EventsConsumer " + message.GetType().Name);
 			using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
 			{
 				_publisher.Publish(message);
 				unitOfWork.PersistAll();
 			}
+			System.IO.File.AppendAllText("wtfdebug.log", "/EventsConsumer " + message.GetType().Name);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
