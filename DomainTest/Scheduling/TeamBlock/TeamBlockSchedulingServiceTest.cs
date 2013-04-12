@@ -36,9 +36,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         private bool _cancelTarget;
 	    private ISafeRollbackAndResourceCalculation _safeRollback;
 	    private ISchedulePartModifyAndRollbackService _rollbackService;
+        private ISchedulingResultStateHolder _schedulingResultStateHolder;
+        private IScheduleRange _scheduleRange;
 
 
-	    [SetUp]
+        [SetUp]
         public void Setup()
         {
             _mock = new MockRepository();
@@ -51,6 +53,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             _teamSteadyStateHolder = _mock.StrictMock<ITeamSteadyStateHolder>();
             _groupPerson = _mock.StrictMock<IGroupPerson>();
             _virtualSchedulePeriod = _mock.StrictMock<IVirtualSchedulePeriod>();
+            _schedulingResultStateHolder = _mock.StrictMock<ISchedulingResultStateHolder>();
 
             _scheduleDay = _mock.StrictMock<IScheduleDay>();
 	        _safeRollback = _mock.StrictMock<ISafeRollbackAndResourceCalculation>();
@@ -68,15 +71,22 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         }
 
         [Test]
+        public void ShouldNotContinueIfRollbakckIsNull()
+        {
+           Assert.IsFalse( _target.ScheduleSelected(_matrixList, _dateOnlyPeriod, _personList, _teamSteadyStateHolder, null));
+            }
+
+        [Test]
         public void ShouldContinueIfTeamNotInSteadyState()
         {
             var teamInfo = new TeamInfo(_groupPerson, new List<IList<IScheduleMatrixPro>>() {_matrixList});
              using(_mock.Record())
              {
                  Expect.Call(() => _teamBlockScheduler .DayScheduled += null).IgnoreArguments();
-                 Expect.Call(_teamInfoFactory.CreateTeamInfo(_person, _date, _matrixList)).Return(teamInfo);
+                 Expect.Call(_teamInfoFactory.CreateTeamInfo(_person, _dateOnlyPeriod , _matrixList)).Return(teamInfo);
                  Expect.Call(_teamSteadyStateHolder.IsSteadyState(_groupPerson)).Return(false);
                  Expect.Call(() => _teamBlockScheduler.DayScheduled -= null).IgnoreArguments();
+
              }
 
 			 Assert.IsTrue(_target.ScheduleSelected(_matrixList, _dateOnlyPeriod, _personList, _teamSteadyStateHolder, _rollbackService));
@@ -90,7 +100,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             using (_mock.Record())
             {
                 Expect.Call(() => _teamBlockScheduler.DayScheduled += null).IgnoreArguments();
-                Expect.Call(_teamInfoFactory.CreateTeamInfo(_person, _date, _matrixList)).Return(_teamInfo);
+                Expect.Call(_teamInfoFactory.CreateTeamInfo(_person, _dateOnlyPeriod, _matrixList)).Return(_teamInfo);
                 Expect.Call(_teamSteadyStateHolder.IsSteadyState(_groupPerson)).Return(true);
                 Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(_teamInfo, _date, BlockFinderType.None ,
                                                                      false)).Return(null);
@@ -112,18 +122,22 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             using (_mock.Record())
             {
                 Expect.Call(() => _teamBlockScheduler.DayScheduled += null).IgnoreArguments();
-                Expect.Call(_teamInfoFactory.CreateTeamInfo(_person, _date, _matrixList)).Return(teamInfo);
+                Expect.Call(_teamInfoFactory.CreateTeamInfo(_person, _dateOnlyPeriod, _matrixList)).Return(teamInfo);
                 Expect.Call(_teamSteadyStateHolder.IsSteadyState(_groupPerson)).Return(true);
                
                 Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, _date, BlockFinderType.None,
                                                                      false)).Return(_teamBlockInfo);
                 Expect.Call(_matrixPro.SchedulePeriod).Return(_virtualSchedulePeriod);
-                Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod);
-                Expect.Call(_matrixPro.GetScheduleDayByKey(_date)).Return(_scheduleDayPro);
-                Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay);
-                Expect.Call(_scheduleDay.IsScheduled()).Return(true);
-
+                //Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod);
+                //Expect.Call(_matrixPro.GetScheduleDayByKey(_date)).Return(_scheduleDayPro);
+                //Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay);
+                //Expect.Call(_scheduleDay.IsScheduled()).Return(true);
                 Expect.Call(() => _teamBlockScheduler.DayScheduled -= null).IgnoreArguments();
+
+                Expect.Call(_matrixPro.SchedulingStateHolder).Return(_schedulingResultStateHolder);
+                Expect.Call(_matrixPro.Person).Return(_person);
+                Expect.Call(_schedulingResultStateHolder.Schedules[_person]).Return(_scheduleRange);
+                Expect.Call(TeamBlockScheduledDayChecker.IsDayScheduledInTeamBlock(_teamBlockInfo, _date)).IgnoreArguments().Return(true);
 
             }
 
@@ -271,24 +285,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
             using (_mock.Record())
             {
-                Expect.Call(() => _teamBlockScheduler.DayScheduled += null).IgnoreArguments();
-                Expect.Call(_teamInfoFactory.CreateTeamInfo(_person, _date, _matrixList)).Return(teamInfo);
-                Expect.Call(_teamSteadyStateHolder.IsSteadyState(_groupPerson)).Return(true);
-
-                Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, _date, BlockFinderType.None,
-                                                                     false)).Return(_teamBlockInfo);
-                Expect.Call(_matrixPro.SchedulePeriod).Return(_virtualSchedulePeriod);
-                Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod);
-                Expect.Call(_matrixPro.GetScheduleDayByKey(_date)).Return(_scheduleDayPro);
-                Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay);
-                Expect.Call(_scheduleDay.IsScheduled()).Return(false);
-                Expect.Call(_blockSteadyStateValidator.IsBlockInSteadyState(_teamBlockInfo, _schedulingOptions))
-                      .Return(true);
-                Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, _date, _schedulingOptions,
-                                                                     _dateOnlyPeriod, _personList)).Return(true);
-
-                Expect.Call(() => _teamBlockScheduler.DayScheduled -= null).IgnoreArguments();
-
+                expectCallsForShouldBreakIfCancelMeIsSetWithNullDayScheduled(teamInfo);
             }
             SchedulingServiceBaseEventArgs args = new SchedulingServiceBaseEventArgs(null);
             args.Cancel = true;
@@ -297,6 +294,27 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             Assert.IsTrue(_cancelTarget);
 			Assert.IsTrue(_target.ScheduleSelected(_matrixList, _dateOnlyPeriod, _personList, _teamSteadyStateHolder, _rollbackService));
 
+        }
+
+        private void expectCallsForShouldBreakIfCancelMeIsSetWithNullDayScheduled(TeamInfo teamInfo)
+        {
+            Expect.Call(() => _teamBlockScheduler.DayScheduled += null).IgnoreArguments();
+            Expect.Call(_teamInfoFactory.CreateTeamInfo(_person, _date, _matrixList)).Return(teamInfo);
+            Expect.Call(_teamSteadyStateHolder.IsSteadyState(_groupPerson)).Return(true);
+
+            Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, _date, BlockFinderType.None,
+                                                                  false)).Return(_teamBlockInfo);
+            Expect.Call(_matrixPro.SchedulePeriod).Return(_virtualSchedulePeriod);
+            Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod);
+            Expect.Call(_matrixPro.GetScheduleDayByKey(_date)).Return(_scheduleDayPro);
+            Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay);
+            Expect.Call(_scheduleDay.IsScheduled()).Return(false);
+            Expect.Call(_blockSteadyStateValidator.IsBlockInSteadyState(_teamBlockInfo, _schedulingOptions))
+                  .Return(true);
+            Expect.Call(_teamBlockScheduler.ScheduleTeamBlockDay(_teamBlockInfo, _date, _schedulingOptions,
+                                                                 _dateOnlyPeriod, _personList)).Return(true);
+
+            Expect.Call(() => _teamBlockScheduler.DayScheduled -= null).IgnoreArguments();
         }
 
         private void TargetOnDayScheduled(object sender, SchedulingServiceBaseEventArgs schedulingServiceBaseEventArgs)

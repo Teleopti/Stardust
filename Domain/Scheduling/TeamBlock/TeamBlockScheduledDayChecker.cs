@@ -6,6 +6,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
     {
         public static bool IsDayScheduledInTeamBlock(ITeamBlockInfo teamBlockInfo, DateOnly dateOnly)
         {
+            if (teamBlockInfo == null) return false;
             IScheduleRange rangeForPerson = null;
             foreach (var matrix in teamBlockInfo.TeamInfo.MatrixesForGroup())
             {
