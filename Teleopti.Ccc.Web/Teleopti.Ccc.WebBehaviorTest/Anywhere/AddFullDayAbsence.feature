@@ -35,7 +35,8 @@ Scenario: View form
 	When I view person schedule for 'Pierre Baldi' on '2012-12-02'
 	And I click 'add full day absence'
 	Then I should see the add full day absence form
-	
+
+@WTFDEBUG	
 Scenario: Add
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' have a (read model) shift with

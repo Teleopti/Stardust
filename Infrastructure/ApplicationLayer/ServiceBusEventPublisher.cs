@@ -7,6 +7,37 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1709:IdentifiersShouldBeCasedCorrectly", MessageId = "WTFDEBUG")]
 	public static class WTFDEBUG
 	{
+		public static void Clear()
+		{
+			try
+			{
+				System.IO.File.Delete(@"wtfdebug.log");
+			}
+			catch (Exception)
+			{
+			}
+			try
+			{
+				System.IO.File.Delete(@"C:\wtfdebug.log");
+			}
+			catch (Exception)
+			{
+			}
+			try
+			{
+				System.IO.File.Delete(@"C:\inetpub\wwwroot\PBI20491-AgentPortalWeb\wtfdebug.log");
+			}
+			catch (Exception)
+			{
+			}
+			try
+			{
+				System.IO.File.Delete(@"C:\Program Files (x86)\CruiseControl.NET\server\PBI20491\WorkingDirectory\wtfdebug.log");
+			}
+			catch (Exception)
+			{
+			}
+		}
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
 		public static void Log(string stuff)
 		{
