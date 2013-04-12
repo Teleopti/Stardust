@@ -2129,7 +2129,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 	    {
 		    return
 			    ((WorkloadDetailView) GetCurrentWorkloadDetailView()).Workload.TemplateWeekCollection
-			                                                         .All(t => t.Value.Name != newName);
+			                                                         .All(t => t.Value.Name.ToLowerInvariant() != newName.ToLowerInvariant());
 	    }
 
 	    private class RenameTemplateTag
