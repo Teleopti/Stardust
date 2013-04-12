@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -16,7 +17,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		public void Execute(IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
-			System.IO.File.AppendAllText("wtfdebug.log", "EventsMessageSender");
+			WTFDEBUG.Log("EventsMessageSender");
 			var events = (from i in modifiedRoots
 			              let r = i.Root
 			              let withEvents = r as IAggregateRootWithEvents
@@ -27,7 +28,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			              select e)
 				.ToArray();
 			_publisher.Publish(events);
-			System.IO.File.AppendAllText("wtfdebug.log", "/EventsMessageSender");
+			WTFDEBUG.Log("/EventsMessageSender");
 		}
 	}
 }

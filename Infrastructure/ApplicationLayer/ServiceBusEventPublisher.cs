@@ -4,6 +4,41 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 {
+	public static class WTFDEBUG
+	{
+		public static void Log(string stuff)
+		{
+			try
+			{
+				System.IO.File.AppendAllText(@"wtfdebug.log", stuff + Environment.NewLine);
+			}
+			catch (Exception)
+			{
+			}
+			try
+			{
+				System.IO.File.AppendAllText(@"C:\wtfdebug.log", stuff + Environment.NewLine);
+			}
+			catch (Exception)
+			{
+			}
+			try
+			{
+				System.IO.File.AppendAllText(@"C:\inetpub\wwwroot\PBI20491-AgentPortalWeb\wtfdebug.log", stuff + Environment.NewLine);
+			}
+			catch (Exception)
+			{
+			}
+			try
+			{
+				System.IO.File.AppendAllText(@"C:\Program Files (x86)\CruiseControl.NET\server\PBI20491\WorkingDirectory\wtfdebug.log", stuff + Environment.NewLine);
+			}
+			catch (Exception)
+			{
+			}
+		}
+	}
+
 	public class ServiceBusEventPublisher : IEventPublisher
 	{
 		private readonly IServiceBusSender _sender;
@@ -16,12 +51,12 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2201:DoNotRaiseReservedExceptionTypes")]
 		public void Publish(object @event)
 		{
-			System.IO.File.AppendAllText("wtfdebug.log", "ServiceBusEventPublisher " + @event.GetType().Name);
+			WTFDEBUG.Log("ServiceBusEventPublisher " + @event.GetType().Name);
 			if (!_sender.EnsureBus())
 				throw new ApplicationException("Cant find the bus, cant publish the event!");
-			System.IO.File.AppendAllText("wtfdebug.log", "ServiceBusEventPublisher Send " + @event.GetType().Name);
+			WTFDEBUG.Log("ServiceBusEventPublisher Send " + @event.GetType().Name);
 			_sender.Send(@event);
-			System.IO.File.AppendAllText("wtfdebug.log", "/ServiceBusEventPublisher " + @event.GetType().Name);
+			WTFDEBUG.Log("/ServiceBusEventPublisher " + @event.GetType().Name);
 		}
 	}
 }

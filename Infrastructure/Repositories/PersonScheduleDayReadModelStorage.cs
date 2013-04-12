@@ -5,6 +5,7 @@ using NHibernate;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -69,7 +70,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void SaveReadModel(PersonScheduleDayReadModel model)
 		{
-			System.IO.File.AppendAllText("wtfdebug.log", "PersonScheduleDayReadModelStorage");
+			WTFDEBUG.Log("PersonScheduleDayReadModelStorage");
 			_unitOfWork.Session().CreateSQLQuery(
 				"INSERT INTO ReadModel.PersonScheduleDay (Id,PersonId,TeamId,SiteId,BusinessUnitId,ShiftStart,ShiftEnd,BelongsToDate,Shift) VALUES (:Id,:PersonId,:TeamId,:SiteId,:BusinessUnitId,:ShiftStart,:ShiftEnd,:BelongsToDate,:Shift)")
 				.SetGuid("Id", Guid.NewGuid())
@@ -85,10 +86,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			_unitOfWork.Current().AfterSuccessfulTx(() =>
 				{
-					System.IO.File.AppendAllText("wtfdebug.log", "PersonScheduleDayReadModelStorage SendEventMessage");
+					WTFDEBUG.Log("PersonScheduleDayReadModelStorage SendEventMessage");
 					_messageBroker.SendEventMessage(_currentDataSource.CurrentName(), model.BusinessUnitId, model.BelongsToDate, model.BelongsToDate, Guid.Empty, model.PersonId, typeof (Person), Guid.Empty, typeof (IPersonScheduleDayReadModel), DomainUpdateType.NotApplicable, null);
 				});
-			System.IO.File.AppendAllText("wtfdebug.log", "/PersonScheduleDayReadModelStorage");
+			WTFDEBUG.Log("/PersonScheduleDayReadModelStorage");
 		}
 
 		public bool IsInitialized()
