@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Repositories;
@@ -135,6 +137,19 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
                 return invalidConfig;
             }
             
+            invalidDays = GetInvalidDaysIfExist(budgetDays, budgetGroup, invalidDays, culture);
+
+            if (!string.IsNullOrEmpty(invalidDays))
+            {
+                invalidDays = invalidDays.Substring(0, invalidDays.Length - 1);
+                invalidConfig = notEnoughAllowance + invalidDays;
+            }
+
+            return invalidConfig;
+        }
+
+        private string GetInvalidDaysIfExist(IList<IBudgetDay> budgetDays, IBudgetGroup budgetGroup, string invalidDays, CultureInfo culture)
+        {
             var count = 0;
             foreach (var budgetDay in budgetDays.OrderBy(x => x.Day))
             {
@@ -149,18 +164,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
                     count++;
                     if (count > 5)
                         break;
-                    Logger.DebugFormat("There is not enough allowance for day {0}.",budgetDay.Day);
+                    Logger.DebugFormat("There is not enough allowance for day {0}.", budgetDay.Day);
                     invalidDays += budgetDay.Day.ToShortDateString(culture) + ",";
                 }
             }
-
-            if (!string.IsNullOrEmpty(invalidDays))
-            {
-                invalidDays = invalidDays.Substring(0, invalidDays.Length - 1);
-                invalidConfig = notEnoughAllowance + invalidDays;
-            }
-
-            return invalidConfig;
+            return invalidDays;
         }
 
 

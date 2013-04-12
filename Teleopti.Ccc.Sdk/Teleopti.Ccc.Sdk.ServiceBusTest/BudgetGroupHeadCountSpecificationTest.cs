@@ -269,6 +269,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
         }
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "HeadCount")]
     public class BudgetGroupHeadCountSpecificationForTest : BudgetGroupHeadCountSpecification
     {
         public BudgetGroupHeadCountSpecificationForTest(ISchedulingResultStateHolder schedulingResultStateHolder,
