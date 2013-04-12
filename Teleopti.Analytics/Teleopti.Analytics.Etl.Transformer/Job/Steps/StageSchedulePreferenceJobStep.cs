@@ -6,26 +6,11 @@ using IJobResult = Teleopti.Analytics.Etl.Interfaces.Transformer.IJobResult;
 
 namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 {
-	/// <summary>
-	/// Responsible for retriving the PersonRestrictions  and send it to the transformer
-	/// </summary>
-	/// <remarks>
-	/// Created by: henrika
-	/// Created date: 2009-07-02
-	/// </remarks>
 	public class StageSchedulePreferenceJobStep : JobStepBase
 	{
-		private readonly IChangedDataChecker _changedDataChecker;
-
 		public StageSchedulePreferenceJobStep(IJobParameters jobParameters)
-			: this(jobParameters, new DefaultNeedToRunChecker())
-		{}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "ToRun")]
-		public StageSchedulePreferenceJobStep(IJobParameters jobParameters, IChangedDataChecker changedDataChecker)
 			: base(jobParameters)
 		{
-			_changedDataChecker = changedDataChecker;
 			Name = "stg_schedule_preference, stg_day_off, dim_day_off";
 			JobCategory = JobCategoryType.Schedule;
 			Transformer = new SchedulePreferenceTransformer(_jobParameters.IntervalsPerDay);
@@ -42,13 +27,6 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 		{
 			var period = new DateTimePeriod(JobCategoryDatePeriod.StartDateUtcFloor, JobCategoryDatePeriod.EndDateUtcCeiling);
 			//IScenario scenario = _jobParameters.StateHolder.DefaultScenario;
-
-			if (!_changedDataChecker.NeedToRun(period, _jobParameters.Helper.Repository, Result.CurrentBusinessUnit, Name))
-			{
-				//gets resetted to Done later :(
-				Result.Status = "No need to run";
-				return 0;
-			}
 
 			foreach (IScenario scenario in _jobParameters.StateHolder.ScenarioCollectionDeletedExcluded)
 			{

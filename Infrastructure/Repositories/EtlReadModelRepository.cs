@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using NHibernate.Transform;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -28,6 +29,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					.SetDateTime("enddate", onPeriod.EndDateTime)
 					.SetGuid("bu", currentBusinessUnit.Id.GetValueOrDefault())
 					.SetString("step", stepName)
+					.SetResultTransformer(Transformers.AliasToBean(typeof (ScheduleChangedReadModel)))
+					.SetReadOnly(true)
 					.List<IScheduleChangedReadModel>();
 			
  		}
@@ -37,6 +40,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	public class ScheduleChangedReadModel : IScheduleChangedReadModel
 	{
 		public Guid Person { get; set; }
-		public DateOnly Date { get; set; }
+		public DateTime Date { get; set; }
 	}
 }

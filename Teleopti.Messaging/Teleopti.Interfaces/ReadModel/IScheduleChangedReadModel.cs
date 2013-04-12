@@ -15,6 +15,6 @@ namespace Teleopti.Interfaces.ReadModel
 		/// <summary>
 		/// 
 		/// </summary>
-		DateOnly Date { get; set; } 
+		DateTime Date { get; set; } 
 	}
 }

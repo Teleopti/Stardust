@@ -35,7 +35,7 @@ namespace Teleopti.Analytics.Etl.Transformer
         private IList<IRuleSetBag> _ruleSetBagCollection;
         private IList<IGroupPage> _userDefinedGroupings;
     	private IList<IMultiplicatorDefinitionSet> _multiplicatorDefinitionSetCollection;
-
+	    private Dictionary<DateTimePeriod, IScheduleDictionary> _dictionaryCashe;
         private CommonStateHolder()
         {
         }
@@ -341,16 +341,27 @@ namespace Teleopti.Analytics.Etl.Transformer
             return scheduleDictionary;
         }
 
-		public IScheduleDictionary GetSchedules(IList<IScheduleChangedReadModel> changed, IScenario scenario)
+		public IDictionary<DateTimePeriod, IScheduleDictionary> GetSchedules(IList<IScheduleChangedReadModel> changed, IScenario scenario)
 		{
-			var scheduleDictionary = _scheduleCache[scenario].GetFromCacheIfAvailable(period);
-			if (scheduleDictionary == null)
+			_dictionaryCashe = new Dictionary<DateTimePeriod, IScheduleDictionary>();
+
+			var groupedChanged = changed.GroupBy(c => c.Date);
+			foreach (var date in groupedChanged)
 			{
-				scheduleDictionary = _jobParameters.Helper.Repository.LoadSchedule(period, scenario, this);
-				_scheduleCache[scenario].Add(period, scheduleDictionary);
+				var theDate = date.Key;
+				// detta måste fixas med tidszon
+				var utcDate = new DateTime(theDate.Date.Ticks, DateTimeKind.Utc);
+				var period = new DateTimePeriod(utcDate, utcDate.AddDays(1));
+				var scheduleDictionary = _jobParameters.Helper.Repository.LoadSchedule(period, scenario, this);
+				_dictionaryCashe.Add(period, scheduleDictionary);
 			}
-			
-			return scheduleDictionary;
+				
+			return _dictionaryCashe;
+		}
+
+		public IDictionary<DateTimePeriod, IScheduleDictionary> GetScheduleCashe()
+		{
+			return _dictionaryCashe;
 		}
 
         public IList<IScheduleDay> LoadSchedulePartsPerPersonAndDate(DateTimePeriod period, IScenario scenario)
@@ -427,6 +438,17 @@ namespace Teleopti.Analytics.Etl.Transformer
             return _schedulePartCollection;
         }
 
+		public IList<IScheduleDay> GetSchedulePartPerPersonAndDate(
+			IDictionary<DateTimePeriod, IScheduleDictionary> dictionary)
+		{
+			var ret = new List<IScheduleDay>();
+			foreach (var key in dictionary.Keys)
+			{
+				ret.AddRange(GetSchedulePartPerPersonAndDate(dictionary[key]));
+			}
+			return ret;
+		}
+
     	public IList<IMultiplicatorDefinitionSet> MultiplicatorDefinitionSetCollection
     	{
     		get {
@@ -495,6 +517,6 @@ namespace Teleopti.Analytics.Etl.Transformer
 
                 return null;
             }
-        }
+		}
     }
 }

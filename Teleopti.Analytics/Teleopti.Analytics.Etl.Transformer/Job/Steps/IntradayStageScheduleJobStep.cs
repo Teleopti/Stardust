@@ -36,19 +36,18 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 		    var rep = _jobParameters.Helper.Repository;
             rep.TruncateSchedule();
 
-			var changed = rep.ChangedDataOnStep(period, Result.CurrentBusinessUnit, Name);
-		    if (!changed.Any()) return 0;
-
-			var groupedList = changed.GroupBy(l => l.Date);
-
             foreach (var scenario in _jobParameters.StateHolder.ScenarioCollectionDeletedExcluded)
             {
 				if(!scenario.DefaultScenario) continue;
+				
+				var changed = rep.ChangedDataOnStep(period, Result.CurrentBusinessUnit, Name);
+				if (!changed.Any()) return 0;
+
                 //Get data from Raptor
-                var scheduleDictionary = _jobParameters.StateHolder.GetSchedules(changed, scenario);
+                var dictionary = _jobParameters.StateHolder.GetSchedules(changed, scenario);
 
                 // Extract one schedulepart per each person and date
-                var rootList = _jobParameters.StateHolder.GetSchedulePartPerPersonAndDate(scheduleDictionary);    
+				var rootList = _jobParameters.StateHolder.GetSchedulePartPerPersonAndDate(dictionary);    
 
                 _raptorTransformer.Transform(rootList, DateTime.Now, _jobParameters, new ThreadPool());
             }
