@@ -150,7 +150,7 @@ INCLUDE ([CreatedAt],[ExpiresAt])
 --Date: 2013-04-12
 --Desc: PBI #22523 - Speed up ETL Intrady load
 ----------------
-CREATE TABLE [stage].[stg_schedule_deleted](
+CREATE TABLE [stage].[stg_schedule_changed](
 	[schedule_date] [datetime] NOT NULL,
 	[person_code] [uniqueidentifier] NOT NULL,
 	[scenario_code] [uniqueidentifier] NOT NULL,
@@ -159,7 +159,7 @@ CREATE TABLE [stage].[stg_schedule_deleted](
 	[insert_date] [smalldatetime] NOT NULL,
 	[update_date] [smalldatetime] NOT NULL,
 	[datasource_update_date] [smalldatetime] NOT NULL
- CONSTRAINT [PK_stg_schedule_deleted] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_stg_schedule_changed] PRIMARY KEY CLUSTERED 
 (
 	[schedule_date] ASC,
 	[person_code] ASC,
@@ -167,7 +167,7 @@ CREATE TABLE [stage].[stg_schedule_deleted](
 )
 )
 
-ALTER TABLE [stage].[stg_schedule_deleted] ADD  CONSTRAINT [DF_stg_schedule_deleted_datasource_id]  DEFAULT ((1)) FOR [datasource_id]
-ALTER TABLE [stage].[stg_schedule_deleted] ADD  CONSTRAINT [DF_stg_schedule_deleted_insert_date]  DEFAULT (getdate()) FOR [insert_date]
-ALTER TABLE [stage].[stg_schedule_deleted] ADD  CONSTRAINT [DF_stg_schedule_deleted_update_date]  DEFAULT (getdate()) FOR [update_date]
+ALTER TABLE [stage].[stg_schedule_changed] ADD  CONSTRAINT [DF_stg_schedule_changed_datasource_id]  DEFAULT ((1)) FOR [datasource_id]
+ALTER TABLE [stage].[stg_schedule_changed] ADD  CONSTRAINT [DF_stg_schedule_changed_insert_date]  DEFAULT (getdate()) FOR [insert_date]
+ALTER TABLE [stage].[stg_schedule_changed] ADD  CONSTRAINT [DF_stg_schedule_changed_update_date]  DEFAULT (getdate()) FOR [update_date]
 GO

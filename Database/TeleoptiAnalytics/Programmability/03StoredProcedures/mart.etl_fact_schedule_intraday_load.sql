@@ -5,7 +5,7 @@ GO
 -- =============================================
 -- Author:		DJ
 -- Create date: 2013-04-11
--- Description:	Write schedule activities from staging table 'stg_schedule_intraday'
+-- Description:	Write schedule activities from staging table 'stg_schedule'
 --				to data mart table 'fact_schedule'.
 -- Updates:
 ------------------------------------------------
@@ -14,36 +14,14 @@ GO
 -- =============================================
 --exec mart.etl_fact_schedule_intraday_load '2009-02-02','2009-02-03'
 --exec mart.etl_fact_schedule_intraday_load @start_date='2010-10-30 00:00:00',@end_date='2010-11-03 00:00:00'
-CREATE PROCEDURE [mart].[etl_fact_schedule_intraday_load] 
+CREATE PROCEDURE [mart].[etl_fact_schedule_intraday_load]
 @business_unit_code uniqueidentifier,
 @scenario_code uniqueidentifier
 AS
 
--- 
-DECLARE @business_unit_id int
-DECLARE @scenario_id int
-
-SET @business_unit_id = (SELECT business_unit_id FROM mart.dim_business_unit WHERE business_unit_code = @business_unit_code)
-SET @scenario_id = (SELECT scenario_id FROM mart.dim_scenario WHERE scenario_code = @scenario_code)
-
---delete days removed from application
+--delete days changed from mart.fact_schedule (new, updated or deleted)
 DELETE fs
-FROM Stage.stg_schedule_deleted stg
-INNER JOIN mart.dim_person dp
-	ON stg.person_code	= dp.person_code
-INNER JOIN mart.dim_date dd
-	ON dd.date_date = stg.schedule_date
-INNER JOIN mart.dim_scenario ds
-	ON stg.scenario_code = ds.scenario_code
-INNER JOIN mart.fact_schedule fs
-	ON dd.date_id = fs.schedule_date_id
-	AND dp.person_id = fs.person_id
-	AND ds.scenario_id = fs.scenario_id
-WHERE fs.business_unit_id = @business_unit_id
-
---Delete existing
-DELETE fs
-FROM Stage.stg_schedule stg
+FROM Stage.stg_schedule_changed stg
 INNER JOIN
 	mart.dim_person		dp
 ON
@@ -64,7 +42,8 @@ INNER JOIN mart.fact_schedule fs
 	AND dp.person_id = fs.person_id
 	AND stg.interval_id = fs.interval_id
 	AND ds.scenario_id = fs.scenario_id
-WHERE fs.business_unit_id = @business_unit_id
+WHERE stg.business_unit_code = @business_unit_code
+AND stg.scenario_code = @scenario_code
 
 --insert new and updated
 INSERT INTO mart.fact_schedule
