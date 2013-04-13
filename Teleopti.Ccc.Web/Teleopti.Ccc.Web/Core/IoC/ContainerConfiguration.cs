@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using Autofac;
+using Autofac.Configuration;
 using Autofac.Integration.Mvc;
 using MbCache.Configuration;
 using Teleopti.Ccc.Domain.ApplicationLayer;
@@ -72,6 +73,8 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterType<EventsMessageSender>().As<IMessageSender>().SingleInstance();
 			builder.RegisterType<DoNotNotifySmsLink>().As<IDoNotifySmsLink>().SingleInstance();
 			builder.RegisterType<NewtonsoftJsonSerializer>().As<IJsonSerializer>().SingleInstance();
+
+			builder.RegisterModule(new ConfigurationSettingsReader());
 
 			return builder.Build();
 		}

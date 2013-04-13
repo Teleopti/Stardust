@@ -128,6 +128,8 @@
     <Compile Include="Bindings\Generic\PasswordPolicyStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Start\SignInPageStepDefinitions.cs" />
     <Compile Include="Bindings\StringContainsAnyLanguageResourceConstraint.cs" />
+    <Compile Include="Data\AllTags.cs" />
+    <Compile Include="Data\FileConfigurator.cs" />
     <Compile Include="Data\Paths.cs" />
     <Compile Include="Data\ServiceBusSetup.cs" />
     <Compile Include="Data\Setups\Generic\PersonAbsenceConfigurable.cs" />
