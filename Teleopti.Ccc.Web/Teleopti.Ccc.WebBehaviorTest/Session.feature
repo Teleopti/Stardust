@@ -3,7 +3,6 @@
 	As an agent
 	I want the application to handle my login session approprietly
 
-@ignore
 Scenario: Stay signed in after server restart
 	Given I am viewing an application page
 	Then I should be signed in
