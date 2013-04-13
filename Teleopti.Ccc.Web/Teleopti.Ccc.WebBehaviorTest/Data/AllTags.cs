@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.TestCommon;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data
 {
+	[Serializable]
 	public class AllTags : Dictionary<string, string>
 	{
 		public AllTags()
