@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 	[TestFixture]
 	public class CurrentHttpContextTest
 	{
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldReturnCurrentHttpContext()
 		{
 			var context = new HttpContext(new HttpRequest("file", "http://my.url.com/", "querystring"), new HttpResponse(new StringWriter()));
