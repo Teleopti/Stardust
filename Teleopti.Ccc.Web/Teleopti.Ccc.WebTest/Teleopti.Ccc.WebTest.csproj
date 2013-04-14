@@ -127,6 +127,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Areas\Anywhere\Controllers\PersonScheduleCommandControllerTest.cs" />
+    <Compile Include="Areas\Anywhere\Core\AutofacDependencyResolverTest.cs" />
     <Compile Include="Areas\Anywhere\Hubs\PersonScheduleHubTest.cs" />
     <Compile Include="Areas\Anywhere\Hubs\PersonScheduleViewModelFactoryTest.cs" />
     <Compile Include="Areas\Anywhere\Hubs\PersonScheduleViewModelMapperTest.cs" />
