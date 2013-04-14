@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.WebTest.Areas.SSO
 			HttpContext.Current = null;
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void BlehShouldHaveCoverageBahGah()
 		{
 			var target = new OpenIdProviderWapper(new OpenIdProvider());
