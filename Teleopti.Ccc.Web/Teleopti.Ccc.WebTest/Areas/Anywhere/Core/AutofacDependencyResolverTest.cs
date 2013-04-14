@@ -30,7 +30,8 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Core
 			target.GetService(typeof(UnregisteredService)).Should().Be.Null();
 			target.GetService(typeof(RegisteredService)).Should().Be.OfType<RegisteredService>();
 
-			target.GetServices(typeof (IMultipleRegisteredService)).Should().Have.Count.EqualTo(2);
+			target.GetServices(typeof(IMultipleRegisteredService)).Should().Have.Count.EqualTo(2);
+			target.GetServices(typeof(UnregisteredService)).Should().Have.Count.EqualTo(0);
 
 			// returns 0, a bug?
 			target.RegistrationsFor(new KeyedService("", typeof (IMultipleRegisteredService)), null);
