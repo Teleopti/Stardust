@@ -1,5 +1,7 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.Web.Core.Aop.Aspects;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -8,6 +10,14 @@ namespace Teleopti.Ccc.WebTest.Core.Aop.Aspects
 	[TestFixture]
 	public class UnitOfWorkAspectTest
 	{
+		[Test]
+		public void ShouldHaveAttribute()
+		{
+			var target = new UnitOfWorkAttribute();
+			target.Should().Be.AssignableTo<Attribute>();
+			target.AspectType.Should().Be(typeof(UnitOfWorkAspect));
+		}
+
 		[Test]
 		public void ShouldOpenUnitOfWorkBeforeInvokation()
 		{
