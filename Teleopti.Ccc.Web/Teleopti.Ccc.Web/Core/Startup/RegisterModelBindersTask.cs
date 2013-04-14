@@ -20,9 +20,11 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			_authenticatorTypes = authenticatorTypes;
 		}
 
+		public Func<ModelBinderDictionary> BindersGetter = () => ModelBinders.Binders;
+ 
 		public Task Execute()
 		{
-			RegisterModelBinders(ModelBinders.Binders);
+			RegisterModelBinders(BindersGetter());
 			return null;
 		}
 
