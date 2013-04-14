@@ -53,7 +53,6 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		[Test]
 		public void ShouldSaveRebuildReadModelForPersonWriteProtectionToQueue()
 		{
-			var session = _mocks.DynamicMock<IRunSql>();
 			var personWriteProtectionInfo = new PersonWriteProtectionInfo(new Person());
 			Guid[] ids = new Guid[] { };
 			var message = new PersonChangedMessage();
@@ -64,11 +63,11 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 
 			using (_mocks.Record())
 			{
-				Expect.Call(() => _saveToDenormalizationQueue.Execute(message, session)).IgnoreArguments();
+				Expect.Call(() => _saveToDenormalizationQueue.Execute(message)).IgnoreArguments();
 			}
 			using (_mocks.Playback())
 			{
-				_target.Execute(session, roots);
+				_target.Execute(roots);
 			}
 		}
 

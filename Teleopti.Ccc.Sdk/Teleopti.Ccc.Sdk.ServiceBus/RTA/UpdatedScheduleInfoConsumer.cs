@@ -1,5 +1,6 @@
 ﻿using System;
 using Rhino.ServiceBus;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Sdk.ServiceBus.TeleoptiRtaService;
 using Teleopti.Interfaces.Infrastructure;

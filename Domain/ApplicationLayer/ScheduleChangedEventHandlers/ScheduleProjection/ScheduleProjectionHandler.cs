@@ -4,12 +4,14 @@ using Teleopti.Interfaces.Messages.Rta;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection
 {
-	public class ScheduleProjectionHandler : IHandleEvent<ProjectionChangedEvent>, IHandleEvent<ProjectionChangedEventForScheduleProjection>
+	public class ScheduleProjectionHandler : 
+		IHandleEvent<ProjectionChangedEvent>, 
+		IHandleEvent<ProjectionChangedEventForScheduleProjection>
 	{
 		private readonly IScheduleProjectionReadOnlyRepository _scheduleProjectionReadOnlyRepository;
-	    private readonly IServiceBus _serviceBus;
+	    private readonly IPublishEventsFromEventHandlers _serviceBus;
 
-		public ScheduleProjectionHandler(IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository)
+		public ScheduleProjectionHandler(IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository, IPublishEventsFromEventHandlers serviceBus)
 		{
 			_scheduleProjectionReadOnlyRepository = scheduleProjectionReadOnlyRepository;
 		    _serviceBus = serviceBus;
@@ -24,9 +26,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 		private void createReadModel(ProjectionChangedEventBase @event)
 		{
 			if (!@event.IsDefaultScenario) return;
-			nearestLayerToNow.StartDateTime = DateTime.MaxValue;
-			using (var unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
-
+			var nearestLayerToNow = new ProjectionChangedEventLayer();
+			nearestLayerToNow.StartDateTime = DateTime.MaxValue; 
 			foreach (var scheduleDay in @event.ScheduleDays)
 			{
 				var date = new DateOnly(scheduleDay.Date);
@@ -50,11 +51,11 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 				}
 			}
 			if (nearestLayerToNow.StartDateTime != DateTime.MaxValue)
-				_serviceBus.Send(new UpdatedScheduleDay
+				_serviceBus.Publish(new UpdatedScheduleDay
 					{
-						Datasource = message.Datasource,
-						BusinessUnitId = message.BusinessUnitId,
-						PersonId = message.PersonId,
+						Datasource = @event.Datasource,
+						BusinessUnitId = @event.BusinessUnitId,
+						PersonId = @event.PersonId,
 						ActivityStartDateTime = nearestLayerToNow.StartDateTime,
 						ActivityEndDateTime = nearestLayerToNow.EndDateTime,
 						Timestamp = DateTime.UtcNow

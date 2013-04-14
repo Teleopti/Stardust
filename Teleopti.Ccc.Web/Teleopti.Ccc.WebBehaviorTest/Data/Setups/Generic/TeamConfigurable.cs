@@ -15,12 +15,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 		public Team Team { get; private set; }
 
 		public TeamConfigurable() : this(GlobalDataContext.Data().Data<CommonSite>().Site) { }
-		private TeamConfigurable(ISite site) { this.site = site; }
+
+		private TeamConfigurable(ISite site)
+		{
+			Site = GlobalDataContext.Data().Data<CommonSite>().Site.Description.Name;
+		}
 
 		public void Apply(IUnitOfWork uow)
 		{
-			Team = new Team
+			var siteRepository = new SiteRepository(uow);
 			var site = siteRepository.LoadAll().Single(c => c.Description.Name == Site);
+			Team = new Team
 			           	{
 			           		Description = new Description(Name),
 			           		Site = site

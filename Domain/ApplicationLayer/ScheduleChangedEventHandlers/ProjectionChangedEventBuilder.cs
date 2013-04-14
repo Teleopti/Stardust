@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 
 					var projection = scheduleDay.ProjectionService().CreateProjection();
 					var significantPart = scheduleDay.SignificantPart();
-					if (emptyScheduleOnInitialLoad<T>(message, significantPart)) continue;
+					if (emptyScheduleOnInitialLoad(message, significantPart)) continue;
 
 					var eventScheduleDay = new ProjectionChangedEventScheduleDay
 						{
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 			}
 		}
 
-		private static bool emptyScheduleOnInitialLoad<T>(ScheduleDenormalizeBase message, SchedulePartView significantPart) where T : DenormalizedScheduleBase, new()
+		private static bool emptyScheduleOnInitialLoad(ScheduleChangedEventBase message, SchedulePartView significantPart)
 		{
 			return message.SkipDelete && significantPart == SchedulePartView.None;
 		}

@@ -1,6 +1,7 @@
 ﻿using System;
 using Autofac;
 using Rhino.ServiceBus;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Forecasting.Export;
 using Teleopti.Ccc.Domain.Repositories;

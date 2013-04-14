@@ -57,9 +57,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                                         .ExecuteUpdate();
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design",
-         System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design",
-             "CA1062:Validate arguments of public methods", MessageId = "3")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3")]
         public void AddProjectedLayer(DateOnly belongsToDate, Guid scenarioId, Guid personId,
                                       ProjectionChangedEventLayer layer)
         {

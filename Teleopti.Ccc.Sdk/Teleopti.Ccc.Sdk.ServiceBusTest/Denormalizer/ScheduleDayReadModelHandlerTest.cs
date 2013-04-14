@@ -65,8 +65,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 				EndDateTime = period.EndDateTime,
 			};
 
-			Expect.Call(_unitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(uowFactory);
-			Expect.Call(uowFactory.CreateAndOpenUnitOfWork()).Return(uow);
 			_mocks.ReplayAll();
 			_target.Handle(new ProjectionChangedEvent
 			{
@@ -96,9 +94,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 								IsDefaultScenario = true,
 								ScheduleDays = new[] { denormalizedScheduleDay }
 			              	};
-
-			Expect.Call(_unitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(uowFactory);
-			Expect.Call(uowFactory.CreateAndOpenUnitOfWork()).Return(uow);
 
 			Expect.Call(_personRepository.Get(_person.Id.GetValueOrDefault())).Return(_person);
 			Expect.Call(_scheduleDayReadModelsCreator.GetReadModel(denormalizedScheduleDay,_person)).Return(model);
@@ -133,8 +128,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 								ScheduleDays = new []{denormalizedScheduleDay}
 			              	};
 
-			Expect.Call(_unitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(uowFactory);
-			Expect.Call(uowFactory.CreateAndOpenUnitOfWork()).Return(uow);
 			Expect.Call(_personRepository.Get(_person.Id.GetValueOrDefault())).Return(_person);
 			Expect.Call(_scheduleDayReadModelsCreator.GetReadModel(denormalizedScheduleDay,_person)).Return(model);
 			Expect.Call(_significantChangeChecker.SignificantChangeNotificationMessage(dateOnlyPeriod.StartDate, _person, model)).Return(mess);

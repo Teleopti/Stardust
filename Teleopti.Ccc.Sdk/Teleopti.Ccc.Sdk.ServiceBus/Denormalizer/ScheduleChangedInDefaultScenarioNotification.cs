@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Rhino.ServiceBus;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Interfaces.Messages.Denormalize;
 using log4net;
 using Teleopti.Ccc.Domain.Common;
@@ -9,7 +10,7 @@ using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 {
-	public class ScheduleChangedInDefaultScenarioNotification : ConsumerOf<DenormalizedSchedule>
+	public class ScheduleChangedInDefaultScenarioNotification : ConsumerOf<ProjectionChangedEvent>
 	{
 		private readonly static ILog Logger = LogManager.GetLogger(typeof (ScheduleChangedInDefaultScenarioNotification));
 		private readonly IMessageBroker _messageBroker;
@@ -25,7 +26,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public void Consume(DenormalizedSchedule message)
+		public void Consume(ProjectionChangedEvent message)
 		{
 			if (!message.IsDefaultScenario) return;
 			if (message.IsInitialLoad) return;

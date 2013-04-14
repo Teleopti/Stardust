@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using Rhino.ServiceBus;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Sdk.ServiceBus.Rta;
 using Teleopti.Ccc.Sdk.ServiceBus.TeleoptiRtaService;
