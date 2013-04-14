@@ -19,8 +19,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 		public void Execute(IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
-			WTFDEBUG.Log("EventsMessageSender");
-			modifiedRoots.ForEach(r => WTFDEBUG.Log("EventsMessageSender.Root " + r.Root.GetType().Name));
 			var events = (from i in modifiedRoots
 			              let r = i.Root
 			              let withEvents = r as IAggregateRootWithEvents
@@ -31,7 +29,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			              select e)
 				.ToArray();
 			_publisher.Publish(events);
-			WTFDEBUG.Log("/EventsMessageSender");
 		}
 	}
 }

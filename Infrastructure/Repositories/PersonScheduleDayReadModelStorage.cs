@@ -5,9 +5,6 @@ using NHibernate;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Infrastructure.ApplicationLayer;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Events;
@@ -71,7 +68,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void SaveReadModel(PersonScheduleDayReadModel model)
 		{
-			WTFDEBUG.Log("PersonScheduleDayReadModelStorage");
 			_unitOfWork.Session().CreateSQLQuery(
 				"INSERT INTO ReadModel.PersonScheduleDay (Id,PersonId,TeamId,SiteId,BusinessUnitId,ShiftStart,ShiftEnd,BelongsToDate,Shift) VALUES (:Id,:PersonId,:TeamId,:SiteId,:BusinessUnitId,:ShiftStart,:ShiftEnd,:BelongsToDate,:Shift)")
 				.SetGuid("Id", Guid.NewGuid())
@@ -85,12 +81,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.SetParameter("Shift", model.Shift,NHibernateUtil.StringClob)
 				.ExecuteUpdate();
 
-			_unitOfWork.Current().AfterSuccessfulTx(() =>
-				{
-					WTFDEBUG.Log("PersonScheduleDayReadModelStorage SendEventMessage");
-					_messageBroker.SendEventMessage(_currentDataSource.CurrentName(), model.BusinessUnitId, model.BelongsToDate, model.BelongsToDate, Guid.Empty, model.PersonId, typeof (Person), Guid.Empty, typeof (IPersonScheduleDayReadModel), DomainUpdateType.NotApplicable, null);
-				});
-			WTFDEBUG.Log("/PersonScheduleDayReadModelStorage");
+			_unitOfWork.Current().AfterSuccessfulTx(() => _messageBroker.SendEventMessage(_currentDataSource.CurrentName(), model.BusinessUnitId, model.BelongsToDate, model.BelongsToDate, Guid.Empty, model.PersonId, typeof (Person), Guid.Empty, typeof (IPersonScheduleDayReadModel), DomainUpdateType.NotApplicable, null));
 		}
 
 		public bool IsInitialized()

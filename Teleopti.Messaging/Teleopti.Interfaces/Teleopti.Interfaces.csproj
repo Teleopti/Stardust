@@ -887,7 +887,6 @@
     <Compile Include="Messages\RaptorDomainMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Domain\SettingValueTypes.cs" />
-    <Compile Include="WTFDEBUG.cs" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="..\..\CodeAnalysisDictionary.xml">

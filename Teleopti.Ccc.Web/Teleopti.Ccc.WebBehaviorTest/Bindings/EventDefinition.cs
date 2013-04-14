@@ -22,20 +22,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		private static void ResetScenarioCount() { _scenarioCount = 0; }
 		private static void IncrementScenarioCount() { _scenarioCount += 1; }
 
-		[BeforeScenario("WTFDEBUG")]
-		public static void WTFDEBUG()
-		{
-			Interfaces.WTFDEBUG.Clear();
-			Interfaces.WTFDEBUG.Log("BEFORE SCENARIO");
-		}
-
-
-		[AfterScenario("WTFDEBUG")]
-		public static void WTFDEBUGAfter()
-		{
-			Interfaces.WTFDEBUG.Log("AFTER SCENARIO");
-		}
-
 		[BeforeTestRun]
 		public static void BeforeTestRun()
 		{

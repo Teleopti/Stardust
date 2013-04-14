@@ -124,7 +124,6 @@ namespace Teleopti.Messaging.SignalR
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "SignalR")]
 		private void startHubConnection()
 		{
-			WTFDEBUG.Log("startHubConnection");
 			try
 			{
 				Exception exception = null;
@@ -145,7 +144,6 @@ namespace Teleopti.Messaging.SignalR
 				}
 				if (exception!=null)
 				{
-					WTFDEBUG.Log("startHubConnection.Exception " + exception);
 					throw exception;
 				}
 
@@ -156,23 +154,16 @@ namespace Teleopti.Messaging.SignalR
 			}
 			catch (AggregateException aggregateException)
 			{
-				WTFDEBUG.Log("startHubConnection.aggregateException " + aggregateException);
-				foreach (var innerException in aggregateException.InnerExceptions)
-				{
-					WTFDEBUG.Log("startHubConnection.aggregateException.InnerException " + innerException);
-				}
 				Logger.Error("An error happened when starting hub connection.", aggregateException);
 				throw new BrokerNotInstantiatedException("Could not start the SignalR message broker.", aggregateException);
 			}
 			catch (SocketException socketException)
 			{
-				WTFDEBUG.Log("startHubConnection.socketException " + socketException);
 				Logger.Error("An error happened when starting hub connection.", socketException);
 				throw new BrokerNotInstantiatedException("Could not start the SignalR message broker.", socketException);
 			}
 			catch (InvalidOperationException exception)
 			{
-				WTFDEBUG.Log("startHubConnection.exception " + exception);
 				Logger.Error("An error happened when starting hub connection.", exception);
 				throw new BrokerNotInstantiatedException("Could not start the SignalR message broker.", exception);
 			}

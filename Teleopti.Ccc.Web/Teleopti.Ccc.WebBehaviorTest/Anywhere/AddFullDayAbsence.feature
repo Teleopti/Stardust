@@ -36,7 +36,6 @@ Scenario: View form
 	And I click 'add full day absence'
 	Then I should see the add full day absence form
 
-@WTFDEBUG	
 Scenario: Add
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' have a (read model) shift with
