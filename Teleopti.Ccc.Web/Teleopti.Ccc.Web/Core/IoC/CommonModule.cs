@@ -53,10 +53,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 
 		private static void registerPortalTypes(ContainerBuilder builder)
 		{
-			builder.RegisterType<LayoutBaseViewModelFactory>().As<ILayoutBaseViewModelFactory>();
-			builder.RegisterType<PortalViewModelFactory>().As<IPortalViewModelFactory>();
 			builder.RegisterType<CultureSpecificViewModelFactory>().As<ICultureSpecificViewModelFactory>();
-			builder.RegisterType<DatePickerGlobalizationViewModelFactory>().As<IDatePickerGlobalizationViewModelFactory>();
 			builder.Register(c =>
 			                 	{
 			                 		if (DefinedLicenseDataFactory.LicenseActivator == null)

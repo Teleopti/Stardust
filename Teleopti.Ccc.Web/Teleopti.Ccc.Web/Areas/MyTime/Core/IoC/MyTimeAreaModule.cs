@@ -166,13 +166,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<LayoutBaseViewModelFactory>().As<ILayoutBaseViewModelFactory>();
 			builder.RegisterType<PortalViewModelFactory>().As<IPortalViewModelFactory>();
 			builder.RegisterType<DatePickerGlobalizationViewModelFactory>().As<IDatePickerGlobalizationViewModelFactory>();
-			builder.Register(c =>
-			                 	{
-			                 		if (DefinedLicenseDataFactory.LicenseActivator == null)
-			                 			throw new DataSourceException("Missing datasource (no *.hbm.xml file available)!");
-			                 		return DefinedLicenseDataFactory.LicenseActivator;
-			                 	})
-				.As<ILicenseActivator>();
 		}
 
 		private static void registerCommonTypes(ContainerBuilder builder)
