@@ -50,12 +50,12 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Debug\Teleopti.Ccc.Sdk.Common.XML</DocumentationFile>
     <NoWarn>1591</NoWarn>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+      <CodeAnalysisRuleSet>$(SolutionDir)\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -66,12 +66,12 @@
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Release\Teleopti.Ccc.Sdk.Common.XML</DocumentationFile>
     <NoWarn>1591</NoWarn>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+      <CodeAnalysisRuleSet>$(SolutionDir)\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x86\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <DocumentationFile>bin\Debug\Teleopti.Ccc.Sdk.Common.XML</DocumentationFile>
     <NoWarn>1591</NoWarn>
     <DebugType>full</DebugType>
@@ -79,8 +79,7 @@
     <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
     <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
     <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <RunCodeAnalysis>false</RunCodeAnalysis>
+      <CodeAnalysisRuleSet>$(SolutionDir)\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <OutputPath>bin\x86\Release\</OutputPath>
@@ -93,7 +92,7 @@
     <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
     <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
     <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+      <CodeAnalysisRuleSet>$(SolutionDir)\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="log4net">
@@ -153,9 +152,11 @@
     <Compile Include="DataTransferObject\Commands\ChildSkillMappingDto.cs" />
     <Compile Include="DataTransferObject\Commands\ChangePersonEmploymentCommandDto.cs" />
     <Compile Include="DataTransferObject\Commands\ClearMainShiftCommandDto.cs" />
+    <Compile Include="DataTransferObject\Commands\QuickForecastCommandDto.cs" />
     <Compile Include="DataTransferObject\Commands\DenormalizeNotificationCommandDto.cs" />
     <Compile Include="DataTransferObject\Commands\DenormalizeScheduleCommandDto.cs" />
     <Compile Include="DataTransferObject\Commands\ImportForecastsFileCommandDto.cs" />
+    <Compile Include="DataTransferObject\Commands\SendPushMessageToPeopleCommandDto.cs" />
     <Compile Include="DataTransferObject\Commands\WorkloadOnSkillSelectionDto.cs" />
     <Compile Include="DataTransferObject\Commands\SaveAgentPortalSettingsCommandDto.cs" />
     <Compile Include="DataTransferObject\Commands\EmployPersonCommandDto.cs" />
@@ -176,9 +177,11 @@
     <Compile Include="DataTransferObject\DefinitionSetDto.cs" />
     <Compile Include="DataTransferObject\DefinitionSetLayerDto.cs" />
     <Compile Include="DataTransferObject\ImportForecastsOptionsDto.cs" />
+    <Compile Include="DataTransferObject\OptionalValueDto.cs" />
     <Compile Include="DataTransferObject\PayrollResultDetailDto.cs" />
     <Compile Include="DataTransferObject\PayrollResultDto.cs" />
     <Compile Include="DataTransferObject\GroupPageDto.cs" />
+    <Compile Include="DataTransferObject\PersonOptionalValuesDto.cs" />
     <Compile Include="DataTransferObject\PersonWriteProtectionDto.cs" />
     <Compile Include="DataTransferObject\PlanningTimeBankDto.cs" />
     <Compile Include="DataTransferObject\PublicNoteLoadOptionDto.cs" />
@@ -198,6 +201,7 @@
     <Compile Include="DataTransferObject\QueryDtos\GetMultiplicatorDefinitionSetShiftAllowanceDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetMultiplicatorOvertimeQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetMultiplicatorShiftAllowanceQueryDto.cs" />
+    <Compile Include="DataTransferObject\QueryDtos\GetPeopleOptionalValuesByPersonIdQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetSchedulesByGroupPageGroupQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetSchedulesBySiteQueryDto.cs" />
     <Compile Include="DataTransferObject\QueryDtos\GetAllScenariosQueryDto.cs" />

@@ -32,8 +32,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
         private StaffingThreshold _aggregatedStaffingThreshold = StaffingThreshold.Ok;
 
         private static readonly object Locker = new object();
-
-        #endregion Fields 
+	    
+	    #endregion Fields 
 
 		#region Constructors (2) 
 
@@ -346,13 +346,20 @@ namespace Teleopti.Ccc.Domain.Forecasting
             IntraIntervalRootMeanSquare = 0;
         }
 
-        #endregion Properties 
+	    public void SetSkillDay(ISkillDay skillDay)
+	    {
+			SkillDay = skillDay;
+	    }
+
+	    public ISkillDay SkillDay { get; private set; }
+
+	    #endregion Properties 
 
 		#region Methods 
 
         private void CalculateEstimatedServiceLevel()
         {
-            ISkillDay parent = (ISkillDay)Parent;
+            var parent = SkillDay;
             
             //Never over 100%, if demand = 0 then 100 if Email etc
             if (parent != null && parent.Skill.SkillType.ForecastSource != ForecastSource.InboundTelephony && parent.Skill.SkillType.ForecastSource!=ForecastSource.Retail)

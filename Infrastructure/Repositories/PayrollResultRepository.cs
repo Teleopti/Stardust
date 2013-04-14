@@ -28,6 +28,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
+				public PayrollResultRepository(ICurrentUnitOfWork currentUnitOfWork)
+					: base(currentUnitOfWork)
+	    {
+		    
+	    }
+
         public ICollection<IPayrollResult> GetPayrollResultsByPayrollExport(IPayrollExport payrollExport)
         {
             ICollection<IPayrollResult> retList = Session.CreateCriteria(typeof (PayrollResult))

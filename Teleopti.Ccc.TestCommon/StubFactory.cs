@@ -6,6 +6,7 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -41,6 +42,12 @@ namespace Teleopti.Ccc.TestCommon
 		public IScheduleDay ScheduleDayStub()
 		{
 			return ScheduleDayStub(new DateTime(2000, 1, 1, 0, 0, 0, DateTimeKind.Utc));
+		}
+
+		public IScheduleDay ScheduleDayStub(DateTimePeriod totalPeriod)
+		{
+			return ScheduleDayStub(totalPeriod.StartDateTime, new Person(), SchedulePartView.MainShift, null, null, null, null,
+			                       null, totalPeriod);
 		}
 
 		public IScheduleDay ScheduleDayStub(DateTime date)
@@ -85,7 +92,7 @@ namespace Teleopti.Ccc.TestCommon
 
 		public IScheduleDay ScheduleDayStub(DateTime date, IPerson person, SchedulePartView significantPartToDisplay, IPersonMeeting personMeeting)
 		{
-			return ScheduleDayStub(date, person, significantPartToDisplay, null, null, null, null, new[] {personMeeting});
+			return ScheduleDayStub(date, person, significantPartToDisplay, null, null, null, null, new[] {personMeeting}, null);
 		}
 
 		public IScheduleDay ScheduleDayStub(DateTime date, SchedulePartView significantPartToDisplay, IEnumerable<IPersonAbsence> personAbsences)
@@ -106,10 +113,10 @@ namespace Teleopti.Ccc.TestCommon
 		public IScheduleDay ScheduleDayStub(DateTime date, IPerson person, SchedulePartView significantPartToDisplay, IPersonDayOff personDayOff, IPersonAssignment personAssignment, IEnumerable<IPersonAbsence> personAbsences, IPublicNote publicNote)
 		{
 			return ScheduleDayStub(date, person, significantPartToDisplay, personDayOff, personAssignment, personAbsences,
-								   publicNote, null);
+								   publicNote, null, null);
 		}
 
-		public IScheduleDay ScheduleDayStub(DateTime date, IPerson person, SchedulePartView significantPartToDisplay, IPersonDayOff personDayOff, IPersonAssignment personAssignment, IEnumerable<IPersonAbsence> personAbsences, IPublicNote publicNote, IEnumerable<IPersonMeeting> meetings)
+		public IScheduleDay ScheduleDayStub(DateTime date, IPerson person, SchedulePartView significantPartToDisplay, IPersonDayOff personDayOff, IPersonAssignment personAssignment, IEnumerable<IPersonAbsence> personAbsences, IPublicNote publicNote, IEnumerable<IPersonMeeting> meetings, DateTimePeriod? totalPeriod)
 		{
 			var timeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
 			                       
@@ -119,6 +126,7 @@ namespace Teleopti.Ccc.TestCommon
 			scheduleDay.Stub(x => x.SignificantPartForDisplay()).Return(significantPartToDisplay);
 			scheduleDay.Stub(x => x.SignificantPart()).Return(significantPartToDisplay);
 			scheduleDay.Stub(x => x.TimeZone).Return(timeZone);
+			scheduleDay.Stub(x => x.TotalPeriod()).Return(totalPeriod);
 			//scheduleDay.Stub(x => x.RestrictionCollection()).Return(new IRestrictionBase[] {});
 			if (person != null)
 				scheduleDay.Stub(x => x.Person).Return(person);
@@ -295,6 +303,15 @@ namespace Teleopti.Ccc.TestCommon
 			projectionMerger.Stub(x => x.MergedCollection(visualLayers, null)).IgnoreArguments().Return(visualLayers);
 			var projection = new VisualLayerCollection(null, visualLayers, projectionMerger);
 			return projection;
+		}
+
+		public IVisualLayerCollection ProjectionStub(DateTimePeriod period)
+		{
+			return
+				ProjectionStub(new List<IVisualLayer>
+					{
+						new VisualLayer(new Activity("for test"), period, new Activity("also for test"), new Person())
+					});
 		}
 
 		public IVisualLayer VisualLayerStub() { return VisualLayerStub(Color.Transparent); }

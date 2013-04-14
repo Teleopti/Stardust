@@ -24,6 +24,13 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
+				public PersonAbsenceAccountRepository(ICurrentUnitOfWork currentUnitOfWork)
+					: base(currentUnitOfWork)
+	    {
+		    
+	    }
+
+
         public IDictionary<IPerson, IPersonAccountCollection> LoadAllAccounts()
         {
             var ret = new dic(new Dictionary<IPerson, IPersonAccountCollection>());

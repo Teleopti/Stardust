@@ -103,13 +103,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.That(LazyLoadingManager.IsInitialized(teams.First().Site), Is.True);
 		}
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
-        public void ShouldCreateRepositoryWithUnitOfWorkFactory()
-        {
-            ITeamRepository repository = new TeamRepository(UnitOfWorkFactory.Current);
-            Assert.IsNotNull(repository);
-        }
-
         protected override Repository<ITeam> TestRepository(IUnitOfWork unitOfWork)
         {
             return new TeamRepository(unitOfWork);

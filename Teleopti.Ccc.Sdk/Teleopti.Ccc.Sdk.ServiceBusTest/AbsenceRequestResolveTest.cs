@@ -15,7 +15,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
     [TestFixture]
     public class AbsenceRequestResolveTest
     {
-	    private ContainerBuilder builder;
 
         [Test]
         public void ShouldResolveNewAbsenceRequestConsumer()

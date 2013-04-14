@@ -46,9 +46,6 @@ Teleopti.MyTimeWeb.Preference.PreferencesAndSchedulesViewModel = function (ajax,
 						dayViewModel.ReadAbsence(element.Absence);
 					if (element.PersonAssignment)
 						dayViewModel.ReadPersonAssignment(element.PersonAssignment);
-					if (element.Fulfilled != null) {
-						dayViewModel.Fulfilled(element.Fulfilled);
-					}
 					dayViewModel.Feedback(element.Feedback);
 					if (element.StyleClassName)
 						dayViewModel.StyleClassName(element.StyleClassName);

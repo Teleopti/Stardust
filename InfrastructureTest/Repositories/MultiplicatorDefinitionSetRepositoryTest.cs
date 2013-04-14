@@ -115,12 +115,5 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
             Assert.AreEqual(1,multiplicatorDefinitionSet.DefinitionCollection.Count);
         }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
-        public void ShouldCreateRepositoryWithUnitOfWorkFactory()
-        {
-            var repository = new MultiplicatorDefinitionSetRepository(UnitOfWorkFactory.Current);
-            Assert.IsNotNull(repository);
-        }
     }
 }

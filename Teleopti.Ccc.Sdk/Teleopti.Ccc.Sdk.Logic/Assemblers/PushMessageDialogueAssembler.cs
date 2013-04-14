@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Globalization;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Interfaces.Domain;
@@ -32,7 +33,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
             CultureInfo c = new CultureInfo(cultureId);
             if (entity.CreatedOn != null)
                 dto.OriginalDate = TimeZoneHelper.ConvertFromUtc((DateTime)entity.CreatedOn, TimeZoneInfo).ToString(c);
-            dto.Message = entity.Message;
+            dto.Message = entity.Message(new NormalizeText());
 
             return dto;
         }

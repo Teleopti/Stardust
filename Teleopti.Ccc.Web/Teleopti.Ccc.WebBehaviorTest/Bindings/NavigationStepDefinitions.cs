@@ -127,16 +127,25 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[When(@"I view team schedule")]
 		public void WhenIViewTeamSchedule()
 		{
-			TestControllerMethods.Logon();
+			TestControllerMethods.LogonWithReadModelsUpdated();
 			Navigation.GotoTeamSchedule();
 		}
 
 		[Given(@"I am viewing team schedule for tomorrow")]
 		public void GivenIAmViewingTeamScheduleForTomorrow()
 		{
-			TestControllerMethods.Logon();
+			TestControllerMethods.LogonWithReadModelsUpdated();
 			Navigation.GotoTeamSchedule(DateTime.Today.AddDays(1));
 		}
+
+		[When(@"I view team schedule for '(.*)'")]
+		public void WhenIViewTeamScheduleFor(DateTime date)
+		{
+			TestControllerMethods.LogonWithReadModelsUpdated();
+			Navigation.GotoTeamSchedule(date);
+		}
+
+
 
 		[Given(@"I am viewing requests")]
 		[When(@"I am viewing requests")]

@@ -33,6 +33,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
+				public MeetingRepository(ICurrentUnitOfWork currentUnitOfWork)
+					: base(currentUnitOfWork)
+	    {
+		    
+	    }
+
         /// <summary>
         /// Find by period, scenario
         /// </summary>

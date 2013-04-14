@@ -67,7 +67,8 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: HenryG
         /// Created date: 2010-04-19
         /// </remarks>
-        bool Validate(IAbsenceRequest absenceRequest);
+        IValidatedRequest Validate(IAbsenceRequest absenceRequest);
+        //bool Validate(IAbsenceRequest absenceRequest);
 
         /// <summary>
         /// Creates a new instance of the same validator type. To avoid threading issues.
@@ -83,5 +84,17 @@ namespace Teleopti.Interfaces.Domain
         /// Specification for validate whether an absence request exceeds the allowance or not.
         /// </summary>
         IBudgetGroupAllowanceSpecification BudgetGroupAllowanceSpecification { get; set; }
-    }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        IBudgetGroupAllowanceCalculator BudgetGroupAllowanceCalculator { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "HeadCount")]
+        IBudgetGroupHeadCountSpecification BudgetGroupHeadCountSpecification { get; set; }
+
+     }
 }

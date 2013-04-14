@@ -3,22 +3,33 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
-    /// <summary>
-    /// Static class for UnitOfWork
-    /// </summary>
-    public static class UnitOfWorkFactory
-    {
-        public static IUnitOfWorkFactory Current
-        {
-            get
-            {
+	/// <summary>
+	/// Static class for UnitOfWork
+	/// </summary>
+	public static class UnitOfWorkFactory
+	{
+		//avoid using this one
+		public static IUnitOfWorkFactory Current
+		{
+			get
+			{
 				if (TeleoptiPrincipal.Current == null)
 				{
 					return null;
 				}
-                var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity);
-                return identity.DataSource.Application;
-            }
-        }
-    }
+				var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity);
+				return identity.DataSource.Application;
+			}
+		}
+
+		public static ICurrentUnitOfWorkFactory CurrentUnitOfWorkFactory()
+		{
+			return new CurrentUnitOfWorkFactory(new CurrentTeleoptiPrincipal());
+		}
+
+		public static ICurrentUnitOfWork CurrentUnitOfWork()
+		{
+			return new CurrentUnitOfWork(CurrentUnitOfWorkFactory());
+		}
+	}
 }

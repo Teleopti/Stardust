@@ -241,7 +241,7 @@
     <value>Propriétés Agent</value>
   </data>
   <data name="All" xml:space="preserve">
-    <value>Tous</value>
+    <value>Tout</value>
   </data>
   <data name="AllSelection" xml:space="preserve">
     <value>&lt; Tous &gt;</value>
@@ -283,7 +283,7 @@
     <value>Moyenne Appels</value>
   </data>
   <data name="AverageTalkTime" xml:space="preserve">
-    <value>Durée moyenne de communication</value>
+    <value>Durée de communication moyenne</value>
   </data>
   <data name="AverageTasks" xml:space="preserve">
     <value>Moyenne tâches</value>
@@ -1060,7 +1060,7 @@
     <value>Sélectionner site:</value>
   </data>
   <data name="ServiceLevelParenthesisPercentSign" xml:space="preserve">
-    <value>Service Level (%)</value>
+    <value>Niveau de Service (%)</value>
   </data>
   <data name="ServiceLevelPercentSign" xml:space="preserve">
     <value>Niveau de Service %</value>
@@ -2662,7 +2662,7 @@
     <value>Min</value>
   </data>
   <data name="RuleSets" xml:space="preserve">
-    <value>Règle d'horaires</value>
+    <value>Règles d'horaires</value>
   </data>
   <data name="ShiftBags" xml:space="preserve">
     <value>Banque d'horaires</value>
@@ -3340,7 +3340,7 @@
     <value>Exemple:</value>
   </data>
   <data name="FormatColon" xml:space="preserve">
-    <value>Format:</value>
+    <value>Culture:</value>
   </data>
   <data name="OptionalColumnColon" xml:space="preserve">
     <value>Colonne optionnelle:</value>
@@ -3706,7 +3706,7 @@
     <value>Temps planifié par agent</value>
   </data>
   <data name="ResReportServiceLevelAndAgentsReady" xml:space="preserve">
-    <value>Niveau de service et Agents Ready</value>
+    <value>Niveau de Service et Agents Ready</value>
   </data>
   <data name="ResReportShiftCategoryAndDayAbsencePerAgent" xml:space="preserve">
     <value>Catégorie d'Horaire et Absence Journée Entière par Agent</value>
@@ -4366,7 +4366,7 @@
     <value>Période précédente</value>
   </data>
   <data name="ShowLastNumberOfDaysColon" xml:space="preserve">
-    <value>Montrer dernier nombre de jours:</value>
+    <value>Afficher requêtes depuis (jours):</value>
   </data>
   <data name="OtherUser" xml:space="preserve">
     <value>Autre utilisateur</value>
@@ -5554,7 +5554,7 @@
     <value>Début tard</value>
   </data>
   <data name="AmpersandFindNext" xml:space="preserve">
-    <value>&amp;Trouversuivante</value>
+    <value>&amp;Suivant</value>
   </data>
   <data name="AmpersandReplace" xml:space="preserve">
     <value>&amp;Remplacer</value>
@@ -8273,7 +8273,7 @@ Si cette erreur de validation persiste vous devez vérifier que votre mot de pas
     <value>Prévisions long-terme</value>
   </data>
   <data name="ManageRuleSets" xml:space="preserve">
-    <value>Gérer les régles d'horaires</value>
+    <value>Gérer les règles d'horaires</value>
   </data>
   <data name="ManualAgents" xml:space="preserve">
     <value>Agents (Supplantation manuelle)</value>
@@ -8658,5 +8658,103 @@ Si cette erreur de validation persiste vous devez vérifier que votre mot de pas
   </data>
   <data name="ResShiftStartDateToColon" xml:space="preserve">
     <value>Date À (shifts débutant)</value>
+  </data>
+  <data name="DataHasBeenDeleted" xml:space="preserve">
+    <value>Erreur lors de la sauvegarde des changements. Un autre utilisateur a probablement supprimé les données que vous utilisiez. Pour préserver la cohérence des données, le formulaire va être fermé. Désolé, vos changements ont été perdus.</value>
+  </data>
+  <data name="Little" xml:space="preserve">
+    <value>Léger</value>
+  </data>
+  <data name="Medium" xml:space="preserve">
+    <value>Médian</value>
+  </data>
+  <data name="Much" xml:space="preserve">
+    <value>Fort</value>
+  </data>
+  <data name="QuickForecast" xml:space="preserve">
+    <value>Prévisions rapides</value>
+  </data>
+  <data name="SeasonalityDataRange" xml:space="preserve">
+    <value>Marge de Saisonnalité et Tendances</value>
+  </data>
+  <data name="SmoothingStyleColon" xml:space="preserve">
+    <value>Type de lissage:</value>
+  </data>
+  <data name="TemplatesHistoricalDataRange" xml:space="preserve">
+    <value>Sélectionner données historiques pour Modèles</value>
+  </data>
+  <data name="ShowInfoMessages" xml:space="preserve">
+    <value>Montrer Messages Info</value>
+  </data>
+  <data name="Errors" xml:space="preserve">
+    <value>Erreurs</value>
+  </data>
+  <data name="TheQuickForecatWillStartInBackgroundMessage" xml:space="preserve">
+    <value>Les Prévisions rapides vont être démarrées comme tâche d'arrière-plan lorsque cet assistant sera fini, visualisez l'historique des tâches pour le statut.</value>
+  </data>
+  <data name="CannotDisplayScheduleWhenShiftTradeStatusIsNew" xml:space="preserve">
+    <value>Ne peut pas afficher le planning lorsque le statut de la requête d'échange est Nouvelle ou Approuvée.</value>
+  </data>
+  <data name="NewTemplateName" xml:space="preserve">
+    <value>Nouveau nom de Modèle</value>
+  </data>
+  <data name="EmptyTemplateName" xml:space="preserve">
+    <value>Vider le nom du Modèle de préférence</value>
+  </data>
+  <data name="Name50CharactersLimit" xml:space="preserve">
+    <value>Le nom ne doit pas être vide ni plus long que 50 caractères.</value>
+  </data>
+  <data name="InsufficientStaffingDays" xml:space="preserve">
+    <value>Staffing insuffisant pour:</value>
+  </data>
+  <data name="InsufficientStaffingHours" xml:space="preserve">
+    <value>Staffing insuffisant sur: {0} à </value>
+  </data>
+  <data name="NoBudgetDefineForSomeRequestedDays" xml:space="preserve">
+    <value>Un jour ou plus de cette période demandée {0} n'a pas de permission budgetée.</value>
+  </data>
+  <data name="NoBudgetForThisPeriod" xml:space="preserve">
+    <value>Il n'y a pas de budget pour cette période {0}</value>
+  </data>
+  <data name="NoBudgetGroupForPerson" xml:space="preserve">
+    <value>Il n'y a pas de groupe budget pour la personne: {0}</value>
+  </data>
+  <data name="NotEnoughBudgetAllowanceForTheDay" xml:space="preserve">
+    <value>Il n'y a pas assez de permission budgetée pour le jour {0}.</value>
+  </data>
+  <data name="RequestDenyReasonClosedPeriodBeforeSendRequest" xml:space="preserve">
+    <value>Votre Demande a été refusée. La Période n'est pas ouverte à l'envoi de Demandes.</value>
+  </data>
+  <data name="RequestDenyReasonPeriodOpenAfterSendRequest" xml:space="preserve">
+    <value>Votre Demande a été refusée. Le Jour n'est pas ouvert aux Demandes. La prochaine date ouverte est {0}.</value>
+  </data>
+  <data name="SeriousUnderStaffingHours" xml:space="preserve">
+    <value>Sous-dimensionnement critique sur : {0} à</value>
+  </data>
+  <data name="CurrentNumberOfShifts" xml:space="preserve">
+    <value>Nombre d'horaires actuel:</value>
+  </data>
+  <data name="GeneratingShifts" xml:space="preserve">
+    <value>Génère les horaires</value>
+  </data>
+  <data name="ShiftGenerationStop" xml:space="preserve">
+    <value>Stop! Ces règles sont trop complexes et les horaires n'ont pas pu être générés dans la limite maximale.
+Aucun horaire de cette règle d'horaires ne sera disponible pour la planification et l'optimisation.
+Réduisez la complexité pour utiliser ces horaires.</value>
+  </data>
+  <data name="ShiftGenerationWarning" xml:space="preserve">
+    <value>Avertissement! Générer des horaires selon ces règles prend trop de temps. Cela va impacter la performance de planification et d'optimisation par la suite.</value>
+  </data>
+  <data name="TooComplexRuleset" xml:space="preserve">
+    <value>est une règle d'horaires trop complexe!</value>
+  </data>
+  <data name="GenerateForecastFor" xml:space="preserve">
+    <value>Génère prévisions pour</value>
+  </data>
+  <data name="InProcess" xml:space="preserve">
+    <value>En cours...</value>
+  </data>
+  <data name="SelectedAbsences" xml:space="preserve">
+    <value>Absences sélectionnées</value>
   </data>
 </root>

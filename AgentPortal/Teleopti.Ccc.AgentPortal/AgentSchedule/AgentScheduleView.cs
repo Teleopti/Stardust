@@ -147,10 +147,8 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
                         newCulture.DateTimeFormat.FirstDayOfWeek;
             _scheduleControl.Appearance.MonthCalendarStartDayOfWeek =
                         newCulture.DateTimeFormat.FirstDayOfWeek;
-            _scheduleControl.Calendar.CalenderGrid.Model.TableStyle.CultureInfo = cultureFormat;
-            _scheduleControl.Culture = newCulture;
-
-            _scheduleControl.ISO8601CalenderFormat = Iso8601Helper.UseIso8601Format(cultureFormat);
+			_scheduleControl.Calendar.CalenderGrid.Model.TableStyle.CultureInfo = cultureUi;
+			_scheduleControl.ISO8601CalenderFormat = Iso8601Helper.UseIso8601Format(cultureUi);
         }
 
         /// <summary>

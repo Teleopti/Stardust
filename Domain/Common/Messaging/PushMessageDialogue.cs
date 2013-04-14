@@ -48,21 +48,18 @@ namespace Teleopti.Ccc.Domain.Common.Messaging
             protected set { _isReplied = value; }
         }
 
-        public virtual string Message
-        {
-            get
-            {
-                if (_pushMessage.TranslateMessage)
-                {
-                   string ret = UserTexts.Resources.ResourceManager.GetString(_pushMessage.GetMessage(new NoFormatting()),
-                                                                  Receiver.PermissionInformation.UICulture());
-                    if (!string.IsNullOrEmpty(ret)) return ret;
-                }
-                return _pushMessage.GetMessage(new NoFormatting());
-            }
-        }
+	    public virtual string Message(ITextFormatter textFormatter)
+	    {
+		    if (_pushMessage.TranslateMessage)
+		    {
+			    string ret = UserTexts.Resources.ResourceManager.GetString(_pushMessage.GetMessage(new NoFormatting()),
+			                                                               Receiver.PermissionInformation.UICulture());
+			    if (!string.IsNullOrEmpty(ret)) return ret;
+		    }
+		    return _pushMessage.GetMessage(textFormatter);
+	    }
 
-        public virtual void DialogueReply(string message, IPerson sender)
+	    public virtual void DialogueReply(string message, IPerson sender)
         {
             InParameter.NotNull("sender", sender);
             if (!_pushMessage.AllowDialogueReply)

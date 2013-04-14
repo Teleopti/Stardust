@@ -36,6 +36,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 		}
 
+		public PersonRequestRepository(ICurrentUnitOfWork currentUnitOfWork)
+			: base(currentUnitOfWork)
+		{
+			
+		}
+
 		/// <summary>
 		/// Finds the specified person's request for given period.
 		/// </summary>

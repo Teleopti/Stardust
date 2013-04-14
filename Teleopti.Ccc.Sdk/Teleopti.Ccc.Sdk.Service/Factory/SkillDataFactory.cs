@@ -17,87 +17,88 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Sdk.WcfService.Factory
 {
-    internal static class SkillDataFactory
-    {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-        internal static ICollection<SkillDayDto> GetSkillData(DateOnlyDto dateOnlyDto, string timeZoneId)
-        {
-            IRepositoryFactory repositoryFactory = new RepositoryFactory();
-            ICollection<SkillDayDto> returnList = new List<SkillDayDto>();
-            TimeZoneInfo timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById(timeZoneId));
-            using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-            {
-                var scenarioRepository = repositoryFactory.CreateScenarioRepository(unitOfWork);
-                IScenario requestedScenario = scenarioRepository.LoadDefaultScenario();
-                
-                DateTimePeriod period = PreparePeriod(timeZoneInfo, dateOnlyDto);
-                DateTimePeriod periodForResourceCalc = new DateTimePeriod(period.StartDateTime.AddDays(-1), period.EndDateTime.AddDays(1));
+	internal static class SkillDataFactory
+	{
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+		internal static ICollection<SkillDayDto> GetSkillData(DateOnlyDto dateOnlyDto, string timeZoneId)
+		{
+			IRepositoryFactory repositoryFactory = new RepositoryFactory();
+			ICollection<SkillDayDto> returnList = new List<SkillDayDto>();
+			TimeZoneInfo timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById(timeZoneId));
+			using (IUnitOfWork unitOfWork = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				IScenarioRepository scenarioRepository = repositoryFactory.CreateScenarioRepository(unitOfWork);
+				IScenario requestedScenario = scenarioRepository.LoadDefaultScenario();
 
-                IPersonRepository personRepository = repositoryFactory.CreatePersonRepository(unitOfWork);
-                using(SchedulingResultStateHolder schedulingResultStateHolder = new SchedulingResultStateHolder())
-                {
-                    LoadSchedulingStateHolderForResourceCalculation loader =
-                        new LoadSchedulingStateHolderForResourceCalculation(personRepository,
-                                                                            repositoryFactory.
-                                                                                CreatePersonAbsenceAccountRepository(
-                                                                                    unitOfWork),
-                                                                            repositoryFactory.CreateSkillRepository(
-                                                                                unitOfWork),
-                                                                            repositoryFactory.CreateWorkloadRepository(
-                                                                                unitOfWork),
-                                                                            repositoryFactory.CreateScheduleRepository(
-                                                                                unitOfWork), schedulingResultStateHolder,
-                                                                            new PeopleAndSkillLoaderDecider(
-                                                                                personRepository),
-                                                                            new SkillDayLoadHelper(
-                                                                                repositoryFactory.
-                                                                                    CreateSkillDayRepository
-                                                                                    (unitOfWork),
-                                                                                repositoryFactory.
-                                                                                    CreateMultisiteDayRepository
-                                                                                    (
-                                                                                        unitOfWork)));
-                    loader.Execute(requestedScenario, periodForResourceCalc,
-                                   personRepository.FindPeopleInOrganization(periodForResourceCalc.ToDateOnlyPeriod(timeZoneInfo), true));
+				DateTimePeriod period = PreparePeriod(timeZoneInfo, dateOnlyDto);
+				DateTimePeriod periodForResourceCalc = new DateTimePeriod(period.StartDateTime.AddDays(-1), period.EndDateTime.AddDays(1));
 
-                	var resourceOptimizationHelper = new ResourceOptimizationHelper(schedulingResultStateHolder,
-                	                                                                new OccupiedSeatCalculator(
-                	                                                                	new SkillVisualLayerCollectionDictionaryCreator
-                	                                                                		(),
-                	                                                                	new SeatImpactOnPeriodForProjection()),
-                	                                                                new NonBlendSkillCalculator(
-                	                                                                	new NonBlendSkillImpactOnPeriodForProjection
-                	                                                                		()), new SingleSkillDictionary());
-                    foreach (DateOnly dateTime in periodForResourceCalc.ToDateOnlyPeriod(timeZoneInfo).DayCollection())
-                    {
-                        resourceOptimizationHelper.ResourceCalculateDate(dateTime, true, true);
-                    }
-                    foreach (ISkill skill in schedulingResultStateHolder.Skills)
-                    {
-                        SkillDayDto skillDayDto = new SkillDayDto();
-                        skillDayDto.DisplayDate = dateOnlyDto;
-                        IList<ISkillStaffPeriod> skillStaffPeriods =
-                            schedulingResultStateHolder.SkillStaffPeriodHolder.SkillStaffPeriodList(
-                                new List<ISkill> {skill}, period);
-                        skillDayDto.Esl = SkillStaffPeriodHelper.EstimatedServiceLevel(skillStaffPeriods).Value;
-                        skillDayDto.SkillId = skill.Id.Value;
-                        skillDayDto.SkillName = skill.Name;
+				IPersonRepository personRepository = repositoryFactory.CreatePersonRepository(unitOfWork);
+				using (SchedulingResultStateHolder schedulingResultStateHolder = new SchedulingResultStateHolder())
+				{
+					LoadSchedulingStateHolderForResourceCalculation loader =
+						new LoadSchedulingStateHolderForResourceCalculation(personRepository,
+																			repositoryFactory.
+																				CreatePersonAbsenceAccountRepository(
+																					unitOfWork),
+																			repositoryFactory.CreateSkillRepository(
+																				unitOfWork),
+																			repositoryFactory.CreateWorkloadRepository(
+																				unitOfWork),
+																			repositoryFactory.CreateScheduleRepository(
+																				unitOfWork), schedulingResultStateHolder,
+																			new PeopleAndSkillLoaderDecider(
+																				personRepository),
+																			new SkillDayLoadHelper(
+																				repositoryFactory.
+																					CreateSkillDayRepository
+																					(unitOfWork),
+																				repositoryFactory.
+																					CreateMultisiteDayRepository
+																					(
+																						unitOfWork)));
+					loader.Execute(requestedScenario, periodForResourceCalc,
+								   personRepository.FindPeopleInOrganization(periodForResourceCalc.ToDateOnlyPeriod(timeZoneInfo), true));
 
-                        var skillDataAssembler = new SkillDataAssembler(new DateTimePeriodAssembler());
-                        skillDayDto.SkillDataCollection = new List<SkillDataDto>(skillDataAssembler.DomainEntitiesToDtos(skillStaffPeriods));
+					var resourceOptimizationHelper = new ResourceOptimizationHelper(schedulingResultStateHolder,
+																					new OccupiedSeatCalculator(
+																						new SkillVisualLayerCollectionDictionaryCreator
+																							(),
+																						new SeatImpactOnPeriodForProjection()),
+																					new NonBlendSkillCalculator(
+																						new NonBlendSkillImpactOnPeriodForProjection
+                	                                                                		()), new SingleSkillDictionary(),
+																							new SingleSkillMaxSeatCalculator());
+					foreach (DateOnly dateTime in periodForResourceCalc.ToDateOnlyPeriod(timeZoneInfo).DayCollection())
+					{
+						resourceOptimizationHelper.ResourceCalculateDate(dateTime, true, true);
+					}
+					foreach (ISkill skill in schedulingResultStateHolder.Skills)
+					{
+						SkillDayDto skillDayDto = new SkillDayDto();
+						skillDayDto.DisplayDate = dateOnlyDto;
+						IList<ISkillStaffPeriod> skillStaffPeriods =
+							schedulingResultStateHolder.SkillStaffPeriodHolder.SkillStaffPeriodList(
+								new List<ISkill> { skill }, period);
+						skillDayDto.Esl = SkillStaffPeriodHelper.EstimatedServiceLevel(skillStaffPeriods).Value;
+						skillDayDto.SkillId = skill.Id.Value;
+						skillDayDto.SkillName = skill.Name;
 
-                        returnList.Add(skillDayDto);
-                    }
-                }
-            }
-            return returnList;
-        }
+						var skillDataAssembler = new SkillDataAssembler(new DateTimePeriodAssembler());
+						skillDayDto.SkillDataCollection = new List<SkillDataDto>(skillDataAssembler.DomainEntitiesToDtos(skillStaffPeriods));
 
-        private static DateTimePeriod PreparePeriod(TimeZoneInfo timeZoneInfo, DateOnlyDto dateOnlyDto)
-        {
-            DateTime fromDateTime = TimeZoneHelper.ConvertToUtc(dateOnlyDto.DateTime, timeZoneInfo);
-            DateTime toDateTime = TimeZoneHelper.ConvertToUtc(dateOnlyDto.DateTime.AddDays(1), timeZoneInfo);
-            return new DateTimePeriod(fromDateTime, toDateTime);
-        }
-    }
+						returnList.Add(skillDayDto);
+					}
+				}
+			}
+			return returnList;
+		}
+
+		private static DateTimePeriod PreparePeriod(TimeZoneInfo timeZoneInfo, DateOnlyDto dateOnlyDto)
+		{
+			DateTime fromDateTime = TimeZoneHelper.ConvertToUtc(dateOnlyDto.DateTime, timeZoneInfo);
+			DateTime toDateTime = TimeZoneHelper.ConvertToUtc(dateOnlyDto.DateTime.AddDays(1), timeZoneInfo);
+			return new DateTimePeriod(fromDateTime, toDateTime);
+		}
+	}
 }

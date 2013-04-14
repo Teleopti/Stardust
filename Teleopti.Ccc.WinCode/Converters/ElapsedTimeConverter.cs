@@ -2,7 +2,6 @@
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Converters
 {
@@ -19,8 +18,11 @@ namespace Teleopti.Ccc.WinCode.Converters
             {
                 return null;
             }
-            DateTimePeriod period = (DateTimePeriod)value;
-            return TimeSpan.FromSeconds(Math.Round(period.ElapsedTime().TotalSeconds));
+            var dateTimeValue = (DateTime)value;
+            if (dateTimeValue == DateTime.MinValue) return null;
+            var time = TimeSpan.FromSeconds(DateTime.UtcNow.Subtract(dateTimeValue).TotalSeconds);
+            if (time > TimeSpan.FromDays(1)) return null;
+            return new TimeSpan(time.Hours, time.Minutes, time.Seconds);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

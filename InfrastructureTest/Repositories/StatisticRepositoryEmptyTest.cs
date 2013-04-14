@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.RealTimeAdherence;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -54,8 +55,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Assert.AreEqual(0, target.LoadSpecificDates(new List<IQueueSource>(),new DateTimePeriod()).Count);
 			Assert.AreEqual(0, target.LoadQueues().Count);
 			Assert.AreEqual(0, target.LoadActiveAgentCount(skill,new DateTimePeriod()).Count);
-			Assert.AreEqual(0, target.LoadRtaAgentStates(new DateTimePeriod(), new List<ExternalLogOnPerson>()).Count);
-
+			
 			//Does nothing!
 			using(var dt = new DataTable())
 			{
@@ -70,6 +70,18 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		public void VerifyNullLists()
 		{
 			Assert.IsNull(target.LoadReports());
+		}
+
+		[Test]
+		public void VerifyRtaMethods()
+		{
+			target.LoadAdherenceData(new DateTime(), "", Guid.Empty, Guid.Empty, 1, 1).Count.Should().Be.EqualTo(0);
+			target.LoadAgentStat(Guid.Empty, new DateTime(), new DateTime(), "", Guid.Empty).Count.Should().Be.EqualTo(0);
+			target.LoadAgentQueueStat(new DateTime(), new DateTime(), "", Guid.Empty).Count.Should().Be.EqualTo(0);
+			target.LoadActualAgentState(new List<IPerson>()).Count.Should().Be.EqualTo(0);
+			target.LoadOneActualAgentState(Guid.Empty);
+			target.AddOrUpdateActualAgentState(new ActualAgentState());
+			target.PersonIdsWithExternalLogOn(Guid.Empty).Count.Should().Be.EqualTo(0);
 		}
 	}
 }

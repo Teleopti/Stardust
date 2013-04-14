@@ -13,13 +13,14 @@ namespace Teleopti.Ccc.WebTest.Filters
         [Test]
         public void ShouldCreateUnitOfWorkForEachAction()
         {
+	        var currentUnitOfWorkFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
 			var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
 			var dependencyResolver = MockRepository.GenerateMock<IDependencyResolver>();
 			DependencyResolver.SetResolver(dependencyResolver);
 			var target = new UnitOfWorkActionAttribute();
 
-			dependencyResolver.Stub(x => x.GetService(typeof(IUnitOfWorkFactory))).Return(unitOfWorkFactory);
-
+			dependencyResolver.Stub(x => x.GetService(typeof(ICurrentUnitOfWorkFactory))).Return(currentUnitOfWorkFactory);
+	        currentUnitOfWorkFactory.Expect(x => x.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
             target.OnActionExecuting(new ActionExecutingContext());
 
 			unitOfWorkFactory.AssertWasCalled(x => x.CreateAndOpenUnitOfWork());
@@ -28,14 +29,14 @@ namespace Teleopti.Ccc.WebTest.Filters
         [Test]
         public void ShouldDisposeUnitOfWorkForEachAction()
         {
-			var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
+					var currentUnitOfWork = MockRepository.GenerateMock<ICurrentUnitOfWork>();
 			var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
 			var dependencyResolver = MockRepository.GenerateMock<IDependencyResolver>();
 			DependencyResolver.SetResolver(dependencyResolver);
 			var target = new UnitOfWorkActionAttribute();
 
-			dependencyResolver.Stub(x => x.GetService(typeof(IUnitOfWorkFactory))).Return(unitOfWorkFactory);
-			unitOfWorkFactory.Stub(x => x.CurrentUnitOfWork()).Return(unitOfWork);
+			dependencyResolver.Stub(x => x.GetService(typeof(ICurrentUnitOfWork))).Return(currentUnitOfWork);
+			currentUnitOfWork.Stub(x => x.Current()).Return(unitOfWork);
 
 			target.OnResultExecuted(new ResultExecutedContext());
 
@@ -45,13 +46,13 @@ namespace Teleopti.Ccc.WebTest.Filters
         [Test]
         public void ShouldHandleNoCurrentUnitOfWork()
         {
-			var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
+					var currentUnitOfWork = MockRepository.GenerateMock<ICurrentUnitOfWork>();
 			var dependencyResolver = MockRepository.GenerateMock<IDependencyResolver>();
 			DependencyResolver.SetResolver(dependencyResolver);
 			var target = new UnitOfWorkActionAttribute();
 
-			dependencyResolver.Stub(x => x.GetService(typeof(IUnitOfWorkFactory))).Return(unitOfWorkFactory);
-			unitOfWorkFactory.Stub(x => x.CurrentUnitOfWork()).Return(null);
+			dependencyResolver.Stub(x => x.GetService(typeof(ICurrentUnitOfWork))).Return(currentUnitOfWork);
+			currentUnitOfWork.Stub(x => x.Current()).Return(null);
 
             target.OnResultExecuted(new ResultExecutedContext());
         }
@@ -59,14 +60,14 @@ namespace Teleopti.Ccc.WebTest.Filters
 		[Test]
 		public void ShouldPersistUnitOfWorkForEachAction()
 		{
-			var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
+			var currentUnitOfWork = MockRepository.GenerateMock<ICurrentUnitOfWork>();
 			var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
 			var dependencyResolver = MockRepository.GenerateMock<IDependencyResolver>();
 			DependencyResolver.SetResolver(dependencyResolver);
 			var target = new UnitOfWorkActionAttribute();
 
-			dependencyResolver.Stub(x => x.GetService(typeof (IUnitOfWorkFactory))).Return(unitOfWorkFactory);
-			unitOfWorkFactory.Stub(x => x.CurrentUnitOfWork()).Return(unitOfWork);
+			dependencyResolver.Stub(x => x.GetService(typeof(ICurrentUnitOfWork))).Return(currentUnitOfWork);
+			currentUnitOfWork.Stub(x => x.Current()).Return(unitOfWork);
 
 			target.OnResultExecuted(new ResultExecutedContext());
 

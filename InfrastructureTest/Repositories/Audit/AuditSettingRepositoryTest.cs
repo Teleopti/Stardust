@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 
 		protected override void AuditSetup()
 		{
-			target = new AuditSettingRepository(UnitOfWorkFactory.Current);
+			target = new AuditSettingRepository(UnitOfWorkFactory.CurrentUnitOfWork());
 		}
 
 

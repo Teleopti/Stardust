@@ -1,14 +1,18 @@
-﻿using Teleopti.Interfaces.Domain;
+﻿using System;
+using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Messages.Rta;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection
 {
 	public class ScheduleProjectionHandler : IHandleEvent<ProjectionChangedEvent>, IHandleEvent<ProjectionChangedEventForScheduleProjection>
 	{
 		private readonly IScheduleProjectionReadOnlyRepository _scheduleProjectionReadOnlyRepository;
+	    private readonly IServiceBus _serviceBus;
 
 		public ScheduleProjectionHandler(IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository)
 		{
 			_scheduleProjectionReadOnlyRepository = scheduleProjectionReadOnlyRepository;
+		    _serviceBus = serviceBus;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
@@ -20,6 +24,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 		private void createReadModel(ProjectionChangedEventBase @event)
 		{
 			if (!@event.IsDefaultScenario) return;
+			nearestLayerToNow.StartDateTime = DateTime.MaxValue;
+			using (var unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 
 			foreach (var scheduleDay in @event.ScheduleDays)
 			{
@@ -32,9 +38,27 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 
 				foreach (var layer in scheduleDay.Layers)
 				{
+						if (date == DateTime.UtcNow.Date &&
+						    ((layer.StartDateTime.ToUniversalTime() < DateTime.UtcNow &&
+						      layer.EndDateTime.ToUniversalTime() > DateTime.UtcNow)
+						     ||
+						     (layer.StartDateTime.ToUniversalTime() > DateTime.UtcNow &&
+						      layer.StartDateTime.ToUniversalTime() < nearestLayerToNow.StartDateTime.ToUniversalTime())))
+							nearestLayerToNow = layer;
 					_scheduleProjectionReadOnlyRepository.AddProjectedLayer(date, @event.ScenarioId, @event.PersonId, layer);
+
 				}
 			}
+			if (nearestLayerToNow.StartDateTime != DateTime.MaxValue)
+				_serviceBus.Send(new UpdatedScheduleDay
+					{
+						Datasource = message.Datasource,
+						BusinessUnitId = message.BusinessUnitId,
+						PersonId = message.PersonId,
+						ActivityStartDateTime = nearestLayerToNow.StartDateTime,
+						ActivityEndDateTime = nearestLayerToNow.EndDateTime,
+						Timestamp = DateTime.UtcNow
+					});
 		}
 
 		public void Handle(ProjectionChangedEventForScheduleProjection @event)

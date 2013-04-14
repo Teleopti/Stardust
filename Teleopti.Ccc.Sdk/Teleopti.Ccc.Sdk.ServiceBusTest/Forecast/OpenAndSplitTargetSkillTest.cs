@@ -18,6 +18,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
     public class OpenAndSplitTargetSkillTest
     {
         private MockRepository _mocks;
+		private ICurrentUnitOfWorkFactory _currentunitOfWorkFactory;
         private IUnitOfWorkFactory _unitOfWorkFactory;
         private ISkillRepository _skillRepository;
         private IJobResultRepository _jobResultRepository;
@@ -33,6 +34,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
         public void Setup()
         {
             _mocks = new MockRepository();
+			_currentunitOfWorkFactory = _mocks.StrictMock<ICurrentUnitOfWorkFactory>();
             _unitOfWorkFactory = _mocks.StrictMock<IUnitOfWorkFactory>();
             _skillRepository = _mocks.StrictMock<ISkillRepository>();
             _jobResultRepository = _mocks.StrictMock<IJobResultRepository>();
@@ -42,7 +44,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
             _unitOfWork = _mocks.DynamicMock<IUnitOfWork>();
             _jobResult = _mocks.DynamicMock<IJobResult>();
             _command = _mocks.StrictMock<IOpenAndSplitSkillCommand>();
-            _target = new OpenAndSplitTargetSkillConsumer(_unitOfWorkFactory, _command, _skillRepository,
+			_target = new OpenAndSplitTargetSkillConsumer(_currentunitOfWorkFactory, _command, _skillRepository,
                                                           _jobResultRepository, _feedback, _messageBroker,
                                                           _serviceBus);
         }
@@ -56,7 +58,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
             var skill = SkillFactory.CreateSkill("test skill");
             using (_mocks.Record())
             {
-                Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
+				Expect.Call(_currentunitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+				Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
                 Expect.Call(_jobResultRepository.Get(jobId)).Return(_jobResult);
                 Expect.Call(_skillRepository.Get(skillId)).Return(skill);
                 Expect.Call(()=>_command.Execute(skill, new DateOnlyPeriod(dateTime,dateTime),new[]{new TimePeriod(8,0,17,0)}));

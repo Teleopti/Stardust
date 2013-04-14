@@ -26,6 +26,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		private ConfigFileDefaultHost _denormalizeBus;
 		[NonSerialized]
 		private ConfigFileDefaultHost _payrollBus;
+		[NonSerialized] 
+		private ConfigFileDefaultHost _rtaBus;
 	
 		public ServiceBusRunner(Action<Exception> unhandledExceptionHandler, Action<Exception> startupExceptionHandler, Action<int> requestExtraTimeHandler)
 		{
@@ -87,6 +89,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			_denormalizeBus = new ConfigFileDefaultHost();
 			_denormalizeBus.UseFileBasedBusConfiguration("DenormalizeQueue.config");
 			_denormalizeBus.Start<DenormalizeBusBootStrapper>();
+
+			_rtaBus = new ConfigFileDefaultHost();
+			_rtaBus.UseFileBasedBusConfiguration("RtaQueue.config");
+			_rtaBus.Start<RtaBusBootStrapper>();
 			
 			PayrollDllCopy.CopyPayrollDll();
 

@@ -108,15 +108,6 @@ namespace Teleopti.Ccc.SyncfusionGridBinding
 				_gridStyleInfo.TextColor = GridColors.ColorHolidayHeader;
 		}
 
-		public void SetMergedHeaderStyle()
-		{
-			_gridControl.Model.Options.MergeCellsMode = GridMergeCellsMode.OnDemandCalculation |
-																	  GridMergeCellsMode.MergeColumnsInRow;
-
-			var rowHeaderStyle = _gridControl.Model.BaseStylesMap["Header"].StyleInfo;
-			rowHeaderStyle.MergeCell = GridMergeCellDirection.ColumnsInRow;
-		}
-
 		public void SetHorizontalAlignment(GridHorizontalAlignment alignement)
 		{
 			_gridStyleInfo.HorizontalAlignment = alignement;

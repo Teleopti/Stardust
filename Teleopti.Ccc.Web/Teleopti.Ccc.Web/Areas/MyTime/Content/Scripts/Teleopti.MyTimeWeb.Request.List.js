@@ -19,6 +19,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 
         var self = this;
 
+	    self.isProcessing = ko.observable(false);
         self.Subject = ko.observable();
         self.RequestType = ko.observable();
         self.RequestPayload = ko.observable();
@@ -93,10 +94,12 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 
         self.MoreToLoad = ko.observable(false);
 
+        self.isLoadingRequests = ko.observable(true);
+        
         self.ShowRequests = function (data) {
             ko.utils.arrayForEach(data, function (item) {
                 var vm = new RequestItemViewModel();
-                vm.Initialize(item);
+                vm.Initialize(item,false);
                 self.Requests.push(vm);
             });
         };
@@ -110,6 +113,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
                 contentType: 'application/json; charset=utf-8',
                 type: "DELETE",
                 success: function () {
+                    Teleopti.MyTimeWeb.Request.RequestDetail.HideEditSection();
                     self.Requests.remove(requestItemViewModel);
                 },
                 error: function (jqXHR, textStatus) {
@@ -118,7 +122,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
             });
         };
 
-        self.AddRequest = function (request) {
+        self.AddRequest = function (request,isProcessing) {
             var selectedViewModel = ko.utils.arrayFirst(self.Requests(), function (item) {
                 return item.Id() == request.Id;
             });
@@ -136,7 +140,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
                 dataType: "json",
                 type: 'GET',
                 success: function (data) {
-                    selectedViewModel.Initialize(data);
+                	selectedViewModel.Initialize(data, isProcessing);
                     self.Requests.unshift(selectedViewModel);
                     self.SetSelected(selectedViewModel);
                 }
@@ -154,6 +158,9 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
                     Take: take,
                     Skip: skip
                 },
+                beforeSend: function() {
+                    self.isLoadingRequests(true);
+                },
                 success: function (data) {
                     self.MoreToLoad(data.length == take);
                     self.ShowRequests(data);
@@ -167,6 +174,7 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
                         self.Completed();
                         self.Completed = null;
                     }
+                    self.isLoadingRequests(false);
                 }
             });
         };
@@ -175,9 +183,10 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
     }
 
     ko.utils.extend(RequestItemViewModel.prototype, {
-        Initialize: function (data) {
-            var self = this;
-            self.Subject(data.Subject);
+        Initialize: function (data, isProcessing) {
+        	var self = this;
+	        self.isProcessing(isProcessing);
+            self.Subject(data.Subject == null ? '<br>' : data.Subject);
             self.RequestType(data.Type);
             self.Status(data.Status);
             self.Dates(data.Dates);
@@ -221,8 +230,8 @@ Teleopti.MyTimeWeb.Request.List = (function ($) {
 
             if (element) ko.applyBindings(pageViewModel, element);
         },
-        AddItemAtTop: function (request) {
-            pageViewModel.AddRequest(request);
+        AddItemAtTop: function (request,isProcessing) {
+        	pageViewModel.AddRequest(request, isProcessing);
         }
     };
 

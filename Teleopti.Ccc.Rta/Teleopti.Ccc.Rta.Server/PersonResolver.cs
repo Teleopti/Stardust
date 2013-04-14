@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data;
@@ -17,7 +18,6 @@ namespace Teleopti.Ccc.Rta.Server
         private readonly string _connectionStringDataStore;
         private readonly ILog _loggingSvc;
         private readonly Cache _cache;
-        private static readonly object lockObj = new object();
 
         public PersonResolver(IDatabaseConnectionFactory databaseConnectionFactory, string connectionStringDataStore) : this(databaseConnectionFactory,connectionStringDataStore,LogManager.GetLogger(typeof(PersonResolver)))
         {
@@ -32,31 +32,22 @@ namespace Teleopti.Ccc.Rta.Server
             _cache = HttpRuntime.Cache;
         }
 
-		public bool TryResolveId(int dataSourceId, string logOn, out IEnumerable<PersonWithBusinessUnit> personId)
-        {
-            var lookupKey = string.Format(CultureInfo.InvariantCulture, "{0}|{1}", dataSourceId, logOn);
-			if (string.IsNullOrEmpty(logOn))
-			{
-				lookupKey = string.Empty;
-			}
+	    public bool TryResolveId(int dataSourceId, string logOn, out IEnumerable<PersonWithBusinessUnit> personId)
+	    {
+		    var lookupKey = string.Format(CultureInfo.InvariantCulture, "{0}|{1}", dataSourceId, logOn);
+		    if (string.IsNullOrEmpty(logOn))
+			    lookupKey = string.Empty;
 
-			IDictionary<string, IEnumerable<PersonWithBusinessUnit>> dictionary;
-            lock (lockObj)
-            {
-                dictionary = (IDictionary<string, IEnumerable<PersonWithBusinessUnit>>)_cache.Get(CacheKey);
-                if (dictionary==null)
-                {
-                    dictionary = initialize();
-                }
-            }
+			var dictionary = (ConcurrentDictionary<string, IEnumerable<PersonWithBusinessUnit>>)_cache.Get(CacheKey) ??
+		                     initialize();
 
-            return dictionary.TryGetValue(lookupKey, out personId);
-        }
+		    return dictionary.TryGetValue(lookupKey, out personId);
+	    }
 
-		private IDictionary<string, IEnumerable<PersonWithBusinessUnit>> initialize()
+		private ConcurrentDictionary<string, IEnumerable<PersonWithBusinessUnit>> initialize()
         {
             _loggingSvc.Info("Loading new data into cache.");
-			var dictionary = new Dictionary<string, IEnumerable<PersonWithBusinessUnit>>();
+			var dictionary = new ConcurrentDictionary<string, IEnumerable<PersonWithBusinessUnit>>();
             using (var connection = _databaseConnectionFactory.CreateConnection(_connectionStringDataStore))
             {
                 var command = connection.CreateCommand();
@@ -85,7 +76,8 @@ namespace Teleopti.Ccc.Rta.Server
                     }
                     else
                     {
-						dictionary.Add(lookupKey, new Collection<PersonWithBusinessUnit> { personWithBusinessUnit });
+	                    var newCollection = new Collection<PersonWithBusinessUnit> {personWithBusinessUnit};
+						dictionary.AddOrUpdate(lookupKey, newCollection, (s, units) => newCollection );
                     }
                 }
                 reader.Close();
@@ -101,22 +93,18 @@ namespace Teleopti.Ccc.Rta.Server
             return dictionary;
         }
 
-		private static void addBatchSignature(Dictionary<string, IEnumerable<PersonWithBusinessUnit>> dictionary)
+		private static void addBatchSignature(ConcurrentDictionary<string, IEnumerable<PersonWithBusinessUnit>> dictionary)
         {
 			IEnumerable<PersonWithBusinessUnit> foundIds;
-            if (!dictionary.TryGetValue(string.Empty,out foundIds))
-            {
-                dictionary.Add(string.Empty,new []{new PersonWithBusinessUnit{PersonId = Guid.Empty,BusinessUnitId = Guid.Empty}});
-            }
+			if (dictionary.TryGetValue(string.Empty, out foundIds)) return;
+			var emptyArray = new[] {new PersonWithBusinessUnit {PersonId = Guid.Empty, BusinessUnitId = Guid.Empty}};
+			dictionary.AddOrUpdate(string.Empty, emptyArray, (s, units) => emptyArray);
         }
 
         private void onRemoveCallback(string key, object value, CacheItemRemovedReason reason)
         {
             _loggingSvc.Info("The cache was cleared.");
-            lock (lockObj)
-            {
-                initialize();
-            }
+			initialize();
         }
     }
 

@@ -12,7 +12,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
     {
         private readonly IEnumerable<Type> _triggerInterfaces = new List<Type>
 		                                                        	{
-		                                                        		typeof (IPerson)
+		                                                        		typeof (IPerson),
+		                                                        		typeof (IPersonWriteProtectionInfo),
 		                                                        	};
 
     	private readonly ISendDenormalizeNotification _sendDenormalizeNotification;
@@ -24,31 +25,30 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_saveToDenormalizationQueue = saveToDenormalizationQueue;
 		}
 
-    	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider",
+	     System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods",
+		     MessageId = "0")]
         public void Execute(IEnumerable<IRootChangeInfo> modifiedRoots)
-        {
-			var atLeastOneMessage = false;
-            var affectedInterfaces = from r in modifiedRoots
-                                     from i in r.Root.GetType().GetInterfaces()
-                                     select i;
+	    {
+		    var atLeastOneMessage = false;
+		    var affectedInterfaces = from r in modifiedRoots
+		                             let t = r.Root.GetType()
+		                             where _triggerInterfaces.Any(ti => ti.IsAssignableFrom(t))
+		                             select (IAggregateRoot) r.Root;
 
-            if (affectedInterfaces.Any(t => _triggerInterfaces.Contains(t)))
-            {
-				var persons = modifiedRoots.Select(r => r.Root).OfType<IPerson>();
-				foreach (var personList in persons.Batch(25))
-				{
-					var idsAsString = personList.Select(p => p.Id.GetValueOrDefault()).ToArray();
-					var message = new PersonChangedMessage();
-					message.SetPersonIdCollection(idsAsString);
+		    foreach (var personList in affectedInterfaces.Batch(25))
+		    {
+			    var idsAsString = personList.Select(p => p.Id.GetValueOrDefault()).ToArray();
+			    var message = new PersonChangedMessage();
+			    message.SetPersonIdCollection(idsAsString);
                     _saveToDenormalizationQueue.Execute(message);
-					atLeastOneMessage = true;
-				}
+			    atLeastOneMessage = true;
+		    }
 
-				if (atLeastOneMessage)
-				{
-					_sendDenormalizeNotification.Notify();
-				}
-            }
-        }
+		    if (atLeastOneMessage)
+		    {
+			    _sendDenormalizeNotification.Notify();
+		    }
+	    }
     }
 }

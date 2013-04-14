@@ -14,14 +14,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
     [TestFixture]
     public class ImportForecastsFileToSkillConsumerResolveTest
     {
-        private IUnitOfWorkFactory _unitOfWorkFactory;
+			private ICurrentUnitOfWorkFactory _unitOfWorkFactory;
         private IServiceBus _serviceBus;
 
         [SetUp]
         public void Setup()
         {
             var mocks = new MockRepository();
-            _unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
+						_unitOfWorkFactory = mocks.DynamicMock<ICurrentUnitOfWorkFactory>();
             _serviceBus = mocks.DynamicMock<IServiceBus>();
         }
 

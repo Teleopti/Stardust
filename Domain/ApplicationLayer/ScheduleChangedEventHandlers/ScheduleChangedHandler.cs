@@ -29,6 +29,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 			_personRepository = personRepository;
 			_scheduleRepository = scheduleRepository;
 			_projectionChangedEventBuilder = projectionChangedEventBuilder;
+		    
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
@@ -83,7 +84,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 			var period = new DateTimePeriod(@event.StartDateTime, @event.EndDateTime);
 			var person = _personRepository.FindPeople(new []{ @event.PersonId}).FirstOrDefault();
 			if (person == null) return false;
-
+                    
 			var timeZone = person.PermissionInformation.DefaultTimeZone();
 			var dateOnlyPeriod = period.ToDateOnlyPeriod(timeZone);
 			var schedule =

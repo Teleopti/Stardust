@@ -34,15 +34,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             rep = new ContractScheduleRepository(UnitOfWork);
         }
 
-		/// <summary>
-		/// Determines whether this instance can be created.
-		/// </summary>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
-		public void CanCreate()
-		{
-			new ContractScheduleRepository(UnitOfWorkFactory.Current).Should().Not.Be.Null();
-		}
-
         /// <summary>
         /// Creates an aggregate using the Bu of logged in user.
         /// Should be a "full detailed" aggregate

@@ -151,8 +151,35 @@ namespace Teleopti.Ccc.Domain.Forecasting
 	        return skillSkillDayDictionary;
 	    }
 	}
-    
-	public class WorkloadDayHelper
+
+	public interface IWorkloadDayHelper
+	{
+		/// <summary>
+		/// Gets the workload days from skill days.
+		/// </summary>
+		/// <param name="skillDays">The skill days.</param>
+		/// <param name="workload">The workload.</param>
+		/// <returns></returns>
+		/// <remarks>
+		/// Created by: robink
+		/// Created date: 2008-04-02
+		/// </remarks>
+		IList<IWorkloadDayBase> GetWorkloadDaysFromSkillDays(IEnumerable<ISkillDay> skillDays, IWorkload workload);
+
+		/// <summary>
+		/// Create all workload days that belongs to a set of skill days with the longterm template (one merged interval for the entire open hours).
+		/// </summary>
+		/// <param name="skill">The skill.</param>
+		/// <param name="skillDays">The skill days.</param>
+		/// <returns></returns>
+		/// <remarks>
+		/// Created by: robink
+		/// Created date: 2008-01-24
+		/// </remarks>
+		void CreateLongtermWorkloadDays(ISkill skill,IEnumerable<ISkillDay> skillDays);
+	}
+
+	public class WorkloadDayHelper : IWorkloadDayHelper
 	{
         /// <summary>
         /// Gets the workload days from skill days.

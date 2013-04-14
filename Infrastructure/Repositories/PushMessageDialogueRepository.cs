@@ -22,9 +22,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 		}
 
-		public PushMessageDialogueRepository(IUnitOfWorkFactory unitOfWorkFactory)
-			: base(unitOfWorkFactory)
+		public PushMessageDialogueRepository(ICurrentUnitOfWork currentUnitOfWork)
+			: base(currentUnitOfWork)
 		{
+			
 		}
 
 		/// <summary>

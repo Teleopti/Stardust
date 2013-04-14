@@ -21,7 +21,6 @@ namespace Teleopti.Ccc.DBManager
         private static bool _isAzure;
         private static bool _isSrvDbCreator;
         private static bool _isSrvSecurityAdmin;
-        private static bool _isSrvSysAdmin;
 		private static bool _loginExist;
 
         private const string AzureEdition = "SQL Azure";
@@ -58,9 +57,6 @@ namespace Teleopti.Ccc.DBManager
                 if (args.Length > 0 && args.Length < 20)
                 {
                     _commandLineArgument = new CommandLineArgument(args);
-#if DEBUG
-					logWrite("DBManager is running in DEBUG Mode...");
-#endif
 					_databaseFolder = new DatabaseFolder(new DbManagerFolder(_commandLineArgument.PathToDbManager));
 					_schemaVersionInformation = new SchemaVersionInformation(_databaseFolder);
                     logWrite("Running from:" + _databaseFolder.Path());
@@ -81,10 +77,17 @@ namespace Teleopti.Ccc.DBManager
 					if (_isAzure && _commandLineArgument.isWindowsGroupName)
 						throw new Exception("Windows Azure don't support Windows Login for the moment!");
 
-					//Check Server Permissions
-					_isSrvSysAdmin = IsSrvSysAdmin();
-					_isSrvDbCreator = IsSrvDbCreator();
-					_isSrvSecurityAdmin = IsSrvSecurityAdmin();
+					//special for Azure => fn_my_permissions does not exist: http://msdn.microsoft.com/en-us/library/windowsazure/ee336248.aspx
+					if (_isAzure)
+					{
+						_isSrvDbCreator = true;
+						_isSrvSecurityAdmin = true;
+					}
+					else
+					{
+						_isSrvDbCreator = IsSrvDbCreator();
+						_isSrvSecurityAdmin = IsSrvSecurityAdmin();
+					}
 
 					//try connect to DB using given AppLogin
 					if (!_commandLineArgument.isWindowsGroupName) //SQL
@@ -116,18 +119,14 @@ namespace Teleopti.Ccc.DBManager
 					else //Win
 						_loginExist = VerifyWinGroup(_commandLineArgument.appUserName); //We will need to check on sys.syslogins
 
-					//special for Azure
-					if (_isAzure)
-						_isSrvSysAdmin = true;
-
                     //New installation
-					if (_commandLineArgument.WillCreateNewDatabase && !(_isSrvSysAdmin || (_isSrvDbCreator && _isSrvSecurityAdmin)))
+					if (_commandLineArgument.WillCreateNewDatabase && !((_isSrvDbCreator && _isSrvSecurityAdmin)))
                     {
                         throw new Exception("Either sysAdmin or dbCreator + SecurityAdmin permissions are needed to install CCC databases!");
                     }
 
 					//patch
-					if (!_loginExist && !(_isSrvSecurityAdmin || _isSrvSysAdmin))
+					if (!_loginExist && !(_isSrvSecurityAdmin))
 					{
 						throw new Exception("The login does not exist or wrong password supplied. You don't have the permission to create/alter login (securityadmin)!");
 					}
@@ -390,7 +389,7 @@ namespace Teleopti.Ccc.DBManager
 
         private static bool IsSrvSecurityAdmin()
         {
-            const string sql = "select IS_SRVROLEMEMBER ('securityadmin')";
+			const string sql = "SELECT count(*) FROM fn_my_permissions(NULL, 'SERVER') WHERE permission_name='ALTER ANY LOGIN'";
 
             using (SqlCommand sqlCommand = new SqlCommand(sql, _sqlConnection))
             {
@@ -400,19 +399,12 @@ namespace Teleopti.Ccc.DBManager
 
         private static bool IsSrvDbCreator()
         {
-            const string sql = "select IS_SRVROLEMEMBER ('dbcreator')";
+			const string sql = "SELECT count(*) FROM fn_my_permissions(NULL, 'SERVER') WHERE permission_name='CREATE ANY DATABASE'";
 
             using (SqlCommand sqlCommand = new SqlCommand(sql, _sqlConnection))
             {
                 return Convert.ToBoolean(sqlCommand.ExecuteScalar(), CultureInfo.InvariantCulture);
             }
-        }
-
-        private static bool IsSrvSysAdmin()
-        {
-            const string sql = "select IS_SRVROLEMEMBER ('sysadmin')";
-            using (SqlCommand sqlCommand = new SqlCommand(sql, _sqlConnection))
-                return Convert.ToBoolean(sqlCommand.ExecuteScalar(), CultureInfo.InvariantCulture);
         }
 
 		private static bool VerifyWinGroup(string WinNTGroup)

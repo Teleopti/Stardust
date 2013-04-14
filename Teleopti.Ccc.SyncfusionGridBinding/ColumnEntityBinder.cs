@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
@@ -45,7 +46,6 @@ namespace Teleopti.Ccc.SyncfusionGridBinding
 			{
                 item = _collection[e.ColIndex - 1];
                 cellDetails.SetParentCellValue(_columnParentHeaderMember.GetModelValue(item).ToString());
-                cellDetails.SetMergedHeaderStyle();
 			}
 			if (cellDetails.IsColumnHeader)
 			{
@@ -53,7 +53,6 @@ namespace Teleopti.Ccc.SyncfusionGridBinding
 				var dateString = _columnHeaderMember.GetModelValue(item).ToString();
 				Weekend(cellDetails, _columnHeaderMember.GetModelValue(item));
 				cellDetails.SetCellValue(dateString);
-				cellDetails.SetMergedHeaderStyle();
 			}
 			if (cellDetails.IsContentCell)
 			{
@@ -66,7 +65,6 @@ namespace Teleopti.Ccc.SyncfusionGridBinding
 				cellDetails.SetCellValue(modelProperty.GetModelValue(item));
 				cellDetails.SetReadOnly(gridRow.ReadOnly);
 				cellDetails.SetHorizontalAlignment(gridRow.HorizontalAlignment);
-				cellDetails.SetMergedHeaderStyle();
 			}
 		}
 
@@ -128,9 +126,15 @@ namespace Teleopti.Ccc.SyncfusionGridBinding
 		{
 			_gridControl.QueryCellInfo += gridControl_QueryCellInfo;
 			_gridControl.SaveCellInfo += gridControl_SaveCellInfo;
+		    _gridControl.ClientSizeChanged += gridControl_ClientSizeChanged;
 		}
 
-		private void ResetGridArea()
+	    private void gridControl_ClientSizeChanged(object sender, EventArgs e)
+	    {
+	        _gridControl.Model.MergeCells.EvaluateMergeCells(GridRangeInfo.Rows(0,1));
+	    }
+
+	    private void ResetGridArea()
 		{
 			_gridControl.RowCount = 0;
 			_gridControl.ColCount = 0;
@@ -151,6 +155,7 @@ namespace Teleopti.Ccc.SyncfusionGridBinding
 		{
 			_gridControl.QueryCellInfo -= gridControl_QueryCellInfo;
 			_gridControl.SaveCellInfo -= gridControl_SaveCellInfo;
+            _gridControl.ClientSizeChanged -= gridControl_ClientSizeChanged;
 		}
 
 		private void model_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -227,7 +232,17 @@ namespace Teleopti.Ccc.SyncfusionGridBinding
 			UnwireGrid();
 			UnwireModels();
 			ResetGridArea();
+		    SetMergedHeaderStyle();
 		}
+
+        private void SetMergedHeaderStyle()
+        {
+            _gridControl.Model.Options.MergeCellsMode = GridMergeCellsMode.OnDemandCalculation |
+                                                                      GridMergeCellsMode.MergeColumnsInRow;
+
+            var rowHeaderStyle = _gridControl.Model.BaseStylesMap["Header"].StyleInfo;
+            rowHeaderStyle.MergeCell = GridMergeCellDirection.ColumnsInRow;
+        }
 
 		public int RowCount()
 		{
@@ -269,13 +284,6 @@ namespace Teleopti.Ccc.SyncfusionGridBinding
 		public CurrentSelection<T> CurrentSelection()
 		{
 			return new CurrentSelection<T>(this, _collection);
-		}
-
-		private bool WeekendOrWeekday(string stringDate)
-		{
-			//DateTime.TryParse(stringDate, out date);
-			//return DateHelper.IsWeekend(_date, CultureInfo.CurrentCulture);
-			return true;
 		}
 	}
 }

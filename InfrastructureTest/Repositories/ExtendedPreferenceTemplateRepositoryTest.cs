@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using NUnit.Framework;
@@ -46,6 +47,26 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(org.DisplayColor.ToArgb(), loadedAggregateFromDatabase.DisplayColor.ToArgb());
             Assert.AreEqual(org.Name, loadedAggregateFromDatabase.Name);
         }
+
+		[Test]
+		public void VerifyCanFindById()
+		{
+			IExtendedPreferenceTemplate extendedPreferenceTemplate = CreateAggregateWithCorrectBusinessUnit();
+			PersistAndRemoveFromUnitOfWork(extendedPreferenceTemplate);
+
+			IExtendedPreferenceTemplate foundTemplate = new ExtendedPreferenceTemplateRepository(UnitOfWork).Find(extendedPreferenceTemplate.Id.Value);
+			Assert.AreEqual("Test", foundTemplate.Name);
+		}
+
+		[Test]
+		public void ReturnNullIfNotFind()
+		{
+			IExtendedPreferenceTemplate extendedPreferenceTemplate = CreateAggregateWithCorrectBusinessUnit();
+			PersistAndRemoveFromUnitOfWork(extendedPreferenceTemplate);
+
+			IExtendedPreferenceTemplate foundTemplate = new ExtendedPreferenceTemplateRepository(UnitOfWork).Find(Guid.NewGuid());
+			Assert.IsNull(foundTemplate);
+		}
 
         [Test]
         public void VerifyCanFindByPerson()

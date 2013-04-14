@@ -21,21 +21,25 @@ namespace Teleopti.Ccc.WebTest.Core.Aop.Aspects
 		[Test]
 		public void ShouldOpenUnitOfWorkBeforeInvokation()
 		{
-			var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
-			var target = new UnitOfWorkAspect(unitOfWorkFactory);
+			var uowFactoryProvider = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
+			var target = new UnitOfWorkAspect(uowFactoryProvider);
+			var uowFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
+			uowFactoryProvider.Expect(x => x.LoggedOnUnitOfWorkFactory()).Return(uowFactory);
 
 			target.OnBeforeInvokation();
 
-			unitOfWorkFactory.AssertWasCalled(x => x.CreateAndOpenUnitOfWork());
+			uowFactory.AssertWasCalled(x => x.CreateAndOpenUnitOfWork());
 		}
 
 		[Test]
 		public void ShouldPersistAndDisposeUnitOfWorkAfterInvocation()
 		{
-			var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
+			var unitOfWorkFactoryProvider = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
+			var uowFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
 			var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
-			var target = new UnitOfWorkAspect(unitOfWorkFactory);
-			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+			var target = new UnitOfWorkAspect(unitOfWorkFactoryProvider);
+			unitOfWorkFactoryProvider.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(uowFactory);
+			uowFactory.Expect(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
 
 			target.OnBeforeInvokation();
 			target.OnAfterInvokation();

@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Teleopti.Interfaces.Domain
 {
 	/// <summary>
@@ -10,7 +12,8 @@ namespace Teleopti.Interfaces.Domain
 		/// </summary>
 		/// <param name="virtualSchedulePeriod">The virtual schedule period.</param>
 		/// <returns></returns>
-		int CountDayOffsOnPeriod(IVirtualSchedulePeriod virtualSchedulePeriod);
+		//int CountDayOffsOnPeriod(IVirtualSchedulePeriod virtualSchedulePeriod);
+		IList<IScheduleDay> CountDayOffsOnPeriod(IVirtualSchedulePeriod virtualSchedulePeriod);
 		/// <summary>
 		/// Determines whether [has correct number of days off] [the specified virtual schedule period].
 		/// </summary>
@@ -21,7 +24,15 @@ namespace Teleopti.Interfaces.Domain
 		/// 	<c>true</c> if [has correct number of days off] [the specified virtual schedule period]; otherwise, <c>false</c>.
 		/// </returns>
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "1#"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#")]
-		bool HasCorrectNumberOfDaysOff(IVirtualSchedulePeriod virtualSchedulePeriod, out int targetDaysOff, out int dayOffsNow);
+		bool HasCorrectNumberOfDaysOff(IVirtualSchedulePeriod virtualSchedulePeriod, out int targetDaysOff, out IList<IScheduleDay> dayOffsNow);
+
+		/// <summary>
+		/// Return first occasion of day off from dayOffDays that are in same week as scheduleDay
+		/// </summary>
+		/// <param name="scheduleDay"></param>
+		/// <param name="dayOffDays"></param>
+		/// <returns></returns>
+		IScheduleDay DayOffInScheduleDayWeek(IScheduleDay scheduleDay, IList<IScheduleDay> dayOffDays);
 
         /// <summary>
         /// Outsides the or at minimum target daysoff.

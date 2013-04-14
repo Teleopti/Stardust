@@ -14,14 +14,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 {
     public class ImportForecastsToSkillConsumer : ConsumerOf<ImportForecastsToSkill>
     {
-        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+			private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
         private readonly ISaveForecastToSkillCommand _saveForecastToSkillCommand;
         private readonly ISkillRepository _skillRepository;
         private readonly IJobResultRepository _jobResultRepository;
         private readonly IJobResultFeedback _feedback;
         private readonly IMessageBroker _messageBroker;
 
-        public ImportForecastsToSkillConsumer(IUnitOfWorkFactory unitOfWorkFactory,
+        public ImportForecastsToSkillConsumer(ICurrentUnitOfWorkFactory unitOfWorkFactory,
             ISaveForecastToSkillCommand saveForecastToSkillCommand,
             ISkillRepository skillRepository,
             IJobResultRepository jobResultRepository,
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Domain.Forecasting.Export.IJobResultFeedback.Info(System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Domain.Forecasting.Export.IJobResultFeedback.Error(System.String,System.Exception)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Domain.Forecasting.Export.IJobResultFeedback.Error(System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
         public void Consume(ImportForecastsToSkill message)
         {
-            using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+            using (var unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
             {
                 var jobResult = _jobResultRepository.Get(message.JobId);
                 var skill = _skillRepository.Get(message.TargetSkillId);

@@ -21,10 +21,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
-        public PartTimePercentageRepository(IUnitOfWorkFactory unitOfWorkFactory)
-            : base(unitOfWorkFactory)
-        {
-        }
+				public PartTimePercentageRepository(ICurrentUnitOfWork currentUnitOfWork)
+					: base(currentUnitOfWork)
+	    {
+		    
+	    }
 
         /// <summary>
         /// Finds all part time percentage by description.

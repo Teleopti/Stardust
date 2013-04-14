@@ -5,18 +5,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
     /// <summary>
     /// MainshiftActivitylayer class
     /// </summary>
-    public class MainShiftActivityLayer : ActivityLayer, IMainShiftActivityLayer
+    public class MainShiftActivityLayer : PersistedActivityLayer, IMainShiftActivityLayer
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MainShiftActivityLayer"/> class.
-        /// </summary>
-        /// <param name="activity">The activity.</param>
-        /// <param name="period">The period.</param>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 2008-01-25
-        /// </remarks>
-        public MainShiftActivityLayer(IActivity activity, DateTimePeriod period)
+		//private IEntity _parent;
+		//private Guid? _id;
+
+	    public MainShiftActivityLayer(IActivity activity, DateTimePeriod period)
             : base(activity, period)
         {
         }
@@ -27,5 +21,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         protected MainShiftActivityLayer()
         {
         }
+
+		public override bool Equals(IEntity other)
+		{
+			if (other == null)
+				return false;
+			if (this == other)
+				return true;
+			if (!other.Id.HasValue || !Id.HasValue)
+				return false;
+
+			return (Id.Value == other.Id.Value);
+		}
     }
 }

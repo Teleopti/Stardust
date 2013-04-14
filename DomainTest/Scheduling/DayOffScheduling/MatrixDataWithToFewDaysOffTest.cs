@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Scheduling.DayOffScheduling;
@@ -30,13 +31,17 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 		[Test]
 		public void ShouldReturnMatrixDataIfNotEnoughDaysOff()
 		{
+			var scheduleDay1  = _mocks.StrictMock<IScheduleDay>();
+			var scheduleDay2 = _mocks.StrictMock<IScheduleDay>();
+
 			using (_mocks.Record())
 			{
 				Expect.Call(_matrixData.Matrix).Return(_matrix);
 				Expect.Call(_matrix.SchedulePeriod).Return(_schedulePeriod);
 				int targetDaysOff;
-				int dayOffsNow;
-				Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulePeriod, out targetDaysOff, out dayOffsNow)).Return(false).OutRef(3, 2);
+				//int dayOffsNow;
+				IList<IScheduleDay> dayOffsNow = new List<IScheduleDay>{scheduleDay1, scheduleDay2};
+				Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulePeriod, out targetDaysOff, out dayOffsNow)).Return(false).OutRef(3, dayOffsNow);
 			}
 			using (_mocks.Playback())
 			{
@@ -48,13 +53,18 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 		[Test]
 		public void ShouldNotReturnMatrixDataIfTooManyDaysOff()
 		{
+			var scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
+			var scheduleDay2 = _mocks.StrictMock<IScheduleDay>();
+			var scheduleDay3 = _mocks.StrictMock<IScheduleDay>();
+
 			using (_mocks.Record())
 			{
 				Expect.Call(_matrixData.Matrix).Return(_matrix);
 				Expect.Call(_matrix.SchedulePeriod).Return(_schedulePeriod);
 				int targetDaysOff;
-				int dayOffsNow;
-				Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulePeriod, out targetDaysOff, out dayOffsNow)).Return(false).OutRef(2, 3);
+				//int dayOffsNow;
+				IList<IScheduleDay> dayOffsNow = new List<IScheduleDay> {scheduleDay1, scheduleDay2, scheduleDay3};
+				Expect.Call(_dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(_schedulePeriod, out targetDaysOff, out dayOffsNow)).Return(false).OutRef(2, dayOffsNow);
 			}
 			using (_mocks.Playback())
 			{

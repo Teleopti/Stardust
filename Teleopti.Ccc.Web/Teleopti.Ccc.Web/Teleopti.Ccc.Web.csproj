@@ -93,23 +93,14 @@
     <Reference Include="Contrib.SignalR.SignalRMessageBus">
       <HintPath>..\..\packages\Contrib.SignalR.SignalRMessageBus.1.0.1\lib\net40-Client\Contrib.SignalR.SignalRMessageBus.dll</HintPath>
     </Reference>
-    <Reference Include="DotNetOpenAuth.Core">
-      <HintPath>..\..\packages\DotNetOpenAuth.Core.4.2.2.13055\lib\net40-full\DotNetOpenAuth.Core.dll</HintPath>
     </Reference>
-    <Reference Include="DotNetOpenAuth.Core.UI">
-      <HintPath>..\..\packages\DotNetOpenAuth.Core.UI.4.2.2.13055\lib\net40-full\DotNetOpenAuth.Core.UI.dll</HintPath>
-    </Reference>
-    <Reference Include="DotNetOpenAuth.OpenId">
+    <Reference Include="DotNetOpenAuth.OpenId, Version=4.2.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\DotNetOpenAuth.OpenId.Core.4.2.2.13055\lib\net40-full\DotNetOpenAuth.OpenId.dll</HintPath>
     </Reference>
-    <Reference Include="DotNetOpenAuth.OpenId.Provider">
+    <Reference Include="DotNetOpenAuth.OpenId.Provider, Version=4.2.0.0, Culture=neutral, PublicKeyToken=2780ccd10d57b246, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\DotNetOpenAuth.OpenId.Provider.4.2.2.13055\lib\net40-full\DotNetOpenAuth.OpenId.Provider.dll</HintPath>
-    </Reference>
-    <Reference Include="DotNetOpenAuth.OpenId.Provider.UI">
-      <HintPath>..\..\packages\DotNetOpenAuth.OpenId.Provider.UI.4.2.2.13055\lib\net40-full\DotNetOpenAuth.OpenId.Provider.UI.dll</HintPath>
-    </Reference>
-    <Reference Include="DotNetOpenAuth.OpenId.UI">
-      <HintPath>..\..\packages\DotNetOpenAuth.OpenId.Core.UI.4.2.2.13055\lib\net40-full\DotNetOpenAuth.OpenId.UI.dll</HintPath>
     </Reference>
     <Reference Include="Elmah, Version=1.2.14706.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -121,13 +112,13 @@
     <Reference Include="log4net, Version=1.2.11.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\log4net.2.0.0\lib\net40-full\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="MbCache, Version=2.1.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
+    <Reference Include="MbCache, Version=2.2.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\MbCache.2.1\lib\net40\MbCache.dll</HintPath>
+      <HintPath>..\..\packages\MbCache.2.2\lib\net40\MbCache.dll</HintPath>
     </Reference>
-    <Reference Include="MbCache.ProxyImpl.LinFu, Version=2.1.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
+    <Reference Include="MbCache.ProxyImpl.LinFu, Version=2.2.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\MbCache.2.1\lib\net40\MbCache.ProxyImpl.LinFu.dll</HintPath>
+      <HintPath>..\..\packages\MbCache.2.2\lib\net40\MbCache.ProxyImpl.LinFu.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.AspNet.SignalR.Client, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -149,17 +140,11 @@
       <Private>True</Private>
       <HintPath>..\..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
-    <Reference Include="Mono.Math">
-      <HintPath>..\..\packages\DotNetOpenAuth.OpenId.Core.4.2.1.13026\lib\net40-full\Mono.Math.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Newtonsoft.Json.4.5.11\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NHibernate.Caches.SysCache, Version=3.1.0.4000, Culture=neutral, PublicKeyToken=6876f2ea66c9f443, processorArchitecture=MSIL">
       <HintPath>..\..\nhibernateAddons\Cache_Providers\NHibernate.Caches.SysCache.dll</HintPath>
-    </Reference>
-    <Reference Include="Org.Mentalis.Security.Cryptography">
-      <HintPath>..\..\packages\DotNetOpenAuth.OpenId.Core.4.2.1.13026\lib\net40-full\Org.Mentalis.Security.Cryptography.dll</HintPath>
     </Reference>
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
@@ -171,9 +156,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Rhino.ServiceBus.Autofac.3.0.2\lib\4.0\Rhino.ServiceBus.Autofac.dll</HintPath>
     </Reference>
-    <Reference Include="Rhino.ServiceBus.SqlQueues, Version=1.0.1.0, Culture=neutral, PublicKeyToken=345d633c75812f60, processorArchitecture=MSIL">
+    <Reference Include="Rhino.ServiceBus.SqlQueues, Version=1.0.1.4, Culture=neutral, PublicKeyToken=345d633c75812f60, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Rhino.ServiceBus.SqlQueues.1.0.1.0\lib\net40\Rhino.ServiceBus.SqlQueues.dll</HintPath>
+      <HintPath>..\..\packages\Rhino.ServiceBus.SqlQueues.1.0.1.4\lib\net40\Rhino.ServiceBus.SqlQueues.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.Net.Http.2.0.20710.0\lib\net40\System.Net.Http.dll</HintPath>
@@ -220,6 +205,14 @@
     <Reference Include="System.Configuration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Areas\MyTime\Core\Common\DataProvider\IUrlHelper.cs" />
+    <Compile Include="Areas\MyTime\Core\Common\DataProvider\UrlHelperProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Preference\DataProvider\IPreferenceTemplatePersister.cs" />
+    <Compile Include="Areas\MyTime\Core\Preference\DataProvider\IPreferenceTemplateProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceTemplatePersister.cs" />
+    <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceTemplateProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceTemplateInputMappingProfile.cs" />
+    <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceTemplateViewModelMappingProfile.cs" />
     <Compile Include="..\..\Teleopti.Ccc.Web.Broker\MessageBrokerHub.cs">
       <Link>Core\MessageBroker\MessageBrokerHub.cs</Link>
     </Compile>
@@ -256,6 +249,9 @@
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradeSwapDetailsViewModelMappingProfile.cs" />
     <Compile Include="Areas\MyTime\Core\Requests\Mapping\ShiftTradeTimeLineHoursViewModelFactory.cs" />
     <Compile Include="Areas\MyTime\Core\StudentAvailability\Mapping\StudentAvailabilityAndScheduleDayViewModelMappingProfile.cs" />
+    <Compile Include="Areas\MyTime\Models\Preference\PreferenceInput.cs" />
+    <Compile Include="Areas\MyTime\Models\Preference\PreferenceTemplateInput.cs" />
+    <Compile Include="Areas\MyTime\Models\Preference\PreferenceTemplateViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradePersonScheduleViewModel.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeRequestForm.cs" />
     <Compile Include="Areas\MyTime\Models\Requests\ShiftTradeSwapDetailsViewModel.cs" />
@@ -913,6 +909,9 @@
     <Content Include="Content\Scripts\jquery.validate.unobtrusive.min.js" />
     <Content Include="Areas\MobileReports\Content\Images\body_bg.jpg" />
     <Content Include="Areas\MobileReports\Content\Images\icon_sprite.png" />
+    <Content Include="Content\select2\select2.css" />
+    <Content Include="Content\select2\select2.png" />
+    <Content Include="Content\select2\select2x2.png" />
     <Content Include="Content\signalr\broker-hubs.js" />
     <Content Include="Content\signals\signals.js" />
     <Content Include="Content\signals\signals.min.js" />
@@ -935,6 +934,9 @@
     <Content Include="Content\moment-datepicker\moment-datepicker.min.js" />
     <Content Include="Content\moment\moment.js" />
     <Content Include="Content\moment\moment.min.js" />
+    <Content Include="Content\select2\spinner.gif" />
+    <Content Include="Content\select2\select2.js" />
+    <Content Include="Content\select2\select2.min.js" />
     <Content Include="Content\Scripts\MicrosoftAjax.js" />
     <Content Include="Content\Scripts\MicrosoftAjax.debug.js" />
     <Content Include="Content\Scripts\MicrosoftMvcAjax.js" />

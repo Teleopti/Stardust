@@ -36,24 +36,19 @@ namespace Teleopti.Ccc.Domain.Collection
             if(_owner!=null)
                 _owner.OnAdd(item);
             Items.Add(item);
-            item.SetParent(_owner);
+			var owner = _owner as IEntity;
+			if(owner != null)
+				item.SetParent(owner);
         }
 
         public bool LayerIsOverlapping(ILayer<T> layer)
         {
-            foreach (ILayer<T> presentLayer in Items)
-            {
-                if (layer.Period.Intersect(presentLayer.Period))
-                {
-                    return true;
-                }
-            }
-            return false;
+	        return Items.Any(presentLayer => layer.Period.Intersect(presentLayer.Period));
         }
 
-        public void MoveAllLayers(TimeSpan time)
+	    public void MoveAllLayers(TimeSpan time)
         {
-            foreach (ILayer<T> layer in Items)
+            foreach (var layer in Items)
             {
                 layer.MoveLayer(time);
             }
@@ -66,12 +61,12 @@ namespace Teleopti.Ccc.Domain.Collection
                 return null;
 
             var firstPeriod = Items[0].Period;
-            DateTime min = firstPeriod.StartDateTime;
-            DateTime max = firstPeriod.EndDateTime;
+            var min = firstPeriod.StartDateTime;
+            var max = firstPeriod.EndDateTime;
             
-            for (int i = 1; i < count; i++)
+            for (var i = 1; i < count; i++)
             {
-                DateTimePeriod period = Items[i].Period;
+                var period = Items[i].Period;
                 if (period.StartDateTime < min)
                     min = period.StartDateTime;
                 if (period.EndDateTime > max)
@@ -110,7 +105,7 @@ namespace Teleopti.Ccc.Domain.Collection
 
         public void MoveUpLayer(ILayer<T> layer)
         {
-            int index = Items.IndexOf(layer);
+            var index = Items.IndexOf(layer);
             if (index == -1) return;
             Items.Remove(layer);
             Items.Insert(Math.Max(0, index - 1), layer);
@@ -118,7 +113,7 @@ namespace Teleopti.Ccc.Domain.Collection
 
         public void MoveDownLayer(ILayer<T> layer)
         {
-            int index = Items.IndexOf(layer);
+            var index = Items.IndexOf(layer);
             if (index == -1) return;
             Items.Remove(layer);
             Items.Insert(Math.Min(Items.Count, index + 1), layer);

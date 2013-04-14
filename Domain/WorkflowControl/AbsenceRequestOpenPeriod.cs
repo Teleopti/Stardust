@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
         private int _absenceRequestProcess;
 
         private static readonly IList<IAbsenceRequestValidator> _staffingThresholdValidatorList =
-            new List<IAbsenceRequestValidator> { new AbsenceRequestNoneValidator(), new StaffingThresholdValidator(), new BudgetGroupAllowanceValidator()};
+            new List<IAbsenceRequestValidator> { new AbsenceRequestNoneValidator(), new StaffingThresholdValidator(), new BudgetGroupAllowanceValidator(), new BudgetGroupHeadCountValidator()};
 
         private static readonly IList<IProcessAbsenceRequest> _absenceRequestProcessList =
             new List<IProcessAbsenceRequest> {new PendingAbsenceRequest(), new GrantAbsenceRequest(), new DenyAbsenceRequest()};
@@ -107,7 +107,9 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
             }
         }
 
-        public virtual IEnumerable<IAbsenceRequestValidator> GetSelectedValidatorList(ISchedulingResultStateHolder schedulingResultStateHolder, IResourceOptimizationHelper resourceOptimizationHelper, IPersonAccountBalanceCalculator personAccountBalanceCalculator, IBudgetGroupAllowanceSpecification budgetGroupAllowanceSpecification)
+        public virtual IEnumerable<IAbsenceRequestValidator> GetSelectedValidatorList(ISchedulingResultStateHolder schedulingResultStateHolder, IResourceOptimizationHelper resourceOptimizationHelper, 
+                                                                                      IPersonAccountBalanceCalculator personAccountBalanceCalculator, IBudgetGroupAllowanceSpecification budgetGroupAllowanceSpecification, 
+                                                                                      IBudgetGroupAllowanceCalculator budgetGroupAllowanceCalculator, IBudgetGroupHeadCountSpecification budgetGroupHeadCountSpecification)
         {
             IList<IAbsenceRequestValidator> validatorList = new List<IAbsenceRequestValidator>
                                                                 { PersonAccountValidator, StaffingThresholdValidator};
@@ -117,6 +119,8 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
                 requestValidator.PersonAccountBalanceCalculator = personAccountBalanceCalculator;
                 requestValidator.ResourceOptimizationHelper = resourceOptimizationHelper;
                 requestValidator.BudgetGroupAllowanceSpecification = budgetGroupAllowanceSpecification;
+                requestValidator.BudgetGroupAllowanceCalculator = budgetGroupAllowanceCalculator;
+                requestValidator.BudgetGroupHeadCountSpecification = budgetGroupHeadCountSpecification;
             }
             return validatorList;
         }

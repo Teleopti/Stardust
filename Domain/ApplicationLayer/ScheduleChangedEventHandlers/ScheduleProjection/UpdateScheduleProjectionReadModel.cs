@@ -1,3 +1,4 @@
+using System;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection
@@ -13,7 +14,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 			_scheduleProjectionReadOnlyRepository = scheduleProjectionReadOnlyRepository;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods",
+			MessageId = "0")]
 		public void Execute(IScheduleRange scheduleRange, DateOnlyPeriod dateOnlyPeriod)
 		{
 			_projectionChangedEventBuilder.Build<ProjectionChangedEvent>(

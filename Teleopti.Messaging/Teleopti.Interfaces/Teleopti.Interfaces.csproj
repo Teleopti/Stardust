@@ -51,11 +51,11 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>bin\Debug\Teleopti.Interfaces.XML</DocumentationFile>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+      <CodeAnalysisRuleSet>$(SolutionDir)\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -66,19 +66,19 @@
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>
     </DocumentationFile>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+      <CodeAnalysisRuleSet>$(SolutionDir)\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x86\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <DocumentationFile>bin\Debug\Teleopti.Interfaces.XML</DocumentationFile>
     <DebugType>full</DebugType>
     <PlatformTarget>x86</PlatformTarget>
     <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
     <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
     <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+      <CodeAnalysisRuleSet>$(SolutionDir)\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <OutputPath>bin\x86\Release\</OutputPath>
@@ -89,7 +89,7 @@
     <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
     <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
     <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+      <CodeAnalysisRuleSet>$(SolutionDir)\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -99,6 +99,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Domain\ActualAgentState.cs" />
     <Compile Include="Domain\AlarmTypeMode.cs" />
     <Compile Include="Domain\AxisLocation.cs" />
     <Compile Include="Domain\BlockFinderType.cs" />
@@ -108,12 +109,17 @@
     <Compile Include="Domain\ChartSeriesDisplayType.cs" />
     <Compile Include="Domain\ClipboardAction.cs" />
     <Compile Include="Domain\ClipboardItems.cs" />
+    <Compile Include="Domain\ComplexRuleSetEventArgs.cs" />
     <Compile Include="Domain\IActivityRestrictableVisualLayer.cs" />
+    <Compile Include="Domain\IActualAgentState.cs" />
     <Compile Include="Domain\IAggregateRootWithEvents.cs" />
+    <Compile Include="Domain\IBudgetGroupAllowanceCalculator.cs" />
+    <Compile Include="Domain\IBudgetGroupHeadCountSpecification.cs" />
     <Compile Include="Domain\IEffectiveRestrictionCombiner.cs" />
     <Compile Include="Domain\IChangePasswordResultInfo.cs" />
     <Compile Include="Domain\IEvent.cs" />
     <Compile Include="Domain\ILoggedOnUser.cs" />
+    <Compile Include="Domain\IPersistedActivityLayer.cs" />
     <Compile Include="Domain\IPersonalShiftRestrictionCombiner.cs" />
     <Compile Include="Domain\IActivityNormalExtender.cs" />
     <Compile Include="Domain\IActivityRestrictionTemplate.cs" />
@@ -318,6 +324,7 @@
     <Compile Include="Domain\ITextFormatter.cs" />
     <Compile Include="Domain\ITimeZoneDim.cs" />
     <Compile Include="Domain\ITrueFalseRandomizer.cs" />
+    <Compile Include="Domain\IUnderStaffingData.cs" />
     <Compile Include="Domain\IUniqueSchedulePartExtractor.cs" />
     <Compile Include="Domain\IUnsafePersonProvider.cs" />
     <Compile Include="Domain\IUnsavedDaysInfo.cs" />
@@ -331,6 +338,7 @@
     <Compile Include="Domain\IWorkflowControlSet.cs" />
     <Compile Include="Domain\IWorkShiftCalculator.cs" />
     <Compile Include="Domain\IWorkShiftCalculationResultHolder.cs" />
+    <Compile Include="Domain\IWorkShiftAddCallback.cs" />
     <Compile Include="Domain\IWorkShiftFinderService.cs" />
     <Compile Include="Domain\IWorkShiftFinderServiceFactory.cs" />
     <Compile Include="Domain\DateOnlyPeriod.cs" />
@@ -344,7 +352,6 @@
     <Compile Include="Domain\ExportFormat.cs" />
     <Compile Include="Domain\IActivityRestriction.cs" />
     <Compile Include="Domain\IAffectedPersonSkillService.cs" />
-    <Compile Include="Domain\IAgentState.cs" />
     <Compile Include="Domain\IAggregateSkillStaffPeriod.cs" />
     <Compile Include="Domain\IAlarmType.cs" />
     <Compile Include="Domain\IAvailabilityDay.cs" />
@@ -369,7 +376,6 @@
     <Compile Include="Domain\IAnnotatable.cs" />
     <Compile Include="Domain\IAnnotatableGrid.cs" />
     <Compile Include="Domain\IAbsenceRequest.cs" />
-    <Compile Include="Domain\IExternalAgentState.cs" />
     <Compile Include="Domain\IFilterOnPeriodOptimizer.cs" />
     <Compile Include="Domain\IFurnessData.cs" />
     <Compile Include="Domain\IFurnessEvaluator.cs" />
@@ -584,7 +590,6 @@
     <Compile Include="Domain\IMinMaxContractTimeCalculator.cs" />
     <Compile Include="Domain\ModifyEventArgs.cs" />
     <Compile Include="Domain\PeriodValueCalculationMethodOption.cs" />
-    <Compile Include="Domain\ExternalAgentState.cs" />
     <Compile Include="Domain\ScheduleChangedInDefaultScenario.cs" />
     <Compile Include="Domain\ScheduleModifier.cs" />
     <Compile Include="Domain\SchedulePartView.cs" />
@@ -606,6 +611,7 @@
     <Compile Include="Domain\MultiplicatorType.cs" />
     <Compile Include="Domain\TimeOfDay.cs" />
     <Compile Include="Domain\TimeZoneInfoExtensions.cs" />
+    <Compile Include="Domain\ValidatedRequest.cs" />
     <Compile Include="Domain\WeekNumber.cs" />
     <Compile Include="Domain\WorkShiftLengthHintOption.cs" />
     <Compile Include="Domain\WorkTimeLimitation.cs" />
@@ -774,91 +780,25 @@
     <Compile Include="Infrastructure\IStatelessUnitOfWork.cs" />
     <Compile Include="Infrastructure\IUnitOfWork.cs" />
     <Compile Include="Infrastructure\IUnitOfWorkFactory.cs" />
+    <Compile Include="Infrastructure\ICurrentUnitOfWorkFactory.cs" />
     <Compile Include="Infrastructure\IWriteToFile.cs" />
     <Compile Include="Domain\IWorkShiftBackToLegalStateServicePro.cs" />
     <Compile Include="Infrastructure\LicenseType.cs" />
     <Compile Include="IPossibleStartEndCategory.cs" />
-    <Compile Include="MessageBroker\Client\IConcurrentUsers.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MessageBroker\Client\IMessageDispatcher.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Domain\IValidatedRequest.cs" />
     <Compile Include="MessageBroker\Client\IMessageSender.cs" />
-    <Compile Include="MessageBroker\Client\IStaticDataManager.cs">
+    <Compile Include="MessageBroker\Core\Consts.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MessageBroker\Coders\IEventFilterDecoder.cs" />
-    <Compile Include="MessageBroker\Coders\IEventFilterEncoder.cs" />
-    <Compile Include="MessageBroker\Coders\IEventHeartbeatDecoder.cs" />
-    <Compile Include="MessageBroker\Coders\IEventHeartbeatEncoder.cs" />
-    <Compile Include="MessageBroker\Coders\IEventMessageDecoder.cs" />
-    <Compile Include="MessageBroker\Coders\IEventMessageEncoder.cs" />
-    <Compile Include="MessageBroker\Coders\IEventSubscriberDecoder.cs" />
-    <Compile Include="MessageBroker\Coders\IEventSubscriberEncoder.cs" />
-    <Compile Include="MessageBroker\Coders\IEventUserDecoder.cs" />
-    <Compile Include="MessageBroker\Coders\IEventUserEncoder.cs" />
-    <Compile Include="MessageBroker\Core\BroadcastDirection.cs" />
-    <Compile Include="MessageBroker\Core\Consts.cs" />
-    <Compile Include="MessageBroker\Core\IBrokerProcessor.cs" />
-    <Compile Include="MessageBroker\Core\IBrokerService.cs" />
-    <Compile Include="MessageBroker\Core\ICache.cs" />
-    <Compile Include="MessageBroker\Core\IChat.cs" />
-    <Compile Include="MessageBroker\Core\IConfigurationInfo.cs" />
-    <Compile Include="MessageBroker\Core\ICustomTcpListener.cs">
+    <Compile Include="MessageBroker\Core\IFramer.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MessageBroker\Core\ICustomThreadPool.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MessageBroker\Core\ICustomUdpListener.cs" />
-    <Compile Include="MessageBroker\Core\IDataMapper.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MessageBroker\Core\IDomainObjectFactory.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MessageBroker\Core\IFramer.cs" />
-    <Compile Include="MessageBroker\Core\ILogbookEntry.cs" />
-    <Compile Include="MessageBroker\Core\ILogEntry.cs" />
-    <Compile Include="MessageBroker\Core\ILogEntryDecoder.cs" />
-    <Compile Include="MessageBroker\Core\ILogEntryEncoder.cs" />
-    <Compile Include="MessageBroker\Core\IMapperBase.cs" />
     <Compile Include="MessageBroker\Core\IMessageFilterManager.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MessageBroker\Core\IMessageRegistrationManager.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MessageBroker\Core\IMessagingProtocol.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MessageBroker\Core\IMulticastAddressInfo.cs" />
-    <Compile Include="MessageBroker\Core\ISubscriber.cs" />
-    <Compile Include="MessageBroker\Core\IObjectInserter.cs" />
-    <Compile Include="MessageBroker\Core\IObjectReader.cs" />
-    <Compile Include="MessageBroker\Core\IPollingManager.cs" />
-    <Compile Include="MessageBroker\Core\IProtocol.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MessageBroker\Core\IPublisher.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MessageBroker\Core\ISocketInfo.cs" />
-    <Compile Include="MessageBroker\Core\IStartedService.cs" />
-    <Compile Include="MessageBroker\Core\ITcpSender.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MessageBroker\Core\IUdpSender.cs" />
-    <Compile Include="MessageBroker\Core\ThreadPoolThreadSettings.cs" />
     <Compile Include="MessageBroker\Events\DomainUpdateType.cs" />
     <Compile Include="MessageBroker\Events\EventMessageArgs.cs" />
-    <Compile Include="MessageBroker\Events\IEventFilter.cs" />
-    <Compile Include="MessageBroker\Events\IEventHeartbeat.cs" />
     <Compile Include="MessageBroker\Events\IEventMessage.cs" />
-    <Compile Include="MessageBroker\Events\IEventReceipt.cs" />
-    <Compile Include="MessageBroker\Events\IEventSubscriber.cs" />
-    <Compile Include="MessageBroker\Events\IEventUser.cs" />
     <Compile Include="MessageBroker\Events\IMessageBroker.cs" />
     <Compile Include="MessageBroker\Events\IMessageBrokerListener.cs" />
     <Compile Include="MessageBroker\Events\IMessageBrokerSender.cs" />
@@ -870,6 +810,8 @@
     <Compile Include="Messages\Denormalize\PersonPeriodChangedMessage.cs" />
     <Compile Include="Messages\Denormalize\ProcessDenormalizeQueue.cs" />
     <Compile Include="Messages\General\ChildSkillSelection.cs" />
+    <Compile Include="Messages\General\QuickForecastWorkloadsMessage.cs" />
+    <Compile Include="Messages\General\QuickForecastWorkloadMessage.cs" />
     <Compile Include="Messages\General\RecalculateForecastOnSkillMessage.cs" />
     <Compile Include="Messages\General\ExportMultisiteSkillsToSkill.cs" />
     <Compile Include="Messages\General\ExportMultisiteSkillToSkill.cs" />
@@ -887,6 +829,10 @@
     <Compile Include="Messages\RaptorDomainMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Domain\SettingValueTypes.cs" />
+    <Compile Include="Domain\UnderStaffingData.cs" />
+    <Compile Include="Messages\Rta\PersonWithExternalLogon.cs" />
+    <Compile Include="Messages\Rta\BusinessUnitInfo.cs" />
+    <Compile Include="Messages\Rta\UpdatedScheduleDay.cs" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="..\..\CodeAnalysisDictionary.xml">

@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			preferenceFeedbackProvider = MockRepository.GenerateMock<IPreferenceFeedbackProvider>();
 
 			Mapper.Reset();
-			Mapper.Initialize(x => x.AddProfile(new PreferenceDayFeedbackViewModelMappingProfile(Depend.On(preferenceFeedbackProvider), Depend.On(() => Mapper.Engine))));
+			Mapper.Initialize(x => x.AddProfile(new PreferenceDayFeedbackViewModelMappingProfile(preferenceFeedbackProvider, new Lazy<IMappingEngine>(() => Mapper.Engine))));
 		}
 
 		[Test]

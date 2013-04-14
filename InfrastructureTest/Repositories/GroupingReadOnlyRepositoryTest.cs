@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
 		protected override void SetupForRepositoryTest()
 		{
-			_target = new GroupingReadOnlyRepository(UnitOfWorkFactory.Current);
+			_target = new GroupingReadOnlyRepository(UnitOfWorkFactory.CurrentUnitOfWorkFactory());
 		}
 
 		[Test]
@@ -28,9 +28,16 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		}
 
 		[Test]
-		public void ShouldLoadAvailableGroupsFromReadModel()
+		public void ShouldLoadAvailableGroupsWithPageIdFromReadModel()
 		{
 			var items = _target.AvailableGroups(new ReadOnlyGroupPage{PageId = new Guid("6CE00B41-0722-4B36-91DD-0A3B63C545CF"),PageName = "xxMain"},DateOnly.Today);
+			items.Count().Should().Be.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldLoadAvailableGroupsFromReadModel()
+		{
+			var items = _target.AvailableGroups(new ReadOnlyGroupPage { PageName = "xxMain" }, DateOnly.Today);
 			items.Count().Should().Be.EqualTo(0);
 		}
 

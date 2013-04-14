@@ -21,6 +21,13 @@ GO
 --				2012-10-08 #20924 Fix Contract Deviation
 --
 -- =============================================
+/*
+set statistics io on
+set statistics time on
+dbcc freeproccache
+dbcc dropcleanbuffers
+exec mart.etl_fact_schedule_deviation_load '2013-02-01 23:00:00','2013-03-01 23:00:00','928DD0BC-BF40-412E-B970-9B5E015AADEA' --Demo
+*/
 
 --exec mart.etl_fact_schedule_deviation_load '2013-02-18 23:00:00','2013-02-21 23:00:00','928DD0BC-BF40-412E-B970-9B5E015AADEA' --Demo
 CREATE PROCEDURE [mart].[etl_fact_schedule_deviation_load]
@@ -77,20 +84,6 @@ CREATE CLUSTERED INDEX [#CIX_fact_schedule] ON #fact_schedule
 (
 	[schedule_date_id] ASC,
 	[interval_id] ASC
-)
-
-CREATE TABLE #fact_agent (
-	date_id int not null,
-	interval_id smallint not null,
-	acd_login_id int not null,
-	ready_time_s int null
-)
-
-CREATE CLUSTERED INDEX [#CIX_fact_agent] ON #fact_agent
-(
-	[date_id] ASC,
-	[interval_id] ASC,
-	[acd_login_id] ASC
 )
 
 --get the number of intervals outside shift to consider for adherence calc
@@ -165,7 +158,7 @@ SELECT
 FROM 
 	mart.bridge_acd_login_person b
 JOIN
-	#fact_agent fa
+	mart.fact_agent fa
 ON
 	b.acd_login_id = fa.acd_login_id
 INNER JOIN 
@@ -234,6 +227,7 @@ SET shift_startdate_id = shifts.shift_startdate_id, shift_startinterval_id=shift
 FROM #fact_schedule_deviation shifts
 INNER JOIN #fact_schedule_deviation stat
 ON stat.date_id=shifts.date_id AND stat.interval_id=shifts.interval_id AND stat.person_id=shifts.person_id
+WHERE shifts.shift_startdate_id IS NOT NULL
 
 --ALL ROWS BEFORE SHIFT WITH NO SHIFT_STARTDATE_ID TO NEAREST SHIFT +-SOMETHING 
 UPDATE stat

@@ -11,42 +11,57 @@ Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
 	self.TypeEnum = ko.observable(2);
 	self.IsFullDay = ko.observable(true);
 	self.Template = ko.observable("shifttrade-request-detail-template");
-	self.CanApprove = ko.observable(true);
+	self.IsTradeCreatedByMe = ko.observable(false);
 	self.ajax = ajax;
 	self.From = ko.observable("");
 	self.To = ko.observable("");
+	self.CanApproveAndDeny = ko.observable(true);
 	self.Approve = function () {
-		self.respondToRequest("Requests/ApproveShiftTrade/" + self.Id());
+		self.CanApproveAndDeny(false);
+		self.ajax.Ajax({
+			url: "Requests/ApproveShiftTrade/" + self.Id(),
+			dataType: "json",
+			type: "POST",
+			success: function (data) {
+				Teleopti.MyTimeWeb.Request.List.AddItemAtTop(data, true);
+				self.CanApproveAndDeny(true);
+			}
+		});
 		Teleopti.MyTimeWeb.Request.RequestDetail.FadeEditSection();
 	};
 	self.pixelPerMinute = ko.observable(0.3);
 	self.Deny = function () {
-		self.respondToRequest("Requests/DenyShiftTrade/" + self.Id());
-		Teleopti.MyTimeWeb.Request.RequestDetail.FadeEditSection();
-	};
-	self.respondToRequest = function (url) {
-
+		self.CanApproveAndDeny(false);
 		self.ajax.Ajax({
-			url: url,
+			url: "Requests/DenyShiftTrade/" + self.Id(),
 			dataType: "json",
 			type: "POST",
 			success: function (data) {
-				Teleopti.MyTimeWeb.Request.List.AddItemAtTop(data);
+				Teleopti.MyTimeWeb.Request.List.AddItemAtTop(data,false);
+				self.CanApproveAndDeny(true);
 			}
 		});
+		Teleopti.MyTimeWeb.Request.RequestDetail.FadeEditSection();
 	};
+	
 	self.mySchedule = ko.observable(new Teleopti.MyTimeWeb.Request.PersonScheduleViewModel());
 	self.otherSchedule = ko.observable(new Teleopti.MyTimeWeb.Request.PersonScheduleViewModel());
 	self.hours = ko.observableArray();
 	self.hourWidth = ko.observable(10);
-	self.loadSwapDetails = function () {
+	
+    self.IsPending = ko.observable(false);
+    self.showInfo = ko.observable(false);
+	self.personFrom = ko.observable();
+	self.personTo = ko.observable();
+	
+    self.loadSwapDetails = function () {
 		self.ajax.Ajax({
 			url: "Requests/ShiftTradeRequestSwapDetails/" + self.Id(),
 			dataType: "json",
-			type: "POST",
+			type: "GET",
 			success: function (data) {
-				var numberOfShownHours = data.TimeLineHours.length;
-				var showNumberRatio = Math.floor(numberOfShownHours / 24);
+			    var numberOfShownHours = data.TimeLineHours.length;
+				var showNumberRatio = Math.floor(numberOfShownHours / 8);
 				self.pixelPerMinute(72 / (numberOfShownHours * 10));
 				self.hours.removeAll();
 				for (var i = 0; i < data.TimeLineHours.length; i++) {
@@ -56,7 +71,8 @@ Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
 				}
 				self.createMySchedule(data.From);
 				self.createOtherSchedule(data.To);
-
+				self.personFrom(data.PersonFrom);
+				self.personTo(data.PersonTo);
 			}
 		});
 	};
@@ -78,15 +94,17 @@ Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel = function (ajax) {
 };
 
 ko.utils.extend(Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel.prototype, {
-	Initialize: function (data) {
-		var self = this;
+    Initialize: function (data) {
+        var self = this;
+        self.showInfo(!data.IsPending);
 		self.Subject(data.Subject);
 		self.MessageText(data.Text);
 		self.Id(data.Id);
-		self.CanApprove(!data.IsCreatedByUser);
+		self.IsTradeCreatedByMe(data.IsCreatedByUser);
 		self.From(data.From);
 		self.To(data.To);
-	}
+		self.IsPending(data.IsPending);
+    }
 });
 
 Teleopti.MyTimeWeb.Request.TimeLineHourViewModel = function (hour, parentViewModel) {

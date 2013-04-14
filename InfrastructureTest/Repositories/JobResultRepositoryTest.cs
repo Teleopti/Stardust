@@ -58,13 +58,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             org.Period.Should().Be.EqualTo(loadedAggregateFromDatabase.Period);
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
-        public void ShouldCreateRepositoryWithUnitOfWorkFactory()
-        {
-            var repository = new JobResultRepository(UnitOfWorkFactory.Current);
-            Assert.IsNotNull(repository);
-        }
-
 		[Test]
 		public void ShouldLoadWithPaging()
 		{

@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 {
     public class OpenAndSplitTargetSkillConsumer : ConsumerOf<OpenAndSplitTargetSkill>
     {
-        private IUnitOfWorkFactory _unitOfWorkFactory;
+		private ICurrentUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IOpenAndSplitSkillCommand _command;
         private readonly ISkillRepository _skillRepository;
         private readonly IJobResultRepository _jobResultRepository;
@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
         private readonly IMessageBroker _messageBroker;
         private readonly IServiceBus _serviceBus;
 
-        public OpenAndSplitTargetSkillConsumer(IUnitOfWorkFactory unitOfWorkFactory, IOpenAndSplitSkillCommand command, ISkillRepository skillRepository, IJobResultRepository jobResultRepository, IJobResultFeedback feedback, IMessageBroker messageBroker, IServiceBus serviceBus)
+		public OpenAndSplitTargetSkillConsumer(ICurrentUnitOfWorkFactory unitOfWorkFactory, IOpenAndSplitSkillCommand command, ISkillRepository skillRepository, IJobResultRepository jobResultRepository, IJobResultFeedback feedback, IMessageBroker messageBroker, IServiceBus serviceBus)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_command = command;
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Domain.Forecasting.Export.IJobResultFeedback.Info(System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Domain.Forecasting.Export.IJobResultFeedback.Error(System.String,System.Exception)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
         public void Consume(OpenAndSplitTargetSkill message)
         {
-            using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+            using (var unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
             {
                 var jobResult = _jobResultRepository.Get(message.JobId);
                 var targetSkill = _skillRepository.Get(message.TargetSkillId);
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 
         private void notifyServiceBusErrors(ImportForecastsToSkill message, Exception e)
         {
-            using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+            using (var uow = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
             {
                 var job = _jobResultRepository.Get(message.JobId);
                 _feedback.SetJobResult(job, _messageBroker);

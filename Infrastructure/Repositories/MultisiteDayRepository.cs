@@ -30,6 +30,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
+				public MultisiteDayRepository(ICurrentUnitOfWork currentUnitOfWork)
+					: base(currentUnitOfWork)
+	    {
+		    
+	    }
+
         /// <summary>
         /// Finds the range.
         /// </summary>

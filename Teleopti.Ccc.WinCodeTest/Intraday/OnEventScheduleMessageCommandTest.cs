@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 		private IIntradayView _view;
 		private IScenario _scenario;
 		private ISchedulingResultLoader _schedulingResultLoader;
-		private IRtaStateHolder _rtaStateHolder;
 		private IUnitOfWorkFactory _unitOfWorkFactory;
 		private IRepositoryFactory _repositoryFactory;
 		private ISchedulerStateHolder _schedulerStateHolder;
@@ -41,13 +40,12 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 			_person = PersonFactory.CreatePerson();
 			_person.SetId(Guid.NewGuid());
 			_schedulingResultLoader = mocks.DynamicMock<ISchedulingResultLoader>();
-			_rtaStateHolder = mocks.StrictMock<IRtaStateHolder>();
 			_unitOfWorkFactory = mocks.StrictMock<IUnitOfWorkFactory>();
 			_repositoryFactory = mocks.StrictMock<IRepositoryFactory>();
 			_schedulerStateHolder = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_period,TeleoptiPrincipal.Current.Regional.TimeZone), new[]{_person});
 			_schedulerStateHolder.SchedulingResultState.PersonsInOrganization = _schedulerStateHolder.AllPermittedPersons;
 			
-	        target = new OnEventScheduleMessageCommand(_view,_schedulingResultLoader,_rtaStateHolder,_unitOfWorkFactory,_repositoryFactory);
+	        target = new OnEventScheduleMessageCommand(_view,_schedulingResultLoader,_unitOfWorkFactory,_repositoryFactory);
 		}
 
 		[Test]
@@ -117,7 +115,6 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 
 			Expect.Call(_schedulingResultLoader.SchedulerState).Return(_schedulerStateHolder);
 			Expect.Call(scheduleDictionary.DeleteFromBroker(idFromBroker)).Return(null);
-			Expect.Call(_rtaStateHolder.InitializeSchedules);
 			Expect.Call(_view.DrawSkillGrid);
 
 			mocks.ReplayAll();
@@ -137,7 +134,6 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 
 			Expect.Call(_schedulingResultLoader.SchedulerState).Return(_schedulerStateHolder);
 			Expect.Call(()=>scheduleDictionary.DeleteMeetingFromBroker(idFromBroker));
-			Expect.Call(_rtaStateHolder.InitializeSchedules);
 			Expect.Call(_view.DrawSkillGrid);
 
 			mocks.ReplayAll();
@@ -191,7 +187,6 @@ namespace Teleopti.Ccc.WinCodeTest.Intraday
 				new SchedulingResultStateHolder(personsInOrganisation, scheduleDictionary,
 												new Dictionary<ISkill, IList<ISkillDay>>())).Repeat.AtLeastOnce();
 			Expect.Call(_schedulerStateHolder.Schedules).Return(scheduleDictionary).Repeat.AtLeastOnce();
-			Expect.Call(_rtaStateHolder.InitializeSchedules);
 			Expect.Call(_schedulingResultLoader.InitializeScheduleData);
 
 			Expect.Call(() => unitOfWork.Reassociate(_scenario));

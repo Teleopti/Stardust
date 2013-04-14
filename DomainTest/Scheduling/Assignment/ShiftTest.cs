@@ -17,10 +17,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
     [TestFixture]
     public class ShiftTest
     {
-        private Shift source;
+        private MainShift source;
 
-        private Shift destination1;
-        private Shift destination2;
+		private MainShift destination1;
+		private MainShift destination2;
 
         /// <summary>
         /// Run once for every test.
@@ -80,9 +80,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
             typeof(Entity).GetField("_id", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(source, Guid.NewGuid());
 
-            source.LayerCollection.Add(new ActivityLayer(ActivityFactory.CreateActivity("hej1"), period1));
+            source.LayerCollection.Add(new MainShiftActivityLayer(ActivityFactory.CreateActivity("hej1"), period1));
 
-            source.LayerCollection.Add(new ActivityLayer(ActivityFactory.CreateActivity("hej2"), period2));
+			source.LayerCollection.Add(new MainShiftActivityLayer(ActivityFactory.CreateActivity("hej2"), period2));
         }
 
         /// <summary>
@@ -104,11 +104,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
             typeof(Entity).GetField("_id", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(destination1, Guid.NewGuid());
 
-            destination1.LayerCollection.Add(new ActivityLayer(ActivityFactory.CreateActivity("bye1"), period1));
+			destination1.LayerCollection.Add(new MainShiftActivityLayer(ActivityFactory.CreateActivity("bye1"), period1));
 
-            destination1.LayerCollection.Add(new ActivityLayer(ActivityFactory.CreateActivity("bye2"), period2));
+			destination1.LayerCollection.Add(new MainShiftActivityLayer(ActivityFactory.CreateActivity("bye2"), period2));
 
-            destination1.LayerCollection.Add(new ActivityLayer(ActivityFactory.CreateActivity("bye3"), period3));
+			destination1.LayerCollection.Add(new MainShiftActivityLayer(ActivityFactory.CreateActivity("bye3"), period3));
         }
 
         /// <summary>
@@ -123,13 +123,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
             typeof(Entity).GetField("_id", BindingFlags.NonPublic | BindingFlags.Instance).SetValue(destination2, Guid.NewGuid());
 
-            destination2.LayerCollection.Add(new ActivityLayer(ActivityFactory.CreateActivity("bye1"), period1));
+            destination2.LayerCollection.Add(new MainShiftActivityLayer(ActivityFactory.CreateActivity("bye1"), period1));
         }
 
         [Test]
         public void VerifyHasProjectionTrue()
         {
-            source.LayerCollection.Add(new ActivityLayer(new Activity("sdf"), new DateTimePeriod(2002,1,1,2003,1,1)));
+			source.LayerCollection.Add(new MainShiftActivityLayer(new Activity("sdf"), new DateTimePeriod(2002, 1, 1, 2003, 1, 1)));
             Assert.IsTrue(source.HasProjection);
         }
 
@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         public void VerifyProjectionWithOneItem()
         {
             ActivityLayer actLayer =
-                new ActivityLayer(new Activity("sdfsdf"), new DateTimePeriod(2000, 1, 1, 2002, 1, 1));
+				new MainShiftActivityLayer(new Activity("sdfsdf"), new DateTimePeriod(2000, 1, 1, 2002, 1, 1));
             source.LayerCollection.Add(actLayer);
             IProjectionService svc = source.ProjectionService();
 
@@ -166,11 +166,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             Activity act2 = new Activity("2");
 
             source.LayerCollection.Add(
-                new ActivityLayer(act1, new DateTimePeriod(2000, 1, 1, 2005, 1, 1)));
+				new MainShiftActivityLayer(act1, new DateTimePeriod(2000, 1, 1, 2005, 1, 1)));
             source.LayerCollection.Add(
-                new ActivityLayer(act2, new DateTimePeriod(2001, 1, 1, 2002, 1, 1)));
+				new MainShiftActivityLayer(act2, new DateTimePeriod(2001, 1, 1, 2002, 1, 1)));
             source.LayerCollection.Add(
-                new ActivityLayer(act2, new DateTimePeriod(2003, 1, 1, 2004, 1, 1)));
+				new MainShiftActivityLayer(act2, new DateTimePeriod(2003, 1, 1, 2004, 1, 1)));
 
             IProjectionService svc = source.ProjectionService();
             IList<IVisualLayer> resWrapper = new List<IVisualLayer>(svc.CreateProjection());
@@ -195,21 +195,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
     /// <summary>
     /// Class to fake an implementation of shift
     /// </summary>
-    internal class FakeShift : Shift
+	internal class FakeShift : MainShift
     {
-        /// <summary>
-        /// Called before layer is added to collection.
-        /// </summary>
-        /// <param name="layer">The layer.</param>
-        /// <remarks>
-        /// Check here on shift because we want activity layers to be persisted in different tables
-        /// (eg adding an activity layer to a MainShift shouldn't be possible even though it makes
-        /// perfect sence regarding objects)
-        /// Created by: rogerkr
-        /// Created date: 2008-01-25
-        /// </remarks>
-        public override void OnAdd(ILayer<IActivity> layer)
-        {
-        }
+
     }
 }

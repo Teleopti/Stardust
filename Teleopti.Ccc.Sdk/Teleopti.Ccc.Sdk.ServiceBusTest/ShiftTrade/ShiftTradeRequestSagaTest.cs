@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
         private IPersonRequestRepository personRequestRepository;
         private IPersonRepository personRepository;
         private IPersonRequest personRequest;
-        private IUnitOfWorkFactory unitOfWorkFactory;
+				private ICurrentUnitOfWorkFactory unitOfWorkFactory;
         private Person fromPerson;
         private Person toPerson;
         private ICurrentScenario scenarioRepository;
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
             CreateRepositories();
 
             scheduleDictionarySaver = mocker.StrictMock<IScheduleDictionarySaver>();
-            unitOfWorkFactory = mocker.StrictMock<IUnitOfWorkFactory>();
+						unitOfWorkFactory = mocker.StrictMock<ICurrentUnitOfWorkFactory>();
             requestFactory = mocker.StrictMock<IRequestFactory>();
             personRequestCheckAuthorization = new PersonRequestAuthorizationCheckerForTest();
             schedulingResultState = new SchedulingResultStateHolder();
@@ -329,7 +329,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
 
         private void prepareUnitOfWork(int times, bool persistAll)
         {
-            Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork).Repeat.Times(times);
+	        var uowFactory = mocker.DynamicMock<IUnitOfWorkFactory>();
+	        Expect.Call(unitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(uowFactory);
+					Expect.Call(uowFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork).Repeat.Times(times);
             Expect.Call(unitOfWork.Dispose).Repeat.Times(times);
             if (persistAll)
             {

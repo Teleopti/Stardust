@@ -52,12 +52,12 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			Mapper.Reset();
 			Mapper.Initialize(c => c.AddProfile(
 				new WeekScheduleDomainDataMappingProfile(
-					Depend.On(scheduleProvider),
-					Depend.On(projectionProvider),
-					Depend.On(personRequestProvider),
-					Depend.On(userTimeZone),
-					Depend.On(permissionProvider),
-					Depend.On(now)
+					scheduleProvider,
+					projectionProvider,
+					personRequestProvider,
+					userTimeZone,
+					permissionProvider,
+					now
 					)));
 		}
 

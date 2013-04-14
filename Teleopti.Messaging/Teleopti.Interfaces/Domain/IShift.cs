@@ -9,8 +9,7 @@ namespace Teleopti.Interfaces.Domain
     /// Created by: rogerkr
     /// Created date: 2008-03-03
     /// </remarks>
-    public interface IShift : IAggregateEntity, 
-                                ILayerCollectionOwner<IActivity>, 
+    public interface IShift : ILayerCollectionOwner<IActivity>, 
                                 IProjectionSource,
                                 IVisualLayerFactoryFactory,
                                 ICloneableEntity<IShift>

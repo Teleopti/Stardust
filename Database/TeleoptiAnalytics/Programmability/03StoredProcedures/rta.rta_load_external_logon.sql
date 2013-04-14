@@ -12,8 +12,14 @@ BEGIN
 	--get current date id
 	declare @toDayDateonly	smalldatetime
 	declare @toDayDateId	int
+	declare @maxDateId	int
 	set @toDayDateonly = DATEADD(dd, 0, DATEDIFF(dd, 0, GETUTCDATE()))
 	select @toDayDateId = date_id from mart.dim_date where date_date = @toDayDateonly
+	select @maxDateId = max(date_id) from mart.dim_date where date_id > 0
+	
+	--todo: raiserror instead?
+	--in case dim_date is not loaded for "today", pick max date
+	select @toDayDateId = ISNULL(@toDayDateId,@maxDateId)
 
 	SELECT DISTINCT p.person_code,al.datasource_id,al.acd_login_original_id,p.business_unit_code
 	FROM [mart].[bridge_acd_login_person] balp

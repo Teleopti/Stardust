@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 {
@@ -23,6 +24,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 		public IEnumerable<ToolBarItemBase> ToolBarItems { get; set; }
 		public bool PayAttention { get; set; }
 		public int UnreadMessageCount { get; set; }
+		public string TitleCount { get; set; }
+
 	}
 
 	public class PreferenceNavigationItem : SectionNavigationItem
@@ -32,6 +35,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 	}
 
 	public class StudentAvailabilityNavigationItem : SectionNavigationItem
+	{
+	}
+
+	public class TeamScheduleNavigationItem : SectionNavigationItem
 	{
 	}
 
@@ -125,4 +132,31 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 		string Color { get; }
 	}
 
+	public interface ISelectOption
+	{
+		string text { get; }
+	}
+
+	public interface ISelectGroup : ISelectOption
+	{
+		ISelectOptionItem[] children { get; }
+	}
+
+	public class SelectSelectGroup : ISelectGroup
+	{
+		public string text { get; set; }
+		public ISelectOptionItem[] children { get; set; }
+		public Guid PageId { get; set; }
+	}
+
+	public interface ISelectOptionItem : ISelectOption
+	{
+		string id { get; }
+	}
+
+	public class SelectOptionItem : ISelectOptionItem
+	{
+		public string text { get; set; }
+		public string id { get; set; }
+	}
 }

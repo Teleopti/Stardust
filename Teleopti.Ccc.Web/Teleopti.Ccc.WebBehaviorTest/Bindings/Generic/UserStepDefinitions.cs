@@ -10,11 +10,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 	[Binding]
 	public class UserStepDefinitions
 	{
-		[Given(@"I have a schedule period with")]
-		public void GivenIHaveASchedulePeriodWith(Table table)
+		[Given(@"(.*) (has|have) a schedule period with")]
+		public void GivenIHaveASchedulePeriodWith(string userName, string hasHave, Table table)
 		{
 			var schedulePeriod = table.CreateInstance<SchedulePeriodConfigurable>();
-			UserFactory.User().Setup(schedulePeriod);
+			UserFactory.User(userName).Setup(schedulePeriod);
 		}
 
 		[Given(@"(.*) (has|have) a person period with")]
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void GivenIHaveUserCredentialWith(Table table)
 		{
 			var user = table.CreateInstance<UserConfigurable>();
-			UserFactory.User().MakeUser(user.UserName, user.UserName, user.Password);
+			UserFactory.User().MakeUser(user.UserName, user.UserName, user.Password, false);
 		}
 
 

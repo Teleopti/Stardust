@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms;
 using Teleopti.Ccc.Win.Common;
@@ -215,10 +214,7 @@ namespace Teleopti.Ccc.Win.Meetings
 
 		private void OutlookTimePickerStartTimeLeave(object sender, EventArgs e)
 		{
-			if (_presenter == null) return;
-			if (outlookTimePickerStartTime.Disposing)
-				return;
-			_presenter.OnOutlookTimePickerStartTimeLeave(outlookTimePickerStartTime.Text);
+			setStartTime();
 		}
 
 		private void OutlookTimePickerStartTimeKeyDown(object sender, KeyEventArgs e)
@@ -267,6 +263,19 @@ namespace Teleopti.Ccc.Win.Meetings
 		public void DescriptionFocus()
 		{
 			textBoxExtDescription.Focus();
+		}
+
+		private void setStartTime()
+		{
+			if (_presenter == null) return;
+			if (outlookTimePickerStartTime.Disposing)
+				return;
+			_presenter.OnOutlookTimePickerStartTimeLeave(outlookTimePickerStartTime.Text);
+		}
+
+		private void outlookTimePickerStartTimeSelectedIndexChanged(object sender, EventArgs e)
+		{
+			setStartTime();
 		}
     }
 }

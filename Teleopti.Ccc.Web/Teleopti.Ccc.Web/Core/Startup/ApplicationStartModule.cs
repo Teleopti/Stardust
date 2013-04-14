@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 				{
 					DependencyResolver.SetResolver(new AutofacDependencyResolver(container));
 
-                    var resolver = new Areas.Anywhere.Core.AutofacDependencyResolver(container.BeginLifetimeScope());
+					var resolver = new Areas.Anywhere.Core.AutofacDependencyResolver(container.BeginLifetimeScope());
 					GlobalHost.DependencyResolver = resolver;
 					GlobalHost.HubPipeline.AddModule(container.Resolve<IHubPipelineModule>());
 					SignalRConfiguration.Configure(new HubConfiguration());

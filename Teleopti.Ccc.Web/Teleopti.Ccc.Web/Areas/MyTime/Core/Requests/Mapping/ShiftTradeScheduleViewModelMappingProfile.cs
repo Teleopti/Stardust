@@ -13,18 +13,18 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 {
 	public class ShiftTradeScheduleViewModelMappingProfile : Profile
 	{
-		private readonly Func<IShiftTradeRequestProvider> _shiftTradeRequestProvider;
-		private readonly Func<IProjectionProvider> _projectionProvider;
-		private readonly IResolve<IShiftTradeTimeLineHoursViewModelFactory> _shiftTradeTimelineHoursViewModelFactory;
-		private readonly Func<IUserCulture> _userCulture;
-		private readonly Func<IPossibleShiftTradePersonsProvider> _possibleShiftTradePersonsProvider;
+		private readonly IShiftTradeRequestProvider _shiftTradeRequestProvider;
+		private readonly IProjectionProvider _projectionProvider;
+		private readonly IShiftTradeTimeLineHoursViewModelFactory _shiftTradeTimelineHoursViewModelFactory;
+		private readonly IUserCulture _userCulture;
+		private readonly IPossibleShiftTradePersonsProvider _possibleShiftTradePersonsProvider;
 		private const int TimeLineOffset = 15;
 
-		public ShiftTradeScheduleViewModelMappingProfile(Func<IShiftTradeRequestProvider> shiftTradeRequestProvider, 
-																										Func<IProjectionProvider> projectionProvider, 
-																										IResolve<IShiftTradeTimeLineHoursViewModelFactory> shiftTradeTimelineHoursViewModelFactory,
-																										Func<IUserCulture> userCulture,
-																										Func<IPossibleShiftTradePersonsProvider> possibleShiftTradePersonsProvider)
+		public ShiftTradeScheduleViewModelMappingProfile(IShiftTradeRequestProvider shiftTradeRequestProvider, 
+																										IProjectionProvider projectionProvider, 
+																										IShiftTradeTimeLineHoursViewModelFactory shiftTradeTimelineHoursViewModelFactory,
+																										IUserCulture userCulture,
+																										IPossibleShiftTradePersonsProvider possibleShiftTradePersonsProvider)
 		{
 			_shiftTradeRequestProvider = shiftTradeRequestProvider;
 			_projectionProvider = projectionProvider;
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 					                {
 
 											 var myScheduleDay = createPersonDay(o.Person, o);
-											 var timeLineRangeTot = setTimeLineRange(myScheduleDay.ScheduleLayers, new List<ShiftTradePersonDayData>(), myScheduleDay.PersonTimeZone);
+											 var timeLineRangeTot = setTimeLineRange(o.DateOnlyAsPeriod.DateOnly, myScheduleDay.ScheduleLayers, new List<ShiftTradePersonDayData>(), myScheduleDay.PersonTimeZone);
 											 var myScheduleViewModel = new ShiftTradePersonScheduleViewModel
 											 {
 												 Name = o.Person.Name.ToString(),
@@ -63,14 +63,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			CreateMap<DateOnly, ShiftTradeScheduleViewModel>()
 				.ConvertUsing(dateOnly =>
 					{
-						var myDomainScheduleDay = _shiftTradeRequestProvider.Invoke().RetrieveMyScheduledDay(dateOnly);
+						var myDomainScheduleDay = _shiftTradeRequestProvider.RetrieveMyScheduledDay(dateOnly);
 						var myScheduleDay = createPersonDay(myDomainScheduleDay.Person, myDomainScheduleDay);
-						var possibleShiftTradePersons = _possibleShiftTradePersonsProvider().RetrievePersons(dateOnly);
+						var possibleShiftTradePersons = _possibleShiftTradePersonsProvider.RetrievePersons(dateOnly);
 
-						var possibleTradePersonsSchedule = _shiftTradeRequestProvider.Invoke().RetrievePossibleTradePersonsScheduleDay(dateOnly, possibleShiftTradePersons);
+						var possibleTradePersonsSchedule = _shiftTradeRequestProvider.RetrievePossibleTradePersonsScheduleDay(dateOnly, possibleShiftTradePersons);
 						var possibleTradePersonDayCollection = createPossibleTradePersonsDayCollection(possibleShiftTradePersons, possibleTradePersonsSchedule);
 
-						var timeLineRangeTot = setTimeLineRange(myScheduleDay.ScheduleLayers, possibleTradePersonDayCollection,
+						var timeLineRangeTot = setTimeLineRange(dateOnly, myScheduleDay.ScheduleLayers, possibleTradePersonDayCollection,
 																			 myScheduleDay.PersonTimeZone);
 
 						var myScheduleViewModel = new ShiftTradePersonScheduleViewModel
@@ -119,7 +119,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				string.Empty;
 		}
 
-		private static DateTimePeriod setTimeLineRange(IEnumerable<IVisualLayer> myLayerCollection, IEnumerable<ShiftTradePersonDayData> possibleTradePersonDayCollection, TimeZoneInfo timeZone)
+		private static DateTimePeriod setTimeLineRange(DateOnly theDay, IEnumerable<IVisualLayer> myLayerCollection, IEnumerable<ShiftTradePersonDayData> possibleTradePersonDayCollection, TimeZoneInfo timeZone)
 		{
 			//IVisualLayerCollection has "Period" - use that instead of looping twice to get period?
 			DateTimePeriod? timeLineRangeTot = null;
@@ -143,7 +143,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 
 			if (!timeLineRangeTot.HasValue)
 			{
-				timeLineRangeTot = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(DateTime.Now.Date.AddHours(8), DateTime.Now.Date.AddHours(17), timeZone);
+				timeLineRangeTot = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(theDay.Date.AddHours(8), theDay.Date.AddHours(17), timeZone);
 			}
 
 			timeLineRangeTot = timeLineRangeTot.Value.ChangeStartTime(TimeSpan.FromMinutes(-TimeLineOffset));
@@ -175,7 +175,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 									};
 			if (scheduleDay != null)
 			{
-				var layerCollection = _projectionProvider.Invoke().Projection(scheduleDay);
+				var layerCollection = _projectionProvider.Projection(scheduleDay);
 				returnDay.ScheduleLayers = layerCollection.ToList();
 				returnDay.DayOffText = dayOffText(scheduleDay);
 				returnDay.SignificantPartForDisplay = scheduleDay.SignificantPartForDisplay();				
@@ -190,7 +190,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 
 		private  IEnumerable<ShiftTradeTimeLineHoursViewModel> createTimeLineHours(DateTimePeriod timeLinePeriod)
 		{
-			return _shiftTradeTimelineHoursViewModelFactory.Invoke().CreateTimeLineHours(timeLinePeriod);
+			return _shiftTradeTimelineHoursViewModelFactory.CreateTimeLineHours(timeLinePeriod);
 		}
 
 
@@ -222,7 +222,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 		private string createTitle(DateTime start, DateTime end)
 		{
 			//make a component for this?
-			var userCulture = _userCulture().GetCulture();
+			var userCulture = _userCulture.GetCulture();
 			return string.Concat(start.ToString(userCulture.DateTimeFormat.ShortTimePattern, userCulture), "-",
 													 end.ToString(userCulture.DateTimeFormat.ShortTimePattern, userCulture));
 		}

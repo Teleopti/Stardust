@@ -64,7 +64,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			}
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var auditSettingRep = new AuditSettingRepository(UnitOfWorkFactory.Current);
+				var auditSettingRep = new AuditSettingRepository(UnitOfWorkFactory.CurrentUnitOfWork());
 				var auditSetting = auditSettingRep.Read();
 				auditSetting.TurnOnScheduleAuditing(auditSettingRep, UnitOfWorkFactory.Current.AuditSetting);
 				//not persisting this one
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 		{
 			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var auditSettingRep = new AuditSettingRepository(UnitOfWorkFactory.Current);
+				var auditSettingRep = new AuditSettingRepository(UnitOfWorkFactory.CurrentUnitOfWork());
 				var auditSetting = auditSettingRep.Read();
 				auditSetting.TurnOffScheduleAuditing(UnitOfWorkFactory.Current.AuditSetting);
 				//not persisting this one

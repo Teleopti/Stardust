@@ -27,6 +27,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
+				public PersonAssignmentRepository(ICurrentUnitOfWork currentUnitOfWork)
+					: base(currentUnitOfWork)
+	    {
+		    
+	    }
+
         /// <summary>
         /// Finds the specified persons.
         /// </summary>

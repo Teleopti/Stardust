@@ -7,7 +7,7 @@ namespace Teleopti.Interfaces.Domain
     /// Created by: rogerkr
     /// Created date: 2008-08-07
     /// </remarks>
-    public interface IMainShift : IShift
+	public interface IMainShift : IShift, IAggregateEntity
     {
         /// <summary>
         /// Gets or the shift category

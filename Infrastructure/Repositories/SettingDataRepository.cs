@@ -1,37 +1,22 @@
-﻿using NHibernate;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
-    public abstract class SettingDataRepository
+    public abstract class SettingDataRepository : Repository
     {
-        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-        private readonly IUnitOfWork _unitOfWork;
-
-        protected SettingDataRepository(IUnitOfWork unitOfWork)
+        protected SettingDataRepository(IUnitOfWork unitOfWork) : base(unitOfWork)
         {
-            _unitOfWork = unitOfWork;
         }
 
-        protected SettingDataRepository(IUnitOfWorkFactory unitOfWorkFactory)
-        {
-            _unitOfWorkFactory = unitOfWorkFactory;
-        }
 
-        protected ISession Session
-        {
-            get { return ((NHibernateUnitOfWork) UnitOfWork).Session; }
-        }
+	    protected SettingDataRepository(IUnitOfWorkFactory unitOfWorkFactory) : base(unitOfWorkFactory)
+				{
+				}
 
-        protected IUnitOfWork UnitOfWork
-        {
-            get
-            {
-                return _unitOfWork ?? _unitOfWorkFactory.CurrentUnitOfWork();
-            }
-        }
+	    protected SettingDataRepository(ICurrentUnitOfWork currentUnitOfWork): base(currentUnitOfWork)
+	    {
+	    }
 
         public abstract ISettingData FindByKey(string key);
 

@@ -6,4 +6,10 @@ namespace Teleopti.Ccc.Rta.Interfaces
     {
         IDbConnection CreateConnection(string connectionString);
     }
+
+	public interface IDatabaseConnectionStringHandler
+	{
+		string AppConnectionString();
+		string DataStoreConnectionString();
+	}
 }

@@ -13,17 +13,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
     /// </remarks>
     public interface ICreateWorkShiftsFromTemplate
     {
-        /// <summary>
-        /// Generates workshift based on the specified template.
-        /// </summary>
-        /// <param name="shiftTemplate">The template.</param>
-        /// <param name="extenders">The extenders.</param>
-        /// <param name="limiters">The limiters.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 2008-03-18
-        /// </remarks>
-        IList<IWorkShift> Generate(IWorkShift shiftTemplate, IList<IWorkShiftExtender> extenders, IList<IWorkShiftLimiter> limiters);
+	    /// <summary>
+	    /// Generates workshift based on the specified template.
+	    /// </summary>
+	    /// <param name="shiftTemplate">The template.</param>
+	    /// <param name="extenders">The extenders.</param>
+	    /// <param name="limiters">The limiters.</param>
+	    /// <param name="callback"></param>
+	    /// <returns></returns>
+	    /// <remarks>
+	    /// Created by: rogerkr
+	    /// Created date: 2008-03-18
+	    /// </remarks>
+	    IList<IWorkShift> Generate(IWorkShift shiftTemplate, IList<IWorkShiftExtender> extenders, IList<IWorkShiftLimiter> limiters, IWorkShiftAddCallback callback);
     }
 }

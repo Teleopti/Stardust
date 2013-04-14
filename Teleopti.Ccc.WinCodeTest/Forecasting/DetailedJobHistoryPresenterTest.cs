@@ -31,7 +31,8 @@ namespace Teleopti.Ccc.WinCodeTest.Forecasting
             var details = new List<JobResultDetailModel>();
             using (mocks.Record())
             {
-                Expect.Call(jobResultProvider.GetJobResultDetails(jobModel)).Return(details);
+	            Expect.Call(view.DetailLevel).Return(1);
+                Expect.Call(jobResultProvider.GetJobResultDetails(jobModel, 1)).Return(details);
                 Expect.Call(() => view.BindJobResultDetailData(details));
             }
             using (mocks.Playback())

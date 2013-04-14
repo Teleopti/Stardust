@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
@@ -10,20 +12,15 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.JobHistory
 {
     public partial class JobHistoryDetailedView : BaseRibbonForm, IJobHistoryView
     {
-        public JobHistoryDetailedView()
+		public JobHistoryDetailedView()
         {
-            InitializeComponent();
-            initializeGrid();
-            initializeJobHistoryDetailGrid();
-            resizeColumns();
-            setColors();
-            if (!DesignMode)
-                SetTexts();
+            InitializeComponent();  
         }
 
         private void setColors()
         {
             gridControlJobHistory.Properties.BackgroundColor = ColorHelper.WizardPanelBackgroundColor();
+			gridControlDetailedJobHistory.Properties.BackgroundColor = ColorHelper.WizardPanelBackgroundColor();
             BackColor = ColorHelper.WizardBackgroundColor();
         }
 
@@ -31,8 +28,13 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.JobHistory
         {
             base.OnLoad(e);
             if (DesignMode) return;
-
+			initializeGrid();
+			initializeJobHistoryDetailGrid();
+			
+			setColors();
+			SetTexts();
             Presenter.Initialize();
+			resizeColumns();
         }
 
         internal JobHistoryPresenter Presenter { get; set; }
@@ -40,6 +42,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.JobHistory
         public void BindJobResultData(IEnumerable<JobResultModel> jobResultModels)
         {
             gridControlJobHistory.DataSource = jobResultModels;
+	        loadDetails();
         }
 
         public void BindJobResultDetailData(IList<JobResultDetailModel> jobHistoryEntries)
@@ -63,9 +66,12 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.JobHistory
             autoLabelPageCount.Text = description;
         }
 
-        private void toolStripButtonReloadHistory_Click(object sender, EventArgs e)
+	    public int DetailLevel { get; private set; }
+
+	    private void toolStripButtonReloadHistory_Click(object sender, EventArgs e)
         {
             Presenter.ReloadHistory();
+			loadDetails();
         }
 
         private void resizeColumns()
@@ -76,12 +82,20 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.JobHistory
                 gridControlJobHistory.Model.ColWidths.SetSize(i, colWidth);
             }
             gridControlJobHistory.Model.ColWidths.SetSize(0, 0);
+			for (int i = 0; i <= gridControlJobHistory.Model.RowCount; i++)
+			{
+				gridControlJobHistory.Model.RowHeights.ResizeToFit(GridRangeInfo.Row(i));
+			}
         }
 
         private void resizeJobDetailColumns()
         {
             gridControlDetailedJobHistory.Model.ColWidths.ResizeToFit(GridRangeInfo.Col(1));
             gridControlDetailedJobHistory.Model.ColWidths.ResizeToFit(GridRangeInfo.Col(2));
+			for (int i = 0; i <= gridControlDetailedJobHistory.Model.RowCount; i++)
+	        {
+				gridControlDetailedJobHistory.Model.RowHeights.ResizeToFit(GridRangeInfo.Row(i));
+	        }
         }
 
         private void initializeGrid()
@@ -115,7 +129,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.JobHistory
                 gridBoundColumnJobCategory,
                 gridBoundColumnOwner,
                 gridBoundColumnTimestamp,
-                gridBoundColumnStatus});
+                gridBoundColumnStatus});		
         }
 
         private void initializeJobHistoryDetailGrid()
@@ -151,12 +165,44 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.JobHistory
 
         private void gridControlJobHistory_CellClick(object sender, GridCellClickEventArgs e)
         {
-            if (e.RowIndex != 0)
-            {
-                var data = (IList) gridControlJobHistory.DataSource;
-                var jobResult = (JobResultModel) data[e.RowIndex - 1];
-                Presenter.LoadDetailedHistory(jobResult);
-            }
+			loadDetails();
         }
+
+		private void ribbonControlAdv1BeforeContextMenuOpen(object sender, Syncfusion.Windows.Forms.Tools.ContextMenuEventArgs e)
+		{
+			e.Cancel = true;
+		}
+
+		private void gridControlJobHistoryPrepareViewStyleInfo(object sender, GridPrepareViewStyleInfoEventArgs e)
+		{
+			e.Style.BackColor = e.RowIndex == gridControlJobHistory.CurrentCell.RowIndex ? Color.LightGoldenrodYellow : Color.White;
+		}
+
+		private void loadDetails()
+		{
+			var row = gridControlJobHistory.CurrentCell.RowIndex;
+			if (row > 0)
+			{
+				var data = (IList)gridControlJobHistory.DataSource;
+				var jobResult = (JobResultModel)data[row - 1];
+				Presenter.LoadDetailedHistory(jobResult);
+			}
+		}
+
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.Convert.ToInt32(System.Object)")]
+		private void toolStripButtonDetailLevelClick(object sender, EventArgs e)
+		{
+			toolStripButtonInfo.Checked = false;
+			toolStripButtonWarnings.Checked = false;
+			toolStripButtonErrors.Checked = false;
+			var butt = (ToolStripButton) sender;
+			{
+				butt.Checked = true;
+				DetailLevel = Convert.ToInt32(butt.Tag);
+			}
+		
+			loadDetails();
+		}
     }
 }

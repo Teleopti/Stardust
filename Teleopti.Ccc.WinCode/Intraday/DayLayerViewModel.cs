@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows.Data;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.RealTimeAdherence;
@@ -38,8 +39,8 @@ namespace Teleopti.Ccc.WinCode.Intraday
             get { return _models; }
         }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
-		public void CreateModels(IEnumerable<IPerson> people, IDateOnlyPeriodAsDateTimePeriod period)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
+        public void CreateModels(IEnumerable<IPerson> people, IDateOnlyPeriodAsDateTimePeriod period)
         {
             Models.Clear();
 
@@ -51,7 +52,7 @@ namespace Teleopti.Ccc.WinCode.Intraday
                 if (currentPersonPeriod != null)
                     team = currentPersonPeriod.Team;
 
-                var layerViewModelCollection = new LayerViewModelCollection(_eventAggregator,new CreateLayerViewModelService());
+                var layerViewModelCollection = new LayerViewModelCollection(_eventAggregator, new CreateLayerViewModelService());
                 var model = new DayLayerModel(person, period.Period(), team, layerViewModelCollection, commonNameDescription);
 
                 rebuildLayerViewModelCollection(model);
@@ -59,19 +60,19 @@ namespace Teleopti.Ccc.WinCode.Intraday
                 Models.Add(model);
             }
 
-			_rtaStateHolder.SchedulingResultStateHolder.Schedules.PartModified += OnScheduleModified;
+            _rtaStateHolder.SchedulingResultStateHolder.Schedules.PartModified += OnScheduleModified;
         }
 
-    	public void OnScheduleModified(object sender, ModifyEventArgs e)
-    	{
-			var model = Models.FirstOrDefault(m => m.Person.Equals(e.ModifiedPerson));
-			if (model != null)
-			{
-				rebuildLayerViewModelCollection(model);
-			}
-    	}
+        public void OnScheduleModified(object sender, ModifyEventArgs e)
+        {
+            var model = Models.FirstOrDefault(m => m.Person.Equals(e.ModifiedPerson));
+            if (model != null)
+            {
+                rebuildLayerViewModelCollection(model);
+            }
+        }
 
-    	private CommonNameDescriptionSetting getCommonNameDescriptionSetting()
+        private CommonNameDescriptionSetting getCommonNameDescriptionSetting()
         {
             if (_commonNameDescriptionSetting == null)
             {
@@ -100,13 +101,21 @@ namespace Teleopti.Ccc.WinCode.Intraday
         {
             foreach (var dayLayerModel in Models)
             {
-                IAgentState agentState;
-                if (!_rtaStateHolder.AgentStates.TryGetValue(dayLayerModel.Person, out agentState)) continue;
+	            IActualAgentState agentState;
+	            if (dayLayerModel.Person.Id == null ||
+	                !_rtaStateHolder.ActualAgentStates.TryGetValue((Guid) dayLayerModel.Person.Id, out agentState))
+		            continue;
+	            dayLayerModel.CurrentActivityDescription = agentState.Scheduled;
+	            dayLayerModel.EnteredCurrentState = agentState.StateStart;
+	            dayLayerModel.NextActivityDescription = agentState.ScheduledNext;
+	            dayLayerModel.NextActivityStartDateTime = agentState.NextStart;
+	            dayLayerModel.CurrentStateDescription = agentState.State;
+	            dayLayerModel.AlarmStart = agentState.AlarmStart;
 
-                dayLayerModel.CurrentActivityLayer = agentState.FindCurrentSchedule(timestamp);
-                dayLayerModel.NextActivityLayer = agentState.FindNextSchedule(timestamp);
-                dayLayerModel.AlarmLayer = agentState.FindCurrentAlarm(timestamp);
-                dayLayerModel.CurrentState = agentState.FindCurrentState(timestamp);
+	            if (DateTime.UtcNow <= dayLayerModel.AlarmStart) continue;
+	            dayLayerModel.AlarmDescription = agentState.AlarmName;
+	            dayLayerModel.ColorValue = agentState.Color;
+	            dayLayerModel.StaffingEffect = agentState.StaffingEffect;
             }
         }
 
@@ -116,12 +125,6 @@ namespace Teleopti.Ccc.WinCode.Intraday
             if (model == null) return;
 
             rebuildLayerViewModelCollection(model);
-
-            IAgentState agentState;
-            if (_rtaStateHolder.AgentStates.TryGetValue(person, out agentState))
-            {
-                agentState.SetSchedule(_rtaStateHolder.SchedulingResultStateHolder.Schedules);
-            }
         }
 
         private void rebuildLayerViewModelCollection(DayLayerModel model)
@@ -137,11 +140,11 @@ namespace Teleopti.Ccc.WinCode.Intraday
 
         private void rebuildSchedule(DayLayerModel model)
         {
-			if (_rtaStateHolder == null ||
-				model.Layers == null)
-			{
-				return;
-			}
+            if (_rtaStateHolder == null ||
+                model.Layers == null)
+            {
+                return;
+            }
             IScheduleRange scheduleRange =
                 _rtaStateHolder.SchedulingResultStateHolder.
                     Schedules[model.Person];
@@ -154,10 +157,10 @@ namespace Teleopti.Ccc.WinCode.Intraday
 
         public void UnregisterMessageBrokerEvent()
         {
-			if (_rtaStateHolder!=null)
-			{
-				_rtaStateHolder.SchedulingResultStateHolder.Schedules.PartModified -= OnScheduleModified;
-			}
+            if (_rtaStateHolder != null)
+            {
+                _rtaStateHolder.SchedulingResultStateHolder.Schedules.PartModified -= OnScheduleModified;
+            }
             _rtaStateHolder = null;
             _dispatcherWrapper = null;
         }

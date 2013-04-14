@@ -48,12 +48,10 @@ namespace Teleopti.Ccc.WpfControls.Controls.Intraday
             get { return _nowPeriod; }
             set
             {
-                if (value != _nowPeriod)
-                {
-                    _nowPeriod = value;
-                    _agentStateViewAdapterCollection.ForEach(
-                        a => a.Refresh(_nowPeriod.StartDateTime));
-                }
+                if (value == _nowPeriod) return;
+                _nowPeriod = value;
+                _agentStateViewAdapterCollection.ForEach(
+                    a => a.Refresh());
             }
         }
 

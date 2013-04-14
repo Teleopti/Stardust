@@ -4,17 +4,18 @@
     xmlns:Controls="clr-namespace:Microsoft.Windows.Controls;assembly=WPFToolkit"
     xmlns:Converters1="clr-namespace:Teleopti.Ccc.WpfControls.Converters"
     xmlns:Converters="clr-namespace:Teleopti.Ccc.WinCode.Converters;assembly=Teleopti.Ccc.WinCode">
-  
+
     <!-- Resources , sets the fallback to aero -->
     <ResourceDictionary.MergedDictionaries>
         <ResourceDictionary Source="CommonBrushes.xaml"/>
-		<ResourceDictionary Source="Icons.xaml"/>
-		<ResourceDictionary Source="/PresentationFramework.Aero, Version=3.0.0.0, Culture=neutral,PublicKeyToken=31bf3856ad364e35, ProcessorArchitecture=MSIL;component/themes/aero.normalcolor.xaml" />	
-	</ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="Icons.xaml"/>
+        <ResourceDictionary Source="/PresentationFramework.Aero, Version=3.0.0.0, Culture=neutral,PublicKeyToken=31bf3856ad364e35, ProcessorArchitecture=MSIL;component/themes/aero.normalcolor.xaml" />
+    </ResourceDictionary.MergedDictionaries>
 
     <Converters1:ColorConverterSoft x:Key="colorConverter"/>
     <Converters:IsNullConverter x:Key="isNullConverter"/>
-    
+    <Converters1:StringToColorConverter x:Key="stringToColorConverter"/>
+
     <Style TargetType="Control" x:Key="HeaderStyle">
         <Setter Property="Background" Value="{StaticResource RaptorStandardGradientBrush}"/>
         <Setter Property="FontWeight" Value="Bold"/>
@@ -41,16 +42,18 @@
         <Style.Triggers>
             <Trigger Property="IsSelected" Value="True">
                 <Setter Property="Background" Value="Transparent"/>
-                <Setter Property="Foreground" Value="{StaticResource RaptorBlack}"/>           
-                <Setter Property="BorderThickness" Value="0" />
+                <Setter Property="Foreground" Value="{StaticResource RaptorBlack}"/>
+                <Setter Property="BorderThickness" Value="1"/>
+                <Setter Property="BorderBrush" Value="Transparent"/>
+                <Setter Property="Padding" Value="5"/>
             </Trigger>
-            <!--Workaround-->
-            <!--<DataTrigger Binding="{Binding Path=AlarmLayer, Converter={StaticResource isNullConverter}}" Value="False">
-                <Setter Property="Background" Value="{Binding Path=AlarmLayer.Payload.DisplayColor, Converter={StaticResource colorConverter}}"/>
+            <!--<!-Workaround->
+            <DataTrigger Binding="{Binding Path=DisplayColor, Converter={StaticResource isNullConverter}}" Value="False">
+                <Setter Property="Background" Value="{Binding Path=DisplayColor, Converter={StaticResource colorConverter}}"/>
             </DataTrigger>-->
-        </Style.Triggers>
+        </Style.Triggers> 
     </Style>
-    
+
     <!--Standard rowstyle for grids-->
     <Style x:Key="RowStyle" TargetType="{x:Type Controls:DataGridRow}">
         <Setter Property="VerticalContentAlignment" Value="Center"/>
@@ -58,32 +61,32 @@
         <Setter Property="BorderThickness" Value="0" />
         <Setter Property="Opacity" Value="100"/>
         <Setter Property="Background" Value="Transparent"/>
-        <Style.Triggers>
+        <!--<Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="{StaticResource RaptorStandardHoverGradientBrush}" />
                 <Setter Property="FontWeight" Value="Bold"/>
             </Trigger>
-         </Style.Triggers>
+        </Style.Triggers>-->
     </Style>
 
     <!--Standard rowstyle for rta grid-->
     <Style TargetType="{x:Type Controls:DataGridRow}" BasedOn="{StaticResource RowStyle}" x:Key="RtaScheduleRowStyle">
         <Style.Triggers>
-            <DataTrigger Binding="{Binding Path=AlarmLayer, Converter={StaticResource isNullConverter}}" Value="False">
-                <Setter Property="Background" Value="{Binding Path=AlarmLayer.Payload.DisplayColor, Converter={StaticResource colorConverter}, FallbackValue=White}"/>
+            <DataTrigger Binding="{Binding Path=Color, Converter={StaticResource isNullConverter}}" Value="False">
+                <Setter Property="Background" Value="{Binding Path=Color, Converter={StaticResource colorConverter}}"/>
             </DataTrigger>
-            <Trigger Property="IsMouseOver" Value="True">
+            <!--<Trigger Property="IsMouseOver" Value="True">
                 <Setter Property="Background" Value="{StaticResource RaptorStandardHoverGradientBrush}" />
                 <Setter Property="FontWeight" Value="Bold"/>
-            </Trigger>
+            </Trigger>-->
         </Style.Triggers>
     </Style>
 
     <!--Standard RaptorStyles-->
-	<Style TargetType="TabControl" >
-		<Setter Property="Background" Value="{StaticResource RaptorStandardGradientBrush}"/>
-	</Style>
-	
+    <Style TargetType="TabControl" >
+        <Setter Property="Background" Value="{StaticResource RaptorStandardGradientBrush}"/>
+    </Style>
+
     <!-- Arrow (Down) -->
     <StreamGeometry x:Key="CommonArrow">M1,1.5L4.5,5 8,1.5</StreamGeometry>
 
@@ -91,7 +94,7 @@
     <Style TargetType="Path" x:Key="CommonArrowStyle">
         <Setter Property="Stroke" Value="{StaticResource CommonDarkBrush}" />
         <Setter Property="StrokeThickness" Value="2"/>
-        
+
     </Style>
 
     <!-- ControlTemplates -->
@@ -112,40 +115,37 @@
                         </TransformGroup>
                     </Grid.LayoutTransform>
                     <Ellipse
-                                                    Stroke="#FFA9A9A9"
-                                                    Name="circle"
-                                                    Width="19"
-                                                    Height="19"
-                                                    HorizontalAlignment="Center"
-                                                    VerticalAlignment="Center" />
-                    <Path 
-                                                    Data="M1,1.5L4.5,5 8,1.5"
-                                                    Stroke="#FF666666"
-                                                    StrokeThickness="2"
-                                                    Name="arrow"
-                                                    HorizontalAlignment="Center"
-                                                    VerticalAlignment="Center"
-                                                    SnapsToDevicePixels="False" />
-
-
+                        Stroke="#FFA9A9A9"
+                        Name="circle"
+                        Width="19"
+                        Height="19"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center" />
+                    <Path Data="M1,1.5L4.5,5 8,1.5"
+                          Stroke="#FF666666"
+                          StrokeThickness="2"
+                          Name="arrow"
+                          HorizontalAlignment="Center"
+                          VerticalAlignment="Center"
+                          SnapsToDevicePixels="False" />
                 </Grid>
                 <ContentPresenter
-                                                RecognizesAccessKey="True"
-                                                Content="{TemplateBinding ContentControl.Content}"
-                                                ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}"
-                                                Margin="0,4,0,0"
-                                                HorizontalAlignment="Center"
-                                                VerticalAlignment="Top"
-                                                SnapsToDevicePixels="True"
-                                                Grid.Row="1" />
+                    RecognizesAccessKey="True"
+                    Content="{TemplateBinding ContentControl.Content}"
+                    ContentTemplate="{TemplateBinding ContentControl.ContentTemplate}"
+                    Margin="0,4,0,0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Top"
+                    SnapsToDevicePixels="True"
+                    Grid.Row="1" />
             </Grid>
         </Border>
         <ControlTemplate.Triggers>
             <Trigger
-                                            Property="ToggleButton.IsChecked">
+                Property="ToggleButton.IsChecked">
                 <Setter
-                                                Property="Path.Data"
-                                                TargetName="arrow">
+                    Property="Path.Data"
+                    TargetName="arrow">
                     <Setter.Value>
                         <StreamGeometry>M1,4.5L4.5,1 8,4.5</StreamGeometry>
                     </Setter.Value>
@@ -155,17 +155,17 @@
                 </Trigger.Value>
             </Trigger>
             <Trigger
-                                            Property="UIElement.IsMouseOver">
+                Property="UIElement.IsMouseOver">
                 <Setter
-                                                Property="Shape.Stroke"
-                                                TargetName="circle">
+                    Property="Shape.Stroke"
+                    TargetName="circle">
                     <Setter.Value>
                         <SolidColorBrush>#FF3C7FB1</SolidColorBrush>
                     </Setter.Value>
                 </Setter>
                 <Setter
-                                                Property="Shape.Stroke"
-                                                TargetName="arrow">
+                    Property="Shape.Stroke"
+                    TargetName="arrow">
                     <Setter.Value>
                         <SolidColorBrush>#FF222222</SolidColorBrush>
                     </Setter.Value>
@@ -175,24 +175,24 @@
                 </Trigger.Value>
             </Trigger>
             <Trigger
-                                            Property="ButtonBase.IsPressed">
+                Property="ButtonBase.IsPressed">
                 <Setter
-                                                Property="Shape.Stroke"
-                                                TargetName="circle">
+                    Property="Shape.Stroke"
+                    TargetName="circle">
                     <Setter.Value>
                         <SolidColorBrush>#FF526C7B</SolidColorBrush>
                     </Setter.Value>
                 </Setter>
                 <Setter
-                                                Property="Shape.StrokeThickness"
-                                                TargetName="circle">
+                    Property="Shape.StrokeThickness"
+                    TargetName="circle">
                     <Setter.Value>
                         <s:Double>1.5</s:Double>
                     </Setter.Value>
                 </Setter>
                 <Setter
-                                                Property="Shape.Stroke"
-                                                TargetName="arrow">
+                    Property="Shape.Stroke"
+                    TargetName="arrow">
                     <Setter.Value>
                         <SolidColorBrush>#FF003366</SolidColorBrush>
                     </Setter.Value>
@@ -204,44 +204,41 @@
         </ControlTemplate.Triggers>
     </ControlTemplate>
 
-	
-	<Style x:Key="DeleteButtonStyle" TargetType="Button">
-		<Setter Property="OverridesDefaultStyle" Value="True"/>
-		<Setter Property="Template">
-			<Setter.Value>
-				<ControlTemplate TargetType="Button">
-					<Grid>
-						<Border  x:Name="Border" BorderBrush="Black" 
+
+    <Style x:Key="DeleteButtonStyle" TargetType="Button">
+        <Setter Property="OverridesDefaultStyle" Value="True"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Grid>
+                        <Border x:Name="Border" BorderBrush="Black" 
                                          BorderThickness="0.5" 
                                          CornerRadius="3" 
                                          Padding="3" 
                                          Background="{StaticResource RaptorStandardGradientBrush}"
                                          HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-							<Border  Background="{StaticResource Raptor_DeleteIcon}" MinHeight="5" MinWidth="5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-								<ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-							</Border>
-
-						</Border>
-					</Grid>
-					<ControlTemplate.Triggers>
-						<Trigger Property="IsMouseOver" Value="true">
-							<Setter TargetName="Border" Property="Background" Value="{StaticResource RaptorStandardHoverGradientBrush}" />
-						</Trigger>
-						<Trigger Property="IsPressed" Value="true">
-							<Setter TargetName="Border" Property="Background" Value="{StaticResource RaptorStandardHoverGradientBrush}" />
-							<Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource RaptorStandardBorderPressedBrush}" />
-							<Setter TargetName="Border" Property="BorderThickness" Value="2"/>
-						</Trigger>
-						<Trigger Property="IsEnabled" Value="false">
-							<Setter TargetName="Border" Property="Opacity" Value="0.5" />
-						</Trigger>
-
-					</ControlTemplate.Triggers>
-
-				</ControlTemplate>
-			</Setter.Value>
-		</Setter>
-	</Style>
+                            <Border Background="{StaticResource Raptor_DeleteIcon}" MinHeight="5" MinWidth="5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            </Border>
+                        </Border>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="true">
+                            <Setter TargetName="Border" Property="Background" Value="{StaticResource RaptorStandardHoverGradientBrush}" />
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="true">
+                            <Setter TargetName="Border" Property="Background" Value="{StaticResource RaptorStandardHoverGradientBrush}" />
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource RaptorStandardBorderPressedBrush}" />
+                            <Setter TargetName="Border" Property="BorderThickness" Value="2"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="false">
+                            <Setter TargetName="Border" Property="Opacity" Value="0.5" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
     <Style TargetType="RepeatButton" x:Key="RaptorMoveForwardButtonStyle">
         <Style.Setters>
@@ -253,7 +250,7 @@
             </Setter>
         </Style.Setters>
     </Style>
-    
+
     <Style TargetType="RepeatButton" 
            BasedOn="{StaticResource RaptorMoveForwardButtonStyle}" 
            x:Key="RaptorMoveBackwardsButton">
@@ -265,7 +262,7 @@
             </Setter>
         </Style.Setters>
     </Style>
-    
+
     <Style TargetType="ListBox" x:Key="BasicListBox">
         <Setter Property="ItemContainerStyle">
             <Setter.Value>
@@ -274,9 +271,9 @@
                     <Setter Property="VerticalContentAlignment" Value="Center"/>
                 </Style>
             </Setter.Value>
-        </Setter>        
+        </Setter>
     </Style>
-    
+
     <Style TargetType="ComboBox" x:Key="BasicComboBox">
         <Setter Property="ItemContainerStyle">
             <Setter.Value>
@@ -287,7 +284,7 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
     <Style TargetType="ContextMenu" x:Key="BasicContextMenu">
         <Setter Property="ItemContainerStyle">
             <Setter.Value>
@@ -298,5 +295,4 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
 </ResourceDictionary>

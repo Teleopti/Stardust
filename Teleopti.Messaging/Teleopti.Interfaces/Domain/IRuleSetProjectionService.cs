@@ -12,8 +12,9 @@ namespace Teleopti.Interfaces.Domain
 		/// Creates the projection data from specified rule set
 		/// </summary>
 		/// <param name="workShiftRuleSet">The rule set</param>
+		/// <param name="callback"></param>
 		/// <returns>Work shift projections</returns>
-		IEnumerable<IWorkShiftProjection> ProjectionCollection(IWorkShiftRuleSet workShiftRuleSet);
+		IEnumerable<IWorkShiftProjection> ProjectionCollection(IWorkShiftRuleSet workShiftRuleSet, IWorkShiftAddCallback callback);
 	}
 
 	/// <summary>

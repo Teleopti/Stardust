@@ -175,15 +175,15 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             sCat.SetId(Guid.NewGuid());
             IMainShift mainShift = MainShiftFactory.CreateMainShift(act,new DateTimePeriod(1900, 1, 1, 1900, 1, 2), sCat);
             mainShift.SetId(Guid.NewGuid());
-            mainShift.LayerCollection[0].SetId(Guid.NewGuid());
+            ((IMainShiftActivityLayer) mainShift.LayerCollection[0]).SetId(Guid.NewGuid());
             IPersonalShift pShift = PersonalShiftFactory.CreatePersonalShift(act,new DateTimePeriod(1800, 1, 1, 1800, 1, 2));
             pShift.SetId(Guid.NewGuid());
-            pShift.LayerCollection[0].SetId(Guid.NewGuid());
+            ((IPersonalShiftActivityLayer)pShift.LayerCollection[0]).SetId(Guid.NewGuid());
             IPersonAssignment ass = PersonAssignmentFactory.CreatePersonAssignment(person, scenario);
             ass.SetId(Guid.NewGuid());
             IOvertimeShift oShift = OvertimeShiftFactory.CreateOvertimeShift(act, new DateTimePeriod(1803, 1, 1, 1803, 1, 2), definitionSet,ass);
             oShift.SetId(Guid.NewGuid());
-            oShift.LayerCollection[0].SetId(Guid.NewGuid());
+            ((IOvertimeShiftActivityLayer)oShift.LayerCollection[0]).SetId(Guid.NewGuid());
             ass.SetMainShift(mainShift);
             ass.AddPersonalShift(pShift);
             ass.AddOvertimeShift(oShift);

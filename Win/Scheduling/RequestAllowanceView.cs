@@ -51,7 +51,8 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                            new BudgetDayRepository(currentUowFactory),
                                                            new BudgetGroupRepository(currentUowFactory),
 														   new DefaultScenarioFromRepository(new ScenarioRepository(currentUowFactory)), 
-                                                           new ScheduleProjectionReadOnlyRepository(currentUowFactory)));
+                                                           new ScheduleProjectionReadOnlyRepository(new CurrentUnitOfWork(UnitOfWorkFactory.CurrentUnitOfWorkFactory()))));
+                                                           
             _presenter.Initialize(budgetGroup, defaultDate);
             initializeGrid();
             _presenter.InitializeGridBinding();
@@ -119,6 +120,14 @@ namespace Teleopti.Ccc.Win.Scheduling
                 ValueMember = new ModelProperty<BudgetAbsenceAllowanceDetailModel>("RelativeDifference"),
                 CellValueType = typeof(double),
                 CellModel = "PercentReadOnlyCellModel",
+                ReadOnly = true
+            });
+            _entityBinder.AddRow(new GridRow<BudgetAbsenceAllowanceDetailModel>
+            {
+                HeaderText = UserTexts.Resources.HeadCount,
+                ValueMember = new ModelProperty<BudgetAbsenceAllowanceDetailModel>("TotalHeadCounts"),
+                CellValueType = typeof(double),
+                CellModel = "NumericReadOnlyCellModel",
                 ReadOnly = true
             });
             requestAllowanceGridControl.Rows.HeaderCount = 1;

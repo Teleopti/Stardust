@@ -1,7 +1,6 @@
 ﻿using Autofac;
 using AutoMapper;
 using Autofac.Extras.DynamicProxy2;
-using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -10,6 +9,7 @@ using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Asm.ViewModelFactory;
@@ -100,11 +100,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.Register(c => Mapper.Engine).As<IMappingEngine>();
 			builder.RegisterAssemblyTypes(GetType().Assembly)
 				.AssignableTo<Profile>()
-				.As<Profile>()
-				.InstancePerDependency();
+				.SingleInstance()
+				.As<Profile>();
 			builder.RegisterType<StudentAvailabilityDomainData>();
 			builder.RegisterType<StudentAvailabilityDayFormMappingProfile.StudentAvailabilityDayFormToStudentAvailabilityDay>().SingleInstance();
 			builder.RegisterType<PreferenceDayInputMappingProfile.PreferenceDayInputToPreferenceDay>().SingleInstance();
+			builder.RegisterType<PreferenceTemplateInputMappingProfile.PreferenceTemplateInputToExtendedPreferenceTemplate>().SingleInstance();
 			builder.RegisterType<TextRequestFormMappingProfile.TextRequestFormToPersonRequest>().As<ITypeConverter<TextRequestForm, IPersonRequest>>().SingleInstance();
 			builder.RegisterType<AbsenceRequestFormMappingProfile.AbsenceRequestFormToPersonRequest>().As<ITypeConverter<AbsenceRequestForm, IPersonRequest>>().SingleInstance();
 		}
@@ -132,8 +133,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<PeriodScheduledAndRestrictionDaysOff>().As<IPeriodScheduledAndRestrictionDaysOff>().SingleInstance();
 			builder.RegisterType<SchedulePeriodTargetTimeCalculator>().As<ISchedulePeriodTargetTimeCalculator>().SingleInstance();
 			builder.RegisterType<ExtendedPreferencePredicate>().As<IExtendedPreferencePredicate>().SingleInstance();
-			builder.RegisterType<PreferenceFulfilledChecker>().As<IPreferenceFulfilledChecker>().SingleInstance();
 			builder.RegisterType<RestrictionChecker>().As<ICheckerRestriction>();
+			builder.RegisterType<PreferenceTemplateProvider>().As<IPreferenceTemplateProvider>();
+			builder.RegisterType<PreferenceTemplatePersister>().As<IPreferenceTemplatePersister>();
 		}
 		 
 		private static void registerStudentAvailabilityTypes(ContainerBuilder builder)
@@ -158,6 +160,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<TeamScheduleProjectionProvider>().As<ITeamScheduleProjectionProvider>();
 			builder.RegisterType<TeamProvider>().As<ITeamProvider>();
 			builder.RegisterType<DefaultTeamCalculator>().As<IDefaultTeamCalculator>();
+			builder.RegisterType<GroupingReadOnlyRepository>().As<IGroupingReadOnlyRepository>();
 		}
 
 		private static void registerPortalTypes(ContainerBuilder builder)

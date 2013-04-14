@@ -107,12 +107,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			MainShift mainShift = (MainShift)target.EntityClone();
 			Assert.AreEqual(target.Id, mainShift.Id);
 			Assert.AreEqual(target.ShiftCategory.Id, mainShift.ShiftCategory.Id);
-			Assert.AreEqual(target.LayerCollection[0].Id, mainShift.LayerCollection[0].Id);
+			Assert.AreEqual(((IMainShiftActivityLayer)target.LayerCollection[0]).Id, ((IMainShiftActivityLayer)mainShift.LayerCollection[0]).Id);
 
 			mainShift = (MainShift)target.NoneEntityClone();
 			Assert.AreEqual(target.ShiftCategory.Id, mainShift.ShiftCategory.Id);
 			Assert.IsNull(mainShift.Id);
-			Assert.IsNull(mainShift.LayerCollection[0].Id);
+			Assert.IsNull(((IMainShiftActivityLayer)mainShift.LayerCollection[0]).Id);
 		}
 
 		/// <summary>

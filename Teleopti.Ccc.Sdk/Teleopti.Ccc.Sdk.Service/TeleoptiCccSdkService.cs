@@ -262,7 +262,8 @@ namespace Teleopti.Ccc.Sdk.WcfService
 		/// <returns>A <see cref="LicenseVerificationResultDto"/>.</returns>
 		public LicenseVerificationResultDto VerifyLicense()
 		{
-			return _factoryProvider.CreateLicenseFactory().VerifyLicense();
+			//wrong - if multidb...
+			return _factoryProvider.CreateLicenseFactory().VerifyLicense(UnitOfWorkFactory.Current);
 		}
 
 		/// <summary>
@@ -1518,8 +1519,14 @@ namespace Teleopti.Ccc.Sdk.WcfService
 			return invoker.Invoke(queryDto);
 		}
 
+    	public ICollection<PersonOptionalValuesDto> GetPersonOptionalValuesByQuery(QueryDto queryDto)
+    	{
+			var invoker = _lifetimeScope.Resolve<IInvokeQuery<ICollection<PersonOptionalValuesDto>>>();
+			return invoker.Invoke(queryDto);
+    	}
+
 		[SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public CommandResultDto ExecuteCommand(CommandDto commandDto)
+    	public CommandResultDto ExecuteCommand(CommandDto commandDto)
         {
             var invoker = _lifetimeScope.Resolve<ICommandDispatcher>();
 			try

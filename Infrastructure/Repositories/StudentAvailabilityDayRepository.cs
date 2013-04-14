@@ -32,6 +32,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
+				public StudentAvailabilityDayRepository(ICurrentUnitOfWork currentUnitOfWork)
+					: base(currentUnitOfWork)
+	    {
+		    
+	    }
+
         public IList<IStudentAvailabilityDay> Find(DateOnlyPeriod period, IEnumerable<IPerson> persons)
         {
             var result = new List<IStudentAvailabilityDay>();

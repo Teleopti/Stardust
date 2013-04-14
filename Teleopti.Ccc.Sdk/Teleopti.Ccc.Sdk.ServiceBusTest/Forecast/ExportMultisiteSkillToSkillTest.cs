@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 	[TestFixture]
 	public class ExportMultisiteSkillToSkillTest
 	{
-		private IUnitOfWorkFactory unitOfWorkFactory;
+		private ICurrentUnitOfWorkFactory unitOfWorkFactory;
 		private ISkillRepository skillRepository;
 		private IMultisiteForecastToSkillCommand command;
 		private ExportMultisiteSkillToSkillConsumer target;
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 		public void Setup()
 		{
 			mocks = new MockRepository();
-			unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
+			unitOfWorkFactory = mocks.DynamicMock<ICurrentUnitOfWorkFactory>();
 			skillRepository = mocks.DynamicMock<ISkillRepository>();
 			jobResultRepository = mocks.DynamicMock<IJobResultRepository>();
 			skillRepository = mocks.DynamicMock<ISkillRepository>();
@@ -55,7 +55,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 			var jobId = Guid.NewGuid();
 			using (mocks.Record())
 			{
-				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+				var uowFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
+				Expect.Call(unitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(uowFactory);
+				Expect.Call(uowFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
 				Expect.Call(unitOfWork.DisableFilter(QueryFilter.BusinessUnit)).Return(disposable);
 				Expect.Call(() => command.Execute(null)).IgnoreArguments();
 				Expect.Call(jobResultRepository.Get(jobId)).Return(jobResult);

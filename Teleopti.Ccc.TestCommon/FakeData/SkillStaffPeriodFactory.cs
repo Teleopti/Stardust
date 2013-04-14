@@ -248,7 +248,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
             public void SetParent(ISkillDay skillDay)
             {
-                base.SetParent(skillDay);
+                base.SetSkillDay(skillDay);
             }
         }
     }

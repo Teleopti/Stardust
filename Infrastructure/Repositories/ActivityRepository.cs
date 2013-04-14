@@ -20,10 +20,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
-        public ActivityRepository(IUnitOfWorkFactory unitOfWorkFactory)
-            : base(unitOfWorkFactory)
-        {
-        }
+	    public ActivityRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
+	    {
+	    }
+
 
         // We have to filter so we don't get the masterActivities here but at the same time activate masterActivity.Activitycollection
         public new IList<IActivity> LoadAll()

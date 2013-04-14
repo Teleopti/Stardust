@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -60,13 +61,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 		[Test]
 		public void ShouldMapPerson()
 		{
-			var expected = new Person();
-			var id = Guid.NewGuid();
-			personRepository.Expect(x => x.Get(id)).Return(expected);
-			form.PersonToId = id;
-
 			var res = target.Map(form);
-			res.Person.Should().Be.SameInstanceAs(expected);
+			res.Person.Should().Be.SameInstanceAs(loggedOnUser);
 		}
 
 		[Test]
@@ -77,6 +73,18 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.Mapping
 
 			var res = target.Map(form);
 			var swapDetail = ((IShiftTradeRequest) res.Request).ShiftTradeSwapDetails[0];
+			swapDetail.DateFrom.Should().Be.EqualTo(expected);
+			swapDetail.DateTo.Should().Be.EqualTo(expected);
+		}
+
+		[Test, SetCulture("ar-SA")]
+		public void ShouldMapShiftTradeRequestWithCorrectDateForArabicCulture()
+		{
+			form.Date = new DateOnly(1434, 5, 1);
+			var expected = new DateOnly(new DateTime(1434, 5, 1, CultureInfo.CurrentCulture.Calendar));
+
+			var res = target.Map(form);
+			var swapDetail = ((IShiftTradeRequest)res.Request).ShiftTradeSwapDetails[0];
 			swapDetail.DateFrom.Should().Be.EqualTo(expected);
 			swapDetail.DateTo.Should().Be.EqualTo(expected);
 		}

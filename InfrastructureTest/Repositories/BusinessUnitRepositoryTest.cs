@@ -30,14 +30,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             rep = new BusinessUnitRepository(UnitOfWork);
         }
 
-        /// <summary>
-        /// Determines whether this instance can be created.
-        /// </summary>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
-        public void CanCreate()
-        {
-            new BusinessUnitRepository(UnitOfWorkFactory.Current).Should().Not.Be.Null();
-        }
 
         [Test]
         public void VerifyLoadAllBusinessUnitSortedByName()

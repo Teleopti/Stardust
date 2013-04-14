@@ -14,10 +14,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.ShiftCreator
 			_shiftCreatorService = shiftCreatorService;
 		}
 
-		public IEnumerable<IWorkShiftProjection> ProjectionCollection(IWorkShiftRuleSet workShiftRuleSet)
+		public IEnumerable<IWorkShiftProjection> ProjectionCollection(IWorkShiftRuleSet workShiftRuleSet, IWorkShiftAddCallback callback)
 		{
 			return (
-			       	from s in _shiftCreatorService.Generate(workShiftRuleSet)
+					from s in _shiftCreatorService.Generate(workShiftRuleSet, callback)
 			       	select WorkShiftProjection.FromWorkShift(s)
 			       ).ToArray();
 		}

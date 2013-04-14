@@ -41,11 +41,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			loggedOnUser.Stub(x => x.CurrentUser()).Return(person);
 
 			Mapper.Reset();
-			Mapper.Initialize(c => c.AddProfile(
-				new PreferenceDomainDataMappingProfile(
-					Depend.On(virtualScheduleProvider),
-					Depend.On(loggedOnUser)
-					)));
+			Mapper.Initialize(c => c.AddProfile(new PreferenceDomainDataMappingProfile(virtualScheduleProvider, loggedOnUser)));
 		}
 
 		[Test]

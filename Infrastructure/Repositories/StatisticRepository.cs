@@ -5,11 +5,10 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Text;
 using NHibernate;
 using NHibernate.Transform;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Forecasting;
-using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -72,7 +71,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             if (sources.Count == 0) return new List<IStatisticTask>();
 
             string queueList = buildStringQueueList(sources);
-            
+
             using (IStatelessUnitOfWork uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
             {
                 IQuery query = createQuery(uow, period, queueList);
@@ -90,15 +89,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             }
         }
 
-        public ICollection<IExternalAgentState> LoadRtaAgentStates(DateTimePeriod period, IList<ExternalLogOnPerson> externalLogOnPersons)
-        {
-            using (IStatelessUnitOfWork uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
-            {
-                IQuery query = createExternalAgentStateQuery(uow, period, externalLogOnPersons);
-                return query.List<IExternalAgentState>();
-            }
-        }
-
+        
         public void PersistFactQueues(DataTable queueDataTable)
         {
             using (IStatelessUnitOfWork uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
@@ -112,37 +103,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                     bulkCopy.WriteToServer(queueDataTable);
                 }
             }
-        }
-
-        private static IQuery createExternalAgentStateQuery(IStatelessUnitOfWork uow, DateTimePeriod period, IList<ExternalLogOnPerson> externalLogOnPersons)
-        {
-            StringBuilder externalLogOnList = new StringBuilder();
-            StringBuilder externalLogOnLogObjectIdList = new StringBuilder();
-            foreach (ExternalLogOnPerson externalLogOnPerson in externalLogOnPersons)
-            {
-                if (externalLogOnList.Length>0)
-                {
-                    externalLogOnList.Append(",");
-                    externalLogOnLogObjectIdList.Append(",");
-                }
-                externalLogOnList.Append(externalLogOnPerson.ExternalLogOn);
-                externalLogOnLogObjectIdList.Append(externalLogOnPerson.DataSourceId);
-            }
-
-            return session(uow).CreateSQLQuery("exec RTA.rta_load_agentstate @start_date=:start_date, @end_date=:end_date, @externallogonlist=:externallogonlist")
-                .AddScalar("ExternalLogOn", NHibernateUtil.String)
-                .AddScalar("StateCode", NHibernateUtil.String)
-                .AddScalar("Timestamp", NHibernateUtil.DateTime)
-                .AddScalar("TimeInState", NHibernateUtil.TimeSpan)
-                .AddScalar("PlatformTypeId", NHibernateUtil.Guid)
-                .AddScalar("DataSourceId",NHibernateUtil.Int32)
-                .AddScalar("BatchId",NHibernateUtil.DateTime)
-                .AddScalar("IsSnapshot",NHibernateUtil.Boolean)
-                .SetReadOnly(true)
-                .SetDateTime("start_date", period.StartDateTime)
-                .SetDateTime("end_date", period.EndDateTime)
-                .SetParameter("externallogonlist", externalLogOnList.ToString(), NHibernateUtil.StringClob)
-                .SetResultTransformer(Transformers.AliasToBean(typeof(ExternalAgentState)));
         }
 
         private static string buildStringQueueList(IEnumerable<IQueueSource> sources)
@@ -187,7 +147,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 .AddScalar("ActiveAgents", NHibernateUtil.Int32)
                 .AddScalar("Interval", NHibernateUtil.DateTime)
                 .SetReadOnly(true)
-                .SetGuid("skill", skill.Id.Value)
+                .SetGuid("skill", skill.Id.GetValueOrDefault())
                 .SetDateTime("start_date", period.StartDateTime)
                 .SetDateTime("end_date", period.EndDateTime)
                 .SetResultTransformer(Transformers.AliasToBean(typeof(ActiveAgentCount)));
@@ -264,7 +224,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             using (IStatelessUnitOfWork uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
             {
                 return session(uow).CreateSQLQuery(
-					"exec mart.raptor_adherence_report_load @date_from=:date_from, @time_zone_id=:time_zone_id, @person_code=:person_code, @agent_person_code=:agent_person_code, @language_id=:language_id, @adherence_id=:adherence_id")
+                    "exec mart.raptor_adherence_report_load @date_from=:date_from, @time_zone_id=:time_zone_id, @person_code=:person_code, @agent_person_code=:agent_person_code, @language_id=:language_id, @adherence_id=:adherence_id")
 
                     .SetReadOnly(true)
                     .SetDateTime("date_from", dateTime)
@@ -310,11 +270,95 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             }
         }
 
+        public IList<IActualAgentState> LoadActualAgentState(IEnumerable<IPerson> persons)
+        {
+            var guids = persons.Select(person => person.Id.GetValueOrDefault()).ToList();
+            using (var uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+            {
+                var ret = new List<IActualAgentState>();
+                foreach (var personList in guids.Batch(400))
+                {
+                    ret.AddRange(((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(
+                        "SELECT * FROM RTA.ActualAgentState WHERE PersonId IN(:persons)")
+                        .SetParameterList("persons", personList)
+                        .SetResultTransformer(Transformers.AliasToBean(typeof(ActualAgentState)))
+                        .SetReadOnly(true)
+                        .List<IActualAgentState>());
+                }
+                return ret;
+            }
+        }
+
+        public IActualAgentState LoadOneActualAgentState(Guid value)
+        {
+            using (var uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+            {
+                return ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(
+                    "SELECT * FROM RTA.ActualAgentState WHERE PersonId =:value")
+                    .SetGuid("value", value)
+                    .SetResultTransformer(Transformers.AliasToBean(typeof(ActualAgentState)))
+                    .List<IActualAgentState>()
+                    .FirstOrDefault();
+            }
+        }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+        public void AddOrUpdateActualAgentState(IActualAgentState actualAgentState)
+        {
+            using (var uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+            {
+                const string stringQuery = @"[RTA].[rta_addorupdate_actualagentstate] @PersonId=:personId,  @StateCode=:stateCode, @PlatformTypeId=:platform, 
+					@State=:state, @StateId=:stateId, @Scheduled=:scheduled, @ScheduledId=:scheduledId, @StateStart=:stateStart, @ScheduledNext=:scheduledNext,  
+					@ScheduledNextId=:scheduledNextId, @NextStart=:nextStart, @AlarmName=:alarmName, @AlarmId=:alarmId, @Color=:color, @AlarmStart=:alarmStart, 
+					@StaffingEffect=:staffingEffect, @ReceivedTime=:receivedTime";
+                session(uow).CreateSQLQuery(stringQuery)
+                    .SetGuid("personId", actualAgentState.PersonId)
+                    .SetString("stateCode", actualAgentState.StateCode)
+                    .SetGuid("platform", actualAgentState.PlatformTypeId)
+                    .SetString("state", actualAgentState.State)
+                    .SetGuid("stateId", actualAgentState.StateId)
+                    .SetString("scheduled", actualAgentState.Scheduled)
+                    .SetGuid("scheduledId", actualAgentState.ScheduledId)
+                    .SetDateTime("stateStart", actualAgentState.StateStart)
+                    .SetString("scheduledNext", actualAgentState.ScheduledNext)
+                    .SetGuid("scheduledNextId", actualAgentState.ScheduledNextId)
+                    .SetDateTime("nextStart", actualAgentState.NextStart)
+                    .SetString("alarmName", actualAgentState.AlarmName)
+                    .SetGuid("alarmId", actualAgentState.AlarmId)
+                    .SetInt32("color", actualAgentState.Color)
+                    .SetDateTime("alarmStart", actualAgentState.AlarmStart)
+                    .SetDouble("staffingEffect", actualAgentState.StaffingEffect)
+					.SetDateTime("receivedTime", actualAgentState.ReceivedTime)
+                    .SetTimeout(300)
+                    .ExecuteUpdate();
+            }
+        }
+
+		public ICollection<Guid> PersonIdsWithExternalLogOn(Guid businessUnitId)
+        {
+            const string stringQuery =
+                @"SELECT DISTINCT p.person_code 
+					FROM [mart].[bridge_acd_login_person] balp 
+					INNER JOIN mart.dim_person p ON p.person_id=balp.person_id 
+					INNER JOIN mart.dim_acd_login al ON balp.acd_login_id=al.acd_login_id 
+					WHERE p.person_code IS NOT NULL AND al.datasource_id<>-1 
+					AND p.business_unit_code =:buid";
+
+            using (var uow = StatisticUnitOfWorkFactory().CreateAndOpenStatelessUnitOfWork())
+            {
+                return session(uow).CreateSQLQuery(stringQuery)
+                    .SetGuid("buid",businessUnitId)
+                    .List<Guid>();
+            }
+        }
 
         private IUnitOfWorkFactory StatisticUnitOfWorkFactory()
         {
             var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity);
             return identity.DataSource.Statistic;
         }
+
     }
+
+
 }

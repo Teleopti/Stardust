@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 				TimePeriod = new TimePeriod(TimeSpan.FromHours(7), TimeSpan.FromHours(16))
 			};
 
-			projectionService.Expect(proj => proj.ProjectionCollection(ruleSet)).Return(new[] {info1, info2});
+			projectionService.Expect(proj => proj.ProjectionCollection(ruleSet,null)).Return(new[] {info1, info2}).IgnoreArguments();
 			restriction.Expect(r => r.Match(info1)).Return(true);
 			restriction.Expect(r => r.Match(info2)).Return(true);
 			restriction.Expect(r => r.MayMatchWithShifts()).Return(true);
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 			};
 			var info2 = new WorkShiftProjection();
 
-			projectionService.Expect(proj => proj.ProjectionCollection(ruleSet)).Return(new[] { info1, info2 });
+			projectionService.Expect(proj => proj.ProjectionCollection(ruleSet,null)).Return(new[] { info1, info2 }).IgnoreArguments();
 			restriction.Expect(r => r.Match(info1)).Return(true);
 			restriction.Expect(r => r.Match(info2)).Return(false);
 			restriction.Expect(r => r.MayMatchWithShifts()).Return(true);

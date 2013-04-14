@@ -16,9 +16,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
-        public AgentDayScheduleTagRepository(IUnitOfWorkFactory unitOfWorkFactory): base(unitOfWorkFactory)
-        {
-        }
+				public AgentDayScheduleTagRepository(ICurrentUnitOfWork currentUnitOfWork)
+					: base(currentUnitOfWork)
+	    {
+	    }
+
 
         public IList<IAgentDayScheduleTag> Find(DateTimePeriod period, IScenario scenario)
         {

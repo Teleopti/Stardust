@@ -31,10 +31,11 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
         [Test]
         public void VerifyStaffingThresholdValidations()
         {
-            Assert.AreEqual(3, Target.StaffingThresholdValidatorList.Count);
+            Assert.AreEqual(4, Target.StaffingThresholdValidatorList.Count);
             Assert.IsTrue(typeof(AbsenceRequestNoneValidator).IsInstanceOfType(Target.StaffingThresholdValidatorList[0]));
             Assert.IsTrue(typeof(StaffingThresholdValidator).IsInstanceOfType(Target.StaffingThresholdValidatorList[1]));
             Assert.IsTrue(typeof(BudgetGroupAllowanceValidator).IsInstanceOfType(Target.StaffingThresholdValidatorList[2]));
+            Assert.IsTrue(typeof(BudgetGroupHeadCountValidator).IsInstanceOfType(Target.StaffingThresholdValidatorList[3]));
         }
 
         [Test]
@@ -114,10 +115,12 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             var mockedPersonAccountBalanceCalculator = mocks.StrictMock<IPersonAccountBalanceCalculator>();
             var mockedResourceOptimizationHelper = mocks.StrictMock<IResourceOptimizationHelper>();
             var allowanceSpecification =  mocks.StrictMock<IBudgetGroupAllowanceSpecification>();
+            var budgetGroupAllowanceCalculator = mocks.DynamicMock<IBudgetGroupAllowanceCalculator>();
+            var budgetGroupHeadCountSpecification  =  mocks.StrictMock<IBudgetGroupHeadCountSpecification>();
 
             var absenceRequestValidators =
                 Target.GetSelectedValidatorList(mockedSchedulingResultStateHolder, mockedResourceOptimizationHelper,
-                                                mockedPersonAccountBalanceCalculator, allowanceSpecification);
+                                                mockedPersonAccountBalanceCalculator, allowanceSpecification, budgetGroupAllowanceCalculator, budgetGroupHeadCountSpecification);
             Assert.AreEqual(2, absenceRequestValidators.Count());
             foreach (var absenceRequestValidator in absenceRequestValidators)
             {

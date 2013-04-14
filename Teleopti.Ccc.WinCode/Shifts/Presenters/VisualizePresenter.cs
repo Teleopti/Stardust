@@ -11,17 +11,21 @@ namespace Teleopti.Ccc.WinCode.Shifts.Presenters
         private readonly IRuleSetProjectionEntityService _ruleSetProjectionEntityService;
     	private IList<int> _amountList;
         private IList<TimeSpan> _contractList;
+	    
 
 		public VisualizePresenter(IExplorerPresenter explorer, IDataHelper dataHelper, IRuleSetProjectionEntityService ruleSetProjectionEntityService)
             : base(explorer, dataHelper)
 		{
 			_ruleSetProjectionEntityService = ruleSetProjectionEntityService;
+			
 		}
 
-    	public override void LoadModelCollection()
+	    public void LoadModelCollection(IWorkShiftAddCallback callback)
         {
             ClearModelCollection();
-            var model = Explorer.Model;
+			Explorer.View.RefreshVisualizeView();
+		    Explorer.View.RefreshActivityGridView();
+			var model = Explorer.Model;
             var filteredRuleSetCollection = model.FilteredRuleSetCollection;
             if (filteredRuleSetCollection != null && filteredRuleSetCollection.Count > 0)
             {
@@ -31,13 +35,17 @@ namespace Teleopti.Ccc.WinCode.Shifts.Presenters
                 var layerCollection = new List<ReadOnlyCollection<VisualPayloadInfo>>();
                 foreach (var ruleSet in filteredRuleSetCollection)
                 {
-						 if ((ruleSet.TemplateGenerator.StartPeriod.Period.StartTime < startTime))
-							 startTime = ruleSet.TemplateGenerator.StartPeriod.Period.StartTime;
-						 if ((ruleSet.TemplateGenerator.EndPeriod.Period.EndTime > endTime))
-							 endTime = ruleSet.TemplateGenerator.EndPeriod.Period.EndTime;
-						 var layers = getVisualLayers(_ruleSetProjectionEntityService.ProjectionCollection(ruleSet));
-						 layerCollection.AddRange(layers);
-						 _amountList.Add(layers.Count);
+					if ((ruleSet.TemplateGenerator.StartPeriod.Period.StartTime < startTime))
+						startTime = ruleSet.TemplateGenerator.StartPeriod.Period.StartTime;
+					if ((ruleSet.TemplateGenerator.EndPeriod.Period.EndTime > endTime))
+						endTime = ruleSet.TemplateGenerator.EndPeriod.Period.EndTime;
+					if (callback != null)
+						callback.StartNewRuleSet(ruleSet);
+					var layers = getVisualLayers(_ruleSetProjectionEntityService.ProjectionCollection(ruleSet,callback));
+					layerCollection.AddRange(layers);
+					_amountList.Add(layers.Count);
+					if (callback != null)
+						callback.EndRuleSet();
                 }
                 SetModelCollection(new ReadOnlyCollection<ReadOnlyCollection<VisualPayloadInfo>>(layerCollection));
 
@@ -82,11 +90,11 @@ namespace Teleopti.Ccc.WinCode.Shifts.Presenters
         public void CopyWorkShiftToSessionDataClip(int rowIndex)
         {
             if (rowIndex < 1) return;
-
+			var callback = new WorkShiftAddCallback();
             var list = new List<IWorkShiftVisualLayerInfo>();
             foreach (IWorkShiftRuleSet ruleSet in Explorer.Model.FilteredRuleSetCollection)
             {
-                var layers = _ruleSetProjectionEntityService.ProjectionCollection(ruleSet);
+				var layers = _ruleSetProjectionEntityService.ProjectionCollection(ruleSet, callback);
                 list.AddRange(layers);
             }
 

@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			StateHolderProxyHelper.SetupFakeState(TestData.DataSource, TestData.PersonThatCreatesTestData, CommonBusinessUnit.BusinessUnitFromFakeState, new ThreadPrincipalContext(new TeleoptiPrincipalFactory()));
 
 			GlobalPrincipalState.Principal = Thread.CurrentPrincipal as TeleoptiPrincipal;
-			GlobalUnitOfWorkState.UnitOfWorkFactory = UnitOfWorkFactory.Current as NHibernateUnitOfWorkFactory;
+			GlobalUnitOfWorkState.CurrentUnitOfWorkFactory = UnitOfWorkFactory.CurrentUnitOfWorkFactory();
 		}
 
 
@@ -136,7 +136,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 					r.FunctionPath != DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules &&
 					r.FunctionPath != DefinedRaptorApplicationFunctionPaths.ViewConfidential &&
 					r.FunctionPath != DefinedRaptorApplicationFunctionPaths.MobileReports &&
-					r.FunctionPath != DefinedRaptorApplicationFunctionPaths.Anywhere
+					r.FunctionPath != DefinedRaptorApplicationFunctionPaths.Anywhere &&
+					r.FunctionPath != DefinedRaptorApplicationFunctionPaths.ViewAllGroupPages
 				select r;
 			var agentRoleWithoutStudentAvailabilityApplicationFunctions =
 				from r in agentRoleApplicationFunctions

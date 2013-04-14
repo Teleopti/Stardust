@@ -8,10 +8,13 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
     public class AbsenceRequestNoneValidatorTest
     {
         private IAbsenceRequestValidator _target;
+        //private IValidatedRequest _validatedRequest;
+
 
         [SetUp]
         public void Setup()
         {
+            //_validatedRequest = new ValidatedRequest(){IsValid = true, ValidationErrors = ""};
             _target = new AbsenceRequestNoneValidator();
         }
 
@@ -24,7 +27,9 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
         [Test]
         public void VerifyValidateAlwaysReturnsTrue()
         {
-            Assert.IsTrue(_target.Validate(null));
+            //Assert.IsNotNullOrEmpty(_target.Validate(null));
+            var result = _target.Validate(null);
+            Assert.IsTrue(result.IsValid);
         }
 
         [Test]
@@ -57,6 +62,13 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
 
             Assert.IsTrue(otherValidatorOfSameKind.Equals(_target));
             Assert.IsFalse(_target.Equals(otherValidator));
+        }
+
+        [Test]
+        public void ShouldGetHashCodeInReturn()
+        {
+            var result = _target.GetHashCode();
+            Assert.IsNotNull(result);
         }
     }
 }
