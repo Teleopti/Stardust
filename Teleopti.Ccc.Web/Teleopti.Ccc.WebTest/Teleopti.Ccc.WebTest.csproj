@@ -173,6 +173,7 @@
     <Compile Include="Core\Asm\ViewModelFactory\AsmViewModelFactoryTest.cs" />
     <Compile Include="Core\Asm\Mapping\AsmViewModelMapperTest.cs" />
     <Compile Include="Core\Common\DataProvider\PreferenceProviderTest.cs" />
+    <Compile Include="Core\HttpPostOrPutAttributeTest.cs" />
     <Compile Include="Core\MessageBroker\MessageBrokerHubTest.cs" />
     <Compile Include="Core\Message\DataProvider\PushMessageDialoguePersisterTest.cs" />
     <Compile Include="Core\Message\Mapping\MessageViewModelMappingProfileTest.cs" />
