@@ -542,5 +542,14 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			requestContainer.Resolve<IEnumerable<IHandleEvent<ProjectionChangedEvent>>>()
 			                .Should().Not.Be.Null();
 		}
+
+		[Test]
+		public void ShouldResolveLicenseActivator()
+		{
+			var licenseActivator = MockRepository.GenerateMock<ILicenseActivator>();
+			DefinedLicenseDataFactory.LicenseActivator = licenseActivator;
+			requestContainer.Resolve<ILicenseActivator>().Should().Be(licenseActivator);
+			DefinedLicenseDataFactory.LicenseActivator = null;
+		}
 	}
 }
