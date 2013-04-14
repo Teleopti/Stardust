@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.WebTest.Core.MessageBroker
 	[TestFixture]
 	public class MessageBrokerHubTest
 	{
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldHaveCoverageForLogging()
 		{
 			var target = new MessageBrokerHub();
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WebTest.Core.MessageBroker
 			target.NotifyClients(new Notification());
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldSubscribe()
 		{
 			var target = new MessageBrokerHub();
