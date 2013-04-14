@@ -116,6 +116,7 @@
     <Compile Include="MessageBrokerHub.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SignalRConfiguration.cs" />
+    <Compile Include="TestableHub.cs" />
     <Compile Include="TimeoutSettings.cs" />
   </ItemGroup>
   <ItemGroup>

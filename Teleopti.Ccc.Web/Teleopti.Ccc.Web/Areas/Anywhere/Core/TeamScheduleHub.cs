@@ -7,13 +7,14 @@ using Microsoft.AspNet.SignalR.Hubs;
 using Newtonsoft.Json;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Web.Broker;
 using Teleopti.Ccc.Web.Core.Aop.Aspects;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 {
 	[HubName("teamScheduleHub")]
-	public class TeamScheduleHub : Hub
+	public class TeamScheduleHub : TestableHub
 	{
 		private readonly IPersonScheduleDayReadModelFinder _personScheduleDayReadModelRepository;
 
