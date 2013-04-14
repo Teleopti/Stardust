@@ -6,7 +6,7 @@ using Teleopti.Ccc.TestCommon;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data
 {
-	[Serializable]
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2237:MarkISerializableTypesWithSerializable")]
 	public class AllTags : Dictionary<string, string>
 	{
 		public AllTags()
