@@ -51,9 +51,14 @@ namespace Teleopti.Ccc.Web.Core.ServiceBus
 			}
 		}
 
+		protected virtual T Resolve<T>()
+		{
+			return _customHost.Resolve<T>();
+		}
+
 		public void Send(object message)
 		{
-			var bus = _customHost.Resolve<IOnewayBus>();
+			var bus = Resolve<IOnewayBus>();
 
 			if (Logger.IsDebugEnabled)
 			{
