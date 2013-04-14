@@ -10,6 +10,7 @@ namespace Teleopti.Ccc.WebTest.Core.MessageBroker
 		public void ShouldLoad()
 		{
 			TimeoutSettings.Load();
+			// assert coverage
 		}
 	}
 }
