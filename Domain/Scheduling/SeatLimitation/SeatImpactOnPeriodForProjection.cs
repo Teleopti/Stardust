@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public double CalculatePeriod(ISkillStaffPeriod skillStaffPeriod, IList<IVisualLayerCollection> shiftList)
 		{
-			ISkill skill = ((ISkillDay)skillStaffPeriod.Parent).Skill;
+			var skill = skillStaffPeriod.SkillDay.Skill;
 			if (skill.SkillType.ForecastSource != ForecastSource.MaxSeatSkill)
 				return 0;
 
@@ -47,8 +47,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.SeatLimitation
 			{
 				IActivity activity = layer.Payload as IActivity;
 				if (activity == null)
-					continue;
-
+				{
+					activity = layer.Payload.UnderlyingPayload as IActivity;
+					if(activity == null)
+						continue;	
+				}
+					
 				if (!activity.RequiresSeat)
 					continue;
 

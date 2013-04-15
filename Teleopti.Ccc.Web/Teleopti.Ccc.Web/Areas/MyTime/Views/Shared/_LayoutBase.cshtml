@@ -17,6 +17,7 @@
 
 	<link href="@Url.Content("~/Content/jqueryui/smoothness/jquery-ui-1.10.1.custom.css")" rel="stylesheet" type="text/css" />
 	<link href="@Url.Content("~/Content/Scripts/jquery.qtip.css")" rel="stylesheet" type="text/css" />
+	<link href="@Url.Content("~/Content/select2/select2.css")" rel="stylesheet" type="text/css" />
 	<link href="@Url.Content("~/Areas/MyTime/Content/Css/Site.css")" rel="stylesheet" type="text/css" />
 	<link href="@Url.Content("~/Areas/MyTime/Content/Css/TeamSchedule.css")" rel="stylesheet" type="text/css" />
 	<link href="@Url.Content("~/Areas/MyTime/Content/Css/Asm.css")" rel="stylesheet" type="text/css" />
@@ -51,6 +52,7 @@
 	<script src="@Url.Content("~/Content/signalr/jquery.signalR-1.0.1.min.js")"></script>
 	<script src="@Url.Content("~/Content/moment/moment.js")"></script>
 	<script src="@Url.Content("~/Content/signalr/broker-hubs.js")"></script>
+	<script src="@Url.Content("~/Content/select2/select2.js")"></script>
 
 	<script src="@Url.Content("~/Content/Scripts/pinify/scripts/jquery.pinify.min.js")"></script>
 	<link href="@Url.Content("~/Content/Scripts/pinify/content/jquery.pinify.min.css")" rel="stylesheet" type="text/css" />
@@ -99,7 +101,11 @@
 	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.AsmMessage.js")"></script>
 	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.MessageBroker.js")"></script>	
 	<script src="@Url.Content("~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Notifier.js")"></script>
-
+    
+    @*<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.1/themes/base/jquery-ui.css" />*@
+    @*<script src="http://code.jquery.com/jquery-1.9.1.js"></script>*@
+ @*   <script src="http://code.jquery.com/ui/1.10.1/jquery-ui.js"></script>
+*@
 	@if (ViewBag.LayoutBase.FixedDate != null)
 	{
 		DateTime date = ViewBag.LayoutBase.FixedDate;

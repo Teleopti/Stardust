@@ -59,11 +59,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			}
 			_cacheBuilder
 				.For<RuleSetProjectionService>()
-					.CacheMethod(m => m.ProjectionCollection(null))
+					.CacheMethod(m => m.ProjectionCollection(null,null))
 					.PerInstance()
 					.As<IRuleSetProjectionService>()
 				.For<RuleSetProjectionEntityService>()
-					.CacheMethod(m => m.ProjectionCollection(null))
+					.CacheMethod(m => m.ProjectionCollection(null, null))
 					.PerInstance()
 					.As<IRuleSetProjectionEntityService>()
 				.For<WorkShiftWorkTime>()

@@ -29,6 +29,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
+				public SkillRepository(ICurrentUnitOfWork currentUnitOfWork)
+					: base(currentUnitOfWork)
+	    {
+		    
+	    }
+
         /// <summary>
         /// Finds all and include workload and queues.
         /// </summary>
@@ -154,7 +160,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             var openhours = getOpenhours(templateIds);
             var taskPeriods = getTaskPeriods(templateIds);
             var skillDetail = getSkillDetail(skill);
-
             var multiCriteria = Session.CreateMultiCriteria().Add(workloads).Add(queues).Add(templates).Add(openhours).Add(taskPeriods).Add(skillDetail);
             var fetchedSkill = CollectionHelper.ToDistinctGenericCollection<ISkill>(wrapMultiCriteria(multiCriteria)).FirstOrDefault();
 

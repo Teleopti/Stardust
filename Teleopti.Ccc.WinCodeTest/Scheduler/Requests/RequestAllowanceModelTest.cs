@@ -38,6 +38,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Requests
             _budgetGroupRepository = MockRepository.GenerateMock<IBudgetGroupRepository>();
 			_scenarioRepository = MockRepository.GenerateMock<ICurrentScenario>();
             _scheduleProjRepository = MockRepository.GenerateMock<IScheduleProjectionReadOnlyRepository>();
+
             _target = new RequestAllowanceModel(_uowFactory, _budgetDayRepository, _budgetGroupRepository, _scenarioRepository, _scheduleProjRepository );
         }
 

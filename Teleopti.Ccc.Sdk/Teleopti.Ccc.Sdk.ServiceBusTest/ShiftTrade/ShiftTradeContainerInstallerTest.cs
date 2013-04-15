@@ -15,14 +15,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ShiftTrade
     public class ShiftTradeContainerInstallerTest
     {
         private MockRepository _mocker;
-        private IUnitOfWorkFactory _unitOfWorkFactory;
+				private ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 
         [SetUp]
         public void Setup()
         {
             _mocker = new MockRepository();
 
-            _unitOfWorkFactory = _mocker.DynamicMock<IUnitOfWorkFactory>();
+						_unitOfWorkFactory = _mocker.DynamicMock<ICurrentUnitOfWorkFactory>();
         }
 
         [Test]

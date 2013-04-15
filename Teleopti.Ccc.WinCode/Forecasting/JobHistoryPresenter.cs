@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.WinCode.Forecasting
         private readonly IJobHistoryView _view;
         private readonly IJobResultProvider _jobResultProvider;
     	private readonly PagingDetail _pagingDetail;
-
+		
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
 		public JobHistoryPresenter(IJobHistoryView view, IJobResultProvider jobResultProvider, PagingDetail pagingDetail)
         {
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.WinCode.Forecasting
 
         public void LoadDetailedHistory(JobResultModel jobResultModel)
         {
-            var jobHistoryEntries = _jobResultProvider.GetJobResultDetails(jobResultModel);
+			var jobHistoryEntries = _jobResultProvider.GetJobResultDetails(jobResultModel, _view.DetailLevel);
             _view.BindJobResultDetailData(jobHistoryEntries);
         }
 

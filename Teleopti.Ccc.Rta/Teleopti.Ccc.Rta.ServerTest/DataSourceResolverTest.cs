@@ -11,132 +11,63 @@ namespace Teleopti.Ccc.Rta.ServerTest
     [TestFixture]
     public class DataSourceResolverTest
     {
-        private IDataSourceResolver target;
-        private MockRepository mocks;
-        private ILog loggingSvc;
-        private IDatabaseConnectionFactory databaseConnectionFactory;
-        private string connectionString;
+        private IDataSourceResolver _target;
+        private MockRepository _mocks;
+        private ILog _loggingSvc;
+        private IDatabaseConnectionFactory _databaseConnectionFactory;
+        private string _connectionString;
 
         [SetUp]
         public void Setup()
         {
-            mocks = new MockRepository();
-            loggingSvc = mocks.DynamicMock<ILog>();
-            databaseConnectionFactory = mocks.StrictMock<IDatabaseConnectionFactory>();
-            connectionString = "connection";
+            _mocks = new MockRepository();
+            _loggingSvc = _mocks.DynamicMock<ILog>();
+            _databaseConnectionFactory = _mocks.StrictMock<IDatabaseConnectionFactory>();
+            _connectionString = "connection";
         }
 
         [Test]
         public void VerifyCanCreateInstance()
         {
-            target = new DataSourceResolver(databaseConnectionFactory, connectionString);
-            Assert.IsNotNull(target);
+            _target = new DataSourceResolver(_databaseConnectionFactory, _connectionString);
+            Assert.IsNotNull(_target);
         }
-
+		
         [Test]
-        public void VerifyOnlyLoadsDataOnce()
+        public void ShouldVerifyWholeMethod()
         {
-            IDbConnection connection = mocks.StrictMock<IDbConnection>();
-            IDbCommand command = mocks.StrictMock<IDbCommand>();
-            IDataReader dataReader = mocks.StrictMock<IDataReader>();
+            var connection = _mocks.StrictMock<IDbConnection>();
+            var command = _mocks.StrictMock<IDbCommand>();
+            var dataReader = _mocks.StrictMock<IDataReader>();
             connection.Dispose();
-            
-            Expect.Call(databaseConnectionFactory.CreateConnection(connectionString)).Return(connection);
-            Expect.Call(connection.CreateCommand()).Return(command);
 
-            command.CommandType = CommandType.StoredProcedure;
+        	_databaseConnectionFactory.Expect(d => d.CreateConnection(_connectionString)).Return(connection);
+            connection.Expect(c => c.CreateCommand()).Return(command);
+			command.CommandType = CommandType.StoredProcedure;
             command.CommandText = "RTA.rta_load_datasources";
             connection.Open();
-            Expect.Call(command.ExecuteReader(CommandBehavior.CloseConnection)).Return(dataReader);
-            Expect.Call(dataReader.Read()).Return(true);
-            Expect.Call(dataReader.GetOrdinal("datasource_id")).Return(0);
-            Expect.Call(dataReader.GetInt16(0)).Return(2);
-            Expect.Call(dataReader["source_id"]).Return("ACD2");
-            Expect.Call(dataReader.Read()).Return(false);
+        	command.Expect(c => c.ExecuteReader(CommandBehavior.CloseConnection)).Return(dataReader);
+			dataReader.Expect(d => d.Read()).Return(true).Repeat.Times(3);
+			dataReader.Expect(d => d["source_id"]).Return(DBNull.Value);
+			_loggingSvc.Expect(l => l.WarnFormat("", 1)).IgnoreArguments();
+			dataReader.Expect(d => d["source_id"]).Return("ACD2").Repeat.Twice();
+			dataReader.Expect(d => d.GetOrdinal("datasource_id")).Return(0).Repeat.Times(3);
+			dataReader.Expect(d => d.GetInt16(0)).Return(2).Repeat.Twice();
+			dataReader.Expect(d => d.GetInt16(0)).Return(3);
+			dataReader.Expect(d => d.Read()).Return(false);
             dataReader.Close();
 
-            mocks.ReplayAll();
-            target = new DataSourceResolverForTest(databaseConnectionFactory, connectionString, loggingSvc);
+            _mocks.ReplayAll();
+            _target = new DataSourceResolverForTest(_databaseConnectionFactory, _connectionString, _loggingSvc);
 
             int resolvedId;
-            Assert.IsTrue(target.TryResolveId("ACD2", out resolvedId));
+            Assert.IsTrue(_target.TryResolveId("ACD2", out resolvedId));
             Assert.AreEqual(2,resolvedId);
-            Assert.IsTrue(target.TryResolveId("ACD2", out resolvedId)); //This time all the stuff should have been loaded already, thus only one expectation for all of the above
+            Assert.IsTrue(_target.TryResolveId("ACD2", out resolvedId)); //This time all the stuff should have been loaded already, thus only one expectation for all of the above
             Assert.AreEqual(2, resolvedId);
-            mocks.VerifyAll();
+            _mocks.VerifyAll();
         }
-		/*
-        [Test]
-        public void VerifySkipDataSourceWithNoSourceId()
-        {
-            IDbConnection connection = mocks.StrictMock<IDbConnection>();
-            IDbCommand command = mocks.StrictMock<IDbCommand>();
-            IDataReader dataReader = mocks.StrictMock<IDataReader>();
-            connection.Dispose();
-
-            Expect.Call(databaseConnectionFactory.CreateConnection(connectionString)).Return(connection);
-            Expect.Call(connection.CreateCommand()).Return(command);
-
-            command.CommandType = CommandType.StoredProcedure;
-            command.CommandText = "RTA.rta_load_datasources";
-            connection.Open();
-            Expect.Call(command.ExecuteReader(CommandBehavior.CloseConnection)).Return(dataReader);
-            Expect.Call(dataReader.Read()).Return(true);
-            Expect.Call(dataReader["source_id"]).Return(DBNull.Value);
-            Expect.Call(dataReader.GetOrdinal("datasource_id")).Return(0);
-            Expect.Call(dataReader.GetInt16(0)).Return(2);
-            Expect.Call(dataReader.Read()).Return(false);
-            dataReader.Close();
-            loggingSvc.WarnFormat("", 2);
-            LastCall.IgnoreArguments();
-
-            mocks.ReplayAll();
-            target = new DataSourceResolverForTest(databaseConnectionFactory, connectionString, loggingSvc);
-
-            int resolvedId;
-            Assert.IsFalse(target.TryResolveId("ACD2", out resolvedId));
-            mocks.VerifyAll();
-        }
-
-        [Test]
-        public void VerifySkipSourceThatAlreadyExistsWithInfoMessage()
-        {
-            IDbConnection connection = mocks.StrictMock<IDbConnection>();
-            IDbCommand command = mocks.StrictMock<IDbCommand>();
-            IDataReader dataReader = mocks.StrictMock<IDataReader>();
-            connection.Dispose();
-
-            Expect.Call(databaseConnectionFactory.CreateConnection(connectionString)).Return(connection);
-            Expect.Call(connection.CreateCommand()).Return(command);
-
-            command.CommandType = CommandType.StoredProcedure;
-            command.CommandText = "RTA.rta_load_datasources";
-            connection.Open();
-            Expect.Call(command.ExecuteReader(CommandBehavior.CloseConnection)).Return(dataReader);
-            Expect.Call(dataReader.Read()).Return(true);
-            Expect.Call(dataReader["source_id"]).Return("ACD2");
-            Expect.Call(dataReader.GetOrdinal("datasource_id")).Return(0);
-            Expect.Call(dataReader.GetInt16(0)).Return(2);
-            Expect.Call(dataReader.Read()).Return(true);
-            Expect.Call(dataReader["source_id"]).Return("ACD2");
-            Expect.Call(dataReader.GetOrdinal("datasource_id")).Return(0);
-            Expect.Call(dataReader.GetInt16(0)).Return(3);
-            Expect.Call(dataReader.Read()).Return(false);
-            dataReader.Close();
-            loggingSvc.WarnFormat("", "ACD2");
-            LastCall.IgnoreArguments();
-
-            mocks.ReplayAll();
-
-            target = new DataSourceResolverForTest(databaseConnectionFactory, connectionString, loggingSvc);
-
-            int resolvedId;
-            Assert.IsTrue(target.TryResolveId("ACD2", out resolvedId));
-            Assert.AreEqual(2,resolvedId);
-            mocks.VerifyAll();
-        }
-		 */
-    }
+	}
 
     public class DataSourceResolverForTest : DataSourceResolver
     {

@@ -71,9 +71,9 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			var now = MockRepository.GenerateMock<INow>();
 			var time = new DateTime(2012, 05, 08, 12, 01, 01);
 			now.Stub(x => x.UtcDateTime()).Return(time);
-			var uowFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
+			var currentUnitOfWork = MockRepository.GenerateMock<ICurrentUnitOfWork>();
 			var currUow = MockRepository.GenerateMock<IUnitOfWork>();
-			uowFactory.Expect(c => c.CurrentUnitOfWork()).Return(currUow);
+			currentUnitOfWork.Expect(c => c.Current()).Return(currUow);
 
 			var form = new AbsenceRequestForm();
 
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			              		Timestamp = time
 			              	};
 
-			var target = new AbsenceRequestPersister(personRequestRepository, mapper, serviceBusSender, currentBusinessUnitProvider, currentDataSourceProvider, now, uowFactory);
+			var target = new AbsenceRequestPersister(personRequestRepository, mapper, serviceBusSender, currentBusinessUnitProvider, currentDataSourceProvider, now, currentUnitOfWork);
 			target.Persist(form);
 
 			currUow.Expect(c => c.AfterSuccessfulTx(() => serviceBusSender.Send(message)));

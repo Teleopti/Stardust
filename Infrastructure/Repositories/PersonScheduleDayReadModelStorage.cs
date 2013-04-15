@@ -5,7 +5,6 @@ using NHibernate;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Events;
@@ -82,7 +81,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.SetParameter("Shift", model.Shift,NHibernateUtil.StringClob)
 				.ExecuteUpdate();
 
-			_unitOfWork.Current().AfterSuccessfulTx(() => _messageBroker.SendEventMessage(_currentDataSource.CurrentName(), model.BusinessUnitId, model.BelongsToDate, model.BelongsToDate, Guid.Empty, model.PersonId, typeof(Person), Guid.Empty, typeof(IPersonScheduleDayReadModel), DomainUpdateType.NotApplicable, null));
+			_unitOfWork.Current().AfterSuccessfulTx(() => _messageBroker.SendEventMessage(_currentDataSource.CurrentName(), model.BusinessUnitId, model.BelongsToDate, model.BelongsToDate, Guid.Empty, model.PersonId, typeof (Person), Guid.Empty, typeof (IPersonScheduleDayReadModel), DomainUpdateType.NotApplicable, null));
 		}
 
 		public bool IsInitialized()

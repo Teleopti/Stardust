@@ -1,5 +1,6 @@
 ﻿using System;
 using NUnit.Framework;
+using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 
@@ -13,8 +14,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 		{
 			var urlHelperBuilder = new TestUrlHelperBuilder();
 			urlHelperBuilder.Routes(new TestRouteBuilder().MakeAreaDefaultRoute("MyTime"));
-			var urlHelper = urlHelperBuilder.MakeUrlHelper("http://hostname/MyTime/Controller/Action");
-			var target = new LinkProvider(urlHelper.Resolver());
+			var urlHelper = MockRepository.GenerateMock<IUrlHelper>();
+			urlHelper.Expect(x => x.Fetch()).Return(urlHelperBuilder.MakeUrlHelper("http://hostname/MyTime/Controller/Action"));
+			var target = new LinkProvider(urlHelper);
 			var id = Guid.NewGuid();
 
 			var result = target.RequestDetailLink(id);

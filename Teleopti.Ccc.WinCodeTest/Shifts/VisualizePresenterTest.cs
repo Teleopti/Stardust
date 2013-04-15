@@ -7,9 +7,11 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.WinCode.Shifts;
 using Teleopti.Ccc.WinCode.Shifts.Interfaces;
 using Teleopti.Ccc.WinCode.Shifts.Models;
 using Teleopti.Ccc.WinCode.Shifts.Presenters;
+using Teleopti.Ccc.WinCode.Shifts.Views;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCodeTest.Shifts
@@ -17,7 +19,7 @@ namespace Teleopti.Ccc.WinCodeTest.Shifts
     [TestFixture]
     public class VisualizePresenterTest
     {
-        private VisualizePresenter _target;
+        private IVisualizePresenter _target;
         private MockRepository _mock;
         private IDataHelper _dataHelper;
         private IExplorerViewModel _model;
@@ -31,8 +33,9 @@ namespace Teleopti.Ccc.WinCodeTest.Shifts
         private IWorkShiftRuleSet _workShiftRuleSet;
         private IActivity _activity;
         private IShiftCategory _category;
+	    private IExplorerView _explorerView;
 
-    	[SetUp]
+	    [SetUp]
         public void Setup()
         {
             _mock = new MockRepository();
@@ -54,10 +57,9 @@ namespace Teleopti.Ccc.WinCodeTest.Shifts
         	_ruleSetBagCollection.Add(_newRuleSetBag);
 
             _workShiftRuleSet = new WorkShiftRuleSet(GetTemplateGenerator());
-            _ruleSetCollection = new List<IWorkShiftRuleSet>();
-            _ruleSetCollection.Add(_workShiftRuleSet);
-            
-            _model.SetActivityCollection(activities);
+            _ruleSetCollection = new List<IWorkShiftRuleSet> {_workShiftRuleSet};
+
+		    _model.SetActivityCollection(activities);
             _model.SetCategoryCollection(categories);
 
             _model.SetRuleSetCollection(new ReadOnlyCollection<IWorkShiftRuleSet>(_ruleSetCollection));
@@ -66,19 +68,23 @@ namespace Teleopti.Ccc.WinCodeTest.Shifts
 
         	_target = new VisualizePresenter(_explorerPresenter, _dataHelper,
         	                                 new RuleSetProjectionEntityService(_shiftCreatorService));
+
+    		_explorerView = _mock.DynamicMock<IExplorerView>();
         }
 
         [Test]
         public void VerifyLoadModelCollection()
         {
+			var callback = new WorkShiftAddCallback();
             using (_mock.Record())
             {
+				Expect.Call(_explorerPresenter.View).Return(_explorerView).Repeat.Twice();
                 Expect.Call(_explorerPresenter.Model).Return(_model);
-					 Expect.Call(_shiftCreatorService.Generate(_workShiftRuleSet)).Return(CreateWorkShiftList());
+				Expect.Call(_shiftCreatorService.Generate(_workShiftRuleSet, null)).Return(CreateWorkShiftList()).IgnoreArguments();
             }
             using (_mock.Playback())
             {
-                _target.LoadModelCollection();
+                _target.LoadModelCollection(callback);
                 _target.RuleSetAmounts();
                 _target.ContractTimes();
                 Assert.IsNotNull(_target.ModelCollection);
@@ -92,14 +98,16 @@ namespace Teleopti.Ccc.WinCodeTest.Shifts
         [Test]
         public void VerifyGetNumberOfRowsToBeShown()
         {
+			var callback = new WorkShiftAddCallback();
             using (_mock.Record())
             {
+				Expect.Call(_explorerPresenter.View).Return(_explorerView).Repeat.Twice();
                 Expect.Call(_explorerPresenter.Model).Return(_model);
-					 Expect.Call(_shiftCreatorService.Generate(_workShiftRuleSet)).Return(CreateWorkShiftList());
+				Expect.Call(_shiftCreatorService.Generate(_workShiftRuleSet,null)).Return(CreateWorkShiftList()).IgnoreArguments();
             }
             using (_mock.Playback())
             {
-                _target.LoadModelCollection();
+				_target.LoadModelCollection(callback);
                 Assert.IsNotNull(_target.ModelCollection);
                 Assert.AreEqual(2, _target.ModelCollection.Count);
             }
@@ -108,15 +116,17 @@ namespace Teleopti.Ccc.WinCodeTest.Shifts
         [Test]
         public void VerifyCopyWorkShiftToSessionDataClip()
         {
+			var callback = new WorkShiftAddCallback();
         	using (_mock.Record())
             {
+				Expect.Call(_explorerPresenter.View).Return(_explorerView).Repeat.Twice();
                 Expect.Call(_explorerPresenter.Model).Return(_model).Repeat.Times(2);
-                Expect.Call(_shiftCreatorService.Generate(_workShiftRuleSet)).Return(CreateWorkShiftList()).Repeat.Twice();
+                Expect.Call(_shiftCreatorService.Generate(_workShiftRuleSet, null)).Return(CreateWorkShiftList()).Repeat.Twice().IgnoreArguments();
             }
             using (_mock.Playback())
             {
                 StateHolderReader.Instance.StateReader.SessionScopeData.Clip = null;
-                _target.LoadModelCollection();
+				_target.LoadModelCollection(callback);
                 _target.CopyWorkShiftToSessionDataClip(1);
                 IWorkShift result = StateHolderReader.Instance.StateReader.SessionScopeData.Clip as IWorkShift;
                 Assert.IsNotNull(result);
@@ -126,15 +136,17 @@ namespace Teleopti.Ccc.WinCodeTest.Shifts
         [Test]
         public void VerifyCopyWorkShiftToSessionDataClipWhenRowIndexIsLessThanOne()
         {
+			var callback = new WorkShiftAddCallback();
             using (_mock.Record())
             {
+				Expect.Call(_explorerPresenter.View).Return(_explorerView).Repeat.Twice();
                 Expect.Call(_explorerPresenter.Model).Return(_model);
-					 Expect.Call(_shiftCreatorService.Generate(_workShiftRuleSet)).Return(CreateWorkShiftList());
+				Expect.Call(_shiftCreatorService.Generate(_workShiftRuleSet,null)).Return(CreateWorkShiftList()).IgnoreArguments();
             }
             using (_mock.Playback())
             {
                 StateHolderReader.Instance.StateReader.SessionScopeData.Clip = null;
-                _target.LoadModelCollection();
+				_target.LoadModelCollection(callback);
                 _target.CopyWorkShiftToSessionDataClip(0);
                 IWorkShift result = StateHolderReader.Instance.StateReader.SessionScopeData.Clip as IWorkShift;
                 Assert.IsNull(result);

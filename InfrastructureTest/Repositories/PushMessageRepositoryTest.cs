@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         [Test]
         public void ShouldCreateWithFactory()
         {
-            Assert.NotNull(new PushMessageRepository(UnitOfWorkFactory.Current,new PushMessageDialogueRepository(UnitOfWorkFactory.Current)));
+            Assert.NotNull(new PushMessageRepository(UnitOfWorkFactory.CurrentUnitOfWork(),new PushMessageDialogueRepository(UnitOfWorkFactory.CurrentUnitOfWork())));
         }
 
         [Test]

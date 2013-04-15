@@ -89,17 +89,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             target.LoadSpecificDates(sources, new DateTimePeriod(2006, 1, 1, 2006, 1, 2));
         }
 
-        [Test]
-        public void VerifyLoadRtaAgentStates()
-        {
-            ICollection<IExternalAgentState> externalAgentStates =
-                target.LoadRtaAgentStates(DateTimeFactory.CreateDateTimePeriod(new DateTime(2008, 12, 5, 0, 0, 0, DateTimeKind.Utc), 0),
-                                          new List<ExternalLogOnPerson>
-                                              {new ExternalLogOnPerson {ExternalLogOn = "007", DataSourceId = 1}});
-            Assert.AreEqual(0, externalAgentStates.Count);
-        }
-
-        [Test]
+       [Test]
         public void VerifyLoadAgentStat()
         {
             IList returnList = target.LoadAgentStat(Guid.NewGuid(), DateTime.Now, DateTime.Now, "W. Europe Standard Time", Guid.NewGuid());
@@ -132,6 +122,39 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         {
             target.LoadFactQueues();
         }
+
+
+		[Test]
+		public void VerifyLoadActualAgentState()
+		{
+			var person = PersonFactory.CreatePerson("Ashlee", "Andeen");
+			person.SetId(Guid.NewGuid());
+			var result = target.LoadActualAgentState(new List<IPerson> {person});
+			Assert.IsNotNull(result);
+		}
+
+		[Test]
+		public void VerifyLoadOneActualAgentState()
+		{
+			VerifyAddOrUpdateActualAgentState();
+			Assert.IsNotNull(target.LoadOneActualAgentState(Guid.Empty));
+		}
+
+		[Test]
+		public void VerifyAddOrUpdateActualAgentState()
+		{
+			var agentState = new ActualAgentState
+				{
+					ReceivedTime = new DateTime(1900, 1, 1)
+				};
+			target.AddOrUpdateActualAgentState(agentState);
+		}
+
+		[Test]
+		public void VerifyPersonIdsWithExternalLogOn()
+		{
+			target.PersonIdsWithExternalLogOn(Guid.Empty);
+		}
 
         protected override void SetupForRepositoryTest()
         {

@@ -31,6 +31,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
+				public PersonDayOffRepository(ICurrentUnitOfWork currentUnitOfWork)
+					: base(currentUnitOfWork)
+	    {
+		    
+	    }
+
         /// <summary>
         /// Loads the aggregate.
         /// </summary>

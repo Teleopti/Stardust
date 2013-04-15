@@ -56,18 +56,5 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			result.Should().Not.Be.Null();
 		}
 
-		[Test]
-		public void ShouldHaveTeamPicker()
-		{
-			var teams = new[] {new Team()};
-			teams.ForEach(t => t.SetId(Guid.NewGuid()));
-			var target = new PortalViewModelFactory(new FakePermissionProvider(), MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateMock<IPushMessageProvider>(), MockRepository.GenerateMock<ILoggedOnUser>());
-
-			var result = ToolBarItemOfType<ToolBarSelectBox>(target.CreatePortalViewModel());
-
-			result.Type.Should().Be("TeamPicker");
-			result.Options.Should().Be.Empty();
-		}
-
 	}
 }

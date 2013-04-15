@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 {
 	public class PushMessageRepository :Repository<IPushMessage>, IPushMessageRepository
 	{
-		private IPushMessageDialogueRepository _pushMessageDialogueRepository;
+		private readonly IPushMessageDialogueRepository _pushMessageDialogueRepository;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PushMessageRepository"/> class.
@@ -24,8 +24,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			_pushMessageDialogueRepository = new PushMessageDialogueRepository(unitOfWork);
 		}
 
-		public PushMessageRepository(IUnitOfWorkFactory unitOfWorkFactory, IPushMessageDialogueRepository pushMessageDialogueRepository)
-			: base(unitOfWorkFactory)
+		public PushMessageRepository(ICurrentUnitOfWork currentUnitOfWork, IPushMessageDialogueRepository pushMessageDialogueRepository)
+			: base(currentUnitOfWork)
 		{
 			_pushMessageDialogueRepository = pushMessageDialogueRepository;
 		}

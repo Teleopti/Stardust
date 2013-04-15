@@ -1,7 +1,4 @@
-﻿using System;
-using System.Web;
-using System.Web.Mvc;
-using Autofac;
+﻿using Autofac;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -53,10 +50,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 
 		private static void registerPortalTypes(ContainerBuilder builder)
 		{
-			builder.RegisterType<LayoutBaseViewModelFactory>().As<ILayoutBaseViewModelFactory>();
-			builder.RegisterType<PortalViewModelFactory>().As<IPortalViewModelFactory>();
 			builder.RegisterType<CultureSpecificViewModelFactory>().As<ICultureSpecificViewModelFactory>();
-			builder.RegisterType<DatePickerGlobalizationViewModelFactory>().As<IDatePickerGlobalizationViewModelFactory>();
 			builder.Register(c =>
 			                 	{
 			                 		if (DefinedLicenseDataFactory.LicenseActivator == null)
@@ -75,35 +69,8 @@ namespace Teleopti.Ccc.Web.Core.IoC
 				.As<IStudentAvailabilityProvider>();
 			builder.RegisterType<VirtualSchedulePeriodProvider>().As<IVirtualSchedulePeriodProvider>();
 			builder.RegisterType<DefaultDateCalculator>().As<IDefaultDateCalculator>();
-			
+			builder.RegisterType<UrlHelperProvider>().As<IUrlHelper>().SingleInstance();
 			builder.RegisterType<MessageBrokerHub>();
-
-			builder.RegisterGeneric(typeof (ResolveUsingDependencyResolver<>)).As(typeof (IResolve<>));
-		}
-	}
-
-	public interface IResolve<T>
-	{
-		T Invoke();
-	}
-
-	public class ResolveUsingDependencyResolver<T> : IResolve<T>
-	{
-		private readonly IComponentContext _resolver;
-
-		public ResolveUsingDependencyResolver(IComponentContext resolver) 
-		{
-			_resolver = resolver;
-		}
-
-		public T Invoke()
-		{
-			var result = HttpContext.Current == null ? 
-				_resolver.Resolve<T>() : 
-				DependencyResolver.Current.GetService<T>();
-			if (result == null)
-				throw new Exception("Failed to resolve " + typeof(T).Name);
-			return result;
 		}
 	}
 }

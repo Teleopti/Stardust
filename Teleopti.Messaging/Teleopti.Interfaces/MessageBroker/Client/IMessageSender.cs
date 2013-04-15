@@ -28,12 +28,12 @@ namespace Teleopti.Interfaces.MessageBroker.Client
     	/// </summary>
     	/// <param name="personId">The person id.</param>
     	/// <param name="businessUnitId">The business unit id.</param>
-    	/// <param name="externalAgentState">State of the external agent.</param>
+    	/// <param name="actualAgentState"> </param>
     	/// <remarks>
     	/// Created by: ankarlp
     	/// Created date: 10/06/2010
     	/// </remarks>
-    	void SendRtaData(Guid personId, Guid businessUnitId,IExternalAgentState externalAgentState);
+    	void SendRtaData(Guid personId, Guid businessUnitId, IActualAgentState actualAgentState);
 
     	/// <summary>
     	/// Sends schedule data.

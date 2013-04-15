@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 	{
 		private MockRepository mocks;
 		private IPersonalSettingDataRepository personalSettingDataRepository;
-		private IUnitOfWorkFactory unitOfWorkFactory;
+        private ICurrentUnitOfWorkFactory unitOfWorkFactory;
 		private GetAgentPortalSettingsQueryHandler target;
 
 		[SetUp]
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 		{
 			mocks = new MockRepository();
 			personalSettingDataRepository = mocks.DynamicMock<IPersonalSettingDataRepository>();
-			unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
+            unitOfWorkFactory = mocks.DynamicMock<ICurrentUnitOfWorkFactory>();
 			target = new GetAgentPortalSettingsQueryHandler(personalSettingDataRepository, unitOfWorkFactory);
 		}
 
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			{
 				Expect.Call(personalSettingDataRepository.FindValueByKey("AgentPortalSettings", new AgentPortalSettings())).
 					IgnoreArguments().Return(settings);
-				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+				Expect.Call(unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork()).Return(unitOfWork);
 			}
 			using (mocks.Playback())
 			{

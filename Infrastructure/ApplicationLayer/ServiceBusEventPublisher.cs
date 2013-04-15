@@ -1,5 +1,6 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
@@ -13,7 +14,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 			_sender = sender;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2201:DoNotRaiseReservedExceptionTypes")]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2201:DoNotRaiseReservedExceptionTypes")]
 		public void Publish(object @event)
 		{
 			if (!_sender.EnsureBus())

@@ -35,6 +35,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		[FindBy(Id = "qtip-add-extended")]
 		public Div ExtendedPreferencePanel;
+		[FindBy(Id = "Preference-template-container")]
+		public SelectBox ExtendedPreferenceTemplateSelectBox;
 		[FindBy(Id = "Preference-extended-preference-container")]
 		public SelectBox ExtendedPreferenceSelectBox;
 		[FindBy(Id = "Preference-extended-start-time-minimum")]
@@ -67,6 +69,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		public ComboBox ExtendedPreferenceActivityTimeMinimum;
 		[FindBy(Id = "Preference-extended-activity-time-maximum")]
 		public ComboBox ExtendedPreferenceActivityTimeMaximum;
+		[FindBy(Id = "Template-save")]
+		public Div TemplateSaveDiv;
+		[FindBy(Id = "Template-name-input")]
+		public TextField TemplateNameTextField;
 
 		[FindBy(Id = "Preference-extended-error")]
 		public Div ExtendedPreferencePanelError { get; set; }
@@ -78,6 +84,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		public Button ExtendedPreferenceApplyButton { get; set; }
 		[FindBy(Id = "Preference-extended-reset")]
 		public Button ExtendedPreferenceResetButton { get; set; }
+		[FindBy(Id = "Preference-extended-save-template")]
+		public Button ExtendedPreferenceSaveTemplateButton { get; set; }
 
 		public void SelectPreferenceItemByText(string text, bool wait)
 		{
@@ -85,6 +93,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 				PreferenceButton.SelectWait(text);
 			else
 				PreferenceButton.Select(text);
+		}
+
+		public Span DeleteSpanForTemplate(string templateName)
+		{
+			// in order to find fast and also it has only one delete button, templateName isn't used here
+			return Document.Div("Preference-template-menu").Span(QuicklyFind.ByClass("menu-icon-delete")).EventualGet();
 		}
 
 		public Div ExtendedPreferenceIndicationForDate(DateTime date)

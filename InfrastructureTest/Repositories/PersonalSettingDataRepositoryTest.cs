@@ -83,15 +83,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(45, rep.FindValueByKey(personalForPerson.Key, defaultValue).Data);
         }
 
-
-
-        [Test]
-        public void ShouldCreateRepositoryWithFactory()
-        {
-            rep = new PersonalSettingDataRepository(UnitOfWorkFactory.Current);
-            Assert.IsNotNull(rep);
-        }
-
         [Test]
         public void SimulateTwoThreadsCreatingNewPersonalSettingLastShouldWin()
         {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Linq;
 using AutoMapper;
 using NUnit.Framework;
@@ -10,7 +11,6 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Preference;
-using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Ccc.WebTest.Core.Mapping;
 using Teleopti.Interfaces.Domain;
 
@@ -45,12 +45,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 							));
 						c.AddProfile(
 							new PreferenceDayInputMappingProfile(
-						        () => shiftCategoryRepository,
-						        () => dayOffRepository,
-						        () => absenceRepository,
-								() => activityRepository,
-								Depend.On(Mapper.Engine)
-						        )
+						        shiftCategoryRepository,
+						        dayOffRepository,
+						        absenceRepository,
+								activityRepository,
+								new Lazy<IMappingEngine>(() => Mapper.Engine))
 							);
 					}
 				);
@@ -81,6 +80,29 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			Mapper.Map<PreferenceDayInput, IPreferenceDay>(input, destination);
 
 			destination.Restriction.ShiftCategory.Should().Be(shiftCategory);
+		}
+
+		[Test]
+		public void ShouldMapTemplateNameToDestination()
+		{
+			var destination = new PreferenceDay(null, DateOnly.Today, new PreferenceRestriction()) {TemplateName = "name2"};
+			var input = new PreferenceDayInput {PreferenceId = Guid.NewGuid(), TemplateName = "name1"};
+
+			Mapper.Map<PreferenceDayInput, IPreferenceDay>(input, destination);
+
+			destination.TemplateName.Should().Be.EqualTo("name1");
+		}
+
+		[Test]
+		public void ShouldMapTemplateName()
+		{
+			var result = Mapper.Map<PreferenceDayInput, IPreferenceDay>(
+				new PreferenceDayInput
+					{
+						TemplateName = "name1"
+					});
+
+			result.TemplateName.Should().Be.EqualTo("name1");
 		}
 
 		[Test]

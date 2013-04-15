@@ -35,7 +35,7 @@ hg revert -C "%ROOTDIR%\Teleopti.Ccc.ApplicationConfigTest\Teleopti.Ccc.Applicat
 ECHO I will now start web Test, ready?
 PAUSE
 ::Test
-"%CCNetWorkingDirectory%\packages\NUnit.Runners.2.6.0.12051\tools\nunit-console.exe" /output=c:\WebTest.xml /framework=4.0.30319 "%CCNetWorkingDirectory%\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\bin\%configuration%\Teleopti.Ccc.WebBehaviorTest.dll"
+"%CCNetWorkingDirectory%\packages\NUnit.Runners.2.6.2\tools\nunit-console.exe" /output=c:\WebTest.xml /framework=4.0.30319 "%CCNetWorkingDirectory%\Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\bin\%configuration%\Teleopti.Ccc.WebBehaviorTest.dll"
 
 ECHO.
 ECHO reverting updated checked in config files ...

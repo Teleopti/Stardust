@@ -2,8 +2,11 @@ using System;
 using System.Collections.Generic;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Scheduling.Meetings;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -31,7 +34,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
 		private ISkill _skillLondon;
 		private ISkill _skillPhone;
 
-		[SetUp]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
 		public void Setup()
 		{
 			_target = new SeatImpactOnPeriodForProjection();
@@ -46,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
 			_visualLayerFactory = new VisualLayerFactory();
 			_shiftPeriod = new DateTimePeriod(new DateTime(2010, 1, 1, 9, 30, 0, DateTimeKind.Utc),
 															 new DateTime(2010, 1, 1, 11, 0, 0, DateTimeKind.Utc));
-			_visualLayer1 = _visualLayerFactory.CreateShiftSetupLayer(_phone, _shiftPeriod,_person1);
+			_visualLayer1	 = _visualLayerFactory.CreateShiftSetupLayer(_phone, _shiftPeriod,_person1);
 			_layerCollection1 = new VisualLayerCollection(_person1, new List<IVisualLayer> { _visualLayer1 }, new ProjectionPayloadMerger());
 			_visualLayer2 = _visualLayerFactory.CreateShiftSetupLayer(_lunch, _shiftPeriod,_person2);
 			_layerCollection2 = new VisualLayerCollection(_person2, new List<IVisualLayer> { _visualLayer2 }, new ProjectionPayloadMerger());
@@ -62,7 +65,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
 			ISkillDay skillDay = new SkillDay(new DateOnly(2010, 1, 1), _skillLondon,
 											  ScenarioFactory.CreateScenarioAggregate(), new List<IWorkloadDay>(),
 											  new List<ISkillDataPeriod>());
-			_skillStaffPeriod.SetParent(skillDay);
+			_skillStaffPeriod.SetSkillDay(skillDay);
 		}
 
 		[Test]
@@ -81,6 +84,19 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
 			_lunch.RequiresSeat = true;
 			result = _target.CalculatePeriod(_skillStaffPeriod, _shiftList);
 			Assert.AreEqual(1, result);
+		}
+
+		[Test]
+		public void ShouldCalculateUnderlyingPayload()
+		{
+			IMeeting meeting = new Meeting(_person1, new List<IMeetingPerson>(), "subject","location","description",_phone, new Scenario("scenario"));
+			IPayload payload = new MeetingPayload(meeting);
+			IVisualLayer visualLayer = new VisualLayer(payload, _shiftPeriod, _phone, _person1);
+			IVisualLayerCollection layerCollection = new VisualLayerCollection(_person1, new List<IVisualLayer> { visualLayer }, new ProjectionPayloadMerger());
+			IList<IVisualLayerCollection> shiftList = new List<IVisualLayerCollection> {layerCollection};
+
+			var result = _target.CalculatePeriod(_skillStaffPeriod, shiftList);
+			Assert.AreEqual(0.5, result);
 		}
 
 		[Test]
@@ -136,7 +152,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
 			ISkillDay skillDay = new SkillDay(new DateOnly(2010, 1, 1), _skillPhone,
 											  ScenarioFactory.CreateScenarioAggregate(), new List<IWorkloadDay>(),
 											  new List<ISkillDataPeriod>());
-			_skillStaffPeriod.SetParent(skillDay);
+			_skillStaffPeriod.SetSkillDay(skillDay);
 			double result = _target.CalculatePeriod(_skillStaffPeriod, _shiftList);
 			Assert.AreEqual(0, result);
 		}

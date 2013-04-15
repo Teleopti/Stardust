@@ -1,5 +1,5 @@
 using System;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Data;
 using System.Web;
 using System.Web.Caching;
@@ -15,7 +15,6 @@ namespace Teleopti.Ccc.Rta.Server
         private readonly string _connectionStringDataStore;
         private readonly ILog _loggingSvc;
     	private readonly Cache _cache;
-		private static readonly object lockObj = new object();
 
     	public DataSourceResolver(IDatabaseConnectionFactory databaseConnectionFactory, string connectionStringDataStore) : this(databaseConnectionFactory,connectionStringDataStore,LogManager.GetLogger(typeof(DataSourceResolver)))
         {
@@ -32,24 +31,15 @@ namespace Teleopti.Ccc.Rta.Server
 
         public bool TryResolveId(string sourceId, out int dataSourceId)
         {
-        	IDictionary<string, int> dictionary;
-			lock (lockObj)
-			{
-				dictionary = (IDictionary<string, int>)_cache.Get(CacheKey);
-				if (dictionary == null)
-				{
-					dictionary = initialize();
-				}
-			}
-
-            return dictionary.TryGetValue(sourceId, out dataSourceId);
+	        var dictionary = (ConcurrentDictionary<string, int>)_cache.Get(CacheKey) ?? initialize();
+	        return dictionary.TryGetValue(sourceId, out dataSourceId);
         }
 
-    	private IDictionary<string, int> initialize()
+	    private ConcurrentDictionary<string, int> initialize()
 		{
 			_loggingSvc.Info("Loading new data into cache.");
 
-			IDictionary<string, int> dictionary = new Dictionary<string, int>();
+			var dictionary = new ConcurrentDictionary<string, int>();
     		using (var connection = _databaseConnectionFactory.CreateConnection(_connectionStringDataStore))
     		{
     			var command = connection.CreateCommand();
@@ -59,7 +49,7 @@ namespace Teleopti.Ccc.Rta.Server
     			var reader = command.ExecuteReader(CommandBehavior.CloseConnection);
     			while (reader.Read())
     			{
-    				object loadedSourceId = reader["source_id"];
+    				var loadedSourceId = reader["source_id"];
     				int loadedDataSourceId = reader.GetInt16(reader.GetOrdinal("datasource_id")); //This one cannot be null as it's the PK of the table
     				if (loadedSourceId == DBNull.Value)
     				{
@@ -73,7 +63,7 @@ namespace Teleopti.Ccc.Rta.Server
     					                       loadedSourceIdAsString);
     					continue;
     				}
-    				dictionary.Add(loadedSourceIdAsString, loadedDataSourceId);
+    				dictionary.AddOrUpdate(loadedSourceIdAsString, loadedDataSourceId, (s, i) => loadedDataSourceId);
     			}
     			reader.Close();
     		}
@@ -89,10 +79,8 @@ namespace Teleopti.Ccc.Rta.Server
 		private void onRemoveCallback(string key, object value, CacheItemRemovedReason reason)
 		{
 			_loggingSvc.Info("The cache was cleared.");
-			lock (lockObj)
-			{
-				initialize();
-			}
+			initialize();
+			
 		}
     }
 }

@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldReturnReadModelsForPerson()
 		{
-			_target = new ScheduleDayReadModelRepository(UnitOfWorkFactory.Current);	
+			_target = new ScheduleDayReadModelRepository(UnitOfWorkFactory.CurrentUnitOfWork());	
 			var dateOnly = new DateOnly(2012, 8, 28);
 			var personId = Guid.NewGuid();
 			Assert.That(_target.ReadModelsOnPerson(dateOnly, dateOnly.AddDays(5),personId),Is.Not.Null);
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldSaveAndLoadReadModel()
 		{
-			_target = new ScheduleDayReadModelRepository(UnitOfWorkFactory.Current);
+			_target = new ScheduleDayReadModelRepository(UnitOfWorkFactory.CurrentUnitOfWork());
 			var guid = Guid.NewGuid();
 			var dateOnly = new DateOnly(2012, 8, 29);
 			Assert.That(_target.IsInitialized(),Is.False);

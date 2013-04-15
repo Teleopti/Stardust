@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.WinCode.Shifts.Presenters
             return true;
         }
 
-        public virtual void LoadModelCollection()
+	    public virtual void LoadModelCollection()
         {
         }
     }

@@ -34,6 +34,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
+				public ScheduleRepository(ICurrentUnitOfWork currentUnitOfWork)
+					: base(currentUnitOfWork)
+	    {
+		    
+	    }
+
         protected void SetRepositoryFactory(IRepositoryFactory repositoryFactory)
         {
             _repositoryFactory = repositoryFactory;

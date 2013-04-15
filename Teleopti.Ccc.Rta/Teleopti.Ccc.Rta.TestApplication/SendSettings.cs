@@ -13,6 +13,7 @@ namespace Teleopti.Ccc.Rta.TestApplication
         private readonly ILog _loggingSvc = LogManager.GetLogger(ClientHandler.LogName);
         private readonly IList<string> _logOnCollection = new List<string>();
         private readonly IList<string> _stateCodeCollection = new List<string>();
+		private readonly IList<string> _personIdForScheduleUpdate = new List<string>();
         private int _sendCount = 1;
         private readonly Guid _platformId;
         private readonly int _sourceId;
@@ -20,11 +21,14 @@ namespace Teleopti.Ccc.Rta.TestApplication
         private readonly int _maxDistributionMilliseconds;
         private readonly string _endSequenceCode;
         private readonly bool _snapshotMode;
+	    private readonly int _intervalForScheduleUpdate;
+	    private readonly Guid _businessUnitId;
 
         public SendSettings()
         {
             _logOnCollection = new List<string>(ConfigurationManager.AppSettings["LogOn"].Split(','));
             _stateCodeCollection = new List<string>(ConfigurationManager.AppSettings["StateCode"].Split(','));
+			_personIdForScheduleUpdate = new List<string>(ConfigurationManager.AppSettings["PersonIdsForScheduleUpdate"].Split(',')); 
             _endSequenceCode = ConfigurationManager.AppSettings["LogOffCode"];
 
             var strPlatformTypeId = (ConfigurationManager.AppSettings["PlatformTypeId"]);
@@ -51,6 +55,14 @@ namespace Teleopti.Ccc.Rta.TestApplication
             if (!bool.TryParse(setting, out _snapshotMode))
                 _loggingSvc.WarnFormat(CultureInfo.CurrentCulture, "Property Snapshot was not read from configuration, the default value of false will be used.");
 
+	        setting = ConfigurationManager.AppSettings["IntervalForScheduleUpdate"];
+			if(!int.TryParse(setting, out _intervalForScheduleUpdate))
+				_loggingSvc.WarnFormat(CultureInfo.CurrentCulture, "Property IntervalForScheduleUpdate was not read from configuration.");
+
+	        setting = ConfigurationManager.AppSettings["BusinessUnitId"];
+	        if (!IsValidGuid(setting, out _businessUnitId))
+		        _loggingSvc.WarnFormat(CultureInfo.CurrentCulture, "Property BusinessUnitId was not read from configuration");
+
             _loggingSvc.InfoFormat(
                 "Loaded test sequence with {0} calls using {1} different log on and {2} different state codes. The SourceId is {3}. Snapshot mode is {4}.",
                 _sendCount, _logOnCollection.Count, _stateCodeCollection.Count, _sourceId, _snapshotMode);
@@ -65,6 +77,11 @@ namespace Teleopti.Ccc.Rta.TestApplication
         {
             get { return _platformId; }
         }
+
+	    public int IntervalForScheduleUpdate
+	    {
+			get { return _intervalForScheduleUpdate; }
+	    }
 
         public IEnumerable<AgentStateForTest> Read()
         {
@@ -82,26 +99,28 @@ namespace Teleopti.Ccc.Rta.TestApplication
                 foreach (var selectedLogOn in selectedLogOns)
                 {
                     var stateCodeIndex = random.Next(0, _stateCodeCollection.Count);
+	                var personIdIndex = random.Next(0, _personIdForScheduleUpdate.Count);
                     _sendCount--;
 
                     yield return
                         new AgentStateForTest(_logOnCollection[selectedLogOn], _stateCodeCollection[stateCodeIndex],
-                                              TimeSpan.Zero, _sourceId, true, batchIdentifier);
+											  TimeSpan.Zero, _sourceId, true, batchIdentifier, _personIdForScheduleUpdate[personIdIndex], _businessUnitId);
                 }
 
                 var waitTime = random.Next(_minDistributionMilliseconds, _maxDistributionMilliseconds);
-                yield return new AgentStateForTest("", "", TimeSpan.FromMilliseconds(waitTime), _sourceId, true, batchIdentifier); //Snapshot end signal - with delay to add delay between snapshots
+                yield return new AgentStateForTest("", "", TimeSpan.FromMilliseconds(waitTime), _sourceId, true, batchIdentifier, _personIdForScheduleUpdate[0], _businessUnitId); //Snapshot end signal - with delay to add delay between snapshots
             }
             else
             {
                 var logOnIndex = random.Next(0, _logOnCollection.Count);
                 var stateCodeIndex = random.Next(0, _stateCodeCollection.Count);
+	            var personIdIndex = random.Next(0, _personIdForScheduleUpdate.Count);
                 var waitTime = random.Next(_minDistributionMilliseconds, _maxDistributionMilliseconds);
                 _sendCount--;
 
                 yield return
                     new AgentStateForTest(_logOnCollection[logOnIndex], _stateCodeCollection[stateCodeIndex],
-                                          TimeSpan.FromMilliseconds(waitTime), _sourceId, false, DateTime.UtcNow);
+										  TimeSpan.FromMilliseconds(waitTime), _sourceId, false, DateTime.UtcNow, _personIdForScheduleUpdate[personIdIndex], _businessUnitId);
             }
         }
 
@@ -139,7 +158,7 @@ namespace Teleopti.Ccc.Rta.TestApplication
             foreach (var logOn in _logOnCollection)
             {
                 result.Add(new AgentStateForTest(logOn, _endSequenceCode, TimeSpan.Zero, _sourceId, false,
-                                                 DateTime.UtcNow));
+                                                 DateTime.UtcNow, string.Empty, Guid.Empty));
             }
             return result;
         }

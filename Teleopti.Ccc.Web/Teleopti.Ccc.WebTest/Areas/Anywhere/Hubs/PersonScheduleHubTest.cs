@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var viewModelFactory = MockRepository.GenerateMock<IPersonScheduleViewModelFactory>();
 			var target = new PersonScheduleHub(viewModelFactory);
 			var hubBuilder = new TestHubBuilder();
-			hubBuilder.SetupHub(target, hubBuilder.FakeCaller("incomingPersonSchedule", new Action<PersonScheduleViewModel>(a => { })));
+			hubBuilder.SetupHub(target, hubBuilder.FakeClient("incomingPersonSchedule", new Action<PersonScheduleViewModel>(a => { })));
 			var personId = Guid.NewGuid();
 
 			target.PersonSchedule(personId, DateTime.Today);
@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var target = new PersonScheduleHub(viewModelFactory);
 			object actual = null;
 			var hubBuilder = new TestHubBuilder();
-			hubBuilder.SetupHub(target, hubBuilder.FakeCaller("incomingPersonSchedule", new Action<PersonScheduleViewModel>(a => { actual = a; })));
+			hubBuilder.SetupHub(target, hubBuilder.FakeClient("incomingPersonSchedule", new Action<PersonScheduleViewModel>(a => { actual = a; })));
 			var personId = Guid.NewGuid();
 			var data = new PersonScheduleViewModel();
 

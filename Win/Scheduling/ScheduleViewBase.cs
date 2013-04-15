@@ -488,10 +488,10 @@ namespace Teleopti.Ccc.Win.Scheduling
         }
 
         //return tip for a day header
-        public virtual string DayHeaderTooltipText(GridStyleInfo gridStyle,DateTime currentDate)
+        public virtual string DayHeaderTooltipText(GridStyleInfo gridStyle,DateOnly currentDate)
         {
             return gridStyle.CellTipText = string.Concat(CultureInfo.CurrentUICulture.DateTimeFormat.GetDayName(CultureInfo.CurrentUICulture.Calendar.GetDayOfWeek(currentDate)), " ",
-               currentDate.ToShortDateString());
+               currentDate.ToShortDateString(CultureInfo.CurrentCulture));
         }
 
         protected void DrawSchedule(GridDrawCellEventArgs e, DateDateTimePeriodDictionary timeSpans, SchedulePartView significantPart)
@@ -505,7 +505,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					DrawLayer(e, layer, timeSpans, scheduleRange.Person, significantPart);
                 }
 
-                if (layerCollection.Count() == 0)
+                if (!layerCollection.Any())
                 {
 					if(significantPart == SchedulePartView.FullDayAbsence || significantPart == SchedulePartView.ContractDayOff)
 					{

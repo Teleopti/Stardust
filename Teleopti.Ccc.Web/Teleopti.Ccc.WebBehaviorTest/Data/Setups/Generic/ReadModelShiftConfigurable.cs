@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			// used for worktime aswell, dont know why, just not changing the behavior for now
 			var contractTimeMinutes = EndTimeAsTimeSpan().Subtract(StartTimeAsTimeSpan()).TotalMinutes;
 
-			var reposistory = new PersonScheduleDayReadModelStorage(new CurrentUnitOfWork(() => GlobalUnitOfWorkState.UnitOfWorkFactory), new DoNotSend(), new SpecificDataSource(TestData.DataSource));
+			var reposistory = new PersonScheduleDayReadModelStorage(new CurrentUnitOfWork(GlobalUnitOfWorkState.CurrentUnitOfWorkFactory), new DoNotSend(), new SpecificDataSource(TestData.DataSource));
 			reposistory.SaveReadModel(new PersonScheduleDayReadModel
 				{
 					BusinessUnitId = mainActivity.BusinessUnit.Id.GetValueOrDefault(),

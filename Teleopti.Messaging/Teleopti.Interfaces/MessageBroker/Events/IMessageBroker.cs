@@ -1,7 +1,5 @@
 using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using Teleopti.Interfaces.MessageBroker.Core;
 
 namespace Teleopti.Interfaces.MessageBroker.Events
 {
@@ -61,72 +59,6 @@ namespace Teleopti.Interfaces.MessageBroker.Events
         IEventMessage CreateEventMessage(DateTime eventStartDate, DateTime eventEndDate, Guid moduleId, Guid referenceObjectId, Type referenceObjectType, Guid domainObjectId, Type domainObjectType, DomainUpdateType updateType);
 
         /// <summary>
-        /// The configuration settings of this instance of the message broker, which is received from the server.
-        /// </summary>
-        /// <returns></returns>
-        IList<IConfigurationInfo> RetrieveConfigurations();
-
-        /// <summary>
-        /// The Addresses
-        /// </summary>
-        /// <returns></returns>
-        IList<IMessageInformation> RetrieveAddresses();
-
-        /// <summary>
-        /// Used by Management Client, can be ignored by Raptor Developer.
-        /// </summary>
-        /// <param name="configurations"></param>
-        void UpdateConfigurations(IList<IConfigurationInfo> configurations);
-
-        /// <summary>
-        /// Used by Management Client, can be ignored by Raptor Developer.
-        /// </summary>
-        /// <param name="configurationInfo"></param>
-        void DeleteConfigurationItem(IConfigurationInfo configurationInfo);
-
-        /// <summary>
-        /// Used by Management Client, can be ignored by Raptor Developer.
-        /// </summary>
-        /// <param name="addresses"></param>
-        void UpdateAddresses(IList<IMessageInformation> addresses);
-
-        /// <summary>
-        /// Used by Management Client, can be ignored by Raptor Developer.
-        /// </summary>
-        /// <param name="addressInfo"></param>
-        void DeleteAddressItem(IMessageInformation addressInfo);
-
-        /// <summary>
-        /// Used by Management Client, can be ignored by Raptor Developer.
-        /// </summary>
-        /// <returns></returns>
-        IEventHeartbeat[] RetrieveHeartbeats();
-
-        /// <summary>
-        /// Retrieves Event User Info
-        /// </summary>
-        /// <returns></returns>
-        IEventUser[] RetrieveEventUsers();
-
-        /// <summary>
-        /// Retrieve Event Receipt
-        /// </summary>
-        /// <returns></returns>
-        IEventReceipt[] RetrieveEventReceipt();
-
-        /// <summary>
-        /// Retrieve Subscriber Information
-        /// </summary>
-        /// <returns></returns>
-        IEventSubscriber[] RetrieveSubscribers();
-
-        /// <summary>
-        /// Retrieve Filter Information
-        /// </summary>
-        /// <returns></returns>
-        IEventFilter[] RetrieveFilters();
-
-        /// <summary>
         /// throws BrokerNotInstantiatedException if it fails.
         /// Please catch this exception and propagate to user
         /// since it can be a valid exception.
@@ -176,15 +108,6 @@ namespace Teleopti.Interfaces.MessageBroker.Events
         /// Created date: 16/04/2009
         /// </remarks>
         int UserId { get; set; }
-        /// <summary>
-        /// Gets or sets the messaging protocol.
-        /// </summary>
-        /// <value>The messaging protocol.</value>
-        /// <remarks>
-        /// Created by: ankarlp
-        /// Created date: 16/04/2009
-        /// </remarks>
-        MessagingProtocol MessagingProtocol { get; set; }
         /// <summary>
         /// Gets or sets the messaging port.
         /// </summary>
@@ -267,29 +190,10 @@ namespace Teleopti.Interfaces.MessageBroker.Events
         void SendReceipt(IEventMessage message);
 
         /// <summary>
-        /// Creates the addresses.
-        /// </summary>
-        /// <returns></returns>
-        IMessageInformation[] CreateAddresses();
-
-        /// <summary>
-        /// Creates the configurations.
-        /// </summary>
-        /// <returns></returns>
-        IConfigurationInfo[] CreateConfigurations();
-
-        /// <summary>
         /// Internals the log.
         /// </summary>
         /// <param name="exception">The exception.</param>
         [SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
         void InternalLog(Exception exception);
-
-        /// <summary>
-        /// Services the guard.
-        /// </summary>
-        /// <param name="service">The service.</param>
-        void ServiceGuard(IBrokerService service);
-
     }
 }

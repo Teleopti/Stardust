@@ -50,7 +50,27 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
             }
         }
 
-        
+		[Test]
+		public void ShouldSaveRebuildReadModelForPersonWriteProtectionToQueue()
+		{
+			var personWriteProtectionInfo = new PersonWriteProtectionInfo(new Person());
+			Guid[] ids = new Guid[] { };
+			var message = new PersonChangedMessage();
+			message.SetPersonIdCollection(ids);
+
+			var roots = new IRootChangeInfo[1];
+			roots[0] = new RootChangeInfo(personWriteProtectionInfo, DomainUpdateType.Update);
+
+			using (_mocks.Record())
+			{
+				Expect.Call(() => _saveToDenormalizationQueue.Execute(message)).IgnoreArguments();
+			}
+			using (_mocks.Playback())
+			{
+				_target.Execute(roots);
+			}
+		}
+
         [Test]
         public void ShouldNotRebuildReadModelForScenario()
         {

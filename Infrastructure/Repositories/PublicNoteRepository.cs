@@ -16,10 +16,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
-        public PublicNoteRepository(IUnitOfWorkFactory unitOfWorkFactory)
-            : base(unitOfWorkFactory)
-        {
-        }
+				public PublicNoteRepository(ICurrentUnitOfWork currentUnitOfWork)
+					: base(currentUnitOfWork)
+	    {
+		    
+	    }
 
         public IList<IPublicNote> Find(DateTimePeriod period, IScenario scenario)
         {

@@ -28,15 +28,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.AreEqual(forecastFile.FileContent, loadedAggregateFromDatabase.FileContent);
         }
 
-		/// <summary>
-		/// Determines whether this instance can be created.
-		/// </summary>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
-		public void CanCreate()
-		{
-			new ImportForecastsRepository(UnitOfWorkFactory.Current).Should().Not.Be.Null();
-		}
-
         protected override Repository<IForecastFile> TestRepository(IUnitOfWork unitOfWork)
         {
             return new ImportForecastsRepository(unitOfWork);

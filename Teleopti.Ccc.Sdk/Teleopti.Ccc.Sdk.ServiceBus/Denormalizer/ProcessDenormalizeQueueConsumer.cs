@@ -13,10 +13,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 	public class ProcessDenormalizeQueueConsumer : ConsumerOf<ProcessDenormalizeQueue>
 	{
 		private readonly IServiceBus _serviceBus;
-		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IDenormalizerQueueRepository _denormalizerQueueRepository;
 
-		public ProcessDenormalizeQueueConsumer(IServiceBus serviceBus,IUnitOfWorkFactory unitOfWorkFactory, IDenormalizerQueueRepository denormalizerQueueRepository)
+		public ProcessDenormalizeQueueConsumer(IServiceBus serviceBus,ICurrentUnitOfWorkFactory unitOfWorkFactory, IDenormalizerQueueRepository denormalizerQueueRepository)
 		{
 			_serviceBus = serviceBus;
 			_unitOfWorkFactory = unitOfWorkFactory;
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 
 		public void Consume(ProcessDenormalizeQueue message)
 		{
-			using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+			using (var unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
 				var messages = _denormalizerQueueRepository.DequeueDenormalizerMessages(((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit);
 				var messagelist = messages.Select(m => SerializationHelper.Deserialize(Type.GetType(m.Type, true, true), m.Message));

@@ -19,10 +19,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
-        public ExternalLogOnRepository(IUnitOfWorkFactory unitOfWorkFactory)
-            : base(unitOfWorkFactory)
-        {
-        }
+				public ExternalLogOnRepository(ICurrentUnitOfWork currentUnitOfWork)
+					: base(currentUnitOfWork)
+	    {
+		    
+	    }
 
         /// <summary>
         /// Loads all logins.

@@ -32,6 +32,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 		}
 
+		public PreferenceDayRepository(ICurrentUnitOfWork currentUnitOfWork)
+			: base(currentUnitOfWork)
+		{
+			
+		}
+
 		public IList<IPreferenceDay> Find(DateOnlyPeriod period, IEnumerable<IPerson> persons)
 		{
 			var result = new List<IPreferenceDay>();

@@ -499,6 +499,11 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
             return 0;
         }
 
+		public int DimTimeZoneDeleteData(IBusinessUnit businessUnit)
+		{
+			return 0;
+		}
+
         public int PerformMaintenance()
         {
             return 0;

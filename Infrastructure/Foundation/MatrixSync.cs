@@ -7,12 +7,8 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Foundation
 {
-    public sealed class MatrixSync
+    public static class MatrixSync
     {
-        private MatrixSync()
-        {
-        }
-
         public static int SynchronizeQueueSources(IUnitOfWork uow, IList<IQueueSource> matrixQueues)
         {
             IQueueSourceRepository rep = new QueueSourceRepository(uow);

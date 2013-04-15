@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
     {
         private ImportForecastsFileToSkillConsumer _target;
         private MockRepository _mocks;
-        private IUnitOfWorkFactory _unitOfWorkFactory;
+				private ICurrentUnitOfWorkFactory _unitOfWorkFactory;
         private ISkillRepository _skillRepository;
         private IJobResultRepository _jobResultRepository;
         private IImportForecastsRepository _importForecastsRepository;
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
         public void Setup()
         {
             _mocks = new MockRepository();
-            _unitOfWorkFactory = _mocks.StrictMock<IUnitOfWorkFactory>();
+            _unitOfWorkFactory = _mocks.StrictMock<ICurrentUnitOfWorkFactory>();
             _skillRepository = _mocks.StrictMock<ISkillRepository>();
             _jobResultRepository = _mocks.StrictMock<IJobResultRepository>();
             _importForecastsRepository = _mocks.StrictMock<IImportForecastsRepository>();
@@ -88,7 +88,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
             forecasts.AddForecastsRow(dateTime, row);
             using (_mocks.Record())
             {
-                Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
+	            var uowFactory = _mocks.DynamicMock<IUnitOfWorkFactory>();
+							Expect.Call(_unitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(uowFactory);
+							Expect.Call(uowFactory.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
                 Expect.Call(_jobResultRepository.Get(jobId)).Return(_jobResult);
                 Expect.Call(_skillRepository.Get(skillId)).Return(skill).Repeat.Any();
                 Expect.Call(_importForecastsRepository.Get(jobId)).Return(_forecastFile);
@@ -124,7 +126,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
             var skillId = Guid.NewGuid();
             using (_mocks.Record())
             {
-                Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
+							var uowFactory = _mocks.DynamicMock<IUnitOfWorkFactory>();
+							Expect.Call(_unitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(uowFactory);
+							Expect.Call(uowFactory.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
                 Expect.Call(_skillRepository.Get(skillId)).Return(null);
                 Expect.Call(_jobResultRepository.Get(jobId)).Return(_jobResult);
             }
@@ -151,7 +155,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
             skill.TimeZone = _timeZone;
             using (_mocks.Record())
             {
-                Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
+							var uowFactory = _mocks.DynamicMock<IUnitOfWorkFactory>();
+							Expect.Call(_unitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(uowFactory);
+							Expect.Call(uowFactory.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
                 Expect.Call(_skillRepository.Get(skillId)).Return(skill);
                 Expect.Call(_jobResultRepository.Get(jobId)).Return(_jobResult);
                 Expect.Call(_importForecastsRepository.Get(jobId)).Return(null);
@@ -181,7 +187,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
             var queryResult = _mocks.StrictMock<IForecastsAnalyzeQueryResult>();
             using (_mocks.Record())
             {
-                Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
+							var uowFactory = _mocks.DynamicMock<IUnitOfWorkFactory>();
+							Expect.Call(_unitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(uowFactory);
+							Expect.Call(uowFactory.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
                 Expect.Call(_skillRepository.Get(skillId)).Return(skill);
                 Expect.Call(_jobResultRepository.Get(jobId)).Return(_jobResult);
                 Expect.Call(_importForecastsRepository.Get(jobId)).Return(_forecastFile);

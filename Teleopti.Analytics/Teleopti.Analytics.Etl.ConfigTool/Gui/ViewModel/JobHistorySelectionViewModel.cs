@@ -25,7 +25,9 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.ViewModel
 
 			SetWeekPeriod();
 
+			IsRefreshing = true;
 			UpdateBusinessUnitCollection();
+			IsRefreshing = false;
 			SetFirstBusinessUnitAsSelected();
 			ShowOnlyErrors = true;
 		}
@@ -110,6 +112,8 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.ViewModel
 				RaisePropertyChanged("ShowOnlyErrors");
 			}
 		}
+
+		public bool IsRefreshing { get; set; }
 
 		public void PreviousPeriod()
 		{

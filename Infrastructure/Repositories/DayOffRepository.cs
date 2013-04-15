@@ -28,10 +28,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
-        public DayOffRepository(IUnitOfWorkFactory unitOfWorkFactory)
-            : base(unitOfWorkFactory)
-        {
-        }
+				public DayOffRepository(ICurrentUnitOfWork currentUnitOfWork)
+					: base(currentUnitOfWork)
+	    {
+		    
+	    }
 
         /// <summary>
         /// Finds all contract by description.

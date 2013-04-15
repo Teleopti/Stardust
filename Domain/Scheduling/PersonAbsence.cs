@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
             _person = agent;
             _scenario = scenario;
             _layer = layer;
-        	_layer.SetParent(this);
+			((IAggregateEntity)_layer).SetParent(this);
         }
 
 		/// <summary>
@@ -281,5 +281,12 @@ namespace Teleopti.Ccc.Domain.Scheduling
             get { return Person; }
         }
 
+		// these two is just because we suddenly are ILayerCollectionOwner
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+		public virtual ILayerCollection<ISkillStaff> LayerCollection { get; set; }
+		public virtual void OnAdd(ILayer<ISkillStaff> layer)
+		{
+			throw new NotImplementedException();
+		}
     }
 }

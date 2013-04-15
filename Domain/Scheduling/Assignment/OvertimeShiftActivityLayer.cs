@@ -2,7 +2,7 @@
 
 namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 {
-    public class OvertimeShiftActivityLayer : ActivityLayer, IOvertimeShiftActivityLayer
+    public class OvertimeShiftActivityLayer : PersistedActivityLayer, IOvertimeShiftActivityLayer
     {
         private readonly IMultiplicatorDefinitionSet _definitionSet;
 

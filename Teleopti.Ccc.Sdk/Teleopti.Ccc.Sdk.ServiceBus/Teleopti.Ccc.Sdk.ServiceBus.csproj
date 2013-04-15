@@ -50,10 +50,10 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+      <CodeAnalysisRuleSet>$(SolutionDir)\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
     <CodeAnalysisAdditionalOptions>/assemblyCompareMode:StrongNameIgnoringVersion</CodeAnalysisAdditionalOptions>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -63,20 +63,20 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+      <CodeAnalysisRuleSet>$(SolutionDir)\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
     <CodeAnalysisAdditionalOptions>/assemblyCompareMode:StrongNameIgnoringVersion</CodeAnalysisAdditionalOptions>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x86\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>x86</PlatformTarget>
     <CodeAnalysisLogFile>bin\Debug\Teleopti.Ccc.Sdk.ServiceBus.dll.CodeAnalysisLog.xml</CodeAnalysisLogFile>
     <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
     <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
     <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+      <CodeAnalysisRuleSet>$(SolutionDir)\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
     <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
     <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
     <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
@@ -93,7 +93,7 @@
     <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
     <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
     <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+      <CodeAnalysisRuleSet>$(SolutionDir)\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
     <CodeAnalysisRuleSetDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\\Rule Sets</CodeAnalysisRuleSetDirectories>
     <CodeAnalysisIgnoreBuiltInRuleSets>false</CodeAnalysisIgnoreBuiltInRuleSets>
     <CodeAnalysisRuleDirectories>;C:\Program Files (x86)\Microsoft Visual Studio 10.0\Team Tools\Static Analysis Tools\FxCop\\Rules</CodeAnalysisRuleDirectories>
@@ -126,9 +126,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Rhino.ServiceBus.Autofac.3.0.2\lib\4.0\Rhino.ServiceBus.Autofac.dll</HintPath>
     </Reference>
-    <Reference Include="Rhino.ServiceBus.SqlQueues, Version=1.0.1.0, Culture=neutral, PublicKeyToken=345d633c75812f60, processorArchitecture=MSIL">
+    <Reference Include="Rhino.ServiceBus.SqlQueues, Version=1.0.1.4, Culture=neutral, PublicKeyToken=345d633c75812f60, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Rhino.ServiceBus.SqlQueues.1.0.1.0\lib\net40\Rhino.ServiceBus.SqlQueues.dll</HintPath>
+      <HintPath>..\..\packages\Rhino.ServiceBus.SqlQueues.1.0.1.4\lib\net40\Rhino.ServiceBus.SqlQueues.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -156,10 +156,18 @@
     <Compile Include="ApplicationLayer\EventsConsumer.cs" />
     <Compile Include="AuthenticationContainerInstaller.cs" />
     <Compile Include="AuthorizationContainerInstaller.cs" />
+    <Compile Include="BudgetGroupAllowanceCalculator.cs" />
     <Compile Include="BudgetGroupAllowanceSpecification.cs" />
+    <Compile Include="BudgetGroupHeadCountSpecification.cs" />
     <Compile Include="BusStartup.cs" />
     <Compile Include="ConfigFileDefaultHost.cs" />
+    <Compile Include="RtaBusBootStrapper.cs" />
+    <Compile Include="Rta\BusinessUnitInfoConsumer.cs" />
+    <Compile Include="QueueClearMessages.cs" />
+    <Compile Include="Rta\UpdatedScheduleInfoConsumer.cs" />
     <Compile Include="Denormalizer\IScheduleDayReadModelCreator.cs" />
+    <Compile Include="Forecast\QuickForecastWorkloadMessageConsumer.cs" />
+    <Compile Include="Forecast\QuickForecastWorkloadsMessageConsumer.cs" />
     <Compile Include="Forecast\RecalculateForecastOnSkillConsumer.cs" />
     <Compile Include="Forecast\StatisticLoader.cs" />
     <Compile Include="DateOnlyPeriodSerializer.cs" />
@@ -170,7 +178,6 @@
     <Compile Include="Denormalizer\UpdateGroupingReadModelDataConsumer.cs" />
     <Compile Include="Denormalizer\UpdateGroupingReadModelGroupPageConsumer.cs" />
     <Compile Include="Denormalizer\InitialLoadScheduleProjectionConsumer.cs" />
-    <Compile Include="Denormalizer\IScheduleChangedNotification.cs" />
     <Compile Include="Denormalizer\IUpdateGroupingReadModel.cs" />
     <Compile Include="Denormalizer\IUpdatePersonFinderReadModel.cs" />
     <Compile Include="Denormalizer\UpdateGroupingReadModelConsumer.cs" />
@@ -241,10 +248,16 @@
     <Compile Include="BasicState.cs" />
     <Compile Include="NewAbsenceRequestConsumer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Rta\BusinessUnitInfoFinder.cs" />
     <Compile Include="ScheduleIsInvalidSpecification.cs" />
     <Compile Include="SchedulingContainerInstaller.cs" />
     <Compile Include="SdkConfigurationReader.cs" />
     <Compile Include="SerializationContainerInstaller.cs" />
+    <Compile Include="Service References\TeleoptiRtaService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="ServiceBusRunner.cs" />
     <Compile Include="ShiftTrade\ShiftTradeRequestSaga.cs" />
   </ItemGroup>
@@ -264,6 +277,16 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
+    <None Include="Service References\TeleoptiRtaService\TeleoptiRtaService.wsdl" />
+    <None Include="Service References\TeleoptiRtaService\TeleoptiRtaService.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TeleoptiRtaService\TeleoptiRtaService1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\TeleoptiRtaService\TeleoptiRtaService2.xsd">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Domain\Teleopti.Ccc.Domain.csproj">
@@ -323,6 +346,27 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\TeleoptiRtaService\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\TeleoptiRtaService\TeleoptiRtaService.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\TeleoptiRtaService\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\TeleoptiRtaService\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\TeleoptiRtaService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

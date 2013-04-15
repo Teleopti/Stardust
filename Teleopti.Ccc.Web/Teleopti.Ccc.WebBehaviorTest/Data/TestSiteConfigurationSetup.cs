@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
@@ -50,19 +51,30 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		private static void GenerateAndWriteTestDataNHibFileFromTemplate()
 		{
-			var contents = File.ReadAllText("Data\\TestData.nhib.xml");
-			contents = contents.Replace("_connectionString_", IniFileInfo.ConnectionString);
-			contents = contents.Replace("_connectionStringMatrix_", IniFileInfo.ConnectionStringMatrix);
-			contents = contents.Replace("_database_", IniFileInfo.Database);
-			File.WriteAllText(TargetTestDataNHibFile, contents);
+			FileConfigurator.ConfigureByTags(
+				"Data\\TestData.nhib.xml",
+				TargetTestDataNHibFile,
+				new AllTags()
+				);
 		}
 		
 		private static void UpdateWebConfigFromTemplate()
 		{
-			var contents = File.ReadAllText(Path.Combine(Paths.FindProjectPath(@"BuildArtifacts\"), "web.root.web.config"));
-			contents = contents.Replace("$(AgentPortalWebURL)", Url.ToString());
-			contents = contents.Replace("$(AnalyticsConnectionString)", IniFileInfo.ConnectionStringMatrix);
-			File.WriteAllText(TargetWebConfig, contents);
+			var sourceFile = Path.Combine(Paths.FindProjectPath(@"BuildArtifacts\"), "web.root.web.config");
+			var tags = new AllTags();
+			if (!IniFileInfo.ServiceBus)
+			{
+				const string module = @"<module type=""Teleopti.Ccc.IocCommon.Configuration.LocalInMemoryEventsPublisherModule, Teleopti.Ccc.IocCommon""/>";
+				tags.Add(
+					"LocalInMemoryEventsPublisherModule",
+					module
+					);
+			}
+			FileConfigurator.ConfigureByTags(
+				sourceFile,
+				TargetWebConfig,
+				tags
+				);
 		}
 	}
 }

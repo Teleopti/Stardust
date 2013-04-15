@@ -11,55 +11,58 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 {
 
-    public class ResourceOptimizationHelper : IResourceOptimizationHelper
-    {
-        private readonly ISchedulingResultStateHolder _stateHolder;
-    	private readonly IOccupiedSeatCalculator _occupiedSeatCalculator;
-    	private readonly INonBlendSkillCalculator _nonBlendSkillCalculator;
-    	private readonly ISingleSkillDictionary _singleSkillDictionary;
+	public class ResourceOptimizationHelper : IResourceOptimizationHelper
+	{
+		private readonly ISchedulingResultStateHolder _stateHolder;
+		private readonly IOccupiedSeatCalculator _occupiedSeatCalculator;
+		private readonly INonBlendSkillCalculator _nonBlendSkillCalculator;
+		private readonly ISingleSkillDictionary _singleSkillDictionary;
+	    private readonly ISingleSkillMaxSeatCalculator _singleSkillMaxSeatCalculator;
 
-    	public ResourceOptimizationHelper(ISchedulingResultStateHolder stateHolder, 
-            IOccupiedSeatCalculator occupiedSeatCalculator, 
-            INonBlendSkillCalculator nonBlendSkillCalculator,
-			ISingleSkillDictionary singleSkillDictionary)
+		public ResourceOptimizationHelper(ISchedulingResultStateHolder stateHolder,
+			IOccupiedSeatCalculator occupiedSeatCalculator,
+			INonBlendSkillCalculator nonBlendSkillCalculator,
+			ISingleSkillDictionary singleSkillDictionary,
+			ISingleSkillMaxSeatCalculator singleSkillMaxSeatCalculator)
 		{
 			_stateHolder = stateHolder;
 			_occupiedSeatCalculator = occupiedSeatCalculator;
-    		_nonBlendSkillCalculator = nonBlendSkillCalculator;
-    		_singleSkillDictionary = singleSkillDictionary;
+			_nonBlendSkillCalculator = nonBlendSkillCalculator;
+			_singleSkillDictionary = singleSkillDictionary;
+    		_singleSkillMaxSeatCalculator = singleSkillMaxSeatCalculator;
 		}
 
-        public void ResourceCalculateDate(DateOnly localDate, bool useOccupancyAdjustment, bool considerShortBreaks)
-        {
-            resourceCalculateDate(localDate, useOccupancyAdjustment, true, considerShortBreaks, new List<IScheduleDay>(), new List<IScheduleDay>());
-        }
+		public void ResourceCalculateDate(DateOnly localDate, bool useOccupancyAdjustment, bool considerShortBreaks)
+		{
+			resourceCalculateDate(localDate, useOccupancyAdjustment, true, considerShortBreaks, new List<IScheduleDay>(), new List<IScheduleDay>());
+		}
 
-    	public void ResourceCalculateDate(DateOnly localDate, bool useOccupancyAdjustment, bool considerShortBreaks, IList<IScheduleDay> toRemove, IList<IScheduleDay> toAdd)
-    	{
+		public void ResourceCalculateDate(DateOnly localDate, bool useOccupancyAdjustment, bool considerShortBreaks, IList<IScheduleDay> toRemove, IList<IScheduleDay> toAdd)
+		{
 			resourceCalculateDate(localDate, useOccupancyAdjustment, true, considerShortBreaks, toRemove, toAdd);
-    	}
+		}
 
-    	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "Teleopti.Interfaces.Domain.DateOnly.ToShortDateString")]
-        private void resourceCalculateDate(DateOnly localDate, bool useOccupancyAdjustment, bool calculateMaxSeatsAndNonBlend, bool considerShortBreaks
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "Teleopti.Interfaces.Domain.DateOnly.ToShortDateString")]
+		private void resourceCalculateDate(DateOnly localDate, bool useOccupancyAdjustment, bool calculateMaxSeatsAndNonBlend, bool considerShortBreaks
 			, IList<IScheduleDay> toRemove, IList<IScheduleDay> toAdd)
-        {
-            if (_stateHolder.TeamLeaderMode)
-                return;
+		{
+			if (_stateHolder.TeamLeaderMode)
+				return;
 
-            if(_stateHolder.SkipResourceCalculation)
-                return;
+			if (_stateHolder.SkipResourceCalculation)
+				return;
 
-            using (PerformanceOutput.ForOperation("ResourceCalculate " + localDate.ToShortDateString()))
-            {
-                var extractor = new ScheduleProjectionExtractor();
-                IList<IVisualLayerCollection> relevantProjections = new List<IVisualLayerCollection>();
+			using (PerformanceOutput.ForOperation("ResourceCalculate " + localDate.ToShortDateString()))
+			{
+				var extractor = new ScheduleProjectionExtractor();
+				IList<IVisualLayerCollection> relevantProjections = new List<IVisualLayerCollection>();
 
-            	var useSingleSkillCalculations = UseSingleSkillCalculations(toRemove, toAdd);
+				var useSingleSkillCalculations = UseSingleSkillCalculations(toRemove, toAdd);
 
 				if (!useSingleSkillCalculations)
 					relevantProjections = extractor.CreateRelevantProjectionWithScheduleList(_stateHolder.Schedules,
 																						 TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(localDate.AddDays(-1), localDate.AddDays(1)));
-			
+
 				IList<IVisualLayerCollection> addedVisualLayerCollections = new List<IVisualLayerCollection>();
 				foreach (IScheduleDay addedSchedule in toAdd)
 				{
@@ -76,45 +79,44 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 					removedVisualLayerCollections.Add(collection);
 				}
 
-				resourceCalculateDate(relevantProjections, localDate, useOccupancyAdjustment, calculateMaxSeatsAndNonBlend, considerShortBreaks, removedVisualLayerCollections, addedVisualLayerCollections, useSingleSkillCalculations);
-            }
-            
-        }
+				resourceCalculateDate(relevantProjections, localDate, useOccupancyAdjustment, calculateMaxSeatsAndNonBlend, considerShortBreaks, removedVisualLayerCollections, addedVisualLayerCollections);
+			}
 
-        private static DateTimePeriod getPeriod(DateOnly localDate)
-        {
-            DateTime currentStart = localDate;
-            DateTime currentEnd = currentStart.AddDays(1).AddTicks(-1);
-            return TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(currentStart, currentEnd);
-        }
+		}
 
-        private void resourceCalculateDate(IList<IVisualLayerCollection> relevantProjections, 
+		private static DateTimePeriod getPeriod(DateOnly localDate)
+		{
+			DateTime currentStart = localDate;
+			DateTime currentEnd = currentStart.AddDays(1).AddTicks(-1);
+			return TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(currentStart, currentEnd);
+		}
+
+		private void resourceCalculateDate(IList<IVisualLayerCollection> relevantProjections,
 			DateOnly localDate, bool useOccupancyAdjustment, bool calculateMaxSeatsAndNonBlend, bool considerShortBreaks
-			, IList<IVisualLayerCollection> toRemove, IList<IVisualLayerCollection> toAdd,
-			bool isAllSingleSkill)
-        {
-            var timePeriod = getPeriod(localDate);
-            var ordinarySkills = new List<ISkill>();
-            foreach (var skill in _stateHolder.Skills)
-            {
-                if(skill.SkillType.ForecastSource != ForecastSource.NonBlendSkill && skill.SkillType.ForecastSource != ForecastSource.MaxSeatSkill)
-                    ordinarySkills.Add(skill);
-            }
+			, IList<IVisualLayerCollection> toRemove, IList<IVisualLayerCollection> toAdd)
+		{
+			var timePeriod = getPeriod(localDate);
+			var ordinarySkills = new List<ISkill>();
+			foreach (var skill in _stateHolder.Skills)
+			{
+				if (skill.SkillType.ForecastSource != ForecastSource.NonBlendSkill && skill.SkillType.ForecastSource != ForecastSource.MaxSeatSkill)
+					ordinarySkills.Add(skill);
+			}
 
-        	var relevantSkillStaffPeriods = CreateSkillSkillStaffDictionaryOnSkills(_stateHolder.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary, ordinarySkills, timePeriod);
+			var relevantSkillStaffPeriods = CreateSkillSkillStaffDictionaryOnSkills(_stateHolder.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary, ordinarySkills, timePeriod);
 
 			var schedulingResultService = new SchedulingResultService(relevantSkillStaffPeriods, _stateHolder.Skills, relevantProjections, new SingleSkillCalculator(), useOccupancyAdjustment, _singleSkillDictionary);
 
-            schedulingResultService.SchedulingResult(timePeriod, toRemove, toAdd);
+			schedulingResultService.SchedulingResult(timePeriod, toRemove, toAdd);
 
-            if(considerShortBreaks)
-            {
-                var periodDistributionService = new PeriodDistributionService(relevantProjections, 5);
-                periodDistributionService.CalculateDay(relevantSkillStaffPeriods);
-            }
+			if (considerShortBreaks)
+			{
+				var periodDistributionService = new PeriodDistributionService(relevantProjections, 5);
+				periodDistributionService.CalculateDay(relevantSkillStaffPeriods);
+			}
 
-            if (calculateMaxSeatsAndNonBlend)
-            {
+			if (calculateMaxSeatsAndNonBlend)
+			{
 				ordinarySkills = new List<ISkill>();
 				foreach (var skill in _stateHolder.Skills)
 				{
@@ -123,15 +125,15 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 				}
 				relevantSkillStaffPeriods = CreateSkillSkillStaffDictionaryOnSkills(_stateHolder.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary, ordinarySkills, timePeriod);
 
-				if (isAllSingleSkill)
+				if (toRemove.IsEmpty() && toAdd.IsEmpty())
 				{
-					var singleMaxSeatCalculator = new SingleSkillMaxSeatCalculator();
-					singleMaxSeatCalculator.Calculate(relevantSkillStaffPeriods, toRemove, toAdd);
+					_occupiedSeatCalculator.Calculate(localDate, relevantProjections, relevantSkillStaffPeriods);
 				}
 				else
-					_occupiedSeatCalculator.Calculate(localDate, relevantProjections, relevantSkillStaffPeriods);	
-				
-            	
+				{
+					_singleSkillMaxSeatCalculator.Calculate(relevantSkillStaffPeriods, toRemove, toAdd);
+				}
+
 				ordinarySkills = new List<ISkill>();
 				foreach (var skill in _stateHolder.Skills)
 				{
@@ -139,73 +141,73 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 						ordinarySkills.Add(skill);
 				}
 				relevantSkillStaffPeriods = CreateSkillSkillStaffDictionaryOnSkills(_stateHolder.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary, ordinarySkills, timePeriod);
-                _nonBlendSkillCalculator.Calculate(localDate, relevantProjections, relevantSkillStaffPeriods, false);
+				_nonBlendSkillCalculator.Calculate(localDate, relevantProjections, relevantSkillStaffPeriods, false);
             }      
-        }
+		}
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public ISkillSkillStaffPeriodExtendedDictionary CreateSkillSkillStaffDictionaryOnSkills(ISkillSkillStaffPeriodExtendedDictionary skillStaffPeriodDictionary, IList<ISkill> skills, DateTimePeriod keyPeriod)
-        {
-            var result = new SkillSkillStaffPeriodExtendedDictionary();
-            foreach (var skillPair in skillStaffPeriodDictionary)
-            {
-                if (!skills.Contains(skillPair.Key))
-                    continue;
-                ISkillStaffPeriodDictionary skillStaffDictionary = skillPair.Value;
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public ISkillSkillStaffPeriodExtendedDictionary CreateSkillSkillStaffDictionaryOnSkills(ISkillSkillStaffPeriodExtendedDictionary skillStaffPeriodDictionary, IList<ISkill> skills, DateTimePeriod keyPeriod)
+		{
+			var result = new SkillSkillStaffPeriodExtendedDictionary();
+			foreach (var skillPair in skillStaffPeriodDictionary)
+			{
+				if (!skills.Contains(skillPair.Key))
+					continue;
+				ISkillStaffPeriodDictionary skillStaffDictionary = skillPair.Value;
 
-                var skillStaffPeriodDictionaryToReturn = new SkillStaffPeriodDictionary(skillPair.Key);
-                foreach (var skillStaffPeriod in skillStaffDictionary)
-                {
-                    if (!skillStaffPeriod.Key.Intersect(keyPeriod)) continue;
-                    skillStaffPeriodDictionaryToReturn.Add(skillStaffPeriod.Key, skillStaffPeriod.Value);
-                }
-                result.Add(skillPair.Key, skillStaffPeriodDictionaryToReturn);
-            }
+				var skillStaffPeriodDictionaryToReturn = new SkillStaffPeriodDictionary(skillPair.Key);
+				foreach (var skillStaffPeriod in skillStaffDictionary)
+				{
+					if (!skillStaffPeriod.Key.Intersect(keyPeriod)) continue;
+					skillStaffPeriodDictionaryToReturn.Add(skillStaffPeriod.Key, skillStaffPeriod.Value);
+				}
+				result.Add(skillPair.Key, skillStaffPeriodDictionaryToReturn);
+			}
 
-            return result;
-        }
+			return result;
+		}
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public void AddResourcesToNonBlendAndMaxSeat(IMainShift mainShift, IPerson person, DateOnly dateOnly)
-        {
-            var virtualSchedulePeriod = person.VirtualSchedulePeriod(dateOnly);
-            if (!virtualSchedulePeriod.IsValid)
-                return;
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public void AddResourcesToNonBlendAndMaxSeat(IMainShift mainShift, IPerson person, DateOnly dateOnly)
+		{
+			var virtualSchedulePeriod = person.VirtualSchedulePeriod(dateOnly);
+			if (!virtualSchedulePeriod.IsValid)
+				return;
 
-            var layerCollection = mainShift.ProjectionService().CreateProjection();
+			var layerCollection = mainShift.ProjectionService().CreateProjection();
 
-            var timePeriod = layerCollection.Period();
+			var timePeriod = layerCollection.Period();
 
-            if (!timePeriod.HasValue)
-                return;
+			if (!timePeriod.HasValue)
+				return;
 
-            // just a workaround for now so we get as Person attached to the collection
-            var layers = layerCollection.ToList();
-            layerCollection = new VisualLayerCollection(person, layers, new ProjectionPayloadMerger());
+			// just a workaround for now so we get as Person attached to the collection
+			var layers = layerCollection.ToList();
+			layerCollection = new VisualLayerCollection(person, layers, new ProjectionPayloadMerger());
 
-            var personPeriod = person.Period(dateOnly);
-            //var personPeriod = virtualSchedulePeriod.PersonPeriod;
-            var skills = new List<ISkill>();
-            foreach (var personSkill in personPeriod.PersonNonBlendSkillCollection)
-            {
-                skills.Add(personSkill.Skill);
-            }
-            var relevantSkillStaffPeriods =
-                CreateSkillSkillStaffDictionaryOnSkills(
-                    _stateHolder.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary, skills, timePeriod.Value);
+			var personPeriod = person.Period(dateOnly);
+			//var personPeriod = virtualSchedulePeriod.PersonPeriod;
+			var skills = new List<ISkill>();
+			foreach (var personSkill in personPeriod.PersonNonBlendSkillCollection)
+			{
+				skills.Add(personSkill.Skill);
+			}
+			var relevantSkillStaffPeriods =
+				CreateSkillSkillStaffDictionaryOnSkills(
+					_stateHolder.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary, skills, timePeriod.Value);
 
-            _nonBlendSkillCalculator.Calculate(dateOnly,new List<IVisualLayerCollection>{layerCollection},relevantSkillStaffPeriods, true);
+			_nonBlendSkillCalculator.Calculate(dateOnly, new List<IVisualLayerCollection> { layerCollection }, relevantSkillStaffPeriods, true);
 
-            skills.Clear();
-            foreach (var personSkill in personPeriod.PersonMaxSeatSkillCollection)
-            {
-                skills.Add(personSkill.Skill);
-            }
-            relevantSkillStaffPeriods =
-                CreateSkillSkillStaffDictionaryOnSkills(
-                    _stateHolder.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary, skills, timePeriod.Value);
-            _occupiedSeatCalculator.Calculate(dateOnly,new List<IVisualLayerCollection>{layerCollection}, relevantSkillStaffPeriods);
-        }
+			skills.Clear();
+			foreach (var personSkill in personPeriod.PersonMaxSeatSkillCollection)
+			{
+				skills.Add(personSkill.Skill);
+			}
+			relevantSkillStaffPeriods =
+				CreateSkillSkillStaffDictionaryOnSkills(
+					_stateHolder.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary, skills, timePeriod.Value);
+			_occupiedSeatCalculator.Calculate(dateOnly, new List<IVisualLayerCollection> { layerCollection }, relevantSkillStaffPeriods);
+		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public bool UseSingleSkillCalculations(IList<IScheduleDay> toRemove, IList<IScheduleDay> toAdd)
@@ -235,5 +237,5 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 
 			return true;
 		}
-    }
+	}
 }

@@ -13,14 +13,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 {
 	public class ExportMultisiteSkillsToSkillConsumer : ConsumerOf<ExportMultisiteSkillsToSkill>
 	{
-		private IUnitOfWorkFactory _unitOfWorkFactory;
+		private ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IRepository<IJobResult> _jobResultRepository;
 		private readonly IJobResultFeedback _feedback;
 		private readonly IMessageBroker _messageBroker;
 		private readonly IServiceBus _serviceBus;
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(ExportMultisiteSkillsToSkillConsumer));
 
-		public ExportMultisiteSkillsToSkillConsumer(IUnitOfWorkFactory unitOfWorkFactory, IJobResultRepository jobResultRepository, IJobResultFeedback feedback, IMessageBroker messageBroker, IServiceBus serviceBus)
+		public ExportMultisiteSkillsToSkillConsumer(ICurrentUnitOfWorkFactory unitOfWorkFactory, IJobResultRepository jobResultRepository, IJobResultFeedback feedback, IMessageBroker messageBroker, IServiceBus serviceBus)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_jobResultRepository = jobResultRepository;
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void Consume(ExportMultisiteSkillsToSkill message)
 		{
-			using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+			using (var unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
 				var jobResult = _jobResultRepository.Get(message.JobId);
 				LazyLoadingManager.Initialize(jobResult.Details);

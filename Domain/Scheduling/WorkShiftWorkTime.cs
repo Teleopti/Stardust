@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
@@ -20,8 +21,9 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 			if (!restriction.MayMatchWithShifts())
 				return null;
-
-			var infoList = _ruleSetProjectionService.ProjectionCollection(workShiftRuleSet);
+			var callback = new WorkShiftAddStopperCallback();
+			callback.StartNewRuleSet(workShiftRuleSet);
+			var infoList = _ruleSetProjectionService.ProjectionCollection(workShiftRuleSet, callback);
 
 			IWorkTimeMinMax resultWorkTimeMinMax = null;
 			var possibilities = new HashSet<IPossibleStartEndCategory>();

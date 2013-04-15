@@ -145,7 +145,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		public SpanCollection ShiftTradeDetailsToScheduleLayers
 		{
-			get { return Document.Divs.Filter(QuicklyFind.ByClass("shift-trade-swap-detail-schedule")).Skip(1).First().Spans.Filter(QuicklyFind.ByClass("shift-trade-layer")); }
+			get { return Document.Divs.Filter(QuicklyFind.ByClass("shift-trade-swap-detail-schedule-to")).First().Spans.Filter(QuicklyFind.ByClass("shift-trade-layer")); }
 		}
 
 		public TextField AddShiftTradeDatePicker
@@ -176,6 +176,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "Request-shift-trade-detail-message")]
 		public Div  ShiftTradeRequestDetailMessage { get; set; }
 
+		[FindBy(Id = "Request-shift-trade-detail-info")]
+		public Div  ShiftTradeRequestDetailInfo { get; set; }
+
 		[FindBy(Id = "Request-add-shift-trade-subject-input")]
 		public TextField AddShiftTradeSubject { get; set; }
 
@@ -184,5 +187,24 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		[FindBy(Id = "Request-add-shift-trade")]
 		public Div AddShiftTradeContainer { get; set; }
+
+		public Span MyScheduleDayOff 
+		{
+			get { return Document.Spans.Filter(QuicklyFind.ByClass("shift-trade-dayoff-name")).First();  }
+		}
+
+		public Span OtherScheduleDayOff
+		{
+			get { return Document.Spans.Filter(QuicklyFind.ByClass("shift-trade-dayoff-name")).Skip(1).First(); }
+		}
+
+
+		public DivCollection Timelines
+		{
+			get
+			{
+				return Document.Divs.Filter(QuicklyFind.ByClass("shift-trade-swap-detail-timeline"));
+			}
+		}
 	}
 }

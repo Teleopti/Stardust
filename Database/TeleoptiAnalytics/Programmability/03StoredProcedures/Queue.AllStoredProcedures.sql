@@ -60,7 +60,7 @@ BEGIN
     
     EXEC Queue.GetAndAddQueue @Endpoint,@Queue,@Subqueue,@QueueId=@QueueId OUTPUT;
 		
-	INSERT INTO Queue.Messages (QueueId,Payload,ProcessingUntil,ExpiresAt,Processed,Headers,CreatedAt) VALUES (@QueueId,@Payload,ISNULL(@ProcessingUntil,GetDate()),@ExpiresAt,0,@Headers,@CreatedAt)
+	INSERT INTO Queue.Messages (QueueId,Payload,ProcessingUntil,ExpiresAt,Processed,Headers,CreatedAt) VALUES (@QueueId,@Payload,ISNULL(@ProcessingUntil,GetUtcDate()),@ExpiresAt,0,@Headers,@CreatedAt)
 END
 GO
 ----
@@ -68,13 +68,13 @@ IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[Queue].[Ext
 DROP PROCEDURE [Queue].[ExtendMessageLease]
 GO
 CREATE PROCEDURE [Queue].[ExtendMessageLease]
-	@MessageId int
+	@MessageId bigint
 AS
 BEGIN
 	SET NOCOUNT ON;
 
 	UPDATE Queue.Messages
-	SET ProcessingUntil = DateAdd(mi,10,GetDate())
+	SET ProcessingUntil = DateAdd(mi,10,GetUtcDate())
 	WHERE MessageId=@MessageId
 END
 GO
@@ -139,7 +139,7 @@ IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[Queue].[Mar
 DROP PROCEDURE [Queue].[MarkMessageAsReady]
 GO
 CREATE PROCEDURE [Queue].[MarkMessageAsReady]
-	@MessageId int
+	@MessageId bigint
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -162,7 +162,7 @@ CREATE PROCEDURE [Queue].[MoveMessage]
 	@Endpoint nvarchar(250),
 	@Queue nvarchar(50),
 	@Subqueue nvarchar(50),
-	@MessageId int
+	@MessageId bigint
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -173,7 +173,7 @@ BEGIN
 
 	UPDATE Queue.Messages
 	SET QueueId = @QueueId,
-	ProcessingUntil = GetDate()
+	ProcessingUntil = GetUtcDate()
 	WHERE MessageId=@MessageId
 END
 GO
@@ -187,11 +187,11 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 	
-	SELECT TOP 1 *
+	SELECT TOP 1 1 as 'y'
 	FROM Queue.Messages
-	WHERE isnull(ExpiresAt,DATEADD(mi,1,GetDate())) > GetDate()
+	WHERE (ExpiresAt IS NULL OR ExpiresAt < GetUtcDate())
 	AND Processed=0
-	AND ProcessingUntil<GetDate()
+	AND ProcessingUntil<GetUtcDate()
 	AND QueueId = @QueueId
 	ORDER BY CreatedAt ASC
 END
@@ -201,23 +201,29 @@ IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[Queue].[Pee
 DROP PROCEDURE [Queue].[PeekMessageById]
 GO
 CREATE PROCEDURE [Queue].[PeekMessageById]
-	@MessageId int
+	@MessageId bigint
 AS
 BEGIN
 	SET NOCOUNT ON;
 
     SELECT
-		m.*,
+		m.MessageId,
+		m.QueueId,
+		m.CreatedAt,
+		m.ProcessingUntil,
+		m.Processed,
+		m.Headers,
+		m.Payload,
 		q.QueueName SubQueueName
     FROM Queue.Messages m
     LEFT JOIN Queue.Queues q
 		ON m.QueueId=q.QueueId
 		AND q.ParentQueueId IS NOT NULL
-	WHERE isnull(m.ExpiresAt,DATEADD(mi,1,GetDate())) > GetDate()
+	WHERE m.MessageId = @MessageId
+	AND isnull(m.ExpiresAt,DATEADD(mi,1,GetUtcDate())) > GetUtcDate()
 	AND m.Processed=0
-	AND m.ProcessingUntil<GetDate()
-	AND m.MessageId=@MessageId
-	ORDER BY CreatedAt ASC
+	AND m.ProcessingUntil<GetUtcDate()
+	ORDER BY m.CreatedAt ASC
 END
 GO
 ----
@@ -230,19 +236,19 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 	
-	DECLARE @MessageId int;
+	DECLARE @MessageId bigint;
 	SELECT TOP 1 @MessageId = MessageId
 	FROM Queue.Messages
-	WHERE isnull(ExpiresAt,DATEADD(mi,1,GetDate())) > GetDate()
+	WHERE (ExpiresAt IS NULL OR ExpiresAt < GetUtcDate())
 	AND Processed=0
-	AND ProcessingUntil<GetDate()
+	AND ProcessingUntil<GetUtcDate()
 	AND QueueId=@QueueId
 	ORDER BY CreatedAt ASC
 	
 	if (@MessageId is not null)
 		BEGIN
 			UPDATE Queue.Messages
-			SET ProcessingUntil = DateAdd(mi,1,GetDate()),
+			SET ProcessingUntil = DateAdd(mi,1,GetUtcDate()),
 			ProcessedCount=ProcessedCount+1
 			WHERE MessageId=@MessageId
 			
@@ -274,11 +280,18 @@ BEGIN
     EXEC Queue.GetAndAddQueue @Endpoint,@Queue,@Subqueue,@QueueId=@QueueId OUTPUT;
 	
 			UPDATE Queue.Messages
-			SET ProcessingUntil = DateAdd(mi,10,GetDate()),
+			SET ProcessingUntil = DateAdd(mi,10,GetUtcDate()),
 			ProcessedCount=ProcessedCount+1
 			WHERE QueueId = @QueueId
-			
-			SELECT *
+
+			SELECT
+				MessageId,
+				QueueId,
+				CreatedAt,
+				ProcessingUntil,
+				Processed,
+				Headers,
+				Payload
 			FROM Queue.Messages
 			WHERE QueueId = @QueueId
 END
@@ -297,6 +310,54 @@ BEGIN
     DELETE FROM Queue.SubscriptionStorage
     WHERE ([Key]=@Key)
     AND (Id=@Id)
+END
+GO
+----
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[Queue].[Clean]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [Queue].[Clean]
+GO
+CREATE PROCEDURE [Queue].[Clean]
+	@Endpoint nvarchar(250),
+	@Queue nvarchar(50)
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+    DECLARE @QueueId int;
+	DECLARE @DiscardedQueueId int;
+	DECLARE @TimeoutQueueId int;
+        
+    EXEC Queue.GetAndAddQueue @Endpoint,@Queue,null,@QueueId=@QueueId OUTPUT;
+	
+	--Delete expired messages
+	DELETE FROM Queue.Messages WHERE QueueId=@QueueId AND ExpiresAt<GetUtcDate()
+
+	--Move discarded messages
+	SELECT @DiscardedQueueId = QueueId
+	FROM Queue.Queues
+	WHERE [Endpoint] = @Endpoint + N'\Discarded'
+	AND QueueName = @Queue
+
+	DELETE FROM Queue.Messages
+	OUTPUT deleted.* INTO [Queue].[MessagesPurged](MessageId, QueueId, CreatedAt, ProcessingUntil, ExpiresAt, Processed, Headers, Payload, ProcessedCount)
+	FROM Queue.Messages	m
+	INNER JOIN Queue.Queues q
+	ON m.QueueId = q.QueueId
+	AND q.QueueId = @DiscardedQueueId
+
+	----Move timeout messages
+	--SELECT @TimeoutQueueId = QueueId
+	--FROM Queue.Queues
+	--WHERE ParentQueueId=@QueueId
+	--AND QueueName=N'Timeout'
+
+	--DELETE FROM Queue.Messages
+	--OUTPUT deleted.* INTO [Queue].[MessagesPurged](MessageId, QueueId, CreatedAt, ProcessingUntil, ExpiresAt, Processed, Headers, Payload, ProcessedCount)
+	--FROM Queue.Messages	m
+	--INNER JOIN Queue.Queues q
+	--ON m.QueueId = q.QueueId
+	--AND q.QueueId = @TimeoutQueueId
+
 END
 GO
 ----

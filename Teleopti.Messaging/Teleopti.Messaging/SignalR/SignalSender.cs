@@ -2,13 +2,12 @@
 using System.Net;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
-using System.Text;
+using Newtonsoft.Json;
 using Microsoft.AspNet.SignalR.Client.Hubs;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Interfaces.MessageBroker.Client;
 using Teleopti.Interfaces.MessageBroker.Events;
-using Teleopti.Messaging.Coders;
 using Subscription = Teleopti.Interfaces.MessageBroker.Subscription;
 
 namespace Teleopti.Messaging.SignalR
@@ -44,7 +43,7 @@ namespace Teleopti.Messaging.SignalR
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
-		public void SendRtaData(Guid personId, Guid businessUnitId, IExternalAgentState externalAgentState)
+		public void SendRtaData(Guid personId, Guid businessUnitId, IActualAgentState actualAgentState)
 		{
 			int sendAttempt = 0;
 			while (sendAttempt < 3)
@@ -52,23 +51,21 @@ namespace Teleopti.Messaging.SignalR
 				try
 				{
 					sendAttempt++;
-					ExternalAgentStateEncoder encoder = new ExternalAgentStateEncoder();
-					byte[] domainObject = encoder.Encode(externalAgentState);
-
-					var type = typeof (IExternalAgentState);
+					var domainObject = JsonConvert.SerializeObject(actualAgentState);
+                    var type = typeof(IActualAgentState);
 					_wrapper.NotifyClients(new Notification
-					          	{
-					          		StartDate =
-					          			Subscription.DateToString(externalAgentState.Timestamp.Add(externalAgentState.TimeInState.Negate())),
-					          		EndDate = Subscription.DateToString(externalAgentState.Timestamp),
-					          		DomainId = Subscription.IdToString(personId),
-					          		DomainType = type.Name,
-					          		DomainQualifiedType = type.AssemblyQualifiedName,
-					          		ModuleId = Subscription.IdToString(Guid.Empty),
-					          		DomainUpdateType = (int) DomainUpdateType.Insert,
-					          		BinaryData = Encoding.UTF8.GetString(domainObject),
-					          		BusinessUnitId = Subscription.IdToString(businessUnitId)
-					          	});
+								{
+									StartDate =
+										Subscription.DateToString(actualAgentState.ReceivedTime.Add(actualAgentState.TimeInState.Negate())),
+									EndDate = Subscription.DateToString(actualAgentState.ReceivedTime),
+									DomainId = Subscription.IdToString(personId),
+									DomainType = type.Name,
+									DomainQualifiedType = type.AssemblyQualifiedName,
+									ModuleId = Subscription.IdToString(Guid.Empty),
+									DomainUpdateType = (int)DomainUpdateType.Insert,
+									BinaryData = domainObject,
+									BusinessUnitId = Subscription.IdToString(businessUnitId)
+								});
 					break;
 				}
 				catch (Exception)
@@ -81,7 +78,7 @@ namespace Teleopti.Messaging.SignalR
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4")]
 		public void SendData(DateTime floor, DateTime ceiling, Guid moduleId, Guid domainObjectId, Type domainInterfaceType, DomainUpdateType updateType, string dataSource, Guid businessUnitId)
 		{
-			int sendAttempt = 0;
+			var sendAttempt = 0;
 			while (sendAttempt < 3)
 			{
 				try

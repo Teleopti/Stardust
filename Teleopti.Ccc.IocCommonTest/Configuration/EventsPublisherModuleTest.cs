@@ -52,6 +52,7 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 		{
 			var containerBuilder = new ContainerBuilder();
 			containerBuilder.RegisterInstance(MockRepository.GenerateMock<ISendDenormalizeNotification>()).As<ISendDenormalizeNotification>();
+			containerBuilder.RegisterModule<AuthenticationModule>();
 			containerBuilder.RegisterModule<UnitOfWorkModule>();
 			containerBuilder.RegisterModule<DenormalizationQueueEventsPublisherModule>();
 			var container = containerBuilder.Build();

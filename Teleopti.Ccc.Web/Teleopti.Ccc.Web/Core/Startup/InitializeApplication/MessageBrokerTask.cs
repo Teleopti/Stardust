@@ -3,6 +3,7 @@ using System.Configuration;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Ccc.Web.Core.Startup.Booter;
 using Teleopti.Interfaces.MessageBroker.Events;
 
@@ -12,10 +13,14 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 	public class MessageBrokerTask : IBootstrapperTask
 	{
 		private readonly IMessageBroker _messageBroker;
+		private readonly ICurrentHttpContext _currentHttpContext;
+		private readonly ISettings _settings;
 
-		public MessageBrokerTask(IMessageBroker messageBroker)
+		public MessageBrokerTask(IMessageBroker messageBroker, ICurrentHttpContext currentHttpContext, ISettings settings)
 		{
 			_messageBroker = messageBroker;
+			_currentHttpContext = currentHttpContext;
+			_settings = settings;
 		}
 
 		public Task Execute()
@@ -26,22 +31,22 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 
 		private string ConnectionString()
 		{
-			var appSetting = ConfigurationManager.AppSettings["MessageBroker"];
+			var appSetting = _settings.MessageBroker();
 			if (!string.IsNullOrEmpty(appSetting))
 				return appSetting;
-			if (HttpContext.Current != null)
+			if (_currentHttpContext.Current() != null)
 				return ApplicationRootUrl();
 			throw new Exception("No connection string (url) found for message broker client!");
 		}
 
 		private string ApplicationRootUrl()
 		{
-			var url = HttpContext.Current.Request.Url;
+			var url = _currentHttpContext.Current().Request.Url;
 			var urlString = new StringBuilder();
 			urlString.Append(url.Scheme);
 			urlString.Append("://");
 			urlString.Append(url.Authority);
-			urlString.Append(HttpContext.Current.Request.ApplicationPath);
+			urlString.Append(_currentHttpContext.Current().Request.ApplicationPath);
 			return urlString.ToString();
 		}
 	}

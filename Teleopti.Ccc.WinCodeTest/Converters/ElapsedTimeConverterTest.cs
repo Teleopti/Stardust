@@ -2,7 +2,6 @@
 using System.Windows;
 using NUnit.Framework;
 using Teleopti.Ccc.WinCode.Converters;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCodeTest.Converters
 {
@@ -20,18 +19,16 @@ namespace Teleopti.Ccc.WinCodeTest.Converters
         [Test]
         public void VerifyConvertNull()
         {
-            object value = _target.Convert(null, null, null, null);
+            var value = _target.Convert(null, null, null, null);
             Assert.IsNull(value);
         }
 
         [Test]
         public void VerifyConvert()
         {
-            DateTimePeriod period = new DateTimePeriod(
-                new DateTime(2008, 1, 1,0,0,0,DateTimeKind.Utc),
-                new DateTime(2008, 1, 2, 0, 0, 0, DateTimeKind.Utc));
-            object value = _target.Convert(period, null, null, null);
-            Assert.AreEqual(TimeSpan.FromDays(1), value);
+            var period = DateTime.UtcNow.Subtract(TimeSpan.FromHours(1));
+            var value = _target.Convert(period, null, null, null);
+            Assert.That(value, Is.EqualTo(new TimeSpan(1, 0, 0)));
         }
 
         [Test]

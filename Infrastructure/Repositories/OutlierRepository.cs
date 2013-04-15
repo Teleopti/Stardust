@@ -23,10 +23,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
-        public OutlierRepository(IUnitOfWorkFactory unitOfWorkFactory)
-            : base(unitOfWorkFactory)
-        {
-        }
+				public OutlierRepository(ICurrentUnitOfWork currentUnitOfWork)
+					: base(currentUnitOfWork)
+	    {
+		    
+	    }
 
         /// <summary>
         /// Finds by workload. (including global)

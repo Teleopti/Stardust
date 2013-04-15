@@ -14,8 +14,15 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
-        public PersonalSettingDataRepository(IUnitOfWorkFactory unitOfWorkFactory) : base(unitOfWorkFactory)
-        {}
+				public PersonalSettingDataRepository(IUnitOfWorkFactory unitOfWorkFactory)
+					: base(unitOfWorkFactory)
+				{
+				}
+
+				protected PersonalSettingDataRepository(ICurrentUnitOfWork currentUnitOfWork)
+					: base(currentUnitOfWork)
+	    {
+	    }
 
         public override ISettingData FindByKey(string key)
         {

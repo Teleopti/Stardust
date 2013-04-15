@@ -50,7 +50,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>
@@ -59,8 +59,7 @@
     <CodeAnalysisRules>
     </CodeAnalysisRules>
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
-    <RunCodeAnalysis>false</RunCodeAnalysis>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+      <CodeAnalysisRuleSet>$(SolutionDir)\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
     <CodeAnalysisIgnoreGeneratedCode>true</CodeAnalysisIgnoreGeneratedCode>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -70,18 +69,18 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+      <CodeAnalysisRuleSet>$(SolutionDir)\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x86\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;CODE_ANALYSIS</DefineConstants>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>AnyCPU</PlatformTarget>
     <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
     <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
     <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+      <CodeAnalysisRuleSet>$(SolutionDir)\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <OutputPath>bin\x86\Release\</OutputPath>
@@ -92,7 +91,7 @@
     <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
     <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
     <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+      <CodeAnalysisRuleSet>$(SolutionDir)\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Domain">
@@ -499,6 +498,7 @@
     <Compile Include="Scheduling\Meetings\IChangeTracker.cs" />
     <Compile Include="Scheduling\Meetings\MeetingChangeTracker.cs" />
     <Compile Include="Scheduling\DayOffScheduling\MissingDaysOffScheduler.cs" />
+    <Compile Include="Scheduling\Assignment\PersistedActivityLayer.cs" />
     <Compile Include="Scheduling\PublicNoteByDateSorter.cs" />
     <Compile Include="Scheduling\PublicNote.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessHolder.cs" />
@@ -657,9 +657,7 @@
     </Compile>
     <Compile Include="Payroll\PayrollExport.cs" />
     <Compile Include="Payroll\PayrollResult.cs" />
-    <Compile Include="RealTimeAdherence\AgentStateBatch.cs" />
     <Compile Include="RealTimeAdherence\ExternalLogOnPerson.cs" />
-    <Compile Include="RealTimeAdherence\IAgentStateBatch.cs" />
     <Compile Include="RealTimeAdherence\IRtaStateHolder.cs" />
     <Compile Include="RealTimeAdherence\RtaVisualLayer.cs" />
     <Compile Include="RealTimeAdherence\StateGroupActivityAlarm.cs" />
@@ -703,8 +701,6 @@
     <Compile Include="ResourceCalculation\PopulationStatisticsCalculator.cs" />
     <Compile Include="ResourceCalculation\PopulationStatisticsData.cs" />
     <Compile Include="ResourceCalculation\PreSchedulingStatusChecker.cs" />
-    <Compile Include="RealTimeAdherence\AgentState.cs" />
-    <Compile Include="RealTimeAdherence\AlarmSituation.cs" />
     <Compile Include="RealTimeAdherence\AlarmType.cs" />
     <Compile Include="RealTimeAdherence\RtaStateHolder.cs" />
     <Compile Include="ResourceCalculation\ScheduleFairnessCalculator.cs" />
@@ -757,7 +753,6 @@
     <Compile Include="Scheduling\Restrictions\EffectiveRestrictionOptions.cs" />
     <Compile Include="Scheduling\Restrictions\ExtendedPreferencePredicate.cs" />
     <Compile Include="Scheduling\Restrictions\PreferenceAbsenceChecker.cs" />
-    <Compile Include="Scheduling\Restrictions\PreferenceFulfilledChecker.cs" />
     <Compile Include="Scheduling\Restrictions\RestrictionCombiner.cs" />
     <Compile Include="Scheduling\Restrictions\RestrictionRetrivalOperation.cs" />
     <Compile Include="Scheduling\Restrictions\ScheduleDayAvailabilityRestrictionExtractor.cs" />
@@ -840,6 +835,8 @@
     <Compile Include="Scheduling\ShiftCreator\RuleSetProjectionService.cs" />
     <Compile Include="Scheduling\ShiftCreator\ShiftFromMasterActivityService.cs" />
     <Compile Include="Scheduling\ShiftCreator\StartTimeLimiter.cs" />
+    <Compile Include="Scheduling\ShiftCreator\WorkShiftAddStopperCallback.cs" />
+    <Compile Include="Scheduling\ShiftCreator\WorkshiftCollection.cs" />
     <Compile Include="Scheduling\ShiftCreator\WorkShiftProjection.cs" />
     <Compile Include="Scheduling\ShiftCreator\WorkShiftVisualLayerInfo.cs" />
     <Compile Include="Scheduling\ShiftTradeChecksumCalculator.cs" />
@@ -1221,7 +1218,6 @@
     <Compile Include="Scheduling\Assignment\PersonAssignmentRestrictionSet.cs" />
     <Compile Include="Scheduling\Assignment\GapsInAssignment.cs" />
     <Compile Include="Scheduling\WorkShift.cs" />
-    <Compile Include="Scheduling\Assignment\Shift.cs" />
     <Compile Include="Scheduling\ShiftCategory.cs" />
     <Compile Include="Security\AuthorizationEntities\ApplicationAuthenticationInfo.cs" />
     <Compile Include="Security\AuthorizationEntities\ApplicationFunction.cs" />
@@ -1274,6 +1270,7 @@
     <Compile Include="WorkflowControl\AbsenceRequestOpenRollingPeriod.cs" />
     <Compile Include="WorkflowControl\AlreadyAbsentSpecification.cs" />
     <Compile Include="WorkflowControl\BudgetGroupAllowanceValidator.cs" />
+    <Compile Include="WorkflowControl\BudgetGroupHeadCountValidator.cs" />
     <Compile Include="WorkflowControl\DenyAbsenceRequest.cs" />
     <Compile Include="WorkflowControl\EmptyPersonAccountBalanceCalculator.cs" />
     <Compile Include="WorkflowControl\GrantAbsenceRequest.cs" />

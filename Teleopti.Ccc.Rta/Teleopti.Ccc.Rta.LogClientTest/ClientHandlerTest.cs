@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.Rta.LogClientTest
         	using (mocks.Record())
 			{
 				Expect.Call(rtaDataHandler.Timeout).Return(15).Repeat.AtLeastOnce();
-				Expect.Call(rtaDataHandler.ProcessRtaData(string.Empty, string.Empty, TimeSpan.Zero, DateTime.UtcNow, Guid.Empty, string.Empty, DateTime.UtcNow, false)).IgnoreArguments().Throw(new InvalidOperationException());
+				Expect.Call(()=> rtaDataHandler.ProcessRtaData(string.Empty, string.Empty, TimeSpan.Zero, DateTime.UtcNow, Guid.Empty, string.Empty, DateTime.UtcNow, false)).IgnoreArguments().Throw(new InvalidOperationException());
 				Expect.Call(()=>loggingSvc.Error("",null)).IgnoreArguments();
         	}
 			using (mocks.Playback())

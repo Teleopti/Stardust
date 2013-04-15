@@ -54,41 +54,41 @@ namespace Teleopti.Ccc.Win.Intraday
         private readonly IntradaySettingManager _settingManager;
         private readonly IOverriddenBusinessRulesHolder _overriddenBusinessRulesHolder;
         private ISchedulerStateHolder _schedulerStateHolder;
-    	private bool _userWantsToCloseIntraday;
+        private bool _userWantsToCloseIntraday;
 
-    	public IntradayViewContent(IntradayPresenter presenter, IIntradayView owner,IEventAggregator eventAggregator, ISchedulerStateHolder schedulerStateHolder, 
+        public IntradayViewContent(IntradayPresenter presenter, IIntradayView owner, IEventAggregator eventAggregator, ISchedulerStateHolder schedulerStateHolder,
             IntradaySettingManager settingManager, IOverriddenBusinessRulesHolder overriddenBusinessRulesHolder)
         {
-    	    if (presenter == null) throw new ArgumentNullException("presenter");
-    	    if (owner == null) throw new ArgumentNullException("owner");
-    	    if (eventAggregator == null) throw new ArgumentNullException("eventAggregator");
+            if (presenter == null) throw new ArgumentNullException("presenter");
+            if (owner == null) throw new ArgumentNullException("owner");
+            if (eventAggregator == null) throw new ArgumentNullException("eventAggregator");
 
-    	    _eventAggregator = eventAggregator;
-    	    _settingManager = settingManager;
-    	    _overriddenBusinessRulesHolder = overriddenBusinessRulesHolder;
-    	    _presenter = presenter;
-    	    _schedulerStateHolder = schedulerStateHolder;
+            _eventAggregator = eventAggregator;
+            _settingManager = settingManager;
+            _overriddenBusinessRulesHolder = overriddenBusinessRulesHolder;
+            _presenter = presenter;
+            _schedulerStateHolder = schedulerStateHolder;
             _owner = owner;
 
             InitializeComponent();
             if (DesignMode) return;
             SetTexts();
-		}
+        }
 
-		private void dockingManager1_AutoHideAnimationStart(object sender, AutoHideAnimationEventArgs arg)
-		{
-			if (arg.DockBorder == DockStyle.Left || arg.DockBorder == DockStyle.Right)
-				DockingManager.AnimationStep = arg.Bounds.Width;
-			else
-				DockingManager.AnimationStep = arg.Bounds.Height;
-		}
+        private void dockingManager1_AutoHideAnimationStart(object sender, AutoHideAnimationEventArgs arg)
+        {
+            if (arg.DockBorder == DockStyle.Left || arg.DockBorder == DockStyle.Right)
+                DockingManager.AnimationStep = arg.Bounds.Width;
+            else
+                DockingManager.AnimationStep = arg.Bounds.Height;
+        }
 
-    	private void dockingManager1_DockStateChanged(object sender, DockStateChangeEventArgs arg)
-    	{
-			_settingManager.HasUnsavedLayout = true;
-    	}
+        private void dockingManager1_DockStateChanged(object sender, DockStateChangeEventArgs arg)
+        {
+            _settingManager.HasUnsavedLayout = true;
+        }
 
-    	public override bool HasHelp
+        public override bool HasHelp
         {
             get
             {
@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.Win.Intraday
 
         private void IntradayViewContent_Load(object sender, EventArgs e)
         {
-            wpfShiftEditor1 = new WpfShiftEditor(_eventAggregator, new CreateLayerViewModelService()) { MinHeight = 80 };
+			wpfShiftEditor1 = new WpfShiftEditor(_eventAggregator, new CreateLayerViewModelService(), false) { MinHeight = 80 };
             pinnedLayerView = new PinnedLayerView();
             elementHostShiftEditor.Child = wpfShiftEditor1;
             elementHostPinnedLayerView.Child = pinnedLayerView;
@@ -151,8 +151,8 @@ namespace Teleopti.Ccc.Win.Intraday
             _backgroundWorkerResources.RunWorkerCompleted += _backgroundWorkerResources_RunWorkerCompleted;
             _backgroundWorkerResources.ProgressChanged += _backgroundWorkerResources_ProgressChanged;
 
-            _optimizerHelper = new ResourceOptimizationHelperWin(_schedulerStateHolder, new SingleSkillDictionary());
-            _skillIntradayGridControl = new SkillIntradayGridControl(_settingManager.ChartSetting); 
+			_optimizerHelper = new ResourceOptimizationHelperWin(_schedulerStateHolder, new SingleSkillDictionary());
+            _skillIntradayGridControl = new SkillIntradayGridControl(_settingManager.ChartSetting);
             _skillIntradayGridControl.SelectionChanged += skillIntradayGridControl_SelectionChanged;
             InitializeIntradayViewContent();
         }
@@ -164,7 +164,7 @@ namespace Teleopti.Ccc.Win.Intraday
             SetupSkillTabs();
             SelectSkillTab(SelectedSkill);
             DrawSkillGrid(false);
-            
+
             Visible = true;
 
             //_defaultSetting = SaveDockingState();
@@ -184,7 +184,7 @@ namespace Teleopti.Ccc.Win.Intraday
             _owner.AddControlHelpContext(chartControlSkillData);
             _owner.AddControlHelpContext(tabSkillData);
 
-            _scheduleView = new IntradayScheduleView(_skillIntradayGridControl, _owner, _presenter.SchedulerStateHolder, _gridLockManager, SchedulePartFilter.None, _clipHandlerSchedule, 
+            _scheduleView = new IntradayScheduleView(_skillIntradayGridControl, _owner, _presenter.SchedulerStateHolder, _gridLockManager, SchedulePartFilter.None, _clipHandlerSchedule,
                 _overriddenBusinessRulesHolder, new SchedulerStateScheduleDayChangedCallback(new ResourceCalculateDaysDecider(), _schedulerStateHolder), NullScheduleTag.Instance);
 
             wpfShiftEditor1.LoadFromStateHolder(_presenter.SchedulerStateHolder.CommonStateHolder);
@@ -208,14 +208,14 @@ namespace Teleopti.Ccc.Win.Intraday
                 var model = _presenter.CreateDayLayerViewModel();
                 dayLayerView1.SetDayLayerViewModel(model);
                 pinnedLayerView.SetDayLayerViewCollection(model);
-                
+
                 dayLayerView1.Model.Period = _presenter.SchedulerStateHolder.RequestedPeriod.Period();
 
                 if (_presenter.RealTimeAdherenceEnabled)
                 {
                     staffingEffectView1.SetDayLayerViewAdapterCollection(model);
                     agentStateLayerView1.SetAgentStateViewAdapterCollection(
-                        _presenter.CreateAgentStateViewAdapterCollection());
+                        _presenter.CreateAgentStateViewAdapterCollection(model));
                 }
             }
         }
@@ -223,7 +223,7 @@ namespace Teleopti.Ccc.Win.Intraday
         private void _skillGridBackgroundLoader_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             if (Disposing || IsDisposed) return;
-			if (_userWantsToCloseIntraday) return;
+            if (_userWantsToCloseIntraday) return;
             if (dataSourceExceptionOccurred(e))
             {
                 _owner.FinishProgress();
@@ -233,7 +233,7 @@ namespace Teleopti.Ccc.Win.Intraday
             _skillIntradayGridControl.SetRowsAndCols();
             PositionControl(_skillIntradayGridControl);
             ReloadChart();
-            
+
             _owner.FinishProgress();
         }
 
@@ -262,7 +262,7 @@ namespace Teleopti.Ccc.Win.Intraday
             System.Threading.Thread.CurrentThread.CurrentUICulture = Domain.Security.Principal.TeleoptiPrincipal.Current.Regional.UICulture;
             System.Threading.Thread.CurrentThread.CurrentCulture = Domain.Security.Principal.TeleoptiPrincipal.Current.Regional.Culture;
 
-            var periods = _presenter.PrepareSkillIntradayCollection();
+            IList<ISkillStaffPeriod> periods = _presenter.PrepareSkillIntradayCollection();
             _skillIntradayGridControl.SetupDataSource(periods, SelectedSkill, true, _presenter.SchedulerStateHolder);
 
             e.Result = e.Argument;
@@ -270,11 +270,7 @@ namespace Teleopti.Ccc.Win.Intraday
 
         private void backgroundWorkerFetchData_DoWork(object sender, DoWorkEventArgs e)
         {
-            using (PerformanceOutput.ForOperation("Refreshing States"))
-            {
-                _scheduleView.Presenter.Now = DateTime.UtcNow;
-                _presenter.RefreshAgentStates(_scheduleView.Presenter.Now, TimeSpan.Zero);
-            }
+	        _scheduleView.Presenter.Now = DateTime.UtcNow;
         }
 
         private void backgroundWorkerFetchData_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -297,17 +293,17 @@ namespace Teleopti.Ccc.Win.Intraday
         {
             _eventAggregator.GetEvent<IntradayLoadProgress>().Publish(Resources.AuthorizingFunctionsThreeDots);
 
-			var control = dockingManager1.ActiveControl;
+            var control = dockingManager1.ActiveControl;
 
-			dockingManager1.ActivateControl(elementHostDayLayerView);
-			dockingManager1.ActivateControl(elementHostShiftEditor);
-			dockingManager1.ActivateControl(panelSkillGrid);
-			dockingManager1.ActivateControl(elementHostPinnedLayerView);
-			dockingManager1.ActivateControl(elementHostAgentState);
-			dockingManager1.ActivateControl(elementHostStaffingEffect);
-			dockingManager1.ActivateControl(panelSkillChart);
+            dockingManager1.ActivateControl(elementHostDayLayerView);
+            dockingManager1.ActivateControl(elementHostShiftEditor);
+            dockingManager1.ActivateControl(panelSkillGrid);
+            dockingManager1.ActivateControl(elementHostPinnedLayerView);
+            dockingManager1.ActivateControl(elementHostAgentState);
+            dockingManager1.ActivateControl(elementHostStaffingEffect);
+            dockingManager1.ActivateControl(panelSkillChart);
 
-			dockingManager1.ActivateControl(control);
+            dockingManager1.ActivateControl(control);
 
             var rtaOrEwEnabled = _presenter.RealTimeAdherenceEnabled || _presenter.EarlyWarningEnabled;
             dockingManager1.SetHiddenOnLoad(panelSkillChart, !_presenter.EarlyWarningEnabled);
@@ -350,16 +346,16 @@ namespace Teleopti.Ccc.Win.Intraday
             tabSkillData.SelectedIndexChanged += tabSkillData_SelectedIndexChanged;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate"), 
-        System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists")]
-        public List<ISkill> GetSkills()
-        {
-            var selectedTab = (ISkill) tabSkillData.SelectedTab.Tag;
-            var list = (from TabPageAdv page in tabSkillData.TabPages select (ISkill) page.Tag).ToList();
-            list.Remove(selectedTab);
-            list.Insert(0, selectedTab);
-            return list;
-        }
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate"),
+		System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists")]
+		public List<ISkill> GetSkills()
+		{
+			var selectedTab = (ISkill)tabSkillData.SelectedTab.Tag;
+			var list = (from TabPageAdv page in tabSkillData.TabPages select (ISkill)page.Tag).ToList();
+			list.Remove(selectedTab);
+			list.Insert(0, selectedTab);
+			return list;
+		}
 
         private void tabSkillData_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -386,7 +382,7 @@ namespace Teleopti.Ccc.Win.Intraday
         {
             get { return tabSkillData.SelectedTab == null ? null : tabSkillData.SelectedTab.Tag as ISkill; }
         }
-        
+
         public void SelectSkillTab(ISkill skill)
         {
             if (skill == null) return;
@@ -417,12 +413,12 @@ namespace Teleopti.Ccc.Win.Intraday
 
         public void ReloadScheduleDayInEditor(IPerson person)
         {
-            if (_lastSchedulePartInEditor!=null)
+            if (_lastSchedulePartInEditor != null)
             {
-				if (person==null)
-				{
-					person = _lastSchedulePartInEditor.Person;
-				}
+                if (person == null)
+                {
+                    person = _lastSchedulePartInEditor.Person;
+                }
                 if (_lastSchedulePartInEditor.Person.Equals(person))
                 {
                     var currentPart =
@@ -448,7 +444,7 @@ namespace Teleopti.Ccc.Win.Intraday
             if (scheduleParts.Count == 1)
             {
                 currentPart = scheduleParts[0];
-                    
+
             }
             if (currentPart != null)
             {
@@ -488,7 +484,7 @@ namespace Teleopti.Ccc.Win.Intraday
 
         private void InvalidateScheduleView(IScheduleDay schedulePart)
         {
-            if (schedulePart==null)return;
+            if (schedulePart == null) return;
             UpdateShiftEditor(new List<IScheduleDay> { schedulePart });
             dayLayerView1.RefreshProjection(schedulePart.Person);
             _owner.EnableSave();
@@ -535,16 +531,10 @@ namespace Teleopti.Ccc.Win.Intraday
 
         public void RefreshPerson(IPerson person)
         {
-            if (person != null)
-            {
-                dayLayerView1.RefreshProjection(person);
-                IAgentState agentState;
-                _presenter.RtaStateHolder.InitializeSchedules();
-                if (_presenter.RtaStateHolder.AgentStates.TryGetValue(person, out agentState))
-                    agentState.ClearAlarmSituations();
-            }
+	        if (person != null)
+		        dayLayerView1.RefreshProjection(person);
         }
-        
+
         private void dayLayerView1_UpdateShiftEditor(object sender, ShiftEditorEventArgs e)
         {
             _lastSchedulePartInEditor = e.SchedulePart;
@@ -638,10 +628,10 @@ namespace Teleopti.Ccc.Win.Intraday
             }
         }
 
-		public void Close()
-		{
-			_userWantsToCloseIntraday = true;
-		}
+        public void Close()
+        {
+            _userWantsToCloseIntraday = true;
+        }
 
         private void cleanUp()
         {

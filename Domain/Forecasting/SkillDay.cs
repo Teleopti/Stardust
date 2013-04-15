@@ -1440,7 +1440,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
                 {
                     var skillStaffPeriod = new SkillStaffPeriod(period, new Task(), new ServiceAgreement(),
                                                                 _skill.SkillType.StaffingCalculatorService);
-                    skillStaffPeriod.SetParent(this);
+                    skillStaffPeriod.SetSkillDay(this);
                     skillStaffPeriod.IsAvailable = false;
                     _skillStaffPeriodCollection.Add(skillStaffPeriod);
                     period = period.MovePeriod(interval);
@@ -1581,5 +1581,13 @@ namespace Teleopti.Ccc.Domain.Forecasting
                         _currentDate.AddDays(1).Date.Add(_skill.MidnightBreakOffset), _skill.TimeZone);
             }
         }
+
+		// these two is just because we suddenly are ILayerCollectionOwner
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+		public virtual ILayerCollection<ISkillStaff> LayerCollection { get; set; }
+	    public virtual void OnAdd(ILayer<ISkillStaff> layer)
+	    {
+		    throw new NotImplementedException();
+	    }
     }
 }

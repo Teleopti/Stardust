@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
-
 using Teleopti.Ccc.TestCommon;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data
@@ -43,12 +43,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		public static void Setup()
 		{
+			if (!IniFileInfo.ServiceBus)
+				return;
 			Configure();
 			StartProcess();
 		}
 
 		public static void TearDown()
 		{
+			if (!IniFileInfo.ServiceBus)
+				return;
 			CloseProcess();
 		}
 
@@ -56,24 +60,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		private static void Configure()
 		{
-			var contents = File.ReadAllText(ConsoleHostConfigSourcePath());
-			contents = ReplaceTag(contents, "ConfigPath", Paths.WebBinPath());
-			contents = ReplaceTag(contents, "MessageBroker", TestSiteConfigurationSetup.Url.ToString());
-			contents = ReplaceTag(contents, "MessagesOnBoot", "false");
-			contents = ReplaceTag(contents, "AnalyticsDB", new SqlConnectionStringBuilder(IniFileInfo.ConnectionStringMatrix).InitialCatalog);
-			File.WriteAllText(ConsoleHostConfigTargetPath(), contents);
-		}
-
-		private static string ReplaceTag(string contents, string tag, string value)
-		{
-			var appSettingTag = string.Format("<!--$({0}AppSetting)-->", tag);
-			if (contents.Contains(appSettingTag))
-			{
-				var appSetting = string.Format(@"<add key=""{0}"" value=""{1}"" />", tag, value);
-				return contents.Replace(appSettingTag, appSetting);
-			}
-			var variableTag = string.Format("$({0})", tag);
-			return contents.Replace(variableTag, value);
+			var additionalTags = new Dictionary<string, string> {{"MessagesOnBoot", "false"}};
+			FileConfigurator.ConfigureByTags(
+				ConsoleHostConfigSourcePath(),
+				ConsoleHostConfigTargetPath(),
+				new AllTags(additionalTags)
+				);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2122:DoNotIndirectlyExposeMethodsWithLinkDemands")]
@@ -118,7 +110,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			_process.Kill();
 			_process = null;
 		}
-
 
 	}
 }

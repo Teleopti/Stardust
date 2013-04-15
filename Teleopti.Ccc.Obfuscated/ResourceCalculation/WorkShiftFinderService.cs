@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.ResourceCalculation;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
@@ -78,7 +79,10 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
             IWorkShiftCalculationResultHolder result = null;
             if(_shiftList.Count > 0)
 				result = findBestShift(effectiveRestriction, currentSchedulePeriod, _scheduleDateOnly, _person, matrix, schedulingOptions, possibleStartEndCategory);
-                
+            else
+            {
+	            FinderResult.AddFilterResults(new WorkShiftFilterResult(Resources.NoShiftsFound, 0 ,0));
+            }
 
 			if (result == null && (schedulingOptions.UsePreferences || schedulingOptions.UseAvailability || schedulingOptions.UseRotations || schedulingOptions.UseStudentAvailability))
 			{

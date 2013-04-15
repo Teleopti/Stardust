@@ -21,7 +21,8 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
 	    private decimal? _adherenceForPeriod;
 	    private decimal? _adherenceForDay;
 
-		public AdherenceDataDto(long localStartTime, long localEndTime, decimal readyTimeMinutes, decimal deviationMinutes, decimal? adherenceForPeriod, DateTime calendarDate, DateTime shiftBelongsToDate)
+	    public AdherenceDataDto(long localStartTime, long localEndTime, decimal readyTimeMinutes, decimal deviationMinutes,
+	                            decimal? adherenceForPeriod, DateTime calendarDate, DateTime shiftBelongsToDate)
 		{
 			_localStartTime = localStartTime;
 			_localEndTime = localEndTime;
@@ -32,16 +33,24 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject
 			_shiftBelongsToDate = shiftBelongsToDate;
 		}
 
-		[Obsolete("To better handle future data with no figures, use other constructor with nullable adherence.")]
-        public AdherenceDataDto(long localStartTime, long localEndTime, decimal readyTimeMinutes, decimal deviationMinutes, decimal adherence, DateTime calendarDate, DateTime shiftBelongsToDate)
+		public AdherenceDataDto(long localStartTime, long localEndTime, decimal readyTimeMinutes, decimal deviationMinutes,
+		                        decimal? adherenceForPeriod)
+		{
+			_localStartTime = localStartTime;
+			_localEndTime = localEndTime;
+			_readyTimeMinutes = readyTimeMinutes;
+			_deviationMinutes = deviationMinutes;
+			_adherenceForPeriod = adherenceForPeriod;
+		}
+
+		[Obsolete("To better handle future data with no figures, use other constructor with nullable adherence")]
+        public AdherenceDataDto(long localStartTime, long localEndTime, decimal readyTimeMinutes, decimal deviationMinutes, decimal adherence)
         {
             _localStartTime = localStartTime;
             _localEndTime = localEndTime;
             _readyTimeMinutes = readyTimeMinutes;
             _deviationMinutes = deviationMinutes;
             _adherence = adherence;
-        	_calendarDate = calendarDate;
-        	_shiftBelongsToDate = shiftBelongsToDate;
         }
 
         [DataMember]

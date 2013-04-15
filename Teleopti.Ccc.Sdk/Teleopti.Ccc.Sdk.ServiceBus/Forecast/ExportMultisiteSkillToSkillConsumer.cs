@@ -17,14 +17,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 {
 	public class ExportMultisiteSkillToSkillConsumer : ConsumerOf<ExportMultisiteSkillToSkill>
 	{
-		private IUnitOfWorkFactory _unitOfWorkFactory;
+		private ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly ISkillRepository _skillRepository;
 		private readonly IRepository<IJobResult> _jobResultRepository;
 		private readonly IMultisiteForecastToSkillCommand _command;
 		private readonly IJobResultFeedback _feedback;
 		private readonly IMessageBroker _messageBroker;
 
-		public ExportMultisiteSkillToSkillConsumer(IUnitOfWorkFactory unitOfWorkFactory, ISkillRepository skillRepository, IJobResultRepository jobResultRepository, IMultisiteForecastToSkillCommand command, IJobResultFeedback feedback, IMessageBroker messageBroker)
+		public ExportMultisiteSkillToSkillConsumer(ICurrentUnitOfWorkFactory unitOfWorkFactory, ISkillRepository skillRepository, IJobResultRepository jobResultRepository, IMultisiteForecastToSkillCommand command, IJobResultFeedback feedback, IMessageBroker messageBroker)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_skillRepository = skillRepository;
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Domain.Forecasting.Export.IJobResultFeedback.Info(System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.Domain.Forecasting.Export.IJobResultFeedback.Error(System.String,System.Exception)")]
 		public void Consume(ExportMultisiteSkillToSkill message)
 		{
-			using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+			using (var unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
 				var jobResult = _jobResultRepository.Get(message.JobId);
 

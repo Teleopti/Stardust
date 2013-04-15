@@ -5,7 +5,9 @@ using System.Net.Sockets;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Client;
 using Microsoft.AspNet.SignalR.Client.Hubs;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Teleopti.Interfaces;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Messaging.Exceptions;
 using log4net;
@@ -173,7 +175,7 @@ namespace Teleopti.Messaging.SignalR
 			var handler = OnNotification;
 			if (handler!=null)
 			{
-				var d = obj[0].Value<Notification>();
+				var d = obj[0].ToObject<Notification>();
 				handler.BeginInvoke(d, onNotificationCallback,handler);
 			}
 		}

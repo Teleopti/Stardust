@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 	{
 		private MockRepository mocks;
 		private IScheduleRepository scheduleRepository;
-		private IUnitOfWorkFactory unitOfWorkFactory;
+        private ICurrentUnitOfWorkFactory unitOfWorkFactory;
 		private GetSchedulesByPersonQueryHandler target;
 		private IDateTimePeriodAssembler dateTimePeriodAssembler;
 		private ISchedulePartAssembler scheduleDayAssembler;
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			dateTimePeriodAssembler = mocks.DynamicMock<IDateTimePeriodAssembler>();
 			scheduleDayAssembler = mocks.DynamicMock<ISchedulePartAssembler>();
 			scenarioRepository = mocks.DynamicMock<IScenarioRepository>();
-			unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
+            unitOfWorkFactory = mocks.DynamicMock<ICurrentUnitOfWorkFactory>();
 			
 			scenarioId = Guid.NewGuid();
 			person1Id = Guid.NewGuid();
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 				Expect.Call(scenarioRepository.Get(scenarioId)).Return(scenario);
 				Expect.Call(personRepository.Get(person1Id)).IgnoreArguments().Return(person1);
 				Expect.Call(scheduleRepository.FindSchedulesOnlyInGivenPeriod(null,null,new DateTimePeriod(), scenario)).IgnoreArguments().Return(dictionary);
-				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+				Expect.Call(unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork()).Return(unitOfWork);
 				Expect.Call(dictionary[person1]).Return(scheduleRange);
 			}
 			using (mocks.Playback())
@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			using (mocks.Record())
 			{
 				Expect.Call(scenarioRepository.Get(scenarioId)).Return(null);
-				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+				Expect.Call(unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork()).Return(unitOfWork);
 			}
 			using (mocks.Playback())
 			{
@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 				Expect.Call(scenarioRepository.LoadDefaultScenario()).Return(scenario);
 				Expect.Call(personRepository.Get(person1Id)).IgnoreArguments().Return(person1);
 				Expect.Call(scheduleRepository.FindSchedulesOnlyInGivenPeriod(null, null, new DateTimePeriod(), scenario)).IgnoreArguments().Return(dictionary);
-				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+				Expect.Call(unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork()).Return(unitOfWork);
 				Expect.Call(dictionary[person1]).Return(scheduleRange);
 			}
 			using (mocks.Playback())

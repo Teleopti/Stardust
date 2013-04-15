@@ -173,12 +173,5 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             var rep = new AbsenceRepository(UnitOfWork);
             rep.FindAbsenceTrackerUsedByPersonAccount();
         }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
-        public void ShouldCreateRepositoryWithUnitOfWorkFactory()
-        {
-            var repository = new AbsenceRepository(UnitOfWorkFactory.Current);
-            Assert.IsNotNull(repository);
-        }
     }
 }

@@ -81,7 +81,8 @@ namespace Teleopti.Ccc.WinCode.Converters.DateTimeConverter
         /// </remarks>
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         {
-            LatestConvertedDateTime = Parser.Parse(value.ToString(), LatestConvertedDateTime, Mode(parameter));
+            if(value != null)
+                LatestConvertedDateTime = Parser.Parse(value.ToString(), LatestConvertedDateTime, Mode(parameter));
             var utcDateTime =
                 (DateTime) _converter.ConvertBack(LatestConvertedDateTime, typeof (DateTime), parameter, culture);
 

@@ -8,17 +8,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 {
 	public class DenormalizerQueueRepository : IDenormalizerQueueRepository
 	{
-		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 
-		public DenormalizerQueueRepository(IUnitOfWorkFactory unitOfWorkFactory)
+		public DenormalizerQueueRepository(ICurrentUnitOfWork currentUnitOfWork)
 		{
-			_unitOfWorkFactory = unitOfWorkFactory;
+			_currentUnitOfWork = currentUnitOfWork;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public IEnumerable<DenormalizerQueueItem> DequeueDenormalizerMessages(IBusinessUnit businessUnit)
 		{
-			var unitOfWork = _unitOfWorkFactory.CurrentUnitOfWork();
+			var unitOfWork = _currentUnitOfWork.Current();
 			return ((NHibernateUnitOfWork) unitOfWork).Session.CreateSQLQuery(
 				"exec [dbo].[DequeueNormalizeMessages] @BusinessUnit=:BusinessUnit")
 				.SetGuid("BusinessUnit", businessUnit.Id.GetValueOrDefault())

@@ -16,12 +16,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
     {
         private MockRepository mocks;
         private IShiftCreatorService shiftCreatorService;
+		private IWorkShiftAddCallback _callback;
 
-        [SetUp]
+		[SetUp]
         public void Setup()
         {
             mocks=new MockRepository();
             shiftCreatorService = mocks.StrictMock<IShiftCreatorService>();
+	        _callback = mocks.DynamicMock<IWorkShiftAddCallback>();
         }
 
         //copied from old test in workshiftrulesettest
@@ -43,9 +45,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.ShiftCreator
             var target = new RuleSetProjectionEntityService(shiftCreatorService);
             WorkShiftRuleSet workShiftRuleSet = new WorkShiftRuleSet(mocks.StrictMock<IWorkShiftTemplateGenerator>());
 
-            Expect.Call(shiftCreatorService.Generate(workShiftRuleSet)).Return(listOfWorkShifts);
+            Expect.Call(shiftCreatorService.Generate(workShiftRuleSet, _callback)).Return(listOfWorkShifts);
             mocks.ReplayAll();
-            var retList = target.ProjectionCollection(workShiftRuleSet);
+			var retList = target.ProjectionCollection(workShiftRuleSet, _callback);
             Assert.AreEqual(2, retList.Count());
             Assert.AreEqual(3, retList.First().VisualLayerCollection.Count());
         }

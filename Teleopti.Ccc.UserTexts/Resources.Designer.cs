@@ -3009,6 +3009,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Budget Group Head Count.
+        /// </summary>
+        public static string BudgetGroupHeadCount {
+            get {
+                return ResourceManager.GetString("BudgetGroupHeadCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Budgeting.
         /// </summary>
         public static string Budgeting {
@@ -3617,6 +3626,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string CannotDisplayAllMeetings {
             get {
                 return ResourceManager.GetString("CannotDisplayAllMeetings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Can not display schedule when the status of the shift trade request is new, denied or approved.
+        /// </summary>
+        public static string CannotDisplayScheduleWhenShiftTradeStatusIsNew {
+            get {
+                return ResourceManager.GetString("CannotDisplayScheduleWhenShiftTradeStatusIsNew", resourceCulture);
             }
         }
         
@@ -5064,6 +5082,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string CurrentDistributedDemand {
             get {
                 return ResourceManager.GetString("CurrentDistributedDemand", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Current number of shifts:  .
+        /// </summary>
+        public static string CurrentNumberOfShifts {
+            get {
+                return ResourceManager.GetString("CurrentNumberOfShifts", resourceCulture);
             }
         }
         
@@ -7096,6 +7123,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Empty preference template name.
+        /// </summary>
+        public static string EmptyTemplateName {
+            get {
+                return ResourceManager.GetString("EmptyTemplateName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enabled.
         /// </summary>
         public static string Enabled {
@@ -9032,6 +9068,24 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Generate forecast for.
+        /// </summary>
+        public static string GenerateForecastFor {
+            get {
+                return ResourceManager.GetString("GenerateForecastFor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Generating shifts.
+        /// </summary>
+        public static string GeneratingShifts {
+            get {
+                return ResourceManager.GetString("GeneratingShifts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Gets shift list to start with.
         /// </summary>
         public static string GetsShiftListToStartWith {
@@ -9352,6 +9406,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string HColonMM {
             get {
                 return ResourceManager.GetString("HColonMM", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Head Count.
+        /// </summary>
+        public static string HeadCount {
+            get {
+                return ResourceManager.GetString("HeadCount", resourceCulture);
             }
         }
         
@@ -10064,6 +10127,24 @@ namespace Teleopti.Ccc.UserTexts {
         public static string InsufficientPermissionForWeb {
             get {
                 return ResourceManager.GetString("InsufficientPermissionForWeb", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Insufficient staffing for : .
+        /// </summary>
+        public static string InsufficientStaffingDays {
+            get {
+                return ResourceManager.GetString("InsufficientStaffingDays", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Insufficient staffing on : {0} at .
+        /// </summary>
+        public static string InsufficientStaffingHours {
+            get {
+                return ResourceManager.GetString("InsufficientStaffingHours", resourceCulture);
             }
         }
         
@@ -12184,6 +12265,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Messages ({0}).
+        /// </summary>
+        public static string MessagesParenthesis {
+            get {
+                return ResourceManager.GetString("MessagesParenthesis", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Message too long.
         /// </summary>
         public static string MessageTooLong {
@@ -13174,6 +13264,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Name must not be empty or longer than 50 characters..
+        /// </summary>
+        public static string Name50CharactersLimit {
+            get {
+                return ResourceManager.GetString("Name50CharactersLimit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The name already exists.
         /// </summary>
         public static string NameAlreadyExists {
@@ -13779,6 +13878,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to New Template Name.
+        /// </summary>
+        public static string NewTemplateName {
+            get {
+                return ResourceManager.GetString("NewTemplateName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to New Text Request.
         /// </summary>
         public static string NewTextRequest {
@@ -14010,6 +14118,33 @@ namespace Teleopti.Ccc.UserTexts {
         public static string NoAvailableShifts {
             get {
                 return ResourceManager.GetString("NoAvailableShifts", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to One or more days during this requested period {0} has no budget allowance..
+        /// </summary>
+        public static string NoBudgetDefineForSomeRequestedDays {
+            get {
+                return ResourceManager.GetString("NoBudgetDefineForSomeRequestedDays", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There is no budget for this period {0}.
+        /// </summary>
+        public static string NoBudgetForThisPeriod {
+            get {
+                return ResourceManager.GetString("NoBudgetForThisPeriod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There is no budget group for person: {0}.
+        /// </summary>
+        public static string NoBudgetGroupForPerson {
+            get {
+                return ResourceManager.GetString("NoBudgetGroupForPerson", resourceCulture);
             }
         }
         
@@ -14442,6 +14577,24 @@ namespace Teleopti.Ccc.UserTexts {
         public static string NoTeamsAvailable {
             get {
                 return ResourceManager.GetString("NoTeamsAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There is not enough allowance for day:.
+        /// </summary>
+        public static string NotEnoughAllowance {
+            get {
+                return ResourceManager.GetString("NotEnoughAllowance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to There is not enough budget allowance for day {0}..
+        /// </summary>
+        public static string NotEnoughBudgetAllowanceForTheDay {
+            get {
+                return ResourceManager.GetString("NotEnoughBudgetAllowanceForTheDay", resourceCulture);
             }
         }
         
@@ -16928,6 +17081,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Processing....
+        /// </summary>
+        public static string ProcessingDotDotDot {
+            get {
+                return ResourceManager.GetString("ProcessingDotDotDot", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Product name:.
         /// </summary>
         public static string ProductNameColon {
@@ -17742,7 +17904,16 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Your absence request cannot be granted.There is no workflow connected to your account..
+        ///   Looks up a localized string similar to Your Request has been denied. Date Period not open for sending requests..
+        /// </summary>
+        public static string RequestDenyReasonClosedPeriodBeforeSendRequest {
+            get {
+                return ResourceManager.GetString("RequestDenyReasonClosedPeriodBeforeSendRequest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No Workflow Control Set defined!.
         /// </summary>
         public static string RequestDenyReasonNoWorkflow {
             get {
@@ -17756,6 +17927,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string RequestDenyReasonOtherPart {
             get {
                 return ResourceManager.GetString("RequestDenyReasonOtherPart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Your Request has been denied. Day not open for requests. Next open date is {0}..
+        /// </summary>
+        public static string RequestDenyReasonPeriodOpenAfterSendRequest {
+            get {
+                return ResourceManager.GetString("RequestDenyReasonPeriodOpenAfterSendRequest", resourceCulture);
             }
         }
         
@@ -19702,6 +19882,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Selected absences.
+        /// </summary>
+        public static string SelectedAbsences {
+            get {
+                return ResourceManager.GetString("SelectedAbsences", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Selected Activities.
         /// </summary>
         public static string SelectedActivities {
@@ -20080,11 +20269,20 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Critical understaffing.
+        ///   Looks up a localized string similar to Critical understaffing for :.
         /// </summary>
         public static string SeriousUnderstaffing {
             get {
                 return ResourceManager.GetString("SeriousUnderstaffing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Critical Understaffing on : {0} at .
+        /// </summary>
+        public static string SeriousUnderStaffingHours {
+            get {
+                return ResourceManager.GetString("SeriousUnderStaffingHours", resourceCulture);
             }
         }
         
@@ -20409,6 +20607,26 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ShiftEditor {
             get {
                 return ResourceManager.GetString("ShiftEditor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stop! These rules are too complex and shifts could not be generated within the maximum limit.
+        ///No shifts from this rule set will be available for scheduling and optimization.
+        ///Reduce the complexity to use these shifts..
+        /// </summary>
+        public static string ShiftGenerationStop {
+            get {
+                return ResourceManager.GetString("ShiftGenerationStop", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Warning! Generating shifts according to these rules takes too long time. This will hurt scheduling and optimization performance at a later stage!.
+        /// </summary>
+        public static string ShiftGenerationWarning {
+            get {
+                return ResourceManager.GetString("ShiftGenerationWarning", resourceCulture);
             }
         }
         
@@ -22413,7 +22631,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Templates historical data range.
+        ///   Looks up a localized string similar to Select historical data for templates.
         /// </summary>
         public static string TemplatesHistoricalDataRange {
             get {
@@ -23094,6 +23312,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string ToleranceForMatchingContractTime {
             get {
                 return ResourceManager.GetString("ToleranceForMatchingContractTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to  is a too complex ruleset!.
+        /// </summary>
+        public static string TooComplexRuleset {
+            get {
+                return ResourceManager.GetString("TooComplexRuleset", resourceCulture);
             }
         }
         
@@ -24295,6 +24522,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to View All Group Pages.
+        /// </summary>
+        public static string ViewAllGroupPages {
+            get {
+                return ResourceManager.GetString("ViewAllGroupPages", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to View allowance.
         /// </summary>
         public static string ViewAllowance {
@@ -24313,7 +24549,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to View custom team schedule.
+        ///   Looks up a localized string similar to View Custom Team Schedule.
         /// </summary>
         public static string ViewCustomTeamSchedule {
             get {

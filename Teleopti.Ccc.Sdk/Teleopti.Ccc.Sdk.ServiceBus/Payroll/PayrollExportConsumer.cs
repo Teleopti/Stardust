@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Payroll
             Logger.DebugFormat("Consuming message for Payroll Export with Id = {0}. (Message timestamp = {1})", message.PayrollExportId, message.Timestamp);
             Logger.DebugFormat("Payroll Export period = {0})", message.ExportPeriod);
 			AppDomain.CurrentDomain.AssemblyResolve += _domainAssemblyResolver.Resolve;
-            using (var unitOfWork = UnitOfWorkFactoryContainer.Current.CreateAndOpenUnitOfWork())
+            using (var unitOfWork = UnitOfWorkFactoryContainer.Current.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
             {
                 var rep = _repositoryFactory.CreatePayrollExportRepository(unitOfWork);
                 var payrollExport = rep.Get(message.PayrollExportId);

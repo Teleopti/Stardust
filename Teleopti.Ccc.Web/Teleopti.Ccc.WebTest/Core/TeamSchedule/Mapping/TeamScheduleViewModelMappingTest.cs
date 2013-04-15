@@ -51,11 +51,11 @@ namespace Teleopti.Ccc.WebTest.Core.TeamSchedule.Mapping
 		[Test]
 		public void ShouldMapTeamSelection()
 		{
-			data.TeamId = Guid.NewGuid();
+			data.TeamOrGroupId = Guid.NewGuid();
 
 			var result = Mapper.Map<TeamScheduleDomainData, TeamScheduleViewModel>(data);
 
-			result.TeamSelection.Should().Be(data.TeamId);
+			result.TeamSelection.Should().Be(data.TeamOrGroupId);
 		}
 
 		[Test]

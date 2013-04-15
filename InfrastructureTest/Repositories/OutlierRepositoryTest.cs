@@ -129,13 +129,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
                 .Should().Be.True();
         }
 
-
-        [Test]
-        public void ShouldCreateInstanceWithFactory()
-        {
-            var reposistory = new OutlierRepository(UnitOfWorkFactory.Current);
-            Assert.IsNotNull(reposistory);
-        }
         [Test]
         public void ShouldReturnUniqueOutliers()
         {

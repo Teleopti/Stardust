@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using log4net;
-using Teleopti.Ccc.Domain.RealTimeAdherence;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Interfaces.Domain;
@@ -20,16 +19,14 @@ namespace Teleopti.Ccc.WinCode.Intraday
 
         private readonly IIntradayView _view;
         private readonly ISchedulingResultLoader _schedulingResultLoader;
-        private readonly IRtaStateHolder _rtaStateHolder;
-        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+	    private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IRepositoryFactory _repositoryFactory;
 
-        public OnEventScheduleMessageCommand(IIntradayView view, ISchedulingResultLoader schedulingResultLoader, IRtaStateHolder rtaStateHolder, IUnitOfWorkFactory unitOfWorkFactory, IRepositoryFactory repositoryFactory) : this()
+        public OnEventScheduleMessageCommand(IIntradayView view, ISchedulingResultLoader schedulingResultLoader, IUnitOfWorkFactory unitOfWorkFactory, IRepositoryFactory repositoryFactory) : this()
         {
             _view = view;
             _schedulingResultLoader = schedulingResultLoader;
-            _rtaStateHolder = rtaStateHolder;
-            _unitOfWorkFactory = unitOfWorkFactory;
+	        _unitOfWorkFactory = unitOfWorkFactory;
             _repositoryFactory = repositoryFactory;
         }
 
@@ -58,8 +55,6 @@ namespace Teleopti.Ccc.WinCode.Intraday
             }
 
             _schedulingResultLoader.InitializeScheduleData();
-            if (_rtaStateHolder != null)
-                _rtaStateHolder.InitializeSchedules();
             _view.DrawSkillGrid();
         }
 

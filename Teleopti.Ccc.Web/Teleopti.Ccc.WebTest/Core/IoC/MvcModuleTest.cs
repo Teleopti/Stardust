@@ -510,6 +510,14 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		}
 
 		[Test]
+		public void ShouldNotRegisterUnitOfWorkFactory()
+		{
+			//make sure IUnitOfWork isn't registered - it should NOT!
+			requestContainer.IsRegistered<IUnitOfWorkFactory>()
+				.Should().Be.False();
+		}
+
+		[Test]
 		public void ShouldRegisterCommandDispatcher()
 		{
 			requestContainer.Resolve<ICommandDispatcher>()
@@ -541,6 +549,15 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			                .Should().Not.Be.Null();
 			requestContainer.Resolve<IEnumerable<IHandleEvent<ProjectionChangedEvent>>>()
 			                .Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldResolveLicenseActivator()
+		{
+			var licenseActivator = MockRepository.GenerateMock<ILicenseActivator>();
+			DefinedLicenseDataFactory.LicenseActivator = licenseActivator;
+			requestContainer.Resolve<ILicenseActivator>().Should().Be(licenseActivator);
+			DefinedLicenseDataFactory.LicenseActivator = null;
 		}
 	}
 }

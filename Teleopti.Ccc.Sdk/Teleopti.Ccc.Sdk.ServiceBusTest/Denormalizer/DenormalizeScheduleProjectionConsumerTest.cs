@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Repositories;
@@ -11,6 +12,7 @@ using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Messages.Denormalize;
+using Teleopti.Interfaces.Messages.Rta;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 {
@@ -20,13 +22,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 		private ScheduleProjectionHandler target;
 		private MockRepository mocks;
 		private IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository;
+	    private IServiceBus serviceBus;
 
 		[SetUp]
 		public void Setup()
 		{
 			mocks = new MockRepository();
 			scheduleProjectionReadOnlyRepository = mocks.DynamicMock<IScheduleProjectionReadOnlyRepository>();
-			target = new ScheduleProjectionHandler(scheduleProjectionReadOnlyRepository);
+			target = new ScheduleProjectionHandler(scheduleProjectionReadOnlyRepository, MockRepository.GenerateMock<IPublishEventsFromEventHandlers>());
 		}
 
 		[Test]
@@ -156,6 +159,64 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 				               		               	}
 				               	});
 			}
+		}
+
+		[Test]
+		public void ShouldSendUpdatedScheduleDay()
+		{
+			var _serviceBus = MockRepository.GenerateMock<IPublishEventsFromEventHandlers>();
+			target = new ScheduleProjectionHandler(scheduleProjectionReadOnlyRepository, _serviceBus);
+			var guid = Guid.NewGuid();
+			var person = PersonFactory.CreatePerson();
+			person.SetId(guid);
+
+			var utcNow = DateTime.UtcNow;
+			var closestPeriod = new DateTimePeriod(utcNow.AddMinutes(-5), utcNow.AddMinutes(5));
+			var notClosestPeriod = new DateTimePeriod(utcNow.AddMinutes(5), utcNow.AddMinutes(10));
+
+			var message = new ProjectionChangedEvent
+				{
+					IsDefaultScenario = true,
+					Datasource = "DataSource",
+					BusinessUnitId = guid,
+					PersonId = person.Id.GetValueOrDefault(),
+					ScheduleDays = new[]
+						{
+							new ProjectionChangedEventScheduleDay
+								{
+									Label = "ClosestLayer",
+									Date = utcNow.Date,
+									Layers = new Collection<ProjectionChangedEventLayer>
+										{
+											new ProjectionChangedEventLayer
+												{
+													StartDateTime = closestPeriod.StartDateTime,
+													EndDateTime = closestPeriod.EndDateTime,
+												},
+											new ProjectionChangedEventLayer
+												{
+													StartDateTime = notClosestPeriod.StartDateTime,
+													EndDateTime = notClosestPeriod.EndDateTime,
+
+												}
+										}
+								}
+						},
+					Timestamp = utcNow
+				};
+
+			target.Handle(message);
+
+			_serviceBus.AssertWasCalled(s => s.Publish(new UpdatedScheduleDay
+				{
+					Datasource = message.Datasource,
+					BusinessUnitId = message.BusinessUnitId,
+					PersonId = message.PersonId,
+					ActivityStartDateTime = closestPeriod.StartDateTime,
+					ActivityEndDateTime = closestPeriod.EndDateTime,
+					Timestamp = utcNow
+				}), o => o.IgnoreArguments());
+
 		}
 	}
 }

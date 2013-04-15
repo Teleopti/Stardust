@@ -10,6 +10,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Sche
 		IEnumerable<PayloadWorkTime> AbsenceTimePerBudgetGroup(DateOnlyPeriod period,IBudgetGroup budgetGroup,IScenario scenario);
 		void ClearPeriodForPerson(DateOnlyPeriod period, Guid scenarioId, Guid personId);
 		void AddProjectedLayer(DateOnly belongsToDate, Guid scenarioId, Guid personId, ProjectionChangedEventLayer layer);
+	    int GetNumberOfAbsencesPerDayAndBudgetGroup(Guid budgetGroupId, DateOnly currentDate);
 		bool IsInitialized();
+	    DateTime? GetNextActivityStartTime(DateTime dateTime, Guid personId);
 	}
 }

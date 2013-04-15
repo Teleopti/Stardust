@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 				jQueryPatter = jQueryPatter.Replace("M", "m");
 			}
 
-			jQueryPatter = jQueryPatter.Contains("yyyy") ? jQueryPatter.Replace("yyyy", "yy") : jQueryPatter.Replace("yy", "y");
+			jQueryPatter = jQueryPatter.Contains("yyyy") ? jQueryPatter.Replace("yyyy", "yy") : jQueryPatter;
 
 			return jQueryPatter;
 		}

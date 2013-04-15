@@ -2239,7 +2239,7 @@ namespace Teleopti.Ccc.Win.Permissions
             IAvailableData availableData = PermissionsExplorerStateHolder.GetAvailableDataInPermissionsDataDictionary(selectedRole) ??
                                            AvailableData.FindByApplicationRole(_availableDataCollection, selectedRole);
 
-            if (availableData != null) //function explicitly returns null if no AvailableData
+            if (availableData != null && !_availableDataForSelectedRoles.Contains(availableData)) //function explicitly returns null if no AvailableData
             {
                 _availableDataForSelectedRoles.Add(availableData);
                 setDataTreeCheckState(_availableDataForSelectedRoles);
@@ -2287,7 +2287,7 @@ namespace Teleopti.Ccc.Win.Permissions
 
         private void permissionsExplorerKeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.M && (e.Alt))
+			if (e.KeyCode == Keys.M && e.Shift && e.Alt)
             {
                 toolStripExViewer.Visible = !toolStripExViewer.Visible;
             }

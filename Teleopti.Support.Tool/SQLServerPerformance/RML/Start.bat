@@ -54,6 +54,7 @@ SET MaxMinutes=%1
 SET MaxDisc=%2
 SET PERFMONRUNAS=%userdomain%\%username% %3
 SET MyINSTANCE=%4
+SET Conn=-E
 
 ECHO %MaxMinutes%
 ECHO %MaxDisc%
@@ -67,12 +68,9 @@ GOTO Start
 :Manual
 CLS
 ECHO Run this script locally on a SQL Server.
-ECHO Connection to SQL Server is made using Windows Authetication
 ECHO.
 ECHO SQL traces will potentially use a lot of I/O resources in a buzy system.
-ECHO If possible; run this batch file from disk device not used by Windows OS or SQL Server.
-ECHO.
-ECHO trace files will be placed here:
+ECHO If possible; run this batch file from disk device not used by Windows OS or SQL Server. Trace files will be placed here:
 ECHO "%OutPutFolder%"
 IF %Silent% EQU 0 PAUSE
 
@@ -86,6 +84,14 @@ ECHO going for the default instance) ELSE (
 SET INSTANCE=%INSTANCE%\%MyINSTANCE%
 SET PERFCOUNTERINSTANCE=MSSQL$%MyINSTANCE%
 )
+ECHO.
+
+CHOICE /C yn /M "Do you connect using WinAuth?"
+IF ERRORLEVEL 1 SET /a WinAuth=1
+IF ERRORLEVEL 2 SET /a WinAuth=0
+
+IF %WinAuth% equ 1 Call :WinAuth
+IF %WinAuth% equ 0 Call :SQLAuth
 
 ECHO.
 ECHO Max time for trace ^(minutes^)
@@ -110,10 +116,28 @@ cls
 
 ::Try connect and check ALTER TRACE
 ECHO Connect to SQL Server ...
-SQLCMD -S%INSTANCE% -E -Q"declare @alterTrace int;SELECT @alterTrace=COUNT(permission_name) FROM fn_my_permissions(NULL, NULL) WHERE permission_name='ALTER TRACE';if @alterTrace<>1 RAISERROR ('not member of ALTER TRACE', 16, 127)" -h-1
+SQLCMD -S%INSTANCE% %Conn% -Q"declare @alterTrace int;SELECT @alterTrace=COUNT(permission_name) FROM fn_my_permissions(NULL, NULL) WHERE permission_name='ALTER TRACE';if @alterTrace<>1 RAISERROR ('not member of ALTER TRACE', 16, 127)" -h-1
 IF %ERRORLEVEL% NEQ 0 GOTO noConnection
 ECHO Connect to SQL Server. Done
 ECHO.
+
+::filter trace by database Id?
+CHOICE /C yn /M "Would you like to filter your trace by database_id?"
+IF ERRORLEVEL 1 SET /a Filter=1
+IF ERRORLEVEL 2 SET /a Filter=0
+If %Filter% equ 1 (
+sqlcmd -S%INSTANCE% %Conn% -Q"set nocount on;select database_id,name from sys.databases order by database_id" -W -w 60
+ECHO.
+ECHO Please provide a comma seprated string with integers ^(Example string: 5,8,34^), 
+set /P DBIdString=representing database_id:
+)
+
+::Get SQL Server version
+sqlcmd -S%INSTANCE% %Conn% -Q"SELECT cast(SERVERPROPERTY('ProductVersion') as nvarchar(20))" -W -h-1 -o ProductVersion.txt 
+set /P ProductVersion= <ProductVersion.txt
+del ProductVersion.txt
+set /A MajorVersion=%ProductVersion:~0,2%
+ECHO ProductVersion is: %ProductVersion%, MajorVersion is: %MajorVersion%
 
 ::Try create a Windows perfmon trace
 ECHO Create Windows Perfmon trace ...
@@ -127,7 +151,7 @@ echo.
 
 ::Try create a SQL server side trace
 echo Create SQL Server trace ... 
-SQLCMD -S%INSTANCE% -E -dtempdb -i"%ROOTDIR%\tsql\TraceCaptureDef_ReportMin.sql" -o"%TraceOutput%" -b -v MaxMinutes="%MaxMinutes%" FolderName="%OutPutFolder%" MaxDisc="%MaxDisc%"
+SQLCMD -S%INSTANCE% %Conn% -dtempdb -i"%ROOTDIR%\tsql\TraceCaptureDef_ReportMin.sql" -o"%TraceOutput%" -b -v MaxMinutes="%MaxMinutes%" FolderName="%OutPutFolder%" MaxDisc="%MaxDisc%" DBIdString="%DBIdString%"
 if %ERRORLEVEL% NEQ 0 (
 call :sqlerror
 GOTO :quitError
@@ -141,8 +165,8 @@ FINDSTR /C:"%ROOTDIR%" /I "%TraceOutput%" > NUL
 if %errorlevel% EQU 0 (
 for /f "tokens=1,2 delims=," %%g in ('more "%TraceOutput%"') do call :GetOutput %%g %%h
 ) else (
-echo unexpected error. Could not find trace path in output. will abort scrip. Try clean up any unwanted traces manually:
-SQLCMD -S%INSTANCE% -E -Q"SELECT * FROM :: fn_trace_getinfo(default)"
+echo unexpected error. Could not find trace path in output. will abort script. Try clean up any unwanted traces manually:
+SQLCMD -S%INSTANCE% %Conn% -Q"SELECT * FROM :: fn_trace_getinfo(default)"
 GOTO :quitError
 )
 
@@ -154,7 +178,7 @@ if %Silent% EQU 0 PAUSE
 
 ::Try start SQL Server trace
 echo SQL Server trace start ... 
-SQLCMD -S%INSTANCE% -E -Q"exec sp_trace_setstatus %traceid%, 1"
+SQLCMD -S%INSTANCE% %Conn% -Q"exec sp_trace_setstatus %traceid%, 1"
 if %ERRORLEVEL% NEQ 0 (
 echo SQL Server trace start. Failed
 call :sqlerror
@@ -193,8 +217,18 @@ ECHO.
 call :stopTrace %traceid%
 call :cleanUpLogman
 
+::if sql 2012
+if %MajorVersion% equ 11 (
+ECHO.
+ECHO Trace files are generated on SQL 2012, I will try to "downgrade" them ...
+ping 127.0.0.1 -n 2 > NUL
+powershell set-executionpolicy unrestricted
+powerShell "%ROOTDIR%\helpers\ConvertTraceTo2008.ps1" "%ROOTDIR%\Data"
+)
+ECHO.
+
 ::generate example call for Analyse
-ECHO %READTRACE% -S%INSTANCE% -E -I"%tracefile%.trc" > "%AnalyseCmd%"
+ECHO %READTRACE% -S%INSTANCE% %Conn% -I"%tracefile%.trc" > "%AnalyseCmd%"
 goto :finished
 
 ::-----------functions----------------
@@ -213,8 +247,8 @@ MORE "%TraceOutput%"
 exit /b
 
 :stopTrace
-SQLCMD -S%INSTANCE% -E -Q"exec sp_trace_setstatus %traceid%, 0"
-SQLCMD -S%INSTANCE% -E -Q"exec sp_trace_setstatus %traceid%, 2"
+SQLCMD -S%INSTANCE% %Conn% -Q"exec sp_trace_setstatus %traceid%, 0"
+SQLCMD -S%INSTANCE% %Conn% -Q"exec sp_trace_setstatus %traceid%, 2"
 exit /b
 
 :getOutput
@@ -277,6 +311,16 @@ set /A logmanError=%errorlevel%
 exit /b %logmanError%
 
 ::-----------Labels----------------
+:WinAuth
+SET Conn=-E
+goto :eof
+
+:SQLAuth
+SET /P SQLLogin=SQL Login: 
+SET /P SQLPwd=SQL password: 
+SET Conn=-U%SQLLogin% -P%SQLPwd%
+goto :eof
+
 :noConnection
 ECHO.
 ECHO Sorry, can not connect to the %INSTANCE% or you dont have ALTER TRACE permssions

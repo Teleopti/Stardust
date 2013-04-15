@@ -4,6 +4,7 @@ using System.Linq;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.TestCommon;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
@@ -69,7 +70,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			EventualAssert.That(() => Pages.Pages.Current.Document.Divs.Filter(QuicklyFind.ByClass("agent")).First(div => div.IsDisplayed()).Text, Is.StringContaining(agentName));
 		}
 
-		[Then(@"I should see the schedule of (.*)")]
+		[Then(@"I should see (.*) in the shift trade list")]
 		public void ThenIShouldSeeOtherAgentSSchedule(string agentName)
 		{
 			EventualAssert.That(() => Pages.Pages.Current.Document.Divs.Filter(QuicklyFind.ByClass("agent")).Any(div => div.IsDisplayed() && div.Text.Trim() == agentName), Is.True);
@@ -131,6 +132,18 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeDetailsFromScheduleLayers.Last().Title, Contains.Substring(expectedEnd));
 		}
 
+		[Then(@"I should see my details scheduled day off '(.*)'")]
+		public void ThenIShouldSeeMyDetailsScheduledDayOff(string dayOffText)
+		{
+			EventualAssert.That(()=>Pages.Pages.RequestsPage.MyScheduleDayOff.Text,Is.EqualTo(dayOffText));
+		}
+
+		[Then(@"I should see other details scheduled day off '(.*)'")]
+		public void ThenIShouldSeeOtherDetailsScheduledDayOff(string dayOffText)
+		{
+			EventualAssert.That(() => Pages.Pages.RequestsPage.OtherScheduleDayOff.Text, Is.EqualTo(dayOffText));
+		}
+
 		[Then(@"I should see details with a schedule to")]
 		public void ThenIShouldSeeDetailsWithAScheduleTo(Table table)
 		{
@@ -144,6 +157,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 
 		}
 
+		[Then(@"I should see details with subject '(.*)'")]
 		[Then(@"I should see details with subject '(.*)'")]
 		public void ThenIShouldSeeDetailsWithSubject(string subject)
 		{
@@ -176,5 +190,20 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		{
 			EventualAssert.That(() => Pages.Pages.RequestsPage.AddShiftTradeContainer.DisplayVisible(), Is.False);
 		}
+
+		[Then(@"I should see details with message that tells the user that the status of the shifttrade is approved")]
+		[Then(@"I should see details with message that tells the user that the status of the shifttrade is new")]
+		public void ThenIShouldSeeDetailsWithMessageThatTellsTheUserThatTheStatusOfTheShifttradeIsNew()
+		{
+			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeRequestDetailInfo.Text, Is.EqualTo(Resources.CannotDisplayScheduleWhenShiftTradeStatusIsNew));
+			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeRequestDetailInfo.IsDisplayed(), Is.True);
+		}
+
+		[Then(@"I should not see timelines")]
+		public void ThenIShouldNotSeeTimelines()
+		{
+			EventualAssert.That(() => Pages.Pages.RequestsPage.Timelines.Any(div=>div.IsDisplayed()), Is.False);
+		}
+
 	}
 }
