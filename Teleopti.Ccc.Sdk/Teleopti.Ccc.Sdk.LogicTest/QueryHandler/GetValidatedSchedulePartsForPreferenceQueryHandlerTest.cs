@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 	public class GetValidatedSchedulePartsForPreferenceQueryHandlerTest
 	{
 		private MockRepository mocks;
-		private IUnitOfWorkFactory unitOfWorkFactory;
+		private ICurrentUnitOfWorkFactory unitOfWorkFactory;
 		private GetValidatedSchedulePartsForPreferenceQueryHandler target;
 		private IShiftCategoryRepository shiftCategoryRepository;
 		private IActivityRepository activityRepository;
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			personRepository = mocks.DynamicMock<IPersonRepository>();
 			scheduleRepository = mocks.DynamicMock<IScheduleRepository>();
 			scenarioRepository = mocks.DynamicMock<IScenarioRepository>();
-			unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
+			unitOfWorkFactory = mocks.DynamicMock<ICurrentUnitOfWorkFactory>();
 			preferenceDayAssembler = mocks.DynamicMock<IAssembler<IPreferenceDay, PreferenceRestrictionDto>>();
 			studentAvailabilityDayAssembler = mocks.DynamicMock<IAssembler<IStudentAvailabilityDay, StudentAvailabilityDayDto>>();
 			workShiftWorkTime = mocks.DynamicMock<IWorkShiftWorkTime>();
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			using (mocks.Record())
 			{
 				Expect.Call(personRepository.Load(personDto.Id.GetValueOrDefault())).Return(person);
-				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+				Expect.Call(unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork()).Return(unitOfWork);
 				Expect.Call(scheduleRepository.FindSchedulesOnlyInGivenPeriod(null, null, new DateTimePeriod(), null)).
 					IgnoreArguments().Return(dictionary);
 				Expect.Call(dictionary[person]).Return(range).Repeat.AtLeastOnce();
