@@ -62,14 +62,13 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 								   personRepository.FindPeopleInOrganization(periodForResourceCalc.ToDateOnlyPeriod(timeZoneInfo), true));
 
 					var resourceOptimizationHelper = new ResourceOptimizationHelper(schedulingResultStateHolder,
-																					new OccupiedSeatCalculator(
-																						new SkillVisualLayerCollectionDictionaryCreator
-																							(),
-																						new SeatImpactOnPeriodForProjection()),
-																					new NonBlendSkillCalculator(
-																						new NonBlendSkillImpactOnPeriodForProjection
-                	                                                                		()), new SingleSkillDictionary(), new CurrentTeleoptiPrincipal());
-																							new SingleSkillMaxSeatCalculator());
+					                                                                new OccupiedSeatCalculator(
+						                                                                new SkillVisualLayerCollectionDictionaryCreator(),
+						                                                                new SeatImpactOnPeriodForProjection()),
+					                                                                new NonBlendSkillCalculator(new NonBlendSkillImpactOnPeriodForProjection()),
+					                                                                new SingleSkillDictionary(),
+					                                                                new SingleSkillMaxSeatCalculator(),
+					                                                                new CurrentTeleoptiPrincipal());
 					foreach (DateOnly dateTime in periodForResourceCalc.ToDateOnlyPeriod(timeZoneInfo).DayCollection())
 					{
 						resourceOptimizationHelper.ResourceCalculateDate(dateTime, true, true);

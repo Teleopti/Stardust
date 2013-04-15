@@ -344,7 +344,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			var dateOnlyAsDateTimeperiod = _mocks.StrictMock<IDateOnlyAsDateTimePeriod>();
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(person, new DateTimePeriod(2009, 2, 2, 2009, 2, 2));
 			var singleSkillDictionary = _mocks.StrictMock<ISingleSkillDictionary>();
-			_target = new ResourceOptimizationHelper(_stateHolder, _occupiedSeatCalculator,new NonBlendSkillCalculator(new NonBlendSkillImpactOnPeriodForProjection()),singleSkillDictionary, _singleSkillMaxSeatCalculator);
+			_target = new ResourceOptimizationHelper(_stateHolder, _occupiedSeatCalculator,new NonBlendSkillCalculator(new NonBlendSkillImpactOnPeriodForProjection()),singleSkillDictionary, _singleSkillMaxSeatCalculator, new CurrentTeleoptiPrincipal());
 
 			using (_mocks.Record())
 			{
