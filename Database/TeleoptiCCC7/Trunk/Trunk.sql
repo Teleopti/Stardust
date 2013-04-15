@@ -53,4 +53,8 @@ GO
 
 update dbo.PersonAssignment
 set TheDate ='1800-1-1'
-Go
+GO
+
+ALTER TABLE dbo.PersonAssignment
+ALTER COLUMN TheDate datetime not null
+GO
