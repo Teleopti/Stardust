@@ -35,6 +35,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		}
 
 		[Test]
+		public void ShouldCheckParameters()
+		{
+			var category = ShiftCategoryFactory.CreateShiftCategory("dv");
+			var ret = _target.Filter(category, null, _finderResult);
+			Assert.IsNull(ret);
+		}
+
+		[Test]
 		public void CanFilterOnCategoryWithEmptyList()
 		{
 			var category = ShiftCategoryFactory.CreateShiftCategory("dv");
