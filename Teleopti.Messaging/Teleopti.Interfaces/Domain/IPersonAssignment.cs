@@ -94,6 +94,9 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         ReadOnlyCollection<IOvertimeShift> OvertimeShiftCollection { get; }
 
+			/// <summary>
+			/// The date
+			/// </summary>
 	    DateOnly Date { get; }
 
 	    /// <summary>
