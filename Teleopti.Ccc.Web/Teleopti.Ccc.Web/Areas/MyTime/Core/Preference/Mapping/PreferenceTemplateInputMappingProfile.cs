@@ -37,6 +37,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 
 			CreateMap<PreferenceTemplateInput, ActivityRestrictionTemplate>()
 				.ForMember(d => d.Activity, o => o.MapFrom(s => _activityRespository.Get(s.ActivityPreferenceId.Value)))
+				.ForMember(d => d.Parent, o => o.Ignore())
 				.ForMember(d => d.StartTimeLimitation, o => o.MapFrom(s =>
 							   new StartTimeLimitation(s.ActivityEarliestStartTime.ToTimeSpan(), s.ActivityLatestStartTime.ToTimeSpan())
 							   ))
