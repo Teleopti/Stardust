@@ -748,12 +748,12 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             comboBoxTeamBlockType.Enabled = checkBoxTeamBlockPerBlockScheduling.Checked; 
             if (checkBoxTeamBlockPerBlockScheduling.Checked)
             {
-                //radioButtonSchedulePeriodAdvScheduling .Checked = true ;
-                //radioButtonBetweenDaysOffAdvScheduling .Checked = false ;
-                checkBoxUseGroupScheduling.Checked = false;
-                //checkBoxUseBlockScheduling.Checked = false;
-                //default value
                 checkBoxTeamBlockSameShiftCategory.Checked = true;
+            }
+            else
+            {
+                checkBoxUseGroupScheduling.Checked = false;
+                checkBoxTeamBlockSameShiftCategory.Checked = false ;
             }
             //else
             //{

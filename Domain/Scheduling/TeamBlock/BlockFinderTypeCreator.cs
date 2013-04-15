@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             get
             {
                 var blockFinderTypes = new List<IBlockFinderTypeHelper>();
-                blockFinderTypes.Add(new BlockFinderTypeHelper { Key = BlockFinderType.BetweenDayOff.ToString(), Name = "Between Daysoff" });
+                blockFinderTypes.Add(new BlockFinderTypeHelper { Key = BlockFinderType.BetweenDayOff.ToString(), Name = "Between Days off" });
                 blockFinderTypes.Add(new BlockFinderTypeHelper { Key = BlockFinderType.SchedulePeriod.ToString(), Name = "Schedule Period" });
                 return blockFinderTypes;
             }
