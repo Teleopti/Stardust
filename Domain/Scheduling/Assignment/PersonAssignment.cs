@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 		}
 
-		public DateOnly Date { get; set; }
+		public virtual DateOnly Date { get; set; }
 
 		public virtual DateTimePeriod Period
 		{
