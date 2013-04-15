@@ -108,8 +108,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             _useCommmonActivity = schedulingOptions.UseCommonActivity;
 
             _fairnessValue = schedulingOptions.Fairness.Value;
-            if (schedulingOptions.GroupPageForShiftCategoryFairness!=null )
-                _fairnessGroupPageKey = schedulingOptions.GroupPageForShiftCategoryFairness.Key;
+            _fairnessGroupPageKey = schedulingOptions.GroupPageForShiftCategoryFairness.Key;
             _resourceCalculateFrequency = schedulingOptions.ResourceCalculateFrequency;
             _screenRefreshRate = schedulingOptions.RefreshRate;
             _commonActivtyId = schedulingOptions.CommonActivity != null ? schedulingOptions.CommonActivity.Id : null;
