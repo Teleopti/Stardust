@@ -194,24 +194,24 @@ namespace Teleopti.Ccc.Win.Optimization
             if (comboBoxGroupPageOnCompareWith.SelectedValue == null)
                 comboBoxGroupPageOnCompareWith.SelectedIndex = 0;
 
-            switch (Preferences.BlockFinderTypeForAdvanceOptimization)
-            {
-                case BlockFinderType.BetweenDayOff:
-                    //radioButtonBetweenDaysOffAdvOptimization.Checked = true;
-                    checkBoxTeamBlockPerBlockScheduling.Checked = true;
-                    break;
-                case BlockFinderType.SchedulePeriod:
-                    //radioButtonSchedulePeriodAdvOptimization.Checked = true;
-                    checkBoxTeamBlockPerBlockScheduling.Checked = true;
-                    break;
-                case BlockFinderType.None:
-                    checkBoxTeamBlockPerBlockScheduling.Checked = false;
-                    checkBoxTeamBlockPerBlockScheduling.Enabled = false;
-                    //radioButtonBetweenDaysOffAdvOptimization.Enabled = false;
-                    //radioButtonSchedulePeriodAdvOptimization.Enabled = false;
-                    //comboBoxGroupPageOnTeamsTeamBlockPer.Enabled = false;
-                    break;
-            }
+            //switch (Preferences.BlockFinderTypeForAdvanceOptimization)
+            //{
+            //    case BlockFinderType.BetweenDayOff:
+            //        //radioButtonBetweenDaysOffAdvOptimization.Checked = true;
+            //        checkBoxTeamBlockPerBlockScheduling.Checked = true;
+            //        break;
+            //    case BlockFinderType.SchedulePeriod:
+            //        //radioButtonSchedulePeriodAdvOptimization.Checked = true;
+            //        checkBoxTeamBlockPerBlockScheduling.Checked = true;
+            //        break;
+            //    case BlockFinderType.None:
+            //        checkBoxTeamBlockPerBlockScheduling.Checked = false;
+            //        checkBoxTeamBlockPerBlockScheduling.Enabled = false;
+            //        //radioButtonBetweenDaysOffAdvOptimization.Enabled = false;
+            //        //radioButtonSchedulePeriodAdvOptimization.Enabled = false;
+            //        //comboBoxGroupPageOnTeamsTeamBlockPer.Enabled = false;
+            //        break;
+            //}
             checkBoxTeams.Checked = Preferences.UseTeams;
             checkBoxTeamBlockPerBlockScheduling.Checked = Preferences.UseTeamBlockOption;
             setLellingPerData();
@@ -275,6 +275,16 @@ namespace Teleopti.Ccc.Win.Optimization
         private void checkBoxTeamBlockPerBlockScheduling_CheckedChanged(object sender, EventArgs e)
         {
             checkBoxTeams.Enabled = !checkBoxTeamBlockPerBlockScheduling.Checked;
+            checkBoxTeamBlockSameShiftCategory.Enabled = checkBoxTeamBlockPerBlockScheduling.Checked;
+            checkBoxSameStartTime.Enabled = checkBoxTeamBlockPerBlockScheduling.Checked;
+            comboBoxTeamBlockType.Enabled = checkBoxTeamBlockPerBlockScheduling.Checked;
+            if (checkBoxTeamBlockPerBlockScheduling.Checked)
+                checkBoxTeamBlockSameShiftCategory.Checked = true;
+            else
+            {
+                checkBoxTeamBlockSameShiftCategory.Checked = false ;
+                checkBoxSameStartTime.Checked = false;
+            }
             //checkBoxBlock.Enabled = !checkBoxTeamBlockPerBlockScheduling.Checked;
             //radioButtonSchedulePeriodAdvOptimization.Enabled = checkBoxTeamBlockPerBlockScheduling.Checked;
             //radioButtonBetweenDaysOffAdvOptimization.Enabled = checkBoxTeamBlockPerBlockScheduling.Checked;
@@ -293,7 +303,7 @@ namespace Teleopti.Ccc.Win.Optimization
             //    radioButtonSchedulePeriodAdvOptimization.Checked = false;
             //    radioButtonBetweenDaysOffAdvOptimization.Checked = false;
             //}
-            
+
         }
 
         //private void btnTeamBlockPer_Click(object sender, EventArgs e)

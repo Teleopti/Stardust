@@ -217,6 +217,7 @@
             // checkBoxTeamBlockSameShiftCategory
             // 
             this.checkBoxTeamBlockSameShiftCategory.AutoSize = true;
+            this.checkBoxTeamBlockSameShiftCategory.Enabled = false;
             this.checkBoxTeamBlockSameShiftCategory.Location = new System.Drawing.Point(33, 28);
             this.checkBoxTeamBlockSameShiftCategory.Name = "checkBoxTeamBlockSameShiftCategory";
             this.checkBoxTeamBlockSameShiftCategory.Size = new System.Drawing.Size(126, 17);
@@ -227,6 +228,7 @@
             // checkBoxSameStartTime
             // 
             this.checkBoxSameStartTime.AutoSize = true;
+            this.checkBoxSameStartTime.Enabled = false;
             this.checkBoxSameStartTime.Location = new System.Drawing.Point(33, 55);
             this.checkBoxSameStartTime.Name = "checkBoxSameStartTime";
             this.checkBoxSameStartTime.Size = new System.Drawing.Size(108, 17);
@@ -238,6 +240,7 @@
             // 
             this.comboBoxTeamBlockType.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
             this.comboBoxTeamBlockType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxTeamBlockType.Enabled = false;
             this.comboBoxTeamBlockType.FlatBorderColor = System.Drawing.SystemColors.ControlDark;
             this.comboBoxTeamBlockType.Location = new System.Drawing.Point(216, 3);
             this.comboBoxTeamBlockType.Name = "comboBoxTeamBlockType";
