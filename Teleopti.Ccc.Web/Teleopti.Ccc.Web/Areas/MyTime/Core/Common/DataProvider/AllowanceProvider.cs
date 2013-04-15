@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -28,12 +29,25 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 		public IEnumerable<IAllowanceDay> GetAllowanceForPeriod(DateOnlyPeriod period)
 		{
 			var person = _loggedOnUser.CurrentUser();
-			var budgetGroup = person.PersonPeriodCollection.Last().BudgetGroup;
+			var allowanceList = new List<IAllowanceDay>();
+			IBudgetGroup budgetGroup;
+			try
+			{
+				budgetGroup = person.PersonPeriodCollection.Last().BudgetGroup;
+			}
+			catch (Exception)
+			{
+				foreach (var day in period.DayCollection())
+				{
+					var allowanceDay = new AllowanceDay { Allowance = 0, Date = day };
+					allowanceList.Add(allowanceDay);
+				}
+
+				return allowanceList;
+			}
 			var defaultScenario = _scenarioRepository.LoadDefaultScenario();
 
 			var budgetDays = _budgetDayRepository.Find(defaultScenario, budgetGroup, period);
-
-			var allowanceList = new List<IAllowanceDay>();
 
 			foreach (var day in period.DayCollection())
 			{
@@ -41,18 +55,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 
 				foreach (var budgetDay in budgetDays)
 				{
-					if (budgetDay.Day == day)
-					{
-						allowanceDay.Allowance = budgetDay.Allowance;
-						allowanceDay.Date = day;
-						allowanceList.Add(allowanceDay);
-					}
+					if (budgetDay.Day != day) continue;
+					allowanceDay.Allowance = budgetDay.Allowance;
+					allowanceDay.Date = day;
+					allowanceList.Add(allowanceDay);
 				}
 			}
 			return allowanceList;
-
-			//return (from budgetDay in budgetDays where budgetDay != null select new AllowanceDay() { Allowance = budgetDay.Allowance, Date = budgetDay.Day }).Cast<IAllowanceDay>().ToList();
-
 		}
 	}
 

@@ -28,26 +28,26 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 
 		public IEnumerable<IAbsenceAgents> GetAbsenceTimeForPeriod(DateOnlyPeriod period)
 		{
-			var person = _loggedOnUser.CurrentUser();
-			var budgetGroup = person.PersonPeriodCollection.Last().BudgetGroup;
-			var defaultScenario = _scenarioRepository.LoadDefaultScenario();
+			//var person = _loggedOnUser.CurrentUser();
+			//var budgetGroup = person.PersonPeriodCollection.Last().BudgetGroup;
+			//var defaultScenario = _scenarioRepository.LoadDefaultScenario();
 
-			var budgetDays = _budgetDayRepository.Find(defaultScenario, budgetGroup, period);
-			var list = new List<double>();
+			//var budgetDays = _budgetDayRepository.Find(defaultScenario, budgetGroup, period);
+			//var list = new List<double>();
 
-			foreach (var budgetDay in budgetDays.OrderBy(x => x.Day))
-			{
-				var currentDay = budgetDay.Day;
-				var x = _scheduleProjectionReadOnlyRepository.AbsenceTimePerBudgetGroup(new DateOnlyPeriod(currentDay, currentDay),
-				                                                                        budgetGroup, defaultScenario);
-				double usedAbsenceMinutes = 0;
-				if (x != null)
-				{
-					usedAbsenceMinutes = TimeSpan.FromTicks(
-						x.Sum(p => p.TotalContractTime)).TotalMinutes;
-				}
-				list.Add(usedAbsenceMinutes);
-			}
+			//foreach (var budgetDay in budgetDays.OrderBy(x => x.Day))
+			//{
+			//	var currentDay = budgetDay.Day;
+			//	var x = _scheduleProjectionReadOnlyRepository.AbsenceTimePerBudgetGroup(new DateOnlyPeriod(currentDay, currentDay),
+			//																			budgetGroup, defaultScenario);
+			//	double usedAbsenceMinutes = 0;
+			//	if (x != null)
+			//	{
+			//		usedAbsenceMinutes = TimeSpan.FromTicks(
+			//			x.Sum(p => p.TotalContractTime)).TotalMinutes;
+			//	}
+			//	list.Add(usedAbsenceMinutes);
+			//}
 
 			var random = new Random();
 			return period.DayCollection().Select(day => new AbsenceAgents() { Date = day, AbsenceTime = random.Next(1,23) }).Cast<IAbsenceAgents>().ToList();
