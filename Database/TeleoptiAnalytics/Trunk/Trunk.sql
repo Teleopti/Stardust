@@ -131,3 +131,52 @@ CREATE TABLE [Queue].[MessagesPurged](
 
 ALTER TABLE [Queue].[MessagesPurged] ADD  CONSTRAINT [DF_PurgedAt_CreatedAt]  DEFAULT (getutcdate()) FOR [PurgedAt]
 GO
+----------------  
+--Name: Karin
+--Date: 2013-04-15
+--Desc: Alter stage request table
+----------------
+TRUNCATE TABLE stage.stg_request
+GO
+ALTER TABLE stage.stg_request ADD
+	absence_code uniqueidentifier NULL,
+	request_starttime smalldatetime  NOT NULL,
+	request_endtime smalldatetime  NOT NULL
+GO
+
+----------------  
+--Name: Karin
+--Date: 2013-04-15
+--Desc: Alter mart fact request table
+----------------
+
+ALTER TABLE mart.fact_request ADD
+	absence_id int NULL,
+	request_starttime smalldatetime NULL,
+	request_endtime smalldatetime NULL,
+	requested_time_m int NULL
+GO
+
+UPDATE mart.fact_request 
+SET absence_id=-1,
+request_starttime='1900-01-01 00:00:00',
+request_endtime='1900-01-01 00:00:00',
+requested_time_m =0 
+WHERE absence_id IS NULL
+GO
+
+ALTER TABLE mart.fact_request alter column absence_id int NOT NULL
+GO
+ALTER TABLE  mart.fact_request alter column request_starttime smalldatetime NOT NULL
+GO
+ALTER TABLE  mart.fact_request alter column request_endtime smalldatetime NOT NULL
+GO
+ALTER TABLE  mart.fact_request alter column requested_time_m int NOT NULL
+GO
+
+ALTER TABLE [mart].[fact_request]  WITH CHECK ADD  CONSTRAINT [FK_fact_request_dim_absence] FOREIGN KEY([absence_id])
+REFERENCES [mart].[dim_absence] ([absence_id])
+GO
+
+ALTER TABLE [mart].[fact_request] CHECK CONSTRAINT [FK_fact_request_dim_absence]
+GO
