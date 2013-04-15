@@ -110,6 +110,7 @@
 
 .team-schedule .date-input {
     cursor: pointer;
+    background-color: #FFFFFF;
 }
 
 @media (max-width: 1199px) {
