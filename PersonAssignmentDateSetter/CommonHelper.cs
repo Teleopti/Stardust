@@ -56,7 +56,7 @@ namespace PersonAssignmentDateSetter
             }
         }
 
-        public void UpdateRows(IList<DataRow> rows)
+        public void UpdatePersonAssignmentRows(IList<DataRow> rows)
         {
 			using (SqlConnection connection = new SqlConnection(_connectionString))
 			{
@@ -67,7 +67,7 @@ namespace PersonAssignmentDateSetter
 					command.Connection = connection;
 					foreach (var dataRow in rows)
 					{
-						command.CommandText = "update PersonAssignment set TheDate = '" + dataRow.Field<DateTime>("TheDate") +
+						command.CommandText = "update dbo.PersonAssignment set TheDate = '" + dataRow.Field<DateTime>("TheDate") +
 						                      "' where Id='" + dataRow.Field<Guid>("Id").ToString() + "'";
 						command.ExecuteNonQuery();
 					}
@@ -75,6 +75,26 @@ namespace PersonAssignmentDateSetter
 				}
 			}
         }
+
+		public void UpdateAuditPersonAssignmentRows(IList<DataRow> rows)
+		{
+			using (SqlConnection connection = new SqlConnection(_connectionString))
+			{
+				using (var command = new SqlCommand())
+				{
+					command.CommandType = CommandType.Text;
+					connection.Open();
+					command.Connection = connection;
+					foreach (var dataRow in rows)
+					{
+						command.CommandText = "update [Auditing].PersonAssignment_AUD set TheDate = '" + dataRow.Field<DateTime>("TheDate") +
+											  "' where Id='" + dataRow.Field<Guid>("Id").ToString() + "'";
+						command.ExecuteNonQuery();
+					}
+
+				}
+			}
+		}
 
     }
 }
