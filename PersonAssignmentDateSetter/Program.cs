@@ -17,17 +17,18 @@ namespace PersonAssignmentDateSetter
 
 			IList<DataRow> rows = dbHelper.ReadData(checkNumberOfNonConvertedPersonAssignments);
 			Console.WriteLine("Updating " + dbHelper.SqlConnectionStringBuilder().InitialCatalog + " found " + rows[0].Field<int>("cnt") + " person assignments");
-			StringBuilder commandString = new StringBuilder();
-			commandString.AppendLine("select top 100");
-			commandString.AppendLine("Pa.Id, DefaultTimeZone, Minimum, TheDate");
-			commandString.AppendLine("from PersonAssignment pa");
-			commandString.AppendLine("inner join Person p on pa.Person = p.id");
-			commandString.AppendLine("Where TheDate = '1800-01-01'");
+			var commandString = new StringBuilder()
+				.AppendLine("select top 100")
+				.AppendLine("Pa.Id, DefaultTimeZone, Minimum, TheDate")
+				.AppendLine("from PersonAssignment pa")
+				.AppendLine("inner join Person p on pa.Person = p.id")
+				.AppendLine("Where TheDate = '1800-01-01'")
+				.ToString();
 			
 			int total = 0;
 			do
 			{
-				rows = dbHelper.ReadData(commandString.ToString());
+				rows = dbHelper.ReadData(commandString);
 				total += rows.Count;
 				foreach (var dataRow in rows)
 				{
