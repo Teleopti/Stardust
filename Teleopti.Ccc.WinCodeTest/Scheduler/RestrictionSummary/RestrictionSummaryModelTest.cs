@@ -226,7 +226,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.RestrictionSummary
         public void VerifyGetTotalMainshiftRestriction()
         {
             IMainShift mainShift = MainShiftFactory.CreateMainShiftWithThreeActivityLayers();
-            IPersonAssignment assignment = new PersonAssignment(_person, _scenario);
+						IPersonAssignment assignment = new PersonAssignment(_person, _scenario, new DateOnly(2000, 1, 1));
             assignment.SetMainShift(mainShift);
             var part = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _person, new DateOnly(_dateTime));
             part.Add(assignment);
@@ -259,7 +259,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.RestrictionSummary
             MainShift mainShiftShift = MainShiftFactory.CreateMainShift(ShiftCategoryFactory.CreateShiftCategory("TEL"));
             mainShiftShift.LayerCollection.Add(layer1);
 
-            IPersonAssignment assignment = new PersonAssignment(_person, _scenario);
+						IPersonAssignment assignment = new PersonAssignment(_person, _scenario, new DateOnly(2000, 1, 1));
             assignment.SetMainShift(mainShiftShift);
             _person.PermissionInformation.SetDefaultTimeZone((TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time")));
             var part = ExtractedSchedule.CreateScheduleDay(_scheduleDictionary, _person, new DateOnly(_dateTime));

@@ -22,8 +22,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		private DateTime _zorder;
 
 
-		public PersonAssignment(IPerson agent, IScenario scenario)
+		public PersonAssignment(IPerson agent, IScenario scenario, DateOnly date)
 		{
+			Date = date;
 			_person = agent;
 			_scenario = scenario;
 			_zorder = DateTime.MinValue;
@@ -34,6 +35,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		protected PersonAssignment()
 		{
 		}
+
+		public DateOnly Date { get; set; }
 
 		public virtual DateTimePeriod Period
 		{

@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
             _scheduleRange = new ScheduleRange(_dic, _parameters);
             _scheduleRange2 = new ScheduleRange(_dic, _parameters2);
 
-            IPersonAssignment ass = new PersonAssignment(_person1, _scenario);
+						IPersonAssignment ass = new PersonAssignment(_person1, _scenario, new DateOnly(2000, 1, 1));
             IMainShift mainShift = new MainShift(new ShiftCategory("Olas"));
             mainShift.LayerCollection.Add(new MainShiftActivityLayer(mainActivity, new DateTimePeriod(new DateTime(2009, 2, 2, 8, 0, 0, DateTimeKind.Utc), new DateTime(2009, 2, 2, 17, 0, 0, DateTimeKind.Utc))));
             mainShift.LayerCollection.Add(new MainShiftActivityLayer(lunchActivity, new DateTimePeriod(new DateTime(2009, 2, 2, 11, 0, 0, DateTimeKind.Utc), new DateTime(2009, 2, 2, 12, 0, 0, DateTimeKind.Utc))));
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler.Reporting
             ass.SetMainShift(mainShift);
             _scheduleRange.Add(ass);
 
-            IPersonAssignment ass2 = new PersonAssignment(_person2, _scenario);
+						IPersonAssignment ass2 = new PersonAssignment(_person2, _scenario, new DateOnly(2000, 1, 1));
             IMainShift mainShift2 = new MainShift(new ShiftCategory("Olas2"));
             mainShift2.LayerCollection.Add(new MainShiftActivityLayer(mainActivity, new DateTimePeriod(new DateTime(2009, 2, 2, 7, 0, 0, DateTimeKind.Utc), new DateTime(2009, 2, 2, 18, 0, 0, DateTimeKind.Utc))));
             mainShift2.LayerCollection.Add(new MainShiftActivityLayer(lunchActivity, new DateTimePeriod(new DateTime(2009, 2, 2, 10, 30, 0, DateTimeKind.Utc), new DateTime(2009, 2, 2, 11, 30, 0, DateTimeKind.Utc))));

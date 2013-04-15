@@ -360,7 +360,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                                                                                    MultiplicatorType.Overtime);
             personPeriods[0].PersonContract.Contract.AddMultiplicatorDefinitionSetCollection(multiplicatorDefinitionSet);
 
-            var personAssignment = new PersonAssignment(_agent, _scheduleRange.Scenario);
+						var personAssignment = new PersonAssignment(_agent, _scheduleRange.Scenario, new DateOnly(2000, 1, 1));
             IActivity activity = ActivityFactory.CreateActivity("Overtime activity");
             var overtimeShift = new OvertimeShift();
             IOvertimeShiftActivityLayer layer =
@@ -1190,7 +1190,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
     	private IPersonAssignment CreatePersonAssignment()
         {
-            IPersonAssignment personAssignment = new PersonAssignment(PersonFactory.CreatePerson(), _scenario);
+					IPersonAssignment personAssignment = new PersonAssignment(PersonFactory.CreatePerson(), _scenario, new DateOnly(2000, 1, 1));
             IMainShift mainShift = new MainShift(ShiftCategoryFactory.CreateShiftCategory("shiftcategory"));
             var start = new DateTime(2008, 11, 1, 10, 0, 0, DateTimeKind.Utc);
             var end = new DateTime(2008, 11, 1, 12, 0, 0, 0, DateTimeKind.Utc);

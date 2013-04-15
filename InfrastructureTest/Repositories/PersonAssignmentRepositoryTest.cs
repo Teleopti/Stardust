@@ -104,7 +104,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         	IPersonAssignment ass = PersonAssignmentFactory.CreatePersonAssignmentAggregate(_dummyAgent,
                                                                                         mainShift,
                                                                                         persShifts,
-                                                                                        _dummyScenario);
+                                                                                        _dummyScenario,
+																																												new DateOnly(2000,1,1));
             IOvertimeShift ot = new OvertimeShift();
             ass.AddOvertimeShift(ot);
             ot.LayerCollection.Add(new OvertimeShiftActivityLayer(_dummyActivity, new DateTimePeriod(2000, 1, 1, 2000, 1, 2), _definitionSet));
