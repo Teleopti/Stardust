@@ -22,6 +22,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			InitializeComponent();
 			SetTexts();
+			toolTip.SetToolTip(checkBoxAdvShiftCategoryNextDayMin, Resources.NextDay);
+			toolTip.SetToolTip(checkBoxAdvShiftCategoryNextDayMax, Resources.NextDay);
 			_dayCreator = new AgentPreferenceDayCreator();
 			_presenter = new AgentPreferencePresenter(this, scheduleDay, schedulingResultStateHolder);
 			_workflowControlSets = workflowControlSets;
@@ -505,12 +507,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void setTimeErrorMessageExtended(Control timeControl, string value)
 		{
+			errorProviderExtended.SetIconAlignment(timeControl, ErrorIconAlignment.MiddleLeft);
 			errorProviderExtended.SetIconPadding(timeControl, 2);
 			errorProviderExtended.SetError(timeControl, value);
 		}
 
 		private void setTimeErrorMessageActivity(Control timeControl, string value)
 		{
+			errorProviderActivity.SetIconAlignment(timeControl, ErrorIconAlignment.MiddleLeft);
 			errorProviderActivity.SetIconPadding(timeControl, 2);
 			errorProviderActivity.SetError(timeControl, value);
 		}
