@@ -744,6 +744,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
         private void checkBoxTeamBlockPerBlockScheduling_CheckedChanged(object sender, EventArgs e)
         {
             checkBoxTeamBlockSameStartTime.Enabled = checkBoxTeamBlockPerBlockScheduling.Checked;
+			checkBoxLevellingSameShift.Enabled = checkBoxTeamBlockPerBlockScheduling.Checked;
             checkBoxTeamBlockSameShiftCategory.Enabled = checkBoxTeamBlockPerBlockScheduling.Checked;
             comboBoxTeamBlockType.Enabled = checkBoxTeamBlockPerBlockScheduling.Checked; 
             if (checkBoxTeamBlockPerBlockScheduling.Checked)
@@ -809,9 +810,9 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
                 _localSchedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.SchedulePeriod;
 			_localSchedulingOptions.GroupOnGroupPageForTeamBlockPer = _singleAgentEntry;
             _localSchedulingOptions.UseTeamBlockSameEndTime = false;
-            _localSchedulingOptions.UseTeamBlockSameShift = false;
             _localSchedulingOptions.UseTeamBlockSameShiftCategory = checkBoxTeamBlockSameShiftCategory.Checked ;
             _localSchedulingOptions.UseTeamBlockSameStartTime = checkBoxTeamBlockSameStartTime.Checked ;
+			_localSchedulingOptions.UseTeamBlockSameShift = checkBoxLevellingSameShift.Checked;
 
         }
 
@@ -824,6 +825,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             //    comboBoxGroupingTeamBlockPer.SelectedValue = _localSchedulingOptions.GroupOnGroupPageForTeamBlockPer;
             checkBoxTeamBlockSameShiftCategory.Checked = _localSchedulingOptions.UseTeamBlockSameShiftCategory;
             checkBoxTeamBlockSameStartTime.Checked = _localSchedulingOptions.UseTeamBlockSameStartTime;
+			checkBoxLevellingSameShift.Checked = _localSchedulingOptions.UseTeamBlockSameShift;
         }
     }
     
