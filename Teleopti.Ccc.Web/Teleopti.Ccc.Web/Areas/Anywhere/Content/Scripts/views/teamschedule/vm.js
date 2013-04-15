@@ -109,7 +109,7 @@ define([
             this.ESLDisplay = ko.computed(function () {
             	var esl = self.ESL();
             	if (esl != undefined)
-            		return self.Resources.ESL + ': ' + esl + ' %';
+            		return self.Resources.ESL + ': ' + (esl * 100).toFixed(2) + ' %';
 	            return '';
             });
             this.SetDailyMetrics = function (data) {
