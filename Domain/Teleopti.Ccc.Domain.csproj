@@ -729,6 +729,7 @@
     <Compile Include="Scheduling\Restriction\RestrictionBase.cs" />
     <Compile Include="Scheduling\Restriction\StudentAvailabilityRestriction.cs" />
     <Compile Include="Scheduling\Restriction\StudentSpecification.cs" />
+    <Compile Include="Scheduling\Rules\DataPartOfAgentDay.cs" />
     <Compile Include="Scheduling\Rules\GapsInAssignmentRule.cs" />
     <Compile Include="Scheduling\Rules\LongestPeriodForAssignmentCalculator.cs" />
     <Compile Include="Scheduling\Rules\MinWeeklyRestRule.cs" />

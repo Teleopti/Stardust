@@ -650,6 +650,7 @@
     <Compile Include="Scheduling\Restriction\StudentAvailabilityRestrictionTest.cs" />
     <Compile Include="Scheduling\Restriction\PreferenceRestrictionTest.cs" />
     <Compile Include="Scheduling\Restriction\RotationTest.cs" />
+    <Compile Include="Scheduling\Rules\DataPartOfAgentDayTest.cs" />
     <Compile Include="Scheduling\Rules\GapsInAssignmentRuleTest.cs" />
     <Compile Include="Scheduling\Rules\LongestPeriodForAssignmentCalculatorTest.cs" />
     <Compile Include="Scheduling\Rules\MinWeklyRestRuleTest.cs" />
