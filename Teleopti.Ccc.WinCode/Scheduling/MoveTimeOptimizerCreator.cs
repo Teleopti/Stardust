@@ -5,6 +5,7 @@ using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.NonBlendSkill;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
 using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Obfuscated.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
@@ -78,7 +79,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					new NonBlendSkillCalculator(new NonBlendSkillImpactOnPeriodForProjection());
 
 				IResourceOptimizationHelper resourceOptimizationHelper =
-					new ResourceOptimizationHelper(_schedulingResultStateHolder, occupiedSeatCalculator, nonBlendSkillCalculator, _singleSkillDictionary, new SingleSkillMaxSeatCalculator());
+					new ResourceOptimizationHelper(_schedulingResultStateHolder, occupiedSeatCalculator, nonBlendSkillCalculator, _singleSkillDictionary, new SingleSkillMaxSeatCalculator(), new CurrentTeleoptiPrincipal());
 
 				IRestrictionExtractor restrictionExtractor =
 					new RestrictionExtractor(_schedulingResultStateHolder);

@@ -480,6 +480,7 @@
     <Compile Include="Scheduling\Assignment\ScheduleDayStringVisualizer.cs" />
     <Compile Include="Optimization\ShiftCategoryFairness\ShiftCategoryFairnessManager.cs" />
     <Compile Include="Scheduling\Assignment\VirtualSchedulePeriodSplitChecker.cs" />
+    <Compile Include="Scheduling\ResourceCalculateSkillCommand.cs" />
     <Compile Include="Scheduling\DayOffScheduling\BestSpotForAddingDayOffFinder.cs" />
     <Compile Include="Scheduling\DayOffScheduling\DayOffScheduler.cs" />
     <Compile Include="Scheduling\DayOffScheduling\DaysOffSchedulingService.cs" />
@@ -493,6 +494,7 @@
     <Compile Include="Scheduling\DeletedDescription.cs" />
     <Compile Include="Scheduling\EmptyScheduleDayChangeCallback.cs" />
     <Compile Include="ApplicationLayer\FullDayAbsenceAddedEvent.cs" />
+    <Compile Include="Scheduling\ISkillLoaderDecider.cs" />
     <Compile Include="Scheduling\LoadScheduleByPersonSpecification.cs" />
     <Compile Include="Scheduling\Meetings\AllLayersAreInWorkTimeSpecification.cs" />
     <Compile Include="Scheduling\Meetings\IChangeTracker.cs" />
