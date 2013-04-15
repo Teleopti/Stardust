@@ -67,6 +67,6 @@ ALTER TABLE Auditing.PersonAssignment_AUD
 ADD TheDate datetime
 GO
 
-update dbo.PersonAssignment
+update Auditing.PersonAssignment_AUD
 set TheDate ='1800-1-1'
 GO
