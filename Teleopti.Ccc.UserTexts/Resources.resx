@@ -11386,4 +11386,8 @@ Reduce the complexity to use these shifts.</value>
   <data name="SingleAgentTeam" xml:space="preserve">
     <value>Single Agent Team</value>
   </data>
+  <data name="SameShift" xml:space="preserve">
+    <value>Same Shift</value>
+    <comment>Use the same shift for levelling options</comment>
+  </data>
 </root>
