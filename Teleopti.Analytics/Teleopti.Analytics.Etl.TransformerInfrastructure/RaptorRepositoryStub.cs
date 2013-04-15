@@ -133,7 +133,12 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
             return 0;
         }
 
-        public int FillScheduleContractDataMart(DateTimePeriod period)
+	    public int FillIntradayScheduleDataMart(IBusinessUnit businessUnit)
+	    {
+		    throw new NotImplementedException();
+	    }
+
+	    public int FillScheduleContractDataMart(DateTimePeriod period)
         {
             return 0;
         }
@@ -682,6 +687,11 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
         }
 
 	    public IList<IScheduleChangedReadModel> ChangedDataOnStep(DateTimePeriod onPeriod, IBusinessUnit currentBusinessUnit, string stepName)
+	    {
+		    throw new NotImplementedException();
+	    }
+
+	    public int PersistScheduleChanged(DataTable dataTable)
 	    {
 		    throw new NotImplementedException();
 	    }

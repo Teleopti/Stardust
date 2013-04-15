@@ -354,6 +354,15 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 											  _dataMartConnectionString);
 		}
 
+		public int FillIntradayScheduleDataMart(IBusinessUnit businessUnit)
+		{
+			var parameterList = new List<SqlParameter> {new SqlParameter("business_unit_code", businessUnit.Id)};
+
+			return
+				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "[mart].[etl_fact_schedule_intraday_load]", parameterList,
+											  _dataMartConnectionString);
+		}
+
 		public int FillScheduleContractDataMart(DateTimePeriod period)
 		{
 			//Prepare sql parameters
@@ -660,6 +669,12 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 				var rep = new EtlReadModelRepository(uow);
 				return rep.ChangedDataOnStep(onPeriod, currentBusinessUnit, stepName);
 			}	
+		}
+
+		public int PersistScheduleChanged(DataTable dataTable)
+		{
+			HelperFunctions.ExecuteNonQuery(CommandType.Text, "TRUNCATE TABLE [stage].[stg_schedule_changed]", new Collection<SqlParameter>(), _dataMartConnectionString);
+			return HelperFunctions.BulkInsert(dataTable, "stage.[stg_schedule_changed]", _dataMartConnectionString);
 		}
 
 		public IList<IScheduleDay> LoadSchedulePartsPerPersonAndDate(DateTimePeriod period, IScheduleDictionary dictionary)

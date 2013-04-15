@@ -70,7 +70,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Jobs
 			Add(new BridgeGroupPagePersonJobStep(jobParameters));
 
 			// FACT TABLES
-			Add(new FactScheduleJobStep(jobParameters));
+			Add(new FactScheduleJobStep(jobParameters,true));
 			Add(new FactScheduleDayCountJobStep(jobParameters));
 			Add(new FactSchedulePreferenceJobStep(jobParameters));
 			Add(new FactQueueJobStep(jobParameters));                   // BU independent

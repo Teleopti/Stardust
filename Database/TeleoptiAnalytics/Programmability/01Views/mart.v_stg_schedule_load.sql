@@ -1,7 +1,7 @@
 IF  EXISTS (SELECT * FROM sys.views WHERE object_id = OBJECT_ID(N'[Stage].[v_stg_Schedule_load]'))
 DROP VIEW [Stage].[v_stg_Schedule_load]
 GO
-CREATE VIEW [Stage.[v_stg_Schedule_load]
+CREATE VIEW [Stage].[v_stg_Schedule_load]
 AS
 SELECT
 	schedule_date_id					= dsd.date_id, 

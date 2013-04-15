@@ -31,6 +31,7 @@ namespace Teleopti.Analytics.Etl.Interfaces.Transformer
         int PersistSchedule(DataTable scheduleDataTable, DataTable absenceDayCountDataTable);
 
         int FillScheduleDataMart(DateTimePeriod period, IBusinessUnit businessUnit);
+	    int FillIntradayScheduleDataMart(IBusinessUnit businessUnit);
         int FillScheduleContractDataMart(DateTimePeriod period);
         int PersistDate(DataTable dataTable);
         int FillDateDataMart();

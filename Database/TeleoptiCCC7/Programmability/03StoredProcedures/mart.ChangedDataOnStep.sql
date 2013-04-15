@@ -17,7 +17,7 @@ CREATE PROCEDURE [mart].[ChangedDataOnStep]
 AS
 -- DELETE FROM mart.LastUpdatedPerStep
 -- SELECT * FROM mart.LastUpdatedPerStep
--- exec mart.[ChangedDataOnStep] 'stg_schedule_day_off_count, stg_day_off, dim_day_off', '2013-03-03', '2013-03-09', 'fc2f309c-3e3c-4cfb-9c11-a1570077b92b'
+-- exec mart.[ChangedDataOnStep] 'stg_schedule_day_off_count, stg_day_off, dim_day_off', '2013-03-03', '2013-03-05', 'fc2f309c-3e3c-4cfb-9c11-a1570077b92b'
 DECLARE @lastTime datetime
 SELECT @lastTime = '1900-01-01'
 

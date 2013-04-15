@@ -13,22 +13,20 @@ GO
 
 -- =============================================
 --exec mart.etl_fact_schedule_intraday_load '2009-02-02','2009-02-03'
---exec mart.etl_fact_schedule_intraday_load @start_date='2010-10-30 00:00:00',@end_date='2010-11-03 00:00:00'
+--exec mart.etl_fact_schedule_intraday_load 'fc2f309c-3e3c-4cfb-9c11-a1570077b92b'
 CREATE PROCEDURE [mart].[etl_fact_schedule_intraday_load] 
-@business_unit_code uniqueidentifier,
-@scenario_code uniqueidentifier
+@business_unit_code uniqueidentifier
+
 AS
 
 -- 
 DECLARE @business_unit_id int
-DECLARE @scenario_id int
 
 SET @business_unit_id = (SELECT business_unit_id FROM mart.dim_business_unit WHERE business_unit_code = @business_unit_code)
-SET @scenario_id = (SELECT scenario_id FROM mart.dim_scenario WHERE scenario_code = @scenario_code)
 
 --delete days removed from application
 DELETE fs
-FROM Stage.stg_schedule_deleted stg
+FROM Stage.stg_schedule_changed stg
 INNER JOIN mart.dim_person dp
 	ON stg.person_code	= dp.person_code
 INNER JOIN mart.dim_date dd
@@ -41,7 +39,7 @@ INNER JOIN mart.fact_schedule fs
 	AND ds.scenario_id = fs.scenario_id
 WHERE fs.business_unit_id = @business_unit_id
 
---Delete existing
+--Delete existing, still do for safety??
 DELETE fs
 FROM Stage.stg_schedule stg
 INNER JOIN
@@ -107,4 +105,5 @@ INSERT INTO mart.fact_schedule
 	overtime_id
 	)
 SELECT * FROM Stage.v_stg_Schedule_load
+				
 GO
