@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.Domain;
 
@@ -21,23 +22,24 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	    private readonly ISafeRollbackAndResourceCalculation _safeRollbackAndResourceCalculation;
 	    private readonly ISchedulingOptions _schedulingOptions;
 	    private bool _cancelMe;
+        private IWorkShiftMinMaxCalculator _workShiftMinMaxCalculator;
 
-	    public TeamBlockSchedulingService
+        public TeamBlockSchedulingService
 		    (
 		    ISchedulingOptions schedulingOptions,
 		    ITeamInfoFactory teamInfoFactory,
 		    ITeamBlockInfoFactory teamBlockInfoFactory,
 		    ITeamBlockScheduler teamBlockScheduler,
             IBlockSteadyStateValidator blockSteadyStateValidator,
-			ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation
-		    )
+			ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation, IWorkShiftMinMaxCalculator workShiftMinMaxCalculator)
 	    {
 		    _teamInfoFactory = teamInfoFactory;
 		    _teamBlockInfoFactory = teamBlockInfoFactory;
 		    _teamBlockScheduler = teamBlockScheduler;
 	        _blockSteadyStateValidator = blockSteadyStateValidator;
 		    _safeRollbackAndResourceCalculation = safeRollbackAndResourceCalculation;
-		    _schedulingOptions = schedulingOptions;
+            _workShiftMinMaxCalculator = workShiftMinMaxCalculator;
+            _schedulingOptions = schedulingOptions;
 	    }
 
 	    public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
@@ -72,18 +74,27 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                     if (_blockSteadyStateValidator.IsBlockInSteadyState(teamBlockInfo, _schedulingOptions))
                     {
                         schedulePartModifyAndRollbackService.ClearModificationCollection();
-                        if (!_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, datePointer, _schedulingOptions,
+                        if (_teamBlockScheduler.ScheduleTeamBlockDay(teamBlockInfo, datePointer, _schedulingOptions,
                                                                       selectedPeriod, selectedPersons))
                         {
-                            _safeRollbackAndResourceCalculation.Execute(schedulePartModifyAndRollbackService,
-                                                                        _schedulingOptions);
-                            continue;
+                            var rollbackExecuted = false;
+                            foreach (var matrix in teamBlockInfo.TeamInfo.MatrixesForGroup())
+                            {
+                                _workShiftMinMaxCalculator.ResetCache();
+                                if (!_workShiftMinMaxCalculator.IsPeriodInLegalState(matrix, _schedulingOptions))
+                                {
+                                    _safeRollbackAndResourceCalculation.Execute(schedulePartModifyAndRollbackService,
+                                                                                _schedulingOptions);
+                                    rollbackExecuted = true;
+                                    break;
+                                }
+                            }
+                            if (rollbackExecuted)
+                                break;
                         }
+
                     }
-                        
-
-				
-
+                     
 					if (_cancelMe)
 						break;
 				}

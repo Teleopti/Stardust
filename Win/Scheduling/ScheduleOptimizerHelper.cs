@@ -1055,7 +1055,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			    new TeamBlockSchedulingService(schedulingOptions,
 			                                 teamInfoFactory, 
 											 _container.Resolve<ITeamBlockInfoFactory>(),
-											 teamBlockScheduler, new BlockSteadyStateValidator(), _container.Resolve<ISafeRollbackAndResourceCalculation>());
+											 teamBlockScheduler, new BlockSteadyStateValidator(), _container.Resolve<ISafeRollbackAndResourceCalculation>(),
+                                             _container.Resolve<IWorkShiftMinMaxCalculator >());
 
 		    return advanceSchedulingService;
 	    }
