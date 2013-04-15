@@ -108,8 +108,8 @@ define([
             this.ESL = ko.observable();
             this.ESLDisplay = ko.computed(function () {
             	var esl = self.ESL();
-	            if (esl)
-	            	return self.Resources.ESL + esl;
+            	if (esl != undefined)
+	            	return self.Resources.ESL + ': ' + esl;
 	            return '';
             });
             this.SetDailyMetrics = function (data) {

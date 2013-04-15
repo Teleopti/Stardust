@@ -1,23 +1,28 @@
 <div class="container team-schedule">
-	<div class="well well-small" data-bind="visible: DisplayStaffingMetrics">
-		
-		<span class="btn-group" id="skill-selector">
-			<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-				<span data-bind="text: SelectedSkillName"></span>
-				<span class="caret"></span>
-			</a>
-			<ul class="dropdown-menu" data-bind="foreach: { data: Skills, as: 'skill'}">
-				<li>
-					<a data-bind="text: skill.Name, value: skill.Id, click: $parent.SelectSkill"></a>
-				</li>
-			</ul>
-		</span>
-		<span data-bind="visible: LoadingStaffingMetrics, text: Resources.LoadingThreeDots"></span>
-		<span id="forecasted-hours" data-bind="text: ForecastedHoursDisplay"></span>
-		<span id="scheduled-hours" data-bind="text: ScheduledHoursDisplay"></span>
-		<span id="difference-forecasted-scheduled" class="text-error" data-bind="text: DifferenceDisplay"></span>
-		<span id="estimated-service-level" class="text-warning" data-bind="text: ESLDisplay"></span>	
-	</div>
+	<table class="table table-condensed well well-small" data-bind="visible: DisplayStaffingMetrics">
+		<thead>
+			<tr>
+				<th>
+					<span class="btn-group">
+						<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+							<span data-bind="text: SelectedSkillName"></span>
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu" data-bind="foreach: { data: Skills, as: 'skill' }">
+							<li>
+								<a data-bind="text: skill.Name, value: skill.Id, click: $parent.SelectSkill"></a>
+							</li>
+						</ul>
+					</span>
+				</th>
+				<th data-bind="visible: LoadingStaffingMetrics"><span class="" data-bind="text: Resources.LoadingThreeDots"></span></th>
+				<th><span class="" data-bind="text: ForecastedHoursDisplay"></span></th>
+				<th><span class="" data-bind="text: ScheduledHoursDisplay"></span></th>
+				<th><span class=" text-error" data-bind="text: DifferenceDisplay"></span></th>
+				<th><span class=" text-warning" data-bind="text: ESLDisplay"></span></th>
+			</tr>
+		</thead>
+	</table>
 	
 	<div class="row">
 		<div class="span12 nowrap">
