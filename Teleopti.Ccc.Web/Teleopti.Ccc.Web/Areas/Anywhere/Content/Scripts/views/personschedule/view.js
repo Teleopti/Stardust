@@ -58,6 +58,7 @@ define([
 
             dispose: function(options) {
                 subscriptions.unsubscribePersonSchedule();
+                $(".datepicker.dropdown-menu").remove();
             },
 			
             clearaction: function(options) {

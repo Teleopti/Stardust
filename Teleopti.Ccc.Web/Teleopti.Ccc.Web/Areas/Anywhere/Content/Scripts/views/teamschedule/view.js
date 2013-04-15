@@ -196,6 +196,10 @@ define([
 			    return deferred.promise();
 			},
 			
+			dispose: function (options) {
+			    $(".datepicker.dropdown-menu").remove();
+			},
+			
 			setDateFromTest: function (date) {
 			    teamSchedule.SelectedDate(moment(date));
 			}
