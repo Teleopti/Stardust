@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			Assert.AreEqual(_scheduleDay, _presenter.ScheduleDay);
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.WinCode.Scheduling.IAgentPreferenceView.UpdateMustHaveText(System.String)"), Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.WinCode.Scheduling.IAgentPreferenceView.UpdateMustHaveText(System.String)"), Test]
 		public void ShouldUpdateView()
 		{
 			using (_mock.Record())

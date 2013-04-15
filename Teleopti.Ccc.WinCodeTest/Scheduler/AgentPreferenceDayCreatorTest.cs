@@ -301,6 +301,18 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_preferenceDayCreator.Create(null, data);	
 		}
 
+		[Test, ExpectedException(typeof(ArgumentNullException))]
+		public void ShouldThrowExceptionOnEmptyData()
+		{
+			_preferenceDayCreator.Create(_scheduleDay, null);
+		}
+
+		[Test, ExpectedException(typeof(ArgumentNullException))]
+		public void ShouldThrowExceptionOnEmptyDataCanCreate()
+		{
+			_preferenceDayCreator.CanCreate(null);
+		}
+
 		[Test]
 		public void ShouldBeAbleToCreateWithValidTimes()
 		{

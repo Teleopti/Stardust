@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 		{	
 			if(scheduleDay == null) throw new ArgumentNullException("scheduleDay");
+			if(data == null) throw new ArgumentNullException("data");
 
 			var result = CanCreate(data);
 			if (!result.Result) return null;
@@ -55,6 +56,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 		public IAgentPreferenceCanCreateResult CanCreate(IAgentPreferenceData data)
 		{
+			if (data == null) throw new ArgumentNullException("data");
+
 			var result = new AgentPreferenceCanCreateResult {Result = true};
 
 			if (validateEmpty(data))
