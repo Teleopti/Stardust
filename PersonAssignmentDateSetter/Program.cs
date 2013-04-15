@@ -8,10 +8,13 @@ namespace PersonAssignmentDateSetter
 	class Program
 	{
 		private const string checkNumberOfNonConvertedPersonAssignments
-			= "select COUNT(*) as cnt from PersonAssignment where TheDate < '1850-01-01'";
+			= "select COUNT(*) as cnt from dbo.PersonAssignment where TheDate < '1850-01-01'";
+		private const string checkNumberOfNonConvertedAuditPersonAssignments
+			= "select COUNT(*) as cnt from [Auditing].PersonAssignment_AUD where TheDate < '1850-01-01'";
 
 		static void Main(string[] args)
 		{
+			Console.Clear();
 			runPersonAssignment(args);
 			Console.WriteLine();
 			runAuditPersonAssignment(args);
@@ -52,6 +55,10 @@ namespace PersonAssignmentDateSetter
 
 			} while (rows.Count > 0);
 
+			var numberOfNonConverted = dbHelper.ReadData(checkNumberOfNonConvertedPersonAssignments)[0].Field<int>("cnt");
+			if (numberOfNonConverted > 0)
+				throw new Exception("There is still " + numberOfNonConverted + " non converted assignments in db.");
+
 			Console.WriteLine();
 		}
 
@@ -59,8 +66,8 @@ namespace PersonAssignmentDateSetter
 		{
 			CommonHelper dbHelper = new CommonHelper(args[0]);
 
-			IList<DataRow> rows = dbHelper.ReadData("select COUNT(*) as cnt from [Auditing].PersonAssignment_AUD where TheDate = '1800-01-01'");
-			Console.WriteLine("Updating " + dbHelper.SqlConnectionStringBuilder().InitialCatalog + " found " + rows[0].Field<int>("cnt") + " person assignments");
+			IList<DataRow> rows = dbHelper.ReadData(checkNumberOfNonConvertedAuditPersonAssignments);
+			Console.WriteLine("Updating " + dbHelper.SqlConnectionStringBuilder().InitialCatalog + " found " + rows[0].Field<int>("cnt") + " audit person assignments");
 			StringBuilder commandString = new StringBuilder();
 			commandString.AppendLine("select top 100");
 			commandString.AppendLine("Pa.Id, DefaultTimeZone, Minimum, TheDate");
@@ -82,16 +89,16 @@ namespace PersonAssignmentDateSetter
 				}
 				dbHelper.UpdateAuditPersonAssignmentRows(rows);
 
-				Console.Clear();
+				
 
 				Console.SetCursorPosition(0, 1);
 				Console.Write("Rows updated = " + total);
 
 			} while (rows.Count > 0);
 
-			var numberOfNonConverted = dbHelper.ReadData(checkNumberOfNonConvertedPersonAssignments)[0].Field<int>("cnt");
+			var numberOfNonConverted = dbHelper.ReadData(checkNumberOfNonConvertedAuditPersonAssignments)[0].Field<int>("cnt");
 			if (numberOfNonConverted> 0)
-				throw new Exception("There is still " + numberOfNonConverted + " non converted assignments in db.");
+				throw new Exception("There is still " + numberOfNonConverted + " non converted audit assignments in db.");
 
 			Console.WriteLine();
 		}
