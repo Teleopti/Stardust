@@ -63,8 +63,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[BeforeScenario]
 		public static void BeforeScenario()
 		{
-			Log.Write(DateTime.Now +  " Before scenario: " + ScenarioContext.Current.ScenarioInfo.Title);
-
 			// restart browser every 20th scenario
 			if (_scenarioCount != 0 && _scenarioCount % 15 == 0)
 				Browser.Restart();
@@ -83,8 +81,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[AfterScenario]
 		public void AfterScenario()
 		{
-			Log.Write(DateTime.Now + " After scenario: " + ScenarioContext.Current.ScenarioInfo.Title);
-
 			ScenarioUnitOfWorkState.DisposeUnitOfWork();
 			HandleScenarioException();
 		}
