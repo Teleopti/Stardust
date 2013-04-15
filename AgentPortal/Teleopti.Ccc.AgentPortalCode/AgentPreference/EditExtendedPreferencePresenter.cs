@@ -209,7 +209,7 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentPreference
             if (Validate())
             {
                 _cellData.Preference = _model.Preference;
-                _cellData.Preference.TemplateName = Resources.Extended;
+				_cellData.Preference.TemplateName = null; 
                 OnSavePreferenceCellData();
                 _view.SaveButtonEnabled = false;
             }
