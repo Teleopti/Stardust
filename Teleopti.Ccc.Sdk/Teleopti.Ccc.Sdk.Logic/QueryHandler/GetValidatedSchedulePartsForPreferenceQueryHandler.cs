@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 {
     public class GetValidatedSchedulePartsForPreferenceQueryHandler : IHandleQuery<GetValidatedSchedulePartsForPreferenceQueryDto, ICollection<ValidatedSchedulePartDto>>
 	{
-		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IShiftCategoryRepository _shiftCategoryRepository;
 		private readonly IActivityRepository _activityRepository;
 		private readonly IPersonRepository _personRepository;
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 		private readonly IAssembler<IStudentAvailabilityDay, StudentAvailabilityDayDto> _studentAvailabilityDayAssembler;
     	private readonly IWorkShiftWorkTime _workShiftWorkTime;
 
-		public GetValidatedSchedulePartsForPreferenceQueryHandler(IUnitOfWorkFactory unitOfWorkFactory, IShiftCategoryRepository shiftCategoryRepository, IActivityRepository activityRepository, IPersonRepository personRepository, IScheduleRepository scheduleRepository, ICurrentScenario scenarioRepository, IAssembler<IPreferenceDay, PreferenceRestrictionDto> preferenceDayAssembler, IAssembler<IStudentAvailabilityDay, StudentAvailabilityDayDto> studentAvailabilityDayAssembler, IWorkShiftWorkTime workShiftWorkTime)
+        public GetValidatedSchedulePartsForPreferenceQueryHandler(ICurrentUnitOfWorkFactory unitOfWorkFactory, IShiftCategoryRepository shiftCategoryRepository, IActivityRepository activityRepository, IPersonRepository personRepository, IScheduleRepository scheduleRepository, IScenarioRepository scenarioRepository, IAssembler<IPreferenceDay, PreferenceRestrictionDto> preferenceDayAssembler, IAssembler<IStudentAvailabilityDay, StudentAvailabilityDayDto> studentAvailabilityDayAssembler, IWorkShiftWorkTime workShiftWorkTime)
         {
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_shiftCategoryRepository = shiftCategoryRepository;
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 
 			var dateOnlyInPeriod = new DateOnly(dateInPeriod.DateTime);
 			IPerson person;
-			using (IUnitOfWork uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+			using (IUnitOfWork uow = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
 				using (uow.DisableFilter(QueryFilter.Deleted))
 				{
