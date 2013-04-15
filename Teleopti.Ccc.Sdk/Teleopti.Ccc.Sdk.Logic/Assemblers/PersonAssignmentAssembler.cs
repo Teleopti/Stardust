@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
         protected override IPersonAssignment DtoToDomainEntityAfterValidation(PersonAssignmentDto dto)
         {
 					//todo: not correct date - just to be able to compile
-            IPersonAssignment ass = new PersonAssignment(Person, DefaultScenario, new DateOnly(1900, 1, 1));
+            IPersonAssignment ass = new PersonAssignment(Person, DefaultScenario, PartDate);
             ass.SetId(dto.Id);
             //rk - hack
             typeof(AggregateRoot).GetField("_version", BindingFlags.Instance | BindingFlags.NonPublic)
