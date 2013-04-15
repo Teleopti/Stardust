@@ -314,6 +314,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             _schedulingOptions.UseTeamBlockSameShiftCategory = _localSchedulingOptions.UseTeamBlockSameShiftCategory;
             _schedulingOptions.UseTeamBlockSameStartTime = _localSchedulingOptions.UseTeamBlockSameStartTime;
             _schedulingOptions.UseTeamBlockPerOption = _localSchedulingOptions.UseTeamBlockPerOption;
+            
         }
 
         private void getDataFromControls()
@@ -364,6 +365,7 @@ namespace Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences
             _localSchedulingOptions.UseShiftCategoryLimitations = checkBoxUseShiftCategoryRestrictions.Checked;
 			_localSchedulingOptions.UseGroupScheduling = checkBoxUseGroupScheduling.Checked;
         	_localSchedulingOptions.GroupOnGroupPage = (IGroupPageLight)comboBoxGrouping.SelectedItem;
+            _localSchedulingOptions.GroupPageForShiftCategoryFairness = (IGroupPageLight)comboBoxGroupingFairness.SelectedItem;
             //_localSchedulingOptions.GroupOnGroupPageForTeamBlockPer  = (IGroupPageLight)comboBoxGroupingTeamBlockPer .SelectedItem;
 			_localSchedulingOptions.DoNotBreakMaxStaffing = checkBoxDoNotBreakMaxSeats.Checked;
         	_localSchedulingOptions.UseMaxSeats = checkBoxUseMaxSeats.Checked;
