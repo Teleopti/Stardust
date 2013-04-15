@@ -38,9 +38,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 	    private ISchedulePartModifyAndRollbackService _rollbackService;
         private ISchedulingResultStateHolder _schedulingResultStateHolder;
         private IScheduleRange _scheduleRange;
+	    private IWorkShiftMinMaxCalculator _workShiftMinMaxCalculator;
 
 
-        [SetUp]
+	    [SetUp]
         public void Setup()
         {
             _mock = new MockRepository();
@@ -58,7 +59,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             _scheduleDay = _mock.StrictMock<IScheduleDay>();
 	        _safeRollback = _mock.StrictMock<ISafeRollbackAndResourceCalculation>();
 		    _rollbackService = _mock.StrictMock<ISchedulePartModifyAndRollbackService>();
-			_target = new TeamBlockSchedulingService(_schedulingOptions, _teamInfoFactory, _teamBlockInfoFactory, _teamBlockScheduler, _blockSteadyStateValidator, _safeRollback);
+	        _workShiftMinMaxCalculator = _mock.StrictMock<IWorkShiftMinMaxCalculator>();
+		    _target = new TeamBlockSchedulingService(_schedulingOptions, _teamInfoFactory, _teamBlockInfoFactory,
+		                                             _teamBlockScheduler, _blockSteadyStateValidator, _safeRollback,
+		                                             _workShiftMinMaxCalculator);
             _date = new DateOnly(2013, 02, 22);
             _person = PersonFactory.CreatePerson();
             _matrixList = new List<IScheduleMatrixPro> {_matrixPro};
