@@ -94,7 +94,7 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         ReadOnlyCollection<IOvertimeShift> OvertimeShiftCollection { get; }
 
-	    DateOnly Date { get; set; }
+	    DateOnly Date { get; }
 
 	    /// <summary>
         /// Adds the over time shift.
