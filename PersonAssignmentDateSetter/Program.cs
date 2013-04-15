@@ -1,20 +1,21 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace PersonAssignmentDateSetter
 {
 	class Program
 	{
+		private const string checkNumberOfNonConvertedPersonAssignments
+			= "select COUNT(*) as cnt from PersonAssignment where TheDate < '1850-01-01'";
+
 		static void Main(string[] args)
 		{
+
 			CommonHelper dbHelper = new CommonHelper(args[0]);
 
-			IList<DataRow> rows = dbHelper.ReadData("select COUNT(*) as cnt from PersonAssignment where TheDate = '1800-01-01'");
+			IList<DataRow> rows = dbHelper.ReadData(checkNumberOfNonConvertedPersonAssignments);
 			Console.WriteLine("Updating " + dbHelper.SqlConnectionStringBuilder().InitialCatalog + " found " + rows[0].Field<int>("cnt") + " person assignments");
 			StringBuilder commandString = new StringBuilder();
 			commandString.AppendLine("select top 100");
@@ -41,7 +42,11 @@ namespace PersonAssignmentDateSetter
 				Console.Write("Rows updated = " + total);
 				
 			} while (rows.Count > 0);
-			
+
+			var numberOfNonConverted = dbHelper.ReadData(checkNumberOfNonConvertedPersonAssignments)[0].Field<int>("cnt");
+			if (numberOfNonConverted> 0)
+				throw new Exception("There is still " + numberOfNonConverted + " non converted assignments in db.");
+
 			Console.WriteLine();
 			Console.WriteLine("Ready, press any key");
 			Console.ReadKey();
