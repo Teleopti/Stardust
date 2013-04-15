@@ -29,6 +29,14 @@
 							type="UtcDateTime"
 							not-null="true"/>
 		<!--IEntity-->
+		<property name="Date" 
+					 column="TheDate"
+					 access="property"
+					 type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"
+					 not-null="true" 
+					 insert="true"
+					 update="false"/>
+		
 		<one-to-one name="MainShift"
 					 class="MainShift"
 					 cascade="all-delete-orphan"/>
