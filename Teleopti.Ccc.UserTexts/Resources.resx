@@ -11305,4 +11305,8 @@ These options are activated:
   <data name="InvalidEndDate" xml:space="preserve">
     <value>Invalid end date</value>
   </data>
+  <data name="HourShort" xml:space="preserve">
+    <value>h</value>
+    <comment>Hour in short description</comment>
+  </data>
 </root>

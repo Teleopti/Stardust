@@ -57,6 +57,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 					UserTexts.Resources.Scheduled,
 					UserTexts.Resources.Difference,
 					UserTexts.Resources.ESL,
+					UserTexts.Resources.HourShort,
 
 					CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern,
 					MomentShortDatePattern = CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern.ToUpper(),

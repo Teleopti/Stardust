@@ -16,10 +16,10 @@
 					</span>
 				</th>
 				<th data-bind="visible: LoadingStaffingMetrics"><span class="" data-bind="text: Resources.LoadingThreeDots"></span></th>
-				<th><span class="" data-bind="text: ForecastedHoursDisplay"></span></th>
-				<th><span class="" data-bind="text: ScheduledHoursDisplay"></span></th>
-				<th><span class=" text-error" data-bind="text: DifferenceDisplay"></span></th>
-				<th><span class=" text-warning" data-bind="text: ESLDisplay"></span></th>
+				<th><span class="" data-bind="visible: !LoadingStaffingMetrics(), text: ForecastedHoursDisplay"></span></th>
+				<th><span class="" data-bind="visible: !LoadingStaffingMetrics(), text: ScheduledHoursDisplay"></span></th>
+				<th><span class=" text-error" data-bind="visible: !LoadingStaffingMetrics(), text: DifferenceDisplay"></span></th>
+				<th><span class=" text-warning" data-bind="visible: !LoadingStaffingMetrics(), text: ESLDisplay"></span></th>
 			</tr>
 		</thead>
 	</table>

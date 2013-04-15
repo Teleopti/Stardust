@@ -83,7 +83,7 @@ define([
             this.ForecastedHoursDisplay = ko.computed(function () {
             	var forecastedHours = self.ForecastedHours();
             	if (forecastedHours != undefined) {
-            		return self.Resources.Forecasted + ': ' + forecastedHours.toFixed(2);
+            		return self.Resources.Forecasted + ': ' + forecastedHours.toFixed(2) + ' ' + self.Resources.HourShort;
             	}
             	return '';
             });
@@ -91,7 +91,7 @@ define([
             this.ScheduledHoursDisplay = ko.computed(function () {
             	var scheduledHours = self.ScheduledHours();
             	if (scheduledHours != undefined) {
-            		return self.Resources.Scheduled + ': ' + scheduledHours.toFixed(2);
+            		return self.Resources.Scheduled + ': ' + scheduledHours.toFixed(2) + ' ' + self.Resources.HourShort;
             	}
             	return '';
 	        });
@@ -101,7 +101,7 @@ define([
 	            var diffHours = self.DiffHours();
 	            var diffPercentage = self.DiffPercentage();
 	            if (diffHours!=undefined && diffPercentage!=undefined)
-	            	return self.Resources.Difference + ': ' + diffPercentage.toFixed(2) + ', ' + (diffHours * 100).toFixed(2) + ' %';
+	            	return self.Resources.Difference + ': ' + diffPercentage.toFixed(2) + ' ' + self.Resources.HourShort + ', ' + (diffHours * 100).toFixed(2) + ' %';
 
 	            return '';
             });
@@ -109,7 +109,7 @@ define([
             this.ESLDisplay = ko.computed(function () {
             	var esl = self.ESL();
             	if (esl != undefined)
-	            	return self.Resources.ESL + ': ' + esl;
+            		return self.Resources.ESL + ': ' + esl + ' %';
 	            return '';
             });
             this.SetDailyMetrics = function (data) {
