@@ -2,16 +2,10 @@
 using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
-using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Sdk.ServiceBus.Denormalizer;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.Messages.Denormalize;
 using Teleopti.Interfaces.Messages.Rta;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
@@ -22,7 +16,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 		private ScheduleProjectionHandler target;
 		private MockRepository mocks;
 		private IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository;
-	    private IServiceBus serviceBus;
 
 		[SetUp]
 		public void Setup()
