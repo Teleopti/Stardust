@@ -52,14 +52,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			foreach (var day in period.DayCollection())
 			{
 				var allowanceDay = new AllowanceDay();
+				allowanceDay.Allowance = 0;
+				allowanceDay.Date = day;
 
 				foreach (var budgetDay in budgetDays)
 				{
 					if (budgetDay.Day != day) continue;
 					allowanceDay.Allowance = budgetDay.Allowance;
 					allowanceDay.Date = day;
-					allowanceList.Add(allowanceDay);
 				}
+				allowanceList.Add(allowanceDay);
 			}
 			return allowanceList;
 		}
