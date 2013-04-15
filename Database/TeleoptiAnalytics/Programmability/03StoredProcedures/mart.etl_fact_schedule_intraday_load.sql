@@ -15,9 +15,15 @@ GO
 --exec mart.etl_fact_schedule_intraday_load '2009-02-02','2009-02-03'
 --exec mart.etl_fact_schedule_intraday_load @start_date='2010-10-30 00:00:00',@end_date='2010-11-03 00:00:00'
 CREATE PROCEDURE [mart].[etl_fact_schedule_intraday_load]
-@business_unit_code uniqueidentifier,
-@scenario_code uniqueidentifier
+@business_unit_code uniqueidentifier
 AS
+
+declare @scenario_code uniqueidentifier
+
+select @scenario_code = scenario_code
+from mart.dim_scenario
+where default_scenario=1
+and business_unit_code = @business_unit_code
 
 --delete days changed from mart.fact_schedule (new, updated or deleted)
 DELETE fs
@@ -28,10 +34,10 @@ ON
 	stg.person_code		=			dp.person_code
 	AND --trim
 		(
-				(stg.shift_start	>= dp.valid_from_date)
+				(stg.schedule_date	>= dp.valid_from_date)
 
 			AND
-				(stg.shift_start < dp.valid_to_date)
+				(stg.schedule_date < dp.valid_to_date)
 		)
 INNER JOIN mart.dim_date dd
 	ON dd.date_date = stg.schedule_date
@@ -40,7 +46,6 @@ INNER JOIN mart.dim_scenario ds
 INNER JOIN mart.fact_schedule fs
 	ON dd.date_id = fs.schedule_date_id
 	AND dp.person_id = fs.person_id
-	AND stg.interval_id = fs.interval_id
 	AND ds.scenario_id = fs.scenario_id
 WHERE stg.business_unit_code = @business_unit_code
 AND stg.scenario_code = @scenario_code

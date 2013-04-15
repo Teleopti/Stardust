@@ -154,6 +154,6 @@ INSERT INTO mart.fact_schedule
 	)
 
 SELECT * FROM Stage.v_stg_Schedule_load
-WHERE convert(smalldatetime,floor(convert(decimal(18,8),shift_start ))) between @start_date AND @end_date
+WHERE convert(smalldatetime,floor(convert(decimal(18,8),shift_starttime))) between @start_date AND @end_date
 
 GO

@@ -166,7 +166,7 @@ CREATE TABLE [stage].[stg_schedule_changed](
 	[scenario_code] ASC
 )
 )
-
+GO
 ALTER TABLE [stage].[stg_schedule_changed] ADD  CONSTRAINT [DF_stg_schedule_changed_datasource_id]  DEFAULT ((1)) FOR [datasource_id]
 ALTER TABLE [stage].[stg_schedule_changed] ADD  CONSTRAINT [DF_stg_schedule_changed_insert_date]  DEFAULT (getdate()) FOR [insert_date]
 ALTER TABLE [stage].[stg_schedule_changed] ADD  CONSTRAINT [DF_stg_schedule_changed_update_date]  DEFAULT (getdate()) FOR [update_date]
