@@ -186,6 +186,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
 
         public static DateOnlyPeriod GetPeriodToLoad(DateOnlyPeriod visiblePeriod)
         {
+			// some skills, like back office skills, email skills have a longer period when the load is distributed
+			// to handle that, we load some days before and after
             return new DateOnlyPeriod(visiblePeriod.StartDate.AddDays(-7),visiblePeriod.EndDate.AddDays(1));
         }
 
