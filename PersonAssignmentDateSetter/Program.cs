@@ -38,6 +38,8 @@ namespace PersonAssignmentDateSetter
 				}
 				dbHelper.UpdateRows(rows);
 
+				Console.Clear();
+
 				Console.SetCursorPosition(0,1);
 				Console.Write("Rows updated = " + total);
 				
