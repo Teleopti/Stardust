@@ -22,35 +22,31 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 	    [SetUp]
         public void Setup()
         {
-            var mocks = new MockRepository();
-            var diffSvc = mocks.StrictMock<IDifferenceCollectionService<IPersistableScheduleData>>();
-            var period2 = new ScheduleDateTimePeriod(new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
-            IScenario scenario = ScenarioFactory.CreateScenarioAggregate();
-            _scheduleDictionary = new ScheduleDictionary(scenario, period2, diffSvc);
 			_mock = new MockRepository();
+			var diffSvc = _mock.StrictMock<IDifferenceCollectionService<IPersistableScheduleData>>();
+            var period2 = new ScheduleDateTimePeriod(new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
+            var scenario = ScenarioFactory.CreateScenarioAggregate();
+            _scheduleDictionary = new ScheduleDictionary(scenario, period2, diffSvc);
         }
 
         [Test]
         public void Verify()
         {
-            
             var raptorRepository = _mock.StrictMock<IRaptorRepository>();
             var scenario = _mock.StrictMock<IScenario>();
             var commonStateHolder = _mock.StrictMock<ICommonStateHolder>();
 			var scheduleTransformer = _mock.DynamicMock<IScheduleTransformer>();
 			var jobParameters = JobParametersFactory.SimpleParameters(false);
+			jobParameters.StateHolder = commonStateHolder;
 			jobParameters.Helper = new JobHelper(raptorRepository, null, null);
 			var stageScheduleJobStep = new StageScheduleJobStep(jobParameters, scheduleTransformer);
 
-	        Expect.Call(() => raptorRepository.TruncateSchedule());
-	        Expect.Call(raptorRepository.LoadScenario()).Return(new List<IScenario>{scenario});
-            Expect.Call(raptorRepository.LoadSchedule(new DateTimePeriod(), scenario, commonStateHolder)).IgnoreArguments()
-                .Return(_scheduleDictionary)
-                .Repeat.Any();
-
-            Expect.Call(raptorRepository.LoadPerson(commonStateHolder))
-                .Return(new List<IPerson>())
-                .Repeat.Any();
+	        Expect.Call(raptorRepository.TruncateSchedule);
+	        Expect.Call(commonStateHolder.ScenarioCollectionDeletedExcluded).Return(new List<IScenario> { scenario });
+			Expect.Call(commonStateHolder.GetSchedules(new DateTimePeriod(), scenario)).IgnoreArguments()
+                .Return(_scheduleDictionary);
+	        Expect.Call(commonStateHolder.GetSchedulePartPerPersonAndDate(_scheduleDictionary))
+				.Return(new List<IScheduleDay>());
 
             _mock.ReplayAll();
             

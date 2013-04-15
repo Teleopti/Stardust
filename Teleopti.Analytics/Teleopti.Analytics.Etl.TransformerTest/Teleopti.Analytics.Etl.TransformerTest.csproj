@@ -95,6 +95,7 @@
   <ItemGroup>
     <Compile Include="BaseConfigurationTest.cs" />
     <Compile Include="ConfigurationHandlerTest.cs" />
+    <Compile Include="Job\Steps\IntradayStageScheduleJobStepTest.cs" />
     <Compile Include="FakeData\SkillFactory.cs" />
     <Compile Include="FakeData\OvertimeFactory.cs" />
     <Compile Include="Job\Jobs\RequestJobTest.cs" />
