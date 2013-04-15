@@ -11,4 +11,6 @@
 ..\..\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBus.Host\GeneralQueue.config;..\ServiceBusHostGeneralQueue.config
 ..\..\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBus.Host\RequestQueue.config;..\ServiceBusHostRequestQueue.config
 ..\..\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBus.Host\DenormalizeQueue.config;..\ServiceBusHostDenormalizeQueue.config
+..\..\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBus.Host\PayrollQueue.config;..\ServiceBusHostPayrollQueue.config
+..\..\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBus.Host\RtaQueue.config;..\ServiceBusHostRTAQueue.config
 FixMyConfig.nhib.xml;..\TeleoptiCCC7.nhib.xml
