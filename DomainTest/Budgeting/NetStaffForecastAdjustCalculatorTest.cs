@@ -158,7 +158,7 @@ namespace Teleopti.Ccc.DomainTest.Budgeting
 		    var netStaffCalculator = new NetStaffCalculator(new GrossStaffCalculator());
 		    netStaffCalculator.Initialize(_listOfBudgetDays);
 		    _info = new CultureInfo(1053);
-		    _target = new NetStaffForecastAdjustCalculator(netStaffCalculator, _info);
+		    _target = new NetStaffForecastAdjustCalculator(netStaffCalculator);
 	    }
 
 	    [Test]
@@ -168,7 +168,7 @@ namespace Teleopti.Ccc.DomainTest.Budgeting
 	            {
 		            GrossStaff = 10000
 	            };
-            _target.Calculate(_budgetDay5, _listOfBudgetDays, result);
+            _target.Calculate(_budgetDay5, _listOfBudgetDays, ref result);
             var net = Math.Round(result.NetStaffFcAdj, 2);
             net.Should().Be.EqualTo(535.75d);
 		}
@@ -205,13 +205,13 @@ namespace Teleopti.Ccc.DomainTest.Budgeting
 			var netStaffCalculator = new NetStaffCalculator(new GrossStaffCalculator());
 			netStaffCalculator.Initialize(budgetDays);
 
-			_target = new NetStaffForecastAdjustCalculator(netStaffCalculator, _info);
+			_target = new NetStaffForecastAdjustCalculator(netStaffCalculator);
 			
 			_result = new BudgetCalculationResult
 				{
 					GrossStaff = 100
 				};
-			_target.Calculate(peakBudgetDay, budgetDays, _result);
+			_target.Calculate(peakBudgetDay, budgetDays, ref _result);
 			_result.NetStaffFcAdj.Should().Not.Be.GreaterThan(90);
 		}
 

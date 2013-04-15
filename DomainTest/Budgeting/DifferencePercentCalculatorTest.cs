@@ -40,14 +40,14 @@ namespace Teleopti.Ccc.DomainTest.Budgeting
             var netStaffCalculator = new NetStaffCalculator(new GrossStaffCalculator());
             netStaffCalculator.Initialize(listOfBudgetDays);
             var info = new CultureInfo(1053);
-            _target = new DifferencePercentCalculator(netStaffCalculator, info);
+            _target = new DifferencePercentCalculator();
         }
 
         [Test]
         public void ShouldGetBudgetedStaff()
         {
             var result = new BudgetCalculationResult();
-            _target.Calculate(_budgetDay4, listOfBudgetDays, result);
+            _target.Calculate(_budgetDay4, listOfBudgetDays, ref result);
             var differencePercent = Math.Round(result.DifferencePercent.Value, 4);
             differencePercent.Should().Be.EqualTo(25.9948d);
         }

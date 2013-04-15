@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Budgeting
             var budgetDayCalculations = _netStaffCalculator.CalculatedResult(budgetDay);
             foreach (var calculator in _calculatorList)
             {
-                calculator.Calculate(budgetDay, _budgetDayList, budgetDayCalculations);
+                calculator.Calculate(budgetDay, _budgetDayList, ref budgetDayCalculations);
             }
 
             return budgetDayCalculations;

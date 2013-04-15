@@ -8,22 +8,19 @@ namespace Teleopti.Ccc.Domain.Budgeting
 	public class NetStaffForecastAdjustCalculator : ICalculator
 	{
 		private readonly INetStaffCalculator _netStaffCalculator;
-		private readonly CultureInfo _cultureInfo;
 
-		public NetStaffForecastAdjustCalculator(INetStaffCalculator netStaffCalculator, CultureInfo cultureInfo)
+		public NetStaffForecastAdjustCalculator(INetStaffCalculator netStaffCalculator)
 		{
 			_netStaffCalculator = netStaffCalculator;
-			_cultureInfo = cultureInfo;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods",
 			MessageId = "1"),
 		 System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods",
 			 MessageId = "2")]
-		public void Calculate(IBudgetDay budgetDay, IEnumerable<IBudgetDay> budgetDayList,
-		                      BudgetCalculationResult budgetCalculationResult)
+		public void Calculate(IBudgetDay budgetDay, IEnumerable<IBudgetDay> budgetDayList, ref BudgetCalculationResult budgetCalculationResult)
 		{
-			var week = DateHelper.GetWeekPeriod(budgetDay.Day, _cultureInfo);
+			var week = DateHelper.GetWeekPeriod(budgetDay.Day, CultureInfo.CurrentCulture);
 
 			var budgetDaysWithinWeek = new List<IBudgetDay>(7);
 			budgetDaysWithinWeek.AddRange(

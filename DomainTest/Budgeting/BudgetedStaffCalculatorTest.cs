@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.Budgeting
             var netStaffCalculator = new NetStaffCalculator(new GrossStaffCalculator());
             netStaffCalculator.Initialize(listOfBudgetDays);
             var info = new CultureInfo(1053);
-            _target = new BudgetedStaffCalculator(netStaffCalculator, info);
+            _target = new BudgetedStaffCalculator();
         }
 
         [Test]
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.Budgeting
             var grossStaffCalculator = new GrossStaffCalculator();
             grossStaffCalculator.Initialize(listOfBudgetDays);
             var result = grossStaffCalculator.CalculatedResult(_budgetDay5);
-            _target.Calculate(_budgetDay5, listOfBudgetDays, result);
+            _target.Calculate(_budgetDay5, listOfBudgetDays, ref result);
             var budget = Math.Round(result.BudgetedStaff, 2);
             budget.Should().Be.EqualTo(536.41d);
         }
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.DomainTest.Budgeting
             var grossStaffCalculator = new GrossStaffCalculator();
             grossStaffCalculator.Initialize(listOfBudgetDays);
             var result = grossStaffCalculator.CalculatedResult(_budgetDay5);
-            _target.Calculate(_budgetDay5, listOfBudgetDays, result);
+            _target.Calculate(_budgetDay5, listOfBudgetDays, ref result);
             var budget = Math.Round(result.BudgetedStaff, 2);
             budget.Should().Be.EqualTo(0d);
         }

@@ -222,9 +222,8 @@ namespace Teleopti.Ccc.DomainTest.Budgeting
                                                             netStaffCalculator,
                                                             new List<ICalculator>
                                                                 {
-                                                                    new DifferencePercentCalculator(netStaffCalculator,
-                                                                                                    info),
-                                                                    new AllowanceCalculator(netStaffCalculator, info)
+                                                                    new DifferencePercentCalculator(),
+                                                                    new AllowanceCalculator()
                                                                 });
                 var calculations = target.Calculate(budgetCalculator);
                 Assert.AreEqual(1.84d, Math.Round(calculations.Difference, 2));
@@ -278,9 +277,8 @@ namespace Teleopti.Ccc.DomainTest.Budgeting
                                                             netStaffCalculator,
                                                             new List<ICalculator>
                                                                 {
-                                                                    new DifferencePercentCalculator(netStaffCalculator,
-                                                                                                    info),
-                                                                    new AllowanceCalculator(netStaffCalculator, info)
+                                                                    new DifferencePercentCalculator(),
+                                                                    new AllowanceCalculator()
                                                                 });
                 var calculations = target.Calculate(budgetCalculator);
                 Assert.AreEqual(0d, calculations.TotalAllowance);

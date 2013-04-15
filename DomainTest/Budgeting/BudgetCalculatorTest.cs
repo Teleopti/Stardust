@@ -55,8 +55,8 @@ namespace Teleopti.Ccc.DomainTest.Budgeting
 
             _calcList = new List<ICalculator>
                             {
-                                new DifferencePercentCalculator(netStaffCalculator, info),
-                                new AllowanceCalculator(netStaffCalculator, info)
+                                new DifferencePercentCalculator(),
+                                new AllowanceCalculator()
                             };
             _target = new BudgetCalculator(_listOfBudgetDays, netStaffCalculator, _calcList);
         }
