@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Specification;
@@ -62,6 +63,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
             foreach (var budgetDay in budgetDays)
             {
                 var currentDay = budgetDay.Day;
+
+                if (!IsSkillOpenForDateOnly(currentDay, budgetGroup.SkillCollection))
+                    continue;
+
                 var allowance = budgetDay.Allowance;
                 var alreadyUsedAllowance =
                     _scheduleProjectionReadOnlyRepository.GetNumberOfAbsencesPerDayAndBudgetGroup(
@@ -71,6 +76,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
                     return false;
             }
             return true;
+        }
+
+        protected static bool IsSkillOpenForDateOnly(DateOnly date, IEnumerable<ISkill> skills)
+        {
+            return skills.Any(s => s.WorkloadCollection.Any(w => w.TemplateWeekCollection.Any(t => t.Key == (int)date.DayOfWeek && t.Value.OpenForWork.IsOpen)));
         }
     }
 }
