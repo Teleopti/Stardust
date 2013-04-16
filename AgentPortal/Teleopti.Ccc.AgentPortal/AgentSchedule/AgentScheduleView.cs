@@ -26,7 +26,9 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
         /// Host schedule Control
         /// </summary>
         private readonly CustomScheduleControl  _scheduleControl;
-        private DateTimePeriodDto _loadedPeriod;
+
+	    private readonly ILegendLoader _legendLoader;
+	    private DateTimePeriodDto _loadedPeriod;
 
         /// <summary>
         /// Gets the schedule control host.
@@ -171,7 +173,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
         public void SetDataSource()
         {
             // set the data source
-            _scheduleControl.DataSource = new CustomScheduleDataProvider(this);
+            _scheduleControl.DataSource = new CustomScheduleDataProvider(this,_legendLoader);
             // Set the property to not to save the changes
             _scheduleControl.DataSource.SaveOnCloseBehaviorAction = SaveOnCloseBehavior.DoNotSave;
         }
@@ -262,18 +264,19 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
         {
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AgentScheduleView"/> class.
-        /// </summary>
-        /// <param name="scheduleControl">The schedule control.</param>
-        /// <param name="scheduleStateHolder">The schedule state holder.</param>
-        /// <param name="clipHandler">The clip handler.</param>
-        public AgentScheduleView(CustomScheduleControl scheduleControl,
-            AgentScheduleStateHolder scheduleStateHolder, ClipHandler<ICustomScheduleAppointment> clipHandler)
+	    /// <summary>
+	    /// Initializes a new instance of the <see cref="AgentScheduleView"/> class.
+	    /// </summary>
+	    /// <param name="scheduleControl">The schedule control.</param>
+	    /// <param name="scheduleStateHolder">The schedule state holder.</param>
+	    /// <param name="clipHandler">The clip handler.</param>
+	    /// <param name="legendLoader"></param>
+	    public AgentScheduleView(CustomScheduleControl scheduleControl, AgentScheduleStateHolder scheduleStateHolder, ClipHandler<ICustomScheduleAppointment> clipHandler, ILegendLoader legendLoader)
         {
             Presenter = new AgentSchedulePresenter(this, scheduleStateHolder, clipHandler);
             _scheduleControl = scheduleControl;
-            IsNeedToReloadData = true;
+		    _legendLoader = legendLoader;
+		    IsNeedToReloadData = true;
         }
 
         /// <summary>
