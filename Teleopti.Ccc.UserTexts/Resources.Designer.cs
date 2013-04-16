@@ -763,6 +763,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add full day absence.
+        /// </summary>
+        public static string AddFullDayAbsence {
+            get {
+                return ResourceManager.GetString("AddFullDayAbsence", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add grouping absence.
         /// </summary>
         public static string AddGroupingAbsence {
@@ -10253,6 +10262,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string InvalidDateTimeExceptionText {
             get {
                 return ResourceManager.GetString("InvalidDateTimeExceptionText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid end date.
+        /// </summary>
+        public static string InvalidEndDate {
+            get {
+                return ResourceManager.GetString("InvalidEndDate", resourceCulture);
             }
         }
         

@@ -9,8 +9,8 @@ using System.Linq;
 using System.Threading;
 using System.Web;
 using Microsoft.Reporting.WebForms;
-
 using Teleopti.Analytics.Portal.Utils;
+using Teleopti.Analytics.ReportTexts;
 
 namespace Teleopti.Analytics.Portal
 {
@@ -18,28 +18,40 @@ namespace Teleopti.Analytics.Portal
     {
         private CommonReports _commonReports;
 
-        protected void Page_Load(object sender, EventArgs e)
-        {
-            if (IsPostBack)
-            {
-                return;
-            } 
-            _commonReports = new CommonReports(ConnectionString, ReportId);
-            if ((Request.QueryString.Get("Ready") != null))
-            {
-                if (Request.QueryString["Ready"].ToUpper(CultureInfo.CurrentCulture) == "YES")
-                {
-                    FillViaQuery();
-                }
-            }
-            else
-            {
-                FillViaParameters();
-            }
+	    protected void Page_Load(object sender, EventArgs e)
+	    {
+		    if (IsPostBack)
+		    {
+			    return;
+		    }
+		    _commonReports = new CommonReports(ConnectionString, ReportId);
 
-        }
+		    try
+		    {
+			    if ((Request.QueryString.Get("Ready") != null))
+			    {
+				    if (Request.QueryString["Ready"].ToUpper(CultureInfo.CurrentCulture) == "YES")
+				    {
+					    FillViaQuery();
+				    }
+			    }
+			    else
+			    {
+				    FillViaParameters();
+			    }
+		    }
+		    catch (SqlException exception)
+		    {
+			    if (exception.ErrorCode != -2146232060) return;
+			    Response.Write(Request.UrlReferrer != null
+				                   ? string.Format(CultureInfo.InvariantCulture, "<script> alert('{0}');" +
+				                                                                 "window.top.location='{1}'</script>",
+				                                   Resources.DatabaseTimedOutSelectLessData, Request.UrlReferrer)
+				                   : "<script> alert('Connection to database timed out, try selecting less data');</script>");
+		    }
+	    }
 
-        private IList<SqlParameter> SessionParameters
+	    private IList<SqlParameter> SessionParameters
         {
             get
             {
@@ -97,19 +109,21 @@ namespace Teleopti.Analytics.Portal
             }
         }
 
-        private static IList<SqlParameter> GetSqlParametersFromQueryString(NameValueCollection queryString)
-	{
-		var parameters = new List<SqlParameter>();
-		foreach (string k in queryString.Keys) {
-            if (k.StartsWith("@", StringComparison.CurrentCultureIgnoreCase) & k != "@report_type")
-			{
-				parameters.Add(CreateParameter(k, queryString[k]));
-			}
+	    private static IList<SqlParameter> GetSqlParametersFromQueryString(NameValueCollection queryString)
+	    {
+		    var parameters = new List<SqlParameter>();
+		    foreach (string k in queryString.Keys)
+		    {
+			    if (k.StartsWith("@", StringComparison.CurrentCultureIgnoreCase) & k != "@report_type")
+			    {
+				    parameters.Add(CreateParameter(k, queryString[k]));
+			    }
 
-		}
-        return parameters;
-	}
-        private static SqlParameter CreateParameter(string name, string value)
+		    }
+		    return parameters;
+	    }
+
+	    private static SqlParameter CreateParameter(string name, string value)
         {
             return new SqlParameter(name, value);
         }
@@ -150,12 +164,10 @@ namespace Teleopti.Analytics.Portal
                     }
                     if (param.ParameterName.ToLower(CultureInfo.CurrentCulture) == "@" + repInfo.Name.ToLower(CultureInfo.CurrentCulture))
                     {
-                        {
-                            @params.Add(new ReportParameter(repInfo.Name, texts[i], false));
-                            added = true;
-                        }
+	                    @params.Add(new ReportParameter(repInfo.Name, texts[i], false));
+	                    added = true;
                     }
-                    if (!added && repInfo.Name == "culture")
+	                if (!added && repInfo.Name == "culture")
                         @params.Add(new ReportParameter("culture",Thread.CurrentThread.CurrentCulture.IetfLanguageTag, false));
                     i += 1;
                 }

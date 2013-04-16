@@ -27,6 +27,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 		private IWorkloadRepository _workloadRep;
 		private IScenarioRepository _scenarioRep;
 		private IRepositoryFactory _repFactory;
+		private ICurrentUnitOfWorkFactory _currentunitOfWorkFactory;
 		private IUnitOfWorkFactory _unitOfWorkFactory;
 		private IJobResultRepository _jobResultRep;
 		private IJobResultFeedback _jobResultFeedback;
@@ -48,6 +49,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 			_workloadRep = _mocks.DynamicMock<IWorkloadRepository>();
 			_scenarioRep = _mocks.DynamicMock<IScenarioRepository>();
 			_repFactory = _mocks.DynamicMock<IRepositoryFactory>();
+			_currentunitOfWorkFactory = _mocks.DynamicMock<ICurrentUnitOfWorkFactory>();
 			_unitOfWorkFactory = _mocks.DynamicMock<IUnitOfWorkFactory>();
 			_jobResultRep = _mocks.DynamicMock<IJobResultRepository>();
 			_jobResultFeedback = _mocks.DynamicMock<IJobResultFeedback>();
@@ -56,7 +58,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 			_statisticHelper = _mocks.DynamicMock<IStatisticHelper>();
 			_forecastClassesCreator = _mocks.DynamicMock<IForecastClassesCreator>();
 			_target = new QuickForecastWorkloadMessageConsumer(_skillDayRep, _outlierRep, _workloadRep, _scenarioRep, _repFactory,
-			                                                   _unitOfWorkFactory, _jobResultRep, _jobResultFeedback, _messBroker,
+															   _currentunitOfWorkFactory, _jobResultRep, _jobResultFeedback, _messBroker,
 															   _workloadDayHelper, _forecastClassesCreator);
 			_unitOfWork =  _mocks.DynamicMock<IUnitOfWork>();
 
@@ -68,6 +70,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 		[Test]
 		public void ShouldExitIfWrongJobId()
 		{
+			Expect.Call(_currentunitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
 			Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
 			Expect.Call(_jobResultRep.Get(_jobId)).Return(null);
 			_mocks.ReplayAll();
@@ -79,6 +82,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 		public void ShouldExitIfWrongWorkloadId()
 		{
 			var jobResult = _mocks.DynamicMock<IJobResult>();
+			Expect.Call(_currentunitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
 			Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
 			Expect.Call(_jobResultRep.Get(_jobId)).Return(jobResult);
 			Expect.Call(_workloadRep.Get(Guid.NewGuid())).IgnoreArguments().Return(null);
@@ -103,6 +107,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 			var taskOwnerPeriod = new TaskOwnerPeriod(new DateOnly(2013,1,1),new List<ITaskOwner>(),TaskOwnerPeriodType.Other  );
 			var template = _mocks.DynamicMock<IWorkloadDayTemplate>();
 
+			Expect.Call(_currentunitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
 			Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
 			Expect.Call(_jobResultRep.Get(_jobId)).Return(jobResult);
 			Expect.Call(_workloadRep.Get(Guid.NewGuid())).IgnoreArguments().Return(workload);
@@ -151,7 +156,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 			var jobResult = _mocks.DynamicMock<IJobResult>();
 			var workload = _mocks.DynamicMock<IWorkload>();
 			var scenario = _mocks.DynamicMock<IScenario>();
-			
+
+			Expect.Call(_currentunitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
 			Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
 			Expect.Call(_jobResultRep.Get(_jobId)).Return(jobResult);
 			Expect.Call(_workloadRep.Get(Guid.NewGuid())).IgnoreArguments().Return(workload);
@@ -169,6 +175,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 		public void ShouldReportError()
 		{
 			var jobResult = _mocks.DynamicMock<IJobResult>();
+			Expect.Call(_currentunitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
 			Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
 			Expect.Call(_jobResultRep.Get(_jobId)).Return(jobResult);
 			Expect.Call(_workloadRep.Get(Guid.NewGuid())).IgnoreArguments().Throw(new ArgumentOutOfRangeException());

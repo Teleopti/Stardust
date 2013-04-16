@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Web.Core.Startup.Booter;
@@ -31,9 +32,10 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 		{
 			public static bool IsExecuted { get; private set; }
 
-			public void Execute()
+			public Task Execute()
 			{
 				IsExecuted = true;
+				return null;
 			}
 		}
 
@@ -42,9 +44,10 @@ namespace Teleopti.Ccc.WebTest.Core.Startup
 		{
 			public static bool IsExecuted { get; private set; }
 
-			public void Execute()
+			public Task Execute()
 			{
 				IsExecuted = true;
+				return null;
 			}
 		}
 	}

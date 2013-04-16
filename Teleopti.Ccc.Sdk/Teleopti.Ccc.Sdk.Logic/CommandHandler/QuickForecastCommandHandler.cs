@@ -1,7 +1,9 @@
 ﻿using System;
 using System.ServiceModel;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Interfaces.Domain;
@@ -24,7 +26,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public CommandResultDto Handle(QuickForecastCommandDto command)
+		public void Handle(QuickForecastCommandDto command)
 		{
 			if (command == null)
 				throw new FaultException("Command is null.");
@@ -62,10 +64,10 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 								IncreaseWith = command.IncreaseWith
 			              	};
 
-			_busSender.NotifyServiceBus(message);
+			_busSender.Send(message);
 			}
 			
-			return new CommandResultDto {AffectedId = jobId, AffectedItems = 1};
+			command.Result = new CommandResultDto {AffectedId = jobId, AffectedItems = 1};
 		}
     }
 }

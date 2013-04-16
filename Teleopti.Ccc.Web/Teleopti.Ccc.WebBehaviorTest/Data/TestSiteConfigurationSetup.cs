@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using CassiniDev;
 using Teleopti.Ccc.TestCommon;
@@ -8,8 +11,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 {
 	public static class TestSiteConfigurationSetup
 	{
-		private static readonly string AgentPortalWebNhibConfPath = Path.Combine(IniFileInfo.SitePath, "bin");
-		private static readonly string TargetTestDataNHibFile = Path.Combine(AgentPortalWebNhibConfPath, "TestData.nhib.xml");
+		private static readonly string TargetTestDataNHibFile = Path.Combine(Paths.WebBinPath(), "TestData.nhib.xml");
+		private static readonly string TargetWebConfig = Path.Combine(Paths.WebPath(), "web.config");
 
 		public static Uri Url;
 		
@@ -28,6 +31,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			{
 				Url = new Uri(IniFileInfo.Url);
 			}
+			UpdateWebConfigFromTemplate();
 			GenerateAndWriteTestDataNHibFileFromTemplate();
 		}
 
@@ -38,22 +42,39 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 				_server.ShutDown();
 		}
 
-		public static void RestartApplication()
+		public static void RecycleApplication()
 		{
-			// just to make sure we'r not on the same second.
-			// Not even sure this is required to make the touch valid at all times
-			Thread.Sleep(1010);
-			// touch the nhib file in the bin folder to make the app restart
-			File.SetLastWriteTimeUtc(TargetTestDataNHibFile, DateTime.UtcNow);
+			var file = Path.Combine(Paths.WebBinPath(), "touch");
+			File.WriteAllText(file, "can't touch this");
+			File.Delete(file);
 		}
 
 		private static void GenerateAndWriteTestDataNHibFileFromTemplate()
 		{
-			var contents = File.ReadAllText("Data\\TestData.nhib.xml");
-			contents = contents.Replace("_connectionString_", IniFileInfo.ConnectionString);
-			contents = contents.Replace("_connectionStringMatrix_", IniFileInfo.ConnectionStringMatrix);
-			contents = contents.Replace("_database_", IniFileInfo.Database);
-			File.WriteAllText(TargetTestDataNHibFile, contents);
+			FileConfigurator.ConfigureByTags(
+				"Data\\TestData.nhib.xml",
+				TargetTestDataNHibFile,
+				new AllTags()
+				);
+		}
+		
+		private static void UpdateWebConfigFromTemplate()
+		{
+			var sourceFile = Path.Combine(Paths.FindProjectPath(@"BuildArtifacts\"), "web.root.web.config");
+			var tags = new AllTags();
+			if (!IniFileInfo.ServiceBus)
+			{
+				const string module = @"<module type=""Teleopti.Ccc.IocCommon.Configuration.LocalInMemoryEventsPublisherModule, Teleopti.Ccc.IocCommon""/>";
+				tags.Add(
+					"LocalInMemoryEventsPublisherModule",
+					module
+					);
+			}
+			FileConfigurator.ConfigureByTags(
+				sourceFile,
+				TargetWebConfig,
+				tags
+				);
 		}
 	}
 }

@@ -32,7 +32,6 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
         [Test]
         public void ShouldSaveRebuildReadModelForPersonToQueue()
         {
-            var session = _mocks.DynamicMock<IRunSql>();
             var person = new Person();
             Guid[] ids = new Guid[] {};
             var message = new PersonChangedMessage();
@@ -43,18 +42,17 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 
             using (_mocks.Record())
             {
-                Expect.Call(() => _saveToDenormalizationQueue.Execute(message, session)).IgnoreArguments();
+                Expect.Call(() => _saveToDenormalizationQueue.Execute(message)).IgnoreArguments();
             }
             using (_mocks.Playback())
             {
-                _target.Execute(session, roots);
+                _target.Execute(roots);
             }
         }
 
 		[Test]
 		public void ShouldSaveRebuildReadModelForPersonWriteProtectionToQueue()
 		{
-			var session = _mocks.DynamicMock<IRunSql>();
 			var personWriteProtectionInfo = new PersonWriteProtectionInfo(new Person());
 			Guid[] ids = new Guid[] { };
 			var message = new PersonChangedMessage();
@@ -65,18 +63,17 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 
 			using (_mocks.Record())
 			{
-				Expect.Call(() => _saveToDenormalizationQueue.Execute(message, session)).IgnoreArguments();
+				Expect.Call(() => _saveToDenormalizationQueue.Execute(message)).IgnoreArguments();
 			}
 			using (_mocks.Playback())
 			{
-				_target.Execute(session, roots);
+				_target.Execute(roots);
 			}
 		}
 
         [Test]
         public void ShouldNotRebuildReadModelForScenario()
         {
-            var session = _mocks.DynamicMock<IRunSql>();
             var scenario = _mocks.DynamicMock<IScenario>();
 
             using (_mocks.Record())
@@ -84,7 +81,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
             }
             using (_mocks.Playback())
             {
-                _target.Execute(session, new IRootChangeInfo[] { new RootChangeInfo(scenario, DomainUpdateType.Insert) });
+                _target.Execute(new IRootChangeInfo[] { new RootChangeInfo(scenario, DomainUpdateType.Insert) });
             }
         }
 	}

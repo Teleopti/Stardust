@@ -2,6 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using Rhino.ServiceBus;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -13,20 +19,20 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 {
 	public class InitialLoadScheduleProjectionConsumer : ConsumerOf<InitialLoadScheduleProjection>
 	{
-		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IPersonRepository _personRepository;
 		private readonly IScheduleProjectionReadOnlyRepository _scheduleProjectionReadOnlyRepository;
 		private readonly IScheduleDayReadModelRepository _scheduleDayReadModelRepository;
-		private readonly IPersonScheduleDayReadModelRepository _personScheduleDayReadModelRepository;
+		private readonly IPersonScheduleDayReadModelPersister _personScheduleDayReadModelRepository;
 		private readonly IPersonAssignmentRepository _personAssignmentRepository;
-		private readonly IScenarioRepository _scenarioRepository;
+		private readonly ICurrentScenario _scenarioRepository;
 		private readonly IServiceBus _serviceBus;
 		private IList<IPerson> _people;
 		private IScenario _defaultScenario;
 		private DateOnlyPeriod _period;
 		private DateTimePeriod _utcPeriod;
 
-		public InitialLoadScheduleProjectionConsumer(IUnitOfWorkFactory unitOfWorkFactory,IPersonRepository personRepository, IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository, IScheduleDayReadModelRepository scheduleDayReadModelRepository, IPersonScheduleDayReadModelRepository personScheduleDayReadModelRepository, IPersonAssignmentRepository personAssignmentRepository, IScenarioRepository scenarioRepository, IServiceBus serviceBus)
+		public InitialLoadScheduleProjectionConsumer(ICurrentUnitOfWorkFactory unitOfWorkFactory, IPersonRepository personRepository, IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository, IScheduleDayReadModelRepository scheduleDayReadModelRepository, IPersonScheduleDayReadModelPersister personScheduleDayReadModelRepository, IPersonAssignmentRepository personAssignmentRepository, ICurrentScenario scenarioRepository, IServiceBus serviceBus)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_personRepository = personRepository;
@@ -40,8 +46,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 
 		public void Consume(InitialLoadScheduleProjection message)
 		{
-			var messages = new List<ScheduleDenormalizeBase>();
-			using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+			var messages = new List<ScheduleChangedEventBase>();
+			using (var uow = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
 				var projectionModelInitialized = _scheduleProjectionReadOnlyRepository.IsInitialized();
 				var scheduleDayModelInitialized = _scheduleDayReadModelRepository.IsInitialized();
@@ -54,7 +60,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 
 				if (!projectionModelInitialized && !scheduleDayModelInitialized && !personScheduleDayModelInitialized)
 				{
-					messages.AddRange(initialLoad<ScheduleChanged>(message));
+					messages.AddRange(initialLoad<ScheduleChangedEvent>(message));
 
 					projectionModelInitialized = true;
 					scheduleDayModelInitialized = true;
@@ -62,15 +68,15 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 				}
 				if (!projectionModelInitialized)
 				{
-					messages.AddRange(initialLoad<ScheduleProjectionInitialize>(message));
+					messages.AddRange(initialLoad<ScheduleInitializeTriggeredEventForScheduleProjection>(message));
 				}
 				if (!scheduleDayModelInitialized)
 				{
-					messages.AddRange(initialLoad<ScheduleDayInitialize>(message));
+					messages.AddRange(initialLoad<ScheduleInitializeTriggeredEventForScheduleDay>(message));
 				}
 				if (!personScheduleDayModelInitialized)
 				{
-					messages.AddRange(initialLoad<PersonScheduleDayInitialize>(message));
+					messages.AddRange(initialLoad<ScheduleInitializeTriggeredEventForPersonScheduleDay>(message));
 				}
 				uow.Clear();
 			}
@@ -80,12 +86,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 		private void loadPeopleAndScenario()
 		{
 			_people = _personRepository.LoadAll();
-			_defaultScenario = _scenarioRepository.LoadDefaultScenario();
+			_defaultScenario = _scenarioRepository.Current();
 			_period = new DateOnlyPeriod(DateOnly.Today.AddDays(-3652), DateOnly.Today.AddDays(3652));
 			_utcPeriod = _period.ToDateTimePeriod(TeleoptiPrincipal.Current.Regional.TimeZone);
 		}
 
-		private IEnumerable<T> initialLoad<T>(InitialLoadScheduleProjection message) where T : ScheduleDenormalizeBase, new()
+		private IEnumerable<T> initialLoad<T>(InitialLoadScheduleProjection message) where T : ScheduleChangedEventBase, new()
 		{
 			return _people.Select(
 				p =>

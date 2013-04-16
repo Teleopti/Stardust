@@ -3,5 +3,6 @@
 	public interface ISettings
 	{
 		string nhibConfPath();
+		string MessageBroker();
 	}
 }

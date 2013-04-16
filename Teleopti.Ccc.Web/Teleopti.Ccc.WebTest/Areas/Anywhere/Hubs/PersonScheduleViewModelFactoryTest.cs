@@ -5,7 +5,9 @@ using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
@@ -21,7 +23,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		public void ShouldPassDateToMapping()
 		{
 			var personScheduleViewModelMapper = MockRepository.GenerateMock<IPersonScheduleViewModelMapper>();
-			var target = new PersonScheduleViewModelFactory(MockRepository.GenerateMock<IPersonRepository>(), MockRepository.GenerateMock<IPersonScheduleDayReadModelRepository>(), personScheduleViewModelMapper);
+			var target = new PersonScheduleViewModelFactory(MockRepository.GenerateMock<IPersonRepository>(), MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>(), MockRepository.GenerateMock<IAbsenceRepository>(), personScheduleViewModelMapper);
 			
 			target.CreateViewModel(Guid.NewGuid(), DateTime.Today);
 
@@ -33,7 +35,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		{
 			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
 			var personScheduleViewModelMapper = MockRepository.GenerateMock<IPersonScheduleViewModelMapper>();
-			var target = new PersonScheduleViewModelFactory(personRepository, MockRepository.GenerateMock<IPersonScheduleDayReadModelRepository>(), personScheduleViewModelMapper);
+			var target = new PersonScheduleViewModelFactory(personRepository, MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>(), MockRepository.GenerateMock<IAbsenceRepository>(), personScheduleViewModelMapper);
 			var person = PersonFactory.CreatePersonWithGuid("", "");
 			personRepository.Stub(x => x.Get(person.Id.Value)).Return(person);
 
@@ -41,13 +43,27 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 
 			personScheduleViewModelMapper.AssertWasCalled(x => x.Map(Arg<PersonScheduleData>.Matches(s => s.Person == person)));
 		}
+		
+		[Test]
+		public void ShouldRetrieveAbsencesToMapping()
+		{
+			var absenceRepository = MockRepository.GenerateMock<IAbsenceRepository>();
+			var personScheduleViewModelMapper = MockRepository.GenerateMock<IPersonScheduleViewModelMapper>();
+			var target = new PersonScheduleViewModelFactory(MockRepository.GenerateMock<IPersonRepository>(), MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>(), absenceRepository, personScheduleViewModelMapper);
+			var absences = new[] { new Absence() };
+			absenceRepository.Stub(x => x.LoadAllSortByName()).Return(absences);
+
+			target.CreateViewModel(Guid.NewGuid(), DateTime.Today);
+
+			personScheduleViewModelMapper.AssertWasCalled(x => x.Map(Arg<PersonScheduleData>.Matches(s => s.Absences == absences)));
+		}
 
 		[Test]
 		public void ShouldRetrievePersonScheduleDayReadModelToMapping()
 		{
-			var personScheduleDayReadModelRepository = MockRepository.GenerateMock<IPersonScheduleDayReadModelRepository>();
+			var personScheduleDayReadModelRepository = MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>();
 			var personScheduleViewModelMapper = MockRepository.GenerateMock<IPersonScheduleViewModelMapper>();
-			var target = new PersonScheduleViewModelFactory(MockRepository.GenerateMock<IPersonRepository>(), personScheduleDayReadModelRepository, personScheduleViewModelMapper);
+			var target = new PersonScheduleViewModelFactory(MockRepository.GenerateMock<IPersonRepository>(), personScheduleDayReadModelRepository, MockRepository.GenerateMock<IAbsenceRepository>(), personScheduleViewModelMapper);
 			var personId = Guid.NewGuid();
 			var readModel = new PersonScheduleDayReadModel();
 			personScheduleDayReadModelRepository.Stub(x => x.ForPerson(DateOnly.Today, personId)).Return(readModel);
@@ -60,9 +76,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		[Test]
 		public void ShouldParsePersonScheduleDayReadModelShiftsToMapping()
 		{
-			var personScheduleDayReadModelRepository = MockRepository.GenerateMock<IPersonScheduleDayReadModelRepository>();
+			var personScheduleDayReadModelRepository = MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>();
 			var personScheduleViewModelMapper = MockRepository.GenerateMock<IPersonScheduleViewModelMapper>();
-			var target = new PersonScheduleViewModelFactory(MockRepository.GenerateMock<IPersonRepository>(), personScheduleDayReadModelRepository, personScheduleViewModelMapper);
+			var target = new PersonScheduleViewModelFactory(MockRepository.GenerateMock<IPersonRepository>(), personScheduleDayReadModelRepository, MockRepository.GenerateMock<IAbsenceRepository>(), personScheduleViewModelMapper);
 			var personId = Guid.NewGuid();
 			var shifts = new {FirstName = "Pierre"};
 			var readModel = new PersonScheduleDayReadModel {Shift = Newtonsoft.Json.JsonConvert.SerializeObject(shifts)};
@@ -83,7 +99,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		public void ShouldCreateViewModelUsingMapping()
 		{
 			var personScheduleViewModelMapper = MockRepository.GenerateMock<IPersonScheduleViewModelMapper>();
-			var target = new PersonScheduleViewModelFactory(MockRepository.GenerateMock<IPersonRepository>(), MockRepository.GenerateMock<IPersonScheduleDayReadModelRepository>(), personScheduleViewModelMapper);
+			var target = new PersonScheduleViewModelFactory(MockRepository.GenerateMock<IPersonRepository>(), MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>(), MockRepository.GenerateMock<IAbsenceRepository>(), personScheduleViewModelMapper);
 			var viewModel = new PersonScheduleViewModel();
 			personScheduleViewModelMapper.Stub(x => x.Map(Arg<PersonScheduleData>.Is.Anything)).Return(viewModel);
 

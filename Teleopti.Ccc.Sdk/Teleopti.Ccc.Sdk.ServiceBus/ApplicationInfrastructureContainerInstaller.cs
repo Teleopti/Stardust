@@ -1,6 +1,7 @@
 ﻿using System;
 using Autofac;
 using Rhino.ServiceBus;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Forecasting.Export;
 using Teleopti.Ccc.Domain.Repositories;
@@ -20,10 +21,15 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		protected override void Load(ContainerBuilder builder)
 		{
 			builder.RegisterType<BusStartup>().As<IServiceBusAware>().SingleInstance();
-			builder.Register(c => StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging).As<IMessageBroker>().ExternallyOwned();
+			builder.Register(c => StateHolderReader.Instance.StateReader.ApplicationScopeData.Messaging)
+				.As<IMessageBroker>()
+				.As<IMessageBrokerSender>()
+				.As<IMessageBrokerListener>()
+				.ExternallyOwned();
 			builder.Register(c => StateHolderReader.Instance.StateReader.ApplicationScopeData).As<IApplicationData>().ExternallyOwned();
 			builder.Register(c => UnitOfWorkFactoryContainer.Current).As<ICurrentUnitOfWorkFactory>().ExternallyOwned();
 			builder.RegisterType<CurrentUnitOfWork>().As<ICurrentUnitOfWork>().SingleInstance();
+			builder.RegisterType<CurrentDataSource>().As<ICurrentDataSource>().SingleInstance();
 			builder.Register(getThreadJobResultFeedback).As<IJobResultFeedback>().ExternallyOwned();
 			builder.RegisterType<SendPushMessageWhenRootAlteredService>().As<ISendPushMessageWhenRootAlteredService>().InstancePerDependency();
 			builder.RegisterType<RepositoryFactory>().As<IRepositoryFactory>().InstancePerDependency();

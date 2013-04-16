@@ -4,6 +4,8 @@ using System.Globalization;
 using System.IO;
 using Autofac;
 using Rhino.ServiceBus.Hosting;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using log4net;
 using Rhino.ServiceBus;
 using Rhino.ServiceBus.Impl;
@@ -59,19 +61,29 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
             }
         }
 
-        public void NotifyServiceBus<TMessage>(TMessage message) where TMessage : RaptorDomainMessage
-        {
+		public void Send(object message)
+		{
             var bus = _customHost.Resolve<IOnewayBus>();
 
-            if (Logger.IsDebugEnabled)
-                Logger.Debug(string.Format(CultureInfo.InvariantCulture,
-                                           "Sending message with identity: {0} (Data source = {1})",
-                                           message.Identity, message.Datasource));
+			if (Logger.IsDebugEnabled)
+			{
+				var raptorDomainMessage = message as RaptorDomainMessage;
+				var identity = "<unknown>";
+				var datasource = "<unknown>";
+				if (raptorDomainMessage != null)
+				{
+					identity = raptorDomainMessage.Identity.ToString();
+					datasource = raptorDomainMessage.Datasource;
+				}
+				Logger.Debug(string.Format(CultureInfo.InvariantCulture,
+										   "Sending message with identity: {0} (Data source = {1})",
+										   identity, datasource));
+			}
 
             bus.Send(message);
         }
 
-        public bool EnsureBus()
+	    public bool EnsureBus()
         {
             if (!_isRunning) MoveThatBus();
             return _isRunning;

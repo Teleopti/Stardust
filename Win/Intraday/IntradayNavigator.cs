@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Win.Intraday
     public class IntradayNavigator : SchedulerNavigator
     {
         private readonly IIntradayViewFactory _intradayViewFactory;
-        private readonly IScenarioRepository _scenarioRepos;
+        private readonly ICurrentScenario _scenarioRepos;
     	private readonly IPersonRepository _personRepository;
     	private readonly IUnitOfWorkFactory _unitOfWorkFactory;
     	private readonly IGracefulDataSourceExceptionHandler _gracefulDataSourceExceptionHandler;
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Win.Intraday
             SelectorPresenter.ShowPersons = true;
         }
 
-		  public IntradayNavigator(IComponentContext container, PortalSettings portalSettings, IIntradayViewFactory intradayViewFactory, IScenarioRepository scenarioRepos, IPersonRepository personRepository, IUnitOfWorkFactory unitOfWorkFactory, IGracefulDataSourceExceptionHandler gracefulDataSourceExceptionHandler)
+		  public IntradayNavigator(IComponentContext container, PortalSettings portalSettings, IIntradayViewFactory intradayViewFactory, ICurrentScenario scenarioRepos, IPersonRepository personRepository, IUnitOfWorkFactory unitOfWorkFactory, IGracefulDataSourceExceptionHandler gracefulDataSourceExceptionHandler)
             : base(container, portalSettings, personRepository, unitOfWorkFactory, gracefulDataSourceExceptionHandler)
         {
             _intradayViewFactory = intradayViewFactory;
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Win.Intraday
         	                                                                             	{
         	                                                                             		using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
         	                                                                             		{
-        	                                                                             			IScenario scenario = _scenarioRepos.LoadDefaultScenario();
+        	                                                                             			IScenario scenario = _scenarioRepos.Current();
 																									var persons = _personRepository.FindPeople(SelectorPresenter.SelectedPersonGuids);
         	                                                                             			var entityCollection = new Collection<IEntity>();
         	                                                                             			entityCollection.AddRange(persons.Cast<IEntity>());

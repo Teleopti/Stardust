@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using Rhino.ServiceBus;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Sdk.ServiceBus.Rta;
 using Teleopti.Ccc.Sdk.ServiceBus.TeleoptiRtaService;
@@ -17,6 +18,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 	{
 		private MockRepository mocks;
 		private IServiceBus serviceBus;
+		private ICurrentUnitOfWorkFactory _currentunitOfWorkFactory;
 		private IUnitOfWorkFactory unitOfWorkFactory;
 		private IUnitOfWork unitOfWork;
 		private IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository;
@@ -28,11 +30,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 		{
 		    mocks = new MockRepository();
 		    serviceBus = mocks.StrictMock<IServiceBus>();
-		    unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
+			_currentunitOfWorkFactory = mocks.DynamicMock<ICurrentUnitOfWorkFactory>();
+			unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
 		    unitOfWork = mocks.DynamicMock<IUnitOfWork>();
 		    scheduleProjectionReadOnlyRepository = mocks.StrictMock<IScheduleProjectionReadOnlyRepository>();
             teleoptiRtaService = mocks.DynamicMock<ITeleoptiRtaService>();
-            target = new UpdatedScheduleInfoConsumer(serviceBus, scheduleProjectionReadOnlyRepository, unitOfWorkFactory, teleoptiRtaService);
+            target = new UpdatedScheduleInfoConsumer(serviceBus, scheduleProjectionReadOnlyRepository, _currentunitOfWorkFactory, teleoptiRtaService);
         }
 
         [Test]
@@ -54,6 +57,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
                     Datasource = "DS"
                 };
 
+            Expect.Call(_currentunitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
             Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
             Expect.Call(scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow,
                                                                                       person.Id.GetValueOrDefault())).IgnoreArguments()
@@ -82,6 +86,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
                 BusinessUnitId = bussinessUnit.Id.GetValueOrDefault()
             };
 
+			Expect.Call(_currentunitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
             Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
             Expect.Call(scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow,
                                                                                      person.Id.GetValueOrDefault())).IgnoreArguments()
@@ -108,7 +113,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
                 PersonId = person.Id.GetValueOrDefault(),
                 BusinessUnitId = bussinessUnit.Id.GetValueOrDefault()
             };
-
+			Expect.Call(_currentunitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
             Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
             Expect.Call(scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow,
                                                                                     person.Id.GetValueOrDefault())).IgnoreArguments()
@@ -136,7 +141,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
                     PersonId = person.Id.GetValueOrDefault(),
                     BusinessUnitId = bussinessUnit.Id.GetValueOrDefault()
                 };
-
+			Expect.Call(_currentunitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
             Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
             Expect.Call(scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow,
                                                                                      person.Id.GetValueOrDefault())).IgnoreArguments()
@@ -188,7 +193,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
                 PersonId = person.Id.GetValueOrDefault(),
                 BusinessUnitId = bussinessUnit.Id.GetValueOrDefault()
             };
-
+			Expect.Call(_currentunitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
             Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
             Expect.Call(scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow,
                                                                                      person.Id.GetValueOrDefault())).IgnoreArguments()

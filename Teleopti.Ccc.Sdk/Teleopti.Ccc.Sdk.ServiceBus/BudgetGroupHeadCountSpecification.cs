@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Specification;
 using Teleopti.Ccc.Infrastructure.Repositories;

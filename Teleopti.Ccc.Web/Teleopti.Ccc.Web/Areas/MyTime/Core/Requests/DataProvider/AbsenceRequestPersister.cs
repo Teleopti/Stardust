@@ -1,6 +1,9 @@
 using System;
 using AutoMapper;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
 using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Ccc.Web.Core.ServiceBus;
@@ -15,16 +18,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 		private readonly IPersonRequestRepository _personRequestRepository;
 		private readonly IMappingEngine _mapper;
 		private readonly IServiceBusSender _serviceBusSender;
-		private readonly ICurrentBusinessUnitProvider _businessUnitProvider;
-		private readonly IDataSourceProvider _dataSourceProvider;
+		private readonly ICurrentBusinessUnit _businessUnitProvider;
+		private readonly ICurrentDataSource _currentDataSource;
 		private readonly INow _now;
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
 
 		public AbsenceRequestPersister(IPersonRequestRepository personRequestRepository, 
 											IMappingEngine mapper, 
 											IServiceBusSender serviceBusSender, 
-											ICurrentBusinessUnitProvider businessUnitProvider, 
-											IDataSourceProvider dataSourceProvider, 
+											ICurrentBusinessUnit businessUnitProvider, 
+											ICurrentDataSource currentDataSource, 
 											INow now,
 											ICurrentUnitOfWork currentUnitOfWork)
 		{
@@ -32,7 +35,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			_mapper = mapper;
 			_serviceBusSender = serviceBusSender;
 			_businessUnitProvider = businessUnitProvider;
-			_dataSourceProvider = dataSourceProvider;
+			_currentDataSource = currentDataSource;
 			_now = now;
 			_currentUnitOfWork = currentUnitOfWork;
 		}
@@ -70,12 +73,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider
 			{
 				var message = new NewAbsenceRequestCreated
 				              	{
-				              		BusinessUnitId = _businessUnitProvider.CurrentBusinessUnit().Id.GetValueOrDefault(Guid.Empty),
-				              		Datasource = _dataSourceProvider.CurrentDataSource().DataSourceName,
+				              		BusinessUnitId = _businessUnitProvider.Current().Id.GetValueOrDefault(Guid.Empty),
+				              		Datasource = _currentDataSource.Current().DataSourceName,
 				              		PersonRequestId = personRequest.Id.GetValueOrDefault(Guid.Empty),
 				              		Timestamp = _now.UtcDateTime()
 				              	};
-				_currentUnitOfWork.Current().AfterSuccessfulTx(() => _serviceBusSender.NotifyServiceBus(message));
+				_currentUnitOfWork.Current().AfterSuccessfulTx(() => _serviceBusSender.Send(message));
 			}
 			else
 			{

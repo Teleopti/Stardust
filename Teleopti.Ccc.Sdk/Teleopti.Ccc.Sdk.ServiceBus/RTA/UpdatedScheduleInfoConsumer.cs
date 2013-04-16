@@ -1,5 +1,6 @@
 ﻿using System;
 using Rhino.ServiceBus;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Sdk.ServiceBus.TeleoptiRtaService;
 using Teleopti.Interfaces.Infrastructure;
@@ -12,11 +13,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
 	{
 		private readonly IServiceBus _serviceBus;
 		private readonly IScheduleProjectionReadOnlyRepository _scheduleProjectionReadOnlyRepository;
-		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
         private readonly ITeleoptiRtaService _teleoptiRtaService;
-        private readonly static ILog Logger = LogManager.GetLogger(typeof(UpdatedScheduleInfoConsumer));		
+        private readonly static ILog Logger = LogManager.GetLogger(typeof(UpdatedScheduleInfoConsumer));
 
-        public UpdatedScheduleInfoConsumer(IServiceBus serviceBus, IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository, IUnitOfWorkFactory unitOfWorkFactory, ITeleoptiRtaService teleoptiRtaService)
+		public UpdatedScheduleInfoConsumer(IServiceBus serviceBus, IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory, ITeleoptiRtaService teleoptiRtaService)
 		{
 			_serviceBus = serviceBus;
 			_scheduleProjectionReadOnlyRepository = scheduleProjectionReadOnlyRepository;
@@ -32,7 +33,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
             Logger.Info("Start consuming PersonalWithExternalLogonOn message.");
 
 			DateTime? startTime;
-			using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
+			using (_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
 				startTime =
 					_scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow, message.PersonId);
@@ -76,7 +77,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
 		    }
 
 		    DateTime? startTime;
-			using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
+			using (_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
 				startTime =
 					_scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow, message.PersonId);

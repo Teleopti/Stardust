@@ -14,7 +14,7 @@
 		<NugetPackages>$(CCNetWorkingDirectory)\packages</NugetPackages>
 		<DBServer>$(Computername)</DBServer>
 		<NCoverAssemblies>Teleopti.Ccc.Web;Teleopti.Analytics.Etl.Transformer;Teleopti.Ccc.Domain;Teleopti.Ccc.WinCode;Teleopti.Interfaces;Teleopti.Ccc.Sdk.Logic;Teleopti.Ccc.PayRoll;Teleopti.Ccc.PayRollFormatter;Teleopti.Ccc.Obfuscated;Teleopti.Ccc.DayOffPlanning;Teleopti.Ccc.IocCommon;Teleopti.Ccc.Infrastructure;Teleopti.Ccc.DataBaseConverter</NCoverAssemblies>
-		<DoCodeAnalysis>true</DoCodeAnalysis>
+		<DoCodeAnalysis>false</DoCodeAnalysis>
 
 		<RunWebBehaviorTests>true</RunWebBehaviorTests>
 		
@@ -186,7 +186,7 @@
 	<Target Name="CreateAgentPortalWeb" Condition="'$(RunWebBehaviorTests)' == 'true'">
 		<!-- create web site/app/VirDir + Copy content-->
 		<Message Importance="high" Text="$(AgentPortalWebCreator) $(AgentPortalWebSiteName) $(DBNamePrefix)_ccc7 $(DBNamePrefix)_analytics"/>
-		<Exec Command = "$(AgentPortalWebCreator) $(AgentPortalWebSiteName) $(DBNamePrefix)_ccc7 $(DBNamePrefix)_analytics"/>
+		<Exec Command = "$(AgentPortalWebCreator) $(AgentPortalWebSiteName) $(DBNamePrefix)_ccc7 $(DBNamePrefix)_analytics $(AgentPortalWebURL)" />
 	</Target>
 
 	<Target Name="CreateAnalyticsDb" DependsOnTargets="BuildDBManager">

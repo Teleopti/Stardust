@@ -1,7 +1,9 @@
-﻿namespace Teleopti.Ccc.Web.Core.Startup.Booter
+﻿using System.Threading.Tasks;
+
+namespace Teleopti.Ccc.Web.Core.Startup.Booter
 {
 	public interface IBootstrapperTask
 	{
-		void Execute();
+		Task Execute();
 	}
 }

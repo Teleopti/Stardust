@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.ServiceModel;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Interfaces.Messages.General;
 
@@ -17,7 +19,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 		}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public CommandResultDto Handle(RecalculateForecastOnSkillCollectionCommandDto command)
+        public void Handle(RecalculateForecastOnSkillCollectionCommandDto command)
 		{
 			// denna borde fångas
 			if (!_busSender.EnsureBus())
@@ -47,8 +49,8 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                         });
 
             }
-            _busSender.NotifyServiceBus(message);
-			return new CommandResultDto { AffectedId = Guid.Empty, AffectedItems = 1 };
+            _busSender.Send(message);
+			command.Result = new CommandResultDto { AffectedId = Guid.Empty, AffectedItems = 1 };
 		}
 	}
 }

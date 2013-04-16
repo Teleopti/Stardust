@@ -138,7 +138,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"the date-picker should close")]
 		public void ThenTheDatePickerShouldClose()
 		{
-			EventualAssert.That(() => _page.ReportSelectionDatePickerContainer.DisplayHidden(), Is.True);
+			EventualAssert.That(() => Browser.Current.Element(QuicklyFind.ByClass("ui-datebox-container")).Exists, Is.False);
 		}
 
 		[Given(@"I am viewing a report")]
@@ -303,19 +303,5 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			EventualAssert.That(() => _page.ReportSkillSelectionOpener.Text.Trim(), Is.StringContaining(Resources.All));
 		}
-
-		private static bool IsDisplayed(Element element)
-		{
-			if (string.Equals(element.Style.Display, "none"))
-			{
-				return false;
-			}
-			if (element.Parent != null)
-			{
-				return IsDisplayed(element.Parent);
-			}
-			return true;
-		}
-
 	}
 }

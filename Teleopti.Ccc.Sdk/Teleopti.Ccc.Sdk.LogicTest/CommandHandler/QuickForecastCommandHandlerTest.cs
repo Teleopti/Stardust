@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ServiceModel;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
@@ -72,7 +73,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			Expect.Call(() => _unitOfWork.PersistAll());
 			Expect.Call(_unitOfWork.Dispose);
 			Expect.Call(_busSender.EnsureBus()).Return(true);
-			Expect.Call(() => _busSender.NotifyServiceBus(new QuickForecastWorkloadsMessage())).IgnoreArguments();
+			Expect.Call(() => _busSender.Send(new QuickForecastWorkloadsMessage())).IgnoreArguments();
 			_mocks.ReplayAll();
 			var period = new DateOnlyPeriodDto
 				{

@@ -5,6 +5,7 @@ using NHibernate.Context;
 using NHibernate.Engine;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
@@ -386,7 +387,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 					.Call(session.BeginTransaction())
 					.Return(tx);
 
-				Expect.Call(() => messageSender.Execute(null, new List<IRootChangeInfo>(interceptor.ModifiedRoots))).IgnoreArguments();
+				Expect.Call(() => messageSender.Execute(new List<IRootChangeInfo>(interceptor.ModifiedRoots))).IgnoreArguments();
 				
 				Expect.Call(messageBroker.IsInitialized).Return(true);
 			}
@@ -469,7 +470,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 
 		private class TestUnitOfWork : NHibernateUnitOfWork
 		{
-            public TestUnitOfWork(ISession mock, IMessageBroker messageBroker, ISendPushMessageWhenRootAlteredService pushMessageService, IEnumerable<IMessageSender> denormalizers)
+			public TestUnitOfWork(ISession mock, IMessageBroker messageBroker, ISendPushMessageWhenRootAlteredService pushMessageService, IEnumerable<IMessageSender> denormalizers)
 				: base(mock, messageBroker, denormalizers, null, pushMessageService, NHibernateUnitOfWorkFactory.UnbindStatic)
 			{
 			}

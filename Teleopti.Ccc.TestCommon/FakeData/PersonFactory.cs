@@ -73,6 +73,13 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             return ret;
         }
 
+		public static IPerson CreatePersonWithId()
+		{
+			var ret = CreatePerson();
+			ret.SetId(Guid.NewGuid());
+			return ret;
+		}
+
         public static IPerson CreatePersonWithGuid(string firstName, string lastName)
         {
             var ret = CreatePerson(firstName, lastName);

@@ -6,6 +6,7 @@ using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
@@ -60,10 +61,10 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			//therefore - just dummy test
 			var now = MockRepository.GenerateMock<INow>();
 			now.Expect(x => x.UtcDateTime()).Return(DateTime.Now);
-			var dataSourceProvider = MockRepository.GenerateMock<IDataSourceProvider>();
-			dataSourceProvider.Expect(x => x.CurrentDataSource()).Return(MockRepository.GenerateMock<IDataSource>());
-			var businessUnitProvider = MockRepository.GenerateMock<ICurrentBusinessUnitProvider>();
-			businessUnitProvider.Expect(x => x.CurrentBusinessUnit()).Return(new BusinessUnit("d"));
+			var dataSourceProvider = MockRepository.GenerateMock<ICurrentDataSource>();
+			dataSourceProvider.Expect(x => x.Current()).Return(MockRepository.GenerateMock<IDataSource>());
+			var businessUnitProvider = MockRepository.GenerateMock<ICurrentBusinessUnit>();
+			businessUnitProvider.Expect(x => x.Current()).Return(new BusinessUnit("d"));
 			var currentUnitOfWork = MockRepository.GenerateMock<ICurrentUnitOfWork>();
 			var form = new ShiftTradeRequestForm();
 			mapper.Stub(x => x.Map(form)).Return(new PersonRequest(new Person()));
@@ -92,8 +93,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests.DataProvider
 			//therefore - just dummy test
 			var now = MockRepository.GenerateMock<INow>();
 			now.Expect(x => x.UtcDateTime()).Return(DateTime.Now);
-			var dataSourceProvider = MockRepository.GenerateMock<IDataSourceProvider>();
-			var businessUnitProvider = MockRepository.GenerateMock<ICurrentBusinessUnitProvider>();
+			var dataSourceProvider = MockRepository.GenerateMock<ICurrentDataSource>();
+			var businessUnitProvider = MockRepository.GenerateMock<ICurrentBusinessUnit>();
 			var currentUnitOfWork = MockRepository.GenerateMock<ICurrentUnitOfWork>();
 			var form = new ShiftTradeRequestForm();
 			mapper.Stub(x => x.Map(form)).Return(new PersonRequest(new Person()));
