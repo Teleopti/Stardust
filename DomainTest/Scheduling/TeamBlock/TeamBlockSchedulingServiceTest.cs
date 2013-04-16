@@ -56,6 +56,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             _virtualSchedulePeriod = _mock.StrictMock<IVirtualSchedulePeriod>();
             _schedulingResultStateHolder = _mock.StrictMock<ISchedulingResultStateHolder>();
             _workShiftMinMaxCalculator = _mock.StrictMock<IWorkShiftMinMaxCalculator>();
+            _scheduleRange = _mock.StrictMock<IScheduleRange>();
 
             _scheduleDay = _mock.StrictMock<IScheduleDay>();
 	        _safeRollback = _mock.StrictMock<ISafeRollbackAndResourceCalculation>();
