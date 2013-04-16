@@ -71,6 +71,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				return null;
 		    var groupPerson = teamBlockInfo.TeamInfo.GroupPerson;
 			var matrixList = teamBlockInfo.TeamInfo.MatrixesForGroupAndDate(dateOnly).ToList();
+			if (matrixList.Count == 0) return null;
 			var currentSchedulePeriod = groupPerson.VirtualSchedulePeriod(dateOnly);
 			if (!currentSchedulePeriod.IsValid)
 				return null;

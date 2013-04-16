@@ -118,6 +118,22 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			                              _schedulingOptions, _finderResult);
 			Assert.IsNull(retShift);
 		}
+
+		[Test]
+		public void ShouldReturnNullIfMatrixListIsEmpty()
+		{
+			var dateOnly = new DateOnly(2012, 12, 12);
+			var groupPerson = new GroupPerson(new List<IPerson> { _person }, dateOnly, "Hej", Guid.NewGuid());
+			var matrixList = new List<IScheduleMatrixPro>();
+			IList<IList<IScheduleMatrixPro>> groupMatrixes = new List<IList<IScheduleMatrixPro>> { matrixList };
+			var teaminfo = new TeamInfo(groupPerson, groupMatrixes);
+			var blockInfo = new BlockInfo(new DateOnlyPeriod(dateOnly, dateOnly));
+			var teamBlockInfo = new TeamBlockInfo(teaminfo, blockInfo);
+			IEffectiveRestriction effectiveRestriction = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(), new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
+			var retShift = _target.Filter(dateOnly, teamBlockInfo, effectiveRestriction,
+										  _schedulingOptions, _finderResult);
+			Assert.IsNull(retShift);
+		}
 	
 		[Test]
 		public void ShouldReturnNullIfCurrentSchedulePeriodIsInvalid()
