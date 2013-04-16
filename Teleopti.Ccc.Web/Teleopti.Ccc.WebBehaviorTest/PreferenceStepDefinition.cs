@@ -203,7 +203,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void ThenIShouldNotBeAbleToSeePreferencesLink()
 		{
 			var page = Browser.Current.Page<PortalPage>();
-			page.Menu.Exists.Should().Be.True();
+			EventualAssert.That(() => page.Menu.Exists, Is.True);
 			page.PreferencesLink.Exists.Should().Be.False();
 		}
 

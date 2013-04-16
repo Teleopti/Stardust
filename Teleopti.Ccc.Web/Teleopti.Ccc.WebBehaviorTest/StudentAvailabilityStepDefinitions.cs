@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void ThenIShouldNotBeAbleToSeeStudentAvailabilityLink()
 		{
 			var page = Browser.Current.Page<PortalPage>();
-			page.Menu.Exists.Should().Be.True();
+			EventualAssert.That(() => page.Menu.Exists, Is.True);
 			page.StudentAvailabilityLink.Exists.Should().Be.False();
 		}
 
