@@ -1,8 +1,6 @@
 ﻿using System;
-using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 
-namespace Teleopti.Interfaces.Messages.Rta
+namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 {
     /// <summary>
     /// 

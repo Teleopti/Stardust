@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
+namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 {
 	public class CannotGetUpdatedScheduleChangeFromTeleoptiRtaService : IGetUpdatedScheduleChangeFromTeleoptiRtaService
 	{

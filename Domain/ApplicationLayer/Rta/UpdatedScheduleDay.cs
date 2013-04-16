@@ -1,7 +1,6 @@
 ﻿using System;
-using Teleopti.Ccc.Domain.ApplicationLayer;
 
-namespace Teleopti.Interfaces.Messages.Rta
+namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 {
     /// <summary>
     /// 

@@ -1,11 +1,8 @@
 ﻿using System;
-using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
-using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.Messages.Rta;
 using log4net;
 
-namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
+namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 {
 	public class UpdatedScheduleInfoConsumer : 
 		IHandleEvent<PersonWithExternalLogOn>,
