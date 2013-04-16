@@ -136,6 +136,7 @@
     <Compile Include="Budgeting\BudgetCalculatorTest.cs" />
     <Compile Include="Budgeting\BudgetDayCalculationsTest.cs" />
     <Compile Include="Budgeting\BudgetDayTest.cs" />
+    <Compile Include="Budgeting\BudgetedLeaveCalculatorTest.cs" />
     <Compile Include="Budgeting\BudgetedStaffCalculatorTest.cs" />
     <Compile Include="Budgeting\BudgetGroupTest.cs" />
     <Compile Include="Budgeting\CustomEfficiencyShrinkageTest.cs" />
@@ -147,7 +148,9 @@
     <Compile Include="Budgeting\ForecastedStaffCalculatorTest.cs" />
     <Compile Include="Budgeting\GrossStaffCalculatorTest.cs" />
     <Compile Include="Budgeting\NetStaffCalculatorTest.cs" />
+    <Compile Include="Budgeting\NetStaffFcAdjustSurplusDistributorTest.cs" />
     <Compile Include="Budgeting\NetStaffForecastAdjustCalculatorTest.cs" />
+    <Compile Include="Budgeting\TotalAllowanceCalculatorTest.cs" />
     <Compile Include="Collection\IdenticalLayersSpecificationTest.cs" />
     <Compile Include="Collection\TeamCollectionTest.cs" />
     <Compile Include="Common\DateTimePeriodPerStartTimeSorterTest.cs" />

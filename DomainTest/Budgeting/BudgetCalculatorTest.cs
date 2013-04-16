@@ -104,5 +104,47 @@ namespace Teleopti.Ccc.DomainTest.Budgeting
             result.TotalAllowance.Should().Be.EqualTo(0);
             result.Allowance.Should().Be.EqualTo(0);
         }
+
+		[Test]
+		public void ShouldCalculateWithoutnetStaffFcAdj()
+		{
+			var result = _target.CalculateWithoutNetStaffFcAdj(_budgetDay4, 596.07024229401054d);
+			result.GrossStaff.Should().Be.EqualTo(776.1488430210959d);
+			result.NetStaff.Should().Be.EqualTo(556.53488787221136d);
+			result.BudgetedStaff.Should().Be.EqualTo(596.72813703085262d);
+			result.ForecastedStaff.Should().Be.EqualTo(22.105263157894736d);
+			result.Difference.Should().Be.EqualTo(574.62287387295794d);
+			result.DifferencePercent.Should().Be.EqualTo(new Percent(25.994844294252861d));
+			result.BudgetedLeave.Should().Be.EqualTo(0);
+			result.BudgetedSurplus.Should().Be.EqualTo(574.62287387295794d);
+			result.TotalAllowance.Should().Be.EqualTo(10);
+			result.Allowance.Should().Be.EqualTo(8);
+		}
+
+		[Test]
+		public void VerifyCalculatorList()
+		{
+			var list = _target.CalculatorList;
+			_target.CalculatorList = list;
+			list.Count.Should().Not.Be.EqualTo(0);
+			_target.CalculatorList.Count.Should().Not.Be.EqualTo(0);
+		}
+
+		[Test]
+		public void ShouldReturnEmptyResultOnClosedDay()
+		{
+			var result = _target.CalculateWithoutNetStaffFcAdj(_budgetDay10, 0);
+			result.GrossStaff.Should().Be.EqualTo(0);
+			result.NetStaff.Should().Be.EqualTo(0);
+			result.NetStaffFcAdj.Should().Be.EqualTo(0);
+			result.BudgetedStaff.Should().Be.EqualTo(0);
+			result.ForecastedStaff.Should().Be.EqualTo(0);
+			result.Difference.Should().Be.EqualTo(0);
+			result.DifferencePercent.Should().Be.EqualTo(new Percent(0));
+			result.BudgetedLeave.Should().Be.EqualTo(0);
+			result.BudgetedSurplus.Should().Be.EqualTo(0);
+			result.TotalAllowance.Should().Be.EqualTo(0);
+			result.Allowance.Should().Be.EqualTo(0);
+		}
     }
 }

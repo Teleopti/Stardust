@@ -55,5 +55,11 @@ namespace Teleopti.Ccc.DomainTest.Budgeting
 			var result = _target.CalculatedResult(_budgetDay5);
 			result.GrossStaff.Should().Be.EqualTo(0);
 		}
+
+		[Test]
+		public void ShouldReturnWhenEmptyList()
+		{
+			_target.Initialize(new List<IBudgetDay>());
+		}
     }
 }
