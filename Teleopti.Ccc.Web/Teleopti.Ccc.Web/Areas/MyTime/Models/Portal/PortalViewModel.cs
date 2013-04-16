@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Portal
 		public bool PayAttention { get; set; }
 		public string TitleCount { get; set; }
 
-	public class TeamScheduleNavigationItem : SectionNavigationItem
+	public class TeamScheduleNavigationItem : NavigationItem
 	{
 	}
 

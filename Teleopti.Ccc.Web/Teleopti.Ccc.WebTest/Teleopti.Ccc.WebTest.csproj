@@ -134,7 +134,6 @@
     <Compile Include="Areas\Anywhere\Controllers\PersonScheduleCommandControllerTest.cs" />
     <Compile Include="Areas\Anywhere\Core\AutofacDependencyResolverTest.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceTemplatePersisterTest.cs" />
-    <Compile Include="Areas\Anywhere\Controllers\PersonScheduleCommandControllerTest.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceTemplateProviderTest.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceTemplateInputMappingTest.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\Mapping\PreferenceTemplateViewModelMappingTest.cs" />

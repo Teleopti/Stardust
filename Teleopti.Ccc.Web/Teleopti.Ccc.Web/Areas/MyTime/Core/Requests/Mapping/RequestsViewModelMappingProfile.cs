@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			return ((IAbsenceRequest) personRequest.Request).Absence.Id.GetValueOrDefault().ToString();
 		}
 
-		private static bool isCreatedByUser(IRequest request, Func<ILoggedOnUser> loggedOnUser)
+		private static bool isCreatedByUser(IRequest request, ILoggedOnUser loggedOnUser)
 		{
 			return request.PersonFrom != null && request.PersonFrom.Equals(loggedOnUser.CurrentUser());
 		}

@@ -208,7 +208,6 @@
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\IUrlHelper.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\UrlHelperProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\IPreferenceTemplatePersister.cs" />
-    <Compile Include="Areas\Anywhere\Controllers\PersonScheduleCommandController.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\IPreferenceTemplateProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceTemplatePersister.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceTemplateProvider.cs" />

@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 
 		private static NavigationItem createTeamScheduleNavigationItem()
 		{
-			return new TeamScheduleNavigationItem
+			return new NavigationItem.TeamScheduleNavigationItem
 						{
 							Action = "Index",
 							Controller = "TeamSchedule",
