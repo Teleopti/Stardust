@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Domain.Budgeting
 			else
 			{
 				budgetCalculationResult.NetStaffFcAdj = netStaffFcAdj;
-				budgetDay.NetStaffFcAdjustedSurplus = null;
+				budgetDay.NetStaffFcAdjustedSurplus = 0;
 			}
 			
 		}

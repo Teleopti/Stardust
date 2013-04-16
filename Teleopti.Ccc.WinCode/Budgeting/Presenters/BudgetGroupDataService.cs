@@ -82,11 +82,11 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Presenters
 			{
 				models.ForEach(d => d.Recalculate(calculator)); //hmm, second same loop
 				
-				var daysThatHaveSurplus = models.Where(d => !d.BudgetDay.NetStaffFcAdjustedSurplus.GetValueOrDefault().Equals(0)).ToList();
+				var daysThatHaveSurplus = models.Where(d => !d.BudgetDay.IsClosed && !d.BudgetDay.NetStaffFcAdjustedSurplus.GetValueOrDefault().Equals(0)).ToList();
 				if (!daysThatHaveSurplus.Any()) return;
 				foreach (var surplusDay in daysThatHaveSurplus)
 				{
-					var week = getWeek(surplusDay, models);
+					var week = getWeekWithoutClosedDays(surplusDay, models);
 					var surplusDays = week.Where(d => !d.BudgetDay.NetStaffFcAdjustedSurplus.GetValueOrDefault().Equals(0)).ToList();
 					distributeSurplus(week, grossStaffCalculator, surplusDays.Count(), week.Except(surplusDays).Count());
 				}
@@ -95,30 +95,37 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Presenters
 			}
 		}
 
-		private static void distributeSurplus(IList<IBudgetGroupDayDetailModel> week, IGrossStaffCalculator grossStaffCalculator, int surplusDaysPrevious, int availableDaysPrevious)
-		{
-			var surplusDays = week.Where(d => !d.BudgetDay.NetStaffFcAdjustedSurplus.GetValueOrDefault().Equals(0)).ToList();
-			var avaiableDays = week.Except(surplusDays).ToList();
-			var surplusToDistribute = surplusDays.Sum(d => d.BudgetDay.NetStaffFcAdjustedSurplus.GetValueOrDefault());
-			foreach (var day in avaiableDays)
-			{
-				var closedToInt = day.IsClosed ? 1 : 0;
-				var maxStaff = (1 - closedToInt)*
-				               (grossStaffCalculator.CalculatedResult(day.BudgetDay).GrossStaff + day.Contractors)*
-				               (1 - day.BudgetDay.CustomShrinkages.GetTotal().Value);
-				day.NetStaffFcAdj = NetStaffFcAdjustSurplusDistributor.Distribute(day.BudgetDay, day.NetStaffFcAdj, surplusToDistribute/avaiableDays.Count(), maxStaff);
-			}
-			if (surplusDays.Count() == surplusDaysPrevious && avaiableDays.Count() == availableDaysPrevious)
-				return;
-			distributeSurplus(week, grossStaffCalculator, surplusDays.Count, avaiableDays.Count);
-		}
-		
-		private static IList<IBudgetGroupDayDetailModel> getWeek(IBudgetGroupDayDetailModel budgetDay, IEnumerable<IBudgetGroupDayDetailModel> budgetDayList)
+	    private static void distributeSurplus(IList<IBudgetGroupDayDetailModel> week,
+	                                          IGrossStaffCalculator grossStaffCalculator,
+	                                          int surplusDaysPrevious,
+	                                          int availableDaysPrevious)
+	    {
+		    var surplusDays = week.Where(d => !d.BudgetDay.NetStaffFcAdjustedSurplus.GetValueOrDefault().Equals(0)).ToList();
+		    var avaiableDays = week.Where(d => d.BudgetDay.NetStaffFcAdjustedSurplus.GetValueOrDefault().Equals(0)).ToList();
+		    var surplusToDistribute = surplusDays.Sum(d => d.BudgetDay.NetStaffFcAdjustedSurplus.GetValueOrDefault());
+		    foreach (var day in avaiableDays)
+		    {
+			    var closedToInt = day.BudgetDay.IsClosed ? 1 : 0;
+			    var maxStaff = (1 - closedToInt)*
+			                   (grossStaffCalculator.CalculatedResult(day.BudgetDay).GrossStaff + day.Contractors)*
+			                   (1 - day.BudgetDay.CustomShrinkages.GetTotal().Value);
+			    day.NetStaffFcAdj = NetStaffFcAdjustSurplusDistributor.Distribute(day.BudgetDay, day.NetStaffFcAdj,
+			                                                                      surplusToDistribute/avaiableDays.Count(),
+			                                                                      maxStaff);
+		    }
+		    if (
+				week.Count(d => !d.BudgetDay.NetStaffFcAdjustedSurplus.GetValueOrDefault().Equals(0)) == surplusDaysPrevious &&
+				week.Count(d => d.BudgetDay.NetStaffFcAdjustedSurplus.GetValueOrDefault().Equals(0)) == availableDaysPrevious)
+			    return;
+		    distributeSurplus(week, grossStaffCalculator, surplusDays.Count, avaiableDays.Count);
+	    }
+
+	    private static IList<IBudgetGroupDayDetailModel> getWeekWithoutClosedDays(IBudgetGroupDayDetailModel budgetDay, IEnumerable<IBudgetGroupDayDetailModel> budgetDayList)
 		{
 			var week = DateHelper.GetWeekPeriod(budgetDay.BudgetDay.Day, CultureInfo.CurrentCulture);
 			var budgetDaysWithinWeek = new List<IBudgetGroupDayDetailModel>(7);
 			budgetDaysWithinWeek.AddRange(
-				budgetDayList.TakeWhile(day => day.BudgetDay.Day <= week.EndDate).Where(day => day.BudgetDay.Day >= week.StartDate));
+				budgetDayList.TakeWhile(day => day.BudgetDay.Day <= week.EndDate).Where(day => day.BudgetDay.Day >= week.StartDate && !day.BudgetDay.IsClosed));
 			return budgetDaysWithinWeek;
 		}
 			
