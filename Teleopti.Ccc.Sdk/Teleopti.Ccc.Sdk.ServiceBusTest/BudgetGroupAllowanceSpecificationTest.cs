@@ -4,6 +4,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Budgeting;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Sdk.ServiceBus;
@@ -224,7 +225,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
     public class BudgetGroupAllowanceSpecificationForTest : BudgetGroupAllowanceSpecification
     {
         public BudgetGroupAllowanceSpecificationForTest(ISchedulingResultStateHolder schedulingResultStateHolder,
-            IScenarioRepository scenarioRepository,IBudgetDayRepository budgetDayRepository,IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository)
+            ICurrentScenario scenarioRepository,IBudgetDayRepository budgetDayRepository,IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository)
             : base(schedulingResultStateHolder, scenarioRepository, budgetDayRepository, scheduleProjectionReadOnlyRepository)
         {
         }
