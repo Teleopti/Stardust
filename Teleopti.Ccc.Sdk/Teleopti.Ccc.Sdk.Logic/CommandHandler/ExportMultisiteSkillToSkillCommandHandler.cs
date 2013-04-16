@@ -16,10 +16,10 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
     public class ExportMultisiteSkillToSkillCommandHandler : IHandleCommand<ExportMultisiteSkillToSkillCommandDto>
     {
         private readonly IServiceBusSender _busSender;
-        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+        private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IJobResultRepository _jobResultRepository;
 
-        public ExportMultisiteSkillToSkillCommandHandler(IServiceBusSender busSender, IUnitOfWorkFactory unitOfWorkFactory, IJobResultRepository jobResultRepository)
+        public ExportMultisiteSkillToSkillCommandHandler(IServiceBusSender busSender, ICurrentUnitOfWorkFactory unitOfWorkFactory, IJobResultRepository jobResultRepository)
         {
             _busSender = busSender;
             _unitOfWorkFactory = unitOfWorkFactory;
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
             }
 
             Guid jobId;
-            using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+            using (var unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
             {
                 //Save start of processing to job history
                 var period = new DateOnlyPeriod(new DateOnly(command.Period.StartDate.DateTime),

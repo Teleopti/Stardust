@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
     {
         private MockRepository _mock;
         private IServiceBusSender _busSender;
-        private IUnitOfWorkFactory _unitOfWorkFactory;
+        private ICurrentUnitOfWorkFactory _unitOfWorkFactory;
         private IJobResultRepository _jobResultRepository;
         private ExportMultisiteSkillToSkillCommandHandler _target;
         private IPerson _person;
@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         {
             _mock = new MockRepository();
             _busSender = _mock.StrictMock<IServiceBusSender>();
-            _unitOfWorkFactory = _mock.StrictMock<IUnitOfWorkFactory>();
+            _unitOfWorkFactory = _mock.StrictMock<ICurrentUnitOfWorkFactory>();
             _jobResultRepository = _mock.StrictMock<IJobResultRepository>();
             _target = new ExportMultisiteSkillToSkillCommandHandler(_busSender,_unitOfWorkFactory,_jobResultRepository);
             _person = PersonFactory.CreatePerson("test");
@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         
             using(_mock.Record())
             {
-                Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+                Expect.Call(_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork()).Return(unitOfWork);
                 Expect.Call(_busSender.EnsureBus()).Return(true);
                 Expect.Call(() => _jobResultRepository.Add(_jobResult)).IgnoreArguments();
                 Expect.Call(() => unitOfWork.PersistAll());
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             
             using (_mock.Record())
             {
-                Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+                Expect.Call(_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork()).Return(unitOfWork);
                 Expect.Call(_busSender.EnsureBus()).Return(false);
                 Expect.Call(() => _jobResultRepository.Add(_jobResult)).IgnoreArguments();
                 Expect.Call(() => unitOfWork.PersistAll());
@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 
             using (_mock.Record())
             {
-                Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+                Expect.Call(_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork()).Return(unitOfWork);
             }
             using (_mock.Playback())
             {
