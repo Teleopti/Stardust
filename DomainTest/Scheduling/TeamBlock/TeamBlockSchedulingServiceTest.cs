@@ -262,6 +262,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             Expect.Call(_workShiftMinMaxCalculator.IsPeriodInLegalState(_matrixPro, _schedulingOptions))
                   .IgnoreArguments()
                   .Return(true);
+
+            Expect.Call(_scheduleRange.ScheduledDay(_date)).Return(_scheduleDay);
         }
 
         [Test]
@@ -347,6 +349,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                       .IgnoreArguments()
                       .Return(false);
                 Expect.Call(() => _safeRollback.Execute(_rollbackService, _schedulingOptions)).IgnoreArguments();
+                Expect.Call(_scheduleRange.ScheduledDay(_date)).Return(_scheduleDay);
             }
 
             Assert.IsTrue(_target.ScheduleSelected(_matrixList, _dateOnlyPeriod, _personList, _teamSteadyStateHolder, _rollbackService));
