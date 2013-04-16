@@ -85,6 +85,26 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			Retrying.Javascript(string.Format("test.callViewMethodWhenReady('personschedule', 'setDateFromTest', '{0}');", fullDayAbsenceFormInfo.EndDate));
 		}
 
+		[Then(@"I should see an absence in the absence list with")]
+		public void ThenIShouldSeeAnAbsenceInTheAbsenceListWith(Table table)
+		{
+			ScenarioContext.Current.Pending();
+
+			var absenceListItemInfo = table.CreateInstance<AbsenceListItemInfo>();
+
+			var selector = string.Format(".absence-list .absence:contains('{0}'):contains('{1}'):contains('{2}')", 
+				absenceListItemInfo.Name, absenceListItemInfo.StartTime, absenceListItemInfo.EndTime);
+
+			EventualAssert.That(() => Browser.Current.Element(Find.BySelector(selector)).Exists, Is.True);
+		}
+
+		public class AbsenceListItemInfo
+		{
+			public string Name { get; set; }
+			public string StartTime { get; set; }
+			public string EndTime { get; set; }
+		}
+
 		public class ShiftLayerInfo
 		{
 			public string StartTime { get; set; }
