@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.Data;
 using Teleopti.Ccc.Domain.Security.Matrix;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.ReadModel;
 
 namespace Teleopti.Analytics.Etl.Interfaces.Transformer
@@ -50,6 +49,7 @@ namespace Teleopti.Analytics.Etl.Interfaces.Transformer
         IList<IBusinessUnit> LoadBusinessUnit();
         int PersistBusinessUnit(DataTable dataTable);
         int FillScheduleDayCountDataMart(DateTimePeriod period, IBusinessUnit businessUnit);
+		int FillIntradayScheduleDayCountDataMart(IBusinessUnit currentBusinessUnit);
         int FillDayOffDataMart(IBusinessUnit businessUnit);
         int PersistScheduleDayOffCount(DataTable dataTable);
 

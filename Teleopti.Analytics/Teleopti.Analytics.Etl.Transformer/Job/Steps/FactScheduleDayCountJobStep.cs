@@ -7,15 +7,22 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 {
     public class FactScheduleDayCountJobStep : JobStepBase
     {
-		public FactScheduleDayCountJobStep(IJobParameters jobParameters)
+	    private readonly bool _isIntraday;
+	    public FactScheduleDayCountJobStep(IJobParameters jobParameters):this(jobParameters,false){}
+		public FactScheduleDayCountJobStep(IJobParameters jobParameters, bool isIntraday)
             : base(jobParameters)
         {
-	        Name = "fact_schedule_day_count";
+			_isIntraday = isIntraday;
+			Name = "fact_schedule_day_count";
             JobCategory = JobCategoryType.Schedule;
         }
 
         protected override int RunStep(IList<IJobResult> jobResultCollection, bool isLastBusinessUnit)
         {
+			if(_isIntraday)
+				return
+				_jobParameters.Helper.Repository.FillIntradayScheduleDayCountDataMart(RaptorTransformerHelper.CurrentBusinessUnit);
+
 			var period = new DateTimePeriod(JobCategoryDatePeriod.StartDateUtcFloor, JobCategoryDatePeriod.EndDateUtcCeiling);
             //Load datamart
             return

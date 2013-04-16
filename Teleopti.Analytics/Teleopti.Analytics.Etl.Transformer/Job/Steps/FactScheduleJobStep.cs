@@ -20,7 +20,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 
         protected override int RunStep(IList<IJobResult> jobResultCollection, bool isLastBusinessUnit)
         {
-			//Load data from stage to datamart
+			//Load data from stage to datamart 
 			if(_isIntraday)
 				return _jobParameters.Helper.Repository.FillIntradayScheduleDataMart(RaptorTransformerHelper.CurrentBusinessUnit);
 

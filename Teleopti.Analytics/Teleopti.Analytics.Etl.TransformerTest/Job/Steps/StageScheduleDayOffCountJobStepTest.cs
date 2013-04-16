@@ -20,14 +20,6 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
 	[TestFixture]
 	public class StageScheduleDayOffCountJobStepTest
 	{
-		private MockRepository _mock;
-
-		[SetUp]
-		public void Setup()
-		{
-			_mock = new MockRepository();
-		}
-
 		[Test]
 		public void VerifyDefaultProperties()
 		{

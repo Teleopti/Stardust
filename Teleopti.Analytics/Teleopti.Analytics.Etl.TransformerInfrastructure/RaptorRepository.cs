@@ -241,6 +241,18 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 											  _dataMartConnectionString);
 		}
 
+		public int FillIntradayScheduleDayCountDataMart(IBusinessUnit currentBusinessUnit)
+		{
+			var parameterList = new List<SqlParameter>
+				{
+					new SqlParameter("business_unit_code", currentBusinessUnit.Id)
+				};
+
+			return
+				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_schedule_day_count_load", parameterList,
+											  _dataMartConnectionString);
+		}
+
 		public int FillDayOffDataMart(IBusinessUnit businessUnit)
 		{
             var parameterList = new List<SqlParameter> { new SqlParameter("business_unit_code", businessUnit.Id) };
