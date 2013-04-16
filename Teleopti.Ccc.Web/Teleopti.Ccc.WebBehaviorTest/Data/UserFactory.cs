@@ -188,7 +188,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			Person = PersonFactory.CreatePersonWithBasicPermissionInfo(logonName, password);
 			Person.Name = new Name("Agent", lastName);
 
-			Log.Write("Making user " + Person.Name);
+			Log.Info("Making user " + Person.Name);
 
 			MakeMePerson(Person);
 

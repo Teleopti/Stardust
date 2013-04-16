@@ -55,9 +55,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 			interceptors.ToList().ForEach(i => i.Before(args));
 
-			Log.Write("Browsing to: " + args.Uri);
+			Log.Info("Browsing to: " + args.Uri);
 			Retrying.Action(() => gotoMethod.Invoke(args.Uri));
-			Log.Write("Ended up in: " + Browser.Current.Url);
+			Log.Info("Ended up in: " + Browser.Current.Url);
 
 			interceptors.Reverse().ToList().ForEach(i => i.After(args));
 		}
