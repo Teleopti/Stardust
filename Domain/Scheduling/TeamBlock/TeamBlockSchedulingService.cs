@@ -48,9 +48,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	    {
 			_teamBlockScheduler.DayScheduled += dayScheduled;
 		    if (schedulePartModifyAndRollbackService == null) return false;
-		    foreach (var datePointer in selectedPeriod.DayCollection())
-		    {
-				var allTeamInfoListOnStartDate = new HashSet<ITeamInfo>();
+		    var dateOnlySkipList = new List<DateOnly>();
+		    //foreach (var datePointer in selectedPeriod.DayCollection())
+            foreach (var datePointer in selectedPeriod.DayCollection())
+            {
+                if (dateOnlySkipList.Contains(datePointer)) continue;
+                var allTeamInfoListOnStartDate = new HashSet<ITeamInfo>();
 			    foreach (var selectedPerson in selectedPersons)
 			    {
                     allTeamInfoListOnStartDate.Add(_teamInfoFactory.CreateTeamInfo(selectedPerson, selectedPeriod, allPersonMatrixList));
@@ -89,7 +92,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                                 }
                             }
                             if (rollbackExecuted)
+                            {
+                                //should skip the whole block
+                                dateOnlySkipList.AddRange(teamBlockInfo.BlockInfo.BlockPeriod.DayCollection());
                                 break;
+                            }
+                                
                         }
 
                     }
