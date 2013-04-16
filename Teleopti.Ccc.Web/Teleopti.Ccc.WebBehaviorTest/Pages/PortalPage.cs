@@ -4,14 +4,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 {
 	public class PortalPage : Page
 	{
-		[FindBy(Id = "tabs")]
-		public Element Menu;
+		public Div Menu
+		{
+			get { return Document.Div(Find.BySelector(".bdd-mytime-top-menu")); }
+		}
 
 		public Link ScheduleLink
 		{
 			get
 			{
-				return Document.Link(Find.By("href", s => s.EndsWith("#ScheduleTab")));
+				//return Document.Link(Find.By("href", s => s.EndsWith("#ScheduleTab")));
+				return Document.Link(Find.BySelector("a [href='#ScheduleTab']"));
 			}
 		}
 

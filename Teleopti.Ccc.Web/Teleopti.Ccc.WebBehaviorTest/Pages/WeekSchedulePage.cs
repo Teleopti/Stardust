@@ -166,8 +166,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		public Button NextPeriodButton { get { return DateRangeSelectorContainer.Buttons.Last(); } }
 		public Button PreviousPeriodButton { get { return DateRangeSelectorContainer.Buttons.First(); } }
 
-		[FindBy(Id = "Schedule-today-button")]
-		public Button TodayButton { get; set; }
+		public Link TodayButton 
+		{
+			get
+			{
+				return Document.Link(QuicklyFind.ByClass("week-schedule-today"));
+			}
+		}
 
 		public DivCollection DayLayers(DateTime date)
         {
@@ -177,6 +182,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		public Div DayLayerTooltipElement(DateTime date, string tooltipContent)
 		{
 			return Document.Div(Find.BySelector(DateSelector(date) + " .week-schedule-layer[tooltip-text*='" + tooltipContent + "']"));
+		}
+
+		public Div InnerBody
+		{
+			get { return Document.Div(Find.BySelector(".body-weekview-inner")); }
 		}
 	}
 }

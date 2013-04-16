@@ -4,15 +4,38 @@
 @{
 	Layout = null;
 }
-<div id="settings" class="edit-module">
-	<div id="selectors" class="edit-module-inner">
-		<div class="edit-module-element">
-			<label>@Resources.Language</label>
-			@Html.DropDownListFor(x => x.ChoosenUiCulture.LCID, new SelectList(Model.Cultures, "LCID", "DisplayName"), new { @id = "cultureUiSelect" })
+<div id="settings" class="well well-small">
+    <div class="clearfix">
+        <label for="cultureUiSelect">@Resources.Language</label>
+        <select id="cultureUiSelect" class="span3">
+            @foreach (var culture in Model.Cultures)
+            {
+                if (Model.ChoosenUiCulture.LCID == culture.LCID)
+                {
+                    <option value="@culture.LCID" selected="selected">@culture.DisplayName</option>
+                }
+                else
+                {
+                    <option value="@culture.LCID">@culture.DisplayName</option>
+                }
+            }
+        </select>
+    </div>
+    <br/>
+		<div class="clearfix">
+		    <label for="cultureSelect">@Resources.DateFormat</label>
+            		    <select id="cultureSelect" class="span3">
+		        @foreach (var culture in Model.Cultures)
+		        {
+                    if (Model.ChoosenCulture.LCID == culture.LCID)
+		            {
+                        <option value="@culture.LCID" selected="selected">@culture.DisplayName</option>
+		            }
+		            else
+		            {
+		                <option value="@culture.LCID">@culture.DisplayName</option>
+		            }
+		        }
+		    </select>
 		</div>
-		<div class="edit-module-element pdt15">
-			<label>@Resources.DateFormat</label>
-			@Html.DropDownListFor(x => x.ChoosenCulture.LCID, new SelectList(Model.Cultures, "LCID", "DisplayName"), new { @id = "cultureSelect" })
-		</div>
-	</div>
 </div>

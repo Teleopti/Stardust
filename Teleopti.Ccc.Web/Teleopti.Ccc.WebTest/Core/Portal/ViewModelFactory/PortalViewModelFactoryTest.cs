@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		{
 			var permissionProvider = MockRepository.GenerateMock<IPermissionProvider>();
 			permissionProvider.Stub(x => x.HasApplicationFunctionPermission(Arg<string>.Is.Anything)).Return(true);
-			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<IPreferenceOptionsProvider>(), MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateMock<IPushMessageProvider>(), MockRepository.GenerateMock<ILoggedOnUser>());
+			var target = new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateMock<IPushMessageProvider>(), MockRepository.GenerateMock<ILoggedOnUser>());
 
 			var result = target.CreatePortalViewModel();
 
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 		public void ShouldHaveCustomerName()
 		{
 			var licenseActivator = MockRepository.GenerateMock<ILicenseActivator>();
-			var target = new PortalViewModelFactory(MockRepository.GenerateMock<IPermissionProvider>(), MockRepository.GenerateMock<IPreferenceOptionsProvider>(), licenseActivator, MockRepository.GenerateMock<IPushMessageProvider>(), MockRepository.GenerateMock<ILoggedOnUser>());
+			var target = new PortalViewModelFactory(MockRepository.GenerateMock<IPermissionProvider>(), licenseActivator, MockRepository.GenerateMock<IPushMessageProvider>(), MockRepository.GenerateMock<ILoggedOnUser>());
 
 			licenseActivator.Stub(x => x.CustomerName).Return("Customer Name");
 
@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			var agent = new Person();
 			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			loggedOnUser.Expect(m => m.CurrentUser()).Return(agent);
-			var target = new PortalViewModelFactory(MockRepository.GenerateStub<IPermissionProvider>(), null, MockRepository.GenerateStub<ILicenseActivator>(), MockRepository.GenerateMock<IPushMessageProvider>(), loggedOnUser);
+			var target = new PortalViewModelFactory(MockRepository.GenerateStub<IPermissionProvider>(), MockRepository.GenerateStub<ILicenseActivator>(), MockRepository.GenerateMock<IPushMessageProvider>(), loggedOnUser);
 			var res = target.CreatePortalViewModel();
 			res.ShowChangePassword.Should().Be.False();
 		}
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			var agent = new Person {ApplicationAuthenticationInfo = new ApplicationAuthenticationInfo()};
 			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			loggedOnUser.Expect(m => m.CurrentUser()).Return(agent);
-			var target = new PortalViewModelFactory(MockRepository.GenerateStub<IPermissionProvider>(), null, MockRepository.GenerateStub<ILicenseActivator>(), MockRepository.GenerateMock<IPushMessageProvider>(), loggedOnUser);
+			var target = new PortalViewModelFactory(MockRepository.GenerateStub<IPermissionProvider>(), MockRepository.GenerateStub<ILicenseActivator>(), MockRepository.GenerateMock<IPushMessageProvider>(), loggedOnUser);
 			var res = target.CreatePortalViewModel();
 			res.ShowChangePassword.Should().Be.False();
 		}
@@ -83,7 +83,7 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			var agent = new Person { ApplicationAuthenticationInfo = new ApplicationAuthenticationInfo{ApplicationLogOnName = "Arne Weise"} };
 			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			loggedOnUser.Expect(m => m.CurrentUser()).Return(agent);
-			var target = new PortalViewModelFactory(MockRepository.GenerateStub<IPermissionProvider>(), null, MockRepository.GenerateStub<ILicenseActivator>(), MockRepository.GenerateMock<IPushMessageProvider>(), loggedOnUser);
+			var target = new PortalViewModelFactory(MockRepository.GenerateStub<IPermissionProvider>(), MockRepository.GenerateStub<ILicenseActivator>(), MockRepository.GenerateMock<IPushMessageProvider>(), loggedOnUser);
 			var res = target.CreatePortalViewModel();
 			res.ShowChangePassword.Should().Be.True();
 		}
@@ -110,9 +110,25 @@ namespace Teleopti.Ccc.WebTest.Core.Portal.ViewModelFactory
 			Assert.That(target.CreatePortalViewModel().HasAsmPermission, Is.False);
 		}
 
+		[Test, SetCulture("en-US")]
+		public void ShouldShowMeridianWhenUsCulture()
+		{
+			var target = CreateTarget(MockRepository.GenerateMock<IPermissionProvider>());
+
+			target.CreatePortalViewModel().ShowMeridian.Should().Be.True();
+		}
+
+		[Test, SetCulture("sv-SE")]
+		public void ShouldShowMeridianWhenSwedishCulture()
+		{
+			var target = CreateTarget(MockRepository.GenerateMock<IPermissionProvider>());
+
+			target.CreatePortalViewModel().ShowMeridian.Should().Be.False();
+		}
+
 		private static PortalViewModelFactory CreateTarget(IPermissionProvider permissionProvider)
 		{
-			return new PortalViewModelFactory(permissionProvider, null, MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateMock<IPushMessageProvider>(), MockRepository.GenerateMock<ILoggedOnUser>()); 
+			return new PortalViewModelFactory(permissionProvider, MockRepository.GenerateMock<ILicenseActivator>(), MockRepository.GenerateMock<IPushMessageProvider>(), MockRepository.GenerateMock<ILoggedOnUser>()); 
 		}
 	}
 

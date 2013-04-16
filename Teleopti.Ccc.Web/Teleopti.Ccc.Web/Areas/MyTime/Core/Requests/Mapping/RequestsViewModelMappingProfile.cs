@@ -97,6 +97,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 										s =>
 																TimeZoneInfo.ConvertTimeFromUtc(s.Request.Period.EndDateTime, _userTimeZone.TimeZone()).ToShortTimeString()))
 				.ForMember(d => d.Payload, o => o.MapFrom(s => s.Request.RequestPayloadDescription.Name))
+				.ForMember(d => d.PayloadId, o => o.ResolveUsing(s => resolvePayloadId(s)))
 				.ForMember(d => d.IsFullDay, o => o.ResolveUsing(s =>
 																											{
 																												var start =
@@ -141,7 +142,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				;
 		}
 
-		private static bool isCreatedByUser(IRequest request, ILoggedOnUser loggedOnUser)
+		private string resolvePayloadId(IPersonRequest personRequest)
+		{
+			if (personRequest.Request.RequestType != RequestType.AbsenceRequest)
+				return null;
+
+			return ((IAbsenceRequest) personRequest.Request).Absence.Id.GetValueOrDefault().ToString();
+		}
+
+		private static bool isCreatedByUser(IRequest request, Func<ILoggedOnUser> loggedOnUser)
 		{
 			return request.PersonFrom != null && request.PersonFrom.Equals(loggedOnUser.CurrentUser());
 		}
