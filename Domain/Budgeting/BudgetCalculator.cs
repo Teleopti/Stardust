@@ -7,7 +7,7 @@ namespace Teleopti.Ccc.Domain.Budgeting
     {
         private readonly IEnumerable<IBudgetDay> _budgetDayList;
         private readonly INetStaffCalculator _netStaffCalculator;
-        private readonly IList<ICalculator> _calculatorList;
+        private IList<ICalculator> _calculatorList;
 
         public BudgetCalculator(IEnumerable<IBudgetDay> listOfBudgetDays, INetStaffCalculator netStaffCalculator, IList<ICalculator> listOfCalculators)
         {
@@ -17,17 +17,21 @@ namespace Teleopti.Ccc.Domain.Budgeting
             _netStaffCalculator.Initialize(_budgetDayList);
         }
 
+	    public IList<ICalculator> CalculatorList
+	    {
+			get { return _calculatorList; }
+			set { _calculatorList = value; }
+	    }
+
         public BudgetCalculationResult Calculate(IBudgetDay budgetDay)
         {
             InParameter.NotNull("budgetDay", budgetDay);
             if(budgetDay.IsClosed) return new BudgetCalculationResult();
             var budgetDayCalculations = _netStaffCalculator.CalculatedResult(budgetDay);
-            foreach (var calculator in _calculatorList)
-            {
-                calculator.Calculate(budgetDay, _budgetDayList, ref budgetDayCalculations);
-            }
+	        foreach (var calculator in _calculatorList)
+		        calculator.Calculate(budgetDay, _budgetDayList, ref budgetDayCalculations);
 
-            return budgetDayCalculations;
+	        return budgetDayCalculations;
         }
     }
 }

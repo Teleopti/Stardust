@@ -9,12 +9,8 @@ namespace Teleopti.Ccc.Domain.Budgeting
         public void Calculate(IBudgetDay budgetDay, IEnumerable<IBudgetDay> budgetDayList, ref BudgetCalculationResult budgetCalculationResult) // Get latest staffemployed and daysperyear
         {
             double differencePercent = 0;
-            var forecastedStaff = new ForecastedStaffCalculator();
-            forecastedStaff.Calculate(budgetDay, budgetDayList, ref budgetCalculationResult);
-
 		    if (!budgetCalculationResult.ForecastedStaff.Equals(0))
 			    differencePercent = budgetCalculationResult.Difference/budgetCalculationResult.ForecastedStaff;
-
 		    budgetCalculationResult.DifferencePercent = new Percent(differencePercent); 
         }
     }

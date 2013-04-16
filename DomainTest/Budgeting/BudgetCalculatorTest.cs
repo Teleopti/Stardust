@@ -50,14 +50,24 @@ namespace Teleopti.Ccc.DomainTest.Budgeting
 			_budgetDay10 = new BudgetDay(_budgetGroup, _scenario, _date.AddDays(9)) { IsClosed = true, AttritionRate = new Percent(0.1), Recruitment = 0, Contractors = 22.8, DaysOffPerWeek = 2, ForecastedHours = 156, FulltimeEquivalentHours = 7.6, OvertimeHours = 2, StudentHours = 3 };
             _listOfBudgetDays = new List<IBudgetDay> { _budgetDay1, _budgetDay2, _budgetDay3, _budgetDay4, _budgetDay5, _budgetDay6, _budgetDay7, _budgetDay8, _budgetDay9, _budgetDay10 };
 
-            var netStaffCalculator = new NetStaffCalculator(new GrossStaffCalculator());
-            var info = new CultureInfo(1053);
+			var grossStaffCalculator = new GrossStaffCalculator();
+			var netStaffCalculator = new NetStaffCalculator(grossStaffCalculator);
 
             _calcList = new List<ICalculator>
-                            {
-                                new DifferencePercentCalculator(),
-                                new AllowanceCalculator()
-                            };
+				{
+					new ForecastedStaffCalculator(),
+					new NetStaffForecastAdjustCalculator(netStaffCalculator, grossStaffCalculator),
+					new BudgetedStaffCalculator(),
+					new DifferenceCalculator(),
+					new DifferencePercentCalculator()
+				};
+			_calcList.AddRange(new List<ICalculator>
+					{
+						new BudgetedLeaveCalculator(netStaffCalculator),
+						new BudgetedSurplusCalculator(),
+						new TotalAllowanceCalculator(),
+						new AllowanceCalculator()
+					});
             _target = new BudgetCalculator(_listOfBudgetDays, netStaffCalculator, _calcList);
         }
 

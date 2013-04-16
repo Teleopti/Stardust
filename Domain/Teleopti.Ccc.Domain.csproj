@@ -137,6 +137,7 @@
     <Compile Include="Budgeting\ForecastedStaffCalculator.cs" />
     <Compile Include="Budgeting\GrossStaffCalculator.cs" />
     <Compile Include="Budgeting\NetStaffCalculator.cs" />
+    <Compile Include="Budgeting\NetStaffFcAdjustSurplusDistributor.cs" />
     <Compile Include="Budgeting\NetStaffForecastAdjustedCalculator.cs" />
     <Compile Include="Budgeting\PayloadWorkTime.cs" />
     <Compile Include="Budgeting\TotalAllowanceCalculator.cs" />

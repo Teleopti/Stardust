@@ -16,6 +16,7 @@ namespace Teleopti.Ccc.DomainTest.Budgeting
         private BudgetedStaffCalculator _target;
         private BudgetDay _budgetDay5;
         private List<IBudgetDay> listOfBudgetDays;
+	    private NetStaffCalculator netStaffCalculator;
 
         [SetUp]
         public void Setup()
@@ -37,9 +38,8 @@ namespace Teleopti.Ccc.DomainTest.Budgeting
 			var budgetDay10 = new BudgetDay(budgetGroup, scenario, date.AddDays(9)) { AttritionRate = new Percent(0.1), Recruitment = 0, Contractors = 22.8, DaysOffPerWeek = 2, ForecastedHours = 156, FulltimeEquivalentHours = 7.6, OvertimeHours = 2, StudentHours = 3 };
             listOfBudgetDays = new List<IBudgetDay> { budgetDay1, budgetDay2, budgetDay3, budgetDay4, _budgetDay5, budgetDay6, budgetDay7, budgetDay8, budgetDay9, budgetDay10 };
 
-            var netStaffCalculator = new NetStaffCalculator(new GrossStaffCalculator());
+            netStaffCalculator = new NetStaffCalculator(new GrossStaffCalculator());
             netStaffCalculator.Initialize(listOfBudgetDays);
-            var info = new CultureInfo(1053);
             _target = new BudgetedStaffCalculator();
         }
 
@@ -49,6 +49,8 @@ namespace Teleopti.Ccc.DomainTest.Budgeting
             var grossStaffCalculator = new GrossStaffCalculator();
             grossStaffCalculator.Initialize(listOfBudgetDays);
             var result = grossStaffCalculator.CalculatedResult(_budgetDay5);
+	        var netStaffFcAdjCalc = new NetStaffForecastAdjustCalculator(netStaffCalculator, grossStaffCalculator);
+			netStaffFcAdjCalc.Calculate(_budgetDay5, listOfBudgetDays, ref result);
             _target.Calculate(_budgetDay5, listOfBudgetDays, ref result);
             var budget = Math.Round(result.BudgetedStaff, 2);
             budget.Should().Be.EqualTo(536.41d);

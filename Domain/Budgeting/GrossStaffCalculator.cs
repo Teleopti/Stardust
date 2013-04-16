@@ -37,9 +37,4 @@ namespace Teleopti.Ccc.Domain.Budgeting
         void Initialize(IEnumerable<IBudgetDay> budgetDayList);
         BudgetCalculationResult CalculatedResult(IBudgetDay budgetDay);
     }
-
-    public interface ICalculator
-    {
-        void Calculate(IBudgetDay budgetDay, IEnumerable<IBudgetDay> budgetDayList, ref BudgetCalculationResult budgetCalculationResult); 
-    }
 }

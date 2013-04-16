@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -216,15 +215,27 @@ namespace Teleopti.Ccc.DomainTest.Budgeting
                 target.AbsenceExtra = 2;
                 target.CustomShrinkages.SetShrinkage(g1, new Percent(0.2d));
                 target.CustomEfficiencyShrinkages.SetEfficiencyShrinkage(g2, new Percent(0.1d));
-                var netStaffCalculator = new NetStaffCalculator(new GrossStaffCalculator());
-                var info = new CultureInfo(1053);
+				var grossStaffCalculator = new GrossStaffCalculator();
+				var netStaffCalculator = new NetStaffCalculator(grossStaffCalculator);
+
+				var calcList = new List<ICalculator>
+				{
+					new ForecastedStaffCalculator(),
+					new NetStaffForecastAdjustCalculator(netStaffCalculator, grossStaffCalculator),
+					new BudgetedStaffCalculator(),
+					new DifferenceCalculator(),
+					new DifferencePercentCalculator()
+				};
+				calcList.AddRange(new List<ICalculator>
+					{
+						new BudgetedLeaveCalculator(netStaffCalculator),
+						new BudgetedSurplusCalculator(),
+						new TotalAllowanceCalculator(),
+						new AllowanceCalculator()
+					});
                 var budgetCalculator = new BudgetCalculator(new List<IBudgetDay> {target},
                                                             netStaffCalculator,
-                                                            new List<ICalculator>
-                                                                {
-                                                                    new DifferencePercentCalculator(),
-                                                                    new AllowanceCalculator()
-                                                                });
+															calcList);
                 var calculations = target.Calculate(budgetCalculator);
                 Assert.AreEqual(1.84d, Math.Round(calculations.Difference, 2));
                 Assert.AreEqual(4.40d, Math.Round(calculations.BudgetedLeave, 2));
@@ -235,7 +246,7 @@ namespace Teleopti.Ccc.DomainTest.Budgeting
         }
 
         [Test]
-        public void ShouldAllowanceBeZeroIfFTEIsZero()
+        public void ShouldAllowanceBeZeroIfFteIsZero()
         {
             var g1 = Guid.NewGuid();
             var g2 = Guid.NewGuid();
@@ -272,7 +283,6 @@ namespace Teleopti.Ccc.DomainTest.Budgeting
                 target.CustomShrinkages.SetShrinkage(g1, new Percent(0.2d));
                 target.CustomEfficiencyShrinkages.SetEfficiencyShrinkage(g2, new Percent(0.1d));
                 var netStaffCalculator = new NetStaffCalculator(new GrossStaffCalculator());
-                var info = new CultureInfo(1053);
                 var budgetCalculator = new BudgetCalculator(new List<IBudgetDay> {target},
                                                             netStaffCalculator,
                                                             new List<ICalculator>

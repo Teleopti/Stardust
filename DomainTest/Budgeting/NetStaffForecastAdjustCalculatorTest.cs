@@ -19,7 +19,6 @@ namespace Teleopti.Ccc.DomainTest.Budgeting
 	    private BudgetGroup _budgetGroup;
 	    private IScenario _scenario;
 	    private DateOnly _date;
-	    private CultureInfo _info;
 	    private BudgetCalculationResult _result;
 
 	    [SetUp]
@@ -154,11 +153,10 @@ namespace Teleopti.Ccc.DomainTest.Budgeting
 				    budgetDay9,
 				    budgetDay10
 			    };
-
-		    var netStaffCalculator = new NetStaffCalculator(new GrossStaffCalculator());
+		    var grossStaffCalculator = new GrossStaffCalculator();
+			var netStaffCalculator = new NetStaffCalculator(grossStaffCalculator);
 		    netStaffCalculator.Initialize(_listOfBudgetDays);
-		    _info = new CultureInfo(1053);
-		    _target = new NetStaffForecastAdjustCalculator(netStaffCalculator);
+			_target = new NetStaffForecastAdjustCalculator(netStaffCalculator, grossStaffCalculator);
 	    }
 
 	    [Test]
@@ -174,7 +172,7 @@ namespace Teleopti.Ccc.DomainTest.Budgeting
 		}
 
 		[Test]
-		public void ShouldNetStaffFcAdjustShouldNotExceedMaxAgents()
+		public void ShouldNetStaffFCAdjustShouldNotExceedMaxAgents()
 		{
 			var peakBudgetDay = new BudgetDay(_budgetGroup, _scenario, _date)
 				{
@@ -202,10 +200,10 @@ namespace Teleopti.Ccc.DomainTest.Budgeting
 					_budgetDay7
 				}, customShrinkage.Id.GetValueOrDefault());
 			budgetDays.Insert(0, peakBudgetDay);
-			var netStaffCalculator = new NetStaffCalculator(new GrossStaffCalculator());
+			var grossStaffCalculator = new GrossStaffCalculator();
+			var netStaffCalculator = new NetStaffCalculator(grossStaffCalculator);
 			netStaffCalculator.Initialize(budgetDays);
-
-			_target = new NetStaffForecastAdjustCalculator(netStaffCalculator);
+			_target = new NetStaffForecastAdjustCalculator(netStaffCalculator, grossStaffCalculator);
 			
 			_result = new BudgetCalculationResult
 				{
