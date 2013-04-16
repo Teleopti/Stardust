@@ -154,11 +154,20 @@ CREATE TABLE [stage].[stg_schedule_changed](
 	[schedule_date] [datetime] NOT NULL,
 	[person_code] [uniqueidentifier] NOT NULL,
 	[scenario_code] [uniqueidentifier] NOT NULL,
-	[business_unit_code] [uniqueidentifier] NOT NULL
- CONSTRAINT [PK_stg_schedule_deleted] PRIMARY KEY CLUSTERED 
+	[business_unit_code] [uniqueidentifier] NOT NULL,
+	[datasource_id] [smallint] NOT NULL,
+	[insert_date] [smalldatetime] NOT NULL,
+	[update_date] [smalldatetime] NOT NULL,
+	[datasource_update_date] [smalldatetime] NOT NULL
+ CONSTRAINT [PK_stg_schedule_changed] PRIMARY KEY CLUSTERED 
 (
 	[schedule_date] ASC,
 	[person_code] ASC,
 	[scenario_code] ASC
-))
+)
+)
+GO
+ALTER TABLE [stage].[stg_schedule_changed] ADD  CONSTRAINT [DF_stg_schedule_changed_datasource_id]  DEFAULT ((1)) FOR [datasource_id]
+ALTER TABLE [stage].[stg_schedule_changed] ADD  CONSTRAINT [DF_stg_schedule_changed_insert_date]  DEFAULT (getdate()) FOR [insert_date]
+ALTER TABLE [stage].[stg_schedule_changed] ADD  CONSTRAINT [DF_stg_schedule_changed_update_date]  DEFAULT (getdate()) FOR [update_date]
 GO
