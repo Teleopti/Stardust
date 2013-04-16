@@ -17,4 +17,19 @@ namespace Teleopti.Interfaces.ReadModel
 		/// </summary>
 		DateTime Date { get; set; } 
 	}
+
+	/// <summary>
+	/// 
+	/// </summary>
+	public interface ILastChangedReadModel
+	{
+		/// <summary>
+		/// 
+		/// </summary>
+		DateTime ThisTime { get; set; }
+		/// <summary>
+		/// 
+		/// </summary>
+		DateTime LastTime { get; set; } 
+	}
 }

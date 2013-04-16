@@ -215,7 +215,9 @@ namespace Teleopti.Analytics.Etl.Interfaces.Transformer
         int LoadQualityQuestDataMart(int dataSourceId, IBusinessUnit currentBusinessUnit);
         int FillFactQualityDataMart(DateTimePeriod period, int dataSourceId, TimeZoneInfo defaultTimeZone, IBusinessUnit currentBusinessUnit);
 
-		IList<IScheduleChangedReadModel> ChangedDataOnStep(DateTimePeriod onPeriod, IBusinessUnit currentBusinessUnit, string stepName);
+		ILastChangedReadModel LastChangedDate(IBusinessUnit currentBusinessUnit, string stepName);
+		IList<IScheduleChangedReadModel> ChangedDataOnStep(DateTime afterDate, IBusinessUnit currentBusinessUnit, string stepName);
 		int PersistScheduleChanged(DataTable dataTable);
+		void UpdateLastChangedDate(IBusinessUnit currentBusinessUnit, string stepName, DateTime thisTime);
     }
 }

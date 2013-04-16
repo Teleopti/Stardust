@@ -673,13 +673,21 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
                                               _dataMartConnectionString);
 	    }
 
-		
-		public IList<IScheduleChangedReadModel> ChangedDataOnStep(DateTimePeriod onPeriod, IBusinessUnit currentBusinessUnit, string stepName)
+		ILastChangedReadModel IRaptorRepository.LastChangedDate(IBusinessUnit currentBusinessUnit, string stepName)
 		{
 			using (var uow = UnitOfWorkFactory.CurrentUnitOfWorkFactory().LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
 				var rep = new EtlReadModelRepository(uow);
-				return rep.ChangedDataOnStep(onPeriod, currentBusinessUnit, stepName);
+				return rep.LastChangedDate(currentBusinessUnit, stepName);
+			}
+		}
+
+		public IList<IScheduleChangedReadModel> ChangedDataOnStep(DateTime afterDate, IBusinessUnit currentBusinessUnit, string stepName)
+		{
+			using (var uow = UnitOfWorkFactory.CurrentUnitOfWorkFactory().LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+			{
+				var rep = new EtlReadModelRepository(uow);
+				return rep.ChangedDataOnStep(afterDate, currentBusinessUnit, stepName);
 			}	
 		}
 
@@ -687,6 +695,15 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 		{
 			HelperFunctions.ExecuteNonQuery(CommandType.Text, "TRUNCATE TABLE [stage].[stg_schedule_changed]", new Collection<SqlParameter>(), _dataMartConnectionString);
 			return HelperFunctions.BulkInsert(dataTable, "stage.[stg_schedule_changed]", _dataMartConnectionString);
+		}
+
+		public void UpdateLastChangedDate(IBusinessUnit currentBusinessUnit, string stepName, DateTime thisTime)
+		{
+			using (var uow = UnitOfWorkFactory.CurrentUnitOfWorkFactory().LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+			{
+				var rep = new EtlReadModelRepository(uow);
+				rep.UpdateLastChangedDate(currentBusinessUnit, stepName, thisTime);
+			}
 		}
 
 		public IList<IScheduleDay> LoadSchedulePartsPerPersonAndDate(DateTimePeriod period, IScheduleDictionary dictionary)

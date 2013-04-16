@@ -691,12 +691,22 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
             return 0;
         }
 
-	    public IList<IScheduleChangedReadModel> ChangedDataOnStep(DateTimePeriod onPeriod, IBusinessUnit currentBusinessUnit, string stepName)
+	    public ILastChangedReadModel LastChangedDate(IBusinessUnit currentBusinessUnit, string stepName)
+	    {
+		    throw new NotImplementedException();
+	    }
+
+	    public IList<IScheduleChangedReadModel> ChangedDataOnStep(DateTime afterDate, IBusinessUnit currentBusinessUnit, string stepName)
 	    {
 		    throw new NotImplementedException();
 	    }
 
 	    public int PersistScheduleChanged(DataTable dataTable)
+	    {
+		    throw new NotImplementedException();
+	    }
+
+	    public void UpdateLastChangedDate(IBusinessUnit currentBusinessUnit, string stepName, DateTime thisTime)
 	    {
 		    throw new NotImplementedException();
 	    }

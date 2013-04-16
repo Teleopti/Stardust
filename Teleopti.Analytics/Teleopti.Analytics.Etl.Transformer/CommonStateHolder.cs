@@ -368,6 +368,8 @@ namespace Teleopti.Analytics.Etl.Transformer
 
 		public IDictionary<DateTimePeriod, IScheduleDictionary> GetScheduleCashe()
 		{
+			if(_dictionaryCashe == null)
+				_dictionaryCashe = new Dictionary<DateTimePeriod, IScheduleDictionary>();
 			return _dictionaryCashe;
 		}
 
