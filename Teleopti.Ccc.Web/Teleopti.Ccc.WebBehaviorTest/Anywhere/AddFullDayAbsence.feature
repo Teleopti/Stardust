@@ -63,9 +63,9 @@ Scenario: Add
 	| Color      | Red   |
 #	And I should see an absence in the absence list with
 #	| Field      | Value            |
+#	| Name    | Vacation         |
 #	| Start time | 2013-04-08 08:00 |
 #	| End time   | 2013-04-08 17:00 |
-#	| Absence    | Vacation         |
 
 Scenario: Default values
 	Given I have the role 'Anywhere Team Green'
