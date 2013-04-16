@@ -51,6 +51,81 @@ Scenario: Henkes testscenario for setting up budgetgroups
 	Then I should see an indication of the amount of agents that can go on holiday on each day of the week
 
 @ignore
+Scenario: Henkes testscenario for setting up budgetgroups 1
+	Given there is an absence with
+	| Field	| Value   |
+	| Name	| holiday |
+	And there is a budgetgroup with
+	| Field		| Value   |
+	| Name		| NameOfTheBudgetGroup |
+	| Absence   | holiday |
+	And there is a budgetday
+	| Field				| Value                |
+	| BudgetGroup		| NameOfTheBudgetGroup |
+	| Date				| 2013-04-01           |
+	| Allowance			| 10                   |
+	| TotalAllowance	| 12                   |
+	And I have the role 'Full access to mytime'
+	And there is absence time for
+	| Field			| Value					|
+	| Date			| 2013-04-01			|
+	| Hours			| 1						|
+	| BudgetGroup	| NameOfTheBudgetGroup	|
+	| Absence		| holiday				|
+	When I view my week schedule for date '2013-04-01'
+	Then I should see an 'green' indication for chance of absence request on '2013-04-01'
+
+@ignore
+Scenario: Henkes testscenario for setting up budgetgroups 2
+	Given there is an absence with
+	| Field	| Value   |
+	| Name	| holiday |
+	And there is a budgetgroup with
+	| Field		| Value   |
+	| Name		| NameOfTheBudgetGroup |
+	| Absence   | holiday |
+	And there is a budgetday
+	| Field				| Value                |
+	| BudgetGroup		| NameOfTheBudgetGroup |
+	| Date				| 2013-04-01           |
+	| Allowance			| 10                   |
+	| TotalAllowance	| 12                   |
+	And I have the role 'Full access to mytime'
+	And there is absence time for
+	| Field			| Value					|
+	| Date			| 2013-04-01			|
+	| Hours			| 6						|
+	| BudgetGroup	| NameOfTheBudgetGroup	|
+	| Absence		| holiday				|
+	When I view my week schedule for date '2013-04-01'
+	Then I should see an 'yellow' indication for chance of absence request on '2013-04-01'
+
+@ignore
+Scenario: Henkes testscenario for setting up budgetgroups 3
+	Given there is an absence with
+	| Field	| Value   |
+	| Name	| holiday |
+	And there is a budgetgroup with
+	| Field		| Value   |
+	| Name		| NameOfTheBudgetGroup |
+	| Absence   | holiday |
+	And there is a budgetday
+	| Field				| Value                |
+	| BudgetGroup		| NameOfTheBudgetGroup |
+	| Date				| 2013-04-01           |
+	| Allowance			| 10                   |
+	| TotalAllowance	| 12                   |
+	And I have the role 'Full access to mytime'
+	And there is absence time for
+	| Field			| Value					|
+	| Date			| 2013-04-01			|
+	| Hours			| 10						|
+	| BudgetGroup	| NameOfTheBudgetGroup	|
+	| Absence		| holiday				|
+	When I view my week schedule for date '2013-04-01'
+	Then I should see an 'red' indication for chance of absence request on '2013-04-01'
+
+@ignore
 Scenario: Do not show indication of the amount of agents that can go on holiday if no permission to absence request
 	Given I have the role 'No access to absence requests'
 	When I view my week schedule for date '2013-02-15'
@@ -60,37 +135,6 @@ Scenario: Show indication of agents that can go on holiday
 	Given I have the role 'Full access to mytime'
 	When I view my week schedule for date '2013-02-15'
 	Then I should see an indication of the amount of agents that can go on holiday on each day of the week
-
-@ignore
-Scenario: Indicate that no agents that can go on holiday if no allowance left
-	Given I have the role 'Full access to mytime'
-	And There is no available allowance
-	When I view my week schedule for date '2013-02-15'
-	Then I should see an 'red' indication for chance of absence request on '2013-02-15'
-
-@ignore
-Scenario: Show indication of agents that can go on holiday when there is a medium possibility of getting the absence request approved
-	Given I have the role 'Full access to mytime'
-	And There is 'medium' possibility that I will get an absence request approved for '2013-02-15'
-	# Henke: Check with AF: This should probably be changed to something like And the supervisor has granted x of y possible absences
-	When I view my week schedule for date '2013-02-15'
-	Then I should see an 'yellow' indication for chance of absence request on '2013-02-15'
-
-@ignore	
-Scenario: Show indication of agents that can go on holiday when there is no possibility of getting the absence request approved
-	Given I have the role 'Full access to mytime'
-	And There is 'no' possibility that I will get an absence request approved for '2013-02-15'
-	# Henke: Check with AF: This should probably be changed to something like And the supervisor has granted x of y possible absences
-	When I view my week schedule for date '2013-02-15'
-	Then I should see an 'red' indication for chance of absence request on '2013-02-15'
-
-@ignore
-Scenario: Show indication of agents that can go on holiday when there is a high possibility of getting the absence request approved
-	Given I have the role 'Full access to mytime'
-	And There is 'high' possibility that I will get an absence request approved for '2013-02-15'
-	# Henke: Check with AF: This should probably be changed to something like And the supervisor has granted x of y possible absences
-	When I view my week schedule for date '2013-02-15'
-	Then I should see an 'green' indication for chance of absence request on '2013-02-15'
 
 @ignore
 Scenario: Indicate that no agents that can go on holiday if outside bounds of absence period

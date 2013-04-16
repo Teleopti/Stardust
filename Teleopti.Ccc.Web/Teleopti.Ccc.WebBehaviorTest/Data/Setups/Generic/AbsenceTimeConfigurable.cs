@@ -17,8 +17,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 	{
 		public DateTime Date { get; set; }
 		public int Hours { get; set; }
-		public string BudgetGroup { get; set; }
 		public string Absence { get; set; }
+
+		//henke: används bara för testningen, den här kan vi ta bort...
+		public string BudgetGroup { get; set; }
 
 		public void Apply(IPerson user, IUnitOfWork uow)
 		{
@@ -27,10 +29,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 
 			var absenceRepository = new AbsenceRepository(uow);
 			var absence = absenceRepository.LoadAll().First(a=>a.Name==Absence);
-
-			//henke: vi kommer antagligen inte att behöva budgetgruppen här, används nu bara för att kolla att allting fungerar......
-			var budgetGroupRepo = new BudgetGroupRepository(uow);
-			var budgetGroup = budgetGroupRepo.LoadAll().First(b => b.Name == BudgetGroup);
 			
 			var teamRepository = new TeamRepository(uow);
 			var team = teamRepository.LoadAll().First();
@@ -47,8 +45,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			var contractSchedulerepository = new ContractScheduleRepository(uow);
 			contractSchedulerepository.Add(contractSchedule);
 
+			//henke: vore nog bra om vi inte behövde budgetgruppen här.....
+			var budgetGroupRepo = new BudgetGroupRepository(uow);
+			var budgetGroup = budgetGroupRepo.LoadAll().First(b => b.Name == BudgetGroup);
 			IPersonPeriod personPeriod = PersonPeriodFactory.CreatePersonPeriod(new DateOnly(Date).AddDays(-1), team, budgetGroup);
 
+			//henke: todo: den här kan vi nog göra med PersonPeriodConfigurable....
 			personPeriod.PersonContract.Contract = contract;
 			personPeriod.PersonContract.ContractSchedule = contractSchedule;
 			personPeriod.PersonContract.PartTimePercentage = partTimepercentage;
@@ -80,6 +82,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 
 			scheduleProjectionReadOnlyRepository.AddProjectedLayer(new DateOnly(Date), scenarioId, person.Id.GetValueOrDefault(), layer);
 
+			//henke: resten är bara ett fultest för att kolla att allt fungerar, det skall inte kollas här		
 			var usedAbsenceMinutes = TimeSpan.FromTicks(
 				   scheduleProjectionReadOnlyRepository.AbsenceTimePerBudgetGroup(new DateOnlyPeriod(new DateOnly(Date).AddDays(-1), new DateOnly(Date).AddDays(1)),
 													 budgetGroup, scenario).Sum(p => p.TotalContractTime)).TotalMinutes;

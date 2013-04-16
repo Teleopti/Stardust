@@ -224,17 +224,12 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			}
 		}
 
-		[Given(@"There is no available allowance")]
-		public void GivenThereIsNoAvailableAllowance()
-		{
-			//Henke: Här behöver vi göra en hel del....
-			ScenarioContext.Current.Pending();
-		}
-
 		[Then(@"I should see an '(.*)' indication for chance of absence request on '(.*)'")]
-		public void ThenIShouldSeeAnIndicationForChanceOfAbsenceRequestOn(HtmlColor color, DateTime date)
+		public void ThenIShouldSeeAnIndicationForChanceOfAbsenceRequestOn(string color, DateTime date)
 		{
-			ScenarioContext.Current.Pending();
+			DivCollection layers = _page.DayLayers(date);
+			var background = layers.Filter(Find.ByClass("small-circle")).First().Style.BackgroundColor;
+			EventualAssert.That(() => background.ToHexString, Is.EqualTo(new HtmlColor(color).ToHexString));
 		}
 
 		private void AssertShowingWeekForDay(DateTime anyDayOfWeek)
