@@ -1,6 +1,5 @@
 ﻿using System;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
@@ -15,7 +14,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2201:DoNotRaiseReservedExceptionTypes")]
-		public void Publish(object @event)
+		public void Publish(IEvent @event)
 		{
 			if (!_sender.EnsureBus())
 				throw new ApplicationException("Cant find the bus, cant publish the event!");

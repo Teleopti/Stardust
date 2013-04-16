@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.Infrastructure.ApplicationLayer
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public void Publish(object @event)
+		public void Publish(IEvent @event)
 		{
 			var handlerType = typeof(IHandleEvent<>).MakeGenericType(@event.GetType());
 			var enumerableHandlerType = typeof (IEnumerable<>).MakeGenericType(handlerType);

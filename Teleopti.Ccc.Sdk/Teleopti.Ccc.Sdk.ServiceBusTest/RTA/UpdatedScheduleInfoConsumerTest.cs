@@ -2,10 +2,15 @@
 using NUnit.Framework;
 using Rhino.Mocks;
 using Rhino.ServiceBus;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Sdk.ServiceBus;
 using Teleopti.Ccc.Sdk.ServiceBus.Rta;
 using Teleopti.Ccc.Sdk.ServiceBus.TeleoptiRtaService;
+using Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -17,25 +22,23 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 	public class UpdatedScheduleInfoConsumerTest
 	{
 		private MockRepository mocks;
-		private IServiceBus serviceBus;
+		private ISendDelayedMessages serviceBus;
 		private ICurrentUnitOfWorkFactory _currentunitOfWorkFactory;
-		private IUnitOfWorkFactory unitOfWorkFactory;
 		private IUnitOfWork unitOfWork;
 		private IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository;
 		private UpdatedScheduleInfoConsumer target;
-	    private ITeleoptiRtaService teleoptiRtaService;
+		private IGetUpdatedScheduleChangeFromTeleoptiRtaService teleoptiRtaService;
 
 		[SetUp]
 		public void Setup()
 		{
 		    mocks = new MockRepository();
-		    serviceBus = mocks.StrictMock<IServiceBus>();
+		    serviceBus = mocks.StrictMock<ISendDelayedMessages>();
 			_currentunitOfWorkFactory = mocks.DynamicMock<ICurrentUnitOfWorkFactory>();
-			unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
 		    unitOfWork = mocks.DynamicMock<IUnitOfWork>();
 		    scheduleProjectionReadOnlyRepository = mocks.StrictMock<IScheduleProjectionReadOnlyRepository>();
-            teleoptiRtaService = mocks.DynamicMock<ITeleoptiRtaService>();
-            target = new UpdatedScheduleInfoConsumer(serviceBus, scheduleProjectionReadOnlyRepository, _currentunitOfWorkFactory, teleoptiRtaService);
+			teleoptiRtaService = mocks.DynamicMock<IGetUpdatedScheduleChangeFromTeleoptiRtaService>();
+            target = new UpdatedScheduleInfoConsumer(serviceBus, scheduleProjectionReadOnlyRepository, teleoptiRtaService);
         }
 
         [Test]
@@ -57,15 +60,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
                     Datasource = "DS"
                 };
 
-            Expect.Call(_currentunitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
-            Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
             Expect.Call(scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow,
                                                                                       person.Id.GetValueOrDefault())).IgnoreArguments()
                   .Return(DateTime.UtcNow.AddHours(3));
             Expect.Call(()=>serviceBus.DelaySend(DateTime.UtcNow.AddDays(1), null)).IgnoreArguments();
 
             mocks.ReplayAll();
-            target.Consume(personInfoMessage);
+            target.Handle(personInfoMessage);
             mocks.VerifyAll();
         }
 
@@ -86,14 +87,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
                 BusinessUnitId = bussinessUnit.Id.GetValueOrDefault()
             };
 
-			Expect.Call(_currentunitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
-            Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
             Expect.Call(scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow,
                                                                                      person.Id.GetValueOrDefault())).IgnoreArguments()
                  .Return(null);
 
             mocks.ReplayAll();
-            target.Consume(updatedSchduleDay);
+            target.Handle(updatedSchduleDay);
             mocks.VerifyAll();
         }
 
@@ -113,15 +112,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
                 PersonId = person.Id.GetValueOrDefault(),
                 BusinessUnitId = bussinessUnit.Id.GetValueOrDefault()
             };
-			Expect.Call(_currentunitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
-            Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
             Expect.Call(scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow,
                                                                                     person.Id.GetValueOrDefault())).IgnoreArguments()
                 .Return(DateTime.UtcNow.AddHours(3));
             Expect.Call(() => serviceBus.DelaySend(DateTime.UtcNow.AddDays(1), null)).IgnoreArguments();
 
             mocks.ReplayAll();
-            target.Consume(updatedSchduleDay);
+            target.Handle(updatedSchduleDay);
             mocks.VerifyAll();
         }
 
@@ -141,15 +138,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
                     PersonId = person.Id.GetValueOrDefault(),
                     BusinessUnitId = bussinessUnit.Id.GetValueOrDefault()
                 };
-			Expect.Call(_currentunitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
-            Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
             Expect.Call(scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow,
                                                                                      person.Id.GetValueOrDefault())).IgnoreArguments()
                  .Return(DateTime.UtcNow.AddHours(3));
             Expect.Call(() => serviceBus.DelaySend(DateTime.UtcNow.AddDays(1), null)).IgnoreArguments();
 
             mocks.ReplayAll();
-            target.Consume(updatedSchduleDay);
+            target.Handle(updatedSchduleDay);
             mocks.VerifyAll();
         }
 
@@ -172,7 +167,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
             };
 
             mocks.ReplayAll();
-            target.Consume(updatedSchduleDay);
+            target.Handle(updatedSchduleDay);
             mocks.VerifyAll();
         }
 
@@ -193,15 +188,13 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
                 PersonId = person.Id.GetValueOrDefault(),
                 BusinessUnitId = bussinessUnit.Id.GetValueOrDefault()
             };
-			Expect.Call(_currentunitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
-            Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
             Expect.Call(scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow,
                                                                                      person.Id.GetValueOrDefault())).IgnoreArguments()
                  .Return(DateTime.UtcNow.AddHours(3));
             Expect.Call(() => serviceBus.DelaySend(DateTime.UtcNow.AddDays(1), null)).IgnoreArguments();
 
             mocks.ReplayAll();
-            target.Consume(updatedSchduleDay);
+            target.Handle(updatedSchduleDay);
             mocks.VerifyAll();
 		}
 	}

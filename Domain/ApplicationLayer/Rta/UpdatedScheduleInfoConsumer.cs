@@ -1,49 +1,47 @@
 ﻿using System;
-using Rhino.ServiceBus;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
-using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Sdk.ServiceBus.TeleoptiRtaService;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Messages.Rta;
 using log4net;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
 {
-	public class UpdatedScheduleInfoConsumer : ConsumerOf<PersonWithExternalLogOn>, ConsumerOf<UpdatedScheduleDay>
+	public class UpdatedScheduleInfoConsumer : 
+		IHandleEvent<PersonWithExternalLogOn>,
+		IHandleEvent<UpdatedScheduleDay>
 	{
-		private readonly IServiceBus _serviceBus;
+		private readonly ISendDelayedMessages _serviceBus;
 		private readonly IScheduleProjectionReadOnlyRepository _scheduleProjectionReadOnlyRepository;
-		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
-        private readonly ITeleoptiRtaService _teleoptiRtaService;
+        private readonly IGetUpdatedScheduleChangeFromTeleoptiRtaService _teleoptiRtaService;
         private readonly static ILog Logger = LogManager.GetLogger(typeof(UpdatedScheduleInfoConsumer));
 
-		public UpdatedScheduleInfoConsumer(IServiceBus serviceBus, IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory, ITeleoptiRtaService teleoptiRtaService)
+		public UpdatedScheduleInfoConsumer(
+			ISendDelayedMessages serviceBus, 
+			IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository, 
+			IGetUpdatedScheduleChangeFromTeleoptiRtaService teleoptiRtaService)
 		{
 			_serviceBus = serviceBus;
 			_scheduleProjectionReadOnlyRepository = scheduleProjectionReadOnlyRepository;
-			_unitOfWorkFactory = unitOfWorkFactory;
 	        _teleoptiRtaService = teleoptiRtaService;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), 
 		System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "exception"),
 		System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-		public void Consume(PersonWithExternalLogOn message)
+		public void Handle(PersonWithExternalLogOn message)
 		{
             Logger.Info("Start consuming PersonalWithExternalLogonOn message.");
 
 			DateTime? startTime;
-			using (_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+			startTime =
+				_scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow, message.PersonId);
+			if (startTime == null)
 			{
-				startTime =
-					_scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow, message.PersonId);
-				if (startTime == null)
-				{
-					Logger.Info("No next activity found. Ignoring this update");
-					return;
-				}
-				Logger.InfoFormat("Next activity for Person: {0}, StartTime: {1}.", message.PersonId, startTime);
+				Logger.Info("No next activity found. Ignoring this update");
+				return;
 			}
+			Logger.InfoFormat("Next activity for Person: {0}, StartTime: {1}.", message.PersonId, startTime);
 			
 			try
 			{
@@ -66,7 +64,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "excpetion"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-		public void Consume(UpdatedScheduleDay message)
+		public void Handle(UpdatedScheduleDay message)
 		{
             Logger.Info("Start consuming UpdatedScheduleDay message.");
 
@@ -77,17 +75,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Rta
 		    }
 
 		    DateTime? startTime;
-			using (_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+			startTime =
+				_scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow, message.PersonId);
+			if (startTime == null)
 			{
-				startTime =
-					_scheduleProjectionReadOnlyRepository.GetNextActivityStartTime(DateTime.UtcNow, message.PersonId);
-				if (startTime == null)
-				{
-					Logger.Info("No next activity found. Ignoring this update");
-					return;
-				}
-				Logger.InfoFormat("Next activity for Person: {0}, StartTime: {1}.", message.PersonId, startTime);
+				Logger.Info("No next activity found. Ignoring this update");
+				return;
 			}
+			Logger.InfoFormat("Next activity for Person: {0}, StartTime: {1}.", message.PersonId, startTime);
 			
 			//send message to the web service.
 			try
