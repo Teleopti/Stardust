@@ -199,6 +199,9 @@
     <Reference Include="System.Configuration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Areas\MyTime\Core\Common\DataProvider\AbsenceAgents.cs" />
+    <Compile Include="Areas\MyTime\Core\Common\DataProvider\AbsenceTimeProvider.cs" />
+    <Compile Include="Areas\MyTime\Core\Common\DataProvider\IAbsenceTimeProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\IUrlHelper.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\UrlHelperProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\AllowanceProvider.cs" />

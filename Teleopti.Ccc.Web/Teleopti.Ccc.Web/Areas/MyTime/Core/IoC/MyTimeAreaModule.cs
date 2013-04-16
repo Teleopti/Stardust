@@ -192,7 +192,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<PersonPeriodProvider>().As<IPersonPeriodProvider>();
 			builder.RegisterType<ServiceBusSender>().As<IServiceBusSender>().SingleInstance();
 			builder.RegisterType<AllowanceProvider>().As<IAllowanceProvider>();
-			builder.RegisterType<AbsenceTimeRandomProvider>().As<IAbsenceTimeRandomProvider>();
+			builder.RegisterType<AbsenceTimeProvider>().As<IAbsenceTimeProvider>();
 		}
 	}
 }

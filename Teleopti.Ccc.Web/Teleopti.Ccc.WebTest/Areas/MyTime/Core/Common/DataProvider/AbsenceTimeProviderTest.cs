@@ -20,38 +20,35 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 		[Test]
 		public void ShouldGetAbsenceTimeForPeriod()
 		{
-			//var user = new Person();
-			//var budgetDayRepository = MockRepository.GenerateMock<IBudgetDayRepository>();
-			//var scenarioRepository = MockRepository.GenerateMock<IScenarioRepository>();
-			//var userTimeZone = MockRepository.GenerateMock<IUserTimeZone>();
-			//var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
-			//var scheduleProjectionReadOnlyRepository = MockRepository.GenerateMock<IScheduleProjectionReadOnlyRepository>();
+			var user = new Person();
+			var budgetDayRepository = MockRepository.GenerateMock<IBudgetDayRepository>();
+			var scenarioRepository = MockRepository.GenerateMock<IScenarioRepository>();
+			var loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
+			var scheduleProjectionReadOnlyRepository = MockRepository.GenerateMock<IScheduleProjectionReadOnlyRepository>();
 
-			//var period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today);
-			//var timeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
+			var period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today);
 
-			//CreateSkills();
+			CreateSkills();
 
-			//var personPeriod1 = PersonPeriodFactory.CreatePersonPeriodWithSkills(period.StartDate, Skill1);
+			var personPeriod1 = PersonPeriodFactory.CreatePersonPeriodWithSkills(period.StartDate, Skill1);
 
-			//var budgetGroup = new BudgetGroup();
-			//personPeriod1.BudgetGroup = budgetGroup;
+			var budgetGroup = new BudgetGroup();
+			personPeriod1.BudgetGroup = budgetGroup;
 
-			//var scenario = new Scenario("thescenario");
-			//var budgetDays = new List<IBudgetDay>();
-			//const int allowance = 5;
-			//var budgetDay = new BudgetDay(budgetGroup, scenario, period.StartDate) { Allowance = allowance };
-			//budgetDays.Add(budgetDay);
+			var scenario = new Scenario("thescenario");
+			var budgetDays = new List<IBudgetDay>();
+			const int allowance = 5;
+			var budgetDay = new BudgetDay(budgetGroup, scenario, period.StartDate) { Allowance = allowance };
+			budgetDays.Add(budgetDay);
 
-			//user.AddPersonPeriod(personPeriod1);
-			//loggedOnUser.Stub(x => x.CurrentUser()).Return(user);
-			//scenarioRepository.Stub(x => x.LoadDefaultScenario()).Return(scenario);
-			//budgetDayRepository.Stub(x => x.Find(scenario, budgetGroup, period)).Return(budgetDays);
-			//userTimeZone.Stub(x => x.TimeZone()).Return(timeZone);
+			user.AddPersonPeriod(personPeriod1);
+			loggedOnUser.Stub(x => x.CurrentUser()).Return(user);
+			scenarioRepository.Stub(x => x.LoadDefaultScenario()).Return(scenario);
+			budgetDayRepository.Stub(x => x.Find(scenario, budgetGroup, period)).Return(budgetDays);
 
-			//var target = new AbsenceTimeRandomProvider(budgetDayRepository, userTimeZone, loggedOnUser, scenarioRepository, scheduleProjectionReadOnlyRepository);
-			//var result = target.GetAbsenceTimeForPeriod(period);
-			//result.First().AbsenceTime.Should().Be.EqualTo(allowance);
+			var target = new AbsenceTimeProvider(budgetDayRepository, loggedOnUser, scenarioRepository, scheduleProjectionReadOnlyRepository);
+			var result = target.GetAbsenceTimeForPeriod(period);
+			result.First().AbsenceTime.Should().Be.EqualTo(allowance);
 		}
 	}
 }

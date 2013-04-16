@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 {
 	public interface IAbsenceTimeProvider
 	{
-		IEnumerable<IAbsenceTimeDay> GetAbsenceTimeForPeriod(DateOnlyPeriod period);
+		IEnumerable<IAbsenceAgents> GetAbsenceTimeForPeriod(DateOnlyPeriod period);
 	}
 
 	public interface IAbsenceTimeDay

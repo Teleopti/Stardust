@@ -21,11 +21,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 		private readonly IPermissionProvider _permissionProvider;
 		private readonly INow _now;
 		private readonly IAllowanceProvider _allowanceProvider;
-		private readonly IAbsenceTimeRandomProvider _absenceTimeProvider;
+		private readonly IAbsenceTimeProvider _absenceTimeProvider;
 
 		public WeekScheduleDomainDataMappingProfile(IScheduleProvider scheduleProvider, IProjectionProvider projectionProvider, 
-			IPersonRequestProvider personRequestProvider, IUserTimeZone userTimeZone, IPermissionProvider permissionProvider, INow now, IAllowanceProvider allowanceProvider, 
-			IAbsenceTimeRandomProvider absenceTimeProvider)
+			IPersonRequestProvider personRequestProvider, IUserTimeZone userTimeZone, IPermissionProvider permissionProvider, INow now, IAllowanceProvider allowanceProvider,
+			IAbsenceTimeProvider absenceTimeProvider)
 		//public WeekScheduleDomainDataMappingProfile(IResolve<IScheduleProvider> scheduleProvider, IResolve<IProjectionProvider> projectionProvider, IResolve<IPersonRequestProvider> personRequestProvider, IResolve<IUserTimeZone> userTimeZone, IResolve<IPermissionProvider> permissionProvider, IResolve<INow> now, IResolve<IAllowanceProvider> allowanceProvider)
 		{
 			_scheduleProvider = scheduleProvider;

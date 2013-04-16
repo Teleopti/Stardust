@@ -1,7 +1,6 @@
 using System;
 using System.Drawing;
 using System.Linq;
-using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -83,10 +82,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			scheduleProjectionReadOnlyRepository.AddProjectedLayer(new DateOnly(Date), scenarioId, person.Id.GetValueOrDefault(), layer);
 
 			//henke: resten är bara ett fultest för att kolla att allt fungerar, det skall inte kollas här		
-			var usedAbsenceMinutes = TimeSpan.FromTicks(
-				   scheduleProjectionReadOnlyRepository.AbsenceTimePerBudgetGroup(new DateOnlyPeriod(new DateOnly(Date).AddDays(-1), new DateOnly(Date).AddDays(1)),
-													 budgetGroup, scenario).Sum(p => p.TotalContractTime)).TotalMinutes;
-			Assert.That(usedAbsenceMinutes, Is.GreaterThan(0));
+			//var usedAbsenceMinutes = TimeSpan.FromTicks(
+			//	   scheduleProjectionReadOnlyRepository.AbsenceTimePerBudgetGroup(new DateOnlyPeriod(new DateOnly(Date).AddDays(-1), new DateOnly(Date).AddDays(1)),
+			//										 budgetGroup, scenario).Sum(p => p.TotalContractTime)).TotalMinutes;
+			//Assert.That(usedAbsenceMinutes, Is.GreaterThan(0));
 		}
 	}
 }
