@@ -130,7 +130,7 @@
     <Compile Include="ApplicationLayer\Rta\IgnoreGetUpdatedScheduleChangeFromTeleoptiRtaService.cs" />
     <Compile Include="ApplicationLayer\Rta\PersonWithExternalLogon.cs" />
     <Compile Include="ApplicationLayer\Rta\UpdatedScheduleDay.cs" />
-    <Compile Include="ApplicationLayer\Rta\UpdatedScheduleInfoConsumer.cs" />
+    <Compile Include="ApplicationLayer\Rta\UpdatedScheduleInfoHandler.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\CanNotPublishEventsFromEventHandlers.cs" />
     <Compile Include="ApplicationLayer\ISendDelayedMessages.cs" />
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\PersonScheduleDayReadModel\IJsonSerializer.cs" />

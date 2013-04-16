@@ -4,16 +4,16 @@ using log4net;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 {
-	public class UpdatedScheduleInfoConsumer : 
+	public class UpdatedScheduleInfoHandler : 
 		IHandleEvent<PersonWithExternalLogOn>,
 		IHandleEvent<UpdatedScheduleDay>
 	{
 		private readonly ISendDelayedMessages _serviceBus;
 		private readonly IScheduleProjectionReadOnlyRepository _scheduleProjectionReadOnlyRepository;
         private readonly IGetUpdatedScheduleChangeFromTeleoptiRtaService _teleoptiRtaService;
-        private readonly static ILog Logger = LogManager.GetLogger(typeof(UpdatedScheduleInfoConsumer));
+        private readonly static ILog Logger = LogManager.GetLogger(typeof(UpdatedScheduleInfoHandler));
 
-		public UpdatedScheduleInfoConsumer(
+		public UpdatedScheduleInfoHandler(
 			ISendDelayedMessages serviceBus, 
 			IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository, 
 			IGetUpdatedScheduleChangeFromTeleoptiRtaService teleoptiRtaService)

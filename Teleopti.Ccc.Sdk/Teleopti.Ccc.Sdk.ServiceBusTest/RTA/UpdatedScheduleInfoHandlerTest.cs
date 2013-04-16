@@ -1,33 +1,21 @@
 ﻿using System;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
-using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
-using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
-using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Sdk.ServiceBus;
-using Teleopti.Ccc.Sdk.ServiceBus.Rta;
-using Teleopti.Ccc.Sdk.ServiceBus.TeleoptiRtaService;
-using Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
-using Teleopti.Interfaces.Messages.Rta;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 {
 	[TestFixture]
-	public class UpdatedScheduleInfoConsumerTest
+	public class UpdatedScheduleInfoHandlerTest
 	{
 		private MockRepository mocks;
 		private ISendDelayedMessages serviceBus;
-		private ICurrentUnitOfWorkFactory _currentunitOfWorkFactory;
-		private IUnitOfWork unitOfWork;
 		private IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository;
-		private UpdatedScheduleInfoConsumer target;
+		private UpdatedScheduleInfoHandler target;
 		private IGetUpdatedScheduleChangeFromTeleoptiRtaService teleoptiRtaService;
 
 		[SetUp]
@@ -35,11 +23,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
 		{
 		    mocks = new MockRepository();
 		    serviceBus = mocks.StrictMock<ISendDelayedMessages>();
-			_currentunitOfWorkFactory = mocks.DynamicMock<ICurrentUnitOfWorkFactory>();
-		    unitOfWork = mocks.DynamicMock<IUnitOfWork>();
 		    scheduleProjectionReadOnlyRepository = mocks.StrictMock<IScheduleProjectionReadOnlyRepository>();
 			teleoptiRtaService = mocks.DynamicMock<IGetUpdatedScheduleChangeFromTeleoptiRtaService>();
-            target = new UpdatedScheduleInfoConsumer(serviceBus, scheduleProjectionReadOnlyRepository, teleoptiRtaService);
+            target = new UpdatedScheduleInfoHandler(serviceBus, scheduleProjectionReadOnlyRepository, teleoptiRtaService);
         }
 
         [Test]
@@ -198,5 +184,33 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Rta
             target.Handle(updatedSchduleDay);
             mocks.VerifyAll();
 		}
+
+		[Test]
+		public void Coverage()
+		{
+			target = new UpdatedScheduleInfoHandler(MockRepository.GenerateMock<ISendDelayedMessages>(), MockRepository.GenerateMock<IScheduleProjectionReadOnlyRepository>(), MockRepository.GenerateMock<IGetUpdatedScheduleChangeFromTeleoptiRtaService>());
+			target.Handle(new PersonWithExternalLogOn());
+
+			var repo = MockRepository.GenerateMock<IScheduleProjectionReadOnlyRepository>();
+			repo.Stub(x => x.GetNextActivityStartTime(DateTime.MinValue, Guid.Empty)).IgnoreArguments().Return(DateTime.Now);
+			var service = MockRepository.GenerateMock<IGetUpdatedScheduleChangeFromTeleoptiRtaService>();
+			service.Stub(x => x.GetUpdatedScheduleChange(Guid.Empty, Guid.Empty, DateTime.MinValue)).IgnoreArguments().Throw(new Exception());
+			target = new UpdatedScheduleInfoHandler(MockRepository.GenerateMock<ISendDelayedMessages>(), repo, service);
+			target.Handle(new PersonWithExternalLogOn());
+
+			target = new UpdatedScheduleInfoHandler(MockRepository.GenerateMock<ISendDelayedMessages>(), repo, service);
+			target.Handle(new UpdatedScheduleDay
+				{
+					ActivityStartDateTime = DateTime.UtcNow.AddHours(-1),
+					ActivityEndDateTime = DateTime.UtcNow.AddHours(1)
+				});
+
+			new IgnoreGetUpdatedScheduleChangeFromTeleoptiRtaService().GetUpdatedScheduleChange(Guid.Empty, Guid.Empty, DateTime.MinValue);
+			Assert.Throws<NotImplementedException>(() => new CannotGetUpdatedScheduleChangeFromTeleoptiRtaService().GetUpdatedScheduleChange(Guid.Empty, Guid.Empty, DateTime.MinValue));
+
+			new IgnoreDelayedMessages().DelaySend(DateTime.MinValue, new object());
+			Assert.Throws<NotImplementedException>(() => new CannotSendDelayedMessages().DelaySend(DateTime.MinValue, new object()));
+		}
+
 	}
 }
