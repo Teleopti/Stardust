@@ -27,12 +27,12 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 		private readonly IActivityRepository _activityRepository;
 		private readonly IPersonRepository _personRepository;
 		private readonly IScheduleRepository _scheduleRepository;
-		private readonly ICurrentScenario _scenarioRepository;
+        private readonly ICurrentScenario _scenarioRepository;
 		private readonly IAssembler<IPreferenceDay, PreferenceRestrictionDto> _preferenceDayAssembler;
 		private readonly IAssembler<IStudentAvailabilityDay, StudentAvailabilityDayDto> _studentAvailabilityDayAssembler;
     	private readonly IWorkShiftWorkTime _workShiftWorkTime;
 
-		public GetValidatedSchedulePartsForPreferenceQueryHandler(ICurrentUnitOfWorkFactory unitOfWorkFactory, IShiftCategoryRepository shiftCategoryRepository, IActivityRepository activityRepository, IPersonRepository personRepository, IScheduleRepository scheduleRepository, ICurrentScenario scenarioRepository, IAssembler<IPreferenceDay, PreferenceRestrictionDto> preferenceDayAssembler, IAssembler<IStudentAvailabilityDay, StudentAvailabilityDayDto> studentAvailabilityDayAssembler, IWorkShiftWorkTime workShiftWorkTime)
+        public GetValidatedSchedulePartsForPreferenceQueryHandler(ICurrentUnitOfWorkFactory unitOfWorkFactory, IShiftCategoryRepository shiftCategoryRepository, IActivityRepository activityRepository, IPersonRepository personRepository, IScheduleRepository scheduleRepository, ICurrentScenario scenarioRepository, IAssembler<IPreferenceDay, PreferenceRestrictionDto> preferenceDayAssembler, IAssembler<IStudentAvailabilityDay, StudentAvailabilityDayDto> studentAvailabilityDayAssembler, IWorkShiftWorkTime workShiftWorkTime)
         {
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_shiftCategoryRepository = shiftCategoryRepository;

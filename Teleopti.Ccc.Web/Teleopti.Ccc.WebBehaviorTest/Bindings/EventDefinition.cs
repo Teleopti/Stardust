@@ -1,9 +1,6 @@
 ﻿using System;
-using System.IO;
-using System.Linq;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Core;
-using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Common;
@@ -25,6 +22,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[BeforeTestRun]
 		public static void BeforeTestRun()
 		{
+			Log.Debug("Preparing for test run");
+
 			ResetScenarioCount();
 
 			Browser.PrepareForTestRun();
@@ -53,16 +52,22 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 
 				ServiceBusSetup.Setup();
 			}
-			catch(Exception)
+			catch (Exception)
 			{
 				Browser.Close();
 				throw;
+			}
+			finally
+			{
+				Log.Debug("Starting test run");
 			}
 		}
 
 		[BeforeScenario]
 		public static void BeforeScenario()
 		{
+			Log.Debug("Preparing for scenario " + ScenarioContext.Current.ScenarioInfo.Title);
+
 			// restart browser every 20th scenario
 			if (_scenarioCount != 0 && _scenarioCount % 15 == 0)
 				Browser.Restart();
@@ -76,22 +81,32 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 
 			GlobalPrincipalState.EnsureThreadPrincipal();
 			ScenarioUnitOfWorkState.OpenUnitOfWork();
+
+			Log.Debug("Starting scenario " + ScenarioContext.Current.ScenarioInfo.Title);
 		}
 
 		[AfterScenario]
 		public void AfterScenario()
 		{
+			Log.Debug("Cleaning up after scenario " + ScenarioContext.Current.ScenarioInfo.Title);
+
 			ScenarioUnitOfWorkState.DisposeUnitOfWork();
 			HandleScenarioException();
+
+			Log.Debug("Finished scenario " + ScenarioContext.Current.ScenarioInfo.Title);
 		}
 
 		[AfterTestRun]
 		public static void AfterTestRun()
 		{
+			Log.Debug("Cleaing up after test run");
+
 			if (Browser.IsStarted())
 				Browser.Close();
 			ServiceBusSetup.TearDown();
 			TestSiteConfigurationSetup.TearDown();
+
+			Log.Debug("Finished test run");
 		}
 
 		private static void CreateData()
