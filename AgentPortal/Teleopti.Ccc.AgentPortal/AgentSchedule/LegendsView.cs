@@ -13,18 +13,18 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
     {
         private LegendsPresenter _presenter;
 
-        public LegendsView(ITeleoptiSchedulingService sdk)
+        public LegendsView(ILegendLoader legendLoader)
         {
             InitializeComponent();
-            setupPresenter(sdk);
+            setupPresenter(legendLoader);
             setupDatasources();
             setupGrid();
             SetTexts();           
         }
 
-        private void setupPresenter(ITeleoptiSchedulingService sdk)
+        private void setupPresenter(ILegendLoader legendLoader)
         {
-            _presenter = new LegendsPresenter(this, sdk);
+            _presenter = new LegendsPresenter(this, legendLoader);
             _presenter.Initialize();
         }
 
