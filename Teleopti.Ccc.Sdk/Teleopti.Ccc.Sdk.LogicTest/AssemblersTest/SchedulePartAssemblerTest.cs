@@ -149,6 +149,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
                 Expect.Call(dic[person]).Return(range);
                 Expect.Call(range.ScheduledDay(date)).Return(part);
                 Expect.Call(part.Person).Return(person).Repeat.Any();
+								Expect.Call(part.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(date, TimeZoneInfo.Utc));
                 Expect.Call(part.SignificantPart()).Return(SchedulePartView.FullDayAbsence);
                 part.Clear<IPersonAssignment>();
                 part.Clear<IPersonDayOff>();
@@ -197,6 +198,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
                 Expect.Call(range.ScheduledDay(date)).Return(part);
                 Expect.Call(part.SignificantPart()).Return(SchedulePartView.Absence);
                 Expect.Call(part.Person).Return(person).Repeat.Any();
+								Expect.Call(part.DateOnlyAsPeriod).Return(new DateOnlyAsDateTimePeriod(date, TimeZoneInfo.Utc));
                 part.Clear<IPersonAssignment>();
                 part.Clear<IPersonDayOff>();
                 //part.Clear<IPreferenceDay>();
