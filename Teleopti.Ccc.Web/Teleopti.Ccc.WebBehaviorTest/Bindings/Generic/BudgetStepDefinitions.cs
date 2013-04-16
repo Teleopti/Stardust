@@ -1,4 +1,3 @@
-using System;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.WebBehaviorTest.Data;
@@ -30,20 +29,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			var scheduleReadOnlyProjection = table.CreateInstance<ReadModelScheduleProjectionConfigurable>();
 			UserFactory.User().Setup(scheduleReadOnlyProjection);
 		}
-
-		//henke
-		[Then(@"I should see stuff for '(.*)' to '(.*)'")]
-		public void ThenIShouldSeeStuffForTo(DateTime from, DateTime to)
-		{
-			//
-		}
-
-//		[Given(@"I have stuff for '(.*)' to '(.*)'")]
-//		public void GivenIHaveStuffForTo(DateTime from, DateTime to)
-//		{
-//			var absenceTimeConfigurable = new AbsenceTimeConfigurable() { From = from, To = to };
-//			UserFactory.User().Setup(absenceTimeConfigurable);
-//		}
 
 		[Given(@"there is absence time for")]
 		public void GivenThereIsAbsenceTimeForTo(Table table)

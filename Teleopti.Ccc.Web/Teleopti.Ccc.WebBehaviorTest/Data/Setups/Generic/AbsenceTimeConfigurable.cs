@@ -4,11 +4,11 @@ using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Common;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Messages.Denormalize;
@@ -18,38 +18,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 	public class AbsenceTimeConfigurable : IPostSetup
 	{
 		public DateTime Date { get; set; }
-		protected IRepositoryFactory RepositoryFactory { get; private set; }
 
 		public void Apply(IPerson user, IUnitOfWork uow)
 		{
-
-			IScheduleProjectionReadOnlyRepository target;
-			IScenario scenario;
-			IPerson person;
-			IAbsence absence;
-			IBudgetGroup budgetGroup;
-			Guid scenarioId;
-
-			BusinessUnitFactory.SetBusinessUnitUsedInTestToNull();
-			RepositoryFactory = new RepositoryFactory();
-
-			var buGuid = Guid.NewGuid();
-			BusinessUnitFactory.BusinessUnitUsedInTest.SetId(buGuid);
-
-
 			//henke: här skall vi nog hämta default?? 
-			var scenarioRepository = new ScenarioRepository(uow);
-			scenario = scenarioRepository.LoadAll().First();
-			scenarioId = scenario.Id.GetValueOrDefault();
-
-			//henke: varför behöver vi den här här??
-			//person = PersonFactory.CreatePerson();
-			person = PersonFactory.CreatePerson();
+			var scenario = GlobalDataContext.Data().Data<CommonScenario>().Scenario;
+			var scenarioId = scenario.Id.GetValueOrDefault();
 
 			var absenceRepository = new AbsenceRepository(uow);
-			absence = absenceRepository.LoadAll().First();
+			var absence = absenceRepository.LoadAll().First();
 
-			budgetGroup = new BudgetGroup { Name = "My Budget", TimeZone = TeleoptiPrincipal.Current.Regional.TimeZone };
+			var budgetGroup = new BudgetGroup { Name = "My Budget", TimeZone = TeleoptiPrincipal.Current.Regional.TimeZone };
 
 			var shrinkage = new CustomShrinkage("test", true);
 			shrinkage.AddAbsence(absence);
@@ -78,7 +57,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			personPeriod.PersonContract.Contract = contract;
 			personPeriod.PersonContract.ContractSchedule = contractSchedule;
 			personPeriod.PersonContract.PartTimePercentage = partTimepercentage;
-		
+
+			//henke: varför behöver vi den här här??
+			var person = PersonFactory.CreatePerson();
 			person.AddPersonPeriod(personPeriod);
 
 			var personRepository = new PersonRepository(uow);
@@ -86,7 +67,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 
 			uow.PersistAll();
 
-			target = new ScheduleProjectionReadOnlyRepository(new FixedCurrentUnitOfWork(uow));
+			var scheduleProjectionReadOnlyRepository = new ScheduleProjectionReadOnlyRepository(new FixedCurrentUnitOfWork(uow));
 
 			var period =
 				new DateOnlyPeriod(new DateOnly(Date), new DateOnly(Date)).ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
@@ -102,11 +83,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 				PayloadId = absence.Id.GetValueOrDefault()
 			};
 
-			target.AddProjectedLayer(new DateOnly(Date), scenarioId, person.Id.GetValueOrDefault(), layer);
+			scheduleProjectionReadOnlyRepository.AddProjectedLayer(new DateOnly(Date), scenarioId, person.Id.GetValueOrDefault(), layer);
 
 
 			var usedAbsenceMinutes = TimeSpan.FromTicks(
-				   target.AbsenceTimePerBudgetGroup(new DateOnlyPeriod(new DateOnly(Date).AddDays(-1), new DateOnly(Date).AddDays(1)),
+				   scheduleProjectionReadOnlyRepository.AbsenceTimePerBudgetGroup(new DateOnlyPeriod(new DateOnly(Date).AddDays(-1), new DateOnly(Date).AddDays(1)),
 													 budgetGroup, scenario).Sum(p => p.TotalContractTime)).TotalMinutes;
 			Assert.That(usedAbsenceMinutes, Is.GreaterThan(0));
 		}
