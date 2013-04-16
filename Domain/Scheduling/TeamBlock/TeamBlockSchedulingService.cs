@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Interfaces.Domain;
 
@@ -22,7 +21,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	    private readonly ISafeRollbackAndResourceCalculation _safeRollbackAndResourceCalculation;
 	    private readonly ISchedulingOptions _schedulingOptions;
 	    private bool _cancelMe;
-        private IWorkShiftMinMaxCalculator _workShiftMinMaxCalculator;
+        private readonly IWorkShiftMinMaxCalculator _workShiftMinMaxCalculator;
 
         public TeamBlockSchedulingService
 		    (
