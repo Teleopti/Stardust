@@ -11,6 +11,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
@@ -48,6 +49,7 @@ using Teleopti.Ccc.Web.Core.ServiceBus;
 using Teleopti.Ccc.Web.Core.Startup.InitializeApplication;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.Messages.Rta;
 
 
 namespace Teleopti.Ccc.WebTest.Core.IoC
@@ -548,7 +550,9 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			requestContainer.Resolve<IEnumerable<IHandleEvent<ScheduleChangedEvent>>>()
 			                .Should().Not.Be.Null();
 			requestContainer.Resolve<IEnumerable<IHandleEvent<ProjectionChangedEvent>>>()
-			                .Should().Not.Be.Null();
+							.Should().Not.Be.Null();
+			requestContainer.Resolve<IEnumerable<IHandleEvent<UpdatedScheduleDay>>>()
+							.Should().Not.Be.Null();
 		}
 
 		[Test]

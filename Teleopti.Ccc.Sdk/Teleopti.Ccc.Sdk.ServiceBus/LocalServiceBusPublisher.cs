@@ -1,9 +1,14 @@
-﻿using Rhino.ServiceBus;
+﻿using System;
+using Rhino.ServiceBus;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
 {
-	public class LocalServiceBusPublisher : IPublishEventsFromEventHandlers
+	public class LocalServiceBusPublisher : 
+		IPublishEventsFromEventHandlers,
+		ISendDelayedMessages
 	{
 		private readonly IServiceBus _bus;
 
@@ -12,9 +17,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			_bus = bus;
 		}
 
-		public void Publish(object @event)
+		public void Publish(IEvent @event)
 		{
 			_bus.Send(@event);
+		}
+
+		public void DelaySend(DateTime time, object message)
+		{
+			_bus.DelaySend(time, message);
 		}
 	}
 }

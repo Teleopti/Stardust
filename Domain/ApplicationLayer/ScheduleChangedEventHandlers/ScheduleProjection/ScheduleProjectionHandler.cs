@@ -1,4 +1,5 @@
 ﻿using System;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Messages.Rta;
 

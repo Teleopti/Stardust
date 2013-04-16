@@ -1,24 +1,15 @@
 ﻿using System;
 
-namespace Teleopti.Interfaces.Messages.Rta
+namespace Teleopti.Ccc.Domain.ApplicationLayer.Rta
 {
     /// <summary>
     /// 
     /// </summary>
-    public class UpdatedScheduleDay : RaptorDomainMessage
+    public class UpdatedScheduleDay : RaptorDomainEvent
     {
-        private readonly Guid _messageId = Guid.NewGuid();
         private Guid _personId;
         private DateTime _activityStartDateTime;
         private DateTime _activityEndDateTime;
-
-        ///<summary>
-        /// Definies an identity for this message (typically the Id of the root this message refers to.
-        ///</summary>
-        public override Guid Identity
-        {
-            get { return _messageId; }
-        }
 
         /// <summary>
         /// 

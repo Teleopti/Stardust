@@ -5,11 +5,15 @@ using Rhino.ServiceBus.Autofac;
 using Rhino.ServiceBus.Internal;
 using Rhino.ServiceBus.MessageModules;
 using Rhino.ServiceBus.Sagas.Persisters;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Sdk.ServiceBus.Notification;
+using Teleopti.Ccc.Sdk.ServiceBus.Rta;
+using Teleopti.Ccc.Sdk.ServiceBus.TeleoptiRtaService;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
 {
@@ -48,7 +52,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 		    build.RegisterModule<ForecastContainerInstaller>();
 		    build.RegisterModule<CommandDispatcherModule>();
 		    build.RegisterModule<LocalServiceBusEventsPublisherModule>();
-		    build.RegisterType<LocalServiceBusPublisher>().As<IPublishEventsFromEventHandlers>().SingleInstance();
+		    build.RegisterModule<LocalServiceBusPublisherModule>();
 		    build.RegisterModule<CommandHandlersModule>();
 		    build.RegisterModule<EventHandlersModule>();
 		    build.RegisterType<NewtonsoftJsonSerializer>().As<IJsonSerializer>();
@@ -71,4 +75,34 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
         	return true;
         }
     }
+
+	public class LocalServiceBusPublisherModule : Module
+	{
+		protected override void Load(ContainerBuilder builder)
+		{
+			builder.RegisterType<LocalServiceBusPublisher>()
+			       .As<IPublishEventsFromEventHandlers>()
+			       .As<ISendDelayedMessages>()
+			       .SingleInstance();
+			builder.RegisterType<GetUpdatedScheduleChangeFromTeleoptiRtaService>()
+			       .As<IGetUpdatedScheduleChangeFromTeleoptiRtaService>()
+			       .SingleInstance();
+		}
+	}
+
+	public class GetUpdatedScheduleChangeFromTeleoptiRtaService : IGetUpdatedScheduleChangeFromTeleoptiRtaService
+	{
+		private readonly ITeleoptiRtaService _service;
+
+		public GetUpdatedScheduleChangeFromTeleoptiRtaService(ITeleoptiRtaService service)
+		{
+			_service = service;
+		}
+
+		public void GetUpdatedScheduleChange(Guid personId, Guid businessUnitId, DateTime timestamp)
+		{
+			_service.GetUpdatedScheduleChange(personId, businessUnitId, timestamp);
+		}
+	}
+
 }
