@@ -36,6 +36,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
 	    double TotalAllowance { get; set; }
 	    void UpdateBudgetDay();
 	    void Recalculate(IBudgetCalculator calculator);
+		void RecalculateWithoutNetStaffForecastAdjustCalculator(IBudgetCalculator calculator, double netStaffFcAdj);
 		event EventHandler<CustomEventArgs<IBudgetGroupDayDetailModel>> Invalidate;
 		Percent GetShrinkage(ICustomShrinkage customShrinkage);
 		void SetShrinkage(ICustomShrinkage customShrinkage, Percent percent);

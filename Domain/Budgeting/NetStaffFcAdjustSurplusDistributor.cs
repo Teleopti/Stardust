@@ -6,19 +6,15 @@ namespace Teleopti.Ccc.Domain.Budgeting
 	{
 		public static double Distribute(IBudgetDay budgetDay, double currentNetStaffFcAdj, double surplusToDistribute,
 		                                double maxStaff)
-
-	{
-		if (currentNetStaffFcAdj + surplusToDistribute > maxStaff)
 		{
-			currentNetStaffFcAdj = maxStaff;
-			budgetDay.NetStaffFcAdjustedSurplus = currentNetStaffFcAdj - maxStaff;
+			var sumNetStaffFcAdj = currentNetStaffFcAdj + surplusToDistribute;
+			if (sumNetStaffFcAdj > maxStaff)
+			{
+				budgetDay.NetStaffFcAdjustedSurplus = sumNetStaffFcAdj - maxStaff;
+				return maxStaff;
+			}
+			budgetDay.NetStaffFcAdjustedSurplus = 0;
+			return sumNetStaffFcAdj;
 		}
-		else
-		{
-			currentNetStaffFcAdj += surplusToDistribute;
-			budgetDay.NetStaffFcAdjustedSurplus = null;
-		}
-		return currentNetStaffFcAdj;
-	}
 	}
 }

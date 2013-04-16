@@ -455,6 +455,22 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Models
             Allowance = result.Allowance;
         }
 
+		public void RecalculateWithoutNetStaffForecastAdjustCalculator(IBudgetCalculator calculator, double netStaffFcAdj)
+		{
+			var result = BudgetDay.CalculateWithoutNetStaffFcAdj(calculator, netStaffFcAdj);
+
+			NetStaff = result.NetStaff;
+			GrossStaff = result.GrossStaff;
+			BudgetedStaff = result.BudgetedStaff;
+			ForecastedStaff = result.ForecastedStaff;
+			Difference = result.Difference;
+			DifferencePercent = result.DifferencePercent;
+			BudgetedLeave = result.BudgetedLeave;
+			BudgetedSurplus = result.BudgetedSurplus;
+			TotalAllowance = result.TotalAllowance;
+			Allowance = result.Allowance;
+		}
+
 		public Percent GetShrinkage(ICustomShrinkage customShrinkage)
 		{
 			return BudgetDay.CustomShrinkages.GetShrinkage(customShrinkage.Id.GetValueOrDefault(Guid.Empty));

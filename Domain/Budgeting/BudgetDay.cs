@@ -170,5 +170,10 @@ namespace Teleopti.Ccc.Domain.Budgeting
         {
             return calculator.Calculate(this);
         }
+
+		public virtual BudgetCalculationResult CalculateWithoutNetStaffFcAdj(IBudgetCalculator calculator, double netStaffFcAdj)
+		{
+			return calculator.CalculateWithoutNetStaffFcAdj(this, netStaffFcAdj);
+		}
     }
 }

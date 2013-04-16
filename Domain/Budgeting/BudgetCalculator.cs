@@ -33,5 +33,17 @@ namespace Teleopti.Ccc.Domain.Budgeting
 
 	        return budgetDayCalculations;
         }
+
+	    public BudgetCalculationResult CalculateWithoutNetStaffFcAdj(IBudgetDay budgetDay, double netStaffFcAdj)
+	    {
+		    InParameter.NotNull("budgetDay", budgetDay);
+		    if (budgetDay.IsClosed) return new BudgetCalculationResult();
+		    var budgetDayCalculations = _netStaffCalculator.CalculatedResult(budgetDay);
+			budgetDayCalculations.NetStaffFcAdj = netStaffFcAdj;
+		    foreach (var calculator in _calculatorList)
+			    calculator.Calculate(budgetDay, _budgetDayList, ref budgetDayCalculations);
+
+		    return budgetDayCalculations;
+	    }
     }
 }
