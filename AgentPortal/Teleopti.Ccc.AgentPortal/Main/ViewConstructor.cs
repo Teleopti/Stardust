@@ -8,6 +8,7 @@ using Teleopti.Ccc.AgentPortal.Reports;
 using Teleopti.Ccc.AgentPortal.AgentSchedule;
 using Teleopti.Ccc.AgentPortal.Requests;
 using Teleopti.Ccc.AgentPortal.Requests.RequestMaster;
+using Teleopti.Ccc.AgentPortalCode.AgentSchedule;
 using Teleopti.Ccc.AgentPortalCode.Foundation.StateHandlers;
 using Teleopti.Ccc.AgentPortalCode.Helper;
 using Teleopti.Ccc.AgentPortalCode.Requests.RequestMaster;
@@ -28,8 +29,9 @@ namespace Teleopti.Ccc.AgentPortal.Main
         private ScheduleControl _scheduleControl;
         private PreferenceView _preferenceView;
         private StudentAvailabilityView _studentAvailabilityView;
+	    private readonly LegendLoader _legendLoader = new LegendLoader(()=>SdkServiceHelper.SchedulingService);
 
-        private ViewConstructor()
+	    private ViewConstructor()
         {
         }
 
@@ -62,7 +64,7 @@ namespace Teleopti.Ccc.AgentPortal.Main
         {
             if (_scheduleControl == null)
             {
-                _scheduleControl = new ScheduleControl(parent);
+                _scheduleControl = new ScheduleControl(parent, _legendLoader);
                 _scheduleControl.ViewChanged += scheduleControl_ViewChanged;
             }
             if (container != null)
@@ -75,7 +77,7 @@ namespace Teleopti.Ccc.AgentPortal.Main
                         break;
 
                     case ViewType.Legend:
-                        _hostedView = new LegendsView(SdkServiceHelper.SchedulingService);
+                        _hostedView = new LegendsView(_legendLoader);
                         ((XPTaskBarBox)container.Parent).PreferredChildPanelHeight = ((LegendsView)_hostedView).DefaultHeight;
                         //height vary with no. of different activities
                         break;
