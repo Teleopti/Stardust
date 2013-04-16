@@ -93,7 +93,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 				if (preferenceRestriction.ShiftCategory != null)
 				{
 					_view.UpdateShiftCategory(preferenceRestriction.ShiftCategory);
-					_view.UpdateShiftCategoryExtended(preferenceRestriction.ShiftCategory);
+					//_view.UpdateShiftCategoryExtended(preferenceRestriction.ShiftCategory);
 					_view.ClearDayOff();
 					_view.ClearAbsence();
 				}

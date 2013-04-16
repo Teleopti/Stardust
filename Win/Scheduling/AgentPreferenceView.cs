@@ -57,25 +57,25 @@ namespace Teleopti.Ccc.Win.Scheduling
 			
 		}
 
-		public void UpdateShiftCategoryExtended(IShiftCategory shiftCategory)
-		{
-			if (shiftCategory == null) return;
+		//public void UpdateShiftCategoryExtended(IShiftCategory shiftCategory)
+		//{
+		//	if (shiftCategory == null) return;
 
-			ComboBoxAdvShiftCategory currentCategory = null;
+		//	ComboBoxAdvShiftCategory currentCategory = null;
 
-			foreach (var item in comboBoxAdvShiftCategoryExtended.Items)
-			{
-				var comboItem = item as ComboBoxAdvShiftCategory;
-				if (comboItem == null || comboItem.Id != shiftCategory.Id) continue;
-				currentCategory = comboItem;
-				break;
-			}
+		//	foreach (var item in comboBoxAdvShiftCategoryExtended.Items)
+		//	{
+		//		var comboItem = item as ComboBoxAdvShiftCategory;
+		//		if (comboItem == null || comboItem.Id != shiftCategory.Id) continue;
+		//		currentCategory = comboItem;
+		//		break;
+		//	}
 
-			if (currentCategory != null)
-			{
-				comboBoxAdvShiftCategoryExtended.SelectedItem = currentCategory;
-			}
-		}
+		//	if (currentCategory != null)
+		//	{
+		//		comboBoxAdvShiftCategoryExtended.SelectedItem = currentCategory;
+		//	}
+		//}
 
 		public void UpdateAbsence(IAbsence absence)
 		{
@@ -251,9 +251,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 			comboBoxAdvShiftCategory.ValueMember = "Id";
 			comboBoxAdvShiftCategory.DataSource = sortedCategories;
 
-			comboBoxAdvShiftCategoryExtended.DisplayMember = "Name";
-			comboBoxAdvShiftCategoryExtended.ValueMember = "Id";
-			comboBoxAdvShiftCategoryExtended.DataSource = sortedCategories;
+			//comboBoxAdvShiftCategoryExtended.DisplayMember = "Name";
+			//comboBoxAdvShiftCategoryExtended.ValueMember = "Id";
+			//comboBoxAdvShiftCategoryExtended.DataSource = sortedCategories;
 		}
 
 		public void PopulateAbsences()
@@ -361,7 +361,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		public void ClearShiftCategoryExtended()
 		{
-			comboBoxAdvShiftCategoryExtended.SelectedIndex = 0;
+			//comboBoxAdvShiftCategoryExtended.SelectedIndex = 0;
 			outlookTimePickerContractShiftCategoryMin.SetTimeValue(null);
 			outlookTimePickerContractShiftCategoryMax.SetTimeValue(null);
 			outlookTimePickerShiftCategoryStartMin.SetTimeValue(null);
@@ -566,13 +566,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 			ClearActivity();
 		}
 
-		private void comboBoxAdvShiftCategoryExtendedSelectedIndexChanged(object sender, EventArgs e)
-		{
-			var comboShiftCategory = comboBoxAdvShiftCategoryExtended.SelectedItem as ComboBoxAdvShiftCategory;
-			if (comboShiftCategory == null || comboShiftCategory.Id == null) return;
-			ClearAbsence();
-			ClearDayOff();
-		}
+		//private void comboBoxAdvShiftCategoryExtendedSelectedIndexChanged(object sender, EventArgs e)
+		//{
+		//	var comboShiftCategory = comboBoxAdvShiftCategoryExtended.SelectedItem as ComboBoxAdvShiftCategory;
+		//	if (comboShiftCategory == null || comboShiftCategory.Id == null) return;
+		//	ClearAbsence();
+		//	ClearDayOff();
+		//}
 
 		private void comboBoxAdvActivitySelectedIndexChanged(object sender, EventArgs e)
 		{

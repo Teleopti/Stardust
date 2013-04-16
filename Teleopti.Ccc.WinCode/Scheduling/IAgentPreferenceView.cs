@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		void ClearDayOff();
 		void ClearActivity();
 		void UpdateShiftCategory(IShiftCategory shiftCategory);
-		void UpdateShiftCategoryExtended(IShiftCategory shiftCategory);
+		//void UpdateShiftCategoryExtended(IShiftCategory shiftCategory);
 		void UpdateAbsence(IAbsence absence);
 		void UpdateDayOff(IDayOffTemplate dayOffTemplate);
 		void UpdateActivity(IActivity activity);

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.UserTexts;
@@ -100,7 +99,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			{
 				Expect.Call(_scheduleDay.PersistableScheduleDataCollection()).Return(new ReadOnlyCollection<IPersistableScheduleData>(new List<IPersistableScheduleData> { _preferenceDay }));
 				Expect.Call(() => _view.UpdateShiftCategory(shiftCategory));
-				Expect.Call(() => _view.UpdateShiftCategoryExtended(shiftCategory));
+				//Expect.Call(() => _view.UpdateShiftCategoryExtended(shiftCategory));
 				Expect.Call(() => _view.ClearAbsence());
 				Expect.Call(() => _view.ClearDayOff());
 				Expect.Call(() => _view.UpdateTimesExtended(null, null, null, null, null, null));
