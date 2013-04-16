@@ -249,8 +249,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				                         new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
 			var shifts = getCashes();
 			var activityData = new Dictionary<IActivity, IDictionary<TimeSpan, ISkillIntervalData>>();
-			var schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
-			var scheduleDayPro = _mocks.StrictMock<IScheduleDayPro>();
 			var scheduleDay = _mocks.StrictMock<IScheduleDay>();
 
 			using (_mocks.Record())

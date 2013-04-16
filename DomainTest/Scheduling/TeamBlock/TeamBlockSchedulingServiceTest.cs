@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         }
 
         [Test]
-        public void ShouldNotContinueIfRollbakckIsNull()
+        public void ShouldNotContinueIfRollbackIsNull()
         {
            Assert.IsFalse( _target.ScheduleSelected(_matrixList, _dateOnlyPeriod, _personList, _teamSteadyStateHolder, null));
             }
@@ -312,8 +312,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             _cancelTarget = true;
         }
 
-        [Test]
-        public void ShouldExecuteRollbackIfNotOK()
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+        public void ShouldExecuteRollbackIfNotOk()
         {
             var teamInfo = new TeamInfo(_groupPerson, new List<IList<IScheduleMatrixPro>>() { _matrixList });
 
@@ -337,8 +337,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                                                                      _dateOnlyPeriod, _personList)).Return(true);
 
                 Expect.Call(() => _teamBlockScheduler.DayScheduled -= null).IgnoreArguments();
-
-
                 Expect.Call(_matrixPro.SchedulingStateHolder).Return(_schedulingResultStateHolder);
                 Expect.Call(_schedulingResultStateHolder.Schedules[_person]).Return(_scheduleRange);
                 Expect.Call(_matrixPro.Person).Return(_person);

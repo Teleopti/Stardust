@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             Assert.IsFalse(TeamBlockScheduledDayChecker.IsDayScheduledInTeamBlock(teamBlockInfo, dateOnly));
         }
 
-        [Test]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
         public void ShouldReturnFalseIfTeamBlockIsNull()
         {
             var dateOnly = new DateOnly(2013, 04, 10);
