@@ -8,10 +8,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 	[Binding]
 	public class BudgetStepDefinitions
 	{
-		[Given(@"there is a budgetgroup '(.*)'")]
-		public void GivenThereIsABudgetgroup(string name)
+	
+
+		[Given(@"there is a budgetgroup with")]
+		public void GivenThereIsABudgetgroup(Table table)
 		{
-			var budgetConfigurable = new BudgetGroupConfigurable(name);
+			var budgetConfigurable = table.CreateInstance<BudgetGroupConfigurable>();
 			UserFactory.User().Setup(budgetConfigurable);
 		}
 

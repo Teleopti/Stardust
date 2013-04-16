@@ -2,9 +2,7 @@ using System;
 using System.Drawing;
 using System.Linq;
 using NUnit.Framework;
-using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -18,25 +16,22 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 	public class AbsenceTimeConfigurable : IPostSetup
 	{
 		public DateTime Date { get; set; }
+		public int Hours { get; set; }
+		public string BudgetGroup { get; set; }
+		public string Absence { get; set; }
 
 		public void Apply(IPerson user, IUnitOfWork uow)
 		{
-			//henke: här skall vi nog hämta default?? 
 			var scenario = GlobalDataContext.Data().Data<CommonScenario>().Scenario;
 			var scenarioId = scenario.Id.GetValueOrDefault();
 
 			var absenceRepository = new AbsenceRepository(uow);
-			var absence = absenceRepository.LoadAll().First();
+			var absence = absenceRepository.LoadAll().First(a=>a.Name==Absence);
 
-			var budgetGroup = new BudgetGroup { Name = "My Budget", TimeZone = TeleoptiPrincipal.Current.Regional.TimeZone };
-
-			var shrinkage = new CustomShrinkage("test", true);
-			shrinkage.AddAbsence(absence);
-			budgetGroup.AddCustomShrinkage(shrinkage);
-
+			//henke: vi kommer antagligen inte att behöva budgetgruppen här, används nu bara för att kolla att allting fungerar......
 			var budgetGroupRepo = new BudgetGroupRepository(uow);
-			budgetGroupRepo.Add(budgetGroup);
-
+			var budgetGroup = budgetGroupRepo.LoadAll().First(b => b.Name == BudgetGroup);
+			
 			var teamRepository = new TeamRepository(uow);
 			var team = teamRepository.LoadAll().First();
 
@@ -58,7 +53,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			personPeriod.PersonContract.ContractSchedule = contractSchedule;
 			personPeriod.PersonContract.PartTimePercentage = partTimepercentage;
 
-			//henke: varför behöver vi den här här??
+			//henke: varför behöver vi den här personen......??
 			var person = PersonFactory.CreatePerson();
 			person.AddPersonPeriod(personPeriod);
 
@@ -73,18 +68,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 				new DateOnlyPeriod(new DateOnly(Date), new DateOnly(Date)).ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
 			var layer = new DenormalizedScheduleProjectionLayer
 			{
-				ContractTime = TimeSpan.FromHours(8),
-				WorkTime = TimeSpan.FromHours(8),
+				ContractTime = TimeSpan.FromHours(Hours),
+				WorkTime = TimeSpan.FromHours(Hours),
 				DisplayColor = Color.Bisque.ToArgb(),
-				Name = "holiday",
-				ShortName = "ho",
+				Name = absence.Name,
+				ShortName = "xx",
 				StartDateTime = period.StartDateTime,
 				EndDateTime = period.EndDateTime,
 				PayloadId = absence.Id.GetValueOrDefault()
 			};
 
 			scheduleProjectionReadOnlyRepository.AddProjectedLayer(new DateOnly(Date), scenarioId, person.Id.GetValueOrDefault(), layer);
-
 
 			var usedAbsenceMinutes = TimeSpan.FromTicks(
 				   scheduleProjectionReadOnlyRepository.AbsenceTimePerBudgetGroup(new DateOnlyPeriod(new DateOnly(Date).AddDays(-1), new DateOnly(Date).AddDays(1)),
