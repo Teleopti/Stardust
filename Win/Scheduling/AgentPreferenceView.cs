@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.Security.AuthorizationData;
+using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Scheduling;
@@ -196,8 +198,25 @@ namespace Teleopti.Ccc.Win.Scheduling
 			tabControlAgentInfo.SelectedIndex = 2;
 			tabControlAgentInfo.SelectedIndex = 1;
 			tabControlAgentInfo.SelectedIndex = 0;
+
+			if (!hasExtended())
+			{
+				tabControlAgentInfo.TabPages[2].Hide();
+				tabControlAgentInfo.TabPages[1].Hide();
+			}
+
 			_presenter.UpdateView();
 			_isInitialized = true;
+		}
+
+		private static bool hasExtended()
+		{
+			var licensedFunctions = (from o in LicenseSchema.ActiveLicenseSchema.LicenseOptions
+									from f in o.EnabledApplicationFunctions
+									where (o.Enabled && f.FunctionPath == DefinedRaptorApplicationFunctionPaths.ModifyExtendedPreferences)
+									select f).ToList();
+
+			return licensedFunctions.Count != 0;
 		}
 
 		public void PopulateShiftCategories()
