@@ -15,51 +15,61 @@ CREATE PROCEDURE [mart].[ChangedDataOnStep]
 -- Date			Who	Description
 -- =============================================
 AS
--- DELETE FROM mart.LastUpdatedPerStep
--- SELECT * FROM mart.LastUpdatedPerStep
--- exec mart.[ChangedDataOnStep] 'stg_schedule_day_off_count, stg_day_off, dim_day_off', '2013-03-03', '2013-03-05', 'fc2f309c-3e3c-4cfb-9c11-a1570077b92b'
-DECLARE @lastTime datetime
-SELECT @lastTime = '1900-01-01'
-
--- do the same check on fact step as on stage step
-IF @stepName = 'fact_schedule' SELECT @stepName = 'stg_schedule, stg_schedule_day_absence_count'
-IF @stepName = 'fact_schedule_day_count' SELECT @stepName = 'stg_schedule_day_off_count, stg_day_off, dim_day_off'
-IF @stepName = 'fact_schedule_preference' SELECT @stepName = 'stg_schedule_preference, stg_day_off, dim_day_off'
-
-IF EXISTS (SELECT * FROM mart.LastUpdatedPerStep WHERE StepName = @stepName AND BusinessUnit = @buId)
-	SELECT @lastTime = Date FROM LastUpdatedPerStep WHERE StepName = @stepName AND BusinessUnit = @buId
+CREATE TABLE #persons (PersonId uniqueidentifier NOT NULL)
+CREATE TABLE #PersonsUpdated
+	(PersonId uniqueidentifier NOT NULL,
+	BelongsToDate smalldatetime NOT NULL,
+	InsertedOn datetime NOT NULL
+	)
 
 DECLARE @thisTime datetime
-SET @thisTime = @lastTime
+DECLARE @lastTime datetime
 
-select Parent INTO #persons
-FROM PersonPeriodWithEndDate
-INNER JOIN Contract ON Contract.Id = Contract
-WHERE EndDate = '2059-12-31'
-AND Contract.BusinessUnit = @buId
+--Get ETL last execution time
+SELECT @lastTime= [Date]
+FROM LastUpdatedPerStep a
+WHERE BusinessUnit = @buId
+AND StepName = @StepName
 
-SELECT PersonId, BelongsToDate, InsertedOn
-INTO #temp
+INSERT INTO #persons (PersonId)
+SELECT DISTINCT Parent
+FROM dbo.PersonPeriod pp
+INNER JOIN dbo.team t
+	ON t.Id = pp.team
+INNER JOIN dbo.site s
+	ON t.site = s.Id
+INNER JOIN dbo.BusinessUnit bu
+	ON bu.id = s.BusinessUnit
+WHERE bu.id=@buId
+
+--Handle case "ETL never executed".
+IF @lastTime IS NULL
+BEGIN
+	SET @lastTime=dateadd(hour,-1,getdate())
+	INSERT mart.LastUpdatedPerStep VALUES(@stepName, @buId, @lastTime)
+END
+
+--Get all Schedule days that are updated after last ETL run
+INSERT INTO #PersonsUpdated (PersonId, BelongsToDate, InsertedOn)
+SELECT s.PersonId, s.BelongsToDate, s.InsertedOn
 FROM [ReadModel].[ScheduleDay] s
-INNER JOIN #persons p ON p.Parent = s.PersonId
+INNER JOIN #persons p ON p.PersonId = s.PersonId
 WHERE InsertedOn >= @lastTime -- >= (not > ) to be sure we do not miss any
 AND BelongsToDate BETWEEN @startDate AND @endDate
 
+--get max for this BU
+SET @thisTime = (SELECT max(InsertedOn) from #PersonsUpdated)
 
-IF EXISTS (SELECT * FROM #temp) 
-	set @thisTime = (SELECT max(InsertedOn) from #temp)
+--Handle case, "now rows detected"
+IF @thisTime IS NULL
+SET @thisTime = @lastTime
 
+--return 'thisTime' to ETL. To be used later if everything is successfull
+SELECT @thisTime as 'thisTime'
 
-IF @thisTime <> @lastTime
-BEGIN
-	IF EXISTS (SELECT * FROM mart.LastUpdatedPerStep WHERE StepName = @stepName AND BusinessUnit = @buId)
-		UPDATE mart.LastUpdatedPerStep SET Date = @thisTime WHERE StepName = @stepName AND BusinessUnit = @buId
-	ELSE
-		INSERT mart.LastUpdatedPerStep VALUES(@stepName, @buId, @thisTime) 
-END
-
-
-	SELECT DISTINCT PersonId AS Person, BelongsToDate AS [Date] FROM #temp
-	ORDER BY BelongsToDate
+--return Persons
+SELECT PersonId AS Person, BelongsToDate AS [Date]
+FROM #PersonsUpdated
+ORDER BY BelongsToDate
 
 GO
