@@ -38,8 +38,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private WorkShift _workShift3;
 		private IScheduleMatrixPro _matrix1;
 		private IGroupPerson _groupPerson;
+	    private ISchedulingResultStateHolder _schedulingResultStateHolder;
+	    private IScheduleRange _scheduleRange;
 
-		[SetUp]
+	    [SetUp]
 		public void Setup()
 		{
 			_mocks = new MockRepository();
@@ -48,6 +50,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_workShiftFilterService =_mocks.StrictMock<IWorkShiftFilterService>();
 			_teamScheduling =_mocks.StrictMock<ITeamScheduling>();
 			_workShiftSelector =_mocks.StrictMock<IWorkShiftSelector>();
+	        _schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
+	        _scheduleRange = _mocks.StrictMock<IScheduleRange>();
+
 			_schedulingOptions = new SchedulingOptions();
 			_dateOnly = new DateOnly(2013, 4, 8);
 			var zone = TimeZoneInfo.FindSystemTimeZoneById("Atlantic Standard Time");
@@ -70,7 +75,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		[Test]
 		public void ShouldCheckParameters()
 		{
-			Assert.IsFalse(_target.ScheduleTeamBlockDay(null, _dateOnly, _schedulingOptions,
+            Assert.Throws<ArgumentNullException>(() => _target.ScheduleTeamBlockDay(null, _dateOnly, _schedulingOptions,
 			                                            _selectedPeriod, new List<IPerson> {_person}));
 		}
 
@@ -178,12 +183,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(() => _teamScheduling.ExecutePerDayPerPerson(_person, _dateOnly, _teamBlockInfo, shifts[0],
 				                                                         !_schedulingOptions.UseTeamBlockSameShift, _selectedPeriod));
 				Expect.Call(() => _teamScheduling.DayScheduled -= _target.OnDayScheduled);
-				Expect.Call(_matrix1.SchedulePeriod).Return(schedulePeriod);
-				Expect.Call(schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(_dateOnly, _dateOnly));
-				Expect.Call(_matrix1.GetScheduleDayByKey(_dateOnly)).Return(scheduleDayPro);
-				Expect.Call(scheduleDayPro.DaySchedulePart()).Return(scheduleDay);
+				//Expect.Call(_matrix1.SchedulePeriod).Return(schedulePeriod);
+				//Expect.Call(schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(_dateOnly, _dateOnly));
+				//Expect.Call(_matrix1.GetScheduleDayByKey(_dateOnly)).Return(scheduleDayPro);
+				//Expect.Call(scheduleDayPro.DaySchedulePart()).Return(scheduleDay);
 				Expect.Call(scheduleDay.IsScheduled()).Return(false);
 				Expect.Call(_groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(new List<IPerson> {_person}));
+
+                expectCallForChecker(scheduleDay);
 			}
 			using (_mocks.Playback())
 			{
@@ -192,7 +199,15 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			}
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
+	    private void expectCallForChecker(IScheduleDay scheduleDay)
+	    {
+	        Expect.Call(_matrix1.SchedulingStateHolder).Return(_schedulingResultStateHolder);
+	        Expect.Call(_schedulingResultStateHolder.Schedules[_person]).Return(_scheduleRange);
+	        Expect.Call(_matrix1.Person).Return(_person);
+	        Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(scheduleDay);
+	    }
+
+	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldSkipScheduleSelectedBlockIfNoShiftsAvailable()
 		{
 			var restriction =
@@ -222,11 +237,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				                                                          _schedulingOptions.WorkShiftLengthHintOption,
 				                                                          _schedulingOptions.UseMinimumPersons,
 				                                                          _schedulingOptions.UseMaximumPersons)).Return(shifts[0]).Repeat.AtLeastOnce();
-				Expect.Call(_matrix1.SchedulePeriod).Return(schedulePeriod);
-				Expect.Call(schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(_dateOnly, _dateOnly));
-				Expect.Call(_matrix1.GetScheduleDayByKey(_dateOnly)).Return(scheduleDayPro);
-				Expect.Call(scheduleDayPro.DaySchedulePart()).Return(scheduleDay);
+                //Expect.Call(_matrix1.SchedulePeriod).Return(schedulePeriod);
+                //Expect.Call(schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(_dateOnly, _dateOnly));
+                //Expect.Call(_matrix1.GetScheduleDayByKey(_dateOnly)).Return(scheduleDayPro);
+                //Expect.Call(scheduleDayPro.DaySchedulePart()).Return(scheduleDay);
 				Expect.Call(scheduleDay.IsScheduled()).Return(false);
+
+                expectCallForChecker(scheduleDay);
 			}
 			using (_mocks.Playback())
 			{
@@ -262,12 +279,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				                                                          _schedulingOptions.WorkShiftLengthHintOption,
 				                                                          _schedulingOptions.UseMinimumPersons,
 				                                                          _schedulingOptions.UseMaximumPersons)).Return(shifts[0]).Repeat.AtLeastOnce();
-				Expect.Call(_matrix1.SchedulePeriod).Return(schedulePeriod);
-				Expect.Call(schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(_dateOnly, _dateOnly));
-				Expect.Call(_matrix1.GetScheduleDayByKey(_dateOnly)).Return(scheduleDayPro);
-				Expect.Call(scheduleDayPro.DaySchedulePart()).Return(scheduleDay);
+                //Expect.Call(_matrix1.SchedulePeriod).Return(schedulePeriod);
+                //Expect.Call(schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(_dateOnly, _dateOnly));
+                //Expect.Call(_matrix1.GetScheduleDayByKey(_dateOnly)).Return(scheduleDayPro);
+                //Expect.Call(scheduleDayPro.DaySchedulePart()).Return(scheduleDay);
 				Expect.Call(scheduleDay.IsScheduled()).Return(false);
 				Expect.Call(_groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(new List<IPerson> { _person }));
+
+                expectCallForChecker(scheduleDay);
 			}
 			using (_mocks.Playback())
 			{
@@ -302,11 +321,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				                                                          _schedulingOptions.WorkShiftLengthHintOption,
 				                                                          _schedulingOptions.UseMinimumPersons,
 				                                                          _schedulingOptions.UseMaximumPersons)).Return(shifts[0]).Repeat.AtLeastOnce();
-				Expect.Call(_matrix1.SchedulePeriod).Return(schedulePeriod);
-				Expect.Call(schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(_dateOnly, _dateOnly));
-				Expect.Call(_matrix1.GetScheduleDayByKey(_dateOnly)).Return(scheduleDayPro);
-				Expect.Call(scheduleDayPro.DaySchedulePart()).Return(scheduleDay);
+                //Expect.Call(_matrix1.SchedulePeriod).Return(schedulePeriod);
+                //Expect.Call(schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(_dateOnly, _dateOnly));
+                //Expect.Call(_matrix1.GetScheduleDayByKey(_dateOnly)).Return(scheduleDayPro);
+                //Expect.Call(scheduleDayPro.DaySchedulePart()).Return(scheduleDay);
 				Expect.Call(scheduleDay.IsScheduled()).Return(true);
+
+                expectCallForChecker(scheduleDay);
 			}
 			using (_mocks.Playback())
 			{
@@ -347,12 +368,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(() => _teamScheduling.ExecutePerDayPerPerson(_person, _dateOnly, _teamBlockInfo, shifts[0],
 				                                                         !_schedulingOptions.UseTeamBlockSameShift, _selectedPeriod));
 				Expect.Call(() => _teamScheduling.DayScheduled -= _target.OnDayScheduled);
-				Expect.Call(_matrix1.SchedulePeriod).Return(schedulePeriod);
-				Expect.Call(schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(_dateOnly, _dateOnly));
-				Expect.Call(_matrix1.GetScheduleDayByKey(_dateOnly)).Return(scheduleDayPro);
-				Expect.Call(scheduleDayPro.DaySchedulePart()).Return(scheduleDay);
+                //Expect.Call(_matrix1.SchedulePeriod).Return(schedulePeriod);
+                //Expect.Call(schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(_dateOnly, _dateOnly));
+                //Expect.Call(_matrix1.GetScheduleDayByKey(_dateOnly)).Return(scheduleDayPro);
+                //Expect.Call(scheduleDayPro.DaySchedulePart()).Return(scheduleDay);
 				Expect.Call(scheduleDay.IsScheduled()).Return(false);
 				Expect.Call(_groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(new List<IPerson> {_person}));
+
+                expectCallForChecker(scheduleDay);
 			}
 			using (_mocks.Playback())
 			{
@@ -400,11 +423,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				                                                          _schedulingOptions.WorkShiftLengthHintOption,
 				                                                          _schedulingOptions.UseMinimumPersons,
 				                                                          _schedulingOptions.UseMaximumPersons)).Return(shifts[0]).Repeat.AtLeastOnce();
-				Expect.Call(_matrix1.SchedulePeriod).Return(schedulePeriod);
-				Expect.Call(schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(_dateOnly, _dateOnly));
-				Expect.Call(_matrix1.GetScheduleDayByKey(_dateOnly)).Return(scheduleDayPro);
-				Expect.Call(scheduleDayPro.DaySchedulePart()).Return(scheduleDay);
+                //Expect.Call(_matrix1.SchedulePeriod).Return(schedulePeriod);
+                //Expect.Call(schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(_dateOnly, _dateOnly));
+                //Expect.Call(_matrix1.GetScheduleDayByKey(_dateOnly)).Return(scheduleDayPro);
+                //Expect.Call(scheduleDayPro.DaySchedulePart()).Return(scheduleDay);
 				Expect.Call(scheduleDay.IsScheduled()).Return(true);
+
+                expectCallForChecker(scheduleDay);
 			}
 			using (_mocks.Playback())
 			{
@@ -439,12 +464,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				                                                          _schedulingOptions.WorkShiftLengthHintOption,
 				                                                          _schedulingOptions.UseMinimumPersons,
 				                                                          _schedulingOptions.UseMaximumPersons)).Return(shifts[0]).Repeat.AtLeastOnce();
-				Expect.Call(_matrix1.SchedulePeriod).Return(schedulePeriod);
-				Expect.Call(schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(_dateOnly, _dateOnly));
-				Expect.Call(_matrix1.GetScheduleDayByKey(_dateOnly)).Return(scheduleDayPro);
-				Expect.Call(scheduleDayPro.DaySchedulePart()).Return(scheduleDay);
+                //Expect.Call(_matrix1.SchedulePeriod).Return(schedulePeriod);
+                //Expect.Call(schedulePeriod.DateOnlyPeriod).Return(new DateOnlyPeriod(_dateOnly, _dateOnly));
+                //Expect.Call(_matrix1.GetScheduleDayByKey(_dateOnly)).Return(scheduleDayPro);
+                //Expect.Call(scheduleDayPro.DaySchedulePart()).Return(scheduleDay);
 				Expect.Call(scheduleDay.IsScheduled()).Return(false);
 				Expect.Call(_groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(new List<IPerson>{_person}));
+
+                expectCallForChecker(scheduleDay);
 			}
 			using (_mocks.Playback())
 			{
