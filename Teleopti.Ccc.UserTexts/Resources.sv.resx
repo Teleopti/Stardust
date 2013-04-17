@@ -6375,7 +6375,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <comment>Isntructions to add Multiplicators</comment>
   </data>
   <data name="ExportCode" xml:space="preserve">
-    <value>Löneart</value>
+    <value>Lönesystemets kod</value>
     <comment>Export Code of the multiplicator</comment>
   </data>
   <data name="MultiplicatorDeleteConfirmation" xml:space="preserve">
