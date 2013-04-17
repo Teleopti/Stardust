@@ -103,11 +103,9 @@
     </Reference>
     <Reference Include="MbCache, Version=2.2.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
       <HintPath>..\packages\MbCache.2.2\lib\net40\MbCache.dll</HintPath>
-      
     </Reference>
     <Reference Include="MbCache.ProxyImpl.LinFu, Version=2.2.0.0, Culture=neutral, PublicKeyToken=c4cb4e6f32c7c400, processorArchitecture=MSIL">
       <HintPath>..\packages\MbCache.2.2\lib\net40\MbCache.ProxyImpl.LinFu.dll</HintPath>
-      
     </Reference>
     <Reference Include="Microsoft.Practices.Composite, Version=2.0.0.0, Culture=neutral, PublicKeyToken=9e7932cdbb39c45f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -169,17 +167,14 @@
     <Reference Include="Syncfusion.Shared.Windows">
       <HintPath>..\packages\Syncfusion.Shared.Win.10.2.81\lib\4.0\Syncfusion.Shared.Windows.dll</HintPath>
       <Private>True</Private>
-      
     </Reference>
     <Reference Include="Syncfusion.Tools.Base, Version=10.204.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
       <HintPath>..\packages\Syncfusion.Tools.Win.10.2.81\lib\4.0\Syncfusion.Tools.Base.dll</HintPath>
       <Private>True</Private>
-      
     </Reference>
     <Reference Include="Syncfusion.Tools.Windows, Version=10.204.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
       <HintPath>..\packages\Syncfusion.Tools.Win.10.2.81\lib\4.0\Syncfusion.Tools.Windows.dll</HintPath>
       <Private>True</Private>
-      
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -555,6 +550,13 @@
     <Compile Include="Presentation\IReportSettingsScheduleTimeVersusTargetTimeView.cs" />
     <Compile Include="Presentation\ReportSettingsScheduleTimeVersusTargetTimePresenter.cs" />
     <Compile Include="Reporting\ReportSettingsScheduledTimePerActivity.cs" />
+    <Compile Include="Scheduling\AgentPreferenceAddCommand.cs" />
+    <Compile Include="Scheduling\AgentPreferenceCanCreateResult.cs" />
+    <Compile Include="Scheduling\AgentPreferenceData.cs" />
+    <Compile Include="Scheduling\AgentPreferenceDayCreator.cs" />
+    <Compile Include="Scheduling\AgentPreferenceEditCommand.cs" />
+    <Compile Include="Scheduling\AgentPreferencePresenter.cs" />
+    <Compile Include="Scheduling\AgentPreferenceRemoveCommand.cs" />
     <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsDetailEffectiveRestrictionExtractor.cs" />
     <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsDetailModel.cs" />
     <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsDetailPresenter.cs" />
@@ -567,6 +569,11 @@
     <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionsSchedulePainterDecider.cs" />
     <Compile Include="Scheduling\AgentRestrictions\IAgentRestrictionsDetailView.cs" />
     <Compile Include="Scheduling\AgentRestrictions\IAgentRestrictionsDetailViewCellModel.cs" />
+    <Compile Include="Scheduling\AgentStudentAvailabilityAddCommand.cs" />
+    <Compile Include="Scheduling\AgentStudentAvailabilityDayCreator.cs" />
+    <Compile Include="Scheduling\AgentStudentAvailabilityEditCommand.cs" />
+    <Compile Include="Scheduling\AgentStudentAvailabilityPresenter.cs" />
+    <Compile Include="Scheduling\AgentStudentAvailabilityRemoveCommand.cs" />
     <Compile Include="Scheduling\AuditHistory\AuditHistoryDirection.cs" />
     <Compile Include="Scheduling\AuditHistory\AuditHistoryModel.cs" />
     <Compile Include="Scheduling\AuditHistory\AuditHistoryPresenter.cs" />
@@ -576,6 +583,8 @@
     <Compile Include="Scheduling\AuditHistory\PreviousPageCommand.cs" />
     <Compile Include="Scheduling\AuditHistory\RevisionDisplayRow.cs" />
     <Compile Include="Scheduling\CalculateMinMaxCacheDecider.cs" />
+    <Compile Include="Scheduling\IAgentPreferenceView.cs" />
+    <Compile Include="Scheduling\IAgentStudentAvailabilityView.cs" />
     <Compile Include="Scheduling\ShiftCategoryFairnessOptimizer.cs" />
     <Compile Include="Scheduling\ShiftCategoryFairnessValueHelper.cs" />
     <Compile Include="Scheduling\SkillFullPeriodGridControlPresenter.cs" />
