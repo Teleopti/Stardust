@@ -2,6 +2,6 @@
 {
     internal interface ICommandLineCommand
     {
-        void Execute(CommandLineArgument commandLineArgument);
+        int Execute(CommandLineArgument commandLineArgument);
     }
 }
