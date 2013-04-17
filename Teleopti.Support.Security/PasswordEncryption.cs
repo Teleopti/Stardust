@@ -8,7 +8,7 @@ namespace Teleopti.Support.Security
 {
     internal class PasswordEncryption : ICommandLineCommand
     {
-        public void Execute(CommandLineArgument commandLineArgument)
+        public int Execute(CommandLineArgument commandLineArgument)
         {
             //Select database version 
             using (SqlConnection connection = new SqlConnection(commandLineArgument.DestinationConnectionString))
@@ -21,13 +21,13 @@ namespace Teleopti.Support.Security
                 {
                     Console.WriteLine("Could not open Sql Connection. Error message: {0}", ex.Message);
                     Thread.Sleep(TimeSpan.FromSeconds(2));
-                    return;
+                    return 1;
                 }
                 catch (InvalidOperationException ex)
                 {
                     Console.WriteLine("Could not open Sql Connection. Error message: {0}", ex.Message);
                     Thread.Sleep(TimeSpan.FromSeconds(2));
-                    return;
+                    return 1;
                 }
                 //Check version
                 var command = connection.CreateCommand();
@@ -36,7 +36,7 @@ namespace Teleopti.Support.Security
                 if (versionCount > 0)
                 {
                     Console.WriteLine("The database is up to date.");
-                    return;
+                    return 0;
                 }
 
                 //Open transaction
@@ -104,13 +104,11 @@ namespace Teleopti.Support.Security
                     if (transaction != null)
                         transaction.Rollback();
                     Console.WriteLine("Something went wrong! Error message: {0}", ex.Message);
-                }
-                finally
-                {
-                    // done with using
-                    //connection.Dispose();
+	                return 1;
                 }
             }
+
+	        return 0;
         }
     }
 }

@@ -1,16 +1,26 @@
-﻿namespace Teleopti.Support.Security
+﻿using System;
+
+namespace Teleopti.Support.Security
 {
     class Program
     {
-        private static readonly ICommandLineCommand passwordEncryption = new PasswordEncryption();
-        private static readonly ICommandLineCommand forecasterDateAdjustment = new ForecasterDateAdjustment();
+        private static readonly ICommandLineCommand PasswordEncryption = new PasswordEncryption();
+        private static readonly ICommandLineCommand ForecasterDateAdjustment = new ForecasterDateAdjustment();
         private static readonly ICommandLineCommand PersonFirstDayOfWeekSetter = new PersonFirstDayOfWeekSetter();
         private static readonly ICommandLineCommand LicenseStatusChecker = new LicenseStatusChecker();
 		private static readonly ICommandLineCommand CrossDatabaseViewUpdate = new CrossDatabaseViewUpdate();
+		private static readonly ICommandLineCommand PersonAssignmentAuditDateSetter = new PersonAssignmentAuditDateSetter();
+		private static readonly ICommandLineCommand PersonAssignmentDateSetter = new PersonAssignmentDateSetter();
 
         static void Main(string[] args)
         {
             var commandLineArgument = new CommandLineArgument(args);
+			if (!string.IsNullOrEmpty(commandLineArgument.DestinationConnectionString))
+			{
+				PersonAssignmentDateSetter.Execute(commandLineArgument);
+				PersonAssignmentAuditDateSetter.Execute(commandLineArgument);
+			}
+
 			if (!string.IsNullOrEmpty(commandLineArgument.AggDatabase))
 				CrossDatabaseViewUpdate.Execute(commandLineArgument);
 
@@ -20,26 +30,26 @@
                 !commandLineArgument.LicenseStatusMode &&
 				string.IsNullOrEmpty(commandLineArgument.AggDatabase))
             {
-                forecasterDateAdjustment.Execute(commandLineArgument);
-                passwordEncryption.Execute(commandLineArgument);
+                ForecasterDateAdjustment.Execute(commandLineArgument);
+                PasswordEncryption.Execute(commandLineArgument);
                 PersonFirstDayOfWeekSetter.Execute(commandLineArgument);
                 LicenseStatusChecker.Execute(commandLineArgument);
                 return;
             }
 
             if (commandLineArgument.ForecasterMode)
-                forecasterDateAdjustment.Execute(commandLineArgument);
+                ForecasterDateAdjustment.Execute(commandLineArgument);
 
             if (commandLineArgument.PersonUpdateMode)
                 PersonFirstDayOfWeekSetter.Execute(commandLineArgument);
 
             if (commandLineArgument.PasswordEncryptionMode)
-                passwordEncryption.Execute(commandLineArgument);
+                PasswordEncryption.Execute(commandLineArgument);
 
             if (commandLineArgument.LicenseStatusMode)
                 LicenseStatusChecker.Execute(commandLineArgument);
-
-
         }
+
+
     }
 }
