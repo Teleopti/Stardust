@@ -11195,4 +11195,8 @@ These options are activated:
     <value>Messages ({0})</value>
     <comment>Messages title with number of unread messages</comment>
   </data>
+  <data name="ResolutionMin" xml:space="preserve">
+    <value>Resolution (minutes)</value>
+    <comment>select resolution in Meettíng Overview</comment>
+  </data>
 </root>
