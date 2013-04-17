@@ -1,55 +1,96 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Text;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Support.Security
 {
-	public class PersonAssignmentAuditDateSetter
+	public class PersonAssignmentAuditDateSetter : ICommandLineCommand
 	{
-		private const string checkNumberOfNonConvertedAuditPersonAssignments
+		private const string numberOfNotConvertedCommand
 			= "select COUNT(*) as cnt from [Auditing].PersonAssignment_AUD where TheDate < '1850-01-01'";
 
-		private static void runAuditPersonAssignment(string[] args)
-		{
-			CommonHelper dbHelper = new CommonHelper(args[0]);
-
-			IList<DataRow> rows = dbHelper.ReadData(checkNumberOfNonConvertedAuditPersonAssignments);
-			Console.WriteLine("Updating " + dbHelper.SqlConnectionStringBuilder().InitialCatalog + " found " + rows[0].Field<int>("cnt") + " audit person assignments");
-			var commandString = new StringBuilder()
+		private readonly string _readCommand = new StringBuilder()
 				.AppendLine("select top 100")
 				.AppendLine("Pa.Id, DefaultTimeZone, Minimum, TheDate")
 				.AppendLine("from [Auditing].PersonAssignment_AUD pa")
 				.AppendLine("inner join Person p on pa.Person = p.id")
-				.AppendLine("Where TheDate = '1800-01-01'").ToString();
+				.AppendLine("Where TheDate = '1800-01-01'")
+				.ToString();
 
-			int total = 0;
-			do
+		private readonly PersonAssignmentCommon _personAssignmentCommon = new PersonAssignmentCommon();
+
+		public int Execute(CommandLineArgument commandLineArgument)
+		{
+			using (var connection = new SqlConnection(commandLineArgument.DestinationConnectionString))
 			{
-				rows = dbHelper.ReadData(commandString);
-				total += rows.Count;
+				connection.Open();
+				if (!_personAssignmentCommon.TheDateFieldExists(connection, numberOfNotConvertedCommand))
+					return 0;
+
+				IList<DataRow> rows = _personAssignmentCommon.ReadRows(connection, numberOfNotConvertedCommand);
+
+				Console.WriteLine(string.Concat("Found ", rows[0].Field<int>("cnt"), " non converted audit person assignments"));
+
+				int total = 0;
+				do
+				{
+					total += runOneBatch(connection);
+
+					Console.Write(string.Concat("Rows updated = ", total));
+					Console.SetCursorPosition(0, 1);
+
+				} while (rows.Count > 0);
+
+				Console.WriteLine();
+
+				rows = _personAssignmentCommon.ReadRows(connection, numberOfNotConvertedCommand);
+				if (rows.Count > 0)
+				{
+					Console.WriteLine("There is still " + rows + " non converted audit assignments in db.");
+					return 1;
+				}
+			}
+			
+			Console.WriteLine();
+
+			return 0;
+		}
+
+		private int runOneBatch(SqlConnection connection)
+		{
+			IList<DataRow> rows;
+			connection.Open();
+			using (SqlTransaction transaction = connection.BeginTransaction(IsolationLevel.ReadCommitted))
+			{
+				rows = _personAssignmentCommon.ReadRows(connection, _readCommand);
+				_personAssignmentCommon.SetFields(rows);
+				updatePersonAssignmentRows(rows, connection);
+
+				transaction.Commit();
+			}
+			connection.Close();
+			return rows.Count;
+		}
+
+		private static void updatePersonAssignmentRows(IEnumerable<DataRow> rows, SqlConnection connection)
+		{
+			using (var command = new SqlCommand())
+			{
+				command.CommandType = CommandType.Text;
+				command.Connection = connection;
 				foreach (var dataRow in rows)
 				{
-					TimeZoneInfo timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(dataRow.Field<string>("DefaultTimeZone"));
-					DateTime utcTime = new DateTime(dataRow.Field<DateTime>("Minimum").Ticks, DateTimeKind.Utc);
-					DateTime localDate = timeZoneInfo.SafeConvertTimeToUtc(utcTime);
-					dataRow["TheDate"] = localDate.Date;
+					var commandText = new StringBuilder()
+						.AppendLine("update [Auditing].PersonAssignment_AUD")
+						.AppendLine("set TheDate = '" + dataRow.Field<DateTime>("TheDate"))
+						.AppendLine("where Id='" + dataRow.Field<Guid>("Id") + "'");
+
+					command.CommandText = commandText.ToString();
+					command.ExecuteNonQuery();
 				}
-				dbHelper.UpdateAuditPersonAssignmentRows(rows);
-
-
-
-				Console.SetCursorPosition(0, 1);
-				Console.Write("Rows updated = " + total);
-
-			} while (rows.Count > 0);
-
-			var numberOfNonConverted = dbHelper.ReadData(checkNumberOfNonConvertedAuditPersonAssignments)[0].Field<int>("cnt");
-			if (numberOfNonConverted > 0)
-				throw new Exception("There is still " + numberOfNonConverted + " non converted audit assignments in db.");
-
-			Console.WriteLine();
+			}
 		}
 	}
 }

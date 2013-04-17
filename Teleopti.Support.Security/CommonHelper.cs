@@ -48,28 +48,5 @@ namespace Teleopti.Support.Security
                 }
             }
         }
-
-        
-
-		public void UpdateAuditPersonAssignmentRows(IList<DataRow> rows)
-		{
-			using (SqlConnection connection = new SqlConnection(_connectionString))
-			{
-				using (var command = new SqlCommand())
-				{
-					command.CommandType = CommandType.Text;
-					connection.Open();
-					command.Connection = connection;
-					foreach (var dataRow in rows)
-					{
-						command.CommandText = "update [Auditing].PersonAssignment_AUD set TheDate = '" + dataRow.Field<DateTime>("TheDate") +
-											  "' where Id='" + dataRow.Field<Guid>("Id").ToString() + "'";
-						command.ExecuteNonQuery();
-					}
-
-				}
-			}
-		}
-
     }
 }
