@@ -6,7 +6,7 @@
 }
 
 <div id="AsmMessage-body-inner" class="asmMessage-body-inner relative">
-    <div class="alert alert-block" data-bind="visible: shouldShowMessage">
+    <div class="alert alert-block bdd-show-message" data-bind="visible: shouldShowMessage">
         @Resources.NoMessagesFound
     </div>
     <div id="AsmMessages-list" data-bind="foreach: asmMessageColumnList">
@@ -60,7 +60,7 @@
                             <br/>
                             <!-- /ko -->
                         </div>
-                        <div>
+                        <div class="bdd-reply-options-div">
                             <textarea data-bind="visible: allowDialogueReply, value: reply, valueUpdate:['afterkeydown', 'afterpaste', 'change']"></textarea>
                             <!-- ko foreach: replyOptions -->
                             <input type="radio" name="radioOptions" data-bind="checked : selected, visible : $parent.userMustSelectReplyOption"/>

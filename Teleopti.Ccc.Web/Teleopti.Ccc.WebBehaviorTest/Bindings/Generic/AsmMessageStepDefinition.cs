@@ -49,18 +49,21 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Then(@"I should be notified that I have '(.*)' unread message\(s\)")]
 		public void ThenIShouldBeNotifiedThatIHaveUnreadMessageS(string unreadMessageCount)
 		{
-			int parseResult;
-			if (int.TryParse(unreadMessageCount, out parseResult))
-				EventualAssert.That(() => _page.MessageLink.ClassName.Contains("asm-new-message-indicator"), Is.True);
-			if (parseResult > 0)
-			{
-				EventualAssert.That(() => _page.MessageLink.InnerHtml.Contains("(" + parseResult + ")"), Is.True);
-			}
+			var messageCount = parseInt(unreadMessageCount);
+
+			if (messageCount == 0)
+				EventualAssert.That(() => Pages.Pages.CurrentPortalPage.MessageLink.Span(Find.BySelector(".badge")).Exists, Is.False);
 			else
-			{
-				EventualAssert.That(() => _page.MessageLink.InnerHtml.Contains("("), Is.False);
-				EventualAssert.That(() => _page.MessageLink.InnerHtml.Contains(")"), Is.False);
-			}
+				EventualAssert.That(() => Pages.Pages.CurrentPortalPage.MessageLink.Span(Find.BySelector(".badge")).InnerHtml, Is.EqualTo(unreadMessageCount));
+		}
+
+		private int parseInt(string stringInt)
+		{
+			int parseResult;
+			if (!int.TryParse(stringInt, NumberStyles.Number, CultureInfo.InvariantCulture, out parseResult))
+				return 0;
+
+			return parseResult;
 		}
 
 		[When(@"I receive message number '(.*)' while not viewing message page")]
@@ -152,14 +155,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[When(@"I click on the message at position '(.*)' in the list")]
 		public void GivenIClickOnTheMessageAtPositionInTheList(int position)
 		{
+			EventualAssert.That(() => _page.MessageBodyDivs.Count, Is.AtLeast(position));
 			var messageBodyDiv = _page.MessageBodyDivs[position - 1].EventualGet();
-			messageBodyDiv.Click();
+			messageBodyDiv.EventualClick();
 		}
-		
-		[When(@"I click the confirm button")]
-		public void WhenIClickTheConfirmButton()
+
+		[When(@"I click the confirm button on the message at position '(.*)' in the list")]
+		public void WhenIClickTheConfirmButtonOnTheMessageAtPositionInTheList(int position)
 		{
-			Pages.Pages.CurrentOkButton.OkButton.EventualClick();
+			Pages.Pages.MessagePage.ConfirmButton(position).EventualClick();
 		}
 
 		[When(@"I confirm reading the message at position '(.*)' of '(.*)' in the list")]
@@ -203,45 +207,44 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Then(@"the send button should be disabled on the message at position '(.*)' in the list")]
 		public void ThenTheSendButtonShouldBeDisabledOnTheMessageAtPositionInTheList(int position)
 		{
-			var messageDetailDiv = _page.MessageDetailDivs[position - 1].EventualGet();
-			EventualAssert.That(() => messageDetailDiv.Button(Find.BySelector(".bdd-asm-message-confirm-button")).Enabled, Is.False);
+			EventualAssert.That(() => Pages.Pages.MessagePage.ConfirmButton(position).Enabled, Is.False);
 		}
 
-		[Then(@"the send button should be enabled")]
-		public void ThenTheSendButtonShouldBeEnabled()
+		[Then(@"the send button should be enabled on the message at position '(.*)' in the list")]
+		public void ThenTheSendButtonShouldBeEnabled(int position)
 		{
-			EventualAssert.That(() => Pages.Pages.CurrentOkButton.OkButton.Enabled, Is.True);
+			EventualAssert.That(() => Pages.Pages.MessagePage.ConfirmButton(position).Enabled, Is.True);
 		}
 
-		[When(@"I click the radiobutton with caption '(.*)'")]
-		public void WhenIClickTheRadiobuttonWithCaption(string option)
+		[When(@"I click the radiobutton with caption '(.*)' on the message at position '(.*)' in the list")]
+		public void WhenIClickTheRadiobuttonWithCaptionOnTheMessageAtPositionInTheList(string option, int position)
 		{
-			var label = Pages.Pages.CurrentMessageReplyPage.ReplyOptions.Labels.First(r => r.Text.Equals(option));
-			var indexOfLabel = Pages.Pages.CurrentMessageReplyPage.ReplyOptions.Labels.ToList().IndexOf(label);
-			Pages.Pages.CurrentMessageReplyPage.ReplyOptions.RadioButtons.ElementAt(indexOfLabel).EventualClick();
+			var label = Pages.Pages.CurrentMessageReplyPage.ReplyOptionsDiv(position).Labels.First(r => r.Text.Equals(option)).EventualGet();
+			label.PreviousSibling.EventualClick();
 		}
 
-		[Then(@"the radiobutton with caption '(.*)' should not be checked")]
-		public void ThenTheRadiobuttonWithCaptionShouldNotBeChecked(string option)
+		[Then(@"the radiobutton with caption '(.*)' should not be checked on the message at position '(.*)' in the list")]
+		public void ThenTheRadiobuttonWithCaptionShouldNotBeCheckedOnTheMessageAtPositionInTheList(string option, int position)
 		{
-			var label = Pages.Pages.CurrentMessageReplyPage.ReplyOptions.Labels.First(r => r.Text.Equals(option));
-			var indexOfLabel = Pages.Pages.CurrentMessageReplyPage.ReplyOptions.Labels.ToList().IndexOf(label);
-			EventualAssert.That(()=>Pages.Pages.CurrentMessageReplyPage.ReplyOptions.RadioButtons.ElementAt(indexOfLabel).Checked,Is.False);
+			var label = Pages.Pages.CurrentMessageReplyPage.ReplyOptionsDiv(position).Labels.First(r => r.Text.Equals(option)).EventualGet();
+			EventualAssert.That(() => ((RadioButton)label.PreviousSibling).Checked, Is.False);
 		}
 
-		[Then(@"I should see radiobuttons with")]
-		public void ThenIShouldSeeRadiobuttonsWith(Table table)
+		[Then(@"I should see radiobuttons on the message at position '(.*)' in the list with")]
+		public void ThenIShouldSeeRadiobuttonsOnTheMessageAtPositionInTheListWith(int position, Table table)
 		{
+			var messageDetailDiv = Pages.Pages.CurrentMessageReplyPage.ReplyOptionsDiv(position).EventualGet();
 			foreach (var tableRow in table.Rows)
 			{
-				EventualAssert.That(() => Pages.Pages.CurrentMessageReplyPage.ReplyOptions.InnerHtml.Contains(tableRow[0]), Is.EqualTo(true));
-			}	
+				EventualAssert.That(() => messageDetailDiv.InnerHtml.Contains(tableRow[0]), Is.EqualTo(true));
+			}
 		}
 
-		[Then(@"I should not see any options")]
-		public void ThenIShouldNotSeeAnyOptions()
+		[Then(@"I should not see any options on the message at position '(.*)' in the list")]
+		public void ThenIShouldNotSeeAnyOptionsOnTheMessageAtPositionInTheList(int position)
 		{
-			foreach (var radioButton in Pages.Pages.CurrentMessageReplyPage.ReplyOptions.RadioButtons)
+			var messageDetailDiv = Pages.Pages.CurrentMessageReplyPage.ReplyOptionsDiv(position).EventualGet();
+			foreach (var radioButton in messageDetailDiv.RadioButtons)
 			{
 				Assert.That(IsDisplayed(radioButton), Is.False);
 			}

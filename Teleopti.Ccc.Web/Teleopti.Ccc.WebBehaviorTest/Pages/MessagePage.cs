@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 	{
 		public Div FriendlyMessage
 		{
-			get { return Document.Div(QuicklyFind.ByClass("friendly-message")); }
+			get { return Document.Div(QuicklyFind.ByClass("bdd-show-message")); }
 		}
 
 		public DivCollection MessageBodyDivs
@@ -19,6 +19,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		public DivCollection MessageDetailDivs
 		{
 			get { return Document.Divs.Filter(QuicklyFind.ByClass("bdd-asm-message-detail")); }
+		}
+
+		public Button ConfirmButton(int messagePositionInList)
+		{
+			return MessageDetailDivs[messagePositionInList - 1].Button(Find.BySelector(".bdd-asm-message-confirm-button"));
 		}
 
 		public Div MessageDetailSection
@@ -40,7 +45,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		public Button OkButton { get; set; }
 
-		[FindBy(Id = "AsmMessage-detail-replyOption")]
-		public Div ReplyOptions { get; set; }
+		public Div ReplyOptionsDiv(int messagePositionInList)
+		{
+			return MessageDetailDivs[messagePositionInList - 1].Div(Find.BySelector(".bdd-reply-options-div"));
+		}
 	}
 }
