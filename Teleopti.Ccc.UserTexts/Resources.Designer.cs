@@ -18237,6 +18237,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Resolution (minutes).
+        /// </summary>
+        public static string ResolutionMin {
+            get {
+                return ResourceManager.GetString("ResolutionMin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Resolve business rule conflicts.
         /// </summary>
         public static string ResolveBusinessRulesConflict {

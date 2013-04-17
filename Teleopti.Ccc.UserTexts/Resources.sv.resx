@@ -10940,4 +10940,8 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   <data name="ViewAllGroupPages" xml:space="preserve">
     <value>Visa alla grupperingar</value>
   </data>
+  <data name="ResolutionMin" xml:space="preserve">
+    <value>Upplösning (minuter)</value>
+    <comment>select resolution in Meettíng Overview</comment>
+  </data>
 </root>

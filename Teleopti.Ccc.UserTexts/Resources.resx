@@ -11406,4 +11406,8 @@ Reduce the complexity to use these shifts.</value>
   <data name="InvalidEndDate" xml:space="preserve">
     <value>Invalid end date</value>
   </data>
+  <data name="ResolutionMin" xml:space="preserve">
+    <value>Resolution (minutes)</value>
+    <comment>select resolution in Meettíng Overview</comment>
+  </data>
 </root>
