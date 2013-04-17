@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
         private readonly IDividedActivityData _dividedActivityData;
 
         private IDictionary<ISkill, int> _skillIndexRegister;
-        private IDictionary<IPerson, int> _personIndexRegister;
+        private IDictionary<string, int> _personIndexRegister;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FurnessDataConverter"/> class.
@@ -72,9 +72,9 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
         /// </summary>
         private void CreatePersonIndexRegister()
         {
-            _personIndexRegister = new Dictionary<IPerson, int>();
+            _personIndexRegister = new Dictionary<string, int>();
             int currentIndex = 0;
-            foreach (IPerson key in _dividedActivityData.PersonResources.Keys)
+            foreach (var key in _dividedActivityData.PersonResources.Keys)
             {
                 _personIndexRegister.Add(key, currentIndex);
                 currentIndex++;
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
         /// </summary>
         private void ConvertAbsolutPersonResources()
         {
-            foreach (IPerson key in _dividedActivityData.PersonResources.Keys)
+            foreach (var key in _dividedActivityData.PersonResources.Keys)
             {
                 _furnessData.ProducerResources()[_personIndexRegister[key]] = _dividedActivityData.PersonResources[key];
 
@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 
         private void convertMatrixData()
         {
-            foreach (IPerson personKey in _dividedActivityData.PersonResources.Keys)
+            foreach (var personKey in _dividedActivityData.PersonResources.Keys)
             {
                 int producerIndex = _personIndexRegister[personKey];
                 foreach (ISkill skillKey in _dividedActivityData.TargetDemands.Keys)
@@ -128,7 +128,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
         /// </summary>
         private void convertPersonSkillResourceMatrixBack()
         {
-            foreach (IPerson personKey in _personIndexRegister.Keys)
+            foreach (var personKey in _personIndexRegister.Keys)
             {
                 int producerIndex = _personIndexRegister[personKey];
                 foreach (ISkill skillKey in _skillIndexRegister.Keys)

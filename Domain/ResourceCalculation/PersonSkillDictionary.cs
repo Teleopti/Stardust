@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     /// of double as value with a key of Skill.
     /// </summary>
     [Serializable]
-    public class PersonSkillDictionary : Dictionary<IPerson, Dictionary<ISkill, double>>
+	public class PersonSkillDictionary : Dictionary<string, Dictionary<ISkill, double>>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="PersonSkillDictionary"/> class.
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         /// Created by: micke
         /// Created date: 2008-03-06
         /// </remarks>
-        public SkillCollectionKey SkillCombination(IPerson person)
+		public SkillCollectionKey SkillCombination(string person)
         {
             Dictionary<ISkill, double> personSkills = this[person];
             List<ISkill> skillList = new List<ISkill>(personSkills.Keys);
@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         public ICollection<SkillCollectionKey> UniqueSkillCombinations()
         {
             ICollection<SkillCollectionKey> result = new HashSet<SkillCollectionKey>();
-            foreach (IPerson person in Keys)
+            foreach (var person in Keys)
             {
                 SkillCollectionKey skillCollectionKey = SkillCombination(person);
                 result.Add(skillCollectionKey);

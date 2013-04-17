@@ -13,15 +13,13 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 	public class SingleSkillCalculatorTest
 	{
 		private ISingleSkillCalculator _target;
-		private IList<IVisualLayerCollection> _toRemove;
-		private IList<IVisualLayerCollection> _toAdd;
+		private IResourceCalculationDataContainer _emptyContainer;
 
 		[SetUp]
 		public void Setup()
 		{
 			_target = new SingleSkillCalculator();
-			_toAdd = new List<IVisualLayerCollection>();
-			_toRemove = new List<IVisualLayerCollection>();
+			_emptyContainer = new ResourceCalculationDataContainer(new PersonSkillProvider());
 		}
 
 		[Test]
@@ -35,7 +33,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			IPerson person1 = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(), new List<ISkill> { rightSkill });
 			IVisualLayerCollection collection1 = VisualLayerCollectionFactory.CreateForWorkShift(person1, TimeSpan.FromHours(8),
 			                                                                                     TimeSpan.FromHours(9), rightSkill.Activity);
-			IList<IVisualLayerCollection> list = new List<IVisualLayerCollection>{collection1};
 			ISkillSkillStaffPeriodExtendedDictionary relevantSkillStaffPeriods = new SkillSkillStaffPeriodExtendedDictionary();
 
 			DateTime dateTime = new DateTime(1800, 1, 1, 8, 0, 0, DateTimeKind.Utc);
@@ -44,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			skillStaffPeriodDictionary.Add(skillStaffPeriod.Period, skillStaffPeriod);
 			relevantSkillStaffPeriods.Add(rightSkill, skillStaffPeriodDictionary);
 			
-			_target.Calculate(list, relevantSkillStaffPeriods, _toRemove, _toAdd);
+			_target.Calculate(collection1.ToResourceContainer(new DateOnly(dateTime), 15), relevantSkillStaffPeriods, _emptyContainer, _emptyContainer);
 
 			Assert.AreEqual(1, skillStaffPeriod.CalculatedResource);
 			Assert.AreEqual(1, skillStaffPeriod.CalculatedLoggedOn);
@@ -61,7 +58,6 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			IPerson person1 = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(), new List<ISkill> { rightSkill });
 			IVisualLayerCollection collection1 = VisualLayerCollectionFactory.CreateForWorkShift(person1, TimeSpan.FromHours(8),
 																								 TimeSpan.FromHours(9), rightSkill.Activity);
-			IList<IVisualLayerCollection> list = new List<IVisualLayerCollection> { collection1 };
 			ISkillSkillStaffPeriodExtendedDictionary relevantSkillStaffPeriods = new SkillSkillStaffPeriodExtendedDictionary();
 
 			DateTime dateTime = new DateTime(1800, 1, 1, 8, 0, 0, DateTimeKind.Utc);
@@ -70,13 +66,12 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			skillStaffPeriodDictionary.Add(skillStaffPeriod.Period, skillStaffPeriod);
 			relevantSkillStaffPeriods.Add(rightSkill, skillStaffPeriodDictionary);
 
-			_target.Calculate(new List<IVisualLayerCollection>(), relevantSkillStaffPeriods, _toRemove, list);
+			_target.Calculate(_emptyContainer, relevantSkillStaffPeriods, _emptyContainer, collection1.ToResourceContainer(new DateOnly(dateTime), 15));
 
 			Assert.AreEqual(1, skillStaffPeriod.CalculatedResource);
 			Assert.AreEqual(1, skillStaffPeriod.CalculatedLoggedOn);
 
-			_toRemove.Add(collection1);
-			_target.Calculate(new List<IVisualLayerCollection>(), relevantSkillStaffPeriods, list, _toAdd);
+			_target.Calculate(_emptyContainer, relevantSkillStaffPeriods, collection1.ToResourceContainer(new DateOnly(dateTime), 15), _emptyContainer);
 
 			Assert.AreEqual(0, skillStaffPeriod.CalculatedResource);
 			Assert.AreEqual(0, skillStaffPeriod.CalculatedLoggedOn);
@@ -93,16 +88,18 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			IPerson person1 = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(), new List<ISkill> { rightSkill });
 			IVisualLayerCollection collection1 = VisualLayerCollectionFactory.CreateForWorkShift(person1, TimeSpan.FromHours(8),
 																								 TimeSpan.FromHours(9), rightSkill.Activity);
-			IList<IVisualLayerCollection> list = new List<IVisualLayerCollection> { collection1, collection1 };
 			ISkillSkillStaffPeriodExtendedDictionary relevantSkillStaffPeriods = new SkillSkillStaffPeriodExtendedDictionary();
 
 			DateTime dateTime = new DateTime(1800, 1, 1, 8, 0, 0, DateTimeKind.Utc);
+			var list = collection1.ToResourceContainer(new DateOnly(dateTime), 15);
+			collection1.AppendToResourceContainer(list,new DateOnly(dateTime), 15);
+
 			ISkillStaffPeriod skillStaffPeriod = SkillStaffPeriodFactory.CreateSkillStaffPeriod(rightSkill, dateTime, 60, 0, 0);
 			ISkillStaffPeriodDictionary skillStaffPeriodDictionary = new SkillStaffPeriodDictionary(rightSkill);
 			skillStaffPeriodDictionary.Add(skillStaffPeriod.Period, skillStaffPeriod);
 			relevantSkillStaffPeriods.Add(rightSkill, skillStaffPeriodDictionary);
 
-			_target.Calculate(list, relevantSkillStaffPeriods, _toRemove, _toAdd);
+			_target.Calculate(list, relevantSkillStaffPeriods, _emptyContainer, _emptyContainer);
 
 			Assert.AreEqual(2, skillStaffPeriod.CalculatedResource);
 			Assert.AreEqual(2, skillStaffPeriod.CalculatedLoggedOn);
@@ -119,22 +116,22 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			IPerson person1 = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(), new List<ISkill> { rightSkill });
 			IVisualLayerCollection collection1 = VisualLayerCollectionFactory.CreateForWorkShift(person1, TimeSpan.FromHours(8),
 																								 TimeSpan.FromHours(9), rightSkill.Activity);
-			IList<IVisualLayerCollection> list = new List<IVisualLayerCollection> { collection1 };
 			ISkillSkillStaffPeriodExtendedDictionary relevantSkillStaffPeriods = new SkillSkillStaffPeriodExtendedDictionary();
 
 			DateTime dateTime = new DateTime(1800, 1, 1, 8, 0, 0, DateTimeKind.Utc);
+			var list = collection1.ToResourceContainer(new DateOnly(dateTime), 15);
 			ISkillStaffPeriod skillStaffPeriod = SkillStaffPeriodFactory.CreateSkillStaffPeriod(rightSkill, dateTime, 60, 0, 0);
 			ISkillStaffPeriodDictionary skillStaffPeriodDictionary = new SkillStaffPeriodDictionary(rightSkill);
 			skillStaffPeriodDictionary.Add(skillStaffPeriod.Period, skillStaffPeriod);
 			relevantSkillStaffPeriods.Add(rightSkill, skillStaffPeriodDictionary);
 
-			_target.Calculate(list, relevantSkillStaffPeriods, _toRemove, _toAdd);
+			_target.Calculate(list, relevantSkillStaffPeriods, _emptyContainer, _emptyContainer);
 
 			Assert.AreEqual(1, skillStaffPeriod.CalculatedResource);
 			Assert.AreEqual(1, skillStaffPeriod.CalculatedLoggedOn);
 
 			list.Clear();
-			_target.Calculate(list, relevantSkillStaffPeriods, _toRemove, _toAdd);
+			_target.Calculate(list, relevantSkillStaffPeriods, _emptyContainer, _emptyContainer);
 
 			Assert.AreEqual(0, skillStaffPeriod.CalculatedResource);
 			Assert.AreEqual(0, skillStaffPeriod.CalculatedLoggedOn);
@@ -151,16 +148,16 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			IPerson person1 = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(), new List<ISkill> { rightSkill });
 			IVisualLayerCollection collection1 = VisualLayerCollectionFactory.CreateForWorkShift(person1, TimeSpan.FromHours(8),
 																								 TimeSpan.FromHours(9), new Activity("other"));
-			IList<IVisualLayerCollection> list = new List<IVisualLayerCollection> { collection1 };
 			ISkillSkillStaffPeriodExtendedDictionary relevantSkillStaffPeriods = new SkillSkillStaffPeriodExtendedDictionary();
 
 			DateTime dateTime = new DateTime(1800, 1, 1, 8, 0, 0, DateTimeKind.Utc);
+			var list = collection1.ToResourceContainer(new DateOnly(dateTime), 15);
 			ISkillStaffPeriod skillStaffPeriod = SkillStaffPeriodFactory.CreateSkillStaffPeriod(rightSkill, dateTime, 60, 0, 0);
 			ISkillStaffPeriodDictionary skillStaffPeriodDictionary = new SkillStaffPeriodDictionary(rightSkill);
 			skillStaffPeriodDictionary.Add(skillStaffPeriod.Period, skillStaffPeriod);
 			relevantSkillStaffPeriods.Add(rightSkill, skillStaffPeriodDictionary);
 
-			_target.Calculate(new List<IVisualLayerCollection>(), relevantSkillStaffPeriods, _toRemove, list);
+			_target.Calculate(_emptyContainer, relevantSkillStaffPeriods, _emptyContainer, list);
 
 			Assert.AreEqual(0, skillStaffPeriod.CalculatedResource);
 			Assert.AreEqual(0, skillStaffPeriod.CalculatedLoggedOn);
@@ -180,16 +177,16 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			IPerson person1 = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(), new List<ISkill> { rightSkill });
 			IVisualLayerCollection collection1 = VisualLayerCollectionFactory.CreateForWorkShift(person1, TimeSpan.FromHours(8),
 																								 TimeSpan.FromHours(9), rightSkill.Activity);
-			IList<IVisualLayerCollection> list = new List<IVisualLayerCollection> { collection1 };
 			ISkillSkillStaffPeriodExtendedDictionary relevantSkillStaffPeriods = new SkillSkillStaffPeriodExtendedDictionary();
 
 			DateTime dateTime = new DateTime(1800, 1, 1, 8, 0, 0, DateTimeKind.Utc);
+			var list = collection1.ToResourceContainer(new DateOnly(dateTime), 15);
 			ISkillStaffPeriod skillStaffPeriod = SkillStaffPeriodFactory.CreateSkillStaffPeriod(rightSkill, dateTime, 60, 0, 0);
 			ISkillStaffPeriodDictionary skillStaffPeriodDictionary = new SkillStaffPeriodDictionary(otherSkill);
 			skillStaffPeriodDictionary.Add(skillStaffPeriod.Period, skillStaffPeriod);
 			relevantSkillStaffPeriods.Add(otherSkill, skillStaffPeriodDictionary);
 
-			_target.Calculate(new List<IVisualLayerCollection>(), relevantSkillStaffPeriods, _toRemove, list);
+			_target.Calculate(_emptyContainer, relevantSkillStaffPeriods, _emptyContainer, list);
 
 			Assert.AreEqual(0, skillStaffPeriod.CalculatedResource);
 			Assert.AreEqual(0, skillStaffPeriod.CalculatedLoggedOn);
@@ -206,16 +203,16 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			IPerson person1 = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(), new List<ISkill> { rightSkill });
 			IVisualLayerCollection collection1 = VisualLayerCollectionFactory.CreateForWorkShift(person1, TimeSpan.FromHours(8).Add(TimeSpan.FromMinutes(15)),
 																								 TimeSpan.FromHours(9).Add(TimeSpan.FromMinutes(-15)), rightSkill.Activity);
-			IList<IVisualLayerCollection> list = new List<IVisualLayerCollection> { collection1 };
 			ISkillSkillStaffPeriodExtendedDictionary relevantSkillStaffPeriods = new SkillSkillStaffPeriodExtendedDictionary();
 
 			DateTime dateTime = new DateTime(1800, 1, 1, 8, 0, 0, DateTimeKind.Utc);
+			var list = collection1.ToResourceContainer(new DateOnly(dateTime), 15);
 			ISkillStaffPeriod skillStaffPeriod = SkillStaffPeriodFactory.CreateSkillStaffPeriod(rightSkill, dateTime, 60, 0, 0);
 			ISkillStaffPeriodDictionary skillStaffPeriodDictionary = new SkillStaffPeriodDictionary(rightSkill);
 			skillStaffPeriodDictionary.Add(skillStaffPeriod.Period, skillStaffPeriod);
 			relevantSkillStaffPeriods.Add(rightSkill, skillStaffPeriodDictionary);
 
-			_target.Calculate(new List<IVisualLayerCollection>(), relevantSkillStaffPeriods, _toRemove, list);
+			_target.Calculate(_emptyContainer, relevantSkillStaffPeriods, _emptyContainer, list);
 
 			Assert.AreEqual(0.5, skillStaffPeriod.CalculatedResource);
 			Assert.AreEqual(0.5, skillStaffPeriod.CalculatedLoggedOn);
@@ -232,16 +229,16 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			IPerson person1 = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(), new List<ISkill> { rightSkill });
 			IVisualLayerCollection collection1 = VisualLayerCollectionFactory.CreateForWorkShift(person1, TimeSpan.FromHours(8),
 																								 TimeSpan.FromHours(8).Add(TimeSpan.FromMinutes(15)), rightSkill.Activity);
-			IList<IVisualLayerCollection> list = new List<IVisualLayerCollection> { collection1 };
 			ISkillSkillStaffPeriodExtendedDictionary relevantSkillStaffPeriods = new SkillSkillStaffPeriodExtendedDictionary();
 
 			DateTime dateTime = new DateTime(1800, 1, 1, 8, 0, 0, DateTimeKind.Utc);
+			var list = collection1.ToResourceContainer(new DateOnly(dateTime), 15);
 			ISkillStaffPeriod skillStaffPeriod = SkillStaffPeriodFactory.CreateSkillStaffPeriod(rightSkill, dateTime, 30, 0, 0);
 			ISkillStaffPeriodDictionary skillStaffPeriodDictionary = new SkillStaffPeriodDictionary(rightSkill);
 			skillStaffPeriodDictionary.Add(skillStaffPeriod.Period, skillStaffPeriod);
 			relevantSkillStaffPeriods.Add(rightSkill, skillStaffPeriodDictionary);
 
-			_target.Calculate(new List<IVisualLayerCollection>(), relevantSkillStaffPeriods, _toRemove, list);
+			_target.Calculate(_emptyContainer, relevantSkillStaffPeriods, _emptyContainer, list);
 
 			Assert.AreEqual(0.5, skillStaffPeriod.CalculatedResource);
 			Assert.AreEqual(0.5, skillStaffPeriod.CalculatedLoggedOn);
@@ -258,16 +255,16 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			IPerson person1 = PersonFactory.CreatePersonWithPersonPeriod(new DateOnly(), new List<ISkill> { rightSkill });
 			IVisualLayerCollection collection1 = VisualLayerCollectionFactory.CreateForWorkShift(person1, TimeSpan.FromHours(8).Add(TimeSpan.FromMinutes(15)),
 																								 TimeSpan.FromHours(9), rightSkill.Activity);
-			IList<IVisualLayerCollection> list = new List<IVisualLayerCollection> { collection1 };
 			ISkillSkillStaffPeriodExtendedDictionary relevantSkillStaffPeriods = new SkillSkillStaffPeriodExtendedDictionary();
 
 			DateTime dateTime = new DateTime(1800, 1, 1, 8, 0, 0, DateTimeKind.Utc);
+			var list = collection1.ToResourceContainer(new DateOnly(dateTime), 15);
 			ISkillStaffPeriod skillStaffPeriod = SkillStaffPeriodFactory.CreateSkillStaffPeriod(rightSkill, dateTime, 30, 0, 0);
 			ISkillStaffPeriodDictionary skillStaffPeriodDictionary = new SkillStaffPeriodDictionary(rightSkill);
 			skillStaffPeriodDictionary.Add(skillStaffPeriod.Period, skillStaffPeriod);
 			relevantSkillStaffPeriods.Add(rightSkill, skillStaffPeriodDictionary);
 
-			_target.Calculate(new List<IVisualLayerCollection>(), relevantSkillStaffPeriods, _toRemove, list);
+			_target.Calculate(_emptyContainer, relevantSkillStaffPeriods, _emptyContainer, list);
 
 			Assert.AreEqual(0.5, skillStaffPeriod.CalculatedResource);
 			Assert.AreEqual(0.5, skillStaffPeriod.CalculatedLoggedOn);
@@ -285,25 +282,25 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			person1.Period(new DateOnly()).PersonSkillCollection[0].SkillPercentage = new Percent(0.5);
 			IVisualLayerCollection collection1 = VisualLayerCollectionFactory.CreateForWorkShift(person1, TimeSpan.FromHours(8),
 																								 TimeSpan.FromHours(9), rightSkill.Activity);
-			IList<IVisualLayerCollection> list = new List<IVisualLayerCollection> { collection1 };
 			ISkillSkillStaffPeriodExtendedDictionary relevantSkillStaffPeriods = new SkillSkillStaffPeriodExtendedDictionary();
 
 			DateTime dateTime = new DateTime(1800, 1, 1, 8, 0, 0, DateTimeKind.Utc);
+			var list = collection1.ToResourceContainer(new DateOnly(dateTime), 15);
 			ISkillStaffPeriod skillStaffPeriod = SkillStaffPeriodFactory.CreateSkillStaffPeriod(rightSkill, dateTime, 60, 0, 0);
 			ISkillStaffPeriodDictionary skillStaffPeriodDictionary = new SkillStaffPeriodDictionary(rightSkill);
 			skillStaffPeriodDictionary.Add(skillStaffPeriod.Period, skillStaffPeriod);
 			relevantSkillStaffPeriods.Add(rightSkill, skillStaffPeriodDictionary);
 
-			_target.Calculate(new List<IVisualLayerCollection>(), relevantSkillStaffPeriods, _toRemove, list);
+			_target.Calculate(_emptyContainer, relevantSkillStaffPeriods, _emptyContainer, list);
 
 			Assert.AreEqual(0.5, skillStaffPeriod.CalculatedResource);
 			Assert.AreEqual(1, skillStaffPeriod.CalculatedLoggedOn);
 
-			_target.Calculate(new List<IVisualLayerCollection>(), relevantSkillStaffPeriods, _toRemove, list);
+			_target.Calculate(_emptyContainer, relevantSkillStaffPeriods, _emptyContainer, list);
 			Assert.AreEqual(1, skillStaffPeriod.CalculatedResource);
 			Assert.AreEqual(2, skillStaffPeriod.CalculatedLoggedOn);
 
-			_target.Calculate(new List<IVisualLayerCollection>(), relevantSkillStaffPeriods, _toRemove, list);
+			_target.Calculate(_emptyContainer, relevantSkillStaffPeriods, _emptyContainer, list);
 			Assert.AreEqual(1.5, skillStaffPeriod.CalculatedResource);
 			Assert.AreEqual(3, skillStaffPeriod.CalculatedLoggedOn);
 		}
@@ -320,19 +317,46 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			person1.Period(new DateOnly()).PersonSkillCollection[0].Active = false;
 			IVisualLayerCollection collection1 = VisualLayerCollectionFactory.CreateForWorkShift(person1, TimeSpan.FromHours(8),
 																								 TimeSpan.FromHours(9), rightSkill.Activity);
-			IList<IVisualLayerCollection> list = new List<IVisualLayerCollection> { collection1 };
 			ISkillSkillStaffPeriodExtendedDictionary relevantSkillStaffPeriods = new SkillSkillStaffPeriodExtendedDictionary();
 
 			DateTime dateTime = new DateTime(1800, 1, 1, 8, 0, 0, DateTimeKind.Utc);
+			var list = collection1.ToResourceContainer(new DateOnly(dateTime), 15);
+			
 			ISkillStaffPeriod skillStaffPeriod = SkillStaffPeriodFactory.CreateSkillStaffPeriod(rightSkill, dateTime, 60, 0, 0);
 			ISkillStaffPeriodDictionary skillStaffPeriodDictionary = new SkillStaffPeriodDictionary(rightSkill);
 			skillStaffPeriodDictionary.Add(skillStaffPeriod.Period, skillStaffPeriod);
 			relevantSkillStaffPeriods.Add(rightSkill, skillStaffPeriodDictionary);
 
-			_target.Calculate(new List<IVisualLayerCollection>(), relevantSkillStaffPeriods, _toRemove, list);
+			_target.Calculate(_emptyContainer, relevantSkillStaffPeriods, _emptyContainer, list);
 
 			Assert.AreEqual(0, skillStaffPeriod.CalculatedResource);
 			Assert.AreEqual(0, skillStaffPeriod.CalculatedLoggedOn);
+		}
+	}
+
+	public static class VisualLayerCollectionTestExtensions
+	{
+		public static IResourceCalculationDataContainer ToResourceContainer(this IVisualLayerCollection visualLayerCollection, DateOnly day, int minutesPerInterval)
+		{
+			var resourceLayers = visualLayerCollection.ToResourceLayers(minutesPerInterval);
+			var result = new ResourceCalculationDataContainer(new PersonSkillProvider());
+
+			foreach (var resourceLayer in resourceLayers)
+			{
+				result.AddResources(resourceLayer.Period,resourceLayer.Activity,visualLayerCollection.Person,day,resourceLayer.Resource);
+			}
+			return result;
+		}
+
+		public static void AppendToResourceContainer(this IVisualLayerCollection visualLayerCollection,
+													 IResourceCalculationDataContainer container, DateOnly day, int minutesPerInterval)
+		{
+			var resourceLayers = visualLayerCollection.ToResourceLayers(minutesPerInterval);
+			
+			foreach (var resourceLayer in resourceLayers)
+			{
+				container.AddResources(resourceLayer.Period, resourceLayer.Activity, visualLayerCollection.Person, day, resourceLayer.Resource);
+			}
 		}
 	}
 }

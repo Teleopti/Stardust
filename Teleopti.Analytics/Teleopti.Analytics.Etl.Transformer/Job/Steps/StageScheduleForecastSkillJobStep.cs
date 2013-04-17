@@ -53,7 +53,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 						new ScheduleForecastSkillResourceCalculation(skillDaysDictionary, schedulingResultService,
 																	 schedulingResultStateHolder.SkillStaffPeriodHolder.
 																		 SkillStaffPeriodList(skills, visiblePeriod),
-																	 _jobParameters.IntervalsPerDay);
+																	 _jobParameters.IntervalsPerDay, period);
 
 					//Transform data from Raptor to Matrix format
 					var raptorTransformer = new ScheduleForecastSkillTransformer(_jobParameters.IntervalsPerDay,

@@ -13,6 +13,6 @@ namespace Teleopti.Interfaces.Domain
 		/// <param name="day">The day.</param>
 		/// <param name="relevantProjections">The relevant projections.</param>
 		/// <param name="relevantSkillStaffPeriods">The relevant skill staff periods.</param>
-		void Calculate(DateOnly day, IList<IVisualLayerCollection> relevantProjections, ISkillSkillStaffPeriodExtendedDictionary relevantSkillStaffPeriods);
+		void Calculate(DateOnly day, IResourceCalculationDataContainer relevantProjections, ISkillSkillStaffPeriodExtendedDictionary relevantSkillStaffPeriods);
 	}
 }

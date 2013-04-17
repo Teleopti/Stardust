@@ -50,10 +50,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             ((ScheduleRange)dic[pAbs.Person]).Add(pAbs);
 
             var retList = _target.CreateRelevantProjectionList(dic);
-            Assert.AreEqual(1, retList.Count);
+            Assert.IsTrue(retList.HasItems());
 
             retList = _target.CreateRelevantProjectionList(dic, period);
-            Assert.AreEqual(1, retList.Count);      
+            Assert.IsTrue(retList.HasItems());
 
         }
 

@@ -5,7 +5,6 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
@@ -55,31 +54,15 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 			using (PerformanceOutput.ForOperation("ResourceCalculate " + localDate.ToShortDateString()))
 			{
 				var extractor = new ScheduleProjectionExtractor();
-				IList<IVisualLayerCollection> relevantProjections = new List<IVisualLayerCollection>();
+				var relevantProjections = new ResourceCalculationDataContainer(new PersonSkillProvider());
 
 				var useSingleSkillCalculations = UseSingleSkillCalculations(toRemove, toAdd);
 
 				if (!useSingleSkillCalculations)
-					relevantProjections = extractor.CreateRelevantProjectionWithScheduleList(_stateHolder.Schedules,
+					relevantProjections = extractor.CreateRelevantProjectionList(_stateHolder.Schedules,
 																						 TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(localDate.AddDays(-1), localDate.AddDays(1)));
 
-				IList<IVisualLayerCollection> addedVisualLayerCollections = new List<IVisualLayerCollection>();
-				foreach (IScheduleDay addedSchedule in toAdd)
-				{
-					IVisualLayerCollection collection = addedSchedule.AssignmentHighZOrder().ProjectionService().CreateProjection();
-					addedVisualLayerCollections.Add(collection);
-				}
-
-				IList<IVisualLayerCollection> removedVisualLayerCollections = new List<IVisualLayerCollection>();
-				foreach (IScheduleDay removedSchedule in toRemove)
-				{
-				    var orderedPersonAssignment = removedSchedule.AssignmentHighZOrder();
-                    if (orderedPersonAssignment == null) continue;
-                    IVisualLayerCollection collection = orderedPersonAssignment.ProjectionService().CreateProjection();
-					removedVisualLayerCollections.Add(collection);
-				}
-
-				resourceCalculateDate(relevantProjections, localDate, useOccupancyAdjustment, calculateMaxSeatsAndNonBlend, considerShortBreaks, removedVisualLayerCollections, addedVisualLayerCollections);
+				resourceCalculateDate(relevantProjections, localDate, useOccupancyAdjustment, calculateMaxSeatsAndNonBlend, considerShortBreaks, toRemove, toAdd);
 			}
 
 		}
@@ -91,9 +74,9 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 			return TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(currentStart, currentEnd);
 		}
 
-		private void resourceCalculateDate(IList<IVisualLayerCollection> relevantProjections,
+		private void resourceCalculateDate(ResourceCalculationDataContainer relevantProjections,
 			DateOnly localDate, bool useOccupancyAdjustment, bool calculateMaxSeatsAndNonBlend, bool considerShortBreaks
-			, IList<IVisualLayerCollection> toRemove, IList<IVisualLayerCollection> toAdd)
+			, IList<IScheduleDay> toRemove, IList<IScheduleDay> toAdd)
 		{
 			var timePeriod = getPeriod(localDate);
 			var ordinarySkills = new List<ISkill>();
@@ -181,12 +164,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 			if (!timePeriod.HasValue)
 				return;
 
-			// just a workaround for now so we get as Person attached to the collection
-			var layers = layerCollection.ToList();
-			layerCollection = new VisualLayerCollection(person, layers, new ProjectionPayloadMerger());
-
 			var personPeriod = person.Period(dateOnly);
-			//var personPeriod = virtualSchedulePeriod.PersonPeriod;
 			var skills = new List<ISkill>();
 			foreach (var personSkill in personPeriod.PersonNonBlendSkillCollection)
 			{
@@ -196,7 +174,13 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 				CreateSkillSkillStaffDictionaryOnSkills(
 					_stateHolder.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary, skills, timePeriod.Value);
 
-			_nonBlendSkillCalculator.Calculate(dateOnly, new List<IVisualLayerCollection> { layerCollection }, relevantSkillStaffPeriods, true);
+			var container = new ResourceCalculationDataContainer(new PersonSkillProvider());
+			foreach (var resourceLayer in layerCollection.ToResourceLayers(_stateHolder.Skills.Min(s => s.DefaultResolution)))
+			{
+				container.AddResources(resourceLayer.Period, resourceLayer.Activity, person, dateOnly, resourceLayer.Resource);
+			}
+
+			_nonBlendSkillCalculator.Calculate(dateOnly, container, relevantSkillStaffPeriods, true);
 
 			skills.Clear();
 			foreach (var personSkill in personPeriod.PersonMaxSeatSkillCollection)
@@ -206,7 +190,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 			relevantSkillStaffPeriods =
 				CreateSkillSkillStaffDictionaryOnSkills(
 					_stateHolder.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary, skills, timePeriod.Value);
-			_occupiedSeatCalculator.Calculate(dateOnly, new List<IVisualLayerCollection> { layerCollection }, relevantSkillStaffPeriods);
+			_occupiedSeatCalculator.Calculate(dateOnly, container, relevantSkillStaffPeriods);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
