@@ -7681,7 +7681,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Export Code.
+        ///   Looks up a localized string similar to Payroll System Code.
         /// </summary>
         public static string ExportCode {
             get {
@@ -15771,7 +15771,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Payroll system code.
+        ///   Looks up a localized string similar to Payroll System Code.
         /// </summary>
         public static string PayrollCode {
             get {
@@ -15780,7 +15780,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Payroll Code:.
+        ///   Looks up a localized string similar to Payroll System Code:.
         /// </summary>
         public static string PayrollCodeColon {
             get {
