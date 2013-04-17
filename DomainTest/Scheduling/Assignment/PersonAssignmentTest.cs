@@ -40,14 +40,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			Assert.IsFalse(target.BelongsToScenario(null));
 		}
 
-        [Test]
-        public void VerifyBelongsToPeriod()
-        {
-            DateOnlyPeriod period =
-                PersonAssignment.UndefinedPeriod.ToDateOnlyPeriod(TimeZoneInfoFactory.UtcTimeZoneInfo());
-            Assert.IsTrue(target.BelongsToPeriod(period));
-        }
-
 		[Test]
 		public void PersonAssignmentWithoutLayersShouldHaveSpecificPeriod()
 		{

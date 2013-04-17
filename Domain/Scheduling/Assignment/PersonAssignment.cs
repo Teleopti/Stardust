@@ -255,16 +255,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public virtual bool BelongsToPeriod(IDateOnlyAsDateTimePeriod dateAndPeriod)
 		{
-			return dateAndPeriod.Period().Contains(Period.StartDateTime);
+			return dateAndPeriod.DateOnly == Date;
 		}
 
-        public virtual bool BelongsToPeriod(DateOnlyPeriod dateOnlyPeriod)
-        {
-            DateTimePeriod dateTimePeriod =
-               dateOnlyPeriod.ToDateTimePeriod(Person.PermissionInformation.DefaultTimeZone());
-
-            return dateTimePeriod.Contains(Period.StartDateTime);
-        }
+		public virtual bool BelongsToPeriod(DateOnlyPeriod dateOnlyPeriod)
+		{
+			return dateOnlyPeriod.Contains(Date);
+		}
 
 		public virtual IPersonAssignment NoneEntityClone()
 		{
