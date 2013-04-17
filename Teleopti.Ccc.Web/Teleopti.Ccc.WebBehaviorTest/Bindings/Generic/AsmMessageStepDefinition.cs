@@ -105,14 +105,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Then(@"I should not see any messages")]
 		public void ThenIShouldNotSeeAnyMessages()
 		{
-			EventualAssert.That(() => _page.MessageListItems.Count, Is.EqualTo(0));
+			EventualAssert.That(() => _page.MessageBodyDivs.Count, Is.EqualTo(0));
 			Browser.Current.Eval("Teleopti.MyTimeWeb.AsmMessage.SetMessageNotificationOnTab(0)");
 		}
 
 		[Then(@"I should see '(.*)' message\(s\) in the list")]
 		public void ThenIShouldSeeMessageSInTheList(int messageCount)
 		{
-			EventualAssert.That(() => _page.MessageListItems.Count, Is.EqualTo(messageCount));
+			EventualAssert.That(() => _page.MessageBodyDivs.Count, Is.EqualTo(messageCount));
 		}
 
 		[Given(@"message tab indicates '(.*)' new message\(s\)")]
@@ -145,15 +145,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Then(@"I should see the message with title '(.*)' at position '(.*)' in the list")]
 		public void ThenIShouldSeeTheMessageWithTitleAtPositionInTheList(string title, int listPosition)
 		{
-			EventualAssert.That(() => _page.MessageListItems[listPosition-1].InnerHtml.Contains(title), Is.True);
+			EventualAssert.That(() => _page.MessageBodyDivs[listPosition-1].InnerHtml.Contains(title), Is.True);
 		}
 
 		[Given(@"I click on the message at position '(.*)' in the list")]
 		[When(@"I click on the message at position '(.*)' in the list")]
 		public void GivenIClickOnTheMessageAtPositionInTheList(int position)
 		{
-			EventualAssert.That(() => _page.MessageListItems.Count, Is.EqualTo(1));
-			_page.MessageListItems[position-1].Click();
+			var messageBodyDiv = _page.MessageBodyDivs[position - 1].EventualGet();
+			messageBodyDiv.Click();
 		}
 		
 		[When(@"I click the confirm button")]
@@ -166,8 +166,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public void WhenIConfirmReadingTheMessageAtPositionInTheList(int listPosition, int messageCount)
 		{
 			var newMessageCount = messageCount - 1;
-			EventualAssert.That(() => _page.MessageListItems.Count, Is.EqualTo(messageCount));
-			_page.MessageListItems[listPosition - 1].Click();
+			EventualAssert.That(() => _page.MessageBodyDivs.Count, Is.EqualTo(messageCount));
+			_page.MessageBodyDivs[listPosition - 1].Click();
 			Pages.Pages.CurrentOkButton.OkButton.EventualClick();
 			Browser.Current.Eval("Teleopti.MyTimeWeb.AsmMessage.SetMessageNotificationOnTab(" + newMessageCount.ToString() + ");");
 		}
@@ -200,10 +200,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			}
 		}
 
-		[Then(@"the send button should be disabled")]
-		public void ThenTheSendButtonShouldBeDisabled()
+		[Then(@"the send button should be disabled on the message at position '(.*)' in the list")]
+		public void ThenTheSendButtonShouldBeDisabledOnTheMessageAtPositionInTheList(int position)
 		{
-			EventualAssert.That(() => Pages.Pages.CurrentOkButton.OkButton.Enabled, Is.False);
+			var messageDetailDiv = _page.MessageDetailDivs[position - 1].EventualGet();
+			EventualAssert.That(() => messageDetailDiv.Button(Find.BySelector(".bdd-asm-message-confirm-button")).Enabled, Is.False);
 		}
 
 		[Then(@"the send button should be enabled")]

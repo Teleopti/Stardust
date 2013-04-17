@@ -214,7 +214,7 @@ Given I have the role 'Full access to mytime'
 	| ReplyOption2			| No				|
 	And I am viewing messages
 	When I click on the message at position '1' in the list
-	Then the send button should be disabled
+	Then the send button should be disabled on the message at position '1' in the list
 
 Scenario: User can only select one replyoption
 Given I have the role 'Full access to mytime'

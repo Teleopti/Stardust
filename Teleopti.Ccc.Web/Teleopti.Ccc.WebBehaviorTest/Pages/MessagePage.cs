@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
 using WatiN.Core;
@@ -13,9 +11,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 			get { return Document.Div(QuicklyFind.ByClass("friendly-message")); }
 		}
 
-		public ListItemCollection MessageListItems
+		public DivCollection MessageBodyDivs
 		{
-			get { return Document.ListItems.Filter(QuicklyFind.ByClass("asmMessage-item")); }
+			get { return Document.Divs.Filter(QuicklyFind.ByClass("bdd-asm-message-body")); }
+		}
+
+		public DivCollection MessageDetailDivs
+		{
+			get { return Document.Divs.Filter(QuicklyFind.ByClass("bdd-asm-message-detail")); }
 		}
 
 		public Div MessageDetailSection
@@ -35,7 +38,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "AsmMessage-detail-dialogueMessages")]
 		public Div DialogueMessages { get; set; }
 
-		[FindBy(Id = "AsmMessage-detail-ok-button")]
 		public Button OkButton { get; set; }
 
 		[FindBy(Id = "AsmMessage-detail-replyOption")]

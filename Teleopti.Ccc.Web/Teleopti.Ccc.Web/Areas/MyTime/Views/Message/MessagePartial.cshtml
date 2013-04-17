@@ -12,25 +12,26 @@
     <div id="AsmMessages-list" data-bind="foreach: asmMessageColumnList">
         <div class="row" data-bind="foreach: Items">
             <div class="span6">
-                <div class="well well-small" data-bind="css: { 'asmMessage-selected': isSelected }, click: toggleSelected" style="cursor: pointer">
-                    <span class="displaynone" data-bind="text : messageId"></span>
-                    <div>
-                        <h3 data-bind="text : title">
-                        </h3>
-                    </div>
-                    <div>
+                <div class="well well-small" data-bind="css: { 'asmMessage-selected': isSelected }">
+                    <div class="bdd-asm-message-body" data-bind="click: toggleSelected" style="cursor: pointer">
+                        <span class="displaynone" data-bind="text: messageId"></span>
                         <div>
-                            <span>@Resources.Sender: </span>
-                            <span data-bind="text : sender"></span>
-                            <span>@Resources.Sent: </span>
-                            <span data-bind="text : date"></span>
+                            <h3 data-bind="text: title">
+                            </h3>
+                        </div>
+                        <div>
+                            <div>
+                                <span>@Resources.Sender: </span>
+                                <span data-bind="text: sender"></span>
+                                <span>@Resources.Sent: </span>
+                                <span data-bind="text: date"></span>
+                            </div>
+                        </div>
+                        <div data-bind="text: listMessage">
                         </div>
                     </div>
-                    <div data-bind="text : listMessage">
-                    </div>
                 
-                
-                    <div data-bind="visible: isSelected">
+                    <div class="bdd-asm-message-detail" data-bind="visible: isSelected">
                         <hr />
                         <div>
                             <label data-bind="text : sender"></label>
@@ -67,7 +68,7 @@
                             <!-- /ko -->
                         </div>
                         <div>
-                            <button class="btn btn-primary" data-bind="click : confirmReadMessage, enable : canConfirm">@Html.AttributeEncode(Resources.Ok)</button>
+                            <button class="btn btn-primary bdd-asm-message-confirm-button" data-bind="click : confirmReadMessage, enable : canConfirm">@Html.AttributeEncode(Resources.Ok)</button>
                         </div>
                         <div>
                             <span class="error" data-bind="text: errorMessage"></span>
