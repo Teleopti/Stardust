@@ -18,9 +18,9 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 		private readonly IGroupingReadOnlyRepository _groupingReadOnlyRepository;
 		private readonly IPersonRepository _personRepository;
 		private readonly IAssembler<IPerson, PersonDto> _personAssembler;
-		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 
-		public GetPeopleByGroupPageGroupQueryHandler(IGroupingReadOnlyRepository groupingReadOnlyRepository,IPersonRepository personRepository,IAssembler<IPerson,PersonDto> personAssembler, IUnitOfWorkFactory unitOfWorkFactory)
+		public GetPeopleByGroupPageGroupQueryHandler(IGroupingReadOnlyRepository groupingReadOnlyRepository,IPersonRepository personRepository,IAssembler<IPerson,PersonDto> personAssembler, ICurrentUnitOfWorkFactory unitOfWorkFactory)
 		{
 			_groupingReadOnlyRepository = groupingReadOnlyRepository;
 			_personRepository = personRepository;
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 				p => PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewSchedules,
 				                                                                  queryDate, p));
 
-			using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
+			using (_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
 				var people = _personRepository.FindPeople(availableDetails.Select(d => d.PersonId));
 				return _personAssembler.DomainEntitiesToDtos(people).ToList();

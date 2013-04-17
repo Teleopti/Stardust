@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 		private GetPeopleByGroupPageGroupQueryHandler target;
 		private IAssembler<IPerson, PersonDto> assembler;
 		private IPersonRepository personRepository;
-		private IUnitOfWorkFactory unitOfWorkFactory;
+		private ICurrentUnitOfWorkFactory unitOfWorkFactory;
 
 		[SetUp]
 		public void Setup()
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			groupingReadOnlyRepository = mocks.DynamicMock<IGroupingReadOnlyRepository>();
 			assembler = mocks.StrictMock<IAssembler<IPerson, PersonDto>>();
 			personRepository = mocks.StrictMock<IPersonRepository>();
-			unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
+			unitOfWorkFactory = mocks.DynamicMock<ICurrentUnitOfWorkFactory>();
 			target = new GetPeopleByGroupPageGroupQueryHandler(groupingReadOnlyRepository,personRepository,assembler,unitOfWorkFactory);
 		}
 

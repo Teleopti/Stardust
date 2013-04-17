@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				{
 				}
 
-				protected PersonalSettingDataRepository(ICurrentUnitOfWork currentUnitOfWork)
+				public PersonalSettingDataRepository(ICurrentUnitOfWork currentUnitOfWork)
 					: base(currentUnitOfWork)
 	    {
 	    }
