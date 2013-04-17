@@ -142,25 +142,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
         }
 
         
-        //private static bool isTeamBlockScheduled(ITeamBlockInfo teamBlockInfo,DateOnly dateOnly)
-        //{
-        //    IScheduleRange rangeForPerson = null;
-        //    foreach (var matrix in teamBlockInfo.TeamInfo.MatrixesForGroup())
-        //    {
-        //        rangeForPerson = matrix.SchedulingStateHolder.Schedules[matrix.Person];
-        //        break;
-        //    }
-        //    if (rangeForPerson == null) return false;
-        //    //foreach (var day in selectedPeriod.DayCollection())
-        //    //{
-        //        IScheduleDay scheduleDay = rangeForPerson.ScheduledDay(dateOnly);
-        //        if (!scheduleDay.IsScheduled())
-        //            return false;
-        //    //}
-            
-        //    return true;
-        //}
-
         public void OnDayScheduled(object sender, SchedulingServiceBaseEventArgs e)
 		{
 			EventHandler<SchedulingServiceBaseEventArgs> temp = DayScheduled;

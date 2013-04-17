@@ -117,26 +117,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		    OnDayScheduled(e);
 	    }
 
-        //private static bool isTeamBlockScheduled(ITeamBlockInfo teamBlockInfo, DateOnly dateOnly )
-        //{
-        //    IScheduleRange rangeForPerson = null;
-        //    foreach (var matrix in teamBlockInfo.TeamInfo.MatrixesForGroup())
-        //    {
-        //        rangeForPerson = matrix.SchedulingStateHolder.Schedules[matrix.Person];
-        //        break;
-        //    }
-        //    if (rangeForPerson == null) return false;
-
-        //        IScheduleDay scheduleDay = rangeForPerson.ScheduledDay(dateOnly);
-        //        if (!scheduleDay.IsScheduled())
-        //            return false;
-
-
-        //    return true;
-        //}
-
-      
-
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		protected virtual void OnDayScheduled(SchedulingServiceBaseEventArgs scheduleServiceBaseEventArgs)
 		{
