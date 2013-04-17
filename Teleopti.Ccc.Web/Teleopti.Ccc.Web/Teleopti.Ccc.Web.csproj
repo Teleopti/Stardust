@@ -206,7 +206,6 @@
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\UrlHelperProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\AllowanceProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\AllowanceRandomProvider.cs" />
-    <Compile Include="Areas\MyTime\Core\Common\DataProvider\AbsenceTimeRandomProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\IAbsenceTimeRandomProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\IAllowanceProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\IPreferenceTemplatePersister.cs" />

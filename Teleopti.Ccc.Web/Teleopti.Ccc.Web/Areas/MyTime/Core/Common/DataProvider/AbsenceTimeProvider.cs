@@ -10,13 +10,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 	public class AbsenceTimeProvider : IAbsenceTimeProvider
 	{
 		private readonly ILoggedOnUser _loggedOnUser;
-		private readonly IBudgetDayRepository _budgetDayRepository;
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IScheduleProjectionReadOnlyRepository _scheduleProjectionReadOnlyRepository;
 
-		public AbsenceTimeProvider(IBudgetDayRepository budgetDayRepository, ILoggedOnUser loggedOnUser, IScenarioRepository scenarioRepository, IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository)
+		public AbsenceTimeProvider(ILoggedOnUser loggedOnUser, IScenarioRepository scenarioRepository, IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository)
 		{
-			_budgetDayRepository = budgetDayRepository;
 			_loggedOnUser = loggedOnUser;
 			_scenarioRepository = scenarioRepository;
 			_scheduleProjectionReadOnlyRepository = scheduleProjectionReadOnlyRepository;
@@ -25,27 +23,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 		public IEnumerable<IAbsenceAgents> GetAbsenceTimeForPeriod(DateOnlyPeriod period)
 		{
 			var person = _loggedOnUser.CurrentUser();
-			var budgetGroup = person.PersonPeriodCollection.Last().BudgetGroup;
-			var defaultScenario = _scenarioRepository.LoadDefaultScenario();
-
-			var budgetDays = _budgetDayRepository.Find(defaultScenario, budgetGroup, period);
-			var list = new List<double>();
-
-			foreach (var budgetDay in budgetDays.OrderBy(x => x.Day))
+			
+			var personPeriod =
+				person.PersonPeriodCollection.OrderBy(p => p.StartDate).LastOrDefault(p => p.StartDate < period.StartDate);
+			if (personPeriod == null || personPeriod.BudgetGroup == null)
 			{
-				var currentDay = budgetDay.Day;
-				var x = _scheduleProjectionReadOnlyRepository.AbsenceTimePerBudgetGroup(new DateOnlyPeriod(currentDay, currentDay),
-				                                                                        budgetGroup, defaultScenario);
-				double usedAbsenceMinutes = 0;
-				if (x != null)
-				{
-					usedAbsenceMinutes = TimeSpan.FromTicks(
-						x.Sum(p => p.TotalContractTime)).TotalMinutes;
-				}
-				list.Add(usedAbsenceMinutes);
+				return period.DayCollection().Select(d => new AbsenceAgents() {Date = d, AbsenceTime = 0});
 			}
-
-			return period.DayCollection().Select(day => new AbsenceAgents() { Date = day, AbsenceTime = list.Sum()}).Cast<IAbsenceAgents>().ToList();
+			
+			var defaultScenario = _scenarioRepository.LoadDefaultScenario();
+			var absenceTime = _scheduleProjectionReadOnlyRepository.AbsenceTimePerBudgetGroup(period, personPeriod.BudgetGroup, defaultScenario);
+			return absenceTime.Select(day => new AbsenceAgents() { Date = day.BelongsToDate, AbsenceTime = day.TotalContractTime});
 		}
 	}
 }
