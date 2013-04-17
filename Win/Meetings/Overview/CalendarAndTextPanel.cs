@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
             InitializeComponent();
 			var cultureInfo = CultureInfo.CurrentUICulture;
 			monthCalendarAdv1.Culture = cultureInfo;
-			monthCalendarAdv1.FirstDayOfWeek = (Day)cultureInfo.DateTimeFormat.FirstDayOfWeek;
+			//monthCalendarAdv1.FirstDayOfWeek = (Day)cultureInfo.DateTimeFormat.FirstDayOfWeek;
 			monthCalendarAdv1.Iso8601CalenderFormat =
 				DateHelper.Iso8601Cultures.Contains(cultureInfo.LCID);
         }

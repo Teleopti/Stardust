@@ -1,7 +1,7 @@
 using System;
 using Teleopti.Interfaces.Messages;
 
-namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
+namespace Teleopti.Ccc.Domain.ApplicationLayer
 {
 	[Serializable]
 	public abstract class RaptorDomainEvent : Event, IRaptorDomainMessageInfo

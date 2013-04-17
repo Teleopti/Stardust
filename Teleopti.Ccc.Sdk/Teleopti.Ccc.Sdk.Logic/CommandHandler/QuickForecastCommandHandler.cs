@@ -15,10 +15,10 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 	public class QuickForecastCommandHandler : IHandleCommand<QuickForecastCommandDto>
     {
     	private readonly IServiceBusSender _busSender;
-		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IJobResultRepository _jobResultRepository;
 
-		public QuickForecastCommandHandler(IServiceBusSender busSender, IUnitOfWorkFactory unitOfWorkFactory, IJobResultRepository jobResultRepository)
+		public QuickForecastCommandHandler(IServiceBusSender busSender, ICurrentUnitOfWorkFactory unitOfWorkFactory, IJobResultRepository jobResultRepository)
 		{
 			_busSender = busSender;
 			_unitOfWorkFactory = unitOfWorkFactory;
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 				throw new FaultException("Command is null.");
 			Guid jobId;
 
-			using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+			using (var unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
 				//Save start of processing to job history
                 var period = new DateOnlyPeriod(new DateOnly(command.TargetPeriod.StartDate.DateTime),

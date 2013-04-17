@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 	{
 		private MockRepository _mocks;
 		private  IServiceBusSender _busSender;
-		private  IUnitOfWorkFactory _unitOfWorkFactory;
+		private  ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private  IJobResultRepository _jobResultRepository;
 		private QuickForecastCommandHandler _target;
 		private IUnitOfWork _unitOfWork;
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		{
 			_mocks = new MockRepository();
 			_busSender = _mocks.DynamicMock<IServiceBusSender>();
-			_unitOfWorkFactory = _mocks.DynamicMock<IUnitOfWorkFactory>();
+			_unitOfWorkFactory = _mocks.DynamicMock<ICurrentUnitOfWorkFactory>();
 			_jobResultRepository = _mocks.DynamicMock<IJobResultRepository>();
 			_target = new QuickForecastCommandHandler(_busSender, _unitOfWorkFactory, _jobResultRepository);
 			_unitOfWork = _mocks.DynamicMock<IUnitOfWork>();
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		[ExpectedException(typeof(FaultException))]
 		public void ShouldThrowFaultExceptionIfServiceBusIsNotAvailable()
 		{
-			Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
+			Expect.Call(_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork()).Return(_unitOfWork);
 			Expect.Call(() => _jobResultRepository.Add(null)).IgnoreArguments();
 			Expect.Call(() => _unitOfWork.PersistAll());
 			Expect.Call(_unitOfWork.Dispose);
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		[Test]
 		public void ShouldSendToServiceBus()
 		{
-			Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(_unitOfWork);
+			Expect.Call(_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork()).Return(_unitOfWork);
 			Expect.Call(() => _jobResultRepository.Add(null)).IgnoreArguments();
 			Expect.Call(() => _unitOfWork.PersistAll());
 			Expect.Call(_unitOfWork.Dispose);
