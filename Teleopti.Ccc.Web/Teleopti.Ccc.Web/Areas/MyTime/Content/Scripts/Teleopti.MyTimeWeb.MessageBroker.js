@@ -61,7 +61,7 @@ Teleopti.MyTimeWeb.MessageBroker = (function () {
 		ConvertMbDateTimeToJsDate: function (mbDateTime) {
 			var splitDatetime = mbDateTime.split('T');
 			var splitDate = splitDatetime[0].split('-');
-			return new Date(splitDate[0].substr(1), splitDate[1] - 1, splitDate[2]);
+			return new Date(splitDate[0].substr(1), splitDate[1] - 1, splitDate[2]).toDateString();
 		}
 	};
 })(jQuery)
