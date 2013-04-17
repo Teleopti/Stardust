@@ -411,8 +411,27 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void buttonAdvOkClick(object sender, EventArgs e)
 		{
 			var data = viewData();
-
+			var result = validateTimes(data);
 			var commandToExecute = _presenter.CommandToExecute(data, _dayCreator);
+			
+			if (commandToExecute == AgentPreferenceExecuteCommand.None)
+			{
+				if (result.ExtendedTimesError)
+				{
+					tabControlAgentInfo.SelectedIndex = 1;
+					return;
+				}
+
+				if (result.ActivityTimesError)
+				{
+					tabControlAgentInfo.SelectedIndex = 2;
+					return;
+				}
+
+				_isDirty = false;
+				Hide();
+				return;
+			}
 
 			if (commandToExecute == AgentPreferenceExecuteCommand.Remove)
 			{
@@ -422,8 +441,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 				Hide();
 				return;
 			}
-
-			if (!validateTimes(data)) return;
 
 			if (commandToExecute == AgentPreferenceExecuteCommand.Add)
 			{
@@ -452,7 +469,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			Hide();
 		}
 
-		private bool validateTimes(IAgentPreferenceData data)
+		private IAgentPreferenceCanCreateResult validateTimes(IAgentPreferenceData data)
 		{
 
 			clearTimeErrorMessagesActivity();
@@ -477,7 +494,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				if (result.EndTimeMaxErrorActivity) setTimeErrorMessageActivity(outlookTimePickerActivityEndMax, Resources.MustSpecifyValidTime);
 			}
 
-			return result.Result;
+			return result;
 		}
 
 		private void clearTimeErrorMessagesActivity()
@@ -502,24 +519,24 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private bool timesActivityError()
 		{
-			if (string.IsNullOrEmpty(errorProviderActivity.GetError(outlookTimePickerActivityLengthMin))) return true;
-			if (string.IsNullOrEmpty(errorProviderActivity.GetError(outlookTimePickerActivityLengthMax))) return true;
-			if (string.IsNullOrEmpty(errorProviderActivity.GetError(outlookTimePickerActivityStartMin))) return true;
-			if (string.IsNullOrEmpty(errorProviderActivity.GetError(outlookTimePickerActivityStartMax))) return true;
-			if (string.IsNullOrEmpty(errorProviderActivity.GetError(outlookTimePickerActivityEndMin))) return true;
-			if (string.IsNullOrEmpty(errorProviderActivity.GetError(outlookTimePickerActivityEndMax))) return true;
+			if (!string.IsNullOrEmpty(errorProviderActivity.GetError(outlookTimePickerActivityLengthMin))) return true;
+			if (!string.IsNullOrEmpty(errorProviderActivity.GetError(outlookTimePickerActivityLengthMax))) return true;
+			if (!string.IsNullOrEmpty(errorProviderActivity.GetError(outlookTimePickerActivityStartMin))) return true;
+			if (!string.IsNullOrEmpty(errorProviderActivity.GetError(outlookTimePickerActivityStartMax))) return true;
+			if (!string.IsNullOrEmpty(errorProviderActivity.GetError(outlookTimePickerActivityEndMin))) return true;
+			if (!string.IsNullOrEmpty(errorProviderActivity.GetError(outlookTimePickerActivityEndMax))) return true;
 
 			return false;
 		}
 
 		private bool timesExtendedError()
 		{
-			if (string.IsNullOrEmpty(errorProviderExtended.GetError(outlookTimePickerContractShiftCategoryMin))) return true;
-			if (string.IsNullOrEmpty(errorProviderExtended.GetError(outlookTimePickerContractShiftCategoryMax))) return true;
-			if (string.IsNullOrEmpty(errorProviderExtended.GetError(outlookTimePickerShiftCategoryStartMin))) return true;
-			if (string.IsNullOrEmpty(errorProviderExtended.GetError(outlookTimePickerShiftCategoryStartMax))) return true;
-			if (string.IsNullOrEmpty(errorProviderExtended.GetError(outlookTimePickerShiftCategoryEndMin))) return true;
-			if (string.IsNullOrEmpty(errorProviderExtended.GetError(outlookTimePickerShiftCategoryEndMax))) return true;
+			if (!string.IsNullOrEmpty(errorProviderExtended.GetError(outlookTimePickerContractShiftCategoryMin))) return true;
+			if (!string.IsNullOrEmpty(errorProviderExtended.GetError(outlookTimePickerContractShiftCategoryMax))) return true;
+			if (!string.IsNullOrEmpty(errorProviderExtended.GetError(outlookTimePickerShiftCategoryStartMin))) return true;
+			if (!string.IsNullOrEmpty(errorProviderExtended.GetError(outlookTimePickerShiftCategoryStartMax))) return true;
+			if (!string.IsNullOrEmpty(errorProviderExtended.GetError(outlookTimePickerShiftCategoryEndMin))) return true;
+			if (!string.IsNullOrEmpty(errorProviderExtended.GetError(outlookTimePickerShiftCategoryEndMax))) return true;
 
 			return false;
 		}

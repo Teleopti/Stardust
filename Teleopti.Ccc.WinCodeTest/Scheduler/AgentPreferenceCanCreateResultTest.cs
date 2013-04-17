@@ -55,5 +55,31 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			Assert.IsTrue(_result.ConflictingTypeError);
 			Assert.IsTrue(_result.Result);
 		}
+
+		[Test]
+		public void ShouldReturnActivityTimesErrorIfAny()
+		{
+			_result.StartTimeMinErrorActivity = false;
+			_result.StartTimeMaxErrorActivity = false;
+			_result.EndTimeMinErrorActivity = true;
+			_result.EndTimeMaxErrorActivity = false;
+			_result.LengthMinErrorActivity = false;
+			_result.LengthMaxErrorActivity = true;
+
+			Assert.IsTrue(_result.ActivityTimesError);	
+		}
+
+		[Test]
+		public void ShouldReturnExtendedTimesErrorIfAny()
+		{
+			_result.StartTimeMinError = false;
+			_result.StartTimeMaxError = false;
+			_result.EndTimeMinError = true;
+			_result.EndTimeMaxError = false;
+			_result.LengthMinError = false;
+			_result.LengthMaxError = true;
+
+			Assert.IsTrue(_result.ExtendedTimesError);
+		}
 	}
 }

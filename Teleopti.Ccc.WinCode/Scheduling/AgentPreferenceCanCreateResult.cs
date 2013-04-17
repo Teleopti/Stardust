@@ -19,9 +19,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		bool LengthMaxErrorActivity { get; set; }
 
 		bool EmptyError { get; set; }
-
+	
 		bool ConflictingTypeError { get; set; }
 		bool Result { get; set; }
+		bool ActivityTimesError { get; }
+		bool ExtendedTimesError { get; }
 	}
 	public class AgentPreferenceCanCreateResult : IAgentPreferenceCanCreateResult
 	{
@@ -132,6 +134,21 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		{
 			get { return _result; }
 			set { _result = value; }
+		}
+
+		public bool ActivityTimesError
+		{
+			get
+			{
+				return _startTimeMinErrorActivity || _startTimeMaxErrorActivity || _endTimeMinErrorActivity || _endTimeMaxErrorActivity || _lengthMinErrorActivity || _lengthMaxErrorActivity;		
+			}
+		}
+		public bool ExtendedTimesError
+		{
+			get
+			{
+				return _startTimeMinError || _startTimeMaxError || _endTimeMinError || _endTimeMaxError || _lengthMinError || _lengthMaxError;			
+			}
 		}
 	}
 }

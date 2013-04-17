@@ -128,5 +128,26 @@ namespace Teleopti.Ccc.Win.Scheduling
 			errorProvider1.SetIconPadding(timeControl, 2);
 			errorProvider1.SetError(timeControl, value);
 		}
+
+		private void outlookTimePickerFromTextChanged(object sender, EventArgs e)
+		{
+			if (!string.IsNullOrEmpty(errorProvider1.GetError(outlookTimePickerFrom)) ||
+			    !string.IsNullOrEmpty(errorProvider1.GetError(outlookTimePickerTo)))
+			{
+				clearTimeErrorMessages();
+				validateTimes();
+			}
+				
+		}
+
+		private void outlookTimePickerToTextChanged(object sender, EventArgs e)
+		{
+			if (!string.IsNullOrEmpty(errorProvider1.GetError(outlookTimePickerFrom)) ||
+			    !string.IsNullOrEmpty(errorProvider1.GetError(outlookTimePickerTo)))
+			{
+				clearTimeErrorMessages();
+				validateTimes();
+			}
+		}
 	}
 }

@@ -98,6 +98,7 @@
 			this.outlookTimePickerTo.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.outlookTimePickerTo.TabIndex = 2;
 			this.outlookTimePickerTo.Text = "00:00";
+			this.outlookTimePickerTo.TextChanged += new System.EventHandler(this.outlookTimePickerToTextChanged);
 			// 
 			// labelTo
 			// 
@@ -122,6 +123,7 @@
 			this.outlookTimePickerFrom.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
 			this.outlookTimePickerFrom.TabIndex = 1;
 			this.outlookTimePickerFrom.Text = "00:00";
+			this.outlookTimePickerFrom.TextChanged += new System.EventHandler(this.outlookTimePickerFromTextChanged);
 			// 
 			// labelFrom
 			// 
