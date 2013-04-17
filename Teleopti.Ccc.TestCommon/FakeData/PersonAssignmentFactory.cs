@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.TestCommon.FakeData
@@ -64,7 +63,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
                                                                                     IShiftCategory category,
                                                                                     IScenario scenario)
         {
-            IPersonAssignment ass = new PersonAssignment(agent, scenario, new DateOnly(period.StartDateTime));
+            IPersonAssignment ass = new PersonAssignment(agent, scenario, new DateOnly(period.LocalStartDateTime));
             ass.AddPersonalShift(PersonalShiftFactory.CreatePersonalShift(activity, period));
             ass.SetMainShift(MainShiftFactory.CreateMainShift(activity, period, category));
             return ass;
@@ -85,7 +84,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
                                                                     IShiftCategory category,
                                                                     IScenario scenario)
         {
-            PersonAssignment ass = new PersonAssignment(agent, scenario, new DateOnly(period.StartDateTime));
+            PersonAssignment ass = new PersonAssignment(agent, scenario, new DateOnly(period.LocalStartDateTime));
             ass.SetMainShift(MainShiftFactory.CreateMainShift(activity, period, category));
             return ass;
         }
@@ -122,7 +121,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
                                                                         DateTimePeriod period,
                                                                         IScenario scenario)
         {
-					IPersonAssignment ass = new PersonAssignment(person, scenario, new DateOnly(period.StartDateTime));
+					IPersonAssignment ass = new PersonAssignment(person, scenario, new DateOnly(period.LocalStartDateTime));
             ass.AddPersonalShift(PersonalShiftFactory.CreatePersonalShift(activity, period));
             return ass;
         }
@@ -138,7 +137,7 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 																		DateTimePeriod period,
 																		IScenario scenario)
 		{
-			IPersonAssignment ass = new PersonAssignment(person, scenario, new DateOnly(period.StartDateTime));
+			IPersonAssignment ass = new PersonAssignment(person, scenario, new DateOnly(period.LocalStartDateTime));
 			IMultiplicatorDefinitionSet multiplicatorDefinitionSet =
 				MultiplicatorDefinitionSetFactory.CreateMultiplicatorDefinitionSet("a", MultiplicatorType.Overtime);
 			ass.AddOvertimeShift(OvertimeShiftFactory.CreateOvertimeShift(activity, period, multiplicatorDefinitionSet, ass));
