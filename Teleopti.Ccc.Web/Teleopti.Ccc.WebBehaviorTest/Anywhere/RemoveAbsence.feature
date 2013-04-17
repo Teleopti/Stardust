@@ -75,9 +75,13 @@ Scenario: Remove absence with confirmation
 	| Start time | 2013-03-10 00:00 |
 	| End time   | 2013-03-10 23:59 |
 	When I view person schedule for 'Pierre Baldi' on '2013-03-10'
-	And I click 'Remove' on absence named 'Vacation'
+	And I click 'Remove' on absence with
+	| Field      | Value            |
+	| Name       | Vacation			|
 	Then I should see 1 absences in the absence list
-	When I click 'Confirm removal' on absence named 'Vacation'
+	When I click 'Confirm removal' on absence with
+	| Field      | Value            |
+	| Name       | Vacation			|
 	Then I should see 0 absences in the absence list
 
 Scenario: Remove one of two absences
@@ -93,8 +97,12 @@ Scenario: Remove one of two absences
 	| Start time | 2013-03-10 15:00 |
 	| End time   | 2013-03-10 23:59 |
 	When I view person schedule for 'Pierre Baldi' on '2013-03-10'
-	And I click 'Remove' on absence named 'Illness'
-	And I click 'Confirm removal' on absence named 'Illness'
+	And I click 'Remove' on absence with
+	| Field      | Value            |
+	| Name       | Illness			|
+	And I click 'Confirm removal' on absence with
+	| Field      | Value            |
+	| Name       | Illness			|
 	Then I should see an absence in the absence list with
 	| Field      | Value            |
 	| Name       | Vacation         |

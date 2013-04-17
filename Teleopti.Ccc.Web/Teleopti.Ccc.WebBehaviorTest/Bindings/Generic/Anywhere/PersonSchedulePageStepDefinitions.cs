@@ -98,6 +98,23 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			EventualAssert.That(() => Browser.Current.Element(Find.BySelector(selector)).Exists, Is.True);
 		}
 
+		[Then(@"I should see (.*) absences in the absence list")]
+		public void ThenIShouldSeeAbsencesInTheAbsenceList(int numberOf)
+		{
+			EventualAssert.That(() => Browser.Current.Elements.Filter(Find.BySelector(".absence-list .absence")).Count, Is.EqualTo(numberOf));
+		}
+
+		[When(@"I click '(.*)' on absence with")]
+		public void WhenIClickOnAbsenceWith(string className, Table table)
+		{
+			var absenceListItemInfo = table.CreateInstance<AbsenceListItemInfo>();
+			
+			Browser.Current.Elements.Filter(
+				Find.BySelector(".absence-list .absence:contains('" + absenceListItemInfo.Name + "')")).Filter(
+				Find.BySelector(className)).First().EventualClick();
+		}
+
+
 		public class AbsenceListItemInfo
 		{
 			public string Name { get; set; }
