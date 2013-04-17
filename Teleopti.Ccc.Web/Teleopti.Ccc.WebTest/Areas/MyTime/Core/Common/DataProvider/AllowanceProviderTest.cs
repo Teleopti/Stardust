@@ -8,13 +8,12 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
-using Teleopti.Ccc.WinCodeTest.FakeData;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 {
 	[TestFixture]
-	public class AllowanceProviderTest : PeopleAdminTestBase
+	public class AllowanceProviderTest 
 	{
 		[Test]
 		public void ShouldGetAllowanceForPeriod()
@@ -28,9 +27,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			var period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today);
 			var timeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
 
-			CreateSkills();
-			
-			var personPeriod1 = PersonPeriodFactory.CreatePersonPeriodWithSkills(period.StartDate, Skill1);
+			var skill=SkillFactory.CreateSkill("skill");
+
+			var personPeriod1 = PersonPeriodFactory.CreatePersonPeriodWithSkills(period.StartDate, skill);
 
 			var budgetGroup = new BudgetGroup();
 			personPeriod1.BudgetGroup = budgetGroup;
