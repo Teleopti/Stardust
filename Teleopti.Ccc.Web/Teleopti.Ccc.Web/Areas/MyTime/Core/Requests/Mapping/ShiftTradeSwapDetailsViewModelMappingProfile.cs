@@ -50,11 +50,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			}
 			else if (fromTotalPeriod.HasValue)
 			{
-				totalPeriod = fromTotalPeriod.Value;
+				totalPeriod = getTotalPeriod(shiftTradeRequest.Period, fromTotalPeriod.Value, schedpartTo);
 			}
-			else if(toTotalPeriod.HasValue)
+			else if (toTotalPeriod.HasValue)
 			{
-				totalPeriod = toTotalPeriod.Value;					
+				totalPeriod = getTotalPeriod(shiftTradeRequest.Period, toTotalPeriod.Value, schedpartFrom);
 			}
 			else
 			{
@@ -62,6 +62,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 			}
 			return new DateTimePeriod(totalPeriod.StartDateTime.AddHours(-extraHourBeforeAndAfter), 
 			                          totalPeriod.EndDateTime.AddHours(extraHourBeforeAndAfter));
+		}
+
+		private static DateTimePeriod getTotalPeriod(DateTimePeriod defaultPeriod, DateTimePeriod period, IScheduleDay schedpart)
+		{
+			var totalPeriod = period;
+			var significantPart = schedpart.SignificantPart();
+			if (significantPart == SchedulePartView.DayOff || significantPart == SchedulePartView.ContractDayOff)
+			{
+				totalPeriod = defaultPeriod.MaximumPeriod(totalPeriod);
+			}
+			return totalPeriod;
 		}
 	}
 }
