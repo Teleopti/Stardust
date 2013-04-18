@@ -40,8 +40,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			_presenter = new AgentPreferencePresenter(_view, _scheduleDay, _schedulingResultStateHolder);
 			_person = _mock.StrictMock<IPerson>();
 			_dateOnly = new DateOnly(2013,1,1);
-			_preferenceRestriction = new PreferenceRestriction();
-			_preferenceRestriction.MustHave = true;
+			_preferenceRestriction = new PreferenceRestriction {MustHave = true};
 			_preferenceDay = new PreferenceDay(_person, _dateOnly, _preferenceRestriction);
 			_dayCreator = _mock.StrictMock<IAgentPreferenceDayCreator>();
 			_dateOnlyAsDateTimePeriod = _mock.StrictMock<IDateOnlyAsDateTimePeriod>();
@@ -99,7 +98,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			{
 				Expect.Call(_scheduleDay.PersistableScheduleDataCollection()).Return(new ReadOnlyCollection<IPersistableScheduleData>(new List<IPersistableScheduleData> { _preferenceDay }));
 				Expect.Call(() => _view.UpdateShiftCategory(shiftCategory));
-				//Expect.Call(() => _view.UpdateShiftCategoryExtended(shiftCategory));
 				Expect.Call(() => _view.ClearAbsence());
 				Expect.Call(() => _view.ClearDayOff());
 				Expect.Call(() => _view.UpdateTimesExtended(null, null, null, null, null, null));
