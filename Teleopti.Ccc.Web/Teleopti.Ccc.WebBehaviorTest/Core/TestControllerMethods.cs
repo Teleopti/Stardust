@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
+using Teleopti.Ccc.WebBehaviorTest.Core.BrowserInteractions.WatiNIE;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
@@ -81,16 +82,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			// doing this twice because IE fails to grab the cookie after the first one sometimes..
 			// probably depending on how quickly the next request takes place.
 			// making a second request seems to enforce the cookie somehow..
-			Retrying.Javascript("Teleopti.MyTimeWeb.Test.ExpireMyCookie('Cookie is expired!');");
+
+			Browser.Interactions.Eval("Teleopti.MyTimeWeb.Test.ExpireMyCookie('Cookie is expired!');");
 			EventualAssert.That(() => Browser.Current.Eval("Teleopti.MyTimeWeb.Test.PopTestMessages();"), Is.StringContaining("Cookie is expired!"));
 
-			Retrying.Javascript("Teleopti.MyTimeWeb.Test.ExpireMyCookie('Cookie is expired!');");
+			Browser.Interactions.Eval("Teleopti.MyTimeWeb.Test.ExpireMyCookie('Cookie is expired!');");
 			EventualAssert.That(() => Browser.Current.Eval("Teleopti.MyTimeWeb.Test.PopTestMessages();"), Is.StringContaining("Cookie is expired!"));
 		}
 
 		public static void TestMessage(string message)
 		{
-			Retrying.Javascript("Teleopti.MyTimeWeb.Test.TestMessage('" + message + "');");
+			Browser.Interactions.Eval("Teleopti.MyTimeWeb.Test.TestMessage('" + message + "');");
 			EventualAssert.That(() => Browser.Current.Eval("Teleopti.MyTimeWeb.Test.PopTestMessages();"), Is.StringContaining(message));
 		}
 

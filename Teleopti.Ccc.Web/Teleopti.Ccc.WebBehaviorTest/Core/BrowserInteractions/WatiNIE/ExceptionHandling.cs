@@ -2,19 +2,10 @@ using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security;
-using WatiN.Core;
 using WatiN.Core.Exceptions;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Core.Robustness
+namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserInteractions.WatiNIE
 {
-	public static class ExceptionHandlingElementActions
-	{
-		public static bool SafeExists(this Element element)
-		{
-			return ExceptionHandling.Action(() => element.Exists, e => false);
-		}
-	}
-
 	public static class ExceptionHandling
 	{
 
