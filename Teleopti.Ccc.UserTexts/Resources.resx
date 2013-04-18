@@ -11410,4 +11410,11 @@ Reduce the complexity to use these shifts.</value>
     <value>Resolution (minutes)</value>
     <comment>select resolution in Meettíng Overview</comment>
   </data>
+  <data name="SingleAgentTeam" xml:space="preserve">
+    <value>Single Agent Team</value>
+  </data>
+  <data name="SameShift" xml:space="preserve">
+    <value>Same Shift</value>
+    <comment>Use the same shift for levelling options</comment>
+  </data>
 </root>

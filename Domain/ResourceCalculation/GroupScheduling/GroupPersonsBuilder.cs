@@ -15,7 +15,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 		private readonly IGroupPersonFactory _groupPersonFactory;
 		private readonly IGroupPersonConsistentChecker _groupPersonConsistentChecker;
 		private readonly IWorkShiftFinderResultHolder _finderResultHolder;
-	    private readonly IGroupPagePerDateHolder _groupPagePerDateHolder;
+	    private IGroupPagePerDateHolder _groupPagePerDateHolder;
+
+	    public IGroupPagePerDateHolder GroupPagePerDateHolder
+	    {
+            get { return _groupPagePerDateHolder; }
+            set { _groupPagePerDateHolder = value; }
+        }
 
 		public GroupPersonsBuilder(ISchedulingResultStateHolder resultStateHolder, IGroupPersonFactory groupPersonFactory, IGroupPersonConsistentChecker groupPersonConsistentChecker, 
 				 IWorkShiftFinderResultHolder finderResultHolder, IGroupPagePerDateHolder groupPagePerDateHolder)

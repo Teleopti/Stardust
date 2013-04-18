@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 using Microsoft.Practices.Composite.Events;
+using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -35,6 +37,7 @@ namespace Teleopti.Ccc.Win.Optimization
         private readonly IList<IActivity> _availableActivity;
 
         private readonly int _resolution;
+        private IList<IGroupPageLight> _groupPagesForTeamBlockPer;
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public OptimizationPreferencesDialog(
@@ -46,6 +49,11 @@ namespace Teleopti.Ccc.Win.Optimization
             Preferences = preferences;
 			_groupPagesProvider = groupPagesProvider;
 			_groupPages = _groupPagesProvider.GetGroups(true);
+            _groupPagesForTeamBlockPer = _groupPages;
+            var singleAgentGroupPage = new GroupPageLight();
+            singleAgentGroupPage.Key = "SingleAgentTeam";
+            singleAgentGroupPage.Name = "Single Agent Team";
+            _groupPagesForTeamBlockPer.Add(singleAgentGroupPage);
         	_scheduleTags = scheduleTags;
             _availableActivity = availableActivity;
             _resolution = resolution;
@@ -63,7 +71,7 @@ namespace Teleopti.Ccc.Win.Optimization
 			LoadPersonalSettings();
             generalPreferencesPanel1.Initialize(Preferences.General, _scheduleTags, _eventAggregator);
             dayOffPreferencesPanel1.Initialize(Preferences.DaysOff);
-            extraPreferencesPanel1.Initialize(Preferences.Extra, _groupPagesProvider, _eventAggregator, _availableActivity);
+            extraPreferencesPanel1.Initialize(Preferences.Extra, _groupPagesProvider, _availableActivity);
             advancedPreferencesPanel1.Initialize(Preferences.Advanced);
             shiftsPreferencesPanel1.Initialize(Preferences.Shifts, _availableActivity, _resolution);
             panels = new List<IDataExchange>{generalPreferencesPanel1, dayOffPreferencesPanel1, extraPreferencesPanel1, shiftsPreferencesPanel1, advancedPreferencesPanel1};
@@ -110,7 +118,7 @@ namespace Teleopti.Ccc.Win.Optimization
             if (hasMissedloadingSettings()) return;
 			_defaultGeneralPreferences.MapTo(Preferences.General, _scheduleTags);
 			_defaultDaysOffPreferences.MapTo(Preferences.DaysOff);
-			_defaultExtraPreferences.MapTo(Preferences.Extra, _groupPages);
+			_defaultExtraPreferences.MapTo(Preferences.Extra, _groupPages,_groupPagesForTeamBlockPer);
 			_defaultAdvancedPreferences.MapTo(Preferences.Advanced);
             _defaultshiftsPreferences.MapTo(Preferences.Shifts, _availableActivity);
             

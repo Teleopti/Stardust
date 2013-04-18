@@ -339,5 +339,17 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         		() => _mainShiftOptimizeActivitySpecificationSetter.SetSpecification(null, null, null, DateOnly.MinValue)).
         		IgnoreArguments().Repeat.Any();
         }
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "MaxIs"), Test]
+        public void ShouldNotContinueIfRestrictionOverMaxIsGreaterThenZero()
+        {
+            using (_mocks.Record())
+            {
+                Expect.Call(_optimizationOverLimitDecider.OverLimit())
+                      .Return(new List<DateOnly>() {new DateOnly(), new DateOnly()});
+            }
+            Assert.IsFalse(_target.Execute());
+        }
+        
     }
 }

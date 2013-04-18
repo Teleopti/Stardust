@@ -205,7 +205,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             using (_mocks.Record())
             {
-                Expect.Call(_dataExtractorProvider.CreatePersonalSkillDataExtractor(_activeScheduleMatrix))
+				Expect.Call(_dataExtractorProvider.CreatePersonalSkillDataExtractor(_activeScheduleMatrix, _optimizationPreferences.Advanced))
                     .Return(_scheduleResultDataExtractor);
                 Expect.Call(_converter.Convert(false, false))
                     .Return(_originalArray);
@@ -303,7 +303,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                     .Return(_originalArray);
                 Expect.Call(_converter.Convert(false, false))
                     .Return(_workingBitArray);
-                Expect.Call(_dataExtractorProvider.CreatePersonalSkillDataExtractor(_activeScheduleMatrix))
+				Expect.Call(_dataExtractorProvider.CreatePersonalSkillDataExtractor(_activeScheduleMatrix, _optimizationPreferences.Advanced))
                     .Return(_scheduleResultDataExtractor);
                 Expect.Call(_scheduleResultDataExtractor.Values())
                     .Return(_dataExtractorValues);
@@ -366,7 +366,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 					.Return(_originalArray);
 			Expect.Call(_converter.Convert(false, false))
 				.Return(_workingBitArray);
-			Expect.Call(_dataExtractorProvider.CreatePersonalSkillDataExtractor(_activeScheduleMatrix))
+			Expect.Call(_dataExtractorProvider.CreatePersonalSkillDataExtractor(_activeScheduleMatrix, _optimizationPreferences.Advanced))
 					.Return(_scheduleResultDataExtractor);
 			Expect.Call(_scheduleResultDataExtractor.Values())
 					.Return(_dataExtractorValues);

@@ -48,7 +48,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		private readonly IGroupShiftLengthDecider _groupShiftLengthDecider;
 		private readonly IGroupShiftCategoryFairnessCreator _groupShiftCategoryFairnessCreator;
 
-	    public BestBlockShiftCategoryFinder(IWorkShiftWorkTime workShiftWorkTime,
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "ShiftWork")]
+        public BestBlockShiftCategoryFinder(IWorkShiftWorkTime workShiftWorkTime,
 		                                    IShiftProjectionCacheManager shiftProjectionCacheManager,
 		                                    ISchedulingResultStateHolder schedulingResultStateHolder,
 		                                    IEffectiveRestrictionCreator effectiveRestrictionCreator,

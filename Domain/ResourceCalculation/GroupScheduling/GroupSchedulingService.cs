@@ -31,6 +31,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
     	                                        ISchedulePartModifyAndRollbackService rollbackService);
 
         IList<IScheduleDay> DeleteMainShift(IList<IScheduleDay> schedulePartList, ISchedulingOptions schedulingOptions);
+        
     }
 
     public class GroupSchedulingService : IGroupSchedulingService
@@ -78,8 +79,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "6"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "5")]
-		public void Execute(DateOnlyPeriod selectedDays, IList<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions, 
-			IList<IPerson> selectedPersons, BackgroundWorker backgroundWorker, ITeamSteadyStateHolder teamSteadyStateHolder, ITeamSteadyStateMainShiftScheduler teamSteadyStateMainShiftScheduler, IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization)
+		public void Execute(DateOnlyPeriod selectedDays, IList<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions,
+            IList<IPerson> selectedPersons, BackgroundWorker backgroundWorker, ITeamSteadyStateHolder teamSteadyStateHolder, ITeamSteadyStateMainShiftScheduler teamSteadyStateMainShiftScheduler, IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization)
 		{
             if(matrixList == null) throw new ArgumentNullException("matrixList");
             if(backgroundWorker == null) throw new ArgumentNullException("backgroundWorker");
@@ -117,7 +118,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 			}
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
+       [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public bool ScheduleOneDay(DateOnly dateOnly, ISchedulingOptions schedulingOptions, IGroupPerson groupPerson, IList<IScheduleMatrixPro> matrixList)
         {
             if(matrixList == null) throw new ArgumentNullException("matrixList");
@@ -296,86 +297,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 			return true;	
 		}
 
-
-
-		//[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-		//public bool ScheduleOneDayOnOnePerson(DateOnly dateOnly, IPerson person, ISchedulingOptions schedulingOptions, IGroupPerson groupPerson, IList<IScheduleMatrixPro> matrixList)
-		//{
-		//    var scheduleDictionary = _resultStateHolder.Schedules;
-
-		//    if (groupPerson == null)
-		//        return false;
-		//    var members = groupPerson.GroupMembers;
-		//    var agentAverageFairness = scheduleDictionary.AverageFairnessPoints(members);
-		//    var best = groupPerson.CommonPossibleStartEndCategory;
-		//    if (best == null)
-		//    {
-		//        IBlockFinderResult result = new BlockFinderResult(null, new List<DateOnly> { dateOnly }, new Dictionary<string, IWorkShiftFinderResult>());
-		//        var matrix = matrixList.First(d => d.Person == person);
-		//        _workShiftMinMaxCalculator.ResetCache();
-		//        var minmax = _workShiftMinMaxCalculator.MinMaxAllowedShiftContractTime(dateOnly, matrix, schedulingOptions);
-		//        var bestCategoryResult = _bestBlockShiftCategoryFinder.BestShiftCategoryForDays(result, groupPerson, schedulingOptions, agentAverageFairness, minmax);
-		//        best = bestCategoryResult.BestPossible;
-
-		//        if (best == null && bestCategoryResult.FailureCause == FailureCause.NoValidPeriod)
-		//            _finderResultHolder.AddFilterToResult(groupPerson, dateOnly, UserTexts.Resources.ErrorMessageNotAValidSchedulePeriod);
-
-		//        if (best == null && bestCategoryResult.FailureCause == FailureCause.ConflictingRestrictions)
-		//            _finderResultHolder.AddFilterToResult(groupPerson, dateOnly, UserTexts.Resources.ConflictingRestrictions);
-		//    }
-
-
-		//    if (best == null)
-		//    {
-		//        return false;
-		//    }
-		//    var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(members, dateOnly, schedulingOptions, scheduleDictionary);
-
-		//    IScheduleDay scheduleDay = scheduleDictionary[person].ScheduledDay(dateOnly);
-
-		//    if (scheduleDay.IsScheduled())
-		//        return true;
-
-		//    bool locked = false;
-		//    foreach (var scheduleMatrixPro in matrixList)
-		//    {
-		//        if (scheduleMatrixPro.Person == scheduleDay.Person)
-		//        {
-		//            if (scheduleMatrixPro.SchedulePeriod.DateOnlyPeriod.Contains(dateOnly))
-		//            {
-		//                if (!scheduleMatrixPro.UnlockedDays.Contains(scheduleMatrixPro.GetScheduleDayByKey(dateOnly)))
-		//                {
-		//                    locked = true;
-		//                }
-		//            }
-		//        }
-		//    }
-		//    if (locked)
-		//    {
-		//        return true;
-		//    }
-
-		//    var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true,
-		//                                                                schedulingOptions.ConsiderShortBreaks);
-
-		//    bool sucess = _scheduleService.SchedulePersonOnDay(scheduleDay, schedulingOptions, effectiveRestriction,
-		//                                                       resourceCalculateDelayer, best, _rollbackService);
-		//    if (!sucess)
-		//    {
-		//        return false;
-
-		//    }
-		//    OnDayScheduled(new SchedulingServiceBaseEventArgs(scheduleDay));
-		//    if (_cancelMe)
-		//    {
-		//        _rollbackService.Rollback();
-		//        _resourceOptimizationHelper.ResourceCalculateDate(dateOnly, true, true);
-		//        return false;
-		//    }
-
-		//    return true;		
-		//}
-
+       
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
         public IList<IScheduleDay> DeleteMainShift(IList<IScheduleDay> schedulePartList, ISchedulingOptions schedulingOptions)
         {
