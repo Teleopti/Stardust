@@ -273,7 +273,8 @@ namespace Teleopti.Ccc.Domain.Forecasting
     	/// Created by: peterwe, zoet
     	/// Created date: 2008-02-20
     	/// </remarks>
-    	private void calculateTemplateDay(IWorkloadDayTemplate workloadDayTemplate, IEnumerable<IWorkloadDayBase> workloadDays, bool includeStatistics = false)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+		private void calculateTemplateDay(IWorkloadDayTemplate workloadDayTemplate, IEnumerable<IWorkloadDayBase> workloadDays, bool includeStatistics = false)
     	{
     		TimeZoneInfo raptorTimeZoneInfo = _workload.Skill.TimeZone;
             DateTime startDateTime = raptorTimeZoneInfo.SafeConvertTimeToUtc(SkillDayTemplate.BaseDate);

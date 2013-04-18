@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 using Teleopti.Ccc.Domain.SystemSetting;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.Domain.Optimization
+namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 {
 	[Serializable]
 	public class AdvancedPreferencesPersonalSettings : SettingValue
@@ -24,7 +24,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public void MapTo(IAdvancedPreferences target)
 		{
-			target.TargetValueCalculation = _targetValueCalculation;
+		    if (target == null) return;
+            target.TargetValueCalculation = _targetValueCalculation;
 			target.UseIntraIntervalDeviation = _useIntraIntervalDeviation;
 			target.UseTweakedValues = _useTweakedValues;
 
@@ -39,7 +40,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 		public void MapFrom(IAdvancedPreferences source)
 		{
-			_targetValueCalculation = source.TargetValueCalculation;
+		    if (source == null) return;
+            _targetValueCalculation = source.TargetValueCalculation;
 			_useIntraIntervalDeviation = source.UseIntraIntervalDeviation;
 			_useTweakedValues = source.UseTweakedValues;
 
