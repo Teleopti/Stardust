@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				return false;
 			if (!_personPeriod.PersonContract.PartTimePercentage.Equals(personPeriod.PersonContract.PartTimePercentage)) 
 				return false;
-			if (!_personPeriod.RuleSetBag.Equals(personPeriod.RuleSetBag)) 
+			if (_personPeriod.RuleSetBag == null || !_personPeriod.RuleSetBag.Equals(personPeriod.RuleSetBag)) 
 				return false;
 
 			return true;
