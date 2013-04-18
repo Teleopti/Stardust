@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
@@ -11,11 +12,11 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider;
 using Teleopti.Ccc.Web.Areas.Start.Core.LayoutBase;
+using Teleopti.Ccc.Web.Broker;
 using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
 using Teleopti.Ccc.Web.Core.RequestContext.Initialize;
 using Teleopti.Interfaces.Domain;
-using IDataSourceProvider = Teleopti.Ccc.Web.Core.RequestContext.IDataSourceProvider;
 
 namespace Teleopti.Ccc.Web.Core.IoC
 {
@@ -32,32 +33,24 @@ namespace Teleopti.Ccc.Web.Core.IoC
 		private static void registerReportTypes(ContainerBuilder builder)
 		{
 			builder.RegisterType<WebReportRepository>().As<IWebReportRepository>();
-			builder.RegisterType<DataSourceProvider>().As<IDataSourceProvider>();
-			builder.Register(c => c.Resolve<IDataSourceProvider>().CurrentDataSource())
-				.As<IDataSource>()
-				.ExternallyOwned();
 		}
 
 		private static void registerRequestContextTypes(ContainerBuilder builder)
 		{
 			builder.RegisterType<SessionPrincipalFactory>().As<ISessionPrincipalFactory>();
-			builder.RegisterType<IdentityProvider>().As<IIdentityProvider>();
 			builder.RegisterType<RequestContextInitializer>().As<IRequestContextInitializer>();
 			builder.RegisterType<SessionSpecificCookieDataProvider>().As<ISessionSpecificDataProvider>();
 			builder.RegisterType<DefaultSessionSpecificCookieDataProviderSettings>().As<ISessionSpecificCookieDataProviderSettings>();
 			builder.RegisterType<SetThreadCulture>().As<ISetThreadCulture>();
 			builder.RegisterType<PermissionProvider>().As<IPermissionProvider>();
 			builder.RegisterType<AbsenceTypesProvider>().As<IAbsenceTypesProvider>();
-			builder.RegisterType<CurrentBusinessUnitProvider>().As<ICurrentBusinessUnitProvider>();
+			builder.RegisterType<CurrentBusinessUnit>().As<ICurrentBusinessUnit>();
 			builder.RegisterType<PushMessageProvider>().As<IPushMessageProvider>();
 		}
 
 		private static void registerPortalTypes(ContainerBuilder builder)
 		{
-			builder.RegisterType<LayoutBaseViewModelFactory>().As<ILayoutBaseViewModelFactory>();
-			builder.RegisterType<PortalViewModelFactory>().As<IPortalViewModelFactory>();
 			builder.RegisterType<CultureSpecificViewModelFactory>().As<ICultureSpecificViewModelFactory>();
-			builder.RegisterType<DatePickerGlobalizationViewModelFactory>().As<IDatePickerGlobalizationViewModelFactory>();
 			builder.Register(c =>
 			                 	{
 			                 		if (DefinedLicenseDataFactory.LicenseActivator == null)
@@ -77,6 +70,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterType<VirtualSchedulePeriodProvider>().As<IVirtualSchedulePeriodProvider>();
 			builder.RegisterType<DefaultDateCalculator>().As<IDefaultDateCalculator>();
 			builder.RegisterType<UrlHelperProvider>().As<IUrlHelper>().SingleInstance();
+			builder.RegisterType<MessageBrokerHub>();
 		}
 	}
 }

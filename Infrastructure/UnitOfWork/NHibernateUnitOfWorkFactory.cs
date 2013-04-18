@@ -25,28 +25,17 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private readonly IAuditSetter _auditSettingProvider;
 		private bool disposed;
 
-		private readonly IEnumerable<IMessageSender> _activeDenormalizers = new List<IMessageSender>
-		                                                                   	{
-                                                                               //that should be remove (asad)
-		                                                                   	};
+		private readonly IEnumerable<IMessageSender> _messageSenders;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Denormalizers"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		protected internal NHibernateUnitOfWorkFactory(ISessionFactory sessionFactory, IAuditSetter auditSettingProvider, IEnumerable<IMessageSender> externalDenormalizers)
+		protected internal NHibernateUnitOfWorkFactory(ISessionFactory sessionFactory, IAuditSetter auditSettingProvider, IEnumerable<IMessageSender> messageSenders)
 		{
 			SessionContextBinder = new StaticSessionContextBinder();
 			InParameter.NotNull("sessionFactory", sessionFactory);
 			sessionFactory.Statistics.IsStatisticsEnabled = true;
 			_factory = sessionFactory;
 			_auditSettingProvider = auditSettingProvider;
-
-			var denormalizerList = new List<IMessageSender>
-			                       	{
-			                       		//that should be remove (asad)
-                                        //new PersonChangedMessageSender()
-			                       	};
-			denormalizerList.AddRange(externalDenormalizers);
-
-			_activeDenormalizers = denormalizerList;
+			_messageSenders = messageSenders;
 		}
 
 		protected ISessionContextBinder SessionContextBinder { get; set; }
@@ -107,7 +96,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		{
 			return new NHibernateUnitOfWork(session,
 			                                messaging,
-											_activeDenormalizers,
+											_messageSenders,
 											filterManager,
 											new SendPushMessageWhenRootAlteredService(),
 											SessionContextBinder.Unbind

@@ -4,44 +4,74 @@ define([
 		'views/personschedule/vm',
 		'subscriptions',
 		'helpers',
-		'text!templates/personschedule/view.html'
+		'text!templates/personschedule/view.html',
+        'resizeevent'
 	], function (
 		ko,
 		personScheduleViewModel,
 		subscriptions,
 		helpers,
-		view
+		view,
+	    resize
 	) {
 
-		var personSchedule = new personScheduleViewModel();
-
-		var resize = function () {
-			personSchedule.TimeLine.WidthPixels($('.shift').width());
-		};
-
-		$(window)
-			.resize(resize)
-			.bind('orientationchange', resize)
-			.ready(resize);
-
+	    var personSchedule;
+	    
 		return {
-			display: function (options) {
+			initialize: function (options) {
 
 				options.renderHtml(view);
 
-				personSchedule.Id(options.id);
-				personSchedule.Date(moment.utc(options.date, 'YYYYMMDD'));
+				personSchedule = new personScheduleViewModel();
 
-				subscriptions.subscribePersonSchedule(
+			    resize.onresize(function() {
+			        personSchedule.TimeLine.WidthPixels($('.shift').width());
+			    });
+			    
+				ko.applyBindings(personSchedule, options.bindingElement);
+
+			},
+		    
+			display: function(options) {
+
+			    var date = moment(options.date, 'YYYYMMDD');
+			    
+			    if (personSchedule.Id() == options.id && personSchedule.Date().diff(date) == 0)
+			        return;
+
+			    personSchedule.Loading(true);
+			    
+			    personSchedule.Id(options.id);
+			    personSchedule.Date(date);
+
+			    subscriptions.subscribePersonSchedule(
 					options.id,
-					helpers.Date.AsUTCDate(personSchedule.Date().toDate()),
+					helpers.Date.ToServer(personSchedule.Date()),
 					function (data) {
-						personSchedule.SetData(data);
+					    resize.notify();
+					    personSchedule.SetData(data);
+					    personSchedule.Loading(false);
 					}
 				);
 
-				ko.applyBindings(personSchedule, options.bindingElement);
-			}
+			},
+
+            dispose: function(options) {
+                subscriptions.unsubscribePersonSchedule();
+                $(".datepicker.dropdown-menu").remove();
+            },
+			
+            clearaction: function(options) {
+                personSchedule.AddingFullDayAbsence(false);
+            },
+			
+            addfulldayabsence: function(options) {
+                personSchedule.AddingFullDayAbsence(true);
+            },
+			
+            setDateFromTest: function (date) {
+                personSchedule.AddFullDayAbsenceForm.EndDate(moment(date));
+            }
 		};
 	});
 

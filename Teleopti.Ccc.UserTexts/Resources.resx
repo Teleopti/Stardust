@@ -6415,7 +6415,7 @@ Meeting</value>
     <comment>Isntructions to add Multiplicators</comment>
   </data>
   <data name="ExportCode" xml:space="preserve">
-    <value>Export Code</value>
+    <value>Payroll System Code</value>
     <comment>Export Code of the multiplicator</comment>
   </data>
   <data name="ManageMultiplicator" xml:space="preserve">
@@ -6892,7 +6892,7 @@ Updated on: {1}</value>
     <comment>Write protection (days)</comment>
   </data>
   <data name="PayrollCode" xml:space="preserve">
-    <value>Payroll system code</value>
+    <value>Payroll System Code</value>
     <comment>used in options for absences</comment>
   </data>
   <data name="Payrolls" xml:space="preserve">
@@ -9387,7 +9387,7 @@ exclusion</value>
     <comment>for max</comment>
   </data>
   <data name="PayrollCodeColon" xml:space="preserve">
-    <value>Payroll Code:</value>
+    <value>Payroll System Code:</value>
     <comment>Payroll Code Colon</comment>
   </data>
   <data name="NoGoodSlotsFound" xml:space="preserve">
@@ -11398,5 +11398,16 @@ Reduce the complexity to use these shifts.</value>
   <data name="NotEnoughAllowance" xml:space="preserve">
     <value>There is not enough allowance for day:</value>
     <comment>There is not enough budget allowance for that day.</comment>
+  </data>
+  <data name="AddFullDayAbsence" xml:space="preserve">
+    <value>Add full day absence</value>
+    <comment>Add full day absence</comment>
+  </data>
+  <data name="InvalidEndDate" xml:space="preserve">
+    <value>Invalid end date</value>
+  </data>
+  <data name="ResolutionMin" xml:space="preserve">
+    <value>Resolution (minutes)</value>
+    <comment>select resolution in Meettíng Overview</comment>
   </data>
 </root>

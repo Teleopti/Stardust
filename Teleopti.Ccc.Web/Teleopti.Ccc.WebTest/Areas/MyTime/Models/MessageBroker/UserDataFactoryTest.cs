@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Models.MessageBroker
 	[TestFixture]
 	public class UserDataFactoryTest
 	{
-		private ICurrentBusinessUnitProvider buProvider;
+		private ICurrentBusinessUnit buProvider;
 		private IDataSource dataSource;
 		private IUserDataFactory target;
 		private IConfigReader configReader;
@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Models.MessageBroker
 		[SetUp]
 		public void Setup()
 		{
-			buProvider = MockRepository.GenerateMock<ICurrentBusinessUnitProvider>();
+			buProvider = MockRepository.GenerateMock<ICurrentBusinessUnit>();
 			dataSource = MockRepository.GenerateMock<IDataSource>();
 			configReader = MockRepository.GenerateMock<IConfigReader>();
 			loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Models.MessageBroker
 			var expected = Guid.NewGuid();
 			var bu = new BusinessUnit("dd");
 			bu.SetId(expected);
-			buProvider.Expect(mock => mock.CurrentBusinessUnit()).Return(bu);
+			buProvider.Expect(mock => mock.Current()).Return(bu);
 			var result = target.CreateViewModel();
 			result.BusinessUnitId.Should().Be.EqualTo(expected);
 		}

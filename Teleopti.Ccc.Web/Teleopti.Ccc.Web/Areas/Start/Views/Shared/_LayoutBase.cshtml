@@ -18,7 +18,7 @@
 	<link href="@Url.Content("~/Areas/Start/Content/Css/Site.css")" rel="stylesheet" type="text/css" />
 	<link href="@Url.Content("~/content/favicon.ico")" rel="shortcut icon" type="image/x-icon"/>
 
-	<script src="@Url.Content("~/Content/Scripts/jquery-1.8.3.js")"></script>
+	<script src="@Url.Content("~/Content/Scripts/jquery-1.9.1.js")"></script>
 	<script src="@Url.Content("~/Content/Scripts/jquery.ba-hashchange.min.js")"></script>
 	<script src="@Url.Content("~/Content/Scripts/modernizr-2.6.2.js")"></script>
 	<script src="@Url.Content("~/Content/jquery-plugin/jquery.placeholder.js")"></script>
@@ -34,10 +34,18 @@
 	@RenderBody()
 	<footer> 
 		
-        <p>@ViewBag.LayoutBase.Footer</p>
+		<p>@ViewBag.LayoutBase.Footer</p>
 		
-    </footer>
-	<div id="dialog-modal">
+	</footer>
+	
+	<div id="dialog-modal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			<h3 id="dialog-modal-header"></h3>
+		</div>
+		<div id="dialog-modal-body">
+			
+		</div>
 	</div>
 	<div id="dialog">
 	</div>

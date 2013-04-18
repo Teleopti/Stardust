@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
             }
         }
 
-        [Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void VerifySendMessageWithDatePeriodAndMainReferenceWithProxy()
         {
             UnitOfWork.PersistAll();

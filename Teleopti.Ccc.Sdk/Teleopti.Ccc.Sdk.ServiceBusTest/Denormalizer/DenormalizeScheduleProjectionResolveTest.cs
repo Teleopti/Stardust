@@ -3,6 +3,11 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Rhino.ServiceBus;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Sdk.ServiceBus;
 using Teleopti.Ccc.Sdk.ServiceBus.Denormalizer;
@@ -14,78 +19,87 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 	[TestFixture]
 	public class DenormalizeScheduleProjectionResolveTest
 	{
-		private ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private IServiceBus _serviceBus;
 
 		[SetUp]
 		public void Setup()
 		{
 			var mocks = new MockRepository();
-			_unitOfWorkFactory = mocks.DynamicMock<ICurrentUnitOfWorkFactory>();
 			_serviceBus = mocks.DynamicMock<IServiceBus>();
 		}
 
 		[Test]
 		public void ShouldResolveProcessDenormalizeQueueConsumer()
 		{
-			UnitOfWorkFactoryContainer.Current = _unitOfWorkFactory;
-
 			var builder = new ContainerBuilder();
 			builder.RegisterInstance(_serviceBus).As<IServiceBus>();
-			builder.RegisterType<DenormalizeScheduleProjectionConsumer>().As<ConsumerOf<DenormalizedSchedule>>();
+			builder.RegisterType<ScheduleProjectionHandler>().As<IHandleEvent<ProjectionChangedEvent>>();
 
 			builder.RegisterModule<RepositoryModule>();
 			builder.RegisterModule<ApplicationInfrastructureContainerInstaller>();
 			builder.RegisterModule<ForecastContainerInstaller>();
 			builder.RegisterModule<ExportForecastContainerInstaller>();
 			builder.RegisterModule<SchedulingContainerInstaller>();
+			builder.RegisterModule<EventHandlersModule>();
+			builder.RegisterType<NoJsonSerializer>().As<IJsonSerializer>();
+			builder.RegisterType<LocalServiceBusPublisher>().As<IPublishEventsFromEventHandlers>().SingleInstance();
 
 			using (var container = builder.Build())
 			{
-				container.Resolve<ConsumerOf<DenormalizedSchedule>>().Should().Not.Be.Null();
+				container.Resolve<IHandleEvent<ProjectionChangedEvent>>().Should().Not.Be.Null();
 			}
 		}
 
 		[Test]
 		public void ShouldResolveScheduleDayReadModelHandlerConsumer()
 		{
-			UnitOfWorkFactoryContainer.Current = _unitOfWorkFactory;
-
 			var builder = new ContainerBuilder();
 			builder.RegisterInstance(_serviceBus).As<IServiceBus>();
-			builder.RegisterType<ScheduleDayReadModelHandler>().As<ConsumerOf<DenormalizedSchedule>>();
+			builder.RegisterType<ScheduleDayReadModelHandler>().As<IHandleEvent<ProjectionChangedEvent>>();
 
 			builder.RegisterModule<RepositoryModule>();
 			builder.RegisterModule<ApplicationInfrastructureContainerInstaller>();
 			builder.RegisterModule<ForecastContainerInstaller>();
 			builder.RegisterModule<ExportForecastContainerInstaller>();
 			builder.RegisterModule<SchedulingContainerInstaller>();
+			builder.RegisterModule<EventHandlersModule>();
+			builder.RegisterType<NoJsonSerializer>().As<IJsonSerializer>();
+			builder.RegisterType<LocalServiceBusPublisher>().As<IPublishEventsFromEventHandlers>().SingleInstance();
 
 			using (var container = builder.Build())
 			{
-				container.Resolve<ConsumerOf<DenormalizedSchedule>>().Should().Not.Be.Null();
+				container.Resolve<IHandleEvent<ProjectionChangedEvent>>().Should().Not.Be.Null();
 			}
 		}
 
 		[Test]
 		public void ShouldResolvePersonScheduleDayReadModelHandlerConsumer()
 		{
-			UnitOfWorkFactoryContainer.Current = _unitOfWorkFactory;
-
 			var builder = new ContainerBuilder();
 			builder.RegisterInstance(_serviceBus).As<IServiceBus>();
-			builder.RegisterType<PersonScheduleDayReadModelHandler>().As<ConsumerOf<DenormalizedSchedule>>();
+			builder.RegisterType<PersonScheduleDayReadModelHandler>().As<IHandleEvent<ProjectionChangedEvent>>();
 
 			builder.RegisterModule<RepositoryModule>();
 			builder.RegisterModule<ApplicationInfrastructureContainerInstaller>();
 			builder.RegisterModule<ForecastContainerInstaller>();
 			builder.RegisterModule<ExportForecastContainerInstaller>();
 			builder.RegisterModule<SchedulingContainerInstaller>();
+			builder.RegisterModule<EventHandlersModule>();
+			builder.RegisterType<NoJsonSerializer>().As<IJsonSerializer>();
+			builder.RegisterType<LocalServiceBusPublisher>().As<IPublishEventsFromEventHandlers>().SingleInstance();
 
 			using (var container = builder.Build())
 			{
-				container.Resolve<ConsumerOf<DenormalizedSchedule>>().Should().Not.Be.Null();
+				container.Resolve<IHandleEvent<ProjectionChangedEvent>>().Should().Not.Be.Null();
 			}
+		}
+	}
+
+	public class NoJsonSerializer : IJsonSerializer
+	{
+		public string SerializeObject(object value)
+		{
+			throw new System.NotImplementedException();
 		}
 	}
 }

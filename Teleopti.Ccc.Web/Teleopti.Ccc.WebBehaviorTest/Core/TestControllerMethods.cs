@@ -34,7 +34,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void BeforeScenario()
 		{
-			Navigation.GoTo("Test/BeforeScenario", new ApplicationStartupTimeout());
+			// use a scenario tag here for enableMyTimeMessageBroker if required
+			Navigation.GoTo("Test/BeforeScenario?enableMyTimeMessageBroker=false", new ApplicationStartupTimeout());
 		}
 
 		/// <summary>

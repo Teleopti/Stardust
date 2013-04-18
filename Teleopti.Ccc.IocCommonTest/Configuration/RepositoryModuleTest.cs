@@ -1,6 +1,7 @@
 using Autofac;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.IocCommon.Configuration;
@@ -39,16 +40,6 @@ namespace Teleopti.Ccc.IocCommonTest.Configuration
 			using (var container = containerBuilder.Build())
 			{
 				container.Resolve<IPushMessageRepository>()
-					.Should().Not.Be.Null();
-			}
-		}
-
-		[Test]
-		public void PersonScheduleDayReadModelRepository()
-		{
-			using (var container = containerBuilder.Build())
-			{
-				container.Resolve<IPersonScheduleDayReadModelRepository>()
 					.Should().Not.Be.Null();
 			}
 		}

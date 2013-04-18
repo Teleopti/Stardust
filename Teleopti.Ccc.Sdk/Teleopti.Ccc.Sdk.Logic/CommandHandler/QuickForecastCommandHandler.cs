@@ -1,7 +1,9 @@
 ﻿using System;
 using System.ServiceModel;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Interfaces.Domain;
@@ -13,10 +15,10 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 	public class QuickForecastCommandHandler : IHandleCommand<QuickForecastCommandDto>
     {
     	private readonly IServiceBusSender _busSender;
-		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IJobResultRepository _jobResultRepository;
 
-		public QuickForecastCommandHandler(IServiceBusSender busSender, IUnitOfWorkFactory unitOfWorkFactory, IJobResultRepository jobResultRepository)
+		public QuickForecastCommandHandler(IServiceBusSender busSender, ICurrentUnitOfWorkFactory unitOfWorkFactory, IJobResultRepository jobResultRepository)
 		{
 			_busSender = busSender;
 			_unitOfWorkFactory = unitOfWorkFactory;
@@ -24,13 +26,13 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public CommandResultDto Handle(QuickForecastCommandDto command)
+		public void Handle(QuickForecastCommandDto command)
 		{
 			if (command == null)
 				throw new FaultException("Command is null.");
 			Guid jobId;
 
-			using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+			using (var unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
 				//Save start of processing to job history
                 var period = new DateOnlyPeriod(new DateOnly(command.TargetPeriod.StartDate.DateTime),
@@ -62,10 +64,10 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 								IncreaseWith = command.IncreaseWith
 			              	};
 
-			_busSender.NotifyServiceBus(message);
+			_busSender.Send(message);
 			}
 			
-			return new CommandResultDto {AffectedId = jobId, AffectedItems = 1};
+			command.Result = new CommandResultDto {AffectedId = jobId, AffectedItems = 1};
 		}
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -25,7 +26,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 			_unitOfWorkFactory = unitOfWorkFactory;
 		}
 
-		public CommandResultDto Handle(SendPushMessageToPeopleCommandDto command)
+		public void Handle(SendPushMessageToPeopleCommandDto command)
 		{
 			verifyNotTooManyReceivers(command.Recipients);
 
@@ -48,7 +49,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 					result.AffectedId = service.PushMessage.Id;
 				}
 			}
-			return result;
+			command.Result = result;
 		}
 
 		private static void verifyNotTooManyReceivers(ICollection<Guid> receivers)

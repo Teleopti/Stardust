@@ -8,5 +8,10 @@ namespace Teleopti.Ccc.Web.Core.Startup.InitializeApplication
 		{
 			return ConfigurationManager.AppSettings["nhibConfPath"];
 		}
+
+		public string MessageBroker()
+		{
+			return ConfigurationManager.AppSettings["MessageBroker"];
+		}
 	}
 }

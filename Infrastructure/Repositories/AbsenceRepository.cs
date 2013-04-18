@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using NHibernate.Criterion;
 using NHibernate.Transform;
@@ -11,7 +12,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     /// <summary>
     /// Repository for absences
     /// </summary>
-    public class AbsenceRepository : Repository<IAbsence>, IAbsenceRepository
+    public class AbsenceRepository : Repository<IAbsence>, IAbsenceRepository, IWriteSideRepository<IAbsence>
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="AbsenceRepository"/> class.
@@ -26,15 +27,15 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 	    {
 	    }
 
-        /// <summary>
-        /// Loads the All absences by sorting it's by name.
-        /// </summary>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: Sumedah
-        /// Created date: 2008-10-05
-        /// </remarks>
-        public IList<IAbsence> LoadAllSortByName()
+	    /// <summary>
+	    /// Loads the All absences by sorting it's by name.
+	    /// </summary>
+	    /// <returns></returns>
+	    /// <remarks>
+	    /// Created by: Sumedah
+	    /// Created date: 2008-10-05
+	    /// </remarks>
+	    public IEnumerable<IAbsence> LoadAllSortByName()
         {
             IList<IAbsence> retList = Session.CreateCriteria(typeof(Absence))
                         .AddOrder(Order.Asc("Description.Name"))
@@ -68,5 +69,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             return Session.GetNamedQuery("FindAbsenceTrackerUsedByPersonAccount")
                             .List<IAbsence>();
         }
+
+	    public IAbsence LoadAggregate(Guid id) { return Load(id); }
     }
 }

@@ -32,11 +32,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core
 			return from i in Enumerable.Range(0, days) select instance.AddDays(i);
 		}
 
-		public static IEnumerable<TimeSpan> HourRange(this TimeSpan instance, int hours)
-		{
-			return from i in Enumerable.Range(0, hours) select instance.Add(TimeSpan.FromHours(i));
-		}
-
 		public static IEnumerable<TimeSpan> TimeRange(this TimeSpan instance, TimeSpan toTime, TimeSpan step)
 		{
 			var time = instance;

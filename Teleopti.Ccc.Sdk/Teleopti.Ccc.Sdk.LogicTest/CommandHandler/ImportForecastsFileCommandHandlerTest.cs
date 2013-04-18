@@ -2,7 +2,9 @@
 using System.ServiceModel;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
@@ -70,7 +72,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 Expect.Call(()=>unitOfWork.PersistAll());
                 Expect.Call(unitOfWork.Dispose);
                 Expect.Call(_busSender.EnsureBus()).Return(false);
-                Expect.Call(()=>_busSender.NotifyServiceBus(new ImportForecastsFileToSkill())).IgnoreArguments();
+                Expect.Call(()=>_busSender.Send(new ImportForecastsFileToSkill())).IgnoreArguments();
             }
             using (_mock.Playback())
             {
@@ -91,7 +93,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 Expect.Call(() => unitOfWork.PersistAll());
                 Expect.Call(unitOfWork.Dispose);
                 Expect.Call(_busSender.EnsureBus()).Return(true);
-                Expect.Call(() => _busSender.NotifyServiceBus(new ImportForecastsFileToSkill())).IgnoreArguments();
+                Expect.Call(() => _busSender.Send(new ImportForecastsFileToSkill())).IgnoreArguments();
             }
             using (_mock.Playback())
             {
@@ -111,7 +113,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
                 Expect.Call(() => unitOfWork.PersistAll());
                 Expect.Call(unitOfWork.Dispose);
                 Expect.Call(_busSender.EnsureBus()).Return(true);
-                Expect.Call(() => _busSender.NotifyServiceBus(new ImportForecastsFileToSkill())).IgnoreArguments();
+                Expect.Call(() => _busSender.Send(new ImportForecastsFileToSkill())).IgnoreArguments();
             }
             using (_mock.Playback())
             {

@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.Win.Main
 				new SignalBroker(MessageFilterManager.Instance.FilterDictionary))
 				{
 					MessageBrokerDisabled = messageBrokerDisabled
-				}.Start(new StateManager(), nhibConfPath, new LoadPasswordPolicyService(nhibConfPath), new ConfigurationManagerWrapper());
+				}.Start(new StateManager(), nhibConfPath, new LoadPasswordPolicyService(nhibConfPath), new ConfigurationManagerWrapper(), true);
             return true;
         }
 
@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.Win.Main
                 messageBrokerDisabled = true;
             }
         	var sendDenormalizeNotification = new SendDenormalizeNotificationToSdk(new SendCommandToSdk(new SdkAuthentication()));
-        	var saveToDenormalizationQueue = new SaveToDenormalizationQueue();
+        	var saveToDenormalizationQueue = new SaveToDenormalizationQueue(new RunSql(CurrentUnitOfWork.Make()));
         	var initializeApplication =
         		new InitializeApplication(
         			new DataSourcesFactory(new EnversConfiguration(),

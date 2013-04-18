@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Client;
 using Microsoft.AspNet.SignalR.Client.Hubs;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Teleopti.Interfaces;
 using Teleopti.Interfaces.MessageBroker;
 using Teleopti.Messaging.Exceptions;
 using log4net;
@@ -126,6 +128,7 @@ namespace Teleopti.Messaging.SignalR
 			try
 			{
 				Exception exception = null;
+				_hubConnection.Credentials = CredentialCache.DefaultNetworkCredentials;
 				var startTask = _hubConnection.Start();
 				startTask.ContinueWith(t =>
 				                       	{
@@ -136,9 +139,9 @@ namespace Teleopti.Messaging.SignalR
 				                       		}
 				                       	}, TaskContinuationOptions.OnlyOnFaulted);
 				
-				if (!startTask.Wait(TimeSpan.FromSeconds(10)))
+				if (!startTask.Wait(TimeSpan.FromSeconds(30)))
 				{
-					exception = new InvalidOperationException("Could not start within given time limit.");
+					exception = new InvalidOperationException("Could not start message broker client within 30 seconds.");
 				}
 				if (exception!=null)
 				{

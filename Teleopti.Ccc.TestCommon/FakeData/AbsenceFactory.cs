@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Interfaces.Domain;
@@ -76,5 +77,12 @@ namespace Teleopti.Ccc.TestCommon.FakeData
                                           
                                       };
         }
+
+	    public static IAbsence CreateAbsenceWithId()
+	    {
+		    var ret = CreateAbsence("  ");
+			ret.SetId(Guid.NewGuid());
+			return ret;
+		}
     }
 }

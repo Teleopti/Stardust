@@ -17,12 +17,12 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 		public void Setup()
 		{
 			currentTeleoptiPrincipal = MockRepository.GenerateMock<ICurrentTeleoptiPrincipal>();
-			target = new CurrentBusinessUnitProvider(currentTeleoptiPrincipal);
+			target = new CurrentBusinessUnit(currentTeleoptiPrincipal);
 		}
 
 		#endregion
 
-		private ICurrentBusinessUnitProvider target;
+		private ICurrentBusinessUnit target;
 		private ICurrentTeleoptiPrincipal currentTeleoptiPrincipal;
 
 		[Test]
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 
 			currentTeleoptiPrincipal.Expect(x => x.Current()).Return(teleoptiPrincipal);
 
-			target.CurrentBusinessUnit()
+			target.Current()
 				.Should().Be.SameInstanceAs(businessUnit);
 		}
 
@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.WebTest.Core.RequestContext
 		{
 			currentTeleoptiPrincipal.Expect(x => x.Current()).Return(null);
 
-			target.CurrentBusinessUnit()
+			target.Current()
 				.Should().Be.Null();
 		}
 	}

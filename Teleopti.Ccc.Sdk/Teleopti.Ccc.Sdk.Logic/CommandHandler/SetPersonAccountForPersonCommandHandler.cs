@@ -1,5 +1,7 @@
 ﻿using System;
 using System.ServiceModel;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -13,13 +15,13 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
     public class SetPersonAccountForPersonCommandHandler : IHandleCommand<SetPersonAccountForPersonCommandDto>
     {
         private readonly IRepositoryFactory _repositoryFactory;
-        private readonly IScenarioRepository _scenarioRepository;
+        private readonly ICurrentScenario _scenarioRepository;
         private readonly IPersonRepository _personRepository;
         private readonly IPersonAbsenceAccountRepository _personAbsenceAccountRepository;
         private readonly IAbsenceRepository _absenceRepository;
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 
-        public SetPersonAccountForPersonCommandHandler(IRepositoryFactory repositoryFactory, IScenarioRepository scenarioRepository, IPersonRepository personRepository, IPersonAbsenceAccountRepository personAbsenceAccountRepository, IAbsenceRepository absenceRepository, IUnitOfWorkFactory unitOfWorkFactory)
+        public SetPersonAccountForPersonCommandHandler(IRepositoryFactory repositoryFactory, ICurrentScenario scenarioRepository, IPersonRepository personRepository, IPersonAbsenceAccountRepository personAbsenceAccountRepository, IAbsenceRepository absenceRepository, IUnitOfWorkFactory unitOfWorkFactory)
         {
             _repositoryFactory = repositoryFactory;
             _scenarioRepository = scenarioRepository;
@@ -30,7 +32,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public CommandResultDto Handle(SetPersonAccountForPersonCommandDto command)
+		public void Handle(SetPersonAccountForPersonCommandDto command)
         {
             using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
@@ -53,7 +55,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                             
                 unitOfWork.PersistAll();
             }
-            return new CommandResultDto { AffectedId = command.PersonId, AffectedItems = 1 };
+			command.Result = new CommandResultDto { AffectedId = command.PersonId, AffectedItems = 1 };
         }
 
         private static void checkIfAuthorized(IPerson person, DateOnly dateOnly)
@@ -88,7 +90,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
         {
             using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
-                var refreshService = new TraceableRefreshService(_scenarioRepository.LoadDefaultScenario(),
+                var refreshService = new TraceableRefreshService(_scenarioRepository.Current(),
                                                                  _repositoryFactory);
                 refreshService.Refresh(account, unitOfWork);
                 unitOfWork.PersistAll();

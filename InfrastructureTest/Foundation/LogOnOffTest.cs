@@ -44,5 +44,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
                 target.LogOff();
             }
         }
+
+		[Test]
+		public void LogOnShouldHaveCoverage()
+		{
+			target.LogOn(null, null, null);
+		}
     }
 }

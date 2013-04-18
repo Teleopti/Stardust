@@ -130,6 +130,9 @@
     <Compile Include="AgentInfo\Requests\PersonRequestCheckAuthorizationTest.cs" />
     <Compile Include="AgentInfo\Requests\RequestApprovalServiceSchedulerTest.cs" />
     <Compile Include="Analytics\BaseConfigurationTest.cs" />
+    <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\CoverageTests.cs" />
+    <Compile Include="ApplicationLayer\SyncEventsPublisherTest.cs" />
+    <Compile Include="ApplicationLayer\TestWriteSideRepository.cs" />
     <Compile Include="Auditing\AuditSettingTest.cs" />
     <Compile Include="Auditing\RevisionTest.cs" />
     <Compile Include="Budgeting\BudgetCalculatorTest.cs" />
@@ -198,7 +201,8 @@
     <Compile Include="GroupPageCreator\PersonFinderServiceTest.cs" />
     <Compile Include="GroupPageCreator\PersonGroupPageTest.cs" />
     <Compile Include="GroupPageCreator\SkillGroupPageTest.cs" />
-    <Compile Include="Helper\DenormalizeScheduleProjectionTest.cs" />
+    <Compile Include="ApplicationLayer\AddFullDayAbsenceCommandHandlerTest.cs" />
+    <Compile Include="ApplicationLayer\DenormalizeScheduleProjectionTest.cs" />
     <Compile Include="Helper\GroupPageChangedMessageTest.cs" />
     <Compile Include="Helper\InitialLoadScheduleProjectionTest.cs" />
     <Compile Include="Helper\LogPointOutputTest.cs" />

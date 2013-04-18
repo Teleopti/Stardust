@@ -144,9 +144,35 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 				Expect.Call(_personContract1.PartTimePercentage).Return(_partTimePercentage1);
 				Expect.Call(_personContract2.PartTimePercentage).Return(_partTimePercentage2);
 				Expect.Call(_partTimePercentage1.Equals(_partTimePercentage2)).Return(true);
-				Expect.Call(_personPeriodTarget.RuleSetBag).Return(_ruleSetBag1);
+				Expect.Call(_personPeriodTarget.RuleSetBag).Return(_ruleSetBag1).Repeat.AtLeastOnce();
 				Expect.Call(_personPeriod.RuleSetBag).Return(_ruleSetBag2);
 				Expect.Call(_ruleSetBag1.Equals(_ruleSetBag2)).Return(false);
+				Expect.Call(_personSkill1.Skill).Return(_skill1).Repeat.AtLeastOnce();
+				Expect.Call(_skill1.Equals(_skill1)).Return(true);
+			}
+
+			using (_mocks.Playback())
+			{
+				Assert.IsFalse(_target.PersonPeriodEquals(_personPeriod));
+			}	
+		}
+
+		[Test]
+		public void ShouldNotEqualOnTargetShiftBagIsNull()
+		{
+			using (_mocks.Record())
+			{
+				Expect.Call(_personPeriodTarget.PersonSkillCollection).Return(new List<IPersonSkill> { _personSkill1 }).Repeat.AtLeastOnce();
+				Expect.Call(_personPeriod.PersonSkillCollection).Return(new List<IPersonSkill> { _personSkill1 }).Repeat.AtLeastOnce();
+				Expect.Call(_personPeriodTarget.PersonContract).Return(_personContract1).Repeat.AtLeastOnce();
+				Expect.Call(_personPeriod.PersonContract).Return(_personContract2).Repeat.AtLeastOnce();
+				Expect.Call(_personContract1.Contract).Return(_contract1);
+				Expect.Call(_personContract2.Contract).Return(_contract1);
+				Expect.Call(_contract1.Equals(_contract1)).Return(true);
+				Expect.Call(_personContract1.PartTimePercentage).Return(_partTimePercentage1);
+				Expect.Call(_personContract2.PartTimePercentage).Return(_partTimePercentage2);
+				Expect.Call(_partTimePercentage1.Equals(_partTimePercentage2)).Return(true);
+				Expect.Call(_personPeriodTarget.RuleSetBag).Return(null);
 				Expect.Call(_personSkill1.Skill).Return(_skill1).Repeat.AtLeastOnce();
 				Expect.Call(_skill1.Equals(_skill1)).Return(true);
 			}
@@ -172,7 +198,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 				Expect.Call(_personContract1.PartTimePercentage).Return(_partTimePercentage1);
 				Expect.Call(_personContract2.PartTimePercentage).Return(_partTimePercentage2);
 				Expect.Call(_partTimePercentage1.Equals(_partTimePercentage2)).Return(true);
-				Expect.Call(_personPeriodTarget.RuleSetBag).Return(_ruleSetBag1);
+				Expect.Call(_personPeriodTarget.RuleSetBag).Return(_ruleSetBag1).Repeat.AtLeastOnce();
 				Expect.Call(_personPeriod.RuleSetBag).Return(_ruleSetBag1);
 				Expect.Call(_ruleSetBag1.Equals(_ruleSetBag1)).Return(true);
 				Expect.Call(_personSkill1.Skill).Return(_skill1).Repeat.AtLeastOnce();

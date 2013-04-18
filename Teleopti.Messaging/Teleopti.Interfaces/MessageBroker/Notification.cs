@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Xml;
 using Teleopti.Interfaces.MessageBroker.Events;
 
@@ -29,26 +30,49 @@ namespace Teleopti.Interfaces.MessageBroker
 		/// <returns></returns>
 		public string[] Routes()
 		{
-			var stringArray = new[] { DataSource, BusinessUnitId, DomainType };
-			var basicRoute = String.Join(Subscription.Separator, stringArray);
+			var dataSources = new[] { DataSource, null};
+			var businessUnits = new[] { BusinessUnitId, Guid.Empty.ToString()};
+			var domainTypes = new[] { DomainType };
+			var domainIds = new[] { DomainId, null };
+			var domainReferenceIds = new[] { DomainReferenceId, null };
+			var shortTermOrNot = new string[] { null };
 
-			var idRoute = String.Join(Subscription.Separator, new[] { basicRoute, "id", DomainId ?? string.Empty });
-			var referenceRoute = String.Join(Subscription.Separator, new[] { basicRoute, "ref", DomainReferenceId ?? string.Empty });
-
-			string[] routes;
 			if (StartDateAsDateTime() < DateTime.UtcNow.AddDays(3) && EndDateAsDateTime() > DateTime.UtcNow.AddDays(-3))
-			{
-				var basicShortTermRoute = String.Join(Subscription.Separator, new[] {basicRoute, Subscription.ShortTerm});
-				var idShortTermRoute = String.Join(Subscription.Separator, new[] { basicShortTermRoute, "id", DomainId ?? string.Empty });
-				var referenceShortTermRoute = String.Join(Subscription.Separator, new[] { basicShortTermRoute, "ref", DomainReferenceId ?? string.Empty });
-				routes = new[] { basicRoute, idRoute, referenceRoute, basicShortTermRoute, idShortTermRoute, referenceShortTermRoute };
-			}
-			else
-			{
-				routes = new[] {basicRoute, idRoute, referenceRoute};
-			}
+				shortTermOrNot = new[] { Subscription.ShortTerm, null };
 
-			return routes;
+			var routes = from dataSource in dataSources
+			              from businessUnit in businessUnits
+			              from domainType in domainTypes
+			              from domainId in domainIds
+			              from domainReferenceId in domainReferenceIds
+			              from shortTerm in shortTermOrNot
+			              let route = makeRoute(
+				              dataSource,
+				              businessUnit,
+				              domainType,
+				              domainId,
+				              domainReferenceId,
+				              shortTerm)
+			              where route != null
+			              select route;
+			return routes.ToArray();
+		}
+
+		private static string makeRoute(string dataSource, string businessUnit, string domainType, string domainId, string domainReferenceId, string shortTerm)
+		{
+			// exclude this combo for some reason
+			if (domainReferenceId != null && domainId != null)
+				return null;
+
+
+			var route = String.Join(Subscription.Separator, dataSource, businessUnit, domainType);
+			if (shortTerm != null)
+				route = String.Join(Subscription.Separator, route, shortTerm);
+			if (domainId != null)
+				route = String.Join(Subscription.Separator, route, "id", domainId);
+			if (domainReferenceId != null)
+				route = String.Join(Subscription.Separator, route, "ref", domainReferenceId);
+			return route;
 		}
 
 		/// <summary>

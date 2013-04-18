@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Linq;
+using NUnit.Framework;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data;
@@ -20,23 +21,43 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void GoTo(string pageUrl, params IGoToInterceptor[] interceptors)
 		{
-			InnerGoto(new Uri(TestSiteConfigurationSetup.Url, pageUrl), interceptors);
+			InnerGoto(new Uri(TestSiteConfigurationSetup.Url, pageUrl), Browser.Current.GoTo, interceptors);
+		}
+
+		public static void GoToNoWaitAndUrlAssert(string pageUrl)
+		{
+			GoToNoWaitAndUrlAssert(pageUrl, new IGoToInterceptor[] { });
+		}
+
+		public static void GoToNoWaitAndUrlAssert(string pageUrl, params IGoToInterceptor[] interceptors)
+		{
+			InnerGoto(new Uri(TestSiteConfigurationSetup.Url, pageUrl),
+			          uri =>
+				          {
+							  // we use nowait because of signalr and watin doesnt play well yet
+							  // and we poll assert the url to make sure we end up on the correct url before continuing
+							  // this assert is not usable in situations when the server might redirect
+							  // should probably avoid using this in the future.
+					          Browser.Current.GoToNoWait(uri);
+					          EventualAssert.That(() => Browser.Current.Url, Is.StringContaining(pageUrl));
+				          },
+			          interceptors);
 		}
 
 		public static void GotoRaw(string url, params IGoToInterceptor[] interceptors)
 		{
-			InnerGoto(new Uri(url), interceptors);
+			InnerGoto(new Uri(url), Browser.Current.GoTo, interceptors);
 		}
 
-		private static void InnerGoto(Uri uri, params IGoToInterceptor[] interceptors)
+		private static void InnerGoto(Uri uri, Action<Uri> gotoMethod, params IGoToInterceptor[] interceptors)
 		{
 			var args = new GotoArgs {Uri = uri};
 
 			interceptors.ToList().ForEach(i => i.Before(args));
 
-			Log.Write("Browsing to: " + args.Uri);
-			Browser.Interactions.GoTo(args.Uri);
-			Log.Write("Ended up in: " + Browser.Current.Url);
+			Log.Info("Browsing to: " + args.Uri);
+			Retrying.Action(() => gotoMethod.Invoke(args.Uri));
+			Log.Info("Ended up in: " + Browser.Current.Url);
 
 			interceptors.Reverse().ToList().ForEach(i => i.After(args));
 		}
@@ -197,20 +218,36 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
             Pages.Pages.NavigatingTo(Browser.Current.Page<MessagePage>());
 	    }
 
-		public static void GotoAnywhereTeamSchedule(string date = null)
+		public static void GotoAnywhereTeamSchedule()
 		{
-			string hash = string.Empty;
-			if (!string.IsNullOrEmpty(date))
-			{
-				hash = string.Format(CultureInfo.InvariantCulture, "#teamschedule/{0}", date.Replace("-",""));
-			}
-			GoTo("Anywhere" + hash, new ApplicationStartupTimeout());
+			GoToNoWaitAndUrlAssert("Anywhere", new ApplicationStartupTimeout());
+			Pages.Pages.NavigatingTo(Browser.Current.Page<AnywherePage>());
+		}
+
+		public static void GotoAnywhereTeamSchedule(DateTime date)
+		{
+			GoToNoWaitAndUrlAssert(string.Format("Anywhere#teamschedule/{0}{1}{2}",
+				date.Year.ToString("0000"), 
+				date.Month.ToString("00"), 
+				date.Day.ToString("00")), 
+				new ApplicationStartupTimeout());
+			Pages.Pages.NavigatingTo(Browser.Current.Page<AnywherePage>());
+		}
+
+		public static void GotoAnywhereTeamSchedule(DateTime date, Guid teamId)
+		{
+			GoToNoWaitAndUrlAssert(string.Format("Anywhere#teamschedule/{0}/{1}{2}{3}",
+				teamId,
+				date.Year.ToString("0000"), 
+				date.Month.ToString("00"), 
+				date.Day.ToString("00")), 
+				new ApplicationStartupTimeout());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<AnywherePage>());
 		}
 
 		public static void GotoAnywherePersonSchedule(Guid personId, DateTime date)
 		{
-			GoTo(string.Format("Anywhere#personschedule/{0}/{1}",
+			GoToNoWaitAndUrlAssert(string.Format("Anywhere#personschedule/{0}/{1}",
 				personId, date.Year.ToString("0000") + date.Month.ToString("00") + date.Day.ToString("00"))
 				, new ApplicationStartupTimeout());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<AnywherePage>());
@@ -218,7 +255,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void GotoAnywherePersonScheduleFullDayAbsenceForm(Guid personId, DateTime date)
 		{
-			GoTo(string.Format("Anywhere#personschedule/{0}/{1}/addfulldayabsence",
+			GoToNoWaitAndUrlAssert(string.Format("Anywhere#personschedule/{0}/{1}/addfulldayabsence",
 				personId, date.Year.ToString("0000") + date.Month.ToString("00") + date.Day.ToString("00"))
 				, new ApplicationStartupTimeout());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<AnywherePage>());
@@ -327,6 +364,24 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		public void After(GotoArgs args)
 		{
 			TestControllerMethods.WaitUntilCompletelyLoaded();
+		}
+	}
+
+	public class WaitUntil : IGoToInterceptor
+	{
+		private readonly Func<bool> _until;
+
+		public WaitUntil(Func<bool> until) {
+			_until = until;
+		}
+
+		public void Before(GotoArgs args)
+		{
+		}
+
+		public void After(GotoArgs args)
+		{
+			_until.WaitOrThrow(Timeouts.Poll, Timeouts.Timeout);
 		}
 	}
 }

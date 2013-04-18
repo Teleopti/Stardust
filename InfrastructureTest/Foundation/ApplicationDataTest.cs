@@ -19,7 +19,7 @@ using Teleopti.Interfaces.MessageBroker.Events;
 
 namespace Teleopti.Ccc.InfrastructureTest.Foundation
 {
-    /// <summary>
+	/// <summary>
     /// Tests for ApplicationData
     /// </summary>
     [TestFixture]
