@@ -1038,6 +1038,7 @@
     <Compile Include="WorkflowControl\AbsenceRequestOpenRollingPeriodTest.cs" />
     <Compile Include="WorkflowControl\BudgetGroupAllowanceValidatorTest.cs" />
     <Compile Include="WorkflowControl\AlreadyAbsentValidatorTest.cs" />
+    <Compile Include="WorkflowControl\SchedulePublishedSpecificationForAbsenseTest.cs" />
     <Compile Include="WorkflowControl\EmptyPersonAccountBalanceCalculatorTest.cs" />
     <Compile Include="WorkflowControl\DenyAbsenceRequestTest.cs" />
     <Compile Include="WorkflowControl\GrantAbsenceRequestTest.cs" />
