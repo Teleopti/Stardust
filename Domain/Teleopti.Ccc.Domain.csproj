@@ -1351,6 +1351,7 @@
     <Compile Include="WorkflowControl\AlreadyAbsentSpecification.cs" />
     <Compile Include="WorkflowControl\BudgetGroupAllowanceValidator.cs" />
     <Compile Include="WorkflowControl\BudgetGroupHeadCountValidator.cs" />
+    <Compile Include="WorkflowControl\SchedulePublishedSpecificationForAbsence.cs" />
     <Compile Include="WorkflowControl\DenyAbsenceRequest.cs" />
     <Compile Include="WorkflowControl\EmptyPersonAccountBalanceCalculator.cs" />
     <Compile Include="WorkflowControl\GrantAbsenceRequest.cs" />
