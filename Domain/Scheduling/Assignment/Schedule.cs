@@ -266,11 +266,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                 var agentTimeZone = Person.PermissionInformation.DefaultTimeZone();
                 schedulePublishedSpecification =
                     new SchedulePublishedSpecification(Person.WorkflowControlSet, ScheduleVisibleReasons.Any);
+				var schedulePublishedSpecificationForAbsence =
+					new SchedulePublishedSpecificationForAbsence(Person.WorkflowControlSet, ScheduleVisibleReasons.Any, dateAndDateTime);
                 filteredData = (from data in ScheduleDataInternalCollection()
                                 where
                                     data.BelongsToPeriod(dateAndDateTime) &&
-                                    schedulePublishedSpecification.IsSatisfiedBy(
+                                    (schedulePublishedSpecification.IsSatisfiedBy(
                                         new DateOnly(data.Period.StartDateTimeLocal(agentTimeZone)))
+										|| schedulePublishedSpecificationForAbsence.IsSatisfiedBy(
+                                        new PublishedScheduleData(data, agentTimeZone)))
                                 select (IScheduleData) data.Clone()).ToList();
                 filteredConflicts = (from conflict in PersonAssignmentConflictInternalCollection
                                      where

@@ -279,7 +279,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TimeLayer
             }
         }
 
-        [Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
         public void VerifyProjectionWithUnevenPeriodsOBTime()
         {
             //Setup for multiplicator-projection:

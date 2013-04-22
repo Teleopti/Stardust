@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         private bool _cancelMe;
 
         public BlockSchedulingService( IBestBlockShiftCategoryFinder blockShiftCategoryFinder,
-            IScheduleDayService scheduleDayService, IBlockFinderFactory blockFinderFactory)
+            IScheduleDayService scheduleDayService, IBlockFinderFactory blockFinderFactory )
         {
             _blockShiftCategoryFinder = blockShiftCategoryFinder;
             _scheduleDayService = scheduleDayService;
@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         {
             bool success = true;
             _cancelMe = false;
-            IList<IBlockFinder> finders = CreateFinders(matrixList, schedulingOptions.UseBlockScheduling);
+            IList<IBlockFinder> finders = CreateFinders(matrixList, BlockFinderType.None );
 
             IBlockFinderResult result;
             int blockCounter = 0;
@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             return success;
         }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "ActOn"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public bool ActOnResult(IBlockFinderResult result, IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions)
         {
             bool success = true;

@@ -34,7 +34,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			                 		new DateOnly(2012, 4, 21)
 			                 	};
 
+#pragma warning disable 612,618
 			Expect.Call(matrixPro.SelectedPeriod).Return(new DateOnlyPeriod(new DateOnly(2012, 4, 20), new DateOnly(2012, 5, 20)));
+#pragma warning restore 612,618
 			Expect.Call(matrixPro.GetScheduleDayByKey(new DateOnly())).IgnoreArguments().Return(scheduleDay).Repeat.AtLeastOnce();
 			Expect.Call(scheduleDay.DaySchedulePart()).Return(part).Repeat.AtLeastOnce();
 			Expect.Call(part.SignificantPart()).Return(SchedulePartView.None).Repeat.AtLeastOnce();
@@ -60,7 +62,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			                 		new DateOnly(2012, 4, 21)
 			                 	};
 
+#pragma warning disable 612,618
 			Expect.Call(matrixPro.SelectedPeriod).Return(new DateOnlyPeriod(new DateOnly(2012, 4, 20), new DateOnly(2012, 5, 20)));
+#pragma warning restore 612,618
 			Expect.Call(matrixPro.GetScheduleDayByKey(new DateOnly(2012, 4, 17))).IgnoreArguments().Return(scheduleDay).Repeat.AtLeastOnce();
 			Expect.Call(scheduleDay.DaySchedulePart()).Return(part).Repeat.AtLeastOnce();
 			Expect.Call(part.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();

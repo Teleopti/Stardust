@@ -1,8 +1,9 @@
-﻿using NUnit.Framework;
+using NUnit.Framework;
 using Teleopti.Ccc.Domain.Optimization;
+using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Interfaces.Domain;
 
-namespace Teleopti.Ccc.DomainTest.Optimization
+namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 {
 	[TestFixture]
 	public class AdvancedPreferencesPersonalSettingsTest
@@ -62,5 +63,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			Assert.AreEqual(_advancedPreferencesSource.RefreshScreenInterval, _advancedPreferencesTarget.RefreshScreenInterval);
 		}
 
+		[Test]
+		public void ShouldCheckParameters()
+		{
+			_target.MapFrom(null);
+			_target.MapTo(null);
+		}
 	}
 }

@@ -335,7 +335,7 @@ namespace Teleopti.Ccc.DomainTest.Time
         }
 
         [Test]
-        public void VerifyTryParseWithChineseProc()
+        public void VerifyTryParseWithChinese()
         {
             Thread.CurrentThread.CurrentCulture = CultureInfo.GetCultureInfo(2052);
             Assert.IsFalse(TimePeriod.TryParse("", out _per));
