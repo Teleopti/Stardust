@@ -8,11 +8,10 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 {
 	public class SaveAgentPortalSettingsCommandHandler : IHandleCommand<SaveAgentPortalSettingsCommandDto>
 	{
-		private  IPersonalSettingDataRepository _personalSettingDataRepository;
-		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+		private readonly IPersonalSettingDataRepository _personalSettingDataRepository;
+        private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 
-
-		public SaveAgentPortalSettingsCommandHandler(IPersonalSettingDataRepository personalSettingDataRepository, IUnitOfWorkFactory unitOfWorkFactory)
+		public SaveAgentPortalSettingsCommandHandler(IPersonalSettingDataRepository personalSettingDataRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory)
 		{
 			_personalSettingDataRepository = personalSettingDataRepository;
 			_unitOfWorkFactory = unitOfWorkFactory;
@@ -21,7 +20,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void Handle(SaveAgentPortalSettingsCommandDto command)
 		{
-			using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+			using (var uow = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
 				var setting = _personalSettingDataRepository.FindValueByKey("AgentPortalSettings", new AgentPortalSettings());
 				setting.Resolution = command.Resolution;

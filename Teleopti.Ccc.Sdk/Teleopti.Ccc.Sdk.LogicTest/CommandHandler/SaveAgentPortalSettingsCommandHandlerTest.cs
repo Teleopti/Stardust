@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         private SaveAgentPortalSettingsCommandHandler _target;
         private SaveAgentPortalSettingsCommandDto _saveAgentPortalSettingsCommandDto;
         private AgentPortalSettings _agentPortalSettings;
+        private ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 
         [SetUp]
         public void Setup()
@@ -24,7 +25,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _mock = new MockRepository();
             _personalSettingDataRepository = _mock.StrictMock<IPersonalSettingDataRepository>();
             _unitOfWorkFactory = _mock.StrictMock<IUnitOfWorkFactory>();
-            _target = new SaveAgentPortalSettingsCommandHandler(_personalSettingDataRepository,_unitOfWorkFactory);
+            _currentUnitOfWorkFactory = _mock.StrictMock<ICurrentUnitOfWorkFactory>();
+            _target = new SaveAgentPortalSettingsCommandHandler(_personalSettingDataRepository,_currentUnitOfWorkFactory);
             _saveAgentPortalSettingsCommandDto = new SaveAgentPortalSettingsCommandDto {Resolution = 15};
             _agentPortalSettings = new AgentPortalSettings();
         }
@@ -36,6 +38,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             
             using(_mock.Record())
             {
+                Expect.Call(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
                 Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(untiOfWork);
                 Expect.Call(_personalSettingDataRepository.FindValueByKey("AgentPortalSettings",
                                                                           new AgentPortalSettings())).IgnoreArguments().

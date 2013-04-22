@@ -22,16 +22,18 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 		private ITeamRepository teamRepository;
 		private IUnitOfWorkFactory unitOfWorkFactory;
 		private IUnitOfWork unitOfWork;
+	    private ICurrentUnitOfWorkFactory currentUnitOfWorkFactory;
 
-		[SetUp]
+	    [SetUp]
 		public void Setup()
 		{
 			mocks = new MockRepository();
 			assembler = mocks.StrictMock<IAssembler<ITeam, TeamDto>>();
 			teamRepository = mocks.StrictMock<ITeamRepository>();
-			unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
+            unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
+            currentUnitOfWorkFactory = mocks.DynamicMock<ICurrentUnitOfWorkFactory>();
 			unitOfWork = mocks.DynamicMock<IUnitOfWork>();
-			target = new GetTeamByDescriptionNameQueryHandler(assembler, teamRepository, unitOfWorkFactory);
+			target = new GetTeamByDescriptionNameQueryHandler(assembler, teamRepository, currentUnitOfWorkFactory);
 		}
 
 		[Test]
@@ -43,6 +45,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 				Expect.Call(teamRepository.FindTeamByDescriptionName("MyTeam")).Return(teamList);
 				Expect.Call(assembler.DomainEntitiesToDtos(teamList)).Return(new[] { new TeamDto { Description = teamList[0].Description.Name, Id = teamList[0].Id} });
 				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+				Expect.Call(currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
 			}
 			using (mocks.Playback())
 			{

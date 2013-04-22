@@ -17,9 +17,9 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 	{
 		private readonly IOptionalColumnRepository _optionalColumnRepository;
 		private readonly IPersonRepository _personRepository;
-		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+        private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 
-		public GetPeopleOptionalValuesByPersonIdQueryHandler(IOptionalColumnRepository optionalColumnRepository, IPersonRepository personRepository, IUnitOfWorkFactory unitOfWorkFactory)
+		public GetPeopleOptionalValuesByPersonIdQueryHandler(IOptionalColumnRepository optionalColumnRepository, IPersonRepository personRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory)
 		{
 			_optionalColumnRepository = optionalColumnRepository;
 			_personRepository = personRepository;
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 		public ICollection<PersonOptionalValuesDto> Handle(GetPeopleOptionalValuesByPersonIdQueryDto query)
 		{
 			verifyNotTooMuchPeople(query.PersonIdCollection);
-			using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+			using (var unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
 				using (unitOfWork.DisableFilter(QueryFilter.Deleted))
 				{

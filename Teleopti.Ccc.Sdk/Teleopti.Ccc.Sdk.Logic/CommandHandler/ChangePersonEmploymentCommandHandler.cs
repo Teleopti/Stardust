@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
     public class ChangePersonEmploymentCommandHandler : IHandleCommand<ChangePersonEmploymentCommandDto>
     {
         private readonly IAssembler<IPersonPeriod, PersonSkillPeriodDto> _personSkillPeriodAssembler;
-        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+        private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
         private readonly ISkillRepository _skillRepository;
         private readonly IExternalLogOnRepository _externalLogOnRepository;
         private readonly IPersonRepository _personRepository;
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
         private readonly IContractScheduleRepository _contractScheduleRepository;
         private readonly IContractRepository _contractRepository;
 
-        public ChangePersonEmploymentCommandHandler(IAssembler<IPersonPeriod,PersonSkillPeriodDto> personSkillPeriodAssembler, IUnitOfWorkFactory unitOfWorkFactory, ISkillRepository skillRepository, IExternalLogOnRepository externalLogOnRepository, IPersonRepository personRepository, ITeamRepository teamRepository, IPartTimePercentageRepository partTimePercentageRepository, IContractScheduleRepository contractScheduleRepository, IContractRepository contractRepository)
+        public ChangePersonEmploymentCommandHandler(IAssembler<IPersonPeriod, PersonSkillPeriodDto> personSkillPeriodAssembler, ICurrentUnitOfWorkFactory unitOfWorkFactory, ISkillRepository skillRepository, IExternalLogOnRepository externalLogOnRepository, IPersonRepository personRepository, ITeamRepository teamRepository, IPartTimePercentageRepository partTimePercentageRepository, IContractScheduleRepository contractScheduleRepository, IContractRepository contractRepository)
         {
             _personSkillPeriodAssembler = personSkillPeriodAssembler;
             _unitOfWorkFactory = unitOfWorkFactory;
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 		public void Handle(ChangePersonEmploymentCommandDto command)
         {
             Guid? result;
-            using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+            using (var uow = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
             {
             	var startDate = new DateOnly(command.Period.StartDate.DateTime);
                 var person = _personRepository.Get(command.Person.Id.GetValueOrDefault());
