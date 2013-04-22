@@ -166,6 +166,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[When(@"I confirm reading the message at position '(.*)' of '(.*)' in the list")]
 		public void WhenIConfirmReadingTheMessageAtPositionInTheList(int listPosition, int messageCount)
 		{
+			Browser.Interactions.AssertExists(".asmMessage-item");
+
 			var newMessageCount = messageCount - 1;
 			EventualAssert.That(() => _page.MessageListItems.Count, Is.EqualTo(messageCount));
 			_page.MessageListItems[listPosition - 1].Click();
