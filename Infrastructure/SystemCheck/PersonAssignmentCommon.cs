@@ -4,20 +4,10 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Support.Security
+namespace Teleopti.Ccc.Infrastructure.SystemCheck
 {
-	public interface IPersonAssignmentCommon
-	{
-		IList<DataRow> ReadRows(SqlConnection connection, string readCommand, SqlTransaction transaction);
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		void SetFields(IEnumerable<DataRow> rows);
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-		bool TheDateFieldExists(SqlConnection connection, string numberOfNotConvertedCommand);
-	}
-
 	public class PersonAssignmentCommon : IPersonAssignmentCommon
 	{
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]

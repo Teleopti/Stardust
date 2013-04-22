@@ -82,9 +82,6 @@
     <Compile Include="CrossDatabaseViewUpdate.cs" />
     <Compile Include="CommandLineArgument.cs" />
     <Compile Include="LicenseStatusChecker.cs" />
-    <Compile Include="PersonAssignmentAuditDateSetter.cs" />
-    <Compile Include="PersonAssignmentCommon.cs" />
-    <Compile Include="PersonAssignmentDateSetter.cs" />
     <Compile Include="PersonFirstDayOfWeekSetter.cs" />
     <Compile Include="ForecasterDateAdjustment.cs" />
     <Compile Include="GlobalSuppressions.cs" />

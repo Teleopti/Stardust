@@ -3,34 +3,35 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Text;
+using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Support.Security
+namespace Teleopti.Ccc.Infrastructure.SystemCheck
 {
-	public class PersonAssignmentAuditDateSetter : ICommandLineCommand
+	public class PersonAssignmentDateSetter : IPersonAssignmentConverter
 	{
 		private const string numberOfNotConvertedCommand
-			= "select COUNT(*) as cnt from [Auditing].PersonAssignment_AUD where TheDate < '1850-01-01'";
+			= "select COUNT(*) as cnt from dbo.PersonAssignment where TheDate < '1850-01-01'";
 
 		private readonly string _readCommand = new StringBuilder()
 				.AppendLine("select top 100")
 				.AppendLine("Pa.Id, DefaultTimeZone, Minimum, TheDate, Pa.Version")
-				.AppendLine("from [Auditing].PersonAssignment_AUD pa")
+				.AppendLine("from dbo.PersonAssignment pa")
 				.AppendLine("inner join Person p on pa.Person = p.id")
-				.AppendLine("Where TheDate = '1800-01-01'")
+				.AppendLine("where TheDate = '1800-01-01'")
 				.ToString();
 
 		private readonly PersonAssignmentCommon _personAssignmentCommon = new PersonAssignmentCommon();
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Console.Write(System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Console.WriteLine(System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
-		public int Execute(CommandLineArgument commandLineArgument)
+		public int Execute(SqlConnectionStringBuilder connectionStringBuilder)
 		{
-			string connectionString = commandLineArgument.DestinationConnectionString;
+			string connectionString = connectionStringBuilder.ToString();
 			if (string.IsNullOrEmpty(connectionString))
 			{
 				return 0;
 			}
 
-			using (var connection = new SqlConnection(commandLineArgument.DestinationConnectionString))
+			using (var connection = new SqlConnection(connectionString))
 			{
 				connection.Open();
 				if (!_personAssignmentCommon.TheDateFieldExists(connection, numberOfNotConvertedCommand))
@@ -38,7 +39,7 @@ namespace Teleopti.Support.Security
 
 				IList<DataRow> rows = _personAssignmentCommon.ReadRows(connection, numberOfNotConvertedCommand, null);
 
-				Console.WriteLine(string.Concat("Found ", rows[0].Field<int>("cnt"), " non converted audit person assignments"));
+				Console.WriteLine(string.Concat("Found ", rows[0].Field<int>("cnt"), " non converted person assignments"));
 
 				connection.Close();
 
@@ -61,11 +62,11 @@ namespace Teleopti.Support.Security
 				int rowsLeft = rows[0].Field<int>("cnt");
 				if (rowsLeft > 0)
 				{
-					Console.WriteLine("There is still " + rows + " non converted audit assignments in db.");
+					Console.WriteLine("There is still " + rowsLeft + " non converted person assignments in db.");
 					return 1;
 				}
 			}
-			
+
 			Console.WriteLine();
 
 			return 0;
@@ -77,6 +78,7 @@ namespace Teleopti.Support.Security
 			connection.Open();
 			using (SqlTransaction transaction = connection.BeginTransaction(IsolationLevel.ReadCommitted))
 			{
+				
 				rows = _personAssignmentCommon.ReadRows(connection, _readCommand, transaction);
 				_personAssignmentCommon.SetFields(rows);
 				updatePersonAssignmentRows(rows, connection, transaction);
@@ -98,7 +100,7 @@ namespace Teleopti.Support.Security
 				foreach (var dataRow in rows)
 				{
 					var commandText = new StringBuilder()
-						.AppendLine("update [Auditing].PersonAssignment_AUD")
+						.AppendLine("update dbo.PersonAssignment")
 						.AppendLine("set TheDate = '" + dataRow.Field<DateTime>("TheDate") + "'")
 						.AppendLine(", Version = " + dataRow.Field<int>("Version"))
 						.AppendLine("where Id='" + dataRow.Field<Guid>("Id") + "'");

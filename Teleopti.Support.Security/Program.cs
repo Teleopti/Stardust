@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
+using Teleopti.Ccc.Infrastructure.SystemCheck;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Support.Security
 {
@@ -10,18 +13,20 @@ namespace Teleopti.Support.Security
         private static readonly ICommandLineCommand PersonFirstDayOfWeekSetter = new PersonFirstDayOfWeekSetter();
         private static readonly ICommandLineCommand LicenseStatusChecker = new LicenseStatusChecker();
 		private static readonly ICommandLineCommand CrossDatabaseViewUpdate = new CrossDatabaseViewUpdate();
-		private static readonly ICommandLineCommand PersonAssignmentAuditDateSetter = new PersonAssignmentAuditDateSetter();
-		private static readonly ICommandLineCommand PersonAssignmentDateSetter = new PersonAssignmentDateSetter();
+		private static readonly IPersonAssignmentConverter PersonAssignmentAuditDateSetter = new PersonAssignmentAuditDateSetter();
+		private static readonly IPersonAssignmentConverter PersonAssignmentDateSetter = new PersonAssignmentDateSetter();
 
 
         static void Main(string[] args)
         {
             var commandLineArgument = new CommandLineArgument(args);
 
-			var result = PersonAssignmentDateSetter.Execute(commandLineArgument);
+			var connectionStringBuilder = new SqlConnectionStringBuilder(commandLineArgument.DestinationConnectionString);
+
+			var result = PersonAssignmentDateSetter.Execute(connectionStringBuilder);
 			if(result!= 0)
 				Environment.Exit(result);
-			result = PersonAssignmentAuditDateSetter.Execute(commandLineArgument);
+			result = PersonAssignmentAuditDateSetter.Execute(connectionStringBuilder);
 			if (result != 0)
 				Environment.Exit(result);
 
