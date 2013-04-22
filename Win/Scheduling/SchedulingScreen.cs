@@ -254,10 +254,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_handlePersonRequestView1 = schedulerSplitters1.HandlePersonRequestView1;
 			_tabSkillData = schedulerSplitters1.TabSkillData;
 			wpfShiftEditor1 = new WpfShiftEditor(_eventAggregator, new CreateLayerViewModelService(), true);
-			restrictionEditor = new RestrictionEditor();
 			notesEditor = new NotesEditor(PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ModifyPersonAssignment));
 			schedulerSplitters1.MultipleHostControl3.AddItem(Resources.ShiftEditor, wpfShiftEditor1);
-			schedulerSplitters1.MultipleHostControl3.AddItem(Resources.Restrictions, restrictionEditor);
 			schedulerSplitters1.MultipleHostControl3.AddItem(Resources.Note, notesEditor);
 			toolStripSpinningProgressControl1.SpinningProgressControl.Enabled = false;
 			toolStripSpinningProgressControl1.Visible = true;
@@ -2659,7 +2657,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 			using (PerformanceOutput.ForOperation("Updating shift editor"))
 			{
-				restrictionEditor.LoadRestriction(null);
 				notesEditor.LoadNote(null);
 				IScheduleDay scheduleDay = _scheduleView.ViewGrid[_scheduleView.ViewGrid.CurrentCell.RowIndex, _scheduleView.ViewGrid.CurrentCell.ColIndex].CellValue as IScheduleDay;
 
@@ -2687,7 +2684,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void schedulePartToEditor(IScheduleDay part)
 		{
 			wpfShiftEditor1.LoadSchedulePart(part);
-			restrictionEditor.LoadRestriction(part);
 			notesEditor.LoadNote(part);
 		}
 
@@ -4437,8 +4433,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			if (_scheduleView != null)
 			{
-				if (restrictionEditor.RestrictionIsAltered)
-					restrictionEditor.LoadRestriction(restrictionEditor.SchedulePart);
 				if (notesEditor.NotesIsAltered || notesEditor.PublicNotesIsAltered)
 				{
 					NotesEditor.RemoveFocus();
@@ -5731,7 +5725,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			wpfShiftEditor1.AddPersonalShift += wpfShiftEditor_AddPersonalShift;
 			wpfShiftEditor1.Undo += wpfShiftEditor_Undo;
 
-			restrictionEditor.RestrictionChanged += restrictionEditor_RestrictionChanged;
 			notesEditor.NotesChanged += notesEditor_NotesChanged;
 			notesEditor.PublicNotesChanged += notesEditor_PublicNotesChanged;
 
@@ -5898,7 +5891,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 				wpfShiftEditor1.AddPersonalShift -= wpfShiftEditor_AddPersonalShift;
 			}
 
-			if (restrictionEditor != null) restrictionEditor.RestrictionChanged -= restrictionEditor_RestrictionChanged;
 			if (notesEditor != null)
 			{
 				notesEditor.NotesChanged -= notesEditor_NotesChanged;
@@ -6036,21 +6028,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			bool viewSchedulesPermission = isPermittedToViewSchedules();
 			_schedulerMeetingHelper.MeetingComposerStart(null, _scheduleView, true, viewSchedulesPermission);
-		}
-
-		private void restrictionEditor_RestrictionChanged(object sender, System.Windows.RoutedEventArgs e)
-		{
-			if (_scheduleView != null)
-			{
-				_scheduleView.Presenter.LastUnsavedSchedulePart = restrictionEditor.SchedulePart;
-				_scheduleView.Presenter.UpdateRestriction();
-				if (_scheduleView is AgentRestrictionsDetailView)
-				{
-					schedulerSplitters1.RecalculateRestrictions();
-					schedulerSplitters1.AgentRestrictionGrid.LoadData(schedulerSplitters1.SchedulingOptions);
-				}
-			}
-			enableSave();
 		}
 
 		private void notesEditor_NotesChanged(object sender, System.Windows.RoutedEventArgs e)
@@ -6306,7 +6283,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			wpfShiftEditor1 = null;
 			if (_undoRedo != null) _undoRedo.Clear();
 
-			restrictionEditor = null;
 			notesEditor = null;
 			if (_singleAgentRestrictionPresenter != null)
 			{
@@ -7140,6 +7116,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				schedulerSplitters1.RecalculateRestrictions();
 				schedulerSplitters1.AgentRestrictionGrid.LoadData(schedulerSplitters1.SchedulingOptions);
+				updateSelectionInfo(new List<IScheduleDay>{scheduleDay});
 			}
 
 			enableSave();

@@ -3365,7 +3365,6 @@ namespace Teleopti.Ccc.Win.Scheduling
         private System.Windows.Forms.ToolStripButton toolStripButtonOptions;
         private System.Windows.Forms.ToolStripButton toolStripButtonSystemExit;
         private System.Windows.Forms.ToolStripMenuItem ToolStripMenuItemScheduleHourlyEmployees;
-        private Teleopti.Ccc.WpfControls.Controls.Restriction.RestrictionEditor restrictionEditor;
         private Teleopti.Ccc.WpfControls.Controls.Notes.NotesEditor notesEditor;
         //private Teleopti.Ccc.WpfControls.Common.Interop.MultipleHostControl hostedComponent1;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItemAddOverTime;
