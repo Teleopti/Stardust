@@ -1,3 +1,4 @@
+using System.Windows.Forms;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
@@ -53,6 +54,20 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages
         public void SetEditMode()
         {
         }
+
+        private void weekOpenHoursGridWorkload_KeyDown(object sender, System.Windows.Forms.KeyEventArgs e)
+        {
+            if (e.Control == true)
+            {
+                switch (e.KeyCode)
+                {
+                   case Keys.X:
+                        e.Handled = true;
+                        break;
+                }
+            }
+        }
+
 
         #region grid events
         //protected override void OnMouseDown(MouseEventArgs e)

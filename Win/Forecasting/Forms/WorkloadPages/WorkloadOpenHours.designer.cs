@@ -129,6 +129,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages
             this.weekOpenHoursGridWorkload.Text = "weekOpenHoursGrid1";
             this.weekOpenHoursGridWorkload.ThemesEnabled = true;
             this.weekOpenHoursGridWorkload.UseRightToLeftCompatibleTextBox = true;
+            this.weekOpenHoursGridWorkload.KeyDown += new System.Windows.Forms.KeyEventHandler(this.weekOpenHoursGridWorkload_KeyDown);
             // 
             // tableLayoutPanelOpenHoursRtl
             // 

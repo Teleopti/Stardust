@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[When(@"I receive message number '(.*)' while not viewing message page")]
 		public void WhenIReceiveMessageNumberWhileNotViewingMessagePage(int messageCount)
 		{
-			Browser.Current.Eval("Teleopti.MyTimeWeb.AsmMessage.SetMessageNotificationOnTab(" + messageCount.ToString() + ");");
+			Browser.Interactions.Eval("Teleopti.MyTimeWeb.AsmMessage.SetMessageNotificationOnTab(" + messageCount.ToString() + ");");
 		}
 
 		[When(@"I receive message number '(.*)'")]
@@ -166,6 +166,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[When(@"I confirm reading the message at position '(.*)' of '(.*)' in the list")]
 		public void WhenIConfirmReadingTheMessageAtPositionInTheList(int listPosition, int messageCount)
 		{
+			Browser.Interactions.AssertExists(".asmMessage-item");
+
 			var newMessageCount = messageCount - 1;
 			EventualAssert.That(() => _page.MessageListItems.Count, Is.EqualTo(messageCount));
 			_page.MessageListItems[listPosition - 1].Click();
