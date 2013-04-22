@@ -399,11 +399,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             {
                 using (new CustomAuthorizationContext(_principalAuthorization))
                 {
-                    DateOnly dateOnly = new DateOnly(2000, 1, 2);
+									_person.PermissionInformation.SetDefaultTimeZone(
+											(TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time")));
+									
+									DateOnly dateOnly = new DateOnly(2000, 1, 2);
                     _target.Add(createPersonAssignment(new DateTimePeriod(2000, 1, 2, 2000, 1, 3)));
 
-                    _person.PermissionInformation.SetDefaultTimeZone(
-                        (TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time")));
 
                     Assert.AreEqual(1, _target.ScheduledDay(dateOnly.AddDays(-1)).PersonAssignmentCollection().Count);
                     Assert.AreEqual(0, _target.ScheduledDay(dateOnly).PersonAssignmentCollection().Count);

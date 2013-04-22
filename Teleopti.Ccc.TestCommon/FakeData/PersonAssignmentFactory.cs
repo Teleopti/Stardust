@@ -84,7 +84,8 @@ namespace Teleopti.Ccc.TestCommon.FakeData
                                                                     IShiftCategory category,
                                                                     IScenario scenario)
         {
-            PersonAssignment ass = new PersonAssignment(agent, scenario, new DateOnly(period.LocalStartDateTime));
+	        var date =new DateOnly(TimeZoneHelper.ConvertFromUtc(period.StartDateTime, agent.PermissionInformation.DefaultTimeZone()));
+            PersonAssignment ass = new PersonAssignment(agent, scenario, date);
             ass.SetMainShift(MainShiftFactory.CreateMainShift(activity, period, category));
             return ass;
         }
