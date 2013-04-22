@@ -279,8 +279,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                 filteredConflicts = (from conflict in PersonAssignmentConflictInternalCollection
                                      where
                                          conflict.BelongsToPeriod(dateAndDateTime) &&
-                                         schedulePublishedSpecification.IsSatisfiedBy(
-                                             new DateOnly(conflict.Period.StartDateTimeLocal(agentTimeZone)))
+									(schedulePublishedSpecification.IsSatisfiedBy(
+										new DateOnly(conflict.Period.StartDateTimeLocal(agentTimeZone)))
+										|| schedulePublishedSpecificationForAbsence.IsSatisfiedBy(
+										new PublishedScheduleData(conflict, agentTimeZone)))
                                      select conflict.EntityClone());
             }
             filteredData.ForEach(retObj._scheduleDataCollection.Add);
