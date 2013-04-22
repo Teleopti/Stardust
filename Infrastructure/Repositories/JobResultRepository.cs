@@ -20,8 +20,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
-				public JobResultRepository(ICurrentUnitOfWork currentUnitOfWork)
-					: base(currentUnitOfWork)
+		public JobResultRepository(IUnitOfWorkFactory unitOfWorkFactory) : base(unitOfWorkFactory)
+		{
+
+		}
+
+		public JobResultRepository(ICurrentUnitOfWork currentUnitOfWork) : base(currentUnitOfWork)
 	    {
 		    
 	    }
