@@ -1,6 +1,7 @@
 using System;
 using System.Drawing;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -67,7 +68,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 
 			var period =
 				new DateOnlyPeriod(new DateOnly(Date), new DateOnly(Date)).ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
-			var layer = new DenormalizedScheduleProjectionLayer
+			var layer = new ProjectionChangedEventLayer
 			{
 				ContractTime = TimeSpan.FromHours(Hours),
 				WorkTime = TimeSpan.FromHours(Hours),

@@ -2,6 +2,7 @@ using System;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Common;
@@ -139,9 +140,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 
 		
 			//var rogersFavvoRepo = new ScheduleProjectionReadOnlyRepository(GlobalUnitOfWorkState.UnitOfWorkFactory);
-			
 
-			var projectionLayer = new DenormalizedScheduleProjectionLayer()
+
+			var projectionLayer = new ProjectionChangedEventLayer()
 									  {
 										  PayloadId = absence.Id.Value,
 										  StartDateTime = StartDateTime,
