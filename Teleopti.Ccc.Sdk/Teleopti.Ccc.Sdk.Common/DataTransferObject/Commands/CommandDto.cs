@@ -34,5 +34,11 @@ namespace Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands
     		get { return _extensionData; }
     		set { _extensionData = value; }
     	}
-    }
+
+		/// <exclude />
+		/// <summary>
+		/// Result from the command. Usable when running synchronously. Is not part of the contract.
+		/// </summary>
+	    public CommandResultDto Result { get; set; }
+	}
 }

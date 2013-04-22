@@ -5,6 +5,6 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
 	public interface IMessageSender
 	{
-		void Execute(IRunSql runSql, IEnumerable<IRootChangeInfo> modifiedRoots);
+		void Execute(IEnumerable<IRootChangeInfo> modifiedRoots);
 	}
 }

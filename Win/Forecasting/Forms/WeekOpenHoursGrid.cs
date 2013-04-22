@@ -157,7 +157,12 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
                 openHourString.ToUpper(CultureInfo.CurrentUICulture) ==
                 UserTexts.Resources.Closed.ToUpper(CultureInfo.CurrentUICulture))
             {
-                ((List<TimePeriod>)this[rowIndex, columnIndex].CellValue).Clear();
+                var cellValue = this[rowIndex, columnIndex].CellValue as List<TimePeriod>;
+                if (cellValue != null)
+                {
+                    if(cellValue.Count > 0)
+                        cellValue.Clear();
+                }
             }
             else
             {

@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         private bool _availabilityDaysOnly;
         private bool _usePreferences;
         private bool _preferencesDaysOnly;
-        private BlockFinderType _blockFinderType;
+        //private BlockFinderType _blockFinderType;
 		private ISpecification<IMainShift> _mainShiftOptimizeActivitySpecification;
         public bool UseMinimumPersons { get; set; }
         public bool UseMaximumPersons { get; set; }
@@ -32,6 +32,15 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         public bool UseStudentAvailability { get; set; }
 		public bool UseGroupScheduling { get; set; }
 		public IGroupPageLight GroupOnGroupPage { get; set; }
+
+
+        public IGroupPageLight GroupOnGroupPageForTeamBlockPer { get; set; }
+        public bool UseTeamBlockSameEndTime { get; set; }
+        public bool UseTeamBlockSameShiftCategory { get; set; }
+        public bool UseTeamBlockSameStartTime { get; set; }
+        public bool UseTeamBlockSameShift { get; set; }
+        public bool UseTeamBlockPerOption { get; set; }
+
         public bool DoNotBreakMaxStaffing { get; set; }
         public IGroupPageLight GroupPageForShiftCategoryFairness { get; set; }
         public int RefreshRate { get; set; }
@@ -50,7 +59,26 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         public IActivity CommonActivity { get; set; }
         public bool UseCommonActivity { get; set; }
 		public bool UseAverageShiftLengths { get; set; }
+
+        public bool UsePeriodAsBlock { get; set; }
+
+        public bool UseTwoDaysOffAsBlock{get;set;}
+
+        public bool UseCalendarWeekAsBlock{get;set;}
+
+        private BlockFinderType _blockFinderTypeForAdvanceScheduling;
         
+        public BlockFinderType BlockFinderTypeForAdvanceScheduling
+        {
+            get { return _blockFinderTypeForAdvanceScheduling; }
+            set
+            {
+                _blockFinderTypeForAdvanceScheduling = value;
+                if (_blockFinderTypeForAdvanceScheduling != BlockFinderType.None)
+                    ShiftCategory = null;
+            }
+        }
+
         public ISpecification<IMainShift> MainShiftOptimizeActivitySpecification
     	{
     		get
@@ -67,19 +95,19 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 		{
 			new SchedulingOptionsGeneralPersonalSetting().MapTo(this, new List<IScheduleTag>());
 			new SchedulingOptionsAdvancedPersonalSetting().MapTo(this, new List<IShiftCategory>());
-            new SchedulingOptionsExtraPersonalSetting().MapTo(this, new List<IScheduleTag>(), new List<IGroupPageLight>(),new List<IActivity>( ));
+            new SchedulingOptionsExtraPersonalSetting().MapTo(this, new List<IScheduleTag>(), new List<IGroupPageLight>(), new List<IGroupPageLight>(), new List<IActivity>());
 		}
 
-    	public BlockFinderType UseBlockScheduling
-        {
-            get { return _blockFinderType; }
-            set
-            {
-                _blockFinderType = value;
-                if(_blockFinderType != BlockFinderType.None)
-                    ShiftCategory = null;
-            }
-        }
+        //public BlockFinderType UseBlockScheduling
+        //{
+        //    get { return _blockFinderType; }
+        //    set
+        //    {
+        //        _blockFinderType = value;
+        //        if(_blockFinderType != BlockFinderType.None)
+        //            ShiftCategory = null;
+        //    }
+        //}
 
         public bool UsePreferences
         {

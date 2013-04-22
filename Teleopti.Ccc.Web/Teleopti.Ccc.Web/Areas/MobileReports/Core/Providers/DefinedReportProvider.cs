@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core.Providers
 			return DefinedReports.ReportInformations.Where(r => grantedFunctions.Contains(r.FunctionCode)).ToList();
 		}
 
-		private class DefinedReportFunctionSpecification : Specification<IApplicationFunction>
+		public class DefinedReportFunctionSpecification : Specification<IApplicationFunction>
 		{
 			private readonly string[] _definedFunctionsList;
 

@@ -1354,6 +1354,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
 			innerMergeTemplateTaskPeriods(templateTaskPeriodList, day => day.Lock(), day => day.Release());
         }
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		protected void innerMergeTemplateTaskPeriods(IList<ITemplateTaskPeriod> templateTaskPeriodList, Action<IWorkloadDayBase> lockAction, Action<IWorkloadDayBase> releaseAction)
     	{
     		if (templateTaskPeriodList.Count == 0) return;

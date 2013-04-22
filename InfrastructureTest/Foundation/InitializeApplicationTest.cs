@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 			{
 				using (mocks.Playback())
 				{
-					target.Start(stateStub, Directory.GetCurrentDirectory(), null, new ConfigurationDictionaryWrapper(new Dictionary<string, string>{{"MessageBroker", "http://localhost/signalr"}}));
+					target.Start(stateStub, Directory.GetCurrentDirectory(), null, new ConfigurationDictionaryWrapper(new Dictionary<string, string>{{"MessageBroker", "http://localhost/signalr"}}), true);
 					Assert.AreEqual(2, StateHolder.Instance.StateReader.ApplicationScopeData.RegisteredDataSourceCollection.Count());
 					CollectionAssert.Contains(StateHolder.Instance.StateReader.ApplicationScopeData.RegisteredDataSourceCollection, ds1);
 					CollectionAssert.Contains(StateHolder.Instance.StateReader.ApplicationScopeData.RegisteredDataSourceCollection, ds2);
@@ -263,7 +263,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Foundation
 			{
 				using (mocks.Playback())
 				{
-					target.Start(stateStub, Directory.GetCurrentDirectory(), null, new ConfigurationDictionaryWrapper(new Dictionary<string, string>{{"MessageBroker", "http://localhost/signalr"}}));
+					target.Start(stateStub, Directory.GetCurrentDirectory(), null, new ConfigurationDictionaryWrapper(new Dictionary<string, string>{{"MessageBroker", "http://localhost/signalr"}}), true);
 					Assert.AreEqual(2, StateHolder.Instance.StateReader.ApplicationScopeData.RegisteredDataSourceCollection.Count());
 					CollectionAssert.Contains(StateHolder.Instance.StateReader.ApplicationScopeData.RegisteredDataSourceCollection, ds1);
 					CollectionAssert.Contains(StateHolder.Instance.StateReader.ApplicationScopeData.RegisteredDataSourceCollection, ds2);

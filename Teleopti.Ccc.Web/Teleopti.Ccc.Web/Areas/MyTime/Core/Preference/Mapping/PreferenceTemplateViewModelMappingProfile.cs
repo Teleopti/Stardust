@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				.ForMember(d => d.Value, o => o.MapFrom(s => s.Id.ToString()))
 				.ForMember(d => d.Text, o => o.MapFrom(s => s.Name))
 				.ForMember(d => d.Color, o => o.MapFrom(s => s.DisplayColor.ToHtml()))
-				.ForMember(d => d.PreferenceId, o => o.MapFrom(s =>
+				.ForMember(d => d.PreferenceId, o => o.ResolveUsing(s =>
 				{
 					if (s.Restriction.DayOffTemplate != null)
 						return s.Restriction.DayOffTemplate.Id;
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				}))
 				.ForMember(d => d.EarliestStartTime, o => o.MapFrom(s => s.Restriction.StartTimeLimitation.StartTimeString))
 				.ForMember(d => d.LatestStartTime, o => o.MapFrom(s => s.Restriction.StartTimeLimitation.EndTimeString))
-				.ForMember(d => d.EarliestEndTime, o => o.MapFrom(s =>
+				.ForMember(d => d.EarliestEndTime, o => o.ResolveUsing(s =>
 					{
 						if (s.Restriction.EndTimeLimitation.StartTime.HasValue &&
 						    s.Restriction.EndTimeLimitation.StartTime.Value >= TimeSpan.FromDays(1))
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 					}))
 				.ForMember(d => d.EarliestEndTimeNextDay, o => o.MapFrom(s => s.Restriction.EndTimeLimitation.StartTime.HasValue &&
 																			  s.Restriction.EndTimeLimitation.StartTime.Value >= TimeSpan.FromDays(1)))
-				.ForMember(d => d.LatestEndTime, o => o.MapFrom(s =>
+				.ForMember(d => d.LatestEndTime, o => o.ResolveUsing(s =>
 					{
 						if (s.Restriction.EndTimeLimitation.EndTime.HasValue &&
 							s.Restriction.EndTimeLimitation.EndTime.Value >= TimeSpan.FromDays(1))

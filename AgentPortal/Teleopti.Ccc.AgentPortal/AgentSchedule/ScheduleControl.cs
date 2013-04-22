@@ -12,6 +12,7 @@ using Teleopti.Ccc.AgentPortal.Helper;
 using Teleopti.Ccc.AgentPortal.Requests;
 using Teleopti.Ccc.AgentPortal.Requests.FormHandler;
 using Teleopti.Ccc.AgentPortal.Requests.ShiftTrade;
+using Teleopti.Ccc.AgentPortalCode.AgentSchedule;
 using Teleopti.Ccc.AgentPortalCode.Common;
 using Teleopti.Ccc.AgentPortalCode.Common.Clipboard;
 using Teleopti.Ccc.AgentPortalCode.Common.Factory;
@@ -37,9 +38,10 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
     {
         private AgentScheduleView _scheduleView;
         private ClipHandler<ICustomScheduleAppointment> _scheduleClipHandler;
-        private IToggleButtonState _parent;
+        private readonly IToggleButtonState _parent;
+	    private readonly ILegendLoader _legendLoader;
 
-        public CalendarViewType SelectedScheduleView
+	    public CalendarViewType SelectedScheduleView
         {
             get { return (CalendarViewType)tabControlAdvMainTab.SelectedIndex; }
         }
@@ -59,13 +61,15 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
         /// Created by: Sumedah
         /// Created date: 2008-08-17
         /// </remarks>
-        public ScheduleControl(IToggleButtonState parent)
+        public ScheduleControl(IToggleButtonState parent, ILegendLoader legendLoader)
         {
-            InitializeComponent();
+			InitializeComponent();
+
+			_parent = parent;
+			_legendLoader = legendLoader;
             
             InitalizeScheduleControlContextMenu();
             InitializeScheduleControl();
-            _parent = parent;
         }
 
         /// <summary>
@@ -441,19 +445,6 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
         }
 
         /// <summary>
-        /// Handles the Click event of the toolStripMenuItemStudentAvailability control.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        /// <remarks>
-        /// Created by: Sumedah
-        /// Created date: 2009-01-19
-        /// </remarks>
-        private void toolStripMenuItemStudentAvailability_Click(object sender, EventArgs e)
-        {
-        }
-
-        /// <summary>
         /// Initializes the schedule control.
         /// </summary>
         /// <remarks>
@@ -488,7 +479,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
                                                                 };
 
             _scheduleClipHandler = new ClipHandler<ICustomScheduleAppointment>();
-            ScheduleView = new AgentScheduleView(scheduleControlMain, AgentScheduleStateHolder.Instance(), _scheduleClipHandler);           
+            ScheduleView = new AgentScheduleView(scheduleControlMain, AgentScheduleStateHolder.Instance(), _scheduleClipHandler, _legendLoader);           
             ScheduleView.InitializeScheduleControl();
             ScheduleView.SetScheduleControlEventHandlers();
             ScheduleView.ScheduleControlHost.AllowAdjustAppointmentsWithMouse = false;

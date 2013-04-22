@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 			base.Configure();
 
 			CreateMap<IPreferenceDay, PreferenceDayViewModel>()
-				.ForMember(d => d.Preference, o => o.MapFrom(s =>
+				.ForMember(d => d.Preference, o => o.ResolveUsing(s =>
 					{
 						if (s.TemplateName != null)
 							return s.TemplateName;
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 							return Resources.Extended;
 						return null;
 					}))
-				.ForMember(d => d.Color, o => o.MapFrom(s =>
+				.ForMember(d => d.Color, o => o.ResolveUsing(s =>
 					{
 						if (s.Restriction.DayOffTemplate != null)
 							return s.Restriction.DayOffTemplate.DisplayColor.ToHtml();
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 					}))
 				.ForMember(d => d.Extended, o => o.MapFrom(s => _extendedPreferencePredicate.IsExtended(s)))
 				.ForMember(d => d.MustHave, o => o.MapFrom(s => s.Restriction.MustHave))
-				.ForMember(d => d.ExtendedTitle, o => o.MapFrom(s =>
+				.ForMember(d => d.ExtendedTitle, o => o.ResolveUsing(s =>
 					{
 						if (s.Restriction.DayOffTemplate != null)
 							return s.Restriction.DayOffTemplate.Description.Name;
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Preference.Mapping
 				.ForMember(d => d.StartTimeLimitation, o => o.MapFrom(s => s.Restriction.StartTimeLimitation.StartTimeString.ToLower() + "-" + s.Restriction.StartTimeLimitation.EndTimeString.ToLower()))
 				.ForMember(d => d.EndTimeLimitation, o => o.MapFrom(s => s.Restriction.EndTimeLimitation.StartTimeString.ToLower() + "-" + s.Restriction.EndTimeLimitation.EndTimeString.ToLower()))
 				.ForMember(d => d.WorkTimeLimitation, o => o.MapFrom(s => s.Restriction.WorkTimeLimitation.StartTimeString + "-" + s.Restriction.WorkTimeLimitation.EndTimeString))
-				.ForMember(d => d.Activity, o => o.MapFrom(s =>
+				.ForMember(d => d.Activity, o => o.ResolveUsing(s =>
 					{
 						var activityName = GetActivityRestrictionValue(s, r => r.Activity.Name);
 						return string.IsNullOrEmpty(activityName) ? "(" + Resources.NoActivity + ")" : activityName;

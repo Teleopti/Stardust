@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 			_combiner = combiner;
 		}
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		public IEffectiveRestriction Combine(IScheduleDay scheduleDay, IEffectiveRestriction effectiveRestriction)
 		{
 			if (scheduleDay == null)

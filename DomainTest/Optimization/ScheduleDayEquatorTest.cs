@@ -286,6 +286,22 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			bool result = _target.MainShiftEquals(otherShift, currentShift);
 			Assert.IsFalse(result);
 		}
+		
+		[Test]
+		public void ShouldMainShiftBeEqualIfHasDifferentDate()
+		{
+			var period1 = new DateTimePeriod(2013, 02, 19, 2013, 02, 19);
+			var period2 = new DateTimePeriod(2013, 02, 20, 2013, 02, 20);
+			var shiftCategory = new ShiftCategory("C");
+			var activity = new Activity("A");
+			activity.SetId(Guid.NewGuid());
+			IMainShift currentShift = MainShiftFactory.CreateMainShift(activity, period1, shiftCategory);
+			IMainShift otherShift = MainShiftFactory.CreateMainShift(activity, period2, shiftCategory);
+			
+			Assert.IsFalse(_target.MainShiftEquals(otherShift, currentShift));
+			Assert.IsTrue(_target.MainShiftBasicEquals(otherShift, currentShift));
+		}
+
 
 		#region Bugfix 19056
 

@@ -1,38 +1,17 @@
 ﻿using System;
 using System.Web;
-using System.Web.Routing;
-using Contrib.SignalR.SignalRMessageBus;
 using Microsoft.AspNet.SignalR;
 
 namespace Teleopti.Ccc.Web.Broker
 {
 	public class Global : HttpApplication
 	{
-
 		protected void Application_Start(object sender, EventArgs e)
 		{
 			log4net.Config.XmlConfigurator.Configure();
 
-			var settingsFromParser = TimeoutSettings.Load();
-
-			if (settingsFromParser.DefaultMessageBufferSize.HasValue)
-				GlobalHost.Configuration.DefaultMessageBufferSize = settingsFromParser.DefaultMessageBufferSize.Value;
-
-			if (settingsFromParser.DisconnectTimeout.HasValue)
-				GlobalHost.Configuration.DisconnectTimeout = settingsFromParser.DisconnectTimeout.Value;
-
-			if (settingsFromParser.KeepAlive.HasValue)
-				GlobalHost.Configuration.KeepAlive = settingsFromParser.KeepAlive.Value;
-
-			if (settingsFromParser.ConnectionTimeout.HasValue)
-				GlobalHost.Configuration.ConnectionTimeout = settingsFromParser.ConnectionTimeout.Value;
-
-			RouteTable.Routes.MapHubs(new HubConfiguration{EnableCrossDomain = true});
-
-			if (settingsFromParser.ScaleOutBackplaneUrl != null)
-			{
-				GlobalHost.DependencyResolver.UseSignalRServer(settingsFromParser.ScaleOutBackplaneUrl);
-			}
+			var hubConfiguration = new HubConfiguration { EnableCrossDomain = true };
+			SignalRConfiguration.Configure(hubConfiguration);
 		}
 
 		protected void Session_Start(object sender, EventArgs e)

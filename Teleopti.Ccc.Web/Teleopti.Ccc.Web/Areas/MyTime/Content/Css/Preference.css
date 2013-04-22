@@ -173,3 +173,7 @@
 .ie9 .preference-ui-tooltip {
     box-shadow: none;
 }
+
+div.qtip-content {
+    overflow: visible;
+}

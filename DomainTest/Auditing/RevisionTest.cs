@@ -38,6 +38,11 @@ namespace Teleopti.Ccc.DomainTest.Auditing
         {
             var revision = new Revision { Id = 100 };
             Assert.That(_target.Equals(revision), Is.True);
+
+	        var obj = (object)PersonFactory.CreatePerson("person");
+			Assert.That(_target.Equals(obj), Is.False);
+
+	        Assert.That(_target.Equals(null), Is.False);
         }
     }
 }

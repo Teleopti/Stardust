@@ -1,24 +1,14 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using NHibernate.Transform;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.Repositories
 {
-	public interface IScheduleDayReadModelRepository
-	{
-		IList<ScheduleDayReadModel> ReadModelsOnPerson(DateOnly startDate, DateOnly toDate, Guid personId);
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
-		void ClearPeriodForPerson(DateOnlyPeriod period, Guid personId);
-
-		void SaveReadModel(ScheduleDayReadModel model);
-		bool IsInitialized();
-	}
-
 	public class ScheduleDayReadModelRepository : IScheduleDayReadModelRepository
 	{
 		private readonly ICurrentUnitOfWork _currentUnitOfWork;
@@ -113,4 +103,5 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public bool NotScheduled { get; set; }
 	}
+
 }

@@ -23,22 +23,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public Repository(IUnitOfWork unitOfWork)
 		{
 			InParameter.NotNull("unitOfWork", unitOfWork);
-			_currentUnitOfWork = new fixedCurrentUnitOfWork(unitOfWork);
+			_currentUnitOfWork = new FixedCurrentUnitOfWork(unitOfWork);
 		}
-		private class fixedCurrentUnitOfWork : ICurrentUnitOfWork
-		{
-			private readonly IUnitOfWork _currentUnitOfWork;
 
-			public fixedCurrentUnitOfWork(IUnitOfWork currentUnitOfWork)
-			{
-				_currentUnitOfWork = currentUnitOfWork;
-			}
-
-			public IUnitOfWork Current()
-			{
-				return _currentUnitOfWork;
-			}
-		}
 
 		//old way - don't use this one
 		public Repository(IUnitOfWorkFactory unitOfWorkFactory)

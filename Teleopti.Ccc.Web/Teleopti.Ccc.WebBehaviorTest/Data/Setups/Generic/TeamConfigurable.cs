@@ -11,24 +11,27 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 	{
 		public string Site { get; set; }
 
-		public TeamConfigurable()
+		public string Name { get; set; }
+		public Team Team { get; private set; }
+
+		public TeamConfigurable() : this(GlobalDataContext.Data().Data<CommonSite>().Site) { }
+
+		private TeamConfigurable(ISite site)
 		{
 			Site = GlobalDataContext.Data().Data<CommonSite>().Site.Description.Name;
 		}
-
-		public string Name { get; set; }
 
 		public void Apply(IUnitOfWork uow)
 		{
 			var siteRepository = new SiteRepository(uow);
 			var site = siteRepository.LoadAll().Single(c => c.Description.Name == Site);
-			var team = new Team
+			Team = new Team
 			           	{
 			           		Description = new Description(Name),
 			           		Site = site
 			           	};
 			var teamRepository = new TeamRepository(uow);
-			teamRepository.Add(team);
+			teamRepository.Add(Team);
 		}
 	}
 }

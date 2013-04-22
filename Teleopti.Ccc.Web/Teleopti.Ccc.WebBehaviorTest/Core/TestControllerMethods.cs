@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Text.RegularExpressions;
 using NUnit.Framework;
+using Teleopti.Ccc.WebBehaviorTest.Core.BrowserInteractions.WatiNIE;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
@@ -13,27 +14,28 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void CreateCorruptCookie()
 		{
-			Navigation.GoTo("Test/CorruptMyCookie");
+			Navigation.GoTo("Test/CorruptMyCookie", new WaitUntilAt("Test/CorruptMyCookie"));
 		}
 
 		public static void CreateNonExistingDatabaseCookie()
 		{
-			Navigation.GoTo("Test/NonExistingDatasourceCookie");
+			Navigation.GoTo("Test/NonExistingDatasourceCookie", new WaitUntilAt("Test/NonExistingDatasourceCookie"));
 		}
 
 		public static void ExpireMyCookie()
 		{
-			Navigation.GoTo("Test/ExpireMyCookie");
+			Navigation.GoTo("Test/ExpireMyCookie", new WaitUntilAt("Test/ExpireMyCookie"));
 		}
 
 		public static void BeforeTestRun()
 		{
-			Navigation.GotoRaw("file://" + System.IO.Path.Combine(Environment.CurrentDirectory, "BeforeTestRun.html"));
+			Navigation.GotoRaw("file://" + System.IO.Path.Combine(Environment.CurrentDirectory, "BeforeTestRun.html"), new WaitUntilAt("BeforeTestRun"));
 		}
 
 		public static void BeforeScenario()
 		{
-			Navigation.GoTo("Test/BeforeScenario", new ApplicationStartupTimeout());
+			// use a scenario tag here for enableMyTimeMessageBroker if required
+			Navigation.GoTo("Test/BeforeScenario?enableMyTimeMessageBroker=false", new ApplicationStartupTimeout(), new WaitUntilAt("Test/BeforeScenario"));
 		}
 
 		/// <summary>
@@ -73,7 +75,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			const string dataSourceName = "TestData";
 			var businessUnitName = UserFactory.User().Person.PermissionInformation.ApplicationRoleCollection.Single().BusinessUnit.Name;
 			var queryString = string.Format("?dataSourceName={0}&businessUnitName={1}&userName={2}&password={3}", dataSourceName, businessUnitName, userName, password);
-			Navigation.GoTo("Test/Logon" + queryString);
+			Navigation.GoTo("Test/Logon" + queryString, new WaitUntilAt("Test/Logon"));
 		}
 
 		public static void ExpireMyCookieInsidePortal()
@@ -81,16 +83,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			// doing this twice because IE fails to grab the cookie after the first one sometimes..
 			// probably depending on how quickly the next request takes place.
 			// making a second request seems to enforce the cookie somehow..
-			Retrying.Javascript("Teleopti.MyTimeWeb.Test.ExpireMyCookie('Cookie is expired!');");
+
+			Browser.Interactions.Eval("Teleopti.MyTimeWeb.Test.ExpireMyCookie('Cookie is expired!');");
 			EventualAssert.That(() => Browser.Current.Eval("Teleopti.MyTimeWeb.Test.PopTestMessages();"), Is.StringContaining("Cookie is expired!"));
 
-			Retrying.Javascript("Teleopti.MyTimeWeb.Test.ExpireMyCookie('Cookie is expired!');");
+			Browser.Interactions.Eval("Teleopti.MyTimeWeb.Test.ExpireMyCookie('Cookie is expired!');");
 			EventualAssert.That(() => Browser.Current.Eval("Teleopti.MyTimeWeb.Test.PopTestMessages();"), Is.StringContaining("Cookie is expired!"));
 		}
 
 		public static void TestMessage(string message)
 		{
-			Retrying.Javascript("Teleopti.MyTimeWeb.Test.TestMessage('" + message + "');");
+			Browser.Interactions.Eval("Teleopti.MyTimeWeb.Test.TestMessage('" + message + "');");
 			EventualAssert.That(() => Browser.Current.Eval("Teleopti.MyTimeWeb.Test.PopTestMessages();"), Is.StringContaining(message));
 		}
 

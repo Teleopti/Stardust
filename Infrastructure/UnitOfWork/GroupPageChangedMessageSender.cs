@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1502:AvoidExcessiveComplexity"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public void Execute(IRunSql runSql, IEnumerable<IRootChangeInfo> modifiedRoots)
+		public void Execute(IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
 			var atLeastOneMessage = false;
 			var affectedInterfaces = from r in modifiedRoots
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 					var idsAsString = (from p in groupPageList select p.Id.GetValueOrDefault()).ToArray();
 					var message = new GroupPageChangedMessage();
 					message.SetGroupPageIdCollection(idsAsString);
-					_saveToDenormalizationQueue.Execute(message, runSql);
+					_saveToDenormalizationQueue.Execute(message);
 					atLeastOneMessage = true;
 				}
 

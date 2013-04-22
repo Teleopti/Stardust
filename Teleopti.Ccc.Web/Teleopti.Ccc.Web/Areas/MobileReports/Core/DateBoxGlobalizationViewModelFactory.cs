@@ -38,7 +38,11 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core
 			       		HeaderFormat = dateTimeFormatInfo.LongDatePattern,
 			       		DateFormat =
 			       			AdjustDateFormat(dateTimeFormatInfo.ShortDatePattern, dateTimeFormatInfo.DateSeparator),
-							CalStartDay = (int)dateTimeFormatInfo.FirstDayOfWeek
+							CalStartDay = (int)dateTimeFormatInfo.FirstDayOfWeek,
+						TitleDateDialogLabel = Resources.SelectDates,
+						NextMonth = Resources.DoubleArrowAdd,
+						PreviousMonth = Resources.DoubleArrowRemove,
+						UseArabicIndic = currentCulture.TextInfo.IsRightToLeft,
 			       	};
 		}
 
@@ -49,11 +53,13 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core
 			string[] strings = shortDatePattern.Split(new[] {dateSeparator}, StringSplitOptions.RemoveEmptyEntries);
 			return string.Join(dateSeparator, strings.Select(s =>
 			                                                 	{
-			                                                 		if ("d".Equals(s)) return "dd";
-			                                                 		if ("dd".Equals(s)) return "DD";
-			                                                 		if ("M".Equals(s)) return "mm";
-			                                                 		if ("yy".Equals(s)) return "YYYY";
-			                                                 		if ("yyyy".Equals(s)) return "YYYY";
+			                                                 		if ("d".Equals(s)) return "%d";
+			                                                 		if ("dd".Equals(s)) return "%d";
+			                                                 		if ("DD".Equals(s)) return "%d";
+			                                                 		if ("M".Equals(s)) return "%m";
+			                                                 		if ("MM".Equals(s)) return "%m";
+			                                                 		if ("yy".Equals(s)) return "%Y";
+			                                                 		if ("yyyy".Equals(s)) return "%Y";
 			                                                 		return s;
 			                                                 	}).ToArray());
 		}

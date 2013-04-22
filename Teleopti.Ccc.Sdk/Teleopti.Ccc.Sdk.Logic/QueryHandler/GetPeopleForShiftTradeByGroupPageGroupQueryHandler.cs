@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
         private readonly IAssembler<IPerson, PersonDto> _personAssembler;
         private readonly IGroupingReadOnlyRepository _groupingReadOnlyRepository;
         private readonly IPersonRepository _personRepository;
-        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+        private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
     	private readonly IShiftTradeLightValidator _shiftTradeLightValidator;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1006:DoNotNestGenericTypesInMemberSignatures")]
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
             IAssembler<IPerson, PersonDto> personAssembler,
             IGroupingReadOnlyRepository groupingReadOnlyRepository,
             IPersonRepository personRepository,
-            IUnitOfWorkFactory unitOfWorkFactory,
+            ICurrentUnitOfWorkFactory unitOfWorkFactory,
 			IShiftTradeLightValidator shiftTradeLightValidator)
         {
             _personAssembler = personAssembler;
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
                 PrincipalAuthorization.Instance().IsPermitted(
                     DefinedRaptorApplicationFunctionPaths.ViewSchedules, queryDate, p));
             var peopleForShiftTrade = new List<IPerson>();
-            using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
+            using (_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
             {
                 var personFrom = _personRepository.Get(query.PersonId);
                 var people = _personRepository.FindPeople(availableDetails.Select(d => d.PersonId));

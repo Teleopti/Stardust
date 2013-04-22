@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
     ///<summary>
     /// Repository for PersonAssignment aggregate
     ///</summary>
-    public class PersonAbsenceRepository : Repository<IPersonAbsence>, IPersonAbsenceRepository
+    public class PersonAbsenceRepository : Repository<IPersonAbsence>, IPersonAbsenceRepository, IWriteSideRepository<IPersonAbsence>
     {
         public PersonAbsenceRepository(IUnitOfWork unitOfWork)
             : base(unitOfWork)

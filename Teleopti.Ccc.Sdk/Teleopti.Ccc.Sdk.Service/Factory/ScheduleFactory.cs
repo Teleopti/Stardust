@@ -22,9 +22,9 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
     	private readonly IAssembler<IPerson, PersonDto> _personAssembler;
         private readonly IAssembler<IScheduleDay, SchedulePartDto> _scheduleDayAssembler;
         private readonly IAssembler<DateTimePeriod, DateTimePeriodDto> _dateTimePeriodAssembler;
-        private readonly IScenarioRepository _scenarioRepository;
+        private readonly ICurrentScenario _scenarioRepository;
 
-		  public ScheduleFactory(IScheduleRepository scheduleRepository, ISaveSchedulePartService saveSchedulePartService, IUnitOfWorkFactory unitOfWorkFactory, IAssembler<IPerson, PersonDto> personAssembler, IAssembler<IScheduleDay, SchedulePartDto> scheduleDayAssembler, IAssembler<DateTimePeriod, DateTimePeriodDto> dateTimePeriodAssembler, IScenarioRepository scenarioRepository)
+		  public ScheduleFactory(IScheduleRepository scheduleRepository, ISaveSchedulePartService saveSchedulePartService, IUnitOfWorkFactory unitOfWorkFactory, IAssembler<IPerson, PersonDto> personAssembler, IAssembler<IScheduleDay, SchedulePartDto> scheduleDayAssembler, IAssembler<DateTimePeriod, DateTimePeriodDto> dateTimePeriodAssembler, ICurrentScenario scenarioRepository)
         {
             _scheduleRepository = scheduleRepository;
         	_saveSchedulePartService = saveSchedulePartService;
@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
             using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
                 IList<IPerson> personList = _personAssembler.DtosToDomainEntities(personCollection).ToList();
-                IScheduleDictionary scheduleDictonary = _scheduleRepository.FindSchedulesOnlyInGivenPeriod(new PersonProvider(personList), new ScheduleDictionaryLoadOptions(false, false), period, _scenarioRepository.LoadDefaultScenario());
+                IScheduleDictionary scheduleDictonary = _scheduleRepository.FindSchedulesOnlyInGivenPeriod(new PersonProvider(personList), new ScheduleDictionaryLoadOptions(false, false), period, _scenarioRepository.Current());
 
                 //rk don't know if I break stuff here...
                 //scheduleDictonary.SetTimeZone(timeZone);
@@ -107,7 +107,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
             {
                 IList<IPerson> personList = _personAssembler.DtosToDomainEntities(personCollection).ToList();
 
-                IScheduleDictionary scheduleDictionary = _scheduleRepository.FindSchedulesOnlyInGivenPeriod(new PersonProvider(personList), new ScheduleDictionaryLoadOptions(true, false), period, _scenarioRepository.LoadDefaultScenario());
+                IScheduleDictionary scheduleDictionary = _scheduleRepository.FindSchedulesOnlyInGivenPeriod(new PersonProvider(personList), new ScheduleDictionaryLoadOptions(true, false), period, _scenarioRepository.Current());
                 foreach (IPerson person in personList)
                 {
                     IScheduleRange scheduleRange = scheduleDictionary[person];

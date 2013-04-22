@@ -1,6 +1,6 @@
-﻿/// <reference path="~/Content/Scripts/jquery-1.8.3.js" />
-/// <reference path="~/Content/jqueryui/jquery-ui-1.9.1.custom.js" />
-/// <reference path="~/Content/Scripts/jquery-1.8.3-vsdoc.js" />
+﻿/// <reference path="~/Content/Scripts/jquery-1.9.1.js" />
+/// <reference path="~/Content/jqueryui/jquery-ui-1.10.1.custom.js" />
+/// <reference path="~/Content/Scripts/jquery-1.9.1-vsdoc.js" />
 /// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
 /// <reference path="Teleopti.MyTimeWeb.Common.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Request.RequestDetail.js"/>
@@ -40,11 +40,11 @@ Teleopti.MyTimeWeb.Request = (function ($) {
 	}
 
 	function _activateAddRequestMenu() {
-		$("#Requests-addRequest-dropdown dt span").live("click", function () {
+		$(document).on("click", "#Requests-addRequest-dropdown dt span", function () {
 			$("#Requests-addRequest-dropdown dd ul").toggle();
 		});
 
-		$("#Requests-addRequest-dropdown dd ul").live("click", function () {
+		$(document).on("click", "#Requests-addRequest-dropdown dd ul", function () {
 			_hideAddRequestMenu();
 		});
 

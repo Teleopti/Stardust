@@ -35,14 +35,25 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Models.Layout
 		[DataMember(Name = "calStartDay")]
 		public int CalStartDay { get; set; }
 
-
 		[DataMember(Name = "isRTL")]
 		public bool IsRtl { get; set; }
+
+		[DataMember(Name = "useArabicIndic")]
+		public bool UseArabicIndic { get; set; }
 
 		[DataMember(Name = "setDateButtonLabel")]
 		public string SetDateButtonLabel { get; set; }
 
 		[DataMember(Name = "tooltip")]
 		public string Tooltip { get; set; }
+
+		[DataMember(Name = "titleDateDialogLabel")]
+		public string TitleDateDialogLabel { get; set; }
+
+		[DataMember(Name = "prevMonth")]
+		public string PreviousMonth { get; set; }
+
+		[DataMember(Name = "nextMonth")]
+		public string NextMonth { get; set; }
 	}
 }

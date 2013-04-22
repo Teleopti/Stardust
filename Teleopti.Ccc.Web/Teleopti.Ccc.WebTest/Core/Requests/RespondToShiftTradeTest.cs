@@ -5,6 +5,7 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Requests;
@@ -70,8 +71,8 @@ namespace Teleopti.Ccc.WebTest.Core.Requests
 			var uowFactory = MockRepository.GenerateStub<IUnitOfWorkFactory>();
 			uowFactory.Expect(x => x.Name).Return("gegga");
 			unitOfWorkFactoryProvider.Expect(x => x.LoggedOnUnitOfWorkFactory()).Return(uowFactory);
-			var bsProvider = MockRepository.GenerateMock<ICurrentBusinessUnitProvider>();
-			bsProvider.Expect(x => x.CurrentBusinessUnit()).Return(new BusinessUnit("sdf"));
+			var bsProvider = MockRepository.GenerateMock<ICurrentBusinessUnit>();
+			bsProvider.Expect(x => x.Current()).Return(new BusinessUnit("sdf"));
 			busSender.Expect(x => x.EnsureBus()).Return(true);
 			var target = new RespondToShiftTrade(personRequestRepository, shiftTradeRequestCheckSum, personRequestCheckAuthorization, loggedOnUser, mapper, busSender, unitOfWorkFactoryProvider, bsProvider, MockRepository.GenerateMock<INow>());
 			var requestViewModel = new RequestViewModel();
@@ -85,7 +86,7 @@ namespace Teleopti.Ccc.WebTest.Core.Requests
 			target.OkByMe(shiftTradeId);
 
 			//verify expectation:
-			busSender.AssertWasCalled(s => s.NotifyServiceBus((AcceptShiftTrade)null), o => o.IgnoreArguments());
+			busSender.AssertWasCalled(s => s.Send(null), o => o.IgnoreArguments());
 		}
 
 		[Test]

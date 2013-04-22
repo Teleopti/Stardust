@@ -258,7 +258,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                                 where data.BelongsToPeriod(dateAndDateTime)
                                 select (IScheduleData)data.Clone()).ToList();
                 filteredConflicts = (from conflict in PersonAssignmentConflictInternalCollection
+// ReSharper disable ImplicitlyCapturedClosure
+									 // tamasb: note that we can ignore the R# warning here as both usages of schedulePublishedSpecification come   
+									 // one after other quick, so the existance of schedulePublishedSpecification is not long
                                      where conflict.BelongsToPeriod(dateAndDateTime)
+// ReSharper restore ImplicitlyCapturedClosure
                                      select conflict.EntityClone());
             }
             else
@@ -266,17 +270,23 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                 var agentTimeZone = Person.PermissionInformation.DefaultTimeZone();
                 schedulePublishedSpecification =
                     new SchedulePublishedSpecification(Person.WorkflowControlSet, ScheduleVisibleReasons.Any);
+				var schedulePublishedSpecificationForAbsence =
+					new SchedulePublishedSpecificationForAbsence(Person.WorkflowControlSet, ScheduleVisibleReasons.Any, dateAndDateTime);
                 filteredData = (from data in ScheduleDataInternalCollection()
                                 where
                                     data.BelongsToPeriod(dateAndDateTime) &&
-                                    schedulePublishedSpecification.IsSatisfiedBy(
+                                    (schedulePublishedSpecification.IsSatisfiedBy(
                                         new DateOnly(data.Period.StartDateTimeLocal(agentTimeZone)))
+										|| schedulePublishedSpecificationForAbsence.IsSatisfiedBy(
+                                        new PublishedScheduleData(data, agentTimeZone)))
                                 select (IScheduleData) data.Clone()).ToList();
                 filteredConflicts = (from conflict in PersonAssignmentConflictInternalCollection
                                      where
                                          conflict.BelongsToPeriod(dateAndDateTime) &&
-                                         schedulePublishedSpecification.IsSatisfiedBy(
-                                             new DateOnly(conflict.Period.StartDateTimeLocal(agentTimeZone)))
+									(schedulePublishedSpecification.IsSatisfiedBy(
+										new DateOnly(conflict.Period.StartDateTimeLocal(agentTimeZone)))
+										|| schedulePublishedSpecificationForAbsence.IsSatisfiedBy(
+										new PublishedScheduleData(conflict, agentTimeZone)))
                                      select conflict.EntityClone());
             }
             filteredData.ForEach(retObj._scheduleDataCollection.Add);

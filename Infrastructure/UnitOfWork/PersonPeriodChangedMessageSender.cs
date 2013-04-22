@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		}
 
     	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public void Execute(IRunSql runSql, IEnumerable<IRootChangeInfo> modifiedRoots)
+        public void Execute(IEnumerable<IRootChangeInfo> modifiedRoots)
         {
 			var atLeastOneMessage = false;
             var affectedInterfaces = from r in modifiedRoots
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
                     
                     var message = new PersonPeriodChangedMessage();
 					message.SetPersonIdCollection(idsAsString);
-                    _saveToDenormalizationQueue.Execute(message, runSql);
+                    _saveToDenormalizationQueue.Execute(message);
 					atLeastOneMessage = true;
 				}
 				if (atLeastOneMessage)

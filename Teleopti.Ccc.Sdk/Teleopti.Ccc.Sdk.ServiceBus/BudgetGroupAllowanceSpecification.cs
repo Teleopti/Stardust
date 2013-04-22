@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Repositories;
@@ -15,11 +17,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
         private static readonly ILog Logger = LogManager.GetLogger(typeof(BudgetGroupAllowanceSpecification));
 
         private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
-        private readonly IScenarioRepository _scenarioRepository;
+        private readonly ICurrentScenario _scenarioRepository;
         private readonly IBudgetDayRepository _budgetDayRepository;
         private readonly IScheduleProjectionReadOnlyRepository _scheduleProjectionReadOnlyRepository;
 
-		  public BudgetGroupAllowanceSpecification(ISchedulingResultStateHolder schedulingResultStateHolder, IScenarioRepository scenarioRepository, IBudgetDayRepository budgetDayRepository, IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository)
+		  public BudgetGroupAllowanceSpecification(ISchedulingResultStateHolder schedulingResultStateHolder, ICurrentScenario scenarioRepository, IBudgetDayRepository budgetDayRepository, IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository)
         {
             _schedulingResultStateHolder = schedulingResultStateHolder;
             _scenarioRepository = scenarioRepository;
@@ -41,7 +43,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
             }
 
 			var budgetGroup = personPeriod.BudgetGroup;
-            var defaultScenario = _scenarioRepository.LoadDefaultScenario();
+            var defaultScenario = _scenarioRepository.Current();
             var budgetDays = _budgetDayRepository.Find(defaultScenario, budgetGroup, requestedPeriod);
             if (budgetDays == null)
             {
@@ -58,6 +60,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
             foreach (var budgetDay in budgetDays)
             {
                 var currentDay = budgetDay.Day;
+
+                if (!IsSkillOpenForDateOnly(currentDay, budgetGroup.SkillCollection))
+                    continue;
+
                 var allowanceMinutes = budgetDay.Allowance * budgetDay.FulltimeEquivalentHours * TimeDefinition.MinutesPerHour;
                 var usedAbsenceMinutes = TimeSpan.FromTicks(
                     _scheduleProjectionReadOnlyRepository.AbsenceTimePerBudgetGroup(new DateOnlyPeriod(currentDay, currentDay),
@@ -100,5 +106,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
             }
             return requestedTime;
         }
+
+        protected static bool IsSkillOpenForDateOnly(DateOnly date, IEnumerable<ISkill> skills)
+        {
+            return skills.Any(s => s.WorkloadCollection.Any(w => w.TemplateWeekCollection.Any(t => t.Key == (int)date.DayOfWeek && t.Value.OpenForWork.IsOpen)));
+        }
+
+
     }
 }

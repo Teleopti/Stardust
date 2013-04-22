@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
@@ -28,22 +27,24 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			InnerGoto(new Uri(url), interceptors);
 		}
 
-		private static void InnerGoto(Uri uri, params IGoToInterceptor[] interceptors)
+		private static void InnerGoto(Uri url, params IGoToInterceptor[] interceptors)
 		{
-			var args = new GotoArgs {Uri = uri};
+			var args = new GotoArgs {Uri = url};
 
 			interceptors.ToList().ForEach(i => i.Before(args));
 
-			Log.Write("Browsing to: " + args.Uri);
-			Retrying.Action(() => Browser.Current.GoTo(args.Uri));
-			Log.Write("Ended up in: " + Browser.Current.Url);
+			Log.Info("Browsing to: " + args.Uri);
+
+			Browser.Interactions.GoTo(args.Uri.ToString());
 
 			interceptors.Reverse().ToList().ForEach(i => i.After(args));
+
+			Log.Info("Ended up in: " + Browser.Current.Url);
 		}
 
 		public static void GotoAsm()
 		{
-			GoTo("MyTime/Asm", new OverrideNotifyBehavior());
+			GoTo("MyTime/Asm", new OverrideNotifyBehavior(), new WaitUntilAt("MyTime/Asm"));
 		}
 
 
@@ -55,44 +56,44 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void GotoMyTime()
 		{
-			GoTo("MyTime", new ApplicationStartupTimeout());
+			GoTo("MyTime", new ApplicationStartupTimeout(), new WaitUntilAt("MyTime"));
 			Pages.Pages.NavigatingTo(Browser.Current.Page<SignInPage>());
 		}
 
 		public static void GotoMobileReports()
 		{
-			GoTo("MobileReports", new ApplicationStartupTimeout());
+			GoTo("MobileReports", new ApplicationStartupTimeout(), new WaitUntilAt("MobileReports"));
 			Pages.Pages.NavigatingTo(Browser.Current.Page<SignInPage>());
 		}
 
 		public static void GotoAnywhere()
 		{
-			GoTo("Anywhere", new ApplicationStartupTimeout());
+			GoTo("Anywhere", new ApplicationStartupTimeout(), new WaitUntilAt("Anywhere"));
 			Pages.Pages.NavigatingTo(Browser.Current.Page<SignInPage>());
 		}
 
 		public static void GotoGlobalSignInPage()
 		{
-			GoTo("Authentication", new ApplicationStartupTimeout());
+			GoTo("Authentication", new ApplicationStartupTimeout(), new WaitUntilAt("Authentication"));
 			Pages.Pages.NavigatingTo(Browser.Current.Page<SignInPage>());
 
 		}
 
 		public static void GotoMobileReportsSignInPage(string hash)
 		{
-			GoTo("MobileReports/Authentication" + hash, new ApplicationStartupTimeout());
+			GoTo("MobileReports/Authentication" + hash, new ApplicationStartupTimeout(), new WaitUntilAtHash());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<SignInPage>());
 		}
 
 		public static void GotoMobileReportsPage()
 		{
-			GoTo("MobileReports#", new ApplicationStartupTimeout());
+			GoTo("MobileReports#", new ApplicationStartupTimeout(), new WaitUntilAt("MobileReports"));
 			Pages.Pages.NavigatingTo(Browser.Current.Page<MobileReportsPage>());
 		}
 
 		public static void GotoMobileReportsSettings()
 		{
-			GoTo("MobileReports#report-settings-view");
+			GoTo("MobileReports#report-settings-view", new WaitUntilAtHash());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<MobileReportsPage>());
 		}
 
@@ -109,7 +110,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void GotoWeekSchedulePage()
 		{
-			GoTo("MyTime#Schedule/Week", new ApplicationStartupTimeout(), new LoadingOverlay());
+			GoTo("MyTime#Schedule/Week", new ApplicationStartupTimeout(), new WaitForLoadingOverlay(), new WaitUntilAtHash());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<WeekSchedulePage>());
 		}
 
@@ -117,13 +118,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		{
 			GoTo(string.Format("MyTime#Schedule/Week/{0}/{1}/{2}", 
 				date.Year.ToString("0000"), date.Month.ToString("00"), date.Day.ToString("00")),
-				new ApplicationStartupTimeout(), new LoadingOverlay(), new WaitUntilCompletelyLoaded());
+				new ApplicationStartupTimeout(), new WaitForLoadingOverlay(), new WaitUntilCompletelyLoaded(), new WaitUntilAtHash());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<WeekSchedulePage>());
 		}
 
 		public static void GotoStudentAvailability()
 		{
-			GoTo("MyTime#StudentAvailability/Index", new ApplicationStartupTimeout(), new LoadingOverlay());
+			GoTo("MyTime#StudentAvailability/Index", new ApplicationStartupTimeout(), new WaitForLoadingOverlay(), new WaitUntilAtHash());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<StudentAvailabilityPage>());
 		}
 
@@ -131,13 +132,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		{
 			GoTo(string.Format("MyTime#StudentAvailability/Index/{0}/{1}/{2}",
 			                   date.Year.ToString("0000"), date.Month.ToString("00"), date.Day.ToString("00")),
-			     new ApplicationStartupTimeout(), new LoadingOverlay());
+				 new ApplicationStartupTimeout(), new WaitForLoadingOverlay(), new WaitUntilAtHash());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<StudentAvailabilityPage>());
 		}
 
 		public static void GotoPreference()
 		{
-			GoTo("MyTime#Preference/Index", new ApplicationStartupTimeout(), new LoadingOverlay(), new OverrideNotifyBehavior(), new WaitUntilReadyForInteraction());
+			GoTo("MyTime#Preference/Index", new ApplicationStartupTimeout(), new WaitForLoadingOverlay(), new OverrideNotifyBehavior(), new WaitUntilReadyForInteraction(), new WaitUntilAtHash());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<PreferencePage>());
 		}
 
@@ -145,31 +146,31 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		{
 			GoTo(string.Format("MyTime#Preference/Index/{0}/{1}/{2}",
 				date.Year.ToString("0000"), date.Month.ToString("00"), date.Day.ToString("00")),
-				new ApplicationStartupTimeout(), new LoadingOverlay(), new OverrideNotifyBehavior(), new WaitUntilReadyForInteraction());
+				new ApplicationStartupTimeout(), new WaitForLoadingOverlay(), new OverrideNotifyBehavior(), new WaitUntilReadyForInteraction(), new WaitUntilAtHash());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<PreferencePage>());
 		}
 
 		public static void GotoRegionalSettings()
 		{
-			GoTo("MyTime#Settings/Index", new ApplicationStartupTimeout(), new LoadingOverlay(), new WaitUntilReadyForInteraction());
+			GoTo("MyTime#Settings/Index", new ApplicationStartupTimeout(), new WaitForLoadingOverlay(), new WaitUntilReadyForInteraction(), new WaitUntilAtHash());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<RegionalSettingsPage>());
 		}
 
 		public static void GotoPasswordPage()
 		{
-			GoTo("MyTime#Settings/Password", new ApplicationStartupTimeout(), new LoadingOverlay());
+			GoTo("MyTime#Settings/Password", new ApplicationStartupTimeout(), new WaitForLoadingOverlay(), new WaitUntilAtHash());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<PasswordPage>());
 		}
 
 		public static void GotoRequests()
 		{
-			GoTo("MyTime#Requests/Index", new ForceRefresh(), new ApplicationStartupTimeout(), new LoadingOverlay(), new WaitUntilReadyForInteraction());
+			GoTo("MyTime#Requests/Index", new ForceRefresh(), new ApplicationStartupTimeout(), new WaitForLoadingOverlay(), new WaitUntilReadyForInteraction(), new WaitUntilAtHash());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<RequestsPage>());
 		}
 
 		public static void GotoTeamSchedule()
 		{
-			GoTo("MyTime#TeamSchedule/Index", new ApplicationStartupTimeout(), new LoadingOverlay(), new WaitUntilReadyForInteraction());
+			GoTo("MyTime#TeamSchedule/Index", new ApplicationStartupTimeout(), new WaitForLoadingOverlay(), new WaitUntilReadyForInteraction(), new WaitUntilAtHash());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<TeamSchedulePage>());
 		}
 
@@ -177,7 +178,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		{
 			GoTo(string.Format("MyTime#TeamSchedule/Index/{0}/{1}/{2}", 
 				date.Year.ToString("0000"), date.Month.ToString("00"),date.Day.ToString("00"))
-				, new ApplicationStartupTimeout(), new LoadingOverlay(), new WaitUntilReadyForInteraction());
+				, new ApplicationStartupTimeout(), new WaitForLoadingOverlay(), new WaitUntilReadyForInteraction(), new WaitUntilAtHash());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<TeamSchedulePage>());
 		}
 
@@ -193,18 +194,34 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 	    public static void GotoMessagePage()
         {
-            GoTo("MyTime#Message/Index", new ApplicationStartupTimeout(), new LoadingOverlay());
+			GoTo("MyTime#Message/Index", new ApplicationStartupTimeout(), new WaitForLoadingOverlay(), new WaitUntilAtHash());
             Pages.Pages.NavigatingTo(Browser.Current.Page<MessagePage>());
 	    }
 
-		public static void GotoAnywhereTeamSchedule(string date = null)
+		public static void GotoAnywhereTeamSchedule()
 		{
-			string hash = string.Empty;
-			if (!string.IsNullOrEmpty(date))
-			{
-				hash = string.Format(CultureInfo.InvariantCulture, "#teamschedule/{0}", date.Replace("-",""));
-			}
-			GoTo("Anywhere" + hash, new ApplicationStartupTimeout());
+			GoTo("Anywhere", new ApplicationStartupTimeout(), new WaitUntilAt("Anywhere"));
+			Pages.Pages.NavigatingTo(Browser.Current.Page<AnywherePage>());
+		}
+
+		public static void GotoAnywhereTeamSchedule(DateTime date)
+		{
+			GoTo(string.Format("Anywhere#teamschedule/{0}{1}{2}",
+				date.Year.ToString("0000"), 
+				date.Month.ToString("00"), 
+				date.Day.ToString("00")),
+				new ApplicationStartupTimeout(), new WaitUntilAtHash());
+			Pages.Pages.NavigatingTo(Browser.Current.Page<AnywherePage>());
+		}
+
+		public static void GotoAnywhereTeamSchedule(DateTime date, Guid teamId)
+		{
+			GoTo(string.Format("Anywhere#teamschedule/{0}/{1}{2}{3}",
+				teamId,
+				date.Year.ToString("0000"), 
+				date.Month.ToString("00"), 
+				date.Day.ToString("00")),
+				new ApplicationStartupTimeout(), new WaitUntilAtHash());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<AnywherePage>());
 		}
 
@@ -212,7 +229,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		{
 			GoTo(string.Format("Anywhere#personschedule/{0}/{1}",
 				personId, date.Year.ToString("0000") + date.Month.ToString("00") + date.Day.ToString("00"))
-				, new ApplicationStartupTimeout());
+				, new ApplicationStartupTimeout(), new WaitUntilAtHash());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<AnywherePage>());
 		}
 
@@ -220,7 +237,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		{
 			GoTo(string.Format("Anywhere#personschedule/{0}/{1}/addfulldayabsence",
 				personId, date.Year.ToString("0000") + date.Month.ToString("00") + date.Day.ToString("00"))
-				, new ApplicationStartupTimeout());
+				, new ApplicationStartupTimeout(), new WaitUntilAtHash());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<AnywherePage>());
 		}
 	}
@@ -267,7 +284,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		}
 	}
 
-	public class LoadingOverlay : IGoToInterceptor
+	public class WaitForLoadingOverlay : IGoToInterceptor
 	{
 		public void Before(GotoArgs args)
 		{
@@ -302,7 +319,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		private static void mockNotifyCall()
 		{
 			const string jsCode = "Teleopti.MyTimeWeb.Notifier.Notify = function (value) {$('<span/>', {text: value, 'class': 'notifyLoggerItem'}).appendTo('#notifyLogger');};";
-			Browser.Current.Eval(jsCode);
+			Browser.Interactions.Eval(jsCode);
 		}
 	}
 
@@ -327,6 +344,60 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		public void After(GotoArgs args)
 		{
 			TestControllerMethods.WaitUntilCompletelyLoaded();
+		}
+	}
+
+	public class WaitUntilAtHash : IGoToInterceptor
+	{
+		private string _hash;
+
+		public void Before(GotoArgs args)
+		{
+			var urlString = args.Uri.ToString();
+			_hash = urlString.Substring(urlString.IndexOf("#"));
+		}
+
+		public void After(GotoArgs args)
+		{
+			Browser.Interactions.AssertUrlContains(_hash);
+		}
+	}
+
+	public class WaitUntilAt : IGoToInterceptor
+	{
+		private readonly string _url;
+
+		public WaitUntilAt(string url)
+		{
+			_url = url;
+		}
+
+		public void Before(GotoArgs args)
+		{
+		}
+
+		public void After(GotoArgs args)
+		{
+			Browser.Interactions.AssertUrlContains(_url);
+		}
+	}
+
+	public class WaitUntilExists : IGoToInterceptor
+	{
+		private readonly string _selector;
+
+		public WaitUntilExists(string selector)
+		{
+			_selector = selector;
+		}
+
+		public void Before(GotoArgs args)
+		{
+		}
+
+		public void After(GotoArgs args)
+		{
+			Browser.Interactions.AssertExists(_selector);
 		}
 	}
 }

@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[When(@"I click the close button")]
 		public void WhenIClickTheCloseButton()
 		{
-			Pages.Pages.StudentAvailabilityPage.EditStudentAvailabilityPanel.Link(Find.ByClass("ui-state-default ui-tooltip-close ui-tooltip-icon"));
+			Pages.Pages.StudentAvailabilityPage.EditStudentAvailabilityPanel.Link(Find.ByClass("ui-state-default qtip-close qtip-icon"));
 		}
 
 		[When(@"I select day '(.*)' in student availability")]

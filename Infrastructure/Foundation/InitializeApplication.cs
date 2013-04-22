@@ -102,8 +102,9 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 		/// <param name="xmlDirectory">The directory to nhibernate's conf file(s)</param>
 		/// <param name="loadPasswordPolicyService">The password policy loading service</param>
 		/// <param name="configurationWrapper">The configuration wrapper.</param>
+		/// <param name="startMessageBroker"></param>
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3")]
-		public void Start(IState clientCache, string xmlDirectory, ILoadPasswordPolicyService loadPasswordPolicyService, IConfigurationWrapper configurationWrapper)
+		public void Start(IState clientCache, string xmlDirectory, ILoadPasswordPolicyService loadPasswordPolicyService, IConfigurationWrapper configurationWrapper, bool startMessageBroker)
 		{
 			StateHolder.Initialize(clientCache);
 
@@ -119,7 +120,8 @@ namespace Teleopti.Ccc.Infrastructure.Foundation
 				}
 			}
 			var appSettings = configurationWrapper.AppSettings;
-			StartMessageBroker(appSettings);
+			if (startMessageBroker)
+				StartMessageBroker(appSettings);
 			StateHolder.Instance.State.SetApplicationData(
 				new ApplicationData(appSettings, new ReadOnlyCollection<IDataSource>(dataSources), MessageBroker, loadPasswordPolicyService));
 		}

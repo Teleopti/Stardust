@@ -11,10 +11,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 	{
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IScheduleRepository _scheduleRepository;
-		private readonly IScenarioRepository _scenarioRepository;
+		private readonly ICurrentScenario _scenarioRepository;
 		private readonly IUserTimeZone _userTimeZone;
 
-		public DefaultScenarioScheduleProvider(ILoggedOnUser loggedOnUser, IScheduleRepository scheduleRepository, IScenarioRepository scenarioRepository, IUserTimeZone userTimeZone)
+		public DefaultScenarioScheduleProvider(ILoggedOnUser loggedOnUser, IScheduleRepository scheduleRepository, ICurrentScenario scenarioRepository, IUserTimeZone userTimeZone)
 		{
 			_loggedOnUser = loggedOnUser;
 			_scheduleRepository = scheduleRepository;
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 		public IEnumerable<IScheduleDay> GetScheduleForPeriod(DateOnlyPeriod period)
 		{
 			var person = _loggedOnUser.CurrentUser();
-			var defaultScenario = _scenarioRepository.LoadDefaultScenario();
+			var defaultScenario = _scenarioRepository.Current();
 			var dateTimePeriod = period.ToDateTimePeriod(_userTimeZone.TimeZone());
 
 			var dictionary = _scheduleRepository.FindSchedulesOnlyInGivenPeriod(new PersonProvider(new[] { person }), new ScheduleDictionaryLoadOptions(true, true), dateTimePeriod,
@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			var timeZone = person.PermissionInformation.DefaultTimeZone();
 			var dateTimePeriod = new DateOnlyPeriod(date, date).ToDateTimePeriod(timeZone);
 
-			var defaultScenario = _scenarioRepository.LoadDefaultScenario();
+			var defaultScenario = _scenarioRepository.Current();
 
 			var dictionary = _scheduleRepository.FindSchedulesOnlyInGivenPeriod(
 				new PersonProvider(persons), 

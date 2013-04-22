@@ -35,15 +35,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 			_permissionProvider = permissionProvider;
 			_loggedOnUser = loggedOnUser;
 		}
-
+		
 		protected override void Configure()
 		{
 			base.Configure();
 
 			CreateMap<WeekScheduleDomainData, WeekScheduleViewModel>()
-				.ForMember(d => d.PeriodSelection, c => c.MapFrom(s => _periodSelectionViewModelFactory.Invoke().CreateModel(s.Date)))
+				.ForMember(d => d.PeriodSelection, c => c.ResolveUsing(s => _periodSelectionViewModelFactory.Invoke().CreateModel(s.Date)))
 				.ForMember(d => d.Styles, o => o.MapFrom(s => s.Days == null ? null : _scheduleColorProvider.Invoke().GetColors(s.ColorSource)))
-				.ForMember(d => d.TimeLine, o => o.MapFrom(s =>
+				.ForMember(d => d.TimeLine, o => o.ResolveUsing(s =>
 				{
 					var startTime = s.MinMaxTime.StartTime;
 					var endTime = s.MinMaxTime.EndTime;
@@ -60,15 +60,17 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 						.OrderBy(t => t)
 						.Distinct()
 						;
-					return from t in times
+
+					var diff = endTime - startTime;
+					return (from t in times
 						   select new TimeLineViewModel
 									{
-										PositionPercentage = (decimal)(t - startTime).Ticks / (endTime - startTime).Ticks,
+										PositionPercentage = diff == TimeSpan.Zero ? 0 : (decimal)(t - startTime).Ticks / diff.Ticks,
 										Culture = _loggedOnUser.Invoke().CurrentUser().PermissionInformation.Culture().ToString(),
 										Time = t
-									};
+									}).ToArray();
 				}))
-				.ForMember(d => d.RequestPermission, c => c.MapFrom(s => new RequestPermission
+				.ForMember(d => d.RequestPermission, c => c.ResolveUsing(s => new RequestPermission
 				{
 					TextRequestPermission = _permissionProvider.Invoke().HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.TextRequests),
 					AbsenceRequestPermission = _permissionProvider.Invoke().HasApplicationFunctionPermission(DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb),
@@ -78,7 +80,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				.ForMember(d => d.Date, c => c.MapFrom(s => s.Date.ToShortDateString()))
 				.ForMember(d => d.FixedDate, c => c.MapFrom(s => s.Date.ToFixedClientDateOnlyFormat()))
 				.ForMember(d => d.DayOfWeekNumber, c => c.MapFrom(s => (int)s.Date.DayOfWeek))
-				.ForMember(d => d.Periods, c => c.MapFrom(s =>
+				.ForMember(d => d.Periods, c => c.ResolveUsing(s =>
 															{
 																var projectionList = new List<IVisualLayer>();
 																if (s.ProjectionYesterday != null)
@@ -87,11 +89,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 																	projectionList.AddRange(s.Projection);
 																return _periodViewModelFactory.Invoke().CreatePeriodViewModels(projectionList,
 																																s.MinMaxTime,
-																																s.Date,
+																																s.Date.Date,
 																																s.ScheduleDay == null ? null : s.ScheduleDay.TimeZone);
 															}))
-				.ForMember(d => d.TextRequestCount, o => o.MapFrom(s => s.PersonRequests == null ? 0 : s.PersonRequests.Count(r => (r.Request is TextRequest || r.Request is AbsenceRequest))))
-				.ForMember(d => d.State, o => o.MapFrom(s =>
+				.ForMember(d => d.TextRequestCount, o => o.ResolveUsing(s => s.PersonRequests == null ? 0 : s.PersonRequests.Count(r => (r.Request is TextRequest || r.Request is AbsenceRequest))))
+				.ForMember(d => d.State, o => o.ResolveUsing(s =>
 															{
 																if (s.Date == DateOnly.Today)
 																	return SpecialDateState.Today;
@@ -99,10 +101,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 															}))
 				.ForMember(d => d.Header, o => o.MapFrom(s => _headerViewModelFactory.Invoke().CreateModel(s.ScheduleDay)))
 				.ForMember(d => d.Note, o => o.MapFrom(s => s.ScheduleDay.PublicNoteCollection()))
-				.ForMember(d => d.Summary, c => c.MapFrom(
+				.ForMember(d => d.Summary, c => c.ResolveUsing(
 					s =>
 					{
 						var mappingEngine = _mapper();
+					if (s.ScheduleDay!=null)
+						{
 						var significantPart = s.ScheduleDay.SignificantPartForDisplay();
 						if (significantPart == SchedulePartView.ContractDayOff)
 						{
@@ -116,12 +120,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 							return mappingEngine.Map<WeekScheduleDayDomainData, PersonAssignmentPeriodViewModel>(s);
 						if (significantPart == SchedulePartView.FullDayAbsence || significantPart == SchedulePartView.ContractDayOff)
 							return mappingEngine.Map<WeekScheduleDayDomainData, FullDayAbsencePeriodViewModel>(s);
+						}	
 						return mappingEngine.Map<WeekScheduleDayDomainData, PeriodViewModel>(s);
 					}))
 				;
 
 			CreateMap<IEnumerable<IPublicNote>, NoteViewModel>()
-				.ForMember(d => d.Message, c => c.MapFrom(
+				.ForMember(d => d.Message, c => c.ResolveUsing(
 					s =>
 					{
 						var publicNote = s.FirstOrDefault();

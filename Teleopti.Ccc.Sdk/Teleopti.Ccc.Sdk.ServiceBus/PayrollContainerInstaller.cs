@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			builder.RegisterType<DomainAssemblyResolver>().As<IDomainAssemblyResolver>().SingleInstance();
 			builder.RegisterType<AssemblyFileLoader>().As<IAssemblyFileLoader>().SingleInstance();
 			builder.RegisterType<InitializePayrollFormats>().As<IInitializePayrollFormats>().SingleInstance();
-			builder.RegisterType<SdkConfigurationReader>().As<ISdkConfigurationReader>().SingleInstance();
+			builder.RegisterType<ConfigFromWebServiceSpecification>().SingleInstance();
 			builder.RegisterType<ChannelCreator>().As<IChannelCreator>();
 			builder.RegisterType<LogOnSdkForPayrollExport>().As<ILogOnSdkForPayrollExport>();
 			builder.RegisterType<PayrollDataExtractor>().As<IPayrollDataExtractor>();

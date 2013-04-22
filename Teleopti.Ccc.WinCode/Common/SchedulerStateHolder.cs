@@ -289,12 +289,13 @@ namespace Teleopti.Ccc.WinCode.Common
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void FilterPersons(HashSet<Guid> selectedGuids)
 		{
-			_filteredPersons = new Dictionary<Guid, IPerson>();
+			var selectedPersons = new List<IPerson>();
 			foreach (var person in AllPermittedPersons)
 			{
-				if(selectedGuids.Contains(person.Id.Value))
-					_filteredPersons.Add(person.Id.Value, person);
+				if (selectedGuids.Contains(person.Id.Value) && !selectedPersons.Contains(person))
+					selectedPersons.Add(person);
 			}
+			_filteredPersons = (from p in selectedPersons orderby CommonAgentName(p) select p).ToDictionary(p => p.Id.Value);
 		}
 
 		public IPersonRequest RequestUpdateFromBroker(IPersonRequestRepository personRequestRepository, Guid personRequestId)

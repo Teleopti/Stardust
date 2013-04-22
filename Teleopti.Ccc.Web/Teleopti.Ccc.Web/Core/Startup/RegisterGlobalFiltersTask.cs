@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using Teleopti.Ccc.Web.Areas.SSO.Controllers;
 using Teleopti.Ccc.Web.Areas.Start.Controllers;
@@ -18,9 +19,10 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			_errorMessageProvider = errorMessageProvider;
 		}
 
-		public void Execute()
+		public Task Execute()
 		{
 			registerGlobalFilters(GlobalFilters.Filters);
+			return null;
 		}
 
 		//rk - org from global.asax
@@ -35,7 +37,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 																		typeof(TestController),
 																		typeof(OpenIdController)
 			                                                    	}));
-			filters.Add(new CheckStartupExceptionAttribute());
+			filters.Add(new CheckStartupResultAttribute());
 		}
 	}
 }

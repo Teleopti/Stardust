@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core.Mappings
 				o => o.MapFrom(s => s.ReportInput.IntervalType.IsTypeWeek() ? Resources.Day : Resources.Time))
 				.ForMember(d => d.ReportDate,
 				           o =>
-				           o.MapFrom(
+						   o.ResolveUsing(
 				           	s =>
 				           		{
 				           			var dateOnlyPeriod = s.ReportInput.Period;
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Web.Areas.MobileReports.Core.Mappings
 				           			       	? dateOnlyPeriod.StartDate.ToShortDateString()
 				           			       	: dateOnlyPeriod.DateString;
 				           		}))
-				.ForMember(d => d.SkillNames, o => o.MapFrom(s =>
+				.ForMember(d => d.SkillNames, o => o.ResolveUsing(s =>
 				                                             	{
 				                                             		var list =
 				                                             			s.ReportInput.SkillSet.Split(new[] {','},

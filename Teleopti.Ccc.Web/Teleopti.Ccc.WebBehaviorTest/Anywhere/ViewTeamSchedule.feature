@@ -13,7 +13,7 @@ Background:
 	| Access to team             | Team green          |
 	| Access to Anywhere         | true                |
 	| View unpublished schedules | true                |
-	And 'Pierre Baldi' have a person period with
+	And 'Pierre Baldi' has a person period with
 	| Field      | Value      |
 	| Team       | Team green |
 	| Start date | 2012-12-01 |
@@ -61,7 +61,6 @@ Scenario: View team schedule, no shift
 	When I view schedules for '2012-12-03'
 	Then I should see no schedule for 'Pierre Baldi'
 	
-@ignore
 Scenario: View team selection
 	Given there is a team with
 	| Field | Value      |
@@ -79,7 +78,6 @@ Scenario: View team selection
 	| Team green |
 	| Team other |
 
-@ignore
 Scenario: Change team
 	Given there is a team with
 	| Field | Value      |
@@ -91,25 +89,23 @@ Scenario: Change team
 	| Access to Anywhere         | true                          |
 	| View unpublished schedules | true                          |
 	And I have the role 'Anywhere Team Green And Other'
-	And 'Max Persson' have a person period with
+	And 'Max Persson' has a person period with
 	| Field      | Value      |
 	| Team       | Team other |
 	| Start date | 2012-12-01 |
 	When I view schedules for 'Team green' on '2012-12-02'
 	And I select team 'Team other'
-	Then I should see schedule for 'Max Persson'
+	Then I should see person 'Max Persson'
 
-@ignore
 Scenario: Select date
 	Given I have the role 'Anywhere Team Green'
 	When I view schedules for '2012-12-02'
 	And I select date '2012-12-03'
 	Then I should be viewing schedules for '2012-12-03'
 
-@ignore
 Scenario: Select person
 	Given I have the role 'Anywhere Team Green'
 	When I view schedules for '2012-12-02'
-	And I click agent 'Pierre Baldi'
+	And I click person 'Pierre Baldi'
 	Then I should be viewing person schedule for 'Pierre Baldi' on '2012-12-02'
 

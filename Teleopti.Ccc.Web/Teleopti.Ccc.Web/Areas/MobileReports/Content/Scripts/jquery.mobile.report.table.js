@@ -10,7 +10,7 @@
 
 		},
 		_eventHandler: function (event, payload) {
-			var table = $(this).data('table'),
+			var table = $(this).data('mobile-table'),
 			    o = table.options;
 			if (!event.isPropagationStopped()) {
 				switch (payload.method) {
@@ -101,7 +101,7 @@
 		},
 		clean: function () {
 			var self = this;
-			self.caller.removeData('table');
+			self.caller.removeData('mobile-table');
 		},
 
 		refresh: function () {

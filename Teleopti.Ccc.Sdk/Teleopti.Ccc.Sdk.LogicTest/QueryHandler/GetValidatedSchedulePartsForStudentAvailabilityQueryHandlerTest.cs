@@ -18,13 +18,13 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 	public class GetValidatedSchedulePartsForStudentAvailabilityQueryHandlerTest
 	{
 		private MockRepository mocks;
-		private IUnitOfWorkFactory unitOfWorkFactory;
+		private ICurrentUnitOfWorkFactory unitOfWorkFactory;
 		private GetValidatedSchedulePartsForStudentAvailabilityQueryHandler target;
 		private IShiftCategoryRepository shiftCategoryRepository;
 		private IActivityRepository activityRepository;
 		private IPersonRepository personRepository;
 		private IScheduleRepository scheduleRepository;
-		private IScenarioRepository scenarioRepository;
+		private ICurrentScenario scenarioRepository;
 		private IAssembler<IPreferenceDay, PreferenceRestrictionDto> preferenceDayAssembler;
 		private IAssembler<IStudentAvailabilityDay, StudentAvailabilityDayDto> studentAvailabilityDayAssembler;
 		private IWorkShiftWorkTime workShiftWorkTime;
@@ -37,8 +37,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			activityRepository = mocks.DynamicMock<IActivityRepository>();
 			personRepository = mocks.DynamicMock<IPersonRepository>();
 			scheduleRepository = mocks.DynamicMock<IScheduleRepository>();
-			scenarioRepository = mocks.DynamicMock<IScenarioRepository>();
-			unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
+			scenarioRepository = mocks.DynamicMock<ICurrentScenario>();
+			unitOfWorkFactory = mocks.DynamicMock<ICurrentUnitOfWorkFactory>();
 			preferenceDayAssembler = mocks.DynamicMock<IAssembler<IPreferenceDay, PreferenceRestrictionDto>>();
 			studentAvailabilityDayAssembler = mocks.DynamicMock<IAssembler<IStudentAvailabilityDay, StudentAvailabilityDayDto>>();
 			workShiftWorkTime = mocks.DynamicMock<IWorkShiftWorkTime>();
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			using (mocks.Record())
 			{
 				Expect.Call(personRepository.Load(personDto.Id.GetValueOrDefault())).Return(person);
-				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+				Expect.Call(unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork()).Return(unitOfWork);
 				Expect.Call(scheduleRepository.FindSchedulesOnlyInGivenPeriod(null, null, new DateTimePeriod(), null)).
 					IgnoreArguments().Return(dictionary);
 				Expect.Call(dictionary[person]).Return(range).Repeat.AtLeastOnce();

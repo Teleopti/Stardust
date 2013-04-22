@@ -20,9 +20,9 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
     public class ScheduleMailFactory
     {
         private readonly IAssembler<IPerson, PersonDto> _personAssembler;
-        private readonly IScenarioRepository _scenarioRepository;
+        private readonly ICurrentScenario _scenarioRepository;
 
-		  public ScheduleMailFactory(IAssembler<IPerson, PersonDto> personAssembler, IScenarioRepository scenarioRepository)
+		  public ScheduleMailFactory(IAssembler<IPerson, PersonDto> personAssembler, ICurrentScenario scenarioRepository)
         {
             _personAssembler = personAssembler;
             _scenarioRepository = scenarioRepository;
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
                 IList<IPerson> personList = _personAssembler.DtosToDomainEntities(personCollection).ToList();
 
                 IScheduleRepository scheduleRep = repositoryFactory.CreateScheduleRepository(unitOfWork);
-                IScheduleDictionary scheduleDictionary = scheduleRep.FindSchedulesOnlyInGivenPeriod(new PersonProvider(personList), new ScheduleDictionaryLoadOptions(false, true), period, _scenarioRepository.LoadDefaultScenario());
+                IScheduleDictionary scheduleDictionary = scheduleRep.FindSchedulesOnlyInGivenPeriod(new PersonProvider(personList), new ScheduleDictionaryLoadOptions(false, true), period, _scenarioRepository.Current());
                 //rk don't know if I break stuff here...
                 //scheduleDictionary.SetTimeZone(timeZone);
 
