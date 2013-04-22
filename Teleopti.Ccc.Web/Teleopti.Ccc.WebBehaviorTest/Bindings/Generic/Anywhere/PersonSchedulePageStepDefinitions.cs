@@ -111,7 +111,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			
 			Browser.Current.Elements.Filter(
 				Find.BySelector(".absence-list .absence:contains('" + absenceListItemInfo.Name + "')")).Filter(
-				Find.BySelector(className)).First().EventualClick();
+				Find.BySelector("." + className)).First().EventualClick();
 		}
 
 
