@@ -24,8 +24,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 		{
 			editControlRestrictions.Visible = false;
 			editControlRestrictions.ToolStripButtonNew.Text = Resources.Add;
-			editControlRestrictions.NewSpecialItems.Add(new ToolStripButton { Text = Resources.Preference, Tag = ClipboardItems.Preference });
-			editControlRestrictions.NewSpecialItems.Add(new ToolStripButton { Text = Resources.StudentAvailability, Tag = ClipboardItems.StudentAvailability });
+			editControlRestrictions.NewSpecialItems.Add(new ToolStripButton { Text = Resources.AddPreferenceThreeDots, Tag = ClipboardItems.Preference });
+			editControlRestrictions.NewSpecialItems.Add(new ToolStripButton { Text = Resources.AddStudentAvailabilityThreeDots, Tag = ClipboardItems.StudentAvailability });
 		}
 
 		public static void InstantiateClipboardControl(ClipboardControl clipboardControl)

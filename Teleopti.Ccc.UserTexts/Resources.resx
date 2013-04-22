@@ -11410,4 +11410,12 @@ Reduce the complexity to use these shifts.</value>
     <value>Resolution (minutes)</value>
     <comment>select resolution in Meettíng Overview</comment>
   </data>
+  <data name="AddPreferenceThreeDots" xml:space="preserve">
+    <value>Add Preference...</value>
+    <comment>To be used in menus/ribbon when adding preference</comment>
+  </data>
+  <data name="AddStudentAvailabilityThreeDots" xml:space="preserve">
+    <value>Add Student Availability...</value>
+    <comment>To be used in menus/ribbon when adding student availability</comment>
+  </data>
 </root>

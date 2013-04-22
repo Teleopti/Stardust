@@ -61,9 +61,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void InitializeComponent()
         {
 			this.components = new System.ComponentModel.Container();
-			Syncfusion.Windows.Forms.Tools.ToolStripTabGroup toolStripTabGroup1 = new Syncfusion.Windows.Forms.Tools.ToolStripTabGroup();
-			Syncfusion.Windows.Forms.Tools.ToolStripTabGroup toolStripTabGroup2 = new Syncfusion.Windows.Forms.Tools.ToolStripTabGroup();
-			Syncfusion.Windows.Forms.Tools.ToolStripTabGroup toolStripTabGroup3 = new Syncfusion.Windows.Forms.Tools.ToolStripTabGroup();
+			Syncfusion.Windows.Forms.Tools.ToolStripTabGroup toolStripTabGroup4 = new Syncfusion.Windows.Forms.Tools.ToolStripTabGroup();
+			Syncfusion.Windows.Forms.Tools.ToolStripTabGroup toolStripTabGroup5 = new Syncfusion.Windows.Forms.Tools.ToolStripTabGroup();
+			Syncfusion.Windows.Forms.Tools.ToolStripTabGroup toolStripTabGroup6 = new Syncfusion.Windows.Forms.Tools.ToolStripTabGroup();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SchedulingScreen));
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
 			this.toolStripSpinningProgressControl1 = new Teleopti.Ccc.Win.Common.Controls.SpinningProgress.ToolStripSpinningProgressControl();
@@ -361,13 +361,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 			// toolStripSpinningProgressControl1
 			// 
 			this.toolStripSpinningProgressControl1.ActiveSegmentColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(146)))), ((int)(((byte)(33)))));
-			this.toolStripSpinningProgressControl1.BehindTransitionSegmentIsActive = false;
+			this.toolStripSpinningProgressControl1.BehindTransitionSegmentIsActive = true;
 			this.toolStripSpinningProgressControl1.InactiveSegmentColor = System.Drawing.Color.Silver;
 			this.toolStripSpinningProgressControl1.Name = "ToolStripSpinningProgress";
 			this.SetShortcut(this.toolStripSpinningProgressControl1, System.Windows.Forms.Keys.None);
 			this.toolStripSpinningProgressControl1.Size = new System.Drawing.Size(20, 24);
 			this.toolStripSpinningProgressControl1.Text = "toolStripSpinningProgressControl1";
-			this.toolStripSpinningProgressControl1.TransitionSegment = 3;
+			this.toolStripSpinningProgressControl1.TransitionSegment = 2;
 			this.toolStripSpinningProgressControl1.TransitionSegmentColor = System.Drawing.Color.FromArgb(((int)(((byte)(129)))), ((int)(((byte)(242)))), ((int)(((byte)(121)))));
 			this.toolStripSpinningProgressControl1.Visible = false;
 			// 
@@ -587,7 +587,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripMenuItemAddPreference.Name = "toolStripMenuItemAddPreference";
 			this.SetShortcut(this.toolStripMenuItemAddPreference, System.Windows.Forms.Keys.None);
 			this.toolStripMenuItemAddPreference.Size = new System.Drawing.Size(282, 22);
-			this.toolStripMenuItemAddPreference.Text = "xxPreference";
+			this.toolStripMenuItemAddPreference.Text = "xxAddPreferenceThreeDots";
 			this.toolStripMenuItemAddPreference.Click += new System.EventHandler(this.addPreferenceToolStripMenuItemClick);
 			// 
 			// toolStripMenuItemAddStudentAvailability
@@ -595,7 +595,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripMenuItemAddStudentAvailability.Name = "toolStripMenuItemAddStudentAvailability";
 			this.SetShortcut(this.toolStripMenuItemAddStudentAvailability, System.Windows.Forms.Keys.None);
 			this.toolStripMenuItemAddStudentAvailability.Size = new System.Drawing.Size(282, 22);
-			this.toolStripMenuItemAddStudentAvailability.Text = "xxStudentAvailability";
+			this.toolStripMenuItemAddStudentAvailability.Text = "xxAddStudentAvailabilityThreeDots";
 			this.toolStripMenuItemAddStudentAvailability.Click += new System.EventHandler(this.addStudentAvailabilityToolStripMenuItemClick);
 			// 
 			// toolStripMenuItem3
@@ -1289,18 +1289,18 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.ribbonControlAdv1.Size = new System.Drawing.Size(1221, 160);
 			this.ribbonControlAdv1.SystemText.QuickAccessCustomizeCaptionText = "Customize QuickAccess Toolbar";
 			this.ribbonControlAdv1.SystemText.QuickAccessDialogDropDownName = "";
-			toolStripTabGroup1.Color = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-			toolStripTabGroup1.Name = "toolStripTabGroupShiftEditor";
-			toolStripTabGroup1.Visible = true;
-			toolStripTabGroup2.Color = System.Drawing.Color.Blue;
-			toolStripTabGroup2.Name = "toolStripTabGroupMainGrid";
-			toolStripTabGroup2.Visible = true;
-			toolStripTabGroup3.Color = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
-			toolStripTabGroup3.Name = "toolStripTabGroupShiftEditor2";
-			toolStripTabGroup3.Visible = true;
-			this.ribbonControlAdv1.TabGroups.Add(toolStripTabGroup1);
-			this.ribbonControlAdv1.TabGroups.Add(toolStripTabGroup2);
-			this.ribbonControlAdv1.TabGroups.Add(toolStripTabGroup3);
+			toolStripTabGroup4.Color = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+			toolStripTabGroup4.Name = "toolStripTabGroupShiftEditor";
+			toolStripTabGroup4.Visible = true;
+			toolStripTabGroup5.Color = System.Drawing.Color.Blue;
+			toolStripTabGroup5.Name = "toolStripTabGroupMainGrid";
+			toolStripTabGroup5.Visible = true;
+			toolStripTabGroup6.Color = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
+			toolStripTabGroup6.Name = "toolStripTabGroupShiftEditor2";
+			toolStripTabGroup6.Visible = true;
+			this.ribbonControlAdv1.TabGroups.Add(toolStripTabGroup4);
+			this.ribbonControlAdv1.TabGroups.Add(toolStripTabGroup5);
+			this.ribbonControlAdv1.TabGroups.Add(toolStripTabGroup6);
 			this.ribbonControlAdv1.TabIndex = 5;
 			this.ribbonControlAdv1.TitleAlignment = Syncfusion.Windows.Forms.Tools.TextAlignment.Center;
 			// 
@@ -3028,7 +3028,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.toolStripSeparator6,
             this.xxAgentInfoToolStripMenuItem});
 			this.contextMenuStripRestrictionView.Name = "contextMenuStripRestrictionView";
-			this.contextMenuStripRestrictionView.Size = new System.Drawing.Size(184, 258);
+			this.contextMenuStripRestrictionView.Size = new System.Drawing.Size(260, 280);
 			// 
 			// toolStripMenuItemUseRotation
 			// 
@@ -3090,16 +3090,16 @@ namespace Teleopti.Ccc.Win.Scheduling
 			// 
 			this.toolStripMenuItemAddPreferenceRestriction.Name = "toolStripMenuItemAddPreferenceRestriction";
 			this.SetShortcut(this.toolStripMenuItemAddPreferenceRestriction, System.Windows.Forms.Keys.None);
-			this.toolStripMenuItemAddPreferenceRestriction.Size = new System.Drawing.Size(183, 22);
-			this.toolStripMenuItemAddPreferenceRestriction.Text = "xxPreference";
+			this.toolStripMenuItemAddPreferenceRestriction.Size = new System.Drawing.Size(259, 22);
+			this.toolStripMenuItemAddPreferenceRestriction.Text = "xxAddPreferenceThreeDots";
 			this.toolStripMenuItemAddPreferenceRestriction.Click += new System.EventHandler(this.addPreferenceToolStripMenuItemClick);
 			// 
 			// toolStripMenuItemAddStudentAvailabilityRestriction
 			// 
 			this.toolStripMenuItemAddStudentAvailabilityRestriction.Name = "toolStripMenuItemAddStudentAvailabilityRestriction";
 			this.SetShortcut(this.toolStripMenuItemAddStudentAvailabilityRestriction, System.Windows.Forms.Keys.None);
-			this.toolStripMenuItemAddStudentAvailabilityRestriction.Size = new System.Drawing.Size(183, 22);
-			this.toolStripMenuItemAddStudentAvailabilityRestriction.Text = "xxStudentAvailability";
+			this.toolStripMenuItemAddStudentAvailabilityRestriction.Size = new System.Drawing.Size(259, 22);
+			this.toolStripMenuItemAddStudentAvailabilityRestriction.Text = "xxAddStudentAvailabilityThreeDots";
 			this.toolStripMenuItemAddStudentAvailabilityRestriction.Click += new System.EventHandler(this.addStudentAvailabilityToolStripMenuItemClick);
 			// 
 			// toolStripSeparator5
