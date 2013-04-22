@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.WinCode.Budgeting
 				distributeSurplus(week, grossStaffCalculator,
 				                  week.Count(d => d.BudgetDay.NetStaffFcAdjustedSurplus.GetValueOrDefault().Equals(0)),
 				                  0);
-				// remove surplus days so that we dont count a surplus more than once
+				// remove the week we just counted so that we dont count a week more than once
 				daysThatHaveSurplus = daysThatHaveSurplus.Except(week).ToList();
 			}
 			calculator.CalculatorList.Remove(netStaffForecastAdjustCalculator);
