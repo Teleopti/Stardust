@@ -9,7 +9,7 @@ namespace Teleopti.Support.Security
 {
 	public class PersonAssignmentCommon
 	{
-		public IList<DataRow> ReadRows(SqlConnection connection, string readCommand)
+		public IList<DataRow> ReadRows(SqlConnection connection, string readCommand, SqlTransaction transaction)
 		{
 			var command = new SqlCommand(readCommand, connection);
 			IList<DataRow> ret = new List<DataRow>();
@@ -17,6 +17,7 @@ namespace Teleopti.Support.Security
 
 			using (var sqlDataAdapter = new SqlDataAdapter(command))
 			{
+				sqlDataAdapter.SelectCommand.Transaction = transaction;
 				sqlDataAdapter.Fill(dataSet, "Data");
 			}
 
@@ -43,7 +44,7 @@ namespace Teleopti.Support.Security
 		{
 			try
 			{
-				ReadRows(connection, numberOfNotConvertedCommand);
+				ReadRows(connection, numberOfNotConvertedCommand, null);
 			}
 			catch
 			{

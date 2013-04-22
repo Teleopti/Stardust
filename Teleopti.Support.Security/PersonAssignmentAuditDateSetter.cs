@@ -35,24 +35,30 @@ namespace Teleopti.Support.Security
 				if (!_personAssignmentCommon.TheDateFieldExists(connection, numberOfNotConvertedCommand))
 					return 0;
 
-				IList<DataRow> rows = _personAssignmentCommon.ReadRows(connection, numberOfNotConvertedCommand);
+				IList<DataRow> rows = _personAssignmentCommon.ReadRows(connection, numberOfNotConvertedCommand, null);
 
 				Console.WriteLine(string.Concat("Found ", rows[0].Field<int>("cnt"), " non converted audit person assignments"));
 
+				connection.Close();
+
 				int total = 0;
+				int batchRows;
 				do
 				{
-					total += runOneBatch(connection);
+					batchRows = runOneBatch(connection);
+					total += batchRows;
 
 					Console.Write(string.Concat("Rows updated = ", total));
-					Console.SetCursorPosition(0, 1);
+					int consoleRow = Console.CursorTop;
+					Console.SetCursorPosition(0, consoleRow);
 
-				} while (rows.Count > 0);
+				} while (batchRows > 0);
 
 				Console.WriteLine();
 
-				rows = _personAssignmentCommon.ReadRows(connection, numberOfNotConvertedCommand);
-				if (rows.Count > 0)
+				rows = _personAssignmentCommon.ReadRows(connection, numberOfNotConvertedCommand, null);
+				int rowsLeft = rows[0].Field<int>("cnt");
+				if (rowsLeft > 0)
 				{
 					Console.WriteLine("There is still " + rows + " non converted audit assignments in db.");
 					return 1;
@@ -70,9 +76,9 @@ namespace Teleopti.Support.Security
 			connection.Open();
 			using (SqlTransaction transaction = connection.BeginTransaction(IsolationLevel.ReadCommitted))
 			{
-				rows = _personAssignmentCommon.ReadRows(connection, _readCommand);
+				rows = _personAssignmentCommon.ReadRows(connection, _readCommand, transaction);
 				_personAssignmentCommon.SetFields(rows);
-				updatePersonAssignmentRows(rows, connection);
+				updatePersonAssignmentRows(rows, connection, transaction);
 
 				transaction.Commit();
 			}
@@ -80,17 +86,18 @@ namespace Teleopti.Support.Security
 			return rows.Count;
 		}
 
-		private static void updatePersonAssignmentRows(IEnumerable<DataRow> rows, SqlConnection connection)
+		private static void updatePersonAssignmentRows(IEnumerable<DataRow> rows, SqlConnection connection, SqlTransaction transaction)
 		{
 			using (var command = new SqlCommand())
 			{
 				command.CommandType = CommandType.Text;
 				command.Connection = connection;
+				command.Transaction = transaction;
 				foreach (var dataRow in rows)
 				{
 					var commandText = new StringBuilder()
 						.AppendLine("update [Auditing].PersonAssignment_AUD")
-						.AppendLine("set TheDate = '" + dataRow.Field<DateTime>("TheDate"))
+						.AppendLine("set TheDate = '" + dataRow.Field<DateTime>("TheDate") + "'")
 						.AppendLine("where Id='" + dataRow.Field<Guid>("Id") + "'");
 
 					command.CommandText = commandText.ToString();
