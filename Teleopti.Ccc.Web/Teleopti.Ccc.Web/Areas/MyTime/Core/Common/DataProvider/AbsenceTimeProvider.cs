@@ -1,7 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
-using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			var absenceTimeForPeriod = absenceDays as IList<AbsenceAgents> ?? absenceDays.ToList();
 			foreach (var payloadWorkTime in absenceTime)
 			{
-				absenceTimeForPeriod.First(a => a.Date == payloadWorkTime.BelongsToDate).AbsenceTime = payloadWorkTime.TotalContractTime;
+				absenceTimeForPeriod.First(a => a.Date == payloadWorkTime.BelongsToDate).AbsenceTime = TimeSpan.FromTicks(payloadWorkTime.TotalContractTime).TotalMinutes;
 			}
 
 			return absenceTimeForPeriod;

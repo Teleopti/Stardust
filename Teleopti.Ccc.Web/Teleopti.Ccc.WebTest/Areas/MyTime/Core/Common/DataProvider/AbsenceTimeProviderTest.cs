@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
@@ -91,20 +92,20 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 		[Test]
 		public void GetAbsenceTimeForPeriod_WhenUsedAbsenceExist_ShouldSetAbsenceInMinutes()
 		{
-			const int absenceTime = 223;
+			const int absenceTimeInMinutes = 240;
 
 			var scheduleProjectionReadOnlyRepository = MockRepository.GenerateMock<IScheduleProjectionReadOnlyRepository>();
 
 			scheduleProjectionReadOnlyRepository.Expect(s => s.AbsenceTimePerBudgetGroup(_period, _budgetGroup, _scenario))
 												.IgnoreArguments()
-												.Return(createlistWithPayloadWorkTimesForEachDateWithUsedAbsenceOf(absenceTime));
+												.Return(createlistWithPayloadWorkTimesForEachDateWithUsedAbsenceOf(TimeSpan.FromMinutes(absenceTimeInMinutes).Ticks));
 
 			var target = new AbsenceTimeProvider(_loggedOnUser, _scenarioRepository, scheduleProjectionReadOnlyRepository);
 			var result = target.GetAbsenceTimeForPeriod(_period);
 
 			foreach (var agentAbsence in result)
 			{
-				Assert.That(absenceTime, Is.EqualTo(agentAbsence.AbsenceTime));
+				Assert.That(absenceTimeInMinutes, Is.EqualTo(agentAbsence.AbsenceTime));
 			}
 			
 		}
