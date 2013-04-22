@@ -149,5 +149,15 @@ namespace Teleopti.Ccc.Win.Scheduling
 				validateTimes();
 			}
 		}
+
+		private void checkBoxAdvNextDayCheckedChanged(object sender, Syncfusion.Windows.Forms.Tools.CheckedChangedEventArgs e)
+		{
+			if (!string.IsNullOrEmpty(errorProvider1.GetError(outlookTimePickerFrom)) ||
+				!string.IsNullOrEmpty(errorProvider1.GetError(outlookTimePickerTo)))
+			{
+				clearTimeErrorMessages();
+				validateTimes();
+			}		
+		}
 	}
 }
