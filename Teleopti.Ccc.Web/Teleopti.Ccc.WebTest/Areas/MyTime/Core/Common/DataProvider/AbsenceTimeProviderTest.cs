@@ -6,7 +6,6 @@ using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Schedule
 using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Interfaces.Domain;
@@ -120,6 +119,22 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 
 			verifyThatEachDayHasZeroUsedAbsence(result);
 		}
+
+		[Test]
+		public void GetAbsenceTimeForPeriod_WhenNoAbsenceExistInRepository_ShouldCreateAbsenceDaysForEachDayWithZeroAbsence()
+		{
+			var scheduleProjectionReadOnlyRepository = MockRepository.GenerateMock<IScheduleProjectionReadOnlyRepository>();
+
+			scheduleProjectionReadOnlyRepository.Expect(s => s.AbsenceTimePerBudgetGroup(_period, _budgetGroup, _scenario))
+												.IgnoreArguments()
+												.Return(new List<PayloadWorkTime>());
+
+			var target = new AbsenceTimeProvider(_loggedOnUser, _scenarioRepository, scheduleProjectionReadOnlyRepository);
+			var result = target.GetAbsenceTimeForPeriod(_period);
+
+			verifyThatEachDayHasZeroUsedAbsence(result);
+		}
+
 
 		#region helpers
 		private  IEnumerable<PayloadWorkTime> createlistWithPayloadWorkTimesForEachDateWithUsedAbsenceOf(long totalContractTimeForEachDay)

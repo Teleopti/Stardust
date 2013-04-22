@@ -1,9 +1,8 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
+using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
@@ -24,17 +23,23 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 		public IEnumerable<IAbsenceAgents> GetAbsenceTimeForPeriod(DateOnlyPeriod period)
 		{
 			var person = _loggedOnUser.CurrentUser();
-			
+			var absenceDays = period.DayCollection().Select(d => new AbsenceAgents() { Date = d, AbsenceTime = 0 });
 			var personPeriod =
 				person.PersonPeriodCollection.OrderBy(p => p.StartDate).LastOrDefault(p => p.StartDate < period.StartDate);
 			if (personPeriod == null || personPeriod.BudgetGroup == null)
 			{
-				return period.DayCollection().Select(d => new AbsenceAgents() {Date = d, AbsenceTime = 0});
+				return absenceDays;
 			}
 			
 			var defaultScenario = _scenarioRepository.LoadDefaultScenario();
 			var absenceTime = _scheduleProjectionReadOnlyRepository.AbsenceTimePerBudgetGroup(period, personPeriod.BudgetGroup, defaultScenario);
-			return absenceTime.Select(day => new AbsenceAgents() { Date = day.BelongsToDate, AbsenceTime = day.TotalContractTime});
+
+			foreach (var payloadWorkTime in absenceTime)
+			{
+				absenceDays.First(a => a.Date == payloadWorkTime.BelongsToDate).AbsenceTime = payloadWorkTime.TotalContractTime;
+			}
+
+			return absenceDays;
 		}
 	}
 }
