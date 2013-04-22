@@ -18,82 +18,82 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Win.Optimization
 {
-    public partial class OptimizationPreferencesDialog : BaseRibbonForm, IDataExchange
-    {
-    	private readonly IEventAggregator _eventAggregator;
-        public IOptimizationPreferences Preferences { get; private set; }
+	public partial class OptimizationPreferencesDialog : BaseRibbonForm, IDataExchange
+	{
+		private readonly IEventAggregator _eventAggregator;
+		public IOptimizationPreferences Preferences { get; private set; }
 
 		private GeneralPreferencesPersonalSettings _defaultGeneralPreferences;
 		private DaysOffPreferencesPersonalSettings _defaultDaysOffPreferences;
 		private ExtraPreferencesPersonalSettings _defaultExtraPreferences;
 		private AdvancedPreferencesPersonalSettings _defaultAdvancedPreferences;
-        private ShiftsPreferencesPersonalSettings _defaultshiftsPreferences;
-        
-        private IList<IDataExchange> panels { get; set; }
+		private ShiftsPreferencesPersonalSettings _defaultshiftsPreferences;
 
-        private readonly IList<IGroupPageLight> _groupPages;
-    	private readonly ISchedulerGroupPagesProvider _groupPagesProvider;
-    	private readonly IList<IScheduleTag> _scheduleTags;
-        private readonly IList<IActivity> _availableActivity;
+		private IList<IDataExchange> panels { get; set; }
 
-        private readonly int _resolution;
-        private IList<IGroupPageLight> _groupPagesForTeamBlockPer;
+		private readonly IList<IGroupPageLight> _groupPages;
+		private readonly ISchedulerGroupPagesProvider _groupPagesProvider;
+		private readonly IList<IScheduleTag> _scheduleTags;
+		private readonly IList<IActivity> _availableActivity;
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public OptimizationPreferencesDialog(
-            IOptimizationPreferences preferences, 
-            ISchedulerGroupPagesProvider  groupPagesProvider,
-            IList<IScheduleTag> scheduleTags, IList< IActivity > availableActivity, int resolution)
-            : this()
-        {
-            Preferences = preferences;
+		private readonly int _resolution;
+		private IList<IGroupPageLight> _groupPagesForTeamBlockPer;
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public OptimizationPreferencesDialog(
+			IOptimizationPreferences preferences,
+			ISchedulerGroupPagesProvider groupPagesProvider,
+			IList<IScheduleTag> scheduleTags, IList<IActivity> availableActivity, int resolution)
+			: this()
+		{
+			Preferences = preferences;
 			_groupPagesProvider = groupPagesProvider;
 			_groupPages = _groupPagesProvider.GetGroups(true);
-            _groupPagesForTeamBlockPer = _groupPages;
-            var singleAgentGroupPage = new GroupPageLight();
-            singleAgentGroupPage.Key = "SingleAgentTeam";
-            singleAgentGroupPage.Name = "Single Agent Team";
-            _groupPagesForTeamBlockPer.Add(singleAgentGroupPage);
-        	_scheduleTags = scheduleTags;
-            _availableActivity = availableActivity;
-            _resolution = resolution;
-            _eventAggregator = new EventAggregator();
-        }
+			_groupPagesForTeamBlockPer = _groupPages;
+			var singleAgentGroupPage = new GroupPageLight();
+			singleAgentGroupPage.Key = "SingleAgentTeam";
+			singleAgentGroupPage.Name = "Single Agent Team";
+			_groupPagesForTeamBlockPer.Add(singleAgentGroupPage);
+			_scheduleTags = scheduleTags;
+			_availableActivity = availableActivity;
+			_resolution = resolution;
+			_eventAggregator = new EventAggregator();
+		}
 
-        private OptimizationPreferencesDialog()
-        {
-            InitializeComponent();
-            if (!DesignMode) SetTexts();
-        }
+		private OptimizationPreferencesDialog()
+		{
+			InitializeComponent();
+			if (!DesignMode) SetTexts();
+		}
 
-        private void Form_Load(object sender, EventArgs e)
-        {
+		private void Form_Load(object sender, EventArgs e)
+		{
 			LoadPersonalSettings();
-            generalPreferencesPanel1.Initialize(Preferences.General, _scheduleTags, _eventAggregator);
-            dayOffPreferencesPanel1.Initialize(Preferences.DaysOff);
-            extraPreferencesPanel1.Initialize(Preferences.Extra, _groupPagesProvider, _availableActivity);
-            advancedPreferencesPanel1.Initialize(Preferences.Advanced);
-            shiftsPreferencesPanel1.Initialize(Preferences.Shifts, _availableActivity, _resolution);
-            panels = new List<IDataExchange>{generalPreferencesPanel1, dayOffPreferencesPanel1, extraPreferencesPanel1, shiftsPreferencesPanel1, advancedPreferencesPanel1};
+			generalPreferencesPanel1.Initialize(Preferences.General, _scheduleTags, _eventAggregator);
+			dayOffPreferencesPanel1.Initialize(Preferences.DaysOff);
+			extraPreferencesPanel1.Initialize(Preferences.Extra, _groupPagesProvider, _availableActivity);
+			advancedPreferencesPanel1.Initialize(Preferences.Advanced);
+			shiftsPreferencesPanel1.Initialize(Preferences.Shifts, _availableActivity, _resolution);
+			panels = new List<IDataExchange> { generalPreferencesPanel1, dayOffPreferencesPanel1, extraPreferencesPanel1, shiftsPreferencesPanel1, advancedPreferencesPanel1 };
 
-            AddToHelpContext();
-            SetColor();
-        }
+			AddToHelpContext();
+			SetColor();
+		}
 
 
-        #region IDataExchange Members
+		#region IDataExchange Members
 
-        public bool ValidateData(ExchangeDataOption direction)
-        {
-            return panels.All(panel => panel.ValidateData(direction));
-        }
+		public bool ValidateData(ExchangeDataOption direction)
+		{
+			return panels.All(panel => panel.ValidateData(direction));
+		}
 
-        public void ExchangeData(ExchangeDataOption direction)
-        {
-            panels.ToList().ForEach(panel => panel.ExchangeData(direction));
-        }
+		public void ExchangeData(ExchangeDataOption direction)
+		{
+			panels.ToList().ForEach(panel => panel.ExchangeData(direction));
+		}
 
-        #endregion
+		#endregion
 
 
 		private void LoadPersonalSettings()
@@ -107,37 +107,37 @@ namespace Teleopti.Ccc.Win.Optimization
 					_defaultDaysOffPreferences = settingRepository.FindValueByKey("DaysOffPreferencesPersonalSettings", new DaysOffPreferencesPersonalSettings());
 					_defaultExtraPreferences = settingRepository.FindValueByKey("ExtraPreferencesPersonalSettings", new ExtraPreferencesPersonalSettings());
 					_defaultAdvancedPreferences = settingRepository.FindValueByKey("AdvancedPreferencesPersonalSettings", new AdvancedPreferencesPersonalSettings());
-                    _defaultshiftsPreferences = settingRepository.FindValueByKey("ShiftsPreferencesPersonalSettings",
-				                                                                          new ShiftsPreferencesPersonalSettings());
+					_defaultshiftsPreferences = settingRepository.FindValueByKey("ShiftsPreferencesPersonalSettings",
+																						  new ShiftsPreferencesPersonalSettings());
 				}
 			}
 			catch (DataSourceException)
 			{
 				// move out silently in case of ex
 			}
-            if (hasMissedloadingSettings()) return;
+			if (hasMissedloadingSettings()) return;
 			_defaultGeneralPreferences.MapTo(Preferences.General, _scheduleTags);
 			_defaultDaysOffPreferences.MapTo(Preferences.DaysOff);
-			_defaultExtraPreferences.MapTo(Preferences.Extra, _groupPages,_groupPagesForTeamBlockPer);
+			_defaultExtraPreferences.MapTo(Preferences.Extra, _groupPages, _groupPagesForTeamBlockPer);
 			_defaultAdvancedPreferences.MapTo(Preferences.Advanced);
-            _defaultshiftsPreferences.MapTo(Preferences.Shifts, _availableActivity);
-            
+			_defaultshiftsPreferences.MapTo(Preferences.Shifts, _availableActivity);
+
 		}
 
-        private bool hasMissedloadingSettings()
-        {
-            return _defaultGeneralPreferences == null || _defaultDaysOffPreferences == null || _defaultExtraPreferences == null
-                || _defaultAdvancedPreferences == null || _defaultshiftsPreferences==null;
-        }
-
-        private void SavePersonalSettings()
+		private bool hasMissedloadingSettings()
 		{
-            if (hasMissedloadingSettings()) return;
+			return _defaultGeneralPreferences == null || _defaultDaysOffPreferences == null || _defaultExtraPreferences == null
+				|| _defaultAdvancedPreferences == null || _defaultshiftsPreferences == null;
+		}
+
+		private void SavePersonalSettings()
+		{
+			if (hasMissedloadingSettings()) return;
 			_defaultGeneralPreferences.MapFrom(Preferences.General);
 			_defaultDaysOffPreferences.MapFrom(Preferences.DaysOff);
 			_defaultExtraPreferences.MapFrom(Preferences.Extra);
 			_defaultAdvancedPreferences.MapFrom(Preferences.Advanced);
-            _defaultshiftsPreferences.MapFrom(Preferences.Shifts );
+			_defaultshiftsPreferences.MapFrom(Preferences.Shifts);
 			try
 			{
 				using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
@@ -150,8 +150,8 @@ namespace Teleopti.Ccc.Win.Optimization
 					uow.PersistAll();
 					new PersonalSettingDataRepository(uow).PersistSettingValue(_defaultAdvancedPreferences);
 					uow.PersistAll();
-                    new PersonalSettingDataRepository(uow).PersistSettingValue(_defaultshiftsPreferences );
-                    uow.PersistAll();
+					new PersonalSettingDataRepository(uow).PersistSettingValue(_defaultshiftsPreferences);
+					uow.PersistAll();
 				}
 			}
 			catch (DataSourceException)
@@ -160,50 +160,56 @@ namespace Teleopti.Ccc.Win.Optimization
 			}
 		}
 
-        private void AddToHelpContext()
-        {
-            for (int i = 0; i < tabControlTopLevel.TabPages.Count; i++)
-            {
-                AddControlHelpContext(tabControlTopLevel.TabPages[i]);
-            }
-        }
+		private void AddToHelpContext()
+		{
+			for (int i = 0; i < tabControlTopLevel.TabPages.Count; i++)
+			{
+				AddControlHelpContext(tabControlTopLevel.TabPages[i]);
+			}
+		}
 
-        private void SetColor()
-        {
-            BackColor = ColorHelper.DialogBackColor();
-            
-            generalPreferencesPanel1.BackColor = ColorHelper.DialogBackColor();
-            dayOffPreferencesPanel1.BackColor = ColorHelper.DialogBackColor();
-            extraPreferencesPanel1.BackColor = ColorHelper.DialogBackColor();
-            advancedPreferencesPanel1.BackColor = ColorHelper.DialogBackColor();
-            shiftsPreferencesPanel1.BackColor = ColorHelper.DialogBackColor();
-        }
+		private void SetColor()
+		{
+			BackColor = ColorHelper.DialogBackColor();
 
-        private void buttonCancel_Click(object sender, EventArgs e)
-        {
-            Close();
-        }
+			generalPreferencesPanel1.BackColor = ColorHelper.DialogBackColor();
+			dayOffPreferencesPanel1.BackColor = ColorHelper.DialogBackColor();
+			extraPreferencesPanel1.BackColor = ColorHelper.DialogBackColor();
+			advancedPreferencesPanel1.BackColor = ColorHelper.DialogBackColor();
+			shiftsPreferencesPanel1.BackColor = ColorHelper.DialogBackColor();
+		}
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions")]
-        private void buttonOK_Click(object sender, EventArgs e)
-        {
-            if(extraPreferencesPanel1.ValidateDefaultValuesForTeam())
-            {
-                if (ValidateData(ExchangeDataOption.ControlsToDataSource))
-                {
-                    ExchangeData(ExchangeDataOption.ControlsToDataSource);
-                    SavePersonalSettings();
-                    DialogResult = DialogResult.OK;
-                    Close();
-                }
-            }
-            else
-            {
-                MessageBox.Show(UserTexts.Resources.SelectAtleastOneOptimizationOption,UserTexts.Resources.OptimizationOptionMessageBox , MessageBoxButtons.OK);
-                DialogResult = DialogResult.None ;
-            }
-            
-        }
+		private void buttonCancel_Click(object sender, EventArgs e)
+		{
+			Close();
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions")]
+		private void buttonOK_Click(object sender, EventArgs e)
+		{
+			var isValidDefaultValuesForTeam = extraPreferencesPanel1.ValidateDefaultValuesForTeam();
+			var isValidDefaultValuesForBlock = extraPreferencesPanel1.ValidateDefaultValuesForBlock();
+			if (isValidDefaultValuesForBlock && isValidDefaultValuesForTeam)
+			{
+				if (ValidateData(ExchangeDataOption.ControlsToDataSource))
+				{
+					ExchangeData(ExchangeDataOption.ControlsToDataSource);
+					SavePersonalSettings();
+					DialogResult = DialogResult.OK;
+					Close();
+				}
+			}
+			else
+			{
+				if (!isValidDefaultValuesForTeam)
+					MessageBox.Show(UserTexts.Resources.SelectAtleastOneOptimizationOption,
+									UserTexts.Resources.OptimizationOptionMessageBox, MessageBoxButtons.OK);
+				if (!isValidDefaultValuesForBlock)
+					MessageBox.Show(UserTexts.Resources.SelectAtleastOneOptimizationOptionForBlock,
+						UserTexts.Resources.OptimizationOptionMessageBox, MessageBoxButtons.OK);
+				DialogResult = DialogResult.None;
+			}
+		}
 
 		private void tabControlTopLevel_SelectedIndexChanged(object sender, EventArgs e)
 		{
@@ -214,5 +220,5 @@ namespace Teleopti.Ccc.Win.Optimization
 		{
 			if (generalPreferencesPanel1 != null) generalPreferencesPanel1.UnsubscribeEvents();
 		}
-    }
+	}
 }
