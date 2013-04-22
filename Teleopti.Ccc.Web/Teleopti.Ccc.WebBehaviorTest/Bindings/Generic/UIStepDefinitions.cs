@@ -37,7 +37,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		}
 
 		// I click 'add full day absence'
-		[When(@"I click '(.*)'")]
+		// *NOT* I click 'remove' on absence named 'Vacation'
+		[When(@"I click '([a-z|\s]*)'")]
 		public void WhenIClickClass(CssClass cssClass)
 		{
 			Browser.Current.Element(Find.BySelector(string.Format(".{0}", cssClass.Name))).EventualClick();
