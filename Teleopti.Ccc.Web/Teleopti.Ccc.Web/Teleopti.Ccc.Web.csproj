@@ -618,6 +618,7 @@
     <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\menu.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\addfulldayabsenceform.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\absencelistitem.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\layer.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\timeline-time.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\timeline.js" />

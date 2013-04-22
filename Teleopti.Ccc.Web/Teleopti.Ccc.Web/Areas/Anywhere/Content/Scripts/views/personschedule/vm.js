@@ -4,6 +4,7 @@ define([
 		'views/personschedule/layer',
 		'views/personschedule/timeline',
 		'views/personschedule/addfulldayabsenceform',
+        'views/personschedule/absencelistitem',
 		'helpers',
 		'noext!application/resources'
 	], function (
@@ -12,7 +13,8 @@ define([
 		layerViewModel,
 		timeLineViewModel,
 		addFullDayAbsenceFormViewModel,
-		helpers,
+		absenceListItemViewModel,
+	    helpers,
 		resources
 		) {
 
@@ -23,6 +25,8 @@ define([
 			this.Loading = ko.observable(false);
 
 			this.Layers = ko.observableArray();
+		    
+			this.Absences = ko.observableArray();
 
 			this.TimeLine = new timeLineViewModel(this.Layers);
 
@@ -36,7 +40,7 @@ define([
 			this.Team = ko.observable("");
 
 			this.AddFullDayAbsenceForm = new addFullDayAbsenceFormViewModel();
-			
+
 			this.AddingFullDayAbsence = ko.observable(false);
 			
 			this.SetData = function (data) {
