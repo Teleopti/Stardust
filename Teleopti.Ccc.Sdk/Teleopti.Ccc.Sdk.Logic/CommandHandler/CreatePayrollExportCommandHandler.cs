@@ -1,4 +1,5 @@
-﻿using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
+﻿using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 
 namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 {
@@ -12,10 +13,10 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public CommandResultDto Handle(CreatePayrollExportCommandDto command)
+		public void Handle(CreatePayrollExportCommandDto command)
         {
             var id = _payrollResultFactory.RunPayrollOnBus(command.PayrollExportDto);
-            return new CommandResultDto() { AffectedId = id, AffectedItems = 1};
+            command.Result = new CommandResultDto() { AffectedId = id, AffectedItems = 1};
         }
     }
 }

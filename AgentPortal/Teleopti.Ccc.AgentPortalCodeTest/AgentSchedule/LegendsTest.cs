@@ -12,14 +12,14 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.AgentSchedule
         readonly MockRepository mocker = new MockRepository();
         private LegendsPresenter target;//
         private ILegendsView view;
-        private ITeleoptiSchedulingService sdk;
+        private ILegendLoader legendLoader;
 
         [SetUp]
         public void Setup()
         {
             view = mocker.StrictMock<ILegendsView>();
-            sdk = mocker.StrictMock<ITeleoptiSchedulingService>();
-            target = new LegendsPresenter(view, sdk);
+            legendLoader = mocker.StrictMock<ILegendLoader>();
+            target = new LegendsPresenter(view, legendLoader);
         }
 
         //Hmm crappy test
@@ -42,8 +42,8 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.AgentSchedule
                                        new ActivityDto {Description = "Three", DisplayColor = new ColorDto()}
                                    };
 
-                Expect.Call(sdk.GetAbsences(new AbsenceLoadOptionDto())).Return(absenceDtos).IgnoreArguments();
-                Expect.Call(sdk.GetActivities(new LoadOptionDto())).Return(activityDtos).IgnoreArguments();
+                Expect.Call(legendLoader.GetAbsences()).Return(absenceDtos);
+                Expect.Call(legendLoader.GetActivities()).Return(activityDtos);
                 Expect.Call(view.AbsenceDataSource).PropertyBehavior().IgnoreArguments();
                 Expect.Call(view.ActivityDataSource).PropertyBehavior().IgnoreArguments();
 
@@ -71,8 +71,8 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.AgentSchedule
                 var absenceDtos = GetManyAbsenceDtos();
                 var activityDtos = getManyActivityDtos();
 
-                Expect.Call(sdk.GetAbsences(new AbsenceLoadOptionDto())).Return(absenceDtos).IgnoreArguments();
-                Expect.Call(sdk.GetActivities(new LoadOptionDto())).Return(activityDtos).IgnoreArguments();
+                Expect.Call(legendLoader.GetAbsences()).Return(absenceDtos).IgnoreArguments();
+                Expect.Call(legendLoader.GetActivities()).Return(activityDtos).IgnoreArguments();
                 Expect.Call(view.AbsenceDataSource).PropertyBehavior().IgnoreArguments();
                 Expect.Call(view.ActivityDataSource).PropertyBehavior().IgnoreArguments();
 

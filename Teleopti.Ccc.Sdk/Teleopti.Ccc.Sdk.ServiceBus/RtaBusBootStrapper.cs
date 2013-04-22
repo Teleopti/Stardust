@@ -1,4 +1,6 @@
 ﻿using System.Configuration;
+using Autofac;
+using Rhino.ServiceBus;
 using Teleopti.Ccc.Sdk.ServiceBus.Rta;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus
@@ -13,7 +15,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			QueueClearMessages.ClearMessages(dbConnection.ToString(), "rta");
 			
 			//add RTA state checker
-			var rtaChecker = new BusinessUnitInfoFinder(daBus);
+			var rtaChecker = new BusinessUnitInfoFinder(() => Container.Resolve<IServiceBus>());
 			rtaChecker.SendMessage();
 		}
 	}

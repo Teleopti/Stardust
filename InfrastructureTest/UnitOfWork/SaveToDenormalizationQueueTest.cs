@@ -4,6 +4,7 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Interfaces.Messages;
 using Teleopti.Interfaces.Messages.Denormalize;
 
 namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
@@ -13,19 +14,20 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 	{
 		private ISaveToDenormalizationQueue target;
 		private MockRepository mocks;
+		private IRunSql runSql;
 
 		[SetUp]
 		public void Setup()
 		{
 			mocks = new MockRepository();
-			target = new SaveToDenormalizationQueue();
+			runSql = mocks.DynamicMock<IRunSql>();
+			target = new SaveToDenormalizationQueue(runSql);
 		}
 
 		[Test]
 		public void ShouldSaveMessageToDenormalizationQueue()
 		{
-			var message = new ScheduleChanged();
-			var runSql = mocks.DynamicMock<IRunSql>();
+			var message = new TestMessage();
 			var sqlQuery = mocks.DynamicMock<ISqlQuery>();
 			using (mocks.Record())
 			{
@@ -37,12 +39,24 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			}
 			using (mocks.Playback())
 			{
-				target.Execute(message, runSql);
+				target.Execute(message);
 
 				message.Timestamp.Should().Be.GreaterThan(DateTime.UtcNow.AddMinutes(-1));
 				message.Datasource.Should().Be.EqualTo(UnitOfWorkFactory.Current.Name);
 				message.BusinessUnitId.Should().Be.EqualTo(((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit.Id.GetValueOrDefault());
 			}
 		}
+	}
+
+	public class TestMessage : RaptorDomainMessage
+	{
+		private readonly Guid _identity;
+
+		public TestMessage()
+		{
+			_identity = Guid.NewGuid();
+		}
+
+		public override Guid Identity { get { return _identity; } }
 	}
 }

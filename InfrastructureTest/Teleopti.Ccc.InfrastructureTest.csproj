@@ -92,6 +92,10 @@
       <CodeAnalysisRuleSet>$(SolutionDir)\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Autofac, Version=3.0.0.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Autofac.3.0.1\lib\net40\Autofac.dll</HintPath>
+    </Reference>
     <Reference Include="Iesi.Collections">
       <HintPath>..\packages\Iesi.Collections.3.2.0.4000\lib\Net35\Iesi.Collections.dll</HintPath>
     </Reference>
@@ -133,6 +137,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplicationLayer\AutofacResolveTest.cs" />
+    <Compile Include="ApplicationLayer\EventPublisherTest.cs" />
+    <Compile Include="ApplicationLayer\SyncCommandDispatcherTest.cs" />
     <Compile Include="Bugs\Bug11558.cs" />
     <Compile Include="Bugs\Bug22329.cs" />
     <Compile Include="Bugs\Bug22600.cs" />
@@ -141,6 +148,7 @@
     <Compile Include="Config\XmlDefaultsTest.cs" />
     <Compile Include="CoverageTest.cs" />
     <Compile Include="Foundation\ConfigurationManagerWrapperTest.cs" />
+    <Compile Include="Foundation\ThreadPrincipalContextTest.cs" />
     <Compile Include="NHibernateConfiguration\TeleoptiLatencySqlDriverTest.cs" />
     <Compile Include="Repositories\AbsenceRequestInfoTest.cs" />
     <Compile Include="Repositories\Deadlock\StudentAvailabilityPersistTest.cs" />
@@ -245,7 +253,7 @@
     <Compile Include="Repositories\Audit\ScheduleHistoryReportTest.cs" />
     <Compile Include="Repositories\Audit\ScheduleHistoryRepositoryTest.cs" />
     <Compile Include="Repositories\PersonRepositoryPossibleShiftTradeTest.cs" />
-    <Compile Include="Repositories\PersonScheduleDayReadModelRepositoryTest.cs" />
+    <Compile Include="Repositories\PersonScheduleDayReadModelStorageTest.cs" />
     <Compile Include="Repositories\LicenseStatusRepositoryTest.cs" />
     <Compile Include="Repositories\DenormalizationQueueRepositoryTest.cs" />
     <Compile Include="Repositories\GroupingReadOnlyRepositoryTest.cs" />
@@ -336,9 +344,10 @@
     <Compile Include="UnitOfWork\DenormalizerContextTest.cs" />
     <Compile Include="UnitOfWork\DifferentPersistAllTest.cs" />
     <Compile Include="UnitOfWork\DisableFilterScopeTest.cs" />
+    <Compile Include="UnitOfWork\EventsMessageSenderTest.cs" />
     <Compile Include="UnitOfWork\GroupPageChangedMessageSenderTest.cs" />
     <Compile Include="UnitOfWork\HandlingOfUowTest.cs" />
-    <Compile Include="UnitOfWork\MeetingDenormalizerTest.cs" />
+    <Compile Include="UnitOfWork\MeetingMessageSenderTest.cs" />
     <Compile Include="UnitOfWork\NHibernateUnitOfWorkCommitCallbackTest.cs" />
     <Compile Include="UnitOfWork\NHibernateUnitOfWorkFactoryUnitTest.cs" />
     <Compile Include="UnitOfWork\NHibernateUnitOfWorkRealTest.cs" />
@@ -365,7 +374,9 @@
     <Compile Include="UnitOfWork\PersonPeriodChangedMessageSenderTest.cs" />
     <Compile Include="UnitOfWork\QueryFilterTest.cs" />
     <Compile Include="UnitOfWork\SaveToDenormalizationQueueTest.cs" />
-    <Compile Include="UnitOfWork\ScheduleProjectionDenormalizerTest.cs" />
+    <Compile Include="UnitOfWork\ScheduleMessageSenderTest.cs" />
+    <Compile Include="UnitOfWork\DenormalizationQueueEventsPublisherTest.cs" />
+    <Compile Include="UnitOfWork\ServiceBusEventPublisherTest.cs" />
     <Compile Include="UnitOfWork\SqlQueryTest.cs" />
     <Compile Include="UnitOfWork\UnitOfWorkFactoryProviderTest.cs" />
   </ItemGroup>

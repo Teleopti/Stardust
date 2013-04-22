@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports
 
 			var result = target.CreateDateBoxGlobalizationViewModel();
 
-			result.DateFormat.Should().Be.EqualTo("DD/MM/YYYY");
+			result.DateFormat.Should().Be.EqualTo("%d/%m/%Y");
 			result.DateFieldOrder.Should().Have.SameSequenceAs(new[] { "d", "m", "y" });
 			result.IsRtl.Should().Be.True();
 		}
@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports
 			var result = target.CreateDateBoxGlobalizationViewModel();
 
 			result.DaysOfWeek[0].Should().Be.EqualTo("Sunday");
-			result.DateFormat.Should().Be.EqualTo("mm/dd/YYYY");
+			result.DateFormat.Should().Be.EqualTo("%m/%d/%Y");
 			result.DateFieldOrder.Should().Have.SameSequenceAs(new[] {"m", "d", "y"});
 			result.CalStartDay.Should().Be.EqualTo(0);
 			result.IsRtl.Should().Be.False();

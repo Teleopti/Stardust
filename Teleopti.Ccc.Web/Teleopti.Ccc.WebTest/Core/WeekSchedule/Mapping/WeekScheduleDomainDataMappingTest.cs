@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		[SetUp]
 		public void Setup()
 		{
-			timeZone = TimeZoneInfoFactory.StockholmTimeZoneInfo();
+			timeZone = TimeZoneInfoFactory.UtcTimeZoneInfo();
 			setPrincipal();
 
 			scheduleProvider = MockRepository.GenerateMock<IScheduleProvider>();

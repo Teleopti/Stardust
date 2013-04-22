@@ -21,20 +21,20 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _mock = new MockRepository();
             _scheduleMatrix = _mock.StrictMock<IScheduleMatrixPro>();
             _advancedPreferences = new AdvancedPreferences();
-            _target = new ScheduleResultDataExtractorProvider(_advancedPreferences);
+            _target = new ScheduleResultDataExtractorProvider();
         }
 
         [Test, ExpectedException(typeof(ArgumentNullException))]
         public void ShouldThrowIfMatrixIsNull()
         {
-            _target.CreatePersonalSkillDataExtractor(null);
+			_target.CreatePersonalSkillDataExtractor(null, _advancedPreferences);
         }
 
         [Test]
         public void ShouldReturnBoostedIfUseImproved()
         {
 			_advancedPreferences.UseTweakedValues = true;
-            var result = _target.CreatePersonalSkillDataExtractor(_scheduleMatrix);
+			var result = _target.CreatePersonalSkillDataExtractor(_scheduleMatrix, _advancedPreferences);
             Assert.That(result, Is.TypeOf(typeof(RelativeBoostedDailyDifferencesByPersonalSkillsExtractor)));
         }
 
@@ -42,9 +42,17 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         public void ShouldReturnOrdinaryIfNotUseImproved()
         {
             _advancedPreferences.UseTweakedValues = false;
-            var result = _target.CreatePersonalSkillDataExtractor(_scheduleMatrix);
+			var result = _target.CreatePersonalSkillDataExtractor(_scheduleMatrix, _advancedPreferences);
             Assert.That(result, Is.TypeOf(typeof(RelativeDailyDifferencesByPersonalSkillsExtractor)));
         }
+
+		[Test]
+		public void ShouldReturnRelativeDailyStandardDeviationsByAllSkillsExtractor()
+		{
+			var schedulingOptions = new SchedulingOptions();
+			var result = _target.CreateRelativeDailyStandardDeviationsByAllSkillsExtractor(_scheduleMatrix, schedulingOptions);
+			Assert.That(result, Is.TypeOf(typeof (RelativeDailyStandardDeviationsByAllSkillsExtractor)));
+		}
     }
 
     

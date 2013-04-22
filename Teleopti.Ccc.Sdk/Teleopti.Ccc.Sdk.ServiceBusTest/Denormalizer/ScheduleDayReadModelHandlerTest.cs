@@ -1,6 +1,8 @@
 ﻿using System;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
@@ -22,7 +24,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 		private ISignificantChangeChecker _significantChangeChecker;
 		private INotificationSender _notificationSender;
 		private ScheduleDayReadModelHandler _target;
-		private ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private IPersonRepository _personRepository;
 		private ISmsLinkChecker _smsLinkChecker;
 		private INotificationSenderFactory _notificationSenderFactory;
@@ -34,7 +35,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 		public void Setup()
 		{
 			_mocks = new MockRepository();
-			_unitOfWorkFactory = _mocks.StrictMock<ICurrentUnitOfWorkFactory>();
 			_personRepository = _mocks.StrictMock<IPersonRepository>();
 			_significantChangeChecker = _mocks.StrictMock<ISignificantChangeChecker>();
 			_smsLinkChecker = _mocks.StrictMock<ISmsLinkChecker>();
@@ -43,8 +43,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			_scheduleDayReadModelsCreator = _mocks.StrictMock<IScheduleDayReadModelsCreator>();
 			_scheduleDayReadModelRepository = _mocks.StrictMock<IScheduleDayReadModelRepository>();
 
-			_target = new ScheduleDayReadModelHandler(_unitOfWorkFactory, _personRepository, _significantChangeChecker, 
-				_smsLinkChecker, _notificationSenderFactory,_scheduleDayReadModelsCreator, _scheduleDayReadModelRepository);
+			_target = new ScheduleDayReadModelHandler(_personRepository, new DoNotifySmsLink(_significantChangeChecker,
+				_smsLinkChecker, _notificationSenderFactory), _scheduleDayReadModelsCreator, _scheduleDayReadModelRepository);
 
 			DefinedLicenseDataFactory.LicenseActivator = new LicenseActivator("", DateTime.Today.AddDays(100), 1000, 1000,
 			                                                                  LicenseType.Agent, new Percent(.10), null, null);
@@ -59,21 +59,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			DefinedLicenseDataFactory.LicenseActivator.EnabledLicenseOptionPaths.Add(DefinedLicenseOptionPaths.TeleoptiCccSmsLink);
 			
 			var period = new DateTimePeriod(DateTime.UtcNow, DateTime.UtcNow.AddDays(2));
-			var denormalizedScheduleDay = new DenormalizedScheduleDay
+			var denormalizedScheduleDay = new ProjectionChangedEventScheduleDay
 			{
 				StartDateTime = period.StartDateTime,
 				EndDateTime = period.EndDateTime,
 			};
 
-			var uow = _mocks.StrictMock<IUnitOfWork>();
-
-			var uowFactory = _mocks.DynamicMock<IUnitOfWorkFactory>();
-			Expect.Call(_unitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(uowFactory);
-			Expect.Call(uowFactory.CreateAndOpenUnitOfWork()).Return(uow);
-			Expect.Call(uow.Dispose);
-
 			_mocks.ReplayAll();
-			_target.Consume(new DenormalizedSchedule
+			_target.Handle(new ProjectionChangedEvent
 			{
 				PersonId = _person.Id.GetValueOrDefault(),
 				IsDefaultScenario = false,
@@ -88,34 +81,27 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			var period = new DateTimePeriod(new DateTime(2012, 12, 1, 10, 0, 0, DateTimeKind.Utc),
 											new DateTime(2012, 12, 1, 17, 0, 0, DateTimeKind.Utc));
 			var dateOnlyPeriod = period.ToDateOnlyPeriod(_person.PermissionInformation.DefaultTimeZone());
-			var uow = _mocks.StrictMock<IUnitOfWork>();
 			var model = new ScheduleDayReadModel();
-			var denormalizedScheduleDay = new DenormalizedScheduleDay
+			var denormalizedScheduleDay = new ProjectionChangedEventScheduleDay
 			{
 				Date = dateOnlyPeriod.StartDate,
 				StartDateTime = period.StartDateTime,
 				EndDateTime = period.EndDateTime,
 			};
-			var message = new DenormalizedSchedule
+			var message = new ProjectionChangedEvent
 			              	{
 				          		PersonId = _person.Id.GetValueOrDefault(),
 								IsDefaultScenario = true,
 								ScheduleDays = new[] { denormalizedScheduleDay }
 			              	};
 
-			var uowFactory = _mocks.DynamicMock<IUnitOfWorkFactory>();
-			Expect.Call(_unitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(uowFactory);
-			Expect.Call(uowFactory.CreateAndOpenUnitOfWork()).Return(uow);
-
 			Expect.Call(_personRepository.Get(_person.Id.GetValueOrDefault())).Return(_person);
 			Expect.Call(_scheduleDayReadModelsCreator.GetReadModel(denormalizedScheduleDay,_person)).Return(model);
 			Expect.Call(() => _scheduleDayReadModelRepository.ClearPeriodForPerson(dateOnlyPeriod, _person.Id.GetValueOrDefault()));
 			Expect.Call(() => _scheduleDayReadModelRepository.SaveReadModel(model));
-			Expect.Call(uow.Dispose);
-			Expect.Call(uow.PersistAll());
 
 			_mocks.ReplayAll();
-			_target.Consume(message);
+			_target.Handle(message);
 			_mocks.VerifyAll();
 		}
 		
@@ -128,24 +114,20 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			var period = new DateTimePeriod(new DateTime(2012, 12, 1, 10, 0, 0, DateTimeKind.Utc),
 			                                new DateTime(2012, 12, 1, 17, 0, 0, DateTimeKind.Utc));
 			var dateOnlyPeriod = period.ToDateOnlyPeriod(_person.PermissionInformation.DefaultTimeZone());
-			var uow = _mocks.StrictMock<IUnitOfWork>();
 			var model = new ScheduleDayReadModel();
-			var denormalizedScheduleDay = new DenormalizedScheduleDay
+			var denormalizedScheduleDay = new ProjectionChangedEventScheduleDay
 			                              	{
 			                              		Date = dateOnlyPeriod.StartDate,
 			                              		StartDateTime = period.StartDateTime,
 			                              		EndDateTime = period.EndDateTime,
 			                              	};
-			var message = new DenormalizedSchedule
+			var message = new ProjectionChangedEvent
 			              	{
 								PersonId = _person.Id.GetValueOrDefault(),
 			              		IsDefaultScenario = true,
 								ScheduleDays = new []{denormalizedScheduleDay}
 			              	};
 
-			var uowFactory = _mocks.DynamicMock<IUnitOfWorkFactory>();
-			Expect.Call(_unitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(uowFactory);
-			Expect.Call(uowFactory.CreateAndOpenUnitOfWork()).Return(uow);
 			Expect.Call(_personRepository.Get(_person.Id.GetValueOrDefault())).Return(_person);
 			Expect.Call(_scheduleDayReadModelsCreator.GetReadModel(denormalizedScheduleDay,_person)).Return(model);
 			Expect.Call(_significantChangeChecker.SignificantChangeNotificationMessage(dateOnlyPeriod.StartDate, _person, model)).Return(mess);
@@ -154,12 +136,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			Expect.Call(() => _notificationSender.SendNotification(mess, "124578"));
 			Expect.Call(() =>_scheduleDayReadModelRepository.ClearPeriodForPerson(dateOnlyPeriod, _person.Id.GetValueOrDefault()));
 			Expect.Call(() => _scheduleDayReadModelRepository.SaveReadModel(model));
-			Expect.Call(uow.Dispose);
-			Expect.Call(uow.PersistAll());
 
 			_mocks.ReplayAll();
-			_target.Consume(message);
+			_target.Handle(message);
 			_mocks.VerifyAll();
 		}
+
 	}
 }

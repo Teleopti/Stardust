@@ -1,9 +1,15 @@
 ﻿using System.Reflection;
 using Autofac;
+using Autofac.Configuration;
 using Autofac.Integration.Mvc;
 using MbCache.Configuration;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core.IoC;
 using Teleopti.Ccc.Web.Areas.MobileReports.Core.IoC;
@@ -27,7 +33,7 @@ namespace Teleopti.Ccc.Web.Core.IoC
 
 			builder.RegisterControllers(Assembly.GetExecutingAssembly());
 
-			builder.RegisterModule(new AutofacWebTypesModuleFromRepository20111123());
+			builder.RegisterModule(new AutofacWebTypesModule());
 			builder.RegisterType<CurrentHttpContext>().As<ICurrentHttpContext>().SingleInstance();
 
 			builder.RegisterFilterProvider();
@@ -59,14 +65,34 @@ namespace Teleopti.Ccc.Web.Core.IoC
 
 			builder.RegisterModule<ShiftTradeModule>();
 
+			builder.RegisterModule<CommandDispatcherModule>();
+			//builder.RegisterModule<LocalInMemoryEventsPublisherModule>();
+			builder.RegisterModule<ServiceBusEventsPublisherModule>();
+			builder.RegisterModule<CommandHandlersModule>();
+			builder.RegisterModule<EventHandlersModule>();
+			builder.RegisterType<EventsMessageSender>().As<IMessageSender>().SingleInstance();
+			builder.RegisterType<DoNotNotifySmsLink>().As<IDoNotifySmsLink>().SingleInstance();
+			builder.RegisterType<NewtonsoftJsonSerializer>().As<IJsonSerializer>().SingleInstance();
+
+			builder.RegisterModule(new ConfigurationSettingsReader());
+
 			return builder.Build();
 		}
-
+	
 		private static void registerAopComponents(ContainerBuilder builder)
 		{
 			builder.RegisterModule<AspectsModule>();
 			builder.RegisterType<UnitOfWorkAspect>();
 		}
 
+	}
+
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Newtonsoft")]
+	public class NewtonsoftJsonSerializer : IJsonSerializer
+	{
+		public string SerializeObject(object value)
+		{
+			return Newtonsoft.Json.JsonConvert.SerializeObject(value);
+		}
 	}
 }

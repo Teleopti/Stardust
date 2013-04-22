@@ -18,24 +18,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.StudentAvailability.Mapping
 				;
 
 			CreateMap<StudentAvailabilityDayInput, IStudentAvailabilityRestriction>()
-				.ConstructUsing(s => new StudentAvailabilityRestriction())
-				.ForMember(d => d.StartTimeLimitation, o => o.MapFrom(s => s))
-				.ForMember(d => d.EndTimeLimitation, o => o.MapFrom(s => s))
+				.ConstructUsing((StudentAvailabilityDayInput s) => new StudentAvailabilityRestriction())
+				.ForMember(d => d.StartTimeLimitation, o => o.ResolveUsing(s => new StartTimeLimitation(s.StartTime.Time, null)))
+				.ForMember(d => d.EndTimeLimitation, o => o.ResolveUsing(s => new EndTimeLimitation(null,
+																	 TimeHelper.ParseTimeSpanFromTimeOfDay(s.EndTime.Time, s.NextDay))))
 				.ForMember(d => d.WorkTimeLimitation, o => o.Ignore())
 				;
-
-			CreateMap<StudentAvailabilityDayInput, StartTimeLimitation>()
-				.ConstructUsing(s => new StartTimeLimitation(s.StartTime.Time, null))
-				.ForMember(d => d.StartTimeString, o => o.Ignore())
-				.ForMember(d => d.EndTimeString, o => o.Ignore())
-				;
-
-			CreateMap<StudentAvailabilityDayInput, EndTimeLimitation>()
-				.ConstructUsing(s => new EndTimeLimitation(null, TimeHelper.ParseTimeSpanFromTimeOfDay(s.EndTime.Time, s.NextDay)))
-				.ForMember(d => d.StartTimeString, o => o.Ignore())
-				.ForMember(d => d.EndTimeString, o => o.Ignore())
-				;
-
 		}
 
 		public class StudentAvailabilityDayFormToStudentAvailabilityDay : ITypeConverter<StudentAvailabilityDayInput, IStudentAvailabilityDay>

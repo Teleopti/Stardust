@@ -124,11 +124,5 @@ namespace Teleopti.Ccc.DayOffPlanningTest
 		}
 	}
 
-	public class FalseRandomizerForTest : ITrueFalseRandomizer
-	{
-		public bool Randomize(int seed)
-		{
-			return false;
-		}
-	}
+	
 }

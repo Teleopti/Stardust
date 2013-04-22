@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using log4net;
 using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.Common;
@@ -23,7 +24,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
         private readonly static ILog Logger = LogManager.GetLogger(typeof(NewAbsenceRequestConsumer));
         private readonly IScheduleRepository _scheduleRepository;
         private readonly IPersonAbsenceAccountProvider _personAbsenceAccountProvider;
-        private readonly IScenarioRepository _scenarioRepository;
+        private readonly ICurrentScenario _scenarioRepository;
         private readonly IPersonRequestRepository _personRequestRepository;
         private ISchedulingResultStateHolder _schedulingResultStateHolder;
         private readonly IAbsenceRequestOpenPeriodMerger _absenceRequestOpenPeriodMerger;
@@ -51,7 +52,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
     	private readonly IResourceOptimizationHelper _resourceOptimizationHelper;
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "HeadCount")]
-        public NewAbsenceRequestConsumer(IScheduleRepository scheduleRepository, IPersonAbsenceAccountProvider personAbsenceAccountProvider, IScenarioRepository scenarioRepository, IPersonRequestRepository personRequestRepository, ISchedulingResultStateHolder schedulingResultStateHolder, 
+    	public NewAbsenceRequestConsumer(IScheduleRepository scheduleRepository, IPersonAbsenceAccountProvider personAbsenceAccountProvider, ICurrentScenario scenarioRepository, IPersonRequestRepository personRequestRepository, ISchedulingResultStateHolder schedulingResultStateHolder, 
                                          IAbsenceRequestOpenPeriodMerger absenceRequestOpenPeriodMerger, IRequestFactory factory,
                                          IScheduleDictionarySaver scheduleDictionarySaver, IScheduleIsInvalidSpecification scheduleIsInvalidSpecification, IPersonRequestCheckAuthorization authorization, IScheduleDictionaryModifiedCallback scheduleDictionaryModifiedCallback, 
                                          IResourceOptimizationHelper resourceOptimizationHelper, IUpdateScheduleProjectionReadModel updateScheduleProjectionReadModel, IBudgetGroupAllowanceSpecification budgetGroupAllowanceSpecification, 
@@ -171,7 +172,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
                 	var allNewRules = NewBusinessRuleCollection.Minimum();
                 	var requestApprovalServiceScheduler = _factory.GetRequestApprovalService(allNewRules,
                 	                                                                         _scenarioRepository.
-                	                                                                         	LoadDefaultScenario());
+                	                                                                         	Current());
                 	var brokenBusinessRules = requestApprovalServiceScheduler.ApproveAbsence(_absenceRequest.Absence,
                 	                                                                         _absenceRequest.Period,
                 	                                                                         _absenceRequest.Person);
@@ -338,7 +339,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
         private bool LoadDataForResourceCalculation(NewAbsenceRequestCreated message)
         {
             DateTimePeriod periodForResourceCalc = _absenceRequest.Period.ChangeStartTime(TimeSpan.FromDays(-1));
-        	_loadSchedulingStateHolderForResourceCalculation.Execute(_scenarioRepository.LoadDefaultScenario(),
+        	_loadSchedulingStateHolderForResourceCalculation.Execute(_scenarioRepository.Current(),
         	                                                         periodForResourceCalc,
         	                                                         new List<IPerson> {_absenceRequest.Person});
             if (Logger.IsDebugEnabled)
@@ -350,7 +351,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 
         private bool LoadDefaultScenario(NewAbsenceRequestCreated message)
         {
-            var defaultScenario = _scenarioRepository.LoadDefaultScenario();
+            var defaultScenario = _scenarioRepository.Current();
             if (Logger.IsDebugEnabled)
             {
                 Logger.DebugFormat("Using the default scenario named {0}. (Id = {1})", defaultScenario.Description,

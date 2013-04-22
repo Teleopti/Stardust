@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"the server restarts")]
 		public void GivenTheServerRestarts()
 		{
-			TestSiteConfigurationSetup.RestartApplication();
+			TestSiteConfigurationSetup.RecycleApplication();
 		}
 
 		[When(@"my cookie expires")]

@@ -1,9 +1,13 @@
 define([
 		'knockout',
-		'moment'
-	], function(ko, moment) {
+		'moment',
+		'noext!application/resources'
+], function (
+		ko,
+		moment,
+		resources) {
 
-		return function(timeline, minutes, shortTimePattern) {
+		return function(timeline, minutes) {
 
 			var self = this;
 
@@ -11,7 +15,7 @@ define([
 
 			this.Time = ko.computed(function() {
 				var time = moment().startOf('day').add('minutes', self.Minutes());
-				return time.format(shortTimePattern);
+				return time.format(resources.ShortTimePattern);
 			});
 
 			this.Pixel = ko.computed(function() {

@@ -763,6 +763,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add full day absence.
+        /// </summary>
+        public static string AddFullDayAbsence {
+            get {
+                return ResourceManager.GetString("AddFullDayAbsence", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add grouping absence.
         /// </summary>
         public static string AddGroupingAbsence {
@@ -7726,7 +7735,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Export Code.
+        ///   Looks up a localized string similar to Payroll System Code.
         /// </summary>
         public static string ExportCode {
             get {
@@ -10253,6 +10262,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string InvalidDateTimeExceptionText {
             get {
                 return ResourceManager.GetString("InvalidDateTimeExceptionText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid end date.
+        /// </summary>
+        public static string InvalidEndDate {
+            get {
+                return ResourceManager.GetString("InvalidEndDate", resourceCulture);
             }
         }
         
@@ -15987,7 +16005,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Payroll system code.
+        ///   Looks up a localized string similar to Payroll System Code.
         /// </summary>
         public static string PayrollCode {
             get {
@@ -15996,7 +16014,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Payroll Code:.
+        ///   Looks up a localized string similar to Payroll System Code:.
         /// </summary>
         public static string PayrollCodeColon {
             get {
@@ -18219,6 +18237,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Resolution (minutes).
+        /// </summary>
+        public static string ResolutionMin {
+            get {
+                return ResourceManager.GetString("ResolutionMin", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Resolve business rule conflicts.
         /// </summary>
         public static string ResolveBusinessRulesConflict {
@@ -18926,6 +18953,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SameEndTime {
             get {
                 return ResourceManager.GetString("SameEndTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Same Shift.
+        /// </summary>
+        public static string SameShift {
+            get {
+                return ResourceManager.GetString("SameShift", resourceCulture);
             }
         }
         
@@ -21168,6 +21204,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SignCustomerWeb {
             get {
                 return ResourceManager.GetString("SignCustomerWeb", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Single Agent Team.
+        /// </summary>
+        public static string SingleAgentTeam {
+            get {
+                return ResourceManager.GetString("SingleAgentTeam", resourceCulture);
             }
         }
         

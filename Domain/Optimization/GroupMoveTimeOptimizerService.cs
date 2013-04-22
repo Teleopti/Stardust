@@ -50,8 +50,9 @@ namespace Teleopti.Ccc.Domain.Optimization
                 }
             }
         }
-        
-        private IEnumerable<IGroupMoveTimeOptimizer> runOptimizers(ICollection<IGroupMoveTimeOptimizer> pendingOptimizers, ITeamSteadyStateMainShiftScheduler teamSteadyStateMainShiftScheduler, ITeamSteadyStateHolder teamSteadyStateHolder, IScheduleDictionary scheduleDictionary)
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+		private IEnumerable<IGroupMoveTimeOptimizer> runOptimizers(ICollection<IGroupMoveTimeOptimizer> pendingOptimizers, ITeamSteadyStateMainShiftScheduler teamSteadyStateMainShiftScheduler, ITeamSteadyStateHolder teamSteadyStateHolder, IScheduleDictionary scheduleDictionary)
         {
             var skippedOptimizers = new List<IGroupMoveTimeOptimizer>();
             var removedOptimizers = new List<IGroupMoveTimeOptimizer>();

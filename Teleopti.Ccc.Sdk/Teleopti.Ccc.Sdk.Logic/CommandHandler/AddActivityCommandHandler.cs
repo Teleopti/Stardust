@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.ServiceModel;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -37,7 +38,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-		public CommandResultDto Handle(AddActivityCommandDto command)
+		public void Handle(AddActivityCommandDto command)
         {
             using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
             {
@@ -73,7 +74,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                     uow.PersistAll();
                 }
             }
-            return new CommandResultDto { AffectedId = command.PersonId, AffectedItems = 1 };
+			command.Result = new CommandResultDto { AffectedId = command.PersonId, AffectedItems = 1 };
         }
 
     	private IScenario getDesiredScenario(AddActivityCommandDto command)

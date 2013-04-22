@@ -25,7 +25,11 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterInstance(_dataSourceConfigurationSetter);
 			builder.RegisterType<InitializeApplication>().As<IInitializeApplication>().SingleInstance();
 			builder.RegisterType<DataSourcesFactory>().As<IDataSourcesFactory>().SingleInstance();
-			builder.RegisterInstance(new SignalBroker(MessageFilterManager.Instance.FilterDictionary)).As<IMessageBroker>();
+			builder.RegisterInstance(new SignalBroker(MessageFilterManager.Instance.FilterDictionary))
+				.As<IMessageBroker>()
+				.As<IMessageBrokerSender>()
+				.As<IMessageBrokerListener>()
+				;
 			builder.RegisterType<OneWayEncryption>().As<IOneWayEncryption>().SingleInstance();
 			builder.RegisterType<EnversConfiguration>().As<IEnversConfiguration>().SingleInstance();
 			builder.RegisterType<ConfigReader>().As<IConfigReader>().SingleInstance();

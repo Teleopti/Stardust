@@ -4,12 +4,15 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using AutoMapper;
 using NUnit.Framework;
+using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
+using Teleopti.Ccc.WebTest.Core.Mapping;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
@@ -74,10 +77,45 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			result.Site.Should().Be("Moon");
 		}
 
+		[Test]
+		public void ShouldMapAbsences()
+		{
+			var target = new PersonScheduleViewModelMapper();
+			var absences = new[] {new Absence(), new Absence()};
+
+			var result = target.Map(new PersonScheduleData { Absences = absences });
+
+			result.Absences.Should().Have.Count.EqualTo(2);
+		}
+
+		[Test]
+		public void ShouldMapAbsenceName()
+		{
+			var target = new PersonScheduleViewModelMapper();
+			var absences = new[] { new Absence { Description = new Description("A Name") } };
+
+			var result = target.Map(new PersonScheduleData { Absences = absences });
+
+			result.Absences.Single().Name.Should().Be("A Name");
+		}
+
+		[Test]
+		public void ShouldMapAbsenceId()
+		{
+			var target = new PersonScheduleViewModelMapper();
+			var absence = new Absence { Description = new Description(" ") };
+			absence.SetId(Guid.NewGuid());
+
+			var result = target.Map(new PersonScheduleData {Absences = new[] {absence}});
+
+			result.Absences.Single().Id.Should().Be(absence.Id.Value.ToString());
+		}
+
 		private dynamic MakeLayer(string Color = "", DateTime? Start = null, int Minutes = 0)
 		{
 			dynamic layer = new ExpandoObject();
 			layer.Color = Color;
+			layer.Start = Start;
 			layer.Start = Start.HasValue ? Start : null;
 			layer.Minutes = Minutes;
 			return layer;
@@ -104,7 +142,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			dynamic shift = new ExpandoObject();
 			shift.Projection = new[] { MakeLayer("Green")};
 
-			var result = target.Map(new PersonScheduleData {Shift = shift});
+			var result = target.Map(new PersonScheduleData {Shift = shift });
 
 			result.Layers.Single().Color.Should().Be("Green");
 		}
@@ -113,17 +151,18 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		public void ShouldMapLayerStartTimeInPersonsTimeZone()
 		{
 			var target = new PersonScheduleViewModelMapper();
+			var startTime = new DateTime(2013, 3, 4, 8, 0, 0, DateTimeKind.Utc);
+
 			var person = new Person();
 			var personTimeZone = TimeZoneInfoFactory.HawaiiTimeZoneInfo();
 			person.PermissionInformation.SetDefaultTimeZone(personTimeZone);
-			var startTime = new DateTime(2013, 3, 4, 8, 0, 0, DateTimeKind.Utc);
-
 			dynamic shift = new ExpandoObject();
 			shift.Projection = new[] { MakeLayer("", startTime) };
 
 			var result = target.Map(new PersonScheduleData {Shift = shift, Person = person});
 
-			result.Layers.Single().Start.Should().Be(TimeZoneInfo.ConvertTimeFromUtc(startTime, personTimeZone));
+			var personStartTime = TimeZoneInfo.ConvertTimeFromUtc(startTime, person.PermissionInformation.DefaultTimeZone()).ToString();
+			result.Layers.Single().Start.Should().Be(personStartTime);
 		}
 
 		[Test]
@@ -132,7 +171,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var target = new PersonScheduleViewModelMapper();
 
 			dynamic shift = new ExpandoObject();
-			shift.Projection = new[] {MakeLayer("", null, 60)};
+			shift.Projection = new[] { MakeLayer(Color: "",Minutes: 60) };
 
 			var result = target.Map(new PersonScheduleData { Shift = shift });
 

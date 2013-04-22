@@ -2,8 +2,8 @@
 require.config({
 
 	paths: {
-		jquery: '../../../../Content/Scripts/jquery-1.8.3',
-		knockout: '../../../../Content/Scripts/knockout-2.2.0',
+		jquery: '../../../../Content/Scripts/jquery-1.9.1',
+		knockout: '../../../../Content/Scripts/knockout-2.2.1',
 		modernizr: '../../../../Content/modernizr/modernizr-2.6.2.min',
 		respond: '../../../../Content/respondjs/respond.min',
 		moment: '../../../../Content/moment/moment',
@@ -37,7 +37,7 @@ require.config({
 		// wtf!
 		'Areas/Anywhere/Content/Scripts/../../../../signalr/hubs?noext=1&noext=1': ['jquery', 'signalr'],
 		'Areas/Anywhere/Content/Scripts/../../../../signalr/hubs?noext=1': ['jquery', 'signalr'],
-		
+
 		'momentLanguages': ['moment'],
 		'momentDatepicker': ['momentLanguages'],
 		'momentDatepickerKo': ['momentDatepicker'],
@@ -46,11 +46,30 @@ require.config({
 });
 
 require([
-	'jquery',
-	'modernizr',
-	'respond',
-	'bootstrap',
-	'layout'
-], function () {
-	
-});
+        'jquery',
+        'modernizr',
+        'respond',
+        'bootstrap',
+        'layout'
+    ], function() {
+
+    });
+
+window.test = {
+    callViewMethodWhenReady: function (viewName, method) {
+        
+        var args = Array.prototype.slice.call(arguments, 2);
+        
+        require(['views/' + viewName + '/view'], function (view) {
+            
+            var callMethodIfReady = function () {
+                if (view.ready)
+                    view[method].apply(view, args);
+                else
+                    setTimeout(callMethodIfReady, 20);
+            };
+            setTimeout(callMethodIfReady, 0);
+
+        });
+    }
+};

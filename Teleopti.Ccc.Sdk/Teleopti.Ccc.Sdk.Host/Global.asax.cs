@@ -4,7 +4,10 @@ using System.Configuration;
 using System.Web;
 using Autofac;
 using Autofac.Integration.Wcf;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Messaging.SignalR;
 using log4net;
 using log4net.Config;
@@ -63,7 +66,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
             Logger.InfoFormat("The Application is starting. {0}", _sitePath);
 
         	var busSender = new SendDenormalizeNotificationToBus(denormalizeHandler);
-        	var saveToDenormalizationQueue = new SaveToDenormalizationQueue();
+        	var saveToDenormalizationQueue = new SaveToDenormalizationQueue(new RunSql(CurrentUnitOfWork.Make()));
         	var initializeApplication =
         		new InitializeApplication(
         			new DataSourcesFactory(new EnversConfiguration(),
@@ -73,13 +76,13 @@ namespace Teleopti.Ccc.Sdk.WcfHost
                                                 new MeetingMessageSender(busSender,saveToDenormalizationQueue),
                                                 new GroupPageChangedMessageSender(busSender,saveToDenormalizationQueue  ),
                                                 new PersonChangedMessageSender(busSender,saveToDenormalizationQueue ),
-                                                new PersonPeriodChangedMessageSender(busSender,saveToDenormalizationQueue )
+                                                new PersonPeriodChangedMessageSender(busSender,saveToDenormalizationQueue)
                                             },
 													DataSourceConfigurationSetter.ForSdk()),
         			new SignalBroker(MessageFilterManager.Instance.FilterDictionary))
         			{MessageBrokerDisabled = messageBrokerDisabled()};
             string sitePath = Global.sitePath();
-            initializeApplication.Start(new SdkState(), sitePath, new LoadPasswordPolicyService(sitePath), new ConfigurationManagerWrapper());
+            initializeApplication.Start(new SdkState(), sitePath, new LoadPasswordPolicyService(sitePath), new ConfigurationManagerWrapper(), true);
             var messageBroker = initializeApplication.MessageBroker;
 
             var messageBrokerEnabled = !messageBrokerDisabled();
@@ -152,8 +155,11 @@ namespace Teleopti.Ccc.Sdk.WcfHost
             builder.RegisterModule<RequestFactoryModule>();
             builder.RegisterModule<QueryHandlerModule>();
             builder.RegisterModule<ShiftTradeModule>();
-            builder.RegisterModule<CommandHandlerModule>();
-            builder.RegisterModule<UpdateScheduleModule>();
+			builder.RegisterModule<SdkCommandHandlersModule>();
+			builder.RegisterModule<CommandDispatcherModule>();
+			builder.RegisterModule<ServiceBusEventsPublisherModule>();
+			builder.RegisterModule<CommandHandlersModule>();
+			builder.RegisterModule<UpdateScheduleModule>();
 			  builder.RegisterModule<DateAndTimeModule>();
             builder.RegisterType<WebWindowsUserProvider>()
                 .As<IWindowsUserProvider>()
@@ -166,6 +172,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
             builder.RegisterType<MainShiftLayerConstructor>().As<ILayerConstructor<IMainShiftActivityLayer>>().InstancePerLifetimeScope();
             builder.RegisterType<PersonalShiftLayerConstructor>().As<ILayerConstructor<IPersonalShiftActivityLayer>>().InstancePerLifetimeScope();
             builder.RegisterType<UserCultureProvider>().As<IUserCultureProvider>().InstancePerLifetimeScope();
+            builder.RegisterType<GroupingReadOnlyRepository>().As<IGroupingReadOnlyRepository>();
 
         	registerAlternativePasswordCheckerIfApplicable(builder);
 

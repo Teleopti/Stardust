@@ -535,7 +535,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                        {
                                                            UseAvailability = true,
                                                            UsePreferences = true,
-                                                           UseStudentAvailability = true,
+                                                           UseStudentAvailability = false,
                                                            UseRotations = true
                                                        };
             var helper = new AgentInfoHelper(person, dateOnly, state, schedulingOptions, _workShiftWorkTime);

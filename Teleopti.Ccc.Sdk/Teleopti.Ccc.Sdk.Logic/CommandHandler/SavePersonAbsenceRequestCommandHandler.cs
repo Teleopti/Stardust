@@ -1,7 +1,9 @@
 ﻿using System;
 using System.ServiceModel;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Interfaces.Domain;
@@ -13,12 +15,12 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
     public class SavePersonAbsenceRequestCommandHandler : IHandleCommand<SavePersonAbsenceRequestCommandDto>
     {
         private readonly IPersistPersonRequest _persistPersonRequest;
-        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+        private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IPersonRequestRepository _personRequestRepository;
         private readonly IServiceBusSender _serviceBusSender;
 
 
-        public SavePersonAbsenceRequestCommandHandler(IPersistPersonRequest persistPersonRequest, IUnitOfWorkFactory unitOfWorkFactory, IPersonRequestRepository personRequestRepository, IServiceBusSender serviceBusSender)
+        public SavePersonAbsenceRequestCommandHandler(IPersistPersonRequest persistPersonRequest, ICurrentUnitOfWorkFactory unitOfWorkFactory, IPersonRequestRepository personRequestRepository, IServiceBusSender serviceBusSender)
         {
             _persistPersonRequest = persistPersonRequest;
             _unitOfWorkFactory = unitOfWorkFactory;
@@ -27,10 +29,10 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public CommandResultDto Handle(SavePersonAbsenceRequestCommandDto command)
+		public void Handle(SavePersonAbsenceRequestCommandDto command)
         {
             IPersonRequest result;
-            using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+            using (var unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
             {
                 if (!(command.PersonRequestDto.Request is AbsenceRequestDto))
                 {
@@ -49,16 +51,16 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                 {
                     //Call RSB!
                     var identity = (ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity;
-                    _serviceBusSender.NotifyServiceBus(new NewAbsenceRequestCreated
-                    {
-                        BusinessUnitId = identity.BusinessUnit.Id.GetValueOrDefault(Guid.Empty),
-                        Datasource = identity.DataSource.Application.Name,
-                        Timestamp = DateTime.UtcNow,
-                        PersonRequestId = result.Id.GetValueOrDefault(Guid.Empty)
-                    });
+                    _serviceBusSender.Send(new NewAbsenceRequestCreated
+	                    {
+		                    BusinessUnitId = identity.BusinessUnit.Id.GetValueOrDefault(Guid.Empty),
+		                    Datasource = identity.DataSource.Application.Name,
+		                    Timestamp = DateTime.UtcNow,
+		                    PersonRequestId = result.Id.GetValueOrDefault(Guid.Empty)
+	                    });
                 }
             }
-            return new CommandResultDto { AffectedId = result.Id, AffectedItems = 1 };
+			command.Result = new CommandResultDto { AffectedId = result.Id, AffectedItems = 1 };
         }
         
         private void addNewRequest(IPersonRequest personRequest)

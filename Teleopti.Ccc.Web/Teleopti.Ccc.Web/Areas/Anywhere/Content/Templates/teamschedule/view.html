@@ -1,24 +1,24 @@
 <div class="container team-schedule">
     <div class="row">
         <div class="span12 nowrap">
-            <select id="team-selector" data-bind="options: TeamSchedule.Teams, optionsText: 'SiteAndTeam', value: TeamSchedule.SelectedTeam"></select>
-            <div class="input-append date input-prepend pull-right" id="dp3" data-bind="datepicker: TeamSchedule.SelectedDate, datepickerOptions: {pullRight: true, format: Resources.ShortDatePattern.toUpperCase(), weekStart: parseInt(Resources.FirstDayOfWeek,10), autoclose: true}">
-                <button class="btn" data-bind="attr: {title: Resources.Previous}, click: TeamSchedule.PreviousDay"><i class="icon-chevron-left"></i></button>
-                <input class="input-small" size="16" type="text" readonly="readonly"/>
-                <span class="add-on"><i class="icon-th"></i></span>
-                <button class="btn" data-bind="attr: {title: Resources.Next}, click: TeamSchedule.NextDay"><i class="icon-chevron-right"></i></button>
+            <select id="team-selector" data-bind="enable: !Loading(), options: Teams, optionsText: 'SiteAndTeam', optionsValue: 'Id', value: SelectedTeam"></select>
+            <div class="input-append date input-prepend pull-right" id="date-picker" data-bind="datepicker: SelectedDate, datepickerOptions: { pullRight: true, format: Resources.MomentShortDatePattern, weekStart: Resources.FirstDayOfWeek, autoclose: true }">
+                <button class="btn" data-bind="attr: {title: Resources.Previous}, click: PreviousDay"><i class="icon-chevron-left"></i></button>
+                <input class="add-on date-input" size="16" type="text" readonly="readonly"/>
+                <span class="add-on"><i class="icon-calendar"></i></span>
+                <button class="btn" data-bind="attr: {title: Resources.Next}, click: NextDay"><i class="icon-chevron-right"></i></button>
             </div>
         </div>
     </div>
 
     <div class="row">
         <div class="span12">
-            <div data-bind="visible: TeamSchedule.isLoading"><span data-bind="text: Resources.LoadingThreeDots"></span></div>
-            <div class="relative" data-bind="visible: !TeamSchedule.isLoading()">
+            <div data-bind="visible: Loading"><span data-bind="text: Resources.LoadingThreeDots"></span></div>
+            <div class="relative" data-bind="visible: !Loading()">
     			
                 <div class="time-line absolute">
                     <div class="relative">
-                        <div data-bind="foreach: Timeline.Times">
+                        <div data-bind="foreach: TimeLine.Times">
                             <div class="ruler absolute" data-bind="style: { left: Pixel() + 'px' }"></div>
                             <div class="label label-info absolute" data-bind="style: { left: (Pixel() - 13) + 'px' }, text: Time"></div>
                         </div>
@@ -33,11 +33,11 @@
                             <th class="contract-time"><span data-bind="text: Resources.ContractTime"></span></th>
                         </tr>
                     </thead>
-                    <tbody data-bind="foreach: Agents.Agents">
-                        <tr class="agent" data-bind="attr: { 'data-agent-id': Id }, click: Select">
-                            <td class="agent-name">
+                    <tbody data-bind="foreach: Persons">
+                        <tr class="person" data-bind="attr: { 'data-person-id': Id }, click: Select">
+                            <td class="person-name">
                                 <!-- Must do it this way to get correct overflow: hidden in IE -->
-                                <div class="agent-name nowrap" data-bind="text: Name"></div>
+                                <div class="person-name nowrap" data-bind="text: Name"></div>
                             </td>
                             <td class="shift">
                                 <ul class="relative unstyled" data-bind="template: { name: 'layerTemplate', foreach: Layers }"></ul>

@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 				.ForMember(d => d.AgentSchedules, o => o.MapFrom(s => s.Days))
 				.ForMember(d => d.PeriodSelection, o => o.MapFrom(s => s))
 				.ForMember(d => d.TeamSelection, o => o.MapFrom(s => s.TeamOrGroupId))
-				.ForMember(d => d.TimeLine, o => o.MapFrom(s =>
+				.ForMember(d => d.TimeLine, o => o.ResolveUsing(s =>
 				                                           	{
 				                                           		var startTime = s.DisplayTimePeriod.StartDateTime;
 				                                           		var endTime = s.DisplayTimePeriod.EndDateTime;
@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 			CreateMap<TimeLineMappingData, TimeLineViewModel>()
                 .ForMember(d => d.ShortTime, o => o.MapFrom(s => s.Time.TimeOfDay.Minutes != 0 ? s.Time.TimeOfDay.Minutes.ToString(CultureInfo.CurrentUICulture.DateTimeFormat.TimeSeparator + "00") : TimeZoneInfo.ConvertTimeFromUtc(s.Time, _userTimeZone().TimeZone()).TimeOfDay.Hours.ToString("00")))
 				.ForMember(d => d.LongTime, o => o.MapFrom(s => TimeHelper.TimeOfDayFromTimeSpan(TimeZoneInfo.ConvertTimeFromUtc(s.Time, _userTimeZone().TimeZone()).TimeOfDay)))
-				.ForMember(d => d.PositionPercent, o => o.MapFrom(s =>
+				.ForMember(d => d.PositionPercent, o => o.ResolveUsing(s =>
 																					{
 																						var displayedTicks = (decimal)s.DisplayTimePeriod.EndDateTime.Ticks - s.DisplayTimePeriod.StartDateTime.Ticks;
 																						var positionTicks = (decimal)s.Time.Ticks - s.DisplayTimePeriod.StartDateTime.Ticks;
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 
 			CreateMap<TeamScheduleDayDomainData, AgentScheduleViewModel>()
 				.ForMember(d => d.AgentName, o => o.MapFrom(s => s.Person.Name.ToString()))
-				.ForMember(d => d.DayOffText, o => o.MapFrom(s =>
+				.ForMember(d => d.DayOffText, o => o.ResolveUsing(s =>
 																				{
 																					if (s.Projection == null)
 																						return null;
@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 																						return null;
 																					return s.Projection.DayOff.DayOff.Description.Name;
 																				}))
-				.ForMember(d => d.Layers, o => o.MapFrom(s =>
+				.ForMember(d => d.Layers, o => o.ResolveUsing(s =>
 																		{
 																			if (s.Projection == null || s.Projection.Layers == null)
 																				return new LayerMappingData[] { };
@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 				;
 
 			CreateMap<LayerMappingData, LayerViewModel>()
-				.ForMember(d => d.PositionPercent, o => o.MapFrom(s =>
+				.ForMember(d => d.PositionPercent, o => o.ResolveUsing(s =>
 				                                                  	{
 				                                                  		if (!s.Layer.Period.HasValue)
 				                                                  			return 0;
@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 				                                                  		return positionTicks/displayedTicks;
 				                                                  	}
 				                                        	))
-				.ForMember(d => d.EndPositionPercent, o => o.MapFrom(s =>
+				.ForMember(d => d.EndPositionPercent, o => o.ResolveUsing(s =>
 				                                                     	{
 				                                                     		if (!s.Layer.Period.HasValue)
 				                                                     			return 0;
@@ -118,13 +118,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.Mapping
 				                                                     	}
 				                                           	))
 				.ForMember(d => d.Color, o => o.MapFrom(s => s.Layer.DisplayColor.ToHtml()))
-				.ForMember(d => d.StartTime, o => o.MapFrom(s =>
+				.ForMember(d => d.StartTime, o => o.ResolveUsing(s =>
 				                                       	{
 				                                       		if (!s.Layer.Period.HasValue)
 				                                       			return null;
 															return s.Layer.Period.Value.StartDateTimeLocal(_userTimeZone.Invoke().TimeZone()).ToShortTimeString();
 				                                       	}))
-				.ForMember(d => d.EndTime, o => o.MapFrom(s =>
+				.ForMember(d => d.EndTime, o => o.ResolveUsing(s =>
 														{
 															if (!s.Layer.Period.HasValue)
 																return null;

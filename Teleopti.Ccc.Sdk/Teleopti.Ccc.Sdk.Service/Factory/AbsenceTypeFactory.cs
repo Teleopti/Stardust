@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
         private static ICollection<AbsenceDto> GetAbsences(IUnitOfWork uow)
         {
             AbsenceRepository rep = new AbsenceRepository(uow);
-            IList<IAbsence> absenceList = rep.LoadAllSortByName();
+            IEnumerable<IAbsence> absenceList = rep.LoadAllSortByName();
             AbsenceAssembler absenceAssembler = new AbsenceAssembler(rep);
             return absenceAssembler.DomainEntitiesToDtos(absenceList).ToList();
         }

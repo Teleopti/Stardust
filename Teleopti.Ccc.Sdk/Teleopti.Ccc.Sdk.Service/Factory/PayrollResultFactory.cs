@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Payroll;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject;
@@ -52,7 +54,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
                         payrollExport.ExportPersonCollection;
                 }
 
-                _serviceBusSender.NotifyServiceBus(message);
+                _serviceBusSender.Send(message);
             }
             return payrollResultId;
         }

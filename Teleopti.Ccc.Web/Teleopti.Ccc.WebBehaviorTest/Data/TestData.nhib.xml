@@ -2,10 +2,10 @@
 <datasource>
 	<hibernate-configuration xmlns="urn:nhibernate-configuration-2.2">
 		<session-factory name="TestData">
-			<property name="connection.connection_string">_connectionString_</property>
+			<property name="connection.connection_string">$(ConnectionString)</property>
 		</session-factory>
 	</hibernate-configuration>
 	<matrix name="MatrixDatamartDemo">
-		<connectionString>_connectionStringMatrix_</connectionString>
+		<connectionString>$(ConnectionStringMatrix)</connectionString>
 	</matrix>
 </datasource>

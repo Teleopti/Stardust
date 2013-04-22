@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
@@ -18,6 +21,24 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 		private DateTime? _updatedOn;
 		private readonly LocalizedUpdateInfo _localizedUpdateInfo = new LocalizedUpdateInfo();
 #pragma warning restore 0649
+
+
+		private readonly IList<IEvent> _events = new List<IEvent>();
+
+		public virtual IEnumerable<IEvent> PopAllEvents()
+		{
+			var allEvents = _events.ToArray();
+			_events.Clear();
+			return allEvents;
+		}
+
+		public virtual IEnumerable<IEvent> AllEvents() { return _events; }
+
+		protected void AddEvent(IEvent @event)
+		{
+			_events.Add(@event);
+		}
+
 
 
 		public virtual int? Version

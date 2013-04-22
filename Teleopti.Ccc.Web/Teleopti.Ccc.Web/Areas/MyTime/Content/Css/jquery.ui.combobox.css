@@ -14,3 +14,9 @@
 input[type=TEXT].ui-combobox {
     vertical-align: top;
 }
+
+ul.ui-menu
+{
+	z-index: 15004;
+	position: absolute;
+}
