@@ -34,12 +34,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			var defaultScenario = _scenarioRepository.LoadDefaultScenario();
 			var absenceTime = _scheduleProjectionReadOnlyRepository.AbsenceTimePerBudgetGroup(period, personPeriod.BudgetGroup, defaultScenario);
 
+			var absenceTimeForPeriod = absenceDays as IList<AbsenceAgents> ?? absenceDays.ToList();
 			foreach (var payloadWorkTime in absenceTime)
 			{
-				absenceDays.First(a => a.Date == payloadWorkTime.BelongsToDate).AbsenceTime = payloadWorkTime.TotalContractTime;
+				absenceTimeForPeriod.First(a => a.Date == payloadWorkTime.BelongsToDate).AbsenceTime = payloadWorkTime.TotalContractTime;
 			}
 
-			return absenceDays;
+			return absenceTimeForPeriod;
 		}
 	}
 }
