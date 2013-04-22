@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[When(@"I click the previous day button")]
 		public void WhenIClickPreviousVirtualSchedulePeriodButton()
 		{
-			Pages.Pages.CurrentDateRangeSelector.PreviousPeriodButton.EventualClick();
+			Browser.Interactions.Click("#StudentAvailabilityDateRangeSelector button:first-of-type");
 		}
 
 		[Then(@"the week-picker should close")]
