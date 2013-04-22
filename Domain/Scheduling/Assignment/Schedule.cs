@@ -258,7 +258,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                                 where data.BelongsToPeriod(dateAndDateTime)
                                 select (IScheduleData)data.Clone()).ToList();
                 filteredConflicts = (from conflict in PersonAssignmentConflictInternalCollection
+// ReSharper disable ImplicitlyCapturedClosure
+									 // tamasb: note that we can ignore the R# warning here as both usages of schedulePublishedSpecification come   
+									 // one after other quick, so the existance of schedulePublishedSpecification is not long
                                      where conflict.BelongsToPeriod(dateAndDateTime)
+// ReSharper restore ImplicitlyCapturedClosure
                                      select conflict.EntityClone());
             }
             else
