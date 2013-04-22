@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Teleopti.Support.Security
 {
@@ -12,14 +13,13 @@ namespace Teleopti.Support.Security
 		private static readonly ICommandLineCommand PersonAssignmentAuditDateSetter = new PersonAssignmentAuditDateSetter();
 		private static readonly ICommandLineCommand PersonAssignmentDateSetter = new PersonAssignmentDateSetter();
 
+
         static void Main(string[] args)
         {
             var commandLineArgument = new CommandLineArgument(args);
-			if (!string.IsNullOrEmpty(commandLineArgument.DestinationConnectionString))
-			{
-				PersonAssignmentDateSetter.Execute(commandLineArgument);
-				PersonAssignmentAuditDateSetter.Execute(commandLineArgument);
-			}
+
+			PersonAssignmentDateSetter.Execute(commandLineArgument);
+			PersonAssignmentAuditDateSetter.Execute(commandLineArgument);
 
 			if (!string.IsNullOrEmpty(commandLineArgument.AggDatabase))
 				CrossDatabaseViewUpdate.Execute(commandLineArgument);

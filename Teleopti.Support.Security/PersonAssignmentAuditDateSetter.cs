@@ -23,6 +23,12 @@ namespace Teleopti.Support.Security
 
 		public int Execute(CommandLineArgument commandLineArgument)
 		{
+			string connectionString = commandLineArgument.DestinationConnectionString;
+			if (string.IsNullOrEmpty(connectionString))
+			{
+				return 0;
+			}
+
 			using (var connection = new SqlConnection(commandLineArgument.DestinationConnectionString))
 			{
 				connection.Open();
