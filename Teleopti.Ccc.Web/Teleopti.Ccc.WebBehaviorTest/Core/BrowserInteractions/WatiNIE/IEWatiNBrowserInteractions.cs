@@ -19,9 +19,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserInteractions.WatiNIE
 			return Retrying.Action(() => _browser.Eval(javascript));
 		}
 
-		public void GoTo(Uri uri)
+		public void GoTo(string uri)
 		{
-			Retrying.Action(() => _browser.GoTo(uri));
+			Retrying.Action(() => _browser.GoToNoWait(uri));
 		}
 
 		public void Click(string selector)
@@ -29,9 +29,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserInteractions.WatiNIE
 			_browser.Element(Find.BySelector(selector)).EventualClick();
 		}
 
-		public void AssertExists(string existsSelector)
+		public void AssertUrlContains(string url)
 		{
-			EventualAssert.That(() => _browser.Element(Find.BySelector(existsSelector)).Exists, Is.True);
+			EventualAssert.That(() => _browser.Url, Is.StringContaining(url));
+		}
+
+		public void AssertExists(string selector)
+		{
+			EventualAssert.That(() => _browser.Element(Find.BySelector(selector)).Exists, Is.True);
 		}
 
 		public void AssertNotExists(string existsSelector, string notExistsSelector)
@@ -46,5 +51,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserInteractions.WatiNIE
 			// should be faster with better compatibility.
 			EventualAssert.That(() => _browser.Element(Find.BySelector(selector)).Text, Is.StringContaining(text));
 		}
+
 	}
 }

@@ -72,7 +72,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[When(@"I receive message number '(.*)'")]
 		public void WhenIReceiveMessageNumber(int messageCount)
 		{
-			Browser.Current.Eval("Teleopti.MyTimeWeb.AsmMessage.SetMessageNotificationOnTab(" + messageCount.ToString() + ");");
+			Browser.Interactions.AssertExists(".asmMessage-list");
+			Browser.Interactions.Eval("Teleopti.MyTimeWeb.AsmMessage.SetMessageNotificationOnTab(" + messageCount.ToString() + ");");
 
 			var pushMessageDialogueJsonObject = new StringBuilder();
 			pushMessageDialogueJsonObject.Append("var messageItem = {");
@@ -85,7 +86,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			pushMessageDialogueJsonObject.Append("IsRead: 'false'}; ");
 			pushMessageDialogueJsonObject.Append("Teleopti.MyTimeWeb.AsmMessageList.AddNewMessageAtTop(messageItem);");
 
-			Browser.Current.Eval(pushMessageDialogueJsonObject.ToString());
+			Browser.Interactions.Eval(pushMessageDialogueJsonObject.ToString());
 		}
 
 		[Given(@"I have no unread messages")]
@@ -262,6 +263,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[When(@"the message with title '(.*)' is deleted by the sender")]
 		public void WhenTheMessageWithTitleIsDeletedByTheSender(string title)
 		{
+			Browser.Interactions.AssertExists(".asmMessage-list");
 			Guid id;
 			IPushMessageDialogue pushMessageDialogue;
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
@@ -271,12 +273,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 				id = (Guid)pushMessageDialogue.Id;
 			}
 
-			Browser.Current.Eval("Teleopti.MyTimeWeb.AsmMessage.SetMessageNotificationOnTab(" + "1" + ");");
+			Browser.Interactions.Eval("Teleopti.MyTimeWeb.AsmMessage.SetMessageNotificationOnTab(" + "1" + ");");
 			var javaScript = new StringBuilder();
 
 			javaScript.AppendFormat(CultureInfo.InvariantCulture, "Teleopti.MyTimeWeb.AsmMessageList.DeleteMessage( '{0}' );", id.ToString());
 
-			Browser.Current.Eval(javaScript.ToString());
+			Browser.Interactions.Eval(javaScript.ToString());
 		}
 	}
 }

@@ -14,28 +14,28 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void CreateCorruptCookie()
 		{
-			Navigation.GoTo("Test/CorruptMyCookie");
+			Navigation.GoTo("Test/CorruptMyCookie", new WaitUntilAt("Test/CorruptMyCookie"));
 		}
 
 		public static void CreateNonExistingDatabaseCookie()
 		{
-			Navigation.GoTo("Test/NonExistingDatasourceCookie");
+			Navigation.GoTo("Test/NonExistingDatasourceCookie", new WaitUntilAt("Test/NonExistingDatasourceCookie"));
 		}
 
 		public static void ExpireMyCookie()
 		{
-			Navigation.GoTo("Test/ExpireMyCookie");
+			Navigation.GoTo("Test/ExpireMyCookie", new WaitUntilAt("Test/ExpireMyCookie"));
 		}
 
 		public static void BeforeTestRun()
 		{
-			Navigation.GotoRaw("file://" + System.IO.Path.Combine(Environment.CurrentDirectory, "BeforeTestRun.html"));
+			Navigation.GotoRaw("file://" + System.IO.Path.Combine(Environment.CurrentDirectory, "BeforeTestRun.html"), new WaitUntilAt("BeforeTestRun"));
 		}
 
 		public static void BeforeScenario()
 		{
 			// use a scenario tag here for enableMyTimeMessageBroker if required
-			Navigation.GoTo("Test/BeforeScenario?enableMyTimeMessageBroker=false", new ApplicationStartupTimeout());
+			Navigation.GoTo("Test/BeforeScenario?enableMyTimeMessageBroker=false", new ApplicationStartupTimeout(), new WaitUntilAt("Test/BeforeScenario"));
 		}
 
 		/// <summary>
@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			const string dataSourceName = "TestData";
 			var businessUnitName = UserFactory.User().Person.PermissionInformation.ApplicationRoleCollection.Single().BusinessUnit.Name;
 			var queryString = string.Format("?dataSourceName={0}&businessUnitName={1}&userName={2}&password={3}", dataSourceName, businessUnitName, userName, password);
-			Navigation.GoTo("Test/Logon" + queryString);
+			Navigation.GoTo("Test/Logon" + queryString, new WaitUntilAt("Test/Logon"));
 		}
 
 		public static void ExpireMyCookieInsidePortal()
