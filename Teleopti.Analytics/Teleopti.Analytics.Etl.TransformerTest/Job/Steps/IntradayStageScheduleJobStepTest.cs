@@ -43,7 +43,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
 			Expect.Call(raptorRepository.TruncateSchedule);
 			Expect.Call(commonStateHolder.ScenarioCollectionDeletedExcluded).Return(new List<IScenario> {scenario});
 			Expect.Call(scenario.DefaultScenario).Return(true);
-	        Expect.Call(raptorRepository.ChangedDataOnStep(new DateTimePeriod(), null, ""))
+	        Expect.Call(raptorRepository.ChangedDataOnStep(new DateTime(), null, ""))
 				.IgnoreArguments()
 				.Return(new List<IScheduleChangedReadModel>
 					{
@@ -102,7 +102,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
 			Expect.Call(raptorRepository.TruncateSchedule);
 			Expect.Call(commonStateHolder.ScenarioCollectionDeletedExcluded).Return(new List<IScenario> { scenario });
 			Expect.Call(scenario.DefaultScenario).Return(true);
-			Expect.Call(raptorRepository.ChangedDataOnStep(new DateTimePeriod(), null, ""))
+			Expect.Call(raptorRepository.ChangedDataOnStep(new DateTime(), null, ""))
 				.IgnoreArguments()
 				.Return(new List<IScheduleChangedReadModel>());
 
