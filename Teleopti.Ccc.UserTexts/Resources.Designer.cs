@@ -19819,6 +19819,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please select at least one of the options &quot;Same shift category&quot;, &quot;Same start time&quot; or &quot;Same shift&quot; in Block Optimization..
+        /// </summary>
+        public static string SelectAtleastOneOptimizationOptionForBlock {
+            get {
+                return ResourceManager.GetString("SelectAtleastOneOptimizationOptionForBlock", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Please select at least one of the options &quot;Shift Category&quot;, &quot;Start Time&quot; or &quot;End Time&quot; in  Team Scheduling..
         /// </summary>
         public static string SelectAtleastOneSchedulingOption {
