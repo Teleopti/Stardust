@@ -184,28 +184,34 @@ namespace Teleopti.Ccc.Win.Optimization
             Close();
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions")]
-        private void buttonOK_Click(object sender, EventArgs e)
-        {
-            if(extraPreferencesPanel1.ValidateDefaultValuesForTeam())
-            {
-                if (ValidateData(ExchangeDataOption.ControlsToDataSource))
-                {
-                    ExchangeData(ExchangeDataOption.ControlsToDataSource);
-                    SavePersonalSettings();
-                    DialogResult = DialogResult.OK;
-                    Close();
-                }
-            }
-            else
-            {
-                MessageBox.Show(UserTexts.Resources.SelectAtleastOneOptimizationOption,UserTexts.Resources.OptimizationOptionMessageBox , MessageBoxButtons.OK);
-                DialogResult = DialogResult.None ;
-            }
-            
-        }
+	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions")]
+	    private void buttonOK_Click(object sender, EventArgs e)
+	    {
+		    var isValidDefaultValuesForTeam = extraPreferencesPanel1.ValidateDefaultValuesForTeam();
+		    var isValidDefaultValuesForBlock = extraPreferencesPanel1.ValidateDefaultValuesForBlock();
+		    if (isValidDefaultValuesForBlock && isValidDefaultValuesForTeam)
+		    {
+			    if (ValidateData(ExchangeDataOption.ControlsToDataSource))
+			    {
+				    ExchangeData(ExchangeDataOption.ControlsToDataSource);
+				    SavePersonalSettings();
+				    DialogResult = DialogResult.OK;
+				    Close();
+			    }
+		    }
+		    else
+		    {
+			    if (!isValidDefaultValuesForTeam)
+				    MessageBox.Show(UserTexts.Resources.SelectAtleastOneOptimizationOption,
+				                    UserTexts.Resources.OptimizationOptionMessageBox, MessageBoxButtons.OK);
+			    if (!isValidDefaultValuesForBlock)
+				    MessageBox.Show("Please select at least one of the options \"Same shift category\", \"Same start time\" or \"Same shift\" in Block Optimization.",
+					    UserTexts.Resources.OptimizationOptionMessageBox, MessageBoxButtons.OK);
+			    DialogResult = DialogResult.None;
+		    }
+	    }
 
-		private void tabControlTopLevel_SelectedIndexChanged(object sender, EventArgs e)
+	    private void tabControlTopLevel_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			this.SelectNextControl(this.ActiveControl, true, true, true, true);
 		}

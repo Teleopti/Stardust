@@ -1,28 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.GroupPageCreator;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.Win.Common;
-using Teleopti.Ccc.Win.Scheduling.SchedulingSessionPreferences;
 using Teleopti.Ccc.WinCode.Grouping;
-using Teleopti.Ccc.WinCode.Events;
-using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Optimization
 {
-	
-
-    public partial class ExtraPreferencesPanel : BaseUserControl, IDataExchange
+	public partial class ExtraPreferencesPanel : BaseUserControl, IDataExchange
     {
-
         private IList<IGroupPageLight> _groupPageOnTeams;
         private IList<IGroupPageLight> _groupPageOnCompareWith;
         private IList<IGroupPageLight> _groupPageOnTeamsTeamBlockPer;
-        //private IEventAggregator _eventAggregator;
         private IList<IActivity> _availableActivity;
-        //private TeamBlockPerConfiguration _TeamBlockConfiguartion;
         private GroupPageLight _singleAgentEntry;
 
         public IExtraPreferences Preferences { get; private set; }
@@ -97,10 +88,6 @@ namespace Teleopti.Ccc.Win.Optimization
             comboBoxGroupPageOnCompareWith.DataSource = _groupPageOnCompareWith;
             comboBoxGroupPageOnCompareWith.DisplayMember = "Name";
             comboBoxGroupPageOnCompareWith.ValueMember = "Key";
-
-            //comboBoxGroupPageOnTeamsTeamBlockPer.DataSource = _groupPageOnTeamsTeamBlockPer;
-            //comboBoxGroupPageOnTeamsTeamBlockPer.DisplayMember = "Name";
-            //comboBoxGroupPageOnTeamsTeamBlockPer.ValueMember = "Key";
         }
 
         private void bindActivityList()
@@ -108,66 +95,27 @@ namespace Teleopti.Ccc.Win.Optimization
             comboBoxActivity .DataSource = _availableActivity ;
             comboBoxActivity.DisplayMember = "Name";
             comboBoxActivity.ValueMember = "Name";
-
         }
     
         private void getDataFromControls()
         {
-            //Preferences.UseBlockScheduling = checkBoxBlock.Checked;
-
-            //Preferences.BlockFinderTypeValue = 
-            //    radioButtonBetweenDayOff.Checked 
-            //    ? BlockFinderType.BetweenDayOff 
-            //    : BlockFinderType.SchedulePeriod;
-
-
-            Preferences.UseTeams = checkBoxTeams.Checked;
+			Preferences.UseTeams = checkBoxTeams.Checked;
         	Preferences.KeepSameDaysOffInTeam = checkBoxKeepWeekEndsTogether.Checked;
 			Preferences.UseGroupSchedulingCommonCategory = checkBoxCommonCategory.Checked;
 			Preferences.UseGroupSchedulingCommonStart = checkBoxCommonStart.Checked;
 			Preferences.UseGroupSchedulingCommonEnd = checkBoxCommonEnd.Checked;
             Preferences.UseCommonActivity = checkBoxCommonActivity.Checked;
             Preferences.CommonActivity = (IActivity)comboBoxActivity.SelectedItem;
-
-            Preferences.GroupPageOnTeam = (IGroupPageLight)comboBoxGroupPageOnTeams.SelectedItem;
-
-            //if ((string) comboBoxGroupPageOnTeamsTeamBlockPer.SelectedValue == "SingleAgentTeam")
-            //    Preferences.GroupPageOnTeamBlockPer = null;
-            //else
-            //Preferences.GroupPageOnTeamBlockPer = (IGroupPageLight)comboBoxGroupPageOnTeamsTeamBlockPer .SelectedItem;
-
-            Preferences.FairnessValue = (double)trackBar1.Value / 100;
-
-            Preferences.GroupPageOnCompareWith = (IGroupPageLight)comboBoxGroupPageOnCompareWith.SelectedItem;
-
-            //if(checkBoxTeamBlockPerBlockScheduling.Checked )
-            //    Preferences.BlockFinderTypeForAdvanceOptimization = radioButtonBetweenDaysOffAdvOptimization .Checked
-            //        ? BlockFinderType.BetweenDayOff
-            //        : BlockFinderType.SchedulePeriod;
-                
-            //else
-            //    Preferences.BlockFinderTypeForAdvanceOptimization = BlockFinderType.None;
-
+			Preferences.GroupPageOnTeam = (IGroupPageLight)comboBoxGroupPageOnTeams.SelectedItem;
+			Preferences.FairnessValue = (double)trackBar1.Value / 100;
+			Preferences.GroupPageOnCompareWith = (IGroupPageLight)comboBoxGroupPageOnCompareWith.SelectedItem;
             Preferences.UseTeamBlockOption = checkBoxTeamBlockPerBlockScheduling.Checked;
             getTeamBlockPerDataToSave();
         }
 
         private void setDataToControls()
         {
-            //checkBoxBlock.Checked = Preferences.UseBlockScheduling;
             checkBoxTeamBlockPerBlockScheduling.Checked = Preferences.UseTeamBlockOption;
-
-            //switch(Preferences.BlockFinderTypeValue)
-            //{
-            //    case BlockFinderType.BetweenDayOff:
-            //        radioButtonBetweenDayOff.Checked = true;
-            //        break;
-            //    case BlockFinderType.SchedulePeriod:
-            //        radioButtonSchedulePeriod.Checked = true;
-            //        break;
-            //}
-
-			//if (checkBoxBlock.Checked) Preferences.UseTeams = false;
 			checkBoxTeams.Checked = Preferences.UseTeams;
         	checkBoxKeepWeekEndsTogether.Checked = Preferences.KeepSameDaysOffInTeam;
         	checkBoxCommonCategory.Checked = Preferences.UseGroupSchedulingCommonCategory;
@@ -182,65 +130,42 @@ namespace Teleopti.Ccc.Win.Optimization
             if (comboBoxGroupPageOnTeams.SelectedValue == null)
                 comboBoxGroupPageOnTeams.SelectedIndex = 0;
 
-            //comboBoxGroupPageOnTeamsTeamBlockPer.SelectedValue = "SingleAgentTeam";
-            //if (Preferences.GroupPageOnTeamBlockPer != null)
-            //    comboBoxGroupPageOnTeamsTeamBlockPer.SelectedValue = Preferences.GroupPageOnTeamBlockPer;
-
             trackBar1.Value = (int)(Preferences.FairnessValue * 100);
-
 
             if (Preferences.GroupPageOnCompareWith != null)
                 comboBoxGroupPageOnCompareWith.SelectedValue = Preferences.GroupPageOnCompareWith.Key;
             if (comboBoxGroupPageOnCompareWith.SelectedValue == null)
                 comboBoxGroupPageOnCompareWith.SelectedIndex = 0;
 
-            //switch (Preferences.BlockFinderTypeForAdvanceOptimization)
-            //{
-            //    case BlockFinderType.BetweenDayOff:
-            //        //radioButtonBetweenDaysOffAdvOptimization.Checked = true;
-            //        checkBoxTeamBlockPerBlockScheduling.Checked = true;
-            //        break;
-            //    case BlockFinderType.SchedulePeriod:
-            //        //radioButtonSchedulePeriodAdvOptimization.Checked = true;
-            //        checkBoxTeamBlockPerBlockScheduling.Checked = true;
-            //        break;
-            //    case BlockFinderType.None:
-            //        checkBoxTeamBlockPerBlockScheduling.Checked = false;
-            //        checkBoxTeamBlockPerBlockScheduling.Enabled = false;
-            //        //radioButtonBetweenDaysOffAdvOptimization.Enabled = false;
-            //        //radioButtonSchedulePeriodAdvOptimization.Enabled = false;
-            //        //comboBoxGroupPageOnTeamsTeamBlockPer.Enabled = false;
-            //        break;
-            //}
             checkBoxTeams.Checked = Preferences.UseTeams;
             checkBoxTeamBlockPerBlockScheduling.Checked = Preferences.UseTeamBlockOption;
-            setLellingPerData();
+            setTeamBlockPerData();
         }
-
-        //private void checkBoxBlock_CheckedChanged(object sender, System.EventArgs e)
-        //{
-        //    new ExtraPreferencesPanelUseBlockScheduling { Use = checkBoxBlock.Checked }.PublishEvent("ExtraPreferencesPanelUseBlockScheduling", _eventAggregator);
-        //    checkBoxTeams.Enabled = !checkBoxBlock.Checked;
-        //    checkBoxTeamBlockPerBlockScheduling.Enabled = !checkBoxBlock.Checked;
-        //    setRadioButtonsStatus();
-        //}
-
-        //private void setRadioButtonsStatus()
-        //{
-        //    radioButtonBetweenDayOff.Enabled = checkBoxBlock.Checked;
-        //    radioButtonSchedulePeriod.Enabled = checkBoxBlock.Checked;
-        //}
 
         public bool  ValidateDefaultValuesForTeam()
         {
             if (checkBoxTeams.Checked)
-                //check if none of the options are not checked. Set the default values
-                if (!(checkBoxCommonCategory.Checked || checkBoxCommonStart.Checked || checkBoxCommonEnd.Checked || checkBoxCommonActivity.Checked  ))
-                {
-                    return false ;
-                }
-            return true;
+            {
+				//check if none of the options are not checked. Set the default values
+				if (!(checkBoxCommonCategory.Checked || checkBoxCommonStart.Checked || checkBoxCommonEnd.Checked || checkBoxCommonActivity.Checked))
+				{
+					return false;
+				}
+            }
+	        return true;
         }
+
+		public bool ValidateDefaultValuesForBlock()
+		{
+			if (checkBoxTeamBlockPerBlockScheduling.Checked)
+			{
+				if (!(checkBoxTeamBlockSameShift.Checked || checkBoxSameStartTime.Checked || checkBoxTeamBlockSameShiftCategory.Checked))
+				{
+					return false;
+				}
+			}
+			return true;
+		}
 
         private void checkBoxTeams_CheckedChanged(object sender, System.EventArgs e)
         {
@@ -263,7 +188,6 @@ namespace Teleopti.Ccc.Win.Optimization
 
         private void setInitialControlStatus()
         {
-            //setRadioButtonsStatus();
             setSubItemsOnTeamOptimizationStatus();
         }
 
@@ -278,55 +202,14 @@ namespace Teleopti.Ccc.Win.Optimization
             checkBoxTeamBlockSameShiftCategory.Enabled = checkBoxTeamBlockPerBlockScheduling.Checked;
             checkBoxSameStartTime.Enabled = checkBoxTeamBlockPerBlockScheduling.Checked;
             comboBoxTeamBlockType.Enabled = checkBoxTeamBlockPerBlockScheduling.Checked;
-            if (checkBoxTeamBlockPerBlockScheduling.Checked)
-                checkBoxTeamBlockSameShiftCategory.Checked = true;
-            else
-            {
-                checkBoxTeamBlockSameShiftCategory.Checked = false ;
-                checkBoxSameStartTime.Checked = false;
-            }
-            //checkBoxBlock.Enabled = !checkBoxTeamBlockPerBlockScheduling.Checked;
-            //radioButtonSchedulePeriodAdvOptimization.Enabled = checkBoxTeamBlockPerBlockScheduling.Checked;
-            //radioButtonBetweenDaysOffAdvOptimization.Enabled = checkBoxTeamBlockPerBlockScheduling.Checked;
-            //comboBoxGroupPageOnTeamsTeamBlockPer.Enabled = checkBoxTeamBlockPerBlockScheduling.Checked;
-            //btnTeamBlockPer.Enabled = checkBoxTeamBlockPerBlockScheduling.Checked;
-            //if (checkBoxTeamBlockPerBlockScheduling.Checked)
-            //{
-            //    if(Preferences.BlockFinderTypeForAdvanceOptimization != BlockFinderType.BetweenDayOff )
-            //        radioButtonBetweenDaysOffAdvOptimization.Checked = false;
-            //    radioButtonSchedulePeriodAdvOptimization.Checked = true;
-            //    checkBoxTeams.Checked = false ;
-            //    checkBoxBlock.Checked = false;
-            //}
-            //else
-            //{
-            //    radioButtonSchedulePeriodAdvOptimization.Checked = false;
-            //    radioButtonBetweenDaysOffAdvOptimization.Checked = false;
-            //}
-
+	        checkBoxTeamBlockSameShift.Enabled = checkBoxTeamBlockPerBlockScheduling.Checked;
         }
 
-        //private void btnTeamBlockPer_Click(object sender, EventArgs e)
-        //{
-        //    TeamBlockPerConfiguration TeamBlockPerConfiguration = new TeamBlockPerConfiguration();
-        //    TeamBlockPerConfiguration.SelectedBlockFinderType = Preferences.BlockFinderTypeForAdvanceOptimization;
-        //    TeamBlockPerConfiguration.SelectedGroupPage = Preferences.GroupPageOnTeamBlockPer;
-        //    TeamBlockPerConfiguration.UseSameEndTime = Preferences.UseTeamBlockSameEndTime;
-        //    TeamBlockPerConfiguration.UseSameShiftCategory = Preferences.UseTeamBlockSameShiftCategory;
-        //    TeamBlockPerConfiguration.UseSameStartTime = Preferences.UseTeamBlockSameStartTime;
-        //    TeamBlockPerConfiguration.UserSameShift = Preferences.UseTeamBlockSameShift;
-
-        //    var TeamBlockPerPrefrences = new TeamBlockPerPrefrences(TeamBlockPerConfiguration, _groupPageOnTeamsTeamBlockPer);
-        //    TeamBlockPerPrefrences.ShowDialog();
-        //    _TeamBlockConfiguartion = TeamBlockPerPrefrences.TeamBlockConfiguration;
-        //    GetTeamBlockPerDataToSave();
-
-        //}
-
-        private void setLellingPerData()
+        private void setTeamBlockPerData()
         {
             checkBoxTeamBlockSameShiftCategory.Checked = Preferences.UseTeamBlockSameShiftCategory;
             checkBoxSameStartTime.Checked = Preferences.UseTeamBlockSameStartTime;
+	        checkBoxTeamBlockSameShift.Checked = Preferences.UseTeamBlockSameShift;
             comboBoxTeamBlockType.SelectedValue = Preferences.BlockFinderTypeForAdvanceOptimization.ToString();
         }
         private void getTeamBlockPerDataToSave()
@@ -336,11 +219,10 @@ namespace Teleopti.Ccc.Win.Optimization
             else if((string) comboBoxTeamBlockType.SelectedValue == BlockFinderType.SchedulePeriod.ToString( ) )
                 Preferences.BlockFinderTypeForAdvanceOptimization = BlockFinderType.SchedulePeriod;
             Preferences.GroupPageOnTeamBlockPer = _singleAgentEntry;
-            Preferences.UseTeamBlockSameEndTime =false ;
-            Preferences.UseTeamBlockSameShift = false;
-            Preferences.UseTeamBlockSameShiftCategory = checkBoxTeamBlockSameShiftCategory.Checked ;
-            Preferences.UseTeamBlockSameStartTime = checkBoxSameStartTime.Checked ;
-
+	        Preferences.UseTeamBlockSameEndTime = false;
+	        Preferences.UseTeamBlockSameShift = checkBoxTeamBlockSameShift.Checked;
+            Preferences.UseTeamBlockSameShiftCategory = checkBoxTeamBlockSameShiftCategory.Checked;
+            Preferences.UseTeamBlockSameStartTime = checkBoxSameStartTime.Checked;
         }
     }
     public class ExtraPreferencesPanelUseBlockScheduling
