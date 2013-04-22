@@ -18,8 +18,12 @@ namespace Teleopti.Support.Security
         {
             var commandLineArgument = new CommandLineArgument(args);
 
-			PersonAssignmentDateSetter.Execute(commandLineArgument);
-			PersonAssignmentAuditDateSetter.Execute(commandLineArgument);
+			var result = PersonAssignmentDateSetter.Execute(commandLineArgument);
+			if(result!= 0)
+				Environment.Exit(result);
+			result = PersonAssignmentAuditDateSetter.Execute(commandLineArgument);
+			if (result != 0)
+				Environment.Exit(result);
 
 			if (!string.IsNullOrEmpty(commandLineArgument.AggDatabase))
 				CrossDatabaseViewUpdate.Execute(commandLineArgument);
@@ -48,6 +52,8 @@ namespace Teleopti.Support.Security
 
             if (commandLineArgument.LicenseStatusMode)
                 LicenseStatusChecker.Execute(commandLineArgument);
+
+	        Environment.ExitCode = 0;
         }
 
 
