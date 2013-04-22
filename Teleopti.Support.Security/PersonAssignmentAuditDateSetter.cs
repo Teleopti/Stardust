@@ -13,7 +13,7 @@ namespace Teleopti.Support.Security
 
 		private readonly string _readCommand = new StringBuilder()
 				.AppendLine("select top 100")
-				.AppendLine("Pa.Id, DefaultTimeZone, Minimum, TheDate")
+				.AppendLine("Pa.Id, DefaultTimeZone, Minimum, TheDate, Pa.Version")
 				.AppendLine("from [Auditing].PersonAssignment_AUD pa")
 				.AppendLine("inner join Person p on pa.Person = p.id")
 				.AppendLine("Where TheDate = '1800-01-01'")
@@ -98,6 +98,7 @@ namespace Teleopti.Support.Security
 					var commandText = new StringBuilder()
 						.AppendLine("update [Auditing].PersonAssignment_AUD")
 						.AppendLine("set TheDate = '" + dataRow.Field<DateTime>("TheDate") + "'")
+						.AppendLine(", Version = " + dataRow.Field<int>("Version"))
 						.AppendLine("where Id='" + dataRow.Field<Guid>("Id") + "'");
 
 					command.CommandText = commandText.ToString();

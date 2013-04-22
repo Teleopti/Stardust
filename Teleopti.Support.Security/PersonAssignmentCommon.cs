@@ -37,6 +37,8 @@ namespace Teleopti.Support.Security
 				var utcTime = new DateTime(dataRow.Field<DateTime>("Minimum").Ticks, DateTimeKind.Utc);
 				var localDate = timeZoneInfo.SafeConvertTimeToUtc(utcTime);
 				dataRow["TheDate"] = localDate.Date;
+				var version = dataRow.Field<int>("Version");
+				dataRow["Version"] = version + 1;
 			}
 		}
 
