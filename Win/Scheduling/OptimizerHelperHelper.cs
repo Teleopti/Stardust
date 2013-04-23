@@ -197,10 +197,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if(schedulerState == null) throw new ArgumentNullException("schedulerState");
 
 			var allSchedules = new List<IScheduleDay>();
-			var period = schedulerState.RequestedPeriod;
+			var period = schedulerState.RequestedPeriod.DateOnlyPeriod;
+			period = new DateOnlyPeriod(period.StartDate.AddDays(-10), period.EndDate.AddDays(10));
 			var persons = schedulerState.FilteredPersonDictionary;
 
-			foreach (var day in period.DateOnlyPeriod.DayCollection())
+			foreach (var day in period.DayCollection())
 			{
 				foreach (var person in persons)
 				{

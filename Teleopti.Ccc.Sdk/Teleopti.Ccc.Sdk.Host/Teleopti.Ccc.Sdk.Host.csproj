@@ -246,6 +246,7 @@
     <None Include="PasswordPolicy.xml.notinuse" />
     <Content Include="Teleopti.Ccc.Sdk.ServiceBus.Client.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
   <ItemGroup>

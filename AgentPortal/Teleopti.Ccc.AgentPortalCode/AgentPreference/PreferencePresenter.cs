@@ -2,13 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
+using System.Linq;
 using Teleopti.Ccc.AgentPortal.AgentPreferenceView;
 using Teleopti.Ccc.AgentPortalCode.AgentPreference.Limitation;
 using Teleopti.Ccc.AgentPortalCode.Common;
 using Teleopti.Ccc.AgentPortalCode.Common.Clipboard;
 using Teleopti.Ccc.AgentPortalCode.Foundation.StateHandlers;
 using Teleopti.Ccc.AgentPortalCode.Helper;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 using DayOff = Teleopti.Ccc.AgentPortalCode.Common.DayOff;
@@ -549,7 +550,7 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentPreference
         public void OnSaveTemplate(string name, int top, int bottom, int left, int right)
         {
             var template = new ExtendedPreferenceTemplateDto {Name = name};
-            var colorDto = new ColorDto {Blue = 123};
+            var colorDto = new ColorDto(Color.FromArgb(0,0,123));
             template.DisplayColor = colorDto;
 
             for (var row = top; row <= bottom; row++)
@@ -586,9 +587,8 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentPreference
 
                         activityRestrictionDto.Activity = activityDto;
 
-                        var test = new List<ActivityRestrictionDto> {activityRestrictionDto};
-
-                        template.ActivityRestrictionCollection = test.ToArray();
+                        template.ActivityRestrictionCollection.Clear();
+                        template.ActivityRestrictionCollection.Add(activityRestrictionDto);
                     }
 
                     if (cellData.Preference.DayOff != null)
@@ -946,11 +946,11 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentPreference
         {
             Preference preference = CreateEmptyPreference();
             preference.TemplateName = dto.Name;
-            if ((dto.ActivityRestrictionCollection != null) && (dto.ActivityRestrictionCollection.Length > 0))
+            if ((dto.ActivityRestrictionCollection != null) && (dto.ActivityRestrictionCollection.Count > 0))
             {
-                var activityRestriction = dto.ActivityRestrictionCollection[0];
+                var activityRestriction = dto.ActivityRestrictionCollection.First();
                 var activity = activityRestriction.Activity;
-                preference.Activity = new Activity(activity.Id, activity.Description);
+                preference.Activity = new Activity(activity.Id.GetValueOrDefault(), activity.Description);
                 preference.ActivityStartTimeLimitation = new TimeLimitation(TimeOfDayValidatorStartTime, activityRestriction.StartTimeLimitation);
                 preference.ActivityEndTimeLimitation = new TimeLimitation(TimeOfDayValidatorEndTime, activityRestriction.EndTimeLimitation);
                 preference.ActivityTimeLimitation = new TimeLimitation(TimeLengthValidator,
@@ -959,18 +959,18 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentPreference
             }
             if (dto.DayOff != null)
             {
-                preference.DayOff = new DayOff(dto.DayOff.Name, dto.DayOff.ShortName, dto.DayOff.Id, Color.Empty);
+                preference.DayOff = new DayOff(dto.DayOff.Name, dto.DayOff.ShortName, dto.DayOff.Id.GetValueOrDefault(), Color.Empty);
             }
             if (dto.ShiftCategory != null)
             {
                 preference.ShiftCategory = new ShiftCategory(dto.ShiftCategory.Name, dto.ShiftCategory.ShortName,
-                                                             dto.ShiftCategory.Id,
+                                                             dto.ShiftCategory.Id.GetValueOrDefault(),
                                                              ColorHelper.CreateColorFromDto(dto.ShiftCategory.DisplayColor));
             }
 
             if(dto.Absence != null)
             {
-                preference.Absence = new Absence(dto.Absence.Name, dto.Absence.ShortName, dto.Absence.Id, ColorHelper.CreateColorFromDto(dto.Absence.DisplayColor));    
+                preference.Absence = new Absence(dto.Absence.Name, dto.Absence.ShortName, dto.Absence.Id.GetValueOrDefault(), ColorHelper.CreateColorFromDto(dto.Absence.DisplayColor));    
             }
 
             preference.StartTimeLimitation = new TimeLimitation(TimeOfDayValidatorStartTime, dto.StartTimeLimitation);

@@ -1,7 +1,8 @@
 ﻿using System;
-using System.Net;
-using System.Web.Services.Protocols;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
+using System.Collections.Generic;
+using System.ServiceModel;
+using Teleopti.Ccc.Sdk.Common.Contracts;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 
 namespace Teleopti.Ccc.Sdk.Client
 {
@@ -16,25 +17,19 @@ namespace Teleopti.Ccc.Sdk.Client
 
 	public class SdkServiceClient : IDisposable
 	{
-		private TeleoptiCccSdkService _teleoptiSdkService;
-		private TeleoptiCccLogOnService _logOnServiceClient;
-		private TeleoptiSchedulingService _schedulingService;
-		private TeleoptiOrganizationService _organizationService;
-		private TeleoptiOrganizationService1 _internalService;
+        private readonly IDictionary<Type,IDisposable> _factories = new Dictionary<Type, IDisposable>();
 
-		private readonly string _serviceUrl;
-
-		public SdkServiceClient(string serviceUrl)
-		{
-			_serviceUrl = serviceUrl;
-		}
+		private ITeleoptiCccLogOnService _logOnServiceClient;
+		private ITeleoptiSchedulingService _schedulingService;
+		private ITeleoptiOrganizationService _organizationService;
+		private ITeleoptiCccSdkInternal _internalService;
+        private readonly object ChannelLock = new object();
 
 		private bool IsInitialized { get { return _logOnServiceClient != null; } }
 
 		private void Initialize()
 		{
-			_logOnServiceClient = new TeleoptiCccLogOnService();
-			InitializeService(_logOnServiceClient);
+			_logOnServiceClient = CreateChannel<ITeleoptiCccLogOnService>();
 		}
 
 		private void InitializeIfNeeded()
@@ -48,7 +43,7 @@ namespace Teleopti.Ccc.Sdk.Client
 			InitializeIfNeeded();
 		}
 
-		public TeleoptiCccLogOnService LogOnServiceClient
+		public ITeleoptiCccLogOnService LogOnServiceClient
 		{
 			get
 			{
@@ -58,72 +53,52 @@ namespace Teleopti.Ccc.Sdk.Client
 			}
 		}
 
-		public TeleoptiSchedulingService SchedulingService
+		public ITeleoptiSchedulingService SchedulingService
 		{
 			get
 			{
-				CheckState();
-				if (_schedulingService == null)
-				{
-					_schedulingService = new TeleoptiSchedulingService();
-					InitializeService(_schedulingService);
-				}
-				return _schedulingService;
+			    CheckState();
+			    return _schedulingService ?? (_schedulingService = CreateChannel<ITeleoptiSchedulingService>());
 			}
 		}
 
-		public TeleoptiOrganizationService OrganizationService
+		public ITeleoptiOrganizationService OrganizationService
 		{
 			get
 			{
-				CheckState();
-				if (_organizationService == null)
-				{
-					_organizationService = new TeleoptiOrganizationService();
-					InitializeService(_organizationService);
-				}
-				return _organizationService;
+			    CheckState();
+			    return _organizationService ?? (_organizationService = CreateChannel<ITeleoptiOrganizationService>());
 			}
 		}
 
-		public TeleoptiCccSdkService TeleoptiSdkService
-		{
-			get
-			{
-				CheckState();
-				if (_teleoptiSdkService == null)
-				{
-					_teleoptiSdkService = new TeleoptiCccSdkService();
-					InitializeService(_teleoptiSdkService);
-				}
-				return _teleoptiSdkService;
-			}
-		}
-
-        public TeleoptiOrganizationService1 TeleoptiInternalService
+        public ITeleoptiCccSdkInternal TeleoptiInternalService
         {
             get
             {
                 CheckState();
-                if (_internalService == null)
-                {
-                    _internalService = new TeleoptiOrganizationService1();
-                    InitializeService(_internalService);
-                }
-                return _internalService;
+                return _internalService ?? (_internalService = CreateChannel<ITeleoptiCccSdkInternal>());
             }
         }
 
-		private void InitializeService(HttpWebClientProtocol service)
-		{
-			var cache = new CredentialCache
-			            {
-			            	{new Uri(_serviceUrl), "NTLM", CredentialCache.DefaultNetworkCredentials},
-			            	{new Uri(_serviceUrl), "Kerberos", CredentialCache.DefaultNetworkCredentials}
-			            };
-			service.Credentials = cache;
-			service.Url = _serviceUrl;
-		}
+        private T CreateChannel<T>()
+        {
+            lock (ChannelLock)
+            {
+                IDisposable factory;
+                ChannelFactory<T> channelFactory;
+                if (_factories.TryGetValue(typeof (T), out factory))
+                {
+                    channelFactory = (ChannelFactory<T>) factory;
+                }
+                else
+                {
+                    channelFactory = new ChannelFactory<T>(typeof(T).Name);
+                    _factories.Add(typeof(T),channelFactory);
+                }
+
+                return channelFactory.CreateChannel();
+            }
+        }
 
 		public void Dispose()
 		{
@@ -146,9 +121,8 @@ namespace Teleopti.Ccc.Sdk.Client
 
 		protected virtual void ReleaseManagedResources()
 		{
-			if (_teleoptiSdkService != null)
-				_teleoptiSdkService.Dispose();
-			if (_logOnServiceClient != null)
+			/*
+            if (_logOnServiceClient != null)
 				_logOnServiceClient.Dispose();
 			if (_schedulingService != null)
 				_schedulingService.Dispose();
@@ -156,6 +130,12 @@ namespace Teleopti.Ccc.Sdk.Client
 				_organizationService.Dispose();
             if (_internalService != null)
                 _internalService.Dispose();
+            */
+		    foreach (var disposable in _factories)
+		    {
+		        disposable.Value.Dispose();
+		    }
+            _factories.Clear();
 		}
 
 	}
