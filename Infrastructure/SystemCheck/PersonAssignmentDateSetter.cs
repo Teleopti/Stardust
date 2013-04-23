@@ -13,14 +13,14 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck
 			= "select COUNT(*) as cnt from dbo.PersonAssignment where TheDate < '1850-01-01'";
 
 		private readonly string _readCommand = new StringBuilder()
-				.AppendLine("select top 100")
+				.AppendLine("select top 500")
 				.AppendLine("Pa.Id, DefaultTimeZone, Minimum, TheDate, Pa.Version")
 				.AppendLine("from dbo.PersonAssignment pa")
 				.AppendLine("inner join Person p on pa.Person = p.id")
 				.AppendLine("where TheDate = '1800-01-01'")
 				.ToString();
 
-		private readonly PersonAssignmentCommon _personAssignmentCommon = new PersonAssignmentCommon();
+		private readonly IPersonAssignmentCommon _personAssignmentCommon = new PersonAssignmentCommon();
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Console.Write(System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Console.WriteLine(System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
 		public int Execute(SqlConnectionStringBuilder connectionStringBuilder)
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck
 
 				IList<DataRow> rows = _personAssignmentCommon.ReadRows(connection, numberOfNotConvertedCommand, null);
 
-				Console.WriteLine(string.Concat("Found ", rows[0].Field<int>("cnt"), " non converted person assignments"));
+				//Console.WriteLine(string.Concat("Found ", rows[0].Field<int>("cnt"), " non converted person assignments"));
 
 				connection.Close();
 
@@ -50,9 +50,9 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck
 					batchRows = runOneBatch(connection);
 					total += batchRows;
 
-					Console.Write(string.Concat("Rows updated = ", total));
-					int consoleRow = Console.CursorTop;
-					Console.SetCursorPosition(0, consoleRow);
+					//Console.Write(string.Concat("Rows updated = ", total));
+					//int consoleRow = Console.CursorTop;
+					//Console.SetCursorPosition(0, consoleRow);
 
 				} while (batchRows > 0);
 
@@ -62,12 +62,12 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck
 				int rowsLeft = rows[0].Field<int>("cnt");
 				if (rowsLeft > 0)
 				{
-					Console.WriteLine("There is still " + rowsLeft + " non converted person assignments in db.");
+					//Console.WriteLine("There is still " + rowsLeft + " non converted person assignments in db.");
 					return 1;
 				}
 			}
 
-			Console.WriteLine();
+			//Console.WriteLine();
 
 			return 0;
 		}
@@ -101,7 +101,7 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck
 				{
 					var commandText = new StringBuilder()
 						.AppendLine("update dbo.PersonAssignment")
-						.AppendLine("set TheDate = '" + dataRow.Field<DateTime>("TheDate") + "'")
+						.AppendLine("set TheDate = '" + String.Format("{0:s}", dataRow.Field<DateTime>("TheDate")) + "'")
 						.AppendLine(", Version = " + dataRow.Field<int>("Version"))
 						.AppendLine("where Id='" + dataRow.Field<Guid>("Id") + "'");
 

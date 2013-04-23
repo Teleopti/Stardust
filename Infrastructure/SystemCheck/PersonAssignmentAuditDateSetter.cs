@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck
 			= "select COUNT(*) as cnt from [Auditing].PersonAssignment_AUD where TheDate < '1850-01-01'";
 
 		private readonly string _readCommand = new StringBuilder()
-				.AppendLine("select top 100")
+				.AppendLine("select top 500")
 				.AppendLine("Pa.Id, DefaultTimeZone, Minimum, TheDate, Pa.Version")
 				.AppendLine("from [Auditing].PersonAssignment_AUD pa")
 				.AppendLine("inner join Person p on pa.Person = p.id")
@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck
 
 				IList<DataRow> rows = _personAssignmentCommon.ReadRows(connection, numberOfNotConvertedCommand, null);
 
-				Console.WriteLine(string.Concat("Found ", rows[0].Field<int>("cnt"), " non converted audit person assignments"));
+				//Console.WriteLine(string.Concat("Found ", rows[0].Field<int>("cnt"), " non converted audit person assignments"));
 
 				connection.Close();
 
@@ -50,24 +50,24 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck
 					batchRows = runOneBatch(connection);
 					total += batchRows;
 
-					Console.Write(string.Concat("Rows updated = ", total));
-					int consoleRow = Console.CursorTop;
-					Console.SetCursorPosition(0, consoleRow);
+					//Console.Write(string.Concat("Rows updated = ", total));
+					//int consoleRow = Console.CursorTop;
+					//Console.SetCursorPosition(0, consoleRow);
 
 				} while (batchRows > 0);
 
-				Console.WriteLine();
+				//Console.WriteLine();
 
 				rows = _personAssignmentCommon.ReadRows(connection, numberOfNotConvertedCommand, null);
 				int rowsLeft = rows[0].Field<int>("cnt");
 				if (rowsLeft > 0)
 				{
-					Console.WriteLine("There is still " + rows + " non converted audit assignments in db.");
+					//Console.WriteLine("There is still " + rows + " non converted audit assignments in db.");
 					return 1;
 				}
 			}
 			
-			Console.WriteLine();
+			//Console.WriteLine();
 
 			return 0;
 		}
@@ -100,7 +100,7 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck
 				{
 					var commandText = new StringBuilder()
 						.AppendLine("update [Auditing].PersonAssignment_AUD")
-						.AppendLine("set TheDate = '" + dataRow.Field<DateTime>("TheDate") + "'")
+						.AppendLine("set TheDate = '" + String.Format("{0:s}", dataRow.Field<DateTime>("TheDate")) + "'")
 						.AppendLine(", Version = " + dataRow.Field<int>("Version"))
 						.AppendLine("where Id='" + dataRow.Field<Guid>("Id") + "'");
 

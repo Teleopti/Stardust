@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
@@ -760,9 +761,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void listViewPerson_DoubleClick(object sender, EventArgs e)
 		{
-			IPersonAssignmentDateResetter resetter = new PersonAssignmentDateResetter();
-			string connStr = UnitOfWorkFactory.CurrentUnitOfWorkFactory().LoggedOnUnitOfWorkFactory().ConnectionString;
-			resetter.ExecuteFor(_selectedPerson, connStr);
+			new ResetDateOnlyAfterChangedTimeZone().ResetFor(_selectedPerson);
 		}
     }
 }

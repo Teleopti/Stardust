@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck
 				var timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(dataRow.Field<string>("DefaultTimeZone"));
 				var utcTime = new DateTime(dataRow.Field<DateTime>("Minimum").Ticks, DateTimeKind.Utc);
 				var localDate = timeZoneInfo.SafeConvertTimeToUtc(utcTime);
-				dataRow["TheDate"] = localDate.Date;
+				dataRow["TheDate"] = String.Format("{0:s}", localDate.Date);
 				var version = dataRow.Field<int>("Version");
 				dataRow["Version"] = version + 1;
 			}
