@@ -70,9 +70,8 @@ Scenario: Open unread message
 	| Message	| Text in message	|	
 	When I am viewing messages
 	And I click on the message at position '1' in the list
-	Then I should see the message details form with
+	Then I should see the message details form with on the message at position '1' in the list
 	| Field		| Value				|
-	| Title		| New message		|
 	| Message	| Text in message	|	
 
 Scenario: Confirm message is read
@@ -129,7 +128,7 @@ Scenario: Open unread message where text reply is allowed
 	| Text reply allowed	| True				|
 	And I am viewing messages
 	When I click on the message at position '1' in the list
-	Then I should see the message details form with an editable text box
+	Then I should see the message details form with an editable text box on the message at position '1' in the list
 
 Scenario: See reply dialogue in message text
 	Given I have the role 'Full access to mytime'
@@ -142,7 +141,7 @@ Scenario: See reply dialogue in message text
 	| Senders reply			| It´s a deal!				|
 	And I am viewing messages
 	When I click on the message at position '1' in the list
-	Then I should see this conversation
+	Then I should see this conversation on the message at position '1' in the list
 	| Messages					|
 	| Ok if you buy me dinner?  |
 	| It´s a deal!				|

@@ -136,15 +136,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			}
 		}
 
-		[Given(@"I should see the message details form with")]
-		[Then(@"I should see the message details form with")]
-		public void ThenIShouldSeeTheMessageDetailsFormWith(Table table)
+		[Then(@"I should see the message details form with on the message at position '(.*)' in the list")]
+		public void ThenIShouldSeeTheMessageDetailsFormWithOnTheMessageAtPositionInTheList(int position, Table table)
 		{
-			EventualAssert.That(() => Pages.Pages.CurrentMessageReplyPage.MessageDetailSection.DisplayVisible(), Is.True);
-			EventualAssert.That(() => Pages.Pages.CurrentMessageReplyPage.Title.InnerHtml.Contains(table.Rows[0][1]), Is.True);
-			EventualAssert.That(() => Pages.Pages.CurrentMessageReplyPage.Message.InnerHtml.Contains(table.Rows[1][1]), Is.True);
+			EventualAssert.That(() => Pages.Pages.CurrentMessageReplyPage.MessageDetailSection(position).DisplayVisible(), Is.True);
+			EventualAssert.That(() => Pages.Pages.CurrentMessageReplyPage.Message(position).InnerHtml.Contains(table.Rows[0][1]), Is.True);
 		}
-
+		
 		[Then(@"I should see the message with title '(.*)' at position '(.*)' in the list")]
 		public void ThenIShouldSeeTheMessageWithTitleAtPositionInTheList(string title, int listPosition)
 		{
@@ -172,8 +170,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			var newMessageCount = messageCount - 1;
 			EventualAssert.That(() => _page.MessageBodyDivs.Count, Is.EqualTo(messageCount));
 			_page.MessageBodyDivs[listPosition - 1].Click();
-			Pages.Pages.CurrentOkButton.OkButton.EventualClick();
-			Browser.Current.Eval("Teleopti.MyTimeWeb.AsmMessage.SetMessageNotificationOnTab(" + newMessageCount.ToString() + ");");
+			Pages.Pages.MessagePage.ConfirmButton(listPosition).EventualClick();
+			Browser.Current.Eval(string.Format(CultureInfo.InvariantCulture,
+			                                   "Teleopti.MyTimeWeb.AsmMessage.SetMessageNotificationOnTab({0});", newMessageCount));
 		}
 
 		[Then(@"I should see a user-friendly message explaining I dont have any messages")]
@@ -189,18 +188,20 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			Browser.Current.Eval(string.Format(js, reply));
 		}
 
-		[Then(@"I should see the message details form with an editable text box")]
-		public void ThenIShouldSeeTheMessageDetailsFormWithAnEditableTextBox()
+		[Then(@"I should see the message details form with an editable text box on the message at position '(.*)' in the list")]
+		public void ThenIShouldSeeTheMessageDetailsFormWithAnEditableTextBoxOnTheMessageAtPositionInTheList(int position)
 		{
-			EventualAssert.That(() => Pages.Pages.CurrentMessageReplyPage.Reply.Style.GetAttributeValue("display"), Is.Not.EqualTo("none"));
+			EventualAssert.That(() => Pages.Pages.CurrentMessageReplyPage.Reply(position).DisplayVisible(), Is.True);
 		}
 
-		[Then(@"I should see this conversation")]
-		public void ThenIShouldSeeThisConversation(Table table)
+		[Then(@"I should see this conversation on the message at position '(.*)' in the list")]
+		public void ThenIShouldSeeThisConversationOnTheMessageAtPositionInTheList(int position, Table table)
 		{
 			foreach (var tableRow in table.Rows)
 			{
-				EventualAssert.That(() => Pages.Pages.CurrentMessageReplyPage.DialogueMessages.InnerHtml.Contains(tableRow[0]), Is.EqualTo(true));						
+				EventualAssert.That(
+					() => Pages.Pages.CurrentMessageReplyPage.DialogueMessages(position).InnerHtml.Contains(tableRow[0]),
+					Is.EqualTo(true));
 			}
 		}
 

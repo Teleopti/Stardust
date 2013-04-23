@@ -34,18 +34,9 @@
                     <div class="bdd-asm-message-detail" data-bind="visible: isSelected">
                         <hr />
                         <div>
-                            <label data-bind="text : sender"></label>
+                            <label class="bdd-asm-message-detail-message" data-bind="text : message"></label>
                         </div>
-                        <div>
-                            <label data-bind="text : date"></label>
-                        </div>
-                        <div>
-                            <label data-bind="text : title"></label>
-                        </div>
-                        <div>
-                            <label data-bind="text : message"></label>
-                        </div>
-                        <div>
+                        <div class="bdd-asm-message-detail-dialogue">
                             <!-- ko foreach: dialogueMessages -->
                             <div></div>
                             <div>
@@ -60,7 +51,7 @@
                             <br/>
                             <!-- /ko -->
                         </div>
-                        <div class="bdd-reply-options-div">
+                        <div class="bdd-asm-message-detail-reply">
                             <textarea data-bind="visible: allowDialogueReply, value: reply, valueUpdate:['afterkeydown', 'afterpaste', 'change']"></textarea>
                             <!-- ko foreach: replyOptions -->
                             <input type="radio" name="radioOptions" data-bind="checked : selected, visible : $parent.userMustSelectReplyOption"/>
