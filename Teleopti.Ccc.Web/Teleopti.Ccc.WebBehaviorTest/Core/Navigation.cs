@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void GotoAnApplicationPageOutsidePortal()
 		{
-			GoTo("MyTime/Schedule/Week", new ApplicationStartupTimeout());
+			GoTo("MyTime/Schedule/Week", new ApplicationStartupTimeout(), new WaitUntilAt("MyTime"));
 			Pages.Pages.NavigatingTo(Browser.Current.Page<WeekSchedulePage>());
 		}
 
