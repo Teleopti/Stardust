@@ -21,9 +21,9 @@ namespace Teleopti.Ccc.Sdk.Logic
         private readonly IScheduleDictionarySaver _scheduleDictionarySaver;
         private readonly IScheduleRepository _scheduleRepository;
     	private readonly IPersonAbsenceAccountRepository _personAbsenceAccountRepository;
-    	private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+        private readonly ICurrentUnitOfWork _unitOfWorkFactory;
 
-    	public SaveSchedulePartService(IScheduleDictionarySaver scheduleDictionarySaver, IScheduleRepository scheduleRepository, IPersonAbsenceAccountRepository personAbsenceAccountRepository, IUnitOfWorkFactory unitOfWorkFactory)
+    	public SaveSchedulePartService(IScheduleDictionarySaver scheduleDictionarySaver, IScheduleRepository scheduleRepository, IPersonAbsenceAccountRepository personAbsenceAccountRepository, ICurrentUnitOfWork unitOfWorkFactory)
         {
             _scheduleDictionarySaver = scheduleDictionarySaver;
             _scheduleRepository = scheduleRepository;
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.Sdk.Logic
 					                          invalidList.Select(i => i.Message).Distinct().ToArray())));
 			}
 
-			_scheduleDictionarySaver.MarkForPersist(_unitOfWorkFactory.CurrentUnitOfWork(), _scheduleRepository, dic.DifferenceSinceSnapshot());
+			_scheduleDictionarySaver.MarkForPersist(_unitOfWorkFactory.Current(), _scheduleRepository, dic.DifferenceSinceSnapshot());
 			_personAbsenceAccountRepository.AddRange(dic.ModifiedPersonAccounts);
         }
     }

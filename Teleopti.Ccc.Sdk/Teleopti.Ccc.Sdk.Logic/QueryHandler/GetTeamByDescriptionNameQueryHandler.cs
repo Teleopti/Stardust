@@ -14,9 +14,9 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
     {
         private readonly IAssembler<ITeam, TeamDto> _assembler;
         private readonly ITeamRepository _teamRepository;
-        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+        private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 
-        public GetTeamByDescriptionNameQueryHandler(IAssembler<ITeam, TeamDto> assembler, ITeamRepository teamRepository, IUnitOfWorkFactory unitOfWorkFactory)
+        public GetTeamByDescriptionNameQueryHandler(IAssembler<ITeam, TeamDto> assembler, ITeamRepository teamRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory)
         {
             _assembler = assembler;
             _teamRepository = teamRepository;
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public ICollection<TeamDto> Handle(GetTeamByDescriptionNameQueryDto query)
         {
-            using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+            using (var unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
             {
                 using (unitOfWork.DisableFilter(QueryFilter.Deleted))
                 {

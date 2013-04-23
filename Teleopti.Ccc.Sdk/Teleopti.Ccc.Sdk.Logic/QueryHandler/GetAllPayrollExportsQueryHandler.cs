@@ -13,9 +13,9 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
     {
         private readonly IAssembler<IPayrollExport, PayrollExportDto> _assembler;
         private readonly IPayrollExportRepository _exportRepository;
-        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+        private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 
-        public GetAllPayrollExportsQueryHandler(IAssembler<IPayrollExport,PayrollExportDto> assembler, IPayrollExportRepository exportRepository, IUnitOfWorkFactory unitOfWorkFactory)
+        public GetAllPayrollExportsQueryHandler(IAssembler<IPayrollExport,PayrollExportDto> assembler, IPayrollExportRepository exportRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory)
         {
             _assembler = assembler;
             _exportRepository = exportRepository;
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 
         public ICollection<PayrollExportDto> Handle(GetAllPayrollExportsQueryDto query)
         {
-            using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
+            using (_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
             {
                 var exports = _exportRepository.LoadAll();
                 return _assembler.DomainEntitiesToDtos(exports).ToList();
