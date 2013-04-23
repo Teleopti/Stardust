@@ -1,28 +1,31 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.Transformer.ScheduleThreading;
 using Teleopti.Analytics.Etl.TransformerInfrastructure;
+using Teleopti.Analytics.Etl.TransformerInfrastructure.DataTableDefinition;
 using Teleopti.Interfaces.Domain;
 using IJobResult = Teleopti.Analytics.Etl.Interfaces.Transformer.IJobResult;
 using RowsUpdatedEventArgs=Teleopti.Analytics.Etl.Transformer.ScheduleThreading.RowsUpdatedEventArgs;
 
 namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 {
-    public class StageScheduleJobStep : JobStepBase
+    public class IntradayStageScheduleJobStep : JobStepBase
     {
 		private readonly IScheduleTransformer _raptorTransformer;
 		
-        public StageScheduleJobStep(IJobParameters jobParameters)
-            : this(jobParameters, new ScheduleTransformer())
-        {}
+       public IntradayStageScheduleJobStep(IJobParameters jobParameters)
+			: this(jobParameters, new ScheduleTransformer())
+		{}
 
-		public StageScheduleJobStep(IJobParameters jobParameters, IScheduleTransformer raptorTransformer)
+        public IntradayStageScheduleJobStep(IJobParameters jobParameters, IScheduleTransformer raptorTransformer)
 			: base(jobParameters)
 		{
 			Name = "stg_schedule, stg_schedule_day_absence_count";
 			JobCategory = JobCategoryType.Schedule;
 			_raptorTransformer = raptorTransformer;
+			ScheduleChangedInfrastructure.AddColumnsToDataTable(BulkInsertDataTable1);
 		}
 
 	    protected override int RunStep(IList<IJobResult> jobResultCollection, bool isLastBusinessUnit)
@@ -30,18 +33,27 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
             var period = new DateTimePeriod(JobCategoryDatePeriod.StartDateUtcFloor, JobCategoryDatePeriod.EndDateUtcCeiling);
 			
             //Transform data from Raptor to Matrix format
-            _raptorTransformer.RowsUpdatedEvent += raptorTransformer_RowsUpdatedEvent;
+            _raptorTransformer.RowsUpdatedEvent += raptorTransformerRowsUpdatedEvent;
             //Truncate stage table
-            _jobParameters.Helper.Repository.TruncateSchedule();
+		    var rep = _jobParameters.Helper.Repository;
+            rep.TruncateSchedule();
 
             foreach (var scenario in _jobParameters.StateHolder.ScenarioCollectionDeletedExcluded)
             {
+				if(!scenario.DefaultScenario) continue;
+	            // get it from stateholder and let it hold it and update in the end??????
+				var lastTime = rep.LastChangedDate(Result.CurrentBusinessUnit, Name);
+				var changed = rep.ChangedDataOnStep(lastTime.LastTime, Result.CurrentBusinessUnit, Name);
+
+				if (!changed.Any()) return 0;
+				ScheduleChangedInfrastructure.AddRows(BulkInsertDataTable1, changed, scenario, Result.CurrentBusinessUnit);
+	            rep.PersistScheduleChanged(BulkInsertDataTable1);
 				
                 //Get data from Raptor
-                var scheduleDictionary = _jobParameters.StateHolder.GetSchedules(period, scenario);
+                var dictionary = _jobParameters.StateHolder.GetSchedules(changed, scenario);
 
                 // Extract one schedulepart per each person and date
-                var rootList = _jobParameters.StateHolder.GetSchedulePartPerPersonAndDate(scheduleDictionary);    
+				var rootList = _jobParameters.StateHolder.GetSchedulePartPerPersonAndDate(dictionary);    
 
                 _raptorTransformer.Transform(rootList, DateTime.Now, _jobParameters, new ThreadPool());
             }
@@ -49,7 +61,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
             return Result.RowsAffected.GetValueOrDefault(0);
         }
 
-        void raptorTransformer_RowsUpdatedEvent(object sender, RowsUpdatedEventArgs e)
+        void raptorTransformerRowsUpdatedEvent(object sender, RowsUpdatedEventArgs e)
         {
             Result.RowsAffected += e.AffectedRows;
 

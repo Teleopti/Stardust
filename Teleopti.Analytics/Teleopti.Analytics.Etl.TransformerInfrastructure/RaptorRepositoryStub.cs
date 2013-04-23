@@ -13,7 +13,7 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.Matrix;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.ReadModel;
 
 namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 {
@@ -112,7 +112,12 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
             return new ScheduleDictionary(scenario, scheduleDateTimePeriod);
         }
 
-        public void TruncateSchedule()
+	    public IScheduleDictionary LoadSchedule(DateTimePeriod period, IScenario scenario, IList<IPerson> persons)
+	    {
+		    throw new NotImplementedException();
+	    }
+
+	    public void TruncateSchedule()
         {
         }
 
@@ -128,7 +133,12 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
             return 0;
         }
 
-        public int FillScheduleContractDataMart(DateTimePeriod period)
+	    public int FillIntradayScheduleDataMart(IBusinessUnit businessUnit)
+	    {
+		    throw new NotImplementedException();
+	    }
+
+	    public int FillScheduleContractDataMart(DateTimePeriod period)
         {
             return 0;
         }
@@ -218,7 +228,12 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
             return 0;
         }
 
-        public int FillDayOffDataMart(IBusinessUnit businessUnit)
+	    public int FillIntradayScheduleDayCountDataMart(IBusinessUnit currentBusinessUnit)
+	    {
+		    throw new NotImplementedException();
+	    }
+
+	    public int FillDayOffDataMart(IBusinessUnit businessUnit)
         {
             return 0;
         }
@@ -676,7 +691,32 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
             return 0;
         }
 
-        public DateTime GetMaxDateInDimDate()
+	    public ILastChangedReadModel LastChangedDate(IBusinessUnit currentBusinessUnit, string stepName)
+	    {
+		    throw new NotImplementedException();
+	    }
+
+	    public IList<IScheduleChangedReadModel> ChangedDataOnStep(DateTime afterDate, IBusinessUnit currentBusinessUnit, string stepName)
+	    {
+		    throw new NotImplementedException();
+	    }
+
+	    public int PersistScheduleChanged(DataTable dataTable)
+	    {
+		    throw new NotImplementedException();
+	    }
+
+	    public void UpdateLastChangedDate(IBusinessUnit currentBusinessUnit, string stepName, DateTime thisTime)
+	    {
+		    throw new NotImplementedException();
+	    }
+
+	    public bool DataOnStepHasChanged(DateTimePeriod onPeriod, IBusinessUnit currentBusinessUnit, string stepName)
+	    {
+		    throw new NotImplementedException();
+	    }
+
+	    public DateTime GetMaxDateInDimDate()
         {
             return new DateTime(1900,1,1,0,0,0,DateTimeKind.Unspecified);
         }

@@ -1,14 +1,13 @@
 using System.Collections.Generic;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.TransformerInfrastructure.DataTableDefinition;
-using Teleopti.Interfaces.Domain;
 using IJobResult = Teleopti.Analytics.Etl.Interfaces.Transformer.IJobResult;
 
 namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 {
-	public class StageScheduleDayOffCountJobStep : JobStepBase
+	public class IntradayStageScheduleDayOffCountJobStep : JobStepBase
 	{
-		public StageScheduleDayOffCountJobStep(IJobParameters jobParameters)
+		public IntradayStageScheduleDayOffCountJobStep(IJobParameters jobParameters)
 			: base(jobParameters)
 		{
 			Name = "stg_schedule_day_off_count, stg_day_off, dim_day_off";
@@ -23,13 +22,11 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 
 		protected override int RunStep(IList<IJobResult> jobResultCollection, bool isLastBusinessUnit)
 		{
-			var period = new DateTimePeriod(JobCategoryDatePeriod.StartDateUtcFloor,
-													   JobCategoryDatePeriod.EndDateUtcCeiling);
-
 			foreach (var scenario in _jobParameters.StateHolder.ScenarioCollectionDeletedExcluded)
 			{
-				//Get data from Raptor
-				var scheduleDictionary = _jobParameters.StateHolder.GetSchedules(period, scenario);
+				if (!scenario.DefaultScenario) continue;
+				//Get data from Cashe
+				var scheduleDictionary = _jobParameters.StateHolder.GetScheduleCashe();
 
 				// Extract one schedulepart per each person and date
 				var rootList = _jobParameters.StateHolder.GetSchedulePartPerPersonAndDate(scheduleDictionary);
@@ -43,7 +40,6 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 			                                                       RaptorTransformerHelper.CurrentBusinessUnit,
 			                                                       _jobParameters.Helper.Repository);
 			
-
 			return rowsAffected;
 		}
 	}

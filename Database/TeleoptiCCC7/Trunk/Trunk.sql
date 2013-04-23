@@ -41,3 +41,29 @@ UPDATE [dbo].[ApplicationFunction] SET [ForeignId]=@ForeignId, [Parent]=@ParentI
 
 SET NOCOUNT OFF
 GO
+
+----------------  
+--Name: Ola & David
+--Date: 2013-04-12
+--Desc: PBI #22523 - Speed up ETL Intrady load
+----------------
+CREATE TABLE [mart].[LastUpdatedPerStep](
+	[StepName] [varchar](500) NOT NULL,
+	[BusinessUnit] [uniqueidentifier] NULL,
+	[Date] [datetime] NOT NULL
+) 
+
+GO
+
+--Add new column to ReadModel
+ALTER TABLE ReadModel.ScheduleDay ADD NotScheduled bit NULL
+GO
+UPDATE ReadModel.ScheduleDay SET NotScheduled = 0
+GO
+ALTER TABLE ReadModel.ScheduleDay ALTER COLUMN NotScheduled bit NOT NULL
+GO
+
+--New default values
+ALTER TABLE ReadModel.ScheduleDay ADD CONSTRAINT DF_ScheduleDay_InsertedOn DEFAULT getdate() FOR InsertedOn
+ALTER TABLE ReadModel.ScheduleDay ADD CONSTRAINT DF_ScheduleDay_NotScheduled DEFAULT 0 FOR NotScheduled
+GO

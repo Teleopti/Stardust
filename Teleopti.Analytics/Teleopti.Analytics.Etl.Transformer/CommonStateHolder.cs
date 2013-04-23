@@ -5,6 +5,7 @@ using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.ReadModel;
 
 namespace Teleopti.Analytics.Etl.Transformer
 {
@@ -34,7 +35,7 @@ namespace Teleopti.Analytics.Etl.Transformer
         private IList<IRuleSetBag> _ruleSetBagCollection;
         private IList<IGroupPage> _userDefinedGroupings;
     	private IList<IMultiplicatorDefinitionSet> _multiplicatorDefinitionSetCollection;
-
+	    private Dictionary<DateTimePeriod, IScheduleDictionary> _dictionaryCashe;
         private CommonStateHolder()
         {
         }
@@ -258,7 +259,12 @@ namespace Teleopti.Analytics.Etl.Transformer
             }
         }
 
-        public IEnumerable<IContract> ContractCollection
+		public IList<IPerson> PersonsWithIds(List<Guid> ids)
+		{
+			return PersonCollection.Where(person => ids.Contains(person.Id.GetValueOrDefault())).ToList();
+		}
+
+	    public IEnumerable<IContract> ContractCollection
         {
             get
             {
@@ -340,6 +346,33 @@ namespace Teleopti.Analytics.Etl.Transformer
             return scheduleDictionary;
         }
 
+		public IDictionary<DateTimePeriod, IScheduleDictionary> GetSchedules(IList<IScheduleChangedReadModel> changed, IScenario scenario)
+		{
+			_dictionaryCashe = new Dictionary<DateTimePeriod, IScheduleDictionary>();
+
+			var groupedChanged = changed.GroupBy(c => c.Date);
+			foreach (var changedReadModels in groupedChanged)
+			{
+				var theDate = changedReadModels.Key;
+				// detta måste fixas med tidszon
+				var utcDate = new DateTime(theDate.Date.Ticks, DateTimeKind.Utc);
+				var period = new DateTimePeriod(utcDate, utcDate);
+				var personsIds = changedReadModels.Select(scheduleChangedReadModel => scheduleChangedReadModel.Person).ToList();
+				var persons = PersonsWithIds(personsIds);
+				var scheduleDictionary = _jobParameters.Helper.Repository.LoadSchedule(period, scenario, persons);
+				_dictionaryCashe.Add(period, scheduleDictionary);
+			}
+				
+			return _dictionaryCashe;
+		}
+
+		public IDictionary<DateTimePeriod, IScheduleDictionary> GetScheduleCashe()
+		{
+			if(_dictionaryCashe == null)
+				_dictionaryCashe = new Dictionary<DateTimePeriod, IScheduleDictionary>();
+			return _dictionaryCashe;
+		}
+
         public IList<IScheduleDay> LoadSchedulePartsPerPersonAndDate(DateTimePeriod period, IScenario scenario)
         {
             return _jobParameters.Helper.Repository.LoadSchedulePartsPerPersonAndDate(period, GetSchedules(period,scenario));
@@ -414,6 +447,17 @@ namespace Teleopti.Analytics.Etl.Transformer
             return _schedulePartCollection;
         }
 
+		public IList<IScheduleDay> GetSchedulePartPerPersonAndDate(
+			IDictionary<DateTimePeriod, IScheduleDictionary> dictionary)
+		{
+			var ret = new List<IScheduleDay>();
+			foreach (var key in dictionary.Keys)
+			{
+				ret.AddRange(GetSchedulePartPerPersonAndDate(dictionary[key]));
+			}
+			return ret;
+		}
+
     	public IList<IMultiplicatorDefinitionSet> MultiplicatorDefinitionSetCollection
     	{
     		get {
@@ -482,6 +526,6 @@ namespace Teleopti.Analytics.Etl.Transformer
 
                 return null;
             }
-        }
+		}
     }
 }
