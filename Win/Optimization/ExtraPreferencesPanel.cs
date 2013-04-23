@@ -169,9 +169,7 @@ namespace Teleopti.Ccc.Win.Optimization
 
         private void checkBoxTeams_CheckedChanged(object sender, System.EventArgs e)
         {
-        	//checkBoxBlock.Enabled = !checkBoxTeams.Checked;
-            checkBoxTeamBlockPerBlockScheduling.Enabled = !checkBoxTeams.Checked;
-            setSubItemsOnTeamOptimizationStatus();
+        	setSubItemsOnTeamOptimizationStatus();
         }
 
         private void setSubItemsOnTeamOptimizationStatus()
@@ -198,7 +196,6 @@ namespace Teleopti.Ccc.Win.Optimization
 
         private void checkBoxTeamBlockPerBlockScheduling_CheckedChanged(object sender, EventArgs e)
         {
-            checkBoxTeams.Enabled = !checkBoxTeamBlockPerBlockScheduling.Checked;
             checkBoxTeamBlockSameShiftCategory.Enabled = checkBoxTeamBlockPerBlockScheduling.Checked;
             checkBoxSameStartTime.Enabled = checkBoxTeamBlockPerBlockScheduling.Checked;
             comboBoxTeamBlockType.Enabled = checkBoxTeamBlockPerBlockScheduling.Checked;
