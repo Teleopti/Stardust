@@ -761,14 +761,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void listViewPerson_DoubleClick(object sender, EventArgs e)
 		{
-			IPersonAssignmentDateResetter resetter = new PersonAssignmentDateResetter();
-			string connStr = UnitOfWorkFactory.CurrentUnitOfWorkFactory().LoggedOnUnitOfWorkFactory().ConnectionString;
-			resetter.ExecuteFor(_selectedPerson, connStr);
-			IPersonAssignmentConverter assignmentConverter = new PersonAssignmentDateSetter();
-			SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder(connStr);
-			assignmentConverter.Execute(builder);
-			assignmentConverter = new PersonAssignmentAuditDateSetter();
-			assignmentConverter.Execute(builder);
+			new ResetDateOnlyAfterChangedTimeZone().ResetFor(_selectedPerson);
 		}
     }
 }
