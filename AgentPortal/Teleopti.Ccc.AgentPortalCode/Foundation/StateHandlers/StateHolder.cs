@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
 using Teleopti.Ccc.AgentPortalCode.Helper;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Interfaces.MessageBroker.Events;
 using Teleopti.Messaging.Client;
 using Teleopti.Messaging.Exceptions;

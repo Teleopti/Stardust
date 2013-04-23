@@ -1,8 +1,7 @@
 using System;
 using System.Runtime.Serialization;
 using System.Windows.Forms;
-using Teleopti.Ccc.AgentPortal.Helper;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 
 namespace Teleopti.Ccc.AgentPortal.Requests.FormHandler
 {

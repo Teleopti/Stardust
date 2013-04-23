@@ -1,15 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using Syncfusion.Pdf.Graphics;
 using Teleopti.Ccc.AgentPortalCode.Helper;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 
 namespace Teleopti.Ccc.AgentPortalCode.ScheduleReporting
 {
     public class PdfScheduleDayOffOvertime : PdfScheduleTemplate
     {
-        ActivityDto[] _arrActivityDto;
+        ICollection<ActivityDto> _arrActivityDto;
         private const int MAX_NUMBER_OF_CHARACTERS = 20;
 
         public PdfScheduleDayOffOvertime(float columnWidth, SchedulePartDto schedulePartDto, bool rightToLeft, CultureInfo culture):base(culture)
@@ -31,7 +32,7 @@ namespace Teleopti.Ccc.AgentPortalCode.ScheduleReporting
                 schedulePartDto.PersonDayOff.Period.LocalStartDateTime, schedulePartDto.PersonDayOff.Name);
         }
 
-        private float Render(float top,ProjectedLayerDto[] payLoads, ScheduleReportDetail details, DateTime dayOffStart, string dayOffName)
+        private float Render(float top,ICollection<ProjectedLayerDto> payLoads, ScheduleReportDetail details, DateTime dayOffStart, string dayOffName)
         {
             top = RenderDate(dayOffStart, top);
             top = RenderText(dayOffName, top);
@@ -39,7 +40,7 @@ namespace Teleopti.Ccc.AgentPortalCode.ScheduleReporting
 
             if (details != ScheduleReportDetail.None)
             {
-                if (payLoads.Length > 0)
+                if (payLoads.Count > 0)
                 {
                     top = RenderSplitter(Color.Gray, top, 1);
                 }
@@ -78,10 +79,10 @@ namespace Teleopti.Ccc.AgentPortalCode.ScheduleReporting
             return top + RowSpace + 21;
         }
 
-        private ActivityDto GetActivity(string activityId)
+        private ActivityDto GetActivity(Guid activityId)
         {
             if (_arrActivityDto == null)
-                _arrActivityDto = SdkServiceHelper.SchedulingService.GetActivities(new LoadOptionDto{LoadDeleted = true,LoadDeletedSpecified = true});
+                _arrActivityDto = SdkServiceHelper.SchedulingService.GetActivities(new LoadOptionDto{LoadDeleted = true});
 
             foreach (ActivityDto activityDto in _arrActivityDto)
             {
@@ -105,7 +106,7 @@ namespace Teleopti.Ccc.AgentPortalCode.ScheduleReporting
             top = top + fontSize + 2;
             var nameRect = new RectangleF(0, top, ColumnWidth, fontSize + 2);
 
-            if (!string.IsNullOrEmpty(visualLayer.OvertimeDefinitionSetId))
+            if (visualLayer.OvertimeDefinitionSetId.HasValue)
             {
                 if (visualLayer.Description.Length > MAX_NUMBER_OF_CHARACTERS)
                 {

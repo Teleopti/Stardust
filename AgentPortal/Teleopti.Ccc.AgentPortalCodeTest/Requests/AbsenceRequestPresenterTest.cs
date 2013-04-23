@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ServiceModel;
 using System.Web.Services.Protocols;
 using System.Windows.Forms;
 using System.Xml;
@@ -7,7 +8,8 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.AgentPortalCode.Common;
 using Teleopti.Ccc.AgentPortalCode.Requests;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
+using Teleopti.Ccc.Sdk.Common.Contracts;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.AgentPortalCodeTest.Requests
@@ -44,9 +46,9 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.Requests
 			requestDto.Period = new DateTimePeriodDto();
 
 			var personRequest = new PersonRequestDto { DenyReason = "RequestDenyReasonSupervisor", Request = requestDto, Subject = "sub" };
-			personRequest.Id = "12";
+			personRequest.Id = Guid.NewGuid();
 
-			var exception = new SoapException("asdf", XmlQualifiedName.Empty);
+            var exception = new FaultException("asdf");
 
 			using (_mocks.Record())
 			{
@@ -191,7 +193,7 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.Requests
         private static AbsenceDto CreateAbsence()
         {
             AbsenceDto absenceDto = new AbsenceDto();
-            absenceDto.Id = Guid.NewGuid().ToString();
+            absenceDto.Id = Guid.NewGuid();
             absenceDto.Name = "Holiday";
             return absenceDto;
         }
@@ -209,8 +211,6 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.Requests
             DateTimePeriodDto period = new DateTimePeriodDto();
             period.LocalStartDateTime = localStartDateTime;
             period.LocalEndDateTime = localEndDateTime;
-            period.UtcStartTimeSpecified = false;
-            period.UtcEndTimeSpecified = false;
             return period;
         }
     }

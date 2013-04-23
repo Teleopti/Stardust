@@ -1,7 +1,8 @@
 ﻿using System;
-using System.Web.Services.Protocols;
+using System.ServiceModel;
 using Teleopti.Ccc.AgentPortalCode.Common;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
+using Teleopti.Ccc.Sdk.Common.Contracts;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 
 namespace Teleopti.Ccc.AgentPortalCode.Requests
 {
@@ -47,8 +48,6 @@ namespace Teleopti.Ccc.AgentPortalCode.Requests
 
             if (textRequest == null) return;
 
-            dateTimePeriod.LocalEndDateTimeSpecified = true;
-            dateTimePeriod.LocalStartDateTimeSpecified = true;
             textRequest.Period = dateTimePeriod;
         }
 
@@ -82,13 +81,13 @@ namespace Teleopti.Ccc.AgentPortalCode.Requests
 
         public bool Delete()
         {
-			if (string.IsNullOrEmpty(_model.Id)) return true;
+			if (!_model.Id.HasValue) return true;
 
         	try
         	{
 				_teleoptiSchedulingService.DeletePersonRequest(_model);
         	}
-        	catch (SoapException exception)
+        	catch (FaultException exception)
         	{
         		_view.ShowDeleteErrorMessage(exception.Message);
         		return false;
@@ -102,9 +101,7 @@ namespace Teleopti.Ccc.AgentPortalCode.Requests
             _model.Subject = _view.Subject;
             _model.Message = _view.Message;
             _model.Request.Period.LocalStartDateTime = _view.StartDateTime;
-            _model.Request.Period.LocalStartDateTimeSpecified = true;
             _model.Request.Period.LocalEndDateTime = _view.EndDateTime;
-            _model.Request.Period.LocalEndDateTimeSpecified = true;
             _view.FixUtcDateTimes();
 
             if (IsTextRequestValid())

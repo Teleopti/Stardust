@@ -1,8 +1,10 @@
 using System;
+using System.ServiceModel;
 using System.Web.Services.Protocols;
 using System.Windows.Forms;
 using Teleopti.Ccc.AgentPortalCode.Common;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
+using Teleopti.Ccc.Sdk.Common.Contracts;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 
 namespace Teleopti.Ccc.AgentPortalCode.Requests
 {
@@ -142,8 +144,6 @@ namespace Teleopti.Ccc.AgentPortalCode.Requests
             if (absenceRequest != null)
             {
                 absenceRequest.Absence = _absenceRequestView.AbsenceType;
-                dateTimePeriodDto.LocalEndDateTimeSpecified = true;
-                dateTimePeriodDto.LocalStartDateTimeSpecified = true;
                 absenceRequest.Period = dateTimePeriodDto;
             }
         }
@@ -222,13 +222,13 @@ namespace Teleopti.Ccc.AgentPortalCode.Requests
 
         public bool Delete()
         {
-			if (string.IsNullOrEmpty( _personRequest.Id)) return true;
+			if (!_personRequest.Id.HasValue) return true;
 
 			try
 			{
 				_teleoptiSchedulingService.DeletePersonRequest(_personRequest);
 			}
-			catch (SoapException exception)
+			catch (FaultException exception)
 			{
 				_absenceRequestView.ShowDeleteErrorMessage(exception.Message);
 				return false;

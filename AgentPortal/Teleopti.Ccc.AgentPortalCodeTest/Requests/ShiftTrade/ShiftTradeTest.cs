@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.ServiceModel;
 using System.Web.Services.Protocols;
 using System.Windows.Forms;
 using System.Xml;
@@ -8,7 +10,8 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.AgentPortalCode.Common;
 using Teleopti.Ccc.AgentPortalCode.Requests.ShiftTrade;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
+using Teleopti.Ccc.Sdk.Common.Contracts;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.AgentPortalCodeTest.Requests.ShiftTrade
@@ -71,16 +74,15 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.Requests.ShiftTrade
                 personRequestDto.CanDelete = true;
 
             personRequestDto.Person = tradeFrom;
-            shiftTradeRequestDto.ShiftTradeSwapDetails = new ShiftTradeSwapDetailDto[dateTimes.Count];
             for (int i = 0; i < dateTimes.Count; i++)
             {
-                shiftTradeRequestDto.ShiftTradeSwapDetails[i] = new ShiftTradeSwapDetailDto
+                shiftTradeRequestDto.ShiftTradeSwapDetails.Add(new ShiftTradeSwapDetailDto
                                                                     {
                                                                         DateFrom = new DateOnlyDto {DateTime = dateTimes[i]},
                                                                         DateTo = new DateOnlyDto {DateTime = dateTimes[i]},
                                                                         PersonFrom = tradeFrom,
                                                                         PersonTo = tradeWith
-                                                                    };
+                                                                    });
             }
             personRequestDto.CreatedDate = shiftTradeRequestDto.ShiftTradeSwapDetails[0].DateFrom.DateTime;
             return personRequestDto;
@@ -88,7 +90,7 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.Requests.ShiftTrade
 
         private static PersonDto createTradePersonDto(string name)
         {
-            var tradeFrom = new PersonDto {Name = name, Id = Guid.NewGuid().ToString()};
+            var tradeFrom = new PersonDto {Name = name, Id = Guid.NewGuid()};
             return tradeFrom;
         }
 
@@ -399,7 +401,7 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.Requests.ShiftTrade
 
 			using (_mocks.Record())
 			{
-				Expect.Call(()=>model.SdkService.DeletePersonRequest(model.PersonRequestDto)).Throw(new SoapException("asdf",XmlQualifiedName.Empty));
+                Expect.Call(() => model.SdkService.DeletePersonRequest(model.PersonRequestDto)).Throw(new FaultException("asdf"));
 			}
 
 			using (_mocks.Playback())
@@ -440,7 +442,7 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.Requests.ShiftTrade
 
             using (_mocks.Record())
             {
-                Expect.Call(model.SdkService.AcceptShiftTradeRequest(model.PersonRequestDto)).Throw(new SoapException());
+                Expect.Call(model.SdkService.AcceptShiftTradeRequest(model.PersonRequestDto)).Throw(new FaultException());
 
                 Expect.Call(() => _view.ShowErrorMessage("", "")).IgnoreArguments();
                 _view.Close();
@@ -599,12 +601,12 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.Requests.ShiftTrade
 		public void ShouldShowErrorMessageAndNotCloseWhenAbsenceInProjection()
 		{
 			var shiftTradeModel = createModelWherePersonCreatedRequest(ShiftTradeStatusDto.OkByMe, RequestStatusDto.Pending);
-			var projectedLayersFrom = new List<ProjectedLayerDto>();
+
 			var dateTimePeriodDto = new DateTimePeriodDto { LocalStartDateTime = new DateTime(2009, 11, 18, 02, 0, 0), LocalEndDateTime = new DateTime(2009, 11, 18, 03, 0, 0) };
-			projectedLayersFrom.Add(new ProjectedLayerDto { IsAbsence = true, Description = "Act3", DisplayColor = new ColorDto(), Period = dateTimePeriodDto });
-			var schedulePartDto = new SchedulePartDto { ProjectedLayerCollection = projectedLayersFrom.ToArray(), Date = new DateOnlyDto { DateTime = new DateTime(2009, 11, 17) } };
+			var schedulePartDto = new SchedulePartDto { Date = new DateOnlyDto { DateTime = new DateTime(2009, 11, 17) } };
+            schedulePartDto.ProjectedLayerCollection.Add(new ProjectedLayerDto { IsAbsence = true, Description = "Act3", DisplayColor = new ColorDto(Color.DodgerBlue), Period = dateTimePeriodDto });
 			var personDto = new PersonDto();
-			var shiftTradeSwapDetailDto = new ShiftTradeSwapDetailDto { DateFrom = new DateOnlyDto { DateTime = new DateTime(2009, 11, 17), DateTimeSpecified = true } };
+			var shiftTradeSwapDetailDto = new ShiftTradeSwapDetailDto { DateFrom = new DateOnlyDto { DateTime = new DateTime(2009, 11, 17) } };
 			shiftTradeSwapDetailDto.DateTo = shiftTradeSwapDetailDto.DateFrom;
 			shiftTradeSwapDetailDto.SchedulePartFrom = schedulePartDto;
 			shiftTradeSwapDetailDto.SchedulePartTo = schedulePartDto;

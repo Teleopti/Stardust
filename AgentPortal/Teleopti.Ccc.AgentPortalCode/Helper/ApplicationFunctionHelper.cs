@@ -1,5 +1,5 @@
 using Teleopti.Ccc.AgentPortalCode.Foundation.StateHandlers;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 
 namespace Teleopti.Ccc.AgentPortalCode.Helper
 {

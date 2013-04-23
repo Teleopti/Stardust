@@ -1,18 +1,11 @@
-﻿#region Imports
-
-using System;
+﻿using System;
 using System.Drawing;
-using System.Globalization;
 using Syncfusion.Schedule;
 using Teleopti.Ccc.AgentPortalCode.Common;
-using Teleopti.Ccc.AgentPortalCode.Foundation.StateHandlers;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
-
-#endregion
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 
 namespace Teleopti.Ccc.AgentPortalCode.ScheduleControlDataProvider
 {
-
     /// <summary>
     /// Represent class that handls the functionality of item in shcedule control
     /// </summary>
@@ -22,34 +15,27 @@ namespace Teleopti.Ccc.AgentPortalCode.ScheduleControlDataProvider
     /// </remarks>
     public class CustomScheduleAppointment : ICustomScheduleAppointment
     {
-
-        #region Fields - Instance Members
-
         private readonly IScheduleAppointment _scheduleAppointment;
 
         private Color _displayColor;
 
-        private ScheduleAppointmentStatusTypes _status;
+        public CustomScheduleAppointment()
+        {
+            _scheduleAppointment = new ScheduleAppointment();
+        }
 
-        private ScheduleAppointmentTypes _itemType;
+        //as a wrapper
+        public CustomScheduleAppointment(IScheduleAppointment scheduleAppointment)
+        {
+            _scheduleAppointment = scheduleAppointment;
+        }
 
-        private bool _allowCopy;
-
-        private bool _allowOpen;
-
-        private bool _allowDelete;
-
-        private bool _allowMultipleDaySplit;
-
-        private bool _isSplittedPart;
-
-        private ScheduleAppointmentPartType _splitPartType;
-
-        #endregion
-
-        #region Properties - Instance Members
-
-        #region Properties - Instance Members - IScheduleAppointment Members
+        //Have to override ToString(), in some strange cases SF ScheduleControl
+        //shows the classname instead of the Subject?!?
+        public override string ToString()
+        {
+            return _scheduleAppointment.Subject;
+        }
 
         public bool AllDay
         {
@@ -338,22 +324,6 @@ namespace Teleopti.Ccc.AgentPortalCode.ScheduleControlDataProvider
             get { return _scheduleAppointment.Version; }
         }
 
-        //public string DisplayItem(string timeFormat, CultureInfo culture)
-        //{
-        //    string displayItem = string.Format(CultureInfo.CurrentCulture, "{0} ", Subject);
-
-        //    if (_itemType != ScheduleAppointmentTypes.DayOff) //Dayoff should'nt show time
-        //    {
-        //        displayItem += StartTime.ToString(timeFormat, culture);
-        //        displayItem += " - " + EndTime.ToString(timeFormat, culture);
-        //    }
-        //    return displayItem;
-        //}
-
-        #endregion
-
-        #region Properties - Instance Members - ICustomScheduleAppointment Members
-
         public Color DisplayColor
         {
             get
@@ -366,95 +336,21 @@ namespace Teleopti.Ccc.AgentPortalCode.ScheduleControlDataProvider
             }
         }
 
-        public ScheduleAppointmentStatusTypes Status
-        {
-            get
-            {
-                return _status;
-            }
-            set
-            {
-                _status = value;
-            }
-        }
+        public ScheduleAppointmentStatusTypes Status { get; set; }
 
-        public ScheduleAppointmentTypes AppointmentType
-        {
-            get { return _itemType; }
-            set { _itemType = value; }
-        }
+        public ScheduleAppointmentTypes AppointmentType { get; set; }
 
-        public bool IsSplit
-        {
-            get { return _isSplittedPart; }
-            set { _isSplittedPart = value; }
-        }
+        public bool IsSplit { get; set; }
 
-        public ScheduleAppointmentPartType SplitPartType
-        {
-            get { return _splitPartType; }
-            set { _splitPartType = value; }
-        }
+        public ScheduleAppointmentPartType SplitPartType { get; set; }
 
-        public bool AllowCopy
-        {
-            get
-            {
-                return _allowCopy;
-            }
-            set
-            {
-                _allowCopy = value;
-            }
-        }
+        public bool AllowCopy { get; set; }
 
-        public bool AllowOpen
-        {
-            get
-            {
-                return _allowOpen;
-            }
-            set
-            {
-                _allowOpen = value;
-            }
-        }
+        public bool AllowOpen { get; set; }
 
-        public bool AllowDelete
-        {
-            get
-            {
-                return _allowDelete;
-            }
-            set
-            {
-                _allowDelete = value;
-            }
-        }
+        public bool AllowDelete { get; set; }
 
-        public bool AllowMultipleDaySplit
-        {
-            get
-            {
-                return _allowMultipleDaySplit;
-            }
-            set
-            {
-                _allowMultipleDaySplit = value;
-            }
-        }
-
-        
-
-        #endregion
-
-        #endregion
-
-        #region Methods - Instance Members
-
-        #region Methods - Instance Members - CustomScheduleAppointment Members
-
-        #region IComparable Members
+        public bool AllowMultipleDaySplit { get; set; }
 
         public int CompareTo(object obj)
         {
@@ -552,55 +448,23 @@ namespace Teleopti.Ccc.AgentPortalCode.ScheduleControlDataProvider
             return app1.StartTime < app2.StartTime;
         }
 
-        #endregion
-
-        #region ICloneable Members
-
         public object Clone()
         {
             IScheduleAppointment clonedScheduleAppointment = (IScheduleAppointment)_scheduleAppointment.Clone();
             ICustomScheduleAppointment newCustomScheduleappointment =
                 new CustomScheduleAppointment(clonedScheduleAppointment);
 
-            newCustomScheduleappointment.AppointmentType = _itemType;
-            newCustomScheduleappointment.Status = _status;
+            newCustomScheduleappointment.AppointmentType = AppointmentType;
+            newCustomScheduleappointment.Status = Status;
             newCustomScheduleappointment.DisplayColor = _displayColor;
-            newCustomScheduleappointment.AllowCopy = _allowCopy;
-            newCustomScheduleappointment.AllowDelete = _allowDelete;
-            newCustomScheduleappointment.AllowOpen = _allowOpen;
-            newCustomScheduleappointment.AllowMultipleDaySplit = _allowMultipleDaySplit;
-            newCustomScheduleappointment.IsSplit = _isSplittedPart;
-            newCustomScheduleappointment.SplitPartType = _splitPartType;
+            newCustomScheduleappointment.AllowCopy = AllowCopy;
+            newCustomScheduleappointment.AllowDelete = AllowDelete;
+            newCustomScheduleappointment.AllowOpen = AllowOpen;
+            newCustomScheduleappointment.AllowMultipleDaySplit = AllowMultipleDaySplit;
+            newCustomScheduleappointment.IsSplit = IsSplit;
+            newCustomScheduleappointment.SplitPartType = SplitPartType;
             newCustomScheduleappointment.Subject = _scheduleAppointment.Subject;
             return newCustomScheduleappointment;
         }
-
-        #endregion
-
-        #endregion
-
-        #region Methods - Instance Members - CustomScheduleAppointment Members - (constructors)
-
-        public CustomScheduleAppointment()
-        {
-            _scheduleAppointment = new ScheduleAppointment();
-        }
-
-        //as a wrapper
-        public CustomScheduleAppointment(IScheduleAppointment scheduleAppointment)
-        {
-            _scheduleAppointment = scheduleAppointment;
-        }
-
-        //Have to override ToString(), in some strange cases SF ScheduleControl
-        //shows the classname instead of the Subject?!?
-        public override string ToString()
-        {
-            return _scheduleAppointment.Subject;
-        }
-        #endregion
-
-        #endregion
-
     }
 }

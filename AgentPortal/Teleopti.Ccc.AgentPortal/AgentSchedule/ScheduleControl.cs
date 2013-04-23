@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Globalization;
 using System.Runtime.Remoting;
+using System.ServiceModel;
 using System.Threading;
 using System.Web.Services.Protocols;
 using System.Windows.Forms;
@@ -20,7 +21,8 @@ using Teleopti.Ccc.AgentPortalCode.Foundation.StateHandlers;
 using Teleopti.Ccc.AgentPortalCode.Helper;
 using Teleopti.Ccc.AgentPortalCode.Requests.ShiftTrade;
 using Teleopti.Ccc.AgentPortalCode.ScheduleControlDataProvider;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Events;
 
@@ -96,7 +98,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
                 string dataErrorMessage = string.Format(CultureInfo.CurrentCulture, UserTexts.Resources.ErrorOccuredWhenAccessingTheDataSource + "\n\nError information: {0}", ex.Message);
                 MessageBoxHelper.ShowErrorMessage(dataErrorMessage, UserTexts.Resources.AgentPortal);
             }
-            catch (SoapException ex)
+            catch (FaultException ex)
             {
                 string communicationErrorMessage = string.Format(CultureInfo.CurrentCulture, UserTexts.Resources.CommunicationErrorEndPoint + "\n\nError information: {0}", ex.Message);
                 MessageBoxHelper.ShowErrorMessage(communicationErrorMessage, UserTexts.Resources.AgentPortal);
@@ -206,7 +208,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
             selectedItem.Checked = true;
 
             ScheduleView.SetResolution( resolution);
-            AgentPortalSettingsHelper.SaveSettings(new SaveAgentPortalSettingsCommandDto { Resolution = resolution , ResolutionSpecified = true});
+            AgentPortalSettingsHelper.SaveSettings(new SaveAgentPortalSettingsCommandDto { Resolution = resolution});
         }
    
         /// <summary>
@@ -340,7 +342,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
 
         private void createAndOpenShiftTradeForm(DateTime tradeDate, PersonDto personToTradeWith, PersonDto loggedPerson)
         {
-            DateOnlyDto dateOnlyDto = new DateOnlyDto { DateTime = tradeDate, DateTimeSpecified = true };
+            DateOnlyDto dateOnlyDto = new DateOnlyDto { DateTime = tradeDate };
             ShiftTradeSwapDetailDto shiftTradeSwapDetailDto = new ShiftTradeSwapDetailDto { DateFrom = dateOnlyDto, DateTo = dateOnlyDto, PersonFrom = loggedPerson, PersonTo = personToTradeWith };
             PersonRequestDto personRequestDto = SdkServiceHelper.SchedulingService.CreateShiftTradeRequest(loggedPerson, "", "", new[] { shiftTradeSwapDetailDto });
             PersonDto loggedOnPerson = StateHolder.Instance.StateReader.SessionScopeData.LoggedOnPerson;
@@ -709,7 +711,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
 			var personToTradeWith = scheduleTeamView.LastRightClickedPerson;
 			var loggedPerson = SdkServiceHelper.LogOnServiceClient.GetLoggedOnPerson();
 			var loggedOnPerson = StateHolder.Instance.StateReader.SessionScopeData.LoggedOnPerson;
-			var dateOnlyDto = new DateOnlyDto { DateTime = tradeDate, DateTimeSpecified = true };
+			var dateOnlyDto = new DateOnlyDto { DateTime = tradeDate };
 			var shiftTradeSwapDetailDto = new ShiftTradeSwapDetailDto { DateFrom = dateOnlyDto, DateTo = dateOnlyDto, PersonFrom = loggedPerson, PersonTo = personToTradeWith };
 			var personRequestDto = SdkServiceHelper.SchedulingService.CreateShiftTradeRequest(loggedPerson, "", "", new[] { shiftTradeSwapDetailDto });
 			var model = new ShiftTradeModel(SdkServiceHelper.SchedulingService, personRequestDto, loggedOnPerson, tradeDate);
@@ -768,7 +770,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
                 try
                 {
                 	var details = StateHolder.Instance.State.SessionScopeData;
-                    StateHolder.Instance.MessageBroker.RegisterEventSubscription(details.DataSource.Name,new Guid(details.BusinessUnit.Id), OnEventMessageHandler,
+                    StateHolder.Instance.MessageBroker.RegisterEventSubscription(details.DataSource.Name,details.BusinessUnit.Id.GetValueOrDefault(), OnEventMessageHandler,
                                                          typeof(IPersonRequest));
                 }
                 catch (RemotingException)

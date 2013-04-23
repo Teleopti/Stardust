@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Reflection;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 
 namespace Teleopti.Ccc.AgentPortalCode.Requests.RequestMaster
 {
@@ -108,9 +108,7 @@ namespace Teleopti.Ccc.AgentPortalCode.Requests.RequestMaster
             ICollection<PersonRequestDto> personRequestDtoCollection = _model.SdkService.GetAllRequestModifiedWithinPeriodOrPending(
                                                                                     _model.LoggedOnPerson,
                                                                                     DateTime.UtcNow.Date.AddDays(-180),
-                                                                                    true,
-                                                                                    DateTime.SpecifyKind(DateTime.MaxValue.Date,DateTimeKind.Utc), 
-                                                                                    true);
+                                                                                    DateTime.SpecifyKind(DateTime.MaxValue.Date,DateTimeKind.Utc));
             var detailList = new List<RequestDetailRow>();
             foreach (var dto in personRequestDtoCollection)
             {

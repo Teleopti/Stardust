@@ -3,7 +3,8 @@ using System.Globalization;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.AgentPortalCode.Requests;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
+using Teleopti.Ccc.Sdk.Common.Contracts;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.AgentPortalCodeTest.Requests
@@ -23,7 +24,7 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.Requests
             _mocks = new MockRepository();
             _view = _mocks.StrictMock<IPersonAccountView>();
             _service = _mocks.StrictMock<ITeleoptiOrganizationService>();
-            _person = new PersonDto {Id = Guid.NewGuid().ToString(), Name = "Kalle Anka"};
+            _person = new PersonDto {Id = Guid.NewGuid(), Name = "Kalle Anka"};
             _target = new PersonAccountPresenter(_view, _service, _person);
         }
 
@@ -55,23 +56,17 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.Requests
             {
                 Expect.Call(_service.GetPersonAccounts(_person,
                                                        new DateOnlyDto
-                                                           {DateTime = DateTime.Today, DateTimeSpecified = true})).
+                                                           {DateTime = DateTime.Today})).
                     Return(new[]
                                {
                                    new PersonAccountDto
                                        {
                                            Accrued = TimeSpan.FromDays(25).Ticks,
-                                           AccruedSpecified = true,
                                            BalanceIn = TimeSpan.FromDays(3).Ticks,
-                                           BalanceInSpecified = true,
                                            Extra = TimeSpan.FromDays(-1).Ticks,
-                                           ExtraSpecified = true,
                                            IsInMinutes = false,
-                                           IsInMinutesSpecified = true,
                                            LatestCalculatedBalance = TimeSpan.FromDays(14).Ticks,
-                                           LatestCalculatedBalanceSpecified = true,
                                            Remaining = TimeSpan.FromDays(13).Ticks,
-                                           RemainingSpecified = true,
                                            Period =
                                                new DateOnlyPeriodDto
                                                    {
@@ -79,13 +74,11 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.Requests
                                                            new DateOnlyDto
                                                                {
                                                                    DateTime = new DateTime(2009, 1, 1),
-                                                                   DateTimeSpecified = true
                                                                },
                                                        EndDate =
                                                            new DateOnlyDto
                                                                {
                                                                    DateTime = new DateTime(2009, 12, 31),
-                                                                   DateTimeSpecified = true
                                                                }
                                                    },
                                            TrackingDescription = "Holiday"
@@ -93,17 +86,11 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.Requests
                                    new PersonAccountDto
                                        {
                                            Accrued = TimeSpan.FromMinutes(300).Ticks,
-                                           AccruedSpecified = true,
                                            BalanceIn = TimeSpan.FromMinutes(-60).Ticks,
-                                           BalanceInSpecified = true,
                                            Extra = TimeSpan.FromMinutes(40).Ticks,
-                                           ExtraSpecified = true,
                                            IsInMinutes = true,
-                                           IsInMinutesSpecified = true,
                                            LatestCalculatedBalance = TimeSpan.FromMinutes(45).Ticks,
-                                           LatestCalculatedBalanceSpecified = true,
                                            Remaining = TimeSpan.FromMinutes(235).Ticks,
-                                           RemainingSpecified = true,
                                            Period =
                                                new DateOnlyPeriodDto
                                                    {
@@ -111,13 +98,11 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.Requests
                                                            new DateOnlyDto
                                                                {
                                                                    DateTime = new DateTime(2009, 1, 1),
-                                                                   DateTimeSpecified = true
                                                                },
                                                        EndDate =
                                                            new DateOnlyDto
                                                                {
                                                                    DateTime = new DateTime(2009, 1, 1).AddDays(((int)TimeSpan.FromDays(3600).TotalDays)),
-                                                                   DateTimeSpecified = true
                                                                }
                                                    },
                                            TrackingDescription = "Time in lieu"
