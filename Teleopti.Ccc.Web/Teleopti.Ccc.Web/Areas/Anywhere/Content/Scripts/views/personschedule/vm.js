@@ -57,7 +57,13 @@ define([
 					return new layerViewModel(self.TimeLine, l);
 				});
 				self.Layers.push.apply(self.Layers, layers);
-				
+
+				self.Absences([]);
+			    var absences = ko.utils.arrayMap(data.Layers, function(l) {
+			        return new absenceListItemViewModel(l);
+			    });
+			    self.Absences.push.apply(self.Absences, absences);
+			    
 				self.AddFullDayAbsenceForm.SetData(data);
 			};
 			

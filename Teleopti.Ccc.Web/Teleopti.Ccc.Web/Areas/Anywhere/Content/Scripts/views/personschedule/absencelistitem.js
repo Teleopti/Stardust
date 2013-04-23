@@ -8,14 +8,12 @@ define([
 
     return function (data) {
 
-        this.StartTime = ko.observable(moment(data.StartTime));
-        this.EndTime = ko.observable(moment(data.EndTime));
+        this.StartTime = ko.observable(moment(data.Start).format("YYYY-MM-DD HH:mm"));
+        this.EndTime = ko.observable(moment(data.Start).add('minutes', data.Minutes).format("YYYY-MM-DD HH:mm"));
 
-        this.BackgroundColor = ko.observable(data.BackgroundColor);
+        this.Name = ko.observable(data.Title);
 
-        this.Remove = function () {
-
-        };
+        this.BackgroundColor = ko.observable(data.Color);
 
         this.ConfirmRemoval = function () {
 

@@ -47,6 +47,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 						return TimeZoneInfo.ConvertTimeFromUtc(start, timeZoneInfo).ToString();
 					}))
 				.ForMember(x => x.Minutes, o => o.ResolveUsing(s => s.Minutes))
+				.ForMember(x => x.Title, o => o.ResolveUsing(s => s.Title))
 				;
 
 		}

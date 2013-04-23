@@ -111,13 +111,14 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			result.Absences.Single().Id.Should().Be(absence.Id.Value.ToString());
 		}
 
-		private dynamic MakeLayer(string Color = "", DateTime? Start = null, int Minutes = 0)
+		private dynamic MakeLayer(string Color = "", DateTime? Start = null, int Minutes = 0, string Title = "")
 		{
 			dynamic layer = new ExpandoObject();
 			layer.Color = Color;
 			layer.Start = Start;
 			layer.Start = Start.HasValue ? Start : null;
 			layer.Minutes = Minutes;
+			layer.Title = Title;
 			return layer;
 		}
 
@@ -178,5 +179,17 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			result.Layers.Single().Minutes.Should().Be(60);
 		}
 
+		[Test]
+		public void ShouldMapLayerTitle()
+		{
+			var target = new PersonScheduleViewModelMapper();
+
+			dynamic shift = new ExpandoObject();
+			shift.Projection = new[] {MakeLayer(Title: "Vacation")};
+
+			var result = target.Map(new PersonScheduleData {Shift = shift});
+
+			result.Layers.Single().Title.Should().Be("Vacation");
+		}
 	}
 }
