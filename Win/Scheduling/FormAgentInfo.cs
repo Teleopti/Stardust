@@ -761,8 +761,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void listViewPerson_DoubleClick(object sender, EventArgs e)
 		{
 			IPersonAssignmentDateResetter resetter = new PersonAssignmentDateResetter();
-
-			//resetter.ExecuteFor(_selectedPerson, TeleoptiPrincipal.Current.Identity.AuthenticationType.)
+			string connStr = UnitOfWorkFactory.CurrentUnitOfWorkFactory().LoggedOnUnitOfWorkFactory().ConnectionString;
+			resetter.ExecuteFor(_selectedPerson, connStr);
 		}
     }
 }
