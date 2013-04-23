@@ -59,8 +59,8 @@ define([
 				self.Layers.push.apply(self.Layers, layers);
 
 				self.Absences([]);
-			    var absences = ko.utils.arrayMap(data.Layers, function(l) {
-			        return new absenceListItemViewModel(l);
+				var absences = ko.utils.arrayMap(data.PersonAbsences, function (a) {
+			        return new absenceListItemViewModel(a);
 			    });
 			    self.Absences.push.apply(self.Absences, absences);
 			    

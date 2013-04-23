@@ -4,6 +4,7 @@ using System.Linq;
 using AutoMapper;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Web.Areas.MyTime.Core;
 using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Interfaces.Domain;
 
@@ -32,8 +33,27 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 					}))
 				;
 
-			CreateMap<IAbsence, PersonScheduleViewModelAbsence>();
+			CreateMap<IPersonAbsence, PersonScheduleViewModelPersonAbsence>()
+				.ForMember(x => x.Color, o => o.ResolveUsing(s => s.Layer.Payload.DisplayColor.ToHtml()))
+				.ForMember(x => x.Name, o => o.ResolveUsing(s => s.Layer.Payload.Description.Name))
+				.ForMember(x => x.StartTime, o => o.ResolveUsing(s =>
+					{
+						if (s.Layer.Period.StartDateTime == DateTime.MinValue)
+							return null;
+						TimeZoneInfo timeZoneInfo = s.Person.PermissionInformation.DefaultTimeZone();
+						return TimeZoneInfo.ConvertTimeFromUtc(s.Layer.Period.StartDateTime, timeZoneInfo);
+					}))
+				.ForMember(x => x.EndTime, o => o.ResolveUsing(s =>
+					{
+						if (s.Layer.Period.EndDateTime == DateTime.MinValue)
+							return null;
+						TimeZoneInfo timeZoneInfo = s.Person.PermissionInformation.DefaultTimeZone();
+						return TimeZoneInfo.ConvertTimeFromUtc(s.Layer.Period.EndDateTime, timeZoneInfo);
+					}))
+				;
 
+			CreateMap<IAbsence, PersonScheduleViewModelAbsence>();
+			
 			CreateMap<dynamic, PersonScheduleViewModelLayer>()
 				.ForMember(x => x.Color, o => o.ResolveUsing(s => s.Color))
 				.ForMember(x => x.Start, o => o.ResolveUsing(s =>
@@ -47,7 +67,6 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 						return TimeZoneInfo.ConvertTimeFromUtc(start, timeZoneInfo).ToString();
 					}))
 				.ForMember(x => x.Minutes, o => o.ResolveUsing(s => s.Minutes))
-				.ForMember(x => x.Title, o => o.ResolveUsing(s => s.Title))
 				;
 
 		}

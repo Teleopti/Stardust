@@ -21,9 +21,11 @@ Background:
 	And there is an absence with
 	| Field | Value    |
 	| Name  | Vacation |
+	| Color | Red      |
 	And there is an absence with
 	| Field | Value   |
 	| Name  | Illness |
+	| Color | Gray    |
 	
 Scenario: View absence on this day in list
 	Given I have the role 'Anywhere Team Green'
