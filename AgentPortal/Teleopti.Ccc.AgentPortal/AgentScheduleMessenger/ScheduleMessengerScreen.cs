@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
+using System.ServiceModel;
 using System.Threading;
 using System.Web.Services.Protocols;
 using System.Windows.Forms;
@@ -279,7 +280,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentScheduleMessenger
             {
                 MessageDialogs.ShowError(this,timeoutException.Message,Text);
             }
-			catch(SoapException)
+			catch(FaultException)
 			{
 				_scheduleLoadRetryCount++;
 

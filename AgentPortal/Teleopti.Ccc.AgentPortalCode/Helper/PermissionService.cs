@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
 using Teleopti.Ccc.AgentPortalCode.Foundation.StateHandlers;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 
 namespace Teleopti.Ccc.AgentPortalCode.Helper
 {
@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.AgentPortalCode.Helper
         {
             _authorizedFunctions = new List<string>();
 
-            IList<ApplicationFunctionDto> permittedApplicationFunctionCollection =
+            var permittedApplicationFunctionCollection =
                 SdkServiceHelper.LogOnServiceClient.GetApplicationFunctionsForPerson(
                     StateHolder.Instance.StateReader.SessionScopeData.LoggedOnPerson);
 

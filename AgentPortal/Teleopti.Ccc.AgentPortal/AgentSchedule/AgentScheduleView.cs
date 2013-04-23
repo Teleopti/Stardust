@@ -15,7 +15,7 @@ using Teleopti.Ccc.AgentPortalCode.Common.Clipboard;
 using Teleopti.Ccc.AgentPortalCode.Foundation.StateHandlers;
 using Teleopti.Ccc.AgentPortalCode.Helper;
 using Teleopti.Ccc.AgentPortalCode.ScheduleControlDataProvider;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.AgentPortal.AgentSchedule

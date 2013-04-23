@@ -1,5 +1,5 @@
 using System;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 
 namespace Teleopti.Ccc.AgentPortal.Requests.ShiftTrade
 {
@@ -8,8 +8,8 @@ namespace Teleopti.Ccc.AgentPortal.Requests.ShiftTrade
         public DateRangeSelectionEventArgs(DateTime start, DateTime end)
         {
             DateRange = new DateOnlyPeriodDto();
-            DateRange.StartDate = new DateOnlyDto {DateTime = start.Date, DateTimeSpecified = true};
-            DateRange.EndDate = new DateOnlyDto {DateTime = end.Date, DateTimeSpecified = true};
+            DateRange.StartDate = new DateOnlyDto {DateTime = start.Date};
+            DateRange.EndDate = new DateOnlyDto {DateTime = end.Date};
         }
 
         public DateOnlyPeriodDto DateRange { get; private set; }

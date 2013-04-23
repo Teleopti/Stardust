@@ -6,7 +6,8 @@ using Teleopti.Ccc.AgentPortal.Reports.Grid;
 using Teleopti.Ccc.AgentPortalCode.Common;
 using Teleopti.Ccc.AgentPortalCode.Foundation.StateHandlers;
 using Teleopti.Ccc.AgentPortalCode.Helper;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.AgentPortal.Reports
@@ -106,11 +107,11 @@ namespace Teleopti.Ccc.AgentPortal.Reports
 
 			var startDate = DateTime.SpecifyKind(_selectedDateTimePeriodDto.LocalStartDateTime.Date, DateTimeKind.Unspecified);
 			var endDate = DateTime.SpecifyKind(_selectedDateTimePeriodDto.LocalEndDateTime.Date, DateTimeKind.Unspecified);
-			var startDateOnly = new DateOnlyDto { DateTime = startDate.AddDays(0), DateTimeSpecified = true };
-			var endDateOnly = new DateOnlyDto { DateTime = endDate, DateTimeSpecified = true };
+			var startDateOnly = new DateOnlyDto { DateTime = startDate };
+			var endDateOnly = new DateOnlyDto { DateTime = endDate };
 			PersonDto person = StateHolder.Instance.StateReader.SessionScopeData.LoggedOnPerson;
-			var query = new GetSchedulesByPersonQueryDto { StartDate = startDateOnly,EndDate = endDateOnly,PersonId = person.Id,TimeZoneId = person.TimeZoneId};
-			IList<SchedulePartDto> schedulePartDtos = SdkServiceHelper.SchedulingService.GetSchedulesByQuery(query);
+			var query = new GetSchedulesByPersonQueryDto { StartDate = startDateOnly,EndDate = endDateOnly,PersonId = person.Id.GetValueOrDefault(),TimeZoneId = person.TimeZoneId};
+			var schedulePartDtos = SdkServiceHelper.SchedulingService.GetSchedulesByQuery(query);
 
 			_myScheduleGridAdapterCollection.Clear();
 			//var allProjectedLayers = new List<ProjectedLayerDto>();
@@ -174,8 +175,8 @@ namespace Teleopti.Ccc.AgentPortal.Reports
 		public static IList<AgentQueueStatDetailsDto> GetAgentQueueStatDetails(DateTime fromDate)
 		{
 			PersonDto personDto = StateHolder.Instance.StateReader.SessionScopeData.LoggedOnPerson;
-			IList<AgentQueueStatDetailsDto> agentQueueStatDetailsDtos = SdkServiceHelper.SchedulingService.GetAgentQueueStatDetails(fromDate, true,
-				fromDate.Date.AddDays(6), true,
+			IList<AgentQueueStatDetailsDto> agentQueueStatDetailsDtos = SdkServiceHelper.SchedulingService.GetAgentQueueStatDetails(fromDate, 
+				fromDate.Date.AddDays(6), 
 				personDto.TimeZoneId,
 				personDto);
 			return agentQueueStatDetailsDtos;
@@ -183,8 +184,8 @@ namespace Teleopti.Ccc.AgentPortal.Reports
 		public static IList<AdherenceInfoDto> GetAgentAdherenceInfoStat(DateTime fromDate)
 		{
 			PersonDto personDto = StateHolder.Instance.StateReader.SessionScopeData.LoggedOnPerson;
-			IList<AdherenceInfoDto> agentQueueStatDetailsDtos = SdkServiceHelper.SchedulingService.GetAdherenceInfo(fromDate, true,
-				fromDate.Date.AddDays(6), true,
+			IList<AdherenceInfoDto> agentQueueStatDetailsDtos = SdkServiceHelper.SchedulingService.GetAdherenceInfo(fromDate, 
+				fromDate.Date.AddDays(6), 
 				personDto.TimeZoneId,
 				personDto);
 			return agentQueueStatDetailsDtos;
@@ -192,8 +193,8 @@ namespace Teleopti.Ccc.AgentPortal.Reports
 		private IList<AdherenceLayer> GetAdherenceLayers(PersonDto personDto, DateTime dateTime)
 		{
 			CultureInfo c = GetCultureInfo(personDto);
-			AdherenceDto adherenceDto = SdkServiceHelper.SchedulingService.GetAdherenceData(dateTime, true,
-																							personDto.TimeZoneId, personDto, personDto, c.LCID, true);
+			AdherenceDto adherenceDto = SdkServiceHelper.SchedulingService.GetAdherenceData(dateTime, 
+																							personDto.TimeZoneId, personDto, personDto, c.LCID);
 			IList<AdherenceLayer> adherenceLayers = new List<AdherenceLayer>();
 			foreach (AdherenceDataDto adherenceDataDto in adherenceDto.AdherenceDataDtos)
 			{

@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using NUnit.Framework;
 using Teleopti.Ccc.AgentPortalCode.Common;
 
@@ -10,7 +11,7 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.Common
         private Absence _target;
         private string _name;
         private string _shortName;
-        private string _id;
+        private Guid _id;
         private Color _color;
 
         [SetUp]
@@ -18,7 +19,7 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.Common
         {
             _name = "name";
             _shortName = "shortName";
-            _id = "id";
+            _id = Guid.NewGuid();
             _color = Color.Blue;
             _target = new Absence(_name, _shortName, _id, _color);    
         }

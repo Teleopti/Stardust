@@ -1,16 +1,11 @@
-﻿#region Imports
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.AgentPortal.Common;
 using Teleopti.Ccc.AgentPortal.Common.Configuration.Cells;
 using Teleopti.Ccc.AgentPortal.Common.Configuration.Columns;
-using Teleopti.Ccc.AgentPortalCode.Foundation.StateHandlers;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
-
-#endregion
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 
 namespace Teleopti.Ccc.AgentPortal.Reports
 {

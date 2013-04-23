@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using Teleopti.Ccc.AgentPortalCode.Foundation.StateHandlers;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Events;
 
@@ -33,15 +33,15 @@ namespace Teleopti.Ccc.AgentPortalCode.Helper
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
         public int GetNumberOfUnhandledMessages()
         {
-            PushMessageDialogueDto[] loadedPushMessageDialogueDto =
+            var loadedPushMessageDialogueDto =
                 SdkServiceHelper.OrganizationService.GetPushMessageDialoguesNotRepliedTo(_affectedPerson);
-            return loadedPushMessageDialogueDto.Length;
+            return loadedPushMessageDialogueDto.Count;
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1024:UsePropertiesWhereAppropriate")]
         public Collection<MessagePresenterObject> GetMessagePresenterObjects()
         {
-            PushMessageDialogueDto[] loadedPushMessageDialogueDto = SdkServiceHelper.OrganizationService.GetPushMessageDialoguesNotRepliedTo(_affectedPerson);
+            var loadedPushMessageDialogueDto = SdkServiceHelper.OrganizationService.GetPushMessageDialoguesNotRepliedTo(_affectedPerson);
             var messagePresenterObjects = new Collection<MessagePresenterObject>();
             foreach (PushMessageDialogueDto dto in loadedPushMessageDialogueDto)
             {
@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.AgentPortalCode.Helper
         //Note: If possible, move the messagebrokercode here as well instead of calling this method
         public void MessageChanged(EventMessageArgs args)
         {
-            if (typeof(IPushMessageDialogue).IsAssignableFrom(args.Message.InterfaceType) && (args.Message.ReferenceObjectId) == new Guid(_affectedPerson.Id))
+            if (typeof(IPushMessageDialogue).IsAssignableFrom(args.Message.InterfaceType) && (args.Message.ReferenceObjectId == _affectedPerson.Id))
             {
                 //note cache this value?
                 int numberOfUnreadMessages = GetNumberOfUnhandledMessages();
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.AgentPortalCode.Helper
 						if (handlerAdded != null)
                         {
                             var pushMessageDialogueDto = new PushMessageDialogueDto();
-                            pushMessageDialogueDto.Id = args.Message.DomainObjectId.ToString();
+                            pushMessageDialogueDto.Id = args.Message.DomainObjectId;
                             PushMessageDialogueDto loadedPushMessageDialogueDto = SdkServiceHelper.OrganizationService.GetPushMessageDialogue(pushMessageDialogueDto);
                             
                             if(loadedPushMessageDialogueDto!=null && !loadedPushMessageDialogueDto.IsReplied )
