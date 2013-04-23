@@ -3626,42 +3626,40 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				schedulingOptions.OnlyShiftsWhenUnderstaffed = false;
 
-			    if (schedulingOptions.UseTeamBlockPerOption)
-			    {
-			        //when the advance scheduling is required
-			        _groupPagePerDateHolder.GroupPersonGroupPagePerDate =
-			            _groupPagePerDateHolder.ShiftCategoryFairnessGroupPagePerDate;
-			        var allVisibleMatrixes = OptimizerHelperHelper.CreateMatrixListAll(_schedulerState, _container);
-			        _scheduleOptimizerHelper.BlockTeamScheduleSelected(matrixesOfSelectedScheduleDays,
-			                                                           allMatrixesOfSelectedPersons, allVisibleMatrixes,
-			                                                           _backgroundWorkerScheduling, schedulingOptions,
-			                                                           scheduleDays);
-			    }
-			    else
-			        _scheduleOptimizerHelper.ScheduleSelectedPersonDays(scheduleDays, matrixesOfSelectedScheduleDays,
-			                                                            allMatrixesOfSelectedPersons, true,
-			                                                            _backgroundWorkerScheduling, schedulingOptions);
 
-			    //old code
-			    //if(!schedulingOptions.UseTeamBlockPerOption)
-			    //{
-			    //        if (schedulingOptions.UseGroupScheduling)
-			    //        {
-			    //            var allMatrixes = OptimizerHelperHelper.CreateMatrixListAll(_schedulerState, _container);
-			    //            _scheduleOptimizerHelper.GroupSchedule(_backgroundWorkerScheduling, scheduleDays, matrixesOfSelectedScheduleDays, allMatrixesOfSelectedPersons, schedulingOptions, _container.Resolve<IGroupPageHelper>(), allMatrixes);
-			    //        }
-			    //        else
-			    //            _scheduleOptimizerHelper.ScheduleSelectedPersonDays(scheduleDays, matrixesOfSelectedScheduleDays, allMatrixesOfSelectedPersons, true, _backgroundWorkerScheduling, schedulingOptions);
+                if (schedulingOptions.UseTeamBlockPerOption && schedulingOptions.UseGroupScheduling)
+                {
+                    //when the advance scheduling is required
+                    _groupPagePerDateHolder.GroupPersonGroupPagePerDate = _groupPagePerDateHolder.ShiftCategoryFairnessGroupPagePerDate;
 
-			    //}
-			    //else
-			    //{
-			    //    //when the advance scheduling is required
-			    //    _groupPagePerDateHolder.GroupPersonGroupPagePerDate = _groupPagePerDateHolder.ShiftCategoryFairnessGroupPagePerDate; 
+                    var allVisibleMatrixes = OptimizerHelperHelper.CreateMatrixListAll(_schedulerState, _container);
+                    _scheduleOptimizerHelper.BlockTeamScheduleSelected(matrixesOfSelectedScheduleDays, allMatrixesOfSelectedPersons, allVisibleMatrixes, _backgroundWorkerScheduling, schedulingOptions, scheduleDays);
+                }
+                else
+                {
+                    //old code
+                    if (!schedulingOptions.UseTeamBlockPerOption)
+                    {
+                        if (schedulingOptions.UseGroupScheduling)
+                        {
+                            var allMatrixes = OptimizerHelperHelper.CreateMatrixListAll(_schedulerState, _container);
+                            _scheduleOptimizerHelper.GroupSchedule(_backgroundWorkerScheduling, scheduleDays, matrixesOfSelectedScheduleDays, allMatrixesOfSelectedPersons, schedulingOptions, _container.Resolve<IGroupPageHelper>(), allMatrixes);
+                        }
+                        else
+                            _scheduleOptimizerHelper.ScheduleSelectedPersonDays(scheduleDays, matrixesOfSelectedScheduleDays, allMatrixesOfSelectedPersons, true, _backgroundWorkerScheduling, schedulingOptions);
 
-			    //    var allVisibleMatrixes = OptimizerHelperHelper.CreateMatrixListAll(_schedulerState, _container);
-			    //    _scheduleOptimizerHelper.BlockTeamScheduleSelected(matrixesOfSelectedScheduleDays, allMatrixesOfSelectedPersons, allVisibleMatrixes, _backgroundWorkerScheduling, schedulingOptions, scheduleDays);
-			    //}
+                    }
+                    else
+                    {
+                        //when the advance scheduling is required
+                        _groupPagePerDateHolder.GroupPersonGroupPagePerDate = _groupPagePerDateHolder.ShiftCategoryFairnessGroupPagePerDate;
+
+                        var allVisibleMatrixes = OptimizerHelperHelper.CreateMatrixListAll(_schedulerState, _container);
+                        _scheduleOptimizerHelper.BlockTeamScheduleSelected(matrixesOfSelectedScheduleDays, allMatrixesOfSelectedPersons, allVisibleMatrixes, _backgroundWorkerScheduling, schedulingOptions, scheduleDays);
+                    }
+                }
+
+                
 
 			}
 			else
