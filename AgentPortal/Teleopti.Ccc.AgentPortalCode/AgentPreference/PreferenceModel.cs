@@ -2,10 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
+using System.Linq;
 using Teleopti.Ccc.AgentPortalCode.AgentPreference.Limitation;
 using Teleopti.Ccc.AgentPortalCode.Common;
 using Teleopti.Ccc.AgentPortalCode.Helper;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
@@ -154,7 +155,7 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentPreference
             _calculationInfo = "";
             DateOnly dateOnly = GetDateOnlyInPeriod(dateInPeriod);
 
-            IList<ValidatedSchedulePartDto> ret = scheduleHelper.Validate(LoggedOnPerson, dateOnly, false);
+            var ret = scheduleHelper.Validate(LoggedOnPerson, dateOnly, false);
             var retList = new Dictionary<int, IPreferenceCellData>();
             int cellNumber = 0;
             bool firstDateIsSet = false;
@@ -178,7 +179,7 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentPreference
                                 validatedSchedulePartDto.PreferenceRestriction.ShiftCategory.DisplayColor);
                         cellData.Preference.ShiftCategory =
                             new ShiftCategory(validatedSchedulePartDto.PreferenceRestriction.ShiftCategory.Name, "",
-                                              validatedSchedulePartDto.PreferenceRestriction.ShiftCategory.Id,
+                                              validatedSchedulePartDto.PreferenceRestriction.ShiftCategory.Id.GetValueOrDefault(),
                                               shiftCategoryColor);
                     }
                     if (validatedSchedulePartDto.PreferenceRestriction.DayOff != null)
@@ -186,7 +187,7 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentPreference
                         cellData.Preference.DayOff =
                             new Common.DayOff(
                                 validatedSchedulePartDto.PreferenceRestriction.DayOff.Name, "",
-                                validatedSchedulePartDto.PreferenceRestriction.DayOff.Id, Color.DimGray);
+                                validatedSchedulePartDto.PreferenceRestriction.DayOff.Id.GetValueOrDefault(), Color.DimGray);
                     }
 
                     if(validatedSchedulePartDto.PreferenceRestriction.Absence != null)
@@ -194,14 +195,14 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentPreference
                         var absenceColor = ColorHelper.CreateColorFromDto(validatedSchedulePartDto.PreferenceRestriction.Absence.DisplayColor);
                         cellData.Preference.Absence = new Absence(validatedSchedulePartDto.PreferenceRestriction.Absence.Name, 
                             validatedSchedulePartDto.PreferenceRestriction.Absence.ShortName,
-                            validatedSchedulePartDto.PreferenceRestriction.Absence.Id, absenceColor);    
+                            validatedSchedulePartDto.PreferenceRestriction.Absence.Id.GetValueOrDefault(), absenceColor);    
                     }
 
-                    if (validatedSchedulePartDto.PreferenceRestriction.ActivityRestrictionCollection != null && validatedSchedulePartDto.PreferenceRestriction.ActivityRestrictionCollection.Length > 0)
+                    if (validatedSchedulePartDto.PreferenceRestriction.ActivityRestrictionCollection != null && validatedSchedulePartDto.PreferenceRestriction.ActivityRestrictionCollection.Count > 0)
                     {
                         ActivityRestrictionDto activityRestrictionDto =
-                            validatedSchedulePartDto.PreferenceRestriction.ActivityRestrictionCollection[0];
-                        var preferenceActivity = new Activity(activityRestrictionDto.Activity.Id, activityRestrictionDto.Activity.Description);
+                            validatedSchedulePartDto.PreferenceRestriction.ActivityRestrictionCollection.First();
+                        var preferenceActivity = new Activity(activityRestrictionDto.Activity.Id.GetValueOrDefault(), activityRestrictionDto.Activity.Description);
                         cellData.Preference.Activity = preferenceActivity;
                         if (activityRestrictionDto.StartTimeLimitation != null)
                             cellData.Preference.ActivityStartTimeLimitation = new TimeLimitation(TimeOfDayValidatorStartTime, activityRestrictionDto.StartTimeLimitation);
@@ -288,7 +289,7 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentPreference
         {
             var dateOnly = new DateOnly(dateInPeriod);
             bool periodExists = false;
-            for (int i = 0; i < LoggedOnPerson.PersonPeriodCollection.Length; i++)
+            for (int i = 0; i < LoggedOnPerson.PersonPeriodCollection.Count; i++)
             {
                 if (LoggedOnPerson.PersonPeriodCollection[i].Period.StartDate.DateTime <= dateOnly && LoggedOnPerson.PersonPeriodCollection[i].Period.EndDate.DateTime >= dateOnly)
                 {
@@ -296,9 +297,9 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentPreference
                     break;
                 }
             }
-            if (!periodExists && LoggedOnPerson.PersonPeriodCollection.Length > 0)
+            if (!periodExists && LoggedOnPerson.PersonPeriodCollection.Count > 0)
             {
-                DateOnlyPeriodDto lastPeriod = LoggedOnPerson.PersonPeriodCollection[LoggedOnPerson.PersonPeriodCollection.Length - 1].Period;
+                DateOnlyPeriodDto lastPeriod = LoggedOnPerson.PersonPeriodCollection.Last().Period;
 
                 if (dateInPeriod > lastPeriod.EndDate.DateTime)//Teminal date
                     dateOnly = new DateOnly(lastPeriod.EndDate.DateTime);

@@ -5,7 +5,6 @@ using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.AgentPortal.Common;
 using Teleopti.Ccc.AgentPortalCode.AgentSchedule;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
 
 namespace Teleopti.Ccc.AgentPortal.AgentSchedule
 {

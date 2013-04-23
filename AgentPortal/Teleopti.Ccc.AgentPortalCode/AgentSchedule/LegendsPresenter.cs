@@ -1,48 +1,50 @@
 ﻿using System;
 using System.Collections;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
+using System.Collections.Generic;
+using Teleopti.Ccc.Sdk.Common.Contracts;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 
 namespace Teleopti.Ccc.AgentPortalCode.AgentSchedule
 {
 	public interface ILegendLoader
 	{
-		ActivityDto[] GetActivities();
-		AbsenceDto[] GetAbsences();
+		ICollection<ActivityDto> GetActivities();
+		ICollection<AbsenceDto> GetAbsences();
 	}
 
 	public class LegendLoader : ILegendLoader
 	{
-		private readonly Func<TeleoptiSchedulingService> _sdk;
+		private readonly Func<ITeleoptiSchedulingService> _sdk;
 		private DateTime _lastLoad = DateTime.MinValue;
-		private ActivityDto[] _activities;
-		private AbsenceDto[] _absences;
+		private ICollection<ActivityDto> _activities;
+		private ICollection<AbsenceDto> _absences;
 		private object Lock = new object();
 
-		public LegendLoader(Func<TeleoptiSchedulingService> sdk)
+		public LegendLoader(Func<ITeleoptiSchedulingService> sdk)
 		{
 			_sdk = sdk;
 		}
 
-		public ActivityDto[] GetActivities()
+		public ICollection<ActivityDto> GetActivities()
 		{
 			lock (Lock)
 			{
 				if (_activities == null || _lastLoad < DateTime.UtcNow.AddMinutes(-10))
 				{
-					_activities = _sdk.Invoke().GetActivities(new LoadOptionDto { LoadDeleted = false, LoadDeletedSpecified = true });
+					_activities = _sdk.Invoke().GetActivities(new LoadOptionDto { LoadDeleted = false });
 					_lastLoad = DateTime.UtcNow;
 				}
 				return _activities;
 			}
 		}
 
-		public AbsenceDto[] GetAbsences()
+		public ICollection<AbsenceDto> GetAbsences()
 		{
 			lock (Lock)
 			{
 				if (_absences == null || _lastLoad < DateTime.UtcNow.AddMinutes(-10))
 				{
-					_absences = _sdk.Invoke().GetAbsences(new AbsenceLoadOptionDto { LoadDeleted = false, LoadDeletedSpecified = true,LoadRequestableSpecified = true});
+					_absences = _sdk.Invoke().GetAbsences(new AbsenceLoadOptionDto { LoadDeleted = false, LoadRequestable = false});
 					_lastLoad = DateTime.UtcNow;
 				}
 				return _absences;
@@ -73,7 +75,10 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentSchedule
         {
             var arrActivityDto = _legendLoader.GetActivities();
             var datasource = new ArrayList();
-            Array.ForEach(arrActivityDto, a => datasource.Add(new LegendModel(a)));
+            foreach (var activityDto in arrActivityDto)
+            {
+                datasource.Add(new LegendModel(activityDto));
+            }
             _noRowsInActivity = datasource.Count;
             return datasource;
         }
@@ -82,7 +87,10 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentSchedule
         {
             var arrAbsenceDto = _legendLoader.GetAbsences();
             var datasource = new ArrayList();
-            Array.ForEach(arrAbsenceDto, a => datasource.Add(new LegendModel(a)));
+            foreach (var absenceDto in arrAbsenceDto)
+            {
+                datasource.Add(new LegendModel(absenceDto));
+            }
             _noRowsInAbsence = datasource.Count;
             return datasource;
         }

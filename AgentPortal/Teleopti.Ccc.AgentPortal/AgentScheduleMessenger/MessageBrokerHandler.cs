@@ -92,14 +92,14 @@ namespace Teleopti.Ccc.AgentPortal.AgentScheduleMessenger
             {
                 try
                 {
-                	var referenceId = new Guid(StateHolder.Instance.State.SessionScopeData.LoggedOnPerson.Id);
+                	var referenceId = StateHolder.Instance.State.SessionScopeData.LoggedOnPerson.Id.GetValueOrDefault();
                 	var workflowControlSetId = Guid.Empty;
 					if (StateHolder.Instance.State.SessionScopeData.LoggedOnPerson.WorkflowControlSet!=null)
 					{
-						workflowControlSetId = new Guid(StateHolder.Instance.State.SessionScopeData.LoggedOnPerson.WorkflowControlSet.Id);
+						workflowControlSetId = StateHolder.Instance.State.SessionScopeData.LoggedOnPerson.WorkflowControlSet.Id.GetValueOrDefault();
 					}
 
-                	var businessUnitId = new Guid(StateHolder.Instance.State.SessionScopeData.BusinessUnit.Id);
+                	var businessUnitId = StateHolder.Instance.State.SessionScopeData.BusinessUnit.Id.GetValueOrDefault();
                 	var datasource = StateHolder.Instance.State.SessionScopeData.DataSource.Name;
 					StateHolder.Instance.MessageBroker.RegisterEventSubscription(datasource,businessUnitId, OnEventMessageHandler, referenceId, typeof(IPerson), typeof(IScheduleChangedInDefaultScenario));
 					StateHolder.Instance.MessageBroker.RegisterEventSubscription(datasource,businessUnitId, OnEventMessageHandler, referenceId, typeof(IPerson), typeof(IPushMessageDialogue));
@@ -122,8 +122,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentScheduleMessenger
 				return true;
 			}
 
-			if (eventMessage.Message.ReferenceObjectId ==
-				 new Guid(StateHolder.Instance.State.SessionScopeData.LoggedOnPerson.Id))
+			if (eventMessage.Message.ReferenceObjectId == StateHolder.Instance.State.SessionScopeData.LoggedOnPerson.Id)
 			{
 				if (typeof (IScheduleChangedInDefaultScenario).IsAssignableFrom(eventMessage.Message.InterfaceType))
 				{

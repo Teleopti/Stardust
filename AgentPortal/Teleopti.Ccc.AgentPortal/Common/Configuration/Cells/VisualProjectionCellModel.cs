@@ -4,14 +4,12 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Globalization;
 using System.Runtime.Serialization;
-using System.Security;
-using System.Security.Permissions;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.AgentPortal.Schedules;
 using Teleopti.Ccc.AgentPortalCode.Common;
 using Teleopti.Ccc.AgentPortalCode.Foundation.StateHandlers;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.AgentPortal.Common.Configuration.Cells

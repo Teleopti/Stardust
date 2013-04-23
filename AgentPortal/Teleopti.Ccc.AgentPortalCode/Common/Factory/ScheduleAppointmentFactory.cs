@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using Syncfusion.Schedule;
 using Teleopti.Ccc.AgentPortalCode.Foundation.StateHandlers;
 using Teleopti.Ccc.AgentPortalCode.Helper;
 using Teleopti.Ccc.AgentPortalCode.Requests.RequestMaster;
 using Teleopti.Ccc.AgentPortalCode.ScheduleControlDataProvider;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 
 namespace Teleopti.Ccc.AgentPortalCode.Common.Factory
 {
@@ -26,14 +27,14 @@ namespace Teleopti.Ccc.AgentPortalCode.Common.Factory
             set { _colorTheme = value; }
         }
 
-        public static ICustomScheduleAppointment Create(ProjectedLayerDto projectedLayerDto, PersonMeetingDto[] personMeetingDtos)
+        public static ICustomScheduleAppointment Create(ProjectedLayerDto projectedLayerDto, IEnumerable<PersonMeetingDto> personMeetingDtos)
         {
             ICustomScheduleAppointment scheduleITem = createScheduleItemFromProjectedLayer(projectedLayerDto, personMeetingDtos);
 
             return scheduleITem;
         }
 
-        public static IList<ICustomScheduleAppointment> Create(IList<SchedulePartDto> schedulePartCollection)
+        public static IList<ICustomScheduleAppointment> Create(IEnumerable<SchedulePartDto> schedulePartCollection)
         {
             IList<ICustomScheduleAppointment> scheduleItemCollection = new List<ICustomScheduleAppointment>();
 
@@ -41,12 +42,12 @@ namespace Teleopti.Ccc.AgentPortalCode.Common.Factory
             {
                 ICustomScheduleAppointment scheduleItem;
                 //For some reason Anders also wants to display scheduled day off when an overtime shift is scheduled...
-                if ((schedulePartDto.PersonDayOff != null && schedulePartDto.ProjectedLayerCollection.Length == 0) || (schedulePartDto.PersonDayOff != null && schedulePartDto.ProjectedLayerCollection.Length > 0 && schedulePartDto.ProjectedLayerCollection[0].OvertimeDefinitionSetId != null))
+                if ((schedulePartDto.PersonDayOff != null && schedulePartDto.ProjectedLayerCollection.Count == 0) || (schedulePartDto.PersonDayOff != null && schedulePartDto.ProjectedLayerCollection.Count > 0 && schedulePartDto.ProjectedLayerCollection.First().OvertimeDefinitionSetId != null))
                 {
                     scheduleItem = create(schedulePartDto.PersonDayOff);
                     scheduleItemCollection.Add(scheduleItem);
                 }
-                if (!(schedulePartDto.PersonDayOff != null && schedulePartDto.ProjectedLayerCollection.Length == 0))
+                if (!(schedulePartDto.PersonDayOff != null && schedulePartDto.ProjectedLayerCollection.Count == 0))
                 {
                     foreach (ProjectedLayerDto projectedLayerDto in schedulePartDto.ProjectedLayerCollection)
                     {
@@ -88,7 +89,7 @@ namespace Teleopti.Ccc.AgentPortalCode.Common.Factory
             return scheduleItem;
         }
 
-        public static IList<ICustomScheduleAppointment> Create(IList<PersonRequestDto> requestPartDtoCollection)
+        public static IList<ICustomScheduleAppointment> Create(IEnumerable<PersonRequestDto> requestPartDtoCollection)
         {
             IList<ICustomScheduleAppointment> scheduleItemCollection = new List<ICustomScheduleAppointment>();
 
@@ -129,7 +130,7 @@ namespace Teleopti.Ccc.AgentPortalCode.Common.Factory
             return MultipleDayAppointmentSplitFactory.Split(scheduleItemCollection);
         }
 
-        public static IList<ICustomScheduleAppointment> Create(IList<PublicNoteDto> publicNoteCollection)
+        public static IList<ICustomScheduleAppointment> Create(IEnumerable<PublicNoteDto> publicNoteCollection)
         {
             IList<ICustomScheduleAppointment> scheduleItemCollection = new List<ICustomScheduleAppointment>();
 
@@ -158,7 +159,7 @@ namespace Teleopti.Ccc.AgentPortalCode.Common.Factory
                 Color c = ColorHelper.CreateColorFromDto(projectedLayerDto.DisplayColor);
 
                 scheduleItem = new CustomScheduleAppointment {Subject = projectedLayerDto.Description};
-            	if (!string.IsNullOrEmpty(projectedLayerDto.MeetingId))
+            	if (projectedLayerDto.MeetingId.HasValue)
                 {
                     foreach (PersonMeetingDto personMeetingDto in personMeetingDtos)
                     {

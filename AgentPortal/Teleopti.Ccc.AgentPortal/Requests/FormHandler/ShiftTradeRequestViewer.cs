@@ -4,7 +4,7 @@ using Teleopti.Ccc.AgentPortal.Requests.ShiftTrade;
 using Teleopti.Ccc.AgentPortalCode.Foundation.StateHandlers;
 using Teleopti.Ccc.AgentPortalCode.Helper;
 using Teleopti.Ccc.AgentPortalCode.Requests.ShiftTrade;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 
 namespace Teleopti.Ccc.AgentPortal.Requests.FormHandler
 {

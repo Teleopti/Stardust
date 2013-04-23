@@ -1,9 +1,11 @@
-﻿namespace Teleopti.Ccc.AgentPortal.AgentSchedule
+﻿using System;
+
+namespace Teleopti.Ccc.AgentPortal.AgentSchedule
 {
 	public class GroupDetailModel
 	{
 		public string DisplayText { get; set; }
-		public string Id { get; set; }
+		public Guid Id { get; set; }
 		public object Object { get; set; }
 	}
 }

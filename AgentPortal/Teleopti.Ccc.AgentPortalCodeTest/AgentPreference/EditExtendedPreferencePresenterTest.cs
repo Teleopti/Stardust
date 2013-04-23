@@ -62,10 +62,10 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.AgentPreference
         {
             _mocks.Record();
 
-            var dayOff = new DayOff("dayOff", "do", "id", Color.Black);
-            var shiftCategory = new ShiftCategory("shiftCat", "ca", "id", Color.Black);
-            var activity = new Activity("id", "act");
-            var absence = new Absence("name", "shortName", "id", Color.Empty);
+            var dayOff = new DayOff("dayOff", "do", Guid.NewGuid(), Color.Black);
+            var shiftCategory = new ShiftCategory("shiftCat", "ca", Guid.NewGuid(), Color.Black);
+            var activity = new Activity(Guid.NewGuid(), "act");
+            var absence = new Absence("name", "shortName", Guid.NewGuid(), Color.Empty);
 
             Expect.Call(_model.StartTimeLimitationMin).Return(TimeSpan.FromHours(1));
             Expect.Call(_model.StartTimeLimitationMax).Return(TimeSpan.FromHours(2));
@@ -119,10 +119,10 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.AgentPreference
         {
             _mocks.Record();
 
-            var dayOff = new DayOff("dayOff", "do", "id", Color.Black);
-            var shiftCategory = new ShiftCategory("shiftCat", "ca", "id", Color.Black);
-            var activity = new Activity("id", "act");
-            var absence = new Absence("name", "shortName", "id", Color.Empty);
+            var dayOff = new DayOff("dayOff", "do", Guid.NewGuid(), Color.Black);
+            var shiftCategory = new ShiftCategory("shiftCat", "ca", Guid.NewGuid(), Color.Black);
+            var activity = new Activity(Guid.NewGuid(), "act");
+            var absence = new Absence("name", "shortName", Guid.NewGuid(), Color.Empty);
 
             Expect.Call(_view.DayOff).Return(dayOff);
             Expect.Call(_view.ShiftCategory).Return(shiftCategory);
