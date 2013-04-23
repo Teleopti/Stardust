@@ -1,8 +1,6 @@
 ﻿using Rhino.ServiceBus;
 using Teleopti.Ccc.Domain.ApplicationLayer;
-using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
-using Teleopti.Interfaces;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -14,9 +12,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ApplicationLayer
 	{
 		private readonly IEventPublisher _publisher;
 		private readonly IServiceBus _bus;
-		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 
-		public EventsConsumer(IEventPublisher publisher, IServiceBus bus, IUnitOfWorkFactory unitOfWorkFactory)
+		public EventsConsumer(IEventPublisher publisher, IServiceBus bus, ICurrentUnitOfWorkFactory unitOfWorkFactory)
 		{
 			_publisher = publisher;
 			_bus = bus;
@@ -26,7 +24,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.ApplicationLayer
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void Consume(IEvent message)
 		{
-			using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+			using (var unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
 				_publisher.Publish(message);
 				unitOfWork.PersistAll();
