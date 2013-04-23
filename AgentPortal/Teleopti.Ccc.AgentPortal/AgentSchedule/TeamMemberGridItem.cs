@@ -1,10 +1,6 @@
-﻿#region Imports
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Teleopti.Ccc.AgentPortalCode.ScheduleControlDataProvider;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
-
-#endregion
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 
 namespace Teleopti.Ccc.AgentPortal.AgentSchedule
 {

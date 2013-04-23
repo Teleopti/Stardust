@@ -58,7 +58,7 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.AgentPreference
             cellDataWithExtendedPreferenceAndDayOffPreference.Preference.EndTimeLimitation = new TimeLimitation(validator);
             cellDataWithExtendedPreferenceAndDayOffPreference.Preference.EndTimeLimitation.MaxTime = new TimeSpan(17, 0, 0);
             cellDataWithExtendedPreferenceAndDayOffPreference.Preference.WorkTimeLimitation = new TimeLimitation(lengthValidator);
-            cellDataWithExtendedPreferenceAndDayOffPreference.Preference.DayOff = new DayOff("Free","DO","xx", Color.DodgerBlue);
+            cellDataWithExtendedPreferenceAndDayOffPreference.Preference.DayOff = new DayOff("Free","DO",Guid.NewGuid(), Color.DodgerBlue);
 
             _target = new PainterHelper(cellDataWithExtendedPreferenceAndDayOffPreference);
             Assert.IsFalse(_target.HasExtendedPreference());
@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.AgentPreference
             Assert.IsFalse(_target.CanPaintActivityPreference());
             cellData.Preference = new Preference();
             Assert.IsFalse(_target.CanPaintActivityPreference());
-            cellData.Preference.Activity = new Activity("xx", "Lunch");
+            cellData.Preference.Activity = new Activity(Guid.NewGuid(), "Lunch");
             Assert.IsTrue(_target.CanPaintActivityPreference());
         }
 
@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.AgentPreference
             cellData = new PreferenceCellData();
             _target = new PainterHelper(cellData);
             cellData.Preference = new Preference();
-            cellData.Preference.DayOff = new DayOff("Free", "DO", "xx", Color.Gray);
+            cellData.Preference.DayOff = new DayOff("Free", "DO", Guid.NewGuid(), Color.Gray);
             cellData.HasShift = true;
             Assert.IsFalse(_target.CanPaintEffectiveRestriction(false));
             cellData = new PreferenceCellData();
@@ -155,7 +155,7 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.AgentPreference
             cellData = new PreferenceCellData();
             _target = new PainterHelper(cellData);
             cellData.Preference = new Preference();
-            cellData.Preference.DayOff = new DayOff("Free", "DO", "xx", Color.Gray);
+            cellData.Preference.DayOff = new DayOff("Free", "DO", Guid.NewGuid(), Color.Gray);
             cellData.HasShift = true;
             Assert.IsFalse(_target.CanPaintEffectiveRestrictionRightToLeft(true));
             cellData = new PreferenceCellData();
@@ -189,7 +189,7 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.AgentPreference
             Assert.IsFalse(_target.CanPaintPreferredDayOff());
             cellData.Preference = new Preference();
             Assert.IsFalse(_target.CanPaintPreferredDayOff());
-            cellData.Preference.DayOff = new DayOff("Free", "DO", "xx", Color.Gray);
+            cellData.Preference.DayOff = new DayOff("Free", "DO", Guid.NewGuid(), Color.Gray);
             Assert.IsTrue(_target.CanPaintPreferredDayOff());
         }
 
@@ -205,7 +205,7 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.AgentPreference
             Assert.IsFalse(_target.CanPaintPreferredAbsence());
             cellData.Preference = new Preference();
             Assert.IsFalse(_target.CanPaintPreferredAbsence());
-            cellData.Preference.Absence = new Absence("Absence", "AB", "xx", Color.Gray);
+            cellData.Preference.Absence = new Absence("Absence", "AB", Guid.NewGuid(), Color.Gray);
             Assert.IsTrue(_target.CanPaintPreferredAbsence());
         }
 
@@ -241,7 +241,7 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.AgentPreference
             cellData.Preference.StartTimeLimitation = new TimeLimitation(validator);
             cellData.Preference.EndTimeLimitation = new TimeLimitation(validator);
             cellData.Preference.WorkTimeLimitation = new TimeLimitation(lengthValidator);
-            cellData.Preference.Activity = new Activity("xx", "Lunch");
+            cellData.Preference.Activity = new Activity(Guid.NewGuid(), "Lunch");
             _target = new PainterHelper(cellData);
             Assert.IsTrue(_target.CanPaintPreferredExtended());
         }
@@ -255,8 +255,8 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.AgentPreference
             cellData.Preference.StartTimeLimitation = new TimeLimitation(validator);
             cellData.Preference.EndTimeLimitation = new TimeLimitation(validator);
             cellData.Preference.WorkTimeLimitation = new TimeLimitation(lengthValidator);
-            cellData.Preference.Activity = new Activity("xx", "Lunch");
-            cellData.Preference.ShiftCategory = new ShiftCategory("Day", "DY", "xxx", Color.DodgerBlue);
+            cellData.Preference.Activity = new Activity(Guid.NewGuid(), "Lunch");
+            cellData.Preference.ShiftCategory = new ShiftCategory("Day", "DY", Guid.NewGuid(), Color.DodgerBlue);
             _target = new PainterHelper(cellData);
             Assert.IsTrue(_target.CanPaintPreferredExtended());
         }
@@ -283,7 +283,7 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.AgentPreference
             cellData.Preference = new Preference();
             cellData.Preference.ShiftCategory = null;
             Assert.IsFalse(_target.CanPaintPreferredShiftCategory());
-            cellData.Preference.ShiftCategory = new ShiftCategory("Day", "DY", "xx", Color.DeepSkyBlue);
+            cellData.Preference.ShiftCategory = new ShiftCategory("Day", "DY", Guid.NewGuid(), Color.DeepSkyBlue);
             Assert.IsTrue(_target.CanPaintPreferredShiftCategory());
         }
         [Test]
@@ -296,8 +296,8 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.AgentPreference
             cellData.Preference.StartTimeLimitation = new TimeLimitation(validator);
             cellData.Preference.EndTimeLimitation = new TimeLimitation(validator);
             cellData.Preference.WorkTimeLimitation = new TimeLimitation(lengthValidator);
-            cellData.Preference.Activity = new Activity("xx", "Lunch");
-            cellData.Preference.ShiftCategory = new ShiftCategory("Day", "DY", "xxx", Color.DodgerBlue);
+            cellData.Preference.Activity = new Activity(Guid.NewGuid(), "Lunch");
+            cellData.Preference.ShiftCategory = new ShiftCategory("Day", "DY", Guid.NewGuid(), Color.DodgerBlue);
             _target = new PainterHelper(cellData);
             Assert.IsFalse(_target.CanPaintPreferredShiftCategory());
         }

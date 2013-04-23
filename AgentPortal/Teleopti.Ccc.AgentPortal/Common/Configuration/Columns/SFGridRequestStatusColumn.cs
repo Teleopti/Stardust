@@ -4,7 +4,7 @@ using System.Drawing;
 using Syncfusion.Drawing;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.AgentPortalCode.Requests.RequestMaster;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 
 namespace Teleopti.Ccc.AgentPortal.Common.Configuration.Columns
 {

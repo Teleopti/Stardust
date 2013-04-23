@@ -1,17 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
+using System.Linq;
 using Syncfusion.Pdf.Graphics;
 using Teleopti.Ccc.AgentPortalCode.Helper;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 
 namespace Teleopti.Ccc.AgentPortalCode.ScheduleReporting
 {
     public class PdfScheduleAssignment : PdfScheduleTemplate
     {
-    	
-    	ActivityDto[] _arrActivityDto;
-        ShiftCategoryDto[] _arrShiftCategoryDto;
+    	ICollection<ActivityDto> _arrActivityDto;
+        ICollection<ShiftCategoryDto> _arrShiftCategoryDto;
 
         public PdfScheduleAssignment(float columnWidth, SchedulePartDto schedulePart, bool rightToLeft, ScheduleReportDetail details, CultureInfo culture):base(culture)
         {
@@ -27,28 +28,18 @@ namespace Teleopti.Ccc.AgentPortalCode.ScheduleReporting
             const float top = 2;
             const float headerTop = top;
 
-            DateTime start = schedulePart.ProjectedLayerCollection[0].Period.LocalStartDateTime;
-            DateTime end = schedulePart.ProjectedLayerCollection[schedulePart.ProjectedLayerCollection.Length -1].Period.LocalEndDateTime;
+            DateTime start = schedulePart.ProjectedLayerCollection.First().Period.LocalStartDateTime;
+            DateTime end = schedulePart.ProjectedLayerCollection.Last().Period.LocalEndDateTime;
 
         	var emptyColor = Color.Empty;
 			string category = string.Empty;
 
-        	ColorDto categoryColor = new ColorDto
-        	                         	{
-        	                         		Alpha = emptyColor.A,
-        	                         		AlphaSpecified = true,
-        	                         		Blue = emptyColor.B,
-        	                         		BlueSpecified = true,
-        	                         		Green = emptyColor.G,
-        	                         		GreenSpecified = true,
-        	                         		Red = emptyColor.R,
-        	                         		RedSpecified = true
-        	                         	};
+        	ColorDto categoryColor = new ColorDto(emptyColor);
 
-			if (schedulePart.PersonAssignmentCollection.Length > 0 && schedulePart.PersonAssignmentCollection[0].MainShift != null)
+			if (schedulePart.PersonAssignmentCollection.Count > 0 && schedulePart.PersonAssignmentCollection.First().MainShift != null)
 			{
 				ShiftCategoryDto shiftCategoryDto =
-					GetShiftCategory(schedulePart.PersonAssignmentCollection[0].MainShift.ShiftCategoryId);
+					GetShiftCategory(schedulePart.PersonAssignmentCollection.First().MainShift.ShiftCategoryId);
 
 				category = shiftCategoryDto.Name;
 				categoryColor = shiftCategoryDto.DisplayColor;
@@ -63,10 +54,10 @@ namespace Teleopti.Ccc.AgentPortalCode.ScheduleReporting
 
         }
 
-        private ActivityDto GetActivity(string activityId)
+        private ActivityDto GetActivity(Guid activityId)
         {
             if (_arrActivityDto == null)
-                _arrActivityDto = SdkServiceHelper.SchedulingService.GetActivities(new LoadOptionDto{LoadDeleted = true,LoadDeletedSpecified = true});
+                _arrActivityDto = SdkServiceHelper.SchedulingService.GetActivities(new LoadOptionDto{LoadDeleted = true});
 
             foreach (ActivityDto activityDto in _arrActivityDto)
             {
@@ -76,10 +67,10 @@ namespace Teleopti.Ccc.AgentPortalCode.ScheduleReporting
             return null;
         }
 
-        private ShiftCategoryDto GetShiftCategory(string categoryId)
+        private ShiftCategoryDto GetShiftCategory(Guid categoryId)
         {
             if (_arrShiftCategoryDto == null)
-                _arrShiftCategoryDto = SdkServiceHelper.SchedulingService.GetShiftCategories(new LoadOptionDto { LoadDeleted = true, LoadDeletedSpecified = true });
+                _arrShiftCategoryDto = SdkServiceHelper.SchedulingService.GetShiftCategories(new LoadOptionDto { LoadDeleted = true });
 
             foreach (ShiftCategoryDto shiftCategoryDto in _arrShiftCategoryDto)
             {
@@ -89,7 +80,7 @@ namespace Teleopti.Ccc.AgentPortalCode.ScheduleReporting
             return null;
         }
 
-        private float Render(float top, DateTime startDateTime, string category, DateTime endDateTime, TimeSpan contractTime, ColorDto categoryColor, float headerTop, ProjectedLayerDto[] payLoads, ScheduleReportDetail details, PersonMeetingDto[] personMeetingDtos)
+        private float Render(float top, DateTime startDateTime, string category, DateTime endDateTime, TimeSpan contractTime, ColorDto categoryColor, float headerTop, ICollection<ProjectedLayerDto> payLoads, ScheduleReportDetail details, ICollection<PersonMeetingDto> personMeetingDtos)
         {
             top = RenderDate(startDateTime, top);
             top = RenderCategory(category, top);
@@ -103,7 +94,7 @@ namespace Teleopti.Ccc.AgentPortalCode.ScheduleReporting
 
             if (details != ScheduleReportDetail.None)
             {
-                if (payLoads.Length > 0)
+                if (payLoads.Count > 0)
                 {
                     top = RenderSplitter(Color.Gray, top, 1);
                 }
@@ -157,7 +148,7 @@ namespace Teleopti.Ccc.AgentPortalCode.ScheduleReporting
         private const int MAX_NUMBER_OF_CHARACTERS = 20;
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
-        private float RenderPayLoad(ProjectedLayerDto visualLayer, float top, PersonMeetingDto[] personMeetingDtos)
+        private float RenderPayLoad(ProjectedLayerDto visualLayer, float top, IEnumerable<PersonMeetingDto> personMeetingDtos)
         {
             Format.Alignment = PdfTextAlignment.Center;
             const float fontSize = 7f;
@@ -170,7 +161,7 @@ namespace Teleopti.Ccc.AgentPortalCode.ScheduleReporting
             top = top + fontSize + 2;
             var nameRect = new RectangleF(0, top, ColumnWidth, fontSize + 2);
 
-            if (!string.IsNullOrEmpty((visualLayer.MeetingId)))
+            if (visualLayer.MeetingId.HasValue)
             {
                 foreach (PersonMeetingDto personMeetingDto in personMeetingDtos)
                 {

@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Net;
 using System.Runtime.Remoting;
+using System.ServiceModel;
 using System.Threading;
 using System.Web.Services.Protocols;
 using System.Windows.Forms;
@@ -23,7 +24,7 @@ using Teleopti.Ccc.AgentPortalCode.Common;
 using Teleopti.Ccc.AgentPortalCode.Foundation.StateHandlers;
 using Teleopti.Ccc.AgentPortalCode.Helper;
 using Teleopti.Ccc.AgentPortalCode.ScheduleReporting;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Events;
@@ -590,12 +591,12 @@ namespace Teleopti.Ccc.AgentPortal.Main
         private void BuildReportsTooItems()
         {
 
-            IList<MatrixReportInfoDto> reportList;
+            ICollection<MatrixReportInfoDto> reportList;
             try
             {
                 reportList = SdkServiceHelper.LogOnServiceClient.GetMatrixReportInfo();
             }
-            catch (SoapException)
+            catch (FaultException)
             {
                 reportList = new List<MatrixReportInfoDto>();
             }
@@ -714,7 +715,7 @@ namespace Teleopti.Ccc.AgentPortal.Main
             toolStripTabItemPreferences.Visible = true;
             toolStripTabItemPreferences.Checked = true;
             var dateOnly = new DateOnly(preferenceView.Presenter.FirstDateOfPeriod);
-            var dateOnlyDto = new DateOnlyDto { DateTime = dateOnly.Date, DateTimeSpecified = true };
+            var dateOnlyDto = new DateOnlyDto { DateTime = dateOnly.Date };
             var helper = new PlanningTimeBankHelper(SdkServiceHelper.SchedulingService);
             toolStripExTimeBank.Visible = helper.SetIsAllowed(PermissionService.Instance(),
                                                               ApplicationFunctionHelper.Instance(),
@@ -854,9 +855,9 @@ namespace Teleopti.Ccc.AgentPortal.Main
                 {
                 	var details = StateHolder.Instance.State.SessionScopeData;
                 	StateHolder.Instance.MessageBroker.RegisterEventSubscription(details.DataSource.Name,
-                	                                                             new Guid(details.BusinessUnit.Id), OnEventMessageHandler, typeof(IPushMessageDialogue));
+                	                                                             details.BusinessUnit.Id.GetValueOrDefault(), OnEventMessageHandler, typeof(IPushMessageDialogue));
 					StateHolder.Instance.MessageBroker.RegisterEventSubscription(details.DataSource.Name,
-																				 new Guid(details.BusinessUnit.Id), OnEventMessageHandler, typeof(IPersonRequest));
+																				 details.BusinessUnit.Id.GetValueOrDefault(), OnEventMessageHandler, typeof(IPersonRequest));
                 }
                 catch (RemotingException e)
                 {
@@ -972,7 +973,7 @@ namespace Teleopti.Ccc.AgentPortal.Main
                 return;
             // TODO convert to correct time zone
             var dateOnly = new DateOnly(preferenceView.Presenter.FirstDateOfPeriod);
-            var dateOnlyDto = new DateOnlyDto {DateTime = dateOnly.Date, DateTimeSpecified = true};
+            var dateOnlyDto = new DateOnlyDto {DateTime = dateOnly.Date};
             var helper = new PlanningTimeBankHelper(SdkServiceHelper.SchedulingService);
             var model = helper.GetPlanningTimeBankModel(StateHolder.Instance.StateReader.SessionScopeData.LoggedOnPerson,
                                                    dateOnlyDto);

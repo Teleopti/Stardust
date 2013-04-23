@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading;
 using Teleopti.Ccc.AgentPortalCode.Common;
@@ -7,7 +8,8 @@ using Teleopti.Ccc.AgentPortalCode.Common.Clipboard;
 using Teleopti.Ccc.AgentPortalCode.Common.Factory;
 using Teleopti.Ccc.AgentPortalCode.Helper;
 using Teleopti.Ccc.AgentPortalCode.ScheduleControlDataProvider;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos;
 
 namespace Teleopti.Ccc.AgentPortalCode.AgentSchedule
 {
@@ -33,8 +35,8 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentSchedule
             if (ScheduleStateHolder.CanVisualize(ScheduleAppointmentTypes.Request))
             {
                 var requests = SdkServiceHelper.SchedulingService.GetPersonRequests(ScheduleStateHolder.Person,
-                                                                                    period.LocalStartDateTime, true,
-                                                                                    period.LocalEndDateTime, true);
+                                                                                    period.LocalStartDateTime,
+                                                                                    period.LocalEndDateTime);
                 IList<ICustomScheduleAppointment> scheduleAppointments = ScheduleAppointmentFactory.Create(requests);
                 ScheduleStateHolder.FillScheduleDictionary(scheduleAppointments);
             }
@@ -55,7 +57,6 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentSchedule
             ScheduleStateHolder.ScheduleMessengerPeriod = period;
             DateOnlyDto dateOnlyDto = new DateOnlyDto();
             dateOnlyDto.DateTime = DateTime.SpecifyKind(utcDate.ToLocalTime(),DateTimeKind.Unspecified); //This could result in something really wrong, but more correct than today
-            dateOnlyDto.DateTimeSpecified = true;
 
             SchedulePartDto schedulePart = GetSchedulePart(dateOnlyDto, 1);
 
@@ -73,10 +74,10 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentSchedule
             	            	{
             	            		StartDate = dateOnlyDto,
             	            		EndDate = dateOnlyDto,
-            	            		PersonId = ScheduleStateHolder.Person.Id,
+            	            		PersonId = ScheduleStateHolder.Person.Id.GetValueOrDefault(),
             	            		TimeZoneId = ScheduleStateHolder.Person.TimeZoneId
             	            	};
-                return SdkServiceHelper.SchedulingService.GetSchedulesByQuery(query)[0];
+                return SdkServiceHelper.SchedulingService.GetSchedulesByQuery(query).First();
             }
             catch (WebException webException)
             {

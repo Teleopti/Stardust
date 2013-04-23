@@ -1,43 +1,27 @@
+using System;
 using System.Drawing;
 
 namespace Teleopti.Ccc.AgentPortalCode.Common
 {
     public class DayOff
     {
-        private readonly Color _color;
-        private readonly string _name;
-        private readonly string _shortName;
-        private readonly string _id;
-
         private DayOff(){}
 
-        public DayOff(string name, string shortName, string id, Color color)
+        public DayOff(string name, string shortName, Guid? id, Color color)
             : this()
         {
-            _name = name;
-            _shortName = shortName;
-            _color = color;
-            _id = id;
+            Name = name;
+            ShortName = shortName;
+            DisplayColor = color;
+            Id = id;
         }
 
-        public Color DisplayColor
-        {
-            get { return _color; }
-        }
+        public Color DisplayColor { get; private set; }
 
-        public string Name
-        {
-            get { return _name; }
-        }
+        public string Name { get; private set; }
 
-        public string ShortName
-        {
-            get { return _shortName; }
-        }
+        public string ShortName { get; private set; }
 
-        public string Id
-        {
-            get { return _id; }
-        }
+        public Guid? Id { get; private set; }
     }
 }

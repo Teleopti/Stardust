@@ -1,5 +1,5 @@
 ﻿using System.Drawing;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 
 namespace Teleopti.Ccc.AgentPortalCode.Helper
 {
@@ -7,17 +7,7 @@ namespace Teleopti.Ccc.AgentPortalCode.Helper
     {
         public static ColorDto CreateColorDto(Color color)
         {
-            return new ColorDto
-                       {
-                           Alpha = color.A,
-                           AlphaSpecified = true,
-                           Blue = color.B,
-                           BlueSpecified = true,
-                           Green = color.G,
-                           GreenSpecified = true,
-                           Red = color.R,
-                           RedSpecified = true
-                       };
+            return new ColorDto(color);
         }
 
         public static Color CreateColorFromDto(ColorDto colorDto)

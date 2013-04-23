@@ -1,5 +1,5 @@
 ﻿using System.Windows.Forms;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 
 namespace Teleopti.Ccc.AgentPortal.Requests.FormHandler
 {
