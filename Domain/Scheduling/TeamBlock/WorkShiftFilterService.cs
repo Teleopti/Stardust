@@ -7,7 +7,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 {
 	public interface IWorkShiftFilterService
 	{
-		IList<IShiftProjectionCache> Filter(DateOnly dateOnly, ITeamBlockInfo teamBlockInfo, IEffectiveRestriction effectiveRestriction, ISchedulingOptions schedulingOptions, IWorkShiftFinderResult finderResult);
+		IList<IShiftProjectionCache> Filter(DateOnly dateOnly, ITeamBlockInfo teamBlockInfo,
+		                                    IEffectiveRestriction effectiveRestriction,
+		                                    ISchedulingOptions schedulingOptions, IWorkShiftFinderResult finderResult);
+		IList<IShiftProjectionCache> Filter(DateOnly dateOnly, ITeamBlockInfo teamBlockInfo,
+		                                    IEffectiveRestriction effectiveRestriction, IShiftProjectionCache suggestedShift,
+		                                    ISchedulingOptions schedulingOptions, IWorkShiftFinderResult finderResult);
 	}
 
 	public class WorkShiftFilterService : IWorkShiftFilterService
@@ -27,6 +32,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		private readonly IWorkTimeLimitationShiftFilter _workTimeLimitationShiftFilter;
 		private readonly IShiftLengthDecider _shiftLengthDecider;
 		private readonly IWorkShiftMinMaxCalculator _minMaxCalculator;
+		private readonly ICommonActivityFilter _commonActivityFilter;
 
 		public WorkShiftFilterService(IActivityRestrictionsShiftFilter activityRestrictionsShiftFilter,
 			IBusinessRulesShiftFilter businessRulesShiftFilter,
@@ -42,7 +48,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			ITimeLimitsRestrictionShiftFilter timeLimitsRestrictionShiftFilter,
 			IWorkTimeLimitationShiftFilter workTimeLimitationShiftFilter,
 			IShiftLengthDecider shiftLengthDecider,
-			IWorkShiftMinMaxCalculator minMaxCalculator)
+			IWorkShiftMinMaxCalculator minMaxCalculator,
+			ICommonActivityFilter commonActivityFilter)
 		{
 			_activityRestrictionsShiftFilter = activityRestrictionsShiftFilter;
 			_businessRulesShiftFilter = businessRulesShiftFilter;
@@ -59,10 +66,18 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			_workTimeLimitationShiftFilter = workTimeLimitationShiftFilter;
 			_shiftLengthDecider = shiftLengthDecider;
 			_minMaxCalculator = minMaxCalculator;
+			_commonActivityFilter = commonActivityFilter;
+		}
+
+		public IList<IShiftProjectionCache> Filter(DateOnly dateOnly, ITeamBlockInfo teamBlockInfo,
+		                                           IEffectiveRestriction effectiveRestriction,
+		                                           ISchedulingOptions schedulingOptions, IWorkShiftFinderResult finderResult)
+		{
+			return Filter(dateOnly, teamBlockInfo, effectiveRestriction, null, schedulingOptions, finderResult);
 		}
 
 		public IList<IShiftProjectionCache> Filter(DateOnly dateOnly, ITeamBlockInfo teamBlockInfo ,
-													IEffectiveRestriction effectiveRestriction,
+													IEffectiveRestriction effectiveRestriction, IShiftProjectionCache suggestedShift,
 													ISchedulingOptions schedulingOptions, IWorkShiftFinderResult finderResult)
 		{
 			if (effectiveRestriction == null)
@@ -83,14 +98,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				effectiveRestriction.ShiftCategory = schedulingOptions.ShiftCategory;
 
 			var shiftList = _shiftProjectionCachesFromAdjustedRuleSetBagShiftFilter.Filter(dateOnly, groupPerson, false);
-			shiftList = runFilters(dateOnly, effectiveRestriction, schedulingOptions, finderResult, shiftList, groupPerson, matrixList);
+			shiftList = runFilters(dateOnly, effectiveRestriction, schedulingOptions, finderResult, shiftList, groupPerson, matrixList, suggestedShift);
 
 		    return shiftList.Count == 0 ? null : shiftList;
 		}
 
 	    private IList<IShiftProjectionCache> runFilters(DateOnly dateOnly, IEffectiveRestriction effectiveRestriction,
 	                             ISchedulingOptions schedulingOptions, IWorkShiftFinderResult finderResult, IList<IShiftProjectionCache> shiftList,
-	                             IGroupPerson groupPerson, List<IScheduleMatrixPro> matrixList)
+								 IGroupPerson groupPerson, List<IScheduleMatrixPro> matrixList, IShiftProjectionCache suggestedShift)
 	    {
 	        shiftList = _commonMainShiftFilter.Filter(shiftList, effectiveRestriction);
 	        shiftList = _mainShiftOptimizeActivitiesSpecificationShiftFilter.Filter(shiftList,
@@ -111,10 +126,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	        shiftList = _notOverWritableActivitiesShiftFilter.Filter(dateOnly, groupPerson, shiftList, finderResult);
 	        shiftList = _personalShiftsShiftFilter.Filter(dateOnly, groupPerson, shiftList, finderResult);
 
+			shiftList = _commonActivityFilter.Filter(shiftList, schedulingOptions, suggestedShift);
+
 	        if (schedulingOptions.WorkShiftLengthHintOption == WorkShiftLengthHintOption.AverageWorkTime)
 	        {
 	            shiftList = _shiftLengthDecider.FilterList(shiftList, _minMaxCalculator, matrixList[0], schedulingOptions);
 	        }
+
 	        return shiftList;
 	    }
 	}

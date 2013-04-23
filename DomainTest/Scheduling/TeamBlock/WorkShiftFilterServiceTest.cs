@@ -49,6 +49,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		private ITeamBlockInfo _teamBlockInfo;
 		private GroupPerson _groupPerson;
 		private List<IScheduleMatrixPro> _matrixList;
+		private ICommonActivityFilter _commonActivityFilter;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), SetUp]
 		public void Setup()
@@ -80,6 +81,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				_mocks.StrictMock<IShiftProjectionCachesFromAdjustedRuleSetBagShiftFilter>();
 			_timeLimitsRestrictionShiftFilter = _mocks.StrictMock<ITimeLimitsRestrictionShiftFilter>();
 			_workTimeLimitationShiftFilter = _mocks.StrictMock<IWorkTimeLimitationShiftFilter>();
+			_commonActivityFilter = _mocks.StrictMock<ICommonActivityFilter>();
 			_shiftLengthDecider = _mocks.StrictMock<IShiftLengthDecider>();
 			_target = new WorkShiftFilterService(_activityRestrictionsShiftFilter, _businessRulesShiftFilter,
 												 _commonMainShiftFilter, _contractTimeShiftFilter,
@@ -89,7 +91,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 												 _shiftCategoryRestrictionShiftFilter,
 												 _shiftProjectionCachesFromAdjustedRuleSetBagShiftFilter,
 												 _timeLimitsRestrictionShiftFilter, _workTimeLimitationShiftFilter,
-												 _shiftLengthDecider, _workShiftMinMaxCalculator);
+												 _shiftLengthDecider, _workShiftMinMaxCalculator, _commonActivityFilter);
 			_personalShiftMeetingTimeChecker = _mocks.StrictMock<IPersonalShiftMeetingTimeChecker>();
 			_groupPerson = new GroupPerson(new List<IPerson>{_person}, _dateOnly, "Hej", Guid.NewGuid());
 			_matrixList = new List<IScheduleMatrixPro> { _matrix };
@@ -174,7 +176,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_personalShiftsShiftFilter.Filter(_dateOnly, _groupPerson, caches, _finderResult)).Return(caches);
 				Expect.Call(_shiftLengthDecider.FilterList(caches, _workShiftMinMaxCalculator, _matrix, _schedulingOptions))
 				      .Return(caches);
-
+				Expect.Call(_commonActivityFilter.Filter(caches, _schedulingOptions, null)).Return(caches);
 			}
 			using (_mocks.Playback())
 			{
@@ -211,7 +213,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_notOverWritableActivitiesShiftFilter.Filter(_dateOnly, _groupPerson, caches, _finderResult)).Return(caches);
 				Expect.Call(_personalShiftsShiftFilter.Filter(_dateOnly, _groupPerson, caches, _finderResult)).Return(caches);
 				Expect.Call(_shiftLengthDecider.FilterList(caches, _workShiftMinMaxCalculator, _matrix, _schedulingOptions))
-				      .Return(new List<IShiftProjectionCache>());
+					  .Return(new List<IShiftProjectionCache>());
+				Expect.Call(_commonActivityFilter.Filter(caches, _schedulingOptions, null)).Return(caches);
 			}
 			using (_mocks.Playback())
 			{
@@ -282,6 +285,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_businessRulesShiftFilter.Filter(_groupPerson, caches, _dateOnly, _finderResult)).Return(caches);
 				Expect.Call(_notOverWritableActivitiesShiftFilter.Filter(_dateOnly, _groupPerson, caches, _finderResult)).Return(caches);
 				Expect.Call(_personalShiftsShiftFilter.Filter(_dateOnly, _groupPerson, caches, _finderResult)).Return(caches);
+				Expect.Call(_commonActivityFilter.Filter(caches, _schedulingOptions, null)).Return(caches);
 				Expect.Call(_shiftLengthDecider.FilterList(caches, _workShiftMinMaxCalculator, _matrix, _schedulingOptions))
 					  .Return(new List<IShiftProjectionCache>());
 			}
