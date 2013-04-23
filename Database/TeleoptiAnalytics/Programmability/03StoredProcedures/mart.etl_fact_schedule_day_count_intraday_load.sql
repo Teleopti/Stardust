@@ -16,6 +16,24 @@ CREATE PROCEDURE [mart].[etl_fact_schedule_day_count_intraday_load]
 @scenario_code uniqueidentifier
 AS
 
+CREATE TABLE #stg_schedule_changed(
+	person_id int,
+	date_id int,
+	scenario_id int,
+	business_unit_id int
+	)
+
+CREATE TABLE #fact_schedule_day_off_count (
+	date_id int, 
+	start_interval_id int, 
+	person_id int, 
+	scenario_id int,
+	date smalldatetime, 
+	person_code uniqueidentifier, 
+	scenario_code uniqueidentifier,
+	)
+
+--Verify this is the default scenario, if not RAISERROR
 if (select count(*)
 	from mart.dim_scenario
 	where business_unit_code = @business_unit_code
@@ -27,10 +45,11 @@ BEGIN
 	RAISERROR (@ErrorMsg,16,1)
 END
 
+--Get BU id
 DECLARE @business_unit_id int
 SELECT @business_unit_id = business_unit_id FROM mart.dim_business_unit WHERE business_unit_code = @business_unit_code
-CREATE TABLE #stg_schedule_changed(person_id int,date_id int,scenario_id int,business_unit_id int)
 
+--Create a tmp table with Id instead of code
 INSERT INTO #stg_schedule_changed
 SELECT dp.person_id,dd.date_id,ds.scenario_id,bu.business_unit_id
 FROM Stage.stg_schedule_changed stg
@@ -47,26 +66,27 @@ INNER JOIN mart.dim_person dp
 		)
 INNER JOIN mart.dim_scenario ds
 	ON ds.scenario_code = stg.scenario_code
+	AND ds.scenario_code = @scenario_code
 INNER JOIN mart.dim_business_unit bu
 	ON bu.business_unit_code = stg.business_unit_code
+	AND bu.business_unit_code = @business_unit_code
 
 --delete days changed from mart.fact_schedule_day_count (new, updated or deleted)
-DELETE fs2
+DELETE fc
 FROM #stg_schedule_changed stg
-INNER JOIN mart.fact_schedule_day_count fs2
-	ON stg.date_id = fs2.date_id
-	AND stg.person_id = fs2.person_id
-	AND stg.business_unit_id = fs2.business_unit_id
-	AND stg.scenario_id = fs2.scenario_id
+INNER JOIN mart.fact_schedule_day_count fc
+	ON stg.date_id = fc.date_id
+	AND stg.person_id = fc.person_id
+	AND stg.business_unit_id = fc.business_unit_id
+	AND stg.scenario_id = fc.scenario_id
 
-SELECT * FROM #stg_schedule_changed
-
------------------------------------------------------------------------------------
+----------------------------------------------------------------------------------
 -- Insert shift_category_count rows
--- Take a look at performance on this insert
+-- Take a look at performance on the select
 INSERT INTO mart.fact_schedule_day_count
 	(
 	date_id, --day the absence start, the shift starts or the day off starts
+	start_interval_id,--interval_id that the the absence start, the shift starts or the day off starts
 	person_id, 
 	scenario_id, 
 	starttime,
@@ -75,29 +95,31 @@ INSERT INTO mart.fact_schedule_day_count
 	absence_id, 
 	day_count, 
 	business_unit_id, 
-	datasource_id
+	datasource_id, 
+	datasource_update_date
 	)
 
-SELECT 
-	date_id					= fs.shift_startdate_id, 
-	person_id				= fs.person_id, 
-	scenario_id				= fs.scenario_id, 
-	starttime				= MAX(fs.shift_starttime),
-	shift_category_id		= MAX(fs.shift_category_id), 
+SELECT
+	date_id					= f.shift_startdate_id, 
+	start_interval_id		= f.shift_startinterval_id,
+	person_id				= f.person_id, 
+	scenario_id				= f.scenario_id, 
+	starttime				= MAX(f.shift_starttime),
+	shift_category_id		= MAX(f.shift_category_id), 
 	day_off_id				= -1, 
 	absence_id				= -1, 
-	day_count				= COUNT(DISTINCT fs.shift_category_id) , 
-	business_unit_id		= fs.business_unit_id, 
-	datasource_id			= 1
+	day_count				= COUNT(DISTINCT f.shift_category_id) , 
+	business_unit_id		= f.business_unit_id, 
+	datasource_id			= f.datasource_id, 
+	datasource_update_date	= MAX(datasource_update_date)
 FROM
-	mart.fact_schedule fs
+	mart.fact_schedule f
 INNER JOIN #stg_schedule_changed stg
-	ON stg.date_id = fs.schedule_date_id
-	AND stg.person_id = fs.person_id
-	AND stg.scenario_id = fs.scenario_id
-	AND stg.business_unit_id = fs.business_unit_id
-GROUP BY fs.shift_startdate_id,fs.shift_startinterval_id,fs.person_id,fs.scenario_id,fs.business_unit_id
-RETURN 0
+	ON f.shift_startdate_id = stg.date_id
+	AND f.person_id = stg.person_id
+	AND f.business_unit_id  = @business_unit_id
+WHERE shift_category_id<>-1
+GROUP BY f.shift_startdate_id,f.shift_startinterval_id,f.person_id,f.scenario_id,f.business_unit_id,f.datasource_id
 
 --WHOLE DAY ABSENCES
 INSERT INTO mart.fact_schedule_day_count
@@ -157,18 +179,8 @@ ON
 	stg.scenario_code = ds.scenario_code
 GROUP BY dsd.date_id,di.interval_id,dp.person_id,ds.scenario_id,dp.business_unit_id,stg.datasource_id
 
-RETURN 0
 --DAY OFF 
 --(START: Special handling to increase start_interval_id for day off if already shift category or absence on same PK.)
-CREATE TABLE #fact_schedule_day_off_count (
-											date_id int, 
-											start_interval_id int, 
-											person_id int, 
-											scenario_id int,
-											date smalldatetime, 
-											person_code uniqueidentifier, 
-											scenario_code uniqueidentifier,
-											)
 INSERT INTO #fact_schedule_day_off_count
 SELECT
 	date_id				= dsd.date_id, 
@@ -201,7 +213,6 @@ LEFT JOIN
 ON
 	stg.scenario_code = ds.scenario_code
 GROUP BY dsd.date_id,stg.date,di.interval_id,dp.person_id,stg.person_code,ds.scenario_id,stg.scenario_code,dd.day_off_id,dp.business_unit_id,stg.datasource_id
-ORDER BY dsd.date_id,di.interval_id,dp.person_id,ds.scenario_id,dd.day_off_id,dp.business_unit_id,stg.datasource_id
 
 UPDATE stage.stg_schedule_day_off_count
 SET start_interval_id = stg.start_interval_id + 1
