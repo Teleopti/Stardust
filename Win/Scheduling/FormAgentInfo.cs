@@ -12,7 +12,11 @@ using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.PersonalAccount;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.SystemCheck;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.ExceptionHandling;
@@ -753,5 +757,12 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
             initializeFairnessTab();
         }
+
+		private void listViewPerson_DoubleClick(object sender, EventArgs e)
+		{
+			IPersonAssignmentDateResetter resetter = new PersonAssignmentDateResetter();
+
+			//resetter.ExecuteFor(_selectedPerson, TeleoptiPrincipal.Current.Identity.AuthenticationType.)
+		}
     }
 }

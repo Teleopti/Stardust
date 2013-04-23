@@ -359,6 +359,7 @@
     <Compile Include="SystemCheck\CheckMessageBroker.cs" />
     <Compile Include="SystemCheck\PersonAssignmentAuditDateSetter.cs" />
     <Compile Include="SystemCheck\PersonAssignmentCommon.cs" />
+    <Compile Include="SystemCheck\PersonAssignmentDateResetter.cs" />
     <Compile Include="SystemCheck\PersonAssignmentDateSetter.cs" />
     <Compile Include="SystemCheck\SystemCheckerValidator.cs" />
     <Compile Include="UnitOfWork\CurrentUnitOfWork.cs" />
