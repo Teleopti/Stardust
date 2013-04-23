@@ -31,8 +31,12 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		                                                                   	};
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Denormalizers"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		protected internal NHibernateUnitOfWorkFactory(ISessionFactory sessionFactory, IAuditSetter auditSettingProvider, IEnumerable<IMessageSender> externalDenormalizers)
+		protected internal NHibernateUnitOfWorkFactory(ISessionFactory sessionFactory, 
+																										IAuditSetter auditSettingProvider, 
+																										string connectionString,
+																										IEnumerable<IMessageSender> externalDenormalizers)
 		{
+			ConnectionString = connectionString;
 			SessionContextBinder = new StaticSessionContextBinder();
 			InParameter.NotNull("sessionFactory", sessionFactory);
 			sessionFactory.Statistics.IsStatisticsEnabled = true;
@@ -102,6 +106,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		{
 			get { return _auditSettingProvider; }
 		}
+
+		public string ConnectionString { get; private set; }
 
 		protected virtual IUnitOfWork MakeUnitOfWork(ISession session, IMessageBroker messaging, NHibernateFilterManager filterManager)
 		{

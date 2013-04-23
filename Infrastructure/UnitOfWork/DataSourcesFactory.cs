@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			using (PerformanceOutput.ForOperation("Create authentication settings"))
 				_authenticationSettings = createAuthenticationSettings(hibernateConfiguration);
 			var appFact =
-				 new NHibernateUnitOfWorkFactory(buildSessionFactory(_applicationConfiguration), _enversConfiguration.AuditSettingProvider, _externalDenormalizers);
+				 new NHibernateUnitOfWorkFactory(buildSessionFactory(_applicationConfiguration), _enversConfiguration.AuditSettingProvider, _applicationConfiguration.Properties[Environment.ConnectionString], _externalDenormalizers);
 			if (_statisticConfiguration == null)
 			{
                 return new DataSource(appFact, null, _authenticationSettings, buildedConnectionString);
@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			}
 			return
 				 new DataSource(appFact,
-                                      new NHibernateUnitOfWorkMatrixFactory(buildSessionFactory(_statisticConfiguration)), _authenticationSettings, buildedConnectionString);
+                                      new NHibernateUnitOfWorkMatrixFactory(buildSessionFactory(_statisticConfiguration), _statisticConfiguration.Properties[Environment.ConnectionString]), _authenticationSettings, buildedConnectionString);
 		}
 
 		public IDataSource Create(IDictionary<string, string> settings,
@@ -134,11 +134,11 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		{
 			NHibernateUnitOfWorkMatrixFactory statFactory;
 			createApplicationConfiguration(settings);
-			var appFactory = new NHibernateUnitOfWorkFactory(buildSessionFactory(_applicationConfiguration), _enversConfiguration.AuditSettingProvider,_externalDenormalizers);
+			var appFactory = new NHibernateUnitOfWorkFactory(buildSessionFactory(_applicationConfiguration), _enversConfiguration.AuditSettingProvider,_applicationConfiguration.Properties[Environment.ConnectionString],_externalDenormalizers);
 			if (!string.IsNullOrEmpty(statisticConnectionString))
 			{
 				_statisticConfiguration = createStatisticConfigurationInner(statisticConnectionString, NoDataSourceName);
-				statFactory = new NHibernateUnitOfWorkMatrixFactory(buildSessionFactory(_statisticConfiguration));
+				statFactory = new NHibernateUnitOfWorkMatrixFactory(buildSessionFactory(_statisticConfiguration), _statisticConfiguration.Properties[Environment.ConnectionString]);
 			}
 			else
 			{
