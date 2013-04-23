@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
@@ -30,6 +29,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.List<ScheduleDayReadModel>();
 		}
 
+		
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public void ClearPeriodForPerson(DateOnlyPeriod period, Guid personId)
 		{
@@ -67,41 +67,4 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return result.Count > 0;
 		}
 	}
-
-	public class ScheduleDayReadModel
-	{
-		private string _label;
-
-		public ScheduleDayReadModel()
-		{
-			StartDateTime = new DateTime(1900,1,1);
-			EndDateTime = new DateTime(1900,1,1);
-		}
-		public Guid PersonId { get; set; }
-		public DateTime Date { get; set; }
-		public DateOnly BelongsToDate { get{return new DateOnly(Date);} }
-		public DateTime StartDateTime { get; set; }
-		public DateTime EndDateTime { get; set; }
-		public bool Workday { get; set; }
-		public string Label
-		{
-			get
-			{
-				if (_label == null)
-					return "";
-				return _label;
-			}
-			set { _label = value; }
-		}
-
-		public int ColorCode { get; set; }
-		public Color DisplayColor { get { return Color.FromArgb(ColorCode); } }
-		public long WorkTimeTicks { get; set; }
-		public TimeSpan WorkTime { get { return TimeSpan.FromTicks(WorkTimeTicks); } }
-		public long ContractTimeTicks { get; set; }
-		public TimeSpan ContractTime { get { return TimeSpan.FromTicks(ContractTimeTicks); } }
-
-		public bool NotScheduled { get; set; }
-	}
-
 }

@@ -55,7 +55,7 @@
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>
     </DocumentationFile>
-      <CodeAnalysisRuleSet>$(SolutionDir)\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>$(SolutionDir)\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -64,7 +64,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-      <CodeAnalysisRuleSet>$(SolutionDir)\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>$(SolutionDir)\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
@@ -75,7 +75,7 @@
     <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
     <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
     <ErrorReport>prompt</ErrorReport>
-      <CodeAnalysisRuleSet>$(SolutionDir)\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>$(SolutionDir)\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <OutputPath>bin\x86\Release\</OutputPath>
@@ -86,9 +86,15 @@
     <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
     <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
     <ErrorReport>prompt</ErrorReport>
-      <CodeAnalysisRuleSet>$(SolutionDir)\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>$(SolutionDir)\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Autofac">
+      <HintPath>..\packages\Autofac.3.0.1\lib\net40\Autofac.dll</HintPath>
+    </Reference>
+    <Reference Include="Autofac.Configuration">
+      <HintPath>..\packages\Autofac.3.0.1\lib\net40\Autofac.Configuration.dll</HintPath>
+    </Reference>
     <Reference Include="Iesi.Collections">
       <HintPath>..\packages\Iesi.Collections.3.2.0.4000\lib\Net35\Iesi.Collections.dll</HintPath>
     </Reference>
@@ -118,6 +124,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplicationLayer\AutofacResolve.cs" />
+    <Compile Include="ApplicationLayer\EventPublisher.cs" />
+    <Compile Include="ApplicationLayer\IResolve.cs" />
+    <Compile Include="ApplicationLayer\IServiceBusSender.cs" />
+    <Compile Include="ApplicationLayer\ServiceBusEventPublisher.cs" />
+    <Compile Include="ApplicationLayer\SyncCommandDispatcher.cs" />
     <Compile Include="Foundation\ConfigReader.cs" />
     <Compile Include="Foundation\ConfigurationDictionaryWrapper.cs" />
     <Compile Include="Foundation\ConfigurationManagerWrapper.cs" />
@@ -243,7 +255,7 @@
     <Compile Include="Repositories\ApplicationRolePersonRepository.cs" />
     <Compile Include="Repositories\CurrentUnitOfWorkExtensions.cs" />
     <Compile Include="Repositories\EtlReadModelRepository.cs" />
-    <Compile Include="Repositories\PersonScheduleDayReadModelRepository.cs" />
+    <Compile Include="Repositories\PersonScheduleDayReadModelStorage.cs" />
     <Compile Include="Repositories\IJobResultRepository.cs" />
     <Compile Include="Repositories\LicenseStatusRepository.cs" />
     <Compile Include="Repositories\IImportForecastsRepository.cs" />
@@ -260,7 +272,6 @@
     <Compile Include="Repositories\DenormalizerQueueItem.cs" />
     <Compile Include="Repositories\DenormalizerQueueRepository.cs" />
     <Compile Include="Repositories\IDenormalizerQueueRepository.cs" />
-    <Compile Include="Repositories\IScheduleProjectionReadOnlyRepository.cs" />
     <Compile Include="Repositories\RequestHistoryReadOnlyRepository.cs" />
     <Compile Include="Repositories\PersonSelectorReadOnlyRepository.cs" />
     <Compile Include="Repositories\ScheduleDayReadModelRepository.cs" />
@@ -358,7 +369,11 @@
     <Compile Include="SystemCheck\CheckMessageBroker.cs" />
     <Compile Include="SystemCheck\SystemCheckerValidator.cs" />
     <Compile Include="UnitOfWork\CurrentUnitOfWork.cs" />
+    <Compile Include="UnitOfWork\DenormalizationQueueEventsPublisher.cs" />
     <Compile Include="UnitOfWork\DenormalizerContext.cs" />
+    <Compile Include="UnitOfWork\FixedCurrentUnitOfWork.cs" />
+    <Compile Include="UnitOfWork\EventsPackageMessage.cs" />
+    <Compile Include="UnitOfWork\EventsMessageSender.cs" />
     <Compile Include="UnitOfWork\GroupPageChangedMessageSender.cs" />
     <Compile Include="UnitOfWork\IRunSql.cs" />
     <Compile Include="UnitOfWork\ISaveToDenormalizationQueue.cs" />
@@ -384,7 +399,7 @@
     <Compile Include="UnitOfWork\SaveToDenormalizationQueue.cs" />
     <Compile Include="UnitOfWork\ScheduleMessageSender.cs" />
     <Compile Include="UnitOfWork\SqlQuery.cs" />
-    <Compile Include="UnitOfWork\TransactionCallbacks.cs" />
+    <Compile Include="UnitOfWork\TransactionCallback.cs" />
     <Compile Include="UnitOfWork\UnitOfWorkFactory.cs" />
     <Compile Include="UnitOfWork\CurrentUnitOfWorkFactory.cs" />
   </ItemGroup>

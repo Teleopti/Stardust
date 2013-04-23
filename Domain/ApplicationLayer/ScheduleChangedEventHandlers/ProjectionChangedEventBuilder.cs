@@ -59,8 +59,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 							eventScheduleDay.Label = scheduleDay.PersonDayOffCollection()[0].DayOff.Description.ShortName;
 							break;
 						case SchedulePartView.None:
-							denormalizedScheduleDay.Label = "";
-							denormalizedScheduleDay.NotScheduled = true;
+							eventScheduleDay.Label = "";
+							eventScheduleDay.NotScheduled = true;
 							break;
 					}
 

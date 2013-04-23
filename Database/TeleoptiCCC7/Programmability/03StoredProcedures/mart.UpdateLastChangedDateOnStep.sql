@@ -13,7 +13,7 @@ CREATE PROCEDURE [mart].[UpdateLastChangedDateOnStep]
 -- =============================================
 -- Date			Who	Description
 -- =============================================
--- exec [mart].[UpdateLastChangedDateOnStep] 'stg_schedule_day_off_count, stg_day_off, dim_day_off', '4F949017-AF0D-4DA3-80BC-A18900580184', '2013-04-01'
+-- exec [mart].[UpdateLastChangedDateOnStep] 'stg_schedule, stg_schedule_day_absence_count', '4F949017-AF0D-4DA3-80BC-A18900580184', '2013-04-01'
 -- SELECT * FROM mart.LastUpdatedPerStep
 
 AS

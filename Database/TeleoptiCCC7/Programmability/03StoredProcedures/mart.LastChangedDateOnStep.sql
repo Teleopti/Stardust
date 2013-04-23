@@ -12,7 +12,7 @@ CREATE PROCEDURE [mart].[LastChangedDateOnStep]
 -- =============================================
 -- Date			Who	Description
 -- =============================================
--- exec [mart].[LastChangedDateOnStep] 'stg_schedule_day_off_count, stg_day_off, dim_day_off', '4F949017-AF0D-4DA3-80BC-A18900580184'
+-- exec [mart].[LastChangedDateOnStep] 'stg_schedule, stg_schedule_day_absence_count', 'fc2f309c-3e3c-4cfb-9c11-a1570077b92b'
 AS
 
 DECLARE @thisTime datetime
