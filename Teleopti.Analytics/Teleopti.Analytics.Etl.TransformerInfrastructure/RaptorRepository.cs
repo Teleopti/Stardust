@@ -249,7 +249,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 				};
 
 			return
-				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_schedule_day_count_load", parameterList,
+				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_schedule_day_count_intraday_load", parameterList,
 											  _dataMartConnectionString);
 		}
 

@@ -11,9 +11,8 @@ GO
 -- Interface:	smalldatetime, with only datepart! No time allowed
 -- =============================================
 CREATE PROCEDURE [mart].[etl_fact_schedule_day_count_intraday_load] 
---exec [mart].[etl_fact_schedule_day_count_intraday_load]  @business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA',@scenario_code='E21D813C-238C-4C3F-9B49-9B5E015AB432'
-@business_unit_code uniqueidentifier,
-@scenario_code uniqueidentifier
+--exec [mart].[etl_fact_schedule_day_count_intraday_load]  @business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA'
+@business_unit_code uniqueidentifier
 AS
 
 CREATE TABLE #stg_schedule_changed(
@@ -32,6 +31,10 @@ CREATE TABLE #fact_schedule_day_off_count (
 	person_code uniqueidentifier, 
 	scenario_code uniqueidentifier,
 	)
+
+--Get first row scenario in stage table, currently this must(!) be the default scenario, else RAISERROR
+DECLARE @scenario_code uniqueidentifier
+SELECT TOP 1 @scenario_code=scenario_code FROM Stage.stg_schedule_changed
 
 --Verify this is the default scenario, if not RAISERROR
 if (select count(*)
@@ -66,7 +69,7 @@ INNER JOIN mart.dim_person dp
 		)
 INNER JOIN mart.dim_scenario ds
 	ON ds.scenario_code = stg.scenario_code
-	AND ds.scenario_code = @scenario_code
+	AND ds.scenario_code = @scenario_code  --remove this if we are to handle multiple scenarios
 INNER JOIN mart.dim_business_unit bu
 	ON bu.business_unit_code = stg.business_unit_code
 	AND bu.business_unit_code = @business_unit_code
