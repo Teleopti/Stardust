@@ -27,6 +27,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			Navigation.GoTo("Test/ExpireMyCookie", new WaitUntilAt("Test/ExpireMyCookie"));
 		}
 
+		public static void SetCurrentDate(DateTime time)
+		{
+			Navigation.GoTo("Test/SetCurrentTime?dateSet=" + time, new WaitUntilAt("Test/SetCurrentTime"));
+		}
+
 		public static void BeforeTestRun()
 		{
 			Navigation.GotoRaw("file://" + System.IO.Path.Combine(Environment.CurrentDirectory, "BeforeTestRun.html"), new WaitUntilAt("BeforeTestRun"));

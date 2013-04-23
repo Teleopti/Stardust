@@ -14,8 +14,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I navigate to unit test url (.*)")]
 		public void WhenINavigateTo(string url)
 		{
-			url += "?" + Guid.NewGuid();
-			Navigation.GoTo(url);
+			Navigation.GoTo(url, new ForceRefresh(), new WaitUntilAt(".html"));
 		}
 
 		[Then(@"I should see the tests run")]
