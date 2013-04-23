@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[When(@"I manually navigate to week schedule page")]
 		public void WhenIManuallyNavigateToWeekSchedulePage()
 		{
-			Navigation.GotoAnApplicationPage();
+			Navigation.GotoWeekSchedulePageNoWait();
 		}
 
 		[When(@"I view my week schedule")]

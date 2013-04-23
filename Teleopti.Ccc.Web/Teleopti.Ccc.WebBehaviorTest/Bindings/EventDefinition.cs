@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[BeforeScenario]
 		public static void BeforeScenario()
 		{
-			Log.Debug("Preparing for scenario " + ScenarioContext.Current.ScenarioInfo.Title);
+			Log.Info("Preparing for scenario " + ScenarioContext.Current.ScenarioInfo.Title);
 
 			// restart browser every 20th scenario
 			if (_scenarioCount != 0 && _scenarioCount % 15 == 0)

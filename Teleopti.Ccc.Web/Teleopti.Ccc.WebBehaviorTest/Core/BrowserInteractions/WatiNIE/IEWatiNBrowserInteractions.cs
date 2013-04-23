@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserInteractions.WatiNIE
 			_browser = browser;
 		}
 
-		public object Eval(string javascript)
+		public object Javascript(string javascript)
 		{
 			return Retrying.Action(() => _browser.Eval(javascript));
 		}
@@ -32,6 +32,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserInteractions.WatiNIE
 		public void AssertUrlContains(string url)
 		{
 			EventualAssert.That(() => _browser.Url, Is.StringContaining(url));
+		}
+
+		public void AssertJavascriptResultContains(string javascript, string text)
+		{
+			EventualAssert.That(() => _browser.Eval(javascript), Is.StringContaining(text));
 		}
 
 		public void AssertExists(string selector)

@@ -110,7 +110,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void GotoWeekSchedulePage()
 		{
-			GoTo("MyTime#Schedule/Week", new ApplicationStartupTimeout(), new WaitForLoadingOverlay(), new WaitUntilAtHash());
+			GoTo("MyTime#Schedule/Week",
+				new ApplicationStartupTimeout(), new WaitUntilCompletelyLoaded(), new WaitForLoadingOverlay(), new WaitUntilAtHash());
+			Pages.Pages.NavigatingTo(Browser.Current.Page<WeekSchedulePage>());
+		}
+
+		public static void GotoWeekSchedulePageNoWait()
+		{
+			GoTo("MyTime#Schedule/Week", new ApplicationStartupTimeout());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<WeekSchedulePage>());
 		}
 
@@ -118,7 +125,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		{
 			GoTo(string.Format("MyTime#Schedule/Week/{0}/{1}/{2}", 
 				date.Year.ToString("0000"), date.Month.ToString("00"), date.Day.ToString("00")),
-				new ApplicationStartupTimeout(), new WaitForLoadingOverlay(), new WaitUntilCompletelyLoaded(), new WaitUntilAtHash());
+				new ApplicationStartupTimeout(), new WaitUntilCompletelyLoaded(), new WaitForLoadingOverlay(), new WaitUntilAtHash());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<WeekSchedulePage>());
 		}
 
@@ -319,7 +326,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		private static void mockNotifyCall()
 		{
 			const string jsCode = "Teleopti.MyTimeWeb.Notifier.Notify = function (value) {$('<span/>', {text: value, 'class': 'notifyLoggerItem'}).appendTo('#notifyLogger');};";
-			Browser.Interactions.Eval(jsCode);
+			Browser.Interactions.Javascript(jsCode);
 		}
 	}
 
