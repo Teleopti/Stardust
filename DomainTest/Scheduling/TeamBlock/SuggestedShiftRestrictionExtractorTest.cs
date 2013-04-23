@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			var shift = _mocks.StrictMock<IShiftProjectionCache>();
 			var startTime = new TimeSpan(8, 0, 0);
 			_schedulingOptions.UseTeamBlockSameStartTime = true;
-
+			_schedulingOptions.UseTeamBlockPerOption = true;
 			using (_mocks.Record())
 			{
 				Expect.Call(shift.WorkShiftStartTime).Return(startTime);
@@ -46,14 +46,39 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Assert.That(result, Is.EqualTo(expected));
 			}
 		}
-	
+
+		[Test]
+		public void ShouldExtractStartEndTimeRestrictionFromSuggestedShiftForTeamScheduling()
+		{
+			var shift = _mocks.StrictMock<IShiftProjectionCache>();
+			var startTime = new TimeSpan(8, 0, 0);
+			var endTime = new TimeSpan(17, 0, 0);
+			_schedulingOptions.UseGroupScheduling = true;
+			_schedulingOptions.UseGroupSchedulingCommonStart = true;
+			_schedulingOptions.UseGroupSchedulingCommonEnd = true;
+			using (_mocks.Record())
+			{
+				Expect.Call(shift.WorkShiftStartTime).Return(startTime);
+				Expect.Call(shift.WorkShiftEndTime).Return(endTime);
+			}
+			using (_mocks.Playback())
+			{
+				var expected = new EffectiveRestriction(new StartTimeLimitation(startTime, startTime),
+																	new EndTimeLimitation(endTime, endTime),
+																	new WorkTimeLimitation(), null, null, null, new List<IActivityRestriction>());
+				var result = _target.Extract(shift, _schedulingOptions);
+
+				Assert.That(result, Is.EqualTo(expected));
+			}
+		}
+
 		[Test]
 		public void ShouldExtractEndTimeRestrictionFromSuggestedShift()
 		{
 			var shift = _mocks.StrictMock<IShiftProjectionCache>();
 			var endTime = new TimeSpan(17, 0, 0);
 			_schedulingOptions.UseTeamBlockSameEndTime = true;
-
+			_schedulingOptions.UseTeamBlockPerOption = true;
 			using (_mocks.Record())
 			{
 				Expect.Call(shift.WorkShiftEndTime).Return(endTime);
@@ -76,6 +101,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			var startTime = new TimeSpan(8, 0, 0);
 			var endTime = new TimeSpan(17, 0, 0);
 
+			_schedulingOptions.UseTeamBlockPerOption = true;
 			_schedulingOptions.UseTeamBlockSameStartTime = true;
 			_schedulingOptions.UseTeamBlockSameEndTime = true;
 
