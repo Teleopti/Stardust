@@ -29,20 +29,22 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[Then(@"I should see person '(.*)'")]
 		public void ThenIShouldSeePerson(string personName)
 		{
-			EventualAssert.That(() => Browser.Current.Element(Find.BySelector(string.Format(".person:contains('{0}')", personName))).Exists, Is.True);
+			Browser.Interactions.AssertExists(string.Format(".person:contains('{0}')", personName));
 		}
 
 		[Then(@"I should see schedule for '(.*)'")]
 		public void ThenIShouldSeeScheduleFor(string personName)
 		{
-			EventualAssert.That(() => Browser.Current.Element(Find.BySelector(string.Format(".person:contains('{0}') .shift li", personName))).Exists, Is.True);
+			Browser.Interactions.AssertExists(string.Format(".person:contains('{0}') .shift li", personName));
 		}
 
 		[Then(@"I should see no schedule for '(.*)'")]
 		public void ThenIShouldSeeNoScheduleFor(string personName)
 		{
-			EventualAssert.That(() => Browser.Current.Element(Find.BySelector(string.Format(".person:contains('{0}')", personName))).Exists, Is.True);
-			EventualAssert.That(() => Browser.Current.Element(Find.BySelector(string.Format(".person:contains('{0}') .shift li", personName))).Exists, Is.False);
+			Browser.Interactions.AssertNotExists(
+				string.Format(".person:contains('{0}')", personName), 
+				string.Format(".person:contains('{0}') .shift li", personName)
+				);
 		}
 
 		[Then(@"I should be able to select teams")]
