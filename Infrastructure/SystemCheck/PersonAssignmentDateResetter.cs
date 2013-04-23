@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck
 				.AppendLine("from dbo.PersonAssignment pa")
 				.AppendLine("inner join Person p on pa.Person = p.id")
 				.AppendLine("where TheDate > '1800-01-01'")
-				.AppendLine("and p.id = " + person.Id)
+				.AppendLine("and p.id = '" + person.Id + "'")
 				.ToString();
 		}
 
@@ -118,7 +118,7 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck
 				.AppendLine("from [Auditing].PersonAssignment_AUD pa")
 				.AppendLine("inner join Person p on pa.Person = p.id")
 				.AppendLine("where TheDate > '1800-01-01'")
-				.AppendLine("and p.id = " + person.Id)
+				.AppendLine("and p.id = '" + person.Id + "'")
 				.ToString();
 		}
 
