@@ -12,14 +12,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "Username-input")]
 		public TextField UserNameTextField { get; set; }
 
-		public TextField PasswordTextField {
-			get
-			{
-				return Document.TextField(Find.BySelector(":password"));
-			}
-		}
+	    [FindBy(Id = "Password-input")]
+	    public TextField PasswordTextField { get; set; }
 
-		[FindBy(Id = "Signin-error")]
+	    [FindBy(Id = "Signin-error")]
 		public Element ValidationSummary { get; set; }
 
 		[FindBy(Id = "PasswordExpireSoon")]
