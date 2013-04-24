@@ -35,11 +35,11 @@ Scenario: Henkes testscenario for setting up budgetgroups
 	| Name		| NameOfTheBudgetGroup |
 	| Absence   | holiday |
 	And there is a budgetday
-	| Field				| Value                |
-	| BudgetGroup		| NameOfTheBudgetGroup |
-	| Date				| 2013-04-01           |
-	| Allowance			| 2                    |
-	| TotalAllowance	| 4                    |
+	| Field						| Value                |
+	| BudgetGroup				| NameOfTheBudgetGroup |
+	| Date						| 2013-04-01           |
+	| Allowance					| 2                    |
+	| FulltimeEquivalentHours	| 8                    |
 	And I have the role 'Full access to mytime'
 	And there is absence time for
 	| Field			| Value					|
@@ -60,11 +60,11 @@ Scenario: Henkes testscenario for setting up budgetgroups 1
 	| Name		| NameOfTheBudgetGroup |
 	| Absence   | holiday |
 	And there is a budgetday
-	| Field				| Value                |
-	| BudgetGroup		| NameOfTheBudgetGroup |
-	| Date				| 2013-04-01           |
-	| Allowance			| 2                    |
-	| TotalAllowance	| 4                    |
+	| Field						| Value                |
+	| BudgetGroup				| NameOfTheBudgetGroup |
+	| Date						| 2013-04-01           |
+	| Allowance					| 2                    |
+	| FulltimeEquivalentHours	| 8                    |
 	And I have the role 'Full access to mytime'
 	And there is absence time for
 	| Field			| Value					|
@@ -85,11 +85,11 @@ Scenario: Henkes testscenario for setting up budgetgroups 2
 	| Name		| NameOfTheBudgetGroup |
 	| Absence   | holiday |
 	And there is a budgetday
-	| Field				| Value                |
-	| BudgetGroup		| NameOfTheBudgetGroup |
-	| Date				| 2013-04-01           |
-	| Allowance			| 2                    |
-	| TotalAllowance	| 4                    |
+	| Field						| Value                |
+	| BudgetGroup				| NameOfTheBudgetGroup |
+	| Date						| 2013-04-01           |
+	| Allowance					| 2                    |
+	| FulltimeEquivalentHours	| 8                    |
 	And I have the role 'Full access to mytime'
 	And there is absence time for
 	| Field			| Value					|
@@ -110,11 +110,11 @@ Scenario: Henkes testscenario for setting up budgetgroups 3
 	| Name		| NameOfTheBudgetGroup |
 	| Absence   | holiday |
 	And there is a budgetday
-	| Field				| Value                |
-	| BudgetGroup		| NameOfTheBudgetGroup |
-	| Date				| 2013-04-01           |
-	| Allowance			| 2                    |
-	| TotalAllowance	| 4                    |
+	| Field						| Value                |
+	| BudgetGroup				| NameOfTheBudgetGroup |
+	| Date						| 2013-04-01           |
+	| Allowance					| 2                    |
+	| FulltimeEquivalentHours	| 8                    |
 	And I have the role 'Full access to mytime'
 	And there is absence time for
 	| Field			| Value					|

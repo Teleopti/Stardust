@@ -59,7 +59,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 				foreach (var budgetDay in budgetDays)
 				{
 					if (budgetDay.Day != day) continue;
-					allowanceDay.Allowance = budgetDay.Allowance * 8 * 60;//Maria: Ska hämta antal timmar från någonstans...
+					allowanceDay.Allowance = budgetDay.Allowance * budgetDay.FulltimeEquivalentHours * 60;
 					allowanceDay.Date = day;
 				}
 				allowanceList.Add(allowanceDay);

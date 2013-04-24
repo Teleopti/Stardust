@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 		public string BudgetGroup { get; set; }
 		public DateTime Date { get; set; }
 		public int Allowance { get; set; }
-		public int TotalAllowance { get; set; }
+		public int FulltimeEquivalentHours { get; set; }
 
 
 	    public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			}
 		    user.PersonPeriodCollection.First().BudgetGroup = budgetGroup;
 			var scenario = GlobalDataContext.Data().Data<CommonScenario>().Scenario;
-			var budgetDay = new BudgetDay(budgetGroup, scenario, new DateOnly(Date)){Allowance = Allowance, TotalAllowance = TotalAllowance};
+			var budgetDay = new BudgetDay(budgetGroup, scenario, new DateOnly(Date)) { Allowance = Allowance, FulltimeEquivalentHours = FulltimeEquivalentHours };
             budgetDayRepository.Add(budgetDay);
 	    }
     }
