@@ -60,6 +60,7 @@ define([
 
 				self.Absences([]);
 				var absences = ko.utils.arrayMap(data.PersonAbsences, function (a) {
+				    a.PersonId = self.Id();
 			        return new absenceListItemViewModel(a);
 			    });
 			    self.Absences.push.apply(self.Absences, absences);

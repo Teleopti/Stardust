@@ -19,6 +19,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		public string Name { get; set; }
 		public string StartTime { get; set; }
 		public string EndTime { get; set; }
+		public string Id { get; set; }
 	}
 
 	public class PersonScheduleViewModelAbsence

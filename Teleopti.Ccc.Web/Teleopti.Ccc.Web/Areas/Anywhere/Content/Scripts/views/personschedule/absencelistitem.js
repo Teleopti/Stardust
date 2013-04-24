@@ -15,6 +15,9 @@ define([
 
         this.BackgroundColor = ko.observable(data.Color);
 
+        var personId = data.PersonId;
+        var absenceId = data.Id;
+
         this.ConfirmRemoval = function () {
 
         };

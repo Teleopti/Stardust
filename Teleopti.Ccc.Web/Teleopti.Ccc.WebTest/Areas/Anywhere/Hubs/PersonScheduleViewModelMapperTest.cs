@@ -265,5 +265,19 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 
 			result.PersonAbsences.Single().EndTime.Should().Be(personEndTime);
 		}
+
+		[Test]
+		public void ShouldMapPersonAbsenceId()
+		{
+			var target = new PersonScheduleViewModelMapper();
+
+			var personAbsence = new PersonAbsence(MockRepository.GenerateMock<IScenario>());
+			personAbsence.SetId(Guid.NewGuid());
+			var personAbsences = new[] { personAbsence };
+
+			var result = target.Map(new PersonScheduleData {PersonAbsences = personAbsences});
+
+			result.PersonAbsences.Single().Id.Should().Be(personAbsence.Id.Value.ToString());
+		}
 	}
 }
