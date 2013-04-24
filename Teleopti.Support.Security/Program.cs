@@ -20,9 +20,7 @@ namespace Teleopti.Support.Security
         {
             var commandLineArgument = new CommandLineArgument(args);
 
-			var connectionStringBuilder = new SqlConnectionStringBuilder(commandLineArgument.DestinationConnectionString);
-
-					//todo - catch errors here
+					var connectionStringBuilder = new SqlConnectionStringBuilder(commandLineArgument.DestinationConnectionString);
 	        var scheduleConverter =
 		        new ConvertSchedule(new IPersonAssignmentConverter[]
 			        {
