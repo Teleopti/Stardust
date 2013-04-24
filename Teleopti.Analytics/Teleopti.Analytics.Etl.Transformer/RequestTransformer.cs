@@ -46,7 +46,10 @@ namespace Teleopti.Analytics.Etl.Transformer
                     
                     // transforming request type into request type id.
                     if (personRequest.Request is IAbsenceRequest)
-                        row["request_type_code"] = 1;
+					{
+						row["request_type_code"] = 1;
+						row["absence_code"] = ((IAbsenceRequest)personRequest.Request).Absence.Id;
+					}
                     else if (personRequest.Request is IShiftTradeRequest)
                         row["request_type_code"] = 2;
                     else
@@ -64,6 +67,9 @@ namespace Teleopti.Analytics.Etl.Transformer
                     row["application_datetime"] = convertedTimeFromUtc;
                     row["request_startdate"] = numOfDays.StartDate.Date;
                     row["request_enddate"] = numOfDays.EndDate.Date;
+					row["request_starttime"] = requestPeriod.StartDateTime;
+					row["request_endtime"] = requestPeriod.EndDateTime;
+
                     row["business_unit_code"] = personRequest.BusinessUnit.Id;
 
                     row["request_day_count"] = 1;

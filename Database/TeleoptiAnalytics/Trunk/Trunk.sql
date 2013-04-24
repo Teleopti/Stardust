@@ -136,12 +136,39 @@ GO
 --Date: 2013-04-15
 --Desc: Alter stage request table
 ----------------
-TRUNCATE TABLE stage.stg_request
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[stage].[stg_request]') AND type in (N'U'))
+DROP TABLE stage.stg_request
 GO
-ALTER TABLE stage.stg_request ADD
-	absence_code uniqueidentifier NULL,
-	request_starttime smalldatetime  NOT NULL,
-	request_endtime smalldatetime  NOT NULL
+
+CREATE TABLE [stage].[stg_request](
+	[request_code] [uniqueidentifier] NOT NULL,
+	[person_code] [uniqueidentifier] NOT NULL,
+	[application_datetime] [smalldatetime] NOT NULL,
+	[request_date] [smalldatetime] NOT NULL,
+	[request_startdate] [smalldatetime] NOT NULL,
+	[request_enddate] [smalldatetime] NOT NULL,
+	[request_type_code] [tinyint] NOT NULL,
+	[request_status_code] [tinyint] NOT NULL,
+	[request_start_date_count] [int] NOT NULL,
+	[request_day_count] [int] NOT NULL,
+	[business_unit_code] [uniqueidentifier] NOT NULL,
+	[datasource_id] [smallint] NOT NULL,
+	[insert_date] [smalldatetime] NOT NULL,
+	[update_date] [smalldatetime] NOT NULL,
+	[datasource_update_date] [smalldatetime] NOT NULL,
+	[is_deleted] [smallint] NOT NULL,
+	[request_starttime] [smalldatetime] NOT NULL,
+	[request_endtime] [smalldatetime] NOT NULL,
+	[absence_code] [uniqueidentifier] NULL
+ CONSTRAINT [PK_stg_request] PRIMARY KEY CLUSTERED 
+(
+	[request_code] ASC,
+	[person_code] ASC,
+	[request_date] ASC,
+	[request_type_code] ASC,
+	[request_status_code] ASC
+)
+)
 GO
 
 ----------------  
@@ -149,7 +176,6 @@ GO
 --Date: 2013-04-15
 --Desc: Alter mart fact request table
 ----------------
-
 ALTER TABLE mart.fact_request ADD
 	absence_id int NULL,
 	request_starttime smalldatetime NULL,
