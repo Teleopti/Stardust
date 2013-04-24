@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Dynamic;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Repositories;
@@ -31,13 +32,16 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 
 		public PersonScheduleViewModel CreateViewModel(Guid personId, DateTime date)
 		{
+			var person = _personRepository.Get(personId);
+			var utcDate = new DateTime(date.Year, date.Month, date.Day, 0, 0, 0, DateTimeKind.Utc);
+	
 			var data = new PersonScheduleData
 				{
-					Person = _personRepository.Get(personId), 
+					Person = person, 
 					Date = date, 
 					PersonScheduleDayReadModel = _personScheduleDayReadModelRepository.ForPerson(new DateOnly(date), personId),
 					Absences = _absenceRepository.LoadAllSortByName(),
-					PersonAbsences = _personAbsenceRepository.LoadAll()
+					PersonAbsences = _personAbsenceRepository.Find(new List<IPerson>() { person }, new DateTimePeriod(utcDate, utcDate.AddHours(24)))
 				};
 			if (data.PersonScheduleDayReadModel != null && data.PersonScheduleDayReadModel.Shift != null)
 				data.Shift = Newtonsoft.Json.JsonConvert.DeserializeObject<ExpandoObject>(data.PersonScheduleDayReadModel.Shift);
