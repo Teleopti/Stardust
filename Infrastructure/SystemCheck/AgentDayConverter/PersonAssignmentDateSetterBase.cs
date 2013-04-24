@@ -60,24 +60,17 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
 		private void updatePersonAssignmentRows(IEnumerable<DataRow> rows, SqlConnection connection, SqlTransaction transaction)
 		{
-			using (var command = new SqlCommand())
+			foreach (var dataRow in rows)
 			{
-				command.CommandType = CommandType.Text;
-				command.Connection = connection;
-				command.Transaction = transaction;
-				foreach (var dataRow in rows)
+				using (var command = new SqlCommand())
 				{
-					var commandText = new StringBuilder()
-						.AppendLine("update dbo.PersonAssignment")
-						.AppendLine("set TheDate = '" + string.Format("{0:s}", dataRow.Field<DateTime>("TheDate")) + "'")
-						.AppendLine(", Version = " + dataRow.Field<int>("Version"))
-						.AppendLine("where Id='" + dataRow.Field<Guid>("Id") + "'");
-
+					command.CommandType = CommandType.Text;
+					command.Connection = connection;
+					command.Transaction = transaction;
 					command.CommandText = UpdateAssignmentDate;
 					command.Parameters.AddWithValue("@newDate", string.Format("{0:s}", dataRow.Field<DateTime>("TheDate")));
 					command.Parameters.AddWithValue("@newVersion", dataRow.Field<int>("Version"));
 					command.Parameters.AddWithValue("@id", dataRow.Field<Guid>("Id"));
-
 					command.ExecuteNonQuery();
 				}
 			}
