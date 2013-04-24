@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
+using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
@@ -25,11 +26,15 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
 				setFields(rows);
 				updatePersonAssignmentRows(rows, connection);
 
+				checkAllConverted(connection);
+			}
+		}
 
-
-				//fix - throw error here if not 0
-				rows = readRows(connection, NumberOfNotConvertedCommand);
-
+		private void checkAllConverted(SqlConnection sqlConnection)
+		{
+			if ((int) new SqlCommand(NumberOfNotConvertedCommand, sqlConnection).ExecuteScalar() > 0)
+			{
+				throw new NotSupportedException("Something went wrong. There is still unconverted schedules in the database!");
 			}
 		}
 
