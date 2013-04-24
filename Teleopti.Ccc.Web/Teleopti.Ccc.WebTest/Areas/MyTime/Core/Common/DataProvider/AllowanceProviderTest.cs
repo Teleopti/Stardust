@@ -37,7 +37,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			var scenario = new Scenario("thescenario");
 			var budgetDays = new List<IBudgetDay>();
 			const int allowance = 5;
-			var budgetDay = new BudgetDay(budgetGroup, scenario, period.StartDate) {Allowance = allowance};
+			const double fulltimeEquivalentHours = 8d;
+			var allowanceInMinutes = allowance*fulltimeEquivalentHours*60;
+			var budgetDay = new BudgetDay(budgetGroup, scenario, period.StartDate) { Allowance = allowance, FulltimeEquivalentHours = fulltimeEquivalentHours };
 			budgetDays.Add(budgetDay);
 
 			user.AddPersonPeriod(personPeriod1);
@@ -48,7 +50,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 
 			var target = new AllowanceProvider(budgetDayRepository, userTimeZone, loggedOnUser, scenarioRepository);
 			var result = target.GetAllowanceForPeriod(period);
-			result.First().Allowance.Should().Be.EqualTo(allowance);
+			result.First().Allowance.Should().Be.EqualTo(allowanceInMinutes);
 
 		}
 	}
