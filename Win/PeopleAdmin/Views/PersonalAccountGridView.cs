@@ -614,7 +614,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
             var cellModel = new GridDropDownMonthCalendarAdvCellModel(Grid.Model);
             cellModel.HideNoneButton();
             cellModel.HideTodayButton();
-            Grid.CellModels.Add("DatePickerCell", cellModel);
+			Grid.CellModels.Add(GridCellModelConstants.CellTypeDatePickerCell, cellModel);
         }
 
         private void CreateParentGridHeaders()
