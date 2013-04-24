@@ -7,7 +7,7 @@ using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 {
-    public class BudgetGroupConfigurable : IUserDataSetup
+    public class BudgetGroupConfigurable : IUserSetup
     {
 		public string Name { get; set; }
 		public string Absence { get; set; }

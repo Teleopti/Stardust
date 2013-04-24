@@ -7,6 +7,13 @@ Background:
 	Given there is a role with
 	| Field                    | Value                 |
 	| Name                     | Full access to mytime |
+	And there is an absence with
+	| Field                    | Value   |
+	| Name                     | holiday |
+	And there is a budgetgroup with
+	| Field		| Value   |
+	| Name		| TheBudgetGroup |
+	| Absence   | holiday |
 	And there is a workflow control set with
 	| Field                      | Value              |
 	| Name                       | Published schedule |
@@ -25,46 +32,16 @@ Background:
 	And I have a person period with 
 	| Field      | Value      |
 	| Start date | 2012-06-18 |
-	
-Scenario: Henkes testscenario for setting up budgetgroups
-	Given there is an absence with
-	| Field                    | Value   |
-	| Name                     | holiday |
-	And there is a budgetgroup with
-	| Field		| Value   |
-	| Name		| NameOfTheBudgetGroup |
-	| Absence   | holiday |
-	And there is a budgetday
-	| Field						| Value                |
-	| BudgetGroup				| NameOfTheBudgetGroup |
-	| Date						| 2013-04-01           |
-	| Allowance					| 2                    |
-	| FulltimeEquivalentHours	| 8                    |
-	And I have the role 'Full access to mytime'
-	And there is absence time for
-	| Field			| Value					|
-	| Date			| 2013-04-01			|
-	| Hours			| 8						|
-	| BudgetGroup	| NameOfTheBudgetGroup	|
-	| Absence		| holiday				|
-	When I view my week schedule for date '2013-04-01'
-	Then I should see an indication of the amount of agents that can go on holiday on each day of the week
+	| BudgetGroup| TheBudgetGroup |
 
 
-Scenario: Henkes testscenario for setting up budgetgroups 1
-	Given there is an absence with
-	| Field	| Value   |
-	| Name	| holiday |
-	And there is a budgetgroup with
-	| Field		| Value   |
-	| Name		| NameOfTheBudgetGroup |
-	| Absence   | holiday |
-	And there is a budgetday
-	| Field						| Value                |
-	| BudgetGroup				| NameOfTheBudgetGroup |
-	| Date						| 2013-04-01           |
-	| Allowance					| 2                    |
-	| FulltimeEquivalentHours	| 8                    |
+Scenario: Show the user a green indication when allowance exceeds used absence
+	Given there is a budgetday
+	| Field						| Value					|
+	| BudgetGroup				| TheBudgetGroup		|
+	| Date						| 2013-04-01			|
+	| Allowance					| 2						|
+	| FulltimeEquivalentHours	| 8						|
 	And I have the role 'Full access to mytime'
 	And there is absence time for
 	| Field			| Value					|
@@ -76,17 +53,10 @@ Scenario: Henkes testscenario for setting up budgetgroups 1
 	Then I should see an 'green' indication for chance of absence request on '2013-04-01'
 
 
-Scenario: Henkes testscenario for setting up budgetgroups 2
-	Given there is an absence with
-	| Field	| Value   |
-	| Name	| holiday |
-	And there is a budgetgroup with
-	| Field		| Value   |
-	| Name		| NameOfTheBudgetGroup |
-	| Absence   | holiday |
-	And there is a budgetday
+Scenario: Show the user a yellow indication when there is a fair amount of allowance compared to used absence
+	Given there is a budgetday
 	| Field						| Value                |
-	| BudgetGroup				| NameOfTheBudgetGroup |
+	| BudgetGroup				| TheBudgetGroup	   |
 	| Date						| 2013-04-01           |
 	| Allowance					| 2                    |
 	| FulltimeEquivalentHours	| 8                    |
@@ -95,23 +65,15 @@ Scenario: Henkes testscenario for setting up budgetgroups 2
 	| Field			| Value					|
 	| Date			| 2013-04-01			|
 	| Hours			| 8						|
-	| BudgetGroup	| NameOfTheBudgetGroup	|
 	| Absence		| holiday				|
 	When I view my week schedule for date '2013-04-01'
 	Then I should see an 'yellow' indication for chance of absence request on '2013-04-01'
 
 
-Scenario: Henkes testscenario for setting up budgetgroups 3
-	Given there is an absence with
-	| Field	| Value   |
-	| Name	| holiday |
-	And there is a budgetgroup with
-	| Field		| Value   |
-	| Name		| NameOfTheBudgetGroup |
-	| Absence   | holiday |
-	And there is a budgetday
+Scenario: Show the user a yellow indication when there is only a little or no allowance compared to used absence
+	Given there is a budgetday
 	| Field						| Value                |
-	| BudgetGroup				| NameOfTheBudgetGroup |
+	| BudgetGroup				| TheBudgetGroup	   |
 	| Date						| 2013-04-01           |
 	| Allowance					| 2                    |
 	| FulltimeEquivalentHours	| 8                    |
