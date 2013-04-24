@@ -12,6 +12,6 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
 		/// </summary>
 		/// <param name="connectionStringBuilder"></param>
 		/// <returns></returns>
-		int Execute(SqlConnectionStringBuilder connectionStringBuilder);
+		void Execute(SqlConnectionStringBuilder connectionStringBuilder);
 	}
 }

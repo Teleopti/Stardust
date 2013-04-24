@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
 		protected abstract string ReadCommand { get; }
 		protected abstract string UpdateAssignmentDate { get; }
 
-		public int Execute(SqlConnectionStringBuilder connectionStringBuilder)
+		public void Execute(SqlConnectionStringBuilder connectionStringBuilder)
 		{
 			var connectionString = connectionStringBuilder.ToString();
 
@@ -28,14 +28,10 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
 				} while (batchRows > 0);
 
 
+				//fix - throw error here
 				var rows = _personAssignmentCommon.ReadRows(connection, NumberOfNotConvertedCommand, null);
-				var rowsLeft = rows[0].Field<int>("cnt");
-				if (rowsLeft > 0)
-				{
-					return 1;
-				}
+
 			}
-			return 0;
 		}
 
 		private int runOneBatch(SqlConnection connection)

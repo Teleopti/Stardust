@@ -24,13 +24,10 @@ namespace Teleopti.Support.Security
 
 			var connectionStringBuilder = new SqlConnectionStringBuilder(commandLineArgument.DestinationConnectionString);
 
-			var result = PersonAssignmentDateSetter.Execute(connectionStringBuilder);
-			if(result!= 0)
-				Environment.Exit(result);
-			result = PersonAssignmentAuditDateSetter.Execute(connectionStringBuilder);
-			if (result != 0)
-				Environment.Exit(result);
-
+					//todo - catch errors here
+			PersonAssignmentDateSetter.Execute(connectionStringBuilder);
+			PersonAssignmentAuditDateSetter.Execute(connectionStringBuilder);
+	
 			if (!string.IsNullOrEmpty(commandLineArgument.AggDatabase))
 				CrossDatabaseViewUpdate.Execute(commandLineArgument);
 
