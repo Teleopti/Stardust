@@ -82,10 +82,35 @@ Scenario: Show the user a yellow indication when there is only a little or no al
 	| Field			| Value					|
 	| Date			| 2013-04-01			|
 	| Hours			| 15					|
-	| BudgetGroup	| NameOfTheBudgetGroup	|
 	| Absence		| holiday				|
 	When I view my week schedule for date '2013-04-01'
 	Then I should see an 'red' indication for chance of absence request on '2013-04-01'
+
+Scenario: Show the user a red indication when there is no budgetgroup for that day
+	Given there is a budgetday
+	| Field						| Value                |
+	| BudgetGroup				| TheBudgetGroup	   |
+	| Date						| 2013-04-02           |
+	| Allowance					| 2                    |
+	| FulltimeEquivalentHours	| 8                    |
+	Given there is a budgetday
+	| Field						| Value                |
+	| BudgetGroup				| TheBudgetGroup	   |
+	| Date						| 2013-04-05           |
+	| Allowance					| 2                    |
+	| FulltimeEquivalentHours	| 8                    |
+	And I have the role 'Full access to mytime'
+	And there is absence time for
+	| Field			| Value					|
+	| Date			| 2013-04-05			|
+	| Hours			| 0						|
+	| Absence		| holiday				|
+	And I have a person period with 
+	| Field      | Value      |
+	| Start date | 2013-04-03 |
+	When I view my week schedule for date '2013-04-05'
+	Then I should see an 'green' indication for chance of absence request on '2013-04-02'
+	And I should see an 'red' indication for chance of absence request on '2013-04-05'
 
 @ignore
 Scenario: Do not show indication of the amount of agents that can go on holiday if no permission to absence request

@@ -136,6 +136,30 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			verifyThatEachDayHasZeroUsedAbsence(result);
 		}
 
+		[Test,Ignore]
+		public void GetAbsenceTimeForPeriod_WhenThereAreDifferentBudgetGroupsDuringThePeriod_ShouldUseTheBudgetGroupThatsConnectedToTheDate()
+		{
+			var anotherBudgetGroup = new BudgetGroup();
+			var nextStart = new DateOnly(_period.StartDate.AddDays(2));
+
+			var personPeriodWithAnotherBudgetGroup = PersonPeriodFactory.CreatePersonPeriod(nextStart);
+			personPeriodWithAnotherBudgetGroup.BudgetGroup = anotherBudgetGroup;
+			_personWithPersonPeriod.AddPersonPeriod(personPeriodWithAnotherBudgetGroup);
+
+			var firstExpectedPeriod = new DateOnlyPeriod(_period.StartDate, nextStart);
+			var secondExpectedPeriod = new DateOnlyPeriod(nextStart, _period.EndDate);
+
+			var scheduleProjectionReadOnlyRepository = MockRepository.GenerateMock<IScheduleProjectionReadOnlyRepository>();
+
+			scheduleProjectionReadOnlyRepository.Expect(s => s.AbsenceTimePerBudgetGroup(firstExpectedPeriod, _budgetGroup, _scenario))
+												.Return(new List<PayloadWorkTime>());
+
+			scheduleProjectionReadOnlyRepository.Expect(s => s.AbsenceTimePerBudgetGroup(secondExpectedPeriod, anotherBudgetGroup, _scenario))
+												.Return(new List<PayloadWorkTime>());
+
+			scheduleProjectionReadOnlyRepository.VerifyAllExpectations();
+		}
+
 
 		#region helpers
 		private  IEnumerable<PayloadWorkTime> createlistWithPayloadWorkTimesForEachDateWithUsedAbsenceOf(long totalContractTimeForEachDay)
