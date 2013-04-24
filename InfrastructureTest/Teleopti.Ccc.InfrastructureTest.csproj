@@ -333,6 +333,7 @@
     <Compile Include="Repositories\GroupingAbsenceRepositoryTest.cs" />
     <Compile Include="Repositories\GroupingActivityRepositoryTest.cs" />
     <Compile Include="SystemCheck\AgentDayConverter\PersonAssignmentDateSetterTest.cs" />
+    <Compile Include="SystemCheck\AgentDayConverter\ResetDateForAssignments.cs" />
     <Compile Include="SystemCheck\CheckMessageBrokerTest.cs" />
     <Compile Include="SystemCheck\SystemCheckerValidatorTest.cs" />
     <Compile Include="UnitOfWork\ConnectionStringTest.cs" />

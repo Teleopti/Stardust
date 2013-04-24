@@ -32,13 +32,9 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 			var start = new DateTime(2000, 1, 1, 8, 0, 0, DateTimeKind.Utc);
 			var expected = new DateOnly(2000, 1, 1);
 
-			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(new Activity("sdf"), SetupFixtureForAssembly.loggedOnPerson, new DateTimePeriod(start, start.AddHours(8)), new ShiftCategory("d"), new Scenario("d"));
-			PersistAndRemoveFromUnitOfWork(pa.MainShift.LayerCollection[0].Payload);
-			PersistAndRemoveFromUnitOfWork(pa.MainShift.ShiftCategory);
-			PersistAndRemoveFromUnitOfWork(pa.Scenario);
-			PersistAndRemoveFromUnitOfWork(pa);
+			var pa = createAndStoreAssignment(start);
 
-			setResetDateForAllAssignmentsAndAudits();
+			Session.ResetDateForAllAssignmentsAndAudits();
 			UnitOfWork.PersistAll();
 			UnitOfWork.Clear();
 
@@ -50,14 +46,34 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 			paRep.Get(pa.Id.Value).Date.Should().Be.EqualTo(expected);
 		}
 
-		private void setResetDateForAllAssignmentsAndAudits()
+		[Test]
+		public void ShouldNotTouchAssignmentIfNotRestoreDate()
 		{
-			Session.CreateSQLQuery("update PersonAssignment set TheDate=:date")
-			       .SetDateTime("date", AgentDayDateSetter.RestoreDate)
-			       .ExecuteUpdate();
-			Session.CreateSQLQuery("update [Auditing].PersonAssignment_AUD set TheDate=:date")
-			       .SetDateTime("date", AgentDayDateSetter.RestoreDate)
-			       .ExecuteUpdate();
+			var paRep = new PersonAssignmentRepository(UnitOfWork);
+			var start = new DateTime(2000, 1, 1, 8, 0, 0, DateTimeKind.Utc);
+			var expected = new DateOnly(2000, 1, 1);
+
+			var pa = createAndStoreAssignment(start);
+
+			UnitOfWork.PersistAll();
+			UnitOfWork.Clear();
+			
+			target.Execute(new SqlConnectionStringBuilder(UnitOfWorkFactory.Current.ConnectionString));
+
+			paRep.Get(pa.Id.Value).Date.Should().Be.EqualTo(expected);
+		}
+
+		private IPersonAssignment createAndStoreAssignment(DateTime start)
+		{
+			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(new Activity("sdf"),
+			                                                               SetupFixtureForAssembly.loggedOnPerson,
+			                                                               new DateTimePeriod(start, start.AddHours(8)),
+			                                                               new ShiftCategory("d"), new Scenario("d"));
+			PersistAndRemoveFromUnitOfWork(pa.MainShift.LayerCollection[0].Payload);
+			PersistAndRemoveFromUnitOfWork(pa.MainShift.ShiftCategory);
+			PersistAndRemoveFromUnitOfWork(pa.Scenario);
+			PersistAndRemoveFromUnitOfWork(pa);
+			return pa;
 		}
 	}
 }
