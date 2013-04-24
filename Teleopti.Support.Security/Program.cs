@@ -14,8 +14,6 @@ namespace Teleopti.Support.Security
         private static readonly ICommandLineCommand PersonFirstDayOfWeekSetter = new PersonFirstDayOfWeekSetter();
         private static readonly ICommandLineCommand LicenseStatusChecker = new LicenseStatusChecker();
 		private static readonly ICommandLineCommand CrossDatabaseViewUpdate = new CrossDatabaseViewUpdate();
-		private static readonly IPersonAssignmentConverter PersonAssignmentAuditDateSetter = new PersonAssignmentAuditDateSetter();
-		private static readonly IPersonAssignmentConverter PersonAssignmentDateSetter = new PersonAssignmentDateSetter();
 
 
         static void Main(string[] args)
