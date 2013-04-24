@@ -38,8 +38,8 @@ Scenario: Henkes testscenario for setting up budgetgroups
 	| Field				| Value                |
 	| BudgetGroup		| NameOfTheBudgetGroup |
 	| Date				| 2013-04-01           |
-	| Allowance			| 10                   |
-	| TotalAllowance	| 12                   |
+	| Allowance			| 2                    |
+	| TotalAllowance	| 4                    |
 	And I have the role 'Full access to mytime'
 	And there is absence time for
 	| Field			| Value					|
@@ -50,7 +50,7 @@ Scenario: Henkes testscenario for setting up budgetgroups
 	When I view my week schedule for date '2013-04-01'
 	Then I should see an indication of the amount of agents that can go on holiday on each day of the week
 
-@ignore
+
 Scenario: Henkes testscenario for setting up budgetgroups 1
 	Given there is an absence with
 	| Field	| Value   |
@@ -63,19 +63,19 @@ Scenario: Henkes testscenario for setting up budgetgroups 1
 	| Field				| Value                |
 	| BudgetGroup		| NameOfTheBudgetGroup |
 	| Date				| 2013-04-01           |
-	| Allowance			| 10                   |
-	| TotalAllowance	| 12                   |
+	| Allowance			| 2                    |
+	| TotalAllowance	| 4                    |
 	And I have the role 'Full access to mytime'
 	And there is absence time for
 	| Field			| Value					|
 	| Date			| 2013-04-01			|
-	| Hours			| 1						|
+	| Hours			| 3						|
 	| BudgetGroup	| NameOfTheBudgetGroup	|
 	| Absence		| holiday				|
 	When I view my week schedule for date '2013-04-01'
 	Then I should see an 'green' indication for chance of absence request on '2013-04-01'
 
-@ignore
+
 Scenario: Henkes testscenario for setting up budgetgroups 2
 	Given there is an absence with
 	| Field	| Value   |
@@ -88,19 +88,19 @@ Scenario: Henkes testscenario for setting up budgetgroups 2
 	| Field				| Value                |
 	| BudgetGroup		| NameOfTheBudgetGroup |
 	| Date				| 2013-04-01           |
-	| Allowance			| 10                   |
-	| TotalAllowance	| 12                   |
+	| Allowance			| 2                    |
+	| TotalAllowance	| 4                    |
 	And I have the role 'Full access to mytime'
 	And there is absence time for
 	| Field			| Value					|
 	| Date			| 2013-04-01			|
-	| Hours			| 6						|
+	| Hours			| 8						|
 	| BudgetGroup	| NameOfTheBudgetGroup	|
 	| Absence		| holiday				|
 	When I view my week schedule for date '2013-04-01'
 	Then I should see an 'yellow' indication for chance of absence request on '2013-04-01'
 
-@ignore
+
 Scenario: Henkes testscenario for setting up budgetgroups 3
 	Given there is an absence with
 	| Field	| Value   |
@@ -113,13 +113,13 @@ Scenario: Henkes testscenario for setting up budgetgroups 3
 	| Field				| Value                |
 	| BudgetGroup		| NameOfTheBudgetGroup |
 	| Date				| 2013-04-01           |
-	| Allowance			| 10                   |
-	| TotalAllowance	| 12                   |
+	| Allowance			| 2                    |
+	| TotalAllowance	| 4                    |
 	And I have the role 'Full access to mytime'
 	And there is absence time for
 	| Field			| Value					|
 	| Date			| 2013-04-01			|
-	| Hours			| 10						|
+	| Hours			| 15					|
 	| BudgetGroup	| NameOfTheBudgetGroup	|
 	| Absence		| holiday				|
 	When I view my week schedule for date '2013-04-01'

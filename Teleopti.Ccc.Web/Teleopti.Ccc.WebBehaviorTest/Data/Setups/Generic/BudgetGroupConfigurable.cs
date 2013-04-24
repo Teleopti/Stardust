@@ -26,6 +26,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 				budgetGroup.AddCustomShrinkage(shrinkage);
 			}
 			budgetGroupRepository.Add(budgetGroup);
+
+			uow.PersistAll();
 	    }
     }
 }
