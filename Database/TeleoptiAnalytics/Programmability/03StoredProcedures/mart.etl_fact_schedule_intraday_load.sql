@@ -15,9 +15,12 @@ GO
 --exec mart.etl_fact_schedule_intraday_load '2009-02-02','2009-02-03'
 --exec mart.etl_fact_schedule_intraday_load @start_date='2010-10-30 00:00:00',@end_date='2010-11-03 00:00:00'
 CREATE PROCEDURE [mart].[etl_fact_schedule_intraday_load]
-@business_unit_code uniqueidentifier,
-@scenario_code uniqueidentifier
+@business_unit_code uniqueidentifier
 AS
+
+--Get first row scenario in stage table, currently this must(!) be the default scenario, else RAISERROR
+DECLARE @scenario_code uniqueidentifier
+SELECT TOP 1 @scenario_code=scenario_code FROM Stage.stg_schedule_changed
 
 if (select count(*)
 	from mart.dim_scenario
@@ -49,12 +52,13 @@ INNER JOIN mart.dim_date dd
 	ON dd.date_date = stg.schedule_date
 INNER JOIN mart.dim_scenario ds
 	ON stg.scenario_code = ds.scenario_code
+	AND stg.scenario_code = @scenario_code  --remove this if we are to handle multiple scenarios
 INNER JOIN mart.fact_schedule fs
 	ON dd.date_id = fs.schedule_date_id
 	AND dp.person_id = fs.person_id
 	AND ds.scenario_id = fs.scenario_id
 WHERE stg.business_unit_code = @business_unit_code
-AND stg.scenario_code = @scenario_code
+
 
 --insert new and updated
 INSERT INTO mart.fact_schedule
