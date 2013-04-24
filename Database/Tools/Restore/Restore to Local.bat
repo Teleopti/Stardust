@@ -265,11 +265,11 @@ ECHO Building %ROOTDIR%\..\..\..\Teleopti.Support.Security\Teleopti.Support.Secu
 %MSBUILD% "%ROOTDIR%\..\..\..\Teleopti.Support.Security\Teleopti.Support.Security.csproj" > "%temp%\build.log"
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=12 & GOTO :error
 
-ECHO Encrypting passwords ...
+ECHO Running: scheduleConverter, ForecasterDateAdjustment, PersonFirstDayOfWeekSetter, PasswordEncryption, LicenseStatusChecker
 "%ROOTDIR%\..\..\..\Teleopti.Support.Security\bin\debug\Teleopti.Support.Security.exe" -DS%INSTANCE% -DD"%Branch%_%Customer%_TeleoptiCCC7" -EE
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=10 & GOTO :error
 
-ECHO Fix Cross DB stuff
+ECHO Running: CrossDatabaseViewUpdate
 "%ROOTDIR%\..\..\..\Teleopti.Support.Security\bin\debug\Teleopti.Support.Security.exe" -DS%INSTANCE% -DD"%Branch%_%Customer%_TeleoptiAnalytics" -CD"%Branch%_%Customer%_TeleoptiCCCAgg" -EE
 IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=1 & GOTO :error
 
