@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using Syncfusion.Windows.Forms.Grid;
+using Teleopti.Ccc.Win.Common.Controls.Cells;
 using Teleopti.Ccc.Win.Common.Controls.Columns;
 using Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers;
 using Teleopti.Ccc.WinCode.Common;
@@ -48,7 +49,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Controls.Columns
 
             if (IsContentRow(e.RowIndex,dataItems.Count))
             {
-                e.Style.CellType = "DatePickerCell";
+				e.Style.CellType = GridCellModelConstants.CellTypeDatePickerCell;
                 e.Style.Format = _dtfi.ShortDatePattern;
                 e.Style.CellValueType = typeof(DateTime);
                 T dataItem = dataItems[e.RowIndex - 1];

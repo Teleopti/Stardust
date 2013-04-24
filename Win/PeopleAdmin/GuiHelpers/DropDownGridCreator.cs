@@ -52,8 +52,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             var cellModel = new GridDropDownMonthCalendarAdvCellModel(_grid.Model);
             cellModel.HideNoneButton();
             cellModel.HideTodayButton();
-           
-             _grid.CellModels.Add("DatePickerCell", cellModel);
+
+			_grid.CellModels.Add(GridCellModelConstants.CellTypeDatePickerCell, cellModel);
 
             _grid.ColCount = colCount;
             _grid.RowCount = collection.Count;
