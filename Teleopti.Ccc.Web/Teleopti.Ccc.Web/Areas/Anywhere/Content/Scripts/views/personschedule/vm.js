@@ -61,6 +61,7 @@ define([
 				self.Absences([]);
 				var absences = ko.utils.arrayMap(data.PersonAbsences, function (a) {
 				    a.PersonId = self.Id();
+				    a.Date = self.Date();
 			        return new absenceListItemViewModel(a);
 			    });
 			    self.Absences.push.apply(self.Absences, absences);
