@@ -7,7 +7,7 @@
 			get { return "select COUNT(*) as cnt from dbo.PersonAssignment where TheDate = '" + AgentDayConverterDate.DateOfUnconvertedSchedule + "'"; }
 		}
 
-		protected override string ReadCommand
+		protected override string ReadUnconvertedSchedulesCommand
 		{
 			get
 			{
@@ -18,7 +18,7 @@
 			}
 		}
 
-		protected override string UpdateAssignmentDate
+		protected override string UpdateAssignmentDateCommand
 		{
 			get
 			{

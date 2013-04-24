@@ -21,9 +21,9 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
 			{
 				connection.Open();
 
-				var rows = readSchedules(connection);
-				setDateAndIncreaseVersion(rows);
-				updatePersonAssignmentRows(rows, connection);
+				var dt = readSchedules(connection);
+				setDateAndIncreaseVersion(dt);
+				updatePersonAssignmentRows(dt, connection);
 
 				checkAllConverted(connection);
 			}
@@ -37,58 +37,47 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
 			}
 		}
 
-		private void updatePersonAssignmentRows(IEnumerable<DataRow> rows, SqlConnection connection)
+		private void updatePersonAssignmentRows(DataTable dataTable, SqlConnection connection)
 		{
-			foreach (var dataRow in rows)
+			foreach (DataRow row in dataTable.Rows)
 			{
 				using (var command = new SqlCommand())
 				{
 					command.CommandType = CommandType.Text;
 					command.Connection = connection;
 					command.CommandText = UpdateAssignmentDateCommand;
-					command.Parameters.AddWithValue("@newDate", string.Format("{0:s}", dataRow.Field<DateTime>("TheDate")));
-					command.Parameters.AddWithValue("@newVersion", dataRow.Field<int>("Version"));
-					command.Parameters.AddWithValue("@id", dataRow.Field<Guid>("Id"));
+					command.Parameters.AddWithValue("@newDate", string.Format("{0:s}", row["TheDate"]));
+					command.Parameters.AddWithValue("@newVersion", row["Version"]);
+					command.Parameters.AddWithValue("@id", row["Id"]);
 					command.ExecuteNonQuery();
 				}
 			}
 		}
 
-		private static void setDateAndIncreaseVersion(IEnumerable<DataRow> rows)
+		private static void setDateAndIncreaseVersion(DataTable dt)
 		{
-			foreach (var dataRow in rows)
+			foreach (DataRow row in dt.Rows)
 			{
-				var timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(dataRow.Field<string>("DefaultTimeZone"));
-				var utcTime = new DateTime(dataRow.Field<DateTime>("Minimum").Ticks, DateTimeKind.Utc);
+				var timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById((string) row["DefaultTimeZone"]);
+				var utcTime = new DateTime(((DateTime) row["Minimum"]).Ticks, DateTimeKind.Utc);
 				var localDate = timeZoneInfo.SafeConvertTimeToUtc(utcTime);
-				dataRow["TheDate"] = String.Format("{0:s}", localDate.Date);
-				var version = dataRow.Field<int>("Version");
-				dataRow["Version"] = version + 1;
+				row["TheDate"] = string.Format("{0:s}", localDate.Date);
+				var version = (int)row["Version"];
+				row["Version"] = version + 1;
 			}
 		}
 
-		private IEnumerable<DataRow> readSchedules(SqlConnection connection)
+		private DataTable readSchedules(SqlConnection connection)
 		{
-			IList<DataRow> ret;
 			using (var command = new SqlCommand(ReadUnconvertedSchedulesCommand, connection))
 			{
-				ret = new List<DataRow>();
-				using (var dataSet = new DataSet())
+				using (var dataAdapter = new SqlDataAdapter(command))
 				{
-					dataSet.Locale = CultureInfo.CurrentUICulture;
-					using (var sqlDataAdapter = new SqlDataAdapter(command))
-					{
-						sqlDataAdapter.Fill(dataSet, "Data");
-					}
-
-					foreach (DataRow row in dataSet.Tables[0].Rows)
-					{
-						ret.Add(row);
-					}
+					var dt = new DataTable();
+					dataAdapter.Fill(dt);
+					return dt;
 				}
 			}
-
-			return ret;
 		}
 	}
 }
