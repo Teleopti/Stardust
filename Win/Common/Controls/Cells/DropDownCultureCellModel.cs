@@ -64,36 +64,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
 			return base.ApplyFormattedText(style, text, textInfo);
 		}
 
-		//private object TryFindListBoxItemByCultureNameAndDisplayText(string text)
-		//{
-		//	var result = WinCode.PeopleAdmin.Culture.GetLanguageInfoByDisplayName(text);
-
-
-		//	CultureInfo[] infos = CultureInfo.GetCultures(CultureTypes.AllCultures);
-		//	var culture = infos.FirstOrDefault(i => i.DisplayName == text);
-
-		//	if (culture != null)
-		//		//return GetInternalListBox().FindValue(culture);
-		//		return FindByCulture(culture);
-			
-		//	culture = infos.FirstOrDefault(i => i.Name == text);
-
-		//	if (culture != null)
-		//		return GetInternalListBox().FindValue(culture);
-
-		//	return -1;
-
-		//}
-
-		private int FindByCulture(CultureInfo culture)
-		{
-			foreach (var item in GetInternalListBox().Items)
-			{
-				var what = item.ToString();
-			}
-			return 1;
-		}
-
 		public override bool ApplyText(GridStyleInfo style, string text)
 		{
 			return ApplyFormattedText(style, text, -1);
