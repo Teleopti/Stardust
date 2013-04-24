@@ -72,13 +72,13 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages
             gridBaseStyle2.StyleInfo.CellType = "TextBox";
             gridBaseStyle2.StyleInfo.Font.Facename = "Tahoma";
             gridBaseStyle2.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(System.Drawing.SystemColors.Window);
-            gridBaseStyle3.Name = "Row Header";
+            gridBaseStyle3.Name = "Column Header";
             gridBaseStyle3.StyleInfo.BaseStyle = "Header";
-            gridBaseStyle3.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Left;
-            gridBaseStyle3.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Horizontal, System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(199)))), ((int)(((byte)(184))))), System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(234)))), ((int)(((byte)(216))))));
-            gridBaseStyle4.Name = "Column Header";
+            gridBaseStyle3.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Center;
+            gridBaseStyle4.Name = "Row Header";
             gridBaseStyle4.StyleInfo.BaseStyle = "Header";
-            gridBaseStyle4.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Center;
+            gridBaseStyle4.StyleInfo.HorizontalAlignment = Syncfusion.Windows.Forms.Grid.GridHorizontalAlignment.Left;
+            gridBaseStyle4.StyleInfo.Interior = new Syncfusion.Drawing.BrushInfo(Syncfusion.Drawing.GradientStyle.Horizontal, System.Drawing.Color.FromArgb(((int)(((byte)(203)))), ((int)(((byte)(199)))), ((int)(((byte)(184))))), System.Drawing.Color.FromArgb(((int)(((byte)(238)))), ((int)(((byte)(234)))), ((int)(((byte)(216))))));
             this.weekOpenHoursGridWorkload.BaseStylesMap.AddRange(new Syncfusion.Windows.Forms.Grid.GridBaseStyle[] {
             gridBaseStyle1,
             gridBaseStyle2,
@@ -129,6 +129,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages
             this.weekOpenHoursGridWorkload.Text = "weekOpenHoursGrid1";
             this.weekOpenHoursGridWorkload.ThemesEnabled = true;
             this.weekOpenHoursGridWorkload.UseRightToLeftCompatibleTextBox = true;
+            this.weekOpenHoursGridWorkload.KeyDown += new System.Windows.Forms.KeyEventHandler(this.weekOpenHoursGridWorkload_KeyDown);
             // 
             // tableLayoutPanelOpenHoursRtl
             // 
