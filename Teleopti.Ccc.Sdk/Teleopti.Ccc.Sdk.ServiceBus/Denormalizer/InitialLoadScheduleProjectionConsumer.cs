@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 		{
 			_people = _personRepository.LoadAll();
 			_defaultScenario = _scenarioRepository.LoadDefaultScenario();
-			_period = new DateOnlyPeriod(DateOnly.Today.AddDays(-3652), DateOnly.Today.AddDays(3652));
+			_period = new DateOnlyPeriod(DateOnly.Today.AddDays(-31), DateOnly.Today.AddDays(3652));
 			_utcPeriod = _period.ToDateTimePeriod(TeleoptiPrincipal.Current.Regional.TimeZone);
 		}
 
