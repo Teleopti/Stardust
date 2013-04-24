@@ -1,9 +1,11 @@
 define([
     'knockout',
-    'moment'
+    'moment',
+    'navigation'
 ], function (
     ko,
-    moment
+    moment,
+    navigation
 ) {
 
     return function (data) {
@@ -24,18 +26,19 @@ define([
 
         this.ConfirmRemoval = function () {
             var data = JSON.stringify({
-                PersonAbsenceId: personAbsenceId,
+                PersonAbsenceId: personAbsenceId
             });
-            $.ajax({
-                url: 'PersonScheduleCommand/RemoveAbsence',
-                type: 'POST',
-                cache: false,
-                contentType: 'application/json; charset=utf-8',
-                data: data,
-                success: function (data, textStatus, jqXHR) {
-                    navigation.GotoPersonSchedule(personId, date);
+            $.ajax(
+                {
+                    url: 'PersonScheduleCommand/RemoveAbsence',
+                    type: 'POST',
+                    cache: false,
+                    contentType: 'application/json; charset=utf-8',
+                    data: data,
+                    success: function(data, textStatus, jqXHR) {
+                        navigation.GotoPersonSchedule(personId, date);
+                    }
                 }
-            }
             );
         };
     };
