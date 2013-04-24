@@ -3,14 +3,13 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Text;
-using Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter;
 using Teleopti.Interfaces.Infrastructure;
 
-namespace Teleopti.Ccc.Infrastructure.SystemCheck
+namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
 {
-	public class PersonAssignmentDateSetter : IPersonAssignmentConverter
+	public abstract class PersonAssignmentDateSetterBase : IPersonAssignmentConverter
 	{
-		private const string numberOfNotConvertedCommand
+			private const string numberOfNotConvertedCommand
 			= "select COUNT(*) as cnt from dbo.PersonAssignment where TheDate < '1850-01-01'";
 
 		private readonly string _readCommand = new StringBuilder()
@@ -57,7 +56,6 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck
 
 				} while (batchRows > 0);
 
-				Console.WriteLine();
 
 				rows = _personAssignmentCommon.ReadRows(connection, numberOfNotConvertedCommand, null);
 				int rowsLeft = rows[0].Field<int>("cnt");
@@ -102,7 +100,7 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck
 				{
 					var commandText = new StringBuilder()
 						.AppendLine("update dbo.PersonAssignment")
-						.AppendLine("set TheDate = '" + String.Format("{0:s}", dataRow.Field<DateTime>("TheDate")) + "'")
+						.AppendLine("set TheDate = '" + string.Format("{0:s}", dataRow.Field<DateTime>("TheDate")) + "'")
 						.AppendLine(", Version = " + dataRow.Field<int>("Version"))
 						.AppendLine("where Id='" + dataRow.Field<Guid>("Id") + "'");
 
@@ -111,5 +109,5 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck
 				}
 			}
 		}
-	}
+	} 
 }
