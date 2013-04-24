@@ -55,6 +55,19 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms.WorkloadPages
         {
         }
 
+        private void weekOpenHoursGridWorkload_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Control == true)
+            {
+                switch (e.KeyCode)
+                {
+                    case Keys.X:
+                        e.Handled = true;
+                        break;
+                }
+            }
+        }
+
         private void weekOpenHoursGridWorkload_KeyDown(object sender, System.Windows.Forms.KeyEventArgs e)
         {
             if (e.Control == true)
