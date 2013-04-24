@@ -2,6 +2,6 @@
 {
 	public interface IAgentDayDateSetter
 	{
-		 
+		void Execute();
 	}
 }
