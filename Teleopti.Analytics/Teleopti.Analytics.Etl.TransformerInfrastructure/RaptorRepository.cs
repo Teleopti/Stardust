@@ -241,15 +241,16 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 											  _dataMartConnectionString);
 		}
 
-		public int FillIntradayScheduleDayCountDataMart(IBusinessUnit currentBusinessUnit)
+		public int FillIntradayScheduleDayCountDataMart(IBusinessUnit currentBusinessUnit, IScenario scenario)
 		{
 			var parameterList = new List<SqlParameter>
 				{
-					new SqlParameter("business_unit_code", currentBusinessUnit.Id)
+					new SqlParameter("business_unit_code", currentBusinessUnit.Id),
+					new SqlParameter("scenario_code", scenario.Id)
 				};
 
-			return
-				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_schedule_day_count_load", parameterList,
+			return 
+				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_schedule_day_count_intraday_load", parameterList,
 											  _dataMartConnectionString);
 		}
 
@@ -673,7 +674,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
                                               _dataMartConnectionString);
 	    }
 
-		ILastChangedReadModel IRaptorRepository.LastChangedDate(IBusinessUnit currentBusinessUnit, string stepName)
+		public ILastChangedReadModel LastChangedDate(IBusinessUnit currentBusinessUnit, string stepName)
 		{
 			using (var uow = UnitOfWorkFactory.CurrentUnitOfWorkFactory().LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{

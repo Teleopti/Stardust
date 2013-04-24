@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.TransformerInfrastructure.DataTableDefinition;
 using IJobResult = Teleopti.Analytics.Etl.Interfaces.Transformer.IJobResult;
@@ -20,11 +21,11 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 		public IScheduleDayOffCountTransformer Transformer { get; set; }
 		public IEtlDayOffSubStep DayOffSubStep { get; set; }
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "scenario")]
 		protected override int RunStep(IList<IJobResult> jobResultCollection, bool isLastBusinessUnit)
 		{
-			foreach (var scenario in _jobParameters.StateHolder.ScenarioCollectionDeletedExcluded)
+			foreach (var scenario in _jobParameters.StateHolder.ScenarioCollectionDeletedExcluded.Where(scenario => scenario.DefaultScenario))
 			{
-				if (!scenario.DefaultScenario) continue;
 				//Get data from Cashe
 				var scheduleDictionary = _jobParameters.StateHolder.GetScheduleCashe();
 

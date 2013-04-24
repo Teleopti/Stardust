@@ -259,6 +259,7 @@ namespace Teleopti.Analytics.Etl.Transformer
             }
         }
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists")]
 		public IList<IPerson> PersonsWithIds(List<Guid> ids)
 		{
 			return PersonCollection.Where(person => ids.Contains(person.Id.GetValueOrDefault())).ToList();

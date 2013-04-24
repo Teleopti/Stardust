@@ -49,7 +49,7 @@ namespace Teleopti.Analytics.Etl.Interfaces.Transformer
         IList<IBusinessUnit> LoadBusinessUnit();
         int PersistBusinessUnit(DataTable dataTable);
         int FillScheduleDayCountDataMart(DateTimePeriod period, IBusinessUnit businessUnit);
-		int FillIntradayScheduleDayCountDataMart(IBusinessUnit currentBusinessUnit);
+		int FillIntradayScheduleDayCountDataMart(IBusinessUnit currentBusinessUnit, IScenario scenario);
         int FillDayOffDataMart(IBusinessUnit businessUnit);
         int PersistScheduleDayOffCount(DataTable dataTable);
 

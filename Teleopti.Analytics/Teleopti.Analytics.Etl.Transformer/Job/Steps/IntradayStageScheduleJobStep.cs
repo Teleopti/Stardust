@@ -38,9 +38,8 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 		    var rep = _jobParameters.Helper.Repository;
             rep.TruncateSchedule();
 
-            foreach (var scenario in _jobParameters.StateHolder.ScenarioCollectionDeletedExcluded)
+			foreach (var scenario in _jobParameters.StateHolder.ScenarioCollectionDeletedExcluded.Where(scenario => scenario.DefaultScenario))
             {
-				if(!scenario.DefaultScenario) continue;
 	            // get it from stateholder and let it hold it and update in the end??????
 				var lastTime = rep.LastChangedDate(Result.CurrentBusinessUnit, Name);
 				var changed = rep.ChangedDataOnStep(lastTime.LastTime, Result.CurrentBusinessUnit, Name);

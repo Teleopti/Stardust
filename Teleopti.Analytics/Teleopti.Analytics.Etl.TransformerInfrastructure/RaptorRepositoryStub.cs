@@ -228,7 +228,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
             return 0;
         }
 
-	    public int FillIntradayScheduleDayCountDataMart(IBusinessUnit currentBusinessUnit)
+	    public int FillIntradayScheduleDayCountDataMart(IBusinessUnit currentBusinessUnit, IScenario scenario)
 	    {
 		    throw new NotImplementedException();
 	    }
