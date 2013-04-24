@@ -1,7 +1,13 @@
-﻿namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
+﻿using System.Data.SqlClient;
+
+namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
 {
 	public class PersonAssignmentAuditDateSetter : PersonAssignmentDateSetterBase
 	{
+		public PersonAssignmentAuditDateSetter(SqlConnectionStringBuilder tempShouldNotBeLikeThis) : base(tempShouldNotBeLikeThis)
+		{
+		}
+
 		protected override string NumberOfNotConvertedCommand
 		{
 			get { return "select COUNT(*) as cnt from [Auditing].PersonAssignment_AUD where TheDate = '" + AgentDayConverterDate.DateOfUnconvertedSchedule + "'"; }

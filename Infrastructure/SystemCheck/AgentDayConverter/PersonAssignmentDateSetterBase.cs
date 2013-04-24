@@ -1,21 +1,26 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Globalization;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
 {
 	public abstract class PersonAssignmentDateSetterBase : IPersonAssignmentConverter
 	{
+		private readonly SqlConnectionStringBuilder _tempShouldNotBeLikeThis;
+
+		public PersonAssignmentDateSetterBase(SqlConnectionStringBuilder tempShouldNotBeLikeThis)
+		{
+			_tempShouldNotBeLikeThis = tempShouldNotBeLikeThis;
+		}
+
 		protected abstract string NumberOfNotConvertedCommand { get; }
 		protected abstract string ReadUnconvertedSchedulesCommand { get; }
 		protected abstract string UpdateAssignmentDateCommand { get; }
 
-		public void Execute(SqlConnectionStringBuilder connectionStringBuilder)
+		public void Execute()
 		{
-			var connectionString = connectionStringBuilder.ToString();
+			var connectionString = _tempShouldNotBeLikeThis.ToString();
 
 			using (var connection = new SqlConnection(connectionString))
 			{

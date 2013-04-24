@@ -1,6 +1,4 @@
-﻿using System.Data.SqlClient;
-
-namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
+﻿namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
 {
 	/// <summary>
 	/// Used to identify a command in the Database
@@ -10,8 +8,7 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
 		/// <summary>
 		/// Executes against the connectionstring
 		/// </summary>
-		/// <param name="connectionStringBuilder"></param>
 		/// <returns></returns>
-		void Execute(SqlConnectionStringBuilder connectionStringBuilder);
+		void Execute();
 	}
 }

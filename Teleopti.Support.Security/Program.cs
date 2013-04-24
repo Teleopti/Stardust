@@ -25,8 +25,13 @@ namespace Teleopti.Support.Security
 			var connectionStringBuilder = new SqlConnectionStringBuilder(commandLineArgument.DestinationConnectionString);
 
 					//todo - catch errors here
-			PersonAssignmentDateSetter.Execute(connectionStringBuilder);
-			PersonAssignmentAuditDateSetter.Execute(connectionStringBuilder);
+	        var scheduleConverter =
+		        new ConvertSchedule(new IPersonAssignmentConverter[]
+			        {
+				        new PersonAssignmentAuditDateSetter(connectionStringBuilder),
+				        new PersonAssignmentDateSetter(connectionStringBuilder)
+			        });
+					scheduleConverter.ExecuteAllConverters();
 	
 			if (!string.IsNullOrEmpty(commandLineArgument.AggDatabase))
 				CrossDatabaseViewUpdate.Execute(commandLineArgument);

@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 		[Test]
 		public void ShouldSetCorrectDateForResettedPersonAssignment()
 		{
-			var target = new dontFixDates();
+			var target = new dontFixDates(new SqlConnectionStringBuilder(UnitOfWorkFactory.Current.ConnectionString));
 			var paRep = new PersonAssignmentRepository(UnitOfWork);
 			var start = new DateTime(2000, 1, 1, 8, 0, 0, DateTimeKind.Utc);
 
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 			UnitOfWork.Clear();
 
 			Assert.Throws<NotSupportedException>(
-				() => target.Execute(new SqlConnectionStringBuilder(UnitOfWorkFactory.Current.ConnectionString)));
+				() => target.Execute());
 		}
 
 		private IPersonAssignment createAndStoreAssignment(DateTime start)
@@ -71,6 +71,10 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 
 		private class dontFixDates : PersonAssignmentDateSetter
 		{
+			public dontFixDates(SqlConnectionStringBuilder tempShouldNotBeLikeThis) : base(tempShouldNotBeLikeThis)
+			{
+			}
+
 			protected override string NumberOfNotConvertedCommand
 			{
 				get { return "select 1"; }

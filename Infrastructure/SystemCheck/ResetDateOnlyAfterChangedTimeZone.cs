@@ -21,10 +21,10 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck
 			var connStr = UnitOfWorkFactory.CurrentUnitOfWorkFactory().LoggedOnUnitOfWorkFactory().ConnectionString;
 			resetter.ExecuteFor(person, connStr);
 			var builder = new SqlConnectionStringBuilder(connStr);
-			IPersonAssignmentConverter assignmentConverter = new PersonAssignmentDateSetter();
-			assignmentConverter.Execute(builder);
-			assignmentConverter = new PersonAssignmentAuditDateSetter();
-			assignmentConverter.Execute(builder);
+			//IPersonAssignmentConverter assignmentConverter = new PersonAssignmentDateSetter();
+			//assignmentConverter.Execute(builder);
+			//assignmentConverter = new PersonAssignmentAuditDateSetter();
+			//assignmentConverter.Execute(builder);
 
 			return true;
 		}

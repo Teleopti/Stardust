@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 		[Test]
 		public void ShouldSetCorrectDateForResettedPersonAssignment()
 		{
-			var target = new PersonAssignmentDateSetter();
+			var target = new PersonAssignmentDateSetter(new SqlConnectionStringBuilder(UnitOfWorkFactory.Current.ConnectionString));
 			var paRep = new PersonAssignmentRepository(UnitOfWork);
 			var start = new DateTime(2000, 1, 1, 8, 0, 0, DateTimeKind.Utc);
 			var expected = new DateOnly(2000, 1, 1);
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 			paRep.Get(pa.Id.Value).Date.Should().Be.EqualTo(AgentDayConverterDate.DateOfUnconvertedSchedule);
 			UnitOfWork.Clear();
 
-			target.Execute(new SqlConnectionStringBuilder(UnitOfWorkFactory.Current.ConnectionString));
+			target.Execute();
 
 			paRep.Get(pa.Id.Value).Date.Should().Be.EqualTo(expected);
 		}
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 		[Test]
 		public void ShouldNotTouchAssignmentIfNotRestoreDate()
 		{
-			var target = new PersonAssignmentDateSetter();
+			var target = new PersonAssignmentDateSetter(new SqlConnectionStringBuilder(UnitOfWorkFactory.Current.ConnectionString));
 			var paRep = new PersonAssignmentRepository(UnitOfWork);
 			var start = new DateTime(2000, 1, 1, 8, 0, 0, DateTimeKind.Utc);
 			var expected = new DateOnly(2000, 1, 1);
@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 			UnitOfWork.PersistAll();
 			UnitOfWork.Clear();
 			
-			target.Execute(new SqlConnectionStringBuilder(UnitOfWorkFactory.Current.ConnectionString));
+			target.Execute();
 
 			paRep.Get(pa.Id.Value).Date.Should().Be.EqualTo(expected);
 		}
