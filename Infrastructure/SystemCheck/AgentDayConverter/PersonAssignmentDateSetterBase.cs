@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Globalization;
-using System.Linq;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
@@ -11,8 +10,8 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
 	public abstract class PersonAssignmentDateSetterBase : IPersonAssignmentConverter
 	{
 		protected abstract string NumberOfNotConvertedCommand { get; }
-		protected abstract string ReadCommand { get; }
-		protected abstract string UpdateAssignmentDate { get; }
+		protected abstract string ReadUnconvertedSchedulesCommand { get; }
+		protected abstract string UpdateAssignmentDateCommand { get; }
 
 		public void Execute(SqlConnectionStringBuilder connectionStringBuilder)
 		{
@@ -22,8 +21,8 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
 			{
 				connection.Open();
 
-				var rows = readRows(connection, ReadCommand);
-				setFields(rows);
+				var rows = readSchedules(connection);
+				setDateAndIncreaseVersion(rows);
 				updatePersonAssignmentRows(rows, connection);
 
 				checkAllConverted(connection);
@@ -46,7 +45,7 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
 				{
 					command.CommandType = CommandType.Text;
 					command.Connection = connection;
-					command.CommandText = UpdateAssignmentDate;
+					command.CommandText = UpdateAssignmentDateCommand;
 					command.Parameters.AddWithValue("@newDate", string.Format("{0:s}", dataRow.Field<DateTime>("TheDate")));
 					command.Parameters.AddWithValue("@newVersion", dataRow.Field<int>("Version"));
 					command.Parameters.AddWithValue("@id", dataRow.Field<Guid>("Id"));
@@ -55,7 +54,7 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
 			}
 		}
 
-		private static void setFields(IEnumerable<DataRow> rows)
+		private static void setDateAndIncreaseVersion(IEnumerable<DataRow> rows)
 		{
 			foreach (var dataRow in rows)
 			{
@@ -68,10 +67,10 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
 			}
 		}
 
-		private IEnumerable<DataRow> readRows(SqlConnection connection, string readCommand)
+		private IEnumerable<DataRow> readSchedules(SqlConnection connection)
 		{
 			IList<DataRow> ret;
-			using (var command = new SqlCommand(readCommand, connection))
+			using (var command = new SqlCommand(ReadUnconvertedSchedulesCommand, connection))
 			{
 				ret = new List<DataRow>();
 				using (var dataSet = new DataSet())
