@@ -1,6 +1,6 @@
 ﻿using System.Data.SqlClient;
 
-namespace Teleopti.Interfaces.Infrastructure
+namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
 {
 	/// <summary>
 	/// Used to identify a command in the Database

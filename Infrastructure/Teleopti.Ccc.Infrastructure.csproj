@@ -356,6 +356,8 @@
     <Compile Include="Repositories\QueueSourceRepository.cs" />
     <Compile Include="Repositories\WorkShiftRuleSetRepository.cs" />
     <Compile Include="Repositories\WriteProtectionRepository.cs" />
+    <Compile Include="SystemCheck\AgentDayConverter\AgentDayDateSetter.cs" />
+    <Compile Include="SystemCheck\AgentDayConverter\IPersonAssignmentConverter.cs" />
     <Compile Include="SystemCheck\CheckMessageBroker.cs" />
     <Compile Include="SystemCheck\PersonAssignmentAuditDateSetter.cs" />
     <Compile Include="SystemCheck\PersonAssignmentCommon.cs" />
