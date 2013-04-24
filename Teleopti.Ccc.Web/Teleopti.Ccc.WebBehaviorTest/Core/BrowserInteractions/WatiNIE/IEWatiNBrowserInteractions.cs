@@ -18,9 +18,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserInteractions.WatiNIE
 			return Retrying.Action(() => _browser.Eval(javascript));
 		}
 
-		public void GoTo(string uri)
+		public void GoToWaitForCompleted(string uri)
+		{
+			Retrying.Action(() => _browser.GoTo(uri));
+		}
+
+		public void GoToWaitForUrlAssert(string uri, string assertUrlContains)
 		{
 			Retrying.Action(() => _browser.GoToNoWait(uri));
+			AssertUrlContains(assertUrlContains);
 		}
 
 		public void Click(string selector)

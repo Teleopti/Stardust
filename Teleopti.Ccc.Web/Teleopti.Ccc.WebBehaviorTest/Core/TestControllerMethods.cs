@@ -10,34 +10,28 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void CreateCorruptCookie()
 		{
-			Navigation.GoTo("Test/CorruptMyCookie");
-			Browser.Interactions.AssertContains(".frame", "Cookie has been corrupted");
+			Navigation.GoToWaitForCompleted("Test/CorruptMyCookie");
 		}
 
 		public static void CreateNonExistingDatabaseCookie()
 		{
-			Navigation.GoTo("Test/NonExistingDatasourceCookie");
-			Browser.Interactions.AssertContains(".frame", "Cookie has an invalid datasource");
+			Navigation.GoToWaitForCompleted("Test/NonExistingDatasourceCookie");
 		}
 
 		public static void SetCurrentTime(DateTime time)
 		{
-			Navigation.GoTo("Test/SetCurrentTime?dateSet=" + time);
-			Browser.Interactions.AssertContains(".frame", "Time is set");
+			Navigation.GoToWaitForCompleted("Test/SetCurrentTime?dateSet=" + time);
 		}
 
 		public static void BeforeTestRun()
 		{
 			Navigation.GotoRaw("file://" + System.IO.Path.Combine(Environment.CurrentDirectory, "BeforeTestRun.html"));
-			// IE Cant handle sizzle injection to local files.
-			//Browser.Interactions.AssertContains(".frame", "Test run setup");
 		}
 
 		public static void BeforeScenario()
 		{
 			// use a scenario tag here for enableMyTimeMessageBroker if required
-			Navigation.GoTo("Test/BeforeScenario?enableMyTimeMessageBroker=false", new ApplicationStartupTimeout());
-			Browser.Interactions.AssertContains(".frame", "Setting up for scenario");
+			Navigation.GoToWaitForCompleted("Test/BeforeScenario?enableMyTimeMessageBroker=false", new ApplicationStartupTimeout());
 		}
 
 		/// <summary>
@@ -77,8 +71,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			const string dataSourceName = "TestData";
 			var businessUnitName = UserFactory.User().Person.PermissionInformation.ApplicationRoleCollection.Single().BusinessUnit.Name;
 			var queryString = string.Format("?dataSourceName={0}&businessUnitName={1}&userName={2}&password={3}", dataSourceName, businessUnitName, userName, password);
-			Navigation.GoTo("Test/Logon" + queryString);
-			Browser.Interactions.AssertContains(".frame", "Signed in");
+			Navigation.GoToWaitForCompleted("Test/Logon" + queryString);
 		}
 
 		public static void ExpireMyCookieInsidePortal()

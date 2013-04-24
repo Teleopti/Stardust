@@ -3,7 +3,8 @@
 	public interface IBrowserInteractions
 	{
 		object Javascript(string javascript);
-		void GoTo(string uri);
+		void GoToWaitForCompleted(string uri);
+		void GoToWaitForUrlAssert(string uri, string assertUrlContains);
 		void Click(string selector);
 		void AssertExists(string selector);
 		void AssertNotExists(string existsSelector, string notExistsSelector);
