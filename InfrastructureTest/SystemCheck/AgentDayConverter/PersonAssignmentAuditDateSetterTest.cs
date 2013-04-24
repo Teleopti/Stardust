@@ -1,17 +1,20 @@
 ﻿using System;
 using System.Data.SqlClient;
+using System.Linq;
 using NHibernate.Envers;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.SystemCheck;
 using Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.InfrastructureTest.Repositories.Audit;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 {
@@ -21,52 +24,61 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 		[Test]
 		public void ShouldSetCorrectDateForResettedPersonAssignment()
 		{
-			var target = new PersonAssignmentDateSetter();
+			var target = new PersonAssignmentAuditDateSetter();
 			var start = new DateTime(2000, 1, 1, 8, 0, 0, DateTimeKind.Utc);
 			var expected = new DateOnly(2000, 1, 1);
+			IPersonAssignment pa;
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				pa = createAndStoreAssignment(uow, start);
 
-			var pa = createAndStoreAssignment(start);
-
+				uow.PersistAll();
+			}
 			Session.ResetDateForAllAssignmentsAndAudits();
-			UnitOfWork.PersistAll();
 			UnitOfWork.Clear();
 
-			Session.Auditer().Find<PersonAssignment>(pa.Id.Value, 1).Date.Should().Be.EqualTo(AgentDayDateSetter.RestoreDate);
-			UnitOfWork.Clear();
+			var revisions = Session.Auditer().GetRevisions(typeof(PersonAssignment), pa.Id.Value);
 
 			target.Execute(new SqlConnectionStringBuilder(UnitOfWorkFactory.Current.ConnectionString));
 
-			Session.Auditer().Find<PersonAssignment>(pa.Id.Value, 1).Date.Should().Be.EqualTo(expected);
+			Session.Auditer().Find<PersonAssignment>(pa.Id.Value, revisions.Last()).Date.Should().Be.EqualTo(expected);
 		}
 
 		[Test]
 		public void ShouldNotTouchAssignmentIfNotRestoreDate()
 		{
-			var target = new PersonAssignmentDateSetter();
-		
+			var target = new PersonAssignmentAuditDateSetter();
 			var start = new DateTime(2000, 1, 1, 8, 0, 0, DateTimeKind.Utc);
 			var expected = new DateOnly(2000, 1, 1);
+			IPersonAssignment pa;
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				pa = createAndStoreAssignment(uow, start);
 
-			var pa = createAndStoreAssignment(start);
+				uow.PersistAll();
+			}
 
-			UnitOfWork.PersistAll();
 			UnitOfWork.Clear();
+
+			var revisions = Session.Auditer().GetRevisions(typeof(PersonAssignment), pa.Id.Value);
 
 			target.Execute(new SqlConnectionStringBuilder(UnitOfWorkFactory.Current.ConnectionString));
 
-			Session.Auditer().Find<PersonAssignment>(pa.Id.Value, 1).Date.Should().Be.EqualTo(expected);
+			Session.Auditer().Find<PersonAssignment>(pa.Id.Value, revisions.Last()).Date.Should().Be.EqualTo(expected);
 		}
 
-		private IPersonAssignment createAndStoreAssignment(DateTime start)
+		private IPersonAssignment createAndStoreAssignment(IUnitOfWork uow, DateTime start)
 		{
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(new Activity("sdf"),
 																																		 SetupFixtureForAssembly.loggedOnPerson,
 																																		 new DateTimePeriod(start, start.AddHours(8)),
 																																		 new ShiftCategory("d"), new Scenario("d"));
-			PersistAndRemoveFromUnitOfWork(pa.MainShift.LayerCollection[0].Payload);
-			PersistAndRemoveFromUnitOfWork(pa.MainShift.ShiftCategory);
-			PersistAndRemoveFromUnitOfWork(pa.Scenario);
-			PersistAndRemoveFromUnitOfWork(pa);
+			var rep = new Repository(uow);
+			rep.Add(pa.MainShift.LayerCollection[0].Payload);
+			rep.Add(pa.MainShift.ShiftCategory);
+			pa.Scenario.DefaultScenario = true;
+			rep.Add(pa.Scenario);
+			rep.Add(pa);
 			return pa;
 		}
 	}
