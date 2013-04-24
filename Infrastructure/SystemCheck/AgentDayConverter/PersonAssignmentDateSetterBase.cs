@@ -9,20 +9,16 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
 {
 	public abstract class PersonAssignmentDateSetterBase : IPersonAssignmentConverter
 	{
-			private const string numberOfNotConvertedCommand
-			= "select COUNT(*) as cnt from dbo.PersonAssignment where TheDate < '1850-01-01'";
+		private const string numberOfNotConvertedCommand
+		= "select COUNT(*) as cnt from dbo.PersonAssignment where TheDate < '1850-01-01'";
 
-		private readonly string _readCommand = new StringBuilder()
-				.AppendLine("select top 500")
-				.AppendLine("Pa.Id, DefaultTimeZone, Minimum, TheDate, Pa.Version")
-				.AppendLine("from dbo.PersonAssignment pa")
-				.AppendLine("inner join Person p on pa.Person = p.id")
-				.AppendLine("where TheDate = '1800-01-01'")
-				.ToString();
+		private const string readCommand = "select pa.Id, p.DefaultTimeZone, pa.Minimum, pa.TheDate, pa.Version " +
+		                                   "from dbo.PersonAssignment pa " +
+		                                   "inner join Person p on pa.Person = p.id " +
+		                                   "where pa.TheDate = '1800-1-1'";
 
 		private readonly IPersonAssignmentCommon _personAssignmentCommon = new PersonAssignmentCommon();
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Console.Write(System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Console.WriteLine(System.String)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
 		public int Execute(SqlConnectionStringBuilder connectionStringBuilder)
 		{
 			string connectionString = connectionStringBuilder.ToString();
@@ -37,54 +33,35 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
 				if (!_personAssignmentCommon.TheDateFieldExists(connection, numberOfNotConvertedCommand))
 					return 0;
 
-				IList<DataRow> rows = _personAssignmentCommon.ReadRows(connection, numberOfNotConvertedCommand, null);
-
-				//Console.WriteLine(string.Concat("Found ", rows[0].Field<int>("cnt"), " non converted person assignments"));
-
-				connection.Close();
-
-				int total = 0;
 				int batchRows;
 				do
 				{
 					batchRows = runOneBatch(connection);
-					total += batchRows;
-
-					//Console.Write(string.Concat("Rows updated = ", total));
-					//int consoleRow = Console.CursorTop;
-					//Console.SetCursorPosition(0, consoleRow);
-
 				} while (batchRows > 0);
 
 
-				rows = _personAssignmentCommon.ReadRows(connection, numberOfNotConvertedCommand, null);
-				int rowsLeft = rows[0].Field<int>("cnt");
+				var rows = _personAssignmentCommon.ReadRows(connection, numberOfNotConvertedCommand, null);
+				var rowsLeft = rows[0].Field<int>("cnt");
 				if (rowsLeft > 0)
 				{
-					//Console.WriteLine("There is still " + rowsLeft + " non converted person assignments in db.");
 					return 1;
 				}
 			}
-
-			//Console.WriteLine();
-
 			return 0;
 		}
 
 		private int runOneBatch(SqlConnection connection)
 		{
 			IList<DataRow> rows;
-			connection.Open();
 			using (SqlTransaction transaction = connection.BeginTransaction(IsolationLevel.ReadCommitted))
 			{
-				
-				rows = _personAssignmentCommon.ReadRows(connection, _readCommand, transaction);
+
+				rows = _personAssignmentCommon.ReadRows(connection, readCommand, transaction);
 				_personAssignmentCommon.SetFields(rows);
 				updatePersonAssignmentRows(rows, connection, transaction);
 
 				transaction.Commit();
 			}
-			connection.Close();
 			return rows.Count;
 		}
 
@@ -109,5 +86,5 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
 				}
 			}
 		}
-	} 
+	}
 }
