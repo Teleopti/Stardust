@@ -28,11 +28,11 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck
 				connection.Open();
 				using (SqlTransaction transaction = connection.BeginTransaction(IsolationLevel.ReadCommitted))
 				{
-					rows = _personAssignmentCommon.ReadRows(connection, readCommandForAssignments(person), transaction);
+					rows = _personAssignmentCommon.ReadRows(connection, readCommandForAssignments(person));
 					setFields(rows);
 					updatePersonAssignmentRows(rows, connection, transaction);
 
-					rows = _personAssignmentCommon.ReadRows(connection, readCommandForAssignmentsAudit(person), transaction);
+					rows = _personAssignmentCommon.ReadRows(connection, readCommandForAssignmentsAudit(person));
 					setFields(rows);
 					updatePersonAssignmentAuditRows(rows, connection, transaction);
 

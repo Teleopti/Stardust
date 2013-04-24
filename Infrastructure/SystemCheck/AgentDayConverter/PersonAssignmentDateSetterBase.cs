@@ -21,35 +21,20 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
 			using (var connection = new SqlConnection(connectionString))
 			{
 				connection.Open();
-				int batchRows;
-				do
-				{
-					batchRows = runOneBatch(connection);
-				} while (batchRows > 0);
 
-
-				//fix - throw error here
-				var rows = _personAssignmentCommon.ReadRows(connection, NumberOfNotConvertedCommand, null);
-
-			}
-		}
-
-		private int runOneBatch(SqlConnection connection)
-		{
-			IList<DataRow> rows;
-			using (SqlTransaction transaction = connection.BeginTransaction(IsolationLevel.ReadCommitted))
-			{
-
-				rows = _personAssignmentCommon.ReadRows(connection, ReadCommand, transaction);
+				var rows = _personAssignmentCommon.ReadRows(connection, ReadCommand);
 				_personAssignmentCommon.SetFields(rows);
-				updatePersonAssignmentRows(rows, connection, transaction);
+				updatePersonAssignmentRows(rows, connection);
 
-				transaction.Commit();
+
+
+				//fix - throw error here if not 0
+				rows = _personAssignmentCommon.ReadRows(connection, NumberOfNotConvertedCommand);
+
 			}
-			return rows.Count;
 		}
 
-		private void updatePersonAssignmentRows(IEnumerable<DataRow> rows, SqlConnection connection, SqlTransaction transaction)
+		private void updatePersonAssignmentRows(IEnumerable<DataRow> rows, SqlConnection connection)
 		{
 			foreach (var dataRow in rows)
 			{
@@ -57,7 +42,6 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
 				{
 					command.CommandType = CommandType.Text;
 					command.Connection = connection;
-					command.Transaction = transaction;
 					command.CommandText = UpdateAssignmentDate;
 					command.Parameters.AddWithValue("@newDate", string.Format("{0:s}", dataRow.Field<DateTime>("TheDate")));
 					command.Parameters.AddWithValue("@newVersion", dataRow.Field<int>("Version"));

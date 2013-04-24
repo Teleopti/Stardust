@@ -14,9 +14,8 @@ namespace Teleopti.Interfaces.Infrastructure
 		/// </summary>
 		/// <param name="connection"></param>
 		/// <param name="readCommand"></param>
-		/// <param name="transaction"></param>
 		/// <returns></returns>
-		IList<DataRow> ReadRows(SqlConnection connection, string readCommand, SqlTransaction transaction);
+		IList<DataRow> ReadRows(SqlConnection connection, string readCommand);
 
 		/// <summary>
 		/// Modify

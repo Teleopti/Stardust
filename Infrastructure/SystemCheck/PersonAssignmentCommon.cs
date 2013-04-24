@@ -10,8 +10,7 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck
 {
 	public class PersonAssignmentCommon : IPersonAssignmentCommon
 	{
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
-		public IList<DataRow> ReadRows(SqlConnection connection, string readCommand, SqlTransaction transaction)
+		public IList<DataRow> ReadRows(SqlConnection connection, string readCommand)
 		{
 			IList<DataRow> ret;
 			using (var command = new SqlCommand(readCommand, connection))
@@ -22,7 +21,6 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck
 					dataSet.Locale = CultureInfo.CurrentUICulture;
 					using (var sqlDataAdapter = new SqlDataAdapter(command))
 					{
-						sqlDataAdapter.SelectCommand.Transaction = transaction;
 						sqlDataAdapter.Fill(dataSet, "Data");
 					}
 
@@ -36,7 +34,6 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck
 			return ret;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void SetFields(IEnumerable<DataRow> rows)
 		{
 			foreach (var dataRow in rows)
@@ -55,7 +52,7 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck
 		{
 			try
 			{
-				ReadRows(connection, numberOfNotConvertedCommand, null);
+				ReadRows(connection, numberOfNotConvertedCommand);
 			}
 			catch
 			{
