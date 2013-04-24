@@ -1,5 +1,4 @@
-﻿using System;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using WatiN.Core;
 
@@ -28,6 +27,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserInteractions.WatiNIE
 		{
 			_browser.Element(Find.BySelector(selector)).EventualClick();
 		}
+
+
+
 
 		public void AssertUrlContains(string url)
 		{

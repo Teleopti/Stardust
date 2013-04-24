@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Given(@"Current time is '(.*)'"), SetCulture("sv-SE")]
 		public void GivenCurrentTimeIs(DateTime time)
 		{
-			TestControllerMethods.SetCurrentDate(time);
+			TestControllerMethods.SetCurrentTime(time);
 		}
 
 		[When(@"Current browser time has changed to '(.*)'"), SetCulture("sv-SE")]
