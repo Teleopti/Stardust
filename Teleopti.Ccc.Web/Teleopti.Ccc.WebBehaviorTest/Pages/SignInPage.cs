@@ -11,8 +11,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 	{
 		[FindBy(Id = "Username-input")]
 		public TextField UserNameTextField { get; set; }
-		[FindBy(Id = "Password-input")]
-		public TextField PasswordTextField { get; set; }
+
+		public TextField PasswordTextField {
+			get
+			{
+				return Document.TextField(Find.BySelector(":password"));
+			}
+		}
 
 		[FindBy(Id = "Signin-error")]
 		public Element ValidationSummary { get; set; }
@@ -63,6 +68,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		{
 		    UserNameTextField.ChangeValue(username);
 		    PasswordTextField.ChangeValue(password);
+			EventualAssert.That(() => PasswordTextField.Value.Equals(password), Is.True);
 		    LoginButton.EventualClick();
 		}
 
