@@ -4,7 +4,7 @@
 	{
 		protected override string NumberOfNotConvertedCommand
 		{
-			get { return "select COUNT(*) as cnt from [Auditing].PersonAssignment_AUD where TheDate = '" + AgentDayDateSetter.RestoreDate + "'"; }
+			get { return "select COUNT(*) as cnt from [Auditing].PersonAssignment_AUD where TheDate = '" + AgentDayConverterDate.DateOfUnconvertedSchedule + "'"; }
 		}
 
 		protected override string ReadCommand
@@ -14,7 +14,7 @@
 				return "select pa.Id, p.DefaultTimeZone, pa.Minimum, pa.TheDate, pa.Version " +
 																	 "from [Auditing].PersonAssignment_AUD pa " +
 																	 "inner join Person p on pa.Person = p.id " +
-																	 "where pa.TheDate = '" + AgentDayDateSetter.RestoreDate + "'";
+																	 "where pa.TheDate = '" + AgentDayConverterDate.DateOfUnconvertedSchedule + "'";
 			}
 		}
 

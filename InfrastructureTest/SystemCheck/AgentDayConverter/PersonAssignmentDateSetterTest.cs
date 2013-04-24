@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 			UnitOfWork.PersistAll();
 			UnitOfWork.Clear();
 
-			paRep.Get(pa.Id.Value).Date.Should().Be.EqualTo(AgentDayDateSetter.RestoreDate);
+			paRep.Get(pa.Id.Value).Date.Should().Be.EqualTo(AgentDayConverterDate.DateOfUnconvertedSchedule);
 			UnitOfWork.Clear();
 
 			target.Execute(new SqlConnectionStringBuilder(UnitOfWorkFactory.Current.ConnectionString));

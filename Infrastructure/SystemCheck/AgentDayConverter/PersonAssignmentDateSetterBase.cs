@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Text;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
@@ -22,9 +21,6 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
 			using (var connection = new SqlConnection(connectionString))
 			{
 				connection.Open();
-				if (!_personAssignmentCommon.TheDateFieldExists(connection, NumberOfNotConvertedCommand))
-					return 0;
-
 				int batchRows;
 				do
 				{
@@ -57,7 +53,6 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
 			return rows.Count;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
 		private void updatePersonAssignmentRows(IEnumerable<DataRow> rows, SqlConnection connection, SqlTransaction transaction)
 		{
 			foreach (var dataRow in rows)
