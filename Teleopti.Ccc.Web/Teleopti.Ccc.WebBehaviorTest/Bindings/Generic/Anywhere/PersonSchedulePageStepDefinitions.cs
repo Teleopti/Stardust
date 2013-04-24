@@ -88,8 +88,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[Then(@"I should see an absence in the absence list with")]
 		public void ThenIShouldSeeAnAbsenceInTheAbsenceListWith(Table table)
 		{
-			ScenarioContext.Current.Pending();
-
 			var absenceListItemInfo = table.CreateInstance<AbsenceListItemInfo>();
 
 			var selector = string.Format(".absence-list .absence:contains('{0}'):contains('{1}'):contains('{2}')", 
