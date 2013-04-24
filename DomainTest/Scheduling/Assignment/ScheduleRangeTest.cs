@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			}
 		}
 
-		[Test]
+		[Test, Ignore("This is no longer valid - maybe it will be soon. Remove if still ignored on main")]
 		public void VerifyExtractAllDataRegardingTimeZones()
 		{
 			_target = new scheduleExposingInternalCollections(_dic, new ScheduleParameters(_scenario, _person, new DateTimePeriod(1800,1,1,2200,1,1)));
