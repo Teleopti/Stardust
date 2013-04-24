@@ -9,28 +9,20 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
 {
 	public abstract class PersonAssignmentDateSetterBase : IPersonAssignmentConverter
 	{
-		private const string numberOfNotConvertedCommand
-		= "select COUNT(*) as cnt from dbo.PersonAssignment where TheDate < '1850-01-01'";
-
-		private const string readCommand = "select pa.Id, p.DefaultTimeZone, pa.Minimum, pa.TheDate, pa.Version " +
-		                                   "from dbo.PersonAssignment pa " +
-		                                   "inner join Person p on pa.Person = p.id " +
-		                                   "where pa.TheDate = '1800-1-1'";
-
 		private readonly IPersonAssignmentCommon _personAssignmentCommon = new PersonAssignmentCommon();
+
+		protected abstract string NumberOfNotConvertedCommand { get; }
+		protected abstract string ReadCommand { get; }
+		protected abstract string UpdateAssignmentDate { get; }
 
 		public int Execute(SqlConnectionStringBuilder connectionStringBuilder)
 		{
-			string connectionString = connectionStringBuilder.ToString();
-			if (string.IsNullOrEmpty(connectionString))
-			{
-				return 0;
-			}
+			var connectionString = connectionStringBuilder.ToString();
 
 			using (var connection = new SqlConnection(connectionString))
 			{
 				connection.Open();
-				if (!_personAssignmentCommon.TheDateFieldExists(connection, numberOfNotConvertedCommand))
+				if (!_personAssignmentCommon.TheDateFieldExists(connection, NumberOfNotConvertedCommand))
 					return 0;
 
 				int batchRows;
@@ -40,7 +32,7 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
 				} while (batchRows > 0);
 
 
-				var rows = _personAssignmentCommon.ReadRows(connection, numberOfNotConvertedCommand, null);
+				var rows = _personAssignmentCommon.ReadRows(connection, NumberOfNotConvertedCommand, null);
 				var rowsLeft = rows[0].Field<int>("cnt");
 				if (rowsLeft > 0)
 				{
@@ -56,7 +48,7 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
 			using (SqlTransaction transaction = connection.BeginTransaction(IsolationLevel.ReadCommitted))
 			{
 
-				rows = _personAssignmentCommon.ReadRows(connection, readCommand, transaction);
+				rows = _personAssignmentCommon.ReadRows(connection, ReadCommand, transaction);
 				_personAssignmentCommon.SetFields(rows);
 				updatePersonAssignmentRows(rows, connection, transaction);
 
@@ -66,7 +58,7 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities")]
-		private static void updatePersonAssignmentRows(IEnumerable<DataRow> rows, SqlConnection connection, SqlTransaction transaction)
+		private void updatePersonAssignmentRows(IEnumerable<DataRow> rows, SqlConnection connection, SqlTransaction transaction)
 		{
 			using (var command = new SqlCommand())
 			{
@@ -81,7 +73,11 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
 						.AppendLine(", Version = " + dataRow.Field<int>("Version"))
 						.AppendLine("where Id='" + dataRow.Field<Guid>("Id") + "'");
 
-					command.CommandText = commandText.ToString();
+					command.CommandText = UpdateAssignmentDate;
+					command.Parameters.AddWithValue("@newDate", string.Format("{0:s}", dataRow.Field<DateTime>("TheDate")));
+					command.Parameters.AddWithValue("@newVersion", dataRow.Field<int>("Version"));
+					command.Parameters.AddWithValue("@id", dataRow.Field<Guid>("Id"));
+
 					command.ExecuteNonQuery();
 				}
 			}

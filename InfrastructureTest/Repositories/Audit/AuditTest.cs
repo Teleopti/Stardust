@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 		{
 		}
 
-		protected override void TeardownForRepositoryTest()
+		protected sealed override void TeardownForRepositoryTest()
 		{
 			//cleanup
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())

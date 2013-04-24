@@ -8,7 +8,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.SystemCheck;
 using Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.InfrastructureTest.Repositories.Audit;
@@ -21,17 +20,17 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 	[TestFixture]
 	public class PersonAssignmentAuditDateSetterTest : AuditTest
 	{
+		IPersonAssignment pa;
+
 		[Test]
 		public void ShouldSetCorrectDateForResettedPersonAssignment()
 		{
 			var target = new PersonAssignmentAuditDateSetter();
 			var start = new DateTime(2000, 1, 1, 8, 0, 0, DateTimeKind.Utc);
 			var expected = new DateOnly(2000, 1, 1);
-			IPersonAssignment pa;
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				pa = createAndStoreAssignment(uow, start);
-
+				createAndStoreAssignment(uow, start);
 				uow.PersistAll();
 			}
 			Session.ResetDateForAllAssignmentsAndAudits();
@@ -50,11 +49,9 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 			var target = new PersonAssignmentAuditDateSetter();
 			var start = new DateTime(2000, 1, 1, 8, 0, 0, DateTimeKind.Utc);
 			var expected = new DateOnly(2000, 1, 1);
-			IPersonAssignment pa;
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				pa = createAndStoreAssignment(uow, start);
-
+				createAndStoreAssignment(uow, start);
 				uow.PersistAll();
 			}
 
@@ -67,9 +64,9 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 			Session.Auditer().Find<PersonAssignment>(pa.Id.Value, revisions.Last()).Date.Should().Be.EqualTo(expected);
 		}
 
-		private IPersonAssignment createAndStoreAssignment(IUnitOfWork uow, DateTime start)
+		private void createAndStoreAssignment(IUnitOfWork uow, DateTime start)
 		{
-			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(new Activity("sdf"),
+			pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(new Activity("sdf"),
 																																		 SetupFixtureForAssembly.loggedOnPerson,
 																																		 new DateTimePeriod(start, start.AddHours(8)),
 																																		 new ShiftCategory("d"), new Scenario("d"));
@@ -79,7 +76,6 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 			pa.Scenario.DefaultScenario = true;
 			rep.Add(pa.Scenario);
 			rep.Add(pa);
-			return pa;
 		}
 	}
 }

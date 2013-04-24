@@ -2,6 +2,30 @@
 {
 	public class PersonAssignmentDateSetter : PersonAssignmentDateSetterBase
 	{
-		 
+		protected override string NumberOfNotConvertedCommand
+		{
+			get { return "select COUNT(*) as cnt from dbo.PersonAssignment where TheDate = '" + AgentDayDateSetter.RestoreDate + "'"; }
+		}
+
+		protected override string ReadCommand
+		{
+			get
+			{
+				return "select pa.Id, p.DefaultTimeZone, pa.Minimum, pa.TheDate, pa.Version " +
+																	 "from dbo.PersonAssignment pa " +
+																	 "inner join Person p on pa.Person = p.id " +
+																	 "where pa.TheDate = '" + AgentDayDateSetter.RestoreDate + "'";
+			}
+		}
+
+		protected override string UpdateAssignmentDate
+		{
+			get
+			{
+				return "update dbo.PersonAssignment " +
+				       "set TheDate = @newDate, Version = @newVersion " +
+				       "where Id=@id";
+			}
+		}
 	}
 }
