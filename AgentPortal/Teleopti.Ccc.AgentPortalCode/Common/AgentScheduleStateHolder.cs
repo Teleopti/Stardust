@@ -280,12 +280,8 @@ namespace Teleopti.Ccc.AgentPortalCode.Common
             for (int i = 0; i < restrictionCount; i++)
             {
                 var studentAvailabilityRestrictionDto = new StudentAvailabilityRestrictionDto();
-                var startTimeLimitationDto = new TimeLimitationDto();
-                studentAvailabilityRestrictions[i].StartTimeLimitation.SetValuesToDto(startTimeLimitationDto);
-                studentAvailabilityRestrictionDto.StartTimeLimitation = startTimeLimitationDto;
-                var endTimeLimitationDto = new TimeLimitationDto();
-                studentAvailabilityRestrictions[i].EndTimeLimitation.SetValuesToDto(endTimeLimitationDto);
-                studentAvailabilityRestrictionDto.EndTimeLimitation = endTimeLimitationDto;
+                studentAvailabilityRestrictionDto.StartTimeLimitation = studentAvailabilityRestrictions[i].StartTimeLimitation.SetValuesToDto();
+                studentAvailabilityRestrictionDto.EndTimeLimitation = studentAvailabilityRestrictions[i].EndTimeLimitation.SetValuesToDto();
                 studentAvailabilityRestrictionsDto[i] = studentAvailabilityRestrictionDto;
             }
             dto.StudentAvailabilityRestrictions.Clear();
@@ -357,12 +353,9 @@ namespace Teleopti.Ccc.AgentPortalCode.Common
             preferenceRestrictionDto.DayOff = dayOff;
             preferenceRestrictionDto.ShiftCategory = shiftCategory;
             preferenceRestrictionDto.Absence = absence;
-            preferenceRestrictionDto.StartTimeLimitation = new TimeLimitationDto();
-            preference.StartTimeLimitation.SetValuesToDto(preferenceRestrictionDto.StartTimeLimitation);
-            preferenceRestrictionDto.EndTimeLimitation = new TimeLimitationDto();
-            preference.EndTimeLimitation.SetValuesToDto(preferenceRestrictionDto.EndTimeLimitation);
-            preferenceRestrictionDto.WorkTimeLimitation = new TimeLimitationDto();
-            preference.WorkTimeLimitation.SetValuesToDto(preferenceRestrictionDto.WorkTimeLimitation);
+            preferenceRestrictionDto.StartTimeLimitation = preference.StartTimeLimitation.SetValuesToDto();
+            preferenceRestrictionDto.EndTimeLimitation = preference.EndTimeLimitation.SetValuesToDto();
+            preferenceRestrictionDto.WorkTimeLimitation = preference.WorkTimeLimitation.SetValuesToDto();
             preferenceRestrictionDto.MustHave = preference.MustHave;
             preferenceRestrictionDto.TemplateName = preference.TemplateName;
 
@@ -374,12 +367,9 @@ namespace Teleopti.Ccc.AgentPortalCode.Common
                                                           Id = preference.Activity.Id,
                                                           Description = preference.Activity.Name
                                                       };
-                activityRestrictionDto.StartTimeLimitation = new TimeLimitationDto();
-                preference.ActivityStartTimeLimitation.SetValuesToDto(activityRestrictionDto.StartTimeLimitation);
-                activityRestrictionDto.EndTimeLimitation = new TimeLimitationDto();
-                preference.ActivityEndTimeLimitation.SetValuesToDto(activityRestrictionDto.EndTimeLimitation);
-                activityRestrictionDto.WorkTimeLimitation = new TimeLimitationDto();
-                preference.ActivityTimeLimitation.SetValuesToDto(activityRestrictionDto.WorkTimeLimitation);
+                activityRestrictionDto.StartTimeLimitation = preference.ActivityStartTimeLimitation.SetValuesToDto();
+                activityRestrictionDto.EndTimeLimitation = preference.ActivityEndTimeLimitation.SetValuesToDto();
+                activityRestrictionDto.WorkTimeLimitation = preference.ActivityTimeLimitation.SetValuesToDto();
                 preferenceRestrictionDto.ActivityRestrictionCollection.Clear();
                 preferenceRestrictionDto.ActivityRestrictionCollection.Add(activityRestrictionDto);
             }
