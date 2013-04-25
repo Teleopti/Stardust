@@ -345,6 +345,7 @@
     <Compile Include="ResourceCalculation\AbsencePreferenceSchedulerTest.cs" />
     <Compile Include="ResourceCalculation\AvailableHourlyEmployeeFinderTest.cs" />
     <Compile Include="ResourceCalculation\BusinessRuleResponseContainsDateSpecificationTest.cs" />
+    <Compile Include="Scheduling\TeamBlock\ScheduleDaysAvailableForDayOffSpecificationTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockScheduledDayCheckerTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockSteadyStateDictionaryCreatorTest.cs" />
     <Compile Include="Scheduling\DayOffScheduling\AdvanceDayOffSchedulingServiceTest.cs" />
