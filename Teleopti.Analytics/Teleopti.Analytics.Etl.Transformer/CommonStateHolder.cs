@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
@@ -473,7 +474,22 @@ namespace Teleopti.Analytics.Etl.Transformer
 			return theDic[person].ScheduledDay(restrictionDate);
 		}
 
-    	public IList<IMultiplicatorDefinitionSet> MultiplicatorDefinitionSetCollection
+		private readonly ConcurrentDictionary<string, ILastChangedReadModel> _timeValues = new ConcurrentDictionary<string, ILastChangedReadModel>();
+	    public void SetThisTime(ILastChangedReadModel lastTime, string step)
+	    {
+			_timeValues.AddOrUpdate(step, lastTime, (key, oldValue) => lastTime);
+	    }
+
+	    public void UpdateThisTime(string step, IBusinessUnit businessUnit)
+	    {
+		    ILastChangedReadModel lastTime;
+			if (_timeValues.TryGetValue(step, out lastTime))
+		    {
+				_jobParameters.Helper.Repository.UpdateLastChangedDate(businessUnit,step,lastTime.ThisTime);
+		    }
+	    }
+
+	    public IList<IMultiplicatorDefinitionSet> MultiplicatorDefinitionSetCollection
     	{
     		get {
     			return _multiplicatorDefinitionSetCollection ??

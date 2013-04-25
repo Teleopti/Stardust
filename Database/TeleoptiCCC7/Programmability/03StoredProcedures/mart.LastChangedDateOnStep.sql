@@ -50,16 +50,22 @@ INNER JOIN dbo.BusinessUnit bu
 	ON bu.id = s.BusinessUnit
 WHERE bu.id=@buId
 
---Get all Schedule days that are updated after last ETL run
-INSERT INTO #PersonsUpdated (PersonId, BelongsToDate, InsertedOn)
-SELECT s.PersonId, s.BelongsToDate, s.InsertedOn
-FROM [ReadModel].[ScheduleDay] s
-INNER JOIN #persons p ON p.PersonId = s.PersonId
-WHERE InsertedOn >= @lastTime -- >= (not > ) to be sure we do not miss any
+IF @stepName = 'Preferences'
+BEGIN
+	SELECT @thisTime = MAX(UpdatedOn) FROM PreferenceDay WHERE UpdatedOn >= @lastTime
+END
+ELSE
+	BEGIN
+		--Get all Schedule days that are updated after last ETL run
+		INSERT INTO #PersonsUpdated (PersonId, BelongsToDate, InsertedOn)
+		SELECT s.PersonId, s.BelongsToDate, s.InsertedOn
+		FROM [ReadModel].[ScheduleDay] s
+		INNER JOIN #persons p ON p.PersonId = s.PersonId
+		WHERE InsertedOn >= @lastTime -- >= (not > ) to be sure we do not miss any
 
---get max for this BU
-SET @thisTime = (SELECT max(InsertedOn) from #PersonsUpdated)
-
+		--get max for this BU
+		SET @thisTime = (SELECT max(InsertedOn) from #PersonsUpdated)
+	END
 --Handle case, "now rows detected"
 IF @thisTime IS NULL
 SET @thisTime = @lastTime

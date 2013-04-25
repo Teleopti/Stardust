@@ -588,7 +588,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 
 				var scheduleRepository = new ScheduleRepository(uow);
 				IPersonProvider personsInOrganizationProvider = new PersonsInOrganizationProvider(persons){DoLoadByPerson = true};
-				IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true);
+				IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, false, true);
 
 				var scheduleDateTimePeriod = new ScheduleDateTimePeriod(period);
 				var schedulesDictionary =

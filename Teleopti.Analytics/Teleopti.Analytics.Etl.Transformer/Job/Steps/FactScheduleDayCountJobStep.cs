@@ -23,8 +23,10 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 			if(_isIntraday)
 				foreach (var scenario in _jobParameters.StateHolder.ScenarioCollectionDeletedExcluded.Where(scenario => scenario.DefaultScenario))
 				{
-					return
-						_jobParameters.Helper.Repository.FillIntradayScheduleDayCountDataMart(RaptorTransformerHelper.CurrentBusinessUnit, scenario);
+					var rows = _jobParameters.Helper.Repository.FillIntradayScheduleDayCountDataMart(RaptorTransformerHelper.CurrentBusinessUnit, scenario);
+					_jobParameters.StateHolder.UpdateThisTime("Schedules", RaptorTransformerHelper.CurrentBusinessUnit);
+					_jobParameters.StateHolder.UpdateThisTime("Preferences", RaptorTransformerHelper.CurrentBusinessUnit);
+					return rows;
 				}
 	        
 

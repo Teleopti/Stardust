@@ -28,8 +28,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 			{
 				var rep = _jobParameters.Helper.Repository;
 				var lastTime = rep.LastChangedDate(Result.CurrentBusinessUnit, "Preferences");
-				//temp
-				lastTime.LastTime = lastTime.LastTime.AddHours(-2);
+				_jobParameters.StateHolder.SetThisTime(lastTime, "Preferences");
 				var changed = rep.ChangedPreferencesOnStep(lastTime.LastTime, Result.CurrentBusinessUnit);
 
 				Transformer.Transform(changed, BulkInsertDataTable1,_jobParameters.StateHolder,scenario);

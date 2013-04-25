@@ -41,9 +41,10 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 			foreach (var scenario in _jobParameters.StateHolder.ScenarioCollectionDeletedExcluded.Where(scenario => scenario.DefaultScenario))
             {
 	            // get it from stateholder and let it hold it and update in the end??????
-				var lastTime = rep.LastChangedDate(Result.CurrentBusinessUnit, Name);
-				var changed = rep.ChangedDataOnStep(lastTime.LastTime, Result.CurrentBusinessUnit, Name);
-
+				var lastTime = rep.LastChangedDate(Result.CurrentBusinessUnit, "Schedules");
+				_jobParameters.StateHolder.SetThisTime(lastTime, "Schedules");
+				var changed = rep.ChangedDataOnStep(lastTime.LastTime, Result.CurrentBusinessUnit, "Schedules");
+				
 				if (!changed.Any()) return 0;
 				ScheduleChangedInfrastructure.AddRows(BulkInsertDataTable1, changed, scenario, Result.CurrentBusinessUnit);
 	            rep.PersistScheduleChanged(BulkInsertDataTable1);
