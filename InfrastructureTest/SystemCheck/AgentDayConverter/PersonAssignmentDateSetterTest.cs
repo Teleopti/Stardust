@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 			paRep.Get(pa.Id.Value).Date.Should().Be.EqualTo(AgentDayConverterDate.DateOfUnconvertedSchedule);
 			UnitOfWork.Clear();
 
-			target.Execute();
+			target.Execute(pa.Person.Id.Value);
 
 			paRep.Get(pa.Id.Value).Date.Should().Be.EqualTo(expected);
 		}
@@ -53,10 +53,28 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 
 			UnitOfWork.PersistAll();
 			UnitOfWork.Clear();
-			
-			target.Execute();
+
+			target.Execute(pa.Person.Id.Value);
 
 			paRep.Get(pa.Id.Value).Date.Should().Be.EqualTo(expected);
+		}
+
+		[Test]
+		public void ShouldNotConvertWrongPerson()
+		{
+			var target = new PersonAssignmentDateSetter(new SqlConnectionStringBuilder(UnitOfWorkFactory.Current.ConnectionString));
+			var paRep = new PersonAssignmentRepository(UnitOfWork);
+			var start = new DateTime(2000, 1, 1, 8, 0, 0, DateTimeKind.Utc);
+
+			var pa = createAndStoreAssignment(start);
+			Session.ResetDateForAllAssignmentsAndAudits();
+
+			UnitOfWork.PersistAll();
+			UnitOfWork.Clear();
+
+			target.Execute(Guid.NewGuid());
+
+			paRep.Get(pa.Id.Value).Date.Should().Be.EqualTo(AgentDayConverterDate.DateOfUnconvertedSchedule);
 		}
 
 		private IPersonAssignment createAndStoreAssignment(DateTime start)

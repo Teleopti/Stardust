@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
+﻿using System;
+
+namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
 {
 	/// <summary>
 	/// Used to identify a command in the Database
@@ -9,6 +11,6 @@
 		/// Executes against the connectionstring
 		/// </summary>
 		/// <returns></returns>
-		void Execute();
+		void Execute(Guid personId);
 	}
 }

@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 	public class VerifyAllConvertedTest : DatabaseTestWithoutTransaction
 	{
 		[Test]
-		public void ShouldSetCorrectDateForResettedPersonAssignment()
+		public void ShouldThrowIfNotFullyConverterted()
 		{
 			var target = new dontFixDates(new SqlConnectionStringBuilder(UnitOfWorkFactory.Current.ConnectionString));
 			var paRep = new PersonAssignmentRepository(UnitOfWork);
@@ -34,8 +34,7 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 			paRep.Get(pa.Id.Value).Date.Should().Be.EqualTo(AgentDayConverterDate.DateOfUnconvertedSchedule);
 			UnitOfWork.Clear();
 
-			Assert.Throws<NotSupportedException>(
-				() => target.Execute());
+			Assert.Throws<NotSupportedException>(() => target.Execute(pa.Person.Id.Value));
 		}
 
 		private IPersonAssignment createAndStoreAssignment(DateTime start)

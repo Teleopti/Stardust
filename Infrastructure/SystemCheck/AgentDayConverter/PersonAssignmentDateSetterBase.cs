@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
 	{
 		private readonly SqlConnectionStringBuilder _tempShouldNotBeLikeThis;
 
-		public PersonAssignmentDateSetterBase(SqlConnectionStringBuilder tempShouldNotBeLikeThis)
+		protected PersonAssignmentDateSetterBase(SqlConnectionStringBuilder tempShouldNotBeLikeThis)
 		{
 			_tempShouldNotBeLikeThis = tempShouldNotBeLikeThis;
 		}
@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
 		protected abstract string ReadUnconvertedSchedulesCommand { get; }
 		protected abstract string UpdateAssignmentDateCommand { get; }
 
-		public void Execute()
+		public void Execute(Guid personId)
 		{
 			var connectionString = _tempShouldNotBeLikeThis.ToString();
 
@@ -26,19 +26,23 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
 			{
 				connection.Open();
 
-				var dt = readSchedules(connection);
+				var dt = readSchedules(connection, personId);
 				setDateAndIncreaseVersion(dt);
 				updatePersonAssignmentRows(dt, connection);
 
-				checkAllConverted(connection);
+				checkAllConverted(connection, personId);
 			}
 		}
 
-		private void checkAllConverted(SqlConnection sqlConnection)
+		private void checkAllConverted(SqlConnection sqlConnection, Guid personId)
 		{
-			if ((int) new SqlCommand(NumberOfNotConvertedCommand, sqlConnection).ExecuteScalar() > 0)
+			using (var cmd = new SqlCommand(NumberOfNotConvertedCommand, sqlConnection))
 			{
-				throw new NotSupportedException("Something went wrong. There is still unconverted schedules in the database!");
+				cmd.Parameters.AddWithValue("@personId", personId);
+				if ((int)cmd.ExecuteScalar() > 0)
+				{
+					throw new NotSupportedException("Something went wrong. There is still unconverted schedules in the database!");
+				}				
 			}
 		}
 
@@ -46,11 +50,9 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
 		{
 			foreach (DataRow row in dataTable.Rows)
 			{
-				using (var command = new SqlCommand())
+				using (var command = new SqlCommand(UpdateAssignmentDateCommand, connection))
 				{
 					command.CommandType = CommandType.Text;
-					command.Connection = connection;
-					command.CommandText = UpdateAssignmentDateCommand;
 					command.Parameters.AddWithValue("@newDate", string.Format("{0:s}", row["TheDate"]));
 					command.Parameters.AddWithValue("@newVersion", row["Version"]);
 					command.Parameters.AddWithValue("@id", row["Id"]);
@@ -72,10 +74,11 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
 			}
 		}
 
-		private DataTable readSchedules(SqlConnection connection)
+		private DataTable readSchedules(SqlConnection connection, Guid personId)
 		{
 			using (var command = new SqlCommand(ReadUnconvertedSchedulesCommand, connection))
 			{
+				command.Parameters.AddWithValue("@personId", personId);
 				using (var dataAdapter = new SqlDataAdapter(command))
 				{
 					var dt = new DataTable();

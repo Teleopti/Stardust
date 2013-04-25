@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 
 			var revisions = Session.Auditer().GetRevisions(typeof(PersonAssignment), pa.Id.Value);
 
-			target.Execute();
+			target.Execute(pa.Person.Id.Value);
 
 			Session.Auditer().Find<PersonAssignment>(pa.Id.Value, revisions.Last()).Date.Should().Be.EqualTo(expected);
 		}
@@ -59,9 +59,29 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 
 			var revisions = Session.Auditer().GetRevisions(typeof(PersonAssignment), pa.Id.Value);
 
-			target.Execute();
+			target.Execute(pa.Person.Id.Value);
 
 			Session.Auditer().Find<PersonAssignment>(pa.Id.Value, revisions.Last()).Date.Should().Be.EqualTo(expected);
+		}
+
+		[Test]
+		public void ShouldNotConvertWrongPerson()
+		{
+			var target = new PersonAssignmentAuditDateSetter(new SqlConnectionStringBuilder(UnitOfWorkFactory.Current.ConnectionString));
+			var start = new DateTime(2000, 1, 1, 8, 0, 0, DateTimeKind.Utc);
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				createAndStoreAssignment(uow, start);
+				uow.PersistAll();
+			}
+			Session.ResetDateForAllAssignmentsAndAudits();
+			UnitOfWork.Clear();
+
+			var revisions = Session.Auditer().GetRevisions(typeof(PersonAssignment), pa.Id.Value);
+
+			target.Execute(Guid.NewGuid());
+
+			Session.Auditer().Find<PersonAssignment>(pa.Id.Value, revisions.Last()).Date.Should().Be.EqualTo(AgentDayConverterDate.DateOfUnconvertedSchedule);
 		}
 
 		private void createAndStoreAssignment(IUnitOfWork uow, DateTime start)
