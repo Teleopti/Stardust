@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
     /// </summary>
     public sealed class ScheduleProjectionExtractor : IScheduleExtractor
     {
-        readonly IList<IVisualLayerCollection> retList = new List<IVisualLayerCollection>();
+        private readonly ResourceCalculationDataContainer retList = new ResourceCalculationDataContainer(new PersonSkillProvider());
 
 
         /// <summary>
@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         /// Created by: micke
         /// Created date: 2008-05-27
         /// </remarks>
-        public IList<IVisualLayerCollection> CreateRelevantProjectionList(IScheduleDictionary scheduleDictionary)
+        public ResourceCalculationDataContainer CreateRelevantProjectionList(IScheduleDictionary scheduleDictionary)
         {
             retList.Clear();
 #pragma warning disable 618
@@ -39,18 +39,10 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         /// Created by: micke
         /// Created date: 2008-05-27
         /// </remarks>
-        public IList<IVisualLayerCollection> CreateRelevantProjectionList(IScheduleDictionary scheduleDictionary, DateTimePeriod period)
+        public ResourceCalculationDataContainer CreateRelevantProjectionList(IScheduleDictionary scheduleDictionary, DateTimePeriod period)
         {
             retList.Clear();
             scheduleDictionary.ExtractAllScheduleData(this, period);
-            return retList;
-        }
-
-        // just returns collections with layers
-        public IList<IVisualLayerCollection> CreateRelevantProjectionWithScheduleList(IScheduleDictionary scheduleDictionary, DateTimePeriod period)
-        {
-            CreateRelevantProjectionList(scheduleDictionary, period);
-            
             return retList;
         }
 
@@ -60,7 +52,11 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             var projection = svc.CreateProjection();
             if (projection.HasLayers)
             {
-                retList.Add(projection);
+	            var resourceLayers = projection.ToResourceLayers(15);
+	            foreach (var resourceLayer in resourceLayers)
+				{
+					retList.AddResources(resourceLayer.Period,resourceLayer.Activity,schedulePart.Person,schedulePart.DateOnlyAsPeriod.DateOnly,resourceLayer.Resource);
+	            }
             }
         }
     }

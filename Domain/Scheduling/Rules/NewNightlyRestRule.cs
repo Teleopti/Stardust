@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
@@ -37,10 +38,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
         public IEnumerable<IBusinessRuleResponse> Validate(IDictionary<IPerson, IScheduleRange> rangeClones, IEnumerable<IScheduleDay> scheduleDays)
         {
             var responsList = new List<IBusinessRuleResponse>();
+	        var groupedByPerson = scheduleDays.GroupBy(s => s.Person);
 
-            foreach (var scheduleDay in scheduleDays)
+            foreach (var scheduleDay in groupedByPerson)
             {
-                responsList.AddRange(checkDay(rangeClones[scheduleDay.Person], scheduleDay));
+				if (!scheduleDay.Any()) continue;
+	            var period = new DateOnlyPeriod(scheduleDay.Min(s => s.DateOnlyAsPeriod.DateOnly).AddDays(-1),
+	                                            scheduleDay.Max(s => s.DateOnlyAsPeriod.DateOnly).AddDays(1));
+	            var schedules =
+		            rangeClones[scheduleDay.Key].ScheduledDayCollection(period)
+		                                        .ToDictionary(k => k.DateOnlyAsPeriod.DateOnly, v => v);
+                responsList.AddRange(checkDay(rangeClones[scheduleDay.Key], period, schedules));
             }
 
             return responsList;
@@ -48,10 +56,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
         public void ClearMyResponses(IList<IBusinessRuleResponse> responseList, IPerson person, DateOnly dateOnly)
         {
-            responseList.Remove(createResponseForRemove(person, dateOnly.AddDays(-1), new DateOnlyPeriod(dateOnly.AddDays(-1), dateOnly)));
-            responseList.Remove(createResponseForRemove(person, dateOnly, new DateOnlyPeriod(dateOnly.AddDays(-1), dateOnly)));
-            responseList.Remove(createResponseForRemove(person, dateOnly, new DateOnlyPeriod(dateOnly, dateOnly.AddDays(1))));
-            responseList.Remove(createResponseForRemove(person, dateOnly.AddDays(1), new DateOnlyPeriod(dateOnly, dateOnly.AddDays(1))));
+	        var dayBefore = dateOnly.AddDays(-1);
+	        var dayAfter = dateOnly.AddDays(1);
+            responseList.Remove(createResponseForRemove(person, dayBefore, new DateOnlyPeriod(dayBefore, dateOnly)));
+            responseList.Remove(createResponseForRemove(person, dateOnly, new DateOnlyPeriod(dayBefore, dateOnly)));
+            responseList.Remove(createResponseForRemove(person, dateOnly, new DateOnlyPeriod(dateOnly, dayAfter)));
+            responseList.Remove(createResponseForRemove(person, dayAfter, new DateOnlyPeriod(dateOnly, dayAfter)));
         }
 
         public static void AddMyResponse(IList<IBusinessRuleResponse> responseList, IBusinessRuleResponse response)
@@ -59,43 +69,46 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
             responseList.Add(response);
         }
 
-        private IEnumerable<IBusinessRuleResponse> checkDay(IScheduleRange range, IScheduleDay scheduleDay)
+        private IEnumerable<IBusinessRuleResponse> checkDay(IScheduleRange range, DateOnlyPeriod period, IDictionary<DateOnly, IScheduleDay> scheduleDay)
         {
-            ICollection<IBusinessRuleResponse> responsList = new List<IBusinessRuleResponse>();
-            DateOnly dateToCheck = scheduleDay.DateOnlyAsPeriod.DateOnly;
-            IPersonPeriod personPeriod = range.Person.Period(dateToCheck);
-            if (personPeriod == null)
-                return responsList;
+            ICollection<IBusinessRuleResponse> responseList = new List<IBusinessRuleResponse>();
+	        var dayCollection = period.DayCollection();
+	        for (int dayIndex = 1; dayIndex < dayCollection.Count - 1; dayIndex++)
+	        {
+		        DateOnly dateToCheck = dayCollection[dayIndex];
+		        IPersonPeriod personPeriod = range.Person.Period(dateToCheck);
+		        if (personPeriod == null)
+			        return responseList;
 
-            IScheduleDay yesterday = range.ScheduledDay(dateToCheck.AddDays(-1));
-            IScheduleDay today = range.ScheduledDay(dateToCheck);
-            IScheduleDay tomorrow = range.ScheduledDay(dateToCheck.AddDays(1));
-            TimeSpan nightRest = personPeriod.PersonContract.Contract.WorkTimeDirective.NightlyRest;
+		        IScheduleDay yesterday = scheduleDay[dateToCheck.AddDays(-1)];
+				IScheduleDay today = scheduleDay[dateToCheck];
+				IScheduleDay tomorrow = scheduleDay[dateToCheck.AddDays(1)];
+		        TimeSpan nightRest = personPeriod.PersonContract.Contract.WorkTimeDirective.NightlyRest;
 
-            ClearMyResponses(range.BusinessRuleResponseInternalCollection, range.Person, dateToCheck);
-            TimeSpan? currentRest = checkDays(yesterday, today, nightRest);
-            if(currentRest != null)
-            {
-                responsList.Add(createResponse(range.Person, yesterday.DateOnlyAsPeriod.DateOnly,
-                                               yesterday.DateOnlyAsPeriod.DateOnly, today.DateOnlyAsPeriod.DateOnly,
-                                               nightRest, currentRest.Value, range, true));
-                responsList.Add(createResponse(range.Person, today.DateOnlyAsPeriod.DateOnly,
-                                               yesterday.DateOnlyAsPeriod.DateOnly, today.DateOnlyAsPeriod.DateOnly,
-                                               nightRest, currentRest.Value, range, !_haltModify));
-            }
-            
-            currentRest = checkDays(today, tomorrow, nightRest);
-            if (currentRest != null)
-            {
-                responsList.Add(createResponse(range.Person, today.DateOnlyAsPeriod.DateOnly,
-                                               today.DateOnlyAsPeriod.DateOnly, tomorrow.DateOnlyAsPeriod.DateOnly,
-                                               nightRest, currentRest.Value, range, !_haltModify));
-                responsList.Add(createResponse(range.Person, tomorrow.DateOnlyAsPeriod.DateOnly,
-                                               today.DateOnlyAsPeriod.DateOnly, tomorrow.DateOnlyAsPeriod.DateOnly,
-                                               nightRest, currentRest.Value, range, true));
-            }
-            
-            return responsList;
+		        ClearMyResponses(range.BusinessRuleResponseInternalCollection, range.Person, dateToCheck);
+		        TimeSpan? currentRest = checkDays(yesterday, today, nightRest);
+		        if (currentRest != null)
+		        {
+			        responseList.Add(createResponse(range.Person, yesterday.DateOnlyAsPeriod.DateOnly,
+			                                        yesterday.DateOnlyAsPeriod.DateOnly, today.DateOnlyAsPeriod.DateOnly,
+			                                        nightRest, currentRest.Value, range, true));
+			        responseList.Add(createResponse(range.Person, today.DateOnlyAsPeriod.DateOnly,
+			                                        yesterday.DateOnlyAsPeriod.DateOnly, today.DateOnlyAsPeriod.DateOnly,
+			                                        nightRest, currentRest.Value, range, !_haltModify));
+		        }
+
+		        currentRest = checkDays(today, tomorrow, nightRest);
+		        if (currentRest != null)
+		        {
+			        responseList.Add(createResponse(range.Person, today.DateOnlyAsPeriod.DateOnly,
+			                                        today.DateOnlyAsPeriod.DateOnly, tomorrow.DateOnlyAsPeriod.DateOnly,
+			                                        nightRest, currentRest.Value, range, !_haltModify));
+			        responseList.Add(createResponse(range.Person, tomorrow.DateOnlyAsPeriod.DateOnly,
+			                                        today.DateOnlyAsPeriod.DateOnly, tomorrow.DateOnlyAsPeriod.DateOnly,
+			                                        nightRest, currentRest.Value, range, true));
+		        }
+	        }
+	        return responseList;
         }
 
         private TimeSpan? checkDays(IScheduleDay firstdDay, IScheduleDay secondDay, TimeSpan nightRest)

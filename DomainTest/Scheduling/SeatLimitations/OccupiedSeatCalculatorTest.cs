@@ -29,8 +29,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
 		[Test]
 		public void ShouldAddLoggedOnAndUsedSeatsToSkillStaffPeriod()
 		{
-			IList<IVisualLayerCollection> relevantProjections = new List<IVisualLayerCollection>();
-			relevantProjections.Add(_mocks.StrictMock<IVisualLayerCollection>());
+			var relevantProjections = _mocks.StrictMock<IResourceCalculationDataContainer>();
 			ISkillSkillStaffPeriodExtendedDictionary relevantSkillStaffPeriods = new SkillSkillStaffPeriodExtendedDictionary();
 			ISkill skill = SkillFactory.CreateSiteSkill("sitSkill");
 			DateOnly day = new DateOnly(2010, 10, 10);
@@ -83,7 +82,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.SeatLimitations
 					Return(skillVisualLayerCollectionDictionary);
 				
 			}
-
 
 			using (_mocks.Playback())
 			{

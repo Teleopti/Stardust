@@ -43,7 +43,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		public void ResourceCalculateAllDays(DoWorkEventArgs e, BackgroundWorker backgroundWorker, bool useOccupancyAdjustment)
 		{
-            resourceCalculateDays(e, backgroundWorker, useOccupancyAdjustment, _stateHolder.ConsiderShortBreaks, _stateHolder.RequestedPeriod.DateOnlyPeriod.DayCollection());
+			var extractor = new ScheduleProjectionExtractor();
+			var resources = extractor.CreateRelevantProjectionList(_stateHolder.Schedules);
+			using (new ResourceCalculationContext(resources))
+			{
+				resourceCalculateDays(e, backgroundWorker, useOccupancyAdjustment, _stateHolder.ConsiderShortBreaks,
+				                      _stateHolder.RequestedPeriod.DateOnlyPeriod.DayCollection());
+			}
 		}
 
 		private void prepareAndCalculateDate(DateOnly date, bool useOccupancyAdjustment, bool considerShortBreaks, ToolStripProgressBar progressBar)
@@ -60,8 +66,15 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		public void ResourceCalculateMarkedDays(DoWorkEventArgs e, BackgroundWorker backgroundWorker, bool considerShortBreaks, bool useOccupancyAdjustment)
 		{
-			resourceCalculateDays(e, backgroundWorker, useOccupancyAdjustment, considerShortBreaks, _stateHolder.DaysToRecalculate);
-			_stateHolder.ClearDaysToRecalculate();
+			var period = new DateOnlyPeriod(_stateHolder.DaysToRecalculate.Min(), _stateHolder.DaysToRecalculate.Max());
+			var extractor = new ScheduleProjectionExtractor();
+			var resources = extractor.CreateRelevantProjectionList(_stateHolder.Schedules, period.ToDateTimePeriod(_stateHolder.TimeZoneInfo));
+			using (new ResourceCalculationContext(resources))
+			{
+				resourceCalculateDays(e, backgroundWorker, useOccupancyAdjustment, considerShortBreaks,
+				                      _stateHolder.DaysToRecalculate);
+				_stateHolder.ClearDaysToRecalculate();
+			}
 		}
 
 		private void resourceCalculateDays(DoWorkEventArgs e, BackgroundWorker backgroundWorker, bool useOccupancyAdjustment, bool considerShortBreaks, IEnumerable<DateOnly> dates)

@@ -46,13 +46,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         /// Gets the absolut person resources, the time, spent on the activity.
         /// </summary>
         /// <value>The absolut person resources.</value>
-        IDictionary<IPerson, double> PersonResources { get; }
+		IDictionary<string, double> PersonResources { get; }
 
         /// <summary>
         /// Gets the relative person resources, also called TRAFF, spent on the activity.
         /// </summary>
         /// <value>The relative person resources.</value>
-        IDictionary<IPerson, double> RelativePersonResources { get; }
+		IDictionary<string, double> RelativePersonResources { get; }
 
         /// <summary>
         /// Calculates the person resources summa for final result.
@@ -81,8 +81,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         private readonly PersonSkillDictionary _weightedRelativePersonSkillResources;
         private readonly PersonSkillDictionary _relativePersonSkillResources;
         private readonly Dictionary<ISkill, double> _targetDemands;
-        private readonly Dictionary<IPerson, double> _personResources;
-        private readonly Dictionary<IPerson, double> _relativePersonResources;
+		private readonly Dictionary<string, double> _personResources;
+		private readonly Dictionary<string, double> _relativePersonResources;
         private readonly Dictionary<ISkill, double> _weightedRelativePersonSkillResourcesSum;
         private readonly Dictionary<ISkill, double> _relativePersonSkillResourcesSum;
 
@@ -97,8 +97,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             _weightedRelativePersonSkillResources = new PersonSkillDictionary();
             _relativePersonSkillResources = new PersonSkillDictionary();
             _targetDemands = new Dictionary<ISkill, double>();
-            _personResources = new Dictionary<IPerson, double>();
-            _relativePersonResources = new Dictionary<IPerson, double>();
+            _personResources = new Dictionary<string, double>();
+            _relativePersonResources = new Dictionary<string, double>();
             _weightedRelativePersonSkillResourcesSum = new Dictionary<ISkill, double>();
             _relativePersonSkillResourcesSum = new Dictionary<ISkill, double>();
         }
@@ -163,7 +163,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         /// Gets the absolut person resources, the time, spent on the activity.
         /// </summary>
         /// <value>The absolut person resources.</value>
-        public IDictionary<IPerson, double> PersonResources
+		public IDictionary<string, double> PersonResources
         {
             get { return _personResources; }
         }
@@ -172,7 +172,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         /// Gets the relative person resources, also called TRAFF, spent on the activity.
         /// </summary>
         /// <value>The relative person resources.</value>
-        public IDictionary<IPerson, double> RelativePersonResources
+		public IDictionary<string, double> RelativePersonResources
         {
             get { return _relativePersonResources; }
         }
@@ -183,7 +183,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         public void CalculatePersonResourcesSummaForReadingResultFromFurness()
         {
             WeightedRelativePersonSkillResourcesSum.Clear();
-            foreach (IPerson personKey in PersonResources.Keys)
+            foreach (var personKey in PersonResources.Keys)
             {
                 Dictionary<ISkill, double> skillValues;
                 if (!WeightedRelativePersonSkillResources.TryGetValue(personKey, out skillValues)) continue;
@@ -211,7 +211,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         public void CalculatePersonResourcesSummaForFurnessInitialization()
         {
             WeightedRelativePersonSkillResourcesSum.Clear();
-            foreach (IPerson personKey in PersonResources.Keys)
+            foreach (var personKey in PersonResources.Keys)
             {
                 Dictionary<ISkill, double> skillValues;
                 if (!WeightedRelativePersonSkillResources.TryGetValue(personKey, out skillValues)) continue;

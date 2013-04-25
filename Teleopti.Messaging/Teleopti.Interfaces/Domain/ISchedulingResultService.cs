@@ -16,7 +16,7 @@ namespace Teleopti.Interfaces.Domain
         /// Created by: micke
         /// Created date: 2008-08-22
         /// </remarks>
-        ISkillSkillStaffPeriodExtendedDictionary SchedulingResult();
+        ISkillSkillStaffPeriodExtendedDictionary SchedulingResult(DateTimePeriod periodWithSchedules);
 
 		/// <summary>
 		/// Create or recreate scheduling result for the given period.
@@ -29,7 +29,7 @@ namespace Teleopti.Interfaces.Domain
 		/// Created by: micke
 		/// Created date: 2008-08-22
 		/// </remarks>
-        ISkillSkillStaffPeriodExtendedDictionary SchedulingResult(DateTimePeriod periodToRecalculate, IList<IVisualLayerCollection> toRemove, IList<IVisualLayerCollection> toAdd);
+		ISkillSkillStaffPeriodExtendedDictionary SchedulingResult(DateTimePeriod periodToRecalculate, IList<IScheduleDay> toRemove, IList<IScheduleDay> toAdd);
 
     }
 }

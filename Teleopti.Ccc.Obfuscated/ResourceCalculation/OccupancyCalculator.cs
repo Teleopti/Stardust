@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
         {
             IList<SkillCollectionKey> skillcombinations = CreateCalculatedSkillCollectionKeys();
 
-            foreach (KeyValuePair<IPerson, Dictionary<ISkill, double>> personSkillValues in _relativePersonSkillResources)
+            foreach (KeyValuePair<string, Dictionary<ISkill, double>> personSkillValues in _relativePersonSkillResources)
             {
                 SkillCollectionKey key = _relativePersonSkillResources.SkillCombination(personSkillValues.Key);
                 int index = skillcombinations.IndexOf(key);

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
@@ -9,7 +11,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 	{
 		private readonly ISkillSkillStaffPeriodExtendedDictionary _relevantSkillStaffPeriods;
 		private readonly IList<ISkill> _allSkills;
-		private readonly IList<IVisualLayerCollection> _relevantProjections;
+		private readonly IResourceCalculationDataContainer _relevantProjections;
 		private readonly ISingleSkillCalculator _singleSkillCalculator;
 		private readonly bool _useOccupancyAdjustment;
 		private readonly ISingleSkillDictionary _singleSkillDictionary;
@@ -32,7 +34,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 
 		public SchedulingResultService(ISkillSkillStaffPeriodExtendedDictionary relevantSkillStaffPeriods,
 			IList<ISkill> allSkills,
-			IList<IVisualLayerCollection> relevantProjections,
+			IResourceCalculationDataContainer relevantProjections,
 			ISingleSkillCalculator singleSkillCalculator,
 			bool useOccupancyAdjustment,
 			ISingleSkillDictionary singleSkillDictionary)
@@ -47,44 +49,41 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 
 
 		//only used by ETL
-		public ISkillSkillStaffPeriodExtendedDictionary SchedulingResult()
+		public ISkillSkillStaffPeriodExtendedDictionary SchedulingResult(DateTimePeriod periodWithSchedules)
 		{
-			DateTimePeriod? periodToRecalculate = null;
-
-			foreach (var projection in _relevantProjections)
-			{
-				DateTimePeriod? projectedPeriod = projection.Period();
-				if (projectedPeriod.HasValue)
-				{
-					if (!periodToRecalculate.HasValue)
-						periodToRecalculate = projectedPeriod.Value;
-					else
-						periodToRecalculate = periodToRecalculate.Value.MaximumPeriod(projectedPeriod.Value);
-				}
-			}
-
-			if (!periodToRecalculate.HasValue)
-				return _relevantSkillStaffPeriods;
-
 			DateTimePeriod? relevantPeriod = _relevantSkillStaffPeriods.Period();
 			if (!relevantPeriod.HasValue)
 				return _relevantSkillStaffPeriods;
 
-			periodToRecalculate = relevantPeriod.Value.Intersection(periodToRecalculate.Value);
+			var intersectingPeriod = relevantPeriod.Value.Intersection(periodWithSchedules);
 
-			if (!periodToRecalculate.HasValue)
+			if (!intersectingPeriod.HasValue)
 				return _relevantSkillStaffPeriods;
 
-			return SchedulingResult(periodToRecalculate.Value, new List<IVisualLayerCollection>(), new List<IVisualLayerCollection>());
+			return SchedulingResult(intersectingPeriod.Value, new List<IScheduleDay>(), new List<IScheduleDay>());
 		}
 
 		//used from everwhere exept ETL
-		public ISkillSkillStaffPeriodExtendedDictionary SchedulingResult(DateTimePeriod periodToRecalculate, IList<IVisualLayerCollection> toRemove, IList<IVisualLayerCollection> toAdd)
+		public ISkillSkillStaffPeriodExtendedDictionary SchedulingResult(DateTimePeriod periodToRecalculate, IList<IScheduleDay> toRemove, IList<IScheduleDay> toAdd)
 		{
-			return schedulingResult(periodToRecalculate, true, toRemove, toAdd);
+			var provider = new PersonSkillProvider();
+			var toRemoveContainer = new ResourceCalculationDataContainer(provider);
+			var toAddContainer = new ResourceCalculationDataContainer(provider);
+
+			var minResolution = _allSkills.Min(s => s.DefaultResolution);
+			foreach (var scheduleDay in toRemove)
+			{
+				toRemoveContainer.AddScheduleDayToContainer(scheduleDay,minResolution);
+			}
+			foreach (var scheduleDay in toAdd)
+			{
+				toAddContainer.AddScheduleDayToContainer(scheduleDay,minResolution);
+			}
+
+			return schedulingResult(periodToRecalculate, true, toRemoveContainer, toAddContainer);
 		}
 
-		private ISkillSkillStaffPeriodExtendedDictionary schedulingResult(DateTimePeriod periodToRecalculate, bool emptyCache, IList<IVisualLayerCollection> toRemove, IList<IVisualLayerCollection> toAdd)
+		private ISkillSkillStaffPeriodExtendedDictionary schedulingResult(DateTimePeriod periodToRecalculate, bool emptyCache, IResourceCalculationDataContainer toRemove, IResourceCalculationDataContainer toAdd)
 		{
 			if (_allSkills.Count == 0)
 				return _relevantSkillStaffPeriods;
@@ -108,16 +107,31 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 			return _relevantSkillStaffPeriods;
 		}
 
-		private static IList<IVisualLayerCollection> createRelevantProjectionList(IScheduleDictionary scheduleDictionary)
+		private ResourceCalculationDataContainer createRelevantProjectionList(IScheduleDictionary scheduleDictionary)
 		{
-			var extractor = new ScheduleProjectionExtractor();
-			return extractor.CreateRelevantProjectionList(scheduleDictionary);
+			var resources = new ResourceCalculationDataContainer(new PersonSkillProvider());
+			int minutesSplit = _allSkills.Min(s => s.DefaultResolution);
+					
+			foreach (var person in scheduleDictionary.Keys)
+			{
+				var range = scheduleDictionary[person];
+				var period = range.TotalPeriod();
+				if (!period.HasValue) continue;
+
+				var scheduleDays =
+					range.ScheduledDayCollection(period.Value.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone()));
+				foreach (var scheduleDay in scheduleDays)
+				{
+					resources.AddScheduleDayToContainer(scheduleDay, minutesSplit);
+				}
+			}
+			return resources;
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public bool UseSingleSkillCalculations(IList<IVisualLayerCollection> toRemove, IList<IVisualLayerCollection> toAdd)
+		public bool UseSingleSkillCalculations(IResourceCalculationDataContainer toRemove, IResourceCalculationDataContainer toAdd)
 		{
-			var useSingleSkillCalculations = toRemove.Count > 0 || toAdd.Count > 0;
+			var useSingleSkillCalculations = toRemove.HasItems() || toAdd.HasItems();
 
 			if (useSingleSkillCalculations)
 				useSingleSkillCalculations = AllIsSingleSkill(toRemove);
@@ -128,23 +142,9 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 			return useSingleSkillCalculations;
 		}
 
-		private bool AllIsSingleSkill(IEnumerable<IVisualLayerCollection> visualLayerCollections)
+		private bool AllIsSingleSkill(IResourceCalculationDataContainer visualLayerCollections)
 		{
-			foreach (var visualLayerCollection in visualLayerCollections)
-			{
-				var dateTimePeriod = visualLayerCollection.Period();
-				if (dateTimePeriod != null)
-				{
-					var person = visualLayerCollection.Person;
-					var dateOnly = dateTimePeriod.Value.ToDateOnlyPeriod(person.PermissionInformation.DefaultTimeZone()).StartDate;
-					if (!_singleSkillDictionary.IsSingleSkill(person, dateOnly))
-					{
-						return false;
-					}
-				}
-			}
-
-			return true;
+			return visualLayerCollections.AllIsSingleSkill();
 		}
 	}
 }

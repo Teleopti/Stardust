@@ -6,18 +6,18 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 {
 	public interface ISingleSkillCalculator
 	{
-		void Calculate(IList<IVisualLayerCollection> relevantProjections,
+		void Calculate(IResourceCalculationDataContainer relevantProjections,
 		               ISkillSkillStaffPeriodExtendedDictionary relevantSkillStaffPeriods,
-		               IList<IVisualLayerCollection> toRemove, IList<IVisualLayerCollection> toAdd);
+					   IResourceCalculationDataContainer toRemove, IResourceCalculationDataContainer toAdd);
 	}
 
 	public class SingleSkillCalculator : ISingleSkillCalculator
 	{
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
-		public void Calculate(IList<IVisualLayerCollection> relevantProjections, 
-			ISkillSkillStaffPeriodExtendedDictionary relevantSkillStaffPeriods, 
-			IList<IVisualLayerCollection> toRemove, 
-			IList<IVisualLayerCollection> toAdd)
+		public void Calculate(IResourceCalculationDataContainer relevantProjections, 
+			ISkillSkillStaffPeriodExtendedDictionary relevantSkillStaffPeriods,
+			IResourceCalculationDataContainer toRemove,
+			IResourceCalculationDataContainer toAdd)
 		{
 			foreach (KeyValuePair<ISkill, ISkillStaffPeriodDictionary> pair in relevantSkillStaffPeriods)
 			{
@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				{
 					double result1;
 					double result2;
-					if(toRemove.Count > 0 || toAdd.Count > 0)
+					if(toRemove.HasItems() || toAdd.HasItems())
 					{
 						Tuple<double, double> resultToRemove = nonBlendSkillImpactOnPeriodForProjection(skillStaffPeriod, toRemove, skill);
 						Tuple<double, double> resultToAdd = nonBlendSkillImpactOnPeriodForProjection(skillStaffPeriod, toAdd, skill);
@@ -53,11 +53,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			}
 		}
 
-		private static Tuple<double, double> nonBlendSkillImpactOnPeriodForProjection(ISkillStaffPeriod skillStaffPeriod, IEnumerable<IVisualLayerCollection> shiftList, ISkill skill)
+		private static Tuple<double, double> nonBlendSkillImpactOnPeriodForProjection(ISkillStaffPeriod skillStaffPeriod, IResourceCalculationDataContainer shiftList, ISkill skill)
 		{
-			double result1 = 0;
-			double result2 = 0;
-			foreach (var layercollection in shiftList)
+			var resources = shiftList.SkillResources(skill, skillStaffPeriod.Period);
+			return new Tuple<double, double>(resources,resources);
+
+			/*foreach (var layercollection in shiftList)
 			{
 				DateOnly dateOnly = skillStaffPeriodDate(skillStaffPeriod, layercollection.Person);
 				double skillEfficiency = checkPersonSkill(skill, layercollection.Person, dateOnly);
@@ -69,7 +70,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 				result1 += result * skillEfficiency;
 			}
 
-			return new Tuple<double, double>(result1, result2);
+			return new Tuple<double, double>(result1, result2);*/
 		}
 
 		private static double calculateShift(ISkillStaffPeriod skillStaffPeriod, IEnumerable<IVisualLayer> layercollection, IActivity skillActivity)

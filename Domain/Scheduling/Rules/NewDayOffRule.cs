@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
@@ -44,39 +45,43 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 		public IEnumerable<IBusinessRuleResponse> Validate(IDictionary<IPerson, IScheduleRange> rangeClones, IEnumerable<IScheduleDay> scheduleDays)
         {
             var responseList = new HashSet<IBusinessRuleResponse>();
-            foreach (IScheduleDay day in scheduleDays)
-            {
-                var person = day.Person;
-                var currentSchedules = rangeClones[person];
-                var oldResponses = currentSchedules.BusinessRuleResponseInternalCollection;
-                var dateOnly = day.DateOnlyAsPeriod.DateOnly;
-                var daysToCheck = currentSchedules.ScheduledDayCollection(new DateOnlyPeriod(dateOnly.AddDays(-3), dateOnly.AddDays(3)));
-                foreach (IScheduleDay checkDay in daysToCheck)
-                {
-                    var checkDateOnly = checkDay.DateOnlyAsPeriod.DateOnly;
-                    oldResponses.Remove(createResponse(person, checkDateOnly, "remove"));
-                    foreach (PersonDayOff personDayOff in checkDay.PersonDayOffCollection())
-                    {
-                        DateTimePeriod layerAfterPeriod = periodOfLayerAfter(personDayOff, daysToCheck);
-                        DateTimePeriod layerBeforePeriod = periodOfLayerBefore(personDayOff, daysToCheck);
 
-                        if (DayOffDoesConflictWithActivity(personDayOff, layerBeforePeriod, layerAfterPeriod))
-                        {
-                            IBusinessRuleResponse response = createResponse(person, checkDateOnly, ErrorMessage);
-                            ErrorMessage = "";
-                            if (!ForDelete)
-                                responseList.Add(response);
-                            oldResponses.Add(response);
-                        }
-                    }
-                }
-                
-                
-            }
-            return responseList;
+			var groupedByPerson = scheduleDays.GroupBy(s => s.Person);
+
+			foreach (var scheduleDay in groupedByPerson)
+			{
+				if (!scheduleDay.Any()) continue;
+				var period = new DateOnlyPeriod(scheduleDay.Min(s => s.DateOnlyAsPeriod.DateOnly).AddDays(-3),
+				                                scheduleDay.Max(s => s.DateOnlyAsPeriod.DateOnly).AddDays(3));
+				var currentSchedules = rangeClones[scheduleDay.Key];
+				var oldResponses = currentSchedules.BusinessRuleResponseInternalCollection;
+				var schedules = currentSchedules.ScheduledDayCollection(period);
+
+				foreach (var checkDay in schedules)
+				{
+					var checkDateOnly = checkDay.DateOnlyAsPeriod.DateOnly;
+					oldResponses.Remove(createResponse(scheduleDay.Key, checkDateOnly, "remove"));
+					foreach (IPersonDayOff personDayOff in checkDay.PersonDayOffCollection())
+					{
+						DateTimePeriod layerAfterPeriod = periodOfLayerAfter(personDayOff, schedules);
+						DateTimePeriod layerBeforePeriod = periodOfLayerBefore(personDayOff, schedules);
+
+						if (DayOffDoesConflictWithActivity(personDayOff, layerBeforePeriod, layerAfterPeriod))
+						{
+							IBusinessRuleResponse response = createResponse(scheduleDay.Key, checkDateOnly, ErrorMessage);
+							ErrorMessage = "";
+							if (!ForDelete)
+								responseList.Add(response);
+							oldResponses.Add(response);
+						}
+					}
+				}
+			}
+
+			return responseList;
         }
 
-        public bool DayOffDoesConflictWithActivity(PersonDayOff dayOff, DateTimePeriod assignmentBeforePeriod, DateTimePeriod assignmentAfterPeriod)
+        public bool DayOffDoesConflictWithActivity(IPersonDayOff dayOff, DateTimePeriod assignmentBeforePeriod, DateTimePeriod assignmentAfterPeriod)
         {
             if(dayOff.DayOff.TargetLength > (assignmentAfterPeriod.StartDateTime - assignmentBeforePeriod.EndDateTime))
             {
@@ -101,7 +106,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
             return false;
         }
 
-        private bool dayOffCannotBeMoved(PersonDayOff dayOff, DateTimePeriod assignmentBeforePeriod, DateTimePeriod assignmentAfterPeriod)
+        private bool dayOffCannotBeMoved(IPersonDayOff dayOff, DateTimePeriod assignmentBeforePeriod, DateTimePeriod assignmentAfterPeriod)
         {
             DateTime startDayOff = dayOffStartEnd(dayOff).StartDateTime;
             DateTime endDayOff = dayOffStartEnd(dayOff).EndDateTime;
@@ -198,7 +203,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
             return response;
         }
 
-        private DateTimePeriod periodOfLayerBefore(PersonDayOff personDayOff, IEnumerable<IScheduleDay> daysToCheck)
+        private DateTimePeriod periodOfLayerBefore(IPersonDayOff personDayOff, IEnumerable<IScheduleDay> daysToCheck)
         {
             var assignmentJustBeforeDayOff = getAssignmentJustBeforeDayOff(personDayOff, daysToCheck);
             var layerBeforePeriod = new DateTimePeriod(1900, 1, 1, 1900, 1, 2);
@@ -216,7 +221,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
             return layerBeforePeriod;
         }
 
-        private static IPersonAssignment getAssignmentJustBeforeDayOff(PersonDayOff dayOff, IEnumerable<IScheduleDay> daysToCheck)
+        private static IPersonAssignment getAssignmentJustBeforeDayOff(IPersonDayOff dayOff, IEnumerable<IScheduleDay> daysToCheck)
         {
             IPersonAssignment returnVal = null;
             foreach (IScheduleDay day in daysToCheck)
@@ -237,7 +242,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
             return returnVal;
         }
 
-        private  DateTimePeriod periodOfLayerAfter(PersonDayOff personDayOff, IEnumerable<IScheduleDay> daysToCheck)
+        private  DateTimePeriod periodOfLayerAfter(IPersonDayOff personDayOff, IEnumerable<IScheduleDay> daysToCheck)
         {
             var assignmentJustAfterDayOff = getAssignmentJustAfterDayOff(personDayOff, daysToCheck);
             var periodOfAssignmentAfter = new DateTimePeriod(2100, 1, 1, 2100, 1, 2);
@@ -252,7 +257,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
             return periodOfAssignmentAfter;
         }
 
-        private static IPersonAssignment getAssignmentJustAfterDayOff(PersonDayOff dayOff, IEnumerable<IScheduleDay> daysToCheck)
+        private static IPersonAssignment getAssignmentJustAfterDayOff(IPersonDayOff dayOff, IEnumerable<IScheduleDay> daysToCheck)
         {
             foreach (IScheduleDay day in daysToCheck)
             {

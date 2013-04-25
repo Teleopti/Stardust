@@ -48,17 +48,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
             foreach (IVirtualSchedulePeriod schedulePeriod in virtualSchedulePeriods)
             {
                 if (schedulePeriod.IsValid)
-                {
+				{
                     DateOnlyPeriod scheduleDateOnlyPeriod = schedulePeriod.DateOnlyPeriod;
                     var person = schedulePeriod.Person;
-                    IScheduleRange currentSchedules = rangeClones[person];
+					var timeZone = person.PermissionInformation.DefaultTimeZone();
+					var currentSchedules = rangeClones[person];
                     var oldResponses = currentSchedules.BusinessRuleResponseInternalCollection;
                     foreach (PersonWeek personWeek in personWeeks)
                     {
                         foreach (DateOnly day in personWeek.Week.DayCollection())
                         {
-                            var dop = new DateOnlyPeriod(day, day);
-                            DateTimePeriod period = dop.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
+							var period = new DateOnlyPeriod(day, day).ToDateTimePeriod(timeZone);
                             for (int i = oldResponses.Count - 1; i >= 0; i--)
                             {
                                 var response = oldResponses[i];
@@ -90,9 +90,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
                                                             shiftCategoryLimitation.ShiftCategory.Description.Name);
                                         foreach (DateOnly dateOnly in datesWithCategory)
                                         {
+											var dop = new DateOnlyPeriod(dateOnly, dateOnly);
+											DateTimePeriod period = dop.ToDateTimePeriod(timeZone);
+
                                             if (!ForDelete)
-                                                responseList.Add(createResponse(person, dateOnly, message, typeof(WeekShiftCategoryLimitationRule)));
-                                            oldResponses.Add(createResponse(person, dateOnly, message, typeof(WeekShiftCategoryLimitationRule)));
+                                                responseList.Add(createResponse(person, dop, period, message, typeof(WeekShiftCategoryLimitationRule)));
+                                            oldResponses.Add(createResponse(person, dop, period, message, typeof(WeekShiftCategoryLimitationRule)));
                                         }
                                     }
                                 }
@@ -105,10 +108,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
             return responseList;
         }
 
-        private IBusinessRuleResponse createResponse(IPerson person, DateOnly dateOnly, string message, Type type)
+        private IBusinessRuleResponse createResponse(IPerson person, DateOnlyPeriod dop, DateTimePeriod period, string message, Type type)
         {
-            var dop = new DateOnlyPeriod(dateOnly, dateOnly);
-            DateTimePeriod period = dop.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
             IBusinessRuleResponse response = new BusinessRuleResponse(type, message, _haltModify, IsMandatory, period, person, dop) { Overridden = !_haltModify };
             return response;
         }
