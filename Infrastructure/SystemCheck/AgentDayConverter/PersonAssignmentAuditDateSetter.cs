@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
 			get
 			{
 				return "update [Auditing].PersonAssignment_AUD " +
-				       "set TheDate = @newDate " +
+				       "set TheDate = @newDate, version=version+1 " +
 				       "where Id=@id";
 			}
 		}

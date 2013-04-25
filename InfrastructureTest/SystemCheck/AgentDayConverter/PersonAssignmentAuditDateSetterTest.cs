@@ -100,6 +100,27 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 			       .Date.Should().Be.EqualTo(new DateOnly(2000, 1, 2));
 		}
 
+		[Test]
+		public void ShouldIncreaseVersionNumber()
+		{
+			var start = new DateTime(2000, 1, 1, 23, 0, 0, DateTimeKind.Utc);
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				createAndStoreAssignment(uow, start);
+				uow.PersistAll();
+			}
+			Session.ResetDateForAllAssignmentsAndAudits();
+			UnitOfWork.Clear();
+
+			var revisions = Session.Auditer().GetRevisions(typeof(PersonAssignment), pa.Id.Value);
+			var versionBefore = Session.Auditer().Find<PersonAssignment>(pa.Id.Value, revisions.Last()).Version;
+			ExecuteTarget.AuditDateSetterAndWrapInTransaction(pa.Person.Id.Value, TimeZoneInfo.Utc);
+
+			Session.Clear();
+			Session.Auditer()
+						 .Find<PersonAssignment>(pa.Id.Value, revisions.Last())
+						 .Version.Should().Be.EqualTo(versionBefore + 1);
+		}
 
 		private void createAndStoreAssignment(IUnitOfWork uow, DateTime start)
 		{
