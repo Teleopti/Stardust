@@ -3,6 +3,7 @@ using NUnit.Framework;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
+using Teleopti.Ccc.WebBehaviorTest.Data;
 using WatiN.Core;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 
@@ -27,7 +28,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public LocalizedText To(string textToBeResourceKey)
 		{
 			var resourceKey = new CultureInfo("en-US").TextInfo.ToTitleCase(textToBeResourceKey).Replace(" ", "");
-			var localizedText = Resources.ResourceManager.GetString(resourceKey) ?? textToBeResourceKey;
+			var localizedText = Resources.ResourceManager.GetString(resourceKey, UserFactory.User().Culture) ?? textToBeResourceKey;
 			return new LocalizedText { Text = localizedText };
 		}
 

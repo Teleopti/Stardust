@@ -9,7 +9,7 @@ using System.Windows.Forms;
 using Syncfusion.Pdf;
 using Syncfusion.Pdf.Graphics;
 using Teleopti.Ccc.AgentPortalCode.Common;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
@@ -176,10 +176,10 @@ namespace Teleopti.Ccc.AgentPortalCode.ScheduleReporting
                 SchedulePartDto part = stateHolder.AgentSchedulePartDictionary[date];
                 SchedulePartView significantPart = SchedulePartView.None;
 
-                if (part.PersonAssignmentCollection.Length > 0)
+                if (part.PersonAssignmentCollection.Count > 0)
                     significantPart = SchedulePartView.PersonalShift;
 
-                if (part.ProjectedLayerCollection.Length > 0)
+                if (part.ProjectedLayerCollection.Count > 0)
                     significantPart = SchedulePartView.MainShift;
 
                 if (part.PersonDayOff != null)
@@ -197,7 +197,7 @@ namespace Teleopti.Ccc.AgentPortalCode.ScheduleReporting
                         break;
 
                     case SchedulePartView.DayOff:
-                        if (part.PersonAssignmentCollection.Length == 0)
+                        if (part.PersonAssignmentCollection.Count == 0)
                         {
                             IPdfScheduleTemplate dayOff = new PdfScheduleDayOff(_scheduleColumnWidth,
 																				part.PersonDayOff, rtl, _culture);

@@ -13,7 +13,7 @@ CREATE PROCEDURE [mart].[ChangedDataOnStep]
 -- =============================================
 -- Date			Who	Description
 -- =============================================
---  exec [mart].[ChangedDataOnStep] 'stg_schedule_day_off_count, stg_day_off, dim_day_off', '2013-04-10 00:00:00.000' ,'FC2F309C-3E3C-4CFB-9C11-A1570077B92B'
+--  exec [mart].[ChangedDataOnStep] 'stg_schedule_day_off_count, stg_day_off, dim_day_off', '2013-04-15 00:00:00.000' ,'FC2F309C-3E3C-4CFB-9C11-A1570077B92B'
 AS
 CREATE TABLE #persons (PersonId uniqueidentifier NOT NULL)
 CREATE TABLE #PersonsUpdated

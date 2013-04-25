@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Analytics.Etl.TransformerInfrastructure.DataTableDefinition;
-using Teleopti.Interfaces.Domain;
 using IJobResult = Teleopti.Analytics.Etl.Interfaces.Transformer.IJobResult;
 
 namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
@@ -13,39 +13,32 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 		{
 			Name = "stg_schedule_preference, stg_day_off, dim_day_off";
 			JobCategory = JobCategoryType.Schedule;
-			Transformer = new SchedulePreferenceTransformer(_jobParameters.IntervalsPerDay);
-			ScheduleDayRestrictor = new ScheduleDayRestrictor();
+			Transformer = new IntradaySchedulePreferenceTransformer(_jobParameters.IntervalsPerDay);
 			DayOffSubStep = new EtlDayOffSubStep();
 			SchedulePreferenceInfrastructure.AddColumnsToDataTable(BulkInsertDataTable1);
 		}
 
-		public ISchedulePreferenceTransformer Transformer { get; set; }
-		public IScheduleDayRestrictor ScheduleDayRestrictor { get; set; }
+		public IIntradaySchedulePreferenceTransformer Transformer { private get; set; }
 		public IEtlDayOffSubStep DayOffSubStep { get; set; }
 
 		protected override int RunStep(IList<IJobResult> jobResultCollection, bool isLastBusinessUnit)
 		{
-			foreach (var scenario in _jobParameters.StateHolder.ScenarioCollectionDeletedExcluded)
+			var rowsAffected = 0;
+			foreach (var scenario in _jobParameters.StateHolder.ScenarioCollectionDeletedExcluded.Where(scenario => scenario.DefaultScenario))
 			{
-				if (!scenario.DefaultScenario) continue;
-				var period = new DateTimePeriod(JobCategoryDatePeriod.StartDateUtcFloor, JobCategoryDatePeriod.EndDateUtcCeiling);
-				//Get data from Cashe
-				var scheduleDictionary = _jobParameters.StateHolder.GetScheduleCashe();
+				var rep = _jobParameters.Helper.Repository;
+				var lastTime = rep.LastChangedDate(Result.CurrentBusinessUnit, "Preferences");
+				_jobParameters.StateHolder.SetThisTime(lastTime, "Preferences");
+				var changed = rep.ChangedPreferencesOnStep(lastTime.LastTime, Result.CurrentBusinessUnit);
 
-				// Extract one schedulepart per each person and date
-				var scheduleParts = _jobParameters.StateHolder.GetSchedulePartPerPersonAndDate(scheduleDictionary);
+				Transformer.Transform(changed, BulkInsertDataTable1,_jobParameters.StateHolder,scenario);
 
-				//IList<IScheduleDay> scheduleParts = _jobParameters.StateHolder.LoadSchedulePartsPerPersonAndDate(period, scenario);
-				//Remove parts ending too late. This because the schedule repository fetches restrictions on larger period than schedule.
-				scheduleParts = ScheduleDayRestrictor.RemoveScheduleDayEndingTooLate(scheduleParts, period.EndDateTime);
-				Transformer.Transform(scheduleParts, BulkInsertDataTable1);
+				rowsAffected = _jobParameters.Helper.Repository.PersistSchedulePreferences(BulkInsertDataTable1);
+
+				rowsAffected += DayOffSubStep.StageAndPersistToMart(DayOffEtlLoadSource.SchedulePreference,
+																	   RaptorTransformerHelper.CurrentBusinessUnit,
+																	   _jobParameters.Helper.Repository);
 			}
-
-			var rowsAffected = _jobParameters.Helper.Repository.PersistSchedulePreferences(BulkInsertDataTable1);
-			
-			rowsAffected += DayOffSubStep.StageAndPersistToMart(DayOffEtlLoadSource.SchedulePreference,
-			                                                       RaptorTransformerHelper.CurrentBusinessUnit,
-			                                                       _jobParameters.Helper.Repository);
 
 			return rowsAffected;
 		}

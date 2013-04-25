@@ -30,7 +30,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Jobs
 			Add(new IntradayStageScheduleJobStep(jobParameters));
 			//Add(new StageScheduleForecastSkillJobStep(jobParameters)); //removed 2010-02-24 to reduce duration/Load (scheduling resource calculation)
 			Add(new IntradayStageScheduleDayOffCountJobStep(jobParameters));
-			Add(new StageSchedulePreferenceJobStep(jobParameters));
+			Add(new IntradayStageSchedulePreferenceJobStep(jobParameters));
 			Add(new StageSkillJobStep(jobParameters));
 			Add(new StageWorkloadJobStep(jobParameters));
 			Add(new StageForecastWorkloadJobStep(jobParameters));

@@ -47,7 +47,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			{
 				Expect.Call(_teamInfoFactory.CreateTeamInfo(person, selectedPeriod, matrixes)).Return(teaminfo);
 				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(teaminfo, dateOnly,
-				                                                      schedulingOptions.BlockFinderTypeForAdvanceScheduling,false ))
+																	  schedulingOptions.BlockFinderTypeForAdvanceScheduling, false, matrixes))
 				      .Return(teamBlockInfo);
 			}
 			using (_mocks.Playback())
@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 			{
 				Expect.Call(_teamInfoFactory.CreateTeamInfo(person, selectedPeriod, matrixes)).Return(teaminfo);
 				Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(teaminfo, dateOnly,
-                                                                      schedulingOptions.BlockFinderTypeForAdvanceScheduling, false))
+																	  schedulingOptions.BlockFinderTypeForAdvanceScheduling, false, matrixes))
 					  .Return(null);
 			}
 			using (_mocks.Playback())

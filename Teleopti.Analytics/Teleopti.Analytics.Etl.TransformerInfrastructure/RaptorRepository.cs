@@ -241,14 +241,15 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 											  _dataMartConnectionString);
 		}
 
-		public int FillIntradayScheduleDayCountDataMart(IBusinessUnit currentBusinessUnit)
+		public int FillIntradayScheduleDayCountDataMart(IBusinessUnit currentBusinessUnit, IScenario scenario)
 		{
 			var parameterList = new List<SqlParameter>
 				{
-					new SqlParameter("business_unit_code", currentBusinessUnit.Id)
+					new SqlParameter("business_unit_code", currentBusinessUnit.Id),
+					new SqlParameter("scenario_code", scenario.Id)
 				};
 
-			return
+			return 
 				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_schedule_day_count_intraday_load", parameterList,
 											  _dataMartConnectionString);
 		}
@@ -289,6 +290,20 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_schedule_preference_load", parameterList,
 											  _dataMartConnectionString);
 
+		}
+
+		public int FillIntradayFactSchedulePreferenceMart(IBusinessUnit currentBusinessUnit, IScenario scenario)
+		{
+			var parameterList = new List<SqlParameter>
+				{
+					new SqlParameter("business_unit_code", currentBusinessUnit.Id),
+					new SqlParameter("scenario_code", currentBusinessUnit.Id)
+				};
+
+
+			return
+				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_schedule_preference_intraday_load", parameterList,
+											  _dataMartConnectionString);
 		}
 
 		public int FillDimQueueDataMart(int dataSourceId, IBusinessUnit businessUnit)
@@ -572,8 +587,8 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 				avoidLazyLoadForLoadSchedule(uow, persons);
 
 				var scheduleRepository = new ScheduleRepository(uow);
-				IPersonProvider personsInOrganizationProvider = new PersonsInOrganizationProvider(persons);
-				IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true);
+				IPersonProvider personsInOrganizationProvider = new PersonsInOrganizationProvider(persons){DoLoadByPerson = true};
+				IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, false, true);
 
 				var scheduleDateTimePeriod = new ScheduleDateTimePeriod(period);
 				var schedulesDictionary =
@@ -673,7 +688,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
                                               _dataMartConnectionString);
 	    }
 
-		ILastChangedReadModel IRaptorRepository.LastChangedDate(IBusinessUnit currentBusinessUnit, string stepName)
+		public ILastChangedReadModel LastChangedDate(IBusinessUnit currentBusinessUnit, string stepName)
 		{
 			using (var uow = UnitOfWorkFactory.CurrentUnitOfWorkFactory().LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
@@ -705,6 +720,17 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 				rep.UpdateLastChangedDate(currentBusinessUnit, stepName, thisTime);
 			}
 		}
+
+		public IEnumerable<IPreferenceDay> ChangedPreferencesOnStep(DateTime lastTime, IBusinessUnit currentBusinessUnit)
+		{
+			using (var uow = UnitOfWorkFactory.CurrentUnitOfWorkFactory().LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+			{
+				var rep = new PreferenceDayRepository(uow);
+				return rep.FindNewerThan(lastTime);
+			}
+		}
+
+		
 
 		public IList<IScheduleDay> LoadSchedulePartsPerPersonAndDate(DateTimePeriod period, IScheduleDictionary dictionary)
 		{

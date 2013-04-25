@@ -228,7 +228,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
             return 0;
         }
 
-	    public int FillIntradayScheduleDayCountDataMart(IBusinessUnit currentBusinessUnit)
+	    public int FillIntradayScheduleDayCountDataMart(IBusinessUnit currentBusinessUnit, IScenario scenario)
 	    {
 		    throw new NotImplementedException();
 	    }
@@ -711,7 +711,12 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 		    throw new NotImplementedException();
 	    }
 
-	    public bool DataOnStepHasChanged(DateTimePeriod onPeriod, IBusinessUnit currentBusinessUnit, string stepName)
+	    public IEnumerable<IPreferenceDay> ChangedPreferencesOnStep(DateTime lastTime, IBusinessUnit currentBusinessUnit)
+	    {
+		    throw new NotImplementedException();
+	    }
+
+	    public int FillIntradayFactSchedulePreferenceMart(IBusinessUnit currentBusinessUnit, IScenario scenario)
 	    {
 		    throw new NotImplementedException();
 	    }

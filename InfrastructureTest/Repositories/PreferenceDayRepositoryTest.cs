@@ -209,5 +209,18 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		{
 			return new PreferenceDayRepository(unitOfWork);
 		}
+
+		[Test]
+		public void CanFindPreferenceDaysNewerThan()
+		{
+			var newerThan = DateTime.UtcNow.AddHours(-1);
+			PersistAndRemoveFromUnitOfWork(CreateAggregateWithCorrectBusinessUnit());
+			PersistAndRemoveFromUnitOfWork(CreatePreferenceDay(new DateOnly(2013, 2, 2), _person, _activity));
+			PersistAndRemoveFromUnitOfWork(CreatePreferenceDay(new DateOnly(2013, 3, 2), _person, _activity));
+			
+			var days = new PreferenceDayRepository(UnitOfWork).FindNewerThan(newerThan);
+			Assert.AreEqual(3, days.Count);
+			LazyLoadingManager.IsInitialized(days[0].Restriction.ActivityRestrictionCollection).Should().Be.True();
+		}
 	}
 }

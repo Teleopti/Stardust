@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Globalization;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
@@ -15,7 +16,7 @@ using Syncfusion.Windows.Forms.Schedule;
 using Teleopti.Ccc.AgentPortal.Properties;
 using Teleopti.Ccc.AgentPortalCode.Common;
 using Teleopti.Ccc.AgentPortalCode.ScheduleControlDataProvider;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 
 namespace Teleopti.Ccc.AgentPortal.Common.Controls
 {
@@ -598,35 +599,31 @@ namespace Teleopti.Ccc.AgentPortal.Common.Controls
                 StringBuilder drawString = new StringBuilder();
 
 
-                if (schedulePartDto.PersonDayOff != null && schedulePartDto.ProjectedLayerCollection.Length == 0)
+                if (schedulePartDto.PersonDayOff != null && schedulePartDto.ProjectedLayerCollection.Count == 0)
                     drawString.AppendLine(schedulePartDto.PersonDayOff.Name);
                 else
                 {
                     if (schedulePartDto.IsFullDayAbsence &&
-                        schedulePartDto.ProjectedLayerCollection.Length > 0 &&
-                            schedulePartDto.ProjectedLayerCollection[0].IsAbsence)
+                        schedulePartDto.ProjectedLayerCollection.Count > 0 &&
+                            schedulePartDto.ProjectedLayerCollection.First().IsAbsence)
                     {
-                        drawString.AppendLine(schedulePartDto.ProjectedLayerCollection[0].Description);
+                        drawString.AppendLine(schedulePartDto.ProjectedLayerCollection.First().Description);
                         drawString.AppendLine();
                     }
                     else
                     {
-                        if (schedulePartDto.PersonAssignmentCollection.Length > 0 && schedulePartDto.PersonAssignmentCollection[
-                                    schedulePartDto.PersonAssignmentCollection.Length - 1].MainShift != null)
+                        if (schedulePartDto.PersonAssignmentCollection.Count > 0 && schedulePartDto.PersonAssignmentCollection.Last().MainShift != null)
                         {
                             string categoryName =
-                                schedulePartDto.PersonAssignmentCollection[
-                                    schedulePartDto.PersonAssignmentCollection.Length - 1].MainShift.ShiftCategoryName;
+                                schedulePartDto.PersonAssignmentCollection.Last().MainShift.ShiftCategoryName;
 
                             drawString.AppendLine(categoryName);
                         }
-                        if (schedulePartDto.ProjectedLayerCollection.Length > 0)
+                        if (schedulePartDto.ProjectedLayerCollection.Count > 0)
                         {
-                            drawString.AppendLine(schedulePartDto.ProjectedLayerCollection[0].Period.LocalStartDateTime.ToShortTimeString() + " - " +
-                                schedulePartDto.ProjectedLayerCollection[schedulePartDto.ProjectedLayerCollection.Length - 1].Period.LocalEndDateTime.ToShortTimeString());
-                        }
-                        if (schedulePartDto.ProjectedLayerCollection.Length > 0)
-                        {
+                            drawString.AppendLine(schedulePartDto.ProjectedLayerCollection.First().Period.LocalStartDateTime.ToShortTimeString() + " - " +
+                                schedulePartDto.ProjectedLayerCollection.Last().Period.LocalEndDateTime.ToShortTimeString());
+
                             DateTime contractTime = schedulePartDto.ContractTime;
                             drawString.AppendLine(contractTime.ToString("HH:mm", CultureInfo.CurrentCulture));
                         }

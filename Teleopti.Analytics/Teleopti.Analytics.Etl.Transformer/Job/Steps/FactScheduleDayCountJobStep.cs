@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Interfaces.Domain;
 using IJobResult = Teleopti.Analytics.Etl.Interfaces.Transformer.IJobResult;
@@ -20,8 +21,14 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
         protected override int RunStep(IList<IJobResult> jobResultCollection, bool isLastBusinessUnit)
         {
 			if(_isIntraday)
-				return
-				_jobParameters.Helper.Repository.FillIntradayScheduleDayCountDataMart(RaptorTransformerHelper.CurrentBusinessUnit);
+				foreach (var scenario in _jobParameters.StateHolder.ScenarioCollectionDeletedExcluded.Where(scenario => scenario.DefaultScenario))
+				{
+					var rows = _jobParameters.Helper.Repository.FillIntradayScheduleDayCountDataMart(RaptorTransformerHelper.CurrentBusinessUnit, scenario);
+					_jobParameters.StateHolder.UpdateThisTime("Schedules", RaptorTransformerHelper.CurrentBusinessUnit);
+					_jobParameters.StateHolder.UpdateThisTime("Preferences", RaptorTransformerHelper.CurrentBusinessUnit);
+					return rows;
+				}
+	        
 
 			var period = new DateTimePeriod(JobCategoryDatePeriod.StartDateUtcFloor, JobCategoryDatePeriod.EndDateUtcCeiling);
             //Load datamart

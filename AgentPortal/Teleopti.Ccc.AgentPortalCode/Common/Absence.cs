@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 
 namespace Teleopti.Ccc.AgentPortalCode.Common
 {
@@ -7,9 +8,9 @@ namespace Teleopti.Ccc.AgentPortalCode.Common
         private readonly Color _color;
         private readonly string _name;
         private readonly string _shortName;
-        private readonly string _id;
+        private readonly Guid? _id;
 
-        public Absence(string name, string shortName, string id, Color color)
+        public Absence(string name, string shortName, Guid? id, Color color)
         {
             _color = color;
             _name = name;
@@ -27,7 +28,7 @@ namespace Teleopti.Ccc.AgentPortalCode.Common
             get { return _shortName; }
         }
 
-        public string Id
+        public Guid? Id
         {
             get { return _id; }
         }

@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				    bool singleAgentTeam = schedulingOptions.GroupOnGroupPageForTeamBlockPer != null &&
 				                           schedulingOptions.GroupOnGroupPageForTeamBlockPer.Key == "SingleAgentTeam";
 				    var teamBlock = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, day,
-                                                                              schedulingOptions.BlockFinderTypeForAdvanceScheduling, singleAgentTeam);
+                                                                              schedulingOptions.BlockFinderTypeForAdvanceScheduling, singleAgentTeam, allPersonMatrixList);
 					if (teamBlock == null) continue;
 					allTeamBlocksInHashSet.Add(teamBlock);
 				}

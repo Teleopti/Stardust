@@ -49,7 +49,7 @@ namespace Teleopti.Analytics.Etl.Interfaces.Transformer
         IList<IBusinessUnit> LoadBusinessUnit();
         int PersistBusinessUnit(DataTable dataTable);
         int FillScheduleDayCountDataMart(DateTimePeriod period, IBusinessUnit businessUnit);
-		int FillIntradayScheduleDayCountDataMart(IBusinessUnit currentBusinessUnit);
+		int FillIntradayScheduleDayCountDataMart(IBusinessUnit currentBusinessUnit, IScenario scenario);
         int FillDayOffDataMart(IBusinessUnit businessUnit);
         int PersistScheduleDayOffCount(DataTable dataTable);
 
@@ -219,5 +219,7 @@ namespace Teleopti.Analytics.Etl.Interfaces.Transformer
 		IList<IScheduleChangedReadModel> ChangedDataOnStep(DateTime afterDate, IBusinessUnit currentBusinessUnit, string stepName);
 		int PersistScheduleChanged(DataTable dataTable);
 		void UpdateLastChangedDate(IBusinessUnit currentBusinessUnit, string stepName, DateTime thisTime);
+	    IEnumerable<IPreferenceDay> ChangedPreferencesOnStep(DateTime lastTime, IBusinessUnit currentBusinessUnit);
+	    int FillIntradayFactSchedulePreferenceMart(IBusinessUnit currentBusinessUnit, IScenario scenario);
     }
 }

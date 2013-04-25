@@ -184,12 +184,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void GotoTheInternet()
 		{
-			Browser.Current.GoTo("about:blank");
+			GotoRaw("about:blank", new WaitUntilAt("blank"));
 		}
 
 		public static void GotoBlank()
 		{
-			Browser.Current.GoTo("about:blank");
+			GotoRaw("about:blank", new WaitUntilAt("blank"));
 		}
 
 	    public static void GotoMessagePage()

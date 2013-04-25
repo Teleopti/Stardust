@@ -1,6 +1,5 @@
 using System;
-using System.Windows.Forms;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.AgentPortalCode.Requests

@@ -1,5 +1,7 @@
 using System;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
+using System.Linq;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos;
 
 namespace Teleopti.Ccc.AgentPortalCode.Helper
 {
@@ -10,7 +12,7 @@ namespace Teleopti.Ccc.AgentPortalCode.Helper
             get 
             { 
                 var settings = SdkServiceHelper.InternalService.GetAgentPortalSettingsByQuery(new GetAgentPortalSettingsQueryDto());
-                return settings[0].Resolution;
+                return settings.First().Resolution;
             } 
         }
 
