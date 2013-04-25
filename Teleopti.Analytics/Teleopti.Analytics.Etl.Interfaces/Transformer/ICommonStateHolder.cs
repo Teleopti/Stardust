@@ -36,5 +36,6 @@ namespace Teleopti.Analytics.Etl.Interfaces.Transformer
 		    IDictionary<DateTimePeriod, IScheduleDictionary> dictionary);
 
 	    IList<IPerson> PersonsWithIds(List<Guid> ids);
+		IScheduleDay GetSchedulePartOnPersonAndDate(IPerson person, DateOnly restrictionDate, IScenario scenario);
     }
 }

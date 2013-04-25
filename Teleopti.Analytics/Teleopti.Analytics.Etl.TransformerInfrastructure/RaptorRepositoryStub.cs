@@ -711,12 +711,12 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 		    throw new NotImplementedException();
 	    }
 
-	    public bool DataOnStepHasChanged(DateTimePeriod onPeriod, IBusinessUnit currentBusinessUnit, string stepName)
+	    public IEnumerable<IPreferenceDay> ChangedPreferencesOnStep(DateTime lastTime, IBusinessUnit currentBusinessUnit)
 	    {
 		    throw new NotImplementedException();
 	    }
 
-	    public DateTime GetMaxDateInDimDate()
+		public DateTime GetMaxDateInDimDate()
         {
             return new DateTime(1900,1,1,0,0,0,DateTimeKind.Unspecified);
         }

@@ -573,7 +573,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 				avoidLazyLoadForLoadSchedule(uow, persons);
 
 				var scheduleRepository = new ScheduleRepository(uow);
-				IPersonProvider personsInOrganizationProvider = new PersonsInOrganizationProvider(persons);
+				IPersonProvider personsInOrganizationProvider = new PersonsInOrganizationProvider(persons){DoLoadByPerson = true};
 				IScheduleDictionaryLoadOptions scheduleDictionaryLoadOptions = new ScheduleDictionaryLoadOptions(true, true);
 
 				var scheduleDateTimePeriod = new ScheduleDateTimePeriod(period);
@@ -704,6 +704,15 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			{
 				var rep = new EtlReadModelRepository(uow);
 				rep.UpdateLastChangedDate(currentBusinessUnit, stepName, thisTime);
+			}
+		}
+
+		public IEnumerable<IPreferenceDay> ChangedPreferencesOnStep(DateTime lastTime, IBusinessUnit currentBusinessUnit)
+		{
+			using (var uow = UnitOfWorkFactory.CurrentUnitOfWorkFactory().LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
+			{
+				var rep = new PreferenceDayRepository(uow);
+				return rep.FindNewerThan(lastTime);
 			}
 		}
 

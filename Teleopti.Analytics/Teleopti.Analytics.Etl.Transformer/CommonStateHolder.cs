@@ -355,9 +355,9 @@ namespace Teleopti.Analytics.Etl.Transformer
 			foreach (var changedReadModels in groupedChanged)
 			{
 				var theDate = changedReadModels.Key;
-				// detta måste fixas med tidszon
+				// detta måste fixas med tidszon, eller???
 				var utcDate = new DateTime(theDate.Date.Ticks, DateTimeKind.Utc);
-				var period = new DateTimePeriod(utcDate, utcDate);
+				var period = new DateTimePeriod(utcDate, utcDate.AddDays(1).AddMilliseconds(-1));
 				var personsIds = changedReadModels.Select(scheduleChangedReadModel => scheduleChangedReadModel.Person).ToList();
 				var persons = PersonsWithIds(personsIds);
 				var scheduleDictionary = _jobParameters.Helper.Repository.LoadSchedule(period, scenario, persons);
@@ -457,6 +457,20 @@ namespace Teleopti.Analytics.Etl.Transformer
 				ret.AddRange(GetSchedulePartPerPersonAndDate(dictionary[key]));
 			}
 			return ret;
+		}
+
+		public IScheduleDay GetSchedulePartOnPersonAndDate(IPerson person, DateOnly restrictionDate, IScenario scenario)
+		{
+			var period = new DateTimePeriod(new DateTime(restrictionDate.Date.Ticks, DateTimeKind.Utc), new DateTime(restrictionDate.Date.Ticks, DateTimeKind.Utc).AddDays(1).AddMilliseconds(-1));
+			if (GetScheduleCashe().ContainsKey(period))
+			{
+				var dic = GetScheduleCashe()[period];
+				if (dic.ContainsKey(person))
+					return dic[person].ScheduledDay(restrictionDate);
+			}
+
+			var theDic = _jobParameters.Helper.Repository.LoadSchedule(period, scenario, new List<IPerson> {person});
+			return theDic[person].ScheduledDay(restrictionDate);
 		}
 
     	public IList<IMultiplicatorDefinitionSet> MultiplicatorDefinitionSetCollection

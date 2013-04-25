@@ -219,5 +219,6 @@ namespace Teleopti.Analytics.Etl.Interfaces.Transformer
 		IList<IScheduleChangedReadModel> ChangedDataOnStep(DateTime afterDate, IBusinessUnit currentBusinessUnit, string stepName);
 		int PersistScheduleChanged(DataTable dataTable);
 		void UpdateLastChangedDate(IBusinessUnit currentBusinessUnit, string stepName, DateTime thisTime);
+	    IEnumerable<IPreferenceDay> ChangedPreferencesOnStep(DateTime lastTime, IBusinessUnit currentBusinessUnit);
     }
 }
