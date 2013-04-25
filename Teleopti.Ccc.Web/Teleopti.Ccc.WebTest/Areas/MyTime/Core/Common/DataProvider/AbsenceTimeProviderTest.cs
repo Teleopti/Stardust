@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 		[Test]
 		public void GetAbsenceTimeForPeriod_WhenNoAbsenceOnAnyday_ShouldReturnAbsenceAgentForEachDayWithZeroUsedAbsence()
 		{
-			var daysWithoutAnyUsedAbsence = createlistWithPayloadWorkTimesForEachDateWithUsedAbsenceOf(0);
+			var daysWithoutAnyUsedAbsence = createlistWithPayloadWorkTimesForEachDateWithUsedAbsenceOf(0,_period);
 			var scheduleProjectionReadOnlyRepository = MockRepository.GenerateMock<IScheduleProjectionReadOnlyRepository>();
 			
 			scheduleProjectionReadOnlyRepository.Expect(s => s.AbsenceTimePerBudgetGroup(_period, null, null))
@@ -98,7 +98,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 
 			scheduleProjectionReadOnlyRepository.Expect(s => s.AbsenceTimePerBudgetGroup(_period, _budgetGroup, _scenario))
 												.IgnoreArguments()
-												.Return(createlistWithPayloadWorkTimesForEachDateWithUsedAbsenceOf(TimeSpan.FromMinutes(absenceTimeInMinutes).Ticks));
+												.Return(createlistWithPayloadWorkTimesForEachDateWithUsedAbsenceOf(TimeSpan.FromMinutes(absenceTimeInMinutes).Ticks,_period));
 
 			var target = new AbsenceTimeProvider(_loggedOnUser, _scenarioRepository, scheduleProjectionReadOnlyRepository);
 			var result = target.GetAbsenceTimeForPeriod(_period);
@@ -136,35 +136,46 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			verifyThatEachDayHasZeroUsedAbsence(result);
 		}
 
-		[Test,Ignore]
+		[Test]
 		public void GetAbsenceTimeForPeriod_WhenThereAreDifferentBudgetGroupsDuringThePeriod_ShouldUseTheBudgetGroupThatsConnectedToTheDate()
 		{
 			var anotherBudgetGroup = new BudgetGroup();
 			var nextStart = new DateOnly(_period.StartDate.AddDays(2));
-
 			var personPeriodWithAnotherBudgetGroup = PersonPeriodFactory.CreatePersonPeriod(nextStart);
+
 			personPeriodWithAnotherBudgetGroup.BudgetGroup = anotherBudgetGroup;
 			_personWithPersonPeriod.AddPersonPeriod(personPeriodWithAnotherBudgetGroup);
-
-			var firstExpectedPeriod = new DateOnlyPeriod(_period.StartDate, nextStart);
+			var firstExpectedPeriod = new DateOnlyPeriod(_period.StartDate, nextStart.AddDays(-1));
 			var secondExpectedPeriod = new DateOnlyPeriod(nextStart, _period.EndDate);
 
 			var scheduleProjectionReadOnlyRepository = MockRepository.GenerateMock<IScheduleProjectionReadOnlyRepository>();
 
-			scheduleProjectionReadOnlyRepository.Expect(s => s.AbsenceTimePerBudgetGroup(firstExpectedPeriod, _budgetGroup, _scenario))
-												.Return(new List<PayloadWorkTime>());
+			var target = new AbsenceTimeProvider(_loggedOnUser, _scenarioRepository, scheduleProjectionReadOnlyRepository);
 
-			scheduleProjectionReadOnlyRepository.Expect(s => s.AbsenceTimePerBudgetGroup(secondExpectedPeriod, anotherBudgetGroup, _scenario))
-												.Return(new List<PayloadWorkTime>());
+			scheduleProjectionReadOnlyRepository.Expect(
+				s => s.AbsenceTimePerBudgetGroup(firstExpectedPeriod, _budgetGroup, _scenario))
+												.Return(createlistWithPayloadWorkTimesForEachDateWithUsedAbsenceOf(TimeSpan.FromMinutes(100).Ticks, firstExpectedPeriod));
+			scheduleProjectionReadOnlyRepository.Expect(
+				s => s.AbsenceTimePerBudgetGroup(secondExpectedPeriod, anotherBudgetGroup, _scenario))
+			                                    .Return(createlistWithPayloadWorkTimesForEachDateWithUsedAbsenceOf(0,secondExpectedPeriod));
 
-			scheduleProjectionReadOnlyRepository.VerifyAllExpectations();
+			var result = target.GetAbsenceTimeForPeriod(_period).ToList();
+
+			Assert.That(result[0].AbsenceTime, Is.EqualTo(100), "2001-01-01");
+			Assert.That(result[1].AbsenceTime, Is.EqualTo(100), "2001-01-02");
+			Assert.That(result[2].AbsenceTime, Is.EqualTo(0),   "2001-01-03");
+			Assert.That(result[3].AbsenceTime, Is.EqualTo(0),   "2001-01-04");
+			Assert.That(result[4].AbsenceTime, Is.EqualTo(0),   "2001-01-05");
+			Assert.That(result[5].AbsenceTime, Is.EqualTo(0),   "2001-01-06");
+			Assert.That(result[5].AbsenceTime, Is.EqualTo(0),   "2001-01-07");
+
 		}
 
 
 		#region helpers
-		private  IEnumerable<PayloadWorkTime> createlistWithPayloadWorkTimesForEachDateWithUsedAbsenceOf(long totalContractTimeForEachDay)
+		private static IEnumerable<PayloadWorkTime> createlistWithPayloadWorkTimesForEachDateWithUsedAbsenceOf(long totalContractTimeForEachDay,DateOnlyPeriod period)
 		{
-			return _period.DayCollection().Select(d => new PayloadWorkTime()
+			return period.DayCollection().Select(d => new PayloadWorkTime()
 				                                          {
 					                                          BelongsToDate = d, 
 															  TotalContractTime = totalContractTimeForEachDay
@@ -181,6 +192,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 				Assert.That(absenceCount.AbsenceTime, Is.EqualTo(0), "Should be zero absence per day");
 			}
 		}
+
 		#endregion
 
 	}
