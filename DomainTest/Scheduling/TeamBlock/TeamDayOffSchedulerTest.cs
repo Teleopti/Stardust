@@ -61,6 +61,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 					Key = "Root",
 					Name = "BU"
 				};
+		    _schedulingOptions.UseGroupScheduling = true;
 			_scheduleDayPro = _mocks.StrictMock<IScheduleDayPro>();
 			_scheduleMatrixPro = _mocks.StrictMock<IScheduleMatrixPro>();
 			_schedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
