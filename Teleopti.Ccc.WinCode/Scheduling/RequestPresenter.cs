@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Linq;
 using System.Linq.Dynamic;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.UserTexts;
@@ -45,9 +46,52 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         public static IList<PersonRequestViewModel> FilterAdapters(IList<PersonRequestViewModel> adapterList, IList<string> filterExpression)
         {
 			// ErikS: Algorithm goes here:
+            var filteredData = SearchText(adapterList, filterExpression);
             // return adapterList.AsQueryable().Where(filterExpression).ToList();
-	        return null;
+            return filteredData;
         }
+
+        public static IList<PersonRequestViewModel> SearchText(IList<PersonRequestViewModel> data,
+                                                 IList<string> filterExpression)
+        {
+            var filteredRequest = new List<PersonRequestViewModel>();
+
+            foreach (var personRequestViewModel in data)
+            {
+                var element = personRequestViewModel;
+                var isElementFoundList = new List<bool>();
+                
+                foreach (string expression in filterExpression)
+                {
+                    var filterText = expression;
+                    var isValid = isTextExists(filterText, element);
+                    isElementFoundList.Add(isValid);
+                }
+
+                if(!isElementFoundList.Contains(false))
+                    filteredRequest.Add(element);
+
+                isElementFoundList.Clear();
+            }
+
+            return filteredRequest;
+        }
+
+        private static bool isTextExists(string filterText, PersonRequestViewModel element)
+        {
+            if (element.Message.ToLower().Contains(filterText.ToLower()))
+                return true;
+            if (element.Name.ToLower().Contains(filterText.ToLower()))
+                return true;
+            if (element.Subject.ToLower().Contains(filterText.ToLower()))
+                return true;
+            if (element.RequestType.ToLower().Contains(filterText.ToLower()))
+                return true;
+            if (element.Details.ToLower().Contains(filterText.ToLower()))
+                return true;
+            return false;
+        }
+
 
         public void SetUndoRedoContainer(IUndoRedoContainer container)
         {
