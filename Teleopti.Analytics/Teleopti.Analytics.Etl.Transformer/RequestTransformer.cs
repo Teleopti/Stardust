@@ -67,8 +67,8 @@ namespace Teleopti.Analytics.Etl.Transformer
                     row["application_datetime"] = convertedTimeFromUtc;
                     row["request_startdate"] = numOfDays.StartDate.Date;
                     row["request_enddate"] = numOfDays.EndDate.Date;
-					row["request_starttime"] = requestPeriod.StartDateTime;
-					row["request_endtime"] = requestPeriod.EndDateTime;
+					row["request_starttime"] = requestPeriod.StartDateTimeLocal(personTimeZone);
+					row["request_endtime"] = requestPeriod.EndDateTimeLocal(personTimeZone);
 
                     row["business_unit_code"] = personRequest.BusinessUnit.Id;
 
