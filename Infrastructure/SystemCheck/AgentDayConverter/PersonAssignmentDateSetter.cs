@@ -4,7 +4,8 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
 {
 	public class PersonAssignmentDateSetter : PersonAssignmentDateSetterBase
 	{
-		public PersonAssignmentDateSetter(SqlConnectionStringBuilder tempShouldNotBeLikeThis) : base(tempShouldNotBeLikeThis)
+		public PersonAssignmentDateSetter(SqlTransaction transaction)
+			: base(transaction)
 		{
 		}
 
@@ -22,7 +23,7 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
 		{
 			get
 			{
-				return "select pa.Id, p.DefaultTimeZone, pa.Minimum, pa.TheDate, pa.Version " +
+				return "select pa.Id, pa.Minimum, pa.TheDate, pa.Version " +
 				       "from dbo.PersonAssignment pa " +
 				       "inner join Person p on pa.Person = p.id " +
 				       "where pa.TheDate = '" + AgentDayConverterDate.DateOfUnconvertedSchedule + "' " +

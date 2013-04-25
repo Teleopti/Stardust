@@ -25,7 +25,6 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 		[Test]
 		public void ShouldSetCorrectDateForResettedPersonAssignment()
 		{
-			var target = new PersonAssignmentAuditDateSetter(new SqlConnectionStringBuilder(UnitOfWorkFactory.Current.ConnectionString));
 			var start = new DateTime(2000, 1, 1, 8, 0, 0, DateTimeKind.Utc);
 			var expected = new DateOnly(2000, 1, 1);
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
@@ -37,8 +36,7 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 			UnitOfWork.Clear();
 
 			var revisions = Session.Auditer().GetRevisions(typeof(PersonAssignment), pa.Id.Value);
-
-			target.Execute(pa.Person.Id.Value);
+			ExecuteTarget.AuditDateSetterAndWrapInTransaction(pa.Person.Id.Value, TimeZoneInfo.Utc);
 
 			Session.Auditer().Find<PersonAssignment>(pa.Id.Value, revisions.Last()).Date.Should().Be.EqualTo(expected);
 		}
@@ -46,7 +44,6 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 		[Test]
 		public void ShouldNotTouchAssignmentIfNotRestoreDate()
 		{
-			var target = new PersonAssignmentAuditDateSetter(new SqlConnectionStringBuilder(UnitOfWorkFactory.Current.ConnectionString));
 			var start = new DateTime(2000, 1, 1, 8, 0, 0, DateTimeKind.Utc);
 			var expected = new DateOnly(2000, 1, 1);
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
@@ -59,7 +56,7 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 
 			var revisions = Session.Auditer().GetRevisions(typeof(PersonAssignment), pa.Id.Value);
 
-			target.Execute(pa.Person.Id.Value);
+			ExecuteTarget.AuditDateSetterAndWrapInTransaction(pa.Person.Id.Value, TimeZoneInfo.Utc);
 
 			Session.Auditer().Find<PersonAssignment>(pa.Id.Value, revisions.Last()).Date.Should().Be.EqualTo(expected);
 		}
@@ -67,7 +64,6 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 		[Test]
 		public void ShouldNotConvertWrongPerson()
 		{
-			var target = new PersonAssignmentAuditDateSetter(new SqlConnectionStringBuilder(UnitOfWorkFactory.Current.ConnectionString));
 			var start = new DateTime(2000, 1, 1, 8, 0, 0, DateTimeKind.Utc);
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
@@ -79,7 +75,7 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 
 			var revisions = Session.Auditer().GetRevisions(typeof(PersonAssignment), pa.Id.Value);
 
-			target.Execute(Guid.NewGuid());
+			ExecuteTarget.AuditDateSetterAndWrapInTransaction(Guid.NewGuid(), TimeZoneInfo.Utc);
 
 			Session.Auditer().Find<PersonAssignment>(pa.Id.Value, revisions.Last()).Date.Should().Be.EqualTo(AgentDayConverterDate.DateOfUnconvertedSchedule);
 		}

@@ -7,50 +7,43 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
 {
 	public abstract class PersonAssignmentDateSetterBase : IPersonAssignmentConverter
 	{
-		private readonly SqlConnectionStringBuilder _tempShouldNotBeLikeThis;
+		private readonly SqlTransaction _transaction;
 
-		protected PersonAssignmentDateSetterBase(SqlConnectionStringBuilder tempShouldNotBeLikeThis)
+		protected PersonAssignmentDateSetterBase(SqlTransaction transaction)
 		{
-			_tempShouldNotBeLikeThis = tempShouldNotBeLikeThis;
+			_transaction = transaction;
 		}
 
 		protected abstract string NumberOfNotConvertedCommand { get; }
 		protected abstract string ReadUnconvertedSchedulesCommand { get; }
 		protected abstract string UpdateAssignmentDateCommand { get; }
 
-		public void Execute(Guid personId)
+		public void Execute(Guid personId, TimeZoneInfo timeZone)
 		{
-			var connectionString = _tempShouldNotBeLikeThis.ToString();
+			var dt = readSchedules(personId);
+			setDateAndIncreaseVersion(dt, timeZone);
+			updatePersonAssignmentRows(dt);
 
-			using (var connection = new SqlConnection(connectionString))
-			{
-				connection.Open();
-
-				var dt = readSchedules(connection, personId);
-				setDateAndIncreaseVersion(dt);
-				updatePersonAssignmentRows(dt, connection);
-
-				checkAllConverted(connection, personId);
-			}
+			checkAllConverted(personId);
 		}
 
-		private void checkAllConverted(SqlConnection sqlConnection, Guid personId)
+		private void checkAllConverted(Guid personId)
 		{
-			using (var cmd = new SqlCommand(NumberOfNotConvertedCommand, sqlConnection))
+			using (var cmd = new SqlCommand(NumberOfNotConvertedCommand, _transaction.Connection, _transaction))
 			{
 				cmd.Parameters.AddWithValue("@personId", personId);
 				if ((int)cmd.ExecuteScalar() > 0)
 				{
 					throw new NotSupportedException("Something went wrong. There is still unconverted schedules in the database!");
-				}				
+				}
 			}
 		}
 
-		private void updatePersonAssignmentRows(DataTable dataTable, SqlConnection connection)
+		private void updatePersonAssignmentRows(DataTable dataTable)
 		{
 			foreach (DataRow row in dataTable.Rows)
 			{
-				using (var command = new SqlCommand(UpdateAssignmentDateCommand, connection))
+				using (var command = new SqlCommand(UpdateAssignmentDateCommand, _transaction.Connection, _transaction))
 				{
 					command.CommandType = CommandType.Text;
 					command.Parameters.AddWithValue("@newDate", string.Format("{0:s}", row["TheDate"]));
@@ -61,12 +54,11 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
 			}
 		}
 
-		private static void setDateAndIncreaseVersion(DataTable dt)
+		private static void setDateAndIncreaseVersion(DataTable dt, TimeZoneInfo timeZoneInfo)
 		{
 			foreach (DataRow row in dt.Rows)
 			{
-				var timeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById((string) row["DefaultTimeZone"]);
-				var utcTime = new DateTime(((DateTime) row["Minimum"]).Ticks, DateTimeKind.Utc);
+				var utcTime = new DateTime(((DateTime)row["Minimum"]).Ticks, DateTimeKind.Utc);
 				var localDate = timeZoneInfo.SafeConvertTimeToUtc(utcTime);
 				row["TheDate"] = string.Format("{0:s}", localDate.Date);
 				var version = (int)row["Version"];
@@ -74,9 +66,9 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
 			}
 		}
 
-		private DataTable readSchedules(SqlConnection connection, Guid personId)
+		private DataTable readSchedules(Guid personId)
 		{
-			using (var command = new SqlCommand(ReadUnconvertedSchedulesCommand, connection))
+			using (var command = new SqlCommand(ReadUnconvertedSchedulesCommand, _transaction.Connection, _transaction))
 			{
 				command.Parameters.AddWithValue("@personId", personId);
 				using (var dataAdapter = new SqlDataAdapter(command))

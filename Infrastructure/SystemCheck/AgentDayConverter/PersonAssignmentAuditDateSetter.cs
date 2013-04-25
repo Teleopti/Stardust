@@ -4,7 +4,8 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
 {
 	public class PersonAssignmentAuditDateSetter : PersonAssignmentDateSetterBase
 	{
-		public PersonAssignmentAuditDateSetter(SqlConnectionStringBuilder tempShouldNotBeLikeThis) : base(tempShouldNotBeLikeThis)
+		public PersonAssignmentAuditDateSetter(SqlTransaction transaction)
+			: base(transaction)
 		{
 		}
 
@@ -19,7 +20,7 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
 		{
 			get
 			{
-				return "select pa.Id, p.DefaultTimeZone, pa.Minimum, pa.TheDate, pa.Version " +
+				return "select pa.Id, pa.Minimum, pa.TheDate, pa.Version " +
 				       "from [Auditing].PersonAssignment_AUD pa " +
 				       "inner join Person p on pa.Person = p.id " +
 				       "where pa.TheDate = '" + AgentDayConverterDate.DateOfUnconvertedSchedule + "' " +

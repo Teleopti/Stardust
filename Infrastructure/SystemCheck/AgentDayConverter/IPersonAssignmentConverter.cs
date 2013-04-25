@@ -11,6 +11,6 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
 		/// Executes against the connectionstring
 		/// </summary>
 		/// <returns></returns>
-		void Execute(Guid personId);
+		void Execute(Guid personId, TimeZoneInfo timeZoneInfo);
 	}
 }
