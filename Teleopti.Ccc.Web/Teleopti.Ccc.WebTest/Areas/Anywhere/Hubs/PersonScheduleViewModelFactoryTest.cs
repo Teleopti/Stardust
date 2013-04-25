@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Dynamic;
 using System.Linq;
 using AutoMapper;
@@ -111,16 +113,26 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		[Test]
 		public void ShouldRetrievePersonAbsencesToMapping()
 		{
+			var personRepository = MockRepository.GenerateMock<IPersonRepository>();
 			var personAbsenceRepository = MockRepository.GenerateMock<IPersonAbsenceRepository>();
 			var personScheduleViewModelMapper = MockRepository.GenerateMock<IPersonScheduleViewModelMapper>();
-			var target = new PersonScheduleViewModelFactory(MockRepository.GenerateMock<IPersonRepository>(), MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>(), MockRepository.GenerateMock<IAbsenceRepository>(), personScheduleViewModelMapper, personAbsenceRepository);
-			var personAbsences = new[] { new PersonAbsence(MockRepository.GenerateMock<IScenario>()) };
-			personAbsenceRepository.Stub(x => x.LoadAll()).Return(personAbsences);
+			var target = new PersonScheduleViewModelFactory(personRepository, MockRepository.GenerateMock<IPersonScheduleDayReadModelFinder>(), MockRepository.GenerateMock<IAbsenceRepository>(), personScheduleViewModelMapper, personAbsenceRepository);
+			
+			var person = PersonFactory.CreatePersonWithGuid("", "");
+			personRepository.Stub(x => x.Get(person.Id.Value)).Return(person);
 
-			target.CreateViewModel(Guid.NewGuid(), DateTime.Today);
+			var personAbsences = new Collection<IPersonAbsence>() { new PersonAbsence(MockRepository.GenerateMock<IScenario>()) };
 
-			personScheduleViewModelMapper.AssertWasCalled(x => x.Map(Arg<PersonScheduleData>.Matches(s => s.PersonAbsences == personAbsences)));
+			var startDate = new DateTime(2012, 2, 2);
+			var utcStartDate = new DateTime(2012, 2, 2, 0, 0, 0, DateTimeKind.Utc);
+
+			personAbsenceRepository.Stub(
+				x => x.Find(new List<IPerson>() {person}, new DateTimePeriod(utcStartDate, utcStartDate.AddHours(24))))
+			                       .Return(personAbsences);
+
+			target.CreateViewModel(person.Id.Value, startDate);
+
+			personScheduleViewModelMapper.AssertWasCalled(x => x.Map(Arg<PersonScheduleData>.Matches(s => s.PersonAbsences.Equals(personAbsences))));	
 		}
-
 	}
 }
