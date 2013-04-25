@@ -360,6 +360,7 @@
     <Compile Include="SystemCheck\AgentDayConverter\IPersonAssignmentConverter.cs" />
     <Compile Include="SystemCheck\AgentDayConverter\PersonAssignmentDateSetter.cs" />
     <Compile Include="SystemCheck\AgentDayConverter\PersonAssignmentDateSetterBase.cs" />
+    <Compile Include="SystemCheck\AgentDayConverter\PersonTimeZoneSetter.cs" />
     <Compile Include="SystemCheck\CheckMessageBroker.cs" />
     <Compile Include="SystemCheck\AgentDayConverter\PersonAssignmentAuditDateSetter.cs" />
     <Compile Include="SystemCheck\PersonAssignmentCommon.cs" />
