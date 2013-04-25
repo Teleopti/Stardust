@@ -26,24 +26,25 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 			_repositoryFactory = repositoryFactory;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public string SmsMobileNumber(IPerson person)
-		{
-			// get wich optional column to use
-			using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
-			{
-				var smsSettingsSetting = _repositoryFactory.CreateGlobalSettingDataRepository(uow).FindValueByKey("SmsSettings", new SmsSettings());
-				if (smsSettingsSetting.OptionalColumnId.Equals(Guid.Empty)) // no column set
-					return "";
-				// get a value if one
-				foreach (var optionalColumnValue in person.OptionalColumnValueCollection.Where(optionalColumnValue => optionalColumnValue.Parent.Id.Equals(smsSettingsSetting.OptionalColumnId)))
-				{
-					return optionalColumnValue.Description;
-				}
-			}
+	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods",
+	        MessageId = "0")]
+	    public string SmsMobileNumber(IPerson person)
+	    {
+	        var smsSettingsSetting = _repositoryFactory.CreateGlobalSettingDataRepository(_unitOfWorkFactory.CurrentUnitOfWork())
+	                                                   .FindValueByKey("SmsSettings", new SmsSettings());
+	        if (smsSettingsSetting.OptionalColumnId.Equals(Guid.Empty)) // no column set
+	            return "";
+	        // get a value if one
+	        foreach (
+	            var optionalColumnValue in
+	                person.OptionalColumnValueCollection.Where(
+	                    optionalColumnValue => optionalColumnValue.Parent.Id.Equals(smsSettingsSetting.OptionalColumnId)))
+	        {
+	            return optionalColumnValue.Description;
+	        }
 
-			//no value
-			return "";
-		}
+	        //no value
+	        return "";
+	    }
 	}
 }

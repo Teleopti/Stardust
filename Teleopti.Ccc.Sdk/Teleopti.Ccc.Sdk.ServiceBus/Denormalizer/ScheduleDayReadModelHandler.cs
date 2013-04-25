@@ -71,9 +71,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 						_scheduleDayReadModelRepository.ClearPeriodForPerson(dateOnlyPeriod, message.PersonId);
 					}
 					_scheduleDayReadModelRepository.SaveReadModel(readModel);
-
-					uow.PersistAll();
-				}
+                }
+                uow.PersistAll();
 			}
 		}
 
