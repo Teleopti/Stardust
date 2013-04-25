@@ -15,7 +15,7 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 	}
 
 	function _partialInit() {
-		_initSelectors();
+	    _loadCultures();
 		_passwordEvents();
 		_initButton();
 	}
@@ -85,24 +85,62 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 		});
 	}
 
-	function _initSelectors() {
-		$('#cultureSelect')
-			.select2({
-			    width: 'resolve',
-			    triggerChange: true,
-			}).on('change', function () {
-			    _selectorChanged($(this).val(), "Settings/UpdateCulture");
-			})
-			;
-		$('#cultureUiSelect')
-			.select2({
-			    width: 'resolve',
-			    triggerChange: true
-			}).on('change', function () {
-			    _selectorChanged($(this).val(), "Settings/UpdateUiCulture");
-			})
-			;
+	function _loadCultures() {
+	    ajax.Ajax({
+	        url: "Settings/Cultures",
+	        dataType: "json",
+	        type: "GET",
+	        global: false,
+	        cache: false,
+	        success: function (data, textStatus, jqXHR) {
+	            _initCultureUiPicker(data);
+	            _initCulturePicker(data);
+	        },
+	        error: function(e) {
+	            console.log(e);
+	        }
+	    });
 	}
+    
+    function _initCulturePicker(data) {
+        $('#Culture-Picker').select2("destroy");
+        $('#Culture-Picker').select2(
+					{
+					    data: data.Cultures,
+					    containerCssClass: "span3"
+					}
+				);
+
+        var cultureId = data.ChoosenCulture.id;
+        if (!cultureId)
+            return;
+        var uiCulture = $.grep(data.Cultures, function (e) { return e.id == cultureId; })[0];
+        $('#Culture-Picker').select2("data", uiCulture);
+        $('#Culture-Picker')
+            .on('change', function (e) {
+                _selectorChanged(e.val, "Settings/UpdateCulture");
+            });
+    }
+    
+    function _initCultureUiPicker(data) {
+        $('#CultureUi-Picker').select2("destroy");
+        $('#CultureUi-Picker').select2(
+					{
+					    data: data.Cultures,
+					    containerCssClass: "span3"
+					}
+				);
+
+        var uiCultureId = data.ChoosenUiCulture.id;
+        if (!uiCultureId)
+            return;
+        var uiCulture = $.grep(data.Cultures, function (e) { return e.id == uiCultureId; })[0];
+        $('#CultureUi-Picker').select2("data", uiCulture);
+        $('#CultureUi-Picker')
+            .on('change', function(e) {
+                _selectorChanged(e.val, "Settings/UpdateUiCulture");
+            });
+    }
 
 	function _selectorChanged(value, url) {
 		var data = { LCID: value };

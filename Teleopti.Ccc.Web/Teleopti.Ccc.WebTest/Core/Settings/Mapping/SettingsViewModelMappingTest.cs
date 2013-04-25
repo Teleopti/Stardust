@@ -26,8 +26,8 @@ namespace Teleopti.Ccc.WebTest.Core.Settings.Mapping
 		{
 			var culture = CultureInfo.CurrentCulture;
 			var result = Mapper.Map<CultureInfo, CultureViewModel>(culture);
-			result.DisplayName.Should().Be.EqualTo(culture.DisplayName);
-			result.LCID.Should().Be.EqualTo(culture.LCID);
+			result.text.Should().Be.EqualTo(culture.DisplayName);
+			result.id.Should().Be.EqualTo(culture.LCID);
 		}
 
 		[Test]
@@ -43,8 +43,8 @@ namespace Teleopti.Ccc.WebTest.Core.Settings.Mapping
 		{
 			var result = Mapper.Map<IPerson, SettingsViewModel>(new Person());
 			var defaultBrowser = result.Cultures.First();
-			defaultBrowser.LCID.Should().Be.EqualTo(-1);
-			defaultBrowser.DisplayName.Should().Be.EqualTo(Resources.BrowserDefault);
+			defaultBrowser.id.Should().Be.EqualTo(-1);
+			defaultBrowser.text.Should().Be.EqualTo(Resources.BrowserDefault);
 		}
 
 		[Test]
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.WebTest.Core.Settings.Mapping
 			var person = new Person();
 			person.PermissionInformation.SetCulture(CultureInfo.GetCultureInfo(3082));
 			var result = Mapper.Map<IPerson, SettingsViewModel>(person);
-			result.ChoosenCulture.LCID.Should().Be.EqualTo(3082);
+			result.ChoosenCulture.id.Should().Be.EqualTo(3082);
 		}
 
 		[Test]
@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.WebTest.Core.Settings.Mapping
 			var person = new Person();
 			person.PermissionInformation.SetUICulture(CultureInfo.GetCultureInfo(3082));
 			var result = Mapper.Map<IPerson, SettingsViewModel>(person);
-			result.ChoosenCulture.LCID.Should().Be.EqualTo(-1);
+			result.ChoosenCulture.id.Should().Be.EqualTo(-1);
 		}
 
 		[Test]
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.WebTest.Core.Settings.Mapping
 			var person = new Person();
 			person.PermissionInformation.SetUICulture(CultureInfo.GetCultureInfo(3082));
 			var result = Mapper.Map<IPerson, SettingsViewModel>(person);
-			result.ChoosenUiCulture.LCID.Should().Be.EqualTo(3082);
+			result.ChoosenUiCulture.id.Should().Be.EqualTo(3082);
 		}
 
 		[Test]
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.WebTest.Core.Settings.Mapping
 			var person = new Person();
 			person.PermissionInformation.SetCulture(CultureInfo.GetCultureInfo(3082));
 			var result = Mapper.Map<IPerson, SettingsViewModel>(person);
-			result.ChoosenUiCulture.LCID.Should().Be.EqualTo(-1);
+			result.ChoosenUiCulture.id.Should().Be.EqualTo(-1);
 		}
 
 		[Test]
@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.WebTest.Core.Settings.Mapping
 			var result = Mapper.Map<IPerson, SettingsViewModel>(new Person());
 			//remove browser default
 			result.Cultures.RemoveAt(0);
-			var sortedCultures = result.Cultures.OrderBy(c => c.DisplayName);
+			var sortedCultures = result.Cultures.OrderBy(c => c.text);
 			result.Cultures.Should().Have.SameSequenceAs(sortedCultures);
 		}
 	}

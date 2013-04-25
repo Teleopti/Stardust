@@ -1,41 +1,15 @@
 ﻿@using Teleopti.Ccc.UserTexts
-@using Teleopti.Ccc.Web.Areas.MyTime.Models.Settings
-@model SettingsViewModel
 @{
 	Layout = null;
 }
 <div id="settings" class="well well-small">
+	<div class="clearfix">
+		<label for="cultureUiSelect">@Resources.Language</label>
+		<input type="hidden" id="CultureUi-Picker"/>
+	</div>
+	<br/>
     <div class="clearfix">
-        <label for="cultureUiSelect">@Resources.Language</label>
-        <select id="cultureUiSelect" class="span3">
-            @foreach (var culture in Model.Cultures)
-            {
-                if (Model.ChoosenUiCulture.LCID == culture.LCID)
-                {
-                    <option value="@culture.LCID" selected="selected">@culture.DisplayName</option>
-                }
-                else
-                {
-                    <option value="@culture.LCID">@culture.DisplayName</option>
-                }
-            }
-        </select>
+        <label for="cultureSelect">@Resources.DateFormat</label>
+        <input type="hidden" id="Culture-Picker"/>
     </div>
-    <br/>
-		<div class="clearfix">
-		    <label for="cultureSelect">@Resources.DateFormat</label>
-            		    <select id="cultureSelect" class="span3">
-		        @foreach (var culture in Model.Cultures)
-		        {
-                    if (Model.ChoosenCulture.LCID == culture.LCID)
-		            {
-                        <option value="@culture.LCID" selected="selected">@culture.DisplayName</option>
-		            }
-		            else
-		            {
-		                <option value="@culture.LCID">@culture.DisplayName</option>
-		            }
-		        }
-		    </select>
-		</div>
 </div>
