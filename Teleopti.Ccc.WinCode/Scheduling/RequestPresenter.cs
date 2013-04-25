@@ -42,9 +42,11 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         /// <param name="adapterList"></param>
         /// <param name="filterExpression"></param>
         /// <returns></returns>
-        public static IList<PersonRequestViewModel> FilterAdapters(IList<PersonRequestViewModel> adapterList, string filterExpression)
+        public static IList<PersonRequestViewModel> FilterAdapters(IList<PersonRequestViewModel> adapterList, IList<string> filterExpression)
         {
-            return adapterList.AsQueryable().Where(filterExpression).ToList();
+			// ErikS: Algorithm goes here:
+            // return adapterList.AsQueryable().Where(filterExpression).ToList();
+	        return null;
         }
 
         public void SetUndoRedoContainer(IUndoRedoContainer container)

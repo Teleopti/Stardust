@@ -6204,21 +6204,22 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void toolStripButtonRequestClick(object sender, EventArgs e)
 		{
-			var filterBox = new FilterBoxAdvanced();
-			filterBox.FilterClicked += filterbox_FilterClicked;
-			var button = sender as ToolStripButton;
-			if (button != null)
-				filterBox.Location = PointToScreen(new Point(button.Owner.Location.X, (button.Owner.Location.Y + (filterBox.Height / 2) + 16)));
+			if (string.IsNullOrEmpty(toolStripTextBoxFilter.Text))
+				return;
+			
+			var filterWords = toolStripTextBoxFilter.Text.Split(' ').ToList();
+			_requestView.FilterGrid(filterWords);
 
-			filterBox.ShowDialog(this);
-			filterBox.Dispose();
+			//var filterBox = new FilterBoxAdvanced();
+			//filterBox.FilterClicked += filterbox_FilterClicked;
+			//var button = sender as ToolStripButton;
+			//if (button != null)
+			//	filterBox.Location = PointToScreen(new Point(button.Owner.Location.X, (button.Owner.Location.Y + (filterBox.Height / 2) + 16)));
+
+			//filterBox.ShowDialog(this);
+			//filterBox.Dispose();
 		}
-
-		private void filterbox_FilterClicked(object sender, FilterBoxAdvancedEventArgs e)
-		{
-			_requestView.FilterGrid(e);
-		}
-
+		
 		private void toolStripButtonEditNote_Click(object sender, EventArgs e)
 		{
 			IList<PersonRequestViewModel> selectedRequestList = _requestView.SelectedAdapters();
