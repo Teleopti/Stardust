@@ -13,7 +13,8 @@ namespace Teleopti.Ccc.Domain.GroupPageCreator
     /// </summary>
     public class PersonGroupPage : IGroupPageCreator<IBusinessUnit>
     {
-        public IGroupPage CreateGroupPage(IEnumerable<IBusinessUnit> entityCollection, IGroupPageOptions groupPageOptions)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
+		public IGroupPage CreateGroupPage(IEnumerable<IBusinessUnit> entityCollection, IGroupPageOptions groupPageOptions)
         {
             //Creates the GroupPage object
             var businessUnit = entityCollection.Single();

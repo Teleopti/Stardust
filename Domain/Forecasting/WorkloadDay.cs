@@ -51,6 +51,7 @@ namespace Teleopti.Ccc.Domain.Forecasting
             ApplyTemplate(workloadDayTemplate, day => day.Lock(), day => day.Release());
         }
 
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
 		public virtual void ApplyTemplate(IWorkloadDayTemplate workloadDayTemplate, Action<IWorkloadDayBase> lockAction, Action<IWorkloadDayBase> releaseAction)
         {
             double tasks = Tasks;

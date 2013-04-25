@@ -14,7 +14,7 @@ using Teleopti.Ccc.AgentPortalCode.Common;
 using Teleopti.Ccc.AgentPortalCode.Common.Clipboard;
 using Teleopti.Ccc.AgentPortalCode.Foundation.StateHandlers;
 using Teleopti.Ccc.AgentPortalCode.Helper;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using ShiftCategory=Teleopti.Ccc.AgentPortalCode.Common.ShiftCategory;
 
 namespace Teleopti.Ccc.AgentPortal.AgentPreferenceView

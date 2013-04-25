@@ -3,7 +3,8 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.AgentPortalCode.AgentPreference;
 using Teleopti.Ccc.AgentPortalCode.Helper;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
+using Teleopti.Ccc.Sdk.Common.Contracts;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.AgentPortalCodeTest.AgentPreference
@@ -27,19 +28,14 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.AgentPreference
             _target = new PlanningTimeBankHelper(_service);
             _personDto = new PersonDto();
             _dateOnly = new DateOnly(2011,02,15);
-            _dateOnlyDto = new DateOnlyDto { DateTime = _dateOnly.Date, DateTimeSpecified = true };
+            _dateOnlyDto = new DateOnlyDto { DateTime = _dateOnly.Date };
             _dto = new PlanningTimeBankDto
             {
                 BalanceInMinutes = 5 * 60,
-                BalanceInMinutesSpecified = true,
                 BalanceOutMaxMinutes = 40 * 60,
-                BalanceOutMaxMinutesSpecified = true,
                 BalanceOutMinMinutes = -5 * 60,
-                BalanceOutMinMinutesSpecified = true,
                 BalanceOutMinutes = 2 * 60,
-                BalanceOutMinutesSpecified = true,
-                IsEditable = true,
-                IsEditableSpecified = true
+                IsEditable = true
             };
         }
 
@@ -68,7 +64,7 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.AgentPreference
         public void ShouldCallServiceAndSave()
         {
             Expect.Call(_service.GetPlanningTimeBank(_personDto, _dateOnlyDto)).Return(_dto);
-            Expect.Call(() =>_service.SavePlanningTimeBank(_personDto, _dateOnlyDto, 500 ,true));
+            Expect.Call(() =>_service.SavePlanningTimeBank(_personDto, _dateOnlyDto, 500));
             _mocks.ReplayAll();
             _target.GetPlanningTimeBankModel(_personDto, _dateOnlyDto);
             _target.SaveWantedBalanceOut(TimeSpan.FromMinutes(500));

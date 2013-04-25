@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Globalization;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
 using Teleopti.Ccc.AgentPortal.Common;
 using Teleopti.Ccc.AgentPortalCode.Foundation.StateHandlers;
 using Teleopti.Ccc.AgentPortalCode.Helper;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 
 namespace Teleopti.Ccc.AgentPortal.Settings
 {

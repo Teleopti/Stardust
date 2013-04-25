@@ -14,9 +14,9 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
         private readonly IAssembler<IPayrollResult, PayrollResultDto> _assembler;
         private readonly IPayrollResultRepository _resultRepository;
         private readonly IPayrollExportRepository _exportRepository;
-        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+        private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 
-        public GetPayrollResultStatusByExportIdQueryHandler(IAssembler<IPayrollResult, PayrollResultDto> assembler, IPayrollResultRepository resultRepository, IPayrollExportRepository exportRepository, IUnitOfWorkFactory unitOfWorkFactory)
+        public GetPayrollResultStatusByExportIdQueryHandler(IAssembler<IPayrollResult, PayrollResultDto> assembler, IPayrollResultRepository resultRepository, IPayrollExportRepository exportRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory)
         {
             _assembler = assembler;
             _resultRepository = resultRepository;
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public ICollection<PayrollResultDto> Handle(GetPayrollResultStatusByExportIdQueryDto query)
         {
-            using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
+            using (_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
             {
                 var export = _exportRepository.Load(query.PayrollExportId);
                 var results = _resultRepository.GetPayrollResultsByPayrollExport(export);

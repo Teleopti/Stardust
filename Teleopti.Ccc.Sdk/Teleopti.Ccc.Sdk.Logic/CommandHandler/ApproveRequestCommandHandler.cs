@@ -23,11 +23,11 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
         private readonly IPersonRequestCheckAuthorization _authorization;
         private readonly ISwapAndModifyService _swapAndModifyService;
         private readonly IPersonRequestRepository _personRequestRepository;
-        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+        private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
     	private readonly IMessageBrokerEnablerFactory _messageBrokerEnablerFactory;
         private readonly IScheduleDictionaryModifiedCallback _scheduleDictionaryModifiedCallback;
 
-		  public ApproveRequestCommandHandler(IScheduleRepository scheduleRepository, IScheduleDictionarySaver scheduleDictionarySaver, ICurrentScenario scenarioRepository, IPersonRequestCheckAuthorization authorization, ISwapAndModifyService swapAndModifyService, IPersonRequestRepository personRequestRepository, IUnitOfWorkFactory unitOfWorkFactory, IMessageBrokerEnablerFactory messageBrokerEnablerFactory, IScheduleDictionaryModifiedCallback scheduleDictionaryModifiedCallback)
+		  public ApproveRequestCommandHandler(IScheduleRepository scheduleRepository, IScheduleDictionarySaver scheduleDictionarySaver, ICurrentScenario scenarioRepository, IPersonRequestCheckAuthorization authorization, ISwapAndModifyService swapAndModifyService, IPersonRequestRepository personRequestRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory, IMessageBrokerEnablerFactory messageBrokerEnablerFactory, IScheduleDictionaryModifiedCallback scheduleDictionaryModifiedCallback)
         {
             _scheduleRepository = scheduleRepository;
             _scheduleDictionarySaver = scheduleDictionarySaver;
@@ -56,7 +56,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void Handle(ApproveRequestCommandDto command)
         {
-            using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+            using (var uow = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
             {
                 var personRequest = _personRequestRepository.Get(command.PersonRequestId);
 

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.LicenseOptions;
 
@@ -61,6 +60,7 @@ namespace Teleopti.Ccc.Domain.Security.AuthorizationData
             licenseOptions.Add(new TeleoptiCccMyTimeWebLicenseOption());
 			licenseOptions.Add(new TeleoptiCccMobileReportsLicenseOption());
 			licenseOptions.Add(new TeleoptiCccSmsLinkLicenseOption());
+			licenseOptions.Add(new TeleoptiCccVersion8LicenseOption());
             
             licenseOptions.Add(new TeleoptiCccFreemiumForecastsLicenseOption());
 

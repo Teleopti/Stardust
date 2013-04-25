@@ -22,44 +22,39 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
         private static readonly object LockObject = new object();
         private bool _isRunning;
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
-        private void MoveThatBus()
-        {
-            bool enabled;
-            var enabledString = ConfigurationManager.AppSettings["EnableAutoDenyAbsenceRequest"];
-            if (bool.TryParse(enabledString, out enabled) && enabled)
-            {
-                lock (LockObject)
-                {
-                    if (!_isRunning)
-                    {
-                        try
-                        {
-                        	var builder = new ContainerBuilder();
-                        	builder.RegisterType<DateOnlyPeriodSerializer>().As<ICustomElementSerializer>();
-                        	builder.RegisterType<LargeGuidCollectionSerializer>().As<ICustomElementSerializer>();
-                        	_customHost = builder.Build();
+	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability",
+		    "CA2000:Dispose objects before losing scope")]
+	    private void MoveThatBus()
+	    {
+		    lock (LockObject)
+		    {
+			    if (_isRunning) return;
+			    try
+			    {
+				    var builder = new ContainerBuilder();
+				    builder.RegisterType<DateOnlyPeriodSerializer>().As<ICustomElementSerializer>();
+				    builder.RegisterType<LargeGuidCollectionSerializer>().As<ICustomElementSerializer>();
+				    _customHost = builder.Build();
 
                         	Rhino.ServiceBus.SqlQueues.Config.QueueConnectionStringContainer.ConnectionString = ConfigurationManager.ConnectionStrings["Queue"].ConnectionString;
 
-                        	new OnewayRhinoServiceBusConfiguration()
-								.UseAutofac(_customHost)
-								.UseStandaloneConfigurationFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,"Teleopti.Ccc.Sdk.ServiceBus.Client.config"))
-								.Configure();
-							
-                            _isRunning = true;
-                            if (Logger.IsInfoEnabled)
-                                Logger.Info("Client started");
-                        }
-                        catch (Exception exception)
-                        {
-                            Logger.Error("The Teleopti Service Bus could not be started, due to an exception.",
-                                         exception);
-                        }
-                    }
-                }
-            }
-        }
+				    new OnewayRhinoServiceBusConfiguration()
+					    .UseAutofac(_customHost)
+					    .UseStandaloneConfigurationFile(Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+					                                                 "Teleopti.Ccc.Sdk.ServiceBus.Client.config"))
+					    .Configure();
+
+				    _isRunning = true;
+				    if (Logger.IsInfoEnabled)
+					    Logger.Info("Client started");
+			    }
+			    catch (Exception exception)
+			    {
+				    Logger.Error("The Teleopti Service Bus could not be started, due to an exception.",
+				                 exception);
+			    }
+		    }
+	    }
 
 		public void Send(object message)
 		{

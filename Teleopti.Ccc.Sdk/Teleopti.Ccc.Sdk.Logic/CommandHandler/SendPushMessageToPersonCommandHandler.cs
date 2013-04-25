@@ -17,9 +17,9 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 	{
 		private readonly IPersonRepository _personRepository;
 		private readonly IPushMessageRepository _pushMessageRepository;
-		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+        private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 
-		public SendPushMessageToPersonCommandHandler(IPersonRepository personRepository, IPushMessageRepository pushMessageRepository, IUnitOfWorkFactory unitOfWorkFactory)
+		public SendPushMessageToPersonCommandHandler(IPersonRepository personRepository, IPushMessageRepository pushMessageRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory)
 		{
 			_personRepository = personRepository;
 			_pushMessageRepository = pushMessageRepository;
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 			verifyNotTooManyReceivers(command.Recipients);
 
 			var result = new CommandResultDto();
-			using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+			using (var uow = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
 				var people = _personRepository.FindPeople(command.Recipients).ToList();
 				if (people.Count > 0)

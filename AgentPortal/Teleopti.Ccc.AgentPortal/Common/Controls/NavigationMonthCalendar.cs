@@ -8,7 +8,7 @@ using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Syncfusion.Windows.Forms.Schedule;
 using Teleopti.Ccc.AgentPortalCode.Foundation.StateHandlers;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.AgentPortal.Common.Controls

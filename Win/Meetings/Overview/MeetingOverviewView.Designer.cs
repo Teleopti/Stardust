@@ -45,6 +45,9 @@
 			this.toolStripExFilter = new Syncfusion.Windows.Forms.Tools.ToolStripEx();
 			this.toolStripButtonFilter = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButtonFetchForUser = new System.Windows.Forms.ToolStripButton();
+			this.toolStripPanelItem1 = new Syncfusion.Windows.Forms.Tools.ToolStripPanelItem();
+			this.toolStripComboBoxResolution = new System.Windows.Forms.ToolStripComboBox();
+			this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
 			this.toolStripButtonExport = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripButtonClose = new System.Windows.Forms.ToolStripButton();
@@ -72,8 +75,10 @@
 			resources.ApplyResources(this.ribbonControlAdv1, "ribbonControlAdv1");
 			this.ribbonControlAdv1.CaptionFont = new System.Drawing.Font("Tahoma", 8.25F);
 			this.ribbonControlAdv1.Header.AddMainItem(toolStripTabItem1);
+			this.ribbonControlAdv1.MaximizeToolTip = "Maximize Ribbon";
 			this.ribbonControlAdv1.MenuButtonImage = global::Teleopti.Ccc.Win.Properties.Resources.ccc_Menu;
 			this.ribbonControlAdv1.MenuButtonText = "";
+			this.ribbonControlAdv1.MinimizeToolTip = "Minimize Ribbon";
 			this.ribbonControlAdv1.Name = "ribbonControlAdv1";
 			// 
 			// ribbonControlAdv1.OfficeMenu
@@ -89,7 +94,6 @@
 			this.ribbonControlAdv1.ShowCaption = false;
 			this.ribbonControlAdv1.ShowContextMenu = false;
 			this.ribbonControlAdv1.ShowLauncher = false;
-			this.ribbonControlAdv1.ShowMinimizeButton = false;
 			this.ribbonControlAdv1.ShowQuickItemsDropDownButton = false;
 			this.ribbonControlAdv1.SystemText.QuickAccessAddItemText = "";
 			this.ribbonControlAdv1.SystemText.QuickAccessCustomizeCaptionText = "";
@@ -233,7 +237,8 @@
 			this.toolStripExFilter.Image = null;
 			this.toolStripExFilter.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButtonFilter,
-            this.toolStripButtonFetchForUser});
+            this.toolStripButtonFetchForUser,
+            this.toolStripPanelItem1});
 			this.toolStripExFilter.Name = "toolStripExFilter";
 			this.toolStripExFilter.ShowLauncher = false;
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripExFilter, false);
@@ -255,10 +260,36 @@
 			this.toolStripButtonFetchForUser.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.toolStripButtonFetchForUser.Image = global::Teleopti.Ccc.Win.Properties.Resources.ccc_User;
 			resources.ApplyResources(this.toolStripButtonFetchForUser, "toolStripButtonFetchForUser");
+			this.toolStripButtonFetchForUser.Margin = new System.Windows.Forms.Padding(0);
 			this.toolStripButtonFetchForUser.Name = "toolStripButtonFetchForUser";
 			this.SetShortcut(this.toolStripButtonFetchForUser, System.Windows.Forms.Keys.None);
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonFetchForUser, false);
 			this.toolStripButtonFetchForUser.Click += new System.EventHandler(this.toolStripButtonFetchForUserClick);
+			// 
+			// toolStripPanelItem1
+			// 
+			this.toolStripPanelItem1.CausesValidation = false;
+			this.toolStripPanelItem1.ForeColor = System.Drawing.Color.MidnightBlue;
+			this.toolStripPanelItem1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripComboBoxResolution,
+            this.toolStripLabel1});
+			this.toolStripPanelItem1.Name = "toolStripPanelItem1";
+			this.SetShortcut(this.toolStripPanelItem1, System.Windows.Forms.Keys.None);
+			resources.ApplyResources(this.toolStripPanelItem1, "toolStripPanelItem1");
+			this.toolStripPanelItem1.Transparent = true;
+			// 
+			// toolStripComboBoxResolution
+			// 
+			this.toolStripComboBoxResolution.Name = "toolStripComboBoxResolution";
+			this.toolStripComboBoxResolution.Padding = new System.Windows.Forms.Padding(0, 5, 0, 3);
+			this.SetShortcut(this.toolStripComboBoxResolution, System.Windows.Forms.Keys.None);
+			resources.ApplyResources(this.toolStripComboBoxResolution, "toolStripComboBoxResolution");
+			// 
+			// toolStripLabel1
+			// 
+			this.toolStripLabel1.Name = "toolStripLabel1";
+			this.SetShortcut(this.toolStripLabel1, System.Windows.Forms.Keys.None);
+			resources.ApplyResources(this.toolStripLabel1, "toolStripLabel1");
 			// 
 			// toolStripButtonExport
 			// 
@@ -356,8 +387,8 @@
 			this.scheduleControl1.ContextMenuStrip = this.contextMenuStripSchedule;
 			this.scheduleControl1.Culture = new System.Globalization.CultureInfo("");
 			this.scheduleControl1.DataSource = null;
-			this.scheduleControl1.ISO8601CalenderFormat = false;
 			resources.ApplyResources(this.scheduleControl1, "scheduleControl1");
+			this.scheduleControl1.ISO8601CalenderFormat = false;
 			this.scheduleControl1.Name = "scheduleControl1";
 			this.scheduleControl1.NavigationPanelPosition = Syncfusion.Schedule.CalendarNavigationPanelPosition.Left;
 			this.scheduleControl1.ShowAllSpansInAllDayPanel = true;
@@ -424,6 +455,9 @@
         private System.Windows.Forms.ToolStripButton toolStripButtonExport;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
 		private System.Windows.Forms.ToolStripButton toolStripButtonFetchForUser;
+		private Syncfusion.Windows.Forms.Tools.ToolStripPanelItem toolStripPanelItem1;
+		private System.Windows.Forms.ToolStripComboBox toolStripComboBoxResolution;
+		private System.Windows.Forms.ToolStripLabel toolStripLabel1;
 
        
     }

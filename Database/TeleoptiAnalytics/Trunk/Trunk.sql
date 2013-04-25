@@ -131,3 +131,15 @@ CREATE TABLE [Queue].[MessagesPurged](
 
 ALTER TABLE [Queue].[MessagesPurged] ADD  CONSTRAINT [DF_PurgedAt_CreatedAt]  DEFAULT (getutcdate()) FOR [PurgedAt]
 GO
+
+
+----------------  
+--Name: Anders
+--Date: 2013-04-25
+--Desc: Purge agg data
+----------------
+if not exists(select 1 from [mart].[etl_maintenance_configuration] where configuration_id = 14)
+	insert into [mart].[etl_maintenance_configuration] values(14,'YearsToKeepAggQueueStats',50)
+
+if not exists(select 1 from [mart].[etl_maintenance_configuration] where configuration_id = 15)
+	insert into [mart].[etl_maintenance_configuration] values(15,'YearsToKeepAggAgentStats',50)

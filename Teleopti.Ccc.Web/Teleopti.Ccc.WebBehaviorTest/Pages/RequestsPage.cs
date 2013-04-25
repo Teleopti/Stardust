@@ -11,9 +11,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 {
 	public class RequestsPage : PortalPage, IEditRequestPage, IOkButton, ICancelButton
 	{
-		[FindBy(Id = "Requests-list")]
-		public List RequestsList { get; set; }
-
 		private Constraint RequestConstraint = Find.BySelector(".request-item");
 		public DivCollection RequestListItems { get { return Document.Divs.Filter(RequestConstraint); } }
 		public IEnumerable<Div> Requests { get { return RequestListItems; } }

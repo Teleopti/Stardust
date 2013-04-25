@@ -12,7 +12,9 @@ namespace Teleopti.Ccc.Domain.Optimization
 	{
 		public IList<DateOnly> CheckDates(IList<DateOnly> blockDates, IScheduleMatrixPro matrixPro)
 		{
+#pragma warning disable 612,618
 			var insidePeriod = matrixPro.SelectedPeriod;
+#pragma warning restore 612,618
 			var datesOutside = new List<DateOnly>();
 			foreach (var blockDate in blockDates)
 			{

@@ -18,8 +18,22 @@ namespace Teleopti.Interfaces.Domain
         /// <summary>
         /// Finds a block representing the whole schedule period
         /// </summary>
-        SchedulePeriod
+        SchedulePeriod,
 
+        /// <summary>
+        /// Finds block between ConSecutive Shifts
+        /// </summary>
+        ConsecutiveShifts,
+
+        /// <summary>
+        /// Finds block between calender week
+        /// </summary>
+        Weeks,
+
+		/// <summary>
+		/// To use when each day is considered a block
+		/// </summary>
+		SingleDay
        
     }
 }

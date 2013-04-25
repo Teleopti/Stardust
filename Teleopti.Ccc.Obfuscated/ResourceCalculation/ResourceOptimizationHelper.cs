@@ -68,7 +68,11 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 				IList<IVisualLayerCollection> addedVisualLayerCollections = new List<IVisualLayerCollection>();
 				foreach (IScheduleDay addedSchedule in toAdd)
 				{
-					IVisualLayerCollection collection = addedSchedule.AssignmentHighZOrder().ProjectionService().CreateProjection();
+					
+					var removedPersonAssignment = addedSchedule.AssignmentHighZOrder();
+					if (removedPersonAssignment == null)
+						continue;
+					IVisualLayerCollection collection = removedPersonAssignment.ProjectionService().CreateProjection();
 					addedVisualLayerCollections.Add(collection);
 				}
 

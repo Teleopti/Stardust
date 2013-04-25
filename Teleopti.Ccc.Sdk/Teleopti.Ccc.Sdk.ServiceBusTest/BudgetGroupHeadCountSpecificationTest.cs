@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
         private DateOnly _defaultDay;
         private DateOnlyPeriod _defaultDatePeriod;
         private IAbsenceRequest _absenceRequest;
+        private IEnumerable<ISkill> _skills;
 
         [SetUp]
         public void Setup()
@@ -35,7 +36,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
             _scheduleProjectionReadOnlyRepository = _mocks.StrictMock<IScheduleProjectionReadOnlyRepository>();
             _schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
             _absenceRequest = _mocks.StrictMock<IAbsenceRequest>();
-
+            _skills = prepareSkillListOpenFromMondayToFriday();
             _person = PersonFactory.CreatePersonWithBasicPermissionInfo("billg", "billg");
             _defaultDay = new DateOnly();
             _defaultDatePeriod = new DateOnlyPeriod();
@@ -44,13 +45,33 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
                                                             _scheduleProjectionReadOnlyRepository);
         }
 
+
+        [Test]
+        public void ShouldReturnTrueIfSkillIsOpen()
+        {
+            // 2013-04-08 is a monday
+            var result = BudgetGroupHeadCountSpecificationForTest.IsSkillOpenForDateOnlyForTest(new DateOnly(2013, 04, 08), _skills);
+            Assert.IsTrue(result);
+        }
+
+        [Test]
+        public void ShouldReturnFalseIfSkillIsClosed()
+        {
+            // 2013-04-07 is a sunday        
+            var result = BudgetGroupHeadCountSpecificationForTest.IsSkillOpenForDateOnlyForTest(new DateOnly(2013, 04, 07), _skills);
+            Assert.IsFalse(result);
+        }
+
+       
+
         [Test]
         public void ShouldBeValidIfEnoughAllowanceLeft()
         {
             var budgetDay = _mocks.StrictMock<IBudgetDay>();
             var personPeriod = PersonPeriodFactory.CreatePersonPeriod(_defaultDay);
-            personPeriod.BudgetGroup = new BudgetGroup { Name = "BG1"};
-            personPeriod.BudgetGroup.SetId(new Guid());
+            var budgetGroup = GetBudgetGroup();
+
+            personPeriod.BudgetGroup = budgetGroup;
             _person.AddPersonPeriod(personPeriod);
             _person.PermissionInformation.SetDefaultTimeZone(TimeZoneHelper.CurrentSessionTimeZone);
             using (_mocks.Record())
@@ -63,40 +84,15 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
             }
         }
 
-        private void ExpectCallsForEnoughAllowanceLeft(IBudgetDay budgetDay, IPersonPeriod personPeriod)
-        {
-            Expect.Call(_scenarioRepository.LoadDefaultScenario()).Return(ScenarioFactory.CreateScenarioAggregate());
-            Expect.Call(_absenceRequest.Person).Return(_person).Repeat.AtLeastOnce();
-            Expect.Call(_absenceRequest.Period).Return(shortPeriod()).Repeat.AtLeastOnce();
-            Expect.Call(_budgetDayRepository.Find(null, null, _defaultDatePeriod))
-                  .IgnoreArguments()
-                  .Return(new List<IBudgetDay> {budgetDay});
-            Expect.Call(budgetDay.Allowance).Return(2d);
-            Expect.Call(budgetDay.Day).Return(_defaultDay).Repeat.Once();
-            Expect.Call(
-                _scheduleProjectionReadOnlyRepository.GetNumberOfAbsencesPerDayAndBudgetGroup(
-                    personPeriod.BudgetGroup.Id.GetValueOrDefault(), new DateOnly(personPeriod.StartDate))).Return(0);
-        }
-
-        private static DateTimePeriod longPeriod()
-        {
-            return new DateTimePeriod(new DateTime(2016, 12, 1, 12, 0, 0, DateTimeKind.Utc),
-                                      new DateTime(2016, 12, 1, 14, 1, 0, DateTimeKind.Utc));
-        }
-
-        private static DateTimePeriod shortPeriod()
-        {
-            return new DateTimePeriod(new DateTime(2011, 12, 1, 12, 0, 0, DateTimeKind.Utc),
-                                      new DateTime(2011, 12, 1, 13, 0, 0, DateTimeKind.Utc));
-        }
-
+        
         [Test]
         public void ShouldBeInvalidIfNotEnoughAllowanceLeft()
         {
             var budgetDay = _mocks.StrictMock<IBudgetDay>();
             var personPeriod = PersonPeriodFactory.CreatePersonPeriod(_defaultDay);
-            personPeriod.BudgetGroup = new BudgetGroup { Name = "BG1" };
-            personPeriod.BudgetGroup.SetId(Guid.NewGuid());
+            var budgetGroup = GetBudgetGroup();
+
+            personPeriod.BudgetGroup = budgetGroup;
             _person.AddPersonPeriod(personPeriod);
             _person.PermissionInformation.SetDefaultTimeZone(TimeZoneHelper.CurrentSessionTimeZone);
 
@@ -110,20 +106,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
             }
         }
 
-        private void GetExpectForNotEnoughAllowanceLeft(IBudgetDay budgetDay, IPersonPeriod personPeriod)
-        {
-            Expect.Call(_scenarioRepository.LoadDefaultScenario()).Return(ScenarioFactory.CreateScenarioAggregate());
-            Expect.Call(_absenceRequest.Person).Return(_person).Repeat.AtLeastOnce();
-            Expect.Call(_absenceRequest.Period).Return(longPeriod()).Repeat.AtLeastOnce();
-            Expect.Call(_budgetDayRepository.Find(null, null, _defaultDatePeriod))
-                  .IgnoreArguments()
-                  .Return(new List<IBudgetDay> {budgetDay});
-            Expect.Call(budgetDay.Day).Return(_defaultDay);
-            Expect.Call(budgetDay.Allowance).Return(2d);
-            Expect.Call(
-                _scheduleProjectionReadOnlyRepository.GetNumberOfAbsencesPerDayAndBudgetGroup(
-                    personPeriod.BudgetGroup.Id.GetValueOrDefault(), new DateOnly(personPeriod.StartDate))).Return(2);
-        }
+       
 
         [Test]
         public void ShouldBeInvalidIfAgentHasNoPersonPeriod()
@@ -201,12 +184,104 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
             }
         }
 
+        private static BudgetGroup GetBudgetGroup()
+        {
+            var budgetGroup = new BudgetGroup();
+            var skill = SkillFactory.CreateSkill("Test Skill");
+            var wl = WorkloadFactory.CreateWorkloadWithFullOpenHours(skill);
+
+            foreach (var day in wl.TemplateWeekCollection)
+            {
+                day.Value.OpenForWork.IsOpen = true;
+                day.Value.OpenForWork.IsOpenForIncomingWork = true;
+            }
+
+            skill.AddWorkload(wl);
+            budgetGroup.SetId(Guid.NewGuid());
+            budgetGroup.Name = "BG1";
+            budgetGroup.AddSkill(skill);
+            return budgetGroup;
+        }
+
+        private void ExpectCallsForEnoughAllowanceLeft(IBudgetDay budgetDay, IPersonPeriod personPeriod)
+        {
+            Expect.Call(_scenarioRepository.LoadDefaultScenario()).Return(ScenarioFactory.CreateScenarioAggregate());
+            Expect.Call(_absenceRequest.Person).Return(_person).Repeat.AtLeastOnce();
+            Expect.Call(_absenceRequest.Period).Return(shortPeriod()).Repeat.AtLeastOnce();
+            Expect.Call(_budgetDayRepository.Find(null, null, _defaultDatePeriod))
+                  .IgnoreArguments()
+                  .Return(new List<IBudgetDay> { budgetDay });
+            Expect.Call(budgetDay.Allowance).Return(2d);
+            Expect.Call(budgetDay.Day).Return(_defaultDay).Repeat.Once();
+            Expect.Call(
+                _scheduleProjectionReadOnlyRepository.GetNumberOfAbsencesPerDayAndBudgetGroup(
+                    personPeriod.BudgetGroup.Id.GetValueOrDefault(), new DateOnly(personPeriod.StartDate))).Return(0);
+        }
+
+        private static DateTimePeriod longPeriod()
+        {
+            return new DateTimePeriod(new DateTime(2016, 12, 1, 12, 0, 0, DateTimeKind.Utc),
+                                      new DateTime(2016, 12, 1, 14, 1, 0, DateTimeKind.Utc));
+        }
+
+        private static DateTimePeriod shortPeriod()
+        {
+            return new DateTimePeriod(new DateTime(2011, 12, 1, 12, 0, 0, DateTimeKind.Utc),
+                                      new DateTime(2011, 12, 1, 13, 0, 0, DateTimeKind.Utc));
+        }
+
+
+        private void GetExpectForNotEnoughAllowanceLeft(IBudgetDay budgetDay, IPersonPeriod personPeriod)
+        {
+            Expect.Call(_scenarioRepository.LoadDefaultScenario()).Return(ScenarioFactory.CreateScenarioAggregate());
+            Expect.Call(_absenceRequest.Person).Return(_person).Repeat.AtLeastOnce();
+            Expect.Call(_absenceRequest.Period).Return(longPeriod()).Repeat.AtLeastOnce();
+            Expect.Call(_budgetDayRepository.Find(null, null, _defaultDatePeriod))
+                  .IgnoreArguments()
+                  .Return(new List<IBudgetDay> { budgetDay });
+            Expect.Call(budgetDay.Day).Return(_defaultDay);
+            Expect.Call(budgetDay.Allowance).Return(2d);
+            Expect.Call(
+                _scheduleProjectionReadOnlyRepository.GetNumberOfAbsencesPerDayAndBudgetGroup(
+                    personPeriod.BudgetGroup.Id.GetValueOrDefault(), new DateOnly(personPeriod.StartDate))).Return(2);
+        }
+
         private void GetExpectIfBudgetIsNotDefinedForFewDays(DateTimePeriod dateTimePeriod, List<IBudgetDay> budgetDayList)
         {
             Expect.Call(_scenarioRepository.LoadDefaultScenario()).Return(ScenarioFactory.CreateScenarioAggregate());
             Expect.Call(_absenceRequest.Period).Return(dateTimePeriod).Repeat.AtLeastOnce();
             Expect.Call(_absenceRequest.Person).Return(_person).Repeat.AtLeastOnce();
             Expect.Call(_budgetDayRepository.Find(null, null, _defaultDatePeriod)).IgnoreArguments().Return(budgetDayList);
+        }
+
+        private static IEnumerable<ISkill> prepareSkillListOpenFromMondayToFriday()
+        {
+            var skill = SkillFactory.CreateSkillWithWorkloadAndSources();
+            var workload = WorkloadFactory.CreateWorkload(skill);
+
+            for (var i = 1; i < 5; i++)
+            {
+                var dayTemplate = (IWorkloadDayTemplate)workload.GetTemplate(TemplateTarget.Workload, (DayOfWeek)i);
+                dayTemplate.ChangeOpenHours(new List<TimePeriod> { new TimePeriod(8, 0, 17, 0) });
+                workload.SetTemplateAt(i, dayTemplate);
+            }
+
+            return new List<ISkill> { skill };
+        }
+    }
+
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "HeadCount")]
+    public class BudgetGroupHeadCountSpecificationForTest : BudgetGroupHeadCountSpecification
+    {
+        public BudgetGroupHeadCountSpecificationForTest(ISchedulingResultStateHolder schedulingResultStateHolder,
+            IScenarioRepository scenarioRepository, IBudgetDayRepository budgetDayRepository, IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository)
+            : base(schedulingResultStateHolder, scenarioRepository, budgetDayRepository, scheduleProjectionReadOnlyRepository)
+        {
+        }
+
+        public static bool IsSkillOpenForDateOnlyForTest(DateOnly date, IEnumerable<ISkill> skills)
+        {
+            return IsSkillOpenForDateOnly(date, skills);
         }
     }
 }

@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[When(@"I manually navigate to week schedule page")]
 		public void WhenIManuallyNavigateToWeekSchedulePage()
 		{
-			Navigation.GotoAnApplicationPage();
+			Navigation.GotoWeekSchedulePageNoWait();
 		}
 
 		[When(@"I view my week schedule")]
@@ -175,13 +175,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoAnApplicationPageOutsidePortal();
 		}
 
-		[When(@"I navigate to the site home page")]
-		public void WhenIBrowseToTheSiteHomePage()
-		{
-			Navigation.GotoSiteHomePage();
-		}
-
-
 
 
 
@@ -197,6 +190,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoGlobalSignInPage();
 		}
 
+		[When(@"I navigate to the site home page")]
 		[When(@"I navigate to the site's root")]
 		public void WhenINavigateToTheSiteSRoot()
 		{

@@ -22,15 +22,17 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 		private IUnitOfWorkFactory unitOfWorkFactory;
 		private IDateTimePeriodAssembler assembler;
 		private GetMultiplicatorDefinitionSetShiftAllowanceQueryHandler target;
+	    private ICurrentUnitOfWorkFactory currentUnitOfWorkFactory;
 
-		[SetUp]
+	    [SetUp]
 		public void Setup()
 		{
 			mocks = new MockRepository();
 			multiplicatorDefinitionSetRepository = mocks.DynamicMock<IMultiplicatorDefinitionSetRepository>();
-			unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
+            unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
+            currentUnitOfWorkFactory = mocks.DynamicMock<ICurrentUnitOfWorkFactory>();
 			assembler = mocks.DynamicMock<IDateTimePeriodAssembler>();
-			target = new GetMultiplicatorDefinitionSetShiftAllowanceQueryHandler(multiplicatorDefinitionSetRepository, assembler, unitOfWorkFactory);
+			target = new GetMultiplicatorDefinitionSetShiftAllowanceQueryHandler(multiplicatorDefinitionSetRepository, assembler, currentUnitOfWorkFactory);
 		}
 		
 		[Test]
@@ -46,7 +48,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 				Expect.Call(multiplicatorDefinitionSetRepository.FindAllShiftAllowanceDefinitions()).Return(
 					multiplicatorDefinitionSetList);
 				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-			}
+                Expect.Call(currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
+            }
 			using (mocks.Playback())
 			{
 				var multiplicatorDefinitionSetShiftAllowanceDto = new GetMultiplicatorDefinitionSetShiftAllowanceDto();

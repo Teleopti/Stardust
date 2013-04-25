@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Teleopti.Ccc.Domain.Security.AuthorizationData
+﻿namespace Teleopti.Ccc.Domain.Security.AuthorizationData
 {
     /// <summary>
     /// Pre defined application function constants.

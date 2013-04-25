@@ -7,6 +7,7 @@ using Autofac.Integration.Wcf;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Messaging.SignalR;
 using log4net;
 using log4net.Config;
@@ -171,6 +172,7 @@ namespace Teleopti.Ccc.Sdk.WcfHost
             builder.RegisterType<MainShiftLayerConstructor>().As<ILayerConstructor<IMainShiftActivityLayer>>().InstancePerLifetimeScope();
             builder.RegisterType<PersonalShiftLayerConstructor>().As<ILayerConstructor<IPersonalShiftActivityLayer>>().InstancePerLifetimeScope();
             builder.RegisterType<UserCultureProvider>().As<IUserCultureProvider>().InstancePerLifetimeScope();
+            builder.RegisterType<GroupingReadOnlyRepository>().As<IGroupingReadOnlyRepository>();
 
         	registerAlternativePasswordCheckerIfApplicable(builder);
 

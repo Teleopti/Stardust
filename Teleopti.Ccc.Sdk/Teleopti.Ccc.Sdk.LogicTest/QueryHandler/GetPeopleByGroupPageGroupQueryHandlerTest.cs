@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 		private GetPeopleByGroupPageGroupQueryHandler target;
 		private IAssembler<IPerson, PersonDto> assembler;
 		private IPersonRepository personRepository;
-		private IUnitOfWorkFactory unitOfWorkFactory;
+		private ICurrentUnitOfWorkFactory unitOfWorkFactory;
 
 		[SetUp]
 		public void Setup()
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			groupingReadOnlyRepository = mocks.DynamicMock<IGroupingReadOnlyRepository>();
 			assembler = mocks.StrictMock<IAssembler<IPerson, PersonDto>>();
 			personRepository = mocks.StrictMock<IPersonRepository>();
-			unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
+			unitOfWorkFactory = mocks.DynamicMock<ICurrentUnitOfWorkFactory>();
 			target = new GetPeopleByGroupPageGroupQueryHandler(groupingReadOnlyRepository,personRepository,assembler,unitOfWorkFactory);
 		}
 
@@ -46,6 +46,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			var personList = new List<IPerson> {PersonFactory.CreatePerson()};
 			using (mocks.Record())
 			{
+			    Expect.Call(unitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(mocks.DynamicMock<IUnitOfWorkFactory>());
 				Expect.Call(groupingReadOnlyRepository.DetailsForGroup(groupPageGroupId, dateOnly)).Return(detailList);
 				Expect.Call(personRepository.FindPeople((IEnumerable<Guid>)null)).Constraints(Rhino.Mocks.Constraints.List.Equal(new List<Guid> { personId })).Return(personList);
 				Expect.Call(assembler.DomainEntitiesToDtos(personList)).Return(new[] {new PersonDto()});

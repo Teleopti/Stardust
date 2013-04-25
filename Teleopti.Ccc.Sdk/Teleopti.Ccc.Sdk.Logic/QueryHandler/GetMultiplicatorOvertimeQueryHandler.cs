@@ -13,16 +13,16 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 	public class GetMultiplicatorOvertimeQueryHandler : IHandleQuery<GetMultiplicatorOvertimeQueryDto, ICollection<MultiplicatorDto>>
 	{
 		private readonly IMultiplicatorRepository _multiplicatorRepository;
-		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+        private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 
-		public GetMultiplicatorOvertimeQueryHandler(IMultiplicatorRepository multiplicatorRepository, IUnitOfWorkFactory unitOfWorkFactory)
+		public GetMultiplicatorOvertimeQueryHandler(IMultiplicatorRepository multiplicatorRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory)
 		{
 			_multiplicatorRepository = multiplicatorRepository;
 			_unitOfWorkFactory = unitOfWorkFactory;
 		}
 		public ICollection<MultiplicatorDto> Handle(GetMultiplicatorOvertimeQueryDto query)
 		{
-			using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+			using (var unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
 				IDisposable filter = null;
 				if (query.LoadDeleted)

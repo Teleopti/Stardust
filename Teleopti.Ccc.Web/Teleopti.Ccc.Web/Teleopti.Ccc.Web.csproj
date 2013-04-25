@@ -958,11 +958,14 @@
     <Content Include="..\..\Teleopti.Ccc.Web.Broker\customTimeoutSettings.config.notinuse">
       <Link>customTimeoutSettings.config.notinuse</Link>
     </Content>
+    <Content Include="Areas\Start\Views\Test\Message.cshtml" />
     <None Include="PasswordPolicy.xml.notinuse">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Content\Scripts\jquery-1.9.1.min.map" />
-    <Content Include="web.config" />
+    <Content Include="web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>

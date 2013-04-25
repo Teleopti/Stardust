@@ -51,9 +51,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
             IScheduleDictionary scheduleDictionary)
 		{
 			InParameter.NotNull("scheduleDictionary", scheduleDictionary);
-            //IEffectiveRestriction ret = new EffectiveRestriction(new StartTimeLimitation(), new EndTimeLimitation(),
-            //                                                          new WorkTimeLimitation(), null, null,
-            //                                                          new List<IActivityRestriction>());
+
             IEffectiveRestriction ret = null;
 			foreach (var person in groupPersons)
 			{
