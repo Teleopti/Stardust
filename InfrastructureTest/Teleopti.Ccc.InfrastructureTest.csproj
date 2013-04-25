@@ -333,6 +333,7 @@
     <Compile Include="Repositories\GroupingAbsenceRepositoryTest.cs" />
     <Compile Include="Repositories\GroupingActivityRepositoryTest.cs" />
     <Compile Include="SystemCheck\AgentDayConverter\ExecuteTarget.cs" />
+    <Compile Include="SystemCheck\AgentDayConverter\FetchPersonIdAndTimeZoneTest.cs" />
     <Compile Include="SystemCheck\AgentDayConverter\PersonAssignmentAuditDateSetterTest.cs" />
     <Compile Include="SystemCheck\AgentDayConverter\PersonAssignmentDateSetterTest.cs" />
     <Compile Include="SystemCheck\AgentDayConverter\PersonTimeZoneSetterTest.cs" />
