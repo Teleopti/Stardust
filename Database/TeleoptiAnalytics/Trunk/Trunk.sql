@@ -206,3 +206,20 @@ GO
 
 ALTER TABLE [mart].[fact_request] CHECK CONSTRAINT [FK_fact_request_dim_absence]
 GO
+----------------  
+--Name: Karin
+--Date: 2013-04-25
+--Desc: Alter mart fact requested days table
+----------------
+ALTER TABLE mart.fact_requested_days ADD absence_id int NULL
+GO
+UPDATE mart.fact_requested_days
+SET absence_id=-1
+WHERE absence_id IS NULL
+GO
+ALTER TABLE [mart].[fact_requested_days]  WITH CHECK ADD  CONSTRAINT [FK_fact_requested_days_dim_absence] FOREIGN KEY([absence_id])
+REFERENCES [mart].[dim_absence] ([absence_id])
+GO
+
+ALTER TABLE [mart].[fact_requested_days] CHECK CONSTRAINT [FK_fact_requested_days_dim_absence]
+GO
