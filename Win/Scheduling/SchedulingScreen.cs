@@ -6206,11 +6206,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void toolStripButtonRequestClick(object sender, EventArgs e)
 		{
-			if (string.IsNullOrEmpty(toolStripTextBoxFilter.Text))
-				return;
-			
-			var filterWords = toolStripTextBoxFilter.Text.Split(' ').ToList();
-			_requestView.FilterGrid(filterWords);
+			_requestView.FilterGrid(toolStripTextBoxFilter.Text.Split(' ').ToList());
 
 			//var filterBox = new FilterBoxAdvanced();
 			//filterBox.FilterClicked += filterbox_FilterClicked;
