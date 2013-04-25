@@ -107,7 +107,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
 			Expect.Call(commonStateHolder.ScenarioCollectionDeletedExcluded).Return(new List<IScenario> { scenario });
 			Expect.Call(scenario.DefaultScenario).Return(true);
 
-			var step = new FactScheduleDayCountJobStep(jobParameters, true);
+			var step = new FactSchedulePreferenceJobStep(jobParameters, true);
 
 			var bu = _mock.DynamicMock<IBusinessUnit>();
 			Expect.Call(raptorRepository.FillIntradayScheduleDayCountDataMart(bu, scenario)).Return(5);
