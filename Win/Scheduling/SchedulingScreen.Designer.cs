@@ -374,7 +374,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.SetShortcut(this.toolStripSpinningProgressControl1, System.Windows.Forms.Keys.None);
 			this.toolStripSpinningProgressControl1.Size = new System.Drawing.Size(20, 24);
 			this.toolStripSpinningProgressControl1.Text = "toolStripSpinningProgressControl1";
-			this.toolStripSpinningProgressControl1.TransitionSegment = 0;
+			this.toolStripSpinningProgressControl1.TransitionSegment = 2;
 			this.toolStripSpinningProgressControl1.TransitionSegmentColor = System.Drawing.Color.FromArgb(((int)(((byte)(129)))), ((int)(((byte)(242)))), ((int)(((byte)(121)))));
 			this.toolStripSpinningProgressControl1.Visible = false;
 			// 
@@ -2750,8 +2750,9 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.toolStripTextBoxFilter});
 			this.toolStripEx3.Location = new System.Drawing.Point(664, 1);
 			this.toolStripEx3.Name = "toolStripEx3";
+			this.toolStripEx3.Padding = new System.Windows.Forms.Padding(15, 0, 15, 0);
 			this.toolStripEx3.ShowLauncher = false;
-			this.toolStripEx3.Size = new System.Drawing.Size(341, 98);
+			this.toolStripEx3.Size = new System.Drawing.Size(372, 98);
 			this.toolStripEx3.TabIndex = 2;
 			this.toolStripEx3.Text = "xxFilter";
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripEx3, true);
@@ -2777,9 +2778,12 @@ namespace Teleopti.Ccc.Win.Scheduling
 			// 
 			this.toolStripTextBoxFilter.AutoSize = false;
 			this.ribbonControlAdv1.SetDescription(this.toolStripTextBoxFilter, "");
+			this.toolStripTextBoxFilter.Margin = new System.Windows.Forms.Padding(1, 0, 0, 0);
 			this.toolStripTextBoxFilter.Name = "toolStripTextBoxFilter";
+			this.toolStripTextBoxFilter.Padding = new System.Windows.Forms.Padding(1, 0, 0, 0);
 			this.SetShortcut(this.toolStripTextBoxFilter, System.Windows.Forms.Keys.None);
 			this.toolStripTextBoxFilter.Size = new System.Drawing.Size(280, 81);
+			this.toolStripTextBoxFilter.ToolTipText = "xxFilter";
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripTextBoxFilter, true);
 			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripTextBoxFilter, false);
 			// 
