@@ -71,38 +71,40 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
             //foreach (var matrixListInOneSchedulePeriod in listOfMatrixes)
             //{
             var matrixDataList = _matrixDataListCreator.Create(matrixListAll, schedulingOptions);
-				var useSameDaysOffOnAll = _matrixDataListInSteadyState.IsListInSteadyState(matrixDataList);
-				if (useSameDaysOffOnAll)
+		    var useSameDaysOffOnAll = false;
+            if(schedulingOptions.UseGroupScheduling)
+                useSameDaysOffOnAll = _matrixDataListInSteadyState.IsListInSteadyState(matrixDataList);
+			if (useSameDaysOffOnAll)
+			{
+				foreach (var matrixData in matrixDataList)
 				{
-					foreach (var matrixData in matrixDataList)
+					foreach (var scheduleDayPro in matrixData.Matrix.UnlockedDays)
 					{
-						foreach (var scheduleDayPro in matrixData.Matrix.UnlockedDays)
-						{
-							var scheduleDate = scheduleDayPro.Day;
-                            var groupPerson = groupPersonBuilderForOptimization.BuildGroupPerson(matrixData.Matrix.Person , scheduleDate);
-							var scheduleDictionary = _schedulingResultStateHolder.Schedules;
-							var restriction = _effectiveRestrictionCreator.GetEffectiveRestriction(groupPerson.GroupMembers,
-																								   scheduleDate, schedulingOptions,
-																								   scheduleDictionary);
-                            addDaysOffForTeam(matrixListAll, schedulingOptions, scheduleDate, restriction);
-						}
-						foreach (var scheduleDayPro in matrixData.Matrix.UnlockedDays)
-						{
-							var scheduleDate = scheduleDayPro.Day;
-                            var groupPerson = groupPersonBuilderForOptimization.BuildGroupPerson(matrixData.Matrix.Person, scheduleDate);
-							var scheduleDictionary = _schedulingResultStateHolder.Schedules;
-							var restriction = _effectiveRestrictionCreator.GetEffectiveRestriction(groupPerson.GroupMembers,
-																								   scheduleDate, schedulingOptions,
-																								   scheduleDictionary);
-                            addContractDaysOffForTeam(matrixListAll, schedulingOptions, rollbackService, scheduleDate, restriction);
-						}
+						var scheduleDate = scheduleDayPro.Day;
+                        var groupPerson = groupPersonBuilderForOptimization.BuildGroupPerson(matrixData.Matrix.Person , scheduleDate);
+						var scheduleDictionary = _schedulingResultStateHolder.Schedules;
+						var restriction = _effectiveRestrictionCreator.GetEffectiveRestriction(groupPerson.GroupMembers,
+																								scheduleDate, schedulingOptions,
+																								scheduleDictionary);
+                        addDaysOffForTeam(matrixListAll, schedulingOptions, scheduleDate, restriction);
+					}
+					foreach (var scheduleDayPro in matrixData.Matrix.UnlockedDays)
+					{
+						var scheduleDate = scheduleDayPro.Day;
+                        var groupPerson = groupPersonBuilderForOptimization.BuildGroupPerson(matrixData.Matrix.Person, scheduleDate);
+						var scheduleDictionary = _schedulingResultStateHolder.Schedules;
+						var restriction = _effectiveRestrictionCreator.GetEffectiveRestriction(groupPerson.GroupMembers,
+																								scheduleDate, schedulingOptions,
+																								scheduleDictionary);
+                        addContractDaysOffForTeam(matrixListAll, schedulingOptions, rollbackService, scheduleDate, restriction);
 					}
 				}
-				else
-				{
-                    addDaysOff(matrixListAll, schedulingOptions);
-                    addContractDaysOff(matrixListAll, rollbackService, schedulingOptions);
-				}
+			}
+			else
+			{
+                addDaysOff(matrixListAll, schedulingOptions);
+                addContractDaysOff(matrixListAll, rollbackService, schedulingOptions);
+			}
             //}
 		}
 
