@@ -12,6 +12,7 @@ using Teleopti.Analytics.Etl.Transformer.Job.Steps;
 using Teleopti.Analytics.Etl.TransformerInfrastructure;
 using Teleopti.Analytics.Etl.TransformerTest.FakeData;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 using IJobResult = Teleopti.Analytics.Etl.Interfaces.Transformer.IJobResult;
 
@@ -45,26 +46,20 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
 			var jobParameters = _mock.DynamicMock<IJobParameters>();
 			var stateHolder = _mock.DynamicMock<ICommonStateHolder>();
 			var jobHelper = _mock.DynamicMock<IJobHelper>();
-			var dic = new Dictionary<DateTimePeriod, IScheduleDictionary>(); 
-
 			var repository = _mock.DynamicMock<IRaptorRepository>();
-			var transformer = _mock.DynamicMock<ISchedulePreferenceTransformer>();
-			var dayRestrictor = _mock.DynamicMock<IScheduleDayRestrictor>();
+			var transformer = _mock.DynamicMock<IIntradaySchedulePreferenceTransformer>();
 			var subStep = _mock.DynamicMock<IEtlDayOffSubStep>();
-			IJobMultipleDate jobMultipleDate = new JobMultipleDate(TimeZoneInfo.FindSystemTimeZoneById("UTC"));
-			jobMultipleDate.Add(DateTime.UtcNow, DateTime.UtcNow, JobCategoryType.Schedule);
+			var scenario = new Scenario("scenario") {DefaultScenario = true};
 
 			Expect.Call(jobParameters.IntervalsPerDay).Return(96);
-			Expect.Call(stateHolder.ScenarioCollectionDeletedExcluded).Return(new List<IScenario> { new Scenario("scenario"){DefaultScenario = true} });
-			Expect.Call(jobParameters.JobCategoryDates).Return(jobMultipleDate);
-			Expect.Call(jobParameters.StateHolder).Return(stateHolder);
-			Expect.Call(stateHolder.GetScheduleCashe()).Return(dic);
-			Expect.Call(stateHolder.GetSchedulePartPerPersonAndDate(dic)).Return(new List<IScheduleDay>());
-			Expect.Call(dayRestrictor.RemoveScheduleDayEndingTooLate(new List<IScheduleDay>(), new DateTime())).IgnoreArguments();
-			Expect.Call(() => transformer.Transform(new List<IScheduleDay>(), new DataTable("d"))).IgnoreArguments();
-
-			//Expect.Call(jobParameters.JobCategoryDates).Return(jobMultipleDate);
+			Expect.Call(stateHolder.ScenarioCollectionDeletedExcluded).Return(new List<IScenario> { scenario });
 			
+			Expect.Call(jobParameters.StateHolder).Return(stateHolder);
+			Expect.Call(repository.LastChangedDate(null, "")).IgnoreArguments().Return(new LastChangedReadModel { LastTime = DateTime.Now, ThisTime = DateTime.Now });
+			Expect.Call(repository.ChangedPreferencesOnStep(new DateTime(), null))
+				.IgnoreArguments()
+				.Return(new List<IPreferenceDay>());
+			Expect.Call(() => transformer.Transform(new List<IPreferenceDay>(), new DataTable("d"),stateHolder, scenario)).IgnoreArguments();
 			Expect.Call(jobParameters.Helper).Return(jobHelper);
 			Expect.Call(jobHelper.Repository).Return(repository);
 			Expect.Call(repository.PersistSchedulePreferences(new DataTable("d"))).IgnoreArguments().Return(5);
@@ -74,7 +69,6 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
 			var target = new IntradayStageSchedulePreferenceJobStep(jobParameters)
 			{
 				Transformer = transformer,
-				ScheduleDayRestrictor = dayRestrictor,
 				DayOffSubStep = subStep
 			};
 			

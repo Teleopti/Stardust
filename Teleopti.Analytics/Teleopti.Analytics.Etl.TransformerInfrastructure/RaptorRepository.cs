@@ -292,6 +292,20 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 
 		}
 
+		public int FillIntradayFactSchedulePreferenceMart(IBusinessUnit currentBusinessUnit, IScenario scenario)
+		{
+			var parameterList = new List<SqlParameter>
+				{
+					new SqlParameter("business_unit_code", currentBusinessUnit.Id),
+					new SqlParameter("scenario_code", currentBusinessUnit.Id)
+				};
+
+
+			return
+				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_schedule_preference_intraday_load", parameterList,
+											  _dataMartConnectionString);
+		}
+
 		public int FillDimQueueDataMart(int dataSourceId, IBusinessUnit businessUnit)
 		{
 			//Prepare sql parameters
@@ -715,6 +729,8 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 				return rep.FindNewerThan(lastTime);
 			}
 		}
+
+		
 
 		public IList<IScheduleDay> LoadSchedulePartsPerPersonAndDate(DateTimePeriod period, IScheduleDictionary dictionary)
 		{
