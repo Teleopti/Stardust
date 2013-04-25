@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
-using Teleopti.Ccc.Infrastructure.SystemCheck;
 using Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Support.Security
 {
@@ -18,22 +15,13 @@ namespace Teleopti.Support.Security
 		static void Main(string[] args)
 		{
 			var commandLineArgument = new CommandLineArgument(args);
-			var connectionStringBuilder = new SqlConnectionStringBuilder(commandLineArgument.DestinationConnectionString);
-
 			if (!string.IsNullOrEmpty(commandLineArgument.AggDatabase))
 			{
 				CrossDatabaseViewUpdate.Execute(commandLineArgument);
 			}
 			else
 			{
-				var scheduleConverter =
-				new ConvertSchedule(new IPersonAssignmentConverter[]
-				{
-					new PersonAssignmentAuditDateSetter(connectionStringBuilder),
-					new PersonAssignmentDateSetter(connectionStringBuilder)
-				});
-
-				scheduleConverter.ExecuteAllConverters();
+				setPersonAssignmentDate(commandLineArgument);
 				ForecasterDateAdjustment.Execute(commandLineArgument);
 				PersonFirstDayOfWeekSetter.Execute(commandLineArgument);
 				PasswordEncryption.Execute(commandLineArgument);
@@ -41,5 +29,25 @@ namespace Teleopti.Support.Security
 			}
 			Environment.ExitCode = 0;
         }
-    }
+
+		private static void setPersonAssignmentDate(CommandLineArgument commandLineArgument)
+		{
+			var allPersonAndTimeZone = new FetchPersonIdAndTimeZone(commandLineArgument.DestinationConnectionString).ForAllPersons();
+			using (var conn = new SqlConnection(commandLineArgument.DestinationConnectionString))
+			{
+				conn.Open();
+				foreach (var personAndTimeZone in allPersonAndTimeZone)
+				{
+					using (var tx = conn.BeginTransaction())
+					{
+						var personId = personAndTimeZone.Item1;
+						var timeZone = personAndTimeZone.Item2;
+						new PersonAssignmentAuditDateSetter(tx).Execute(personId, timeZone);
+						new PersonAssignmentDateSetter(tx).Execute(personId, timeZone);
+						tx.Commit();
+					}
+				}
+			}
+		}
+	}
 }
