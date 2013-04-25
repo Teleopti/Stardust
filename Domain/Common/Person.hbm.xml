@@ -72,10 +72,11 @@
 			<parent name="BelongsTo"/>
 
 			<property name="defaultTimeZone"
-                access="field"
+						access="field"
 						type="string"
-				length="50"
-				not-null="true"/>
+						length="50"
+						not-null="true"
+						update="false"/>
 
 			<property name="culture"
                 access="field"
