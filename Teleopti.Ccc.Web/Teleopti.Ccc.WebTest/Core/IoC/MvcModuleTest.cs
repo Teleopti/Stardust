@@ -531,6 +531,8 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		{
 			requestContainer.Resolve<IHandleCommand<AddFullDayAbsenceCommand>>()
 			                .Should().Not.Be.Null();
+			requestContainer.Resolve<IHandleCommand<RemoveAbsenceCommand>>()
+							.Should().Not.Be.Null();
 		}
 
 		[Test]

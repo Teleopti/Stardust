@@ -1,8 +1,6 @@
-using System;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Web.Areas.MyTime.Core;
-using Teleopti.Ccc.Web.Core.Aop.Aspects;
 using Teleopti.Ccc.Web.Filters;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
@@ -19,6 +17,12 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 		[HttpPostOrPut]
 		[UnitOfWorkAction]
 		public void AddFullDayAbsence(AddFullDayAbsenceCommand command)
+		{
+			_commandDispatcher.Execute(command);
+		}
+
+
+		public void RemoveAbsence(RemoveAbsenceCommand command)
 		{
 			_commandDispatcher.Execute(command);
 		}

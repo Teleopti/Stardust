@@ -125,6 +125,8 @@
     <Compile Include="ApplicationLayer\IEventsPublisher.cs" />
     <Compile Include="ApplicationLayer\IgnoreDelayedMessages.cs" />
     <Compile Include="ApplicationLayer\IHandleEvent.cs" />
+    <Compile Include="ApplicationLayer\RemoveAbsenceCommand.cs" />
+    <Compile Include="ApplicationLayer\RemoveAbsenceCommandHandler.cs" />
     <Compile Include="ApplicationLayer\Rta\CannotGetUpdatedScheduleChangeFromTeleoptiRtaService.cs" />
     <Compile Include="ApplicationLayer\Rta\IGetUpdatedScheduleChangeFromTeleoptiRtaService.cs" />
     <Compile Include="ApplicationLayer\Rta\IgnoreGetUpdatedScheduleChangeFromTeleoptiRtaService.cs" />
