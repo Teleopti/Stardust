@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 using NUnit.Framework;
 using Rhino.Mocks;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Helper;
@@ -132,6 +134,20 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Assert.AreEqual(0, list.Count);
 
         }
+
+		[Test]
+		public void ShouldOnlyShowFilteredPersons()
+		{
+			foreach (var request in _requestViewAdapters)
+			{
+				request.PersonRequest.Person.SetId(Guid.NewGuid());
+			}
+			var result = RequestPresenter.FilterAdapters(_requestViewAdapters,
+			                                new List<Guid> {_request1.PersonRequest.Person.Id.GetValueOrDefault()});
+			result.Count.Should().Be.EqualTo(1);
+			result.First().Should().Be.EqualTo(_request1);
+		}
+
         [Test]
         public void VerifyCanApproveStatusOnRequest()
         {

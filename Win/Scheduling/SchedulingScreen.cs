@@ -4842,6 +4842,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 					GridHelper.GridlockWriteProtected(_grid, LockManager);
 					_grid.Refresh();
 				}
+				if (_requestView != null)
+					_requestView.FilterPersons(_schedulerState.FilteredPersonDictionary.Select(kvp => kvp.Key));
 				drawSkillGrid();
 			}
 		}

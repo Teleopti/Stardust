@@ -1,14 +1,13 @@
 ﻿using System;
+using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
 using System.Windows;
 using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Ccc.Win.Common;
-using Teleopti.Ccc.Win.Common.Controls;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Scheduling.Requests;
 using Teleopti.Interfaces.Domain;
@@ -71,6 +70,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_source = RequestPresenter.FilterAdapters(modelsToShow, filterWords);
 			_model.ShowOnly(_source);
         }
+
+		public void FilterPersons(IEnumerable<Guid> persons)
+		{
+			_source =
+				RequestPresenter.FilterAdapters((IList<PersonRequestViewModel>) _model.PersonRequestViewModels.SourceCollection,
+				                                persons);
+			_model.ShowOnly(_source);
+		}
 
 	    public bool IsSelectionEditable()
         {

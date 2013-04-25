@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Linq.Dynamic;
@@ -48,6 +49,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             // return adapterList.AsQueryable().Where(filterExpression).ToList();
 	        return null;
         }
+
+		public static IList<PersonRequestViewModel> FilterAdapters(IList<PersonRequestViewModel> adapterList,
+		                                                           IEnumerable<Guid> filteredPersons)
+		{
+			return adapterList.Where(p => filteredPersons.Contains(p.PersonRequest.Person.Id.GetValueOrDefault())).ToList();
+		}
 
         public void SetUndoRedoContainer(IUndoRedoContainer container)
         {
