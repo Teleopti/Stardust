@@ -20,14 +20,16 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 		private IScenarioRepository scenarioRepository;
 		private IUnitOfWorkFactory unitOfWorkFactory;
 		private GetAllScenariosQueryHandler target;
+	    private ICurrentUnitOfWorkFactory currentUnitOfWorkFactory;
 
-		[SetUp]
+	    [SetUp]
 		public void Setup()
 		{
 			mocks = new MockRepository();
 			scenarioRepository = mocks.DynamicMock<IScenarioRepository>();
 			unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
-			target = new GetAllScenariosQueryHandler(scenarioRepository, unitOfWorkFactory);
+			currentUnitOfWorkFactory = mocks.DynamicMock<ICurrentUnitOfWorkFactory>();
+			target = new GetAllScenariosQueryHandler(scenarioRepository, currentUnitOfWorkFactory);
 		}
 
 		[Test]
@@ -41,6 +43,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			{
 				Expect.Call(scenarioRepository.FindAllSorted()).Return(new List<IScenario>{scenario});
 				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+				Expect.Call(currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
 			}
 			using (mocks.Playback())
 			{

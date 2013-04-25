@@ -7,7 +7,6 @@ using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -22,7 +21,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
         private IPerson _person2;
         private IScheduleDay _scheduleDay1;
         private IScheduleDay _scheduleDay2;
-
 
         [SetUp]
         public void Setup()
@@ -77,7 +75,39 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
                 Assert.AreEqual(new DateOnly(2010, 8, 22), ret.ElementAt(1).Week.EndDate);
                 Assert.AreEqual(7, ret.First().Week.DayCount());
             }
+        }
 
+        [Test]
+        public void ShouldNotReturnWeekDuplicates()
+        {
+            var dateOnly1 = new DateOnly(2010, 8, 5);
+            var dateOnly2 = new DateOnly(2010, 8, 7);
+            _person1 = PersonFactory.CreatePerson("", "");
+            _person1.FirstDayOfWeek = DayOfWeek.Monday;
+
+            IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod1 = new DateOnlyAsDateTimePeriod(dateOnly1, (
+                                                                                                   TimeZoneInfo.Utc));
+            IDateOnlyAsDateTimePeriod dateOnlyAsDateTimePeriod2 = new DateOnlyAsDateTimePeriod(dateOnly2,
+                                                                                               (
+                                                                                                   TimeZoneInfo.Utc));
+
+            _scheduleDay1 = _mocks.StrictMock<IScheduleDay>();
+            _scheduleDay2 = _mocks.StrictMock<IScheduleDay>();
+            IList<IScheduleDay> days = new List<IScheduleDay> { _scheduleDay1, _scheduleDay2 };
+
+            using (_mocks.Record())
+            {
+                Expect.Call(_scheduleDay1.Person).Return(_person1).Repeat.AtLeastOnce();
+                Expect.Call(_scheduleDay2.Person).Return(_person1).Repeat.AtLeastOnce();
+                Expect.Call(_scheduleDay1.DateOnlyAsPeriod).Return(dateOnlyAsDateTimePeriod1);
+                Expect.Call(_scheduleDay2.DateOnlyAsPeriod).Return(dateOnlyAsDateTimePeriod2);
+            }
+
+            using (_mocks.Playback())
+            {
+                var ret = _target.CreateWeeksFromScheduleDaysExtractor(days);
+                Assert.AreEqual(1, ret.Count());
+            }
         }
 
         [Test]

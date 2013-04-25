@@ -12,9 +12,9 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 	public class GetMultiplicatorShiftAllowanceQueryHandler: IHandleQuery<GetMultiplicatorShiftAllowanceQueryDto, ICollection<MultiplicatorDto>>
 	{
 		private readonly IMultiplicatorRepository _multiplicatorRepository;
-		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+        private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 
-		public GetMultiplicatorShiftAllowanceQueryHandler(IMultiplicatorRepository multiplicatorRepository, IUnitOfWorkFactory unitOfWorkFactory)
+		public GetMultiplicatorShiftAllowanceQueryHandler(IMultiplicatorRepository multiplicatorRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory)
 		{
 			_multiplicatorRepository = multiplicatorRepository;
 			_unitOfWorkFactory = unitOfWorkFactory;
@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 
 		public ICollection<MultiplicatorDto> Handle(GetMultiplicatorShiftAllowanceQueryDto query)
 		{
-			using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+			using (var unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
 				IDisposable filter = null;
 				if (query.LoadDeleted)

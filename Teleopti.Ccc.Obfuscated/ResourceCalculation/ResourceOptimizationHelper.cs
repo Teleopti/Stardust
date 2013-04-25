@@ -63,6 +63,10 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 																						 TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(localDate.AddDays(-1), localDate.AddDays(1)));
 
 				resourceCalculateDate(relevantProjections, localDate, useOccupancyAdjustment, calculateMaxSeatsAndNonBlend, considerShortBreaks, toRemove, toAdd);
+					var removedPersonAssignment = addedSchedule.AssignmentHighZOrder();
+					if (removedPersonAssignment == null)
+						continue;
+					IVisualLayerCollection collection = removedPersonAssignment.ProjectionService().CreateProjection();
 			}
 		}
 

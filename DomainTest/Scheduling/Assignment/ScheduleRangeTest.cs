@@ -479,12 +479,24 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                 {
                     var restriction1 = new AvailabilityRestriction();
                     var restriction2 = new RotationRestriction();
-
-                    _target.Add(new ScheduleDataRestriction(_person, restriction1, new DateOnly(2000, 1, 1)));
-                    _target.Add(new ScheduleDataRestriction(_person, restriction2, new DateOnly(2000, 1, 1)));
+	                restriction2.ShiftCategory = ShiftCategoryFactory.CreateShiftCategory("sk");
+	                var scheduleDataRestriction1 = new ScheduleDataRestriction(_person, restriction1,
+	                                                                          new DateOnly(2000, 1, 1));
+	                var scheduleDataRestriction2 = new ScheduleDataRestriction(_person, restriction2,
+	                                                                           new DateOnly(2000, 1, 1));
+                    _target.Add(scheduleDataRestriction1);
+                    _target.Add(scheduleDataRestriction2);
 
                     var coll = _target.ScheduledDay(new DateOnly(2000, 1, 1)).RestrictionCollection();
                     Assert.AreEqual(2, coll.Count());
+	                Assert.AreEqual(new DateOnly(2000, 1, 1), scheduleDataRestriction1.RestrictionDate);
+	                Assert.AreEqual(new DateOnly(2000, 1, 1), scheduleDataRestriction2.RestrictionDate);
+	                Assert.IsTrue(scheduleDataRestriction1.IsAvailabilityRestriction);
+	                Assert.IsFalse(scheduleDataRestriction1.IsPreferenceRestriction);
+	                Assert.IsFalse(scheduleDataRestriction1.IsRotationRestriction);
+					Assert.IsFalse(scheduleDataRestriction2.IsAvailabilityRestriction);
+	                Assert.IsFalse(scheduleDataRestriction2.IsPreferenceRestriction);
+	                Assert.IsTrue(scheduleDataRestriction2.IsRotationRestriction);
                     CollectionAssert.Contains(coll, restriction1);
                     CollectionAssert.Contains(coll, restriction2);
                 }

@@ -27,15 +27,17 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Payroll
 		private IUnitOfWorkFactory unitOfWorkFactory;
 		private Guid resultGuid;
 		private PayrollResult result;
+	    private ICurrentUnitOfWorkFactory currentUnitOfWorkFactory;
 
-		[SetUp]
+	    [SetUp]
 		public void Setup()
 		{
 			mocks = new MockRepository();
 			var personOwner = PersonFactory.CreatePerson();
 			resultRep = mocks.StrictMock<IPayrollResultRepository>();
-			unitOfWorkFactory = mocks.StrictMock<IUnitOfWorkFactory>();
-			target = new PayrollResultService(unitOfWorkFactory, resultRep);
+            unitOfWorkFactory = mocks.StrictMock<IUnitOfWorkFactory>();
+            currentUnitOfWorkFactory = mocks.DynamicMock<ICurrentUnitOfWorkFactory>();
+			target = new PayrollResultService(currentUnitOfWorkFactory, resultRep);
 			resultGuid = new Guid("AAB2796D-C440-4A85-BD96-719D8FCBA8ED");
 			var payrollExport = new PayrollExport();
 			payrollExport.Name = "The Ex\\port";
@@ -59,7 +61,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.Payroll
 			{
 				Expect.Call(resultRep.Load(resultGuid)).Return(result);
 				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-				Expect.Call(()=>unitOfWork.Dispose());
+				Expect.Call(currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
+				Expect.Call(unitOfWork.Dispose);
 			}
 
 			using (mocks.Playback())

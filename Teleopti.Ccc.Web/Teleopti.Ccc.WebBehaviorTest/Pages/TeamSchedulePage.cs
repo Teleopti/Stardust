@@ -3,6 +3,7 @@ using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
 using WatiN.Core;
 using WatiN.Core.Constraints;
+using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Pages
 {
@@ -75,6 +76,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 			{
 				return DateRangeSelectorContainer.Buttons.First();
 			}
+		}
+
+		public void ClickNext()
+		{
+			Browser.Interactions.Click("#TeamScheduleDateRangeSelector button:last-of-type");
+		}
+
+		public void ClickPrevious()
+		{
+			Browser.Interactions.Click("#TeamScheduleDateRangeSelector button:first-of-type");
 		}
 
 		public Div ToolTipContainer()

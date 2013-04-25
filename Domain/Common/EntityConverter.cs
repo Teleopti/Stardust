@@ -1,5 +1,4 @@
-﻿using Teleopti.Ccc.Domain.Common;
-using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Common
 {

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
+using Teleopti.Ccc.Sdk.Common.Contracts;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 
 namespace Teleopti.Ccc.AgentPortalCode.Requests
 {
@@ -33,7 +34,7 @@ namespace Teleopti.Ccc.AgentPortalCode.Requests
 
         public void ChangeDate(DateTime dateTime)
         {
-            CreatePersonAccountModels(_service.GetPersonAccounts(_personDto, new DateOnlyDto {DateTime = dateTime, DateTimeSpecified = true}));
+            CreatePersonAccountModels(_service.GetPersonAccounts(_personDto, new DateOnlyDto {DateTime = dateTime }));
             _view.DataLoaded();
         }
 

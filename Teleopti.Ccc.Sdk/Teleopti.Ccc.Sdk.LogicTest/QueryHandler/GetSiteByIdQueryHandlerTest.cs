@@ -22,16 +22,18 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 		private ISiteRepository siteRepository;
 		private IUnitOfWorkFactory unitOfWorkFactory;
 		private IUnitOfWork unitOfWork;
+	    private ICurrentUnitOfWorkFactory currentUnitOfWorkFactory;
 
-		[SetUp]
+	    [SetUp]
 		public void Setup()
 		{
 			mocks = new MockRepository();
 			assembler = mocks.StrictMock<IAssembler<ISite, SiteDto>>();
 			siteRepository = mocks.StrictMock<ISiteRepository>();
-			unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
+            unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
+            currentUnitOfWorkFactory = mocks.DynamicMock<ICurrentUnitOfWorkFactory>();
 			unitOfWork = mocks.DynamicMock<IUnitOfWork>();
-			target = new GetSiteByIdQueryHandler(assembler, siteRepository, unitOfWorkFactory);
+			target = new GetSiteByIdQueryHandler(assembler, siteRepository, currentUnitOfWorkFactory);
 		}
 
 		[Test]
@@ -44,6 +46,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 				Expect.Call(siteRepository.Get(siteId)).Return(site);
 				Expect.Call(assembler.DomainEntityToDto(site)).Return(new SiteDto { DescriptionName = site.Description.Name, Id = site.Id});
 				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+				Expect.Call(currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
 			}
 			using (mocks.Playback())
 			{
@@ -60,6 +63,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			{
 				Expect.Call(siteRepository.Get(siteId)).Return(null);
 				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+				Expect.Call(currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
 			}
 			using (mocks.Playback())
 			{

@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
-using Teleopti.Ccc.AgentPortalCode.Common;
 using Teleopti.Ccc.Sdk.Client;
 
 namespace Teleopti.Ccc.AgentPortalCode.Foundation.StateHandlers

@@ -27,8 +27,9 @@ namespace Teleopti.Ccc.Domain.Budgeting
         private double? _absenceOverride;
         private double _totalAllowance;
         private double _allowance;
+	    private double? _netStaffFcAdjustedSurplus;
 
-        protected BudgetDay()
+	    protected BudgetDay()
         {
         }
 
@@ -55,7 +56,9 @@ namespace Teleopti.Ccc.Domain.Budgeting
             set { _budgetGroup = value; }
         }
 
+		// ReSharper disable ConvertToAutoProperty
         public virtual double FulltimeEquivalentHours
+
         {
             get { return _fulltimeEquivalentHours; }
             set { _fulltimeEquivalentHours = value; }
@@ -155,10 +158,22 @@ namespace Teleopti.Ccc.Domain.Budgeting
             set { _allowance = value; }
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+	    public virtual double? NetStaffFcAdjustedSurplus
+	    {
+		    get { return _netStaffFcAdjustedSurplus; }
+		    set { _netStaffFcAdjustedSurplus = value; }
+	    }
+		// ReSharper restore ConvertToAutoProperty
+
+	    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public virtual BudgetCalculationResult Calculate(IBudgetCalculator calculator)
         {
             return calculator.Calculate(this);
         }
+
+		public virtual BudgetCalculationResult CalculateWithoutNetStaffFcAdj(IBudgetCalculator calculator, double netStaffFcAdj)
+		{
+			return calculator.CalculateWithoutNetStaffFcAdj(this, netStaffFcAdj);
+		}
     }
 }

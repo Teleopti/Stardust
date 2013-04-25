@@ -10,6 +10,7 @@
 		public const string CellTypeTimeSpanHourMinutesOrEmptyCell = "HourMinutes";
         public const string CellTypeDatePickerCell = "DatePickerCell";
         public const string CellTypeNumericCell = "NumericCell";
-        public const string CellTypePercentCell = "PercentCell"; 
+        public const string CellTypePercentCell = "PercentCell";
+		public const string CellTypeDropDownCultureCell = "DropdownCultureCell"; 
     }
 }

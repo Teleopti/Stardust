@@ -28,14 +28,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
             return (_person.GetHashCode() ^ _week.GetHashCode());
         }
 
-		public override bool Equals(object obj)
-		{
-			var other = obj as PersonWeek;
-			if (other == null) return false;
+        public override bool Equals(object obj)
+        {
+            var other = obj as PersonWeek;
+            if (other == null) return false;
 
-			return ((_person == null && other._person == null) ||
-			        (_person!=null && _person.Equals(other._person))) &&
-			       _week == other._week;
-		}
+            return ((_person == null && other._person == null) ||
+                    (_person != null && _person.Equals(other._person))) &&
+                   _week == other._week;
+        }
     }
 }

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
+﻿namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 {
     /// <summary>
     /// Result when validating a ShiftTradeRequest

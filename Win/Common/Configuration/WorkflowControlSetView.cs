@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration
             var cellModel = new GridDropDownMonthCalendarAdvCellModel(gridControlAbsenceRequestOpenPeriods.Model);
             cellModel.HideNoneButton();
             cellModel.HideTodayButton();
-            gridControlAbsenceRequestOpenPeriods.CellModels.Add("DatePickerCell", cellModel);
+			gridControlAbsenceRequestOpenPeriods.CellModels.Add(GridCellModelConstants.CellTypeDatePickerCell, cellModel);
             var cell = new NullableIntegerCellModel(gridControlAbsenceRequestOpenPeriods.Model)
                        	{
                        		MinValue = 0,

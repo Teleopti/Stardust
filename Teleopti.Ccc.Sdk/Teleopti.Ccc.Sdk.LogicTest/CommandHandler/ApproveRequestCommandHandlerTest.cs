@@ -42,6 +42,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         private DateTimePeriod _period;
         private ShiftTradeRequest _shiftTradeRequest;
         private IPerson _personTo;
+        private ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 
         [SetUp]
         public  void Setup()
@@ -54,11 +55,12 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _swapAndModifyService = _mock.StrictMock<ISwapAndModifyService>();
             _personRequestRepository = _mock.StrictMock<IPersonRequestRepository>();
             _unitOfWorkFactory = _mock.StrictMock<IUnitOfWorkFactory>();
+            _currentUnitOfWorkFactory = _mock.DynamicMock<ICurrentUnitOfWorkFactory>();
             _messageBrokerEnablerFactory = _mock.DynamicMock<IMessageBrokerEnablerFactory>();
             _scheduleDictionaryModifiedCallback = _mock.StrictMock<IScheduleDictionaryModifiedCallback>();
             _target = new ApproveRequestCommandHandler(_scheduleRepository, _scheduleDictionarySaver, _scenarioRepository,
                                                        _authorization, _swapAndModifyService, _personRequestRepository,
-                                                       _unitOfWorkFactory, _messageBrokerEnablerFactory,
+                                                       _currentUnitOfWorkFactory, _messageBrokerEnablerFactory,
                                                        _scheduleDictionaryModifiedCallback);
 
             _person = PersonFactory.CreatePerson("Test Peson");
@@ -90,6 +92,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             using(_mock.Record())
             {
                 Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+                Expect.Call(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
                 Expect.Call(request.Request).Return(_absenceRequest).Repeat.Times(3);
                 Expect.Call(_scenarioRepository.Current()).Return(_scenario).Repeat.Twice();
                 Expect.Call(_scheduleRepository.FindSchedulesOnlyInGivenPeriod(
@@ -119,6 +122,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             using (_mock.Record())
             {
                 Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+                Expect.Call(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
                 Expect.Call(request.Request).Return(_shiftTradeRequest).Repeat.Times(3);
                 Expect.Call(_scenarioRepository.Current()).Return(_scenario).Repeat.Twice();
                 Expect.Call(_scheduleRepository.FindSchedulesOnlyInGivenPeriod(
@@ -149,6 +153,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             using (_mock.Record())
             {
                 Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+                Expect.Call(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
                 Expect.Call(request.Request).Return(_absenceRequest).Repeat.Times(3);
                 Expect.Call(_scenarioRepository.Current()).Return(_scenario).Repeat.Twice();
                 Expect.Call(_scheduleRepository.FindSchedulesOnlyInGivenPeriod(

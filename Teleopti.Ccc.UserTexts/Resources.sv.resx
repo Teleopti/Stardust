@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="MaskedEditTextBox" xml:space="preserve">
     <value>Dold redigeringsruta för text</value>
@@ -6375,7 +6375,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <comment>Isntructions to add Multiplicators</comment>
   </data>
   <data name="ExportCode" xml:space="preserve">
-    <value>Löneart</value>
+    <value>Lönesystemets kod</value>
     <comment>Export Code of the multiplicator</comment>
   </data>
   <data name="MultiplicatorDeleteConfirmation" xml:space="preserve">
@@ -10939,5 +10939,36 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   </data>
   <data name="ViewAllGroupPages" xml:space="preserve">
     <value>Visa alla grupperingar</value>
+  </data>
+  <data name="ResolutionMin" xml:space="preserve">
+    <value>Upplösning (minuter)</value>
+    <comment>select resolution in Meettíng Overview</comment>
+  </data>
+  <data name="MessagesParenthesis" xml:space="preserve">
+    <value>Meddelanden ({0})</value>
+  </data>
+  <data name="BudgetGroupHeadCount" xml:space="preserve">
+    <value>Antal personer i budgetgruppen</value>
+  </data>
+  <data name="HeadCount" xml:space="preserve">
+    <value>Antal personer</value>
+  </data>
+  <data name="NotEnoughAllowance" xml:space="preserve">
+    <value>Det finns inte tillräcklig tilldelning för dagen:</value>
+  </data>
+  <data name="AddFullDayAbsence" xml:space="preserve">
+    <value>Lägg till heldagsfrånvaro</value>
+  </data>
+  <data name="InvalidEndDate" xml:space="preserve">
+    <value>Ogiltigt slutdatum</value>
+  </data>
+  <data name="SingleAgentTeam" xml:space="preserve">
+    <value>Team med en agent</value>
+  </data>
+  <data name="SameShift" xml:space="preserve">
+    <value>Samma skift</value>
+  </data>
+  <data name="SelectAtleastOneOptimizationOptionForBlock" xml:space="preserve">
+    <value>Var god välj minst ett av alternativen "Samma skiftkategori", "Samma starttid" eller "Samma skift" vid blockoptimering. </value>
   </data>
 </root>

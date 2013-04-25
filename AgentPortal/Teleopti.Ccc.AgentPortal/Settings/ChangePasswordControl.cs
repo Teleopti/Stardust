@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ServiceModel;
 using System.Web.Services.Protocols;
 using Teleopti.Ccc.AgentPortal.Common;
 using System.Windows.Forms;
@@ -6,7 +7,7 @@ using Teleopti.Ccc.AgentPortal.Helper;
 using Teleopti.Ccc.AgentPortalCode.Common;
 using Teleopti.Ccc.AgentPortalCode.Foundation.StateHandlers;
 using Teleopti.Ccc.AgentPortalCode.Helper;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 
 namespace Teleopti.Ccc.AgentPortal.Settings
 {
@@ -97,10 +98,8 @@ namespace Teleopti.Ccc.AgentPortal.Settings
                 try
                 {
                     Cursor = Cursors.WaitCursor;
-                    bool changed;
-                    bool resultSpecified;
-                    SdkServiceHelper.LogOnServiceClient.ChangePassword(person, oldPassword, newPassword, out changed,
-                                                                       out resultSpecified);
+
+                    var changed = SdkServiceHelper.LogOnServiceClient.ChangePassword(person, oldPassword, newPassword);
                     if (!changed)
                     {
                         string validationErrorMessage = UserTexts.Resources.PasswordsDoNotMatch;
@@ -109,7 +108,7 @@ namespace Teleopti.Ccc.AgentPortal.Settings
                     StateHolder.Instance.StateReader.SessionScopeData.SetPassword(newPassword);
                 }
 
-                catch (SoapException ex)
+                catch (FaultException ex)
                 {
                     MessageBoxHelper.ShowErrorMessage(ex.Message, UserTexts.Resources.AgentPortal);
                     return false;

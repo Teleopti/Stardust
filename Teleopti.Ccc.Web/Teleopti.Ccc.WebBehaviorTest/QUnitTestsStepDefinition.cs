@@ -14,16 +14,18 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I navigate to unit test url (.*)")]
 		public void WhenINavigateTo(string url)
 		{
-			url += "?" + Guid.NewGuid();
-			Navigation.GoTo(url);
+			Navigation.GoToWaitForCompleted(url, new ForceRefresh());
+			Browser.Interactions.AssertUrlContains(".html");
+			Browser.Interactions.AssertExists("#qunit-tests");
 		}
 
 		[Then(@"I should see the tests run")]
 		public void ThenIShouldSeeTheTestsRun()
 		{
-			EventualAssert.That(() => Browser.Current.Element(Find.BySelector("#qunit-tests")).Exists, Is.True);
-			EventualAssert.That(() => Browser.Current.Element(Find.BySelector(".running")).Exists, Is.False);
-			EventualAssert.That(() => Browser.Current.Element(Find.BySelector("#qunit-testresult")).Exists, Is.True);
+			Browser.Interactions.AssertExists("#qunit-tests");
+			Browser.Interactions.AssertNotExists("#qunit-tests", ".running");
+			Browser.Interactions.AssertExists("#qunit-testresult");
+
 			EventualAssert.That(() =>
 			                    	{
 			                    		int total;
@@ -35,7 +37,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see all tests pass")]
 		public void ThenIShouldSeeAllTestsPass()
 		{
-			EventualAssert.That(() => Browser.Current.Element(Find.BySelector("#qunit-testresult")).Exists, Is.True);
+			Browser.Interactions.AssertExists("#qunit-testresult");
+
 			EventualAssert.That(() =>
 			                    	{
 			                    		int failed;

@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
 using WatiN.Core;
+using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Pages
 {
@@ -48,5 +49,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "StudentAvailabilityScheduleDatePicker")] public DatePicker DatePicker { get; set; }
 		public Button NextPeriodButton { get { return DateRangeSelectorContainer.Buttons.Last(); } }
 		public Button PreviousPeriodButton { get { return DateRangeSelectorContainer.Buttons.First(); } }
+
+
+		public void ClickNext()
+		{
+			Browser.Interactions.Click("#StudentAvailabilityDateRangeSelector button:last-of-type");
+		}
+
+		public void ClickPrevious()
+		{
+			Browser.Interactions.Click("#StudentAvailabilityDateRangeSelector button:first-of-type");
+		}
+
 	}
 }

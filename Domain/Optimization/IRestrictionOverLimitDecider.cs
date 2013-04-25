@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Optimization
 {
@@ -8,10 +7,10 @@ namespace Teleopti.Ccc.Domain.Optimization
     /// </summary>
     public interface IRestrictionOverLimitDecider
     {
-        BrokenRestrictionsInfo PreferencesOverLimit(Percent limit);
-        BrokenRestrictionsInfo MustHavesOverLimit(Percent limit);
-        BrokenRestrictionsInfo RotationOverLimit(Percent limit);
-        BrokenRestrictionsInfo AvailabilitiesOverLimit(Percent limit);
-        BrokenRestrictionsInfo StudentAvailabilitiesOverLimit(Percent limit);
+		BrokenRestrictionsInfo PreferencesOverLimit(Percent limit, IScheduleMatrixPro matrix);
+		BrokenRestrictionsInfo MustHavesOverLimit(Percent limit, IScheduleMatrixPro matrix);
+		BrokenRestrictionsInfo RotationOverLimit(Percent limit, IScheduleMatrixPro matrix);
+		BrokenRestrictionsInfo AvailabilitiesOverLimit(Percent limit, IScheduleMatrixPro matrix);
+		BrokenRestrictionsInfo StudentAvailabilitiesOverLimit(Percent limit, IScheduleMatrixPro matrix);
     }
 }

@@ -12,7 +12,8 @@ define([
 
 			var self = this;
 
-			var time = moment(data.Start);
+			var time = moment(data.Start, resources.MomentShortDatePattern + resources.ShortTimePattern);
+		    
 			var localStartMinutes = time.diff(data.Date, 'minutes');
 
 			this.StartMinutes = ko.observable(localStartMinutes);

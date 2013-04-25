@@ -42,9 +42,10 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 		private SchedulePartFactoryForDomain _schedulePartFactoryForDomain;
 		private CancelPersonalActivityCommandDto _cancelPersonalActivityCommandDto;
 		private IBusinessRulesForPersonalAccountUpdate _businessRulesForPersonalAccountUpdate;
+	    private ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 
 
-		[SetUp]
+	    [SetUp]
 		public void Setup()
 		{
 			_mock = new MockRepository();
@@ -52,12 +53,13 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			_scheduleRepository = _mock.StrictMock<IScheduleRepository>();
 			_personRepository = _mock.StrictMock<IPersonRepository>();
 			_scenarioRepository = _mock.StrictMock<IScenarioRepository>();
-			_unitOfWorkFactory = _mock.StrictMock<IUnitOfWorkFactory>();
+            _unitOfWorkFactory = _mock.StrictMock<IUnitOfWorkFactory>();
+            _currentUnitOfWorkFactory = _mock.DynamicMock<ICurrentUnitOfWorkFactory>();
 			_saveSchedulePartService = _mock.DynamicMock<ISaveSchedulePartService>();
 			_messageBrokerEnablerFactory = _mock.DynamicMock<IMessageBrokerEnablerFactory>();
 			_businessRulesForPersonalAccountUpdate = _mock.DynamicMock<IBusinessRulesForPersonalAccountUpdate>();
 
-			_target = new CancelPersonalActivityCommandHandler(_dateTimePeriodAssembler, _scheduleRepository, _personRepository, _scenarioRepository, _unitOfWorkFactory, _saveSchedulePartService, _messageBrokerEnablerFactory, _businessRulesForPersonalAccountUpdate);
+			_target = new CancelPersonalActivityCommandHandler(_dateTimePeriodAssembler, _scheduleRepository, _personRepository, _scenarioRepository, _currentUnitOfWorkFactory, _saveSchedulePartService, _messageBrokerEnablerFactory, _businessRulesForPersonalAccountUpdate);
 
 			_person = PersonFactory.CreatePerson();
 			_person.SetId(Guid.NewGuid());
@@ -89,6 +91,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			using (_mock.Record())
 			{
 				Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+				Expect.Call(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
 				Expect.Call(_personRepository.Load(_cancelPersonalActivityCommandDto.PersonId)).Return(_person);
 				Expect.Call(_scenarioRepository.LoadDefaultScenario()).Return(_scenario);
 				Expect.Call(_dateTimePeriodAssembler.DtoToDomainEntity(_cancelPersonalActivityCommandDto.Period)).Return(_period);
@@ -120,6 +123,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			using (_mock.Record())
 			{
 				Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+				Expect.Call(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
 				Expect.Call(_personRepository.Load(_cancelPersonalActivityCommandDto.PersonId)).Return(_person);
 				Expect.Call(_scenarioRepository.Get(scenarioId)).Return(_scenario);
 				Expect.Call(_dateTimePeriodAssembler.DtoToDomainEntity(_cancelPersonalActivityCommandDto.Period)).Return(_period);

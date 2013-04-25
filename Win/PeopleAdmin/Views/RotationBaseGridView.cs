@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			cellModel.SetTodayButtonText("");
 			cellModel.HideNoneButton();
 			cellModel.HideTodayButton();
-			grid.CellModels.Add("DatePickerCell", cellModel);
+			grid.CellModels.Add(GridCellModelConstants.CellTypeDatePickerCell, cellModel);
 
 			OnEventMessageHandlerChanged += RotationBaseGridViewOnEventMessageHandlerChanged;
 

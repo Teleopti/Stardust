@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Budgeting
             _netStaffCalculator = netStaffCalculator;
         }
 
-        public void Calculate(IBudgetDay budgetDay, IEnumerable<IBudgetDay> budgetDayList, BudgetCalculationResult budgetCalculationResult)
+        public void Calculate(IBudgetDay budgetDay, IEnumerable<IBudgetDay> budgetDayList, ref BudgetCalculationResult budgetCalculationResult)
         {
             if (budgetDay.IsClosed)
             {
@@ -24,12 +24,12 @@ namespace Teleopti.Ccc.Domain.Budgeting
             var shrinkages = budgetDay.BudgetGroup.CustomShrinkages;
             totalShrinkages += shrinkages.Where(shrinkage => shrinkage.Id != null && shrinkage.IncludedInAllowance).Sum(shrinkage => budgetDay.CustomShrinkages.GetShrinkage(shrinkage.Id.Value).Value);
             
-            if (budgetDay.FulltimeEquivalentHours != 0)
+            if (!budgetDay.FulltimeEquivalentHours.Equals(0))
             {
                 budgetCalculationResult = _netStaffCalculator.CalculatedResult(budgetDay);
-                var totalFTEs = budgetCalculationResult.GrossStaff +
+                var totalFtEs = budgetCalculationResult.GrossStaff +
                                 budgetDay.Contractors / budgetDay.FulltimeEquivalentHours;
-                budgetCalculationResult.BudgetedLeave = totalFTEs * totalShrinkages;
+                budgetCalculationResult.BudgetedLeave = totalFtEs * totalShrinkages;
             }
         }
     }

@@ -4,12 +4,24 @@ using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
 using WatiN.Core;
+using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Pages
 {
 	public class PreferencePage : CalendarCellsPage, IDateRangeSelector, IDeleteButton
 	{
 		[FindBy(Id = "PreferenceDateRangeSelector")] public Div DateRangeSelectorContainer { get; set; }
+
+		public void ClickNext()
+		{
+			Browser.Interactions.Click("#PreferenceDateRangeSelector button:last-of-type");
+		}
+
+		public void ClickPrevious()
+		{
+			Browser.Interactions.Click("#PreferenceDateRangeSelector button:first-of-type");
+		}
+
 		[FindBy(Id = "PreferenceDatePicker")] public DatePicker DatePicker { get; set; }
 		public Button NextPeriodButton { get { return DateRangeSelectorContainer.Buttons.Last(); } }
 		public Button PreviousPeriodButton { get { return DateRangeSelectorContainer.Buttons.First(); } }

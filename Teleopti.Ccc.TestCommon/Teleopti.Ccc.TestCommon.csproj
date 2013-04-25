@@ -75,6 +75,7 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseLineData.cs" />
     <Compile Include="BitArrayHelper.cs" />
     <Compile Include="ConnectionStringHelper.cs" />
     <Compile Include="DatabaseHelper.cs" />
