@@ -178,8 +178,8 @@ insert_date			= stg.insert_date,
 update_date			= stg.update_date,
 datasource_update_date=stg.datasource_update_date,
 absence_id			= isnull(ab.absence_id,-1),
-request_starttime	= stg.request_starttime,
-request_endtime		= stg.request_endtime,
+request_starttime	= ISNULL(stg.request_starttime,'1900-01-01 00:00:00') ,
+request_endtime		= ISNULL(stg.request_endtime, '1900-01-01 00:00:00'),
 requested_time_m	= ISNULL(DATEDIFF(minute,stg.request_starttime, stg.request_endtime), 0)
 FROM stage.stg_request stg
 INNER JOIN mart.dim_date dLocal
