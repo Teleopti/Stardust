@@ -111,20 +111,22 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         [Test]
         public void VerifyFilterAdapters()
         {
-            string filterExpression = "Seniority>-1";
-            filterExpression += " And ";
-            filterExpression += "StatusText=" + '"' + UserTexts.Resources.Pending + '"';
-            filterExpression += " And ";
-            filterExpression += "RequestType=" + '"' + "Absence" + '"';
+	        var filterExpression = new List<string>();
+            
+			//string filterExpression = "Seniority>-1";
+			//filterExpression += " And ";
+			//filterExpression += "StatusText=" + '"' + UserTexts.Resources.Pending + '"';
+			//filterExpression += " And ";
+			//filterExpression += "RequestType=" + '"' + "Absence" + '"';
 
-            IList<PersonRequestViewModel> list = RequestPresenter.FilterAdapters(_requestViewAdapters, filterExpression);
+            var list = RequestPresenter.FilterAdapters(_requestViewAdapters, filterExpression);
             Assert.AreEqual(3, list.Count);
 
-            filterExpression = "Seniority>-1";
-            filterExpression += " And ";
-            filterExpression += "StatusText=" + '"' + UserTexts.Resources.Approved + '"';
-            filterExpression += " And ";
-            filterExpression += "RequestType=" + '"' + "Absence" + '"';
+			//filterExpression = "Seniority>-1";
+			//filterExpression += " And ";
+			//filterExpression += "StatusText=" + '"' + UserTexts.Resources.Approved + '"';
+			//filterExpression += " And ";
+			//filterExpression += "RequestType=" + '"' + "Absence" + '"';
 
             list = RequestPresenter.FilterAdapters(_requestViewAdapters, filterExpression);
             Assert.AreEqual(0, list.Count);
