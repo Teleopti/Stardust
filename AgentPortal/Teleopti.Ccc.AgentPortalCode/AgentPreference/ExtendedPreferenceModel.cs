@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentPreference
             get { return _dayOff; }
             set
             {
-                if (value != null && string.IsNullOrEmpty(value.Id))
+                if (value != null && !value.Id.HasValue)
                 {
                     value = null;
                 }
@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentPreference
             get { return _shiftCategory; }
             set
             {
-                if (value != null && string.IsNullOrEmpty(value.Id))
+                if (value != null && !value.Id.HasValue)
                 {
                     value = null;
                 }
@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentPreference
             get { return _absence; }
             set
             {
-                if(value != null && string.IsNullOrEmpty(value.Id))
+                if(value != null && !value.Id.HasValue)
                 {
                     value = null;
                 }
@@ -152,30 +152,12 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentPreference
             }
         }
 
-        /*public Templates Templates
-        {
-            get { return _templates; }
-            set
-            {
-                if (value != null && string.IsNullOrEmpty(value.Id))
-                {
-                    value = null;
-                }
-
-                _templates = value;
-                if (_templates != null)
-                {
-                    DayOff = null;
-                }
-            }
-        }*/
-
         public Activity Activity
         {
             get { return _activity; }
             set
             {
-                if (value != null && string.IsNullOrEmpty(value.Id))
+                if (value != null && !value.Id.HasValue)
                 {
                     value = null;
                 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ServiceModel;
 using System.Web.Services.Protocols;
 using System.Xml;
 using NUnit.Framework;
@@ -6,7 +7,8 @@ using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.AgentPortalCode.Common;
 using Teleopti.Ccc.AgentPortalCode.Requests;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
+using Teleopti.Ccc.Sdk.Common.Contracts;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 
 namespace Teleopti.Ccc.AgentPortalCodeTest.Requests
 {
@@ -104,7 +106,7 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.Requests
             requestDto.Period = new DateTimePeriodDto();
 
             var personRequest = new PersonRequestDto { DenyReason = "RequestDenyReasonSupervisor", Request = requestDto, Subject = "sub" };
-            personRequest.Id = "12";
+            personRequest.Id = Guid.NewGuid();
             using (_mocks.Record())
             {
                 Expect.Call(()=>_teleoptiSchedulingService.DeletePersonRequest(personRequest));
@@ -125,9 +127,9 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.Requests
 			requestDto.Period = new DateTimePeriodDto();
 
 			var personRequest = new PersonRequestDto { DenyReason = "RequestDenyReasonSupervisor", Request = requestDto, Subject = "sub" };
-			personRequest.Id = "12";
+			personRequest.Id = Guid.NewGuid();
 
-			var exception = new SoapException("asdf", XmlQualifiedName.Empty);
+            var exception = new FaultException("asdf");
 
 			using (_mocks.Record())
 			{

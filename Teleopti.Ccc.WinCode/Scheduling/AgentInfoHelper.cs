@@ -280,12 +280,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
         private void setRestrictionFullfillment()
         {
-            RestrictionOverLimitDecider restrictionOverLimitDecider = new RestrictionOverLimitDecider(_matrix, new RestrictionChecker());
-            _preferenceFulfillment = restrictionOverLimitDecider.PreferencesOverLimit(new Percent(1)).BrokenPercentage;
-            _mustHavesFulfillment = restrictionOverLimitDecider.MustHavesOverLimit(new Percent(1)).BrokenPercentage;
-            _rotationFulfillment = restrictionOverLimitDecider.RotationOverLimit(new Percent(1)).BrokenPercentage;
-            _availabilityFulfillment = restrictionOverLimitDecider.AvailabilitiesOverLimit(new Percent(1)).BrokenPercentage;
-            _studentAvailabilityFulfillment = restrictionOverLimitDecider.StudentAvailabilitiesOverLimit(new Percent(1)).BrokenPercentage;
+            RestrictionOverLimitDecider restrictionOverLimitDecider = new RestrictionOverLimitDecider(new RestrictionChecker());
+            _preferenceFulfillment = restrictionOverLimitDecider.PreferencesOverLimit(new Percent(1), _matrix).BrokenPercentage;
+			_mustHavesFulfillment = restrictionOverLimitDecider.MustHavesOverLimit(new Percent(1), _matrix).BrokenPercentage;
+			_rotationFulfillment = restrictionOverLimitDecider.RotationOverLimit(new Percent(1), _matrix).BrokenPercentage;
+			_availabilityFulfillment = restrictionOverLimitDecider.AvailabilitiesOverLimit(new Percent(1), _matrix).BrokenPercentage;
+			_studentAvailabilityFulfillment = restrictionOverLimitDecider.StudentAvailabilitiesOverLimit(new Percent(1), _matrix).BrokenPercentage;
         }
 
         private void setCurrentScheduled()

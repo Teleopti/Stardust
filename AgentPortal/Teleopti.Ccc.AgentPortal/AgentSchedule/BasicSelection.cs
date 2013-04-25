@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.AgentPortalCode.Foundation.StateHandlers;
 using Teleopti.Ccc.AgentPortalCode.Helper;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos;
 
 namespace Teleopti.Ccc.AgentPortal.AgentSchedule
 {
@@ -35,8 +36,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
 			                                                                        		QueryDate =
 			                                                                        			new DateOnlyDto
 			                                                                        				{
-			                                                                        					DateTime = _selectedDate,
-			                                                                        					DateTimeSpecified = true
+			                                                                        					DateTime = _selectedDate
 			                                                                        				}
 			                                                                        	}));
             else
@@ -44,8 +44,8 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
                        new GetPeopleForShiftTradeByGroupPageGroupQueryDto
                        {
                            GroupPageGroupId = _selectedTeam.Id,
-                           PersonId = StateHolder.Instance.State.SessionScopeData.LoggedOnPerson.Id,
-                           QueryDate = new DateOnlyDto { DateTime = _selectedDate, DateTimeSpecified = true }
+                           PersonId = StateHolder.Instance.State.SessionScopeData.LoggedOnPerson.Id.GetValueOrDefault(),
+                           QueryDate = new DateOnlyDto { DateTime = _selectedDate }
                        }));
 			SelectedPeople = persons;
 			SelectedTeams = teamDtos;
@@ -54,6 +54,6 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
 
 	internal class GroupForPeople
 	{
-		public string GroupId { get; set; }
+		public Guid GroupId { get; set; }
 	}
 }

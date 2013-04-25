@@ -11,7 +11,8 @@ using Teleopti.Ccc.AgentPortal.Schedules;
 using Teleopti.Ccc.AgentPortalCode.Common;
 using Teleopti.Ccc.AgentPortalCode.Foundation.StateHandlers;
 using Teleopti.Ccc.AgentPortalCode.Helper;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
@@ -35,14 +36,14 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
         private readonly ApplicationFunctionDto _applicationFunctionDto = new ApplicationFunctionDto();
         private const string _functionPath = "Raptor/Global/ViewSchedules";
         private TeamDto _loggedOnPersonTeam;
-        private readonly string _teamAll = Guid.NewGuid().ToString();
+        private readonly Guid _teamAll = Guid.NewGuid();
     	private bool _isAscending;
     	private IList<GroupPageDto> _allGroupPages;
         private bool _filterPeopleForShiftTrade;
 
-        internal const string PageMain = "6CE00B41-0722-4B36-91DD-0A3B63C545CF";
-        
-    	public ScheduleTeamView()
+        internal static readonly Guid PageMain = new Guid("6CE00B41-0722-4B36-91DD-0A3B63C545CF");
+
+        public ScheduleTeamView()
         {
             InitializeComponent();
             navigationMonthCalendarTeamView.SetCurrentPersonCulture();
@@ -112,7 +113,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
 		{
 			var query = new GetSchedulesByPersonQueryDto
 			{
-				PersonId = person.Id,
+				PersonId = person.Id.GetValueOrDefault(),
 				StartDate = dateOnlyDto,
 				EndDate = dateOnlyDto,
 				TimeZoneId = StateHolder.Instance.State.SessionScopeData.LoggedOnPerson.TimeZoneId
@@ -134,7 +135,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
 
     	private List<SchedulePartDto> LoadScheduleForSelection(ITeamAndPeopleSelection agentTeamMemberCollection)
     	{
-    		var dateOnlyDto = new DateOnlyDto { DateTime = _startDateForTeamView, DateTimeSpecified = true };
+    		var dateOnlyDto = new DateOnlyDto { DateTime = _startDateForTeamView };
     		var schedulePartDtos = new List<SchedulePartDto>();
 
     		if (agentTeamMemberCollection.SelectedTeams.Count==0)
@@ -175,7 +176,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
     			string dayOffName = string.Empty;
     			bool isDayOff = false;
     			activityVisualLayers = new List<ActivityVisualLayer>();
-    			if (schedulePartDto.PersonDayOff != null && schedulePartDto.ProjectedLayerCollection.Length == 0)
+    			if (schedulePartDto.PersonDayOff != null && schedulePartDto.ProjectedLayerCollection.Count == 0)
     			{
     				isDayOff = true;
     				dayOffName = schedulePartDto.PersonDayOff.Name;
@@ -318,14 +319,14 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
 			_allGroupPages = new List<GroupPageDto>();
 
 			GroupPageDto businessHierarchyPage = null;
-			IList<GroupPageDto> groupPageDtos = SdkServiceHelper.OrganizationService.GroupPagesByQuery(new GetAvailableCustomGroupPagesQueryDto());
+			var groupPageDtos = SdkServiceHelper.OrganizationService.GroupPagesByQuery(new GetAvailableCustomGroupPagesQueryDto());
 			foreach (var groupPageDto in groupPageDtos)
 			{
 				if (groupPageDto.PageName.StartsWith("xx", StringComparison.OrdinalIgnoreCase))
 				{
 					groupPageDto.PageName = LanguageResourceHelper.Translate(groupPageDto.PageName);
 				}
-				if (groupPageDto.Id.ToUpperInvariant()==PageMain)
+				if (groupPageDto.Id==PageMain)
 				{
 					businessHierarchyPage = groupPageDto;
 					continue;
@@ -343,7 +344,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
 
             foreach (var groupPage in _allGroupPages)
             {
-                if (groupPage.Id.ToUpperInvariant() == PageMain)
+                if (groupPage.Id == PageMain)
                 {
                     comboBoxAdvGroup.SelectedItem = groupPage;
                     break;
@@ -353,10 +354,13 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
 
 		private void LoadTeams()
 		{
-			DateTime startDateUtc = AgentPortalTimeZoneHelper.ConvertToUniversalTime(_startDateForTeamView);
+            var timeZone =
+                TimeZoneInfo.FindSystemTimeZoneById(
+                    StateHolder.Instance.State.SessionScopeData.LoggedOnPerson.TimeZoneId);
+            DateTime startDateUtc = TimeZoneHelper.ConvertToUtc(_startDateForTeamView, timeZone);
 			startDateUtc = DateTime.SpecifyKind(startDateUtc, DateTimeKind.Utc);
 			
-			_loggedOnPersonTeam = SdkServiceHelper.OrganizationService.GetLoggedOnPersonTeam(startDateUtc, true);
+			_loggedOnPersonTeam = SdkServiceHelper.OrganizationService.GetLoggedOnPersonTeam(startDateUtc);
 		}
 
     	/// <summary>
@@ -582,12 +586,11 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
 
 			var groups = SdkServiceHelper.OrganizationService.GroupPageGroupsByQuery(new GetGroupsForGroupPageAtDateQueryDto
 			                                                                         	{
-			                                                                         		PageId = selectedItem.Id,
+			                                                                         		PageId = selectedItem.Id.GetValueOrDefault(),
 			                                                                         		QueryDate =
 			                                                                         			new DateOnlyDto
 			                                                                         				{
 			                                                                         					DateTime = _startDateForTeamView,
-			                                                                         					DateTimeSpecified = true
 			                                                                         				}
 			                                                                         	});
             foreach (var groupPageGroupDto in groups)
@@ -595,11 +598,11 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
 				dataSourceItems.Add(new GroupDetailModel
 				                    	{
 				                    		DisplayText = groupPageGroupDto.GroupName.StartsWith("xx",StringComparison.OrdinalIgnoreCase) ? LanguageResourceHelper.Translate(groupPageGroupDto.GroupName) : groupPageGroupDto.GroupName,
-				                    		Id = groupPageGroupDto.Id,
+				                    		Id = groupPageGroupDto.Id.GetValueOrDefault(),
 				                    		Object = groupPageGroupDto
 				                    	});
 			}
-			if (selectedItem.Id.ToUpperInvariant() == PageMain)
+			if (selectedItem.Id == PageMain)
 			{
 				dataSourceItems.Insert(0, new GroupDetailModel {DisplayText = Resources.All, Id = _teamAll, Object = null});
 			}

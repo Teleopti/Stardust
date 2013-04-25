@@ -8,7 +8,7 @@ using Teleopti.Ccc.AgentPortalCode.AgentPreference.Limitation;
 using Teleopti.Ccc.AgentPortalCode.Common;
 using Teleopti.Ccc.AgentPortalCode.Common.Clipboard;
 using Teleopti.Ccc.AgentPortalCode.Helper;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 
 namespace Teleopti.Ccc.AgentPortalCodeTest.AgentPreference
 {
@@ -71,14 +71,14 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.AgentPreference
             
             var preference = new Preference
                                  {
-                                     DayOff = new DayOff("name", "shortName", "id", Color.Empty),
-                                     ShiftCategory = new ShiftCategory("name", "shortName", "id", Color.Empty),
-                                     Absence = new Absence("name", "shortName", "id", Color.Empty),
+                                     DayOff = new DayOff("name", "shortName", Guid.NewGuid(), Color.Empty),
+                                     ShiftCategory = new ShiftCategory("name", "shortName", Guid.NewGuid(), Color.Empty),
+                                     Absence = new Absence("name", "shortName", Guid.NewGuid(), Color.Empty),
                                      TemplateName = "templateName",
                                      StartTimeLimitation = start,
                                      EndTimeLimitation = end,
                                      WorkTimeLimitation = work,
-                                     Activity = new Activity("id", "name")
+                                     Activity = new Activity(Guid.NewGuid(), "name")
                                  };
 
             cellData.Preference = preference;
@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.AgentPreference
 
             var preference = new Preference
                 {
-                    Absence = new Absence("name", "shortName", "id", Color.DeepSkyBlue)     
+                    Absence = new Absence("name", "shortName", Guid.NewGuid(), Color.DeepSkyBlue)     
                 };
 
             var cellData = new PreferenceCellData {Preference = preference};

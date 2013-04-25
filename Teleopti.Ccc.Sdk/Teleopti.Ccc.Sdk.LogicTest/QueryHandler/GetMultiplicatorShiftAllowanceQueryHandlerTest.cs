@@ -23,8 +23,9 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 		private GetMultiplicatorShiftAllowanceQueryHandler target;
 		private IMultiplicator multiplicator;
 		private IList<IMultiplicator> multiplicatorList;
-			
-		[SetUp]
+	    private ICurrentUnitOfWorkFactory currentUnitOfWorkFactory;
+
+	    [SetUp]
 		public void Setup()
 		{
 			mocks = new MockRepository();
@@ -33,8 +34,9 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			multiplicator.Description = new Description("Shift Allowance", "OB");
 			multiplicatorList = new List<IMultiplicator>();
 			multiplicatorList.Add(multiplicator);
-			unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
-			target = new GetMultiplicatorShiftAllowanceQueryHandler(multiplicatorRepository, unitOfWorkFactory);
+            unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
+            currentUnitOfWorkFactory = mocks.DynamicMock<ICurrentUnitOfWorkFactory>();
+			target = new GetMultiplicatorShiftAllowanceQueryHandler(multiplicatorRepository, currentUnitOfWorkFactory);
 		}
 
 		[Test]
@@ -46,6 +48,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			{
 				Expect.Call(multiplicatorRepository.LoadAllByTypeAndSortByName(MultiplicatorType.OBTime)).Return(multiplicatorList);
 				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+				Expect.Call(currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
 			}
 			using (mocks.Playback())
 			{

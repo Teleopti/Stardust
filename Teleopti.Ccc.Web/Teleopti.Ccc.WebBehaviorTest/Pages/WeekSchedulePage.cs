@@ -8,6 +8,7 @@ using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
 using Teleopti.Interfaces.Domain;
 using WatiN.Core;
 using WatiN.Core.Constraints;
+using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 using List = WatiN.Core.List;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Pages
@@ -165,6 +166,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "ScheduleDatePicker")] public DatePicker DatePicker { get; set; }
 		public Button NextPeriodButton { get { return DateRangeSelectorContainer.Buttons.Last(); } }
 		public Button PreviousPeriodButton { get { return DateRangeSelectorContainer.Buttons.First(); } }
+
+
+		public void ClickNext()
+		{
+			Browser.Interactions.Click("#ScheduleDateRangeSelector button:last-of-type");
+		}
+
+		public void ClickPrevious()
+		{
+			Browser.Interactions.Click("#ScheduleDateRangeSelector button:first-of-type");
+		}
 
 		[FindBy(Id = "Schedule-today-button")]
 		public Button TodayButton { get; set; }

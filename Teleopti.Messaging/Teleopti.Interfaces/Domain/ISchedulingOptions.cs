@@ -207,11 +207,11 @@ namespace Teleopti.Interfaces.Domain
         /// </value>
         bool UseShiftCategoryLimitations { get; set; }
 
-        /// <summary>
-        /// Gets or sets the use block scheduling.
-        /// </summary>
-        /// <value>The use block scheduling.</value>
-        BlockFinderType UseBlockScheduling { get; set; }
+        ///// <summary>
+        ///// Gets or sets the use block scheduling.
+        ///// </summary>
+        ///// <value>The use block scheduling.</value>
+        //BlockFinderType UseBlockScheduling { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether [use group scheduling].
@@ -297,7 +297,8 @@ namespace Teleopti.Interfaces.Domain
         /// 
         /// </summary>
         ISpecification<IMainShift> MainShiftOptimizeActivitySpecification { get; set; }
-		/// <summary>
+		
+        /// <summary>
 		/// 
 		/// </summary>
 		bool UseGroupSchedulingCommonStart { get; set; }
@@ -327,5 +328,53 @@ namespace Teleopti.Interfaces.Domain
 		/// 	<c>true</c> if [use average shift lengths]; otherwise, <c>false</c>.
 		/// </value>
 		bool UseAverageShiftLengths { get; set; }
+
+        ///// <summary>
+        ///// Gets or sets a value indicating whether [use period as block].
+        ///// </summary>
+        //bool UsePeriodAsBlock { get; set; }
+        ///// <summary>
+        ///// Gets or sets a value indicating whether [use two days off as block].
+        ///// </summary>
+        //bool UseTwoDaysOffAsBlock { get; set; }
+        ///// <summary>
+        ///// Gets or sets a value indicating whether [use calender as block].
+        ///// </summary>
+        //bool UseCalendarWeekAsBlock { get; set; }
+
+        /// <summary>
+        /// Block finder service for advance scheduling service
+        /// </summary>
+        BlockFinderType BlockFinderTypeForAdvanceScheduling { get; set; }
+
+        /// <summary>
+		/// Group page to be used for TeamBlock per
+        /// </summary>
+        IGroupPageLight GroupOnGroupPageForTeamBlockPer { get; set; }
+
+        /// <summary>
+        /// Used in TeamBlock per same end time
+        /// </summary>
+        bool UseTeamBlockSameEndTime { get; set; }
+
+        /// <summary>
+        /// Used in TeamBlock per same shift category
+        /// </summary>
+        bool UseTeamBlockSameShiftCategory { get; set; }
+
+        /// <summary>
+        /// Used in TeamBlock per same start time
+        /// </summary>
+        bool UseTeamBlockSameStartTime { get; set; }
+
+        /// <summary>
+        /// Used in TeamBlock per same shift
+        /// </summary>
+        bool UseTeamBlockSameShift { get; set; }
+
+        /// <summary>
+        /// Used if the TeamBlock option is checked or not
+        /// </summary>
+        bool UseTeamBlockPerOption { get; set; }
     }
 }

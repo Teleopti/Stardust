@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 {
     public class EmployPersonCommandHandler : IHandleCommand<EmployPersonCommandDto>
     {
-        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+        private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IPersonRepository _personRepository;
         private readonly IPersonAssembler _personAssembler;
         private readonly IPartTimePercentageRepository _partTimePercentageRepository;
@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
         private readonly IContractRepository _contractRepository;
         private readonly ITeamRepository _teamRepository;
 
-        public EmployPersonCommandHandler(IUnitOfWorkFactory unitOfWorkFactory, IPersonRepository personRepository,IPersonAssembler personAssembler, IPartTimePercentageRepository partTimePercentageRepository, IContractScheduleRepository contractScheduleRepository, IContractRepository contractRepository, ITeamRepository teamRepository)
+        public EmployPersonCommandHandler(ICurrentUnitOfWorkFactory unitOfWorkFactory, IPersonRepository personRepository, IPersonAssembler personAssembler, IPartTimePercentageRepository partTimePercentageRepository, IContractScheduleRepository contractScheduleRepository, IContractRepository contractRepository, ITeamRepository teamRepository)
         {
             _unitOfWorkFactory = unitOfWorkFactory;
             _personRepository = personRepository;
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 			checkIfAuthorized();
 
             PersonPeriod personPeriod;
-            using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+            using (var uow = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
             {
                 var start = command.Period.StartDate.DateTime;
 

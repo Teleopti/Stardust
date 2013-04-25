@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Interfaces.Domain;
 
@@ -38,7 +37,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                 {
 					if (!_ruleSetDeletedActivityChecker.ContainsDeletedActivity(ruleSet) && !_rulesSetDeletedShiftCategoryChecker.ContainsDeletedActivity(ruleSet))
                     {
-                        IEnumerable<IShiftProjectionCache> ruleSetList = GetShiftsForRuleset(ruleSet);
+                        IEnumerable<IShiftProjectionCache> ruleSetList = getShiftsForRuleset(ruleSet);
                         if (ruleSetList != null)
                         {
                             foreach (var projectionCache in ruleSetList)
@@ -53,8 +52,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
             return shiftProjectionCaches;
         }
-
-        private IEnumerable<IShiftProjectionCache> GetShiftsForRuleset(IWorkShiftRuleSet ruleSet)
+ 
+        private IEnumerable<IShiftProjectionCache> getShiftsForRuleset(IWorkShiftRuleSet ruleSet)
         {
             IList<IShiftProjectionCache> retList;
 
@@ -72,7 +71,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                 retList = new List<IShiftProjectionCache>();
                 foreach (IWorkShift shift in tmpList)
                 {
-                    IEnumerable<IWorkShift> shiftsFromMasterActivity = GetShiftFromMasterActivity(shift);
+                    IEnumerable<IWorkShift> shiftsFromMasterActivity = getShiftFromMasterActivity(shift);
 
                     if (shiftsFromMasterActivity == null)
                         retList.Add(new ShiftProjectionCache(shift, new PersonalShiftMeetingTimeChecker()));
@@ -90,7 +89,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             return retList;
         }
 
-        private IEnumerable<IWorkShift> GetShiftFromMasterActivity(IWorkShift workShift)
+        private IEnumerable<IWorkShift> getShiftFromMasterActivity(IWorkShift workShift)
         {
             return _shiftFromMasterActivityService.Generate(workShift);
         }

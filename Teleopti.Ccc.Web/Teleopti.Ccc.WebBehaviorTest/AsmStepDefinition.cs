@@ -92,7 +92,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			const string js = @"var notification = {{StartDate : '{0}', EndDate : '{1}'}};Teleopti.MyTimeWeb.Asm.NotifyWhenScheduleChangedListener(notification);";
 
 			var formattedJs = string.Format(js, xmlStartDate, xmlEndDate);
-			Browser.Current.Eval(formattedJs);
+			Browser.Interactions.Javascript(formattedJs);
 		}
 
 		[Then(@"Now indicator should be at hour '(.*)'")]

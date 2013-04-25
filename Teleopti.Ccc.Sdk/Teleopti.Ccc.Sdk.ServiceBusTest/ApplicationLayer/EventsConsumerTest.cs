@@ -15,9 +15,11 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ApplicationLayer
 		public void ShouldPublishEvents()
 		{
 			var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
+			var currentUnitOfWorkFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
 			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(MockRepository.GenerateMock<IUnitOfWork>());
+			currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
 			var publisher = MockRepository.GenerateMock<IEventPublisher>();
-			var target = new EventsConsumer(publisher, null, unitOfWorkFactory);
+			var target = new EventsConsumer(publisher, null, currentUnitOfWorkFactory);
 			var @event = new Event();
 
 			target.Consume(@event);
@@ -28,10 +30,12 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.ApplicationLayer
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
 		public void ShouldCreateAndPersistUnitOfWork()
 		{
-			var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
-			var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
-			unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-			var target = new EventsConsumer(MockRepository.GenerateMock<IEventPublisher>(), null, unitOfWorkFactory);
+            var unitOfWork = MockRepository.GenerateMock<IUnitOfWork>();
+            var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
+            var currentUnitOfWorkFactory = MockRepository.GenerateMock<ICurrentUnitOfWorkFactory>();
+            unitOfWorkFactory.Stub(x => x.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+            currentUnitOfWorkFactory.Stub(x => x.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
+			var target = new EventsConsumer(MockRepository.GenerateMock<IEventPublisher>(), null, currentUnitOfWorkFactory);
 
 			target.Consume(new Event());
 

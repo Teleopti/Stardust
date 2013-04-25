@@ -22,16 +22,18 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 		private IPersonRepository personRepository;
 		private IUnitOfWorkFactory unitOfWorkFactory;
 		private IUnitOfWork unitOfWork;
+	    private ICurrentUnitOfWorkFactory currentUnitOfWorkFactory;
 
-		[SetUp]
+	    [SetUp]
 		public void Setup()
 		{
 			mocks = new MockRepository();
 			assembler = mocks.StrictMock<IAssembler<IPerson, PersonDto>>();
 			personRepository = mocks.StrictMock<IPersonRepository>();
-			unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
+            unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
+            currentUnitOfWorkFactory = mocks.DynamicMock<ICurrentUnitOfWorkFactory>();
 			unitOfWork = mocks.DynamicMock<IUnitOfWork>();
-			target = new GetPersonByIdQueryHandler(assembler, personRepository, unitOfWorkFactory);
+			target = new GetPersonByIdQueryHandler(assembler, personRepository, currentUnitOfWorkFactory);
 		}
 
 		[Test]
@@ -44,6 +46,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 				Expect.Call(personRepository.Get(personId)).Return(person);
 				Expect.Call(assembler.DomainEntityToDto(person)).Return(new PersonDto());
 				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+				Expect.Call(currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
 			}
 			using (mocks.Playback())
 			{
@@ -60,7 +63,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			{
 				Expect.Call(personRepository.Get(personId)).Return(null);
 				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-			}
+                Expect.Call(currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
+            }
 			using (mocks.Playback())
 			{
 				var result = target.Handle(new GetPersonByIdQueryDto { PersonId = personId });

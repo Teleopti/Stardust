@@ -14,9 +14,9 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
     {
         private readonly IAssembler<IPerson, PersonDto> _assembler;
         private readonly IPersonRepository _personRepository;
-        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+        private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 
-        public GetPersonByEmploymentNumberQueryHandler(IAssembler<IPerson, PersonDto> assembler, IPersonRepository personRepository, IUnitOfWorkFactory unitOfWorkFactory)
+        public GetPersonByEmploymentNumberQueryHandler(IAssembler<IPerson, PersonDto> assembler, IPersonRepository personRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory)
         {
             _assembler = assembler;
             _personRepository = personRepository;
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public ICollection<PersonDto> Handle(GetPersonByEmploymentNumberQueryDto query)
         {
-            using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+            using (var unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
             {
                 using (unitOfWork.DisableFilter(QueryFilter.Deleted))
                 {

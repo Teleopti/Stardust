@@ -18957,6 +18957,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Same Shift.
+        /// </summary>
+        public static string SameShift {
+            get {
+                return ResourceManager.GetString("SameShift", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Same shift category.
         /// </summary>
         public static string SameShiftCategory {
@@ -19806,6 +19815,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SelectAtleastOneOptimizationOption {
             get {
                 return ResourceManager.GetString("SelectAtleastOneOptimizationOption", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please select at least one of the options &quot;Same shift category&quot;, &quot;Same start time&quot; or &quot;Same shift&quot; in Block Optimization..
+        /// </summary>
+        public static string SelectAtleastOneOptimizationOptionForBlock {
+            get {
+                return ResourceManager.GetString("SelectAtleastOneOptimizationOptionForBlock", resourceCulture);
             }
         }
         
@@ -21195,6 +21213,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string SignCustomerWeb {
             get {
                 return ResourceManager.GetString("SignCustomerWeb", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Single Agent Team.
+        /// </summary>
+        public static string SingleAgentTeam {
+            get {
+                return ResourceManager.GetString("SingleAgentTeam", resourceCulture);
             }
         }
         

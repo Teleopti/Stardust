@@ -73,7 +73,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			var cellModel = new GridDropDownMonthCalendarAdvCellModel(grid.Model);
 			cellModel.HideNoneButton();
 			cellModel.HideTodayButton();
-			if (!grid.CellModels.ContainsKey("DatePickerCell")) grid.CellModels.Add("DatePickerCell", cellModel);
+			if (!grid.CellModels.ContainsKey(GridCellModelConstants.CellTypeDatePickerCell)) grid.CellModels.Add(GridCellModelConstants.CellTypeDatePickerCell, cellModel);
+			if (!grid.CellModels.ContainsKey(GridCellModelConstants.CellTypeDropDownCultureCell)) grid.CellModels.Add(GridCellModelConstants.CellTypeDropDownCultureCell, new DropDownCultureCellModel(grid.Model));
 
 			OnEventMessageHandlerChanged += GeneralGridView_OnEventMessageHandlerChanged;
 

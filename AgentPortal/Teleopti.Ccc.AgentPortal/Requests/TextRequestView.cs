@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Data;
 using System.Globalization;
+using System.ServiceModel;
 using System.Threading;
 using System.Web.Services.Protocols;
 using System.Windows.Forms;
 using Teleopti.Ccc.AgentPortal.Common;
 using Teleopti.Ccc.AgentPortal.Helper;
-using Teleopti.Ccc.AgentPortalCode.Helper;
+using Teleopti.Ccc.AgentPortalCode.Foundation.StateHandlers;
 using Teleopti.Ccc.AgentPortalCode.Requests;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
+using Teleopti.Ccc.Sdk.Common.Contracts;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.AgentPortal.Requests
 {
@@ -134,7 +137,7 @@ namespace Teleopti.Ccc.AgentPortal.Requests
                 string dataErrorMessage = string.Format(CultureInfo.CurrentUICulture, UserTexts.Resources.ErrorOccuredWhenAccessingTheDataSource + ".\n\nError information: {0}", ex.Message);
                 MessageBoxHelper.ShowErrorMessage(dataErrorMessage, UserTexts.Resources.AgentPortal);
             }
-            catch (SoapException ex)
+            catch (FaultException ex)
             {
                 string errorMessage = string.Format(CultureInfo.CurrentCulture, UserTexts.Resources.SaveError + "\n\nError information: {0}", ex.Message);
                 MessageBoxHelper.ShowErrorMessage(errorMessage, UserTexts.Resources.AgentPortal);
@@ -162,12 +165,12 @@ namespace Teleopti.Ccc.AgentPortal.Requests
         public void FixUtcDateTimes()
         {
             DateTimePeriodDto dateTimePeriodDto = _presenter.PersonRequest.Request.Period;
-            
-                dateTimePeriodDto.UtcStartTime = AgentPortalTimeZoneHelper.ConvertToUniversalTime(dateTimePeriodDto.LocalStartDateTime);
-                dateTimePeriodDto.UtcStartTimeSpecified = true;
-            
-                dateTimePeriodDto.UtcEndTime = AgentPortalTimeZoneHelper.ConvertToUniversalTime(dateTimePeriodDto.LocalEndDateTime);
-                dateTimePeriodDto.UtcEndTimeSpecified = true;
+
+            var timeZone =
+            TimeZoneInfo.FindSystemTimeZoneById(
+                StateHolder.Instance.State.SessionScopeData.LoggedOnPerson.TimeZoneId);
+            dateTimePeriodDto.UtcStartTime = TimeZoneHelper.ConvertToUtc(dateTimePeriodDto.LocalStartDateTime, timeZone);
+            dateTimePeriodDto.UtcEndTime = TimeZoneHelper.ConvertToUtc(dateTimePeriodDto.LocalEndDateTime, timeZone);
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "Teleopti.Ccc.AgentPortal.Helper.MessageBoxHelper.ShowErrorMessage(System.String,System.String)")]

@@ -13,9 +13,9 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
     {
         private readonly IAssembler<ISite, SiteDto> _assembler;
         private readonly ISiteRepository _siteRepository;
-        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+        private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 
-        public GetSiteByIdQueryHandler(IAssembler<ISite, SiteDto> assembler, ISiteRepository siteRepository, IUnitOfWorkFactory unitOfWorkFactory)
+        public GetSiteByIdQueryHandler(IAssembler<ISite, SiteDto> assembler, ISiteRepository siteRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory)
         {
             _assembler = assembler;
             _siteRepository = siteRepository;
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public ICollection<SiteDto> Handle(GetSiteByIdQueryDto query)
         {
-            using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+            using (var unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
             {
                 using (unitOfWork.DisableFilter(QueryFilter.Deleted))
                 {

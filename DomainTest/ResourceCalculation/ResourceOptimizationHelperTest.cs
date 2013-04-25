@@ -274,7 +274,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 			}
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "AddIs"), Test]
 		public void ShouldNotUseSingleSkillCalculationsWhenToAddIsNotSingleSkilled()
 		{
 			var singleSkillDictionary = _mocks.StrictMock<ISingleSkillDictionary>();

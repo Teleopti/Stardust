@@ -12,10 +12,10 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
     {
         private readonly IPersonRequestRepository _personRequestRepository;
         private readonly IPersonRequestCheckAuthorization _authorization;
-        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+        private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
     	private readonly IMessageBrokerEnablerFactory _messageBrokerEnablerFactory;
 
-    	public DenyRequestCommandHandler(IPersonRequestRepository personRequestRepository, IPersonRequestCheckAuthorization authorization, IUnitOfWorkFactory unitOfWorkFactory, IMessageBrokerEnablerFactory messageBrokerEnablerFactory)
+    	public DenyRequestCommandHandler(IPersonRequestRepository personRequestRepository, IPersonRequestCheckAuthorization authorization, ICurrentUnitOfWorkFactory unitOfWorkFactory, IMessageBrokerEnablerFactory messageBrokerEnablerFactory)
         {
             _personRequestRepository = personRequestRepository;
             _authorization = authorization;
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 		public void Handle(DenyRequestCommandDto command)
         {
             IPersonRequest personRequest;
-            using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+            using (var uow = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
             {
                 personRequest = _personRequestRepository.Get(command.PersonRequestId);
                 try

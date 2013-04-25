@@ -21,15 +21,17 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 		private IUnitOfWorkFactory unitOfWorkFactory;
 		private IDateTimePeriodAssembler assembler;
 		private GetMultiplicatorDefinitionSetOvertimeQueryHandler target;
+	    private ICurrentUnitOfWorkFactory currentUnitOfWorkFactory;
 
-		[SetUp]
+	    [SetUp]
 		public void Setup()
 		{
 			mocks = new MockRepository();
 			multiplicatorDefinitionSetRepository = mocks.DynamicMock<IMultiplicatorDefinitionSetRepository>();
 			unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
+			currentUnitOfWorkFactory = mocks.DynamicMock<ICurrentUnitOfWorkFactory>();
 			assembler = mocks.DynamicMock<IDateTimePeriodAssembler>();
-			target = new GetMultiplicatorDefinitionSetOvertimeQueryHandler(multiplicatorDefinitionSetRepository, assembler, unitOfWorkFactory);
+			target = new GetMultiplicatorDefinitionSetOvertimeQueryHandler(multiplicatorDefinitionSetRepository, assembler, currentUnitOfWorkFactory);
 		}
 
 		[Test]
@@ -44,6 +46,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			{
 				Expect.Call(multiplicatorDefinitionSetRepository.FindAllOvertimeDefinitions()).Return(multiplicatorDefinitionSetList);
 				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+				Expect.Call(currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
 			}
 			using (mocks.Playback())
 			{
