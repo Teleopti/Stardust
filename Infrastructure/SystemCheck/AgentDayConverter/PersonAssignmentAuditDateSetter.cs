@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
 		{
 			get
 			{
-				return "select pa.Id, pa.Minimum, pa.TheDate, pa.Version " +
+				return "select pa.Id, pa.Minimum, pa.TheDate " +
 				       "from [Auditing].PersonAssignment_AUD pa " +
 				       "inner join Person p on pa.Person = p.id " +
 				       "where pa.TheDate = '" + AgentDayConverterDate.DateOfUnconvertedSchedule + "' " +
@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
 			get
 			{
 				return "update [Auditing].PersonAssignment_AUD " +
-				       "set TheDate = @newDate, Version = @newVersion " +
+				       "set TheDate = @newDate " +
 				       "where Id=@id";
 			}
 		}

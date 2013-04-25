@@ -21,7 +21,7 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
 		public void Execute(Guid personId, TimeZoneInfo timeZone)
 		{
 			var dt = readSchedules(personId);
-			setDateAndIncreaseVersion(dt, timeZone);
+			setDate(dt, timeZone);
 			updatePersonAssignmentRows(dt);
 
 			checkAllConverted(personId);
@@ -47,22 +47,19 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
 				{
 					command.CommandType = CommandType.Text;
 					command.Parameters.AddWithValue("@newDate", string.Format("{0:s}", row["TheDate"]));
-					command.Parameters.AddWithValue("@newVersion", row["Version"]);
 					command.Parameters.AddWithValue("@id", row["Id"]);
 					command.ExecuteNonQuery();
 				}
 			}
 		}
 
-		private static void setDateAndIncreaseVersion(DataTable dt, TimeZoneInfo timeZoneInfo)
+		private static void setDate(DataTable dt, TimeZoneInfo timeZoneInfo)
 		{
 			foreach (DataRow row in dt.Rows)
 			{
 				var utcTime = new DateTime(((DateTime)row["Minimum"]).Ticks, DateTimeKind.Utc);
 				var localDate = timeZoneInfo.SafeConvertTimeToUtc(utcTime);
 				row["TheDate"] = string.Format("{0:s}", localDate.Date);
-				var version = (int)row["Version"];
-				row["Version"] = version + 1;
 			}
 		}
 
