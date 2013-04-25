@@ -90,6 +90,20 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 			paRep.Get(pa.Id.Value).Date.Should().Be.EqualTo(new DateOnly(1999, 12, 31));
 		}
 
+		[Test]
+		public void ShouldIncreaseVersionNumber()
+		{
+			var pa = createAndStoreAssignment(new DateTime(2000, 1, 1, 0, 0, 0, DateTimeKind.Utc));
+			Session.ResetDateForAllAssignmentsAndAudits();
+			UnitOfWork.PersistAll();
+			UnitOfWork.Clear();
+
+			var versionBefore = pa.Version;
+			ExecuteTarget.DateSetterAndWrapInTransaction(pa.Person.Id.Value, TimeZoneInfo.Utc);
+			new PersonAssignmentRepository(UnitOfWork).Get(pa.Id.Value).Version
+			                                          .Should().Be.EqualTo(versionBefore + 1);
+		}
+
 		private IPersonAssignment createAndStoreAssignment(DateTime start)
 		{
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(new Activity("sdf"),
