@@ -71,11 +71,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
                     }
                 }
 
+	            var timeZone = rangeCloneValueKey.Value.Person.PermissionInformation.DefaultTimeZone();
                 foreach (var affectedAccount in affectedAccounts)
                 {
-                    DateOnlyPeriod rangePeriod =
-                       rangeCloneValueKey.Value.Period.ToDateOnlyPeriod(
-                           rangeCloneValueKey.Value.Person.PermissionInformation.DefaultTimeZone());
+                    DateOnlyPeriod rangePeriod = rangeCloneValueKey.Value.Period.ToDateOnlyPeriod(timeZone);
                     DateOnlyPeriod? intersection = affectedAccount.Period().Intersection(rangePeriod);
                     if (!intersection.HasValue)
                         continue;
@@ -95,7 +94,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
                 	var oldResponses = rangeCloneValueKey.Value.BusinessRuleResponseInternalCollection;
                     foreach (var scheduleDay in scheduleDaysForAccount)
                     {
-                        oldResponses.Remove(createResponse(scheduleDay.Person, scheduleDay.DateOnlyAsPeriod.DateOnly, string.Empty, typeof(NewPersonAccountRule)));
+                        oldResponses.Remove(createResponse(scheduleDay.Person, scheduleDay.DateOnlyAsPeriod, string.Empty, typeof(NewPersonAccountRule)));
                     }
                     if(affectedAccount.IsExceeded)
                     {
@@ -106,7 +105,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
                                                     affectedAccount.Owner.Absence.Description.Name, affectedAccount.Period().StartDate.ToShortDateString());
 
                             if (!ForDelete)
-                                responseList.Add(createResponse(scheduleDay.Person, scheduleDay.DateOnlyAsPeriod.DateOnly, message, typeof(NewPersonAccountRule)));
+                                responseList.Add(createResponse(scheduleDay.Person, scheduleDay.DateOnlyAsPeriod, message, typeof(NewPersonAccountRule)));
                         }
                     }
                     
@@ -125,11 +124,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
             return !_schedulingResultStateHolder.Schedules.Scenario.DefaultScenario;
         }
 
-        private IBusinessRuleResponse createResponse(IPerson person, DateOnly dateOnly, string message, Type type)
+        private IBusinessRuleResponse createResponse(IPerson person, IDateOnlyAsDateTimePeriod dateOnly, string message, Type type)
         {
-            var dop = new DateOnlyPeriod(dateOnly, dateOnly);
-            DateTimePeriod period = dop.ToDateTimePeriod(person.PermissionInformation.DefaultTimeZone());
-            IBusinessRuleResponse response = new BusinessRuleResponse(type, message, _haltModify, IsMandatory, period, person, dop) { Overridden = !_haltModify };
+            var dop = new DateOnlyPeriod(dateOnly.DateOnly, dateOnly.DateOnly);
+            IBusinessRuleResponse response = new BusinessRuleResponse(type, message, _haltModify, IsMandatory, dateOnly.Period(), person, dop) { Overridden = !_haltModify };
             return response;
         }
     }

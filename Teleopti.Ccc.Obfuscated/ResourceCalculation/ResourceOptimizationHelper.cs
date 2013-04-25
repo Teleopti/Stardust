@@ -54,17 +54,16 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 			using (PerformanceOutput.ForOperation("ResourceCalculate " + localDate.ToShortDateString()))
 			{
 				var extractor = new ScheduleProjectionExtractor();
-				var relevantProjections = new ResourceCalculationDataContainer(new PersonSkillProvider());
+				var relevantProjections = ResourceCalculationContext.Container();
 
 				var useSingleSkillCalculations = UseSingleSkillCalculations(toRemove, toAdd);
 
-				if (!useSingleSkillCalculations)
+				if (!useSingleSkillCalculations && !ResourceCalculationContext.InContext)
 					relevantProjections = extractor.CreateRelevantProjectionList(_stateHolder.Schedules,
 																						 TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(localDate.AddDays(-1), localDate.AddDays(1)));
 
 				resourceCalculateDate(relevantProjections, localDate, useOccupancyAdjustment, calculateMaxSeatsAndNonBlend, considerShortBreaks, toRemove, toAdd);
 			}
-
 		}
 
 		private static DateTimePeriod getPeriod(DateOnly localDate)
@@ -74,7 +73,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 			return TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(currentStart, currentEnd);
 		}
 
-		private void resourceCalculateDate(ResourceCalculationDataContainer relevantProjections,
+		private void resourceCalculateDate(IResourceCalculationDataContainer relevantProjections,
 			DateOnly localDate, bool useOccupancyAdjustment, bool calculateMaxSeatsAndNonBlend, bool considerShortBreaks
 			, IList<IScheduleDay> toRemove, IList<IScheduleDay> toAdd)
 		{
@@ -220,6 +219,31 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 			}
 
 			return true;
+		}
+	}
+
+	public class ResourceCalculationContext : IDisposable
+	{
+		[ThreadStatic] private static IResourceCalculationDataContainer _container;
+
+		public static IResourceCalculationDataContainer Container()
+		{
+			return _container ?? new ResourceCalculationDataContainer(new PersonSkillProvider());
+		}
+
+		public ResourceCalculationContext(IResourceCalculationDataContainer resources)
+		{
+			_container = resources;
+		}
+
+		public static bool InContext
+		{
+			get { return _container != null; }
+		}
+
+		public void Dispose()
+		{
+			_container = null;
 		}
 	}
 }

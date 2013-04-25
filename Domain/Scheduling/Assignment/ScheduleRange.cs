@@ -94,11 +94,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             var period = Owner.Period.VisiblePeriod.ToDateOnlyPeriod(Person.PermissionInformation.DefaultTimeZone());
 
             BusinessRuleResponseInternalCollection.Clear();
-            IList<IScheduleDay> scheduleDays = new List<IScheduleDay>();
-            foreach (var day in period.DayCollection())
-            {
-                scheduleDays.Add(ScheduledDay(day));
-            }
+	        IList<IScheduleDay> scheduleDays = ScheduledDayCollection(period).ToList();
 
             if (newBusinessRuleCollection != null)
             {
@@ -307,11 +303,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		public IEnumerable<IScheduleDay> ScheduledDayCollection(DateOnlyPeriod dateOnlyPeriod)
 		{
 			var canSeeUnpublished = PrincipalAuthorization.Instance().IsPermitted(DefinedRaptorApplicationFunctionPaths.ViewUnpublishedSchedules);
+			var timeZone = Person.PermissionInformation.DefaultTimeZone();
+			var availablePeriods = AvailablePeriods();
 			var retList = new List<IScheduleDay>();
 			foreach (var date in dateOnlyPeriod.DayCollection())
 			{
-				var dayAndPeriod = new DateOnlyAsDateTimePeriod(date, Person.PermissionInformation.DefaultTimeZone());
-				retList.Add(ScheduleDay(dayAndPeriod, canSeeUnpublished, AvailablePeriods()));
+				var dayAndPeriod = new DateOnlyAsDateTimePeriod(date, timeZone);
+				retList.Add(ScheduleDay(dayAndPeriod, canSeeUnpublished, availablePeriods));
 			}
 			return retList;
 		}
