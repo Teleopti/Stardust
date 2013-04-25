@@ -47,6 +47,7 @@ namespace Teleopti.Ccc.SyncfusionGridBinding
 			{
                 item = _collection[e.ColIndex - 1];
                 cellDetails.SetParentCellValue(_columnParentHeaderMember.GetModelValue(item).ToString());
+                SetMergedHeaderStyle();
 			}
 			if (cellDetails.IsColumnHeader)
 			{
@@ -54,6 +55,7 @@ namespace Teleopti.Ccc.SyncfusionGridBinding
 				var dateString = _columnHeaderMember.GetModelValue(item).ToString();
 				Weekend(cellDetails, _columnHeaderMember.GetModelValue(item));
 				cellDetails.SetCellValue(dateString);
+                SetMergedHeaderStyle();
 			}
 			if (cellDetails.IsContentCell)
 			{
@@ -234,7 +236,6 @@ namespace Teleopti.Ccc.SyncfusionGridBinding
 			UnwireGrid();
 			UnwireModels();
 			ResetGridArea();
-		    SetMergedHeaderStyle();
 		}
 
         private void SetMergedHeaderStyle()
