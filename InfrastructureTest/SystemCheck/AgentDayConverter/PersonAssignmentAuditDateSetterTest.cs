@@ -80,6 +80,27 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 			Session.Auditer().Find<PersonAssignment>(pa.Id.Value, revisions.Last()).Date.Should().Be.EqualTo(AgentDayConverterDate.DateOfUnconvertedSchedule);
 		}
 
+		[Test]
+		public void ShouldSetCorrectDayWhenTimeZoneIsCrazy()
+		{
+			var start = new DateTime(2000, 1, 1, 23, 0, 0, DateTimeKind.Utc);
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				createAndStoreAssignment(uow, start);
+				uow.PersistAll();
+			}
+			Session.ResetDateForAllAssignmentsAndAudits();
+			UnitOfWork.Clear();
+
+			var revisions = Session.Auditer().GetRevisions(typeof(PersonAssignment), pa.Id.Value);
+			ExecuteTarget.AuditDateSetterAndWrapInTransaction(pa.Person.Id.Value, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time"));
+
+			Session.Auditer()
+			       .Find<PersonAssignment>(pa.Id.Value, revisions.Last())
+			       .Date.Should().Be.EqualTo(new DateOnly(2000, 1, 2));
+		}
+
+
 		private void createAndStoreAssignment(IUnitOfWork uow, DateTime start)
 		{
 			pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(new Activity("sdf"),

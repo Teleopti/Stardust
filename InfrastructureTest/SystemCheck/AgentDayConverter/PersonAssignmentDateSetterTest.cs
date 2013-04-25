@@ -73,6 +73,23 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 			paRep.Get(pa.Id.Value).Date.Should().Be.EqualTo(AgentDayConverterDate.DateOfUnconvertedSchedule);
 		}
 
+		[Test]
+		public void ShouldSetCorrectDayWhenTimeZoneIsCrazy()
+		{
+			var paRep = new PersonAssignmentRepository(UnitOfWork);
+			var start = new DateTime(2000, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
+			var pa = createAndStoreAssignment(start);
+			Session.ResetDateForAllAssignmentsAndAudits();
+
+			UnitOfWork.PersistAll();
+			UnitOfWork.Clear();
+
+			ExecuteTarget.DateSetterAndWrapInTransaction(pa.Person.Id.Value, TimeZoneInfo.FindSystemTimeZoneById("Tokyo Standard Time"));
+
+			paRep.Get(pa.Id.Value).Date.Should().Be.EqualTo(new DateOnly(1999, 12, 31));
+		}
+
 		private IPersonAssignment createAndStoreAssignment(DateTime start)
 		{
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(new Activity("sdf"),
