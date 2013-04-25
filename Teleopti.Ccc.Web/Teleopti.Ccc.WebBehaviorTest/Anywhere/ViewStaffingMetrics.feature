@@ -75,12 +75,12 @@ Scenario: View staffing metrics
 	When I view schedules for '2013-04-09'
 	And I select skill 'Direct Sales'
 	Then I should see metrics for skill 'Direct Sales' with
-	| Field                   | Value |
-	| Forecasted hours        | 11.50   |
-	| Scheduled hours         | 7.0   |
-	| Difference hours        | -1.0  |
-	| Difference percentage   | -12.5 |
-	| Estimated service level | 71    |
+	| Field                   | Value  |
+	| Forecasted hours        | 11.50  |
+	| Scheduled hours         | 7.0    |
+	| Difference hours        | -4.49  |
+	| Difference percentage   | -39.10 |
+	| Estimated service level | 0.00   |
 
 
 Scenario: Remember skill selection when changing date
