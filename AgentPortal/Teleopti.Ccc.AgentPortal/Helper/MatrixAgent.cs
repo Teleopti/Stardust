@@ -4,7 +4,7 @@ using System.Windows.Forms;
 using Teleopti.Ccc.AgentPortal.Common.Controls;
 using Teleopti.Ccc.AgentPortalCode.Foundation.StateHandlers;
 using Teleopti.Ccc.AgentPortal.Main;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 
 namespace Teleopti.Ccc.AgentPortal.Helper
 {

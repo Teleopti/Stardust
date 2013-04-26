@@ -1,6 +1,9 @@
 ﻿using System.ServiceModel;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic;
 using Teleopti.Ccc.Sdk.Logic.CommandHandler;
@@ -31,7 +34,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             using (_mock.Record())
             {
                 Expect.Call(_busSender.EnsureBus()).Return(true);
-                Expect.Call(() => _busSender.NotifyServiceBus(new ScheduleChanged())).IgnoreArguments();
+                Expect.Call(() => _busSender.Send(new ScheduleChangedEvent())).IgnoreArguments();
             }
             using (_mock.Playback())
             {
@@ -46,7 +49,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             using (_mock.Record())
             {
                 Expect.Call(_busSender.EnsureBus()).Return(false);
-                Expect.Call(() => _busSender.NotifyServiceBus(new ScheduleChanged())).IgnoreArguments();
+                Expect.Call(() => _busSender.Send(new ScheduleChangedEvent())).IgnoreArguments();
             }
             using (_mock.Playback())
             {

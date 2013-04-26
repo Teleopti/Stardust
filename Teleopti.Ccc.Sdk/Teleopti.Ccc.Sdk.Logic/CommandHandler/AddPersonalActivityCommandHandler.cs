@@ -1,3 +1,4 @@
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -16,12 +17,12 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 		private readonly IScheduleRepository _scheduleRepository;
 		private readonly IPersonRepository _personRepository;
 		private readonly IScenarioRepository _scenarioRepository;
-		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+        private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly ISaveSchedulePartService _saveSchedulePartService;
 		private readonly IMessageBrokerEnablerFactory _messageBrokerEnablerFactory;
 		private readonly IBusinessRulesForPersonalAccountUpdate _businessRulesForPersonalAccountUpdate;
 
-		public AddPersonalActivityCommandHandler(IAssembler<DateTimePeriod, DateTimePeriodDto> dateTimePeriodAssembler, IActivityRepository activityRepository, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IScenarioRepository scenarioRepository, IUnitOfWorkFactory unitOfWorkFactory, ISaveSchedulePartService saveSchedulePartService, IMessageBrokerEnablerFactory messageBrokerEnablerFactory, IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate)
+		public AddPersonalActivityCommandHandler(IAssembler<DateTimePeriod, DateTimePeriodDto> dateTimePeriodAssembler, IActivityRepository activityRepository, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IScenarioRepository scenarioRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory, ISaveSchedulePartService saveSchedulePartService, IMessageBrokerEnablerFactory messageBrokerEnablerFactory, IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate)
 		{
 			_dateTimePeriodAssembler = dateTimePeriodAssembler;
 			_activityRepository = activityRepository;
@@ -35,9 +36,9 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling")]
-		public CommandResultDto Handle(AddPersonalActivityCommandDto command)
+		public void Handle(AddPersonalActivityCommandDto command)
 		{
-			using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+			using (var uow = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
 				var person = _personRepository.Load(command.PersonId);
 				var scenario = getDesiredScenario(command);
@@ -60,7 +61,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 					uow.PersistAll();
 				}
 			}
-			return new CommandResultDto { AffectedId = command.PersonId, AffectedItems = 1 };
+			command.Result = new CommandResultDto { AffectedId = command.PersonId, AffectedItems = 1 };
 		}
 
 		private IScenario getDesiredScenario(AddPersonalActivityCommandDto command)

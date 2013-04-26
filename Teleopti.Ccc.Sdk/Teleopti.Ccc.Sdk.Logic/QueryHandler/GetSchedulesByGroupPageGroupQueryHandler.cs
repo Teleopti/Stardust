@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 {
 	public class GetSchedulesByGroupPageGroupQueryHandler : IHandleQuery<GetSchedulesByGroupPageGroupQueryDto, ICollection<SchedulePartDto>>
 	{
-		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IScheduleRepository _scheduleRepository;
 		private readonly IPersonRepository _personRepository;
 		private readonly IScenarioRepository _scenarioRepository;
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 		private readonly IDateTimePeriodAssembler _dateTimePeriodAssembler;
 		private readonly ISchedulePartAssembler _scheduleDayAssembler;
 
-		public GetSchedulesByGroupPageGroupQueryHandler(IUnitOfWorkFactory unitOfWorkFactory, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IScenarioRepository scenarioRepository, IGroupingReadOnlyRepository groupingReadOnlyRepository, IDateTimePeriodAssembler dateTimePeriodAssembler, ISchedulePartAssembler scheduleDayAssembler)
+		public GetSchedulesByGroupPageGroupQueryHandler(ICurrentUnitOfWorkFactory unitOfWorkFactory, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IScenarioRepository scenarioRepository, IGroupingReadOnlyRepository groupingReadOnlyRepository, IDateTimePeriodAssembler dateTimePeriodAssembler, ISchedulePartAssembler scheduleDayAssembler)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_scheduleRepository = scheduleRepository;
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 			_dateTimePeriodAssembler.TimeZone = timeZone;
 			_scheduleDayAssembler.TimeZone = timeZone;
 						
-			using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
+			using (_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
 				IScenario scenario = GetGivenScenarioOrDefault(query);
 

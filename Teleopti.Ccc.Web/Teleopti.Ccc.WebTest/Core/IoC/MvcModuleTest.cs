@@ -10,10 +10,16 @@ using MbCache.Core;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.Rta;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
+using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
@@ -43,6 +49,7 @@ using Teleopti.Ccc.Web.Core.ServiceBus;
 using Teleopti.Ccc.Web.Core.Startup.InitializeApplication;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.Messages.Rta;
 
 
 namespace Teleopti.Ccc.WebTest.Core.IoC
@@ -166,7 +173,7 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 		[Test]
 		public void ShouldRegisterCurrentBusinessUnitProvider()
 		{
-			requestContainer.Resolve<ICurrentBusinessUnitProvider>()
+			requestContainer.Resolve<ICurrentBusinessUnit>()
 				.Should().Not.Be.Null();
 		}
 
@@ -510,6 +517,51 @@ namespace Teleopti.Ccc.WebTest.Core.IoC
 			//make sure IUnitOfWork isn't registered - it should NOT!
 			requestContainer.IsRegistered<IUnitOfWorkFactory>()
 				.Should().Be.False();
+		}
+
+		[Test]
+		public void ShouldRegisterCommandDispatcher()
+		{
+			requestContainer.Resolve<ICommandDispatcher>()
+			                .Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldRegisterCommandHandlers()
+		{
+			requestContainer.Resolve<IHandleCommand<AddFullDayAbsenceCommand>>()
+			                .Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldRegisterEventsMessageSender()
+		{
+			requestContainer.Resolve<IEnumerable<IMessageSender>>()
+				.OfType<EventsMessageSender>()
+				.Single()
+				.Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldResolveEventHandlers()
+		{
+			requestContainer.Resolve<IEnumerable<IHandleEvent<FullDayAbsenceAddedEvent>>>()
+							.Should().Not.Be.Null();
+			requestContainer.Resolve<IEnumerable<IHandleEvent<ScheduleChangedEvent>>>()
+			                .Should().Not.Be.Null();
+			requestContainer.Resolve<IEnumerable<IHandleEvent<ProjectionChangedEvent>>>()
+							.Should().Not.Be.Null();
+			requestContainer.Resolve<IEnumerable<IHandleEvent<UpdatedScheduleDay>>>()
+							.Should().Not.Be.Null();
+		}
+
+		[Test]
+		public void ShouldResolveLicenseActivator()
+		{
+			var licenseActivator = MockRepository.GenerateMock<ILicenseActivator>();
+			DefinedLicenseDataFactory.LicenseActivator = licenseActivator;
+			requestContainer.Resolve<ILicenseActivator>().Should().Be(licenseActivator);
+			DefinedLicenseDataFactory.LicenseActivator = null;
 		}
 	}
 }

@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
@@ -8,6 +10,7 @@ using Autofac.Integration.Mvc;
 using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
+using Teleopti.Ccc.Web.Broker;
 using Teleopti.Ccc.Web.Core.IoC;
 using Teleopti.Ccc.Web.Core.RequestContext.Initialize;
 using Teleopti.Ccc.Web.Core.Startup;
@@ -28,6 +31,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 		}
 
 		public static Exception ErrorAtStartup { get; set; }
+		public static Task[] TasksFromStartup { get; set; }
 
 		public static bool HasStartupError
 		{
@@ -63,7 +67,7 @@ namespace Teleopti.Ccc.Web.Core.Startup
 		private IContainerConfiguration _containerConfiguration = new ContainerConfiguration();
 		private bool _testMode;
 
-		public void HackForTest(IBootstrapper injectedBootstrapper, IContainerConfiguration injectedContainerConfiguration)
+		public void InjectForTest(IBootstrapper injectedBootstrapper, IContainerConfiguration injectedContainerConfiguration)
 		{
 			_bootstrapper = injectedBootstrapper;
 			_containerConfiguration = injectedContainerConfiguration;
@@ -103,9 +107,9 @@ namespace Teleopti.Ccc.Web.Core.Startup
 					var resolver = new Areas.Anywhere.Core.AutofacDependencyResolver(container.BeginLifetimeScope());
 					GlobalHost.DependencyResolver = resolver;
 					GlobalHost.HubPipeline.AddModule(container.Resolve<IHubPipelineModule>());
-					RouteTable.Routes.MapHubs(new HubConfiguration());
+					SignalRConfiguration.Configure(new HubConfiguration {EnableCrossDomain = true});
 				}
-				_bootstrapper.Run(container.Resolve<IEnumerable<IBootstrapperTask>>());
+				TasksFromStartup = _bootstrapper.Run(container.Resolve<IEnumerable<IBootstrapperTask>>()).ToArray();
 			}
 			catch (Exception ex)
 			{

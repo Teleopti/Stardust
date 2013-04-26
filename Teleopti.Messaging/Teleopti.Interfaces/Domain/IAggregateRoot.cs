@@ -7,6 +7,5 @@ namespace Teleopti.Interfaces.Domain
     ///</summary>
     public interface IAggregateRoot : IEntity
     {
-
     }
 }

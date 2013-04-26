@@ -2,7 +2,7 @@
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.MessageBroker.js"/>
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Notifier.js"/>
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js"/>
-/// <reference path="~/Content/Scripts/knockout-2.2.0.js" />
+/// <reference path="~/Content/Scripts/knockout-2.2.1.js" />
 /// <reference path="../../../../Content/moment/moment.js" />
 
 if (typeof (Teleopti) === 'undefined') {
@@ -214,7 +214,7 @@ Teleopti.MyTimeWeb.Asm = (function () {
 		},
 		NotifyWhenScheduleChangedListener: function (notification) {
 			if (_validSchedulePeriod(notification)) {
-				var startDate = Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.StartDate).toString('d');
+			    var startDate = new moment(Teleopti.MyTimeWeb.MessageBroker.ConvertMbDateTimeToJsDate(notification.StartDate)).format('L');
 				var notifyText = notifyOptions.notifyText.format(startDate);
 				Teleopti.MyTimeWeb.Notifier.Notify(notifyOptions, notifyText);
 			}

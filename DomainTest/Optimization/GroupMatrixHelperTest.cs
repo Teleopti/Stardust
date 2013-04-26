@@ -466,7 +466,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             }
         }
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ScheduleBackToLegalStateDaysShouldReturnFalseIfSchedulingFails()
 		{
 			IGroupSchedulingService groupSchedulingService = _mocks.StrictMock<IGroupSchedulingService>();
@@ -497,7 +497,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			}
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ScheduleBackToLegalStateDaysShouldReturnTrueIfSuccessfulScheduling()
 		{
 			IGroupSchedulingService groupSchedulingService = _mocks.StrictMock<IGroupSchedulingService>();

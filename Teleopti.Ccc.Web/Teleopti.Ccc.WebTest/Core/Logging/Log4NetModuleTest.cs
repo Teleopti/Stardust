@@ -11,6 +11,12 @@ namespace Teleopti.Ccc.WebTest.Core.Logging
 	public class Log4NetModuleTest
 	{
 		[Test]
+		public void ShouldHaveEmptyConstructor()
+		{
+			new Log4NetModule();
+		}
+
+		[Test]
 		public void ShouldConfigureLog4Net()
 		{
 			var configured = false;

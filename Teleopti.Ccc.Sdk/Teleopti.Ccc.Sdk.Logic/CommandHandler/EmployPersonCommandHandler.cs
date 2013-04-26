@@ -1,5 +1,6 @@
 ﻿using System.ServiceModel;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -12,7 +13,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 {
     public class EmployPersonCommandHandler : IHandleCommand<EmployPersonCommandDto>
     {
-        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+        private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IPersonRepository _personRepository;
         private readonly IPersonAssembler _personAssembler;
         private readonly IPartTimePercentageRepository _partTimePercentageRepository;
@@ -20,7 +21,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
         private readonly IContractRepository _contractRepository;
         private readonly ITeamRepository _teamRepository;
 
-        public EmployPersonCommandHandler(IUnitOfWorkFactory unitOfWorkFactory, IPersonRepository personRepository,IPersonAssembler personAssembler, IPartTimePercentageRepository partTimePercentageRepository, IContractScheduleRepository contractScheduleRepository, IContractRepository contractRepository, ITeamRepository teamRepository)
+        public EmployPersonCommandHandler(ICurrentUnitOfWorkFactory unitOfWorkFactory, IPersonRepository personRepository, IPersonAssembler personAssembler, IPartTimePercentageRepository partTimePercentageRepository, IContractScheduleRepository contractScheduleRepository, IContractRepository contractRepository, ITeamRepository teamRepository)
         {
             _unitOfWorkFactory = unitOfWorkFactory;
             _personRepository = personRepository;
@@ -32,12 +33,12 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public CommandResultDto Handle(EmployPersonCommandDto command)
+		public void Handle(EmployPersonCommandDto command)
         {
 			checkIfAuthorized();
 
             PersonPeriod personPeriod;
-            using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+            using (var uow = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
             {
                 var start = command.Period.StartDate.DateTime;
 
@@ -57,7 +58,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                 _personRepository.Add(person);
                 uow.PersistAll();
             }
-            return new CommandResultDto {AffectedId = personPeriod.Id, AffectedItems = 2};
+			command.Result = new CommandResultDto { AffectedId = personPeriod.Id, AffectedItems = 2 };
         }
 
 		private static void checkIfAuthorized()

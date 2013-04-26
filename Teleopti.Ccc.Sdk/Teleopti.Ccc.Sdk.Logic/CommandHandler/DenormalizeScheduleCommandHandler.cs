@@ -1,6 +1,9 @@
 ﻿using System;
 using System.ServiceModel;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Interfaces.Messages.Denormalize;
 
@@ -16,7 +19,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public CommandResultDto Handle(DenormalizeScheduleCommandDto command)
+		public void Handle(DenormalizeScheduleCommandDto command)
 		{
 			if (!_busSender.EnsureBus())
 			{
@@ -24,7 +27,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 			}
 
 			var identity = (ITeleoptiIdentity) TeleoptiPrincipal.Current.Identity;
-			var message = new ScheduleChanged
+			var message = new ScheduleChangedEvent
 			              	{
 			              		BusinessUnitId = identity.BusinessUnit.Id.GetValueOrDefault(Guid.Empty),
 			              		Datasource = identity.DataSource.Application.Name,
@@ -35,9 +38,9 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 			              		PersonId = command.PersonId
 			              	};
 
-			_busSender.NotifyServiceBus(message);
-			
-			return new CommandResultDto {AffectedId = Guid.Empty, AffectedItems = 1};
+			_busSender.Send(message);
+
+			command.Result = new CommandResultDto { AffectedId = Guid.Empty, AffectedItems = 1 };
 		}
     }
 }

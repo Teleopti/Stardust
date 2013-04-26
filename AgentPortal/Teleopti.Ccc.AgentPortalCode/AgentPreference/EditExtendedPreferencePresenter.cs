@@ -73,21 +73,21 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentPreference
         public void SetShiftCategories(IEnumerable<ShiftCategory> shiftCategories)
         {
             var list = new List<ShiftCategory>(shiftCategories);
-            list.Insert(0, new ShiftCategory(Resources.None, string.Empty, string.Empty, Color.Empty));
+            list.Insert(0, new ShiftCategory(Resources.None, string.Empty, null, Color.Empty));
             _view.PopulateShiftCategories(list);
         }
 
         public void SetDaysOff(IEnumerable<DayOff> daysOff)
         {
             var list = new List<DayOff>(daysOff);
-            list.Insert(0, new DayOff(Resources.None, string.Empty, string.Empty, Color.Empty));
+            list.Insert(0, new DayOff(Resources.None, string.Empty, null, Color.Empty));
             _view.PopulateDaysOff(list);
         }
 
         public void SetAbsences(IEnumerable<Absence> absences)
         {
             var list = new List<Absence>(absences);
-            list.Insert(0, new Absence(Resources.None, string.Empty, string.Empty, Color.Empty));
+            list.Insert(0, new Absence(Resources.None, string.Empty, null, Color.Empty));
             _view.PopulateAbsences(list);
         }
 
@@ -209,7 +209,7 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentPreference
             if (Validate())
             {
                 _cellData.Preference = _model.Preference;
-                _cellData.Preference.TemplateName = Resources.Extended;
+				_cellData.Preference.TemplateName = null; 
                 OnSavePreferenceCellData();
                 _view.SaveButtonEnabled = false;
             }

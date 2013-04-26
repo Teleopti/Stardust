@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -16,21 +17,21 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 	{
 		private readonly IPersonRepository _personRepository;
 		private readonly IPushMessageRepository _pushMessageRepository;
-		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+        private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 
-		public SendPushMessageToPersonCommandHandler(IPersonRepository personRepository, IPushMessageRepository pushMessageRepository, IUnitOfWorkFactory unitOfWorkFactory)
+		public SendPushMessageToPersonCommandHandler(IPersonRepository personRepository, IPushMessageRepository pushMessageRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory)
 		{
 			_personRepository = personRepository;
 			_pushMessageRepository = pushMessageRepository;
 			_unitOfWorkFactory = unitOfWorkFactory;
 		}
 
-		public CommandResultDto Handle(SendPushMessageToPeopleCommandDto command)
+		public void Handle(SendPushMessageToPeopleCommandDto command)
 		{
 			verifyNotTooManyReceivers(command.Recipients);
 
 			var result = new CommandResultDto();
-			using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+			using (var uow = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
 				var people = _personRepository.FindPeople(command.Recipients).ToList();
 				if (people.Count > 0)
@@ -48,7 +49,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 					result.AffectedId = service.PushMessage.Id;
 				}
 			}
-			return result;
+			command.Result = result;
 		}
 
 		private static void verifyNotTooManyReceivers(ICollection<Guid> receivers)

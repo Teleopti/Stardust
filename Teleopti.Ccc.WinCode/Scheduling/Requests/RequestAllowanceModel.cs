@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Budgeting;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
@@ -37,7 +39,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IBudgetDayRepository _budgetDayRepository;
         private readonly IBudgetGroupRepository _budgetGroupRepository;
-        private readonly IScenarioRepository _scenarioRepository;
+        private readonly ICurrentScenario _scenarioRepository;
         private readonly IScheduleProjectionReadOnlyRepository _scheduleProjectionReadOnlyRepository;
         private IList<double> _allowanceCollection;
         private IList<double> _totalAllowanceCollection;
@@ -48,7 +50,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
         public RequestAllowanceModel(IUnitOfWorkFactory unitOfWorkFactory,
                                     IBudgetDayRepository budgetDayRepository, 
                                     IBudgetGroupRepository budgetGroupRepository,
-                                    IScenarioRepository scenarioRepository,
+                                    ICurrentScenario scenarioRepository,
                                     IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository)
         {
             _unitOfWorkFactory = unitOfWorkFactory;
@@ -218,7 +220,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
 
         private void loadDefaultScenario()
         {
-            DefaultScenario = _scenarioRepository.LoadDefaultScenario();
+            DefaultScenario = _scenarioRepository.Current();
         }
 
         private IEnumerable<IBudgetDay> addMissingDays(IEnumerable<IBudgetDay> existingBudgetDays, DateOnlyPeriod period)

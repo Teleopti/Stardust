@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         private MockRepository _mock;
         private IScheduleRepository _scheduleRepository;
         private IScheduleDictionarySaver _scheduleDictionarySaver;
-        private IScenarioRepository _scenarioRepository;
+        private ICurrentScenario _scenarioRepository;
         private IPersonRequestCheckAuthorization _authorization;
         private ISwapAndModifyService _swapAndModifyService;
         private IPersonRequestRepository _personRequestRepository;
@@ -42,6 +42,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         private DateTimePeriod _period;
         private ShiftTradeRequest _shiftTradeRequest;
         private IPerson _personTo;
+        private ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 
         [SetUp]
         public  void Setup()
@@ -49,16 +50,17 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _mock = new MockRepository();
             _scheduleRepository = _mock.StrictMock<IScheduleRepository>();
             _scheduleDictionarySaver = _mock.StrictMock<IScheduleDictionarySaver>();
-            _scenarioRepository = _mock.StrictMock<IScenarioRepository>();
+			_scenarioRepository = _mock.StrictMock<ICurrentScenario>();
             _authorization = _mock.StrictMock<IPersonRequestCheckAuthorization>();
             _swapAndModifyService = _mock.StrictMock<ISwapAndModifyService>();
             _personRequestRepository = _mock.StrictMock<IPersonRequestRepository>();
             _unitOfWorkFactory = _mock.StrictMock<IUnitOfWorkFactory>();
+            _currentUnitOfWorkFactory = _mock.DynamicMock<ICurrentUnitOfWorkFactory>();
             _messageBrokerEnablerFactory = _mock.DynamicMock<IMessageBrokerEnablerFactory>();
             _scheduleDictionaryModifiedCallback = _mock.StrictMock<IScheduleDictionaryModifiedCallback>();
             _target = new ApproveRequestCommandHandler(_scheduleRepository, _scheduleDictionarySaver, _scenarioRepository,
                                                        _authorization, _swapAndModifyService, _personRequestRepository,
-                                                       _unitOfWorkFactory, _messageBrokerEnablerFactory,
+                                                       _currentUnitOfWorkFactory, _messageBrokerEnablerFactory,
                                                        _scheduleDictionaryModifiedCallback);
 
             _person = PersonFactory.CreatePerson("Test Peson");
@@ -90,8 +92,9 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             using(_mock.Record())
             {
                 Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+                Expect.Call(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
                 Expect.Call(request.Request).Return(_absenceRequest).Repeat.Times(3);
-                Expect.Call(_scenarioRepository.LoadDefaultScenario()).Return(_scenario).Repeat.Twice();
+                Expect.Call(_scenarioRepository.Current()).Return(_scenario).Repeat.Twice();
                 Expect.Call(_scheduleRepository.FindSchedulesOnlyInGivenPeriod(
                     new PersonProvider(new[] { _person }), new ScheduleDictionaryLoadOptions(false, false), _period, null)).
                     IgnoreArguments().Return(dictionary);
@@ -119,8 +122,9 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             using (_mock.Record())
             {
                 Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+                Expect.Call(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
                 Expect.Call(request.Request).Return(_shiftTradeRequest).Repeat.Times(3);
-                Expect.Call(_scenarioRepository.LoadDefaultScenario()).Return(_scenario).Repeat.Twice();
+                Expect.Call(_scenarioRepository.Current()).Return(_scenario).Repeat.Twice();
                 Expect.Call(_scheduleRepository.FindSchedulesOnlyInGivenPeriod(
                     new PersonProvider(new[] { _person }), new ScheduleDictionaryLoadOptions(false, false), _period, null)).
                     IgnoreArguments().Return(dictionary);
@@ -149,8 +153,9 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             using (_mock.Record())
             {
                 Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+                Expect.Call(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
                 Expect.Call(request.Request).Return(_absenceRequest).Repeat.Times(3);
-                Expect.Call(_scenarioRepository.LoadDefaultScenario()).Return(_scenario).Repeat.Twice();
+                Expect.Call(_scenarioRepository.Current()).Return(_scenario).Repeat.Twice();
                 Expect.Call(_scheduleRepository.FindSchedulesOnlyInGivenPeriod(
                     new PersonProvider(new[] { _person }), new ScheduleDictionaryLoadOptions(false, false), _period, null)).
                     IgnoreArguments().Return(dictionary);

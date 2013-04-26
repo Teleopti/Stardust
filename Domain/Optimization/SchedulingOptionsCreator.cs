@@ -17,10 +17,11 @@ namespace Teleopti.Ccc.Domain.Optimization
             ISchedulingOptions schedulingOptions = new SchedulingOptions();
 
             schedulingOptions.TagToUseOnScheduling = optimizationPreferences.General.ScheduleTag;
-            schedulingOptions.UseBlockScheduling =
-                optimizationPreferences.Extra.UseBlockScheduling 
-                ? optimizationPreferences.Extra.BlockFinderTypeValue 
-                : BlockFinderType.None;
+	       
+            //schedulingOptions.UseBlockScheduling =
+            //    optimizationPreferences.Extra.UseBlockScheduling 
+            //    ? optimizationPreferences.Extra.BlockFinderTypeValue 
+            //    : BlockFinderType.None;
 
             schedulingOptions.UseGroupScheduling = optimizationPreferences.Extra.UseTeams;
         	schedulingOptions.UseGroupSchedulingCommonCategory =
@@ -33,7 +34,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                 schedulingOptions.CommonActivity = optimizationPreferences.Extra.CommonActivity;
             
             schedulingOptions.GroupOnGroupPage = optimizationPreferences.Extra.GroupPageOnTeam;
-
+            
 
             setPreferencesInSchedulingOptions(optimizationPreferences, schedulingOptions);
             setRotationsInSchedulingOptions(optimizationPreferences, schedulingOptions);
@@ -50,6 +51,18 @@ namespace Teleopti.Ccc.Domain.Optimization
 
             schedulingOptions.Fairness = new Percent(optimizationPreferences.Extra.FairnessValue);
             schedulingOptions.GroupPageForShiftCategoryFairness = optimizationPreferences.Extra.GroupPageOnCompareWith;
+
+			schedulingOptions.BlockFinderTypeForAdvanceScheduling =
+			   optimizationPreferences.Extra.BlockFinderTypeForAdvanceOptimization;
+	        schedulingOptions.GroupOnGroupPageForTeamBlockPer = optimizationPreferences.Extra.GroupPageOnTeamBlockPer;
+			if (optimizationPreferences.Extra.UseTeamBlockOption)
+			{
+				schedulingOptions.UseSameDayOffs = true;
+			}
+			else
+			{
+				schedulingOptions.UseSameDayOffs = optimizationPreferences.Extra.KeepSameDaysOffInTeam;
+			}
 
 			//if (optimizationPreferences.Shifts.KeepShiftCategories)
 			//    schedulingOptions.RescheduleOptions = OptimizationRestriction.KeepShiftCategory;
@@ -68,7 +81,7 @@ namespace Teleopti.Ccc.Domain.Optimization
             schedulingOptions.ConsiderShortBreaks = optimizationPreferences.Rescheduling.ConsiderShortBreaks;
             schedulingOptions.OnlyShiftsWhenUnderstaffed = optimizationPreferences.Rescheduling.OnlyShiftsWhenUnderstaffed;
 
-           
+            setTeamBlockOptions(optimizationPreferences, schedulingOptions);
 
             return schedulingOptions;
         }
@@ -112,6 +125,16 @@ namespace Teleopti.Ccc.Domain.Optimization
             double value = optimizationPreferences.General.StudentAvailabilitiesValue;
 
             schedulingOptions.UseStudentAvailability = use && value == 1d;
+        }
+
+        private static void setTeamBlockOptions(IOptimizationPreferences optimizationPreferences,
+                                                ISchedulingOptions schedulingOptions)
+        {
+            schedulingOptions.UseTeamBlockPerOption = optimizationPreferences.Extra.UseTeamBlockOption;
+            schedulingOptions.UseTeamBlockSameEndTime = optimizationPreferences.Extra.UseTeamBlockSameEndTime;
+            schedulingOptions.UseTeamBlockSameStartTime = optimizationPreferences.Extra.UseTeamBlockSameStartTime;
+            schedulingOptions.UseTeamBlockSameShift = optimizationPreferences.Extra.UseTeamBlockSameShift;
+            schedulingOptions.UseTeamBlockSameShiftCategory = optimizationPreferences.Extra.UseTeamBlockSameShiftCategory;
         }
     }
 }

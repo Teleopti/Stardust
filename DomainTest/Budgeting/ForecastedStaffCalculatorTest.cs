@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.DomainTest.Budgeting
         public void ShouldGetBudgetedStaff()
         {
             var result = new BudgetCalculationResult();
-            _target.Calculate(_budgetDay5, listOfBudgetDays, result);
+            _target.Calculate(_budgetDay5, listOfBudgetDays, ref result);
             var forecastedStaff = Math.Round(result.ForecastedStaff, 2);
             forecastedStaff.Should().Be.EqualTo(19.87d); 
         }

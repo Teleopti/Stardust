@@ -48,6 +48,13 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             return myBusinessUnit;
         }
 
+		public static BusinessUnit CreateWithId(string name)
+		{
+			var businessUnit = new BusinessUnit(name);
+			businessUnit.SetId(Guid.NewGuid());
+			return businessUnit;
+		}
+
         /// <summary>
         /// Creates A businessUnit without taking params
         /// </summary>

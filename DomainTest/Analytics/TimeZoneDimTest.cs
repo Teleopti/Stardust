@@ -58,6 +58,13 @@ namespace Teleopti.Ccc.DomainTest.Analytics
             Assert.AreEqual(_utcConversionDst2, _target2.UtcConversionDst);
         }
 
+		[Test]
+		public void ShouldBeEqualToDefault()
+		{
+			_target1 = new TimeZoneDim(_swedenTimeZone, _swedenTimeZone);
+			Assert.That(_target1.IsDefaultTimeZone, Is.True);
+		}
+
         private static int getUtcConversionIncludedDaylightSaving(TimeZoneInfo timeZone)
         {
             int retVal = 0;

@@ -1,31 +1,17 @@
-﻿using System.Configuration;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
-using Teleopti.Ccc.Sdk.Client;
-using TeleoptiOrganizationService = Teleopti.Ccc.Sdk.Client.SdkServiceReference.TeleoptiOrganizationService;
-using TeleoptiSchedulingService = Teleopti.Ccc.Sdk.Client.SdkServiceReference.TeleoptiSchedulingService;
+﻿using Teleopti.Ccc.Sdk.Client;
+using Teleopti.Ccc.Sdk.Common.Contracts;
 
 namespace Teleopti.Ccc.AgentPortalCode.Helper
 {
     public static class SdkServiceHelper
     {
-        private static readonly SdkServiceClient Instance = new SdkServiceClient(GetServiceUrl());
+        private static readonly SdkServiceClient Instance = new SdkServiceClient();
 
-        public static TeleoptiCccLogOnService LogOnServiceClient { get { return Instance.LogOnServiceClient; } }
-        public static TeleoptiSchedulingService SchedulingService { get { return Instance.SchedulingService; } }
-        public static TeleoptiOrganizationService OrganizationService { get { return Instance.OrganizationService; } }
-        public static TeleoptiOrganizationService1 InternalService { get { return Instance.TeleoptiInternalService; } }
-        public static TeleoptiCccSdkService TeleoptiSdkService { get { return Instance.TeleoptiSdkService; } }
-
-        private static string GetServiceUrl()
-        {
-            var agentPortalSettings =
-                (ClientSettingsSection)
-                ConfigurationManager.GetSection("applicationSettings/Teleopti.Ccc.AgentPortal.Properties.Settings");
-            return
-                agentPortalSettings.Settings.Get("Teleopti_Ccc_AgentPortal_SdkServiceReference_TeleoptiCccSdkService").Value.
-                    ValueXml.InnerText;
-        }
-
+        public static ITeleoptiCccLogOnService LogOnServiceClient { get { return Instance.LogOnServiceClient; } }
+        public static ITeleoptiSchedulingService SchedulingService { get { return Instance.SchedulingService; } }
+        public static ITeleoptiOrganizationService OrganizationService { get { return Instance.OrganizationService; } }
+        public static ITeleoptiCccSdkInternal InternalService { get { return Instance.TeleoptiInternalService; } }
+        
         public static void Dispose()
         {
             Instance.Dispose();

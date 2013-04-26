@@ -57,8 +57,13 @@ namespace Teleopti.Ccc.Win.Common
 
 		private void HelpHttp(string formName, IHelpContext control)
 		{
-			Help.ShowHelp((Control)control, GetUrl(formName, control));
+			var theControl = control as Control;
+			var controlHelpContext = control as ControlHelpContext;
+			if (controlHelpContext != null) theControl = controlHelpContext.Control;
+		
+			Help.ShowHelp(theControl, GetUrl(formName, control));
 		}
+
 		private void HelpOnlineHttp(string formName, IHelpContext control)
 		{
 			Help.ShowHelp(null, GetOnlineUrl(formName, control));

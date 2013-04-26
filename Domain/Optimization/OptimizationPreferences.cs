@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 	public class ExtraPreferences : IExtraPreferences
 	{
 
-		public bool UseBlockScheduling { get; set; }
+		//public bool UseBlockScheduling { get; set; }
 
 		public BlockFinderType BlockFinderTypeValue { get; set; }
 
@@ -96,6 +96,15 @@ namespace Teleopti.Ccc.Domain.Optimization
 		public bool UseGroupSchedulingCommonCategory { get; set; }
         public bool UseCommonActivity { get; set; }
         public IActivity CommonActivity { get; set; }
+
+        public BlockFinderType BlockFinderTypeForAdvanceOptimization { get; set; }
+
+	    public IGroupPageLight GroupPageOnTeamBlockPer{get ; set; }
+	    public bool UseTeamBlockSameEndTime { get; set; }
+	    public bool UseTeamBlockSameShiftCategory { get; set; }
+	    public bool UseTeamBlockSameStartTime { get; set; }
+	    public bool UseTeamBlockSameShift { get; set; }
+	    public bool UseTeamBlockOption { get; set; }
 	}
 
     public class ShiftPreferences : IShiftPreferences

@@ -1,16 +1,16 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Microsoft.AspNet.SignalR;
 using Microsoft.AspNet.SignalR.Hubs;
 using log4net;
 using Teleopti.Interfaces.MessageBroker;
 
 namespace Teleopti.Ccc.Web.Broker
 {
+
 	[HubName("MessageBrokerHub")]
-	public class MessageBrokerHub : Hub
+	public class MessageBrokerHub : TestableHub
 	{
-		private readonly static ILog Logger = LogManager.GetLogger(typeof (MessageBrokerHub));
+		public ILog Logger = LogManager.GetLogger(typeof(MessageBrokerHub));
 
 		public string AddSubscription(Subscription subscription)
 		{
@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Web.Broker
 				Logger.DebugFormat("New subscription from client {0} with route {1} (Id: {2}).", Context.ConnectionId, subscription.Route(), subscription.Route().GetHashCode());
 			}
 			var route = subscription.Route();
-			Groups.Add(Context.ConnectionId, createRouteHash(route)).ContinueWith(t => Logger.InfoFormat("Added subscription {0}.", route));
+			Groups.Add(Context.ConnectionId, RouteToGroupName(route)).ContinueWith(t => Logger.InfoFormat("Added subscription {0}.", route));
 			return route;
 		}
 
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Web.Broker
 
 			foreach (var route in routes)
 			{
-				Clients.Group(createRouteHash(route)).onEventMessage(notification, route);
+				Clients.Group(RouteToGroupName(route)).onEventMessage(notification, route);
 			}
 		}
 
@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.Web.Broker
 			}
 		}
 
-		private static string createRouteHash(string route)
+		public static string RouteToGroupName(string route)
 		{
 			//gethashcode won't work in 100% of the cases...
 			return route.GetHashCode().ToString();

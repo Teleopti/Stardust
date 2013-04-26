@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.DataProvider
 			target.Persist(input);
 
 			preferenceDayRepository.AssertWasCalled(x => x.Add(preferenceDay));
-			mapper.AssertWasNotCalled(x => x.Map<PreferenceDayInput, IPreferenceDay>(input, null));
+			mapper.AssertWasNotCalled(x => x.Map<PreferenceDayInput, IPreferenceDay>(input, (IPreferenceDay)null));
 		}
 
 		[Test]

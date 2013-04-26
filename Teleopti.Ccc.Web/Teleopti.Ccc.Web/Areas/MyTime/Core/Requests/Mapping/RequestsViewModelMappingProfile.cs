@@ -37,7 +37,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				.ForMember(d => d.Subject, o => o.MapFrom(s => s.GetSubject(new NoFormatting())))
 				.ForMember(d => d.Dates,
 									 o => o.MapFrom(s => s.Request.Period.ToShortDateTimeString(_userTimeZone.TimeZone())))
-				.ForMember(d => d.Status, o => o.MapFrom(s =>
+				.ForMember(d => d.Status, o => o.ResolveUsing(s =>
 					{
 						var ret = s.StatusText;
 						if (s.IsPending)
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 										s =>
 																TimeZoneInfo.ConvertTimeFromUtc(s.Request.Period.EndDateTime, _userTimeZone.TimeZone()).ToShortTimeString()))
 				.ForMember(d => d.Payload, o => o.MapFrom(s => s.Request.RequestPayloadDescription.Name))
-				.ForMember(d => d.IsFullDay, o => o.MapFrom(s =>
+				.ForMember(d => d.IsFullDay, o => o.ResolveUsing(s =>
 																											{
 																												var start =
 																													TimeZoneInfo.ConvertTimeFromUtc(
@@ -112,7 +112,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				.ForMember(d => d.IsCreatedByUser, o => o.MapFrom(s => isCreatedByUser(s.Request,_loggedOnUser)))
 				.ForMember(d => d.From, o => o.MapFrom(s => s.Request.PersonFrom == null ? string.Empty : s.Request.PersonFrom.Name.ToString()))
 				.ForMember(d => d.To, o => o.MapFrom(s => s.Request.PersonTo == null ? string.Empty : s.Request.PersonTo.Name.ToString()))
-				.ForMember(d => d.DenyReason, o => o.MapFrom(s =>
+				.ForMember(d => d.DenyReason, o => o.ResolveUsing(s =>
 																											{
 																												Resources.ResourceManager.IgnoreCase = true;
 				                                             	    var result =  Resources.ResourceManager.GetString(s.DenyReason);
@@ -129,7 +129,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 				.ForMember(d => d.href, o => o.MapFrom(s => s.Id.HasValue ?
 																			_linkProvider.RequestDetailLink(s.Id.Value) :
 																			null))
-				.ForMember(d => d.Methods, o => o.MapFrom(s =>
+				.ForMember(d => d.Methods, o => o.ResolveUsing(s =>
 																			{
 																				var stateId = PersonRequest.GetUnderlyingStateId(s);
 																				//0: Pending
@@ -143,7 +143,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping
 
 		private static bool isCreatedByUser(IRequest request, ILoggedOnUser loggedOnUser)
 		{
-			return  request.PersonFrom  == null || request.PersonFrom == loggedOnUser.CurrentUser();
+			return request.PersonFrom != null && request.PersonFrom.Equals(loggedOnUser.CurrentUser());
 		}
 	}
 }

@@ -15,14 +15,14 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 {
 	public class GetSchedulesByTeamQueryHandler : IHandleQuery<GetSchedulesByTeamQueryDto, ICollection<SchedulePartDto>>
 	{
-		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+        private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IScheduleRepository _scheduleRepository;
 		private readonly IPersonRepository _personRepository;
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IDateTimePeriodAssembler _dateTimePeriodAssembler;
 		private readonly ISchedulePartAssembler _scheduleDayAssembler;
 
-		public GetSchedulesByTeamQueryHandler(IUnitOfWorkFactory unitOfWorkFactory, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IScenarioRepository scenarioRepository, IDateTimePeriodAssembler dateTimePeriodAssembler, ISchedulePartAssembler scheduleDayAssembler)
+        public GetSchedulesByTeamQueryHandler(ICurrentUnitOfWorkFactory unitOfWorkFactory, IScheduleRepository scheduleRepository, IPersonRepository personRepository, IScenarioRepository scenarioRepository, IDateTimePeriodAssembler dateTimePeriodAssembler, ISchedulePartAssembler scheduleDayAssembler)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_scheduleRepository = scheduleRepository;
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 			_scheduleDayAssembler.SpecialProjection = query.SpecialProjection;
 			_scheduleDayAssembler.TimeZone = timeZone;
 						
-			using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
+			using (_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
 				IScenario scenario = GetGivenScenarioOrDefault(query);
 

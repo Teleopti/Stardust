@@ -68,6 +68,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 
 		public void SelectCalendarCellByClass(DateTime date)
 		{
+			EventualAssert.That(() => CalendarCellForDate(date).ClassName, Is.StringContaining("ui-selectee"));
 			JQuery.SelectByElementAttribute("li", "data-mytime-date", date.ToString("yyyy-MM-dd"))
 				.AddClass("ui-selected")
 				.Eval();

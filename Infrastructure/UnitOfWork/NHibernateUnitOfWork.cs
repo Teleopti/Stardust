@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Transactions;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common.Messaging;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -32,16 +34,16 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private ITransaction _transaction;
 		private readonly ILog _logger = LogManager.GetLogger(typeof (NHibernateUnitOfWork));
 		private NHibernateFilterManager _filterManager;
-		private IEnumerable<IMessageSender> _activeDenormalizers;
+		private IEnumerable<IMessageSender> _messageSenders;
 		private readonly Action<ISession> _unbind;
 		private ISendPushMessageWhenRootAlteredService _sendPushMessageWhenRootAlteredService;
 
-		protected internal NHibernateUnitOfWork(ISession session, 
-													IMessageBroker messageBroker,
-													IEnumerable<IMessageSender> activeDenormalizers,
-													NHibernateFilterManager filterManager,
-													ISendPushMessageWhenRootAlteredService sendPushMessageWhenRootAlteredService,
-													Action<ISession> unbind)
+		protected internal NHibernateUnitOfWork(ISession session,
+		                                        IMessageBroker messageBroker,
+		                                        IEnumerable<IMessageSender> messageSenders,
+		                                        NHibernateFilterManager filterManager,
+		                                        ISendPushMessageWhenRootAlteredService sendPushMessageWhenRootAlteredService,
+		                                        Action<ISession> unbind)
 		{
 			InParameter.NotNull("session", session);
 			_session = session;
@@ -49,7 +51,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			_filterManager = filterManager;
 			_sendPushMessageWhenRootAlteredService = sendPushMessageWhenRootAlteredService;
 			_unbind = unbind;
-			_activeDenormalizers = activeDenormalizers;
+			_messageSenders = messageSenders;
 		}
 
 		protected internal AggregateRootInterceptor Interceptor
@@ -133,7 +135,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				Flush();
 
 				modifiedRoots = new List<IRootChangeInfo>(Interceptor.ModifiedRoots);
-				callDenormalizers(modifiedRoots);
+				invokeMessageSenders(modifiedRoots);
 				if (Transaction.Current == null)
 				{
 					_transaction.Commit();
@@ -164,18 +166,16 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			return modifiedRoots;
 		}
 
-		private void callDenormalizers(IEnumerable<IRootChangeInfo> modifiedRoots)
+		private void invokeMessageSenders(IEnumerable<IRootChangeInfo> modifiedRoots)
 		{
-			if (_activeDenormalizers==null) return;
-			var runSql = new RunSql(Session);
-			_activeDenormalizers.ForEach(d =>
-			                             	{
-			                             		using (PerformanceOutput.ForOperation(string.Format(System.Globalization.CultureInfo.InvariantCulture, "Denormalizing data with {0}",d.GetType())))
-			                             		{
-			                             			d.Execute(runSql, modifiedRoots);
-			                             		}
-			                             	}
-				);
+			if (_messageSenders == null) return;
+			_messageSenders.ForEach(d =>
+				{
+					using (PerformanceOutput.ForOperation(string.Format(System.Globalization.CultureInfo.InvariantCulture, "Sending message with {0}", d.GetType())))
+					{
+						d.Execute(modifiedRoots);
+					}
+				});
 		}
 
 		private void persistExceptionHandler(Exception ex)
@@ -251,7 +251,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		//right now only supporting one callback. if you call this twice - the latter will overwrite the first one
 		public void AfterSuccessfulTx(Action func)
 		{
-			Session.Transaction.RegisterSynchronization(new TransactionCallbacks(func));
+			Session.Transaction.RegisterSynchronization(new TransactionCallback(func));
 		}
 
 		private static bool hasOuterTransaction()
@@ -344,7 +344,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 				_filterManager = null;
 
-				_activeDenormalizers = null;
+				_messageSenders = null;
 				_messageBroker = null;
 				_sendPushMessageWhenRootAlteredService = null;
 			}

@@ -1374,13 +1374,16 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
 
         public void LoadSettings()
         {
-            using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-            {
-                ISettingDataRepository settingDataRepository = new GlobalSettingDataRepository(uow);
+			//using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			//{
+			//	ISettingDataRepository settingDataRepository = new GlobalSettingDataRepository(uow);
 
-                _commonNameDescription = settingDataRepository.FindValueByKey("CommonNameDescription", new CommonNameDescriptionSetting());
-            }
+			//	_commonNameDescription = settingDataRepository.FindValueByKey("CommonNameDescription", new CommonNameDescriptionSetting());
+			//}
 
+	        IUnitOfWork uow = UnitOfWorkFactory.CurrentUnitOfWork().Current();
+			ISettingDataRepository settingDataRepository = new GlobalSettingDataRepository(uow);
+			_commonNameDescription = settingDataRepository.FindValueByKey("CommonNameDescription", new CommonNameDescriptionSetting());
         }
 
         public void ResetBoldProperty()

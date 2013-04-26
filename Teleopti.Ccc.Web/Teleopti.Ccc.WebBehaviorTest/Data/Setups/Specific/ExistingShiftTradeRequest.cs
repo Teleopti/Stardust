@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.Services;
@@ -46,8 +48,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 			
 			PersonRequest.TrySetMessage(message);
 			PersonRequest.Request = shiftTradeRequest;
-			var setShiftTraderequestCheckSum = new ShiftTradeRequestSetChecksum(new ScenarioRepository(uow),
-																									  new ScheduleRepository(uow));
+			var setShiftTraderequestCheckSum = new ShiftTradeRequestSetChecksum(new DefaultScenarioFromRepository(new ScenarioRepository(uow)), new ScheduleRepository(uow));
 
 			setShiftTraderequestCheckSum.SetChecksum(shiftTradeRequest);
 			var requestRepository = new PersonRequestRepository(uow);

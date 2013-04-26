@@ -4,12 +4,24 @@ using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
 using WatiN.Core;
+using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Pages
 {
 	public class PreferencePage : CalendarCellsPage, IDateRangeSelector, IDeleteButton
 	{
 		[FindBy(Id = "PreferenceDateRangeSelector")] public Div DateRangeSelectorContainer { get; set; }
+
+		public void ClickNext()
+		{
+			Browser.Interactions.Click("#PreferenceDateRangeSelector button:last-of-type");
+		}
+
+		public void ClickPrevious()
+		{
+			Browser.Interactions.Click("#PreferenceDateRangeSelector button:first-of-type");
+		}
+
 		[FindBy(Id = "PreferenceDatePicker")] public DatePicker DatePicker { get; set; }
 		public Button NextPeriodButton { get { return DateRangeSelectorContainer.Buttons.Last(); } }
 		public Button PreviousPeriodButton { get { return DateRangeSelectorContainer.Buttons.First(); } }
@@ -33,7 +45,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "Preference-period")]
 		public Div PreferencePeriod;
 
-		[FindBy(Id = "ui-tooltip-add-extended")]
+		[FindBy(Id = "qtip-add-extended")]
 		public Div ExtendedPreferencePanel;
 		[FindBy(Id = "Preference-template-container")]
 		public SelectBox ExtendedPreferenceTemplateSelectBox;
@@ -118,12 +130,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		
 		public Div ExtendedPreferenceForDate(DateTime date)
 		{
-			return Document.Div("ui-tooltip-extended-" + date.ToString("yyyy-MM-dd"));
+			return Document.Div("qtip-extended-" + date.ToString("yyyy-MM-dd"));
 		}
 
 		public Div MeetingAndPersonalShiftForDate(DateTime date)
 		{
-			return Document.Div("ui-tooltip-meeting-" + date.ToString("yyyy-MM-dd")).EventualGet();
+			return Document.Div("qtip-meeting-" + date.ToString("yyyy-MM-dd")).EventualGet();
 		}
 	}
 }

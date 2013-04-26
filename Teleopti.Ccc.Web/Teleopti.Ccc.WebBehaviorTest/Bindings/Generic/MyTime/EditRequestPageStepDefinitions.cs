@@ -2,6 +2,7 @@
 using System.Linq;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
+using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data;
@@ -15,13 +16,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should not see the New Absence Request menu item")]
 		public void ThenIShouldNotSeeTheNewAbsenceRequestMenuItem()
 		{
-			EventualAssert.That(() => Pages.Pages.RequestsPage.AddAbsenceRequestMenuItem.SafeExists(), Is.False);
+			Browser.Interactions.AssertNotExists("#request-list", "#Requests-addAbsenceRequest-menuItem");
 		}
 
 		[Then(@"I should not see the New Shift Trade Request menu item")]
 		public void ThenIShouldNotSeeTheNewShiftTradeRequestMenuItem()
 		{
-			EventualAssert.That(() => Pages.Pages.RequestsPage.AddShiftTradeRequestMenuItem.SafeExists(), Is.False);
+			Browser.Interactions.AssertNotExists("#request-list", "#Requests-addShiftTradeRequest-menuItem");
 		}
 
 		[When(@"I click new text request menu item in the toolbar")]

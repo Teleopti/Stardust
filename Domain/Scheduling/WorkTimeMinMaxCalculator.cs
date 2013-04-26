@@ -10,7 +10,8 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		private readonly IWorkShiftWorkTime _workShiftWorkTime;
 		private readonly IWorkTimeMinMaxRestrictionCreator _workTimeMinMaxRestrictionCreator;
 
-		public WorkTimeMinMaxCalculator(IWorkShiftWorkTime workShiftWorkTime, IWorkTimeMinMaxRestrictionCreator workTimeMinMaxRestrictionCreator)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "ShiftWork")]
+        public WorkTimeMinMaxCalculator(IWorkShiftWorkTime workShiftWorkTime, IWorkTimeMinMaxRestrictionCreator workTimeMinMaxRestrictionCreator)
 		{
 			_workShiftWorkTime = workShiftWorkTime;
 			_workTimeMinMaxRestrictionCreator = workTimeMinMaxRestrictionCreator;

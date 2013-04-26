@@ -1,8 +1,5 @@
-﻿using NUnit.Framework;
-using TechTalk.SpecFlow;
+﻿using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Core;
-using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
-using Teleopti.Ccc.WebBehaviorTest.Pages;
 
 namespace Teleopti.Ccc.WebBehaviorTest
 {
@@ -18,14 +15,13 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see an application page")]
 		public void ThenIShouldSeeAnApplicationPage()
 		{
-			EventualAssert.That(() => Pages.Pages.CurrentPortalPage.SignOutLink.Exists, Is.True);
+			Browser.Interactions.AssertExists("#signout, #signout-button");
 		}
 
 		[Then(@"I should be redirected to the sign in page")]
 		public void ThenIShouldBeRedirectedToTheSignInPage()
 		{
-			var page = Browser.Current.Page<SignInPage>();
-			EventualAssert.That(() => page.UserNameTextField.Exists, Is.True);
+			Browser.Interactions.AssertExists("#Username-input");
 		}
 
 	}

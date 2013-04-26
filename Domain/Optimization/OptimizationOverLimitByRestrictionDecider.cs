@@ -11,7 +11,8 @@ namespace Teleopti.Ccc.Domain.Optimization
 
     public class OptimizationOverLimitByRestrictionDecider : IOptimizationOverLimitByRestrictionDecider
     {
-        private readonly IOptimizationPreferences _optimizationPreferences;
+	    private readonly IScheduleMatrixPro _matrix;
+	    private readonly IOptimizationPreferences _optimizationPreferences;
         private readonly IScheduleMatrixOriginalStateContainer _originalStateContainer;
         private readonly IRestrictionOverLimitDecider _restrictionOverLimitDecider; 
 
@@ -22,9 +23,10 @@ namespace Teleopti.Ccc.Domain.Optimization
             IScheduleMatrixOriginalStateContainer originalStateContainer
             )
         {
-            _optimizationPreferences = optimizationPreferences;
+	        _matrix = matrix;
+	        _optimizationPreferences = optimizationPreferences;
             _originalStateContainer = originalStateContainer;
-            _restrictionOverLimitDecider = new RestrictionOverLimitDecider(matrix, restrictionChecker);
+            _restrictionOverLimitDecider = new RestrictionOverLimitDecider(restrictionChecker);
         }
 
         public IList<DateOnly> OverLimit()
@@ -54,35 +56,35 @@ namespace Teleopti.Ccc.Domain.Optimization
         {
             if (!_optimizationPreferences.General.UsePreferences)
                 return new List<DateOnly>();
-            return _restrictionOverLimitDecider.PreferencesOverLimit(new Percent(_optimizationPreferences.General.PreferencesValue)).BrokenDays;
+			return _restrictionOverLimitDecider.PreferencesOverLimit(new Percent(_optimizationPreferences.General.PreferencesValue), _matrix).BrokenDays;
         }
 
         private IList<DateOnly> mustHavesOverLimit()
         {
             if (!_optimizationPreferences.General.UseMustHaves)
                 return new List<DateOnly>();
-            return _restrictionOverLimitDecider.MustHavesOverLimit(new Percent(_optimizationPreferences.General.MustHavesValue)).BrokenDays;
+			return _restrictionOverLimitDecider.MustHavesOverLimit(new Percent(_optimizationPreferences.General.MustHavesValue), _matrix).BrokenDays;
         }
 
         private IList<DateOnly> rotationOverLimit()
         {
             if (!_optimizationPreferences.General.UseRotations)
                 return new List<DateOnly>();
-            return _restrictionOverLimitDecider.RotationOverLimit(new Percent(_optimizationPreferences.General.RotationsValue)).BrokenDays;
+			return _restrictionOverLimitDecider.RotationOverLimit(new Percent(_optimizationPreferences.General.RotationsValue), _matrix).BrokenDays;
         }
 
         private IList<DateOnly> availabilitiesOverLimit()
         {
             if (!_optimizationPreferences.General.UseAvailabilities)
                 return new List<DateOnly>();
-            return _restrictionOverLimitDecider.AvailabilitiesOverLimit(new Percent(_optimizationPreferences.General.AvailabilitiesValue)).BrokenDays;
+			return _restrictionOverLimitDecider.AvailabilitiesOverLimit(new Percent(_optimizationPreferences.General.AvailabilitiesValue), _matrix).BrokenDays;
         }
 
         private IList<DateOnly> studentAvailabilitiesOverLimit()
         {
             if (!_optimizationPreferences.General.UseStudentAvailabilities)
                 return new List<DateOnly>();
-            return _restrictionOverLimitDecider.StudentAvailabilitiesOverLimit(new Percent(_optimizationPreferences.General.StudentAvailabilitiesValue)).BrokenDays;
+			return _restrictionOverLimitDecider.StudentAvailabilitiesOverLimit(new Percent(_optimizationPreferences.General.StudentAvailabilitiesValue), _matrix).BrokenDays;
         }
     }
 }

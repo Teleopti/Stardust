@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Globalization;
 using System.Runtime.Remoting;
+using System.ServiceModel;
 using System.Threading;
 using System.Web.Services.Protocols;
 using System.Windows.Forms;
@@ -12,6 +13,7 @@ using Teleopti.Ccc.AgentPortal.Helper;
 using Teleopti.Ccc.AgentPortal.Requests;
 using Teleopti.Ccc.AgentPortal.Requests.FormHandler;
 using Teleopti.Ccc.AgentPortal.Requests.ShiftTrade;
+using Teleopti.Ccc.AgentPortalCode.AgentSchedule;
 using Teleopti.Ccc.AgentPortalCode.Common;
 using Teleopti.Ccc.AgentPortalCode.Common.Clipboard;
 using Teleopti.Ccc.AgentPortalCode.Common.Factory;
@@ -19,7 +21,8 @@ using Teleopti.Ccc.AgentPortalCode.Foundation.StateHandlers;
 using Teleopti.Ccc.AgentPortalCode.Helper;
 using Teleopti.Ccc.AgentPortalCode.Requests.ShiftTrade;
 using Teleopti.Ccc.AgentPortalCode.ScheduleControlDataProvider;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Events;
 
@@ -37,9 +40,10 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
     {
         private AgentScheduleView _scheduleView;
         private ClipHandler<ICustomScheduleAppointment> _scheduleClipHandler;
-        private IToggleButtonState _parent;
+        private readonly IToggleButtonState _parent;
+	    private readonly ILegendLoader _legendLoader;
 
-        public CalendarViewType SelectedScheduleView
+	    public CalendarViewType SelectedScheduleView
         {
             get { return (CalendarViewType)tabControlAdvMainTab.SelectedIndex; }
         }
@@ -59,13 +63,15 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
         /// Created by: Sumedah
         /// Created date: 2008-08-17
         /// </remarks>
-        public ScheduleControl(IToggleButtonState parent)
+        public ScheduleControl(IToggleButtonState parent, ILegendLoader legendLoader)
         {
-            InitializeComponent();
+			InitializeComponent();
+
+			_parent = parent;
+			_legendLoader = legendLoader;
             
             InitalizeScheduleControlContextMenu();
             InitializeScheduleControl();
-            _parent = parent;
         }
 
         /// <summary>
@@ -92,7 +98,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
                 string dataErrorMessage = string.Format(CultureInfo.CurrentCulture, UserTexts.Resources.ErrorOccuredWhenAccessingTheDataSource + "\n\nError information: {0}", ex.Message);
                 MessageBoxHelper.ShowErrorMessage(dataErrorMessage, UserTexts.Resources.AgentPortal);
             }
-            catch (SoapException ex)
+            catch (FaultException ex)
             {
                 string communicationErrorMessage = string.Format(CultureInfo.CurrentCulture, UserTexts.Resources.CommunicationErrorEndPoint + "\n\nError information: {0}", ex.Message);
                 MessageBoxHelper.ShowErrorMessage(communicationErrorMessage, UserTexts.Resources.AgentPortal);
@@ -202,7 +208,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
             selectedItem.Checked = true;
 
             ScheduleView.SetResolution( resolution);
-            AgentPortalSettingsHelper.SaveSettings(new SaveAgentPortalSettingsCommandDto { Resolution = resolution , ResolutionSpecified = true});
+            AgentPortalSettingsHelper.SaveSettings(new SaveAgentPortalSettingsCommandDto { Resolution = resolution});
         }
    
         /// <summary>
@@ -336,7 +342,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
 
         private void createAndOpenShiftTradeForm(DateTime tradeDate, PersonDto personToTradeWith, PersonDto loggedPerson)
         {
-            DateOnlyDto dateOnlyDto = new DateOnlyDto { DateTime = tradeDate, DateTimeSpecified = true };
+            DateOnlyDto dateOnlyDto = new DateOnlyDto { DateTime = tradeDate };
             ShiftTradeSwapDetailDto shiftTradeSwapDetailDto = new ShiftTradeSwapDetailDto { DateFrom = dateOnlyDto, DateTo = dateOnlyDto, PersonFrom = loggedPerson, PersonTo = personToTradeWith };
             PersonRequestDto personRequestDto = SdkServiceHelper.SchedulingService.CreateShiftTradeRequest(loggedPerson, "", "", new[] { shiftTradeSwapDetailDto });
             PersonDto loggedOnPerson = StateHolder.Instance.StateReader.SessionScopeData.LoggedOnPerson;
@@ -441,19 +447,6 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
         }
 
         /// <summary>
-        /// Handles the Click event of the toolStripMenuItemStudentAvailability control.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-        /// <remarks>
-        /// Created by: Sumedah
-        /// Created date: 2009-01-19
-        /// </remarks>
-        private void toolStripMenuItemStudentAvailability_Click(object sender, EventArgs e)
-        {
-        }
-
-        /// <summary>
         /// Initializes the schedule control.
         /// </summary>
         /// <remarks>
@@ -488,7 +481,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
                                                                 };
 
             _scheduleClipHandler = new ClipHandler<ICustomScheduleAppointment>();
-            ScheduleView = new AgentScheduleView(scheduleControlMain, AgentScheduleStateHolder.Instance(), _scheduleClipHandler);           
+            ScheduleView = new AgentScheduleView(scheduleControlMain, AgentScheduleStateHolder.Instance(), _scheduleClipHandler, _legendLoader);           
             ScheduleView.InitializeScheduleControl();
             ScheduleView.SetScheduleControlEventHandlers();
             ScheduleView.ScheduleControlHost.AllowAdjustAppointmentsWithMouse = false;
@@ -718,7 +711,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
 			var personToTradeWith = scheduleTeamView.LastRightClickedPerson;
 			var loggedPerson = SdkServiceHelper.LogOnServiceClient.GetLoggedOnPerson();
 			var loggedOnPerson = StateHolder.Instance.StateReader.SessionScopeData.LoggedOnPerson;
-			var dateOnlyDto = new DateOnlyDto { DateTime = tradeDate, DateTimeSpecified = true };
+			var dateOnlyDto = new DateOnlyDto { DateTime = tradeDate };
 			var shiftTradeSwapDetailDto = new ShiftTradeSwapDetailDto { DateFrom = dateOnlyDto, DateTo = dateOnlyDto, PersonFrom = loggedPerson, PersonTo = personToTradeWith };
 			var personRequestDto = SdkServiceHelper.SchedulingService.CreateShiftTradeRequest(loggedPerson, "", "", new[] { shiftTradeSwapDetailDto });
 			var model = new ShiftTradeModel(SdkServiceHelper.SchedulingService, personRequestDto, loggedOnPerson, tradeDate);
@@ -777,7 +770,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
                 try
                 {
                 	var details = StateHolder.Instance.State.SessionScopeData;
-                    StateHolder.Instance.MessageBroker.RegisterEventSubscription(details.DataSource.Name,new Guid(details.BusinessUnit.Id), OnEventMessageHandler,
+                    StateHolder.Instance.MessageBroker.RegisterEventSubscription(details.DataSource.Name,details.BusinessUnit.Id.GetValueOrDefault(), OnEventMessageHandler,
                                                          typeof(IPersonRequest));
                 }
                 catch (RemotingException)

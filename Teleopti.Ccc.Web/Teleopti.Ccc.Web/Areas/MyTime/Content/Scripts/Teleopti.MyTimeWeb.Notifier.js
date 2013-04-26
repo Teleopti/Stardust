@@ -23,9 +23,8 @@ Teleopti.MyTimeWeb.Notifier = (function () {
 		}
 	}
 	function _notify(notifyText) {
-		var time = new Date(new Date().getTeleoptiTime()).toString('hh:mm tt');
 		return noty({
-			text: notifyText + ' (' + time + ')',
+			text: notifyText,
 			layout: 'bottom',
 			closeWith: ['button'],
 			callback: {

@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
-using Teleopti.Ccc.AgentPortalCode.Helper;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
+using Teleopti.Ccc.AgentPortalCode.Foundation.StateHandlers;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.AgentPortal.Helper
 {
@@ -33,12 +34,13 @@ namespace Teleopti.Ccc.AgentPortal.Helper
         public static DateTimePeriodDto CreateDateTimePeriodDto(DateTime localStartDateTime, DateTime localEndDateTime)
         {
             DateTimePeriodDto period = new DateTimePeriodDto();
-            period.UtcStartTime = AgentPortalTimeZoneHelper.ConvertToUniversalTime(localStartDateTime);
-            period.UtcEndTime = AgentPortalTimeZoneHelper.ConvertToUniversalTime(localEndDateTime);
+            var timeZone =
+                TimeZoneInfo.FindSystemTimeZoneById(
+                    StateHolder.Instance.State.SessionScopeData.LoggedOnPerson.TimeZoneId);
+            period.UtcStartTime = TimeZoneHelper.ConvertToUtc(localStartDateTime, timeZone);
+            period.UtcEndTime = TimeZoneHelper.ConvertToUtc(localEndDateTime, timeZone);
             period.LocalStartDateTime = localStartDateTime;
             period.LocalEndDateTime = localEndDateTime;
-            period.UtcStartTimeSpecified = true;
-            period.UtcEndTimeSpecified = true;
             return period;
         }
     }

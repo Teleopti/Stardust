@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
 
@@ -31,6 +32,14 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             ret.DefaultScenario = defaultWorkspace;
             return ret;
         }
+
+		public static Scenario CreateScenarioWithId(string name, bool defaultWorkspace)
+		{
+			Scenario ret = new Scenario(name);
+			ret.SetId(Guid.NewGuid());
+			ret.DefaultScenario = defaultWorkspace;
+			return ret;
+		}
 
         /// <summary>
         /// Creates a scenario aggregate list.
