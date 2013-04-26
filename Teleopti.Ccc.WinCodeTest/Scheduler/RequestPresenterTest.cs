@@ -73,15 +73,19 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             DateTimePeriod period1 = new DateTimePeriod(startDateTime, endDateTime);
             PersonRequest personRequest1 = new PersonRequest(_person1);
             personRequest1.TrySetMessage("b");
+            personRequest1.Subject = "Absence Request1";
             personRequest1.Request = new AbsenceRequest(absence, period1);
             personRequest1.Pending();
 
             _request1 = new PersonRequestViewModel(personRequest1, _shiftTradeRequestStatusChecker, null, null, _TimeZoneInfo);
+            
+            
 
             DateTimePeriod period2 = new DateTimePeriod(startDateTime,
                                                 endDateTime);
             PersonRequest personRequest2 = new PersonRequest(_person2);
             personRequest2.TrySetMessage("b");
+            personRequest2.Subject = "Absence Request2";
             personRequest2.Request = new AbsenceRequest(absence, period2);
             personRequest2.Pending();
             _request2 = new PersonRequestViewModel(personRequest2, _shiftTradeRequestStatusChecker, null, null, _TimeZoneInfo);
@@ -90,6 +94,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                                                 endDateTime);
             PersonRequest personRequest3 = new PersonRequest(_person3);
             personRequest3.TrySetMessage("a");
+            personRequest3.Subject = "Absence Request3";
             personRequest3.Request = new AbsenceRequest(absence, period3);
             personRequest3.Pending();
             _request3 = new PersonRequestViewModel(personRequest3, _shiftTradeRequestStatusChecker, null, null, _TimeZoneInfo);
@@ -131,11 +136,41 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			//filterExpression += "RequestType=" + '"' + "Absence" + '"';
 
             list = RequestPresenter.FilterAdapters(_requestViewAdapters, filterExpression);
-            Assert.AreEqual(0, list.Count);
+            Assert.AreEqual(3, list.Count);
 
         }
 
-		[Test]
+        [Test]
+        public void VerifyThatPersonNameFound()
+        {
+            var filterExpression = new List<string>();
+            filterExpression.Add("A");
+
+            var list = RequestPresenter.FilterAdapters(_requestViewAdapters, filterExpression);
+            Assert.AreEqual(list.Count, 3);
+        }
+
+        [Test]
+        public void ShouldNotReturnAnyRequestIfNoTextFound()
+        {
+            var filerExpression = new List<string>();
+            filerExpression.Add("NOT FOUND");
+
+            var list = RequestPresenter.FilterAdapters(_requestViewAdapters, filerExpression);
+            Assert.AreEqual(list.Count, 0);
+        }
+
+        [Test]
+        public void ShouldReturnThoseRequestThatRequestedIn2013()
+        {
+            var filerExpression = new List<string>();
+            filerExpression.Add("2013");
+
+            var list = RequestPresenter.FilterAdapters(_requestViewAdapters, filerExpression);
+            Assert.AreEqual(list.Count, 3);
+        }
+
+        [Test]
 		public void ShouldOnlyShowFilteredPersons()
 		{
 			foreach (var request in _requestViewAdapters)
@@ -147,6 +182,48 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			result.Count.Should().Be.EqualTo(1);
 			result.First().Should().Be.EqualTo(_request1);
 		}
+
+        
+        [Test]
+        public void ShouldReturnRequestsWhichContainTextToBeSearched()
+        {
+            var filerExpression = new List<string>();
+            filerExpression.Add("Request2");
+
+            var list = RequestPresenter.FilterAdapters(_requestViewAdapters, filerExpression);
+            Assert.AreEqual(list.Count, 1);
+        }
+
+        [Test]
+        public void ShouldReturnRequestsFromtheCurrentMonth()
+        {
+            var filerExpression = new List<string>();
+            var month = DateTime.Now.Month;
+            filerExpression.Add(month.ToString());
+
+            var list = RequestPresenter.FilterAdapters(_requestViewAdapters, filerExpression);
+            Assert.AreEqual(list.Count, 3);
+        }
+
+        [Test]
+        public void ShouldReturnRequestsOfTypeAbsence()
+        {
+            var filerExpression = new List<string>();
+           filerExpression.Add("Absence");
+
+            var list = RequestPresenter.FilterAdapters(_requestViewAdapters, filerExpression);
+            Assert.AreEqual(list.Count, 3);
+        }
+
+        [Test]
+        public void ShouldReturnRequestWhichContainsSearchedAbsenceName()
+        {
+            var filerExpression = new List<string>();
+            filerExpression.Add("abs");
+
+            var list = RequestPresenter.FilterAdapters(_requestViewAdapters, filerExpression);
+            Assert.AreEqual(list.Count, 3);
+        }
 
         [Test]
         public void VerifyCanApproveStatusOnRequest()
