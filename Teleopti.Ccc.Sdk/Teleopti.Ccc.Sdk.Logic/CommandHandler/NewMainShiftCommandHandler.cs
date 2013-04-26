@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 {
     public class NewMainShiftCommandHandler : IHandleCommand<NewMainShiftCommandDto>
     {
-        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+        private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IShiftCategoryRepository _shiftCategoryRepository;
         private readonly IActivityLayerAssembler<IMainShiftActivityLayer> _mainActivityLayerAssembler;
         private readonly IScheduleRepository _scheduleRepository;
@@ -25,7 +25,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
     	private readonly IMessageBrokerEnablerFactory _messageBrokerEnablerFactory;
     	private readonly IBusinessRulesForPersonalAccountUpdate _businessRulesForPersonalAccountUpdate;
 
-    	public NewMainShiftCommandHandler(IUnitOfWorkFactory unitOfWorkFactory,IShiftCategoryRepository shiftCategoryRepository,IActivityLayerAssembler<IMainShiftActivityLayer> mainActivityLayerAssembler, IScheduleRepository scheduleRepository, IScenarioRepository scenarioRepository, IPersonRepository personRepository, ISaveSchedulePartService saveSchedulePartService, IMessageBrokerEnablerFactory messageBrokerEnablerFactory, IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate)
+    	public NewMainShiftCommandHandler(ICurrentUnitOfWorkFactory unitOfWorkFactory,IShiftCategoryRepository shiftCategoryRepository,IActivityLayerAssembler<IMainShiftActivityLayer> mainActivityLayerAssembler, IScheduleRepository scheduleRepository, IScenarioRepository scenarioRepository, IPersonRepository personRepository, ISaveSchedulePartService saveSchedulePartService, IMessageBrokerEnablerFactory messageBrokerEnablerFactory, IBusinessRulesForPersonalAccountUpdate businessRulesForPersonalAccountUpdate)
         {
             _unitOfWorkFactory = unitOfWorkFactory;
             _shiftCategoryRepository = shiftCategoryRepository;
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void Handle(NewMainShiftCommandDto command)
         {
-            using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+            using (var uow = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
             {
                 var person = _personRepository.Load(command.PersonId);
                 var scenario = getDesiredScenario(command);

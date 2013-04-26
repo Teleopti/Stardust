@@ -7,7 +7,7 @@ using Teleopti.Ccc.AgentPortalCode.AgentSchedule;
 using Teleopti.Ccc.AgentPortalCode.Common;
 using Teleopti.Ccc.AgentPortalCode.Common.Factory;
 using Teleopti.Ccc.AgentPortalCode.Helper;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 
 namespace Teleopti.Ccc.AgentPortal.ScheduleControlDataProvider
 {
@@ -40,15 +40,11 @@ namespace Teleopti.Ccc.AgentPortal.ScheduleControlDataProvider
             var orgPeriod = new DateTimePeriodDto();
             orgPeriod.LocalStartDateTime = startDate.Date.AddSeconds(-1);
             orgPeriod.LocalEndDateTime = endDate.Date.AddHours(24).AddSeconds(-1);
-            orgPeriod.LocalStartDateTimeSpecified = true;
-            orgPeriod.LocalEndDateTimeSpecified = true;
             
             var loadPeriod = new DateTimePeriodDto();
 
             loadPeriod.LocalStartDateTime = startDate.Date.AddDays(-1).AddSeconds(-1);
             loadPeriod.LocalEndDateTime = endDate.Date.AddHours(24).AddSeconds(-1);
-            loadPeriod.LocalStartDateTimeSpecified = true;
-            loadPeriod.LocalEndDateTimeSpecified = true;
             
             if (_scheduleView.IsNeedToReloadData)
             {

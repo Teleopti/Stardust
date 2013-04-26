@@ -20,7 +20,8 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Commands
         private MockRepository _mocks;
         private IAddMeetingCommand _target;
         private IMeetingOverviewView _view;
-        private IUnitOfWorkFactory _unitOfWorkFactory;
+        private ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
+	    private IUnitOfWorkFactory _unitOfWorkFactory;
         private IActivityRepository _activityRepository;
         private ISettingDataRepository _settingDataRepository;
         private IMeetingOverviewViewModel _model;
@@ -35,11 +36,12 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Commands
             _settingDataRepository = _mocks.StrictMock<ISettingDataRepository>();
             _activityRepository = _mocks.StrictMock<IActivityRepository>();
             _personRepository = _mocks.StrictMock<IPersonRepository>();
-            _unitOfWorkFactory = _mocks.StrictMock<IUnitOfWorkFactory>();
+            _currentUnitOfWorkFactory = _mocks.StrictMock<ICurrentUnitOfWorkFactory>();
+	        _unitOfWorkFactory = _mocks.StrictMock<IUnitOfWorkFactory>();
             _model = _mocks.StrictMock<IMeetingOverviewViewModel>();
             _canModifyMeeting = _mocks.StrictMock<ICanModifyMeeting>();
             _target = new AddMeetingCommand(_view, _settingDataRepository, _activityRepository, _personRepository,
-                _unitOfWorkFactory, _model, _canModifyMeeting);
+                _currentUnitOfWorkFactory, _model, _canModifyMeeting);
         
         }
 
@@ -59,7 +61,8 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings.Commands
             var meetingViewModel = _mocks.StrictMock<IMeetingViewModel>();
             var activity = new Activity("akta dej");
             Expect.Call(_model.CurrentScenario).Return(scenario);
-            Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork());
+            Expect.Call(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
+	        Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork());
             Expect.Call(_activityRepository.LoadAllSortByName()).Return(new List<IActivity> {activity});
             Expect.Call(_personRepository.Get(Guid.Empty)).Return(((IUnsafePerson) TeleoptiPrincipal.Current).Person);
             Expect.Call(_settingDataRepository.FindValueByKey("CommonNameDescription",

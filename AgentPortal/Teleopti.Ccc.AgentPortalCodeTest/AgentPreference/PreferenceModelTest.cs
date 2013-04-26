@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.AgentPortalCode.AgentPreference;
@@ -7,7 +8,7 @@ using Teleopti.Ccc.AgentPortalCode.AgentPreference.Limitation;
 using Teleopti.Ccc.AgentPortalCode.Common;
 using Teleopti.Ccc.AgentPortalCode.Helper;
 using System.Drawing;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.AgentPortalCodeTest.AgentPreference
@@ -58,9 +59,9 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.AgentPreference
         {
             ITimeLimitationValidator timeLimitationValidator = new TimeOfDayValidator(false);
             ITimeLimitationValidator lengthLimitationValidator = new TimeLengthValidator();
-            TimeLimitationDto startMinTime = new TimeLimitationDto { MinTime = "PT6H" };
-            TimeLimitationDto endMaxTime = new TimeLimitationDto { MaxTime = "PT8H" };
-            TimeLimitationDto workMaxTime = new TimeLimitationDto { MaxTime = "PT1H" };
+            TimeLimitationDto startMinTime = new TimeLimitationDto { MinTime = TimeSpan.FromHours(6) };
+            TimeLimitationDto endMaxTime = new TimeLimitationDto { MaxTime = TimeSpan.FromHours(8) };
+            TimeLimitationDto workMaxTime = new TimeLimitationDto { MaxTime = TimeSpan.FromHours(1) };
             TimeLimitation startTimeLimitation = new TimeLimitation(timeLimitationValidator, startMinTime);
             TimeLimitation endTimeLimitation = new TimeLimitation(timeLimitationValidator, endMaxTime);
             TimeLimitation workTimeLimitation = new TimeLimitation(lengthLimitationValidator, workMaxTime);
@@ -185,7 +186,7 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.AgentPreference
         {
             DateTime dateTimeOutsidePeriod = new DateTime(2010, 12, 31);
             DateOnly expectedDate = new DateOnly(
-                _loggedOnPersonDto.PersonPeriodCollection[_loggedOnPersonDto.PersonPeriodCollection.Length - 1].Period.
+                _loggedOnPersonDto.PersonPeriodCollection.Last().Period.
                     EndDate.DateTime);
             DateOnly dateOnly = _target.GetDateOnlyInPeriod(dateTimeOutsidePeriod);
             Assert.AreEqual(expectedDate, dateOnly);
@@ -196,7 +197,7 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.AgentPreference
         {
             DateTime dateTimeOutsidePeriod = new DateTime(2007, 12, 31);
             DateOnly expectedDate = new DateOnly(
-                _loggedOnPersonDto.PersonPeriodCollection[_loggedOnPersonDto.PersonPeriodCollection.Length - 1].Period.
+                _loggedOnPersonDto.PersonPeriodCollection.Last().Period.
                     StartDate.DateTime.AddDays(1));
             DateOnly dateOnly = _target.GetDateOnlyInPeriod(dateTimeOutsidePeriod);
             Assert.AreEqual(expectedDate, dateOnly);
@@ -254,14 +255,10 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.AgentPreference
             secondEnd.DateTime = new DateTime(2010, 7, 1, 0, 0, 0, DateTimeKind.Local);
             DateOnlyPeriodDto firstPeriod = new DateOnlyPeriodDto();
             firstPeriod.StartDate = firstStart;
-            firstPeriod.StartDate.DateTimeSpecified = true;
             firstPeriod.EndDate = firstEnd;
-            firstPeriod.EndDate.DateTimeSpecified = true;
             DateOnlyPeriodDto secondPeriod = new DateOnlyPeriodDto();
             secondPeriod.StartDate = secondStart;
-            secondPeriod.StartDate.DateTimeSpecified = true;
             secondPeriod.EndDate = secondEnd;
-            secondPeriod.EndDate.DateTimeSpecified = true;
             _loggedOnPersonDto = new PersonDto();
             _loggedOnPersonDto.UICultureLanguageId = 1053;
             _loggedOnPersonDto.CultureLanguageId = 1053;
@@ -300,10 +297,10 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.AgentPreference
             validatedSchedulePartDto.PreferenceRestriction.RestrictionDate = dateOnly;
 
             validatedSchedulePartDto.PreferenceRestriction.Absence = new AbsenceDto();
-            validatedSchedulePartDto.PreferenceRestriction.Absence.Id = "id";
+            validatedSchedulePartDto.PreferenceRestriction.Absence.Id = Guid.NewGuid();
             validatedSchedulePartDto.PreferenceRestriction.Absence.Name = "name";
             validatedSchedulePartDto.PreferenceRestriction.Absence.ShortName = "shortName";
-            validatedSchedulePartDto.PreferenceRestriction.Absence.DisplayColor = new ColorDto();
+            validatedSchedulePartDto.PreferenceRestriction.Absence.DisplayColor = new ColorDto(Color.DodgerBlue);
             validatedSchedulePartDto.PreferenceRestriction.Absence.DisplayColor.Alpha = 255;
             validatedSchedulePartDto.PreferenceRestriction.Absence.DisplayColor.Red = 0;
             validatedSchedulePartDto.PreferenceRestriction.Absence.DisplayColor.Green = 128;
@@ -316,7 +313,7 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.AgentPreference
             validatedSchedulePartDto.ScheduledItemName = "ScheduledItemName";
             validatedSchedulePartDto.ScheduledItemShortName = "XX";
             validatedSchedulePartDto.TipText = "TipText";
-            validatedSchedulePartDto.DisplayColor = new ColorDto();
+            validatedSchedulePartDto.DisplayColor = new ColorDto(Color.DodgerBlue);
 
             return validatedSchedulePartDto;
         }
@@ -348,8 +345,8 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.AgentPreference
             {
                 validatedSchedulePartDto.PreferenceRestriction.ShiftCategory = new ShiftCategoryDto();
                 validatedSchedulePartDto.PreferenceRestriction.ShiftCategory.Name = "Day";
-                validatedSchedulePartDto.PreferenceRestriction.ShiftCategory.Id = "xxxx";
-                validatedSchedulePartDto.PreferenceRestriction.ShiftCategory.DisplayColor = new ColorDto();
+                validatedSchedulePartDto.PreferenceRestriction.ShiftCategory.Id = Guid.NewGuid();
+                validatedSchedulePartDto.PreferenceRestriction.ShiftCategory.DisplayColor = new ColorDto(Color.DodgerBlue);
                 validatedSchedulePartDto.PreferenceRestriction.ShiftCategory.DisplayColor.Alpha = 255;
                 validatedSchedulePartDto.PreferenceRestriction.ShiftCategory.DisplayColor.Red = 0;
                 validatedSchedulePartDto.PreferenceRestriction.ShiftCategory.DisplayColor.Green = 128;
@@ -357,16 +354,16 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.AgentPreference
                 ActivityRestrictionDto activityRestrictionDto = new ActivityRestrictionDto();
                 activityRestrictionDto.Activity = new ActivityDto();
                 activityRestrictionDto.Activity.Description = "Lunch";
-                activityRestrictionDto.Activity.Id = "xyz";
-                activityRestrictionDto.StartTimeLimitation = new TimeLimitationDto { MinTime = "PT6H" };
-                activityRestrictionDto.EndTimeLimitation = new TimeLimitationDto { MaxTime = "PT8H" };
-                activityRestrictionDto.WorkTimeLimitation = new TimeLimitationDto { MinTime = "PT1H" };
-                validatedSchedulePartDto.PreferenceRestriction.ActivityRestrictionCollection = new[] { activityRestrictionDto };
+                activityRestrictionDto.Activity.Id = Guid.NewGuid();
+                activityRestrictionDto.StartTimeLimitation = new TimeLimitationDto { MinTime = TimeSpan.FromHours(6) };
+                activityRestrictionDto.EndTimeLimitation = new TimeLimitationDto { MaxTime = TimeSpan.FromHours(8) };
+                activityRestrictionDto.WorkTimeLimitation = new TimeLimitationDto { MinTime = TimeSpan.FromHours(1) };
+                validatedSchedulePartDto.PreferenceRestriction.ActivityRestrictionCollection.Add(activityRestrictionDto);
             }
             else
             {
                 validatedSchedulePartDto.PreferenceRestriction.DayOff = new DayOffInfoDto();
-                validatedSchedulePartDto.PreferenceRestriction.DayOff.Id = "yy";
+                validatedSchedulePartDto.PreferenceRestriction.DayOff.Id = Guid.NewGuid();
                 validatedSchedulePartDto.PreferenceRestriction.DayOff.Name = "DayOff";
                 validatedSchedulePartDto.PreferenceRestriction.DayOff.ShortName = "DO";
             }
@@ -377,7 +374,7 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.AgentPreference
             validatedSchedulePartDto.ScheduledItemName = "ScheduledItemName";
             validatedSchedulePartDto.ScheduledItemShortName = "XX";
             validatedSchedulePartDto.TipText = "TipText";
-            validatedSchedulePartDto.DisplayColor = new ColorDto();
+            validatedSchedulePartDto.DisplayColor = new ColorDto(Color.DodgerBlue);
             validatedSchedulePartDto.IsWorkday = true;
             validatedSchedulePartDto.ViolatesNightlyRest = true;
 
@@ -410,7 +407,7 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.AgentPreference
 
     internal class ScheduleHelperFake : IScheduleHelper
     {
-        public IList<ValidatedSchedulePartDto> Validate(PersonDto loggedOnPerson, DateOnly dateInPeriod, bool useStudentAvailability)
+        public ICollection<ValidatedSchedulePartDto> Validate(PersonDto loggedOnPerson, DateOnly dateInPeriod, bool useStudentAvailability)
         {
             return ValidatedSchedulePartDto;
         }

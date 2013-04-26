@@ -305,6 +305,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
         {
             ClipHandler<string> clipHandler = new ClipHandler<string>();
 
+			
             //check if there is any data in clipboard
             if (Clipboard.ContainsText())
             {

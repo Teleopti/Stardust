@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         private IMessageBrokerEnablerFactory _messageBrokerEnablerFactory;
         private DenyRequestCommandHandler _target;
         private DenyRequestCommandDto _denyRequestCommandDto;
+        private ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 
         [SetUp]
         public void Setup()
@@ -30,8 +31,9 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _personRequestRepository = _mock.StrictMock<IPersonRequestRepository>();
             _authorization = _mock.StrictMock<IPersonRequestCheckAuthorization>();
             _unitOfWorkFactory = _mock.StrictMock<IUnitOfWorkFactory>();
+            _currentUnitOfWorkFactory = _mock.DynamicMock<ICurrentUnitOfWorkFactory>();
             _messageBrokerEnablerFactory = _mock.StrictMock<IMessageBrokerEnablerFactory>();
-            _target = new DenyRequestCommandHandler(_personRequestRepository,_authorization,_unitOfWorkFactory,_messageBrokerEnablerFactory);
+            _target = new DenyRequestCommandHandler(_personRequestRepository,_authorization,_currentUnitOfWorkFactory,_messageBrokerEnablerFactory);
             _denyRequestCommandDto = new DenyRequestCommandDto {PersonRequestId = Guid.NewGuid()};
         }
 
@@ -44,6 +46,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             using (_mock.Record())
             {
                 Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+                Expect.Call(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
                 Expect.Call(_personRequestRepository.Get(_denyRequestCommandDto.PersonRequestId)).Return(request);
                 Expect.Call(() => request.Deny(null, "Test", _authorization)).IgnoreArguments();
                 Expect.Call(() => _messageBrokerEnablerFactory.NewMessageBrokerEnabler());
@@ -66,6 +69,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             using (_mock.Record())
             {
                 Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+                Expect.Call(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
                 Expect.Call(_personRequestRepository.Get(_denyRequestCommandDto.PersonRequestId)).Return(request);
                 Expect.Call(() => request.Deny(null, "Test", _authorization)).IgnoreArguments().Throw(new InvalidRequestStateTransitionException());
                 Expect.Call(() => _messageBrokerEnablerFactory.NewMessageBrokerEnabler());

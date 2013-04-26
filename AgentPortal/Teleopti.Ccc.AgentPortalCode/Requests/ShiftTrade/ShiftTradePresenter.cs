@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Globalization;
+using System.Linq;
+using System.ServiceModel;
 using System.Web.Services.Protocols;
 using System.Windows.Forms;
 using Teleopti.Ccc.AgentPortalCode.Common;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 
 namespace Teleopti.Ccc.AgentPortalCode.Requests.ShiftTrade
 {
@@ -48,7 +50,7 @@ namespace Teleopti.Ccc.AgentPortalCode.Requests.ShiftTrade
             {
                 _model.PersonRequestDto = _model.SdkService.AcceptShiftTradeRequest(_model.PersonRequestDto);
             }
-            catch(SoapException soapException)
+            catch(FaultException soapException)
             {
                 _view.ShowErrorMessage(
                     string.Format(CultureInfo.CurrentUICulture,
@@ -100,7 +102,7 @@ namespace Teleopti.Ccc.AgentPortalCode.Requests.ShiftTrade
         	{
 				_model.SdkService.DeletePersonRequest(_model.PersonRequestDto);
         	}
-        	catch (SoapException exception)
+        	catch (FaultException exception)
         	{
         		_view.ShowErrorMessage(
         			string.Concat(UserTexts.Resources.PleaseTryAgainLater, Environment.NewLine, Environment.NewLine,
@@ -276,7 +278,12 @@ namespace Teleopti.Ccc.AgentPortalCode.Requests.ShiftTrade
                 var shiftTradeRequest = _model.PersonRequestDto.Request as ShiftTradeRequestDto;
                 if (shiftTradeRequest!=null)
                 {
-                    shiftTradeRequest.ShiftTradeSwapDetails = updatedShiftTradeRequest.ShiftTradeSwapDetails;
+                    var updatedList = updatedShiftTradeRequest.ShiftTradeSwapDetails.ToList();
+                    shiftTradeRequest.ShiftTradeSwapDetails.Clear();
+                    foreach (var shiftTradeSwapDetailDto in updatedList)
+                    {
+                        shiftTradeRequest.ShiftTradeSwapDetails.Add(shiftTradeSwapDetailDto);
+                    }
                     _model.CreateShiftTradeDetails();
                 }
             }

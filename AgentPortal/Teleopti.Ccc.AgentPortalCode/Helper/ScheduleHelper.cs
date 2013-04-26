@@ -5,7 +5,8 @@ using Teleopti.Ccc.AgentPortalCode.Common;
 using Teleopti.Ccc.AgentPortalCode.Common.Factory;
 using Teleopti.Ccc.AgentPortalCode.Foundation.StateHandlers;
 using Teleopti.Ccc.AgentPortalCode.ScheduleControlDataProvider;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject.QueryDtos;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.AgentPortalCode.Helper
@@ -15,31 +16,30 @@ namespace Teleopti.Ccc.AgentPortalCode.Helper
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1011:ConsiderPassingBaseTypesAsParameters"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public static IList<ICustomScheduleAppointment> LoadSchedules(PersonDto person, DateTimePeriodDto period)
         {
-            var startDate = new DateOnlyDto {DateTime = period.LocalStartDateTime, DateTimeSpecified = true};
+            var startDate = new DateOnlyDto {DateTime = period.LocalStartDateTime};
 
-            var endDate = new DateOnlyDto {DateTime = period.LocalEndDateTime, DateTimeSpecified = true};
+            var endDate = new DateOnlyDto {DateTime = period.LocalEndDateTime};
 
         	var query = new GetSchedulesByPersonQueryDto
         	            	{
         	            		StartDate = startDate,
         	            		EndDate = endDate,
         	            		TimeZoneId = StateHolder.Instance.State.SessionScopeData.LoggedOnPerson.TimeZoneId,
-        	            		PersonId = person.Id
+        	            		PersonId = person.Id.GetValueOrDefault()
         	            	};
 
             //Fill with Assignments
-            IList<SchedulePartDto> schedulePartDtos = SdkServiceHelper.SchedulingService.GetSchedulesByQuery(query);
+            var schedulePartDtos = SdkServiceHelper.SchedulingService.GetSchedulesByQuery(query);
 
             AgentScheduleStateHolder.Instance().FillAgentSchedulePartDictionary(schedulePartDtos);
             return ScheduleAppointmentFactory.Create(schedulePartDtos);
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public IList<ValidatedSchedulePartDto> Validate(PersonDto loggedOnPerson, DateOnly dateInPeriod, bool useStudentAvailability)
+        public ICollection<ValidatedSchedulePartDto> Validate(PersonDto loggedOnPerson, DateOnly dateInPeriod, bool useStudentAvailability)
         {
-            var dateOnlyDto = new DateOnlyDto {DateTime = dateInPeriod.Date, DateTimeSpecified = true};
+            var dateOnlyDto = new DateOnlyDto {DateTime = dateInPeriod.Date};
             loggedOnPerson.CultureLanguageId = CultureInfo.CurrentCulture.LCID;
-            loggedOnPerson.CultureLanguageIdSpecified = true;
 
             return useStudentAvailability
                        ? SdkServiceHelper.SchedulingService.GetValidatedSchedulePartsOnSchedulePeriodByQuery(

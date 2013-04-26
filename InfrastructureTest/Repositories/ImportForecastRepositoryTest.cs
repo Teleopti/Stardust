@@ -1,9 +1,7 @@
 ﻿using System.Text;
 using NUnit.Framework;
-using SharpTestsEx;
 using Teleopti.Ccc.Domain.Forecasting.Import;
 using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.InfrastructureTest.Repositories

@@ -19,17 +19,17 @@ namespace Teleopti.Ccc.Sdk.LogicTest
 		private IScheduleRepository scheduleRepository;
 		private ISaveSchedulePartService target;
 		private IPersonAbsenceAccountRepository personAbsenceAccountRepository;
-		private IUnitOfWorkFactory unitOfWorkFactory;
+	    private ICurrentUnitOfWork currentUnitOfWork;
 
-		[SetUp]
+	    [SetUp]
 		public void Setup()
 		{
 			mocks = new MockRepository();
 			scheduleDictionarySaver = mocks.DynamicMock<IScheduleDictionarySaver>();
 			scheduleRepository = mocks.DynamicMock<IScheduleRepository>();
 			personAbsenceAccountRepository = mocks.DynamicMock<IPersonAbsenceAccountRepository>();
-			unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
-			target = new SaveSchedulePartService(scheduleDictionarySaver, scheduleRepository, personAbsenceAccountRepository, unitOfWorkFactory);
+			currentUnitOfWork = mocks.DynamicMock<ICurrentUnitOfWork>();
+			target = new SaveSchedulePartService(scheduleDictionarySaver, scheduleRepository, personAbsenceAccountRepository, currentUnitOfWork);
 		}
 
 		[Test]
@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest
 
 			using (mocks.Record())
 			{
-				Expect.Call(unitOfWorkFactory.CurrentUnitOfWork()).Return(unitOfWork);
+				Expect.Call(currentUnitOfWork.Current()).Return(unitOfWork);
 				Expect.Call(dictionary.DifferenceSinceSnapshot()).Return(differenceCollectionItems);
 				Expect.Call(scheduleDay.Owner).Return(dictionary);
 				Expect.Call(dictionary.Modify(ScheduleModifier.Scheduler, scheduleDay, null, null, null)).IgnoreArguments().Return(response);

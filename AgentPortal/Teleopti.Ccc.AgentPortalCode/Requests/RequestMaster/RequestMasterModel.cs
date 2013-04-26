@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Globalization;
 using Teleopti.Ccc.AgentPortalCode.Common;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
+using Teleopti.Ccc.Sdk.Common.Contracts;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 
 namespace Teleopti.Ccc.AgentPortalCode.Requests.RequestMaster
 {
@@ -177,7 +178,7 @@ namespace Teleopti.Ccc.AgentPortalCode.Requests.RequestMaster
             if (shiftTradeRequestDto != null)
             {
                 string multiple = UserTexts.Resources.MultipleValuesParanteses;
-                if (shiftTradeRequestDto.ShiftTradeSwapDetails.Length > 1)
+                if (shiftTradeRequestDto.ShiftTradeSwapDetails.Count > 1)
                 {
                     text = string.Format(CultureInfo.CurrentCulture, "{0} - {1}", _personRequestDto.RequestedDateLocal.ToShortDateString(), multiple);
                 }

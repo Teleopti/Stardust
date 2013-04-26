@@ -31,7 +31,7 @@ Describe "Write and read files with different encoding" {
 		Setup -File "\forTest.txt" "some file content"
 		Setup -File "\forTest2.txt" "some file content"
 
-		$testPath = "$TestDrive\forTest.txt"
+		$testPath = (get-item "$TestDrive\forTest.txt").FullName
 		$Files = @(Get-FileListByFilter -path "$TestDrive" -filter "*.txt")
 		$Files.count | Should Be 2
 		$Files[0].FullName | Should Be $testPath
@@ -40,7 +40,7 @@ Describe "Write and read files with different encoding" {
 		it "Should return one file in path based on filter" {
 		Cleanup
 		Setup -File "\forTest.txt" "some file content"
-		$testPath = "$TestDrive\forTest.txt"
+		$testPath = (get-item "$TestDrive\forTest.txt").FullName
 		
 		$Files = @(Get-FileListByFilter -path "$TestDrive" -filter "*.txt")
 		$Files.count | Should Be 1

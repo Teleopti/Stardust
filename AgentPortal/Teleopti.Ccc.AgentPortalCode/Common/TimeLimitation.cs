@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Globalization;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.AgentPortalCode.Common
@@ -72,20 +72,16 @@ namespace Teleopti.Ccc.AgentPortalCode.Common
             _timeLimitationValidator = timeLimitationValidator;
         }
 
-        public TimeLimitation(ITimeLimitationValidator timeLimitationValidator, TimeLimitationDto timeLimitationDto):this(timeLimitationValidator)
+        public TimeLimitation(ITimeLimitationValidator timeLimitationValidator, TimeLimitationDto timeLimitationDto)
+            : this(timeLimitationValidator)
         {
-            if (!string.IsNullOrEmpty(timeLimitationDto.MinTime))
-                MinTime = System.Xml.XmlConvert.ToTimeSpan(timeLimitationDto.MinTime);
-            if (!string.IsNullOrEmpty(timeLimitationDto.MaxTime))
-                MaxTime = System.Xml.XmlConvert.ToTimeSpan(timeLimitationDto.MaxTime);
+            MinTime = timeLimitationDto.MinTime;
+            MaxTime = timeLimitationDto.MaxTime;
         }
 
-        public void SetValuesToDto(TimeLimitationDto timeLimitationDto)
+        public TimeLimitationDto SetValuesToDto()
         {
-            if (MinTime.HasValue)
-                timeLimitationDto.MinTime = System.Xml.XmlConvert.ToString(MinTime.Value);
-            if (MaxTime.HasValue)
-                timeLimitationDto.MaxTime = System.Xml.XmlConvert.ToString(MaxTime.Value);
+            return new TimeLimitationDto {MinTime = MinTime, MaxTime = MaxTime};
         }
 
         public TimeSpan? MinTime { get; set; }

@@ -16,7 +16,7 @@ namespace Teleopti.Ccc.WinCode.Meetings.Commands
     public class AddMeetingCommand : IAddMeetingCommand
     {
         private readonly IMeetingOverviewView _meetingOverviewView;
-        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IMeetingOverviewViewModel _model;
         private readonly ICanModifyMeeting _canModifyMeeting;
         private readonly ISettingDataRepository _settingDataRepository;
@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WinCode.Meetings.Commands
         private readonly IPersonRepository _personRepository;
 
         public AddMeetingCommand(IMeetingOverviewView meetingOverviewView, ISettingDataRepository settingDataRepository,
-            IActivityRepository activityRepository, IPersonRepository personRepository, IUnitOfWorkFactory unitOfWorkFactory, IMeetingOverviewViewModel model,
+            IActivityRepository activityRepository, IPersonRepository personRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory, IMeetingOverviewViewModel model,
             ICanModifyMeeting canModifyMeeting)
         {
             _meetingOverviewView = meetingOverviewView;
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.WinCode.Meetings.Commands
             IScenario selectedScenario = _model.CurrentScenario;
             
             IList<IActivity> activities;
-            using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
+            using (_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
             {
                 IPerson organizer = TeleoptiPrincipal.Current.GetPerson(_personRepository);
                 activities = _activityRepository.LoadAllSortByName();

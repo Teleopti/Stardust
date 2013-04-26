@@ -2,7 +2,7 @@
 using System.Drawing;
 using System.Globalization;
 using Syncfusion.Pdf.Graphics;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 
 namespace Teleopti.Ccc.AgentPortalCode.ScheduleReporting
 {

@@ -14,10 +14,9 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 	{
 		private readonly IMultiplicatorDefinitionSetRepository _multiplicatorDefinitionSetRepository;
 		private readonly IDateTimePeriodAssembler _dateTimePeriodAssembler;
-		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+        private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 
-
-		public GetMultiplicatorDefinitionSetShiftAllowanceQueryHandler(IMultiplicatorDefinitionSetRepository multiplicatorDefinitionSetRepository, IDateTimePeriodAssembler dateTimePeriodAssembler, IUnitOfWorkFactory unitOfWorkFactory)
+		public GetMultiplicatorDefinitionSetShiftAllowanceQueryHandler(IMultiplicatorDefinitionSetRepository multiplicatorDefinitionSetRepository, IDateTimePeriodAssembler dateTimePeriodAssembler, ICurrentUnitOfWorkFactory unitOfWorkFactory)
 		{
 			_multiplicatorDefinitionSetRepository = multiplicatorDefinitionSetRepository;
 			_dateTimePeriodAssembler = dateTimePeriodAssembler;
@@ -26,7 +25,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 
 		public ICollection<DefinitionSetDto> Handle(GetMultiplicatorDefinitionSetShiftAllowanceDto query)
 		{
-			using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
+			using (_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
 				var multiplicatorDefinitionSetList = _multiplicatorDefinitionSetRepository.FindAllShiftAllowanceDefinitions();
 				var definitionSetDtoList = new List<DefinitionSetDto>();

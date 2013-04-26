@@ -7,7 +7,8 @@ using Teleopti.Ccc.AgentPortal.Common;
 using Teleopti.Ccc.AgentPortal.Common.Configuration.Cells;
 using Teleopti.Ccc.AgentPortal.Common.Configuration.Columns;
 using Teleopti.Ccc.AgentPortalCode.Requests;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
+using Teleopti.Ccc.Sdk.Common.Contracts;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 
 namespace Teleopti.Ccc.AgentPortal.Requests
 {

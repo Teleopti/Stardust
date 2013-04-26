@@ -12,10 +12,10 @@ namespace Teleopti.Ccc.Sdk.Logic.Payroll
 {
     public class PayrollResultService
     {
-        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+        private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IPayrollResultRepository _payrollResultRepository;
 
-        public PayrollResultService(IUnitOfWorkFactory unitOfWorkFactory, IPayrollResultRepository payrollResultRepository)
+        public PayrollResultService(ICurrentUnitOfWorkFactory unitOfWorkFactory, IPayrollResultRepository payrollResultRepository)
         {
             _unitOfWorkFactory = unitOfWorkFactory;
             _payrollResultRepository = payrollResultRepository;
@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Payroll
             XmlDocument navigable;
             IPayrollResult result;
 
-            using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
+            using (_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
             {
                 result = _payrollResultRepository.Load(id);
                 navigable = new XmlDocument {InnerXml = result.XmlResult.XPathNavigable.CreateNavigator().OuterXml};

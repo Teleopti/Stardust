@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
+using Teleopti.Ccc.Sdk.Common.Contracts;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 
 namespace Teleopti.Ccc.AgentPortalCode.Requests.ShiftTrade
 {
@@ -25,7 +26,7 @@ namespace Teleopti.Ccc.AgentPortalCode.Requests.ShiftTrade
             _loggedOnPerson = loggedOnPerson;
 
             if (_shiftTradeRequestDto != null &&
-                _shiftTradeRequestDto.ShiftTradeSwapDetails.Length > 0)
+                _shiftTradeRequestDto.ShiftTradeSwapDetails.Count > 0)
             {
                 PersonTo = _shiftTradeRequestDto.ShiftTradeSwapDetails[0].PersonTo;
             }
@@ -79,7 +80,7 @@ namespace Teleopti.Ccc.AgentPortalCode.Requests.ShiftTrade
             get
             {
                 _personName = _personRequestDto.Person.Name;
-                if (_shiftTradeRequestDto.ShiftTradeSwapDetails.Length>0 &&
+                if (_shiftTradeRequestDto.ShiftTradeSwapDetails.Count>0 &&
                     LoggedOnPerson.Id != _shiftTradeRequestDto.ShiftTradeSwapDetails[0].PersonTo.Id)
                 {
                     _personName = _shiftTradeRequestDto.ShiftTradeSwapDetails[0].PersonTo.Name;
@@ -141,14 +142,17 @@ namespace Teleopti.Ccc.AgentPortalCode.Requests.ShiftTrade
             {
                 var swapDetails = SwapDetails;
                 swapDetails.Remove(shiftTradeSwapDetailDtoToRemove);
-                _shiftTradeRequestDto.ShiftTradeSwapDetails = swapDetails.ToArray();
+                _shiftTradeRequestDto.ShiftTradeSwapDetails.Clear();
+                foreach (var shiftTradeSwapDetailDto in swapDetails)
+                {
+                    _shiftTradeRequestDto.ShiftTradeSwapDetails.Add(shiftTradeSwapDetailDto);
+                }
             }
             CreateShiftTradeDetails();
         }
 
         public void AddDateRange(DateTime startDate,DateTime endDate)
         {
-            var swapDetails = SwapDetails;
             for (DateTime date = startDate; date <= endDate; date = date.AddDays(1))
             {
                 if (date<DateTime.Today) continue;
@@ -158,19 +162,16 @@ namespace Teleopti.Ccc.AgentPortalCode.Requests.ShiftTrade
                 {
                     shiftTradeSwapDetailDto = new ShiftTradeSwapDetailDto();
                     shiftTradeSwapDetailDto.ChecksumFrom = 0;
-                    shiftTradeSwapDetailDto.ChecksumFromSpecified = true;
                     shiftTradeSwapDetailDto.ChecksumTo = 0;
-                    shiftTradeSwapDetailDto.ChecksumToSpecified = true;
-                    shiftTradeSwapDetailDto.DateFrom = new DateOnlyDto {DateTime = date, DateTimeSpecified = true};
-                    shiftTradeSwapDetailDto.DateTo = new DateOnlyDto { DateTime = date, DateTimeSpecified = true };
+                    shiftTradeSwapDetailDto.DateFrom = new DateOnlyDto {DateTime = date};
+                    shiftTradeSwapDetailDto.DateTo = new DateOnlyDto { DateTime = date };
                     shiftTradeSwapDetailDto.PersonFrom = _personRequestDto.Person;
                     shiftTradeSwapDetailDto.PersonTo = PersonTo;
 
-                    swapDetails.Add(shiftTradeSwapDetailDto);
+                    _shiftTradeRequestDto.ShiftTradeSwapDetails.Add(shiftTradeSwapDetailDto);
                 }
             }
 
-            _shiftTradeRequestDto.ShiftTradeSwapDetails = swapDetails.ToArray();
             CreateShiftTradeDetails();
         }
     }

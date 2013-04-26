@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -156,6 +155,18 @@ namespace Teleopti.Ccc.DomainTest.Budgeting
             Assert.IsNotNull(target.CustomEfficiencyShrinkages);
         }
 
+	    [Test]
+	    public void ShouldGetProperties()
+	    {
+		    target.TotalAllowance = 10d;
+		    target.Allowance = 10d;
+		    target.NetStaffFcAdjustedSurplus = 10d;
+
+		    target.TotalAllowance.Should().Be.EqualTo(10d);
+			target.Allowance.Should().Be.EqualTo(10d);
+			target.NetStaffFcAdjustedSurplus.Should().Be.EqualTo(10d);
+	    }
+
         [Test]
         public void ShouldRecalculate()
         {
@@ -178,6 +189,30 @@ namespace Teleopti.Ccc.DomainTest.Budgeting
             //Dont know about the value, this is tested in the calculator, Im testing the concept
             calculations.GrossStaff.Should().Be.EqualTo(22.987398986676673d);
         }
+
+		[Test]
+		public void ShouldCalculateWithoutNetStaffFcAdj()
+		{
+			var theBudgetGroup = new BudgetGroup { Name = "BG" };
+			theBudgetGroup.TrySetDaysPerYear(365);
+
+			var budgetDay1 = new BudgetDay(theBudgetGroup, ScenarioFactory.CreateScenarioAggregate(), new DateOnly(2010, 12, 1));
+			budgetDay1.StaffEmployed = 23;
+			budgetDay1.AttritionRate = new Percent(0.1);
+			var budgetDay2 = new BudgetDay(theBudgetGroup, ScenarioFactory.CreateScenarioAggregate(), new DateOnly(2010, 12, 2));
+			budgetDay2.AttritionRate = new Percent(0.1);
+			var budgetDay3 = new BudgetDay(theBudgetGroup, ScenarioFactory.CreateScenarioAggregate(), new DateOnly(2010, 12, 3));
+			budgetDay3.AttritionRate = new Percent(0.1);
+
+			var budgetCalculator = new BudgetCalculator(new List<IBudgetDay> { budgetDay1, budgetDay2, budgetDay3 },
+														new NetStaffCalculator(new GrossStaffCalculator()),
+														new List<ICalculator>());
+			var calculations = budgetDay2.CalculateWithoutNetStaffFcAdj(budgetCalculator, 123);
+
+			//Dont know about the value, this is tested in the calculator, Im testing the concept
+			calculations.GrossStaff.Should().Be.EqualTo(22.987398986676673d);
+			calculations.NetStaffFcAdj.Should().Be.EqualTo(123);
+		}
 
         [Test]
         public void ShouldRecalculateAllowance()
@@ -216,16 +251,27 @@ namespace Teleopti.Ccc.DomainTest.Budgeting
                 target.AbsenceExtra = 2;
                 target.CustomShrinkages.SetShrinkage(g1, new Percent(0.2d));
                 target.CustomEfficiencyShrinkages.SetEfficiencyShrinkage(g2, new Percent(0.1d));
-                var netStaffCalculator = new NetStaffCalculator(new GrossStaffCalculator());
-                var info = new CultureInfo(1053);
+				var grossStaffCalculator = new GrossStaffCalculator();
+				var netStaffCalculator = new NetStaffCalculator(grossStaffCalculator);
+
+				var calcList = new List<ICalculator>
+				{
+					new ForecastedStaffCalculator(),
+					new NetStaffForecastAdjustCalculator(netStaffCalculator, grossStaffCalculator),
+					new BudgetedStaffCalculator(),
+					new DifferenceCalculator(),
+					new DifferencePercentCalculator()
+				};
+				calcList.AddRange(new List<ICalculator>
+					{
+						new BudgetedLeaveCalculator(netStaffCalculator),
+						new BudgetedSurplusCalculator(),
+						new TotalAllowanceCalculator(),
+						new AllowanceCalculator()
+					});
                 var budgetCalculator = new BudgetCalculator(new List<IBudgetDay> {target},
                                                             netStaffCalculator,
-                                                            new List<ICalculator>
-                                                                {
-                                                                    new DifferencePercentCalculator(netStaffCalculator,
-                                                                                                    info),
-                                                                    new AllowanceCalculator(netStaffCalculator, info)
-                                                                });
+															calcList);
                 var calculations = target.Calculate(budgetCalculator);
                 Assert.AreEqual(1.84d, Math.Round(calculations.Difference, 2));
                 Assert.AreEqual(4.40d, Math.Round(calculations.BudgetedLeave, 2));
@@ -236,7 +282,7 @@ namespace Teleopti.Ccc.DomainTest.Budgeting
         }
 
         [Test]
-        public void ShouldAllowanceBeZeroIfFTEIsZero()
+        public void ShouldAllowanceBeZeroIfFteIsZero()
         {
             var g1 = Guid.NewGuid();
             var g2 = Guid.NewGuid();
@@ -273,14 +319,12 @@ namespace Teleopti.Ccc.DomainTest.Budgeting
                 target.CustomShrinkages.SetShrinkage(g1, new Percent(0.2d));
                 target.CustomEfficiencyShrinkages.SetEfficiencyShrinkage(g2, new Percent(0.1d));
                 var netStaffCalculator = new NetStaffCalculator(new GrossStaffCalculator());
-                var info = new CultureInfo(1053);
                 var budgetCalculator = new BudgetCalculator(new List<IBudgetDay> {target},
                                                             netStaffCalculator,
                                                             new List<ICalculator>
                                                                 {
-                                                                    new DifferencePercentCalculator(netStaffCalculator,
-                                                                                                    info),
-                                                                    new AllowanceCalculator(netStaffCalculator, info)
+                                                                    new DifferencePercentCalculator(),
+                                                                    new AllowanceCalculator()
                                                                 });
                 var calculations = target.Calculate(budgetCalculator);
                 Assert.AreEqual(0d, calculations.TotalAllowance);

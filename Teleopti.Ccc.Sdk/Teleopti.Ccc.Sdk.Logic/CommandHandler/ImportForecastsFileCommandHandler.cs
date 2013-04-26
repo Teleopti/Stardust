@@ -16,11 +16,11 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
     public class ImportForecastsFileCommandHandler : IHandleCommand<ImportForecastsFileCommandDto>
     {
         private readonly IServiceBusSender _busSender;
-        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+        private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IJobResultRepository _jobResultRepository;
 
         public ImportForecastsFileCommandHandler(IServiceBusSender busSender,
-            IUnitOfWorkFactory unitOfWorkFactory,
+            ICurrentUnitOfWorkFactory unitOfWorkFactory,
             IJobResultRepository jobResultRepository)
         {
             _busSender = busSender;
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
             }
             Guid jobResultId;
             var person = ((IUnsafePerson) TeleoptiPrincipal.Current).Person;
-            using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+            using (var unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
             {
                 var jobResult = new JobResult(JobCategory.ForecastsImport, new DateOnlyPeriod(DateOnly.Today, DateOnly.Today),
                                               person, DateTime.UtcNow);

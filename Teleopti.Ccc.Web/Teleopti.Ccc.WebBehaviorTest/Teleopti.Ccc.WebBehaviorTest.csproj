@@ -121,6 +121,9 @@
     <Compile Include="AsmStepDefinition.cs" />
     <Compile Include="Bindings\Generic\ActivityStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Anywhere\PersonSchedulePageStepDefinitions.cs" />
+    <Compile Include="Core\BrowserInteractions\IBrowserInteractions.cs" />
+    <Compile Include="Core\BrowserInteractions\WatiNIE\IEWatiNBrowserInteractions.cs" />
+    <Compile Include="Core\BrowserInteractions\WatiNIE\Retrying.cs" />
     <Compile Include="Pages\Common\Select2Box.cs" />
     <Compile Include="TeamScheduleForGroups.feature.cs" />
     <Compile Include="Bindings\Generic\BudgetStepDefinitions.cs" />
@@ -170,7 +173,6 @@
     <Compile Include="Core\Robustness\EventualAssert.cs" />
     <Compile Include="Core\Robustness\EventualElementActions.cs" />
     <Compile Include="Core\Robustness\Timeouts.cs" />
-    <Compile Include="Core\Robustness\Retrying.cs" />
     <Compile Include="Pages\AnywherePage.cs" />
     <Compile Include="Pages\SignInPage.cs" />
     <Compile Include="Routing.feature.cs">
@@ -195,7 +197,7 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Core\Robustness\ExceptionHandling.cs" />
+    <Compile Include="Core\BrowserInteractions\WatiNIE\ExceptionHandling.cs" />
     <Compile Include="Data\Setups\Generic\AvailabilityRotationConfigurable.cs" />
     <Compile Include="Bindings\Generic\AvailabilityStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\BusinessUnitStepDefinitions.cs" />
