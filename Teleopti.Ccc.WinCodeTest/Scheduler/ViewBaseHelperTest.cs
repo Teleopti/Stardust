@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				_ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(
                               act,
                               _agent,
-                              TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(new DateTime(2001, 1, 1, 0, 0, 0), new DateTime(2001, 1, 1, 1, 0, 0)),
+                              TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(new DateTime(2000, 12, 31, 21, 0, 0), new DateTime(2000, 12, 31, 22, 0, 0)),
                               ShiftCategoryFactory.CreateShiftCategory("Morgon"),
                               _scenario);
 
@@ -527,7 +527,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         	act.InWorkTime = true;
             IPersonAssignment noRest = PersonAssignmentFactory.CreateAssignmentWithMainShiftAndPersonalShift(
                   act,
-                  _agent, TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(new DateTime(2001, 1, 1, 7, 0, 0), new DateTime(2001, 1, 2, 0, 0, 0)),
+                  _agent, TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(new DateTime(2001, 1, 1, 4, 0, 0), new DateTime(2001, 1, 1, 21, 0, 0)),
                   ShiftCategoryFactory.CreateShiftCategory("Morgon"),
                   _scenario);
 
