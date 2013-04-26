@@ -11421,4 +11421,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Please select at least one of the options "Same shift category", "Same start time" or "Same shift" in Block Optimization.</value>
     <comment>Block optimization</comment>
   </data>
+  <data name="NotAllowedMoveOfAssignmentToOtherDate" xml:space="preserve">
+    <value>It is not allowed to move a work shift to another day in shift editor, use cut and paste instead</value>
+    <comment>It is not allowed to move a work shift to another day in shift editor, use cut and paste instead</comment>
+  </data>
 </root>

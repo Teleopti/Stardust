@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Rules
@@ -34,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
 
 					if (!dateOnlyAsDatePeriod.Contains(assignmentPeriod.StartDateTime))
 					{
-						ret.Add(new BusinessRuleResponse(typeof(DataPartOfAgentDay), string.Empty, true, true, assignmentPeriod,
+						ret.Add(new BusinessRuleResponse(typeof(DataPartOfAgentDay), Resources.NotAllowedMoveOfAssignmentToOtherDate, true, true, assignmentPeriod,
 																						 scheduleDay.Person, dateOnlyPeriod));
 					}
 				}

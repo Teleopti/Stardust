@@ -14536,6 +14536,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to It is not allowed to move a work shift to another day in shift editor, use cut and paste instead.
+        /// </summary>
+        public static string NotAllowedMoveOfAssignmentToOtherDate {
+            get {
+                return ResourceManager.GetString("NotAllowedMoveOfAssignmentToOtherDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to not allowed Shift Categories.
         /// </summary>
         public static string NotAllowedShiftCategories {
