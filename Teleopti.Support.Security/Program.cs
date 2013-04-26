@@ -34,7 +34,6 @@ namespace Teleopti.Support.Security
 		private static void setPersonAssignmentDate(CommandLineArgument commandLineArgument)
 		{
 			var allPersonAndTimeZone = new FetchPersonIdAndTimeZone(commandLineArgument.DestinationConnectionString).ForAllPersons();
-			var converters = new IPersonAssignmentConverter[] {new PersonAssignmentAuditDateSetter(), new PersonAssignmentDateSetter()};
 			using (var conn = new SqlConnection(commandLineArgument.DestinationConnectionString))
 			{
 				conn.Open();
@@ -44,7 +43,7 @@ namespace Teleopti.Support.Security
 					var timeZone = personAndTimeZone.Item2;
 					using (var tx = conn.BeginTransaction())
 					{
-						converters.ForEach(x => x.Execute(tx, personId, timeZone));
+						AgentDayConverters.ForDbManager().ForEach(x => x.Execute(tx, personId, timeZone));
 						tx.Commit();
 					}
 				}

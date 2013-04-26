@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 			UnitOfWork.PersistAll();
 			UnitOfWork.Clear();
 
-			paRep.Get(pa.Id.Value).Date.Should().Be.EqualTo(AgentDayConverterDate.DateOfUnconvertedSchedule);
+			paRep.Get(pa.Id.Value).Date.Should().Be.EqualTo(AgentDayConverters.DateOfUnconvertedSchedule);
 			UnitOfWork.Clear();
 
 			Assert.Throws<NotSupportedException>(() =>

@@ -8,10 +8,10 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 		public static void ResetDateForAllAssignmentsAndAudits(this ISession session)
 		{
 			session.CreateSQLQuery("update PersonAssignment set TheDate=:date")
-						 .SetDateTime("date", AgentDayConverterDate.DateOfUnconvertedSchedule)
+						 .SetDateTime("date", AgentDayConverters.DateOfUnconvertedSchedule)
 						 .ExecuteUpdate();
 			session.CreateSQLQuery("update [Auditing].PersonAssignment_AUD set TheDate=:date")
-						 .SetDateTime("date", AgentDayConverterDate.DateOfUnconvertedSchedule)
+						 .SetDateTime("date", AgentDayConverters.DateOfUnconvertedSchedule)
 						 .ExecuteUpdate();
 		}
 	}
