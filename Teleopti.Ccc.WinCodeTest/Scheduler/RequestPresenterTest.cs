@@ -161,10 +161,11 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         }
 
         [Test]
-        public void ShouldReturnThoseRequestThatRequestedIn2013()
+        public void ShouldReturnThoseRequestThatRequestedInCurrentYear()
         {
             var filerExpression = new List<string>();
-            filerExpression.Add("2013");
+            var year = DateTime.Now.Year.ToString();
+            filerExpression.Add(year);
 
             var list = RequestPresenter.FilterAdapters(_requestViewAdapters, filerExpression);
             Assert.AreEqual(list.Count, 3);
