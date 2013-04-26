@@ -103,6 +103,7 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
 			var item = toolStripComboBoxResolution.ComboBox.SelectedItem as GridResolution;
 			if (item != null)
 				scheduleControl1.Appearance.DivisionsPerHour = item.PerHour;
+			selectWholeWeekInCalendar(scheduleControl1.Calendar.DateValue);
 		}
 
         
