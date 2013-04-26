@@ -1,29 +1,32 @@
 ﻿using System;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Time
 {
     public class SetupDateTimePeriodDefaultLocalHoursForActivities : ISetupDateTimePeriod
     {
-        private readonly DateTimePeriod _period;
-        private static DateTimePeriod _tp;
+	    private readonly ICurrentTeleoptiPrincipal _currentTeleoptiPrincipal;
+	    private readonly DateTimePeriod _period;
+        private DateTimePeriod _tp;
 
-        public SetupDateTimePeriodDefaultLocalHoursForActivities(IScheduleDay scheduleDay)
+        public SetupDateTimePeriodDefaultLocalHoursForActivities(IScheduleDay scheduleDay, ICurrentTeleoptiPrincipal currentTeleoptiPrincipal)
         {
-            HasDefaultValue = false;
-            _period = GetPeriodFromScheduleDays(scheduleDay);
+	        _currentTeleoptiPrincipal = currentTeleoptiPrincipal;
+	        _period = GetPeriodFromScheduleDays(scheduleDay);
         }
 
-        public SetupDateTimePeriodDefaultLocalHoursForActivities(IScheduleDay scheduleDay, DateTimePeriod defaultPeriod)
+		public SetupDateTimePeriodDefaultLocalHoursForActivities(IScheduleDay scheduleDay, ICurrentTeleoptiPrincipal currentTeleoptiPrincipal, DateTimePeriod defaultPeriod)
         {
-            _tp = defaultPeriod;
+			_currentTeleoptiPrincipal = currentTeleoptiPrincipal;
+			_tp = defaultPeriod;
             HasDefaultValue = true;
             _period = GetPeriodFromScheduleDays(scheduleDay);
         }
 
-        private static DateTimePeriod GetPeriodFromScheduleDays(IScheduleDay scheduleDay)
+        private DateTimePeriod GetPeriodFromScheduleDays(IScheduleDay scheduleDay)
         {
-            var defaultPeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(scheduleDay.Period.LocalStartDateTime.Add(TimeSpan.FromHours(8)), scheduleDay.Period.LocalStartDateTime.Add(TimeSpan.FromHours(17)));
+            var defaultPeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(scheduleDay.Period.LocalStartDateTime.Add(TimeSpan.FromHours(8)), scheduleDay.Period.LocalStartDateTime.Add(TimeSpan.FromHours(17)), _currentTeleoptiPrincipal.Current().Regional.TimeZone);
             var dateTimePeriod = HasDefaultValue ? _tp : defaultPeriod;
             var setupDateTimePeriodToDefaultLocalHours =
                 new SetupDateTimePeriodToDefaultLocalHours(

@@ -17,6 +17,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 		public string ContractSchedule { get; set; }
 		public string Team { get; set; }
 		public string RuleSetBag { get; set; }
+		public string PersonSkill { get; set; }
 
 		public PersonPeriodConfigurable() {
 			Contract = GlobalDataContext.Data().Data<CommonContract>().Contract.Description.Name;
@@ -52,6 +53,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 					.LoadAll()
 					.Single(x => x.Description.Name == RuleSetBag);
 				personPeriod.RuleSetBag = bag;
+			}
+
+			if (!string.IsNullOrEmpty(PersonSkill))
+			{
+				var skillRepository = new SkillRepository(uow);
+				var skill = skillRepository.LoadAll().Single(c => c.Name == PersonSkill);
+				personPeriod.AddPersonSkill(new PersonSkill(skill,new Percent(1.0)){Active = true});
 			}
 
 			user.AddPersonPeriod(personPeriod);

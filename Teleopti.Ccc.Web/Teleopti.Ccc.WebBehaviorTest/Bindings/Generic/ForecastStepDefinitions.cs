@@ -6,14 +6,13 @@ using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 {
 	[Binding]
-	public class TeamStepDefinitions
+	public class ForecastStepDefinitions
 	{
-		[Given(@"there is a team with")]
-		public void GivenThereIsATeamWith(Table table)
+		[Given(@"there is a forecast with")]
+		public void GivenThereIsAForecastWith(Table table)
 		{
-			var team = table.CreateInstance<TeamConfigurable>();
-			UserFactory.User().Setup(team);
+			var forecast = table.CreateInstance<ForecastConfigurable>();
+			UserFactory.User().Setup(forecast);
 		}
-
 	}
 }

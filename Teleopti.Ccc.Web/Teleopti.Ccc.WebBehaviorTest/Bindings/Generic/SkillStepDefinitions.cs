@@ -6,13 +6,13 @@ using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 {
 	[Binding]
-	public class TeamStepDefinitions
+	public class SkillStepDefinitions
 	{
-		[Given(@"there is a team with")]
-		public void GivenThereIsATeamWith(Table table)
+		[Given(@"there is a skill with")]
+		public void GivenThereIsASkillWith(Table table)
 		{
-			var team = table.CreateInstance<TeamConfigurable>();
-			UserFactory.User().Setup(team);
+			var skill = table.CreateInstance<SkillConfigurable>();
+			UserFactory.User().Setup(skill);
 		}
 
 	}
