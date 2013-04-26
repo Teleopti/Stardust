@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		[Test]
 		public void ShouldRemoveAbsenceFromRepository()
 		{
-			var personAbsence = new PersonAbsence(MockRepository.GenerateMock<IScenario>());
+			var personAbsence = new PersonAbsence(PersonFactory.CreatePersonWithId(), new FakeCurrentScenario().Current(), MockRepository.GenerateMock<IAbsenceLayer>());
 			personAbsence.SetId(new Guid());
 
 			var personAbsenceRepository = new TestWriteSideRepository<IPersonAbsence>() { personAbsence };
