@@ -338,7 +338,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         protected override void OnSelectionChanged(GridSelectionChangedEventArgs e)
         {
 			if(e == null) throw new ArgumentNullException("e");
-            if (e.Range.Top > 1)
+            if (e.Range.Top > 0)
             {
                 GridRow gridRow = _gridRows[e.Range.Top] as GridRow;
 
