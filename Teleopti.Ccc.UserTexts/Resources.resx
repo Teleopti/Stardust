@@ -11399,4 +11399,8 @@ Reduce the complexity to use these shifts.</value>
     <value>There is not enough allowance for day:</value>
     <comment>There is not enough budget allowance for that day.</comment>
   </data>
+  <data name="NotAllowedMoveOfAssignmentToOtherDate" xml:space="preserve">
+    <value>It is not allowed to move a work shift to another day in shift editor, use cut and paste instead</value>
+    <comment>It is not allowed to move a work shift to another day in shift editor, use cut and paste instead</comment>
+  </data>
 </root>
