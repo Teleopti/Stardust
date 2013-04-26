@@ -12,7 +12,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		IHandleEvent<ScheduleInitializeTriggeredEventForScheduleProjection>,
 		IHandleEvent<ScheduleInitializeTriggeredEventForScheduleDay>,
 		IHandleEvent<ScheduleInitializeTriggeredEventForPersonScheduleDay>,
-		IHandleEvent<FullDayAbsenceAddedEvent>
+		IHandleEvent<FullDayAbsenceAddedEvent>,
+		IHandleEvent<RemovedAbsenceEvent>
 	{
 		private readonly IPublishEventsFromEventHandlers _bus;
 		private readonly IScenarioRepository _scenarioRepository;
@@ -30,6 +31,21 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 			_scheduleRepository = scheduleRepository;
 			_projectionChangedEventBuilder = projectionChangedEventBuilder;
 		    
+		}
+
+		public void Handle(RemovedAbsenceEvent @event)
+		{
+			_bus.Publish(new ScheduleChangedEvent
+			{
+				SkipDelete = false,
+				Timestamp = @event.Timestamp,
+				BusinessUnitId = @event.BusinessUnitId,
+				Datasource = @event.Datasource,
+				PersonId = @event.PersonId,
+				ScenarioId = @event.ScenarioId,
+				StartDateTime = @event.StartDateTime,
+				EndDateTime = @event.EndDateTime,
+			});
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]

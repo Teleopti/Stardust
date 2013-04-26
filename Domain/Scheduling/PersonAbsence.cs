@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 					ScenarioId = _scenario.Id.Value
 				});
 		}
-
+		
         /// <summary>
         /// Constructor for NHibernate
         /// </summary>
@@ -288,5 +288,18 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 			throw new NotImplementedException();
 		}
+
+	    public virtual void RemoveAbsence(string dataSourceName)
+	    {
+		    AddEvent(new RemovedAbsenceEvent
+			    {
+				   Datasource = dataSourceName,
+				   BusinessUnitId = BusinessUnit.Id.Value,
+				   PersonId = Person.Id.Value,
+				   ScenarioId = Scenario.Id.Value,
+				   StartDateTime = Period.StartDateTime,
+				   EndDateTime = Period.EndDateTime
+			    });
+	    }
     }
 }
