@@ -11,7 +11,7 @@ GO
 -- Interface:	smalldatetime, with only datepart! No time allowed
 -- =============================================
 CREATE PROCEDURE [mart].[etl_fact_schedule_day_count_intraday_load] 
---exec [mart].[etl_fact_schedule_day_count_intraday_load]  @business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA'
+--exec [mart].[etl_fact_schedule_day_count_intraday_load]  @business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA',@scenario_code='928DD0BC-BF40-412E-B970-9B5E015AADEA'
 @business_unit_code uniqueidentifier,
 @scenario_code uniqueidentifier
 AS

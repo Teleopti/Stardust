@@ -39,7 +39,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public ILastChangedReadModel LastChangedDate(IBusinessUnit currentBusinessUnit, string stepName)
 		{
 			var res = ((NHibernateUnitOfWork)_currentUnitOfWork).Session.CreateSQLQuery(
-					"exec mart.[LastChangedDateOnStep] :step, :bu ")
+					"exec mart.[LastChangedDateOnStep] @stepName=:step, @buId=:bu ")
 					.SetGuid("bu", currentBusinessUnit.Id.GetValueOrDefault())
 					.SetString("step", stepName)
 					.SetResultTransformer(Transformers.AliasToBean(typeof(LastChangedReadModel)))
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		public void UpdateLastChangedDate(IBusinessUnit currentBusinessUnit, string stepName, DateTime thisTime)
 		{
 			((NHibernateUnitOfWork)_currentUnitOfWork).Session.CreateSQLQuery(
-					"exec mart.[UpdateLastChangedDateOnStep] :step, :bu, :thisTime ")
+					"exec mart.[UpdateLastChangedDateOnStep] @stepName=:step, @buId=:bu, @thisTime=:thisTime ")
 					.SetDateTime("thisTime", thisTime)
 					.SetGuid("bu", currentBusinessUnit.Id.GetValueOrDefault())
 					.SetString("step", stepName)

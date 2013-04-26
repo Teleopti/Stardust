@@ -718,6 +718,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			{
 				var rep = new EtlReadModelRepository(uow);
 				rep.UpdateLastChangedDate(currentBusinessUnit, stepName, thisTime);
+				uow.PersistAll();
 			}
 		}
 
