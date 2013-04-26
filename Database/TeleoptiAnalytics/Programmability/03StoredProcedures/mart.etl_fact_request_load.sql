@@ -222,6 +222,11 @@ group by stg.request_code
 inner join mart.fact_request f
 on temp.request_code = f.request_code
 
+--set requested time for shift trades to 0
+UPDATE mart.fact_request
+SET requested_time_m=0
+WHERE request_type_id=2 AND requested_time_m<>0
+
 
 
 END
