@@ -40,8 +40,8 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 						conn.Open();
 						using (var tran = conn.BeginTransaction())
 						{
-							var target = new dontFixDates(tran);
-							target.Execute(pa.Person.Id.Value, TimeZoneInfo.Utc);
+							var target = new dontFixDates();
+							target.Execute(tran, pa.Person.Id.Value, TimeZoneInfo.Utc);
 							tran.Commit();
 						}
 					}
@@ -81,11 +81,6 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 
 		private class dontFixDates : PersonAssignmentDateSetter
 		{
-			public dontFixDates(SqlTransaction transaction)
-				: base(transaction)
-			{
-			}
-
 			protected override string NumberOfNotConvertedCommand
 			{
 				get { return "select 1"; }

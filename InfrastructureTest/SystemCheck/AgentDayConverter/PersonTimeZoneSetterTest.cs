@@ -3,6 +3,7 @@ using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Interfaces.Domain;
@@ -27,7 +28,7 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 		{
 			var newTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
 
-			ExecuteTarget.PersonTimeZoneSetterAndWrapInTransaction(snubbe.Id.Value, newTimeZone);
+			new PersonTimeZoneSetter().ExecuteConverterAndWrapInTransaction(snubbe.Id.Value, newTimeZone);
 
 			new PersonRepository(UnitOfWork).Get(snubbe.Id.Value).PermissionInformation.DefaultTimeZone()
 																.Should().Be.EqualTo(newTimeZone);
@@ -38,7 +39,7 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 		{
 			var oldTimeZone = snubbe.PermissionInformation.DefaultTimeZone();
 
-			ExecuteTarget.PersonTimeZoneSetterAndWrapInTransaction(Guid.NewGuid(), TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time"));
+			new PersonTimeZoneSetter().ExecuteConverterAndWrapInTransaction(Guid.NewGuid(), TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time"));
 
 			new PersonRepository(UnitOfWork).Get(snubbe.Id.Value).PermissionInformation.DefaultTimeZone()
 													.Should().Be.EqualTo(oldTimeZone);

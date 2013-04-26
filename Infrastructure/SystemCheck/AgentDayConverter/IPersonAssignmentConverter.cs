@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data.SqlClient;
 
 namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
 {
@@ -11,6 +12,6 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
 		/// Executes against the connectionstring
 		/// </summary>
 		/// <returns></returns>
-		void Execute(Guid personId, TimeZoneInfo timeZoneInfo);
+		void Execute(SqlTransaction transaction, Guid personId, TimeZoneInfo timeZoneInfo);
 	}
 }

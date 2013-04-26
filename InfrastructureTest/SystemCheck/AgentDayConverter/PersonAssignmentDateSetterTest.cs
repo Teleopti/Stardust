@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 			paRep.Get(pa.Id.Value).Date.Should().Be.EqualTo(AgentDayConverterDate.DateOfUnconvertedSchedule);
 			UnitOfWork.Clear();
 
-			ExecuteTarget.DateSetterAndWrapInTransaction(pa.Person.Id.Value, TimeZoneInfo.Utc);
+			new PersonAssignmentDateSetter().ExecuteConverterAndWrapInTransaction(pa.Person.Id.Value, TimeZoneInfo.Utc);
 
 			paRep.Get(pa.Id.Value).Date.Should().Be.EqualTo(expected);
 		}
@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 			UnitOfWork.PersistAll();
 			UnitOfWork.Clear();
 
-			ExecuteTarget.DateSetterAndWrapInTransaction(pa.Person.Id.Value, TimeZoneInfo.Utc);
+			new PersonAssignmentDateSetter().ExecuteConverterAndWrapInTransaction(pa.Person.Id.Value, TimeZoneInfo.Utc);
 
 			paRep.Get(pa.Id.Value).Date.Should().Be.EqualTo(expected);
 		}
@@ -68,7 +68,7 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 			UnitOfWork.PersistAll();
 			UnitOfWork.Clear();
 
-			ExecuteTarget.DateSetterAndWrapInTransaction(Guid.NewGuid(), TimeZoneInfo.Utc);
+			new PersonAssignmentDateSetter().ExecuteConverterAndWrapInTransaction(Guid.NewGuid(), TimeZoneInfo.Utc);
 
 			paRep.Get(pa.Id.Value).Date.Should().Be.EqualTo(AgentDayConverterDate.DateOfUnconvertedSchedule);
 		}
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 			UnitOfWork.PersistAll();
 			UnitOfWork.Clear();
 
-			ExecuteTarget.DateSetterAndWrapInTransaction(pa.Person.Id.Value, TimeZoneInfo.FindSystemTimeZoneById("Tokyo Standard Time"));
+			new PersonAssignmentDateSetter().ExecuteConverterAndWrapInTransaction(pa.Person.Id.Value, TimeZoneInfo.FindSystemTimeZoneById("Tokyo Standard Time"));
 
 			paRep.Get(pa.Id.Value).Date.Should().Be.EqualTo(new DateOnly(1999, 12, 31));
 		}
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 			UnitOfWork.Clear();
 
 			var versionBefore = pa.Version;
-			ExecuteTarget.DateSetterAndWrapInTransaction(pa.Person.Id.Value, TimeZoneInfo.Utc);
+			new PersonAssignmentDateSetter().ExecuteConverterAndWrapInTransaction(pa.Person.Id.Value, TimeZoneInfo.Utc);
 			new PersonAssignmentRepository(UnitOfWork).Get(pa.Id.Value).Version
 			                                          .Should().Be.EqualTo(versionBefore + 1);
 		}

@@ -1,14 +1,7 @@
-﻿using System.Data.SqlClient;
-
-namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
+﻿namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
 {
 	public class PersonAssignmentDateSetter : PersonAssignmentDateSetterBase
 	{
-		public PersonAssignmentDateSetter(SqlTransaction transaction)
-			: base(transaction)
-		{
-		}
-
 		protected override string NumberOfNotConvertedCommand
 		{
 			get

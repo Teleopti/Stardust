@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Data.SqlClient;
 using System.Linq;
 using NHibernate.Envers;
 using NUnit.Framework;
@@ -36,7 +35,7 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 			UnitOfWork.Clear();
 
 			var revisions = Session.Auditer().GetRevisions(typeof(PersonAssignment), pa.Id.Value);
-			ExecuteTarget.AuditDateSetterAndWrapInTransaction(pa.Person.Id.Value, TimeZoneInfo.Utc);
+			new PersonAssignmentAuditDateSetter().ExecuteConverterAndWrapInTransaction(pa.Person.Id.Value, TimeZoneInfo.Utc);
 
 			Session.Auditer().Find<PersonAssignment>(pa.Id.Value, revisions.Last()).Date.Should().Be.EqualTo(expected);
 		}
@@ -56,7 +55,7 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 
 			var revisions = Session.Auditer().GetRevisions(typeof(PersonAssignment), pa.Id.Value);
 
-			ExecuteTarget.AuditDateSetterAndWrapInTransaction(pa.Person.Id.Value, TimeZoneInfo.Utc);
+			new PersonAssignmentAuditDateSetter().ExecuteConverterAndWrapInTransaction(pa.Person.Id.Value, TimeZoneInfo.Utc);
 
 			Session.Auditer().Find<PersonAssignment>(pa.Id.Value, revisions.Last()).Date.Should().Be.EqualTo(expected);
 		}
@@ -75,7 +74,7 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 
 			var revisions = Session.Auditer().GetRevisions(typeof(PersonAssignment), pa.Id.Value);
 
-			ExecuteTarget.AuditDateSetterAndWrapInTransaction(Guid.NewGuid(), TimeZoneInfo.Utc);
+			new PersonAssignmentAuditDateSetter().ExecuteConverterAndWrapInTransaction(Guid.NewGuid(), TimeZoneInfo.Utc);
 
 			Session.Auditer().Find<PersonAssignment>(pa.Id.Value, revisions.Last()).Date.Should().Be.EqualTo(AgentDayConverterDate.DateOfUnconvertedSchedule);
 		}
@@ -93,7 +92,7 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 			UnitOfWork.Clear();
 
 			var revisions = Session.Auditer().GetRevisions(typeof(PersonAssignment), pa.Id.Value);
-			ExecuteTarget.AuditDateSetterAndWrapInTransaction(pa.Person.Id.Value, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time"));
+			new PersonAssignmentAuditDateSetter().ExecuteConverterAndWrapInTransaction(pa.Person.Id.Value, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time"));
 
 			Session.Auditer()
 			       .Find<PersonAssignment>(pa.Id.Value, revisions.Last())
@@ -114,7 +113,7 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 
 			var revisions = Session.Auditer().GetRevisions(typeof(PersonAssignment), pa.Id.Value);
 			var versionBefore = Session.Auditer().Find<PersonAssignment>(pa.Id.Value, revisions.Last()).Version;
-			ExecuteTarget.AuditDateSetterAndWrapInTransaction(pa.Person.Id.Value, TimeZoneInfo.Utc);
+			new PersonAssignmentAuditDateSetter().ExecuteConverterAndWrapInTransaction(pa.Person.Id.Value, TimeZoneInfo.Utc);
 
 			Session.Clear();
 			Session.Auditer()

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Data.SqlClient;
 using Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter;
+using Teleopti.Ccc.Domain.Collection;
 
 namespace Teleopti.Support.Security
 {
@@ -33,17 +34,17 @@ namespace Teleopti.Support.Security
 		private static void setPersonAssignmentDate(CommandLineArgument commandLineArgument)
 		{
 			var allPersonAndTimeZone = new FetchPersonIdAndTimeZone(commandLineArgument.DestinationConnectionString).ForAllPersons();
+			var converters = new IPersonAssignmentConverter[] {new PersonAssignmentAuditDateSetter(), new PersonAssignmentDateSetter()};
 			using (var conn = new SqlConnection(commandLineArgument.DestinationConnectionString))
 			{
 				conn.Open();
 				foreach (var personAndTimeZone in allPersonAndTimeZone)
 				{
+					var personId = personAndTimeZone.Item1;
+					var timeZone = personAndTimeZone.Item2;
 					using (var tx = conn.BeginTransaction())
 					{
-						var personId = personAndTimeZone.Item1;
-						var timeZone = personAndTimeZone.Item2;
-						new PersonAssignmentAuditDateSetter(tx).Execute(personId, timeZone);
-						new PersonAssignmentDateSetter(tx).Execute(personId, timeZone);
+						converters.ForEach(x => x.Execute(tx, personId, timeZone));
 						tx.Commit();
 					}
 				}

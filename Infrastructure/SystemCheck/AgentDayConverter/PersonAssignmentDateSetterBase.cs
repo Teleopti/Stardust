@@ -7,29 +7,22 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
 {
 	public abstract class PersonAssignmentDateSetterBase : IPersonAssignmentConverter
 	{
-		private readonly SqlTransaction _transaction;
-
-		protected PersonAssignmentDateSetterBase(SqlTransaction transaction)
-		{
-			_transaction = transaction;
-		}
-
 		protected abstract string NumberOfNotConvertedCommand { get; }
 		protected abstract string ReadUnconvertedSchedulesCommand { get; }
 		protected abstract string UpdateAssignmentDateCommand { get; }
 
-		public void Execute(Guid personId, TimeZoneInfo timeZone)
+		public void Execute(SqlTransaction transaction, Guid personId, TimeZoneInfo timeZone)
 		{
-			var dt = readSchedules(personId);
+			var dt = readSchedules(transaction, personId);
 			setDate(dt, timeZone);
-			updatePersonAssignmentRows(dt);
+			updatePersonAssignmentRows(transaction, dt);
 
-			checkAllConverted(personId);
+			checkAllConverted(transaction, personId);
 		}
 
-		private void checkAllConverted(Guid personId)
+		private void checkAllConverted(SqlTransaction transaction, Guid personId)
 		{
-			using (var cmd = new SqlCommand(NumberOfNotConvertedCommand, _transaction.Connection, _transaction))
+			using (var cmd = new SqlCommand(NumberOfNotConvertedCommand, transaction.Connection, transaction))
 			{
 				cmd.Parameters.AddWithValue("@personId", personId);
 				if ((int)cmd.ExecuteScalar() > 0)
@@ -39,11 +32,11 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
 			}
 		}
 
-		private void updatePersonAssignmentRows(DataTable dataTable)
+		private void updatePersonAssignmentRows(SqlTransaction transaction, DataTable dataTable)
 		{
 			foreach (DataRow row in dataTable.Rows)
 			{
-				using (var command = new SqlCommand(UpdateAssignmentDateCommand, _transaction.Connection, _transaction))
+				using (var command = new SqlCommand(UpdateAssignmentDateCommand, transaction.Connection, transaction))
 				{
 					command.CommandType = CommandType.Text;
 					command.Parameters.AddWithValue("@newDate", string.Format("{0:s}", row["TheDate"]));
@@ -63,9 +56,9 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
 			}
 		}
 
-		private DataTable readSchedules(Guid personId)
+		private DataTable readSchedules(SqlTransaction transaction, Guid personId)
 		{
-			using (var command = new SqlCommand(ReadUnconvertedSchedulesCommand, _transaction.Connection, _transaction))
+			using (var command = new SqlCommand(ReadUnconvertedSchedulesCommand, transaction.Connection, transaction))
 			{
 				command.Parameters.AddWithValue("@personId", personId);
 				using (var dataAdapter = new SqlDataAdapter(command))
