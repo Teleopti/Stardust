@@ -115,16 +115,13 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				_statisticConfiguration = createStatisticConfiguration(hibernateConfiguration);
 			using (PerformanceOutput.ForOperation("Create authentication settings"))
 				_authenticationSettings = createAuthenticationSettings(hibernateConfiguration);
-			var appFact =
-                                 new NHibernateUnitOfWorkFactory(buildSessionFactory(_applicationConfiguration), _enversConfiguration.AuditSettingProvider, _applicationConfiguration.Properties[Environment.ConnectionString], messageSenders);
+			var appFact = new NHibernateUnitOfWorkFactory(buildSessionFactory(_applicationConfiguration), _enversConfiguration.AuditSettingProvider, _applicationConfiguration.Properties[Environment.ConnectionString], _messageSenders);
 			if (_statisticConfiguration == null)
 			{
                 return new DataSource(appFact, null, _authenticationSettings);
-
 			}
 			return
-				 new DataSource(appFact,
-                                      new NHibernateUnitOfWorkMatrixFactory(buildSessionFactory(_statisticConfiguration), _statisticConfiguration.Properties[Environment.ConnectionString]), _authenticationSettings);
+				 new DataSource(appFact, new NHibernateUnitOfWorkMatrixFactory(buildSessionFactory(_statisticConfiguration), _statisticConfiguration.Properties[Environment.ConnectionString]), _authenticationSettings);
 		}
 
 		public IDataSource Create(IDictionary<string, string> settings,

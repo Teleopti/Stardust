@@ -158,7 +158,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
         private void fillPersonAssignment(IScheduleDay part, IEnumerable<PersonAssignmentDto> assignmentDtos)
         {
             _personAssignmentAssembler.Person = part.Person;
-            _personAssignmentAssembler.DefaultScenario = scenarioRepository.Current();
+            _personAssignmentAssembler.DefaultScenario = _scenarioRepository.Current();
 	        _personAssignmentAssembler.PartDate = part.DateOnlyAsPeriod.DateOnly;
             part.Clear<IPersonAssignment>();
             var filteredAssignmentDtos = filterEmptyAssignment(assignmentDtos);
