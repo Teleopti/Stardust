@@ -31,31 +31,33 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			                                                             new List<IActivityRestriction>());
 			if (dateOnlyList == null)
 				return restriction;
-
-			if (schedulingOptions.UseTeamBlockSameShift)
+            
+			if ( schedulingOptions.UseTeamBlockSameShift)
 			{
 				var sameShiftRestriction = extractSameShift(dateOnlyList, matrixList);
 				if (sameShiftRestriction == null) return null;
 				restriction = restriction.Combine(sameShiftRestriction);
 			}
-			if (schedulingOptions.UseTeamBlockSameStartTime)
+            if ((schedulingOptions.UseTeamBlockPerOption &&  schedulingOptions.UseTeamBlockSameStartTime) || (schedulingOptions.UseGroupScheduling && schedulingOptions.UseGroupSchedulingCommonStart ))
 			{
 				var sameStartRestriction = extractSameStartTime(dateOnlyList, matrixList, timeZone);
 				if (sameStartRestriction == null) return null;
 				restriction = restriction.Combine(sameStartRestriction);
 			}
-			if (schedulingOptions.UseTeamBlockSameEndTime)
+			if ((schedulingOptions.UseTeamBlockPerOption && schedulingOptions.UseTeamBlockSameEndTime) || (schedulingOptions.UseGroupScheduling && schedulingOptions.UseGroupSchedulingCommonEnd ))
 			{
 				var sameEndRestriction = extractSameEndTime(dateOnlyList, matrixList, timeZone);
 				if (sameEndRestriction == null) return null;
 				restriction = restriction.Combine(sameEndRestriction);
 			}
-			if (schedulingOptions.UseTeamBlockSameShiftCategory)
+			if ((schedulingOptions.UseTeamBlockPerOption && schedulingOptions.UseTeamBlockSameShiftCategory) || (schedulingOptions.UseGroupScheduling && schedulingOptions.UseGroupSchedulingCommonCategory ))
 			{
 				var sameShiftCategory = extractSameShiftCategory(dateOnlyList, matrixList);
 				if (sameShiftCategory == null) return null;
 				restriction = restriction.Combine(sameShiftCategory);
 			}
+
+
 			return restriction;
 		}
 
