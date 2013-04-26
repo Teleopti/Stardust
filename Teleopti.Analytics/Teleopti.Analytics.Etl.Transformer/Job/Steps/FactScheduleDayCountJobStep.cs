@@ -25,7 +25,6 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 				{
 					var rows = _jobParameters.Helper.Repository.FillIntradayScheduleDayCountDataMart(RaptorTransformerHelper.CurrentBusinessUnit, scenario);
 					_jobParameters.StateHolder.UpdateThisTime("Schedules", RaptorTransformerHelper.CurrentBusinessUnit);
-					_jobParameters.StateHolder.UpdateThisTime("Preferences", RaptorTransformerHelper.CurrentBusinessUnit);
 					return rows;
 				}
 	        
