@@ -297,7 +297,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			var parameterList = new List<SqlParameter>
 				{
 					new SqlParameter("business_unit_code", currentBusinessUnit.Id),
-					new SqlParameter("scenario_code", currentBusinessUnit.Id)
+					new SqlParameter("scenario_code", scenario.Id)
 				};
 
 
@@ -708,7 +708,6 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 
 		public int PersistScheduleChanged(DataTable dataTable)
 		{
-			HelperFunctions.ExecuteNonQuery(CommandType.Text, "TRUNCATE TABLE [stage].[stg_schedule_changed]", new Collection<SqlParameter>(), _dataMartConnectionString);
 			return HelperFunctions.BulkInsert(dataTable, "stage.[stg_schedule_changed]", _dataMartConnectionString);
 		}
 

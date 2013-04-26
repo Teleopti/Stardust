@@ -15,6 +15,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
         {
 	        Name = "fact_schedule_preference";
             JobCategory = JobCategoryType.Schedule;
+			_isIntraday = isIntraday;
         }
 
         protected override int RunStep(IList<IJobResult> jobResultCollection, bool isLastBusinessUnit)
