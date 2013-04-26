@@ -20,7 +20,8 @@ GO
 --exec mart.etl_fact_schedule_preference_intraday_load '493E828B-D416-4628-AB10-990E7D268DB9'
 
 CREATE PROCEDURE [mart].[etl_fact_schedule_preference_intraday_load]
-@business_unit_code uniqueidentifier
+@business_unit_code uniqueidentifier,
+@scenario_code uniqueidentifier
 AS
 SET NOCOUNT ON
 CREATE TABLE #fakeCount (Col1 int)
