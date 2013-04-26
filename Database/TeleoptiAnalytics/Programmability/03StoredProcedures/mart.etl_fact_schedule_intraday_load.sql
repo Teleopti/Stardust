@@ -13,7 +13,7 @@ GO
 
 -- =============================================
 --exec mart.etl_fact_schedule_intraday_load '2009-02-02','2009-02-03'
---exec mart.etl_fact_schedule_intraday_load @start_date='2010-10-30 00:00:00',@end_date='2010-11-03 00:00:00'
+--exec mart.etl_fact_schedule_intraday_load 'CEC854E6-B4A8-4BD5-BB12-26E8A3D9E0BA'
 CREATE PROCEDURE [mart].[etl_fact_schedule_intraday_load]
 @business_unit_code uniqueidentifier
 AS
@@ -21,6 +21,12 @@ AS
 --Get first row scenario in stage table, currently this must(!) be the default scenario, else RAISERROR
 DECLARE @scenario_code uniqueidentifier
 SELECT TOP 1 @scenario_code=scenario_code FROM Stage.stg_schedule_changed
+
+--if no @scenario, no data then break
+IF @scenario_code IS NULL
+BEGIN
+	RETURN 0
+END
 
 if (select count(*)
 	from mart.dim_scenario

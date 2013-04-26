@@ -16,6 +16,17 @@ CREATE PROCEDURE [mart].[etl_fact_schedule_day_count_intraday_load]
 @scenario_code uniqueidentifier
 AS
 
+if (select count(*)
+	from mart.dim_scenario
+	where business_unit_code = @business_unit_code
+	and scenario_code = @scenario_code
+	) <> 1
+BEGIN
+	DECLARE @ErrorMsg nvarchar(4000)
+	SELECT @ErrorMsg  = 'This is not a default scenario, or muliple default scenarios exists!'
+	RAISERROR (@ErrorMsg,16,1)
+	RETURN 0
+END
 CREATE TABLE #stg_schedule_changed(
 	person_id int,
 	date_id int,
