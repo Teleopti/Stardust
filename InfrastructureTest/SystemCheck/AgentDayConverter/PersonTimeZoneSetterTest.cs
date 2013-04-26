@@ -27,11 +27,10 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 		public void ShouldPersistTimeZone()
 		{
 			var newTimeZone = TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time");
-
 			new PersonTimeZoneSetter().ExecuteConverterAndWrapInTransaction(snubbe.Id.Value, newTimeZone);
 
-			new PersonRepository(UnitOfWork).Get(snubbe.Id.Value).PermissionInformation.DefaultTimeZone()
-																.Should().Be.EqualTo(newTimeZone);
+			new PersonRepository(UnitOfWork).Get(snubbe.Id.Value).PermissionInformation.DefaultTimeZone().Id
+																.Should().Be.EqualTo(newTimeZone.Id);
 		}
 
 		[Test]

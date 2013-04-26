@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
 using NHibernate;
 using NUnit.Framework;
@@ -25,8 +26,10 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 			UnitOfWork.PersistAll();
 
 			var res = new FetchPersonIdAndTimeZone(UnitOfWorkFactory.Current.ConnectionString).ForAllPersons();
-			res.Should().Contain(new Tuple<Guid, TimeZoneInfo>(p1.Id.Value, p1.PermissionInformation.DefaultTimeZone()));
-			res.Should().Contain(new Tuple<Guid, TimeZoneInfo>(p2.Id.Value, p2.PermissionInformation.DefaultTimeZone()));
+			res.First(x => x.Item1 == p1.Id.Value).Item2.Id
+				.Should().Be.EqualTo(p1.PermissionInformation.DefaultTimeZone().Id);
+			res.First(x => x.Item1 == p2.Id.Value).Item2.Id
+				.Should().Be.EqualTo(p2.PermissionInformation.DefaultTimeZone().Id);
 		}
 
 		protected override void TeardownForRepositoryTest()
