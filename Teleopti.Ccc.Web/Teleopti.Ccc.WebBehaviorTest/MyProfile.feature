@@ -7,16 +7,14 @@
 		be able to change language
 		be able to change my password
 
-@ignore
-# Ignore for now until because we need to wait for Select2 control from main
+
 Scenario: See my profile
 	Given I am an agent
 	When I view my regional settings
 	Then I should see my culture
 	And I should see my language
 
-@ignore
-# Ignore for now until because we need to wait for Select2 control from main
+#Failing now because the date format of the datepicker in TeamSchedule is incorrect. Will be fixed in TeeamSchedule soon.
 Scenario: Change my culture
 	Given I am an agent
 	And I am swedish
@@ -24,8 +22,6 @@ Scenario: Change my culture
 	And I change culture to US
 	Then I should see US date format
 
-@ignore
-# Ignore for now until because we need to wait for Select2 control from main
 Scenario: Change my language
 	Given I am an agent
 	And I am swedish
