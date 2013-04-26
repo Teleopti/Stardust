@@ -52,6 +52,12 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             return filteredData;
         }
 
+		public static IList<PersonRequestViewModel> FilterAdapters(IList<PersonRequestViewModel> adapterList,
+		                                                           IEnumerable<Guid> filteredPersons)
+		{
+			return adapterList.Where(p => filteredPersons.Contains(p.PersonRequest.Person.Id.GetValueOrDefault())).ToList();
+		}
+
         public static IList<PersonRequestViewModel> SearchText(IList<PersonRequestViewModel> data,
                                                  IList<string> filterExpression)
         {
