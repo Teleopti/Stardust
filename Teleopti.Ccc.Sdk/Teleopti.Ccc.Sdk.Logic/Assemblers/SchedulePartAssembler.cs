@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
     {
         private readonly IScheduleDataAssembler<IPersonAssignment, PersonAssignmentDto> _personAssignmentAssembler;
         private readonly IScheduleDataAssembler<IPersonAbsence, PersonAbsenceDto> _personAbsenceAssembler;
-        private readonly IScenarioRepository _scenarioRepository;
+        private readonly ICurrentScenario _scenarioRepository;
         private readonly IScheduleDataAssembler<IPersonDayOff, PersonDayOffDto> _personDayOffAssembler;
         private readonly IScheduleDataAssembler<IPersonMeeting, PersonMeetingDto> _personMeetingAssembler;
         private readonly IScheduleDataAssembler<IPreferenceDay, PreferenceRestrictionDto> _prefRestrictionAssembler;
@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
     	public string SpecialProjection { get; set; }
     	public TimeZoneInfo TimeZone { get; set; }
 
-		public SchedulePartAssembler(IScenarioRepository scenarioRepository,
+		public SchedulePartAssembler(ICurrentScenario scenarioRepository,
                                     IScheduleDataAssembler<IPersonAssignment, PersonAssignmentDto> personAssignmentAssembler,
                                     IScheduleDataAssembler<IPersonAbsence, PersonAbsenceDto> personAbsenceAssembler,
                                     IScheduleDataAssembler<IPersonDayOff, PersonDayOffDto> personDayOffAssembler,
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
             IScheduleDictionary scheduleDictionary =
                 ScheduleRepository.FindSchedulesOnlyInGivenPeriod(new PersonProvider(new[] { person }), new ScheduleDictionaryLoadOptions(true, false),
                                                                      skaVaraPersonernaIListansFullaSchemaPeriod,
-                                                                     _scenarioRepository.LoadDefaultScenario());
+                                                                     _scenarioRepository.Current());
             //vad ska hända här?
             //TimeZoneInfo timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById(schedulePartDto.TimeZoneId));
             //scheduleDictionary.SetTimeZone(timeZoneInfo);
@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
         private void fillPersonAbsence(IScheduleDay part, IEnumerable<PersonAbsenceDto> absenceDtos)
         {
             _personAbsenceAssembler.Person = part.Person;
-            _personAbsenceAssembler.DefaultScenario = _scenarioRepository.LoadDefaultScenario();
+            _personAbsenceAssembler.DefaultScenario = _scenarioRepository.Current();
 
             ClearAbsenceBelongingToThisPart(part);
 
@@ -158,9 +158,8 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
         private void fillPersonAssignment(IScheduleDay part, IEnumerable<PersonAssignmentDto> assignmentDtos)
         {
             _personAssignmentAssembler.Person = part.Person;
-            _personAssignmentAssembler.DefaultScenario = _scenarioRepository.LoadDefaultScenario();
+            _personAssignmentAssembler.DefaultScenario = scenarioRepository.Current();
 	        _personAssignmentAssembler.PartDate = part.DateOnlyAsPeriod.DateOnly;
-
             part.Clear<IPersonAssignment>();
             var filteredAssignmentDtos = filterEmptyAssignment(assignmentDtos);
             if (filteredAssignmentDtos != Enumerable.Empty<PersonAssignmentDto>())
@@ -200,7 +199,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
             if(dayOffDto!=null)
             {
                 _personDayOffAssembler.Person = part.Person;
-                _personDayOffAssembler.DefaultScenario = _scenarioRepository.LoadDefaultScenario();
+                _personDayOffAssembler.DefaultScenario = _scenarioRepository.Current();
                 part.Add(_personDayOffAssembler.DtoToDomainEntity(dayOffDto));                
             }
         }

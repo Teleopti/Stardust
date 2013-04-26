@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.ServiceModel;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Ccc.Sdk.Logic;
 using Teleopti.Ccc.Sdk.Logic.CommandHandler;
@@ -49,7 +51,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			               	};
 			var message = new RecalculateForecastOnSkillMessageCollection();
 			Expect.Call(_busSender.EnsureBus()).Return(true);
-			Expect.Call(() =>_busSender.NotifyServiceBus(message)).IgnoreArguments();
+			Expect.Call(() =>_busSender.Send(message)).IgnoreArguments();
 			_mocks.ReplayAll();
 			_target.Handle(commands);
 			_mocks.VerifyAll();

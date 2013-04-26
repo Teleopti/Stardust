@@ -202,9 +202,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should not be able to see preferences link")]
 		public void ThenIShouldNotBeAbleToSeePreferencesLink()
 		{
-			var page = Browser.Current.Page<PortalPage>();
-			page.Menu.Exists.Should().Be.True();
-			page.PreferencesLink.Exists.Should().Be.False();
+			Browser.Interactions.AssertNotExists("#tabs", "[href*='#PreferenceTab']");
 		}
 
 		[Then(@"I should see the start time boundry (.*) to (.*)")]

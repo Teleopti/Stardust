@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ServiceModel;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
@@ -18,15 +19,15 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
     {
         private readonly IScheduleRepository _scheduleRepository;
         private readonly IScheduleDictionarySaver _scheduleDictionarySaver;
-        private readonly IScenarioRepository _scenarioRepository;
+        private readonly ICurrentScenario _scenarioRepository;
         private readonly IPersonRequestCheckAuthorization _authorization;
         private readonly ISwapAndModifyService _swapAndModifyService;
         private readonly IPersonRequestRepository _personRequestRepository;
-        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+        private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
     	private readonly IMessageBrokerEnablerFactory _messageBrokerEnablerFactory;
         private readonly IScheduleDictionaryModifiedCallback _scheduleDictionaryModifiedCallback;
 
-		  public ApproveRequestCommandHandler(IScheduleRepository scheduleRepository, IScheduleDictionarySaver scheduleDictionarySaver, IScenarioRepository scenarioRepository, IPersonRequestCheckAuthorization authorization, ISwapAndModifyService swapAndModifyService, IPersonRequestRepository personRequestRepository, IUnitOfWorkFactory unitOfWorkFactory, IMessageBrokerEnablerFactory messageBrokerEnablerFactory, IScheduleDictionaryModifiedCallback scheduleDictionaryModifiedCallback)
+		  public ApproveRequestCommandHandler(IScheduleRepository scheduleRepository, IScheduleDictionarySaver scheduleDictionarySaver, ICurrentScenario scenarioRepository, IPersonRequestCheckAuthorization authorization, ISwapAndModifyService swapAndModifyService, IPersonRequestRepository personRequestRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory, IMessageBrokerEnablerFactory messageBrokerEnablerFactory, IScheduleDictionaryModifiedCallback scheduleDictionaryModifiedCallback)
         {
             _scheduleRepository = scheduleRepository;
             _scheduleDictionarySaver = scheduleDictionarySaver;
@@ -53,9 +54,9 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public CommandResultDto Handle(ApproveRequestCommandDto command)
+		public void Handle(ApproveRequestCommandDto command)
         {
-            using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+            using (var uow = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
             {
                 var personRequest = _personRequestRepository.Get(command.PersonRequestId);
 
@@ -63,7 +64,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                 var scheduleDictionary = getSchedules(personRequest);
 
                 var approvalService = GetRequestApprovalServiceScheduler(scheduleDictionary,
-                                                                          _scenarioRepository.LoadDefaultScenario(),
+                                                                          _scenarioRepository.Current(),
                                                                           _swapAndModifyService, allNewRules);
                 try
                 {
@@ -84,7 +85,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                     uow.PersistAll();
                 }
             }
-            return new CommandResultDto { AffectedId = command.PersonRequestId, AffectedItems = 1 };
+			command.Result = new CommandResultDto { AffectedId = command.PersonRequestId, AffectedItems = 1 };
         }
 
         private IScheduleDictionary getSchedules(IPersonRequest personRequest)
@@ -111,7 +112,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
             var timePeriod = personRequest.Request.Period;
             var scheduleDictionary = _scheduleRepository.FindSchedulesOnlyInGivenPeriod(
                 new PersonProvider(personList), new ScheduleDictionaryLoadOptions(true, false), timePeriod,
-                _scenarioRepository.LoadDefaultScenario());
+                _scenarioRepository.Current());
             ((ReadOnlyScheduleDictionary)scheduleDictionary).MakeEditable();
             return scheduleDictionary;
         }

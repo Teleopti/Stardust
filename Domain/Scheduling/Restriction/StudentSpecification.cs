@@ -1,5 +1,4 @@
-﻿using System;
-using Teleopti.Interfaces.Domain;
+﻿using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Domain.Specification;
 
 namespace Teleopti.Ccc.Domain.Scheduling.Restriction

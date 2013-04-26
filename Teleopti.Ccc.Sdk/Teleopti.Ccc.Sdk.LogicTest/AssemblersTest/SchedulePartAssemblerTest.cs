@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
     public class SchedulePartAssemblerTest
     {
         private SchedulePartAssembler target;
-        private IScenarioRepository scenarioRepository;
+        private ICurrentScenario scenarioRepository;
         private MockRepository mocks;
         private IScheduleDataAssembler<IPersonAssignment, PersonAssignmentDto> assignmentAssembler;
         private IScheduleDataAssembler<IPersonAbsence, PersonAbsenceDto> absenceAssembler;
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             person.SetId(Guid.NewGuid());
 
             mocks = new MockRepository();
-            scenarioRepository = mocks.StrictMock<IScenarioRepository>();
+			scenarioRepository = mocks.StrictMock<ICurrentScenario>();
             assignmentAssembler = mocks.DynamicMock<IScheduleDataAssembler<IPersonAssignment, PersonAssignmentDto>>();
             absenceAssembler = mocks.DynamicMock<IScheduleDataAssembler<IPersonAbsence, PersonAbsenceDto>>();
             dayOffAssembler = mocks.DynamicMock<IScheduleDataAssembler<IPersonDayOff, PersonDayOffDto>>();
@@ -169,7 +169,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
                 //part.Add(prefDay);
                 part.Add(studentDay);
 
-                Expect.Call(scenarioRepository.LoadDefaultScenario()).Return(null).Repeat.AtLeastOnce();
+                Expect.Call(scenarioRepository.Current()).Return(null).Repeat.AtLeastOnce();
             }
             using(mocks.Playback())
             {
@@ -209,7 +209,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
                 
                 part.Add(absResult);
 
-                Expect.Call(scenarioRepository.LoadDefaultScenario()).Return(null).Repeat.AtLeastOnce();
+                Expect.Call(scenarioRepository.Current()).Return(null).Repeat.AtLeastOnce();
             }
             using (mocks.Playback())
             {

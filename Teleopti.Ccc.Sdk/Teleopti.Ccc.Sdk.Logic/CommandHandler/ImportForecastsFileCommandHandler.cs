@@ -1,8 +1,10 @@
 ﻿using System;
 using System.ServiceModel;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
+using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;
 using Teleopti.Interfaces.Domain;
@@ -14,11 +16,11 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
     public class ImportForecastsFileCommandHandler : IHandleCommand<ImportForecastsFileCommandDto>
     {
         private readonly IServiceBusSender _busSender;
-        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+        private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
         private readonly IJobResultRepository _jobResultRepository;
 
         public ImportForecastsFileCommandHandler(IServiceBusSender busSender,
-            IUnitOfWorkFactory unitOfWorkFactory,
+            ICurrentUnitOfWorkFactory unitOfWorkFactory,
             IJobResultRepository jobResultRepository)
         {
             _busSender = busSender;
@@ -26,7 +28,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
             _jobResultRepository = jobResultRepository;
         }
 
-        public CommandResultDto Handle(ImportForecastsFileCommandDto command)
+        public void Handle(ImportForecastsFileCommandDto command)
         {
             if (command == null)
                 throw new FaultException("Command is null.");
@@ -36,7 +38,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
             }
             Guid jobResultId;
             var person = ((IUnsafePerson) TeleoptiPrincipal.Current).Person;
-            using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+            using (var unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
             {
                 var jobResult = new JobResult(JobCategory.ForecastsImport, new DateOnlyPeriod(DateOnly.Today, DateOnly.Today),
                                               person, DateTime.UtcNow);
@@ -61,8 +63,8 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                 Timestamp = DateTime.UtcNow,
                 ImportMode = (ImportForecastsMode)((int)command.ImportForecastsMode)
             };
-            _busSender.NotifyServiceBus(message);
-            return new CommandResultDto { AffectedId = jobResultId, AffectedItems = 1 };
+            _busSender.Send(message);
+			command.Result = new CommandResultDto { AffectedId = jobResultId, AffectedItems = 1 };
         }
     }
 }

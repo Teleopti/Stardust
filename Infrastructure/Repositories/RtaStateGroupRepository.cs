@@ -22,9 +22,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
         }
 
-	    public RtaStateGroupRepository(ICurrentUnitOfWork currentUnitOfWork) :base(currentUnitOfWork)
-	    {
-	    }
+        public RtaStateGroupRepository(IUnitOfWorkFactory unitOfWorkFactory)
+            : base(unitOfWorkFactory)
+        {
+        }
 
         /// <summary>
         /// Loads all complete graph.

@@ -467,7 +467,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             }
         }
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ScheduleBackToLegalStateDaysShouldReturnFalseIfSchedulingFails()
 		{
 			_person=new Person();
@@ -499,7 +499,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			}
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ScheduleBackToLegalStateDaysShouldReturnTrueIfSuccessfulScheduling()
 		{
 			_person=new Person();

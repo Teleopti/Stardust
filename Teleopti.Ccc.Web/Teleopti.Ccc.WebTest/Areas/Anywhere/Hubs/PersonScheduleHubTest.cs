@@ -19,10 +19,10 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var viewModelFactory = MockRepository.GenerateMock<IPersonScheduleViewModelFactory>();
 			var target = new PersonScheduleHub(viewModelFactory);
 			var hubBuilder = new TestHubBuilder();
-			hubBuilder.SetupHub(target, hubBuilder.FakeCaller("incomingPersonSchedule", new Action<PersonScheduleViewModel>(a => { })));
+			hubBuilder.SetupHub(target, hubBuilder.FakeClient("incomingPersonSchedule", new Action<PersonScheduleViewModel>(a => { })));
 			var personId = Guid.NewGuid();
 
-			target.SubscribePersonSchedule(personId, DateTime.Today);
+			target.PersonSchedule(personId, DateTime.Today);
 
 			viewModelFactory.AssertWasCalled(x => x.CreateViewModel(personId, DateTime.Today));
 		}
@@ -34,13 +34,13 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			var target = new PersonScheduleHub(viewModelFactory);
 			object actual = null;
 			var hubBuilder = new TestHubBuilder();
-			hubBuilder.SetupHub(target, hubBuilder.FakeCaller("incomingPersonSchedule", new Action<PersonScheduleViewModel>(a => { actual = a; })));
+			hubBuilder.SetupHub(target, hubBuilder.FakeClient("incomingPersonSchedule", new Action<PersonScheduleViewModel>(a => { actual = a; })));
 			var personId = Guid.NewGuid();
 			var data = new PersonScheduleViewModel();
 
 			viewModelFactory.Stub(x => x.CreateViewModel(personId, DateTime.Today)).Return(data);
 
-			target.SubscribePersonSchedule(personId, DateTime.Today);
+			target.PersonSchedule(personId, DateTime.Today);
 
 			actual.Should().Be.SameInstanceAs(data);
 		}

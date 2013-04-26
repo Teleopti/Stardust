@@ -9,25 +9,25 @@ Background:
 	| Name                     | Access to all areas |
 	| Access to mobile reports | true                |
 	| Access to mytime web     | true                |
-	| Access to admin web      | true                |
+	| Access to anywhere       | true                |
 	Given there is a role with
-	| Field                    | Value                       |
-	| Name                     | Access to report only       |
-	| Access to mobile reports | true                        |
-	| Access to mytime web     | false                       |
-	| Access to admin web      | false                       |
+	| Field                    | Value                 |
+	| Name                     | Access to report only |
+	| Access to mobile reports | true                  |
+	| Access to mytime web     | false                 |
+	| Access to anywhere       | false                 |
 	Given there is a role with
-	| Field                    | Value                       |
-	| Name                     | Access to mytime only       |
-	| Access to mobile reports | false                       |
-	| Access to mytime web     | true                        |
-	| Access to admin web      | false                       |
+	| Field                    | Value                 |
+	| Name                     | Access to mytime only |
+	| Access to mobile reports | false                 |
+	| Access to mytime web     | true                  |
+	| Access to anywhere       | false                 |
 	Given there is a role with
-	| Field                    | Value                       |
-	| Name                     | Access to admin web only    |
-	| Access to mobile reports | false                       |
-	| Access to mytime web     | false                       |
-	| Access to admin web      | true                        |
+	| Field                    | Value                   |
+	| Name                     | Access to anywhere only |
+	| Access to mobile reports | false                   |
+	| Access to mytime web     | false                   |
+	| Access to anywhere       | true                    |
 
 Scenario: Browse to root
 	Given I am not signed in
@@ -65,12 +65,12 @@ Scenario: Browse to root and sign in to Mobile Reports
 	And I sign in
 	Then I should see Mobile Reports
 	
-Scenario: Browse to root and sign in to Web Admin
-	Given I have the role 'Access to admin web only'
+Scenario: Browse to root and sign in to Anywhere
+	Given I have the role 'Access to anywhere only'
 	When I navigate to the site's root
 	And I select application logon data source
 	And I sign in
-	Then I should see Admin Web
+	Then I should see Anywhere
 
 Scenario: Browse to MyTime and sign in
 	Given I have the role 'Access to all areas'
@@ -86,9 +86,9 @@ Scenario: Browse to Mobile Reports and sign in
 	And I sign in
 	Then I should see Mobile Reports
 	
-Scenario: Browse to Web Admin and sign in
+Scenario: Browse to Anywhere and sign in
 	Given I have the role 'Access to all areas'
-	When I navigate to Admin Web
+	When I navigate to Anywhere
 	And I select application logon data source
 	And I sign in
-	Then I should see Admin Web
+	Then I should see Anywhere

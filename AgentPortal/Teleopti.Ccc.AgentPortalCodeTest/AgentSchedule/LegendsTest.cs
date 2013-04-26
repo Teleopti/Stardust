@@ -1,8 +1,9 @@
 ﻿using System.Collections;
+using System.Drawing;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.AgentPortalCode.AgentSchedule;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 
 namespace Teleopti.Ccc.AgentPortalCodeTest.AgentSchedule
 {
@@ -10,16 +11,16 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.AgentSchedule
     public class LegendsTest
     {
         readonly MockRepository mocker = new MockRepository();
-        private LegendsPresenter target;//
+        private LegendsPresenter target;
         private ILegendsView view;
-        private ITeleoptiSchedulingService sdk;
+        private ILegendLoader legendLoader;
 
         [SetUp]
         public void Setup()
         {
             view = mocker.StrictMock<ILegendsView>();
-            sdk = mocker.StrictMock<ITeleoptiSchedulingService>();
-            target = new LegendsPresenter(view, sdk);
+            legendLoader = mocker.StrictMock<ILegendLoader>();
+            target = new LegendsPresenter(view, legendLoader);
         }
 
         //Hmm crappy test
@@ -30,20 +31,20 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.AgentSchedule
             {
                 var absenceDtos = new[]
                                    {
-                                       new AbsenceDto {Name = "One", DisplayColor = new ColorDto()},
-                                       new AbsenceDto {Name = "Two", DisplayColor = new ColorDto()},
-                                       new AbsenceDto {Name = "Three", DisplayColor = new ColorDto()}
+                                       new AbsenceDto {Name = "One", DisplayColor = new ColorDto(Color.DeepSkyBlue)},
+                                       new AbsenceDto {Name = "Two", DisplayColor = new ColorDto(Color.DeepSkyBlue)},
+                                       new AbsenceDto {Name = "Three", DisplayColor = new ColorDto(Color.DeepSkyBlue)}
                                    };
                 
                 var activityDtos = new[]
                                    {
-                                       new ActivityDto {Description = "One", DisplayColor = new ColorDto()},
-                                       new ActivityDto {Description = "Two", DisplayColor = new ColorDto()},
-                                       new ActivityDto {Description = "Three", DisplayColor = new ColorDto()}
+                                       new ActivityDto {Description = "One", DisplayColor = new ColorDto(Color.DeepSkyBlue)},
+                                       new ActivityDto {Description = "Two", DisplayColor = new ColorDto(Color.DeepSkyBlue)},
+                                       new ActivityDto {Description = "Three", DisplayColor = new ColorDto(Color.DeepSkyBlue)}
                                    };
 
-                Expect.Call(sdk.GetAbsences(new AbsenceLoadOptionDto())).Return(absenceDtos).IgnoreArguments();
-                Expect.Call(sdk.GetActivities(new LoadOptionDto())).Return(activityDtos).IgnoreArguments();
+                Expect.Call(legendLoader.GetAbsences()).Return(absenceDtos);
+                Expect.Call(legendLoader.GetActivities()).Return(activityDtos);
                 Expect.Call(view.AbsenceDataSource).PropertyBehavior().IgnoreArguments();
                 Expect.Call(view.ActivityDataSource).PropertyBehavior().IgnoreArguments();
 
@@ -71,8 +72,8 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.AgentSchedule
                 var absenceDtos = GetManyAbsenceDtos();
                 var activityDtos = getManyActivityDtos();
 
-                Expect.Call(sdk.GetAbsences(new AbsenceLoadOptionDto())).Return(absenceDtos).IgnoreArguments();
-                Expect.Call(sdk.GetActivities(new LoadOptionDto())).Return(activityDtos).IgnoreArguments();
+                Expect.Call(legendLoader.GetAbsences()).Return(absenceDtos).IgnoreArguments();
+                Expect.Call(legendLoader.GetActivities()).Return(activityDtos).IgnoreArguments();
                 Expect.Call(view.AbsenceDataSource).PropertyBehavior().IgnoreArguments();
                 Expect.Call(view.ActivityDataSource).PropertyBehavior().IgnoreArguments();
 
@@ -96,24 +97,24 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.AgentSchedule
         {
             return new[]
                                {
-                                   new ActivityDto {Description = "One", DisplayColor = new ColorDto()}, 
-                                   new ActivityDto {Description = "Two", DisplayColor = new ColorDto()},
-                                   new ActivityDto {Description = "One", DisplayColor = new ColorDto()}, 
-                                   new ActivityDto {Description = "Two", DisplayColor = new ColorDto()},
-                                   new ActivityDto {Description = "One", DisplayColor = new ColorDto()}, 
-                                   new ActivityDto {Description = "Two", DisplayColor = new ColorDto()},
-                                   new ActivityDto {Description = "One", DisplayColor = new ColorDto()}, 
-                                   new ActivityDto {Description = "Two", DisplayColor = new ColorDto()},
-                                   new ActivityDto {Description = "One", DisplayColor = new ColorDto()}, 
-                                   new ActivityDto {Description = "Two", DisplayColor = new ColorDto()},
-                                   new ActivityDto {Description = "One", DisplayColor = new ColorDto()}, 
-                                   new ActivityDto {Description = "Two", DisplayColor = new ColorDto()},
-                                   new ActivityDto {Description = "One", DisplayColor = new ColorDto()}, 
-                                   new ActivityDto {Description = "Two", DisplayColor = new ColorDto()},
-                                   new ActivityDto {Description = "One", DisplayColor = new ColorDto()}, 
-                                   new ActivityDto {Description = "Two", DisplayColor = new ColorDto()},
-                                   new ActivityDto {Description = "Two", DisplayColor = new ColorDto()},
-                                   new ActivityDto {Description = "Three", DisplayColor = new ColorDto()}
+                                   new ActivityDto {Description = "One", DisplayColor = new ColorDto(Color.DeepSkyBlue)}, 
+                                   new ActivityDto {Description = "Two", DisplayColor = new ColorDto(Color.DeepSkyBlue)},
+                                   new ActivityDto {Description = "One", DisplayColor = new ColorDto(Color.DeepSkyBlue)}, 
+                                   new ActivityDto {Description = "Two", DisplayColor = new ColorDto(Color.DeepSkyBlue)},
+                                   new ActivityDto {Description = "One", DisplayColor = new ColorDto(Color.DeepSkyBlue)}, 
+                                   new ActivityDto {Description = "Two", DisplayColor = new ColorDto(Color.DeepSkyBlue)},
+                                   new ActivityDto {Description = "One", DisplayColor = new ColorDto(Color.DeepSkyBlue)}, 
+                                   new ActivityDto {Description = "Two", DisplayColor = new ColorDto(Color.DeepSkyBlue)},
+                                   new ActivityDto {Description = "One", DisplayColor = new ColorDto(Color.DeepSkyBlue)}, 
+                                   new ActivityDto {Description = "Two", DisplayColor = new ColorDto(Color.DeepSkyBlue)},
+                                   new ActivityDto {Description = "One", DisplayColor = new ColorDto(Color.DeepSkyBlue)}, 
+                                   new ActivityDto {Description = "Two", DisplayColor = new ColorDto(Color.DeepSkyBlue)},
+                                   new ActivityDto {Description = "One", DisplayColor = new ColorDto(Color.DeepSkyBlue)}, 
+                                   new ActivityDto {Description = "Two", DisplayColor = new ColorDto(Color.DeepSkyBlue)},
+                                   new ActivityDto {Description = "One", DisplayColor = new ColorDto(Color.DeepSkyBlue)}, 
+                                   new ActivityDto {Description = "Two", DisplayColor = new ColorDto(Color.DeepSkyBlue)},
+                                   new ActivityDto {Description = "Two", DisplayColor = new ColorDto(Color.DeepSkyBlue)},
+                                   new ActivityDto {Description = "Three", DisplayColor = new ColorDto(Color.DeepSkyBlue)}
                                };
         }
 
@@ -121,25 +122,25 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.AgentSchedule
         {
             return new []
                        {
-                           new AbsenceDto {Name = "One", DisplayColor = new ColorDto()}, 
-                           new AbsenceDto {Name = "Two", DisplayColor = new ColorDto()},
-                           new AbsenceDto {Name = "One", DisplayColor = new ColorDto()}, 
-                           new AbsenceDto {Name = "Two", DisplayColor = new ColorDto()},
-                           new AbsenceDto {Name = "One", DisplayColor = new ColorDto()}, 
-                           new AbsenceDto {Name = "Two", DisplayColor = new ColorDto()},
-                           new AbsenceDto {Name = "One", DisplayColor = new ColorDto()}, 
-                           new AbsenceDto {Name = "Two", DisplayColor = new ColorDto()},
-                           new AbsenceDto {Name = "One", DisplayColor = new ColorDto()}, 
-                           new AbsenceDto {Name = "Two", DisplayColor = new ColorDto()},
-                           new AbsenceDto {Name = "One", DisplayColor = new ColorDto()}, 
-                           new AbsenceDto {Name = "Two", DisplayColor = new ColorDto()},
-                           new AbsenceDto {Name = "One", DisplayColor = new ColorDto()}, 
-                           new AbsenceDto {Name = "Two", DisplayColor = new ColorDto()},
-                           new AbsenceDto {Name = "One", DisplayColor = new ColorDto()},
-                           new AbsenceDto {Name = "Two", DisplayColor = new ColorDto()},
-                           new AbsenceDto {Name = "One", DisplayColor = new ColorDto()}, 
-                           new AbsenceDto {Name = "Two", DisplayColor = new ColorDto()},
-                           new AbsenceDto {Name = "Three",DisplayColor = new ColorDto()}
+                           new AbsenceDto {Name = "One", DisplayColor = new ColorDto(Color.DeepSkyBlue)}, 
+                           new AbsenceDto {Name = "Two", DisplayColor = new ColorDto(Color.DeepSkyBlue)},
+                           new AbsenceDto {Name = "One", DisplayColor = new ColorDto(Color.DeepSkyBlue)}, 
+                           new AbsenceDto {Name = "Two", DisplayColor = new ColorDto(Color.DeepSkyBlue)},
+                           new AbsenceDto {Name = "One", DisplayColor = new ColorDto(Color.DeepSkyBlue)}, 
+                           new AbsenceDto {Name = "Two", DisplayColor = new ColorDto(Color.DeepSkyBlue)},
+                           new AbsenceDto {Name = "One", DisplayColor = new ColorDto(Color.DeepSkyBlue)}, 
+                           new AbsenceDto {Name = "Two", DisplayColor = new ColorDto(Color.DeepSkyBlue)},
+                           new AbsenceDto {Name = "One", DisplayColor = new ColorDto(Color.DeepSkyBlue)}, 
+                           new AbsenceDto {Name = "Two", DisplayColor = new ColorDto(Color.DeepSkyBlue)},
+                           new AbsenceDto {Name = "One", DisplayColor = new ColorDto(Color.DeepSkyBlue)}, 
+                           new AbsenceDto {Name = "Two", DisplayColor = new ColorDto(Color.DeepSkyBlue)},
+                           new AbsenceDto {Name = "One", DisplayColor = new ColorDto(Color.DeepSkyBlue)}, 
+                           new AbsenceDto {Name = "Two", DisplayColor = new ColorDto(Color.DeepSkyBlue)},
+                           new AbsenceDto {Name = "One", DisplayColor = new ColorDto(Color.DeepSkyBlue)},
+                           new AbsenceDto {Name = "Two", DisplayColor = new ColorDto(Color.DeepSkyBlue)},
+                           new AbsenceDto {Name = "One", DisplayColor = new ColorDto(Color.DeepSkyBlue)}, 
+                           new AbsenceDto {Name = "Two", DisplayColor = new ColorDto(Color.DeepSkyBlue)},
+                           new AbsenceDto {Name = "Three",DisplayColor = new ColorDto(Color.DeepSkyBlue)}
                        };
         }
     }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.Routing;
 using Teleopti.Ccc.Web.Core.Startup.Booter;
@@ -21,9 +22,10 @@ namespace Teleopti.Ccc.Web.Core.Startup
 			_registerAllAreas = registerAllAreas;
 		}
 
-		public void Execute()
+		public Task Execute()
 		{
 			registerRoutes(RouteTable.Routes);
+			return null;
 		}
 
 		public void registerRoutes(RouteCollection routes)

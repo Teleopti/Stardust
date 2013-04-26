@@ -33,6 +33,14 @@ namespace Teleopti.Ccc.TestCommon.FakeData
             return ret;
         }
 
+		public static Scenario CreateScenarioWithId(string name, bool defaultWorkspace)
+		{
+			Scenario ret = new Scenario(name);
+			ret.SetId(Guid.NewGuid());
+			ret.DefaultScenario = defaultWorkspace;
+			return ret;
+		}
+
         /// <summary>
         /// Creates a scenario aggregate list.
         /// </summary>

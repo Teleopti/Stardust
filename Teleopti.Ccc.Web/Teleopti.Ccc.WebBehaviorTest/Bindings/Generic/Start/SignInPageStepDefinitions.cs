@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 		[Then(@"I should be signed in")]
 		public void ThenIShouldBeSignedIn()
 		{
-			EventualAssert.That(() => Browser.Current.Link("signout").Exists || Browser.Current.Link("signout-button").Exists, Is.True);
+			Browser.Interactions.AssertExists("#signout, #signout-button");
 		}
 
 		[Then(@"I should see a log on error")]

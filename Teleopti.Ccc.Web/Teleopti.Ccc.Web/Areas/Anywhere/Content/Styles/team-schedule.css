@@ -28,13 +28,13 @@
 	z-index: 111;
  }
  
-.team-schedule .agent
+.team-schedule .person
 {
 }
-.team-schedule .agent:last-child
+.team-schedule .person:last-child
 {
 }
-.team-schedule .agent-name 
+.team-schedule .person-name 
 {
 	max-width: 105px !important;
 	min-width: 105px !important;
@@ -66,6 +66,12 @@
 	-webkit-border-radius: 0px 4px 4px 0px;
 	   -moz-border-radius: 0px 4px 4px 0px;
 			border-radius: 0px 4px 4px 0px;
+}
+.team-schedule .shift .layer:only-child
+{
+	-webkit-border-radius: 4px 4px 4px 4px;
+	   -moz-border-radius: 4px 4px 4px 4px;
+			border-radius: 4px 4px 4px 4px;
 }
 .team-schedule .resource-layer 
 {
@@ -102,6 +108,10 @@
 	overflow: hidden;
 }
 
+.team-schedule .date-input {
+    cursor: pointer;
+    background-color: #FFFFFF;
+}
 
 @media (max-width: 1199px) {
 
@@ -111,6 +121,5 @@
 	.team-schedule .work-time {
 		display: none;
 	}
-
 }
 

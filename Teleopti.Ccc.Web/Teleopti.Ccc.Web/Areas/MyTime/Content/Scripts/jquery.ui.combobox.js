@@ -82,14 +82,14 @@
 			input.attr('title', select.attr('title'));
 			input[0].defaultValue = value;
 
-			input.data("autocomplete")._renderItem = function (ul, item) {
+			input.data("ui-autocomplete")._renderItem = function (ul, item) {
 				return $("<li></li>")
-									.data("item.autocomplete", item)
+									.data("ui-autocomplete-item", item)
 									.append("<a>" + item.label + "</a>")
 									.appendTo(ul);
 			};
 
-			input.data("autocomplete").menu.element.addClass(select.attr('class'));
+			input.data("ui-autocomplete").menu.element.addClass(select.attr('class'));
 
 			this.button = $("<button type='button'>&nbsp;</button>")
 				.attr("tabIndex", -1)

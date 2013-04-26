@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.IO;
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 	public class DataSourcesFactory : IDataSourcesFactory
 	{
 		private readonly IEnversConfiguration _enversConfiguration;
-		private readonly IEnumerable<IMessageSender> _externalDenormalizers;
+		private readonly IEnumerable<IMessageSender> _messageSenders;
 		private readonly IDataSourceConfigurationSetter _dataSourceConfigurationSetter;
 		private static readonly ILog Logger = LogManager.GetLogger(typeof(DataSourcesFactory));
 		private Configuration _applicationConfiguration;
@@ -39,10 +39,10 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private const string _connectionStringKeyName = "connection.connection_string";
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Denormalizers")]
-		public DataSourcesFactory(IEnversConfiguration enversConfiguration, IEnumerable<IMessageSender> externalDenormalizers, IDataSourceConfigurationSetter dataSourceConfigurationSetter)
+		public DataSourcesFactory(IEnversConfiguration enversConfiguration, IEnumerable<IMessageSender> messageSenders, IDataSourceConfigurationSetter dataSourceConfigurationSetter)
 		{
 			_enversConfiguration = enversConfiguration;
-			_externalDenormalizers = externalDenormalizers;
+			_messageSenders = messageSenders;
 			_dataSourceConfigurationSetter = dataSourceConfigurationSetter;
 		}
 
@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 			using (PerformanceOutput.ForOperation("Create authentication settings"))
 				_authenticationSettings = createAuthenticationSettings(hibernateConfiguration);
 			var appFact =
-				 new NHibernateUnitOfWorkFactory(buildSessionFactory(_applicationConfiguration), _enversConfiguration.AuditSettingProvider, _applicationConfiguration.Properties[Environment.ConnectionString], _externalDenormalizers);
+                                 new NHibernateUnitOfWorkFactory(buildSessionFactory(_applicationConfiguration), _enversConfiguration.AuditSettingProvider, _applicationConfiguration.Properties[Environment.ConnectionString], messageSenders);
 			if (_statisticConfiguration == null)
 			{
                 return new DataSource(appFact, null, _authenticationSettings);
@@ -132,7 +132,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		{
 			NHibernateUnitOfWorkMatrixFactory statFactory;
 			createApplicationConfiguration(settings);
-			var appFactory = new NHibernateUnitOfWorkFactory(buildSessionFactory(_applicationConfiguration), _enversConfiguration.AuditSettingProvider,_applicationConfiguration.Properties[Environment.ConnectionString],_externalDenormalizers);
+                        var appFactory = new NHibernateUnitOfWorkFactory(buildSessionFactory(_applicationConfiguration), _enversConfiguration.AuditSettingProvider,_applicationConfiguration.Properties[Environment.ConnectionString],_messageSenders);
 			if (!string.IsNullOrEmpty(statisticConnectionString))
 			{
 				_statisticConfiguration = createStatisticConfigurationInner(statisticConnectionString, NoDataSourceName);

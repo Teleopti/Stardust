@@ -44,10 +44,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             IDayOffTemplate template = new DayOffTemplate(new Description("template"));
             _target.DayOffTemplate = template;
             Assert.AreEqual(template, _target.DayOffTemplate);
-            _target.ShiftCategory = category;
-            _target.UseBlockScheduling = BlockFinderType.BetweenDayOff;
-            Assert.AreEqual(BlockFinderType.BetweenDayOff, _target.UseBlockScheduling);
-            Assert.IsNull(_target.ShiftCategory);
+
+
+            _target.BlockFinderTypeForAdvanceScheduling  = BlockFinderType.BetweenDayOff;
+            Assert.AreEqual(BlockFinderType.BetweenDayOff, _target.BlockFinderTypeForAdvanceScheduling);
+
             _target.UsePreferences = true;
             _target.UsePreferencesMustHaveOnly = true;
             Assert.IsTrue(_target.UsePreferencesMustHaveOnly);
@@ -65,7 +66,19 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Assert.IsFalse(_target.UseSameDayOffs);
             _target.UseSameDayOffs = true;
             Assert.IsTrue(_target.UseSameDayOffs);
+            
         }
+
+        //[Test]
+        //public void VerifyBlockOptions()
+        //{
+        //    _target.UsePeriodAsBlock = true;
+        //    Assert.IsTrue(_target.UsePeriodAsBlock);
+        //    _target.UseTwoDaysOffAsBlock = true;
+        //    Assert.IsTrue(_target.UseTwoDaysOffAsBlock);
+        //    _target.UseCalendarWeekAsBlock = true;
+        //    Assert.IsTrue(_target.UseCalendarWeekAsBlock);
+        //}
 
         [Test]
         public void VerifyRotationDaysOnlyCannotBeTrueIfUseRotationsIsFalse()
@@ -115,6 +128,29 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             Assert.IsFalse(_target.UsePreferencesMustHaveOnly);
             Assert.IsFalse(_target.UsePreferences);
 
+        }
+
+		[Test]
+        public void VerifyPreferenceToBeSavedForTeamBlock()
+        {
+            _target.UseTeamBlockSameEndTime  = true;
+            _target.UseTeamBlockSameShift = true;
+            _target.UseTeamBlockSameStartTime = true;
+            _target.UseTeamBlockSameShiftCategory = true;
+            Assert.IsTrue(_target.UseTeamBlockSameEndTime );
+            Assert.IsTrue(_target.UseTeamBlockSameShift );
+            Assert.IsTrue(_target.UseTeamBlockSameShiftCategory );
+            Assert.IsTrue(_target.UseTeamBlockSameStartTime );
+
+
+            _target.UseTeamBlockSameEndTime = false;
+            _target.UseTeamBlockSameShift = false;
+            _target.UseTeamBlockSameStartTime = false;
+            _target.UseTeamBlockSameShiftCategory = false;
+            Assert.IsFalse(_target.UseTeamBlockSameEndTime);
+            Assert.IsFalse(_target.UseTeamBlockSameShift);
+            Assert.IsFalse(_target.UseTeamBlockSameShiftCategory);
+            Assert.IsFalse(_target.UseTeamBlockSameStartTime);
         }
 
         [Test]

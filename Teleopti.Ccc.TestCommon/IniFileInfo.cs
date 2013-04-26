@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.TestCommon
 		public static string Url { get; private set; }
 		public static string SitePath { get; private set; }
 		public static bool CassiniDev { get; private set; }
+		public static bool ServiceBus { get; private set; }
 
 		private static void readIniFile()
 		{
@@ -41,6 +42,7 @@ namespace Teleopti.Ccc.TestCommon
 			Url = iniFileHelper.ReadIniValue(testDatabaseSection, "url");
 			SitePath = iniFileHelper.ReadIniValue(testDatabaseSection, "sitepath");
 			CassiniDev = iniFileHelper.ReadIniValue(testDatabaseSection, "cassinidev") == "true";
+			ServiceBus = iniFileHelper.ReadIniValue(testDatabaseSection, "servicebus") == "true";
 
 			buildConnectionString();
 

@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.TestCommon.FakeData;
 
@@ -52,5 +53,12 @@ namespace Teleopti.Ccc.DomainTest.Budgeting
             Assert.AreEqual(0, shrinkage1.OrderIndex);
             Assert.AreEqual(1, shrinkage2.OrderIndex);
         }
+
+		[Test]
+		public void ShouldSetOrderIndex()
+		{
+			var shrinkage = new CustomShrinkage("Test") {OrderIndex = -1};
+			shrinkage.OrderIndex.Should().Be.EqualTo(-1);
+		}
     }
 }

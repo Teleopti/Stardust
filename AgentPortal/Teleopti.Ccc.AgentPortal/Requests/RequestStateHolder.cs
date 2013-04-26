@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
 using Teleopti.Ccc.AgentPortalCode.Helper;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 
 namespace Teleopti.Ccc.AgentPortal.Requests
 {
@@ -34,13 +34,12 @@ namespace Teleopti.Ccc.AgentPortal.Requests
         /// Created by: Sumedah
         /// Created date: 2008-06-25
         /// </remarks>
-        public static  IList<AbsenceDto> LoadRequestableAbsence()
+        public static ICollection<AbsenceDto> LoadRequestableAbsence()
         {
             return
                 SdkServiceHelper.SchedulingService.GetAbsences(new AbsenceLoadOptionDto
                                                                    {
-                                                                       LoadRequestable = true,
-                                                                       LoadRequestableSpecified = true
+                                                                       LoadRequestable = true
                                                                    });
         }
     }

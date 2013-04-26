@@ -1,9 +1,14 @@
 using System;
+using System.Linq;
 using TechTalk.SpecFlow;
+using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WebBehaviorTest.Bindings.Generic;
 using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Data;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 {
@@ -24,7 +29,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[When(@"I manually navigate to week schedule page")]
 		public void WhenIManuallyNavigateToWeekSchedulePage()
 		{
-			Navigation.GotoAnApplicationPage();
+			Navigation.GotoWeekSchedulePageNoWait();
 		}
 
 		[When(@"I view my week schedule")]
@@ -75,11 +80,23 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoStudentAvailability(date);
 		}
 
-		[When(@"I view schedules for '(.*)'")]
-		public void WhenIViewSchedules(string date)
+		[When(@"I view schedules for '([0-9\-\\\/]*)'")]
+		public void WhenIViewSchedulesForDate(DateTime date)
 		{
 			TestControllerMethods.Logon();
 			Navigation.GotoAnywhereTeamSchedule(date);
+		}
+		
+		[When(@"I view schedules for '(.*)' on '(.*)'")]
+		public void WhenIViewSchedulesWithTeamAndDate(string teamName, DateTime date)
+		{
+			TestControllerMethods.Logon();
+			var teamSetups = UserFactory.User().UserDatasOfType<TeamConfigurable>();
+			var teamId = (from t in teamSetups
+						  let team = t.Team
+						  where team.Description.Name.Equals(teamName)
+						  select team.Id.Value).First();
+			Navigation.GotoAnywhereTeamSchedule(date, teamId);
 		}
 
 		[When(@"I view person schedule for '(.*)' on '(.*)'")]
@@ -90,8 +107,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoAnywherePersonSchedule(personId, date);
 		}
 
-		[When(@"I view agent schedules add full day absence form for '(.*)' on '(.*)'")]
-		public void WhenIViewAgentSchedulesAddFullDayAbsenceFormForAgentOnDate(string name, DateTime date)
+		[When(@"I view person schedules add full day absence form for '(.*)' on '(.*)'")]
+		public void WhenIViewPersonSchedulesAddFullDayAbsenceFormForPersonOnDate(string name, DateTime date)
 		{
 			TestControllerMethods.Logon();
 			var personId = UserFactory.User(name).Person.Id.Value;
@@ -157,13 +174,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoAnApplicationPageOutsidePortal();
 		}
 
-		[When(@"I navigate to the site home page")]
-		public void WhenIBrowseToTheSiteHomePage()
-		{
-			Navigation.GotoSiteHomePage();
-		}
-
-
 
 
 
@@ -179,6 +189,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Navigation.GotoGlobalSignInPage();
 		}
 
+		[When(@"I navigate to the site home page")]
 		[When(@"I navigate to the site's root")]
 		public void WhenINavigateToTheSiteSRoot()
 		{

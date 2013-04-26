@@ -1,75 +1,85 @@
 define([
 		'jquery',
-		'noext!../../../../signalr/hubs'
+        'messagebroker',
+        'signalrhubs',
+        'helpers'
 	], function (
 		$,
-		signalrHubs
+	    messagebroker,
+	    signalRHubs,
+	    helpers
 	) {
 		
 		var startPromise;
 
-		var subscription = function (options) {
-
-			var self = this;
-
-			this.callback = options.callback;
-			this.serverSubscribeMethod = options.serverSubscribeMethod;
-			
-			this.incomingData = function (data) {
-				//throw "why cant I see this?";
-				if (self.callback) {
-					try {
-						self.callback(data);
-					} catch(e) {
-						// why is signalr eating my exceptions?
-						console.log(e);
-						throw e;
-					} 
-				}
-			};
-
-			options.clientIncomingMethodSetter(this.incomingData);
-
-			this.subscribe = function() {
-				var argumentsArray = Array.prototype.slice.call(arguments);
-				var serverArguments = argumentsArray.slice(0, arguments.length - 1);
-				var callbackArgument = arguments[arguments.length - 1];
-				self.callback = callbackArgument;
-				startPromise.done(function() {
-					self.serverSubscribeMethod.apply(self, serverArguments);
-				});
-			};
-
+	    // why is signalr eating my exceptions?
+		var logException = function (func) {
+	        try {
+	            func();
+	        } catch (e) {
+	            console.log(e);
+	            throw e;
+	        }
+	    };
+	    
+		var teamScheduleHub = $.connection.teamScheduleHub;
+	    var incomingTeamSchedule = null;
+	    teamScheduleHub.client.incomingTeamSchedule = function (data) {
+	        if (incomingTeamSchedule != null)
+    	        logException(function() { incomingTeamSchedule(data); });
+	    };
+	    
+	    var personScheduleHub = $.connection.personScheduleHub;
+	    var personScheduleSubscription = null;
+	    var incomingPersonSchedule = null;
+	    personScheduleHub.client.incomingPersonSchedule = function (data) {
+	        if (incomingPersonSchedule != null)
+    		    logException(function () { incomingPersonSchedule(data); });
 		};
 
-		var subscriptions = [];
-		var teamScheduleHub = $.connection.teamScheduleHub;
-		var personScheduleHub = $.connection.personScheduleHub;
-
-		subscriptions.push(new subscription({
-			serverSubscribeMethod: teamScheduleHub.server.subscribeTeamSchedule,
-			clientIncomingMethodSetter: function(method) {
-				teamScheduleHub.client.incomingTeamSchedule = method;
-			}
-		}));
-
-		subscriptions.push(new subscription({
-			serverSubscribeMethod: personScheduleHub.server.subscribePersonSchedule,
-			clientIncomingMethodSetter: function(method) {
-				personScheduleHub.client.incomingPersonSchedule = method;
-			}
-		}));
-
 		var start = function () {
-			$.connection.hub.url = 'signalr';
-			startPromise = $.connection.hub.start();
+		    startPromise = messagebroker.start();
 			return startPromise;
 		};
 
-		return {
-			start: start,
-			subscribeTeamSchedule: subscriptions[0].subscribe,
-			subscribePersonSchedule: subscriptions[1].subscribe,
-		};
+	    return {
+	        start: start,
+	        
+	        subscribeTeamSchedule: function(teamId, date, callback) {
+	            incomingTeamSchedule = callback;
+	            startPromise.done(function() {
+	                teamScheduleHub.server.subscribeTeamSchedule(teamId, date);
+	            });
+	        },
+	        
+	        subscribePersonSchedule: function (personId, date, callback) {
+	            incomingPersonSchedule = callback;
+	            startPromise.done(function () {
+	                
+	                personScheduleHub.server.personSchedule(personId, date);
+
+	                personScheduleSubscription = messagebroker.subscribe({
+	                    domainReferenceType: 'Person',
+	                    domainReferenceId: personId,
+	                    domainType: 'IPersonScheduleDayReadModel',
+	                    callback: function(notification) {
+	                        var momentDate = moment(date);
+	                        var startDate = helpers.Date.ToMoment(notification.StartDate);
+	                        var endDate = helpers.Date.ToMoment(notification.EndDate);
+	                        if (momentDate.diff(startDate) >= 0 && momentDate.diff(endDate) <= 0)
+	                            personScheduleHub.server.personSchedule(personId, date);
+	                    }
+	                });
+	                
+	            });
+	        },
+	        
+	        unsubscribePersonSchedule: function () {
+	            startPromise.done(function() {
+	                incomingPersonSchedule = null;
+	                messagebroker.unsubscribe(personScheduleSubscription);
+	            });
+	        }
+	    };
 
 	});

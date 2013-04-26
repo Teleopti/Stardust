@@ -1,5 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -34,6 +37,39 @@ namespace Teleopti.Ccc.Domain.Scheduling
             _layer = layer;
 			((IAggregateEntity)_layer).SetParent(this);
         }
+
+		/// <summary>
+		/// Constructor for CommandHandlers
+		/// </summary>
+		public PersonAbsence(IScenario scenario)
+		{
+			_scenario = scenario;
+		}
+
+		/// <summary>
+		/// Make this person absence a full day absence
+		/// </summary>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
+		public virtual void FullDayAbsence(string dataSource, IPerson person, IAbsence absence, DateTime startDate, DateTime endDate)
+		{
+			var startDateTime = TimeZoneInfo.ConvertTimeToUtc(DateTime.SpecifyKind(startDate.Date, DateTimeKind.Unspecified), person.PermissionInformation.DefaultTimeZone());
+			var endDateTime = TimeZoneInfo.ConvertTimeToUtc(DateTime.SpecifyKind(endDate.Date.AddHours(24), DateTimeKind.Unspecified), person.PermissionInformation.DefaultTimeZone());
+
+			_person = person;
+			var absenceLayer = new AbsenceLayer(absence, new DateTimePeriod(startDateTime, endDateTime));
+			_layer = absenceLayer;
+
+			AddEvent(new FullDayAbsenceAddedEvent
+				{
+					Datasource = dataSource,
+					BusinessUnitId = _scenario.BusinessUnit.Id.Value,
+					AbsenceId = absence.Id.Value,
+					PersonId = person.Id.Value,
+					StartDateTime = startDateTime,
+					EndDateTime = endDateTime,
+					ScenarioId = _scenario.Id.Value
+				});
+		}
 
         /// <summary>
         /// Constructor for NHibernate
@@ -167,7 +203,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
             set { _lastChange = value; }
         }
 
-        #region ICloneableEntity<PersonAbsence> Members
+	    #region ICloneableEntity<PersonAbsence> Members
 
         /// <summary>
         /// Creates a new object that is a copy of the current instance.

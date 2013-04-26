@@ -17,7 +17,7 @@ namespace Teleopti.Ccc.DomainTest.Security.LicenseOptions
 			target.EnableApplicationFunctions(new List<IApplicationFunction>());
 			var result = target.EnabledApplicationFunctions;
 			
-			Assert.AreEqual(5, result.Count);
+			Assert.AreEqual(6, result.Count);
 		}
 
 	}

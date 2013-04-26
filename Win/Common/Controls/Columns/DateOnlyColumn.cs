@@ -4,6 +4,7 @@ using System.Globalization;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Win.Common.Configuration.Columns;
+using Teleopti.Ccc.Win.Common.Controls.Cells;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Common.Controls.Columns
@@ -36,7 +37,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Columns
             DateOnly? value = PropertyReflectorHelper.GetValue(currentItem, BindingProperty) as DateOnly?;
             if (value.HasValue)
             {
-                e.Style.CellType = "DatePickerCell";
+				e.Style.CellType = GridCellModelConstants.CellTypeDatePickerCell;
                 e.Style.Format = _dtfi.ShortDatePattern;
                 e.Style.CellValueType = typeof(DateTime);
                 e.Style.CellValue = value.Value.Date;

@@ -14,6 +14,7 @@ GO
 -- Create date: 2010-06-16
 -- Description:	A maintenance procedure that will ie remove old ETL execution logs and purge old mart data.
 -- 20120207 AF: Now also prge of old mart fact data.
+-- 20130325 AF: Now also Purge of old Agg data
 -- =============================================
 CREATE PROCEDURE [mart].[etl_data_mart_maintenance]
 AS
@@ -66,8 +67,6 @@ BEGIN
 	and d.date_date < (select dateadd(day,10,min(d2.date_date))
 						from mart.fact_agent f2 inner join mart.dim_date d2 on f2.date_id = d2.date_id)
 
-
-
 	--fact_agent_queue
 	delete mart.fact_agent_queue
 	from mart.fact_agent_queue f
@@ -88,7 +87,6 @@ BEGIN
 	and d.date_date < (select dateadd(day,10,min(d2.date_date))
 						from mart.fact_forecast_workload f2 inner join mart.dim_date d2 on f2.date_id = d2.date_id)
 
-
 	--fact_queue
 	delete mart.fact_queue
 	from mart.fact_queue f
@@ -98,7 +96,6 @@ BEGIN
 						and configuration_name = 'YearsToKeepFactQueue'),100),getdate())
 	and d.date_date < (select dateadd(day,10,min(d2.date_date))
 						from mart.fact_queue f2 inner join mart.dim_date d2 on f2.date_id = d2.date_id)
-
 
 	--fact_request
 	delete mart.fact_request
@@ -159,6 +156,42 @@ BEGIN
 						and configuration_name = 'YearsToKeepFactSchedulePreferences'),100),getdate())
 	and d.date_date < (select dateadd(day,10,min(d2.date_date))
 						from mart.fact_schedule_preference f2 inner join mart.dim_date d2 on f2.date_id = d2.date_id)
+
+	--External Agg Queue_Logg
+	delete mart.v_queue_logg
+	from mart.v_queue_logg f
+	where 1=1
+	and f.date_from < dateadd(year,-1*isnull((select isnull(configuration_value,100) from [mart].[etl_maintenance_configuration] where configuration_id = 14
+						and configuration_name = 'YearsToKeepAggQueueStats'),100),getdate())
+	and f.date_from < (select dateadd(day,10,min(f2.date_from))
+						from mart.v_queue_logg f2)
+
+	--Internal Agg Queue_Logg
+	delete dbo.queue_logg
+	from dbo.queue_logg f
+	where 1=1
+	and f.date_from < dateadd(year,-1*isnull((select isnull(configuration_value,100) from [mart].[etl_maintenance_configuration] where configuration_id = 14
+						and configuration_name = 'YearsToKeepAggQueueStats'),100),getdate())
+	and f.date_from < (select dateadd(day,10,min(f2.date_from))
+						from dbo.queue_logg f2)
+
+	--External Agg Agent_Logg
+	delete mart.v_agent_logg
+	from mart.v_agent_logg f
+	where 1=1
+	and f.date_from < dateadd(year,-1*isnull((select isnull(configuration_value,100) from [mart].[etl_maintenance_configuration] where configuration_id = 15
+						and configuration_name = 'YearsToKeepAggAgentStats'),100),getdate())
+	and f.date_from < (select dateadd(day,10,min(f2.date_from))
+						from mart.v_agent_logg f2)
+
+	--Internal Agg Agent_Logg
+	delete dbo.agent_logg
+	from dbo.agent_logg f
+	where 1=1
+	and f.date_from < dateadd(year,-1*isnull((select isnull(configuration_value,100) from [mart].[etl_maintenance_configuration] where configuration_id = 15
+						and configuration_name = 'YearsToKeepAggAgentStats'),100),getdate())
+	and f.date_from < (select dateadd(day,10,min(f2.date_from))
+						from dbo.agent_logg f2)
 
 END
 

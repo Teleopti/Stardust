@@ -1,8 +1,7 @@
 using System;
 using Teleopti.Ccc.AgentPortalCode.Helper;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
-using Teleopti.Interfaces.Domain;
-using Percent = Teleopti.Interfaces.Domain.Percent;
+using Teleopti.Ccc.Sdk.Common.Contracts;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 
 namespace Teleopti.Ccc.AgentPortalCode.AgentPreference
 {
@@ -44,7 +43,7 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentPreference
             if(_personDto == null || _dateOnlyDto == null)
                 throw new Exception("You must call GetPlanningTimeBankModel first to set person and date");
 
-            _service.SavePlanningTimeBank(_personDto, _dateOnlyDto, (int)wantedBalanceOut.TotalMinutes, true);
+            _service.SavePlanningTimeBank(_personDto, _dateOnlyDto, (int)wantedBalanceOut.TotalMinutes);
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "4"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]

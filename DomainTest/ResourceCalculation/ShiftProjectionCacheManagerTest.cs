@@ -5,7 +5,6 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -57,10 +56,10 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(_ruleSet.IsValidDate(dateOnly)).Return(true);
                 Expect.Call(_activityChecker.ContainsDeletedActivity(_ruleSet)).Return(false);
 				Expect.Call(_shiftCategoryChecker.ContainsDeletedActivity(_ruleSet)).Return(false);
-				Expect.Call(_ruleSetProjectionEntityService.ProjectionCollection(_ruleSet, callback)).Return(GetWorkShiftsInfo()).IgnoreArguments();
-                Expect.Call(_shiftFromMasterActivityService.Generate(GetWorkShifts()[0])).IgnoreArguments().Return(new List<IWorkShift>());
-                Expect.Call(_shiftFromMasterActivityService.Generate(GetWorkShifts()[0])).IgnoreArguments().Return(GetWorkShifts());
-                Expect.Call(_shiftFromMasterActivityService.Generate(GetWorkShifts()[0])).IgnoreArguments().Return(new List<IWorkShift>());    
+				Expect.Call(_ruleSetProjectionEntityService.ProjectionCollection(_ruleSet, callback)).Return(getWorkShiftsInfo()).IgnoreArguments();
+                Expect.Call(_shiftFromMasterActivityService.Generate(getWorkShifts()[0])).IgnoreArguments().Return(new List<IWorkShift>());
+                Expect.Call(_shiftFromMasterActivityService.Generate(getWorkShifts()[0])).IgnoreArguments().Return(getWorkShifts());
+                Expect.Call(_shiftFromMasterActivityService.Generate(getWorkShifts()[0])).IgnoreArguments().Return(new List<IWorkShift>());    
             }
 
             using (_mocks.Playback())
@@ -71,7 +70,11 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             }
         }
 
-		[Test]
+        
+
+        
+
+        [Test]
 		public void ShouldNotGetAnyWorkShiftsWhenDeletedShiftCategoryInRuleSetBag()
 		{
 			var ruleSets = new List<IWorkShiftRuleSet> { _ruleSet };
@@ -153,7 +156,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             }
         }
 
-        private IList<IWorkShift> GetWorkShifts()
+        private IList<IWorkShift> getWorkShifts()
         {
             _activity = ActivityFactory.CreateActivity("sd");
             _category = ShiftCategoryFactory.CreateShiftCategory("dv");
@@ -167,7 +170,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             return new List<IWorkShift> {_workShift1, _workShift2, _workShift3};
         }
 
-        private IList<IWorkShiftVisualLayerInfo> GetWorkShiftsInfo()
+        private IList<IWorkShiftVisualLayerInfo> getWorkShiftsInfo()
         {
             _activity = ActivityFactory.CreateActivity("sd");
             _category = ShiftCategoryFactory.CreateShiftCategory("dv");

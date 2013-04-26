@@ -6,59 +6,55 @@ namespace Teleopti.Ccc.Domain.Optimization
 {
     public class RestrictionOverLimitDecider : IRestrictionOverLimitDecider
     {
-        private readonly IScheduleMatrixPro _matrix;
+
         private readonly ICheckerRestriction _restrictionChecker;
 
-        public RestrictionOverLimitDecider(
-            IScheduleMatrixPro matrix,
-            ICheckerRestriction restrictionChecker
-            )
+        public RestrictionOverLimitDecider(ICheckerRestriction restrictionChecker)
         {
-            _matrix = matrix;
             _restrictionChecker = restrictionChecker;
         }
 
-        public BrokenRestrictionsInfo PreferencesOverLimit(Percent limit)
+		public BrokenRestrictionsInfo PreferencesOverLimit(Percent limit, IScheduleMatrixPro matrix)
         {
-            return calculateReturn(limit, _restrictionChecker.CheckPreference);
+			return calculateReturn(limit, _restrictionChecker.CheckPreference, matrix);
         }
 
-        public BrokenRestrictionsInfo MustHavesOverLimit(Percent limit)
+		public BrokenRestrictionsInfo MustHavesOverLimit(Percent limit, IScheduleMatrixPro matrix)
         {
-            return calculateReturn(limit, _restrictionChecker.CheckPreferenceMustHave);
+			return calculateReturn(limit, _restrictionChecker.CheckPreferenceMustHave, matrix);
         }
 
-        public BrokenRestrictionsInfo RotationOverLimit(Percent limit)
+		public BrokenRestrictionsInfo RotationOverLimit(Percent limit, IScheduleMatrixPro matrix)
         {
-            return calculateReturn(limit, _restrictionChecker.CheckRotations);
+			return calculateReturn(limit, _restrictionChecker.CheckRotations, matrix);
         }
 
-        public BrokenRestrictionsInfo AvailabilitiesOverLimit(Percent limit)
+		public BrokenRestrictionsInfo AvailabilitiesOverLimit(Percent limit, IScheduleMatrixPro matrix)
         {
-            return calculateReturn(limit, _restrictionChecker.CheckAvailability);
+			return calculateReturn(limit, _restrictionChecker.CheckAvailability, matrix);
         }
 
-        public BrokenRestrictionsInfo StudentAvailabilitiesOverLimit(Percent limit)
+		public BrokenRestrictionsInfo StudentAvailabilitiesOverLimit(Percent limit, IScheduleMatrixPro matrix)
         {
-            return calculateReturn(limit, _restrictionChecker.CheckStudentAvailability);
+            return calculateReturn(limit, _restrictionChecker.CheckStudentAvailability, matrix);
         }
 
-        private BrokenRestrictionsInfo calculateReturn(Percent limit, Func<PermissionState> checkMethod)
+		private BrokenRestrictionsInfo calculateReturn(Percent limit, Func<PermissionState> checkMethod, IScheduleMatrixPro matrix)
         {
             double brokenLimit = calculateBrokenLimit(limit.Value);
-            BrokenRestrictionsInfo current = calculateBrokenPercentage(checkMethod);
+            BrokenRestrictionsInfo current = calculateBrokenPercentage(checkMethod, matrix);
             if (current.BrokenPercentage.Value > brokenLimit)
                 return new BrokenRestrictionsInfo(current.BrokenDays, current.BrokenPercentage);
 
             return new BrokenRestrictionsInfo(new List<DateOnly>(), new Percent());
         }
 
-        private BrokenRestrictionsInfo calculateBrokenPercentage(Func<PermissionState> checkMethod)
+		private BrokenRestrictionsInfo calculateBrokenPercentage(Func<PermissionState> checkMethod, IScheduleMatrixPro matrix)
         {
             int brokenDays = 0;
             int allDays = 0;
             IList<DateOnly> brokenDates = new List<DateOnly>();
-            foreach (var scheduleDayPro in _matrix.EffectivePeriodDays)
+            foreach (var scheduleDayPro in matrix.EffectivePeriodDays)
             {
                 _restrictionChecker.ScheduleDay = scheduleDayPro.DaySchedulePart();
                 PermissionState permissionState = checkMethod();

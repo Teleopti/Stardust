@@ -176,7 +176,11 @@ business_unit_id	= bu.business_unit_id,
 datasource_id		= stg.datasource_id,
 insert_date			= stg.insert_date,
 update_date			= stg.update_date,
-datasource_update_date=stg.datasource_update_date
+datasource_update_date=stg.datasource_update_date,
+absence_id			= isnull(ab.absence_id,-1),
+request_starttime	= ISNULL(stg.request_starttime,'1900-01-01 00:00:00') ,
+request_endtime		= ISNULL(stg.request_endtime, '1900-01-01 00:00:00'),
+requested_time_m	= ISNULL(DATEDIFF(minute,stg.request_starttime, stg.request_endtime), 0)
 FROM stage.stg_request stg
 INNER JOIN mart.dim_date dLocal
 	ON dLocal.date_date = CONVERT(smalldatetime,CONVERT(nvarchar(30), stg.request_date, 112))	
@@ -198,6 +202,10 @@ INNER JOIN mart.dim_request_type rt
 	ON rt.request_type_id = stg.request_type_code
 INNER JOIN mart.dim_request_status rs
 	ON rs.request_status_id = stg.request_status_code
+LEFT JOIN
+	mart.dim_absence	ab
+ON
+	stg.absence_code = ab.absence_code
 WHERE stg.request_startdate BETWEEN @start_date AND @end_date
 	AND dp.to_be_deleted = 0
 
@@ -213,6 +221,11 @@ group by stg.request_code
 ) temp
 inner join mart.fact_request f
 on temp.request_code = f.request_code
+
+--set requested time for shift trades to 0
+UPDATE mart.fact_request
+SET requested_time_m=0
+WHERE request_type_id=2 AND requested_time_m<>0
 
 
 

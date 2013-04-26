@@ -164,7 +164,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 			{
 				_target.DayScheduled += _target_DayScheduled;
 				_target.DayOffScheduling(matrixProList, matrixProList, _schedulePartModifyAndRollbackService, _schedulingOptions);
-				_target.DayScheduled += _target_DayScheduled;
+				_target.DayScheduled -= _target_DayScheduled;
 			}
 		}
 

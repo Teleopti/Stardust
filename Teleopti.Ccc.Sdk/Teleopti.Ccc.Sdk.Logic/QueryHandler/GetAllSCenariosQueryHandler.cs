@@ -10,9 +10,9 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 	public class GetAllScenariosQueryHandler : IHandleQuery<GetAllScenariosQueryDto,ICollection<ScenarioDto>>
 	{
 		private readonly IScenarioRepository _scenarioRepository;
-		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+        private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 
-		public GetAllScenariosQueryHandler(IScenarioRepository scenarioRepository, IUnitOfWorkFactory unitOfWorkFactory)
+		public GetAllScenariosQueryHandler(IScenarioRepository scenarioRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory)
 		{
 			_scenarioRepository = scenarioRepository;
 			_unitOfWorkFactory = unitOfWorkFactory;
@@ -20,7 +20,7 @@ namespace Teleopti.Ccc.Sdk.Logic.QueryHandler
 
 		public ICollection<ScenarioDto> Handle(GetAllScenariosQueryDto query)
 		{
-			using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
+			using (_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
 				return
 					_scenarioRepository.FindAllSorted().Select(

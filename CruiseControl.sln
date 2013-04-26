@@ -168,6 +168,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.WebTest", "Teleopti.Ccc.Web\Teleopti.Ccc.WebTest\Teleopti.Ccc.WebTest.csproj", "{040557EE-947F-460B-8860-CFC92139725E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.WebBehaviorTest", "Teleopti.Ccc.Web\Teleopti.Ccc.WebBehaviorTest\Teleopti.Ccc.WebBehaviorTest.csproj", "{7784CC87-2CAD-416B-A254-CDE14C589FF5}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3266BFDE-8B39-458E-B0B7-063434806C96} = {3266BFDE-8B39-458E-B0B7-063434806C96}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Support.LicTool", "Teleopti.Support.LicTool\Teleopti.Support.LicTool.csproj", "{3036552C-25FF-4641-B939-96AD01E3F900}"
 EndProject
@@ -192,6 +195,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Startpage", "Teleopti.Ccc.Startpage\Teleopti.Ccc.Startpage.csproj", "{BF7E4697-98E5-47B1-8C2E-DA24E308453F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost", "Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost\Teleopti.Ccc.Sdk.ServiceBus.ConsoleHost.csproj", "{3266BFDE-8B39-458E-B0B7-063434806C96}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B37A5C3F-C1EE-4BCF-AF07-767E52E7C34D} = {B37A5C3F-C1EE-4BCF-AF07-767E52E7C34D}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Teleopti.Ccc.Web.Broker.Backplane", "Teleopti.Ccc.Web.Broker.Backplane\Teleopti.Ccc.Web.Broker.Backplane.csproj", "{31C00166-E856-49D3-A664-424224D90C2C}"
 EndProject
@@ -1257,16 +1263,18 @@ Global
 		{BF7E4697-98E5-47B1-8C2E-DA24E308453F}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{BF7E4697-98E5-47B1-8C2E-DA24E308453F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{BF7E4697-98E5-47B1-8C2E-DA24E308453F}.Release|x86.ActiveCfg = Release|Any CPU
-		{3266BFDE-8B39-458E-B0B7-063434806C96}.Debug|.NET.ActiveCfg = Debug|x86
-		{3266BFDE-8B39-458E-B0B7-063434806C96}.Debug|Any CPU.ActiveCfg = Debug|x86
-		{3266BFDE-8B39-458E-B0B7-063434806C96}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{3266BFDE-8B39-458E-B0B7-063434806C96}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{3266BFDE-8B39-458E-B0B7-063434806C96}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{3266BFDE-8B39-458E-B0B7-063434806C96}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3266BFDE-8B39-458E-B0B7-063434806C96}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3266BFDE-8B39-458E-B0B7-063434806C96}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{3266BFDE-8B39-458E-B0B7-063434806C96}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
 		{3266BFDE-8B39-458E-B0B7-063434806C96}.Debug|x86.ActiveCfg = Debug|x86
 		{3266BFDE-8B39-458E-B0B7-063434806C96}.Debug|x86.Build.0 = Debug|x86
-		{3266BFDE-8B39-458E-B0B7-063434806C96}.Release|.NET.ActiveCfg = Release|x86
-		{3266BFDE-8B39-458E-B0B7-063434806C96}.Release|Any CPU.ActiveCfg = Release|x86
-		{3266BFDE-8B39-458E-B0B7-063434806C96}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{3266BFDE-8B39-458E-B0B7-063434806C96}.Release|Mixed Platforms.Build.0 = Release|x86
+		{3266BFDE-8B39-458E-B0B7-063434806C96}.Release|.NET.ActiveCfg = Release|Any CPU
+		{3266BFDE-8B39-458E-B0B7-063434806C96}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3266BFDE-8B39-458E-B0B7-063434806C96}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3266BFDE-8B39-458E-B0B7-063434806C96}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{3266BFDE-8B39-458E-B0B7-063434806C96}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{3266BFDE-8B39-458E-B0B7-063434806C96}.Release|x86.ActiveCfg = Release|x86
 		{3266BFDE-8B39-458E-B0B7-063434806C96}.Release|x86.Build.0 = Release|x86
 		{31C00166-E856-49D3-A664-424224D90C2C}.Debug|.NET.ActiveCfg = Debug|Any CPU

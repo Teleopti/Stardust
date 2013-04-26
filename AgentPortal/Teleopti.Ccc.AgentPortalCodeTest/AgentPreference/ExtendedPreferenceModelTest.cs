@@ -8,7 +8,7 @@ using Teleopti.Ccc.AgentPortalCode.AgentPreference.Limitation;
 using Teleopti.Ccc.AgentPortalCode.Common;
 using Teleopti.Ccc.AgentPortalCode.Foundation.StateHandlers;
 using Teleopti.Ccc.AgentPortalCode.Helper;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.UserTexts;
 
 namespace Teleopti.Ccc.AgentPortalCodeTest.AgentPreference
@@ -38,14 +38,14 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.AgentPreference
             var preference = new Preference();
             preference.DayOff = null;
             preference.Absence = null;
-            preference.ShiftCategory = new ShiftCategory("shiftC", "sc", "id", Color.Black);
+            preference.ShiftCategory = new ShiftCategory("shiftC", "sc", Guid.NewGuid(), Color.Black);
             preference.StartTimeLimitation = new TimeLimitation(null)
                                                  {MaxTime = TimeSpan.FromHours(5), MinTime = TimeSpan.FromHours(10)};
             preference.EndTimeLimitation = new TimeLimitation(null)
                                                {MaxTime = TimeSpan.FromHours(16), MinTime = TimeSpan.FromHours(17)};
             preference.WorkTimeLimitation = new TimeLimitation(null)
                                                 {MaxTime = TimeSpan.FromHours(1), MinTime = TimeSpan.FromHours(10)};
-            preference.Activity = new Activity(Guid.NewGuid().ToString(), "act");
+            preference.Activity = new Activity(Guid.NewGuid(), "act");
             preference.ActivityStartTimeLimitation = new TimeLimitation(null)
                                                          {
                                                              MaxTime = TimeSpan.FromHours(10),
@@ -89,18 +89,18 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.AgentPreference
         {
             _target.SetPreference(new Preference());
 
-            _target.DayOff = new DayOff("dayoff", "do", "id", Color.Black);
-            _target.Absence = new Absence("name", "shortName", "id", Color.Empty);
+            _target.DayOff = new DayOff("dayoff", "do", Guid.NewGuid(), Color.Black);
+            _target.Absence = new Absence("name", "shortName", Guid.NewGuid(), Color.Empty);
             _target.StartTimeLimitationMax = TimeSpan.FromHours(10);
             _target.StartTimeLimitationMin = TimeSpan.FromHours(6);
             _target.EndTimeLimitationMin = TimeSpan.FromHours(16);
             _target.EndTimeLimitationMinNextDay = false;
             _target.EndTimeLimitationMax = TimeSpan.FromHours(20);
             _target.EndTimeLimitationMaxNextDay = false;
-        	_target.ShiftCategory = new ShiftCategory("shiftC", "sc", "id", Color.Black);
+        	_target.ShiftCategory = new ShiftCategory("shiftC", "sc", Guid.NewGuid(), Color.Black);
             _target.WorkTimeLimitationMax = TimeSpan.FromHours(1);
             _target.WorkTimeLimitationMin = TimeSpan.FromHours(10);
-            _target.Activity = new Activity(Guid.NewGuid().ToString(), "act");
+            _target.Activity = new Activity(Guid.NewGuid(), "act");
             _target.ActivityStartTimeLimitationMin = TimeSpan.FromHours(10);
             _target.ActivityStartTimeLimitationMax = TimeSpan.FromHours(13);
             _target.ActivityEndTimeLimitationMin = TimeSpan.FromHours(11);
@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.AgentPreference
                                      StartTimeLimitation = new TimeLimitation(null) {MaxTime = TimeSpan.FromHours(5), MinTime = TimeSpan.FromHours(10)},
                                      EndTimeLimitation = new TimeLimitation(null) {MaxTime = TimeSpan.FromHours(6), MinTime = TimeSpan.FromHours(11)},
                                      WorkTimeLimitation = new TimeLimitation(null) {MaxTime = TimeSpan.FromHours(7), MinTime = TimeSpan.FromHours(12)},
-                                     Activity = new Activity("id", "act"),
+                                     Activity = new Activity(Guid.NewGuid(), "act"),
                                      ActivityStartTimeLimitation = new TimeLimitation(null) {MaxTime = TimeSpan.FromHours(8), MinTime = TimeSpan.FromHours(13)},
                                      ActivityEndTimeLimitation = new TimeLimitation(null) {MaxTime = TimeSpan.FromHours(9), MinTime = TimeSpan.FromHours(14)},
                                      ActivityTimeLimitation = new TimeLimitation(null) {MaxTime = TimeSpan.FromHours(10), MinTime = TimeSpan.FromHours(15)}
@@ -165,7 +165,7 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.AgentPreference
 
             preference = new Preference
                                 {
-                                    DayOff = new DayOff("dayoff", "do", "id", Color.Black)
+                                    DayOff = new DayOff("dayoff", "do", Guid.NewGuid(), Color.Black)
                                 };
 
             _target.SetPreference(preference);
@@ -174,7 +174,7 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.AgentPreference
 
             preference = new Preference
                                 {
-                                    Absence = new Absence("name", "shortName", "id", Color.Empty)
+                                    Absence = new Absence("name", "shortName", Guid.NewGuid(), Color.Empty)
                                 };
 
             _target.SetPreference(preference);
@@ -183,7 +183,7 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.AgentPreference
 
             preference = new Preference
                                 {
-                                    ShiftCategory = new ShiftCategory("shiftC", "sc", "id", Color.Black)
+                                    ShiftCategory = new ShiftCategory("shiftC", "sc", Guid.NewGuid(), Color.Black)
                                 };
 
             _target.SetPreference(preference);
@@ -194,13 +194,13 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.AgentPreference
         [Test]
         public void ShouldClearDayOffAndAbsenceWhenSettingShiftCategory()
         {
-            _target.Absence = new Absence("name", "shortName", "id", Color.Empty);
-            _target.ShiftCategory = new ShiftCategory("name", "shortName", "id", Color.Empty);
+            _target.Absence = new Absence("name", "shortName", Guid.NewGuid(), Color.Empty);
+            _target.ShiftCategory = new ShiftCategory("name", "shortName", Guid.NewGuid(), Color.Empty);
             
             Assert.IsNull(_target.Absence);
 
-            _target.DayOff = new DayOff("name", "shortName", "id", Color.Empty);
-            _target.ShiftCategory = new ShiftCategory("name", "shortName", "id", Color.Empty);
+            _target.DayOff = new DayOff("name", "shortName", Guid.NewGuid(), Color.Empty);
+            _target.ShiftCategory = new ShiftCategory("name", "shortName", Guid.NewGuid(), Color.Empty);
 
             Assert.IsNull(_target.DayOff);
         }
@@ -216,7 +216,7 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.AgentPreference
             _target.EndTimeLimitationMaxNextDay = false;
             _target.WorkTimeLimitationMax = TimeSpan.FromHours(1);
             _target.WorkTimeLimitationMin = TimeSpan.FromHours(10);
-            _target.Activity = new Activity(Guid.NewGuid().ToString(), "act");
+            _target.Activity = new Activity(Guid.NewGuid(), "act");
             _target.ActivityStartTimeLimitationMin = TimeSpan.FromHours(10);
             _target.ActivityStartTimeLimitationMax = TimeSpan.FromHours(13);
             _target.ActivityEndTimeLimitationMin = TimeSpan.FromHours(11);
@@ -224,7 +224,7 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.AgentPreference
             _target.ActivityTimeLimitationMin = TimeSpan.FromHours(1);
             _target.ActivityTimeLimitationMax = TimeSpan.FromHours(2);
 
-            _target.DayOff = new DayOff("name", "shortName", "id", Color.Empty);
+            _target.DayOff = new DayOff("name", "shortName", Guid.NewGuid(), Color.Empty);
 
             Assert.IsNull(_target.StartTimeLimitationMax);
             Assert.IsNull(_target.StartTimeLimitationMin);
@@ -240,13 +240,13 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.AgentPreference
             Assert.IsNull(_target.ActivityTimeLimitationMin);
             Assert.IsNull(_target.ActivityTimeLimitationMax);
 
-            _target.Absence = new Absence("name", "shortName", "id", Color.Empty);
-            _target.DayOff = new DayOff("name", "shortName", "id", Color.Empty);
+            _target.Absence = new Absence("name", "shortName", Guid.NewGuid(), Color.Empty);
+            _target.DayOff = new DayOff("name", "shortName", Guid.NewGuid(), Color.Empty);
 
             Assert.IsNull(_target.Absence);
 
-            _target.ShiftCategory = new ShiftCategory("name", "shortName", "id", Color.Empty);
-            _target.DayOff = new DayOff("name", "shortName", "id", Color.Empty);
+            _target.ShiftCategory = new ShiftCategory("name", "shortName", Guid.NewGuid(), Color.Empty);
+            _target.DayOff = new DayOff("name", "shortName", Guid.NewGuid(), Color.Empty);
 
             Assert.IsNull(_target.ShiftCategory);
         }
@@ -259,7 +259,7 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.AgentPreference
                                      StartTimeLimitation = new TimeLimitation(null) {MaxTime = TimeSpan.FromHours(5), MinTime = TimeSpan.FromHours(10)},
                                      EndTimeLimitation = new TimeLimitation(null) {MaxTime = TimeSpan.FromHours(6), MinTime = TimeSpan.FromHours(11)},
                                      WorkTimeLimitation = new TimeLimitation(null) {MaxTime = TimeSpan.FromHours(7), MinTime = TimeSpan.FromHours(12)},
-                                     Activity = new Activity("id", "act"),
+                                     Activity = new Activity(Guid.NewGuid(), "act"),
                                      ActivityStartTimeLimitation = new TimeLimitation(null) {MaxTime = TimeSpan.FromHours(8), MinTime = TimeSpan.FromHours(13)},
                                      ActivityEndTimeLimitation = new TimeLimitation(null) {MaxTime = TimeSpan.FromHours(9), MinTime = TimeSpan.FromHours(14)},
                                      ActivityTimeLimitation = new TimeLimitation(null) {MaxTime = TimeSpan.FromHours(10), MinTime = TimeSpan.FromHours(15)}
@@ -291,7 +291,7 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.AgentPreference
 				StartTimeLimitation = new TimeLimitation(null) { MaxTime = TimeSpan.FromHours(5), MinTime = TimeSpan.FromHours(10) },
 				EndTimeLimitation = new TimeLimitation(null) { MaxTime = TimeSpan.FromHours(6), MinTime = TimeSpan.FromHours(11) },
 				WorkTimeLimitation = new TimeLimitation(null) { MaxTime = TimeSpan.FromHours(7), MinTime = TimeSpan.FromHours(12) },
-				Activity = new Activity("id", "act"),
+				Activity = new Activity(Guid.NewGuid(), "act"),
 				ActivityStartTimeLimitation = new TimeLimitation(null) { MaxTime = TimeSpan.FromHours(8), MinTime = TimeSpan.FromHours(13) },
 				ActivityEndTimeLimitation = new TimeLimitation(null) { MaxTime = TimeSpan.FromHours(9), MinTime = TimeSpan.FromHours(14) },
 				ActivityTimeLimitation = new TimeLimitation(null) { MaxTime = TimeSpan.FromHours(10), MinTime = TimeSpan.FromHours(15) }
@@ -315,7 +315,7 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.AgentPreference
             _target.EndTimeLimitationMaxNextDay = false;
             _target.WorkTimeLimitationMax = TimeSpan.FromHours(1);
             _target.WorkTimeLimitationMin = TimeSpan.FromHours(10);
-            _target.Activity = new Activity(Guid.NewGuid().ToString(), "act");
+            _target.Activity = new Activity(Guid.NewGuid(), "act");
             _target.ActivityStartTimeLimitationMin = TimeSpan.FromHours(10);
             _target.ActivityStartTimeLimitationMax = TimeSpan.FromHours(13);
             _target.ActivityEndTimeLimitationMin = TimeSpan.FromHours(11);
@@ -323,7 +323,7 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.AgentPreference
             _target.ActivityTimeLimitationMin = TimeSpan.FromHours(1);
             _target.ActivityTimeLimitationMax = TimeSpan.FromHours(2);
 
-            _target.Absence = new Absence("name", "shortName", "id", Color.Empty);
+            _target.Absence = new Absence("name", "shortName", Guid.NewGuid(), Color.Empty);
 
             Assert.IsNull(_target.StartTimeLimitationMax);
             Assert.IsNull(_target.StartTimeLimitationMin);
@@ -339,13 +339,13 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.AgentPreference
             Assert.IsNull(_target.ActivityTimeLimitationMin);
             Assert.IsNull(_target.ActivityTimeLimitationMax);
 
-            _target.DayOff = new DayOff("name", "shortName", "id", Color.Empty);
-            _target.Absence = new Absence("name", "shortName", "id", Color.Empty);
+            _target.DayOff = new DayOff("name", "shortName", Guid.NewGuid(), Color.Empty);
+            _target.Absence = new Absence("name", "shortName", Guid.NewGuid(), Color.Empty);
             
             Assert.IsNull(_target.DayOff);
 
-            _target.ShiftCategory = new ShiftCategory("name", "shortName", "id", Color.Empty);
-            _target.Absence = new Absence("name", "shortName", "id", Color.Empty);
+            _target.ShiftCategory = new ShiftCategory("name", "shortName", Guid.NewGuid(), Color.Empty);
+            _target.Absence = new Absence("name", "shortName", Guid.NewGuid(), Color.Empty);
 
             Assert.IsNull(_target.ShiftCategory);
         }
@@ -354,12 +354,12 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.AgentPreference
         public void ShouldClearAbsenceDayOffWhenSettingActivity()
         {
 
-            _target.Absence = new Absence("name", "shortName", "id", Color.Empty);
-            _target.Activity = new Activity(Guid.NewGuid().ToString(), "act");
+            _target.Absence = new Absence("name", "shortName", Guid.NewGuid(), Color.Empty);
+            _target.Activity = new Activity(Guid.NewGuid(), "act");
             Assert.IsNull(_target.Absence);
 
-            _target.DayOff = new DayOff("name", "shortName", "id", Color.Empty);
-            _target.Activity = new Activity(Guid.NewGuid().ToString(), "act");
+            _target.DayOff = new DayOff("name", "shortName", Guid.NewGuid(), Color.Empty);
+            _target.Activity = new Activity(Guid.NewGuid(), "act");
             Assert.IsNull(_target.DayOff); 
         }
 

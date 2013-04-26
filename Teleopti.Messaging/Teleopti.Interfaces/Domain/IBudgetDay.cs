@@ -1,4 +1,7 @@
-﻿namespace Teleopti.Interfaces.Domain
+﻿using System.Collections;
+using System.Collections.Generic;
+
+namespace Teleopti.Interfaces.Domain
 {
     /// <summary>
     /// The budget for a particular date, planning group and scenario.
@@ -107,25 +110,50 @@
         /// Budget allowance for leave
         /// </summary>
         double Allowance { get; set; }
+		
+		/// <summary>
+		/// Surplus from difference between max employees and NetStaffFcAdj
+		/// </summary>
+		double? NetStaffFcAdjustedSurplus { get; set; }
 
         /// <summary>
         /// Calculates the specified calculator.
         /// </summary>
         BudgetCalculationResult Calculate(IBudgetCalculator calculator);
+
+		/// <summary>
+		/// Calculates the specified calculator except NetStaffFcAdj
+		/// Needed for recalculation after NetStaffFcAdj have been distributed
+		/// </summary>
+	    BudgetCalculationResult CalculateWithoutNetStaffFcAdj(IBudgetCalculator calculator, double netStaffFcAdj);
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <remarks>
-    /// Created by: peterwe
-    /// Created date: 10/15/2010
-    /// </remarks>
-    public interface IBudgetCalculator
-    {
-        /// <summary>
-        /// Calculates the specified budget day.
-        /// </summary>
-        BudgetCalculationResult Calculate(IBudgetDay budgetDay);
-    }
+	/// <summary>
+	/// 
+	/// </summary>
+	/// <remarks>
+	/// Created by: peterwe
+	/// Created date: 10/15/2010
+	/// </remarks>
+	public interface IBudgetCalculator
+	{
+		/// <summary>
+		/// Calculates the specified budget day.
+		/// </summary>
+		BudgetCalculationResult Calculate(IBudgetDay budgetDay);
+
+		/// <summary>
+		/// List of Calculators
+		/// </summary>
+		IList<ICalculator> CalculatorList { get; set; }
+
+		/// <summary>
+		/// ReCalculate results without NetStaffFcAdj 
+		/// Need this after distributing surplus of NetStaffFcAdj
+		/// </summary>
+		/// <param name="budgetDay"></param>
+		/// <param name="netStaffFcAdj"></param>
+		/// <returns></returns>
+		BudgetCalculationResult CalculateWithoutNetStaffFcAdj(IBudgetDay budgetDay, double netStaffFcAdj);
+	}
 }

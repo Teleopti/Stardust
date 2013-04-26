@@ -118,5 +118,10 @@ namespace Teleopti.Interfaces.Domain
     	/// If true we should not add a contract day off
     	/// </summary>
     	bool NotAllowedForDayOffs { get; set; }
+
+		/// <summary>
+		/// The common main shift to be assigned to all the rest free slots
+		/// </summary>
+		IMainShift CommonMainShift { get; set; }
     }
 }

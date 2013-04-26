@@ -25,32 +25,21 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private readonly IAuditSetter _auditSettingProvider;
 		private bool disposed;
 
-		private readonly IEnumerable<IMessageSender> _activeDenormalizers = new List<IMessageSender>
-		                                                                   	{
-                                                                               //that should be remove (asad)
-		                                                                   	};
+		private readonly IEnumerable<IMessageSender> _messageSenders;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Denormalizers"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		protected internal NHibernateUnitOfWorkFactory(ISessionFactory sessionFactory, 
 																										IAuditSetter auditSettingProvider, 
 																										string connectionString,
-																										IEnumerable<IMessageSender> externalDenormalizers)
-		{
+                                                                                                                                                                                                                IEnumerable<IMessageSender> messageSenders)
+                {
 			ConnectionString = connectionString;
 			SessionContextBinder = new StaticSessionContextBinder();
 			InParameter.NotNull("sessionFactory", sessionFactory);
 			sessionFactory.Statistics.IsStatisticsEnabled = true;
 			_factory = sessionFactory;
 			_auditSettingProvider = auditSettingProvider;
-
-			var denormalizerList = new List<IMessageSender>
-			                       	{
-			                       		//that should be remove (asad)
-                                        //new PersonChangedMessageSender()
-			                       	};
-			denormalizerList.AddRange(externalDenormalizers);
-
-			_activeDenormalizers = denormalizerList;
+			_messageSenders = messageSenders;
 		}
 
 		protected ISessionContextBinder SessionContextBinder { get; set; }
@@ -113,7 +102,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		{
 			return new NHibernateUnitOfWork(session,
 			                                messaging,
-											_activeDenormalizers,
+											_messageSenders,
 											filterManager,
 											new SendPushMessageWhenRootAlteredService(),
 											SessionContextBinder.Unbind
@@ -235,7 +224,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 	public class StaticSessionContextBinder : ISessionContextBinder
 	{
-		//todo: byt till ConcurrentDictionary när vi uppgraderar till .net 4.0!
+		//todo: byt till ConcurrentDictionary n?r vi uppgraderar till .net 4.0!
 		private static readonly IDictionary<Guid, NHibernateSessionRelatedData> uowRelatedData
 			 = new ConcurrentDictionary<Guid, NHibernateSessionRelatedData>(new ConcurrentDictionary<Guid, NHibernateSessionRelatedData>());
 

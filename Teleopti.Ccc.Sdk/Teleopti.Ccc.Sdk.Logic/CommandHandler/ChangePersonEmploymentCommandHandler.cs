@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.ServiceModel;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
@@ -18,7 +19,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
     public class ChangePersonEmploymentCommandHandler : IHandleCommand<ChangePersonEmploymentCommandDto>
     {
         private readonly IAssembler<IPersonPeriod, PersonSkillPeriodDto> _personSkillPeriodAssembler;
-        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+        private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
         private readonly ISkillRepository _skillRepository;
         private readonly IExternalLogOnRepository _externalLogOnRepository;
         private readonly IPersonRepository _personRepository;
@@ -27,7 +28,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
         private readonly IContractScheduleRepository _contractScheduleRepository;
         private readonly IContractRepository _contractRepository;
 
-        public ChangePersonEmploymentCommandHandler(IAssembler<IPersonPeriod,PersonSkillPeriodDto> personSkillPeriodAssembler, IUnitOfWorkFactory unitOfWorkFactory, ISkillRepository skillRepository, IExternalLogOnRepository externalLogOnRepository, IPersonRepository personRepository, ITeamRepository teamRepository, IPartTimePercentageRepository partTimePercentageRepository, IContractScheduleRepository contractScheduleRepository, IContractRepository contractRepository)
+        public ChangePersonEmploymentCommandHandler(IAssembler<IPersonPeriod, PersonSkillPeriodDto> personSkillPeriodAssembler, ICurrentUnitOfWorkFactory unitOfWorkFactory, ISkillRepository skillRepository, IExternalLogOnRepository externalLogOnRepository, IPersonRepository personRepository, ITeamRepository teamRepository, IPartTimePercentageRepository partTimePercentageRepository, IContractScheduleRepository contractScheduleRepository, IContractRepository contractRepository)
         {
             _personSkillPeriodAssembler = personSkillPeriodAssembler;
             _unitOfWorkFactory = unitOfWorkFactory;
@@ -41,10 +42,10 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
         }
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public CommandResultDto Handle(ChangePersonEmploymentCommandDto command)
+		public void Handle(ChangePersonEmploymentCommandDto command)
         {
             Guid? result;
-            using (var uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+            using (var uow = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
             {
             	var startDate = new DateOnly(command.Period.StartDate.DateTime);
                 var person = _personRepository.Get(command.Person.Id.GetValueOrDefault());
@@ -118,7 +119,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
                     result = newPersonPeriod.Id.GetValueOrDefault();
                 }
             }
-            return new CommandResultDto { AffectedId = result, AffectedItems = 1 };
+			command.Result = new CommandResultDto { AffectedId = result, AffectedItems = 1 };
         }
 
         private IPersonPeriod createPersonPeriod(ChangePersonEmploymentCommandDto command)

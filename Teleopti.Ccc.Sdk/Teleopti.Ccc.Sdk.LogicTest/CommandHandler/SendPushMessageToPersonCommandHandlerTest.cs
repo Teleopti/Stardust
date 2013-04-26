@@ -25,15 +25,17 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         private IUnitOfWorkFactory unitOfWorkFactory;
         private SendPushMessageToPersonCommandHandler target;
     	private IPersonRepository personRepository;
+        private ICurrentUnitOfWorkFactory currentUnitOfWorkFactory;
 
-    	[SetUp]
+        [SetUp]
         public void Setup()
         {
             mock = new MockRepository();
             pushMessageRepository = mock.StrictMock<IPushMessageRepository>();
             personRepository = mock.StrictMock<IPersonRepository>();
             unitOfWorkFactory = mock.StrictMock<IUnitOfWorkFactory>();
-			target = new SendPushMessageToPersonCommandHandler(personRepository, pushMessageRepository, unitOfWorkFactory);
+            currentUnitOfWorkFactory = mock.DynamicMock<ICurrentUnitOfWorkFactory>();
+			target = new SendPushMessageToPersonCommandHandler(personRepository, pushMessageRepository, currentUnitOfWorkFactory);
         }
 
 		[Test]
@@ -47,6 +49,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			using (mock.Record())
 			{
 				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(untiOfWork);
+				Expect.Call(currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
 				Expect.Call(personRepository.FindPeople(new[] { person.Id.GetValueOrDefault() })).Return(new Collection<IPerson> { person });
 				Expect.Call(() => pushMessageRepository.Add(null, null)).Callback<IPushMessage, IEnumerable<IPerson>>(
 					(m, s) =>
@@ -61,7 +64,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			{
 				var command = new SendPushMessageToPeopleCommandDto();
 				command.Recipients.Add(person.Id.GetValueOrDefault());
-				var result = target.Handle(command);
+				target.Handle(command);
+				var result = command.Result;
 				result.AffectedItems.Should().Be.EqualTo(1);
 				result.AffectedId.Should().Be.EqualTo(messageId);
 			}
@@ -93,6 +97,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			using (mock.Record())
 			{
 				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(untiOfWork);
+				Expect.Call(currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
 				Expect.Call(personRepository.FindPeople(new[] { person.Id.GetValueOrDefault() })).Return(new Collection<IPerson> { person });
 				Expect.Call(() => pushMessageRepository.Add(null, null)).Callback<IPushMessage, IEnumerable<IPerson>>(
 					(m, s) =>
@@ -120,7 +125,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			using (mock.Record())
 			{
 				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(untiOfWork);
-				Expect.Call(personRepository.FindPeople(new[] { personId })).Return(new Collection<IPerson>());
+                Expect.Call(currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
+                Expect.Call(personRepository.FindPeople(new[] { personId })).Return(new Collection<IPerson>());
 				Expect.Call(() => pushMessageRepository.Add(null, null)).IgnoreArguments().Repeat.Never();
 				Expect.Call(() => untiOfWork.PersistAll()).Repeat.Never();
 				Expect.Call(untiOfWork.Dispose);
@@ -129,7 +135,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			{
 				var command = new SendPushMessageToPeopleCommandDto();
 				command.Recipients.Add(personId);
-				var result = target.Handle(command);
+				target.Handle(command);
+				var result = command.Result;
 				result.AffectedItems.Should().Be.EqualTo(0);
 				result.AffectedId.HasValue.Should().Be.False();
 			}
@@ -145,7 +152,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
 			using (mock.Record())
 			{
 				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(untiOfWork);
-				Expect.Call(personRepository.FindPeople(new[] { person.Id.GetValueOrDefault() })).Return(new Collection<IPerson> { person });
+                Expect.Call(currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
+                Expect.Call(personRepository.FindPeople(new[] { person.Id.GetValueOrDefault() })).Return(new Collection<IPerson> { person });
 				Expect.Call(() => pushMessageRepository.Add(null, null)).IgnoreArguments().Repeat.Never();
 				Expect.Call(() => untiOfWork.PersistAll()).Repeat.Never();
 				Expect.Call(untiOfWork.Dispose);

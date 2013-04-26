@@ -168,8 +168,16 @@ namespace Teleopti.Ccc.WebTest.Core.Aop.Core
 			public static Action BeforeCallback;
 			public static Action AfterCallback;
 
-			public override void OnBeforeInvokation() { if (BeforeCallback != null) BeforeCallback(); }
-			public override void OnAfterInvokation() { if (AfterCallback != null) AfterCallback(); }
+			public override void OnBeforeInvokation()
+			{
+				base.OnBeforeInvokation();
+				if (BeforeCallback != null) BeforeCallback();
+			}
+			public override void OnAfterInvokation()
+			{
+				base.OnAfterInvokation();
+				if (AfterCallback != null) AfterCallback();
+			}
 		}
 
 		public class AnotherAspect : AspectAttribute
@@ -177,8 +185,16 @@ namespace Teleopti.Ccc.WebTest.Core.Aop.Core
 			public static Action BeforeCallback;
 			public static Action AfterCallback;
 
-			public override void OnBeforeInvokation() { if (BeforeCallback != null) BeforeCallback(); }
-			public override void OnAfterInvokation() { if (AfterCallback != null) AfterCallback(); }
+			public override void OnBeforeInvokation()
+			{
+				base.OnBeforeInvokation();
+				if (BeforeCallback != null) BeforeCallback();
+			}
+			public override void OnAfterInvokation()
+			{
+				base.OnAfterInvokation();
+				if (AfterCallback != null) AfterCallback();
+			}
 		}
 
 		public class AnAttribute : Attribute
@@ -195,8 +211,15 @@ namespace Teleopti.Ccc.WebTest.Core.Aop.Core
 
 			public class TheResolvedAspect : IAspect
 			{
-				public void OnBeforeInvokation() { if (BeforeCallback != null) BeforeCallback(); }
-				public void OnAfterInvokation() { if (AfterCallback != null) AfterCallback(); }
+				public void OnBeforeInvokation()
+				{
+					if (BeforeCallback != null) BeforeCallback();
+				}
+
+				public void OnAfterInvokation()
+				{
+					if (AfterCallback != null) AfterCallback();
+				}
 			}
 		}
 	}

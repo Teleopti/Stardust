@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ServiceModel;
+using Teleopti.Ccc.Domain.ApplicationLayer;
 using log4net;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Sdk.Common.DataTransferObject.Commands;

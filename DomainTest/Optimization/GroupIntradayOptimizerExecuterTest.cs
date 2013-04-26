@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ShouldRollbackIfToManyRestrictionsBroken()
 		{
 			DateOnly date = new DateOnly(2012, 1, 1);

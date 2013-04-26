@@ -119,23 +119,30 @@ namespace Teleopti.Interfaces.Domain
 
 
         ///<summary>
-        /// Gets or sets the preference period
+        /// Gets or sets the preference period.
+        /// It is a period THAT the agent may edit to input, modify its preferences for the a later scheduling process.
         ///</summary>
         DateOnlyPeriod PreferencePeriod { get; set; }
+
         ///<summary>
-        /// Gets or sets the preference input period
+        /// Gets or sets the preference input period.
+        /// It is the calendar period WHEN the user is allowed to set its preferences for the PreferencePeriod.
+		/// This period is then compared to today's date to determine if the agent is allowed to provide student
+		/// availability data.
         ///</summary>
         DateOnlyPeriod PreferenceInputPeriod { get; set;  }
         
         ///<summary>
         /// Gets or sets the student availability period.
-        /// This is the calendar period where the agent may input availability data.
+		/// This is the period THAT the agent may edit to input its availability data for the a later scheduling process.
         ///</summary>
         DateOnlyPeriod StudentAvailabilityPeriod { get; set; }
+
         ///<summary>
         /// Gets or sets the student availability input period.
-        /// This is the period which is compared to today's date to 
-        /// determine if the agent is allowed to provide student availability data.
+		/// It is the calendar period WHEN the user is allowed to set its availabilities for the StudentAvailabilityPeriod.
+		/// This period is then compared to today's date to determine if the agent is allowed to provide student
+		/// availability data.
         /// Also refered to as the "open" period, or "Is Open".
         ///</summary>
         DateOnlyPeriod StudentAvailabilityInputPeriod { get; set; }

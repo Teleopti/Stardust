@@ -1,6 +1,8 @@
 ﻿using System;
 using NUnit.Framework;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
 using Teleopti.Ccc.Sdk.ServiceBus.Denormalizer;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Messages.Denormalize;
@@ -26,7 +28,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
 
 			var ret =
-				_target.GetReadModel(new DenormalizedScheduleDay
+				_target.GetReadModel(new ProjectionChangedEventScheduleDay
 				                     	{
 				                     		ContractTime = TimeSpan.FromHours(8),
 				                     		WorkTime = TimeSpan.FromHours(7),

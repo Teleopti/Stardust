@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using Autofac;
 using Teleopti.Ccc.Domain.Forecasting.Import;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Win.Forecasting.Forms.ImportForecast;
 using Teleopti.Ccc.Win.Forecasting.Forms.JobHistory;
 using Teleopti.Ccc.Win.Payroll.Forms.PayrollExportPages;
@@ -41,6 +42,7 @@ namespace Teleopti.Ccc.Win.Forecasting
 
         private static void jobHistoryView(ContainerBuilder builder)
         {
+			builder.RegisterType<JobResultRepository>().As<IJobResultRepository>();
             builder.RegisterType<JobResultProvider>().As<IJobResultProvider>();
             builder.Register(c => new PagingDetail {Take = 20});
             builder.RegisterType<JobHistoryDetailedView>()

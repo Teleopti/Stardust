@@ -45,12 +45,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 			Element.DomContainer.Eval("$('#" + Element.Id + "').select2('open')");
 		}
 
-		public void SelectTeamByIdAndText(string id, string text)
+		public void SelectItemByIdAndText(string id, string text)
 		{
 			Element.DomContainer.Eval("$('#" + Element.Id + "').select2('data', {id:'" + id + "', text:'" + text + "'}).trigger('change')");
 		}
 
-		public void SelectTeamByText(string text)
+		public void SelectItemByText(string text)
 		{
 			EventualAssert.That(() => OptionsTexts.Contains(text), Is.True);
 			Element.DomContainer.Eval("$('.select2-result-selectable div:contains(\""+text+"\")').trigger('mouseup')");

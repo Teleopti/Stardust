@@ -1,19 +1,21 @@
 ﻿using NHibernate;
+using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 {
-	class RunSql : IRunSql
+	public class RunSql : IRunSql
 	{
-		private readonly ISession _session;
+		private readonly ICurrentUnitOfWork _unitOfWork;
 
-		public RunSql(ISession session)
+		public RunSql(ICurrentUnitOfWork unitOfWork)
 		{
-			_session = session;
+			_unitOfWork = unitOfWork;
 		}
 
 		public ISqlQuery Create(string sqlCommand)
 		{
-			return new SqlQuery(_session.CreateSQLQuery(sqlCommand));
+			return new SqlQuery(_unitOfWork.Session().CreateSQLQuery(sqlCommand));
 		}
 	}
 }

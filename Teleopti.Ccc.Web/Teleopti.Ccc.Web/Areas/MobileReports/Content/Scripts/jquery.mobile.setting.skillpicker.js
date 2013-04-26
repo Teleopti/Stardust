@@ -6,7 +6,7 @@
 			values: null
 		},
 		_create: function () {
-			this.element.data('selectmenu', this.element.data('skillpicker'));
+			this.element.data('mobile-selectmenu', this.element.data('mobile-skillpicker'));
 			$.mobile.selectmenu.prototype._create.apply(this, arguments);
 			var self = this, o = this.myoptions, caller = this.element;
 			o.values = self._spCurrentValues();

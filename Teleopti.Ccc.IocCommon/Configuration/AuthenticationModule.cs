@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security;
@@ -105,11 +106,12 @@ namespace Teleopti.Ccc.IocCommon.Configuration
 			builder.RegisterType<PrincipalAuthorization>()
 				.As<IPrincipalAuthorization>()
 				.SingleInstance();
-			builder.RegisterType<UserCulture>().As<IUserCulture>();
-			builder.RegisterType<LoggedOnUser>().As<ILoggedOnUser>();
-			builder.RegisterType<UserTimeZone>().As<IUserTimeZone>();
+			builder.RegisterType<UserCulture>().As<IUserCulture>().SingleInstance();
+			builder.RegisterType<LoggedOnUser>().As<ILoggedOnUser>().SingleInstance();
+			builder.RegisterType<UserTimeZone>().As<IUserTimeZone>().SingleInstance();
 			builder.RegisterType<ApplicationDataSourceProvider>().As<IApplicationDataSourceProvider>().SingleInstance();
 			builder.RegisterType<OneWayEncryption>().As<IOneWayEncryption>().SingleInstance();
+			builder.RegisterType<CurrentIdentity>().As<ICurrentIdentity>().SingleInstance();
 		}
     }
 }

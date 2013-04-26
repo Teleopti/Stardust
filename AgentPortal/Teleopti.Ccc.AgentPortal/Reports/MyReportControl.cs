@@ -1,14 +1,9 @@
-﻿#region Imports
-
-using System;
+﻿using System;
 using System.Globalization;
 using System.Windows.Forms;
 using Teleopti.Ccc.AgentPortal.Common;
-using Teleopti.Ccc.AgentPortalCode.Helper;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Interfaces.Domain;
-
-#endregion
 
 namespace Teleopti.Ccc.AgentPortal.Reports
 {
@@ -21,13 +16,10 @@ namespace Teleopti.Ccc.AgentPortal.Reports
     /// </remarks>
     public partial class MyReportControl : BaseUserControl
     {
-        #region Fields
-
         private static MyReportStateHolder _stateHolder;
+        private DateTime startDateForScheduleInfo;
+        private DateTime endDateForScheduleInfo;
 
-        #endregion
-
-        #region Constructor
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MyReportControl"/> class.
@@ -53,10 +45,6 @@ namespace Teleopti.Ccc.AgentPortal.Reports
             }
         }
 
-        #endregion
-
-        #region MyReportStateHolderProperties
-
         /// <summary>
         /// Gets the state holder.
         /// </summary>
@@ -69,11 +57,6 @@ namespace Teleopti.Ccc.AgentPortal.Reports
         {
             get { return _stateHolder; }
         }
-
-        #endregion
-
-        private DateTime startDateForScheduleInfo;
-        private DateTime endDateForScheduleInfo;
 
         /// <summary>
         /// Handles the DateValueChanged event of the navigationMonthCalendarMyReport control.
@@ -165,14 +148,13 @@ namespace Teleopti.Ccc.AgentPortal.Reports
         {
             if (StateHolder != null)
             {
-                StateHolder.SelectedDateTimePeriodDto.UtcStartTime = AgentPortalTimeZoneHelper.ConvertToUniversalTime(startDateForScheduleInfo);
-                StateHolder.SelectedDateTimePeriodDto.UtcEndTime = AgentPortalTimeZoneHelper.ConvertToUniversalTime(endDateForScheduleInfo);
-                StateHolder.SelectedDateTimePeriodDto.UtcStartTimeSpecified = true;
-                StateHolder.SelectedDateTimePeriodDto.UtcEndTimeSpecified = true;
+                var timeZone =
+                TimeZoneInfo.FindSystemTimeZoneById(
+                    AgentPortalCode.Foundation.StateHandlers.StateHolder.Instance.State.SessionScopeData.LoggedOnPerson.TimeZoneId);
+                StateHolder.SelectedDateTimePeriodDto.UtcStartTime = TimeZoneHelper.ConvertToUtc(startDateForScheduleInfo, timeZone);
+                StateHolder.SelectedDateTimePeriodDto.UtcEndTime = TimeZoneHelper.ConvertToUtc(endDateForScheduleInfo, timeZone);
                 StateHolder.SelectedDateTimePeriodDto.LocalStartDateTime = startDateForScheduleInfo;
                 StateHolder.SelectedDateTimePeriodDto.LocalEndDateTime = endDateForScheduleInfo;
-                StateHolder.SelectedDateTimePeriodDto.LocalStartDateTimeSpecified= true;
-                StateHolder.SelectedDateTimePeriodDto.LocalEndDateTimeSpecified = true;
             }
         }
     }

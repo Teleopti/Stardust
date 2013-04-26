@@ -2,9 +2,11 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Web.Areas.MobileReports.Core;
 using Teleopti.Ccc.Web.Areas.MobileReports.Core.Providers;
+using Teleopti.Ccc.Web.Areas.MobileReports.Models.Domain;
 using Teleopti.Ccc.WebTest.Areas.MobileReports.TestData;
 
 namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.Providers
@@ -12,6 +14,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MobileReports.Core.Providers
 	[TestFixture]
 	public class DefinedReportProviderTest
 	{
+		[Test]
+		public void ShouldHaveCoverage()
+		{
+			new DefinedReportProvider.DefinedReportFunctionSpecification(new IDefinedReport[]{}).IsSatisfiedBy(new ApplicationFunction());
+		}
 
 		[Test]
 		public void ShouldFilterReportsByFunctionsCode()

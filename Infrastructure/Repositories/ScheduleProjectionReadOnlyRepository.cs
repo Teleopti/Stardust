@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using NHibernate.Transform;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Budgeting;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -54,12 +57,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                                         .ExecuteUpdate();
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design",
-            "CA1062:Validate arguments of public methods", MessageId = "1"),
-         System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design",
-             "CA1062:Validate arguments of public methods", MessageId = "3")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3")]
         public void AddProjectedLayer(DateOnly belongsToDate, Guid scenarioId, Guid personId,
-                                      DenormalizedScheduleProjectionLayer layer)
+                                      ProjectionChangedEventLayer layer)
         {
 			var uow = _currentUnitOfWork.Current();
 

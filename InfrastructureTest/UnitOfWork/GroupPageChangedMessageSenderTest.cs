@@ -32,7 +32,6 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
         [Test]
         public void ShouldSaveRebuildReadModelForGroupPageToQueue()
         {
-            var session = _mocks.DynamicMock<IRunSql>();
             var page = new GroupPage("Page");
             Guid[] ids = new Guid[] { };
             var message = new GroupPageChangedMessage();
@@ -47,7 +46,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
             }
             using (_mocks.Playback())
             {
-                _target.Execute(session, roots);
+                _target.Execute(roots);
             }
         }
 
@@ -55,7 +54,6 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 		[Test]
 		public void ShouldNotRebuildReadModelForScenario()
 		{
-			var session = _mocks.DynamicMock<IRunSql>();
 			var scenario = _mocks.DynamicMock<IScenario>();
 
 			using (_mocks.Record())
@@ -63,7 +61,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 			}
 			using (_mocks.Playback())
 			{
-				_target.Execute(session, new IRootChangeInfo[] { new RootChangeInfo(scenario, DomainUpdateType.Insert) });
+				_target.Execute(new IRootChangeInfo[] { new RootChangeInfo(scenario, DomainUpdateType.Insert) });
 			}
 		}
 	}

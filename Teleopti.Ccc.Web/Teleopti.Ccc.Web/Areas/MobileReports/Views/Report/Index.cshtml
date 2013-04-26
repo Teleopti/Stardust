@@ -4,7 +4,7 @@
 @{ Layout = "~/Areas/MobileReports/Views/Shared/MobileLayoutBase.cshtml"; }
 @section csshead {
 	<link rel="stylesheet" href="@Url.Content("~/Areas/MobileReports/Content/Css/mobile.custom.css")" />
-	<link rel="stylesheet" href="@Url.Content("~/Content/MobileDateBox/jquery.mobile.datebox-1.0.1.min.css")" />
+	<link rel="stylesheet" href="@Url.Content("~/Content/MobileDateBox/jqm-datebox.min.css")" />
 }
 @section jsBeforeMobile {
 	<script src="@Url.Content("~/Areas/MobileReports/Content/Scripts/Teleopti.MobileReports.Common.js")"></script>
@@ -19,7 +19,8 @@
 	<script src="@Url.Content("~/Areas/MobileReports/Content/Scripts/jquery.mobile.setting.skillpicker.js")"></script>
 	<script src="@Url.Content("~/Areas/MobileReports/Content/Scripts/jquery.mobile.report.graph.js")"></script>
 	<script src="@Url.Content("~/Areas/MobileReports/Content/Scripts/jquery.mobile.report.table.js")"></script>
-	<script src="@Url.Content("~/Content/MobileDateBox/jquery.mobile.datebox-1.0.1.min.js")"></script>
+	<script src="@Url.Content("~/Content/MobileDateBox/jqm-datebox.core.js")"></script>
+	<script src="@Url.Content("~/Content/MobileDateBox/jqm-datebox.mode.calbox.js")"></script>
 	<script>
 		$.extend($.mobile.datebox.prototype.options.lang, {
 			'loc': @Html.Raw(Model.DateBoxGlobalization.ToJson())
@@ -73,8 +74,7 @@
 			<li data-role="fieldcontain">
 					<label for="sel-date">@Resources.DateSelection</label>
 
-					<input name="sel-date" id="sel-date" data-theme="b" type="date" data-role="datebox"
-						   data-options='{"mode": "calbox", "pickPageTheme": "b", "pickPageButtonTheme": "b"}' />
+					<input name="sel-date" id="sel-date" data-theme="b" type="date" data-role="datebox" data-options='{"mode": "calbox", "pickPageTheme": "b", "pickPageButtonTheme": "b"}' />
 			</li>
 			<li data-role="fieldcontain">
 				<fieldset data-role="controlgroup" data-type="horizontal">

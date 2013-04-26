@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using Syncfusion.Windows.Forms.Grid;
+using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.SyncfusionGridBinding;
@@ -48,7 +50,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                        new RequestAllowanceModel(currentUowFactory,
                                                            new BudgetDayRepository(currentUowFactory),
                                                            new BudgetGroupRepository(currentUowFactory),
-                                                           new ScenarioRepository(currentUowFactory),
+														   new DefaultScenarioFromRepository(new ScenarioRepository(currentUowFactory)), 
                                                            new ScheduleProjectionReadOnlyRepository(new CurrentUnitOfWork(UnitOfWorkFactory.CurrentUnitOfWorkFactory()))));
                                                            
             _presenter.Initialize(budgetGroup, defaultDate);
