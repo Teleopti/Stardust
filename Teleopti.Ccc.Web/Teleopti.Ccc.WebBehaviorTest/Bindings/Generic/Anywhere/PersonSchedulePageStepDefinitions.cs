@@ -99,7 +99,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[Then(@"I should see (.*) absences in the absence list")]
 		public void ThenIShouldSeeAbsencesInTheAbsenceList(int numberOf)
 		{
-			EventualAssert.That(() => Browser.Current.Elements.Filter(Find.BySelector(".absence-list .absence")).Count, Is.EqualTo(numberOf));
+			var selector = Find.BySelector(".absence-list .absence");
+			if(numberOf > 0)
+				EventualAssert.That(() => Browser.Current.Elements.Filter(selector).Count, Is.EqualTo(numberOf));
+			else
+				EventualAssert.That(() => Browser.Current.Elements.Filter(selector).IsEmpty(), Is.True);
 		}
 
 		[When(@"I click '(.*)' on absence named '(.*)'")]
