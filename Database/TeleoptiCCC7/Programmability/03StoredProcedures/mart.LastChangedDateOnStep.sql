@@ -9,7 +9,7 @@ GO
 -- =============================================
 -- Date			Who	Description
 -- =============================================
--- exec [mart].[LastChangedDateOnStep] @stepName='Permissions', @buId='928DD0BC-BF40-412E-B970-9B5E015AADEA'
+-- exec [mart].[LastChangedDateOnStep] @stepName='Schedules', @buId='928DD0BC-BF40-412E-B970-9B5E015AADEA'
 
 CREATE PROCEDURE [mart].[LastChangedDateOnStep]
 @stepName nvarchar(500),
@@ -28,7 +28,7 @@ AND StepName = @StepName
 --Handle case "ETL never executed".
 IF @lastTime IS NULL
 BEGIN
-	SET @lastTime=dateadd(hour,-1,getutcdate())
+	SET @lastTime=getutcdate()
 END
 
 CREATE TABLE #persons (PersonId uniqueidentifier NOT NULL)
@@ -60,7 +60,7 @@ BEGIN
 	SELECT s.PersonId, s.BelongsToDate, s.InsertedOn
 	FROM [ReadModel].[ScheduleDay] s
 	INNER JOIN #persons p ON p.PersonId = s.PersonId
-	WHERE InsertedOn >= @lastTime -- >= (not > ) to be sure we do not miss any
+	WHERE InsertedOn > @lastTime --InsertedOn includes milliseconds, @lastTime does not => we will always catch the last changed schedule over and over again
 
 	--get max for this BU
 	SET @thisTime = (SELECT max(InsertedOn) from #PersonsUpdated)
@@ -94,29 +94,6 @@ BEGIN
 			AND ar.BusinessUnit = @buId
 		) a
 END
-
-		SELECT MAX(pr.InsertedOn) as LastUpdate
-		FROM dbo.AvailablePersonsInApplicationRole pr
-		INNER JOIN #persons p
-			ON p.PersonId = pr.AvailablePerson
-		UNION ALL
-
-		--Role getting changed ApplicationFunction
-		SELECT MAX(afir.InsertedOn) as LastUpdate
-		FROM dbo.ApplicationFunctionInRole afir
-		INNER JOIN dbo.ApplicationFunction af
-			ON afir.ApplicationFunction = af.Id
-		INNER JOIN dbo.ApplicationRole ar
-			ON afir.ApplicationRole=ar.Id
-			AND ar.BusinessUnit = @buId
-		UNION ALL
-
-		--Role getting changed data
-		SELECT MAX(ad.UpdatedOn) as LastUpdate
-		FROM dbo.ApplicationRole ar
-		INNER JOIN dbo.AvailableData ad
-			ON ar.Id = ad.ApplicationRole
-			AND ar.BusinessUnit = @buId
 
 --Handle case, "now rows detected"
 IF @thisTime IS NULL
