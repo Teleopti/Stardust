@@ -23,6 +23,7 @@ using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.Repositories.Audit;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -1649,6 +1650,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					new PersonRepository(UnitOfWork).FindAllSortByName());
 			Assert.AreEqual(testList[0], per1);
 			Assert.That(testList[0].OptionalColumnValueCollection.Count,Is.EqualTo(1));
+		}
+
+		[Test]
+		public void ShouldSaveLoginAttempt()
+		{
+			var rep = new PersonRepository(UnitOfWork);
+			var model = new LoginAttemptModel{ClientIp = "172.168.1.1",Provider = "Win", Result = "Success",UserCredentials = "aa"};
+			rep.SaveLoginAttempt(model);
 		}
 
 		private static void verifyPermissionInfoIsLazy(bool expected, IPerson userRetOk)

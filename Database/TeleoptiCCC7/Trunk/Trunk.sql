@@ -50,3 +50,27 @@ GO
 TRUNCATE TABLE [ReadModel].[ScheduleDay]
 TRUNCATE TABLE [ReadModel].[ScheduleProjectionReadOnly]
 GO
+
+----------------  
+--Name: Ola H
+--Date: 2013-04-27
+--Desc: Table for logging log in attempts.
+---------------- 
+CREATE TABLE [Auditing].[Security](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Time] [datetime] NOT NULL,
+	[Result] [nchar](100) NOT NULL,
+	[UserCredentials] [nchar](100) NOT NULL,
+	[Provider] [nchar](100) NOT NULL,
+	[ClientIp] [nchar](100) NOT NULL,
+	[PersonId] [uniqueidentifier] NULL,
+PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)
+)
+
+GO
+
+ALTER TABLE [Auditing].[Security] ADD  CONSTRAINT [DF_Security_Time]  DEFAULT (getutcdate()) FOR [Time]
+GO
