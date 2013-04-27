@@ -47,14 +47,14 @@ namespace Teleopti.Ccc.DomainTest.Security.Authentication
 	        var rep = mocks.DynamicMock<IPersonRepository>();
             using(mocks.Record())
             {
-                Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
-                Expect.Call(dataSource.Application).Return(unitOfWorkFactory);
+                Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork).Repeat.Twice();
+                Expect.Call(dataSource.Application).Return(unitOfWorkFactory).Repeat.Twice();
                 Expect.Call(checkLogOn.CheckLogOn(unitOfWork, "robink", "topsecret")).Return(new AuthenticationResult{Person = person});
 	            Expect.Call(person.Id).Return(Guid.NewGuid());
 	            Expect.Call(repositoryFactory.CreatePersonRepository(unitOfWork)).Return(rep);
 	            Expect.Call(rep.SaveLoginAttempt(new LoginAttemptModel())).IgnoreArguments().Return(1);
-                Expect.Call(unitOfWork.PersistAll()).Return(new List<IRootChangeInfo>());
-                Expect.Call(unitOfWork.Dispose);
+                Expect.Call(unitOfWork.PersistAll()).Return(new List<IRootChangeInfo>()).Repeat.Twice();
+                Expect.Call(unitOfWork.Dispose).Repeat.Twice();
             }
             using (mocks.Playback())
             {
@@ -70,8 +70,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Authentication
             IUnitOfWorkFactory unitOfWorkFactory = mocks.StrictMock<IUnitOfWorkFactory>();
             IUnitOfWork unitOfWork = mocks.StrictMock<IUnitOfWork>();
             IPerson person = mocks.StrictMock<IPerson>();
-			Expect.Call(person.Id).Return(Guid.NewGuid());
-            using (mocks.Record())
+			using (mocks.Record())
             {
                 Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
                 Expect.Call(dataSource.Application).Return(unitOfWorkFactory);
