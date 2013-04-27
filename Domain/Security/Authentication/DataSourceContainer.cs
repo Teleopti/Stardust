@@ -1,4 +1,5 @@
 using System;
+using Teleopti.Ccc.Domain.Auditing;
 using log4net;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -36,17 +37,35 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
             User = person;
         }
 
+		public AuthenticationResult LogOn(string logOnName, string password)
+		{
+			return LogOn(logOnName, password, "");
+		}
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-        public AuthenticationResult LogOn(string logOnName, string password)
+		public AuthenticationResult LogOn(string logOnName, string password, string clientIp)
         {
             AuthenticationResult result;
             using (var unitOfWork = DataSource.Application.CreateAndOpenUnitOfWork())
             {
                 result = _checkLogOn.CheckLogOn(unitOfWork, logOnName, password);
                 SetUser(result.Person);
-
+	            var model = new LoginAttemptModel
+		            {
+			            ClientIp = clientIp,
+			            UserCredentials = logOnName,
+			            Provider = "Application",
+			            Result = result.Successful ? "LogonSuccess" : "LogonFailed"
+		            };
+	            if (result.Person != null) model.PersonId = result.Person.Id;
+	           
                 try
                 {
+					if (clientIp != "")
+					{
+						var rep = RepositoryFactory.CreatePersonRepository(unitOfWork);
+						rep.SaveLoginAttempt(model);
+					}
                     unitOfWork.PersistAll();
                 }
                 catch (Exception ex) //Not good at all! But we'll need to move the exceptions to domain first.

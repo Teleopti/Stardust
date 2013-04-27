@@ -10,6 +10,7 @@ using NHibernate.Criterion;
 using NHibernate.SqlCommand;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
@@ -18,7 +19,6 @@ using Teleopti.Ccc.Domain.Scheduling.ShiftCreator;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Infrastructure.Foundation;
-using Teleopti.Ccc.Infrastructure.Repositories.Audit;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Obfuscated.Security;
 using Teleopti.Interfaces.Domain;
@@ -786,9 +786,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 	    public IPerson LoadAggregate(Guid id) { return Load(id); }
 
-		public void SaveLoginAttempt(LoginAttemptModel model)
+		public int SaveLoginAttempt(LoginAttemptModel model)
 		{
-			var res = Session.CreateSQLQuery(
+			return Session.CreateSQLQuery(
 					"INSERT INTO [Auditing].[Security] (Result, UserCredentials, Provider, ClientIp , PersonId) VALUES (:Result, :UserCredentials, :Provider, :ClientIp , :PersonId)")
 					.SetString("Result", model.Result)
 					.SetString("UserCredentials", model.UserCredentials)

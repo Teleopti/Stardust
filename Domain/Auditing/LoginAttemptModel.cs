@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
+namespace Teleopti.Ccc.Domain.Auditing
 {
 	public class LoginAttemptModel
 	{

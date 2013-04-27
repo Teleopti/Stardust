@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
+using System.Net;
+using System.Net.Sockets;
 using System.Threading;
 using System.Windows.Forms;
 using System.Xml.Linq;
@@ -274,7 +276,15 @@ namespace Teleopti.Ccc.Win.Main
 			if (!string.IsNullOrEmpty(logOnName))
 			{
 				string password = textBoxPassword.Text;
-				var authenticationResult = _choosenDataSource.LogOn(textBoxLogOnName.Text, password);
+				var ips = Dns.GetHostEntry(Dns.GetHostName());
+				var ip = "";
+				foreach (var  adress in ips.AddressList)
+				{
+					if (adress.AddressFamily == AddressFamily.InterNetwork)
+						ip = adress.ToString();
+				}
+				var authenticationResult = _choosenDataSource.LogOn(textBoxLogOnName.Text, password, ip);
+
 				if (authenticationResult.HasMessage)
 					MessageDialogs.ShowError(this, string.Concat(authenticationResult.Message, "  "), Resources.LogOn);
 				if (authenticationResult.Successful)

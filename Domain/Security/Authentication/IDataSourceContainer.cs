@@ -12,5 +12,6 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
         void SetUser(IPerson person);
         AuthenticationResult LogOn(string logOnName, string password);
         AuthenticationResult LogOn(string windowsLogOnName);
+	    AuthenticationResult LogOn(string logOnName, string password, string clientIp);
     }
 }
