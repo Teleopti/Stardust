@@ -26,5 +26,22 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 
 			result.Should().Be.SameInstanceAs(expectedResult);
 		}
+
+		[Test]
+		public void ShouldSaveResult()
+		{
+			var authenticator = MockRepository.GenerateMock<IAuthenticator>();
+			var expectedResult = new AuthenticateResult();
+			
+			var target = new ApplicationAuthenticationModel(authenticator)
+			{
+				DataSourceName = "mydata",
+				Password = "password",
+				UserName = "username"
+			};
+			authenticator.Stub(x => x.SaveAuthenticateResult("username", expectedResult));
+
+			target.SaveAuthenticateResult(expectedResult);
+		}
 	}
 }

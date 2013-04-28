@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Authentication;
@@ -97,6 +98,32 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 				result.PasswordExpired = domainAuthResult.PasswordExpired;
 				result.Successful = domainAuthResult.Successful;
 			}
+		}
+
+		[Test]
+		public void ShouldSaveAuthenticateResult()
+		{
+			var dataSource = mocks.DynamicMock<IDataSource>();
+			var unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
+			var personRep = mocks.DynamicMock<IPersonRepository>();
+			var uow = mocks.DynamicMock<IUnitOfWork>();
+			var result = new AuthenticateResult { Successful = false,DataSource = dataSource};
+
+			var model = new LoginAttemptModel
+				{
+					ClientIp ="",
+					Provider = "Application",
+					UserCredentials = "hej",
+					Result = "LogonSuccess"
+				};
+			
+			Expect.Call(dataSource.Application).Return(unitOfWorkFactory);
+			Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow);
+			Expect.Call(repositoryFactory.CreatePersonRepository(uow)).Return(personRep);
+			Expect.Call(personRep.SaveLoginAttempt(model)).IgnoreArguments().Return(1);
+			mocks.ReplayAll();
+			target.SaveAuthenticateResult("hej", result);
+			mocks.VerifyAll();
 		}
 	}
 }

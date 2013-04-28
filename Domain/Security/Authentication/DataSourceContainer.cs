@@ -99,6 +99,7 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
 			var model = new LoginAttemptModel
 			{
 				ClientIp = clientIp,
+				Client = "WIN",
 				UserCredentials = LogOnName,
 				Provider = AuthenticationTypeOption.ToString(),
 				Result = successful ? "LogonSuccess" : "LogonFailed"

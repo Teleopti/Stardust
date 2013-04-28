@@ -31,6 +31,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		public JsonResult CheckPassword(IAuthenticationModel model)
 		{
 			var result = model.AuthenticateUser();
+			model.SaveAuthenticateResult(result);
 			var passwordWarningViewModel = new PasswordWarningViewModel();
 			if (!result.Successful)
 			{

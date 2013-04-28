@@ -62,6 +62,7 @@ CREATE TABLE [Auditing].[Security](
 	[Result] [nchar](100) NOT NULL,
 	[UserCredentials] [nchar](100) NOT NULL,
 	[Provider] [nchar](100) NOT NULL,
+	[Client] [nchar](100) NOT NULL,
 	[ClientIp] [nchar](100) NOT NULL,
 	[PersonId] [uniqueidentifier] NULL,
 PRIMARY KEY CLUSTERED 
