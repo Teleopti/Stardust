@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				commonMainShift = shift.TheMainShift;
 			}
 
-			if (schedulingOptions.UseTeamBlockSameShiftCategory)
+			if ((schedulingOptions.UseTeamBlockPerOption && schedulingOptions.UseTeamBlockSameShiftCategory  ) || (schedulingOptions.UseGroupScheduling && schedulingOptions.UseGroupSchedulingCommonCategory))
 			{
 				shiftCategory = shift.TheWorkShift.ShiftCategory;
 			}
