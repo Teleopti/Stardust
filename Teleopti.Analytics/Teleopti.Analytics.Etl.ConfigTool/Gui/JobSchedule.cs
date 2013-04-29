@@ -263,10 +263,9 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui
         private void initiateAgentStatisticsDatePeriod()
         {
             groupBoxAgentStats.Enabled = true;
-            numericUpDownRelativePeriodStartAgentStats.Value = -3;
-            numericUpDownRelativePeriodEndAgentStats.Value = 0;
-            radioButtonRelativePeriodAgentStats.Checked = true;
-        }
+			radioButtonRelativePeriodTodayAgentStats.Checked = true;
+			radioButtonRelativePeriodAgentStats.Checked = false;
+		}
 
         private void initiateForecastDatePeriod()
         {
@@ -279,9 +278,8 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui
         private void initiateQueueStatisticsDatePeriod()
         {
             groupBoxQueueStats.Enabled = true;
-            numericUpDownRelativePeriodStartQueueStats.Value = -3;
-            numericUpDownRelativePeriodEndQueueStats.Value = 0;
-            radioButtonRelativePeriodQueueStats.Checked = true;
+			radioButtonRelativePeriodTodayQueueStats.Checked = true;
+            radioButtonRelativePeriodQueueStats.Checked = false;
         }
 
         private void initiateScheduleDatePeriod()
