@@ -64,6 +64,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 		private ToolStripMenuItem _addNewPersonMenuItem;
 		private ToolStripMenuItem _addNewPersonFromClipboardMenuItem;
 		private ToolStripMenuItem _deleteSelectedPeopleMenuItem;
+		private ToolStripMenuItem _timeZoneMenuItem;
 
 		private IList<IPerson> _currentSelectedPersons;
 
@@ -425,6 +426,20 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			//_deleteSelectedPeopleMenuItem.ShortcutKeys = Keys.Delete;
 			Grid.ContextMenuStrip.Items.Add(_deleteSelectedPeopleMenuItem);
 
+			_timeZoneMenuItem = new ToolStripMenuItem(Resources.TimeZone);
+			_timeZoneMenuItem.Click += timeZoneMenuItemClick;
+			Grid.ContextMenuStrip.Items.Add(_timeZoneMenuItem);
+
+		}
+
+		void timeZoneMenuItemClick(object sender, EventArgs e)
+		{
+			var selected = GetSelectedPersons();
+			using (var view = new PersonTimeZoneView(selected))
+			{
+				view.ShowDialog();
+				Grid.Invalidate();
+			}
 		}
 
 		internal override void PrepareView()
