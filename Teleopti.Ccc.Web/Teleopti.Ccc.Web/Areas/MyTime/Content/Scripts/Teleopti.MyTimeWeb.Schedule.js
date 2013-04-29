@@ -602,8 +602,9 @@ Teleopti.MyTimeWeb.Schedule.Request = (function ($) {
 			;
 		$('#Absence-type').prop('selectedIndex', 0);
 		requestViewModel.IsFullDay(false);
-		$('#Schedule-addRequest-fromDate-input').datepicker("setDate", new Date(date));
-		$('#Schedule-addRequest-toDate-input').datepicker("setDate", new Date(date));
+	    var parsedDate = $.datepicker.parseDate($.datepicker.ISO_8601, date);
+	    $('#Schedule-addRequest-fromDate-input').datepicker("setDate", parsedDate);
+	    $('#Schedule-addRequest-toDate-input').datepicker("setDate", parsedDate);
 		$('#Text-request-tab').click();
 	}
 
