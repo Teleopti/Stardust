@@ -58,7 +58,7 @@ GO
 ---------------- 
 CREATE TABLE [Auditing].[Security](
 	[Id] [int] IDENTITY(1,1) NOT NULL,
-	[Time] [datetime] NOT NULL,
+	[DateTimeUtc] [datetime] NOT NULL,
 	[Result] [nchar](100) NOT NULL,
 	[UserCredentials] [nchar](100) NOT NULL,
 	[Provider] [nchar](100) NOT NULL,
@@ -73,5 +73,34 @@ PRIMARY KEY CLUSTERED
 
 GO
 
-ALTER TABLE [Auditing].[Security] ADD  CONSTRAINT [DF_Security_Time]  DEFAULT (getutcdate()) FOR [Time]
+ALTER TABLE [Auditing].[Security] ADD  CONSTRAINT [DF_Security_Time]  DEFAULT (getutcdate()) FOR [DateTimeUtc]
+GO
+
+----------------  
+--Name: David J
+--Date: 2013-04-29
+--Desc: re-factor purge settings
+---------------- 
+EXEC dbo.sp_rename @objname = N'[dbo].[PurgeSetting]', @newname = N'PurgeSetting_old', @objtype = N'OBJECT'
+EXEC dbo.sp_rename @objname = N'[dbo].[PurgeSetting_old].[PK_PurgeSetting]', @newname = N'PK_PurgeSetting_old', @objtype =N'INDEX'
+GO
+CREATE TABLE [dbo].[PurgeSetting](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Key] [nvarchar](50) NOT NULL,
+	[Value] [int] NOT NULL,
+ CONSTRAINT [PK_PurgeSetting] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)
+)
+GO
+
+--Save old data
+INSERT INTO dbo.PurgeSetting ([Key],Value)
+SELECT 'YearsToKeep'+[Key],KeepYears
+FROM dbo.PurgeSetting_old
+
+--new setting
+INSERT INTO dbo.PurgeSetting ([Key],Value)
+VALUES('DaysToKeepSecurityAudit',30)
 GO
