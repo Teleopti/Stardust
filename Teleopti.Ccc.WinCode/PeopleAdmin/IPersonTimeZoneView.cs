@@ -9,8 +9,7 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin
 	public interface IPersonTimeZoneView
 	{
 		void Cancel();
-		void SetPersonTimeZone(IList<IPerson> persons);
-		void ResetDateOnly(IList<IPerson> persons);
+		void SetPersonTimeZone(IPerson person);
 		void HideDialog();
 	}
 }

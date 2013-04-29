@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using Teleopti.Ccc.Infrastructure.SystemCheck;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.Win.Common;
@@ -13,15 +13,11 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 	public partial class PersonTimeZoneView : BaseRibbonForm, IPersonTimeZoneView
 	{
 		private readonly PersonTimeZonePresenter _presenter;
-		private readonly IPersonAssignmentConverter _personAssignmentConverter;
-		private readonly IResetDateOnlyAfterChangedTimeZone _resetDateOnlyAfterChangedTimeZone;
 
 		public PersonTimeZoneView(IList<IPerson> persons)
 		{
 			InitializeComponent();
 			_presenter = new PersonTimeZonePresenter(this, persons);
-			_personAssignmentConverter = new PersonTimeZoneSetter();
-			_resetDateOnlyAfterChangedTimeZone = new ResetDateOnlyAfterChangedTimeZone();
 			PopulateTimeZones();
 		}
 
@@ -52,33 +48,22 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			Hide();
 		}
 
-		public void SetPersonTimeZone(IList<IPerson> persons)
+		public void SetPersonTimeZone(IPerson person)
 		{
+			if (!person.Id.HasValue) return;
+
 			var currentTimeZone = comboBoxAdvTimeZones.SelectedItem as TimeZoneInfo;
 
 			using (var conn = new SqlConnection(UnitOfWorkFactory.Current.ConnectionString))
 			{
 				conn.Open();
-				using (var transaction = conn.BeginTransaction())
-				{
-					foreach (var person in persons)
-					{
-						if (!person.Id.HasValue) continue;
-						_personAssignmentConverter.Execute(transaction, person.Id.Value, currentTimeZone);
-					}
 
-					transaction.Commit();
+				using (var tx = conn.BeginTransaction())
+				{
+					AgentDayConverters.ForPeople().ForEach(x => x.Execute(tx, person.Id.Value, currentTimeZone));
+					tx.Commit();
 				}
 			}
-		}
-
-		public void ResetDateOnly(IList<IPerson> persons)
-		{
-			foreach (var person in persons)
-			{
-				if (!person.Id.HasValue) continue;
-				_resetDateOnlyAfterChangedTimeZone.ResetFor(person);
-			}	
 		}
 	}
 }

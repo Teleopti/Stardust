@@ -16,8 +16,11 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin
 
 		public void OnButtonAdvOkClick()
 		{
-			_view.SetPersonTimeZone(_persons);
-			_view.ResetDateOnly(_persons);
+			foreach (var person in _persons)
+			{
+				_view.SetPersonTimeZone(person);	
+			}
+			
 			_view.HideDialog();
 		}
 

@@ -13,13 +13,15 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin
 		private IPersonTimeZoneView _view;
 		private MockRepository _mock;
 		private IList<IPerson> _persons;
+		private IPerson _person;
 
 		[SetUp]
 		public void Setup()
 		{
 			_mock = new MockRepository();
 			_view = _mock.StrictMock<IPersonTimeZoneView>();
-			_persons = new List<IPerson>();
+			_person = _mock.StrictMock<IPerson>();
+			_persons = new List<IPerson>{_person};
 			_presenter = new PersonTimeZonePresenter(_view, _persons);	
 		}
 
@@ -42,8 +44,7 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin
 		{
 			using (_mock.Record())
 			{
-				_view.SetPersonTimeZone(_persons);
-				_view.ResetDateOnly(_persons);
+				_view.SetPersonTimeZone(_person);
 				_view.HideDialog();
 			}
 
