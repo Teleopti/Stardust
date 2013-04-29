@@ -235,3 +235,13 @@ if not exists(select 1 from [mart].[etl_maintenance_configuration] where configu
 if not exists(select 1 from [mart].[etl_maintenance_configuration] where configuration_id = 15)
 	insert into [mart].[etl_maintenance_configuration] values(15,'YearsToKeepAggAgentStats',50)
 GO
+----------------  
+--Name: Karin
+--Date: 2013-04-29
+--Desc: Add new column must_have in [stage].[stg_schedule_preference]
+----------------
+ALTER TABLE stage.stg_schedule_preference 
+ADD absence_code uniqueidentifier NULL,
+	must_have int NULL
+GO
+
