@@ -3,7 +3,6 @@ using System.Configuration;
 using System.Globalization;
 using System.IO;
 using Autofac;
-using Teleopti.Ccc.Domain.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using log4net;
 using Rhino.ServiceBus;
