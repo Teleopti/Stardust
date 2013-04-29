@@ -1,7 +1,9 @@
-﻿using Teleopti.Ccc.Domain.Auditing;
+﻿using System.Web;
+using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
+using Teleopti.Ccc.Web.Areas.Start.Models.Authentication;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
@@ -12,16 +14,19 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 		private readonly IWindowsAccountProvider _windowsAccountProvider;
 		private readonly IRepositoryFactory _repositoryFactory;
 		private readonly IFindApplicationUser _findApplicationUser;
+		private readonly IIpAddressResolver _ipAddressResolver;
 
 		public Authenticator(IDataSourcesProvider dataSourceProvider,
 									IWindowsAccountProvider windowsAccountProvider,
 									IRepositoryFactory repositoryFactory,
-									IFindApplicationUser findApplicationUser)
+									IFindApplicationUser findApplicationUser,
+									IIpAddressResolver ipAddressResolver)
 		{
 			_dataSourceProvider = dataSourceProvider;
 			_windowsAccountProvider = windowsAccountProvider;
 			_repositoryFactory = repositoryFactory;
 			_findApplicationUser = findApplicationUser;
+			_ipAddressResolver = ipAddressResolver;
 		}
 
 
@@ -70,7 +75,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 			{
 				var model = new LoginAttemptModel
 				{
-					ClientIp = ipAddress(),
+					ClientIp = _ipAddressResolver.GetIpAddress(),
 					Provider = provider,
 					Client = "WEB",
 					UserCredentials = userName,
@@ -83,24 +88,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 			}
 		}
 
-		private string ipAddress()
-		{
-			// in test environment
-			if (System.Web.HttpContext.Current != null)
-				return System.Web.HttpContext.Current.Request.UserHostAddress;
-
-			return "0.0.0.0";
-			//var context = System.Web.HttpContext.Current;
-			//var sIpAddress = context.Request.ServerVariables["HTTP_X_FORWARDED_FOR"];
-
-			//if(string.IsNullOrEmpty(sIpAddress))
-			//	return context.Request.ServerVariables["REMOTE_ADDR"];
-
-			//var ipArray = sIpAddress.Split(',');
-
-			//return ipArray[0];
-
-		}
+		
 
 
 	}

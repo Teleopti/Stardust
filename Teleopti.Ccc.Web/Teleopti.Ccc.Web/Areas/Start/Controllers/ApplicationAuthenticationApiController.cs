@@ -31,13 +31,13 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		public JsonResult CheckPassword(IAuthenticationModel model)
 		{
 			var result = model.AuthenticateUser();
-			model.SaveAuthenticateResult(result);
 			var passwordWarningViewModel = new PasswordWarningViewModel();
 			if (!result.Successful)
 			{
 				passwordWarningViewModel.AlreadyExpired = result.PasswordExpired;
 				if (!result.PasswordExpired)
 				{
+					model.SaveAuthenticateResult(result);
 					Response.StatusCode = 400;
 					Response.TrySkipIisCustomErrors = true;
 					ModelState.AddModelError("Error", result.Message);

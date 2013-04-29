@@ -12,6 +12,7 @@ using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.DataProvider;
 using Teleopti.Ccc.Web.Areas.Start.Core.LayoutBase;
+using Teleopti.Ccc.Web.Areas.Start.Models.Authentication;
 using Teleopti.Ccc.Web.Broker;
 using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Ccc.Web.Core.RequestContext.Cookie;
@@ -71,6 +72,8 @@ namespace Teleopti.Ccc.Web.Core.IoC
 			builder.RegisterType<DefaultDateCalculator>().As<IDefaultDateCalculator>();
 			builder.RegisterType<UrlHelperProvider>().As<IUrlHelper>().SingleInstance();
 			builder.RegisterType<MessageBrokerHub>();
+			builder.RegisterType<IpAddressResolver>().As<IIpAddressResolver>();
+			
 		}
 	}
 }
