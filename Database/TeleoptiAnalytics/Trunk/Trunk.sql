@@ -245,3 +245,54 @@ ADD absence_code uniqueidentifier NULL,
 	must_have int NULL
 GO
 
+----------------  
+--Name: Karin
+--Date: 2013-04-29
+--Desc: Add new column must_haves and absence_id in [mart].[fact_schedule_preference]
+----------------
+ALTER TABLE mart.fact_schedule_preference 
+ADD must_haves int NULL, 
+	absence_id int null
+
+GO
+UPDATE mart.fact_schedule_preference
+SET must_haves=0, absence_id=-1
+WHERE must_haves IS NULL AND absence_id IS NULL
+GO
+--set absence_id to not null
+ALTER TABLE mart.fact_schedule_preference alter column absence_id int NOT NULL
+GO
+
+--drop current primary
+ALTER TABLE mart.fact_schedule_preference
+DROP CONSTRAINT PK_fact_schedule_preference
+GO
+--add new primary with absence_id added
+ALTER TABLE mart.fact_schedule_preference
+ADD CONSTRAINT [PK_fact_schedule_preference] PRIMARY KEY CLUSTERED 
+(
+	[date_id] ASC,
+	[interval_id] ASC,
+	[person_id] ASC,
+	[scenario_id] ASC,
+	[preference_type_id] ASC,
+	[shift_category_id] ASC,
+	[day_off_id] ASC,
+	[absence_id] ASC)
+GO
+--add fk asbence
+ALTER TABLE [mart].[fact_schedule_preference]  WITH CHECK ADD  CONSTRAINT [FK_fact_schedule_preference_dim_absence] FOREIGN KEY([absence_id])
+REFERENCES [mart].[dim_absence] ([absence_id])
+GO
+
+ALTER TABLE [mart].[fact_schedule_preference] CHECK CONSTRAINT [FK_fact_schedule_preference_dim_absence]
+GO
+----------------  
+--Name: Karin
+--Date: 2013-04-29
+--Desc: Add "Absence" as new type in dim_preference_type
+----------------
+--add preference type absence in [mart].[dim_preference_type]
+INSERT mart.dim_preference_type(preference_type_id, preference_type_name, resource_key)
+SELECT 4,'Absence','ResAbsence'
+GO
