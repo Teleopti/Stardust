@@ -236,12 +236,16 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui
                 case "Agent Statistics":
                     initiateAgentStatisticsDatePeriod();
                     break;
+				case "Intraday":
+					initiateQueueStatisticsDatePeriod();
+					initiateForecastDatePeriod();
+					initiateAgentStatisticsDatePeriod();
+					break;
                 case "Nightly":
-                case "Intraday":
-                    initiateScheduleDatePeriod();
-                    initiateQueueStatisticsDatePeriod();
-                    initiateForecastDatePeriod();
-                    initiateAgentStatisticsDatePeriod();
+					initiateScheduleDatePeriod();
+					initiateQueueStatisticsDatePeriod();
+					initiateForecastDatePeriod();
+					initiateAgentStatisticsDatePeriod();
                     break;
                 default:
                     break;
