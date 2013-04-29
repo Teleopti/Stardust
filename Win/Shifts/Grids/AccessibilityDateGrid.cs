@@ -45,8 +45,8 @@ namespace Teleopti.Ccc.Win.Shifts.Grids
             {
                 cellModel.HideNoneButton();
                 cellModel.HideTodayButton();
-                if (!Grid.CellModels.ContainsKey("DatePickerCell"))
-                    Grid.CellModels.Add("DatePickerCell", cellModel);
+				if (!Grid.CellModels.ContainsKey(GridCellModelConstants.CellTypeDatePickerCell))
+					Grid.CellModels.Add(GridCellModelConstants.CellTypeDatePickerCell, cellModel);
             }
         }
 

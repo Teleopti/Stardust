@@ -1,5 +1,4 @@
-﻿using System;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using WatiN.Core;
 
@@ -14,14 +13,20 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserInteractions.WatiNIE
 			_browser = browser;
 		}
 
-		public object Eval(string javascript)
+		public object Javascript(string javascript)
 		{
 			return Retrying.Action(() => _browser.Eval(javascript));
 		}
 
-		public void GoTo(string uri)
+		public void GoToWaitForCompleted(string uri)
+		{
+			Retrying.Action(() => _browser.GoTo(uri));
+		}
+
+		public void GoToWaitForUrlAssert(string uri, string assertUrlContains)
 		{
 			Retrying.Action(() => _browser.GoToNoWait(uri));
+			AssertUrlContains(assertUrlContains);
 		}
 
 		public void Click(string selector)
@@ -29,9 +34,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserInteractions.WatiNIE
 			_browser.Element(Find.BySelector(selector)).EventualClick();
 		}
 
+
+
+
 		public void AssertUrlContains(string url)
 		{
 			EventualAssert.That(() => _browser.Url, Is.StringContaining(url));
+		}
+
+		public void AssertJavascriptResultContains(string javascript, string text)
+		{
+			EventualAssert.That(() => _browser.Eval(javascript), Is.StringContaining(text));
 		}
 
 		public void AssertExists(string selector)

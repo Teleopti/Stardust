@@ -153,6 +153,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 
             string openHourString = Convert.ToString(clipValue, CultureInfo.CurrentCulture);
             IList<TimePeriod> timePeriods = new List<TimePeriod>();
+            
             if (String.IsNullOrEmpty(openHourString) ||
                 openHourString.ToUpper(CultureInfo.CurrentUICulture) ==
                 UserTexts.Resources.Closed.ToUpper(CultureInfo.CurrentUICulture))

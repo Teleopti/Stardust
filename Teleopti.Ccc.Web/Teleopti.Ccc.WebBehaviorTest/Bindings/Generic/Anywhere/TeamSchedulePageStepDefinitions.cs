@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[When(@"I select date '(.*)'")]
 		public void WhenISelectDate(DateTime date)
 		{
-			Browser.Interactions.Eval(string.Format("test.callViewMethodWhenReady('teamschedule', 'setDateFromTest', '{0}');", date));
+			Browser.Interactions.Javascript(string.Format("test.callViewMethodWhenReady('teamschedule', 'setDateFromTest', '{0}');", date));
 		}
 	}
 }

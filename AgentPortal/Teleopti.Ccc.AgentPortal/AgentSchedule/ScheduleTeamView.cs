@@ -399,7 +399,8 @@ namespace Teleopti.Ccc.AgentPortal.AgentSchedule
 			_presenter = new VisualProjectionGridPresenter(gridControlTeamSchedules, _schedules);
 			CreateDisplayDate();
 			new ScheduleGridColumnGridHelper<VisualProjection>(gridControlTeamSchedules, _presenter.GridColumns, _schedules);
-		}
+	        _lastRightClickedPerson = null;
+        }
 
         #region Event Handlers
 

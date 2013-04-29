@@ -573,17 +573,9 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentPreference
                         activityDto.Id = cellActivity.Id;
                         activityDto.Description = cellActivity.Name;
 
-                        var activityStartTime = new TimeLimitationDto();
-                        cellData.Preference.ActivityStartTimeLimitation.SetValuesToDto(activityStartTime);
-                        activityRestrictionDto.StartTimeLimitation = activityStartTime;
-
-                        var activityEndTime = new TimeLimitationDto();
-                        cellData.Preference.ActivityEndTimeLimitation.SetValuesToDto(activityEndTime);
-                        activityRestrictionDto.EndTimeLimitation = activityEndTime;
-
-                        var activityLengthTime = new TimeLimitationDto();
-                        cellData.Preference.ActivityTimeLimitation.SetValuesToDto(activityLengthTime);
-                        activityRestrictionDto.WorkTimeLimitation = activityLengthTime;
+                        activityRestrictionDto.StartTimeLimitation = cellData.Preference.ActivityStartTimeLimitation.SetValuesToDto();
+                        activityRestrictionDto.EndTimeLimitation = cellData.Preference.ActivityEndTimeLimitation.SetValuesToDto();
+                        activityRestrictionDto.WorkTimeLimitation = cellData.Preference.ActivityTimeLimitation.SetValuesToDto();
 
                         activityRestrictionDto.Activity = activityDto;
 
@@ -617,15 +609,9 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentPreference
 
                     AddAbsenceToExtendedPreferenceTemplateDto(template, cellData);
 
-                    var startTime = new TimeLimitationDto();
-                    cellData.Preference.StartTimeLimitation.SetValuesToDto(startTime);
-                    template.StartTimeLimitation = startTime;
-                    var endTime = new TimeLimitationDto();
-                    cellData.Preference.EndTimeLimitation.SetValuesToDto(endTime);
-                    template.EndTimeLimitation = endTime;
-                    var lengthTime = new TimeLimitationDto();
-                    cellData.Preference.WorkTimeLimitation.SetValuesToDto(lengthTime);
-                    template.WorkTimeLimitation = lengthTime;
+                    template.StartTimeLimitation = cellData.Preference.StartTimeLimitation.SetValuesToDto();
+                    template.EndTimeLimitation = cellData.Preference.EndTimeLimitation.SetValuesToDto();
+                    template.WorkTimeLimitation = cellData.Preference.WorkTimeLimitation.SetValuesToDto();
                 }
             }
             SdkServiceHelper.SchedulingService.SaveExtendedPreferenceTemplate(template);

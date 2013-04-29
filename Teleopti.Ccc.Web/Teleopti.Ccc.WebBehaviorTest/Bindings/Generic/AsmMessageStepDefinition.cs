@@ -66,14 +66,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[When(@"I receive message number '(.*)' while not viewing message page")]
 		public void WhenIReceiveMessageNumberWhileNotViewingMessagePage(int messageCount)
 		{
-			Browser.Interactions.Eval("Teleopti.MyTimeWeb.AsmMessage.SetMessageNotificationOnTab(" + messageCount.ToString() + ");");
+			Browser.Interactions.Javascript("Teleopti.MyTimeWeb.AsmMessage.SetMessageNotificationOnTab(" + messageCount.ToString() + ");");
 		}
 
 		[When(@"I receive message number '(.*)'")]
 		public void WhenIReceiveMessageNumber(int messageCount)
 		{
 			Browser.Interactions.AssertExists(".asmMessage-list");
-			Browser.Interactions.Eval("Teleopti.MyTimeWeb.AsmMessage.SetMessageNotificationOnTab(" + messageCount.ToString() + ");");
+			Browser.Interactions.Javascript("Teleopti.MyTimeWeb.AsmMessage.SetMessageNotificationOnTab(" + messageCount.ToString() + ");");
 
 			var pushMessageDialogueJsonObject = new StringBuilder();
 			pushMessageDialogueJsonObject.Append("var messageItem = {");
@@ -86,7 +86,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			pushMessageDialogueJsonObject.Append("IsRead: 'false'}; ");
 			pushMessageDialogueJsonObject.Append("Teleopti.MyTimeWeb.AsmMessageList.AddNewMessageAtTop(messageItem);");
 
-			Browser.Interactions.Eval(pushMessageDialogueJsonObject.ToString());
+			Browser.Interactions.Javascript(pushMessageDialogueJsonObject.ToString());
 		}
 
 		[Given(@"I have no unread messages")]
@@ -275,12 +275,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 				id = (Guid)pushMessageDialogue.Id;
 			}
 
-			Browser.Interactions.Eval("Teleopti.MyTimeWeb.AsmMessage.SetMessageNotificationOnTab(" + "1" + ");");
+			Browser.Interactions.Javascript("Teleopti.MyTimeWeb.AsmMessage.SetMessageNotificationOnTab(" + "1" + ");");
 			var javaScript = new StringBuilder();
 
 			javaScript.AppendFormat(CultureInfo.InvariantCulture, "Teleopti.MyTimeWeb.AsmMessageList.DeleteMessage( '{0}' );", id.ToString());
 
-			Browser.Interactions.Eval(javaScript.ToString());
+			Browser.Interactions.Javascript(javaScript.ToString());
 		}
 	}
 }

@@ -79,10 +79,9 @@ namespace Teleopti.Ccc.AgentPortalCode.Common
             MaxTime = timeLimitationDto.MaxTime;
         }
 
-        public void SetValuesToDto(TimeLimitationDto timeLimitationDto)
+        public TimeLimitationDto SetValuesToDto()
         {
-            timeLimitationDto.MinTime = MinTime;
-            timeLimitationDto.MaxTime = MaxTime;
+            return new TimeLimitationDto {MinTime = MinTime, MaxTime = MaxTime};
         }
 
         public TimeSpan? MinTime { get; set; }

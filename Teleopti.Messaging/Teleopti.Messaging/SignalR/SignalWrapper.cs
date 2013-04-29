@@ -5,6 +5,7 @@ using System.Net.Sockets;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Client;
 using Microsoft.AspNet.SignalR.Client.Hubs;
+using Microsoft.AspNet.SignalR.Client.Transports;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Teleopti.Interfaces;
@@ -129,7 +130,7 @@ namespace Teleopti.Messaging.SignalR
 			{
 				Exception exception = null;
 				_hubConnection.Credentials = CredentialCache.DefaultNetworkCredentials;
-				var startTask = _hubConnection.Start();
+				var startTask = _hubConnection.Start(new LongPollingTransport());
 				startTask.ContinueWith(t =>
 				                       	{
 				                       		if (t.IsFaulted && t.Exception != null)

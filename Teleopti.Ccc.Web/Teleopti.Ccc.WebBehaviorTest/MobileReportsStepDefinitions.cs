@@ -95,7 +95,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see friendly error message")]
 		public void ThenIShouldSeeFriendlyErrorMessage()
 		{
-			_page.Document.Divs.Filter(Find.ById("error-view")).First().DomContainer.ContainsText("No access");
+			Browser.Interactions.AssertContains("#error-view", "No access");
 		}
 
 		[Then(@"I should see ReportSettings")]

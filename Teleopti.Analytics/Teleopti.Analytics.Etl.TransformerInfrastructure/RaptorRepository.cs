@@ -640,10 +640,11 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 
 		public int PerformPurge()
 		{
-			using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				var purgeCommand = new PurgeApplicationData(UnitOfWorkFactory.Current);
 				purgeCommand.Execute();
+				uow.PersistAll();
 			}
 			return 1;
 		}

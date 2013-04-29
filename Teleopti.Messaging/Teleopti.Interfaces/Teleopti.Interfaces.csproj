@@ -117,9 +117,11 @@
     <Compile Include="Domain\IAggregateRootWithEvents.cs" />
     <Compile Include="Domain\IBudgetGroupAllowanceCalculator.cs" />
     <Compile Include="Domain\IBudgetGroupHeadCountSpecification.cs" />
+    <Compile Include="Domain\ICalculator.cs" />
     <Compile Include="Domain\IEffectiveRestrictionCombiner.cs" />
     <Compile Include="Domain\IChangePasswordResultInfo.cs" />
     <Compile Include="Domain\IEvent.cs" />
+    <Compile Include="Domain\IExtractBudgetGroupPeriods.cs" />
     <Compile Include="Domain\ILoggedOnUser.cs" />
     <Compile Include="Domain\IPersistedActivityLayer.cs" />
     <Compile Include="Domain\IPersonalShiftRestrictionCombiner.cs" />

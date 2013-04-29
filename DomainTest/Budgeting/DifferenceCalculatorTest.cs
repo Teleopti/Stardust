@@ -39,15 +39,16 @@ namespace Teleopti.Ccc.DomainTest.Budgeting
 
             var netStaffCalculator = new NetStaffCalculator(new GrossStaffCalculator());
             netStaffCalculator.Initialize(listOfBudgetDays);
-            var info = new CultureInfo(1053);
-            _target = new DifferenceCalculator(netStaffCalculator, info);
+            _target = new DifferenceCalculator();
         }
 
         [Test]
         public void ShouldGetBudgetedStaff()
         {
             var result = new BudgetCalculationResult();
-            _target.Calculate(_budgetDay5, listOfBudgetDays, result);
+	        result.BudgetedStaff = 517.54D;
+	        result.ForecastedStaff = 1D;
+            _target.Calculate(_budgetDay5, listOfBudgetDays, ref result);
             var difference = Math.Round(result.Difference, 2);
             difference.Should().Be.EqualTo(516.54d);
         }

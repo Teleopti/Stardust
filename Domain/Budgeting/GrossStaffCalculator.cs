@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.Domain.Budgeting
 
             var daysPerYear = budgetDay.BudgetGroup.DaysPerYear;
             double previousDayGrossStaff = 0;
-            foreach (IBudgetDay day in budgetDayList)
+            foreach (var day in budgetDayList)
             {
                 var staffEmployed = day.StaffEmployed.GetValueOrDefault(previousDayGrossStaff);
                 var grossStaffThisDay = staffEmployed*(1 - day.AttritionRate.Value/daysPerYear) + day.Recruitment;
@@ -36,10 +36,5 @@ namespace Teleopti.Ccc.Domain.Budgeting
     {
         void Initialize(IEnumerable<IBudgetDay> budgetDayList);
         BudgetCalculationResult CalculatedResult(IBudgetDay budgetDay);
-    }
-
-    public interface ICalculator
-    {
-        void Calculate(IBudgetDay budgetDay, IEnumerable<IBudgetDay> budgetDayList, BudgetCalculationResult budgetCalculationResult); 
     }
 }

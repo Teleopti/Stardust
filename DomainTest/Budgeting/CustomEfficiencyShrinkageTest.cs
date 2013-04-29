@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Budgeting;
 
 namespace Teleopti.Ccc.DomainTest.Budgeting
@@ -9,8 +10,8 @@ namespace Teleopti.Ccc.DomainTest.Budgeting
         [Test]
         public void ShouldContainNameWhenConstructed()
         {
-            var sickString = "Sick";
-            var tiredString = "tired";
+            const string sickString = "Sick";
+            const string tiredString = "tired";
             var sick = new CustomEfficiencyShrinkage(sickString);
             Assert.AreEqual(sickString, sick.ShrinkageName);
             sick.ShrinkageName = tiredString;
@@ -28,5 +29,12 @@ namespace Teleopti.Ccc.DomainTest.Budgeting
             Assert.AreEqual(0, shrinkage1.OrderIndex);
             Assert.AreEqual(1, shrinkage2.OrderIndex);
         }
+
+		[Test]
+		public void ShouldSetOrderIndex()
+		{
+			var shrinkage1 = new CustomEfficiencyShrinkage("shrinkage1") {OrderIndex = 0};
+			shrinkage1.OrderIndex.Should().Be.EqualTo(-1);
+		}
     }
 }

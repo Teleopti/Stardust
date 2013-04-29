@@ -1,9 +1,5 @@
 using System;
 using System.Linq;
-using System.Text.RegularExpressions;
-using NUnit.Framework;
-using Teleopti.Ccc.WebBehaviorTest.Core.BrowserInteractions.WatiNIE;
-using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
 
@@ -14,33 +10,28 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void CreateCorruptCookie()
 		{
-			Navigation.GoTo("Test/CorruptMyCookie", new WaitUntilAt("Test/CorruptMyCookie"));
+			Navigation.GoToWaitForCompleted("Test/CorruptMyCookie");
 		}
 
 		public static void CreateNonExistingDatabaseCookie()
 		{
-			Navigation.GoTo("Test/NonExistingDatasourceCookie", new WaitUntilAt("Test/NonExistingDatasourceCookie"));
+			Navigation.GoToWaitForCompleted("Test/NonExistingDatasourceCookie");
 		}
 
-		public static void ExpireMyCookie()
+		public static void SetCurrentTime(DateTime time)
 		{
-			Navigation.GoTo("Test/ExpireMyCookie", new WaitUntilAt("Test/ExpireMyCookie"));
-		}
-
-		public static void SetCurrentDate(DateTime time)
-		{
-			Navigation.GoTo("Test/SetCurrentTime?dateSet=" + time, new WaitUntilAt("Test/SetCurrentTime"));
+			Navigation.GoToWaitForCompleted("Test/SetCurrentTime?dateSet=" + time);
 		}
 
 		public static void BeforeTestRun()
 		{
-			Navigation.GotoRaw("file://" + System.IO.Path.Combine(Environment.CurrentDirectory, "BeforeTestRun.html"), new WaitUntilAt("BeforeTestRun"));
+			Navigation.GotoRaw("file://" + System.IO.Path.Combine(Environment.CurrentDirectory, "BeforeTestRun.html"));
 		}
 
 		public static void BeforeScenario()
 		{
 			// use a scenario tag here for enableMyTimeMessageBroker if required
-			Navigation.GoTo("Test/BeforeScenario?enableMyTimeMessageBroker=false", new ApplicationStartupTimeout(), new WaitUntilAt("Test/BeforeScenario"));
+			Navigation.GoToWaitForCompleted("Test/BeforeScenario?enableMyTimeMessageBroker=false", new ApplicationStartupTimeout());
 		}
 
 		/// <summary>
@@ -80,7 +71,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			const string dataSourceName = "TestData";
 			var businessUnitName = UserFactory.User().Person.PermissionInformation.ApplicationRoleCollection.Single().BusinessUnit.Name;
 			var queryString = string.Format("?dataSourceName={0}&businessUnitName={1}&userName={2}&password={3}", dataSourceName, businessUnitName, userName, password);
-			Navigation.GoTo("Test/Logon" + queryString, new WaitUntilAt("Test/Logon"));
+			Navigation.GoToWaitForCompleted("Test/Logon" + queryString);
 		}
 
 		public static void ExpireMyCookieInsidePortal()
@@ -89,27 +80,27 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			// probably depending on how quickly the next request takes place.
 			// making a second request seems to enforce the cookie somehow..
 
-			Browser.Interactions.Eval("Teleopti.MyTimeWeb.Test.ExpireMyCookie('Cookie is expired!');");
-			EventualAssert.That(() => Browser.Current.Eval("Teleopti.MyTimeWeb.Test.PopTestMessages();"), Is.StringContaining("Cookie is expired!"));
+			Browser.Interactions.Javascript("Teleopti.MyTimeWeb.Test.ExpireMyCookie('Cookie is expired!');");
+			Browser.Interactions.AssertJavascriptResultContains("Teleopti.MyTimeWeb.Test.PopTestMessages();", "Cookie is expired!");
 
-			Browser.Interactions.Eval("Teleopti.MyTimeWeb.Test.ExpireMyCookie('Cookie is expired!');");
-			EventualAssert.That(() => Browser.Current.Eval("Teleopti.MyTimeWeb.Test.PopTestMessages();"), Is.StringContaining("Cookie is expired!"));
+			Browser.Interactions.Javascript("Teleopti.MyTimeWeb.Test.ExpireMyCookie('Cookie is expired!');");
+			Browser.Interactions.AssertJavascriptResultContains("Teleopti.MyTimeWeb.Test.PopTestMessages();", "Cookie is expired!");
 		}
 
 		public static void TestMessage(string message)
 		{
-			Browser.Interactions.Eval("Teleopti.MyTimeWeb.Test.TestMessage('" + message + "');");
-			EventualAssert.That(() => Browser.Current.Eval("Teleopti.MyTimeWeb.Test.PopTestMessages();"), Is.StringContaining(message));
+			Browser.Interactions.Javascript("Teleopti.MyTimeWeb.Test.TestMessage('" + message + "');");
+			Browser.Interactions.AssertJavascriptResultContains("Teleopti.MyTimeWeb.Test.PopTestMessages();", message);
 		}
 
 		public static void WaitUntilReadyForInteraction()
 		{
-			EventualAssert.That(() => Browser.Current.Eval("Teleopti.MyTimeWeb.Test.PopTestMessages();"), Is.StringContaining("Ready for interaction"));
+			Browser.Interactions.AssertJavascriptResultContains("Teleopti.MyTimeWeb.Test.PopTestMessages();", "Ready for interaction");
 		}
 
 		public static void WaitUntilCompletelyLoaded()
 		{
-			EventualAssert.That(() => Browser.Current.Eval("Teleopti.MyTimeWeb.Test.PopTestMessages();"), Is.StringContaining("Completely loaded"));
+			Browser.Interactions.AssertJavascriptResultContains("Teleopti.MyTimeWeb.Test.PopTestMessages();", "Completely loaded");
 		}
 
 	}

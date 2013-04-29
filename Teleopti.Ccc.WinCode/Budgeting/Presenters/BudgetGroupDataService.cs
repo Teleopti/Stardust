@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.Collection;
@@ -49,29 +48,44 @@ namespace Teleopti.Ccc.WinCode.Budgeting.Presenters
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void Recalculate(IList<IBudgetGroupDayDetailModel> models)
-        {
-            var bList = models.Select(dayDetailModel =>
-                                      	{
-											dayDetailModel.UpdateBudgetDay();
-                                      		return dayDetailModel.BudgetDay;
-                                      	}).ToList(); //One loop
+		{
+			var budgetDays = models.Select(dayDetailModel =>
+				{
+					dayDetailModel.UpdateBudgetDay();
+					return dayDetailModel.BudgetDay;
+				}).ToList(); //One loop
 
-		    var netStaffCalculator = new NetStaffCalculator(new GrossStaffCalculator());
-		    var cList = new List<ICalculator>{new DifferencePercentCalculator(netStaffCalculator, CultureInfo.CurrentCulture)};
-		    if (_budgetPermissionService.IsAllowancePermitted)
-                cList.Add(new AllowanceCalculator(netStaffCalculator, CultureInfo.CurrentCulture));
+			var grossStaffCalculator = new GrossStaffCalculator();
+			var netStaffCalculator = new NetStaffCalculator(grossStaffCalculator);
+			var netStaffForecasteAdjustCalculator = new NetStaffForecastAdjustCalculator(netStaffCalculator, grossStaffCalculator);
+			var calculators = new List<ICalculator>
+				{
+					new ForecastedStaffCalculator(),
+					netStaffForecasteAdjustCalculator,
+					new BudgetedStaffCalculator(),
+					new DifferenceCalculator(),
+					new DifferencePercentCalculator()
+				};
 
-            IBudgetCalculator calculator = new BudgetCalculator(bList, netStaffCalculator, cList);
+			if (_budgetPermissionService.IsAllowancePermitted)
+				calculators.AddRange(new List<ICalculator>
+					{
+						new BudgetedLeaveCalculator(netStaffCalculator),
+						new BudgetedSurplusCalculator(),
+						new TotalAllowanceCalculator(),
+						new AllowanceCalculator()
+					});
+
+			IBudgetCalculator calculator = new BudgetCalculator(budgetDays, netStaffCalculator, calculators);
 			using (PerformanceOutput.ForOperation("Recalculating"))
-            {
-                foreach (var detailModel in models) //hmm, second same loop
-                {
-                    detailModel.Recalculate(calculator);
-                }
-            }
-        }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
+			{
+				models.ForEach(d => d.Recalculate(calculator)); //hmm, second same loop
+				
+				NetStaffFcAdjustSurplusDistributor.Distribute(calculator, grossStaffCalculator, netStaffForecasteAdjustCalculator, models);
+			}
+		}
+			
+			[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic")]
         public void UpdateBudgetDays(IBudgetDayProvider budgetDayProvider)
         {
             if (budgetDayProvider == null) throw new ArgumentNullException("budgetDayProvider");

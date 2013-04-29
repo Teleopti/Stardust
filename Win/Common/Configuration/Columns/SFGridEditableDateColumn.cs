@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Globalization;
 using Syncfusion.Windows.Forms.Grid;
+using Teleopti.Ccc.Win.Common.Controls.Cells;
 using Teleopti.Ccc.WinCode.Common;
 
 namespace Teleopti.Ccc.Win.Common.Configuration.Columns
@@ -39,7 +40,7 @@ namespace Teleopti.Ccc.Win.Common.Configuration.Columns
             else
             {
                 if (dataItems.Count == 0) return;
-                e.Style.CellType = "DatePickerCell";
+				e.Style.CellType = GridCellModelConstants.CellTypeDatePickerCell;
                 //e.Style.CellType = "MonthCalendar";
                 e.Style.Format = _dtfi.ShortDatePattern;
                 e.Style.CellValueType = typeof(DateTime);
