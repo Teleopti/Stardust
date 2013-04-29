@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
@@ -11,51 +12,41 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 		private readonly ILoggedOnUser _loggedOnUser;
 		public readonly IBudgetDayRepository _budgetDayRepository;
 		private readonly IScenarioRepository _scenarioRepository;
+		private readonly IExtractBudgetGroupPeriods _extractBudgetGroupPeriods;
 
-		public AllowanceProvider(IBudgetDayRepository budgetDayRepository, ILoggedOnUser loggedOnUser, IScenarioRepository scenarioRepository)
+		public AllowanceProvider(IBudgetDayRepository budgetDayRepository, ILoggedOnUser loggedOnUser, IScenarioRepository scenarioRepository, IExtractBudgetGroupPeriods extractBudgetGroupPeriods)
 		{
 			_budgetDayRepository = budgetDayRepository;
 			_loggedOnUser = loggedOnUser;
 			_scenarioRepository = scenarioRepository;
+			_extractBudgetGroupPeriods = extractBudgetGroupPeriods;
 		}
 
 		public IEnumerable<IAllowanceDay> GetAllowanceForPeriod(DateOnlyPeriod period)
 		{
 			var person = _loggedOnUser.CurrentUser();
-			var allowanceList = new List<IAllowanceDay>();
-			IBudgetGroup budgetGroup;
-			try
-			{
-				budgetGroup = person.PersonPeriodCollection.Last().BudgetGroup;
-			}
-			catch (Exception)
-			{
-				foreach (var day in period.DayCollection())
-				{
-					var allowanceDay = new AllowanceDay { Allowance = 0, Date = day };
-					allowanceList.Add(allowanceDay);
-				}
+			var allowanceList = period.DayCollection().Select(dateOnly => new AllowanceDay
+				                                                              {
+					                                                              Allowance = 0d, Date = dateOnly
+				                                                              }).ToList();
 
-				return allowanceList;
-			}
+			var budgetGroupPeriods = _extractBudgetGroupPeriods.BudgetGroupsForPeriod(person, period);
 			var defaultScenario = _scenarioRepository.LoadDefaultScenario();
 
-			var budgetDays = _budgetDayRepository.Find(defaultScenario, budgetGroup, period);
-
-			foreach (var day in period.DayCollection())
+			foreach (var budgetGroupPeriod in budgetGroupPeriods)
 			{
-				var allowanceDay = new AllowanceDay();
-				allowanceDay.Allowance = 0;
-				allowanceDay.Date = day;
+				var budgetDays = _budgetDayRepository.Find(defaultScenario, budgetGroupPeriod.Item2, budgetGroupPeriod.Item1);
 
 				foreach (var budgetDay in budgetDays)
 				{
-					if (budgetDay.Day != day) continue;
-					allowanceDay.Allowance = budgetDay.Allowance * budgetDay.FulltimeEquivalentHours * 60;
-					allowanceDay.Date = day;
+					var allowanceDay = allowanceList.FirstOrDefault(a => a.Date == budgetDay.Day);
+					if (allowanceDay != null)
+					{
+						allowanceDay.Allowance = budgetDay.Allowance * budgetDay.FulltimeEquivalentHours * 60;
+					}
 				}
-				allowanceList.Add(allowanceDay);
 			}
+
 			return allowanceList;
 		}
 	}
