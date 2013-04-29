@@ -1,5 +1,5 @@
-IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[etl_dim_time_zone_delete.sql]') AND type in (N'P', N'PC'))
-DROP PROCEDURE [mart].[etl_dim_time_zone_delete.sql]
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[etl_dim_time_zone_delete]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [mart].[etl_dim_time_zone_delete]
 GO
 
 -- =============================================
@@ -13,7 +13,7 @@ GO
 -- =============================================
 --
 -- =============================================
-CREATE PROCEDURE [mart].[etl_dim_time_zone_delete.sql]
+CREATE PROCEDURE [mart].[etl_dim_time_zone_delete]
 
 AS
 --bridge_group_page_person
