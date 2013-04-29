@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			budgetDayRepository.Stub(x => x.Find(scenario, budgetGroup, period)).Return(budgetDays);
 			userTimeZone.Stub(x => x.TimeZone()).Return(timeZone);
 
-			var target = new AllowanceProvider(budgetDayRepository, userTimeZone, loggedOnUser, scenarioRepository);
+			var target = new AllowanceProvider(budgetDayRepository, loggedOnUser, scenarioRepository);
 			var result = target.GetAllowanceForPeriod(period);
 			result.First().Allowance.Should().Be.EqualTo(allowanceInMinutes);
 

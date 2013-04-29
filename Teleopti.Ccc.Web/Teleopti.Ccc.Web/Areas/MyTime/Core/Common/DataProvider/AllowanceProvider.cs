@@ -1,11 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
-using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Repositories;
-using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
@@ -15,16 +11,12 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 		private readonly ILoggedOnUser _loggedOnUser;
 		public readonly IBudgetDayRepository _budgetDayRepository;
 		private readonly IScenarioRepository _scenarioRepository;
-		private readonly IUserTimeZone _userTimeZone;
-		private readonly IScheduleProjectionReadOnlyRepository _scheduleProjectionReadOnlyRepository;
 
-		public AllowanceProvider(IBudgetDayRepository budgetDayRepository, IUserTimeZone userTimeZone, ILoggedOnUser loggedOnUser, IScenarioRepository scenarioRepository)
+		public AllowanceProvider(IBudgetDayRepository budgetDayRepository, ILoggedOnUser loggedOnUser, IScenarioRepository scenarioRepository)
 		{
 			_budgetDayRepository = budgetDayRepository;
-			_userTimeZone = userTimeZone;
 			_loggedOnUser = loggedOnUser;
 			_scenarioRepository = scenarioRepository;
-			_scheduleProjectionReadOnlyRepository = new ScheduleProjectionReadOnlyRepository(UnitOfWorkFactory.CurrentUnitOfWork());
 		}
 
 		public IEnumerable<IAllowanceDay> GetAllowanceForPeriod(DateOnlyPeriod period)
