@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific
 
 			// create main shift
 			_assignmentPeriod = new DateTimePeriod(dateUtc.Add(StartTime), dateUtc.Add(EndTime));
-			var assignment = PersonAssignmentFactory.CreatePersonAssignment(user, Scenario);
+			var assignment = PersonAssignmentFactory.CreatePersonAssignment(user, Scenario, new DateOnly(Date));
 			assignment.SetMainShift(MainShiftFactory.CreateMainShift(TestData.ActivityPhone, _assignmentPeriod, ShiftCategory));
 
 			// add lunch
