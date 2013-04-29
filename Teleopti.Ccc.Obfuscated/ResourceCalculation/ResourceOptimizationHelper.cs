@@ -17,18 +17,21 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 		private readonly INonBlendSkillCalculator _nonBlendSkillCalculator;
 		private readonly ISingleSkillDictionary _singleSkillDictionary;
 	    private readonly ISingleSkillMaxSeatCalculator _singleSkillMaxSeatCalculator;
+		private readonly IPersonSkillProvider _personSkillProvider;
 
 		public ResourceOptimizationHelper(ISchedulingResultStateHolder stateHolder,
 			IOccupiedSeatCalculator occupiedSeatCalculator,
 			INonBlendSkillCalculator nonBlendSkillCalculator,
 			ISingleSkillDictionary singleSkillDictionary,
-			ISingleSkillMaxSeatCalculator singleSkillMaxSeatCalculator)
+			ISingleSkillMaxSeatCalculator singleSkillMaxSeatCalculator,
+			IPersonSkillProvider personSkillProvider)
 		{
 			_stateHolder = stateHolder;
 			_occupiedSeatCalculator = occupiedSeatCalculator;
 			_nonBlendSkillCalculator = nonBlendSkillCalculator;
 			_singleSkillDictionary = singleSkillDictionary;
     		_singleSkillMaxSeatCalculator = singleSkillMaxSeatCalculator;
+			_personSkillProvider = personSkillProvider;
 		}
 
 		public void ResourceCalculateDate(DateOnly localDate, bool useOccupancyAdjustment, bool considerShortBreaks)
@@ -53,20 +56,19 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 
 			using (PerformanceOutput.ForOperation("ResourceCalculate " + localDate.ToShortDateString()))
 			{
-				var extractor = new ScheduleProjectionExtractor();
-				var relevantProjections = ResourceCalculationContext.Container();
+				var relevantProjections = ResourceCalculationContext.Container(_personSkillProvider);
 
 				var useSingleSkillCalculations = UseSingleSkillCalculations(toRemove, toAdd);
 
 				if (!useSingleSkillCalculations && !ResourceCalculationContext.InContext)
+				{
+					var extractor = new ScheduleProjectionExtractor(_personSkillProvider, _stateHolder.Skills.Min(s => s.DefaultResolution));
 					relevantProjections = extractor.CreateRelevantProjectionList(_stateHolder.Schedules,
-																						 TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(localDate.AddDays(-1), localDate.AddDays(1)));
+					                                                             TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(
+						                                                             localDate.AddDays(-1), localDate.AddDays(1)));
+				}
 
 				resourceCalculateDate(relevantProjections, localDate, useOccupancyAdjustment, calculateMaxSeatsAndNonBlend, considerShortBreaks, toRemove, toAdd);
-					var removedPersonAssignment = addedSchedule.AssignmentHighZOrder();
-					if (removedPersonAssignment == null)
-						continue;
-					IVisualLayerCollection collection = removedPersonAssignment.ProjectionService().CreateProjection();
 			}
 		}
 
@@ -91,7 +93,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 
 			var relevantSkillStaffPeriods = CreateSkillSkillStaffDictionaryOnSkills(_stateHolder.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary, ordinarySkills, timePeriod);
 
-			var schedulingResultService = new SchedulingResultService(relevantSkillStaffPeriods, _stateHolder.Skills, relevantProjections, new SingleSkillCalculator(), useOccupancyAdjustment, _singleSkillDictionary);
+			var schedulingResultService = new SchedulingResultService(relevantSkillStaffPeriods, _stateHolder.Skills, relevantProjections, new SingleSkillCalculator(), useOccupancyAdjustment, _personSkillProvider);
 
 			schedulingResultService.SchedulingResult(timePeriod, toRemove, toAdd);
 
@@ -177,7 +179,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 				CreateSkillSkillStaffDictionaryOnSkills(
 					_stateHolder.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary, skills, timePeriod.Value);
 
-			var container = new ResourceCalculationDataContainer(new PersonSkillProvider());
+			var container = new ResourceCalculationDataContainer(_personSkillProvider);
 			foreach (var resourceLayer in layerCollection.ToResourceLayers(_stateHolder.Skills.Min(s => s.DefaultResolution)))
 			{
 				container.AddResources(resourceLayer.Period, resourceLayer.Activity, person, dateOnly, resourceLayer.Resource);
@@ -230,9 +232,9 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 	{
 		[ThreadStatic] private static IResourceCalculationDataContainer _container;
 
-		public static IResourceCalculationDataContainer Container()
+		public static IResourceCalculationDataContainer Container(IPersonSkillProvider personSkillProvider)
 		{
-			return _container ?? new ResourceCalculationDataContainer(new PersonSkillProvider());
+			return _container ?? new ResourceCalculationDataContainer(personSkillProvider);
 		}
 
 		public ResourceCalculationContext(IResourceCalculationDataContainer resources)

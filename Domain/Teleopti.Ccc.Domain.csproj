@@ -446,6 +446,7 @@
     <Compile Include="Repositories\IWebReportRepository.cs" />
     <Compile Include="Repositories\Paging.cs" />
     <Compile Include="Repositories\PagingDetail.cs" />
+    <Compile Include="ResourceCalculation\ActivitySkillsCombination.cs" />
     <Compile Include="ResourceCalculation\AvailableHourlyEmployeeFinder.cs" />
     <Compile Include="ResourceCalculation\BestGroupValueExtractorThreadFactory.cs" />
     <Compile Include="ResourceCalculation\BusinessRuleResponseContainsDateSpecification.cs" />
@@ -463,13 +464,16 @@
     <Compile Include="ResourceCalculation\GroupScheduling\IGroupPersonShiftCategoryConsistentChecker.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\PossibleCombinationsOfStartEndCategoryCreator.cs" />
     <Compile Include="ResourceCalculation\GroupScheduling\RuleSetBagForGroupPerson.cs" />
+    <Compile Include="ResourceCalculation\IPersonSkillProvider.cs" />
     <Compile Include="ResourceCalculation\ISwapAndModifyService.cs" />
     <Compile Include="ResourceCalculation\ISwapAndModifyServiceNew.cs" />
     <Compile Include="ResourceCalculation\OptimizerActivitiesPreferences.cs" />
     <Compile Include="Optimization\SkillExtractorForGroupOfPeople.cs" />
     <Compile Include="ResourceCalculation\PersonalShiftMeetingTimeChecker.cs" />
+    <Compile Include="ResourceCalculation\PersonSkillProvider.cs" />
     <Compile Include="ResourceCalculation\PossibleCombinationsOfStartEndCategoryRunner.cs" />
     <Compile Include="ResourceCalculation\PossibleStartEndCategory.cs" />
+    <Compile Include="ResourceCalculation\ResourceCalculationDataContainer.cs" />
     <Compile Include="ResourceCalculation\ShiftCategoryPeriodValueExtractorThread.cs" />
     <Compile Include="ResourceCalculation\SingleSkillCalculator.cs" />
     <Compile Include="ResourceCalculation\SingleSkillDictionary.cs" />
@@ -853,7 +857,6 @@
     <Compile Include="Scheduling\SeatLimitation\SkillVisualLayerCollectionDictionaryCreator.cs" />
     <Compile Include="Scheduling\SeatLimitation\SkillVisualLayerCollectionDictionary.cs" />
     <Compile Include="Scheduling\SeatLimitation\SeatImpactOnPeriodForProjection.cs" />
-    <Compile Include="Scheduling\SeatLimitation\SeatLimitationWorkShiftCalculator.cs" />
     <Compile Include="Scheduling\ShiftCreator\EndTimeLimiter.cs" />
     <Compile Include="Scheduling\ShiftCreator\OperatorLimiter.cs" />
     <Compile Include="Scheduling\ShiftCreator\RuleSetProjectionEntityService.cs" />

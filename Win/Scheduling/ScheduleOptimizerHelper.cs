@@ -44,6 +44,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         private readonly IGroupPersonBuilderForOptimization _groupPersonBuilderForOptimization;
     	private readonly ISingleSkillDictionary _singleSkillDictionary;
     	private readonly IDaysOffSchedulingService _daysOffSchedulingService;
+		private readonly IPersonSkillProvider _personSkillProvider;
 
         public ScheduleOptimizerHelper(ILifetimeScope container)
         {
@@ -60,6 +61,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             _groupPersonBuilderForOptimization = _container.Resolve<IGroupPersonBuilderForOptimization>();
         	_singleSkillDictionary = _container.Resolve<ISingleSkillDictionary>();
         	_daysOffSchedulingService = _container.Resolve<IDaysOffSchedulingService>();
+	        _personSkillProvider = _container.Resolve<IPersonSkillProvider>();
         }
 
         #region Interface
@@ -92,7 +94,8 @@ namespace Teleopti.Ccc.Win.Scheduling
                                                                      optimizerPreferences,
                                                                      rollbackService,
                                                                      SchedulingStateHolder,
-																	 _singleSkillDictionary);
+																	 _singleSkillDictionary,
+																	 _personSkillProvider);
 
             IList<IIntradayOptimizer2> optimizers = creator.Create();
             IScheduleOptimizationService service = new IntradayOptimizerContainer(optimizers);
@@ -129,7 +132,8 @@ namespace Teleopti.Ccc.Win.Scheduling
                                              optimizerPreferences,
                                              rollbackService,
                                              SchedulingStateHolder,
-											 _singleSkillDictionary);
+											 _singleSkillDictionary,
+											 _personSkillProvider);
 
             IList<IMoveTimeOptimizer> optimizers = creator.Create();
             IScheduleOptimizationService service = new MoveTimeOptimizerContainer(optimizers, periodValueCalculator);

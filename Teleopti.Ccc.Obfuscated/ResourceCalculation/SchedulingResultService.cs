@@ -14,21 +14,21 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 		private readonly IResourceCalculationDataContainer _relevantProjections;
 		private readonly ISingleSkillCalculator _singleSkillCalculator;
 		private readonly bool _useOccupancyAdjustment;
-		private readonly ISingleSkillDictionary _singleSkillDictionary;
+		private readonly IPersonSkillProvider _personSkillProvider;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public SchedulingResultService(ISchedulingResultStateHolder stateHolder,
 			IList<ISkill> allSkills,
 			ISingleSkillCalculator singleSkillCalculator,
 			bool useOccupancyAdjustment,
-			ISingleSkillDictionary singleSkillDictionary)
+			IPersonSkillProvider personSkillProvider)
 		{
 			_useOccupancyAdjustment = useOccupancyAdjustment;
 			_relevantSkillStaffPeriods = stateHolder.SkillStaffPeriodHolder.SkillSkillStaffPeriodDictionary;
 			_relevantProjections = createRelevantProjectionList(stateHolder.Schedules);
 			_allSkills = allSkills;
 			_singleSkillCalculator = singleSkillCalculator;
-			_singleSkillDictionary = singleSkillDictionary;
+			_personSkillProvider = personSkillProvider;
 		}
 
 
@@ -37,14 +37,14 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 			IResourceCalculationDataContainer relevantProjections,
 			ISingleSkillCalculator singleSkillCalculator,
 			bool useOccupancyAdjustment,
-			ISingleSkillDictionary singleSkillDictionary)
+			IPersonSkillProvider personSkillProvider)
 		{
 			_relevantSkillStaffPeriods = relevantSkillStaffPeriods;
 			_allSkills = allSkills;
 			_relevantProjections = relevantProjections;
 			_singleSkillCalculator = singleSkillCalculator;
 			_useOccupancyAdjustment = useOccupancyAdjustment;
-			_singleSkillDictionary = singleSkillDictionary;
+			_personSkillProvider = personSkillProvider;
 		}
 
 
@@ -66,9 +66,8 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 		//used from everwhere exept ETL
 		public ISkillSkillStaffPeriodExtendedDictionary SchedulingResult(DateTimePeriod periodToRecalculate, IList<IScheduleDay> toRemove, IList<IScheduleDay> toAdd)
 		{
-			var provider = new PersonSkillProvider();
-			var toRemoveContainer = new ResourceCalculationDataContainer(provider);
-			var toAddContainer = new ResourceCalculationDataContainer(provider);
+			var toRemoveContainer = new ResourceCalculationDataContainer(_personSkillProvider);
+			var toAddContainer = new ResourceCalculationDataContainer(_personSkillProvider);
 
 			var minResolution = _allSkills.Min(s => s.DefaultResolution);
 			foreach (var scheduleDay in toRemove)
@@ -109,7 +108,7 @@ namespace Teleopti.Ccc.Obfuscated.ResourceCalculation
 
 		private ResourceCalculationDataContainer createRelevantProjectionList(IScheduleDictionary scheduleDictionary)
 		{
-			var resources = new ResourceCalculationDataContainer(new PersonSkillProvider());
+			var resources = new ResourceCalculationDataContainer(_personSkillProvider);
 			int minutesSplit = _allSkills.Min(s => s.DefaultResolution);
 					
 			foreach (var person in scheduleDictionary.Keys)

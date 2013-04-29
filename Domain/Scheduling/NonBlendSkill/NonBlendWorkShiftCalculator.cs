@@ -16,11 +16,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.NonBlendSkill
 	{
 	    private readonly INonBlendSkillImpactOnPeriodForProjection _nonBlendSkillImpactOnPeriodForProjection;
 		private readonly IWorkShiftCalculator _workShiftCalculator;
+		private readonly IPersonSkillProvider _personSkillProvider;
 
-		public NonBlendWorkShiftCalculator(INonBlendSkillImpactOnPeriodForProjection nonBlendSkillImpactOnPeriodForProjection, IWorkShiftCalculator workShiftCalculator)
+		public NonBlendWorkShiftCalculator(INonBlendSkillImpactOnPeriodForProjection nonBlendSkillImpactOnPeriodForProjection, IWorkShiftCalculator workShiftCalculator, IPersonSkillProvider personSkillProvider)
         {
         	_nonBlendSkillImpactOnPeriodForProjection = nonBlendSkillImpactOnPeriodForProjection;
 			_workShiftCalculator = workShiftCalculator;
+			_personSkillProvider = personSkillProvider;
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
@@ -33,11 +35,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.NonBlendSkill
 
 			double result = 0;
 	        var resolution = skillStaffPeriods.Keys.Min(k => k.DefaultResolution);
-	        var container = new ResourceCalculationDataContainer(new PersonSkillProvider());
-	        var date = vcPeriod.Value.StartDateTimeLocal(person.PermissionInformation.DefaultTimeZone());
+	        var container = new ResourceCalculationDataContainer(_personSkillProvider);
+	        var date = new DateOnly(vcPeriod.Value.StartDateTimeLocal(person.PermissionInformation.DefaultTimeZone()));
 			foreach (var resourceLayer in layers.ToResourceLayers(resolution))
 			{
-				container.AddResources(resourceLayer.Period, resourceLayer.Activity, person, new DateOnly(date),
+				container.AddResources(resourceLayer.Period, resourceLayer.Activity, person, date,
 				                       resourceLayer.Resource);
 			}
 

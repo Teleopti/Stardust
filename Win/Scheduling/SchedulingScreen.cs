@@ -4067,7 +4067,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         	_singleSkillDictionary = _container.Resolve<ISingleSkillDictionary>();
 			_singleSkillDictionary.Create(SchedulerState.SchedulingResultState.PersonsInOrganization.ToList(), SchedulerState.RequestedPeriod.DateOnlyPeriod);
 
-            _optimizationHelperWin = new ResourceOptimizationHelperWin(SchedulerState, _singleSkillDictionary);
+            _optimizationHelperWin = new ResourceOptimizationHelperWin(SchedulerState, _singleSkillDictionary, new PersonSkillProvider());
 			_scheduleOptimizerHelper = new ScheduleOptimizerHelper(_container);
 
 			_groupDayOffOptimizerHelper = new GroupDayOffOptimizerHelper(_container);

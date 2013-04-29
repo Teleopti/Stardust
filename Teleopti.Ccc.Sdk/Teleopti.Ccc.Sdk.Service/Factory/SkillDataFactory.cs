@@ -60,15 +60,14 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
 					loader.Execute(requestedScenario, periodForResourceCalc,
 								   personRepository.FindPeopleInOrganization(periodForResourceCalc.ToDateOnlyPeriod(timeZoneInfo), true));
 
+					var personSkillProvider = new PersonSkillProvider();
+					var singleSkillDictionary = new SingleSkillDictionary();
 					var resourceOptimizationHelper = new ResourceOptimizationHelper(schedulingResultStateHolder,
-																					new OccupiedSeatCalculator(
-																						new SkillVisualLayerCollectionDictionaryCreator
-																							(),
-																						new SeatImpactOnPeriodForProjection()),
+																					new OccupiedSeatCalculator(),
 																					new NonBlendSkillCalculator(
 																						new NonBlendSkillImpactOnPeriodForProjection
-                	                                                                		()), new SingleSkillDictionary(),
-																							new SingleSkillMaxSeatCalculator());
+                	                                                                		()), singleSkillDictionary,
+																							new SingleSkillMaxSeatCalculator(personSkillProvider),personSkillProvider);
 					foreach (DateOnly dateTime in periodForResourceCalc.ToDateOnlyPeriod(timeZoneInfo).DayCollection())
 					{
 						resourceOptimizationHelper.ResourceCalculateDate(dateTime, true, true);

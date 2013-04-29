@@ -11,6 +11,13 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 	public class SingleSkillMaxSeatCalculator : ISingleSkillMaxSeatCalculator
 	{
+		private readonly IPersonSkillProvider _personSkillProvider;
+
+		public SingleSkillMaxSeatCalculator(IPersonSkillProvider personSkillProvider)
+		{
+			_personSkillProvider = personSkillProvider;
+		}
+
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public void Calculate(ISkillSkillStaffPeriodExtendedDictionary relevantSkillStaffPeriods, IList<IScheduleDay> toRemove, IList<IScheduleDay> toAdd)
 		{
@@ -38,26 +45,20 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			}
 		}
 
-		private static double nonBlendSkillImpactOnPeriodForProjection(ISkillStaffPeriod skillStaffPeriod, IEnumerable<IScheduleDay> shiftList, ISkill skill)
+		private double nonBlendSkillImpactOnPeriodForProjection(ISkillStaffPeriod skillStaffPeriod,
+		                                                               IEnumerable<IScheduleDay> shiftList, ISkill skill)
 		{
-			double result = 0;
-
-			var container = new ResourceCalculationDataContainer(new PersonSkillProvider());
-			if (!skill.Activity.RequiresSeat) return result;
-
+			if (skill.Activity == null || !skill.Activity.RequiresSeat) return 0;
+			
+			var container = new ResourceCalculationDataContainer(_personSkillProvider);
+			
 			var resolution = skill.DefaultResolution;
 			foreach (var scheduleDay in shiftList)
 			{
 				container.AddScheduleDayToContainer(scheduleDay, resolution);
 			}
 
-			var periods = skillStaffPeriod.Period.Intervals(TimeSpan.FromMinutes(resolution));
-			foreach (var dateTimePeriod in periods)
-			{
-				result += container.SkillResources(skill, dateTimePeriod);
-			}
-			
-			return result;
+			return container.SkillResources(skill, skillStaffPeriod.Period);
 		}
 	}
 }

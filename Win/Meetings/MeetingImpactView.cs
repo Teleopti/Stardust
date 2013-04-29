@@ -56,14 +56,14 @@ namespace Teleopti.Ccc.Win.Meetings
 			var stateHolderLoader = new SchedulerStateLoader(schedulerStateHolder);
 			var slotCalculator = new MeetingSlotImpactCalculator(schedulerStateHolder.SchedulingResultState, new AllLayersAreInWorkTimeSpecification());
 			var slotFinder = new BestSlotForMeetingFinder(slotCalculator);
+			var personSkillProvider = new PersonSkillProvider();
 			var optimizationHelperWin = new ResourceOptimizationHelper(schedulerStateHolder.SchedulingResultState,
-																	new OccupiedSeatCalculator(
-																		new SkillVisualLayerCollectionDictionaryCreator(),
-																		new SeatImpactOnPeriodForProjection()),
-																	new NonBlendSkillCalculator(
-																		new NonBlendSkillImpactOnPeriodForProjection()),
-																		new SingleSkillDictionary(),
-																		new SingleSkillMaxSeatCalculator());
+			                                                           new OccupiedSeatCalculator(),
+			                                                           new NonBlendSkillCalculator(
+				                                                           new NonBlendSkillImpactOnPeriodForProjection()),
+			                                                           new SingleSkillDictionary(),
+			                                                           new SingleSkillMaxSeatCalculator(personSkillProvider),
+			                                                           personSkillProvider);
 			var decider = new PeopleAndSkillLoaderDecider(new PersonRepository(UnitOfWorkFactory.Current));
 			var gridHandler = new MeetingImpactSkillGridHandler(this, meetingViewModel, schedulerStateHolder,
 																UnitOfWorkFactory.Current, decider);

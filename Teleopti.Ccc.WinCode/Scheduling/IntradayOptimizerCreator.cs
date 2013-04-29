@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 		private readonly ISchedulePartModifyAndRollbackService _rollbackService;
 		private readonly ISchedulingResultStateHolder _schedulingResultStateHolder;
 		private ISingleSkillDictionary _singleSkillDictionary;
+		private readonly IPersonSkillProvider _personSkillProvider;
 
 		public IntradayOptimizer2Creator(
 			IList<IScheduleMatrixOriginalStateContainer> scheduleMatrixContainerList,
@@ -30,7 +31,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			IOptimizationPreferences optimizerPreferences,
 			ISchedulePartModifyAndRollbackService rollbackService,
 			ISchedulingResultStateHolder schedulingResultStateHolder,
-			ISingleSkillDictionary singleSkillDictionary)
+			ISingleSkillDictionary singleSkillDictionary,
+			IPersonSkillProvider personSkillProvider)
 		{
 			_scheduleMatrixContainerList = scheduleMatrixContainerList;
 			_workShiftStateContainerList = workShiftContainerList;
@@ -40,6 +42,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 			_rollbackService = rollbackService;
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 			_singleSkillDictionary = singleSkillDictionary;
+			_personSkillProvider = personSkillProvider;
 		}
 
 		/// <summary>
@@ -76,7 +79,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					new DeleteSchedulePartService(_schedulingResultStateHolder);
 				IResourceOptimizationHelper resourceOptimizationHelper =
 					new ResourceOptimizationHelper(_schedulingResultStateHolder,
-                                                   new OccupiedSeatCalculator(new SkillVisualLayerCollectionDictionaryCreator(), new SeatImpactOnPeriodForProjection()), nonBlendSkillCalculator, _singleSkillDictionary, new SingleSkillMaxSeatCalculator());
+                                                   new OccupiedSeatCalculator(), nonBlendSkillCalculator, _singleSkillDictionary, new SingleSkillMaxSeatCalculator(_personSkillProvider), _personSkillProvider);
 				IRestrictionExtractor restrictionExtractor =
 					new RestrictionExtractor(_schedulingResultStateHolder);
 				IEffectiveRestrictionCreator effectiveRestrictionCreator =

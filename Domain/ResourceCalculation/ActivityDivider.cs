@@ -48,9 +48,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 	        var periodResources = filteredProjections.AffectedResources(activity, periodToCalculate);
 	        foreach (var periodResource in periodResources)
 	        {
-				if (periodResource.Value == 0) continue;
-		        var skills = skillsFromKey(periodResource.Key);
-				var traff = periodResource.Value;
+				if (periodResource.Value.Item2 == 0) continue;
+		        var skills = periodResource.Value.Item1;
+				var traff = periodResource.Value.Item2;
 
 				var personSkillEfficiencyRow = new Dictionary<ISkill, double>();
 				var relativePersonSkillResourceRow = new Dictionary<ISkill, double>();
@@ -94,20 +94,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
             return dividedActivity;
         }
-
-	    private IEnumerable<ISkill> skillsFromKey(string key)
-	    {
-		    var skillIdCollection = key.Split('|')[1].Split('_');
-		    return
-			    skillIdCollection.Select(
-				    s =>
-					    {
-						    var skill = new Skill("dummy", "dummy", Color.NavajoWhite, 15,
-						                          new SkillTypePhone(new Description("temp"), ForecastSource.Time));
-							skill.SetId(new Guid(s));
-						    return skill;
-					    });
-	    }
 
 	    private static double? skillDayDemand(ISkill skill, ISkillSkillStaffPeriodExtendedDictionary relevantSkillStaffPeriods, DateTimePeriod periodToCalculate)
         {
@@ -164,151 +150,4 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             return distinctList;
         }
     }
-
-	public class ActivitySkillsCombination
-	{
-		private readonly IPayload _activity;
-		private readonly ISkill[] _skills;
-
-		public ActivitySkillsCombination(IPayload activity, params ISkill[] skills)
-		{
-			_activity = activity;
-			_skills = skills;
-		}
-
-		public string GenerateKey()
-		{
-			return _activity == null
-				       ? string.Empty
-				       : _activity.Id.GetValueOrDefault() + "|" +
-				         string.Join("_", _skills.OrderBy(a => a.Name).Select(a => a.Id.GetValueOrDefault()));
-		}
-	}
-
-	public class ResourceCalculationDataContainer : IResourceCalculationDataContainer
-	{
-		private readonly IPersonSkillProvider _personSkillProvider;
-		private readonly IDictionary<DateTimePeriod,IDictionary<string,double>> _dictionary = new Dictionary<DateTimePeriod, IDictionary<string, double>>();
-
-		public ResourceCalculationDataContainer(IPersonSkillProvider personSkillProvider)
-		{
-			_personSkillProvider = personSkillProvider;
-		}
-
-		public void Clear()
-		{
-			_dictionary.Clear();
-		}
-
-		public bool HasItems()
-		{
-			return _dictionary.Count > 0;
-		}
-
-		public void AddResources(DateTimePeriod period, IPayload activity, IPerson person, DateOnly personDate,
-		                         double resource)
-		{
-			IDictionary<string, double> resources;
-			if (!_dictionary.TryGetValue(period, out resources))
-			{
-				resources = new Dictionary<string, double>();
-				_dictionary.Add(period, resources);
-			}
-
-			var key = new ActivitySkillsCombination(activity, _personSkillProvider.SkillsOnPersonDate(person, personDate)).GenerateKey();
-			double foundResource;
-			if (resources.TryGetValue(key, out foundResource))
-			{
-				resources[key] = resource + foundResource;
-			}
-			else
-			{
-				resources.Add(key, resource);
-			}
-		}
-
-		public double SkillResources(ISkill skill, DateTimePeriod period)
-		{
-			var skillKey = skill.Id.GetValueOrDefault().ToString();
-			var activityKey = string.Empty;
-			if (skill.Activity != null)
-			{
-				activityKey = skill.Activity.Id.GetValueOrDefault().ToString();
-			}
-
-			double resource = 0;
-			var periodSplit = period.Intervals(TimeSpan.FromMinutes(15));
-			foreach (var dateTimePeriod in periodSplit)
-			{
-				IDictionary<string,double> interval;
-				if (_dictionary.TryGetValue(dateTimePeriod, out interval))
-				{
-					foreach (var pair in interval)
-					{
-						if (!string.IsNullOrEmpty(activityKey) && !pair.Key.StartsWith(activityKey)) continue;
-						if (!pair.Key.Contains(skillKey)) continue;
-
-						resource += pair.Value;
-					}
-				}
-			}
-			return resource;
-		}
-
-		public bool AllIsSingleSkill()
-		{
-			return !_dictionary.Values.Any(v => v.Keys.Any(k => k.Contains("_")));
-		}
-
-		public IDictionary<string, double> AffectedResources(IActivity activity, DateTimePeriod periodToCalculate)
-		{
-			var result = new Dictionary<string, double>();
-
-			var activityKey = activity.Id.GetValueOrDefault().ToString();
-			var periodSplit = periodToCalculate.Intervals(TimeSpan.FromMinutes(15));
-			foreach (var dateTimePeriod in periodSplit)
-			{
-				IDictionary<string, double> interval;
-				if (_dictionary.TryGetValue(dateTimePeriod, out interval))
-				{
-					foreach (var pair in interval)
-					{
-						if (!pair.Key.StartsWith(activityKey)) continue;
-
-						if (result.ContainsKey(pair.Key))
-						{
-							result[pair.Key] += pair.Value;
-						}
-						else
-						{
-							result.Add(pair.Key, pair.Value);
-						}
-					}
-				}
-			}
-			return result;
-		}
-	}
-
-	public interface IPersonSkillProvider
-	{
-		ISkill[] SkillsOnPersonDate(IPerson person, DateOnly date);
-	}
-
-	public class PersonSkillProvider : IPersonSkillProvider
-	{
-		public ISkill[] SkillsOnPersonDate(IPerson person, DateOnly date)
-		{
-			IPersonPeriod personPeriod = person.Period(date);
-			if (personPeriod == null) return new ISkill[0];
-
-			var skills = personPeriod.PersonSkillCollection.Where(s => s.Active && s.SkillPercentage.Value > 0).Select(s => s.Skill);
-			if (personPeriod.Team.Site.MaxSeatSkill != null)
-			{
-				skills = skills.Concat(new[] {personPeriod.Team.Site.MaxSeatSkill});
-			}
-
-			return skills.ToArray();
-		}
-	}
 }

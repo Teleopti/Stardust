@@ -252,7 +252,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public virtual bool BelongsToPeriod(IDateOnlyAsDateTimePeriod dateAndPeriod)
 		{
-			return dateAndPeriod.Period().Contains(Period.StartDateTime);
+			return startsWithinPeriod(dateAndPeriod.Period());
 		}
 
         public virtual bool BelongsToPeriod(DateOnlyPeriod dateOnlyPeriod)
@@ -260,8 +260,35 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             DateTimePeriod dateTimePeriod =
                dateOnlyPeriod.ToDateTimePeriod(Person.PermissionInformation.DefaultTimeZone());
 
-            return dateTimePeriod.Contains(Period.StartDateTime);
+            return startsWithinPeriod(dateTimePeriod);
         }
+
+		private bool startsWithinPeriod(DateTimePeriod period)
+		{
+			DateTime? periodToCheck;
+			if (_mainShift != null)
+			{
+				periodToCheck = _mainShift.LayerCollection.FirstStart();
+				if (periodToCheck.HasValue && period.Contains(periodToCheck.Value))
+					return true;
+			}
+
+			foreach (var shift in _personalShiftCollection)
+			{
+				periodToCheck = shift.LayerCollection.FirstStart();
+				if (periodToCheck.HasValue && period.Contains(periodToCheck.Value))
+					return true;
+			}
+
+			foreach (var shift in _overtimeShiftCollection)
+			{
+				periodToCheck = shift.LayerCollection.FirstStart();
+				if (periodToCheck.HasValue && period.Contains(periodToCheck.Value))
+					return true;
+			}			
+
+			return false;
+		}
 
 		public virtual IPersonAssignment NoneEntityClone()
 		{

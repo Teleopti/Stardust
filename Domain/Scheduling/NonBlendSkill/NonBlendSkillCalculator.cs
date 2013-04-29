@@ -26,7 +26,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.NonBlendSkill
 			    
 				foreach (ISkillStaffPeriod skillStaffPeriod in skillStaffPeriodDictionary.Values)
 				{
-                    double result = _nonBlendSkillImpactOnPeriodForProjection.CalculatePeriod(skillStaffPeriod, relevantProjections, skill);
+                    double result = relevantProjections.SkillResources(skill, skillStaffPeriod.Period);
                     if (addToEarlierResult)
                         result += skillStaffPeriod.Payload.CalculatedLoggedOn;
 					skillStaffPeriod.Payload.CalculatedLoggedOn = result;
