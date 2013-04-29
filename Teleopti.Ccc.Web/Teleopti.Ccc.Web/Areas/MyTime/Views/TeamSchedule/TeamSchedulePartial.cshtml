@@ -17,8 +17,9 @@
                 <button class="btn" data-bind="datepicker: selectedDate, datepickerOptions: {autoHide: true}"><i class="icon-th"></i></button>
                 <button class="btn" data-bind="click: nextDay"><i class="icon-arrow-right"></i></button>
             </div>
-            <select data-bind="options: availableTeams, value: selectedTeam, 'optionsText': 'Text'">
-            </select>
+            <input type="hidden" id="Team-Picker"/>
+            @*<select data-bind="options: availableTeams, value: selectedTeam, 'optionsText': 'Text'">
+            </select>*@
         </form>
     </div>
 </div>
