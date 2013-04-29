@@ -17,11 +17,10 @@ GO
 -- 2011-05-03 #15164 - Report Preference fulfillment does not handle preferences that are a combination of Standard and Extended.
 -- 2012-01-09 Pass BU to ReportAgents
 -- 2012-02-15 Changed to uniqueidentifier as report_id - Ola
+-- 2013-04-29 Added absence and must haves KJ
 -- Description:	<Used by report Preferences per Day>
 -- =============================================
--- exec mart.report_data_schedule_preferences_per_day @scenario_id=N'0',@date_from='2009-01-01 00:00:00',@date_to='2009-02-28 00:00:00',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_set=NULL,@group_page_agent_code=NULL,@site_id=N'0',@team_set=N'7',@agent_code=N'00000000-0000-0000-0000-000000000002',@time_zone_id=N'2',@person_code='3F0886AB-7B25-4E95-856A-0D726EDC2A67',@report_id=1,@language_id=1033
--- or
--- exec mart.report_data_schedule_preferences_per_day @scenario_id=N'0',@date_from='2009-01-01 00:00:00',@date_to='2009-02-28 00:00:00',@group_page_code=N'76674029-6b02-4d74-90fe-9dff016139a8',@group_page_group_set=N'19',@group_page_agent_code=N'00000000-0000-0000-0000-000000000002',@site_id=NULL,@team_set=NULL,@agent_code=NULL,@time_zone_id=N'2',@person_code='3F0886AB-7B25-4E95-856A-0D726EDC2A67',@report_id=1,@language_id=1033
+--exec mart.report_data_schedule_preferences_per_day @scenario_id=N'0',@date_from='2009-02-01 00:00:00',@date_to='2009-02-28 00:00:00',@group_page_code=N'd5ae2a10-2e17-4b3c-816c-1a0e81cd767c',@group_page_group_set=NULL,@group_page_agent_code=NULL,@site_id=N'-2',@team_set=N'7',@agent_code=N'00000000-0000-0000-0000-000000000002',@time_zone_id=N'1',@person_code='18037D35-73D5-4211-A309-9B5E015B2B5C',@report_id='0E3F340F-C05D-4A98-AD23-A019607745C9',@language_id=1033,@business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA'
 
 
 CREATE PROCEDURE [mart].[report_data_schedule_preferences_per_day]
@@ -74,12 +73,13 @@ CREATE TABLE #RESULT(date smalldatetime,
 					preferences_accepted int,
 					share_accepted decimal(18,3),
 					preferences_declined int,
-					hide_time_zone bit)
+					hide_time_zone bit, 
+					must_haves int)
 					
 ------------------
 --Shift categories
 ------------------
-INSERT #result(date,preference_type_id,preference_type_name,preference_id,preference_name,preferences_requested,preferences_accepted,share_accepted,preferences_declined,hide_time_zone)
+INSERT #result(date,preference_type_id,preference_type_name,preference_id,preference_name,preferences_requested,preferences_accepted,share_accepted,preferences_declined,hide_time_zone, must_haves)
 SELECT	d.date_date,
 		f.preference_type_id, 
 		ISNULL(term_language, dpt.preference_type_name), 
@@ -89,7 +89,8 @@ SELECT	d.date_date,
 		sum(preferences_accepted_count),
 		sum(preferences_accepted_count)/convert(decimal(18,3),sum(preferences_requested_count)),
 		sum(preferences_declined_count), 
-		@hide_time_zone
+		@hide_time_zone, 
+		sum(must_haves)
 FROM mart.fact_schedule_preference f
 INNER JOIN mart.dim_preference_type dpt
 	ON dpt.preference_type_id=f.preference_type_id
@@ -119,7 +120,7 @@ GROUP BY d.date_date,f.preference_type_id,ISNULL(term_language, dpt.preference_t
 ------------------
 --Day off
 ------------------
-INSERT #result(date,preference_type_id,preference_type_name,preference_id,preference_name,preferences_requested,preferences_accepted,share_accepted,preferences_declined,hide_time_zone)
+INSERT #result(date,preference_type_id,preference_type_name,preference_id,preference_name,preferences_requested,preferences_accepted,share_accepted,preferences_declined,hide_time_zone, must_haves)
 SELECT	d.date_date, 
 		f.preference_type_id,
 		ISNULL(term_language, dpt.preference_type_name),  
@@ -130,7 +131,8 @@ SELECT	d.date_date,
 		sum(preferences_accepted_count),
 		sum(preferences_accepted_count)/convert(decimal(18,3),sum(preferences_requested_count)),
 		sum(preferences_declined_count), 
-		@hide_time_zone
+		@hide_time_zone, 
+		sum(must_haves)
 FROM mart.fact_schedule_preference f
 INNER JOIN mart.dim_preference_type dpt
 	ON dpt.preference_type_id=f.preference_type_id
@@ -158,9 +160,50 @@ AND f.preference_type_id=2
 GROUP BY d.date_date,f.preference_type_id,ISNULL(term_language, dpt.preference_type_name),ddo.day_off_id,ddo.day_off_name
 
 ------------------
+--Absences
+------------------
+INSERT #result(date,preference_type_id,preference_type_name,preference_id,preference_name,preferences_requested,preferences_accepted,share_accepted,preferences_declined,hide_time_zone, must_haves)
+SELECT	d.date_date, 
+		f.preference_type_id,
+		ISNULL(term_language, dpt.preference_type_name),  
+		ab.absence_id, 
+		ab.absence_name,
+		sum(preferences_requested_count), 
+		sum(preferences_accepted_count),
+		sum(preferences_accepted_count)/convert(decimal(18,3),sum(preferences_requested_count)),
+		sum(preferences_declined_count), 
+		@hide_time_zone, 
+		sum(must_haves)
+FROM mart.fact_schedule_preference f
+INNER JOIN mart.dim_preference_type dpt
+	ON dpt.preference_type_id=f.preference_type_id
+INNER JOIN mart.dim_person p
+	ON f.person_id=p.person_id
+INNER JOIN mart.dim_absence ab
+	ON ab.absence_id=f.absence_id
+INNER JOIN mart.bridge_time_zone b
+	ON	f.interval_id= b.interval_id
+	AND f.date_id= b.date_id
+INNER JOIN mart.dim_date d 
+	ON b.local_date_id = d.date_id
+INNER JOIN mart.dim_interval i
+	ON b.local_interval_id = i.interval_id
+LEFT JOIN
+	mart.language_translation l ON
+	dpt.preference_type_name = l.term_english AND
+	language_id = @language_id	
+WHERE d.date_date BETWEEN @date_from AND @date_to
+AND b.time_zone_id = @time_zone_id
+AND f.scenario_id=@scenario_id
+AND p.team_id IN(select right_id from #rights_teams)
+AND p.person_id in (SELECT right_id FROM #rights_agents)--bara de man har rattighet pa
+AND f.preference_type_id=4 --absences
+GROUP BY d.date_date,f.preference_type_id,ISNULL(term_language, dpt.preference_type_name),ab.absence_id,ab.absence_name
+
+------------------
 --Extended prefs
 ------------------
-INSERT #result(date,preference_type_id,preference_type_name,preference_id,preference_name,preferences_requested,preferences_accepted,share_accepted,preferences_declined,hide_time_zone)
+INSERT #result(date,preference_type_id,preference_type_name,preference_id,preference_name,preferences_requested,preferences_accepted,share_accepted,preferences_declined,hide_time_zone, must_haves)
 SELECT	d.date_date, 
 		f.preference_type_id,
 		ISNULL(term_language, dpt.preference_type_name), 
@@ -170,7 +213,8 @@ SELECT	d.date_date,
 		sum(preferences_accepted_count),
 		sum(preferences_accepted_count)/convert(decimal(18,3),sum(preferences_requested_count)),
 		sum(preferences_declined_count), 
-		@hide_time_zone
+		@hide_time_zone,
+		sum(must_haves)
 FROM mart.fact_schedule_preference f
 INNER JOIN mart.dim_preference_type dpt
 	ON dpt.preference_type_id=f.preference_type_id
