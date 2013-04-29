@@ -1,20 +1,15 @@
-/****** Object:  StoredProcedure [dbo].[Purge]    Script Date: 02/03/2012 17:21:54 ******/
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[Purge]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [dbo].[Purge]
 GO
-
-
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
 
 -- =============================================
 -- Author:		<AF>
 -- Create date: <2012-02-02>
 -- Description:	<Purge old data from app db>
+-- =============================================
+-- Changed		Who			Why
+-- =============================================
+-- 2013-04-29	David J		Re-factor table into key/value, added Security Audit
 -- =============================================
 CREATE PROCEDURE [dbo].[Purge]
 AS
@@ -27,6 +22,9 @@ declare @MessageKeepYears int
 declare @MessageKeepUntil datetime
 declare @PayrollKeepYears int
 declare @PayrollKeepUntil datetime
+declare @SecurityAuditKeepDays int
+declare @SecurityAuditKeepUntil datetime
+
 declare @BatchSize int
 declare @MaxDate datetime
 
@@ -34,14 +32,20 @@ declare @MaxDate datetime
 exec Purge
 */
 
-select @ForecastKeepYears = isnull(KeepYears,100) from PurgeSetting where [Key] = 'Forecast'
+--Get values
+select @ForecastKeepYears = isnull(Value,100) from PurgeSetting where [Key] = 'YearsToKeepForecast'
+select @ScheduleKeepYears = isnull(Value,100) from PurgeSetting where [Key] = 'YearsToKeepSchedule'
+select @MessageKeepYears = isnull(Value,100) from PurgeSetting where [Key] = 'YearsToKeepMessage'
+select @PayrollKeepYears = isnull(Value,100) from PurgeSetting where [Key] = 'YearsToKeepPayroll'
+select @SecurityAuditKeepDays = isnull(Value,30) from PurgeSetting where [Key] = 'DaysToKeepSecurityAudit'
+
+--Create a KeepUntil
 select @ForecastsKeepUntil = dateadd(year,-1*@ForecastKeepYears,getdate())
-select @ScheduleKeepYears = isnull(KeepYears,100) from PurgeSetting where [Key] = 'Schedule'
 select @ScheduleKeepUntil = dateadd(year,-1*@ScheduleKeepYears,getdate())
-select @MessageKeepYears = isnull(KeepYears,100) from PurgeSetting where [Key] = 'Message'
 select @MessageKeepUntil = dateadd(year,-1*@MessageKeepYears,getdate())
-select @PayrollKeepYears = isnull(KeepYears,100) from PurgeSetting where [Key] = 'Payroll'
 select @PayrollKeepUntil = dateadd(year,-1*@MessageKeepYears,getdate())
+select @SecurityAuditKeepUntil = dateadd(day,-1*@SecurityAuditKeepDays,getdate())
+
 select @BatchSize = 14
 
 --Forecast
@@ -189,6 +193,9 @@ and not exists (select 1
 				from PayrollResult pr
 				where pr.PayrollExport = pe.Id)
 
+--SecurityAudit
+delete [Auditing].[Security]
+where  [Time] < @SecurityAuditKeepUntil
 
 END
 
