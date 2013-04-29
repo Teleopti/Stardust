@@ -195,7 +195,7 @@ and not exists (select 1
 
 --SecurityAudit
 delete [Auditing].[Security]
-where  [Time] < @SecurityAuditKeepUntil
+where  [DateTimeUtc] < @SecurityAuditKeepUntil
 
 END
 

@@ -58,7 +58,7 @@ GO
 ---------------- 
 CREATE TABLE [Auditing].[Security](
 	[Id] [int] IDENTITY(1,1) NOT NULL,
-	[Time] [datetime] NOT NULL,
+	[DateTimeUtc] [datetime] NOT NULL,
 	[Result] [nchar](100) NOT NULL,
 	[UserCredentials] [nchar](100) NOT NULL,
 	[Provider] [nchar](100) NOT NULL,
@@ -73,7 +73,7 @@ PRIMARY KEY CLUSTERED
 
 GO
 
-ALTER TABLE [Auditing].[Security] ADD  CONSTRAINT [DF_Security_Time]  DEFAULT (getutcdate()) FOR [Time]
+ALTER TABLE [Auditing].[Security] ADD  CONSTRAINT [DF_Security_Time]  DEFAULT (getutcdate()) FOR [DateTimeUtc]
 GO
 
 ----------------  
