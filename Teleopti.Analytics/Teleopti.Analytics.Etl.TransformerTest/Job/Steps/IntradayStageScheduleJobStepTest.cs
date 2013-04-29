@@ -39,12 +39,13 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
 			var scheduleTransformer = _mock.StrictMock<IScheduleTransformer>();
 			var stageScheduleJobStep = new IntradayStageScheduleJobStep(jobParameters, scheduleTransformer);
 	        var dic = new Dictionary<DateTimePeriod, IScheduleDictionary>();
-
+	        var model = new LastChangedReadModel {LastTime = new DateTime(), ThisTime = new DateTime()};
 			Expect.Call(raptorRepository.TruncateSchedule);
 			Expect.Call(commonStateHolder.ScenarioCollectionDeletedExcluded).Return(new List<IScenario> {scenario});
 			Expect.Call(scenario.DefaultScenario).Return(true);
-			Expect.Call(raptorRepository.LastChangedDate(null, "")).IgnoreArguments().Return(new LastChangedReadModel { LastTime = new DateTime(), ThisTime = new DateTime() });
-	        Expect.Call(raptorRepository.ChangedDataOnStep(new DateTime(), null, ""))
+			Expect.Call(raptorRepository.LastChangedDate(null, "")).IgnoreArguments().Return(model);
+			Expect.Call(() => commonStateHolder.SetThisTime(model, null)).IgnoreArguments();
+			Expect.Call(raptorRepository.ChangedDataOnStep(new DateTime(), null, ""))
 				.IgnoreArguments()
 				.Return(new List<IScheduleChangedReadModel>
 					{
@@ -99,11 +100,12 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
 			jobParameters.StateHolder = commonStateHolder;
 			jobParameters.Helper = new JobHelper(raptorRepository, null, null);
 			var stageScheduleJobStep = new IntradayStageScheduleJobStep(jobParameters);
-			
+			var model = new LastChangedReadModel {LastTime = new DateTime(), ThisTime = new DateTime()};
 			Expect.Call(raptorRepository.TruncateSchedule);
 			Expect.Call(commonStateHolder.ScenarioCollectionDeletedExcluded).Return(new List<IScenario> { scenario });
 			Expect.Call(scenario.DefaultScenario).Return(true);
-			Expect.Call(raptorRepository.LastChangedDate(null, "")).IgnoreArguments().Return(new LastChangedReadModel{LastTime = new DateTime(), ThisTime = new DateTime()});
+			Expect.Call(raptorRepository.LastChangedDate(null, "Schedules")).IgnoreArguments().Return(model);
+			Expect.Call(() => commonStateHolder.SetThisTime(model, null)).IgnoreArguments();
 			Expect.Call(raptorRepository.ChangedDataOnStep(new DateTime(), null, ""))
 				.IgnoreArguments()
 				.Return(new List<IScheduleChangedReadModel>());
