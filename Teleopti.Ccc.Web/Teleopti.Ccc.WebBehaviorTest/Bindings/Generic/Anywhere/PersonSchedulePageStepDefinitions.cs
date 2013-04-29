@@ -110,9 +110,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		public void WhenIClickOnAbsenceNamed(string className, string absenceName)
 		{
 			className = className.ToLower().Replace(" ", "-");
-			Browser.Current.Elements.Filter(
-				Find.BySelector(".absence-list .absence:contains('" + absenceName + "')")).Filter(
-				Find.BySelector("." + className)).First().EventualClick();
+			
+			Browser.Current.Elements.Filter(Find.BySelector(".absence-list .absence:contains('" + absenceName + "') ." + className + "")).First().EventualClick();
 		}
 		
 		public class AbsenceListItemInfo
