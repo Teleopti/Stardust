@@ -374,9 +374,6 @@
     <Compile Include="SystemCheck\AgentDayConverter\PersonTimeZoneSetter.cs" />
     <Compile Include="SystemCheck\CheckMessageBroker.cs" />
     <Compile Include="SystemCheck\AgentDayConverter\PersonAssignmentAuditDateSetter.cs" />
-    <Compile Include="SystemCheck\PersonAssignmentCommon.cs" />
-    <Compile Include="SystemCheck\PersonAssignmentDateResetter.cs" />
-    <Compile Include="SystemCheck\ResetDateOnlyAfterChangedTimeZone.cs" />
     <Compile Include="SystemCheck\SystemCheckerValidator.cs" />
     <Compile Include="UnitOfWork\CurrentUnitOfWork.cs" />
     <Compile Include="UnitOfWork\DenormalizationQueueEventsPublisher.cs" />
