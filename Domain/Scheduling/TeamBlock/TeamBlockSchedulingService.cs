@@ -84,8 +84,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                                                                       selectedPeriod, selectedPersons))
                         {
                             var rollbackExecuted = false;
-                            foreach (var matrix in teamBlockInfo.TeamInfo.MatrixesForGroup())
+                            foreach (var matrix in teamBlockInfo.TeamInfo.MatrixesForGroup() )
                             {
+                                if (!selectedPersons.Contains(matrix.Person)) continue;
                                 _workShiftMinMaxCalculator.ResetCache();
                                 if (!_workShiftMinMaxCalculator.IsPeriodInLegalState(matrix, _schedulingOptions))
                                 {
@@ -99,7 +100,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                             {
                                 //should skip the whole block
                                 dateOnlySkipList.AddRange(teamBlockInfo.BlockInfo.BlockPeriod.DayCollection());
-                                break;
+                                //break; Removed this to schedule all the remaining teams if this block failed.
                             }
                                 
                         }
