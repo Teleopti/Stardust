@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows;
@@ -6,7 +8,6 @@ using Microsoft.Practices.Composite.Events;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
 using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Ccc.Win.Common;
-using Teleopti.Ccc.Win.Common.Controls;
 using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.Scheduling.Requests;
 using Teleopti.Interfaces.Domain;
@@ -62,43 +63,23 @@ namespace Teleopti.Ccc.Win.Scheduling
             _model.UpdatePersonRequestViewModels();
         }
 
-        public void FilterAdapters(string filterExpression)
+        public void FilterGrid(IList<string> filterWords)
         {
-            IList<PersonRequestViewModel> allModels = (IList<PersonRequestViewModel>)_model.PersonRequestViewModels.SourceCollection;
-            IList<PersonRequestViewModel> modelsToShow = RequestPresenter.FilterAdapters(allModels, filterExpression);
-            _source = RequestPresenter.FilterAdapters(modelsToShow, filterExpression);
-            _model.ShowOnly(_source);
-           
+			var allModels = (IList<PersonRequestViewModel>)_model.PersonRequestViewModels.SourceCollection;
+			var modelsToShow = RequestPresenter.FilterAdapters(allModels, filterWords);
+			_source = RequestPresenter.FilterAdapters(modelsToShow, filterWords);
+			_model.ShowOnly(_source);
         }
 
-        public void FilterGrid(FilterBoxAdvancedEventArgs e)
-        {
-            string filterExpression = string.Empty;
+		public void FilterPersons(IEnumerable<Guid> persons)
+		{
+			_source =
+				RequestPresenter.FilterAdapters((IList<PersonRequestViewModel>) _model.PersonRequestViewModels.SourceCollection,
+				                                persons);
+			_model.ShowOnly(_source);
+		}
 
-            for (int i = 0; i < e.FilterRules.Count; i++)
-            {
-                FilterBoxAdvancedFilter filter = e.FilterRules[i];
-                string strCriteria = filter.FilterCriteria.Value.ToString();
-               
-                if(filter.FilterCriteria.Value.GetType() == typeof(string))
-                    strCriteria = '"' + strCriteria + '"';
-
-                filterExpression += ((FilterAdvancedTupleItem)filter.FilterOn).Value + filter.FilterOperand.Text + strCriteria;
-                if (i < e.FilterRules.Count - 1)
-                    filterExpression += " And ";
-            }
-
-            if (string.IsNullOrEmpty(filterExpression))
-            {
-               _model.ShowAll();
-            }
-            else
-            {
-                FilterAdapters(filterExpression);
-            }
-        }
-
-        public bool IsSelectionEditable()
+	    public bool IsSelectionEditable()
         {
             bool editable = false;
 
