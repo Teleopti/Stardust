@@ -44,9 +44,13 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 
         public static IPersonAssignment CreatePersonAssignment(IPerson agent, IScenario scenario)
         {
-            IPersonAssignment ret = new PersonAssignment(agent, scenario, new DateOnly(2000,1,1));
-            return ret;
+            return CreatePersonAssignment(agent, scenario, new DateOnly(2000,1,1));
         }
+
+			public static IPersonAssignment CreatePersonAssignment(IPerson agent, IScenario scenario, DateOnly date)
+			{
+				return new PersonAssignment(agent, scenario, date);
+			}
 
         /// <summary>
         /// Creates an assignment with personal and main shift.
