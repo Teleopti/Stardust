@@ -19,7 +19,6 @@ Teleopti.MyTimeWeb.MessageBroker = (function () {
 					value.Callback(notification);
 				}
 			});
-			listeners.push({ Route: route, Notification: notification });
 		};
 
 		conn = $.connection.hub.start();
