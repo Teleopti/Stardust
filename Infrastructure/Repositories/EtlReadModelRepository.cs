@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using NHibernate;
 using NHibernate.Transform;
-using NHibernate.Util;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -25,21 +25,23 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		}
 
 		public IList<IScheduleChangedReadModel> ChangedDataOnStep(DateTime afterDate, IBusinessUnit currentBusinessUnit, string stepName)
- 		{
+		{
 			return ((NHibernateUnitOfWork)_currentUnitOfWork).Session.CreateSQLQuery(
 					"exec mart.[ChangedDataOnStep] :step, :afterdate, :bu ")
-					.SetDateTime("afterdate", afterDate)
+					.SetTimestamp("afterdate", afterDate)
 					.SetGuid("bu", currentBusinessUnit.Id.GetValueOrDefault())
 					.SetString("step", stepName)
 					.SetResultTransformer(Transformers.AliasToBean(typeof(ScheduleChangedReadModel)))
 					.SetReadOnly(true)
 					.List<IScheduleChangedReadModel>();
- 		}
+		}
 
 		public ILastChangedReadModel LastChangedDate(IBusinessUnit currentBusinessUnit, string stepName)
 		{
 			var res = ((NHibernateUnitOfWork)_currentUnitOfWork).Session.CreateSQLQuery(
 					"exec mart.[LastChangedDateOnStep] @stepName=:step, @buId=:bu ")
+					.AddScalar("ThisTime", NHibernateUtil.Timestamp)
+					.AddScalar("LastTime", NHibernateUtil.Timestamp)
 					.SetGuid("bu", currentBusinessUnit.Id.GetValueOrDefault())
 					.SetString("step", stepName)
 					.SetResultTransformer(Transformers.AliasToBean(typeof(LastChangedReadModel)))
@@ -52,7 +54,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			((NHibernateUnitOfWork)_currentUnitOfWork).Session.CreateSQLQuery(
 					"exec mart.[UpdateLastChangedDateOnStep] @stepName=:step, @buId=:bu, @thisTime=:thisTime ")
-					.SetDateTime("thisTime", thisTime)
+					.SetTimestamp("thisTime", thisTime)
 					.SetGuid("bu", currentBusinessUnit.Id.GetValueOrDefault())
 					.SetString("step", stepName)
 					.ExecuteUpdate();

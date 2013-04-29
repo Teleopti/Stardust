@@ -692,7 +692,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 		{
 			using (var uow = UnitOfWorkFactory.CurrentUnitOfWorkFactory().LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
-				var rep = new EtlReadModelRepository(uow);
+				IEtlReadModelRepository rep = new EtlReadModelRepository(uow);
 				return rep.LastChangedDate(currentBusinessUnit, stepName);
 			}
 		}
@@ -701,7 +701,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 		{
 			using (var uow = UnitOfWorkFactory.CurrentUnitOfWorkFactory().LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
-				var rep = new EtlReadModelRepository(uow);
+				IEtlReadModelRepository rep = new EtlReadModelRepository(uow);
 				return rep.ChangedDataOnStep(afterDate, currentBusinessUnit, stepName);
 			}	
 		}
@@ -715,7 +715,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 		{
 			using (var uow = UnitOfWorkFactory.CurrentUnitOfWorkFactory().LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
 			{
-				var rep = new EtlReadModelRepository(uow);
+				IEtlReadModelRepository rep = new EtlReadModelRepository(uow);
 				rep.UpdateLastChangedDate(currentBusinessUnit, stepName, thisTime);
 				uow.PersistAll();
 			}
