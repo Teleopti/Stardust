@@ -49,7 +49,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.ViewModelFactory
 			                 				DefinedRaptorApplicationFunctionPaths.TextRequests),
 			                 		AbsenceRequestPermission =
 			                 			_permissionProvider.HasApplicationFunctionPermission(
-			                 				DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb)
+											DefinedRaptorApplicationFunctionPaths.AbsenceRequestsWeb),
+									ShiftTradeRequestPermission =
+										_permissionProvider.HasApplicationFunctionPermission(
+											DefinedRaptorApplicationFunctionPaths.ShiftTradeRequestsWeb)
 			                 	};
 			return new RequestsViewModel
 			{

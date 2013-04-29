@@ -11421,4 +11421,11 @@ Reduce the complexity to use these shifts.</value>
     <value>Please select at least one of the options "Same shift category", "Same start time" or "Same shift" in Block Optimization.</value>
     <comment>Block optimization</comment>
   </data>
+  <data name="AddFullDayAbsence" xml:space="preserve">
+    <value>Add full day absence</value>
+    <comment>Add full day absence</comment>
+  </data>
+  <data name="InvalidEndDate" xml:space="preserve">
+    <value>Invalid end date</value>
+  </data>
 </root>

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.PeriodSelection;
+using Teleopti.Ccc.Web.Areas.MyTime.Models.Portal;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
@@ -11,6 +12,21 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Models.Preference
 		public IEnumerable<WeekViewModel> Weeks { get; set; }
 		public PreferencePeriodViewModel PreferencePeriod { get; set; }
 		public int MaxMustHave { get; set; }
+		public bool ExtendedPreferencesPermission { get; set; }
+
+		public PreferenceOptionsViewModel Options { get; set; }
+	}
+
+	public class PreferenceOptionsViewModel
+	{
+		public PreferenceOptionsViewModel(IEnumerable<IPreferenceOption> preferenceOptions, IEnumerable<IOption> activityOptions)
+		{
+			PreferenceOptions = preferenceOptions;
+			ActivityOptions = activityOptions;
+		}
+
+		public IEnumerable<IPreferenceOption> PreferenceOptions { get; set; }
+		public IEnumerable<IOption> ActivityOptions { get; set; }
 	}
 
 	public class PreferencePeriodViewModel

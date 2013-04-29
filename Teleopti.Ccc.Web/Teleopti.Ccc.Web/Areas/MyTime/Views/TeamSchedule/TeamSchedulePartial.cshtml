@@ -1,4 +1,5 @@
-﻿@using Teleopti.Ccc.Web.Areas.MyTime.Core
+﻿@using Teleopti.Ccc.UserTexts
+@using Teleopti.Ccc.Web.Areas.MyTime.Core
 @using Teleopti.Ccc.Web.Areas.MyTime.Models.Shared
 @using Teleopti.Ccc.Web.Areas.MyTime.Models.TeamSchedule
 @model TeamScheduleViewModel
@@ -7,6 +8,21 @@
 	const int scheduleWidth = 835;
 	var left = Html.HtmlStyleLeft();
 }
+<div class="navbar">
+    <div class="navbar-inner">
+        <form class="navbar-form pull-left">
+            <div class="input-append input-prepend">
+                <button class="btn" data-bind="click: previousDay"><i class="icon-arrow-left"></i></button>
+                <input data-bind="value: displayDate" type="text" class="span2" readonly="readonly"/>
+                <button class="btn" data-bind="datepicker: selectedDate, datepickerOptions: {autoHide: true}"><i class="icon-th"></i></button>
+                <button class="btn" data-bind="click: nextDay"><i class="icon-arrow-right"></i></button>
+            </div>
+            <input type="hidden" id="Team-Picker"/>
+            @*<select data-bind="options: availableTeams, value: selectedTeam, 'optionsText': 'Text'">
+            </select>*@
+        </form>
+    </div>
+</div>
 <div id="TeamSchedule-body" class="body-teamschedule" data-mytime-teamselection="@Model.TeamSelection" data-mytime-periodselection='@Html.Schedule().PeriodSelectionAsJson(Model.PeriodSelection)'>
 	<div class="body-teamschedule-inner">
 		

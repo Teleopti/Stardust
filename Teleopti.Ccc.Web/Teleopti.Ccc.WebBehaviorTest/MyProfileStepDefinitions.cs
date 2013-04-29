@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			var user = UserFactory.User();
 			var page = Browser.Current.Page<RegionalSettingsPage>();
-			EventualAssert.That(() => page.CultureSelect.SelectedText, Is.StringContaining(user.Person.PermissionInformation.Culture().DisplayName));
+			EventualAssert.That(() => page.CultureSelect.Container.InnerHtml, Is.StringContaining(user.Person.PermissionInformation.Culture().DisplayName));
 		}
 
 		[Then(@"I should see my language")]
@@ -104,7 +104,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			var user = UserFactory.User();
 			var page = Browser.Current.Page<RegionalSettingsPage>();
-			EventualAssert.That(() => page.CultureUiSelect.SelectedText, Is.StringContaining(user.Person.PermissionInformation.UICulture().DisplayName));
+			EventualAssert.That(() => page.CultureUiSelect.Container.InnerHtml, Is.StringContaining(user.Person.PermissionInformation.UICulture().DisplayName));
 		}
 
 		[When(@"I change culture to US")]
@@ -180,7 +180,10 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			var page = Browser.Current.Page<RegionalSettingsPage>();
 			TestControllerMethods.TestMessage("Page have not refreshed");
 			EventualAssert.That(() => Browser.Current.Text, Is.StringContaining("Page have not refreshed"));
-			page.CultureSelect.Select(culture);
+
+			IOpenTheCulturePicker();
+			page.CultureSelect.SelectItemByText(culture);
+
 			EventualAssert.That(() => Browser.Current.Text, Is.Not.StringContaining("Page have not refreshed"));
 		}
 
@@ -189,8 +192,31 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			var page = Browser.Current.Page<RegionalSettingsPage>();
 			TestControllerMethods.TestMessage("Page have not refreshed");
 			EventualAssert.That(() => Browser.Current.Text, Is.StringContaining("Page have not refreshed"));
-			page.CultureUiSelect.Select(culture);
+
+			IOpenTheCultureUiPicker();
+			page.CultureUiSelect.SelectItemByText(culture);
+
 			EventualAssert.That(() => Browser.Current.Text, Is.Not.StringContaining("Page have not refreshed"));
+		}
+
+		private static void IOpenTheCultureUiPicker()
+		{
+			var page = Browser.Current.Page<RegionalSettingsPage>();
+			var picker = page.CultureUiSelect;
+			if (picker.IsClosed)
+				picker.Open();
+
+			EventualAssert.That(() => picker.IsOpen, Is.True);
+		}
+
+		private static void IOpenTheCulturePicker()
+		{
+			var page = Browser.Current.Page<RegionalSettingsPage>();
+			var picker = page.CultureSelect;
+			if (picker.IsClosed)
+				picker.Open();
+
+			EventualAssert.That(() => picker.IsOpen, Is.True);
 		}
 
 	}

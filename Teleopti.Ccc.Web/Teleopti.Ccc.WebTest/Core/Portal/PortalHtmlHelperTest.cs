@@ -15,15 +15,15 @@ namespace Teleopti.Ccc.WebTest.Core.Portal
 			const string expectedResult = "C1/A1";
 			var portalViewModel = new PortalViewModel
 			                      	{
-			                      		NavigationItems = new List<SectionNavigationItem>
+			                      		NavigationItems = new List<NavigationItem>
 			                      		                  	{
-			                      		                  		new SectionNavigationItem
+			                      		                  		new NavigationItem
 			                      		                  			{
 			                      		                  				Controller = "C1",
 			                      		                  				Action = "A1",
 			                      		                  				Title = "C1A1"
 			                      		                  			},
-			                      		                  		new SectionNavigationItem
+			                      		                  		new NavigationItem
 			                      		                  			{
 			                      		                  				Controller = "C1",
 			                      		                  				Action = "A2",
