@@ -186,8 +186,10 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			_uiCultureColumn.ColumnComparer = new PeopleAdminCultureComparer();
 			_gridColumns.Add(_uiCultureColumn);
 
-			_timeZoneColumn = new DropDownColumn<PersonGeneralModel, TimeZoneInfo>("TimeZoneInformation", Resources.TimeZone,
-			                                                                        TimeZoneInfo.GetSystemTimeZones(), "DisplayName");
+			//_timeZoneColumn = new DropDownColumn<PersonGeneralModel, TimeZoneInfo>("TimeZoneInformation", Resources.TimeZone,
+			//																		TimeZoneInfo.GetSystemTimeZones(), "DisplayName");
+
+			_timeZoneColumn = new ReadOnlyTextColumn<PersonGeneralModel>("TimeZoneInformation", Resources.TimeZone);
 			_timeZoneColumn.CellDisplayChanged += columnCellDisplayChanged;
 			_timeZoneColumn.CellChanged += columnCellChanged;
 			// Sets the comparer for the sorting
