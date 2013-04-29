@@ -12,12 +12,14 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 		private readonly ILoggedOnUser _loggedOnUser;
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IScheduleProjectionReadOnlyRepository _scheduleProjectionReadOnlyRepository;
+		private readonly IExtractBudgetGroupPeriods _extractBudgetGroupPeriod;
 
-		public AbsenceTimeProvider(ILoggedOnUser loggedOnUser, IScenarioRepository scenarioRepository, IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository)
+		public AbsenceTimeProvider(ILoggedOnUser loggedOnUser, IScenarioRepository scenarioRepository, IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository,IExtractBudgetGroupPeriods extractBudgetGroupPeriod)
 		{
 			_loggedOnUser = loggedOnUser;
 			_scenarioRepository = scenarioRepository;
 			_scheduleProjectionReadOnlyRepository = scheduleProjectionReadOnlyRepository;
+			_extractBudgetGroupPeriod = extractBudgetGroupPeriod;
 		}
 
 		private void AddTime(IEnumerable<AbsenceAgents> target, DateOnlyPeriod period, IBudgetGroup budgetGroup, IScenario scenario)
@@ -38,28 +40,16 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 	
 		public IEnumerable<IAbsenceAgents> GetAbsenceTimeForPeriod(DateOnlyPeriod period)
 		{
-			var currentDate = period.StartDate;
-
-			var person = _loggedOnUser.CurrentUser();
 			var defaultScenario = _scenarioRepository.LoadDefaultScenario();
 			List<AbsenceAgents> absenceDays = period.DayCollection().Select(d => new AbsenceAgents() { Date = d, AbsenceTime = 0 }).ToList();
 
-			var affectedPersonPeriods = person.PersonPeriods(period);
-			foreach (var affectedPersonPeriod in affectedPersonPeriods)
+			var budgetGroupsPeriod = _extractBudgetGroupPeriod.BudgetGroupsForPeriod(_loggedOnUser.CurrentUser(), period);
+			foreach (var tuple in budgetGroupsPeriod)
 			{
-				var endDate = affectedPersonPeriod.EndDate() < period.EndDate ? affectedPersonPeriod.EndDate() : period.EndDate;
-				if (currentDate <= endDate)
-				{
-					var thePeriod = new DateOnlyPeriod(currentDate, endDate);
-					var budgetGroup = affectedPersonPeriod.BudgetGroup;
-					AddTime(absenceDays,thePeriod,budgetGroup,defaultScenario);
-					currentDate = thePeriod.EndDate.AddDays(1);
-				}
-
+				AddTime(absenceDays, tuple.Item1, tuple.Item2, defaultScenario);
 			}
+
 			return absenceDays;
 		}
-
-		
 	}
 }
