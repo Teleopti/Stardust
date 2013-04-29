@@ -72,5 +72,6 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
 			result.RowsAffected.Should().Be.EqualTo(2);
 
 		}
-	}
+
+		}
 }
