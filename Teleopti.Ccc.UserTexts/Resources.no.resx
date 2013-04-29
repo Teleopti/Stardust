@@ -776,7 +776,7 @@ Dato</value>
     <value>Fravær (%)</value>
   </data>
   <data name="KpiAdherence" xml:space="preserve">
-    <value>Vagtplanuppføljning (%)</value>
+    <value>Etterlevelses (%)</value>
   </data>
   <data name="KpiAnsweredCallsPerScheduledPhoneHour" xml:space="preserve">
     <value>Besvarte samtaler per planlagt telefontime</value>
@@ -947,10 +947,10 @@ Dato</value>
     <value>Malen kan ikke lagres pga. feil i godkjenning. Sjekk at hvert intervall til sammen blir 100 %. Informasjon om feil: {0}</value>
   </data>
   <data name="MultisiteSkillWizard" xml:space="preserve">
-    <value>Multiside ferdighetsveiviser</value>
+    <value>Multienhets ferdighetsveiviser</value>
   </data>
   <data name="MultisiteTemplate" xml:space="preserve">
-    <value>Multiside mal</value>
+    <value>Multienhet mal</value>
   </data>
   <data name="MustSpecifyValidTime" xml:space="preserve">
     <value>Du må angi en gyldig tid</value>
@@ -968,7 +968,7 @@ Dato</value>
     <value>Ny</value>
   </data>
   <data name="NewMultisiteSkillThreeDots" xml:space="preserve">
-    <value>Ny multisideferdighet...</value>
+    <value>Ny multienheterdighet...</value>
   </data>
   <data name="NewOutlier" xml:space="preserve">
     <value>Ny spesiell hendelse</value>
@@ -1196,7 +1196,7 @@ Dato</value>
     <value>Vil du opprette annen arbeidsbyrde?</value>
   </data>
   <data name="QuestionCreateSubSkill" xml:space="preserve">
-    <value>Multiside ferdighet inneholder ingen sub ferdigheter. Vil du opprette en?</value>
+    <value>Multienhet ferdighet inneholder ingen sub ferdigheter. Vil du opprette en?</value>
   </data>
   <data name="QuestionDeleteTheSkillTwoParameters" xml:space="preserve">
     <value>Er det sikkert at du vil slette ferdigheten {0}{1}{0}?</value>
@@ -1337,7 +1337,7 @@ Dato</value>
     <value>Velg historiske data</value>
   </data>
   <data name="SelectSiteColon" xml:space="preserve">
-    <value>Velg side:</value>
+    <value>Velg enhet:</value>
   </data>
   <data name="ServiceLevelParenthesisPercentSign" xml:space="preserve">
     <value>Servicenivå (%)</value>
@@ -1985,10 +1985,10 @@ Dato</value>
     <value>Initialiserer</value>
   </data>
   <data name="MultisiteSkill" xml:space="preserve">
-    <value>Multiside ferdighet</value>
+    <value>Multienhet ferdighet</value>
   </data>
   <data name="MultisiteSkillLoading" xml:space="preserve">
-    <value>Multiside ferdighet lastes</value>
+    <value>Multienhet ferdighet lastes</value>
   </data>
   <data name="SkillDaysLoaded" xml:space="preserve">
     <value>Ferdighet dager lastet</value>
@@ -2000,7 +2000,7 @@ Dato</value>
     <value>Maler lastet</value>
   </data>
   <data name="TemplateTargetMultisite" xml:space="preserve">
-    <value>Multiside ferdighet</value>
+    <value>Multienhet ferdighet</value>
   </data>
   <data name="TemplateTargetSkill" xml:space="preserve">
     <value>Ferdighet</value>
@@ -3314,7 +3314,7 @@ Dato</value>
     <value>Sett planlagt publiseringsdatoer</value>
   </data>
   <data name="ManageMultisiteDistributions" xml:space="preserve">
-    <value>Administrer multisidedistribusjon</value>
+    <value>Administrer multienhetdistribusjon</value>
   </data>
   <data name="ListOfValues" xml:space="preserve">
     <value>Regelsett</value>
@@ -3392,7 +3392,7 @@ Dato</value>
     <value>Ny statusgruppe</value>
   </data>
   <data name="RealTimeAdherence" xml:space="preserve">
-    <value>Real Time Adherence</value>
+    <value>Sanntid etterlevelse</value>
   </data>
   <data name="SetAsDefaultStateGroup" xml:space="preserve">
     <value>Sett som standard statusgruppe</value>
@@ -3410,7 +3410,7 @@ Dato</value>
     <value>Svar</value>
   </data>
   <data name="SiteTeam" xml:space="preserve">
-    <value>Side/Team</value>
+    <value>Enhet/Team</value>
   </data>
   <data name="ReplyAndApprove" xml:space="preserve">
     <value>Svar og godkjenn</value>
@@ -3428,7 +3428,7 @@ Dato</value>
     <value>Forespørselstatus:</value>
   </data>
   <data name="Site" xml:space="preserve">
-    <value>Side</value>
+    <value>Enhet</value>
   </data>
   <data name="AddOvertime" xml:space="preserve">
     <value>Legg til overtid</value>
@@ -3792,7 +3792,7 @@ standard</value>
     <value>Slett bekreftelse</value>
   </data>
   <data name="AddNewSite" xml:space="preserve">
-    <value>Legg til ny side</value>
+    <value>Legg til ny enhet</value>
   </data>
   <data name="AddNewTeam" xml:space="preserve">
     <value>Legg til nytt team</value>
@@ -3804,7 +3804,7 @@ standard</value>
     <value>Nodetekst kan ikke være null..!</value>
   </data>
   <data name="NodeTextCantBeNulls" xml:space="preserve">
-    <value>Side / Teamnavn kan ikke være null..!</value>
+    <value>Enhet / Teamnavn kan ikke være null..!</value>
   </data>
   <data name="MessageTooLong" xml:space="preserve">
     <value>Meldingen er for lang</value>
@@ -3903,7 +3903,7 @@ standard</value>
     <value>Ikke gyldige åpningstider for nåværende dageavgrensing.</value>
   </data>
   <data name="InvalidMultisiteDistribution" xml:space="preserve">
-    <value>Ugyldig multiside distribusjon</value>
+    <value>Ugyldig multienhet distribusjon</value>
   </data>
   <data name="ColumnOnly" xml:space="preserve">
     <value>Kun kolonne</value>
@@ -4521,7 +4521,7 @@ Lisensskjemaet er "{3}". Disse valgene er aktivert: {4}</value>
     <value>Total:</value>
   </data>
   <data name="TotalOutOfAdherenceColon" xml:space="preserve">
-    <value>Total avvikende:</value>
+    <value>Total avvikende fra etterlevelse:</value>
   </data>
   <data name="SaveAsScenario" xml:space="preserve">
     <value>Lagre som scenario</value>
@@ -4983,7 +4983,7 @@ Lisensskjemaet er "{3}". Disse valgene er aktivert: {4}</value>
     <value>Gjennomsnitt arbeidstid per dag</value>
   </data>
   <data name="AverageWorkTimePerSlot" xml:space="preserve">
-    <value>Gjennomsnitt arbeidstid per dag</value>
+    <value>Gjennomsnitt arbeidstid per bolk</value>
   </data>
   <data name="ContractTime" xml:space="preserve">
     <value>Kontrakttid</value>
@@ -4992,7 +4992,7 @@ Lisensskjemaet er "{3}". Disse valgene er aktivert: {4}</value>
     <value>Rettferdighetsverdi</value>
   </data>
   <data name="FreeSlots" xml:space="preserve">
-    <value>Ledige slots</value>
+    <value>Ledige bolker</value>
   </data>
   <data name="SchedulePeriod" xml:space="preserve">
     <value>Planlegg periode</value>
@@ -6248,10 +6248,10 @@ Ukedag</value>
     <value>Vurder uken før</value>
   </data>
   <data name="MustHave" xml:space="preserve">
-    <value>Veto</value>
+    <value>Påkrevde</value>
   </data>
   <data name="MustHaveCapitalized" xml:space="preserve">
-    <value>Veto</value>
+    <value>Påkrevde</value>
   </data>
   <data name="Confidential" xml:space="preserve">
     <value>Konfidensiell</value>
@@ -6299,7 +6299,7 @@ Ukedag</value>
     <value>Bruk blokker planlegging</value>
   </data>
   <data name="UsePreferencesMustHavesOnly" xml:space="preserve">
-    <value>Bruk bare preferanser med veto</value>
+    <value>Bruk kun Påkrevde preferanser</value>
   </data>
   <data name="Left" xml:space="preserve">
     <value>Igjen</value>
@@ -6452,7 +6452,7 @@ Ukedag</value>
     <value>Sjekk bemanning</value>
   </data>
   <data name="ChooseWorkflowControlSetToEdit" xml:space="preserve">
-    <value>Velg arbeidsflytsregelsett som skal redigeres</value>
+    <value>Velg regelsett for arbeidsflyt som skal redigeres</value>
   </data>
   <data name="ManageWorkflowControlSets" xml:space="preserve">
     <value>Administrer regelsett for arbeidsflyt</value>
@@ -6977,7 +6977,7 @@ langsiktig</value>
     <value>Ny hovedaktivitet</value>
   </data>
   <data name="PeriodNotInLegalState" xml:space="preserve">
-    <value>Period ikke OK</value>
+    <value>Periode ikke OK</value>
   </data>
   <data name="EnableScheduleAuditTrail" xml:space="preserve">
     <value>Aktiver sporing av skjemaendringer</value>
@@ -7118,7 +7118,7 @@ langsiktig</value>
     <value>Bruker</value>
   </data>
   <data name="OptimizingIntraday" xml:space="preserve">
-    <value>Optimalisera inom dag</value>
+    <value>Optimalisere innen dag</value>
   </data>
   <data name="SelectNames" xml:space="preserve">
     <value>Velg navn</value>
@@ -7175,5 +7175,1406 @@ ukedag</value>
   </data>
   <data name="SchedulePeriodView" xml:space="preserve">
     <value>Perioder</value>
+  </data>
+  <data name="ResReportScheduledAndActualAgents" xml:space="preserve">
+    <value>Planlagte og faktiske agenter</value>
+  </data>
+  <data name="PayrollCodeColon" xml:space="preserve">
+    <value>Payroll Kode:</value>
+  </data>
+  <data name="FromContract" xml:space="preserve">
+    <value>Fra Kontrakt</value>
+  </data>
+  <data name="FromSchedulePeriod" xml:space="preserve">
+    <value>Fra Skjema Periode</value>
+  </data>
+  <data name="NotWorking" xml:space="preserve">
+    <value>Jobber Ikke</value>
+  </data>
+  <data name="SchedulePeriodTypeDay" xml:space="preserve">
+    <value>Dag</value>
+  </data>
+  <data name="SchedulePeriodTypeMonth" xml:space="preserve">
+    <value>Måned</value>
+  </data>
+  <data name="SchedulePeriodTypeWeek" xml:space="preserve">
+    <value>Uke</value>
+  </data>
+  <data name="ShiftCategories" xml:space="preserve">
+    <value>Skift kategorier</value>
+  </data>
+  <data name="Others" xml:space="preserve">
+    <value>Andre</value>
+  </data>
+  <data name="Sites" xml:space="preserve">
+    <value>Enheter</value>
+  </data>
+  <data name="CannotDeleteSelectedActivities" xml:space="preserve">
+    <value>Kan ikke slette valgte aktiviteter</value>
+  </data>
+  <data name="SelectedActivitiesCannotBeDeletedColon" xml:space="preserve">
+    <value>Valgte aktiviteter kan ikke slettes fordi følgende skills bruker dem:</value>
+  </data>
+  <data name="InternalNoteColon" xml:space="preserve">
+    <value>Internt notat</value>
+  </data>
+  <data name="PublicNoteColon" xml:space="preserve">
+    <value>Offentlig notat</value>
+  </data>
+  <data name="ViewDetails" xml:space="preserve">
+    <value>Se detaljer</value>
+  </data>
+  <data name="FairnessSystemUsedForScheduling" xml:space="preserve">
+    <value>Rettferdigshets-system brukt til planlegging</value>
+  </data>
+  <data name="PointsPerShiftCategory" xml:space="preserve">
+    <value>Poeng per skift kategori</value>
+  </data>
+  <data name="RenameEfficiencyShrinkageRow" xml:space="preserve">
+    <value>Endre navn på effektivitets svinn</value>
+  </data>
+  <data name="RenameShrinkageRow" xml:space="preserve">
+    <value>Endre navn på svinn</value>
+  </data>
+  <data name="ClosePreviousPeriod" xml:space="preserve">
+    <value>Lukk forrige periode</value>
+  </data>
+  <data name="ClosingPreviousPeriod" xml:space="preserve">
+    <value>Lukker forrige periode</value>
+  </data>
+  <data name="Id" xml:space="preserve">
+    <value>Id</value>
+  </data>
+  <data name="TheDaysListedBelowWillNotBeSavedDot" xml:space="preserve">
+    <value>De følgende dagene vil ikke bli lagret.</value>
+  </data>
+  <data name="PasteError" xml:space="preserve">
+    <value>Feil ved innliming</value>
+  </data>
+  <data name="DetailedInformation" xml:space="preserve">
+    <value>Detaljert informasjon</value>
+  </data>
+  <data name="WaitingThreeDots" xml:space="preserve">
+    <value>Venter</value>
+  </data>
+  <data name="SwapRaw" xml:space="preserve">
+    <value>Bytt Raw</value>
+  </data>
+  <data name="Restricted" xml:space="preserve">
+    <value>Begrenset</value>
+  </data>
+  <data name="ModifyRestrictedScenario" xml:space="preserve">
+    <value>Endre begrensede scenarier</value>
+  </data>
+  <data name="ViewRestrictedScenario" xml:space="preserve">
+    <value>Se begrensede scenarier</value>
+  </data>
+  <data name="SetBalanceOut" xml:space="preserve">
+    <value>Sett utgående balanse</value>
+  </data>
+  <data name="CopyDetails" xml:space="preserve">
+    <value>Kopier detaljer</value>
+  </data>
+  <data name="FullDayAbsence" xml:space="preserve">
+    <value>Heldags fravær</value>
+  </data>
+  <data name="EnterPropertiesOnSite" xml:space="preserve">
+    <value>Legg inn egenskaper på enhet</value>
+  </data>
+  <data name="ManageSites" xml:space="preserve">
+    <value>Rediger Enheter</value>
+  </data>
+  <data name="MaxSeats" xml:space="preserve">
+    <value>Max plasser</value>
+  </data>
+  <data name="RequiresSeat" xml:space="preserve">
+    <value>Trenger plass</value>
+  </data>
+  <data name="ForMax" xml:space="preserve">
+    <value>for max:</value>
+  </data>
+  <data name="NoGoodSlotsFound" xml:space="preserve">
+    <value>Ingen god bolk for møte funnet!</value>
+  </data>
+  <data name="PickBestMeetingSlot" xml:space="preserve">
+    <value>Velg beste bolk for møte</value>
+  </data>
+  <data name="SlotsFound" xml:space="preserve">
+    <value>Bolk(er) funnet.</value>
+  </data>
+  <data name="MaxUsedSeats" xml:space="preserve">
+    <value>Max brukte plasser</value>
+  </data>
+  <data name="UsedSeats" xml:space="preserve">
+    <value>Brukte plasser</value>
+  </data>
+  <data name="DoNotBreakMaxSeats" xml:space="preserve">
+    <value>Ikke bryt max antall plasser</value>
+  </data>
+  <data name="MaxSeatLimitBroken" xml:space="preserve">
+    <value>Max grense for antall plasser brutt</value>
+  </data>
+  <data name="UsePreferenceMustHavesOnly1" xml:space="preserve">
+    <value>Bruk kun Påkrevde preferanser.</value>
+  </data>
+  <data name="UseMaxSeats" xml:space="preserve">
+    <value>Bruk max antall plasser</value>
+  </data>
+  <data name="HighestPossibleWorkTimeIsTooLow" xml:space="preserve">
+    <value>Lengste mulige arbeidstid er for lav!</value>
+  </data>
+  <data name="LowestPossibleWorkTimeIsTooHigh" xml:space="preserve">
+    <value>Korteste mulige arbeidstid er for høy!</value>
+  </data>
+  <data name="DoNotBreakMaxStaffing" xml:space="preserve">
+    <value>Ikke bryt max bemanning</value>
+  </data>
+  <data name="AreYouSureYouWantToDeleteContractSchedule" xml:space="preserve">
+    <value>Er du sikker på at du vil slette {0} kontrakts skjema?</value>
+  </data>
+  <data name="EqualOfEachShiftCategory" xml:space="preserve">
+    <value>Likt for hver skift kategori</value>
+  </data>
+  <data name="PreferenceViewCalculationInfo" xml:space="preserve">
+    <value>{0} (Normal) {1} (Sesong) {2} (Balanse inn) {3} (Ekstra) {4} (Balanse ut) = {5}</value>
+  </data>
+  <data name="ViewSchedulePeriodCalculation" xml:space="preserve">
+    <value>Vis skjema periode kalkulering</value>
+  </data>
+  <data name="CannotPasteAShiftWithMasterActivity" xml:space="preserve">
+    <value>Et skift med Master aktivitet kan ikke brukes i skjema!</value>
+  </data>
+  <data name="TimedOutWhileWaitingforProcessing" xml:space="preserve">
+    <value>Tidsavbrudd under prossesering</value>
+  </data>
+  <data name="PlanningTimeBankCaption" xml:space="preserve">
+    <value>PlanleggingTidsbank</value>
+  </data>
+  <data name="PlanningTimeBankLimitError" xml:space="preserve">
+    <value>Balanse ut er utenfor grense!</value>
+  </data>
+  <data name="PlanningTimeBankMax" xml:space="preserve">
+    <value>Planlegging Tidsbank max:</value>
+  </data>
+  <data name="PlanningTimeBankMin" xml:space="preserve">
+    <value>Planlegging Tidsbank min:</value>
+  </data>
+  <data name="PlanningTimeBankMinMaxInfo" xml:space="preserve">
+    <value>({0} to {1})</value>
+  </data>
+  <data name="SetPlanningTimeBank" xml:space="preserve">
+    <value>Sett Planlegging Tidsbank</value>
+  </data>
+  <data name="ExportToPDFGraphical" xml:space="preserve">
+    <value>Eksporter til PDF grafisk</value>
+  </data>
+  <data name="FilterData" xml:space="preserve">
+    <value>Filtrer data</value>
+  </data>
+  <data name="Include" xml:space="preserve">
+    <value>Inkluder</value>
+  </data>
+  <data name="ReportScheduledOvertimePerAgent" xml:space="preserve">
+    <value>Planlagt overtid per agent</value>
+  </data>
+  <data name="resReportScheduledOvertimePerAgent" xml:space="preserve">
+    <value>Planlagt overtid per agent</value>
+  </data>
+  <data name="Illegal" xml:space="preserve">
+    <value>Ugyldig</value>
+  </data>
+  <data name="IllegalInput" xml:space="preserve">
+    <value>Ugyldig input</value>
+  </data>
+  <data name="IllegalTimeInput" xml:space="preserve">
+    <value>Input er ikke en gyldig tids verdi</value>
+  </data>
+  <data name="ScheduledTimeVsTarget" xml:space="preserve">
+    <value>Planlagt tid mot mål</value>
+  </data>
+  <data name="FilterColon" xml:space="preserve">
+    <value>Filter:</value>
+  </data>
+  <data name="SourceColon" xml:space="preserve">
+    <value>Kilde:</value>
+  </data>
+  <data name="TargetSkillColon" xml:space="preserve">
+    <value>Mål ferdighet:</value>
+  </data>
+  <data name="AvailabilityColon" xml:space="preserve">
+    <value>Tilgjengelighet</value>
+  </data>
+  <data name="NextDayColon" xml:space="preserve">
+    <value>Neste dag:</value>
+  </data>
+  <data name="NoShiftsAvailableForThisStudentAvailabilityDot" xml:space="preserve">
+    <value>Ingen skift tilgjengelige for denne studentens tilgjengelighet.</value>
+  </data>
+  <data name="StudentAvailabilityPeriod" xml:space="preserve">
+    <value>Student tilgjengelighets periode</value>
+  </data>
+  <data name="OpenStudentAvailability" xml:space="preserve">
+    <value>Åpne sudent tilgjengelighet</value>
+  </data>
+  <data name="SelectedPeriodShouldNotBeLongerThanParameterDot" xml:space="preserve">
+    <value>Valgt periode bør ikke være lenger enn {0}.</value>
+  </data>
+  <data name="UseOnlyForRestrictions" xml:space="preserve">
+    <value>Kun for restriksjoner</value>
+  </data>
+  <data name="ConflictingShiftCategories" xml:space="preserve">
+    <value>Skift kategorien i restriksjoner er i konflikt med Skift kategori i alternativer.</value>
+  </data>
+  <data name="DataSourceRequired" xml:space="preserve">
+    <value>Data kilde nødvendig</value>
+  </data>
+  <data name="AllAvailable" xml:space="preserve">
+    <value>Alle tilgjengelige</value>
+  </data>
+  <data name="AllDaysOff" xml:space="preserve">
+    <value>Alle fri dager</value>
+  </data>
+  <data name="AllFulFilled" xml:space="preserve">
+    <value>Alle oppfylt</value>
+  </data>
+  <data name="AllFulFilledDaysOff" xml:space="preserve">
+    <value>Alle oppfylte fri dager</value>
+  </data>
+  <data name="AllFulFilledShifts" xml:space="preserve">
+    <value>Alle oppfylte skift</value>
+  </data>
+  <data name="AllShifts" xml:space="preserve">
+    <value>All skift</value>
+  </data>
+  <data name="AllUnavailable" xml:space="preserve">
+    <value>Alle utilgjengelige</value>
+  </data>
+  <data name="LockAvailability" xml:space="preserve">
+    <value>Lås tilgjengelighet</value>
+  </data>
+  <data name="LockPreferences" xml:space="preserve">
+    <value>Lås preferanser</value>
+  </data>
+  <data name="LockRestrictions" xml:space="preserve">
+    <value>Lås restriksjoner</value>
+  </data>
+  <data name="LockStudentAvailability" xml:space="preserve">
+    <value>Lås Sudent tilgjengelighet</value>
+  </data>
+  <data name="LockRotations" xml:space="preserve">
+    <value>Lås rotasjoner</value>
+  </data>
+  <data name="PasswordRequired" xml:space="preserve">
+    <value>Passord nødvendig</value>
+  </data>
+  <data name="UserNameRequired" xml:space="preserve">
+    <value>Brukernavn nødvendig</value>
+  </data>
+  <data name="ExportMeetings" xml:space="preserve">
+    <value>Eksporter møter</value>
+  </data>
+  <data name="NewLicenseDoesNotCoverEnoughSeats" xml:space="preserve">
+    <value>Denne lisensen dekker kun {0} plasser. Du må skaffe en lisens som dekker nok plasser.</value>
+  </data>
+  <data name="SeatLicense" xml:space="preserve">
+    <value>Dette systemet er lisensiert for "{0}" ifølge vilkår og betingelser i lisens-avtalen og lisens nøkkel går ut {1}.
+
+Lisensen dekker maximalt {2} plasser.
+
+Lisens skjema er "{3}".
+Disse alternativene er aktivert:
+{4}</value>
+  </data>
+  <data name="YouHaveAlmostTooManySeats" xml:space="preserve">
+    <value>Du har nesten nådd din lisens grense på {0} plasser. Vennligst oppgrader din lisens-nøkkel snarest.</value>
+  </data>
+  <data name="YouHaveTooManySeats" xml:space="preserve">
+    <value>Du bruker for mange plasser, du er lisensiert for kun {0}. Du må oppgradere din lisens nøkkel før du kan fortsette.</value>
+  </data>
+  <data name="SelectMultisiteSkills" xml:space="preserve">
+    <value>Velg Multienhet ferdigheter</value>
+  </data>
+  <data name="ChildSkillWithSameNameAsParentSkillWarning" xml:space="preserve">
+    <value>En ferdighet på lavere nivå har samme navn som en ferdighet på høyere nivå, eller to eller flere ferdigheter på samme nivå har samme navn. Vennligst kontroller egenskaper for multienhets ferdigheter. Planlegger vil avslutte.</value>
+  </data>
+  <data name="AdjustTimeBankWithPartTimePercentage" xml:space="preserve">
+    <value>Juster Tidsbank med deltids prosent</value>
+  </data>
+  <data name="DoNotBreakMaximumSeats" xml:space="preserve">
+    <value>Ikke bryt maximum antall plasser</value>
+  </data>
+  <data name="MaximumSeats" xml:space="preserve">
+    <value>Maximum antall plasser</value>
+  </data>
+  <data name="MaximumStaffing" xml:space="preserve">
+    <value>Maximum bemanning</value>
+  </data>
+  <data name="MinimumStaffing" xml:space="preserve">
+    <value>Minimum bemanning</value>
+  </data>
+  <data name="ImportStaffing" xml:space="preserve">
+    <value>Importer bemanning</value>
+  </data>
+  <data name="ImportWorkload" xml:space="preserve">
+    <value>Importer arbeidsbyrde</value>
+  </data>
+  <data name="ImportWorkloadAndStaffing" xml:space="preserve">
+    <value>Importer arbeidsbyrde og bemanning</value>
+  </data>
+  <data name="WorkloadNameColon" xml:space="preserve">
+    <value>Arbeidsbyrde navn:</value>
+  </data>
+  <data name="WorkloadWindowAlreadyOpen" xml:space="preserve">
+    <value>Dette arbeidsbyrde {0} vinduet er åpent. Vennligst lukk det da det ikke lenger er gyldig.</value>
+  </data>
+  <data name="ExportStaffing" xml:space="preserve">
+    <value>Eksporter bemanning</value>
+  </data>
+  <data name="ExportWorkload" xml:space="preserve">
+    <value>Eksporter arbeidsbyrde</value>
+  </data>
+  <data name="ExportWorkloadAndStaffing" xml:space="preserve">
+    <value>Eksporter arbeidsbyrde og bemanning</value>
+  </data>
+  <data name="AllowMeetings" xml:space="preserve">
+    <value>Tillat møter</value>
+  </data>
+  <data name="MyTime" xml:space="preserve">
+    <value>Min Tid</value>
+  </data>
+  <data name="ExtendedPreferencesWeb" xml:space="preserve">
+    <value>Utvidede Preferanser</value>
+  </data>
+  <data name="MaximumAgentsMustBeLargerOrEqualToMinimumAgents" xml:space="preserve">
+    <value>Maximum agenter må være større eller lik til minimum agenter</value>
+  </data>
+  <data name="ResReportScheduledAgentsPerActivity" xml:space="preserve">
+    <value>Planlagte agenter per aktivitet</value>
+  </data>
+  <data name="ResTotals" xml:space="preserve">
+    <value>Totaler</value>
+  </data>
+  <data name="FairnessOptimizationOn" xml:space="preserve">
+    <value>Rettferdighet på for Optilmalisering</value>
+  </data>
+  <data name="FairnessOptimizationRollingBack" xml:space="preserve">
+    <value>- verdi etter er ikke bedre, ruller tilbake.</value>
+  </data>
+  <data name="FairnessOptimizationValueAfter" xml:space="preserve">
+    <value>- verdi etter =</value>
+  </data>
+  <data name="FairnessOptimizationValueBefore" xml:space="preserve">
+    <value>- verdi før =</value>
+  </data>
+  <data name="RequestDetails" xml:space="preserve">
+    <value>Be om Detalj oversikt</value>
+  </data>
+  <data name="ServerUnavailable" xml:space="preserve">
+    <value>Server er midlertidig utilgjengelig, vennligst prøv igjen senere.</value>
+  </data>
+  <data name="FilterDaysForTemplate" xml:space="preserve">
+    <value>Filtrer dager for mal</value>
+  </data>
+  <data name="TheEnteredIsIllegal" xml:space="preserve">
+    <value>Angitte {0} er ugyldig</value>
+  </data>
+  <data name="TheServiceLevelForSpecifiedIntervalLengthIsTooLongDot" xml:space="preserve">
+    <value>Service nivå for spesifisert interval lengde er for lang.</value>
+  </data>
+  <data name="MeetingDeleteConfirmationQuestion" xml:space="preserve">
+    <value>Ønsker du å slette møtet {0}?</value>
+  </data>
+  <data name="MeetingOverview" xml:space="preserve">
+    <value>Møte oversikt</value>
+  </data>
+  <data name="NoMeetingIsSelected" xml:space="preserve">
+    <value>Ikke valgt noe møte!</value>
+  </data>
+  <data name="CopyToThreeDots" xml:space="preserve">
+    <value>Kopier til...</value>
+  </data>
+  <data name="IncludeQueues" xml:space="preserve">
+    <value>Inkluder kø</value>
+  </data>
+  <data name="IncludeTemplates" xml:space="preserve">
+    <value>Inkluder maler</value>
+  </data>
+  <data name="NoSkillMatchingPropertiesForCurrentSkillFound" xml:space="preserve">
+    <value>Ingen ferdighet med matchende egenskaper til gjeldene ferdighet funnet.</value>
+  </data>
+  <data name="YouShouldWorkAtLeastParameterHDotYouAreNowAvailableForBetweenParameterHAndParameterHDot" xml:space="preserve">
+    <value>Du skal jobbe minst {0}t. Du er nå tilgjengelig for mellom {1}t og {2}t.</value>
+  </data>
+  <data name="ResReportAgentQueueMetrics" xml:space="preserve">
+    <value>Agent kø beregninger</value>
+  </data>
+  <data name="BusinessRuleErrorAssignmentLength" xml:space="preserve">
+    <value>Den maximale lengden på et oppdrag er {0} timer. Gjeldene oppdrags lengde er {1} timer.</value>
+  </data>
+  <data name="DatabaseConnectionLostFormClose" xml:space="preserve">
+    <value>Database tilkobling brutt. For å bevare regelmessighet vil skjema lukkes. Beklager, dine endringer vil gå tapt.</value>
+  </data>
+  <data name="LegalNotice" xml:space="preserve">
+    <value>Juridisk merknad</value>
+  </data>
+  <data name="ShiftTradeAbsenceDenyReason" xml:space="preserve">
+    <value>Skift bytte kan ikke gjennomføres grunnet fravær i et skift.</value>
+  </data>
+  <data name="ShiftTradePersonalActivityDenyReason" xml:space="preserve">
+    <value>Skift bytte avslått grunnet personlig aktivitet endte opp utenfor skift.</value>
+  </data>
+  <data name="ShiftTradeMeetingSpecificationDenyReason" xml:space="preserve">
+    <value>Skift bytte avslått grunnet et møte endte opp utenfor skift.</value>
+  </data>
+  <data name="BusinessUnitRequired" xml:space="preserve">
+    <value>Foretaksenhet påkrevd</value>
+  </data>
+  <data name="SelectPeriodAndScenarioToExportTo" xml:space="preserve">
+    <value>Velg tidsperiode å hente møter fra og et scenario å eksportere til.</value>
+  </data>
+  <data name="SuccessfullyExportedMeetings" xml:space="preserve">
+    <value>Eksportering av {0} møter til annet scenario vellykket.</value>
+  </data>
+  <data name="NoAllowedScenarios" xml:space="preserve">
+    <value>Det er ingen scenarier du har tillatelse til å se!</value>
+  </data>
+  <data name="ActualServiceLevel" xml:space="preserve">
+    <value>Faktisk service nivå</value>
+  </data>
+  <data name="CommonAgentDescriptionForScheduleExports" xml:space="preserve">
+    <value>Felles agent beskrivelse for skjema eksporteringer</value>
+  </data>
+  <data name="EditCommonAgentDescriptionForScheduleExportsFormat" xml:space="preserve">
+    <value>Rediger felles agent beskrivelse for skjema eksporteringer</value>
+  </data>
+  <data name="AdjustedDifference" xml:space="preserve">
+    <value>Justert forskjell</value>
+  </data>
+  <data name="AllFulfilledMustHave" xml:space="preserve">
+    <value>Alle oppfylte Påkrevde</value>
+  </data>
+  <data name="AllMustHave" xml:space="preserve">
+    <value>Alle Påkrevde</value>
+  </data>
+  <data name="ResReportActivityTimePerAgent" xml:space="preserve">
+    <value>Aktivitets tid per agent</value>
+  </data>
+  <data name="InterruptedShutDown" xml:space="preserve">
+    <value>{0} har hindret applikasjonen fra å avslutte. Ønsker du å tvinge avslutting?</value>
+  </data>
+  <data name="ProficiencyPercent" xml:space="preserve">
+    <value>Ferdighet (%)</value>
+  </data>
+  <data name="SeveralValues" xml:space="preserve">
+    <value>&lt;Flere verdier&gt;</value>
+  </data>
+  <data name="Active" xml:space="preserve">
+    <value>Aktiv</value>
+  </data>
+  <data name="MyTimeWeb" xml:space="preserve">
+    <value>MyTimeWeb</value>
+  </data>
+  <data name="LogOut" xml:space="preserve">
+    <value>Logg ut</value>
+  </data>
+  <data name="LicenseAgreement" xml:space="preserve">
+    <value>Lisens avtale</value>
+  </data>
+  <data name="TeleoptiLicenseAgreementProgram" xml:space="preserve">
+    <value>Teleopti lisens avtale for software</value>
+  </data>
+  <data name="PersonalActivity" xml:space="preserve">
+    <value>Personlig aktivitet</value>
+  </data>
+  <data name="NoSchedulePeriodFoundForUser" xml:space="preserve">
+    <value>Ingen skjema periode funnet for denne brukeren</value>
+  </data>
+  <data name="NoPersonPeriodFoundForUser" xml:space="preserve">
+    <value>Ingen personperiode funnet for denne brukeren</value>
+  </data>
+  <data name="AlsoShowsMeetingsCreatedByMe" xml:space="preserve">
+    <value>Vis også møter opprettet av meg hvor jeg ikke deltar.</value>
+  </data>
+  <data name="MeetingsCreatedByMe" xml:space="preserve">
+    <value>Møter opprettet av meg</value>
+  </data>
+  <data name="SendASM" xml:space="preserve">
+    <value>Send melding (ASM)</value>
+  </data>
+  <data name="AllAbsences" xml:space="preserve">
+    <value>Alle fravær</value>
+  </data>
+  <data name="AllFulFilledAbsences" xml:space="preserve">
+    <value>Alle oppfylte Fravær</value>
+  </data>
+  <data name="MissingWorkflowControlSet" xml:space="preserve">
+    <value>Manglende regelsett for arbeidsflyt</value>
+  </data>
+  <data name="YourEmailAddressShouldBeConfiguredInThePeopleModuleToUseThisServiceDot" xml:space="preserve">
+    <value>Din e-post adresse må være konfigurert i modul for personer for å bruke denne tjenesten.</value>
+  </data>
+  <data name="SignCustomerWeb" xml:space="preserve">
+    <value>Innlogg Kunde Web</value>
+  </data>
+  <data name="LoadMoreHistory" xml:space="preserve">
+    <value>Last inn mer historikk</value>
+  </data>
+  <data name="Owner" xml:space="preserve">
+    <value>Eier</value>
+  </data>
+  <data name="Timestamp" xml:space="preserve">
+    <value>Tidsstempel</value>
+  </data>
+  <data name="BusinessUnit" xml:space="preserve">
+    <value>Foretaksenhet</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Feil</value>
+  </data>
+  <data name="NewExportThreeDots" xml:space="preserve">
+    <value>Ny eksport</value>
+  </data>
+  <data name="SelectDestination" xml:space="preserve">
+    <value>Velg destinasjon</value>
+  </data>
+  <data name="TargetBusinessUnit" xml:space="preserve">
+    <value>Mål-foretaksenhet</value>
+  </data>
+  <data name="WorkingThreeDots" xml:space="preserve">
+    <value>Jobber...</value>
+  </data>
+  <data name="InvalidTimeValue" xml:space="preserve">
+    <value>Ugyldig tids verdi '{0}'</value>
+  </data>
+  <data name="AuditingReportAbsence" xml:space="preserve">
+    <value>Fravær</value>
+  </data>
+  <data name="AuditingReportDayOff" xml:space="preserve">
+    <value>Fridag</value>
+  </data>
+  <data name="AuditingReportDeleted" xml:space="preserve">
+    <value>Slettet</value>
+  </data>
+  <data name="AuditingReportInsert" xml:space="preserve">
+    <value>Ny</value>
+  </data>
+  <data name="AuditingReportModified" xml:space="preserve">
+    <value>Endret</value>
+  </data>
+  <data name="AuditingReportShift" xml:space="preserve">
+    <value>Skift</value>
+  </data>
+  <data name="AuditingTurnOnShort" xml:space="preserve">
+    <value>Skru på?</value>
+  </data>
+  <data name="Restore" xml:space="preserve">
+    <value>Gjenopprett</value>
+  </data>
+  <data name="AbsenceExtra" xml:space="preserve">
+    <value>Ekstra</value>
+  </data>
+  <data name="XRequests" xml:space="preserve">
+    <value>{0} Forespørsler{0}</value>
+  </data>
+  <data name="PersonFinderFieldAll" xml:space="preserve">
+    <value>Alle</value>
+  </data>
+  <data name="PersonFinderFieldContract" xml:space="preserve">
+    <value>Kontrakt</value>
+  </data>
+  <data name="RowsPerPageFifty" xml:space="preserve">
+    <value>Femti</value>
+  </data>
+  <data name="RowsPerPageForty" xml:space="preserve">
+    <value>Førti</value>
+  </data>
+  <data name="RowsPerPageTen" xml:space="preserve">
+    <value>Ti</value>
+  </data>
+  <data name="RowsPerPageThirty" xml:space="preserve">
+    <value>Tretti</value>
+  </data>
+  <data name="RowsPerPageTwenty" xml:space="preserve">
+    <value>Tyve</value>
+  </data>
+  <data name="RowsPerPage" xml:space="preserve">
+    <value>Rekker per side</value>
+  </data>
+  <data name="ExportForecastToOtherBusinessUnit" xml:space="preserve">
+    <value>Eksporter prognose til annen foretaksenhet</value>
+  </data>
+  <data name="MustHaves" xml:space="preserve">
+    <value>Påkrevde</value>
+  </data>
+  <data name="ImportForecast" xml:space="preserve">
+    <value>Importer prognose</value>
+  </data>
+  <data name="MustHaveFulfillment" xml:space="preserve">
+    <value>Oppfyllelse av Påkrevd</value>
+  </data>
+  <data name="ImportForecastFromFile" xml:space="preserve">
+    <value>Importer prognose fra fil</value>
+  </data>
+  <data name="LongtermForecast" xml:space="preserve">
+    <value>Langsiktig prognose</value>
+  </data>
+  <data name="ManualAgents" xml:space="preserve">
+    <value>Agenter (manuel overstyring)</value>
+  </data>
+  <data name="ExportToBU" xml:space="preserve">
+    <value>Eksporter til foretaksenhet</value>
+  </data>
+  <data name="ForecastedAverageAfterCustomerWork" xml:space="preserve">
+    <value>Prognose gjennomsnitt etter kunde arbeid</value>
+  </data>
+  <data name="ForecastedCustomers" xml:space="preserve">
+    <value>Prognose kunder</value>
+  </data>
+  <data name="ForecastedCustomersColon" xml:space="preserve">
+    <value>Prognose kunder:</value>
+  </data>
+  <data name="ForecastedEmployees" xml:space="preserve">
+    <value>Prognose ansatte</value>
+  </data>
+  <data name="ForecastedEmployeesIncoming" xml:space="preserve">
+    <value>Prognose ansatte innkommende</value>
+  </data>
+  <data name="ScheduleOnlyPreferenceMustHave" xml:space="preserve">
+    <value>Planlegg kun Påkrevd preferanser</value>
+  </data>
+  <data name="JobCategory" xml:space="preserve">
+    <value>Jobb Kategori</value>
+  </data>
+  <data name="JobHistory" xml:space="preserve">
+    <value>Jobb Historikk</value>
+  </data>
+  <data name="RestrictionViolatesNightRest" xml:space="preserve">
+    <value>Restriksjon bryter med nattlig hviletid</value>
+  </data>
+  <data name="MapDestination" xml:space="preserve">
+    <value>Merk destinasjon</value>
+  </data>
+  <data name="TargetSkill" xml:space="preserve">
+    <value>Mål-ferdighet</value>
+  </data>
+  <data name="TheExportWillStartInBackgroundMessage" xml:space="preserve">
+    <value>Eksporten vil bli kjørt som en jobb i bakgrunnen når denne veiviseren er ferdig, sjekk Jobb Historikk for status.</value>
+  </data>
+  <data name="YouHaveToMapAtLeastOneSubSkill" xml:space="preserve">
+    <value>Du må merke minst en sub-ferdighet.</value>
+  </data>
+  <data name="YouHaveToSelectAtLeastOneSkill" xml:space="preserve">
+    <value>Du må velge minst en ferdighet.</value>
+  </data>
+  <data name="AbsencesAvailableForExtendedPreference" xml:space="preserve">
+    <value>Fravær tilgjengelig for preferanser</value>
+  </data>
+  <data name="CannotDisplayAllMeetings" xml:space="preserve">
+    <value>Kan ikke vise alle møter på dette tidspunkt!</value>
+  </data>
+  <data name="UseStandardDeviation" xml:space="preserve">
+    <value>Bruk Standardavvik</value>
+  </data>
+  <data name="UseTweakedValues" xml:space="preserve">
+    <value>Bruk finjusterte verdier</value>
+  </data>
+  <data name="ResReportShiftCategoryAndDayAbsencePerDay" xml:space="preserve">
+    <value>Skift kategori og heldags fravær per dag</value>
+  </data>
+  <data name="UseSameDayOffs" xml:space="preserve">
+    <value>Bruk samme Fridager</value>
+  </data>
+  <data name="UseTeam" xml:space="preserve">
+    <value>Bruk Team</value>
+  </data>
+  <data name="AuditingIsNotRunning" xml:space="preserve">
+    <value>Skjema revisjonsspor kjører ikke.</value>
+  </data>
+  <data name="AuditingIsRunning" xml:space="preserve">
+    <value>Skjema revisjonssport kjører.</value>
+  </data>
+  <data name="AuditingPageName" xml:space="preserve">
+    <value>Revisjon</value>
+  </data>
+  <data name="AuditingTurnOnLong" xml:space="preserve">
+    <value>Start initialisering av revisjon? Dette kan ta noen minutter.</value>
+  </data>
+  <data name="ViewCustomTeamSchedule" xml:space="preserve">
+    <value>Se egendefinert skjema for Team</value>
+  </data>
+  <data name="ChangeDateFromColon" xml:space="preserve">
+    <value>Endre dato fra:</value>
+  </data>
+  <data name="ChangeDateToColon" xml:space="preserve">
+    <value>Endre dato til:</value>
+  </data>
+  <data name="ScheduleDateFromColon" xml:space="preserve">
+    <value>Skjema fra dato:</value>
+  </data>
+  <data name="ScheduleDateToColon" xml:space="preserve">
+    <value>Skjema til dato:</value>
+  </data>
+  <data name="AdjustTimeBankWithSeasonality" xml:space="preserve">
+    <value>Juster Tidsbank med sesong</value>
+  </data>
+  <data name="Previous" xml:space="preserve">
+    <value>Forrige</value>
+  </data>
+  <data name="NoRequestsFound" xml:space="preserve">
+    <value>Ingen forespørsler funnet</value>
+  </data>
+  <data name="AbsenceOverride" xml:space="preserve">
+    <value>Overstyr</value>
+  </data>
+  <data name="AbsenceThreshold" xml:space="preserve">
+    <value>Terskel</value>
+  </data>
+  <data name="BudgetedLeave" xml:space="preserve">
+    <value>Budsjettert permisjon</value>
+  </data>
+  <data name="BudgetedSurplus" xml:space="preserve">
+    <value>Budsjettert overskudd</value>
+  </data>
+  <data name="UpdateEfficiencyShrinkageRow" xml:space="preserve">
+    <value>Rediger effektivitets svinn</value>
+  </data>
+  <data name="UpdateShrinkageRow" xml:space="preserve">
+    <value>Rediger shrinkage</value>
+  </data>
+  <data name="ViewScheduleHistory" xml:space="preserve">
+    <value>Se Skjemahistorikk</value>
+  </data>
+  <data name="MoveColon" xml:space="preserve">
+    <value>Optimaliser:</value>
+  </data>
+  <data name="ShiftsWithinDay" xml:space="preserve">
+    <value>Skift innen dag</value>
+  </data>
+  <data name="TimeBetweenDays" xml:space="preserve">
+    <value>Tid mellom dager</value>
+  </data>
+  <data name="AreYouSureYouWantToDeleteItem" xml:space="preserve">
+    <value>Er du sikker på at du vil slette '{0}'?</value>
+  </data>
+  <data name="MissingSubject" xml:space="preserve">
+    <value>Mangler emne</value>
+  </data>
+  <data name="ChooseScheduleTagToChange" xml:space="preserve">
+    <value>Velg skjema-tag å endre</value>
+  </data>
+  <data name="DeleteTag" xml:space="preserve">
+    <value>Slett Tag</value>
+  </data>
+  <data name="DoYouWantToDeleteTag" xml:space="preserve">
+    <value>Ønsker du å slette {0}. taggen?</value>
+  </data>
+  <data name="ManageScheduleTags" xml:space="preserve">
+    <value>Administrer Skjema-tagger</value>
+  </data>
+  <data name="NewTag" xml:space="preserve">
+    <value>Ny Tag</value>
+  </data>
+  <data name="NewTagExample" xml:space="preserve">
+    <value>Ny Tag</value>
+  </data>
+  <data name="ScheduleTagColon" xml:space="preserve">
+    <value>Skjema tag:</value>
+  </data>
+  <data name="TagChangesWithColon" xml:space="preserve">
+    <value>Merk endringer med:</value>
+  </data>
+  <data name="ScheduleTags" xml:space="preserve">
+    <value>Skjema tagger</value>
+  </data>
+  <data name="WorkWeekStartsAt" xml:space="preserve">
+    <value>Arbeidsuke starter på</value>
+  </data>
+  <data name="AutoTag" xml:space="preserve">
+    <value>Auto Tag</value>
+  </data>
+  <data name="ChangeTag" xml:space="preserve">
+    <value>Sett Tag</value>
+  </data>
+  <data name="DefaultTag" xml:space="preserve">
+    <value>&lt;ingen&gt;</value>
+  </data>
+  <data name="LockTags" xml:space="preserve">
+    <value>Lås Tagger</value>
+  </data>
+  <data name="Tags" xml:space="preserve">
+    <value>Tagger</value>
+  </data>
+  <data name="TheInputTextCanNotBeEmptyDot" xml:space="preserve">
+    <value>Input kan ikke være tom.</value>
+  </data>
+  <data name="AllowPersonModifications" xml:space="preserve">
+    <value>Kan endre og lagre</value>
+  </data>
+  <data name="TeamSchedule" xml:space="preserve">
+    <value>Team Skjema</value>
+  </data>
+  <data name="PersonFinderFieldBudgetGroup" xml:space="preserve">
+    <value>Busjett gruppe</value>
+  </data>
+  <data name="PersonFinderFieldContractSchedule" xml:space="preserve">
+    <value>Kontraktskjema</value>
+  </data>
+  <data name="PersonFinderFieldOrganization" xml:space="preserve">
+    <value>Organisasjon</value>
+  </data>
+  <data name="PersonFinderFieldPartTimePercentage" xml:space="preserve">
+    <value>Deltids prosent</value>
+  </data>
+  <data name="PersonFinderFieldShiftBag" xml:space="preserve">
+    <value>Skift Bag</value>
+  </data>
+  <data name="PersonFinderFieldSkill" xml:space="preserve">
+    <value>Ferdighet</value>
+  </data>
+  <data name="TogglePinStatus" xml:space="preserve">
+    <value>Fest til front</value>
+  </data>
+  <data name="ExtendingAndReducingTime" xml:space="preserve">
+    <value>Utvider og reduserer tid for fleksible agenter</value>
+  </data>
+  <data name="ExtendReduceTimeForFlexibleAgents" xml:space="preserve">
+    <value>Juster etter fleksibel arbeidstid</value>
+  </data>
+  <data name="MeetingActivityRequired" xml:space="preserve">
+    <value>Velg en aktivitet!</value>
+  </data>
+  <data name="NoShiftsFound" xml:space="preserve">
+    <value>Ingen skift funnet.</value>
+  </data>
+  <data name="FindThreeDots" xml:space="preserve">
+    <value>Finn...</value>
+  </data>
+  <data name="ErrorOccuredWhenSavingSettings" xml:space="preserve">
+    <value>En feil oppstod under lagring av innstillinger.</value>
+  </data>
+  <data name="HavePermissionToRestrictedScenariosButNotForSelectedTeams" xml:space="preserve">
+    <value>Du har generel tillatelse til å se begrensede scenarier, men ikke for valgte team og datoer.</value>
+  </data>
+  <data name="NoPermissionToViewRestrictedScenarios" xml:space="preserve">
+    <value>Du har ingen tillatelse til å se begrensede scenarier og alle scenarier er begrensede</value>
+  </data>
+  <data name="RunningBackgroundJob" xml:space="preserve">
+    <value>Kjører bakgrunns jobb...</value>
+  </data>
+  <data name="ResReportRequestsPerAgent" xml:space="preserve">
+    <value>Forespørsler per agent</value>
+  </data>
+  <data name="TargetValue" xml:space="preserve">
+    <value>Mål verdi</value>
+  </data>
+  <data name="Teleopti" xml:space="preserve">
+    <value>Teleopti</value>
+  </data>
+  <data name="DayOffTolerancePlus" xml:space="preserve">
+    <value>Fridager toleranse +</value>
+  </data>
+  <data name="DayOffTolerancMinus" xml:space="preserve">
+    <value>Fridager toleranse -</value>
+  </data>
+  <data name="ExtendingAndReducingDaysoff" xml:space="preserve">
+    <value>Utvider og reduserer fridager for fleksible agenter</value>
+  </data>
+  <data name="ExtendReduceDaysoffForFlexibleAgents" xml:space="preserve">
+    <value>Justert for fleksible fridager</value>
+  </data>
+  <data name="ThisIsTheDefaultScenario" xml:space="preserve">
+    <value>Dette er standard scenario</value>
+  </data>
+  <data name="MaximumIsParameterHoursDot" xml:space="preserve">
+    <value>Maximum er {0} timer.</value>
+  </data>
+  <data name="MinimumIsParameterHoursDot" xml:space="preserve">
+    <value>Minimum er {0} timer.</value>
+  </data>
+  <data name="RequestDenyReasonAlreadyAbsent" xml:space="preserve">
+    <value>Det er allerede fravær i skjemaet for angitte periode.</value>
+  </data>
+  <data name="CustomReports" xml:space="preserve">
+    <value>Egendefinerte rapporter</value>
+  </data>
+  <data name="TooManyAgentsIsUsedWarning" xml:space="preserve">
+    <value>Du bruker flere agenter ({0}) enn din lisens tillater ({1}). Du har nå {2} dager igjen til å reduserer antall agenter eller legge inn en lisens som dekker så mange agenter.</value>
+  </data>
+  <data name="BrowserDefault" xml:space="preserve">
+    <value>Standard nettleser</value>
+  </data>
+  <data name="PasswordOld" xml:space="preserve">
+    <value>Gammelt passord</value>
+  </data>
+  <data name="PasswordWrong" xml:space="preserve">
+    <value>Feil passord!</value>
+  </data>
+  <data name="Updated" xml:space="preserve">
+    <value>Oppdatert</value>
+  </data>
+  <data name="DateFormat" xml:space="preserve">
+    <value>Dato format</value>
+  </data>
+  <data name="Block" xml:space="preserve">
+    <value>Blokk</value>
+  </data>
+  <data name="ConsecutiveDaysOff" xml:space="preserve">
+    <value>Sammenhengende fridager</value>
+  </data>
+  <data name="ConsecutiveWorkDays" xml:space="preserve">
+    <value>Sammenhengende arbeidsdager</value>
+  </data>
+  <data name="DaysOffFromFlexibleWorkTime" xml:space="preserve">
+    <value>Fridager for fleksibel arbeidstid</value>
+  </data>
+  <data name="FulfillRestrictions" xml:space="preserve">
+    <value>Oppfyll Restriksjoner</value>
+  </data>
+  <data name="FullWeekEndDaysOff" xml:space="preserve">
+    <value>Fridager helg</value>
+  </data>
+  <data name="FullWeekEndsOff" xml:space="preserve">
+    <value>Hele helger fri</value>
+  </data>
+  <data name="KeepExistingDaysOff" xml:space="preserve">
+    <value>Behold eksisterende fridager</value>
+  </data>
+  <data name="KeepShiftCategories" xml:space="preserve">
+    <value>Behold skiftkategorier</value>
+  </data>
+  <data name="KeepShifts" xml:space="preserve">
+    <value>Behold skift</value>
+  </data>
+  <data name="KeepStartEndTimes" xml:space="preserve">
+    <value>Behold start og slutt tider</value>
+  </data>
+  <data name="OptimizationSteps" xml:space="preserve">
+    <value>Optimaliserings steg</value>
+  </data>
+  <data name="ShiftLimits" xml:space="preserve">
+    <value>Skift begrensninger</value>
+  </data>
+  <data name="ShiftSelection" xml:space="preserve">
+    <value>Skift utvalg</value>
+  </data>
+  <data name="ShiftsForFlexibleWorkTime" xml:space="preserve">
+    <value>Skift for fleksibel arbeidstid</value>
+  </data>
+  <data name="StudentAvailabilities" xml:space="preserve">
+    <value>Student tilgjengelighet</value>
+  </data>
+  <data name="Teams" xml:space="preserve">
+    <value>Team</value>
+  </data>
+  <data name="ActivityCanNotBeEmptyDot" xml:space="preserve">
+    <value>Aktivitet kan ikke være tom.</value>
+  </data>
+  <data name="NoTeamsAvailable" xml:space="preserve">
+    <value>Det er ingen team tilgjengelig</value>
+  </data>
+  <data name="FromRole" xml:space="preserve">
+    <value>Fra rolle</value>
+  </data>
+  <data name="FunctionsCap" xml:space="preserve">
+    <value>Funksjoner</value>
+  </data>
+  <data name="PermissionsViewer" xml:space="preserve">
+    <value>Oversikt Tillatelser</value>
+  </data>
+  <data name="Persons" xml:space="preserve">
+    <value>Personer</value>
+  </data>
+  <data name="ThePersonsRoles" xml:space="preserve">
+    <value>Personens roller</value>
+  </data>
+  <data name="CouldNotReachTeleoptiCustomerWebAtTheMoment" xml:space="preserve">
+    <value>Kunne ikke nå Teleopti kundeweb på dette tidspunkt!</value>
+  </data>
+  <data name="RequestHistory" xml:space="preserve">
+    <value>Forespørsel historikk</value>
+  </data>
+  <data name="ViewHistory" xml:space="preserve">
+    <value>Vis historikk</value>
+  </data>
+  <data name="ContractTimeAsc" xml:space="preserve">
+    <value>Kontrakttid stigende</value>
+  </data>
+  <data name="ContractTimeDesc" xml:space="preserve">
+    <value>Kontrakttid synkende</value>
+  </data>
+  <data name="RemoveWriteProtection" xml:space="preserve">
+    <value>Fjern skrivebeskyttelse</value>
+  </data>
+  <data name="IncludeTroubleshootingInformation" xml:space="preserve">
+    <value>Legg ved feilsøking informasjon</value>
+  </data>
+  <data name="NoOfAgentDaysCouldNotBeScheduled" xml:space="preserve">
+    <value>{0} agent dager kunne ikke planlegges.</value>
+  </data>
+  <data name="Import" xml:space="preserve">
+    <value>Importer</value>
+  </data>
+  <data name="ImportFileNameColon" xml:space="preserve">
+    <value>Importer fil navn:</value>
+  </data>
+  <data name="SkillNameColon" xml:space="preserve">
+    <value>Ferdighet navn:</value>
+  </data>
+  <data name="JobHistoryView" xml:space="preserve">
+    <value>Vis jobb historikk</value>
+  </data>
+  <data name="ExportToPDFShiftsPerDay" xml:space="preserve">
+    <value>Eksporter til PDF skift per dag</value>
+  </data>
+  <data name="ShowPublicNote" xml:space="preserve">
+    <value>Vis offentlig notat</value>
+  </data>
+  <data name="AvailabilityFulfillment" xml:space="preserve">
+    <value>Tilgjengelighets oppfyllelse</value>
+  </data>
+  <data name="NoAvailableShifts" xml:space="preserve">
+    <value>Ingen tilgjengelige skift</value>
+  </data>
+  <data name="ActualAfterCallWorkTime" xml:space="preserve">
+    <value>Faktisk oppfølgingstid</value>
+  </data>
+  <data name="PreferenceFulfillment" xml:space="preserve">
+    <value>Preferanse oppfyllelse</value>
+  </data>
+  <data name="AbsenceRequestForOneDayHasBeenApprovedDot" xml:space="preserve">
+    <value>Fraværsforespørselen {0} ble godkjent.</value>
+  </data>
+  <data name="RotationFulfillment" xml:space="preserve">
+    <value>Rotasjons oppfyllelse</value>
+  </data>
+  <data name="AbsenceRequestForOneDayHasBeenDeniedDot" xml:space="preserve">
+    <value>Fraværsforespørselen {0} ble avslått.</value>
+  </data>
+  <data name="StudentAvailabilityFulfillment" xml:space="preserve">
+    <value>Student tilgjengelighet oppfyllelse</value>
+  </data>
+  <data name="ANewShiftTradeForOneDayHasBeenCreatedDot" xml:space="preserve">
+    <value>Ny vaktbytte forespørsel {0}, godkjenn eller avslå i din forespørsels oversikt.</value>
+  </data>
+  <data name="ResourceCalculateEveryColon" xml:space="preserve">
+    <value>Ressurs kalkuler hver:</value>
+  </data>
+  <data name="ShiftTradeRequestForOneDayHasBeenAcceptedDot" xml:space="preserve">
+    <value>En vaktbytteforespørsel {0} ble godkjent av en annen person.</value>
+  </data>
+  <data name="ShiftTradeRequestForOneDayHasBeenApprovedDot" xml:space="preserve">
+    <value>En vaktbytteforespørsel {0} ble godkjent.</value>
+  </data>
+  <data name="ShiftTradeRequestForOneDayHasBeenDeniedDot" xml:space="preserve">
+    <value>En vaktbytteforespørsel {0} ble avslått</value>
+  </data>
+  <data name="ShiftTradeRequestForOneDayHasBeenReferredDot" xml:space="preserve">
+    <value>En vaktbytte forespørsel {0} må aksepteres igjen grunnet en skjemaendring.</value>
+  </data>
+  <data name="ExternalResourceInUse" xml:space="preserve">
+    <value>Ekstern ressurs benyttes</value>
+  </data>
+  <data name="ExternalResourceIsUsingByAnotherProgramCommaPleaseTryAgainLaterDot" xml:space="preserve">
+    <value>Ekstern ressurs benyttes av annet program, vennligst prøv igjen senere.</value>
+  </data>
+  <data name="ShowOnlyAvailableForShiftTrade" xml:space="preserve">
+    <value>Vis kun tilgjengelige for vaktbytte</value>
+  </data>
+  <data name="StartTimeShouldBeEarlierThanEndTimeDot" xml:space="preserve">
+    <value>Starttid {0} skal være tidligere enn sluttid {1}.</value>
+  </data>
+  <data name="DuplicateDaysOffValidationError" xml:space="preserve">
+    <value>Dublett fridager på {0}</value>
+  </data>
+  <data name="NoAbsenceDefined" xml:space="preserve">
+    <value>Du må lage minst en type fravær for å kunne utføre denne handlingen.</value>
+  </data>
+  <data name="NoAbsenceDefinedCaption" xml:space="preserve">
+    <value>Ingen fravær er definert</value>
+  </data>
+  <data name="TheIntervalLengthOfThisSubskillShouldBeTheSameAsItsParentSkillCommaWhichIsParameterMinutesDot" xml:space="preserve">
+    <value>Interval lengden til denne sub-ferdigheten skal være det samme som hoved-ferdigheten, som er {0} minutter.</value>
+  </data>
+  <data name="AbsenceType" xml:space="preserve">
+    <value>Fraværs type:</value>
+  </data>
+  <data name="AbsenceRequestsWeb" xml:space="preserve">
+    <value>Fraværs forespørsler</value>
+  </data>
+  <data name="FullDay" xml:space="preserve">
+    <value>Hel dag</value>
+  </data>
+  <data name="YouShouldHaveXDaysOff" xml:space="preserve">
+    <value>Du skal ha {0} fridager.</value>
+  </data>
+  <data name="Anywhere" xml:space="preserve">
+    <value>Hvor som helst</value>
+  </data>
+  <data name="YouShouldHaveBetweenXAndYDaysOff" xml:space="preserve">
+    <value>Du skal ha mellom {0} og {1} fridager.</value>
+  </data>
+  <data name="YourPreferencesCanResultXDaysOff" xml:space="preserve">
+    <value>Dine preferanser kan resultere i {0} fridager.</value>
+  </data>
+  <data name="YourPreferencesCanResultXHours" xml:space="preserve">
+    <value>Dine preferanser kan resultere i {0} timer.</value>
+  </data>
+  <data name="YourPreferencesCanResultXToYHours" xml:space="preserve">
+    <value>Dine preferanser kan resultere i {0} til {1} timer.</value>
+  </data>
+  <data name="YouShouldWorkXHours" xml:space="preserve">
+    <value>Du skal ha {0} arbeidstimer</value>
+  </data>
+  <data name="YouShouldWorkBetweenXAndYHours" xml:space="preserve">
+    <value>Du skal ha {0} til {1} arbeidstimer.</value>
+  </data>
+  <data name="MissingAbsenceType" xml:space="preserve">
+    <value>Mangler fraværstype.</value>
+  </data>
+  <data name="SubmitRequest" xml:space="preserve">
+    <value>Send</value>
+  </data>
+  <data name="OverridePeriod" xml:space="preserve">
+    <value>Overstyr tid i periode</value>
+  </data>
+  <data name="OverrideHoursPerDay" xml:space="preserve">
+    <value>Overstyr timer per dag</value>
+  </data>
+  <data name="OverrideDaysOff" xml:space="preserve">
+    <value>Overstyr fridager</value>
+  </data>
+  <data name="ManageRuleSets" xml:space="preserve">
+    <value>Administrer regel sett</value>
+  </data>
+  <data name="RequestCannotUpdateDelete" xml:space="preserve">
+    <value>Tilstanden til din forespørsel er endret, du kan ikke oppdatere/slette den.</value>
+  </data>
+  <data name="SkillTypeRetail" xml:space="preserve">
+    <value>Detaljhandel</value>
+  </data>
+  <data name="ActualEmployees" xml:space="preserve">
+    <value>Faktiske Ansatte</value>
+  </data>
+  <data name="ExportToFile" xml:space="preserve">
+    <value>Eksporter til fil</value>
+  </data>
+  <data name="FileExportDone" xml:space="preserve">
+    <value>Fil eksport er ferdig</value>
+  </data>
+  <data name="SelectDateAndScenario" xml:space="preserve">
+    <value>Velg en dato og et scenario</value>
+  </data>
+  <data name="SelectFileDestination" xml:space="preserve">
+    <value>Velg fil destinasjon</value>
+  </data>
+  <data name="SelectSkill" xml:space="preserve">
+    <value>Velg en ferdighet</value>
+  </data>
+  <data name="CSVFile" xml:space="preserve">
+    <value>CSV filer (*.csv)|*.csv</value>
+  </data>
+  <data name="AfterCustomerWorkTime" xml:space="preserve">
+    <value>Kunde oppfølgingstid</value>
+  </data>
+  <data name="AverageAfterCustomerWork" xml:space="preserve">
+    <value>Snitt Kunde oppfølging</value>
+  </data>
+  <data name="AverageCustomers" xml:space="preserve">
+    <value>Snitt kunder</value>
+  </data>
+  <data name="CalculatedCustomers" xml:space="preserve">
+    <value>Beregnede kunder</value>
+  </data>
+  <data name="CampaignCustomersPercent" xml:space="preserve">
+    <value>Kampanje kunder %</value>
+  </data>
+  <data name="SameEndTime" xml:space="preserve">
+    <value>Samme sluttid</value>
+  </data>
+  <data name="SameShiftCategory" xml:space="preserve">
+    <value>Samme skiftkategori</value>
+  </data>
+  <data name="SameStartTime" xml:space="preserve">
+    <value>Samme starttid</value>
+  </data>
+  <data name="UseRestriction" xml:space="preserve">
+    <value>Bruk Restriksjoner</value>
+  </data>
+  <data name="Customers" xml:space="preserve">
+    <value>Kunder</value>
+  </data>
+  <data name="DeviationCustomersColon" xml:space="preserve">
+    <value>Avvik Kunder:</value>
+  </data>
+  <data name="Employee" xml:space="preserve">
+    <value>Ansatt</value>
+  </data>
+  <data name="Employees" xml:space="preserve">
+    <value>Ansatte</value>
+  </data>
+  <data name="EmployeesInc" xml:space="preserve">
+    <value>Ansatte inc</value>
+  </data>
+  <data name="EmployeesIncWithShrinkage" xml:space="preserve">
+    <value>Ansatte inc med svinn</value>
+  </data>
+  <data name="EmployeesWithShrinkage" xml:space="preserve">
+    <value>Ansatte med svinn</value>
+  </data>
+  <data name="IndexAfterCustomerWork" xml:space="preserve">
+    <value>Indeks kunde oppfølging</value>
+  </data>
+  <data name="IndexCustomers" xml:space="preserve">
+    <value>Indeks Kunder</value>
+  </data>
+  <data name="MaximumEmployees" xml:space="preserve">
+    <value>Maximum ansatte</value>
+  </data>
+  <data name="MinimumEmployees" xml:space="preserve">
+    <value>Minimum ansatte</value>
+  </data>
+  <data name="OfferedCustomers" xml:space="preserve">
+    <value>Kunder</value>
+  </data>
+  <data name="OriginalAfterCustomerWork" xml:space="preserve">
+    <value>Opprinnelig Kunde oppfølging</value>
+  </data>
+  <data name="OriginalCustomers" xml:space="preserve">
+    <value>Opprinnelige Kunder</value>
+  </data>
+  <data name="OriginalOfferedCustomers" xml:space="preserve">
+    <value>Opprinnelige Kunder</value>
+  </data>
+  <data name="ScheduledEmployees" xml:space="preserve">
+    <value>Planlagte ansatte</value>
+  </data>
+  <data name="ScheduledEmployeesIncoming" xml:space="preserve">
+    <value>Planlagte ansatte innkommende</value>
+  </data>
+  <data name="ServedCustomers" xml:space="preserve">
+    <value>Betjente kunder</value>
+  </data>
+  <data name="TotalCustomers" xml:space="preserve">
+    <value>Kunder Totalt</value>
+  </data>
+  <data name="ValidatedAfterCustomerWork" xml:space="preserve">
+    <value>Validert kunde oppfølging</value>
+  </data>
+  <data name="ValidatedCustomers" xml:space="preserve">
+    <value>Validerte Kunder</value>
+  </data>
+  <data name="WalkAways" xml:space="preserve">
+    <value>Gå alltid</value>
+  </data>
+  <data name="YourPreferenceIsOutOfRange" xml:space="preserve">
+    <value>Din preferanse er utenfor referanse område</value>
+  </data>
+  <data name="FileExportFailed" xml:space="preserve">
+    <value>Fil eksport feilet</value>
+  </data>
+  <data name="FileExportFinished" xml:space="preserve">
+    <value>Fil eksport ferdig</value>
+  </data>
+  <data name="OptimizationOptionMessageBox" xml:space="preserve">
+    <value>Optimaliserings alternativer</value>
+  </data>
+  <data name="NoActivity" xml:space="preserve">
+    <value>Ingen aktivitet</value>
+  </data>
+  <data name="SelectAtleastOneOptimizationOption" xml:space="preserve">
+    <value>Vennligst velg minst en av alternativene "skift kategori", "starttid" eller "sluttid" i Team optimalisering.</value>
+  </data>
+  <data name="SchedulingOptionMessageBox" xml:space="preserve">
+    <value>Planleggings alternativer</value>
+  </data>
+  <data name="SelectAtleastOneSchedulingOption" xml:space="preserve">
+    <value>Vennligst velg minst en av alternativene "skift kategori", "starttid" eller "sluttid" i Team Planlegging</value>
+  </data>
+  <data name="ManageSmsSettings" xml:space="preserve">
+    <value>Administrer SMS innstillinger</value>
+  </data>
+  <data name="SetWhichColumnToGetSmsPhoneNumberFrom" xml:space="preserve">
+    <value>Sett hvilken kolonne telefon nummer til SMS skal hentes fra</value>
+  </data>
+  <data name="SmsSettings" xml:space="preserve">
+    <value>SMS innstillinger</value>
+  </data>
+  <data name="YourWorkingHoursHaveChanged" xml:space="preserve">
+    <value>Dine arbeidstimer er endret:</value>
+  </data>
+  <data name="GraphLOC" xml:space="preserve">
+    <value>Graf (loc)</value>
+  </data>
+  <data name="IntervalLOC" xml:space="preserve">
+    <value>Interval (loc)</value>
+  </data>
+  <data name="TableLOC" xml:space="preserve">
+    <value>Tabell (loc)</value>
+  </data>
+  <data name="TypeLOC" xml:space="preserve">
+    <value>Type (loc)</value>
+  </data>
+  <data name="InsufficientPermissionForWeb" xml:space="preserve">
+    <value>Du har ikke tillatelse til å få tilgang til web portalen.</value>
+  </data>
+  <data name="SchedulePeriodTypeChineseMonth" xml:space="preserve">
+    <value>Måned 7-8</value>
+  </data>
+  <data name="MobileReports" xml:space="preserve">
+    <value>Mobil rapporter</value>
+  </data>
+  <data name="PleaseChooseAReportType" xml:space="preserve">
+    <value>Vennligst velg en rapport type.</value>
+  </data>
+  <data name="SameDaysOff" xml:space="preserve">
+    <value>Samme fridager</value>
+  </data>
+  <data name="ResReportAdherencePerAgent" xml:space="preserve">
+    <value>Etterlevelse per Agent</value>
+  </data>
+  <data name="ResReportAdherencePerDay" xml:space="preserve">
+    <value>Etterlevelse per Dag</value>
+  </data>
+  <data name="PleaseChooseSkillSet" xml:space="preserve">
+    <value>Vennligst velg ferdighets sett.</value>
+  </data>
+  <data name="AfterCheckingAgainstActivities" xml:space="preserve">
+    <value>Etter avsjekk mot aktiviteter</value>
+  </data>
+  <data name="AddExtendedPreference" xml:space="preserve">
+    <value>Legg til utvidet preferanse</value>
+  </data>
+  <data name="AgentScheduleMessengerPermission" xml:space="preserve">
+    <value>Agent Planlegger Messenger</value>
+  </data>
+  <data name="DistributionBetweenSubskillsMustbeEqualToOneHundredPercent" xml:space="preserve">
+    <value>Distribusjon mellom sub-ferdigheter må være lik 100%</value>
+  </data>
+  <data name="MaximumAgentOccupancyMustBeLargerThanOrEqualToMinimumAgentOccupancy" xml:space="preserve">
+    <value>Maximum agent belegg må være større eller lik minimum agent belegg</value>
+  </data>
+  <data name="YourScheduleHasChanged" xml:space="preserve">
+    <value>Ditt skjema er endret!</value>
+  </data>
+  <data name="SelectedFileDestinationDoesNotExist" xml:space="preserve">
+    <value>Valgte fil destinasjon eksisterer ikke, vennligst angi gyldig filbane </value>
+  </data>
+  <data name="Allowance" xml:space="preserve">
+    <value>Kvote</value>
+  </data>
+  <data name="IncludedInRequestAllowance" xml:space="preserve">
+    <value>Inkluder i forespørsel kvote</value>
+  </data>
+  <data name="TotalAllowance" xml:space="preserve">
+    <value>Total kvote</value>
+  </data>
+  <data name="ViewAllowance" xml:space="preserve">
+    <value>Vis kvote</value>
+  </data>
+  <data name="RequestDenyReasonBudgetGroupAllowance" xml:space="preserve">
+    <value>Din fraværsforespørsel er avslått automatisk. Kvoten for dette fraværet er brukt opp.</value>
+  </data>
+  <data name="RequestAllowances" xml:space="preserve">
+    <value>Forespørsel kvote</value>
   </data>
 </root>
