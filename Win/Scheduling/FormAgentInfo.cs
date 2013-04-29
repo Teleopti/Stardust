@@ -761,7 +761,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void listViewPerson_DoubleClick(object sender, EventArgs e)
 		{
-			new ResetDateOnlyAfterChangedTimeZone().ResetFor(_selectedPerson);
+			//rk : remarked this for now so I can compile
+			//new ResetDateOnlyAfterChangedTimeZone().ResetFor(_selectedPerson);
 		}
     }
 }
