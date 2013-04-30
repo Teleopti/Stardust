@@ -38,9 +38,7 @@ INSERT INTO #PersonsUpdated (PersonId, BelongsToDate, InsertedOn)
 SELECT s.PersonId, s.BelongsToDate, s.InsertedOn
 FROM [ReadModel].[ScheduleDay] s
 INNER JOIN #persons p ON p.PersonId = s.PersonId
-WHERE InsertedOn > @lastTime -- well, in theori this could be a problem;
---If the ServiceBus manage to insert two changes within 3 ms, and the ETL gets in between and only spots the first one.
---Then we will miss the second update
+WHERE InsertedOn >= @lastTime -- >= (not > ) to be sure we do not miss any
 
 --return Persons
 SELECT PersonId AS Person, BelongsToDate AS [Date]
