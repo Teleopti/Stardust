@@ -67,4 +67,4 @@ Logs/WebApps.log.1
 *.feature.cs
 Teleopti.Ccc.Sdk/Teleopti.Ccc.Sdk.Host/Teleopti.Payroll/internal.storage.xml
 */Pester.*
-PowerShellTests.xml
+nunit*.xml
