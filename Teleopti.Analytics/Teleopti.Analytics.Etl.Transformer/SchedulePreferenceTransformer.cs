@@ -245,7 +245,11 @@ namespace Teleopti.Analytics.Etl.Transformer
 
             dataRow["must_have"] = preferenceRestriction.MustHave ? 1 : 0;
 
-            dataRow["absence_code"] = preferenceRestriction.Absence.Id;
+            if(preferenceRestriction.Absence != null)
+                dataRow["absence_code"] = preferenceRestriction.Absence.Id;
+            else
+                dataRow["absence_code"] = DBNull.Value;
+            
 
             RestrictionChecker restrictionChecker = new RestrictionChecker(schedulePart);
             PermissionState permissionState = restrictionChecker.CheckPreference();
