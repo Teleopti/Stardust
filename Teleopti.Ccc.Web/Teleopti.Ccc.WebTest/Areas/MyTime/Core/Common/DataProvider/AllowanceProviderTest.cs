@@ -49,8 +49,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 
 			foreach (var date in period.DayCollection())
 			{
-				var allowanceDay = result.Single(r => r.Date == date);
-				Assert.That(allowanceDay.Allowance,Is.EqualTo(TimeSpan.Zero));
+				var allowanceDay = result.Single(r => r.Item1 == date);
+				Assert.That(allowanceDay.Item2,Is.EqualTo(TimeSpan.Zero));
 			}
 		}
 
@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 
 			var target = new AllowanceProvider(budgetDayRepository, _loggedOnUser, _scenarioRepository, new ExtractBudgetGroupPeriods());
 			var result = target.GetAllowanceForPeriod(period);
-			result.First().Allowance.Should().Be.EqualTo(allowance);
+			result.First().Item2.Should().Be.EqualTo(allowance);
 		}
 
 		[Test]
@@ -117,8 +117,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 
 			budgetDayRepo.VerifyAllExpectations();
 
-			Assert.That(result.Single(d=>d.Date==day1).Allowance,Is.EqualTo(allowance1));
-			Assert.That(result.Single(d=>d.Date==day2).Allowance,Is.EqualTo(allowance2));
+			Assert.That(result.Single(d=>d.Item1==day1).Item2,Is.EqualTo(allowance1));
+			Assert.That(result.Single(d=>d.Item1==day2).Item2,Is.EqualTo(allowance2));
 		}
 
 		[Test]
@@ -163,9 +163,9 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			_user.WorkflowControlSet = workflowControlSet;
 		}
 
-		private bool allDaysHasZeroAllowance(IEnumerable<IAllowanceDay> allowanceDays)
+		private bool allDaysHasZeroAllowance(IEnumerable<Tuple<DateOnly, TimeSpan>> allowanceDays)
 		{
-			return allowanceDays.Sum(a => a.Allowance.TotalMinutes) == 0;
+			return allowanceDays.Sum(a => a.Item2.TotalMinutes) == 0;
 		}
 	}
 }

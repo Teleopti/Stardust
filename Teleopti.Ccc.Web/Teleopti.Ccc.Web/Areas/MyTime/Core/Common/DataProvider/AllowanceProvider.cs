@@ -22,13 +22,10 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			_extractBudgetGroupPeriods = extractBudgetGroupPeriods;
 		}
 
-		public IEnumerable<IAllowanceDay> GetAllowanceForPeriod(DateOnlyPeriod period)
+		public IEnumerable<Tuple<DateOnly, TimeSpan>> GetAllowanceForPeriod(DateOnlyPeriod period)
 		{
 			var person = _loggedOnUser.CurrentUser();
-			var allowanceList = period.DayCollection().Select(dateOnly => new AllowanceDay
-				                                                              {
-					                                                              Allowance = TimeSpan.Zero, Date = dateOnly
-				                                                              }).ToList();
+			var allowanceList = period.DayCollection().Select(dateOnly => new Tuple<DateOnly, TimeSpan>(dateOnly,TimeSpan.Zero)).ToList();
 
 			var budgetGroupPeriods = _extractBudgetGroupPeriods.BudgetGroupsForPeriod(person, period);
 			var defaultScenario = _scenarioRepository.LoadDefaultScenario();
@@ -54,10 +51,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 					{
 						if (!openPeriod.OpenForRequestsPeriod.Contains(budgetDay.Day)) continue;
 
-						var allowanceDay = allowanceList.FirstOrDefault(a => a.Date == budgetDay.Day);
+						var allowanceDay = allowanceList.FirstOrDefault(a => a.Item1 == budgetDay.Day);
 						if (allowanceDay != null)
 						{
-							allowanceDay.Allowance = TimeSpan.FromHours(budgetDay.Allowance * budgetDay.FulltimeEquivalentHours);
+							var index = allowanceList.IndexOf(allowanceDay); 
+							allowanceList.Insert(index,new Tuple<DateOnly, TimeSpan>(allowanceDay.Item1, TimeSpan.FromHours(budgetDay.Allowance * budgetDay.FulltimeEquivalentHours)));
+							allowanceList.Remove(allowanceDay);
+
 						}
 					}
 				}
@@ -65,11 +65,5 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 
 			return allowanceList;
 		}
-	}
-
-	public class AllowanceDay : IAllowanceDay
-	{
-		public DateTime Date { get; set; }
-		public TimeSpan Allowance { get; set; }
 	}
 }

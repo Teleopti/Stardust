@@ -7,10 +7,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 {
 	public class AllowanceRandomProvider : IAllowanceProvider
 	{
-		public IEnumerable<IAllowanceDay> GetAllowanceForPeriod(DateOnlyPeriod period)
+		IEnumerable<Tuple<DateOnly, TimeSpan>> IAllowanceProvider.GetAllowanceForPeriod(DateOnlyPeriod period)
 		{
 			var random = new Random();
-			return period.DayCollection().Select(day => new AllowanceDay() { Date = day, Allowance =TimeSpan.FromHours(random.Next(1, 100)) }).Cast<IAllowanceDay>().ToList();
+			return
+				period.DayCollection().Select(day => new Tuple<DateOnly, TimeSpan>(day, TimeSpan.FromHours(random.Next(1, 100))));
 		}
 
 	}
