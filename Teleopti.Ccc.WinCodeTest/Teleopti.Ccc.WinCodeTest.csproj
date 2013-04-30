@@ -528,6 +528,13 @@
     <Compile Include="Scheduler\AddOvertimeViewModelTest.cs" />
     <Compile Include="Scheduler\AddPersonalActivityViewModelTest.cs" />
     <Compile Include="Scheduler\AgentInfoHelperTest.cs" />
+    <Compile Include="Scheduler\AgentPreferenceAddCommandTest.cs" />
+    <Compile Include="Scheduler\AgentPreferenceCanCreateResultTest.cs" />
+    <Compile Include="Scheduler\AgentPreferenceDataTest.cs" />
+    <Compile Include="Scheduler\AgentPreferenceDayCreatorTest.cs" />
+    <Compile Include="Scheduler\AgentPreferenceEditCommandTest.cs" />
+    <Compile Include="Scheduler\AgentPreferencePresenterTest.cs" />
+    <Compile Include="Scheduler\AgentPreferenceRemoveCommandTest.cs" />
     <Compile Include="Scheduler\AgentRestrictions\AgentRestrictionsDetailEffectiveRestrictionExtractorTest.cs" />
     <Compile Include="Scheduler\AgentRestrictions\AgentRestrictionsDetailModelTest.cs" />
     <Compile Include="Scheduler\AgentRestrictions\AgentRestrictionsDetailPresenterTest.cs" />
@@ -538,6 +545,11 @@
     <Compile Include="Scheduler\AgentRestrictions\AgentRestrictionsPreferencePainterDeciderTest.cs" />
     <Compile Include="Scheduler\AgentRestrictions\AgentRestrictionsPresenterTest.cs" />
     <Compile Include="Scheduler\AgentRestrictions\AgentRestrictionsSchedulePainterDeciderTest.cs" />
+    <Compile Include="Scheduler\AgentStudentAvailabilityAddCommandTest.cs" />
+    <Compile Include="Scheduler\AgentStudentAvailabilityDayCreatorTest.cs" />
+    <Compile Include="Scheduler\AgentStudentAvailabilityEditCommandTest.cs" />
+    <Compile Include="Scheduler\AgentStudentAvailabilityPresenterTest.cs" />
+    <Compile Include="Scheduler\AgentStudentAvailabilityRemoveCommandTest.cs" />
     <Compile Include="Scheduler\AuditHistory\AuditHistoryModelTest.cs" />
     <Compile Include="Scheduler\AuditHistory\AuditHistoryPresenterTest.cs" />
     <Compile Include="Scheduler\AuditHistory\AuditHistoryScheduleDayCreatorTest.cs" />
