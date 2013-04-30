@@ -84,7 +84,11 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Jobs
 			Add(new FactRequestJobStep(jobParameters));
 			Add(new FactRequestedDaysJobStep(jobParameters));
 			Add(new PermissionReportJobStep(jobParameters,true));
-			
+
+			// If PM is installed then show ETL job step for synchronizing PM permissions
+			if (jobParameters.IsPmInstalled)
+				Add(new PmPermissionJobStep(jobParameters));
+
 			// WEB SERVICE TO ANALYZER
 			//Add(new PerformanceManagerPermissionJobStep(jobParameters));
 		}
