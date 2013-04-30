@@ -12,6 +12,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 	public interface IAllowanceDay
 	{
 		DateTime Date { get; set; }
-		double Allowance { get; set; }
+		TimeSpan Allowance { get; set; }
 	}
 }
