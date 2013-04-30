@@ -104,5 +104,13 @@ namespace MvcContrib.TestHelper.Fakes
                 return _httpMethod;
             }
         }
+		public override string UserHostAddress
+        {
+            get
+            {
+                return "172.168.1.1";
+            }
+        }
+		
     }
 }

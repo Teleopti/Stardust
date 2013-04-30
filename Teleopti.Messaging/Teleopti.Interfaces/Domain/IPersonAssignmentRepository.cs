@@ -40,21 +40,5 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         /// <param name="personAssignment">The agent assignment.</param>
         void RemoveMainShift(IPersonAssignment personAssignment);
-
-
-        /// <summary>
-        /// Finds all assignments for a person where there is a certain absence 
-        /// </summary>
-        /// <param name="period">The period.</param>
-        /// <param name="scenario">The scenario.</param>
-        /// <param name="person">The agent.</param>
-        /// <param name="absence">The search.</param>
-        /// <returns>
-        /// All underlying asignments 
-        /// </returns>
-        /// <remarks>
-        /// calculates the periods if there is any absence on that period, even if the highest in projection
-        /// </remarks>
-        IEnumerable<IPersonAssignment> Find(DateTimePeriod period, IScenario scenario, IPerson person, IAbsence absence);
     }
 }
