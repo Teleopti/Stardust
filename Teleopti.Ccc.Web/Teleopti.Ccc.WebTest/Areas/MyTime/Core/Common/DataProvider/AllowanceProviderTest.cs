@@ -8,6 +8,8 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
+using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Interfaces.Domain;
@@ -21,6 +23,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 		private IScenarioRepository _scenarioRepository;
 		private ILoggedOnUser _loggedOnUser;
 		private IPerson _user;
+		private WorkflowControlSet _workflowControlSet;
 
 		[SetUp]
 		public void Setup()
@@ -32,6 +35,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			_user = PersonFactory.CreatePerson("some person");
 			_loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			_loggedOnUser.Expect(l => l.CurrentUser()).Repeat.Any().Return(_user);
+			_workflowControlSet = new WorkflowControlSet("_workflowControlSet");
 		}
 
 		[Test]
@@ -56,6 +60,12 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 		[Test]
 		public void GetAllowanceForPeriod_WhenBudgetDayExistWitthinThePeriod_ShouldSetTheAllowanceInMinutesForThatDate()
 		{
+			_workflowControlSet.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenRollingPeriod()
+				{
+					Absence = AbsenceFactory.CreateAbsence("theAbsence"), 
+					OpenForRequestsPeriod = new DateOnlyPeriod(new DateOnly(1900, 1, 1), new DateOnly(2040, 1, 1))
+				});
+
 			var budgetDayRepository = MockRepository.GenerateMock<IBudgetDayRepository>();
 
 			var period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today);
@@ -72,6 +82,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			budgetDays.Add(budgetDay);
 
 			_user.AddPersonPeriod(personPeriod1);
+			_user.WorkflowControlSet = _workflowControlSet;
 			budgetDayRepository.Stub(x => x.Find(_scenario, budgetGroup, period)).Return(budgetDays);
 
 			var target = new AllowanceProvider(budgetDayRepository, _loggedOnUser, _scenarioRepository, new ExtractBudgetGroupPeriods());
@@ -83,6 +94,13 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 		public void
 		GetAllowanceForPeriod_WhenThereAreMultiplePersonPeriodWithDifferentBudgetGroupssWithinThatPeriod_ShouldUseAllBudgetGroupsToFindTheBudgetDays()
 		{
+			_workflowControlSet.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenRollingPeriod()
+			{
+				Absence = AbsenceFactory.CreateAbsence("theAbsence"),
+				OpenForRequestsPeriod = new DateOnlyPeriod(new DateOnly(1900, 1, 1), new DateOnly(2040, 1, 1))
+			});
+
+			_user.WorkflowControlSet = _workflowControlSet;
 			var period = new DateOnlyPeriod(new DateOnly(2001, 1, 1), new DateOnly(2001, 1, 10));
 			var budgetDayRepo = MockRepository.GenerateMock<IBudgetDayRepository>();
 			var extractBudgetGroupPeriods = MockRepository.GenerateMock<IExtractBudgetGroupPeriods>();

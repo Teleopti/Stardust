@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
@@ -33,16 +34,33 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			var budgetGroupPeriods = _extractBudgetGroupPeriods.BudgetGroupsForPeriod(person, period);
 			var defaultScenario = _scenarioRepository.LoadDefaultScenario();
 
+			ReadOnlyCollection<IAbsenceRequestOpenPeriod> openPeriods;
+
+			try
+ 			{
+				openPeriods = person.WorkflowControlSet.AbsenceRequestOpenPeriods;
+ 			}
+ 			catch (Exception)
+ 			{
+ 				return allowanceList;
+ 			}
+
 			foreach (var budgetGroupPeriod in budgetGroupPeriods)
 			{
 				var budgetDays = _budgetDayRepository.Find(defaultScenario, budgetGroupPeriod.Item2, budgetGroupPeriod.Item1);
 
+				if (person.WorkflowControlSet != null)
 				foreach (var budgetDay in budgetDays)
 				{
-					var allowanceDay = allowanceList.FirstOrDefault(a => a.Date == budgetDay.Day);
-					if (allowanceDay != null)
+					foreach (var openPeriod in openPeriods)
 					{
-						allowanceDay.Allowance = budgetDay.Allowance * budgetDay.FulltimeEquivalentHours * 60;
+						if (!openPeriod.OpenForRequestsPeriod.Contains(budgetDay.Day)) continue;
+
+						var allowanceDay = allowanceList.FirstOrDefault(a => a.Date == budgetDay.Day);
+						if (allowanceDay != null)
+						{
+							allowanceDay.Allowance = budgetDay.Allowance * budgetDay.FulltimeEquivalentHours * 60;
+						}
 					}
 				}
 			}
