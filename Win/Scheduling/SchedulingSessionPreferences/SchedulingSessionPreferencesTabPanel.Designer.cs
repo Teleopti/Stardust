@@ -59,7 +59,7 @@
             this.comboBoxGroupingFairness = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
             this.pnlBlockTeamScheduling = new System.Windows.Forms.Panel();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
-			this.checkBoxTeamBlockPerBlockScheduling = new System.Windows.Forms.CheckBox();
+            this.checkBoxTeamBlockPerBlockScheduling = new System.Windows.Forms.CheckBox();
             this.checkBoxUseGroupScheduling = new System.Windows.Forms.CheckBox();
             this.checkBoxCommonActivity = new System.Windows.Forms.CheckBox();
             this.comboBoxActivity = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
@@ -68,8 +68,8 @@
             this.checkBoxCommonCategory = new System.Windows.Forms.CheckBox();
             this.comboBoxGrouping = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
             this.comboBoxTeamBlockType = new Syncfusion.Windows.Forms.Tools.ComboBoxAdv();
-			this.checkBoxTeamBlockSameShiftCategory = new System.Windows.Forms.CheckBox();
-			this.checkBoxTeamBlockSameStartTime = new System.Windows.Forms.CheckBox();
+            this.checkBoxTeamBlockSameShiftCategory = new System.Windows.Forms.CheckBox();
+            this.checkBoxTeamBlockSameStartTime = new System.Windows.Forms.CheckBox();
             this.checkBoxLevellingSameShift = new System.Windows.Forms.CheckBox();
             this.tabPageAdvance = new System.Windows.Forms.TabPage();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();

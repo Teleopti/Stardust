@@ -19,13 +19,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			var workTimeLimitation = new WorkTimeLimitation();
 			IMainShift commonMainShift = null;
 			IShiftCategory shiftCategory = null;
-			if (schedulingOptions.UseTeamBlockSameStartTime)
+			if ((schedulingOptions.UseTeamBlockPerOption && schedulingOptions.UseTeamBlockSameStartTime)
+				|| (schedulingOptions.UseGroupScheduling && schedulingOptions.UseGroupSchedulingCommonStart))
 			{
 				var startTime = shift.WorkShiftStartTime;
 				startTimeLimitation = new StartTimeLimitation(startTime, startTime);
 			}
-				
-			if (schedulingOptions.UseTeamBlockSameEndTime)
+
+			if ((schedulingOptions.UseTeamBlockPerOption && schedulingOptions.UseTeamBlockSameEndTime)
+				|| (schedulingOptions.UseGroupScheduling && schedulingOptions.UseGroupSchedulingCommonEnd))
 			{
 				var endTime = shift.WorkShiftEndTime;
 				endTimeLimitation = new EndTimeLimitation(endTime, endTime);
@@ -36,7 +38,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				commonMainShift = shift.TheMainShift;
 			}
 
-			if (schedulingOptions.UseTeamBlockSameShiftCategory)
+			if ((schedulingOptions.UseTeamBlockPerOption && schedulingOptions.UseTeamBlockSameShiftCategory  ) || (schedulingOptions.UseGroupScheduling && schedulingOptions.UseGroupSchedulingCommonCategory))
 			{
 				shiftCategory = shift.TheWorkShift.ShiftCategory;
 			}

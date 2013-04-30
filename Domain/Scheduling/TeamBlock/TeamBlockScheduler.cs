@@ -73,8 +73,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	        var restriction = _restrictionAggregator.AggregatePerDay(dailyTeamBlockInfo, schedulingOptions,
 	                                                                 suggestedShiftProjectionCache);
 
-	        var shifts = _workShiftFilterService.Filter(day, dailyTeamBlockInfo, restriction,
-	                                                    schedulingOptions,
+	        var shifts = _workShiftFilterService.Filter(day, dailyTeamBlockInfo, restriction, suggestedShiftProjectionCache, schedulingOptions,
 	                                                    new WorkShiftFinderResult(dailyTeamBlockInfo.TeamInfo.GroupPerson, day));
 	        if (shifts == null || shifts.Count <= 0)
 	            return false;
