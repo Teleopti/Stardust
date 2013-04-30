@@ -10,6 +10,7 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Forecasting;
@@ -23,6 +24,7 @@ using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
+using Teleopti.Ccc.Infrastructure.Repositories.Audit;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -1649,6 +1651,15 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					new PersonRepository(UnitOfWork).FindAllSortByName());
 			Assert.AreEqual(testList[0], per1);
 			Assert.That(testList[0].OptionalColumnValueCollection.Count,Is.EqualTo(1));
+		}
+
+		[Test]
+		public void ShouldSaveLoginAttempt()
+		{
+			var rep = new PersonRepository(UnitOfWork);
+			var model = new LoginAttemptModel{ClientIp = "172.168.1.1",Provider = "Win", Client = "Web",Result = "Success",UserCredentials = "aa"};
+			var result = rep.SaveLoginAttempt(model);
+			Assert.That(result,Is.EqualTo(1));
 		}
 
 		private static void verifyPermissionInfoIsLazy(bool expected, IPerson userRetOk)

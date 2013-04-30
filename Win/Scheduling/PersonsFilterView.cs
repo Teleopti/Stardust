@@ -4,7 +4,6 @@ using System.Drawing;
 using System.Windows.Forms;
 using Autofac;
 using Teleopti.Ccc.Win.Common;
-using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Grouping;
 using Teleopti.Ccc.WinCode.Presentation;
 using Teleopti.Interfaces.Domain;

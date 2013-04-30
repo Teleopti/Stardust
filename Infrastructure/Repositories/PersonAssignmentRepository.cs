@@ -119,9 +119,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.Add(Restrictions.Lt("ass.Period.period.Minimum", period.EndDateTime));
         }
 
-
-        #region IPersonAssignmentRepository Members
-
         /// <summary>
         /// Removes the main shift from the data source.
         /// </summary>
@@ -135,24 +132,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				  Session.Lock(personAssignment, LockMode.None);
             Session.Delete(personAssignment.MainShift);
         }
-
-        public IEnumerable<IPersonAssignment> Find(DateTimePeriod period, IScenario scenario, IPerson person, IAbsence absence, IPersonAbsenceRepository repository)
-        {
-            IList<IPerson> persons = new List<IPerson> { person };
-            List<IPersonAssignment> ret = new List<IPersonAssignment>();
-            ICollection<DateTimePeriod> searchPeriods = repository.AffectedPeriods(person, scenario, period, absence);
-            foreach (var p in searchPeriods)
-            {
-                ret.AddRange(Find(persons, p, scenario));
-            }
-            return ret;
-        }
-        public IEnumerable<IPersonAssignment> Find(DateTimePeriod period, IScenario scenario, IPerson person, IAbsence absence)
-        {
-            return Find(period, scenario, person, absence, new PersonAbsenceRepository(UnitOfWork));
-        }
-
-        #endregion
 
         /// <summary>
         /// Loads the aggregate.
