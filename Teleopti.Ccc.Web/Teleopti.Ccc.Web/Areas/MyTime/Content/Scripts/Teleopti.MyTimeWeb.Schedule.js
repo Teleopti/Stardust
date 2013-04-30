@@ -180,6 +180,20 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		self.allowance = ko.observable(day.Allowance);
 		self.absenceAgents = ko.observable(day.AbsenceAgents);
 
+		self.basedOnAllowanceChance = function (options) {
+			var percent;
+			if (self.allowance() != 0)
+				percent = 100 * ((self.allowance() - self.absenceAgents()) / self.allowance());
+			else {
+				percent = 0;
+			}
+			
+			var index = 2;
+			if (percent < 30) index = 0;
+			else if (percent < 80) index = 1;
+			return options[index];
+		};
+		
 		self.holidayChance = ko.computed(function () {
 		    var percent;
 		    if (self.allowance() != 0)
@@ -191,15 +205,18 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		});
 
 		self.holidayChanceText = ko.computed(function () {
-			if (self.holidayChance() < 30) return parent.userTexts.chanceOfGettingAbsencerequestGranted + parent.userTexts.poor;
-			if (self.holidayChance() < 80) return parent.userTexts.chanceOfGettingAbsencerequestGranted + parent.userTexts.fair;
-			return parent.userTexts.chanceOfGettingAbsencerequestGranted + parent.userTexts.good;
+			return parent.userTexts.chanceOfGettingAbsencerequestGranted + self.basedOnAllowanceChance([parent.userTexts.poor, parent.userTexts.fair, parent.userTexts.good]);
+			//if (self.holidayChance() < 30) return parent.userTexts.chanceOfGettingAbsencerequestGranted + parent.userTexts.poor;
+			//if (self.holidayChance() < 80) return parent.userTexts.chanceOfGettingAbsencerequestGranted + parent.userTexts.fair;
+			//return parent.userTexts.chanceOfGettingAbsencerequestGranted + parent.userTexts.good;
 		});
 		
 		self.holidayChanceColor = ko.computed(function () {
-			if (self.holidayChance() < 30) return 'red';
-			if (self.holidayChance() < 80) return 'yellow';
-			return 'green';
+
+			return self.basedOnAllowanceChance(["red", "yellow", "green"]);
+			//if (self.holidayChance() < 30) return 'red';
+			//if (self.holidayChance() < 80) return 'yellow';
+			//return 'green';
 		});
 		
 		self.hasTextRequest = ko.computed(function () {
@@ -237,6 +254,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 	    self.absenceRequestPermission = ko.computed(function() {
 	        return parent.absenceRequestPermission();
 	    });
+
+	
 	};
 	var LayerViewModel = function (layer, parent) {
 		var self = this;
