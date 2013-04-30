@@ -41,8 +41,8 @@ namespace Teleopti.Ccc.DomainTest.Security.Authentication
             using(mocks.Record())
             {
                 Expect.Call(availableDataSourcesProvider.AvailableDataSources()).Return(new List<IDataSource> {dataSource});
-                Expect.Call(windowsUserProvider.DomainName).Return("toptinet");
-                Expect.Call(windowsUserProvider.UserName).Return("robink");
+                Expect.Call(windowsUserProvider.DomainName).Return("toptinet").Repeat.Twice();
+                Expect.Call(windowsUserProvider.UserName).Return("robink").Repeat.Twice();
                 Expect.Call(repositoryFactory.CreatePersonRepository(unitOfWork)).Return(personRepository);
                 Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
                 Expect.Call(dataSource.Application).Return(unitOfWorkFactory);

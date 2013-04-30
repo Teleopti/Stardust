@@ -4842,6 +4842,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 					GridHelper.GridlockWriteProtected(_grid, LockManager);
 					_grid.Refresh();
 				}
+				if (_requestView != null)
+					_requestView.FilterPersons(_schedulerState.FilteredPersonDictionary.Select(kvp => kvp.Key));
 				drawSkillGrid();
 			}
 		}
@@ -6204,21 +6206,18 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 		private void toolStripButtonRequestClick(object sender, EventArgs e)
 		{
-			var filterBox = new FilterBoxAdvanced();
-			filterBox.FilterClicked += filterbox_FilterClicked;
-			var button = sender as ToolStripButton;
-			if (button != null)
-				filterBox.Location = PointToScreen(new Point(button.Owner.Location.X, (button.Owner.Location.Y + (filterBox.Height / 2) + 16)));
+			_requestView.FilterGrid(toolStripTextBoxFilter.Text.Split(' ').ToList());
 
-			filterBox.ShowDialog(this);
-			filterBox.Dispose();
+			//var filterBox = new FilterBoxAdvanced();
+			//filterBox.FilterClicked += filterbox_FilterClicked;
+			//var button = sender as ToolStripButton;
+			//if (button != null)
+			//	filterBox.Location = PointToScreen(new Point(button.Owner.Location.X, (button.Owner.Location.Y + (filterBox.Height / 2) + 16)));
+
+			//filterBox.ShowDialog(this);
+			//filterBox.Dispose();
 		}
-
-		private void filterbox_FilterClicked(object sender, FilterBoxAdvancedEventArgs e)
-		{
-			_requestView.FilterGrid(e);
-		}
-
+		
 		private void toolStripButtonEditNote_Click(object sender, EventArgs e)
 		{
 			IList<PersonRequestViewModel> selectedRequestList = _requestView.SelectedAdapters();

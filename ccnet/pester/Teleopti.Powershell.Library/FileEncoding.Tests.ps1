@@ -120,12 +120,12 @@ Mock Get-FileEncoding {return "Unicode (UTF-8)"} -PrameterFilter {$Path -eq "A_F
 Describe "Investigate mock a cross describe" {
 Mock Get-Banan {return "gurka"}
 
-	It "I should get the mock if it's defined in the current <describe> block and I don't use Cleanup" {
+	It "I should get the mock if it's defined in the current describe block and I don't use Cleanup" {
 		$string = Get-Banan
 		$string | Should Be "gurka"
 	}
 
-	It "I should _not_ get the mock when defined in current <describe> block and I _do_ use Cleanup" {
+	It "I should _not_ get the mock when defined in current describe block and I _do_ use Cleanup" {
 		Cleanup
 		$string = Get-Banan
 		$string | Should Be "banan"

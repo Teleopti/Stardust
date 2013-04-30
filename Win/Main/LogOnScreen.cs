@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
+using System.Net;
+using System.Net.Sockets;
 using System.Threading;
 using System.Windows.Forms;
 using System.Xml.Linq;
@@ -274,7 +276,9 @@ namespace Teleopti.Ccc.Win.Main
 			if (!string.IsNullOrEmpty(logOnName))
 			{
 				string password = textBoxPassword.Text;
-				var authenticationResult = _choosenDataSource.LogOn(textBoxLogOnName.Text, password);
+				
+				var authenticationResult = _choosenDataSource.LogOn(textBoxLogOnName.Text, password, ipAdress());
+
 				if (authenticationResult.HasMessage)
 					MessageDialogs.ShowError(this, string.Concat(authenticationResult.Message, "  "), Resources.LogOn);
 				if (authenticationResult.Successful)
@@ -650,11 +654,24 @@ namespace Teleopti.Ccc.Win.Main
 
 			_logOnOff.LogOn(dataSourceContainer.DataSource, dataSourceContainer.User, businessUnit);
 
+			dataSourceContainer.SaveLogonAttempt(true, ipAdress());
+
 			StateHolderReader.Instance.StateReader.SessionScopeData.AuthenticationTypeOption = _authenticationType;
 
 			InitializeStuff();
 		}
 
+		private string ipAdress()
+		{
+			var ips = Dns.GetHostEntry(Dns.GetHostName());
+			var ip = "";
+			foreach (var adress in ips.AddressList)
+			{
+				if (adress.AddressFamily == AddressFamily.InterNetwork)
+					ip = adress.ToString();
+			}
+			return ip;
+		}
 		public void Warning(string warning)
 		{
 			ShowInTaskbar = true;
