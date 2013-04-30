@@ -267,6 +267,7 @@
     <Compile Include="Optimization\GroupShiftCategoryBackToLegalStateServiceBuilderTest.cs" />
     <Compile Include="Optimization\GroupShiftCategoryBackToLegalStateServiceTest.cs" />
     <Compile Include="Optimization\MainShiftOptimizeActivitySpecificationSetterTest.cs" />
+    <Compile Include="Optimization\MatrixShiftsNotAvailibleLockerTest.cs" />
     <Compile Include="Optimization\NightRestWhiteSpotSolverServiceTest.cs" />
     <Compile Include="Optimization\NightRestWhiteSpotSolverTest.cs" />
     <Compile Include="Optimization\OptimizationOverLimitByRestrictionDeciderCreatorTest.cs" />
