@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Configuration;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web;
 using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Ccc.Web.Core.Startup.Booter;
 using Teleopti.Interfaces.MessageBroker.Events;

@@ -1623,18 +1623,6 @@
     <Compile Include="Common\Controls\Columns\VisualizeGridColumn.cs" />
     <Compile Include="Common\Controls\Cells\DescriptionNameCellModel.cs" />
     <Compile Include="Common\Controls\Columns\DropDownTypeColumn.cs" />
-    <Compile Include="Common\Controls\FilterBoxItemAdvanced.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Common\Controls\FilterBoxItemAdvanced.Designer.cs">
-      <DependentUpon>FilterBoxItemAdvanced.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Common\Controls\FilterBoxAdvanced.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Common\Controls\FilterBoxAdvanced.Designer.cs">
-      <DependentUpon>FilterBoxAdvanced.cs</DependentUpon>
-    </Compile>
     <Compile Include="Common\Controls\DateSelection\DateNavigateControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -3294,14 +3282,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Common\Controls\ClipboardControl.resx">
       <DependentUpon>ClipboardControl.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Common\Controls\FilterBoxItemAdvanced.resx">
-      <DependentUpon>FilterBoxItemAdvanced.cs</DependentUpon>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Common\Controls\FilterBoxAdvanced.resx">
-      <DependentUpon>FilterBoxAdvanced.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Common\Controls\DateSelection\DateNavigateControl.resx">

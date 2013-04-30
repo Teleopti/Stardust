@@ -8,7 +8,6 @@ using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Budgeting;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.WorkflowControl;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
@@ -23,7 +22,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 		private IScenarioRepository _scenarioRepository;
 		private ILoggedOnUser _loggedOnUser;
 		private IPerson _user;
-		private WorkflowControlSet _workflowControlSet;
 
 		[SetUp]
 		public void Setup()
@@ -35,7 +33,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			_user = PersonFactory.CreatePerson("some person");
 			_loggedOnUser = MockRepository.GenerateMock<ILoggedOnUser>();
 			_loggedOnUser.Expect(l => l.CurrentUser()).Repeat.Any().Return(_user);
-			_workflowControlSet = new WorkflowControlSet("_workflowControlSet");
 		}
 
 		[Test]
@@ -50,22 +47,13 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			var target = new AllowanceProvider(budgetDayRepository, _loggedOnUser, _scenarioRepository, new ExtractBudgetGroupPeriods());
 			var result = target.GetAllowanceForPeriod(period).ToList();
 
-			foreach (var date in period.DayCollection())
-			{
-				var allowanceDay = result.Single(r => r.Date == date);
-				Assert.That(allowanceDay.Allowance,Is.EqualTo(0));
-			}
+			Assert.That(allDaysHasZeroAllowance(result));
 		}
 
 		[Test]
 		public void GetAllowanceForPeriod_WhenBudgetDayExistWitthinThePeriod_ShouldSetTheAllowanceInMinutesForThatDate()
 		{
-			_workflowControlSet.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenRollingPeriod()
-				{
-					Absence = AbsenceFactory.CreateAbsence("theAbsence"), 
-					OpenForRequestsPeriod = new DateOnlyPeriod(new DateOnly(1900, 1, 1), new DateOnly(2040, 1, 1))
-				});
-
+			addWorkFlowControlSetWithOpenAbsencePeriod();
 			var budgetDayRepository = MockRepository.GenerateMock<IBudgetDayRepository>();
 
 			var period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today);
@@ -82,25 +70,17 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			budgetDays.Add(budgetDay);
 
 			_user.AddPersonPeriod(personPeriod1);
-			_user.WorkflowControlSet = _workflowControlSet;
 			budgetDayRepository.Stub(x => x.Find(_scenario, budgetGroup, period)).Return(budgetDays);
 
 			var target = new AllowanceProvider(budgetDayRepository, _loggedOnUser, _scenarioRepository, new ExtractBudgetGroupPeriods());
 			var result = target.GetAllowanceForPeriod(period);
-			result.First().Allowance.Should().Be.EqualTo(allowance.TotalMinutes);
+			result.First().Item2.Should().Be.EqualTo(allowance);
 		}
 
 		[Test]
-		public void
-		GetAllowanceForPeriod_WhenThereAreMultiplePersonPeriodWithDifferentBudgetGroupssWithinThatPeriod_ShouldUseAllBudgetGroupsToFindTheBudgetDays()
+		public void GetAllowanceForPeriod_WhenThereAreMultiplePersonPeriodWithDifferentBudgetGroupssWithinThatPeriod_ShouldUseAllBudgetGroupsToFindTheBudgetDays()
 		{
-			_workflowControlSet.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenRollingPeriod()
-			{
-				Absence = AbsenceFactory.CreateAbsence("theAbsence"),
-				OpenForRequestsPeriod = new DateOnlyPeriod(new DateOnly(1900, 1, 1), new DateOnly(2040, 1, 1))
-			});
-
-			_user.WorkflowControlSet = _workflowControlSet;
+			addWorkFlowControlSetWithOpenAbsencePeriod();
 			var period = new DateOnlyPeriod(new DateOnly(2001, 1, 1), new DateOnly(2001, 1, 10));
 			var budgetDayRepo = MockRepository.GenerateMock<IBudgetDayRepository>();
 			var extractBudgetGroupPeriods = MockRepository.GenerateMock<IExtractBudgetGroupPeriods>();
@@ -133,18 +113,57 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 
 			budgetDayRepo.VerifyAllExpectations();
 
-			var stuff = result.FirstOrDefault(d => d.Date.Equals(day1));
-
-			//Assert.That(result.Where(d => d.Date == day1).Sum(d => d.Allowance), Is.EqualTo(allowance1.TotalMinutes));
-			//Assert.That(result.Where(d => d.Date == day2).Sum(d => d.Allowance), Is.EqualTo(allowance2.TotalMinutes));
-
-			Assert.That(result.Single(d=>d.Date==day1).Allowance,Is.EqualTo(allowance1.TotalMinutes));
-			Assert.That(result.Single(d=>d.Date==day2).Allowance,Is.EqualTo(allowance2.TotalMinutes));
+			Assert.That(result.Single(d=>d.Item1==day1).Item2,Is.EqualTo(allowance1));
+			Assert.That(result.Single(d=>d.Item1==day2).Item2,Is.EqualTo(allowance2));
 		}
 
+		[Test]
+		public void GetAllowanceForPeriod_WithoutOpenAbsenceRequestPeriods_ShouldSetAllowanceToZeroOnEverydayInThePeriod()
+		{
+			_user.WorkflowControlSet= new WorkflowControlSet("workflow controlset without open absenceperiod");
+			var period = new DateOnlyPeriod(new DateOnly(2001, 1, 1), new DateOnly(2001, 1, 10));
+			var budgetDayRepo = MockRepository.GenerateMock<IBudgetDayRepository>();
+
+			var target = new AllowanceProvider(budgetDayRepo, _loggedOnUser, _scenarioRepository, new ExtractBudgetGroupPeriods());
+
+			var result = target.GetAllowanceForPeriod(period);
+			Assert.That(allDaysHasZeroAllowance(result));
+		}
+
+		[Test]
+		public void GetAllowanceForPeriod_WhenNoWorkFlowControlSet_ShouldSetAllowanceToZeroOnEverydayInThePeriod()
+		{
+			var period = new DateOnlyPeriod(new DateOnly(2001, 1, 1), new DateOnly(2001, 1, 10));
+			var budgetDayRepo = MockRepository.GenerateMock<IBudgetDayRepository>();
+
+			var target = new AllowanceProvider(budgetDayRepo, _loggedOnUser, _scenarioRepository, new ExtractBudgetGroupPeriods());
+
+			var result = target.GetAllowanceForPeriod(period);
+			Assert.That(allDaysHasZeroAllowance(result));
+		}
+
+		#region helpers
 		private BudgetDay createBudgetDayWithAllowance(IBudgetGroup budgetGroup,DateOnly date, double hoursOfAllowance)
 		{
 			return new BudgetDay(budgetGroup, _scenario, date) {FulltimeEquivalentHours = 1, Allowance = hoursOfAllowance};
 		}	
+
+		private void addWorkFlowControlSetWithOpenAbsencePeriod()
+		{
+			var workflowControlSet = new WorkflowControlSet("_workflowControlSet");
+			workflowControlSet.AddOpenAbsenceRequestPeriod(new AbsenceRequestOpenRollingPeriod()
+			{
+				Absence = AbsenceFactory.CreateAbsence("theAbsence"),
+				OpenForRequestsPeriod = new DateOnlyPeriod(new DateOnly(1900, 1, 1), new DateOnly(2040, 1, 1))
+			});
+
+			_user.WorkflowControlSet = workflowControlSet;
+		}
+
+		private bool allDaysHasZeroAllowance(IEnumerable<Tuple<DateOnly, TimeSpan>> allowanceDays)
+		{
+			return allowanceDays.Sum(a => a.Item2.TotalMinutes) == 0;
+		}
+		#endregion
 	}
 }

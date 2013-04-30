@@ -6,12 +6,6 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 {
 	public interface IAllowanceProvider
 	{
-		IEnumerable<IAllowanceDay> GetAllowanceForPeriod(DateOnlyPeriod period);
-	}
-
-	public interface IAllowanceDay
-	{
-		DateTime Date { get; set; }
-		double Allowance { get; set; }
+		IEnumerable<Tuple<DateOnly,TimeSpan>> GetAllowanceForPeriod(DateOnlyPeriod period);
 	}
 }

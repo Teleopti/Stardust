@@ -222,19 +222,19 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 			projectionProvider.Stub(x => x.Projection(scheduleDay)).Return(projection);
 
 			userTimeZone.Stub(x => x.TimeZone()).Return(timeZone);
-
-			var allowanceDay1 = new AllowanceDay { Allowance = 4, Date = week.StartDate };
-			var allowanceDay2 = new AllowanceDay { Allowance = 4, Date = week.StartDate.AddDays(1) };
-			var allowanceDay3 = new AllowanceDay { Allowance = 4, Date = week.StartDate.AddDays(2) };
-			var allowanceDay4 = new AllowanceDay { Allowance = 4, Date = week.StartDate.AddDays(3) };
-			var allowanceDay5 = new AllowanceDay { Allowance = 4, Date = week.StartDate.AddDays(4) };
-			var allowanceDay6 = new AllowanceDay { Allowance = 4, Date = week.StartDate.AddDays(5) };
-			var allowanceDay7 = new AllowanceDay { Allowance = 5, Date = week.StartDate.AddDays(6) };
+			var allowance = TimeSpan.FromHours(4);
+			var allowanceDay1 = new Tuple<DateOnly,TimeSpan>(week.StartDate,allowance);
+			var allowanceDay2 = new Tuple<DateOnly,TimeSpan>(week.StartDate.AddDays(1),allowance);
+			var allowanceDay3 = new Tuple<DateOnly,TimeSpan>(week.StartDate.AddDays(2),allowance);
+			var allowanceDay4 = new Tuple<DateOnly,TimeSpan>(week.StartDate.AddDays(3),allowance);
+			var allowanceDay5 = new Tuple<DateOnly,TimeSpan>(week.StartDate.AddDays(4),allowance);
+			var allowanceDay6 = new Tuple<DateOnly,TimeSpan>(week.StartDate.AddDays(5),allowance);
+			var allowanceDay7 = new Tuple<DateOnly, TimeSpan>(week.StartDate.AddDays(6), allowance.Add(TimeSpan.FromHours(1)));
 
 			allowanceProvider.Stub(x => x.GetAllowanceForPeriod(week)).Return(new[] { allowanceDay1, allowanceDay2, allowanceDay3, allowanceDay4, allowanceDay5, allowanceDay6, allowanceDay7 });
 
 			var result = Mapper.Map<DateOnly, WeekScheduleDomainData>(date);
-			result.Days.Single(d => d.Date == lastDayOfWeek).Allowance.Should().Be.EqualTo(allowanceDay7.Allowance);
+			result.Days.Single(d => d.Date == lastDayOfWeek).Allowance.Should().Be.EqualTo(allowanceDay7.Item2.TotalMinutes);
 		}
 
 		[Test]

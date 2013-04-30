@@ -1,11 +1,13 @@
 ﻿using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services;
+using Teleopti.Ccc.Web.Areas.Start.Models.Authentication;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 
@@ -20,6 +22,7 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 		private IAuthenticator target;
 		private IWindowsAccountProvider windowsAccountProvider;
 		private IFindApplicationUser findApplicationUser;
+		private IIpAddressResolver ipFinder;
 		const string dataSourceName = "Gurkmajonääääs";
 
 		[SetUp]
@@ -30,11 +33,11 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 			repositoryFactory = mocks.DynamicMock<IRepositoryFactory>();
 			windowsAccountProvider = mocks.DynamicMock<IWindowsAccountProvider>();
 			findApplicationUser = mocks.DynamicMock<IFindApplicationUser>();
-
-			target = new Authenticator(dataSourcesProvider, windowsAccountProvider, repositoryFactory, findApplicationUser);
+			ipFinder = mocks.DynamicMock<IIpAddressResolver>();
+			target = new Authenticator(dataSourcesProvider, windowsAccountProvider, repositoryFactory, findApplicationUser, ipFinder);
 		}
 
-
+		
 		[Test]
 		public void AuthenticateWindowsUserShouldReturnSuccessfulAuthenticationResult()
 		{
@@ -98,5 +101,34 @@ namespace Teleopti.Ccc.WebTest.Core.Authentication.Services
 				result.Successful = domainAuthResult.Successful;
 			}
 		}
+
+		[Test]
+		public void ShouldSaveAuthenticateResult()
+		{
+			var dataSource = mocks.DynamicMock<IDataSource>();
+			var unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
+			var personRep = mocks.DynamicMock<IPersonRepository>();
+			var uow = mocks.DynamicMock<IUnitOfWork>();
+			var result = new AuthenticateResult { Successful = false,DataSource = dataSource};
+
+			var model = new LoginAttemptModel
+				{
+					ClientIp ="",
+					Provider = "Application",
+					UserCredentials = "hej",
+					Result = "LogonSuccess"
+				};
+			
+			Expect.Call(dataSource.Application).Return(unitOfWorkFactory);
+			Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow);
+			Expect.Call(ipFinder.GetIpAddress()).IgnoreArguments().Return("");
+			Expect.Call(repositoryFactory.CreatePersonRepository(uow)).Return(personRep);
+			Expect.Call(personRep.SaveLoginAttempt(model)).IgnoreArguments().Return(1);
+			mocks.ReplayAll();
+			target.SaveAuthenticateResult("hej", result);
+			mocks.VerifyAll();
+		}
+
+		
 	}
 }

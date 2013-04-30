@@ -60,7 +60,9 @@ namespace Teleopti.Ccc.WebTest.Areas.Start.Controllers
 		{
 			var target = new ApplicationAuthenticationApiController(null, null, null, null);
 			var authenticationModel = MockRepository.GenerateMock<IAuthenticationModel>();
-			authenticationModel.Stub(x => x.AuthenticateUser()).Return(new AuthenticateResult { Successful = true });
+			var result = new AuthenticateResult {Successful = true}; 
+			authenticationModel.Stub(x => x.AuthenticateUser()).Return(result);
+			authenticationModel.Stub(x => x.SaveAuthenticateResult(result));
 
 			target.CheckPassword(authenticationModel);
 

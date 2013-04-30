@@ -180,6 +180,7 @@
     <Compile Include="Areas\Start\Controllers\AuthenticationControllerTest.cs" />
     <Compile Include="Areas\Start\Controllers\WindowsAuthenticationModelTest.cs" />
     <Compile Include="Areas\Start\Core\Authentication\ViewModelFactory\DataSourcesViewModelFactoryTest.cs" />
+    <Compile Include="Areas\Start\Core\IpAddressResolverTest.cs" />
     <Compile Include="Core\Asm\ViewModelFactory\AsmViewModelFactoryTest.cs" />
     <Compile Include="Core\Asm\Mapping\AsmViewModelMapperTest.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\AllowanceProviderTest.cs" />

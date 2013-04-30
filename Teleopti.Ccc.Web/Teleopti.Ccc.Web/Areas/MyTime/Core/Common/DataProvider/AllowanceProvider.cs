@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 
@@ -11,7 +10,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 	public class AllowanceProvider : IAllowanceProvider
 	{
 		private readonly ILoggedOnUser _loggedOnUser;
-		public readonly IBudgetDayRepository _budgetDayRepository;
+		private readonly IBudgetDayRepository _budgetDayRepository;
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IExtractBudgetGroupPeriods _extractBudgetGroupPeriods;
 
@@ -23,27 +22,23 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			_extractBudgetGroupPeriods = extractBudgetGroupPeriods;
 		}
 
-		public IEnumerable<IAllowanceDay> GetAllowanceForPeriod(DateOnlyPeriod period)
+		public IEnumerable<Tuple<DateOnly, TimeSpan>> GetAllowanceForPeriod(DateOnlyPeriod period)
 		{
 			var person = _loggedOnUser.CurrentUser();
-			var allowanceList = period.DayCollection().Select(dateOnly => new AllowanceDay
-				                                                              {
-					                                                              Allowance = 0d, Date = dateOnly
-				                                                              }).ToList();
+			var allowanceList = period.DayCollection().Select(dateOnly => new Tuple<DateOnly, TimeSpan>(dateOnly,TimeSpan.Zero)).ToList();
 
 			var budgetGroupPeriods = _extractBudgetGroupPeriods.BudgetGroupsForPeriod(person, period);
 			var defaultScenario = _scenarioRepository.LoadDefaultScenario();
 
 			ReadOnlyCollection<IAbsenceRequestOpenPeriod> openPeriods;
-
-			try
- 			{
+			if (person.WorkflowControlSet != null && person.WorkflowControlSet.AbsenceRequestOpenPeriods != null)
+			{
 				openPeriods = person.WorkflowControlSet.AbsenceRequestOpenPeriods;
- 			}
- 			catch (Exception)
- 			{
- 				return allowanceList;
- 			}
+			}
+			else
+			{
+				return allowanceList;
+			}
 
 			foreach (var budgetGroupPeriod in budgetGroupPeriods)
 			{
@@ -56,10 +51,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 					{
 						if (!openPeriod.OpenForRequestsPeriod.Contains(budgetDay.Day)) continue;
 
-						var allowanceDay = allowanceList.FirstOrDefault(a => a.Date == budgetDay.Day);
+						var allowanceDay = allowanceList.FirstOrDefault(a => a.Item1 == budgetDay.Day);
 						if (allowanceDay != null)
 						{
-							allowanceDay.Allowance = budgetDay.Allowance * budgetDay.FulltimeEquivalentHours * 60;
+							var index = allowanceList.IndexOf(allowanceDay); 
+							allowanceList.Insert(index,new Tuple<DateOnly, TimeSpan>(allowanceDay.Item1, TimeSpan.FromHours(budgetDay.Allowance * budgetDay.FulltimeEquivalentHours)));
+							allowanceList.Remove(allowanceDay);
+
 						}
 					}
 				}
@@ -67,11 +65,5 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 
 			return allowanceList;
 		}
-	}
-
-	public class AllowanceDay : IAllowanceDay
-	{
-		public DateTime Date { get; set; }
-		public double Allowance { get; set; }
 	}
 }
