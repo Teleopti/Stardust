@@ -110,9 +110,11 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
 			var step = new FactSchedulePreferenceJobStep(jobParameters, true);
 
 			var bu = _mock.DynamicMock<IBusinessUnit>();
-			Expect.Call(raptorRepository.FillIntradayScheduleDayCountDataMart(bu, scenario)).Return(5);
+			Expect.Call(raptorRepository.FillIntradayFactSchedulePreferenceMart(bu, scenario)).Return(5).IgnoreArguments();
+			Expect.Call(() => commonStateHolder.UpdateThisTime("Schedules", bu)).IgnoreArguments();
 			_mock.ReplayAll();
 			step.Run(new List<IJobStep>(), bu, null, true);
+			_mock.VerifyAll();
 		}
 	}
 }

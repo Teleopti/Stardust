@@ -9,8 +9,8 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
     public class FactScheduleDayCountJobStep : JobStepBase
     {
 	    private readonly bool _isIntraday;
-	    public FactScheduleDayCountJobStep(IJobParameters jobParameters):this(jobParameters,false){}
-		public FactScheduleDayCountJobStep(IJobParameters jobParameters, bool isIntraday)
+
+	    public FactScheduleDayCountJobStep(IJobParameters jobParameters, bool isIntraday = false)
             : base(jobParameters)
         {
 			_isIntraday = isIntraday;
