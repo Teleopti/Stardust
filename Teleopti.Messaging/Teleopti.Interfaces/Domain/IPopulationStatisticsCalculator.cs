@@ -69,7 +69,9 @@ namespace Teleopti.Interfaces.Domain
         /// </value>
         bool IgnoreNonNumberValues { get; }
 
-
+		/// <summary>
+		/// Gets the teleopti.
+		/// </summary>
 	    double Teleopti { get; }
     }
 }
