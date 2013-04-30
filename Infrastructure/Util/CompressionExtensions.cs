@@ -10,7 +10,7 @@ namespace Teleopti.Ccc.Infrastructure.Util
         /// <summary>
         /// Returns the byte array of a compressed string
         /// </summary>
-        public static byte[] ToCompressedByteArray(this string source)
+        private static byte[] toCompressedByteArray(this string source)
         {
             // convert the source string into a memory stream
             using (
@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.Infrastructure.Util
         /// </summary>
         public static string ToCompressedBase64String(this string source)
         {
-            return Convert.ToBase64String(source.ToCompressedByteArray());
+            return Convert.ToBase64String(source.toCompressedByteArray());
         }
 
         /// <summary>
