@@ -75,9 +75,9 @@ CREATE TABLE #RESULT(person_code uniqueidentifier,
 					preference_id int,
 					preference_name nvarchar(100),
 					preferences_requested int,
-					preferences_accepted int,
-					share_accepted decimal(18,3),
-					preferences_declined int,
+					preferences_fulfilled int,
+					fulfillment decimal(18,3),
+					preferences_unfulfilled int,
 					hide_time_zone bit, 
 					must_haves int)
 					
@@ -85,17 +85,17 @@ CREATE TABLE #RESULT(person_code uniqueidentifier,
 ------------------
 --Shift Category
 ------------------
-INSERT #result(person_code,person_name,preference_type_id,preference_type_name,preference_id,preference_name,preferences_requested,preferences_accepted,share_accepted,preferences_declined,hide_time_zone, must_haves)
+INSERT #result(person_code,person_name,preference_type_id,preference_type_name,preference_id,preference_name,preferences_requested,preferences_fulfilled,fulfillment,preferences_unfulfilled,hide_time_zone, must_haves)
 SELECT	p.person_code,
 		p.person_name,
 		f.preference_type_id, 
 		ISNULL(term_language, dpt.preference_type_name), 
 		sc.shift_category_id, 
 		sc.shift_category_name,
-		sum(preferences_requested_count), 
-		sum(preferences_accepted_count),
-		sum(preferences_accepted_count)/convert(decimal(18,3),sum(preferences_requested_count)),
-		sum(preferences_declined_count), 
+		sum(preferences_requested), 
+		sum(preferences_fulfilled),
+		sum(preferences_fulfilled)/convert(decimal(18,3),sum(preferences_requested)),
+		sum(preferences_unfulfilled), 
 		@hide_time_zone,
 		sum(must_haves)
 FROM mart.fact_schedule_preference f
@@ -127,17 +127,17 @@ GROUP BY 	p.person_code,p.person_name,f.preference_type_id,ISNULL(term_language,
 --------------
 --Day Off
 --------------
-INSERT #result(person_code,person_name,preference_type_id,preference_type_name,preference_id,preference_name,preferences_requested,preferences_accepted,share_accepted,preferences_declined,hide_time_zone,must_haves)
+INSERT #result(person_code,person_name,preference_type_id,preference_type_name,preference_id,preference_name,preferences_requested,preferences_fulfilled,fulfillment,preferences_unfulfilled,hide_time_zone,must_haves)
 SELECT	p.person_code,
 		p.person_name,
 		f.preference_type_id,
 		ISNULL(term_language, dpt.preference_type_name),  
 		ddo.day_off_id,
 		ddo.day_off_name,
-		sum(preferences_requested_count), 
-		sum(preferences_accepted_count),
-		sum(preferences_accepted_count)/convert(decimal(18,3),sum(preferences_requested_count)),
-		sum(preferences_declined_count), 
+		sum(preferences_requested), 
+		sum(preferences_fulfilled),
+		sum(preferences_fulfilled)/convert(decimal(18,3),sum(preferences_requested)),
+		sum(preferences_unfulfilled), 
 		@hide_time_zone,
 		sum(must_haves)
 FROM mart.fact_schedule_preference f
@@ -169,17 +169,17 @@ GROUP BY p.person_code,p.person_name,f.preference_type_id,ISNULL(term_language, 
 --------------
 --Absence
 --------------
-INSERT #result(person_code,person_name,preference_type_id,preference_type_name,preference_id,preference_name,preferences_requested,preferences_accepted,share_accepted,preferences_declined,hide_time_zone,must_haves)
+INSERT #result(person_code,person_name,preference_type_id,preference_type_name,preference_id,preference_name,preferences_requested,preferences_fulfilled,fulfillment,preferences_unfulfilled,hide_time_zone,must_haves)
 SELECT	p.person_code,
 		p.person_name,
 		f.preference_type_id,
 		ISNULL(term_language, dpt.preference_type_name),  
 		ab.absence_id,
 		ab.absence_name,
-		sum(preferences_requested_count), 
-		sum(preferences_accepted_count),
-		sum(preferences_accepted_count)/convert(decimal(18,3),sum(preferences_requested_count)),
-		sum(preferences_declined_count), 
+		sum(preferences_requested), 
+		sum(preferences_fulfilled),
+		sum(preferences_fulfilled)/convert(decimal(18,3),sum(preferences_requested)),
+		sum(preferences_unfulfilled), 
 		@hide_time_zone,
 		sum(must_haves)
 FROM mart.fact_schedule_preference f
@@ -211,17 +211,17 @@ GROUP BY p.person_code,p.person_name,f.preference_type_id,ISNULL(term_language, 
 --------------
 --Extended Prefs
 --------------
-INSERT #result(person_code,person_name,preference_type_id,preference_type_name,preference_id,preference_name,preferences_requested,preferences_accepted,share_accepted,preferences_declined,hide_time_zone, must_haves)
+INSERT #result(person_code,person_name,preference_type_id,preference_type_name,preference_id,preference_name,preferences_requested,preferences_fulfilled,fulfillment,preferences_unfulfilled,hide_time_zone, must_haves)
 SELECT	p.person_code,
 		p.person_name,
 		f.preference_type_id,
 		ISNULL(term_language, dpt.preference_type_name), 
 		-1, 
 		ISNULL(term_language, dpt.preference_type_name),
-		sum(preferences_requested_count), 
-		sum(preferences_accepted_count),
-		sum(preferences_accepted_count)/convert(decimal(18,3),sum(preferences_requested_count)),
-		sum(preferences_declined_count), 
+		sum(preferences_requested), 
+		sum(preferences_fulfilled),
+		sum(preferences_fulfilled)/convert(decimal(18,3),sum(preferences_requested)),
+		sum(preferences_unfulfilled), 
 		@hide_time_zone,
 		sum(must_haves)
 FROM mart.fact_schedule_preference f

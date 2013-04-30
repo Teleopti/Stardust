@@ -296,3 +296,21 @@ GO
 INSERT mart.dim_preference_type(preference_type_id, preference_type_name, resource_key)
 SELECT 4,'Absence','ResAbsence'
 GO
+
+----------------  
+--Name: Karin
+--Date: 2013-04-29
+--Desc: Rename columns in preference table
+----------------
+
+EXEC sp_RENAME 'mart.fact_schedule_preference.preferences_accepted_count' , 'preferences_fulfilled', 'COLUMN'
+GO
+EXEC sp_RENAME 'mart.fact_schedule_preference.preferences_declined_count' , 'preferences_unfulfilled', 'COLUMN'
+GO
+EXEC sp_RENAME 'mart.fact_schedule_preference.preferences_requested_count' , 'preferences_requested', 'COLUMN'
+GO
+EXEC sp_RENAME 'stage.stg_schedule_preference.preference_accepted' , 'preference_fulfilled', 'COLUMN'
+GO
+EXEC sp_RENAME 'stage.stg_schedule_preference.preference_declined' , 'preference_unfulfilled', 'COLUMN'
+GO
+

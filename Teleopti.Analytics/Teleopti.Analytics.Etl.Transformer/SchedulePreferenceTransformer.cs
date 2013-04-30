@@ -258,13 +258,13 @@ namespace Teleopti.Analytics.Etl.Transformer
             PermissionState permissionState = restrictionChecker.CheckPreference();
             if (permissionState == PermissionState.Satisfied)
             {
-                dataRow["preference_accepted"] = 1;
-                dataRow["preference_declined"] = 0;
+                dataRow["preference_fulfilled"] = 1;
+                dataRow["preference_unfulfilled"] = 0;
             }
             else
             {
-                dataRow["preference_accepted"] = 0;
-                dataRow["preference_declined"] = 1;
+                dataRow["preference_fulfilled"] = 0;
+                dataRow["preference_unfulfilled"] = 1;
             }
 
             dataRow["business_unit_code"] = schedulePart.Scenario.BusinessUnit.Id;

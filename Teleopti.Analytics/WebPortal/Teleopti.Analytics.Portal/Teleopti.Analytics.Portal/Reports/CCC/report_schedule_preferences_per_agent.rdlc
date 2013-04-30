@@ -1000,7 +1000,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=sum(Fields!preferences_accepted.Value)</Value>
+                              <Value>=sum(Fields!preferences_fulfilled.Value)</Value>
                               <Style>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
@@ -1037,7 +1037,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Sum(Fields!preferences_declined.Value)</Value>
+                              <Value>=Sum(Fields!preferences_unfulfilled.Value)</Value>
                               <Style>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
@@ -1076,7 +1076,7 @@
                             <TextRun>
                               <Value>=FormatPercent(
 iif(sum(Fields!preferences_requested.Value)&gt;0,
-sum(Fields!preferences_accepted.Value)/sum(Fields!preferences_requested.Value),0)
+sum(Fields!preferences_fulfilled.Value)/sum(Fields!preferences_requested.Value),0)
 ,1)</Value>
                               <Style>
                                 <FontWeight>Bold</FontWeight>
@@ -1212,7 +1212,7 @@ sum(Fields!preferences_accepted.Value)/sum(Fields!preferences_requested.Value),0
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=sum(Fields!preferences_accepted.Value)</Value>
+                              <Value>=sum(Fields!preferences_fulfilled.Value)</Value>
                               <Style>
                                 <Color>DimGray</Color>
                               </Style>
@@ -1243,7 +1243,7 @@ sum(Fields!preferences_accepted.Value)/sum(Fields!preferences_requested.Value),0
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Sum(Fields!preferences_declined.Value)</Value>
+                              <Value>=Sum(Fields!preferences_unfulfilled.Value)</Value>
                               <Style>
                                 <Color>DimGray</Color>
                               </Style>
@@ -1276,7 +1276,7 @@ sum(Fields!preferences_accepted.Value)/sum(Fields!preferences_requested.Value),0
                             <TextRun>
                               <Value>=FormatPercent(
 iif(sum(Fields!preferences_requested.Value)&gt;0,
-sum(Fields!preferences_accepted.Value)/sum(Fields!preferences_requested.Value),0)
+sum(Fields!preferences_fulfilled.Value)/sum(Fields!preferences_requested.Value),0)
 ,1)</Value>
                               <Style>
                                 <Color>DimGray</Color>
@@ -1401,7 +1401,7 @@ sum(Fields!preferences_accepted.Value)/sum(Fields!preferences_requested.Value),0
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!preferences_accepted.Value</Value>
+                              <Value>=Fields!preferences_fulfilled.Value</Value>
                               <Style>
                                 <Color>DimGray</Color>
                               </Style>
@@ -1432,7 +1432,7 @@ sum(Fields!preferences_accepted.Value)/sum(Fields!preferences_requested.Value),0
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!preferences_declined.Value</Value>
+                              <Value>=Fields!preferences_unfulfilled.Value</Value>
                               <Style>
                                 <Color>DimGray</Color>
                               </Style>
@@ -1462,7 +1462,7 @@ sum(Fields!preferences_accepted.Value)/sum(Fields!preferences_requested.Value),0
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatPercent(Fields!share_accepted.Value,1)</Value>
+                              <Value>=FormatPercent(Fields!fulfillment.Value,1)</Value>
                               <Style>
                                 <Color>DimGray</Color>
                               </Style>
@@ -1618,7 +1618,7 @@ sum(Fields!preferences_accepted.Value)/sum(Fields!preferences_requested.Value),0
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=sum(Fields!preferences_accepted.Value)</Value>
+                              <Value>=sum(Fields!preferences_fulfilled.Value)</Value>
                               <Style>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
@@ -1655,7 +1655,7 @@ sum(Fields!preferences_accepted.Value)/sum(Fields!preferences_requested.Value),0
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Sum(Fields!preferences_declined.Value)</Value>
+                              <Value>=Sum(Fields!preferences_unfulfilled.Value)</Value>
                               <Style>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
@@ -1694,7 +1694,7 @@ sum(Fields!preferences_accepted.Value)/sum(Fields!preferences_requested.Value),0
                             <TextRun>
                               <Value>=FormatPercent(
 iif(sum(Fields!preferences_requested.Value)&gt;0,
-sum(Fields!preferences_accepted.Value)/sum(Fields!preferences_requested.Value),0)
+sum(Fields!preferences_fulfilled.Value)/sum(Fields!preferences_requested.Value),0)
 ,1)</Value>
                               <Style>
                                 <FontWeight>Bold</FontWeight>
@@ -1856,7 +1856,7 @@ sum(Fields!preferences_accepted.Value)/sum(Fields!preferences_requested.Value),0
                                       <Paragraph>
                                         <TextRuns>
                                           <TextRun>
-                                            <Value>=sum(Fields!preferences_accepted.Value)</Value>
+                                            <Value>=sum(Fields!preferences_fulfilled.Value)</Value>
                                             <Style>
                                               <Color>DimGray</Color>
                                             </Style>
@@ -1888,7 +1888,7 @@ sum(Fields!preferences_accepted.Value)/sum(Fields!preferences_requested.Value),0
                                       <Paragraph>
                                         <TextRuns>
                                           <TextRun>
-                                            <Value>=Sum(Fields!preferences_declined.Value)</Value>
+                                            <Value>=Sum(Fields!preferences_unfulfilled.Value)</Value>
                                             <Style>
                                               <Color>DimGray</Color>
                                             </Style>
@@ -1919,7 +1919,7 @@ sum(Fields!preferences_accepted.Value)/sum(Fields!preferences_requested.Value),0
                                       <Paragraph>
                                         <TextRuns>
                                           <TextRun>
-                                            <Value>=FormatPercent(iif(sum(Fields!preferences_requested.Value)&gt;0,sum(Fields!preferences_accepted.Value)/sum(Fields!preferences_requested.Value),0),1)</Value>
+                                            <Value>=FormatPercent(iif(sum(Fields!preferences_requested.Value)&gt;0,sum(Fields!preferences_fulfilled.Value)/sum(Fields!preferences_requested.Value),0),1)</Value>
                                             <Style>
                                               <Color>DimGray</Color>
                                             </Style>
@@ -2334,16 +2334,16 @@ sum(Fields!preferences_accepted.Value)/sum(Fields!preferences_requested.Value),0
           <DataField>preferences_requested</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
-        <Field Name="preferences_accepted">
-          <DataField>preferences_accepted</DataField>
+        <Field Name="preferences_fulfilled">
+          <DataField>preferences_fulfilled</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
-        <Field Name="share_accepted">
-          <DataField>share_accepted</DataField>
+        <Field Name="fulfillment">
+          <DataField>fulfillment</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
-        <Field Name="preferences_declined">
-          <DataField>preferences_declined</DataField>
+        <Field Name="preferences_unfulfilled">
+          <DataField>preferences_unfulfilled</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
         <Field Name="hide_time_zone">
