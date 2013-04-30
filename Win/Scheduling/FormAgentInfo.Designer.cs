@@ -268,7 +268,6 @@
 			this.listViewPerson.TabIndex = 3;
 			this.listViewPerson.UseCompatibleStateImageBehavior = false;
 			this.listViewPerson.View = System.Windows.Forms.View.Details;
-			this.listViewPerson.DoubleClick += new System.EventHandler(this.listViewPerson_DoubleClick);
 			// 
 			// columnHeader7
 			// 

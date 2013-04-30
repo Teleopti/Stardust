@@ -758,11 +758,5 @@ namespace Teleopti.Ccc.Win.Scheduling
         {
             initializeFairnessTab();
         }
-
-		private void listViewPerson_DoubleClick(object sender, EventArgs e)
-		{
-			//rk : remarked this for now so I can compile
-			//new ResetDateOnlyAfterChangedTimeZone().ResetFor(_selectedPerson);
-		}
     }
 }
