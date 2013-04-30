@@ -178,22 +178,36 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		});
 		self.textRequestCount = ko.observable(day.TextRequestCount);
 		self.allowance = ko.observable(day.Allowance);
-		self.holidayAgents = ko.observable(day.AbsenceAgents);
+		self.absenceAgents = ko.observable(day.AbsenceAgents);
 
 		self.holidayChance = ko.computed(function () {
 		    var percent;
 		    if (self.allowance() != 0)
-		        percent = 100 * ((self.allowance() - self.holidayAgents()) / self.allowance());
+		    	percent = 100 * ((self.allowance() - self.absenceAgents()) / self.allowance());
 		    else {
 		        percent = 0;
 		    }
 		    return percent;
 		});
-	    
+
+		self.holidayChanceText = ko.computed(function () {
+			if (self.holidayChance() < 30) return parent.userTexts.chanceOfGettingAbsencerequestGranted + parent.userTexts.poor;
+			if (self.holidayChance() < 80) return parent.userTexts.chanceOfGettingAbsencerequestGranted + parent.userTexts.fair;
+			return parent.userTexts.chanceOfGettingAbsencerequestGranted + parent.userTexts.good;
+		});
+		
+		self.holidayChanceColor = ko.computed(function () {
+			if (self.holidayChance() < 30) return 'red';
+			if (self.holidayChance() < 80) return 'yellow';
+			return 'green';
+		});
+		
 		self.hasTextRequest = ko.computed(function () {
 			return self.textRequestCount() > 0;
 		});
+
 		self.hasNote = ko.observable(day.HasNote);
+
 		self.textRequestText = ko.computed(function () {
 			return parent.userTexts.xRequests.format(self.textRequestCount());
 		});
@@ -202,6 +216,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			var showRequestClass = self.textRequestPermission() ? 'show-request ' : '';
 			return 'third category ' + showRequestClass + self.summaryStyleClassName(); //last one needs to be becuase of "stripes" and similar
 		});
+
 		self.colorForDaySummary = ko.computed(function () {
 			return parent.styles()[self.summaryStyleClassName()];
 		});
@@ -214,9 +229,11 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			}
 			return 'black';
 		});
+
 		self.layers = ko.utils.arrayMap(day.Periods, function (item) {
 			return new LayerViewModel(item, parent);
 		});
+		
 	    self.absenceRequestPermission = ko.computed(function() {
 	        return parent.absenceRequestPermission();
 	    });

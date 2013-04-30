@@ -3713,6 +3713,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Chance of getting absence request granted: .
+        /// </summary>
+        public static string ChanceOfGettingAbsenceRequestGranted {
+            get {
+                return ResourceManager.GetString("ChanceOfGettingAbsenceRequestGranted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Change Date.
         /// </summary>
         public static string ChangeDate {
@@ -8059,6 +8068,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fair.
+        /// </summary>
+        public static string Fair {
+            get {
+                return ResourceManager.GetString("Fair", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fairness.
         /// </summary>
         public static string Fairness {
@@ -9118,6 +9136,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Go {
             get {
                 return ResourceManager.GetString("Go", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Good.
+        /// </summary>
+        public static string Good {
+            get {
+                return ResourceManager.GetString("Good", resourceCulture);
             }
         }
         
@@ -16877,6 +16904,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string PointsPerShiftCategory {
             get {
                 return ResourceManager.GetString("PointsPerShiftCategory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Poor.
+        /// </summary>
+        public static string Poor {
+            get {
+                return ResourceManager.GetString("Poor", resourceCulture);
             }
         }
         
