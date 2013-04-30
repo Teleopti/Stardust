@@ -107,7 +107,7 @@ INNER JOIN mart.dim_interval i
 	ON b.local_interval_id = i.interval_id	
 LEFT JOIN
 	mart.language_translation l ON
-	dpt.preference_type_name = l.term_english AND
+	dpt.resource_key = l.ResourceKey AND
 	language_id = @language_id
 WHERE d.date_date BETWEEN @date_from AND @date_to
 AND b.time_zone_id = @time_zone_id
@@ -149,7 +149,7 @@ INNER JOIN mart.dim_interval i
 	ON b.local_interval_id = i.interval_id
 LEFT JOIN
 	mart.language_translation l ON
-	dpt.preference_type_name = l.term_english AND
+	dpt.resource_key = l.ResourceKey AND
 	language_id = @language_id	
 WHERE d.date_date BETWEEN @date_from AND @date_to
 AND b.time_zone_id = @time_zone_id
@@ -190,7 +190,7 @@ INNER JOIN mart.dim_interval i
 	ON b.local_interval_id = i.interval_id
 LEFT JOIN
 	mart.language_translation l ON
-	dpt.preference_type_name = l.term_english AND
+	dpt.resource_key = l.ResourceKey AND
 	language_id = @language_id	
 WHERE d.date_date BETWEEN @date_from AND @date_to
 AND b.time_zone_id = @time_zone_id
@@ -229,7 +229,7 @@ INNER JOIN mart.dim_interval i
 	ON b.local_interval_id = i.interval_id	
 LEFT JOIN
 	mart.language_translation l ON
-	dpt.preference_type_name = l.term_english AND
+	dpt.resource_key = l.ResourceKey AND
 	language_id = @language_id
 WHERE d.date_date BETWEEN @date_from AND @date_to
 AND b.time_zone_id = @time_zone_id
