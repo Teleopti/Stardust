@@ -489,6 +489,16 @@ namespace Teleopti.Analytics.Etl.Transformer
 		    }
 	    }
 
+	    public bool PermissionsMustRun()
+	    {
+			ILastChangedReadModel lastTime;
+			if (_timeValues.TryGetValue("Permissions", out lastTime))
+			{
+				return !lastTime.LastTime.Equals(lastTime.ThisTime);
+			}
+		    return true;
+	    }
+
 	    public IList<IMultiplicatorDefinitionSet> MultiplicatorDefinitionSetCollection
     	{
     		get {

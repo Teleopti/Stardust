@@ -38,7 +38,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Jobs
 			Add(new StageScorecardJobStep(jobParameters));
 			Add(new StageScorecardKpiJobStep(jobParameters));
 			Add(new StageKpiTargetTeamJobStep(jobParameters));
-			Add(new StagePermissionJobStep(jobParameters));
+			Add(new StagePermissionJobStep(jobParameters,true));
 			Add(new StageUserJobStep(jobParameters));                   // BU independent
 			Add(new StageGroupPagePersonJobStep(jobParameters));
 			Add(new StageOvertimeJobStep(jobParameters));
@@ -83,7 +83,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Jobs
 			Add(new FactKpiTargetTeamJobStep(jobParameters));
 			Add(new FactRequestJobStep(jobParameters));
 			Add(new FactRequestedDaysJobStep(jobParameters));
-			Add(new PermissionReportJobStep(jobParameters));
+			Add(new PermissionReportJobStep(jobParameters,true));
 			
 			// WEB SERVICE TO ANALYZER
 			//Add(new PerformanceManagerPermissionJobStep(jobParameters));

@@ -39,5 +39,6 @@ namespace Teleopti.Analytics.Etl.Interfaces.Transformer
 		IScheduleDay GetSchedulePartOnPersonAndDate(IPerson person, DateOnly restrictionDate, IScenario scenario);
 	    void SetThisTime(ILastChangedReadModel lastTime, string step);
 	    void UpdateThisTime(string step, IBusinessUnit businessUnit);
+	    bool PermissionsMustRun();
     }
 }

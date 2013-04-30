@@ -10,6 +10,7 @@ using Teleopti.Analytics.Etl.TransformerTest.FakeData;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.TransformerTest
@@ -308,5 +309,30 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 			Assert.That(thePersons.Contains(person1),Is.True);
 			_mocks.VerifyAll();
 		}
+
+		[Test]
+		public void ShouldKnowIfPermissionsMustRun()
+		{
+			var time = DateTime.Now;
+			var lastTime = new LastChangedReadModel {LastTime = time, ThisTime = time};
+			_target.SetThisTime(lastTime,"Permissions");
+			Assert.That(_target.PermissionsMustRun(),Is.False);
+			lastTime = new LastChangedReadModel { LastTime = time, ThisTime = time.AddHours(1) };
+			_target.SetThisTime(lastTime, "Permissions");
+			Assert.That(_target.PermissionsMustRun(), Is.True);
+		}
+
+	    [Test]
+	    public void ShouldSaveLastTime()
+	    {
+			var time = DateTime.Now;
+		    var bu = new BusinessUnit("bu");
+			var lastTime = new LastChangedReadModel { LastTime = time, ThisTime = time };
+			_target.SetThisTime(lastTime, "Schedules");
+
+			Expect.Call(() =>_raptorRepository.UpdateLastChangedDate(bu, "Schedules", time));
+			_mocks.ReplayAll();
+			_target.UpdateThisTime("Schedules",bu);
+	    }
     }
 }

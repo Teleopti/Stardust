@@ -9,19 +9,28 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 {
     public class StagePermissionJobStep : JobStepBase
     {
-        public StagePermissionJobStep(IJobParameters jobParameters)
+	    private readonly bool _checkIfNeeded;
+
+	    public StagePermissionJobStep(IJobParameters jobParameters, bool checkIfNeeded = false)
             : base(jobParameters)
         {
-            Name = "stg_permission";
+		    _checkIfNeeded = checkIfNeeded;
+		    Name = "stg_permission";
             PermissionReportInfrastructure.AddColumnsToDataTable(BulkInsertDataTable1);
         }
 
         protected override int RunStep(IList<IJobResult> jobResultCollection, bool isLastBusinessUnit)
         {
             _jobParameters.Helper.Repository.TruncatePermissionReportTable();
-            IList<MatrixPermissionHolder> reportPermissions = _jobParameters.Helper.Repository.LoadReportPermissions();
-            int affectedRows = 0;
-            PermissionReportTransformer transformer = new PermissionReportTransformer();
+			if (_checkIfNeeded)
+			{
+				var lastTime = _jobParameters.Helper.Repository.LastChangedDate(Result.CurrentBusinessUnit, "Permissions");
+				_jobParameters.StateHolder.SetThisTime(lastTime, "Permissions");
+				if (!_jobParameters.StateHolder.PermissionsMustRun()) return 0;
+			}
+            var reportPermissions = _jobParameters.Helper.Repository.LoadReportPermissions();
+            var affectedRows = 0;
+            var transformer = new PermissionReportTransformer();
 
             foreach (IList<MatrixPermissionHolder> permissionHolders in reportPermissions.Batch(500))
             {
