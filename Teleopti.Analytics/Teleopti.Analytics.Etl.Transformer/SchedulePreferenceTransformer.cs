@@ -167,6 +167,9 @@ namespace Teleopti.Analytics.Etl.Transformer
                 return true;
             }
 
+            if (preferenceRestriction.Absence != null)
+                return true;
+
 			if(preferenceRestriction.ActivityRestrictionCollection.Count > 0)
 			{
 				return true;
