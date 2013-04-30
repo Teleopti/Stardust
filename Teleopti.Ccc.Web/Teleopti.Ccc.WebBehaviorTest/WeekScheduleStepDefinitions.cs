@@ -227,8 +227,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see an '(.*)' indication for chance of absence request on '(.*)'")]
 		public void ThenIShouldSeeAnIndicationForChanceOfAbsenceRequestOn(string color, DateTime date)
 		{
-			DivCollection layers = _page.DayLayers(date);
-			var background = layers.Filter(Find.ByClass("small-circle")).First().Style.BackgroundColor;
+			var layers = _page.DayLayers(date);
+			var background = layers.Filter(Find.ByClass("small-circle"))[date.Day-1].Style.BackgroundColor;
 			EventualAssert.That(() => background.ToHexString, Is.EqualTo(new HtmlColor(color).ToHexString));
 		}
 
