@@ -1,6 +1,5 @@
 ﻿using System;
 using NUnit.Framework;
-using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.InfrastructureTest.Helper;
@@ -10,19 +9,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 	[TestFixture]
 	public class EtlReadModelRepositoryTest : DatabaseTest
 	{
-		private MockRepository _mocks;
 		private EtlReadModelRepository _target;
-
-		[SetUp]
-		public void Setup()
-		{
-			_mocks = new MockRepository();
-			_target = new EtlReadModelRepository(UnitOfWork);
-		}
 
 		[Test]
 		public void ShouldLoadLastAndThis()
 		{
+			_target = new EtlReadModelRepository(UnitOfWork);
 			var bu = new BusinessUnit("name");
 			bu.SetId(Guid.NewGuid());
 			var model = _target.LastChangedDate(bu, "Shedules");
@@ -32,6 +24,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldSaveThis()
 		{
+			_target = new EtlReadModelRepository(UnitOfWork);
 			var bu = new BusinessUnit("name");
 			bu.SetId(Guid.NewGuid());
 			 _target.UpdateLastChangedDate(bu,"Schedules", DateTime.Now);
@@ -40,6 +33,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void ShouldGetChanged()
 		{
+			_target = new EtlReadModelRepository(UnitOfWork);
 			var bu = new BusinessUnit("name");
 			bu.SetId(Guid.NewGuid());
 			Assert.That(_target.ChangedDataOnStep(DateTime.Now, bu, "Schedules"),Is.Not.Null);
