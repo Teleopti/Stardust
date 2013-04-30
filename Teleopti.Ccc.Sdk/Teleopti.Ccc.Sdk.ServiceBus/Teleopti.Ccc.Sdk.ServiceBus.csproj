@@ -164,6 +164,7 @@
     <Compile Include="Denormalizer\IDenormalizedScheduleMessageBuilder.cs" />
     <Compile Include="Denormalizer\IScheduleDayReadModelCreator.cs" />
     <Compile Include="Denormalizer\IScheduleDayReadModelsCreator.cs" />
+    <Compile Include="Denormalizer\LegacyMessagesConsumer.cs" />
     <Compile Include="Denormalizer\LoadProjectedScheduleConsumer.cs" />
     <Compile Include="Denormalizer\ScheduleDayReadModelsCreator.cs" />
     <Compile Include="Forecast\QuickForecastWorkloadMessageConsumer.cs" />
