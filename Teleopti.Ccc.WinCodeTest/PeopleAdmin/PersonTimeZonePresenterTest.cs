@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using Teleopti.Ccc.WinCode.PeopleAdmin;
 using Rhino.Mocks;
@@ -44,13 +45,12 @@ namespace Teleopti.Ccc.WinCodeTest.PeopleAdmin
 		{
 			using (_mock.Record())
 			{
-				_view.SetPersonTimeZone(_person);
-				_view.HideDialog();
+				_view.SetPersonsTimeZone(_persons, TimeZoneInfo.Utc);
 			}
 
 			using (_mock.Playback())
 			{
-				_presenter.OnButtonAdvOkClick();
+				_presenter.OnButtonAdvOkClick(TimeZoneInfo.Utc);
 			}
 		}
 	}

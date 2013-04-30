@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.PeopleAdmin
@@ -14,14 +15,9 @@ namespace Teleopti.Ccc.WinCode.PeopleAdmin
 			_persons = persons;
 		}
 
-		public void OnButtonAdvOkClick()
+		public void OnButtonAdvOkClick(TimeZoneInfo timeZoneInfo)
 		{
-			foreach (var person in _persons)
-			{
-				_view.SetPersonTimeZone(person);	
-			}
-			
-			_view.HideDialog();
+			_view.SetPersonsTimeZone(_persons, timeZoneInfo);	
 		}
 
 		public void OnButtonAdvCancelClick()

@@ -15,6 +15,8 @@
 		{
 			if (disposing && (components != null))
 			{
+				if(_cancellationToken != null)
+					_cancellationToken.Dispose();
 				components.Dispose();
 			}
 			base.Dispose(disposing);

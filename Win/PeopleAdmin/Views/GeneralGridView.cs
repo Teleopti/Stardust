@@ -438,6 +438,12 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			using (var view = new PersonTimeZoneView(selected))
 			{
 				view.ShowDialog();
+
+				foreach (var person in view.AffectedPersons())
+				{
+					person.PermissionInformation.SetDefaultTimeZone(view.SelectedTimeZone());
+				}
+
 				Grid.Invalidate();
 			}
 		}
