@@ -47,11 +47,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			var target = new AllowanceProvider(budgetDayRepository, _loggedOnUser, _scenarioRepository, new ExtractBudgetGroupPeriods());
 			var result = target.GetAllowanceForPeriod(period).ToList();
 
-			foreach (var date in period.DayCollection())
-			{
-				var allowanceDay = result.Single(r => r.Item1 == date);
-				Assert.That(allowanceDay.Item2,Is.EqualTo(TimeSpan.Zero));
-			}
+			Assert.That(allDaysHasZeroAllowance(result));
 		}
 
 		[Test]
@@ -122,7 +118,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 		}
 
 		[Test]
-		public void GetAllowanceForPeriod_WithoutOpenAbsenceRequestPeriods_ShouldReturnZeroAllowanceForThatDay()
+		public void GetAllowanceForPeriod_WithoutOpenAbsenceRequestPeriods_ShouldSetAllowanceToZeroOnEverydayInThePeriod()
 		{
 			_user.WorkflowControlSet= new WorkflowControlSet("workflow controlset without open absenceperiod");
 			var period = new DateOnlyPeriod(new DateOnly(2001, 1, 1), new DateOnly(2001, 1, 10));
@@ -135,7 +131,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 		}
 
 		[Test]
-		public void GetAllowanceForPeriod_WhenNoWorkFlowControlSet_ShouldReturnZeroAllowanceForThatDay()
+		public void GetAllowanceForPeriod_WhenNoWorkFlowControlSet_ShouldSetAllowanceToZeroOnEverydayInThePeriod()
 		{
 			var period = new DateOnlyPeriod(new DateOnly(2001, 1, 1), new DateOnly(2001, 1, 10));
 			var budgetDayRepo = MockRepository.GenerateMock<IBudgetDayRepository>();
@@ -146,6 +142,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			Assert.That(allDaysHasZeroAllowance(result));
 		}
 
+		#region helpers
 		private BudgetDay createBudgetDayWithAllowance(IBudgetGroup budgetGroup,DateOnly date, double hoursOfAllowance)
 		{
 			return new BudgetDay(budgetGroup, _scenario, date) {FulltimeEquivalentHours = 1, Allowance = hoursOfAllowance};
@@ -167,5 +164,6 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 		{
 			return allowanceDays.Sum(a => a.Item2.TotalMinutes) == 0;
 		}
+		#endregion
 	}
 }
