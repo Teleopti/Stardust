@@ -1,15 +1,19 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
-using Microsoft.Windows.Controls.Primitives;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
+using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Ccc.WinCode.Scheduling.Requests;
+using Teleopti.Ccc.WpfControls.Common;
 using DataGrid = Microsoft.Windows.Controls.DataGrid;
+using DataGridRowDetailsVisibilityMode = Microsoft.Windows.Controls.DataGridRowDetailsVisibilityMode;
 using DataGridSortingEventArgs = Microsoft.Windows.Controls.DataGridSortingEventArgs;
+using SelectedCellsChangedEventArgs = Microsoft.Windows.Controls.SelectedCellsChangedEventArgs;
 
 
 namespace Teleopti.Ccc.WpfControls.Controls.Requests.Views
@@ -19,23 +23,26 @@ namespace Teleopti.Ccc.WpfControls.Controls.Requests.Views
     /// </summary>
     public partial class HandlePersonRequestView
     {
-    	public HandlePersonRequestView()
+		private readonly IList<SortDescription> _sortDirections;
+    
+		public HandlePersonRequestView()
         {
             InitializeComponent();
+			_sortDirections = new List<SortDescription>();
         }
 
 	    //Sorry Hank, had to put all this shit here to make this expand/collapse thing work Teleopti style
         private void Expander_Expanded(object sender, RoutedEventArgs e)
         {
-            requestGrid.RowDetailsVisibilityMode = Microsoft.Windows.Controls.DataGridRowDetailsVisibilityMode.VisibleWhenSelected;
+            requestGrid.RowDetailsVisibilityMode = DataGridRowDetailsVisibilityMode.VisibleWhenSelected;
         }
 
         private void Expander_Collapsed(object sender, RoutedEventArgs e)
         {
-            requestGrid.RowDetailsVisibilityMode = Microsoft.Windows.Controls.DataGridRowDetailsVisibilityMode.Collapsed;
+            requestGrid.RowDetailsVisibilityMode = DataGridRowDetailsVisibilityMode.Collapsed;
         }
 
-        private void requestGrid_SelectedCellsChanged(object sender, Microsoft.Windows.Controls.SelectedCellsChangedEventArgs e)
+        private void requestGrid_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
         {
             var dataContext = requestGrid.DataContext as HandlePersonRequestViewModel;
             var selectedItems = 0;
@@ -51,7 +58,7 @@ namespace Teleopti.Ccc.WpfControls.Controls.Requests.Views
                         i++;
                     }
                 }
-            requestGrid.RowDetailsVisibilityMode = Microsoft.Windows.Controls.DataGridRowDetailsVisibilityMode.Collapsed;
+            requestGrid.RowDetailsVisibilityMode = DataGridRowDetailsVisibilityMode.Collapsed;
         }
         
         private void Expander_LostFocus(object sender, RoutedEventArgs e)
@@ -95,24 +102,28 @@ namespace Teleopti.Ccc.WpfControls.Controls.Requests.Views
 	    private void RequestGrid_OnPreviewMouseDown(object sender, MouseButtonEventArgs e)
 	    {
 		    var dependencyObject = (DependencyObject) e.OriginalSource;
-		    while (dependencyObject != null && !(dependencyObject is DataGridColumnHeader))
+		    while (dependencyObject != null && !(dependencyObject is Microsoft.Windows.Controls.Primitives.DataGridColumnHeader))
 			    dependencyObject = VisualTreeHelper.GetParent(dependencyObject);
-		    if (dependencyObject == null || !(dependencyObject is DataGridColumnHeader) || !(sender is DataGrid)) return;
+			if (dependencyObject == null || !(dependencyObject is Microsoft.Windows.Controls.Primitives.DataGridColumnHeader) || !(sender is DataGrid)) return;
+		    if (requestGrid.Items.IsEmpty)
+			    return;
 
-		    var header = dependencyObject as DataGridColumnHeader;
-		    var view = CollectionViewSource.GetDefaultView((sender as DataGrid).ItemsSource);
+			var header = dependencyObject as Microsoft.Windows.Controls.Primitives.DataGridColumnHeader;
+		    var view = CollectionViewSource.GetDefaultView(requestGrid.ItemsSource);
 		    var direction = ListSortDirection.Ascending;
-		    if (view.SortDescriptions.Any(s => s.PropertyName == header.Column.SortMemberPath))
+		    if (_sortDirections.Any(s => s.PropertyName == header.Column.SortMemberPath))
 		    {
-			    var previousSort = view.SortDescriptions.FirstOrDefault(s => s.PropertyName == header.Column.SortMemberPath);
+			    var previousSort = _sortDirections.FirstOrDefault(s => s.PropertyName == header.Column.SortMemberPath);
 			    direction = previousSort.Direction == ListSortDirection.Ascending
 				                ? ListSortDirection.Descending
 				                : ListSortDirection.Ascending;
-			    view.SortDescriptions.Remove(previousSort);
+			    _sortDirections.Remove(previousSort);
 		    }
-
-		    var sortDescription = new SortDescription(header.Column.SortMemberPath, direction);
-		    view.SortDescriptions.Insert(0, sortDescription);
+			var sourceCollectionList = view.SourceCollection.Cast<PersonRequestViewModel>().AsQueryable();
+		    _sortDirections.Add(new SortDescription(header.Column.SortMemberPath, direction));
+			requestGrid.ItemsSource = CustomSort.SortViewSource(sourceCollectionList, _sortDirections);
+			requestGrid.SelectedItem = null;
+		    e.Handled = true;
 	    }
     }
 }
