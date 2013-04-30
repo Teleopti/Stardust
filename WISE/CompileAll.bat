@@ -249,7 +249,7 @@ DEL /F /Q "%WISESOURCEFILE%\AgentPortalWeb\web.config"
 COPY "%ARTIFACTDIR%\Web.Root.Web.config" "%DYNAMICCONTENT%\Web\web.config"
 
 DEL /F /Q "%WISESOURCEFILE%\AgentPortalWeb\Teleopti.Ccc.Web.ServiceBus.Client.config"
-COPY "%ARTIFACTDIR%\Web.ServiceBus.Client.config" "%DYNAMICCONTENT%\Web\Teleopti.Ccc.Web.ServiceBus.Client.config"
+COPY "%ARTIFACTDIR%\ServiceBusClient.config" "%DYNAMICCONTENT%\Web\Teleopti.Ccc.Web.ServiceBus.Client.config"
 
 DEL /F /Q "%WISESOURCEFILE%\AgentPortalWeb\TeleoptiCCC7.nhib.xml"
 COPY "%ARTIFACTDIR%\TeleoptiCCC7.nhib.xml" "%DYNAMICCONTENT%\Web\TeleoptiCCC7.nhib.xml"

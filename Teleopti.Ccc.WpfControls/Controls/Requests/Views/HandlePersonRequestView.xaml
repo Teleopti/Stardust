@@ -23,12 +23,13 @@
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="Padding" Value="10,10"/>
             <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                  <Style.Triggers>
+				<Style.Triggers>
 					<Trigger Property="IsEnabled" Value="False">
 						<Setter Property="Background" Value="{StaticResource RaptorDisabledSelectionGradientBrush}" />
 						<Setter Property="ToolTip" Value="xxTheRequestIsNotWithinOpenedScheduledPeriod"/>
 						<Setter Property="Foreground" Value="Gray"/>
 					</Trigger>
+
 					<Trigger Property="IsMouseOver" Value="True">
                         <Setter Property="FontWeight" Value="Bold"/>
                     </Trigger>

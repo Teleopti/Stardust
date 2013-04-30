@@ -1,6 +1,9 @@
-﻿using Teleopti.Ccc.Domain.Repositories;
+﻿using System.Web;
+using Teleopti.Ccc.Domain.Auditing;
+using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Web.Areas.Start.Core.Authentication.DataProvider;
+using Teleopti.Ccc.Web.Areas.Start.Models.Authentication;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
@@ -11,16 +14,19 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 		private readonly IWindowsAccountProvider _windowsAccountProvider;
 		private readonly IRepositoryFactory _repositoryFactory;
 		private readonly IFindApplicationUser _findApplicationUser;
+		private readonly IIpAddressResolver _ipAddressResolver;
 
 		public Authenticator(IDataSourcesProvider dataSourceProvider,
 									IWindowsAccountProvider windowsAccountProvider,
 									IRepositoryFactory repositoryFactory,
-									IFindApplicationUser findApplicationUser)
+									IFindApplicationUser findApplicationUser,
+									IIpAddressResolver ipAddressResolver)
 		{
 			_dataSourceProvider = dataSourceProvider;
 			_windowsAccountProvider = windowsAccountProvider;
 			_repositoryFactory = repositoryFactory;
 			_findApplicationUser = findApplicationUser;
+			_ipAddressResolver = ipAddressResolver;
 		}
 
 
@@ -55,5 +61,35 @@ namespace Teleopti.Ccc.Web.Areas.Start.Core.Authentication.Services
 			}
 
 		}
+
+		public void SaveAuthenticateResult(string userName, AuthenticateResult result)
+		{
+			var provider = "Application";
+			if (string.IsNullOrEmpty(userName))
+			{
+				var winAccount = _windowsAccountProvider.RetrieveWindowsAccount();
+				userName = winAccount.DomainName + "\\" + winAccount.UserName;
+				provider = "Windows";
+			}
+			using (var uow = result.DataSource.Application.CreateAndOpenUnitOfWork())
+			{
+				var model = new LoginAttemptModel
+				{
+					ClientIp = _ipAddressResolver.GetIpAddress(),
+					Provider = provider,
+					Client = "WEB",
+					UserCredentials = userName,
+					Result = result.Successful ? "LogonSuccess" : "LogonFailed"
+				};
+				if (result.Person != null) model.PersonId = result.Person.Id;
+
+				_repositoryFactory.CreatePersonRepository(uow).SaveLoginAttempt(model);
+				uow.PersistAll();
+			}
+		}
+
+		
+
+
 	}
 }

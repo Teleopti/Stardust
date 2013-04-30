@@ -264,6 +264,8 @@
     <Compile Include="Areas\Start\Controllers\ApplicationAuthenticationApiController.cs" />
     <Compile Include="Areas\Anywhere\Core\IoC\AnywhereAreaModule.cs" />
     <Compile Include="Areas\Start\Models\Authentication\ChangePasswordInput.cs" />
+    <Compile Include="Areas\Start\Models\Authentication\IIpAddressResolver.cs" />
+    <Compile Include="Areas\Start\Models\Authentication\IpAddressResolver.cs" />
     <Compile Include="Areas\Start\Models\Authentication\PasswordWarningViewModel.cs" />
     <Compile Include="Areas\Anywhere\Controllers\PersonController.cs" />
     <Compile Include="Areas\Anywhere\Core\AutofacDependencyResolver.cs" />

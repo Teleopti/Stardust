@@ -1,6 +1,4 @@
-﻿using System;
-using AutoMapper;
-using Teleopti.Ccc.Domain.Collection;
+﻿using AutoMapper;
 
 namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 {
