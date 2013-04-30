@@ -916,14 +916,14 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox24">
+                    <Textbox Name="Textbox18">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value EvaluationMode="Constant">xxx</Value>
+                              <Value>=Parameters!ResMustHaves.Value</Value>
                               <Style>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
@@ -935,8 +935,11 @@
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Textbox24</rd:DefaultName>
+                      <rd:DefaultName>Textbox18</rd:DefaultName>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <BackgroundColor>White</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -970,6 +973,9 @@
                       <rd:DefaultName>textbox22</rd:DefaultName>
                       <ZIndex>21</ZIndex>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <BackgroundColor>White</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -1135,7 +1141,7 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox20">
+                    <Textbox Name="Textbox19">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
@@ -1154,7 +1160,7 @@
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Textbox20</rd:DefaultName>
+                      <rd:DefaultName>Textbox19</rd:DefaultName>
                       <Style>
                         <BottomBorder>
                           <Color>Black</Color>
@@ -1295,22 +1301,22 @@ sum(Fields!preferences_accepted.Value)/sum(Fields!preferences_requested.Value),0
                       <TablixBody>
                         <TablixColumns>
                           <TablixColumn>
-                            <Width>2.2cm</Width>
+                            <Width>2.24564cm</Width>
                           </TablixColumn>
                           <TablixColumn>
-                            <Width>6.25cm</Width>
-                          </TablixColumn>
-                          <TablixColumn>
-                            <Width>2.47383cm</Width>
-                          </TablixColumn>
-                          <TablixColumn>
-                            <Width>2.52616cm</Width>
+                            <Width>6.20436cm</Width>
                           </TablixColumn>
                           <TablixColumn>
                             <Width>2.5cm</Width>
                           </TablixColumn>
                           <TablixColumn>
                             <Width>2.49999cm</Width>
+                          </TablixColumn>
+                          <TablixColumn>
+                            <Width>2.50439cm</Width>
+                          </TablixColumn>
+                          <TablixColumn>
+                            <Width>2.4956cm</Width>
                           </TablixColumn>
                         </TablixColumns>
                         <TablixRows>
@@ -1379,7 +1385,7 @@ sum(Fields!preferences_accepted.Value)/sum(Fields!preferences_requested.Value),0
                               </TablixCell>
                               <TablixCell>
                                 <CellContents>
-                                  <Textbox Name="Textbox21">
+                                  <Textbox Name="Textbox28">
                                     <CanGrow>true</CanGrow>
                                     <KeepTogether>true</KeepTogether>
                                     <Paragraphs>
@@ -1397,7 +1403,7 @@ sum(Fields!preferences_accepted.Value)/sum(Fields!preferences_requested.Value),0
                                         </Style>
                                       </Paragraph>
                                     </Paragraphs>
-                                    <rd:DefaultName>Textbox21</rd:DefaultName>
+                                    <rd:DefaultName>Textbox28</rd:DefaultName>
                                     <Style>
                                       <BackgroundColor>White</BackgroundColor>
                                       <PaddingLeft>2pt</PaddingLeft>
@@ -1626,7 +1632,7 @@ sum(Fields!preferences_accepted.Value)/sum(Fields!preferences_requested.Value),0
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox46">
+                    <Textbox Name="Textbox25">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
@@ -1644,7 +1650,7 @@ sum(Fields!preferences_accepted.Value)/sum(Fields!preferences_requested.Value),0
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Textbox46</rd:DefaultName>
+                      <rd:DefaultName>Textbox25</rd:DefaultName>
                       <Style>
                         <BackgroundColor>WhiteSmoke</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
@@ -1816,7 +1822,7 @@ sum(Fields!preferences_accepted.Value)/sum(Fields!preferences_requested.Value),0
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox49">
+                    <Textbox Name="Textbox27">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
@@ -1834,7 +1840,7 @@ sum(Fields!preferences_accepted.Value)/sum(Fields!preferences_requested.Value),0
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>Textbox49</rd:DefaultName>
+                      <rd:DefaultName>Textbox27</rd:DefaultName>
                       <Style>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -2014,7 +2020,7 @@ sum(Fields!preferences_accepted.Value)/sum(Fields!preferences_requested.Value),0
     <Height>8.86667cm</Height>
     <Style />
   </Body>
-  <Width>23.07852cm</Width>
+  <Width>18.84519cm</Width>
   <Page>
     <PageHeader>
       <Height>2cm</Height>
