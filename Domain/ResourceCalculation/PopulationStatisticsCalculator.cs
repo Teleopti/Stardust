@@ -16,6 +16,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         private double _squareSumma;
         private double _rootMeanSquare;
         private bool _ignoreNonNumberValues = true;
+		private double _teleopti;
+		private double _absSumma;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PopulationStatisticsCalculator"/> class.
@@ -103,7 +105,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
         public void Analyze()
         {
-            CalculateSumma();
+            CalculateSums();
             CalculateAverage();
             foreach (PopulationStatisticsData statisticData in _values)
             {
@@ -111,8 +113,8 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             }
             CalculateDeviationSquareFromAverageSumma();
             CalculateStandardDeviation();
-            CalculateSquareSumma();
             CalculateRootMeanSquare();
+			calculateTeleopti();
         }
 
         public bool IgnoreNonNumberValues 
@@ -121,7 +123,17 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             set { _ignoreNonNumberValues = value; }
         }
 
-        /// <summary>
+		public double Teleopti
+    	{
+    		get { return _teleopti; }
+    	}
+
+	    private void calculateTeleopti()
+	    {
+		    _teleopti = _absSumma + _standardDeviation;
+	    }
+
+	    /// <summary>
         /// Calculates the mean.
         /// </summary>
         protected void CalculateAverage()
@@ -129,18 +141,19 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
             _average = Summa/Count;
         }
 
-        /// <summary>
-        /// Calculates the summa.
-        /// </summary>
-        protected void CalculateSumma()
-        {
-            double summa = 0;
-            foreach (PopulationStatisticsData statisticData in _values)
-            {
-                summa += statisticData.Value;
-            }
-            _summa = summa;
-        }
+		protected void CalculateSums()
+		{
+			_summa = 0;
+			_squareSumma = 0;
+			_absSumma = 0;
+			foreach (var populationStatisticsData in _values)
+			{
+				double value = populationStatisticsData.Value;
+				_summa += value;
+				_squareSumma += Math.Pow(value, 2d);
+				_absSumma += Math.Abs(value);
+			}
+		}
 
         /// <summary>
         /// Calculates the deviation square from average summa.
@@ -153,19 +166,6 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
                 summa += statisticData.DeviationSquareFromAverage;
             }
             _deviationSquareFromAverageSumma = summa;
-        }
-
-        /// <summary>
-        /// Calculates the value square summa.
-        /// </summary>
-        protected void CalculateSquareSumma()
-        {
-            double summa = 0;
-            foreach (PopulationStatisticsData statisticData in _values)
-            {
-                summa += Math.Pow(statisticData.Value, 2d);
-            }
-            _squareSumma = summa;
         }
 
         /// <summary>
