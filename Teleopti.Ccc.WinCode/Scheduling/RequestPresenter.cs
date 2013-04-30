@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Linq.Dynamic;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.Rules;
 using Teleopti.Ccc.UserTexts;
@@ -42,9 +44,123 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         /// <param name="adapterList"></param>
         /// <param name="filterExpression"></param>
         /// <returns></returns>
-        public static IList<PersonRequestViewModel> FilterAdapters(IList<PersonRequestViewModel> adapterList, string filterExpression)
+        public static IList<PersonRequestViewModel> FilterAdapters(IList<PersonRequestViewModel> adapterList, IList<string> filterExpression)
         {
-            return adapterList.AsQueryable().Where(filterExpression).ToList();
+			var filteredData = SearchText(adapterList, filterExpression);
+            // return adapterList.AsQueryable().Where(filterExpression).ToList();
+            return filteredData;
+        }
+
+		public static IList<PersonRequestViewModel> FilterAdapters(IList<PersonRequestViewModel> adapterList,
+		                                                           IEnumerable<Guid> filteredPersons)
+		{
+			return adapterList.Where(p => filteredPersons.Contains(p.PersonRequest.Person.Id.GetValueOrDefault())).ToList();
+		}
+
+        public static IList<PersonRequestViewModel> SearchText(IList<PersonRequestViewModel> data,
+                                                 IList<string> filterExpression)
+        {
+            var filteredRequest = new List<PersonRequestViewModel>();
+
+            foreach (var personRequestViewModel in data)
+            {
+                var element = personRequestViewModel;
+                var isElementFoundList = new List<bool>();
+                
+                foreach (string expression in filterExpression)
+                {
+                    var filterText = expression;
+                    var isTextFound = findText(filterText, element);
+                    isElementFoundList.Add(isTextFound);
+                }
+
+                if(!isElementFoundList.Contains(false))
+                    filteredRequest.Add(element);
+            }
+
+            return filteredRequest;
+        }
+
+        private static bool findText(string filterText, PersonRequestViewModel element)
+        {
+            var requestedDate = element.RequestedDate;
+            var personRequestStartDate = element.PersonRequest.Request.Period.StartDateTime;
+            var personRequestEndDate = element.PersonRequest.Request.Period.EndDateTime;
+
+            if (requestedDate.Contains(filterText))
+                return true;
+
+            if (foundDateTextIfAny(personRequestStartDate, personRequestEndDate, filterText))
+                return true;
+
+            if (foundTextInRequestIfAny(filterText, element))
+                return true;
+
+            return false;
+        }
+
+        private static bool foundTextInRequestIfAny(string filterText, PersonRequestViewModel element)
+        {
+            var filterTextInLowerCase = filterText.ToLower();
+
+            if (element.Message.ToLower().Contains(filterTextInLowerCase))
+                return true;
+            if (element.Name.ToLower().Contains(filterTextInLowerCase))
+                return true;
+            if (element.Subject.ToLower().Contains(filterTextInLowerCase))
+                return true;
+            if (element.RequestType.ToLower().Contains(filterTextInLowerCase))
+                return true;
+            if (element.Details.ToLower().Contains(filterTextInLowerCase))
+                return true;
+            if (element.RequestType.ToLower().Contains(filterTextInLowerCase))
+                return true;
+            if (element.StatusText.ToLower().Contains(filterTextInLowerCase))
+                return true;
+
+            var request = element.PersonRequest.Request as AbsenceRequest;
+
+            if (request != null)
+            {
+                var absenceRequest = request;
+                var absenceName = absenceRequest.Absence.Name;
+
+                if (absenceName.ToLower().Contains(filterTextInLowerCase))
+                    return true;
+            }
+
+            return false;
+        }
+
+        private static bool foundDateTextIfAny(DateTime startDate, DateTime endDate, string filterText)
+        {
+            var numOfDaysInBetween = (endDate - startDate).Days;
+            var requestedPeriodList = new List<string>();
+
+            if (numOfDaysInBetween > 0)
+            {
+                for (int i = 0; i < numOfDaysInBetween; i++)
+                {
+                    var date = startDate.AddDays(i);
+                    requestedPeriodList.Add(date.ToString());
+
+                    if (date.Equals(endDate))
+                        break;
+                }
+
+                if (requestedPeriodList.Contains(filterText))
+                    return true;
+            }
+            else
+            {
+                if (startDate.ToString().Contains(filterText))
+                    return true;
+
+                if (endDate.ToString().Contains(filterText))
+                    return true;
+            }
+
+            return false;
         }
 
         public void SetUndoRedoContainer(IUndoRedoContainer container)
