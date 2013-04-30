@@ -10,6 +10,7 @@ using Teleopti.Analytics.Etl.TransformerTest.FakeData;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Analytics.Etl.TransformerTest
@@ -287,5 +288,51 @@ namespace Teleopti.Analytics.Etl.TransformerTest
                 Assert.AreEqual(0, _target.UserDefinedGroupings.Count());
             }
         }
+
+		[Test]
+		public void ShouldReturnPersonsWithId()
+		{
+			var id1 = Guid.NewGuid();
+			var id2 = Guid.NewGuid();
+			var person1 = new Person();
+			person1.SetId(id1);
+			var person2 = new Person();
+			person2.SetId(id2);
+
+			var persons = new List<IPerson> {person1, person2};
+			var ids = new List<Guid> {id1};
+			Expect.Call(_raptorRepository.LoadPerson(_target)).Return(persons);
+
+			_mocks.ReplayAll();
+			var thePersons = _target.PersonsWithIds(ids);
+			Assert.That(thePersons.Count,Is.EqualTo(1));
+			Assert.That(thePersons.Contains(person1),Is.True);
+			_mocks.VerifyAll();
+		}
+
+		[Test]
+		public void ShouldKnowIfPermissionsMustRun()
+		{
+			var time = DateTime.Now;
+			var lastTime = new LastChangedReadModel {LastTime = time, ThisTime = time};
+			_target.SetThisTime(lastTime,"Permissions");
+			Assert.That(_target.PermissionsMustRun(),Is.False);
+			lastTime = new LastChangedReadModel { LastTime = time, ThisTime = time.AddHours(1) };
+			_target.SetThisTime(lastTime, "Permissions");
+			Assert.That(_target.PermissionsMustRun(), Is.True);
+		}
+
+	    [Test]
+	    public void ShouldSaveLastTime()
+	    {
+			var time = DateTime.Now;
+		    var bu = new BusinessUnit("bu");
+			var lastTime = new LastChangedReadModel { LastTime = time, ThisTime = time };
+			_target.SetThisTime(lastTime, "Schedules");
+
+			Expect.Call(() =>_raptorRepository.UpdateLastChangedDate(bu, "Schedules", time));
+			_mocks.ReplayAll();
+			_target.UpdateThisTime("Schedules",bu);
+	    }
     }
 }

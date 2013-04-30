@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Analytics.Etl.Interfaces.Transformer;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.ReadModel;
 
 namespace Teleopti.Analytics.Etl.Transformer
 {
@@ -34,7 +36,7 @@ namespace Teleopti.Analytics.Etl.Transformer
         private IList<IRuleSetBag> _ruleSetBagCollection;
         private IList<IGroupPage> _userDefinedGroupings;
     	private IList<IMultiplicatorDefinitionSet> _multiplicatorDefinitionSetCollection;
-
+	    private Dictionary<DateTimePeriod, IScheduleDictionary> _dictionaryCashe;
         private CommonStateHolder()
         {
         }
@@ -258,7 +260,13 @@ namespace Teleopti.Analytics.Etl.Transformer
             }
         }
 
-        public IEnumerable<IContract> ContractCollection
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1002:DoNotExposeGenericLists")]
+		public IList<IPerson> PersonsWithIds(List<Guid> ids)
+		{
+			return PersonCollection.Where(person => ids.Contains(person.Id.GetValueOrDefault())).ToList();
+		}
+
+	    public IEnumerable<IContract> ContractCollection
         {
             get
             {
@@ -340,6 +348,33 @@ namespace Teleopti.Analytics.Etl.Transformer
             return scheduleDictionary;
         }
 
+		public IDictionary<DateTimePeriod, IScheduleDictionary> GetSchedules(IList<IScheduleChangedReadModel> changed, IScenario scenario)
+		{
+			_dictionaryCashe = new Dictionary<DateTimePeriod, IScheduleDictionary>();
+
+			var groupedChanged = changed.GroupBy(c => c.Date);
+			foreach (var changedReadModels in groupedChanged)
+			{
+				var theDate = changedReadModels.Key;
+				// detta måste fixas med tidszon, eller???
+				var utcDate = new DateTime(theDate.Date.Ticks, DateTimeKind.Utc);
+				var period = new DateTimePeriod(utcDate, utcDate.AddDays(1).AddMilliseconds(-1));
+				var personsIds = changedReadModels.Select(scheduleChangedReadModel => scheduleChangedReadModel.Person).ToList();
+				var persons = PersonsWithIds(personsIds);
+				var scheduleDictionary = _jobParameters.Helper.Repository.LoadSchedule(period, scenario, persons);
+				_dictionaryCashe.Add(period, scheduleDictionary);
+			}
+				
+			return _dictionaryCashe;
+		}
+
+		public IDictionary<DateTimePeriod, IScheduleDictionary> GetScheduleCashe()
+		{
+			if(_dictionaryCashe == null)
+				_dictionaryCashe = new Dictionary<DateTimePeriod, IScheduleDictionary>();
+			return _dictionaryCashe;
+		}
+
         public IList<IScheduleDay> LoadSchedulePartsPerPersonAndDate(DateTimePeriod period, IScenario scenario)
         {
             return _jobParameters.Helper.Repository.LoadSchedulePartsPerPersonAndDate(period, GetSchedules(period,scenario));
@@ -414,7 +449,57 @@ namespace Teleopti.Analytics.Etl.Transformer
             return _schedulePartCollection;
         }
 
-    	public IList<IMultiplicatorDefinitionSet> MultiplicatorDefinitionSetCollection
+		public IList<IScheduleDay> GetSchedulePartPerPersonAndDate(
+			IDictionary<DateTimePeriod, IScheduleDictionary> dictionary)
+		{
+			var ret = new List<IScheduleDay>();
+			foreach (var key in dictionary.Keys)
+			{
+				ret.AddRange(GetSchedulePartPerPersonAndDate(dictionary[key]));
+			}
+			return ret;
+		}
+
+		public IScheduleDay GetSchedulePartOnPersonAndDate(IPerson person, DateOnly restrictionDate, IScenario scenario)
+		{
+			var period = new DateTimePeriod(new DateTime(restrictionDate.Date.Ticks, DateTimeKind.Utc), new DateTime(restrictionDate.Date.Ticks, DateTimeKind.Utc).AddDays(1).AddMilliseconds(-1));
+			if (GetScheduleCashe().ContainsKey(period))
+			{
+				var dic = GetScheduleCashe()[period];
+				if (dic.ContainsKey(person))
+					return dic[person].ScheduledDay(restrictionDate);
+			}
+
+			var theDic = _jobParameters.Helper.Repository.LoadSchedule(period, scenario, new List<IPerson> {person});
+			return theDic[person].ScheduledDay(restrictionDate);
+		}
+
+		private readonly ConcurrentDictionary<string, ILastChangedReadModel> _timeValues = new ConcurrentDictionary<string, ILastChangedReadModel>();
+	    public void SetThisTime(ILastChangedReadModel lastTime, string step)
+	    {
+			_timeValues.AddOrUpdate(step, lastTime, (key, oldValue) => lastTime);
+	    }
+
+	    public void UpdateThisTime(string step, IBusinessUnit businessUnit)
+	    {
+		    ILastChangedReadModel lastTime;
+			if (_timeValues.TryGetValue(step, out lastTime))
+		    {
+				_jobParameters.Helper.Repository.UpdateLastChangedDate(businessUnit,step,lastTime.ThisTime);
+		    }
+	    }
+
+	    public bool PermissionsMustRun()
+	    {
+			ILastChangedReadModel lastTime;
+			if (_timeValues.TryGetValue("Permissions", out lastTime))
+			{
+				return !lastTime.LastTime.Equals(lastTime.ThisTime);
+			}
+		    return true;
+	    }
+
+	    public IList<IMultiplicatorDefinitionSet> MultiplicatorDefinitionSetCollection
     	{
     		get {
     			return _multiplicatorDefinitionSetCollection ??
@@ -482,6 +567,6 @@ namespace Teleopti.Analytics.Etl.Transformer
 
                 return null;
             }
-        }
+		}
     }
 }

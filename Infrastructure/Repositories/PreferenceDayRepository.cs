@@ -100,6 +100,17 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return result;
 		}
 
+		public IList<IPreferenceDay> FindNewerThan(DateTime newerThan)
+		{
+			var crit = Session.CreateCriteria(typeof(PreferenceDay))
+				.Add(Restrictions.Gt("UpdatedOn", newerThan))
+				.SetFetchMode("Restriction", FetchMode.Join);
+			var retList = crit.List<IPreferenceDay>();
+
+			InitializePreferenceDays(retList);
+			return retList;
+		}
+
 		private ICriteria FilterByPeriod(DateOnlyPeriod period)
 		{
 			return Session.CreateCriteria(typeof(PreferenceDay))

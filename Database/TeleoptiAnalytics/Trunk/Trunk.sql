@@ -243,3 +243,26 @@ GO
 ----------------
 IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[etl_dim_time_zone_delete.sql]') AND type in (N'P', N'PC'))
 DROP PROCEDURE [mart].[etl_dim_time_zone_delete.sql]
+
+----------------  
+--Name: Ola & David
+--Date: 2013-04-12
+--Desc: PBI #22523 - Speed up ETL Intrady load
+----------------
+CREATE TABLE [stage].[stg_schedule_changed](
+            [schedule_date] [datetime] NOT NULL,
+            [person_code] [uniqueidentifier] NOT NULL,
+            [scenario_code] [uniqueidentifier] NOT NULL,
+            [business_unit_code] [uniqueidentifier] NOT NULL,
+            [datasource_id] [smallint] NOT NULL,
+            [datasource_update_date] [smalldatetime] NOT NULL
+CONSTRAINT [PK_stg_schedule_changed] PRIMARY KEY CLUSTERED 
+(
+            [schedule_date] ASC,
+            [person_code] ASC,
+            [scenario_code] ASC
+)
+)
+
+GO
+
