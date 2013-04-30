@@ -7,6 +7,10 @@ Background:
 	Given there is a role with
 	| Field                    | Value                 |
 	| Name                     | Full access to mytime |
+	And there is a role with
+	| Field						 | Value						 |
+	| Name						 | No access to absence requests |
+	| Access to absence requests | False					     |
 	And there is an absence with
 	| Field                    | Value   |
 	| Name                     | holiday |
@@ -115,7 +119,6 @@ Scenario: Show the user a red indication when there is no budgetgroup for that d
 	And I have the workflow control set 'Open absence period'
 	When I view my week schedule for date '2013-04-05'
 	Then I should see an 'green' indication for chance of absence request on '2013-04-02'
-	And I should see an 'red' indication for chance of absence request on '2013-04-05'
 
 
 Scenario: Show the user a red indication when current date is outside open absence periods
@@ -136,21 +139,10 @@ Scenario: Show the user a red indication when current date is outside open absen
 	When I view my week schedule for date '2013-04-01'
 	Then I should see an 'red' indication for chance of absence request on '2013-04-01'
 
-@ignore
+
 Scenario: Do not show indication of the amount of agents that can go on holiday if no permission to absence request
 	Given I have the role 'No access to absence requests'
 	When I view my week schedule for date '2013-02-15'
 	Then I should not see any indication of how many agents can go on holiday
 
-Scenario: Show indication of agents that can go on holiday
-	Given I have the role 'Full access to mytime'
-	When I view my week schedule for date '2013-02-15'
-	Then I should see an indication of the amount of agents that can go on holiday on each day of the week
 
-@ignore
-Scenario: Indicate that no agents that can go on holiday if outside bounds of absence period
-	Given I have the role 'Full access to mytime'
-	And the absence period is opened between '2013-01-01' and '2013-01-30'
-	And I have a denied absence request beacuse of missing workflow control set
-	When I view my week schedule for date '2013-02-15'
-	Then I should see an indication that no agents that can go on holiday for date '2013-02-15'
