@@ -107,20 +107,26 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
         [Test]
         public void VerifyCommonStatisticData()
         {
-            _target.Analyze();
-
             Assert.AreEqual(5, _target.Count);
             Assert.AreEqual(116d, _target.Summa);
             Assert.AreEqual(23.2d, _target.Average);
             Assert.AreEqual(9.701, _target.StandardDeviation, 0.01d);// 0.001d);
             Assert.AreEqual(25.146, _target.RootMeanSquare, 0.01d);
+			Assert.AreEqual(_target.Summa + _target.StandardDeviation, _target.Teleopti, 0.01d);
+
+			_target.Analyze();
+
+			Assert.AreEqual(5, _target.Count);
+			Assert.AreEqual(116d, _target.Summa);
+			Assert.AreEqual(23.2d, _target.Average);
+			Assert.AreEqual(9.701, _target.StandardDeviation, 0.01d);// 0.001d);
+			Assert.AreEqual(25.146, _target.RootMeanSquare, 0.01d);
+			Assert.AreEqual(_target.Summa + _target.StandardDeviation, _target.Teleopti, 0.01d);
         }
 
         [Test]
         public void VerifyItemsStatisticData()
         {
-            _target.Analyze();
-
             Assert.AreEqual(-11.8d, _target[0].DeviationFromAverage, 0.01d);
             Assert.AreEqual(-5.9d, _target[1].DeviationFromAverage, 0.01d);
             Assert.AreEqual(-1.9d, _target[2].DeviationFromAverage, 0.01d);
