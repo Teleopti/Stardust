@@ -62,7 +62,6 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
 			{
 				IJobStepResult jobStepResult = _target.Run(new List<IJobStep>(), new BusinessUnit("bu"), new List<IJobResult>(), false);
 				Assert.AreEqual(0, jobStepResult.RowsAffected);
-				Assert.That(_target.);
 			}
 		}
 
