@@ -5506,8 +5506,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			IList<ISkillStaffPeriod> skillStaffPeriods;
 			if (aggregateSkillSkill.IsVirtual)
 			{
-				skillStaffPeriods = SchedulerState.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodList(
-					aggregateSkillSkill, TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(_currentIntraDayDate, _currentIntraDayDate.AddDays(1), _schedulerState.TimeZoneInfo));
+				SchedulerState.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodList(aggregateSkillSkill, TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(_currentIntraDayDate, _currentIntraDayDate.AddDays(1), _schedulerState.TimeZoneInfo));
+				skillStaffPeriods = SchedulerState.SchedulingResultState.SkillStaffPeriodHolder.SkillStaffPeriodList(aggregateSkillSkill, TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(_currentIntraDayDate, _currentIntraDayDate.AddDays(1), _schedulerState.TimeZoneInfo));
 			}
 			else
 			{

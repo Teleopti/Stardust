@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Common
@@ -24,7 +25,7 @@ namespace Teleopti.Ccc.Domain.Common
             get { return _secondDependencies; }
         }
 
-        public void CreateDependencies(IEnumerable<IPair<T>> pairList,IEnumerable<T> entriesForFirst)
+        public void CreateDependencies(IEnumerable<Tuple<T, T>> pairList,IEnumerable<T> entriesForFirst)
         {
             _firstDependencies = new HashSet<T>();
             _secondDependencies = new HashSet<T>();
