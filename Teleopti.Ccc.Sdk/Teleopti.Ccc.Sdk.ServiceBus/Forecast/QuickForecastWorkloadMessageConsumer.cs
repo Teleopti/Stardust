@@ -84,7 +84,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 					var skill = workload.Skill;
 					var scenario = _scenarioRepository.Get(message.ScenarioId);
 					//Load statistic data
-					var statisticHelper = _forecastClassesCreator.CreateStatisticHelper(_repositoryFactory, unitOfWork);
+					var statisticHelper = _forecastClassesCreator.CreateStatisticHelper(unitOfWork);
 					var stat = statisticHelper.LoadStatisticData(message.StatisticPeriod, workload);
 					
 					var validated = new List<IValidatedVolumeDay>(0);
@@ -148,7 +148,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 					updateStandardTemplates(workload, statisticHelper, message.TemplatePeriod, message.SmoothingStyle);
 
 					//Create budget forecast (apply standard templates for all days in target)
+				    var helper = new TaskOwnerHelper(workloadDays);
+                    helper.BeginUpdate();
 					workload.SetDefaultTemplates(workloadDays);
+                    helper.EndUpdate();
 					jobResult.AddDetail(new JobResultDetail(DetailLevel.Info, "Updated forecast for " + workload.Name, DateTime.UtcNow,
 					                                        null));
 					_feedback.ReportProgress(message.IncreaseWith, "Updated forecast for " + workload.Name);
@@ -217,7 +220,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 		ISkillDayCalculator CreateSkillDayCalculator(ISkill skill, IList<ISkillDay> skillDays,
 		                                                            DateOnlyPeriod visiblePeriod);
 
-		IStatisticHelper CreateStatisticHelper(IRepositoryFactory repositoryFactory, IUnitOfWork unitOfWork);
+		IStatisticHelper CreateStatisticHelper(IUnitOfWork unitOfWork);
 
 
 		ITaskOwnerPeriod GetNewTaskOwnerPeriod(IList<ITaskOwner> taskOwnerDaysWithoutOutliers);
@@ -225,7 +228,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 
 	public class ForecastClassesCreator : IForecastClassesCreator
 	{
-		public IWorkloadDayTemplateCalculator CreateWorkloadDayTemplateCalculator(IStatisticHelper statisticsHelper,
+	    private readonly IRepositoryFactory _repositoryFactory;
+
+	    public ForecastClassesCreator(IRepositoryFactory repositoryFactory)
+        {
+            _repositoryFactory = repositoryFactory;
+        }
+
+	    public IWorkloadDayTemplateCalculator CreateWorkloadDayTemplateCalculator(IStatisticHelper statisticsHelper,
 		                                                                         IOutlierRepository outlierRepository)
 		{
 			return  new WorkloadDayTemplateCalculator(statisticsHelper,outlierRepository);
@@ -242,9 +252,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Forecast
 			return new SkillDayCalculator(skill,skillDays,visiblePeriod);
 		}
 
-		public IStatisticHelper CreateStatisticHelper(IRepositoryFactory repositoryFactory, IUnitOfWork unitOfWork)
+		public IStatisticHelper CreateStatisticHelper(IUnitOfWork unitOfWork)
 		{
-			return new StatisticHelper(repositoryFactory,unitOfWork);
+			return new StatisticHelper(_repositoryFactory,unitOfWork);
 		}
 
 		public ITaskOwnerPeriod GetNewTaskOwnerPeriod(IList<ITaskOwner> taskOwnerDaysWithoutOutliers)
