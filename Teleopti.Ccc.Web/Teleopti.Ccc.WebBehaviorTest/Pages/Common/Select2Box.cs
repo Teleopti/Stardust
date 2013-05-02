@@ -6,7 +6,7 @@ using WatiN.Core;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 {
-	public class Select2Box : Control<TextField>
+	public class Select2Box : Control<SelectList>
 	{
 		public Div Container
 		{
@@ -15,7 +15,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 
 		public string Value
 		{
-			get { return Element.Value; }
+			get { return Element.SelectedOption.Value; }
 		}
 
 		public bool IsClosed {

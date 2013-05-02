@@ -17,10 +17,13 @@
                 <button class="btn" data-bind="datepicker: selectedDate, datepickerOptions: {autoHide: true}"><i class="icon-th"></i></button>
                 <button class="btn" data-bind="click: nextDay"><i class="icon-arrow-right"></i></button>
             </div>
-            <input type="hidden" id="Team-Picker"/>
-            @*<select data-bind="options: availableTeams, value: selectedTeam, 'optionsText': 'Text'">
-            </select>*@
         </form>
+        <ul class="nav" data-bind="if: showTeamPicker">
+            <li class="divider-vertical"></li>
+        </ul>
+        <div data-bind="if: showTeamPicker">
+            <select id="Team-Picker" data-bind="select2: { width: 'resolve' }, options: availableTeams, value: selectedTeam, optionsValue: 'id', optionsText: 'text'" />
+        </div>
     </div>
 </div>
 <div id="TeamSchedule-body" class="body-teamschedule" data-mytime-teamselection="@Model.TeamSelection" data-mytime-periodselection='@Html.Schedule().PeriodSelectionAsJson(Model.PeriodSelection)'>
@@ -59,7 +62,7 @@
 									var rightPixel = (Math.Round(scheduleWidth * layer.EndPositionPercent));
 									var widthPixel = rightPixel - leftPixel;
 									var IEString = "filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='" + layer.Color + "',GradientType=0 ); /* IE6-9 */";
-									<li class="layer absolute tooltip @(agentSchedule.HasDayOffUnder ? StyleClasses.Striped : "gradient")" tooltip-title="@Html.AttributeEncode(layer.ActivityName)" tooltip-text="@layer.StartTime &ndash; @layer.EndTime"
+									<li class="layer absolute qtip-tooltip @(agentSchedule.HasDayOffUnder ? StyleClasses.Striped : "gradient")" tooltip-title="@Html.AttributeEncode(layer.ActivityName)" tooltip-text="@layer.StartTime &ndash; @layer.EndTime"
 											style="width: @(widthPixel)px;
 												@left: @(leftPixel)px;
 												background-color: @layer.Color;

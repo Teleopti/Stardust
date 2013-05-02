@@ -378,15 +378,13 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should not see the team-picker")]
 		public void ThenIShouldNotSeeTheTeam_Picker()
 		{
-			var picker = Pages.Pages.TeamSchedulePage.TeamPicker.Container;
-			EventualAssert.That(() => picker.Exists && picker.DisplayVisible(), Is.False);
+			Browser.Interactions.AssertNotExists(".navbar-inner", "#Team-Picker");
 		}
 
 		[Then(@"I should see the team-picker")]
 		public void ThenIShouldSeeTheTeam_PickerWithTwoTeams()
 		{
 			var picker = Pages.Pages.TeamSchedulePage.TeamPicker.Container;
-
 			picker.Should().Not.Be.Null();
 		}
 
