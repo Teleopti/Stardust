@@ -5,15 +5,7 @@
 Describe "Find a string in a file and replace it with another string" {
 
 	It "should throw exeption if file not exists" {
-		[bool] $isOk = $false;
-		try {
-		  FindAndReplace "dontexist.dontexist" "searchstring" "replacestring"
-		}
-		catch
-		{
-            $isOk = $true;
-		}
-		$isOk | Should Be $true
+		{ FindAndReplace "dontexist.dontexist" "searchstring" "replacestring" } | Should Throw
 	}
     
 	It "should replace string" {

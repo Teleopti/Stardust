@@ -165,6 +165,7 @@
     <Compile Include="Rta\BusinessUnitInfoConsumer.cs" />
     <Compile Include="QueueClearMessages.cs" />
     <Compile Include="Denormalizer\IScheduleDayReadModelCreator.cs" />
+    <Compile Include="Denormalizer\LegacyMessagesConsumer.cs" />
     <Compile Include="Forecast\QuickForecastWorkloadMessageConsumer.cs" />
     <Compile Include="Forecast\QuickForecastWorkloadsMessageConsumer.cs" />
     <Compile Include="Forecast\RecalculateForecastOnSkillConsumer.cs" />

@@ -39,6 +39,7 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
                 {
                     var container = new DataSourceContainer(availableDataSource, _repositoryFactory, null,
                                                             AuthenticationTypeOption.Windows);
+					container.LogOnName = _windowsUserProvider.DomainName + "\\" + _windowsUserProvider.UserName;
                     container.SetUser(person);
                     dataSourceList.Add(container);
                 }

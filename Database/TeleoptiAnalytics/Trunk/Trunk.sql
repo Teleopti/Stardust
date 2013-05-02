@@ -235,6 +235,15 @@ if not exists(select 1 from [mart].[etl_maintenance_configuration] where configu
 if not exists(select 1 from [mart].[etl_maintenance_configuration] where configuration_id = 15)
 	insert into [mart].[etl_maintenance_configuration] values(15,'YearsToKeepAggAgentStats',50)
 GO
+
+----------------  
+--Name: David
+--Date: 2013-04-29
+--Desc: bug #23283 - wrong SP name
+----------------
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[etl_dim_time_zone_delete.sql]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [mart].[etl_dim_time_zone_delete.sql]
+GO
 ----------------  
 --Name: Karin
 --Date: 2013-04-29

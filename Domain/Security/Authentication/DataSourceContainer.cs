@@ -1,4 +1,5 @@
 using System;
+using Teleopti.Ccc.Domain.Auditing;
 using log4net;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -36,17 +37,24 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
             User = person;
         }
 
+	    
+	    public string LogOnName { get; set; }
+
+		
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1031:DoNotCatchGeneralExceptionTypes")]
-        public AuthenticationResult LogOn(string logOnName, string password)
+		public AuthenticationResult LogOn(string logOnName, string password, string clientIp)
         {
             AuthenticationResult result;
+	        LogOnName = logOnName;
             using (var unitOfWork = DataSource.Application.CreateAndOpenUnitOfWork())
             {
                 result = _checkLogOn.CheckLogOn(unitOfWork, logOnName, password);
                 SetUser(result.Person);
+				if (!result.Successful && !string.IsNullOrEmpty(clientIp))
+					SaveLogonAttempt(false, clientIp);
 
                 try
-                {
+                {			
                     unitOfWork.PersistAll();
                 }
                 catch (Exception ex) //Not good at all! But we'll need to move the exceptions to domain first.
@@ -60,7 +68,12 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
             return result;
         }
 
-        public AuthenticationResult LogOn(string windowsLogOnName)
+	    public AuthenticationResult LogOn(string logOnName, string password)
+	    {
+		    return LogOn(logOnName, password, "");
+	    }
+
+	    public AuthenticationResult LogOn(string windowsLogOnName)
         {
             AuthenticationResult result = new AuthenticationResult{Successful = false,HasMessage = false};
             using (var unitOfWork = DataSource.Application.CreateAndOpenUnitOfWork())
@@ -80,5 +93,26 @@ namespace Teleopti.Ccc.Domain.Security.Authentication
             }
             return result;
         }
+
+		public void SaveLogonAttempt(bool successful, string clientIp)
+	    {
+			var model = new LoginAttemptModel
+			{
+				ClientIp = clientIp,
+				Client = "WIN",
+				UserCredentials = LogOnName,
+				Provider = AuthenticationTypeOption.ToString(),
+				Result = successful ? "LogonSuccess" : "LogonFailed"
+			};
+			if (User != null) model.PersonId = User.Id;
+
+		    using (var unitOfWork = DataSource.Application.CreateAndOpenUnitOfWork())
+		    {
+				var rep = RepositoryFactory.CreatePersonRepository(unitOfWork);
+				rep.SaveLoginAttempt(model);
+			    unitOfWork.PersistAll();
+		    }
+		    
+	    }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Repositories
@@ -130,5 +131,6 @@ namespace Teleopti.Ccc.Domain.Repositories
         ICollection<IPerson> FindPeople(IEnumerable<IPerson> people);
     	bool DoesWindowsUserExists(string domainName, string userName);
     	IEnumerable<IPerson> FindPossibleShiftTrades(IPerson loggedOnUser);
+	    int SaveLoginAttempt(LoginAttemptModel model);
     }
 }

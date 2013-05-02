@@ -73,13 +73,33 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
         ///  Filter layercollection by activity once and
         ///  leave early if possible
         /// </remarks>
-        public void ProcessLayers(IVisualLayerCollection layerCollectionFilteredByPeriod)
-        {
-            _splittedValues = FillInValuesFromLayers(layerCollectionFilteredByPeriod, _splittedValues);
-            IPopulationStatisticsCalculator calculator =
-                new PopulationStatisticsCalculator(CalculateSplitPeriodRelativeValues());
-            _skillStaffPeriod.SetDistributionValues(calculator, this);
-        }
+		public void ProcessLayers(IVisualLayerCollection layerCollectionFilteredByPeriod)
+		{
+			_splittedValues = FillInValuesFromLayers(layerCollectionFilteredByPeriod, _splittedValues);
+			if (!diffFound(_splittedValues))
+				return;
+
+			IPopulationStatisticsCalculator calculator =
+				new PopulationStatisticsCalculator(CalculateSplitPeriodRelativeValues());
+			_skillStaffPeriod.SetDistributionValues(calculator, this);
+		}
+
+		private static bool diffFound(double[] splittedValues)
+		{
+			double? lastValue = null;
+			for (int i = 0; i < splittedValues.Length; i++)
+			{
+				if (!lastValue.HasValue)
+					lastValue = splittedValues[i];
+
+				if (Math.Abs(splittedValues[i] - lastValue.Value) > 0.001)
+					return true;
+
+				lastValue = splittedValues[i];
+			}
+
+			return false;
+		}
 
         public double[] CalculateSplitPeriodRelativeValues()
         {
