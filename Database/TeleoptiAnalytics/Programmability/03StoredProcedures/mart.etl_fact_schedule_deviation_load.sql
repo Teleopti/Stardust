@@ -215,7 +215,7 @@ ON
 INNER JOIN 
 	mart.dim_interval di
 ON 
-	dateadd(hour,DATEPART(hour,fs.shift_endtime),@date_min)+ dateadd(minute,DATEPART(minute,fs.shift_endtime),@date_min) > di.interval_start
+	dateadd(hour,DATEPART(hour,fs.shift_endtime),@date_min)+ dateadd(minute,DATEPART(minute,fs.shift_endtime),@date_min) >= di.interval_start
 	and dateadd(hour,DATEPART(hour,fs.shift_endtime),@date_min)+ dateadd(minute,DATEPART(minute,fs.shift_endtime),@date_min) <= di.interval_end
 WHERE
 	fs.schedule_date_id BETWEEN @start_date_id AND @end_date_id
