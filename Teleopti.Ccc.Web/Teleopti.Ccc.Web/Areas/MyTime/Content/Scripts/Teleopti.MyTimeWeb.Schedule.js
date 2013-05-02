@@ -193,16 +193,6 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			else if (percent < 80) index = 1;
 			return options[index];
 		};
-		
-		self.holidayChance = ko.computed(function () {
-		    var percent;
-		    if (self.allowance() != 0)
-		    	percent = 100 * ((self.allowance() - self.absenceAgents()) / self.allowance());
-		    else {
-		        percent = 0;
-		    }
-		    return percent;
-		});
 
 		self.holidayChanceText = ko.computed(function () {
 			return parent.userTexts.chanceOfGettingAbsencerequestGranted + self.basedOnAllowanceChance([parent.userTexts.poor, parent.userTexts.fair, parent.userTexts.good]);
