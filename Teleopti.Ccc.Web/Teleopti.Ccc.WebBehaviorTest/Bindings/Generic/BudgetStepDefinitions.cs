@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			UserFactory.User().Setup(budgetday);
 		}
 
-		//henke hitta på ett bättre namn
+
 		[Given(@"there is a \(readonly\) PersonScheduleDayModel")]
 		public void GivenThereIsAReadonlyPersonScheduleDayModel(Table table)
 		{

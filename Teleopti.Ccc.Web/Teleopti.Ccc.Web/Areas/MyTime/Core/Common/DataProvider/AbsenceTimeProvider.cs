@@ -38,17 +38,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 
 		private void addTime(IEnumerable<AbsenceAgents> target, DateOnlyPeriod period, IBudgetGroup budgetGroup, IScenario scenario)
 		{
-			if (budgetGroup != null)
-			{
-				var absenceTime = _scheduleProjectionReadOnlyRepository.AbsenceTimePerBudgetGroup(period, budgetGroup, scenario);
+			if (budgetGroup == null) return;
+			var absenceTime = _scheduleProjectionReadOnlyRepository.AbsenceTimePerBudgetGroup(period, budgetGroup, scenario);
 
-				if (absenceTime != null)
-				{
-					foreach (var payloadWorkTime in absenceTime)
-					{
-						target.First(a => a.Date == payloadWorkTime.BelongsToDate).AbsenceTime = TimeSpan.FromTicks(payloadWorkTime.TotalContractTime).TotalMinutes;
-					}
-				}
+			if (absenceTime == null) return;
+			foreach (var payloadWorkTime in absenceTime)
+			{
+				target.First(a => a.Date == payloadWorkTime.BelongsToDate).AbsenceTime = TimeSpan.FromTicks(payloadWorkTime.TotalContractTime).TotalMinutes;
 			}
 		}
 	}
