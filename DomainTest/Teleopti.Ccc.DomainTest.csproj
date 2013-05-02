@@ -488,7 +488,6 @@
     <Compile Include="Common\OptionalColumnValueTest.cs" />
     <Compile Include="Common\PairDictionaryFactoryTest.cs" />
     <Compile Include="Common\PairMatrixServiceTest.cs" />
-    <Compile Include="Common\PairTest.cs" />
     <Compile Include="Common\RootPersonGroupTest.cs" />
     <Compile Include="Common\ContainerTestClass.cs" />
     <Compile Include="Common\EntityContainerTest.cs">

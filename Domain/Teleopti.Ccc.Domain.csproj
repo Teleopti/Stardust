@@ -629,7 +629,6 @@
     <Compile Include="Common\OptionalColumn.cs" />
     <Compile Include="Common\GroupPage.cs" />
     <Compile Include="Common\Ignore.cs" />
-    <Compile Include="Common\Pair.cs" />
     <Compile Include="Common\PairDictionaryFactory.cs" />
     <Compile Include="Common\PairMatrixService.cs" />
     <Compile Include="Common\Payload.cs" />
@@ -1828,7 +1827,9 @@
     <EmbeddedResource Include="Common\JobResultDetail.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Auditing\Revision.hbm.xml" />
+    <EmbeddedResource Include="Auditing\Revision.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Auditing\AuditSetting.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
