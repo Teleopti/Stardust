@@ -40,10 +40,9 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 				from budgetGroupPeriod in budgetGroupPeriods
 				from budgetDay in _budgetDayRepository.Find(defaultScenario, budgetGroupPeriod.Item2, budgetGroupPeriod.Item1)
 				where openPeriods.Any(o => o.OpenForRequestsPeriod.Contains(budgetDay.Day))
-				select new { Date = budgetDay.Day, Time = TimeSpan.FromHours(budgetDay.Allowance * budgetDay.FulltimeEquivalentHours) };
+				select new { Date = budgetDay.Day, Time = TimeSpan.FromHours(Math.Max(budgetDay.Allowance * budgetDay.FulltimeEquivalentHours,0)) };
 
 				allowanceList = allowanceList.Concat(allowanceFromBudgetDays);
-
 			}
 
 			return

@@ -47,11 +47,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			var target = new AllowanceProvider(budgetDayRepository, _loggedOnUser, _scenarioRepository, new ExtractBudgetGroupPeriods());
 			var result = target.GetAllowanceForPeriod(period).ToList();
 
-			Assert.That(allDaysHasZeroAllowance(result));
+			verifyThatAllDaysHasZeroAllowance(result);
 		}
 
 		[Test]
-		public void GetAllowanceForPeriod_WhenBudgetDayExistWitthinThePeriod_ShouldSetTheAllowanceInMinutesForThatDate()
+		public void GetAllowanceForPeriod_WhenBudgetDayExistWithinThePeriod_ShouldSetTheAllowanceInMinutesForThatDate()
 		{
 			addWorkFlowControlSetWithOpenAbsencePeriod();
 			var budgetDayRepository = MockRepository.GenerateMock<IBudgetDayRepository>();
@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			var target = new AllowanceProvider(budgetDayRepo, _loggedOnUser, _scenarioRepository, new ExtractBudgetGroupPeriods());
 
 			var result = target.GetAllowanceForPeriod(period);
-			Assert.That(allDaysHasZeroAllowance(result));
+			verifyThatAllDaysHasZeroAllowance(result);
 		}
 
 		[Test]
@@ -139,7 +139,31 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			var target = new AllowanceProvider(budgetDayRepo, _loggedOnUser, _scenarioRepository, new ExtractBudgetGroupPeriods());
 
 			var result = target.GetAllowanceForPeriod(period);
-			Assert.That(allDaysHasZeroAllowance(result));
+			verifyThatAllDaysHasZeroAllowance(result);
+		}
+
+		[Test]
+		public void GetAllowanceForPeriod_WhenThereAreDayWithNegativeValues_ShouldSetAllowanceToZero()
+		{
+			addWorkFlowControlSetWithOpenAbsencePeriod();
+			var budgetDayRepository = MockRepository.GenerateMock<IBudgetDayRepository>();
+
+			var period = new DateOnlyPeriod(DateOnly.Today, DateOnly.Today);
+
+			var personPeriod = PersonPeriodFactory.CreatePersonPeriodWithSkills(period.StartDate);
+
+			var budgetGroup = new BudgetGroup();
+			personPeriod.BudgetGroup = budgetGroup;
+
+
+			var budgetDayWithNegativeValue = createBudgetDayWithAllowance(budgetGroup, period.StartDate, -20);
+
+			_user.AddPersonPeriod(personPeriod);
+			budgetDayRepository.Expect(x => x.Find(_scenario, budgetGroup, period)).Return(new List<IBudgetDay>(){budgetDayWithNegativeValue});
+
+			var target = new AllowanceProvider(budgetDayRepository, _loggedOnUser, _scenarioRepository, new ExtractBudgetGroupPeriods());
+			var result = target.GetAllowanceForPeriod(period);
+			verifyThatAllDaysHasZeroAllowance(result);
 		}
 
 		#region helpers
@@ -160,10 +184,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Common.DataProvider
 			_user.WorkflowControlSet = workflowControlSet;
 		}
 
-		private bool allDaysHasZeroAllowance(IEnumerable<Tuple<DateOnly, TimeSpan>> allowanceDays)
+		private void verifyThatAllDaysHasZeroAllowance(IEnumerable<Tuple<DateOnly, TimeSpan>> allowanceDays)
 		{
-			return allowanceDays.Sum(a => a.Item2.TotalMinutes) == 0;
+			Assert.That(allowanceDays.Sum(a => a.Item2.TotalMinutes) == 0);
 		}
+
 		#endregion
 	}
 }
