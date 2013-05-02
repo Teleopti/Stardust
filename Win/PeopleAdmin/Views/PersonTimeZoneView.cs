@@ -23,8 +23,12 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 		public PersonTimeZoneView(IList<IPerson> persons)
 		{
 			InitializeComponent();
+			SetTexts();
 			_presenter = new PersonTimeZonePresenter(this, persons);
 			_affectedPersons = new List<IPerson>();
+			_cancellationToken = new CancellationTokenSource();
+			toolStripProgressBar1.Visible = false;
+			toolStripStatusLabel1.Visible = false;
 			PopulateTimeZones();
 		}
 
@@ -48,6 +52,8 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 		private void buttonAdvOkClick(object sender, EventArgs e)
 		{
 			buttonAdvOk.Enabled = false;
+			toolStripProgressBar1.Visible = true;
+			toolStripStatusLabel1.Visible = true;
 			_presenter.OnButtonAdvOkClick(comboBoxAdvTimeZones.SelectedItem as TimeZoneInfo);
 		}
 
@@ -85,7 +91,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			}
 		}
 
-		private void setPersonsTimeZoneTask(IEnumerable<IPerson> persons, TimeZoneInfo timeZoneInfo)
+		private void setPersonsTimeZoneTask(IList<IPerson> persons, TimeZoneInfo timeZoneInfo)
 		{
 			foreach (var person in persons)
 			{
@@ -102,9 +108,30 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 						AgentDayConverters.ForPeople().ForEach(x => x.Execute(tx, person.Id.Value, timeZoneInfo));
 						tx.Commit();
 						_affectedPersons.Add(person);
+						var statusText = person.Name.FirstName + " " + person.Name.LastName;
+						var progress = ((100 * _affectedPersons.Count) / persons.Count);
+						updateProgress(statusText, progress);	
 					}
 				}
 			}	
+		}
+
+		private void updateProgress(string statusText, int progress)
+		{
+			if (InvokeRequired)
+			{
+				BeginInvoke(new Action<string, int>(updateProgress), statusText, progress);
+			}
+			else
+			{
+				toolStripStatusLabel1.Text = statusText;
+				toolStripProgressBar1.Value = progress;
+			}
+		}
+
+		private void personTimeZoneViewFormClosing(object sender, System.Windows.Forms.FormClosingEventArgs e)
+		{
+			_cancellationToken.Cancel();
 		}
 	}
 }
