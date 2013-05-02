@@ -160,6 +160,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		{
 			var shift = _mocks.StrictMock<IShiftProjectionCache>();
 			_schedulingOptions.UseTeamBlockSameShiftCategory = true;
+		    _schedulingOptions.UseTeamBlockPerOption = true;
 			var shiftCategory = ShiftCategoryFactory.CreateShiftCategory("shiftcategory");
 			using (_mocks.Record())
 			{
