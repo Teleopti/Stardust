@@ -326,6 +326,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			return personRequestList;
 		}
 
+		public IList<IPersonRequest> FindNewerThan(DateTime newerThan)
+		{
+			var crit = Session.CreateCriteria(typeof(PersonRequest))
+				.Add(Restrictions.Gt("UpdatedOn", newerThan));
+			var retList = crit.List<IPersonRequest>();
+			return retList;
+		}
+
 		private IEnumerable<IPersonRequest> FindModifiedWithinPeriodOrPending(IEnumerable<IPerson> persons, DateTimePeriod period)
 		{
 			var retList = new List<IPersonRequest>();

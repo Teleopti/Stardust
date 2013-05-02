@@ -703,5 +703,24 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			 Assert.Throws<DataSourceException>(() =>
 															rep.Remove(request));
 		 }
+
+		 [Test]
+		 public void CanFindPersonRequestNewerThan()
+		 {
+			 var newerThan = DateTime.UtcNow.AddHours(-1);
+
+			 IPersonRequest requestAccepted = CreateShiftTradeRequest("Trade with me");
+			 IPersonRequest requestAbsence = CreateAggregateWithCorrectBusinessUnit();
+
+			 PersistAndRemoveFromUnitOfWork(requestAccepted);
+			 PersistAndRemoveFromUnitOfWork(requestAbsence);
+
+			 Assert.IsNotNull(requestAccepted.Id);
+			 Guid? savedGuid = requestAccepted.Id;
+
+			 var loadedPersonRequest = new PersonRequestRepository(UnitOfWork).FindNewerThan(newerThan);
+			 Assert.AreEqual(2, loadedPersonRequest.Count);
+		 }
+
     }
 }
