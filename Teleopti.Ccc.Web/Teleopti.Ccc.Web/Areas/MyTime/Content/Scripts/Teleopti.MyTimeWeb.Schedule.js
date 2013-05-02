@@ -206,17 +206,11 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 		self.holidayChanceText = ko.computed(function () {
 			return parent.userTexts.chanceOfGettingAbsencerequestGranted + self.basedOnAllowanceChance([parent.userTexts.poor, parent.userTexts.fair, parent.userTexts.good]);
-			//if (self.holidayChance() < 30) return parent.userTexts.chanceOfGettingAbsencerequestGranted + parent.userTexts.poor;
-			//if (self.holidayChance() < 80) return parent.userTexts.chanceOfGettingAbsencerequestGranted + parent.userTexts.fair;
-			//return parent.userTexts.chanceOfGettingAbsencerequestGranted + parent.userTexts.good;
 		});
 		
 		self.holidayChanceColor = ko.computed(function () {
 
 			return self.basedOnAllowanceChance(["red", "yellow", "green"]);
-			//if (self.holidayChance() < 30) return 'red';
-			//if (self.holidayChance() < 80) return 'yellow';
-			//return 'green';
 		});
 		
 		self.hasTextRequest = ko.computed(function () {

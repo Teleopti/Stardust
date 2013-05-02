@@ -52,17 +52,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 						if (!openPeriod.OpenForRequestsPeriod.Contains(budgetDay.Day)) continue;
 
 						var allowanceDay = allowanceList.FirstOrDefault(a => a.Item1 == budgetDay.Day);
-						if (allowanceDay != null)
-						{
-							var index = allowanceList.IndexOf(allowanceDay); 
-							allowanceList.Insert(index,new Tuple<DateOnly, TimeSpan>(allowanceDay.Item1, TimeSpan.FromHours(budgetDay.Allowance * budgetDay.FulltimeEquivalentHours)));
-							allowanceList.Remove(allowanceDay);
-
-						}
+						if (allowanceDay == null) continue;
+						var index = allowanceList.IndexOf(allowanceDay); 
+						allowanceList.Insert(index,new Tuple<DateOnly, TimeSpan>(allowanceDay.Item1, TimeSpan.FromHours(budgetDay.Allowance * budgetDay.FulltimeEquivalentHours)));
+						allowanceList.Remove(allowanceDay);
 					}
 				}
 			}
-
 			return allowanceList;
 		}
 	}
