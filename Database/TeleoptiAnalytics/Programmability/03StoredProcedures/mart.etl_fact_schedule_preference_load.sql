@@ -15,6 +15,7 @@ GO
 --				2010-10-12 #12055 - ETL - cant load preferences
 --				2011-09-27 Fix start/end times = 0
 --				2012-11-25 #19854 - PBI to add Shortname for DayOff.
+--				2013-04-30 #22523 - Use stage as delete source
 -- Interface:	smalldatetime, with only datepart! No time allowed
 -- =============================================
 --exec mart.etl_fact_schedule_preference_load '2009-02-01','2009-02-17'
@@ -23,64 +24,36 @@ CREATE PROCEDURE [mart].[etl_fact_schedule_preference_load]
 @start_date smalldatetime,
 @end_date smalldatetime,
 @business_unit_code uniqueidentifier
-WITH EXECUTE AS OWNER	
 AS
-
-DECLARE @start_date_id	INT
-DECLARE @end_date_id	INT
-
---Declare
-DECLARE @max_start_date smalldatetime
-DECLARE @min_start_date smalldatetime
-
---init
-SELECT  
-	@max_start_date= max(restriction_date),
-	@min_start_date= min(restriction_date)
-FROM
-	Stage.stg_schedule_preference
---select * from v_stg_schedule_preference
---Reset @start_date, @end_date to 
-SET	@start_date = CASE WHEN @min_start_date > @start_date THEN @min_start_date ELSE @start_date END
-SET	@end_date	= CASE WHEN @max_start_date < @end_date THEN @max_start_date ELSE @end_date	END
-
---There must not be any timevalue on the interface values, since that will mess things up around midnight!
---Consider: DECLARE @end_date smalldatetime;SET @end_date = '2006-01-31 23:59:30';SELECT @end_date
-SET @start_date = CONVERT(smalldatetime,CONVERT(nvarchar(30), @start_date, 112)) --ISO yyyymmdd
-SET @end_date	= CONVERT(smalldatetime,CONVERT(nvarchar(30), @end_date, 112))
-
---Not currently needed since we now delete on shift_starttime (instead of _id)
-SET @start_date_id =	(SELECT date_id FROM dim_date WHERE @start_date = date_date)
-SET @end_date_id	 =	(SELECT date_id FROM dim_date WHERE @end_date = date_date)
 
 DECLARE @business_unit_id int
 SET @business_unit_id = (SELECT business_unit_id FROM mart.dim_business_unit WHERE business_unit_code = @business_unit_code)
 
-DELETE FROM mart.fact_schedule_preference
-WHERE date_id between @start_date_id AND @end_date_id
-AND business_unit_id = @business_unit_id
+-- Delete rows
+DELETE f
+FROM Stage.stg_schedule_preference stg
+INNER JOIN
+	mart.dim_person		dp
+ON
+	stg.person_code		=			dp.person_code
+	AND --trim persons
+		(
+				(stg.restriction_date	>= dp.valid_from_date)
 
+			AND
+				(stg.restriction_date < dp.valid_to_date)
+		)
+INNER JOIN mart.dim_date dd
+	ON dd.date_date = stg.restriction_date
+INNER JOIN mart.dim_scenario ds
+	ON stg.scenario_code = ds.scenario_code
+INNER JOIN mart.fact_schedule_preference f
+	ON f.date_id = dd.date_id
+	AND f.interval_id = stg.interval_id
+	AND f.scenario_id = ds.scenario_id
+WHERE stg.business_unit_code = @business_unit_code
 
-/*
-DELETE FROM mart.fact_schedule_preference
-WHERE date_id between @start_date_id AND @end_date_id
-	AND business_unit_id = 
-	(
-		SELECT DISTINCT
-			bu.business_unit_id
-		FROM 
-			Stage.stg_schedule_preference s
-		INNER JOIN
-			mart.dim_business_unit bu
-		ON
-			s.business_unit_code = bu.business_unit_code
-	)
-*/
---DELETE FROM mart.fact_schedule_preference WHERE date_id between @start_date_id AND @end_date_id
-
------------------------------------------------------------------------------------
 -- Insert rows
-
 INSERT INTO mart.fact_schedule_preference
 	(
 	date_id, 
