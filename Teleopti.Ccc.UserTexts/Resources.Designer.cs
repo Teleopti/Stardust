@@ -24486,6 +24486,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to View All Group Pages.
+        /// </summary>
+        public static string ViewAllGroupPages {
+            get {
+                return ResourceManager.GetString("ViewAllGroupPages", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to View allowance.
         /// </summary>
         public static string ViewAllowance {
@@ -24504,7 +24513,7 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to View custom team schedule.
+        ///   Looks up a localized string similar to View Custom Team Schedule.
         /// </summary>
         public static string ViewCustomTeamSchedule {
             get {

@@ -5,12 +5,18 @@ As an agent
 I want to see team schedule for other groups on any group page
  
 Background:
-	Given there is a role with
-	| Field                          | Value                         |
-	| Name                           | Test for view all group pages |
-	| Access to team schedule        | true                          |
-	| Access to view all group pages | true                          |
-	| Access to the whole site       | true                          |
+Given there is a team with
+	| Field | Value      |
+	| Name  | Team green |
+	And there is a team with
+	| Field | Value    |
+	| Name  | Team Red |
+	And there is a role with
+	| Field                          | Value                            |
+	| Name                           | Test for viewing all group pages |
+	| Access to team                 | Team red                         |
+	| Access to team schedule        | true                             |
+	| Access to view all group pages | true                             |
 	And there is a workflow control set with
 	| Field                      | Value              |
 	| Name                       | Published schedule |
@@ -18,25 +24,29 @@ Background:
 	And I have the workflow control set 'Published schedule'
 	And I have a schedule period with 
 	| Field      | Value      |
-	| Start date | 2013-02-25 |
+	| Start date | 2013-03-25 |
 	| Type       | Week       |
 	| Length     | 1          |
 	And I have a person period with 
 	| Field      | Value      |
-	| Start date | 2013-02-25 |
-	And I have a colleague
-	And I have a colleague in another team
-	And I have the role 'Test for view all group pages'
+	| Team       | Team green |
+	| Start date | 2013-03-25 |
+	And 'Pierre Baldi' have a person period with
+	| Field      | Value      |
+	| Team       | Team green |
+	| Start date | 2013-03-25 |
+	And 'John Smith' have a person period with
+	| Field      | Value      |
+	| Team       | Team Red |
+	| Start date | 2013-03-25 |
+	And I have the role 'Test for viewing all group pages'
 
 
 Scenario: View team schedule
-	Given I am an agent in a team
-	And I have a shift today
-	And I have a colleague
-	And My colleague has a shift today
-	When I view team schedule
-	Then I should see my schedule
-	And I should see my colleague's schedule
+	Given I have the role 'Test for viewing all group pages'
+	When I view team schedule for '2013-03-25'
+	Then I should see schedule for 'Pierre Baldi'
+
 
 Scenario: View only my team's schedule
 	Given I am an agent in a team with access to the whole site
