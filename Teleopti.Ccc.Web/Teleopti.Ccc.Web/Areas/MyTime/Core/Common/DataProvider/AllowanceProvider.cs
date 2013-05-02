@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
@@ -25,41 +24,34 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 		public IEnumerable<Tuple<DateOnly, TimeSpan>> GetAllowanceForPeriod(DateOnlyPeriod period)
 		{
 			var person = _loggedOnUser.CurrentUser();
-			var allowanceList = period.DayCollection().Select(dateOnly => new Tuple<DateOnly, TimeSpan>(dateOnly,TimeSpan.Zero)).ToList();
+
+			var allowanceList =
+				from d in period.DayCollection()
+				select new { Date = d, Time = TimeSpan.Zero };
 
 			var budgetGroupPeriods = _extractBudgetGroupPeriods.BudgetGroupsForPeriod(person, period);
 			var defaultScenario = _scenarioRepository.LoadDefaultScenario();
 
-			ReadOnlyCollection<IAbsenceRequestOpenPeriod> openPeriods;
 			if (person.WorkflowControlSet != null && person.WorkflowControlSet.AbsenceRequestOpenPeriods != null)
 			{
-				openPeriods = person.WorkflowControlSet.AbsenceRequestOpenPeriods;
-			}
-			else
-			{
-				return allowanceList;
+				var openPeriods = person.WorkflowControlSet.AbsenceRequestOpenPeriods;
+
+				var allowanceFromBudgetDays =
+				from budgetGroupPeriod in budgetGroupPeriods
+				from budgetDay in _budgetDayRepository.Find(defaultScenario, budgetGroupPeriod.Item2, budgetGroupPeriod.Item1)
+				where openPeriods.Any(o => o.OpenForRequestsPeriod.Contains(budgetDay.Day))
+				select new { Date = budgetDay.Day, Time = TimeSpan.FromHours(budgetDay.Allowance * budgetDay.FulltimeEquivalentHours) };
+
+				allowanceList = allowanceList.Concat(allowanceFromBudgetDays);
+
 			}
 
-			foreach (var budgetGroupPeriod in budgetGroupPeriods)
-			{
-				var budgetDays = _budgetDayRepository.Find(defaultScenario, budgetGroupPeriod.Item2, budgetGroupPeriod.Item1);
+			return
+			from p in allowanceList
+			group p by p.Date into g
+			orderby g.Key
+			select new Tuple<DateOnly, TimeSpan>(g.Key, TimeSpan.FromTicks(g.Sum(p => p.Time.Ticks)));
 
-				if (person.WorkflowControlSet != null)
-				foreach (var budgetDay in budgetDays)
-				{
-					foreach (var openPeriod in openPeriods)
-					{
-						if (!openPeriod.OpenForRequestsPeriod.Contains(budgetDay.Day)) continue;
-
-						var allowanceDay = allowanceList.FirstOrDefault(a => a.Item1 == budgetDay.Day);
-						if (allowanceDay == null) continue;
-						var index = allowanceList.IndexOf(allowanceDay); 
-						allowanceList.Insert(index,new Tuple<DateOnly, TimeSpan>(allowanceDay.Item1, TimeSpan.FromHours(budgetDay.Allowance * budgetDay.FulltimeEquivalentHours)));
-						allowanceList.Remove(allowanceDay);
-					}
-				}
-			}
-			return allowanceList;
 		}
 	}
 }
