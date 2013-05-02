@@ -42,7 +42,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Jobs
 			Add(new StageUserJobStep(jobParameters));                   // BU independent
 			Add(new StageGroupPagePersonJobStep(jobParameters));
 			Add(new StageOvertimeJobStep(jobParameters));
-			Add(new StageRequestJobStep(jobParameters));
+			Add(new IntradayStageRequestJobStep(jobParameters));
 
 			// DIM AND BRIDGE TABLES AND QUEUE/AGENT SYNC
 			Add(new BridgeTimeZoneJobStep(jobParameters));              // BU independent
@@ -81,8 +81,8 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Jobs
 			Add(new FactForecastWorkloadJobStep(jobParameters));
 			Add(new FactScheduleDeviationJobStep(jobParameters));
 			Add(new FactKpiTargetTeamJobStep(jobParameters));
-			Add(new FactRequestJobStep(jobParameters));
-			Add(new FactRequestedDaysJobStep(jobParameters));
+			Add(new FactRequestJobStep(jobParameters,true));
+			Add(new FactRequestedDaysJobStep(jobParameters,true));
 			Add(new PermissionReportJobStep(jobParameters,true));
 
 			// If PM is installed then show ETL job step for synchronizing PM permissions

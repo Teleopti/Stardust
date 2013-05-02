@@ -655,10 +655,20 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
     		return new List<IPersonRequest>();
     	}
 
+		public IList<IPersonRequest> LoadIntradayRequest(ICollection<IPerson> person, DateTimePeriod period)
+		{
+			return new List<IPersonRequest>();
+		}
+
 		public int PersistRequest(DataTable dataTable)
     	{
     		return 0;
     	}
+
+		public int FillIntradayFactRequestMart(IBusinessUnit businessUnit)
+		{
+			return 0;
+		}
 
 		public int FillFactRequestMart(DateTimePeriod period, IBusinessUnit businessUnit)
 		{
@@ -669,7 +679,12 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
     	{
     		return 0;
     	}
-    	
+
+		public int FillIntradayFactRequestedDaysMart(IBusinessUnit businessUnit)
+        {
+            return 0;
+        }
+
         public int FillFactRequestedDaysMart(DateTimePeriod period, IBusinessUnit businessUnit)
         {
             return 0;

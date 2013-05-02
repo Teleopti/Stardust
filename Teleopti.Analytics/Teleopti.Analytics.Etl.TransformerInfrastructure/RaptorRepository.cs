@@ -731,8 +731,6 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			}
 		}
 
-		
-
 		public IList<IScheduleDay> LoadSchedulePartsPerPersonAndDate(DateTimePeriod period, IScheduleDictionary dictionary)
 		{
 			List<IScheduleDay> scheduleParts = new List<IScheduleDay>();
@@ -1031,6 +1029,18 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			}
 		}
 
+		public IList<IPersonRequest> LoadIntradayRequest(ICollection<IPerson> person, DateTimePeriod period)
+		{
+			IList<IPersonRequest> personRequests;
+			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+			{
+				var rep = new PersonRequestRepository(uow);
+				uow.Reassociate(((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit);
+				personRequests = rep.FindAllRequestModifiedWithinPeriodOrPending(person, period);
+			}
+			return personRequests;
+		}
+
 		public IList<IPersonRequest> LoadRequest(DateTimePeriod period)
 		{
 		    IList<IPersonRequest> personRequests;
@@ -1049,6 +1059,19 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			return HelperFunctions.BulkInsert(dataTable, "stage.stg_request", _dataMartConnectionString);
 		}
 
+		public int FillIntradayFactRequestMart(IBusinessUnit businessUnit)
+		{
+			// currently we are considering only UTC time instead of converting into Local if we need it in future we will change it here.
+
+			//Prepare sql parameters
+			List<SqlParameter> parameterList = new List<SqlParameter>();
+			parameterList.Add(new SqlParameter("business_unit_code", businessUnit.Id));
+
+			return
+				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_request_intraday_load", parameterList,
+											  _dataMartConnectionString);
+		}
+
 		public int FillFactRequestMart(DateTimePeriod period, IBusinessUnit businessUnit)
 		{
 			// currently we are considering only UTC time instead of converting into Local if we need it in future we will change it here.
@@ -1061,6 +1084,16 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 
 			return
 				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_request_load", parameterList,
+											  _dataMartConnectionString);
+		}
+
+		public int FillIntradayFactRequestedDaysMart(IBusinessUnit businessUnit)
+		{
+			List<SqlParameter> parameterList = new List<SqlParameter>();
+			parameterList.Add(new SqlParameter("business_unit_code", businessUnit.Id));
+
+			return
+				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_fact_requested_days_intraday_load", parameterList,
 											  _dataMartConnectionString);
 		}
 

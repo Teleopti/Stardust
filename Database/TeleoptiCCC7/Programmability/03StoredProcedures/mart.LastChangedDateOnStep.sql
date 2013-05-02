@@ -10,7 +10,6 @@ GO
 -- Date			Who	Description
 -- =============================================
 -- exec [mart].[LastChangedDateOnStep] @stepName='Schedules', @buId='928DD0BC-BF40-412E-B970-9B5E015AADEA'
-
 CREATE PROCEDURE [mart].[LastChangedDateOnStep]
 @stepName nvarchar(500),
 @buId uniqueidentifier
@@ -95,8 +94,24 @@ BEGIN
 		) a
 END
 
+IF @stepName = 'Requests'
+BEGIN
+	SELECT @thisTime = MAX(LastUpdate)
+	FROM (
+		--Persons getting changed Role
+		SELECT MAX(pr.UpdatedOn) as LastUpdate
+		FROM dbo.PersonRequest pr
+		INNER JOIN #persons p
+			ON p.PersonId = pr.person
+		) a
+END
+
 --Handle case, "now rows detected"
 IF @thisTime IS NULL
+SET @thisTime = @lastTime
+
+--Handle case, "ETL is running for the first time"
+IF @thisTime < @lastTime
 SET @thisTime = @lastTime
 
 --return 'thisTime' to ETL. To be used later if everything is successfull

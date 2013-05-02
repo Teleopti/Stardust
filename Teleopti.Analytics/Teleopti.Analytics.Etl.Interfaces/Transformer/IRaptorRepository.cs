@@ -207,10 +207,13 @@ namespace Teleopti.Analytics.Etl.Interfaces.Transformer
 
     	ITimeZoneDim DefaultTimeZone { get; }
 		IList<IPersonRequest> LoadRequest(DateTimePeriod period);
+		IList<IPersonRequest> LoadIntradayRequest(ICollection<IPerson> person, DateTimePeriod period);
 		int PersistRequest(DataTable dataTable);
     	int FillFactRequestMart(DateTimePeriod period, IBusinessUnit businessUnit);
+		int FillIntradayFactRequestMart(IBusinessUnit businessUnit);
     	int PerformPurge();
         int FillFactRequestedDaysMart(DateTimePeriod period, IBusinessUnit businessUnit);
+		int FillIntradayFactRequestedDaysMart(IBusinessUnit businessUnit);
         ILicenseStatusUpdater LicenseStatusUpdater { get; }
         int LoadQualityQuestDataMart(int dataSourceId, IBusinessUnit currentBusinessUnit);
         int FillFactQualityDataMart(DateTimePeriod period, int dataSourceId, TimeZoneInfo defaultTimeZone, IBusinessUnit currentBusinessUnit);
