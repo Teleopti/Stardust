@@ -15,6 +15,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 		public string AvailableDayOff { get; set; }
 		public string AvailableAbsence{ get; set; }
 		public string AvailableActivity { get; set; }
+		public bool AbsencePeriodIsClosed { get; set; }
 		public bool PreferencePeriodIsClosed { get; set; }
 		public bool StudentAvailabilityPeriodIsClosed { get; set; }
 		public int ShiftTradeSlidingPeriodStart { get; set; }
@@ -45,6 +46,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			{
 				var absence = new AbsenceRepository(uow).LoadAll().Single(c => c.Description.Name == AvailableAbsence);
 				workflowControlSet.AddAllowedPreferenceAbsence(absence);
+
+				var absenceRequestOpenPeriod = new AbsenceRequestOpenRollingPeriod
+				{
+					Absence = absence,
+					OpenForRequestsPeriod =
+						new DateOnlyPeriod(new DateOnly(1900, 1, 1),
+										   AbsencePeriodIsClosed ? new DateOnly(1900, 1, 1) : new DateOnly(2040, 12, 31))
+				};
+				workflowControlSet.AddOpenAbsenceRequestPeriod(absenceRequestOpenPeriod);
 			}
 
 			if (!string.IsNullOrEmpty(AvailableActivity))
