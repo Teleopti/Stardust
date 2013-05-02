@@ -1053,6 +1053,11 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 		    return personRequests;
 		}
 
+		public void TruncateRequest()
+		{
+			HelperFunctions.TruncateTable("stage.etl_stg_request_delete", _dataMartConnectionString);
+		}
+
 		public int PersistRequest(DataTable dataTable)
 		{
 			HelperFunctions.TruncateTable("stage.etl_stg_request_delete", _dataMartConnectionString);

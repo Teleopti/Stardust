@@ -209,6 +209,7 @@ namespace Teleopti.Analytics.Etl.Interfaces.Transformer
 		IList<IPersonRequest> LoadRequest(DateTimePeriod period);
 		IList<IPersonRequest> LoadIntradayRequest(ICollection<IPerson> person, DateTimePeriod period);
 		int PersistRequest(DataTable dataTable);
+		void TruncateRequest();
     	int FillFactRequestMart(DateTimePeriod period, IBusinessUnit businessUnit);
 		int FillIntradayFactRequestMart(IBusinessUnit businessUnit);
     	int PerformPurge();

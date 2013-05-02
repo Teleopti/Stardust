@@ -33,7 +33,10 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 			_jobParameters.StateHolder.SetThisTime(ETLIntraday, "Requests");
 
 			if (ETLIntraday.LastTime == ETLIntraday.ThisTime)
+			{
+				_jobParameters.Helper.Repository.TruncateRequest();
 				return 0;
+			}
 			else
 			{
 				var startTimeUTC = DateTime.SpecifyKind(ETLIntraday.LastTime, DateTimeKind.Utc);
