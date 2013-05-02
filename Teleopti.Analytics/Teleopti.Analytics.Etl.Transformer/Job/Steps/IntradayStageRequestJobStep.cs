@@ -41,6 +41,8 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 			{
 				var startTimeUTC = DateTime.SpecifyKind(ETLIntraday.LastTime, DateTimeKind.Utc);
 				var endTimeUTC = DateTime.SpecifyKind(ETLIntraday.ThisTime, DateTimeKind.Utc);
+
+				//TODO: Get only changed persons
 				ICollection<IPerson> person = _jobParameters.StateHolder.PersonCollection.ToList();
 
 				DateTimePeriod period = new DateTimePeriod(startTimeUTC, endTimeUTC);
