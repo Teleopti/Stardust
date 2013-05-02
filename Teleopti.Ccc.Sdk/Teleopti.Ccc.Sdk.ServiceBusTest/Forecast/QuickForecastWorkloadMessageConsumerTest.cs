@@ -113,7 +113,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 			Expect.Call(_workloadRep.Get(Guid.NewGuid())).IgnoreArguments().Return(workload);
 			Expect.Call(() =>_jobResultFeedback.SetJobResult(jobResult, _messBroker));
 			Expect.Call(_scenarioRep.Get(Guid.NewGuid())).IgnoreArguments().Return(scenario);
-			Expect.Call(_forecastClassesCreator.CreateStatisticHelper(_repFactory, _unitOfWork)).Return(_statisticHelper);
+			Expect.Call(_forecastClassesCreator.CreateStatisticHelper(_unitOfWork)).Return(_statisticHelper);
 			Expect.Call(_statisticHelper.LoadStatisticData(_statPeriod, workload)).Return(new List<IWorkloadDayBase>());
 			Expect.Call(_repFactory.CreateValidatedVolumeDayRepository(_unitOfWork)).Return(validatedRep);
 
@@ -163,7 +163,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 			Expect.Call(_workloadRep.Get(Guid.NewGuid())).IgnoreArguments().Return(workload);
 			Expect.Call(() => _jobResultFeedback.SetJobResult(jobResult, _messBroker));
 			Expect.Call(_scenarioRep.Get(Guid.NewGuid())).IgnoreArguments().Return(scenario);
-			Expect.Call(_forecastClassesCreator.CreateStatisticHelper(_repFactory, _unitOfWork)).Return(_statisticHelper);
+			Expect.Call(_forecastClassesCreator.CreateStatisticHelper(_unitOfWork)).Return(_statisticHelper);
 			Expect.Call(_statisticHelper.LoadStatisticData(_statPeriod,workload)).Return(new List<IWorkloadDayBase>());
 
 			_mocks.ReplayAll();
@@ -188,7 +188,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 		[Test]
 		public void ShouldUseCreator()
 		{
-			var creator = new ForecastClassesCreator();
+			var creator = new ForecastClassesCreator(_repFactory);
 			var statRep = _mocks.DynamicMock<IStatisticRepository>();
 			Assert.That(creator.CreateTotalVolume(), Is.Not.Null);
 			Assert.That(creator.CreateSkillDayCalculator(null, new List<ISkillDay>(),new DateOnlyPeriod() ), Is.Not.Null);
@@ -196,7 +196,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest.Forecast
 			Assert.That(creator.GetNewTaskOwnerPeriod(new List<ITaskOwner>()),Is.Not.Null);
 			Expect.Call(_repFactory.CreateStatisticRepository()).Return(statRep);
 			_mocks.ReplayAll();
-			Assert.That(creator.CreateStatisticHelper(_repFactory,_unitOfWork),Is.Not.Null);
+			Assert.That(creator.CreateStatisticHelper(_unitOfWork),Is.Not.Null);
 			_mocks.VerifyAll();
 		}
 
