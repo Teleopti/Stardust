@@ -48,8 +48,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             skill.SetId(Guid.NewGuid());
 
             IScenario scenario = new Scenario("f");
-            
-            IEnumerable<IPair<Guid>> peopleSkillMatrix = new List<IPair<Guid>>();
+
+            IEnumerable<Tuple<Guid, Guid>> peopleSkillMatrix = new List<Tuple<Guid, Guid>>();
 
             IEnumerable<Guid> skillDependencies = new List<Guid>();
             IEnumerable<Guid> peopleDependencies = new List<Guid>();
