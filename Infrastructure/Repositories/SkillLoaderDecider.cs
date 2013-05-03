@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public void Execute(IScenario scenario, DateTimePeriod period, ISkill skill)
 		{
-			IEnumerable<IPair<Guid>> matrix = _personRepository.PeopleSkillMatrix(scenario, period);
+			IEnumerable<Tuple<Guid, Guid>> matrix = _personRepository.PeopleSkillMatrix(scenario, period);
 			matrix = toSkillPeopleMatrix(matrix);
 			MatrixService.CreateDependencies(matrix, new[] { skill.Id.GetValueOrDefault() });
 			PeopleGuidDependencies = MatrixService.SecondDependencies;
@@ -55,12 +55,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			Period = period;
 		}
 
-		private IEnumerable<IPair<Guid>> toSkillPeopleMatrix(IEnumerable<IPair<Guid>> matrix)
+		private IEnumerable<Tuple<Guid, Guid>> toSkillPeopleMatrix(IEnumerable<Tuple<Guid, Guid>> matrix)
 		{
-			foreach (var pair in matrix)
-			{
-				yield return new Pair<Guid>(pair.Second,pair.First);
-			}
+			return matrix.Select(pair => new Tuple<Guid, Guid>(pair.Item2, pair.Item1));
 		}
 
 		public int FilterPeople(ICollection<IPerson> people)
@@ -71,12 +68,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			int origCount = people.Count;
 
 			IEnumerable<IPerson> peopleToRemove = (from person in people
-			                                       where !person.Id.HasValue || !PeopleGuidDependencies.Contains(person.Id.Value)
-			                                       select person).ToList();
+												   where !person.Id.HasValue || !PeopleGuidDependencies.Contains(person.Id.Value)
+												   select person).ToList();
 
 			IEnumerable<IPerson> peopleToAdd = (from person in people
-			                                    where person.Id.HasValue && SiteGuidDependencies.Contains(person.Id.Value)
-			                                    select person).ToList();
+												where person.Id.HasValue && SiteGuidDependencies.Contains(person.Id.Value)
+												select person).ToList();
 
 			foreach (IPerson personToRemove in peopleToRemove)
 			{
@@ -142,8 +139,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 			int orgCount = skills.Count;
 			IEnumerable<ISkill> skillsToRemove = (from skill in skills
-			                                      where !skill.Id.HasValue || !SkillGuidDependencies.Contains(skill.Id.Value)
-			                                      select skill).ToList();
+												  where !skill.Id.HasValue || !SkillGuidDependencies.Contains(skill.Id.Value)
+												  select skill).ToList();
 			foreach (ISkill skillToRemove in skillsToRemove)
 			{
 				skills.Remove(skillToRemove);
