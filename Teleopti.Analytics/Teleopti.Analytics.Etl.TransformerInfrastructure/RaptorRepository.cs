@@ -1029,14 +1029,15 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			}
 		}
 
-		public IList<IPersonRequest> LoadIntradayRequest(ICollection<IPerson> person, DateTimePeriod period)
+		public IList<IPersonRequest> LoadIntradayRequest(ICollection<IPerson> person, DateTime lastTime)
 		{
 			IList<IPersonRequest> personRequests;
 			using (IUnitOfWork uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
 				var rep = new PersonRequestRepository(uow);
 				uow.Reassociate(((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity).BusinessUnit);
-				personRequests = rep.FindAllRequestModifiedWithinPeriodOrPending(person, period);
+				uow.Reassociate(person);
+				personRequests = rep.FindPersonRequestUpdatedAfter(lastTime);
 			}
 			return personRequests;
 		}

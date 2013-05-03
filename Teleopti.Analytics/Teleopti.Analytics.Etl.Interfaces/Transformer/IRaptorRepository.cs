@@ -207,7 +207,7 @@ namespace Teleopti.Analytics.Etl.Interfaces.Transformer
 
     	ITimeZoneDim DefaultTimeZone { get; }
 		IList<IPersonRequest> LoadRequest(DateTimePeriod period);
-		IList<IPersonRequest> LoadIntradayRequest(ICollection<IPerson> person, DateTimePeriod period);
+		IList<IPersonRequest> LoadIntradayRequest(ICollection<IPerson> person, DateTime lastTime);
 		int PersistRequest(DataTable dataTable);
 		void TruncateRequest();
     	int FillFactRequestMart(DateTimePeriod period, IBusinessUnit businessUnit);

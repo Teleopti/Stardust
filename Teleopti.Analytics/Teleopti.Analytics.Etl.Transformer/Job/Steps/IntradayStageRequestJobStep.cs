@@ -40,13 +40,11 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 			else
 			{
 				var startTimeUTC = DateTime.SpecifyKind(ETLIntraday.LastTime, DateTimeKind.Utc);
-				var endTimeUTC = DateTime.SpecifyKind(ETLIntraday.ThisTime, DateTimeKind.Utc);
 
 				//TODO: Get only changed persons
 				ICollection<IPerson> person = _jobParameters.StateHolder.PersonCollection.ToList();
 
-				DateTimePeriod period = new DateTimePeriod(startTimeUTC, endTimeUTC);
-				var rootList = _jobParameters.Helper.Repository.LoadIntradayRequest(person, period);
+				var rootList = _jobParameters.Helper.Repository.LoadIntradayRequest(person, startTimeUTC);
 				Transformer.Transform(rootList, _jobParameters.IntervalsPerDay, BulkInsertDataTable1);
 
 				return _jobParameters.Helper.Repository.PersistRequest(BulkInsertDataTable1);
