@@ -9,9 +9,15 @@ CREATE PROCEDURE [mart].[etl_fact_requested_days_intraday_load]
 AS
 BEGIN
 SET NOCOUNT ON
-DECLARE @business_unit_id int
 
-truncate table mart.fact_requested_days
+DECLARE @business_unit_id int
+SET @business_unit_id = (SELECT business_unit_id FROM mart.dim_business_unit WHERE business_unit_code = @business_unit_code)
+
+--Delete all request in stage 
+DELETE f
+FROM stage.stg_request stg
+INNER JOIN mart.fact_requested_days f
+on f.request_code = stg.request_code
 
 ----------------
 --insert new ones
