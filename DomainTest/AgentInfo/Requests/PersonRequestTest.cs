@@ -591,5 +591,11 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 		{
 			_target.UpdatedOnServerUtc.Should().Be.EqualTo(new DateTime());
 		}
+
+		[Test]
+		public void ShouldCallDummyToRemoveUnusedMethod()
+		{
+			((PersonRequest)_target).DummyMethodToRemoveCompileErrorsWithUnusedVariable();
+		}
     }
 }

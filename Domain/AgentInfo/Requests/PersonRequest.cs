@@ -709,5 +709,10 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             if (typedRequest == null) return 3;
             return typedRequest.requestStatus;
         }
+
+		public void DummyMethodToRemoveCompileErrorsWithUnusedVariable()
+		{
+			_updatedOnServerUtc = new DateTime();
+		}
     }
 }
