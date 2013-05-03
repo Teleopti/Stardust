@@ -323,3 +323,10 @@ GO
 EXEC sp_RENAME 'stage.stg_schedule_preference.preference_declined' , 'preference_unfulfilled', 'COLUMN'
 GO
 
+----------------  
+--Name: Karin
+--Date: 2013-05-03
+--Desc: Drop unused column calulated calls in fact_forecast_workload
+----------------
+ALTER TABLE [mart].[fact_forecast_workload] DROP COLUMN [calculated_calls]
+GO
