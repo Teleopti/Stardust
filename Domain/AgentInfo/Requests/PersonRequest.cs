@@ -285,7 +285,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             get { return _isDeleted; }
         }
 
-		private DateTime UpdatedOnServerUtc { get { return _updatedOnServerUtc; } }
+		public virtual DateTime UpdatedOnServerUtc { get { return _updatedOnServerUtc; } }
 
 
         private void CheckIfEditable()
