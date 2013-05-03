@@ -230,7 +230,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		{
 			return Session.CreateCriteria<PersonRequest>()
 			              .Add(Restrictions.Not(Restrictions.Eq("requestStatus", 3)))
-			              .Add(Restrictions.Ge("UpdatedOn", lastTime))
+						  .Add(Restrictions.Ge("UpdatedOnServerUtc", lastTime))
 			              .SetFetchMode("requests", FetchMode.Join)
 			              .SetFetchMode("Person", FetchMode.Join)
 			              .SetFetchMode("requests.ShiftTradeSwapDetails", FetchMode.Join)
