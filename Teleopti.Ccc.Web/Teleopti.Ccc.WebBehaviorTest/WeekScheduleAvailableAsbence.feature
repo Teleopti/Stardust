@@ -151,12 +151,12 @@ Scenario: Show the user a red indication when absence day is outside absence pre
 	| Name									| Closed preference period	|
 	| Schedule published to date			| 2040-06-24				|
 	| Available absence						| holiday					|
-	| AbsenceRequestOpenPeriodStart			| 2023-05-10				|
-	| AbsenceRequestOpenPeriodEnd			| 2023-05-30				|
+	| AbsenceRequestPreferencePeriodStart	| 2023-05-10				|
+	| AbsenceRequestPreferencePeriodEnd		| 2023-05-25				|
 	And I have the role 'Full access to mytime'
 	And I have the workflow control set 'Closed preference period'
 	When I view my week schedule for date '2023-05-28'
-	Then I should see an 'green' indication for chance of absence request on '2023-05-28'
+	Then I should see an 'red' indication for chance of absence request on '2023-05-28'
 
 
 Scenario: Do not show indication of the amount of agents that can go on holiday if no permission to absence request
