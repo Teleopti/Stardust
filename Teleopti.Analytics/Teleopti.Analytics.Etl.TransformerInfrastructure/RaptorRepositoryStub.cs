@@ -655,7 +655,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
     		return new List<IPersonRequest>();
     	}
 
-		public IList<IPersonRequest> LoadIntradayRequest(ICollection<IPerson> person, DateTimePeriod period)
+		public IList<IPersonRequest> LoadIntradayRequest(ICollection<IPerson> person, DateTime lastTime)
 		{
 			return new List<IPersonRequest>();
 		}
