@@ -206,17 +206,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 			if (updateReadModel)
 			{
-				updateReadModels();
+				updateReadModels(Person.Id.Value);
 			}
 
 			return logonName;
 		}
 
-		private void updateReadModels()
+		private void updateReadModels(Guid id)
 		{
 			var uowf = GlobalUnitOfWorkState.CurrentUnitOfWorkFactory;
 			var groupingReadOnlyRepository = new GroupingReadOnlyRepository(uowf);
-			groupingReadOnlyRepository.UpdateGroupingReadModel(new Collection<Guid>());
+			groupingReadOnlyRepository.UpdateGroupingReadModel(new Collection<Guid> { id });
 		}
 
 		private void doPostSetups()

@@ -14,59 +14,12 @@ if (typeof (Teleopti) === 'undefined') {
 	}
 }
 
-Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
+Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajaxForDate) {
 	var self = this;
 
 	var hasStringValue = function (value) {
 		return typeof (value) == 'string' && value.length > 0;
 	};
-
-	// legacy.
-	// should be refactored into using the viewmodel to update the ui etc
-	// would result in less text...
-	var ajaxForDate = function (options) {
-
-		var type = options.type || 'GET',
-		    date = options.date || null, // required
-		    data = options.data || {},
-		    statusCode400 = options.statusCode400,
-		    statusCode404 = options.statusCode404,
-		    url = options.url || "Preference/Preference",
-		    success = options.success || function () {
-		    },
-		    complete = options.complete || null;
-
-		return ajax.Ajax({
-			url: url,
-			dataType: "json",
-			contentType: "application/json; charset=utf-8",
-			type: type,
-			beforeSend: function (jqXHR) {
-				self.AjaxError('');
-				self.IsLoading(true);
-			},
-			complete: function (jqXHR, textStatus) {
-				self.IsLoading(false);
-				if (complete)
-					complete(jqXHR, textStatus);
-			},
-			success: success,
-			data: data,
-			statusCode404: statusCode404,
-			statusCode400: statusCode400,
-			error: function (jqXHR, textStatus, errorThrown) {
-				var error = {
-					ShortMessage: "Error!"
-				};
-				try {
-					error = $.parseJSON(jqXHR.responseText);
-				} catch (e) {
-				}
-				self.AjaxError(error.ShortMessage);
-			}
-		});
-	};
-
 
 	this.Date = "";
 
@@ -93,9 +46,41 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 	this.PersonAssignmentContractTime = ko.observable('');
 	this.ContractTimeMinutes = ko.observable(0);
 
+    this.HasDayOff = ko.computed(function() {
+        return self.DayOff() != '';
+    });
+
+    this.HasAjaxError = ko.computed(function () {
+        return self.AjaxError() != '';
+    });
+
+    this.HasAbsence = ko.computed(function () {
+        return self.Absence() != '';
+    });
+
+    this.HasDayOff = ko.computed(function () {
+        return self.DayOff() != '';
+    });
+
+    this.HasPersonAssignmentShiftCategory = ko.computed(function () {
+        return self.PersonAssignmentShiftCategory() != '';
+    });
+
 	this.Meetings = ko.observableArray();
 	this.PersonalShifts = ko.observableArray();
-	
+
+	this.HasMeetings = ko.computed(function () {
+	    return self.Meetings().length>0;
+	});
+
+	this.HasPersonalShifts = ko.computed(function () {
+	    return self.PersonalShifts().length > 0;
+	});
+
+	this.HasPersonalShiftsOrMeetings = ko.computed(function () {
+	    return self.HasPersonalShifts() || self.HasMeetings();
+	});
+
 	this.EditableIsInOpenPeriod = ko.observable(false);
 	this.EditableHasNoSchedule = ko.computed(function () {
 		if (hasStringValue(self.DayOff()))
@@ -158,12 +143,12 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 			complete();
 			return null;
 		}
-		return ajaxForDate({
+		return ajaxForDate(self, {
 			url: "Preference/Preference",
 			type: 'GET',
 			data: { Date: self.Date },
 			date: self.Date,
-			success: this.ReadPreference,
+			success: self.ReadPreference,
 			complete: complete,
 			statusCode404: function () { }
 		});
@@ -172,7 +157,7 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 	this.LoadFeedback = function () {
 		if (!self.Feedback())
 			return null;
-		return ajaxForDate({
+		return ajaxForDate(self,{
 			url: "PreferenceFeedback/Feedback",
 			type: 'GET',
 			data: { Date: self.Date },
@@ -198,7 +183,7 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 		}
 
 		var deferred = $.Deferred();
-		ajaxForDate({
+		ajaxForDate(self,{
 			type: 'POST',
 			data: JSON.stringify(value),
 			date: self.Date,
@@ -206,7 +191,7 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 				var errorMessage = $.parseJSON(jqXHR.responseText);
 				validationErrorCallback(errorMessage);
 			},
-			success: this.ReadPreference,
+			success: self.ReadPreference,
 			complete: function () {
 				deferred.resolve();
 				self.LoadFeedback();
@@ -222,7 +207,7 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 		};
 
 		var deferred = $.Deferred();
-		ajaxForDate({
+		ajaxForDate(self, {
 			url: 'Preference/MustHave',
 			type: 'POST',
 			data: JSON.stringify(value),
@@ -239,12 +224,12 @@ Teleopti.MyTimeWeb.Preference.DayViewModel = function (ajax) {
 
 	this.DeletePreference = function () {
 		var deferred = $.Deferred();
-		ajaxForDate({
+		ajaxForDate(self, {
 			type: 'DELETE',
 			data: JSON.stringify({ Date: self.Date }),
 			date: self.Date,
 			statusCode404: function () { },
-			success: this.ReadPreference,
+			success: self.ReadPreference,
 			complete: function () {
 				deferred.resolve();
 				self.LoadFeedback();

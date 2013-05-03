@@ -122,7 +122,7 @@ namespace Teleopti.Ccc.Domain.Repositories
         /// Created by: rogerkr
         /// Created date: 2008-12-08
         /// </remarks>
-        IEnumerable<IPair<Guid>> PeopleSkillMatrix(IScenario scenario, DateTimePeriod period);
+        IEnumerable<Tuple<Guid, Guid>> PeopleSkillMatrix(IScenario scenario, DateTimePeriod period);
 
     	IEnumerable<Guid> PeopleSiteMatrix(DateTimePeriod period);
 

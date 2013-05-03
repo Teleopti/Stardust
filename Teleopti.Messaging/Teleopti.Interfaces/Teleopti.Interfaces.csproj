@@ -404,7 +404,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Domain\IOvertimeShiftActivityLayer.cs" />
-    <Compile Include="Domain\IPair.cs" />
     <Compile Include="Domain\IPairDictionaryFactory.cs" />
     <Compile Include="Domain\IPairMatrixService.cs" />
     <Compile Include="Domain\IPayrollExport.cs" />

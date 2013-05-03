@@ -1042,6 +1042,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add Preference....
+        /// </summary>
+        public static string AddPreferenceThreeDots {
+            get {
+                return ResourceManager.GetString("AddPreferenceThreeDots", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add reply option.
         /// </summary>
         public static string AddReplyOption {
@@ -1111,6 +1120,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string AddStudentAvailability {
             get {
                 return ResourceManager.GetString("AddStudentAvailability", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Student Availability....
+        /// </summary>
+        public static string AddStudentAvailabilityThreeDots {
+            get {
+                return ResourceManager.GetString("AddStudentAvailabilityThreeDots", resourceCulture);
             }
         }
         

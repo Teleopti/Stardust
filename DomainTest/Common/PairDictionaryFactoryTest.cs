@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Common
 {
@@ -19,17 +19,16 @@ namespace Teleopti.Ccc.DomainTest.Common
         [Test]
         public void VerifyResult()
         {
-            IEnumerable<IPair<int>> pairList = new List<IPair<int>>
-                           {
-                               {new Pair<int>(2, 1)},
-                               {new Pair<int>(3, 7)},
-                               {new Pair<int>(9, 7)},
-                               {new Pair<int>(4, 8)},
-                               {new Pair<int>(4, 6)},
-                               {new Pair<int>(9, 6)},
-                               {new Pair<int>(9, 9)}
-
-                           };
+	        var pairList = new List<Tuple<int, int>>
+		        {
+			        {Tuple.Create(2, 1)},
+			        {Tuple.Create(3, 7)},
+			        {Tuple.Create(9, 7)},
+			        {Tuple.Create(4, 8)},
+			        {Tuple.Create(4, 6)},
+			        {Tuple.Create(9, 6)},
+			        {Tuple.Create(9, 9)}
+		        };
             target.CreateDictionaries(pairList);
             IDictionary<int, ICollection<int>> firstDic = target.FirstDictionary;
             IDictionary<int, ICollection<int>> secondDic = target.SecondDictionary;
