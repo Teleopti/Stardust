@@ -5,7 +5,7 @@ GO
 CREATE TRIGGER tr_PersonRequest_UpdatedOn ON dbo.PersonRequest
 AFTER UPDATE 
 AS
-select * from dbo.PersonRequest
+SET NOCOUNT ON
 UPDATE dbo.PersonRequest
 SET UpdatedOnServerUtc = getutcdate()
 FROM INSERTED i
