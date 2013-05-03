@@ -388,6 +388,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			var picker = Pages.Pages.TeamSchedulePage.TeamPicker.Container;
 
 			picker.Should().Not.Be.Null();
+			EventualAssert.That(picker.DisplayVisible, Is.True);
 		}
 
 
