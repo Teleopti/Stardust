@@ -121,6 +121,7 @@ namespace Teleopti.Analytics.Etl.Transformer
             return false;
         }
 
+
         public bool CheckIfPreferenceIsValid(IPreferenceRestriction preferenceRestriction)
         {
             if (preferenceRestriction == null)
@@ -159,6 +160,9 @@ namespace Teleopti.Analytics.Etl.Transformer
             {
                 return true;
             }
+
+			if (preferenceRestriction.Absence != null)
+				return true;
 
 			if(preferenceRestriction.ActivityRestrictionCollection.Count > 0)
 			{
@@ -225,18 +229,25 @@ namespace Teleopti.Analytics.Etl.Transformer
 				dataRow["activity_code"] = preferenceRestriction.ActivityRestrictionCollection[0].Activity.Id;
 			}
 
+			dataRow["must_have"] = preferenceRestriction.MustHave ? 1 : 0;
+
+			if (preferenceRestriction.Absence != null)
+				dataRow["absence_code"] = preferenceRestriction.Absence.Id;
+			else
+				dataRow["absence_code"] = DBNull.Value;
+
             RestrictionChecker restrictionChecker = new RestrictionChecker(schedulePart);
             PermissionState permissionState = restrictionChecker.CheckPreference();
-            if (permissionState == PermissionState.Satisfied)
-            {
-                dataRow["preference_accepted"] = 1;
-                dataRow["preference_declined"] = 0;
-            }
-            else
-            {
-                dataRow["preference_accepted"] = 0;
-                dataRow["preference_declined"] = 1;
-            }
+			if (permissionState == PermissionState.Satisfied)
+			{
+				dataRow["preference_fulfilled"] = 1;
+				dataRow["preference_unfulfilled"] = 0;
+			}
+			else
+			{
+				dataRow["preference_fulfilled"] = 0;
+				dataRow["preference_unfulfilled"] = 1;
+			}
 
             dataRow["business_unit_code"] = schedulePart.Scenario.BusinessUnit.Id;
             //dataRow["datasource_id"] = 1;
