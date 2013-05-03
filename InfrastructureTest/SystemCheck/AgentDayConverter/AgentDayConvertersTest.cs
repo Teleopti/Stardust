@@ -21,5 +21,12 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 			AgentDayConverters.ForPeople().Select(x => x.GetType())
 												.Should().Have.SameValuesAs(typeof(PersonAssignmentDateSetter), typeof(PersonAssignmentAuditDateSetter), typeof(PersonTimeZoneSetter));
 		}
+
+		[Test]
+		public void ShouldRunPersonTimeZoneSetterFirstForPeopleSoAssignmentsAreResetted()
+		{
+			AgentDayConverters.ForPeople().First().GetType()
+			                  .Should().Be.EqualTo(typeof (PersonTimeZoneSetter));
+		}
 	}
 }

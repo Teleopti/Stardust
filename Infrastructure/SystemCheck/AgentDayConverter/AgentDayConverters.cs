@@ -20,9 +20,9 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
 		{
 			return new IPersonAssignmentConverter[]
 				{
+					new PersonTimeZoneSetter(),
 					new PersonAssignmentAuditDateSetter(), 
-					new PersonAssignmentDateSetter(), 
-					new PersonTimeZoneSetter()
+					new PersonAssignmentDateSetter()
 				};
 		}
 	}

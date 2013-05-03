@@ -33,6 +33,7 @@ namespace Teleopti.Support.Security
 
 		private static void setPersonAssignmentDate(CommandLineArgument commandLineArgument)
 		{
+			//expects all schedules having thedate set to 1800-1-1
 			var allPersonAndTimeZone = new FetchPersonIdAndTimeZone(commandLineArgument.DestinationConnectionString).ForAllPersons();
 			using (var conn = new SqlConnection(commandLineArgument.DestinationConnectionString))
 			{
