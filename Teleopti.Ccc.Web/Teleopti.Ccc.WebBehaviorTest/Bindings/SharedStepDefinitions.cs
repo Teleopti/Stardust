@@ -24,14 +24,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[When(@"I click the next day button")]
 		public void WhenIClickNextVirtualSchedulePeriodButton()
 		{
-			Pages.Pages.CurrentDateRangeSelector.NextPeriodButton.EventualClick();
+			Pages.Pages.CurrentDateRangeSelector.ClickNext();
 		}
 
 		[When(@"I click previous virtual schedule period button")]
 		[When(@"I click the previous day button")]
 		public void WhenIClickPreviousVirtualSchedulePeriodButton()
 		{
-			Pages.Pages.CurrentDateRangeSelector.PreviousPeriodButton.EventualClick();
+			Pages.Pages.CurrentDateRangeSelector.ClickPrevious();
 		}
 
 		[Then(@"the week-picker should close")]

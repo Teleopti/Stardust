@@ -14,7 +14,7 @@ using Teleopti.Ccc.AgentPortalCode.Common;
 using Teleopti.Ccc.AgentPortalCode.Common.Clipboard;
 using Teleopti.Ccc.AgentPortalCode.Foundation.StateHandlers;
 using Teleopti.Ccc.AgentPortalCode.Helper;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using ShiftCategory=Teleopti.Ccc.AgentPortalCode.Common.ShiftCategory;
 
 namespace Teleopti.Ccc.AgentPortal.AgentPreferenceView
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.AgentPortal.AgentPreferenceView
             InitializeComponent();
             IScheduleHelper scheduleHelper = new ScheduleHelper();
             _model = new PreferenceModel(StateHolder.Instance.StateReader.SessionScopeData.LoggedOnPerson, scheduleHelper);
-            _presenter = new PreferencePresenter(_model, this, new ClipHandler<IPreferenceCellData>(), parent);
+            _presenter = new PreferencePresenter(_model, this, new ClipHandler<IPreferenceCellData>(), parent, AgentScheduleStateHolder.Instance());
             gridControl1.Model.CellModels.Add("RestrictionViewCellModel", new RestrictionViewCellModel(gridControl1.Model));
             gridControl1.Model.CellModels.Add("RestrictionWeekHeaderViewCellModel", new RestrictionWeekHeaderViewCellModel(gridControl1.Model));
             gridControl1.ColWidths.SetRange(1, gridControl1.ColCount, ColumnWidth);

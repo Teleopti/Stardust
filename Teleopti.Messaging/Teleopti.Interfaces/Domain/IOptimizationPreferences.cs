@@ -287,11 +287,11 @@ namespace Teleopti.Interfaces.Domain
     /// </summary>
     public interface IExtraPreferences
     {
-        /// <summary>
-        /// Gets or sets a value indicating whether to use block scheduling.
-        /// </summary>
-        /// <value><c>true</c> if use block; otherwise, <c>false</c>.</value>
-        bool UseBlockScheduling { get; set; }
+        ///// <summary>
+        ///// Gets or sets a value indicating whether to use block scheduling.
+        ///// </summary>
+        ///// <value><c>true</c> if use block; otherwise, <c>false</c>.</value>
+        //bool UseBlockScheduling { get; set; }
 
         /// <summary>
         /// Gets or sets the block finder type.
@@ -351,6 +351,36 @@ namespace Teleopti.Interfaces.Domain
         /// The actual common activity
         /// </summary>
         IActivity CommonActivity { get; set; }
+
+        /// <summary>
+        /// Block finder service for advance optimization service
+        /// </summary>
+        BlockFinderType BlockFinderTypeForAdvanceOptimization { get; set; }
+
+        /// <summary>
+        /// Group page for TeamBlock property used for block optimization
+        /// </summary>
+        IGroupPageLight GroupPageOnTeamBlockPer { get; set; }
+        /// <summary>
+        /// Use TeamBlock same end time
+        /// </summary>
+        bool UseTeamBlockSameEndTime { get; set; }
+        /// <summary>
+        /// Use TeamBlock same shift category
+        /// </summary>
+        bool UseTeamBlockSameShiftCategory { get; set; }
+        /// <summary>
+        /// Use TeamBlock same start time
+        /// </summary>
+        bool UseTeamBlockSameStartTime { get; set; }
+        /// <summary>
+        /// Use TeamBlock same shift
+        /// </summary>
+        bool UseTeamBlockSameShift { get; set; }
+        /// <summary>
+        /// This is  used if TeamBlock per is used
+        /// </summary>
+        bool UseTeamBlockOption { get; set; }
     }
 
     /// <summary>

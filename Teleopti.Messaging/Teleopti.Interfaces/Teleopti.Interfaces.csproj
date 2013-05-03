@@ -54,7 +54,8 @@
     <DefineConstants>TRACE;DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\Teleopti.Interfaces.XML</DocumentationFile>
+    <DocumentationFile>
+    </DocumentationFile>
     <CodeAnalysisRuleSet>$(SolutionDir)\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -72,7 +73,8 @@
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\x86\Debug\</OutputPath>
     <DefineConstants>TRACE;DEBUG</DefineConstants>
-    <DocumentationFile>bin\Debug\Teleopti.Interfaces.XML</DocumentationFile>
+    <DocumentationFile>
+    </DocumentationFile>
     <DebugType>full</DebugType>
     <PlatformTarget>x86</PlatformTarget>
     <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
@@ -115,9 +117,11 @@
     <Compile Include="Domain\IAggregateRootWithEvents.cs" />
     <Compile Include="Domain\IBudgetGroupAllowanceCalculator.cs" />
     <Compile Include="Domain\IBudgetGroupHeadCountSpecification.cs" />
+    <Compile Include="Domain\ICalculator.cs" />
     <Compile Include="Domain\IEffectiveRestrictionCombiner.cs" />
     <Compile Include="Domain\IChangePasswordResultInfo.cs" />
     <Compile Include="Domain\IEvent.cs" />
+    <Compile Include="Domain\IExtractBudgetGroupPeriods.cs" />
     <Compile Include="Domain\ILoggedOnUser.cs" />
     <Compile Include="Domain\IPersistedActivityLayer.cs" />
     <Compile Include="Domain\IPersonalShiftRestrictionCombiner.cs" />
@@ -400,7 +404,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Domain\IOvertimeShiftActivityLayer.cs" />
-    <Compile Include="Domain\IPair.cs" />
     <Compile Include="Domain\IPairDictionaryFactory.cs" />
     <Compile Include="Domain\IPairMatrixService.cs" />
     <Compile Include="Domain\IPayrollExport.cs" />
@@ -619,6 +622,7 @@
     <Compile Include="Domain\IReplyOptionTarget.cs" />
     <Compile Include="Domain\ILogWriter.cs" />
     <Compile Include="Domain\WorkTimeSource.cs" />
+    <Compile Include="IDayOffOptimizationDecisionMakerFactory.cs" />
     <Compile Include="IMapiMailMessage.cs" />
     <Compile Include="Domain\ISchedulePeriodTargetTimeCalculator.cs" />
     <Compile Include="Infrastructure\EncryptionConstants.cs" />
@@ -804,6 +808,8 @@
     <Compile Include="MessageBroker\Events\IMessageBrokerSender.cs" />
     <Compile Include="MessageBroker\Notification.cs" />
     <Compile Include="MessageBroker\Subscription.cs" />
+    <Compile Include="Messages\Denormalize\ScheduleChanged.cs" />
+    <Compile Include="Messages\Denormalize\DenormalizeScheduleProjection.cs" />
     <Compile Include="Messages\Denormalize\GroupPageChangedMessage.cs" />
     <Compile Include="Messages\Denormalize\PersonChangedMessage.cs" />
     <Compile Include="Messages\Denormalize\InitialLoadScheduleProjection.cs" />

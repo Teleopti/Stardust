@@ -99,5 +99,12 @@ namespace Teleopti.Ccc.DayOffPlanningTest.Scheduling
 			Assert.AreEqual(1, result.Count);
 			Assert.AreSame(c2, result[0]);
 		}
+
+		[Test]
+		public void ShouldCheckParameters()
+		{
+			var result =_target.FilterList(null, _workShiftMinMaxCalculator, _matrix, _schedulingOptions);
+			Assert.IsNull(result);
+		}
 	}
 }

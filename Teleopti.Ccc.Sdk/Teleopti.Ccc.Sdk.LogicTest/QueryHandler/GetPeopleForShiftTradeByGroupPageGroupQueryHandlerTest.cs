@@ -24,6 +24,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 		private GetPeopleForShiftTradeByGroupPageGroupQueryHandler target;
 		private IAssembler<IPerson, PersonDto> assembler;
 		private IPersonRepository personRepository;
+		private ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 
 		[SetUp]
 		public void Setup()
@@ -32,10 +33,10 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			groupingReadOnlyRepository = mocks.DynamicMock<IGroupingReadOnlyRepository>();
 			assembler = mocks.StrictMock<IAssembler<IPerson, PersonDto>>();
 			personRepository = mocks.StrictMock<IPersonRepository>();
-			var unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
+			_unitOfWorkFactory = mocks.DynamicMock<ICurrentUnitOfWorkFactory>();
 			var shiftTradeValidationList = new List<IShiftTradeLightSpecification>();
 			var shiftTradeLightValidator = new ShiftTradeLightValidator(shiftTradeValidationList);
-			target = new GetPeopleForShiftTradeByGroupPageGroupQueryHandler(assembler, groupingReadOnlyRepository, personRepository, unitOfWorkFactory, shiftTradeLightValidator);
+			target = new GetPeopleForShiftTradeByGroupPageGroupQueryHandler(assembler, groupingReadOnlyRepository, personRepository, _unitOfWorkFactory, shiftTradeLightValidator);
 		}
 
 		[Test]
@@ -48,9 +49,11 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			var queryPerson = PersonFactory.CreatePerson();
 			var detailList = new List<ReadOnlyGroupDetail> {new ReadOnlyGroupDetail {PersonId = personId}};
 			var personList = new List<IPerson> {PersonFactory.CreatePerson()};
+			var unitOfWorkFactory = MockRepository.GenerateMock<IUnitOfWorkFactory>();
 			using (mocks.Record())
 			{
 				Expect.Call(groupingReadOnlyRepository.DetailsForGroup(groupPageGroupId, dateOnly)).Return(detailList);
+				Expect.Call(_unitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
 				Expect.Call(personRepository.FindPeople((IEnumerable<Guid>)null)).Constraints(Rhino.Mocks.Constraints.List.Equal(new List<Guid> { personId })).Return(personList);
 				Expect.Call(personRepository.Get(queryPersonId)).Return(queryPerson);
 				Expect.Call(assembler.DomainEntitiesToDtos(personList)).Return(new[] {new PersonDto()});

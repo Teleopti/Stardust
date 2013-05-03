@@ -6,7 +6,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 	{
 		DatePicker DatePicker { get; }
 		Div DateRangeSelectorContainer { get; }
-		Button NextPeriodButton { get; }
-		Button PreviousPeriodButton { get; }
+		void ClickNext();
+		void ClickPrevious();
 	}
 }

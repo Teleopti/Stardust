@@ -14,9 +14,9 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
         private readonly IPersonRepository _personRepository;
         private readonly IPersonAbsenceAccountRepository _personAbsenceAccountRepository;
         private readonly IAbsenceRepository _absenceRepository;
-        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+        private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
 
-        public DeletePersonAccountForPersonCommandHandler(IPersonRepository personRepository, IPersonAbsenceAccountRepository personAbsenceAccountRepository, IAbsenceRepository absenceRepository, IUnitOfWorkFactory unitOfWorkFactory)
+        public DeletePersonAccountForPersonCommandHandler(IPersonRepository personRepository, IPersonAbsenceAccountRepository personAbsenceAccountRepository, IAbsenceRepository absenceRepository, ICurrentUnitOfWorkFactory unitOfWorkFactory)
         {
             _personRepository = personRepository;
             _personAbsenceAccountRepository = personAbsenceAccountRepository;
@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.Sdk.Logic.CommandHandler
 		public void Handle(DeletePersonAccountForPersonCommandDto command)
 		{
 			var result = new CommandResultDto {AffectedId = command.PersonId, AffectedItems = 0};
-            using (var unitOfWork = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+            using (var unitOfWork = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
             {
                 var foundPerson = _personRepository.Get(command.PersonId);
                 if (foundPerson == null) throw new FaultException("Person is not exist.");

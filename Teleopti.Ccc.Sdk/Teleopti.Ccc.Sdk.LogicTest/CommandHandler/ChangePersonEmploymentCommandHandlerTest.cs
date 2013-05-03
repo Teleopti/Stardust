@@ -47,6 +47,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         private IContract _contract;
         private IContractSchedule _contractSchedule;
         private IPartTimePercentage _partTimePercentage;
+        private ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 
 
         [SetUp]
@@ -55,6 +56,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _mock = new MockRepository();
             _personSkillPeriodAssembler = _mock.StrictMock<IAssembler<IPersonPeriod,PersonSkillPeriodDto>>();
             _unitOfWorkFactory = _mock.StrictMock<IUnitOfWorkFactory>();
+            _currentUnitOfWorkFactory = _mock.DynamicMock<ICurrentUnitOfWorkFactory>();
             _skillRepository = _mock.StrictMock<ISkillRepository>();
             _externalLogOnRepository = _mock.StrictMock<IExternalLogOnRepository>();
             _personRepository = _mock.StrictMock<IPersonRepository>();
@@ -62,7 +64,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _partTimePercentageRepository = _mock.StrictMock<IPartTimePercentageRepository>();
             _contractScheduleRepository = _mock.StrictMock<IContractScheduleRepository>();
             _contractRepository = _mock.StrictMock<IContractRepository>();
-            _target = new ChangePersonEmploymentCommandHandler(_personSkillPeriodAssembler,_unitOfWorkFactory,_skillRepository,_externalLogOnRepository,_personRepository,_teamRepository,_partTimePercentageRepository,_contractScheduleRepository,_contractRepository);
+            _target = new ChangePersonEmploymentCommandHandler(_personSkillPeriodAssembler,_currentUnitOfWorkFactory,_skillRepository,_externalLogOnRepository,_personRepository,_teamRepository,_partTimePercentageRepository,_contractScheduleRepository,_contractRepository);
 
             _externalLogOnDto = new ExternalLogOnDto { Id = Guid.NewGuid(), AcdLogOnOriginalId = "test Id", AcdLogOnName="test Acd"};
             _externalLogOnList = new List<ExternalLogOnDto> { _externalLogOnDto };
@@ -127,6 +129,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             using(_mock.Record())
             {
                 Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+                Expect.Call(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
                 Expect.Call(_personRepository.Get(_changePersonEmploymentCommandDto.Person.Id.GetValueOrDefault())).
                     Return(_person);
                 Expect.Call(
@@ -164,6 +167,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             using (_mock.Record())
             {
                 Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+                Expect.Call(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
                 Expect.Call(_personRepository.Get(_changePersonEmploymentCommandDto.Person.Id.GetValueOrDefault())).
                     Return(_person);
                 Expect.Call(_teamRepository.Load(_changePersonEmploymentCommandDto.Team.Id.GetValueOrDefault())).Return(
@@ -203,6 +207,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             using (_mock.Record())
             {
                 Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+                Expect.Call(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
                 Expect.Call(_personRepository.Get(_changePersonEmploymentCommandDto.Person.Id.GetValueOrDefault())).
                     Return(_person);
                 Expect.Call(_teamRepository.Load(_changePersonEmploymentCommandDto.Team.Id.GetValueOrDefault())).Return(
@@ -241,6 +246,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             using (_mock.Record())
             {
                 Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+                Expect.Call(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
                 Expect.Call(_personRepository.Get(_changePersonEmploymentCommandDto.Person.Id.GetValueOrDefault())).
                     Return(_person);
                 Expect.Call((() => unitOfWork.PersistAll()));

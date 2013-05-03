@@ -3,10 +3,11 @@ using System.Drawing;
 using System.Collections;
 using Syncfusion.Schedule;
 using Teleopti.Ccc.AgentPortal.AgentSchedule;
+using Teleopti.Ccc.AgentPortalCode.AgentSchedule;
 using Teleopti.Ccc.AgentPortalCode.Common;
 using Teleopti.Ccc.AgentPortalCode.Common.Factory;
 using Teleopti.Ccc.AgentPortalCode.Helper;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 
 namespace Teleopti.Ccc.AgentPortal.ScheduleControlDataProvider
 {
@@ -20,8 +21,9 @@ namespace Teleopti.Ccc.AgentPortal.ScheduleControlDataProvider
     public class CustomScheduleDataProvider : ScheduleDataProvider
     {
         private readonly AgentScheduleView _scheduleView;
+	    private readonly ILegendLoader _legendLoader;
 
-        /// <summary>
+	    /// <summary>
         /// Returns a the subset of MasterList between the 2 dates.
         /// </summary>
         /// <param name="startDate">Starting date limit for the returned items.</param>
@@ -36,26 +38,14 @@ namespace Teleopti.Ccc.AgentPortal.ScheduleControlDataProvider
             //get a "standard" time of day (transition time minus 1 second?!?). 
 
             var orgPeriod = new DateTimePeriodDto();
-            /*orgPeriod.UtcStartTime = AgentPortalTimeZoneHelper.ConvertToUniversalTime(startDate.Date.AddSeconds(-1));
-            orgPeriod.UtcEndTime = AgentPortalTimeZoneHelper.ConvertToUniversalTime(endDate.Date.AddHours(24).AddSeconds(-1));*/
             orgPeriod.LocalStartDateTime = startDate.Date.AddSeconds(-1);
             orgPeriod.LocalEndDateTime = endDate.Date.AddHours(24).AddSeconds(-1);
-            orgPeriod.LocalStartDateTimeSpecified = true;
-            orgPeriod.LocalEndDateTimeSpecified = true;
-            /*orgPeriod.UtcStartTimeSpecified = true;
-            orgPeriod.UtcEndTimeSpecified = true;*/
-
+            
             var loadPeriod = new DateTimePeriodDto();
 
-            /*loadPeriod.UtcStartTime = AgentPortalTimeZoneHelper.ConvertToUniversalTime(startDate.Date.AddDays(-1).AddSeconds(-1));
-            loadPeriod.UtcEndTime = AgentPortalTimeZoneHelper.ConvertToUniversalTime(endDate.Date.AddHours(24).AddSeconds(-1));*/
             loadPeriod.LocalStartDateTime = startDate.Date.AddDays(-1).AddSeconds(-1);
             loadPeriod.LocalEndDateTime = endDate.Date.AddHours(24).AddSeconds(-1);
-            loadPeriod.LocalStartDateTimeSpecified = true;
-            loadPeriod.LocalEndDateTimeSpecified = true;
-            /*loadPeriod.UtcStartTimeSpecified = true;
-            loadPeriod.UtcEndTimeSpecified = true;*/
-
+            
             if (_scheduleView.IsNeedToReloadData)
             {
                 _scheduleView.LoadAgentSchedules(loadPeriod);
@@ -87,13 +77,14 @@ namespace Teleopti.Ccc.AgentPortal.ScheduleControlDataProvider
         /// Created by: Sumedah
         /// Created date: 2008-11-20
         /// </remarks>
-        public CustomScheduleDataProvider(AgentScheduleView scheduleView)
-        {
+        public CustomScheduleDataProvider(AgentScheduleView scheduleView, ILegendLoader legendLoader)
+		{
+			_scheduleView = scheduleView;
+			_legendLoader = legendLoader;
+
             LabelList.Clear();
             LabelList.AddRange(GetTheLabels());
             ScheduleAppointmentFactory.Init(LabelList);
-
-            _scheduleView = scheduleView;
         }
 
         /// <summary>
@@ -104,14 +95,11 @@ namespace Teleopti.Ccc.AgentPortal.ScheduleControlDataProvider
         /// Created by: Sumedah
         /// Created date: 2008-11-20
         /// </remarks>
-        private static ICollection GetTheLabels()
+        private ICollection GetTheLabels()
         {
             int lableValue = 2;
             var labels = new ListObjectList();
-            var arrActivityDto = SdkServiceHelper.SchedulingService.GetActivities(new LoadOptionDto { LoadDeleted = false, LoadDeletedSpecified = true });
-            var arrAbsenceDto = SdkServiceHelper.SchedulingService.GetAbsences(new AbsenceLoadOptionDto { LoadDeleted = false, LoadDeletedSpecified = true });
-
-
+            
             //Load Default Color
             var defaultColor = Color.FromArgb(192, 210, 234); // outlook 2007 blue color
             var defaultLabel = new ListObject(0, "Default", defaultColor);
@@ -123,7 +111,7 @@ namespace Teleopti.Ccc.AgentPortal.ScheduleControlDataProvider
             
 
             // Load activity colors
-            foreach (ActivityDto dto in arrActivityDto)
+            foreach (ActivityDto dto in _legendLoader.GetActivities())
             {
                 var color = ColorHelper.CreateColorFromDto(dto.DisplayColor);
                 var label = new ListObject(lableValue++, dto.Description, color);
@@ -132,7 +120,7 @@ namespace Teleopti.Ccc.AgentPortal.ScheduleControlDataProvider
                 labels.Add(label);
             }
 
-            foreach (AbsenceDto dto in arrAbsenceDto)
+            foreach (AbsenceDto dto in _legendLoader.GetAbsences())
             {
                 var color = ColorHelper.CreateColorFromDto(dto.DisplayColor);
                 var label = new ListObject(lableValue++, dto.Name, color);
@@ -142,6 +130,4 @@ namespace Teleopti.Ccc.AgentPortal.ScheduleControlDataProvider
             return labels;
         }
     }
-
 }
-

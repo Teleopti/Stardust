@@ -2,13 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
+using System.Linq;
 using Teleopti.Ccc.AgentPortal.AgentPreferenceView;
 using Teleopti.Ccc.AgentPortalCode.AgentPreference.Limitation;
 using Teleopti.Ccc.AgentPortalCode.Common;
 using Teleopti.Ccc.AgentPortalCode.Common.Clipboard;
 using Teleopti.Ccc.AgentPortalCode.Foundation.StateHandlers;
 using Teleopti.Ccc.AgentPortalCode.Helper;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
 using DayOff = Teleopti.Ccc.AgentPortalCode.Common.DayOff;
@@ -17,51 +18,6 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentPreference
 {
     public interface IPreferencePresenter
     {
-        //Dictionary<int, IPreferenceCellData> CellDataCollection { get; }
-        //DateTime FirstDateOfPeriod { get; }
-        //ClipHandler<IPreferenceCellData> CellDataClipHandler { get; }
-        //bool ExtendedPreferenceTemplate { get; }
-        //void GetNextPeriod();
-        //void GetPreviousPeriod();
-        //string PeriodInfo();
-        //void ReloadPeriod();
-        //void PasteTemplateNameInCellData(IList<int> cellDataToChange, string name);
-        //void PasteClipsInCellData(IList<int> cellDataToChange);
-
-        //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2233:OperationsShouldNotOverflow", MessageId = "headerCount+1")]
-        //void OnSelectColumns(int left, int right, int headerCount, int rowCount);
-
-        //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2233:OperationsShouldNotOverflow", MessageId = "colHeaderCount+1")]
-        //void OnSelectRows(int colHeaderCount, int colCount, int top, int bottom);
-
-        //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2233:OperationsShouldNotOverflow", MessageId = "rowHeaderCount+1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2233:OperationsShouldNotOverflow", MessageId = "colsHeaderCount+1")]
-        //void OnSelectAll(int rowHeaderCount, int colsHeaderCount, int colCount, int rowCount);
-
-        //void OnTemplateCell(int top, int bottom, int left, int right);
-        //void OnSetCellDataClip(int top, int bottom, int left, int right);
-        //void OnSetCellDataCut(int top, int bottom, int left, int right);
-        //void OnPasteCellDataClip(int top, int bottom, int left, int right);
-        //void OnSaveTemplateCellData(int top, int bottom, int left, int right, string name);
-
-        //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#")]
-        //bool OnQueryCellInfo(int colIndex, int rowIndex, out IPreferenceCellData cellData);
-
-        //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2233:OperationsShouldNotOverflow", MessageId = "colIndex-1")]
-        //string OnQueryColumnHeaderText(int colIndex);
-
-        //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2233:OperationsShouldNotOverflow", MessageId = "rowIndex-1")]
-        //WeekHeaderCellData OnQueryWeekHeader(int rowIndex);
-
-        //void OnDelete(int top, int bottom, int left, int right);
-        //void OnSaveTemplate(string name, int top, int bottom, int left, int right);
-        //void OnAddPreference(int top, int bottom, int left, int right, Preference preference);
-        //void OnToggleMustHave(int top, int bottom, int left, int right, bool mustHave);
-        //void ToggleMustHaveState(bool? state);
-        //void ToggleMustHaveEnable(bool enabled);
-        //bool? PreferenceExistsOnNotScheduledDay(int top, int bottom, int left, int right);
-        //void OnSelectionChanged(int top, int bottom, int left, int right);
-        //bool IsMustHave(int top, int bottom, int left, int right);
-        //bool OnCheckPermission(Preference preference);
         bool HasOpenDays();
     }
 
@@ -75,13 +31,15 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentPreference
         private static readonly TimeOfDayValidator TimeOfDayValidatorStartTime = new TimeOfDayValidator(false);
         private static readonly TimeOfDayValidator TimeOfDayValidatorEndTime = new TimeOfDayValidator(true);
         private bool _template = true;
+        private readonly IAgentScheduleStateHolder _scheduleStateHolder;
 
-        public PreferencePresenter(IPreferenceModel model, IPreferenceView view, ClipHandler<IPreferenceCellData> cellDataClipHandler, IToggleButtonState parent)
+        public PreferencePresenter(IPreferenceModel model, IPreferenceView view, ClipHandler<IPreferenceCellData> cellDataClipHandler, IToggleButtonState parent, IAgentScheduleStateHolder scheduleStateHolder)
         {
             _model = model;
             _view = view;
             _cellDataClipHandler = cellDataClipHandler;
             _parent = parent;
+            _scheduleStateHolder = scheduleStateHolder;
         }
 
         public Dictionary<int, IPreferenceCellData> CellDataCollection
@@ -231,7 +189,7 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentPreference
                 Preference preference = _cellDataClipHandler.ClipList[index].ClipValue.Preference;
                 if (ValidatePreference(preference))
                 {
-                    _model.CellDataCollection[i].Preference = _cellDataClipHandler.ClipList[index].ClipValue.Preference;
+                    _model.CellDataCollection[i].Preference = (Preference) _cellDataClipHandler.ClipList[index].ClipValue.Preference.Clone();
                     cellDataToPersist.Add(_model.CellDataCollection[i]);
                 }
                 index++;
@@ -549,7 +507,7 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentPreference
         public void OnSaveTemplate(string name, int top, int bottom, int left, int right)
         {
             var template = new ExtendedPreferenceTemplateDto {Name = name};
-            var colorDto = new ColorDto {Blue = 123};
+            var colorDto = new ColorDto(Color.FromArgb(0,0,123));
             template.DisplayColor = colorDto;
 
             for (var row = top; row <= bottom; row++)
@@ -572,23 +530,14 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentPreference
                         activityDto.Id = cellActivity.Id;
                         activityDto.Description = cellActivity.Name;
 
-                        var activityStartTime = new TimeLimitationDto();
-                        cellData.Preference.ActivityStartTimeLimitation.SetValuesToDto(activityStartTime);
-                        activityRestrictionDto.StartTimeLimitation = activityStartTime;
-
-                        var activityEndTime = new TimeLimitationDto();
-                        cellData.Preference.ActivityEndTimeLimitation.SetValuesToDto(activityEndTime);
-                        activityRestrictionDto.EndTimeLimitation = activityEndTime;
-
-                        var activityLengthTime = new TimeLimitationDto();
-                        cellData.Preference.ActivityTimeLimitation.SetValuesToDto(activityLengthTime);
-                        activityRestrictionDto.WorkTimeLimitation = activityLengthTime;
+                        activityRestrictionDto.StartTimeLimitation = cellData.Preference.ActivityStartTimeLimitation.SetValuesToDto();
+                        activityRestrictionDto.EndTimeLimitation = cellData.Preference.ActivityEndTimeLimitation.SetValuesToDto();
+                        activityRestrictionDto.WorkTimeLimitation = cellData.Preference.ActivityTimeLimitation.SetValuesToDto();
 
                         activityRestrictionDto.Activity = activityDto;
 
-                        var test = new List<ActivityRestrictionDto> {activityRestrictionDto};
-
-                        template.ActivityRestrictionCollection = test.ToArray();
+                        template.ActivityRestrictionCollection.Clear();
+                        template.ActivityRestrictionCollection.Add(activityRestrictionDto);
                     }
 
                     if (cellData.Preference.DayOff != null)
@@ -617,15 +566,9 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentPreference
 
                     AddAbsenceToExtendedPreferenceTemplateDto(template, cellData);
 
-                    var startTime = new TimeLimitationDto();
-                    cellData.Preference.StartTimeLimitation.SetValuesToDto(startTime);
-                    template.StartTimeLimitation = startTime;
-                    var endTime = new TimeLimitationDto();
-                    cellData.Preference.EndTimeLimitation.SetValuesToDto(endTime);
-                    template.EndTimeLimitation = endTime;
-                    var lengthTime = new TimeLimitationDto();
-                    cellData.Preference.WorkTimeLimitation.SetValuesToDto(lengthTime);
-                    template.WorkTimeLimitation = lengthTime;
+                    template.StartTimeLimitation = cellData.Preference.StartTimeLimitation.SetValuesToDto();
+                    template.EndTimeLimitation = cellData.Preference.EndTimeLimitation.SetValuesToDto();
+                    template.WorkTimeLimitation = cellData.Preference.WorkTimeLimitation.SetValuesToDto();
                 }
             }
             SdkServiceHelper.SchedulingService.SaveExtendedPreferenceTemplate(template);
@@ -787,7 +730,7 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentPreference
             };
         }
 
-        private static void PersistMixedCellData(IEnumerable<IPreferenceCellData> cellDataToPersist)
+        private void PersistMixedCellData(IEnumerable<IPreferenceCellData> cellDataToPersist)
         {
             IDictionary<IList<Preference>, IList<DateTime>> prefDic = new Dictionary<IList<Preference>, IList<DateTime>>();
 
@@ -803,7 +746,7 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentPreference
 
             foreach (KeyValuePair<IList<Preference>, IList<DateTime>> keyValuePair in prefDic)
             {
-                AgentScheduleStateHolder.Instance().UpdateOrAddPreference(keyValuePair.Value, keyValuePair.Key);
+                _scheduleStateHolder.UpdateOrAddPreference(keyValuePair.Value, keyValuePair.Key);
             }
         }
 
@@ -946,11 +889,11 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentPreference
         {
             Preference preference = CreateEmptyPreference();
             preference.TemplateName = dto.Name;
-            if ((dto.ActivityRestrictionCollection != null) && (dto.ActivityRestrictionCollection.Length > 0))
+            if ((dto.ActivityRestrictionCollection != null) && (dto.ActivityRestrictionCollection.Count > 0))
             {
-                var activityRestriction = dto.ActivityRestrictionCollection[0];
+                var activityRestriction = dto.ActivityRestrictionCollection.First();
                 var activity = activityRestriction.Activity;
-                preference.Activity = new Activity(activity.Id, activity.Description);
+                preference.Activity = new Activity(activity.Id.GetValueOrDefault(), activity.Description);
                 preference.ActivityStartTimeLimitation = new TimeLimitation(TimeOfDayValidatorStartTime, activityRestriction.StartTimeLimitation);
                 preference.ActivityEndTimeLimitation = new TimeLimitation(TimeOfDayValidatorEndTime, activityRestriction.EndTimeLimitation);
                 preference.ActivityTimeLimitation = new TimeLimitation(TimeLengthValidator,
@@ -959,18 +902,18 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentPreference
             }
             if (dto.DayOff != null)
             {
-                preference.DayOff = new DayOff(dto.DayOff.Name, dto.DayOff.ShortName, dto.DayOff.Id, Color.Empty);
+                preference.DayOff = new DayOff(dto.DayOff.Name, dto.DayOff.ShortName, dto.DayOff.Id.GetValueOrDefault(), Color.Empty);
             }
             if (dto.ShiftCategory != null)
             {
                 preference.ShiftCategory = new ShiftCategory(dto.ShiftCategory.Name, dto.ShiftCategory.ShortName,
-                                                             dto.ShiftCategory.Id,
+                                                             dto.ShiftCategory.Id.GetValueOrDefault(),
                                                              ColorHelper.CreateColorFromDto(dto.ShiftCategory.DisplayColor));
             }
 
             if(dto.Absence != null)
             {
-                preference.Absence = new Absence(dto.Absence.Name, dto.Absence.ShortName, dto.Absence.Id, ColorHelper.CreateColorFromDto(dto.Absence.DisplayColor));    
+                preference.Absence = new Absence(dto.Absence.Name, dto.Absence.ShortName, dto.Absence.Id.GetValueOrDefault(), ColorHelper.CreateColorFromDto(dto.Absence.DisplayColor));    
             }
 
             preference.StartTimeLimitation = new TimeLimitation(TimeOfDayValidatorStartTime, dto.StartTimeLimitation);

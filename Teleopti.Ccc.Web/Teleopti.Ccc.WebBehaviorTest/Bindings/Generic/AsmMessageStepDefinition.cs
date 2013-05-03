@@ -66,13 +66,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[When(@"I receive message number '(.*)' while not viewing message page")]
 		public void WhenIReceiveMessageNumberWhileNotViewingMessagePage(int messageCount)
 		{
-			Browser.Current.Eval("Teleopti.MyTimeWeb.AsmMessage.SetMessageNotificationOnTab(" + messageCount.ToString() + ");");
+			Browser.Interactions.Javascript("Teleopti.MyTimeWeb.AsmMessage.SetMessageNotificationOnTab(" + messageCount.ToString() + ");");
 		}
 
 		[When(@"I receive message number '(.*)'")]
 		public void WhenIReceiveMessageNumber(int messageCount)
 		{
-			Browser.Current.Eval("Teleopti.MyTimeWeb.AsmMessage.SetMessageNotificationOnTab(" + messageCount.ToString() + ");");
+			Browser.Interactions.AssertExists(".asmMessage-list");
+			Browser.Interactions.Javascript("Teleopti.MyTimeWeb.AsmMessage.SetMessageNotificationOnTab(" + messageCount.ToString() + ");");
 
 			var pushMessageDialogueJsonObject = new StringBuilder();
 			pushMessageDialogueJsonObject.Append("var messageItem = {");
@@ -85,7 +86,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			pushMessageDialogueJsonObject.Append("IsRead: 'false'}; ");
 			pushMessageDialogueJsonObject.Append("Teleopti.MyTimeWeb.AsmMessageList.AddNewMessageAtTop(messageItem);");
 
-			Browser.Current.Eval(pushMessageDialogueJsonObject.ToString());
+			Browser.Interactions.Javascript(pushMessageDialogueJsonObject.ToString());
 		}
 
 		[Given(@"I have no unread messages")]
@@ -165,6 +166,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[When(@"I confirm reading the message at position '(.*)' of '(.*)' in the list")]
 		public void WhenIConfirmReadingTheMessageAtPositionInTheList(int listPosition, int messageCount)
 		{
+			Browser.Interactions.AssertExists(".asmMessage-item");
+
 			var newMessageCount = messageCount - 1;
 			EventualAssert.That(() => _page.MessageListItems.Count, Is.EqualTo(messageCount));
 			_page.MessageListItems[listPosition - 1].Click();
@@ -262,6 +265,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[When(@"the message with title '(.*)' is deleted by the sender")]
 		public void WhenTheMessageWithTitleIsDeletedByTheSender(string title)
 		{
+			Browser.Interactions.AssertExists(".asmMessage-list");
 			Guid id;
 			IPushMessageDialogue pushMessageDialogue;
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
@@ -271,12 +275,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 				id = (Guid)pushMessageDialogue.Id;
 			}
 
-			Browser.Current.Eval("Teleopti.MyTimeWeb.AsmMessage.SetMessageNotificationOnTab(" + "1" + ");");
+			Browser.Interactions.Javascript("Teleopti.MyTimeWeb.AsmMessage.SetMessageNotificationOnTab(" + "1" + ");");
 			var javaScript = new StringBuilder();
 
 			javaScript.AppendFormat(CultureInfo.InvariantCulture, "Teleopti.MyTimeWeb.AsmMessageList.DeleteMessage( '{0}' );", id.ToString());
 
-			Browser.Current.Eval(javaScript.ToString());
+			Browser.Interactions.Javascript(javaScript.ToString());
 		}
 	}
 }

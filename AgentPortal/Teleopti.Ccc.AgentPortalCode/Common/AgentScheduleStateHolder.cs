@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
@@ -8,11 +7,17 @@ using Teleopti.Ccc.AgentPortalCode.AgentSchedule;
 using Teleopti.Ccc.AgentPortalCode.AgentStudentAvailability;
 using Teleopti.Ccc.AgentPortalCode.Helper;
 using Teleopti.Ccc.AgentPortalCode.ScheduleControlDataProvider;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 
 namespace Teleopti.Ccc.AgentPortalCode.Common
 {
-    public class AgentScheduleStateHolder
+    public interface IAgentScheduleStateHolder
+    {
+        void UpdateOrAddPreference(IList<DateTime> dateCollection, IList<Preference> preferenceCollection);
+        void UpdateOrAddPreference(DateTime date, Preference preference);
+    }
+
+    public class AgentScheduleStateHolder : IAgentScheduleStateHolder
     {
         private static AgentScheduleStateHolder _instance;
 
@@ -157,7 +162,7 @@ namespace Teleopti.Ccc.AgentPortalCode.Common
             _asmScheduleDictionary.Fill(scheduleAppointmentCollection);
         }
 
-        public void FillAgentSchedulePartDictionary(IList<SchedulePartDto> partCollection)
+        public void FillAgentSchedulePartDictionary(IEnumerable<SchedulePartDto> partCollection)
         {
             _schedulePartDictionary.Clear();
 
@@ -173,10 +178,8 @@ namespace Teleopti.Ccc.AgentPortalCode.Common
             _shiftCategories.Clear();
             DateOnlyDto start = new DateOnlyDto();
             start.DateTime = unspecifiedKind;
-            start.DateTimeSpecified = true;
             DateOnlyDto end = new DateOnlyDto();
             end.DateTime = unspecifiedKind.AddDays(1);
-            end.DateTimeSpecified = true;
            var categories = new List<ShiftCategoryDto>(SdkServiceHelper.SchedulingService.GetShiftCategoriesBelongingToRuleSetBag(Person, start, end));
                 
             _shiftCategories.Clear();
@@ -200,7 +203,7 @@ namespace Teleopti.Ccc.AgentPortalCode.Common
                 if(found)
                 {
                     Color color = ColorHelper.CreateColorFromDto(categoryDto.DisplayColor);
-                    var shiftCategory = new ShiftCategory(categoryDto.Name, categoryDto.ShortName, categoryDto.Id, color);
+                    var shiftCategory = new ShiftCategory(categoryDto.Name, categoryDto.ShortName, categoryDto.Id.GetValueOrDefault(), color);
                     _shiftCategories.Add(shiftCategory);
                 }
             }
@@ -243,7 +246,7 @@ namespace Teleopti.Ccc.AgentPortalCode.Common
             foreach (var absenceDto in Person.WorkflowControlSet.AllowedPreferenceAbsences)
             {
                 var color = ColorHelper.CreateColorFromDto(absenceDto.DisplayColor);
-                var absence = new Absence(absenceDto.Name, absenceDto.ShortName, absenceDto.Id, color);
+                var absence = new Absence(absenceDto.Name, absenceDto.ShortName, absenceDto.Id.GetValueOrDefault(), color);
                 _absences.Add(absence);
             }
             _absences.Sort(new AbcenseComparer());
@@ -257,7 +260,7 @@ namespace Teleopti.Ccc.AgentPortalCode.Common
             dayOffs.Sort(new DayOffComparer());
             foreach (var dayOffInfoDto in dayOffs)
             {
-                  var dayOff = new DayOff(dayOffInfoDto.Name, dayOffInfoDto.ShortName, dayOffInfoDto.Id, Color.Empty);
+                  var dayOff = new DayOff(dayOffInfoDto.Name, dayOffInfoDto.ShortName, dayOffInfoDto.Id.GetValueOrDefault(), Color.Empty);
                 _daysOff.Add(dayOff); 
             }
         }
@@ -276,22 +279,22 @@ namespace Teleopti.Ccc.AgentPortalCode.Common
             var dto = new StudentAvailabilityDayDto();
             dto.RestrictionDate = new DateOnlyDto();
             dto.RestrictionDate.DateTime = unspecifiedKind;
-            dto.RestrictionDate.DateTimeSpecified = true;
             dto.Person = Person;
             var restrictionCount = studentAvailabilityRestrictions.Count;
             var studentAvailabilityRestrictionsDto = new StudentAvailabilityRestrictionDto[restrictionCount];
+
             for (int i = 0; i < restrictionCount; i++)
             {
                 var studentAvailabilityRestrictionDto = new StudentAvailabilityRestrictionDto();
-                var startTimeLimitationDto = new TimeLimitationDto();
-                studentAvailabilityRestrictions[i].StartTimeLimitation.SetValuesToDto(startTimeLimitationDto);
-                studentAvailabilityRestrictionDto.StartTimeLimitation = startTimeLimitationDto;
-                var endTimeLimitationDto = new TimeLimitationDto();
-                studentAvailabilityRestrictions[i].EndTimeLimitation.SetValuesToDto(endTimeLimitationDto);
-                studentAvailabilityRestrictionDto.EndTimeLimitation = endTimeLimitationDto;
+                studentAvailabilityRestrictionDto.StartTimeLimitation = studentAvailabilityRestrictions[i].StartTimeLimitation.SetValuesToDto();
+                studentAvailabilityRestrictionDto.EndTimeLimitation = studentAvailabilityRestrictions[i].EndTimeLimitation.SetValuesToDto();
                 studentAvailabilityRestrictionsDto[i] = studentAvailabilityRestrictionDto;
             }
-            dto.StudentAvailabilityRestrictions = studentAvailabilityRestrictionsDto;
+            dto.StudentAvailabilityRestrictions.Clear();
+            foreach (var studentAvailabilityRestrictionDto in studentAvailabilityRestrictionsDto)
+            {
+                dto.StudentAvailabilityRestrictions.Add(studentAvailabilityRestrictionDto);
+            }
             if (Person.TerminationDate != null && dto.RestrictionDate.DateTime > Person.TerminationDate.DateTime)
                 return;
             SdkServiceHelper.SchedulingService.SaveStudentAvailabilityDay(dto);
@@ -304,7 +307,6 @@ namespace Teleopti.Ccc.AgentPortalCode.Common
             dto.Person = Person;
             dto.RestrictionDate = new DateOnlyDto();
             dto.RestrictionDate.DateTime = unspecifiedKind;
-            dto.RestrictionDate.DateTimeSpecified = true;
             SdkServiceHelper.SchedulingService.DeleteStudentAvailabilityDay(dto);
         }
 
@@ -354,16 +356,12 @@ namespace Teleopti.Ccc.AgentPortalCode.Common
             preferenceRestrictionDto.Person = Person;
             preferenceRestrictionDto.RestrictionDate = new DateOnlyDto();
             preferenceRestrictionDto.RestrictionDate.DateTime = unspecifiedKind;
-            preferenceRestrictionDto.RestrictionDate.DateTimeSpecified = true;
             preferenceRestrictionDto.DayOff = dayOff;
             preferenceRestrictionDto.ShiftCategory = shiftCategory;
             preferenceRestrictionDto.Absence = absence;
-            preferenceRestrictionDto.StartTimeLimitation = new TimeLimitationDto();
-            preference.StartTimeLimitation.SetValuesToDto(preferenceRestrictionDto.StartTimeLimitation);
-            preferenceRestrictionDto.EndTimeLimitation = new TimeLimitationDto();
-            preference.EndTimeLimitation.SetValuesToDto(preferenceRestrictionDto.EndTimeLimitation);
-            preferenceRestrictionDto.WorkTimeLimitation = new TimeLimitationDto();
-            preference.WorkTimeLimitation.SetValuesToDto(preferenceRestrictionDto.WorkTimeLimitation);
+            preferenceRestrictionDto.StartTimeLimitation = preference.StartTimeLimitation.SetValuesToDto();
+            preferenceRestrictionDto.EndTimeLimitation = preference.EndTimeLimitation.SetValuesToDto();
+            preferenceRestrictionDto.WorkTimeLimitation = preference.WorkTimeLimitation.SetValuesToDto();
             preferenceRestrictionDto.MustHave = preference.MustHave;
             preferenceRestrictionDto.TemplateName = preference.TemplateName;
 
@@ -375,16 +373,13 @@ namespace Teleopti.Ccc.AgentPortalCode.Common
                                                           Id = preference.Activity.Id,
                                                           Description = preference.Activity.Name
                                                       };
-                activityRestrictionDto.StartTimeLimitation = new TimeLimitationDto();
-                preference.ActivityStartTimeLimitation.SetValuesToDto(activityRestrictionDto.StartTimeLimitation);
-                activityRestrictionDto.EndTimeLimitation = new TimeLimitationDto();
-                preference.ActivityEndTimeLimitation.SetValuesToDto(activityRestrictionDto.EndTimeLimitation);
-                activityRestrictionDto.WorkTimeLimitation = new TimeLimitationDto();
-                preference.ActivityTimeLimitation.SetValuesToDto(activityRestrictionDto.WorkTimeLimitation);
-                preferenceRestrictionDto.ActivityRestrictionCollection = new[] {activityRestrictionDto};
+                activityRestrictionDto.StartTimeLimitation = preference.ActivityStartTimeLimitation.SetValuesToDto();
+                activityRestrictionDto.EndTimeLimitation = preference.ActivityEndTimeLimitation.SetValuesToDto();
+                activityRestrictionDto.WorkTimeLimitation = preference.ActivityTimeLimitation.SetValuesToDto();
+                preferenceRestrictionDto.ActivityRestrictionCollection.Clear();
+                preferenceRestrictionDto.ActivityRestrictionCollection.Add(activityRestrictionDto);
             }
 
-            preferenceRestrictionDto.MustHaveSpecified = true;
             SdkServiceHelper.SchedulingService.SavePreference(preferenceRestrictionDto);
         }
 
@@ -395,7 +390,6 @@ namespace Teleopti.Ccc.AgentPortalCode.Common
             restrictionDto.Person = Person;
             restrictionDto.RestrictionDate = new DateOnlyDto();
             restrictionDto.RestrictionDate.DateTime = unspecifiedKind;
-            restrictionDto.RestrictionDate.DateTimeSpecified = true;
             SdkServiceHelper.SchedulingService.DeletePreference(restrictionDto);
         }
 

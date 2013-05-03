@@ -7,7 +7,8 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling
 {
-	public class WorkShiftWorkTime : IWorkShiftWorkTime
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "ShiftWork")]
+    public class WorkShiftWorkTime : IWorkShiftWorkTime
 	{
 		private readonly IRuleSetProjectionService _ruleSetProjectionService;
 

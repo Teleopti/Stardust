@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
@@ -15,7 +16,6 @@ using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.ExceptionHandling;
-using Teleopti.Ccc.WinCode.Grouping.Events;
 using Teleopti.Ccc.WinCode.Meetings.Events;
 using Teleopti.Ccc.WinCode.Meetings.Interfaces;
 using Teleopti.Ccc.WinCode.Meetings.Overview;
@@ -81,7 +81,14 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
 
                 toolStripComboBoxScenario.ComboBox.SelectedIndexChanged += comboBoxScenarioSelectedIndexChanged;
             }
-
+			if (toolStripComboBoxResolution.ComboBox != null)
+			{
+				toolStripComboBoxResolution.ComboBox.DisplayMember = "Resolution";
+				toolStripComboBoxResolution.ComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+				toolStripComboBoxResolution.ComboBox.DataSource = GridResolution.GetCollection();
+				toolStripComboBoxResolution.ComboBox.SelectedIndex = 1;
+				toolStripComboBoxResolution.ComboBox.SelectedIndexChanged += comboBoxSelectedIndexChanged;
+			}
             _calendarAndTextPanel.DateChanged += calendarAndTextPanelDateChanged;
             _nextButton.Click += nextButtonClick;
             _previousButton.Click += previousButtonClick;
@@ -90,6 +97,14 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
             scheduleControl1.DataSource = _dataProvider;
         	
         }
+
+		void comboBoxSelectedIndexChanged(object sender, EventArgs e)
+		{
+			var item = toolStripComboBoxResolution.ComboBox.SelectedItem as GridResolution;
+			if (item != null)
+				scheduleControl1.Appearance.DivisionsPerHour = item.PerHour;
+			selectWholeWeekInCalendar(scheduleControl1.Calendar.DateValue);
+		}
 
         
 
@@ -561,6 +576,23 @@ namespace Teleopti.Ccc.Win.Meetings.Overview
 		private void toolStripButtonFetchForUserClick(object sender, EventArgs e)
 		{
 			_eventAggregator.GetEvent<FetchForCurrentUserChanged>().Publish(toolStripButtonFetchForUser.Checked);
+		}
+
+		internal class GridResolution
+		{
+			public static IList<GridResolution> GetCollection()
+			{
+				return new List<GridResolution>
+					{
+						new GridResolution {PerHour = 1, Resolution = 60},
+						new GridResolution {PerHour = 2, Resolution = 30},
+						new GridResolution {PerHour = 4, Resolution = 15},
+						new GridResolution {PerHour = 6, Resolution = 10},
+						new GridResolution {PerHour = 12, Resolution = 5}
+					};
+			}
+			public int PerHour { get; set; }
+			public int Resolution { get; set; }
 		}
 
     }

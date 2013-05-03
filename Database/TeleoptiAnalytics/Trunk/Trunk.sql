@@ -131,3 +131,195 @@ CREATE TABLE [Queue].[MessagesPurged](
 
 ALTER TABLE [Queue].[MessagesPurged] ADD  CONSTRAINT [DF_PurgedAt_CreatedAt]  DEFAULT (getutcdate()) FOR [PurgedAt]
 GO
+----------------  
+--Name: Karin
+--Date: 2013-04-15
+--Desc: Alter stage request table
+----------------
+IF EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[stage].[stg_request]') AND type in (N'U'))
+DROP TABLE stage.stg_request
+GO
+
+CREATE TABLE [stage].[stg_request](
+	[request_code] [uniqueidentifier] NOT NULL,
+	[person_code] [uniqueidentifier] NOT NULL,
+	[application_datetime] [smalldatetime] NOT NULL,
+	[request_date] [smalldatetime] NOT NULL,
+	[request_startdate] [smalldatetime] NOT NULL,
+	[request_enddate] [smalldatetime] NOT NULL,
+	[request_type_code] [tinyint] NOT NULL,
+	[request_status_code] [tinyint] NOT NULL,
+	[request_start_date_count] [int] NOT NULL,
+	[request_day_count] [int] NOT NULL,
+	[business_unit_code] [uniqueidentifier] NOT NULL,
+	[datasource_id] [smallint] NOT NULL,
+	[insert_date] [smalldatetime] NOT NULL,
+	[update_date] [smalldatetime] NOT NULL,
+	[datasource_update_date] [smalldatetime] NOT NULL,
+	[is_deleted] [smallint] NOT NULL,
+	[request_starttime] [smalldatetime] NOT NULL,
+	[request_endtime] [smalldatetime] NOT NULL,
+	[absence_code] [uniqueidentifier] NULL
+ CONSTRAINT [PK_stg_request] PRIMARY KEY CLUSTERED 
+(
+	[request_code] ASC,
+	[person_code] ASC,
+	[request_date] ASC,
+	[request_type_code] ASC,
+	[request_status_code] ASC
+)
+)
+GO
+
+----------------  
+--Name: Karin
+--Date: 2013-04-15
+--Desc: Alter mart fact request table
+----------------
+ALTER TABLE mart.fact_request ADD
+	absence_id int NULL,
+	request_starttime smalldatetime NULL,
+	request_endtime smalldatetime NULL,
+	requested_time_m int NULL
+GO
+
+UPDATE mart.fact_request 
+SET absence_id=-1,
+request_starttime='1900-01-01 00:00:00',
+request_endtime='1900-01-01 00:00:00',
+requested_time_m =0 
+WHERE absence_id IS NULL
+GO
+
+ALTER TABLE mart.fact_request alter column absence_id int NOT NULL
+GO
+ALTER TABLE  mart.fact_request alter column request_starttime smalldatetime NOT NULL
+GO
+ALTER TABLE  mart.fact_request alter column request_endtime smalldatetime NOT NULL
+GO
+ALTER TABLE  mart.fact_request alter column requested_time_m int NOT NULL
+GO
+
+ALTER TABLE [mart].[fact_request]  WITH CHECK ADD  CONSTRAINT [FK_fact_request_dim_absence] FOREIGN KEY([absence_id])
+REFERENCES [mart].[dim_absence] ([absence_id])
+GO
+
+ALTER TABLE [mart].[fact_request] CHECK CONSTRAINT [FK_fact_request_dim_absence]
+GO
+----------------  
+--Name: Karin
+--Date: 2013-04-25
+--Desc: Alter mart fact requested days table
+----------------
+ALTER TABLE mart.fact_requested_days ADD absence_id int NULL
+GO
+UPDATE mart.fact_requested_days
+SET absence_id=-1
+WHERE absence_id IS NULL
+GO
+ALTER TABLE [mart].[fact_requested_days]  WITH CHECK ADD  CONSTRAINT [FK_fact_requested_days_dim_absence] FOREIGN KEY([absence_id])
+REFERENCES [mart].[dim_absence] ([absence_id])
+GO
+
+ALTER TABLE [mart].[fact_requested_days] CHECK CONSTRAINT [FK_fact_requested_days_dim_absence]
+GO
+
+----------------  
+--Name: Anders
+--Date: 2013-04-25
+--Desc: Purge agg data
+----------------
+if not exists(select 1 from [mart].[etl_maintenance_configuration] where configuration_id = 14)
+	insert into [mart].[etl_maintenance_configuration] values(14,'YearsToKeepAggQueueStats',50)
+
+if not exists(select 1 from [mart].[etl_maintenance_configuration] where configuration_id = 15)
+	insert into [mart].[etl_maintenance_configuration] values(15,'YearsToKeepAggAgentStats',50)
+GO
+
+----------------  
+--Name: David
+--Date: 2013-04-29
+--Desc: bug #23283 - wrong SP name
+----------------
+IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[etl_dim_time_zone_delete.sql]') AND type in (N'P', N'PC'))
+DROP PROCEDURE [mart].[etl_dim_time_zone_delete.sql]
+GO
+----------------  
+--Name: Karin
+--Date: 2013-04-29
+--Desc: Add new column must_have in [stage].[stg_schedule_preference]
+----------------
+ALTER TABLE stage.stg_schedule_preference 
+ADD absence_code uniqueidentifier NULL,
+	must_have int NULL
+GO
+
+----------------  
+--Name: Karin
+--Date: 2013-04-29
+--Desc: Add new column must_haves and absence_id in [mart].[fact_schedule_preference]
+----------------
+ALTER TABLE mart.fact_schedule_preference 
+ADD must_haves int NULL, 
+	absence_id int null
+
+GO
+UPDATE mart.fact_schedule_preference
+SET must_haves=0, absence_id=-1
+WHERE must_haves IS NULL AND absence_id IS NULL
+GO
+--set absence_id to not null
+ALTER TABLE mart.fact_schedule_preference alter column absence_id int NOT NULL
+GO
+
+--drop current primary
+ALTER TABLE mart.fact_schedule_preference
+DROP CONSTRAINT PK_fact_schedule_preference
+GO
+--add new primary with absence_id added
+ALTER TABLE mart.fact_schedule_preference
+ADD CONSTRAINT [PK_fact_schedule_preference] PRIMARY KEY CLUSTERED 
+(
+	[date_id] ASC,
+	[interval_id] ASC,
+	[person_id] ASC,
+	[scenario_id] ASC,
+	[preference_type_id] ASC,
+	[shift_category_id] ASC,
+	[day_off_id] ASC,
+	[absence_id] ASC)
+GO
+--add fk asbence
+ALTER TABLE [mart].[fact_schedule_preference]  WITH CHECK ADD  CONSTRAINT [FK_fact_schedule_preference_dim_absence] FOREIGN KEY([absence_id])
+REFERENCES [mart].[dim_absence] ([absence_id])
+GO
+
+ALTER TABLE [mart].[fact_schedule_preference] CHECK CONSTRAINT [FK_fact_schedule_preference_dim_absence]
+GO
+----------------  
+--Name: Karin
+--Date: 2013-04-29
+--Desc: Add "Absence" as new type in dim_preference_type
+----------------
+--add preference type absence in [mart].[dim_preference_type]
+INSERT mart.dim_preference_type(preference_type_id, preference_type_name, resource_key)
+SELECT 4,'Absence','ResAbsence'
+GO
+
+----------------  
+--Name: Karin
+--Date: 2013-04-29
+--Desc: Rename columns in preference table
+----------------
+
+EXEC sp_RENAME 'mart.fact_schedule_preference.preferences_accepted_count' , 'preferences_fulfilled', 'COLUMN'
+GO
+EXEC sp_RENAME 'mart.fact_schedule_preference.preferences_declined_count' , 'preferences_unfulfilled', 'COLUMN'
+GO
+EXEC sp_RENAME 'mart.fact_schedule_preference.preferences_requested_count' , 'preferences_requested', 'COLUMN'
+GO
+EXEC sp_RENAME 'stage.stg_schedule_preference.preference_accepted' , 'preference_fulfilled', 'COLUMN'
+GO
+EXEC sp_RENAME 'stage.stg_schedule_preference.preference_declined' , 'preference_unfulfilled', 'COLUMN'
+GO
+

@@ -56,13 +56,13 @@
             this.isPassword = true;
             // IE < 9 doesn't allow changing the type of password inputs
             if (navigator.userAgent.match(/msie/i) && input[0].outerHTML) {
-                var fakeHTML = $(input[0].outerHTML.replace(/type=(['"])?password\1/gi, 'type=$1text$1'));
+            	var fakeHTML = $(input.clone()[0].outerHTML.replace(/type=(['"])?password\1/gi, 'type=$1text$1'));
                 this.fakePassword = fakeHTML.val(input.attr('placeholder')).addClass('placeholder').focus(function() {
                     input.trigger('focus');
                     $(this).hide();
                 });
                 $(input[0].form).submit(function() {
-                    fakeHTML.remove();
+                	fakeHTML.hide();
                     input.show()
                 });
             }

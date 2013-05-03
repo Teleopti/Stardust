@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using NUnit.Framework;
 using Teleopti.Ccc.AgentPortalCode.Requests.ShiftTrade;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 
 namespace Teleopti.Ccc.AgentPortalCodeTest.Requests.ShiftTrade
 {
@@ -24,7 +25,7 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.Requests.ShiftTrade
             _shiftTradeSwapDetailDto = new ShiftTradeSwapDetailDto();
             _shiftTradeSwapDetailDto.PersonFrom = _loggedOnPerson;
             _shiftTradeSwapDetailDto.PersonTo = _otherPerson;
-            _shiftTradeSwapDetailDto.DateFrom = new DateOnlyDto {DateTime = new DateTime(2009, 11, 17), DateTimeSpecified = true};
+            _shiftTradeSwapDetailDto.DateFrom = new DateOnlyDto {DateTime = new DateTime(2009, 11, 17)};
             _shiftTradeSwapDetailDto.DateTo = _shiftTradeSwapDetailDto.DateFrom;
             _shiftTradeSwapDetailDto.SchedulePartFrom = _schedulePartFrom;
             _shiftTradeSwapDetailDto.SchedulePartTo = _schedulePartTo;
@@ -59,7 +60,7 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.Requests.ShiftTrade
             projectedLayersFrom.Add(new ProjectedLayerDto
                                         {
                                             Description = "Act1",
-                                            DisplayColor = new ColorDto(),
+                                            DisplayColor = new ColorDto(Color.ForestGreen),
                                             Period =
                                                 new DateTimePeriodDto
                                                     {
@@ -70,7 +71,7 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.Requests.ShiftTrade
             projectedLayersFrom.Add(new ProjectedLayerDto
             {
                 Description = "Act2",
-                DisplayColor = new ColorDto(),
+                DisplayColor = new ColorDto(Color.Firebrick),
                 Period =
                     new DateTimePeriodDto
                     {
@@ -82,7 +83,7 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.Requests.ShiftTrade
             {
 				IsAbsence = true,
                 Description = "Act3",
-                DisplayColor = new ColorDto(),
+                DisplayColor = new ColorDto(Color.DodgerBlue),
                 Period =
                     new DateTimePeriodDto
                     {
@@ -91,10 +92,13 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.Requests.ShiftTrade
                     }
             });
             _schedulePartFrom = new SchedulePartDto();
-            _schedulePartFrom.ProjectedLayerCollection = projectedLayersFrom.ToArray();
+            foreach (var projectedLayerDto in projectedLayersFrom)
+            {
+                _schedulePartFrom.ProjectedLayerCollection.Add(projectedLayerDto);
+            }
             _schedulePartFrom.Date = new DateOnlyDto { DateTime = new DateTime(2009, 11, 17) };
             _schedulePartTo = new SchedulePartDto();
-            _schedulePartTo.ProjectedLayerCollection = new ProjectedLayerDto[0];
+            _schedulePartTo.ProjectedLayerCollection.Clear();
             _schedulePartTo.Date = new DateOnlyDto { DateTime = new DateTime(2009, 11, 17) };
             _schedulePartTo.PersonDayOff = new PersonDayOffDto {Name = "Da dayoff"};
         }
@@ -102,10 +106,10 @@ namespace Teleopti.Ccc.AgentPortalCodeTest.Requests.ShiftTrade
         private void PreparePersons()
         {
             _loggedOnPerson = new PersonDto();
-            _loggedOnPerson.Id = Guid.NewGuid().ToString();
+            _loggedOnPerson.Id = Guid.NewGuid();
             _loggedOnPerson.Name = "Ashley Andeen";
             _otherPerson = new PersonDto();
-            _otherPerson.Id = Guid.NewGuid().ToString();
+            _otherPerson.Id = Guid.NewGuid();
             _otherPerson.Name = "Prashant Arora";
         }
     }

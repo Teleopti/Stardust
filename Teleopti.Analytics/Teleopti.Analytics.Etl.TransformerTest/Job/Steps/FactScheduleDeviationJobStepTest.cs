@@ -23,7 +23,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
 		[SetUp]
 		public void Setup()
 		{
-			_timeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
+			_timeZone = TimeZoneInfo.FindSystemTimeZoneById("UTC");
 			_jobCategoryDates = new JobMultipleDate(_timeZone);
 			_repository = MockRepository.GenerateStrictMock<IRaptorRepository>();
 		}

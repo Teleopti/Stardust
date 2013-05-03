@@ -130,9 +130,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should not be able to see student availability link")]
 		public void ThenIShouldNotBeAbleToSeeStudentAvailabilityLink()
 		{
-			var page = Browser.Current.Page<PortalPage>();
-			page.Menu.Exists.Should().Be.True();
-			page.StudentAvailabilityLink.Exists.Should().Be.False();
+			Browser.Interactions.AssertNotExists("#tabs", "[href*='#StudentAvailabilityTab']");
 		}
 
 		[Then(@"I should see my existing student availability")]

@@ -3,6 +3,7 @@ using NUnit.Framework;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
+using Teleopti.Ccc.WebBehaviorTest.Data;
 using WatiN.Core;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 
@@ -27,7 +28,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		public LocalizedText To(string textToBeResourceKey)
 		{
 			var resourceKey = new CultureInfo("en-US").TextInfo.ToTitleCase(textToBeResourceKey).Replace(" ", "");
-			var localizedText = Resources.ResourceManager.GetString(resourceKey) ?? textToBeResourceKey;
+			var localizedText = Resources.ResourceManager.GetString(resourceKey, UserFactory.User().Culture) ?? textToBeResourceKey;
 			return new LocalizedText { Text = localizedText };
 		}
 
@@ -41,7 +42,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[When(@"I click '([a-z|\s]*)'")]
 		public void WhenIClickClass(CssClass cssClass)
 		{
-			Browser.Current.Element(Find.BySelector(string.Format(".{0}", cssClass.Name))).EventualClick();
+			Browser.Interactions.Click(string.Format(".{0}", cssClass.Name));
 		}
 
 		// I click agent 'mathias stenbom'
@@ -53,7 +54,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[When(@"I click( the)? ([a-z]*|[a-z]* [a-z]*) '(.*)'")]
 		public void WhenIClickClassWithText(string the, CssClass cssClass, string text)
 		{
-			Browser.Current.Element(Find.BySelector(string.Format(".{0}:contains('{1}')", cssClass.Name, text))).EventualClick();
+			Browser.Interactions.Click(string.Format(".{0}:contains('{1}')", cssClass.Name, text));
 		}
 
 		// I should see the message 'an error message'
@@ -63,7 +64,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		[Then(@"I should see the ([a-z]*|[a-z]* [a-z]*) '(.*)'")]
 		public void ThenIShouldSeeTheMessage(CssClass cssClass, LocalizedText text)
 		{
-			EventualAssert.That(() => Browser.Current.Element(Find.BySelector("." + cssClass.Name)).Text, Is.StringContaining(text.Text));
+			Browser.Interactions.AssertContains("." + cssClass.Name, text.Text);
 		}
 
 	}

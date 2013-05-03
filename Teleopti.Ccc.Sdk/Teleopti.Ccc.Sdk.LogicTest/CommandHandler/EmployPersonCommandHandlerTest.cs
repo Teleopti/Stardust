@@ -36,19 +36,21 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         private IContract _contract;
         private IContractSchedule _contractSchedule;
         private IPartTimePercentage _partTimePercentage;
+        private ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 
         [SetUp]
         public void Setup()
         {
             _mock = new MockRepository();
             _unitOfWorkFactory = _mock.StrictMock<IUnitOfWorkFactory>();
+            _currentUnitOfWorkFactory = _mock.DynamicMock<ICurrentUnitOfWorkFactory>();
             _personRepository = _mock.StrictMock<IPersonRepository>();
             _personAssembler = _mock.StrictMock<IPersonAssembler>();
             _partTimePercentageRepository = _mock.StrictMock<IPartTimePercentageRepository>();
             _contractScheduleRepository = _mock.StrictMock<IContractScheduleRepository>();
             _contractRepository = _mock.StrictMock<IContractRepository>();
             _teamRepository = _mock.StrictMock<ITeamRepository>();
-            _target = new EmployPersonCommandHandler(_unitOfWorkFactory,_personRepository,_personAssembler,_partTimePercentageRepository,_contractScheduleRepository,_contractRepository,_teamRepository);
+            _target = new EmployPersonCommandHandler(_currentUnitOfWorkFactory,_personRepository,_personAssembler,_partTimePercentageRepository,_contractScheduleRepository,_contractRepository,_teamRepository);
 
             _person = PersonFactory.CreatePerson("test");
             _person.SetId(Guid.NewGuid());
@@ -91,6 +93,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             using(_mock.Record())
             {
                 Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+                Expect.Call(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
                 Expect.Call(_personAssembler.DtoToDomainEntity(_employPersonCommandDto.Person)).Return(_person);
                 Expect.Call(_personAssembler.EnableSaveOrUpdate = true);
                 Expect.Call(_partTimePercentageRepository.Load(_employPersonCommandDto.PersonContract.PartTimePercentageId.GetValueOrDefault())).Return(_partTimePercentage);

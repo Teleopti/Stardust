@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Globalization;
+using System.Linq;
 using Teleopti.Ccc.AgentPortalCode.AgentPreference.Limitation;
 using Teleopti.Ccc.AgentPortalCode.Common;
 using Teleopti.Ccc.AgentPortalCode.Helper;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.AgentPortalCode.AgentStudentAvailability
@@ -63,7 +64,7 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentStudentAvailability
         public void LoadPeriod(DateTime dateInPeriod, IScheduleHelper scheduleHelper)
         {
             DateOnly dateOnly = GetDateOnlyInPeriod(dateInPeriod);
-            IList<ValidatedSchedulePartDto> ret = scheduleHelper.Validate(LoggedOnPerson, dateOnly, true);
+            var ret = scheduleHelper.Validate(LoggedOnPerson, dateOnly, true);
             var retList = new Dictionary<int, IStudentAvailabilityCellData>();
             int cellNumber = 0;
             bool firstDateIsSet = false;
@@ -140,7 +141,7 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentStudentAvailability
         {
             var dateOnly = new DateOnly(dateInPeriod);
             bool periodExists = false;
-            for (int i = 0; i < LoggedOnPerson.PersonPeriodCollection.Length; i++)
+            for (int i = 0; i < LoggedOnPerson.PersonPeriodCollection.Count; i++)
             {
                 if (LoggedOnPerson.PersonPeriodCollection[i].Period.StartDate.DateTime <= dateOnly && LoggedOnPerson.PersonPeriodCollection[i].Period.EndDate.DateTime >= dateOnly)
                 {
@@ -148,9 +149,9 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentStudentAvailability
                     break;
                 }
             }
-            if (!periodExists && LoggedOnPerson.PersonPeriodCollection.Length > 0)
+            if (!periodExists && LoggedOnPerson.PersonPeriodCollection.Count > 0)
             {
-                DateOnlyPeriodDto lastPeriod = LoggedOnPerson.PersonPeriodCollection[LoggedOnPerson.PersonPeriodCollection.Length - 1].Period;
+                DateOnlyPeriodDto lastPeriod = LoggedOnPerson.PersonPeriodCollection.Last().Period;
 
                 if (dateInPeriod > lastPeriod.EndDate.DateTime)//Teminal date
                     dateOnly = new DateOnly(lastPeriod.EndDate.DateTime);

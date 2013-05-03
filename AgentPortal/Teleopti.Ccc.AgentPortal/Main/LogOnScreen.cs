@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
+using System.ServiceModel;
 using System.Threading;
 using System.Web.Services.Protocols;
 using System.Windows.Forms;
 using Teleopti.Ccc.AgentPortal.Helper;
 using Teleopti.Ccc.AgentPortalCode.Foundation.StateHandlers;
 using Teleopti.Ccc.AgentPortalCode.Helper;
-using Teleopti.Ccc.Sdk.Client.SdkServiceReference;
-using Teleopti.Messaging.SignalR;
+using Teleopti.Ccc.Sdk.Common.Contracts;
+using Teleopti.Ccc.Sdk.Common.DataTransferObject;
+using Teleopti.Ccc.Sdk.Common.WcfExtensions;
 
 namespace Teleopti.Ccc.AgentPortal.Main
 {
@@ -35,7 +38,7 @@ namespace Teleopti.Ccc.AgentPortal.Main
 
         private IList<DataSourceDto> _logonableWindowsDataSources;
         private IList<DataSourceDto> _availableApplicationDataSources;
-        private IList<BusinessUnitDto> _businessUnitList;
+        private ICollection<BusinessUnitDto> _businessUnitList;
         private bool _cancelLogOn;
         private LoadingState _loadingState = LoadingState.Initializing;
         private DataSourceDto _choosenDataSource;
@@ -171,9 +174,8 @@ namespace Teleopti.Ccc.AgentPortal.Main
         private void signOn()
         {
             if (_choosenDataSource == null) return;
-            var currentHeader = Sdk.Client.AuthenticationSoapHeader.Current;
-            currentHeader.DataSource = _choosenDataSource.Name;
-            currentHeader.UseWindowsIdentity = false;
+            AuthenticationMessageHeader.DataSource = _choosenDataSource.Name;
+            AuthenticationMessageHeader.UseWindowsIdentity = false;
 
             var resultDto =
                 SdkServiceHelper.LogOnServiceClient.LogOnApplicationUser(_logOnDetails.UserName, _logOnDetails.Password,
@@ -317,7 +319,7 @@ namespace Teleopti.Ccc.AgentPortal.Main
         /// <summary>
         /// Do an authentication.
         /// </summary>
-        private void Authenticate(TeleoptiCccLogOnService service)
+        private void Authenticate(ITeleoptiCccLogOnService service)
         {
             //Log on Step 1
             ICollection<DataSourceDto> dataSourceCollection = service.GetDataSources();
@@ -411,10 +413,9 @@ namespace Teleopti.Ccc.AgentPortal.Main
                 
                 if (_cancelLogOn)
                     return;
-                var currentHeader = Sdk.Client.AuthenticationSoapHeader.Current;
-                currentHeader.UserName = _logOnDetails.UserName;
-                currentHeader.Password = _logOnDetails.Password;
-                currentHeader.BusinessUnit = Guid.Empty.ToString();
+                AuthenticationMessageHeader.UserName = _logOnDetails.UserName;
+                AuthenticationMessageHeader.Password = _logOnDetails.Password;
+                AuthenticationMessageHeader.BusinessUnit = Guid.Empty;
             }
         }
 
@@ -467,14 +468,13 @@ namespace Teleopti.Ccc.AgentPortal.Main
             if (_cancelLogOn)
                 return;
 
-            var currentHeader = Sdk.Client.AuthenticationSoapHeader.Current;
             if (AuthenticationType == AuthenticationTypeOptionDto.Windows)
             {
-                currentHeader.DataSource = _choosenDataSource.Name;
-                currentHeader.UserName = string.Empty;
-                currentHeader.Password = string.Empty;
-                currentHeader.BusinessUnit = Guid.Empty.ToString();
-                currentHeader.UseWindowsIdentity = true;
+                AuthenticationMessageHeader.DataSource = _choosenDataSource.Name;
+                AuthenticationMessageHeader.UserName = string.Empty;
+                AuthenticationMessageHeader.Password = string.Empty;
+                AuthenticationMessageHeader.BusinessUnit = Guid.Empty;
+                AuthenticationMessageHeader.UseWindowsIdentity = true;
 
                 var resultDto =
                     SdkServiceHelper.LogOnServiceClient.LogOnWindowsUser(
@@ -516,13 +516,12 @@ namespace Teleopti.Ccc.AgentPortal.Main
             }
             else
             {
-                _choosenBusinessUnit = _businessUnitList[0];
+                _choosenBusinessUnit = _businessUnitList.First();
             }
 
             ActivatePanel(panelPicture);
 
-            currentHeader.BusinessUnit = _choosenBusinessUnit.Id;
-            SdkServiceHelper.LogOnServiceClient.SetBusinessUnit(_choosenBusinessUnit);
+            AuthenticationMessageHeader.BusinessUnit = _choosenBusinessUnit.Id.GetValueOrDefault();
         }
 
         private void CreateSettings()
@@ -552,7 +551,7 @@ namespace Teleopti.Ccc.AgentPortal.Main
                 {
                     StateHolder.Initialize(new StateManager());
                 }
-                catch (SoapException e)
+                catch (FaultException e)
                 {
                     MessageBoxHelper.ShowWarningMessage(this, e.Message, UserTexts.Resources.ErrorMessage);
                     return false;

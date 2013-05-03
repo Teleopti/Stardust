@@ -40,12 +40,14 @@ namespace Teleopti.Ccc.SyncfusionGridBinding
 			{
 				cellDetails.SetCellValue(_gridRows[e.RowIndex - 1 - _gridControl.Rows.HeaderCount].HeaderText);
                 cellDetails.SetCellTipText(_gridRows[e.RowIndex - 1 - _gridControl.Rows.HeaderCount].CellTipText);
+                SetMergedHeaderStyle();
 			}
 			T item;
             if (cellDetails.IsColumnParentHeader)
 			{
                 item = _collection[e.ColIndex - 1];
                 cellDetails.SetParentCellValue(_columnParentHeaderMember.GetModelValue(item).ToString());
+                SetMergedHeaderStyle();
 			}
 			if (cellDetails.IsColumnHeader)
 			{
@@ -53,6 +55,7 @@ namespace Teleopti.Ccc.SyncfusionGridBinding
 				var dateString = _columnHeaderMember.GetModelValue(item).ToString();
 				Weekend(cellDetails, _columnHeaderMember.GetModelValue(item));
 				cellDetails.SetCellValue(dateString);
+                SetMergedHeaderStyle();
 			}
 			if (cellDetails.IsContentCell)
 			{
@@ -132,6 +135,7 @@ namespace Teleopti.Ccc.SyncfusionGridBinding
 	    private void gridControl_ClientSizeChanged(object sender, EventArgs e)
 	    {
 	        _gridControl.Model.MergeCells.EvaluateMergeCells(GridRangeInfo.Rows(0,1));
+	        _gridControl.Model.MergeCells.EvaluateMergeCells(GridRangeInfo.Cols(0,1));
 	    }
 
 	    private void ResetGridArea()
@@ -232,7 +236,6 @@ namespace Teleopti.Ccc.SyncfusionGridBinding
 			UnwireGrid();
 			UnwireModels();
 			ResetGridArea();
-		    SetMergedHeaderStyle();
 		}
 
         private void SetMergedHeaderStyle()

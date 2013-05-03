@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             IScenario scenario = new Scenario("f");
             IEnumerable<IPerson> peopleToSearchWith = new List<IPerson> { person };
 
-            IEnumerable<IPair<Guid>> peopleSkillMatrix = new List<IPair<Guid>>();
+            var peopleSkillMatrix = new List<Tuple<Guid, Guid>>();
 
             IEnumerable<Guid> skillDependencies = new List<Guid>();
             IEnumerable<Guid> peopleDependencies = new List<Guid>();

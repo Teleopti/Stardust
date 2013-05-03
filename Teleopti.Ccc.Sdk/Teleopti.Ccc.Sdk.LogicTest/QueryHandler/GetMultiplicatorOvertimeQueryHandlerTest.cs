@@ -22,8 +22,9 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 		private GetMultiplicatorOvertimeQueryHandler target;
 		private IMultiplicator multiplicator;
 		private IList<IMultiplicator> multiplicatorList;
+	    private ICurrentUnitOfWorkFactory currentUnitOfWorkFactory;
 
-		[SetUp]
+	    [SetUp]
 		public void Setup()
 		{
 			mocks = new MockRepository();
@@ -32,8 +33,9 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			multiplicator.Description = new Description("Overtime", "OV");
 			multiplicatorList = new List<IMultiplicator>();
 			multiplicatorList.Add(multiplicator);
-			unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
-			target = new GetMultiplicatorOvertimeQueryHandler(multiplicatorRepository, unitOfWorkFactory);
+            unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
+            currentUnitOfWorkFactory = mocks.DynamicMock<ICurrentUnitOfWorkFactory>();
+			target = new GetMultiplicatorOvertimeQueryHandler(multiplicatorRepository, currentUnitOfWorkFactory);
 		}
 
 		[Test]
@@ -45,6 +47,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			{
 				Expect.Call(multiplicatorRepository.LoadAllByTypeAndSortByName(MultiplicatorType.Overtime)).Return(multiplicatorList);
 				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+				Expect.Call(currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
 			}
 			using (mocks.Playback())
 			{

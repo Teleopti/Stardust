@@ -24,16 +24,18 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 		private GetPayrollResultStatusByExportIdQueryHandler target;
 		private IAssembler<IPayrollResult, PayrollResultDto> assembler;
 		private IPayrollResultRepository payrollResultRepository;
+	    private ICurrentUnitOfWorkFactory currentUnitOfWorkFactory;
 
-		[SetUp]
+	    [SetUp]
 		public void Setup()
 		{
 			mocks = new MockRepository();
 			payrollExportRepository = mocks.StrictMock<IPayrollExportRepository>();
 			payrollResultRepository = mocks.StrictMock<IPayrollResultRepository>();
-			unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
+            unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
+            currentUnitOfWorkFactory = mocks.DynamicMock<ICurrentUnitOfWorkFactory>();
 			assembler = mocks.DynamicMock<IAssembler<IPayrollResult, PayrollResultDto>>();
-			target = new GetPayrollResultStatusByExportIdQueryHandler(assembler, payrollResultRepository, payrollExportRepository, unitOfWorkFactory);
+			target = new GetPayrollResultStatusByExportIdQueryHandler(assembler, payrollResultRepository, payrollExportRepository, currentUnitOfWorkFactory);
 		}
 
 		[Test]
@@ -51,6 +53,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 				Expect.Call(payrollResultRepository.GetPayrollResultsByPayrollExport(payrollExport)).Return(payrollResultList);
 				Expect.Call(assembler.DomainEntitiesToDtos(payrollResultList)).Return(new[] {dto});
 				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+				Expect.Call(currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
 			}
 			using (mocks.Playback())
 			{

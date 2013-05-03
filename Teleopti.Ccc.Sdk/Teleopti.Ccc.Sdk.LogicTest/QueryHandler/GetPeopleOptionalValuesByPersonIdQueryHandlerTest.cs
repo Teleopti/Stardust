@@ -30,14 +30,16 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 		private Guid personId;
 		private IPerson person;
 		private IOptionalColumn optionalColumn;
+	    private ICurrentUnitOfWorkFactory currentUnitOfWorkFactory;
 
-		[SetUp]
+	    [SetUp]
 		public void Setup()
 		{
 			mocks = new MockRepository();
 			personRepository = mocks.StrictMock<IPersonRepository>();
 			optionalColumnRepository = mocks.StrictMock<IOptionalColumnRepository>();
-			unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
+            unitOfWorkFactory = mocks.DynamicMock<IUnitOfWorkFactory>();
+            currentUnitOfWorkFactory = mocks.DynamicMock<ICurrentUnitOfWorkFactory>();
 			unitOfWork = mocks.DynamicMock<IUnitOfWork>();
 
 			personId = Guid.NewGuid();
@@ -45,7 +47,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 			person.SetId(personId);
 			optionalColumn = new OptionalColumn("Shoe size");
 
-			target = new GetPeopleOptionalValuesByPersonIdQueryHandler(optionalColumnRepository, personRepository, unitOfWorkFactory);
+			target = new GetPeopleOptionalValuesByPersonIdQueryHandler(optionalColumnRepository, personRepository, currentUnitOfWorkFactory);
 		}
 
 		[Test]
@@ -61,6 +63,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 				Expect.Call(personRepository.FindPeople(query.PersonIdCollection)).Return(new Collection<IPerson>{person});
 				Expect.Call(optionalColumnRepository.GetOptionalColumns<Person>()).Return(new List<IOptionalColumn>{optionalColumn});
 				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+				Expect.Call(currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
 			}
 			using (mocks.Playback())
 			{
@@ -82,6 +85,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 				Expect.Call(personRepository.FindPeople(query.PersonIdCollection)).Return(new Collection<IPerson> { person });
 				Expect.Call(optionalColumnRepository.GetOptionalColumns<Person>()).Return(new List<IOptionalColumn> { optionalColumn });
 				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+				Expect.Call(currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
 			}
 			using (mocks.Playback())
 			{
@@ -103,6 +107,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 				Expect.Call(personRepository.FindPeople(query.PersonIdCollection)).Return(new Collection<IPerson>());
 				Expect.Call(optionalColumnRepository.GetOptionalColumns<Person>()).Return(new List<IOptionalColumn> { optionalColumn });
 				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+				Expect.Call(currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
 			}
 			using (mocks.Playback())
 			{
@@ -122,6 +127,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 				Expect.Call(personRepository.FindPeople(query.PersonIdCollection)).Return(new Collection<IPerson> { person });
 				Expect.Call(optionalColumnRepository.GetOptionalColumns<Person>()).Return(new List<IOptionalColumn> { optionalColumn }).Repeat.Never();
 				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+				Expect.Call(currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory);
 			}
 			using (mocks.Playback())
 			{
@@ -143,6 +149,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.QueryHandler
 				Expect.Call(personRepository.FindPeople(query.PersonIdCollection)).Return(new Collection<IPerson> { person }).Repeat.Never();
 				Expect.Call(optionalColumnRepository.GetOptionalColumns<Person>()).Return(new List<IOptionalColumn> { optionalColumn }).Repeat.Never();
 				Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork).Repeat.Never();
+				Expect.Call(currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(unitOfWorkFactory).Repeat.Never();
 			}
 			using (mocks.Playback())
 			{

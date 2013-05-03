@@ -3,7 +3,7 @@ using Teleopti.Ccc.Domain.Security;
 
 namespace Teleopti.Ccc.DomainTest.Security
 {
-    [TestFixture]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Exp"), TestFixture]
     public class RegExpSpecificationTest
     {
         private RegExpSpecification target;

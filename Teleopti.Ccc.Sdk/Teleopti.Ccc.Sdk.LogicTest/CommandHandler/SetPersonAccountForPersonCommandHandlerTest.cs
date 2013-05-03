@@ -32,6 +32,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
         private readonly DateOnly _dateOnly = new DateOnly(_startDate);
 		private readonly DateOnlyDto _dateOnlydto = new DateOnlyDto { DateTime = new DateOnly(_startDate) };
         private SetPersonAccountForPersonCommandDto _setPersonAccountForPersonCommandDto;
+        private ICurrentUnitOfWorkFactory _currentUnitOfWorkFactory;
 
         [SetUp]
         public void Setup()
@@ -43,7 +44,8 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             _personAbsenceAccountRepository = _mock.StrictMock<IPersonAbsenceAccountRepository>();
             _absenceRepository = _mock.StrictMock<IAbsenceRepository>();
             _unitOfWorkFactory = _mock.StrictMock<IUnitOfWorkFactory>();
-            _target = new SetPersonAccountForPersonCommandHandler(_repositoryFactory,_scenarioRepository,_personRepository,_personAbsenceAccountRepository,_absenceRepository,_unitOfWorkFactory);
+            _currentUnitOfWorkFactory = _mock.DynamicMock<ICurrentUnitOfWorkFactory>();
+            _target = new SetPersonAccountForPersonCommandHandler(_repositoryFactory,_scenarioRepository,_personRepository,_personAbsenceAccountRepository,_absenceRepository,_currentUnitOfWorkFactory);
 
             _person = PersonFactory.CreatePerson("test");
             _person.SetId(Guid.NewGuid());
@@ -72,6 +74,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             using(_mock.Record())
             {
                 Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork).Repeat.Twice();
+                Expect.Call(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory).Repeat.Twice();
                 Expect.Call(_personRepository.Get(_setPersonAccountForPersonCommandDto.PersonId)).Return(_person);
                 Expect.Call(_absenceRepository.Get(_setPersonAccountForPersonCommandDto.AbsenceId)).Return(_absence);
                 Expect.Call(_personAbsenceAccountRepository.Find(_person)).Return(personAccounts);
@@ -100,6 +103,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             using (_mock.Record())
             {
                 Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+                Expect.Call(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
                 Expect.Call(_personRepository.Get(_setPersonAccountForPersonCommandDto.PersonId)).Return(null);
                 Expect.Call(unitOfWork.Dispose);
             }
@@ -118,6 +122,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             using (_mock.Record())
             {
                 Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+                Expect.Call(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
                 Expect.Call(_personRepository.Get(_setPersonAccountForPersonCommandDto.PersonId)).Return(_person);
                 Expect.Call(_absenceRepository.Get(_setPersonAccountForPersonCommandDto.AbsenceId)).Return(null);
                 Expect.Call(unitOfWork.Dispose);
@@ -140,6 +145,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             using (_mock.Record())
             {
                 Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork).Repeat.Times(2);
+                Expect.Call(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory).Repeat.Times(2);
                 Expect.Call(_personRepository.Get(_setPersonAccountForPersonCommandDto.PersonId)).Return(_person);
                 Expect.Call(_absenceRepository.Get(_setPersonAccountForPersonCommandDto.AbsenceId)).Return(_absence);
                 Expect.Call(_personAbsenceAccountRepository.Find(_person)).Return(personAccounts);
@@ -171,6 +177,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             using (_mock.Record())
             {
                 Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork).Repeat.Times(2);
+                Expect.Call(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
                 Expect.Call(_personRepository.Get(_setPersonAccountForPersonCommandDto.PersonId)).Return(_person);
                 Expect.Call(_absenceRepository.Get(_setPersonAccountForPersonCommandDto.AbsenceId)).Return(_absence);
                 Expect.Call(()=>_scenarioRepository.Current());
@@ -196,6 +203,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.CommandHandler
             using (_mock.Record())
             {
                 Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
+                Expect.Call(_currentUnitOfWorkFactory.LoggedOnUnitOfWorkFactory()).Return(_unitOfWorkFactory);
                 Expect.Call(_personRepository.Get(_setPersonAccountForPersonCommandDto.PersonId)).Return(_person);
                 Expect.Call(_absenceRepository.Get(_setPersonAccountForPersonCommandDto.AbsenceId)).Return(_absence);
                 

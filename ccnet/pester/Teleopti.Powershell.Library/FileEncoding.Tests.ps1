@@ -31,7 +31,7 @@ Describe "Write and read files with different encoding" {
 		Setup -File "\forTest.txt" "some file content"
 		Setup -File "\forTest2.txt" "some file content"
 
-		$testPath = "$TestDrive\forTest.txt"
+		$testPath = (get-item "$TestDrive\forTest.txt").FullName
 		$Files = @(Get-FileListByFilter -path "$TestDrive" -filter "*.txt")
 		$Files.count | Should Be 2
 		$Files[0].FullName | Should Be $testPath
@@ -40,7 +40,7 @@ Describe "Write and read files with different encoding" {
 		it "Should return one file in path based on filter" {
 		Cleanup
 		Setup -File "\forTest.txt" "some file content"
-		$testPath = "$TestDrive\forTest.txt"
+		$testPath = (get-item "$TestDrive\forTest.txt").FullName
 		
 		$Files = @(Get-FileListByFilter -path "$TestDrive" -filter "*.txt")
 		$Files.count | Should Be 1
@@ -100,10 +100,10 @@ Describe "Write and read files with different encoding" {
 Describe "Write and read files with different encoding - Using Mock" {
 #put a dummy mock here to be used in another "describe" block
 #Mocks used for the rest of this descibe block:
-Mock Get-FileListByFilter {return @{FullName="A_File.TXT"}} -PrameterFilter {$filter -eq "*.txt"}
-Mock Get-FileEncoding {return "Unicode (UTF-7)"} -PrameterFilter {$Path -eq "A_File.TXT"}
-Mock Get-FileListByFilter {return @{FullName="A_File.sql"}} -PrameterFilter {$filter -eq "*.sql"}
-Mock Get-FileEncoding {return "Unicode (UTF-8)"} -PrameterFilter {$Path -eq "A_File.sql"}
+Mock Get-FileListByFilter {return @{FullName="A_File.TXT"}} -ParameterFilter {$filter -eq "*.txt"}
+Mock Get-FileEncoding {return "Unicode (UTF-7)"} -ParameterFilter {$Path -eq "A_File.TXT"}
+Mock Get-FileListByFilter {return @{FullName="A_File.sql"}} -ParameterFilter {$filter -eq "*.sql"}
+Mock Get-FileEncoding {return "Unicode (UTF-8)"} -ParameterFilter {$Path -eq "A_File.sql"}
 
 	It "one file, correct encoding" {
 		$ZeroFiles = Get-FileListOtherEncoding -path "$TestDrive" -filter "*.txt" -ExpectedEncoding "Unicode (UTF-7)"
@@ -120,12 +120,12 @@ Mock Get-FileEncoding {return "Unicode (UTF-8)"} -PrameterFilter {$Path -eq "A_F
 Describe "Investigate mock a cross describe" {
 Mock Get-Banan {return "gurka"}
 
-	It "I should get the mock if it's defined in the current <describe> block and I don't use Cleanup" {
+	It "I should get the mock if it's defined in the current describe block and I don't use Cleanup" {
 		$string = Get-Banan
 		$string | Should Be "gurka"
 	}
 
-	It "I should _not_ get the mock when defined in current <describe> block and I _do_ use Cleanup" {
+	It "I should _not_ get the mock when defined in current describe block and I _do_ use Cleanup" {
 		Cleanup
 		$string = Get-Banan
 		$string | Should Be "banan"
