@@ -19,8 +19,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
     /// </remarks>
     public partial class DateSelectionFromTo : IDateSelectionControl
     {
-        #region eventdeclarations
-
         /// <summary>
         /// trigged by the prognosis startdate dropdown.
         /// </summary>
@@ -49,13 +47,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
         /// </remarks>
         public event EventHandler ButtonClickedNoValidation;
 
-
-   
-
-        #endregion
-
-        #region setup
-
         public DateSelectionFromTo()
         {
             InitializeComponent();
@@ -83,6 +74,16 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
             dateTimePickerAdvWorkEndPeriod.Culture = cultureInfo;
 			dateTimePickerAdvWorkEndPeriod.Calendar.Iso8601CalenderFormat =
 				DateHelper.Iso8601Cultures.Contains(cultureInfo.LCID);
+
+			// <bugfix 22929: Bulgarian date format not displayed well in most calendar controls
+			// seems that CalendarSizeToFit property does not work with the BG culture
+			if (cultureInfo.LCID == 1026)
+			{
+				dateTimePickerAdvWorkAStartDate.CalendarSizeToFit = false;
+				dateTimePickerAdvWorkEndPeriod.CalendarSizeToFit = false;
+			}
+			// >
+
         }
 
         private void SetColors()
@@ -91,8 +92,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
             btnApplyChangedPeriod.Office2007ColorScheme = Office2007Theme.Managed ;
             btnApplyChangedPeriod.UseVisualStyle = true;
         }
-
-        #endregion
 
         public bool HideNoneButtons
         {
@@ -107,8 +106,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
                 dateTimePickerAdvWorkEndPeriod.NoneButtonVisible = !value;
             }
         }
-
-        #region fields and properties
 
         /// <summary>
         /// Gets a value indicating whether this instance is work period valid.
@@ -140,9 +137,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
             get { return new DateOnly(dateTimePickerAdvWorkAStartDate.Value.Date); }
             set
             {
-                //dateTimePickerAdvWorkAStartDate
                 dateTimePickerAdvWorkAStartDate.Value = value.Date;
-                //dateTimePickerAdvWorkAStartDate.Calendar.Value
                 dateTimePickerAdvWorkAStartDate.RefreshFields();
             }
         }
@@ -272,9 +267,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
             }
         }
 
-        # endregion
-        #region Eventhandlers
-
         /// <summary>
         /// Handles the Click event of the BtnApplyChangedPeriod control.
         /// </summary>
@@ -378,10 +370,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
             dateTimePickerAdvWorkEndPeriod.ValueChanged += dateTimePickerAdvWorkEndPeriod_ValueChanged;
         }
 
-        #endregion
-
-        #region IDateSelectionControl Members
-
         /// <summary>
         /// Gets or sets a value indicating whether [show apply button].
         /// </summary>
@@ -424,8 +412,6 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
             //ShowWarning();
             return selectedDates;
         }
-
-        #endregion
 
         public void SetErrorOnEndTime(string error)
         {
