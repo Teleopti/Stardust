@@ -47,6 +47,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 					.SetResultTransformer(Transformers.AliasToBean(typeof(LastChangedReadModel)))
 					.SetReadOnly(true)
 					.List<ILastChangedReadModel>();
+			_currentUnitOfWork.PersistAll(); 
 			return res[0];
 		}
 

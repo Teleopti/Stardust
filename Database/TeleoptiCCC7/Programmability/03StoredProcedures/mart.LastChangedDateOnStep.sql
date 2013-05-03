@@ -23,7 +23,7 @@ INSERT INTO mart.LastUpdatedPerStep(StepName,BusinessUnit,[Date])
 SELECT @StepName, bu.Id,GETUTCDATE()
 FROM dbo.BusinessUnit bu
 WHERE NOT EXISTS (
-	SELECT * FROM LastUpdatedPerStep etl
+	SELECT * FROM mart.LastUpdatedPerStep etl
 	WHERE etl.stepName = @StepName
 	AND etl.BusinessUnit = bu.id
 	AND bu.Id = @buId
@@ -32,7 +32,7 @@ WHERE NOT EXISTS (
 
 --Get ETL last execution time
 SELECT @lastTime= [Date]
-FROM LastUpdatedPerStep a
+FROM mart.LastUpdatedPerStep a
 WHERE BusinessUnit = @buId
 AND StepName = @StepName
 
