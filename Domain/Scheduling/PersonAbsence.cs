@@ -70,6 +70,33 @@ namespace Teleopti.Ccc.Domain.Scheduling
 					ScenarioId = _scenario.Id.Value
 				});
 		}
+
+		public virtual void RemoveAbsence(string dataSourceName)
+		{
+			AddEvent(new RemovedAbsenceEvent
+			{
+				Datasource = dataSourceName,
+				BusinessUnitId = BusinessUnit.Id.Value,
+				PersonId = Person.Id.Value,
+				ScenarioId = Scenario.Id.Value,
+				StartDateTime = Period.StartDateTime,
+				EndDateTime = Period.EndDateTime
+			});
+		}
+
+		public virtual void AddAbsence(string dataSource, IPerson person, IAbsence absence, DateTime startDateInUtc, DateTime endDateInUtc)
+		{
+			AddEvent(new AbsenceAddedEvent
+			{
+				Datasource = dataSource,
+				BusinessUnitId = _scenario.BusinessUnit.Id.Value,
+				AbsenceId = absence.Id.Value,
+				PersonId = person.Id.Value,
+				StartDateTime = startDateInUtc,
+				EndDateTime = endDateInUtc,
+				ScenarioId = _scenario.Id.Value
+			});
+		}
 		
         /// <summary>
         /// Constructor for NHibernate
@@ -288,18 +315,5 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 			throw new NotImplementedException();
 		}
-
-	    public virtual void RemoveAbsence(string dataSourceName)
-	    {
-		    AddEvent(new RemovedAbsenceEvent
-			    {
-				   Datasource = dataSourceName,
-				   BusinessUnitId = BusinessUnit.Id.Value,
-				   PersonId = Person.Id.Value,
-				   ScenarioId = Scenario.Id.Value,
-				   StartDateTime = Period.StartDateTime,
-				   EndDateTime = Period.EndDateTime
-			    });
-	    }
     }
 }
