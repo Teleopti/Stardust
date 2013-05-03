@@ -4,7 +4,7 @@
 /// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Ajax.js" />
 
-Teleopti.MyTimeWeb.StudentAvailability.DayViewModel = function (ajax) {
+Teleopti.MyTimeWeb.StudentAvailability.DayViewModel = function (ajaxForDate) {
 	var self = this;
 
 	this.Date = "";
@@ -29,50 +29,9 @@ Teleopti.MyTimeWeb.StudentAvailability.DayViewModel = function (ajax) {
 		self.EditableIsInOpenPeriod(item.attr('data-mytime-editable') == "True");
 	};
 	
-	var ajaxForDate = function (options) {
-
-		var type = options.type || 'GET',
-		    data = options.data || {},
-		    statusCode400 = options.statusCode400,
-		    statusCode404 = options.statusCode404,
-		    url = options.url || "StudentAvailability/StudentAvailability",
-		    success = options.success || function () {},
-		    complete = options.complete || null;
-
-		return ajax.Ajax({
-			url: url,
-			dataType: "json",
-			contentType: "application/json; charset=utf-8",
-			type: type,
-			beforeSend: function (jqXHR) {
-				self.AjaxError('');
-				self.IsLoading(true);
-			},
-			complete: function (jqXHR, textStatus) {
-				self.IsLoading(false);
-				if (complete)
-					complete(jqXHR, textStatus);
-			},
-			success: success,
-			data: data,
-			statusCode404: statusCode404,
-			statusCode400: statusCode400,
-			error: function (jqXHR, textStatus, errorThrown) {
-				var error = {
-					ShortMessage: "Error!"
-				};
-				try {
-					error = $.parseJSON(jqXHR.responseText);
-				} catch (e) {
-				}
-				self.AjaxError(error.ShortMessage);
-			}
-		});
-	};
-
 	this.SetStudentAvailability = function (value, editFormViewModel) {
 		var deferred = $.Deferred();
-		ajaxForDate({
+		ajaxForDate(self, {
 			type: 'POST',
 			data: JSON.stringify(value),
 			date: self.Date,
@@ -93,7 +52,7 @@ Teleopti.MyTimeWeb.StudentAvailability.DayViewModel = function (ajax) {
 
 	this.DeleteStudentAvailability = function () {
 		var deferred = $.Deferred();
-		ajaxForDate({
+		ajaxForDate(self, {
 			type: 'DELETE',
 			data: JSON.stringify({ Date: self.Date }),
 			date: self.Date,
