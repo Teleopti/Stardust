@@ -18,17 +18,23 @@ AS
 DECLARE @thisTime datetime
 DECLARE @lastTime datetime
 
+--insert missing stepName for each BU
+INSERT INTO mart.LastUpdatedPerStep(StepName,BusinessUnit,[Date])
+SELECT @StepName, bu.Id,GETUTCDATE()
+FROM dbo.BusinessUnit bu
+WHERE NOT EXISTS (
+	SELECT * FROM LastUpdatedPerStep etl
+	WHERE etl.stepName = @StepName
+	AND etl.BusinessUnit = bu.id
+	AND bu.Id = @buId
+	AND bu.IsDeleted = 0
+	)
+
 --Get ETL last execution time
 SELECT @lastTime= [Date]
 FROM LastUpdatedPerStep a
 WHERE BusinessUnit = @buId
 AND StepName = @StepName
-
---Handle case "ETL never executed".
-IF @lastTime IS NULL
-BEGIN
-	SET @lastTime=getutcdate()
-END
 
 CREATE TABLE #persons (PersonId uniqueidentifier NOT NULL)
 CREATE TABLE #PersonsUpdated
@@ -110,7 +116,7 @@ END
 IF @thisTime IS NULL
 SET @thisTime = @lastTime
 
---Handle case, "ETL is running for the first time"
+--Handle case, "ETL is running and detect older changes"
 IF @thisTime < @lastTime
 SET @thisTime = @lastTime
 
