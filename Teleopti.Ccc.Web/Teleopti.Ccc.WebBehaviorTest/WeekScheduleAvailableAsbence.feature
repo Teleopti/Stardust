@@ -23,12 +23,6 @@ Background:
 	| Name                       | Open absence period		|
 	| Schedule published to date | 2040-06-24				|
 	| Available absence          | holiday					|
-	And there is a workflow control set with
-	| Field                      | Value					|
-	| Name                       | Closed absence period	|
-	| Schedule published to date | 2040-06-24				|
-	| Available absence          | holiday					|
-	| Absence period is closed	 | true						|
 	And I have a schedule period with 
 	| Field      | Value      |
 	| Start date | 2012-06-18 |
@@ -122,24 +116,26 @@ Scenario: Show the user a red indication when there is no budgetgroup for that d
 	Then I should see an 'green' indication for chance of absence request on '2013-04-02'
 	And I should see an 'red' indication for chance of absence request on '2013-04-03'
 
-
-Scenario: Show the user a red indication when current date is outside open absence periods
-	Given there is a budgetday
+@ignore
+Scenario: Show the user a red indication when today is outside open absence periods
+	Given Current time is '2023-05-02 20:00'
+	And there is a budgetday
 	| Field						| Value					|
 	| BudgetGroup				| TheBudgetGroup		|
-	| Date						| 2013-04-01			|
+	| Date						| 2023-04-28			|
 	| Allowance					| 2						|
 	| FulltimeEquivalentHours	| 8						|
+	And there is a workflow control set with
+	| Field                         | Value                 |
+	| Name                          | Closed absence period |
+	| Schedule published to date    | 2040-06-24            |
+	| Available absence             | holiday               |
+	| AbsenceRequestOpenPeriodStart | 2023-04-10            |
+	| AbsenceRequestOpenPeriodEnd   | 2023-04-30            |
 	And I have the role 'Full access to mytime'
-	And there is absence time for
-	| Field			| Value					|
-	| Date			| 2013-04-01			|
-	| Hours			| 3						|
-	| BudgetGroup	| NameOfTheBudgetGroup	|
-	| Absence		| holiday				|
 	And I have the workflow control set 'Closed absence period'
-	When I view my week schedule for date '2013-04-01'
-	Then I should see an 'red' indication for chance of absence request on '2013-04-01'
+	When I view my week schedule for date '2023-04-28'
+	Then I should see an 'red' indication for chance of absence request on '2023-04-28'
 
 
 Scenario: Do not show indication of the amount of agents that can go on holiday if no permission to absence request
