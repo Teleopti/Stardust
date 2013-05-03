@@ -66,13 +66,6 @@ namespace Teleopti.Ccc.Domain.Optimization
             return ActiveScheduleRange.ScheduledDay(Day);
         }
 
-        public DateTimePeriod LocalDateTimePeriod()
-        {
-            IScheduleDay schedulePart = DaySchedulePart();
-            DateTime localDay = schedulePart.Period.LocalStartDateTime.Date;
-            return TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(localDay, localDay.AddDays(1));
-        }
-
         #endregion
 
     }

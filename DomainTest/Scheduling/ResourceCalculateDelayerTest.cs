@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Time;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DomainTest.Scheduling
 {
-	[TestFixture]
+    [TestFixture]
 	public class ResourceCalculateDelayerTest
 	{
 		private IResourceCalculateDelayer _target;

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.Time;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.WinCode.Scheduling;
@@ -38,7 +39,7 @@ namespace Teleopti.Ccc.Win.Scheduling
         public IAddOvertimeViewModel CreateAddOvertimeViewModel(IScheduleDay selectedSchedule, IList<IActivity> activities, IList<IMultiplicatorDefinitionSet> definitionSets, IActivity defaultActivity, DateTimePeriod period, TimeZoneInfo timeZoneInfo)
         {
             var dateTimePeriod = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(period.LocalStartDateTime, period.LocalEndDateTime);
-            var fallbackDefaultHours = new SetupDateTimePeriodDefaultLocalHoursForActivities(selectedSchedule, dateTimePeriod);
+            var fallbackDefaultHours = new SetupDateTimePeriodDefaultLocalHoursForActivities(selectedSchedule, new CurrentTeleoptiPrincipal(), dateTimePeriod);
             var model = new AddOvertimeViewModel(activities, definitionSets, defaultActivity, fallbackDefaultHours, WorkingInterval);
             SetBoundary(model);
             return new AddDialogComposer<AddOvertimeViewModel>(model, timeZoneInfo).Result();

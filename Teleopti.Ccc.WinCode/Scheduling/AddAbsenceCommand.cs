@@ -42,7 +42,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 					select a;
 
 			var fallbackDefaultHours =
-				new SetupDateTimePeriodDefaultLocalHoursForAbsence(selectedSchedules[0]);
+				new SetupDateTimePeriodDefaultLocalHoursForAbsence(selectedSchedules[0], new CurrentTeleoptiPrincipal());
 			var periodFromSchedules = new SetupDateTimePeriodToSchedulesIfTheyExist(selectedSchedules, fallbackDefaultHours);
 			ISetupDateTimePeriod periodSetup = new SetupDateTimePeriodToDefaultPeriod(DefaultPeriod, periodFromSchedules);
 

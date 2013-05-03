@@ -84,7 +84,38 @@ define([
 				}
 			});
 		};
+		
+		var loadSkills = function (options) {
+			$.ajax({
+				url: 'StaffingMetrics/AvailableSkills',
+				cache: false,
+				dataType: 'json',
+				data: {
+					date: teamSchedule.SelectedDate().toDate().toJSON()
+				},
+				success: function (data, textStatus, jqXHR) {
+					teamSchedule.SetSkills(data.Skills);
+					options.success();
+				}
+			});
+		};
 
+		var loadDailyStaffingMetrics = function (options) {
+			if (teamSchedule.SelectedSkill() == null) return;
+			$.ajax({
+				url: 'StaffingMetrics/DailyStaffingMetrics',
+				cache: false,
+				dataType: 'json',
+				data: {
+					skillId: teamSchedule.SelectedSkill().Id,
+					date: teamSchedule.SelectedDate().toDate().toJSON()
+				},
+				success: function (data, textStatus, jqXHR) {
+					teamSchedule.SetDailyMetrics(data);
+					options.success();
+				}
+			});
+		};
 		var loadTeams = function (options) {
 			$.ajax({
 				url: 'Person/AvailableTeams',
@@ -114,13 +145,19 @@ define([
 				teamSchedule.SelectedTeam.subscribe(function () {
 					if (teamSchedule.Loading())
 						return;
-					navigation.GoToTeamSchedule(teamSchedule.SelectedTeam(), teamSchedule.SelectedDate());
+					navigation.GoToTeamSchedule(teamSchedule.SelectedTeam(), teamSchedule.SelectedDate(), teamSchedule.SelectedSkill());
 				});
 
 				teamSchedule.SelectedDate.subscribe(function() {
 					if (teamSchedule.Loading())
 						return;
-					navigation.GoToTeamSchedule(teamSchedule.SelectedTeam(), teamSchedule.SelectedDate());
+					navigation.GoToTeamSchedule(teamSchedule.SelectedTeam(), teamSchedule.SelectedDate(), teamSchedule.SelectedSkill());
+				});
+
+				teamSchedule.SelectedSkill.subscribe(function () {
+					if (teamSchedule.Loading())
+						return;
+					navigation.GoToTeamSchedule(teamSchedule.SelectedTeam(), teamSchedule.SelectedDate(), teamSchedule.SelectedSkill());
 				});
 				
 				ko.applyBindings(teamSchedule, options.bindingElement);
@@ -155,6 +192,15 @@ define([
 						return teamSchedule.Teams()[0].Id;
 					return null;
 				};
+				
+				var currentSkillId = function () {
+					if (options.secondaryId)
+						return options.secondaryId;
+					var skills = teamSchedule.Skills();
+					if (skills.length > 0)
+						return skills[0].Id;
+					return null;
+				};
 
 				var currentDate = function () {
 					var date = options.date;
@@ -164,19 +210,28 @@ define([
 						return moment(date, 'YYYYMMDD');
 					}
 				};
-
 				teamSchedule.Loading(true);
 
 				teamSchedule.SelectedDate(currentDate());
+				loadSkills({
+					success: function() {
+						teamSchedule.SelectSkillById(currentSkillId());
+						teamSchedule.LoadingStaffingMetrics(true);
+						loadDailyStaffingMetrics({
+							success: function () {
+								teamSchedule.LoadingStaffingMetrics(false);
+							}
+						});
+					}
+				});
 
 				var deferred = $.Deferred();
-			    
 				var loadPersonsAndSchedules = function() {
 					teamSchedule.SelectedTeam(currentTeamId());
 					loadPersons({
 						success: function() {
 							loadSchedules({
-								success: function() {
+								success: function () {
 								    teamSchedule.Loading(false);
 								    deferred.resolve();
 								}
