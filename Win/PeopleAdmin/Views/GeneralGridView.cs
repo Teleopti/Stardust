@@ -448,6 +448,11 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			}
 		}
 
+		public void OnToolStripTimeZoneButtonClick()
+		{
+			timeZoneMenuItemClick(null, null);	
+		}
+
 		internal override void PrepareView()
 		{
 			//FilteredPeopleHolder.ReassociateOptionalColumnCollection();

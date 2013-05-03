@@ -76,23 +76,18 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 			var ui = TaskScheduler.FromCurrentSynchronizationContext();
 			var task = Task.Factory.StartNew(() => setPersonsTimeZoneTask(persons, timeZoneInfo), _cancellationToken.Token);
 			task.ContinueWith(result => Hide(), CancellationToken.None, TaskContinuationOptions.None, ui);
-
-			try
+			task.ContinueWith(taskFinished =>
 			{
-				task.Wait();
-			}
-
-			catch (AggregateException aggregateException)
-			{
-				using (var view = new SimpleExceptionHandlerView(aggregateException.GetBaseException(), Resources.TimeZone, Resources.ErrorOccuredWhenAccessingTheDataSource))
+				if (taskFinished.IsFaulted)
 				{
-					view.ShowDialog();
-				}	
-			}
+					showException(task.Exception);	
+				}
+			});
 		}
 
 		private void setPersonsTimeZoneTask(IList<IPerson> persons, TimeZoneInfo timeZoneInfo)
 		{
+			int i = 0;
 			foreach (var person in persons)
 			{
 				_cancellationToken.Token.ThrowIfCancellationRequested();
@@ -110,11 +105,24 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 						_affectedPersons.Add(person);
 						var statusText = person.Name.FirstName + " " + person.Name.LastName;
 						var progress = ((100 * _affectedPersons.Count) / persons.Count);
-						updateProgress(statusText, progress);	
+						updateProgress(statusText, progress);
 					}
 				}
 			}	
 		}
+
+		private void showException(Exception exception)
+		{
+			if (InvokeRequired)
+			{
+				BeginInvoke(new Action<Exception>(showException), exception);	
+			}
+			using (var view = new SimpleExceptionHandlerView(exception, Resources.TimeZone, Resources.ErrorOccuredWhenAccessingTheDataSource))
+			{
+				view.ShowDialog();
+			}	
+		}
+
 
 		private void updateProgress(string statusText, int progress)
 		{
