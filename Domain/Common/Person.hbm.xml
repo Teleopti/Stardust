@@ -4,7 +4,7 @@
                    namespace="Teleopti.Ccc.Domain.Common"
                    default-access="field.camelcase-underscore">
   <typedef class="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.HashedString, Teleopti.Ccc.Infrastructure" name="Encrypted"/>
-  <import class="Teleopti.Ccc.Domain.Common.Pair`1[System.Guid]" rename="PersonSkillPair"/>
+  <import class="System.Tuple`2[[System.Guid], [System.Guid]]" rename="PersonSkillPair"/>
   <class name="Person"
 		   batch-size="10">
 		<!--IEntity-->

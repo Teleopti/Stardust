@@ -481,8 +481,8 @@ namespace Teleopti.Ccc.Win.Common.Controls
             ClipHandler clipHandler = GridHelper.ConvertClipboardToClipHandler();
 
             if (clipHandler.ClipList.Count > 0)
-            {
-                //BeginUpdate();
+            {		
+                BeginUpdate();
                 OnBeforePaste();
                 GridRangeInfoList rangelist = GridHelper.GetGridSelectedRanges(this, true);
 
@@ -516,7 +516,7 @@ namespace Teleopti.Ccc.Win.Common.Controls
                         }
                     }
                 }
-                //EndUpdate();
+                EndUpdate();
                 if (rangelist.Count > 0)
                 {
                     int firstRow = rangelist.ActiveRange.Top;

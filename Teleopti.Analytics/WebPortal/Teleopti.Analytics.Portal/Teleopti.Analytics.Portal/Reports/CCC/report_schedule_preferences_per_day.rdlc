@@ -1,109 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Report xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner" xmlns="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition">
-  <DataSources>
-    <DataSource Name="DataSource2">
-      <DataSourceReference>DataSource2</DataSourceReference>
-      <rd:DataSourceID>bceec683-a8e5-4fbe-855b-9001b4ef4201</rd:DataSourceID>
-    </DataSource>
-  </DataSources>
-  <DataSets>
-    <DataSet Name="DataSet1">
-      <Fields>
-        <Field Name="date">
-          <DataField>date</DataField>
-          <rd:TypeName>System.DateTime</rd:TypeName>
-        </Field>
-        <Field Name="preference_type_id">
-          <DataField>preference_type_id</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="preference_type_name">
-          <DataField>preference_type_name</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="preference_id">
-          <DataField>preference_id</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="preference_name">
-          <DataField>preference_name</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="preferences_requested">
-          <DataField>preferences_requested</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="preferences_accepted">
-          <DataField>preferences_accepted</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="share_accepted">
-          <DataField>share_accepted</DataField>
-          <rd:TypeName>System.Decimal</rd:TypeName>
-        </Field>
-        <Field Name="preferences_declined">
-          <DataField>preferences_declined</DataField>
-          <rd:TypeName>System.Int32</rd:TypeName>
-        </Field>
-        <Field Name="hide_time_zone">
-          <DataField>hide_time_zone</DataField>
-          <rd:TypeName>System.Bool</rd:TypeName>
-        </Field>
-      </Fields>
-      <Query>
-        <DataSourceName>DataSource2</DataSourceName>
-        <CommandType>StoredProcedure</CommandType>
-        <CommandText>report_data_schedule_preferences_per_day</CommandText>
-        <QueryParameters>
-          <QueryParameter Name="@scenario_id">
-            <Value>=Parameters!scenario_id.Value</Value>
-          </QueryParameter>
-          <QueryParameter Name="@date_from">
-            <Value>=Parameters!date_from.Value</Value>
-          </QueryParameter>
-          <QueryParameter Name="@date_to">
-            <Value>=Parameters!date_to.Value</Value>
-          </QueryParameter>
-          <QueryParameter Name="@site_id">
-            <Value>=Parameters!site_id.Value</Value>
-          </QueryParameter>
-          <QueryParameter Name="@team_set">
-            <Value>=Parameters!team_set.Value</Value>
-          </QueryParameter>
-          <QueryParameter Name="@agent_code">
-            <Value>=Parameters!agent_code.Value</Value>
-          </QueryParameter>
-          <QueryParameter Name="@person_code">
-            <Value>=Parameters!person_code.Value</Value>
-          </QueryParameter>
-          <QueryParameter Name="@report_id">
-            <Value>=Parameters!report_id.Value</Value>
-          </QueryParameter>
-          <QueryParameter Name="@language_id">
-            <Value>=Parameters!language_id.Value</Value>
-          </QueryParameter>
-        </QueryParameters>
-      </Query>
-    </DataSet>
-  </DataSets>
+<Report xmlns="http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition" xmlns:rd="http://schemas.microsoft.com/SQLServer/reporting/reportdesigner">
   <Body>
     <ReportItems>
       <Tablix Name="table1">
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>1.4461in</Width>
+              <Width>3.67309cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>3.99939in</Width>
+              <Width>10.15845cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.83798in</Width>
+              <Width>4.66847cm</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
             <TablixRow>
-              <Height>0.19685in</Height>
+              <Height>0.5cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -147,7 +61,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.19685in</Height>
+              <Height>0.5cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -220,7 +134,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.23622in</Height>
+              <Height>0.6cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -287,7 +201,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.23622in</Height>
+              <Height>0.6cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -356,14 +270,13 @@
                       </Style>
                     </Textbox>
                     <ColSpan>2</ColSpan>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell />
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.23622in</Height>
+              <Height>0.6cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -438,7 +351,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.19685in</Height>
+              <Height>0.5cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -515,7 +428,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.19685in</Height>
+              <Height>0.5cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -596,7 +509,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.23622in</Height>
+              <Height>0.6cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -675,7 +588,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.19685in</Height>
+              <Height>0.5cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -748,7 +661,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.19685in</Height>
+              <Height>0.5cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -905,7 +818,7 @@
         <KeepTogether>true</KeepTogether>
         <DataSetName>DataSet1</DataSetName>
         <Left>0.25cm</Left>
-        <Height>5.39999cm</Height>
+        <Height>5.4cm</Height>
         <Width>18.50001cm</Width>
         <Style />
       </Tablix>
@@ -913,27 +826,27 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>0.86614in</Width>
+              <Width>2.2cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>2.46063in</Width>
+              <Width>6.25cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.98425in</Width>
+              <Width>2.5cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.98425in</Width>
+              <Width>2.49999cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.98425in</Width>
+              <Width>2.5cm</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.98425in</Width>
+              <Width>2.49999cm</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
             <TablixRow>
-              <Height>0.3937in</Height>
+              <Height>1cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -1003,14 +916,14 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="textbox18">
+                    <Textbox Name="Textbox18">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Parameters!ResPreferencesRequested.Value</Value>
+                              <Value>=Parameters!ResMustHaves.Value</Value>
                               <Style>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
@@ -1022,9 +935,11 @@
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>textbox18</rd:DefaultName>
-                      <ZIndex>22</ZIndex>
+                      <rd:DefaultName>Textbox18</rd:DefaultName>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <BackgroundColor>White</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -1043,7 +958,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Parameters!ResPreferencesAccepted.Value</Value>
+                              <Value>=Parameters!ResFulfilled.Value</Value>
                               <Style>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
@@ -1058,6 +973,9 @@
                       <rd:DefaultName>textbox22</rd:DefaultName>
                       <ZIndex>21</ZIndex>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <BackgroundColor>White</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -1069,47 +987,14 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="textbox8">
+                    <Textbox Name="textbox24">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Parameters!ResPreferencesAcceptedPercent.Value</Value>
-                              <Style>
-                                <FontWeight>Bold</FontWeight>
-                                <Color>DimGray</Color>
-                              </Style>
-                            </TextRun>
-                          </TextRuns>
-                          <Style>
-                            <TextAlign>Center</TextAlign>
-                          </Style>
-                        </Paragraph>
-                      </Paragraphs>
-                      <rd:DefaultName>textbox8</rd:DefaultName>
-                      <ZIndex>20</ZIndex>
-                      <Style>
-                        <BackgroundColor>White</BackgroundColor>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
-                  </CellContents>
-                </TablixCell>
-                <TablixCell>
-                  <CellContents>
-                    <Textbox Name="textbox19">
-                      <CanGrow>true</CanGrow>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value>=Parameters!ResPreferencesDeclined.Value</Value>
+                              <Value>=Parameters!ResUnfulfilled.Value</Value>
                               <Style>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
@@ -1133,10 +1018,43 @@
                     </Textbox>
                   </CellContents>
                 </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="textbox8">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=Parameters!ResFulfillmentPercent.Value</Value>
+                              <Style>
+                                <FontWeight>Bold</FontWeight>
+                                <Color>DimGray</Color>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>textbox8</rd:DefaultName>
+                      <ZIndex>20</ZIndex>
+                      <Style>
+                        <BackgroundColor>White</BackgroundColor>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.19685in</Height>
+              <Height>0.5cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -1223,14 +1141,14 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="textbox36">
+                    <Textbox Name="Textbox19">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=sum(Fields!preferences_requested.Value)</Value>
+                              <Value>=sum(Fields!must_haves.Value)</Value>
                               <Style>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
@@ -1242,7 +1160,7 @@
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <ZIndex>16</ZIndex>
+                      <rd:DefaultName>Textbox19</rd:DefaultName>
                       <Style>
                         <BottomBorder>
                           <Color>Black</Color>
@@ -1267,7 +1185,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=sum(Fields!preferences_accepted.Value)</Value>
+                              <Value>=sum(Fields!preferences_fulfilled.Value)</Value>
                               <Style>
                                 <FontWeight>Bold</FontWeight>
                                 <Color>DimGray</Color>
@@ -1297,6 +1215,43 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
+                    <Textbox Name="textbox29">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=Sum(Fields!preferences_unfulfilled.Value)</Value>
+                              <Style>
+                                <FontWeight>Bold</FontWeight>
+                                <Color>DimGray</Color>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <ZIndex>13</ZIndex>
+                      <Style>
+                        <BottomBorder>
+                          <Color>Black</Color>
+                          <Style>Solid</Style>
+                          <Width>1pt</Width>
+                        </BottomBorder>
+                        <BackgroundColor>WhiteSmoke</BackgroundColor>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
                     <Textbox Name="textbox34">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
@@ -1306,7 +1261,7 @@
                             <TextRun>
                               <Value>=FormatPercent(
 iif(sum(Fields!preferences_requested.Value)&gt;0,
-sum(Fields!preferences_accepted.Value)/sum(Fields!preferences_requested.Value),0)
+sum(Fields!preferences_fulfilled.Value)/sum(Fields!preferences_requested.Value),0)
 ,1)</Value>
                               <Style>
                                 <FontWeight>Bold</FontWeight>
@@ -1335,47 +1290,10 @@ sum(Fields!preferences_accepted.Value)/sum(Fields!preferences_requested.Value),0
                     </Textbox>
                   </CellContents>
                 </TablixCell>
-                <TablixCell>
-                  <CellContents>
-                    <Textbox Name="textbox28">
-                      <CanGrow>true</CanGrow>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value>=sum(Fields!preferences_declined.Value)</Value>
-                              <Style>
-                                <FontWeight>Bold</FontWeight>
-                                <Color>DimGray</Color>
-                              </Style>
-                            </TextRun>
-                          </TextRuns>
-                          <Style>
-                            <TextAlign>Center</TextAlign>
-                          </Style>
-                        </Paragraph>
-                      </Paragraphs>
-                      <ZIndex>13</ZIndex>
-                      <Style>
-                        <BottomBorder>
-                          <Color>Black</Color>
-                          <Style>Solid</Style>
-                          <Width>1pt</Width>
-                        </BottomBorder>
-                        <BackgroundColor>WhiteSmoke</BackgroundColor>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
-                  </CellContents>
-                </TablixCell>
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.19372in</Height>
+              <Height>0.49205cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -1383,27 +1301,27 @@ sum(Fields!preferences_accepted.Value)/sum(Fields!preferences_requested.Value),0
                       <TablixBody>
                         <TablixColumns>
                           <TablixColumn>
-                            <Width>0.86614in</Width>
+                            <Width>2.24564cm</Width>
                           </TablixColumn>
                           <TablixColumn>
-                            <Width>2.46063in</Width>
+                            <Width>6.20436cm</Width>
                           </TablixColumn>
                           <TablixColumn>
-                            <Width>0.95336in</Width>
+                            <Width>2.5cm</Width>
                           </TablixColumn>
                           <TablixColumn>
-                            <Width>0.99455in</Width>
+                            <Width>2.49999cm</Width>
                           </TablixColumn>
                           <TablixColumn>
-                            <Width>0.99455in</Width>
+                            <Width>2.50439cm</Width>
                           </TablixColumn>
                           <TablixColumn>
-                            <Width>0.99455in</Width>
+                            <Width>2.4956cm</Width>
                           </TablixColumn>
                         </TablixColumns>
                         <TablixRows>
                           <TablixRow>
-                            <Height>0.19372in</Height>
+                            <Height>0.49205cm</Height>
                             <TablixCells>
                               <TablixCell>
                                 <CellContents>
@@ -1467,14 +1385,14 @@ sum(Fields!preferences_accepted.Value)/sum(Fields!preferences_requested.Value),0
                               </TablixCell>
                               <TablixCell>
                                 <CellContents>
-                                  <Textbox Name="textbox42">
+                                  <Textbox Name="Textbox28">
                                     <CanGrow>true</CanGrow>
                                     <KeepTogether>true</KeepTogether>
                                     <Paragraphs>
                                       <Paragraph>
                                         <TextRuns>
                                           <TextRun>
-                                            <Value>=sum(Fields!preferences_requested.Value)</Value>
+                                            <Value>=sum(Fields!must_haves.Value)</Value>
                                             <Style>
                                               <Color>DimGray</Color>
                                             </Style>
@@ -1485,8 +1403,7 @@ sum(Fields!preferences_accepted.Value)/sum(Fields!preferences_requested.Value),0
                                         </Style>
                                       </Paragraph>
                                     </Paragraphs>
-                                    <rd:DefaultName>textbox42</rd:DefaultName>
-                                    <ZIndex>3</ZIndex>
+                                    <rd:DefaultName>Textbox28</rd:DefaultName>
                                     <Style>
                                       <BackgroundColor>White</BackgroundColor>
                                       <PaddingLeft>2pt</PaddingLeft>
@@ -1506,7 +1423,7 @@ sum(Fields!preferences_accepted.Value)/sum(Fields!preferences_requested.Value),0
                                       <Paragraph>
                                         <TextRuns>
                                           <TextRun>
-                                            <Value>=sum(Fields!preferences_accepted.Value)</Value>
+                                            <Value>=sum(Fields!preferences_fulfilled.Value)</Value>
                                             <Style>
                                               <Color>DimGray</Color>
                                             </Style>
@@ -1531,14 +1448,14 @@ sum(Fields!preferences_accepted.Value)/sum(Fields!preferences_requested.Value),0
                               </TablixCell>
                               <TablixCell>
                                 <CellContents>
-                                  <Textbox Name="textbox21">
+                                  <Textbox Name="textbox63">
                                     <CanGrow>true</CanGrow>
                                     <KeepTogether>true</KeepTogether>
                                     <Paragraphs>
                                       <Paragraph>
                                         <TextRuns>
                                           <TextRun>
-                                            <Value>=FormatPercent(iif(sum(Fields!preferences_requested.Value)&gt;0,sum(Fields!preferences_accepted.Value)/sum(Fields!preferences_requested.Value),0),1)</Value>
+                                            <Value>=Sum(Fields!preferences_unfulfilled.Value)</Value>
                                             <Style>
                                               <Color>DimGray</Color>
                                             </Style>
@@ -1549,7 +1466,7 @@ sum(Fields!preferences_accepted.Value)/sum(Fields!preferences_requested.Value),0
                                         </Style>
                                       </Paragraph>
                                     </Paragraphs>
-                                    <ZIndex>1</ZIndex>
+                                    <rd:DefaultName>textbox62</rd:DefaultName>
                                     <Style>
                                       <BackgroundColor>White</BackgroundColor>
                                       <PaddingLeft>2pt</PaddingLeft>
@@ -1562,14 +1479,14 @@ sum(Fields!preferences_accepted.Value)/sum(Fields!preferences_requested.Value),0
                               </TablixCell>
                               <TablixCell>
                                 <CellContents>
-                                  <Textbox Name="textbox62">
+                                  <Textbox Name="textbox21">
                                     <CanGrow>true</CanGrow>
                                     <KeepTogether>true</KeepTogether>
                                     <Paragraphs>
                                       <Paragraph>
                                         <TextRuns>
                                           <TextRun>
-                                            <Value>=sum(Fields!preferences_declined.Value)</Value>
+                                            <Value>=FormatPercent(iif(sum(Fields!preferences_requested.Value)&gt;0,sum(Fields!preferences_fulfilled.Value)/sum(Fields!preferences_requested.Value),0),1)</Value>
                                             <Style>
                                               <Color>DimGray</Color>
                                             </Style>
@@ -1580,7 +1497,7 @@ sum(Fields!preferences_accepted.Value)/sum(Fields!preferences_requested.Value),0
                                         </Style>
                                       </Paragraph>
                                     </Paragraphs>
-                                    <rd:DefaultName>textbox62</rd:DefaultName>
+                                    <ZIndex>1</ZIndex>
                                     <Style>
                                       <BackgroundColor>White</BackgroundColor>
                                       <PaddingLeft>2pt</PaddingLeft>
@@ -1622,7 +1539,6 @@ sum(Fields!preferences_accepted.Value)/sum(Fields!preferences_requested.Value),0
                                 </Group>
                                 <TablixMembers>
                                   <TablixMember>
-                                    <KeepWithGroup>After</KeepWithGroup>
                                     <KeepTogether>true</KeepTogether>
                                   </TablixMember>
                                 </TablixMembers>
@@ -1652,7 +1568,7 @@ sum(Fields!preferences_accepted.Value)/sum(Fields!preferences_requested.Value),0
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.19685in</Height>
+              <Height>0.5cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -1716,14 +1632,14 @@ sum(Fields!preferences_accepted.Value)/sum(Fields!preferences_requested.Value),0
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="textbox27">
+                    <Textbox Name="Textbox25">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=sum(Fields!preferences_requested.Value)</Value>
+                              <Value>=sum(Fields!must_haves.Value)</Value>
                               <Style>
                                 <Color>DimGray</Color>
                               </Style>
@@ -1734,7 +1650,7 @@ sum(Fields!preferences_accepted.Value)/sum(Fields!preferences_requested.Value),0
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <ZIndex>9</ZIndex>
+                      <rd:DefaultName>Textbox25</rd:DefaultName>
                       <Style>
                         <BackgroundColor>WhiteSmoke</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
@@ -1754,7 +1670,7 @@ sum(Fields!preferences_accepted.Value)/sum(Fields!preferences_requested.Value),0
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=sum(Fields!preferences_accepted.Value)</Value>
+                              <Value>=sum(Fields!preferences_fulfilled.Value)</Value>
                               <Style>
                                 <Color>DimGray</Color>
                               </Style>
@@ -1778,6 +1694,37 @@ sum(Fields!preferences_accepted.Value)/sum(Fields!preferences_requested.Value),0
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
+                    <Textbox Name="textbox46">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=Sum(Fields!preferences_unfulfilled.Value)</Value>
+                              <Style>
+                                <Color>DimGray</Color>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <ZIndex>6</ZIndex>
+                      <Style>
+                        <BackgroundColor>WhiteSmoke</BackgroundColor>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
                     <Textbox Name="textbox39">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
@@ -1787,7 +1734,7 @@ sum(Fields!preferences_accepted.Value)/sum(Fields!preferences_requested.Value),0
                             <TextRun>
                               <Value>=FormatPercent(
 iif(sum(Fields!preferences_requested.Value)&gt;0,
-sum(Fields!preferences_accepted.Value)/sum(Fields!preferences_requested.Value),0)
+sum(Fields!preferences_fulfilled.Value)/sum(Fields!preferences_requested.Value),0)
 ,1)</Value>
                               <Style>
                                 <Color>DimGray</Color>
@@ -1810,41 +1757,10 @@ sum(Fields!preferences_accepted.Value)/sum(Fields!preferences_requested.Value),0
                     </Textbox>
                   </CellContents>
                 </TablixCell>
-                <TablixCell>
-                  <CellContents>
-                    <Textbox Name="textbox45">
-                      <CanGrow>true</CanGrow>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value>=sum(Fields!preferences_declined.Value)</Value>
-                              <Style>
-                                <Color>DimGray</Color>
-                              </Style>
-                            </TextRun>
-                          </TextRuns>
-                          <Style>
-                            <TextAlign>Center</TextAlign>
-                          </Style>
-                        </Paragraph>
-                      </Paragraphs>
-                      <ZIndex>6</ZIndex>
-                      <Style>
-                        <BackgroundColor>WhiteSmoke</BackgroundColor>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
-                  </CellContents>
-                </TablixCell>
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.19685in</Height>
+              <Height>0.5cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -1906,14 +1822,14 @@ sum(Fields!preferences_accepted.Value)/sum(Fields!preferences_requested.Value),0
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="textbox25">
+                    <Textbox Name="Textbox27">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!preferences_requested.Value</Value>
+                              <Value>=sum(Fields!must_haves.Value)</Value>
                               <Style>
                                 <Color>DimGray</Color>
                               </Style>
@@ -1924,8 +1840,7 @@ sum(Fields!preferences_accepted.Value)/sum(Fields!preferences_requested.Value),0
                           </Style>
                         </Paragraph>
                       </Paragraphs>
-                      <rd:DefaultName>textbox25</rd:DefaultName>
-                      <ZIndex>3</ZIndex>
+                      <rd:DefaultName>Textbox27</rd:DefaultName>
                       <Style>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -1944,7 +1859,7 @@ sum(Fields!preferences_accepted.Value)/sum(Fields!preferences_requested.Value),0
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!preferences_accepted.Value</Value>
+                              <Value>=Fields!preferences_fulfilled.Value</Value>
                               <Style>
                                 <Color>DimGray</Color>
                               </Style>
@@ -1968,6 +1883,36 @@ sum(Fields!preferences_accepted.Value)/sum(Fields!preferences_requested.Value),0
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
+                    <Textbox Name="textbox42">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=Fields!preferences_unfulfilled.Value</Value>
+                              <Style>
+                                <Color>DimGray</Color>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Center</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>textbox40</rd:DefaultName>
+                      <Style>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
+                <TablixCell>
+                  <CellContents>
                     <Textbox Name="textbox37">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
@@ -1975,7 +1920,7 @@ sum(Fields!preferences_accepted.Value)/sum(Fields!preferences_requested.Value),0
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatPercent(Fields!share_accepted.Value,1)</Value>
+                              <Value>=FormatPercent(Fields!fulfillment.Value,1)</Value>
                               <Style>
                                 <Color>DimGray</Color>
                               </Style>
@@ -1988,36 +1933,6 @@ sum(Fields!preferences_accepted.Value)/sum(Fields!preferences_requested.Value),0
                       </Paragraphs>
                       <rd:DefaultName>textbox37</rd:DefaultName>
                       <ZIndex>1</ZIndex>
-                      <Style>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
-                  </CellContents>
-                </TablixCell>
-                <TablixCell>
-                  <CellContents>
-                    <Textbox Name="textbox40">
-                      <CanGrow>true</CanGrow>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value>=Fields!preferences_declined.Value</Value>
-                              <Style>
-                                <Color>DimGray</Color>
-                              </Style>
-                            </TextRun>
-                          </TextRuns>
-                          <Style>
-                            <TextAlign>Center</TextAlign>
-                          </Style>
-                        </Paragraph>
-                      </Paragraphs>
-                      <rd:DefaultName>textbox40</rd:DefaultName>
                       <Style>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -2096,7 +2011,7 @@ sum(Fields!preferences_accepted.Value)/sum(Fields!preferences_requested.Value),0
         <DataSetName>DataSet1</DataSetName>
         <Top>5.75cm</Top>
         <Left>0.25cm</Left>
-        <Height>2.99204cm</Height>
+        <Height>2.99205cm</Height>
         <Width>18.44998cm</Width>
         <ZIndex>1</ZIndex>
         <Style />
@@ -2105,207 +2020,7 @@ sum(Fields!preferences_accepted.Value)/sum(Fields!preferences_requested.Value),0
     <Height>8.86667cm</Height>
     <Style />
   </Body>
-  <ReportParameters>
-    <ReportParameter Name="scenario_id">
-      <DataType>String</DataType>
-      <DefaultValue>
-        <Values>
-          <Value>0</Value>
-        </Values>
-      </DefaultValue>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>scenario_id</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="date_from">
-      <DataType>String</DataType>
-      <DefaultValue>
-        <Values>
-          <Value>2006-01-01</Value>
-        </Values>
-      </DefaultValue>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>date_from</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="date_to">
-      <DataType>String</DataType>
-      <DefaultValue>
-        <Values>
-          <Value>2006-01-01</Value>
-        </Values>
-      </DefaultValue>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>date_to</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="site_id">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>site_id</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="team_set">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>team_set</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="agent_code">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>agent_code</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="time_zone_id">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>time_zone_id</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="person_code">
-      <DataType>String</DataType>
-      <DefaultValue>
-        <Values>
-          <Value>D74D215A-8D4D-4B76-946E-9B5A001802F4</Value>
-        </Values>
-      </DefaultValue>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>person_code</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="report_id">
-      <DataType>String</DataType>
-      <DefaultValue>
-        <Values>
-          <Value>8</Value>
-        </Values>
-      </DefaultValue>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>report_id</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="language_id">
-      <DataType>String</DataType>
-      <DefaultValue>
-        <Values>
-          <Value>1053</Value>
-        </Values>
-      </DefaultValue>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>language_id</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="culture">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>Report_Parameter_10</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="ResSelections">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ResSelections</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="ResReportPreferencesPerDay">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ResReportPreferencesPerDay</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="ResDatePeriodColon">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ResDatePeriodColon</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="ResTotalsColon">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ResTotalsColon</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="ResScenarioColon">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ResScenarioColon</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="ResDate">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ResDate</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="ResSiteNameColon">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ResSiteNameColon</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="ResTeamNameColon">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ResTeamNameColon</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="ResAgentsColon">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ResAgentsColon</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="ResDateColon">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ResDateColon</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="ResTimeZoneColon">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ResTimeZoneColon</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="ResPreferencesRequested">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ResPreferencesRequested</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="ResPreferencesAccepted">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ResPreferencesAccepted</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="ResPreferencesAcceptedPercent">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ResPreferencesAcceptedPercent</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="ResPreferencesDeclined">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ResPreferencesDeclined</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="ResPreferenceCategory">
-      <DataType>String</DataType>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ResPreferenceCategory</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="group_page_code">
-      <DataType>String</DataType>
-      <Nullable>true</Nullable>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ReportParameter1</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="group_page_group_set">
-      <DataType>String</DataType>
-      <Nullable>true</Nullable>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ReportParameter1</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="group_page_agent_code">
-      <DataType>String</DataType>
-      <Nullable>true</Nullable>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ReportParameter1</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="ResGroupPageColon">
-      <DataType>String</DataType>
-      <Nullable>true</Nullable>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ReportParameter1</Prompt>
-    </ReportParameter>
-    <ReportParameter Name="ResGroupPageGroupColon">
-      <DataType>String</DataType>
-      <Nullable>true</Nullable>
-      <AllowBlank>true</AllowBlank>
-      <Prompt>ReportParameter1</Prompt>
-    </ReportParameter>
-  </ReportParameters>
-  <Code>Public Function TimeString(i as integer)as string
-	return Math.Floor(i / 3600) &amp; ":" &amp; Format(Math.Floor((i Mod 3600) / 60), "00") &amp; ":" &amp; Format(i Mod 60, "00")
-End function</Code>
-  <Width>18.75001cm</Width>
+  <Width>18.84519cm</Width>
   <Page>
     <PageHeader>
       <Height>2cm</Height>
@@ -2477,8 +2192,303 @@ End function</Code>
     <ColumnSpacing>1cm</ColumnSpacing>
     <Style />
   </Page>
+  <AutoRefresh>0</AutoRefresh>
+  <DataSources>
+    <DataSource Name="DataSource2">
+      <DataSourceReference>DataSource2</DataSourceReference>
+      <rd:DataSourceID>bceec683-a8e5-4fbe-855b-9001b4ef4201</rd:DataSourceID>
+    </DataSource>
+  </DataSources>
+  <DataSets>
+    <DataSet Name="DataSet1">
+      <Query>
+        <DataSourceName>DataSource2</DataSourceName>
+        <QueryParameters>
+          <QueryParameter Name="@scenario_id">
+            <Value>=Parameters!scenario_id.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@date_from">
+            <Value>=Parameters!date_from.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@date_to">
+            <Value>=Parameters!date_to.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@site_id">
+            <Value>=Parameters!site_id.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@team_set">
+            <Value>=Parameters!team_set.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@agent_code">
+            <Value>=Parameters!agent_code.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@person_code">
+            <Value>=Parameters!person_code.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@report_id">
+            <Value>=Parameters!report_id.Value</Value>
+          </QueryParameter>
+          <QueryParameter Name="@language_id">
+            <Value>=Parameters!language_id.Value</Value>
+          </QueryParameter>
+        </QueryParameters>
+        <CommandType>StoredProcedure</CommandType>
+        <CommandText>report_data_schedule_preferences_per_day</CommandText>
+      </Query>
+      <Fields>
+        <Field Name="date">
+          <DataField>date</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
+        <Field Name="preference_type_id">
+          <DataField>preference_type_id</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="preference_type_name">
+          <DataField>preference_type_name</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="preference_id">
+          <DataField>preference_id</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="preference_name">
+          <DataField>preference_name</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="preferences_requested">
+          <DataField>preferences_requested</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="preferences_fulfilled">
+          <DataField>preferences_fulfilled</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="fulfillment">
+          <DataField>fulfillment</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="preferences_unfulfilled">
+          <DataField>preferences_unfulfilled</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="hide_time_zone">
+          <DataField>hide_time_zone</DataField>
+          <rd:TypeName>System.Bool</rd:TypeName>
+        </Field>
+        <Field Name="must_haves">
+          <DataField>must_haves</DataField>
+          <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+      </Fields>
+    </DataSet>
+  </DataSets>
+  <ReportParameters>
+    <ReportParameter Name="scenario_id">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>0</Value>
+        </Values>
+      </DefaultValue>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>scenario_id</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="date_from">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>2006-01-01</Value>
+        </Values>
+      </DefaultValue>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>date_from</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="date_to">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>2006-01-01</Value>
+        </Values>
+      </DefaultValue>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>date_to</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="site_id">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>site_id</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="team_set">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>team_set</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="agent_code">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>agent_code</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="time_zone_id">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>time_zone_id</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="person_code">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>D74D215A-8D4D-4B76-946E-9B5A001802F4</Value>
+        </Values>
+      </DefaultValue>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>person_code</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="report_id">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>8</Value>
+        </Values>
+      </DefaultValue>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>report_id</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="language_id">
+      <DataType>String</DataType>
+      <DefaultValue>
+        <Values>
+          <Value>1053</Value>
+        </Values>
+      </DefaultValue>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>language_id</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="culture">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>Report_Parameter_10</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ResSelections">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ResSelections</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ResReportPreferencesPerDay">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ResReportPreferencesPerDay</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ResDatePeriodColon">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ResDatePeriodColon</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ResTotalsColon">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ResTotalsColon</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ResScenarioColon">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ResScenarioColon</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ResDate">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ResDate</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ResSiteNameColon">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ResSiteNameColon</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ResTeamNameColon">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ResTeamNameColon</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ResAgentsColon">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ResAgentsColon</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ResDateColon">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ResDateColon</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ResTimeZoneColon">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ResTimeZoneColon</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ResPreferenceCategory">
+      <DataType>String</DataType>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ResPreferenceCategory</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="group_page_code">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="group_page_group_set">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="group_page_agent_code">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ResGroupPageColon">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ResGroupPageGroupColon">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ResFulfilled">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ResUnfulfilled">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ResFulfillmentPercent">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="ResMustHaves">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+  </ReportParameters>
+  <Code>Public Function TimeString(i as integer)as string
+	return Math.Floor(i / 3600) &amp; ":" &amp; Format(Math.Floor((i Mod 3600) / 60), "00") &amp; ":" &amp; Format(i Mod 60, "00")
+End function</Code>
   <Language>=Parameters!culture.Value</Language>
   <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
-  <rd:ReportID>51da61bd-585a-4466-956c-80175da319a5</rd:ReportID>
   <rd:ReportUnitType>Cm</rd:ReportUnitType>
+  <rd:ReportID>51da61bd-585a-4466-956c-80175da319a5</rd:ReportID>
 </Report>

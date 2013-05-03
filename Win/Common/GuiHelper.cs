@@ -3,10 +3,12 @@
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms.Grid;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Common
 {
-    public static class GuiHelper
+	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Gui")]
+	public static class GuiHelper
     {
 
         public static void SetStyle(GridStyleInfo gridStyleInfo)
@@ -46,5 +48,29 @@ namespace Teleopti.Ccc.Win.Common
             ToolTip tip = new ToolTip();
             tip.SetToolTip(button, text);
         }
+
+		/// <summary>
+		/// Image index for skillType
+		/// </summary>
+		/// <param name="skillType"></param>
+		/// <returns></returns>
+		public static int ImageIndexSkillType(ForecastSource skillType)
+		{
+			switch (skillType)
+			{
+				case ForecastSource.Email:
+					return 0;
+				case ForecastSource.Facsimile:
+					return 1;
+				case ForecastSource.Backoffice:
+					return 3;
+				case ForecastSource.MaxSeatSkill:
+					return 5;
+				case ForecastSource.Retail:
+					return 6;
+				default:
+					return 2;
+			}
+		}
     }
 }
