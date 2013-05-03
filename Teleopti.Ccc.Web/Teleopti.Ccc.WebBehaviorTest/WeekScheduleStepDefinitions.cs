@@ -228,7 +228,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void ThenIShouldSeeAnIndicationForChanceOfAbsenceRequestOn(string color, DateTime date)
 		{
 			var layers = _page.DayLayers(date);
-			var background = layers.Filter(Find.ByClass("small-circle"))[date.Day-1].Style.BackgroundColor;
+			var background = _page.DayElementForDate(date).Divs.Filter(Find.ByClass("small-circle"))[0].Style.BackgroundColor;
+			
 			EventualAssert.That(() => background.ToHexString, Is.EqualTo(new HtmlColor(color).ToHexString));
 		}
 
