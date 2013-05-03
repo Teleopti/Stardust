@@ -228,41 +228,16 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IList<IPersonRequest> FindPersonRequestUpdatedAfter(DateTime lastTime)
 		{
-			var allRequestExceptShiftTrade = FindPersonRequestUpdatedAfterExceptShiftTrade(lastTime);
-			var allShiftTradeRequests = FindShiftTradeRequestUpdatedAfter(lastTime);
-
-			return allRequestExceptShiftTrade.Union(allShiftTradeRequests).ToList();
+			return Session.CreateCriteria<PersonRequest>()
+			              .Add(Restrictions.Not(Restrictions.Eq("requestStatus", 3)))
+			              .Add(Restrictions.Ge("UpdatedOn", lastTime))
+			              .SetFetchMode("requests", FetchMode.Join)
+			              .SetFetchMode("Person", FetchMode.Join)
+			              .SetFetchMode("requests.ShiftTradeSwapDetails", FetchMode.Join)
+						  .SetResultTransformer(Transformers.DistinctRootEntity)
+			              .List<IPersonRequest>();
 		}
 
-		private IList<IPersonRequest> FindPersonRequestUpdatedAfterExceptShiftTrade(DateTime lastTime)
-		{
-			var requestForPeriod = DetachedCriteria.For<Request>()
-				 .SetProjection(Projections.Property("Parent"))
-				 .Add(Restrictions.Ge("UpdatedOn", lastTime))
-				 .Add(Restrictions.Not(Restrictions.Eq("class", typeof(ShiftTradeRequest))));
-
-			return Session.CreateCriteria<IPersonRequest>()
-					  .Add(Restrictions.Not(Restrictions.Eq("requestStatus", 3)))
-					  .SetFetchMode("requests", FetchMode.Join)
-					  .SetFetchMode("Person", FetchMode.Join)
-					  .Add(Subqueries.PropertyIn("Id", requestForPeriod))
-					  .List<IPersonRequest>();
-		}
-
-		private IList<IPersonRequest> FindShiftTradeRequestUpdatedAfter(DateTime lastTime)
-		{
-			var requestForPeriod = DetachedCriteria.For<ShiftTradeRequest>()
-				 .SetProjection(Projections.Property("Parent"))
-				 .Add(Restrictions.Ge("UpdatedOn", lastTime));
-
-			return Session.CreateCriteria<IPersonRequest>()
-				 .Add(Restrictions.Not(Restrictions.Eq("requestStatus", 3)))
-				 .SetFetchMode("requests", FetchMode.Join)
-				 .SetFetchMode("Person", FetchMode.Join)
-				 .SetFetchMode("requests.ShiftTradeSwapDetails", FetchMode.Join)
-				 .Add(Subqueries.PropertyIn("Id", requestForPeriod))
-				 .List<IPersonRequest>();
-		}
 
 		public IList<IPersonRequest> FindPersonRequestWithinPeriod(DateTimePeriod period)
 		{
