@@ -151,3 +151,13 @@ ALTER TABLE dbo.PersonInApplicationRole ALTER COLUMN InsertedOn datetime NOT NUL
 ALTER TABLE dbo.PersonInApplicationRole ADD  CONSTRAINT [DF_PersonInApplicationRole_InsertedOn]  DEFAULT (getutcdate()) FOR [InsertedOn]
 GO
 
+--track changes on PersonRequest (db time)
+ALTER TABLE dbo.PersonRequest ADD UpdatedOnServerUTC datetime NULL
+GO
+UPDATE dbo.PersonRequest SET UpdatedOnServerUTC = GETUTCDATE()
+GO
+ALTER TABLE dbo.PersonRequest ALTER COLUMN UpdatedOnServerUTC datetime NOT NULL
+GO
+
+ALTER TABLE dbo.PersonRequest ADD CONSTRAINT DF_PersonRequest_UpdatedOnServerUTC DEFAULT getutcdate() FOR UpdatedOnServerUTC
+GO
