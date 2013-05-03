@@ -710,7 +710,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             return typedRequest.requestStatus;
         }
 
-		public void DummyMethodToRemoveCompileErrorsWithUnusedVariable()
+		public virtual void DummyMethodToRemoveCompileErrorsWithUnusedVariable()
 		{
 			_updatedOnServerUtc = new DateTime();
 		}
