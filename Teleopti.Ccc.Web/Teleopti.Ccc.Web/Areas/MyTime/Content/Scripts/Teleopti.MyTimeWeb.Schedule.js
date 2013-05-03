@@ -374,6 +374,13 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			}
 		});
 	}
+    
+    function _cleanBindings() {
+        ko.cleanNode($('#ScheduleWeek-body')[0]);
+        vm.days([]);
+        vm.timeLines([]);
+        vm = null;
+    }
 
 	return {
 		Init: function () {
@@ -390,7 +397,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 		},
 		SetupViewModel: function (userTexts) {
 			vm = new WeekScheduleViewModel(userTexts);
-			ko.applyBindings(vm, document.getElementById('ScheduleWeek-body'));
+			ko.applyBindings(vm, $('#ScheduleWeek-body')[0]);
 		},
 		LoadAndBindData: function () {
 			ajax.Ajax({
@@ -426,7 +433,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			};
 		},
 		PartialDispose: function () {
-			addTextRequestTooltip.qtip('destroy');
+		    addTextRequestTooltip.qtip('destroy');
+		    _cleanBindings();
 		},
 		SetTimeIndicator: function (date) {
 			_setTimeIndicator(date);
