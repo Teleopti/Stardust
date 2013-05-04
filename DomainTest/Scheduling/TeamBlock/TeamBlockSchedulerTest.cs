@@ -178,8 +178,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				                                                          _schedulingOptions.UseMinimumPersons,
 				                                                          _schedulingOptions.UseMaximumPersons)).Return(shifts[0]).Repeat.AtLeastOnce();
 				Expect.Call(() => _teamScheduling.DayScheduled += _target.OnDayScheduled);
-				Expect.Call(() => _teamScheduling.ExecutePerDayPerPerson(_person, _dateOnly, _teamBlockInfo, shifts[0],
-				                                                         !_schedulingOptions.UseTeamBlockSameShift, _selectedPeriod));
+				Expect.Call(() => _teamScheduling.ExecutePerDayPerPerson(_person, _dateOnly, _teamBlockInfo, shifts[0], _selectedPeriod));
 				Expect.Call(() => _teamScheduling.DayScheduled -= _target.OnDayScheduled);
 				Expect.Call(scheduleDay.IsScheduled()).Return(false);
 				Expect.Call(_groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(new List<IPerson> {_person}));
@@ -339,8 +338,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				      .Return(shifts[0])
 				      .Repeat.AtLeastOnce();
 				Expect.Call(() => _teamScheduling.DayScheduled += _target.OnDayScheduled);
-				Expect.Call(() => _teamScheduling.ExecutePerDayPerPerson(_person, _dateOnly, _teamBlockInfo, shifts[0],
-				                                                         !_schedulingOptions.UseTeamBlockSameShift, _selectedPeriod));
+				Expect.Call(() => _teamScheduling.ExecutePerDayPerPerson(_person, _dateOnly, _teamBlockInfo, shifts[0], _selectedPeriod));
 				Expect.Call(() => _teamScheduling.DayScheduled -= _target.OnDayScheduled);
 				Expect.Call(scheduleDay.IsScheduled()).Return(false);
 				Expect.Call(_groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(new List<IPerson> {_person}));

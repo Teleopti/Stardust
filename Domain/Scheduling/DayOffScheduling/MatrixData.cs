@@ -13,6 +13,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 		ReadOnlyCollection<IScheduleDayData> ScheduleDayDataCollection { get; }
 		void Store(IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions);
 	    bool ContainsKey(DateOnly key);
+		int TargetDaysOff { get; }
 	}
 
 	public class MatrixData : IMatrixData
@@ -37,6 +38,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
             return ScheduleDayDataDictionary.ContainsKey(key);
         }
 
+		public int TargetDaysOff { get; protected set; }
+
 		public IScheduleMatrixPro Matrix
 		{
 			get { return _matrix; }
@@ -51,6 +54,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.DayOffScheduling
 		public virtual void Store(IScheduleMatrixPro matrix, ISchedulingOptions schedulingOptions)
 		{
 			_matrix = matrix;
+			TargetDaysOff = _matrix.SchedulePeriod.DaysOff();
 			foreach (var scheduleDayPro in _matrix.EffectivePeriodDays)
 			{
 				IScheduleDayData toAdd = _scheduleDayDataMapper.Map(scheduleDayPro, schedulingOptions);
