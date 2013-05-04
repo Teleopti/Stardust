@@ -27,28 +27,26 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 			//var rowsAffected = 0;
 
 			// Find any changes since last ETL, and get those (only)
-			var rep = _jobParameters.Helper.Repository;
-			var ETLIntraday = _jobParameters.Helper.Repository.LastChangedDate(Result.CurrentBusinessUnit, "Requests");
+			//var rep = _jobParameters.Helper.Repository;
+			var etlIntraday = _jobParameters.Helper.Repository.LastChangedDate(Result.CurrentBusinessUnit, "Requests");
 			
-			_jobParameters.StateHolder.SetThisTime(ETLIntraday, "Requests");
+			_jobParameters.StateHolder.SetThisTime(etlIntraday, "Requests");
 
-			if (ETLIntraday.LastTime == ETLIntraday.ThisTime)
+			if (etlIntraday.LastTime == etlIntraday.ThisTime)
 			{
 				_jobParameters.Helper.Repository.TruncateRequest();
 				return 0;
 			}
-			else
-			{
-				var startTimeUTC = DateTime.SpecifyKind(ETLIntraday.LastTime, DateTimeKind.Utc);
+			
+			var startTimeUtc = DateTime.SpecifyKind(etlIntraday.LastTime, DateTimeKind.Utc);
 
-				//TODO: Get only changed persons
-				ICollection<IPerson> person = _jobParameters.StateHolder.PersonCollection.ToList();
+			//TODO: Get only changed persons
+			ICollection<IPerson> person = _jobParameters.StateHolder.PersonCollection.ToList();
 
-				var rootList = _jobParameters.Helper.Repository.LoadIntradayRequest(person, startTimeUTC);
-				Transformer.Transform(rootList, _jobParameters.IntervalsPerDay, BulkInsertDataTable1);
+			var rootList = _jobParameters.Helper.Repository.LoadIntradayRequest(person, startTimeUtc);
+			Transformer.Transform(rootList, _jobParameters.IntervalsPerDay, BulkInsertDataTable1);
 
-				return _jobParameters.Helper.Repository.PersistRequest(BulkInsertDataTable1);
-			}
+			return _jobParameters.Helper.Repository.PersistRequest(BulkInsertDataTable1);
 		}
 	}
 }
