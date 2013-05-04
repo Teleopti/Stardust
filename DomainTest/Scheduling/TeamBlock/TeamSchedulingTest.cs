@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using NUnit.Framework;
@@ -8,7 +7,6 @@ using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
-using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -44,11 +42,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             _matrix = _mock.StrictMock<IScheduleMatrixPro>();
 
 			_person = PersonFactory.CreatePersonWithValidVirtualSchedulePeriod(new Person(), DateOnly.MinValue);
-
 			_resourceCalculateDelayer = _mock.StrictMock<IResourceCalculateDelayer>();
 			_schedulePartModifyAndRollbackService = _mock.StrictMock<ISchedulePartModifyAndRollbackService>();
 			_target = new TeamScheduling(_resourceCalculateDelayer, _schedulePartModifyAndRollbackService);
-
+			_groupPerson = new GroupPerson(new List<IPerson>{ _person },DateOnly.MinValue,"hej", null);
 			_scheduleDayPro = _mock.StrictMock<IScheduleDayPro>();
 			_scheduleDay = _mock.StrictMock<IScheduleDay>();
 			_mainShift = new MainShift(new ShiftCategory("hej"));
@@ -60,6 +57,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			_blockInfo = new BlockInfo(new DateOnlyPeriod(DateOnly.MinValue, DateOnly.MinValue));
 			_teamBlockInfo = new TeamBlockInfo(_teaminfo, _blockInfo);
 			_dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(DateOnly.MinValue, _person.PermissionInformation.DefaultTimeZone());
+
         }
 
 		//void targetDayScheduledCanceled(object sender, SchedulingServiceBaseEventArgs e)
@@ -103,6 +101,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
         [Test]
         public void ShouldNotSchedulePerDayIfScheduled()
         {
+
             using (_mock.Record())
             {
 				Expect.Call(_matrix.Person).Return(_person);
