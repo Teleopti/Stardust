@@ -47,7 +47,6 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Jobs
 			Add(new FactSchedulePreferenceJobStep(jobParameters));
 			Add(new DimWorkloadJobStep(jobParameters));
 			Add(new FactScheduleForecastSkillJobStep(jobParameters));
-			Add(new FactScheduleDeviationJobStep(jobParameters));
 			Add(new FactRequestJobStep(jobParameters));
             Add(new FactRequestedDaysJobStep(jobParameters));
 		}

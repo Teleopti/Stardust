@@ -9,9 +9,6 @@ GO
 -- Description:	truncate in a separate batch to avoid lock
 -- =============================================
 CREATE PROCEDURE [mart].[etl_permission_report_truncate_nonactive]
-@business_unit_code uniqueidentifier,
-@isFirstBusinessUnit bit,
-@isLastBusinessUnit bit
 WITH EXECUTE AS OWNER
 AS
 DECLARE @is_active char(1)
@@ -23,8 +20,6 @@ IF @is_active = 'A'
 ELSE
 	SET @non_active = 'A'
 	
---If "FirstBU", then truncate the non-active table
-IF @isFirstBusinessUnit = 1
 BEGIN
 	IF @is_active = 'A'
 		TRUNCATE TABLE [mart].[permission_report_B]

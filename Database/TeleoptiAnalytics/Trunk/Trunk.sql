@@ -330,3 +330,46 @@ GO
 ----------------
 ALTER TABLE [mart].[fact_forecast_workload] DROP COLUMN [calculated_calls]
 GO
+----------------  
+--Name: Ola & David
+--Date: 2013-04-12
+--Desc: PBI #22523 - Speed up ETL Intrady load
+----------------
+CREATE TABLE [stage].[stg_schedule_changed](
+            [schedule_date] [datetime] NOT NULL,
+            [person_code] [uniqueidentifier] NOT NULL,
+            [scenario_code] [uniqueidentifier] NOT NULL,
+            [business_unit_code] [uniqueidentifier] NOT NULL,
+            [datasource_id] [smallint] NOT NULL,
+            [datasource_update_date] [smalldatetime] NOT NULL
+CONSTRAINT [PK_stg_schedule_changed] PRIMARY KEY CLUSTERED 
+(
+            [schedule_date] ASC,
+            [person_code] ASC,
+            [scenario_code] ASC
+)
+)
+
+GO
+
+CREATE TABLE Stage.stg_schedule_updated_personLocal (
+	person_id int not null,
+	time_zone_id int not null,
+	person_code uniqueidentifier not null,
+	valid_from_date_local smalldatetime not null,
+	valid_to_date_local smalldatetime not null
+CONSTRAINT [PK_stg_schedule_updated_personLocal] PRIMARY KEY CLUSTERED 
+(
+            [person_id]
+)
+)
+
+CREATE TABLE Stage.stg_schedule_updated_ShiftStartDateUTC (
+	person_id int not null,
+	shift_startdate_id int not null
+CONSTRAINT [PK_stg_schedule_updated_ShiftStartDateUTC] PRIMARY KEY CLUSTERED 
+(
+            [person_id]
+)
+)
+GO

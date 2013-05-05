@@ -41,7 +41,6 @@ UPDATE [dbo].[ApplicationFunction] SET [ForeignId]=@ForeignId, [Parent]=@ParentI
 
 SET NOCOUNT OFF
 GO
-
 ----------------  
 --Name: Robin Karlsson
 --Date: 2013-04-24
@@ -103,6 +102,64 @@ FROM dbo.PurgeSetting_old
 --new setting
 INSERT INTO dbo.PurgeSetting ([Key],Value)
 VALUES('DaysToKeepSecurityAudit',30)
+GO
+
+----------------  
+--Name: Ola & David
+--Date: 2013-04-12
+--Desc: PBI #22523 - Speed up ETL Intrady load
+----------------
+CREATE TABLE [mart].[LastUpdatedPerStep](
+	[StepName] [varchar](500) NOT NULL,
+	[BusinessUnit] [uniqueidentifier] NULL,
+	[Date] [datetime] NOT NULL
+) 
+
+GO
+
+--Track changes on schedule, default scenario only
+ALTER TABLE ReadModel.ScheduleDay ADD NotScheduled bit NULL
+GO
+UPDATE ReadModel.ScheduleDay SET NotScheduled = 0
+GO
+ALTER TABLE ReadModel.ScheduleDay ALTER COLUMN NotScheduled bit NOT NULL
+GO
+
+ALTER TABLE ReadModel.ScheduleDay ADD CONSTRAINT DF_ScheduleDay_InsertedOn DEFAULT getutcdate() FOR InsertedOn
+ALTER TABLE ReadModel.ScheduleDay ADD CONSTRAINT DF_ScheduleDay_NotScheduled DEFAULT 0 FOR NotScheduled
+GO
+
+--track changes on Permissions
+ALTER TABLE dbo.ApplicationFunctionInRole ADD InsertedOn datetime NULL
+GO
+UPDATE dbo.ApplicationFunctionInRole SET InsertedOn = '1900-01-01'
+ALTER TABLE dbo.ApplicationFunctionInRole ALTER COLUMN InsertedOn datetime NOT NULL
+ALTER TABLE dbo.ApplicationFunctionInRole ADD  CONSTRAINT [DF_ApplicationFunctionInRole_InsertedOn]  DEFAULT (getutcdate()) FOR [InsertedOn]
+GO
+
+ALTER TABLE dbo.AvailablePersonsInApplicationRole ADD InsertedOn datetime NULL
+GO
+UPDATE dbo.AvailablePersonsInApplicationRole SET InsertedOn = '1900-01-01'
+ALTER TABLE dbo.AvailablePersonsInApplicationRole ALTER COLUMN InsertedOn datetime NOT NULL
+ALTER TABLE dbo.AvailablePersonsInApplicationRole ADD  CONSTRAINT [DF_AvailablePersonsInApplicationRole_InsertedOn]  DEFAULT (getutcdate()) FOR [InsertedOn]
+GO
+
+ALTER TABLE dbo.PersonInApplicationRole ADD InsertedOn datetime NULL
+GO
+UPDATE dbo.PersonInApplicationRole SET InsertedOn = '1900-01-01'
+ALTER TABLE dbo.PersonInApplicationRole ALTER COLUMN InsertedOn datetime NOT NULL
+ALTER TABLE dbo.PersonInApplicationRole ADD  CONSTRAINT [DF_PersonInApplicationRole_InsertedOn]  DEFAULT (getutcdate()) FOR [InsertedOn]
+GO
+
+--track changes on PersonRequest (db time)
+ALTER TABLE dbo.PersonRequest ADD UpdatedOnServerUtc datetime NULL
+GO
+UPDATE dbo.PersonRequest SET UpdatedOnServerUtc = GETUTCDATE()
+GO
+ALTER TABLE dbo.PersonRequest ALTER COLUMN UpdatedOnServerUtc datetime NOT NULL
+GO
+
+ALTER TABLE dbo.PersonRequest ADD CONSTRAINT DF_PersonRequest_UpdatedOnServerUtc DEFAULT getutcdate() FOR UpdatedOnServerUtc
 GO
 GO
 
