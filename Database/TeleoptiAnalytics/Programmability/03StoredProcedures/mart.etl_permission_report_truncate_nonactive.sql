@@ -9,6 +9,9 @@ GO
 -- Description:	truncate in a separate batch to avoid lock
 -- =============================================
 CREATE PROCEDURE [mart].[etl_permission_report_truncate_nonactive]
+@business_unit_code uniqueidentifier,
+@isFirstBusinessUnit bit,
+@isLastBusinessUnit bit
 WITH EXECUTE AS OWNER
 AS
 DECLARE @is_active char(1)

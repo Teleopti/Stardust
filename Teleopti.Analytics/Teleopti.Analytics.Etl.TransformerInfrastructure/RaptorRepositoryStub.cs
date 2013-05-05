@@ -422,10 +422,6 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
         {
         }
 
-		public void TruncatePermissionReportNonactive()
-		{
-		}
-
 		public int FillPermissionDataMart(IBusinessUnit businessUnit, bool isFirstBusinessUnit, bool isLastBusinessUnit)
         {
             return 0;

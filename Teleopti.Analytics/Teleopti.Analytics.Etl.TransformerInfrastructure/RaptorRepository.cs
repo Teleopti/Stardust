@@ -809,11 +809,6 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 			HelperFunctions.TruncateTable("stage.etl_stg_permission_report_delete", _dataMartConnectionString);
 		}
 
-		public void TruncatePermissionReportNonactive()
-		{
-			HelperFunctions.TruncateTable("mart.etl_permission_report_truncate_nonactive", _dataMartConnectionString);
-		}
-
 		public int PersistAbsence(DataTable dataTable)
 		{
 			HelperFunctions.TruncateTable("stage.etl_stg_absence_delete", _dataMartConnectionString);
