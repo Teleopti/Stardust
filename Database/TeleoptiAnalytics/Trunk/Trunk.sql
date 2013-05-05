@@ -358,10 +358,18 @@ CREATE TABLE Stage.stg_schedule_updated_personLocal (
 	person_code uniqueidentifier not null,
 	valid_from_date_local smalldatetime not null,
 	valid_to_date_local smalldatetime not null
-	)
+CONSTRAINT [PK_stg_schedule_updated_personLocal] PRIMARY KEY CLUSTERED 
+(
+            [person_id]
+)
+)
 
 CREATE TABLE Stage.stg_schedule_updated_ShiftStartDateUTC (
 	person_id int not null,
 	shift_startdate_id int not null
-	)
+CONSTRAINT [stg_schedule_updated_ShiftStartDateUTC] PRIMARY KEY CLUSTERED 
+(
+            [person_id]
+)
+)
 GO
