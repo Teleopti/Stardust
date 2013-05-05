@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 		private readonly IBudgetDayRepository _budgetDayRepository;
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IExtractBudgetGroupPeriods _extractBudgetGroupPeriods;
-		private INow _now;
+		private readonly INow _now;
 
 		public AllowanceProvider(IBudgetDayRepository budgetDayRepository, ILoggedOnUser loggedOnUser, IScenarioRepository scenarioRepository, IExtractBudgetGroupPeriods extractBudgetGroupPeriods, INow now)
 		{
@@ -45,7 +45,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 					var allowanceFromBudgetDays =
 						from budgetGroupPeriod in budgetGroupPeriods
 						from budgetDay in _budgetDayRepository.Find(defaultScenario, budgetGroupPeriod.Item2, budgetGroupPeriod.Item1)
-						where openPeriods.Any(o => o.GetPeriod(budgetDay.Day).Contains(budgetDay.Day)) 
+						where openPeriods.Any(o => o.GetPeriod(_now.DateOnly()).Contains(budgetDay.Day)) 
 						select
 							new
 								{
