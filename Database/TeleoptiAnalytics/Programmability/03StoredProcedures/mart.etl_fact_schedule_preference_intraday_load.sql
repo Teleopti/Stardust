@@ -31,6 +31,9 @@ END
 DECLARE @business_unit_id int
 SET @business_unit_id = (SELECT business_unit_id FROM mart.dim_business_unit WHERE business_unit_code = @business_unit_code)
 
+DECLARE @scenario_id int
+SELECT @scenario_id = scenario_id FROM mart.dim_scenario WHERE scenario_code= @scenario_code
+ 
 -- Delete rows from stage
 DELETE f
 FROM Stage.stg_schedule_preference stg
@@ -129,6 +132,7 @@ LEFT JOIN
 	mart.dim_scenario	ds
 ON
 	f.scenario_code = ds.scenario_code
+	and ds.scenario_id=@scenario_id
 LEFT JOIN
 	mart.dim_shift_category sc
 ON
@@ -145,10 +149,5 @@ LEFT JOIN
 	mart.dim_absence ab
 ON
 	f.absence_code = ab.absence_code
-
---LEFT JOIN				--behöver inte denna om de sätts hårt
---	dim_preference_type dpt
---ON
---	dpt.preference_type_name=f.preference_type_name
 
 GO

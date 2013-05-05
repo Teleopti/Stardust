@@ -27,12 +27,6 @@ BEGIN
 	RAISERROR (@ErrorMsg,16,1)
 	RETURN 0
 END
-CREATE TABLE #stg_schedule_changed(
-	person_id int,
-	date_id int,
-	scenario_id int,
-	business_unit_id int
-	)
 
 CREATE TABLE #fact_schedule_day_off_count (
 	date_id int, 
@@ -45,39 +39,33 @@ CREATE TABLE #fact_schedule_day_off_count (
 	)
 
 --Get BU id
+DECLARE @scenario_id int 
 DECLARE @business_unit_id int
 SELECT @business_unit_id = business_unit_id FROM mart.dim_business_unit WHERE business_unit_code = @business_unit_code
-
---Create a tmp table with Id instead of code
-INSERT INTO #stg_schedule_changed
-SELECT dp.person_id,dd.date_id,ds.scenario_id,bu.business_unit_id
-FROM Stage.stg_schedule_changed stg
-INNER JOIN mart.dim_date dd
-	ON dd.date_date = stg.schedule_date
-INNER JOIN mart.dim_person dp
-	ON dp.person_code = stg.person_code
-	AND --trim
-		(
-				(stg.schedule_date	>= dp.valid_from_date)
-
-			AND
-				(stg.schedule_date < dp.valid_to_date)
-		)
-INNER JOIN mart.dim_scenario ds
-	ON ds.scenario_code = stg.scenario_code
-	AND ds.scenario_code = @scenario_code  --remove this if we are to handle multiple scenarios
-INNER JOIN mart.dim_business_unit bu
-	ON bu.business_unit_code = stg.business_unit_code
-	AND bu.business_unit_code = @business_unit_code
+SELECT @scenario_id = scenario_id FROM mart.dim_scenario WHERE scenario_code= @scenario_code
 
 --delete days changed from mart.fact_schedule_day_count (new, updated or deleted)
-DELETE fc
-FROM #stg_schedule_changed stg
-INNER JOIN mart.fact_schedule_day_count fc
-	ON stg.date_id = fc.date_id
-	AND stg.person_id = fc.person_id
-	AND stg.business_unit_id = fc.business_unit_id
-	AND stg.scenario_id = fc.scenario_id
+DELETE fs
+FROM Stage.stg_schedule_changed stg
+INNER JOIN Stage.stg_schedule_updated_personLocal dp
+	ON stg.person_code		=	dp.person_code
+	AND --trim
+		(
+				(stg.schedule_date	>= dp.valid_from_date_local)
+
+			AND
+				(stg.schedule_date < dp.valid_to_date_local)
+		)
+INNER JOIN mart.dim_scenario ds
+	ON stg.scenario_code = ds.scenario_code
+	AND stg.scenario_code = @scenario_code  --remove this if we are to handle multiple scenarios
+INNER JOIN mart.fact_schedule_day_count fs
+	ON fs.person_id= dp.person_id
+ 	--AND ds.scenario_id = fs.scenario_id
+INNER JOIN Stage.stg_schedule_updated_ShiftStartDateUTC utc
+	ON utc.shift_startdate_id = fs.date_id
+	AND utc.person_id = fs.person_id
+WHERE stg.business_unit_code = @business_unit_code
 
 ----------------------------------------------------------------------------------
 -- Insert shift_category_count rows
@@ -113,9 +101,10 @@ SELECT
 	datasource_update_date	= MAX(datasource_update_date)
 FROM
 	mart.fact_schedule f
-INNER JOIN #stg_schedule_changed stg
-	ON f.shift_startdate_id = stg.date_id
+INNER JOIN Stage.stg_schedule_updated_ShiftStartDateUTC stg
+	ON f.shift_startdate_id = stg.shift_startdate_id
 	AND f.person_id = stg.person_id
+	AND f.scenario_id = @scenario_id 
 	AND f.business_unit_id  = @business_unit_id
 WHERE shift_category_id<>-1
 GROUP BY f.shift_startdate_id,f.shift_startinterval_id,f.person_id,f.scenario_id,f.business_unit_id,f.datasource_id
@@ -176,6 +165,7 @@ LEFT JOIN
 	mart.dim_scenario	ds
 ON
 	stg.scenario_code = ds.scenario_code
+	AND ds.scenario_id = @scenario_id 
 GROUP BY dsd.date_id,di.interval_id,dp.person_id,ds.scenario_id,dp.business_unit_id,stg.datasource_id
 
 --DAY OFF 
@@ -211,6 +201,7 @@ LEFT JOIN
 	mart.dim_scenario	ds
 ON
 	stg.scenario_code = ds.scenario_code
+	AND ds.scenario_id = @scenario_id
 GROUP BY dsd.date_id,stg.date,di.interval_id,dp.person_id,stg.person_code,ds.scenario_id,stg.scenario_code,dd.day_off_id,dp.business_unit_id,stg.datasource_id
 
 UPDATE stage.stg_schedule_day_off_count
@@ -263,20 +254,15 @@ JOIN
 ON
 	stg.person_code	= dp.person_code	AND
 	stg.date BETWEEN dp.valid_from_date	AND dp.valid_to_date  --Is person valid in this range	
-JOIN
-	mart.dim_day_off dd ON
-	stg.day_off_name = dd.day_off_name AND
-	dd.business_unit_id = dp.business_unit_id
-LEFT JOIN
-	mart.dim_date dsd
-ON
-	stg.date = dsd.date_date
-LEFT JOIN
-	mart.dim_interval	di
-ON
-	stg.start_interval_id = di.interval_id
-LEFT JOIN
-	mart.dim_scenario	ds
-ON
-	stg.scenario_code = ds.scenario_code
+INNER JOIN mart.dim_day_off dd
+	ON stg.day_off_name = dd.day_off_name
+	AND dd.business_unit_id = dp.business_unit_id
+LEFT JOIN mart.dim_date dsd
+	ON stg.date = dsd.date_date
+LEFT JOIN mart.dim_interval	di
+	ON stg.start_interval_id = di.interval_id
+LEFT JOIN mart.dim_scenario	ds
+	ON stg.scenario_code = ds.scenario_code
+	AND ds.scenario_id = @scenario_id 
 GROUP BY dsd.date_id,di.interval_id,dp.person_id,ds.scenario_id,dd.day_off_id,dp.business_unit_id,stg.datasource_id
+GO
