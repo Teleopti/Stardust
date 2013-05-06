@@ -17,7 +17,10 @@ Background:
 	| Field      | Value      |
 	| Team       | Team green |
 	| Start date | 2012-12-01 |
-	And there is a shift category named 'Day'
+	And there are shift categories
+	| Name  |
+	| Day   |
+	| Night |
 	And there is an activity with
 	| Field | Value  |
 	| Name  | Lunch  |
@@ -47,25 +50,23 @@ Scenario: View shift
 
 Scenario: View night shift from yesterday
 	Given I have the role 'Anywhere Team Green'
-	And 'Pierre Baldi' have a (read model) shift with
-	| Field            | Value        |
-	| Person           | Pierre Baldi |
-	| Date             | 2012-12-01   |
-	| Start time       | 20:00        |
-	| End time         | 1.04:00      |
-	| Activity         | Phone        |
+	And 'Pierre Baldi' have a shift with
+	| Field          | Value            |
+	| Shift category | Night            |
+	| Activity       | Phone            |
+	| Start time     | 2012-12-01 20:00 |
+	| End time       | 2012-12-02 04:00 |
 	When I view person schedule for 'Pierre Baldi' on '2012-12-02'
 	Then I should not see any shift
 
 Scenario: View night shift from today
 	Given I have the role 'Anywhere Team Green'
-	And 'Pierre Baldi' have a (read model) shift with
-	| Field            | Value        |
-	| Person           | Pierre Baldi |
-	| Date             | 2012-12-02   |
-	| Start time       | 20:00        |
-	| End time         | 1.04:00      |
-	| Activity         | Phone        |
+	And 'Pierre Baldi' have a shift with
+	| Field          | Value            |
+	| Shift category | Night            |
+	| Activity       | Phone            |
+	| Start time     | 2012-12-02 20:00 |
+	| End time       | 2012-12-03 04:00 |
 	When I view person schedule for 'Pierre Baldi' on '2012-12-02'
 	Then I should see a shift layer with
 	| Field      | Value   |
