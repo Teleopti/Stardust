@@ -118,14 +118,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		}
 
 		[Then(@"I should see (.*) absences in the absence list")]
-		public void ThenIShouldSeeAbsencesInTheAbsenceList(int numberOf)
+		public void ThenIShouldSeeAbsencesInTheAbsenceList(int count)
 		{
-			Browser.Interactions.AssertExists(".absence-list .absence");
-			var selector = Find.BySelector(".absence-list .absence");
-			if(numberOf > 0)
-				EventualAssert.That(() => Browser.Current.Elements.Filter(selector).Count, Is.EqualTo(numberOf));
+			if (count == 0)
+				Browser.Interactions.AssertNotExists(".absence-list", ".absence-list .absence");
 			else
-				EventualAssert.That(() => Browser.Current.Elements.Filter(selector).IsEmpty(), Is.True);
+				Browser.Interactions.AssertNotExists(".absence-list .absence:nth-child(" + count + ")", ".absence-list .absence:nth-child(" + (count + 1) + ")");
 		}
 
 		[When(@"I click '(.*)' on absence named '(.*)'")]
