@@ -42,17 +42,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 
 		private static void AssertShiftLayer(ShiftLayerInfo shiftLayer)
 		{
-			if (shiftLayer.Color != null)
-				Browser.Interactions.AssertExists(
-					string.Format(".shift .layer[data-start-time='{0}'][data-length-minutes='{1}'][style*='background-color: {2}']",
-					              shiftLayer.StartTime,
-					              shiftLayer.LengthMinutes(),
-					              ColorNameToCss(shiftLayer.Color)));
-			else
-				Browser.Interactions.AssertExists(
-					string.Format(".shift .layer[data-start-time='{0}'][data-length-minutes='{1}']",
-					              shiftLayer.StartTime,
-					              shiftLayer.LengthMinutes()));
+			Browser.Interactions.AssertExists(
+				string.Format(".shift .layer[data-start-time='{0}'][data-length-minutes='{1}'][style*='background-color: {2}']",
+				              shiftLayer.StartTime,
+				              shiftLayer.LengthMinutes(),
+				              ColorNameToCss(shiftLayer.Color)));
 		}
 
 		[Then(@"I should not see a shift layer with")]

@@ -72,6 +72,7 @@ Scenario: View night shift from today
 	| Field      | Value   |
 	| Start time | 20:00   |
 	| End time   | 1.04:00 |
+	| Color      | Green   |
 
 Scenario: View schedule in persons time zone
 	Given I have the role 'Anywhere Team Green'
@@ -88,3 +89,4 @@ Scenario: View schedule in persons time zone
 	| Field      | Value |
 	| Start time | 08:00 |
 	| End time   | 17:00 |
+	| Color      | Green |
