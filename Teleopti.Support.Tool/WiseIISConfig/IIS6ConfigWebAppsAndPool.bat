@@ -1,8 +1,6 @@
 @ECHO off
 ::Example Call:
-::IIS6ConfigWebAppsAndPool.bat "Teleopti ASP.NET v3.5" SDK v2.0 False Skip
-::IIS6ConfigWebAppsAndPool.bat "Teleopti ASP.NET v3.5" SDK v2.0 True Skip
-::IIS6ConfigWebAppsAndPool.bat "Teleopti ASP.NET v4.0" web v4.0 True Ntlm MySpecialIISuser MySpecialPwd
+::IIS6ConfigWebAppsAndPool.bat "Teleopti ASP.NET v4.0 Web" web v4.0 True Ntlm MySpecialIISuser MySpecialPwd
 
 ::Get path to this batchfile
 SET ROOTDIR=%~dp0
@@ -75,26 +73,12 @@ echo cscript "%ROOTDIR%\ASPNetVersion.vbs" "%MainSiteName%/%SubSiteName%" "%NETV
 cscript "%ROOTDIR%\ASPNetVersion.vbs" "%MainSiteName%/%SubSiteName%" "%NETVersion%"
 echo.
 
-::6 - Specify the authentication for the virtual dir
-::http://www.microsoft.com/technet/prodtechnol/WindowsServer2003/Library/IIS/e3a60d16-1f4d-44a4-9866-5aded450956f.mspx?mfr=true
-
-::We have this config in two places. Trust BuildArtifacts to be correct and let WISE do the dynamic content stuff
-::anonymousAuthentication=always true
-::windowsAuthentication=true/false + Forms=true/false is depends "%SDKCREDPROT%"
-:: ...which in turn depends on "same" vs. "different domain" in Msi GUI.
-::So, At this point we bail out for most vdir. Go for what we specify in web.config created
-if not "%SubSiteName%"=="Web" GOTO Done
-
-::But for vdir="Web" we continue
-if "%SDKCREDPROT%"=="Ntlm" (
-echo implementing Ntlm Auth
-echo cscript "%ROOTDIR%\adsutil.vbs" set W3SVC/1/ROOT/%SitePath%/Authflags 4
-cscript "%ROOTDIR%\adsutil.vbs" set W3SVC/1/ROOT/%SitePath%/Authflags 4
-) else (
-echo implementing Anonymous Auth
-echo cscript "%ROOTDIR%\adsutil.vbs" set W3SVC/1/ROOT/%SitePath%/Authflags 1
-cscript "%ROOTDIR%\adsutil.vbs" set W3SVC/1/ROOT/%SitePath%/Authflags 1
-)
+::5 Athentication for the virtual dir
+::-----
+::Different authentication based on "SDKCREDPROT"
+::-----
+for /f "tokens=1,2 delims=;" %%g in (%SDKCREDPROT%\IIS6Authflags.txt) do CALL:IISSecuritySet "%%g" "%%h"
+SET authentication=basicAuthentication
 
 ::application mapping. Needed for asp.net MVC on IIS6
 set aspnet_isapi=C:\WINDOWS\Microsoft.NET\Framework64\v4.0.30319\aspnet_isapi.dll
@@ -104,8 +88,15 @@ if "%PROCESSOR_ARCHITECTURE%"=="x86" set aspnet_isapi=C:\WINDOWS\Microsoft.NET\F
 if exist %aspnet_isapi% cscript "%ROOTDIR%\IIS6ManageMapping.vbs" W3SVC/1/root/%SitePath%/ScriptMaps "*,%aspnet_isapi%,0" "" /REMOVE /ALL /COMMIT
 ::Add MVC mapping
 if exist %aspnet_isapi% cscript "%ROOTDIR%\IIS6ManageMapping.vbs" W3SVC/1/root/%SitePath%/ScriptMaps "" "*,%aspnet_isapi%,0" /INSERT /COMMIT
-
 GOTO Done
+
+:IISSecuritySet
+::http://www.microsoft.com/technet/prodtechnol/WindowsServer2003/Library/IIS/6cc53bc1-6487-412c-ae93-063cd86b4f6e.mspx?mfr=true
+if "%SubSiteName%"=="%~1" (
+echo cscript "%ROOTDIR%\adsutil.vbs" set W3SVC/1/ROOT/%SitePath%/Authflags %~2
+cscript "%ROOTDIR%\adsutil.vbs" set W3SVC/1/ROOT/%SitePath%/Authflags %~2
+)
+exit /B
 
 :Done
 echo done
