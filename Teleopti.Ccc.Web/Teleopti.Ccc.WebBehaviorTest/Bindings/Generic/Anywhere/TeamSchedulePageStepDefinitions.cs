@@ -1,19 +1,13 @@
 using System;
-using System.Linq;
-using System.Threading;
 using NUnit.Framework;
-using SharpTestsEx;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
-using Teleopti.Ccc.WebBehaviorTest.Data;
-using Teleopti.Ccc.WebBehaviorTest.Pages.jQuery;
 using WatiN.Core;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 using Table = TechTalk.SpecFlow.Table;
-using TableRow = TechTalk.SpecFlow.TableRow;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 {
@@ -23,7 +17,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[Then(@"I should be viewing schedules for '(.*)'")]
 		public void ThenIShouldSeePersonScheduleForPersonOnDate(string date)
 		{
-			EventualAssert.That(() => Browser.Current.Url.Contains(date.Replace("-", "")), Is.True);
+			Browser.Interactions.AssertUrlContains(date.Replace("-", ""));
 		}
 
 		[Then(@"I should see person '(.*)'")]

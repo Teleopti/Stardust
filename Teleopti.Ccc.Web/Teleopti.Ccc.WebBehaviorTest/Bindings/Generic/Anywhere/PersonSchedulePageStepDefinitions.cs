@@ -22,8 +22,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		public void ThenIShouldSeePersonScheduleForPersonOnDate(string name, string date)
 		{
 			var id = UserFactory.User(name).Person.Id.ToString();
-			EventualAssert.That(() => Browser.Current.Url.Contains(id), Is.True);
-			EventualAssert.That(() => Browser.Current.Url.Contains(date.Replace("-", "")), Is.True);
+			Browser.Interactions.AssertUrlContains(id);
+			Browser.Interactions.AssertUrlContains(date.Replace("-", ""));
 		}
 
 		[Then(@"I should see these shift layers")]
@@ -76,8 +76,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[Then(@"I should not see any shift")]
 		public void ThenIShouldNotSeeAnyShift()
 		{
-			EventualAssert.That(() => Browser.Current.Element(Find.BySelector(".shift")).Exists, Is.True);
-			EventualAssert.That(() => Browser.Current.Element(Find.BySelector(".shift .layer")).Exists, Is.False);
+			Browser.Interactions.AssertNotExists(".shift", ".shift .layer");
 		}
 
 		[Then(@"I should see the add full day absence form with")]
@@ -92,14 +91,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[Then(@"I should see the add full day absence form")]
 		public void ThenIShouldSeeTheAddFullDayAbsenceForm()
 		{
-			EventualAssert.That(() => Browser.Current.Element(Find.BySelector(".full-day-absence-form")).Exists, Is.True);
+			Browser.Interactions.AssertExists(".full-day-absence-form");
 		}
 
 		[When(@"I input these full day absence values")]
 		public void WhenIInputTheseFullDayAbsenceValues(Table table)
 		{
 			var fullDayAbsenceFormInfo = table.CreateInstance<FullDayAbsenceFormInfo>();
-
+			
 			var select = Browser.Current.SelectList(Find.BySelector(".full-day-absence-form .absence-type"));
 			if (fullDayAbsenceFormInfo.Absence != null)
 				select.SelectNoWait(fullDayAbsenceFormInfo.Absence);
@@ -114,10 +113,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		{
 			var absenceListItemInfo = table.CreateInstance<AbsenceListItemInfo>();
 
-			var selector = string.Format(".absence-list .absence:contains('{0}'):contains('{1}'):contains('{2}')", 
-				absenceListItemInfo.Name, absenceListItemInfo.StartTime, absenceListItemInfo.EndTime);
-
-			EventualAssert.That(() => Browser.Current.Element(Find.BySelector(selector)).Exists, Is.True);
+			Browser.Interactions.AssertExists(
+				string.Format(".absence-list .absence:contains('{0}'):contains('{1}'):contains('{2}')",
+				              absenceListItemInfo.Name,
+				              absenceListItemInfo.StartTime,
+				              absenceListItemInfo.EndTime)
+				);
 		}
 
 		[Then(@"I should see (.*) absences in the absence list")]
