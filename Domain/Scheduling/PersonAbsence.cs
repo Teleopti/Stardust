@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
 		public virtual void RemoveAbsence(string dataSourceName)
 		{
-			AddEvent(new RemovedAbsenceEvent
+			AddEvent(new PersonAbsenceRemovedEvent
 			{
 				Datasource = dataSourceName,
 				BusinessUnitId = BusinessUnit.Id.Value,

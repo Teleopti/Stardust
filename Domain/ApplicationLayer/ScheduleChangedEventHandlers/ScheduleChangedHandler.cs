@@ -11,7 +11,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		IHandleEvent<ScheduleInitializeTriggeredEventForScheduleDay>,
 		IHandleEvent<ScheduleInitializeTriggeredEventForPersonScheduleDay>,
 		IHandleEvent<FullDayAbsenceAddedEvent>,
-		IHandleEvent<RemovedAbsenceEvent>
+		IHandleEvent<PersonAbsenceRemovedEvent>
 	{
 		private readonly IPublishEventsFromEventHandlers _bus;
 		private readonly IScenarioRepository _scenarioRepository;
@@ -31,7 +31,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		    
 		}
 
-		public void Handle(RemovedAbsenceEvent @event)
+		public void Handle(PersonAbsenceRemovedEvent @event)
 		{
 			_bus.Publish(new ScheduleChangedEvent
 			{

@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 				};
 
 			target.Handle(command);
-			var @event = personAbsence.PopAllEvents().Single() as RemovedAbsenceEvent;
+			var @event = personAbsence.PopAllEvents().Single() as PersonAbsenceRemovedEvent;
 			@event.Datasource.Should().Be("datasource");
 			@event.BusinessUnitId.Should().Be(personAbsence.BusinessUnit.Id.Value);
 			@event.PersonId.Should().Be(personAbsence.Person.Id.Value);

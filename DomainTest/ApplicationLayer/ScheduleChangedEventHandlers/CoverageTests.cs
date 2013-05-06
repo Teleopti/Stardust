@@ -51,7 +51,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer.ScheduleChangedEventHandlers
 
 			var target = new ScheduleChangedHandler(bus, scenarioRepository, personRepository, scheduleRepository, new ProjectionChangedEventBuilder());
 
-			target.Handle(new RemovedAbsenceEvent { StartDateTime = DateTime.UtcNow, EndDateTime = DateTime.UtcNow});
+			target.Handle(new PersonAbsenceRemovedEvent { StartDateTime = DateTime.UtcNow, EndDateTime = DateTime.UtcNow});
 			target.Handle(new FullDayAbsenceAddedEvent { StartDateTime = DateTime.UtcNow, EndDateTime = DateTime.UtcNow });
 			target.Handle(new ScheduleChangedEvent {StartDateTime = DateTime.UtcNow, EndDateTime = DateTime.UtcNow});
 			target.Handle(new ScheduleInitializeTriggeredEventForPersonScheduleDay {StartDateTime = DateTime.UtcNow, EndDateTime = DateTime.UtcNow});
