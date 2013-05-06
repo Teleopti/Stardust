@@ -47,9 +47,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserInteractions.WatiNIE
 			EventualAssert.That(() => _browser.Eval(javascript), Is.StringContaining(text));
 		}
 
+		public void AssertInputValue(string selector, string value)
+		{
+			EventualAssert.That(() => _browser.TextField(Find.BySelector(selector)).Value, Is.EqualTo(value));
+		}
+
 		public void AssertExists(string selector)
 		{
-			EventualAssert.That(() => _browser.Element(Find.BySelector(selector)).Exists, Is.True);
+			EventualAssert.That(() => _browser.Element(Find.BySelector(selector)).Exists, Is.True, "Could not find selector " + selector);
 		}
 
 		public void AssertNotExists(string existsSelector, string notExistsSelector)
