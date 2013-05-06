@@ -13,6 +13,7 @@ namespace Teleopti.Interfaces.Domain
     /// Created date: 2008-02-25
     /// </remarks>
     public interface IPersonAssignment : IPersistableScheduleData, 
+											IAggregateRootWithEvents,
                                             IChangeInfo,
                                             IBelongsToBusinessUnit,
                                             IRestrictionChecker<IPersonAssignment>, 

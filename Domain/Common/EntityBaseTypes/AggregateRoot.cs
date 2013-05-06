@@ -7,7 +7,6 @@ namespace Teleopti.Ccc.Domain.Common.EntityBaseTypes
 {
 
 	public abstract class AggregateRoot : Entity,
-		IAggregateRootWithEvents,
 		IAggregateRoot,
 		IChangeInfo,
 		IVersioned
