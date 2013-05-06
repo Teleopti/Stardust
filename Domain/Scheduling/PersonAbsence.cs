@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -84,21 +85,18 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			});
 		}
 
-		public virtual void AddAbsence(string dataSource, IPerson person, IAbsence absence, DateTime startDateInUtc, DateTime endDateInUtc)
-		{
-			AddEvent(new AbsenceAddedEvent
-			{
-				Datasource = dataSource,
-				BusinessUnitId = _scenario.BusinessUnit.Id.Value,
-				AbsenceId = absence.Id.Value,
-				PersonId = person.Id.Value,
-				StartDateTime = startDateInUtc,
-				EndDateTime = endDateInUtc,
-				ScenarioId = _scenario.Id.Value
-			});
-		}
-		
-        /// <summary>
+	    public virtual void ScheduleChanged()
+	    {
+		    AddEvent(new ScheduleChangedEvent
+			    {
+				    ScenarioId = Scenario.Id.Value,
+				    StartDateTime = Period.StartDateTime,
+				    EndDateTime = Period.EndDateTime,
+				    PersonId = Person.Id.Value
+			    });
+	    }
+
+	    /// <summary>
         /// Constructor for NHibernate
         /// </summary>
         protected PersonAbsence()
