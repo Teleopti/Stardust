@@ -24,8 +24,8 @@ Background:
 	And 'Pierre Baldi' have a shift with
 	| Field          | Value            |
 	| Shift category | Day              |
-	| Start time     | 2013-04-16 08:00 |
-	| End time       | 2013-04-16 17:00 |
+	| Start time     | 2013-05-06 08:00 |
+	| End time       | 2013-05-06 17:00 |
 	And there is an absence with
 	| Field | Value    |
 	| Name  | Vacation |
@@ -40,51 +40,51 @@ Scenario: View absence on this day in list
 	And 'Pierre Baldi' has an absence with
 	| Field      | Value            |
 	| Name       | Vacation         |
-	| Start time | 2013-04-16 00:00 |
-	| End time   | 2013-04-16 23:59 |
-	When I view person schedule for 'Pierre Baldi' on '2013-04-16'
+	| Start time | 2013-05-06 00:00 |
+	| End time   | 2013-05-06 23:59 |
+	When I view person schedule for 'Pierre Baldi' on '2013-05-06'
 	Then I should see an absence in the absence list with
 	| Field      | Value            |
 	| Name       | Vacation         |
-	| Start time | 2013-04-16 00:00 |
-	| End time   | 2013-04-16 23:59 |
+	| Start time | 2013-05-06 00:00 |
+	| End time   | 2013-05-06 23:59 |
 
 Scenario: View absence starting yesterday in list
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' has an absence with
 	| Field      | Value            |
 	| Name       | Vacation         |
-	| Start time | 2013-04-15 00:00 |
-	| End time   | 2013-04-16 15:00 |
-	When I view person schedule for 'Pierre Baldi' on '2013-04-16'
+	| Start time | 2013-05-02 00:00 |
+	| End time   | 2013-05-06 15:00 |
+	When I view person schedule for 'Pierre Baldi' on '2013-05-06'
 	Then I should see an absence in the absence list with
 	| Field      | Value            |
 	| Name       | Vacation         |
-	| Start time | 2013-04-15 00:00 |
-	| End time   | 2013-04-16 15:00 |
+	| Start time | 2013-05-02 00:00 |
+	| End time   | 2013-05-06 15:00 |
 
 Scenario: View absence ending tomorrow in list
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' has an absence with
 	| Field      | Value            |
 	| Name       | Vacation         |
-	| Start time | 2013-04-16 00:00 |
-	| End time   | 2013-04-17 15:00 |
-	When I view person schedule for 'Pierre Baldi' on '2013-04-16'
+	| Start time | 2013-05-06 00:00 |
+	| End time   | 2013-05-07 15:00 |
+	When I view person schedule for 'Pierre Baldi' on '2013-05-06'
 	Then I should see an absence in the absence list with
 	| Field      | Value            |
 	| Name       | Vacation         |
-	| Start time | 2013-04-16 00:00 |
-	| End time   | 2013-04-17 15:00 |
+	| Start time | 2013-05-06 00:00 |
+	| End time   | 2013-05-07 15:00 |
 
 Scenario: Remove absence with confirmation
 	Given I have the role 'Anywhere Team Green'
 	And 'Pierre Baldi' has an absence with
 	| Field      | Value            |
 	| Name       | Vacation         |
-	| Start time | 2013-03-10 00:00 |
-	| End time   | 2013-03-10 23:59 |
-	When I view person schedule for 'Pierre Baldi' on '2013-03-10'
+	| Start time | 2013-05-06 00:00 |
+	| End time   | 2013-05-06 23:59 |
+	When I view person schedule for 'Pierre Baldi' on '2013-05-06'
 	And I click 'remove' on absence named 'Vacation'
 	Then I should see 1 absences in the absence list
 	And I should see a shift layer with
@@ -105,14 +105,14 @@ Scenario: Remove one of two absences
 	And 'Pierre Baldi' has an absence with
 	| Field      | Value            |
 	| Name       | Vacation         |
-	| Start time | 2013-03-10 10:00 |
-	| End time   | 2013-03-10 11:00 |
+	| Start time | 2013-05-06 10:00 |
+	| End time   | 2013-05-06 11:00 |
 	And 'Pierre Baldi' has an absence with
 	| Field      | Value            |
 	| Name       | Illness			|
-	| Start time | 2013-03-10 15:00 |
-	| End time   | 2013-03-10 23:59 |
-	When I view person schedule for 'Pierre Baldi' on '2013-03-10'
+	| Start time | 2013-05-06 15:00 |
+	| End time   | 2013-05-06 23:59 |
+	When I view person schedule for 'Pierre Baldi' on '2013-05-06'
 	Then I should see 1 absences in the absence list
 	And I should see a shift layer with
 	| Field      | Value |
@@ -124,8 +124,8 @@ Scenario: Remove one of two absences
 	Then I should see an absence in the absence list with
 	| Field      | Value            |
 	| Name       | Vacation         |
-	| Start time | 2013-03-10 10:00 |
-	| End time   | 2013-03-10 11:00 |
+	| Start time | 2013-05-06 10:00 |
+	| End time   | 2013-05-06 11:00 |
 	And I should see 1 absences in the absence list
 	And I should see a shift layer with
 	| Field      | Value |

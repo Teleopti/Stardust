@@ -107,11 +107,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		}
 
 		[When(@"I click '(.*)' on absence named '(.*)'")]
-		public void WhenIClickOnAbsenceNamed(string className, string absenceName)
+		public void WhenIClickOnAbsenceNamed(CssClass cssClass, string absenceName)
 		{
-			className = className.ToLower().Replace(" ", "-");
-			
-			Browser.Current.Elements.Filter(Find.BySelector(".absence-list .absence:contains('" + absenceName + "') ." + className + "")).First().EventualClick();
+			Browser.Interactions.Click(".absence-list .absence:contains('" + absenceName + "') ." + cssClass.Name);
 		}
 		
 		public class AbsenceListItemInfo
