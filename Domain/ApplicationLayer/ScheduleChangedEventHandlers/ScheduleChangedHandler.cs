@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 			var scenario = _scenarioRepository.Get(@event.ScenarioId);
             if (scenario == null)
             {
-                Logger.InfoFormat("Scenario not found (Id: {0})", message.ScenarioId);
+                Logger.InfoFormat("Scenario not found (Id: {0})", @event.ScenarioId);
                 return false;
             }
 			if (!scenario.DefaultScenario) return false;
@@ -90,7 +90,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 			var person = _personRepository.FindPeople(new []{ @event.PersonId}).FirstOrDefault();
 		    if (person == null)
 		    {
-		        Logger.InfoFormat("Person not found (Id: {0})", message.PersonId);
+                Logger.InfoFormat("Person not found (Id: {0})", @event.PersonId);
 		        return false;
 		    }
                     
