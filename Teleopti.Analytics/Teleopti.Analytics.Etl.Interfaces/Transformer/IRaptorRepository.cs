@@ -122,7 +122,7 @@ namespace Teleopti.Analytics.Etl.Interfaces.Transformer
         //Permission
         int PersistPermissionReport(DataTable dataTable);
         void TruncatePermissionReportTable();
-		int FillPermissionDataMart(IBusinessUnit businessUnit, bool isFirstBusinessUnit, bool isLastBusinessUnit);
+		int FillPermissionDataMart(IBusinessUnit businessUnit);
         IList<MatrixPermissionHolder> LoadReportPermissions();
 
         int FillBridgeAcdLogOnPerson(IBusinessUnit businessUnit);

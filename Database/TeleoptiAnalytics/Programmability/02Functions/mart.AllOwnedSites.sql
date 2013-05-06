@@ -8,6 +8,7 @@ GO
 -- Description:	<Description,,>
 -- 2012-02-15 Changed to uniqueidentifier as report_id - Ola
 -- 2013-02-07 #22206 - Implement faster persmission load (view) - David
+-- 2013-05-06 Bck to the "old" way - Ola
 -- =============================================
 
 
@@ -19,8 +20,7 @@ BEGIN
 /*RETURN ALL TEAMS PERMITTED TO ME, EXCEPT MYSELF PERMISSION*/
 INSERT INTO @sites(id)
 SELECT DISTINCT ds.site_id 
-FROM mart.v_permission_report perm
-INNER JOIN [mart].[permission_report_active] active ON perm.table_name = active.is_active
+FROM mart.permission_report perm
 INNER JOIN mart.dim_team dt ON
 	dt.team_id=perm.team_id
 INNER JOIN mart.dim_site ds 
@@ -33,8 +33,7 @@ AND perm.my_own=0 --not myown
 /*RETURN ALL TEAMS I HAVE BELONGED TO, LOOKING AT MYSELF PERMISSIONS*/
 INSERT INTO @sites(id)
 SELECT DISTINCT dt.site_id
-FROM mart.v_permission_report perm
-INNER JOIN [mart].[permission_report_active] active ON perm.table_name = active.is_active
+FROM mart.permission_report perm
 INNER JOIN mart.dim_person dp ON dp.person_code=perm.person_code AND dp.to_be_deleted = 0 --Only valid PersonPeriods
 INNER JOIN mart.dim_team dt ON 
 	dt.team_id=dp.team_id

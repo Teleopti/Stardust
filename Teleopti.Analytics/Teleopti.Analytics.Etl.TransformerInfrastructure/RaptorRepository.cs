@@ -1360,35 +1360,17 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public int FillPermissionDataMart(IBusinessUnit businessUnit, bool isFirstBusinessUnit, bool isLastBusinessUnit)
+		public int FillPermissionDataMart(IBusinessUnit businessUnit)
 		{
 			int numberOfRows;
 
 			//Prepare sql parameters
-			List<SqlParameter> parameterList = new List<SqlParameter>();
-			parameterList.Add(new SqlParameter("business_unit_code", businessUnit.Id));
-			parameterList.Add(new SqlParameter("isFirstBusinessUnit", isFirstBusinessUnit));
-			parameterList.Add(new SqlParameter("isLastBusinessUnit", isLastBusinessUnit));
-
-			//truncate, if first BU
-			if (isFirstBusinessUnit)
-			{
-				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_permission_report_truncate_nonactive", parameterList,
-											  _dataMartConnectionString);
-			}
+			var parameterList = new List<SqlParameter> {new SqlParameter("business_unit_code", businessUnit.Id)};
 
 			//fill data and return effected rows
 			numberOfRows =
 				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_permission_report_load", parameterList,
 											  _dataMartConnectionString);
-
-			//swap tables, if last BU
-			if (isLastBusinessUnit)
-			{
-				HelperFunctions.ExecuteNonQuery(CommandType.StoredProcedure, "mart.etl_permission_report_switch_active", parameterList,
-											  _dataMartConnectionString);
-			}
-
 
 			return numberOfRows;
 		}
