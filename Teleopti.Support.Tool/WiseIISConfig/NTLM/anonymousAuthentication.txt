@@ -1,4 +1,4 @@
-Analytics;False
+Analytics;True
 Broker;False
 Broker.backplane;False
 PMService;False
