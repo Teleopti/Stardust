@@ -27,7 +27,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 			var commandDispatcher = MockRepository.GenerateMock<ICommandDispatcher>();
 			var target = new PersonScheduleCommandController(commandDispatcher);
 
-			var command = new RemoveAbsenceCommand();
+			var command = new RemovePersonAbsenceCommand();
 
 			target.RemoveAbsence(command);
 

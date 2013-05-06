@@ -4,18 +4,18 @@ using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer
 {
-	public class RemoveAbsenceCommandHandler : IHandleCommand<RemoveAbsenceCommand>
+	public class RemovePersonAbsenceCommandHandler : IHandleCommand<RemovePersonAbsenceCommand>
 	{
 		private readonly ICurrentDataSource _currentDataSource;
 		private readonly IWriteSideRepository<IPersonAbsence> _personAbsenceRepository;
 
-		public RemoveAbsenceCommandHandler(ICurrentDataSource currentDataSource, IWriteSideRepository<IPersonAbsence> personAbsenceRepository)
+		public RemovePersonAbsenceCommandHandler(ICurrentDataSource currentDataSource, IWriteSideRepository<IPersonAbsence> personAbsenceRepository)
 		{
 			_currentDataSource = currentDataSource;
 			_personAbsenceRepository = personAbsenceRepository;
 		}
 
-		public void Handle(RemoveAbsenceCommand command)
+		public void Handle(RemovePersonAbsenceCommand command)
 		{
 			var personAbsence = (PersonAbsence) _personAbsenceRepository.Load(command.PersonAbsenceId);
 

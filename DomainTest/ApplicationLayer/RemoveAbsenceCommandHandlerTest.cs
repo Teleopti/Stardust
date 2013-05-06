@@ -22,9 +22,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			var personAbsenceRepository = new TestWriteSideRepository<IPersonAbsence>() { personAbsence };
 
-			var target = new RemoveAbsenceCommandHandler(new FakeCurrentDatasource(), personAbsenceRepository);
+			var target = new RemovePersonAbsenceCommandHandler(new FakeCurrentDatasource(), personAbsenceRepository);
 
-			var command = new RemoveAbsenceCommand
+			var command = new RemovePersonAbsenceCommand
 				{
 					PersonAbsenceId = personAbsence.Id.Value
 				};
@@ -44,9 +44,9 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 
 			var personAbsenceRepository = new TestWriteSideRepository<IPersonAbsence>() { personAbsence };
 			
-			var target = new RemoveAbsenceCommandHandler(currentDataSource, personAbsenceRepository);
+			var target = new RemovePersonAbsenceCommandHandler(currentDataSource, personAbsenceRepository);
 
-			var command = new RemoveAbsenceCommand
+			var command = new RemovePersonAbsenceCommand
 				{
 					PersonAbsenceId = personAbsence.Id.Value
 				};

@@ -2,7 +2,7 @@ using System;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer
 {
-	public class RemoveAbsenceCommand
+	public class RemovePersonAbsenceCommand
 	{
 		public Guid PersonAbsenceId { get; set; }
 	}
