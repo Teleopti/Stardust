@@ -38,12 +38,11 @@ Scenario: View form
 
 Scenario: Add
 	Given I have the role 'Anywhere Team Green'
-	And 'Pierre Baldi' have a (read model) shift with
-	| Field      | Value        |
-	| Date       | 2013-04-08   |
-	| Start time | 08:00        |
-	| End time   | 17:00        |
-	| Activity   | Phone        |
+	And 'Pierre Baldi' have a shift with
+	| Field      | Value            |
+	| Start time | 2013-04-08 08:00 |
+	| End time   | 2013-04-08 17:00 |
+	| Activity   | Phone            |
 	And there is a shift category named 'Day'
 	And 'Pierre Baldi' have a shift with
 	| Field          | Value            |

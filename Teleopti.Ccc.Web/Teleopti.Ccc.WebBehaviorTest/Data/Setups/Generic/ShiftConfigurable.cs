@@ -16,9 +16,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 	public class ShiftConfigurable : IUserDataSetup
 	{
 		private DateTimePeriod _assignmentPeriod;
+
 		public string ShiftCategory { get; set; }
+		public string Activity { get; set; }
 		public DateTime StartTime { get; set; }
 		public DateTime EndTime { get; set; }
+
+		public string LunchActivity { get; set; }
 		public bool Lunch3HoursAfterStart { get; set; }
 
 		public string ShiftColor { get; set; }	// this should not be here. this exists on the ShiftCategoryConfigurable
@@ -28,10 +32,32 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
-			var shiftCat = new ShiftCategoryRepository(uow).LoadAll().Single(sCat => sCat.Description.Name.Equals(ShiftCategory));
-
+			var shiftCategory = TestData.ShiftCategory;
+			if (ShiftCategory != null)
+				shiftCategory = new ShiftCategoryRepository(uow).LoadAll().Single(sCat => sCat.Description.Name.Equals(ShiftCategory));
 			if (ShiftColor != null)
-				shiftCat.DisplayColor = Color.FromName(ShiftColor);
+				shiftCategory.DisplayColor = Color.FromName(ShiftColor);
+
+			var activity = TestData.ActivityPhone;
+			if (Activity != null)
+				activity = new ActivityRepository(uow).LoadAll().Single(sCat => sCat.Description.Name.Equals(Activity));
+			if (AllActivityColor != null)
+			{
+				activity = new Activity("Phone");
+				new ActivityRepository(uow).Add(activity);
+				activity.DisplayColor = Color.FromName(AllActivityColor);
+			}
+
+			var lunchActivity = TestData.ActivityLunch;
+			if (LunchActivity != null)
+				lunchActivity = new ActivityRepository(uow).LoadAll().Single(sCat => sCat.Description.Name.Equals(LunchActivity));
+			else if (AllActivityColor != null)
+			{
+				lunchActivity = new Activity("Lunch");
+				new ActivityRepository(uow).Add(lunchActivity);
+				lunchActivity.DisplayColor = Color.FromName(AllActivityColor);
+			}
+
 
 
 			var assignmentRepository = new PersonAssignmentRepository(uow);
@@ -43,40 +69,16 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			_assignmentPeriod = new DateTimePeriod(startTimeUtc, endTimeUtc);
 			var assignment = PersonAssignmentFactory.CreatePersonAssignment(user, Scenario);
 
-			if (AllActivityColor != null)
-			{
-				var activity = new Activity("Phone");
-				new ActivityRepository(uow).Add(activity);
-				activity.DisplayColor = Color.FromName(AllActivityColor);
-				assignment.SetMainShift(MainShiftFactory.CreateMainShift(activity, _assignmentPeriod, shiftCat));
-			}
-			else
-			{
-				var activityPhone = TestData.ActivityPhone; 
-				assignment.SetMainShift(MainShiftFactory.CreateMainShift(activityPhone, _assignmentPeriod, shiftCat));
-			}
-
-
+			assignment.SetMainShift(MainShiftFactory.CreateMainShift(activity, _assignmentPeriod, shiftCategory));
 
 			// add lunch
 			if (Lunch3HoursAfterStart)
 			{
 				var lunchPeriod = new DateTimePeriod(startTimeUtc.AddHours(3), startTimeUtc.AddHours(4));
-
-				if (AllActivityColor != null)
-				{
-					var lunchActivity = new Activity("Lunch");
-					new ActivityRepository(uow).Add(lunchActivity);
-					lunchActivity.DisplayColor = Color.FromName(AllActivityColor);
-					assignment.MainShift.LayerCollection.Add(new MainShiftActivityLayer(lunchActivity, lunchPeriod));
-				}
-				else
-				{
-					assignment.MainShift.LayerCollection.Add(new MainShiftActivityLayer(TestData.ActivityLunch, lunchPeriod));
-				}
+				assignment.MainShift.LayerCollection.Add(new MainShiftActivityLayer(lunchActivity, lunchPeriod));
 			}
 
-			// simply publis the schedule changed event so that the read model is updated
+			// simply publish the schedule changed event so that the read model is updated
 			assignment.ScheduleChanged(TestData.DataSource.DataSourceName);
 
 			assignmentRepository.Add(assignment);
