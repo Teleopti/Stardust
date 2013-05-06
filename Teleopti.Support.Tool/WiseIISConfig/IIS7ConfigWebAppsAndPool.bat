@@ -11,7 +11,7 @@ SET SSL=%~1
 SET SDKCREDPROT=%~2
 SET CustomIISUsr=%~3
 SET CustomIISPwd=%~4
-
+SET logfile=IIS7ConfigWebAppsAndPool.log
 SET SSLPORT=443
 
 IF "%SDKCREDPROT%"=="" GOTO NoInput
@@ -19,13 +19,15 @@ IF "%SDKCREDPROT%"=="" GOTO NoInput
 ::=============
 ::Main
 ::=============
+ECHO Call was: IIS7ConfigWebAppsAndPool.bat %~1 %~3 %~3 %~4 > %logfile%
+
 SET DefaultSite=Default Web Site
 SET MainSiteName=TeleoptiCCC
 SET appcmd=%systemroot%\system32\inetsrv\APPCMD.exe
 
-for /f "tokens=2,3 delims=;" %%g in (Apps\ApplicationsInAppPool.txt) do CALL:CreateAppPool "%%g" "%%h"
+for /f "tokens=2,3 delims=;" %%g in (Apps\ApplicationsInAppPool.txt) do CALL:CreateAppPool "%%g" "%%h" >> %logfile%
 
-for /f "tokens=1,2 delims=;" %%g in (Apps\ApplicationsInAppPool.txt) do CALL:ForEachApplication "%%g" "%%h"
+for /f "tokens=1,2 delims=;" %%g in (Apps\ApplicationsInAppPool.txt) do CALL:ForEachApplication "%%g" "%%h"  >> %logfile%
 GOTO Done
 
 ::=============
