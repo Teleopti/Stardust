@@ -1,16 +1,11 @@
 ﻿using Autofac;
 using NUnit.Framework;
-using Rhino.Mocks;
 using Rhino.ServiceBus;
-using Rhino.ServiceBus.MessageModules;
 using SharpTestsEx;
 using Teleopti.Ccc.IocCommon.Configuration;
 using Teleopti.Ccc.Sdk.ServiceBus;
 using Teleopti.Ccc.Sdk.ServiceBus.Denormalizer;
-using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Messages.Denormalize;
-using Teleopti.Interfaces.Messages.Requests;
 
 namespace Teleopti.Ccc.Sdk.ServiceBusTest.Denormalizer
 {
