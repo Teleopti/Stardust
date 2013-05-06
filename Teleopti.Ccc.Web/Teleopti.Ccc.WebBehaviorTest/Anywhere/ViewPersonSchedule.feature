@@ -75,17 +75,16 @@ Scenario: View night shift from today
 
 Scenario: View schedule in persons time zone
 	Given I have the role 'Anywhere Team Green'
+	And I am located in Stockholm
 	And 'Pierre Baldi' is located in Hawaii
-	And I am located in Hawaii
-	And 'Pierre Baldi' have a (read model) shift with
-	| Field            | Value        |
-	| Person           | Pierre Baldi |
-	| Date             | 2012-12-02   |
-	| Start time       | 08:00        |
-	| End time         | 17:00        |
-	| Activity         | Phone        |
+	And 'Pierre Baldi' have a shift with
+	| Field          | Value            |
+	| Shift category | Day              |
+	| Activity       | Phone            |
+	| Start time     | 2012-12-02 08:00 |
+	| End time       | 2012-12-02 17:00 |
 	When I view person schedule for 'Pierre Baldi' on '2012-12-02'
 	Then I should see a shift layer with
 	| Field      | Value |
-	| Start time | 22:00 |
-	| End time   | 1.07:00 |
+	| Start time | 08:00 |
+	| End time   | 17:00 |
