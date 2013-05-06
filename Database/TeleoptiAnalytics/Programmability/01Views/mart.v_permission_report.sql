@@ -4,6 +4,6 @@ GO
 
 CREATE VIEW [mart].[v_permission_report]
 AS
-SELECT person_code, team_id, my_own, business_unit_id, datasource_id, insert_date, update_date, datasource_update_date, ReportId
+SELECT person_code, team_id, my_own, business_unit_id, datasource_id,  datasource_update_date, ReportId
   FROM [mart].[permission_report] 
 GO
