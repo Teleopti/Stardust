@@ -32,9 +32,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
-			var shiftCategory = TestData.ShiftCategory;
-			if (ShiftCategory != null)
-				shiftCategory = new ShiftCategoryRepository(uow).LoadAll().Single(sCat => sCat.Description.Name.Equals(ShiftCategory));
+			var shiftCategory = new ShiftCategoryRepository(uow).LoadAll().Single(sCat => sCat.Description.Name.Equals(ShiftCategory));
 			if (ShiftColor != null)
 				shiftCategory.DisplayColor = Color.FromName(ShiftColor);
 
