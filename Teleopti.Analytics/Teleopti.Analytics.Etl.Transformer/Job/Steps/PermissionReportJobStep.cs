@@ -18,16 +18,12 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 
 	    protected override int RunStep(IList<IJobResult> jobResultCollection, bool isLastBusinessUnit)
         {
-
 			if (_checkIfNeeded)
 			{
 				if (!_jobParameters.StateHolder.PermissionsMustRun()) return 0;
 			}
 
-			//ToDo: get this in some objects instead
-			var isFirstBusinessUnit = jobResultCollection != null && jobResultCollection.Count == 0;
-
-		    var rows = _jobParameters.Helper.Repository.FillPermissionDataMart(RaptorTransformerHelper.CurrentBusinessUnit, isFirstBusinessUnit, isLastBusinessUnit);
+			var rows = _jobParameters.Helper.Repository.FillPermissionDataMart(RaptorTransformerHelper.CurrentBusinessUnit);
 			_jobParameters.StateHolder.UpdateThisTime("Permissions", RaptorTransformerHelper.CurrentBusinessUnit);
 		    return rows;
         }
