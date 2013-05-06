@@ -117,6 +117,6 @@ namespace Teleopti.Interfaces.Domain
 		/// <summary>
 		/// Publish the ScheduleChangedEvent
 		/// </summary>
-		void ScheduleChanged();
+		void ScheduleChanged(string dataSource);
     }
 }

@@ -18,16 +18,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 		{
 			// use autofac soon?
 			if (type == typeof (IEnumerable<IHandleEvent<ScheduleChangedEvent>>))
-				return new[]
-					{
-						new ScheduleChangedHandler(
-							new EventPublisher(this),
-							new ScenarioRepository(CurrentUnitOfWork.Make()),
-							new PersonRepository(CurrentUnitOfWork.Make()),
-							new ScheduleRepository(CurrentUnitOfWork.Make()),
-							new ProjectionChangedEventBuilder())
-					};
-			if (type == typeof (IEnumerable<IHandleEvent<ProjectionChangedEvent>>))
+				return MakeScheduleChangedHandler();
+			if (type == typeof(IEnumerable<IHandleEvent<AbsenceAddedEvent>>))
+				return MakeScheduleChangedHandler();
+			if (type == typeof(IEnumerable<IHandleEvent<ProjectionChangedEvent>>))
 				return new[]
 					{
 						new PersonScheduleDayReadModelHandler(
@@ -40,7 +34,20 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 								new CurrentDataSource(new CurrentIdentity()))
 							)
 					};
-			throw new Exception("Cannot resolve type " + type + "! Add it manually or consider using autofac!");
+				throw new Exception("Cannot resolve type " + type + "! Add it manually or consider using autofac!");
+		}
+
+		private object MakeScheduleChangedHandler()
+		{
+			return new[]
+				{
+					new ScheduleChangedHandler(
+						new EventPublisher(this),
+						new ScenarioRepository(CurrentUnitOfWork.Make()),
+						new PersonRepository(CurrentUnitOfWork.Make()),
+						new ScheduleRepository(CurrentUnitOfWork.Make()),
+						new ProjectionChangedEventBuilder())
+				};
 		}
 	}
 

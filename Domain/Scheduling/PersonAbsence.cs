@@ -83,18 +83,25 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			});
 		}
 
-		public virtual void AddAbsence(string dataSource, IPerson person, IAbsence absence, DateTime startDateInUtc, DateTime endDateInUtc)
+		public virtual void AddExplicitAbsence(string dataSource, IPerson person, IAbsence absence, DateTime startDateTime, DateTime endDateTime)
 		{
+			startDateTime = TimeZoneInfo.ConvertTimeToUtc(DateTime.SpecifyKind(startDateTime, DateTimeKind.Unspecified), person.PermissionInformation.DefaultTimeZone());
+			endDateTime = TimeZoneInfo.ConvertTimeToUtc(DateTime.SpecifyKind(endDateTime, DateTimeKind.Unspecified), person.PermissionInformation.DefaultTimeZone());
+
+			_person = person;
+			var absenceLayer = new AbsenceLayer(absence, new DateTimePeriod(startDateTime, endDateTime));
+			_layer = absenceLayer;
+
 			AddEvent(new AbsenceAddedEvent
-			{
-				Datasource = dataSource,
-				BusinessUnitId = _scenario.BusinessUnit.Id.Value,
-				AbsenceId = absence.Id.Value,
-				PersonId = person.Id.Value,
-				StartDateTime = startDateInUtc,
-				EndDateTime = endDateInUtc,
-				ScenarioId = _scenario.Id.Value
-			});
+				{
+					Datasource = dataSource,
+					BusinessUnitId = _scenario.BusinessUnit.Id.Value,
+					AbsenceId = absence.Id.Value,
+					PersonId = person.Id.Value,
+					StartDateTime = startDateTime,
+					EndDateTime = endDateTime,
+					ScenarioId = _scenario.Id.Value
+				});
 		}
 		
         /// <summary>

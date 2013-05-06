@@ -42,11 +42,35 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 
 		private static void AssertShiftLayer(ShiftLayerInfo shiftLayer)
 		{
-			var minutes = TimeSpan.Parse(shiftLayer.EndTime).Subtract(TimeSpan.Parse(shiftLayer.StartTime)).TotalMinutes;
-			EventualAssert.That(() => Browser.Current.Element(Find.BySelector(string.Format(".shift .layer[data-start-time='{0}']", shiftLayer.StartTime))).Exists, Is.True);
-			EventualAssert.That(() => Browser.Current.Element(Find.BySelector(string.Format(".shift .layer[data-length-minutes='{0}']", minutes))).Exists, Is.True);
 			if (shiftLayer.Color != null)
-				EventualAssert.That(() => Browser.Current.Element(Find.BySelector(string.Format(".shift .layer[data-start-time='{0}']", shiftLayer.StartTime))).Style.BackgroundColor.ToName, Is.EqualTo(shiftLayer.Color));
+				Browser.Interactions.AssertExists(
+					string.Format(".shift .layer[data-start-time='{0}'][data-length-minutes='{1}'][style*='background-color: {2}']",
+					              shiftLayer.StartTime,
+					              shiftLayer.LengthMinutes(),
+					              ColorNameToCss(shiftLayer.Color)));
+			else
+				Browser.Interactions.AssertExists(
+					string.Format(".shift .layer[data-start-time='{0}'][data-length-minutes='{1}']",
+					              shiftLayer.StartTime,
+					              shiftLayer.LengthMinutes()));
+		}
+
+		[Then(@"I should not see a shift layer with")]
+		public void ThenIShouldNotSeeAShiftLayerWith(Table table)
+		{
+			var shiftLayer = table.CreateInstance<ShiftLayerInfo>();
+			Browser.Interactions.AssertNotExists(
+				".shift",
+				string.Format(".shift .layer[data-start-time='{0}'][data-length-minutes='{1}'][style*='background-color: {2}']",
+							  shiftLayer.StartTime,
+							  shiftLayer.LengthMinutes(),
+							  ColorNameToCss(shiftLayer.Color)));
+		}
+
+		private static string ColorNameToCss(string colorName)
+		{
+			var color = System.Drawing.Color.FromName(colorName);
+			return string.Format("rgb({0}, {1}, {2})", color.R, color.G, color.B);
 		}
 
 		[Then(@"I should not see any shift")]
@@ -99,6 +123,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[Then(@"I should see (.*) absences in the absence list")]
 		public void ThenIShouldSeeAbsencesInTheAbsenceList(int numberOf)
 		{
+			Browser.Interactions.AssertExists(".absence-list .absence");
 			var selector = Find.BySelector(".absence-list .absence");
 			if(numberOf > 0)
 				EventualAssert.That(() => Browser.Current.Elements.Filter(selector).Count, Is.EqualTo(numberOf));
@@ -124,6 +149,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			public string StartTime { get; set; }
 			public string EndTime { get; set; }
 			public string Color { get; set; }
+
+			public int LengthMinutes()
+			{
+				return (int) TimeSpan.Parse(EndTime).Subtract(TimeSpan.Parse(StartTime)).TotalMinutes;
+			}
 		}
 
 		public class FullDayAbsenceFormInfo

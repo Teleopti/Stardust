@@ -127,10 +127,12 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			_overtimeShiftCollection.Remove(overtimeShift);
 		}
 
-		public virtual void ScheduleChanged()
+		public virtual void ScheduleChanged(string dataSource)
 		{
 			AddEvent(new ScheduleChangedEvent
 				{
+					Datasource = dataSource,
+					BusinessUnitId = _scenario.BusinessUnit.Id.Value,
 					ScenarioId = Scenario.Id.Value,
 					StartDateTime = Period.StartDateTime,
 					EndDateTime = Period.EndDateTime,

@@ -11,7 +11,8 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		IHandleEvent<ScheduleInitializeTriggeredEventForScheduleDay>,
 		IHandleEvent<ScheduleInitializeTriggeredEventForPersonScheduleDay>,
 		IHandleEvent<FullDayAbsenceAddedEvent>,
-		IHandleEvent<PersonAbsenceRemovedEvent>
+		IHandleEvent<PersonAbsenceRemovedEvent>,
+		IHandleEvent<AbsenceAddedEvent>
 	{
 		private readonly IPublishEventsFromEventHandlers _bus;
 		private readonly IScenarioRepository _scenarioRepository;
@@ -46,8 +47,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 			});
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void Handle(FullDayAbsenceAddedEvent @event)
+		{
+			_bus.Publish(new ScheduleChangedEvent
+				{
+					SkipDelete = false,
+					Timestamp = @event.Timestamp,
+					BusinessUnitId = @event.BusinessUnitId,
+					Datasource = @event.Datasource,
+					PersonId = @event.PersonId,
+					ScenarioId = @event.ScenarioId,
+					StartDateTime = @event.StartDateTime,
+					EndDateTime = @event.EndDateTime,
+				});
+		}
+
+		public void Handle(AbsenceAddedEvent @event)
 		{
 			_bus.Publish(new ScheduleChangedEvent
 				{
@@ -115,5 +130,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 			_realPeriod = actualPeriod.Value.ToDateOnlyPeriod(timeZone);
 			return true;
 		}
+
 	}
 }

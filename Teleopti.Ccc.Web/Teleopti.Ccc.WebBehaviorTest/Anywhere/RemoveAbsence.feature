@@ -111,15 +111,9 @@ Scenario: Remove one of two absences
 	| Field      | Value            |
 	| Name       | Illness			|
 	| Start time | 2013-05-06 15:00 |
-	| End time   | 2013-05-06 23:59 |
+	| End time   | 2013-05-06 16:00 |
 	When I view person schedule for 'Pierre Baldi' on '2013-05-06'
-	Then I should see 1 absences in the absence list
-	And I should see a shift layer with
-	| Field      | Value |
-	| Start time | 08:00 |
-	| End time   | 17:00 |
-	| Color      | Gray  |
-	When I click 'remove' on absence named 'Illness'
+	And I click 'remove' on absence named 'Illness'
 	And I click 'confirm removal' on absence named 'Illness'
 	Then I should see an absence in the absence list with
 	| Field      | Value            |
@@ -127,8 +121,8 @@ Scenario: Remove one of two absences
 	| Start time | 2013-05-06 10:00 |
 	| End time   | 2013-05-06 11:00 |
 	And I should see 1 absences in the absence list
-	And I should see a shift layer with
+	And I should not see a shift layer with
 	| Field      | Value |
-	| Start time | 08:00 |
-	| End time   | 17:00 |
-	| Color      | Red   |
+	| Start time | 15:00 |
+	| End time   | 16:00 |
+	| Color      | Gray  |
