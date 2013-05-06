@@ -168,7 +168,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			using (_mocks.Record())
 			{
 				Expect.Call(_groupPerson.Id).Return(Guid.Empty).Repeat.AtLeastOnce();
-				Expect.Call(_restrictionAggregator.AggregatePerDay(_teamBlockInfo, _schedulingOptions,shifts[0])).Return(restriction);
+				Expect.Call(_restrictionAggregator.AggregatePerDayPerPerson(_dateOnly, _person, _teamBlockInfo, _schedulingOptions, shifts[0], false)).Return(restriction);
 				Expect.Call(_restrictionAggregator.Aggregate(_teamBlockInfo, _schedulingOptions)).Return(restriction);
 				Expect.Call(_workShiftFilterService.Filter(_dateOnly, _teamBlockInfo, restriction, _schedulingOptions, finderResult))
 					  .Return(shifts).Repeat.AtLeastOnce();
@@ -219,7 +219,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			using (_mocks.Record())
 			{
 				Expect.Call(_groupPerson.Id).Return(Guid.Empty).Repeat.AtLeastOnce();
-				Expect.Call(_restrictionAggregator.AggregatePerDay(_teamBlockInfo, _schedulingOptions,shifts[0])).Return(restriction);
+				Expect.Call(_restrictionAggregator.AggregatePerDayPerPerson(_dateOnly, _person, _teamBlockInfo, _schedulingOptions, shifts[0], false)).Return(restriction);
 				Expect.Call(_restrictionAggregator.Aggregate(_teamBlockInfo, _schedulingOptions)).Return(restriction);
 				Expect.Call(_workShiftFilterService.Filter(_dateOnly, _teamBlockInfo, restriction, _schedulingOptions,
 				                                           new WorkShiftFinderResult(_groupPerson, _dateOnly)))
@@ -266,8 +266,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             using (_mocks.Record())
             {
                 Expect.Call(_groupPerson.Id).Return(Guid.Empty).Repeat.AtLeastOnce();
-                Expect.Call(_restrictionAggregator.AggregatePerDay(_teamBlockInfo, _schedulingOptions, shifts[0])).Return(restriction);
-                Expect.Call(_restrictionAggregator.Aggregate(_teamBlockInfo, _schedulingOptions)).Return(restriction);
+	            Expect.Call(_groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(new List<IPerson> {_person}));
+				Expect.Call(_restrictionAggregator.AggregatePerDayPerPerson(_dateOnly, _person, _teamBlockInfo, _schedulingOptions, shifts[0], false)).Return(restriction);
+				Expect.Call(_restrictionAggregator.Aggregate(_teamBlockInfo, _schedulingOptions)).Return(restriction);
                 Expect.Call(_workShiftFilterService.Filter(_dateOnly, _teamBlockInfo, restriction, _schedulingOptions,
                                                            new WorkShiftFinderResult(_groupPerson, _dateOnly)))
                       .Return(shifts);
@@ -307,7 +308,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			using (_mocks.Record())
 			{
 				Expect.Call(_groupPerson.Id).Return(Guid.Empty).Repeat.AtLeastOnce();
-				Expect.Call(_restrictionAggregator.AggregatePerDay(_teamBlockInfo, _schedulingOptions,shifts[0])).Return(restriction);
 				Expect.Call(_restrictionAggregator.Aggregate(_teamBlockInfo, _schedulingOptions)).Return(restriction);
 				Expect.Call(_workShiftFilterService.Filter(_dateOnly, _teamBlockInfo, restriction, _schedulingOptions,
                                                            finderResult))
@@ -321,8 +321,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(scheduleDay.IsScheduled()).Return(false);
 				Expect.Call(_groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(new List<IPerson> { _person }));
 
-                Expect.Call(_workShiftFilterService.Filter(_dateOnly, _teamBlockInfo, restriction, shifts[0],
-                                                           _schedulingOptions, finderResult)).Return(shifts);
 
                 expectCallForChecker(scheduleDay);
 			}
@@ -383,9 +381,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			{
 				Expect.Call(_groupPerson.Id).Return(Guid.Empty).Repeat.AtLeastOnce();
 				Expect.Call(_restrictionAggregator.Aggregate(_teamBlockInfo, _schedulingOptions)).Return(restriction);
+				Expect.Call(_restrictionAggregator.AggregatePerDayPerPerson(_dateOnly, _person, _teamBlockInfo, _schedulingOptions,
+				                                                            shifts[0], false)).Return(restriction);
 				Expect.Call(_workShiftFilterService.Filter(_dateOnly, _teamBlockInfo, restriction, _schedulingOptions,
 				                                           new WorkShiftFinderResult(_groupPerson, _dateOnly)))
-				      .Return(shifts).Repeat.AtLeastOnce();
+				      .Return(shifts);
+				Expect.Call(_workShiftFilterService.Filter(_dateOnly, _teamBlockInfo, restriction, shifts[0], _schedulingOptions, 
+				                                           new WorkShiftFinderResult(_groupPerson, _dateOnly)))
+				      .Return(shifts);
 				Expect.Call(_skillDayPeriodIntervalDataGenerator.GeneratePerDay(_teamBlockInfo))
 				      .Return(activityData).Repeat.AtLeastOnce();
 				Expect.Call(_workShiftSelector.SelectShiftProjectionCache(shifts, activityData,

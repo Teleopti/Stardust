@@ -151,6 +151,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
 
         public IEffectiveRestriction Combine(IEffectiveRestriction effectiveRestriction)
         {
+	        if (effectiveRestriction == null)
+		        return null;
             IDayOffTemplate dayOff = resolveDayOff(effectiveRestriction.DayOffTemplate);
             IShiftCategory cat = resolveShiftCategory(effectiveRestriction.ShiftCategory);
             var absence = resolveAbsence(effectiveRestriction.Absence);

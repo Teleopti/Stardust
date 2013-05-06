@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Interfaces.Domain;
@@ -8,7 +9,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
     {
         IEffectiveRestriction Aggregate(ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions);
 
-        IEffectiveRestriction AggregatePerDay(ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, IShiftProjectionCache suggestedShiftProjectionCache);
+		IEffectiveRestriction AggregatePerDayPerPerson(DateOnly dateOnly, IPerson person, ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions, IShiftProjectionCache suggestedShiftProjectionCache, bool isTeamScheduling);
     }
 
     public class RestrictionAggregator : IRestrictionAggregator
@@ -33,13 +34,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		    _suggestedShiftRestrictionExtractor = suggestedShiftRestrictionExtractor;
         }
 
-        public IEffectiveRestriction Aggregate(ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions)
-        {
-            return AggregatePerDay(teamBlockInfo, schedulingOptions, null);
-        }
-
-	    public IEffectiveRestriction AggregatePerDay(ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions,
-	                                                 IShiftProjectionCache suggestedShiftProjectionCache)
+	    public IEffectiveRestriction Aggregate(ITeamBlockInfo teamBlockInfo, ISchedulingOptions schedulingOptions)
 	    {
 		    if (teamBlockInfo == null)
 			    return null;
@@ -78,17 +73,69 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			    return null;
 		    if (effectiveRestriction != null)
 			    effectiveRestriction = effectiveRestriction.Combine(restrictionFromSchedules);
-		    if (suggestedShiftProjectionCache != null)
-		    {
-			    var suggestedShiftRestriction = _suggestedShiftRestrictionExtractor.Extract(suggestedShiftProjectionCache,
-			                                                                                schedulingOptions);
-			    if (suggestedShiftRestriction == null)
-				    return null;
-			    if (effectiveRestriction != null)
-				    effectiveRestriction = effectiveRestriction.Combine(suggestedShiftRestriction);
-		    }
 
 		    return effectiveRestriction;
+	    }
+
+	    public IEffectiveRestriction AggregatePerDayPerPerson(DateOnly dateOnly, IPerson person,
+	                                                          ITeamBlockInfo teamBlockInfo,
+	                                                          ISchedulingOptions schedulingOptions,
+	                                                          IShiftProjectionCache suggestedShiftProjectionCache,
+	                                                          bool isTeamScheduling)
+	    {
+		    var dateOnlyList = teamBlockInfo.BlockInfo.BlockPeriod.DayCollection();
+		    var scheduleDictionary = _schedulingResultStateHolder.Schedules;
+		    var restriction = _effectiveRestrictionCreator.GetEffectiveRestriction(new List<IPerson> {person},
+		                                                                           dateOnly, schedulingOptions,
+		                                                                           scheduleDictionary);
+		    if (restriction == null)
+			    return null;
+		    var openHoursRestriction = _openHoursToRestrictionConverter.Convert(teamBlockInfo.TeamInfo.GroupPerson,
+		                                                                        new List<DateOnly> {dateOnly});
+
+		    restriction = restriction.Combine(openHoursRestriction);
+		    if (restriction == null)
+			    return null;
+
+		    var timeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
+		    var matrixes = teamBlockInfo.TeamInfo.MatrixesForMemberAndPeriod(person, teamBlockInfo.BlockInfo.BlockPeriod);
+		    if (isTeamScheduling)
+		    {
+			    var teamMatrixList = teamBlockInfo.TeamInfo.MatrixesForGroup().ToList();
+			    var restrictionFromOneTeam = _scheduleRestrictionExtractor.ExtractForOneTeamOneDay(dateOnly, teamMatrixList,
+			                                                                                       schedulingOptions, timeZone);
+			    restriction = restriction.Combine(restrictionFromOneTeam);
+			    if (restriction == null)
+				    return null;
+		    }
+
+		    var restrictionFromOneBlock = _scheduleRestrictionExtractor.ExtractForOnePersonOneBlock(dateOnlyList,
+		                                                                                            matrixes,
+		                                                                                            schedulingOptions,
+		                                                                                            timeZone);
+		    restriction = restriction.Combine(restrictionFromOneBlock);
+		    if (restriction == null)
+			    return null;
+
+		    if (suggestedShiftProjectionCache != null)
+		    {
+
+			    if (isTeamScheduling)
+			    {
+				    var suggestedShiftRestrictionForOneTeam =
+					    _suggestedShiftRestrictionExtractor.ExtractForOneTeam(suggestedShiftProjectionCache, schedulingOptions);
+
+				    restriction = restriction.Combine(suggestedShiftRestrictionForOneTeam);
+				    if (restriction == null)
+					    return null;
+			    }
+
+			    var suggestedShiftRestrictionForOneBlock =
+				    _suggestedShiftRestrictionExtractor.ExtractForOneBlock(suggestedShiftProjectionCache, schedulingOptions);
+			    restriction = restriction.Combine(suggestedShiftRestrictionForOneBlock);
+
+		    }
+		    return restriction;
 	    }
     }
 }
