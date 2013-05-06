@@ -60,25 +60,41 @@ if "%SSL%"=="False" "%appcmd%" set config "%SitePath%" /section:access /sslFlags
 
 ::5 Athentication for the virtual dir
 ::-----
-::Basic Auth, never used so far. Always Disable
+::Different authentication based on "SDKCREDPROT"
 ::-----
-"%appcmd%" set config "%SitePath%" -section:system.webServer/security/authentication/basicAuthentication /enabled:"False" /commit:apphost
+SET authentication=anonymousAuthentication
+for /f "tokens=1,2 delims=;" %%g in (%SDKCREDPROT%\%authentication%.txt) do CALL:IISSecuritySet "%%g" "%authentication%" "%%h"
+SET authentication=basicAuthentication
+for /f "tokens=1,2 delims=;" %%g in (%SDKCREDPROT%\%authentication%.txt) do CALL:IISSecuritySet "%%g" "%authentication%" "%%h"
+SET authentication=windowsAuthentication
+for /f "tokens=1,2 delims=;" %%g in (%SDKCREDPROT%\%authentication%.txt) do CALL:IISSecuritySet "%%g" "%authentication%" "%%h"
+::a little different for Forms section
+SET authentication=FormsAuthentication
+for /f "tokens=1,2 delims=;" %%g in (%SDKCREDPROT%\%authentication%.txt) do CALL::IISSecurityFormsSet "%%g" "%%h"
 
-::At this point we bail out for most vdir and go for the Authetication created by Wise
-::Wise uses:
-::windowsAuthentication=true/false + Forms=true/false is depending on web.config which in turn depends on "%SDKCREDPROT%" which in turn depends on "same" vs. "different domain" in Msi GUI.
-if not "%SubSiteName%"=="Web" GOTO Done
-
-::But for vdir="Web" we continue
-if "%SDKCREDPROT%"=="Ntlm" (
-"%appcmd%" set config "%SitePath%" -section:system.webServer/security/authentication/anonymousAuthentication /enabled:"False" /commit:apphost
-"%appcmd%" set config "%SitePath%" -section:system.webServer/security/authentication/windowsAuthentication /enabled:"True" /commit:apphost
-) Else (
-"%appcmd%" set config "%SitePath%" -section:system.webServer/security/authentication/anonymousAuthentication /enabled:"True" /commit:apphost
-"%appcmd%" set config "%SitePath%" -section:system.webServer/security/authentication/windowsAuthentication /enabled:"False" /commit:apphost
-)
-
+::6 Impersonate
+::-----
+::Different identity based on "SDKCREDPROT"
+::-----
+SET identity=Impersonate
+for /f "tokens=1,2 delims=;" %%g in (%SDKCREDPROT%\%identity%.txt) do CALL:IISIdentitySet "%%g" "%%h"
 GOTO Done
+
+:IISSecurityFormsSet
+if "%SubSiteName%"=="%~1" (
+"%appcmd%" set config "%SitePath%" /section:system.web/authentication /mode:%~2 /commit:apphost
+)
+exit /B
+
+:IISSecuritySet
+if "%SubSiteName%"=="%~1" (
+"%appcmd%" set config "%SitePath%" -section:system.webServer/security/authentication/%~2 /enabled:"%~3" /commit:apphost
+)
+exit /B
+
+:IISIdentitySet
+if "%SubSiteName%"=="%~1" "%appcmd%" set config "%SitePath%" -section:system.web/identity /impersonate:"%~2"
+exit /B
 
 :Done
 echo done
