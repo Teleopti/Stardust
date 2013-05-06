@@ -129,37 +129,37 @@ item: Remark
 end
 item: Execute Program
   Pathname=CMD
-  Command Line=/C ""%SUPPORTTOOLSDIR%WiseIISConfig\%CUSTOMIISSCRIPT%" "Teleopti ASP.NET v4.0" Analytics v4.0 %MYSDKSSL% Skip %CUSTOMIUSR% %CUSTOMIUSRPWD%"
+  Command Line=/C ""%SUPPORTTOOLSDIR%WiseIISConfig\%CUSTOMIISSCRIPT%" "Teleopti ASP.NET v4.0" Analytics v4.0 %MYSDKSSL% %SDKCREDPROT% %CUSTOMIUSR% %CUSTOMIUSRPWD%"
   Flags=00001010
 end
 item: Execute Program
   Pathname=CMD
-  Command Line=/C ""%SUPPORTTOOLSDIR%WiseIISConfig\%CUSTOMIISSCRIPT%" "Teleopti ASP.NET v4.0" Client v4.0 %MYSDKSSL% Skip %CUSTOMIUSR% %CUSTOMIUSRPWD%"
+  Command Line=/C ""%SUPPORTTOOLSDIR%WiseIISConfig\%CUSTOMIISSCRIPT%" "Teleopti ASP.NET v4.0" Client v4.0 %MYSDKSSL% %SDKCREDPROT% %CUSTOMIUSR% %CUSTOMIUSRPWD%"
   Flags=00001010
 end
 item: Execute Program
   Pathname=CMD
-  Command Line=/C ""%SUPPORTTOOLSDIR%WiseIISConfig\%CUSTOMIISSCRIPT%" "Teleopti ASP.NET v4.0" MyTime v4.0 %MYSDKSSL% Skip %CUSTOMIUSR% %CUSTOMIUSRPWD%"
+  Command Line=/C ""%SUPPORTTOOLSDIR%WiseIISConfig\%CUSTOMIISSCRIPT%" "Teleopti ASP.NET v4.0" MyTime v4.0 %MYSDKSSL% %SDKCREDPROT% %CUSTOMIUSR% %CUSTOMIUSRPWD%"
   Flags=00001010
 end
 item: Execute Program
   Pathname=CMD
-  Command Line=/C ""%SUPPORTTOOLSDIR%WiseIISConfig\%CUSTOMIISSCRIPT%" "Teleopti ASP.NET v4.0" PMService v4.0 %MYSDKSSL% Skip %CUSTOMIUSR% %CUSTOMIUSRPWD%"
+  Command Line=/C ""%SUPPORTTOOLSDIR%WiseIISConfig\%CUSTOMIISSCRIPT%" "Teleopti ASP.NET v4.0" PMService v4.0 %MYSDKSSL% %SDKCREDPROT% %CUSTOMIUSR% %CUSTOMIUSRPWD%"
   Flags=00001010
 end
 item: Execute Program
   Pathname=CMD
-  Command Line=/C ""%SUPPORTTOOLSDIR%WiseIISConfig\%CUSTOMIISSCRIPT%" "Teleopti ASP.NET v4.0 RTA" RTA v4.0 %MYSDKSSL% Skip %CUSTOMIUSR% %CUSTOMIUSRPWD%"
+  Command Line=/C ""%SUPPORTTOOLSDIR%WiseIISConfig\%CUSTOMIISSCRIPT%" "Teleopti ASP.NET v4.0" RTA v4.0 %MYSDKSSL% %SDKCREDPROT% %CUSTOMIUSR% %CUSTOMIUSRPWD%"
   Flags=00001010
 end
 item: Execute Program
   Pathname=CMD
-  Command Line=/C ""%SUPPORTTOOLSDIR%WiseIISConfig\%CUSTOMIISSCRIPT%" "Teleopti ASP.NET v4.0 SDK" SDK v4.0 %MYSDKSSL% Skip %CUSTOMIUSR% %CUSTOMIUSRPWD%"
+  Command Line=/C ""%SUPPORTTOOLSDIR%WiseIISConfig\%CUSTOMIISSCRIPT%" "Teleopti ASP.NET v4.0" SDK v4.0 %MYSDKSSL% %SDKCREDPROT% %CUSTOMIUSR% %CUSTOMIUSRPWD%"
   Flags=00001010
 end
 item: Execute Program
   Pathname=CMD
-  Command Line=/C ""%SUPPORTTOOLSDIR%WiseIISConfig\%CUSTOMIISSCRIPT%" "Teleopti ASP.NET v4.0" TeleoptiCCC v4.0 %MYSDKSSL% Skip %CUSTOMIUSR% %CUSTOMIUSRPWD%"
+  Command Line=/C ""%SUPPORTTOOLSDIR%WiseIISConfig\%CUSTOMIISSCRIPT%" "Teleopti ASP.NET v4.0" TeleoptiCCC v4.0 %MYSDKSSL% %SDKCREDPROT% %CUSTOMIUSR% %CUSTOMIUSRPWD%"
   Flags=00001010
 end
 item: Execute Program
@@ -169,7 +169,7 @@ item: Execute Program
 end
 item: Execute Program
   Pathname=CMD
-  Command Line=/C ""%SUPPORTTOOLSDIR%WiseIISConfig\%CUSTOMIISSCRIPT%" "Teleopti ASP.NET v4.0 Broker" Broker.backplane v4.0 %MYSDKSSL% Skip %CUSTOMIUSR% %CUSTOMIUSRPWD%"
+  Command Line=/C ""%SUPPORTTOOLSDIR%WiseIISConfig\%CUSTOMIISSCRIPT%" "Teleopti ASP.NET v4.0 Broker" Broker.backplane v4.0 %MYSDKSSL% %SDKCREDPROT% %CUSTOMIUSR% %CUSTOMIUSRPWD%"
   Flags=00001010
 end
 item: Execute Program
