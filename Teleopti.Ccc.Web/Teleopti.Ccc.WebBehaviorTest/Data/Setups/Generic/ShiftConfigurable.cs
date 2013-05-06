@@ -24,6 +24,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 
 		public string LunchActivity { get; set; }
 		public bool Lunch3HoursAfterStart { get; set; }
+		public DateTime LunchStartTime { get; set; }
+		public DateTime LunchEndTime { get; set; }
 
 		public string ShiftColor { get; set; }	// this should not be here. this exists on the ShiftCategoryConfigurable
 		public string AllActivityColor { get; set; }// this should not be here. this should exist on the ActivityConfigurable
@@ -70,11 +72,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			assignment.SetMainShift(MainShiftFactory.CreateMainShift(activity, _assignmentPeriod, shiftCategory));
 
 			// add lunch
-			if (Lunch3HoursAfterStart)
+			DateTimePeriod? lunchPeriod = null;
+			if (LunchStartTime != DateTime.MinValue)
 			{
-				var lunchPeriod = new DateTimePeriod(startTimeUtc.AddHours(3), startTimeUtc.AddHours(4));
-				assignment.MainShift.LayerCollection.Add(new MainShiftActivityLayer(lunchActivity, lunchPeriod));
+				var lunchStartTimeUtc = user.PermissionInformation.DefaultTimeZone().SafeConvertTimeToUtc(LunchStartTime);
+				var lunchEndTimeUtc = user.PermissionInformation.DefaultTimeZone().SafeConvertTimeToUtc(LunchEndTime);
+				lunchPeriod = new DateTimePeriod(lunchStartTimeUtc, lunchEndTimeUtc);
 			}
+			else if (Lunch3HoursAfterStart)
+			{
+				lunchPeriod = new DateTimePeriod(startTimeUtc.AddHours(3), startTimeUtc.AddHours(4));
+			}
+			if (lunchPeriod.HasValue)
+				assignment.MainShift.LayerCollection.Add(new MainShiftActivityLayer(lunchActivity, lunchPeriod.Value));
 
 			// simply publish the schedule changed event so that the read model is updated
 			assignment.ScheduleChanged(TestData.DataSource.DataSourceName);
