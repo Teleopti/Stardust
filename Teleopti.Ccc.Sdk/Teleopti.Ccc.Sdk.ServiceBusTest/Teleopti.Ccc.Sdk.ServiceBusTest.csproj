@@ -120,6 +120,7 @@
     <Compile Include="BudgetGroupAllowanceCalculatorTest.cs" />
     <Compile Include="BudgetGroupAllowanceSpecificationTest.cs" />
     <Compile Include="Denormalizer\CreateAnywherePersonScheduleReadModelTest.cs" />
+    <Compile Include="Denormalizer\UpdateGroupingReadModelConsumerResolveTest.cs" />
     <Compile Include="Denormalizer\ScheduleDayReadModelHandlerTest.cs" />
     <Compile Include="Denormalizer\ScheduleDayReadModelsCreatorTest.cs" />
     <Compile Include="Denormalizer\UpdateFindPersonDataConsumerTest.cs" />
