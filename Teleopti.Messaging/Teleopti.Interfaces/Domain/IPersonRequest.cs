@@ -108,6 +108,12 @@ namespace Teleopti.Interfaces.Domain
         /// <value>The status text.</value>
         string StatusText { get; }
 
+		/// <summary>
+		/// Gets the server time for when item was last updated 
+		/// </summary>
+		/// <value>Time for when item was updated on server</value>
+		DateTime UpdatedOnServerUtc { get; }
+
         /// <summary>
         /// Approves this instance.
         /// </summary>

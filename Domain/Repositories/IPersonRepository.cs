@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Repositories
@@ -121,7 +122,7 @@ namespace Teleopti.Ccc.Domain.Repositories
         /// Created by: rogerkr
         /// Created date: 2008-12-08
         /// </remarks>
-        IEnumerable<IPair<Guid>> PeopleSkillMatrix(IScenario scenario, DateTimePeriod period);
+        IEnumerable<Tuple<Guid, Guid>> PeopleSkillMatrix(IScenario scenario, DateTimePeriod period);
 
     	IEnumerable<Guid> PeopleSiteMatrix(DateTimePeriod period);
 
@@ -130,5 +131,6 @@ namespace Teleopti.Ccc.Domain.Repositories
         ICollection<IPerson> FindPeople(IEnumerable<IPerson> people);
     	bool DoesWindowsUserExists(string domainName, string userName);
     	IEnumerable<IPerson> FindPossibleShiftTrades(IPerson loggedOnUser);
+	    int SaveLoginAttempt(LoginAttemptModel model);
     }
 }

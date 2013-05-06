@@ -10,7 +10,11 @@
 			xRequests: '@Resources.XRequests',
 			subjectColon: '@Resources.SubjectColon',
 			locationColon: '@Resources.LocationColon',
-			descriptionColon: '@Resources.DescriptionColon'
+			descriptionColon: '@Resources.DescriptionColon',
+			chanceOfGettingAbsencerequestGranted: '@Resources.ChanceOfGettingAbsenceRequestGranted',
+			fair: '@Resources.Fair',
+			poor: '@Resources.Poor',
+			good: '@Resources.Good'
 		});
 		Teleopti.MyTimeWeb.Schedule.LoadAndBindData();
 	});
@@ -50,10 +54,13 @@
 					</div>
 					<div class="icon text-request ir floatright" />
 				</div>
-			    @*<div class="holiday-agents text-request floatright" data-bind="visible: true, attr: {title : holidayAgents}">
-					<div data-bind="text:holidayAgents">
-					</div
-				</div>*@
+			    <div class="holiday-agents show-request floatright" data-bind="visible: absenceRequestPermission, attr: {title :  holidayChanceText()}">
+					  <div>
+						<div class="small-circle" data-bind="animateBackground: holidayChanceColor()">
+						    <div class="small-radial-circle"></div>
+						</div>
+			        </div> 
+			    </div>
 				<!-- ko if: hasNote -->
 				<div class="icon comment-day ir tooltip floatright" data-bind="attr: {'tooltip-text': noteMessage}">
 				</div>

@@ -37,6 +37,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 				passwordWarningViewModel.AlreadyExpired = result.PasswordExpired;
 				if (!result.PasswordExpired)
 				{
+					model.SaveAuthenticateResult(result);
 					Response.StatusCode = 400;
 					Response.TrySkipIisCustomErrors = true;
 					ModelState.AddModelError("Error", result.Message);

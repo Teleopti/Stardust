@@ -35,6 +35,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
         private IList<IRequest> requests = new List<IRequest>(1);
         private bool _isDeleted;
         private string _denyReason = string.Empty;
+		private DateTime _updatedOnServerUtc;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="PersonRequest"/> class.
@@ -283,6 +284,9 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
         {
             get { return _isDeleted; }
         }
+
+		public virtual DateTime UpdatedOnServerUtc { get { return _updatedOnServerUtc; } }
+
 
         private void CheckIfEditable()
         {
@@ -705,5 +709,10 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             if (typedRequest == null) return 3;
             return typedRequest.requestStatus;
         }
+
+		public virtual void DummyMethodToRemoveCompileErrorsWithUnusedVariable()
+		{
+			_updatedOnServerUtc = new DateTime();
+		}
     }
 }

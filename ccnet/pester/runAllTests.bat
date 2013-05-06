@@ -2,7 +2,7 @@
 SETLOCAL
 set rootdir=%~dp0
 SET rootdir=%rootdir:~0,-1%
-set currentPester=2.0.0
+set currentPester=2.0.3
 set obsoletePester=1.1.1;1.0.0
 set outputFile=%rootdir%\Pester.%currentPester%\Test.xml
 ::install

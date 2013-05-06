@@ -18,51 +18,6 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentPreference
 {
     public interface IPreferencePresenter
     {
-        //Dictionary<int, IPreferenceCellData> CellDataCollection { get; }
-        //DateTime FirstDateOfPeriod { get; }
-        //ClipHandler<IPreferenceCellData> CellDataClipHandler { get; }
-        //bool ExtendedPreferenceTemplate { get; }
-        //void GetNextPeriod();
-        //void GetPreviousPeriod();
-        //string PeriodInfo();
-        //void ReloadPeriod();
-        //void PasteTemplateNameInCellData(IList<int> cellDataToChange, string name);
-        //void PasteClipsInCellData(IList<int> cellDataToChange);
-
-        //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2233:OperationsShouldNotOverflow", MessageId = "headerCount+1")]
-        //void OnSelectColumns(int left, int right, int headerCount, int rowCount);
-
-        //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2233:OperationsShouldNotOverflow", MessageId = "colHeaderCount+1")]
-        //void OnSelectRows(int colHeaderCount, int colCount, int top, int bottom);
-
-        //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2233:OperationsShouldNotOverflow", MessageId = "rowHeaderCount+1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2233:OperationsShouldNotOverflow", MessageId = "colsHeaderCount+1")]
-        //void OnSelectAll(int rowHeaderCount, int colsHeaderCount, int colCount, int rowCount);
-
-        //void OnTemplateCell(int top, int bottom, int left, int right);
-        //void OnSetCellDataClip(int top, int bottom, int left, int right);
-        //void OnSetCellDataCut(int top, int bottom, int left, int right);
-        //void OnPasteCellDataClip(int top, int bottom, int left, int right);
-        //void OnSaveTemplateCellData(int top, int bottom, int left, int right, string name);
-
-        //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1021:AvoidOutParameters", MessageId = "2#")]
-        //bool OnQueryCellInfo(int colIndex, int rowIndex, out IPreferenceCellData cellData);
-
-        //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2233:OperationsShouldNotOverflow", MessageId = "colIndex-1")]
-        //string OnQueryColumnHeaderText(int colIndex);
-
-        //[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2233:OperationsShouldNotOverflow", MessageId = "rowIndex-1")]
-        //WeekHeaderCellData OnQueryWeekHeader(int rowIndex);
-
-        //void OnDelete(int top, int bottom, int left, int right);
-        //void OnSaveTemplate(string name, int top, int bottom, int left, int right);
-        //void OnAddPreference(int top, int bottom, int left, int right, Preference preference);
-        //void OnToggleMustHave(int top, int bottom, int left, int right, bool mustHave);
-        //void ToggleMustHaveState(bool? state);
-        //void ToggleMustHaveEnable(bool enabled);
-        //bool? PreferenceExistsOnNotScheduledDay(int top, int bottom, int left, int right);
-        //void OnSelectionChanged(int top, int bottom, int left, int right);
-        //bool IsMustHave(int top, int bottom, int left, int right);
-        //bool OnCheckPermission(Preference preference);
         bool HasOpenDays();
     }
 
@@ -76,13 +31,15 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentPreference
         private static readonly TimeOfDayValidator TimeOfDayValidatorStartTime = new TimeOfDayValidator(false);
         private static readonly TimeOfDayValidator TimeOfDayValidatorEndTime = new TimeOfDayValidator(true);
         private bool _template = true;
+        private readonly IAgentScheduleStateHolder _scheduleStateHolder;
 
-        public PreferencePresenter(IPreferenceModel model, IPreferenceView view, ClipHandler<IPreferenceCellData> cellDataClipHandler, IToggleButtonState parent)
+        public PreferencePresenter(IPreferenceModel model, IPreferenceView view, ClipHandler<IPreferenceCellData> cellDataClipHandler, IToggleButtonState parent, IAgentScheduleStateHolder scheduleStateHolder)
         {
             _model = model;
             _view = view;
             _cellDataClipHandler = cellDataClipHandler;
             _parent = parent;
+            _scheduleStateHolder = scheduleStateHolder;
         }
 
         public Dictionary<int, IPreferenceCellData> CellDataCollection
@@ -232,7 +189,7 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentPreference
                 Preference preference = _cellDataClipHandler.ClipList[index].ClipValue.Preference;
                 if (ValidatePreference(preference))
                 {
-                    _model.CellDataCollection[i].Preference = _cellDataClipHandler.ClipList[index].ClipValue.Preference;
+                    _model.CellDataCollection[i].Preference = (Preference) _cellDataClipHandler.ClipList[index].ClipValue.Preference.Clone();
                     cellDataToPersist.Add(_model.CellDataCollection[i]);
                 }
                 index++;
@@ -773,7 +730,7 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentPreference
             };
         }
 
-        private static void PersistMixedCellData(IEnumerable<IPreferenceCellData> cellDataToPersist)
+        private void PersistMixedCellData(IEnumerable<IPreferenceCellData> cellDataToPersist)
         {
             IDictionary<IList<Preference>, IList<DateTime>> prefDic = new Dictionary<IList<Preference>, IList<DateTime>>();
 
@@ -789,7 +746,7 @@ namespace Teleopti.Ccc.AgentPortalCode.AgentPreference
 
             foreach (KeyValuePair<IList<Preference>, IList<DateTime>> keyValuePair in prefDic)
             {
-                AgentScheduleStateHolder.Instance().UpdateOrAddPreference(keyValuePair.Value, keyValuePair.Key);
+                _scheduleStateHolder.UpdateOrAddPreference(keyValuePair.Value, keyValuePair.Key);
             }
         }
 

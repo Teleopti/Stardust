@@ -163,6 +163,8 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui.Control
                         break;
                 }
             }
+			if (_currentJob.Name == "Intraday")
+				groupBoxSchedule.IsEnabled = false;
         }
 
     	private TimeZoneInfo defaultTimeZone

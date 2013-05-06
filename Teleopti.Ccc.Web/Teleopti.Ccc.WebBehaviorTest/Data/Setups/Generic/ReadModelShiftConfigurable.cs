@@ -2,12 +2,16 @@ using System;
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
+using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Common;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
+using Teleopti.Interfaces.Messages.Denormalize;
 using Teleopti.Messaging.SignalR;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
@@ -34,7 +38,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 
 			var dateOnly = new DateOnly(Date);
 			var personPeriod = user.Period(dateOnly);
-			
+
 			object[] projection;
 			if (lunchActivity != null)
 			{
@@ -93,6 +97,70 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 					End = end,
 					Minutes = end.Subtract(start).TotalMinutes
 				};
+		}
+	}
+
+	public class ReadModelScheduleProjectionConfigurable : IUserDataSetup
+	{
+		public DateTime BelongsToDate { get; set; }
+		public Guid PayloadId { get; set; }
+		public DateTime StartDateTime { get; set; }
+		public DateTime EndDateTime { get; set; }
+		public int WorkTimeHours { get; set; }
+		public int ContractTimeHours { get; set; }
+		public string Name { get; set; }
+		public string ShortName { get; set; }
+		public string PayrollCode { get; set; }
+		public int DisplayColor { get; set; }
+		public bool IsAbsence { get; set; }
+
+		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
+		{
+
+			//fulsettning:
+			PayloadId = new Guid();
+			//StartDateTime = StartDateTime;
+			//EndDateTime = EndDateTime;
+			Name = "Maria Stein";
+			ShortName = "MS";
+			PayrollCode = "tjohej";
+			DisplayColor = 1;
+			IsAbsence = true;
+			//end fulsetting
+
+
+			var absenceRepo = new AbsenceRepository(uow);
+
+			var absence = absenceRepo.LoadAll().First(a => a.Name == "Vacation");
+
+
+
+			//var scenario = GlobalDataContext.Data().Data<CommonScenario>().Scenario;
+			var scenario = GlobalDataContext.Data().Data<CommonScenario>().Scenario;
+
+		
+			//var rogersFavvoRepo = new ScheduleProjectionReadOnlyRepository(GlobalUnitOfWorkState.UnitOfWorkFactory);
+
+
+			var projectionLayer = new ProjectionChangedEventLayer()
+									  {
+										  PayloadId = absence.Id.Value,
+										  StartDateTime = StartDateTime,
+										  EndDateTime = EndDateTime,
+										  WorkTime = TimeSpan.FromHours(WorkTimeHours),
+										  ContractTime = TimeSpan.FromHours(ContractTimeHours),
+										  Name = absence.Name,
+										  ShortName = ShortName,
+										  PayrollCode = PayrollCode,
+										  DisplayColor = DisplayColor,
+										  IsAbsence = IsAbsence
+									  };
+
+// ReSharper disable PossibleInvalidOperationException
+			//rogersFavvoRepo.AddProjectedLayer(new DateOnly(BelongsToDate), scenario.Id.Value, user.Id.Value, projectionLayer);
+// ReSharper restore PossibleInvalidOperationException
+
+			
 		}
 	}
 }

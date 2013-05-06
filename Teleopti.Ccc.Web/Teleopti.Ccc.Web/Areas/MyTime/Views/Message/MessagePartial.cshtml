@@ -44,7 +44,7 @@
 			<!-- /ko -->
 		</div>
 		
-		<input id="AsmMessage-detail-ok-button" type="button" class="button mb5 ui-button ui-widget ui-state-default ui-corner-all floatright" data-bind="click : confirmReadMessage, enable : canConfirm" value="@Html.AttributeEncode(Resources.Ok)"/>
+		<input id="AsmMessage-detail-ok-button" type="button" class="mb5 floatright" data-bind="button: { disabled: !canConfirm() }, click : confirmReadMessage, enable : canConfirm" value="@Html.AttributeEncode(Resources.Ok)"/>
 		<div id="AsmMessage-detail-error" class="error edit-module-element floatleft clearleftfloat"></div>
 	</div>
 	<div class="asmMessage-list">

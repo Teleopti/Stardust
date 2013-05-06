@@ -114,6 +114,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AgentInfo\ExtractBudgetGroupPeriods.cs" />
     <Compile Include="AgentInfo\Requests\IBatchShiftTradeRequestStatusChecker.cs" />
     <Compile Include="AgentInfo\Requests\ShiftTradeStatusExtensions.cs" />
     <Compile Include="Analytics\BaseConfiguration.cs" />
@@ -168,6 +169,7 @@
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleProjection\UpdateScheduleProjectionReadModel.cs" />
     <Compile Include="ApplicationLayer\SyncEventsPublisher.cs" />
     <Compile Include="Auditing\AuditSetting.cs" />
+    <Compile Include="Auditing\LoginAttemptModel.cs" />
     <Compile Include="Auditing\Revision.cs" />
     <Compile Include="Auditing\ScheduleAuditingReportData.cs" />
     <Compile Include="Budgeting\AllowanceCalculator.cs" />
@@ -321,6 +323,7 @@
     <Compile Include="Optimization\GroupShiftCategoryBackToLegalStateServiceBuilder.cs" />
     <Compile Include="Optimization\IsSignificantPartFullDayAbsenceOrDayOffSpecification.cs" />
     <Compile Include="Optimization\MainShiftOptimizeActivitySpecificationSetter.cs" />
+    <Compile Include="Optimization\MatrixShiftsNotAvailibleLocker.cs" />
     <Compile Include="Optimization\OptimizationOverLimitByRestrictionDecider.cs" />
     <Compile Include="Optimization\EmptyDaysInBlockOutsideSelectedHandler.cs" />
     <Compile Include="Optimization\OptimizationOverLimitByRestrictionDeciderCreator.cs" />
@@ -626,7 +629,6 @@
     <Compile Include="Common\OptionalColumn.cs" />
     <Compile Include="Common\GroupPage.cs" />
     <Compile Include="Common\Ignore.cs" />
-    <Compile Include="Common\Pair.cs" />
     <Compile Include="Common\PairDictionaryFactory.cs" />
     <Compile Include="Common\PairMatrixService.cs" />
     <Compile Include="Common\Payload.cs" />
@@ -1826,7 +1828,9 @@
     <EmbeddedResource Include="Common\JobResultDetail.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Auditing\Revision.hbm.xml" />
+    <EmbeddedResource Include="Auditing\Revision.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Auditing\AuditSetting.hbm.xml" />
   </ItemGroup>
   <ItemGroup>

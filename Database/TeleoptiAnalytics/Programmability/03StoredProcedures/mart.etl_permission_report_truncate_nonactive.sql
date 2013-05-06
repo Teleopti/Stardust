@@ -23,8 +23,6 @@ IF @is_active = 'A'
 ELSE
 	SET @non_active = 'A'
 	
---If "FirstBU", then truncate the non-active table
-IF @isFirstBusinessUnit = 1
 BEGIN
 	IF @is_active = 'A'
 		TRUNCATE TABLE [mart].[permission_report_B]

@@ -466,6 +466,12 @@ namespace Teleopti.Ccc.Win.Scheduling
                                     activityRestriction.Activity.Name + mustHave, 2);
                    addTimeRestriction(activityRestriction, 3);
                }
+
+			   if (restriction.Absence != null)
+			   {
+				   createAndAddItem(listViewRestrictions, Resources.Absence, restriction.Absence.Description.Name + mustHave, 2);
+			   }
+
                 if (restriction.DayOffTemplate != null)
                     createAndAddItem(listViewRestrictions, Resources.DayOff, restriction.DayOffTemplate.Description.Name + mustHave, 2);
             }

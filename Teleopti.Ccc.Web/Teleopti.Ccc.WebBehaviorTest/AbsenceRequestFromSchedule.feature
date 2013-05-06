@@ -106,26 +106,6 @@ Scenario: Switch request type
 	Then I should see my existing inputs for date '2013-10-03'
 	And I should see an absence type called Vacation in droplist
 
-@ignore
-Scenario: Do not show indication of the amount of agents that can go on holiday if no permission to absence request
-	Given I have the role 'No access to absence requests'
-	When I view my week schedule for date '2013-02-15'
-	Then I should not see any indication of how many agents can go on holiday
-
-@ignore
-Scenario: Show number of agents that can go on holiday
-	Given I have the role 'Full access to mytime'
-	When I view my week schedule for date '2013-02-15'
-	Then I should see an indication of the amount of agents that can go on holiday on each day of the week
-
-@ignore
-Scenario: Indicate that no agents that can go on holiday if outside bounds of absence period
-	Given I have the role 'Full access to mytime'
-	# And the absence period is opened between '2013-01-01' and '2013-01-30'
-	And I have a denied absence request beacuse of missing workflow control set
-	When I view my week schedule for date '2013-02-15'
-	Then I should see an indication that no agents that can go on holiday for date '2013-02-15'
-
 Scenario: Add absence request from week schedule view with multiple absences
 	Given I have the role 'Full access to mytime'
 	And I have a requestable absence called Vacation
@@ -138,12 +118,5 @@ Scenario: Add absence request from week schedule view with multiple absences
 	And I click the OK button
 	And I navigate to the requests page
 	Then I should see my existing absence request with absence 'Time in lieu'
-
-@ignore
-Scenario: Indicate that no agents that can go on holiday if no allowance left
-	Given I have the role 'Full access to mytime'
-	And I have no absence allowance left
-	When I view my week schedule for date '2013-02-15'
-	Then I should see an indication that no agents that can go on holiday any of the days
 
 

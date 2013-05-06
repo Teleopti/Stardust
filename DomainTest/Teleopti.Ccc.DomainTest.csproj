@@ -126,6 +126,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AgentInfo\ExtractBudgetGroupPeriodsTest.cs" />
     <Compile Include="AgentInfo\Requests\InvalidRequestStateTransitionExceptionTest.cs" />
     <Compile Include="AgentInfo\Requests\PersonRequestCheckAuthorizationTest.cs" />
     <Compile Include="AgentInfo\Requests\RequestApprovalServiceSchedulerTest.cs" />
@@ -266,6 +267,7 @@
     <Compile Include="Optimization\GroupShiftCategoryBackToLegalStateServiceBuilderTest.cs" />
     <Compile Include="Optimization\GroupShiftCategoryBackToLegalStateServiceTest.cs" />
     <Compile Include="Optimization\MainShiftOptimizeActivitySpecificationSetterTest.cs" />
+    <Compile Include="Optimization\MatrixShiftsNotAvailibleLockerTest.cs" />
     <Compile Include="Optimization\NightRestWhiteSpotSolverServiceTest.cs" />
     <Compile Include="Optimization\NightRestWhiteSpotSolverTest.cs" />
     <Compile Include="Optimization\OptimizationOverLimitByRestrictionDeciderCreatorTest.cs" />
@@ -486,7 +488,6 @@
     <Compile Include="Common\OptionalColumnValueTest.cs" />
     <Compile Include="Common\PairDictionaryFactoryTest.cs" />
     <Compile Include="Common\PairMatrixServiceTest.cs" />
-    <Compile Include="Common\PairTest.cs" />
     <Compile Include="Common\RootPersonGroupTest.cs" />
     <Compile Include="Common\ContainerTestClass.cs" />
     <Compile Include="Common\EntityContainerTest.cs">

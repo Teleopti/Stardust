@@ -78,6 +78,8 @@ namespace Teleopti.Ccc.Domain.Repositories
 		/// </remarks>
 		IList<IPersonRequest> FindAllRequestModifiedWithinPeriodOrPending(IPerson person, DateTimePeriod period);
 
+		IList<IPersonRequest> FindPersonRequestUpdatedAfter(DateTime lastTime);
+
 		/// <summary>
 		/// Finds all requests modified within or pending.
 		/// </summary>
