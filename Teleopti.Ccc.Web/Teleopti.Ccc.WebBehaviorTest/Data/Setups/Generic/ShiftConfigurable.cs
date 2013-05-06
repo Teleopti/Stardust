@@ -19,8 +19,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 		public DateTime StartTime { get; set; }
 		public DateTime EndTime { get; set; }
 		public bool Lunch3HoursAfterStart { get; set; }
-		public string ShiftColor { get; set; }
-		public string AllActivityColor { get; set; }
+
+		public string ShiftColor { get; set; }	// this should not be here. this exists on the ShiftCategoryConfigurable
+		public string AllActivityColor { get; set; }// this should not be here. this should exist on the ActivityConfigurable
 
 		public IScenario Scenario = GlobalDataContext.Data().Data<CommonScenario>().Scenario;
 
@@ -73,6 +74,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 					assignment.MainShift.LayerCollection.Add(new MainShiftActivityLayer(TestData.ActivityLunch, lunchPeriod));
 				}
 			}
+
+			// simply publis the schedule changed event so that the read model is updated
+			assignment.ScheduleChanged();
 
 			assignmentRepository.Add(assignment);
 

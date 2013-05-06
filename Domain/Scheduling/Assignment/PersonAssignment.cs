@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Interfaces.Domain;
@@ -126,6 +127,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			_overtimeShiftCollection.Remove(overtimeShift);
 		}
 
+		public virtual void ScheduleChanged()
+		{
+			AddEvent(new ScheduleChangedEvent
+				{
+					ScenarioId = Scenario.Id.Value,
+					StartDateTime = Period.StartDateTime,
+					EndDateTime = Period.EndDateTime,
+					PersonId = Person.Id.Value,
+				});
+		}
 
 		#region Manipulate personalshifts
 

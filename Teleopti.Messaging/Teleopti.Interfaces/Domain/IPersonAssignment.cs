@@ -113,5 +113,10 @@ namespace Teleopti.Interfaces.Domain
         /// Created date: 2009-02-05
         /// </remarks>
         void RemoveOvertimeShift(IOvertimeShift overtimeShift);
+
+		/// <summary>
+		/// Publish the ScheduleChangedEvent
+		/// </summary>
+		void ScheduleChanged();
     }
 }
