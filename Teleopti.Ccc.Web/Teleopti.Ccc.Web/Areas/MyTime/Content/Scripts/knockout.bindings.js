@@ -141,3 +141,15 @@ ko.bindingHandlers.datepicker = {
 		$(element).datepicker("setDate", new Date(value));
 	}
 };
+
+ko.bindingHandlers.button = {
+    init: function (element, valueAccessor, allBindingsAccessor, viewModel) {
+        $(element).button();
+    },
+    update: function (element, valueAccessor, allBindingsAccessor, viewModel) {
+        var value = ko.utils.unwrapObservable(valueAccessor()),
+            disabled = ko.utils.unwrapObservable(value.disabled);
+
+        $(element).button("option", "disabled", disabled);
+    }
+};
