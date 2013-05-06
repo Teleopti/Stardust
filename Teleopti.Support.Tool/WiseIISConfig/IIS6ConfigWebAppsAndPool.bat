@@ -1,31 +1,42 @@
 @ECHO off
-::Example Call:
-::IIS6ConfigWebAppsAndPool.bat "Teleopti ASP.NET v4.0 Web" web v4.0 True Ntlm MySpecialIISuser MySpecialPwd
-
-::Get path to this batchfile
 SET ROOTDIR=%~dp0
-
-::Remove trailer slash
 SET ROOTDIR=%ROOTDIR:~0,-1%
+%ROOTDIR:~0,2%
+CD "%ROOTDIR%"
 
-SET PoolName=%~1
-SET SubSiteName=%~2
-SET NETVersion=%~3
-SET SSL=%~4
-SET SDKCREDPROT=%~5
-SET CustomIISUsr=%~6
-SET CustomIISPwd=%~7
+::Example Call:
+::note: parameter 3,4 are optional
+::IIS7ConfigWebAppsAndPool.bat [IS_SSL] [SDK_CREDPROT] [MYUSER] [MYPASSWORD]
+::IIS7ConfigWebAppsAndPool.bat True Ntlm MySpecialIISuser MySpecialPwd
+SET SSL=%~1
+SET SDKCREDPROT=%~2
+SET CustomIISUsr=%~3
+SET CustomIISPwd=%~4
+SET logfile=IIS6ConfigWebAppsAndPool.log
+SET SSLPORT=443
 
-IF "%PoolName%"=="" GOTO NoInput
-IF "%SubSiteName%"=="" GOTO NoInput
-IF "%NETVersion%"=="" GOTO NoInput
 IF "%SDKCREDPROT%"=="" GOTO NoInput
 
-SET MainSiteName=TeleoptiCCC
-SET SitePath=%MainSiteName%/%SubSiteName%
+::=============
+::Main
+::=============
+ECHO Call was: IIS6ConfigWebAppsAndPool.bat %~1 %~3 %~3 %~4 > %logfile%
 
-::special case for TeleoptCCC root site, skip subsite
-if "%SubSiteName%"=="TeleoptiCCC" SET SitePath=%MainSiteName%
+SET DefaultSite=Default Web Site
+SET MainSiteName=TeleoptiCCC
+SET appcmd=%systemroot%\system32\inetsrv\APPCMD.exe
+
+for /f "tokens=2,3 delims=;" %%g in (Apps\ApplicationsInAppPool.txt) do CALL:CreateAppPool "%%g" "%%h" >> %logfile%
+
+for /f "tokens=1,2,3 delims=;" %%g in (Apps\ApplicationsInAppPool.txt) do CALL:ForEachApplication "%%g" "%%h" "%%i" >> %logfile%
+GOTO Done
+
+::=============
+::Functions
+::=============
+:CreateAppPool
+SET PoolName=%~1
+SET NETVersion=%~2
 
 ::1 - Create app pool
 echo cscript "%ROOTDIR%\adsutil.vbs" ENUM "w3svc/AppPools/%PoolName%"
@@ -39,6 +50,18 @@ ECHO Creating Teleopti App pool. Done!
 ECHO Teleopti app pool already exist: "%PoolName%"
 )
 echo.
+
+Exit /B
+
+:ForEachApplication
+SET SubSiteName=%~1
+SET PoolName=%~2
+SET NETVersion=%~3
+
+SET SitePath=%DefaultSite%/%MainSiteName%/%SubSiteName%
+
+::special case for TeleoptCCC root site, skip subsite
+if "%SubSiteName%"=="TeleoptiCCC" SET SitePath=%DefaultSite%/%MainSiteName%
 
 ::2 - Change app pool
 echo Change app pool

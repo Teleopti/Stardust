@@ -1,0 +1,9 @@
+TeleoptiCCC;Teleopti ASP.NET v4.0;v4.0
+Analytics;Teleopti ASP.NET v4.0;v4.0
+Client;Teleopti ASP.NET v4.0;v4.0
+MyTime;Teleopti ASP.NET v4.0;v4.0
+PMService;Teleopti ASP.NET v4.0;v4.0
+RTA;Teleopti ASP.NET v4.0 RTA;v4.0
+SDK;Teleopti ASP.NET v4.0 SDK;v4.0
+Broker;Teleopti ASP.NET v4.0 Broker;v4.0
+Web;Teleopti ASP.NET v4.0 Web;v4.0
