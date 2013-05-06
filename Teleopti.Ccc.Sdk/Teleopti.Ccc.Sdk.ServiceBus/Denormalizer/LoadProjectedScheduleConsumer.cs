@@ -5,11 +5,13 @@ using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.Messages.Denormalize;
+using log4net;
 
 namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 {
 	public class LoadProjectedScheduleConsumer : ConsumerOf<ScheduleChanged>, ConsumerOf<ScheduleProjectionInitialize>, ConsumerOf<ScheduleDayInitialize>, ConsumerOf<PersonScheduleDayInitialize>
 	{
+	    private static readonly ILog Logger = LogManager.GetLogger(typeof (LoadProjectedScheduleConsumer));
 		private readonly IServiceBus _bus;
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IScenarioRepository _scenarioRepository;
@@ -72,13 +74,22 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Denormalizer
 		private bool getPeriodAndScenario(ScheduleDenormalizeBase message)
 		{
 			var scenario = _scenarioRepository.Get(message.ScenarioId);
+            if (scenario == null)
+            {
+                Logger.InfoFormat("Scenario not found (Id: {0})", message.ScenarioId);
+                return false;
+            }
 			if (!scenario.DefaultScenario) return false;
 
 			var period = new DateTimePeriod(message.StartDateTime, message.EndDateTime);
 			var person = _personRepository.FindPeople(new []{ message.PersonId}).FirstOrDefault();
-			if (person == null) return false;
+		    if (person == null)
+		    {
+		        Logger.InfoFormat("Person not found (Id: {0})", message.PersonId);
+		        return false;
+		    }
 
-			var timeZone = person.PermissionInformation.DefaultTimeZone();
+		    var timeZone = person.PermissionInformation.DefaultTimeZone();
 			var dateOnlyPeriod = period.ToDateOnlyPeriod(timeZone);
 			var schedule =
 				_scheduleRepository.FindSchedulesOnlyInGivenPeriod(new PersonProvider(new[] {person}) {DoLoadByPerson = true},
