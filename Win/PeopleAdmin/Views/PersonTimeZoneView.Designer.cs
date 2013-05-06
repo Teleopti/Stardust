@@ -73,7 +73,7 @@
 			this.buttonAdvOk.Name = "buttonAdvOk";
 			this.buttonAdvOk.Size = new System.Drawing.Size(75, 23);
 			this.buttonAdvOk.TabIndex = 6;
-			this.buttonAdvOk.Text = "xxOk";
+			this.buttonAdvOk.Text = "xxApply";
 			this.buttonAdvOk.UseVisualStyle = true;
 			this.buttonAdvOk.Click += new System.EventHandler(this.buttonAdvOkClick);
 			// 
@@ -84,7 +84,7 @@
 			this.buttonAdvCancel.Name = "buttonAdvCancel";
 			this.buttonAdvCancel.Size = new System.Drawing.Size(75, 23);
 			this.buttonAdvCancel.TabIndex = 7;
-			this.buttonAdvCancel.Text = "xxCancel";
+			this.buttonAdvCancel.Text = "xxClose";
 			this.buttonAdvCancel.UseVisualStyle = true;
 			this.buttonAdvCancel.Click += new System.EventHandler(this.buttonAdvCancelClick);
 			// 
@@ -151,6 +151,8 @@
 			this.Controls.Add(this.comboBoxAdvTimeZones);
 			this.Controls.Add(this.ribbonControlAdv1);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+			this.MaximizeBox = false;
+			this.MinimizeBox = false;
 			this.Name = "PersonTimeZoneView";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "xxTimeZone";
