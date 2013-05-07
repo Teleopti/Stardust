@@ -15,7 +15,7 @@ define([
 
 			this.Time = ko.computed(function () {
 				var time = moment().startOf('day').add('minutes', self.Minutes());
-				return time.format(resources.ShortTimePattern);
+				return time.format(resources.TimeFormatForMoment);
 			});
 
 			this.Pixel = ko.computed(function () {

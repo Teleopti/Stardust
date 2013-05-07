@@ -38,14 +38,14 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 						if (s.Layer.Period.StartDateTime == DateTime.MinValue)
 							return null;
 						TimeZoneInfo timeZoneInfo = s.Person.PermissionInformation.DefaultTimeZone();
-						return TimeZoneInfo.ConvertTimeFromUtc(s.Layer.Period.StartDateTime, timeZoneInfo);
+						return TimeZoneInfo.ConvertTimeFromUtc(s.Layer.Period.StartDateTime, timeZoneInfo).ToFixedDateTimeFormat();
 					}))
 				.ForMember(x => x.EndTime, o => o.ResolveUsing(s =>
 					{
 						if (s.Layer.Period.EndDateTime == DateTime.MinValue)
 							return null;
 						TimeZoneInfo timeZoneInfo = s.Person.PermissionInformation.DefaultTimeZone();
-						return TimeZoneInfo.ConvertTimeFromUtc(s.Layer.Period.EndDateTime, timeZoneInfo);
+						return TimeZoneInfo.ConvertTimeFromUtc(s.Layer.Period.EndDateTime, timeZoneInfo).ToFixedDateTimeFormat();
 					}))
 				;
 
@@ -61,7 +61,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 						if (start == DateTime.MinValue)
 							return null;
 						TimeZoneInfo timeZoneInfo = s.TimeZoneInfo;
-						return TimeZoneInfo.ConvertTimeFromUtc(start, timeZoneInfo).ToString();
+						return TimeZoneInfo.ConvertTimeFromUtc(start, timeZoneInfo).ToFixedDateTimeFormat();
 					}))
 				.ForMember(x => x.Minutes, o => o.ResolveUsing(s => s.Minutes))
 				;

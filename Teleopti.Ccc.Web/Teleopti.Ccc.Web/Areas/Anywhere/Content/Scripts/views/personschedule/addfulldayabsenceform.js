@@ -29,7 +29,7 @@ define([
             };
 
             this.StartDateFormatted = ko.computed(function() {
-                return self.StartDate().format(resources.MomentShortDatePattern);
+                return self.StartDate().format(resources.DateFormatForMoment);
             });
             
             this.AbsenceTypes = ko.observableArray();

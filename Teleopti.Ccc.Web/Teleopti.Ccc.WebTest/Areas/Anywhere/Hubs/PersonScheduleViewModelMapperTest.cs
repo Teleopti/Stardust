@@ -1,10 +1,7 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Dynamic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -14,8 +11,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
-using Teleopti.Ccc.WebTest.Core.Mapping;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
@@ -118,7 +113,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		{
 			dynamic layer = new ExpandoObject();
 			layer.Color = Color;
-			layer.Start = Start;
 			layer.Start = Start.HasValue ? Start : null;
 			layer.Minutes = Minutes;
 			return layer;
@@ -164,7 +158,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 
 			var result = target.Map(new PersonScheduleData {Shift = shift, Person = person});
 
-			var personStartTime = TimeZoneInfo.ConvertTimeFromUtc(startTime, person.PermissionInformation.DefaultTimeZone()).ToString();
+			var personStartTime = TimeZoneInfo.ConvertTimeFromUtc(startTime, person.PermissionInformation.DefaultTimeZone()).ToFixedDateTimeFormat();
 			result.Layers.Single().Start.Should().Be(personStartTime);
 		}
 
@@ -239,7 +233,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 
 			var result = target.Map(new PersonScheduleData { PersonAbsences = personAbsences });
 
-			var personStartTime = TimeZoneInfo.ConvertTimeFromUtc(startTime, person.PermissionInformation.DefaultTimeZone()).ToString();
+			var personStartTime = TimeZoneInfo.ConvertTimeFromUtc(startTime, person.PermissionInformation.DefaultTimeZone()).ToFixedDateTimeFormat();
 
 			result.PersonAbsences.Single().StartTime.Should().Be(personStartTime);
 		}
@@ -261,7 +255,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			
 			var result = target.Map(new PersonScheduleData { PersonAbsences = personAbsences });
 
-			var personEndTime = TimeZoneInfo.ConvertTimeFromUtc(endTime, person.PermissionInformation.DefaultTimeZone()).ToString();
+			var personEndTime = TimeZoneInfo.ConvertTimeFromUtc(endTime, person.PermissionInformation.DefaultTimeZone()).ToFixedDateTimeFormat();
 
 			result.PersonAbsences.Single().EndTime.Should().Be(personEndTime);
 		}
