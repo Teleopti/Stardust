@@ -72,7 +72,7 @@ define([
 				cache: false,
 				dataType: 'json',
 				data: {
-					date: teamSchedule.SelectedDate().toDate().toJSON(),
+				    date: helpers.Date.ToServer(teamSchedule.SelectedDate()),
 					teamId: teamSchedule.SelectedTeam()
 				},
 				success: function (people, textStatus, jqXHR) {
@@ -91,7 +91,7 @@ define([
 				cache: false,
 				dataType: 'json',
 				data: {
-					date: teamSchedule.SelectedDate().toDate().toJSON()
+				    date: helpers.Date.ToServer(teamSchedule.SelectedDate()),
 				},
 				success: function (data, textStatus, jqXHR) {
 					teamSchedule.SetTeams(data.Teams);
