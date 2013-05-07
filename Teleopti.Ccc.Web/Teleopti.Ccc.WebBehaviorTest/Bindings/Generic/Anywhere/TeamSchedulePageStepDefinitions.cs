@@ -1,10 +1,10 @@
 using System;
+using System.Linq;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserInteractions;
-using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using WatiN.Core;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
@@ -45,11 +45,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[Then(@"I should be able to select teams")]
 		public void ThenIShouldBeAbleToSelectTeams(Table table)
 		{
-			var select = Browser.Current.SelectList(Find.BySelector("#team-selector"));
-			EventualAssert.That(() => select.Exists, Is.True);
+			Browser.Interactions.AssertExists("#team-selector");
 
-			var teams = table.CreateSet<TeamInfo>();
-			teams.ForEach(t => EventualAssert.That(() => select.Option(Find.BySelector(string.Format(":contains('{0}')", t.Team))).Exists, Is.True));
+			var teams = table.CreateSet<TeamInfo>().ToArray();
+			teams.ForEach(t => Browser.Interactions.AssertExists("#team-selector option:contains('{0}')", t.Team));
+
+			Browser.Interactions.AssertNotExists("#team-selector option:nth-child(" + teams.Length + ")", "#team-selector option:nth-child(" + (teams.Length + 1) + ")");
 		}
 		
 		public class TeamInfo
