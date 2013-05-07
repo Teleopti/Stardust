@@ -2,11 +2,13 @@ define([
         'knockout',
         'moment',
         'navigation',
+        'ajax',
         'noext!application/resources'
     ], function(
         ko,
         moment,
         navigation,
+        ajax,
         resources
     ) {
 
@@ -49,11 +51,9 @@ define([
                     AbsenceId: self.AbsenceType(),
                     PersonId: personId
                 });
-                $.ajax({
+                ajax.ajax({
                         url: 'PersonScheduleCommand/AddFullDayAbsence',
                         type: 'POST',
-                        cache: false,
-                        contentType: 'application/json; charset=utf-8',
                         data: data,
                         success: function(data, textStatus, jqXHR) {
                             navigation.GotoPersonSchedule(personId, self.StartDate());

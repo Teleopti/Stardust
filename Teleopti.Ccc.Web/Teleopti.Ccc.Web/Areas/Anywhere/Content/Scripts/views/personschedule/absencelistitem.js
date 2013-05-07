@@ -1,11 +1,13 @@
 define([
     'knockout',
     'moment',
-    'navigation'
+    'navigation',
+    'ajax'
 ], function (
     ko,
     moment,
-    navigation
+    navigation,
+    ajax
 ) {
 
     return function (data) {
@@ -26,12 +28,10 @@ define([
             var data = JSON.stringify({
                 PersonAbsenceId: personAbsenceId
             });
-            $.ajax(
+            ajax.ajax(
                 {
                     url: 'PersonScheduleCommand/RemoveAbsence',
                     type: 'POST',
-                    cache: false,
-                    contentType: 'application/json; charset=utf-8',
                     data: data,
                     success: function(data, textStatus, jqXHR) {
                         navigation.GotoPersonSchedule(personId, date);
