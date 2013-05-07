@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 		{
 			var personAbsence = (PersonAbsence) _personAbsenceRepository.Load(command.PersonAbsenceId);
 
-			personAbsence.RemoveAbsence(
+			personAbsence.RemovePersonAbsence(
 				_currentDataSource.CurrentName()
 				);
 

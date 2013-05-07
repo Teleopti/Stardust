@@ -30,7 +30,7 @@ define([
             });
             ajax.ajax(
                 {
-                    url: 'PersonScheduleCommand/RemoveAbsence',
+                    url: 'PersonScheduleCommand/RemovePersonAbsence',
                     type: 'POST',
                     data: data,
                     success: function(data, textStatus, jqXHR) {

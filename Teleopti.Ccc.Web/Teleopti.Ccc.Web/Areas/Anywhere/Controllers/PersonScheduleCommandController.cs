@@ -23,7 +23,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 
 		[HttpPostOrPut]
 		[UnitOfWorkAction]
-		public void RemoveAbsence(RemovePersonAbsenceCommand command)
+		public void RemovePersonAbsence(RemovePersonAbsenceCommand command)
 		{
 			_commandDispatcher.Execute(command);
 		}
