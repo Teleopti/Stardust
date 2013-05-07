@@ -19,7 +19,7 @@ IF "%SDKCREDPROT%"=="" GOTO NoInput
 ::=============
 ::Main
 ::=============
-ECHO Call was: IIS7ConfigWebAppsAndPool.bat %~1 %~3 %~3 %~4 > %logfile%
+ECHO Call was: IIS7ConfigWebAppsAndPool.bat %~1 %~2 %~3 %~4 > %logfile%
 
 SET DefaultSite=Default Web Site
 SET MainSiteName=TeleoptiCCC
