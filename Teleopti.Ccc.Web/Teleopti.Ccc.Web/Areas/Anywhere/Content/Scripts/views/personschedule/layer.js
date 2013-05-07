@@ -22,7 +22,7 @@ define([
 
 			this.StartTime = ko.computed(function () {
 				var time = moment().startOf('day').add('minutes', self.StartMinutes());
-				return time.format(resources.ShortTimePattern);
+				return time.format(resources.TimeFormatForMoment);
 			});
 
 			this.EndMinutes = ko.computed(function () {

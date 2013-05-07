@@ -72,12 +72,6 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Controllers
 					DateTimeFormatForMoment = DateAndTimeFormatExtensions.DateTimeFormatForMoment(),
 					TimeFormatForMoment = DateAndTimeFormatExtensions.TimeFormatForMoment(),
 
-
-
-					CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern,
-					MomentShortDatePattern = CultureInfo.CurrentCulture.DateTimeFormat.ShortDatePattern.ToUpper(),
-					ShortTimePattern = CultureInfo.CurrentCulture.DateTimeFormat.ShortTimePattern.Replace("tt", "a"),
-
 					LanguageCode = CultureInfo.CurrentCulture.IetfLanguageTag,
 					FirstDayOfWeek = (int) CultureInfo.CurrentCulture.DateTimeFormat.FirstDayOfWeek
 				}, Formatting.Indented);
