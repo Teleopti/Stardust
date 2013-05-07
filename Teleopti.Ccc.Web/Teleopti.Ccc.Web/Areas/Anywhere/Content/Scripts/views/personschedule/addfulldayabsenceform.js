@@ -55,7 +55,6 @@ define([
                         url: 'PersonScheduleCommand/AddFullDayAbsence',
                         type: 'POST',
                         data: data,
-                        dataType: 'text',
                         success: function(data, textStatus, jqXHR) {
                             navigation.GotoPersonSchedule(personId, self.StartDate());
                         }
