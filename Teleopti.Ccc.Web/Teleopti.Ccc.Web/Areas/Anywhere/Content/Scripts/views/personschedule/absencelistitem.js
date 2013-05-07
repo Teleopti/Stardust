@@ -33,6 +33,7 @@ define([
                     url: 'PersonScheduleCommand/RemovePersonAbsence',
                     type: 'POST',
                     data: data,
+                    dataType: 'text',
                     success: function(data, textStatus, jqXHR) {
                         navigation.GotoPersonSchedule(personId, date);
                     }
