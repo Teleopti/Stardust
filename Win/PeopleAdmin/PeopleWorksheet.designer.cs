@@ -130,7 +130,7 @@
             this.toolStripButtonSystemOptions});
 			this.ribbonControlWorksheet.OfficeMenu.SystemPanel.Text = "";
 			this.ribbonControlWorksheet.SelectedTab = this.toolStripTabItem1;
-			this.ribbonControlWorksheet.Size = new System.Drawing.Size(1286, 150);
+			this.ribbonControlWorksheet.Size = new System.Drawing.Size(1205, 150);
 			this.ribbonControlWorksheet.SystemText.QuickAccessDialogDropDownName = "Starting menu";
 			toolStripTabGroup1.Color = System.Drawing.Color.Empty;
 			toolStripTabGroup1.Name = "Period Options";
@@ -412,7 +412,7 @@
 			this.toolStripExEditing.OfficeColorScheme = Syncfusion.Windows.Forms.Tools.ToolStripEx.ColorScheme.Managed;
 			this.toolStripExEditing.RightToLeft = System.Windows.Forms.RightToLeft.No;
 			this.toolStripExEditing.ShowLauncher = false;
-			this.toolStripExEditing.Size = new System.Drawing.Size(332, 88);
+			this.toolStripExEditing.Size = new System.Drawing.Size(247, 88);
 			this.toolStripExEditing.TabIndex = 8;
 			this.toolStripExEditing.Text = "xxEditing";
 			this.ribbonControlWorksheet.SetUseInCustomQuickAccessDialog(this.toolStripExEditing, true);
@@ -456,7 +456,7 @@
 			// 
 			this.toolStripMenuItemSortAsc.Name = "toolStripMenuItemSortAsc";
 			this.SetShortcut(this.toolStripMenuItemSortAsc, System.Windows.Forms.Keys.None);
-			this.toolStripMenuItemSortAsc.Size = new System.Drawing.Size(152, 22);
+			this.toolStripMenuItemSortAsc.Size = new System.Drawing.Size(131, 22);
 			this.toolStripMenuItemSortAsc.Text = "xxSortAtoZ";
 			this.toolStripMenuItemSortAsc.Click += new System.EventHandler(this.toolStripMenuItemSortAsc_Click);
 			// 
@@ -464,7 +464,7 @@
 			// 
 			this.toolStripMenuItemSortDesc.Name = "toolStripMenuItemSortDesc";
 			this.SetShortcut(this.toolStripMenuItemSortDesc, System.Windows.Forms.Keys.None);
-			this.toolStripMenuItemSortDesc.Size = new System.Drawing.Size(152, 22);
+			this.toolStripMenuItemSortDesc.Size = new System.Drawing.Size(131, 22);
 			this.toolStripMenuItemSortDesc.Text = "xxSortZtoA";
 			this.toolStripMenuItemSortDesc.Click += new System.EventHandler(this.toolStripMenuItemSortDesc_Click);
 			// 
@@ -720,8 +720,8 @@
 			this.splitContainerWorksheet.Panel2.Controls.Add(this.tableLayoutPanel1);
 			this.splitContainerWorksheet.Panel2.Controls.Add(this.shiftCategoryLimitationView);
 			this.splitContainerWorksheet.PanelToBeCollapsed = Syncfusion.Windows.Forms.Tools.Enums.CollapsedPanel.Panel2;
-			this.splitContainerWorksheet.Size = new System.Drawing.Size(1276, 368);
-			this.splitContainerWorksheet.SplitterDistance = 1045;
+			this.splitContainerWorksheet.Size = new System.Drawing.Size(1195, 368);
+			this.splitContainerWorksheet.SplitterDistance = 964;
 			this.splitContainerWorksheet.Style = Syncfusion.Windows.Forms.Tools.Enums.Style.Office2007Blue;
 			this.splitContainerWorksheet.TabIndex = 3;
 			this.splitContainerWorksheet.Text = "splitContainerAdv1";
@@ -759,20 +759,19 @@
 			this.tableLayoutPanel1.Name = "tableLayoutPanel1";
 			this.tableLayoutPanel1.RowCount = 3;
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 45F));
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 500F));
-			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 2F));
 			this.tableLayoutPanel1.Size = new System.Drawing.Size(224, 368);
 			this.tableLayoutPanel1.TabIndex = 2;
 			// 
 			// panel1
 			// 
-			this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
 			this.panel1.Controls.Add(this.externalFilteringLabel);
 			this.panel1.Controls.Add(this.externalFilteringTextBox);
+			this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
 			this.panel1.Location = new System.Drawing.Point(3, 3);
 			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(218, 32);
+			this.panel1.Size = new System.Drawing.Size(218, 39);
 			this.panel1.TabIndex = 1;
 			this.panel1.Visible = false;
 			// 
@@ -813,7 +812,7 @@
 			this.statusStripEx1.Dock = Syncfusion.Windows.Forms.Tools.DockStyleEx.Bottom;
 			this.statusStripEx1.Location = new System.Drawing.Point(6, 519);
 			this.statusStripEx1.Name = "statusStripEx1";
-			this.statusStripEx1.Size = new System.Drawing.Size(1276, 22);
+			this.statusStripEx1.Size = new System.Drawing.Size(1195, 22);
 			this.statusStripEx1.TabIndex = 4;
 			this.statusStripEx1.Text = "statusStripEx1";
 			// 

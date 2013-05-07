@@ -478,7 +478,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                     .SetFetchMode("PersonPeriodCollection.Team", FetchMode.Join)
                     .SetFetchMode("PersonPeriodCollection.Team.Site", FetchMode.Join)
                     .SetFetchMode("PersonPeriodCollection.Team.Site.BusinessUnit", FetchMode.Join)
-                    .SetFetchMode("PersonPeriodCollection.PersonSkillCollection", FetchMode.Join);
+                    .SetFetchMode("PersonPeriodCollection.PersonSkillCollection", FetchMode.Join)
+					.SetFetchMode("PersonPeriodCollection.ExternalLogOnCollection", FetchMode.Join);
 
             	DetachedCriteria schedulePeriod = DetachedCriteria.For<Person>("schedulePeriod")
             		.Add(Restrictions.InG("Id", currentBatchIds))
