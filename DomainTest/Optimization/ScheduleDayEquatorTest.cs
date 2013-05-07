@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Threading;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
+using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
 
@@ -302,6 +304,25 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			Assert.IsTrue(_target.MainShiftBasicEquals(otherShift, currentShift));
 		}
 
+		[Test]
+		public void ShouldHandleDaylightSavingTime()
+		{
+			var period1 = new DateTimePeriod(new DateTime(2013, 3, 30, 8, 0, 0, DateTimeKind.Utc),
+			                                 new DateTime(2013, 3, 30, 17, 0, 0, DateTimeKind.Utc));
+			var period2 = new DateTimePeriod(new DateTime(2013, 3, 31, 7, 0, 0, DateTimeKind.Utc),
+			                                 new DateTime(2013, 3, 31, 16, 0, 0, DateTimeKind.Utc));
+			var shiftCategory = new ShiftCategory("C");
+			var activity = new Activity("A");
+			activity.SetId(Guid.NewGuid());
+			IMainShift currentShift = MainShiftFactory.CreateMainShift(activity, period1, shiftCategory);
+			IMainShift otherShift = MainShiftFactory.CreateMainShift(activity, period2, shiftCategory);
+			var person = PersonFactory.CreatePerson();
+			person.PermissionInformation.SetDefaultTimeZone(TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time"));
+			var newIdentity = new TeleoptiIdentity("test2", null, null, null);
+			Thread.CurrentPrincipal = new TeleoptiPrincipal(newIdentity, person);
+
+			Assert.IsTrue(_target.MainShiftBasicEquals(otherShift, currentShift));
+		}
 
 		#region Bugfix 19056
 
