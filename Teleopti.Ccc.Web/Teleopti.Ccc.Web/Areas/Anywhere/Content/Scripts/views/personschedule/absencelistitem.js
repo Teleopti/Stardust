@@ -3,11 +3,13 @@ define([
 	'moment',
 	'navigation',
 	'noext!application/resources'
+    'ajax'
 ], function (
 	ko,
 	moment,
 	navigation,
 	resources
+    ajax
 ) {
 
 	return function (data) {
@@ -28,13 +30,12 @@ define([
 			var data = JSON.stringify({
 				PersonAbsenceId: personAbsenceId
 			});
-			$.ajax(
+            ajax.ajax(
 				{
-					url: 'PersonScheduleCommand/RemoveAbsence',
+                    url: 'PersonScheduleCommand/RemovePersonAbsence',
 					type: 'POST',
-					cache: false,
-					contentType: 'application/json; charset=utf-8',
 					data: data,
+                    dataType: 'text',
 					success: function(data, textStatus, jqXHR) {
 						navigation.GotoPersonSchedule(personId, date);
 					}

@@ -70,7 +70,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				});
 		}
 
-		public virtual void RemoveAbsence(string dataSourceName)
+		public virtual void RemovePersonAbsence(string dataSourceName)
 		{
 			AddEvent(new PersonAbsenceRemovedEvent
 			{

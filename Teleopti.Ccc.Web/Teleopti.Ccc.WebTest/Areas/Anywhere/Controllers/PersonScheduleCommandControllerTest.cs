@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 
 			var command = new RemovePersonAbsenceCommand();
 
-			target.RemoveAbsence(command);
+			target.RemovePersonAbsence(command);
 
 			commandDispatcher.AssertWasCalled(x => x.Execute(command));
 		}

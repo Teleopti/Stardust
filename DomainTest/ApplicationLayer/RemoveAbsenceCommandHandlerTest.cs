@@ -12,10 +12,10 @@ using Teleopti.Interfaces.Domain;
 namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 {
 	[TestFixture]
-	public class RemoveAbsenceCommandHandlerTest
+	public class RemovePersonAbsenceCommandHandlerTest
 	{
 		[Test]
-		public void ShouldRemoveAbsenceFromRepository()
+		public void ShouldRemovePersonAbsenceFromRepository()
 		{
 			var personAbsence = new PersonAbsence(PersonFactory.CreatePersonWithId(), new FakeCurrentScenario().Current(), MockRepository.GenerateMock<IAbsenceLayer>());
 			personAbsence.SetId(new Guid());
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.ApplicationLayer
 		}
 
 		[Test]
-		public void ShouldRaiseRemovedAbsenceEvent()
+		public void ShouldRaisePersonAbsenceRemovedEvent()
 		{
 			var currentDataSource = new FakeCurrentDatasource("datasource");
 

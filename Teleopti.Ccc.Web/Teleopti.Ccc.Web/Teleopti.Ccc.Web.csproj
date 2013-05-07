@@ -390,6 +390,7 @@
     <Compile Include="Areas\Start\Models\Authentication\IAuthenticationType.cs" />
     <Compile Include="Areas\Start\Models\Authentication\WindowsAuthenticationModel.cs" />
     <Compile Include="Areas\Start\Models\Authentication\WindowsAuthenticationType.cs" />
+    <Compile Include="Core\Startup\ExceptionHandlerPipelineModule.cs" />
     <Compile Include="Core\Startup\InitializeApplication\MessageBrokerTask.cs" />
     <Compile Include="Core\Startup\InterceptorPipelineModule.cs" />
     <Compile Include="Filters\AsyncTaskAttribute.cs" />
@@ -615,6 +616,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Areas\Anywhere\Content\Scripts\ajax.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\errorview.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\signalrhubs.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\resizeevent.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\messagebroker.js" />
