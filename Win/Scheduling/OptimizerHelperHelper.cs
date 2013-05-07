@@ -194,7 +194,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             return new ReadOnlyCollection<IScheduleDay>(clipObjectListFilter());
         }
 
-		public static IList<IScheduleMatrixPro> CreateMatrixListAll(ISchedulerStateHolder schedulerState, IComponentContext container)
+		public static IList<IScheduleMatrixPro> CreateMatrixListAll(ISchedulerStateHolder schedulerState, IComponentContext container, DateOnlyPeriod selectedPeriod)
 		{
 			if(schedulerState == null) throw new ArgumentNullException("schedulerState");
 
@@ -212,18 +212,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 				}
 			}
 
-			return CreateMatrixList(allSchedules, schedulerState.SchedulingResultState, container);
+			return CreateMatrixList(allSchedules, schedulerState.SchedulingResultState, container, selectedPeriod);
 		}
 
-		[Obsolete("Never used")]
-		public static IList<IScheduleMatrixPro> CreateMatrixList(ClipHandler clipHandler, ISchedulingResultStateHolder resultStateHolder, IComponentContext container)
-        {
-            if (clipHandler == null) throw new ArgumentNullException("clipHandler");
-            IList<IScheduleDay> scheduleDays = ContainedSchedulePartList(clipHandler.ClipList);
-            return CreateMatrixList(scheduleDays, resultStateHolder, container);
-        }
-
-        public static IList<IScheduleMatrixPro> CreateMatrixList(IList<IScheduleDay> scheduleDays, ISchedulingResultStateHolder resultStateHolder, IComponentContext container)
+        public static IList<IScheduleMatrixPro> CreateMatrixList(IList<IScheduleDay> scheduleDays, ISchedulingResultStateHolder resultStateHolder, IComponentContext container, DateOnlyPeriod selectedPeriod)
         {
             if (scheduleDays == null) throw new ArgumentNullException("scheduleDays");
 
@@ -231,7 +223,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 new ScheduleMatrixListCreator(resultStateHolder).CreateMatrixListFromScheduleParts(scheduleDays);
 
             var matrixUserLockLocker = container.Resolve<IMatrixUserLockLocker>();
-            matrixUserLockLocker.Execute(scheduleDays, matrixes);
+            matrixUserLockLocker.Execute(scheduleDays, matrixes, selectedPeriod);
 
             return matrixes;
         }
