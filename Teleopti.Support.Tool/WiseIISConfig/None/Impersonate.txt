@@ -4,3 +4,5 @@ PMService;True
 RTA;False
 SDK;False
 Web;False
+Client;False
+MyTime;False
