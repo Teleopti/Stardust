@@ -5,7 +5,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 {
     public interface IMatrixUserLockLocker
     {
-        void Execute(IEnumerable<IScheduleDay> scheduleDays, IEnumerable<IScheduleMatrixPro> scheduleMatrixes);
+        void Execute(IEnumerable<IScheduleDay> scheduleDays, IEnumerable<IScheduleMatrixPro> scheduleMatrixes, DateOnlyPeriod selectedPeriod);
     }
 
     public class MatrixUserLockLocker : IMatrixUserLockLocker
@@ -18,7 +18,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-        public void Execute(IEnumerable<IScheduleDay> scheduleDays, IEnumerable<IScheduleMatrixPro> scheduleMatrixes)
+		public void Execute(IEnumerable<IScheduleDay> scheduleDays, IEnumerable<IScheduleMatrixPro> scheduleMatrixes, DateOnlyPeriod selectedPeriod)
         {
             foreach (var matrix in scheduleMatrixes)
             {
@@ -32,15 +32,15 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                         dates.Add(scheduleDay.DateOnlyAsPeriod.DateOnly);
                 }
 
-                setUserLockedDaysInMatrix(matrix, dates, _gridlockManager);
+				setUserLockedDaysInMatrix(matrix, selectedPeriod, _gridlockManager);
 				if(dates.Count > 0)
 #pragma warning disable 612,618
-					matrix.SelectedPeriod = new DateOnlyPeriod(dates[0], dates[dates.Count -1]);
+					matrix.SelectedPeriod = selectedPeriod;
 #pragma warning restore 612,618
             }
         }
 
-        private static void setUserLockedDaysInMatrix(IScheduleMatrixPro matrix, ICollection<DateOnly> selectedDates, IGridlockManager gridlockManager)
+		private static void setUserLockedDaysInMatrix(IScheduleMatrixPro matrix, DateOnlyPeriod selectedPeriod, IGridlockManager gridlockManager)
         {
             var currentPerson = matrix.Person;
 
@@ -48,7 +48,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             {
                 var day = dayPro.Day;
 
-                if (selectedDates.Contains(day))
+                if (selectedPeriod.Contains(day))
                     matrix.UnlockPeriod(new DateOnlyPeriod(day, day));
 
                 var locks = gridlockManager.Gridlocks(currentPerson, day);
