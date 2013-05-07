@@ -41,16 +41,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Extensions
 			element.JQueryChange();
 		}
 
-		public static void SelectNoWait(this SelectList element, string text)
-		{
-			element.EventualWait();
-			var option = element.Option(Find.BySelector(string.Format(":contains('{0}')", text)));
-			option.EventualWait();
-			option.SelectNoWait();
-			element.FireEventNoWait("change");
-			element.JQueryChange();
-		}
-
 		public static bool JQueryVisible(this Element element)
 		{
 			var result = JQuery.SelectById(GetIdForJQuerySelection(element))

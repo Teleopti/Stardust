@@ -10,6 +10,7 @@ using Teleopti.Ccc.WebBehaviorTest.Core.BrowserInteractions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data;
+using Teleopti.Ccc.WebBehaviorTest.Pages.jQuery;
 using Teleopti.Interfaces.Domain;
 using WatiN.Core;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
@@ -94,13 +95,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		public void WhenIInputTheseFullDayAbsenceValues(Table table)
 		{
 			var fullDayAbsenceFormInfo = table.CreateInstance<FullDayAbsenceFormInfo>();
-			
-			var select = Browser.Current.SelectList(Find.BySelector(".full-day-absence-form .absence-type"));
-			if (fullDayAbsenceFormInfo.Absence != null)
-				select.SelectNoWait(fullDayAbsenceFormInfo.Absence);
-			else
-				select.WaitUntilEnabled();
-
+			Browser.Interactions.SelectOptionByTextUsingJQuery(".full-day-absence-form .absence-type:enabled", fullDayAbsenceFormInfo.Absence);
 			Browser.Interactions.Javascript(string.Format("test.callViewMethodWhenReady('personschedule', 'setDateFromTest', '{0}');", fullDayAbsenceFormInfo.EndDate));
 		}
 

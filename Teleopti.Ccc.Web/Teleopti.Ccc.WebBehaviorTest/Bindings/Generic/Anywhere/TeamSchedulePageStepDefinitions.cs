@@ -3,6 +3,7 @@ using NUnit.Framework;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.WebBehaviorTest.Core.BrowserInteractions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using WatiN.Core;
@@ -59,7 +60,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		[When(@"I select team '(.*)'")]
 		public void WhenISelectTeam(string teamName)
 		{
-			Browser.Current.SelectList(Find.BySelector("#team-selector")).SelectNoWait(teamName);
+			Browser.Interactions.SelectOptionByTextUsingJQuery("#team-selector", teamName);
 		}
 
 		[When(@"I select date '(.*)'")]
