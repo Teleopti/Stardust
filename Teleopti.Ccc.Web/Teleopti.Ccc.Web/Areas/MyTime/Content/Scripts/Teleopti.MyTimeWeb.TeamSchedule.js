@@ -51,23 +51,27 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
         };
 
         this.findTeamById = function (teamId) {
-            var team;
-            ko.utils.arrayForEach(self.availableTeams(), function (t) {
-                if (t.Value == teamId) {
-                    team = t;
-                }
+            var foundTeam;
+            ko.utils.arrayForEach(self.availableTeams(), function (group) {
+                ko.utils.arrayForEach(group.children, function(team) {
+                    if (team.id == teamId) {
+                        foundTeam = team;
+                    }
+                });
             });
-            return team;
+            return foundTeam;
         };
         
         this.findFirstTeam = function () {
-            var team;
-            ko.utils.arrayForEach(self.availableTeams(), function(t) {
-                if (t.Value != '-') {
-                    team = t;
-                }
+            var firstTeam;
+            ko.utils.arrayForEach(self.availableTeams(), function (group) {
+                ko.utils.arrayForEach(group.children, function (team) {
+                    if (firstTeam === undefined) {
+                        firstTeam = team;
+                    }
+                });
             });
-            return team;
+            return firstTeam;
         };
 
         this.dateAndTeamKey = ko.computed(function() {
@@ -80,16 +84,8 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
         });
     };
 
-	function _initPeriodSelection() {
-		
-	}
-
-	function _initTeamPicker() {
-		
-	}
-
 	function _initTeamPickerSelection() {
-	    $('#Team-Picker').select2("destroy");
+	    //$('#Team-Picker').select2("destroy");
 	    vm = new teamScheduleViewModel(_currentUrlDate());
 
 	    $.ajax({
@@ -99,57 +95,7 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 	        global: false,
 	        cache: false,
 	        success: function (data, textStatus, jqXHR) {
-	            var containerCss = data.length < 2 ? "team-select2-container team-select2-container-hidden" : "team-select2-container";
-	            //if (data.length < 2) {
-	            //    containerCss = "team-select2-container team-select2-container-hidden";
-	            //} else {
-	            //    containerCss = "team-select2-container";
-	            //}
-	            //$('#Team-Picker').select2(
-				//	{
-				//	    data: data,
-				//	    containerCssClass: containerCss,
-				//	    dropdownCssClass: "team-select2-dropdown"
-				//	}
-				//);
-	            
-	            //var teamId = $('#TeamSchedule-body').data('mytime-teamselection');
-	            //if (!teamId)
-	            //    return;
-	            //var selectables = [];
-	            //if (data[0] && data[0].children) {
-	            //    $.each(data, function (index) {
-	            //        $.merge(selectables, data[index].children);
-	            //    });
-	            //} else {
-	            //    selectables = data;
-	            //}
-	            //var team = $.grep(selectables, function (e) { return e.id == teamId; })[0];
-	            //if (team) {
-	            //    $('#Team-Picker').select2("data", team);
-	            //} else {
-	            //    var date = _currentFixedDate();
-	            //    if (date)
-	            //        _navigateTo(date);
-	            //}
-
-	            //readyForInteraction();
-	            //completelyLoaded();
-
-	            /////////////////////////////////////////////////////////
-	            //$('#Team-Picker').select2('containerCssClass', containerCss);
-	            
-	            //var list = vm.availableTeams();
-	            
-	            var list = [];
-	            ko.utils.arrayForEach(data, function (t) {
-	                if (t.Value != '-') {
-	                    list.push(t);
-	                }
-	            });
-	            
-	            vm.availableTeams(list);
-	            //vm.availableTeams.valueHasMutated();
+	            vm.availableTeams(data);
 
 	            var teamId = _currentId();
 	            var foundTeam = undefined;
@@ -159,12 +105,13 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 	            if (foundTeam === undefined)
 	                foundTeam = vm.findFirstTeam();
 
-	            vm.selectedTeam(foundTeam);
+	            vm.selectedTeam(foundTeam.id);
 
                 vm.dateAndTeamKey.subscribe(function() {
                     var team = vm.selectedTeam();
                     if (team === undefined || team == null) return;
-                    _navigateTo(vm.selectedDate().format('YYYY-MM-DD'), team.Value);
+                    var theDate = vm.selectedDate();
+                    _navigateTo(theDate.format('YYYY-MM-DD'), team);
                 });
 	            
                 readyForInteraction();
@@ -190,11 +137,16 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 	}
 
 	function _navigateTo(date, teamid) {
+	    _unBindData();
 		portal.NavigateTo("TeamSchedule/Index", date, teamid);
 	}
 
 	function _bindData() {
 	    ko.applyBindings(vm, $('#page')[0]);
+	};
+    
+	function _unBindData() {
+	    ko.cleanNode($('#page')[0]);
 	};
 
 	function _currentUrlDate() {
@@ -208,7 +160,6 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 	return {
 		Init: function () {
 			portal.RegisterPartialCallBack('TeamSchedule/Index', Teleopti.MyTimeWeb.TeamSchedule.TeamSchedulePartialInit);
-			_initTeamPicker();
 		},
 		TeamSchedulePartialInit: function (readyForInteractionCallback, completelyLoadedCallback) {
 			readyForInteraction = readyForInteractionCallback;
@@ -218,7 +169,6 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 				completelyLoaded();
 				return;
 			}
-			_initPeriodSelection();
 			_initTeamPickerSelection();
 			_bindData();
 			_initAgentNameOverflow();

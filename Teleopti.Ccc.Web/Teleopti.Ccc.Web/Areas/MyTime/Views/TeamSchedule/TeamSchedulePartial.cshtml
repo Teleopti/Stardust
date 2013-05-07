@@ -22,7 +22,11 @@
             <li class="divider-vertical"></li>
         </ul>
         <div data-bind="if: showTeamPicker">
-            <select id="Team-Picker" data-bind="select2: { width: 'resolve' }, options: availableTeams, value: selectedTeam, optionsValue: 'id', optionsText: 'text'" />
+            <select id="Team-Picker" data-bind="foreach: availableTeams, select2: { width: 'resolve', value: selectedTeam } ">
+                <optgroup data-bind="attr: { label: text }, foreach: children">
+                    <option data-bind="text: text, value: id"></option>
+                </optgroup>
+            </select>
         </div>
     </div>
 </div>
