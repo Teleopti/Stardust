@@ -303,7 +303,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				_daysOffSchedulingService.DayScheduled -= schedulingServiceDayScheduled;
 
                 IList<IScheduleMatrixOriginalStateContainer> originalStateContainers =
-                    CreateScheduleMatrixOriginalStateContainers(allSelectedSchedules);
+					CreateScheduleMatrixOriginalStateContainers(allSelectedSchedules, new DateOnlyPeriod(selectedPeriod.First(), selectedPeriod.Last()));
 
                 foreach (var scheduleMatrixOriginalStateContainer in originalStateContainers)
                 {
@@ -572,22 +572,24 @@ namespace Teleopti.Ccc.Win.Scheduling
             var onlyShiftsWhenUnderstaffed = optimizerPreferences.Rescheduling.OnlyShiftsWhenUnderstaffed;
             _sendEventEvery = optimizerPreferences.Advanced.RefreshScreenInterval;
 
+			var currentPersonTimeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
+			var selectedPeriod =
+				new DateOnlyPeriod(OptimizerHelperHelper.GetStartDateInSelectedDays(selectedDays, currentPersonTimeZone),
+				                   OptimizerHelperHelper.GetEndDateInSelectedDays(selectedDays, currentPersonTimeZone));
+
             optimizerPreferences.Rescheduling.OnlyShiftsWhenUnderstaffed = false;
             var tagSetter = _container.Resolve<IScheduleTagSetter>();
             tagSetter.ChangeTagToSet(optimizerPreferences.General.ScheduleTag);
 			IList<IPerson> selectedPersons = new List<IPerson>(ScheduleViewBase.AllSelectedPersons(selectedDays));
-            IList<IScheduleMatrixPro> matrixListForWorkShiftOptimization = OptimizerHelperHelper.CreateMatrixList(selectedDays, SchedulingStateHolder, _container);
-            IList<IScheduleMatrixPro> matrixListForDayOffOptimization = OptimizerHelperHelper.CreateMatrixList(selectedDays, SchedulingStateHolder, _container);
-            IList<IScheduleMatrixPro> matrixListForIntradayOptimization = OptimizerHelperHelper.CreateMatrixList(selectedDays, SchedulingStateHolder, _container);
+			IList<IScheduleMatrixPro> matrixListForWorkShiftOptimization = OptimizerHelperHelper.CreateMatrixList(selectedDays, SchedulingStateHolder, _container, selectedPeriod);
+			IList<IScheduleMatrixPro> matrixListForDayOffOptimization = OptimizerHelperHelper.CreateMatrixList(selectedDays, SchedulingStateHolder, _container, selectedPeriod);
+			IList<IScheduleMatrixPro> matrixListForIntradayOptimization = OptimizerHelperHelper.CreateMatrixList(selectedDays, SchedulingStateHolder, _container, selectedPeriod);
 
             IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainerListForWorkShiftOptimization = createMatrixContainerList(matrixListForWorkShiftOptimization);
             IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainerListForDayOffOptimization = createMatrixContainerList(matrixListForDayOffOptimization);
             IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainerListForIntradayOptimization = createMatrixContainerList(matrixListForIntradayOptimization);
 
             IList<IScheduleMatrixOriginalStateContainer> matrixOriginalStateContainerListForMoveMax = createMatrixContainerList(matrixListForIntradayOptimization);
-
-            var currentPersonTimeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
-            var selectedPeriod = new DateOnlyPeriod(OptimizerHelperHelper.GetStartDateInSelectedDays(selectedDays, currentPersonTimeZone), OptimizerHelperHelper.GetEndDateInSelectedDays(selectedDays, currentPersonTimeZone));
 			
 			OptimizerHelperHelper.SetConsiderShortBreaks(selectedPersons, selectedPeriod, optimizerPreferences.Rescheduling, _container);
 
@@ -596,7 +598,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 if (optimizerPreferences.General.OptimizationStepDaysOff)
                     runDayOffOptimization(optimizerPreferences, matrixOriginalStateContainerListForDayOffOptimization, selectedPeriod);
 
-                IList<IScheduleMatrixPro> matrixListForWorkShiftAndIntradayOptimization = OptimizerHelperHelper.CreateMatrixList(selectedDays, _stateHolder, _container);
+				IList<IScheduleMatrixPro> matrixListForWorkShiftAndIntradayOptimization = OptimizerHelperHelper.CreateMatrixList(selectedDays, _stateHolder, _container, selectedPeriod);
                 IList<IScheduleMatrixOriginalStateContainer> workShiftOriginalStateContainerListForWorkShiftAndIntradayOptimization =
                     createMatrixContainerList(matrixListForWorkShiftAndIntradayOptimization);
 
@@ -628,7 +630,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                         backgroundWorker);
 
 				if (optimizerPreferences.General.OptimizationStepFairness)
-					runFairness(selectedDays, tagSetter, selectedPersons, optimizerPreferences);
+					runFairness(selectedDays, tagSetter, selectedPersons, optimizerPreferences, selectedPeriod);
             }
 
             //set back
@@ -636,9 +638,9 @@ namespace Teleopti.Ccc.Win.Scheduling
         }
 
 		private void runFairness(IList<IScheduleDay> selectedDays, IScheduleTagSetter tagSetter, IList<IPerson> selectedPersons,
-			IOptimizationPreferences optimizerPreferences)
+			IOptimizationPreferences optimizerPreferences, DateOnlyPeriod selectedPeriod)
 		{
-			var matrixListForFairness = OptimizerHelperHelper.CreateMatrixList(selectedDays, _stateHolder, _container);
+			var matrixListForFairness = OptimizerHelperHelper.CreateMatrixList(selectedDays, _stateHolder, _container, selectedPeriod);
 			var fairnessOpt = _container.Resolve<IShiftCategoryFairnessOptimizer>();
 			var selectedDates = OptimizerHelperHelper.GetSelectedPeriod(selectedDays).DayCollection();
 			var rollbackService = new SchedulePartModifyAndRollbackService(_stateHolder, new EmptyScheduleDayChangeCallback(), tagSetter);
@@ -1022,11 +1024,11 @@ namespace Teleopti.Ccc.Win.Scheduling
                 _backgroundWorker.ReportProgress(-e.PercentageCompleted);
         }
 
-        public IList<IScheduleMatrixOriginalStateContainer> CreateScheduleMatrixOriginalStateContainers(IList<IScheduleDay> scheduleDays)
+        public IList<IScheduleMatrixOriginalStateContainer> CreateScheduleMatrixOriginalStateContainers(IList<IScheduleDay> scheduleDays, DateOnlyPeriod selectedPeriod)
         {
             IList<IScheduleMatrixOriginalStateContainer> retList = new List<IScheduleMatrixOriginalStateContainer>();
             IScheduleDayEquator scheduleDayEquator = new ScheduleDayEquator();
-            foreach (IScheduleMatrixPro scheduleMatrixPro in OptimizerHelperHelper.CreateMatrixList(scheduleDays, SchedulingStateHolder, _container))
+			foreach (IScheduleMatrixPro scheduleMatrixPro in OptimizerHelperHelper.CreateMatrixList(scheduleDays, SchedulingStateHolder, _container, selectedPeriod))
                 retList.Add(new ScheduleMatrixOriginalStateContainer(scheduleMatrixPro, scheduleDayEquator));
 
             return retList;
