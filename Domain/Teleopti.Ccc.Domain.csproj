@@ -974,6 +974,7 @@
     <Compile Include="Security\Authentication\IFindUserDetail.cs" />
     <Compile Include="Security\Authentication\IWindowsUserProvider.cs" />
     <Compile Include="Security\Authentication\LoggedOnUser.cs" />
+    <Compile Include="Security\Authentication\LogonLogger.cs" />
     <Compile Include="Security\Authentication\UserTimeZone.cs" />
     <Compile Include="Security\Authentication\WindowsDataSourceProvider.cs" />
     <Compile Include="Security\Authentication\AuthenticationSettings.cs" />
