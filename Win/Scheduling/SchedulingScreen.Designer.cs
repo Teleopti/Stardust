@@ -61,9 +61,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void InitializeComponent()
         {
 			this.components = new System.ComponentModel.Container();
-			Syncfusion.Windows.Forms.Tools.ToolStripTabGroup toolStripTabGroup4 = new Syncfusion.Windows.Forms.Tools.ToolStripTabGroup();
-			Syncfusion.Windows.Forms.Tools.ToolStripTabGroup toolStripTabGroup5 = new Syncfusion.Windows.Forms.Tools.ToolStripTabGroup();
-			Syncfusion.Windows.Forms.Tools.ToolStripTabGroup toolStripTabGroup6 = new Syncfusion.Windows.Forms.Tools.ToolStripTabGroup();
+			Syncfusion.Windows.Forms.Tools.ToolStripTabGroup toolStripTabGroup1 = new Syncfusion.Windows.Forms.Tools.ToolStripTabGroup();
+			Syncfusion.Windows.Forms.Tools.ToolStripTabGroup toolStripTabGroup2 = new Syncfusion.Windows.Forms.Tools.ToolStripTabGroup();
+			Syncfusion.Windows.Forms.Tools.ToolStripTabGroup toolStripTabGroup3 = new Syncfusion.Windows.Forms.Tools.ToolStripTabGroup();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SchedulingScreen));
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
 			this.toolStripSpinningProgressControl1 = new Teleopti.Ccc.Win.Common.Controls.SpinningProgress.ToolStripSpinningProgressControl();
@@ -367,7 +367,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.SetShortcut(this.toolStripSpinningProgressControl1, System.Windows.Forms.Keys.None);
 			this.toolStripSpinningProgressControl1.Size = new System.Drawing.Size(20, 24);
 			this.toolStripSpinningProgressControl1.Text = "toolStripSpinningProgressControl1";
-			this.toolStripSpinningProgressControl1.TransitionSegment = 3;
+			this.toolStripSpinningProgressControl1.TransitionSegment = 8;
 			this.toolStripSpinningProgressControl1.TransitionSegmentColor = System.Drawing.Color.FromArgb(((int)(((byte)(129)))), ((int)(((byte)(242)))), ((int)(((byte)(121)))));
 			this.toolStripSpinningProgressControl1.Visible = false;
 			// 
@@ -445,7 +445,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.xxExportToolStripMenuItem,
             this.toolStripMenuItemChangeTagRM});
 			this.contextMenuViews.Name = "contextMenuStrip1";
-			this.contextMenuViews.Size = new System.Drawing.Size(283, 666);
+			this.contextMenuViews.Size = new System.Drawing.Size(283, 644);
 			this.contextMenuViews.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuViews_Opening);
 			// 
 			// toolStripMenuItemCut
@@ -1289,18 +1289,18 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.ribbonControlAdv1.Size = new System.Drawing.Size(1221, 160);
 			this.ribbonControlAdv1.SystemText.QuickAccessCustomizeCaptionText = "Customize QuickAccess Toolbar";
 			this.ribbonControlAdv1.SystemText.QuickAccessDialogDropDownName = "";
-			toolStripTabGroup4.Color = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
-			toolStripTabGroup4.Name = "toolStripTabGroupShiftEditor";
-			toolStripTabGroup4.Visible = true;
-			toolStripTabGroup5.Color = System.Drawing.Color.Blue;
-			toolStripTabGroup5.Name = "toolStripTabGroupMainGrid";
-			toolStripTabGroup5.Visible = true;
-			toolStripTabGroup6.Color = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
-			toolStripTabGroup6.Name = "toolStripTabGroupShiftEditor2";
-			toolStripTabGroup6.Visible = true;
-			this.ribbonControlAdv1.TabGroups.Add(toolStripTabGroup4);
-			this.ribbonControlAdv1.TabGroups.Add(toolStripTabGroup5);
-			this.ribbonControlAdv1.TabGroups.Add(toolStripTabGroup6);
+			toolStripTabGroup1.Color = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+			toolStripTabGroup1.Name = "toolStripTabGroupShiftEditor";
+			toolStripTabGroup1.Visible = true;
+			toolStripTabGroup2.Color = System.Drawing.Color.Blue;
+			toolStripTabGroup2.Name = "toolStripTabGroupMainGrid";
+			toolStripTabGroup2.Visible = true;
+			toolStripTabGroup3.Color = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
+			toolStripTabGroup3.Name = "toolStripTabGroupShiftEditor2";
+			toolStripTabGroup3.Visible = true;
+			this.ribbonControlAdv1.TabGroups.Add(toolStripTabGroup1);
+			this.ribbonControlAdv1.TabGroups.Add(toolStripTabGroup2);
+			this.ribbonControlAdv1.TabGroups.Add(toolStripTabGroup3);
 			this.ribbonControlAdv1.TabIndex = 5;
 			this.ribbonControlAdv1.TitleAlignment = Syncfusion.Windows.Forms.Tools.TextAlignment.Center;
 			// 
@@ -2670,7 +2670,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripEx3.ShowLauncher = false;
 			this.toolStripEx3.Size = new System.Drawing.Size(366, 98);
 			this.toolStripEx3.TabIndex = 2;
-			this.toolStripEx3.Text = "xxFilter";
+			this.toolStripEx3.Text = "xxFind";
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripEx3, true);
 			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripEx3, false);
 			// 
@@ -2982,14 +2982,14 @@ namespace Teleopti.Ccc.Win.Scheduling
             this.toolStripSeparator6,
             this.xxAgentInfoToolStripMenuItem});
 			this.contextMenuStripRestrictionView.Name = "contextMenuStripRestrictionView";
-			this.contextMenuStripRestrictionView.Size = new System.Drawing.Size(260, 280);
+			this.contextMenuStripRestrictionView.Size = new System.Drawing.Size(260, 258);
 			// 
 			// toolStripMenuItemUseRotation
 			// 
 			this.toolStripMenuItemUseRotation.CheckOnClick = true;
 			this.toolStripMenuItemUseRotation.Name = "toolStripMenuItemUseRotation";
 			this.SetShortcut(this.toolStripMenuItemUseRotation, System.Windows.Forms.Keys.None);
-			this.toolStripMenuItemUseRotation.Size = new System.Drawing.Size(183, 22);
+			this.toolStripMenuItemUseRotation.Size = new System.Drawing.Size(259, 22);
 			this.toolStripMenuItemUseRotation.Text = "xxRotation";
 			this.toolStripMenuItemUseRotation.Visible = false;
 			this.toolStripMenuItemUseRotation.Click += new System.EventHandler(this.toolStripMenuItemUseRotation_Click);
@@ -3001,7 +3001,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripMenuItemUseAvailability.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.toolStripMenuItemUseAvailability.Name = "toolStripMenuItemUseAvailability";
 			this.SetShortcut(this.toolStripMenuItemUseAvailability, System.Windows.Forms.Keys.None);
-			this.toolStripMenuItemUseAvailability.Size = new System.Drawing.Size(183, 22);
+			this.toolStripMenuItemUseAvailability.Size = new System.Drawing.Size(259, 22);
 			this.toolStripMenuItemUseAvailability.Text = "xxAvailability";
 			this.toolStripMenuItemUseAvailability.Visible = false;
 			this.toolStripMenuItemUseAvailability.Click += new System.EventHandler(this.toolStripMenuItemUseAvailability_Click);
@@ -3013,7 +3013,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripMenuItemUsePreference.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.toolStripMenuItemUsePreference.Name = "toolStripMenuItemUsePreference";
 			this.SetShortcut(this.toolStripMenuItemUsePreference, System.Windows.Forms.Keys.None);
-			this.toolStripMenuItemUsePreference.Size = new System.Drawing.Size(183, 22);
+			this.toolStripMenuItemUsePreference.Size = new System.Drawing.Size(259, 22);
 			this.toolStripMenuItemUsePreference.Text = "xxPreference";
 			this.toolStripMenuItemUsePreference.Visible = false;
 			this.toolStripMenuItemUsePreference.Click += new System.EventHandler(this.toolStripMenuItemUsePreference_Click);
@@ -3023,7 +3023,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripMenuItemUseStudentAvailability.CheckOnClick = true;
 			this.toolStripMenuItemUseStudentAvailability.Name = "toolStripMenuItemUseStudentAvailability";
 			this.SetShortcut(this.toolStripMenuItemUseStudentAvailability, System.Windows.Forms.Keys.None);
-			this.toolStripMenuItemUseStudentAvailability.Size = new System.Drawing.Size(183, 22);
+			this.toolStripMenuItemUseStudentAvailability.Size = new System.Drawing.Size(259, 22);
 			this.toolStripMenuItemUseStudentAvailability.Text = "xxStudentAvailability";
 			this.toolStripMenuItemUseStudentAvailability.Visible = false;
 			this.toolStripMenuItemUseStudentAvailability.Click += new System.EventHandler(this.toolStripMenuItemUseStudentAvailability_Click);
@@ -3035,7 +3035,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripMenuItemUseSchedule.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.toolStripMenuItemUseSchedule.Name = "toolStripMenuItemUseSchedule";
 			this.SetShortcut(this.toolStripMenuItemUseSchedule, System.Windows.Forms.Keys.None);
-			this.toolStripMenuItemUseSchedule.Size = new System.Drawing.Size(183, 22);
+			this.toolStripMenuItemUseSchedule.Size = new System.Drawing.Size(259, 22);
 			this.toolStripMenuItemUseSchedule.Text = "xxSchedule";
 			this.toolStripMenuItemUseSchedule.Visible = false;
 			this.toolStripMenuItemUseSchedule.Click += new System.EventHandler(this.toolStripMenuItemUseSchedule_Click);
@@ -3060,14 +3060,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 			// 
 			this.toolStripSeparator5.Name = "toolStripSeparator5";
 			this.SetShortcut(this.toolStripSeparator5, System.Windows.Forms.Keys.None);
-			this.toolStripSeparator5.Size = new System.Drawing.Size(180, 6);
+			this.toolStripSeparator5.Size = new System.Drawing.Size(256, 6);
 			// 
 			// toolStripMenuItemRestrictionCopy
 			// 
 			this.toolStripMenuItemRestrictionCopy.Name = "toolStripMenuItemRestrictionCopy";
 			this.SetShortcut(this.toolStripMenuItemRestrictionCopy, System.Windows.Forms.Keys.None);
 			this.toolStripMenuItemRestrictionCopy.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
-			this.toolStripMenuItemRestrictionCopy.Size = new System.Drawing.Size(183, 22);
+			this.toolStripMenuItemRestrictionCopy.Size = new System.Drawing.Size(259, 22);
 			this.toolStripMenuItemRestrictionCopy.Text = "xxCopy";
 			this.toolStripMenuItemRestrictionCopy.Click += new System.EventHandler(this.toolStripMenuItemRestrictionCopy_Click);
 			// 
@@ -3076,7 +3076,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripMenuItemRestrictionPaste.Name = "toolStripMenuItemRestrictionPaste";
 			this.SetShortcut(this.toolStripMenuItemRestrictionPaste, System.Windows.Forms.Keys.None);
 			this.toolStripMenuItemRestrictionPaste.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
-			this.toolStripMenuItemRestrictionPaste.Size = new System.Drawing.Size(183, 22);
+			this.toolStripMenuItemRestrictionPaste.Size = new System.Drawing.Size(259, 22);
 			this.toolStripMenuItemRestrictionPaste.Text = "xxPaste";
 			this.toolStripMenuItemRestrictionPaste.Click += new System.EventHandler(this.toolStripMenuItemRestrictionPaste_Click);
 			// 
@@ -3085,7 +3085,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripMenuItemRestrictionDelete.Name = "toolStripMenuItemRestrictionDelete";
 			this.SetShortcut(this.toolStripMenuItemRestrictionDelete, System.Windows.Forms.Keys.None);
 			this.toolStripMenuItemRestrictionDelete.ShortcutKeys = System.Windows.Forms.Keys.Delete;
-			this.toolStripMenuItemRestrictionDelete.Size = new System.Drawing.Size(183, 22);
+			this.toolStripMenuItemRestrictionDelete.Size = new System.Drawing.Size(259, 22);
 			this.toolStripMenuItemRestrictionDelete.Text = "xxDelete";
 			this.toolStripMenuItemRestrictionDelete.Click += new System.EventHandler(this.toolStripMenuItemRestrictionDelete_Click);
 			// 
@@ -3093,14 +3093,14 @@ namespace Teleopti.Ccc.Win.Scheduling
 			// 
 			this.toolStripSeparator6.Name = "toolStripSeparator6";
 			this.SetShortcut(this.toolStripSeparator6, System.Windows.Forms.Keys.None);
-			this.toolStripSeparator6.Size = new System.Drawing.Size(180, 6);
+			this.toolStripSeparator6.Size = new System.Drawing.Size(256, 6);
 			// 
 			// xxAgentInfoToolStripMenuItem
 			// 
 			this.xxAgentInfoToolStripMenuItem.Name = "xxAgentInfoToolStripMenuItem";
 			this.SetShortcut(this.xxAgentInfoToolStripMenuItem, System.Windows.Forms.Keys.None);
 			this.xxAgentInfoToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.I)));
-			this.xxAgentInfoToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
+			this.xxAgentInfoToolStripMenuItem.Size = new System.Drawing.Size(259, 22);
 			this.xxAgentInfoToolStripMenuItem.Text = "xxAgentInfo";
 			this.xxAgentInfoToolStripMenuItem.Click += new System.EventHandler(this.toolStripButtonAgentInfo_Click);
 			// 

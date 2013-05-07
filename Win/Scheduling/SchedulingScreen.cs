@@ -6203,15 +6203,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 		private void toolStripButtonRequestClick(object sender, EventArgs e)
 		{
 			_requestView.FilterGrid(toolStripTextBoxFilter.Text.Split(' ').ToList());
-
-			//var filterBox = new FilterBoxAdvanced();
-			//filterBox.FilterClicked += filterbox_FilterClicked;
-			//var button = sender as ToolStripButton;
-			//if (button != null)
-			//	filterBox.Location = PointToScreen(new Point(button.Owner.Location.X, (button.Owner.Location.Y + (filterBox.Height / 2) + 16)));
-
-			//filterBox.ShowDialog(this);
-			//filterBox.Dispose();
 		}
 		
 		private void toolStripButtonEditNote_Click(object sender, EventArgs e)
@@ -6762,11 +6753,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			refreshSummarySkillIfActive();
 		}
 
-		private void toolStripMenuItemFilter_Click(object sender, EventArgs e)
-		{
-			showFilterDialog();
-		}
-
 		private void ToolStripMenuItemScheduledTimePerActivityMouseUp(object sender, MouseEventArgs e)
 		{
 			if (e.Button != MouseButtons.Left) return;
@@ -6817,13 +6803,6 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (!isViewRequestDetailsAvailable()) return;
 			var requestDetailsView = new RequestDetailsView(_eventAggregator, _requestView.SelectedAdapters().First(), _schedulerState.Schedules);
 			requestDetailsView.Show(this);
-		}
-
-		private void ToolStripMenuItemZoomMouseUp(object sender, MouseEventArgs e)
-		{
-			if (e.Button != MouseButtons.Left) return;
-			var level = (ZoomLevel)((ToolStripMenuItem)sender).Tag;
-			zoom(level);
 		}
 
 		private void toolStripMenuItemLoggedOnUserTimeZoneMouseUp(object sender, MouseEventArgs e)
