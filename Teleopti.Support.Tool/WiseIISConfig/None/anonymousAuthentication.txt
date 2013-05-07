@@ -5,3 +5,5 @@ PMService;True
 RTA;True
 SDK;True
 Web;True
+Client;True
+MyTime;True
