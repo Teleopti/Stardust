@@ -11,6 +11,7 @@ define([
 		'menu',
 		'subscriptions',
 		'ajax',
+        'errorview',
 		'noext!application/resources'
 	], function(
 		layoutTemplate,
@@ -24,6 +25,7 @@ define([
 		menuViewModel,
 		subscriptions,
 		ajax,
+	    errorview,
 		resources) {
 
 		var currentView;
@@ -33,7 +35,7 @@ define([
 		
 		function _displayView(routeInfo) {
 
-			_removeError();
+		    errorview.remove();
 
 			routeInfo.renderHtml = function(html) {
 				contentPlaceHolder.html(html);
@@ -45,7 +47,7 @@ define([
 			require([module], function(view) {
 
 				if (view == undefined) {
-					_displayError("View " + routeInfo.view + " could not be loaded");
+				    errorview.display("View " + routeInfo.view + " could not be loaded");
 					return;
 				}
 
@@ -76,20 +78,6 @@ define([
 			});
 
 			menu.ActiveView(routeInfo.view);
-		}
-
-		function _setUpErrorHandler() {
-			$(document).ajaxError(function(e, jqxhr, settings, exception) {
-				_displayError(exception);
-			});
-		}
-
-		function _displayError(message) {
-			$('#error-placeholder').html(errorTemplate).find('span').text(message);
-		}
-		
-		function _removeError() {
-			$('#error-placeholder').html("");
 		}
 
 		function _setupRoutes() {
@@ -207,5 +195,4 @@ define([
 
 		_bindMenu();
 		
-		_setUpErrorHandler();
 	});
