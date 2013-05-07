@@ -130,7 +130,7 @@
             this.toolStripButtonSystemOptions});
 			this.ribbonControlWorksheet.OfficeMenu.SystemPanel.Text = "";
 			this.ribbonControlWorksheet.SelectedTab = this.toolStripTabItem1;
-			this.ribbonControlWorksheet.Size = new System.Drawing.Size(1205, 150);
+			this.ribbonControlWorksheet.Size = new System.Drawing.Size(1286, 150);
 			this.ribbonControlWorksheet.SystemText.QuickAccessDialogDropDownName = "Starting menu";
 			toolStripTabGroup1.Color = System.Drawing.Color.Empty;
 			toolStripTabGroup1.Name = "Period Options";
@@ -493,7 +493,7 @@
 			this.toolStripButtonTimeZone.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButtonTimeZone.Name = "toolStripButtonTimeZone";
 			this.SetShortcut(this.toolStripButtonTimeZone, System.Windows.Forms.Keys.None);
-			this.toolStripButtonTimeZone.Size = new System.Drawing.Size(75, 68);
+			this.toolStripButtonTimeZone.Size = new System.Drawing.Size(75, 51);
 			this.toolStripButtonTimeZone.Text = "xxTimeZone";
 			this.toolStripButtonTimeZone.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
 			this.toolStripButtonTimeZone.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
@@ -720,8 +720,8 @@
 			this.splitContainerWorksheet.Panel2.Controls.Add(this.tableLayoutPanel1);
 			this.splitContainerWorksheet.Panel2.Controls.Add(this.shiftCategoryLimitationView);
 			this.splitContainerWorksheet.PanelToBeCollapsed = Syncfusion.Windows.Forms.Tools.Enums.CollapsedPanel.Panel2;
-			this.splitContainerWorksheet.Size = new System.Drawing.Size(1195, 368);
-			this.splitContainerWorksheet.SplitterDistance = 964;
+			this.splitContainerWorksheet.Size = new System.Drawing.Size(1276, 368);
+			this.splitContainerWorksheet.SplitterDistance = 1045;
 			this.splitContainerWorksheet.Style = Syncfusion.Windows.Forms.Tools.Enums.Style.Office2007Blue;
 			this.splitContainerWorksheet.TabIndex = 3;
 			this.splitContainerWorksheet.Text = "splitContainerAdv1";
@@ -812,7 +812,7 @@
 			this.statusStripEx1.Dock = Syncfusion.Windows.Forms.Tools.DockStyleEx.Bottom;
 			this.statusStripEx1.Location = new System.Drawing.Point(6, 519);
 			this.statusStripEx1.Name = "statusStripEx1";
-			this.statusStripEx1.Size = new System.Drawing.Size(1195, 22);
+			this.statusStripEx1.Size = new System.Drawing.Size(1276, 22);
 			this.statusStripEx1.TabIndex = 4;
 			this.statusStripEx1.Text = "statusStripEx1";
 			// 
