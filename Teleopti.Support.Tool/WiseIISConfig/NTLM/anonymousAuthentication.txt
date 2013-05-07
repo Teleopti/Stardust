@@ -1,9 +1,9 @@
-Analytics;True
+Analytics;False
 Broker;True
 Broker.backplane;True
-PMService;True
+PMService;False
 RTA;True
-SDK;True
+SDK;False
 Web;False
-Client;True
-MyTime;True
+Client;False
+MyTime;False
