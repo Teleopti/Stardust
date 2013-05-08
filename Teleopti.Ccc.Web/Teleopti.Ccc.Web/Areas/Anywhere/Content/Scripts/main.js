@@ -1,6 +1,8 @@
 
 require.config({
 
+    urlArgs: "bust=v3",
+    
 	paths: {
 		jquery: '../../../../Content/Scripts/jquery-1.9.1',
 		knockout: '../../../../Content/Scripts/knockout-2.2.1',
@@ -18,7 +20,8 @@ require.config({
 		momentDatepickerKo: '../../../../Content/moment-datepicker/moment-datepicker-ko',
 		
 		noext: '../../../../Content/require/noext',
-		
+		sigr: '../../../../Content/require/sigr',
+
 		templates: '../templates',
 		
 		text: '../../../../Content/require/text'
@@ -34,9 +37,8 @@ require.config({
 		'bootstrap': ['jquery'],
 
 		'signalr': ['jquery'],
-		// wtf!
-		'Areas/Anywhere/Content/Scripts/../../../../signalr/hubs?noext=1&noext=1': ['jquery', 'signalr'],
-		'Areas/Anywhere/Content/Scripts/../../../../signalr/hubs?noext=1': ['jquery', 'signalr'],
+		
+		'Areas/Anywhere/Content/Scripts/../../../../signalr/hubs?': ['jquery', 'signalr'],
 
 		'momentLanguages': ['moment'],
 		'momentDatepicker': ['momentLanguages'],

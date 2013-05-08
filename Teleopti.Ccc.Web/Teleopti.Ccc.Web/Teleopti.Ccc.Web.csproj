@@ -858,6 +858,7 @@
     <Content Include="Content\modernizr\modernizr-2.6.2.min.js" />
     <Content Include="Content\moment-datepicker\datepicker.css" />
     <Content Include="Content\moment\moment.all.min.js" />
+    <Content Include="Content\require\sigr.js" />
     <Content Include="Content\require\noext.js" />
     <Content Include="Content\require\require.js" />
     <Content Include="Content\require\text.js" />

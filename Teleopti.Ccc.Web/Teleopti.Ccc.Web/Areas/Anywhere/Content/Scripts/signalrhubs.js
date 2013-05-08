@@ -1,6 +1,6 @@
 define(
     [
-        'noext!../../../../signalr/hubs',
+        'sigr!../../../../signalr/hubs',
 		'text!templates/error.html',
         'errorview'
     ], function (
