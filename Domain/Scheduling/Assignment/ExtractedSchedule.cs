@@ -573,7 +573,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public void DeleteMainShift(IScheduleDay source)
 		{
-			IPersonAssignment destAss = new PersonAssignment(Person, Scenario);
+			IPersonAssignment destAss = new PersonAssignment(Person, Scenario, source.DateOnlyAsPeriod.DateOnly);
 			IPersonAssignment highAss = AssignmentHighZOrder();
 
 			if (highAss != null)
@@ -641,7 +641,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                     Remove(dayOff);
                 }
 
-                IPersonAssignment ass = new PersonAssignment(Person, Scenario);
+                IPersonAssignment ass = new PersonAssignment(Person, Scenario, source.DateOnlyAsPeriod.DateOnly);
                 ass.SetMainShift(workingCopyOfMainShift);
                 Add(ass);
             }
@@ -737,7 +737,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             {
                 if (destAss == null)
                 {
-                    destAss = new PersonAssignment(Person, Scenario);
+                    destAss = new PersonAssignment(Person, Scenario, source.DateOnlyAsPeriod.DateOnly);
 
                     foreach (IPersonalShift personalShift in sourceAss.PersonalShiftCollection)
                     {
@@ -824,7 +824,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             {
                 var foundPersonAssignment = FindPersonAssignmentToConnectOvertimeTo(overtimeShiftActivityLayer);
                 if(foundPersonAssignment==null)
-                    foundPersonAssignment = new PersonAssignment(Person, Scenario);
+                    foundPersonAssignment = new PersonAssignment(Person, Scenario, DateOnlyAsPeriod.DateOnly);
 
                 var overtimeShift = new OvertimeShift();
                 foundPersonAssignment.AddOvertimeShift(overtimeShift);
@@ -906,7 +906,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			Clear<IPersonDayOff>();
 
 			//TODO create inparameters to check on if to create new personassignment
-			IPersonAssignment newPersonAssignment = new PersonAssignment(Person, Scenario);
+			IPersonAssignment newPersonAssignment = new PersonAssignment(Person, Scenario, DateOnlyAsPeriod.DateOnly);
 			newPersonAssignment.SetMainShift(new MainShift(shiftCategory));
 			newPersonAssignment.MainShift.LayerCollection.Add(layer);
 			Add(newPersonAssignment);
@@ -929,7 +929,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			}
 
 			//TODO create inparameters to check on if to create new personassignment
-			IPersonAssignment newPersonAssignment = new PersonAssignment(Person, Scenario);
+			IPersonAssignment newPersonAssignment = new PersonAssignment(Person, Scenario, DateOnlyAsPeriod.DateOnly);
 			newPersonAssignment.AddPersonalShift(personalShift);
 			Add(newPersonAssignment);
 		}
@@ -940,7 +940,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             MergePersonalShiftsToOneAssignment(mainShift);
             if (currentAss == null)
             {
-                IPersonAssignment personAssignment = new PersonAssignment(Person, Scenario);
+                IPersonAssignment personAssignment = new PersonAssignment(Person, Scenario, DateOnlyAsPeriod.DateOnly);
                 personAssignment.SetMainShift(mainShift);
                 Add(personAssignment);
             }

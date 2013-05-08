@@ -272,7 +272,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                                                                                     _dateTime.AddHours(12)));
             layerCollection.Add(layer);
             mainShift.LayerCollection.AddRange(layerCollection);
-            var assignment = new PersonAssignment(_person, _scenario);
+            var assignment = new PersonAssignment(_person, _scenario, _dateOnly);
             assignment.SetMainShift(mainShift);
             return assignment;
         }

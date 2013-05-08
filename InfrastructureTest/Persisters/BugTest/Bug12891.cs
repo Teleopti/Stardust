@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.BugTest
 			PersistAndRemoveFromUnitOfWork(_shiftCategory);
 			PersistAndRemoveFromUnitOfWork(_activity);
 
-			var personAssignment = new PersonAssignment(Person, Scenario);
+			var personAssignment = new PersonAssignment(Person, Scenario, FirstDayDateOnly);
 			var mainShift = new MainShift(_shiftCategory);
 			var layer = new MainShiftActivityLayer(_activity, FirstDayDateTimePeriod);
 			mainShift.LayerCollection.Add(layer);

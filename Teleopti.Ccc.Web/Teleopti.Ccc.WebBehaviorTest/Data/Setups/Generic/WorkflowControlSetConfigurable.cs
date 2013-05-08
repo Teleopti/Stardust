@@ -19,6 +19,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 		public bool StudentAvailabilityPeriodIsClosed { get; set; }
 		public int ShiftTradeSlidingPeriodStart { get; set; }
 		public int ShiftTradeSlidingPeriodEnd { get; set; }
+		public string AbsenceRequestOpenPeriodStart { get; set; }
+		public string AbsenceRequestOpenPeriodEnd { get; set; }
+		public string AbsenceRequestPreferencePeriodStart { get; set; }
+		public string AbsenceRequestPreferencePeriodEnd { get; set; }
 
 		public void Apply(IUnitOfWork uow)
 		{
@@ -45,6 +49,31 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			{
 				var absence = new AbsenceRepository(uow).LoadAll().Single(c => c.Description.Name == AvailableAbsence);
 				workflowControlSet.AddAllowedPreferenceAbsence(absence);
+
+				var absenceRequestOpenPeriodStart = String.IsNullOrEmpty(AbsenceRequestOpenPeriodStart)
+					                                    ? new DateOnly(1900, 1, 1)
+					                                    : new DateOnly(DateTime.Parse(AbsenceRequestOpenPeriodStart));
+
+				var absenceRequestOpenPeriodEnd = String.IsNullOrEmpty(AbsenceRequestOpenPeriodEnd)
+											? new DateOnly(2040, 12, 31)
+											: new DateOnly(DateTime.Parse(AbsenceRequestOpenPeriodEnd));
+				
+				var absenceRequestPreferencePeriodStart = String.IsNullOrEmpty(AbsenceRequestPreferencePeriodStart)
+					                                    ? new DateOnly(1900, 1, 1)
+														: new DateOnly(DateTime.Parse(AbsenceRequestPreferencePeriodStart));
+
+				var absenceRequestPreferencePeriodEnd = String.IsNullOrEmpty(AbsenceRequestPreferencePeriodEnd)
+											? new DateOnly(2040, 12, 31)
+											: new DateOnly(DateTime.Parse(AbsenceRequestPreferencePeriodEnd));
+				
+				var absenceRequestOpenPeriod = new AbsenceRequestOpenDatePeriod
+				{
+					Absence = absence,
+					OpenForRequestsPeriod =
+						new DateOnlyPeriod(absenceRequestOpenPeriodStart,absenceRequestOpenPeriodEnd),
+					Period = new DateOnlyPeriod(absenceRequestPreferencePeriodStart, absenceRequestPreferencePeriodEnd)
+				};
+				workflowControlSet.AddOpenAbsenceRequestPeriod(absenceRequestOpenPeriod);
 			}
 
 			if (!string.IsNullOrEmpty(AvailableActivity))

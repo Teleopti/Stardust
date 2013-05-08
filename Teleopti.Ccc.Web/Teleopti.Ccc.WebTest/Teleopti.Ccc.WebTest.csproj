@@ -95,7 +95,7 @@
       <HintPath>..\..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="Rhino.Mocks, Version=3.6.0.0, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\RhinoMocks.3.6.1\lib\net\Rhino.Mocks.dll</HintPath>
+      <HintPath>..\..\Teleopti.Ccc.WinCodeTest\bin\Debug\Rhino.Mocks.dll</HintPath>
     </Reference>
     <Reference Include="Rhino.ServiceBus, Version=3.0.2.0, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -131,6 +131,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Areas\MyTime\Core\Common\DataProvider\AbsenceTimeProviderTest.cs" />
     <Compile Include="Areas\Anywhere\Controllers\PersonScheduleCommandControllerTest.cs" />
     <Compile Include="Areas\Anywhere\Core\AutofacDependencyResolverTest.cs" />
     <Compile Include="Areas\MyTime\Core\Preference\DataProvider\PreferenceTemplatePersisterTest.cs" />
@@ -184,6 +185,7 @@
     <Compile Include="Areas\Start\Core\IpAddressResolverTest.cs" />
     <Compile Include="Core\Asm\ViewModelFactory\AsmViewModelFactoryTest.cs" />
     <Compile Include="Core\Asm\Mapping\AsmViewModelMapperTest.cs" />
+    <Compile Include="Areas\MyTime\Core\Common\DataProvider\AllowanceProviderTest.cs" />
     <Compile Include="Core\Common\DataProvider\PreferenceProviderTest.cs" />
     <Compile Include="Core\HttpPostOrPutAttributeTest.cs" />
     <Compile Include="Core\MessageBroker\MessageBrokerHubTest.cs" />

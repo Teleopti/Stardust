@@ -143,12 +143,15 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                     addPreferencesDays(retDic,
                                        _repositoryFactory.CreatePreferenceDayRepository(UnitOfWork).Find(
                                            longDateOnlyPeriod, people));
-                    addStudentAvailabilityDays(retDic,
-                                               _repositoryFactory.CreateStudentAvailabilityDayRepository(UnitOfWork).
-                                                   Find(longDateOnlyPeriod, people));
+					if (!scheduleDictionaryLoadOptions.LoadOnlyPreferenses)
+					{
+						addStudentAvailabilityDays(retDic,
+											   _repositoryFactory.CreateStudentAvailabilityDayRepository(UnitOfWork).
+												   Find(longDateOnlyPeriod, people));
 
-                    addPersonAvailabilities(period, retDic, people);
-                    addPersonRotations(period, retDic, people);
+						addPersonAvailabilities(period, retDic, people);
+						addPersonRotations(period, retDic, people);
+					}
                 }
             }
             retDic.TakeSnapshot();

@@ -16,8 +16,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
     {
         private const string notStatefulSupport = "This IUnitOfWorkFactory does not support stateful IUnitOfWorks";
 
-        protected internal NHibernateUnitOfWorkMatrixFactory(ISessionFactory sessionFactory)
-            : base(sessionFactory, null, new List<IMessageSender>())
+        protected internal NHibernateUnitOfWorkMatrixFactory(ISessionFactory sessionFactory, string connectionString)
+            : base(sessionFactory, null, connectionString, new List<IMessageSender>())
         {
         }
 

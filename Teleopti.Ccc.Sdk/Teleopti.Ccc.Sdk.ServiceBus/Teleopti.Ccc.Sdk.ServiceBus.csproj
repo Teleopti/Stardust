@@ -161,6 +161,9 @@
     <Compile Include="BudgetGroupHeadCountSpecification.cs" />
     <Compile Include="BusStartup.cs" />
     <Compile Include="ConfigFileDefaultHost.cs" />
+    <Compile Include="LocalServiceBusPublisher.cs" />
+    <Compile Include="NewtonsoftJsonSerializer.cs" />
+    <Compile Include="Notification\SmsNotification.cs" />
     <Compile Include="RtaBusBootStrapper.cs" />
     <Compile Include="Rta\BusinessUnitInfoConsumer.cs" />
     <Compile Include="QueueClearMessages.cs" />
@@ -172,9 +175,11 @@
     <Compile Include="Forecast\StatisticLoader.cs" />
     <Compile Include="DateOnlyPeriodSerializer.cs" />
     <Compile Include="DenormalizeBusBootStrapper.cs" />
-    <Compile Include="LocalServiceBusPublisher.cs" />
-    <Compile Include="NewtonsoftJsonSerializer.cs" />
+    <Compile Include="Notification\NotificationMessage.cs" />
+    <Compile Include="Notification\SignificantChangeChecker.cs" />
     <Compile Include="Notification\NotificationConfigReader.cs" />
+    <Compile Include="Notification\SmsLinkChecker.cs" />
+    <Compile Include="Notification\NotificationSenderFactory.cs" />
     <Compile Include="Denormalizer\UpdateGroupingReadModelDataConsumer.cs" />
     <Compile Include="Denormalizer\UpdateGroupingReadModelGroupPageConsumer.cs" />
     <Compile Include="Denormalizer\InitialLoadScheduleProjectionConsumer.cs" />
@@ -206,11 +211,6 @@
     <Compile Include="IRequestFactory.cs" />
     <Compile Include="IScheduleIsInvalidSpecification.cs" />
     <Compile Include="LargeGuidCollectionSerializer.cs" />
-    <Compile Include="Notification\NotificationMessage.cs" />
-    <Compile Include="Notification\NotificationSenderFactory.cs" />
-    <Compile Include="Notification\SignificantChangeChecker.cs" />
-    <Compile Include="Notification\SmsLinkChecker.cs" />
-    <Compile Include="Notification\SmsNotification.cs" />
     <Compile Include="PayrollContainerInstaller.cs" />
     <Compile Include="PayrollDllCopy.cs" />
     <Compile Include="Payroll\ChannelCreator.cs" />

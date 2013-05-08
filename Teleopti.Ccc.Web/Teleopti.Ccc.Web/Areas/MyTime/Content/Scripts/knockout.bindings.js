@@ -9,6 +9,15 @@
 	}
 };
 
+ko.bindingHandlers.animateBackground = {
+	update: function (element, valueAccessor, allBindingsAccessor, viewmodel) {
+		var value = valueAccessor(), allBindings = allBindingsAccessor();
+		var fadeDuration = allBindings.fadeDuration || 1500;
+		var valueUnwrapped = ko.utils.unwrapObservable(value);
+		$(element).stop().animate({ backgroundColor: valueUnwrapped}, fadeDuration);
+	}
+};
+
 ko.bindingHandlers['class'] = {
 	update: function (element, valueAccessor) {
 		if (element['__ko__previousClassValue__']) {
@@ -131,4 +140,16 @@ ko.bindingHandlers.datepicker = {
 		var value = ko.utils.unwrapObservable(valueAccessor());
 		$(element).datepicker("setDate", new Date(value));
 	}
+};
+
+ko.bindingHandlers.button = {
+    init: function (element, valueAccessor, allBindingsAccessor, viewModel) {
+        $(element).button();
+    },
+    update: function (element, valueAccessor, allBindingsAccessor, viewModel) {
+        var value = ko.utils.unwrapObservable(valueAccessor()),
+            disabled = ko.utils.unwrapObservable(value.disabled);
+
+        $(element).button("option", "disabled", disabled);
+    }
 };

@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		[Test]
 		public void ShouldReturnTrueWhenWorkTimeAndContractTimeAreUnchangedWhenAddingPersonalShift()
 		{
-			_personAssignment = new PersonAssignment(_person, _scenario);
+			_personAssignment = new PersonAssignment(_person, _scenario, new DateOnly(2013, 1, 1));
 			var shiftLayer1 = new PersonalShiftActivityLayer(_personalActivity, _mainDateTimePeriodNotInWorkTime);
 			var shiftLayer2 = new PersonalShiftActivityLayer(_activity, _mainDateTimePeriod);
 			_personalShift1.LayerCollection.Add(shiftLayer1);
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		public void ShouldReturnFalseWhenPeriodsDoNotIntersectWhenAddingPersonalShift()
 		{
 			var periodOutside = new DateTimePeriod(_mainDateTimePeriod.StartDateTime.AddDays(-1), _mainDateTimePeriod.EndDateTime.AddDays(-1));
-			_personAssignment = new PersonAssignment(_person, _scenario);
+			_personAssignment = new PersonAssignment(_person, _scenario, new DateOnly(2013, 1, 1));
 			var shiftLayer = new PersonalShiftActivityLayer(_personalActivity, periodOutside);
 			_personalShift1.LayerCollection.Add(shiftLayer);
 			_personAssignment.AddPersonalShift(_personalShift1);
@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		public void ShouldReturnFalseWhenWorkTimeIsChangedWhenAddingPersonalShift()
 		{
 			_personalActivity.InWorkTime = true;
-			_personAssignment = new PersonAssignment(_person, _scenario);
+			_personAssignment = new PersonAssignment(_person, _scenario, new DateOnly(2013, 1, 1));
 			var shiftLayer = new PersonalShiftActivityLayer(_personalActivity, _mainDateTimePeriodNotInWorkTime);
 			_personalShift1.LayerCollection.Add(shiftLayer);
 			_personAssignment.AddPersonalShift(_personalShift1);
@@ -164,7 +164,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		public void ShouldReturnFalseWhenContractTimeIsChangedWhenAddingPersonalShift()
 		{
 			_personalActivity.InContractTime = false;
-			_personAssignment = new PersonAssignment(_person, _scenario);
+			_personAssignment = new PersonAssignment(_person, _scenario, new DateOnly(2013, 1, 1));
 			var shiftLayer = new PersonalShiftActivityLayer(_personalActivity, _mainDateTimePeriodNotInWorkTime);
 			_personalShift1.LayerCollection.Add(shiftLayer);
 			_personAssignment.AddPersonalShift(_personalShift1);
@@ -188,7 +188,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		[Test]
 		public void ShouldReturnFalseWhenActivityDoNotAllowOverwriteWhenAddingPersonalShift()
 		{
-			_personAssignment = new PersonAssignment(_person, _scenario);
+			_personAssignment = new PersonAssignment(_person, _scenario, new DateOnly(2013, 1, 1));
 			var shiftLayer1 = new PersonalShiftActivityLayer(_personalActivity, _mainDateTimePeriodNoOverwrite);
 			var shiftLayer2 = new PersonalShiftActivityLayer(_activity, _mainDateTimePeriod);
 			_personalShift1.LayerCollection.Add(shiftLayer1);

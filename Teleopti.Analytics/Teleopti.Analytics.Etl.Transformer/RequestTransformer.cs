@@ -56,7 +56,7 @@ namespace Teleopti.Analytics.Etl.Transformer
                         row["request_type_code"] = 0;
 
                     // transforming request status into request status id.
-                    if (personRequest.IsPending)
+                    if (personRequest.IsPending || personRequest.IsNew)
                         row["request_status_code"] = 0;
                     if (personRequest.IsApproved)
                         row["request_status_code"] = 1;

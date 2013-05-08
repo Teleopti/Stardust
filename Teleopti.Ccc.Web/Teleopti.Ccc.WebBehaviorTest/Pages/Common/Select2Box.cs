@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
+using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using WatiN.Core;
 
@@ -26,7 +27,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 		{
 			get
 			{
-				return Element.DomContainer.Div(QuicklyFind.ByClass("team-select2-dropdown")).Exists;
+				var div = Element.DomContainer.Div(QuicklyFind.ByClass("team-select2-dropdown"));
+				return div.Exists && div.DisplayVisible();
 			}
 		}
 

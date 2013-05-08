@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 		public string ShiftColor { get; set; }
 		public string AllActivityColor { get; set; }
 		public string Activity { get; set; }
+		public DateOnly Date { get; set; }
 
 		public IScenario Scenario = GlobalDataContext.Data().Data<CommonScenario>().Scenario;
 
@@ -39,8 +40,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			var endTimeUtc = user.PermissionInformation.DefaultTimeZone().SafeConvertTimeToUtc(EndTime);
 
 			// create main shift
+			if (Date == new DateOnly())
+			{
+				//if not explicitly set of user, try to set based on starttime
+				Date = new DateOnly(StartTime);
+			}
 			_assignmentPeriod = new DateTimePeriod(startTimeUtc, endTimeUtc);
-			var assignment = PersonAssignmentFactory.CreatePersonAssignment(user, Scenario);
+			var assignment = PersonAssignmentFactory.CreatePersonAssignment(user, Scenario, Date);
 
 			if (AllActivityColor != null)
 			{

@@ -695,6 +695,7 @@
     <Compile Include="Infrastructure\IMultiplicatorDefinitionSetRepository.cs" />
     <Compile Include="Infrastructure\IMultiplicatorRepository.cs" />
     <Compile Include="Infrastructure\IPeopleAndSkillLoaderDecider.cs" />
+    <Compile Include="Infrastructure\IPersonAssignmentCommon.cs" />
     <Compile Include="Infrastructure\IQueryFilter.cs" />
     <Compile Include="Infrastructure\IRootChangeInfo.cs">
       <SubType>Code</SubType>
@@ -837,6 +838,7 @@
     <Compile Include="Domain\SettingValueTypes.cs" />
     <Compile Include="Domain\UnderStaffingData.cs" />
     <Compile Include="Messages\Rta\BusinessUnitInfo.cs" />
+    <Compile Include="ReadModel\IScheduleChangedReadModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="..\..\CodeAnalysisDictionary.xml">

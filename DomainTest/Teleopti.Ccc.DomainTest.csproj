@@ -673,6 +673,7 @@
     <Compile Include="Scheduling\Restriction\StudentAvailabilityRestrictionTest.cs" />
     <Compile Include="Scheduling\Restriction\PreferenceRestrictionTest.cs" />
     <Compile Include="Scheduling\Restriction\RotationTest.cs" />
+    <Compile Include="Scheduling\Rules\DataPartOfAgentDayTest.cs" />
     <Compile Include="Scheduling\Rules\GapsInAssignmentRuleTest.cs" />
     <Compile Include="Scheduling\Rules\LongestPeriodForAssignmentCalculatorTest.cs" />
     <Compile Include="Scheduling\Rules\MinWeklyRestRuleTest.cs" />
@@ -838,6 +839,7 @@
     <Compile Include="Security\Authentication\EnvironmentWindowsUserProviderTest.cs" />
     <Compile Include="Security\Authentication\FindApplicationUserTest.cs" />
     <Compile Include="Security\Authentication\LoggedOnUserTest.cs" />
+    <Compile Include="Security\Authentication\LogonLoggerTest.cs" />
     <Compile Include="Security\Authentication\UserTimeZoneTest.cs" />
     <Compile Include="Security\Authentication\WindowsDataSourceProviderTest.cs" />
     <Compile Include="Security\Authentication\AuthenticationSettingsTest.cs" />

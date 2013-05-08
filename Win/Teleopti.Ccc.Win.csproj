@@ -338,6 +338,9 @@
       <DependentUpon>SmsSettingsControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Common\Controls\Cells\DropDownCultureCellModel.cs" />
+    <Compile Include="Common\Controls\OutlookTimePicker.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Common\Controls\Rows\SkillFullPeriodGridRowStaffingIssuesSummary.cs" />
     <Compile Include="Common\Controls\Rows\SkillFullPeriodGridRowStaffingIssues.cs" />
     <Compile Include="Common\Controls\Rows\SkillFullPeriodGridRowMinMaxIssuesSummary.cs" />
@@ -1122,6 +1125,12 @@
     <Compile Include="PeopleAdmin\Views\PersonFinderView.Designer.cs">
       <DependentUpon>PersonFinderView.cs</DependentUpon>
     </Compile>
+    <Compile Include="PeopleAdmin\Views\PersonTimeZoneView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PeopleAdmin\Views\PersonTimeZoneView.Designer.cs">
+      <DependentUpon>PersonTimeZoneView.cs</DependentUpon>
+    </Compile>
     <Compile Include="PeopleAdmin\Views\UserCredentialConflicts.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -1225,6 +1234,12 @@
       <DependentUpon>SchedulerReportsViewer.cs</DependentUpon>
     </Compile>
     <Compile Include="Reporting\ViewerFoldingChangedEvent.cs" />
+    <Compile Include="Scheduling\AgentPreferenceView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Scheduling\AgentPreferenceView.Designer.cs">
+      <DependentUpon>AgentPreferenceView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Scheduling\AgentRestrictions\AgentRestrictionGrid.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -1245,6 +1260,12 @@
     <Compile Include="Scheduling\AgentSkillExplorer.Designer.cs">
       <DependentUpon>AgentSkillExplorer.cs</DependentUpon>
     </Compile>
+    <Compile Include="Scheduling\AgentStudentAvailabilityView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Scheduling\AgentStudentAvailabilityView.Designer.cs">
+      <DependentUpon>AgentStudentAvailabilityView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Scheduling\BlockOptimizerHelper.cs" />
     <Compile Include="Scheduling\AuditHistoryView.cs">
       <SubType>Form</SubType>
@@ -1262,8 +1283,11 @@
     <Compile Include="Scheduling\OverViewDrawDayOff.cs" />
     <Compile Include="Scheduling\OverViewDrawMainShift.cs" />
     <Compile Include="Scheduling\PermissionClipboardControl.cs" />
+    <Compile Include="Scheduling\PermissionClipboardRestrictionControl.cs" />
     <Compile Include="Scheduling\PermissionEditControl.cs" />
+    <Compile Include="Scheduling\PermissionEditRestrictionControl.cs" />
     <Compile Include="Scheduling\QuickAccessState.cs" />
+    <Compile Include="Scheduling\SchedulerRibbonHelper.cs" />
     <Compile Include="Scheduling\SkillFullPeriodGridControl.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -2692,6 +2716,9 @@
     <EmbeddedResource Include="PeopleAdmin\Views\PersonFinderView.resx">
       <DependentUpon>PersonFinderView.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="PeopleAdmin\Views\PersonTimeZoneView.resx">
+      <DependentUpon>PersonTimeZoneView.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="PeopleAdmin\Views\UserCredentialConflicts.resx">
       <DependentUpon>UserCredentialConflicts.cs</DependentUpon>
     </EmbeddedResource>
@@ -2770,8 +2797,14 @@
       <DependentUpon>ReportSettingsScheduledTimePerActivityView.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Scheduling\AgentPreferenceView.resx">
+      <DependentUpon>AgentPreferenceView.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\AgentSkillExplorer.resx">
       <DependentUpon>AgentSkillExplorer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Scheduling\AgentStudentAvailabilityView.resx">
+      <DependentUpon>AgentStudentAvailabilityView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Scheduling\AuditHistoryView.resx">
       <DependentUpon>AuditHistoryView.cs</DependentUpon>

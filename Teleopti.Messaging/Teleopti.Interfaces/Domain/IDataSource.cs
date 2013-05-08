@@ -52,16 +52,6 @@ namespace Teleopti.Interfaces.Domain
         /// </remarks>
         void ResetStatistic();
 
-        /// <summary>
-        /// Gets the server.
-        /// </summary>
-        string Server { get; }
-
-        /// <summary>
-        /// Gets the initial catalog.
-        /// </summary>
-        string InitialCatalog { get; }
-
 		/// <summary>
 		/// Gets or sets the original file name for this data source.
 		/// </summary>
