@@ -1,8 +1,6 @@
 
 require.config({
 
-    urlArgs: "bust=v3",
-    
 	paths: {
 		jquery: '../../../../Content/Scripts/jquery-1.9.1',
 		knockout: '../../../../Content/Scripts/knockout-2.2.1',
@@ -25,7 +23,7 @@ require.config({
 		templates: '../templates',
 		
 		text: '../../../../Content/require/text'
-		
+
 	},
 
 	// dependencies that requires loading order
