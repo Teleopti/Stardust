@@ -55,7 +55,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <PlatformTarget>AnyCPU</PlatformTarget>
-      <CodeAnalysisRuleSet>$(SolutionDir)\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>$(SolutionDir)\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -64,7 +64,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-      <CodeAnalysisRuleSet>$(SolutionDir)\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>$(SolutionDir)\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
@@ -75,7 +75,7 @@
     <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
     <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
     <ErrorReport>prompt</ErrorReport>
-      <CodeAnalysisRuleSet>$(SolutionDir)\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>$(SolutionDir)\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <OutputPath>bin\x86\Release\</OutputPath>
@@ -86,7 +86,7 @@
     <CodeAnalysisUseTypeNameInSuppression>true</CodeAnalysisUseTypeNameInSuppression>
     <CodeAnalysisModuleSuppressionsFile>GlobalSuppressions.cs</CodeAnalysisModuleSuppressionsFile>
     <ErrorReport>prompt</ErrorReport>
-      <CodeAnalysisRuleSet>$(SolutionDir)\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRuleSet>$(SolutionDir)\CodeAnalysis.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Syncfusion.Compression.Base, Version=10.204.0.75, Culture=neutral, PublicKeyToken=3d67ed1f87d44c89, processorArchitecture=MSIL">
@@ -285,9 +285,7 @@
     <Compile Include="Common\Controls\Columns\RowHeaderColumn.cs" />
     <Compile Include="Common\Controls\Columns\ScheduleGridColumnBase.cs" />
     <Compile Include="Common\Controls\Columns\ScheduleGridVisualProjectionColumn.cs" />
-    <Compile Include="Common\Controls\CustomScheduleControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
+    <Compile Include="Common\Controls\CustomScheduleControl.cs" />
     <Compile Include="Common\Controls\MailButton.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -494,9 +492,7 @@
     <Compile Include="Settings\AgentPortalOptions.Designer.cs">
       <DependentUpon>AgentPortalOptions.cs</DependentUpon>
     </Compile>
-    <Compile Include="Common\Controls\CustomScheduleGrid.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="Common\Controls\CustomScheduleGrid.cs" />
     <Compile Include="Common\Controls\NavigationMonthCalendar.cs">
       <SubType>Component</SubType>
     </Compile>
