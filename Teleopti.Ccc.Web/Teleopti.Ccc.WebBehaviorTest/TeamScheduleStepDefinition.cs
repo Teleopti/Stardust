@@ -6,7 +6,6 @@ using SharpTestsEx;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
 using Teleopti.Ccc.WebBehaviorTest.Core;
-using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Common;
@@ -378,23 +377,20 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should not see the team-picker")]
 		public void ThenIShouldNotSeeTheTeam_Picker()
 		{
-			var picker = Pages.Pages.TeamSchedulePage.TeamPicker.Container;
-			EventualAssert.That(() => picker.Exists && picker.DisplayVisible(), Is.False);
+			Browser.Interactions.AssertNotExists(".navbar-inner", "#Team-Picker");
 		}
 
 		[Then(@"I should see the team-picker")]
 		public void ThenIShouldSeeTheTeam_PickerWithTwoTeams()
 		{
 			var picker = Pages.Pages.TeamSchedulePage.TeamPicker.Container;
-
 			EventualAssert.That(() => picker.Exists && picker.DisplayVisible(), Is.True);
 		}
 
 
 		private static void AssertAgentIsDisplayed(string name)
 		{
-			var agent = Pages.Pages.TeamSchedulePage.AgentByName(name);
-			EventualAssert.That(() => agent.Exists, Is.True, name + " not found");
+			Browser.Interactions.AssertContains(".teamschedule-agent-name", name);
 		}
 
 		private static void AssertAgentIsNotDisplayed(string name)

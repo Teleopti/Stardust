@@ -1,5 +1,5 @@
 ﻿/// <reference path="~/Content/Scripts/jquery-1.9.1.js" />
-/// <reference path="~/Content/jqueryui/jquery-ui-1.10.1.custom.js" />
+/// <reference path="~/Content/jqueryui/jquery-ui-1.10.2.custom.js" />
 /// <reference path="~/Content/Scripts/jquery-1.9.1-vsdoc.js" />
 /// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
 /// <reference path="~/Content/Scripts/jquery.qtip.js" />
@@ -31,7 +31,7 @@ Teleopti.MyTimeWeb.Common = (function ($) {
 		if (!_isFixedDate(dateString)) {
 			return new Date();
 		}
-		return $.datepicker.parseDate($.datepicker.ISO_8601, dateString);
+		return moment(dateString).toDate();
 	}
 
 	function _fixedDateToPartsUrl(fixedDate) {
@@ -142,11 +142,6 @@ Teleopti.MyTimeWeb.Common.Layout = (function ($) {
 			$("#tabs").tabs();
 		},
 
-		// Activating buttons
-		ActivateStdButtons: function () {
-			$(".button").button();
-		},
-
 		// Activate custom inputs
 		ActivateCustomInput: function () {
 			$('.edit-module input[type="checkbox"], .edit-module input[type="radio"]').customInput();
@@ -155,7 +150,7 @@ Teleopti.MyTimeWeb.Common.Layout = (function ($) {
 
 		//Activating tooltip where available
 		ActivateTooltip: function () {
-			$('.tooltip')
+			$('.qtip-tooltip')
 				.add('[title]')
 				.each(function () {
 					

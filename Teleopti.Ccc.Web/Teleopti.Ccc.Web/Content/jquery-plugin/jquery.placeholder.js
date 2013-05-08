@@ -63,37 +63,37 @@
                 });
                 $(input[0].form).submit(function() {
                 	fakeHTML.hide();
-                    input.show()
+                    input.show();
                 });
             }
         }
     };
     var NATIVE_SUPPORT = !!("placeholder" in document.createElement( "input" ));
-    $.fn.placeholder = function() {
-        return NATIVE_SUPPORT ? this : this.each(function() {
+    $.fn.placeholder = function () {
+        return NATIVE_SUPPORT ? this : this.each(function () {
             var input = $(this);
             var placeholder = new Placeholder(input);
             placeholder.show(true);
-            input.focus(function() {
+            input.focus(function () {
                 placeholder.hide();
             });
-            input.blur(function() {
+            input.blur(function () {
                 placeholder.show(false);
             });
 
             // On page refresh, IE doesn't re-populate user input
             // until the window.onload event is fired.
-               if (navigator.userAgent.match(/msie/i)) {
-                $(window).load(function() {
-                    if(input.val()) {
+            if (navigator.userAgent.match(/msie/i)) {
+                $(window).load(function () {
+                    if (input.val()) {
                         input.removeClass("placeholder");
                     }
                     placeholder.show(true);
                 });
                 // What's even worse, the text cursor disappears
                 // when tabbing between text inputs, here's a fix
-                input.focus(function() {
-                    if(this.value == "") {
+                input.focus(function () {
+                    if (this.value == "") {
                         var range = this.createTextRange();
                         range.collapse(true);
                         range.moveStart('character', 0);
@@ -102,5 +102,5 @@
                 });
             }
         });
-    }
+    };
 })(jQuery);

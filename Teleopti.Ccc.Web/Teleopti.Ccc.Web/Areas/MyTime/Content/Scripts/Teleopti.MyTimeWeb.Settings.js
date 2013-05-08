@@ -15,14 +15,13 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 	}
 
 	function _partialInit() {
-		_initSelectors();
+	    _loadCultures();
 		_passwordEvents();
 		_initButton();
 	}
 
 	function _initButton() {
-		$("input#passwordButton")
-			.button()
+		$("#passwordButton")
 			.click(function () {
 				_updatePassword($("input#oldPassword").val(), $("input#password").val());
 			});
@@ -31,15 +30,15 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 	function _passwordEvents() {
 		$("input#password, input#passwordValidation").keyup(function () {
 			var incorrectLabel = $("#nonMatchingPassword");
-			var passwordButton = $("input#passwordButton");
+			var passwordButton = $("#passwordButton");
 			var pw = $("input#password").val();
 			var pw2 = $("input#passwordValidation").val();
 			if (pw != pw2) {
 				incorrectLabel.show();
-				passwordButton.button("disable");
+				passwordButton.attr('disabled','disabled');
 			} else {
 				incorrectLabel.hide();
-				passwordButton.button("enable");
+				passwordButton.removeAttr('disabled');
 			}
 		});
 
@@ -68,7 +67,7 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 				updatedLabel.show();
 				$("#incorrectOldPassword").hide();
 				$("#invalidNewPassword").hide();
-				$("#passwordDiv input").reset();
+				$("#settings input").reset();
 				setTimeout(function () { updatedLabel.hide(); }, 2000);
 			},
 			error: function (jqXHR, textStatus, errorThrown) {
@@ -86,22 +85,62 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 		});
 	}
 
-	function _initSelectors() {
-		$('#cultureSelect')
-			.selectbox({
-				changed: function () {
-					_selectorChanged($(this).val(), "Settings/UpdateCulture");
-				}
-			})
-			;
-		$('#cultureUiSelect')
-			.selectbox({
-				changed: function () {
-					_selectorChanged($(this).val(), "Settings/UpdateUiCulture");
-				}
-			})
-			;
+	function _loadCultures() {
+	    ajax.Ajax({
+	        url: "Settings/Cultures",
+	        dataType: "json",
+	        type: "GET",
+	        global: false,
+	        cache: false,
+	        success: function (data, textStatus, jqXHR) {
+	            _initCultureUiPicker(data);
+	            _initCulturePicker(data);
+	        },
+	        error: function(e) {
+	            console.log(e);
+	        }
+	    });
 	}
+    
+    function _initCulturePicker(data) {
+        $('#Culture-Picker').select2("destroy");
+        $('#Culture-Picker').select2(
+					{
+					    data: data.Cultures,
+					    containerCssClass: "span3"
+					}
+				);
+
+        var cultureId = data.ChoosenCulture.id;
+        if (!cultureId)
+            return;
+        var uiCulture = $.grep(data.Cultures, function (e) { return e.id == cultureId; })[0];
+        $('#Culture-Picker').select2("data", uiCulture);
+        $('#Culture-Picker')
+            .on('change', function (e) {
+                _selectorChanged(e.val, "Settings/UpdateCulture");
+            });
+    }
+    
+    function _initCultureUiPicker(data) {
+        $('#CultureUi-Picker').select2("destroy");
+        $('#CultureUi-Picker').select2(
+					{
+					    data: data.Cultures,
+					    containerCssClass: "span3"
+					}
+				);
+
+        var uiCultureId = data.ChoosenUiCulture.id;
+        if (!uiCultureId)
+            return;
+        var uiCulture = $.grep(data.Cultures, function (e) { return e.id == uiCultureId; })[0];
+        $('#CultureUi-Picker').select2("data", uiCulture);
+        $('#CultureUi-Picker')
+            .on('change', function(e) {
+                _selectorChanged(e.val, "Settings/UpdateUiCulture");
+            });
+    }
 
 	function _selectorChanged(value, url) {
 		var data = { LCID: value };
@@ -121,6 +160,10 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 		});
 	}
 
+	function _activatePlaceHolderText() {
+	    $(':text, :password').placeholder();
+	}
+
 	return {
 		Init: function () {
 			_init();
@@ -129,6 +172,7 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 			_partialInit();
 			readyForInteraction();
 			completelyLoaded();
+		    _activatePlaceHolderText();
 		}
 	};
 })(jQuery);

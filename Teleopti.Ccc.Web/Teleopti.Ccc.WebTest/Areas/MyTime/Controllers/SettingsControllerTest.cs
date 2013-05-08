@@ -12,7 +12,6 @@ using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Settings;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.Settings;
-using Teleopti.Ccc.Web.Core.RequestContext;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
@@ -33,7 +32,17 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		}
 
 		[Test]
-		public void IndexShouldReturnViewModel()
+		public void IndexShouldReturnView()
+		{
+			using (var target = new SettingsController(mappingEngine, loggedOnUser, null, new PersonPersister(MockRepository.GenerateMock<IMbCacheFactory>(), null)))
+			{
+				var res = target.Index();
+				res.ViewName.Should().Be.EqualTo("RegionalSettingsPartial");
+			}
+		}
+
+		[Test]
+		public void CulturesShouldReturnViewModel()
 		{
 			using (var target = new SettingsController(mappingEngine, loggedOnUser, null, new PersonPersister(MockRepository.GenerateMock<IMbCacheFactory>(), null)))
 			{
@@ -41,8 +50,8 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 				var person = new Person();
 				loggedOnUser.Expect(obj => obj.CurrentUser()).Return(person);
 				mappingEngine.Expect(obj => obj.Map<IPerson, SettingsViewModel>(person)).Return(viewModel);
-				var res = target.Index();
-				res.Model.Should().Be.SameInstanceAs(viewModel);
+				var res = target.Cultures();
+				res.Data.Should().Be.SameInstanceAs(viewModel);
 			}
 		}
 

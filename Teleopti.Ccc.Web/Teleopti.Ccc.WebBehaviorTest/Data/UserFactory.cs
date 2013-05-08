@@ -158,7 +158,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 
 		public IPerson Person { get; private set; }
 
-
 		/// <summary>
 		/// Creates ans persists a person with an automatic number as name, plus creates and persists the list of persons who are in the inner Colleague list.
 		/// </summary>

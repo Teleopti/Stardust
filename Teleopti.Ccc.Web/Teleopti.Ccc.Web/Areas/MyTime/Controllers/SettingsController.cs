@@ -30,8 +30,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		[HttpGet]
 		public ViewResult Index()
 		{
-			var viewModel = _mapper.Map<IPerson, SettingsViewModel>(_loggedOnUser.CurrentUser());
-			return View("RegionalSettingsPartial", viewModel);
+			return View("RegionalSettingsPartial");
 		}
 
 		[EnsureInPortal]
@@ -39,6 +38,15 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 		public ViewResult Password()
 		{
 			return View("PasswordPartial");
+		}
+
+		[EnsureInPortal]
+		[UnitOfWorkAction]
+		[HttpGet]
+		public JsonResult Cultures()
+		{
+			var test = _mapper.Map<IPerson, SettingsViewModel>(_loggedOnUser.CurrentUser());
+			return Json(test, JsonRequestBehavior.AllowGet);
 		}
 
 		[UnitOfWorkAction]

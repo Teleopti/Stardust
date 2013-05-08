@@ -6,77 +6,72 @@
 }
 
 <div id="AsmMessage-body-inner" class="asmMessage-body-inner relative">
-	<div class="displaynone asmMessage-edit-section ui-corner-all" data-bind="with : chosenMessage">
-		<input type="hidden" id="Request-detail-entityid"/>
-		<div class="edit-module-element asmMessage-detail-sender displayinline-block">
-			<label data-bind="text : sender"></label>
-		</div>
-		<div class="edit-module-element asmMessage-detail-sent displayinline-block">
-			<label data-bind="text : date"></label>
-		</div>
-		<div class="edit-module-element asmMessage-detail-title asmMessage-data-subject">
-			<label id="AsmMessage-detail-title" data-bind="text : title"></label>
-		</div>
-		<div class="edit-module-element asmMessage-data-text">
-			<label id="AsmMessage-detail-message" data-bind="text : message"></label>
-		</div>
-		<div id="AsmMessage-detail-dialogueMessages" class="edit-module-element">
-			<!-- ko foreach: dialogueMessages -->
-			<div class="asmMessage-reply-details"></div>
-				<div class="asmMessage-details">
-					<div>
-						<span class="asmMessage-caption">@Resources.Sender: </span>
-						<span class="asmMessage-data-type" data-bind="text : sender"></span>
-						<span class="asmMessage-caption">@Resources.Sent: </span>
-						<span class="asmMessage-data-updatedon" data-bind="text : created"></span>
-					</div>
-				</div>
-				<span class="asmMessage-data-text" data-bind="text : text"></span>
-				<br/>
-			<!-- /ko -->
-		</div>
-		<div id="AsmMessage-detail-replyOption" class="edit-module-element" >
-			<!--<label class="displayblock ui-labeled-input-label" for="AsmMessage-detail-reply">@Resources.Message</label>-->
-			<textarea id="AsmMessage-detail-reply" class="ui-widget-content ui-corner-all" data-bind="visible: allowDialogueReply, value: reply, valueUpdate:['afterkeydown', 'afterpaste', 'change']"></textarea>
-			<!-- ko foreach: replyOptions -->
-			<input type="radio" name="radioOptions" data-bind="checked : selected, visible : $parent.userMustSelectReplyOption"/>
-			<label class="asmMessage-data-subject" data-bind="text: text, visible : $parent.userMustSelectReplyOption"></label>
-			<!-- /ko -->
-		</div>
-		
-		<input id="AsmMessage-detail-ok-button" type="button" class="mb5 floatright" data-bind="button: { disabled: !canConfirm() }, click : confirmReadMessage, enable : canConfirm" value="@Html.AttributeEncode(Resources.Ok)"/>
-		<div id="AsmMessage-detail-error" class="error edit-module-element floatleft clearleftfloat"></div>
-	</div>
-	<div class="asmMessage-list">
-		<div class="friendly-message ui-corner-all floatleft" data-bind="visible: shouldShowMessage">
-			@Resources.NoMessagesFound
-		</div>
-		<ol id="AsmMessages-list" data-bind="foreach: asmMessageList">
-			<li class="ui-corner-all asmMessage-item relative" data-bind="css: { 'asmMessage-selected': isSelected() == true }">
-				<span class="displaynone" data-bind="text : messageId"></span>
-				<div class="asmMessage-arrow-right">
-					<img src="@Url.Content("~/Areas/MyTime/Content/Images/arrow-right.png")"/>   
-				</div>
-				<div class="asmMessage-subject">
-					<h3 class="asmMessage-data-subject" data-bind="text : title">
-					</h3>
-				</div>
-				<div class="asmMessage-details">
-					<div>
-						<span class="asmMessage-caption">@Resources.Sender: </span>
-						<span class="asmMessage-data-type" data-bind="text : sender"></span>
-						<span class="asmMessage-caption">@Resources.Sent: </span>
-						<span class="asmMessage-data-updatedon" data-bind="text : date"></span>
-					</div>
-				</div>
-				<div class="asmMessage-text asmMessage-data-text" data-bind="text : listMessage">
-				</div>             
-			</li>
-		</ol>
-		<div class="loading-gradient" style="display: none">
-			<div class="loading"></div>
-		</div>
-		<div class="arrow-down"></div>
-		<div class="clearboth"></div>
-	</div>
+    <div class="alert alert-block bdd-show-message" data-bind="visible: shouldShowMessage">
+        @Resources.NoMessagesFound
+    </div>
+    <div id="AsmMessages-list" data-bind="foreach: asmMessageColumnList">
+        <div class="row" data-bind="foreach: Items">
+            <div class="span6">
+                <div class="well well-small" data-bind="css: { 'asmMessage-selected': isSelected }">
+                    <div class="bdd-asm-message-body" data-bind="click: toggleSelected" style="cursor: pointer">
+                        <span class="displaynone" data-bind="text: messageId"></span>
+                        <div>
+                            <h3 data-bind="text: title">
+                            </h3>
+                        </div>
+                        <div>
+                            <div>
+                                <span>@Resources.Sender: </span>
+                                <span data-bind="text: sender"></span>
+                                <span>@Resources.Sent: </span>
+                                <span data-bind="text: date"></span>
+                            </div>
+                        </div>
+                        <div data-bind="text: listMessage">
+                        </div>
+                    </div>
+                
+                    <div class="bdd-asm-message-detail" data-bind="visible: isSelected">
+                        <hr />
+                        <div>
+                            <label class="bdd-asm-message-detail-message" data-bind="text : message"></label>
+                        </div>
+                        <div class="bdd-asm-message-detail-dialogue">
+                            <!-- ko foreach: dialogueMessages -->
+                            <div></div>
+                            <div>
+                                <div>
+                                    <span>@Resources.Sender: </span>
+                                    <span data-bind="text : sender"></span>
+                                    <span>@Resources.Sent: </span>
+                                    <span data-bind="text : created"></span>
+                                </div>
+                            </div>
+                            <span data-bind="text : text"></span>
+                            <br/>
+                            <!-- /ko -->
+                        </div>
+                        <div class="bdd-asm-message-detail-reply">
+                            <textarea data-bind="visible: allowDialogueReply, value: reply, valueUpdate:['afterkeydown', 'afterpaste', 'change']"></textarea>
+                            <!-- ko foreach: replyOptions -->
+                            <input type="radio" name="radioOptions" data-bind="checked : selected, visible : $parent.userMustSelectReplyOption"/>
+                            <label data-bind="text: text, visible : $parent.userMustSelectReplyOption"></label>
+                            <!-- /ko -->
+                        </div>
+                        <div>
+                            <button class="btn btn-primary bdd-asm-message-confirm-button" data-bind="click : confirmReadMessage, enable : canConfirm">@Html.AttributeEncode(Resources.Ok)</button>
+                        </div>
+                        <div>
+                            <span class="error" data-bind="text: errorMessage"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="loading-gradient" style="display: none">
+        <div class="loading"></div>
+    </div>
+    <div class="arrow-down"></div>
+    <div class="clearboth"></div>
 </div>
