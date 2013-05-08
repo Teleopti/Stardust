@@ -2,7 +2,7 @@ define([
         'knockout',
         'moment',
         'views/teamschedule/layer',
-        'noext!application/resources'
+        'resources!r'
     ], function(
         ko,
         moment,

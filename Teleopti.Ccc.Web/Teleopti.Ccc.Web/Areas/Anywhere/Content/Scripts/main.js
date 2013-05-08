@@ -19,6 +19,7 @@ require.config({
 		
 		noext: '../../../../Content/require/noext',
 		sigr: '../../../../Content/require/sigr',
+		resources: 'require/resources',
 
 		templates: '../templates',
 		

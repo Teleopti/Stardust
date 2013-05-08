@@ -1,8 +1,8 @@
 define([
 		'knockout',
 		'moment',
-		'noext!application/resources'
-	], function (
+        'resources!r'
+    ], function (
 		ko,
 		moment,
 		resources

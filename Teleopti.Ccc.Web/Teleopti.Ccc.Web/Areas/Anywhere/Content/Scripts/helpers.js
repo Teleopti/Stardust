@@ -1,7 +1,7 @@
 define(
     [
         'moment',
-        'noext!application/resources'
+        'resources!r'
     ], function (
         momentX,
         resources

@@ -1,198 +1,198 @@
 
 define([
-		'text!templates/layout.html',
-		'text!templates/menu.html',
-		'text!templates/error.html',
-		'crossroads',
-		'hasher',
-		'knockout',
-		'moment',
-		'momentDatepickerKo',
-		'menu',
-		'subscriptions',
-		'ajax',
+        'text!templates/layout.html',
+        'text!templates/menu.html',
+        'text!templates/error.html',
+        'crossroads',
+        'hasher',
+        'knockout',
+        'moment',
+        'momentDatepickerKo',
+        'menu',
+        'subscriptions',
+        'ajax',
         'errorview',
-		'noext!application/resources'
-	], function(
-		layoutTemplate,
-		menuTemplate,
-		errorTemplate,
-		crossroads,
-		hasher,
-		ko,
-		moment,
-		datepicker,
-		menuViewModel,
-		subscriptions,
-		ajax,
-	    errorview,
-		resources) {
+        'resources!r'
+    ], function(
+        layoutTemplate,
+        menuTemplate,
+        errorTemplate,
+        crossroads,
+        hasher,
+        ko,
+        moment,
+        datepicker,
+        menuViewModel,
+        subscriptions,
+        ajax,
+        errorview,
+        resources) {
 
-		var currentView;
-		var defaultView = 'teamschedule';
-		var menu = new menuViewModel(resources);
-		var contentPlaceHolder;
-		
-		function _displayView(routeInfo) {
+        var currentView;
+        var defaultView = 'teamschedule';
+        var menu = new menuViewModel(resources);
+        var contentPlaceHolder;
 
-		    errorview.remove();
+        function _displayView(routeInfo) {
 
-			routeInfo.renderHtml = function(html) {
-				contentPlaceHolder.html(html);
-			};
+            errorview.remove();
 
-			routeInfo.bindingElement = contentPlaceHolder[0];
+            routeInfo.renderHtml = function(html) {
+                contentPlaceHolder.html(html);
+            };
 
-			var module = 'views/' + routeInfo.view + '/view';
-			require([module], function(view) {
+            routeInfo.bindingElement = contentPlaceHolder[0];
 
-				if (view == undefined) {
-				    errorview.display("View " + routeInfo.view + " could not be loaded");
-					return;
-				}
+            var module = 'views/' + routeInfo.view + '/view';
+            require([module], function(view) {
 
-				view.ready = false;
-				
-				if (view != currentView) {
-					if (currentView && currentView.dispose)
-						currentView.dispose(routeInfo);
-					currentView = view;
-					view.initialize(routeInfo);
-				}
+                if (view == undefined) {
+                    errorview.display("View " + routeInfo.view + " could not be loaded");
+                    return;
+                }
 
-				var promise = view.display(routeInfo);
-				if (promise) {
-					promise.done(function() {
-						view.ready = true;
-					});
-				} else {
-					view.ready = true;
-				}
+                view.ready = false;
 
-				if (view.clearaction)
-					view.clearaction(routeInfo);
-				if (routeInfo.action)
-					view[routeInfo.action](routeInfo);
+                if (view != currentView) {
+                    if (currentView && currentView.dispose)
+                        currentView.dispose(routeInfo);
+                    currentView = view;
+                    view.initialize(routeInfo);
+                }
 
-				_fixBootstrapDropdownForMobileDevices();
-			});
+                var promise = view.display(routeInfo);
+                if (promise) {
+                    promise.done(function() {
+                        view.ready = true;
+                    });
+                } else {
+                    view.ready = true;
+                }
 
-			menu.ActiveView(routeInfo.view);
-		}
+                if (view.clearaction)
+                    view.clearaction(routeInfo);
+                if (routeInfo.action)
+                    view[routeInfo.action](routeInfo);
 
-		function _setupRoutes() {
-			var viewRegex = '[a-z]+';
-			var actionRegex = '[a-z]+';
-			var guidRegex = '[a-z0-9]{8}(?:-[a-z0-9]{4}){3}-[a-z0-9]{12}';
-			var dateRegex = '\\d{8}';
+                _fixBootstrapDropdownForMobileDevices();
+            });
 
-			crossroads.addRoute(
-				new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')/(' + dateRegex + ')/(' + actionRegex + ')/(' + guidRegex + ')$', "i"),
-				function(view, id, date, action, secondaryId) {
-					_displayView({ view: view, id: id, date: date, action: action, secondaryId: secondaryId });
-				});
-			crossroads.addRoute(
-				new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')/(' + actionRegex + ')/(' + guidRegex + ')$', "i"),
-				function(view, id, action, secondaryId) {
-					_displayView({ view: view, id: id, action: action, secondaryId: secondaryId });
-				});
-			crossroads.addRoute(
-				new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')/(' + dateRegex + ')/(' + actionRegex + ')$', "i"),
-				function(view, id, date, action) {
-					_displayView({ view: view, id: id, date: date, action: action });
-				});
-			crossroads.addRoute(
-				new RegExp('^(' + viewRegex + ')/(' + dateRegex + ')$', "i"),
-				function(view, date) {
-					_displayView({ view: view, date: date });
-				});
-			crossroads.addRoute(
-				new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')/(' + actionRegex + ')$', "i"),
-				function(view, id, action) {
-					_displayView({ view: view, id: id, action: action });
-				});
-			crossroads.addRoute(
-				new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')/(' + dateRegex + ')$', "i"),
-				function(view, id, date) {
-					_displayView({ view: view, id: id, date: date });
-				});
-			crossroads.addRoute(
-				new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')$', "i"),
-				function(view, id) {
-					_displayView({ view: view, id: id });
-				});
-			crossroads.addRoute('{view}', function(view) {
-				_displayView({ view: view });
-			});
-			crossroads.addRoute('', function() {
-				_displayView({ view: defaultView });
-			});
-		}
+            menu.ActiveView(routeInfo.view);
+        }
 
-		function _initializeHasher() {
-			var parseHash = function(newHash, oldHash) {
-				crossroads.parse(newHash);
-			};
-			hasher.initialized.add(parseHash);
-			hasher.changed.add(parseHash);
-			hasher.init();
-		}
+        function _setupRoutes() {
+            var viewRegex = '[a-z]+';
+            var actionRegex = '[a-z]+';
+            var guidRegex = '[a-z0-9]{8}(?:-[a-z0-9]{4}){3}-[a-z0-9]{12}';
+            var dateRegex = '\\d{8}';
 
-		function _render() {
-			$('body').append(layoutTemplate);
-			contentPlaceHolder = $('#content-placeholder');
-			$('#menu-placeholder').replaceWith(menuTemplate);
-		}
+            crossroads.addRoute(
+                new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')/(' + dateRegex + ')/(' + actionRegex + ')/(' + guidRegex + ')$', "i"),
+                function(view, id, date, action, secondaryId) {
+                    _displayView({ view: view, id: id, date: date, action: action, secondaryId: secondaryId });
+                });
+            crossroads.addRoute(
+                new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')/(' + actionRegex + ')/(' + guidRegex + ')$', "i"),
+                function(view, id, action, secondaryId) {
+                    _displayView({ view: view, id: id, action: action, secondaryId: secondaryId });
+                });
+            crossroads.addRoute(
+                new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')/(' + dateRegex + ')/(' + actionRegex + ')$', "i"),
+                function(view, id, date, action) {
+                    _displayView({ view: view, id: id, date: date, action: action });
+                });
+            crossroads.addRoute(
+                new RegExp('^(' + viewRegex + ')/(' + dateRegex + ')$', "i"),
+                function(view, date) {
+                    _displayView({ view: view, date: date });
+                });
+            crossroads.addRoute(
+                new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')/(' + actionRegex + ')$', "i"),
+                function(view, id, action) {
+                    _displayView({ view: view, id: id, action: action });
+                });
+            crossroads.addRoute(
+                new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')/(' + dateRegex + ')$', "i"),
+                function(view, id, date) {
+                    _displayView({ view: view, id: id, date: date });
+                });
+            crossroads.addRoute(
+                new RegExp('^(' + viewRegex + ')/(' + guidRegex + ')$', "i"),
+                function(view, id) {
+                    _displayView({ view: view, id: id });
+                });
+            crossroads.addRoute('{view}', function(view) {
+                _displayView({ view: view });
+            });
+            crossroads.addRoute('', function() {
+                _displayView({ view: defaultView });
+            });
+        }
 
-		function _fixBootstrapDropdownForMobileDevices() {
-			$('.dropdown-menu').on('touchstart.dropdown.data-api', function(e) {
-				e.stopPropagation();
-			});
-		}
+        function _initializeHasher() {
+            var parseHash = function(newHash, oldHash) {
+                crossroads.parse(newHash);
+            };
+            hasher.initialized.add(parseHash);
+            hasher.changed.add(parseHash);
+            hasher.init();
+        }
 
-		function _initMomentLanguageWithFallback() {
-			var ietfLanguageTag = resources.LanguageCode;
-			var baseLang = 'en'; //Base
-			var languages = [ietfLanguageTag, ietfLanguageTag.split('-')[0], baseLang];
+        function _render() {
+            $('body').append(layoutTemplate);
+            contentPlaceHolder = $('#content-placeholder');
+            $('#menu-placeholder').replaceWith(menuTemplate);
+        }
 
-			for (var i = 0; i < languages.length; i++) {
-				try {
-					moment.lang(languages[i]);
-					if (moment.lang() == languages[i]) return;
-				} catch(e) {
-					continue;
-				}
-			}
-		}
+        function _fixBootstrapDropdownForMobileDevices() {
+            $('.dropdown-menu').on('touchstart.dropdown.data-api', function(e) {
+                e.stopPropagation();
+            });
+        }
 
-		function _bindMenu() {
-			ajax.ajax({
-				url: "Application/NavigationContent",
-				success: function(responseData, textStatus, jqXHR) {
-					menu.MyTimeVisible(responseData.IsMyTimeAvailable === true);
-					menu.MobileReportsVisible(responseData.IsMobileReportsAvailable === true);
-					menu.UserName(responseData.UserName);
-				}
-			});
-			ko.applyBindings(menu, $('nav')[0]);
-		}
+        function _initMomentLanguageWithFallback() {
+            var ietfLanguageTag = resources.LanguageCode;
+            var baseLang = 'en'; //Base
+            var languages = [ietfLanguageTag, ietfLanguageTag.split('-')[0], baseLang];
 
-		function _initSignalR() {
-			var promise = subscriptions.start();
-			promise.fail(function() {
-				_displayError("SignalR failed to start");
-			});
-		}
+            for (var i = 0; i < languages.length; i++) {
+                try {
+                    moment.lang(languages[i]);
+                    if (moment.lang() == languages[i]) return;
+                } catch(e) {
+                    continue;
+                }
+            }
+        }
 
-		_render();
+        function _bindMenu() {
+            ajax.ajax({
+                url: "Application/NavigationContent",
+                success: function(responseData, textStatus, jqXHR) {
+                    menu.MyTimeVisible(responseData.IsMyTimeAvailable === true);
+                    menu.MobileReportsVisible(responseData.IsMobileReportsAvailable === true);
+                    menu.UserName(responseData.UserName);
+                }
+            });
+            ko.applyBindings(menu, $('nav')[0]);
+        }
 
-		_initSignalR();
+        function _initSignalR() {
+            var promise = subscriptions.start();
+            promise.fail(function() {
+                _displayError("SignalR failed to start");
+            });
+        }
 
-		_setupRoutes();
-		_initializeHasher();
+        _render();
 
-		_initMomentLanguageWithFallback();
+        _initSignalR();
 
-		_bindMenu();
-		
-	});
+        _setupRoutes();
+        _initializeHasher();
+
+        _initMomentLanguageWithFallback();
+
+        _bindMenu();
+
+    });
