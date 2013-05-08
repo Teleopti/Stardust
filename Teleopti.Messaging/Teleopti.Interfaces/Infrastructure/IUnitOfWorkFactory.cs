@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Data;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Interfaces.Infrastructure
@@ -85,5 +84,10 @@ namespace Teleopti.Interfaces.Infrastructure
 		/// Returns the audit setting delegate used by auditing
 		/// </summary>
 		IAuditSetter AuditSetting { get; }
+
+		/// <summary>
+		/// The connection string.
+		/// </summary>
+		string ConnectionString { get; }
 	}
 }

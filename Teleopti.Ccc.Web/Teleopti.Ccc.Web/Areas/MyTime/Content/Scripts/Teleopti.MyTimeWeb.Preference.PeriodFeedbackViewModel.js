@@ -19,6 +19,8 @@ if (typeof (Teleopti) === 'undefined') {
 Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel = function (ajax, dayViewModels, date) {
 	var self = this;
 
+    this.DayViewModels = dayViewModels;
+
 	this.LoadFeedback = function () {
 		ajax.Ajax({
 			url: "PreferenceFeedback/PeriodFeedback",
@@ -44,25 +46,25 @@ Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel = function (ajax, dayViewM
 
 	this.PossibleResultContractTimeMinutesLower = ko.computed(function () {
 		var sum = 0;
-		$.each(dayViewModels, function (index,day) {
+		$.each(self.DayViewModels, function (index, day) {
 			var value = day.PossibleContractTimeMinutesLower();
 			if (value)
 				sum += parseInt(value);
 			sum += day.ContractTimeMinutes();
 		});
 		return sum;
-	}).extend({ throttle: 200 });
+	});
 
 	this.PossibleResultContractTimeMinutesUpper = ko.computed(function () {
 		var sum = 0;
-		$.each(dayViewModels, function (index,day) {
+		$.each(self.DayViewModels, function (index, day) {
 			var value = day.PossibleContractTimeMinutesUpper();
 			if (value)
 				sum += parseInt(value);
 			sum += day.ContractTimeMinutes();
 		});
 		return sum;
-	}).extend({ throttle: 200 });
+	});
 
 	this.PossibleResultContractTimeLower = ko.computed(function () {
 		return Teleopti.MyTimeWeb.Preference.formatTimeSpan(self.PossibleResultContractTimeMinutesLower());

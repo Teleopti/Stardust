@@ -4,6 +4,7 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.DayOffPlanning;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
@@ -469,6 +470,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ScheduleBackToLegalStateDaysShouldReturnFalseIfSchedulingFails()
 		{
+			_person=new Person();
 			IGroupSchedulingService groupSchedulingService = _mocks.StrictMock<IGroupSchedulingService>();
 			ISchedulePartModifyAndRollbackService rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
 			IPersonAssignment personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, new DateTimePeriod());
@@ -500,6 +502,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
 		public void ScheduleBackToLegalStateDaysShouldReturnTrueIfSuccessfulScheduling()
 		{
+			_person=new Person();
 			IGroupSchedulingService groupSchedulingService = _mocks.StrictMock<IGroupSchedulingService>();
 			ISchedulePartModifyAndRollbackService rollbackService = _mocks.StrictMock<ISchedulePartModifyAndRollbackService>();
 			IPersonAssignment personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person, new DateTimePeriod());

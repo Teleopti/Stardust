@@ -45,6 +45,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			try
 			{
 				var result = model.AuthenticateUser();
+				model.SaveAuthenticateResult(result);
 				if (!result.Successful)
 					return ReturnErrorMessage(Resources.LogOnFailedInvalidUserNameOrPassword);
 				_webLogon.LogOn(result.DataSource.DataSourceName, businessUnitId, result.Person.Id.Value);

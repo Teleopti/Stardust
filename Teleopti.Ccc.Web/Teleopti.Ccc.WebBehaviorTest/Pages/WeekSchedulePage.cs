@@ -200,5 +200,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		{
 			get { return Document.Div(Find.BySelector(".body-weekview-inner")); }
 		}
+
+		public DivCollection AbsenceIndiciators()
+		{
+			return Document.Divs.Filter(Find.BySelector(".holiday-agents"));
+		}
 	}
 }

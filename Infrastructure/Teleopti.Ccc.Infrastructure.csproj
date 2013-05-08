@@ -113,6 +113,7 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.IdentityModel" />
     <Reference Include="System.Security" />
@@ -254,6 +255,7 @@
     <Compile Include="Persisters\ScheduleScreenRetryingPersister.cs" />
     <Compile Include="Repositories\ApplicationRolePersonRepository.cs" />
     <Compile Include="Repositories\CurrentUnitOfWorkExtensions.cs" />
+    <Compile Include="Repositories\EtlReadModelRepository.cs" />
     <Compile Include="Repositories\PersonScheduleDayReadModelStorage.cs" />
     <Compile Include="Repositories\IJobResultRepository.cs" />
     <Compile Include="Repositories\LicenseStatusRepository.cs" />
@@ -365,7 +367,14 @@
     <Compile Include="Repositories\QueueSourceRepository.cs" />
     <Compile Include="Repositories\WorkShiftRuleSetRepository.cs" />
     <Compile Include="Repositories\WriteProtectionRepository.cs" />
+    <Compile Include="SystemCheck\AgentDayConverter\AgentDayConverters.cs" />
+    <Compile Include="SystemCheck\AgentDayConverter\FetchPersonIdAndTimeZone.cs" />
+    <Compile Include="SystemCheck\AgentDayConverter\IPersonAssignmentConverter.cs" />
+    <Compile Include="SystemCheck\AgentDayConverter\PersonAssignmentDateSetter.cs" />
+    <Compile Include="SystemCheck\AgentDayConverter\PersonAssignmentDateSetterBase.cs" />
+    <Compile Include="SystemCheck\AgentDayConverter\PersonTimeZoneSetter.cs" />
     <Compile Include="SystemCheck\CheckMessageBroker.cs" />
+    <Compile Include="SystemCheck\AgentDayConverter\PersonAssignmentAuditDateSetter.cs" />
     <Compile Include="SystemCheck\SystemCheckerValidator.cs" />
     <Compile Include="UnitOfWork\CurrentUnitOfWork.cs" />
     <Compile Include="UnitOfWork\DenormalizationQueueEventsPublisher.cs" />

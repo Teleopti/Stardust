@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                                                                       selectedPeriod, selectedPersons))
                         {
                             var rollbackExecuted = false;
-                            foreach (var matrix in teamBlockInfo.TeamInfo.MatrixesForGroup())
+                            foreach (var matrix in teamBlockInfo.TeamInfo.MatrixesForGroupAndDate(datePointer))
                             {
                                 _workShiftMinMaxCalculator.ResetCache();
                                 if (!_workShiftMinMaxCalculator.IsPeriodInLegalState(matrix, _schedulingOptions))

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.IO;
@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				string resultOfOnline = isSqlServerOnline(connectionString);
 				if (string.IsNullOrEmpty(resultOfOnline))
 				{
-                    dataSource = Create(element, connectionString);
+                    dataSource = Create(element);
 					return true;
 				}
 			}
@@ -105,10 +105,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		}
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "dataSource"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
-        public IDataSource Create(XElement hibernateConfiguration, string connectionString)
+        public IDataSource Create(XElement hibernateConfiguration)
 		{
-            var buildedConnectionString = new SqlConnectionStringBuilder(connectionString);
-            
 			if (hibernateConfiguration.Name != "datasource")
 				throw new DataSourceException(@"Missing <dataSource> in xml source ");
 			using (PerformanceOutput.ForOperation("Create application configuration"))
@@ -117,16 +115,13 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 				_statisticConfiguration = createStatisticConfiguration(hibernateConfiguration);
 			using (PerformanceOutput.ForOperation("Create authentication settings"))
 				_authenticationSettings = createAuthenticationSettings(hibernateConfiguration);
-			var appFact =
-				 new NHibernateUnitOfWorkFactory(buildSessionFactory(_applicationConfiguration), _enversConfiguration.AuditSettingProvider, _messageSenders);
+			var appFact = new NHibernateUnitOfWorkFactory(buildSessionFactory(_applicationConfiguration), _enversConfiguration.AuditSettingProvider, _applicationConfiguration.Properties[Environment.ConnectionString], _messageSenders);
 			if (_statisticConfiguration == null)
 			{
-                return new DataSource(appFact, null, _authenticationSettings, buildedConnectionString);
-
+                return new DataSource(appFact, null, _authenticationSettings);
 			}
 			return
-				 new DataSource(appFact,
-                                      new NHibernateUnitOfWorkMatrixFactory(buildSessionFactory(_statisticConfiguration)), _authenticationSettings, buildedConnectionString);
+				 new DataSource(appFact, new NHibernateUnitOfWorkMatrixFactory(buildSessionFactory(_statisticConfiguration), _statisticConfiguration.Properties[Environment.ConnectionString]), _authenticationSettings);
 		}
 
 		public IDataSource Create(IDictionary<string, string> settings,
@@ -134,11 +129,11 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		{
 			NHibernateUnitOfWorkMatrixFactory statFactory;
 			createApplicationConfiguration(settings);
-			var appFactory = new NHibernateUnitOfWorkFactory(buildSessionFactory(_applicationConfiguration), _enversConfiguration.AuditSettingProvider,_messageSenders);
+                        var appFactory = new NHibernateUnitOfWorkFactory(buildSessionFactory(_applicationConfiguration), _enversConfiguration.AuditSettingProvider,_applicationConfiguration.Properties[Environment.ConnectionString],_messageSenders);
 			if (!string.IsNullOrEmpty(statisticConnectionString))
 			{
 				_statisticConfiguration = createStatisticConfigurationInner(statisticConnectionString, NoDataSourceName);
-				statFactory = new NHibernateUnitOfWorkMatrixFactory(buildSessionFactory(_statisticConfiguration));
+				statFactory = new NHibernateUnitOfWorkMatrixFactory(buildSessionFactory(_statisticConfiguration), _statisticConfiguration.Properties[Environment.ConnectionString]);
 			}
 			else
 			{

@@ -125,7 +125,7 @@
                             </div>
                             <div class="day-content pdt10" data-bind="style: { borderLeftColor: Color() }">
                                 <img class="loading-small-gray-blue" data-bind="visible: IsLoading" src="@Url.Content("~/Areas/MyTime/Content/Images/ajax-loader-small-f8f8f8.gif")" alt="..." />
-                                <!-- ko if: AjaxError().length > 0 -->
+									<!-- ko if: HasAjaxError -->
                                 <h2 class="error" data-bind="text: AjaxError"></h2>
                                 <!-- /ko -->
 
@@ -154,11 +154,11 @@
                                             </div>
                                         </div>
                                         <div class="preference-indicator">
-                                            <!-- ko if: Meetings().length > 0 || PersonalShifts().length > 0 -->
+												<!-- ko if: HasPersonalShiftsOrMeetings -->
                                             <div class="icon meeting-small">
                                             </div>
                                             <div class="meeting-tooltip" style="display: none">
-                                                <!-- ko if: Meetings().length > 0 -->
+													<!-- ko if: HasMeetings -->
                                                 <table>
                                                     <thead>@Resources.Meetings</thead>
                                                     <tbody data-bind="foreach: Meetings">
@@ -178,7 +178,7 @@
                                                     </tbody>
                                                 </table>
                                                 <!-- /ko -->
-                                                <!-- ko if: PersonalShifts().length > 0 -->
+													<!-- ko if: HasPersonalShifts -->
                                                 <table>
                                                     <thead>@Resources.PersonalShift</thead>
                                                     <tbody data-bind="foreach: PersonalShifts">
@@ -196,15 +196,15 @@
                                     </span>
                                 </div>
 
-                                <!-- ko if: DayOff() != '' -->
+									<!-- ko if: HasDayOff -->
                                 <div class="dayoff" data-bind="text: DayOff"></div>
                                 <!-- /ko -->
 
-                                <!-- ko if: Absence() != '' -->
+									<!-- ko if: HasAbsence -->
                                 <div class="absence" data-bind="text: Absence"></div>
                                 <!-- /ko -->
 
-                                <!-- ko if: PersonAssignmentShiftCategory() != '' -->
+									<!-- ko if: HasPersonAssignmentShiftCategory -->
                                 <div class="scheduled">
                                     <span class="displayblock fullwidth" data-bind="text: PersonAssignmentShiftCategory"></span>
                                     <strong class="displayblock fullwidth" data-bind="text: PersonAssignmentTimeSpan"></strong>

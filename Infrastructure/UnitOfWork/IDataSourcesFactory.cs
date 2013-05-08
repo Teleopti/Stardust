@@ -17,13 +17,12 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
         /// Creates the datasource using the specified nhibernate config xml structure.
         /// </summary>
         /// <param name="hibernateConfiguration">The nhibernate config xml structure.</param>
-        /// <param name="connectionString"></param>
         /// <returns></returns>
         /// <remarks>
         /// Created by: Klas
         /// Created date: 2008-12-09
         /// </remarks>
-        IDataSource Create(XElement hibernateConfiguration, string connectionString);
+        IDataSource Create(XElement hibernateConfiguration);
 
 
         /// <summary>

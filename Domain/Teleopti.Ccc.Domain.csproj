@@ -169,6 +169,7 @@
     <Compile Include="ApplicationLayer\ScheduleChangedEventHandlers\ScheduleProjection\UpdateScheduleProjectionReadModel.cs" />
     <Compile Include="ApplicationLayer\SyncEventsPublisher.cs" />
     <Compile Include="Auditing\AuditSetting.cs" />
+    <Compile Include="Auditing\LoginAttemptModel.cs" />
     <Compile Include="Auditing\Revision.cs" />
     <Compile Include="Auditing\ScheduleAuditingReportData.cs" />
     <Compile Include="Budgeting\AllowanceCalculator.cs" />
@@ -322,6 +323,7 @@
     <Compile Include="Optimization\GroupShiftCategoryBackToLegalStateServiceBuilder.cs" />
     <Compile Include="Optimization\IsSignificantPartFullDayAbsenceOrDayOffSpecification.cs" />
     <Compile Include="Optimization\MainShiftOptimizeActivitySpecificationSetter.cs" />
+    <Compile Include="Optimization\MatrixShiftsNotAvailibleLocker.cs" />
     <Compile Include="Optimization\OptimizationOverLimitByRestrictionDecider.cs" />
     <Compile Include="Optimization\EmptyDaysInBlockOutsideSelectedHandler.cs" />
     <Compile Include="Optimization\OptimizationOverLimitByRestrictionDeciderCreator.cs" />
@@ -627,7 +629,6 @@
     <Compile Include="Common\OptionalColumn.cs" />
     <Compile Include="Common\GroupPage.cs" />
     <Compile Include="Common\Ignore.cs" />
-    <Compile Include="Common\Pair.cs" />
     <Compile Include="Common\PairDictionaryFactory.cs" />
     <Compile Include="Common\PairMatrixService.cs" />
     <Compile Include="Common\Payload.cs" />
@@ -810,6 +811,7 @@
     <Compile Include="Scheduling\Restriction\RestrictionBase.cs" />
     <Compile Include="Scheduling\Restriction\StudentAvailabilityRestriction.cs" />
     <Compile Include="Scheduling\Restriction\StudentSpecification.cs" />
+    <Compile Include="Scheduling\Rules\DataPartOfAgentDay.cs" />
     <Compile Include="Scheduling\Rules\GapsInAssignmentRule.cs" />
     <Compile Include="Scheduling\Rules\LongestPeriodForAssignmentCalculator.cs" />
     <Compile Include="Scheduling\Rules\MinWeeklyRestRule.cs" />
@@ -973,6 +975,7 @@
     <Compile Include="Security\Authentication\IFindUserDetail.cs" />
     <Compile Include="Security\Authentication\IWindowsUserProvider.cs" />
     <Compile Include="Security\Authentication\LoggedOnUser.cs" />
+    <Compile Include="Security\Authentication\LogonLogger.cs" />
     <Compile Include="Security\Authentication\UserTimeZone.cs" />
     <Compile Include="Security\Authentication\WindowsDataSourceProvider.cs" />
     <Compile Include="Security\Authentication\AuthenticationSettings.cs" />
@@ -1826,7 +1829,9 @@
     <EmbeddedResource Include="Common\JobResultDetail.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Auditing\Revision.hbm.xml" />
+    <EmbeddedResource Include="Auditing\Revision.hbm.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Auditing\AuditSetting.hbm.xml" />
   </ItemGroup>
   <ItemGroup>

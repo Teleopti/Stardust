@@ -44,7 +44,8 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
                 //main shift
                 agAss =
                     new PersonAssignment(MappedObjectPair.Agent.GetPaired(oldEntity.AssignedAgent),
-                                        MappedObjectPair.Scenario.GetPaired(oldEntity.AgentScenario));
+                                        MappedObjectPair.Scenario.GetPaired(oldEntity.AgentScenario),
+																				new DateOnly(oldEntity.AgentDate));
                 MainShiftMapper msMapper = new MainShiftMapper(MappedObjectPair, TimeZone, oldEntity.AgentDate);
 
                 agAss.SetMainShift(msMapper.Map(oldEntity.AgentDayAssignment.Assigned.AssignedWorkshift));
@@ -61,7 +62,8 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
                 //main shift
                 agAss =
                     new PersonAssignment(MappedObjectPair.Agent.GetPaired(oldEntity.AssignedAgent),
-                                        MappedObjectPair.Scenario.GetPaired(oldEntity.AgentScenario));
+                                        MappedObjectPair.Scenario.GetPaired(oldEntity.AgentScenario),
+																				new DateOnly(oldEntity.AgentDate));
                 MainShiftMapper msMapper = new MainShiftMapper(MappedObjectPair, TimeZone, oldEntity.AgentDate);
 
                 agAss.SetMainShift(msMapper.Map(oldEntity.AgentDayAssignment.AbsenceWorkshift));
@@ -78,7 +80,8 @@ namespace Teleopti.Ccc.DatabaseConverter.EntityMapper
                 {
                     agAss =
                         new PersonAssignment(MappedObjectPair.Agent.GetPaired(oldEntity.AssignedAgent),
-                                            MappedObjectPair.Scenario.GetPaired(oldEntity.AgentScenario));
+                                            MappedObjectPair.Scenario.GetPaired(oldEntity.AgentScenario),
+																						new DateOnly(oldEntity.AgentDate));
                 }
                 PersonalShiftMapper psMapper = new PersonalShiftMapper(MappedObjectPair, TimeZone,oldEntity.AgentDate);
 

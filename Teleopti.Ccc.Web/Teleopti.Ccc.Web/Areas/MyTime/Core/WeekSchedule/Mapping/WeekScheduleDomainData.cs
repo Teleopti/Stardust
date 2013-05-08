@@ -11,6 +11,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 		public IScheduleColorSource ColorSource { get; set; }
 		public TimePeriod MinMaxTime { get; set; }
 		public bool AsmPermission { get; set; }
+		public bool AbsenceRequestPermission { get; set; }	
 		public bool IsCurrentWeek { get; set; }
 	}
 }

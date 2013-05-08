@@ -11421,11 +11421,34 @@ Reduce the complexity to use these shifts.</value>
     <value>Please select at least one of the options "Same shift category", "Same start time" or "Same shift" in Block Optimization.</value>
     <comment>Block optimization</comment>
   </data>
-  <data name="AddFullDayAbsence" xml:space="preserve">
-    <value>Add full day absence</value>
-    <comment>Add full day absence</comment>
+  <data name="NotAllowedMoveOfAssignmentToOtherDate" xml:space="preserve">
+    <value>It is not allowed to move a work shift to another day in shift editor, use cut and paste instead</value>
+    <comment>It is not allowed to move a work shift to another day in shift editor, use cut and paste instead</comment>
   </data>
-  <data name="InvalidEndDate" xml:space="preserve">
-    <value>Invalid end date</value>
+  <data name="ChanceOfGettingAbsenceRequestGranted" xml:space="preserve">
+    <value>Chance of getting absence request granted: </value>
+    <comment>Used in mytime web so agents can see what day is best for absence request</comment>
+    </data>
+
+  <data name="AddPreferenceThreeDots" xml:space="preserve">
+    <value>Add Preference...</value>
+    <comment>To be used in menus/ribbon when adding preference</comment>
+  </data>
+  <data name="AddStudentAvailabilityThreeDots" xml:space="preserve">
+    <value>Add Student Availability...</value>
+    <comment>To be used in menus/ribbon when adding student availability</comment>
+    </data>
+
+  <data name="Fair" xml:space="preserve">
+    <value>Fair</value>
+    <comment>Chance of getting absencerequest granted: Fair</comment>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>Good</value>
+    <comment>Chance of getting absencerequest granted: Good</comment>
+  </data>
+  <data name="Poor" xml:space="preserve">
+    <value>Poor</value>
+    <comment>Chance of getting absencerequest granted: Poor</comment>
   </data>
 </root>

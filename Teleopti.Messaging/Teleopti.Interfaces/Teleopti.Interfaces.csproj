@@ -404,7 +404,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Domain\IOvertimeShiftActivityLayer.cs" />
-    <Compile Include="Domain\IPair.cs" />
     <Compile Include="Domain\IPairDictionaryFactory.cs" />
     <Compile Include="Domain\IPairMatrixService.cs" />
     <Compile Include="Domain\IPayrollExport.cs" />
@@ -696,6 +695,7 @@
     <Compile Include="Infrastructure\IMultiplicatorDefinitionSetRepository.cs" />
     <Compile Include="Infrastructure\IMultiplicatorRepository.cs" />
     <Compile Include="Infrastructure\IPeopleAndSkillLoaderDecider.cs" />
+    <Compile Include="Infrastructure\IPersonAssignmentCommon.cs" />
     <Compile Include="Infrastructure\IQueryFilter.cs" />
     <Compile Include="Infrastructure\IRootChangeInfo.cs">
       <SubType>Code</SubType>
@@ -809,6 +809,8 @@
     <Compile Include="MessageBroker\Events\IMessageBrokerSender.cs" />
     <Compile Include="MessageBroker\Notification.cs" />
     <Compile Include="MessageBroker\Subscription.cs" />
+    <Compile Include="Messages\Denormalize\ScheduleChanged.cs" />
+    <Compile Include="Messages\Denormalize\DenormalizeScheduleProjection.cs" />
     <Compile Include="Messages\Denormalize\GroupPageChangedMessage.cs" />
     <Compile Include="Messages\Denormalize\PersonChangedMessage.cs" />
     <Compile Include="Messages\Denormalize\InitialLoadScheduleProjection.cs" />
@@ -836,6 +838,7 @@
     <Compile Include="Domain\SettingValueTypes.cs" />
     <Compile Include="Domain\UnderStaffingData.cs" />
     <Compile Include="Messages\Rta\BusinessUnitInfo.cs" />
+    <Compile Include="ReadModel\IScheduleChangedReadModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <CodeAnalysisDictionary Include="..\..\CodeAnalysisDictionary.xml">

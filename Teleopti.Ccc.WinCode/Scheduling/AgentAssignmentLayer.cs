@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             {
                 InParameter.NotNull("agent", agent);
                 InParameter.NotNull("scenario", scenario);
-                personAssignment = new PersonAssignment(agent, scenario);
+                personAssignment = new PersonAssignment(agent, scenario, period.ToDateOnlyPeriod(agent.PermissionInformation.DefaultTimeZone()).StartDate);
             }
 
             switch (typeOfLayer)

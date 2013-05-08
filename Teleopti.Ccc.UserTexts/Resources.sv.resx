@@ -10971,4 +10971,8 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   <data name="SelectAtleastOneOptimizationOptionForBlock" xml:space="preserve">
     <value>Var god välj minst ett av alternativen "Samma skiftkategori", "Samma starttid" eller "Samma skift" vid blockoptimering. </value>
   </data>
+  <data name="NotAllowedMoveOfAssignmentToOtherDate" xml:space="preserve">
+    <value>Det är inte tillåtet att flytta ett skift från en dag till en annan i skifteditor, använd klipp ut och klistra in i stället.</value>
+    <comment>It is not allowed to move a work shift to another day in shift editor, use cut and paste instead</comment>
+  </data>
 </root>

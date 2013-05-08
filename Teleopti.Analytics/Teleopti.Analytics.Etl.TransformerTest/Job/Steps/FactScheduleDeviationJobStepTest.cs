@@ -34,7 +34,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
 			var startDate = DateTime.SpecifyKind(DateTime.Today.AddDays(-100), DateTimeKind.Local);
 			var endDate = DateTime.SpecifyKind(DateTime.Today.AddDays(-30), DateTimeKind.Local);
 
-			_jobCategoryDates.Add(startDate, endDate, JobCategoryType.Schedule);
+			_jobCategoryDates.Add(startDate, endDate, JobCategoryType.AgentStatistics);
 			var jobParameters = new JobParameters(_jobCategoryDates, 1, _timeZone.Id, 15, "", "", CultureInfo.CurrentCulture);
 			
 			var jobHelper = new JobHelper(_repository, null, null);
@@ -60,7 +60,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
 		{
 			var startDate = DateTime.SpecifyKind(DateTime.Now.Date, DateTimeKind.Local);
 			var endDate = startDate.AddDays(10);
-			_jobCategoryDates.Add(startDate, endDate, JobCategoryType.Schedule);
+			_jobCategoryDates.Add(startDate, endDate, JobCategoryType.AgentStatistics);
 			
 
 			var expectedPeriod = extractExpectedPeriod(_jobCategoryDates.AllDatePeriodCollection[0]);
@@ -91,7 +91,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
 		public void ShouldNotLoadDataWhenPeriodIsInTheFuture()
 		{
 			var startDateInFuture = DateTime.SpecifyKind(DateTime.Now.Date.AddDays(2), DateTimeKind.Local);
-			_jobCategoryDates.Add(startDateInFuture, startDateInFuture.AddDays(10), JobCategoryType.Schedule);
+			_jobCategoryDates.Add(startDateInFuture, startDateInFuture.AddDays(10), JobCategoryType.AgentStatistics);
 			var jobParameters = new JobParameters(_jobCategoryDates, 1, _timeZone.Id, 15, "", "", CultureInfo.CurrentCulture);
 
 			var jobHelper = new JobHelper(_repository, null, null);

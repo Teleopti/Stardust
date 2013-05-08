@@ -4,9 +4,12 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
+using System.Net;
+using System.Net.Sockets;
 using System.Threading;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Infrastructure;
@@ -50,6 +53,7 @@ namespace Teleopti.Ccc.Win.Main
 		private readonly IEnumerable<LoadingFunction> _initializeFunctions;
 		private readonly WindowsAppDomainPrincipalContext _principalContext = new WindowsAppDomainPrincipalContext(new TeleoptiPrincipalFactory());
 		private IRoleToPrincipalCommand _roleToPrincipalCommand;
+		private readonly ILogonLogger _logonLogger;
 
 		public LogOnScreen()
 		{
@@ -81,12 +85,13 @@ namespace Teleopti.Ccc.Win.Main
                                        };
 		}
 
-		public LogOnScreen(ILogOnOff logOnOff, IDataSourceHandler dataSourceHandler, IRoleToPrincipalCommand roleToPrincipalCommand)
+		public LogOnScreen(ILogOnOff logOnOff, IDataSourceHandler dataSourceHandler, IRoleToPrincipalCommand roleToPrincipalCommand, ILogonLogger logonLogger)
 			: this()
 		{
 			_logOnOff = logOnOff;
 			_dataSourceHandler = dataSourceHandler;
 			_roleToPrincipalCommand = roleToPrincipalCommand;
+			_logonLogger = logonLogger;
 		}
 
 		protected override void OnShown(EventArgs e)
@@ -274,7 +279,9 @@ namespace Teleopti.Ccc.Win.Main
 			if (!string.IsNullOrEmpty(logOnName))
 			{
 				string password = textBoxPassword.Text;
+				
 				var authenticationResult = _choosenDataSource.LogOn(textBoxLogOnName.Text, password);
+
 				if (authenticationResult.HasMessage)
 					MessageDialogs.ShowError(this, string.Concat(authenticationResult.Message, "  "), Resources.LogOn);
 				if (authenticationResult.Successful)
@@ -282,6 +289,19 @@ namespace Teleopti.Ccc.Win.Main
 					_choosenDataSource.User.ApplicationAuthenticationInfo.Password = password; //To use for silent background log on
 
 					ChooseBusinessUnit();
+				}
+				else
+				{
+					var model = new LoginAttemptModel
+					{
+						ClientIp = ipAdress(),
+						Client = "WIN",
+						UserCredentials = _choosenDataSource.LogOnName,
+						Provider = _choosenDataSource.AuthenticationTypeOption.ToString(),
+						Result = "LogonFailed"
+					};
+
+					_logonLogger.SaveLogonAttempt(model, _choosenDataSource.DataSource.Application);
 				}
 			}
 		}
@@ -650,11 +670,34 @@ namespace Teleopti.Ccc.Win.Main
 
 			_logOnOff.LogOn(dataSourceContainer.DataSource, dataSourceContainer.User, businessUnit);
 
+			var model = new LoginAttemptModel
+			{
+				ClientIp = ipAdress(),
+				Client = "WIN",
+				UserCredentials = dataSourceContainer.LogOnName,
+				Provider = dataSourceContainer.AuthenticationTypeOption.ToString(),
+				Result = "LogonSuccess"
+			};
+			if (dataSourceContainer.User != null) model.PersonId = dataSourceContainer.User.Id;
+
+			_logonLogger.SaveLogonAttempt(model, dataSourceContainer.DataSource.Application);
+
 			StateHolderReader.Instance.StateReader.SessionScopeData.AuthenticationTypeOption = _authenticationType;
 
 			InitializeStuff();
 		}
 
+		private string ipAdress()
+		{
+			var ips = Dns.GetHostEntry(Dns.GetHostName());
+			var ip = "";
+			foreach (var adress in ips.AddressList)
+			{
+				if (adress.AddressFamily == AddressFamily.InterNetwork)
+					ip = adress.ToString();
+			}
+			return ip;
+		}
 		public void Warning(string warning)
 		{
 			ShowInTaskbar = true;

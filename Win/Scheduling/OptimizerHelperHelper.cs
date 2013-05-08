@@ -89,6 +89,8 @@ namespace Teleopti.Ccc.Win.Scheduling
             matrixOvertimeLocker.Execute();
             IMatrixNoMainShiftLocker noMainShiftLocker = new MatrixNoMainShiftLocker(matrixList);
             noMainShiftLocker.Execute();
+			IMatrixShiftsNotAvailibleLocker matrixShiftsNotAvailibleLocker = new MatrixShiftsNotAvailibleLocker();
+			matrixShiftsNotAvailibleLocker.Execute(matrixList);
         }
 
 		private static void lockRestrictionDaysInMatrix(IScheduleMatrixPro matrix, IMatrixRestrictionLocker locker)

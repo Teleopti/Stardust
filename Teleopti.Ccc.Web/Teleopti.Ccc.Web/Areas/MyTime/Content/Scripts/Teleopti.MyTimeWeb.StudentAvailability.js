@@ -61,11 +61,51 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 	    
 	    ko.applyBindings(vm, $('div.navbar')[1]);
 	}
+    
+	function _ajaxForDate(model, options) {
+	    var type = options.type || 'GET',
+		    data = options.data || {},
+		    statusCode400 = options.statusCode400,
+		    statusCode404 = options.statusCode404,
+		    url = options.url || "StudentAvailability/StudentAvailability",
+		    success = options.success || function () { },
+		    complete = options.complete || null;
 
+	    return ajax.Ajax({
+	        url: url,
+	        dataType: "json",
+	        contentType: "application/json; charset=utf-8",
+	        type: type,
+	        beforeSend: function (jqXHR) {
+	            model.AjaxError('');
+	            model.IsLoading(true);
+	        },
+	        complete: function (jqXHR, textStatus) {
+	            model.IsLoading(false);
+	            if (complete)
+	                complete(jqXHR, textStatus);
+	        },
+	        success: success,
+	        data: data,
+	        statusCode404: statusCode404,
+	        statusCode400: statusCode400,
+	        error: function (jqXHR, textStatus, errorThrown) {
+	            var error = {
+	                ShortMessage: "Error!"
+	            };
+	            try {
+	                error = $.parseJSON(jqXHR.responseText);
+	            } catch (e) {
+	            }
+	            model.AjaxError(error.ShortMessage);
+	        }
+	    });
+	};
+    
 	function _initViewModels() {
 		dayViewModels = {};
 		$('li[data-mytime-date]').each(function (index, element) {
-			var dayViewModel = new Teleopti.MyTimeWeb.StudentAvailability.DayViewModel(ajax);
+			var dayViewModel = new Teleopti.MyTimeWeb.StudentAvailability.DayViewModel(_ajaxForDate);
 			dayViewModel.ReadElement(element);
 			dayViewModels[dayViewModel.Date] = dayViewModel;
 			ko.applyBindings(dayViewModel, element);
@@ -204,6 +244,14 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 		$('#StudentAvailability-body-inner').calendarselectable();
 	}
 
+	function _cleanBindings() {
+	    $('li[data-mytime-date]').each(function (index, element) {
+	        ko.cleanNode(element);
+	    });
+
+	    dayViewModels = {};
+	}
+
 	return {
 		Init: function () {
 			Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack(
@@ -224,6 +272,7 @@ Teleopti.MyTimeWeb.StudentAvailability = (function ($) {
 		StudentAvailabilityPartialDispose: function () {
 			studentAvailabilityToolTip.qtip('toggle', false);
 			ajax.AbortAll();
+			_cleanBindings();
 		},
 		SetStudentAvailability: function(studentAvailabilityViewModel) {
 		    _setStudentAvailability(ko.toJS(studentAvailabilityViewModel));

@@ -93,11 +93,11 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 	var WeekScheduleViewModel = function (userTexts) {
 		var self = this;
-
 		self.userTexts = userTexts;
 		self.textPermission = ko.observable();
 		self.periodSelection = ko.observable();
 		self.asmPermission = ko.observable();
+	    self.absenceRequestPermission = ko.observable();
 		self.isCurrentWeek = ko.observable();
 		self.timeLines = ko.observableArray();
 		self.days = ko.observableArray();
@@ -132,14 +132,16 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 
 		self.isWithinSelected = function (startDate, endDate) {
 			return (startDate <= self.maxDate() && endDate >= self.minDate());
+		    
 		};
 	    
 		self.requestViewModel = new Teleopti.MyTimeWeb.Schedule.RequestViewModel();
 	};
 
 	ko.utils.extend(WeekScheduleViewModel.prototype, {
-		Initialize: function (data) {
-			var self = this;
+	    Initialize: function (data) {
+		    var self = this;
+		    self.absenceRequestPermission(data.RequestPermission.AbsenceRequestPermission);
 			self.textPermission(data.RequestPermission.TextRequestPermission);
 			self.periodSelection(JSON.stringify(data.PeriodSelection));
 			self.asmPermission(data.AsmPermission);
@@ -190,17 +192,38 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			return $('<div/>').text(day.Note.Message).html();
 		});
 		self.textRequestCount = ko.observable(day.TextRequestCount);
+		self.allowance = ko.observable(day.Allowance);
+		self.absenceAgents = ko.observable(day.AbsenceAgents);
+
+		self.basedOnAllowanceChance = function (options) {
+			var percent;
+			if (self.allowance() != 0)
+				percent = 100 * ((self.allowance() - self.absenceAgents()) / self.allowance());
+			else {
+				percent = 0;
+			}
+			
+			var index = 2;
+			if (percent < 30) index = 0;
+			else if (percent < 80) index = 1;
+			return options[index];
+		};
+
+		self.holidayChanceText = ko.computed(function () {
+			return parent.userTexts.chanceOfGettingAbsencerequestGranted + self.basedOnAllowanceChance([parent.userTexts.poor, parent.userTexts.fair, parent.userTexts.good]);
+		});
+		
+		self.holidayChanceColor = ko.computed(function () {
+
+			return self.basedOnAllowanceChance(["red", "yellow", "green"]);
+		});
+		
 		self.hasTextRequest = ko.computed(function () {
 			return self.textRequestCount() > 0;
 		});
-		self.holidayAgents = ko.computed(function () {
-		    if (!self.hasTextRequest())
-		        return "X";
-		    else {
-		        return self.textRequestCount();
-		    }
-		});
+
 		self.hasNote = ko.observable(day.HasNote);
+
 		self.textRequestText = ko.computed(function () {
 			return parent.userTexts.xRequests.format(self.textRequestCount());
 		});
@@ -209,6 +232,7 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			var showRequestClass = self.textRequestPermission() ? 'show-request ' : '';
 			return 'third category ' + showRequestClass + self.summaryStyleClassName(); //last one needs to be becuase of "stripes" and similar
 		});
+
 		self.colorForDaySummary = ko.computed(function () {
 			return parent.styles()[self.summaryStyleClassName()];
 		});
@@ -221,9 +245,16 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			}
 			return 'black';
 		});
+
 		self.layers = ko.utils.arrayMap(day.Periods, function (item) {
 			return new LayerViewModel(item, parent);
 		});
+		
+	    self.absenceRequestPermission = ko.computed(function() {
+	        return parent.absenceRequestPermission();
+	    });
+
+	
 	};
 	var LayerViewModel = function (layer, parent) {
 		var self = this;
@@ -389,6 +420,13 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			}
 		});
 	}
+    
+    function _cleanBindings() {
+        ko.cleanNode($('#ScheduleWeek-body')[0]);
+        vm.days([]);
+        vm.timeLines([]);
+        vm = null;
+    }
 
 	return {
 		Init: function () {
@@ -440,7 +478,8 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 			};
 		},
 		PartialDispose: function () {
-			addTextRequestTooltip.qtip('destroy');
+		    addTextRequestTooltip.qtip('destroy');
+		    _cleanBindings();
 		},
 		SetTimeIndicator: function (date) {
 			_setTimeIndicator(date);

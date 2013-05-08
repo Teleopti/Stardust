@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
         [Test]
         public void OrderIndexIsNotMinusOneWhenConnectedToAssignment()
         {
-            PersonAssignment personAssignment = new PersonAssignment(new Person(), new Scenario("dsds"));
+            PersonAssignment personAssignment = new PersonAssignment(new Person(), new Scenario("dsds"), new DateOnly(2000,1,1));
             personAssignment.AddPersonalShift(target);
             
             Assert.AreNotEqual(-1, target.OrderIndex);

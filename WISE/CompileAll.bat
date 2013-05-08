@@ -249,16 +249,13 @@ DEL /F /Q "%WISESOURCEFILE%\AgentPortalWeb\web.config"
 COPY "%ARTIFACTDIR%\Web.Root.Web.config" "%DYNAMICCONTENT%\Web\web.config"
 
 DEL /F /Q "%WISESOURCEFILE%\AgentPortalWeb\Teleopti.Ccc.Web.ServiceBus.Client.config"
-COPY "%ARTIFACTDIR%\Web.ServiceBus.Client.config" "%DYNAMICCONTENT%\Web\Teleopti.Ccc.Web.ServiceBus.Client.config"
+COPY "%ARTIFACTDIR%\ServiceBusClient.config" "%DYNAMICCONTENT%\Web\Teleopti.Ccc.Web.ServiceBus.Client.config"
 
 DEL /F /Q "%WISESOURCEFILE%\AgentPortalWeb\TeleoptiCCC7.nhib.xml"
 COPY "%ARTIFACTDIR%\TeleoptiCCC7.nhib.xml" "%DYNAMICCONTENT%\Web\TeleoptiCCC7.nhib.xml"
 
 DEL /F /Q "%WISESOURCEFILE%\Broker\web*config"
 COPY "%ARTIFACTDIR%\BrokerWeb.config" "%DYNAMICCONTENT%\Broker\web.config"
-
-DEL /F /Q "%WISESOURCEFILE%\BrokerBackplane\web*config"
-COPY "%ARTIFACTDIR%\BrokerBackplaneWeb.config" "%DYNAMICCONTENT%\BrokerBackplane\web.config"
 
 ::Non-Dynamic Artifacts
 COPY "%ARTIFACTDIR%\CccAppConfig.config" "%WISESOURCEFILE%\ApplicationConfiguration\CccAppConfig.exe.config"
@@ -268,6 +265,7 @@ COPY "%ARTIFACTDIR%\licensecontext.slf" "%WISESOURCEFILE%\Client\StandAlone\lice
 COPY "%ARTIFACTDIR%\Web.MyTime.Web.config" "%WISESOURCEFILE%\Web\Areas\MyTime\Views\web.config"
 COPY "%ARTIFACTDIR%\Web.Start.Web.config" "%WISESOURCEFILE%\Web\Areas\Start\Views\web.config"
 COPY "%ARTIFACTDIR%\Web.Mobile.Web.config" "%WISESOURCEFILE%\Web\Areas\MobileReports\Views\web.config"
+COPY "%ARTIFACTDIR%\BrokerBackplaneWeb.config" "%WISESOURCEFILE%\BrokerBackplane\web.config"
 
 ::Create msi output folder
 IF NOT EXIST %OUTDIR% MKDIR %OUTDIR%

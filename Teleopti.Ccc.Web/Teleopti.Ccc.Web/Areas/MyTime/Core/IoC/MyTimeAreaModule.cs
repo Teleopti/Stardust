@@ -1,12 +1,10 @@
 ﻿using Autofac;
 using AutoMapper;
 using Autofac.Extras.DynamicProxy2;
-using Teleopti.Ccc.Domain.ApplicationLayer;
+using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.Restrictions;
-using Teleopti.Ccc.Domain.Security.AuthorizationData;
-using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.Infrastructure.ApplicationLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -152,6 +150,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<PeriodViewModelFactory>().As<IPeriodViewModelFactory>();
 			builder.RegisterType<PeriodSelectionViewModelFactory>().As<IPeriodSelectionViewModelFactory>();
 			builder.RegisterType<ProjectionProvider>().As<IProjectionProvider>();
+			builder.RegisterType<ExtractBudgetGroupPeriods>().As<IExtractBudgetGroupPeriods>();
 		}
 
 		private static void registerTeamScheduleTypes(ContainerBuilder builder)
@@ -185,6 +184,8 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.IoC
 			builder.RegisterType<ScheduleColorProvider>().As<IScheduleColorProvider>();
 			builder.RegisterType<PersonPeriodProvider>().As<IPersonPeriodProvider>();
 			builder.RegisterType<ServiceBusSender>().As<IServiceBusSender>().SingleInstance();
+			builder.RegisterType<AllowanceProvider>().As<IAllowanceProvider>();
+			builder.RegisterType<AbsenceTimeProvider>().As<IAbsenceTimeProvider>();
 		}
 	}
 }

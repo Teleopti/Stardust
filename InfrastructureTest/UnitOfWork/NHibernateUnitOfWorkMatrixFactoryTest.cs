@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 
         private class factory : NHibernateUnitOfWorkMatrixFactory
         {
-            public factory(ISessionFactory sessionFactory) : base(sessionFactory)
+            public factory(ISessionFactory sessionFactory) : base(sessionFactory, null)
             {
             }
         }

@@ -1708,7 +1708,13 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
             Cursor = Cursors.Default;
         }
 
-        
+		private void toolStripButtonTimeZoneClick(object sender, EventArgs e)
+		{
+			if (_gridConstructor.View.Type == ViewType.GeneralView)
+			{
+				((GeneralGridView)_gridConstructor.View).OnToolStripTimeZoneButtonClick();
+			}
+		}   
     }
 
 }

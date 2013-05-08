@@ -44,7 +44,9 @@ namespace Teleopti.Ccc.TestCommon.FakeData
         		get { return null; }
         	}
 
-        	public IUnitOfWork CreateAndOpenUnitOfWork()
+	        public string ConnectionString { get; private set; }
+
+	        public IUnitOfWork CreateAndOpenUnitOfWork()
             {
                 throw new NotImplementedException();
             }

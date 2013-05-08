@@ -22,8 +22,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		private DateTime _zorder;
 
 
-		public PersonAssignment(IPerson agent, IScenario scenario)
+		public PersonAssignment(IPerson agent, IScenario scenario, DateOnly date)
 		{
+			Date = date;
 			_person = agent;
 			_scenario = scenario;
 			_zorder = DateTime.MinValue;
@@ -34,6 +35,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		protected PersonAssignment()
 		{
 		}
+
+		public virtual DateOnly Date { get; protected set; }
 
 		public virtual DateTimePeriod Period
 		{
@@ -252,16 +255,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		public virtual bool BelongsToPeriod(IDateOnlyAsDateTimePeriod dateAndPeriod)
 		{
-			return dateAndPeriod.Period().Contains(Period.StartDateTime);
+			return dateAndPeriod.DateOnly == Date;
 		}
 
-        public virtual bool BelongsToPeriod(DateOnlyPeriod dateOnlyPeriod)
-        {
-            DateTimePeriod dateTimePeriod =
-               dateOnlyPeriod.ToDateTimePeriod(Person.PermissionInformation.DefaultTimeZone());
-
-            return dateTimePeriod.Contains(Period.StartDateTime);
-        }
+		public virtual bool BelongsToPeriod(DateOnlyPeriod dateOnlyPeriod)
+		{
+			return dateOnlyPeriod.Contains(Date);
+		}
 
 		public virtual IPersonAssignment NoneEntityClone()
 		{

@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         public void VerifyPersonalShiftIsAddedToAgentAssignment()
         {
             typeOfLayer = LayerType.PersonalShift;
-            personAssignment = new PersonAssignment(agent, scenario);
+            personAssignment = new PersonAssignment(agent, scenario, period.ToDateOnlyPeriod(agent.PermissionInformation.DefaultTimeZone()).StartDate);
 
             personAssignment = AgentAssignmentLayer.AddLayerToAssignment(agent, scenario, personAssignment, typeOfLayer, shiftCategory, activity, period);
 

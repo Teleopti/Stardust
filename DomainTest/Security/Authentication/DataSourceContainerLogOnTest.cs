@@ -1,6 +1,8 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
+using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Authentication;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -39,15 +41,15 @@ namespace Teleopti.Ccc.DomainTest.Security.Authentication
         [Test]
         public void VerifyLogOn()
         {
-            IUnitOfWorkFactory unitOfWorkFactory = mocks.StrictMock<IUnitOfWorkFactory>();
-            IUnitOfWork unitOfWork = mocks.StrictMock<IUnitOfWork>();
-            IPerson person = mocks.StrictMock<IPerson>();
-            using(mocks.Record())
+            var unitOfWorkFactory = mocks.StrictMock<IUnitOfWorkFactory>();
+            var unitOfWork = mocks.StrictMock<IUnitOfWork>();
+            var person = mocks.StrictMock<IPerson>();
+	        using(mocks.Record())
             {
                 Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
                 Expect.Call(dataSource.Application).Return(unitOfWorkFactory);
                 Expect.Call(checkLogOn.CheckLogOn(unitOfWork, "robink", "topsecret")).Return(new AuthenticationResult{Person = person});
-                Expect.Call(unitOfWork.PersistAll()).Return(new List<IRootChangeInfo>());
+	            Expect.Call(unitOfWork.PersistAll()).Return(new List<IRootChangeInfo>());
                 Expect.Call(unitOfWork.Dispose);
             }
             using (mocks.Playback())
@@ -64,7 +66,7 @@ namespace Teleopti.Ccc.DomainTest.Security.Authentication
             IUnitOfWorkFactory unitOfWorkFactory = mocks.StrictMock<IUnitOfWorkFactory>();
             IUnitOfWork unitOfWork = mocks.StrictMock<IUnitOfWork>();
             IPerson person = mocks.StrictMock<IPerson>();
-            using (mocks.Record())
+			using (mocks.Record())
             {
                 Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(unitOfWork);
                 Expect.Call(dataSource.Application).Return(unitOfWorkFactory);

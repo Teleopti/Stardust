@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Interfaces.ReadModel;
 
 namespace Teleopti.Analytics.Etl.Interfaces.Transformer
 {
@@ -24,17 +25,20 @@ namespace Teleopti.Analytics.Etl.Interfaces.Transformer
         IList<IScenario> ScenarioCollectionDeletedExcluded { get; }
         IList<IScheduleDay> GetSchedulePartPerPersonAndDate(IScheduleDictionary scheduleDictionary);
     	IList<IMultiplicatorDefinitionSet> MultiplicatorDefinitionSetCollection { get; }
-
-        /// <summary>
-        /// Loads the schedule parts per person and date.
-        /// </summary>
-        /// <param name="period">The period.</param>
-        /// <param name="scenario">The scenario.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: Henryg
-        /// Created date: 2009-11-24
-        /// </remarks>
         IList<IScheduleDay> LoadSchedulePartsPerPersonAndDate(DateTimePeriod period, IScenario scenario);
+
+	    IDictionary<DateTimePeriod, IScheduleDictionary> GetSchedules(IList<IScheduleChangedReadModel> changed,
+																	IScenario scenario);
+
+	    IDictionary<DateTimePeriod, IScheduleDictionary> GetScheduleCashe();
+
+	    IList<IScheduleDay> GetSchedulePartPerPersonAndDate(
+		    IDictionary<DateTimePeriod, IScheduleDictionary> dictionary);
+
+	    IList<IPerson> PersonsWithIds(List<Guid> ids);
+		IScheduleDay GetSchedulePartOnPersonAndDate(IPerson person, DateOnly restrictionDate, IScenario scenario);
+	    void SetThisTime(ILastChangedReadModel lastTime, string step);
+	    void UpdateThisTime(string step, IBusinessUnit businessUnit);
+	    bool PermissionsMustRun();
     }
 }

@@ -10,6 +10,7 @@ using NHibernate.Criterion;
 using NHibernate.SqlCommand;
 using NHibernate.Transform;
 using Teleopti.Ccc.Domain.AgentInfo;
+using Teleopti.Ccc.Domain.Auditing;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Helper;
@@ -674,14 +675,14 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
             return detachedCriteria;
         }
 
-        public IEnumerable<IPair<Guid>> PeopleSkillMatrix(IScenario scenario, DateTimePeriod period)
+        public IEnumerable<Tuple<Guid, Guid>> PeopleSkillMatrix(IScenario scenario, DateTimePeriod period)
         {
             var identity = ((ITeleoptiIdentity)TeleoptiPrincipal.Current.Identity);
             return Session.GetNamedQuery("AgentSkillMatrix")
                     .SetEntity("bu", identity.BusinessUnit)
                     .SetEntity("scenario", scenario)
                     .SetProperties(period)
-                    .List<IPair<Guid>>();
+										.List<Tuple<Guid, Guid>>();
         }
 
         public IEnumerable<Guid> PeopleSiteMatrix(DateTimePeriod period)
@@ -784,6 +785,19 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         }
 
 	    public IPerson LoadAggregate(Guid id) { return Load(id); }
+
+		public int SaveLoginAttempt(LoginAttemptModel model)
+		{
+			return Session.CreateSQLQuery(
+					"INSERT INTO [Auditing].[Security] (Result, UserCredentials, Provider, Client, ClientIp , PersonId) VALUES (:Result, :UserCredentials, :Provider, :Client, :ClientIp, :PersonId)")
+					.SetString("Result", model.Result)
+					.SetString("UserCredentials", model.UserCredentials)
+					.SetString("Provider", model.Provider)
+					.SetString("Client", model.Client)
+					.SetString("ClientIp", model.ClientIp)
+					.SetGuid("PersonId", model.PersonId.GetValueOrDefault())
+					.ExecuteUpdate();
+		}
     }
 }
 
