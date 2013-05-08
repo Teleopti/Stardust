@@ -173,7 +173,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void GotoRequests()
 		{
-			GoToWaitForCompleted("MyTime#Requests/Index", new ForceRefresh(), new ApplicationStartupTimeout(), new WaitForLoadingOverlay(), new WaitUntilReadyForInteraction());
+            GoToWaitForCompleted("MyTime#Requests/Index", new ForceRefresh(), new ApplicationStartupTimeout(), new WaitForLoadingOverlay(), new WaitUntilReadyForInteraction(), new OverrideNotifyBehavior());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<RequestsPage>());
 		}
 
