@@ -383,8 +383,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see the team-picker")]
 		public void ThenIShouldSeeTheTeam_PickerWithTwoTeams()
 		{
-			var picker = Pages.Pages.TeamSchedulePage.TeamPicker.Container;
-			EventualAssert.That(() => picker.Exists && picker.DisplayVisible(), Is.True);
+			Browser.Interactions.AssertExists("#Team-Picker");
 		}
 
 
