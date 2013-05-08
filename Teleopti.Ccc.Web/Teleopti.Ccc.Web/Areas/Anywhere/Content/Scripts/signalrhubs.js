@@ -1,6 +1,6 @@
 define(
     [
-        'sigr!../../../../signalr/hubs',
+        'signalrrr!r',
 		'text!templates/error.html',
         'errorview'
     ], function (

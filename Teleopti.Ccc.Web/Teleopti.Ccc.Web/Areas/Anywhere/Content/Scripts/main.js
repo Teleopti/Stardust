@@ -18,7 +18,7 @@ require.config({
 		momentDatepickerKo: '../../../../Content/moment-datepicker/moment-datepicker-ko',
 		
 		noext: '../../../../Content/require/noext',
-		sigr: '../../../../Content/require/sigr',
+		signalrrr: 'require/signalrrr',
 		resources: 'require/resources',
 
 		templates: '../templates',
@@ -36,8 +36,6 @@ require.config({
 		'bootstrap': ['jquery'],
 
 		'signalr': ['jquery'],
-		
-		'Areas/Anywhere/Content/Scripts/../../../../signalr/hubs?': ['jquery', 'signalr'],
 
 		'momentLanguages': ['moment'],
 		'momentDatepicker': ['momentLanguages'],
