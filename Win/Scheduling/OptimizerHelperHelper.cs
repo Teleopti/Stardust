@@ -194,40 +194,6 @@ namespace Teleopti.Ccc.Win.Scheduling
             return new ReadOnlyCollection<IScheduleDay>(clipObjectListFilter());
         }
 
-		public static IList<IScheduleMatrixPro> CreateMatrixListAll(ISchedulerStateHolder schedulerState, IComponentContext container, DateOnlyPeriod selectedPeriod)
-		{
-			if(schedulerState == null) throw new ArgumentNullException("schedulerState");
-
-			var allSchedules = new List<IScheduleDay>();
-			var period = schedulerState.RequestedPeriod.DateOnlyPeriod;
-			period = new DateOnlyPeriod(period.StartDate.AddDays(-10), period.EndDate.AddDays(10));
-			var persons = schedulerState.FilteredPersonDictionary;
-
-			foreach (var day in period.DayCollection())
-			{
-				foreach (var person in persons)
-				{
-					var theDay = schedulerState.Schedules[person.Value].ScheduledDay(day);
-					allSchedules.Add(theDay);
-				}
-			}
-
-			return CreateMatrixList(allSchedules, schedulerState.SchedulingResultState, container, selectedPeriod);
-		}
-
-        public static IList<IScheduleMatrixPro> CreateMatrixList(IList<IScheduleDay> scheduleDays, ISchedulingResultStateHolder resultStateHolder, IComponentContext container, DateOnlyPeriod selectedPeriod)
-        {
-            if (scheduleDays == null) throw new ArgumentNullException("scheduleDays");
-
-            IList<IScheduleMatrixPro> matrixes =
-                new ScheduleMatrixListCreator(resultStateHolder).CreateMatrixListFromScheduleParts(scheduleDays);
-
-            var matrixUserLockLocker = container.Resolve<IMatrixUserLockLocker>();
-            matrixUserLockLocker.Execute(scheduleDays, matrixes, selectedPeriod);
-
-            return matrixes;
-        }
-
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
         public static IEnumerable<IPerson> CreatePersonsList(ClipHandler clipHandler)
         {
