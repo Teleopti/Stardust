@@ -88,7 +88,7 @@ BEGIN
 			ON afir.ApplicationFunction = af.Id
 		INNER JOIN dbo.ApplicationRole ar
 			ON afir.ApplicationRole=ar.Id
-			--AND ar.BusinessUnit = @buId
+			AND ar.BusinessUnit = @buId
 		UNION ALL
 
 		--Role getting changed data
@@ -96,7 +96,7 @@ BEGIN
 		FROM dbo.ApplicationRole ar
 		INNER JOIN dbo.AvailableData ad
 			ON ar.Id = ad.ApplicationRole
-			--AND ar.BusinessUnit = @buId
+			AND ar.BusinessUnit = @buId
 		) a
 END
 

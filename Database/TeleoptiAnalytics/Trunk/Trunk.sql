@@ -60,5 +60,39 @@ IF  EXISTS (SELECT * FROM sys.objects WHERE object_id = OBJECT_ID(N'[mart].[etl_
 DROP PROCEDURE [mart].[etl_permission_report_truncate_nonactive]
 GO
 
+----------------  
+--Name: David
+--Date: 2013-05-10
+--Desc: #23416 - dubplicate key error
+-----------------
+IF EXISTS (SELECT * FROM sys.tables WHERE object_id = OBJECT_ID(N'[Stage].[stg_schedule_updated_personLocal]'))
+DROP TABLE [Stage].[stg_schedule_updated_personLocal]
+GO
+CREATE TABLE Stage.stg_schedule_updated_personLocal (
+	person_id int not null,
+	time_zone_id int not null,
+	person_code uniqueidentifier not null,
+	valid_from_date_local smalldatetime not null,
+	valid_to_date_local smalldatetime not null
+CONSTRAINT [PK_stg_schedule_updated_personLocal] PRIMARY KEY CLUSTERED 
+(
+	[person_id],
+	[valid_from_date_local],
+	[valid_to_date_local]
+)
+)
 
-
+IF EXISTS (SELECT * FROM sys.tables WHERE object_id = OBJECT_ID(N'[Stage].[stg_schedule_updated_ShiftStartDateUTC]'))
+DROP TABLE [Stage].[stg_schedule_updated_ShiftStartDateUTC]
+GO
+CREATE TABLE Stage.stg_schedule_updated_ShiftStartDateUTC (
+	person_id int not null,
+	shift_startdate_id int not null
+CONSTRAINT [PK_stg_schedule_updated_ShiftStartDateUTC] PRIMARY KEY CLUSTERED 
+(
+	[person_id],
+	[shift_startdate_id]
+)
+)
+GO
+GO

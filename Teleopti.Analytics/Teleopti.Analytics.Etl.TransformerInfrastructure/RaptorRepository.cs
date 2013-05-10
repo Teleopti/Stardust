@@ -709,6 +709,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 
 		public int PersistScheduleChanged(DataTable dataTable)
 		{
+			HelperFunctions.TruncateTable("stage.stg_schedule_changed_delete", _dataMartConnectionString);
 			return HelperFunctions.BulkInsert(dataTable, "stage.[stg_schedule_changed]", _dataMartConnectionString);
 		}
 
