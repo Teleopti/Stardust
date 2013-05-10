@@ -1,7 +1,7 @@
 Analytics;False
 Broker;True
 Broker.backplane;True
-PMService;False
+PMService;True
 RTA;True
 SDK;False
 Web;False
