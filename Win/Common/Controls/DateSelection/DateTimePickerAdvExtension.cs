@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Globalization;
+using System.Reflection;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Interfaces.Domain;
 
@@ -33,5 +34,30 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
                 yearNumericUpDown.Maximum = monthCalendarAdv.CurrentCalendar.GetYear(dateTimePair.EndDate.Date);
             }
         }
+
+		/// <summary>
+		/// Sets the culture on safe mode by taking some known bugs into consideration.
+		/// </summary>
+		/// <remarks>
+		/// Fixed issues: 
+		/// - bugfix 22929: Bulgarian date format not displayed well in most calendar controls:
+		/// seems that CalendarSizeToFit property does not work with the BG culture
+		/// - taking care of ISO8601 weeknumbers
+		/// </remarks>
+		public static void SetCultureInfoSafe(this DateTimePickerAdv dateTimePickerAdv, CultureInfo cultureInfo)
+	    {
+
+			dateTimePickerAdv.Culture = cultureInfo;
+			dateTimePickerAdv.Calendar.Culture = CultureInfo.CurrentCulture;
+
+			dateTimePickerAdv.Calendar.Iso8601CalenderFormat =
+				DateHelper.Iso8601Cultures.Contains(cultureInfo.LCID);
+
+			if (cultureInfo.LCID == 1026 
+				&& dateTimePickerAdv.CalendarSizeToFit )
+			{
+				dateTimePickerAdv.CalendarSizeToFit = false;
+			}
+	    }
     }
 }

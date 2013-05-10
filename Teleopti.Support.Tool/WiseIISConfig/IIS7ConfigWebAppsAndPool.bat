@@ -101,7 +101,7 @@ exit /B
 
 :IISSecurityFormsSet
 if "%SubSiteName%"=="%~1" (
-"%appcmd%" set config "%SitePath%" /section:system.web/authentication /mode:%~2 /commit:apphost
+"%appcmd%" set config "%SitePath%" /section:system.web/authentication /mode:%~2
 )
 exit /B
 
