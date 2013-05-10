@@ -35,8 +35,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserInteractions.WatiNIE
 		}
 
 
-
-
 		public void AssertUrlContains(string url)
 		{
 			EventualAssert.That(() => _browser.Url, Is.StringContaining(url));
@@ -69,6 +67,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserInteractions.WatiNIE
 			// use assertExists(selector:contains(text)) here instead?
 			// should be faster with better compatibility.
 			EventualAssert.That(() => _browser.Element(Find.BySelector(selector)).Text, Is.StringContaining(text));
+		}
+
+		public void AssertNotContains(string selector, string text)
+		{
+			EventualAssert.That(() => _browser.Element(Find.BySelector(selector)).Text, Is.Not.StringContaining(text));
 		}
 
 	}

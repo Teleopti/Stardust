@@ -9,6 +9,7 @@
 		void AssertExists(string selector);
 		void AssertNotExists(string existsSelector, string notExistsSelector);
 		void AssertContains(string selector, string text);
+		void AssertNotContains(string selector, string text);
 		void AssertUrlContains(string url);
 		void AssertUrlNotContains(string urlContains, string urlNotContains);
 		void AssertJavascriptResultContains(string javascript, string text);

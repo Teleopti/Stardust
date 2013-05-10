@@ -144,7 +144,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void ThenIShouldNotSeeTheFormerStandardPreferenceInTheCalendar()
 		{
 			var data = UserFactory.User().UserData<StandardPreference>();
-			Browser.Interactions.AssertContains(CalendarCellsPage.DateSelector(data.Date), data.Preference);
+			Browser.Interactions.AssertNotContains(CalendarCellsPage.DateSelector(data.Date), data.Preference);
 		}
 
 		[Then(@"I should see the first virtual schedule period overlapping open preference period")]
