@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 					ForecastedHours = sumOfForecastedHours.TotalHours,
 					ESL = estimatedServiceLevel,
 					ScheduledHours = scheduledHours,
-					RelativeDifference = relativeDifference,
+					RelativeDifference = relativeDifference == double.NaN ? "NaN" : relativeDifference.ToString(),
 					AbsoluteDifferenceHours = absoluteDifference == null ? (double?) null : absoluteDifference.Value.TotalHours
 				};
 		}

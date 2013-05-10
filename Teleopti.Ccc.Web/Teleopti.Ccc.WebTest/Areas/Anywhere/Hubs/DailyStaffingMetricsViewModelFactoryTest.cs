@@ -121,7 +121,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 
 			var relativeDifference = SkillStaffPeriodHelper.RelativeDifferenceForDisplay(skillDay.SkillStaffPeriodCollection);
 
-			result.RelativeDifference.Should().Be.EqualTo(relativeDifference);
+			result.RelativeDifference.Should().Be.EqualTo(relativeDifference.ToString());
 		}
 
 		[Test]

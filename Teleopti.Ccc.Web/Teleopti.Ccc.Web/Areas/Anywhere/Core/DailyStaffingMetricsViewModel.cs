@@ -8,7 +8,7 @@
 
 		public double? ScheduledHours { get; set; }
 
-		public double? RelativeDifference { get; set; }
+		public string RelativeDifference { get; set; }
 
 		public double? AbsoluteDifferenceHours { get; set; }
 	}
