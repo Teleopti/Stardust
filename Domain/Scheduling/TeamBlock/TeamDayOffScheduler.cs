@@ -48,92 +48,81 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			_schedulingResultStateHolder = schedulingResultStateHolder;
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3")]
-		public void DayOffScheduling(IList<IScheduleMatrixPro> matrixListAll, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingOptions schedulingOptions, IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization)
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods",
+			MessageId = "3")]
+		public void DayOffScheduling(IList<IScheduleMatrixPro> matrixListAll,
+		                             ISchedulePartModifyAndRollbackService rollbackService,
+		                             ISchedulingOptions schedulingOptions,
+		                             IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization)
 		{
-            if (matrixListAll == null) return;
-            if (groupPersonBuilderForOptimization == null) return;
-            //var person = matrixListAll[0].Person;
+			if (matrixListAll == null)
+				return;
+			if (groupPersonBuilderForOptimization == null)
+				return;
 
-            //var listOfMatrixes = new List<List<IScheduleMatrixPro>>();
-            //foreach (var person in matrixListAll.Select(x => x.Person).Distinct())
-            //{
-            //    var matrixesOfOnePerson = matrixListAll.Where(x => x.Person == person);
-
-            //    foreach (var scheduleMatrixPro in matrixesOfOnePerson)
-            //    {
-            //        var date = scheduleMatrixPro.UnlockedDays.First().Day;
-            //        var matrixesInOneSchedulePeriod = matrixListAll.Where(x => x.SchedulePeriod.DateOnlyPeriod.Contains(date)).ToList();
-            //        listOfMatrixes.Add(matrixesInOneSchedulePeriod);
-            //    }
-            //}
-
-            //foreach (var matrixListInOneSchedulePeriod in listOfMatrixes)
-            //{
-            var matrixDataList = _matrixDataListCreator.Create(matrixListAll, schedulingOptions);
-				var useSameDaysOffOnAll = _matrixDataListInSteadyState.IsListInSteadyState(matrixDataList);
-				if (useSameDaysOffOnAll)
+			var matrixDataList = _matrixDataListCreator.Create(matrixListAll, schedulingOptions);
+			var useSameDaysOffOnAll = _matrixDataListInSteadyState.IsListInSteadyState(matrixDataList);
+			if (useSameDaysOffOnAll)
+			{
+				foreach (var matrixData in matrixDataList)
 				{
-					foreach (var matrixData in matrixDataList)
+					foreach (var scheduleDayPro in matrixData.Matrix.UnlockedDays)
 					{
-						foreach (var scheduleDayPro in matrixData.Matrix.UnlockedDays)
-						{
-							var scheduleDate = scheduleDayPro.Day;
-                            var groupPerson = groupPersonBuilderForOptimization.BuildGroupPerson(matrixData.Matrix.Person , scheduleDate);
-							var scheduleDictionary = _schedulingResultStateHolder.Schedules;
-							var restriction = _effectiveRestrictionCreator.GetEffectiveRestriction(groupPerson.GroupMembers,
-																								   scheduleDate, schedulingOptions,
-																								   scheduleDictionary);
-                            addDaysOffForTeam(matrixListAll, schedulingOptions, scheduleDate, restriction);
-						}
-						foreach (var scheduleDayPro in matrixData.Matrix.UnlockedDays)
-						{
-							var scheduleDate = scheduleDayPro.Day;
-                            var groupPerson = groupPersonBuilderForOptimization.BuildGroupPerson(matrixData.Matrix.Person, scheduleDate);
-							var scheduleDictionary = _schedulingResultStateHolder.Schedules;
-							var restriction = _effectiveRestrictionCreator.GetEffectiveRestriction(groupPerson.GroupMembers,
-																								   scheduleDate, schedulingOptions,
-																								   scheduleDictionary);
-                            addContractDaysOffForTeam(matrixListAll, schedulingOptions, rollbackService, scheduleDate, restriction);
-						}
+						var scheduleDate = scheduleDayPro.Day;
+						var groupPerson = groupPersonBuilderForOptimization.BuildGroupPerson(matrixData.Matrix.Person, scheduleDate);
+						var scheduleDictionary = _schedulingResultStateHolder.Schedules;
+						var restriction = _effectiveRestrictionCreator.GetEffectiveRestriction(groupPerson.GroupMembers,
+						                                                                       scheduleDate, schedulingOptions,
+						                                                                       scheduleDictionary);
+						addDaysOffForTeam(matrixListAll, schedulingOptions, scheduleDate, restriction);
+					}
+					foreach (var scheduleDayPro in matrixData.Matrix.UnlockedDays)
+					{
+						var scheduleDate = scheduleDayPro.Day;
+						var groupPerson = groupPersonBuilderForOptimization.BuildGroupPerson(matrixData.Matrix.Person, scheduleDate);
+						var scheduleDictionary = _schedulingResultStateHolder.Schedules;
+						var restriction = _effectiveRestrictionCreator.GetEffectiveRestriction(groupPerson.GroupMembers,
+						                                                                       scheduleDate, schedulingOptions,
+						                                                                       scheduleDictionary);
+						addContractDaysOffForTeam(matrixListAll, schedulingOptions, rollbackService, scheduleDate, restriction);
 					}
 				}
-				else
-				{
-                    addDaysOff(matrixListAll, schedulingOptions);
-                    addContractDaysOff(matrixListAll, rollbackService, schedulingOptions);
-				}
-            //}
+			}
+			else
+			{
+				addDaysOff(matrixListAll, schedulingOptions);
+				addContractDaysOff(matrixListAll, rollbackService, schedulingOptions);
+			}
 		}
 
-		private void addDaysOffForTeam(IList<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions, DateOnly scheduleDate,
-								IEffectiveRestriction restriction)
+		private void addDaysOffForTeam(IList<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions,
+		                               DateOnly scheduleDate,
+		                               IEffectiveRestriction restriction)
 		{
-			if (restriction == null || restriction.DayOffTemplate == null) return;
-			if (EffectiveRestrictionCreator.OptionsConflictWithRestrictions(schedulingOptions, restriction)) return;
-			if (matrixList.Any(x => x.GetScheduleDayByKey(scheduleDate).DaySchedulePart().IsScheduled())) return;
+			if (restriction == null || restriction.DayOffTemplate == null)
+				return;
+			if (EffectiveRestrictionCreator.OptionsConflictWithRestrictions(schedulingOptions, restriction))
+				return;
+			if (matrixList.Any(x => x.GetScheduleDayByKey(scheduleDate).DaySchedulePart().IsScheduled()))
+				return;
 
 			foreach (var scheduleMatrixPro in matrixList)
 			{
 				var part = scheduleMatrixPro.GetScheduleDayByKey(scheduleDate).DaySchedulePart();
-				try
-				{
-					part.CreateAndAddDayOff(restriction.DayOffTemplate);
-					_schedulePartModifyAndRollbackService.Modify(part);
-				}
-				catch (DayOffOutsideScheduleException)
-				{
-					_schedulePartModifyAndRollbackService.Rollback();
-				}
+
+				part.CreateAndAddDayOff(restriction.DayOffTemplate);
+				_schedulePartModifyAndRollbackService.Modify(part);
+
 				var eventArgs = new SchedulingServiceBaseEventArgs(part);
 				OnDayScheduled(eventArgs);
-				if (eventArgs.Cancel) return;
+				if (eventArgs.Cancel)
+					return;
 			}
 		}
 
 		private void addContractDaysOffForTeam(IList<IScheduleMatrixPro> matrixList, ISchedulingOptions schedulingOptions,
-										ISchedulePartModifyAndRollbackService rollbackService, DateOnly scheduleDate,
-										IEffectiveRestriction restriction)
+		                                       ISchedulePartModifyAndRollbackService rollbackService, DateOnly scheduleDate,
+		                                       IEffectiveRestriction restriction)
 		{
 			if (rollbackService == null)
 				throw new ArgumentNullException("rollbackService");
@@ -146,16 +135,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					break;
 
 				int targetDaysOff;
-				
-                IList<IScheduleDay> currentOffDaysList;
+
+				IList<IScheduleDay> currentOffDaysList;
 				bool hasCorrectNumberOfDaysOff = _dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(schedulePeriod,
-																									  out targetDaysOff,
-                                                                                                      out currentOffDaysList);
-			    int currentDaysOff = currentOffDaysList.Count;
-                if (hasCorrectNumberOfDaysOff && currentDaysOff > 0)
+				                                                                                      out targetDaysOff,
+				                                                                                      out currentOffDaysList);
+				int currentDaysOff = currentOffDaysList.Count;
+				if (hasCorrectNumberOfDaysOff && currentDaysOff >= targetDaysOff)
 					break;
 
-                if (currentDaysOff >= targetDaysOff)
+				if (currentDaysOff >= targetDaysOff)
 					break;
 
 				IScheduleDay part = matrix.GetScheduleDayByKey(scheduleDate).DaySchedulePart();
@@ -165,15 +154,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				if (!_hasContractDayOffDefinition.IsDayOff(part))
 					break;
 
-				try
-				{
-					part.CreateAndAddDayOff(schedulingOptions.DayOffTemplate);
-					rollbackService.Modify(part);
-				}
-				catch (DayOffOutsideScheduleException)
-				{
-					rollbackService.Rollback();
-				}
+				part.CreateAndAddDayOff(schedulingOptions.DayOffTemplate);
+				rollbackService.Modify(part);
+
 				var eventArgs = new SchedulingServiceBaseEventArgs(part);
 				OnDayScheduled(eventArgs);
 				if (eventArgs.Cancel)
@@ -189,23 +172,21 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				foreach (var scheduleDayPro in scheduleMatrixPro.UnlockedDays)
 				{
 					var part = scheduleDayPro.DaySchedulePart();
-					if (part.IsScheduled()) continue;
+					if (part.IsScheduled()) 
+						continue;
 
 					var effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(part, schedulingOptions);
 
-					if (effectiveRestriction == null || effectiveRestriction.DayOffTemplate == null) continue;
+					if (effectiveRestriction == null || effectiveRestriction.DayOffTemplate == null) 
+						continue;
+
 					// borde inte detta hanteras när effective restriction skapas och då returnera null??
-					if (EffectiveRestrictionCreator.OptionsConflictWithRestrictions(schedulingOptions, effectiveRestriction)) continue;
-					try
-					{
+					if (EffectiveRestrictionCreator.OptionsConflictWithRestrictions(schedulingOptions, effectiveRestriction)) 
+						continue;
+					
 						part.CreateAndAddDayOff(effectiveRestriction.DayOffTemplate);
 						_schedulePartModifyAndRollbackService.Modify(part);
-					}
-					catch (DayOffOutsideScheduleException)
-					{
-						_schedulePartModifyAndRollbackService.Rollback();
-					}
-
+					
 					var eventArgs = new SchedulingServiceBaseEventArgs(part);
 					OnDayScheduled(eventArgs);
 					if (eventArgs.Cancel) return;
@@ -213,7 +194,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			}
 		}
 
-		private void addContractDaysOff(IList<IScheduleMatrixPro> matrixListAll, ISchedulePartModifyAndRollbackService rollbackService, ISchedulingOptions schedulingOptions)
+		private void addContractDaysOff(IList<IScheduleMatrixPro> matrixListAll,
+		                                ISchedulePartModifyAndRollbackService rollbackService,
+		                                ISchedulingOptions schedulingOptions)
 		{
 			if (rollbackService == null)
 				throw new ArgumentNullException("rollbackService");
@@ -225,20 +208,20 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					continue;
 
 				int targetDaysOff;
-				
-                IList<IScheduleDay> currentOffDaysList;
+
+				IList<IScheduleDay> currentOffDaysList;
 				bool hasCorrectNumberOfDaysOff = _dayOffsInPeriodCalculator.HasCorrectNumberOfDaysOff(schedulePeriod,
-																									  out targetDaysOff,
-                                                                                                      out currentOffDaysList);
-                int currentDaysOff = currentOffDaysList.Count ;
-                if (hasCorrectNumberOfDaysOff && currentDaysOff > 0)
+				                                                                                      out targetDaysOff,
+				                                                                                      out currentOffDaysList);
+				int currentDaysOff = currentOffDaysList.Count;
+				if (hasCorrectNumberOfDaysOff && currentDaysOff >= targetDaysOff)
 					continue;
 
 
 
 				foreach (var scheduleDayPro in matrix.UnlockedDays)
 				{
-                    if (currentDaysOff >= targetDaysOff)
+					if (currentDaysOff >= targetDaysOff)
 						continue;
 
 					IScheduleDay part = scheduleDayPro.DaySchedulePart();
@@ -248,20 +231,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					if (!_hasContractDayOffDefinition.IsDayOff(part))
 						continue;
 
-					IEffectiveRestriction effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(part, schedulingOptions);
+					IEffectiveRestriction effectiveRestriction = _effectiveRestrictionCreator.GetEffectiveRestriction(part,
+					                                                                                                  schedulingOptions);
 					if (effectiveRestriction != null && effectiveRestriction.NotAllowedForDayOffs)
 						continue;
 
-					try
-					{
-						part.CreateAndAddDayOff(schedulingOptions.DayOffTemplate);
-						rollbackService.Modify(part);
-						currentDaysOff++;
-					}
-					catch (DayOffOutsideScheduleException)
-					{
-						rollbackService.Rollback();
-					}
+					part.CreateAndAddDayOff(schedulingOptions.DayOffTemplate);
+					rollbackService.Modify(part);
+					currentDaysOff++;
+
 					var eventArgs = new SchedulingServiceBaseEventArgs(part);
 					OnDayScheduled(eventArgs);
 					if (eventArgs.Cancel)

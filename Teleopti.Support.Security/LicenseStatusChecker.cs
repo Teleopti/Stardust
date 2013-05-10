@@ -9,7 +9,7 @@ namespace Teleopti.Support.Security
     public class LicenseStatusChecker : ICommandLineCommand
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Security", "CA2100:Review SQL queries for security vulnerabilities"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Console.WriteLine(System.String,System.Object)"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1303:Do not pass literals as localized parameters", MessageId = "System.Console.WriteLine(System.String)")]
-        public void Execute(CommandLineArgument commandLineArgument)
+        public int Execute(CommandLineArgument commandLineArgument)
         {
             //Select database version 
             using (var connection = new SqlConnection(commandLineArgument.DestinationConnectionString))
@@ -22,13 +22,13 @@ namespace Teleopti.Support.Security
                 {
                     Console.WriteLine("Could not open Sql Connection. Error message: {0}", ex.Message);
                     Thread.Sleep(TimeSpan.FromSeconds(2));
-                    return;
+                    return 1;
                 }
                 catch (InvalidOperationException ex)
                 {
                     Console.WriteLine("Could not open Sql Connection. Error message: {0}", ex.Message);
                     Thread.Sleep(TimeSpan.FromSeconds(2));
-                    return;
+                    return 1;
                 }
                 //Check version
                 SqlCommand command;
@@ -40,7 +40,7 @@ namespace Teleopti.Support.Security
                     {
                         Console.WriteLine("The Check has been done.");
                         Thread.Sleep(TimeSpan.FromSeconds(2));
-                        return;
+                        return 0;
                     }
                 }
 
@@ -67,11 +67,13 @@ namespace Teleopti.Support.Security
                 {
                     Console.WriteLine("Could not save the status: {0}", ex.Message);
                     Thread.Sleep(TimeSpan.FromSeconds(2));
-                    return;
+                    return 1;
                 }
                 
                 Thread.Sleep(TimeSpan.FromSeconds(2));
             }
+
+	        return 0;
         }
     }
 }

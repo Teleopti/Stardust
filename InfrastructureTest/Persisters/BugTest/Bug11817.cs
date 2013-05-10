@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.BugTest
 
 		private void AddPersonAssignment()
 		{
-			_personAssignment = new PersonAssignment(Person, Scenario);
+			_personAssignment = new PersonAssignment(Person, Scenario, FirstDayDateOnly);
 			var mainShift = new MainShift(_shiftCategory);
 			var layer = new MainShiftActivityLayer(_activity, FirstDayDateTimePeriod);
 			mainShift.LayerCollection.Add(layer);

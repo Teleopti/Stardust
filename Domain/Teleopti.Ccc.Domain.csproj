@@ -814,6 +814,7 @@
     <Compile Include="Scheduling\Restriction\RestrictionBase.cs" />
     <Compile Include="Scheduling\Restriction\StudentAvailabilityRestriction.cs" />
     <Compile Include="Scheduling\Restriction\StudentSpecification.cs" />
+    <Compile Include="Scheduling\Rules\DataPartOfAgentDay.cs" />
     <Compile Include="Scheduling\Rules\GapsInAssignmentRule.cs" />
     <Compile Include="Scheduling\Rules\LongestPeriodForAssignmentCalculator.cs" />
     <Compile Include="Scheduling\Rules\MinWeeklyRestRule.cs" />
@@ -977,6 +978,7 @@
     <Compile Include="Security\Authentication\IFindUserDetail.cs" />
     <Compile Include="Security\Authentication\IWindowsUserProvider.cs" />
     <Compile Include="Security\Authentication\LoggedOnUser.cs" />
+    <Compile Include="Security\Authentication\LogonLogger.cs" />
     <Compile Include="Security\Authentication\UserTimeZone.cs" />
     <Compile Include="Security\Authentication\WindowsDataSourceProvider.cs" />
     <Compile Include="Security\Authentication\AuthenticationSettings.cs" />

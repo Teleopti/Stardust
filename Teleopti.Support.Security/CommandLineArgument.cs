@@ -4,8 +4,30 @@ using System.Globalization;
 
 namespace Teleopti.Support.Security
 {
-    public class CommandLineArgument
-    {
+	public interface ICommandLineConnectionString
+	{
+		string DestinationConnectionString
+		{
+			get;
+		}
+	}
+	
+	public interface ICommandLineArgument
+	{
+		string AggDatabase { get; }
+		bool PersonUpdateMode { get; }
+		bool ForecasterMode { get; }
+		bool PasswordEncryptionMode { get; }
+		bool LicenseStatusMode { get; }
+		string DestinationServer { get; }
+		string DestinationDatabase { get; }
+		string DestinationUserName { get; }
+		string DestinationPassword { get; }
+		bool UseIntegratedSecurity { get; }
+	}
+
+	public class CommandLineArgument : ICommandLineArgument, ICommandLineConnectionString
+	{
         private string _destinationServer;
         private string _destinationDatabase;
         private string _destinationUserName;

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
-using Teleopti.Ccc.Domain.AgentInfo;
 using Teleopti.Ccc.Web.Areas.MyTime.Controllers;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider;
 using Teleopti.Ccc.Web.Areas.MyTime.Core.TeamSchedule.DataProvider;
@@ -25,7 +24,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var date = DateOnly.Today.AddDays(1);
 			personPeriodProvider.Stub(x => x.HasPersonPeriod(date)).Return(true);
 			var id = Guid.NewGuid();
-			var target = new TeamScheduleController(viewModelFactory, MockRepository.GenerateMock<IDefaultTeamCalculator>(), personPeriodProvider);
+			var target = new TeamScheduleController(viewModelFactory, MockRepository.GenerateMock<IDefaultTeamCalculator>());
 
 			viewModelFactory.Stub(x => x.CreateViewModel(date, id)).Return(new TeamScheduleViewModel());
 
@@ -41,7 +40,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var viewModelFactory = MockRepository.GenerateMock<ITeamScheduleViewModelFactory>();
 			var personPeriodProvider = MockRepository.GenerateMock<IPersonPeriodProvider>();
 			personPeriodProvider.Stub(x => x.HasPersonPeriod(DateOnly.Today)).Return(true);
-			var target = new TeamScheduleController(viewModelFactory, MockRepository.GenerateMock<IDefaultTeamCalculator>(), personPeriodProvider);
+			var target = new TeamScheduleController(viewModelFactory, MockRepository.GenerateMock<IDefaultTeamCalculator>());
 
 			target.Index(null, Guid.Empty);
 
@@ -59,7 +58,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			team.SetId(Guid.NewGuid());
 			defaultTeamCalculator.Stub(x => x.Calculate(DateOnly.Today)).Return(team);
 
-			var target = new TeamScheduleController(viewModelFactory, defaultTeamCalculator, personPeriodProvider);
+			var target = new TeamScheduleController(viewModelFactory, defaultTeamCalculator);
 
 			target.Index(DateOnly.Today, null);
 
@@ -73,7 +72,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var viewModelFactory = MockRepository.GenerateMock<ITeamScheduleViewModelFactory>();
 			viewModelFactory.Stub(x => x.CreateTeamOptionsViewModel(DateOnly.Today)).Return(teams);
 
-			var target = new TeamScheduleController(viewModelFactory, null, null);
+			var target = new TeamScheduleController(viewModelFactory, null);
 
 			var result = target.Teams(DateOnly.Today);
 
@@ -85,27 +84,11 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldUseTodayWhenDateNotSpecifiedForTeams()
 		{
 			var viewModelFactory = MockRepository.GenerateMock<ITeamScheduleViewModelFactory>();
-			var target = new TeamScheduleController(viewModelFactory, null, null);
+			var target = new TeamScheduleController(viewModelFactory, null);
 
 			target.Teams(null);
 
 			viewModelFactory.AssertWasCalled(x => x.CreateTeamOptionsViewModel(DateOnly.Today));
-		}
-
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
-		public void ShouldReturnNoPersonPeriodPartialWhenNoPersonPeriod()
-		{
-			var viewModelFactory = MockRepository.GenerateMock<ITeamScheduleViewModelFactory>();
-			var personPeriodProvider = MockRepository.GenerateMock<IPersonPeriodProvider>();
-			personPeriodProvider.Stub(x => x.HasPersonPeriod(DateOnly.Today)).Return(false);
-			var id = Guid.NewGuid();
-			var target = new TeamScheduleController(viewModelFactory, MockRepository.GenerateMock<IDefaultTeamCalculator>(), personPeriodProvider);
-
-			viewModelFactory.Stub(x => x.CreateViewModel(DateOnly.Today, id)).Return(new TeamScheduleViewModel());
-
-			var result = target.Index(DateOnly.Today, id);
-
-			result.ViewName.Should().Be.EqualTo("NoPersonPeriodPartial");
 		}
 	}
 }

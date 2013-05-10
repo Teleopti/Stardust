@@ -1,31 +1,41 @@
 @ECHO off
+SET ROOTDIR=%~dp0
+SET ROOTDIR=%ROOTDIR:~0,-1%
+%ROOTDIR:~0,2%
+CD "%ROOTDIR%"
 ::Example Call:
-::IIS7ConfigWebAppsAndPool.bat "Teleopti ASP.NET v3.5" SDK v2.0 False Skip
-::IIS7ConfigWebAppsAndPool.bat "Teleopti ASP.NET v3.5" SDK v2.0 True Skip
-::IIS7ConfigWebAppsAndPool.bat "Teleopti ASP.NET v4.0" web v4.0 True Ntlm MySpecialIISuser MySpecialPwd
-SET PoolName=%~1
-SET SubSiteName=%~2
-SET NETVersion=%~3
-SET SSL=%~4
-SET SDKCREDPROT=%~5
-SET CustomIISUsr=%~6
-SET CustomIISPwd=%~7
-
+::note: parameter 3,4 are optional
+::IIS7ConfigWebAppsAndPool.bat [IS_SSL] [SDK_CREDPROT] [MYUSER] [MYPASSWORD]
+::IIS7ConfigWebAppsAndPool.bat True Ntlm MySpecialIISuser MySpecialPwd
+SET SSL=%~1
+SET SDKCREDPROT=%~2
+SET CustomIISUsr=%~3
+SET CustomIISPwd=%~4
+SET logfile=IIS7ConfigWebAppsAndPool.log
 SET SSLPORT=443
 
-IF "%PoolName%"=="" GOTO NoInput
-IF "%SubSiteName%"=="" GOTO NoInput
-IF "%NETVersion%"=="" GOTO NoInput
 IF "%SDKCREDPROT%"=="" GOTO NoInput
+
+::=============
+::Main
+::=============
+ECHO Call was: IIS7ConfigWebAppsAndPool.bat %~1 %~2 %~3 %~4 > %logfile%
 
 SET DefaultSite=Default Web Site
 SET MainSiteName=TeleoptiCCC
 SET appcmd=%systemroot%\system32\inetsrv\APPCMD.exe
 
-SET SitePath=%DefaultSite%/%MainSiteName%/%SubSiteName%
+for /f "tokens=2,3 delims=;" %%g in (Apps\ApplicationsInAppPool.txt) do CALL:CreateAppPool "%%g" "%%h" >> %logfile%
 
-::special case for TeleoptCCC root site, skip subsite
-if "%SubSiteName%"=="TeleoptiCCC" SET SitePath=%DefaultSite%/%MainSiteName%
+for /f "tokens=1,2 delims=;" %%g in (Apps\ApplicationsInAppPool.txt) do CALL:ForEachApplication "%%g" "%%h"  >> %logfile%
+GOTO Done
+
+::=============
+::Functions
+::=============
+:CreateAppPool
+SET PoolName=%~1
+SET NETVersion=%~2
 
 ::1 - Create app pool
 "%appcmd%" list apppool /name:"%PoolName%"
@@ -39,6 +49,16 @@ ECHO updating managedRuntimeVersion to: %NETVersion%
 "%appcmd%" set apppool /APPPOOL.NAME:"%PoolName%" /managedRuntimeVersion:%NETVersion% /managedPipelineMode:Integrated
 )
 echo.
+exit /B
+
+:ForEachApplication
+SET SubSiteName=%~1
+SET PoolName=%~2
+
+SET SitePath=%DefaultSite%/%MainSiteName%/%SubSiteName%
+
+::special case for TeleoptCCC root site, skip subsite
+if "%SubSiteName%"=="TeleoptiCCC" SET SitePath=%DefaultSite%/%MainSiteName%
 
 ::2 - Change app pool
 %windir%\system32\inetsrv\APPCMD.exe set app "%SitePath%" /applicationPool:"%PoolName%" /commit:apphost
@@ -60,25 +80,41 @@ if "%SSL%"=="False" "%appcmd%" set config "%SitePath%" /section:access /sslFlags
 
 ::5 Athentication for the virtual dir
 ::-----
-::Basic Auth, never used so far. Always Disable
+::Different authentication based on "SDKCREDPROT"
 ::-----
-"%appcmd%" set config "%SitePath%" -section:system.webServer/security/authentication/basicAuthentication /enabled:"False" /commit:apphost
+SET authentication=anonymousAuthentication
+for /f "tokens=1,2 delims=;" %%g in (%SDKCREDPROT%\%authentication%.txt) do CALL:IISSecuritySet "%%g" "%authentication%" "%%h"
+SET authentication=basicAuthentication
+for /f "tokens=1,2 delims=;" %%g in (%SDKCREDPROT%\%authentication%.txt) do CALL:IISSecuritySet "%%g" "%authentication%" "%%h"
+SET authentication=windowsAuthentication
+for /f "tokens=1,2 delims=;" %%g in (%SDKCREDPROT%\%authentication%.txt) do CALL:IISSecuritySet "%%g" "%authentication%" "%%h"
+::a little different for Forms section
+SET authentication=FormsAuthentication
+for /f "tokens=1,2 delims=;" %%g in (%SDKCREDPROT%\%authentication%.txt) do CALL::IISSecurityFormsSet "%%g" "%%h"
 
-::At this point we bail out for most vdir and go for the Authetication created by Wise
-::Wise uses:
-::windowsAuthentication=true/false + Forms=true/false is depending on web.config which in turn depends on "%SDKCREDPROT%" which in turn depends on "same" vs. "different domain" in Msi GUI.
-if not "%SubSiteName%"=="Web" GOTO Done
+::6 Impersonate
+::-----
+::Different identity based on "SDKCREDPROT"
+::-----
+for /f "tokens=1,2 delims=;" %%g in (%SDKCREDPROT%\Impersonate.txt) do CALL:IISIdentitySet "%%g" "%%h"
+exit /B
 
-::But for vdir="Web" we continue
-if "%SDKCREDPROT%"=="Ntlm" (
-"%appcmd%" set config "%SitePath%" -section:system.webServer/security/authentication/anonymousAuthentication /enabled:"False" /commit:apphost
-"%appcmd%" set config "%SitePath%" -section:system.webServer/security/authentication/windowsAuthentication /enabled:"True" /commit:apphost
-) Else (
-"%appcmd%" set config "%SitePath%" -section:system.webServer/security/authentication/anonymousAuthentication /enabled:"True" /commit:apphost
-"%appcmd%" set config "%SitePath%" -section:system.webServer/security/authentication/windowsAuthentication /enabled:"False" /commit:apphost
+:IISSecurityFormsSet
+if "%SubSiteName%"=="%~1" (
+"%appcmd%" set config "%SitePath%" /section:system.web/authentication /mode:%~2
 )
+exit /B
 
-GOTO Done
+:IISSecuritySet
+if "%SubSiteName%"=="%~1" (
+ECHO "%appcmd%" set config "%SitePath%" -section:system.webServer/security/authentication/%~2 /enabled:"%~3" /commit:apphost
+"%appcmd%" set config "%SitePath%" -section:system.webServer/security/authentication/%~2 /enabled:"%~3" /commit:apphost
+)
+exit /B
+
+:IISIdentitySet
+if "%SubSiteName%"=="%~1" "%appcmd%" set config "%SitePath%" -section:system.web/identity /impersonate:"%~2"
+exit /B
 
 :Done
 echo done

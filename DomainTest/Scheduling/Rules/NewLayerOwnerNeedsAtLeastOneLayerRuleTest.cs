@@ -102,7 +102,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Rules
             var pShift = PersonalShiftFactory.CreatePersonalShift(act, p);
             var oShift = new OvertimeShift();
             var per = new Person();
-            var pAss = new PersonAssignment(per, scenario);
+            var pAss = new PersonAssignment(per, scenario, new DateOnly(2000,1,1));
 
             pAss.SetMainShift(mShift);
             pAss.AddPersonalShift(pShift);

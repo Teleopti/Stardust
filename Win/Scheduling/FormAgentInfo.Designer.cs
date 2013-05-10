@@ -160,7 +160,7 @@
 			this.tabPageAdvRestrictions.Location = new System.Drawing.Point(1, 22);
 			this.tabPageAdvRestrictions.Name = "tabPageAdvRestrictions";
 			this.tabPageAdvRestrictions.ShowCloseButton = true;
-			this.tabPageAdvRestrictions.Size = new System.Drawing.Size(605, 472);
+			this.tabPageAdvRestrictions.Size = new System.Drawing.Size(660, 472);
 			this.tabPageAdvRestrictions.TabIndex = 4;
 			this.tabPageAdvRestrictions.Text = "xxRestrictions";
 			this.tabPageAdvRestrictions.ThemesEnabled = false;
@@ -179,7 +179,7 @@
             listViewItem2});
 			this.listViewRestrictions.Location = new System.Drawing.Point(0, 0);
 			this.listViewRestrictions.Name = "listViewRestrictions";
-			this.listViewRestrictions.Size = new System.Drawing.Size(605, 472);
+			this.listViewRestrictions.Size = new System.Drawing.Size(660, 472);
 			this.listViewRestrictions.SmallImageList = this.imageList1;
 			this.listViewRestrictions.TabIndex = 2;
 			this.listViewRestrictions.UseCompatibleStateImageBehavior = false;
@@ -202,7 +202,7 @@
 			this.tabPageAdvPersonPeriod.Location = new System.Drawing.Point(1, 22);
 			this.tabPageAdvPersonPeriod.Name = "tabPageAdvPersonPeriod";
 			this.tabPageAdvPersonPeriod.ShowCloseButton = true;
-			this.tabPageAdvPersonPeriod.Size = new System.Drawing.Size(605, 472);
+			this.tabPageAdvPersonPeriod.Size = new System.Drawing.Size(660, 472);
 			this.tabPageAdvPersonPeriod.TabIndex = 3;
 			this.tabPageAdvPersonPeriod.Text = "xxPersonPeriod";
 			this.tabPageAdvPersonPeriod.ThemesEnabled = false;
@@ -221,7 +221,7 @@
             listViewItem3});
 			this.listViewPersonPeriod.Location = new System.Drawing.Point(0, 0);
 			this.listViewPersonPeriod.Name = "listViewPersonPeriod";
-			this.listViewPersonPeriod.Size = new System.Drawing.Size(605, 472);
+			this.listViewPersonPeriod.Size = new System.Drawing.Size(660, 472);
 			this.listViewPersonPeriod.SmallImageList = this.imageList1;
 			this.listViewPersonPeriod.TabIndex = 2;
 			this.listViewPersonPeriod.UseCompatibleStateImageBehavior = false;
@@ -244,7 +244,7 @@
 			this.tabPageAdvPerson.Location = new System.Drawing.Point(1, 22);
 			this.tabPageAdvPerson.Name = "tabPageAdvPerson";
 			this.tabPageAdvPerson.ShowCloseButton = true;
-			this.tabPageAdvPerson.Size = new System.Drawing.Size(605, 472);
+			this.tabPageAdvPerson.Size = new System.Drawing.Size(660, 472);
 			this.tabPageAdvPerson.TabIndex = 5;
 			this.tabPageAdvPerson.Text = "xxPerson";
 			this.tabPageAdvPerson.ThemesEnabled = false;
@@ -263,7 +263,7 @@
             listViewItem4});
 			this.listViewPerson.Location = new System.Drawing.Point(0, 0);
 			this.listViewPerson.Name = "listViewPerson";
-			this.listViewPerson.Size = new System.Drawing.Size(605, 472);
+			this.listViewPerson.Size = new System.Drawing.Size(660, 472);
 			this.listViewPerson.SmallImageList = this.imageList1;
 			this.listViewPerson.TabIndex = 3;
 			this.listViewPerson.UseCompatibleStateImageBehavior = false;
@@ -286,7 +286,7 @@
 			this.tabPageFairness.Location = new System.Drawing.Point(1, 22);
 			this.tabPageFairness.Name = "tabPageFairness";
 			this.tabPageFairness.ShowCloseButton = true;
-			this.tabPageFairness.Size = new System.Drawing.Size(605, 472);
+			this.tabPageFairness.Size = new System.Drawing.Size(660, 472);
 			this.tabPageFairness.TabIndex = 6;
 			this.tabPageFairness.Text = "xxFairness";
 			this.tabPageFairness.ThemesEnabled = false;
@@ -305,7 +305,7 @@
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
 			this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-			this.tableLayoutPanel1.Size = new System.Drawing.Size(605, 472);
+			this.tableLayoutPanel1.Size = new System.Drawing.Size(660, 472);
 			this.tableLayoutPanel1.TabIndex = 0;
 			// 
 			// tableLayoutPanel2
@@ -321,13 +321,13 @@
 			this.tableLayoutPanel2.RowCount = 2;
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 3F));
 			this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 97F));
-			this.tableLayoutPanel2.Size = new System.Drawing.Size(599, 31);
+			this.tableLayoutPanel2.Size = new System.Drawing.Size(654, 31);
 			this.tableLayoutPanel2.TabIndex = 5;
 			// 
 			// agentGroupPageLabel
 			// 
 			this.agentGroupPageLabel.Anchor = System.Windows.Forms.AnchorStyles.None;
-			this.agentGroupPageLabel.Location = new System.Drawing.Point(81, 9);
+			this.agentGroupPageLabel.Location = new System.Drawing.Point(89, 9);
 			this.agentGroupPageLabel.Name = "agentGroupPageLabel";
 			this.agentGroupPageLabel.Size = new System.Drawing.Size(0, 13);
 			this.agentGroupPageLabel.TabIndex = 0;
@@ -337,7 +337,7 @@
 			this.comboBoxAgentGrouping.Anchor = System.Windows.Forms.AnchorStyles.Left;
 			this.comboBoxAgentGrouping.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(234)))), ((int)(((byte)(242)))), ((int)(((byte)(251)))));
 			this.comboBoxAgentGrouping.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBoxAgentGrouping.Location = new System.Drawing.Point(166, 5);
+			this.comboBoxAgentGrouping.Location = new System.Drawing.Point(181, 5);
 			this.comboBoxAgentGrouping.Name = "comboBoxAgentGrouping";
 			this.comboBoxAgentGrouping.Size = new System.Drawing.Size(176, 19);
 			this.comboBoxAgentGrouping.Style = Syncfusion.Windows.Forms.VisualStyle.Office2007;
@@ -358,7 +358,7 @@
 			this.perPersonAndGroupListView.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
 			this.perPersonAndGroupListView.Location = new System.Drawing.Point(3, 40);
 			this.perPersonAndGroupListView.Name = "perPersonAndGroupListView";
-			this.perPersonAndGroupListView.Size = new System.Drawing.Size(599, 429);
+			this.perPersonAndGroupListView.Size = new System.Drawing.Size(654, 429);
 			this.perPersonAndGroupListView.StateImageList = this.imageList1;
 			this.perPersonAndGroupListView.TabIndex = 0;
 			this.perPersonAndGroupListView.UseCompatibleStateImageBehavior = false;

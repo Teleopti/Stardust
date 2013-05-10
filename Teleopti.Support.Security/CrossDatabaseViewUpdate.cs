@@ -8,7 +8,7 @@ namespace Teleopti.Support.Security
 {
 	internal class CrossDatabaseViewUpdate : ICommandLineCommand
 	{
-		public void Execute(CommandLineArgument commandLineArgument)
+		public int Execute(CommandLineArgument commandLineArgument)
 		{
 			//Select database version 
 			using (SqlConnection connection = new SqlConnection(commandLineArgument.DestinationConnectionString))
@@ -21,13 +21,13 @@ namespace Teleopti.Support.Security
 				{
 					Console.WriteLine("Could not open Sql Connection. Error message: {0}", ex.Message);
 					Thread.Sleep(TimeSpan.FromSeconds(2));
-					return;
+					return 1;
 				}
 				catch (InvalidOperationException ex)
 				{
 					Console.WriteLine("Could not open Sql Connection. Error message: {0}", ex.Message);
 					Thread.Sleep(TimeSpan.FromSeconds(2));
-					return;
+					return 1;
 				}
 
 				//Check version
@@ -51,6 +51,7 @@ namespace Teleopti.Support.Security
 					catch (Exception ex)
 					{
 						Console.WriteLine("Something went wrong! Error message: {0}", ex.Message);
+						return 1;
 					}
 					finally
 					{
@@ -60,6 +61,8 @@ namespace Teleopti.Support.Security
 					Thread.Sleep(TimeSpan.FromSeconds(2));
 				}
 			}
+
+			return 0;
 		}
 	}
 }

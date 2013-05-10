@@ -126,7 +126,9 @@
     <Compile Include="Core\BrowserInteractions\WatiNIE\Retrying.cs" />
     <Compile Include="Data\HardCodedResolver.cs" />
     <Compile Include="Pages\Common\Select2Box.cs" />
-    <Compile Include="TeamScheduleForGroups.feature.cs">
+    <Compile Include="TeamScheduleForGroups.feature.cs" />
+    <Compile Include="Bindings\Generic\BudgetStepDefinitions.cs" />
+    <Compile Include="Data\Setups\Generic\AbsenceTimeConfigurable.cs">
       <DependentUpon>TeamScheduleForGroups.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -140,6 +142,8 @@
     <Compile Include="Bindings\Generic\PasswordPolicyStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Start\SignInPageStepDefinitions.cs" />
     <Compile Include="Bindings\StringContainsAnyLanguageResourceConstraint.cs" />
+    <Compile Include="Data\Setups\Generic\BudgetdayConfigurable.cs" />
+    <Compile Include="Data\Setups\Generic\BudgetGroupConfigurable.cs" />
     <Compile Include="Data\AllTags.cs" />
     <Compile Include="Data\FileConfigurator.cs" />
     <Compile Include="Data\Paths.cs" />
@@ -261,6 +265,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ShiftTradeRequests.feature</DependentUpon>
+    </Compile>
+    <Compile Include="WeekScheduleAvailableAsbence.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>WeekScheduleAvailableAsbence.feature</DependentUpon>
     </Compile>
     <Compile Include="WeekScheduleTimeIndicator.feature.cs">
       <DependentUpon>WeekScheduleTimeIndicator.feature</DependentUpon>
@@ -646,6 +655,10 @@
     <None Include="Testing\specflow.exe.config" />
     <None Include="Testing\TestExecutionReport.bat" />
     <None Include="Testing\StepDefinitionReport.bat" />
+    <None Include="WeekScheduleAvailableAsbence.feature">
+      <Generator>SpecFlowSingleFileGenerator</Generator>
+      <LastGenOutput>WeekScheduleAvailableAsbence.feature.cs</LastGenOutput>
+    </None>
     <None Include="WeekScheduleTimeIndicator.feature">
       <Generator>SpecFlowSingleFileGenerator</Generator>
       <LastGenOutput>WeekScheduleTimeIndicator.feature.cs</LastGenOutput>

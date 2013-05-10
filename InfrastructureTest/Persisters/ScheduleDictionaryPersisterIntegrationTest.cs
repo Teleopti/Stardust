@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
         public void VerifyAddScheduleDictionaryWhenAdd()
         {
             var diffColl = new DifferenceCollection<IPersistableScheduleData>();
-            var schedData = new PersonAssignment(PersonFactory.CreatePerson(), new Scenario("sdd"));
+						var schedData = new PersonAssignment(PersonFactory.CreatePerson(), new Scenario("sdd"), new DateOnly(2000, 1, 1));
             PersistAndRemoveFromUnitOfWork(schedData.Scenario);
             PersistAndRemoveFromUnitOfWork(schedData.Person);
             diffColl.Add(new DifferenceCollectionItem<IPersistableScheduleData>(null, schedData));
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
         public void VerifyAddScheduleDictionaryWhenDelete()
         {
             var diffColl = new DifferenceCollection<IPersistableScheduleData>();
-            var schedData = new PersonAssignment(PersonFactory.CreatePerson(), new Scenario("sdd"));
+						var schedData = new PersonAssignment(PersonFactory.CreatePerson(), new Scenario("sdd"), new DateOnly(2000, 1, 1));
             PersistAndRemoveFromUnitOfWork(schedData.Scenario);
             PersistAndRemoveFromUnitOfWork(schedData.Person);
             PersistAndRemoveFromUnitOfWork(schedData);
@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
         public void VerifyAddScheduleDictionaryWhenChanged()
         {
             var diffColl = new DifferenceCollection<IPersistableScheduleData>();
-            var schedData = new PersonAssignment(PersonFactory.CreatePerson(), new Scenario("sdd"));
+						var schedData = new PersonAssignment(PersonFactory.CreatePerson(), new Scenario("sdd"), new DateOnly(2000, 1, 1));
             var cat = new ShiftCategory("ballefjong");
             PersistAndRemoveFromUnitOfWork(schedData.Scenario);
             PersistAndRemoveFromUnitOfWork(schedData.Person);

@@ -28,8 +28,12 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		private readonly IEnumerable<IMessageSender> _messageSenders;
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1704:IdentifiersShouldBeSpelledCorrectly", MessageId = "Denormalizers"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		protected internal NHibernateUnitOfWorkFactory(ISessionFactory sessionFactory, IAuditSetter auditSettingProvider, IEnumerable<IMessageSender> messageSenders)
-		{
+		protected internal NHibernateUnitOfWorkFactory(ISessionFactory sessionFactory, 
+																										IAuditSetter auditSettingProvider, 
+																										string connectionString,
+                                                                                                                                                                                                                IEnumerable<IMessageSender> messageSenders)
+                {
+			ConnectionString = connectionString;
 			SessionContextBinder = new StaticSessionContextBinder();
 			InParameter.NotNull("sessionFactory", sessionFactory);
 			sessionFactory.Statistics.IsStatisticsEnabled = true;
@@ -91,6 +95,8 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 		{
 			get { return _auditSettingProvider; }
 		}
+
+		public string ConnectionString { get; private set; }
 
 		protected virtual IUnitOfWork MakeUnitOfWork(ISession session, IMessageBroker messaging, NHibernateFilterManager filterManager)
 		{
@@ -218,7 +224,7 @@ namespace Teleopti.Ccc.Infrastructure.UnitOfWork
 
 	public class StaticSessionContextBinder : ISessionContextBinder
 	{
-		//todo: byt till ConcurrentDictionary när vi uppgraderar till .net 4.0!
+		//todo: byt till ConcurrentDictionary n?r vi uppgraderar till .net 4.0!
 		private static readonly IDictionary<Guid, NHibernateSessionRelatedData> uowRelatedData
 			 = new ConcurrentDictionary<Guid, NHibernateSessionRelatedData>(new ConcurrentDictionary<Guid, NHibernateSessionRelatedData>());
 

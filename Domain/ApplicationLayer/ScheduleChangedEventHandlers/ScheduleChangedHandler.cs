@@ -2,6 +2,7 @@ using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Interfaces.Domain;
+using log4net;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 {
@@ -15,6 +16,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		IHandleEvent<PersonAbsenceAddedEvent>
 	{
 		private readonly IPublishEventsFromEventHandlers _bus;
+	    private static readonly ILog Logger = LogManager.GetLogger(typeof (ScheduleChangedHandler));
 		private readonly IScenarioRepository _scenarioRepository;
 		private readonly IPersonRepository _personRepository;
 		private readonly IScheduleRepository _scheduleRepository;
@@ -105,13 +107,22 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		private bool getPeriodAndScenario(ScheduleChangedEventBase @event)
 		{
 			var scenario = _scenarioRepository.Get(@event.ScenarioId);
+            if (scenario == null)
+            {
+                Logger.InfoFormat("Scenario not found (Id: {0})", @event.ScenarioId);
+                return false;
+            }
 			if (!scenario.DefaultScenario) return false;
 
 			var period = new DateTimePeriod(@event.StartDateTime, @event.EndDateTime);
 			var person = _personRepository.FindPeople(new []{ @event.PersonId}).FirstOrDefault();
-			if (person == null) return false;
+		    if (person == null)
+		    {
+                Logger.InfoFormat("Person not found (Id: {0})", @event.PersonId);
+		        return false;
+		    }
                     
-			var timeZone = person.PermissionInformation.DefaultTimeZone();
+		    var timeZone = person.PermissionInformation.DefaultTimeZone();
 			var dateOnlyPeriod = period.ToDateOnlyPeriod(timeZone);
 			var schedule =
 				_scheduleRepository.FindSchedulesOnlyInGivenPeriod(new PersonProvider(new[] {person}) {DoLoadByPerson = true},

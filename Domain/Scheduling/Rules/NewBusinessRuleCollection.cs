@@ -20,6 +20,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Rules
             Add(new NewMaxOneDayOffRule());
             Add(new NewOverlappingAssignmentRule());
             Add(new GapsInAssignmentRule(new GapsInAssignment()));
+					Add(new DataPartOfAgentDay());
         }
 
         public static INewBusinessRuleCollection Minimum()

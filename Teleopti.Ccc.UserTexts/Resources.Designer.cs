@@ -1042,6 +1042,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add Preference....
+        /// </summary>
+        public static string AddPreferenceThreeDots {
+            get {
+                return ResourceManager.GetString("AddPreferenceThreeDots", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add reply option.
         /// </summary>
         public static string AddReplyOption {
@@ -1111,6 +1120,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string AddStudentAvailability {
             get {
                 return ResourceManager.GetString("AddStudentAvailability", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add Student Availability....
+        /// </summary>
+        public static string AddStudentAvailabilityThreeDots {
+            get {
+                return ResourceManager.GetString("AddStudentAvailabilityThreeDots", resourceCulture);
             }
         }
         
@@ -3709,6 +3727,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Category {
             get {
                 return ResourceManager.GetString("Category", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Chance of getting absence request granted: .
+        /// </summary>
+        public static string ChanceOfGettingAbsenceRequestGranted {
+            get {
+                return ResourceManager.GetString("ChanceOfGettingAbsenceRequestGranted", resourceCulture);
             }
         }
         
@@ -8068,6 +8095,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fair.
+        /// </summary>
+        public static string Fair {
+            get {
+                return ResourceManager.GetString("Fair", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fairness.
         /// </summary>
         public static string Fairness {
@@ -9127,6 +9163,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Go {
             get {
                 return ResourceManager.GetString("Go", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Good.
+        /// </summary>
+        public static string Good {
+            get {
+                return ResourceManager.GetString("Good", resourceCulture);
             }
         }
         
@@ -14545,6 +14590,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to It is not allowed to move a work shift to another day in shift editor, use cut and paste instead.
+        /// </summary>
+        public static string NotAllowedMoveOfAssignmentToOtherDate {
+            get {
+                return ResourceManager.GetString("NotAllowedMoveOfAssignmentToOtherDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to not allowed Shift Categories.
         /// </summary>
         public static string NotAllowedShiftCategories {
@@ -16886,6 +16940,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string PointsPerShiftCategory {
             get {
                 return ResourceManager.GetString("PointsPerShiftCategory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Poor.
+        /// </summary>
+        public static string Poor {
+            get {
+                return ResourceManager.GetString("Poor", resourceCulture);
             }
         }
         

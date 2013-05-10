@@ -105,6 +105,20 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 			Assert.IsFalse(result);
 		}
 
+		[Test]
+		public void ShoulReturnFalseIfNotSameTargetDaysOff()
+		{
+			IDictionary<DateOnly, IScheduleDayData> dataList = createList();
+			dataList[new DateOnly(2013, 1, 3)].IsDayOff = true;
+			MatrixDataForTest matrixData = new MatrixDataForTest(dataList.Values);
+			matrixData.SetTargetDaysOff(8);
+			MatrixDataForTest matrixData1 = new MatrixDataForTest(dataList.Values);
+			matrixData.SetTargetDaysOff(7);
+			IList<IMatrixData> matrixDataList = new List<IMatrixData> { matrixData, matrixData1 };
+			bool result = _target.IsListInSteadyState(matrixDataList);
+			Assert.IsFalse(result);
+		}
+
 		private static IDictionary<DateOnly, IScheduleDayData> createList()
 		{
 			IDictionary<DateOnly, IScheduleDayData> dataList = new Dictionary<DateOnly, IScheduleDayData>();
@@ -149,6 +163,11 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.DayOffScheduling
 
 		public MatrixDataForTest(IScheduleDayDataMapper scheduleDayDataMapper) : base(scheduleDayDataMapper)
 		{
+		}
+
+		public void SetTargetDaysOff(int value)
+		{
+			TargetDaysOff = value;
 		}
 
 	}

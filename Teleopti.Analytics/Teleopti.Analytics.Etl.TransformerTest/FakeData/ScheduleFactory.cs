@@ -53,7 +53,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest.FakeData
 
         private IList<IPersonAssignment> createPersonAssignmentlList()
         {
-            PersonAssignment personAssignment = new PersonAssignment(_personCollection[0], _scenarioCollection[0]);
+					PersonAssignment personAssignment = new PersonAssignment(_personCollection[0], _scenarioCollection[0], new DateOnly(2007, 1, 1));
 
             MainShift mainShift = new MainShift(_shiftCategoryCollection[0]);
             ((IEntity) mainShift).SetId(Guid.NewGuid());

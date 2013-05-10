@@ -66,8 +66,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 			var endTimeUtc = user.PermissionInformation.DefaultTimeZone().SafeConvertTimeToUtc(EndTime);
 
 			// create main shift
+			if (Date == new DateOnly())
+			{
+				//if not explicitly set of user, try to set based on starttime
+				Date = new DateOnly(StartTime);
+			}
 			_assignmentPeriod = new DateTimePeriod(startTimeUtc, endTimeUtc);
-			var assignment = PersonAssignmentFactory.CreatePersonAssignment(user, Scenario);
+			var assignment = PersonAssignmentFactory.CreatePersonAssignment(user, Scenario, Date);
 
 			assignment.SetMainShift(MainShiftFactory.CreateMainShift(activity, _assignmentPeriod, shiftCategory));
 

@@ -108,7 +108,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 		[Test]
 		public void ShouldMapShiftCategoryInPersonAssignmentDayViewModel()
 		{
-			var personAssignment = new PersonAssignment(new Person(), new Scenario(" "));
+			var personAssignment = new PersonAssignment(new Person(), new Scenario(" "), new DateOnly(2000,1,1));
 			personAssignment.SetMainShift(new MainShift(new ShiftCategory("shiftCategory")));
 			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today, SchedulePartView.MainShift, personAssignment);
 
@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			var contractTime = TimeSpan.FromHours(8);
 			var projection = MockRepository.GenerateMock<IVisualLayerCollection>();
 			projection.Stub(x => x.ContractTime()).Return(contractTime);
-			var personAssignment = new PersonAssignment(new Person(), new Scenario(" "));
+			var personAssignment = new PersonAssignment(new Person(), new Scenario(" "), new DateOnly(2000,1,1));
 			personAssignment.SetMainShift(new MainShift(new ShiftCategory("shiftCategory")));
 			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today, SchedulePartView.MainShift, personAssignment);
 			_projectionProvider.Stub(x => x.Projection(scheduleDay)).Return(projection);
@@ -141,7 +141,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Core.Preference.Mapping
 			var contractTime = TimeSpan.FromHours(8);
 			var projection = MockRepository.GenerateMock<IVisualLayerCollection>();
 			projection.Stub(x => x.ContractTime()).Return(contractTime);
-			var personAssignment = new PersonAssignment(new Person(), new Scenario(" "));
+			var personAssignment = new PersonAssignment(new Person(), new Scenario(" "), new DateOnly(2000, 1, 1));
 			personAssignment.SetMainShift(new MainShift(new ShiftCategory("shiftCategory")));
 			var scheduleDay = new StubFactory().ScheduleDayStub(DateOnly.Today, SchedulePartView.MainShift, personAssignment);
 			_projectionProvider.Stub(x => x.Projection(scheduleDay)).Return(projection);

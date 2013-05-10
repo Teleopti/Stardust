@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		{
 			testScenario = new Scenario("sdf");
 			testPerson = new Person();
-			target = new PersonAssignment(testPerson, testScenario);
+			target = new PersonAssignment(testPerson, testScenario, new DateOnly(2000,1,1));
 		}
 
 		[Test]
@@ -39,14 +39,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			Assert.IsFalse(target.BelongsToScenario(new Scenario("f")));
 			Assert.IsFalse(target.BelongsToScenario(null));
 		}
-
-        [Test]
-        public void VerifyBelongsToPeriod()
-        {
-            DateOnlyPeriod period =
-                PersonAssignment.UndefinedPeriod.ToDateOnlyPeriod(TimeZoneInfoFactory.UtcTimeZoneInfo());
-            Assert.IsTrue(target.BelongsToPeriod(period));
-        }
 
 		[Test]
 		public void PersonAssignmentWithoutLayersShouldHaveSpecificPeriod()
@@ -110,7 +102,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 
 			target = PersonAssignmentFactory.CreateAssignmentWithMainShift(testScenario, testPerson, new DateTimePeriod(2000,1,1,2000,1,2));
 			target.SetId(Guid.NewGuid());
-			var moveToTheseParameters = new PersonAssignment(newPer, newScen);
+			var moveToTheseParameters = new PersonAssignment(newPer, newScen, new DateOnly(2000, 1, 1));
 
 			IPersistableScheduleData newAss = ((PersonAssignment)target).CloneAndChangeParameters(moveToTheseParameters);
 			

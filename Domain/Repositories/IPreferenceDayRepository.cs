@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Repositories
@@ -9,5 +10,6 @@ namespace Teleopti.Ccc.Domain.Repositories
 		IList<IPreferenceDay> Find(DateOnly dateOnly, IPerson person);
 		IList<IPreferenceDay> FindAndLock(DateOnly dateOnly, IPerson person);
 		IList<IPreferenceDay> Find(DateOnlyPeriod period, IPerson person);
+		IList<IPreferenceDay> FindNewerThan(DateTime newerThan);
 	}
 }

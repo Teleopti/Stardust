@@ -190,5 +190,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		{
 			return Document.Div(Find.BySelector(DateSelector(date) + " .week-schedule-layer[tooltip-text*='" + tooltipContent + "']"));
 		}
+
+		public DivCollection AbsenceIndiciators()
+		{
+			return Document.Divs.Filter(Find.BySelector(".holiday-agents"));
+		}
 	}
 }

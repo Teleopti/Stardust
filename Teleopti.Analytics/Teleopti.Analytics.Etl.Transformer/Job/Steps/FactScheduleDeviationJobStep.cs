@@ -13,7 +13,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 			: base(jobParameters)
 		{
 			Name = "fact_schedule_deviation";
-			JobCategory = JobCategoryType.Schedule;
+			JobCategory = JobCategoryType.AgentStatistics;
 		}
 
 
