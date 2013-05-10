@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Windows.Forms;
 using Syncfusion.Windows.Forms;
+using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
@@ -68,22 +69,8 @@ namespace Teleopti.Ccc.Win.Common.Controls.DateSelection
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public void SetCulture(CultureInfo cultureInfo)
         {
-            dateTimePickerAdvWorkAStartDate.Culture = cultureInfo;
-        	dateTimePickerAdvWorkAStartDate.Calendar.Iso8601CalenderFormat =
-        		DateHelper.Iso8601Cultures.Contains(cultureInfo.LCID);
-            dateTimePickerAdvWorkEndPeriod.Culture = cultureInfo;
-			dateTimePickerAdvWorkEndPeriod.Calendar.Iso8601CalenderFormat =
-				DateHelper.Iso8601Cultures.Contains(cultureInfo.LCID);
-
-			// <bugfix 22929: Bulgarian date format not displayed well in most calendar controls
-			// seems that CalendarSizeToFit property does not work with the BG culture
-			if (cultureInfo.LCID == 1026)
-			{
-				dateTimePickerAdvWorkAStartDate.CalendarSizeToFit = false;
-				dateTimePickerAdvWorkEndPeriod.CalendarSizeToFit = false;
-			}
-			// >
-
+			dateTimePickerAdvWorkAStartDate.SetCultureInfoSafe(cultureInfo);
+			dateTimePickerAdvWorkEndPeriod.SetCultureInfoSafe(cultureInfo);
         }
 
         private void SetColors()
