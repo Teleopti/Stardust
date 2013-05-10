@@ -5,32 +5,73 @@
 
 --------
 --Bad Maintanance in our DB?
--- => EDIT!
-USE TeleoptiCCC7
 -------
--- Do they ahve _any_ maint? => Check our biggest table
+-- ===== Last REBUILD =====
+-- Do they have any regular maintenance of indexes?
+-- When did the last REBUILD happen?
+-- modify_date reflects the last "rebuild"-date, (since we don't make any other ALTER on tables)
+-- http://msdn.microsoft.com/en-us/library/ms190324.aspx
+-- "Date the object was last modified by using an ALTER statement. If the object is a table or a view, modify_date also changes when a clustered index on the table or view is created or altered."
+-- note: "reorganize" the table/index will not(!) shoe in the "modify_date" value, so we can't tell in that case :-(
 
-select index_level, page_count,avg_fragmentation_in_percent, avg_page_space_used_in_percent, si.name
-from sys.dm_db_index_physical_stats(db_id(),object_id('dbo.mainShiftActivityLayer'),null,null,'detailed') ps
+Select schemaname =sch.name, objectname=object_name(i.object_id),indexname=i.name, i.index_id, o.create_date, o.modify_date
+from sys.indexes i, sys.objects o
+inner join sys.schemas sch
+	on sch.schema_id = o.schema_id
+where objectproperty(o.object_id,'IsUserTable') = 1
+and i.index_id NOT IN (
+	select s.index_id
+	from sys.dm_db_index_usage_stats s
+	where s.object_id=i.object_id and
+	i.index_id=s.index_id and
+	database_id = db_id()
+	)
+and o.object_id = i.object_id
+order by modify_date desc
+
+-- ===== fragmented tables =====
+-- Bad maintanance will give you high values over time.
+-- But heavy insert/delete activites (RTA, stage tables) will also result in fragmented tables. Not much we can do about that
+-- For each of the Teleopti databases run this query and save the result
+-- Note: this query is in "SAMPLED" mode, still it will read alot from the database. Handle with care.
+select object_name(ps.object_id) as table_name,index_level, page_count,avg_fragmentation_in_percent, avg_page_space_used_in_percent, si.name
+from sys.dm_db_index_physical_stats(db_id(),object_id(''),null,null,'SAMPLED') ps
 inner join sys.indexes si
 	on ps.object_id = si.object_id
 	and ps.index_id = si.index_id
+where page_count > 1000 -- 1000 * 8kb = ~ 7,8Mb
+order by avg_fragmentation_in_percent desc
+
 -- What does this mean?
+/*
+==============================================================================================
+index_level	page_count			avg_fragmentation_in_percent	avg_page_space_used_in_percent	name
+==============================================================================================
+0	44849	59,1027670628108	75,3869532987398				PK_stg_schedule						<-- super critical, the table is all messed up, Use REBUILD INDEX
+0	184526	14,347571615924		94,1472448727452				PK_fact_schedule					<-- bad, Use REORGINIZE
+0	33964	9,85160758450124	98,1105880899432				IX_fact_schedule_Shift_startdate_id	<-- bad, Use REORGINIZE
+0	28945	4,20452582484021	99,7906473931307				IX_person_scenario_schdate_interval	<-- ok from here and below
+0	35143	1,78698460575364	99,5648505065481				PK_stg_time_zone_bridge
+0	5012	1,23703112529928	97,7257474672597				PK_stg_schedule_forecast_skill
+0	8626	0,64920009274287	99,8003829997529				IX_bridge_time_zone_local_date_id_local_interval_id
+0	14224	0,47103487064117	99,864096861873					PK_bridge_time_zone
+0	1622	0,30826140567201	91,8131578947368				PK_dim_person
+==============================================================================================
+*/
+
 -- Focus on leave level of the data pages => index_level = 0
+-- http://msdn.microsoft.com/en-us/library/ms189858.aspx
 -- If the avg_fragmentation_in_percent value is > 5% Then we start suffer from fragmentation
 -- reorganize the index when "avg_fragmentation_in_percent" is > 5% but < 30%
 -- rebuild the index when "avg_fragmentation_in_percent" > 30% 
 -- Rebuild = more thorough defragmentation
- 
- 
---Old school
-DBCC SHOWCONTIG('mainShiftActivityLayer')
 
--- Scan Density [Best Count:Actual Count]
--- Below than 90% is considered harming
--- Below than 80% is bad
---revert to master
-use master
+-- ===== rebuild a table and it indexes ===== 
+-- Ok, this is not our business ...
+-- Rebuilding index consumes a lot of I/O and transaction log space. This is not Teleopti stuff. Hand over to customer IT.
+-- .. but this is how you REBUILD a table (the clustered index inself) plus all other (non-clustered index) on that specific table
+ALTER INDEX ALL ON mart.fact_schedule_forecast_skill reorganize
+
 ---------
 -- queries access the master database or msdb
 ----------
@@ -177,9 +218,10 @@ FROM sys.dm_os_wait_stats OPTION (RECOMPILE);
 --MEMORY STATS
 ---------
 -- Page Life Expectancy (PLE) value for default instance
+-- It represents the number of seconds data stays in memory at current client load
 -- PLE is a good measurement of memory pressure.
 -- Higher PLE is better. Watch the trend, not the absolute value.
-SELECT cntr_value AS [Page Life Expectancy]
+SELECT cntr_value AS [Page Life Expectancy (sec)]
 FROM sys.dm_os_performance_counters
 WHERE
 	(
@@ -189,7 +231,6 @@ WHERE
 	)
 AND counter_name = N'Page life expectancy' OPTION (RECOMPILE);
 
---Q: ms or seconds?
 
 
 --Which database is using most Memory?

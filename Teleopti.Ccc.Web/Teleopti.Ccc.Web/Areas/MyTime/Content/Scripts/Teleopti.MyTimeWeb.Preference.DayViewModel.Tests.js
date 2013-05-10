@@ -77,9 +77,7 @@ $(document).ready(function () {
 
 	test("should load preference", function () {
 
-		var ajax = {
-			Ajax: function (options) {
-				equal(options.url, "Preference/Preference");
+		var ajax = function (model, options) {
 				equal(options.data.Date, "2012-06-11");
 				options.success({
 					Preference: "a shift category",
@@ -95,13 +93,12 @@ $(document).ready(function () {
 					ActivityEndTimeLimitation: "5:00 pm-6:00 pm",
 					ActivityTimeLimitation: "1:00-2:00"
 				});
-			}
 		};
 
 		var viewModelDay = new Teleopti.MyTimeWeb.Preference.DayViewModel(ajax);
 		viewModelDay.Date = "2012-06-11";
 
-		expect(14);
+		expect(13);
 
 		viewModelDay.LoadPreference();
 
@@ -134,10 +131,7 @@ $(document).ready(function () {
 
 	test("should set preference", function () {
 
-		var ajax = {
-			Ajax: function (options) {
-				equal(options.url, "Preference/Preference");
-
+		var ajax = function (model, options) {
 				var result = jQuery.parseJSON(options.data);
 
 				equal(result.Date, "2012-06-11");
@@ -147,13 +141,12 @@ $(document).ready(function () {
 					Color: "black",
 					Extended: false
 				});
-			}
 		};
 
 		var viewModelDay = new Teleopti.MyTimeWeb.Preference.DayViewModel(ajax);
 		viewModelDay.Date = "2012-06-11";
 
-		expect(5);
+		expect(4);
 
 		viewModelDay.SetPreference("id");
 
@@ -163,10 +156,7 @@ $(document).ready(function () {
 
 	test("should set extended preference", function () {
 
-		var ajax = {
-			Ajax: function (options) {
-				equal(options.url, "Preference/Preference");
-
+		var ajax = function (model, options) {
 				var result = jQuery.parseJSON(options.data);
 
 				equal(result.Date, "2012-09-03", "Date");
@@ -189,13 +179,12 @@ $(document).ready(function () {
 					Color: "black",
 					Extended: true
 				});
-			}
 		};
 
 		var viewModelDay = new Teleopti.MyTimeWeb.Preference.DayViewModel(ajax);
 		viewModelDay.Date = "2012-09-03";
 
-		expect(16 + 1);
+		expect(15 + 1);
 
 		viewModelDay.SetPreference({
 			PreferenceId: "id1",
@@ -219,10 +208,7 @@ $(document).ready(function () {
 
 	test("should delete preference", function () {
 
-		var ajax = {
-			Ajax: function (options) {
-				equal(options.url, "Preference/Preference");
-
+		var ajax = function (mode, options) {
 				var result = jQuery.parseJSON(options.data);
 
 				equal(result.Date, "2012-06-11");
@@ -231,13 +217,12 @@ $(document).ready(function () {
 					Color: "deleted!",
 					Extended: "deleted!"
 				});
-			}
 		};
 
 		var viewModelDay = new Teleopti.MyTimeWeb.Preference.DayViewModel(ajax);
 		viewModelDay.Date = "2012-06-11";
 
-		expect(5);
+		expect(4);
 
 		viewModelDay.DeletePreference();
 
@@ -258,8 +243,7 @@ $(document).ready(function () {
 
 	test("should load feedback", function () {
 
-		var ajax = {
-			Ajax: function (options) {
+		var ajax = function (model, options) {
 				options.success({
 					FeedbackError: "an error",
 					PossibleStartTimes: "6:00-9:00",
@@ -267,7 +251,6 @@ $(document).ready(function () {
 					PossibleContractTimeMinutesLower: 7 * 60,
 					PossibleContractTimeMinutesUpper: 12 * 60
 				});
-			}
 		};
 
 		var viewModelDay = new Teleopti.MyTimeWeb.Preference.DayViewModel(ajax);
@@ -340,22 +323,18 @@ $(document).ready(function () {
 
 	test("should set must have", function () {
 
-		var ajax = {
-			Ajax: function (options) {
-				equal(options.url, "Preference/MustHave");
-
+		var ajax = function (model, options) {
 				var result = jQuery.parseJSON(options.data);
 
 				equal(result.Date, "2012-06-11");
 				equal(result.MustHave, true);
 				options.success(true);
-			}
 		};
 
 		var viewModelDay = new Teleopti.MyTimeWeb.Preference.DayViewModel(ajax);
 		viewModelDay.Date = "2012-06-11";
 
-		expect(4);
+		expect(3);
 
 		viewModelDay.SetMustHave(true);
 

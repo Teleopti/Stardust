@@ -4811,11 +4811,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (scheduleFilterView.ShowDialog() == DialogResult.OK)
 			{
 				_schedulerState.FilterPersons(scheduleFilterView.SelectedAgentGuids());
-				toolStripButtonFilterAgents.Checked =
-					scheduleFilterView.SelectedAgentGuids().Count != SchedulerState.AllPermittedPersons.Count;
+				toolStripButtonFilterAgents.Checked = scheduleFilterView.SelectedAgentGuids().Count != SchedulerState.AllPermittedPersons.Count;
 
 				if (_scheduleView != null)
 				{
+					_scheduleView.Sort(_scheduleView.Presenter.SortCommand);
 					_grid.Refresh();
 					GridHelper.GridlockWriteProtected(_grid, LockManager);
 					_grid.Refresh();

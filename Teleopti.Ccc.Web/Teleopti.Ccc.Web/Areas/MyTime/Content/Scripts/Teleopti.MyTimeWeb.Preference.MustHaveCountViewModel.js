@@ -17,19 +17,27 @@ if (typeof (Teleopti) === 'undefined') {
 }
 
 Teleopti.MyTimeWeb.Preference.MustHaveCountViewModel = function (dayViewModels, maxMustHave) {
+    var self = this;
+
+    this.DayViewModels = dayViewModels;
+
+    this.CurrentMustHaves = ko.computed(function () {
+        var total = 0;
+        $.each(self.DayViewModels, function (index, day) {
+            if (day.MustHave())
+                total += 1;
+        });
+        return total;
+    });
 
 	this.MustHaveText = ko.computed(function () {
-		var total = 0;
-		$.each(dayViewModels, function (index, day) {
-			if (day.MustHave())
-				total += 1;
-		});
-		if (total == maxMustHave) {
-			$("#Preference-must-have-button").addClass("grey-out");
-		}else {
-			$("#Preference-must-have-button").removeClass("grey-out");
-		}
-		
-		return total + "(" + maxMustHave + ")";
+		return self.CurrentMustHaves() + "(" + maxMustHave + ")";
 	});
+
+    this.MustHaveClass = ko.computed(function() {
+        if (self.CurrentMustHaves() == maxMustHave) 
+            return "grey-out";
+
+        return undefined;
+    });
 };
