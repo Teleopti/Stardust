@@ -21,11 +21,6 @@ Background:
     | Field | Value |
     | Name  | Day   |
     | Color | Green |
-	And 'Pierre Baldi' have a shift with
-	| Field          | Value            |
-	| Shift category | Day              |
-	| Start time     | 2013-05-06 08:00 |
-	| End time       | 2013-05-06 17:00 |
 	And there is an absence with
 	| Field | Value    |
 	| Name  | Vacation |
@@ -87,21 +82,18 @@ Scenario: Remove absence with confirmation
 	When I view person schedule for 'Pierre Baldi' on '2013-05-06'
 	And I click 'remove' on absence named 'Vacation'
 	Then I should see 1 absences in the absence list
-	And I should see a shift layer with
-	| Field      | Value |
-	| Start time | 08:00 |
-	| End time   | 17:00 |
-	| Color      | Red   |
+	And I should see a shift
 	When I click 'confirm removal' on absence named 'Vacation'
 	Then I should see 0 absences in the absence list
-	And I should see a shift layer with
-	| Field      | Value |
-	| Start time | 08:00 |
-	| End time   | 17:00 |
-	| Color      | Green |
+	And I should not see any shift
 
 Scenario: Remove one of two absences
 	Given I have the role 'Anywhere Team Green'
+	And 'Pierre Baldi' have a shift with
+	| Field          | Value            |
+	| Shift category | Day              |
+	| Start time     | 2013-05-06 08:00 |
+	| End time       | 2013-05-06 17:00 |
 	And 'Pierre Baldi' has an absence with
 	| Field      | Value            |
 	| Name       | Vacation         |
@@ -113,7 +105,12 @@ Scenario: Remove one of two absences
 	| Start time | 2013-05-06 15:00 |
 	| End time   | 2013-05-06 16:00 |
 	When I view person schedule for 'Pierre Baldi' on '2013-05-06'
-	And I click 'remove' on absence named 'Illness'
+	Then I should see a shift layer with
+	| Field      | Value |
+	| Start time | 15:00 |
+	| End time   | 16:00 |
+	| Color      | Gray  |
+	When I click 'remove' on absence named 'Illness'
 	And I click 'confirm removal' on absence named 'Illness'
 	Then I should see an absence in the absence list with
 	| Field      | Value            |

@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data
 			// use autofac soon?
 			if (type == typeof (IEnumerable<IHandleEvent<ScheduleChangedEvent>>))
 				return MakeScheduleChangedHandler();
-			if (type == typeof(IEnumerable<IHandleEvent<AbsenceAddedEvent>>))
+			if (type == typeof(IEnumerable<IHandleEvent<PersonAbsenceAddedEvent>>))
 				return MakeScheduleChangedHandler();
 			if (type == typeof(IEnumerable<IHandleEvent<ProjectionChangedEvent>>))
 				return new[]

@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer
 	}
 
 	[Serializable]
-	public class AbsenceAddedEvent : RaptorDomainEvent
+	public class PersonAbsenceAddedEvent : RaptorDomainEvent
 	{
 		public Guid AbsenceId { get; set; }
 		public Guid PersonId { get; set; }

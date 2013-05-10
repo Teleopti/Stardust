@@ -12,7 +12,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		IHandleEvent<ScheduleInitializeTriggeredEventForPersonScheduleDay>,
 		IHandleEvent<FullDayAbsenceAddedEvent>,
 		IHandleEvent<PersonAbsenceRemovedEvent>,
-		IHandleEvent<AbsenceAddedEvent>
+		IHandleEvent<PersonAbsenceAddedEvent>
 	{
 		private readonly IPublishEventsFromEventHandlers _bus;
 		private readonly IScenarioRepository _scenarioRepository;
@@ -36,7 +36,20 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		{
 			_bus.Publish(new ScheduleChangedEvent
 			{
-				SkipDelete = false,
+				Timestamp = @event.Timestamp,
+				BusinessUnitId = @event.BusinessUnitId,
+				Datasource = @event.Datasource,
+				PersonId = @event.PersonId,
+				ScenarioId = @event.ScenarioId,
+				StartDateTime = @event.StartDateTime,
+				EndDateTime = @event.EndDateTime,
+			});
+		}
+
+		public void Handle(PersonAbsenceAddedEvent @event)
+		{
+			_bus.Publish(new ScheduleChangedEvent
+			{
 				Timestamp = @event.Timestamp,
 				BusinessUnitId = @event.BusinessUnitId,
 				Datasource = @event.Datasource,
@@ -51,22 +64,6 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers
 		{
 			_bus.Publish(new ScheduleChangedEvent
 				{
-					SkipDelete = false,
-					Timestamp = @event.Timestamp,
-					BusinessUnitId = @event.BusinessUnitId,
-					Datasource = @event.Datasource,
-					PersonId = @event.PersonId,
-					ScenarioId = @event.ScenarioId,
-					StartDateTime = @event.StartDateTime,
-					EndDateTime = @event.EndDateTime,
-				});
-		}
-
-		public void Handle(AbsenceAddedEvent @event)
-		{
-			_bus.Publish(new ScheduleChangedEvent
-				{
-					SkipDelete = false,
 					Timestamp = @event.Timestamp,
 					BusinessUnitId = @event.BusinessUnitId,
 					Datasource = @event.Datasource,

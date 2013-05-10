@@ -70,6 +70,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 			return string.Format("rgb({0}, {1}, {2})", color.R, color.G, color.B);
 		}
 
+		[Then(@"I should see a shift")]
+		public void ThenIShouldeeAnyShift()
+		{
+			Browser.Interactions.AssertExists(".shift .layer");
+		}
+
 		[Then(@"I should not see any shift")]
 		public void ThenIShouldNotSeeAnyShift()
 		{
