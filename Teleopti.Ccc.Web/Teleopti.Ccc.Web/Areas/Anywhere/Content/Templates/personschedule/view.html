@@ -120,7 +120,14 @@
                         <td class="absence-item"><i class="icon-step-backward"></i><span data-bind="text: StartTime"></span></td>
                         <td class="absence-item"><i class="icon-minus"></i></td>
                         <td class="absence-item"><span data-bind="text: EndTime"></span><i class="icon-step-forward"></i></td>
-                        <td class="absence-item"><button class="btn remove" onclick="$(this).hide();$(this).parent().find('.btn-danger').show();"><span data-bind="text: $root.Resources.Remove"></span></button><button class="btn btn-danger confirm-removal" data-bind="click: ConfirmRemoval" style="display: none;"><span data-bind="text: $root.Resources.ConfirmRemoval"></span></button></td>
+                        <td class="absence-item">
+                            <!-- ko if: !AboutToRemove() -->
+                                <button class="btn remove" data-bind="click: Remove, text: $root.Resources.Remove" />
+                            <!-- /ko -->
+                            <!-- ko if: AboutToRemove -->
+                                <button class="btn btn-danger confirm-removal" data-bind="enable: !Removing(), click: ConfirmRemoval, text: $root.Resources.ConfirmRemoval" />
+                            <!-- /ko -->
+                        </td>
                     </tr>
                 </tbody>
             </table>

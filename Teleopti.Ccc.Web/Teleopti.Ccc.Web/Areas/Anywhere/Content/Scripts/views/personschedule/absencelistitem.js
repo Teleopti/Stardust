@@ -14,30 +14,29 @@ define([
 
         return function(data) {
 
+            var self = this;
+            
             this.StartTime = ko.observable(moment(data.StartTime).format(resources.DateTimeFormatForMoment));
             this.EndTime = ko.observable(moment(data.EndTime).format(resources.DateTimeFormatForMoment));
-
             this.Name = ko.observable(data.Name);
-
             this.BackgroundColor = ko.observable(data.Color);
+            
+            this.AboutToRemove = ko.observable(false);
+            this.Removing = ko.observable(false);
+            
+            this.Remove = function() {
+                self.AboutToRemove(true);
+            };
 
-            var personId = data.PersonId;
-            var date = data.Date;
-
-            var personAbsenceId = data.Id;
-
-            this.ConfirmRemoval = function() {
-                var data = JSON.stringify({
-                    PersonAbsenceId: personAbsenceId
-                });
+            this.ConfirmRemoval = function () {
+                self.Removing(true);
                 ajax.ajax(
                     {
                         url: 'PersonScheduleCommand/RemovePersonAbsence',
                         type: 'POST',
-                        data: data,
-                        success: function(data, textStatus, jqXHR) {
-                            navigation.GotoPersonSchedule(personId, date);
-                        }
+                        data: JSON.stringify({
+                            PersonAbsenceId: data.Id
+                        })
                     }
                 );
             };
