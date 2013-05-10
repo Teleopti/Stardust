@@ -113,12 +113,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => (Browser.Current.Span(Find.ById("message-count")).Text), Is.EqualTo(unreadMessagesCount.ToString()));
 		}
 
-		[Then(@"I shoud see an indication that I have an unread message")]
-		public void ThenIShoudSeeAnIndicationThatIHaveAnUnreadMessage()
-		{
-			EventualAssert.That(() => Browser.Current.Div(QuicklyFind.ByClass("asm-info-canvas-column-messages")).IsDisplayed(), Is.True);
-		}
-
 		[Then(@"I shoud not see an indication that I have an unread message")]
 		public void ThenIShoudNotSeeAnIndicationThatIHaveAnUnreadMessage()
 		{

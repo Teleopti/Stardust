@@ -468,7 +468,6 @@
     <Compile Include="Data\Setups\Specific\PersonPeriod.cs" />
     <Compile Include="Data\IUserDataSetup.cs" />
     <Compile Include="Data\IUserSetup.cs" />
-    <Compile Include="Bindings\Generic\LicenseStepDefinitions.cs" />
     <Compile Include="Pages\Common\ICancelButton.cs" />
     <Compile Include="Pages\Common\IOkButton.cs" />
     <Compile Include="Pages\Pages.cs" />

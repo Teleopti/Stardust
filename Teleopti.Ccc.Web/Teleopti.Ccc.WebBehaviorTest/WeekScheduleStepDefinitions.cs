@@ -25,12 +25,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 
 		private WeekSchedulePage _page { get { return Pages.Pages.WeekSchedulePage; } }
 
-		[When(@"I click on any day of a week")]
-		public void WhenIClickOnAnyDayOfAWeek()
-		{
-			_page.ClickThirdDayOfOtherWeekInWeekPicker(UserFactory.User().Culture);
-		}
-
 		[When(@"I click the request symbol for date '(.*)'")]
 		public void WhenIClickTheRequestSymbolForDate(DateTime date)
 		{
@@ -88,25 +82,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void ThenIShouldSeeThePublicNoteOnDate(DateTime date)
 		{
 			EventualAssert.That(() => _page.DayComment(date).Exists, Is.True);
-		}
-
-
-		[Then(@"I should see the selected week")]
-		public void ThenIShouldSeeTheSelectedWeek()
-		{
-			AssertShowingWeekForDay(TestDataSetup.ThirdDayOfOtherThanCurrentWeekInCurrentMonth(UserFactory.User().Culture));
-		}
-
-		[Then(@"I should see monday as the first day of week")]
-		public void ThenIShouldSeeMondayAsTheFirstDayOfWeek()
-		{
-			_page.DatePicker.CalendarFirstDayNumbers.Should().Contain(TestDataSetup.FirstDayOfAnyWeekInCurrentMonth(UserFactory.User().Culture).Day);
-		}
-
-		[Then(@"I should see sunday as the first day of week")]
-		public void ThenIShouldSeeSundayAsTheFirstDayOfWeek()
-		{
-			_page.DatePicker.CalendarFirstDayNumbers.Should().Contain(TestDataSetup.FirstDayOfAnyWeekInCurrentMonth(UserFactory.User().Culture).Day);
 		}
 
 		[Then(@"I should see number '(.*)' with the request count for date '(.*)'")]
@@ -201,15 +176,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 
 			EventualAssert.That(() => layers[0].Style.GetAttributeValue("color").ToLower(), Is.StringContaining(color));
 		}
-
-		[Then(@"I should see the text for today in '(.*)'")]
-		public void ThenIShouldSeeTheTextForTodayIn(string color)
-		{
-			DivCollection layers = _page.DayLayers(DateTime.Today.Date);
-
-			EventualAssert.That(() => layers[0].Style.GetAttributeValue("color").ToLower(), Is.StringContaining(color));
-		}
-
 
 		private void AssertShowingWeekForDay(DateTime anyDayOfWeek)
 		{

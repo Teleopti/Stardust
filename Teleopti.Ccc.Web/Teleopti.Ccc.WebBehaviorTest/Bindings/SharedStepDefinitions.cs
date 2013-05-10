@@ -34,13 +34,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Pages.Pages.CurrentDateRangeSelector.ClickPrevious();
 		}
 
-		[Then(@"the week-picker should close")]
-		[Then(@"the day-picker should close")]
-		public void ThenTheWeek_PickerShouldClose()
-		{
-			EventualAssert.That(() => Pages.Pages.CurrentDateRangeSelector.DatePicker.IsClosed(), Is.True);
-		}
-
 		[When(@"I click the OK button")]
 		public void WhenIClickTheOKButton()
 		{
