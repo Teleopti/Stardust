@@ -26,9 +26,9 @@
 			interactions.AssertExists(string.Format(selector, args));
 		}
 
-		public static void SelectOptionByTextUsingJQuery(this IBrowserInteractions interactions, string selector, string text)
+		public static void SelectOptionByTextUsingJQuery(this IBrowserInteractions interactions, string selectSelector, string text)
 		{
-			var selectSelector = selector + ":enabled";
+			selectSelector = selectSelector + ":enabled";
 			var optionSelector = string.Format(selectSelector + " option:contains('{0}')", text);
 			interactions.AssertExists(selectSelector);
 			interactions.AssertExists(optionSelector);
