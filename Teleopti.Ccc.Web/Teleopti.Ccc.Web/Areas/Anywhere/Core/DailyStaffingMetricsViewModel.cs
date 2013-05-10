@@ -6,10 +6,10 @@
 
 		public double ESL { get; set; }
 
-		public double ScheduledHours { get; set; }
+		public double? ScheduledHours { get; set; }
 
-		public double RelativeDifference { get; set; }
+		public double? RelativeDifference { get; set; }
 
-		public double AbsoluteDifferenceHours { get; set; }
+		public double? AbsoluteDifferenceHours { get; set; }
 	}
 }

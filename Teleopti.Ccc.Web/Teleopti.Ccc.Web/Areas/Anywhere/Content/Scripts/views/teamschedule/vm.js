@@ -85,7 +85,7 @@ define([
             	if (forecastedHours != undefined) {
             		return self.Resources.Forecasted + ': ' + forecastedHours.toFixed(2) + ' ' + self.Resources.HourShort;
             	}
-            	return '';
+            	return self.Resources.Forecasted + ': ' + '__' + ' ' + self.Resources.HourShort;
             });
             this.ScheduledHours = ko.observable();
             this.ScheduledHoursDisplay = ko.computed(function () {
@@ -93,7 +93,7 @@ define([
             	if (scheduledHours != undefined) {
             		return self.Resources.Scheduled + ': ' + scheduledHours.toFixed(2) + ' ' + self.Resources.HourShort;
             	}
-            	return '';
+            	return self.Resources.Scheduled + ': ' + '__' + ' ' + self.Resources.HourShort;
 	        });
             this.DiffHours = ko.observable();
             this.DiffPercentage = ko.observable();
@@ -101,9 +101,9 @@ define([
 	            var diffHours = self.DiffHours();
 	            var diffPercentage = self.DiffPercentage();
 	            if (diffHours!=undefined && diffPercentage!=undefined)
-	            	return self.Resources.Difference + ': ' + diffPercentage.toFixed(2) + ' ' + self.Resources.HourShort + ', ' + (diffHours * 100).toFixed(2) + ' %';
+	            	return self.Resources.Difference + ': ' + diffHours.toFixed(2) + ' ' + self.Resources.HourShort + ', ' + (diffPercentage * 100).toFixed(2) + ' %';
 
-	            return '';
+	            return self.Resources.Difference + ': ' + '__' + ' ' + self.Resources.HourShort + ', ' + '__' + ' %';
             });
             this.ESL = ko.observable();
             this.ESLDisplay = ko.computed(function () {
@@ -116,8 +116,8 @@ define([
 	            self.ForecastedHours(data.ForecastedHours);
 	            self.ESL(data.ESL);
 	            self.ScheduledHours(data.ScheduledHours);
-	            self.DiffHours(data.RelativeDifference);
-	            self.DiffPercentage(data.AbsoluteDifferenceHours);
+	            self.DiffHours(data.AbsoluteDifferenceHours);
+	            self.DiffPercentage(data.RelativeDifference);
             };
         };
     });

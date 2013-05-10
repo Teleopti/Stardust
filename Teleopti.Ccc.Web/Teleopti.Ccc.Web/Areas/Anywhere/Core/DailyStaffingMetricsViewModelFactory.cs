@@ -41,16 +41,16 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 			var skillDay = _stateHolder.SkillDays[skill].First(d => d.CurrentDate == dateOnly);
 			var sumOfForecastedHours = skillDay.ForecastedIncomingDemand;
 			var estimatedServiceLevel = SkillStaffPeriodHelper.EstimatedServiceLevel(skillDay.SkillStaffPeriodCollection).Value;
-			var relativeDifference = SkillStaffPeriodHelper.RelativeDifferenceForDisplay(skillDay.SkillStaffPeriodCollection).Value;
-			var absoluteDifference = SkillStaffPeriodHelper.AbsoluteDifference(skillDay.SkillStaffPeriodCollection, false, false).Value;
-			var scheduledHours = SkillStaffPeriodHelper.ScheduledHours(skillDay.SkillStaffPeriodCollection).Value;
+			var relativeDifference = SkillStaffPeriodHelper.RelativeDifferenceForDisplay(skillDay.SkillStaffPeriodCollection);
+			var absoluteDifference = SkillStaffPeriodHelper.AbsoluteDifference(skillDay.SkillStaffPeriodCollection, false, false);
+			var scheduledHours = SkillStaffPeriodHelper.ScheduledHours(skillDay.SkillStaffPeriodCollection);
 			return new DailyStaffingMetricsViewModel
 				{
 					ForecastedHours = sumOfForecastedHours.TotalHours,
 					ESL = estimatedServiceLevel,
 					ScheduledHours = scheduledHours,
 					RelativeDifference = relativeDifference,
-					AbsoluteDifferenceHours = absoluteDifference.TotalHours
+					AbsoluteDifferenceHours = absoluteDifference == null ? (double?) null : absoluteDifference.Value.TotalHours
 				};
 		}
 	}
