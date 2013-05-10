@@ -513,7 +513,6 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			_initSplitButton();
 			_initDeleteButton();
 			_initAddExtendedButton();
-			_initMustHaveButton();
 		},
 		InitViewModels: function () {
 			_initViewModels();
@@ -528,6 +527,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			}
 			_initPeriodSelection();
 			_initExtendedPanels();
+			_initMustHaveButton();
 			_initViewModels(_soon);
 		},
 		PreferencePartialDispose: function () {
