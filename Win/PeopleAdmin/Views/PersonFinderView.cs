@@ -14,6 +14,7 @@ using Teleopti.Ccc.WinCode.Common;
 using Teleopti.Ccc.WinCode.PeopleAdmin;
 using Teleopti.Ccc.WinCode.PeopleAdmin.Commands;
 using Teleopti.Ccc.WinCode.PeopleAdmin.Models;
+using Teleopti.Ccc.Win.Common.Controls.DateSelection;
 using Teleopti.Interfaces.Domain;
 
 
@@ -28,8 +29,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
         {
             InitializeComponent();
             SetTexts();
-            dateTimePickerAdv1.Calendar.Culture = TeleoptiPrincipal.Current.Regional.Culture;
-            dateTimePickerAdv1.Culture = TeleoptiPrincipal.Current.Regional.Culture;
+			dateTimePickerAdv1.SetCultureInfoSafe(TeleoptiPrincipal.Current.Regional.Culture);
             dateTimePickerAdv1.Value = DateTime.Now.AddMonths(-1);
             dateTimePickerAdv1.Calendar.TodayButton.Text = Resources.Today;
             listView1.ListViewItemSorter = new ListViewColumnSorter();
