@@ -29,15 +29,13 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see a schedule in popup")]
 		public void ThenIShouldSeeAScheduleInPopup()
 		{
-			EventualAssert.That(() => Browser.Current.Spans.Filter(QuicklyFind.ByClass("asm-layer")).Count, Is.GreaterThan(0));
+			Browser.Interactions.AssertExists("span.asm-layer");
 		}
 
 		[Then(@"I should see Phone as current activity")]
 		public void ThenIShouldSeePhoneAsCurrentActivity()
 		{
-			EventualAssert.That(() =>
-				Browser.Current.Div(QuicklyFind.ByClass("asm-info-canvas-column-current")).Text,
-				Is.StringContaining(TestData.ActivityPhone.Description.Name));
+			Browser.Interactions.AssertContains("div.asm-info-canvas-column-current", TestData.ActivityPhone.Description.Name);
 		}
 
 		[Then(@"I should not see a current activity")]
