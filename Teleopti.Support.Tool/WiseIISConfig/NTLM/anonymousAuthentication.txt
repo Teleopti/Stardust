@@ -7,3 +7,4 @@ SDK;False
 Web;False
 Client;False
 MyTime;False
+TeleoptiCCC;True
