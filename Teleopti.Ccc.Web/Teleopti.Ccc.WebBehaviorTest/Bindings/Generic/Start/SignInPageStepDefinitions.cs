@@ -107,31 +107,29 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 		[Then(@"I should see the global sign in page")]
 		public void ThenIShouldSeeTheGlobalSignInPage()
 		{
-			EventualAssert.That(() => Pages.Pages.CurrentSignInPage.UserNameTextField.Exists, Is.True);
-			
-			EventualAssert.That(() => Browser.Current.Url, Is.Not.StringContaining("/MyTime/Authentication"));
-			EventualAssert.That(() => Browser.Current.Url, Is.Not.StringContaining("/MobileReports/Authentication"));
-			
+			Browser.Interactions.AssertExists("#Username-input");
+			Browser.Interactions.AssertUrlNotContains("/Authentication", "/MyTime");
+			Browser.Interactions.AssertUrlNotContains("/Authentication", "/MobileReports");
 		}
 
 		[Then(@"I should see MyTime's sign in page")]
 		public void ThenIShouldSeeMyTimesSignInPage()
 		{
-			EventualAssert.That(() => Pages.Pages.CurrentSignInPage.UserNameTextField.Exists, Is.True);
-			EventualAssert.That(() => Browser.Current.Url, Is.StringContaining("/MyTime/Authentication"));
+			Browser.Interactions.AssertExists("#Username-input");
+			Browser.Interactions.AssertUrlContains("/MyTime/Authentication");
 		}
 
 		[Then(@"I should see Mobile Report's sign in page")]
 		public void ThenIShouldSeeMobileReportsSignInPage()
 		{
-			EventualAssert.That(() => Pages.Pages.CurrentSignInPage.UserNameTextField.Exists, Is.True);
-			EventualAssert.That(() => Browser.Current.Url, Is.StringContaining("/MobileReports/Authentication"));
+			Browser.Interactions.AssertExists("#Username-input");
+			Browser.Interactions.AssertUrlContains("/MobileReports/Authentication");
 		}
 
 		[Then(@"I should see the global menu")]
 		public void ThenIShouldSeeTheGlobalMenu()
 		{
-			EventualAssert.That(() => Browser.Current.Url, Is.StringContaining("/Authentication#menu"));
+			Browser.Interactions.AssertUrlContains("/Authentication#menu");
 		}
 
 

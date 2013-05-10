@@ -42,6 +42,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserInteractions.WatiNIE
 			EventualAssert.That(() => _browser.Url, Is.StringContaining(url));
 		}
 
+		public void AssertUrlNotContains(string urlContains, string urlNotContains)
+		{
+			AssertUrlContains(urlContains);
+			EventualAssert.That(() => _browser.Url, Is.Not.StringContaining(urlNotContains));
+		}
+
 		public void AssertJavascriptResultContains(string javascript, string text)
 		{
 			EventualAssert.That(() => _browser.Eval(javascript), Is.StringContaining(text));
