@@ -47,7 +47,6 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         public static IList<PersonRequestViewModel> FilterAdapters(IList<PersonRequestViewModel> adapterList, IList<string> filterExpression)
         {
 			var filteredData = SearchText(adapterList, filterExpression);
-            // return adapterList.AsQueryable().Where(filterExpression).ToList();
             return filteredData;
         }
 

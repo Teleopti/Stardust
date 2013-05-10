@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.WinCode.Common.Collections
         /// </remarks>
         public static void FilterOutBySpecification<T>(this ObservableCollection<T> collection, ISpecification<T> specification)
         {
-            SpecificationFilter<T> specificationFilter = new SpecificationFilter<T>();
+            var specificationFilter = new SpecificationFilter<T>();
             specificationFilter.Filter = specification;
             specificationFilter.FilterCollection(collection);
         }
