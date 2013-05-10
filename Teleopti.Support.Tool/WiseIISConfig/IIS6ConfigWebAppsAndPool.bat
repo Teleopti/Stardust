@@ -34,6 +34,9 @@ for /f "tokens=1,2,3 delims=;" %%g in (Apps\ApplicationsInAppPool.txt) do CALL:F
 cscript "%ROOTDIR%\adsutil.vbs" SET "w3svc/1/Root/TeleoptiCCC/DefaultDoc" "index.html"
 cscript "%ROOTDIR%\adsutil.vbs" SET "w3svc/1/Root/TeleoptiCCC/EnableDefaultDoc" True
 
+::just in case
+iisreset /restart
+
 GOTO Done
 
 ::=============
@@ -81,8 +84,6 @@ if %errorlevel% NEQ 0 GOTO :ErrorInfo
 if "%CustomIISUsr%"=="" (
 echo using Network Service as identity on AppPool
 cscript "%ROOTDIR%\adsutil.vbs" SET "w3svc/AppPools/%PoolName%/AppPoolIdentityType" 2
-::cscript "%ROOTDIR%\adsutil.vbs" SET "w3svc/AppPools/%PoolName%/WamUserName" "IWAM_%ComputerName%"
-::cscript "%ROOTDIR%\adsutil.vbs" SET "w3svc/AppPools/%PoolName%/WamUserPass" "fakePassword"
 ) else (
 echo using %CustomIISUsr% as identity on AppPool
 cscript "%ROOTDIR%\adsutil.vbs" SET "w3svc/AppPools/%PoolName%/WamUserName" "%CustomIISUsr%"
@@ -101,12 +102,19 @@ echo cscript "%ROOTDIR%\ASPNetVersion.vbs" "%SitePath%" "%NETVersion%"
 cscript "%ROOTDIR%\ASPNetVersion.vbs" "%SitePath%" "%NETVersion%"
 echo.
 
-::5 Athentication for the virtual dir
+::5 Authentication for the virtual dir
 ::-----
 ::Different authentication based on "SDKCREDPROT"
 ::-----
-for /f "tokens=1,2 delims=;" %%g in (%SDKCREDPROT%\IIS6Authflags.txt) do CALL:IISSecuritySet "%%g" "%%h"
-SET authentication=basicAuthentication
+::AuthFlag is a bitmask: http://msdn.microsoft.com/en-us/library/ms524513(v=vs.90).aspx
+SET /A AuthFlag=0
+
+SET authentication=anonymousAuthentication
+for /f "tokens=1,2 delims=;" %%g in ('findstr /C:"%SubSiteName%;" /I %SDKCREDPROT%\%authentication%.txt') do CALL:BitMaskGet "%%g" "%authentication%" "%%h" %AuthFlag% AuthFlag
+SET authentication=windowsAuthentication
+for /f "tokens=1,2 delims=;" %%g in ('findstr /C:"%SubSiteName%;" /I %SDKCREDPROT%\%authentication%.txt') do CALL:BitMaskGet "%%g" "%authentication%" "%%h" %AuthFlag% AuthFlag
+
+CALL:IISSecuritySet "%SitePath%" "%AuthFlag%"
 
 ::application mapping. Needed for asp.net MVC on IIS6
 set aspnet_isapi=C:\WINDOWS\Microsoft.NET\Framework64\v4.0.30319\aspnet_isapi.dll
@@ -118,12 +126,26 @@ if exist %aspnet_isapi% cscript "%ROOTDIR%\IIS6ManageMapping.vbs" W3SVC/1/root/%
 if exist %aspnet_isapi% cscript "%ROOTDIR%\IIS6ManageMapping.vbs" W3SVC/1/root/%SitePath%/ScriptMaps "" "*,%aspnet_isapi%,0" /INSERT /COMMIT
 GOTO Done
 
+
+:BitMaskGet
+SETLOCAL
+SET /A AuthFlag=0
+if "%~2"=="anonymousAuthentication" (
+ if "%~3"=="True" set /A AuthFlag=1
+)
+if "%~2"=="windowsAuthentication" (
+  if "%~3"=="True" set /A AuthFlag=4
+)
+(
+ENDLOCAL
+set /a "%~5=%AuthFlag%+%5"
+)
+goto:eof
+
 :IISSecuritySet
 ::http://www.microsoft.com/technet/prodtechnol/WindowsServer2003/Library/IIS/6cc53bc1-6487-412c-ae93-063cd86b4f6e.mspx?mfr=true
-if "%SubSiteName%"=="%~1" (
-echo cscript "%ROOTDIR%\adsutil.vbs" set W3SVC/1/ROOT/%SitePath%/Authflags %~2
-cscript "%ROOTDIR%\adsutil.vbs" set W3SVC/1/ROOT/%SitePath%/Authflags %~2
-)
+echo cscript "%ROOTDIR%\adsutil.vbs" set W3SVC/1/ROOT/%~1/Authflags %~2
+cscript "%ROOTDIR%\adsutil.vbs" set W3SVC/1/ROOT/%~1/Authflags %~2
 exit /B
 
 :Done
