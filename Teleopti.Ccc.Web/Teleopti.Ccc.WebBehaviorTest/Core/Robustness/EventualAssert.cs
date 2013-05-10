@@ -45,12 +45,5 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Robustness
 				throw exception;
 		}
 
-		//[Obsolete("Use WaitUntilExists and EventualAssert.That instead, or simply an EventualAssert should work")]
-		public static void WhenElementExists<TElement, TValue>(TElement element, Func<TElement, TValue> value, Constraint constraint) where  TElement : Element
-		{
-			element.WaitUntilExists();
-			That(() => value(element), constraint);
-		}
-
 	}
 }

@@ -10,6 +10,7 @@ using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
+using Teleopti.Ccc.WebBehaviorTest.Pages.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebBehaviorTest
@@ -122,10 +123,9 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			var date = UserFactory.User().UserData<SchedulePeriod>().FirstDateInVirtualSchedulePeriod();
 			var shiftCategory = UserFactory.User().UserData<PreferenceOpenWithAllowedPreferencesWorkflowControlSet>().ShiftCategory;
-			var cell = _page.CalendarCellForDate(date);
-			EventualAssert.WhenElementExists(cell, c => c.Text, Contains.Substring(shiftCategory.Description.Name));
+			Browser.Interactions.AssertContains(CalendarCellsPage.DateSelector(date), shiftCategory.Description.Name);
 			Navigation.GotoPreference(date);
-			EventualAssert.WhenElementExists(cell, c => c.Text, Contains.Substring(shiftCategory.Description.Name));
+			Browser.Interactions.AssertContains(CalendarCellsPage.DateSelector(date), shiftCategory.Description.Name);
 		}
 
 		[Then(@"I should see the 2 standard preferences in the calendar")]
@@ -133,21 +133,18 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			var shiftCategory = UserFactory.User().UserData<PreferenceOpenWithAllowedPreferencesWorkflowControlSet>().ShiftCategory;
 			var data = UserFactory.User().UserData<StandardPreference>();
-			var cell1 = _page.CalendarCellForDate(data.Date);
-			var cell2 = _page.CalendarCellForDate(data.Date.AddDays(1));
-			EventualAssert.WhenElementExists(cell1, c => c.Text, Contains.Substring(shiftCategory.Description.Name));
-			EventualAssert.WhenElementExists(cell1, c => c.Text, Contains.Substring(shiftCategory.Description.Name));
+			Browser.Interactions.AssertContains(CalendarCellsPage.DateSelector(data.Date), shiftCategory.Description.Name);
+			Browser.Interactions.AssertContains(CalendarCellsPage.DateSelector(data.Date.AddDays(1)), shiftCategory.Description.Name);
 			Navigation.GotoPreference(data.Date);
-			EventualAssert.WhenElementExists(cell2, c => c.Text, Contains.Substring(shiftCategory.Description.Name));
-			EventualAssert.WhenElementExists(cell2, c => c.Text, Contains.Substring(shiftCategory.Description.Name));
+			Browser.Interactions.AssertContains(CalendarCellsPage.DateSelector(data.Date), shiftCategory.Description.Name);
+			Browser.Interactions.AssertContains(CalendarCellsPage.DateSelector(data.Date.AddDays(1)), shiftCategory.Description.Name);
 		}
 
 		[Then(@"I should not see the former standard preference in the calendar")]
 		public void ThenIShouldNotSeeTheFormerStandardPreferenceInTheCalendar()
 		{
 			var data = UserFactory.User().UserData<StandardPreference>();
-			var cell = _page.CalendarCellForDate(data.Date);
-			EventualAssert.That(() => cell.Text, Is.Not.StringContaining(data.Preference));
+			Browser.Interactions.AssertContains(CalendarCellsPage.DateSelector(data.Date), data.Preference);
 		}
 
 		[Then(@"I should see the first virtual schedule period overlapping open preference period")]
