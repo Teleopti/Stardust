@@ -257,8 +257,9 @@ namespace Teleopti.Ccc.Win.Common.Controls
         {
             foreach (var item in flowLayoutPanel1.Controls.OfType<FilterBoxItemAdvanced>())
             {
-                if (item == (FilterBoxItemAdvanced)sender)
+                if (item == sender)
                 {
+	                item.RemoveMe -= itemRemoveMe;
                     flowLayoutPanel1.Controls.Remove(item);
                     return;
                 }
@@ -334,6 +335,11 @@ namespace Teleopti.Ccc.Win.Common.Controls
         /// <param name="e"></param>
         private void buttonAdvClear_Click(object sender, EventArgs e)
         {
+			foreach (var item in flowLayoutPanel1.Controls.OfType<FilterBoxItemAdvanced>())
+			{
+				item.RemoveMe -= itemRemoveMe;
+			}
+
             flowLayoutPanel1.Controls.Clear();
         }
     }
