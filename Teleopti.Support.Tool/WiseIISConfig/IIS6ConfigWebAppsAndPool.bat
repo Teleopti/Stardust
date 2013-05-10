@@ -29,6 +29,11 @@ SET appcmd=%systemroot%\system32\inetsrv\APPCMD.exe
 for /f "tokens=2,3 delims=;" %%g in (Apps\ApplicationsInAppPool.txt) do CALL:CreateAppPool "%%g" "%%h" >> %logfile%
 
 for /f "tokens=1,2,3 delims=;" %%g in (Apps\ApplicationsInAppPool.txt) do CALL:ForEachApplication "%%g" "%%h" "%%i" >> %logfile%
+
+::enable defautl doc on "TeleoptiCCC"-site
+cscript "%ROOTDIR%\adsutil.vbs" SET "w3svc/1/Root/TeleoptiCCC/DefaultDoc" "index.html"
+cscript "%ROOTDIR%\adsutil.vbs" SET "w3svc/1/Root/TeleoptiCCC/EnableDefaultDoc" True
+
 GOTO Done
 
 ::=============
@@ -58,10 +63,10 @@ SET SubSiteName=%~1
 SET PoolName=%~2
 SET NETVersion=%~3
 
-SET SitePath=%DefaultSite%/%MainSiteName%/%SubSiteName%
+SET SitePath=%MainSiteName%/%SubSiteName%
 
 ::special case for TeleoptCCC root site, skip subsite
-if "%SubSiteName%"=="TeleoptiCCC" SET SitePath=%DefaultSite%/%MainSiteName%
+if "%SubSiteName%"=="TeleoptiCCC" SET SitePath=%MainSiteName%
 
 ::2 - Change app pool
 echo Change app pool
@@ -92,8 +97,8 @@ cscript "%ROOTDIR%\adsutil.vbs" set w3svc/1/root/%SitePath%/AccessSSL %SSL%
 echo.
 
 ::5 .NET version
-echo cscript "%ROOTDIR%\ASPNetVersion.vbs" "%MainSiteName%/%SubSiteName%" "%NETVersion%"
-cscript "%ROOTDIR%\ASPNetVersion.vbs" "%MainSiteName%/%SubSiteName%" "%NETVersion%"
+echo cscript "%ROOTDIR%\ASPNetVersion.vbs" "%SitePath%" "%NETVersion%"
+cscript "%ROOTDIR%\ASPNetVersion.vbs" "%SitePath%" "%NETVersion%"
 echo.
 
 ::5 Athentication for the virtual dir
