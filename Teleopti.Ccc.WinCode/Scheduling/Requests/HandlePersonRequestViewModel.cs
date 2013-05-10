@@ -34,11 +34,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
 		private readonly TimeZoneInfo _timeZoneInfo;
 		private static readonly object FilterLock = new object();
 
-	    public ListCollectionView PersonRequestViewModels
-		{ 
-			get;
-			private set;
-		}
+	    public ListCollectionView PersonRequestViewModels { get; set; }
 
 		public IList<PersonRequestViewModel> SelectedModels
 		{
@@ -86,7 +82,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
 
 		public void UpdatePersonRequestViewModels()
 		{
-			foreach (PersonRequestViewModel personRequestViewModel in RequestViewModels)
+			foreach (var personRequestViewModel in RequestViewModels)
 			{
 				personRequestViewModel.NotifyStatusChanged();
 			}
@@ -114,6 +110,13 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
 				}	
 			}
 			filterItems();
+		}
+
+		public void SortSourceList(IList<SortDescription> sortDescriptions)
+		{
+			PersonRequestViewModels.SortDescriptions.Clear();
+			sortDescriptions.ForEach(s => PersonRequestViewModels.SortDescriptions.Add(s));
+			PersonRequestViewModels.Refresh();
 		}
 
 		public void InsertPersonRequestViewModel(IPersonRequest request, IShiftTradeRequestStatusChecker statusChecker, IPersonRequestCheckAuthorization authorization)
@@ -164,6 +167,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Requests
 				var updatedOnFilter = new PersonRequestViewModelFilter(_filterTimeSpan);
 				var showOnlyfilter = new ShowOnlyPersonRequestViewModelSpecification(_showOnlymodels);
 				RequestViewModels.FilterOutBySpecification(updatedOnFilter.Or(showOnlyfilter));
+				//PersonRequestViewModels = RequestViewModels.CreateFilteredView(updatedOnFilter.Or(showOnlyfilter));
 			}
 		}
 
