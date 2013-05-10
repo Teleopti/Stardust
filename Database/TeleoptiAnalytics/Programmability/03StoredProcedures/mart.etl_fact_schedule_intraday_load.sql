@@ -13,7 +13,8 @@ GO
 
 -- =============================================
 --exec mart.etl_fact_schedule_intraday_load '2009-02-02','2009-02-03'
---exec mart.etl_fact_schedule_intraday_load 'CEC854E6-B4A8-4BD5-BB12-26E8A3D9E0BA'
+--exec mart.etl_fact_schedule_intraday_load 'CEC854E6-B4A8-4BD5-BB12-26E8A3D9E0BA''
+exec [mart].[etl_fact_schedule_intraday_load] @business_unit_code='928DD0BC-BF40-412E-B970-9B5E015AADEA'
 CREATE PROCEDURE [mart].[etl_fact_schedule_intraday_load]
 @business_unit_code uniqueidentifier
 AS
