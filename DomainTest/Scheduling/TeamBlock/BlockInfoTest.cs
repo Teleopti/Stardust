@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			var values = new List<double?> {0.1, 0.2, null, 0.3};
 			_target.StandardDeviations = values;
 
-            Assert.That(Math.Round(_target.AverageStandardDeviation, 1), Is.EqualTo(0.2));
+			Assert.That(Math.Round(_target.SumOfStandardDeviations, 1), Is.EqualTo(0.6));
 		}
 
         [Test]

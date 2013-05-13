@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			var sortedTeamBlocks = new List<ITeamBlockInfo>();
 			sortedTeamBlocks.AddRange(
 				originalTeamBlocks.OrderByDescending(
-					x => RecalculateTeamBlock(x, optimizationPreferences, schedulingOptions).BlockInfo.AverageStandardDeviation));
+					x => RecalculateTeamBlock(x, optimizationPreferences, schedulingOptions).BlockInfo.AverageOfStandardDeviations));
 			return sortedTeamBlocks;
 		}
 
