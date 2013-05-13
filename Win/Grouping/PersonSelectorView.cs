@@ -34,6 +34,7 @@ namespace Teleopti.Ccc.Win.Grouping
 
             _groupPageHelper = groupPageHelper;
             InitializeComponent();
+			xdtpDate.Value = DateTime.Today;
 			xdtpDate.SetCultureInfoSafe(CultureInfo.CurrentCulture);
             SetTexts();
             PreselectedPersonIds = new List<Guid>();
