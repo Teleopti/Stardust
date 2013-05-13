@@ -5,7 +5,6 @@ using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.AgentInfo.Requests;
-using Teleopti.Ccc.DomainTest.Helper;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.TestCommon.Services;
@@ -97,19 +96,46 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
         }
 
         [Test]
-        public void VerifyDeny()
+        public void VerifyDenyForTranslatedCultureInOwnLanguage()
         {
-            _target.Deny(_tradePerson);
+            
+			CultureInfo swedishCultureInfo = CultureInfoFactory.CreateSwedishCulture();
+			_requestedPerson.PermissionInformation.SetCulture(swedishCultureInfo);
+		
+			_target.Deny(_tradePerson);
             Assert.IsNotNull(_target);
             
             Assert.IsTrue(MessageWillOnlyBeSentToRequestPerson(),  "Only Request person needs to be notified");
-            var datepattern = _requestedPerson.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern;
-            var notificationString = string.Format(UserTexts.Resources.ShiftTradeRequestForOneDayHasBeenDeniedDot,
-                                                   _target.Period.StartDateTimeLocal(
-                                                       _requestedPerson.PermissionInformation.DefaultTimeZone()).
-                                                       ToString(datepattern));
-            Assert.AreEqual(notificationString, _target.TextForNotification);
+
+			// tamasb: note that it is a hardcoded notification string !!! 
+	        var notificationString = "En skiftbytesförfrågan 2008-07-16 nekades.";
+
+			// the old is deleted: reason the same code used in real code and test code >>> NO NO NO
+			//var notificationString = string.Format(UserTexts.Resources.ResourceManager.GetString(
+			//						 "ShiftTradeRequestForOneDayHasBeenDeniedDot",
+			//						 swedishCultureInfo),
+			//						 _target.Period.StartDateTimeLocal(_requestedPerson.PermissionInformation.DefaultTimeZone()).ToString(datepattern));
+
+	          Assert.AreEqual(notificationString, _target.TextForNotification);
         }
+
+		[Test]
+		public void VerifyDenyForUntranslatedCultureInEnglish()
+		{
+
+			CultureInfo catalanCulture = CultureInfoFactory.CreateCatalanCulture();
+			_requestedPerson.PermissionInformation.SetCulture(catalanCulture);
+
+			_target.Deny(_tradePerson);
+			Assert.IsNotNull(_target);
+
+			Assert.IsTrue(MessageWillOnlyBeSentToRequestPerson(), "Only Request person needs to be notified");
+
+			// tamasb: note that it is a hardcoded notification string !!! 
+			var notificationString = "A shift trade request 16-07-2008 was denied.";
+
+			Assert.AreEqual(notificationString, _target.TextForNotification);
+		}
 
         [Test]
         public void VerifyShiftTradeStatusCanSet()

@@ -181,35 +181,46 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             }
         }
 
-        /// <summary>
-        /// Denies this instance.
-        /// </summary>
-        /// <remarks>
-        /// Created by: Dinesh Ranasinghe
-        /// Created date: 2008-09-19
-        /// </remarks>
         public override void Deny(IPerson denyPerson)
         {
             var list = new List<IPerson>(InvolvedPeople());
             list.Remove(denyPerson);
 
-            var datePattern = PersonFrom.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern;
+	        var culture = PersonFrom.PermissionInformation.Culture();
+	        var uiCulture = PersonFrom.PermissionInformation.UICulture();
+			var timezone = PersonFrom.PermissionInformation.DefaultTimeZone();
+            var datePattern = culture.DateTimeFormat.ShortDatePattern;
+	        string notification;
 
             if (isShiftTradeRequestForOneDayOnly())
             {
-                SetNotification(string.Format(PersonFrom.PermissionInformation.UICulture(),
-                                              UserTexts.Resources.ShiftTradeRequestForOneDayHasBeenDeniedDot,
-                                              Period.StartDateTimeLocal(
-                                                  PersonFrom.PermissionInformation.DefaultTimeZone()).ToString(
-                                                      datePattern)), list);
+
+				var notificationTemplate =
+					UserTexts.Resources.ResourceManager.GetString("ShiftTradeRequestForOneDayHasBeenDeniedDot", culture) ??
+					UserTexts.Resources.ShiftTradeRequestForOneDayHasBeenDeniedDot;
+
+	            notification = string.Format(
+						uiCulture, 
+						notificationTemplate, 
+						Period.StartDateTimeLocal(timezone).ToString(datePattern));
             }
             else
             {
-                SetNotification(string.Format(PersonFrom.PermissionInformation.UICulture(),
-                              UserTexts.Resources.ShiftTradeRequestHasBeenDeniedDot,
-                              Period.StartDateTimeLocal(PersonFrom.PermissionInformation.DefaultTimeZone()).ToString(datePattern),
-                              Period.EndDateTimeLocal(PersonFrom.PermissionInformation.DefaultTimeZone()).AddMinutes(-1).ToString(datePattern)), list);
-            }
+
+				var notificationTemplate =
+					UserTexts.Resources.ResourceManager.GetString("ShiftTradeRequestHasBeenDeniedDot", culture) ??
+					UserTexts.Resources.ShiftTradeRequestHasBeenDeniedDot;
+
+	            notification = string.Format(
+						uiCulture, 
+						notificationTemplate, 
+						Period.StartDateTimeLocal(timezone).ToString(datePattern), 
+						Period.EndDateTimeLocal(PersonFrom.PermissionInformation.DefaultTimeZone()).AddMinutes(-1).ToString(datePattern));
+
+             }
+
+			SetNotification(notification, list);
+
         }
 
         /// <summary>
