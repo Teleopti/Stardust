@@ -26,6 +26,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 			Settings.HighLightElement = true;
 			Settings.MakeNewIe8InstanceNoMerge = true;
 			Settings.MakeNewIeInstanceVisible = true;
+			StartBrowser();
 		}
 
 		[SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
