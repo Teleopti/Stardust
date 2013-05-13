@@ -12,22 +12,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "StudentAvailability-delete-button")]
 		public Button DeleteButton { get; set; }
 
-		//[FindBy(Id = "StudentAvailability-edit-starttime-input")]
-		//public TextField StartTimeTextField;
-		//[FindBy(Id = "StudentAvailability-edit-endtime-input")]
-		//public TextField EndTimeTextField;
-		//[FindBy(Id = "StudentAvailability-edit-nextday-cb")]
-		//public CheckBox NextDay;
-
-		//[FindBy(Id = "StudentAvailability-edit-ok-button")]
-		//public Button OkButton { get; set; }
-
-		//[FindBy(Id = "StudentAvailability-edit-cancel-button")]
-		//public Button CancelButton { get; set; }
-
-		//[FindBy(Id = "StudentAvailability-edit-section")]
-		//public Div InputPanel { get; set; }
-
 		[FindBy(Id = "qtip-edit-student-availability")]
 		public Div EditStudentAvailabilityPanel;
 		[FindBy(Id = "Student-availability-start-time")]
@@ -53,12 +37,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		public void ClickNext()
 		{
-			Browser.Interactions.Click("#StudentAvailabilityDateRangeSelector button:last-of-type");
+			Browser.Interactions.Click(".navbar-inner .icon-arrow-right");
 		}
 
 		public void ClickPrevious()
 		{
-			Browser.Interactions.Click("#StudentAvailabilityDateRangeSelector button:first-of-type");
+			Browser.Interactions.Click(".navbar-inner .icon-arrow-left");
 		}
 
 	}
