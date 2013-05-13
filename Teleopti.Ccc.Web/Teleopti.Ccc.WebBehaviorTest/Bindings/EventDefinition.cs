@@ -143,9 +143,4 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 
 	}
 
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2237:MarkISerializableTypesWithSerializable")]
-	public class ScenarioErrorException : Exception
-	{
-		public ScenarioErrorException(string message, Exception scenarioError) : base(message, scenarioError) {  }
-	}
 }
