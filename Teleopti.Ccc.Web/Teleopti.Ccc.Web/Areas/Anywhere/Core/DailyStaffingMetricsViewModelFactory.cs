@@ -1,12 +1,9 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling;
-using Teleopti.Ccc.Domain.Scheduling.NonBlendSkill;
-using Teleopti.Ccc.Domain.Scheduling.SeatLimitation;
-using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Obfuscated.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
@@ -49,7 +46,10 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 					ForecastedHours = sumOfForecastedHours.TotalHours,
 					ESL = estimatedServiceLevel,
 					ScheduledHours = scheduledHours,
-					RelativeDifference = relativeDifference == double.NaN ? "NaN" : relativeDifference.ToString(),
+					RelativeDifference =
+						relativeDifference == double.NaN
+							? "NaN"
+							: (relativeDifference == null ? null : relativeDifference.Value.ToString(CultureInfo.InvariantCulture)),
 					AbsoluteDifferenceHours = absoluteDifference == null ? (double?) null : absoluteDifference.Value.TotalHours
 				};
 		}
