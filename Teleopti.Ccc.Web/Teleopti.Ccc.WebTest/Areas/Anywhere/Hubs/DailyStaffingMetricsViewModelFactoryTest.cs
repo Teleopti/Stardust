@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -121,7 +122,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 
 			var relativeDifference = SkillStaffPeriodHelper.RelativeDifferenceForDisplay(skillDay.SkillStaffPeriodCollection);
 
-			result.RelativeDifference.Should().Be.EqualTo(relativeDifference.ToString());
+			result.RelativeDifference.Should().Be.EqualTo(relativeDifference.Value.ToString(CultureInfo.InvariantCulture));
 		}
 
 		[Test]
