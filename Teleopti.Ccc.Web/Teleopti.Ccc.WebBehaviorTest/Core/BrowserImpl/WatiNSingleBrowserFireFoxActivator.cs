@@ -6,7 +6,7 @@ using WatiN.Core;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 {
-	public class WatiNSingleBrowserFireFoxHandler : IBrowserHandler<FireFox>
+	public class WatiNSingleBrowserFireFoxActivator : IBrowserActivator<FireFox>
 	{
 		private const string ProcessName = "firefox";
 

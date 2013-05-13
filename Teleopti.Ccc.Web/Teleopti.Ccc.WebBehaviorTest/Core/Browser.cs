@@ -10,36 +10,36 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 	public static class Browser
 	{
 		private static readonly ILog Log = LogManager.GetLogger(typeof (Browser));
-		private static readonly IBrowserHandler<IE> BrowserHandler = new WatiNSingleBrowserIEHandler();
+		private static readonly IBrowserActivator<IE> BrowserActivator = new WatiNSingleBrowserIEActivator();
 
-		public static IE Current { get { return BrowserHandler.Internal; } }
+		public static IE Current { get { return BrowserActivator.Internal; } }
 
-		public static IBrowserInteractions Interactions { get { return new IEWatiNBrowserInteractions(BrowserHandler.Internal); } }
+		public static IBrowserInteractions Interactions { get { return new IEWatiNBrowserInteractions(BrowserActivator.Internal); } }
 
 		public static void Start()
 		{
-			BrowserHandler.Start();
+			BrowserActivator.Start();
 		}
 
 		public static bool IsStarted()
 		{
-			return BrowserHandler.Internal != null;
+			return BrowserActivator.Internal != null;
 		}
 
 		public static void NotifyBeforeTestRun()
 		{
-			BrowserHandler.NotifyBeforeTestRun();
+			BrowserActivator.NotifyBeforeTestRun();
 		}
 
 		public static void NotifyBeforeScenario()
 		{
-			BrowserHandler.NotifyBeforeScenario();
+			BrowserActivator.NotifyBeforeScenario();
 		}
 
 		public static void Close()
 		{
 			Log.Write("Closing the browser");
-			BrowserHandler.Close();
+			BrowserActivator.Close();
 		}
 
 	}

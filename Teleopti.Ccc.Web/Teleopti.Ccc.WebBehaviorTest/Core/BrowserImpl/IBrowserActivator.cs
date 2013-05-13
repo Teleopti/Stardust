@@ -1,6 +1,6 @@
 namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 {
-	public interface IBrowserHandler<T>
+	public interface IBrowserActivator<T>
 	{
 		T Internal { get; }
 		void Start();

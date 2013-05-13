@@ -8,7 +8,7 @@ using WatiN.Core;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 {
-	public class WatiNSingleBrowserIEHandler : IBrowserHandler<IE>
+	public class WatiNSingleBrowserIEActivator : IBrowserActivator<IE>
 	{
 		private const string ProcessName = "iexplore";
 

@@ -299,10 +299,10 @@
     <Compile Include="Data\Setups\Generic\PersonPeriodConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\PreferenceConfigurable.cs" />
     <Compile Include="Core\BrowserImpl\ProcessHelpers.cs" />
-    <Compile Include="Core\BrowserImpl\WatiNSingleBrowserFireFoxHandler.cs" />
-    <Compile Include="Core\BrowserImpl\IBrowserHandler.cs" />
-    <Compile Include="Core\BrowserImpl\WatiNSingleBrowserIEHandler.cs" />
-    <Compile Include="Core\BrowserImpl\WatiNParallelBrowserIEHandler.cs" />
+    <Compile Include="Core\BrowserImpl\WatiNSingleBrowserFireFoxActivator.cs" />
+    <Compile Include="Core\BrowserImpl\IBrowserActivator.cs" />
+    <Compile Include="Core\BrowserImpl\WatiNSingleBrowserIEActivator.cs" />
+    <Compile Include="Core\BrowserImpl\WatiNParallelBrowserIEActivator.cs" />
     <Compile Include="Data\GlobalDataContext.cs" />
     <Compile Include="Data\GlobalPrincipalState.cs" />
     <Compile Include="Data\GlobalUnitOfWorkState.cs" />
