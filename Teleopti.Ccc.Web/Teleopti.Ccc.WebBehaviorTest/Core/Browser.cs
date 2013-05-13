@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static IE Current { get { return BrowserActivator.Internal; } }
 
-		public static IBrowserInteractions Interactions { get { return new WatiNIEBrowserInteractions(BrowserActivator.Internal); } }
+		public static IBrowserInteractions Interactions { get { return BrowserActivator.GetInteractions(); } }
 
 		public static void Start()
 		{

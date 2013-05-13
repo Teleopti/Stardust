@@ -7,5 +7,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 		void Close();
 		void NotifyBeforeTestRun();
 		void NotifyBeforeScenario();
+		IBrowserInteractions GetInteractions();
 	}
 }

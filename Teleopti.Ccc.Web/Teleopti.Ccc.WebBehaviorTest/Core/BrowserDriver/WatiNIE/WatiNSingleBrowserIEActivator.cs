@@ -86,6 +86,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 			IncrementScenarioCount();
 		}
 
+		public IBrowserInteractions GetInteractions()
+		{
+			return new WatiNIEBrowserInteractions(Internal);
+		}
+
 
 		private void MakeSureBrowserIsNotRunning()
 		{

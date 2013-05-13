@@ -51,6 +51,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 
 		public void NotifyBeforeScenario() { }
 
+		public IBrowserInteractions GetInteractions()
+		{
+			throw new NotImplementedException();
+		}
+
 		private void MakeSureBrowserIsNotRunning()
 		{
 			using (MakeBrowserLock())
