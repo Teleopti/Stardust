@@ -3,13 +3,10 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
-using Teleopti.Ccc.WinCode.Scheduling;
 using Teleopti.Ccc.WinCode.Scheduling.Requests;
-using Teleopti.Ccc.WpfControls.Common;
 using DataGrid = Microsoft.Windows.Controls.DataGrid;
 using DataGridRowDetailsVisibilityMode = Microsoft.Windows.Controls.DataGridRowDetailsVisibilityMode;
 using DataGridSortingEventArgs = Microsoft.Windows.Controls.DataGridSortingEventArgs;
@@ -109,7 +106,6 @@ namespace Teleopti.Ccc.WpfControls.Controls.Requests.Views
 			    return;
 
 			var header = dependencyObject as Microsoft.Windows.Controls.Primitives.DataGridColumnHeader;
-		    var view = CollectionViewSource.GetDefaultView(requestGrid.ItemsSource);
 		    var direction = ListSortDirection.Ascending;
 		    if (_sortDirections.Any(s => s.PropertyName == header.Column.SortMemberPath))
 		    {
@@ -119,9 +115,10 @@ namespace Teleopti.Ccc.WpfControls.Controls.Requests.Views
 				                : ListSortDirection.Ascending;
 			    _sortDirections.Remove(previousSort);
 		    }
-			var sourceCollectionList = view.SourceCollection.Cast<PersonRequestViewModel>().AsQueryable();
-		    _sortDirections.Add(new SortDescription(header.Column.SortMemberPath, direction));
-			requestGrid.ItemsSource = CustomSort.SortViewSource(sourceCollectionList, _sortDirections);
+		    _sortDirections.Insert(0, new SortDescription(header.Column.SortMemberPath, direction));
+		    var model = DataContext as HandlePersonRequestViewModel;
+			if (model != null)
+				model.SortSourceList(_sortDirections);
 			requestGrid.SelectedItem = null;
 		    e.Handled = true;
 	    }

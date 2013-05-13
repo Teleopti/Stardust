@@ -1,7 +1,7 @@
 using System;
+using System.Drawing;
 using System.Dynamic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using AutoMapper;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -11,8 +11,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.Web.Areas.Anywhere.Core;
-using Teleopti.Ccc.Web.Areas.MyTime.Core.Requests.Mapping;
-using Teleopti.Ccc.WebTest.Core.Mapping;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
@@ -115,7 +113,6 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 		{
 			dynamic layer = new ExpandoObject();
 			layer.Color = Color;
-			layer.Start = Start;
 			layer.Start = Start.HasValue ? Start : null;
 			layer.Minutes = Minutes;
 			return layer;
@@ -161,7 +158,7 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 
 			var result = target.Map(new PersonScheduleData {Shift = shift, Person = person});
 
-			var personStartTime = TimeZoneInfo.ConvertTimeFromUtc(startTime, person.PermissionInformation.DefaultTimeZone()).ToString();
+			var personStartTime = TimeZoneInfo.ConvertTimeFromUtc(startTime, person.PermissionInformation.DefaultTimeZone()).ToFixedDateTimeFormat();
 			result.Layers.Single().Start.Should().Be(personStartTime);
 		}
 
@@ -178,5 +175,103 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Hubs
 			result.Layers.Single().Minutes.Should().Be(60);
 		}
 
+		[Test]
+		public void ShouldMapPersonAbsences()
+		{
+			var target = new PersonScheduleViewModelMapper();
+
+			var personAbsences = new[] { new PersonAbsence(MockRepository.GenerateMock<IScenario>()) };
+		
+			var result = target.Map(new PersonScheduleData {PersonAbsences = personAbsences});
+			
+			result.PersonAbsences.Count().Should().Be.EqualTo(1);
+		}
+
+		[Test]
+		public void ShouldMapPersonAbsenceColor()
+		{
+			var target = new PersonScheduleViewModelMapper();
+
+			var absenceLayer = new AbsenceLayer(new Absence() {DisplayColor = Color.Red},
+			                                    new DateTimePeriod(2001, 1, 1, 2001, 1, 2));
+
+			var personAbsences = new[] {new PersonAbsence(new Person(), MockRepository.GenerateMock<IScenario>(), absenceLayer)};
+
+			var result = target.Map(new PersonScheduleData { PersonAbsences = personAbsences });
+
+			result.PersonAbsences.Single().Color.Should().Be.EqualTo("Red");
+		}
+
+		[Test]
+		public void ShouldMapPersonAbsenceName()
+		{
+			var target = new PersonScheduleViewModelMapper();
+
+			var absenceLayer = new AbsenceLayer(new Absence() { Description = new Description("Vacation")},
+			                                    new DateTimePeriod(2001, 1, 1, 2001, 1, 2));
+			var personAbsences = new[] {new PersonAbsence(new Person(), MockRepository.GenerateMock<IScenario>(), absenceLayer)};
+			
+			var result = target.Map(new PersonScheduleData { PersonAbsences = personAbsences });
+
+			result.PersonAbsences.Single().Name.Should().Be.EqualTo("Vacation");
+		}
+
+		[Test]
+		public void ShouldMapPersonAbsenceStartTimeInPersonsTimeZone()
+		{
+			var target = new PersonScheduleViewModelMapper();
+
+			var startTime = new DateTime(2013, 04, 18, 8, 0, 0, DateTimeKind.Utc);
+			var endTime = new DateTime(2013, 04, 18, 17, 0, 0, DateTimeKind.Utc);
+			var absenceLayer = new AbsenceLayer(new Absence(), new DateTimePeriod(startTime, endTime));
+
+			var person = new Person();
+			var personTimeZone = TimeZoneInfoFactory.HawaiiTimeZoneInfo();
+			person.PermissionInformation.SetDefaultTimeZone(personTimeZone);
+
+			var personAbsences = new[] {new PersonAbsence(person, MockRepository.GenerateMock<IScenario>(), absenceLayer)};
+
+			var result = target.Map(new PersonScheduleData { PersonAbsences = personAbsences });
+
+			var personStartTime = TimeZoneInfo.ConvertTimeFromUtc(startTime, person.PermissionInformation.DefaultTimeZone()).ToFixedDateTimeFormat();
+
+			result.PersonAbsences.Single().StartTime.Should().Be(personStartTime);
+		}
+
+		[Test]
+		public void ShouldMapPersonAbsenceEndTimeInPersonsTimeZone()
+		{
+			var target = new PersonScheduleViewModelMapper();
+
+			var startTime = new DateTime(2013, 04, 18, 8, 0, 0, DateTimeKind.Utc);
+			var endTime = new DateTime(2013, 04, 18, 17, 0, 0, DateTimeKind.Utc);
+			var absenceLayer = new AbsenceLayer(new Absence(), new DateTimePeriod(startTime, endTime));
+
+			var person = new Person();
+			var personTimeZone = TimeZoneInfoFactory.HawaiiTimeZoneInfo();
+			person.PermissionInformation.SetDefaultTimeZone(personTimeZone);
+
+			var personAbsences = new[] { new PersonAbsence(person, MockRepository.GenerateMock<IScenario>(), absenceLayer) };
+			
+			var result = target.Map(new PersonScheduleData { PersonAbsences = personAbsences });
+
+			var personEndTime = TimeZoneInfo.ConvertTimeFromUtc(endTime, person.PermissionInformation.DefaultTimeZone()).ToFixedDateTimeFormat();
+
+			result.PersonAbsences.Single().EndTime.Should().Be(personEndTime);
+		}
+
+		[Test]
+		public void ShouldMapPersonAbsenceId()
+		{
+			var target = new PersonScheduleViewModelMapper();
+
+			var personAbsence = new PersonAbsence(MockRepository.GenerateMock<IScenario>());
+			personAbsence.SetId(Guid.NewGuid());
+			var personAbsences = new[] { personAbsence };
+
+			var result = target.Map(new PersonScheduleData {PersonAbsences = personAbsences});
+
+			result.PersonAbsences.Single().Id.Should().Be(personAbsence.Id.Value.ToString());
+		}
 	}
 }

@@ -2,11 +2,13 @@ define([
         'knockout',
         'moment',
         'navigation',
-        'noext!application/resources'
+        'ajax',
+        'resources!r'
     ], function(
         ko,
         moment,
         navigation,
+        ajax,
         resources
     ) {
 
@@ -18,7 +20,7 @@ define([
 
             this.StartDate = ko.observable(moment());
             this.EndDate = ko.observable(moment());
-            
+
             var personId;
 
             this.SetData = function(data) {
@@ -29,31 +31,29 @@ define([
             };
 
             this.StartDateFormatted = ko.computed(function() {
-                return self.StartDate().format(resources.MomentShortDatePattern);
+                return self.StartDate().format(resources.DateFormatForMoment);
             });
-            
+
             this.AbsenceTypes = ko.observableArray();
 
-            this.InvalidEndDate = ko.computed(function () {
+            this.InvalidEndDate = ko.computed(function() {
                 if (!self.EndDate())
                     return true;
                 if (self.StartDate() && self.StartDate().diff)
                     return self.StartDate().diff(self.EndDate()) > 0;
                 return false;
             });
-            
-            this.Apply = function () {
+
+            this.Apply = function() {
                 var data = JSON.stringify({
                     StartDate: self.StartDate().format(),
                     EndDate: self.EndDate().format(),
                     AbsenceId: self.AbsenceType(),
                     PersonId: personId
                 });
-                $.ajax({
+                ajax.ajax({
                         url: 'PersonScheduleCommand/AddFullDayAbsence',
                         type: 'POST',
-                        cache: false,
-                        contentType: 'application/json; charset=utf-8',
                         data: data,
                         success: function(data, textStatus, jqXHR) {
                             navigation.GotoPersonSchedule(personId, self.StartDate());

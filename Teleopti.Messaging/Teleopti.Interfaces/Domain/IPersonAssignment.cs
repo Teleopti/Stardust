@@ -13,6 +13,7 @@ namespace Teleopti.Interfaces.Domain
     /// Created date: 2008-02-25
     /// </remarks>
     public interface IPersonAssignment : IPersistableScheduleData, 
+											IAggregateRootWithEvents,
                                             IChangeInfo,
                                             IBelongsToBusinessUnit,
                                             IRestrictionChecker<IPersonAssignment>, 
@@ -118,5 +119,10 @@ namespace Teleopti.Interfaces.Domain
         /// Created date: 2009-02-05
         /// </remarks>
         void RemoveOvertimeShift(IOvertimeShift overtimeShift);
+
+		/// <summary>
+		/// Publish the ScheduleChangedEvent
+		/// </summary>
+		void ScheduleChanged(string dataSource);
     }
 }

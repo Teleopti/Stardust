@@ -226,26 +226,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => _page.CalendarCellDataForDate(DateOnly.Today, "possible-contract-times").InnerHtml, Is.StringMatching(expected));
 		}
 
-		[Then(@"I should see the contract time boundry (\d+) to (\d+) on weekday (\d)")]
-		public void ThenIShouldSeeTheContractTimeBoundryTo(string earliest, string latest, int weekday)
-		{
-			var culture = UserFactory.User().Person.PermissionInformation.Culture();
-			var date = DateHelper.GetFirstDateInWeek(DateTime.Now.Date, culture).AddDays(weekday - 1);
-			var expected = GetExpectedContractTimesString(earliest, latest, culture);
-
-			EventualAssert.That(() => _page.CalendarCellDataForDate(date, "possible-contract-times").InnerHtml, Is.StringMatching(expected));
-		}
-
-		[Then(@"I should see no feedback")]
-		public void ThenIShouldSeeNoFeedback()
-		{
-			var date = UserFactory.User().UserData<SchedulePeriod>().FirstDateInVirtualSchedulePeriod();
-			EventualAssert.That(() => _page.CalendarCellDataForDate(date, "feedback-error").Exists, Is.False);
-			EventualAssert.That(() => _page.CalendarCellDataForDate(date, "possible-start-times").Exists, Is.False);
-			EventualAssert.That(() => _page.CalendarCellDataForDate(date, "possible-end-times").Exists, Is.False);
-			EventualAssert.That(() => _page.CalendarCellDataForDate(date, "possible-contract-times").Exists, Is.False);
-		}
-
 		[Then(@"I should see that there are no available shifts")]
 		public void ThenIShouldSeeThatThereAreNoAvailableShifts()
 		{

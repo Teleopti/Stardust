@@ -9,6 +9,17 @@ using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 {
+
+	public class CssClass
+	{
+		public string Name { get; set; }
+	}
+
+	public class LocalizedText
+	{
+		public string Text { get; set; }
+	}
+
 	[Binding]
 	public class UIStepDefinitions
 	{
@@ -19,11 +30,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			return new CssClass {Name = className};
 		}
 
-		public class CssClass
-		{
-			public string Name { get; set; }
-		}
-
 		[StepArgumentTransformation]
 		public LocalizedText To(string textToBeResourceKey)
 		{
@@ -32,13 +38,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			return new LocalizedText { Text = localizedText };
 		}
 
-		public class LocalizedText
-		{
-			public string Text { get; set; }
-		}
-
 		// I click 'add full day absence'
-		[When(@"I click '(.*)'")]
+		// *NOT* I click 'remove' on absence named 'Vacation'
+		[When(@"I click '([a-z|\s]*)'")]
 		public void WhenIClickClass(CssClass cssClass)
 		{
 			Browser.Interactions.Click(string.Format(".{0}", cssClass.Name));

@@ -892,7 +892,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\AddDialogComposer.cs" />
-    <Compile Include="Common\CustomSort.cs" />
     <Compile Include="Common\DatePickerExtensions.cs" />
     <Compile Include="Common\ErrorBorder.xaml.cs">
       <DependentUpon>ErrorBorder.xaml</DependentUpon>

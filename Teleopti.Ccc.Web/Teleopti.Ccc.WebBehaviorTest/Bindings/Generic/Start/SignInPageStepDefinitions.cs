@@ -22,21 +22,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 			Pages.Pages.CurrentSignInPage.SignInApplication(userName, TestData.CommonPassword);
 		}
 
-		[When(@"I sign in with")]
-		public void WhenISignInWith(Table table)
+		[When(@"I try to sign in with")]
+		public void WhenITryToSignInWith(Table table)
 		{
+			Navigation.GotoGlobalSignInPage();
 			var user = table.CreateInstance<UserConfigurable>();
 			var userName = user.UserName;
 			var password = user.Password;
 			WhenISelectApplicationLogonDataSource();
 			Pages.Pages.CurrentSignInPage.SignInApplication(userName, password);
-		}
-
-		[When(@"I try to sign in with")]
-		public void WhenITryToSignInWith(Table table)
-		{
-			Navigation.GotoGlobalSignInPage();
-			WhenISignInWith(table);
 		}
 
 		[When(@"I sign in by windows credentials")]
@@ -90,12 +84,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 		public void ThenIShouldBeSignedIn()
 		{
 			Browser.Interactions.AssertExists("#signout, #signout-button");
-		}
-
-		[Then(@"I should see a log on error")]
-		public void ThenIShouldSeeAnLogOnError()
-		{
-			EventualAssert.That(() => Pages.Pages.CurrentSignInPage.ValidationSummary.Text, new StringContainsAnyLanguageResourceConstraint("LogOnFailedInvalidUserNameOrPassword"));
 		}
 
 		[Then(@"I should see a log on error '(.*)'")]
