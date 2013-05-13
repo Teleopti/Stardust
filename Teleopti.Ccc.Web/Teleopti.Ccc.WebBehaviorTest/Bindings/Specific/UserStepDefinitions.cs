@@ -462,6 +462,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Specific
 
 		}
 
+		[Given(@"I have a pending text request")]
+		public void GivenIHaveAPendingTextRequest()
+		{
+			UserFactory.User().Setup(new ExistingPendingTextRequest());
+		}
+
 		[Given(@"I have an approved text request")]
 		public void GivenIHaveAnApprovedTextRequest()
 		{
