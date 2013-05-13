@@ -14,6 +14,7 @@ using Teleopti.Ccc.WinCode.Grouping;
 using Teleopti.Ccc.WinCode.Grouping.Commands;
 using Teleopti.Ccc.WinCode.Grouping.Events;
 using Teleopti.Interfaces.Domain;
+using Teleopti.Ccc.Win.Common.Controls.DateSelection;
 using DataSourceException = Teleopti.Ccc.Infrastructure.Foundation.DataSourceException;
 
 namespace Teleopti.Ccc.Win.Grouping
@@ -33,8 +34,8 @@ namespace Teleopti.Ccc.Win.Grouping
 
             _groupPageHelper = groupPageHelper;
             InitializeComponent();
-            xdtpDate.Value = DateTime.Today;
-            xdtpDate.Culture = CultureInfo.CurrentCulture;
+			xdtpDate.Value = DateTime.Today;
+			xdtpDate.SetCultureInfoSafe(CultureInfo.CurrentCulture);
             SetTexts();
             PreselectedPersonIds = new List<Guid>();
 			treeViewAdvMainTabTree.SortWithChildNodes = true;

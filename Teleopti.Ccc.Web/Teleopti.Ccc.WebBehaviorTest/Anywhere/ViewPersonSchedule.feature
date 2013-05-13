@@ -17,6 +17,10 @@ Background:
 	| Field      | Value      |
 	| Team       | Team green |
 	| Start date | 2012-12-01 |
+	And there are shift categories
+	| Name  |
+	| Day   |
+	| Night |
 	And there is an activity with
 	| Field | Value  |
 	| Name  | Lunch  |
@@ -28,63 +32,61 @@ Background:
 	
 Scenario: View shift
 	Given I have the role 'Anywhere Team Green'
-	And 'Pierre Baldi' have a (read model) shift with
-	| Field            | Value        |
-	| Person           | Pierre Baldi |
-	| Date             | 2012-12-02   |
-	| Start time       | 08:00        |
-	| End time         | 17:00        |
-	| Activity         | Phone        |
-	| Lunch start time | 11:30        |
-	| Lunch end time   | 12:15        |
-	| Lunch activity   | Lunch        |
+	And 'Pierre Baldi' have a shift with
+	| Field            | Value            |
+	| Shift category   | Day              |
+	| Activity         | Phone            |
+	| Start time       | 2012-12-02 08:00 |
+	| End time         | 2012-12-02 17:00 |
+	| Lunch activity   | Lunch            |
+	| Lunch start time | 2012-12-02 11:30 |
+	| Lunch end time   | 2012-12-02 12:15 |
 	When I view person schedule for 'Pierre Baldi' on '2012-12-02'
 	Then I should see these shift layers
-	| Start time | End time |
-	| 08:00      | 11:30    |
-	| 11:30      | 12:15    |
-	| 12:15      | 17:00    |
+	| Start time | End time | Color  |
+	| 08:00      | 11:30    | Green  |
+	| 11:30      | 12:15    | Yellow |
+	| 12:15      | 17:00    | Green  |
 
 Scenario: View night shift from yesterday
 	Given I have the role 'Anywhere Team Green'
-	And 'Pierre Baldi' have a (read model) shift with
-	| Field            | Value        |
-	| Person           | Pierre Baldi |
-	| Date             | 2012-12-01   |
-	| Start time       | 20:00        |
-	| End time         | 1.04:00      |
-	| Activity         | Phone        |
+	And 'Pierre Baldi' have a shift with
+	| Field          | Value            |
+	| Shift category | Night            |
+	| Activity       | Phone            |
+	| Start time     | 2012-12-01 20:00 |
+	| End time       | 2012-12-02 04:00 |
 	When I view person schedule for 'Pierre Baldi' on '2012-12-02'
 	Then I should not see any shift
 
 Scenario: View night shift from today
 	Given I have the role 'Anywhere Team Green'
-	And 'Pierre Baldi' have a (read model) shift with
-	| Field            | Value        |
-	| Person           | Pierre Baldi |
-	| Date             | 2012-12-02   |
-	| Start time       | 20:00        |
-	| End time         | 1.04:00      |
-	| Activity         | Phone        |
+	And 'Pierre Baldi' have a shift with
+	| Field          | Value            |
+	| Shift category | Night            |
+	| Activity       | Phone            |
+	| Start time     | 2012-12-02 20:00 |
+	| End time       | 2012-12-03 04:00 |
 	When I view person schedule for 'Pierre Baldi' on '2012-12-02'
 	Then I should see a shift layer with
 	| Field      | Value   |
 	| Start time | 20:00   |
 	| End time   | 1.04:00 |
+	| Color      | Green   |
 
 Scenario: View schedule in persons time zone
 	Given I have the role 'Anywhere Team Green'
+	And I am located in Stockholm
 	And 'Pierre Baldi' is located in Hawaii
-	And I am located in Hawaii
-	And 'Pierre Baldi' have a (read model) shift with
-	| Field            | Value        |
-	| Person           | Pierre Baldi |
-	| Date             | 2012-12-02   |
-	| Start time       | 08:00        |
-	| End time         | 17:00        |
-	| Activity         | Phone        |
+	And 'Pierre Baldi' have a shift with
+	| Field          | Value            |
+	| Shift category | Day              |
+	| Activity       | Phone            |
+	| Start time     | 2012-12-02 08:00 |
+	| End time       | 2012-12-02 17:00 |
 	When I view person schedule for 'Pierre Baldi' on '2012-12-02'
 	Then I should see a shift layer with
 	| Field      | Value |
-	| Start time | 22:00 |
-	| End time   | 1.07:00 |
+	| Start time | 08:00 |
+	| End time   | 17:00 |
+	| Color      | Green |

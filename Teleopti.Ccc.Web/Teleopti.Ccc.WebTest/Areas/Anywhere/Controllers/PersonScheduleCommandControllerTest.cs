@@ -20,5 +20,18 @@ namespace Teleopti.Ccc.WebTest.Areas.Anywhere.Controllers
 
 			commandDispatcher.AssertWasCalled(x => x.Execute(command));
 		}
+
+		[Test]
+		public void ShouldDispatchRemoveAbsenceCommand()
+		{
+			var commandDispatcher = MockRepository.GenerateMock<ICommandDispatcher>();
+			var target = new PersonScheduleCommandController(commandDispatcher);
+
+			var command = new RemovePersonAbsenceCommand();
+
+			target.RemovePersonAbsence(command);
+
+			commandDispatcher.AssertWasCalled(x => x.Execute(command));
+		}
 	}
 }

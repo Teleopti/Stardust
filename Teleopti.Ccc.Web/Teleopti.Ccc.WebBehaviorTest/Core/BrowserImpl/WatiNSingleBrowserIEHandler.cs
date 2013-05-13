@@ -36,6 +36,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 		private IE StartBrowser()
 		{
 			_browser = new IE {AutoClose = true};
+			// Clear the browser cache this way to solve caching issues that occurr on the build server sometimes?
+			// Process.Start("RunDll32.exe", "InetCpl.cpl,ClearMyTracksByProcess 8");
 			_browser.ClearCache();
 			_browser.ClearCookies();
 			_browser.BringToFront();

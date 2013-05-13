@@ -19,13 +19,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 	[Binding]
 	public class TeamScheduleStepDefinition
 	{
-		[When(@"I click on a day")]
-		public void WhenIClickOnADay()
-		{
-			var date = new DateOnly(DateOnly.Today.Year, DateOnly.Today.Month, 1);
-			Pages.Pages.CurrentDateRangeSelector.DatePicker.ClickDay(date);
-		}
-
 		[When(@"I select the other team in the team picker")]
 		public void WhenIChooseTheOtherTeamInTheTeamPicker()
 		{
@@ -83,13 +76,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => layers.Count, Is.GreaterThan(0));
 		}
 
-		[Then(@"I should see '(.*)' schedule")]
-		public void ThenIShouldSeeSchedule(string name)
-		{
-			var layers = Pages.Pages.TeamSchedulePage.LayersByAgentName(name);
-			EventualAssert.That(() => layers.Count, Is.GreaterThan(0));
-		}
-
 		[Then(@"I should see '(.*)' schedule in team schedule with")]
 		public void ThenIShouldSeeScheduleInTeamScheduleWith(string name, Table table)
 		{
@@ -128,13 +114,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			AssertShowingDay(DateOnly.Today.AddDays(-1));
 		}
 
-		[Then(@"I should see the selected day")]
-		public void ThenIShouldSeeTheSelectedDay()
-		{
-			var date = new DateOnly(DateOnly.Today.Year, DateOnly.Today.Month, 1);
-			AssertShowingDay(date);
-		}
-
 		private void AssertShowingDay(DateOnly date)
 		{
 			Browser.Current.Url.EndsWith(string.Format("{0}/{1}/{2}", date.Year, date.Month, date.Day));
@@ -159,13 +138,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			var dayOff = Pages.Pages.TeamSchedulePage.DayOffByAgentName(UserFactory.User().TeamColleague().Person.Name.ToString());
 			EventualAssert.That(() => dayOff.Exists, Is.True);
-		}
-
-		[Then(@"I should not see my colleague's day off")]
-		public void ThenIShouldNotSeeMyColleagueSDayOff()
-		{
-			var dayOff = Pages.Pages.TeamSchedulePage.DayOffByAgentName(UserFactory.User().TeamColleague().Person.Name.ToString());
-			EventualAssert.That(() => dayOff.Exists, Is.False);
 		}
 
 		[Then(@"The time line should span from (.*) to (.*)")]

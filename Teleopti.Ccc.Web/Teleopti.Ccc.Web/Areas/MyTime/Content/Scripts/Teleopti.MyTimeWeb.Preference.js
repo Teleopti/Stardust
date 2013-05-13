@@ -503,6 +503,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			_initAddExtendedButton();
 			_initPeriodSelection();
 			_initExtendedPanels();
+			_initMustHaveButton();
 			_initViewModels(_soon);
 		},
 		PreferencePartialDispose: function () {

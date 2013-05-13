@@ -124,6 +124,7 @@
     <Compile Include="Core\BrowserInteractions\IBrowserInteractions.cs" />
     <Compile Include="Core\BrowserInteractions\WatiNIE\IEWatiNBrowserInteractions.cs" />
     <Compile Include="Core\BrowserInteractions\WatiNIE\Retrying.cs" />
+    <Compile Include="Data\HardCodedResolver.cs" />
     <Compile Include="Pages\Common\Select2Box.cs" />
     <Compile Include="TeamScheduleForGroups.feature.cs" />
     <Compile Include="Bindings\Generic\BudgetStepDefinitions.cs" />
@@ -154,7 +155,6 @@
     </Compile>
     <Compile Include="Data\Setups\Generic\PersonAbsenceConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\PersonDayOffConfigurable.cs" />
-    <Compile Include="Data\Setups\Generic\ReadModelShiftConfigurable.cs" />
     <Compile Include="Data\Setups\Generic\TeamConfigurable.cs" />
     <Compile Include="Bindings\Generic\MyTime\StudentAvailabilityPageStepDefinitions.cs" />
     <Compile Include="Data\Setups\Specific\CreateName.cs" />
@@ -477,7 +477,6 @@
     <Compile Include="Data\Setups\Specific\PersonPeriod.cs" />
     <Compile Include="Data\IUserDataSetup.cs" />
     <Compile Include="Data\IUserSetup.cs" />
-    <Compile Include="Bindings\Generic\LicenseStepDefinitions.cs" />
     <Compile Include="Pages\Common\ICancelButton.cs" />
     <Compile Include="Pages\Common\IOkButton.cs" />
     <Compile Include="Pages\Pages.cs" />

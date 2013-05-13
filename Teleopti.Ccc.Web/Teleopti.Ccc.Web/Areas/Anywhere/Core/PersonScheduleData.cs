@@ -12,5 +12,6 @@ namespace Teleopti.Ccc.Web.Areas.Anywhere.Core
 		public PersonScheduleDayReadModel PersonScheduleDayReadModel { get; set; }
 		public dynamic Shift { get; set; }
 		public IEnumerable<IAbsence> Absences { get; set; }
+		public IEnumerable<IPersonAbsence> PersonAbsences { get; set; }
 	}
 }

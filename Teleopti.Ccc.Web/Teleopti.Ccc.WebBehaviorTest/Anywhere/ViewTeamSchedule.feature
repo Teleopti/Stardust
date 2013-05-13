@@ -17,6 +17,10 @@ Background:
 	| Field      | Value      |
 	| Team       | Team green |
 	| Start date | 2012-12-01 |
+	And there are shift categories
+	| Name  |
+	| Day   |
+	| Night |
 	And there is an activity with
 	| Field | Value  |
 	| Name  | Lunch  |
@@ -28,31 +32,27 @@ Background:
 	
 Scenario: View team schedule
 	Given I have the role 'Anywhere Team Green'
-	And 'Pierre Baldi' have a (read model) shift with
-	| Field            | Value        |
-	| Person           | Pierre Baldi |
-	| Date             | 2012-12-02   |
-	| Start time       | 08:00        |
-	| End time         | 17:00        |
-	| Activity         | Phone        |
-	| Lunch start time | 11:30        |
-	| Lunch end time   | 12:15        |
-	| Lunch activity   | Lunch        |
+	And 'Pierre Baldi' have a shift with
+	| Field                     | Value            |
+	| Shift category            | Day              |
+	| Activity                  | Phone            |
+	| Start time                | 2012-12-02 08:00 |
+	| End time                  | 2012-12-02 17:00 |
+	| Lunch activity            | Lunch            |
+	| Lunch 3 hours after start | true             |
 	When I view schedules for '2012-12-02'
 	Then I should see schedule for 'Pierre Baldi'
 	
 Scenario: View team schedule with night shift from yesterday
 	Given I have the role 'Anywhere Team Green'
-	And 'Pierre Baldi' have a (read model) shift with
-	| Field            | Value        |
-	| Person           | Pierre Baldi |
-	| Date             | 2012-12-02   |
-	| Start time       | 20:00        |
-	| End time         | 1.04:00      |
-	| Activity         | Phone        |
-	| Lunch start time | 23:30        |
-	| Lunch end time   | 1.00:15      |
-	| Lunch activity   | Lunch        |
+	And 'Pierre Baldi' have a shift with
+	| Field                     | Value            |
+	| Shift category            | Night            |
+	| Start time                | 2012-12-02 20:00 |
+	| End time                  | 2012-12-03 04:00 |
+	| Activity                  | Phone            |
+	| Lunch activity            | Lunch            |
+	| Lunch 3 hours after start | true             |
 	When I view schedules for '2012-12-03'
 	Then I should see schedule for 'Pierre Baldi'
 	

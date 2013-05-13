@@ -15,7 +15,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			UserFactory.User().Setup(absence);
 		}
 
-		[Given(@"(.*) have a absence with")]
+		[Given(@"'?(I)'? have a absence with")]
+		[Given(@"'?(.*)'? has an absence with")]
 		public void GivenHaveAAbsenceWith(string userName, Table table)
 		{
 			var personAbsence = table.CreateInstance<PersonAbsenceConfigurable>();

@@ -333,18 +333,22 @@ Teleopti.MyTimeWeb.Portal.Layout = (function ($) {
 		ActivateDateButtons: function () {
 			$(".date-range-selector").each(function () {
 				var t = $(this);
-				t.find("button:first").button({
+				var first = t.find("button:first");
+				first.button({
 					icons: {
 						primary: "ui-icon-triangle-1-w"
 					},
 					text: false
 				});
-				t.find("button:last").button({
+				first.removeAttr("title");
+				var last = t.find("button:last");
+				last.button({
 					icons: {
 						primary: "ui-icon-triangle-1-e"
 					},
 					text: false
 				});
+				last.removeAttr("title");
 			});
 		},
 		ActivateHorizontalScroll: function () {

@@ -1,8 +1,8 @@
 define([
 		'knockout',
 		'moment',
-		'noext!application/resources'
-	], function (
+        'resources!r'
+    ], function (
 		ko,
 		moment,
 		resources
@@ -12,7 +12,7 @@ define([
 
 			var self = this;
 
-			var time = moment(data.Start, resources.MomentShortDatePattern + resources.ShortTimePattern);
+			var time = moment(data.Start, resources.FixedDateTimeFormat);
 		    
 			var localStartMinutes = time.diff(data.Date, 'minutes');
 
@@ -22,7 +22,7 @@ define([
 
 			this.StartTime = ko.computed(function () {
 				var time = moment().startOf('day').add('minutes', self.StartMinutes());
-				return time.format(resources.ShortTimePattern);
+				return time.format(resources.TimeFormatForMoment);
 			});
 
 			this.EndMinutes = ko.computed(function () {

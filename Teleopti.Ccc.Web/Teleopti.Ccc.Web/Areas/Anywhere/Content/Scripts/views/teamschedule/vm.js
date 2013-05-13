@@ -2,8 +2,8 @@ define([
         'knockout',
         'navigation',
 		'views/personschedule/timeline',
-        'noext!application/resources',
-        'moment'
+        'resources!r',
+        'moment',
     ], function(
         ko,
         navigation,

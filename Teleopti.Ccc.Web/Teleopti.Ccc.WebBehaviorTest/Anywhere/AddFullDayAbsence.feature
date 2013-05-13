@@ -17,6 +17,7 @@ Background:
 	| Field      | Value      |
 	| Team       | Team green |
 	| Start date | 2012-12-01 |
+	And there is a shift category named 'Day'
 	And there is an activity with
 	| Field | Value  |
 	| Name  | Lunch  |
@@ -38,16 +39,10 @@ Scenario: View form
 
 Scenario: Add
 	Given I have the role 'Anywhere Team Green'
-	And 'Pierre Baldi' have a (read model) shift with
-	| Field      | Value        |
-	| Date       | 2013-04-08   |
-	| Start time | 08:00        |
-	| End time   | 17:00        |
-	| Activity   | Phone        |
-	And there is a shift category named 'Day'
 	And 'Pierre Baldi' have a shift with
 	| Field          | Value            |
 	| Shift category | Day              |
+	| Activity       | Phone            |
 	| Start time     | 2013-04-08 08:00 |
 	| End time       | 2013-04-08 17:00 |
 	When I view person schedules add full day absence form for 'Pierre Baldi' on '2013-04-08'
@@ -61,11 +56,11 @@ Scenario: Add
 	| Start time | 08:00 |
 	| End time   | 17:00 |
 	| Color      | Red   |
-#	And I should see an absence in the absence list with
-#	| Field      | Value            |
-#	| Start time | 2013-04-08 08:00 |
-#	| End time   | 2013-04-08 17:00 |
-#	| Absence    | Vacation         |
+	And I should see an absence in the absence list with
+	| Field      | Value            |
+	| Name       | Vacation         |
+	| Start time | 2013-04-08 00:00 |
+	| End time   | 2013-04-09 00:00 |
 
 Scenario: Default values
 	Given I have the role 'Anywhere Team Green'

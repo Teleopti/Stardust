@@ -126,6 +126,9 @@
     <Compile Include="ApplicationLayer\IEventsPublisher.cs" />
     <Compile Include="ApplicationLayer\IgnoreDelayedMessages.cs" />
     <Compile Include="ApplicationLayer\IHandleEvent.cs" />
+    <Compile Include="ApplicationLayer\RemovePersonAbsenceCommand.cs" />
+    <Compile Include="ApplicationLayer\RemovePersonAbsenceCommandHandler.cs" />
+    <Compile Include="ApplicationLayer\PersonAbsenceRemovedEvent.cs" />
     <Compile Include="ApplicationLayer\Rta\CannotGetUpdatedScheduleChangeFromTeleoptiRtaService.cs" />
     <Compile Include="ApplicationLayer\Rta\IGetUpdatedScheduleChangeFromTeleoptiRtaService.cs" />
     <Compile Include="ApplicationLayer\Rta\IgnoreGetUpdatedScheduleChangeFromTeleoptiRtaService.cs" />
@@ -483,6 +486,7 @@
     <Compile Include="ResourceCalculation\RuleSetDeletedShiftCategoryChecker.cs" />
     <Compile Include="ResourceCalculation\SwapAndModifyServiceNew.cs" />
     <Compile Include="ResourceCalculation\SwapServiceNew.cs" />
+    <Compile Include="Scheduling\TeamBlock\StandardDeviationSumCalculator.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockScheduledDayChecker.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockSteadyStateDictionaryCreator.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockSchedulingService.cs" />

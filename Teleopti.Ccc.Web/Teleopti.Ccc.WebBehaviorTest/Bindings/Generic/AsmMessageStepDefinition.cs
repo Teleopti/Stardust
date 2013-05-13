@@ -119,24 +119,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			EventualAssert.That(() => _page.MessageBodyDivs.Count, Is.EqualTo(messageCount));
 		}
 
-		[Given(@"message tab indicates '(.*)' new message\(s\)")]
-		[Then(@"message tab indicates '(.*)' new message\(s\)")]
-		public void ThenMessageTabIndicatesNewMessageS(string unreadMessageCount)
-		{
-			int parseResult;
-			if (int.TryParse(unreadMessageCount, out parseResult))
-			EventualAssert.That(() => _page.MessageLink.ClassName.Contains("asm-new-message-indicator"), Is.True);
-			if (parseResult > 0)
-			{
-				EventualAssert.That(() => _page.MessageLink.InnerHtml.Contains("(" + parseResult + ")"), Is.True);
-			}
-			else
-			{
-				EventualAssert.That(() => _page.MessageLink.InnerHtml.Contains("("), Is.False);
-				EventualAssert.That(() => _page.MessageLink.InnerHtml.Contains(")"), Is.False);
-			}
-		}
-
 		[Then(@"I should see the message details form with on the message at position '(.*)' in the list")]
 		public void ThenIShouldSeeTheMessageDetailsFormWithOnTheMessageAtPositionInTheList(int position, Table table)
 		{
@@ -144,13 +126,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 			EventualAssert.That(() => Pages.Pages.CurrentMessageReplyPage.Message(position).InnerHtml.Contains(table.Rows[0][1]), Is.True);
 		}
 		
-		[Then(@"I should see the message with title '(.*)' at position '(.*)' in the list")]
-		public void ThenIShouldSeeTheMessageWithTitleAtPositionInTheList(string title, int listPosition)
-		{
-			EventualAssert.That(() => _page.MessageBodyDivs[listPosition-1].InnerHtml.Contains(title), Is.True);
-		}
-
-		[Given(@"I click on the message at position '(.*)' in the list")]
 		[When(@"I click on the message at position '(.*)' in the list")]
 		public void GivenIClickOnTheMessageAtPositionInTheList(int position)
 		{

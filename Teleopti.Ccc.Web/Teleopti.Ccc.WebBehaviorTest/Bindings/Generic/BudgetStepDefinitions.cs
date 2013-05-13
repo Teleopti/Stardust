@@ -8,8 +8,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 	[Binding]
 	public class BudgetStepDefinitions
 	{
-	
-
 		[Given(@"there is a budgetgroup with")]
 		public void GivenThereIsABudgetgroup(Table table)
 		{
@@ -22,14 +20,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic
 		{
 			var budgetday = table.CreateInstance<BudgetdayConfigurable>();
 			UserFactory.User().Setup(budgetday);
-		}
-
-
-		[Given(@"there is a \(readonly\) PersonScheduleDayModel")]
-		public void GivenThereIsAReadonlyPersonScheduleDayModel(Table table)
-		{
-			var scheduleReadOnlyProjection = table.CreateInstance<ReadModelScheduleProjectionConfigurable>();
-			UserFactory.User().Setup(scheduleReadOnlyProjection);
 		}
 
 		[Given(@"there is absence time for")]

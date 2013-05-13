@@ -34,7 +34,7 @@ namespace Teleopti.Ccc.WinCode.Common.Filter
         public bool FilterOutSpecification(object model)
         {
             InParameter.MustBeTrue("model", model is T);
-            return (Filter != null) ? !Filter.IsSatisfiedBy((T)model) : true;
+            return (Filter == null) || !Filter.IsSatisfiedBy((T)model);
         }
 
 
@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.WinCode.Common.Filter
         public bool FilterAllButSpecification(object model)
         {
             InParameter.MustBeTrue("model", model is T);
-            return (Filter != null) ? Filter.IsSatisfiedBy((T)model) : false;
+            return (Filter != null) && Filter.IsSatisfiedBy((T)model);
         }
 
         /// <summary>
@@ -64,19 +64,14 @@ namespace Teleopti.Ccc.WinCode.Common.Filter
         /// </remarks>
         public void FilterCollection(IEnumerable<T> targetCollection)
         {
-            ICollectionView defaultView = CollectionViewSource.GetDefaultView(targetCollection);
+            var defaultView = CollectionViewSource.GetDefaultView(targetCollection);
             defaultView.Filter = FilterOutSpecification;
-        
         }
 
         public void FilterAllButCollection(IEnumerable<T> targetCollection)
         {
-            ICollectionView defaultView = CollectionViewSource.GetDefaultView(targetCollection);
+            var defaultView = CollectionViewSource.GetDefaultView(targetCollection);
             defaultView.Filter = FilterAllButSpecification;
         }
-
-
-
     }
-
 }

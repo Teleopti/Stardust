@@ -543,30 +543,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
             }
         }
 
-        [Test]
-        public void VerifyPasteAbsenceRequestPeriodOfSingleCells()
-        {
-            IList<IWorkflowControlSet> repositoryCollection = new List<IWorkflowControlSet> { _workflowControlSet };
-            using (_mocks.Record())
-            {
-                ExpectInitialize(repositoryCollection);
-                ExpectSetSelectedWorkflowControlSetModel();
-                // Paste mocks
-                Expect.Call(_view.HandlePasteWhenCellIsCopied()).Return(true);
-                Expect.Call(() => _view.SetOpenPeriodsGridRowCount(0)).IgnoreArguments();
-                Expect.Call(() => _view.RefreshOpenPeriodsGrid());
-            }
-
-            using (_mocks.Playback())
-            {
-                _target.Initialize();
-                _target.SetSelectedWorkflowControlSetModel(_target.WorkflowControlSetModelCollection.First());
-
-                _target.PasteAbsenceRequestPeriod();
-            }
-        }
-
-        [Test]
+       [Test]
         public void VerifyPasteAbsenceRequestPeriodOneModelOntoExistingModel()
         {
             IAbsence absenceForDatePeriod = AbsenceFactory.CreateRequestableAbsence("Holiday", "HL", Color.Red);
@@ -597,7 +574,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
                 using (_mocks.Ordered())
                 {
                     Expect.Call(_view.AbsenceRequestPeriodSelected).Return(copiedPeriodModels);
-                    Expect.Call(_view.HandlePasteWhenCellIsCopied()).Return(false);
+                    //Expect.Call(_view.HandlePasteWhenCellIsCopied()).Return(false);
                     Expect.Call(_view.AbsenceRequestPeriodSelected).Return(selectedPeriodModels);
                     Expect.Call(() => _view.SetOpenPeriodsGridRowCount(0)).IgnoreArguments();
                     Expect.Call(() => _view.RefreshOpenPeriodsGrid());
@@ -664,7 +641,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
                 using (_mocks.Ordered())
                 {
                     Expect.Call(_view.AbsenceRequestPeriodSelected).Return(copiedPeriodModels);
-                    Expect.Call(_view.HandlePasteWhenCellIsCopied()).Return(false);
+                    //Expect.Call(_view.HandlePasteWhenCellIsCopied()).Return(false);
                     Expect.Call(_view.AbsenceRequestPeriodSelected).Return(selectedPeriodModels);
                     Expect.Call(() => _view.SetOpenPeriodsGridRowCount(0)).IgnoreArguments();
                     Expect.Call(() => _view.RefreshOpenPeriodsGrid());
@@ -744,7 +721,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
                 using (_mocks.Ordered())
                 {
                     Expect.Call(_view.AbsenceRequestPeriodSelected).Return(copiedPeriodModels);
-                    Expect.Call(_view.HandlePasteWhenCellIsCopied()).Return(false);
+                    //Expect.Call(_view.HandlePasteWhenCellIsCopied()).Return(false);
                     Expect.Call(_view.AbsenceRequestPeriodSelected).Return(selectedPeriodModels);
                     Expect.Call(() => _view.SetOpenPeriodsGridRowCount(0)).IgnoreArguments();
                     Expect.Call(() => _view.RefreshOpenPeriodsGrid());
@@ -825,7 +802,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
                 using (_mocks.Ordered())
                 {
                     Expect.Call(_view.AbsenceRequestPeriodSelected).Return(copiedPeriodModels);
-                    Expect.Call(_view.HandlePasteWhenCellIsCopied()).Return(false);
+                    //Expect.Call(_view.HandlePasteWhenCellIsCopied()).Return(false);
                     Expect.Call(_view.AbsenceRequestPeriodSelected).Return(selectedPeriodModels);
                     Expect.Call(() => _view.SetOpenPeriodsGridRowCount(0)).IgnoreArguments();
                     Expect.Call(() => _view.RefreshOpenPeriodsGrid());
@@ -881,7 +858,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
                 ExpectInitialize(repositoryCollection);
                 ExpectSetSelectedWorkflowControlSetModel();
                 // Paste mocks
-                Expect.Call(_view.HandlePasteWhenCellIsCopied()).Return(false);
+                //Expect.Call(_view.HandlePasteWhenCellIsCopied()).Return(false);
                 Expect.Call(_view.AbsenceRequestPeriodSelected).Return(selectedPeriodModels);
             }
 
@@ -914,7 +891,7 @@ namespace Teleopti.Ccc.WinCodeTest.Configuration
                 ExpectInitialize(repositoryCollection);
                 ExpectSetSelectedWorkflowControlSetModel();
                 // Paste mocks
-                Expect.Call(_view.HandlePasteWhenCellIsCopied()).Return(false);
+                //Expect.Call(_view.HandlePasteWhenCellIsCopied()).Return(false);
                 Expect.Call(_view.AbsenceRequestPeriodSelected).Return(new List<AbsenceRequestPeriodModel>());
             }
 

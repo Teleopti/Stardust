@@ -11421,6 +11421,10 @@ Reduce the complexity to use these shifts.</value>
     <value>Please select at least one of the options "Same shift category", "Same start time" or "Same shift" in Block Optimization.</value>
     <comment>Block optimization</comment>
   </data>
+  <data name="ConfirmRemoval" xml:space="preserve">
+    <value>Confirm removal</value>
+    <comment>Confirm removal</comment>
+  </data>
   <data name="NotAllowedMoveOfAssignmentToOtherDate" xml:space="preserve">
     <value>It is not allowed to move a work shift to another day in shift editor, use cut and paste instead</value>
     <comment>It is not allowed to move a work shift to another day in shift editor, use cut and paste instead</comment>
@@ -11428,8 +11432,7 @@ Reduce the complexity to use these shifts.</value>
   <data name="ChanceOfGettingAbsenceRequestGranted" xml:space="preserve">
     <value>Chance of getting absence request granted: </value>
     <comment>Used in mytime web so agents can see what day is best for absence request</comment>
-    </data>
-
+  </data>
   <data name="AddPreferenceThreeDots" xml:space="preserve">
     <value>Add Preference...</value>
     <comment>To be used in menus/ribbon when adding preference</comment>
@@ -11437,8 +11440,7 @@ Reduce the complexity to use these shifts.</value>
   <data name="AddStudentAvailabilityThreeDots" xml:space="preserve">
     <value>Add Student Availability...</value>
     <comment>To be used in menus/ribbon when adding student availability</comment>
-    </data>
-
+  </data>
   <data name="Fair" xml:space="preserve">
     <value>Fair</value>
     <comment>Chance of getting absencerequest granted: Fair</comment>
@@ -11450,5 +11452,12 @@ Reduce the complexity to use these shifts.</value>
   <data name="Poor" xml:space="preserve">
     <value>Poor</value>
     <comment>Chance of getting absencerequest granted: Poor</comment>
+  </data>
+  <data name="CollectingData" xml:space="preserve">
+    <value>Collecting data...</value>
+  </data>
+  <data name="Improved" xml:space="preserve">
+    <value>Improved</value>
+    <comment>optimization result improved</comment>
   </data>
 </root>
