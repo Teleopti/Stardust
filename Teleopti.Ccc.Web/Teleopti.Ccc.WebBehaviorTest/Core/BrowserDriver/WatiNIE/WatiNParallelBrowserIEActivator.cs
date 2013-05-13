@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using WatiN.Core;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
+namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 {
 	public class WatiNParallelBrowserIEActivator : IBrowserActivator<IE>
 	{

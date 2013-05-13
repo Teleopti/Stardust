@@ -1,7 +1,7 @@
 using System;
 using NUnit.Framework;
 using NUnit.Framework.Constraints;
-using Teleopti.Ccc.WebBehaviorTest.Core.BrowserInteractions.WatiNIE;
+using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using WatiN.Core;
 

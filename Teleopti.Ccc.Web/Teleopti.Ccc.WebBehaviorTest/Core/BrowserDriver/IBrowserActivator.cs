@@ -1,4 +1,4 @@
-namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
+namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 {
 	public interface IBrowserActivator<T>
 	{

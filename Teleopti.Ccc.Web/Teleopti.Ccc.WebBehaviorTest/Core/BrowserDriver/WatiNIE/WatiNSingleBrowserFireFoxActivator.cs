@@ -4,7 +4,7 @@ using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using WatiN.Core;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
+namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 {
 	public class WatiNSingleBrowserFireFoxActivator : IBrowserActivator<FireFox>
 	{

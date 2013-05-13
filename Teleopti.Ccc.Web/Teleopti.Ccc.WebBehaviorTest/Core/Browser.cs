@@ -1,6 +1,5 @@
-﻿using Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl;
-using Teleopti.Ccc.WebBehaviorTest.Core.BrowserInteractions;
-using Teleopti.Ccc.WebBehaviorTest.Core.BrowserInteractions.WatiNIE;
+﻿using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
+using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using WatiN.Core;
 using log4net;

@@ -4,7 +4,7 @@ using NUnit.Framework;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using WatiN.Core;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserInteractions.WatiNIE
+namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 {
 	public class WatiNIEBrowserInteractions : IBrowserInteractions
 	{
