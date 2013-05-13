@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using WatiN.Core;
 
@@ -77,6 +78,28 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserInteractions.WatiNIE
 		public void AssertNotContains(string selector, string text)
 		{
 			EventualAssert.That(() => _browser.Element(Find.BySelector(selector)).Text, Is.Not.StringContaining(text));
+		}
+
+		public void DumpInfo(Action<string> writer)
+		{
+			writer("Url:");
+			writer(TryOperation(() => Browser.Current.Url, ""));
+			writer("Html:");
+			writer(TryOperation(() => Browser.Current.Html, ""));
+			writer("Text:");
+			writer(TryOperation(() => Browser.Current.Text, ""));
+		}
+
+		private string TryOperation(Func<string> operation, string @default)
+		{
+			try
+			{
+				return operation();
+			}
+			catch (Exception ex)
+			{
+				return @default;
+			}
 		}
 
 	}

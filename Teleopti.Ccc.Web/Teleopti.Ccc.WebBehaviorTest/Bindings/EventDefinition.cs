@@ -137,24 +137,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			if (ScenarioContext.Current.TestError != null)
 			{
 				Log.Error("Scenario exception occurred, dumping url, text and html.");
-				Log.Error("Url:");
-				Log.Error(TryOperation(() => Browser.Current.Url, ""));
-				Log.Error("Html:");
-				Log.Error(TryOperation(() => Browser.Current.Html, ""));
-				Log.Error("Text:");
-				Log.Error(TryOperation(() => Browser.Current.Text, ""));
-			}
-		}
-
-		public string TryOperation(Func<string> operation, string @default)
-		{
-			try
-			{
-				return operation();
-			}
-			catch (Exception ex)
-			{
-				return @default;
+				Browser.Interactions.DumpInfo(Log.Error);
 			}
 		}
 
