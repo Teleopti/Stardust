@@ -308,7 +308,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             {
                 return _isAscendingSort;
             }
-            protected set
+            set
             {
                 _isAscendingSort = value;
             }
@@ -317,6 +317,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
         public int CurrentSortColumn
         {
             get { return _currentSortColumn; }
+			set { _currentSortColumn = value; }
         }
 
         public IScheduleSortCommand SortCommand
@@ -324,6 +325,26 @@ namespace Teleopti.Ccc.WinCode.Scheduling
             get { return _sortCommand; }
             set { _sortCommand = value; }
         }
+
+		public void ApplyGridSort()
+		{
+			List<KeyValuePair<Guid, IPerson>> sortedFilteredPersonDictionary;
+
+			var loggedOnCulture = TeleoptiPrincipal.Current.Regional.Culture;
+			IComparer<object> comparer = new PersonNameComparer(loggedOnCulture);
+
+			if (IsAscendingSort)
+				sortedFilteredPersonDictionary = SchedulerState.FilteredPersonDictionary.OrderBy(p => columnTextFromPerson(p.Value, (ColumnType)_currentSortColumn), comparer).ToList();
+			else
+				sortedFilteredPersonDictionary = SchedulerState.FilteredPersonDictionary.OrderByDescending(p => columnTextFromPerson(p.Value, (ColumnType)_currentSortColumn), comparer).ToList();
+
+
+			SchedulerState.FilteredPersonDictionary.Clear();
+			foreach (var keyValuePair in sortedFilteredPersonDictionary)
+			{
+				SchedulerState.FilteredPersonDictionary.Add(keyValuePair);
+			}
+		}
 
         /// <summary>
         /// Sort the column ascending or desceding
