@@ -2,9 +2,10 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 {
 	public interface IBrowserHandler<T>
 	{
-		T Start();
-		void PrepareForTestRun();
+		T Internal { get; }
+		void Start();
 		void Close();
-		T Restart();
+		void NotifyBeforeTestRun();
+		void NotifyBeforeScenario();
 	}
 }

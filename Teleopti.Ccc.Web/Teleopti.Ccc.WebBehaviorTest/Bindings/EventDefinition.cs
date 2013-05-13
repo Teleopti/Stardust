@@ -14,19 +14,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 	{
 		private static readonly ILog Log = LogManager.GetLogger(typeof(EventDefinition));
 
-		private static int _scenarioCount = 0;
-
-		private static void ResetScenarioCount() { _scenarioCount = 0; }
-		private static void IncrementScenarioCount() { _scenarioCount += 1; }
-
 		[BeforeTestRun]
 		public static void BeforeTestRun()
 		{
 			Log.Debug("Preparing for test run");
 
-			ResetScenarioCount();
-
-			Browser.PrepareForTestRun();
+			Browser.NotifyBeforeTestRun();
 
 			try
 			{
@@ -68,11 +61,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		{
 			Log.Debug("Preparing for scenario " + ScenarioContext.Current.ScenarioInfo.Title);
 
-			// restart browser every 20th scenario
-			if (_scenarioCount != 0 && _scenarioCount % 15 == 0)
-				Browser.Restart();
-
-			IncrementScenarioCount();
+			Browser.NotifyBeforeScenario();
 			
 			TestControllerMethods.BeforeScenario();
 			
