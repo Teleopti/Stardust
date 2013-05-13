@@ -2,7 +2,6 @@
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
-using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -26,7 +25,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 		public bool Lunch3HoursAfterStart { get; set; }
 		public DateTime LunchStartTime { get; set; }
 		public DateTime LunchEndTime { get; set; }
-		public string Activity { get; set; }
 
 		public string ShiftColor { get; set; }	// this should not be here. this exists on the ShiftCategoryConfigurable
 		public string AllActivityColor { get; set; }// this should not be here. this should exist on the ActivityConfigurable
@@ -54,24 +52,9 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 				lunchActivity = new ActivityRepository(uow).LoadAll().Single(sCat => sCat.Description.Name.Equals(LunchActivity));
 			else if (AllActivityColor != null)
 			{
-		                lunchActivity = new Activity("Lunch");
+				lunchActivity = new Activity("Lunch");
 				new ActivityRepository(uow).Add(lunchActivity);
 				lunchActivity.DisplayColor = Color.FromName(AllActivityColor);
-
-
-				if (Activity == null)
-				{
-					var activityPhone = TestData.ActivityPhone;
-					assignment.SetMainShift(MainShiftFactory.CreateMainShift(activityPhone, _assignmentPeriod, shiftCat));
-				}
-			}
-
-			if (Activity != null)
-			{
-				var activityRepository = new ActivityRepository(uow);
-				var activities = activityRepository.LoadAll();
-				var mainActivity = activities.Single(a => a.Name == Activity);
-				assignment.SetMainShift(MainShiftFactory.CreateMainShift(mainActivity, _assignmentPeriod, shiftCat));
 			}
 
 
@@ -106,7 +89,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 
 			assignmentRepository.Add(assignment);
 
-			
+
 		}
 
 		public TimeSpan GetContractTime()
