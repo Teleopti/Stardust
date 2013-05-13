@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			{
 				return operation();
 			}
-			catch (Exception ex)
+			catch (Exception)
 			{
 				return @default;
 			}
