@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 			JQuery.Select(string.Format("#{0} a:contains('{1}')", AutoComplete.Id, text))
 				.Trigger("mouseover")
 				.Trigger("click")
-				.EvalIn(Element.DomContainer);
+				.Eval();
 		}
 
 	}
