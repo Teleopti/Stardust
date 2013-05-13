@@ -97,8 +97,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				if (roleModelShift == null)
 					roleModelShift = bestShiftProjectionCache;
 				_teamScheduling.DayScheduled += OnDayScheduled;
-	            var skipOffset = !schedulingOptions.UseTeamBlockSameShift;
-                _teamScheduling.ExecutePerDayPerPerson(person, day, teamBlockInfo, bestShiftProjectionCache, skipOffset, selectedPeriod);
+                _teamScheduling.ExecutePerDayPerPerson(person, day, teamBlockInfo, bestShiftProjectionCache, selectedPeriod);
 				_teamScheduling.DayScheduled -= OnDayScheduled;
 
 				isTeamScheduling = true;
@@ -117,8 +116,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 		        {
 			        if (!selectedPersons.Contains(person)) continue;
 			        _teamScheduling.DayScheduled += OnDayScheduled;
-			        var skipOffset = !schedulingOptions.UseTeamBlockSameShift;
-			        _teamScheduling.ExecutePerDayPerPerson(person, day, teamBlockInfo, suggestedShiftProjectionCache, skipOffset,
+			        _teamScheduling.ExecutePerDayPerPerson(person, day, teamBlockInfo, suggestedShiftProjectionCache,
 			                                               selectedPeriod);
 			        _teamScheduling.DayScheduled -= OnDayScheduled;
 		        }
@@ -130,12 +128,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				foreach (var person in teamBlockInfo.TeamInfo.GroupPerson.GroupMembers)
 				{
 					if (!selectedPersons.Contains(person)) continue;
-					var skipOffset = !schedulingOptions.UseTeamBlockSameShift;
 					if (suggestedShiftProjectionCache != null)
 					{
 						_teamScheduling.DayScheduled += OnDayScheduled;
 						
-						_teamScheduling.ExecutePerDayPerPerson(person, day, teamBlockInfo, suggestedShiftProjectionCache, skipOffset,
+						_teamScheduling.ExecutePerDayPerPerson(person, day, teamBlockInfo, suggestedShiftProjectionCache,
 															   selectedPeriod);
 						_teamScheduling.DayScheduled -= OnDayScheduled;
 						suggestedShiftProjectionCache = null;
@@ -161,7 +158,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					if (roleModelShift == null)
 						roleModelShift = bestShiftProjectionCache;
 					_teamScheduling.DayScheduled += OnDayScheduled;
-					_teamScheduling.ExecutePerDayPerPerson(person, day, teamBlockInfo, bestShiftProjectionCache, true, selectedPeriod);
+					_teamScheduling.ExecutePerDayPerPerson(person, day, teamBlockInfo, bestShiftProjectionCache, selectedPeriod);
 					_teamScheduling.DayScheduled -= OnDayScheduled;
 					isTeamScheduling = true;
 				}

@@ -486,7 +486,7 @@
     <Compile Include="ResourceCalculation\RuleSetDeletedShiftCategoryChecker.cs" />
     <Compile Include="ResourceCalculation\SwapAndModifyServiceNew.cs" />
     <Compile Include="ResourceCalculation\SwapServiceNew.cs" />
-  	<Compile Include="Scheduling\TeamBlock\ScheduleDaysAvailableForDayOffSpecification.cs" />
+    <Compile Include="Scheduling\TeamBlock\ScheduleDaysAvailableForDayOffSpecification.cs" />
     <Compile Include="Scheduling\TeamBlock\StandardDeviationSumCalculator.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockScheduledDayChecker.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockSteadyStateDictionaryCreator.cs" />
@@ -634,7 +634,6 @@
     <Compile Include="Common\OptionalColumn.cs" />
     <Compile Include="Common\GroupPage.cs" />
     <Compile Include="Common\Ignore.cs" />
-	<Compile Include="Common\Pair.cs" />
     <Compile Include="Common\PairDictionaryFactory.cs" />
     <Compile Include="Common\PairMatrixService.cs" />
     <Compile Include="Common\Payload.cs" />

@@ -3686,17 +3686,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 				schedulingOptions.UseShiftCategoryLimitations = useShiftCategoryLimitations;
 				if (schedulingOptions.UseShiftCategoryLimitations)
 				{
-					var currentPersonTimeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
-					var selectedPeriod =
-						new DateOnlyPeriod(
-							OptimizerHelperHelper.GetStartDateInSelectedDays(scheduleDays, currentPersonTimeZone),
-							OptimizerHelperHelper.GetEndDateInSelectedDays(scheduleDays, currentPersonTimeZone));
-
 					IList<IScheduleMatrixPro> allMatrixes = new List<IScheduleMatrixPro>();
 
 					if (schedulingOptions.UseGroupScheduling)
 					{
-						allMatrixes = OptimizerHelperHelper.CreateMatrixListAll(_schedulerState, _container);
+						allMatrixes = _container.Resolve<IMatrixListFactory>().CreateMatrixListAll(selectedPeriod);
 					}
 
 					_scheduleOptimizerHelper.RemoveShiftCategoryBackToLegalState(matrixesOfSelectedScheduleDays, _backgroundWorkerScheduling,

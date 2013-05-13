@@ -62,7 +62,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 			var assCollection =
 				new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment>
 					{
-						new PersonAssignment(PersonFactory.CreatePerson("bill"), ScenarioFactory.CreateScenarioAggregate())
+						new PersonAssignment(PersonFactory.CreatePerson("bill"),ScenarioFactory.CreateScenarioAggregate(), new DateOnly())
 					});
 
 			Expect.Call(_part1.PersonAbsenceCollection()).Return(absenceCollection).Repeat.AtLeastOnce();
