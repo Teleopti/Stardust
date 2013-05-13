@@ -6,9 +6,9 @@ using System.Security.Permissions;
 using System.Windows.Forms;
 using Microsoft.Practices.Composite.Events;
 using Syncfusion.Windows.Forms.Grid;
+using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Ccc.Domain.Security.Principal;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.Win.Common;
 using Teleopti.Ccc.Win.Common.Configuration;
 using Teleopti.Ccc.Win.Common.Controls;
@@ -20,6 +20,7 @@ using Teleopti.Ccc.WinCode.Shifts;
 using Teleopti.Ccc.WinCode.Shifts.Interfaces;
 using Teleopti.Ccc.WinCode.Shifts.Views;
 using Teleopti.Interfaces.Domain;
+using DataSourceException = Teleopti.Ccc.Infrastructure.Foundation.DataSourceException;
 
 namespace Teleopti.Ccc.Win.Shifts
 {
@@ -46,6 +47,7 @@ namespace Teleopti.Ccc.Win.Shifts
             setPermissionOnControls();
             if (StateHolderReader.Instance.StateReader.SessionScopeData.MickeMode)
                 Icon = Resources.shifts;
+			ribbonControlAdv1.BeforeContextMenuOpen += ribbonControlBeforeContextMenuOpen;
         }
 
         public IExplorerPresenter Presenter { get; set; }
@@ -54,7 +56,7 @@ namespace Teleopti.Ccc.Win.Shifts
         {
             base.OnLoad(e);
             if (DesignMode) return;
-
+			
             Presenter.Model.SetRightToLeft((base.RightToLeft == RightToLeft.Yes) ? true : false);
             Presenter.Model.SetSelectedView(ShiftCreatorViewType.RuleSet);
 
@@ -330,7 +332,7 @@ namespace Teleopti.Ccc.Win.Shifts
 
         private void toolStripButtonRefreshClick(object sender, EventArgs e)
         {
-            if (validateGrid())
+			if (validateGrid())
             {
 				_navigationView.ForceRefresh();
                 //Presenter.VisualizePresenter.LoadModelCollection();
@@ -339,7 +341,7 @@ namespace Teleopti.Ccc.Win.Shifts
                 _generalView.Amounts(amountList);
                 _generalView.RefreshView();
             }
-        }
+		}
 
         private void toolStripButtonCloseExitClick(object sender, EventArgs e)
         {
@@ -565,5 +567,10 @@ namespace Teleopti.Ccc.Win.Shifts
 
             return base.ProcessCmdKey(ref msg, keyData);
         }
+
+		static void ribbonControlBeforeContextMenuOpen(object sender, ContextMenuEventArgs e)
+		{
+			e.Cancel = true;
+		}
     }
 }

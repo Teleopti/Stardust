@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Syncfusion.Drawing;
 using Syncfusion.Windows.Forms.Tools;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Win.Common;
 using System.Globalization;
 using System.Windows.Forms;
@@ -11,7 +10,6 @@ using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Win.Common.Controls.Chart;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Win.Forecasting.Forms
 {
@@ -24,7 +22,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
     /// </remarks>
     public partial class SkillDayTemplates : BaseRibbonFormWithUnitOfWork
     {
-        private ISkill _skill;
+        private readonly ISkill _skill;
     	private string _newSkillName = string.Empty;
 
 
@@ -38,7 +36,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
         public SkillDayTemplates(ISkill skill) : this()
         {
             SkillRepository skillRepository = new SkillRepository(UnitOfWork);
-            _skill = skillRepository.Get(skill.Id.Value);
+            _skill = skillRepository.Get(skill.Id.GetValueOrDefault());
             InitializeTabs();
             HandleTabSelectionChanged();
         }
@@ -49,7 +47,7 @@ namespace Teleopti.Ccc.Win.Forecasting.Forms
 			if (reloadSkill)
 			{
 				var skillRepository = new SkillRepository(UnitOfWork);
-				_skill = skillRepository.Get(skill.Id.Value);
+				_skill = skillRepository.Get(skill.Id.GetValueOrDefault());
 			}
 			else
 				_skill = skill;
