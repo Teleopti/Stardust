@@ -4239,6 +4239,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Collecting data....
+        /// </summary>
+        public static string CollectingData {
+            get {
+                return ResourceManager.GetString("CollectingData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to :  .
         /// </summary>
         public static string Colon {
@@ -9793,6 +9802,15 @@ namespace Teleopti.Ccc.UserTexts {
         public static string Improve {
             get {
                 return ResourceManager.GetString("Improve", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Improved.
+        /// </summary>
+        public static string Improved {
+            get {
+                return ResourceManager.GetString("Improved", resourceCulture);
             }
         }
         
