@@ -6,11 +6,11 @@ using WatiN.Core;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserInteractions.WatiNIE
 {
-	public class IEWatiNBrowserInteractions : IBrowserInteractions
+	public class WatiNIEBrowserInteractions : IBrowserInteractions
 	{
 		private readonly IE _browser;
 
-		public IEWatiNBrowserInteractions(IE browser)
+		public WatiNIEBrowserInteractions(IE browser)
 		{
 			_browser = browser;
 		}
