@@ -99,8 +99,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[Then(@"I should see a user-friendly message explaining I dont have anything to view")]
 		public void ThenIShouldSeeAUser_FriendlyMessageExplainingIDontHaveAnythingToView()
 		{
-			var page = Browser.Current.Page<CalendarCellsPage>();
-			EventualAssert.That(() => page.FriendlyMessage.Exists, Is.True);
+			Browser.Interactions.AssertExists(".alert.alert-block");
 		}
 
 		[Then(@"I should see next virtual schedule period")]
