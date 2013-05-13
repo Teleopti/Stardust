@@ -3661,25 +3661,18 @@ namespace Teleopti.Ccc.Win.Scheduling
 			{
 				schedulingOptions.OnlyShiftsWhenUnderstaffed = false;
 
-				if (!schedulingOptions.UseTeamBlockPerOption)
-				{
-					if (schedulingOptions.UseGroupScheduling)
-					{
-						var allMatrixes = _container.Resolve<IMatrixListFactory>().CreateMatrixListAll(selectedPeriod);
-						_scheduleOptimizerHelper.GroupSchedule(_backgroundWorkerScheduling, scheduleDays, matrixesOfSelectedScheduleDays,
-						                                       allMatrixesOfSelectedPersons, schedulingOptions,
-						                                       _container.Resolve<IGroupPageHelper>(), allMatrixes);
-					}
-					else
-						_scheduleOptimizerHelper.ScheduleSelectedPersonDays(scheduleDays, matrixesOfSelectedScheduleDays,
+				if (schedulingOptions.UseTeamBlockPerOption || schedulingOptions.UseGroupScheduling)
+                {
+                    //when the advance scheduling is required
+					_container.Resolve<ITeamBlockScheduleCommand>().Execute(schedulingOptions, _backgroundWorkerScheduling, scheduleDays);
+				
+                }
+                else
+                {
+                   	_scheduleOptimizerHelper.ScheduleSelectedPersonDays(scheduleDays, matrixesOfSelectedScheduleDays,
 						                                                    allMatrixesOfSelectedPersons, true,
 						                                                    _backgroundWorkerScheduling, schedulingOptions);
-				}
-				else
-				{
-					//when the advance scheduling is required
-					_container.Resolve<ITeamBlockScheduleCommand>().Execute(schedulingOptions, _backgroundWorkerScheduling, scheduleDays);
-				}
+                }
 
 			}
 			else
@@ -3693,11 +3686,17 @@ namespace Teleopti.Ccc.Win.Scheduling
 				schedulingOptions.UseShiftCategoryLimitations = useShiftCategoryLimitations;
 				if (schedulingOptions.UseShiftCategoryLimitations)
 				{
+					var currentPersonTimeZone = TeleoptiPrincipal.Current.Regional.TimeZone;
+					var selectedPeriod =
+						new DateOnlyPeriod(
+							OptimizerHelperHelper.GetStartDateInSelectedDays(scheduleDays, currentPersonTimeZone),
+							OptimizerHelperHelper.GetEndDateInSelectedDays(scheduleDays, currentPersonTimeZone));
+
 					IList<IScheduleMatrixPro> allMatrixes = new List<IScheduleMatrixPro>();
 
 					if (schedulingOptions.UseGroupScheduling)
 					{
-						allMatrixes = _container.Resolve<IMatrixListFactory>().CreateMatrixListAll(selectedPeriod);
+						allMatrixes = OptimizerHelperHelper.CreateMatrixListAll(_schedulerState, _container);
 					}
 
 					_scheduleOptimizerHelper.RemoveShiftCategoryBackToLegalState(matrixesOfSelectedScheduleDays, _backgroundWorkerScheduling,
