@@ -6,12 +6,13 @@ define(
     ) {
 
         function _initAjaxErrorCallback() {
-            $(document).ajaxError(function (e, jqxhr, settings, exception) {
-                _displayError(exception);
+            $(document).ajaxError(function (event, jqXHR, ajaxSettings, thrownError) {
+                _displayError(thrownError);
             });
         }
 
         function _displayError(message) {
+            message = message || "No message!";
             $('#error-placeholder')
                 .html(errorTemplate)
                 .find('span')
