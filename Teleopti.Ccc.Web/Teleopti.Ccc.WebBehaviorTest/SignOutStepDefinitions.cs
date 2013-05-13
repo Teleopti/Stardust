@@ -1,7 +1,5 @@
 ﻿using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Core;
-using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
-using Teleopti.Ccc.WebBehaviorTest.Pages;
 
 namespace Teleopti.Ccc.WebBehaviorTest
 {
@@ -11,8 +9,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I sign out")]
 		public void WhenISignOut()
 		{
-			var page = Browser.Current.Page<PortalPage>();
-			page.SignOutLink.EventualClick();
+			Browser.Interactions.Click("#signout");
 		}
 
 		[When(@"I press back in the web browser")]

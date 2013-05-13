@@ -14,6 +14,7 @@ using Autofac;
 using Teleopti.Ccc.Domain.Infrastructure;
 using Teleopti.Ccc.Domain.Scheduling.ScheduleTagging;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
+using Teleopti.Ccc.Win.Commands;
 using Teleopti.Ccc.Win.Optimization;
 using Teleopti.Ccc.Win.Scheduling.AgentRestrictions;
 using Teleopti.Ccc.WinCode.Forecasting.ImportForecast;
@@ -3636,7 +3637,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 					OptimizerHelperHelper.GetStartDateInSelectedDays(scheduleDays, currentPersonTimeZone),
 					OptimizerHelperHelper.GetEndDateInSelectedDays(scheduleDays, currentPersonTimeZone));
 
-            IList<IScheduleMatrixPro> matrixesOfSelectedScheduleDays = OptimizerHelperHelper.CreateMatrixList(scheduleDays, _schedulerState.SchedulingResultState, _container, selectedPeriod);
+			IList<IScheduleMatrixPro> matrixesOfSelectedScheduleDays = _container.Resolve<IMatrixListFactory>().CreateMatrixList(scheduleDays, selectedPeriod);
 			if (matrixesOfSelectedScheduleDays.Count == 0)
 				return;
 
@@ -3647,14 +3648,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 				allScheduleDays.AddRange(_schedulerState.Schedules[scheduleMatrixPro.Person].ScheduledDayCollection(scheduleMatrixPro.SchedulePeriod.DateOnlyPeriod).ToList());
 			}
 
-			var allMatrixesOfSelectedPersons = OptimizerHelperHelper.CreateMatrixList(allScheduleDays, _schedulerState.SchedulingResultState, _container, selectedPeriod);
+			var allMatrixesOfSelectedPersons = _container.Resolve<IMatrixListFactory>().CreateMatrixList(allScheduleDays, selectedPeriod);
 
 			_undoRedo.CreateBatch(Resources.UndoRedoScheduling);
 
-			//Extend period with 10 days to handle block scheduling
 			DateOnlyPeriod groupPagePeriod = _schedulerState.RequestedPeriod.DateOnlyPeriod;
-            //if (schedulingOptions.UseBlockScheduling != BlockFinderType.None)
-            //    groupPagePeriod = new DateOnlyPeriod(groupPagePeriod.StartDate.AddDays(-10), groupPagePeriod.EndDate.AddDays(10));
 
 			_groupPagePerDateHolder.ShiftCategoryFairnessGroupPagePerDate = _container.Resolve<IGroupPageCreator>()
 				   .CreateGroupPagePerDate(groupPagePeriod.DayCollection(), _container.Resolve<IGroupScheduleGroupPageDataProvider>(), _optimizerOriginalPreferences.SchedulingOptions.GroupPageForShiftCategoryFairness);
@@ -3667,7 +3665,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				{
 					if (schedulingOptions.UseGroupScheduling)
 					{
-						var allMatrixes = OptimizerHelperHelper.CreateMatrixListAll(_schedulerState, _container, selectedPeriod);
+						var allMatrixes = _container.Resolve<IMatrixListFactory>().CreateMatrixListAll(selectedPeriod);
 						_scheduleOptimizerHelper.GroupSchedule(_backgroundWorkerScheduling, scheduleDays, matrixesOfSelectedScheduleDays,
 						                                       allMatrixesOfSelectedPersons, schedulingOptions,
 						                                       _container.Resolve<IGroupPageHelper>(), allMatrixes);
@@ -3680,12 +3678,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				else
 				{
 					//when the advance scheduling is required
-					_groupPagePerDateHolder.GroupPersonGroupPagePerDate = _groupPagePerDateHolder.ShiftCategoryFairnessGroupPagePerDate;
-
-					var allVisibleMatrixes = OptimizerHelperHelper.CreateMatrixListAll(_schedulerState, _container, selectedPeriod);
-					_scheduleOptimizerHelper.BlockTeamScheduleSelected(matrixesOfSelectedScheduleDays, allMatrixesOfSelectedPersons,
-					                                                   allVisibleMatrixes, _backgroundWorkerScheduling,
-					                                                   schedulingOptions, scheduleDays);
+					_container.Resolve<ITeamBlockScheduleCommand>().Execute(schedulingOptions, _backgroundWorkerScheduling, scheduleDays);
 				}
 
 			}
@@ -3704,7 +3697,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 					if (schedulingOptions.UseGroupScheduling)
 					{
-						allMatrixes = OptimizerHelperHelper.CreateMatrixListAll(_schedulerState, _container, selectedPeriod);
+						allMatrixes = _container.Resolve<IMatrixListFactory>().CreateMatrixListAll(selectedPeriod);
 					}
 
 					_scheduleOptimizerHelper.RemoveShiftCategoryBackToLegalState(matrixesOfSelectedScheduleDays, _backgroundWorkerScheduling,
@@ -3934,14 +3927,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 					_optimizationHelperWin.ResourceCalculateMarkedDays(e, null,
 					                                                   _optimizerOriginalPreferences.SchedulingOptions
 					                                                                                .ConsiderShortBreaks, true);
-					IList<IScheduleMatrixPro> matrixList = OptimizerHelperHelper.CreateMatrixList(selectedSchedules,
-					                                                                              _schedulerState.SchedulingResultState,
-					                                                                              _container, selectedPeriod);
+					IList<IScheduleMatrixPro> matrixList = _container.Resolve<IMatrixListFactory>().CreateMatrixList(selectedSchedules,
+					                                                                              selectedPeriod);
 
 
 					if (optimizerPreferences.Extra.UseTeams)
 					{
-						allMatrixes = OptimizerHelperHelper.CreateMatrixListAll(_schedulerState, _container, selectedPeriod);
+						allMatrixes = _container.Resolve<IMatrixListFactory>().CreateMatrixListAll(selectedPeriod);
 					}
 
 					_scheduleOptimizerHelper.GetBackToLegalState(matrixList, _schedulerState, _backgroundWorkerOptimization,
@@ -3951,7 +3943,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 				case OptimizationMethod.ReOptimize:
 					if (optimizerPreferences.Extra.UseTeams)
 					{
-						allMatrixes = OptimizerHelperHelper.CreateMatrixListAll(_schedulerState, _container, selectedPeriod);
+						allMatrixes = _container.Resolve<IMatrixListFactory>().CreateMatrixListAll(selectedPeriod);
 						_groupDayOffOptimizerHelper.ReOptimize(_backgroundWorkerOptimization, selectedSchedules, allMatrixes);
 						break;
 					}

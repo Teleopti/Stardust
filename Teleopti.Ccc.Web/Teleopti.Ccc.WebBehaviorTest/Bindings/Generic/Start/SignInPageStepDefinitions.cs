@@ -22,21 +22,15 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 			Pages.Pages.CurrentSignInPage.SignInApplication(userName, TestData.CommonPassword);
 		}
 
-		[When(@"I sign in with")]
-		public void WhenISignInWith(Table table)
+		[When(@"I try to sign in with")]
+		public void WhenITryToSignInWith(Table table)
 		{
+			Navigation.GotoGlobalSignInPage();
 			var user = table.CreateInstance<UserConfigurable>();
 			var userName = user.UserName;
 			var password = user.Password;
 			WhenISelectApplicationLogonDataSource();
 			Pages.Pages.CurrentSignInPage.SignInApplication(userName, password);
-		}
-
-		[When(@"I try to sign in with")]
-		public void WhenITryToSignInWith(Table table)
-		{
-			Navigation.GotoGlobalSignInPage();
-			WhenISignInWith(table);
 		}
 
 		[When(@"I sign in by windows credentials")]
@@ -92,12 +86,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 			Browser.Interactions.AssertExists("#signout, #signout-button");
 		}
 
-		[Then(@"I should see a log on error")]
-		public void ThenIShouldSeeAnLogOnError()
-		{
-			EventualAssert.That(() => Pages.Pages.CurrentSignInPage.ValidationSummary.Text, new StringContainsAnyLanguageResourceConstraint("LogOnFailedInvalidUserNameOrPassword"));
-		}
-
 		[Then(@"I should see a log on error '(.*)'")]
 		public void ThenIShouldSeeALogOnError(string resourceText)
 		{
@@ -107,31 +95,29 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Start
 		[Then(@"I should see the global sign in page")]
 		public void ThenIShouldSeeTheGlobalSignInPage()
 		{
-			EventualAssert.That(() => Pages.Pages.CurrentSignInPage.UserNameTextField.Exists, Is.True);
-			
-			EventualAssert.That(() => Browser.Current.Url, Is.Not.StringContaining("/MyTime/Authentication"));
-			EventualAssert.That(() => Browser.Current.Url, Is.Not.StringContaining("/MobileReports/Authentication"));
-			
+			Browser.Interactions.AssertExists("#Username-input");
+			Browser.Interactions.AssertUrlNotContains("/Authentication", "/MyTime");
+			Browser.Interactions.AssertUrlNotContains("/Authentication", "/MobileReports");
 		}
 
 		[Then(@"I should see MyTime's sign in page")]
 		public void ThenIShouldSeeMyTimesSignInPage()
 		{
-			EventualAssert.That(() => Pages.Pages.CurrentSignInPage.UserNameTextField.Exists, Is.True);
-			EventualAssert.That(() => Browser.Current.Url, Is.StringContaining("/MyTime/Authentication"));
+			Browser.Interactions.AssertExists("#Username-input");
+			Browser.Interactions.AssertUrlContains("/MyTime/Authentication");
 		}
 
 		[Then(@"I should see Mobile Report's sign in page")]
 		public void ThenIShouldSeeMobileReportsSignInPage()
 		{
-			EventualAssert.That(() => Pages.Pages.CurrentSignInPage.UserNameTextField.Exists, Is.True);
-			EventualAssert.That(() => Browser.Current.Url, Is.StringContaining("/MobileReports/Authentication"));
+			Browser.Interactions.AssertExists("#Username-input");
+			Browser.Interactions.AssertUrlContains("/MobileReports/Authentication");
 		}
 
 		[Then(@"I should see the global menu")]
 		public void ThenIShouldSeeTheGlobalMenu()
 		{
-			EventualAssert.That(() => Browser.Current.Url, Is.StringContaining("/Authentication#menu"));
+			Browser.Interactions.AssertUrlContains("/Authentication#menu");
 		}
 
 

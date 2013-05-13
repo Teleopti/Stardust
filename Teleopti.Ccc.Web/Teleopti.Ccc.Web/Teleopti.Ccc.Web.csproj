@@ -205,6 +205,7 @@
     <Reference Include="System.Configuration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Areas\Anywhere\Core\DateAndTimeFormatExtensions.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\AbsenceAgents.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\AbsenceTimeProvider.cs" />
     <Compile Include="Areas\MyTime\Core\Common\DataProvider\IAbsenceTimeProvider.cs" />
@@ -399,6 +400,7 @@
     <Compile Include="Areas\Start\Models\Authentication\IAuthenticationType.cs" />
     <Compile Include="Areas\Start\Models\Authentication\WindowsAuthenticationModel.cs" />
     <Compile Include="Areas\Start\Models\Authentication\WindowsAuthenticationType.cs" />
+    <Compile Include="Core\Startup\ExceptionHandlerPipelineModule.cs" />
     <Compile Include="Core\Startup\InitializeApplication\MessageBrokerTask.cs" />
     <Compile Include="Core\Startup\InterceptorPipelineModule.cs" />
     <Compile Include="Filters\AsyncTaskAttribute.cs" />
@@ -624,12 +626,15 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Areas\Anywhere\Content\Scripts\ajax.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\errorview.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\signalrhubs.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\resizeevent.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\messagebroker.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\subscriptions.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\menu.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\addfulldayabsenceform.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\absencelistitem.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\layer.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\timeline-time.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\views\personschedule\timeline.js" />
@@ -863,6 +868,8 @@
     <Content Include="Content\modernizr\modernizr-2.6.2.min.js" />
     <Content Include="Content\moment-datepicker\datepicker.css" />
     <Content Include="Content\moment\moment.all.min.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\require\resources.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\require\signalrrr.js" />
     <Content Include="Content\require\noext.js" />
     <Content Include="Content\require\require.js" />
     <Content Include="Content\require\text.js" />

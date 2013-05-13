@@ -11425,6 +11425,10 @@ Reduce the complexity to use these shifts.</value>
     <value>h</value>
     <comment>Hour in short description</comment>
   </data>
+  <data name="ConfirmRemoval" xml:space="preserve">
+    <value>Confirm removal</value>
+    <comment>Confirm removal</comment>
+  </data>
   <data name="NotAllowedMoveOfAssignmentToOtherDate" xml:space="preserve">
     <value>It is not allowed to move a work shift to another day in shift editor, use cut and paste instead</value>
     <comment>It is not allowed to move a work shift to another day in shift editor, use cut and paste instead</comment>

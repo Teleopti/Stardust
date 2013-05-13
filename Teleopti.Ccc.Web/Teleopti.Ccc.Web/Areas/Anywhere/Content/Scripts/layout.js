@@ -10,7 +10,9 @@ define([
         'momentDatepickerKo',
         'menu',
         'subscriptions',
-        'noext!application/resources'
+        'ajax',
+        'errorview',
+        'resources!r'
     ], function(
         layoutTemplate,
         menuTemplate,
@@ -22,6 +24,8 @@ define([
         datepicker,
         menuViewModel,
         subscriptions,
+        ajax,
+        errorview,
         resources) {
 
         var currentView;
@@ -30,6 +34,8 @@ define([
         var contentPlaceHolder;
 
         function _displayView(routeInfo) {
+
+            errorview.remove();
 
             routeInfo.renderHtml = function(html) {
                 contentPlaceHolder.html(html);
@@ -41,12 +47,12 @@ define([
             require([module], function(view) {
 
                 if (view == undefined) {
-                    _displayError("View " + routeInfo.view + " could not be loaded");
+                    errorview.display("View " + routeInfo.view + " could not be loaded");
                     return;
                 }
 
                 view.ready = false;
-                
+
                 if (view != currentView) {
                     if (currentView && currentView.dispose)
                         currentView.dispose(routeInfo);
@@ -72,10 +78,6 @@ define([
             });
 
             menu.ActiveView(routeInfo.view);
-        }
-
-        function _displayError(message) {
-            contentPlaceHolder.html(errorTemplate).find('span').text(message);
         }
 
         function _setupRoutes() {
@@ -161,7 +163,7 @@ define([
             for (var i = 0; i < languages.length; i++) {
                 try {
                     moment.lang(languages[i]);
-					if (moment.lang() == languages[i]) return;
+                    if (moment.lang() == languages[i]) return;
                 } catch(e) {
                     continue;
                 }
@@ -169,9 +171,7 @@ define([
         }
 
         function _bindMenu() {
-            $.ajax({
-                dataType: "json",
-                cache: false,
+            ajax.ajax({
                 url: "Application/NavigationContent",
                 success: function(responseData, textStatus, jqXHR) {
                     menu.MyTimeVisible(responseData.IsMyTimeAvailable === true);
@@ -199,4 +199,5 @@ define([
         _initMomentLanguageWithFallback();
 
         _bindMenu();
+
     });

@@ -20,13 +20,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
 			var absence = new AbsenceRepository(uow).LoadAll().Single(abs => abs.Description.Name.Equals(Name));
-			var startTimeUtc = user.PermissionInformation.DefaultTimeZone().SafeConvertTimeToUtc(StartTime);
-			var endTimeUtc = user.PermissionInformation.DefaultTimeZone().SafeConvertTimeToUtc(EndTime);
 
-			var personAbsence = new PersonAbsence(user, Scenario, new AbsenceLayer(absence, new DateTimePeriod(startTimeUtc, endTimeUtc)));
+			var personAbsence = new PersonAbsence(Scenario);
+			personAbsence.AddExplicitAbsence(TestData.DataSource.DataSourceName, user, absence, StartTime, EndTime);
 
 			var repository = new PersonAbsenceRepository(uow);
-
 			repository.Add(personAbsence);
 		}
 	}

@@ -49,7 +49,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		/// <summary>
 		/// Make this person absence a full day absence
 		/// </summary>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
 		public virtual void FullDayAbsence(string dataSource, IPerson person, IAbsence absence, DateTime startDate, DateTime endDate)
 		{
 			var startDateTime = TimeZoneInfo.ConvertTimeToUtc(DateTime.SpecifyKind(startDate.Date, DateTimeKind.Unspecified), person.PermissionInformation.DefaultTimeZone());
@@ -71,6 +70,40 @@ namespace Teleopti.Ccc.Domain.Scheduling
 				});
 		}
 
+		public virtual void RemovePersonAbsence(string dataSourceName)
+		{
+			AddEvent(new PersonAbsenceRemovedEvent
+			{
+				Datasource = dataSourceName,
+				BusinessUnitId = BusinessUnit.Id.Value,
+				PersonId = Person.Id.Value,
+				ScenarioId = Scenario.Id.Value,
+				StartDateTime = Period.StartDateTime,
+				EndDateTime = Period.EndDateTime
+			});
+		}
+
+		public virtual void AddExplicitAbsence(string dataSource, IPerson person, IAbsence absence, DateTime startDateTime, DateTime endDateTime)
+		{
+			startDateTime = TimeZoneInfo.ConvertTimeToUtc(DateTime.SpecifyKind(startDateTime, DateTimeKind.Unspecified), person.PermissionInformation.DefaultTimeZone());
+			endDateTime = TimeZoneInfo.ConvertTimeToUtc(DateTime.SpecifyKind(endDateTime, DateTimeKind.Unspecified), person.PermissionInformation.DefaultTimeZone());
+
+			_person = person;
+			var absenceLayer = new AbsenceLayer(absence, new DateTimePeriod(startDateTime, endDateTime));
+			_layer = absenceLayer;
+
+			AddEvent(new PersonAbsenceAddedEvent
+				{
+					Datasource = dataSource,
+					BusinessUnitId = _scenario.BusinessUnit.Id.Value,
+					AbsenceId = absence.Id.Value,
+					PersonId = person.Id.Value,
+					StartDateTime = startDateTime,
+					EndDateTime = endDateTime,
+					ScenarioId = _scenario.Id.Value
+				});
+		}
+		
         /// <summary>
         /// Constructor for NHibernate
         /// </summary>

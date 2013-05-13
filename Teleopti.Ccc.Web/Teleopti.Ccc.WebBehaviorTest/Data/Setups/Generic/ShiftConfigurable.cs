@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Globalization;
 using System.Linq;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Infrastructure.Repositories;
@@ -15,48 +16,49 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 	public class ShiftConfigurable : IUserDataSetup
 	{
 		private DateTimePeriod _assignmentPeriod;
+
 		public string ShiftCategory { get; set; }
+		public string Activity { get; set; }
 		public DateTime StartTime { get; set; }
 		public DateTime EndTime { get; set; }
+
+		public string LunchActivity { get; set; }
 		public bool Lunch3HoursAfterStart { get; set; }
-		public string ShiftColor { get; set; }
-		public string AllActivityColor { get; set; }
+		public DateTime LunchStartTime { get; set; }
+		public DateTime LunchEndTime { get; set; }
 		public string Activity { get; set; }
-		public DateOnly Date { get; set; }
+
+		public string ShiftColor { get; set; }	// this should not be here. this exists on the ShiftCategoryConfigurable
+		public string AllActivityColor { get; set; }// this should not be here. this should exist on the ActivityConfigurable
 
 		public IScenario Scenario = GlobalDataContext.Data().Data<CommonScenario>().Scenario;
 
 		public void Apply(IUnitOfWork uow, IPerson user, CultureInfo cultureInfo)
 		{
-			var shiftCat = new ShiftCategoryRepository(uow).LoadAll().Single(sCat => sCat.Description.Name.Equals(ShiftCategory));
-
+			var shiftCategory = new ShiftCategoryRepository(uow).LoadAll().Single(sCat => sCat.Description.Name.Equals(ShiftCategory));
 			if (ShiftColor != null)
-				shiftCat.DisplayColor = Color.FromName(ShiftColor);
+				shiftCategory.DisplayColor = Color.FromName(ShiftColor);
 
-
-			var assignmentRepository = new PersonAssignmentRepository(uow);
-
-			var startTimeUtc = user.PermissionInformation.DefaultTimeZone().SafeConvertTimeToUtc(StartTime);
-			var endTimeUtc = user.PermissionInformation.DefaultTimeZone().SafeConvertTimeToUtc(EndTime);
-
-			// create main shift
-			if (Date == new DateOnly())
-			{
-				//if not explicitly set of user, try to set based on starttime
-				Date = new DateOnly(StartTime);
-			}
-			_assignmentPeriod = new DateTimePeriod(startTimeUtc, endTimeUtc);
-			var assignment = PersonAssignmentFactory.CreatePersonAssignment(user, Scenario, Date);
-
+			var activity = TestData.ActivityPhone;
+			if (Activity != null)
+				activity = new ActivityRepository(uow).LoadAll().Single(sCat => sCat.Description.Name.Equals(Activity));
 			if (AllActivityColor != null)
 			{
-				var activity = new Activity("Phone");
+				activity = new Activity("Phone");
 				new ActivityRepository(uow).Add(activity);
 				activity.DisplayColor = Color.FromName(AllActivityColor);
-				assignment.SetMainShift(MainShiftFactory.CreateMainShift(activity, _assignmentPeriod, shiftCat));
 			}
-			else
+
+			var lunchActivity = TestData.ActivityLunch;
+			if (LunchActivity != null)
+				lunchActivity = new ActivityRepository(uow).LoadAll().Single(sCat => sCat.Description.Name.Equals(LunchActivity));
+			else if (AllActivityColor != null)
 			{
+		                lunchActivity = new Activity("Lunch");
+				new ActivityRepository(uow).Add(lunchActivity);
+				lunchActivity.DisplayColor = Color.FromName(AllActivityColor);
+
+
 				if (Activity == null)
 				{
 					var activityPhone = TestData.ActivityPhone;
@@ -74,23 +76,33 @@ namespace Teleopti.Ccc.WebBehaviorTest.Data.Setups.Generic
 
 
 
-			// add lunch
-			if (Lunch3HoursAfterStart)
-			{
-				var lunchPeriod = new DateTimePeriod(startTimeUtc.AddHours(3), startTimeUtc.AddHours(4));
+			var assignmentRepository = new PersonAssignmentRepository(uow);
 
-				if (AllActivityColor != null)
-				{
-					var lunchActivity = new Activity("Lunch");
-					new ActivityRepository(uow).Add(lunchActivity);
-					lunchActivity.DisplayColor = Color.FromName(AllActivityColor);
-					assignment.MainShift.LayerCollection.Add(new MainShiftActivityLayer(lunchActivity, lunchPeriod));
-				}
-				else
-				{
-					assignment.MainShift.LayerCollection.Add(new MainShiftActivityLayer(TestData.ActivityLunch, lunchPeriod));
-				}
+			var startTimeUtc = user.PermissionInformation.DefaultTimeZone().SafeConvertTimeToUtc(StartTime);
+			var endTimeUtc = user.PermissionInformation.DefaultTimeZone().SafeConvertTimeToUtc(EndTime);
+
+			_assignmentPeriod = new DateTimePeriod(startTimeUtc, endTimeUtc);
+			var assignment = PersonAssignmentFactory.CreatePersonAssignment(user, Scenario, new DateOnly(StartTime));
+
+			assignment.SetMainShift(MainShiftFactory.CreateMainShift(activity, _assignmentPeriod, shiftCategory));
+
+			// add lunch
+			DateTimePeriod? lunchPeriod = null;
+			if (LunchStartTime != DateTime.MinValue)
+			{
+				var lunchStartTimeUtc = user.PermissionInformation.DefaultTimeZone().SafeConvertTimeToUtc(LunchStartTime);
+				var lunchEndTimeUtc = user.PermissionInformation.DefaultTimeZone().SafeConvertTimeToUtc(LunchEndTime);
+				lunchPeriod = new DateTimePeriod(lunchStartTimeUtc, lunchEndTimeUtc);
 			}
+			else if (Lunch3HoursAfterStart)
+			{
+				lunchPeriod = new DateTimePeriod(startTimeUtc.AddHours(3), startTimeUtc.AddHours(4));
+			}
+			if (lunchPeriod.HasValue)
+				assignment.MainShift.LayerCollection.Add(new MainShiftActivityLayer(lunchActivity, lunchPeriod.Value));
+
+			// simply publish the schedule changed event so that the read model is updated
+			assignment.ScheduleChanged(TestData.DataSource.DataSourceName);
 
 			assignmentRepository.Add(assignment);
 

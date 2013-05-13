@@ -1,29 +1,30 @@
 define([
-		'knockout',
-		'moment',
-		'noext!application/resources'
-	], function (
-		ko,
-		moment, 
-		resources) {
+        'knockout',
+        'moment',
+        'resources!r'
+    ], function(
+        ko,
+        moment,
+        resources
+    ) {
 
-		return function (timeline, minutes) {
+        return function(timeline, minutes) {
 
-			var self = this;
+            var self = this;
 
-			this.Minutes = ko.observable(minutes);
+            this.Minutes = ko.observable(minutes);
 
-			this.Time = ko.computed(function () {
-				var time = moment().startOf('day').add('minutes', self.Minutes());
-				return time.format(resources.ShortTimePattern);
-			});
+            this.Time = ko.computed(function() {
+                var time = moment().startOf('day').add('minutes', self.Minutes());
+                return time.format(resources.TimeFormatForMoment);
+            });
 
-			this.Pixel = ko.computed(function () {
-				var startMinutes = self.Minutes() - timeline.StartMinutes();
-				var pixels = startMinutes * timeline.PixelsPerMinute();
-				return Math.round(pixels);
-			});
+            this.Pixel = ko.computed(function() {
+                var startMinutes = self.Minutes() - timeline.StartMinutes();
+                var pixels = startMinutes * timeline.PixelsPerMinute();
+                return Math.round(pixels);
+            });
 
-		};
+        };
 
-	});
+    });

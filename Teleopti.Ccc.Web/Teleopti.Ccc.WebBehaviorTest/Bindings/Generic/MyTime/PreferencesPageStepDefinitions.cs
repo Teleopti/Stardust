@@ -53,7 +53,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		}
 
 		[Then(@"I should see that I have an extended preference on '(.*)'")]
-		[Then(@"I should see an extended preference indication on '(.*)'")]
 		public void ThenIShouldSeeThatIHaveAnExtendedPreferenceOn(DateTime date)
 		{
 			var indication = Pages.Pages.PreferencePage.ExtendedPreferenceIndicationForDate(date);

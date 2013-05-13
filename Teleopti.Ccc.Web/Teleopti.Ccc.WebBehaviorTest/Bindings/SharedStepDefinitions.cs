@@ -34,13 +34,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Pages.Pages.CurrentDateRangeSelector.ClickPrevious();
 		}
 
-		[Then(@"the week-picker should close")]
-		[Then(@"the day-picker should close")]
-		public void ThenTheWeek_PickerShouldClose()
-		{
-			EventualAssert.That(() => Pages.Pages.CurrentDateRangeSelector.DatePicker.IsClosed(), Is.True);
-		}
-
 		[When(@"I click the OK button")]
 		public void WhenIClickTheOKButton()
 		{
@@ -62,7 +55,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[Then(@"I should see an error message")]
 		public void ThenIShouldSeeAnErrorMessage()
 		{
-			EventualAssert.That(() => Browser.Current.Div("error-panel").Exists, Is.True);
+			Browser.Interactions.AssertExists("#error-panel");
 		}
 
 		[Then(@"I should see a symbol at the top of the schedule for date '(.*)'")]
@@ -99,8 +92,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		[Then(@"I should see a user-friendly message explaining I dont have anything to view")]
 		public void ThenIShouldSeeAUser_FriendlyMessageExplainingIDontHaveAnythingToView()
 		{
-			var page = Browser.Current.Page<CalendarCellsPage>();
-			EventualAssert.That(() => page.FriendlyMessage.Exists, Is.True);
+			Browser.Interactions.AssertExists("#friendly-message");
 		}
 
 		[Then(@"I should see next virtual schedule period")]

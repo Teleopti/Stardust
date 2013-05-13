@@ -132,12 +132,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.TextRequestTab.Exists, Is.False);
 		}
 
-		[Then(@"I should not see the add text request tab")]
-		public void ThenIShouldNotSeeTheTextRequestTabInvisible()
-		{
-			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.TextRequestTab.IsDisplayed(), Is.False);
-		}
-
 		[Then(@"I should see the add absence request form")]
 		public void ThenIShouldSeeTheAbsenceRequestTab()
 		{
@@ -150,12 +144,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		public void ThenIShouldNotSeeTheAbsenceRequestTab()
 		{
 			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.AbsenceRequestTab.Exists, Is.False);
-		}
-
-		[Then(@"I should not see the add absence request tab")]
-		public void ThenIShouldNotSeeTheAbsenceRequestTabInvisible()
-		{
-			EventualAssert.That(() => Pages.Pages.CurrentEditRequestPage.AbsenceRequestTab.IsDisplayed(), Is.False);
 		}
 
 		[Then(@"I should not see the deny reason")]

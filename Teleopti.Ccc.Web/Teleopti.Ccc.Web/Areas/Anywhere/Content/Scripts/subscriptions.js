@@ -2,12 +2,14 @@ define([
 		'jquery',
         'messagebroker',
         'signalrhubs',
-        'helpers'
+        'helpers',
+        'errorview'
 	], function (
 		$,
 	    messagebroker,
 	    signalRHubs,
-	    helpers
+	    helpers,
+	    errorview
 	) {
 		
 		var startPromise;
@@ -23,6 +25,7 @@ define([
 	    };
 	    
 		var teamScheduleHub = $.connection.teamScheduleHub;
+	    teamScheduleHub.client.exceptionHandler = errorview.display;
 	    var incomingTeamSchedule = null;
 	    teamScheduleHub.client.incomingTeamSchedule = function (data) {
 	        if (incomingTeamSchedule != null)
@@ -30,6 +33,7 @@ define([
 	    };
 	    
 	    var personScheduleHub = $.connection.personScheduleHub;
+	    personScheduleHub.client.exceptionHandler = errorview.display;
 	    var personScheduleSubscription = null;
 	    var incomingPersonSchedule = null;
 	    personScheduleHub.client.incomingPersonSchedule = function (data) {
@@ -55,7 +59,7 @@ define([
 	        subscribePersonSchedule: function (personId, date, callback) {
 	            incomingPersonSchedule = callback;
 	            startPromise.done(function () {
-	                
+
 	                personScheduleHub.server.personSchedule(personId, date);
 
 	                personScheduleSubscription = messagebroker.subscribe({

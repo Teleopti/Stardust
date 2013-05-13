@@ -10,7 +10,8 @@ define([
 		'views/teamschedule/vm',
 		'views/teamschedule/person',
 		'text!templates/teamschedule/view.html',
-        'resizeevent'
+        'resizeevent',
+        'ajax'
 	], function (
 		ko,
 		$,
@@ -22,7 +23,8 @@ define([
 		teamScheduleViewModel,
 		personViewModel,
 		view,
-	    resize
+	    resize,
+	    ajax
 	) {
 
 		var teamSchedule;
@@ -67,12 +69,10 @@ define([
 		};
 
 		var loadPersons = function (options) {
-			$.ajax({
+		    ajax.ajax({
 				url: 'Person/PeopleInTeam',
-				cache: false,
-				dataType: 'json',
 				data: {
-					date: teamSchedule.SelectedDate().toDate().toJSON(),
+				    date: helpers.Date.ToServer(teamSchedule.SelectedDate()),
 					teamId: teamSchedule.SelectedTeam()
 				},
 				success: function (people, textStatus, jqXHR) {
@@ -117,12 +117,10 @@ define([
 			});
 		};
 		var loadTeams = function (options) {
-			$.ajax({
+			ajax.ajax({
 				url: 'Person/AvailableTeams',
-				cache: false,
-				dataType: 'json',
 				data: {
-					date: teamSchedule.SelectedDate().toDate().toJSON()
+				    date: helpers.Date.ToServer(teamSchedule.SelectedDate()),
 				},
 				success: function (data, textStatus, jqXHR) {
 					teamSchedule.SetTeams(data.Teams);

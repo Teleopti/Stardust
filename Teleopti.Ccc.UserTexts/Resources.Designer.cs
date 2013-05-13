@@ -4437,6 +4437,15 @@ namespace Teleopti.Ccc.UserTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Confirm removal.
+        /// </summary>
+        public static string ConfirmRemoval {
+            get {
+                return ResourceManager.GetString("ConfirmRemoval", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Confirm Role Delete.
         /// </summary>
         public static string ConfirmRoleDelete {

@@ -1,8 +1,10 @@
 define(
     [
-        'moment'
-    ], function(
-        momentX
+        'moment',
+        'resources!r'
+    ], function (
+        momentX,
+        resources
     ) {
 
         return {
@@ -35,13 +37,10 @@ define(
             Date: {
                 ToServer: function (date) {
                     if (moment.isMoment(date))
-                        return date.format("YYYY-MM-DD");
+                        return date.format(resources.FixedDateFormatForMoment);
                     if (date.getMonth)
-                        return date.toString('yyyy-MM-dd');
+                        return date.toString(resources.FixedDateFormat);
                     return date;
-                    
-                    // recreate the date as UTC, then convert it to local clock, and send it to the server which will then convert it correctly
-                    //return new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
                 },
                 ToMoment: function (date) {
                     if (moment.isMoment(date))

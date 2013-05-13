@@ -10975,4 +10975,22 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
     <value>Det är inte tillåtet att flytta ett skift från en dag till en annan i skifteditor, använd klipp ut och klistra in i stället.</value>
     <comment>It is not allowed to move a work shift to another day in shift editor, use cut and paste instead</comment>
   </data>
+  <data name="ChanceOfGettingAbsenceRequestGranted" xml:space="preserve">
+    <value>Chans att få frånvaroförfrågan godkänd:</value>
+  </data>
+  <data name="AddPreferenceThreeDots" xml:space="preserve">
+    <value>Lägg till önskemål...</value>
+  </data>
+  <data name="AddStudentAvailabilityThreeDots" xml:space="preserve">
+    <value>Lägg till tillgänglighet för timanställda...</value>
+  </data>
+  <data name="Fair" xml:space="preserve">
+    <value>Möjlig</value>
+  </data>
+  <data name="Good" xml:space="preserve">
+    <value>God</value>
+  </data>
+  <data name="Poor" xml:space="preserve">
+    <value>Dålig</value>
+  </data>
 </root>

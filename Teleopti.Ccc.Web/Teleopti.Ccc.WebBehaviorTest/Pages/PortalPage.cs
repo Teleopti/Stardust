@@ -49,13 +49,5 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "asm-link")]
 		public Link AsmButton { get; set; }
 
-	    [FindBy(Id = "signout")]
-		public Link SignOutLink;
-
-		[FindBy(Id = "licensed-to-label")]
-		public Span LicensedToLabel;
-
-		[FindBy(Id = "licensed-to-text")]
-		public Span LicensedToText;
 	}
 }
