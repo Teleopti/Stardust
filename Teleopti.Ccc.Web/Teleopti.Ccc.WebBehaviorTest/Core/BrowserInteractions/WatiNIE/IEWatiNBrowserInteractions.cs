@@ -58,13 +58,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserInteractions.WatiNIE
 
 		public void AssertExists(string selector)
 		{
-			EventualAssert.That(() => _browser.Element(Find.BySelector(selector)).Exists, Is.True, "Could not find element matching selector " + selector);
+			EventualAssert.That(() => _browser.Element(Find.BySelector(selector)).Exists, Is.True, "Could not find element matching selector " + selector + " in " + _browser.Html);
 		}
 
 		public void AssertNotExists(string existsSelector, string notExistsSelector)
 		{
 			AssertExists(existsSelector);
-			EventualAssert.That(() => _browser.Element(Find.BySelector(notExistsSelector)).Exists, Is.False, "Found element matching selector " + notExistsSelector + " although I shouldnt");
+			EventualAssert.That(() => _browser.Element(Find.BySelector(notExistsSelector)).Exists, Is.False, "Found element matching selector " + notExistsSelector + " in " + _browser.Html + " although I shouldnt");
 		}
 
 		public void AssertContains(string selector, string text)
