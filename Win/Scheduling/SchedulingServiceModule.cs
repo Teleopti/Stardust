@@ -250,12 +250,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 			builder.RegisterType<TeamBlockScheduleCommand>().As<ITeamBlockScheduleCommand>();
 		}
 
-		private static void registerTeamBlockDayOffOptimizerService(ContainerBuilder builder)
+		private static void registerTeamBlockIntradayOptimizerService(ContainerBuilder builder)
 		{
 			builder.RegisterType<TeamBlockIntradayDecisionMaker>().As<ITeamBlockIntradayDecisionMaker>();
+			builder.RegisterType<StandardDeviationSumCalculator>().As<IStandardDeviationSumCalculator>();
 		}
-	
-		private static void registerTeamBlockIntradayOptimizerService(ContainerBuilder builder)
+
+		private static void registerTeamBlockDayOffOptimizerService(ContainerBuilder builder)
 		{
 			builder.RegisterType<LockableBitArrayFactory>().As<ILockableBitArrayFactory>();
 			builder.RegisterType<TeamDayOffModifier>().As<ITeamDayOffModifier>();
