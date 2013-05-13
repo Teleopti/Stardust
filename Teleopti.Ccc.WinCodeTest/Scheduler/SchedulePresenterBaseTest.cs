@@ -260,11 +260,23 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Assert.AreEqual(_schedulerState.FilteredPersonDictionary.ElementAt(2).Value.Name, person2.Name);
             Assert.AreEqual(_schedulerState.FilteredPersonDictionary.ElementAt(3).Value.Name, person1.Name);
 
+	        _target.ApplyGridSort();
+			Assert.AreEqual(_schedulerState.FilteredPersonDictionary.ElementAt(0).Value.Name, person4.Name);
+			Assert.AreEqual(_schedulerState.FilteredPersonDictionary.ElementAt(1).Value.Name, person3.Name);
+			Assert.AreEqual(_schedulerState.FilteredPersonDictionary.ElementAt(2).Value.Name, person2.Name);
+			Assert.AreEqual(_schedulerState.FilteredPersonDictionary.ElementAt(3).Value.Name, person1.Name);
+
             _target.SortColumn((int)ColumnType.RowHeaderColumn);
             Assert.AreEqual(_schedulerState.FilteredPersonDictionary.ElementAt(0).Value.Name, person1.Name);
             Assert.AreEqual(_schedulerState.FilteredPersonDictionary.ElementAt(1).Value.Name, person2.Name);
             Assert.AreEqual(_schedulerState.FilteredPersonDictionary.ElementAt(2).Value.Name, person3.Name);
             Assert.AreEqual(_schedulerState.FilteredPersonDictionary.ElementAt(3).Value.Name, person4.Name);
+
+	        _target.ApplyGridSort();
+			Assert.AreEqual(_schedulerState.FilteredPersonDictionary.ElementAt(0).Value.Name, person1.Name);
+			Assert.AreEqual(_schedulerState.FilteredPersonDictionary.ElementAt(1).Value.Name, person2.Name);
+			Assert.AreEqual(_schedulerState.FilteredPersonDictionary.ElementAt(2).Value.Name, person3.Name);
+			Assert.AreEqual(_schedulerState.FilteredPersonDictionary.ElementAt(3).Value.Name, person4.Name);
 
             _schedulerState.CommonNameDescription.AliasFormat = "{EmployeeNumber}";
             _target.SortColumn((int)ColumnType.RowHeaderColumn);

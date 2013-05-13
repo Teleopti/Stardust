@@ -4803,7 +4803,11 @@ namespace Teleopti.Ccc.Win.Scheduling
 
 				if (_scheduleView != null)
 				{
-					_scheduleView.Sort(_scheduleView.Presenter.SortCommand);
+					if (_scheduleView.Presenter.SortCommand == null || _scheduleView.Presenter.SortCommand is NoSortCommand)
+						_scheduleView.Presenter.ApplyGridSort();
+					else
+						_scheduleView.Sort(_scheduleView.Presenter.SortCommand);
+
 					_grid.Refresh();
 					GridHelper.GridlockWriteProtected(_grid, LockManager);
 					_grid.Refresh();
@@ -4833,6 +4837,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			IScheduleDay selectedPart = null;
 			IScheduleSortCommand sortCommand = null;
 			IList<IPerson> selectedPersons = null;
+			int currentSortColumn = 0;
+			bool isAscendingSort = false;
 
 			if (_scheduleView != null)
 			{
@@ -4840,6 +4846,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 				scheduleParts = _scheduleView.SelectedSchedules();
 				selectedPersons = new List<IPerson>(_scheduleView.AllSelectedPersons());
 				sortCommand = _scheduleView.Presenter.SortCommand;
+				currentSortColumn = _scheduleView.Presenter.CurrentSortColumn;
+				isAscendingSort = _scheduleView.Presenter.IsAscendingSort;
 				selectedPart = _scheduleView.ViewGrid[_scheduleView.ViewGrid.CurrentCell.RowIndex, _scheduleView.ViewGrid.CurrentCell.ColIndex].CellValue as IScheduleDay;
 				_scheduleView.RefreshSelectionInfo -= _scheduleView_RefreshSelectionInfo;
 				_scheduleView.RefreshShiftEditor -= _scheduleView_RefreshShiftEditor;
@@ -4953,6 +4961,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 			if (_scheduleView != null)
 			{
 				if (sortCommand != null) _scheduleView.Presenter.SortCommand = sortCommand;
+				_scheduleView.Presenter.CurrentSortColumn = currentSortColumn;
+				_scheduleView.Presenter.IsAscendingSort = isAscendingSort;
 				_scheduleView.RefreshSelectionInfo += _scheduleView_RefreshSelectionInfo;
 				_scheduleView.RefreshShiftEditor += _scheduleView_RefreshShiftEditor;
 				_scheduleView.ViewPasteCompleted += _currentView_viewPasteCompleted;
