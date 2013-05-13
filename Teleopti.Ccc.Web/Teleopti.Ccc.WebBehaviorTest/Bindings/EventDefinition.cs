@@ -136,7 +136,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			if (!Browser.IsStarted()) return;
 			if (ScenarioContext.Current.TestError != null)
 			{
-				Log.Error("Scenario exception occurred, dumping url, text and html.");
+				Log.Error("Scenario exception occurred, dumping info here.");
 				Browser.Interactions.DumpInfo(Log.Error);
 			}
 		}
