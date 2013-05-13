@@ -19,7 +19,7 @@ define([
 	        try {
 	            func();
 	        } catch (e) {
-	            console.log(e);
+	            errorview.display(e);
 	            throw e;
 	        }
 	    };

@@ -13,6 +13,9 @@ define(
 
         function _displayError(message) {
             message = message || "No message!";
+            if (typeof message != "string") {
+                message = JSON.stringify(message);
+            }
             $('#error-placeholder')
                 .html(errorTemplate)
                 .find('span')
