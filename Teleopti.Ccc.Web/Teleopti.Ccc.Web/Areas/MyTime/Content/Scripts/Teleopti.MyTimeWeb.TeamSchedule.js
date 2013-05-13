@@ -113,24 +113,36 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 	            vm.availableTeams(data);
 
 	            var teamId = _currentId();
+	            var foundTeam = undefined;
 	            if (vm.showTeamPicker()) {
-	                var foundTeam = undefined;
 	                if (teamId)
 	                    foundTeam = vm.findTeamById(teamId);
 
 	                if (foundTeam === undefined)
 	                    foundTeam = vm.findFirstTeam();
 
+	                if (foundTeam === undefined) {
+	                    _navigateTo(moment(_currentUrlDate()).format('YYYY-MM-DD'));
+	                    return;
+	                }
+
 	                vm.selectedTeam(foundTeam.id);
 	            } else {
-	                vm.selectedTeam(teamId);
+	                if (teamId)
+	                    foundTeam = vm.findTeamById(teamId);
+	                
+	                if (foundTeam === undefined) {
+	                    _navigateTo(moment(_currentUrlDate()).format('YYYY-MM-DD'));
+	                    return;
+	                }
+	                    
+	                vm.selectedTeam(foundTeam.id);
 	            }
 	            
 	            vm.dateAndTeamKey.subscribe(function () {
 	                var team = vm.selectedTeam();
 	                if (team === undefined || team == null) return;
-	                var theDate = vm.selectedDate();
-	                _navigateTo(theDate.format('YYYY-MM-DD'), team);
+	                _navigateTo(vm.selectedDate().format('YYYY-MM-DD'), team);
 	            });
 	            
                 readyForInteraction();
