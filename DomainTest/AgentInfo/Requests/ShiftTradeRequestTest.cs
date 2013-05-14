@@ -31,6 +31,11 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
         {
             _requestedPerson = PersonFactory.CreatePerson("Mama","Hawa");
             _tradePerson = PersonFactory.CreatePerson("Day", "Trader");
+
+			CultureInfo englishCulture = CultureInfoFactory.CreateEnglishCulture();
+			_requestedPerson.PermissionInformation.SetCulture(englishCulture);
+			_tradePerson.PermissionInformation.SetCulture(englishCulture);
+
             _shiftTradeSwapDetail = new ShiftTradeSwapDetail(_requestedPerson, _tradePerson,
                                                              new DateOnly(2008, 7, 16), new DateOnly(2008, 7, 16));
 
@@ -156,8 +161,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             personRequest.Pending();
             IList<IBusinessRuleResponse> brokenRules = personRequest.Approve(requestApprovalService,_authorization);
             Assert.AreEqual(0, brokenRules.Count);
-            var notificationString = string.Format(UserTexts.Resources.ShiftTradeRequestForOneDayHasBeenApprovedDot,
-                                                   personRequest.RequestedDate.ToShortDateString());
+	        var notificationString = "A shift trade request 16-07-2008 was approved.";
 
             Assert.AreEqual(notificationString, _target.TextForNotification);
             Assert.IsTrue(messageWillBeSentToBothPersons(), "Message should be sent to both persons when approving");
@@ -181,8 +185,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             IList<IBusinessRuleResponse> brokenRules = personRequest.Approve(requestApprovalService,_authorization);
             Assert.AreEqual(1, brokenRules.Count);
 
-            var notificationString = string.Format(UserTexts.Resources.ANewShiftTradeForOneDayHasBeenCreatedDot,
-                                                   personRequest.RequestedDate.ToShortDateString());
+			var notificationString = "New shift trade request 16-07-2008, approve or deny in your request list.";
             Assert.AreEqual(notificationString, _target.TextForNotification);
 
             mocks.VerifyAll();
@@ -212,7 +215,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
          
             Assert.IsTrue(messageWillOnlyBeSentToRequestPerson(),"RequestPerson (only) should be notified when accepted from targetperson");
 
-			var notificationString = "A shift trade request 2008-07-16 was accepted by other person.";
+			var notificationString = "A shift trade request 16-07-2008 was accepted by other person.";
 
             Assert.AreEqual(notificationString, _target.TextForNotification);
             mocks.VerifyAll();
@@ -285,7 +288,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             _target.Refer(_authorization);
             Assert.AreEqual(ShiftTradeStatus.Referred, _target.GetShiftTradeStatus(new ShiftTradeRequestStatusCheckerForTestDoesNothing()));
             Assert.IsTrue(_personRequest.IsPending);
-			var notificationString = "A shift trade request 2008-07-16 - 2008-07-16 must be accepted again due to a schedule change from.";
+			var notificationString = "A shift trade request 16-07-2008 - 16-07-2008 must be accepted again due to a schedule change from.";
             Assert.AreEqual(notificationString, _target.TextForNotification);
         }
 
