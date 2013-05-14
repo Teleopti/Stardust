@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces;
@@ -139,8 +140,11 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			var teamInfosToRemove = new List<ITeamInfo>();
 			double previousPeriodValue =
 					_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
+			var totalLiveTeamInfos = remainingInfoList.Count;
+			var currentTeamInfoCounter = 0;
 			foreach (ITeamInfo teamInfo in remainingInfoList.GetRandom(remainingInfoList.Count, true))
 			{
+				currentTeamInfoCounter++;
 				bool anySuccess = false;
 				foreach (IScheduleMatrixPro matrix in teamInfo.MatrixesForGroupMember(0))
 				{
@@ -163,7 +167,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 					}
 					previousPeriodValue = currentPeriodValue;
 
-					OnReportProgress(Resources.OptimizingDaysOff + Resources.Colon + teamInfo.GroupPerson.Name + "(" + currentPeriodValue + ")");
+					OnReportProgress(Resources.OptimizingDaysOff + Resources.Colon + "(" + totalLiveTeamInfos.ToString("####") + ")(" +
+					                 currentTeamInfoCounter.ToString("####") + ") " +
+					                 StringHelper.DisplayString(teamInfo.GroupPerson.Name.ToString(), 20) + " (" + currentPeriodValue +
+					                 ")");
 					if (_cancelMe)
 						break;
 				}
