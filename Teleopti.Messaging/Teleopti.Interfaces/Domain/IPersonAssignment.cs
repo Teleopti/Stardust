@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
 namespace Teleopti.Interfaces.Domain
@@ -99,6 +100,9 @@ namespace Teleopti.Interfaces.Domain
 			/// The date
 			/// </summary>
 	    DateOnly Date { get; }
+
+	    IShiftCategory ShiftCategory { get; }
+	    IEnumerable<IMainShiftActivityLayer> MainShiftActivityLayers { get; }
 
 	    /// <summary>
         /// Adds the over time shift.

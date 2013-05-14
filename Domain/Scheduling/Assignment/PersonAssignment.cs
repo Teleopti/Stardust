@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers;
+using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Interfaces.Domain;
@@ -17,7 +18,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		private IList<IPersonalShift> _personalShiftCollection;
 		private IList<IOvertimeShift> _overtimeShiftCollection;
-		private IMainShift _mainShift;
+		private IList<IMainShiftActivityLayer> _mainShiftActivityLayers;
 		private IPerson _person;
 		private IScenario _scenario;
 		private DateTime _zorder;
@@ -31,6 +32,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			_zorder = DateTime.MinValue;
 			_personalShiftCollection = new List<IPersonalShift>();
 			_overtimeShiftCollection = new List<IOvertimeShift>();
+			_mainShiftActivityLayers = new List<IMainShiftActivityLayer>();
 		}
 
 		protected PersonAssignment()
@@ -87,12 +89,23 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			return retObj;
 		}
 
-
+		/// TO BE CONTINUED....
 		public virtual IMainShift MainShift
 		{
-			get { return _mainShift; }
+			get
+			{
+				var ret = new MainShift(ShiftCategory);
+				_mainShiftActivityLayers.ForEach(ret.LayerCollection.Add);
+				return ret;
+			}
 		}
-
+		public virtual IShiftCategory ShiftCategory { get; private set; }
+		public virtual IEnumerable<IMainShiftActivityLayer> MainShiftActivityLayers
+		{
+			get { return _mainShiftActivityLayers; }
+		}
+		///
+	
 		public virtual ReadOnlyCollection<IPersonalShift> PersonalShiftCollection
 		{
 			get { return new ReadOnlyCollection<IPersonalShift>(_personalShiftCollection); }
@@ -182,18 +195,21 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		#region Manipulate MainShift
 
+		//remove me!
 		public virtual void ClearMainShift(IPersonAssignmentRepository personAssignmentRepository)
 		{
 			InParameter.NotNull("personAssignmentRepository", personAssignmentRepository);
 			personAssignmentRepository.RemoveMainShift(this);
-			_mainShift = null;
+			//_mainShift = null;
 		}
 
 		public virtual void SetMainShift(IMainShift mainShift)
 		{
 			InParameter.NotNull("mainShift", mainShift); //use ClearMainShift method instead!
-			_mainShift = mainShift;
-			((AggregateEntity)_mainShift).SetParent(this);
+			//fix nicer later
+			_mainShiftActivityLayers.Clear();
+			mainShift.LayerCollection.ForEach(layer => _mainShiftActivityLayers.Add((IMainShiftActivityLayer)layer));
+			ShiftCategory = mainShift.ShiftCategory;
 		}
 
 		#endregion
