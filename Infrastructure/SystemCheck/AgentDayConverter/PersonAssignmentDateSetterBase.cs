@@ -25,6 +25,7 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
 			using (var cmd = new SqlCommand(NumberOfNotConvertedCommand, transaction.Connection, transaction))
 			{
 				cmd.Parameters.AddWithValue("@personId", personId);
+				cmd.Parameters.AddWithValue("@baseDate", AgentDayConverters.DateOfUnconvertedSchedule.Date);
 				if ((int)cmd.ExecuteScalar() > 0)
 				{
 					throw new NotSupportedException("Something went wrong. There is still unconverted schedules in the database!");
@@ -61,6 +62,7 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
 			using (var command = new SqlCommand(ReadUnconvertedSchedulesCommand, transaction.Connection, transaction))
 			{
 				command.Parameters.AddWithValue("@personId", personId);
+				command.Parameters.AddWithValue("@baseDate", AgentDayConverters.DateOfUnconvertedSchedule.Date);
 				using (var dataAdapter = new SqlDataAdapter(command))
 				{
 					var dt = new DataTable();
