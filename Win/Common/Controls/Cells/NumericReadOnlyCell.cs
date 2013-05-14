@@ -124,7 +124,7 @@ namespace Teleopti.Ccc.Win.Common.Controls.Cells
             //double.TryParse(value.ToString(), out d);
             if (value == null ||
                 !double.TryParse(value.ToString(), out d) ||
-                double.IsNaN(d))
+                double.IsNaN(d) || double.IsInfinity(d))
                 return "";
 
             NumberFormatInfo nfi = (NumberFormatInfo) ci.NumberFormat.Clone();
