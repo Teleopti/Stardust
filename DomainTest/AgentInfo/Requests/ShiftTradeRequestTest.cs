@@ -212,15 +212,9 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
          
             Assert.IsTrue(messageWillOnlyBeSentToRequestPerson(),"RequestPerson (only) should be notified when accepted from targetperson");
 
-            var datepattern = _tradePerson.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern;
-            var notificationString = string.Format(_tradePerson.PermissionInformation.UICulture(),
-                                                   UserTexts.Resources.ShiftTradeRequestForOneDayHasBeenAcceptedDot,
-                                                   _target.Period.StartDateTimeLocal(
-                                                       _tradePerson.PermissionInformation.DefaultTimeZone()).ToString(
-                                                           datepattern));
+			var notificationString = "A shift trade request 2008-07-16 was accepted by other person.";
 
             Assert.AreEqual(notificationString, _target.TextForNotification);
-            //Assert.AreEqual(ShiftTradeRequestHasBeenAcceptedDot, _target.TextForNotification);
             mocks.VerifyAll();
         }
 
@@ -284,13 +278,6 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             _target.Accept(null,new EmptyShiftTradeRequestSetChecksum(),_authorization);
         }
 
-        /// <summary>
-        /// Determines whether this instance can refer.
-        /// </summary>
-        /// <remarks>
-        /// Created by: HenryG
-        /// Created date: 2009-08-31
-        /// </remarks>
         [Test]
         public void CanRefer()
         {
@@ -298,12 +285,26 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             _target.Refer(_authorization);
             Assert.AreEqual(ShiftTradeStatus.Referred, _target.GetShiftTradeStatus(new ShiftTradeRequestStatusCheckerForTestDoesNothing()));
             Assert.IsTrue(_personRequest.IsPending);
-            var notificationString = string.Format(_tradePerson.PermissionInformation.UICulture(),
-                                                   UserTexts.Resources.ShiftTradeRequestHasBeenReferredDot,
-                                                   _personRequest.RequestedDate.ToShortDateString().ToString(_requestedPerson.PermissionInformation.Culture()),
-                                                   _personRequest.RequestedDate.ToShortDateString().ToString(_requestedPerson.PermissionInformation.Culture()));
+			var notificationString = "A shift trade request 2008-07-16 - 2008-07-16 must be accepted again due to a schedule change from";
             Assert.AreEqual(notificationString, _target.TextForNotification);
         }
+
+		[Test]
+		public void ShouldReferMessageForTranslatedCultureBeRequestPersonOwnLanguage()
+		{
+
+			CultureInfo swedishCulture = CultureInfoFactory.CreateSwedishCulture();
+			_requestedPerson.PermissionInformation.SetCulture(swedishCulture);
+
+			Assert.AreEqual(ShiftTradeStatus.OkByMe, _target.GetShiftTradeStatus(new ShiftTradeRequestStatusCheckerForTestDoesNothing()));
+			_target.Refer(_authorization);
+			Assert.AreEqual(ShiftTradeStatus.Referred, _target.GetShiftTradeStatus(new ShiftTradeRequestStatusCheckerForTestDoesNothing()));
+			Assert.IsTrue(_personRequest.IsPending);
+			
+			var notificationString = "En schemaändring har gjort att en förfrågan om skiftbyte måste accepteras igen.";
+			
+			Assert.AreEqual(notificationString, _target.TextForNotification);
+		}
 
         [Test]
         public void VerifyCanAddAndClearShiftTradeSwapDetails()
