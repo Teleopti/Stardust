@@ -8,6 +8,11 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 {
 	public static class CultureInfoFactory
 	{
+		public static CultureInfo CreateEnglishCulture()
+		{
+			return new CultureInfo("en-GB");
+		}
+
 		public static CultureInfo CreateSwedishCulture()
 		{
 			return new CultureInfo("sv-SE");
