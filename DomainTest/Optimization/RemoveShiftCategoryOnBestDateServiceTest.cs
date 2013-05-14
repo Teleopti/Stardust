@@ -150,7 +150,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				Expect.Call(_schedulePart.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.Once();
 				Expect.Call(_schedulePart.AssignmentHighZOrder()).Return(assignment).Repeat.Once();
 				Expect.Call(assignment.MainShift).Return(mainShift).Repeat.Once();
-				Expect.Call(mainShift.ShiftCategory).Return(ShiftCategoryFactory.CreateShiftCategory("yy")).Repeat.Once();
+				Expect.Call(assignment.ShiftCategory).Return(ShiftCategoryFactory.CreateShiftCategory("yy")).Repeat.Once();
 			}
 
 			using (_mocks.Playback())
@@ -275,7 +275,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			Expect.Call(_schedulePart.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
 			Expect.Call(_schedulePart.AssignmentHighZOrder()).Return(assignment).Repeat.AtLeastOnce();
 			Expect.Call(assignment.MainShift).Return(mainShift).Repeat.AtLeastOnce();
-			Expect.Call(mainShift.ShiftCategory).Return(_shiftCategory).Repeat.AtLeastOnce();
+			Expect.Call(assignment.ShiftCategory).Return(_shiftCategory).Repeat.AtLeastOnce();
 		}
 	}
 }

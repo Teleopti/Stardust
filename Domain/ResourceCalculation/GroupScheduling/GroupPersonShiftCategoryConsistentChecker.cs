@@ -21,9 +21,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 				if (day.SignificantPart().Equals(SchedulePartView.MainShift))
 				{
 					if (_category == null)
-						_category = day.AssignmentHighZOrder().MainShift.ShiftCategory;
+						_category = day.AssignmentHighZOrder().ShiftCategory;
 
-					if (!_category.Equals(day.AssignmentHighZOrder().MainShift.ShiftCategory))
+					if (!_category.Equals(day.AssignmentHighZOrder().ShiftCategory))
 						return false;
 				}
 			}

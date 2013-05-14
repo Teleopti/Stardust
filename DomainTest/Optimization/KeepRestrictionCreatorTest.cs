@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			{
 				Expect.Call(_schedulePart.AssignmentHighZOrder()).Return(personAssignment);
 				Expect.Call(personAssignment.MainShift).Return(mainShift);
-				Expect.Call(mainShift.ShiftCategory).Return(new ShiftCategory("TestCategory"));
+				Expect.Call(personAssignment.ShiftCategory).Return(new ShiftCategory("TestCategory"));
 			}
 			using (_mockRepository.Playback())
 			{

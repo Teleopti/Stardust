@@ -43,7 +43,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                 if (significant == SchedulePartView.MainShift)
                 {
                     IShiftCategory shiftCategory =
-                        scheduleDayPro.DaySchedulePart().AssignmentHighZOrder().MainShift.ShiftCategory;
+                        scheduleDayPro.DaySchedulePart().AssignmentHighZOrder().ShiftCategory;
 
                     if(foundCategory != null)
                     {

@@ -75,7 +75,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             IBlockFinderResult result = _interface.NextBlock();
 
-            Assert.AreEqual(_schedulePartEarly.AssignmentHighZOrder().MainShift.ShiftCategory, result.ShiftCategory);
+            Assert.AreEqual(_schedulePartEarly.AssignmentHighZOrder().ShiftCategory, result.ShiftCategory);
             Assert.AreEqual(3, result.BlockDays.Count);
             Assert.AreEqual(_scheduleDayPro1.Day, result.BlockDays[0]);
             Assert.AreEqual(_scheduleDayPro4.Day, result.BlockDays[2]);
@@ -130,7 +130,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             IBlockFinderResult result = _target.FindValidBlockForDate(_scheduleDayPro3.Day);
             Assert.AreEqual(3, result.BlockDays.Count);
-            Assert.AreEqual(_schedulePartEarly.AssignmentHighZOrder().MainShift.ShiftCategory, result.ShiftCategory);
+            Assert.AreEqual(_schedulePartEarly.AssignmentHighZOrder().ShiftCategory, result.ShiftCategory);
         }
 
         [Test]
@@ -182,7 +182,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             result = _target.FindValidBlockForDate(_scheduleDayPro2.Day);
             Assert.AreEqual(3, result.BlockDays.Count);
-            Assert.AreEqual(_schedulePartEarly.AssignmentHighZOrder().MainShift.ShiftCategory, result.ShiftCategory);
+            Assert.AreEqual(_schedulePartEarly.AssignmentHighZOrder().ShiftCategory, result.ShiftCategory);
             Assert.AreEqual(_scheduleDayPro3.Day, result.BlockDays[1]);
         }
 
@@ -406,11 +406,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			Expect.Call(_schedulePartLate.IsScheduled()).Return(true).Repeat.Any();
             Expect.Call(_schedulePartEarly.AssignmentHighZOrder()).Return(earlyAssignment).Repeat.Any();
             Expect.Call(earlyAssignment.MainShift).Return(earlyShift).Repeat.Any();
-            Expect.Call(earlyShift.ShiftCategory).Return(_early).Repeat.Any();
+						Expect.Call(earlyAssignment.ShiftCategory).Return(_early).Repeat.Any();
             Expect.Call(_schedulePartLate.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.Any();
             Expect.Call(_schedulePartLate.AssignmentHighZOrder()).Return(lateAssignment).Repeat.Any();
             Expect.Call(lateAssignment.MainShift).Return(lateShift).Repeat.Any();
-            Expect.Call(lateShift.ShiftCategory).Return(late).Repeat.Any();
+						Expect.Call(lateAssignment.ShiftCategory).Return(late).Repeat.Any();
             Expect.Call(_matrix.UnlockedDays).Return(new ReadOnlyCollection<IScheduleDayPro>(unlockedList)).Repeat.Any();
             Expect.Call(_matrix.FullWeeksPeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(periodList)).Repeat.Any();
             Expect.Call(_matrix.GetScheduleDayByKey(new DateOnly(2009, 12, 31))).Return(null).

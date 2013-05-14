@@ -472,7 +472,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
                 if (assignment.MainShift == null)
                     continue;
 
-                IShiftCategory shiftCategory = assignment.MainShift.ShiftCategory;
+                IShiftCategory shiftCategory = assignment.ShiftCategory;
                 if (preference.ShiftCategory != null)
                 {
                     if (!preference.ShiftCategory.Equals(shiftCategory))
@@ -496,7 +496,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
                 if (assignment.MainShift == null)
                     continue;
 
-                IShiftCategory shiftCategory = assignment.MainShift.ShiftCategory;
+                IShiftCategory shiftCategory = assignment.ShiftCategory;
                 if (preference.ShiftCategory != null)
                 {
                     if (!preference.ShiftCategory.Equals(shiftCategory))
