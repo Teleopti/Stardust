@@ -118,25 +118,18 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 	                if (teamId)
 	                    foundTeam = vm.findTeamById(teamId);
 
-	                if (foundTeam === undefined)
-	                    foundTeam = vm.findFirstTeam();
-
-	                if (foundTeam === undefined) {
-	                    _navigateTo(moment(_currentUrlDate()).format('YYYY-MM-DD'));
-	                    return;
-	                }
-
-	                vm.selectedTeam(foundTeam.id);
+	                if (foundTeam != undefined)
+	                    vm.selectedTeam(foundTeam.id);
+	                else
+	                    _navigateTo(_getNavigateToDate());
 	            } else {
 	                if (teamId)
 	                    foundTeam = vm.findTeamById(teamId);
 	                
-	                if (foundTeam === undefined) {
-	                    _navigateTo(moment(_currentUrlDate()).format('YYYY-MM-DD'));
-	                    return;
-	                }
-	                    
-	                vm.selectedTeam(foundTeam.id);
+	                if (foundTeam != undefined)
+	                    vm.selectedTeam(foundTeam.id);
+	                else
+	                    _navigateTo(_getNavigateToDate());
 	            }
 	            
 	            vm.dateAndTeamKey.subscribe(function () {
@@ -149,6 +142,16 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
                 completelyLoaded();
 	        }
 	    });
+	}
+
+	function _getNavigateToDate() {
+	    var urlDate = _currentUrlDate();
+	    if (urlDate) {
+	        return moment(urlDate).format('YYYY-MM-DD');
+	    }
+	    
+	    var periodData = $('#TeamSchedule-body').data('mytime-periodselection');
+	    return periodData.Date;
 	}
 
 	function _initAgentNameOverflow() {
@@ -168,7 +171,6 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 	}
 
 	function _navigateTo(date, teamid) {
-	    _unBindData();
 		portal.NavigateTo("TeamSchedule/Index", date, teamid);
 	}
 
@@ -176,7 +178,7 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 	    ko.applyBindings(vm, $('#page')[0]);
 	};
     
-	function _unBindData() {
+	function _cleanBindings() {
 	    ko.cleanNode($('#page')[0]);
 	};
 
@@ -191,7 +193,7 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 
 	return {
 		Init: function () {
-			portal.RegisterPartialCallBack('TeamSchedule/Index', Teleopti.MyTimeWeb.TeamSchedule.TeamSchedulePartialInit);
+		    portal.RegisterPartialCallBack('TeamSchedule/Index', Teleopti.MyTimeWeb.TeamSchedule.TeamSchedulePartialInit, Teleopti.MyTimeWeb.TeamSchedule.PartialDispose);
 		},
 		TeamSchedulePartialInit: function (readyForInteractionCallback, completelyLoadedCallback) {
 			readyForInteraction = readyForInteractionCallback;
@@ -204,6 +206,9 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 			_initTeamPickerSelection();
 			_bindData();
 			_initAgentNameOverflow();
+		},
+		PartialDispose: function () {
+		    _cleanBindings();
 		}
 	};
 

@@ -389,7 +389,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 
 		private static void AssertAgentIsDisplayed(string name)
 		{
-			Browser.Interactions.AssertContains(".teamschedule-agent-name", name);
+			Browser.Interactions.AssertExists(string.Format(".teamschedule-agent-name:contains({0})", name));
 		}
 
 		private static void AssertAgentIsNotDisplayed(string name)
