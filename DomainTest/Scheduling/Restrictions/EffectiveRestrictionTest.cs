@@ -632,6 +632,19 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Restrictions
 		}
 
 		[Test]
+		public void ShouldNotCombineNullValue()
+		{
+			_target = new EffectiveRestriction(
+				_startTimeLimitation,
+				_endTimeLimitation,
+				_workTimeLimitation,
+				null,
+				null, null, new List<IActivityRestriction>());
+			var result = _target.Combine(null);
+			Assert.IsNull(result);
+		}
+
+		[Test]
 		public void ShouldReturnFalseIfSpecificStartAndLunchStartsToEarly()
 		{
 			TimePeriod fullPeriod = new TimePeriod(TimeSpan.FromHours(8), TimeSpan.FromHours(17));

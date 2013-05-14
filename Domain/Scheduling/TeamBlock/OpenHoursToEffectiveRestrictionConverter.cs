@@ -23,7 +23,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			_groupPersonSkillAggregator = groupPersonSkillAggregator;
 		}
 
-
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		public IEffectiveRestriction Convert(IGroupPerson groupPerson, IList<DateOnly> dateOnlyList)
 		{
@@ -34,14 +33,17 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 			var skills = _groupPersonSkillAggregator.AggregatedSkills(groupPerson, dateOnlyPeriod);
 			var openHours = new List<TimePeriod>();
 			var reducedOpenHours = new List<TimePeriod>();
-			var dayOffDays = new HashSet<DateOnly>();
+			var dayOffDays = new List<DateOnly>();
 			var scheduleDictionary = _schedulingResultStateHolder.Schedules;
-			foreach (var person in groupPerson.GroupMembers)
+			for (int i = 0; i < groupPerson.GroupMembers.Count; i++ )
 			{
+				var person = groupPerson.GroupMembers[i];
 				foreach (var dateOnly in dateOnlyList)
 				{
 					if (scheduleDictionary[person].ScheduledDay(dateOnly).SignificantPart() == SchedulePartView.DayOff)
 						dayOffDays.Add(dateOnly);
+					if (dayOffDays.Count(x => x == dateOnly) != i + 1)
+						dayOffDays.RemoveAll(x => x == dateOnly);
 				}
 			}
 			var filteredSkillDays = skillDays.Where(s => skills.Contains(s.Skill) && !dayOffDays.Contains(s.CurrentDate)).ToList();
