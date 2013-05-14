@@ -19,6 +19,3 @@ Set-ItemProperty IIS:\AppPools\$AppPoolName -name "ManagedRuntimeVersion" -Value
 #TestApp is assigned to the 'Default Web Site' (port 80)
 New-Item IIS:\Sites\$DefaultSite\$AppName -physicalPath $PhysicalPath -type Application
 Set-ItemProperty IIS:\sites\$DefaultSite\$AppName -name applicationPool -value $AppPoolName
-
-#Step 5: Set validation and decryption keys
-Set-MachineKey ("IIS:\sites\{0}\{1}" -f $DefaultSite, $AppName)
