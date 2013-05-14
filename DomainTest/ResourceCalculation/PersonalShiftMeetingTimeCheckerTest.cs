@@ -202,6 +202,31 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		}
 
 		[Test]
+		public void ShouldAllowNoOverwriteActivityBetweenPersonalShifts()
+		{
+			_personAssignment = new PersonAssignment(_person, _scenario);
+			_mainShift = new MainShift(_shiftCategory);
+			_mainShift.LayerCollection.Add(_mainShiftLayerNoOverwrite);
+			_mainShiftProjection = _mainShift.ProjectionService().CreateProjection();
+			_personalActivity.InContractTime = false;
+
+			var periodBefore = new DateTimePeriod(_mainDateTimePeriodNoOverwrite.StartDateTime.AddHours(-2), _mainDateTimePeriodNoOverwrite.StartDateTime.AddHours(-1));
+			var periodAfter = new DateTimePeriod(_mainDateTimePeriodNoOverwrite.EndDateTime.AddHours(1), _mainDateTimePeriodNoOverwrite.EndDateTime.AddHours(2));
+			var shiftLayer1 = new PersonalShiftActivityLayer(_personalActivity, periodBefore);
+			var shiftLayer2 = new PersonalShiftActivityLayer(_personalActivity, periodAfter);
+
+			_personalShift1.LayerCollection.Add(shiftLayer1);
+			_personalShift2.LayerCollection.Add(shiftLayer2);
+			_personAssignment.AddPersonalShift(_personalShift1);
+			_personAssignment.AddPersonalShift(_personalShift2);
+
+			var personAssignments = new ReadOnlyCollection<IPersonAssignment>(new List<IPersonAssignment> { _personAssignment });
+			var result = _target.CheckTimePersonAssignment(_mainShift, _mainShiftProjection, personAssignments);
+
+			Assert.IsTrue(result);		
+		}
+
+		[Test]
 		public void ShouldReturnFalseIfMainShiftProjectionPeriodHasNoValue()
 		{
 			_mainShift.LayerCollection.Clear();
