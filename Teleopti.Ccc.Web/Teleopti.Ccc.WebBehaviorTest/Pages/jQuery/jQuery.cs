@@ -17,11 +17,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.jQuery
 			return new JQueryExpression().SelectById(Id);
 		}
 
-		public static IJQueryExpression SelectById(string Id, DomContainer domContainer)
-		{
-			return new JQueryExpression(domContainer).SelectById(Id);
-		}
-
 		public static IJQueryExpression SelectByElementAttribute(string element, string attribute, string value)
 		{
 			return new JQueryExpression().SelectByElementAttribute(element, attribute, value);

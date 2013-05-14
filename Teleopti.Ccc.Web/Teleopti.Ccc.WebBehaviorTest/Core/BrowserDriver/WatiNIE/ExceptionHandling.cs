@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 using System.Security;
 using WatiN.Core.Exceptions;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserInteractions.WatiNIE
+namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 {
 	public static class ExceptionHandling
 	{

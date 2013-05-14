@@ -623,6 +623,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\Anywhere\Content\Scripts\ajax.js" />
+    <Content Include="Areas\Anywhere\Content\Scripts\pagelog.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\errorview.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\signalrhubs.js" />
     <Content Include="Areas\Anywhere\Content\Scripts\resizeevent.js" />
