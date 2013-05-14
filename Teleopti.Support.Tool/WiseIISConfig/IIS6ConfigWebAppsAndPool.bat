@@ -146,7 +146,7 @@ cscript "%ROOTDIR%\adsutil.vbs" delete w3svc/1/root/%~1
 echo cscript "%ROOTDIR%\adsutil.vbs" create_vdir w3svc/1/root/%~1
 cscript "%ROOTDIR%\adsutil.vbs" create_vdir w3svc/1/root/%~1
 
-if "%~4"=="App" (
+if "%~4"=="app" (
 	echo cscript "%ROOTDIR%\adsutil.vbs" appcreateinproc w3svc/1/root/%~1
 	cscript "%ROOTDIR%\adsutil.vbs" appcreateinproc w3svc/1/root/%~1
 
