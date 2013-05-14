@@ -3934,10 +3934,18 @@ namespace Teleopti.Ccc.Win.Scheduling
 					                                             allMatrixes);
 					break;
 				case OptimizationMethod.ReOptimize:
-					if (optimizerPreferences.Extra.UseTeams)
+
+					
+					if (!optimizerPreferences.Extra.UseTeamBlockOption && optimizerPreferences.Extra.UseTeams)
 					{
-						allMatrixes = _container.Resolve<IMatrixListFactory>().CreateMatrixListAll(selectedPeriod);
-						_groupDayOffOptimizerHelper.ReOptimize(_backgroundWorkerOptimization, selectedSchedules, allMatrixes);
+						var originalBlockType = schedulingOptions.BlockFinderTypeForAdvanceScheduling;
+						schedulingOptions.BlockFinderTypeForAdvanceScheduling= BlockFinderType.SingleDay;
+
+						IList<IPerson> selectedPersons =
+							new PersonListExtractorFromScheduleParts(selectedSchedules).ExtractPersons().ToList();
+						_groupDayOffOptimizerHelper.TeamGroupReOptimize(_backgroundWorkerOptimization, selectedPeriod, selectedPersons,
+																		_container.Resolve<IOptimizationPreferences>());
+						schedulingOptions.BlockFinderTypeForAdvanceScheduling = originalBlockType;
 						break;
 					}
 
