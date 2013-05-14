@@ -160,8 +160,9 @@
                 <!--Alarm time Column-->
                 <controls:DataGridTextColumn HeaderStyle="{StaticResource HeaderWithHand}"
                                              Header="{x:Static Member=userTexts:Resources.Time}" 
-                                             Width="Auto"  
-                                             SortMemberPath="SortTime"
+                                             Width="Auto"
+											 CanUserSort="True"
+                                             SortMemberPath="EnteredCurrentState"
                                              Binding="{Binding Path=EnteredCurrentState, Converter={StaticResource ElapsedTimeConverter}, Mode=OneWay}"/>
 
                 <!--Pinned Column-->
