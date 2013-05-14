@@ -3,6 +3,9 @@ SET ROOTDIR=%~dp0
 SET ROOTDIR=%ROOTDIR:~0,-1%
 %ROOTDIR:~0,2%
 CD "%ROOTDIR%"
+
+SET INSTALLDIR=%ROOTDIR:~0,-27%
+
 ::Example Call:
 ::note: parameter 3,4 are optional
 ::IIS7ConfigWebAppsAndPool.bat [IS_SSL] [SDK_CREDPROT] [MYUSER] [MYPASSWORD]
@@ -19,15 +22,31 @@ IF "%SDKCREDPROT%"=="" GOTO NoInput
 ::=============
 ::Main
 ::=============
-ECHO Call was: IIS7ConfigWebAppsAndPool.bat %~1 %~2 %~3 %~4 > %logfile%
+ECHO Settings up IIS web sites and applictions ...
+ECHO Call was: IIS6ConfigWebAppsAndPool.bat %~1 %~2 %~3 %~4 > %logfile%
 
 SET DefaultSite=Default Web Site
 SET MainSiteName=TeleoptiCCC
 SET appcmd=%systemroot%\system32\inetsrv\APPCMD.exe
 
-for /f "tokens=2,3 delims=;" %%g in (Apps\ApplicationsInAppPool.txt) do CALL:CreateAppPool "%%g" "%%h" >> %logfile%
+::remove applications
+for /f "tokens=2,3,4,5 delims=;" %%g in ('FINDSTR /C:"Level2;" Apps\ApplicationsInAppPool.txt') do CALL:DeleteApp "%DefaultSite%/%MainSiteName%" "%%g" "%%j" >> %logfile%
+for /f "tokens=2,3,4,5 delims=;" %%g in ('FINDSTR /C:"Level1;%MainSiteName%;" Apps\ApplicationsInAppPool.txt') do CALL:DeleteApp "%DefaultSite%" "%%g" "%%j" >> %logfile%
 
-for /f "tokens=1,2 delims=;" %%g in (Apps\ApplicationsInAppPool.txt) do CALL:ForEachApplication "%%g" "%%h"  >> %logfile%
+::create AppPools
+for /f "tokens=3,4 delims=;" %%g in (Apps\ApplicationsInAppPool.txt) do CALL:CreateAppPool "%%g" "%%h" >> %logfile%
+
+::create applications
+for /f "tokens=2,3,4,5 delims=;" %%g in ('FINDSTR /C:"Level1;%MainSiteName%;" Apps\ApplicationsInAppPool.txt') do CALL:CreateApp "%DefaultSite%" "%%g" "%%g" "%%j" "%INSTALLDIR%" >> %logfile%
+for /f "tokens=2,3,4,5 delims=;" %%g in ('FINDSTR /C:"Level2;" Apps\ApplicationsInAppPool.txt') do CALL:CreateApp "%DefaultSite%" "%MainSiteName%/%%g" "%%g" "%%j" "%INSTALLDIR%\%MainSiteName%" >> %logfile%
+
+::config applications
+for /f "tokens=2,3,4,5 delims=;" %%g in (Apps\ApplicationsInAppPool.txt) do CALL:ForEachApplication "%%g" "%%h" "%%i" "%%j" >> %logfile%
+
+::just in case
+iisreset /restart
+ECHO.
+ECHO Done!
 GOTO Done
 
 ::=============
@@ -40,28 +59,59 @@ SET NETVersion=%~2
 ::1 - Create app pool
 "%appcmd%" list apppool /name:"%PoolName%"
 if %errorlevel% NEQ 0 (
-ECHO Creating Teleopti App pool ...
-"%appcmd%" add apppool /name:"%PoolName%" /managedRuntimeVersion:%NETVersion% /managedPipelineMode:Integrated /commit:apphost
-ECHO Creating Teleopti App pool. Done!
+	ECHO Creating Teleopti App pool ...
+	"%appcmd%" add apppool /name:"%PoolName%" /managedRuntimeVersion:%NETVersion% /managedPipelineMode:Integrated /commit:apphost
+	ECHO Creating Teleopti App pool. Done!
 ) else (
-ECHO Teleopti app pool already exist: "%PoolName%"
-ECHO updating managedRuntimeVersion to: %NETVersion%
-"%appcmd%" set apppool /APPPOOL.NAME:"%PoolName%" /managedRuntimeVersion:%NETVersion% /managedPipelineMode:Integrated
+	ECHO Teleopti app pool already exist: "%PoolName%"
+	ECHO updating managedRuntimeVersion to: %NETVersion%
+	"%appcmd%" set apppool /APPPOOL.NAME:"%PoolName%" /managedRuntimeVersion:%NETVersion% /managedPipelineMode:Integrated
 )
 echo.
 exit /B
 
+:DeleteApp
+if "%~3"=="app" (
+ECHO "%appcmd%" delete app /app.name:"%~1/%~2"
+"%appcmd%" delete app /app.name:"%~1/%~2"
+)
+
+if "%~3"=="vdir" (
+ECHO "%appcmd%" delete vdir /vdir.name:"%~1/%~2"
+"%appcmd%" delete vdir /vdir.name:"%~1/%~2"
+)
+
+goto:eof
+
+:CreateApp
+echo %~1 %~2 %~3 %~4
+
+if "%~4"=="app" (
+ECHO "%appcmd%" add app /site.name:"%~1" /path:/%~2 /physicalPath:"%~5\%~3"
+"%appcmd%" add app /site.name:"%~1" /path:/%~2 /physicalPath:"%~5\%~3"
+)
+
+if "%~4"=="vdir" (
+echo "%appcmd%" add vdir /app.name:"%~1" /path:/%~2 /physicalPath:"%~5\%~3"
+"%appcmd%" add vdir /app.name:"%~1" /path:/%~2 /physicalPath:"%~5\%~3"
+)
+goto:eof
+
 :ForEachApplication
 SET SubSiteName=%~1
 SET PoolName=%~2
+SET NETVersion=%~3
+SET SiteOrApp=%~4
 
-SET SitePath=%DefaultSite%/%MainSiteName%/%SubSiteName%
+SET SitePath=%MainSiteName%/%SubSiteName%
+SET FolderPath=%MainSiteName%\%SubSiteName%
 
 ::special case for TeleoptCCC root site, skip subsite
-if "%SubSiteName%"=="TeleoptiCCC" SET SitePath=%DefaultSite%/%MainSiteName%
+if "%SubSiteName%"=="TeleoptiCCC" SET SitePath=%MainSiteName%
+if "%SubSiteName%"=="TeleoptiCCC" SET FolderPath=%MainSiteName%
 
 ::2 - Change app pool
-%windir%\system32\inetsrv\APPCMD.exe set app "%SitePath%" /applicationPool:"%PoolName%" /commit:apphost
+%windir%\system32\inetsrv\APPCMD.exe set app "%DefaultSite%/%SitePath%" /applicationPool:"%PoolName%" /commit:apphost
 echo.
 
 ::3 - Set AppPool credentials
@@ -75,8 +125,8 @@ echo using %CustomIISUsr% as identity on AppPool
 echo.
 
 ::4 SSL seetings
-if "%SSL%"=="True" "%appcmd%" set config "%SitePath%" /section:access /sslFlags:Ssl /commit:APPHOST
-if "%SSL%"=="False" "%appcmd%" set config "%SitePath%" /section:access /sslFlags:None /commit:APPHOST
+if "%SSL%"=="True" "%appcmd%" set config "%DefaultSite%/%SitePath%" /section:access /sslFlags:Ssl /commit:APPHOST
+if "%SSL%"=="False" "%appcmd%" set config "%DefaultSite%/%SitePath%" /section:access /sslFlags:None /commit:APPHOST
 
 ::5 Athentication for the virtual dir
 ::-----
@@ -101,19 +151,19 @@ exit /B
 
 :IISSecurityFormsSet
 if "%SubSiteName%"=="%~1" (
-"%appcmd%" set config "%SitePath%" /section:system.web/authentication /mode:%~2
+"%appcmd%" set config "%DefaultSite%/%SitePath%" /section:system.web/authentication /mode:%~2
 )
 exit /B
 
 :IISSecuritySet
 if "%SubSiteName%"=="%~1" (
-ECHO "%appcmd%" set config "%SitePath%" -section:system.webServer/security/authentication/%~2 /enabled:"%~3" /commit:apphost
-"%appcmd%" set config "%SitePath%" -section:system.webServer/security/authentication/%~2 /enabled:"%~3" /commit:apphost
+ECHO "%appcmd%" set config "%DefaultSite%/%SitePath%" -section:system.webServer/security/authentication/%~2 /enabled:"%~3" /commit:apphost
+"%appcmd%" set config "%DefaultSite%/%SitePath%" -section:system.webServer/security/authentication/%~2 /enabled:"%~3" /commit:apphost
 )
 exit /B
 
 :IISIdentitySet
-if "%SubSiteName%"=="%~1" "%appcmd%" set config "%SitePath%" -section:system.web/identity /impersonate:"%~2"
+if "%SubSiteName%"=="%~1" "%appcmd%" set config "%DefaultSite%/%SitePath%" -section:system.web/identity /impersonate:"%~2"
 exit /B
 
 :Done
