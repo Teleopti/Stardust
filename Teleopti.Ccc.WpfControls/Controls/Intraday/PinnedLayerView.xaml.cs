@@ -1,4 +1,3 @@
-using System.Collections.ObjectModel;
 using System.Windows;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.Infrastructure.Repositories;

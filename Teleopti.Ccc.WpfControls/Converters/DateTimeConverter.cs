@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Windows.Data;
 
 namespace Teleopti.Ccc.WpfControls.Converters
 {
-
-
     /// <summary>
     /// Converter for DateTime
     /// Use for DataBinding to get correct Localized content.
@@ -21,7 +16,7 @@ namespace Teleopti.Ccc.WpfControls.Converters
 
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-        	if (value is DateTime && value != null)
+        	if (value is DateTime)
             {
                 DateTime dateTime = (DateTime) value;
                 return dateTime.ToShortTimeString();
