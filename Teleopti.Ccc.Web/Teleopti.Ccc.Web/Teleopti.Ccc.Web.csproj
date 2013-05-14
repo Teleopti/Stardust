@@ -937,8 +937,6 @@
     <Content Include="Content\signals\signals.js" />
     <Content Include="Content\signals\signals.min.js" />
     <Content Include="Content\jqueryui.touch-punch\jquery.ui.touch-punch.js" />
-    <Content Include="Content\signalr\jquery.signalR-1.0.1.js" />
-    <Content Include="Content\signalr\jquery.signalR-1.0.1.min.js" />
     <Content Include="Content\bootstrap\bootstrap.js" />
     <Content Include="Content\bootstrap\bootstrap.min.js" />
     <Content Include="Content\Scripts\jquery-1.9.1-vsdoc.js" />
@@ -980,8 +978,8 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="Content\Scripts\jquery-1.9.1.min.map" />
-    <Content Include="Scripts\jquery.signalR-1.1.0.js" />
-    <Content Include="Scripts\jquery.signalR-1.1.0.min.js" />
+    <Content Include="Content\signalr\jquery.signalR-1.1.0.js" />
+    <Content Include="Content\signalr\jquery.signalR-1.1.0.min.js" />
     <Content Include="web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -1077,6 +1075,7 @@
   <ItemGroup>
     <Folder Include="Areas\Anywhere\Models\" />
     <Folder Include="Areas\Anywhere\Views\" />
+    <Folder Include="Scripts\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\MobileReports\Views\Report\Index.cshtml" />
