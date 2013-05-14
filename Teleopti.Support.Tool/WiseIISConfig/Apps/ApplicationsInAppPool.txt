@@ -1,4 +1,4 @@
-Level1;TeleoptiCCC;Teleopti ASP.NET v4.0;v4.0;app
+Level1;TeleoptiCCC;Teleopti ASP.NET v4.0;v4.0;vdir
 Level2;Analytics;Teleopti ASP.NET v4.0;v4.0;app
 Level2;Client;Teleopti ASP.NET v4.0;v4.0;vdir
 Level2;MyTime;Teleopti ASP.NET v4.0;v4.0;vdir
