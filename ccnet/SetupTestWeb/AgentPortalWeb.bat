@@ -31,6 +31,7 @@ SET AppPoolName=%SiteName%
 ::Let us run unsigned scripts
 ECHO powershell Set-ExecutionPolicy RemoteSigned
 powershell Set-ExecutionPolicy RemoteSigned
+ECHO powershell Set-Location "%ROOTDIR%"
 powershell Set-Location "%ROOTDIR%"
 
 ::clean up previous build
