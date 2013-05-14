@@ -66,9 +66,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
                     bool singleAgentTeam = _schedulingOptions.GroupOnGroupPageForTeamBlockPer != null &&
                                            _schedulingOptions.GroupOnGroupPageForTeamBlockPer.Key == "SingleAgentTeam";
-				    ITeamBlockInfo teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, datePointer,
+				    ITeamBlockInfo teamBlockInfo;
+                    if (_schedulingOptions.UseTeamBlockPerOption)
+                        teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, datePointer,
 					                                                                         _schedulingOptions
                                                                                                  .BlockFinderTypeForAdvanceScheduling, singleAgentTeam, allPersonMatrixList);
+                    else
+                        teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, datePointer,BlockFinderType.SingleDay, singleAgentTeam,allPersonMatrixList);
 				    if (teamBlockInfo == null) continue;
                     if (TeamBlockScheduledDayChecker.IsDayScheduledInTeamBlock(teamBlockInfo, datePointer)) continue;
 
@@ -82,6 +86,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                             var rollbackExecuted = false;
                             foreach (var matrix in teamBlockInfo.TeamInfo.MatrixesForGroupAndDate(datePointer))
                             {
+                                if (!selectedPersons.Contains(matrix.Person)) continue;
                                 _workShiftMinMaxCalculator.ResetCache();
                                 if (!_workShiftMinMaxCalculator.IsPeriodInLegalState(matrix, _schedulingOptions))
                                 {
@@ -95,7 +100,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                             {
                                 //should skip the whole block
                                 dateOnlySkipList.AddRange(teamBlockInfo.BlockInfo.BlockPeriod.DayCollection());
-                                break;
+                                //break; Removed this to schedule all the remaining teams if this block failed.
                             }
                                 
                         }

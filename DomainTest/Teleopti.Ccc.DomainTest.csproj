@@ -350,6 +350,7 @@
     <Compile Include="ResourceCalculation\AbsencePreferenceSchedulerTest.cs" />
     <Compile Include="ResourceCalculation\AvailableHourlyEmployeeFinderTest.cs" />
     <Compile Include="ResourceCalculation\BusinessRuleResponseContainsDateSpecificationTest.cs" />
+    <Compile Include="Scheduling\TeamBlock\ScheduleDaysAvailableForDayOffSpecificationTest.cs" />
     <Compile Include="Scheduling\TeamBlock\StandardDeviationSumCalculatorTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockScheduledDayCheckerTest.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockSteadyStateDictionaryCreatorTest.cs" />
@@ -767,6 +768,7 @@
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilterServiceTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\ActivityRestrictionsShiftFilterTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\BusinessRulesShiftFilterTest.cs" />
+    <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\CommonActivityFilterTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\CommonMainShiftFilterTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\ContractTimeShiftFilterTest.cs" />
     <Compile Include="Scheduling\TeamBlock\WorkShiftFilters\DisallowedShiftCategoriesShiftFilterTest.cs" />
