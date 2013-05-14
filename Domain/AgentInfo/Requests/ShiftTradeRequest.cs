@@ -53,24 +53,38 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
         private void notifyPersonOfAvailableShiftTradeRequest(IEnumerable<IShiftTradeSwapDetail> shiftTradeSwapDetails)
         {
-            if (!shiftTradeSwapDetails.IsEmpty())
-            {
-                var datePattern = PersonFrom.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern;
-                if (isShiftTradeRequestForOneDayOnly())
-                {
-                    SetNotification(string.Format(PersonFrom.PermissionInformation.UICulture(),
-                                  UserTexts.Resources.ANewShiftTradeForOneDayHasBeenCreatedDot,
-                                  Period.StartDateTimeLocal(PersonFrom.PermissionInformation.DefaultTimeZone()).ToString(datePattern)), new List<IPerson> { PersonTo });
-                }
-                else
-                {
-                    SetNotification(string.Format(PersonFrom.PermissionInformation.UICulture(),
-                                  UserTexts.Resources.ANewShiftTradeHasBeenCreatedDot,
-                                  Period.StartDateTimeLocal(PersonFrom.PermissionInformation.DefaultTimeZone()).ToString(datePattern),
-                                  Period.EndDateTimeLocal(PersonFrom.PermissionInformation.DefaultTimeZone()).AddMinutes(-1).ToString(datePattern)), new List<IPerson> { PersonTo });
-                }
+	        if (shiftTradeSwapDetails.IsEmpty()) return;
 
-            }
+	        var culture = PersonTo.PermissionInformation.Culture();
+	        var uiCulture = PersonTo.PermissionInformation.UICulture();
+	        var timezone = PersonTo.PermissionInformation.DefaultTimeZone();
+	        var datePattern = culture.DateTimeFormat.ShortDatePattern;
+
+	        if (isShiftTradeRequestForOneDayOnly())
+	        {
+		        var notificationTemplate =
+			        UserTexts.Resources.ResourceManager.GetString("ANewShiftTradeForOneDayHasBeenCreatedDot", culture) ??
+			        UserTexts.Resources.ANewShiftTradeForOneDayHasBeenCreatedDot;
+
+		        SetNotification(string.Format(
+			        uiCulture,
+			        notificationTemplate,
+			        Period.StartDateTimeLocal(timezone).ToString(datePattern)), 
+		            new List<IPerson> { PersonTo });
+	        }
+	        else
+	        {
+		        var notificationTemplate =
+					UserTexts.Resources.ResourceManager.GetString("ANewShiftTradeHasBeenCreatedDot", culture) ??
+			        UserTexts.Resources.ANewShiftTradeHasBeenCreatedDot;
+
+		        SetNotification(string.Format(
+			        uiCulture,
+			        notificationTemplate,
+			        Period.StartDateTimeLocal(timezone).ToString(datePattern),
+			        Period.EndDateTimeLocal(timezone).AddMinutes(-1).ToString(datePattern)), 
+		            new List<IPerson> { PersonTo });
+	        }
         }
 
         private void calculateAndSetPeriod()
@@ -108,22 +122,35 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             _shiftTradeSwapDetails.Add(shiftTradeSwapDetail);
             calculateAndSetPeriod();
 
-            var datePattern = PersonFrom.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern;
+			var culture = PersonTo.PermissionInformation.Culture();
+			var uiCulture = PersonTo.PermissionInformation.UICulture();
+			var timezone = PersonTo.PermissionInformation.DefaultTimeZone();
+			var datePattern = culture.DateTimeFormat.ShortDatePattern;
 
             if (isShiftTradeRequestForOneDayOnly())
             {
-                SetNotification(string.Format(PersonFrom.PermissionInformation.UICulture(),
-                                UserTexts.Resources.ANewShiftTradeForOneDayHasBeenCreatedDot,
-                                Period.StartDateTimeLocal(PersonFrom.PermissionInformation.DefaultTimeZone()).ToString(datePattern))
-                              , new List<IPerson> { shiftTradeSwapDetail.PersonTo });
+				var notificationTemplate =
+					UserTexts.Resources.ResourceManager.GetString("ANewShiftTradeForOneDayHasBeenCreatedDot", culture) ??
+					UserTexts.Resources.ANewShiftTradeForOneDayHasBeenCreatedDot;
+
+                SetNotification(string.Format(
+					uiCulture,
+					notificationTemplate,
+                    Period.StartDateTimeLocal(timezone).ToString(datePattern)),
+                    new List<IPerson> { shiftTradeSwapDetail.PersonTo });
             }
             else
             {
-                SetNotification(string.Format(PersonFrom.PermissionInformation.UICulture(),
-                              UserTexts.Resources.ANewShiftTradeHasBeenCreatedDot,
-                              Period.StartDateTimeLocal(PersonFrom.PermissionInformation.DefaultTimeZone()).ToString(datePattern),
-                              Period.EndDateTimeLocal(PersonFrom.PermissionInformation.DefaultTimeZone()).AddMinutes(-1).ToString(datePattern))
-                              , new List<IPerson> { shiftTradeSwapDetail.PersonTo });
+				var notificationTemplate =
+					UserTexts.Resources.ResourceManager.GetString("ANewShiftTradeHasBeenCreatedDot", culture) ??
+					UserTexts.Resources.ANewShiftTradeHasBeenCreatedDot;
+
+                SetNotification(string.Format(
+					uiCulture,
+                    notificationTemplate,
+                    Period.StartDateTimeLocal(timezone).ToString(datePattern),
+                    Period.EndDateTimeLocal(timezone).AddMinutes(-1).ToString(datePattern)),
+                    new List<IPerson> { shiftTradeSwapDetail.PersonTo });
             }
         }
 

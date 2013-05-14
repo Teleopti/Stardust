@@ -285,7 +285,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             _target.Refer(_authorization);
             Assert.AreEqual(ShiftTradeStatus.Referred, _target.GetShiftTradeStatus(new ShiftTradeRequestStatusCheckerForTestDoesNothing()));
             Assert.IsTrue(_personRequest.IsPending);
-			var notificationString = "A shift trade request 2008-07-16 - 2008-07-16 must be accepted again due to a schedule change from";
+			var notificationString = "A shift trade request 2008-07-16 - 2008-07-16 must be accepted again due to a schedule change from.";
             Assert.AreEqual(notificationString, _target.TextForNotification);
         }
 
@@ -459,17 +459,46 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 
             mocks.ReplayAll();
 
-            personRequest.Pending();
-            IList<IBusinessRuleResponse> brokenRules = personRequest.Approve(requestApprovalService, _authorization);
-            Assert.AreEqual(0, brokenRules.Count);
-            //var notificationString = string.Format(UserTexts.Resources.ShiftTradeRequestForOneDayHasBeenApprovedDot,
-            //                                       personRequest.RequestedDate.ToShortDateString());
+			personRequest.Pending();
+			IList<IBusinessRuleResponse> brokenRules = personRequest.Approve(requestApprovalService, _authorization);
+			Assert.AreEqual(0, brokenRules.Count);
 
-            //Assert.AreEqual(notificationString, target.TextForNotification);
-            Assert.IsNotNullOrEmpty(target.TextForNotification);
-            
-            mocks.VerifyAll();
+			Assert.IsNotNullOrEmpty(target.TextForNotification);
+
+			mocks.VerifyAll();
         }
+
+		[Test]
+		public void ShouldPendingMessageBeOnTheReceiverCultureLanguage()
+		{
+
+			CultureInfo swedishCultureInfo = CultureInfoFactory.CreateSwedishCulture();
+			_tradePerson.PermissionInformation.SetCulture(swedishCultureInfo);
+
+			var shiftTradeSwapDetail1 = new ShiftTradeSwapDetail(_requestedPerson, _tradePerson,
+															 new DateOnly(2008, 7, 16), new DateOnly(2008, 7, 16));
+
+			var shiftTradeSwapDetail2 = new ShiftTradeSwapDetail(_requestedPerson, _tradePerson,
+															 new DateOnly(2008, 7, 17), new DateOnly(2008, 7, 17));
+
+			_authorization = new PersonRequestAuthorizationCheckerForTest();
+			var target = new ShiftTradeRequest(new List<IShiftTradeSwapDetail> { shiftTradeSwapDetail1, shiftTradeSwapDetail2 });
+
+			MockRepository mocks = new MockRepository();
+			IRequestApprovalService requestApprovalService =
+				mocks.StrictMock<IRequestApprovalService>();
+			PersonRequest personRequest = new PersonRequest(_requestedPerson, target);
+
+			mocks.ReplayAll();
+
+			personRequest.Pending();
+
+			var notificationString = "Ny skiftbytesförfrågan, godkänn eller avslå i din lista.";
+
+			Assert.AreEqual(notificationString, target.TextForNotification, "Pending message should be in the receiver's language");
+
+			mocks.VerifyAll();
+		}
 
         [Test]
         public void VerifyCanAddAndClearShiftTradeSwapDetailsForMultipleDays()
