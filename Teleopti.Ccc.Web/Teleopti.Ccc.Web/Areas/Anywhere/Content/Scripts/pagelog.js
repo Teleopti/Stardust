@@ -23,7 +23,6 @@ define(
 
 		return {
 		    log: function (message) {
-		        return;
 				_displayError(message);
 			}
 		};
