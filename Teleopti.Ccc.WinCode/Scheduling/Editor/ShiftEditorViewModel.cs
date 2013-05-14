@@ -300,9 +300,9 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
                 
                 ZoomToPeriod(Layers.TotalDateTimePeriod(true));
                 var assignement = SchedulePart.AssignmentHighZOrder();
-                if (assignement != null && assignement.MainShift != null)
+				if (assignement != null && assignement.ShiftCategory != null)
                 {
-                    _category = assignement.MainShift.ShiftCategory;
+                    _category = assignement.ShiftCategory;
                     CollectionViewSource.GetDefaultView(Categories).MoveCurrentTo(_category);
                     Enabled = true;
                     NotifyPropertyChanged("Category"); 

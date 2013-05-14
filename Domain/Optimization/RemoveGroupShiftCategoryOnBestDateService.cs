@@ -54,7 +54,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                 IScheduleDay part = scheduleDayPro.DaySchedulePart();
                 if (part.SignificantPart() == SchedulePartView.MainShift)
                 {
-                    if (part.AssignmentHighZOrder().MainShift.ShiftCategory.Equals(shiftCategory))
+                    if (part.AssignmentHighZOrder().ShiftCategory.Equals(shiftCategory))
                         return true;
                 }
             }

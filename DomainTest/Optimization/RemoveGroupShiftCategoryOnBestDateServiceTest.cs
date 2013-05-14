@@ -151,7 +151,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         public void VerifyIsDayToBeRemovedWhenWrongShiftCategory()
         {
             IPersonAssignment assignment = _mocks.StrictMock<IPersonAssignment>();
-            IMainShift mainShift = _mocks.StrictMock<IMainShift>();
             bool result;
 
             using (_mocks.Record())
@@ -159,8 +158,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                 Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_schedulePart).Repeat.Once();
                 Expect.Call(_schedulePart.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.Once();
                 Expect.Call(_schedulePart.AssignmentHighZOrder()).Return(assignment).Repeat.Once();
-                Expect.Call(assignment.MainShift).Return(mainShift).Repeat.Once();
-								Expect.Call(assignment.ShiftCategory).Return(ShiftCategoryFactory.CreateShiftCategory("yy")).Repeat.Once();
+				Expect.Call(assignment.ShiftCategory).Return(ShiftCategoryFactory.CreateShiftCategory("yy")).Repeat.Once();
             }
 
             using (_mocks.Playback())
@@ -279,13 +277,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         private void matchingShiftCategoryMock()
         {
             IPersonAssignment assignment = _mocks.StrictMock<IPersonAssignment>();
-            IMainShift mainShift = _mocks.StrictMock<IMainShift>();
 
             Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_schedulePart).Repeat.AtLeastOnce();
             Expect.Call(_schedulePart.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
             Expect.Call(_schedulePart.AssignmentHighZOrder()).Return(assignment).Repeat.AtLeastOnce();
-            Expect.Call(assignment.MainShift).Return(mainShift).Repeat.AtLeastOnce();
-						Expect.Call(assignment.ShiftCategory).Return(_shiftCategory).Repeat.AtLeastOnce();
+			Expect.Call(assignment.ShiftCategory).Return(_shiftCategory).Repeat.AtLeastOnce();
         }
     }
 }

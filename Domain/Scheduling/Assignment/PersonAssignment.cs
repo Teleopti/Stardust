@@ -22,6 +22,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		private IPerson _person;
 		private IScenario _scenario;
 		private DateTime _zorder;
+		private IShiftCategory _shiftCategory;
 
 
 		public PersonAssignment(IPerson agent, IScenario scenario, DateOnly date)
@@ -94,12 +95,26 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			get
 			{
+				if (!_mainShiftActivityLayers.Any())
+					return null;
+
 				var ret = new MainShift(ShiftCategory);
 				_mainShiftActivityLayers.ForEach(ret.LayerCollection.Add);
 				return ret;
 			}
 		}
-		public virtual IShiftCategory ShiftCategory { get; private set; }
+		public virtual IShiftCategory ShiftCategory
+		{
+			get
+			{
+				if (!_mainShiftActivityLayers.Any())
+					return null;
+
+				return _shiftCategory;
+			}
+			private set { _shiftCategory = value; }
+		}
+
 		public virtual IEnumerable<IMainShiftActivityLayer> MainShiftActivityLayers
 		{
 			get { return _mainShiftActivityLayers; }
