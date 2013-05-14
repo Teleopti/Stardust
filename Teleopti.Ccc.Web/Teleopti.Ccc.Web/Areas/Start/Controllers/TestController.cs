@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Web.Areas.MyTime.Models.MessageBroker;
@@ -38,7 +40,7 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 		{
 			_sessionSpecificDataProvider.RemoveCookie();
 			updateIocNow(null);
-			updateMyTimeMessageBrokerConfiguration(enableMyTimeMessageBroker);
+			UserDataFactory.EnableMyTimeMessageBroker = enableMyTimeMessageBroker;
 			var viewModel = new TestMessageViewModel
 								{
 									Title = "Setting up for scenario",
@@ -122,9 +124,16 @@ namespace Teleopti.Ccc.Web.Areas.Start.Controllers
 			_modifyNow.SetNow(dateTimeSet);
 		}
 
-		private void updateMyTimeMessageBrokerConfiguration(bool enableMyTimeMessageBroker)
-		{
-			UserDataFactory.EnableMyTimeMessageBroker = enableMyTimeMessageBroker;
-		}
+		//public JsonResult CrashApplicationPool()
+		//{
+		//	var thread = new Thread(() =>
+		//		{
+		//			Thread.Sleep(2000);
+		//			throw new Exception("Crash!");
+		//		});
+		//	thread.Start();
+		//	return Json(new object(), JsonRequestBehavior.AllowGet);
+		//}
+
 	}
 }
