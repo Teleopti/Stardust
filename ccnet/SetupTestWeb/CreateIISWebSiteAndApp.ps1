@@ -1,6 +1,5 @@
 param($PhysicalPath,$DefaultSite,$SiteName,$AppName,$AppPoolName)
 import-module webadministration
-import-module .\MachineKey.psm1.ps1
 
 #Step 1: Create New Directories
 #We use the New-Item cmdlet to create four new file system directories. Execute the following commands (use 'md' instead of New-Item if you don't want to specify the -type parameter):
