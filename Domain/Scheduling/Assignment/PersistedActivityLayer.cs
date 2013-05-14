@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 			 while (root == null)
 			 {
-				 var internalParent = parent as IAggregateEntity;
+				 var internalParent = theParent as IAggregateEntity;
 				 if (internalParent == null)
 				 {
 					 throw new AggregateException("[" + ToString() + "]:s parent is null or not of type IAggregateEntity");
