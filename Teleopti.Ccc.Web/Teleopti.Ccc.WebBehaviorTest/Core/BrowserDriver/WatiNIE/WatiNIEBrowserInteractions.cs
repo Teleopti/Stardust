@@ -83,11 +83,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 
 		public void DumpInfo(Action<string> writer)
 		{
-			writer("Url: ");
+			writer(" Time: ");
+			writer(DateTime.Now.ToString());
+			writer(" Url: ");
 			writer(tryOperation(() => Browser.Current.Url, "Failed to get Url"));
-			writer("Html: ");
+			writer(" Html: ");
 			writer(tryOperation(() => Browser.Current.Html, "Failed to get Html"));
-			//writer("Text: ");
+			//writer(" Text: ");
 			//writer(tryOperation(() => Browser.Current.Text, ""));
 		}
 
