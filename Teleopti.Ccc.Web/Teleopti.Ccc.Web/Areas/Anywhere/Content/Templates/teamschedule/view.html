@@ -13,8 +13,11 @@
 
     <div class="row">
         <div class="span12">
-            <div data-bind="visible: Loading"><span data-bind="text: Resources.LoadingThreeDots"></span></div>
-            <div class="relative" data-bind="visible: !Loading()">
+            <!-- ko if: Loading -->
+            <div><span data-bind="text: Resources.LoadingThreeDots"></span></div>
+            <!-- /ko -->
+            <!-- ko if: !Loading() -->
+            <div class="relative">
     			
                 <div class="time-line absolute">
                     <div class="relative">
@@ -47,6 +50,7 @@
                     </tbody>
                 </table>
             </div>
+            <!-- /ko -->
         </div>
     </div>
 </div>
