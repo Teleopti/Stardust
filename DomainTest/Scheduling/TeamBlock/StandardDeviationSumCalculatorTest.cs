@@ -2,9 +2,7 @@
 using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Interfaces.Domain;
@@ -16,7 +14,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 	{
 		private MockRepository _mocks;
 		private IStandardDeviationSumCalculator _target;
-		private ILockableBitArrayFactory _lockableBitArrayFactory;
 		private IScheduleResultDataExtractorProvider _dataExtractorProvider;
 		private OptimizationPreferences _optimizerPreferences;
 		private SchedulingOptions _schedulingOptions;
@@ -25,11 +22,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 		public void Setup()
 		{
 			_mocks = new MockRepository();
-			_lockableBitArrayFactory = _mocks.StrictMock<ILockableBitArrayFactory>();
 			_dataExtractorProvider = _mocks.StrictMock<IScheduleResultDataExtractorProvider>();
 			_optimizerPreferences = new OptimizationPreferences();
 			_schedulingOptions = new SchedulingOptions();
-			_target = new StandardDeviationSumCalculator(_lockableBitArrayFactory, _dataExtractorProvider);
+			_target = new StandardDeviationSumCalculator( _dataExtractorProvider);
 		}
 
 		[Test]
@@ -49,10 +45,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				};
 
 			var scheduleDayPro2 = _mocks.StrictMock<IScheduleDayPro>();
-			var scheduleDayPro3 = _mocks.StrictMock<IScheduleDayPro>();
 			IList<IScheduleDayPro> periodList2= new List<IScheduleDayPro>
 				{
-					scheduleDayPro2, scheduleDayPro3
+					scheduleDayPro2
 				};
 			
 			using (_mocks.Record())
@@ -64,13 +59,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 				Expect.Call(_dataExtractorProvider.CreateRelativeDailyStandardDeviationsByAllSkillsExtractor(scheduleMatrixPro2,
 																											 _schedulingOptions))
 					  .Return(dataExtractor1);
-				Expect.Call(dataExtractor1.Values()).Return(new List<double?> { 0.3, 0.1});
+				Expect.Call(dataExtractor1.Values()).Return(new List<double?> { 0.3});
 				Expect.Call(scheduleMatrixPro1.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(periodList1));
 				Expect.Call(scheduleMatrixPro2.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(periodList2));
-				Expect.Call(_lockableBitArrayFactory.ConvertFromMatrix(false, false, scheduleMatrixPro1))
-					  .Return(new LockableBitArray(1, false, false, null));
-				Expect.Call(_lockableBitArrayFactory.ConvertFromMatrix(false, false, scheduleMatrixPro2))
-					  .Return(new LockableBitArray(1, false, false, null)).Repeat.Twice();
 				Expect.Call(scheduleDayPro1.Day).Return(firstDay).Repeat.AtLeastOnce();
 				Expect.Call(scheduleDayPro2.Day).Return(secondDay).Repeat.AtLeastOnce();
 			}
