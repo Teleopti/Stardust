@@ -45,45 +45,6 @@ namespace Teleopti.Ccc.Domain.Scheduling
 			}
 		}
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public virtual void Transform(IShift sourceShift)
-		{
-			foreach (ActivityLayer layer in sourceShift.LayerCollection)
-			{
-				transformOrAdd(layer);
-			}
-
-			if (sourceShift.LayerCollection.Count >= LayerCollection.Count) return;
-			for (var i = LayerCollection.Count - 1; i >= 0; i--)
-			{
-				var layer = findLayerByOrderIndex(sourceShift.LayerCollection, LayerCollection[i].OrderIndex);
-
-				if (layer == null)
-				{
-					LayerCollection.Remove(LayerCollection[i]);
-				}
-			}
-		}
-
-		private static ActivityLayer findLayerByOrderIndex(IEnumerable<ILayer<IActivity>> layerCollection, int orderIndex)
-		{
-			return layerCollection.Cast<ActivityLayer>().FirstOrDefault(layer => layer.OrderIndex == orderIndex);
-		}
-
-		private void transformOrAdd(ILayer<IActivity> sourceLayer)
-		{
-			var destLayer = findLayerByOrderIndex(LayerCollection, sourceLayer.OrderIndex);
-
-			if (destLayer != null)
-			{
-				destLayer.Transform(sourceLayer);
-			}
-			else
-			{
-				LayerCollection.Add((ActivityLayer)sourceLayer.Clone());
-			}
-		}
-
 		public virtual object Clone()
 		{
 			var retObj = EntityClone();

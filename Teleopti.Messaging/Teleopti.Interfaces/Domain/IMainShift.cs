@@ -14,6 +14,10 @@ namespace Teleopti.Interfaces.Domain
         /// </summary>
         IShiftCategory ShiftCategory { get; set; }
 
-        
+				/// <summary>
+				/// Transform one shift(this instance) to another shift
+				/// </summary>
+				/// <param name="sourceShift"></param>
+				void Transform(IMainShift sourceShift);
     }
 }

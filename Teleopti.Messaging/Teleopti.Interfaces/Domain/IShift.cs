@@ -14,10 +14,5 @@ namespace Teleopti.Interfaces.Domain
                                 IVisualLayerFactoryFactory,
                                 ICloneableEntity<IShift>
     {
-        /// <summary>
-        /// Transform one shift(this instance) to another shift
-        /// </summary>
-        /// <param name="sourceShift"></param>
-        void Transform(IShift sourceShift);
     }
 }
