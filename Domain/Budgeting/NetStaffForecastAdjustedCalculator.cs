@@ -31,10 +31,11 @@ namespace Teleopti.Ccc.Domain.Budgeting
 			var currentForecastedHoursWeekSum = getWeekSumForecastedHours(budgetDaysWithinWeek);
 			var maxStaff = getMaxStaffForDay(budgetDay);
 
-			double netStaffFcAdj = 0;
+			double netStaffFcAdj;
 			if (!currentForecastedHoursWeekSum.Equals(0))
 				netStaffFcAdj = (budgetDay.ForecastedHours/currentForecastedHoursWeekSum)*currentNetStaffWeekSum;
-
+			else
+				netStaffFcAdj = _netStaffCalculator.CalculatedResult(budgetDay).NetStaff;
 
 			if (netStaffFcAdj > maxStaff)
 			{
