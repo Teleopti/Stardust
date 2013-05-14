@@ -69,8 +69,8 @@ namespace Teleopti.Ccc.Win.Scheduling
 
                 if (pa.MainShift != null)
                 {
-                    Color color = pa.MainShift.ShiftCategory.DisplayColor;
-                    string shortName = pa.MainShift.ShiftCategory.Description.ShortName;
+                    Color color = pa.ShiftCategory.DisplayColor;
+                    string shortName = pa.ShiftCategory.Description.ShortName;
                     SizeF stringWidth = e.Graphics.MeasureString(shortName, CellFontBig);
 
                     //if (totalItems > 0)

@@ -139,7 +139,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
                 Assert.AreEqual(new DateTimePeriod(2001, 1, 1, 2001, 1, 2), entity.OvertimeShiftCollection[0].LayerCollection[0].Period);
                 Assert.AreSame(person, entity.Person);
                 Assert.AreSame(scenario, entity.Scenario);             
-                Assert.AreSame(shiftCategory, entity.MainShift.ShiftCategory);
+                Assert.AreSame(shiftCategory, entity.ShiftCategory);
                 Assert.AreSame(activityMain, entity.MainShift.LayerCollection[0].Payload);
                 Assert.AreSame(activityPers, entity.PersonalShiftCollection[0].LayerCollection[0].Payload);
                 Assert.AreSame(activityOvertime, entity.OvertimeShiftCollection[0].LayerCollection[0].Payload);
@@ -194,7 +194,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
             Assert.AreEqual(0, dto.Version);
             Assert.AreEqual(ass.Id, dto.Id);
             Assert.AreEqual(ass.MainShift.Id, dto.MainShift.Id);
-            Assert.AreEqual(ass.MainShift.ShiftCategory.Id, dto.MainShift.ShiftCategoryId);
+            Assert.AreEqual(ass.ShiftCategory.Id, dto.MainShift.ShiftCategoryId);
             Assert.AreEqual(ass.MainShift.LayerCollection.Count, dto.MainShift.LayerCollection.Count);
             Assert.AreEqual(ass.MainShift.LayerCollection[0].Payload.Id, firstMainShiftLayer.Activity.Id);
             Assert.AreEqual(ass.MainShift.LayerCollection[0].Period,

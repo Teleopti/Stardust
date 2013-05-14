@@ -55,7 +55,7 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 																																		 new DateTimePeriod(start, start.AddHours(8)),
 																																		 new ShiftCategory("d"), new Scenario("d"));
 			PersistAndRemoveFromUnitOfWork(pa.MainShift.LayerCollection[0].Payload);
-			PersistAndRemoveFromUnitOfWork(pa.MainShift.ShiftCategory);
+			PersistAndRemoveFromUnitOfWork(pa.ShiftCategory);
 			PersistAndRemoveFromUnitOfWork(pa.Scenario);
 			PersistAndRemoveFromUnitOfWork(pa);
 			return pa;

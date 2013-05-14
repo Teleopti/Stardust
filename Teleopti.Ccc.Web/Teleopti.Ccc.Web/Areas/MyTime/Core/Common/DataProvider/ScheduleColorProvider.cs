@@ -29,7 +29,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Common.DataProvider
 			if (assignments.Any(x => x.MainShift != null))
 			{
 				personAssignmentColors = from d in assignments
-										 select d.MainShift.ShiftCategory.DisplayColor;
+										 select d.ShiftCategory.DisplayColor;
 			}
 
 			var absenceColors = from d in scheduleDays

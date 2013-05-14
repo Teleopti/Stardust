@@ -83,8 +83,8 @@ namespace Teleopti.Ccc.Win.Scheduling
                 {
                     if (pa.MainShift != null)
                     {
-                        Color c = pa.MainShift.ShiftCategory.DisplayColor;
-                        String shortName = pa.MainShift.ShiftCategory.Description.ShortName;
+                        Color c = pa.ShiftCategory.DisplayColor;
+                        String shortName = pa.ShiftCategory.Description.ShortName;
                         SizeF stringWidth = e.Graphics.MeasureString(shortName, CellFontBig);
                         Point point =
                             new Point(e.Bounds.X - (int)stringWidth.Width / 2 + e.Bounds.Width / 2,

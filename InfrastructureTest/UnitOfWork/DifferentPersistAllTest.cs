@@ -28,7 +28,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
 
                 PersistAndRemoveFromUnitOfWork(groupingActivity);
                 PersistAndRemoveFromUnitOfWork(ass.Scenario);
-                PersistAndRemoveFromUnitOfWork(ass.MainShift.ShiftCategory);
+                PersistAndRemoveFromUnitOfWork(ass.ShiftCategory);
                 ass.MainShift.LayerCollection[0].Payload.GroupingActivity = groupingActivity;
                 PersistAndRemoveFromUnitOfWork(ass.MainShift.LayerCollection[0].Payload);
                 PersistAndRemoveFromUnitOfWork(groupingActivity);
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
                 {
                     IRepository rep = new Repository(uowTemp);
                     rep.Remove(ass);
-                    rep.Remove(ass.MainShift.ShiftCategory);
+                    rep.Remove(ass.ShiftCategory);
                     rep.Remove(groupingActivity);
                     rep.Remove(pLoad);
                     rep.Remove(ass.Scenario);

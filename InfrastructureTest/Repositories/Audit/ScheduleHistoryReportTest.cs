@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 									{
 										AuditType = Resources.AuditingReportModified,
 										ShiftType = Resources.AuditingReportShift,
-										Detail = PersonAssignment.MainShift.ShiftCategory.Description.Name,
+										Detail = PersonAssignment.ShiftCategory.Description.Name,
 										ModifiedAt = TimeZoneInfo.ConvertTimeFromUtc(PersonAssignment.UpdatedOn.Value, regional.TimeZone),
 										ModifiedBy = PersonAssignment.UpdatedBy.Name.ToString(NameOrderOption.FirstNameLastName),
 										ScheduledAgent = PersonAssignment.Person.Name.ToString(NameOrderOption.FirstNameLastName),
@@ -140,7 +140,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 				ShiftType = Resources.AuditingReportShift,
 				ScheduleEnd = TimeZoneInfo.ConvertTimeFromUtc(PersonAssignment.Period.EndDateTime, regional.TimeZone),
 				ScheduleStart = TimeZoneInfo.ConvertTimeFromUtc(PersonAssignment.Period.StartDateTime, regional.TimeZone),
-				Detail = PersonAssignment.MainShift.ShiftCategory.Description.Name,
+				Detail = PersonAssignment.ShiftCategory.Description.Name,
 				ModifiedAt = TimeZoneInfo.ConvertTimeFromUtc(PersonAssignment.UpdatedOn.Value, regional.TimeZone),
 				ModifiedBy = PersonAssignment.UpdatedBy.Name.ToString(NameOrderOption.FirstNameLastName),
 				ScheduledAgent = PersonAssignment.Person.Name.ToString(NameOrderOption.FirstNameLastName)
@@ -281,7 +281,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			{
 				AuditType = Resources.AuditingReportInsert,
 				ShiftType = Resources.AuditingReportShift,
-				Detail = PersonAssignment.MainShift.ShiftCategory.Description.Name,
+				Detail = PersonAssignment.ShiftCategory.Description.Name,
 				ModifiedAt = TimeZoneInfo.ConvertTimeFromUtc(PersonAssignment.UpdatedOn.Value, regional.TimeZone),
 				ModifiedBy = PersonAssignment.UpdatedBy.Name.ToString(NameOrderOption.FirstNameLastName),
 				ScheduledAgent = PersonAssignment.Person.Name.ToString(NameOrderOption.FirstNameLastName),

@@ -87,7 +87,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters
 
 			_target.MarkForPersist(UnitOfWork, new ScheduleRepository(UnitOfWork), diffColl);
 
-            Assert.AreEqual(cat.Id.Value, Session.Get<PersonAssignment>(schedData.Id).MainShift.ShiftCategory.Id.Value);
+            Assert.AreEqual(cat.Id.Value, Session.Get<PersonAssignment>(schedData.Id).ShiftCategory.Id.Value);
         }
     }
 }

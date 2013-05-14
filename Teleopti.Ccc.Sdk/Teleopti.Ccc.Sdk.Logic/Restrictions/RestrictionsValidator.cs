@@ -230,7 +230,7 @@ namespace Teleopti.Ccc.Sdk.Logic.Restrictions
             if(personAssignments[0].MainShift == null)
                 return resultSoFar;
 
-            IShiftCategory cat = personAssignments[0].MainShift.ShiftCategory;
+            IShiftCategory cat = personAssignments[0].ShiftCategory;
             resultSoFar.HasShift = true;
             resultSoFar.DisplayColor = new ColorDto(cat.DisplayColor);
             resultSoFar.ScheduledItemName = cat.Description.Name;

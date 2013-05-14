@@ -63,7 +63,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Assert.AreEqual(agent, personAssignment.Person);
             Assert.AreEqual(scenario, personAssignment.Scenario);
             Assert.IsNotNull(personAssignment.MainShift);
-            Assert.AreEqual(shiftCategory, personAssignment.MainShift.ShiftCategory);
+            Assert.AreEqual(shiftCategory, personAssignment.ShiftCategory);
             Assert.AreEqual(1, personAssignment.MainShift.LayerCollection.Count);
             Assert.AreEqual(activity, personAssignment.MainShift.LayerCollection[0].Payload);
             Assert.AreEqual(period, personAssignment.MainShift.LayerCollection[0].Period);
@@ -85,7 +85,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Assert.AreEqual(agent, personAssignment.Person);
             Assert.AreEqual(scenario, personAssignment.Scenario);
             Assert.IsNotNull(personAssignment.MainShift);
-            Assert.AreEqual(shiftCategory, personAssignment.MainShift.ShiftCategory);
+            Assert.AreEqual(shiftCategory, personAssignment.ShiftCategory);
             Assert.AreEqual(1, personAssignment.MainShift.LayerCollection.Count);
             Assert.AreEqual(activity, personAssignment.MainShift.LayerCollection[0].Payload);
             Assert.AreEqual(period, personAssignment.MainShift.LayerCollection[0].Period);

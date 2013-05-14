@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Win.Scheduling.ScheduleReporting
         	var personAssignments = schedulePart.PersonAssignmentCollection();
 			if (personAssignments.Count>0 && personAssignments[0].MainShift!=null)
 			{
-				IShiftCategory category = personAssignments[0].MainShift.ShiftCategory;
+				IShiftCategory category = personAssignments[0].ShiftCategory;
 				categoryColor = category.DisplayColor;
 				categoryName = category.Description.Name;
 			}
