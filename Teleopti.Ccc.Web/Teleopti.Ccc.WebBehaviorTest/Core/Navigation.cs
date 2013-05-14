@@ -221,7 +221,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		public static void GotoAnywhereTeamSchedule()
 		{
 			GoToWaitForUrlAssert("Anywhere", "Anywhere", new ApplicationStartupTimeout());
-			Pages.Pages.NavigatingTo(Browser.Current.Page<AnywherePage>());
 		}
 
 		public static void GotoAnywhereTeamSchedule(DateTime date)
@@ -232,7 +231,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 				date.Day.ToString("00")),
 				"Anywhere#teamschedule",
 				new ApplicationStartupTimeout());
-			Pages.Pages.NavigatingTo(Browser.Current.Page<AnywherePage>());
 		}
 
 		public static void GotoAnywhereTeamSchedule(DateTime date, Guid teamId)
@@ -245,7 +243,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 				date.Day.ToString("00")),
 				"Anywhere#teamschedule",
 				new ApplicationStartupTimeout());
-			Pages.Pages.NavigatingTo(Browser.Current.Page<AnywherePage>());
 		}
 
 		public static void GotoAnywherePersonSchedule(Guid personId, DateTime date)
@@ -258,7 +255,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 				date.Day.ToString("00")),
 				"Anywhere#personschedule",
 				new ApplicationStartupTimeout());
-			Pages.Pages.NavigatingTo(Browser.Current.Page<AnywherePage>());
 		}
 
 		public static void GotoAnywherePersonScheduleFullDayAbsenceForm(Guid personId, DateTime date)
@@ -271,7 +267,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 				date.Day.ToString("00")),
 				"Anywhere#personschedule",
 				new ApplicationStartupTimeout());
-			Pages.Pages.NavigatingTo(Browser.Current.Page<AnywherePage>());
 		}
 	}
 
