@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Optimization;
-using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
@@ -12,12 +11,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	}
 	public class StandardDeviationSumCalculator : IStandardDeviationSumCalculator
 	{
-		private readonly ILockableBitArrayFactory _lockableBitArrayFactory;
 		private readonly IScheduleResultDataExtractorProvider _dataExtractorProvider;
 
-		public StandardDeviationSumCalculator(ILockableBitArrayFactory lockableBitArrayFactory, IScheduleResultDataExtractorProvider dataExtractorProvider)
+		public StandardDeviationSumCalculator(IScheduleResultDataExtractorProvider dataExtractorProvider)
 		{
-			_lockableBitArrayFactory = lockableBitArrayFactory;
 			_dataExtractorProvider = dataExtractorProvider;
 		}
 
@@ -35,11 +32,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 				var periodDays = matrix.EffectivePeriodDays;
 				for (var i = 0; i < periodDays.Count; i++)
 				{
-					var originalArray = _lockableBitArrayFactory.ConvertFromMatrix(optimizerPreferences.DaysOff.ConsiderWeekBefore,
-					                                                               optimizerPreferences.DaysOff.ConsiderWeekAfter,
-					                                                               matrix);
-					if (originalArray.UnlockedIndexes.Contains(i) && !originalArray.DaysOffBitArray[i])
-						if (!standardDeviationData.Data.ContainsKey(periodDays[i].Day))
+					if (!standardDeviationData.Data.ContainsKey(periodDays[i].Day))
 							standardDeviationData.Add(periodDays[i].Day, values[i]);
 				}
 			}
