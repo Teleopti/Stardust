@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Text;
 using NUnit.Framework;
+using NUnit.Framework.Constraints;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using WatiN.Core;
 
@@ -9,6 +10,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 	public class WatiNIEBrowserInteractions : IBrowserInteractions
 	{
 		private readonly IE _browser;
+		private readonly IExceptionCatcher exceptionCatcher = new WatiNIEExceptionCatcher();
 
 		public WatiNIEBrowserInteractions(IE browser)
 		{
@@ -17,17 +19,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 
 		public object Javascript(string javascript)
 		{
-			return Retrying.Action(() => _browser.Eval(javascript));
+			return browserOperation(() => _browser.Eval(javascript), "Failed to execute javascript " + javascript);
 		}
 
 		public void GoToWaitForCompleted(string uri)
 		{
-			Retrying.Action(() => _browser.GoTo(uri));
+			browserOperation(() => _browser.GoTo(uri), "Failed to goto url " + uri + " and wait for completion");
 		}
 
 		public void GoToWaitForUrlAssert(string uri, string assertUrlContains)
 		{
-			Retrying.Action(() => _browser.GoToNoWait(uri));
+			browserOperation(() => _browser.GoToNoWait(uri), "Failed to goto url " + uri + " without waiting");
 			AssertUrlContains(assertUrlContains);
 		}
 
@@ -36,49 +38,48 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 			_browser.Element(Find.BySelector(selector)).EventualClick();
 		}
 
-
 		public void AssertUrlContains(string url)
 		{
-			EventualAssert.That(() => _browser.Url, Is.StringContaining(url));
+			browserAssert(() => _browser.Url, Is.StringContaining(url), "Failed to assert that current url contains " + url);
 		}
 
 		public void AssertUrlNotContains(string urlContains, string urlNotContains)
 		{
 			AssertUrlContains(urlContains);
-			EventualAssert.That(() => _browser.Url, Is.Not.StringContaining(urlNotContains));
+			browserAssert(() => _browser.Url, Is.Not.StringContaining(urlNotContains), "Failed to assert that current url did not contain " + urlNotContains);
 		}
 
 		public void AssertJavascriptResultContains(string javascript, string text)
 		{
-			EventualAssert.That(() => _browser.Eval(javascript), Is.StringContaining(text));
+			browserAssert(() => _browser.Eval(javascript), Is.StringContaining(text), "Failed to assert that javascript " + javascript + " returned a value containing " + text);
 		}
 
 		public void AssertInputValue(string selector, string value)
 		{
-			EventualAssert.That(() => _browser.TextField(Find.BySelector(selector)).Value, Is.EqualTo(value));
+			browserAssert(() => _browser.TextField(Find.BySelector(selector)).Value, Is.EqualTo(value), "Failed to assert that input " + selector + " had the value " + value);
 		}
 
 		public void AssertExists(string selector)
 		{
-			EventualAssert.That(() => _browser.Element(Find.BySelector(selector)).Exists, Is.True, () => buildAssertMessage("Could not find element matching selector " + selector));
+			browserAssert(() => _browser.Element(Find.BySelector(selector)).Exists, Is.True, "Could not find element matching selector " + selector);
 		}
 
 		public void AssertNotExists(string existsSelector, string notExistsSelector)
 		{
 			AssertExists(existsSelector);
-			EventualAssert.That(() => _browser.Element(Find.BySelector(notExistsSelector)).Exists, Is.False, () => buildAssertMessage("Found element matching selector " + notExistsSelector + " although I shouldnt"));
+			browserAssert(() => _browser.Element(Find.BySelector(notExistsSelector)).Exists, Is.False, "Found element matching selector " + notExistsSelector + " although I shouldnt");
 		}
 
 		public void AssertContains(string selector, string text)
 		{
 			// use assertExists(selector:contains(text)) here instead?
 			// should be faster with better compatibility.
-			EventualAssert.That(() => _browser.Element(Find.BySelector(selector)).Text, Is.StringContaining(text));
+			browserAssert(() => _browser.Element(Find.BySelector(selector)).Text, Is.StringContaining(text), "Failed to assert that " + selector + " contained text " + text);
 		}
 
 		public void AssertNotContains(string selector, string text)
 		{
-			EventualAssert.That(() => _browser.Element(Find.BySelector(selector)).Text, Is.Not.StringContaining(text));
+			browserAssert(() => _browser.Element(Find.BySelector(selector)).Text, Is.Not.StringContaining(text), "Failed to assert that " + selector + " did not contain text " + text);
 		}
 
 		public void DumpInfo(Action<string> writer)
@@ -86,14 +87,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 			writer(" Time: ");
 			writer(DateTime.Now.ToString());
 			writer(" Url: ");
-			writer(tryOperation(() => Browser.Current.Url, "Failed to get Url"));
+			writer(succeedOrIgnore(() => Browser.Current.Url));
 			writer(" Html: ");
-			writer(tryOperation(() => Browser.Current.Html, "Failed to get Html"));
+			writer(succeedOrIgnore(() => Browser.Current.Html));
 			//writer(" Text: ");
-			//writer(tryOperation(() => Browser.Current.Text, ""));
+			//writer(tryOperation(() => Browser.Current.Text));
 		}
 
-		private static string tryOperation(Func<string> operation, string @default)
+		private static string succeedOrIgnore(Func<string> operation)
 		{
 			try
 			{
@@ -101,11 +102,40 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 			}
 			catch (Exception)
 			{
-				return @default;
+				return "Failed";
 			}
 		}
 
-		private string buildAssertMessage(string message)
+		private void browserOperation(Action operation, string message)
+		{
+			try
+			{
+				Retrying.Action(operation, exceptionCatcher);
+			}
+			catch (Exception ex)
+			{
+				throw new BrowserInteractionException(buildMessage(message), ex);
+			}
+		}
+
+		private void browserAssert<T>(Func<T> value, Constraint constraint, string message)
+		{
+			EventualAssert.That(value, constraint, () => buildMessage(message));
+		}
+
+		private T browserOperation<T>(Func<T> operation, string message)
+		{
+			try
+			{
+				return Retrying.Action(operation, exceptionCatcher);
+			}
+			catch (Exception ex)
+			{
+				throw new BrowserInteractionException(buildMessage(message), ex);
+			}
+		}
+
+		private string buildMessage(string message)
 		{
 			var builder = new StringBuilder();
 			builder.Append(message);
@@ -113,7 +143,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 			DumpInfo(s => builder.Append(s));
 			return builder.ToString();
 		}
+	}
 
-
+	public class BrowserInteractionException : Exception
+	{
+		public BrowserInteractionException(string message, Exception innerException)
+			: base(message, innerException)
+		{
+		}
 	}
 }

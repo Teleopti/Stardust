@@ -1,9 +1,9 @@
 using System;
 using NUnit.Framework;
 using NUnit.Framework.Constraints;
+using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
-using WatiN.Core;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core.Robustness
 {
@@ -16,30 +16,35 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Robustness
 
 		public static void That<T>(Func<T> value, Constraint constraint, Func<string> message)
 		{
+			That(value, constraint, message, new WatiNIEExceptionCatcher());
+		}
+
+		public static void That<T>(Func<T> value, Constraint constraint, Func<string> message, IExceptionCatcher exceptionCatcher)
+		{
 			ReusableConstraint reusableConstraint = constraint;
 			Exception exception = null;
 			Func<bool> longPollTimeSafeAssert = () =>
-			                                    	{
-			                                    		
-			                                    		try
-			                                    		{
-			                                    			Func<Exception, T> failingValue = e =>
-			                                    			                                  	{
-			                                    			                                  		exception = e;
-			                                    			                                  		return default(T);
-			                                    			                                  	};
+				{
 
-			                                    			Func<T> robustValue = () => ExceptionHandling.Action(value.Invoke, failingValue);
+					try
+					{
+						Func<Exception, T> failingValue = e =>
+							{
+								exception = e;
+								return default(T);
+							};
 
-			                                    			Assert.That(() => robustValue.Invoke(), reusableConstraint);
-			                                    			return true;
-			                                    		}
-			                                    		catch (AssertionException ex)
-			                                    		{
-			                                    			exception = ex;
-			                                    			return false;
-			                                    		}
-			                                    	};
+						Func<T> robustValue = () => exceptionCatcher.Action(value.Invoke, failingValue);
+
+						Assert.That(() => robustValue.Invoke(), reusableConstraint);
+						return true;
+					}
+					catch (AssertionException ex)
+					{
+						exception = ex;
+						return false;
+					}
+				};
 
 			if (longPollTimeSafeAssert.WaitUntil(Timeouts.Poll, Timeouts.Timeout)) return;
 
@@ -47,6 +52,5 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Robustness
 				Assert.Fail(message.Invoke());
 			throw exception;
 		}
-
 	}
 }

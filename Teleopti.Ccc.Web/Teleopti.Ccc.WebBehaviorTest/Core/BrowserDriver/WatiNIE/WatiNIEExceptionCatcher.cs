@@ -6,10 +6,9 @@ using WatiN.Core.Exceptions;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 {
-	public static class ExceptionHandling
+	public class WatiNIEExceptionCatcher : IExceptionCatcher
 	{
-
-		public static T Action<T>(Func<T> action, Func<Exception, T> failureCallback)
+		public T Action<T>(Func<T> action, Func<Exception, T> failureCallback)
 		{
 			try
 			{
@@ -53,7 +52,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 			}
 		}
 
-		public static void Action(Action action, Action<Exception> failureCallback)
+		public void Action(Action action, Action<Exception> failureCallback)
 		{
 			try
 			{
