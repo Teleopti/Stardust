@@ -1237,4 +1237,8 @@ Schedule</value>
     <value>Unfulfilled</value>
     <comment>Unfulfilled</comment>
   </data>
+  <data name="ResReportAvailabilityPerAgent" xml:space="preserve">
+    <value>Availability Per Agent</value>
+    <comment> the report Availability Per Agent</comment>
+  </data>
 </root>

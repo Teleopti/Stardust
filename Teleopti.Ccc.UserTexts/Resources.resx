@@ -11460,4 +11460,8 @@ Reduce the complexity to use these shifts.</value>
     <value>Improved</value>
     <comment>optimization result improved</comment>
   </data>
+  <data name="ResReportAvailabilityPerAgent" xml:space="preserve">
+    <value>Availability Per Agent</value>
+    <comment> the report Availability Per Agent</comment>
+  </data>
 </root>

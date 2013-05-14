@@ -95,4 +95,41 @@ CONSTRAINT [PK_stg_schedule_updated_ShiftStartDateUTC] PRIMARY KEY CLUSTERED
 )
 )
 GO
+----------------  
+--Name: Ola
+--Date: 2013-05-14
+--Desc: new "Avaliability per Agent" report
+-----------------
+DECLARE @newreportid uniqueidentifier = 'A56B3EEF-17A2-4778-AA8A-D166232073D2'
+INSERT INTO mart.report (
+		Id, 
+		report_id, 
+		control_collection_id, 
+		url, 
+		target, 
+		report_name, 
+		report_name_resource_key, 
+		visible, 
+		rpt_file_name, 
+		proc_name, 
+		help_key, 
+		sub1_name, 
+		sub1_proc_name, 
+		sub2_name, 
+		sub2_proc_name, 
+		ControlCollectionId)
+		VALUES(
+		@newreportid,
+		0,
+		28,
+		'~/Selection.aspx?ReportId=A56B3EEF-17A2-4778-AA8A-D166232073D2',
+		'_blank',
+		'Availability per Agent',
+		'ResReportAvailabilityPerAgent',
+		1,
+		'~/Reports/CCC/report_availability_per_agent.rdlc',
+		'mart.report_data_availability_per_agent',
+		'f01:Report+AvailabilityPerAgent',
+		'','','','',
+		'077F50D3-CE9C-4EF6-B52F-13975C4F83EA')
 GO
