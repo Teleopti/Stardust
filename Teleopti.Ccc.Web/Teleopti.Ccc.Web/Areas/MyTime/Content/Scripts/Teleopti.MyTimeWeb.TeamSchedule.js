@@ -28,6 +28,8 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
         }
         this.selectedTeam = ko.observable();
         this.availableTeams = ko.observableArray();
+        
+        this.displayDate = ko.observable($('#TeamSchedule-body').data('mytime-periodselection').Display);
 
         this.selectableTeams = ko.computed(function() {
             if (self.availableTeams()[0] && self.availableTeams()[0].children) {
@@ -61,10 +63,6 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
             self.selectedDate().add('days', -1);
             self.selectedDate.valueHasMutated();
         };
-
-        this.displayDate = ko.computed(function() {
-            return self.selectedDate().format('YYYY-MM-DD');
-        });
 
         this.today = function() {
             self.selectedDate(moment().startOf('day'));
