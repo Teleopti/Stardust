@@ -1449,9 +1449,14 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
             var retList = new List<ISameUserCredentialOnOther>();
             if (_validateUserCredentialsCollection.Count > 0)
             {
-                var sameUserCredentialOnOtherChecker =
-                    new SameUserCredentialOnOtherChecker(new PersonRepository(UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork()));
-                retList.AddRange(sameUserCredentialOnOtherChecker.CheckConflictsBeforeSave(_validateUserCredentialsCollection));
+                using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+                {
+                    var rep = new PersonRepository(uow);
+                    var sameUserCredentialOnOtherChecker =
+                        new SameUserCredentialOnOtherChecker(rep);
+                    retList.AddRange(
+                        sameUserCredentialOnOtherChecker.CheckConflictsBeforeSave(_validateUserCredentialsCollection));
+                }
             }
             return retList;
         }
@@ -1792,6 +1797,15 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.GuiHelpers
         public void SetSortedSchedulePeriodFilteredList(IEnumerable<SchedulePeriodModel> result)
         {
             _schedulePeriodGridViewCollection = result.ToList();
+        }
+
+        public void PersistAll()
+        {
+            using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+            {
+                UnitOfWork.PersistAll();
+                uow.PersistAll();
+            }
         }
 
         #region IDisposable Members
