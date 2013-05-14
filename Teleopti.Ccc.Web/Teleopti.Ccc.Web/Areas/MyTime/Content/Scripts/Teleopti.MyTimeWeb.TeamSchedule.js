@@ -28,6 +28,26 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
         }
         this.selectedTeam = ko.observable();
         this.availableTeams = ko.observableArray();
+
+        this.selectableTeams = ko.computed(function() {
+            if (self.availableTeams()[0] && self.availableTeams()[0].children) {
+                var selectables = [];
+                $.each(self.availableTeams(), function (index) {
+                    $.merge(selectables, self.availableTeams()[index].children);
+                });
+
+                return selectables;
+            }
+            return self.availableTeams();
+        });
+
+        this.showGroupings = ko.computed(function () {
+            if (self.availableTeams()[0] && self.availableTeams()[0].children) {
+                return true;
+            }
+            return false;
+        });
+        
         this.showTeamPicker = ko.computed(function() {
             return self.availableTeams().length > 1;
         });
@@ -52,29 +72,25 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 
         this.findTeamById = function (teamId) {
             var foundTeam;
-            ko.utils.arrayForEach(self.availableTeams(), function (group) {
-                ko.utils.arrayForEach(group.children, function(team) {
-                    if (team.id == teamId) {
-                        foundTeam = team;
-                    }
-                });
+            ko.utils.arrayForEach(self.selectableTeams(), function (team) {
+                if (team.id == teamId) {
+                    foundTeam = team;
+                }
             });
             return foundTeam;
         };
         
         this.findFirstTeam = function () {
             var firstTeam;
-            ko.utils.arrayForEach(self.availableTeams(), function (group) {
-                ko.utils.arrayForEach(group.children, function (team) {
-                    if (firstTeam === undefined) {
-                        firstTeam = team;
-                    }
-                });
+            ko.utils.arrayForEach(self.selectableTeams(), function (team) {
+                if (firstTeam === undefined) {
+                    firstTeam = team;
+                }
             });
             return firstTeam;
         };
 
-        this.dateAndTeamKey = ko.computed(function() {
+        this.dateAndTeamKey = ko.computed(function () {
             var selectedTeam = self.selectedTeam();
             var teamId = '';
             if (selectedTeam != undefined && selectedTeam != null) {
@@ -85,7 +101,6 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
     };
 
 	function _initTeamPickerSelection() {
-	    //$('#Team-Picker').select2("destroy");
 	    vm = new teamScheduleViewModel(_currentUrlDate());
 
 	    $.ajax({
@@ -99,25 +114,44 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 
 	            var teamId = _currentId();
 	            var foundTeam = undefined;
-	            if (teamId)
-	                foundTeam = vm.findTeamById(teamId);
+	            if (vm.showTeamPicker()) {
+	                if (teamId)
+	                    foundTeam = vm.findTeamById(teamId);
 
-	            if (foundTeam === undefined)
-	                foundTeam = vm.findFirstTeam();
-
-	            vm.selectedTeam(foundTeam.id);
-
-                vm.dateAndTeamKey.subscribe(function() {
-                    var team = vm.selectedTeam();
-                    if (team === undefined || team == null) return;
-                    var theDate = vm.selectedDate();
-                    _navigateTo(theDate.format('YYYY-MM-DD'), team);
-                });
+	                if (foundTeam != undefined)
+	                    vm.selectedTeam(foundTeam.id);
+	                else
+	                    _navigateTo(_getNavigateToDate());
+	            } else {
+	                if (teamId)
+	                    foundTeam = vm.findTeamById(teamId);
+	                
+	                if (foundTeam != undefined)
+	                    vm.selectedTeam(foundTeam.id);
+	                else
+	                    _navigateTo(_getNavigateToDate());
+	            }
+	            
+	            vm.dateAndTeamKey.subscribe(function () {
+	                var team = vm.selectedTeam();
+	                if (team === undefined || team == null) return;
+	                _navigateTo(vm.selectedDate().format('YYYY-MM-DD'), team);
+	            });
 	            
                 readyForInteraction();
                 completelyLoaded();
 	        }
 	    });
+	}
+
+	function _getNavigateToDate() {
+	    var urlDate = _currentUrlDate();
+	    if (urlDate) {
+	        return moment(urlDate).format('YYYY-MM-DD');
+	    }
+	    
+	    var periodData = $('#TeamSchedule-body').data('mytime-periodselection');
+	    return periodData.Date;
 	}
 
 	function _initAgentNameOverflow() {
@@ -137,7 +171,6 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 	}
 
 	function _navigateTo(date, teamid) {
-	    _unBindData();
 		portal.NavigateTo("TeamSchedule/Index", date, teamid);
 	}
 
@@ -145,7 +178,7 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 	    ko.applyBindings(vm, $('#page')[0]);
 	};
     
-	function _unBindData() {
+	function _cleanBindings() {
 	    ko.cleanNode($('#page')[0]);
 	};
 
@@ -154,12 +187,13 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 	}
     
     function _currentId() {
-        return Teleopti.MyTimeWeb.Portal.ParseHash().parts[5];
+        //return Teleopti.MyTimeWeb.Portal.ParseHash().parts[5];
+        return $('#TeamSchedule-body').data('mytime-teamselection');
     }
 
 	return {
 		Init: function () {
-			portal.RegisterPartialCallBack('TeamSchedule/Index', Teleopti.MyTimeWeb.TeamSchedule.TeamSchedulePartialInit);
+		    portal.RegisterPartialCallBack('TeamSchedule/Index', Teleopti.MyTimeWeb.TeamSchedule.TeamSchedulePartialInit, Teleopti.MyTimeWeb.TeamSchedule.PartialDispose);
 		},
 		TeamSchedulePartialInit: function (readyForInteractionCallback, completelyLoadedCallback) {
 			readyForInteraction = readyForInteractionCallback;
@@ -172,6 +206,9 @@ Teleopti.MyTimeWeb.TeamSchedule = (function ($) {
 			_initTeamPickerSelection();
 			_bindData();
 			_initAgentNameOverflow();
+		},
+		PartialDispose: function () {
+		    _cleanBindings();
 		}
 	};
 

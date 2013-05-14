@@ -80,12 +80,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		public void ClickNext()
 		{
-			Browser.Interactions.Click(".navbar-form button:nth-child(3)");
+			Browser.Interactions.Click(".navbar-form button:nth-of-type(3)");
 		}
 
 		public void ClickPrevious()
 		{
-			Browser.Interactions.Click(".navbar-form button:nth-child(1)");
+			Browser.Interactions.Click(".navbar-form button:nth-of-type(1)");
 		}
 
 		public Div ToolTipContainer()
