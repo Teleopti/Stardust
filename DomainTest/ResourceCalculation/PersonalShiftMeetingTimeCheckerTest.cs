@@ -204,7 +204,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
 		[Test]
 		public void ShouldAllowNoOverwriteActivityBetweenPersonalShifts()
 		{
-			_personAssignment = new PersonAssignment(_person, _scenario);
+			_personAssignment = new PersonAssignment(_person, _scenario, new DateOnly(2013, 1, 1));
 			_mainShift = new MainShift(_shiftCategory);
 			_mainShift.LayerCollection.Add(_mainShiftLayerNoOverwrite);
 			_mainShiftProjection = _mainShift.ProjectionService().CreateProjection();
