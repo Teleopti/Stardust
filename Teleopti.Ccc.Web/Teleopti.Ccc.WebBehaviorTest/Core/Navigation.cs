@@ -173,7 +173,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 
 		public static void GotoRequests()
 		{
-			GoToWaitForCompleted("MyTime#Requests/Index", new ForceRefresh(), new ApplicationStartupTimeout(), new WaitForLoadingOverlay(), new WaitUntilReadyForInteraction());
+			GoToWaitForCompleted("MyTime#Requests/Index", new BustCache(), new ApplicationStartupTimeout(), new WaitForLoadingOverlay(), new WaitUntilReadyForInteraction());
 			Pages.Pages.NavigatingTo(Browser.Current.Page<RequestsPage>());
 		}
 
@@ -286,7 +286,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		void After(GotoArgs args);
 	}
 
-	public class ForceRefresh : IGoToInterceptor
+	public class BustCache : IGoToInterceptor
 	{
 		public void Before(GotoArgs args)
 		{
