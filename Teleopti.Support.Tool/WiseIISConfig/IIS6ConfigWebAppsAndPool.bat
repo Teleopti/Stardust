@@ -4,6 +4,8 @@ SET ROOTDIR=%ROOTDIR:~0,-1%
 %ROOTDIR:~0,2%
 CD "%ROOTDIR%"
 
+SET INSTALLDIR=%ROOTDIR:~0,-27%
+
 ::Example Call:
 ::note: parameter 3,4 are optional
 ::IIS7ConfigWebAppsAndPool.bat [IS_SSL] [SDK_CREDPROT] [MYUSER] [MYPASSWORD]
@@ -20,23 +22,20 @@ IF "%SDKCREDPROT%"=="" GOTO NoInput
 ::=============
 ::Main
 ::=============
+ECHO Settings up IIS web sites and applictions ...
 ECHO Call was: IIS6ConfigWebAppsAndPool.bat %~1 %~2 %~3 %~4 > %logfile%
 
 SET DefaultSite=Default Web Site
 SET MainSiteName=TeleoptiCCC
-SET appcmd=%systemroot%\system32\inetsrv\APPCMD.exe
 
-for /f "tokens=2,3 delims=;" %%g in (Apps\ApplicationsInAppPool.txt) do CALL:CreateAppPool "%%g" "%%h" >> %logfile%
+for /f "tokens=3,4 delims=;" %%g in (Apps\ApplicationsInAppPool.txt) do CALL:CreateAppPool "%%g" "%%h" >> %logfile%
 
-for /f "tokens=1,2,3 delims=;" %%g in (Apps\ApplicationsInAppPool.txt) do CALL:ForEachApplication "%%g" "%%h" "%%i" >> %logfile%
-
-::enable defautl doc on "TeleoptiCCC"-site
-cscript "%ROOTDIR%\adsutil.vbs" SET "w3svc/1/Root/TeleoptiCCC/DefaultDoc" "index.html"
-cscript "%ROOTDIR%\adsutil.vbs" SET "w3svc/1/Root/TeleoptiCCC/EnableDefaultDoc" True
+for /f "tokens=2,3,4,5 delims=;" %%g in (Apps\ApplicationsInAppPool.txt) do CALL:ForEachApplication "%%g" "%%h" "%%i" "%%j" >> %logfile%
 
 ::just in case
 iisreset /restart
-
+ECHO.
+ECHO Done!
 GOTO Done
 
 ::=============
@@ -50,62 +49,58 @@ SET NETVersion=%~2
 echo cscript "%ROOTDIR%\adsutil.vbs" ENUM "w3svc/AppPools/%PoolName%"
 cscript "%ROOTDIR%\adsutil.vbs" ENUM "w3svc/AppPools/%PoolName%"
 if %errorlevel% NEQ 0 (
-ECHO Creating Teleopti App pool ...
-echo cscript "%ROOTDIR%\adsutil.vbs" CREATE "w3svc/AppPools/%PoolName%" IIsApplicationPool
-cscript "%ROOTDIR%\adsutil.vbs" CREATE "w3svc/AppPools/%PoolName%" IIsApplicationPool
-ECHO Creating Teleopti App pool. Done!
+	ECHO Creating Teleopti App pool ...
+	echo cscript "%ROOTDIR%\adsutil.vbs" CREATE "w3svc/AppPools/%PoolName%" IIsApplicationPool
+	cscript "%ROOTDIR%\adsutil.vbs" CREATE "w3svc/AppPools/%PoolName%" IIsApplicationPool
+	ECHO Creating Teleopti App pool. Done!
 ) else (
-ECHO Teleopti app pool already exist: "%PoolName%"
+	ECHO Teleopti app pool already exist: "%PoolName%"
 )
 echo.
-
 Exit /B
 
 :ForEachApplication
 SET SubSiteName=%~1
 SET PoolName=%~2
 SET NETVersion=%~3
+SET SiteOrApp=%~4
 
 SET SitePath=%MainSiteName%/%SubSiteName%
+SET FolderPath=%MainSiteName%\%SubSiteName%
 
 ::special case for TeleoptCCC root site, skip subsite
 if "%SubSiteName%"=="TeleoptiCCC" SET SitePath=%MainSiteName%
+if "%SubSiteName%"=="TeleoptiCCC" SET FolderPath=%MainSiteName%
 
-::2 - Change app pool
-echo Change app pool
-echo cscript "%ROOTDIR%\adsutil.vbs" set W3SVC/1/ROOT/%SitePath%/AppPoolId "%PoolName%"
-cscript "%ROOTDIR%\adsutil.vbs" set W3SVC/1/ROOT/%SitePath%/AppPoolId "%PoolName%"
-if %errorlevel% NEQ 0 GOTO :ErrorInfo
+CALL:CreateApplication "%SitePath%" "%SubSiteName%" "%INSTALLDIR%\%FolderPath%" "%SiteOrApp%"
 
-::3 - Set AppPool credentials
-::Not sure how to handle the case when user first run installation with %CustomIISUsr% and later
-:: decides to revert to Network Service. Then the IWAM-user is = %CustomIISUsr% and password is still = %CustomIISPwd%
-::this applies possible(?) only to "Teleopti ASP.NET 3.5/4.0", in that case a no brainer.
-if "%CustomIISUsr%"=="" (
-echo using Network Service as identity on AppPool
-cscript "%ROOTDIR%\adsutil.vbs" SET "w3svc/AppPools/%PoolName%/AppPoolIdentityType" 2
-) else (
-echo using %CustomIISUsr% as identity on AppPool
-cscript "%ROOTDIR%\adsutil.vbs" SET "w3svc/AppPools/%PoolName%/WamUserName" "%CustomIISUsr%"
-cscript "%ROOTDIR%\adsutil.vbs" SET "w3svc/AppPools/%PoolName%/WamUserPass" "%CustomIISPwd%"
-cscript "%ROOTDIR%\adsutil.vbs" SET "w3svc/AppPools/%PoolName%/AppPoolIdentityType" 3
+if "%SiteOrApp%"=="app" (
+	echo Change app pool
+	echo cscript "%ROOTDIR%\adsutil.vbs" set W3SVC/1/ROOT/%SitePath%/AppPoolId "%PoolName%"
+	cscript "%ROOTDIR%\adsutil.vbs" set W3SVC/1/ROOT/%SitePath%/AppPoolId "%PoolName%"
+	echo Set identity on App Pool
+	if "%CustomIISUsr%"=="" (
+		echo using Network Service as identity on AppPool
+		cscript "%ROOTDIR%\adsutil.vbs" SET "w3svc/AppPools/%PoolName%/AppPoolIdentityType" 2
+	) else (
+		echo using %CustomIISUsr% as identity on AppPool
+		cscript "%ROOTDIR%\adsutil.vbs" SET "w3svc/AppPools/%PoolName%/WamUserName" "%CustomIISUsr%"
+		cscript "%ROOTDIR%\adsutil.vbs" SET "w3svc/AppPools/%PoolName%/WamUserPass" "%CustomIISPwd%"
+		cscript "%ROOTDIR%\adsutil.vbs" SET "w3svc/AppPools/%PoolName%/AppPoolIdentityType" 3
+	)
+	echo setting .Net version
+	echo cscript "%ROOTDIR%\ASPNetVersion.vbs" "%SitePath%" "%NETVersion%"
+	cscript "%ROOTDIR%\ASPNetVersion.vbs" "%SitePath%" "%NETVersion%"
+	echo.
 )
 echo.
 
-::4 SSL seetings
+::SSL seetings
 echo cscript "%ROOTDIR%\adsutil.vbs" set w3svc/1/root/%SitePath%/AccessSSL %SSL%
 cscript "%ROOTDIR%\adsutil.vbs" set w3svc/1/root/%SitePath%/AccessSSL %SSL%
 echo.
 
-::5 .NET version
-echo cscript "%ROOTDIR%\ASPNetVersion.vbs" "%SitePath%" "%NETVersion%"
-cscript "%ROOTDIR%\ASPNetVersion.vbs" "%SitePath%" "%NETVersion%"
-echo.
-
-::5 Authentication for the virtual dir
-::-----
-::Different authentication based on "SDKCREDPROT"
-::-----
+::Authentication for the virtual dir
 ::AuthFlag is a bitmask: http://msdn.microsoft.com/en-us/library/ms524513(v=vs.90).aspx
 SET /A AuthFlag=0
 
@@ -131,15 +126,46 @@ GOTO Done
 SETLOCAL
 SET /A AuthFlag=0
 if "%~2"=="anonymousAuthentication" (
- if "%~3"=="True" set /A AuthFlag=1
+	if "%~3"=="True" set /A AuthFlag=1
 )
 if "%~2"=="windowsAuthentication" (
-  if "%~3"=="True" set /A AuthFlag=4
+	if "%~3"=="True" set /A AuthFlag=4
 )
 (
 ENDLOCAL
 set /a "%~5=%AuthFlag%+%5"
 )
+goto:eof
+
+:CreateApplication
+::delete VirDir
+echo cscript "%ROOTDIR%\adsutil.vbs" delete w3svc/1/root/%~1
+cscript "%ROOTDIR%\adsutil.vbs" delete w3svc/1/root/%~1
+
+::create VirDir and App
+echo cscript "%ROOTDIR%\adsutil.vbs" create_vdir w3svc/1/root/%~1
+cscript "%ROOTDIR%\adsutil.vbs" create_vdir w3svc/1/root/%~1
+
+if "%~4"=="App" (
+	echo cscript "%ROOTDIR%\adsutil.vbs" appcreateinproc w3svc/1/root/%~1
+	cscript "%ROOTDIR%\adsutil.vbs" appcreateinproc w3svc/1/root/%~1
+
+	echo cscript "%ROOTDIR%\adsutil.vbs" appenable w3svc/1/root/%~1
+	cscript "%ROOTDIR%\adsutil.vbs" appenable w3svc/1/root/%~1
+)
+
+echo cscript "%ROOTDIR%\adsutil.vbs" set w3svc/1/root/%~1/appfriendlyname "%~2"
+cscript "%ROOTDIR%\adsutil.vbs" set w3svc/1/root/%~1/appfriendlyname "%~2"
+
+::link to disk
+echo cscript "%ROOTDIR%\adsutil.vbs" set w3svc/1/root/%~1/path "%~3"
+cscript "%ROOTDIR%\adsutil.vbs" set w3svc/1/root/%~1/path "%~3"
+
+if "%~4"=="vdir" (
+cscript "%ROOTDIR%\adsutil.vbs" SET "w3svc/1/Root/%~1/DefaultDoc" "index.html, default.htm"
+cscript "%ROOTDIR%\adsutil.vbs" SET "w3svc/1/Root/%~1/EnableDefaultDoc" True
+)
+
 goto:eof
 
 :IISSecuritySet

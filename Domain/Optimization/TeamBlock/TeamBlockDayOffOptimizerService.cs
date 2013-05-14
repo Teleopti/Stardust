@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Ccc.Domain.Collection;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces;
@@ -142,32 +141,38 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 					_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
 			foreach (ITeamInfo teamInfo in remainingInfoList.GetRandom(remainingInfoList.Count, true))
 			{
-				if (_cancelMe)
-					break;
-
-				rollbackService.ClearModificationCollection();
-
-				bool success = true;
+				bool anySuccess = false;
 				foreach (IScheduleMatrixPro matrix in teamInfo.MatrixesForGroupMember(0))
 				{
-					success = runOneMatrix(optimizationPreferences, rollbackService, schedulingOptions, matrix, teamInfo,
+					rollbackService.ClearModificationCollection();
+					var success = runOneMatrix(optimizationPreferences, rollbackService, schedulingOptions, matrix, teamInfo,
 					             selectedPeriod, selectedPersons, allPersonMatrixList);
-					if (!success)
+
+					double currentPeriodValue =
+					_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
+
+					if (currentPeriodValue >= previousPeriodValue || !success)
+					{
+						_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
+						currentPeriodValue =
+						_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
+					}
+					else
+					{
+						anySuccess = true;
+					}
+					previousPeriodValue = currentPeriodValue;
+
+					OnReportProgress(Resources.OptimizingDaysOff + Resources.Colon + teamInfo.GroupPerson.Name + "(" + currentPeriodValue + ")");
+					if (_cancelMe)
 						break;
 				}
-				// rollback if failed or not good
-				double currentPeriodValue =
-					_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
-				if (currentPeriodValue >= previousPeriodValue || !success)
+
+				if (!anySuccess)
 				{
 					teamInfosToRemove.Add(teamInfo);
-					_safeRollbackAndResourceCalculation.Execute(rollbackService, schedulingOptions);
-					currentPeriodValue =
-					_periodValueCalculatorForAllSkills.PeriodValue(IterationOperationOption.DayOffOptimization);
 				}
-				previousPeriodValue = currentPeriodValue;
-
-				OnReportProgress(Resources.OptimizingDaysOff + Resources.Colon + teamInfo.GroupPerson.Name +"(" + currentPeriodValue +")");
+				
 			}
 
 			return teamInfosToRemove;
