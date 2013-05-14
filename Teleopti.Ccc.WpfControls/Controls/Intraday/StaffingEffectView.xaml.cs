@@ -1,5 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using Teleopti.Ccc.WinCode.Common.GuiHelpers;
 using Teleopti.Ccc.WinCode.Intraday;
@@ -13,8 +12,7 @@ namespace Teleopti.Ccc.WpfControls.Controls.Intraday
     {
         public void SetDayLayerViewAdapterCollection(IDayLayerViewModel dayLayerViewModel)
         {
-           
-            grid.DataContext = new StaffingEffectViewAdapter(dayLayerViewModel);
+			Grid.DataContext = new StaffingEffectViewAdapter(dayLayerViewModel);
         }
 
         public StaffingEffectView()
