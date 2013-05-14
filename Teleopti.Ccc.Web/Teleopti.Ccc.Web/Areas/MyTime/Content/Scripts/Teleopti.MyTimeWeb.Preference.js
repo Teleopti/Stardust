@@ -36,7 +36,8 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 		callWhenAjaxIsCompleted = ajax.CallWhenAllAjaxCompleted;
 
 	function _initPeriodSelection() {
-	    var periodData = $('#Preference-body').data('mytime-periodselection');
+		var periodData = $('#Preference-body').data('mytime-periodselection');
+		console.log(selectionViewModel);
 	    selectionViewModel.displayDate(periodData.Display);
 	    selectionViewModel.nextPeriodDate(moment(periodData.PeriodNavigation.NextPeriod));
 	    selectionViewModel.previousPeriodDate(moment(periodData.PeriodNavigation.PrevPeriod));
@@ -45,7 +46,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 	    var availablePreferences = eval($("#preference-split-button").data("mytime-preference-option"));
 	    selectionViewModel.availablePreferences(availablePreferences);
 
-	    if (availablePreferences.length > 0) {
+	    if (availablePreferences && availablePreferences.length > 0) {
 	        selectionViewModel.selectedPreference(availablePreferences[0]);
 	    }
 
@@ -501,10 +502,10 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			}
 			_initSplitButton();
 			_initAddExtendedButton();
+			_initViewModels(_soon);
 			_initPeriodSelection();
 			_initExtendedPanels();
-			_initMustHaveButton();
-			_initViewModels(_soon);
+			
 		},
 		PreferencePartialDispose: function () {
 			_hideAddExtendedTooltip();
