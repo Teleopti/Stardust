@@ -61,6 +61,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					LayerCollection.Remove(LayerCollection[i]);
 				}
 			}
+			ShiftCategory = sourceShift.ShiftCategory;
 		}
 
 		private static ActivityLayer findLayerByOrderIndex(IEnumerable<ILayer<IActivity>> layerCollection, int orderIndex)
