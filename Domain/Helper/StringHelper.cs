@@ -41,6 +41,34 @@ namespace Teleopti.Ccc.Domain.Helper
         {
             return toBeSplit.Split(new[] {separator}, StringSplitOptions.None);
         }
+
+		public static string DisplayString(string input, int wordlength)
+		{
+			char space = ' ';
+			string dotsInEnd = "...";
+
+			var lth = input.Length;
+			if (lth < wordlength)
+			{
+				return input.PadRight(wordlength);
+			}
+			if (lth > wordlength)
+			{
+				var trimEndSpaces = input.TrimEnd(space);
+				if (trimEndSpaces != input)
+				{
+					return DisplayString(trimEndSpaces, wordlength);
+				}
+				var subStr = trimEndSpaces.Substring(0, (wordlength - 3));
+				var trimEndAgain = subStr.TrimEnd(space);
+				if (trimEndAgain.Length == 0)
+				{
+					return string.Empty.PadRight(wordlength-3) + dotsInEnd;
+				}
+				return string.Concat(trimEndAgain, dotsInEnd);
+			}
+			return input;
+		}
     }
 
     public static class DateExtensions
