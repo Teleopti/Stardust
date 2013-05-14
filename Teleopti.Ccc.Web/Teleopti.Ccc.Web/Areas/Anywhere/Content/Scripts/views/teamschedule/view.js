@@ -11,7 +11,8 @@ define([
 		'views/teamschedule/person',
 		'text!templates/teamschedule/view.html',
         'resizeevent',
-        'ajax'
+        'ajax',
+        'pagelog'
 	], function (
 		ko,
 		$,
@@ -24,7 +25,8 @@ define([
 		personViewModel,
 		view,
 	    resize,
-	    ajax
+	    ajax,
+	    pagelog
 	) {
 
 		var teamSchedule;
@@ -36,11 +38,13 @@ define([
 		}, null, "gotoperson");
 
 		var loadSchedules = function(options) {
-			subscriptions.subscribeTeamSchedule(
+		    pagelog.log("loadSchedules");
+		    subscriptions.subscribeTeamSchedule(
 				teamSchedule.SelectedTeam(),
 				helpers.Date.ToServer(teamSchedule.SelectedDate()),
 				function(schedules) {
-					var currentPersons = teamSchedule.Persons();
+				    pagelog.log("loadSchedules.got");
+				    var currentPersons = teamSchedule.Persons();
 
 					var dateClone = teamSchedule.SelectedDate().clone();
 					for (var i = 0; i < schedules.length; i++) {
@@ -65,10 +69,12 @@ define([
 					options.success();
 				    
 					resize.notify();
+					pagelog.log("loadSchedules./got");
 				});
 		};
 
 		var loadPersons = function (options) {
+		    pagelog.log("loadPersons");
 		    ajax.ajax({
 				url: 'Person/PeopleInTeam',
 				data: {
@@ -86,7 +92,8 @@ define([
 		};
 
 		var loadTeams = function (options) {
-			ajax.ajax({
+		    pagelog.log("loadTeams");
+		    ajax.ajax({
 				url: 'Person/AvailableTeams',
 				data: {
 				    date: helpers.Date.ToServer(teamSchedule.SelectedDate()),
@@ -101,6 +108,8 @@ define([
 		return {
 			initialize: function (options) {
 
+			    pagelog.log("initialize");
+			    
 				options.renderHtml(view);
 
 				teamSchedule = new teamScheduleViewModel();
@@ -146,7 +155,9 @@ define([
 			
 			display: function (options) {
 
-				var currentTeamId = function () {
+			    pagelog.log("display");
+
+			    var currentTeamId = function () {
 					if (options.id)
 						return options.id;
 					if (teamSchedule.Teams().length > 0)
@@ -170,7 +181,8 @@ define([
 				var deferred = $.Deferred();
 			    
 				var loadPersonsAndSchedules = function() {
-					teamSchedule.SelectedTeam(currentTeamId());
+				    pagelog.log("loadPersonsAndSchedules");
+				    teamSchedule.SelectedTeam(currentTeamId());
 					loadPersons({
 						success: function() {
 							loadSchedules({
@@ -183,6 +195,8 @@ define([
 					});
 				};
 				
+				pagelog.log("load stuff");
+			    
 				if (teamSchedule.Teams().length != 0) {
 					loadPersonsAndSchedules();
 				} else {
