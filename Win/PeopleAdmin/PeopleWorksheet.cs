@@ -570,7 +570,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
         {
             try
             {
-                _filteredPeopleHolder.UnitOfWork.PersistAll();
+                _filteredPeopleHolder.PersistAll();
 
                 //Reset Add new records nold behaviour.
                 _filteredPeopleHolder.ResetBoldProperty();

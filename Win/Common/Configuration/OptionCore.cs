@@ -66,34 +66,34 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			return ready;
 		}
 
-		public void SaveChanges()
-		{
-			var invalidModules = new StringBuilder();
+	    public void SaveChanges()
+	    {
+	        var invalidModules = new StringBuilder();
 
-		    using (var runSql = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
-		    {
-		        foreach (var page in AllSelectedPages)
-		        {
-		            try
-		            {
-		                page.SaveChanges();
-		            }
-		            catch (ValidationException ex)
-		            {
-		                invalidModules.Append(ex.Message + ", ");
-		            }
-		        }
-		        if (invalidModules.Length > 0)
-		        {
-		            throw new ValidationException(invalidModules.ToString().Substring(0, invalidModules.Length - 2));
-		        }
+	        foreach (var page in AllSelectedPages)
+	        {
+	            try
+	            {
+	                page.SaveChanges();
+	            }
+	            catch (ValidationException ex)
+	            {
+	                invalidModules.Append(ex.Message + ", ");
+	            }
+	        }
+	        if (invalidModules.Length > 0)
+	        {
+	            throw new ValidationException(invalidModules.ToString().Substring(0, invalidModules.Length - 2));
+	        }
 
-		        UnitOfWork.PersistAll();
-		        runSql.PersistAll();
-		    }
-		}
+	        using (var runSql = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+	        {
+	            UnitOfWork.PersistAll();
+	            runSql.PersistAll();
+	        }
+	    }
 
-		public void UnloadPages()
+	    public void UnloadPages()
 		{
 			foreach (var page in AllSelectedPages)
 			{
