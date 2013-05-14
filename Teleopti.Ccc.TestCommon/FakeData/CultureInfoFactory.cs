@@ -13,6 +13,11 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 			return new CultureInfo("sv-SE");
 		}
 
+		public static CultureInfo CreateFinnishCulture()
+		{
+			return new CultureInfo("fi-Fi");
+		}
+
 		public static CultureInfo CreateCatalanCulture()
 		{
 			return new CultureInfo("ca-ES");

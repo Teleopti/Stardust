@@ -47,11 +47,11 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             : this()
         {
             _shiftTradeSwapDetails = new List<IShiftTradeSwapDetail>(shiftTradeSwapDetails);
-            CalculateAndSetPeriod();
-            NotifyPersonOfAvailableShiftTradeRequest(shiftTradeSwapDetails);
+            calculateAndSetPeriod();
+            notifyPersonOfAvailableShiftTradeRequest(shiftTradeSwapDetails);
         }
 
-        private void NotifyPersonOfAvailableShiftTradeRequest(IEnumerable<IShiftTradeSwapDetail> shiftTradeSwapDetails)
+        private void notifyPersonOfAvailableShiftTradeRequest(IEnumerable<IShiftTradeSwapDetail> shiftTradeSwapDetails)
         {
             if (!shiftTradeSwapDetails.IsEmpty())
             {
@@ -73,7 +73,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             }
         }
 
-        private void CalculateAndSetPeriod()
+        private void calculateAndSetPeriod()
         {
             if (_shiftTradeSwapDetails.Count>0)
             {
@@ -103,10 +103,10 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
         public virtual void AddShiftTradeSwapDetail(IShiftTradeSwapDetail shiftTradeSwapDetail)
         {
-            VerifyEditingShiftTradeIsAllowed();
+            verifyEditingShiftTradeIsAllowed();
             shiftTradeSwapDetail.SetParent(this);
             _shiftTradeSwapDetails.Add(shiftTradeSwapDetail);
-            CalculateAndSetPeriod();
+            calculateAndSetPeriod();
 
             var datePattern = PersonFrom.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern;
 
@@ -129,12 +129,12 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
         public virtual void ClearShiftTradeSwapDetails()
         {
-            VerifyEditingShiftTradeIsAllowed();
+            verifyEditingShiftTradeIsAllowed();
             _shiftTradeSwapDetails.Clear();
-            CalculateAndSetPeriod();
+            calculateAndSetPeriod();
         }
 
-        private void VerifyEditingShiftTradeIsAllowed()
+        private void verifyEditingShiftTradeIsAllowed()
         {
             if (shiftTradeStatus!=ShiftTradeStatus.OkByMe &&
                 shiftTradeStatus!=ShiftTradeStatus.Referred)
@@ -159,7 +159,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
         /// </remarks>
         public virtual void SetShiftTradeStatus(ShiftTradeStatus shiftTradeStatusToSet, IPersonRequestCheckAuthorization authorization)
         {
-            VerifyShiftTradeStatusIsAllowed(shiftTradeStatusToSet);
+            verifyShiftTradeStatusIsAllowed(shiftTradeStatusToSet);
             shiftTradeStatus = shiftTradeStatusToSet;
             switch (shiftTradeStatus)
             {
@@ -172,7 +172,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             }
         }
 
-        private void VerifyShiftTradeStatusIsAllowed(ShiftTradeStatus shiftTradeStatusToVerify)
+        private void verifyShiftTradeStatusIsAllowed(ShiftTradeStatus shiftTradeStatusToVerify)
         {
             if (shiftTradeStatus==ShiftTradeStatus.Referred && 
                 shiftTradeStatusToVerify==ShiftTradeStatus.OkByBothParts)
@@ -214,8 +214,8 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 	            notification = string.Format(
 						uiCulture, 
 						notificationTemplate, 
-						Period.StartDateTimeLocal(timezone).ToString(datePattern), 
-						Period.EndDateTimeLocal(PersonFrom.PermissionInformation.DefaultTimeZone()).AddMinutes(-1).ToString(datePattern));
+						Period.StartDateTimeLocal(timezone).ToString(datePattern),
+						Period.EndDateTimeLocal(timezone).AddMinutes(-1).ToString(datePattern));
 
              }
 
@@ -224,7 +224,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
         }
 
         /// <summary>
-        /// Accepts this instance.
+        /// Accepts the shift trade request.
         /// </summary>
         /// <param name="acceptingPerson">The accepting person.</param>
         /// <param name="shiftTradeRequestSetChecksum">The shift trade request set checksum.</param>
@@ -235,25 +235,40 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
         /// </remarks>
         public override void Accept(IPerson acceptingPerson, IShiftTradeRequestSetChecksum shiftTradeRequestSetChecksum, IPersonRequestCheckAuthorization authorization)
         {
-            string notification = "";
-            var datePattern = PersonFrom.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern;
+
+			var culture = PersonFrom.PermissionInformation.Culture();
+			var uiCulture = PersonFrom.PermissionInformation.UICulture();
+			var timezone = PersonFrom.PermissionInformation.DefaultTimeZone();
+			var datePattern = culture.DateTimeFormat.ShortDatePattern;
+			string notification;
+
 
             if (isShiftTradeRequestForOneDayOnly())
             {
-                notification = string.Format(PersonFrom.PermissionInformation.UICulture(),
-                              UserTexts.Resources.ShiftTradeRequestForOneDayHasBeenAcceptedDot,
-                              Period.StartDateTimeLocal(PersonFrom.PermissionInformation.DefaultTimeZone()).ToString(datePattern));
+				var notificationTemplate =
+					UserTexts.Resources.ResourceManager.GetString("ShiftTradeRequestForOneDayHasBeenAcceptedDot", culture) ??
+					UserTexts.Resources.ShiftTradeRequestForOneDayHasBeenAcceptedDot;
+
+				notification = string.Format(
+						uiCulture,
+						notificationTemplate,
+						Period.StartDateTimeLocal(timezone).ToString(datePattern));
             }
             else
             {
-                notification = string.Format(PersonFrom.PermissionInformation.UICulture(),
-                              UserTexts.Resources.ShiftTradeRequestHasBeenAcceptedDot,
-                              Period.StartDateTimeLocal(PersonFrom.PermissionInformation.DefaultTimeZone()).ToString(datePattern),
-                              Period.EndDateTimeLocal(PersonFrom.PermissionInformation.DefaultTimeZone()).AddMinutes(-1).ToString(datePattern));
+				var notificationTemplate =
+					UserTexts.Resources.ResourceManager.GetString("ShiftTradeRequestHasBeenAcceptedDot", culture) ??
+					UserTexts.Resources.ShiftTradeRequestHasBeenAcceptedDot;
+
+				notification = string.Format(
+						uiCulture,
+						notificationTemplate,
+						Period.StartDateTimeLocal(timezone).ToString(datePattern),
+						Period.EndDateTimeLocal(timezone).AddMinutes(-1).ToString(datePattern));
             }
 
             InParameter.NotNull("acceptingPerson",acceptingPerson);
-            ShiftTradeStatus okBothParts = ShiftTradeStatus.OkByBothParts;
+            var okBothParts = ShiftTradeStatus.OkByBothParts;
             if (Person.Equals(acceptingPerson))
             {
                 shiftTradeRequestSetChecksum.SetChecksum(this);
@@ -392,7 +407,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 
         public virtual void NotifyToPersonAfterValidation()
         {
-            NotifyPersonOfAvailableShiftTradeRequest(_shiftTradeSwapDetails);
+            notifyPersonOfAvailableShiftTradeRequest(_shiftTradeSwapDetails);
         }
 
         private bool isShiftTradeRequestForOneDayOnly ()

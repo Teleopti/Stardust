@@ -96,7 +96,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
         }
 
         [Test]
-        public void VerifyDenyForTranslatedCultureInOwnLanguage()
+		public void ShouldDenyMessageForTranslatedCultureBeRequestPersonOwnLanguage()
         {
             
 			CultureInfo swedishCultureInfo = CultureInfoFactory.CreateSwedishCulture();
@@ -105,22 +105,14 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 			_target.Deny(_tradePerson);
             Assert.IsNotNull(_target);
             
-            Assert.IsTrue(MessageWillOnlyBeSentToRequestPerson(),  "Only Request person needs to be notified");
+            Assert.IsTrue(messageWillOnlyBeSentToRequestPerson(),  "Only Request person needs to be notified");
 
-			// tamasb: note that it is a hardcoded notification string !!! 
 	        var notificationString = "En skiftbytesförfrågan 2008-07-16 nekades.";
-
-			// the old is deleted: reason the same code used in real code and test code >>> NO NO NO
-			//var notificationString = string.Format(UserTexts.Resources.ResourceManager.GetString(
-			//						 "ShiftTradeRequestForOneDayHasBeenDeniedDot",
-			//						 swedishCultureInfo),
-			//						 _target.Period.StartDateTimeLocal(_requestedPerson.PermissionInformation.DefaultTimeZone()).ToString(datepattern));
-
-	          Assert.AreEqual(notificationString, _target.TextForNotification);
+	        Assert.AreEqual(notificationString, _target.TextForNotification);
         }
 
 		[Test]
-		public void VerifyDenyForUntranslatedCultureInEnglish()
+		public void ShouldDenyMessageForNotTranslatedCultureBeInEnglish()
 		{
 
 			CultureInfo catalanCulture = CultureInfoFactory.CreateCatalanCulture();
@@ -129,7 +121,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 			_target.Deny(_tradePerson);
 			Assert.IsNotNull(_target);
 
-			Assert.IsTrue(MessageWillOnlyBeSentToRequestPerson(), "Only Request person needs to be notified");
+			Assert.IsTrue(messageWillOnlyBeSentToRequestPerson(), "Only Request person needs to be notified");
 
 			// tamasb: note that it is a hardcoded notification string !!! 
 			var notificationString = "A shift trade request 16-07-2008 was denied.";
@@ -168,7 +160,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
                                                    personRequest.RequestedDate.ToShortDateString());
 
             Assert.AreEqual(notificationString, _target.TextForNotification);
-            Assert.IsTrue(MessageWillBeSentToBothPersons(), "Message should be sent to both persons when approving");
+            Assert.IsTrue(messageWillBeSentToBothPersons(), "Message should be sent to both persons when approving");
 
             mocks.VerifyAll();
         }
@@ -197,7 +189,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
         }
 
         [Test]
-        public void CanAccept()
+        public void VerifyAccept()
         {
             MockRepository mocks = new MockRepository();
             IShiftTradeRequestSetChecksum shiftTradeRequestSetChecksum =
@@ -211,14 +203,14 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             _target.Refer(_authorization);
             Assert.AreEqual(ShiftTradeStatus.Referred, _target.GetShiftTradeStatus(shiftTradeRequestStatusCheckerForTestDoesNothing));
             _target.Accept(_requestedPerson, shiftTradeRequestSetChecksum,_authorization);
-            Assert.IsTrue(MessageWillOnlyBeSentToTradePerson(), "TradePerson (only) should be notified when accepted from requestperson");
+            Assert.IsTrue(messageWillOnlyBeSentToTradePerson(), "TradePerson (only) should be notified when accepted from requestperson");
             
             Assert.AreEqual(ShiftTradeStatus.OkByMe, _target.GetShiftTradeStatus(shiftTradeRequestStatusCheckerForTestDoesNothing));
             _target.Accept(_tradePerson, shiftTradeRequestSetChecksum,_authorization);
            
             Assert.AreEqual(ShiftTradeStatus.OkByBothParts, _target.GetShiftTradeStatus(shiftTradeRequestStatusCheckerForTestDoesNothing));
          
-            Assert.IsTrue(MessageWillOnlyBeSentToRequestPerson(),"RequestPerson (only) should be notified when accepted from targetperson");
+            Assert.IsTrue(messageWillOnlyBeSentToRequestPerson(),"RequestPerson (only) should be notified when accepted from targetperson");
 
             var datepattern = _tradePerson.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern;
             var notificationString = string.Format(_tradePerson.PermissionInformation.UICulture(),
@@ -231,6 +223,60 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             //Assert.AreEqual(ShiftTradeRequestHasBeenAcceptedDot, _target.TextForNotification);
             mocks.VerifyAll();
         }
+
+		[Test]
+		public void ShouldAcceptMessageForTranslatedCultureBeRequestPersonOwnLanguage()
+		{
+
+			CultureInfo swedishCultureInfo = CultureInfoFactory.CreateSwedishCulture();
+			_requestedPerson.PermissionInformation.SetCulture(swedishCultureInfo);
+
+			MockRepository mocks = new MockRepository();
+			IShiftTradeRequestSetChecksum shiftTradeRequestSetChecksum =
+				mocks.StrictMock<IShiftTradeRequestSetChecksum>();
+			shiftTradeRequestSetChecksum.SetChecksum(_target);
+			LastCall.Repeat.Once();
+
+			mocks.ReplayAll();
+
+			_target.Refer(_authorization);
+			_target.Accept(_requestedPerson, shiftTradeRequestSetChecksum, _authorization);
+			_target.Accept(_tradePerson, shiftTradeRequestSetChecksum, _authorization);
+
+			// must be on the request person's own language with the culture's date format
+			var notificationString = "En skiftbytesförfrågan 2008-07-16 accepterades av den andra personen.";
+
+			Assert.AreEqual(notificationString, _target.TextForNotification);
+
+			mocks.VerifyAll();
+		}
+
+		[Test]
+		public void ShouldAcceptMessageForNotTranslatedCultureBeInEnglish()
+		{
+
+			CultureInfo catalanCultureInfo = CultureInfoFactory.CreateCatalanCulture();
+			_requestedPerson.PermissionInformation.SetCulture(catalanCultureInfo);
+
+			MockRepository mocks = new MockRepository();
+			IShiftTradeRequestSetChecksum shiftTradeRequestSetChecksum =
+				mocks.StrictMock<IShiftTradeRequestSetChecksum>();
+			shiftTradeRequestSetChecksum.SetChecksum(_target);
+			LastCall.Repeat.Once();
+
+			mocks.ReplayAll();
+
+			_target.Refer(_authorization);
+			_target.Accept(_requestedPerson, shiftTradeRequestSetChecksum, _authorization);
+			_target.Accept(_tradePerson, shiftTradeRequestSetChecksum, _authorization);
+
+			// must be in english with english date format
+			var notificationString = "A shift trade request 16-07-2008 was accepted by other person.";
+
+			Assert.AreEqual(notificationString, _target.TextForNotification);
+
+			mocks.VerifyAll();
+		}
 
         [Test,ExpectedException(typeof(ArgumentNullException))]
         public void VerifyMustSupplyPersonToAccept()
@@ -332,7 +378,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
         [Test]
         public void VerifyPushMessageIsCreatedForToPersonWhenCreatingAShiftTradeRequest()
         {
-            Assert.IsTrue(MessageWillBeSentToTradePerson());
+            Assert.IsTrue(messageWillBeSentToTradePerson());
             Assert.AreEqual(_target.ReceiversForNotification.Count,1,"Only the person involved in the trade should be notified");
         }
 
@@ -366,29 +412,29 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             Assert.AreEqual(_target.ReceiversForNotification.Count, 1, "Only the person involved in the trade should be notified");
         }
 
-        private bool MessageWillBeSentToRequestPerson()
+        private bool messageWillBeSentToRequestPerson()
         {
             return _target.ReceiversForNotification.Contains(_requestedPerson) && _target.ShouldNotifyWithMessage;
         }
 
-        private bool MessageWillBeSentToTradePerson()
+        private bool messageWillBeSentToTradePerson()
         {
             return _target.ReceiversForNotification.Contains(_tradePerson) && _target.ShouldNotifyWithMessage;
         }
 
-        private bool MessageWillOnlyBeSentToRequestPerson()
+        private bool messageWillOnlyBeSentToRequestPerson()
         {
-            return _target.ReceiversForNotification.Count==1 && MessageWillBeSentToRequestPerson();
+            return _target.ReceiversForNotification.Count==1 && messageWillBeSentToRequestPerson();
         }
 
-        private bool MessageWillOnlyBeSentToTradePerson()
+        private bool messageWillOnlyBeSentToTradePerson()
         {
-            return _target.ReceiversForNotification.Count == 1 && MessageWillBeSentToTradePerson();
+            return _target.ReceiversForNotification.Count == 1 && messageWillBeSentToTradePerson();
         }
 
-        private bool MessageWillBeSentToBothPersons()
+        private bool messageWillBeSentToBothPersons()
         {
-            return MessageWillBeSentToRequestPerson() && MessageWillBeSentToTradePerson();
+            return messageWillBeSentToRequestPerson() && messageWillBeSentToTradePerson();
         }
 
         [Test]
