@@ -6,5 +6,5 @@ Level2;PMService;Teleopti ASP.NET v4.0;v4.0;app
 Level2;RTA;Teleopti ASP.NET v4.0 RTA;v4.0;app
 Level2;SDK;Teleopti ASP.NET v4.0 SDK;v4.0;app
 Level2;Broker;Teleopti ASP.NET v4.0 Broker;v4.0;app
-Level2;Broker.backplane;Teleopti ASP.NET v4.0 Broker;v4.0
-Level2;Web;Teleopti ASP.NET v4.0 Web;v4.0
+Level2;Broker.backplane;Teleopti ASP.NET v4.0 Broker;v4.0;app
+Level2;Web;Teleopti ASP.NET v4.0 Web;v4.0;app
