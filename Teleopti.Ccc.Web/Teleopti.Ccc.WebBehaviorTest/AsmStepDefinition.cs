@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() =>
 								Browser.Current.Title.Contains(Resources.AgentScheduleMessenger), 
 								Is.True,
-								string.Format("{0} does not contain {1}", Browser.Current.Title, Resources.AgentScheduleMessenger));
+								() => string.Format("{0} does not contain {1}", Browser.Current.Title, Resources.AgentScheduleMessenger));
 		}
 
 		[When(@"My schedule between '(.*)' to '(.*)' change")]

@@ -3,35 +3,27 @@ using System.Threading.Tasks;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using WatiN.Core;
-using log4net;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
+namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 {
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable")]
-	public class WatiNSingleBrowserFireFoxHandler : IBrowserHandler<FireFox>
+	public class WatiNSingleBrowserFireFoxActivator : IBrowserActivator<FireFox>
 	{
 		private const string ProcessName = "firefox";
 
-		private static readonly ILog Log = LogManager.GetLogger(typeof (WatiNSingleBrowserFireFoxHandler));
-
 		private static IDisposable BrowserLock { get { return ScenarioContext.Current.Value<SystemLevelLock>(); } set { ScenarioContext.Current.Value((SystemLevelLock) value); } }
 
-		private FireFox _browser;
+		public FireFox Internal { get; set; }
 
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
-		public FireFox Start()
+		public void Start()
 		{
 			LockBrowser();
 			Settings.AutoCloseDialogs = true;
 			Settings.AutoMoveMousePointerToTopLeft = false;
 			Settings.HighLightColor = "Green";
 			Settings.HighLightElement = true;
-			_browser = new FireFox();
-			_browser.BringToFront();
-			return _browser;
+			Internal = new FireFox();
+			Internal.BringToFront();
 		}
-
-		public void PrepareForTestRun() { MakeSureBrowserIsNotRunning(); }
 
 		public void Close()
 		{
@@ -50,13 +42,19 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 			}
 			finally
 			{
-				_browser = null;
+				Internal = null;
 				ReleaseBrowser();
 			}
 		}
 
-		public FireFox Restart() { throw new NotImplementedException(); }
+		public void NotifyBeforeTestRun() { MakeSureBrowserIsNotRunning(); }
 
+		public void NotifyBeforeScenario() { }
+
+		public IBrowserInteractions GetInteractions()
+		{
+			throw new NotImplementedException();
+		}
 
 		private void MakeSureBrowserIsNotRunning()
 		{
@@ -81,8 +79,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 			var result = Task.Factory
 				.StartNew(() =>
 				          	{
-				          		_browser.Close();
-								_browser.Dispose();
+								Internal.Close();
+								Internal.Dispose();
 				          	})
 				.Wait(TimeSpan.FromSeconds(2));
 			return result ? TryResult.Passed : TryResult.Failure;

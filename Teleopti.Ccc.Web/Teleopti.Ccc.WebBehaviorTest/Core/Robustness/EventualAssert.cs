@@ -1,7 +1,7 @@
 using System;
 using NUnit.Framework;
 using NUnit.Framework.Constraints;
-using Teleopti.Ccc.WebBehaviorTest.Core.BrowserInteractions.WatiNIE;
+using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using WatiN.Core;
 
@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Robustness
 			That(value, constraint, null);
 		}
 
-		public static void That<T>(Func<T> value, Constraint constraint, string message)
+		public static void That<T>(Func<T> value, Constraint constraint, Func<string> message)
 		{
 			ReusableConstraint reusableConstraint = constraint;
 			Exception exception = null;
@@ -31,8 +31,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Robustness
 
 			                                    			Func<T> robustValue = () => ExceptionHandling.Action(value.Invoke, failingValue);
 
-			                                    			Assert.That(() => robustValue.Invoke(), reusableConstraint,
-			                                    			            string.IsNullOrEmpty(message) ? string.Empty : message);
+			                                    			Assert.That(() => robustValue.Invoke(), reusableConstraint);
 			                                    			return true;
 			                                    		}
 			                                    		catch (AssertionException ex)
@@ -41,8 +40,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.Robustness
 			                                    			return false;
 			                                    		}
 			                                    	};
-			if (!longPollTimeSafeAssert.WaitUntil(Timeouts.Poll, Timeouts.Timeout))
-				throw exception;
+
+			if (longPollTimeSafeAssert.WaitUntil(Timeouts.Poll, Timeouts.Timeout)) return;
+
+			if (message != null)
+				Assert.Fail(message.Invoke());
+			throw exception;
 		}
 
 	}

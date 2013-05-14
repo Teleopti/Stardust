@@ -10,13 +10,13 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void WhenISignOut()
 		{
 			Browser.Interactions.Click("#signout");
+			Browser.Interactions.AssertUrlContains("Authentication");
 		}
 
 		[When(@"I press back in the web browser")]
 		public void WhenIPressBackInTheWebBrowser()
 		{
-			Browser.Current.WaitForComplete();
-			Browser.Current.Back();
+			Browser.Interactions.Javascript("history.back();");
 		}
 
 	}

@@ -5,14 +5,11 @@ define(
         errorTemplate
     ) {
 
-        function _initAjaxErrorCallback() {
-            $(document).ajaxError(function (event, jqXHR, ajaxSettings, thrownError) {
-                _displayError(thrownError);
-            });
-        }
-
         function _displayError(message) {
             message = message || "No message!";
+            if (typeof message != "string") {
+                message = JSON.stringify(message);
+            }
             $('#error-placeholder')
                 .html(errorTemplate)
                 .find('span')
@@ -23,8 +20,6 @@ define(
             $('#error-placeholder').html("");
         }
 
-        _initAjaxErrorCallback();
-        
         return {
             display: function(message) {
                 _displayError(message);

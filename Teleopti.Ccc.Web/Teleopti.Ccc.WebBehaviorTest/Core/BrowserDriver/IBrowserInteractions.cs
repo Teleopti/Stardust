@@ -1,4 +1,6 @@
-﻿namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserInteractions
+﻿using System;
+
+namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 {
 	public interface IBrowserInteractions
 	{
@@ -14,6 +16,7 @@
 		void AssertUrlNotContains(string urlContains, string urlNotContains);
 		void AssertJavascriptResultContains(string javascript, string text);
 		void AssertInputValue(string selector, string value);
+		void DumpInfo(Action<string> writer);
 	}
 
 	public static class BrowserInteractionsExtensions

@@ -57,14 +57,14 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			const string disabledAttr = "disabled";
 			const string readonlyAttr = "readonly";
 			var detailForm = Pages.Pages.CurrentEditRequestPage;
-			EventualAssert.That(() => detailForm.RequestDetailFromDateTextField.GetAttributeValue(disabledAttr), Is.EqualTo("True"), "TextRequestDetailFromDateInput");
-			EventualAssert.That(() => detailForm.RequestDetailFromTimeTextField.GetAttributeValue(disabledAttr), Is.EqualTo("True"), "RequestDetailFromTimeTextField");
-			EventualAssert.That(() => detailForm.RequestDetailSubjectInput.GetAttributeValue(disabledAttr), Is.EqualTo("True"), "RequestDetailSubjectInput");
-			EventualAssert.That(() => detailForm.RequestDetailToDateTextField.GetAttributeValue(disabledAttr), Is.EqualTo("True"), "RequestDetailToDateTextField");
-			EventualAssert.That(() => detailForm.RequestDetailToTimeTextField.GetAttributeValue(disabledAttr), Is.EqualTo("True"), "RequestDetailToTimeTextField");
-			EventualAssert.That(() => detailForm.RequestDetailMessageTextField.GetAttributeValue(readonlyAttr), Is.EqualTo("True"), "RequestDetailMessageTextField");
-			EventualAssert.That(() => detailForm.AbsenceTypesTextField.GetAttributeValue(readonlyAttr), Is.EqualTo("True"), "AbsenceTypesTextField");
-			EventualAssert.That(() => detailForm.FulldayCheck.GetAttributeValue(disabledAttr), Is.EqualTo("True"), "FulldayCheck");
+			EventualAssert.That(() => detailForm.RequestDetailFromDateTextField.GetAttributeValue(disabledAttr), Is.EqualTo("True"), () => "TextRequestDetailFromDateInput");
+			EventualAssert.That(() => detailForm.RequestDetailFromTimeTextField.GetAttributeValue(disabledAttr), Is.EqualTo("True"), () => "RequestDetailFromTimeTextField");
+			EventualAssert.That(() => detailForm.RequestDetailSubjectInput.GetAttributeValue(disabledAttr), Is.EqualTo("True"), () => "RequestDetailSubjectInput");
+			EventualAssert.That(() => detailForm.RequestDetailToDateTextField.GetAttributeValue(disabledAttr), Is.EqualTo("True"), () => "RequestDetailToDateTextField");
+			EventualAssert.That(() => detailForm.RequestDetailToTimeTextField.GetAttributeValue(disabledAttr), Is.EqualTo("True"), () => "RequestDetailToTimeTextField");
+			EventualAssert.That(() => detailForm.RequestDetailMessageTextField.GetAttributeValue(readonlyAttr), Is.EqualTo("True"), () => "RequestDetailMessageTextField");
+			EventualAssert.That(() => detailForm.AbsenceTypesTextField.GetAttributeValue(readonlyAttr), Is.EqualTo("True"), () => "AbsenceTypesTextField");
+			EventualAssert.That(() => detailForm.FulldayCheck.GetAttributeValue(disabledAttr), Is.EqualTo("True"), () => "FulldayCheck");
 		}
 
 		[Then(@"I should see the absence request containing '(.*)' in the list")]

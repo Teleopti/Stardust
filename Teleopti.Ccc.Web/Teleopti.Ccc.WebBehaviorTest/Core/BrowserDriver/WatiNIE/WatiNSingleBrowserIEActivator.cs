@@ -1,26 +1,22 @@
 using System;
-using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.Threading.Tasks;
-using TechTalk.SpecFlow;
-using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using WatiN.Core;
 
-namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
+namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver.WatiNIE
 {
-	[SuppressMessage("Microsoft.Design", "CA1001:TypesThatOwnDisposableFieldsShouldBeDisposable")]
-	public class WatiNSingleBrowserIEHandler : IBrowserHandler<IE>
+	public class WatiNSingleBrowserIEActivator : IBrowserActivator<IE>
 	{
 		private const string ProcessName = "iexplore";
 
 		private static IDisposable BrowserLock { get; set; }
-		//private static IDisposable BrowserLock { get { return ScenarioContext.Current.Value<SystemLevelLock>(); } set { ScenarioContext.Current.Value((SystemLevelLock)value); } }
 
-		//private static bool _closeByWatiNCloseNDisposeFailed = false;
-		private IE _browser;
+		private static int _scenarioCount = 0;
 
-		[SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
-		public IE Start()
+		private static void ResetScenarioCount() { _scenarioCount = 0; }
+		private static void IncrementScenarioCount() { _scenarioCount += 1; }
+
+		public IE Internal { get; set; }
+
+		public void Start()
 		{
 			LockBrowser();
 			Settings.AutoCloseDialogs = true;
@@ -29,22 +25,24 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 			Settings.HighLightElement = true;
 			Settings.MakeNewIe8InstanceNoMerge = true;
 			Settings.MakeNewIeInstanceVisible = true;
-			return StartBrowser();
+			StartBrowser();
 		}
 
-		[SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
-		private IE StartBrowser()
+		private void StartBrowser()
 		{
-			_browser = new IE {AutoClose = true};
+			Internal = new IE { AutoClose = true };
 			// Clear the browser cache this way to solve caching issues that occurr on the build server sometimes?
 			// Process.Start("RunDll32.exe", "InetCpl.cpl,ClearMyTracksByProcess 8");
-			_browser.ClearCache();
-			_browser.ClearCookies();
-			_browser.BringToFront();
-			return _browser;
+			Internal.ClearCache();
+			Internal.ClearCookies();
+			Internal.BringToFront();
 		}
 
-		public void PrepareForTestRun() { MakeSureBrowserIsNotRunning(); }
+		public void NotifyBeforeTestRun()
+		{
+			ResetScenarioCount();
+			MakeSureBrowserIsNotRunning();
+		}
 
 		public void Close()
 		{
@@ -54,7 +52,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 			}
 			finally
 			{
-				_browser = null;
+				Internal = null;
 				ReleaseBrowser();
 			}
 		}
@@ -76,10 +74,20 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserImpl
 				throw new ApplicationException("Browser failed to close.");
 		}
 
-		public IE Restart()
+		public void NotifyBeforeScenario()
 		{
-			CloseBrowser();
-			return StartBrowser();
+			// restart browser every 15th scenario
+			if (_scenarioCount != 0 && _scenarioCount%15 == 0)
+			{
+				CloseBrowser();
+				StartBrowser();
+			}
+			IncrementScenarioCount();
+		}
+
+		public IBrowserInteractions GetInteractions()
+		{
+			return new WatiNIEBrowserInteractions(Internal);
 		}
 
 

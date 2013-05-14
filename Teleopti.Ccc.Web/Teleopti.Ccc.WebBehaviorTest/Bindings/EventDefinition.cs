@@ -14,19 +14,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 	{
 		private static readonly ILog Log = LogManager.GetLogger(typeof(EventDefinition));
 
-		private static int _scenarioCount = 0;
-
-		private static void ResetScenarioCount() { _scenarioCount = 0; }
-		private static void IncrementScenarioCount() { _scenarioCount += 1; }
-
 		[BeforeTestRun]
 		public static void BeforeTestRun()
 		{
 			Log.Debug("Preparing for test run");
 
-			ResetScenarioCount();
-
-			Browser.PrepareForTestRun();
+			Browser.NotifyBeforeTestRun();
 
 			try
 			{
@@ -38,7 +31,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 				TestSiteConfigurationSetup.RecycleApplication();
 
 				log4net.Config.XmlConfigurator.Configure();
-				Timeouts.Set(TimeSpan.FromSeconds(20));
+				Timeouts.Set(TimeSpan.FromSeconds(10));
 
 				TestDataSetup.CreateDataSource();
 
@@ -68,11 +61,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 		{
 			Log.Debug("Preparing for scenario " + ScenarioContext.Current.ScenarioInfo.Title);
 
-			// restart browser every 20th scenario
-			if (_scenarioCount != 0 && _scenarioCount % 15 == 0)
-				Browser.Restart();
-
-			IncrementScenarioCount();
+			Browser.NotifyBeforeScenario();
 			
 			TestControllerMethods.BeforeScenario();
 			
@@ -136,33 +125,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			if (!Browser.IsStarted()) return;
 			if (ScenarioContext.Current.TestError != null)
 			{
-				Log.Error("Scenario exception occurred, dumping url, text and html.");
-				Log.Error("Url:");
-				Log.Error(TryOperation(() => Browser.Current.Url, ""));
-				Log.Error("Html:");
-				Log.Error(TryOperation(() => Browser.Current.Html, ""));
-				Log.Error("Text:");
-				Log.Error(TryOperation(() => Browser.Current.Text, ""));
-			}
-		}
-
-		public string TryOperation(Func<string> operation, string @default)
-		{
-			try
-			{
-				return operation();
-			}
-			catch (Exception)
-			{
-				return @default;
+				Log.Error("Scenario exception occurred, dumping info here.");
+				Browser.Interactions.DumpInfo(Log.Error);
 			}
 		}
 
 	}
 
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2237:MarkISerializableTypesWithSerializable")]
-	public class ScenarioErrorException : Exception
-	{
-		public ScenarioErrorException(string message, Exception scenarioError) : base(message, scenarioError) {  }
-	}
 }
