@@ -66,11 +66,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
                     bool singleAgentTeam = _schedulingOptions.GroupOnGroupPageForTeamBlockPer != null &&
                                            _schedulingOptions.GroupOnGroupPageForTeamBlockPer.Key == "SingleAgentTeam";
-
-					var teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, datePointer,
+				    ITeamBlockInfo teamBlockInfo;
+                    if (_schedulingOptions.UseTeamBlockPerOption)
+                        teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, datePointer,
 					                                                                         _schedulingOptions
-						                                                                         .BlockFinderTypeForAdvanceScheduling, singleAgentTeam, allPersonMatrixList);
-
+                                                                                                 .BlockFinderTypeForAdvanceScheduling, singleAgentTeam, allPersonMatrixList);
+                    else
+                        teamBlockInfo = _teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, datePointer,BlockFinderType.SingleDay, singleAgentTeam,allPersonMatrixList);
 				    if (teamBlockInfo == null) continue;
                     if (TeamBlockScheduledDayChecker.IsDayScheduledInTeamBlock(teamBlockInfo, datePointer)) continue;
 

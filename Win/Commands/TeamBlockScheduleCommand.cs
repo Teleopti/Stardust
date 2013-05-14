@@ -86,10 +86,6 @@ namespace Teleopti.Ccc.Win.Commands
 			_fixedStaffSchedulingService.ClearFinderResults();
 			if (schedulingOptions != null)
 			{
-				var originalBlockType = _schedulingOptions.BlockFinderTypeForAdvanceScheduling;
-				if (!_schedulingOptions.UseTeamBlockPerOption)
-					_schedulingOptions.BlockFinderTypeForAdvanceScheduling = BlockFinderType.SingleDay;
-
 				ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackServiceForContractDaysOff =
 					new SchedulePartModifyAndRollbackService(_schedulerStateHolder.SchedulingResultState, _scheduleDayChangeCallback,
 															 new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
@@ -138,10 +134,8 @@ namespace Teleopti.Ccc.Win.Commands
 				//    schedulePartModifyAndRollbackServiceForContractDaysOff.Rollback();
 
 				_workShiftFinderResultHolder.AddResults(new List<IWorkShiftFinderResult>(schedulingResults.Values), DateTime.Now);
-				_schedulingOptions.BlockFinderTypeForAdvanceScheduling = originalBlockType;
 			}
 			_workShiftFinderResultHolder.AddResults(_fixedStaffSchedulingService.FinderResults, DateTime.Now);
-			
 		}
 
 		private void schedulingServiceDayScheduled(object sender, SchedulingServiceBaseEventArgs e)
