@@ -223,7 +223,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			InParameter.NotNull("mainShift", mainShift); //use ClearMainShift method instead!
 			//fix nicer later
 			_mainShiftActivityLayers.Clear();
-			mainShift.LayerCollection.ForEach(layer => _mainShiftActivityLayers.Add((IMainShiftActivityLayer)layer));
+			mainShift.LayerCollection.ForEach(layer =>
+				{
+					layer.SetParent(this);
+					_mainShiftActivityLayers.Add((IMainShiftActivityLayer) layer);
+				});
 			ShiftCategory = mainShift.ShiftCategory;
 		}
 
