@@ -390,6 +390,7 @@
     <Compile Include="UnitOfWork\ServiceBusEventPublisherTest.cs" />
     <Compile Include="UnitOfWork\SqlQueryTest.cs" />
     <Compile Include="UnitOfWork\UnitOfWorkFactoryProviderTest.cs" />
+    <Compile Include="Util\CompressionExtensionsTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Domain\Teleopti.Ccc.Domain.csproj">

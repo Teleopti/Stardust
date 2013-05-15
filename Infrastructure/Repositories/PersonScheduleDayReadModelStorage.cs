@@ -6,6 +6,7 @@ using NHibernate.Transform;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Collection;
 using Teleopti.Ccc.Domain.Common;
+using Teleopti.Ccc.Infrastructure.Util;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
 using Teleopti.Interfaces.MessageBroker.Events;
@@ -27,15 +28,19 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IEnumerable<PersonScheduleDayReadModel> ForPerson(DateOnly startDate, DateOnly endDate, Guid personId)
 		{
-			return _unitOfWork.Session().CreateSQLQuery(
-				"SELECT PersonId, TeamId, SiteId, BusinessUnitId, BelongsToDate AS Date, ShiftStart, ShiftEnd, Shift FROM ReadModel.PersonScheduleDay WHERE PersonId=:personid AND BelongsToDate Between :startdate AND :enddate")
-			                  .SetGuid("personid", personId)
-			                  .SetDateTime("startdate", startDate)
-			                  .SetDateTime("enddate", endDate)
-			                  .SetResultTransformer(Transformers.AliasToBean(typeof (PersonScheduleDayReadModel)))
-			                  .SetReadOnly(true)
-			                  .List<PersonScheduleDayReadModel>()
-				;
+		    var readModels = _unitOfWork.Session().CreateSQLQuery(
+		        "SELECT PersonId, TeamId, SiteId, BusinessUnitId, BelongsToDate AS Date, ShiftStart, ShiftEnd, Shift FROM ReadModel.PersonScheduleDay WHERE PersonId=:personid AND BelongsToDate Between :startdate AND :enddate")
+		                                .SetGuid("personid", personId)
+		                                .SetDateTime("startdate", startDate)
+		                                .SetDateTime("enddate", endDate)
+		                                .SetResultTransformer(Transformers.AliasToBean(typeof (PersonScheduleDayReadModel)))
+		                                .SetReadOnly(true)
+		                                .List<PersonScheduleDayReadModel>();
+			foreach (var personScheduleDayReadModel in readModels)
+		    {
+		        personScheduleDayReadModel.Shift = personScheduleDayReadModel.Shift.ToUncompressedString();
+		        yield return personScheduleDayReadModel;
+		    }
 		}
 
 		public PersonScheduleDayReadModel ForPerson(DateOnly date, Guid personId)
@@ -45,14 +50,19 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		public IEnumerable<PersonScheduleDayReadModel> ForTeam(DateTimePeriod period, Guid teamId)
 		{
-			return _unitOfWork.Session().CreateSQLQuery(
-				"SELECT PersonId, TeamId, SiteId, BusinessUnitId, BelongsToDate AS Date, ShiftStart, ShiftEnd, Shift FROM ReadModel.PersonScheduleDay WHERE TeamId=:TeamId AND ShiftStart IS NOT NULL AND ShiftStart < :DateEnd AND ShiftEnd > :DateStart")
-				.SetGuid("TeamId", teamId)
-				.SetDateTime("DateStart", period.StartDateTime)
-				.SetDateTime("DateEnd", period.EndDateTime)
-				 .SetResultTransformer(Transformers.AliasToBean(typeof(PersonScheduleDayReadModel)))
-				 .SetReadOnly(true)
-				 .List<PersonScheduleDayReadModel>();
+		    var readModels = _unitOfWork.Session().CreateSQLQuery(
+		        "SELECT PersonId, TeamId, SiteId, BusinessUnitId, BelongsToDate AS Date, ShiftStart, ShiftEnd, Shift FROM ReadModel.PersonScheduleDay WHERE TeamId=:TeamId AND ShiftStart IS NOT NULL AND ShiftStart < :DateEnd AND ShiftEnd > :DateStart")
+		                                .SetGuid("TeamId", teamId)
+		                                .SetDateTime("DateStart", period.StartDateTime)
+		                                .SetDateTime("DateEnd", period.EndDateTime)
+		                                .SetResultTransformer(Transformers.AliasToBean(typeof (PersonScheduleDayReadModel)))
+		                                .SetReadOnly(true)
+		                                .List<PersonScheduleDayReadModel>();
+		    foreach (var personScheduleDayReadModel in readModels)
+		    {
+		        personScheduleDayReadModel.Shift = personScheduleDayReadModel.Shift.ToUncompressedString();
+		        yield return personScheduleDayReadModel;
+		    }
 		}
 
 		public void UpdateReadModels(DateOnlyPeriod period, Guid personId, Guid businessUnitId, IEnumerable<PersonScheduleDayReadModel> readModels, bool skipClear)
@@ -78,7 +88,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
 		private void saveReadModel(PersonScheduleDayReadModel model)
 		{
-			_unitOfWork.Session().CreateSQLQuery(
+            _unitOfWork.Session().CreateSQLQuery(
 				"INSERT INTO ReadModel.PersonScheduleDay (Id,PersonId,TeamId,SiteId,BusinessUnitId,ShiftStart,ShiftEnd,BelongsToDate,Shift) VALUES (:Id,:PersonId,:TeamId,:SiteId,:BusinessUnitId,:ShiftStart,:ShiftEnd,:BelongsToDate,:Shift)")
 				.SetGuid("Id", Guid.NewGuid())
 				.SetGuid("PersonId", model.PersonId)
@@ -88,7 +98,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 				.SetParameter("ShiftStart", model.ShiftStart)
 				.SetParameter("ShiftEnd", model.ShiftEnd)
 				.SetDateTime("BelongsToDate", model.BelongsToDate)
-				.SetParameter("Shift", model.Shift,NHibernateUtil.StringClob)
+                .SetParameter("Shift", model.Shift.ToCompressedBase64String(), NHibernateUtil.StringClob)
 				.ExecuteUpdate();
 		}
 
@@ -101,5 +111,4 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 		}
 
 	}
-
 }
