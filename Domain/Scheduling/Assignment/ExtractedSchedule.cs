@@ -896,7 +896,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					}
 					else
 					{
-						personAssignment.MainShift.LayerCollection.Add(layer);
+						var oldShift = personAssignment.MainShift;
+						oldShift.LayerCollection.Add(layer);
+						personAssignment.SetMainShift(oldShift);
 					}
 					return;
 				}
@@ -906,8 +908,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 			//TODO create inparameters to check on if to create new personassignment
 			IPersonAssignment newPersonAssignment = new PersonAssignment(Person, Scenario, DateOnlyAsPeriod.DateOnly);
-			newPersonAssignment.SetMainShift(new MainShift(shiftCategory));
-			newPersonAssignment.MainShift.LayerCollection.Add(layer);
+			newPersonAssignment.SetMainShift(mainShift);
 			Add(newPersonAssignment);
 
 			SplitAbsences(Period);
