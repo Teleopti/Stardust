@@ -59,9 +59,12 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var sameAct = PersonAssignment.MainShift.LayerCollection[0].Payload;
+				//fix later when mainshift is removed -> add mainshiftlayer directly
 				uow.Reassociate(PersonAssignment);
-				PersonAssignment.MainShift.LayerCollection.Add(new MainShiftActivityLayer(sameAct, new DateTimePeriod(Today, Today.AddDays(1))));
+				var ms = PersonAssignment.MainShift;
+				var sameAct = ms.LayerCollection[0].Payload;
+				ms.LayerCollection.Add(new MainShiftActivityLayer(sameAct, new DateTimePeriod(Today, Today.AddDays(1))));
+				PersonAssignment.SetMainShift(ms);
 				uow.PersistAll();
 			}
 
