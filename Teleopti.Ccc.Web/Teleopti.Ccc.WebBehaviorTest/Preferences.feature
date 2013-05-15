@@ -116,8 +116,6 @@ Scenario: Delete multiple standard preference
 	Then I should no longer see the 2 standard preferences in the calendar
 
 
-
-
 Scenario: Can not edit preference without workflow control set
 	Given I am an agent
 	And I do not have a workflow control set

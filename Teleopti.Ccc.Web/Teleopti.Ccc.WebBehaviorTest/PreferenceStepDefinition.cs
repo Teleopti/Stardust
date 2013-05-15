@@ -23,16 +23,18 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I click the standard preference split-button")]
 		public void WhenIClickTheStandardPreferenceSplit_Button()
 		{
-			_page.PreferenceButton.ListButton.EventualClick();
-			_page.PreferenceButton.Menu.WaitUntilDisplayed();
+			Browser.Interactions.Javascript("$('#preference-split-button .dropdown-toggle .caret').mousedown();");
 		}
 
 		[When(@"I change standard preference")]
 		[When(@"I select a standard preference")]
 		public void WhenIChangeStandardPreference()
 		{
-			var data = UserFactory.User().UserData<PreferenceOpenWithAllowedPreferencesWorkflowControlSet>();
-			_page.SelectPreferenceItemByText(data.ShiftCategory.Description.Name, true);
+			Browser.Interactions.Click("#preference-split-button .dropdown-toggle");
+			var shiftCategory = UserFactory.User().UserData<PreferenceOpenWithAllowedPreferencesWorkflowControlSet>().ShiftCategory;
+
+			var selector = "a:contains('" + shiftCategory.Description.Name + "')";
+			Browser.Interactions.Click(selector);
 		}
 
 		[When(@"I try to select a standard preference")]
@@ -123,8 +125,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			var date = UserFactory.User().UserData<SchedulePeriod>().FirstDateInVirtualSchedulePeriod();
 			var shiftCategory = UserFactory.User().UserData<PreferenceOpenWithAllowedPreferencesWorkflowControlSet>().ShiftCategory;
-			Browser.Interactions.AssertContains(CalendarCellsPage.DateSelector(date), shiftCategory.Description.Name);
-			Navigation.GotoPreference(date);
 			Browser.Interactions.AssertContains(CalendarCellsPage.DateSelector(date), shiftCategory.Description.Name);
 		}
 
