@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				Expect.Call(_person.VirtualSchedulePeriod(_dateOnly)).Return(_virtualSchedulePeriod).Repeat.AtLeastOnce();
 				Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod);
 				Expect.Call(_virtualSchedulePeriod.MustHavePreference).Return(1);
-				Expect.Call(() => _view.UpdateMustHaveText(Resources.MustHave + "(1/1)"));
+				Expect.Call(() => _view.UpdateMustHaveText(Resources.MustHave + " (1/1)"));
 				Expect.Call(() => _view.UpdateMustHave(true));
 			}
 
@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				Expect.Call(_person.VirtualSchedulePeriod(_dateOnly)).Return(_virtualSchedulePeriod).Repeat.AtLeastOnce();
 				Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod);
 				Expect.Call(_virtualSchedulePeriod.MustHavePreference).Return(1);
-				Expect.Call(() => _view.UpdateMustHaveText(Resources.MustHave + "(1/1)"));
+				Expect.Call(() => _view.UpdateMustHaveText(Resources.MustHave + " (1/1)"));
 				Expect.Call(() => _view.UpdateMustHave(true));
 			}
 
@@ -156,7 +156,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				Expect.Call(_person.VirtualSchedulePeriod(_dateOnly)).Return(_virtualSchedulePeriod).Repeat.AtLeastOnce();
 				Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod);
 				Expect.Call(_virtualSchedulePeriod.MustHavePreference).Return(1);
-				Expect.Call(() => _view.UpdateMustHaveText(Resources.MustHave + "(1/1)"));
+				Expect.Call(() => _view.UpdateMustHaveText(Resources.MustHave + " (1/1)"));
 				Expect.Call(() => _view.UpdateMustHave(true));
 			}
 
@@ -196,7 +196,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				Expect.Call(_person.VirtualSchedulePeriod(_dateOnly)).Return(_virtualSchedulePeriod).Repeat.AtLeastOnce();
 				Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod);
 				Expect.Call(_virtualSchedulePeriod.MustHavePreference).Return(1);
-				Expect.Call(() => _view.UpdateMustHaveText(Resources.MustHave + "(1/1)"));
+				Expect.Call(() => _view.UpdateMustHaveText(Resources.MustHave + " (1/1)"));
 				Expect.Call(() => _view.UpdateMustHave(true));
 			}
 
@@ -236,7 +236,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				Expect.Call(_person.VirtualSchedulePeriod(_dateOnly)).Return(_virtualSchedulePeriod).Repeat.AtLeastOnce();
 				Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod);
 				Expect.Call(_virtualSchedulePeriod.MustHavePreference).Return(1);
-				Expect.Call(() => _view.UpdateMustHaveText(Resources.MustHave + "(1/1)"));
+				Expect.Call(() => _view.UpdateMustHaveText(Resources.MustHave + " (1/1)"));
 				Expect.Call(() => _view.UpdateMustHave(true));
 			}
 
@@ -272,7 +272,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 				Expect.Call(_person.VirtualSchedulePeriod(_dateOnly)).Return(_virtualSchedulePeriod).Repeat.AtLeastOnce();
 				Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod);
 				Expect.Call(_virtualSchedulePeriod.MustHavePreference).Return(1);
-				Expect.Call(() => _view.UpdateMustHaveText(Resources.MustHave + "(1/1)"));
+				Expect.Call(() => _view.UpdateMustHaveText(Resources.MustHave + " (1/1)"));
 			}
 
 			using (_mock.Playback())
