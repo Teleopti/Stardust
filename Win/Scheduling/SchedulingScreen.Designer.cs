@@ -2904,7 +2904,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripButtonQuickAccessRedo.Text = "xxRedo";
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripButtonQuickAccessRedo, true);
 			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripButtonQuickAccessRedo, false);
-			this.toolStripButtonQuickAccessRedo.Click += new System.EventHandler(this.toolStripButtonQuickAccessRedo_Click_1);
+			this.toolStripButtonQuickAccessRedo.MouseUp += new MouseEventHandler(this.toolStripButtonQuickAccessRedo_Click_1);
 			// 
 			// toolStripSplitButtonQuickAccessUndo
 			// 
@@ -2921,7 +2921,7 @@ namespace Teleopti.Ccc.Win.Scheduling
 			this.toolStripSplitButtonQuickAccessUndo.Text = "xxUndo";
 			this.ribbonControlAdv1.SetUseInCustomQuickAccessDialog(this.toolStripSplitButtonQuickAccessUndo, true);
 			this.ribbonControlAdv1.SetUseInQuickAccessMenu(this.toolStripSplitButtonQuickAccessUndo, false);
-			this.toolStripSplitButtonQuickAccessUndo.ButtonClick += new System.EventHandler(this.toolStripSplitButtonQuickAccessUndo_ButtonClick);
+	        this.toolStripSplitButtonQuickAccessUndo.DefaultItem = this.toolStripMenuItemQuickAccessUndo;
 			// 
 			// toolStripMenuItemQuickAccessUndo
 			// 
