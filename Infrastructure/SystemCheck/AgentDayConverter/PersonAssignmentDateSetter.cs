@@ -7,7 +7,7 @@
 			get
 			{
 				return "select COUNT(*) as cnt from dbo.PersonAssignment " +
-							 "where TheDate = '" + AgentDayConverters.DateOfUnconvertedSchedule + "' " +
+							 "where TheDate=@baseDate " +
 				       "and Person=@personId";
 			}
 		}
@@ -19,7 +19,7 @@
 				return "select pa.Id, pa.Minimum, pa.TheDate " +
 				       "from dbo.PersonAssignment pa " +
 				       "inner join Person p on pa.Person = p.id " +
-							 "where pa.TheDate = '" + AgentDayConverters.DateOfUnconvertedSchedule + "' " +
+							 "where pa.TheDate=@baseDate " +
 				       "and p.Id=@personId";
 			}
 		}

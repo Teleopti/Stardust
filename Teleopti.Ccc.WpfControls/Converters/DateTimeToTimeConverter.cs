@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Windows.Data;
-using Teleopti.Ccc.Infrastructure.Foundation;
 using Teleopti.Ccc.WinCode.Converters.DateTimeConverter;
-using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WpfControls.Converters
 {
@@ -16,7 +14,7 @@ namespace Teleopti.Ccc.WpfControls.Converters
 
         public override object TransformBack(DateTime convertedDateTime, object parameter)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }

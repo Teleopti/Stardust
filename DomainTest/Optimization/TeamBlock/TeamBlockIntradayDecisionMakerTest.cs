@@ -2,7 +2,6 @@
 using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.DayOffPlanning;
 using Teleopti.Ccc.Domain.Optimization;
 using Teleopti.Ccc.Domain.Optimization.TeamBlock;
 using Teleopti.Ccc.Domain.ResourceCalculation;
@@ -18,7 +17,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 	{
 		private TeamBlockIntradayDecisionMaker _target;
 		private MockRepository _mocks;
-		private ILockableBitArrayFactory _lockableBitArrayFactory;
 		private OptimizationPreferences _optimizerPreferences;
 		private SchedulingOptions _schedulingOptions;
 		private IScheduleResultDataExtractorProvider _dataExtractorProvider;
@@ -27,11 +25,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 		public void Setup()
 		{
 			_mocks = new MockRepository();
-			_lockableBitArrayFactory = _mocks.StrictMock<ILockableBitArrayFactory>();
 			_dataExtractorProvider = _mocks.StrictMock<IScheduleResultDataExtractorProvider>();
 			_optimizerPreferences = new OptimizationPreferences();
 			_schedulingOptions = new SchedulingOptions();
-			_target = new TeamBlockIntradayDecisionMaker(_lockableBitArrayFactory, _dataExtractorProvider);
+			_target = new TeamBlockIntradayDecisionMaker(_dataExtractorProvider);
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Maintainability", "CA1506:AvoidExcessiveClassCoupling"), Test]
@@ -61,8 +58,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 				      .Return(dataExtractor1);
 				Expect.Call(dataExtractor1.Values()).Return(new List<double?> {0.2, 0.2, 0.2});
 				Expect.Call(scheduleMatrixPro1.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(periodList1));
-				Expect.Call(_lockableBitArrayFactory.ConvertFromMatrix(false, false, scheduleMatrixPro1))
-				      .Return(new LockableBitArray(1, false, false, null));
 				Expect.Call(scheduleDayPro1.Day).Return(dateOnly).Repeat.AtLeastOnce();
 			}
 			using (_mocks.Playback())
@@ -118,10 +113,6 @@ namespace Teleopti.Ccc.DomainTest.Optimization.TeamBlock
 				Expect.Call(dataExtractor2.Values()).Return(new List<double?> { 0.4, 0.4, 0.4 }).Repeat.Twice();
 				Expect.Call(scheduleMatrixPro1.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(periodList1)).Repeat.Twice();
 				Expect.Call(scheduleMatrixPro2.EffectivePeriodDays).Return(new ReadOnlyCollection<IScheduleDayPro>(periodList2)).Repeat.Twice();
-				Expect.Call(_lockableBitArrayFactory.ConvertFromMatrix(false, false, scheduleMatrixPro1))
-					  .Return(new LockableBitArray(1, false, false, null)).Repeat.Twice();
-				Expect.Call(_lockableBitArrayFactory.ConvertFromMatrix(false, false, scheduleMatrixPro2))
-					  .Return(new LockableBitArray(1, false, false, null)).Repeat.Twice();
 				Expect.Call(scheduleDayPro1.Day).Return(dateOnly).Repeat.AtLeastOnce();
 				Expect.Call(scheduleDayPro2.Day).Return(dateOnly.AddDays(1)).Repeat.AtLeastOnce();
 			}

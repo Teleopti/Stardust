@@ -92,8 +92,8 @@ ECHO "%appcmd%" add app /site.name:"%~1" /path:/%~2 /physicalPath:"%~5\%~3"
 )
 
 if "%~4"=="vdir" (
-echo "%appcmd%" add vdir /app.name:"%~1" /path:/%~2 /physicalPath:"%~5\%~3"
-"%appcmd%" add vdir /app.name:"%~1" /path:/%~2 /physicalPath:"%~5\%~3"
+echo "%appcmd%" add vdir /app.name:"%~1/" /path:/%~2 /physicalPath:"%~5\%~3"
+"%appcmd%" add vdir /app.name:"%~1/" /path:/%~2 /physicalPath:"%~5\%~3"
 )
 goto:eof
 

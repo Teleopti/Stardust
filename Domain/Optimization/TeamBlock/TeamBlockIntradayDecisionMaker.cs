@@ -18,13 +18,10 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 
 	public class TeamBlockIntradayDecisionMaker : ITeamBlockIntradayDecisionMaker
 	{
-		private readonly ILockableBitArrayFactory _lockableBitArrayFactory;
 		private readonly IScheduleResultDataExtractorProvider _scheduleResultDataExtractorProvider;
 
-		public TeamBlockIntradayDecisionMaker(ILockableBitArrayFactory lockableBitArrayFactory,
-		                                      IScheduleResultDataExtractorProvider scheduleResultDataExtractorProvider)
+		public TeamBlockIntradayDecisionMaker(IScheduleResultDataExtractorProvider scheduleResultDataExtractorProvider)
 		{
-			_lockableBitArrayFactory = lockableBitArrayFactory;
 			_scheduleResultDataExtractorProvider = scheduleResultDataExtractorProvider;
 		}
 
@@ -55,12 +52,8 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				var periodDays = matrix.EffectivePeriodDays;
 				for (var i = 0; i < periodDays.Count; i++)
 				{
-					var originalArray = _lockableBitArrayFactory.ConvertFromMatrix(optimizationPreferences.DaysOff.ConsiderWeekBefore,
-					                                                               optimizationPreferences.DaysOff.ConsiderWeekAfter,
-					                                                               matrix);
-					if (originalArray.UnlockedIndexes.Contains(i) && !originalArray.DaysOffBitArray[i])
-						if (!standardDeviationData.Data.ContainsKey(periodDays[i].Day))
-							standardDeviationData.Add(periodDays[i].Day, values[i]);
+					if (!standardDeviationData.Data.ContainsKey(periodDays[i].Day))
+						standardDeviationData.Add(periodDays[i].Day, values[i]);
 				}
 			}
 

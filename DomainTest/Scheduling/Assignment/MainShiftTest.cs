@@ -147,14 +147,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			target.ShiftCategory = null;
 		}
 
-		private class testMainShift : MainShift
-		{
-			internal testMainShift()
-				: base()
-			{
-			}
-		}
-
 		[Test]
 		[ExpectedException(typeof(ArgumentException))]
 		public void CannotAddNothingButMainShiftActivityLayer()

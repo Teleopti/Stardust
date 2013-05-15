@@ -657,7 +657,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                 else
                 {
                     destAss.MainShift.Transform(workingCopyOfMainShift);
-                    destAss.MainShift.ShiftCategory = workingCopyOfMainShift.ShiftCategory;
                 }
             }
 

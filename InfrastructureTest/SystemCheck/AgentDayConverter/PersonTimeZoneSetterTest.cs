@@ -58,8 +58,7 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 			PersistAndRemoveFromUnitOfWork(ass);
 
 			new PersonTimeZoneSetter().ExecuteConverterAndWrapInTransaction(snubbe.Id.Value,
-			                                                                TimeZoneInfo.FindSystemTimeZoneById(
-				                                                                "Eastern Standard Time"));
+			                          TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time"));
 
 			new PersonAssignmentRepository(UnitOfWork).Get(ass.Id.Value).Date
 			                                          .Should().Be.EqualTo(AgentDayConverters.DateOfUnconvertedSchedule);
@@ -72,8 +71,7 @@ namespace Teleopti.Ccc.InfrastructureTest.SystemCheck.AgentDayConverter
 			PersistAndRemoveFromUnitOfWork(ass);
 
 			new PersonTimeZoneSetter().ExecuteConverterAndWrapInTransaction(Guid.NewGuid(),
-			                                                                TimeZoneInfo.FindSystemTimeZoneById(
-				                                                                "Eastern Standard Time"));
+			                          TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time"));
 
 			new PersonAssignmentRepository(UnitOfWork).Get(ass.Id.Value).Date
 			                                          .Should().Not.Be.EqualTo(AgentDayConverters.DateOfUnconvertedSchedule);

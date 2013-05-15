@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Budgeting;
+using Teleopti.Ccc.Domain.Forecasting;
 using Teleopti.Ccc.Domain.Repositories;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Sdk.ServiceBus;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -18,6 +20,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
         private MockRepository _mocks;
         private IScenarioRepository _scenarioRepository;
         private IBudgetDayRepository _budgetDayRepository;
+        private ISkillDayRepository _skillDayRepository;
         private IScheduleProjectionReadOnlyRepository _scheduleProjectionReadOnlyRepository;
         private IBudgetGroupHeadCountSpecification _target;
         private ISchedulingResultStateHolder _schedulingResultStateHolder;
@@ -33,6 +36,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
             _mocks = new MockRepository();
             _scenarioRepository = _mocks.StrictMock<IScenarioRepository>();
             _budgetDayRepository = _mocks.StrictMock<IBudgetDayRepository>();
+            _skillDayRepository = _mocks.StrictMock<ISkillDayRepository>();
             _scheduleProjectionReadOnlyRepository = _mocks.StrictMock<IScheduleProjectionReadOnlyRepository>();
             _schedulingResultStateHolder = _mocks.StrictMock<ISchedulingResultStateHolder>();
             _absenceRequest = _mocks.StrictMock<IAbsenceRequest>();
@@ -41,28 +45,9 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
             _defaultDay = new DateOnly();
             _defaultDatePeriod = new DateOnlyPeriod();
 
-            _target = new BudgetGroupHeadCountSpecification(_schedulingResultStateHolder, _scenarioRepository, _budgetDayRepository,
+            _target = new BudgetGroupHeadCountSpecification(_schedulingResultStateHolder, _scenarioRepository, _budgetDayRepository, _skillDayRepository, 
                                                             _scheduleProjectionReadOnlyRepository);
         }
-
-
-        [Test]
-        public void ShouldReturnTrueIfSkillIsOpen()
-        {
-            // 2013-04-08 is a monday
-            var result = BudgetGroupHeadCountSpecificationForTest.IsSkillOpenForDateOnlyForTest(new DateOnly(2013, 04, 08), _skills);
-            Assert.IsTrue(result);
-        }
-
-        [Test]
-        public void ShouldReturnFalseIfSkillIsClosed()
-        {
-            // 2013-04-07 is a sunday        
-            var result = BudgetGroupHeadCountSpecificationForTest.IsSkillOpenForDateOnlyForTest(new DateOnly(2013, 04, 07), _skills);
-            Assert.IsFalse(result);
-        }
-
-       
 
         [Test]
         public void ShouldBeValidIfEnoughAllowanceLeft()
@@ -74,6 +59,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
             personPeriod.BudgetGroup = budgetGroup;
             _person.AddPersonPeriod(personPeriod);
             _person.PermissionInformation.SetDefaultTimeZone(TimeZoneHelper.CurrentSessionTimeZone);
+           
             using (_mocks.Record())
             {
                 ExpectCallsForEnoughAllowanceLeft(budgetDay, personPeriod);
@@ -205,7 +191,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 
         private void ExpectCallsForEnoughAllowanceLeft(IBudgetDay budgetDay, IPersonPeriod personPeriod)
         {
-            Expect.Call(_scenarioRepository.LoadDefaultScenario()).Return(ScenarioFactory.CreateScenarioAggregate());
+            Expect.Call(_scenarioRepository.LoadDefaultScenario()).Return(ScenarioFactory.CreateScenarioAggregate()).Repeat.Twice();
             Expect.Call(_absenceRequest.Person).Return(_person).Repeat.AtLeastOnce();
             Expect.Call(_absenceRequest.Period).Return(shortPeriod()).Repeat.AtLeastOnce();
             Expect.Call(_budgetDayRepository.Find(null, null, _defaultDatePeriod))
@@ -216,6 +202,17 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
             Expect.Call(
                 _scheduleProjectionReadOnlyRepository.GetNumberOfAbsencesPerDayAndBudgetGroup(
                     personPeriod.BudgetGroup.Id.GetValueOrDefault(), new DateOnly(personPeriod.StartDate))).Return(0);
+
+            ICollection<ISkillDay> skillDays = new Collection<ISkillDay>();
+            var skillDay = SkillDayFactory.CreateSkillDay(new DateTime(2013, 04, 08));
+            skillDay.SkillDayCalculator = new SkillDayCalculator(_skills.ElementAt(0), skillDays.ToList(), new DateOnlyPeriod(new DateOnly(2013, 04, 08), new DateOnly(2013, 04, 08)));
+            skillDays.Add(skillDay);
+
+            Expect.Call(
+                _skillDayRepository.FindRange(new DateOnlyPeriod(new DateOnly(2012, 01, 01), new DateOnly(2012, 01, 02)),
+                                              _skills.ToList(), ScenarioFactory.CreateScenarioAggregate()))
+                  .IgnoreArguments().Return(skillDays)
+                  .Repeat.AtLeastOnce();
         }
 
         private static DateTimePeriod longPeriod()
@@ -233,7 +230,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 
         private void GetExpectForNotEnoughAllowanceLeft(IBudgetDay budgetDay, IPersonPeriod personPeriod)
         {
-            Expect.Call(_scenarioRepository.LoadDefaultScenario()).Return(ScenarioFactory.CreateScenarioAggregate());
+            Expect.Call(_scenarioRepository.LoadDefaultScenario()).Return(ScenarioFactory.CreateScenarioAggregate()).Repeat.Twice();
             Expect.Call(_absenceRequest.Person).Return(_person).Repeat.AtLeastOnce();
             Expect.Call(_absenceRequest.Period).Return(longPeriod()).Repeat.AtLeastOnce();
             Expect.Call(_budgetDayRepository.Find(null, null, _defaultDatePeriod))
@@ -244,6 +241,17 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
             Expect.Call(
                 _scheduleProjectionReadOnlyRepository.GetNumberOfAbsencesPerDayAndBudgetGroup(
                     personPeriod.BudgetGroup.Id.GetValueOrDefault(), new DateOnly(personPeriod.StartDate))).Return(2);
+
+            ICollection<ISkillDay> skillDays = new Collection<ISkillDay>();
+            var skillDay = SkillDayFactory.CreateSkillDay(new DateTime(2013, 04, 08));
+            skillDay.SkillDayCalculator = new SkillDayCalculator(_skills.ElementAt(0), skillDays.ToList(), new DateOnlyPeriod(new DateOnly(2013, 04, 08), new DateOnly(2013, 04, 08)));
+            skillDays.Add(skillDay);
+            
+            Expect.Call(
+                _skillDayRepository.FindRange(new DateOnlyPeriod(new DateOnly(2012,01,01),new DateOnly(2012,01,02) ),
+                                              _skills.ToList(), ScenarioFactory.CreateScenarioAggregate()))
+                  .IgnoreArguments().Return(skillDays)
+                  .Repeat.AtLeastOnce();
         }
 
         private void GetExpectIfBudgetIsNotDefinedForFewDays(DateTimePeriod dateTimePeriod, List<IBudgetDay> budgetDayList)
@@ -269,19 +277,5 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
             return new List<ISkill> { skill };
         }
     }
-
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Naming", "CA1702:CompoundWordsShouldBeCasedCorrectly", MessageId = "HeadCount")]
-    public class BudgetGroupHeadCountSpecificationForTest : BudgetGroupHeadCountSpecification
-    {
-        public BudgetGroupHeadCountSpecificationForTest(ISchedulingResultStateHolder schedulingResultStateHolder,
-            IScenarioRepository scenarioRepository, IBudgetDayRepository budgetDayRepository, IScheduleProjectionReadOnlyRepository scheduleProjectionReadOnlyRepository)
-            : base(schedulingResultStateHolder, scenarioRepository, budgetDayRepository, scheduleProjectionReadOnlyRepository)
-        {
-        }
-
-        public static bool IsSkillOpenForDateOnlyForTest(DateOnly date, IEnumerable<ISkill> skills)
-        {
-            return IsSkillOpenForDateOnly(date, skills);
-        }
-    }
+   
 }

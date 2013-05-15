@@ -112,8 +112,15 @@ for /f "tokens=1,2 delims=;" %%g in ('findstr /C:"%SubSiteName%;" /I %SDKCREDPRO
 CALL:IISSecuritySet "%SitePath%" "%AuthFlag%"
 
 ::application mapping. Needed for asp.net MVC on IIS6
+ECHO.
+ECHO setting script maps aka isapi filter ...
+if defined ProgramFiles(x86) (
+echo is Wow6432
 set aspnet_isapi=C:\WINDOWS\Microsoft.NET\Framework64\v4.0.30319\aspnet_isapi.dll
-if "%PROCESSOR_ARCHITECTURE%"=="x86" set aspnet_isapi=C:\WINDOWS\Microsoft.NET\Framework\v4.0.30319\aspnet_isapi.dll
+) else (
+echo is 32-bit
+set aspnet_isapi=C:\WINDOWS\Microsoft.NET\Framework\v4.0.30319\aspnet_isapi.dll
+)
 
 ::Remove existing MVC mapping
 if exist %aspnet_isapi% cscript "%ROOTDIR%\IIS6ManageMapping.vbs" W3SVC/1/root/%SitePath%/ScriptMaps "*,%aspnet_isapi%,0" "" /REMOVE /ALL /COMMIT
@@ -146,7 +153,7 @@ cscript "%ROOTDIR%\adsutil.vbs" delete w3svc/1/root/%~1
 echo cscript "%ROOTDIR%\adsutil.vbs" create_vdir w3svc/1/root/%~1
 cscript "%ROOTDIR%\adsutil.vbs" create_vdir w3svc/1/root/%~1
 
-if "%~4"=="App" (
+if "%~4"=="app" (
 	echo cscript "%ROOTDIR%\adsutil.vbs" appcreateinproc w3svc/1/root/%~1
 	cscript "%ROOTDIR%\adsutil.vbs" appcreateinproc w3svc/1/root/%~1
 

@@ -113,9 +113,9 @@ namespace Teleopti.Ccc.WinCode.Intraday
 	            dayLayerModel.AlarmStart = agentState.AlarmStart;
 
 	            if (DateTime.UtcNow <= dayLayerModel.AlarmStart) continue;
+				dayLayerModel.StaffingEffect = agentState.StaffingEffect;
+				dayLayerModel.ColorValue = agentState.Color;
 	            dayLayerModel.AlarmDescription = agentState.AlarmName;
-	            dayLayerModel.ColorValue = agentState.Color;
-	            dayLayerModel.StaffingEffect = agentState.StaffingEffect;
             }
         }
 

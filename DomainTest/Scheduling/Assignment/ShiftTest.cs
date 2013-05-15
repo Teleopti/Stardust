@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using NUnit.Framework;
+using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
@@ -63,6 +64,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             Assert.AreEqual(2, destination1.LayerCollection.Count);
             Assert.AreEqual(source.LayerCollection[0].Payload.Description.Name, destination1.LayerCollection[0].Payload.Description.Name);
             Assert.AreEqual(source.LayerCollection[0].Period.EndDateTime, destination1.LayerCollection[0].Period.EndDateTime);
+	        destination1.ShiftCategory.Should().Be.SameInstanceAs(source.ShiftCategory);
         }
 
         /// <summary>
@@ -83,6 +85,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
             source.LayerCollection.Add(new MainShiftActivityLayer(ActivityFactory.CreateActivity("hej1"), period1));
 
 			source.LayerCollection.Add(new MainShiftActivityLayer(ActivityFactory.CreateActivity("hej2"), period2));
+					source.ShiftCategory = new ShiftCategory("test");
         }
 
         /// <summary>

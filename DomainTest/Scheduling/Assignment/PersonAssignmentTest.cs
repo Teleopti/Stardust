@@ -455,38 +455,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		}
 
 		[Test]
-		public void VerifyThatCloneWorks()
-		{
-			PersonalShift ps1 = new PersonalShift();
-			PersonalShift ps2 = new PersonalShift();
-			PersonalShift ps3 = new PersonalShift();
-			DateTimePeriod period =
-				new DateTimePeriod(new DateTime(2007, 8, 10, 10, 0, 0, DateTimeKind.Utc),
-								   new DateTime(2007, 8, 10, 12, 0, 0, DateTimeKind.Utc));
-			PersonalShiftActivityLayer layer1 = new PersonalShiftActivityLayer(ActivityFactory.CreateActivity("Möte"), period);
-			PersonalShiftActivityLayer layer2 = new PersonalShiftActivityLayer(ActivityFactory.CreateActivity("Läkare"), period);
-			PersonalShiftActivityLayer layer3 = new PersonalShiftActivityLayer(ActivityFactory.CreateActivity("Samtal"), period);
-			ps1.LayerCollection.Add(layer1);
-			ps2.LayerCollection.Add(layer2);
-			ps3.LayerCollection.Add(layer3);
-			target.AddPersonalShift(ps1);
-			target.AddPersonalShift(ps2);
-			target.AddPersonalShift(ps3);
-
-			IMainShift shift = MainShiftFactory.CreateMainShiftWithThreeActivityLayers();
-			target.SetMainShift(shift);
-
-			IPersonAssignment theClone = (PersonAssignment) target.Clone();
-			theClone.PersonalShiftCollection[1].Transform(target.PersonalShiftCollection[0]);
-			theClone.PersonalShiftCollection[2].Transform(target.PersonalShiftCollection[0]);
-
-			Assert.AreEqual("Möte", theClone.PersonalShiftCollection[2].LayerCollection[0].Payload.Description.ToString());
-			Assert.AreNotEqual("Möte", target.PersonalShiftCollection[1].LayerCollection[0].Payload.Description.ToString());
-			Assert.IsNull(theClone.Id);
-			Assert.AreEqual(target.Person, theClone.Person);
-		}
-
-		[Test]
 		public void VerifyCloneWhenMainShiftIsNull()
 		{
 			IPersonAssignment targetClone = (IPersonAssignment) target.Clone();

@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
-		public virtual void Transform(IShift sourceShift)
+		public virtual void Transform(IMainShift sourceShift)
 		{
 			foreach (ActivityLayer layer in sourceShift.LayerCollection)
 			{
@@ -61,6 +61,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 					LayerCollection.Remove(LayerCollection[i]);
 				}
 			}
+			ShiftCategory = sourceShift.ShiftCategory;
 		}
 
 		private static ActivityLayer findLayerByOrderIndex(IEnumerable<ILayer<IActivity>> layerCollection, int orderIndex)

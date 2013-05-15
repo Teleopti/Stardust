@@ -65,8 +65,12 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 
 				foreach (var mainShiftLayer in mainShift.LayerCollection)
 				{
-					if (!mainShiftLayer.Payload.AllowOverwrite && mainShiftLayer.Period.Intersect(personAssignment.Period))
-						return false;
+					if (mainShiftLayer.Payload.AllowOverwrite) continue;
+					foreach (var personalShift in personAssignment.PersonalShiftCollection)
+					{
+						if (!personalShift.LayerCollection.Period().HasValue) continue;
+						if (mainShiftLayer.Period.Intersect(personalShift.LayerCollection.Period().Value)) return false;
+					}
 				}
 
 				foreach (var personalShift in personAssignment.PersonalShiftCollection)
