@@ -823,7 +823,6 @@
     <Compile Include="PeopleAdmin\Models\PersonGeneralModelTest.cs" />
     <Compile Include="Common\ClipHandlerTest.cs" />
     <Compile Include="Common\ClipTest.cs" />
-    <Compile Include="Scheduler\AgentAssignmentLayerTest.cs" />
     <Compile Include="Scheduler\FilteredCollectionTest.cs" />
     <Compile Include="Scheduler\Panels\LengthToTimeCalculatorTest.cs" />
     <Compile Include="Scheduler\SchedulePresenterBaseTest.cs" />
