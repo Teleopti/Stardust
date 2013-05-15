@@ -4,6 +4,7 @@
 /// <reference path="~/Content/Scripts/MicrosoftMvcAjax.debug.js" />
 /// <reference path="Teleopti.MyTimeWeb.Portal.js"/>
 /// <reference path="Teleopti.MyTimeWeb.Common.js"/>
+/// <reference path="~/Content/Scripts/knockout-2.2.1.debug.js"/>
 
 if (typeof (Teleopti) === 'undefined') {
 	Teleopti = {};

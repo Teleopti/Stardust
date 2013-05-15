@@ -14,7 +14,6 @@ Scenario: See my profile
 	Then I should see my culture
 	And I should see my language
 
-#Failing now because the date format of the datepicker in TeamSchedule is incorrect. Will be fixed in TeeamSchedule soon.
 Scenario: Change my culture
 	Given I am an agent
 	And I am swedish

@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
-using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using WatiN.Core;
 
@@ -22,7 +21,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 		public bool IsClosed {
 			get
 			{
-				return Container.Div(QuicklyFind.ByClass("select2-offscreen")).Exists;
+				return Container.Div(Find.BySelector(".select2-offscreen")).Exists;
 			}
 		}
 
@@ -30,7 +29,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 		{
 			get
 			{
-				return !Container.Div(QuicklyFind.ByClass("select2-offscreen")).Exists;
+				return !Container.Div(Find.BySelector(".select2-offscreen")).Exists;
 			}
 		}
 
