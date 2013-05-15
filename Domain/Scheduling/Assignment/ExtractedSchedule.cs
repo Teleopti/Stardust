@@ -649,15 +649,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             {
                 MergePersonalShiftsToOneAssignment(workingCopyOfMainShift);
                 IPersonAssignment destAss = AssignmentHighZOrder();
-
-                if (destAss.MainShift == null)
-                {
-                    destAss.SetMainShift(workingCopyOfMainShift);
-                }
-                else
-                {
-                    destAss.MainShift.Transform(workingCopyOfMainShift);
-                }
+                destAss.SetMainShift(workingCopyOfMainShift);
             }
 
             SplitAbsences(period);
