@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 			var ret = new ScheduleAuditingReportData { ShiftType = Resources.AuditingReportShift};
 			addCommonScheduleData(ret, auditedAssignment.Entity, auditedAssignment.RevisionEntity, auditedAssignment.Operation);
 
-			if (auditedAssignment.Entity.MainShift == null)
+			if (auditedAssignment.Entity.ShiftCategory == null)
 			{
 				// Ta bort detta if-block när denna är löst/portad https://hibernate.onjira.com/browse/HHH-5845
 				// Sätt då istället bara string.Empty på detail.
@@ -90,12 +90,12 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 				}
 				else
 				{
-					ret.Detail = string.Empty;					
+					ret.Detail = string.Empty;
 				}
 			}
 			else
 			{
-				ret.Detail = auditedAssignment.Entity.MainShift.ShiftCategory.Description.Name;
+				ret.Detail = auditedAssignment.Entity.ShiftCategory.Description.Name;
 			}
 
 			if (auditedAssignment.Entity.DatabasePeriod.Equals(PersonAssignment.UndefinedPeriod))
@@ -114,7 +114,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories.Audit
 
 		private IShiftCategory fetchShiftCategory(Guid personAssignmentId, long revision)
 		{
-			const string shiftCategoryHql = @"select ms.ShiftCategory_Id from Teleopti.Ccc.Domain.Scheduling.Assignment.MainShift_AUD ms
+			const string shiftCategoryHql = @"select ms.ShiftCategory_Id from Teleopti.Ccc.Domain.Scheduling.Assignment.PersonAssignment_AUD ms
 												where ms.originalId.Id = :paId and ms.originalId.REV = :rev";
 			var scId = session().CreateQuery(shiftCategoryHql)
 							.SetGuid("paId", personAssignmentId) //mainshift and personassignment has same id

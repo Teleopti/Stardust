@@ -48,7 +48,9 @@ insert into Auditing.Revision (ModifiedAt, ModifiedBy)
 		,[Maximum]
 		,[Person]
 		,[Scenario]
-		,[BusinessUnit])
+		,[BusinessUnit]
+		,[ShiftCategory])
+		
 	 select p.Id
 		,ar.Id
 		,0
@@ -58,23 +60,10 @@ insert into Auditing.Revision (ModifiedAt, ModifiedBy)
 		,[Person]
 		,[Scenario]
 		,p.BusinessUnit
+		,[ShiftCategory]
 	from dbo.PersonAssignment p
 	inner join Auditing.Revision ar on p.UpdatedBy = ar.ModifiedBy and p.UpdatedOn = ar.ModifiedAt
-	inner join Scenario s on s.Id = p.Scenario and s.DefaultScenario = 1
-	
-		--mainshift
-	insert into Auditing.MainShift_AUD ([Id]
-		,[REV]
-		,[REVTYPE]
-		,[ShiftCategory])
-	 select ms.Id
-		,rev
-		,0
-		,ms.ShiftCategory
-	 from dbo.MainShift ms
-	 inner join Auditing.PersonAssignment_AUD pa_aud
-	 on ms.Id = pa_aud.Id
-	 
+	inner join Scenario s on s.Id = p.Scenario and s.DefaultScenario = 1	 
 
 	 --mainshiftactivitylayer
 	 insert into Auditing.MainShiftActivityLayer_AUD ([Id]
@@ -94,8 +83,8 @@ insert into Auditing.Revision (ModifiedAt, ModifiedBy)
 		,al.Payload
 		,al.Parent
 	 from dbo.MainShiftActivityLayer al
-	 inner join Auditing.MainShift_AUD ms_aud
-	 on al.Parent = ms_aud.Id
+	 inner join Auditing.PersonAssignment_AUD ps_aud
+	 on al.Parent = ps_aud.Id
 
 	--overtimeshift
 	insert into Auditing.OvertimeShift_AUD ([Id]

@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Globalization;
-using System.Threading;
 using Newtonsoft.Json;
 using Teleopti.Ccc.DBManager.Library;
 using Teleopti.Ccc.Domain.Auditing;
-using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Infrastructure.NHibernateConfiguration;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;

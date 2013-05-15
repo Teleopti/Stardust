@@ -178,9 +178,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 				ScheduledAgent = PersonAssignment.Person.Name.ToString(NameOrderOption.FirstNameLastName)
 			};
 
-			//remove mainshift
+			//remove mainshiftlayers
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
+				uow.Reassociate(PersonAssignment);
 				PersonAssignment.ClearMainShiftLayers();
 				uow.PersistAll();
 			}
@@ -219,6 +220,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
+				uow.Reassociate(PersonAssignment);
 				var pShift = new PersonalShift();
 				pShift.LayerCollection.Add(new PersonalShiftActivityLayer(PersonAssignment.MainShift.LayerCollection[0].Payload,
 																							 PersonAssignment.MainShift.LayerCollection[0].Period));
@@ -254,6 +256,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
+				uow.Reassociate(PersonAssignment);
 				PersonAssignment.ClearMainShiftLayers();
 				uow.PersistAll();
 			}

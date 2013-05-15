@@ -38,9 +38,9 @@
 					 update="false"/>
 		
 		<many-to-one name="ShiftCategory"
-			class="Teleopti.Ccc.Domain.Scheduling.ShiftCategory"
-			not-null="true" 
-			foreign-key="FK_PersonAssignment_ShiftCategory"/>
+						class="Teleopti.Ccc.Domain.Scheduling.ShiftCategory"
+						foreign-key="FK_PersonAssignment_ShiftCategory"
+						access="property"/>
 
 		<list name="MainShiftActivityLayers"
 		  cascade="all-delete-orphan"

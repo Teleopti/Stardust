@@ -32,6 +32,8 @@ GO
 --Name: Roger Kratz
 --Date: 2013-05-15
 
+---------------- MAIN TABLES --------------------------
+
 --Add shiftcategory to personassignment
 ALTER TABLE dbo.PersonAssignment
 add ShiftCategory uniqueidentifier
@@ -49,6 +51,7 @@ GO
 
 ALTER TABLE [dbo].[MainShiftActivityLayer]  WITH CHECK ADD  CONSTRAINT [FK_MainShiftActivityLayer_PersonAssignment] FOREIGN KEY([Parent])
 REFERENCES [dbo].[PersonAssignment] ([Id])
+on delete cascade
 GO
 
 ALTER TABLE [dbo].[MainShiftActivityLayer] CHECK CONSTRAINT [FK_MainShiftActivityLayer_PersonAssignment]
@@ -56,3 +59,12 @@ GO
 
 --drop mainshift table
 DROP TABLE dbo.MainShift
+
+------------------ AUDIT TABLES ----------------------------
+--Add shiftcategory to personassignment
+ALTER TABLE auditing.PersonAssignment_AUD
+add ShiftCategory uniqueidentifier
+
+-- NOTE! Parent now points to personassignment (no db scheme changes
+
+drop table auditing.mainshift_aud
