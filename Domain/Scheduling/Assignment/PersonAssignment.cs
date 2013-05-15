@@ -50,8 +50,11 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		private DateTimePeriod mergedMainShiftAndPersonalPeriods()
 		{
 			DateTimePeriod? mergedPeriod = null;
-			if (MainShift != null)
-				mergedPeriod = DateTimePeriod.MaximumPeriod(MainShift.LayerCollection.Period(), mergedPeriod);
+			//fix later 
+			foreach (var mainShiftActivityLayer in MainShiftActivityLayers)
+			{
+				mergedPeriod = DateTimePeriod.MaximumPeriod(mainShiftActivityLayer.Period, mergedPeriod);
+			}
 			foreach (IPersonalShift personalShift in _personalShiftCollection)
 			{
 				mergedPeriod = DateTimePeriod.MaximumPeriod(personalShift.LayerCollection.Period(), mergedPeriod);
@@ -314,8 +317,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			retobj.SetId(null);
 			retobj._personalShiftCollection = new List<IPersonalShift>();
 			retobj._overtimeShiftCollection = new List<IOvertimeShift>();
-			if (MainShift != null)
-				retobj.SetMainShift((MainShift)MainShift.NoneEntityClone());
+			//fix this!
+			retobj._mainShiftActivityLayers = new List<IMainShiftActivityLayer>();
+			foreach (var newLayer in _mainShiftActivityLayers.Select(layer => layer.NoneEntityClone()))
+			{
+				newLayer.SetParent(this);
+				retobj._mainShiftActivityLayers.Add((IMainShiftActivityLayer)newLayer);
+			}
+			//
 			foreach (IPersonalShift shift in _personalShiftCollection)
 			{
 				retobj.AddPersonalShift((IPersonalShift)shift.NoneEntityClone());
@@ -333,8 +342,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			PersonAssignment retobj = (PersonAssignment)MemberwiseClone();
 			retobj._personalShiftCollection = new List<IPersonalShift>();
 			retobj._overtimeShiftCollection = new List<IOvertimeShift>();
-			if (MainShift != null)
-				retobj.SetMainShift((MainShift)MainShift.EntityClone());
+			//fix this
+			retobj._mainShiftActivityLayers = new List<IMainShiftActivityLayer>();
+			foreach (var newLayer in _mainShiftActivityLayers.Select(layer => layer.EntityClone()))
+			{
+				newLayer.SetParent(this);
+				retobj._mainShiftActivityLayers.Add((IMainShiftActivityLayer)newLayer);
+			}
+			//
 			foreach (IPersonalShift shift in _personalShiftCollection)
 			{
 				retobj.AddPersonalShift((PersonalShift)shift.EntityClone());
