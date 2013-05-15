@@ -157,7 +157,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
 		public string MustHavesText()
 		{
-			return Resources.MustHave + "(" + CurrentMustHaves() + "/" + MaxMustHaves() + ")";	
+			return Resources.MustHave + " (" + CurrentMustHaves() + "/" + MaxMustHaves() + ")";	
 		}
 
 		public int MaxMustHaves()

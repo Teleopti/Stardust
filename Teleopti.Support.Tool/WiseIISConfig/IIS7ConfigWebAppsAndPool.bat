@@ -30,6 +30,7 @@ SET MainSiteName=TeleoptiCCC
 SET appcmd=%systemroot%\system32\inetsrv\APPCMD.exe
 
 ::remove applications
+CALL:DeleteApp "%DefaultSite%" "%MainSiteName%/ContextHelp" "app" >> %logfile%
 for /f "tokens=2,3,4,5 delims=;" %%g in ('FINDSTR /C:"Level2;" Apps\ApplicationsInAppPool.txt') do CALL:DeleteApp "%DefaultSite%/%MainSiteName%" "%%g" "%%j" >> %logfile%
 for /f "tokens=2,3,4,5 delims=;" %%g in ('FINDSTR /C:"Level1;%MainSiteName%;" Apps\ApplicationsInAppPool.txt') do CALL:DeleteApp "%DefaultSite%" "%%g" "%%j" >> %logfile%
 
@@ -40,8 +41,11 @@ for /f "tokens=3,4 delims=;" %%g in (Apps\ApplicationsInAppPool.txt) do CALL:Cre
 for /f "tokens=2,3,4,5 delims=;" %%g in ('FINDSTR /C:"Level1;%MainSiteName%;" Apps\ApplicationsInAppPool.txt') do CALL:CreateApp "%DefaultSite%" "%%g" "%%g" "%%j" "%INSTALLDIR%" >> %logfile%
 for /f "tokens=2,3,4,5 delims=;" %%g in ('FINDSTR /C:"Level2;" Apps\ApplicationsInAppPool.txt') do CALL:CreateApp "%DefaultSite%" "%MainSiteName%/%%g" "%%g" "%%j" "%INSTALLDIR%\%MainSiteName%" >> %logfile%
 
+::disable directoryBrowse
+"%appcmd%" set config "%DefaultSite%" -section:system.webServer/directoryBrowse /enabled:"False"
+
 ::config applications
-for /f "tokens=2,3,4,5 delims=;" %%g in (Apps\ApplicationsInAppPool.txt) do CALL:ForEachApplication "%%g" "%%h" "%%i" "%%j" >> %logfile%
+for /f "tokens=2,3,4,5,6,7 delims=;" %%g in (Apps\ApplicationsInAppPool.txt) do CALL:ForEachApplication "%%g" "%%h" "%%i" "%%j" "%%k" "%%l" >> %logfile%
 
 ::just in case
 iisreset /restart
@@ -71,15 +75,12 @@ echo.
 exit /B
 
 :DeleteApp
-if "%~3"=="app" (
 ECHO "%appcmd%" delete app /app.name:"%~1/%~2"
 "%appcmd%" delete app /app.name:"%~1/%~2"
-)
 
-if "%~3"=="vdir" (
 ECHO "%appcmd%" delete vdir /vdir.name:"%~1/%~2"
 "%appcmd%" delete vdir /vdir.name:"%~1/%~2"
-)
+
 
 goto:eof
 
