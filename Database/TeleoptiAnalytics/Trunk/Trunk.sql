@@ -144,9 +144,8 @@ CREATE TABLE [stage].[stg_hourly_availability](
 	[person_code] [uniqueidentifier] NOT NULL,
 	[scenario_code] [uniqueidentifier] NOT NULL,
 	[available_time_m] [int] NOT NULL,
-	[available_day_count] [int] NOT NULL,
 	[scheduled_time_m] [int] NOT NULL,
-	[scheduled_day_count] [int] NOT NULL,
+	[scheduled] [smallint] NOT NULL,
 	[business_unit_code] [uniqueidentifier] NOT NULL,
 	[datasource_id] [smallint] NOT NULL
 
@@ -155,7 +154,7 @@ CREATE TABLE [stage].[stg_hourly_availability](
 	[person_code] ASC,
 	[restriction_date] ASC,
 	[scenario_code] ASC
-)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-) ON [PRIMARY]
+)
+)
 
 GO

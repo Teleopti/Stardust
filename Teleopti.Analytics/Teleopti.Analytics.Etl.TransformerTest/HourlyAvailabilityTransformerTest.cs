@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Data;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Analytics.Etl.Interfaces.Transformer;
+using Teleopti.Analytics.Etl.Transformer;
 using Teleopti.Analytics.Etl.TransformerInfrastructure.DataTableDefinition;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Restriction;
@@ -25,7 +24,7 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 			_target = new HourlyAvailabilityTransformer();
 		}
 
-		[Test]
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "studDay"), Test]
 		public void ShouldTransformAvailability()
 		{
 			var person = new Person();
@@ -57,73 +56,5 @@ namespace Teleopti.Analytics.Etl.TransformerTest
 
 	}
 
-	public class HourlyAvailabilityTransformer : IEtlTransformer<IScheduleDay>
-	{
-		public void Transform(IEnumerable<IScheduleDay> rootList, DataTable table)
-		{
-			foreach (var schedulePart in rootList)
-			{
-				var restrictionBases = schedulePart.RestrictionCollection();
-				foreach (var restrictionBase in restrictionBases)
-				{
-					var availRestriction = restrictionBase as IStudentAvailabilityRestriction;
-					
-					var newDataRow = table.NewRow();
-					newDataRow = fillDataRow(newDataRow, availRestriction, schedulePart);
-					table.Rows.Add(newDataRow);
-					
-				}
-			}
-		}
-
-		private DataRow fillDataRow(DataRow dataRow, IStudentAvailabilityRestriction availRestriction, IScheduleDay schedulePart)
-		{
-			var availDay = (IStudentAvailabilityDay)availRestriction.Parent;
-			dataRow["restriction_date"] = availDay.RestrictionDate.Date;
-			dataRow["person_code"] = schedulePart.Person.Id;
-			dataRow["scenario_code"] = schedulePart.Scenario.Id;
-			dataRow["business_unit_code"] = schedulePart.Scenario.BusinessUnit.Id;
-			dataRow["available_time_m"] = getMaxAvailable(availRestriction);
-			var workTime = scheduledWorkTime(schedulePart);
-			dataRow["scheduled_time_m"] = workTime;
-			dataRow["scheduled"] = workTime > 0;
-			dataRow["datasource_id"] = 1;
-
-			return dataRow;
-		}
-
-		private int scheduledWorkTime(IScheduleDay scheduleDay)
-		{
-			var minutes = 0;
-			if (scheduleDay.IsScheduled())
-			{
-				var visualLayerCollection = scheduleDay.ProjectionService().CreateProjection();
-
-				if (visualLayerCollection.HasLayers)
-				{
-					minutes = (int)visualLayerCollection.WorkTime().TotalMinutes;
-				}
-			}
-			return minutes;
-		}
-
-		private int getMaxAvailable(IStudentAvailabilityRestriction availRestriction)
-		{
-			var start = TimeSpan.FromMinutes(0);
-			var end = TimeSpan.FromHours(24);
-			if (availRestriction.StartTimeLimitation.StartTime.HasValue)
-				start = availRestriction.StartTimeLimitation.StartTime.GetValueOrDefault();
-
-			if (availRestriction.EndTimeLimitation.EndTime.HasValue)
-				end = availRestriction.EndTimeLimitation.EndTime.GetValueOrDefault();
-
-			var minutes = (int)end.Add(-start).TotalMinutes;
-
-			if (availRestriction.WorkTimeLimitation.EndTime.HasValue)
-			{
-				minutes = availRestriction.WorkTimeLimitation.EndTime.Value.Minutes;
-			}
-			return minutes;
-		}
-	}
+	
 }

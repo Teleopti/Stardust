@@ -11,9 +11,9 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure.DataTableDefinition
             table.Columns.Add("restriction_date", typeof(DateTime));
             table.Columns.Add("person_code", typeof(Guid));
             table.Columns.Add("scenario_code", typeof(Guid));
-            table.Columns.Add("available_time_m", typeof(long));
-            table.Columns.Add("scheduled", typeof(int));
-            table.Columns.Add("scheduled_time_m", typeof(int));
+			table.Columns.Add("available_time_m", typeof(int));
+			table.Columns.Add("scheduled_time_m", typeof(int));
+			table.Columns.Add("scheduled", typeof(int));
             table.Columns.Add("business_unit_code", typeof(Guid));
             table.Columns.Add("datasource_id", typeof(int));
 

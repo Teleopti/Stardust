@@ -306,6 +306,12 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 											  _dataMartConnectionString);
 		}
 
+		public int PersistAvailability(DataTable dataTable)
+		{
+			HelperFunctions.TruncateTable("stage.etl_stg_availability_delete", _dataMartConnectionString);
+			return HelperFunctions.BulkInsert(dataTable, "[stage].[stg_hourly_availability]", _dataMartConnectionString);
+		}
+
 		public int FillDimQueueDataMart(int dataSourceId, IBusinessUnit businessUnit)
 		{
 			//Prepare sql parameters

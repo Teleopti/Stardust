@@ -94,7 +94,9 @@
     <Compile Include="AbsenceTransformer.cs" />
     <Compile Include="ActivityTransformer.cs" />
     <Compile Include="ConfigurationHandler.cs" />
+    <Compile Include="HourlyAvailabilityTransformer.cs" />
     <Compile Include="IntradaySchedulePreferenceTransformer.cs" />
+    <Compile Include="Job\Steps\StageAvailabilityJobStep.cs" />
     <Compile Include="Job\Steps\IntradayStageRequestJobStep.cs" />
     <Compile Include="Job\Steps\IntradayStageSchedulePreferenceJobStep.cs" />
     <Compile Include="Job\Steps\IntradayStageScheduleDayOffCountJobStep.cs" />
