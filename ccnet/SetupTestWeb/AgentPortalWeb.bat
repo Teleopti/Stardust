@@ -31,8 +31,6 @@ SET AppPoolName=%SiteName%
 ::Let us run unsigned scripts
 ECHO powershell Set-ExecutionPolicy RemoteSigned
 powershell Set-ExecutionPolicy RemoteSigned
-ECHO powershell Set-Location "'%ROOTDIR%'"
-powershell Set-Location "'%ROOTDIR%'"
 
 ::clean up previous build
 ECHO powershell /file "%ROOTDIR%\CleanUp.ps1" %Sitepath% %DefaultSite% %SiteName% %AppPoolName%
@@ -60,6 +58,9 @@ cscript "%ROOTDIR%\replace.vbs" $(AgentPortalWebURL) %AgentPortalWebURL% "%Sitep
 
 ::Set esent permissions
 "%Sitepath%\EsentPermissions.bat" "601" "1" "705" "IIS APPPOOL\%AppPoolName%"
+
+ECHO powershell Set-Location "'%ROOTDIR%'"
+powershell Set-Location "'%ROOTDIR%'"
 
 ::Do some finishing touches
 ECHO powershell /file "%ROOTDIR%\AfterSetup.ps1" %Sitepath% %DefaultSite% %SiteName% %AppName% %AppPoolName%
