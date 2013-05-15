@@ -159,3 +159,56 @@ CREATE TABLE [stage].[stg_hourly_availability](
 ) ON [PRIMARY]
 
 GO
+
+----------------  
+--Name: Karin
+--Date: 2013-05-15
+--Desc: New Fact Table Hourly Availablity
+-----------------
+
+CREATE TABLE [mart].[fact_hourly_availability](
+	[date_id] [int] NOT NULL,
+	[person_id] [int] NOT NULL,
+	[scenario_id] [smallint] NOT NULL,
+	[available_time_m] [int] NULL,
+	[available_days] [int] NULL,
+	[scheduled_time_m] [int] NULL,
+	[scheduled_days] [int] NULL,
+	[business_unit_id] [int] NOT NULL,
+	[datasource_id] [smallint] NOT NULL
+ CONSTRAINT [PK_fact_hourly_availability] PRIMARY KEY CLUSTERED 
+(
+	[date_id] ASC,
+	[person_id] ASC,
+	[scenario_id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [MART]
+) ON [MART]
+
+GO
+
+ALTER TABLE [mart].[fact_hourly_availability] ADD  CONSTRAINT [DF_fact_hourly_availability_datasource_id]  DEFAULT ((1)) FOR [datasource_id]
+GO
+
+
+ALTER TABLE [mart].[fact_hourly_availability]  WITH CHECK ADD  CONSTRAINT [FK_fact_hourly_availability_dim_date] FOREIGN KEY([date_id])
+REFERENCES [mart].[dim_date] ([date_id])
+GO
+
+ALTER TABLE [mart].[fact_hourly_availability] CHECK CONSTRAINT [FK_fact_hourly_availability_dim_date]
+GO
+
+
+ALTER TABLE [mart].[fact_hourly_availability]  WITH CHECK ADD  CONSTRAINT [FK_fact_hourly_availability_dim_person] FOREIGN KEY([person_id])
+REFERENCES [mart].[dim_person] ([person_id])
+GO
+
+ALTER TABLE [mart].[fact_hourly_availability] CHECK CONSTRAINT [FK_fact_hourly_availability_dim_person]
+GO
+
+
+ALTER TABLE [mart].[fact_hourly_availability]  WITH CHECK ADD  CONSTRAINT [FK_fact_hourly_availability_dim_scenario] FOREIGN KEY([scenario_id])
+REFERENCES [mart].[dim_scenario] ([scenario_id])
+GO
+
+ALTER TABLE [mart].[fact_hourly_availability] CHECK CONSTRAINT [FK_fact_hourly_availability_dim_scenario]
+GO
