@@ -1406,7 +1406,6 @@
     <EmbeddedResource Include="Scheduling\Assignment\PersonAssignment.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Scheduling\Assignment\MainShift.hbm.xml" />
     <EmbeddedResource Include="Scheduling\Assignment\PersonalShift.hbm.xml" />
   </ItemGroup>
   <ItemGroup>

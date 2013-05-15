@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.Domain.Common
         }
 
 
-        private int findOrderIndex()
+        protected virtual int findOrderIndex()
         {
 			return ((ILayerCollectionOwner<T>)Parent).LayerCollection.IndexOf(this);
         }

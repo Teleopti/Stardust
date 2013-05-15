@@ -26,3 +26,33 @@ GO
 update Auditing.PersonAssignment_AUD
 set TheDate ='1800-1-1'
 GO
+
+
+----------------  
+--Name: Roger Kratz
+--Date: 2013-05-15
+
+--Add shiftcategory to personassignment
+ALTER TABLE dbo.PersonAssignment
+add ShiftCategory uniqueidentifier
+
+ALTER TABLE [dbo].[PersonAssignment]  WITH CHECK ADD  CONSTRAINT [FK_PersonAssignment_ShiftCategory] FOREIGN KEY([ShiftCategory])
+REFERENCES [dbo].[ShiftCategory] ([Id])
+GO
+
+ALTER TABLE [dbo].[PersonAssignment] CHECK CONSTRAINT [FK_PersonAssignment_ShiftCategory]
+GO
+
+--add mainshiftlayers from personassignment
+ALTER TABLE [dbo].[MainShiftActivityLayer] DROP CONSTRAINT [FK_MainShiftActivityLayer_MainShift]
+GO
+
+ALTER TABLE [dbo].[MainShiftActivityLayer]  WITH CHECK ADD  CONSTRAINT [FK_MainShiftActivityLayer_PersonAssignment] FOREIGN KEY([Parent])
+REFERENCES [dbo].[PersonAssignment] ([Id])
+GO
+
+ALTER TABLE [dbo].[MainShiftActivityLayer] CHECK CONSTRAINT [FK_MainShiftActivityLayer_PersonAssignment]
+GO
+
+--drop mainshift table
+DROP TABLE dbo.MainShift

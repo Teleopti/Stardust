@@ -27,9 +27,9 @@
       </component>
     </component>
     <many-to-one name="Parent"
-                 class="MainShift"
+                 class="PersonAssignment"
                  not-null ="true" 
-                 foreign-key="FK_MainShiftActivityLayer_MainShift"/>
+                 foreign-key="PersonAssignment"/>
     <property name="OrderIndex"
               access="readonly"
               not-null ="true" />
