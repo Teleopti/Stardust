@@ -816,12 +816,10 @@
     <Compile Include="Scheduling\Restriction\StudentAvailabilityRestriction.cs" />
     <Compile Include="Scheduling\Restriction\StudentSpecification.cs" />
     <Compile Include="Scheduling\Rules\DataPartOfAgentDay.cs" />
-    <Compile Include="Scheduling\Rules\GapsInAssignmentRule.cs" />
     <Compile Include="Scheduling\Rules\LongestPeriodForAssignmentCalculator.cs" />
     <Compile Include="Scheduling\Rules\MinWeeklyRestRule.cs" />
     <Compile Include="Scheduling\Rules\NewBusinessRuleCollection.cs" />
     <Compile Include="Scheduling\Rules\NewDayOffRule.cs" />
-    <Compile Include="Scheduling\Rules\NewLayerOwnerNeedsAtLeastOneLayerRule.cs" />
     <Compile Include="Scheduling\Rules\NewLegalStateRule.cs" />
     <Compile Include="Scheduling\Rules\NewMaxOneDayOffRule.cs" />
     <Compile Include="Scheduling\Rules\NewMaxWeekWorkTimeRule.cs" />
@@ -1304,7 +1302,6 @@
     <Compile Include="Scheduling\PersonDayOff.cs" />
     <Compile Include="Scheduling\Assignment\AssignmentLength.cs" />
     <Compile Include="Scheduling\Assignment\PersonAssignmentRestrictionSet.cs" />
-    <Compile Include="Scheduling\Assignment\GapsInAssignment.cs" />
     <Compile Include="Scheduling\WorkShift.cs" />
     <Compile Include="Scheduling\ShiftCategory.cs" />
     <Compile Include="Security\AuthorizationEntities\ApplicationAuthenticationInfo.cs" />

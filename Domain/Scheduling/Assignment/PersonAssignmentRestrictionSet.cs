@@ -24,7 +24,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             : base(new List<IRestriction<IPersonAssignment>>
         {
             new AssignmentLength(), 
-            new GapsInAssignment()
         })
         {
         }
