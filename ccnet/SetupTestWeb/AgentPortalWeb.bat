@@ -63,8 +63,8 @@ ECHO powershell Set-Location "'%ROOTDIR%'"
 powershell Set-Location "'%ROOTDIR%'"
 
 ::Do some finishing touches
-ECHO powershell /file "%ROOTDIR%\AfterSetup.ps1" %Sitepath% %DefaultSite% %SiteName% %AppName% %AppPoolName%
-powershell /file "%ROOTDIR%\AfterSetup.ps1" %Sitepath% %DefaultSite% %SiteName% %AppName% %AppPoolName%
+ECHO powershell /file "%ROOTDIR%\AfterSetup.ps1" "%Sitepath%" %DefaultSite% "%SiteName%" "%AppName%" "%AppPoolName%"
+powershell /file "%ROOTDIR%\AfterSetup.ps1" "%Sitepath%" %DefaultSite% "%SiteName%" "%AppName%" "%AppPoolName%"
 
 ::Done
 CLS
