@@ -11,8 +11,7 @@ define([
 		'views/teamschedule/person',
 		'text!templates/teamschedule/view.html',
         'resizeevent',
-        'ajax',
-        'pagelog'
+        'ajax'
 	], function (
 		ko,
 		$,
@@ -25,8 +24,7 @@ define([
 		personViewModel,
 		view,
 	    resize,
-	    ajax,
-	    pagelog
+	    ajax
 	) {
 
 		var teamSchedule;
@@ -38,12 +36,10 @@ define([
 		}, null, "gotoperson");
 
 		var loadSchedules = function(options) {
-		    pagelog.log("loadSchedules");
 		    subscriptions.subscribeTeamSchedule(
 				teamSchedule.SelectedTeam(),
 				helpers.Date.ToServer(teamSchedule.SelectedDate()),
 				function(schedules) {
-				    pagelog.log("loadSchedules.got");
 				    var currentPersons = teamSchedule.Persons();
 
 					var dateClone = teamSchedule.SelectedDate().clone();
@@ -69,12 +65,10 @@ define([
 					options.success();
 				    
 					resize.notify();
-					pagelog.log("loadSchedules./got");
 				});
 		};
 
 		var loadPersons = function (options) {
-		    pagelog.log("loadPersons");
 		    ajax.ajax({
 				url: 'Person/PeopleInTeam',
 				data: {
@@ -92,7 +86,6 @@ define([
 		};
 
 		var loadTeams = function (options) {
-		    pagelog.log("loadTeams");
 		    ajax.ajax({
 				url: 'Person/AvailableTeams',
 				data: {
@@ -108,8 +101,6 @@ define([
 		return {
 			initialize: function (options) {
 
-			    pagelog.log("initialize");
-			    
 				options.renderHtml(view);
 
 				teamSchedule = new teamScheduleViewModel();
@@ -155,8 +146,6 @@ define([
 			
 			display: function (options) {
 
-			    pagelog.log("display");
-
 			    var currentTeamId = function () {
 					if (options.id)
 						return options.id;
@@ -181,7 +170,6 @@ define([
 				var deferred = $.Deferred();
 			    
 				var loadPersonsAndSchedules = function() {
-				    pagelog.log("loadPersonsAndSchedules");
 				    teamSchedule.SelectedTeam(currentTeamId());
 					loadPersons({
 						success: function() {
@@ -195,8 +183,6 @@ define([
 					});
 				};
 				
-				pagelog.log("load stuff");
-			    
 				if (teamSchedule.Teams().length != 0) {
 					loadPersonsAndSchedules();
 				} else {
