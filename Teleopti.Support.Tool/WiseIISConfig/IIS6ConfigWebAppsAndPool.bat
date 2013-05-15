@@ -179,11 +179,14 @@ cscript "%ROOTDIR%\adsutil.vbs" set w3svc/1/root/%~1/appfriendlyname "%~2"
 echo cscript "%ROOTDIR%\adsutil.vbs" set w3svc/1/root/%~1/path "%~3"
 cscript "%ROOTDIR%\adsutil.vbs" set w3svc/1/root/%~1/path "%~3"
 
-if "%~4"=="vdir" (
-	if not "%~5"=="None" (
-		cscript "%ROOTDIR%\adsutil.vbs" SET "w3svc/1/Root/%~1/DefaultDoc" "%~5"
-		cscript "%ROOTDIR%\adsutil.vbs" SET "w3svc/1/Root/%~1/EnableDefaultDoc" True
-	)
+::disbable default docs for all
+cscript "%ROOTDIR%\adsutil.vbs" SET "w3svc/1/Root/%~1/DefaultDoc" ""
+cscript "%ROOTDIR%\adsutil.vbs" SET "w3svc/1/Root/%~1/EnableDefaultDoc" False
+
+::enable default docs for some
+if not "%~5"=="None" (
+	cscript "%ROOTDIR%\adsutil.vbs" SET "w3svc/1/Root/%~1/DefaultDoc" "%~5"
+	cscript "%ROOTDIR%\adsutil.vbs" SET "w3svc/1/Root/%~1/EnableDefaultDoc" True
 )
 goto:eof
 
