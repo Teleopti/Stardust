@@ -72,6 +72,11 @@ SET FolderPath=%MainSiteName%\%SubSiteName%
 if "%SubSiteName%"=="TeleoptiCCC" SET SitePath=%MainSiteName%
 if "%SubSiteName%"=="TeleoptiCCC" SET FolderPath=%MainSiteName%
 
+::remove old stuff
+echo cscript "%ROOTDIR%\adsutil.vbs" delete w3svc/1/root/%MainSiteName%/ContextHelp
+cscript "%ROOTDIR%\adsutil.vbs" delete w3svc/1/root/%MainSiteName%/ContextHelp
+
+::remove + re-add
 CALL:CreateApplication "%SitePath%" "%SubSiteName%" "%INSTALLDIR%\%FolderPath%" "%SiteOrApp%"
 
 if "%SiteOrApp%"=="app" (
