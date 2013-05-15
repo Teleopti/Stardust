@@ -240,39 +240,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		}
 
 		/// <summary>
-		/// Verifies the clear main shift.
-		/// </summary>
-		[Test]
-		public void VerifyClearMainShift()
-		{
-			MockRepository mockTemp = new MockRepository();
-			IPersonAssignmentRepository rep = mockTemp.StrictMock<IPersonAssignmentRepository>();
-			target = new testAssignment();
-			MainShift shift = MainShiftFactory.CreateMainShiftWithThreeActivityLayers();
-			target.SetMainShift(shift);
-
-			using (mockTemp.Record())
-			{
-				rep.RemoveMainShift(target);
-			}
-			using (mockTemp.Playback())
-			{
-				target.ClearMainShift(rep);
-			}
-			Assert.IsNull(target.MainShift);
-		}
-
-		/// <summary>
-		/// Verifies the null is not passed to clear main shift.
-		/// </summary>
-		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
-		public void VerifyNullIsNotPassedToClearMainShift()
-		{
-			target.ClearMainShift(null);
-		}
-
-		/// <summary>
 		/// Verifies the period property.
 		/// </summary>
 		[Test]

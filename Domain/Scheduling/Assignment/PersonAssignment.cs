@@ -210,19 +210,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
 		#region Manipulate MainShift
 
-		//remove me!
-		public virtual void ClearMainShift(IPersonAssignmentRepository personAssignmentRepository)
+		public virtual void ClearMainShiftLayers()
 		{
-			InParameter.NotNull("personAssignmentRepository", personAssignmentRepository);
-			personAssignmentRepository.RemoveMainShift(this);
-			//_mainShift = null;
+			_mainShiftActivityLayers.Clear();
 		}
 
 		public virtual void SetMainShift(IMainShift mainShift)
 		{
 			InParameter.NotNull("mainShift", mainShift); //use ClearMainShift method instead!
 			//fix nicer later
-			_mainShiftActivityLayers.Clear();
+			ClearMainShiftLayers();
 			mainShift.LayerCollection.ForEach(layer =>
 				{
 					layer.SetParent(this);

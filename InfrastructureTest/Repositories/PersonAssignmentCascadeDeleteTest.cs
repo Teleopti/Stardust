@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 		[Test]
 		public void DeleteMainShiftShouldGenerateOneStatement()
 		{
-			target.ClearMainShift(new PersonAssignmentRepository(UnitOfWork));
+			target.ClearMainShiftLayers();
 			PersistAndRemoveFromUnitOfWork(target);
 			Session.SessionFactory.Statistics.PrepareStatementCount
 				.Should().Be.EqualTo(1); //delete mainshift (no layer)

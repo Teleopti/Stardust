@@ -181,8 +181,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			//remove mainshift
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var rep = new PersonAssignmentRepository(UnitOfWorkFactory.Current);
-				PersonAssignment.ClearMainShift(rep);
+				PersonAssignment.ClearMainShiftLayers();
 				uow.PersistAll();
 			}
 			//remove assignment
@@ -220,11 +219,10 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var rep = new PersonAssignmentRepository(UnitOfWorkFactory.Current);
 				var pShift = new PersonalShift();
 				pShift.LayerCollection.Add(new PersonalShiftActivityLayer(PersonAssignment.MainShift.LayerCollection[0].Payload,
 																							 PersonAssignment.MainShift.LayerCollection[0].Period));
-				PersonAssignment.ClearMainShift(rep);
+				PersonAssignment.ClearMainShiftLayers();
 				PersonAssignment.AddPersonalShift(pShift);
 				uow.PersistAll();
 			}
@@ -256,8 +254,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 
 			using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
 			{
-				var rep = new PersonAssignmentRepository(UnitOfWorkFactory.Current);
-				PersonAssignment.ClearMainShift(rep);
+				PersonAssignment.ClearMainShiftLayers();
 				uow.PersistAll();
 			}
 

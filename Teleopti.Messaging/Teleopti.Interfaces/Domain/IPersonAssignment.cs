@@ -64,16 +64,7 @@ namespace Teleopti.Interfaces.Domain
         /// <summary>
         /// Clears the main shift.
         /// </summary>
-        /// <param name="personAssignmentRepository">The uow.</param>
-        /// <remarks>
-        /// Repository must be injected to let nhibernate delete
-        /// unreferenced mainshift from db.
-        /// NHibernate doesn't support "all-delete-orphan" on
-        /// one-to-one references.
-        /// Remove this injection later when/if this is supported
-        /// out-of-the-box.
-        /// </remarks>
-        void ClearMainShift(IPersonAssignmentRepository personAssignmentRepository);
+        void ClearMainShiftLayers();
 
         /// <summary>
         /// Sets the main shift.

@@ -99,6 +99,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         protected override IPersonAssignment CreateAggregateWithCorrectBusinessUnit()
         {
             MainShift mainShift = MainShiftFactory.CreateMainShift(_dummyCat);
+					mainShift.LayerCollection.Add(new MainShiftActivityLayer(_dummyActivity, new DateTimePeriod(2000,1,1,2000,1,2)));
             IList<IPersonalShift> persShifts = new List<IPersonalShift> {new PersonalShift(), new PersonalShift()};
 
         	IPersonAssignment ass = PersonAssignmentFactory.CreatePersonAssignmentAggregate(_dummyAgent,
@@ -139,11 +140,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             IPersonAssignment loaded = new PersonAssignmentRepository(UnitOfWork).LoadAggregate(ass.Id.Value);
             Assert.AreEqual(ass.Id, loaded.Id);
             Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.MainShift));
-            Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.MainShift.LayerCollection));
+            Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.MainShiftActivityLayers));
             Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.PersonalShiftCollection));
             Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.PersonalShiftCollection[0].LayerCollection));
-            Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.MainShift.ShiftCategory));
-            Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.MainShift.ShiftCategory.DayOfWeekJusticeValues));
+            Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.ShiftCategory));
+            Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.ShiftCategory.DayOfWeekJusticeValues));
             Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.OvertimeShiftCollection));
             Assert.IsTrue(LazyLoadingManager.IsInitialized(loaded.OvertimeShiftCollection[0].LayerCollection));
         }
@@ -342,12 +343,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
                 Assert.IsNotNull(loaded.UpdatedOn);
                 Assert.AreSame(LoggedOnPerson, loaded.UpdatedBy);
 
-                loaded.ClearMainShift(_rep);
                 UnitOfWork.PersistAll();
 
-                loaded = _rep.Load(org.Id.Value);
-                //Check history
-                Assert.AreEqual(3, casted.Version);
             }
             finally
             {
@@ -383,15 +380,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
                 Assert.IsNotNull(loaded.UpdatedOn);
                 Assert.AreEqual(LoggedOnPerson, loaded.UpdatedBy);
-
-				loaded.ClearMainShift(_rep);
-                UnitOfWork.PersistAll();
-                UnitOfWork.Remove(loaded);
-
-                IPersonAssignment l = Session.Load<PersonAssignment>(loaded.Id);
-                Assert.IsNotNull(l);
-                loaded = _rep.LoadAggregate(org.Id.Value);
-                Assert.AreEqual(3, (loaded).Version);
             }
             finally
             {
@@ -423,7 +411,7 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
             Assert.GreaterOrEqual(1, noOfPersonalShift); //ensures factory method creates persShifts
 
             //Remove shifts
-            loaded.ClearMainShift(_rep);
+            loaded.ClearMainShiftLayers();
             PersistAndRemoveFromUnitOfWork(loaded);
 
             foreach (int items in Session.CreateCriteria(typeof(MainShift))
