@@ -133,3 +133,29 @@ INSERT INTO mart.report (
 		'','','','',
 		'077F50D3-CE9C-4EF6-B52F-13975C4F83EA')
 GO
+
+----------------  
+--Name: Karin
+--Date: 2013-05-15
+--Desc: New Stage Table Hourly Availablity
+-----------------
+CREATE TABLE [stage].[stg_hourly_availability](
+	[restriction_date] [smalldatetime] NOT NULL,
+	[person_code] [uniqueidentifier] NOT NULL,
+	[scenario_code] [uniqueidentifier] NOT NULL,
+	[available_time_m] [int] NOT NULL,
+	[available_day_count] [int] NOT NULL,
+	[scheduled_time_m] [int] NOT NULL,
+	[scheduled_day_count] [int] NOT NULL,
+	[business_unit_code] [uniqueidentifier] NOT NULL,
+	[datasource_id] [smallint] NOT NULL
+
+ CONSTRAINT [PK_stg_hourly_availability] PRIMARY KEY CLUSTERED 
+(
+	[person_code] ASC,
+	[restriction_date] ASC,
+	[scenario_code] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
