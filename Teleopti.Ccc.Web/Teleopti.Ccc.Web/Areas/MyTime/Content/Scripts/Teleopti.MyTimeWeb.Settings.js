@@ -1,4 +1,6 @@
-﻿if (typeof (Teleopti) === 'undefined') {
+﻿/// <reference path="~/Content/Scripts/knockout-2.2.1.debug.js"/>
+
+if (typeof (Teleopti) === 'undefined') {
 	Teleopti = {};
 
 	if (typeof (Teleopti.MyTimeWeb) === 'undefined') {
@@ -8,14 +10,42 @@
 
 
 Teleopti.MyTimeWeb.Settings = (function ($) {
-	var ajax = new Teleopti.MyTimeWeb.Ajax();
-	function _init() {
+    var ajax = new Teleopti.MyTimeWeb.Ajax();
+    var vm;
+
+    var settingsViewModel = function() {
+        var self = this;
+
+        self.avoidReload = false;
+        self.cultures = ko.observableArray();
+        self.selectedUiCulture = ko.observable();
+        self.selectedCulture = ko.observable();
+
+        self.selectedUiCulture.subscribe(function(newValue) {
+            if (!self.avoidReload)
+                _selectorChanged(newValue, "Settings/UpdateUiCulture");
+        });
+        
+        self.selectedCulture.subscribe(function (newValue) {
+            if (!self.avoidReload)
+                _selectorChanged(newValue, "Settings/UpdateCulture");
+        });
+    };
+
+    function _init() {
 		Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack('Settings/Index', Teleopti.MyTimeWeb.Settings.PartialInit);
 		Teleopti.MyTimeWeb.Portal.RegisterPartialCallBack('Settings/Password', Teleopti.MyTimeWeb.Settings.PartialInit);
 	}
 
-	function _partialInit() {
-	    _loadCultures();
+    function _bindData() {
+        ko.applyBindings(vm, $('#page')[0]);
+    };
+
+    function _partialInit() {
+        vm = new settingsViewModel();
+        _loadCultures();
+        _bindData();
+
 		_passwordEvents();
 		_initButton();
 	}
@@ -93,55 +123,18 @@ Teleopti.MyTimeWeb.Settings = (function ($) {
 	        global: false,
 	        cache: false,
 	        success: function (data, textStatus, jqXHR) {
-	            _initCultureUiPicker(data);
-	            _initCulturePicker(data);
+	            vm.cultures(data.Cultures);
+	            vm.avoidReload = true;
+	            vm.selectedUiCulture(data.ChoosenUiCulture.id);
+	            vm.selectedCulture(data.ChoosenCulture.id);
+	            vm.avoidReload = false;
 	        },
 	        error: function(e) {
-	            console.log(e);
+	            //console.log(e);
 	        }
 	    });
 	}
     
-    function _initCulturePicker(data) {
-        $('#Culture-Picker').select2("destroy");
-        $('#Culture-Picker').select2(
-					{
-					    data: data.Cultures,
-					    containerCssClass: "span3"
-					}
-				);
-
-        var cultureId = data.ChoosenCulture.id;
-        if (!cultureId)
-            return;
-        var uiCulture = $.grep(data.Cultures, function (e) { return e.id == cultureId; })[0];
-        $('#Culture-Picker').select2("data", uiCulture);
-        $('#Culture-Picker')
-            .on('change', function (e) {
-                _selectorChanged(e.val, "Settings/UpdateCulture");
-            });
-    }
-    
-    function _initCultureUiPicker(data) {
-        $('#CultureUi-Picker').select2("destroy");
-        $('#CultureUi-Picker').select2(
-					{
-					    data: data.Cultures,
-					    containerCssClass: "span3"
-					}
-				);
-
-        var uiCultureId = data.ChoosenUiCulture.id;
-        if (!uiCultureId)
-            return;
-        var uiCulture = $.grep(data.Cultures, function (e) { return e.id == uiCultureId; })[0];
-        $('#CultureUi-Picker').select2("data", uiCulture);
-        $('#CultureUi-Picker')
-            .on('change', function(e) {
-                _selectorChanged(e.val, "Settings/UpdateUiCulture");
-            });
-    }
-
 	function _selectorChanged(value, url) {
 		var data = { LCID: value };
 		ajax.Ajax({

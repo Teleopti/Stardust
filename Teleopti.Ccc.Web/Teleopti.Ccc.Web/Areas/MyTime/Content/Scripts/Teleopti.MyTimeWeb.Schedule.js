@@ -422,10 +422,12 @@ Teleopti.MyTimeWeb.Schedule = (function ($) {
 	}
     
     function _cleanBindings() {
-        ko.cleanNode($('#ScheduleWeek-body')[0]);
-        vm.days([]);
-        vm.timeLines([]);
-        vm = null;
+        ko.cleanNode($('#body-inner')[0]);
+        if (vm != null) {
+            vm.days([]);
+            vm.timeLines([]);
+            vm = null;
+        }
     }
 
 	return {

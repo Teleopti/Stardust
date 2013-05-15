@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 
 		private void AssertShowingDay(DateOnly date)
 		{
-			Browser.Current.Url.EndsWith(string.Format("{0}/{1}/{2}", date.Year, date.Month, date.Day));
+			Browser.Interactions.AssertUrlContains(string.Format("{0}/{1}/{2}", date.Year, date.Month.ToString("D2"), date.Day.ToString("D2")));
 		}
 
 		[Then(@"I should not see the absence's color")]
@@ -326,7 +326,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void ThenIShouldSeeTheOtherSiteSTeam()
 		{
 			var theOtherSitesTeam = UserFactory.User().UserData<AnotherSitesTeam>().TheTeam.Description.Name;
-			EventualAssert.That(() => Pages.Pages.TeamSchedulePage.TeamPicker.Container.InnerHtml, Contains.Substring(theOtherSitesTeam));
+			Browser.Interactions.AssertContains(".select2-container .select2-choice span", theOtherSitesTeam);
 		}
 
 		[Then(@"the team-picker should have my team selected")]
@@ -361,7 +361,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 
 		private static void AssertAgentIsDisplayed(string name)
 		{
-			Browser.Interactions.AssertContains(".teamschedule-agent-name", name);
+			Browser.Interactions.AssertExists(string.Format(".teamschedule-agent-name:contains({0})", name));
 		}
 
 		private static void AssertAgentIsNotDisplayed(string name)

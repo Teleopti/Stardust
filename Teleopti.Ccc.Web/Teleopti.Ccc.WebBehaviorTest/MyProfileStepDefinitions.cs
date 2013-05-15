@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using NUnit.Framework;
 using TechTalk.SpecFlow;
 using TechTalk.SpecFlow.Assist;
@@ -95,16 +96,14 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void ThenIShouldSeeMyCulture()
 		{
 			var user = UserFactory.User();
-			var page = Browser.Current.Page<RegionalSettingsPage>();
-			EventualAssert.That(() => page.CultureSelect.Container.InnerHtml, Is.StringContaining(user.Person.PermissionInformation.Culture().DisplayName));
+			Browser.Interactions.AssertContains("#s2id_Culture-Picker a span", user.Person.PermissionInformation.Culture().DisplayName);
 		}
 
 		[Then(@"I should see my language")]
 		public void ThenIShouldSeeMyLanguage()
 		{
 			var user = UserFactory.User();
-			var page = Browser.Current.Page<RegionalSettingsPage>();
-			EventualAssert.That(() => page.CultureUiSelect.Container.InnerHtml, Is.StringContaining(user.Person.PermissionInformation.UICulture().DisplayName));
+			Browser.Interactions.AssertContains("#s2id_CultureUi-Picker a span", user.Person.PermissionInformation.UICulture().DisplayName);
 		}
 
 		[When(@"I change culture to US")]
@@ -131,12 +130,12 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			ChangeUiCulture(UserTexts.Resources.BrowserDefault);
 		}
 
-		[Then(@"I should see US date format")]
+		[Then(@"I should see US date format"), SetCulture("en-US")]
 		public void ThenIShouldSeeUSDateFormat()
 		{
 			Navigation.GotoTeamSchedule();
-			var page = Browser.Current.Page<TeamSchedulePage>();
-			EventualAssert.That(() => page.DatePicker.DateFormat, Is.EqualTo("m/d/yy"));
+			Browser.Interactions.AssertExists(string.Format(@"div:[data-mytime-periodselection*=""""Display"": ""{0}""""]",
+			                                                DateTime.Today.ToShortDateString()));
 		}
 
 
