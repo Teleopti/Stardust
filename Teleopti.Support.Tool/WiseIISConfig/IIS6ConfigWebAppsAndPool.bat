@@ -134,6 +134,10 @@ if not "%aspnetisapi%"=="None" (
 	if exist %aspnet_isapi% cscript "%ROOTDIR%\IIS6ManageMapping.vbs" W3SVC/1/root/%SitePath%/ScriptMaps "*,%aspnet_isapi%,0" "" /REMOVE /ALL /COMMIT
 	if exist %aspnet_isapi% cscript "%ROOTDIR%\IIS6ManageMapping.vbs" W3SVC/1/root/%SitePath%/ScriptMaps "" "*,%aspnet_isapi%,0" /INSERT /COMMIT
 )
+
+::disable directoryBrowse
+cscript "%ROOTDIR%\adsutil.vbs" set w3svc/1/root/%SitePath%/enabledirbrowsing "False"
+
 GOTO Done
 
 :BitMaskGet
