@@ -119,18 +119,14 @@ for /f "tokens=1,2 delims=;" %%g in ('findstr /C:"%SubSiteName%;" /I %SDKCREDPRO
 CALL:IISSecuritySet "%SitePath%" "%AuthFlag%"
 
 ::application mapping. Needed for asp.net MVC on IIS6
-ECHO.
-ECHO setting script maps aka isapi filter ...
-if defined ProgramFiles(x86) (
-echo is Wow6432
-set aspnet_isapi=C:\WINDOWS\Microsoft.NET\Framework64\v4.0.30319\aspnet_isapi.dll
-) else (
-echo is 32-bit
+::set x86 first as "default"
 set aspnet_isapi=C:\WINDOWS\Microsoft.NET\Framework\v4.0.30319\aspnet_isapi.dll
-)
 
-::Remove + Add existing MVC mapping
-if not "%aspnetisapi%"=="None" (
+::AMD64?
+if defined ProgramFiles(x86) set aspnet_isapi=C:\WINDOWS\Microsoft.NET\Framework64\v4.0.30319\aspnet_isapi.dll
+
+if "%aspnetisapi%"=="aspnet_isapi" (
+	ECHO setting script maps aka isapi filter for: %SitePath% %aspnetisapi%
 	if exist %aspnet_isapi% cscript "%ROOTDIR%\IIS6ManageMapping.vbs" W3SVC/1/root/%SitePath%/ScriptMaps "*,%aspnet_isapi%,0" "" /REMOVE /ALL /COMMIT
 	if exist %aspnet_isapi% cscript "%ROOTDIR%\IIS6ManageMapping.vbs" W3SVC/1/root/%SitePath%/ScriptMaps "" "*,%aspnet_isapi%,0" /INSERT /COMMIT
 )
