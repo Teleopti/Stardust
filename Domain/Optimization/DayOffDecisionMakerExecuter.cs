@@ -417,7 +417,7 @@ namespace Teleopti.Ccc.Domain.Optimization
                     IMainShift originalMainShift = originalPersonAssignment.MainShift;
                     if (originalMainShift != null)
                     {
-						originalShiftCategory = originalMainShift.ShiftCategory;
+											originalShiftCategory = originalPersonAssignment.ShiftCategory;
 						_mainShiftOptimizeActivitySpecificationSetter.SetSpecification(schedulingOptions, _optimizerPreferences, originalMainShift, dateOnly);
                     }
 
