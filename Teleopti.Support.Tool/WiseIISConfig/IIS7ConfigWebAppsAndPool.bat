@@ -42,7 +42,7 @@ for /f "tokens=2,3,4,5 delims=;" %%g in ('FINDSTR /C:"Level1;%MainSiteName%;" Ap
 for /f "tokens=2,3,4,5 delims=;" %%g in ('FINDSTR /C:"Level2;" Apps\ApplicationsInAppPool.txt') do CALL:CreateApp "%DefaultSite%" "%MainSiteName%/%%g" "%%g" "%%j" "%INSTALLDIR%\%MainSiteName%" >> %logfile%
 
 ::config applications
-for /f "tokens=2,3,4,5 delims=;" %%g in (Apps\ApplicationsInAppPool.txt) do CALL:ForEachApplication "%%g" "%%h" "%%i" "%%j" >> %logfile%
+for /f "tokens=2,3,4,5,6,7 delims=;" %%g in (Apps\ApplicationsInAppPool.txt) do CALL:ForEachApplication "%%g" "%%h" "%%i" "%%j" "%%k" "%%l" >> %logfile%
 
 ::just in case
 iisreset /restart

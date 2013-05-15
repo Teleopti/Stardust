@@ -30,7 +30,7 @@ SET MainSiteName=TeleoptiCCC
 
 for /f "tokens=3,4 delims=;" %%g in (Apps\ApplicationsInAppPool.txt) do CALL:CreateAppPool "%%g" "%%h" >> %logfile%
 
-for /f "tokens=2,3,4,5 delims=;" %%g in (Apps\ApplicationsInAppPool.txt) do CALL:ForEachApplication "%%g" "%%h" "%%i" "%%j" >> %logfile%
+for /f "tokens=2,3,4,5,6,7 delims=;" %%g in (Apps\ApplicationsInAppPool.txt) do CALL:ForEachApplication "%%g" "%%h" "%%i" "%%j" "%%k" "%%l" >> %logfile%
 
 ::just in case
 iisreset /restart
@@ -64,6 +64,8 @@ SET SubSiteName=%~1
 SET PoolName=%~2
 SET NETVersion=%~3
 SET SiteOrApp=%~4
+SET DefaultDocs=%~5
+SET aspnetisapi=%~6
 
 SET SitePath=%MainSiteName%/%SubSiteName%
 SET FolderPath=%MainSiteName%\%SubSiteName%
@@ -77,7 +79,7 @@ echo cscript "%ROOTDIR%\adsutil.vbs" delete w3svc/1/root/%MainSiteName%/ContextH
 cscript "%ROOTDIR%\adsutil.vbs" delete w3svc/1/root/%MainSiteName%/ContextHelp
 
 ::remove + re-add
-CALL:CreateApplication "%SitePath%" "%SubSiteName%" "%INSTALLDIR%\%FolderPath%" "%SiteOrApp%"
+CALL:CreateApplication "%SitePath%" "%SubSiteName%" "%INSTALLDIR%\%FolderPath%" "%SiteOrApp%" "%DefaultDocs%"
 
 if "%SiteOrApp%"=="app" (
 	echo Change app pool
@@ -127,12 +129,12 @@ echo is 32-bit
 set aspnet_isapi=C:\WINDOWS\Microsoft.NET\Framework\v4.0.30319\aspnet_isapi.dll
 )
 
-::Remove existing MVC mapping
-if exist %aspnet_isapi% cscript "%ROOTDIR%\IIS6ManageMapping.vbs" W3SVC/1/root/%SitePath%/ScriptMaps "*,%aspnet_isapi%,0" "" /REMOVE /ALL /COMMIT
-::Add MVC mapping
-if exist %aspnet_isapi% cscript "%ROOTDIR%\IIS6ManageMapping.vbs" W3SVC/1/root/%SitePath%/ScriptMaps "" "*,%aspnet_isapi%,0" /INSERT /COMMIT
+::Remove + Add existing MVC mapping
+if not "%aspnetisapi%"=="None" (
+	if exist %aspnet_isapi% cscript "%ROOTDIR%\IIS6ManageMapping.vbs" W3SVC/1/root/%SitePath%/ScriptMaps "*,%aspnet_isapi%,0" "" /REMOVE /ALL /COMMIT
+	if exist %aspnet_isapi% cscript "%ROOTDIR%\IIS6ManageMapping.vbs" W3SVC/1/root/%SitePath%/ScriptMaps "" "*,%aspnet_isapi%,0" /INSERT /COMMIT
+)
 GOTO Done
-
 
 :BitMaskGet
 SETLOCAL
@@ -174,10 +176,11 @@ echo cscript "%ROOTDIR%\adsutil.vbs" set w3svc/1/root/%~1/path "%~3"
 cscript "%ROOTDIR%\adsutil.vbs" set w3svc/1/root/%~1/path "%~3"
 
 if "%~4"=="vdir" (
-cscript "%ROOTDIR%\adsutil.vbs" SET "w3svc/1/Root/%~1/DefaultDoc" "index.html, default.htm"
-cscript "%ROOTDIR%\adsutil.vbs" SET "w3svc/1/Root/%~1/EnableDefaultDoc" True
+	if not "%~5"=="None" (
+		cscript "%ROOTDIR%\adsutil.vbs" SET "w3svc/1/Root/%~1/DefaultDoc" "%~5"
+		cscript "%ROOTDIR%\adsutil.vbs" SET "w3svc/1/Root/%~1/EnableDefaultDoc" True
+	)
 )
-
 goto:eof
 
 :IISSecuritySet
