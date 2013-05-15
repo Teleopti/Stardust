@@ -30,11 +30,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		public void VerifyCreateKeepShiftCategoryRestriction()
 		{
 			IPersonAssignment personAssignment = _mockRepository.StrictMock<IPersonAssignment>();
-			IMainShift mainShift = _mockRepository.StrictMock<IMainShift>();
 			using (_mockRepository.Record())
 			{
 				Expect.Call(_schedulePart.AssignmentHighZOrder()).Return(personAssignment);
-				Expect.Call(personAssignment.MainShift).Return(mainShift);
 				Expect.Call(personAssignment.ShiftCategory).Return(new ShiftCategory("TestCategory"));
 			}
 			using (_mockRepository.Playback())
