@@ -200,11 +200,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		[Test]
 		public void CanSetBaseShift()
 		{
-			MainShift baseShift = new MainShift(new ShiftCategory("Morning"));
+			Assert.IsNull(target.MainShift);
+			var category = new ShiftCategory("Morning");
+			MainShift baseShift = MainShiftFactory.CreateMainShift(new Activity("hej"), target.Period, category);
 			target.SetMainShift(baseShift);
-			Assert.AreSame(baseShift, target.MainShift);
-			Assert.AreSame(target, baseShift.Parent);
-			Assert.AreSame(target, ((IAggregateEntity) baseShift).Root());
+			Assert.IsNotNull(target.MainShift);
+			Assert.AreSame(target.ShiftCategory, baseShift.ShiftCategory);
 		}
 
 
@@ -529,7 +530,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			target.SetId(Guid.NewGuid());
 			target.ZOrder = zOrder;
 
-			IMainShift mainShift = new MainShift(new ShiftCategory("sdf"));
+			IMainShift mainShift = MainShiftFactory.CreateMainShift(new Activity("hej"), target.Period, new ShiftCategory("sdf"));
 			mainShift.SetId(Guid.NewGuid());
 			target.SetMainShift(mainShift);
 
@@ -548,7 +549,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			Assert.AreEqual(target.MainShift.Id, pAss.MainShift.Id);
 			Assert.AreEqual(target.PersonalShiftCollection[0].Id, pAss.PersonalShiftCollection[0].Id);
 			Assert.AreEqual(target.Person.Id, pAss.Person.Id);
-			Assert.AreSame(pAss.MainShift.Parent, pAss);
 			Assert.AreEqual(zOrder, target.ZOrder);
 			Assert.AreEqual(target.OvertimeShiftCollection[0].Id, pAss.OvertimeShiftCollection[0].Id);
 
@@ -558,7 +558,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			Assert.IsNull(pAss.MainShift.Id);
 			Assert.IsNull(pAss.PersonalShiftCollection[0].Id);
 			Assert.IsNull(pAss.OvertimeShiftCollection[0].Id);
-			Assert.AreSame(pAss.MainShift.Parent, pAss);
 			Assert.AreEqual(zOrder, target.ZOrder);
 
 			pAss = (IPersonAssignment)target.CreateTransient();
@@ -567,7 +566,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			Assert.IsNull(pAss.MainShift.Id);
 			Assert.IsNull(pAss.PersonalShiftCollection[0].Id);
 			Assert.IsNull(pAss.OvertimeShiftCollection[0].Id);
-			Assert.AreSame(pAss.MainShift.Parent, pAss);
 			Assert.AreEqual(zOrder, target.ZOrder);
 		}
 
@@ -584,9 +582,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 									defSet));
 
 			var mShift = new MainShift(new ShiftCategory("d"));
-			target.SetMainShift(mShift);
 			mShift.LayerCollection.Add(new MainShiftActivityLayer(act,
 											new DateTimePeriod(2000, 1, 5, 2000, 1, 6)));
+			target.SetMainShift(mShift);
 
 			Assert.AreEqual(2, target.ProjectionService().CreateProjection().Count());
 

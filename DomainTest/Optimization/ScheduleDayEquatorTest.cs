@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
@@ -149,15 +150,18 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             IScheduleDay original = schedulePartFactory.CreatePartWithMainShift();
             IScheduleDay current = schedulePartFactory.CreatePartWithMainShift();
             IPersonAssignment personAssingment = current.PersonAssignmentCollection()[0];
+	        var category = personAssingment.ShiftCategory;
             Assert.AreEqual(2, personAssingment.MainShift.LayerCollection.Count);
 
             // change order
             ILayer<IActivity> activity1 = personAssingment.MainShift.LayerCollection[0];
             ILayer<IActivity> activity2 = personAssingment.MainShift.LayerCollection[1];
-            personAssingment.MainShift.LayerCollection.Clear();
-            Assert.AreEqual(0, personAssingment.MainShift.LayerCollection.Count);
-            personAssingment.MainShift.LayerCollection.Add(activity2);
-            personAssingment.MainShift.LayerCollection.Add(activity1);
+            personAssingment.ClearMainShiftLayers();
+            Assert.AreEqual(0, personAssingment.MainShiftActivityLayers.Count());
+	        var mainShift = new MainShift(category);
+			mainShift.LayerCollection.Add(activity2);
+			mainShift.LayerCollection.Add(activity1);
+			personAssingment.SetMainShift(mainShift);
 
             Assert.IsTrue(_target.DayOffEquals(original, current));
             Assert.IsFalse(_target.MainShiftEquals(original, current));

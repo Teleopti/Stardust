@@ -747,8 +747,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 																											  2000, 1, 6));
 			IPersonAbsence abs = PersonAbsenceFactory.CreatePersonAbsence(_person, _scenario,
 																		  new DateTimePeriod(2000, 1, 1, 2001, 1, 1));
-			ass1.MainShift.ShiftCategory = low;
-			ass2.MainShift.ShiftCategory = high;
+			var tmpShift = ass1.MainShift;
+			tmpShift.ShiftCategory = low;
+			ass1.SetMainShift(tmpShift);
+
+			tmpShift = ass2.MainShift;
+			tmpShift.ShiftCategory = high;
+			ass2.SetMainShift(tmpShift);
 
 			((ScheduleRange)dic1[_person]).Add(ass1);
 			Assert.AreEqual(1, dic1[_person].FairnessPoints().FairnessPoints);
