@@ -67,7 +67,12 @@ Teleopti.MyTimeWeb.Preference.SelectionViewModel = function (dayViewModels, maxM
 
     self.selectedPreference = ko.observable();
     self.availablePreferences = ko.observableArray();
-    
+
+    self.selectAndapplyPreference = function (item) {
+    	self.selectedPreference(item);
+    	setPreferenceMethod(self.selectedPreference().Value);
+	};
+	
     self.applyPreference = function() {
         setPreferenceMethod(self.selectedPreference().Value);
     };

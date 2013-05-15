@@ -37,7 +37,6 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 
 	function _initPeriodSelection() {
 		var periodData = $('#Preference-body').data('mytime-periodselection');
-		console.log(selectionViewModel);
 	    selectionViewModel.displayDate(periodData.Display);
 	    selectionViewModel.nextPeriodDate(moment(periodData.PeriodNavigation.NextPeriod));
 	    selectionViewModel.previousPeriodDate(moment(periodData.PeriodNavigation.PrevPeriod));
