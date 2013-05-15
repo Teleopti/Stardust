@@ -59,13 +59,6 @@ cscript "%ROOTDIR%\replace.vbs" $(AgentPortalWebURL) %AgentPortalWebURL% "%Sitep
 ::Set esent permissions
 "%Sitepath%\EsentPermissions.bat" "601" "1" "705" "IIS APPPOOL\%AppPoolName%"
 
-ECHO powershell Set-Location "'%ROOTDIR%'"
-powershell Set-Location "'%ROOTDIR%'"
-
-::Do some finishing touches
-ECHO powershell /file "%ROOTDIR%\AfterSetup.ps1" "%Sitepath%" %DefaultSite% "%SiteName%" "%AppName%" "%AppPoolName%"
-powershell /file "%ROOTDIR%\AfterSetup.ps1" "%Sitepath%" %DefaultSite% "%SiteName%" "%AppName%" "%AppPoolName%"
-
 ::Done
 CLS
 ECHO Deployed %SiteName% - Done!
