@@ -1143,7 +1143,6 @@
     <Compile Include="PeopleAdmin\IPersonRoleView.cs" />
     <Compile Include="PeopleAdmin\PersonGeneralModel.cs" />
     <Compile Include="Presentation\AuthorizationEntityListBoxPresenter.cs" />
-    <Compile Include="Scheduling\AgentAssignmentLayer.cs" />
     <Compile Include="Scheduling\PersonRequestViewModel.cs" />
     <Compile Include="Scheduling\RequestPresenter.cs" />
     <Compile Include="Scheduling\ScheduleHelper.cs" />

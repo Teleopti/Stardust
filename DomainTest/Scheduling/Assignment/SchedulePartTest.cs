@@ -562,7 +562,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			IMainShift mainShift = MainShiftFactory.CreateMainShift(ActivityFactory.CreateActivity("test"), period,
 																	ShiftCategoryFactory.CreateShiftCategory("test"));
 			_target.AddMainShift(mainShift);
-			Assert.AreEqual(mainShift, _target.AssignmentHighZOrder().MainShift);
 
 			mainShift = MainShiftFactory.CreateMainShift(ActivityFactory.CreateActivity("test1"), period,
 																	ShiftCategoryFactory.CreateShiftCategory("test1"));

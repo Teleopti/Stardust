@@ -28,9 +28,10 @@ namespace Teleopti.Ccc.DomainTest.Collection
         [Test]
         public void VerifyParentWorksWhenLayerIsAdded()
         {
-            MainShift dummyShift = MainShiftFactory.CreateMainShiftWithDefaultCategory();
-            MainShiftActivityLayer actLay =
-                new MainShiftActivityLayer(ActivityFactory.CreateActivity("hej"),
+	        var dummyShift = PersonalShiftFactory.CreatePersonalShift(ActivityFactory.CreateActivity("hopp"),
+	                                                                  new DateTimePeriod(2000, 1, 1, 2002, 1, 1));
+            var actLay =
+                new PersonalShiftActivityLayer(ActivityFactory.CreateActivity("hej"),
                                                         new DateTimePeriod(2000, 1, 1, 2002, 1, 1));
             dummyShift.LayerCollection.Add(actLay);
             Assert.AreSame(dummyShift, actLay.Parent);
