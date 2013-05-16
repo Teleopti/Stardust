@@ -1241,4 +1241,20 @@ Schedule</value>
     <value>Availability Per Agent</value>
     <comment> the report Availability Per Agent</comment>
   </data>
+  <data name="ResAvailableDays" xml:space="preserve">
+    <value>Available Days</value>
+    <comment>Column caption</comment>
+  </data>
+  <data name="ResAvailableTime" xml:space="preserve">
+    <value>Available Time</value>
+    <comment>Column caption</comment>
+  </data>
+  <data name="ResScheduledDays" xml:space="preserve">
+    <value>Scheduled Days</value>
+    <comment>Column caption</comment>
+  </data>
+  <data name="ResUtilization" xml:space="preserve">
+    <value>Utilization</value>
+    <comment>Column caption</comment>
+  </data>
 </root>

@@ -764,6 +764,24 @@ namespace Teleopti.Analytics.ReportTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Available Days.
+        /// </summary>
+        public static string ResAvailableDays {
+            get {
+                return ResourceManager.GetString("ResAvailableDays", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Available Time.
+        /// </summary>
+        public static string ResAvailableTime {
+            get {
+                return ResourceManager.GetString("ResAvailableTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Average Speed of Answer (s).
         /// </summary>
         public static string ResAverageSpeedOfAnswerSec {
@@ -2204,6 +2222,15 @@ namespace Teleopti.Analytics.ReportTexts {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Scheduled Days.
+        /// </summary>
+        public static string ResScheduledDays {
+            get {
+                return ResourceManager.GetString("ResScheduledDays", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Scheduled Hours (hh:mm).
         /// </summary>
         public static string ResScheduledHoursH {
@@ -2578,6 +2605,15 @@ namespace Teleopti.Analytics.ReportTexts {
         public static string ResUnfulfilled {
             get {
                 return ResourceManager.GetString("ResUnfulfilled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Utilization.
+        /// </summary>
+        public static string ResUtilization {
+            get {
+                return ResourceManager.GetString("ResUtilization", resourceCulture);
             }
         }
         
