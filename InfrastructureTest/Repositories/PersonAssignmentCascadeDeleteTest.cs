@@ -54,9 +54,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			Session.Delete(target);
 			Session.Flush();
 			Session.SessionFactory.Statistics.PrepareStatementCount
-				.Should().Be.EqualTo(4); //delete pers assignment, ot, ms, ps (no layers)
+				.Should().Be.EqualTo(3); //delete pers assignment, ot, ps (no layers)
 			Session.SessionFactory.Statistics.EntityDeleteCount
-				.Should().Be.EqualTo(7); //delete pers assignment, ot, ms, ps, otlayer, mslayer, pslayer
+				.Should().Be.EqualTo(6); //delete pers assignment, ot, ps, otlayer, mslayer, pslayer
 		}
 
 
