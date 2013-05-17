@@ -1769,7 +1769,7 @@
       </Query>
       <Fields>
         <Field Name="PersonName">
-          <DataField>person_name</DataField>
+          <DataField>PersonName</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="AvailableDays">
