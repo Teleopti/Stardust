@@ -26,18 +26,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			 return (Id.Value == other.Id.Value);
 		 }
 
-		 public virtual bool Equals(PersistedActivityLayer other)
-		 {
-			 if (other == null)
-				 return false;
-			 if (this == other)
-				 return true;
-			 if (!other.Id.HasValue || !Id.HasValue)
-				 return false;
-
-			 return (Id.Value == other.Id.Value);
-		 }
-
 		 public virtual Guid? Id
 		 {
 			 get { return _id; }
