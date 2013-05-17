@@ -126,9 +126,9 @@
     <Compile Include="Core\BrowserInteractions\WatiNIE\Retrying.cs" />
     <Compile Include="Data\HardCodedResolver.cs" />
     <Compile Include="Pages\Common\Select2Box.cs" />
-    <Compile Include="TeamScheduleForGroups.feature.cs" />
     <Compile Include="Bindings\Generic\BudgetStepDefinitions.cs" />
-    <Compile Include="Data\Setups\Generic\AbsenceTimeConfigurable.cs">
+    <Compile Include="Data\Setups\Generic\AbsenceTimeConfigurable.cs" />
+	<Compile Include="TeamScheduleForGroups.feature.cs">
       <DependentUpon>TeamScheduleForGroups.feature</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
