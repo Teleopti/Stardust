@@ -1,12 +1,9 @@
-using System;
 using System.Drawing;
 using NUnit.Framework;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
-using Teleopti.Ccc.Domain.Time;
-using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Interfaces.Domain;
@@ -35,9 +32,9 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 			target.ClearMainShiftLayers();
 			PersistAndRemoveFromUnitOfWork(target);
 			Session.SessionFactory.Statistics.PrepareStatementCount
-				.Should().Be.EqualTo(1); //delete mainshift (no layer)
+				.Should().Be.EqualTo(2); //delete layer + update personassignment
 			Session.SessionFactory.Statistics.EntityDeleteCount
-				.Should().Be.EqualTo(2); //delete mainshift + mainshiftlayer
+				.Should().Be.EqualTo(1); //delete mainshiftlayer
 		}
 
 		[Test]
