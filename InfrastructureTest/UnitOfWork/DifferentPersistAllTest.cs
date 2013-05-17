@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
-using Rhino.Mocks;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.InfrastructureTest.Helper;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -21,6 +20,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
                                                                                           LoggedOnPerson,
                                                                                           new DateTimePeriod(2000, 1, 1, 2000, 1, 2));
             IGroupingActivity groupingActivity = GroupingActivityFactory.CreateSimpleGroupingActivity();
+	        var sc = ass.ShiftCategory;
             IPayload pLoad = ass.MainShift.LayerCollection[0].Payload;
             try
             {
@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
                 {
                     IRepository rep = new Repository(uowTemp);
                     rep.Remove(ass);
-                    rep.Remove(ass.ShiftCategory);
+                    rep.Remove(sc);
                     rep.Remove(groupingActivity);
                     rep.Remove(pLoad);
                     rep.Remove(ass.Scenario);
