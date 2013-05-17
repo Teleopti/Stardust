@@ -404,7 +404,6 @@
     </Compile>
     <Compile Include="MobileReportsStepDefinitions.cs" />
     <Compile Include="Pages\Common\IEditRequestPage.cs" />
-    <Compile Include="Pages\MobileReportsPage.cs" />
     <Compile Include="PreferencesPeriodFeedback.feature.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

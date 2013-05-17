@@ -88,13 +88,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 		public static void GotoMobileReportsPage()
 		{
 			GoToWaitForCompleted("MobileReports#", new ApplicationStartupTimeout());
-			Pages.Pages.NavigatingTo(Browser.Current.Page<MobileReportsPage>());
 		}
 
 		public static void GotoMobileReportsSettings()
 		{
 			GoToWaitForCompleted("MobileReports#report-settings-view");
-			Pages.Pages.NavigatingTo(Browser.Current.Page<MobileReportsPage>());
 		}
 
 		public static void GotoAnApplicationPageOutsidePortal()
