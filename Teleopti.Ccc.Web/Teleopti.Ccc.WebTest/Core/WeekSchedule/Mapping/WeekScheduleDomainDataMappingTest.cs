@@ -181,7 +181,7 @@ namespace Teleopti.Ccc.WebTest.Core.WeekSchedule.Mapping
 		[Test]
 		public void ShouldMapPersonRequests()
 		{
-			var date = DateOnly.Today;
+			var date = new DateOnly(DateTime.UtcNow.Date);
 			var firstDayOfWeek = new DateOnly(DateHelper.GetFirstDateInWeek(date, CultureInfo.CurrentCulture));
 			var lastDayOfWeek = new DateOnly(DateHelper.GetLastDateInWeek(date, CultureInfo.CurrentCulture));
 			var week = new DateOnlyPeriod(firstDayOfWeek, lastDayOfWeek);

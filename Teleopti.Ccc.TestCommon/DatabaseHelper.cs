@@ -156,11 +156,11 @@ namespace Teleopti.Ccc.TestCommon
 			return versionInfo.GetSchemaVersion(DatabaseType);
 		}
 
-		public int SchemaTrunkHash()
+		public int OtherScriptFilesHash()
 		{
 			var databaseFolder = new DatabaseFolder(new DbManagerFolder());
 			var versionInfo = new SchemaVersionInformation(databaseFolder);
-			return versionInfo.TrunkVersion(DatabaseType);
+			return versionInfo.GetOtherScriptFilesHash(DatabaseType);
 		}
 
 

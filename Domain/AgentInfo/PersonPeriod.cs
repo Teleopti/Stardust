@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 		private ITeam _team;
 		private Iesi.Collections.Generic.ISet<IPersonSkill> _personSkillCollection;
 		private readonly IList<IPersonSkill> _personMaxSeatSkillCollection  = new List<IPersonSkill>();
-		private IList<IExternalLogOn> _externalLogOnCollection;
+		private Iesi.Collections.Generic.ISet<IExternalLogOn> _externalLogOnCollection;
 		private DateOnly _startDate;
 		private IRuleSetBag _ruleSetBag;
 		private string _note;
@@ -36,7 +36,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			_team = team;
 			_personSkillCollection = new HashedSet<IPersonSkill>();
 			_personMaxSeatSkillCollection = new List<IPersonSkill>();
-			_externalLogOnCollection = new List<IExternalLogOn>();
+			_externalLogOnCollection = new HashedSet<IExternalLogOn>();
 			_startDate = startDate;
 		}
 
@@ -106,7 +106,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 
 		public virtual ReadOnlyCollection<IExternalLogOn> ExternalLogOnCollection
 		{
-			get { return new ReadOnlyCollection<IExternalLogOn>(_externalLogOnCollection); }
+			get { return new ReadOnlyCollection<IExternalLogOn>(_externalLogOnCollection.ToList()); }
 		}
 
 		public virtual IBudgetGroup BudgetGroup
@@ -143,9 +143,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 		public virtual void AddExternalLogOn(IExternalLogOn externalLogOn)
 		{
 			InParameter.NotNull("logOn", externalLogOn);
-
-			if (!_externalLogOnCollection.Contains(externalLogOn))
-				_externalLogOnCollection.Add(externalLogOn);
+			_externalLogOnCollection.Add(externalLogOn);
 		}
 
 		public virtual void RemoveExternalLogOn(IExternalLogOn externalLogOn)
@@ -212,7 +210,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 			var retobj = (PersonPeriod)MemberwiseClone();
 			retobj.SetId(null);
 			retobj._personSkillCollection = new HashedSet<IPersonSkill>();
-			retobj._externalLogOnCollection = new List<IExternalLogOn>(_externalLogOnCollection);
+			retobj._externalLogOnCollection = new HashedSet<IExternalLogOn>(_externalLogOnCollection);
 
 			foreach (IPersonSkill personSkill in _personSkillCollection)
 			{
@@ -230,7 +228,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo
 		{
 			var retobj = (PersonPeriod)MemberwiseClone();
 			retobj._personSkillCollection = new HashedSet<IPersonSkill>();
-			retobj._externalLogOnCollection = new List<IExternalLogOn>(_externalLogOnCollection);
+			retobj._externalLogOnCollection = new HashedSet<IExternalLogOn>(_externalLogOnCollection);
 
 			foreach (IPersonSkill personSkill in _personSkillCollection)
 			{
