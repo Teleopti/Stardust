@@ -15,7 +15,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 		void AssertUrlContains(string url);
 		void AssertUrlNotContains(string urlContains, string urlNotContains);
 		void AssertJavascriptResultContains(string javascript, string text);
-		void AssertInputValue(string selector, string value);
 		void DumpInfo(Action<string> writer);
 	}
 
@@ -31,6 +30,11 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 			interactions.AssertExists(string.Format(selector, args));
 		}
 
+		public static void AssertInputValueUsingJQuery(this IBrowserInteractions interactions, string selector, string value)
+		{
+			interactions.AssertJavascriptResultContains("$('" + selector + "').val();", value);
+		}
+
 		public static void SelectOptionByTextUsingJQuery(this IBrowserInteractions interactions, string selectSelector, string text)
 		{
 			selectSelector = selectSelector + ":enabled";
@@ -40,5 +44,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 			interactions.Javascript("$(\"{0}\").val($(\"{1}\").val());", selectSelector, optionSelector);
 			interactions.Javascript("$(\"{0}\").change();", selectSelector);
 		}
+
 	}
 }

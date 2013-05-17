@@ -2,19 +2,20 @@
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.TestCommon.TestData.Analytics;
 using Teleopti.Ccc.UserTexts;
+using Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
+using NUnit.Framework;
+using TechTalk.SpecFlow;
+using Teleopti.Ccc.WebBehaviorTest.Core;
+using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
+using Teleopti.Ccc.WebBehaviorTest.Data;
+using Teleopti.Ccc.WebBehaviorTest.Pages;
+using Teleopti.Interfaces.Domain;
+using WatiN.Core;
+using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 
 namespace Teleopti.Ccc.WebBehaviorTest
 {
-	using NUnit.Framework;
-	using TechTalk.SpecFlow;
-	using Teleopti.Ccc.WebBehaviorTest.Core;
-	using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
-	using Teleopti.Ccc.WebBehaviorTest.Data;
-	using Teleopti.Ccc.WebBehaviorTest.Pages;
-	using Teleopti.Interfaces.Domain;
-	using WatiN.Core;
-	using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 
 	[Binding]
 	public class MobileReportsStepDefinitions
@@ -55,41 +56,41 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I click the signout button")]
 		public void GivenIClickSignoutButton()
 		{
-			_page.SignoutButton.EventualClick();
+			Browser.Interactions.Click("#signout-button");
 		}
 
 		[Then(@"I should see a report")]
 		public void ThenIShouldSeAReport()
 		{
-			EventualAssert.That(() => _page.ReportsViewPageContainer.DisplayVisible(), Is.True);
+			Browser.Interactions.AssertExists("#report-view.ui-page-active");
+			Browser.Interactions.AssertNotExists("#report-view.ui-page-active", ".ui-mobile-viewport-transitioning");
 		}
 
 		[Then(@"I should see a graph")]
 		public void ThenIShouldSeeAGraph()
 		{
-			EventualAssert.That(() => _page.ReportGraphContainer.DisplayVisible(), Is.True);
-			EventualAssert.That(() => _page.ReportGraph.DisplayVisible(), Is.True);
+			Browser.Interactions.AssertExists("#report-view.ui-page-active #report-graph-holder");
+			Browser.Interactions.AssertExists("#report-view.ui-page-active #report-graph-canvas");
 		}
 
 		[Then(@"I should see a report for next date")]
 		public void ThenIShouldSeeAReportForNextDate()
 		{
-			var expexted = DateOnly.Today.AddDays(1).ToShortDateString(UserFactory.User().Culture);
-			EventualAssert.That(() => _page.ReportViewNavDate.Text, Is.EqualTo(expexted));
+			var expected = DateOnly.Today.AddDays(1).ToShortDateString(UserFactory.User().Culture);
+			Browser.Interactions.AssertContains("#report-view-date-nav-current", expected);
 		}
 
 		[Then(@"I should see a report for previous date")]
 		public void ThenIShouldSeeAReportForPreviousDate()
 		{
-			var expexted = DateOnly.Today.AddDays(-1).ToShortDateString(UserFactory.User().Culture);
-			EventualAssert.That(() => _page.ReportViewNavDate.Text, Is.EqualTo(expexted));
+			var expected = DateOnly.Today.AddDays(-1).ToShortDateString(UserFactory.User().Culture);
+			Browser.Interactions.AssertContains("#report-view-date-nav-current", expected);
 		}
 
 		[Then(@"I should see a table")]
 		public void ThenIShouldSeeATable()
 		{
-			var table = _page.ReportTableContainer.Table(Find.First());
-			EventualAssert.That(() => table.TableCells.Count, Is.GreaterThan(0));
+			Browser.Interactions.AssertExists("#report-table-holder tr");
 		}
 
 		[Then(@"I should see friendly error message")]
@@ -101,18 +102,18 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see ReportSettings")]
 		public void ThenIShouldSeeReportSettings()
 		{
-			EventualAssert.That(() => _page.ReportsSettingsViewPageContainer.Exists, Is.True);
-			EventualAssert.That(() => _page.ReportsSettingsViewPageContainer.DisplayVisible(), Is.True);
+			Browser.Interactions.AssertExists("#report-settings-view.ui-page-active");
+			Browser.Interactions.AssertNotExists("#report-settings-view.ui-page-active", ".ui-mobile-viewport-transitioning");
 		}
 
 		[Then(@"I should see ReportSettings with default value")]
 		public void ThenIShouldSeeReportSettingsWithDefaultValue()
 		{
-			EventualAssert.That(() => _page.ReportSelectionDateValue, Is.EqualTo(DateOnly.Today.AddDays(-1).ToShortDateString(UserFactory.User().Culture)));
-			EventualAssert.That(() => _page.ReportSkillSelectionList.Text, Is.StringContaining(Resources.All));
-			EventualAssert.That(() => _page.ReportTypeGraphInput.Checked, Is.True);
-			EventualAssert.That(() => _page.ReportTypeTableInput.Checked, Is.False);
-			EventualAssert.That(() => _page.ReportIntervalWeekInput.Checked, Is.False);
+			Browser.Interactions.AssertInputValueUsingJQuery("#sel-date", DateOnly.Today.AddDays(-1).ToShortDateString(UserFactory.User().Culture));
+			Browser.Interactions.AssertContains("#sel-skill-menu", Resources.All);
+			Browser.Interactions.AssertExists("#report-settings-type-graph:checked");
+			Browser.Interactions.AssertExists("#report-settings-type-table:not(:checked)");
+			Browser.Interactions.AssertExists("#report-settings-interval-week:not(:checked)");
 		}
 
 

@@ -79,8 +79,8 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.Anywhere
 		{
 			var fullDayAbsenceFormInfo = table.CreateInstance<FullDayAbsenceFormInfo>();
 
-			Browser.Interactions.AssertInputValue(".full-day-absence-form .start-date", fullDayAbsenceFormInfo.StartDate.ToShortDateString(UserFactory.User().Culture));
-			Browser.Interactions.AssertInputValue(".full-day-absence-form .end-date", fullDayAbsenceFormInfo.StartDate.ToShortDateString(UserFactory.User().Culture));
+			Browser.Interactions.AssertInputValueUsingJQuery(".full-day-absence-form .start-date", fullDayAbsenceFormInfo.StartDate.ToShortDateString(UserFactory.User().Culture));
+			Browser.Interactions.AssertInputValueUsingJQuery(".full-day-absence-form .end-date", fullDayAbsenceFormInfo.StartDate.ToShortDateString(UserFactory.User().Culture));
 		}
 
 		[Then(@"I should see the add full day absence form")]
