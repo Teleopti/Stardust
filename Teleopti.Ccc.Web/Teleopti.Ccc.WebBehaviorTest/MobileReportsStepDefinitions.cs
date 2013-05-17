@@ -21,7 +21,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 	[Binding]
 	public class MobileReportsStepDefinitions
 	{
-		private MobileReportsPage _page;
 		private DateTime _clickedDateInDatePicker;
 
 		[Given(@"I have skill analytics data")]
@@ -149,7 +148,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			TestControllerMethods.Logon();
 			Navigation.GotoMobileReportsSettings();
-			_page = Browser.Current.Page<MobileReportsPage>();
 
 			ThenIShouldSeeReportSettings();
 			WhenISelectDateToday();
@@ -168,7 +166,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			TestControllerMethods.Logon();
 			Navigation.GotoMobileReportsSettings();
-			_page = Browser.Current.Page<MobileReportsPage>();
 
 			ThenIShouldSeeReportSettings();
 			WhenISelectDateToday();
@@ -181,17 +178,13 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I check type Graph")]
 		public void WhenICheckTypeGraph()
 		{
-			if (!_page.ReportTypeGraphInput.Checked)
-				_page.ReportTypeGraphInput.EventualClick();
-			EventualAssert.That(() => _page.ReportTypeGraphInput.Checked, Is.True);
+			Browser.Interactions.Javascript("$('#report-settings-type-graph').prop('checked', true).checkboxradio('refresh');");
 		}
 
 		[When(@"I check type Table")]
 		public void WhenICheckTypeTable()
 		{
-			if (!_page.ReportTypeTableInput.Checked)
-				_page.ReportTypeTableInput.EventualClick();
-			EventualAssert.That(() => _page.ReportTypeTableInput.Checked, Is.True);
+			Browser.Interactions.Javascript("$('#report-settings-type-table').prop('checked', true).checkboxradio('refresh');");
 		}
 
 		[When(@"I click next date")]
@@ -239,7 +232,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			TestControllerMethods.Logon();
 			Navigation.GotoMobileReportsPage();
-			_page = Browser.Current.Page<MobileReportsPage>();
 		}
 
 		[When(@"I open the date-picker")]
@@ -302,7 +294,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			TestControllerMethods.Logon();
 			Navigation.GotoMobileReportsSettings();
-			_page = Browser.Current.Page<MobileReportsPage>();
 		}
 
 		[Then(@"I should see sunday as the first day of week in tabledata")]
