@@ -10,6 +10,7 @@ using Teleopti.Ccc.WebBehaviorTest.Core;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Pages;
+using Teleopti.Ccc.WebBehaviorTest.Pages.jQuery;
 using Teleopti.Interfaces.Domain;
 using WatiN.Core;
 using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
@@ -152,9 +153,14 @@ namespace Teleopti.Ccc.WebBehaviorTest
 
 			ThenIShouldSeeReportSettings();
 			WhenISelectDateToday();
-			Browser.Interactions.Click("#sel-report-GetAnsweredAndAbandoned + label");
+			SelectGetAnsweredAndAbondonedReport();
 			WhenICheckTypeTable();
 			WhenIClickViewReportButton();
+		}
+
+		private static void SelectGetAnsweredAndAbondonedReport()
+		{
+			Browser.Interactions.Click("#sel-report-GetAnsweredAndAbandoned + label");
 		}
 
 		[When(@"I view a report with week data")]
@@ -166,7 +172,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 
 			ThenIShouldSeeReportSettings();
 			WhenISelectDateToday();
-			Browser.Interactions.Click("#sel-report-GetAnsweredAndAbandoned + label");
+			SelectGetAnsweredAndAbondonedReport();
 			Browser.Interactions.Click("#report-settings-interval-week");
 			WhenICheckTypeTable();
 			WhenIClickViewReportButton();
@@ -192,9 +198,9 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void WhenIClickNextDate()
 		{
 			// before click next date, make sure current is today
-			var expexted = DateOnly.Today.ToShortDateString(UserFactory.User().Culture);
-			EventualAssert.That(() => _page.ReportViewNavDate.Text, Is.EqualTo(expexted));
-			_page.ReportViewNextDateNavigation.EventualClick();
+			var expected = DateOnly.Today.ToShortDateString(UserFactory.User().Culture);
+			Browser.Interactions.AssertContains("#report-view-date-nav-current", expected);
+			Browser.Interactions.Click("#report-view-date-nav-next");
 		}
 
 		[When(@"I click on any date")]
@@ -210,24 +216,21 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void WhenIClickPreviousDate()
 		{
 			// before click previous date, make sure current is today
-			var expexted = DateOnly.Today.ToShortDateString(UserFactory.User().Culture);
-			EventualAssert.That(() => _page.ReportViewNavDate.Text, Is.EqualTo(expexted));
-			_page.ReportViewPrevDateNavigation.EventualClick();
+			var expected = DateOnly.Today.ToShortDateString(UserFactory.User().Culture);
+			Browser.Interactions.AssertContains("#report-view-date-nav-current", expected);
+			Browser.Interactions.Click("#report-view-date-nav-prev");
 		}
 
 		[When(@"I click View Report Button")]
 		public void WhenIClickViewReportButton()
 		{
-			_page.ReportViewShowButton.EventualClick();
-			EventualAssert.That(() => _page.ReportsViewPageContainer.DisplayVisible(), Is.True);
-			EventualAssert.That(() => _page.ReportsViewPageContainer.JQueryVisible(), Is.True);
-			EventualAssert.That(() => _page.ReportsViewPageContainer.ClassName, Is.StringContaining("ui-page-active"));
+			Browser.Interactions.Click("#report-view-show-button");
 		}
 
 		[When(@"I close the skill-picker")]
 		public void WhenICloseTheSkillPicker()
 		{
-			_page.ReportSkillSelectionCloseButton.EventualClick();
+			Browser.Interactions.Click(".ui-popup-container a");
 		}
 
 		[Given(@"I view MobileReports")]
@@ -242,29 +245,38 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I open the date-picker")]
 		public void WhenIOpenTheDatePicker()
 		{
-			_page.ReportSelectionDateOpener.EventualClick();
-			EventualAssert.That(() => _page.ReportSelectionDatePickerContainer.DisplayVisible(), Is.True);
+			Browser.Interactions.Click("#sel-date + a");
+			Browser.Interactions.AssertExists(".ui-datebox-container");
+			Browser.Interactions.AssertNotExists(".ui-datebox-container", "ui-datebox-screen ui-datebox-hidden");
 		}
 
 		[When(@"I open the skill-picker")]
 		public void WhenIOpenTheSkillPicker()
 		{
-			_page.ReportSkillSelectionOpener.EventualClick();
+			Browser.Interactions.Click("#sel-skill-button");
 		}
 
 		[When(@"I select a report")]
 		public void WhenISelectAReport()
 		{
-			_page.ReportGetAnsweredAndAbandoned.EventualClick();
-			Assert.That(() => _page.ReportGetAnsweredAndAbandonedInput.Checked, Is.True);
+			SelectGetAnsweredAndAbondonedReport();
 		}
 
 		[When(@"I select date today")]
 		public void WhenISelectDateToday()
 		{
-			var date = DateOnly.Today.Date.ToShortDateString(UserFactory.User().Culture);
-			_page.SetReportSettingsDate(DateOnly.Today, UserFactory.User().Culture);
-			EventualAssert.That(() => _page.ReportSelectionDateValue, Is.EqualTo(date));
+			var date = DateOnly.Today;
+			var dateString = date.ToShortDateString(UserFactory.User().Culture);
+			// this cant be correct. trigger an avent named datebox?!
+			new JQueryExpression()
+				.SelectById("sel-date")
+				.Trigger("datebox",
+						 string.Format(
+							"{{'method':'set', 'value': '{0}', 'date': new Date({1}, {2} , {3})}}",
+							dateString, date.Year, date.Month - 1, date.Day))
+				.Eval();
+
+			Browser.Interactions.AssertInputValueUsingJQuery("#sel-date", dateString);
 		}
 
 		[When(@"I select a skill")]
