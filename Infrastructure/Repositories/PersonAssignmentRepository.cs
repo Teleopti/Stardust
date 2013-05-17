@@ -50,7 +50,6 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
             InParameter.NotNull("persons", persons);
             var retList = new List<IPersonAssignment>();
-            //var multi = Session.CreateMultiCriteria();
 
             foreach (var personList in persons.Batch(400))
             {
@@ -80,10 +79,8 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 
         private IEnumerable<ICriteria> personAssignmentCriteriaLoader(DateTimePeriod period, IScenario scenario)
         {
-            var assWithMain = Session.CreateCriteria(typeof(PersonAssignment), "ass")
-                        .SetFetchMode("MainShift", FetchMode.Join)
-                        .SetFetchMode("MainShift.LayerCollection", FetchMode.Join);
-
+	        var assWithMain = Session.CreateCriteria(typeof (PersonAssignment), "ass")
+	                                 .SetFetchMode("MainShiftActivityLayers", FetchMode.Join);
 
             var assWithPers = Session.CreateCriteria(typeof(PersonAssignment), "ass")
                     .SetFetchMode("PersonalShiftCollection", FetchMode.Join);
