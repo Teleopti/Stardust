@@ -54,6 +54,10 @@ namespace Teleopti.Ccc.Win.Scheduling
 			_backgroundWorker = backgroundWorker;
 
 			IDictionary<IPerson, IScheduleRange> allSelectedScheduleRangeClones = new Dictionary<IPerson, IScheduleRange>();
+			foreach (var selectedPerson in selectedPersons)
+			{
+				allSelectedScheduleRangeClones.Add(selectedPerson, _schedulerState.Schedules[selectedPerson]);
+			}
 			IMaxMovedDaysOverLimitValidator maxMovedDaysOverLimitValidator =
 				new MaxMovedDaysOverLimitValidator(allSelectedScheduleRangeClones, _container.Resolve<IScheduleDayEquator>());
 			ITeamBlockRestrictionOverLimitValidator teamBlockRestrictionOverLimitValidator = new TeamBlockRestrictionOverLimitValidator(
