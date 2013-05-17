@@ -21,6 +21,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 	public class MobileReportsStepDefinitions
 	{
 		private MobileReportsPage _page;
+		private DateTime _clickedDateInDatePicker;
 
 		[Given(@"I have skill analytics data")]
 		public void GivenIHaveSkillAnalyticsData()
@@ -120,26 +121,26 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see the selected date")]
 		public void ThenIShouldSeeTheSelectedDate()
 		{
-			EventualAssert.That(() => _page.ReportSelectionDateValue, Is.Not.Empty);
+			Browser.Interactions.AssertInputValueUsingJQuery("#sel-date", _clickedDateInDatePicker.ToShortDateString(UserFactory.User().Culture));
 		}
 
 		[Then(@"I should see the selected skill")]
 		public void ThenIShouldSeeTheSelectedSkill()
 		{
 			var skillName = UserFactory.User().UserData<ThreeSkills>().Skill2Name;
-			EventualAssert.That(() => _page.ReportSkillSelectionOpener.Text, Is.StringContaining(skillName));
+			Browser.Interactions.AssertContains("#sel-skill-button", skillName);
 		}
 
 		[Then(@"I should only see reports i have access to")]
 		public void ThenIShouldonlySeeReportsIHaveAccessTo()
 		{
-			EventualAssert.That(() => _page.Reports.Count, Is.EqualTo(2));
+			Browser.Interactions.AssertNotExists(".ui-radio:nth-child(2) input[name='sel-report']", ".ui-radio:nth-child(3) input[name='sel-report']");
 		}
 
 		[Then(@"the date-picker should close")]
 		public void ThenTheDatePickerShouldClose()
 		{
-			EventualAssert.That(() => Browser.Current.Element(QuicklyFind.ByClass("ui-datebox-container")).Exists, Is.False);
+			Browser.Interactions.AssertNotExists("#report-settings-view", ".ui-datebox-container");
 		}
 
 		[Given(@"I am viewing a report")]
@@ -148,10 +149,10 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			TestControllerMethods.Logon();
 			Navigation.GotoMobileReportsSettings();
 			_page = Browser.Current.Page<MobileReportsPage>();
-			EventualAssert.That(() => _page.ReportsSettingsViewPageContainer.DisplayVisible(), Is.True);
 
+			ThenIShouldSeeReportSettings();
 			WhenISelectDateToday();
-			_page.ReportGetAnsweredAndAbandoned.EventualClick();
+			Browser.Interactions.Click("#sel-report-GetAnsweredAndAbandoned + label");
 			WhenICheckTypeTable();
 			WhenIClickViewReportButton();
 		}
@@ -162,11 +163,11 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			TestControllerMethods.Logon();
 			Navigation.GotoMobileReportsSettings();
 			_page = Browser.Current.Page<MobileReportsPage>();
-			EventualAssert.That(() => _page.ReportsSettingsViewPageContainer.DisplayVisible(), Is.True);
 
+			ThenIShouldSeeReportSettings();
 			WhenISelectDateToday();
-			_page.ReportGetAnsweredAndAbandoned.EventualClick();
-			_page.ReportIntervalWeekInput.EventualClick();
+			Browser.Interactions.Click("#sel-report-GetAnsweredAndAbandoned + label");
+			Browser.Interactions.Click("#report-settings-interval-week");
 			WhenICheckTypeTable();
 			WhenIClickViewReportButton();
 		}
@@ -199,8 +200,10 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I click on any date")]
 		public void WhenIClickOnAnyDate()
 		{
-			var pickerDayDiv = _page.AnyDatePickerDay;
-			pickerDayDiv.EventualClick();
+			_clickedDateInDatePicker = DateOnly.Today.AddDays(2);
+			if (_clickedDateInDatePicker.Month != DateOnly.Today.Month)
+				_clickedDateInDatePicker = DateOnly.Today.AddDays(-2);
+			Browser.Interactions.Click(".ui-datebox-griddate.ui-btn-up-d:contains('" + _clickedDateInDatePicker.Day + "')");
 		}
 
 		[When(@"I click previous date")]
