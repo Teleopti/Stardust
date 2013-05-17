@@ -6,7 +6,6 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Common;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.Domain.Scheduling.TimeLayer;
 using Teleopti.Ccc.Infrastructure.Foundation;
@@ -34,7 +33,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
         private IShiftCategory _dummyCategory;
         private IGroupingActivity _groupAct;
         private IMultiplicatorDefinitionSet _definitionSet;
-        private MockRepository _mocker;
 
 
         private void cleanUp(IAggregateRoot loaded)
@@ -64,7 +62,6 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 
         protected override void ConcreteSetup()
         {
-            _mocker = new MockRepository();
             _dummyCat = ShiftCategoryFactory.CreateShiftCategory("dummyCat");
             _rep = RepositoryFactory.CreatePersonAssignmentRepository(UnitOfWork);
             _groupAct = new GroupingActivity("f");
@@ -371,11 +368,11 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
                 Assert.AreEqual(1, (org).Version);
 
                 //Do change
-                loaded = _rep.Load(org.Id.Value);
+                loaded = _rep.LoadAggregate(org.Id.Value);
                 loaded.AddPersonalShift(new PersonalShift());
                 UnitOfWork.PersistAll();
                 UnitOfWork.Remove(loaded);
-                loaded = _rep.Load(org.Id.Value);
+                loaded = _rep.LoadAggregate(org.Id.Value);
                 Assert.AreEqual(2, (loaded).Version);
 
                 Assert.IsNotNull(loaded.UpdatedOn);
