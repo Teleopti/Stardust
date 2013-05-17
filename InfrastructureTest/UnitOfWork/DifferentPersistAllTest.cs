@@ -29,12 +29,12 @@ namespace Teleopti.Ccc.InfrastructureTest.UnitOfWork
                 PersistAndRemoveFromUnitOfWork(groupingActivity);
                 PersistAndRemoveFromUnitOfWork(ass.Scenario);
                 PersistAndRemoveFromUnitOfWork(ass.ShiftCategory);
-                ass.MainShift.LayerCollection[0].Payload.GroupingActivity = groupingActivity;
-                PersistAndRemoveFromUnitOfWork(ass.MainShift.LayerCollection[0].Payload);
+                ass.MainShiftActivityLayers.First().Payload.GroupingActivity = groupingActivity;
+                PersistAndRemoveFromUnitOfWork(ass.MainShiftActivityLayers.First().Payload);
                 PersistAndRemoveFromUnitOfWork(groupingActivity);
                 new PersonAssignmentRepository(UnitOfWork).Add(ass);
                 UnitOfWork.PersistAll();
-                ass.MainShift.LayerCollection.Remove(ass.MainShift.LayerCollection[0]);
+                ass.ClearMainShiftLayers();
                 IEnumerable<IRootChangeInfo> changes = UnitOfWork.PersistAll();
 
                 UnitOfWork.Dispose();
