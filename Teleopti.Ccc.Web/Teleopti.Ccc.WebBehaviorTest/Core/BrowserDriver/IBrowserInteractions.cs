@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 {
@@ -23,6 +24,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserDriver
 		public static void Javascript(this IBrowserInteractions interactions, string javascript, params object[] args)
 		{
 			interactions.Javascript(string.Format(javascript, args));
+		}
+
+		public static void Javascript(this IBrowserInteractions interactions, Action<Action<string>> javascript, params object[] args)
+		{
+			var builder = new StringBuilder();
+			javascript.Invoke(s => builder.Append(s));
+			interactions.Javascript(string.Format(builder.ToString(), args));
 		}
 
 		public static void AssertExists(this IBrowserInteractions interactions, string selector, params object[] args)

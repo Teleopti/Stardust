@@ -282,15 +282,13 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I select a skill")]
 		public void WhenISelectASkill()
 		{
-			foreach (var skillListItem in _page.ReportSkillSelectionList.ListItems)
-			{
-				if (skillListItem.GetAttributeValue("aria-selected").Equals("true"))
+			var skillId = UserFactory.User().UserData<ThreeSkills>().Skill2Id;
+			Browser.Interactions.Javascript(line =>
 				{
-					skillListItem.EventualClick();
-				}
-			}
-
-			_page.SelectSkillByName(UserFactory.User().UserData<ThreeSkills>().Skill2Name);
+					line("var el = $('#sel-skill');");
+					line("el.val('{0}').attr('selected', true).siblings('option').removeAttr('selected');");
+					line("el.selectmenu('refresh', true);");
+				}, skillId);
 		}
 
 		[When(@"I select the all skills item")]
@@ -298,7 +296,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		{
 			// Default operation is select all.
 		}
-
 
 		[When(@"I view ReportSettings")]
 		public void WhenIViewReportSettings()
@@ -311,13 +308,13 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see sunday as the first day of week in tabledata")]
 		public void ThenIShouldSeeSundayAsTheFirstDayOfWeekInTabledata()
 		{
-			EventualAssert.That(() => _page.ReportTableFirstDataCell.Text.Trim(), Is.EqualTo(Resources.DayOfWeekSunday));
+			Browser.Interactions.AssertContains(".report-table>tbody>tr>td", Resources.DayOfWeekSunday);
 		}
 
 		[Then(@"I should see the all skill item selected")]
 		public void ThenIShouldSeeTheAllSkillItemSelected()
 		{
-			EventualAssert.That(() => _page.ReportSkillSelectionOpener.Text.Trim(), Is.StringContaining(Resources.All));
+			Browser.Interactions.AssertExists("#sel-skill-menu li[aria-selected='true']:contains('{0}')", Resources.All);
 		}
 	}
 }
