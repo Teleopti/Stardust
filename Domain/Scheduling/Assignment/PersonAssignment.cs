@@ -321,7 +321,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			retobj._mainShiftActivityLayers = new List<IMainShiftActivityLayer>();
 			foreach (var newLayer in _mainShiftActivityLayers.Select(layer => layer.NoneEntityClone()))
 			{
-				newLayer.SetParent(this);
+				newLayer.SetParent(retobj);
 				retobj._mainShiftActivityLayers.Add((IMainShiftActivityLayer)newLayer);
 			}
 			//
@@ -346,7 +346,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			retobj._mainShiftActivityLayers = new List<IMainShiftActivityLayer>();
 			foreach (var newLayer in _mainShiftActivityLayers.Select(layer => layer.EntityClone()))
 			{
-				newLayer.SetParent(this);
+				newLayer.SetParent(retobj);
 				retobj._mainShiftActivityLayers.Add((IMainShiftActivityLayer)newLayer);
 			}
 			//
