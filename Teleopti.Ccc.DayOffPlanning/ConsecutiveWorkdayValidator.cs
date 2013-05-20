@@ -32,7 +32,7 @@ namespace Teleopti.Ccc.DayOffPlanning
         public bool IsValid(BitArray periodDays, int dayOffIndex)
         {
 
-            MinMax<int> workingRange = DefineWorkingRange(periodDays);
+            MinMax<int> workingRange = defineWorkingRange(periodDays);
             int minimumIndex = workingRange.Minimum;
             int maximumIndex = workingRange.Maximum;
 
@@ -42,42 +42,73 @@ namespace Teleopti.Ccc.DayOffPlanning
             if (!periodDays[dayOffIndex])
                 throw new ArgumentException("Invalid index. The pointed day is not a day-off", "dayOffIndex");
 
-            if (!CheckWorkdaysBefore(periodDays, dayOffIndex, minimumIndex, maximumIndex)) 
+            if (!checkWorkdaysBefore(periodDays, dayOffIndex, minimumIndex, maximumIndex)) 
                 return false;
 
-            return CheckWorkdaysAfter(periodDays, dayOffIndex, maximumIndex);
+            return checkWorkdaysAfter(periodDays, dayOffIndex, maximumIndex);
         }
 
         #endregion
 
         #region Local
 
-        private MinMax<int> DefineWorkingRange(BitArray array)
+        private MinMax<int> defineWorkingRange(BitArray array)
         {
-            if (_considerWeekBefore && _considerWeekAfter)
+	        bool considerWeekBefore = localConsiderWeekBefore(array, _considerWeekBefore);
+	        bool considerWeekAfter = localConsiderWeekAfter(array, _considerWeekAfter);
+
+            if (considerWeekBefore && considerWeekAfter)
             {
                 return new MinMax<int>(0, array.Count - 1);  //scheduleMatrix.OuterWeeksPeriodDays;
             }
-            if (_considerWeekBefore)
+            if (considerWeekBefore)
             {
                 return new MinMax<int>(0, array.Count - 8); // scheduleMatrix.WeekBeforeOuterPeriodDays;
             }
-            if (_considerWeekAfter)
+            if (considerWeekAfter)
             {
                 return new MinMax<int>(7, array.Count - 1); //scheduleMatrix.WeekAfterOuterPeriodDays;
             }
             return new MinMax<int>(7, array.Count - 8); //scheduleMatrix.FullWeeksPeriodDays;
         }
 
-        private bool CheckWorkdaysBefore(BitArray periodDays, int dayOffIndex, int minimumIndex, int maximumIndex)
+		private static bool localConsiderWeekBefore(BitArray array, bool considerWeekBefore)
+		{
+			if (!considerWeekBefore)
+				return false;
+
+			for (int i = 0; i < 7; i++)
+			{
+				if (array[i])
+					return true;
+			}
+
+			return false;
+		}
+
+		private static bool localConsiderWeekAfter(BitArray array, bool considerWeekAfter)
+		{
+			if (!considerWeekAfter)
+				return false;
+
+			for (int i = array.Length - 1; i > array.Length - 8; i--)
+			{
+				if (array[i])
+					return true;
+			}
+
+			return false;
+		}
+
+        private bool checkWorkdaysBefore(BitArray periodDays, int dayOffIndex, int minimumIndex, int maximumIndex)
         {
             int dayIndexBefore = dayOffIndex - 1;
             if (dayIndexBefore < minimumIndex)
                 return true;
             if (periodDays[dayIndexBefore])
                 return true;
-            int firstWorkdayIndex = FindFirstWorkdayIndexInBlock(periodDays, dayIndexBefore, minimumIndex);
-            int workdaysInBlock = CountWorkdaysInBlock(periodDays, firstWorkdayIndex, maximumIndex);
+            int firstWorkdayIndex = findFirstWorkdayIndexInBlock(periodDays, dayIndexBefore, minimumIndex);
+            int workdaysInBlock = countWorkdaysInBlock(periodDays, firstWorkdayIndex, maximumIndex);
             if (workdaysInBlock == 0)
                 return true;
             if (firstWorkdayIndex == minimumIndex)
@@ -85,15 +116,15 @@ namespace Teleopti.Ccc.DayOffPlanning
             return (_options.Maximum >= workdaysInBlock && _options.Minimum <= workdaysInBlock);
         }
 
-        private bool CheckWorkdaysAfter(BitArray periodDays, int dayOffIndex, int maximumIndex)
+        private bool checkWorkdaysAfter(BitArray periodDays, int dayOffIndex, int maximumIndex)
         {
             int dayIndexAfter = dayOffIndex + 1;
             if (dayIndexAfter > maximumIndex)
                 return true;
             if (periodDays[dayIndexAfter])
                 return true;
-            int lastWorkdayIndex = FindLastWorkdayIndexInBlock(periodDays, dayIndexAfter, maximumIndex);
-            int workdaysInBlock = CountWorkdaysInBlock(periodDays, dayIndexAfter, maximumIndex);
+            int lastWorkdayIndex = findLastWorkdayIndexInBlock(periodDays, dayIndexAfter, maximumIndex);
+            int workdaysInBlock = countWorkdaysInBlock(periodDays, dayIndexAfter, maximumIndex);
             if (workdaysInBlock == 0)
                 return true;
             if (lastWorkdayIndex == maximumIndex)
@@ -122,7 +153,7 @@ namespace Teleopti.Ccc.DayOffPlanning
         //    return (_options.Maximum >= countWorkdays && _options.Minimum <= countWorkdays);
         //}
 
-        private static int FindFirstWorkdayIndexInBlock(BitArray days, int startIndex, int minimumIndex)
+        private static int findFirstWorkdayIndexInBlock(BitArray days, int startIndex, int minimumIndex)
         {
             int index = startIndex;
             while (index >= minimumIndex && !days[index])
@@ -133,7 +164,7 @@ namespace Teleopti.Ccc.DayOffPlanning
             return index + 1;
         }
 
-        private static int FindLastWorkdayIndexInBlock(BitArray days, int startIndex, int maximumIndex)
+        private static int findLastWorkdayIndexInBlock(BitArray days, int startIndex, int maximumIndex)
         {
             int index = startIndex;
             while (index <= maximumIndex && !days[index])
@@ -143,7 +174,7 @@ namespace Teleopti.Ccc.DayOffPlanning
             return index - 1;
         }
 
-        private static int CountWorkdaysInBlock(BitArray days, int firstWorkdayIndex, int maximumIndex)
+        private static int countWorkdaysInBlock(BitArray days, int firstWorkdayIndex, int maximumIndex)
         {
             int index = firstWorkdayIndex;
             while (index <= maximumIndex && !days[index])
