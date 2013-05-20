@@ -90,7 +90,6 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
             {
                 IShiftCategory shiftCategory = _shiftCategoryRepository.Load(dto.MainShift.ShiftCategoryId);
                 IMainShift mainShift = new MainShift(shiftCategory);
-                mainShift.SetId(dto.MainShift.Id);
                 addLayersToMainShift(mainShift, dto.MainShift.LayerCollection);
                 assignment.SetMainShift(mainShift);
             }
@@ -115,7 +114,6 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
         private MainShiftDto CreateMainShiftDto(IMainShift mainShift, IPerson shiftOwner)
         {
             MainShiftDto retDto = new MainShiftDto();
-            retDto.Id = mainShift.Id.Value;
             if (mainShift.ShiftCategory != null)
             {
                 retDto.ShiftCategoryId = mainShift.ShiftCategory.Id.Value;

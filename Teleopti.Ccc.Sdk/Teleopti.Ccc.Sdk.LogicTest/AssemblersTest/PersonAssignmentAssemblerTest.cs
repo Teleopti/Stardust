@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -126,21 +127,21 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 
                 Assert.AreEqual(dto.Version, entity.Version);
                 Assert.AreEqual(dto.Id, entity.Id);
-                Assert.AreEqual(dto.MainShift.Id, entity.MainShift.Id);
-                Assert.AreEqual(1, entity.MainShift.LayerCollection.Count);
+                Assert.IsNull(entity.MainShift.Id);
+                Assert.AreEqual(1, entity.MainShiftActivityLayers.Count());
                 Assert.AreEqual(1, entity.PersonalShiftCollection.Count);
                 Assert.AreEqual(dto.PersonalShiftCollection.First().Id, entity.PersonalShiftCollection[0].Id);
                 Assert.AreEqual(1, entity.PersonalShiftCollection[0].LayerCollection.Count);
                 Assert.AreEqual(1, entity.OvertimeShiftCollection.Count);
                 Assert.AreEqual(dto.OvertimeShiftCollection.First().Id, entity.OvertimeShiftCollection[0].Id);
                 Assert.AreEqual(1, entity.OvertimeShiftCollection[0].LayerCollection.Count);
-                Assert.AreEqual(new DateTimePeriod(1900, 1, 1, 1900, 1, 2), entity.MainShift.LayerCollection[0].Period);
+                Assert.AreEqual(new DateTimePeriod(1900, 1, 1, 1900, 1, 2), entity.MainShiftActivityLayers.First().Period);
                 Assert.AreEqual(new DateTimePeriod(2000, 1, 1, 2000, 1, 2), entity.PersonalShiftCollection[0].LayerCollection[0].Period);
                 Assert.AreEqual(new DateTimePeriod(2001, 1, 1, 2001, 1, 2), entity.OvertimeShiftCollection[0].LayerCollection[0].Period);
                 Assert.AreSame(person, entity.Person);
                 Assert.AreSame(scenario, entity.Scenario);             
                 Assert.AreSame(shiftCategory, entity.ShiftCategory);
-                Assert.AreSame(activityMain, entity.MainShift.LayerCollection[0].Payload);
+                Assert.AreSame(activityMain, entity.MainShiftActivityLayers.First().Payload);
                 Assert.AreSame(activityPers, entity.PersonalShiftCollection[0].LayerCollection[0].Payload);
                 Assert.AreSame(activityOvertime, entity.OvertimeShiftCollection[0].LayerCollection[0].Payload);
                 Assert.AreSame(definitionSet, ((IOvertimeShiftActivityLayer)entity.OvertimeShiftCollection[0].LayerCollection[0]).DefinitionSet);
