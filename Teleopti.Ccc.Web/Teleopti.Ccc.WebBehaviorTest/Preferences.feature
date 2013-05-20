@@ -112,7 +112,7 @@ Scenario: Delete multiple standard preference
 	And I have 2 existing standard preference
 	And I am viewing preferences
 	When I select 2 editable day with standard preference
-	And I click the delete button
+	And I click the delete preference button
 	Then I should no longer see the 2 standard preferences in the calendar
 
 

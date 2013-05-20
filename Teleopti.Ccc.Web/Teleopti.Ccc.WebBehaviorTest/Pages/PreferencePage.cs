@@ -14,7 +14,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		public void ClickNext()
 		{
-			Browser.Interactions.Click("#PreferenceDateRangeSelector button:last-of-type");
+			Browser.Interactions.Click(".icon-arrow-right");
 		}
 
 		public void ClickPrevious()

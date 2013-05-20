@@ -106,18 +106,16 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void ThenIShouldSeeTheWorkflowControlSetSStandardPreferencesList()
 		{
 			var data = UserFactory.User().UserData<PreferenceOpenWithAllowedPreferencesWorkflowControlSet>();
-			var menu = _page.PreferenceButton.Menu;
-			EventualAssert.That(() => menu.Style.Display, Is.EqualTo("block"));
-			EventualAssert.That(() => menu.Text, Contains.Substring(data.ShiftCategory.Description.Name));
-			EventualAssert.That(() => menu.Text, Contains.Substring(data.DayOffTemplate.Description.Name));
-			EventualAssert.That(() => menu.Text, Contains.Substring(data.Absence.Description.Name));
+			Browser.Interactions.AssertContains("#preference-split-button", data.ShiftCategory.Description.Name);
+			Browser.Interactions.AssertContains("#preference-split-button", data.DayOffTemplate.Description.Name);
+			Browser.Interactions.AssertContains("#preference-split-button", data.Absence.Description.Name);
 		}
 
 		[Then(@"I should see the selected standard preference in the split-button")]
 		public void ThenIShouldSeeTheSelectedStandardPreferenceInTheSplit_Button()
 		{
 			var data = UserFactory.User().UserData<PreferenceOpenWithAllowedPreferencesWorkflowControlSet>();
-			EventualAssert.That(() => _page.PreferenceButton.SetButton.InnerHtml, Contains.Substring(data.ShiftCategory.Description.Name));
+			Browser.Interactions.AssertContains("#preference-split-button .btn", data.ShiftCategory.Description.Name);
 		}
 
 		[Then(@"I should see the standard preference in the calendar")]
@@ -199,7 +197,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should not be able to see preferences link")]
 		public void ThenIShouldNotBeAbleToSeePreferencesLink()
 		{
-			Browser.Interactions.AssertNotExists("#tabs", "[href*='#PreferenceTab']");
+			Browser.Interactions.AssertNotExists(".navbar-inner", "[href*='#PreferenceTab']");
 		}
 
 		[Then(@"I should see the start time boundry (.*) to (.*)")]
@@ -241,6 +239,12 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			EventualAssert.That(() => _page.CalendarCellDataForDate(date, "possible-start-times").InnerHtml, Is.Not.Null.Or.Empty);
 			EventualAssert.That(() => _page.CalendarCellDataForDate(date, "possible-end-times").InnerHtml, Is.Not.Null.Or.Empty);
 			EventualAssert.That(() => _page.CalendarCellDataForDate(date, "possible-contract-times").InnerHtml, Is.Not.Null.Or.Empty);
+		}
+
+		[When(@"I click the delete preference button")]
+		public void WhenIClickTheDeletePreferenceButton()
+		{
+			Browser.Interactions.Click(".icon-remove");
 		}
 
 		private static string GetExpectedContractTimesString(string earliest, string latest, CultureInfo culture)
