@@ -125,6 +125,7 @@
     <Compile Include="Core\BrowserDriver\IExceptionCatcher.cs" />
     <Compile Include="Core\BrowserDriver\WatiNIE\WatiNIEBrowserInteractions.cs" />
     <Compile Include="Core\BrowserDriver\Retrying.cs" />
+    <Compile Include="Data\CryptoCreator.cs" />
     <Compile Include="Data\HardCodedResolver.cs" />
     <Compile Include="Pages\Common\Select2Box.cs" />
     <Compile Include="TeamScheduleForGroups.feature.cs" />
