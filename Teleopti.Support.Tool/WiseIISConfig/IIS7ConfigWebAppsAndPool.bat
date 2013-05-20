@@ -23,7 +23,7 @@ IF "%SDKCREDPROT%"=="" GOTO NoInput
 ::Main
 ::=============
 ECHO Settings up IIS web sites and applictions ...
-ECHO Call was: IIS6ConfigWebAppsAndPool.bat %~1 %~2 %~3 %~4 > %logfile%
+ECHO Call was: IIS7ConfigWebAppsAndPool.bat %~1 %~2 %~3 %~4 > %logfile%
 
 SET DefaultSite=Default Web Site
 SET MainSiteName=TeleoptiCCC
@@ -129,6 +129,11 @@ echo.
 if "%SSL%"=="True" "%appcmd%" set config "%DefaultSite%/%SitePath%" /section:access /sslFlags:Ssl /commit:APPHOST
 if "%SSL%"=="False" "%appcmd%" set config "%DefaultSite%/%SitePath%" /section:access /sslFlags:None /commit:APPHOST
 
+::4.5 Machine keys
+SET WebConfigPath=%INSTALLDIR%\%FolderPath%\web.config
+echo Setting machine keys in "%WebConfigPath%"
+if EXIST "%WebConfigPath%" (SetMachineKeys.exe "%WebConfigPath%")
+
 ::5 Athentication for the virtual dir
 ::-----
 ::Different authentication based on "SDKCREDPROT"
@@ -148,6 +153,7 @@ for /f "tokens=1,2 delims=;" %%g in (%SDKCREDPROT%\%authentication%.txt) do CALL
 ::Different identity based on "SDKCREDPROT"
 ::-----
 for /f "tokens=1,2 delims=;" %%g in (%SDKCREDPROT%\Impersonate.txt) do CALL:IISIdentitySet "%%g" "%%h"
+
 exit /B
 
 :IISSecurityFormsSet

@@ -67,4 +67,5 @@ Teleopti.Ccc.Sdk/Teleopti.Ccc.Sdk.Host/Teleopti.Payroll/internal.storage.xml
 */Pester.*
 nunit*.xml
 *.log.?
+*.key
 *.log.??
