@@ -8,7 +8,7 @@ ADD TheDate datetime
 GO
 
 declare @theDate datetime
-set @theDate ='1800-01-01'
+set @theDate = '1800-01-01T00:00:00'
 update dbo.PersonAssignment
 set TheDate = @theDate
 GO
@@ -26,7 +26,7 @@ ADD TheDate datetime
 GO
 
 declare @theDate datetime
-set @theDate ='1800-01-01'
+set @theDate = '1800-01-01T00:00:00'
 
 update Auditing.PersonAssignment_AUD
 set TheDate = @theDate
