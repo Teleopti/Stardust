@@ -134,7 +134,12 @@ if "%aspnetisapi%"=="aspnet_isapi" (
 ::disable directoryBrowse
 cscript "%ROOTDIR%\adsutil.vbs" set w3svc/1/root/%SitePath%/enabledirbrowsing "False"
 
-GOTO Done
+::use Ntlm only
+If "%SDKCREDPROT%"=="Ntlm" (
+	cscript "%ROOTDIR%\adsutil.vbs" set W3SVC/1/root/%SitePath%/NTAuthenticationProviders "NTLM"  
+)
+
+exit /B
 
 :BitMaskGet
 SETLOCAL
