@@ -378,6 +378,22 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 	    });
 	};
 
+	function _initMustHaves() {
+	    mustHaveCountViewModel = new Teleopti.MyTimeWeb.Preference.MustHaveCountViewModel();
+	    
+	    var mustHaveButton = $('#Preference-must-have-button');
+	    if (mustHaveButton.length > 0) {
+	        mustHaveButton.attr("data-bind", "class: MustHaveClass");
+	        ko.applyBindings(mustHaveCountViewModel, mustHaveButton[0]);
+	    }
+
+	    var mustHaveTextElement = $('#Preference-must-have-numbers');
+	    if (mustHaveTextElement.length > 0) {
+	        mustHaveTextElement.attr("data-bind", "text: MustHaveText");
+	        ko.applyBindings(mustHaveCountViewModel, mustHaveTextElement[0]);
+	    }
+    }
+
 	function _initViewModels(loader) {
 		var date = portal ? portal.CurrentFixedDate() : null;
 
@@ -396,25 +412,14 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 		var to = $('li[data-mytime-date]').last().data('mytime-date');
 
 		preferencesAndScheduleViewModel = new Teleopti.MyTimeWeb.Preference.PreferencesAndSchedulesViewModel(ajax, dayViewModels);
-		mustHaveCountViewModel = new Teleopti.MyTimeWeb.Preference.MustHaveCountViewModel(dayViewModelsInPeriod, $('#Preference-body').data('mytime-maxmusthave'));
 		periodFeedbackViewModel = new Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel(ajax, dayViewModelsInPeriod, date);
-
+	    
+		mustHaveCountViewModel.SetData(dayViewModelsInPeriod, $('#Preference-body').data('mytime-maxmusthave'));
+	    
 		var periodFeedbackElement = $('#Preference-period-feedback-view')[0];
 		if (periodFeedbackElement)
 			ko.applyBindings(periodFeedbackViewModel, periodFeedbackElement);
-
-		var mustHaveButton = $('#Preference-must-have-button');
-		if (mustHaveButton.length > 0) {
-		    mustHaveButton.attr("data-bind", "class: MustHaveClass");
-		    ko.applyBindings(mustHaveCountViewModel, mustHaveButton[0]);
-		}
-
-		var mustHaveTextElement = $('#Preference-must-have-numbers');
-		if (mustHaveTextElement.length > 0) {
-			mustHaveTextElement.attr("data-bind", "text: MustHaveText");
-			ko.applyBindings(mustHaveCountViewModel, mustHaveTextElement[0]);
-		}
-
+        
 		loader = loader || function (call) { call(); };
 		loader(function () {
 			preferencesAndScheduleViewModel.LoadPreferencesAndSchedules(from, to)
@@ -490,22 +495,10 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 	    if (periodFeedbackElement)
 	        ko.cleanNode(periodFeedbackElement);
 
-	    var mustHaveButton = $('#Preference-must-have-button');
-	    if (mustHaveButton.length > 0) {
-	        ko.cleanNode(mustHaveButton[0]);
-	    }
-
-	    var mustHaveTextElement = $('#Preference-must-have-numbers');
-	    if (mustHaveTextElement.length > 0) {
-	        ko.cleanNode(mustHaveTextElement[0]);
-	    }
-
 	    periodFeedbackViewModel.DayViewModels = {};
 	    periodFeedbackViewModel = null;
 	    preferencesAndScheduleViewModel.DayViewModels = {};
 	    preferencesAndScheduleViewModel = null;
-	    mustHaveCountViewModel.DayViewModels = {};
-	    mustHaveCountViewModel = null;
 	}
 
 	return {
@@ -517,6 +510,8 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			_initSplitButton();
 			_initDeleteButton();
 			_initAddExtendedButton();
+			_initMustHaveButton();
+		    _initMustHaves();
 		},
 		InitViewModels: function () {
 			_initViewModels();
@@ -531,7 +526,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			}
 			_initPeriodSelection();
 			_initExtendedPanels();
-			_initMustHaveButton();
+			
 			_initViewModels(_soon);
 		},
 		PreferencePartialDispose: function () {
