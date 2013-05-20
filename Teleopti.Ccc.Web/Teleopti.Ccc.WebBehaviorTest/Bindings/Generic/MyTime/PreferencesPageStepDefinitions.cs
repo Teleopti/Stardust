@@ -28,8 +28,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[When(@"I click the add extended preference button")]
 		public void WhenIClickTheAddExtendedPreferenceButton()
 		{
-			Pages.Pages.PreferencePage.ExtendedPreferenceButton.Focus();
-			Pages.Pages.PreferencePage.ExtendedPreferenceButton.EventualClick();
+			Browser.Interactions.Javascript("$('#Preference-add-extended-button').mousedown();");
 		}
 
 		[When(@"I click the apply extended preferences button")]
