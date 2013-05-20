@@ -21,13 +21,13 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void ThenIShouldSeeMobileReports()
 		{
 			// Settings is Now preferred "home"
-			EventualAssert.That(() => Pages.Pages.MobileReportsPage.ReportsSettingsViewPageContainer.DisplayVisible(), Is.True);
+			Browser.Interactions.AssertExists("#report-settings-view");
 		}
 
 		[Then(@"I should see Anywhere")]
 		public void ThenIShouldSeeAnywhere()
 		{
-			EventualAssert.That(() => Pages.Pages.AnywherePage.Placeholder.DisplayVisible(), Is.True);
+			Browser.Interactions.AssertExists("#content-placeholder");
 		}
 	}
 }

@@ -23,13 +23,14 @@ IF "%SDKCREDPROT%"=="" GOTO NoInput
 ::Main
 ::=============
 ECHO Settings up IIS web sites and applictions ...
-ECHO Call was: IIS6ConfigWebAppsAndPool.bat %~1 %~2 %~3 %~4 > %logfile%
+ECHO Call was: IIS7ConfigWebAppsAndPool.bat %~1 %~2 %~3 %~4 > %logfile%
 
 SET DefaultSite=Default Web Site
 SET MainSiteName=TeleoptiCCC
 SET appcmd=%systemroot%\system32\inetsrv\APPCMD.exe
 
 ::remove applications
+CALL:DeleteApp "%DefaultSite%" "%MainSiteName%/ContextHelp" "app" >> %logfile%
 for /f "tokens=2,3,4,5 delims=;" %%g in ('FINDSTR /C:"Level2;" Apps\ApplicationsInAppPool.txt') do CALL:DeleteApp "%DefaultSite%/%MainSiteName%" "%%g" "%%j" >> %logfile%
 for /f "tokens=2,3,4,5 delims=;" %%g in ('FINDSTR /C:"Level1;%MainSiteName%;" Apps\ApplicationsInAppPool.txt') do CALL:DeleteApp "%DefaultSite%" "%%g" "%%j" >> %logfile%
 
@@ -40,8 +41,11 @@ for /f "tokens=3,4 delims=;" %%g in (Apps\ApplicationsInAppPool.txt) do CALL:Cre
 for /f "tokens=2,3,4,5 delims=;" %%g in ('FINDSTR /C:"Level1;%MainSiteName%;" Apps\ApplicationsInAppPool.txt') do CALL:CreateApp "%DefaultSite%" "%%g" "%%g" "%%j" "%INSTALLDIR%" >> %logfile%
 for /f "tokens=2,3,4,5 delims=;" %%g in ('FINDSTR /C:"Level2;" Apps\ApplicationsInAppPool.txt') do CALL:CreateApp "%DefaultSite%" "%MainSiteName%/%%g" "%%g" "%%j" "%INSTALLDIR%\%MainSiteName%" >> %logfile%
 
+::disable directoryBrowse
+"%appcmd%" set config "%DefaultSite%" -section:system.webServer/directoryBrowse /enabled:"False"
+
 ::config applications
-for /f "tokens=2,3,4,5 delims=;" %%g in (Apps\ApplicationsInAppPool.txt) do CALL:ForEachApplication "%%g" "%%h" "%%i" "%%j" >> %logfile%
+for /f "tokens=2,3,4,5,6,7 delims=;" %%g in (Apps\ApplicationsInAppPool.txt) do CALL:ForEachApplication "%%g" "%%h" "%%i" "%%j" "%%k" "%%l" >> %logfile%
 
 ::just in case
 iisreset /restart
@@ -71,15 +75,12 @@ echo.
 exit /B
 
 :DeleteApp
-if "%~3"=="app" (
 ECHO "%appcmd%" delete app /app.name:"%~1/%~2"
 "%appcmd%" delete app /app.name:"%~1/%~2"
-)
 
-if "%~3"=="vdir" (
 ECHO "%appcmd%" delete vdir /vdir.name:"%~1/%~2"
 "%appcmd%" delete vdir /vdir.name:"%~1/%~2"
-)
+
 
 goto:eof
 
@@ -92,8 +93,8 @@ ECHO "%appcmd%" add app /site.name:"%~1" /path:/%~2 /physicalPath:"%~5\%~3"
 )
 
 if "%~4"=="vdir" (
-echo "%appcmd%" add vdir /app.name:"%~1" /path:/%~2 /physicalPath:"%~5\%~3"
-"%appcmd%" add vdir /app.name:"%~1" /path:/%~2 /physicalPath:"%~5\%~3"
+echo "%appcmd%" add vdir /app.name:"%~1/" /path:/%~2 /physicalPath:"%~5\%~3"
+"%appcmd%" add vdir /app.name:"%~1/" /path:/%~2 /physicalPath:"%~5\%~3"
 )
 goto:eof
 
@@ -128,6 +129,11 @@ echo.
 if "%SSL%"=="True" "%appcmd%" set config "%DefaultSite%/%SitePath%" /section:access /sslFlags:Ssl /commit:APPHOST
 if "%SSL%"=="False" "%appcmd%" set config "%DefaultSite%/%SitePath%" /section:access /sslFlags:None /commit:APPHOST
 
+::4.5 Machine keys
+SET WebConfigPath=%INSTALLDIR%\%FolderPath%\web.config
+echo Setting machine keys in "%WebConfigPath%"
+if EXIST "%WebConfigPath%" (SetMachineKeys.exe "%WebConfigPath%")
+
 ::5 Athentication for the virtual dir
 ::-----
 ::Different authentication based on "SDKCREDPROT"
@@ -147,6 +153,14 @@ for /f "tokens=1,2 delims=;" %%g in (%SDKCREDPROT%\%authentication%.txt) do CALL
 ::Different identity based on "SDKCREDPROT"
 ::-----
 for /f "tokens=1,2 delims=;" %%g in (%SDKCREDPROT%\Impersonate.txt) do CALL:IISIdentitySet "%%g" "%%h"
+
+::7 if we are in Windows mode, make sure we use "Ntlm" only
+If "%SDKCREDPROT%"=="Ntlm" (
+	"%appcmd%" set config "%DefaultSite%/%SitePath%" -section:system.webServer/security/authentication/windowsAuthentication /-"providers.[value='Negotiate:Kerberos']" /commit:apphost
+	"%appcmd%" set config "%DefaultSite%/%SitePath%" -section:system.webServer/security/authentication/windowsAuthentication /-"providers.[value='Negotiate']" /commit:apphost
+	"%appcmd%" set config "%DefaultSite%/%SitePath%" -section:system.webServer/security/authentication/windowsAuthentication /-"providers.[value='NTLM']" /commit:apphost
+	"%appcmd%" set config "%DefaultSite%/%SitePath%" -section:system.webServer/security/authentication/windowsAuthentication /+"providers.[value='NTLM']" /commit:apphost
+)
 exit /B
 
 :IISSecurityFormsSet

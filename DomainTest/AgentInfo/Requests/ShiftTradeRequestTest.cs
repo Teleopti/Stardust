@@ -31,6 +31,11 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
         {
             _requestedPerson = PersonFactory.CreatePerson("Mama","Hawa");
             _tradePerson = PersonFactory.CreatePerson("Day", "Trader");
+
+			CultureInfo englishCulture = CultureInfoFactory.CreateEnglishCulture();
+			_requestedPerson.PermissionInformation.SetCulture(englishCulture);
+			_tradePerson.PermissionInformation.SetCulture(englishCulture);
+
             _shiftTradeSwapDetail = new ShiftTradeSwapDetail(_requestedPerson, _tradePerson,
                                                              new DateOnly(2008, 7, 16), new DateOnly(2008, 7, 16));
 
@@ -96,7 +101,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
         }
 
         [Test]
-        public void VerifyDenyForTranslatedCultureInOwnLanguage()
+		public void ShouldDenyMessageForTranslatedCultureBeRequestPersonOwnLanguage()
         {
             
 			CultureInfo swedishCultureInfo = CultureInfoFactory.CreateSwedishCulture();
@@ -105,22 +110,14 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 			_target.Deny(_tradePerson);
             Assert.IsNotNull(_target);
             
-            Assert.IsTrue(MessageWillOnlyBeSentToRequestPerson(),  "Only Request person needs to be notified");
+            Assert.IsTrue(messageWillOnlyBeSentToRequestPerson(),  "Only Request person needs to be notified");
 
-			// tamasb: note that it is a hardcoded notification string !!! 
 	        var notificationString = "En skiftbytesförfrågan 2008-07-16 nekades.";
-
-			// the old is deleted: reason the same code used in real code and test code >>> NO NO NO
-			//var notificationString = string.Format(UserTexts.Resources.ResourceManager.GetString(
-			//						 "ShiftTradeRequestForOneDayHasBeenDeniedDot",
-			//						 swedishCultureInfo),
-			//						 _target.Period.StartDateTimeLocal(_requestedPerson.PermissionInformation.DefaultTimeZone()).ToString(datepattern));
-
-	          Assert.AreEqual(notificationString, _target.TextForNotification);
+	        Assert.AreEqual(notificationString, _target.TextForNotification);
         }
 
 		[Test]
-		public void VerifyDenyForUntranslatedCultureInEnglish()
+		public void ShouldDenyMessageForNotTranslatedCultureBeInEnglish()
 		{
 
 			CultureInfo catalanCulture = CultureInfoFactory.CreateCatalanCulture();
@@ -129,7 +126,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 			_target.Deny(_tradePerson);
 			Assert.IsNotNull(_target);
 
-			Assert.IsTrue(MessageWillOnlyBeSentToRequestPerson(), "Only Request person needs to be notified");
+			Assert.IsTrue(messageWillOnlyBeSentToRequestPerson(), "Only Request person needs to be notified");
 
 			// tamasb: note that it is a hardcoded notification string !!! 
 			var notificationString = "A shift trade request 16-07-2008 was denied.";
@@ -164,11 +161,10 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             personRequest.Pending();
             IList<IBusinessRuleResponse> brokenRules = personRequest.Approve(requestApprovalService,_authorization);
             Assert.AreEqual(0, brokenRules.Count);
-            var notificationString = string.Format(UserTexts.Resources.ShiftTradeRequestForOneDayHasBeenApprovedDot,
-                                                   personRequest.RequestedDate.ToShortDateString());
+	        var notificationString = "A shift trade request 16-07-2008 was approved.";
 
             Assert.AreEqual(notificationString, _target.TextForNotification);
-            Assert.IsTrue(MessageWillBeSentToBothPersons(), "Message should be sent to both persons when approving");
+            Assert.IsTrue(messageWillBeSentToBothPersons(), "Message should be sent to both persons when approving");
 
             mocks.VerifyAll();
         }
@@ -189,15 +185,14 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             IList<IBusinessRuleResponse> brokenRules = personRequest.Approve(requestApprovalService,_authorization);
             Assert.AreEqual(1, brokenRules.Count);
 
-            var notificationString = string.Format(UserTexts.Resources.ANewShiftTradeForOneDayHasBeenCreatedDot,
-                                                   personRequest.RequestedDate.ToShortDateString());
+			var notificationString = "New shift trade request 16-07-2008, approve or deny in your request list.";
             Assert.AreEqual(notificationString, _target.TextForNotification);
 
             mocks.VerifyAll();
         }
 
         [Test]
-        public void CanAccept()
+        public void VerifyAccept()
         {
             MockRepository mocks = new MockRepository();
             IShiftTradeRequestSetChecksum shiftTradeRequestSetChecksum =
@@ -211,26 +206,74 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             _target.Refer(_authorization);
             Assert.AreEqual(ShiftTradeStatus.Referred, _target.GetShiftTradeStatus(shiftTradeRequestStatusCheckerForTestDoesNothing));
             _target.Accept(_requestedPerson, shiftTradeRequestSetChecksum,_authorization);
-            Assert.IsTrue(MessageWillOnlyBeSentToTradePerson(), "TradePerson (only) should be notified when accepted from requestperson");
+            Assert.IsTrue(messageWillOnlyBeSentToTradePerson(), "TradePerson (only) should be notified when accepted from requestperson");
             
             Assert.AreEqual(ShiftTradeStatus.OkByMe, _target.GetShiftTradeStatus(shiftTradeRequestStatusCheckerForTestDoesNothing));
             _target.Accept(_tradePerson, shiftTradeRequestSetChecksum,_authorization);
            
             Assert.AreEqual(ShiftTradeStatus.OkByBothParts, _target.GetShiftTradeStatus(shiftTradeRequestStatusCheckerForTestDoesNothing));
          
-            Assert.IsTrue(MessageWillOnlyBeSentToRequestPerson(),"RequestPerson (only) should be notified when accepted from targetperson");
+            Assert.IsTrue(messageWillOnlyBeSentToRequestPerson(),"RequestPerson (only) should be notified when accepted from targetperson");
 
-            var datepattern = _tradePerson.PermissionInformation.Culture().DateTimeFormat.ShortDatePattern;
-            var notificationString = string.Format(_tradePerson.PermissionInformation.UICulture(),
-                                                   UserTexts.Resources.ShiftTradeRequestForOneDayHasBeenAcceptedDot,
-                                                   _target.Period.StartDateTimeLocal(
-                                                       _tradePerson.PermissionInformation.DefaultTimeZone()).ToString(
-                                                           datepattern));
+			var notificationString = "A shift trade request 16-07-2008 was accepted by other person.";
 
             Assert.AreEqual(notificationString, _target.TextForNotification);
-            //Assert.AreEqual(ShiftTradeRequestHasBeenAcceptedDot, _target.TextForNotification);
             mocks.VerifyAll();
         }
+
+		[Test]
+		public void ShouldAcceptMessageForTranslatedCultureBeRequestPersonOwnLanguage()
+		{
+
+			CultureInfo swedishCultureInfo = CultureInfoFactory.CreateSwedishCulture();
+			_requestedPerson.PermissionInformation.SetCulture(swedishCultureInfo);
+
+			MockRepository mocks = new MockRepository();
+			IShiftTradeRequestSetChecksum shiftTradeRequestSetChecksum =
+				mocks.StrictMock<IShiftTradeRequestSetChecksum>();
+			shiftTradeRequestSetChecksum.SetChecksum(_target);
+			LastCall.Repeat.Once();
+
+			mocks.ReplayAll();
+
+			_target.Refer(_authorization);
+			_target.Accept(_requestedPerson, shiftTradeRequestSetChecksum, _authorization);
+			_target.Accept(_tradePerson, shiftTradeRequestSetChecksum, _authorization);
+
+			// must be on the request person's own language with the culture's date format
+			var notificationString = "En skiftbytesförfrågan 2008-07-16 accepterades av den andra personen.";
+
+			Assert.AreEqual(notificationString, _target.TextForNotification);
+
+			mocks.VerifyAll();
+		}
+
+		[Test]
+		public void ShouldAcceptMessageForNotTranslatedCultureBeInEnglish()
+		{
+
+			CultureInfo catalanCultureInfo = CultureInfoFactory.CreateCatalanCulture();
+			_requestedPerson.PermissionInformation.SetCulture(catalanCultureInfo);
+
+			MockRepository mocks = new MockRepository();
+			IShiftTradeRequestSetChecksum shiftTradeRequestSetChecksum =
+				mocks.StrictMock<IShiftTradeRequestSetChecksum>();
+			shiftTradeRequestSetChecksum.SetChecksum(_target);
+			LastCall.Repeat.Once();
+
+			mocks.ReplayAll();
+
+			_target.Refer(_authorization);
+			_target.Accept(_requestedPerson, shiftTradeRequestSetChecksum, _authorization);
+			_target.Accept(_tradePerson, shiftTradeRequestSetChecksum, _authorization);
+
+			// must be in english with english date format
+			var notificationString = "A shift trade request 16-07-2008 was accepted by other person.";
+
+			Assert.AreEqual(notificationString, _target.TextForNotification);
+
+			mocks.VerifyAll();
+		}
 
         [Test,ExpectedException(typeof(ArgumentNullException))]
         public void VerifyMustSupplyPersonToAccept()
@@ -238,13 +281,6 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             _target.Accept(null,new EmptyShiftTradeRequestSetChecksum(),_authorization);
         }
 
-        /// <summary>
-        /// Determines whether this instance can refer.
-        /// </summary>
-        /// <remarks>
-        /// Created by: HenryG
-        /// Created date: 2009-08-31
-        /// </remarks>
         [Test]
         public void CanRefer()
         {
@@ -252,12 +288,26 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             _target.Refer(_authorization);
             Assert.AreEqual(ShiftTradeStatus.Referred, _target.GetShiftTradeStatus(new ShiftTradeRequestStatusCheckerForTestDoesNothing()));
             Assert.IsTrue(_personRequest.IsPending);
-            var notificationString = string.Format(_tradePerson.PermissionInformation.UICulture(),
-                                                   UserTexts.Resources.ShiftTradeRequestHasBeenReferredDot,
-                                                   _personRequest.RequestedDate.ToShortDateString().ToString(_requestedPerson.PermissionInformation.Culture()),
-                                                   _personRequest.RequestedDate.ToShortDateString().ToString(_requestedPerson.PermissionInformation.Culture()));
+			var notificationString = "A shift trade request 16-07-2008 - 16-07-2008 must be accepted again due to a schedule change from.";
             Assert.AreEqual(notificationString, _target.TextForNotification);
         }
+
+		[Test]
+		public void ShouldReferMessageForTranslatedCultureBeRequestPersonOwnLanguage()
+		{
+
+			CultureInfo swedishCulture = CultureInfoFactory.CreateSwedishCulture();
+			_requestedPerson.PermissionInformation.SetCulture(swedishCulture);
+
+			Assert.AreEqual(ShiftTradeStatus.OkByMe, _target.GetShiftTradeStatus(new ShiftTradeRequestStatusCheckerForTestDoesNothing()));
+			_target.Refer(_authorization);
+			Assert.AreEqual(ShiftTradeStatus.Referred, _target.GetShiftTradeStatus(new ShiftTradeRequestStatusCheckerForTestDoesNothing()));
+			Assert.IsTrue(_personRequest.IsPending);
+			
+			var notificationString = "En schemaändring har gjort att en förfrågan om skiftbyte måste accepteras igen.";
+			
+			Assert.AreEqual(notificationString, _target.TextForNotification);
+		}
 
         [Test]
         public void VerifyCanAddAndClearShiftTradeSwapDetails()
@@ -332,7 +382,7 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
         [Test]
         public void VerifyPushMessageIsCreatedForToPersonWhenCreatingAShiftTradeRequest()
         {
-            Assert.IsTrue(MessageWillBeSentToTradePerson());
+            Assert.IsTrue(messageWillBeSentToTradePerson());
             Assert.AreEqual(_target.ReceiversForNotification.Count,1,"Only the person involved in the trade should be notified");
         }
 
@@ -366,29 +416,29 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             Assert.AreEqual(_target.ReceiversForNotification.Count, 1, "Only the person involved in the trade should be notified");
         }
 
-        private bool MessageWillBeSentToRequestPerson()
+        private bool messageWillBeSentToRequestPerson()
         {
             return _target.ReceiversForNotification.Contains(_requestedPerson) && _target.ShouldNotifyWithMessage;
         }
 
-        private bool MessageWillBeSentToTradePerson()
+        private bool messageWillBeSentToTradePerson()
         {
             return _target.ReceiversForNotification.Contains(_tradePerson) && _target.ShouldNotifyWithMessage;
         }
 
-        private bool MessageWillOnlyBeSentToRequestPerson()
+        private bool messageWillOnlyBeSentToRequestPerson()
         {
-            return _target.ReceiversForNotification.Count==1 && MessageWillBeSentToRequestPerson();
+            return _target.ReceiversForNotification.Count==1 && messageWillBeSentToRequestPerson();
         }
 
-        private bool MessageWillOnlyBeSentToTradePerson()
+        private bool messageWillOnlyBeSentToTradePerson()
         {
-            return _target.ReceiversForNotification.Count == 1 && MessageWillBeSentToTradePerson();
+            return _target.ReceiversForNotification.Count == 1 && messageWillBeSentToTradePerson();
         }
 
-        private bool MessageWillBeSentToBothPersons()
+        private bool messageWillBeSentToBothPersons()
         {
-            return MessageWillBeSentToRequestPerson() && MessageWillBeSentToTradePerson();
+            return messageWillBeSentToRequestPerson() && messageWillBeSentToTradePerson();
         }
 
         [Test]
@@ -412,17 +462,46 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 
             mocks.ReplayAll();
 
-            personRequest.Pending();
-            IList<IBusinessRuleResponse> brokenRules = personRequest.Approve(requestApprovalService, _authorization);
-            Assert.AreEqual(0, brokenRules.Count);
-            //var notificationString = string.Format(UserTexts.Resources.ShiftTradeRequestForOneDayHasBeenApprovedDot,
-            //                                       personRequest.RequestedDate.ToShortDateString());
+			personRequest.Pending();
+			IList<IBusinessRuleResponse> brokenRules = personRequest.Approve(requestApprovalService, _authorization);
+			Assert.AreEqual(0, brokenRules.Count);
 
-            //Assert.AreEqual(notificationString, target.TextForNotification);
-            Assert.IsNotNullOrEmpty(target.TextForNotification);
-            
-            mocks.VerifyAll();
+			Assert.IsNotNullOrEmpty(target.TextForNotification);
+
+			mocks.VerifyAll();
         }
+
+		[Test]
+		public void ShouldPendingMessageBeOnTheReceiverCultureLanguage()
+		{
+
+			CultureInfo swedishCultureInfo = CultureInfoFactory.CreateSwedishCulture();
+			_tradePerson.PermissionInformation.SetCulture(swedishCultureInfo);
+
+			var shiftTradeSwapDetail1 = new ShiftTradeSwapDetail(_requestedPerson, _tradePerson,
+															 new DateOnly(2008, 7, 16), new DateOnly(2008, 7, 16));
+
+			var shiftTradeSwapDetail2 = new ShiftTradeSwapDetail(_requestedPerson, _tradePerson,
+															 new DateOnly(2008, 7, 17), new DateOnly(2008, 7, 17));
+
+			_authorization = new PersonRequestAuthorizationCheckerForTest();
+			var target = new ShiftTradeRequest(new List<IShiftTradeSwapDetail> { shiftTradeSwapDetail1, shiftTradeSwapDetail2 });
+
+			MockRepository mocks = new MockRepository();
+			IRequestApprovalService requestApprovalService =
+				mocks.StrictMock<IRequestApprovalService>();
+			PersonRequest personRequest = new PersonRequest(_requestedPerson, target);
+
+			mocks.ReplayAll();
+
+			personRequest.Pending();
+
+			var notificationString = "Ny skiftbytesförfrågan, godkänn eller avslå i din lista.";
+
+			Assert.AreEqual(notificationString, target.TextForNotification, "Pending message should be in the receiver's language");
+
+			mocks.VerifyAll();
+		}
 
         [Test]
         public void VerifyCanAddAndClearShiftTradeSwapDetailsForMultipleDays()

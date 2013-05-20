@@ -71,7 +71,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core
 			const string dataSourceName = "TestData";
 			var businessUnitName = UserFactory.User().Person.PermissionInformation.ApplicationRoleCollection.Single().BusinessUnit.Name;
 			var queryString = string.Format("?dataSourceName={0}&businessUnitName={1}&userName={2}&password={3}", dataSourceName, businessUnitName, userName, password);
-			Navigation.GoToWaitForCompleted("Test/Logon" + queryString);
+			Navigation.GoToWaitForCompleted("Test/Logon" + queryString, new ApplicationStartupTimeout());
 		}
 
 		public static void ExpireMyCookieInsidePortal()

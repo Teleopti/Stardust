@@ -30,7 +30,7 @@ SET MainSiteName=TeleoptiCCC
 
 for /f "tokens=3,4 delims=;" %%g in (Apps\ApplicationsInAppPool.txt) do CALL:CreateAppPool "%%g" "%%h" >> %logfile%
 
-for /f "tokens=2,3,4,5 delims=;" %%g in (Apps\ApplicationsInAppPool.txt) do CALL:ForEachApplication "%%g" "%%h" "%%i" "%%j" >> %logfile%
+for /f "tokens=2,3,4,5,6,7 delims=;" %%g in (Apps\ApplicationsInAppPool.txt) do CALL:ForEachApplication "%%g" "%%h" "%%i" "%%j" "%%k" "%%l" >> %logfile%
 
 ::just in case
 iisreset /restart
@@ -64,6 +64,8 @@ SET SubSiteName=%~1
 SET PoolName=%~2
 SET NETVersion=%~3
 SET SiteOrApp=%~4
+SET DefaultDocs=%~5
+SET aspnetisapi=%~6
 
 SET SitePath=%MainSiteName%/%SubSiteName%
 SET FolderPath=%MainSiteName%\%SubSiteName%
@@ -72,7 +74,12 @@ SET FolderPath=%MainSiteName%\%SubSiteName%
 if "%SubSiteName%"=="TeleoptiCCC" SET SitePath=%MainSiteName%
 if "%SubSiteName%"=="TeleoptiCCC" SET FolderPath=%MainSiteName%
 
-CALL:CreateApplication "%SitePath%" "%SubSiteName%" "%INSTALLDIR%\%FolderPath%" "%SiteOrApp%"
+::remove old stuff
+echo cscript "%ROOTDIR%\adsutil.vbs" delete w3svc/1/root/%MainSiteName%/ContextHelp
+cscript "%ROOTDIR%\adsutil.vbs" delete w3svc/1/root/%MainSiteName%/ContextHelp
+
+::remove + re-add
+CALL:CreateApplication "%SitePath%" "%SubSiteName%" "%INSTALLDIR%\%FolderPath%" "%SiteOrApp%" "%DefaultDocs%"
 
 if "%SiteOrApp%"=="app" (
 	echo Change app pool
@@ -112,15 +119,27 @@ for /f "tokens=1,2 delims=;" %%g in ('findstr /C:"%SubSiteName%;" /I %SDKCREDPRO
 CALL:IISSecuritySet "%SitePath%" "%AuthFlag%"
 
 ::application mapping. Needed for asp.net MVC on IIS6
-set aspnet_isapi=C:\WINDOWS\Microsoft.NET\Framework64\v4.0.30319\aspnet_isapi.dll
-if "%PROCESSOR_ARCHITECTURE%"=="x86" set aspnet_isapi=C:\WINDOWS\Microsoft.NET\Framework\v4.0.30319\aspnet_isapi.dll
+::set x86 first as "default"
+set aspnet_isapi=C:\WINDOWS\Microsoft.NET\Framework\v4.0.30319\aspnet_isapi.dll
 
-::Remove existing MVC mapping
-if exist %aspnet_isapi% cscript "%ROOTDIR%\IIS6ManageMapping.vbs" W3SVC/1/root/%SitePath%/ScriptMaps "*,%aspnet_isapi%,0" "" /REMOVE /ALL /COMMIT
-::Add MVC mapping
-if exist %aspnet_isapi% cscript "%ROOTDIR%\IIS6ManageMapping.vbs" W3SVC/1/root/%SitePath%/ScriptMaps "" "*,%aspnet_isapi%,0" /INSERT /COMMIT
-GOTO Done
+::AMD64?
+if defined ProgramFiles(x86) set aspnet_isapi=C:\WINDOWS\Microsoft.NET\Framework64\v4.0.30319\aspnet_isapi.dll
 
+if "%aspnetisapi%"=="aspnet_isapi" (
+	ECHO setting script maps aka isapi filter for: %SitePath% %aspnetisapi%
+	if exist %aspnet_isapi% cscript "%ROOTDIR%\IIS6ManageMapping.vbs" W3SVC/1/root/%SitePath%/ScriptMaps "*,%aspnet_isapi%,0" "" /REMOVE /ALL /COMMIT
+	if exist %aspnet_isapi% cscript "%ROOTDIR%\IIS6ManageMapping.vbs" W3SVC/1/root/%SitePath%/ScriptMaps "" "*,%aspnet_isapi%,0" /INSERT /COMMIT
+)
+
+::disable directoryBrowse
+cscript "%ROOTDIR%\adsutil.vbs" set w3svc/1/root/%SitePath%/enabledirbrowsing "False"
+
+::use Ntlm only
+If "%SDKCREDPROT%"=="Ntlm" (
+	cscript "%ROOTDIR%\adsutil.vbs" set W3SVC/1/root/%SitePath%/NTAuthenticationProviders "NTLM"  
+)
+
+exit /B
 
 :BitMaskGet
 SETLOCAL
@@ -161,11 +180,15 @@ cscript "%ROOTDIR%\adsutil.vbs" set w3svc/1/root/%~1/appfriendlyname "%~2"
 echo cscript "%ROOTDIR%\adsutil.vbs" set w3svc/1/root/%~1/path "%~3"
 cscript "%ROOTDIR%\adsutil.vbs" set w3svc/1/root/%~1/path "%~3"
 
-if "%~4"=="vdir" (
-cscript "%ROOTDIR%\adsutil.vbs" SET "w3svc/1/Root/%~1/DefaultDoc" "index.html, default.htm"
-cscript "%ROOTDIR%\adsutil.vbs" SET "w3svc/1/Root/%~1/EnableDefaultDoc" True
-)
+::disbable default docs for all
+cscript "%ROOTDIR%\adsutil.vbs" SET "w3svc/1/Root/%~1/DefaultDoc" ""
+cscript "%ROOTDIR%\adsutil.vbs" SET "w3svc/1/Root/%~1/EnableDefaultDoc" False
 
+::enable default docs for some
+if not "%~5"=="None" (
+	cscript "%ROOTDIR%\adsutil.vbs" SET "w3svc/1/Root/%~1/DefaultDoc" "%~5"
+	cscript "%ROOTDIR%\adsutil.vbs" SET "w3svc/1/Root/%~1/EnableDefaultDoc" True
+)
 goto:eof
 
 :IISSecuritySet

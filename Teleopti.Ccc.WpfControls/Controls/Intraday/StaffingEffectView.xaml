@@ -29,7 +29,7 @@
 
     <StackPanel Background="{StaticResource RaptorStandardLightGradientBrush}">
 
-        <Grid Name="grid" >
+        <Grid x:Name="Grid">
         <Grid.Resources>
             <Style TargetType="Label">
                 <Setter Property="VerticalAlignment" Value="Center"></Setter>  
