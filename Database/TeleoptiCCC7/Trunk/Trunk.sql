@@ -8,7 +8,7 @@ ADD TheDate datetime
 GO
 
 update dbo.PersonAssignment
-set TheDate ='1800-1-1'
+set TheDate ='1800-01-01'
 GO
 
 ALTER TABLE dbo.PersonAssignment
@@ -24,9 +24,8 @@ ADD TheDate datetime
 GO
 
 update Auditing.PersonAssignment_AUD
-set TheDate ='1800-1-1'
+set TheDate ='1800-01-01'
 GO
-
 
 ----------------  
 --Name: Roger Kratz
@@ -45,6 +44,13 @@ GO
 ALTER TABLE [dbo].[PersonAssignment] CHECK CONSTRAINT [FK_PersonAssignment_ShiftCategory]
 GO
 
+--move data for ShiftCategory
+UPDATE pa
+SET pa.ShiftCategory = ms.ShiftCategory
+FROM dbo.PersonAssignment pa
+INNER JOIN dbo.MainShift ms
+	ON pa.Id = ms.Id
+
 --add mainshiftlayers from personassignment
 ALTER TABLE [dbo].[MainShiftActivityLayer] DROP CONSTRAINT [FK_MainShiftActivityLayer_MainShift]
 GO
@@ -59,12 +65,21 @@ GO
 
 --drop mainshift table
 DROP TABLE dbo.MainShift
+GO
 
 ------------------ AUDIT TABLES ----------------------------
 --Add shiftcategory to personassignment
 ALTER TABLE auditing.PersonAssignment_AUD
 add ShiftCategory uniqueidentifier
+GO
 
--- NOTE! Parent now points to personassignment (no db scheme changes
+--move data for ShiftCategory
+UPDATE pa
+SET pa.ShiftCategory = ms.ShiftCategory
+FROM auditing.PersonAssignment_AUD pa
+INNER JOIN auditing.MainShift_AUD ms
+	ON pa.Id = ms.Id
 
+--drop mainshift table
 drop table auditing.mainshift_aud
+GO
