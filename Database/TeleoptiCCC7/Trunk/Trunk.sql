@@ -7,8 +7,10 @@ ALTER TABLE dbo.PersonAssignment
 ADD TheDate datetime
 GO
 
+declare @theDate datetime
+set @theDate ='1800-01-01'
 update dbo.PersonAssignment
-set TheDate ='1800-01-01'
+set TheDate = @theDate
 GO
 
 ALTER TABLE dbo.PersonAssignment
@@ -23,8 +25,11 @@ ALTER TABLE Auditing.PersonAssignment_AUD
 ADD TheDate datetime
 GO
 
+declare @theDate datetime
+set @theDate ='1800-01-01'
+
 update Auditing.PersonAssignment_AUD
-set TheDate ='1800-01-01'
+set TheDate = @theDate
 GO
 
 ----------------  
