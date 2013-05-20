@@ -33,8 +33,10 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             _tradePerson = PersonFactory.CreatePerson("Day", "Trader");
 
 			CultureInfo englishCulture = CultureInfoFactory.CreateEnglishCulture();
-			_requestedPerson.PermissionInformation.SetCulture(englishCulture);
-			_tradePerson.PermissionInformation.SetCulture(englishCulture);
+			setPersonCulture(_requestedPerson, englishCulture);
+			setPersonCulture(_tradePerson, englishCulture);
+			setPersonLanguage(_requestedPerson, englishCulture);
+			setPersonLanguage(_tradePerson, englishCulture);
 
             _shiftTradeSwapDetail = new ShiftTradeSwapDetail(_requestedPerson, _tradePerson,
                                                              new DateOnly(2008, 7, 16), new DateOnly(2008, 7, 16));
@@ -103,9 +105,9 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
         [Test]
 		public void ShouldDenyMessageForTranslatedCultureBeRequestPersonOwnLanguage()
         {
-            
-			CultureInfo swedishCultureInfo = CultureInfoFactory.CreateSwedishCulture();
-			_requestedPerson.PermissionInformation.SetCulture(swedishCultureInfo);
+
+			setPersonCulture(_requestedPerson, CultureInfoFactory.CreateSwedishCulture());
+			setPersonLanguage(_requestedPerson, CultureInfoFactory.CreateSwedishCulture());
 		
 			_target.Deny(_tradePerson);
             Assert.IsNotNull(_target);
@@ -120,8 +122,8 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 		public void ShouldDenyMessageForNotTranslatedCultureBeInEnglish()
 		{
 
-			CultureInfo catalanCulture = CultureInfoFactory.CreateCatalanCulture();
-			_requestedPerson.PermissionInformation.SetCulture(catalanCulture);
+			setPersonCulture(_requestedPerson, CultureInfoFactory.CreateCatalanCulture());
+			setPersonLanguage(_requestedPerson, CultureInfoFactory.CreateCatalanCulture());
 
 			_target.Deny(_tradePerson);
 			Assert.IsNotNull(_target);
@@ -225,8 +227,8 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 		public void ShouldAcceptMessageForTranslatedCultureBeRequestPersonOwnLanguage()
 		{
 
-			CultureInfo swedishCultureInfo = CultureInfoFactory.CreateSwedishCulture();
-			_requestedPerson.PermissionInformation.SetCulture(swedishCultureInfo);
+			setPersonCulture(_requestedPerson, CultureInfoFactory.CreateSwedishCulture());
+			setPersonLanguage(_requestedPerson, CultureInfoFactory.CreateSwedishCulture());
 
 			MockRepository mocks = new MockRepository();
 			IShiftTradeRequestSetChecksum shiftTradeRequestSetChecksum =
@@ -248,12 +250,12 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 			mocks.VerifyAll();
 		}
 
-		[Test]
+	    [Test]
 		public void ShouldAcceptMessageForNotTranslatedCultureBeInEnglish()
 		{
 
-			CultureInfo catalanCultureInfo = CultureInfoFactory.CreateCatalanCulture();
-			_requestedPerson.PermissionInformation.SetCulture(catalanCultureInfo);
+			setPersonCulture(_requestedPerson, CultureInfoFactory.CreateCatalanCulture());
+			setPersonLanguage(_requestedPerson, CultureInfoFactory.CreateCatalanCulture());
 
 			MockRepository mocks = new MockRepository();
 			IShiftTradeRequestSetChecksum shiftTradeRequestSetChecksum =
@@ -296,8 +298,8 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 		public void ShouldReferMessageForTranslatedCultureBeRequestPersonOwnLanguage()
 		{
 
-			CultureInfo swedishCulture = CultureInfoFactory.CreateSwedishCulture();
-			_requestedPerson.PermissionInformation.SetCulture(swedishCulture);
+			setPersonCulture(_requestedPerson, CultureInfoFactory.CreateSwedishCulture());
+			setPersonLanguage(_requestedPerson, CultureInfoFactory.CreateSwedishCulture());
 
 			Assert.AreEqual(ShiftTradeStatus.OkByMe, _target.GetShiftTradeStatus(new ShiftTradeRequestStatusCheckerForTestDoesNothing()));
 			_target.Refer(_authorization);
@@ -441,6 +443,16 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
             return messageWillBeSentToRequestPerson() && messageWillBeSentToTradePerson();
         }
 
+		private static void setPersonLanguage(IPerson person, CultureInfo cultureInfo)
+		{
+			person.PermissionInformation.SetUICulture(cultureInfo);
+		}
+
+		private static void setPersonCulture(IPerson person, CultureInfo cultureInfo)
+		{
+			person.PermissionInformation.SetCulture(cultureInfo);
+		}
+
         [Test]
         public void VerifySwappingShiftsForMoreThanOneDay()
         {
@@ -475,8 +487,8 @@ namespace Teleopti.Ccc.DomainTest.AgentInfo.Requests
 		public void ShouldPendingMessageBeOnTheReceiverCultureLanguage()
 		{
 
-			CultureInfo swedishCultureInfo = CultureInfoFactory.CreateSwedishCulture();
-			_tradePerson.PermissionInformation.SetCulture(swedishCultureInfo);
+			setPersonCulture(_tradePerson, CultureInfoFactory.CreateSwedishCulture());
+			setPersonLanguage(_tradePerson, CultureInfoFactory.CreateSwedishCulture());
 
 			var shiftTradeSwapDetail1 = new ShiftTradeSwapDetail(_requestedPerson, _tradePerson,
 															 new DateOnly(2008, 7, 16), new DateOnly(2008, 7, 16));

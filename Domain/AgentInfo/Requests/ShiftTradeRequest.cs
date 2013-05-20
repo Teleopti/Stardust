@@ -56,18 +56,18 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 	        if (shiftTradeSwapDetails.IsEmpty()) return;
 
 	        var culture = PersonTo.PermissionInformation.Culture();
-	        var uiCulture = PersonTo.PermissionInformation.UICulture();
+	        var language = PersonTo.PermissionInformation.UICulture();
 	        var timezone = PersonTo.PermissionInformation.DefaultTimeZone();
 	        var datePattern = culture.DateTimeFormat.ShortDatePattern;
 
 	        if (isShiftTradeRequestForOneDayOnly())
 	        {
 		        var notificationTemplate =
-			        UserTexts.Resources.ResourceManager.GetString("ANewShiftTradeForOneDayHasBeenCreatedDot", culture) ??
+			        UserTexts.Resources.ResourceManager.GetString("ANewShiftTradeForOneDayHasBeenCreatedDot", language) ??
 			        UserTexts.Resources.ANewShiftTradeForOneDayHasBeenCreatedDot;
 
 		        SetNotification(string.Format(
-			        uiCulture,
+			        culture,
 			        notificationTemplate,
 			        Period.StartDateTimeLocal(timezone).ToString(datePattern)), 
 		            new List<IPerson> { PersonTo });
@@ -75,11 +75,11 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
 	        else
 	        {
 		        var notificationTemplate =
-					UserTexts.Resources.ResourceManager.GetString("ANewShiftTradeHasBeenCreatedDot", culture) ??
+					UserTexts.Resources.ResourceManager.GetString("ANewShiftTradeHasBeenCreatedDot", language) ??
 			        UserTexts.Resources.ANewShiftTradeHasBeenCreatedDot;
 
 		        SetNotification(string.Format(
-			        uiCulture,
+			        culture,
 			        notificationTemplate,
 			        Period.StartDateTimeLocal(timezone).ToString(datePattern),
 			        Period.EndDateTimeLocal(timezone).AddMinutes(-1).ToString(datePattern)), 
@@ -123,18 +123,18 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             calculateAndSetPeriod();
 
 			var culture = PersonTo.PermissionInformation.Culture();
-			var uiCulture = PersonTo.PermissionInformation.UICulture();
+			var language = PersonTo.PermissionInformation.UICulture();
 			var timezone = PersonTo.PermissionInformation.DefaultTimeZone();
 			var datePattern = culture.DateTimeFormat.ShortDatePattern;
 
             if (isShiftTradeRequestForOneDayOnly())
             {
 				var notificationTemplate =
-					UserTexts.Resources.ResourceManager.GetString("ANewShiftTradeForOneDayHasBeenCreatedDot", culture) ??
+					UserTexts.Resources.ResourceManager.GetString("ANewShiftTradeForOneDayHasBeenCreatedDot", language) ??
 					UserTexts.Resources.ANewShiftTradeForOneDayHasBeenCreatedDot;
 
                 SetNotification(string.Format(
-					uiCulture,
+					culture,
 					notificationTemplate,
                     Period.StartDateTimeLocal(timezone).ToString(datePattern)),
                     new List<IPerson> { shiftTradeSwapDetail.PersonTo });
@@ -142,11 +142,11 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             else
             {
 				var notificationTemplate =
-					UserTexts.Resources.ResourceManager.GetString("ANewShiftTradeHasBeenCreatedDot", culture) ??
+					UserTexts.Resources.ResourceManager.GetString("ANewShiftTradeHasBeenCreatedDot", language) ??
 					UserTexts.Resources.ANewShiftTradeHasBeenCreatedDot;
 
                 SetNotification(string.Format(
-					uiCulture,
+					culture,
                     notificationTemplate,
                     Period.StartDateTimeLocal(timezone).ToString(datePattern),
                     Period.EndDateTimeLocal(timezone).AddMinutes(-1).ToString(datePattern)),
@@ -214,7 +214,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             list.Remove(denyPerson);
 
 	        var culture = PersonFrom.PermissionInformation.Culture();
-	        var uiCulture = PersonFrom.PermissionInformation.UICulture();
+	        var language = PersonFrom.PermissionInformation.UICulture();
 			var timezone = PersonFrom.PermissionInformation.DefaultTimeZone();
             var datePattern = culture.DateTimeFormat.ShortDatePattern;
 	        string notification;
@@ -223,11 +223,11 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             {
 
 				var notificationTemplate =
-					UserTexts.Resources.ResourceManager.GetString("ShiftTradeRequestForOneDayHasBeenDeniedDot", culture) ??
+					UserTexts.Resources.ResourceManager.GetString("ShiftTradeRequestForOneDayHasBeenDeniedDot", language) ??
 					UserTexts.Resources.ShiftTradeRequestForOneDayHasBeenDeniedDot;
 
 	            notification = string.Format(
-						uiCulture, 
+						culture, 
 						notificationTemplate, 
 						Period.StartDateTimeLocal(timezone).ToString(datePattern));
             }
@@ -235,11 +235,11 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             {
 
 				var notificationTemplate =
-					UserTexts.Resources.ResourceManager.GetString("ShiftTradeRequestHasBeenDeniedDot", culture) ??
+					UserTexts.Resources.ResourceManager.GetString("ShiftTradeRequestHasBeenDeniedDot", language) ??
 					UserTexts.Resources.ShiftTradeRequestHasBeenDeniedDot;
 
 	            notification = string.Format(
-						uiCulture, 
+						culture, 
 						notificationTemplate, 
 						Period.StartDateTimeLocal(timezone).ToString(datePattern),
 						Period.EndDateTimeLocal(timezone).AddMinutes(-1).ToString(datePattern));
@@ -264,7 +264,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
         {
 
 			var culture = PersonFrom.PermissionInformation.Culture();
-			var uiCulture = PersonFrom.PermissionInformation.UICulture();
+			var language = PersonFrom.PermissionInformation.UICulture();
 			var timezone = PersonFrom.PermissionInformation.DefaultTimeZone();
 			var datePattern = culture.DateTimeFormat.ShortDatePattern;
 			string notification;
@@ -273,22 +273,22 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             if (isShiftTradeRequestForOneDayOnly())
             {
 				var notificationTemplate =
-					UserTexts.Resources.ResourceManager.GetString("ShiftTradeRequestForOneDayHasBeenAcceptedDot", culture) ??
+					UserTexts.Resources.ResourceManager.GetString("ShiftTradeRequestForOneDayHasBeenAcceptedDot", language) ??
 					UserTexts.Resources.ShiftTradeRequestForOneDayHasBeenAcceptedDot;
 
 				notification = string.Format(
-						uiCulture,
+						culture,
 						notificationTemplate,
 						Period.StartDateTimeLocal(timezone).ToString(datePattern));
             }
             else
             {
 				var notificationTemplate =
-					UserTexts.Resources.ResourceManager.GetString("ShiftTradeRequestHasBeenAcceptedDot", culture) ??
+					UserTexts.Resources.ResourceManager.GetString("ShiftTradeRequestHasBeenAcceptedDot", language) ??
 					UserTexts.Resources.ShiftTradeRequestHasBeenAcceptedDot;
 
 				notification = string.Format(
-						uiCulture,
+						culture,
 						notificationTemplate,
 						Period.StartDateTimeLocal(timezone).ToString(datePattern),
 						Period.EndDateTimeLocal(timezone).AddMinutes(-1).ToString(datePattern));
@@ -315,30 +315,30 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             SetShiftTradeStatus(ShiftTradeStatus.Referred, authorization);
 
 			var culture = PersonFrom.PermissionInformation.Culture();
-			var uiCulture = PersonFrom.PermissionInformation.UICulture();
+			var language = PersonFrom.PermissionInformation.UICulture();
 			var timezone = PersonFrom.PermissionInformation.DefaultTimeZone();
 			var datePattern = culture.DateTimeFormat.ShortDatePattern;
 
             if (!isShiftTradeRequestForOneDayOnly())
             {
 				var notificationTemplate =
-					UserTexts.Resources.ResourceManager.GetString("ShiftTradeRequestForOneDayHasBeenReferredDot", culture) ??
+					UserTexts.Resources.ResourceManager.GetString("ShiftTradeRequestForOneDayHasBeenReferredDot", language) ??
 					UserTexts.Resources.ShiftTradeRequestForOneDayHasBeenReferredDot;
 
 
 				TextForNotification = string.Format(
-					uiCulture,
+					culture,
 					notificationTemplate,
 					Period.StartDateTimeLocal(timezone).ToString(datePattern));
             }
             else
             {
 				var notificationTemplate =
-					UserTexts.Resources.ResourceManager.GetString("ShiftTradeRequestHasBeenReferredDot", culture) ??
+					UserTexts.Resources.ResourceManager.GetString("ShiftTradeRequestHasBeenReferredDot", language) ??
 					UserTexts.Resources.ShiftTradeRequestHasBeenReferredDot;
 
                 TextForNotification = string.Format(
-					uiCulture,
+					culture,
 					notificationTemplate,
 					Period.StartDateTimeLocal(timezone).ToString(datePattern),
 					Period.EndDateTimeLocal(timezone).AddMinutes(-1).ToString(datePattern));
@@ -368,7 +368,7 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
             {
 
 				var culture = PersonFrom.PermissionInformation.Culture();
-				var uiCulture = PersonFrom.PermissionInformation.UICulture();
+				var language = PersonFrom.PermissionInformation.UICulture();
 				var timezone = PersonFrom.PermissionInformation.DefaultTimeZone();
 				var datePattern = culture.DateTimeFormat.ShortDatePattern;
 
@@ -376,11 +376,11 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
                 if (isShiftTradeRequestForOneDayOnly())
                 {
 					var notificationTemplate =
-						UserTexts.Resources.ResourceManager.GetString("ShiftTradeRequestForOneDayHasBeenApprovedDot", culture) ??
+						UserTexts.Resources.ResourceManager.GetString("ShiftTradeRequestForOneDayHasBeenApprovedDot", language) ??
 						UserTexts.Resources.ShiftTradeRequestForOneDayHasBeenApprovedDot;
 
                     SetNotification(string.Format(
-						uiCulture,
+						culture,
 						notificationTemplate,
 						Period.StartDateTimeLocal(timezone).ToString(datePattern)),
 						new List<IPerson>(InvolvedPeople()));
@@ -389,11 +389,11 @@ namespace Teleopti.Ccc.Domain.AgentInfo.Requests
                 {
 
 					var notificationTemplate =
-						UserTexts.Resources.ResourceManager.GetString("ShiftTradeRequestHasBeenApprovedDot", culture) ??
+						UserTexts.Resources.ResourceManager.GetString("ShiftTradeRequestHasBeenApprovedDot", language) ??
 						UserTexts.Resources.ShiftTradeRequestHasBeenApprovedDot;
 
                     SetNotification(string.Format(
-						uiCulture,
+						culture,
 						notificationTemplate,
 						Period.StartDateTimeLocal(timezone).ToString(datePattern),
 						Period.EndDateTimeLocal(timezone).AddMinutes(-1).ToString(datePattern)), 
