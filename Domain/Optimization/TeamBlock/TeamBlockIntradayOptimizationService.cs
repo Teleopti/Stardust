@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Interfaces.Domain;
@@ -102,8 +103,11 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 			var sortedTeamBlockInfos = _teamBlockIntradayDecisionMaker.Decide(allTeamBlockInfos, optimizationPreferences,
 			                                                              schedulingOptions);
 
+			int totalTeamBlockInfos = sortedTeamBlockInfos.Count;
+			int runningTeamBlockCounter = 0;
 			foreach (var teamBlockInfo in sortedTeamBlockInfos)
 			{
+				runningTeamBlockCounter++;
 				if (_cancelMe)
 					break;
 				schedulePartModifyAndRollbackService.ClearModificationCollection();
@@ -131,15 +135,19 @@ namespace Teleopti.Ccc.Domain.Optimization.TeamBlock
 				var newStandardDeviationSum = _standardDeviationSumCalculator.Calculate(selectedPeriod, allMatrixesOfOnePerson,
 																								optimizationPreferences, schedulingOptions);
 				var isWorse = newStandardDeviationSum >= previousStandardDevationSum;
+				string teamName = StringHelper.DisplayString(teamBlockInfo.TeamInfo.GroupPerson.Name.ToString(), 20);
+				string commonProgress = Resources.OptimizingIntraday + Resources.Colon + "(" + totalTeamBlockInfos + ")(" +
+				                        runningTeamBlockCounter + ")" + teamBlockInfo.BlockInfo.BlockPeriod.DateString + " " +
+				                        teamName + " ";
 				if (isWorse)
 				{
 					teamBlockToRemove.Add(teamBlockInfo);
-					OnReportProgress(Resources.OptimizingIntraday + Resources.Colon + previousStandardDevationSum + "("+ newStandardDeviationSum+ ")");
+					OnReportProgress(commonProgress + previousStandardDevationSum + "(" + newStandardDeviationSum + ")");
 					_safeRollbackAndResourceCalculation.Execute(schedulePartModifyAndRollbackService, schedulingOptions);
 				}
 				else
 				{
-					OnReportProgress(Resources.OptimizingIntraday + Resources.Colon + newStandardDeviationSum + " - " + Resources.Improved);
+					OnReportProgress(commonProgress + newStandardDeviationSum + " - " + Resources.Improved);
 				}
 			}
 			return teamBlockToRemove;
