@@ -4,17 +4,17 @@
 --Date: 2013-04-15
 --Desc: Adding date for person assignment. Hard coded to 1800-1-1. Will be replaced by .net code
 ALTER TABLE dbo.PersonAssignment
-ADD TheDate datetime
+ADD [Date] datetime
 GO
 
-declare @theDate datetime
-set @theDate = '1800-01-01T00:00:00'
+declare @Date datetime
+set @Date = '1800-01-01T00:00:00'
 update dbo.PersonAssignment
-set TheDate = @theDate
+set [Date] = @Date
 GO
 
 ALTER TABLE dbo.PersonAssignment
-ALTER COLUMN TheDate datetime not null
+ALTER COLUMN [Date] datetime not null
 GO
 
 ----------------  
@@ -22,14 +22,14 @@ GO
 --Date: 2013-04-15
 --Desc: Adding date for person assignment audit table. Hard coded to 1800-1-1. Will be replaced by .net code
 ALTER TABLE Auditing.PersonAssignment_AUD
-ADD TheDate datetime
+ADD [Date] datetime
 GO
 
-declare @theDate datetime
-set @theDate = '1800-01-01T00:00:00'
+declare @Date datetime
+set @Date = '1800-01-01T00:00:00'
 
 update Auditing.PersonAssignment_AUD
-set TheDate = @theDate
+set [Date] = @Date
 GO
 
 ----------------  

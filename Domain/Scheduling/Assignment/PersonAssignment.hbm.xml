@@ -30,7 +30,7 @@
 							not-null="true"/>
 		<!--IEntity-->
 		<property name="Date" 
-					 column="TheDate"
+					 column="`Date`"
 					 access="property"
 					 type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"
 					 not-null="true" 
