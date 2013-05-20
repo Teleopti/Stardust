@@ -131,7 +131,7 @@ INSERT INTO mart.report (
 		'mart.report_data_availability_per_agent',
 		'f01:Report+AvailabilityPerAgent',
 		'','','','',
-		'077F50D3-CE9C-4EF6-B52F-13975C4F83EA')
+		'B69DBA82-38A3-4A12-BFF6-0FAB903C368B')
 GO
 
 ----------------  
