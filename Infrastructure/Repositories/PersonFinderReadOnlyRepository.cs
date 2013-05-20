@@ -11,11 +11,11 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 {
     public class PersonFinderReadOnlyRepository : IPersonFinderReadOnlyRepository
     {
-        private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-        
-        public PersonFinderReadOnlyRepository(IUnitOfWorkFactory unitOfWorkFactory)
+		private readonly ICurrentUnitOfWork _currentUnitOfWork;
+
+		public PersonFinderReadOnlyRepository(ICurrentUnitOfWork currentUnitOfWork)
         {
-            _unitOfWorkFactory = unitOfWorkFactory;
+			_currentUnitOfWork = currentUnitOfWork;
         }
 
          [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1305:SpecifyIFormatProvider", MessageId = "System.String.Format(System.String,System.Object[])"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "0")]
@@ -24,9 +24,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
              personFinderSearchCriteria.TotalRows = 0;
              int cultureId = Domain.Security.Principal.TeleoptiPrincipal.Current.Regional.UICulture.LCID;
 
-             using (var uow = _unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork())
+             using (var uow = _currentUnitOfWork.Current())
              {
-                 var result = ((NHibernateStatelessUnitOfWork) uow).Session.CreateSQLQuery(
+				 var result = ((NHibernateUnitOfWork)uow).Session.CreateSQLQuery(
                      "exec [ReadModel].PersonFinder @search_string=:search_string, @search_type=:search_type, @leave_after=:leave_after, @start_row =:start_row, @end_row=:end_row, @order_by=:order_by, @sort_direction=:sort_direction, @culture=:culture")
                      .SetString("search_string", personFinderSearchCriteria.SearchValue)
                      .SetString("search_type", Enum.GetName(typeof(PersonFinderField), personFinderSearchCriteria.Field))
@@ -54,9 +54,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         public  void UpdateFindPerson(ICollection<Guid> ids)
         {
             string inputIds = String.Join(",", (from p in ids select p.ToString()).ToArray());
-            using (var uow = _unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork())
+            using (var uow = _currentUnitOfWork.Current())
             {
-                ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(
+				((NHibernateUnitOfWork)uow).Session.CreateSQLQuery(
                     string.Format("exec [ReadModel].[UpdateFindPerson] '{0}'", inputIds)).ExecuteUpdate();
             }
         }
@@ -65,9 +65,9 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         public void UpdateFindPersonData(ICollection<Guid> ids)
         {
             string inputIds = String.Join(",", (from p in ids select p.ToString()).ToArray());
-            using (var uow = _unitOfWorkFactory.CreateAndOpenStatelessUnitOfWork())
+			using (var uow = _currentUnitOfWork.Current())
             {
-                ((NHibernateStatelessUnitOfWork)uow).Session.CreateSQLQuery(
+				((NHibernateUnitOfWork)uow).Session.CreateSQLQuery(
                     string.Format("exec [ReadModel].[UpdateFindPersonData] '{0}'", inputIds)).ExecuteUpdate();
             }
         }
