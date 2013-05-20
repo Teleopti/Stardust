@@ -37,7 +37,7 @@ IF %ERRORLEVEL% NEQ 0 SET /A ERRORLEV=8 & GOTO :error
 
 
 ::Deploy
-ROBYCOPY "%ROOTDIR%\..\..\..\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBus.Host\bin\Debug\*" "%OutputDir%" /E > NUL
+ROBOCOPY "%ROOTDIR%\..\..\..\Teleopti.Ccc.Sdk\Teleopti.Ccc.Sdk.ServiceBus.Host\bin\Debug\*" "%OutputDir%" /E > NUL
 
 ::Install
 ECHO Install ServiceBus Service
