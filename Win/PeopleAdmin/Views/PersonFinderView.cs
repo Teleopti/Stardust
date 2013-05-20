@@ -33,7 +33,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
             dateTimePickerAdv1.Value = DateTime.Now.AddMonths(-1);
             dateTimePickerAdv1.Calendar.TodayButton.Text = Resources.Today;
             listView1.ListViewItemSorter = new ListViewColumnSorter();
-            IPersonFinderReadOnlyRepository repository = new PersonFinderReadOnlyRepository(UnitOfWorkFactory.Current);
+            IPersonFinderReadOnlyRepository repository = new PersonFinderReadOnlyRepository(UnitOfWorkFactory.CurrentUnitOfWork());
             IPersonFinderSearchCriteria personFinderSearchCriteria = new PersonFinderSearchCriteria(PersonFinderField.All, string.Empty, (int)RowsPerPage.Ten , DateOnly.Today,2,0);
             IPersonFinderModel model = new PersonFinderModel(repository, personFinderSearchCriteria);
             _presenter = new PersonFinderPresenter(this, model);
