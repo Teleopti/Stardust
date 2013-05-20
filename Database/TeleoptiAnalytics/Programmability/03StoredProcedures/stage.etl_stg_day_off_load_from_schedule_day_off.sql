@@ -30,17 +30,17 @@ BEGIN
 		)
 	SELECT 
 		[day_off_name]			= sdo.day_off_name,
-		[day_off_shortname]		= sdo.day_off_shortname,
+		[day_off_shortname]		= MAX(sdo.day_off_shortname),
 		[business_unit_code]	= sdo.business_unit_code,
 		[day_off_code]			= NULL,
 		[display_color]			= -8355712,
 		[display_color_html]	= '#808080',
-		[datasource_id]			= min(sdo.datasource_id),
+		[datasource_id]			= MIN(sdo.datasource_id),
 		[insert_date]			= GETDATE(),
 		[update_date]			= GETDATE(),
-		[datasource_update_date]= GETDATE()
+		[datasource_update_date]= MAX(sdo.datasource_update_date)
 	FROM stage.stg_schedule_day_off_count sdo
-	GROUP BY sdo.day_off_name,sdo.day_off_shortname,sdo.business_unit_code
+	GROUP BY sdo.day_off_name, sdo.business_unit_code
 END
 
 GO
