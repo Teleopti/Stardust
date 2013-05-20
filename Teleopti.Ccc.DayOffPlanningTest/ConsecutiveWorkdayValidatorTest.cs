@@ -489,42 +489,80 @@ namespace Teleopti.Ccc.DayOffPlanningTest
             return result;
         }
 
-        //[Test]
-        //public void ShouldAllowSingleWorkdayOnLastDayIfNotConsiderWeekAfterAndBefore()
-        //{
-        //    _options = new MinMax<int>(2, 6);
-        //    bool[] values = new bool[]
-        //                        {
-        //                            false,
-        //                            false,
-        //                            false,
-        //                            false,
-        //                            false,
-        //                            false,
-        //                            false,
+		[Test]
+		public void ShouldNotConsiderWeekBeforeIfEmpty()
+		{
+			_options = new MinMax<int>(2, 6);
+			bool[] values = new bool[]
+                                {
+                                    false,
+                                    false,
+                                    false,
+                                    false,
+                                    false,
+                                    false,
+                                    false,
 
-        //                            false,
-        //                            false,
-        //                            false,
-        //                            false,
-        //                            true,
-        //                            true,
-        //                            false,
+                                    false,
+                                    false,
+                                    false,
+                                    false,
+                                    true,
+                                    true,
+                                    false,
 
-        //                            false,
-        //                            false,
-        //                            false,
-        //                            false,
-        //                            false,
-        //                            false,
-        //                            false
-        //                        };
-        //    BitArray bitArray = new BitArray(values);
-        //    _target = new ConsecutiveWorkdayValidator(_options, false, false);
-        //    bool result = _target.IsValid(bitArray, 11);
-        //    Assert.IsTrue(result);
-        //    result = _target.IsValid(bitArray, 12);
-        //    Assert.IsTrue(result);
-        //}
+                                    false,
+                                    false,
+                                    false,
+                                    false,
+                                    false,
+                                    false,
+                                    false
+                                };
+			BitArray bitArray = new BitArray(values);
+			_target = new ConsecutiveWorkdayValidator(_options, true, false);
+			bool result = _target.IsValid(bitArray, 11);
+			Assert.IsTrue(result);
+			result = _target.IsValid(bitArray, 12);
+			Assert.IsTrue(result);
+		}
+
+		[Test]
+		public void ShouldNotConsiderWeekAfterIfEmpty()
+		{
+			_options = new MinMax<int>(2, 6);
+			bool[] values = new bool[]
+                                {
+                                    false,
+                                    false,
+                                    false,
+                                    false,
+                                    false,
+                                    false,
+                                    false,
+
+                                    false,
+                                    false,
+                                    false,
+                                    false,
+                                    true,
+                                    true,
+                                    false,
+
+                                    false,
+                                    false,
+                                    false,
+                                    false,
+                                    false,
+                                    false,
+                                    false
+                                };
+			BitArray bitArray = new BitArray(values);
+			_target = new ConsecutiveWorkdayValidator(_options, false, true);
+			bool result = _target.IsValid(bitArray, 11);
+			Assert.IsTrue(result);
+			result = _target.IsValid(bitArray, 12);
+			Assert.IsTrue(result);
+		}
     }
 }
