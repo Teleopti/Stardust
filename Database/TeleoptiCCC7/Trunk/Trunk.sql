@@ -26,3 +26,15 @@ GO
 update Auditing.PersonAssignment_AUD
 set TheDate ='1800-1-1'
 GO
+
+
+----------------  
+--Name: Kunning Mao
+--Date: 2013-05-20
+--Desc: Empty read models in order to re-fill it with compressed shifts
+----------------  
+TRUNCATE TABLE [ReadModel].[PersonScheduleDay]
+GO
+
+ALTER TABLE [ReadModel].[PersonScheduleDay] ALTER COLUMN [Shift] nvarchar(2000)
+GO
