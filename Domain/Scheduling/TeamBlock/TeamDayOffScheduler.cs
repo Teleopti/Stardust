@@ -63,7 +63,8 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					{
 						var scheduleDate = scheduleDayPro.Day;
 						var groupPerson = groupPersonBuilderForOptimization.BuildGroupPerson(matrixData.Matrix.Person, scheduleDate);
-						var scheduleDictionary = _schedulingResultStateHolder.Schedules;
+					    if (groupPerson == null) continue;
+                        var scheduleDictionary = _schedulingResultStateHolder.Schedules;
 						var restriction = _effectiveRestrictionCreator.GetEffectiveRestriction(groupPerson.GroupMembers,
 						                                                                       scheduleDate, schedulingOptions,
 						                                                                       scheduleDictionary);
@@ -73,6 +74,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					{
 						var scheduleDate = scheduleDayPro.Day;
 						var groupPerson = groupPersonBuilderForOptimization.BuildGroupPerson(matrixData.Matrix.Person, scheduleDate);
+                        if (groupPerson == null) continue;
 						var scheduleDictionary = _schedulingResultStateHolder.Schedules;
 						var restriction = _effectiveRestrictionCreator.GetEffectiveRestriction(groupPerson.GroupMembers,
 						                                                                       scheduleDate, schedulingOptions,

@@ -119,8 +119,8 @@ namespace Teleopti.Ccc.Win.Commands
 				ISchedulePartModifyAndRollbackService rollbackService =
 				   new SchedulePartModifyAndRollbackService(_schedulerStateHolder.SchedulingResultState, _scheduleDayChangeCallback,
 															new ScheduleTagSetter(schedulingOptions.TagToUseOnScheduling));
-
-				var advanceSchedulingService = callAdvanceSchedulingService(schedulingOptions, groupPersonBuilderForOptimization, rollbackService);
+			    var advanceSchedulingResults = new List<IWorkShiftFinderResult>();
+                var advanceSchedulingService = callAdvanceSchedulingService(schedulingOptions, groupPersonBuilderForOptimization, rollbackService, advanceSchedulingResults);
 				IDictionary<string, IWorkShiftFinderResult> schedulingResults = new Dictionary<string, IWorkShiftFinderResult>();
 				var allVisibleMatrixes = _matrixListFactory.CreateMatrixListAll(selectedPeriod);
 
@@ -129,11 +129,11 @@ namespace Teleopti.Ccc.Win.Commands
 												  matrixesOfSelectedScheduleDays.Select(x => x.Person).Distinct().ToList(),
 												  teamSteadyStateHolder, rollbackService);
 				advanceSchedulingService.DayScheduled -= schedulingServiceDayScheduled;
-
+                _workShiftFinderResultHolder.AddResults(new List<IWorkShiftFinderResult>(schedulingResults.Values), DateTime.Now);
 				//if (schedulingOptions.RotationDaysOnly)
 				//    schedulePartModifyAndRollbackServiceForContractDaysOff.Rollback();
 
-				_workShiftFinderResultHolder.AddResults(new List<IWorkShiftFinderResult>(schedulingResults.Values), DateTime.Now);
+                _workShiftFinderResultHolder.AddResults(advanceSchedulingResults, DateTime.Now);
 			}
 			_workShiftFinderResultHolder.AddResults(_fixedStaffSchedulingService.FinderResults, DateTime.Now);
 		}
@@ -166,9 +166,7 @@ namespace Teleopti.Ccc.Win.Commands
 			return teamSteadyStateHolder;
 		}
 
-		private TeamBlockSchedulingService callAdvanceSchedulingService(ISchedulingOptions schedulingOptions,
-																	  IGroupPersonBuilderForOptimization
-																		  groupPersonBuilderForOptimization, ISchedulePartModifyAndRollbackService rollbackService)
+		private TeamBlockSchedulingService callAdvanceSchedulingService(ISchedulingOptions schedulingOptions, IGroupPersonBuilderForOptimization groupPersonBuilderForOptimization, ISchedulePartModifyAndRollbackService rollbackService, List<IWorkShiftFinderResult> advanceSchedulingResults)
 		{
 
 			var resourceCalculateDelayer = new ResourceCalculateDelayer(_resourceOptimizationHelper, 1, true,
@@ -191,7 +189,7 @@ namespace Teleopti.Ccc.Win.Commands
 											 teamBlockScheduler, 
 											 new BlockSteadyStateValidator(), 
 											 _safeRollbackAndResourceCalculation,
-											 _workShiftMinMaxCalculator);
+                                             _workShiftMinMaxCalculator, advanceSchedulingResults);
 
 			return advanceSchedulingService;
 		}

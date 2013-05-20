@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Teleopti.Ccc.Domain.Collection;
+using Teleopti.Ccc.Domain.ResourceCalculation;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
@@ -22,15 +23,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	    private readonly ISchedulingOptions _schedulingOptions;
 	    private bool _cancelMe;
         private readonly IWorkShiftMinMaxCalculator _workShiftMinMaxCalculator;
+        private readonly List<IWorkShiftFinderResult> _advanceSchedulingResults;
 
         public TeamBlockSchedulingService
-		    (
-		    ISchedulingOptions schedulingOptions,
-		    ITeamInfoFactory teamInfoFactory,
-		    ITeamBlockInfoFactory teamBlockInfoFactory,
-		    ITeamBlockScheduler teamBlockScheduler,
-            IBlockSteadyStateValidator blockSteadyStateValidator,
-			ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation, IWorkShiftMinMaxCalculator workShiftMinMaxCalculator)
+		    (ISchedulingOptions schedulingOptions, ITeamInfoFactory teamInfoFactory, ITeamBlockInfoFactory teamBlockInfoFactory, ITeamBlockScheduler teamBlockScheduler, IBlockSteadyStateValidator blockSteadyStateValidator, ISafeRollbackAndResourceCalculation safeRollbackAndResourceCalculation, IWorkShiftMinMaxCalculator workShiftMinMaxCalculator, List<IWorkShiftFinderResult> advanceSchedulingResults)
 	    {
 		    _teamInfoFactory = teamInfoFactory;
 		    _teamBlockInfoFactory = teamBlockInfoFactory;
@@ -38,11 +34,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	        _blockSteadyStateValidator = blockSteadyStateValidator;
 		    _safeRollbackAndResourceCalculation = safeRollbackAndResourceCalculation;
             _workShiftMinMaxCalculator = workShiftMinMaxCalculator;
+            _advanceSchedulingResults = advanceSchedulingResults;
             _schedulingOptions = schedulingOptions;
 	    }
 
 	    public event EventHandler<SchedulingServiceBaseEventArgs> DayScheduled;
 
+        
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "3"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "2")]
 		public bool ScheduleSelected(IList<IScheduleMatrixPro> allPersonMatrixList, DateOnlyPeriod selectedPeriod, IList<IPerson> selectedPersons, ITeamSteadyStateHolder teamSteadyStateHolder,ISchedulePartModifyAndRollbackService schedulePartModifyAndRollbackService)
 	    {
@@ -61,7 +59,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 				foreach (var teamInfo in allTeamInfoListOnStartDate.GetRandom(allTeamInfoListOnStartDate.Count, true))
 				{
-					if (!teamSteadyStateHolder.IsSteadyState(teamInfo.GroupPerson))
+
+				    if (teamInfo == null) continue;
+                    if (!teamSteadyStateHolder.IsSteadyState(teamInfo.GroupPerson))
 						continue;
 
                     bool singleAgentTeam = _schedulingOptions.GroupOnGroupPageForTeamBlockPer != null &&
@@ -90,6 +90,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                                 _workShiftMinMaxCalculator.ResetCache();
                                 if (!_workShiftMinMaxCalculator.IsPeriodInLegalState(matrix, _schedulingOptions))
                                 {
+                                    var workShiftFinderResult = new WorkShiftFinderResult(teamInfo.GroupPerson, datePointer);
+                                    workShiftFinderResult.AddFilterResults(new WorkShiftFilterResult(UserTexts.Resources.TeamBlockNotInLegalState, 0, 0));
+                                    _advanceSchedulingResults.Add(workShiftFinderResult);
+
                                     _safeRollbackAndResourceCalculation.Execute(schedulePartModifyAndRollbackService,
                                                                                 _schedulingOptions);
                                     rollbackExecuted = true;
