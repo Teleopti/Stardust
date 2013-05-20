@@ -3,7 +3,7 @@ DROP PROCEDURE [mart].[report_data_availability_per_agent]
 GO
 
 
-create PROCEDURE [mart].[report_data_availability_per_agent]
+CREATE PROCEDURE [mart].[report_data_availability_per_agent]
 @scenario_id int,
 @date_from datetime,
 @date_to datetime,
@@ -22,20 +22,58 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-    CREATE TABLE #RESULT(PersonName nvarchar(500),
+/* Check if time zone will be hidden (if only one exist then hide) */
+DECLARE @hide_time_zone bit
+IF (SELECT COUNT(*) FROM mart.dim_time_zone tz WHERE tz.time_zone_code<>'UTC') < 2
+	SET @hide_time_zone = 1
+ELSE
+	SET @hide_time_zone = 0
+
+/* Get the agents to report on */
+CREATE TABLE  #rights_agents (right_id int)
+
+INSERT INTO #rights_agents
+SELECT * FROM mart.ReportAgentsMultipleTeams(@date_from, @date_to, @group_page_code, @group_page_group_set, @group_page_agent_code, @site_id, @team_set, @agent_code, @person_code, @report_id, @business_unit_code)
+
+
+/*Get all teams that user has permission to see. */
+CREATE TABLE #rights_teams (right_id int)
+           INSERT INTO #rights_teams SELECT * FROM mart.PermittedTeamsMultipleTeams(@person_code, @report_id, @site_id, @team_set)
+
+
+
+CREATE TABLE #RESULT(PersonCode uniqueidentifier,
+					PersonName nvarchar(500),
 					AvailableDays int,
 					AvailableMinutes int,
 					ScheduledDays int,
-					ScheduledMinutes int)
-					
-	INSERT INTO #RESULT values('Ola Håkansson',3, 580, 2, 200 )
-	INSERT INTO #RESULT values('Karin Jeppson',5, 1200, 4, 800 )
-	INSERT INTO #RESULT values('David Johnsson',12, 2500, 3, 200 )
-	INSERT INTO #RESULT values('Erik Sundberg',10, 1600, 10, 1600 )
+					ScheduledMinutes int, 
+					Utilization decimal(18,3))
 
-	SELECT * FROM #RESULT
+
+
+INSERT #result(PersonCode,PersonName, AvailableDays,AvailableMinutes,ScheduledDays,ScheduledMinutes,Utilization)
+SELECT	p.person_code,
+		p.person_name,
+		sum(f.available_days), 
+		sum(f.available_time_m),
+		sum(f.scheduled_days),
+		sum(f.scheduled_time_m), 
+		sum(f.scheduled_time_m)/convert(decimal(18,3),sum(f.available_time_m))
+FROM mart.fact_hourly_availability f
+INNER JOIN mart.dim_person p
+	ON f.person_id=p.person_id
+INNER JOIN mart.dim_date d 
+	ON f.date_id = d.date_id
+WHERE d.date_date BETWEEN @date_from AND @date_to
+AND f.scenario_id=@scenario_id
+AND p.team_id IN(select right_id from #rights_teams)
+AND p.person_id in (SELECT right_id FROM #rights_agents)
+GROUP BY p.person_code,p.person_name
+
+	
+	SELECT * FROM #RESULT order by PersonName
 END
-
 
 GO
 

@@ -609,6 +609,9 @@
                   <CellContents>
                     <Textbox Name="textbox6">
                       <CanGrow>true</CanGrow>
+                      <UserSort>
+                        <SortExpression>=Fields!PersonName.Value</SortExpression>
+                      </UserSort>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
@@ -630,6 +633,9 @@
                       <rd:DefaultName>textbox6</rd:DefaultName>
                       <ZIndex>24</ZIndex>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <BackgroundColor>White</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -643,6 +649,9 @@
                   <CellContents>
                     <Textbox Name="Textbox16">
                       <CanGrow>true</CanGrow>
+                      <UserSort>
+                        <SortExpression>=Fields!AvailableDays.Value</SortExpression>
+                      </UserSort>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
@@ -663,6 +672,9 @@
                       </Paragraphs>
                       <rd:DefaultName>Textbox16</rd:DefaultName>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <BackgroundColor>White</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -676,6 +688,9 @@
                   <CellContents>
                     <Textbox Name="textbox22">
                       <CanGrow>true</CanGrow>
+                      <UserSort>
+                        <SortExpression>=Fields!AvailableMinutes.Value</SortExpression>
+                      </UserSort>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
@@ -697,6 +712,9 @@
                       <rd:DefaultName>textbox22</rd:DefaultName>
                       <ZIndex>21</ZIndex>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <BackgroundColor>White</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -710,6 +728,9 @@
                   <CellContents>
                     <Textbox Name="textbox20">
                       <CanGrow>true</CanGrow>
+                      <UserSort>
+                        <SortExpression>=Fields!ScheduledDays.Value</SortExpression>
+                      </UserSort>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
@@ -731,6 +752,9 @@
                       <rd:DefaultName>textbox19</rd:DefaultName>
                       <ZIndex>19</ZIndex>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <BackgroundColor>White</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -744,6 +768,9 @@
                   <CellContents>
                     <Textbox Name="textbox21">
                       <CanGrow>true</CanGrow>
+                      <UserSort>
+                        <SortExpression>=Fields!ScheduledMinutes.Value</SortExpression>
+                      </UserSort>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
@@ -765,6 +792,9 @@
                       <rd:DefaultName>textbox19</rd:DefaultName>
                       <ZIndex>19</ZIndex>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <BackgroundColor>White</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -778,6 +808,9 @@
                   <CellContents>
                     <Textbox Name="textbox24">
                       <CanGrow>true</CanGrow>
+                      <UserSort>
+                        <SortExpression>=Fields!Utilization.Value</SortExpression>
+                      </UserSort>
                       <KeepTogether>true</KeepTogether>
                       <Paragraphs>
                         <Paragraph>
@@ -799,6 +832,9 @@
                       <rd:DefaultName>textbox19</rd:DefaultName>
                       <ZIndex>19</ZIndex>
                       <Style>
+                        <Border>
+                          <Style>None</Style>
+                        </Border>
                         <BackgroundColor>White</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
@@ -811,7 +847,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.5cm</Height>
+              <Height>0.55cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -902,7 +938,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=sum(Fields!AvailableMinutes.Value)</Value>
+                              <Value>=Code.TimeString(sum(Fields!AvailableMinutes.Value))</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
@@ -978,7 +1014,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Sum(Fields!ScheduledMinutes.Value)</Value>
+                              <Value>=Code.TimeString(Sum(Fields!ScheduledMinutes.Value))</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
@@ -1052,7 +1088,7 @@
               </TablixCells>
             </TablixRow>
             <TablixRow>
-              <Height>0.5cm</Height>
+              <Height>0.55cm</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -1128,7 +1164,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!AvailableMinutes.Value</Value>
+                              <Value>=Code.TimeString(Fields!AvailableMinutes.Value)</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
@@ -1192,7 +1228,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!ScheduledMinutes.Value</Value>
+                              <Value>=Code.TimeString(Fields!ScheduledMinutes.Value)</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <Color>DimGray</Color>
@@ -1224,7 +1260,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!ScheduledMinutes.Value/Fields!AvailableMinutes.Value</Value>
+                              <Value>=Fields!Utilization.Value</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <Format>0.0%</Format>
@@ -1345,7 +1381,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=sum(Fields!AvailableMinutes.Value)</Value>
+                              <Value>=Code.TimeString(sum(Fields!AvailableMinutes.Value))</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
@@ -1421,7 +1457,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Sum(Fields!ScheduledMinutes.Value)</Value>
+                              <Value>=Code.TimeString(Sum(Fields!ScheduledMinutes.Value))</Value>
                               <Style>
                                 <FontFamily>Segoe UI</FontFamily>
                                 <FontWeight>Bold</FontWeight>
@@ -1540,15 +1576,15 @@
         </TablixRowHierarchy>
         <RepeatColumnHeaders>true</RepeatColumnHeaders>
         <DataSetName>DataSet1</DataSetName>
-        <Top>4.52761cm</Top>
+        <Top>4.10428cm</Top>
         <Left>0.25001cm</Left>
-        <Height>2.6cm</Height>
+        <Height>2.7cm</Height>
         <Width>18.3677cm</Width>
         <ZIndex>1</ZIndex>
         <Style />
       </Tablix>
     </ReportItems>
-    <Height>8.22761cm</Height>
+    <Height>6.93115cm</Height>
     <Style />
   </Body>
   <Width>22.93042cm</Width>
@@ -1703,8 +1739,9 @@
             </Paragraph>
           </Paragraphs>
           <Top>0.17639cm</Top>
+          <Left>0.25001cm</Left>
           <Height>0.50265cm</Height>
-          <Width>18.75cm</Width>
+          <Width>18.3677cm</Width>
           <Style>
             <PaddingLeft>2pt</PaddingLeft>
             <PaddingRight>2pt</PaddingRight>
@@ -1768,8 +1805,12 @@
         <CommandText>report_data_availability_per_agent</CommandText>
       </Query>
       <Fields>
+        <Field Name="PersonCode">
+          <DataField>PersonCode</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
         <Field Name="PersonName">
-          <DataField>person_name</DataField>
+          <DataField>PersonName</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="AvailableDays">
@@ -1787,6 +1828,10 @@
         <Field Name="ScheduledMinutes">
           <DataField>ScheduledMinutes</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="Utilization">
+          <DataField>Utilization</DataField>
+          <rd:TypeName>System.Decimal</rd:TypeName>
         </Field>
       </Fields>
     </DataSet>
@@ -2003,9 +2048,10 @@
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
   </ReportParameters>
-  <Code>Public Function TimeString(i as integer)as string
-	return Math.Floor(i / 3600) &amp; ":" &amp; Format(Math.Floor((i Mod 3600) / 60), "00") &amp; ":" &amp; Format(i Mod 60, "00")
-End function</Code>
+  <Code>
+    Public Function TimeString(i as integer)as string
+    return Math.Floor(i / 60) &amp; ":"  &amp; Format(i Mod 60, "00")
+    End function</Code>
   <Language>=Parameters!culture.Value</Language>
   <ConsumeContainerWhitespace>true</ConsumeContainerWhitespace>
   <rd:ReportUnitType>Cm</rd:ReportUnitType>
