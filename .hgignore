@@ -68,3 +68,4 @@ Logs/WebApps.log.1
 Teleopti.Ccc.Sdk/Teleopti.Ccc.Sdk.Host/Teleopti.Payroll/internal.storage.xml
 */Pester.*
 nunit*.xml
+*.key
