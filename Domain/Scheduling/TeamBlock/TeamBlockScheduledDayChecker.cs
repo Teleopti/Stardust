@@ -8,9 +8,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
         {
             if (teamBlockInfo == null) return false;
            
-            foreach (var matrix in teamBlockInfo.TeamInfo.MatrixesForGroupAndDate(dateOnly))
+            foreach (var matrix in teamBlockInfo.TeamInfo.MatrixesForGroup())
             {
                 IScheduleRange rangeForPerson =  matrix.SchedulingStateHolder.Schedules[matrix.Person];
+                if (rangeForPerson == null) return false;
                 IScheduleDay scheduleDay = rangeForPerson.ScheduledDay(dateOnly);
                 if (!scheduleDay.IsScheduled())
                 {

@@ -122,10 +122,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 	                                                             finderResult);
 	        shiftList = _workTimeLimitationShiftFilter.Filter(shiftList, effectiveRestriction, finderResult);
 
-			// TODO Performance:should run on all members when selecting rolemodel, otherwise should only run on current member
 	        shiftList = _contractTimeShiftFilter.Filter(dateOnly, matrixList, shiftList, schedulingOptions, finderResult);
-
-			// TODO Problem:should run on individual agents but not when getting rolemodel
 			//shiftList = _businessRulesShiftFilter.Filter(groupPerson, shiftList, dateOnly, finderResult);
 	        shiftList = _notOverWritableActivitiesShiftFilter.Filter(dateOnly, groupPerson, shiftList, finderResult);
 	        shiftList = _personalShiftsShiftFilter.Filter(dateOnly, groupPerson, shiftList, finderResult);
@@ -134,7 +131,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 
 	        if (schedulingOptions.WorkShiftLengthHintOption == WorkShiftLengthHintOption.AverageWorkTime)
 	        {
-				// TODO Problem + Performance:should perhaps not be runned if different average worktimes 
 	            shiftList = _shiftLengthDecider.FilterList(shiftList, _minMaxCalculator, matrixList[0], schedulingOptions);
 	        }
 
