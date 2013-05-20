@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using NUnit.Framework;
 using Teleopti.Ccc.DayOffPlanning;
+using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.DayOffPlanningTest
 {
@@ -291,6 +292,49 @@ namespace Teleopti.Ccc.DayOffPlanningTest
 			Assert.AreEqual(2, result[2]);
 		}
 
+		[Test]
+		public void ShouldNotConsiderWeekBeforeIfNoDaysOffInWeekBeforeWhenFindingLongestBlock()
+		{
+			_bitArray = weekBeforeAndAfterEmpty(10);
+			_bitArray.PeriodArea = new MinMax<int>(9, 9);
+			_target = new DayOffBackToLegalStateFunctions(_bitArray);
+			Point result = _target.FindLongestConsecutiveWorkdayBlockWithAtLeastOneUnlockedBit();
+			Assert.AreEqual(new Point(7, 9), result);
+			_bitArray.PeriodArea = new MinMax<int>(7, 13);
+			result = _target.FindLongestConsecutiveWorkdayBlockWithAtLeastOneUnlockedBit();
+			Assert.AreEqual(new Point(7, 9), result);
+		}
+
+		[Test]
+		public void ShouldNotConsiderWeekAfterIfNoDaysOffInWeekAfterWhenFindingLongestBlock()
+		{
+			_bitArray = weekBeforeAndAfterEmpty(8);
+			_bitArray.PeriodArea = new MinMax<int>(8, 8);
+			_target = new DayOffBackToLegalStateFunctions(_bitArray);
+			Point result = _target.FindLongestConsecutiveWorkdayBlockWithAtLeastOneUnlockedBit();
+			Assert.AreEqual(new Point(9, 13), result);
+		}
+
+		[Test]
+		public void ShouldNotConsiderWeekAfterOrBeforeIfNoDaysOffInWeekAfterAndBeforeWhenFindingLongestBlock()
+		{
+			_bitArray = weekBeforeAndAfterEmpty(7);
+			_bitArray.PeriodArea = new MinMax<int>(7, 13);
+			_target = new DayOffBackToLegalStateFunctions(_bitArray);
+			Point result = _target.FindLongestConsecutiveWorkdayBlockWithAtLeastOneUnlockedBit();
+			Assert.AreEqual(new Point(8, 13), result);
+		}
+
+		[Test]
+		public void ShouldHandleLongestBlockInWeekAfterEndingWithoutDayOff()
+		{
+			_bitArray = weekAfterNotEmpty();
+			_bitArray.PeriodArea = new MinMax<int>(7, 13);
+			_target = new DayOffBackToLegalStateFunctions(_bitArray);
+			Point result = _target.FindLongestConsecutiveWorkdayBlockWithAtLeastOneUnlockedBit();
+			Assert.AreEqual(new Point(16, 20), result);
+		}
+
         private static LockableBitArray array1()
         {
 
@@ -364,9 +408,31 @@ namespace Teleopti.Ccc.DayOffPlanningTest
             ret.Lock(26, true);
             ret.Lock(29, true);
             ret.Lock(32, true);
-            ret.Lock(34, true); ;
+            ret.Lock(34, true);
 
             return ret;
         }
+
+		private static LockableBitArray weekBeforeAndAfterEmpty(int dayOffIndex)
+		{
+			LockableBitArray ret = new LockableBitArray(21, true, true, null);
+			ret.SetAll(false);
+			ret.Set(dayOffIndex, true);
+
+			return ret;
+		}
+
+		private static LockableBitArray weekAfterNotEmpty()
+		{
+			LockableBitArray ret = new LockableBitArray(21, true, true, null);
+			ret.SetAll(false);
+			ret.Set(7, true);
+			ret.Set(9, true);
+			ret.Set(11, true);
+			ret.Set(13, true);
+			ret.Set(15, true);
+
+			return ret;
+		}
     }
 }
