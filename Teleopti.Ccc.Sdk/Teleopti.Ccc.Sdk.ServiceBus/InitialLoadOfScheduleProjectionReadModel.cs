@@ -26,6 +26,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 				bool.TryParse(ConfigurationManager.AppSettings["MessagesOnBoot"], out messagesOnBoot);
 			if (!messagesOnBoot)
 				return;
+			var start = parseNumber("InitialLoadScheduleProjectionStartDate", "-31");
+			var end = parseNumber("InitialLoadScheduleProjectionEndDate", "180");
 
 			var bus = _serviceBusFinder.Invoke();
 
@@ -39,9 +41,21 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 				}
 				foreach (var businessUnitId in businessUnitCollection)
 				{
-					bus.Send(new InitialLoadScheduleProjection { Datasource = dataSource.DataSourceName, BusinessUnitId = businessUnitId, Timestamp = DateTime.UtcNow });
+					bus.Send(new InitialLoadScheduleProjection { Datasource = dataSource.DataSourceName, BusinessUnitId = businessUnitId, Timestamp = DateTime.UtcNow, StartDays = start, EndDays = end });
 				}
 			}
+		}
+
+		private static int parseNumber(string configString, string defaultValue)
+		{
+			var days = ConfigurationManager.AppSettings[configString];
+			if (string.IsNullOrEmpty(days))
+			{
+				days = defaultValue;
+			}
+			int number;
+			int.TryParse(days, out number);
+			return number;
 		}
 	}
 }
