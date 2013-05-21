@@ -50,6 +50,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         private readonly IList<IContract> _contractList = new List<IContract>();
         private readonly ICollection<IContractSchedule> _contractScheduleColl = new List<IContractSchedule>();
         private IPersonRepository _personRep;
+        private INow _now;
 
         [SetUp]
         public void Setup()
@@ -67,9 +68,13 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             _timeZone = (TimeZoneInfo.Local);
             _scenario = ScenarioFactory.CreateScenarioAggregate();
             _commonNameDescriptionSetting = new CommonNameDescriptionSetting();
+
+            _now = new Now(() => null);
+            ((IModifyNow) _now).SetNow(new DateTime(2009, 10, 14, 15, 0, 0, DateTimeKind.Utc));
+
             _model = MeetingComposerPresenter.CreateDefaultMeeting(_person, _scenario, _activity,
                                                                    new DateOnly(2009, 10, 14), new List<IPerson>(),
-                                                                   _commonNameDescriptionSetting, _timeZone);
+                                                                   _commonNameDescriptionSetting, _timeZone, _now);
             _meeting = _model.Meeting;
             _meeting.EndDate = new DateOnly(2009, 10, 16);
             _meeting.StartTime = TimeSpan.FromHours(19);
@@ -512,7 +517,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
                                                                                                   {
                                                                                                       _requiredPerson,
                                                                                                       _optionalPerson
-                                                                                                  });
+                                                                                                  }, _now);
             Assert.AreEqual(2, meetingViewModel.RequiredParticipants.Count);
             _mocks.VerifyAll();
         }
@@ -530,19 +535,13 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
 
             _mocks.ReplayAll();
             MeetingViewModel meetingViewModel = MeetingComposerPresenter.CreateDefaultMeeting(_person,
-
-
-                      _schedulerStateHolder,
-
-
-                      _model.StartDate,
-
-
-                      new List<IPerson>
+                                                                                              _schedulerStateHolder,
+                                                                                              _model.StartDate,
+                                                                                              new List<IPerson>
                                                                                                   {
                                                                                                       _requiredPerson,
                                                                                                       _optionalPerson
-                                                                                                  });
+                                                                                                  }, _now);
             Assert.AreEqual(_activity.Id, meetingViewModel.Activity.Id);
             _mocks.VerifyAll();
         }
