@@ -238,7 +238,7 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui
                     break;
 				case "Intraday":
 					initiateQueueStatisticsDatePeriod();
-					initiateForecastDatePeriod();
+					initiateForecastDatePeriodForIntraday();
 					initiateAgentStatisticsDatePeriod();
 					break;
                 case "Nightly":
@@ -251,8 +251,8 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui
                     break;
             }
         }
-
-        private void initiateInitialLoadDatePeriod()
+	    
+	    private void initiateInitialLoadDatePeriod()
         {
             groupBoxInitial.Enabled = true;
             numericUpDownRelativePeriodStartInitial.Value = 0;
@@ -274,6 +274,14 @@ namespace Teleopti.Analytics.Etl.ConfigTool.Gui
             numericUpDownRelativePeriodEndForecast.Value = 31;
             radioButtonRelativePeriodForecast.Checked = true;
         }
+
+		private void initiateForecastDatePeriodForIntraday()
+		{
+			groupBoxForecast.Enabled = true;
+			numericUpDownRelativePeriodStartForecast.Value = -1;
+			numericUpDownRelativePeriodEndForecast.Value = 7;
+			radioButtonRelativePeriodForecast.Checked = true;
+		}
 
         private void initiateQueueStatisticsDatePeriod()
         {

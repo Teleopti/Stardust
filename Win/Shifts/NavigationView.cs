@@ -519,10 +519,11 @@ namespace Teleopti.Ccc.Win.Shifts
                 if (originalRuleSet != null && _currentView == ShiftCreatorViewType.RuleSet)
                 {
                     IWorkShiftRuleSet newRuleSet = originalRuleSet.NoneEntityClone();
-                    if (string.Concat(UserTexts.Resources.CopyOf," ", newRuleSet.Description.Name).Length > 50)
-                        newRuleSet.Description = new Description(string.Concat(UserTexts.Resources.CopyOf," ", newRuleSet.Description.Name).Substring(0,50));
-                    else
-                        newRuleSet.Description = new Description(string.Concat(UserTexts.Resources.CopyOf, " ", newRuleSet.Description.Name));
+	                newRuleSet.Description =
+		                string.Concat(UserTexts.Resources.CopyOf, " ", newRuleSet.Description.Name).Length > 50
+			                ? new Description(
+				                  string.Concat(UserTexts.Resources.CopyOf, " ", newRuleSet.Description.Name).Substring(0, 50))
+			                : new Description(string.Concat(UserTexts.Resources.CopyOf, " ", newRuleSet.Description.Name));
                     ExplorerPresenter.Model.AddRuleSet(newRuleSet);
                     ExplorerPresenter.DataWorkHelper.Save(newRuleSet);
                     newNode = createNode(newRuleSet.Description.ToString(), newRuleSet);
@@ -535,7 +536,11 @@ namespace Teleopti.Ccc.Win.Shifts
                 else if (originalRuleSetBag != null && _currentView == ShiftCreatorViewType.RuleSetBag)
                 {
                     IRuleSetBag newRuleSetBag = originalRuleSetBag.NoneEntityClone();
-                    newRuleSetBag.Description = new Description(string.Concat(UserTexts.Resources.CopyOf, " ", newRuleSetBag.Description.Name));
+	                newRuleSetBag.Description =
+		                string.Concat(UserTexts.Resources.CopyOf, " ", newRuleSetBag.Description.Name).Length > 50
+			                ? new Description(
+				                  string.Concat(UserTexts.Resources.CopyOf, " ", newRuleSetBag.Description.Name).Substring(0, 50))
+			                : new Description(string.Concat(UserTexts.Resources.CopyOf, " ", newRuleSetBag.Description.Name));
                     ExplorerPresenter.Model.AddRuleSetBag(newRuleSetBag);
                     _eventAggregator.GetEvent<RuleSetBagChanged>().Publish(newRuleSetBag);
                     

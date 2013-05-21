@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleProjection;
 using Teleopti.Ccc.Domain.Repositories;
@@ -67,7 +68,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
             {
                 var currentDay = budgetDay.Day;
 
-                if (!isSkillOpenForDateOnly(currentDay, budgetGroup.SkillCollection))
+                if(budgetDay.IsClosed)
                     continue;
 
                 var allowance = budgetDay.Allowance;
@@ -75,7 +76,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
                     _scheduleProjectionReadOnlyRepository.GetNumberOfAbsencesPerDayAndBudgetGroup(
                         budgetGroup.Id.GetValueOrDefault(), currentDay);
 
-                if (allowance <= alreadyUsedAllowance)
+                if (Math.Floor(allowance) <= alreadyUsedAllowance)
                     return false;
             }
             return true;
