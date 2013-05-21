@@ -260,7 +260,6 @@ namespace Teleopti.Ccc.WinCode.Meetings
         public IEnumerable<IVisualLayer> GetVisualLayersForPerson(EntityContainer<IPerson> personViewModel)
         {
             var period = _currentPeriod;
-            //period = period.ChangeEndTime(TimeSpan.FromHours(12));
             var cacheKey = new PersonSchedulePeriodCacheKey { Period = period, Person = personViewModel.ContainedEntity };
             IEnumerable<IVisualLayer> projection;
             if (!_projectionCache.TryGetValue(cacheKey, out projection))

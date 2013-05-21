@@ -42,9 +42,9 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             _mocks = new MockRepository();
             _view = _mocks.DynamicMock<IMeetingSchedulesView>();
             _person = PersonFactory.CreatePerson();
-			_timeZone = TimeZoneInfo.FindSystemTimeZoneById("utc");
+			_timeZone = TimeZoneInfo.Utc;
 			_person.PermissionInformation.SetDefaultTimeZone(_timeZone);
-            _startDate = new DateOnly(new DateTime(2009, 10, 27,0,0,0, DateTimeKind.Utc));
+            _startDate = new DateOnly(2009, 10, 27);
             _period = new DateOnlyPeriod(_startDate, _startDate.AddDays(3));
             _scenario = _mocks.StrictMock<IScenario>();
             _rangeProjectionService = _mocks.StrictMock<IRangeProjectionService>();
@@ -52,8 +52,11 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
 			_schedulerStateHolder = new SchedulerStateHolder(_scenario, new DateOnlyPeriodAsDateTimePeriod(_period, _timeZone), new List<IPerson> { _person });
 		    _schedulerStateHolder.TimeZoneInfo = _timeZone;
             _meetingSlotFinderService = _mocks.StrictMock<IMeetingSlotFinderService>();
+
+	        var now = new Now(() => null);
+            ((IModifyNow)now).SetNow(_startDate.Date.AddHours(15));
             _model = MeetingComposerPresenter.CreateDefaultMeeting(_person, _schedulerStateHolder, _startDate,
-                                                                   new List<IPerson>());
+                                                                   new List<IPerson>(), now);
             _model.StartTime = TimeSpan.FromHours(8);
             _model.EndTime = TimeSpan.FromHours(10);
 
@@ -75,8 +78,6 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             Assert.AreEqual(0, _target.RowCount);
             Assert.IsFalse(_target.IsInitialized);
             Assert.AreEqual(_model, _target.Model);
-            //Assert.IsTrue(_target.MeetingMoveState.Equals(MeetingMoveState.None));
-            //Assert.IsTrue(_target.MeetingMousePosition.Equals(MeetingMousePosition.None));
         }
 
         [Test]
@@ -496,6 +497,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
         public void ShouldReturnDefaultMergedPeriod()
         {
             var person = new Person();
+            person.PermissionInformation.SetDefaultTimeZone(_timeZone);
             _schedulerStateHolder = _mocks.StrictMock<ISchedulerStateHolder>();
             var scheduleDictionary = _mocks.StrictMock<IScheduleDictionary>();
             var range = _mocks.StrictMock<IScheduleRange>();
@@ -507,7 +509,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             var periodFirst = new DateTimePeriod(startFirst, endFirst);
             var expectedStart = new DateTime(2009, 10, 27, 0, 0, 0, DateTimeKind.Utc);
             var expectedEnd = expectedStart.AddDays(1);
-            var expectedPeriod  = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(expectedStart, expectedEnd, _timeZone);
+            var expectedPeriod  = new DateTimePeriod(expectedStart, expectedEnd);
 
             using (_mocks.Record())
             {
@@ -517,8 +519,7 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
 				Expect.Call(_schedulerStateHolder.TimeZoneInfo).Return(_model.TimeZone).Repeat.AtLeastOnce();
                 Expect.Call(_schedulerStateHolder.Schedules).Return(scheduleDictionary);
                 Expect.Call(scheduleDictionary[person]).Return(range);
-                Expect.Call(range.ScheduledDay(_startDate)).Return(scheduleDay).IgnoreArguments();
-                
+                Expect.Call(range.ScheduledDay(_startDate)).Return(scheduleDay);
             }
 
             using (_mocks.Playback())
