@@ -731,12 +731,27 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 		    throw new NotImplementedException();
 	    }
 
+	    public IEnumerable<IStudentAvailabilityDay> ChangedAvailabilityOnStep(DateTime lastTime, IBusinessUnit currentBusinessUnit)
+	    {
+		    throw new NotImplementedException();
+	    }
+
 	    public int FillIntradayFactSchedulePreferenceMart(IBusinessUnit currentBusinessUnit, IScenario scenario)
 	    {
 		    throw new NotImplementedException();
 	    }
 
 	    public int PersistAvailability(DataTable dataTable)
+	    {
+		    throw new NotImplementedException();
+	    }
+
+	    public int FillFactAvailabilityMart(DateTimePeriod period, TimeZoneInfo defaultTimeZone, IBusinessUnit businessUnit)
+	    {
+		    throw new NotImplementedException();
+	    }
+
+	    public int FillIntradayFactAvailabilityMart(IBusinessUnit businessUnit, IScenario scenario)
 	    {
 		    throw new NotImplementedException();
 	    }
