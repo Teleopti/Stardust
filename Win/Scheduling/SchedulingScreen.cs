@@ -72,7 +72,6 @@ using Teleopti.Ccc.WinCode.Scheduling.RestrictionSummary;
 using Teleopti.Ccc.WinCode.Scheduling.ScheduleSortingCommands;
 using Teleopti.Ccc.WpfControls.Controls.Editor;
 using Teleopti.Ccc.WpfControls.Controls.Notes;
-using Teleopti.Ccc.WpfControls.Controls.Restriction;
 using Teleopti.Ccc.WpfControls.Controls.Scheduling;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.Infrastructure;
@@ -746,6 +745,13 @@ namespace Teleopti.Ccc.Win.Scheduling
 						agentSkillExplorer.ShowDialog(this);
 					}
 				}
+			}
+
+			if (e.KeyCode == Keys.Enter && toolStripTextBoxFilter.Focused)
+			{
+				_requestView.FilterGrid(toolStripTextBoxFilter.Text.Split(' '));
+				e.Handled = true;
+				e.SuppressKeyPress = true;
 			}
 		
 			base.OnKeyDown(e);
@@ -6205,9 +6211,9 @@ namespace Teleopti.Ccc.Win.Scheduling
 			changeRequestStatus(new DenyPersonRequestCommand(_requestPresenter, _personRequestAuthorizationChecker), _requestView.SelectedAdapters());
 		}
 
-		private void toolStripButtonRequestClick(object sender, EventArgs e)
+		private void toolStripButtonFindRequestOnClick(object sender, EventArgs eventArgs)
 		{
-			_requestView.FilterGrid(toolStripTextBoxFilter.Text.Split(' ').ToList());
+			_requestView.FilterGrid(toolStripTextBoxFilter.Text.Split(' '));
 		}
 		
 		private void toolStripButtonEditNote_Click(object sender, EventArgs e)
