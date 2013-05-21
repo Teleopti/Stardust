@@ -130,9 +130,11 @@ if "%SSL%"=="True" "%appcmd%" set config "%DefaultSite%/%SitePath%" /section:acc
 if "%SSL%"=="False" "%appcmd%" set config "%DefaultSite%/%SitePath%" /section:access /sslFlags:None /commit:APPHOST
 
 ::4.5 Machine keys
+if "%SiteOrApp%"=="app" (
 SET WebConfigPath=%INSTALLDIR%\%FolderPath%\web.config
 echo Setting machine keys in "%WebConfigPath%"
 if EXIST "%WebConfigPath%" (SetMachineKeys.exe "%WebConfigPath%")
+)
 
 ::5 Athentication for the virtual dir
 ::-----
