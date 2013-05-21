@@ -37,5 +37,13 @@
 			interactions.Javascript("$(\"{0}\").val($(\"{1}\").val());", selectSelector, optionSelector);
 			interactions.Javascript("$(\"{0}\").change();", selectSelector);
 		}
+
+		public static void TypeTextIntoInputTextUsingJQuery(this IBrowserInteractions interactions, string selectSelector, string text)
+		{
+			selectSelector = selectSelector + ":enabled";
+			interactions.AssertExists(selectSelector);
+			interactions.Javascript("$(\"{0}\").val(\"{1}\");", selectSelector, text);
+			interactions.Javascript("$(\"{0}\").change();", selectSelector);
+		}
 	}
 }

@@ -33,14 +33,17 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			Pages.Pages.CurrentEditRequestPage.RequestDetailSection.WaitUntilDisplayed();
 		}
 
-		[When(@"I click new absence request menu item in the toolbar")]
-		public void WhenIClickNewAbsenceRequestMenuItemInTheToolbar()
+		[When(@"I click to add a new absence request")]
+		public void WhenIClickToAddANewAbsenceRequest()
 		{
-			Pages.Pages.CurrentEditRequestPage.AddRequestDropDown.EventualClick();
-			Pages.Pages.CurrentEditRequestPage.AddAbsenceRequestMenuItem.EventualClick();
-			Pages.Pages.CurrentEditRequestPage.RequestDetailSection.WaitUntilDisplayed();
+			//Pages.Pages.CurrentEditRequestPage.AddRequestDropDown.EventualClick();
+			//Pages.Pages.CurrentEditRequestPage.AddAbsenceRequestMenuItem.EventualClick();
+			//Pages.Pages.CurrentEditRequestPage.RequestDetailSection.WaitUntilDisplayed();
+			Browser.Interactions.Click(".bdd-add-absence-request-link");
+			Browser.Interactions.Click(".bdd-add-absence-request-link");
+			Browser.Interactions.AssertExists("#Request-detail-section");
 		}
-		
+
 		[When(@"I click absence request tab")]
 		public void WhenIClickAbsenceRequestTab()
 		{

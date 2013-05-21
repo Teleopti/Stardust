@@ -3,7 +3,7 @@ using NUnit.Framework;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.WebBehaviorTest.Core;
-using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
+using Teleopti.Ccc.WebBehaviorTest.Core.BrowserInteractions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
@@ -28,15 +28,11 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I input absence request values with '(.*)' for date '(.*)'")]
         public void WhenIInputAbsenceRequestValuesWithForDate(string name, DateTime date)
         {
-            Pages.Pages.CurrentEditRequestPage.AbsenceTypesElement.WaitUntilDisplayed();
-            var time = date.AddHours(12);
-            Pages.Pages.CurrentEditRequestPage.RequestDetailSubjectInput.Value = "The cake is a.. Cake!";
-            Pages.Pages.CurrentEditRequestPage.AbsenceTypesSelectList.Select(name);
-            Pages.Pages.CurrentEditRequestPage.RequestDetailFromDateTextField.Value = date.ToShortDateString(UserFactory.User().Culture);
-            Pages.Pages.CurrentEditRequestPage.RequestDetailFromTimeTextField.Value = time.ToShortTimeString(UserFactory.User().Culture);
-            Pages.Pages.CurrentEditRequestPage.RequestDetailToDateTextField.Value = date.ToShortDateString(UserFactory.User().Culture);
-            Pages.Pages.CurrentEditRequestPage.RequestDetailToTimeTextField.Value = time.AddHours(1).ToShortTimeString(UserFactory.User().Culture);
-            Pages.Pages.CurrentEditRequestPage.RequestDetailMessageTextField.Value = "A message. A very very very short message. Or maybe not.";
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-detail-section input[data-bind='value: Subject']", "The cake is a.. Cake!");
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-detail-section textarea[data-bind='value: Message']", "A message. A very very very short message. Or maybe not.");	
+			Browser.Interactions.SelectOptionByTextUsingJQuery("#Request-detail-section select[data-bind='value: AbsenceId']", name);
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-detail-section input[data-bind*='datepicker: DateFrom']", date.ToShortDateString(UserFactory.User().Culture));	
+			Browser.Interactions.TypeTextIntoInputTextUsingJQuery("#Request-detail-section input[data-bind*='datepicker: DateTo']", date.ToShortDateString(UserFactory.User().Culture));	
         }
 
 		[Then(@"I should see the text request in the list")]
@@ -52,5 +48,11 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			UserFactory.User().Setup(new AgentWithoutAbsenceRequestsAccess());
 		}
 
+		[When(@"I click the send button")]
+		[When(@"I click the update button")]
+		public void WhenIClickTheSendButton()
+		{
+			Browser.Interactions.Click("#Request-detail-section button[data-bind*='click: AddRequest']");
+		}
 	}
 }

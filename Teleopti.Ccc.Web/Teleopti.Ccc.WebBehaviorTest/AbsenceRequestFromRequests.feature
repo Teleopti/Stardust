@@ -7,9 +7,9 @@ Scenario: Add absence request
 	Given I am an agent
 	And I have a requestable absence called Vacation
 	And I am viewing requests
-	When I click new absence request menu item in the toolbar
+	When I click to add a new absence request
 	And I input absence request values with Vacation
-	And I click the OK button
+	And I click the send button
 	Then I should see the absence request containing 'Vacation' in the list
 
 Scenario: Add absence request when multiple absences exist
@@ -17,10 +17,9 @@ Scenario: Add absence request when multiple absences exist
 	And I have a requestable absence called Vacation
 	And I have a requestable absence called Holiday
 	And I am viewing requests
-	When I click add request button in the toolbar
-	And I click absence request tab
+	When I click to add a new absence request
 	And I input absence request values with Holiday
-	And I click the OK button
+	And I click the send button
 	Then I should see the absence request containing 'Holiday' in the list
 
 Scenario: Can not add absence request from request view if no permission
@@ -32,7 +31,7 @@ Scenario: Default absence request values from request view
 	Given I am an agent
 	And I have a requestable absence called Vacation
 	And I am viewing requests
-	When I click new absence request menu item in the toolbar
+	When I click to add a new absence request
 	Then I should see the request form with today's date as default
 	And I should see 00:00 - 23:59 as the default times
 	And I should see an absence type called Vacation in droplist
@@ -40,7 +39,7 @@ Scenario: Default absence request values from request view
 Scenario: Default absence request values from request view when checked Fullday
 	Given I am an agent
 	And I am viewing requests
-	When I click new absence request menu item in the toolbar
+	When I click to add a new absence request
 	And I checked the full day checkbox
 	Then I should see the request form with today's date as default
 	And I should see 00:00 - 23:59 as the default times
@@ -48,7 +47,7 @@ Scenario: Default absence request values from request view when checked Fullday
 Scenario: Default absence request values from request view when unchecked Fullday
 	Given I am an agent
 	And I am viewing requests
-	When I click new absence request menu item in the toolbar
+	When I click to add a new absence request
 	And I unchecked the full day checkbox
 	Then I should see the request form with today's date as default
 	And I should see 08:00 - 17:00 as the default times
@@ -56,28 +55,28 @@ Scenario: Default absence request values from request view when unchecked Fullda
 Scenario: Adding invalid absence request values
 	Given I am an agent
 	And I am viewing requests
-	When I click new absence request menu item in the toolbar
+	When I click to add a new absence request
 	And I input empty subject
 	And I input later start time than end time
-	And I click the OK button
+	And I click the send button
 	Then I should see texts describing my errors
 	And I should not see the absence request in the list
 
 Scenario: Adding too long message on absence request
 	Given I am an agent
 	And I am viewing requests
-	When I click new absence request menu item in the toolbar
+	When I click to add a new absence request
 	And I input too long message request values
-	And I click the OK button
+	And I click the send button
 	Then I should see texts describing too long text error
 	And I should not see the absence request in the list
 
 Scenario: Adding too long subject on absence request
 	Given I am an agent
 	And I am viewing requests
-	When I click new absence request menu item in the toolbar
+	When I click to add a new absence request
 	And I input too long subject request values
-	And I click the OK button
+	And I click the send button
 	Then I should see texts describing too long subject error
 	And I should not see the absence request in the list
 
@@ -85,7 +84,7 @@ Scenario: View absence types
 	Given I am an agent
 	And I have a requestable absence called Vacation
 	And I am viewing requests
-	When I click new absence request menu item in the toolbar
+	When I click to add a new absence request
 	Then I should see an absence type called Vacation in droplist
 
 Scenario: View absence request details
@@ -103,7 +102,7 @@ Scenario: Edit absence request
 	And I am viewing requests
 	When I click on the request
 	And I input new absence request values
-	And I click the OK button
+	And I click the update button
 	Then I should see the new absence request values in the list
 
 Scenario: Delete absence request
@@ -156,5 +155,5 @@ Scenario: Clear deny reason when adding new absence request
 	And I have a denied absence request beacuse of missing workflow control set
 	And I am viewing requests
 	When I click on the request 
-	And I click new absence request menu item in the toolbar
+	When I click to add a new absence request
 	Then I should not see the deny reason
