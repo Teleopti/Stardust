@@ -198,7 +198,14 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
 	    private void expectCallForChecker(IScheduleDay scheduleDay)
 	    {
-	        Expect.Call(_matrix1.SchedulingStateHolder).Return(_schedulingResultStateHolder);
+	        IVirtualSchedulePeriod virtualSchedulePeriod = _mocks.StrictMock<IVirtualSchedulePeriod>();
+            DateOnlyPeriod dateOnlyPeriod = new DateOnlyPeriod(_dateOnly, _dateOnly);
+
+            Expect.Call(_matrix1.SchedulingStateHolder).Return(_schedulingResultStateHolder);
+	        
+	        Expect.Call(_matrix1.SchedulePeriod).Return(virtualSchedulePeriod);
+	        
+	        Expect.Call(virtualSchedulePeriod.DateOnlyPeriod).Return(dateOnlyPeriod);
 	        Expect.Call(_schedulingResultStateHolder.Schedules[_person]).Return(_scheduleRange);
 	        Expect.Call(_matrix1.Person).Return(_person);
 	        Expect.Call(_scheduleRange.ScheduledDay(_dateOnly)).Return(scheduleDay);
