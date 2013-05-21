@@ -552,13 +552,6 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
             _globalEventAggregator.GetEvent<PeopleSaved>().Publish("");
         }
 
-		private void notifyOnOtherThread()
-		{
-			var oThread = new Thread(notifySaveChanges);
-			// Start the thread
-			oThread.Start();
-		}
-
         private void notifyForceClose()
         {
             var handler = PeopleWorksheetForceClose;
@@ -575,7 +568,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
                 //Reset Add new records nold behaviour.
                 _filteredPeopleHolder.ResetBoldProperty();
 
-				notifyOnOtherThread();
+				notifySaveChanges();
             }
             catch (TooManyActiveAgentsException e)
             {
