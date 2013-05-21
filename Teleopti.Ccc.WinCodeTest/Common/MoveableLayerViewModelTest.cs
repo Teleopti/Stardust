@@ -1,7 +1,9 @@
+using System;
 using System.Linq;
 using Microsoft.Practices.Composite.Events;
 using NUnit.Framework;
 using Rhino.Mocks;
+using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Common;
@@ -44,7 +46,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 
             #region setup
             ILayerViewModelObserver observer = _mocks.StrictMock<ILayerViewModelObserver>();
-            MainShift shift = MainShiftFactory.CreateMainShiftWithThreeActivityLayers();
+	        IEditorShift shift = CreateEditorShiftWithThreeActivityLayers();
             ILayer<IActivity> firstLayer =
                 (from l in shift.LayerCollection
                  orderby l.OrderIndex
@@ -78,7 +80,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         public void VerifyCanMoveUpDownCommand()
         {
             #region setup
-            MainShift shift = MainShiftFactory.CreateMainShiftWithThreeActivityLayers();
+			IEditorShift shift = CreateEditorShiftWithThreeActivityLayers();
 
             IOrderedEnumerable<ILayer<IActivity>> layers =
                 from l in shift.LayerCollection
@@ -136,7 +138,34 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             }
         }
 
+		public static IEditorShift CreateEditorShiftWithThreeActivityLayers()
+		{
+			Activity telephone = ActivityFactory.CreateActivity("Tel");
+			DateTimePeriod period1 =
+				new DateTimePeriod(new DateTime(2007, 1, 1, 8, 0, 0, DateTimeKind.Utc),
+								   new DateTime(2007, 1, 1, 12, 0, 0, DateTimeKind.Utc));
 
+			Activity longDuty = ActivityFactory.CreateActivity("Long duty");
+			DateTimePeriod period2 =
+				new DateTimePeriod(new DateTime(2007, 1, 1, 8, 0, 0, DateTimeKind.Utc),
+								   new DateTime(2007, 1, 2, 1, 0, 0, DateTimeKind.Utc));
+
+			DateTimePeriod period3 =
+				new DateTimePeriod(new DateTime(2007, 1, 2, 1, 0, 0, DateTimeKind.Utc),
+								   new DateTime(2007, 1, 2, 2, 0, 0, DateTimeKind.Utc));
+
+
+			EditorActivityLayer layer1 = new EditorActivityLayer(telephone, period1);
+			EditorActivityLayer layer2 = new EditorActivityLayer(longDuty, period2);
+			EditorActivityLayer layer3 = new EditorActivityLayer(longDuty, period3);
+
+			IEditorShift resultShift = new EditorShift(ShiftCategoryFactory.CreateShiftCategory("TEL"));
+			resultShift.LayerCollection.Add(layer1);
+			resultShift.LayerCollection.Add(layer2);
+			resultShift.LayerCollection.Add(layer3);
+
+			return resultShift;
+		}
 
     }
 }
