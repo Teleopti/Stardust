@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Domain.Repositories;
 using Teleopti.Ccc.Domain.Security.Principal;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
@@ -58,7 +59,7 @@ namespace Teleopti.Ccc.WinCode.Meetings.Commands
                     meetingViewModel = MeetingComposerPresenter.CreateDefaultMeeting(organizer, selectedScenario,
                                                                                     activities[0], new DateOnly(period.StartDateTime),
                                                                                     new List<IPerson>(), commonNameDescription,
-                                                                                    organizer.PermissionInformation.DefaultTimeZone());
+                                                                                    organizer.PermissionInformation.DefaultTimeZone(), new Now(()=>null));
                     meetingViewModel.StartDate = new DateOnly(period.StartDateTime);
                     meetingViewModel.StartTime = period.StartDateTime.TimeOfDay;
                     meetingViewModel.MeetingDuration = period.EndDateTime - period.StartDateTime;
