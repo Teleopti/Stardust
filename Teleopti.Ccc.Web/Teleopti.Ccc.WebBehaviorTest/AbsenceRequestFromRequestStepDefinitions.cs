@@ -4,7 +4,6 @@ using NUnit.Framework;
 using TechTalk.SpecFlow;
 using Teleopti.Ccc.Domain.Helper;
 using Teleopti.Ccc.WebBehaviorTest.Core;
-using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using Teleopti.Ccc.WebBehaviorTest.Data;
 using Teleopti.Ccc.WebBehaviorTest.Data.Setups.Specific;
@@ -70,8 +69,8 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[Then(@"I should see the absence request containing '(.*)' in the list")]
 		public void ThenIShouldSeeTheAbsenceRequestInTheList(string absence)
 		{
-			EventualAssert.That(() => Pages.Pages.RequestsPage.FirstRequest.Exists, Is.True);
-			EventualAssert.That(() => Pages.Pages.RequestsPage.FirstRequest.InnerHtml, Is.StringContaining(absence));
+			Browser.Interactions.AssertExists(".bdd-request-body");
+			Browser.Interactions.AssertContains(".bdd-request-body:nth-of-type(1)", absence);
 		}
 
 		[Then(@"I should see the absence request's values")]
