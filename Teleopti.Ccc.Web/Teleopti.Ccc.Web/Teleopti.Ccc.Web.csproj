@@ -645,7 +645,6 @@
     <Content Include="Areas\MyTime\Content\Css\TooltipCustom.css" />
     <Content Include="Areas\MyTime\Content\Css\Request.css" />
     <Content Include="Areas\MyTime\Content\Css\Settings.css" />
-    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Preference.MustHaveCountViewModel.Tests.js" />
     <Content Include="Areas\MyTime\Content\Images\header_bg_2x.png" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Preference.MustHaveCountViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Preference.PreferencesAndScheduleViewModel.js" />
