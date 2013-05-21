@@ -275,6 +275,7 @@
     </None>
     <None Include="NotificationConfig.xml.notinuse">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </None>
     <None Include="packages.config" />
     <None Include="Service References\TeleoptiRtaService\TeleoptiRtaService.wsdl" />
