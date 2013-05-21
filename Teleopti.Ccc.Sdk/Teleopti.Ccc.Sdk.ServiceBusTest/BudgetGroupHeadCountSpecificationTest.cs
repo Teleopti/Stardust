@@ -237,10 +237,10 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
                   .IgnoreArguments()
                   .Return(new List<IBudgetDay> { budgetDay });
             Expect.Call(budgetDay.Day).Return(_defaultDay);
-            Expect.Call(budgetDay.Allowance).Return(2d);
+            Expect.Call(budgetDay.Allowance).Return(1.5d);
             Expect.Call(
                 _scheduleProjectionReadOnlyRepository.GetNumberOfAbsencesPerDayAndBudgetGroup(
-                    personPeriod.BudgetGroup.Id.GetValueOrDefault(), new DateOnly(personPeriod.StartDate))).Return(2);
+                    personPeriod.BudgetGroup.Id.GetValueOrDefault(), new DateOnly(personPeriod.StartDate))).Return(1);
 
             ICollection<ISkillDay> skillDays = new Collection<ISkillDay>();
             var skillDay = SkillDayFactory.CreateSkillDay(new DateTime(2013, 04, 08));
@@ -277,5 +277,4 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
             return new List<ISkill> { skill };
         }
     }
-   
 }
