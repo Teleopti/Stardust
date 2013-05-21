@@ -61,7 +61,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
             {
                 var currentDay = budgetDay.Day;
 
-                //if (!IsSkillOpenForDateOnly(currentDay, budgetGroup.SkillCollection))
                 if(budgetDay.IsClosed)
                     continue;
 
