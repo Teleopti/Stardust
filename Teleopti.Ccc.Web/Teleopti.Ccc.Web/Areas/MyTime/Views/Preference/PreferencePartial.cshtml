@@ -31,7 +31,8 @@
                                                                            {
                                                                                @Html.Raw("{'Color': '" + @option.Color + "', 'Value': '" + @option.Value + "', 'Text': '" + @option.Text + "'},");
                                                                            }]">
-                        <button class="btn" data-bind="click: applyPreference, 'text': selectedPreference().Text">Preference</button>
+                        <button class="btn" data-bind="click: applyPreference, text: selectedPreferenceText()">Preference</button>
+                     
                         <button class="btn dropdown-toggle" data-toggle="dropdown">
                             <span class="caret"></span>
                         </button>

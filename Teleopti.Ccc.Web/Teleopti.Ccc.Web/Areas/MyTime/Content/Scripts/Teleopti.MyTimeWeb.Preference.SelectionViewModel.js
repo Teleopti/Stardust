@@ -64,7 +64,7 @@ Teleopti.MyTimeWeb.Preference.SelectionViewModel = function (dayViewModels, maxM
         });
         return total;
     });
-
+    
     self.selectedPreference = ko.observable();
     self.availablePreferences = ko.observableArray();
 
@@ -82,4 +82,11 @@ Teleopti.MyTimeWeb.Preference.SelectionViewModel = function (dayViewModels, maxM
     });
 
     self.deletePreference = deletePreferenceMethod;
+    
+    self.selectedPreferenceText = ko.computed(function () {
+        if (self.selectedPreference()) {
+            return self.selectedPreference().Text;
+        }
+        return '';
+    });
 };
