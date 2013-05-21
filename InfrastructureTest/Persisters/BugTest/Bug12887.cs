@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Scheduling;
@@ -57,11 +56,13 @@ namespace Teleopti.Ccc.InfrastructureTest.Persisters.BugTest
 			var scheduleDay = ScheduleDictionary[Person].ScheduledDay(FirstDayDateOnly);
 
 			var personAssignment = scheduleDay.PersonAssignmentCollection()[0];
-			var activity = personAssignment.MainShift.LayerCollection[0].Payload;
+			var ms = personAssignment.MainShift;
+			var activity = ms.LayerCollection[0].Payload;
 			var layer = new MainShiftActivityLayer(activity, FirstDayDateTimePeriod);
-			personAssignment.MainShift.LayerCollection.Add(layer);
-
-            ScheduleDictionary.Modify(ScheduleModifier.Scheduler, scheduleDay, NewBusinessRuleCollection.Minimum(), new EmptyScheduleDayChangeCallback(), new ScheduleTagSetter(NullScheduleTag.Instance));
+			ms.LayerCollection.Add(layer);
+			personAssignment.SetMainShift(ms);
+		
+			ScheduleDictionary.Modify(ScheduleModifier.Scheduler, scheduleDay, NewBusinessRuleCollection.Minimum(), new EmptyScheduleDayChangeCallback(), new ScheduleTagSetter(NullScheduleTag.Instance));
 		}
 
 		protected override void TeardownForRepositoryTest()
