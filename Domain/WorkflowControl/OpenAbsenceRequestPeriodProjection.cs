@@ -73,27 +73,29 @@ namespace Teleopti.Ccc.Domain.WorkflowControl
 
         private void AddBottomLayer(DateOnlyPeriod limitToDateOnlyPeriod)
         {
-                        _layerCollectionOriginal.Insert(0,
-                                            new DateOnlyPeriodWithAbsenceRequestPeriod
-                                            {
-                                                AbsenceRequestOpenPeriod =
-                                                    new AbsenceRequestOpenDatePeriod
-                                                    {
-                                                        Absence = null,
-                                                        AbsenceRequestProcess =
-                                                            new DenyAbsenceRequest
-                                                            {
-                                                                DenyReason = "RequestDenyReasonClosedPeriod"
-                                                            },
-                                                        Period = limitToDateOnlyPeriod,
-                                                        PersonAccountValidator =
-                                                            new AbsenceRequestNoneValidator(),
-                                                        StaffingThresholdValidator =
-                                                            new AbsenceRequestNoneValidator()
-                                                    },
-                                                LimitPeriod = limitToDateOnlyPeriod,
-                                                Period = limitToDateOnlyPeriod
-                                            });
+	        _layerCollectionOriginal.Insert(0,
+	                                        new DateOnlyPeriodWithAbsenceRequestPeriod
+		                                        {
+			                                        AbsenceRequestOpenPeriod =
+				                                        new AbsenceRequestOpenDatePeriod
+					                                        {
+						                                        Absence = null,
+						                                        AbsenceRequestProcess =
+							                                        new DenyAbsenceRequest
+								                                        {
+									                                        DenyReason =
+										                                        UserTexts.Resources.ResourceManager.GetString(
+											                                        "RequestDenyReasonClosedPeriod", _cultureInfo)
+								                                        },
+						                                        Period = limitToDateOnlyPeriod,
+						                                        PersonAccountValidator =
+							                                        new AbsenceRequestNoneValidator(),
+						                                        StaffingThresholdValidator =
+							                                        new AbsenceRequestNoneValidator()
+					                                        },
+			                                        LimitPeriod = limitToDateOnlyPeriod,
+			                                        Period = limitToDateOnlyPeriod
+		                                        });
 
                 // checking if the Agent request period is within open request period or not        
                 var wcsDatePeriod = _openAbsenceRequestPeriodExtractor.WorkflowControlSet;
