@@ -191,13 +191,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 
         private void ExpectCallsForEnoughAllowanceLeft(IBudgetDay budgetDay, IPersonPeriod personPeriod)
         {
-            Expect.Call(_scenarioRepository.LoadDefaultScenario()).Return(ScenarioFactory.CreateScenarioAggregate()).Repeat.Twice();
+            Expect.Call(_scenarioRepository.LoadDefaultScenario()).Return(ScenarioFactory.CreateScenarioAggregate()).Repeat.AtLeastOnce();
             Expect.Call(_absenceRequest.Person).Return(_person).Repeat.AtLeastOnce();
             Expect.Call(_absenceRequest.Period).Return(shortPeriod()).Repeat.AtLeastOnce();
             Expect.Call(_budgetDayRepository.Find(null, null, _defaultDatePeriod))
                   .IgnoreArguments()
                   .Return(new List<IBudgetDay> { budgetDay });
             Expect.Call(budgetDay.Allowance).Return(2d);
+            Expect.Call(budgetDay.IsClosed).Return(false);
             Expect.Call(budgetDay.Day).Return(_defaultDay).Repeat.Once();
             Expect.Call(
                 _scheduleProjectionReadOnlyRepository.GetNumberOfAbsencesPerDayAndBudgetGroup(
@@ -207,12 +208,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
             var skillDay = SkillDayFactory.CreateSkillDay(new DateTime(2013, 04, 08));
             skillDay.SkillDayCalculator = new SkillDayCalculator(_skills.ElementAt(0), skillDays.ToList(), new DateOnlyPeriod(new DateOnly(2013, 04, 08), new DateOnly(2013, 04, 08)));
             skillDays.Add(skillDay);
-
-            Expect.Call(
-                _skillDayRepository.FindRange(new DateOnlyPeriod(new DateOnly(2012, 01, 01), new DateOnly(2012, 01, 02)),
-                                              _skills.ToList(), ScenarioFactory.CreateScenarioAggregate()))
-                  .IgnoreArguments().Return(skillDays)
-                  .Repeat.AtLeastOnce();
         }
 
         private static DateTimePeriod longPeriod()
@@ -230,13 +225,14 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
 
         private void GetExpectForNotEnoughAllowanceLeft(IBudgetDay budgetDay, IPersonPeriod personPeriod)
         {
-            Expect.Call(_scenarioRepository.LoadDefaultScenario()).Return(ScenarioFactory.CreateScenarioAggregate()).Repeat.Twice();
+            Expect.Call(_scenarioRepository.LoadDefaultScenario()).Return(ScenarioFactory.CreateScenarioAggregate()).Repeat.AtLeastOnce();
             Expect.Call(_absenceRequest.Person).Return(_person).Repeat.AtLeastOnce();
             Expect.Call(_absenceRequest.Period).Return(longPeriod()).Repeat.AtLeastOnce();
             Expect.Call(_budgetDayRepository.Find(null, null, _defaultDatePeriod))
                   .IgnoreArguments()
                   .Return(new List<IBudgetDay> { budgetDay });
             Expect.Call(budgetDay.Day).Return(_defaultDay);
+            Expect.Call(budgetDay.IsClosed).Return(false);
             Expect.Call(budgetDay.Allowance).Return(1.5d);
             Expect.Call(
                 _scheduleProjectionReadOnlyRepository.GetNumberOfAbsencesPerDayAndBudgetGroup(
@@ -246,12 +242,6 @@ namespace Teleopti.Ccc.Sdk.ServiceBusTest
             var skillDay = SkillDayFactory.CreateSkillDay(new DateTime(2013, 04, 08));
             skillDay.SkillDayCalculator = new SkillDayCalculator(_skills.ElementAt(0), skillDays.ToList(), new DateOnlyPeriod(new DateOnly(2013, 04, 08), new DateOnly(2013, 04, 08)));
             skillDays.Add(skillDay);
-            
-            Expect.Call(
-                _skillDayRepository.FindRange(new DateOnlyPeriod(new DateOnly(2012,01,01),new DateOnly(2012,01,02) ),
-                                              _skills.ToList(), ScenarioFactory.CreateScenarioAggregate()))
-                  .IgnoreArguments().Return(skillDays)
-                  .Repeat.AtLeastOnce();
         }
 
         private void GetExpectIfBudgetIsNotDefinedForFewDays(DateTimePeriod dateTimePeriod, List<IBudgetDay> budgetDayList)
