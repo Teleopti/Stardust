@@ -79,7 +79,7 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
 
             using (_mocks.Record())
             {
-                Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow);
+                Expect.Call(_unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow).Repeat.Twice();
                 
                 savedTester.ISavedTesterSaved(null, null);
                 LastCall.IgnoreArguments().Repeat.Once();
@@ -88,7 +88,7 @@ namespace Teleopti.Ccc.WinCodeTest.Budgeting
                 LastCall.IgnoreArguments().Return(true).Repeat.Once();
 
                 uow.PersistAll();
-                LastCall.Repeat.Once().Return(new List<IRootChangeInfo>());
+                LastCall.Repeat.Twice().Return(new List<IRootChangeInfo>());
             }
             using(_mocks.Playback())
             {

@@ -137,7 +137,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
                 return invalidConfig;
             }
             
-            invalidDays = GetInvalidDaysIfExist(budgetDays, budgetGroup, invalidDays, culture);
+            invalidDays = getInvalidDaysIfExist(budgetDays, budgetGroup, invalidDays, culture);
 
             if (!string.IsNullOrEmpty(invalidDays))
             {
@@ -148,7 +148,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
             return invalidConfig;
         }
 
-        private string GetInvalidDaysIfExist(IList<IBudgetDay> budgetDays, IBudgetGroup budgetGroup, string invalidDays, CultureInfo culture)
+        private string getInvalidDaysIfExist(IEnumerable<IBudgetDay> budgetDays, IBudgetGroup budgetGroup, string invalidDays, CultureInfo culture)
         {
             var count = 0;
             foreach (var budgetDay in budgetDays.OrderBy(x => x.Day))
@@ -159,7 +159,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
                     _scheduleProjectionReadOnlyRepository.GetNumberOfAbsencesPerDayAndBudgetGroup(
                         budgetGroup.Id.GetValueOrDefault(), currentDay);
 
-                if (allowance <= alreadyUsedAllowance)
+                if (Math.Floor(allowance) <= alreadyUsedAllowance)
                 {
                     count++;
                     if (count > 5)

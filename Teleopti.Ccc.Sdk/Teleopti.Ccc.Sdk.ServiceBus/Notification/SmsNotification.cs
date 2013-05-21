@@ -1,4 +1,6 @@
-﻿using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
+﻿using System;
+using System.IO;
+using Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.ScheduleDayReadModel;
 using Teleopti.Ccc.Domain.Security.AuthorizationData;
 using Teleopti.Interfaces.Domain;
 using log4net;
@@ -46,8 +48,34 @@ namespace Teleopti.Ccc.Sdk.ServiceBus.Notification
 					var number = _smsLinkChecker.SmsMobileNumber(person);
 					if (!string.IsNullOrEmpty(number))
 					{
-						var smsSender = _notificationSenderFactory.GetSender();
-						smsSender.SendNotification(smsMessages, number);
+                        try
+                        {
+                            var smsSender = _notificationSenderFactory.GetSender();
+                            if (smsSender != null)
+                            {
+                                smsSender.SendNotification(smsMessages, number);
+                            }
+                            else
+                            {
+                                Logger.Warn("No SMS sender was found. Review the configuration and try to restart the service bus.");
+                            }
+                        }
+                        catch (TypeLoadException exception)
+                        {
+                            Logger.Error("Could not load type for notification.", exception);
+                        }
+                        catch (FileNotFoundException exception)
+                        {
+                            Logger.Error("Could not load type for notification.", exception);
+                        }
+                        catch (FileLoadException exception)
+                        {
+                            Logger.Error("Could not load type for notification.", exception);
+                        }
+                        catch (BadImageFormatException exception)
+                        {
+                            Logger.Error("Could not load type for notification.", exception);
+                        }
 					}
 				}
 			}
