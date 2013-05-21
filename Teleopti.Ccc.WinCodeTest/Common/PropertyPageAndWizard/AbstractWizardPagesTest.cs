@@ -124,17 +124,17 @@ namespace Teleopti.Ccc.WinCodeTest.Common.PropertyPageAndWizard
         public void VerifySaveWorks()
         {
             IAggregateRoot aggregateRoot = mocks.StrictMock<IAggregateRoot>();
-            IUnitOfWork uow = mocks.StrictMock<IUnitOfWork>();
+            IUnitOfWork uow = mocks.DynamicMock<IUnitOfWork>();
             Guid newGuid = Guid.NewGuid();
 
             using(mocks.Record())
             {
-                Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow);
+                Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow).Repeat.Twice();
                 Expect.Call(target.CreateNewRoot()).Return(aggregateRoot).Repeat.Once();
                 Expect.Call(aggregateRoot.Id).Return(newGuid).Repeat.Once();
 
                 uow.PersistAll();
-                LastCall.Repeat.Once().Return(
+                LastCall.Repeat.Twice().Return(
                     new List<IRootChangeInfo>
                         {
                             new RootChangeInfo(aggregateRoot, DomainUpdateType.Update)
@@ -201,7 +201,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.PropertyPageAndWizard
             
             using(mocks.Record())
             {
-                Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow);
+                Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow).Repeat.Twice();
                 Expect.Call(target.CreateNewRoot()).Return(aggregateRoot).Repeat.Once();
 
                 target.Save();
@@ -211,7 +211,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.PropertyPageAndWizard
                 LastCall.IgnoreArguments().Return(true).Repeat.Once();
 
                 uow.PersistAll();
-                LastCall.Repeat.Once().Return(new List<IRootChangeInfo>());
+                LastCall.Repeat.Twice().Return(new List<IRootChangeInfo>());
 
                 target.GetType()
                     .GetMethod("OnAfterSave",
@@ -224,7 +224,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common.PropertyPageAndWizard
                 LastCall.CallOriginalMethod(OriginalCallOptions.CreateExpectation);
 
                 uow.Dispose();
-                LastCall.Repeat.Once();
+                LastCall.Repeat.Twice();
 
                 foreach (IPropertyPage page in pages)
                 {

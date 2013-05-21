@@ -235,10 +235,15 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                 if(scheduleDictionaryLoadOptions.LoadRestrictions)
                 {
                     addPreferencesDays(scheduleDictionary, _repositoryFactory.CreatePreferenceDayRepository(UnitOfWork).Find(longDateOnlyPeriod, visiblePersons));
-                    addStudentAvailabilityDays(scheduleDictionary, _repositoryFactory.CreateStudentAvailabilityDayRepository(UnitOfWork).Find(longDateOnlyPeriod, visiblePersons));
+	                if (!scheduleDictionaryLoadOptions.LoadOnlyPreferenses)
+	                {
+		                addStudentAvailabilityDays(scheduleDictionary,
+													_repositoryFactory.CreateStudentAvailabilityDayRepository(UnitOfWork)
+																	.Find(longDateOnlyPeriod, visiblePersons));
 
-                    addPersonAvailabilities(period.VisiblePeriod, scheduleDictionary, personsInOrganization);
-                    addPersonRotations(period.VisiblePeriod, scheduleDictionary, visiblePersons); 
+		                addPersonAvailabilities(period.VisiblePeriod, scheduleDictionary, personsInOrganization);
+		                addPersonRotations(period.VisiblePeriod, scheduleDictionary, visiblePersons);
+	                }
                 }                              
             }
 

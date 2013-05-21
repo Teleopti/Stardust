@@ -389,17 +389,17 @@ namespace Teleopti.Ccc.WinCodeTest.Common.PropertyPageAndWizard
         public void VerifySave()
         {
             IAggregateRoot aggregateRoot = mocks.StrictMock<IAggregateRoot>();
-            IUnitOfWork uow = mocks.StrictMock<IUnitOfWork>();
+            IUnitOfWork uow = mocks.DynamicMock<IUnitOfWork>();
             Guid newGuid = Guid.NewGuid();
 
             using(mocks.Record())
             {
-                Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow);
+                Expect.Call(unitOfWorkFactory.CreateAndOpenUnitOfWork()).Return(uow).Repeat.Twice();
                 Expect.Call(target.CreateNewRoot()).Return(aggregateRoot).Repeat.Once();
                 Expect.Call(aggregateRoot.Id).Return(newGuid).Repeat.Once();
 
                 uow.PersistAll();
-                LastCall.Repeat.Once().Return(
+                LastCall.Repeat.Twice().Return(
                     new List<IRootChangeInfo>
                         {
                             new RootChangeInfo(aggregateRoot, DomainUpdateType.Update)

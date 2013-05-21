@@ -154,6 +154,13 @@ for /f "tokens=1,2 delims=;" %%g in (%SDKCREDPROT%\%authentication%.txt) do CALL
 ::-----
 for /f "tokens=1,2 delims=;" %%g in (%SDKCREDPROT%\Impersonate.txt) do CALL:IISIdentitySet "%%g" "%%h"
 
+::7 if we are in Windows mode, make sure we use "Ntlm" only
+If "%SDKCREDPROT%"=="Ntlm" (
+	"%appcmd%" set config "%DefaultSite%/%SitePath%" -section:system.webServer/security/authentication/windowsAuthentication /-"providers.[value='Negotiate:Kerberos']" /commit:apphost
+	"%appcmd%" set config "%DefaultSite%/%SitePath%" -section:system.webServer/security/authentication/windowsAuthentication /-"providers.[value='Negotiate']" /commit:apphost
+	"%appcmd%" set config "%DefaultSite%/%SitePath%" -section:system.webServer/security/authentication/windowsAuthentication /-"providers.[value='NTLM']" /commit:apphost
+	"%appcmd%" set config "%DefaultSite%/%SitePath%" -section:system.webServer/security/authentication/windowsAuthentication /+"providers.[value='NTLM']" /commit:apphost
+)
 exit /B
 
 :IISSecurityFormsSet

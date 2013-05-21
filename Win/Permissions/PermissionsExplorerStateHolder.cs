@@ -82,7 +82,11 @@ namespace Teleopti.Ccc.Win.Permissions
         {
             try
             {
-                UnitOfWork.PersistAll();
+                using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+                {
+                    UnitOfWork.PersistAll();
+                    uow.PersistAll();
+                }
             }
             catch (OptimisticLockException optimisticLockException)
             {

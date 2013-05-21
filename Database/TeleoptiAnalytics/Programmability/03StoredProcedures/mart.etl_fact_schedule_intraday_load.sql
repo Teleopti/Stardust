@@ -60,7 +60,7 @@ INNER JOIN mart.fact_schedule fs
 	ON dp.person_id = fs.person_id
  	AND ds.scenario_id = fs.scenario_id
 INNER JOIN Stage.stg_schedule_updated_ShiftStartDateUTC dd
-	ON dd.shift_startdate_id = fs.shift_startdate_id
+	ON dd.shift_startdate_id = fs.shift_startdate_id AND dd.interval_id = fs.interval_id
 WHERE stg.business_unit_code = @business_unit_code
 
 --insert new and updated

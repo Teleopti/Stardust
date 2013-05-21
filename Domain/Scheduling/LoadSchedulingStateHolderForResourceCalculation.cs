@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 		{
 			var dateOnlyPeriod = period.ToDateOnlyPeriod(TimeZoneInfo.Utc);
 
-			_schedulingResultStateHolder.PersonsInOrganization = _personRepository.FindPeopleInOrganization(dateOnlyPeriod, true);
+			_schedulingResultStateHolder.PersonsInOrganization = _personRepository.FindPeopleInOrganization(dateOnlyPeriod, false);
 
 			var skills = _skillRepository.FindAllWithSkillDays(dateOnlyPeriod);
 			_workloadRepository.LoadAll();
