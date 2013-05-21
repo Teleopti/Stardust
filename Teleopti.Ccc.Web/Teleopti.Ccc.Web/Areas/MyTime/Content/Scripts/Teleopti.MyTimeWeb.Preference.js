@@ -414,7 +414,8 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 		preferencesAndScheduleViewModel = new Teleopti.MyTimeWeb.Preference.PreferencesAndSchedulesViewModel(ajax, dayViewModels);
 		periodFeedbackViewModel = new Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel(ajax, dayViewModelsInPeriod, date);
 	    
-		mustHaveCountViewModel.SetData(dayViewModelsInPeriod, $('#Preference-body').data('mytime-maxmusthave'));
+        if(mustHaveCountViewModel != null)
+		    mustHaveCountViewModel.SetData(dayViewModelsInPeriod, $('#Preference-body').data('mytime-maxmusthave'));
 	    
 		var periodFeedbackElement = $('#Preference-period-feedback-view')[0];
 		if (periodFeedbackElement)
