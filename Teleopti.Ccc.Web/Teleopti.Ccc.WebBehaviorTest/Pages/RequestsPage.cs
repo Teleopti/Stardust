@@ -36,9 +36,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "Requests-addTextRequest-menuItem")]
 		public Link AddTextRequestMenuItem { get; set; }
 
-		[FindBy(Id = "Requests-addAbsenceRequest-menuItem")]
-		public Link AddAbsenceRequestMenuItem { get; set; }
-
 		[FindBy(Id = "Requests-addShiftTradeRequest-menuItem")]
 		public Link AddShiftTradeRequestMenuItem { get; set; }
 
@@ -50,9 +47,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		[FindBy(Id = "Absence-request-tab")]
 		public Span AbsenceRequestTab { get; set; }
-
-		[FindBy(Id = "Absence-type-element")]
-		public Div AbsenceTypesElement { get; set; }
 
 		[FindBy(Id = "Absence-type-input")]
 		public TextField AbsenceTypesTextField { get; set; }
