@@ -33,49 +33,45 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
 		public void VerifyDefaultProperties()
 		{
 			var jobParameters = JobParametersFactory.SimpleParameters(false);
-			var target = new StageSchedulePreferenceJobStep(jobParameters);
+			var target = new StageAvailabilityJobStep(jobParameters);
 			jobParameters.Helper = _mock.DynamicMock<IJobHelper>();
 			Assert.AreEqual(JobCategoryType.Schedule, target.JobCategory);
-			Assert.AreEqual("stg_schedule_preference, stg_day_off, dim_day_off", target.Name);
+			Assert.AreEqual("Stage Hourly Availability", target.Name);
 			Assert.IsFalse(target.IsBusinessUnitIndependent);
 		}
 
 		[Test]
-		public void ShouldProcessDayOffAlsoInThisStep()
+		public void ShouldProcessAvailabilities()
 		{
 			var jobParameters = _mock.DynamicMock<IJobParameters>();
 			var stateHolder = _mock.DynamicMock<ICommonStateHolder>();
 			var jobHelper = _mock.DynamicMock<IJobHelper>();
 			var repository = _mock.DynamicMock<IRaptorRepository>();
-			var transformer = _mock.DynamicMock<IIntradaySchedulePreferenceTransformer>();
-			var subStep = _mock.DynamicMock<IEtlDayOffSubStep>();
+			var transformer = _mock.DynamicMock<IIntradayAvailabilityTransformer>();
 			var scenario = new Scenario("scenario") {DefaultScenario = true};
 
-			Expect.Call(jobParameters.IntervalsPerDay).Return(96);
 			Expect.Call(stateHolder.ScenarioCollectionDeletedExcluded).Return(new List<IScenario> { scenario });
 			
 			Expect.Call(jobParameters.StateHolder).Return(stateHolder);
 			Expect.Call(repository.LastChangedDate(null, "")).IgnoreArguments().Return(new LastChangedReadModel { LastTime = DateTime.Now, ThisTime = DateTime.Now });
-			Expect.Call(repository.ChangedPreferencesOnStep(new DateTime(), null))
+			Expect.Call(repository.ChangedAvailabilityOnStep(new DateTime(), null))
 				.IgnoreArguments()
-				.Return(new List<IPreferenceDay>());
-			Expect.Call(() => transformer.Transform(new List<IPreferenceDay>(), new DataTable("d"),stateHolder, scenario)).IgnoreArguments();
+				.Return(new List<IStudentAvailabilityDay>());
+			Expect.Call(() => transformer.Transform(new List<IStudentAvailabilityDay>(), new DataTable("d"),stateHolder, scenario)).IgnoreArguments();
 			Expect.Call(jobParameters.Helper).Return(jobHelper);
 			Expect.Call(jobHelper.Repository).Return(repository);
-			Expect.Call(repository.PersistSchedulePreferences(new DataTable("d"))).IgnoreArguments().Return(5);
-			Expect.Call(subStep.StageAndPersistToMart(DayOffEtlLoadSource.SchedulePreference, RaptorTransformerHelper.CurrentBusinessUnit, repository)).Return(5);
+			Expect.Call(repository.PersistAvailability(new DataTable("d"))).IgnoreArguments().Return(5);
 			_mock.ReplayAll();
 			
-			var target = new IntradayStageSchedulePreferenceJobStep(jobParameters)
+			var target = new IntradayStageAvailabilityJobStep(jobParameters)
 			{
-				Transformer = transformer,
-				DayOffSubStep = subStep
+				Transformer = transformer
 			};
 			
 			
 			var result = target.Run(new List<IJobStep>(), null, new List<IJobResult>(), true);
 
-			result.RowsAffected.Should().Be.EqualTo(10);
+			result.RowsAffected.Should().Be.EqualTo(5);
 			_mock.VerifyAll();
 		}
 
@@ -85,11 +81,10 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
 			var jobParameters = _mock.DynamicMock<IJobParameters>();
 			var stateHolder = _mock.DynamicMock<ICommonStateHolder>();
 			
-			Expect.Call(jobParameters.IntervalsPerDay).Return(96);
 			Expect.Call(jobParameters.StateHolder).Return(stateHolder);
 			Expect.Call(stateHolder.ScenarioCollectionDeletedExcluded).Return(new List<IScenario> { new Scenario("scenario") { DefaultScenario = false } });
 			_mock.ReplayAll();
-			var target = new IntradayStageSchedulePreferenceJobStep(jobParameters);
+			var target = new IntradayStageAvailabilityJobStep(jobParameters);
 			target.Run(new List<IJobStep>(), null, new List<IJobResult>(), true);
 			_mock.VerifyAll();
 		}
@@ -107,11 +102,11 @@ namespace Teleopti.Analytics.Etl.TransformerTest.Job.Steps
 			Expect.Call(commonStateHolder.ScenarioCollectionDeletedExcluded).Return(new List<IScenario> { scenario });
 			Expect.Call(scenario.DefaultScenario).Return(true);
 
-			var step = new FactSchedulePreferenceJobStep(jobParameters, true);
+			var step = new FactAvailabilityJobStep(jobParameters, true);
 
 			var bu = _mock.DynamicMock<IBusinessUnit>();
-			Expect.Call(raptorRepository.FillIntradayFactSchedulePreferenceMart(bu, scenario)).Return(5).IgnoreArguments();
-			Expect.Call(() => commonStateHolder.UpdateThisTime("Schedules", bu)).IgnoreArguments();
+			Expect.Call(raptorRepository.FillIntradayFactAvailabilityMart(bu, scenario)).Return(5).IgnoreArguments();
+			Expect.Call(() => commonStateHolder.UpdateThisTime("Availability", bu)).IgnoreArguments();
 			_mock.ReplayAll();
 			step.Run(new List<IJobStep>(), bu, null, true);
 			_mock.VerifyAll();

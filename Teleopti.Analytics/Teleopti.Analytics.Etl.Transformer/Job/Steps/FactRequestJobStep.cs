@@ -21,7 +21,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 		{
 			if (_isIntraday)
 				return _jobParameters.Helper.Repository.FillIntradayFactRequestMart(RaptorTransformerHelper.CurrentBusinessUnit);
-			else
+			
 				return _jobParameters.Helper.Repository.FillFactRequestMart(new DateTimePeriod(JobCategoryDatePeriod.StartDateUtcFloor, JobCategoryDatePeriod.EndDateUtcCeiling), RaptorTransformerHelper.CurrentBusinessUnit);
 		}
 	}

@@ -74,6 +74,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Jobs
 			Add(new FactScheduleJobStep(jobParameters,true));
 			Add(new FactScheduleDayCountJobStep(jobParameters,true));
 			Add(new FactSchedulePreferenceJobStep(jobParameters, true));
+			Add(new FactAvailabilityJobStep(jobParameters, true));
 			Add(new FactQueueJobStep(jobParameters));                   // BU independent
 			Add(new FactAgentJobStep(jobParameters));                   // BU independent
 			Add(new StatisticsUpdateNotificationJobStep(jobParameters));                   // BU independent

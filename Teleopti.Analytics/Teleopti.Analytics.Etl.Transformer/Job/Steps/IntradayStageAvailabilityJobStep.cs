@@ -15,7 +15,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 			JobCategory = JobCategoryType.Schedule;
 			Transformer = new IntradayHourlyAvailabilityTransformer();
 			
-			SchedulePreferenceInfrastructure.AddColumnsToDataTable(BulkInsertDataTable1);
+			HourlyAvailabilityInfrastructure.AddColumnsToDataTable(BulkInsertDataTable1);
 		}
 
 		public IIntradayAvailabilityTransformer Transformer { get; set; }
@@ -33,7 +33,7 @@ namespace Teleopti.Analytics.Etl.Transformer.Job.Steps
 
 				Transformer.Transform(changed, BulkInsertDataTable1,_jobParameters.StateHolder,scenario);
 
-				rowsAffected = _jobParameters.Helper.Repository.PersistSchedulePreferences(BulkInsertDataTable1);
+				rowsAffected = _jobParameters.Helper.Repository.PersistAvailability(BulkInsertDataTable1);
 
 				
 			}

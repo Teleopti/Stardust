@@ -12,6 +12,7 @@ using Teleopti.Ccc.Domain.Common.EntityBaseTypes;
 using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Security.Matrix;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
+using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.ReadModel;
 
@@ -708,7 +709,7 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 
 	    public ILastChangedReadModel LastChangedDate(IBusinessUnit currentBusinessUnit, string stepName)
 	    {
-		    throw new NotImplementedException();
+		    return new LastChangedReadModel();
 	    }
 
 	    public IList<IScheduleChangedReadModel> ChangedDataOnStep(DateTime afterDate, IBusinessUnit currentBusinessUnit, string stepName)
@@ -718,42 +719,40 @@ namespace Teleopti.Analytics.Etl.TransformerInfrastructure
 
 	    public int PersistScheduleChanged(DataTable dataTable)
 	    {
-		    throw new NotImplementedException();
+			return 0;
 	    }
 
 	    public void UpdateLastChangedDate(IBusinessUnit currentBusinessUnit, string stepName, DateTime thisTime)
-	    {
-		    throw new NotImplementedException();
-	    }
+	    {}
 
 	    public IEnumerable<IPreferenceDay> ChangedPreferencesOnStep(DateTime lastTime, IBusinessUnit currentBusinessUnit)
 	    {
-		    throw new NotImplementedException();
+		    return new List<IPreferenceDay>();
 	    }
 
 	    public IEnumerable<IStudentAvailabilityDay> ChangedAvailabilityOnStep(DateTime lastTime, IBusinessUnit currentBusinessUnit)
 	    {
-		    throw new NotImplementedException();
+		    return new List<IStudentAvailabilityDay>();
 	    }
 
 	    public int FillIntradayFactSchedulePreferenceMart(IBusinessUnit currentBusinessUnit, IScenario scenario)
 	    {
-		    throw new NotImplementedException();
+			return 0;
 	    }
 
 	    public int PersistAvailability(DataTable dataTable)
 	    {
-		    throw new NotImplementedException();
+		    return 0;
 	    }
 
 	    public int FillFactAvailabilityMart(DateTimePeriod period, TimeZoneInfo defaultTimeZone, IBusinessUnit businessUnit)
 	    {
-		    throw new NotImplementedException();
+			return 0;
 	    }
 
 	    public int FillIntradayFactAvailabilityMart(IBusinessUnit businessUnit, IScenario scenario)
 	    {
-		    throw new NotImplementedException();
+			return 0;
 	    }
 
 	    public DateTime GetMaxDateInDimDate()
