@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
+﻿using System.Globalization;
 
 namespace Teleopti.Ccc.TestCommon.FakeData
 {
@@ -10,23 +6,22 @@ namespace Teleopti.Ccc.TestCommon.FakeData
 	{
 		public static CultureInfo CreateEnglishCulture()
 		{
-			return new CultureInfo("en-GB");
+			return CultureInfo.GetCultureInfo("en-GB");
 		}
 
 		public static CultureInfo CreateSwedishCulture()
 		{
-			return new CultureInfo("sv-SE");
+            return CultureInfo.GetCultureInfo("sv-SE");
 		}
 
 		public static CultureInfo CreateFinnishCulture()
 		{
-			return new CultureInfo("fi-Fi");
+			return CultureInfo.GetCultureInfo("fi-Fi");
 		}
 
 		public static CultureInfo CreateCatalanCulture()
 		{
-			return new CultureInfo("ca-ES");
+			return CultureInfo.GetCultureInfo("ca-ES");
 		}
-
 	}
 }
