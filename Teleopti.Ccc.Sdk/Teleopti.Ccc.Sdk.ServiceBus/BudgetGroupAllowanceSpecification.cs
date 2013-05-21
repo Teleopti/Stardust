@@ -61,7 +61,8 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
             {
                 var currentDay = budgetDay.Day;
 
-                if (!IsSkillOpenForDateOnly(currentDay, budgetGroup.SkillCollection))
+                //if (!IsSkillOpenForDateOnly(currentDay, budgetGroup.SkillCollection))
+                if(budgetDay.IsClosed)
                     continue;
 
                 var allowanceMinutes = budgetDay.Allowance * budgetDay.FulltimeEquivalentHours * TimeDefinition.MinutesPerHour;
