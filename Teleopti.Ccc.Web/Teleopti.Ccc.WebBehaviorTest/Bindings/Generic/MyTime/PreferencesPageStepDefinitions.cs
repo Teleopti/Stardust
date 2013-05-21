@@ -131,15 +131,14 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should see I have (\d) available must haves")]
 		public void ThenIShouldSeeIHave1AvailableMustHaves(int mustHave)
 		{
-			EventualAssert.That(() => Pages.Pages.PreferencePage.MustHaveNumbersText.Text, Is.StringContaining("(" + mustHave + ")"));
+            Browser.Interactions.AssertContains(".musthave-max",mustHave.ToString());
 		}
 
 		[Then(@"I should see I have (\d) must haves")]
 		public void ThenIShouldSeeIHave1MustHaves(int mustHave)
 		{
-			EventualAssert.That(() => Pages.Pages.PreferencePage.MustHaveNumbersText.Text, Is.StringContaining(mustHave + "("));
+            Browser.Interactions.AssertContains(".musthave-current", mustHave.ToString());
 		}
-
 
 		[Then(@"I should not see the extended preference button")]
 		public void ThenIShouldNotSeeTheExtendedPreferenceButton()
@@ -343,7 +342,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[When(@"I click remove must have button")]
 		public void WhenIClickOnRemoveMustHaveButton()
 		{
-			Pages.Pages.PreferencePage.MustHaveDeleteButton.EventualClick();
+            Browser.Interactions.Click(".icon-minus");
 		}
 
 

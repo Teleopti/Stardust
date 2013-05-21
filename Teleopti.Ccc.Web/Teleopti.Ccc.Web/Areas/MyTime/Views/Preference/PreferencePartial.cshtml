@@ -45,11 +45,11 @@
                         </ul>
                     </div></li>
             }
-            <li><a href="#" data-bind="click: deletePreference"><i class="icon-remove"></i>&nbsp;@Resources.Remove</a></li>
+            <li><a data-bind="click: deletePreference"><i class="icon-remove"></i>&nbsp;@Resources.Remove</a></li>
             <li class="divider-vertical"></li>
             <li data-bind="if: mustHaveEnabled"><span class="navbar-text">@Resources.MustHave</span></li>
-            <li data-bind="if: mustHaveEnabled"><a href="#" data-bind="click: removeMustHave"><i class="icon-minus"></i></a></li>
-            <li data-bind="if: mustHaveEnabled"><span class="navbar-text"><i class="icon-heart"></i>&nbsp;<span data-bind="text: currentMustHaves"></span>&nbsp;(<span data-bind="text: maxMustHave"></span>)</span></li>
+            <li data-bind="if: mustHaveEnabled"><a  data-bind="click: removeMustHave"><i class="icon-minus"></i></a></li>
+            <li data-bind="if: mustHaveEnabled"><span class="navbar-text"><i class="icon-heart"></i>&nbsp;<span data-bind="text: currentMustHaves" class="musthave-current"></span>&nbsp;(<span data-bind="text: maxMustHave" class="musthave-max"></span>)</span></li>
             <li data-bind="if: mustHaveEnabled"><a href="#" data-bind="click: addMustHave, enabled: addMustHaveEnabled"><i class="icon-plus"></i></a></li>
         </ul>
     </div>

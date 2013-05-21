@@ -34,10 +34,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		[FindBy(Id = "Preference-must-have-button")]
 		public Button MustHaveButton { get; set; }
-		[FindBy(Id = "Preference-must-have-delete-button")]
-		public Button MustHaveDeleteButton { get; set; }
-		[FindBy(Id = "Preference-must-have-numbers")]
-		public Span MustHaveNumbersText { get; set; }
 
 		[FindBy(Id = "Preference-delete-button")]
 		public Button DeleteButton { get; set; }
