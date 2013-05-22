@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Teleopti.Ccc.Domain.ResourceCalculation;
-using Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling;
 using Teleopti.Ccc.Domain.Scheduling.TeamBlock.WorkShiftFilters;
 using Teleopti.Ccc.Domain.Security.AuthorizationEntities;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -27,7 +26,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 		private IRuleSetBag _ruleSetBag;
 		private TimeZoneInfo _timeZoneInfo;
 		private IPersonalShiftMeetingTimeChecker _personalShiftMeetingTimeChecker;
-		private IGroupPerson _groupPerson;
 
 		[SetUp]
 		public void Setup()
@@ -35,7 +33,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			_mocks = new MockRepository();
 			_dateOnly = new DateOnly(2013, 3, 1);
 			_person = _mocks.StrictMock<IPerson>();
-			_groupPerson = _mocks.StrictMock<IGroupPerson>();
 			_personPeriod = _mocks.StrictMock<IPersonPeriod>();
 			_ruleSetBag = _mocks.StrictMock<IRuleSetBag>();
 			_timeZoneInfo = (TimeZoneInfo.FindSystemTimeZoneById("UTC"));
@@ -65,7 +62,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			var shifts = getCashes();
 			using (_mocks.Record())
 			{
-				Expect.Call(_groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(new List<IPerson> {_person}));
 				Expect.Call(_person.Period(_dateOnly)).Return(_personPeriod);
 				Expect.Call(_personPeriod.RuleSetBag).Return(_ruleSetBag);
 				Expect.Call(ruleSet1.OnlyForRestrictions).Return(false);
@@ -78,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.Filter(_dateOnly, _groupPerson, false);
+				var result = _target.Filter(_dateOnly, _person, false);
 
 				Assert.That(result.Count, Is.EqualTo(3));
 			}
@@ -93,7 +89,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			var ruleSets = new List<IWorkShiftRuleSet> { ruleSet1 };
 			using (_mocks.Record())
 			{
-				Expect.Call(_groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(new List<IPerson> { _person }));
 				Expect.Call(_person.Period(_dateOnly)).Return(_personPeriod);
 				Expect.Call(_personPeriod.RuleSetBag).Return(_ruleSetBag);
 				Expect.Call(ruleSet1.OnlyForRestrictions).Return(false);
@@ -103,7 +98,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.Filter(_dateOnly, _groupPerson, false);
+				var result = _target.Filter(_dateOnly, _person, false);
 
 				Assert.That(result.Count, Is.EqualTo(0));
 			}
@@ -118,7 +113,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			var ruleSets = new List<IWorkShiftRuleSet> { ruleSet1 };
 			using (_mocks.Record())
 			{
-				Expect.Call(_groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(new List<IPerson> { _person }));
 				Expect.Call(_person.Period(_dateOnly)).Return(_personPeriod);
 				Expect.Call(_personPeriod.RuleSetBag).Return(_ruleSetBag);
 				Expect.Call(ruleSet1.OnlyForRestrictions).Return(false);
@@ -130,7 +124,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.Filter(_dateOnly, _groupPerson, false);
+				var result = _target.Filter(_dateOnly, _person, false);
 
 				Assert.That(result.Count, Is.EqualTo(0));
 			}
@@ -145,7 +139,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			var ruleSets = new List<IWorkShiftRuleSet> { ruleSet1 };
 			using (_mocks.Record())
 			{
-				Expect.Call(_groupPerson.GroupMembers).Return(new ReadOnlyCollection<IPerson>(new List<IPerson> { _person }));
 				Expect.Call(_person.Period(_dateOnly)).Return(_personPeriod);
 				Expect.Call(_personPeriod.RuleSetBag).Return(_ruleSetBag);
 				Expect.Call(ruleSet1.OnlyForRestrictions).Return(false);
@@ -156,7 +149,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock.WorkShiftFilters
 			}
 			using (_mocks.Playback())
 			{
-				var result = _target.Filter(_dateOnly, _groupPerson, false);
+				var result = _target.Filter(_dateOnly, _person, false);
 
 				Assert.That(result.Count, Is.EqualTo(0));
 			}

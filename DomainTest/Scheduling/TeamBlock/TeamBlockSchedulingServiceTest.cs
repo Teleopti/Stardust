@@ -164,8 +164,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
                 Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, _date, BlockFinderType.SingleDay,
 																	 false, _matrixList)).Return(_teamBlockInfo);
-                Expect.Call(_matrixPro.SchedulePeriod).Return(_virtualSchedulePeriod);
-                Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod);
+				Expect.Call(_matrixPro.SchedulePeriod).Return(_virtualSchedulePeriod).Repeat.AtLeastOnce();
+                Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod).Repeat.AtLeastOnce();
                 Expect.Call(_matrixPro.GetScheduleDayByKey(_date)).Return(_scheduleDayPro);
                 Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay);
                 Expect.Call(_scheduleDay.IsScheduled()).Return(false);
@@ -266,8 +266,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
                 Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo,_date , BlockFinderType.SingleDay,
 																	 false, _matrixList)).Return(_teamBlockInfo);
-                Expect.Call(_matrixPro.SchedulePeriod).Return(_virtualSchedulePeriod);
-                Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod);
+				Expect.Call(_matrixPro.SchedulePeriod).Return(_virtualSchedulePeriod).Repeat.AtLeastOnce();
+				Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod).Repeat.AtLeastOnce();
                 Expect.Call(_matrixPro.GetScheduleDayByKey(_date)).Return(_scheduleDayPro);
                 Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay);
                 Expect.Call(_scheduleDay.IsScheduled()).Return(false);
@@ -331,8 +331,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
             Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, _date, BlockFinderType.SingleDay,
 																  false, _matrixList)).Return(_teamBlockInfo);
-            Expect.Call(_matrixPro.SchedulePeriod).Return(_virtualSchedulePeriod);
-            Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod);
+			Expect.Call(_matrixPro.SchedulePeriod).Return(_virtualSchedulePeriod).Repeat.AtLeastOnce();
+			Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod).Repeat.AtLeastOnce();
             Expect.Call(_matrixPro.GetScheduleDayByKey(_date)).Return(_scheduleDayPro);
             Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay);
             Expect.Call(_scheduleDay.IsScheduled()).Return(false);
@@ -363,8 +363,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
 
                 Expect.Call(_teamBlockInfoFactory.CreateTeamBlockInfo(teamInfo, _date, BlockFinderType.SingleDay ,
 																	 false, _matrixList)).Return(_teamBlockInfo);
-                Expect.Call(_matrixPro.SchedulePeriod).Return(_virtualSchedulePeriod);
-                Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod);
+				Expect.Call(_matrixPro.SchedulePeriod).Return(_virtualSchedulePeriod).Repeat.AtLeastOnce();
+				Expect.Call(_virtualSchedulePeriod.DateOnlyPeriod).Return(_dateOnlyPeriod).Repeat.AtLeastOnce();
                 Expect.Call(_matrixPro.GetScheduleDayByKey(_date)).Return(_scheduleDayPro);
                 Expect.Call(_scheduleDayPro.DaySchedulePart()).Return(_scheduleDay);
                 Expect.Call(_scheduleDay.IsScheduled()).Return(false);
