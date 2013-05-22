@@ -369,9 +369,10 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 	    var date = portal ? portal.CurrentFixedDate() : null;
 	    if (date == null)
 	        date = moment().startOf('day').format('YYYY-MM-DD');
+	    var dayViewModels = {};
 
-		var dayViewModels = {};
-		var dayViewModelsInPeriod = {};
+	    var dayViewModelsInPeriod = {};
+
 		$('li[data-mytime-date]').each(function (index, element) {
 			var dayViewModel = new Teleopti.MyTimeWeb.Preference.DayViewModel(_ajaxForDate);
 			dayViewModel.ReadElement(element);
@@ -389,10 +390,16 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 		periodFeedbackViewModel = new Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel(ajax, dayViewModelsInPeriod, date);
 
 		var periodFeedbackElement = $('#Preference-period-feedback-view')[0];
-		if (periodFeedbackElement)
+		if (periodFeedbackElement) {
 			ko.applyBindings(periodFeedbackViewModel, periodFeedbackElement);
+
+		}
+			
 		loader = loader || function (call) { call(); };
 		loader(function () {
+
+			if (preferencesAndScheduleViewModel) {
+
 			preferencesAndScheduleViewModel.LoadPreferencesAndSchedules(from, to)
 				.done(function () {
 					loadingStarted = true;
@@ -404,9 +411,14 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 						$.each(preferencesAndScheduleViewModel.DayViewModels, function (index, day) {
 							day.LoadFeedback();
 						});
-						callWhenAjaxIsCompleted(completelyLoaded);
+						
 					});
 				});
+			}
+			callWhenAjaxIsCompleted(function() {
+				readyForInteraction();
+				completelyLoaded();
+			});
 		});
 	}
 
@@ -476,12 +488,8 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 	        ko.cleanNode(mustHaveTextElement[0]);
 	    }
 
-	    periodFeedbackViewModel.DayViewModels = {};
 	    periodFeedbackViewModel = null;
-	    preferencesAndScheduleViewModel.DayViewModels = {};
 	    preferencesAndScheduleViewModel = null;
-	    mustHaveCountViewModel.DayViewModels = {};
-	    mustHaveCountViewModel = null;
 	}
 
 	return {
@@ -494,6 +502,7 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 		PreferencePartialInit: function (readyForInteractionCallback, completelyLoadedCallback) {
 			readyForInteraction = readyForInteractionCallback;
 			completelyLoaded = completelyLoadedCallback;
+			
 			if (!$('#Preference-body').length) {
 				readyForInteraction();
 				completelyLoaded();

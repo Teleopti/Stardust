@@ -19,7 +19,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		public void ClickPrevious()
 		{
-			Browser.Interactions.Click("#PreferenceDateRangeSelector button:first-of-type");
+			Browser.Interactions.Click(".icon-arrow-left");
 		}
 
 		[FindBy(Id = "PreferenceDatePicker")] public DatePicker DatePicker { get; set; }

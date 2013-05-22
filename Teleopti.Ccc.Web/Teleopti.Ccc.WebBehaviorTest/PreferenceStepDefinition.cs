@@ -133,7 +133,6 @@ namespace Teleopti.Ccc.WebBehaviorTest
 			var data = UserFactory.User().UserData<StandardPreference>();
 			Browser.Interactions.AssertContains(CalendarCellsPage.DateSelector(data.Date), shiftCategory.Description.Name);
 			Browser.Interactions.AssertContains(CalendarCellsPage.DateSelector(data.Date.AddDays(1)), shiftCategory.Description.Name);
-			Navigation.GotoPreference(data.Date);
 			Browser.Interactions.AssertContains(CalendarCellsPage.DateSelector(data.Date), shiftCategory.Description.Name);
 			Browser.Interactions.AssertContains(CalendarCellsPage.DateSelector(data.Date.AddDays(1)), shiftCategory.Description.Name);
 		}
@@ -157,7 +156,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		public void ThenIShouldSeeThePreferencePeriodInformation()
 		{
 			var data = UserFactory.User().UserData<ExistingWorkflowControlSet>();
-			var innerHtml = _page.PreferencePeriod.InnerHtml;
+			var innerHtml = _page.PreferencePeriodFeedbackView.InnerHtml;
 			innerHtml.Should().Contain(data.PreferenceInputPeriod.StartDate.ToShortDateString(UserFactory.User().Culture));
 			innerHtml.Should().Contain(data.PreferenceInputPeriod.EndDate.ToShortDateString(UserFactory.User().Culture));
 			innerHtml.Should().Contain(data.PreferencePeriod.StartDate.ToShortDateString(UserFactory.User().Culture));
