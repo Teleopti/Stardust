@@ -1,4 +1,5 @@
 using Microsoft.Practices.Composite.Events;
+using Teleopti.Ccc.Domain.Common;
 using Teleopti.Interfaces.Domain;
 
 namespace Teleopti.Ccc.WinCode.Common
@@ -41,7 +42,10 @@ namespace Teleopti.Ccc.WinCode.Common
         {
             if (CanMoveDown)
             {
-                Parent.LayerCollection.MoveDownLayer(Layer as ILayer<IActivity>);
+				var layer = Layer as ILayer<IActivity>;
+				Parent.LayerCollection.MoveDownLayer(layer);
+				if (layer != null && layer.Parent is IPersonAssignment && Parent is IMainShift)
+					((IPersonAssignment)layer.Parent).SetMainShift((IMainShift)Parent);
                 LayerMoved();
             }
 
@@ -51,8 +55,11 @@ namespace Teleopti.Ccc.WinCode.Common
         {
             if (CanMoveUp)
             {
-                Parent.LayerCollection.MoveUpLayer(Layer as ILayer<IActivity>);
-                LayerMoved();
+				var layer = Layer as ILayer<IActivity>;
+				Parent.LayerCollection.MoveUpLayer(layer);
+				if (layer != null && layer.Parent is IPersonAssignment && Parent is IMainShift)
+					((IPersonAssignment)layer.Parent).SetMainShift((IMainShift)Parent);
+				LayerMoved();
             }
         }
 
