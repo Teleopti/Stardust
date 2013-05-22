@@ -32,9 +32,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "Preference-add-extended-button")]
 		public Button ExtendedPreferenceButton { get; set; }
 
-		[FindBy(Id = "Preference-must-have-button")]
-		public Button MustHaveButton { get; set; }
-
 		[FindBy(Id = "Preference-delete-button")]
 		public Button DeleteButton { get; set; }
 

@@ -336,7 +336,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[When(@"I click set must have button")]
 		public void WhenIClickOnMustHaveButton()
 		{
-			Pages.Pages.PreferencePage.MustHaveButton.EventualClick();
+			Browser.Interactions.Click(".add-musthave");
 		}
 
 		[When(@"I click remove must have button")]
