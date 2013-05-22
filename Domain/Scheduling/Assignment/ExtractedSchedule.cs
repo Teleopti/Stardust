@@ -74,7 +74,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
             return ServiceForSignificantPartForDisplay.SignificantPart();
         }
 
-    	public bool IsScheduled()
+	    public IEditorShift GetEditorShift()
+	    {
+		    var personAssignment = AssignmentHighZOrder();
+		    if (personAssignment == null)
+			    return null;
+
+		    return new EditorShiftMapper().CreateEditorShift(personAssignment);
+	    }
+
+	    public bool IsScheduled()
     	{
     		SchedulePartView partView = SignificantPart();
     		return (partView == SchedulePartView.FullDayAbsence || partView == SchedulePartView.DayOff ||

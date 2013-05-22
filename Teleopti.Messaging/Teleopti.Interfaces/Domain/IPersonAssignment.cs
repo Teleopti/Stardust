@@ -21,6 +21,14 @@ namespace Teleopti.Interfaces.Domain
                                             IProjectionSource, 
                                             ICloneableEntity<IPersonAssignment>
     {
+
+		/// <summary>
+		/// Sets the main shift layers and the shift category
+		/// </summary>
+		/// <param name="activityLayers"></param>
+		/// <param name="shiftCategory"></param>
+		void SetMainShiftLayers(IEnumerable<IActivityLayer> activityLayers, IShiftCategory shiftCategory);
+
 	    /// <summary>
 	    /// Gets the main shift.
 	    /// </summary>

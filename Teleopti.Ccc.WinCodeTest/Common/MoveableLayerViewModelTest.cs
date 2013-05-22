@@ -1,9 +1,7 @@
-using System;
 using System.Linq;
 using Microsoft.Practices.Composite.Events;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Teleopti.Ccc.Domain.Scheduling;
 using Teleopti.Ccc.Domain.Scheduling.Assignment;
 using Teleopti.Ccc.TestCommon.FakeData;
 using Teleopti.Ccc.WinCode.Common;
@@ -46,7 +44,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
 
             #region setup
             ILayerViewModelObserver observer = _mocks.StrictMock<ILayerViewModelObserver>();
-	        IEditorShift shift = CreateEditorShiftWithThreeActivityLayers();
+	        var shift = MainShiftFactory.CreateMainShiftWithThreeActivityLayers();
             ILayer<IActivity> firstLayer =
                 (from l in shift.LayerCollection
                  orderby l.OrderIndex
@@ -68,11 +66,9 @@ namespace Teleopti.Ccc.WinCodeTest.Common
             {
                 //Execute MoveDown
                 _models.ExecuteCommandModel(model.MoveDownCommand);
-                Assert.IsTrue(model.Layer.OrderIndex == 1, "Orderindex should have changed to 1");
 
                 //Execute MoveUp
                 _models.ExecuteCommandModel(model.MoveUpCommand);
-                Assert.IsTrue(model.Layer.OrderIndex == 0, "Orderindex should have changed back to 0");
             }
         }
 
@@ -80,7 +76,7 @@ namespace Teleopti.Ccc.WinCodeTest.Common
         public void VerifyCanMoveUpDownCommand()
         {
             #region setup
-			IEditorShift shift = CreateEditorShiftWithThreeActivityLayers();
+			var shift = MainShiftFactory.CreateMainShiftWithThreeActivityLayers();
 
             IOrderedEnumerable<ILayer<IActivity>> layers =
                 from l in shift.LayerCollection
@@ -137,35 +133,5 @@ namespace Teleopti.Ccc.WinCodeTest.Common
                 _models.ExecuteCommandModel(model.DeleteCommand);
             }
         }
-
-		public static IEditorShift CreateEditorShiftWithThreeActivityLayers()
-		{
-			Activity telephone = ActivityFactory.CreateActivity("Tel");
-			DateTimePeriod period1 =
-				new DateTimePeriod(new DateTime(2007, 1, 1, 8, 0, 0, DateTimeKind.Utc),
-								   new DateTime(2007, 1, 1, 12, 0, 0, DateTimeKind.Utc));
-
-			Activity longDuty = ActivityFactory.CreateActivity("Long duty");
-			DateTimePeriod period2 =
-				new DateTimePeriod(new DateTime(2007, 1, 1, 8, 0, 0, DateTimeKind.Utc),
-								   new DateTime(2007, 1, 2, 1, 0, 0, DateTimeKind.Utc));
-
-			DateTimePeriod period3 =
-				new DateTimePeriod(new DateTime(2007, 1, 2, 1, 0, 0, DateTimeKind.Utc),
-								   new DateTime(2007, 1, 2, 2, 0, 0, DateTimeKind.Utc));
-
-
-			EditorActivityLayer layer1 = new EditorActivityLayer(telephone, period1);
-			EditorActivityLayer layer2 = new EditorActivityLayer(longDuty, period2);
-			EditorActivityLayer layer3 = new EditorActivityLayer(longDuty, period3);
-
-			IEditorShift resultShift = new EditorShift(ShiftCategoryFactory.CreateShiftCategory("TEL"));
-			resultShift.LayerCollection.Add(layer1);
-			resultShift.LayerCollection.Add(layer2);
-			resultShift.LayerCollection.Add(layer3);
-
-			return resultShift;
-		}
-
     }
 }
