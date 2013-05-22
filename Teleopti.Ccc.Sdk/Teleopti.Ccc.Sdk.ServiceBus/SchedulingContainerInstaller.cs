@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.Sdk.ServiceBus
 			builder.RegisterType<SmsLinkChecker>().As<ISmsLinkChecker>();
 			builder.RegisterType<NotificationSenderFactory>().As<INotificationSenderFactory>();
 			builder.RegisterType<NotificationConfigReader>().As<INotificationConfigReader>();
-			builder.RegisterType<SingleSkillDictionary>().As<ISingleSkillDictionary>().InstancePerLifetimeScope();
+			builder.RegisterType<SingleSkillDictionary>().As<ISingleSkillDictionary>();
 			builder.RegisterType<TeleoptiRtaServiceClient>().As<ITeleoptiRtaService>().SingleInstance();
 			builder.RegisterType<SingleSkillMaxSeatCalculator>().As<ISingleSkillMaxSeatCalculator>();
 		}
