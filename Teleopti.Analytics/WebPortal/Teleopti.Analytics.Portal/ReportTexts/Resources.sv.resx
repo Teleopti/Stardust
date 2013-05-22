@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="CommonCollapse" xml:space="preserve">
     <value>Dra ihop</value>
@@ -1199,6 +1199,18 @@
   </data>
   <data name="ResShiftStartDateToColon" xml:space="preserve">
     <value>Till datum (då skiften påbörjas):</value>
+  </data>
+  <data name="ResFulfilled" xml:space="preserve">
+    <value>Uppfyllda</value>
+    <comment>Uppfyllda</comment>
+  </data>
+  <data name="ResFulfillmentPercent" xml:space="preserve">
+    <value>Uppfyllda (%)</value>
+    <comment>Uppfyllda (%)</comment>
+  </data>
+  <data name="ResUnfulfilled" xml:space="preserve">
+    <value>Ouppfyllda</value>
+    <comment>Ouppfyllda</comment>
   </data>
   <data name="ResFulfilled" xml:space="preserve">
     <value>Uppfyllda</value>
