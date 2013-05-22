@@ -134,7 +134,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			ShiftCategory = mainShift.ShiftCategory;
 		}
 
-		public void SetMainShiftLayers(IEnumerable<IActivityLayer> activityLayers, IShiftCategory shiftCategory)
+		public virtual void SetMainShiftLayers(IEnumerable<IActivityLayer> activityLayers, IShiftCategory shiftCategory)
 		{
 			InParameter.NotNull("shiftCategory", shiftCategory); //for now
 
