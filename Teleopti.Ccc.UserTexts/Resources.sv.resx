@@ -10993,4 +10993,13 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   <data name="Poor" xml:space="preserve">
     <value>Dålig</value>
   </data>
+  <data name="ConfirmRemoval" xml:space="preserve">
+    <value>Bekräfta borttagning</value>
+  </data>
+  <data name="CollectingData" xml:space="preserve">
+    <value>Laddar data...</value>
+  </data>
+  <data name="Improved" xml:space="preserve">
+    <value>Förbättrat</value>
+  </data>
 </root>

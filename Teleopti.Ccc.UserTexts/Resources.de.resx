@@ -3342,7 +3342,7 @@ Sie können das Programm erneut starten. Sie müssen außerdem MyTime neu starte
     <comment>Information</comment>
   </data>
   <data name="MidnightBreakOffsetColon" xml:space="preserve">
-    <value>Mitternachtspause</value>
+    <value>Mitternachtsumbruch</value>
     <comment>Describes a Midnight break e.g 00:00 - 00:00</comment>
   </data>
   <data name="Min" xml:space="preserve">
@@ -3979,7 +3979,7 @@ Sie können das Programm erneut starten. Sie müssen außerdem MyTime neu starte
     <comment>Users</comment>
   </data>
   <data name="NotValidOpenHoursForMidnightBreak" xml:space="preserve">
-    <value>Keine gültigen Öffnungszeiten für aktuelle Mitternachtspause \nAktuelle Mitternachtspause des Skill</value>
+    <value>Keine gültigen Öffnungszeiten für den aktuellen Mitternachtsumbruch.</value>
     <comment>Open hour not within midnight break</comment>
   </data>
   <data name="NoValueInNameField" xml:space="preserve">
@@ -4271,7 +4271,7 @@ Sie können das Programm erneut starten. Sie müssen außerdem MyTime neu starte
     <comment>Override</comment>
   </data>
   <data name="Overstaffing" xml:space="preserve">
-    <value>Überbelegung</value>
+    <value>Überdeckung</value>
     <comment>Overstaffing</comment>
   </data>
   <data name="Overtime" xml:space="preserve">
@@ -5412,7 +5412,7 @@ Periods</comment>
     <comment>Seniority</comment>
   </data>
   <data name="SeriousUnderstaffing" xml:space="preserve">
-    <value>Kritische Unterbelegung</value>
+    <value>Kritische Unterdeckung</value>
     <comment>Critical understaffing</comment>
   </data>
   <data name="ServiceLevelParenthesisPercentSign" xml:space="preserve">
@@ -6349,7 +6349,7 @@ Periods</comment>
     <comment>Unable to connect the the remote service</comment>
   </data>
   <data name="Understaffing" xml:space="preserve">
-    <value>Unterbelegung</value>
+    <value>Unterdeckung</value>
     <comment>Understaffing</comment>
   </data>
   <data name="Undo" xml:space="preserve">
