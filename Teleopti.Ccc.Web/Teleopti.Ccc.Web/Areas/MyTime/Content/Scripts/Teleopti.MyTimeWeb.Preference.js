@@ -496,10 +496,14 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 	    if (periodFeedbackElement)
 	        ko.cleanNode(periodFeedbackElement);
 
-	    periodFeedbackViewModel.DayViewModels = {};
-	    periodFeedbackViewModel = null;
-	    preferencesAndScheduleViewModel.DayViewModels = {};
-	    preferencesAndScheduleViewModel = null;
+	    if (periodFeedbackViewModel) {
+	    	periodFeedbackViewModel.DayViewModels = {};
+	    	periodFeedbackViewModel = null;
+	    }
+	    if (preferencesAndScheduleViewModel) {
+	    	preferencesAndScheduleViewModel.DayViewModels = {};
+	    	preferencesAndScheduleViewModel = null;
+	    }
 	}
 
 	return {
