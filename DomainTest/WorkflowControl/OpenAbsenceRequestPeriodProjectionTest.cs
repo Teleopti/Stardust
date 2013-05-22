@@ -291,11 +291,13 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl
             Assert.AreEqual(new DateOnlyPeriod(new DateOnly(2010, 6, 23), new DateOnly(2010, 6, 27)), projectedOpenAbsenceRequestPeriods[1].GetPeriod(DateOnly.Today));
             Assert.AreEqual(new DateOnlyPeriod(new DateOnly(2010, 6, 28), new DateOnly(2010, 12, 31)), projectedOpenAbsenceRequestPeriods[2].GetPeriod(DateOnly.Today));
 
-            Assert.IsTrue(typeof(DenyAbsenceRequest).IsInstanceOfType(projectedOpenAbsenceRequestPeriods[0].AbsenceRequestProcess));
-            Assert.AreEqual("RequestDenyReasonClosedPeriod", ((DenyAbsenceRequest)projectedOpenAbsenceRequestPeriods[0].AbsenceRequestProcess).DenyReason);
-            Assert.IsTrue(typeof(PendingAbsenceRequest).IsInstanceOfType(projectedOpenAbsenceRequestPeriods[1].AbsenceRequestProcess));
-            Assert.IsTrue(typeof(DenyAbsenceRequest).IsInstanceOfType(projectedOpenAbsenceRequestPeriods[2].AbsenceRequestProcess));
-            Assert.AreEqual("RequestDenyReasonClosedPeriod", ((DenyAbsenceRequest)projectedOpenAbsenceRequestPeriods[2].AbsenceRequestProcess).DenyReason);
+            Assert.IsTrue(projectedOpenAbsenceRequestPeriods[0].AbsenceRequestProcess is DenyAbsenceRequest);
+	        Assert.AreEqual(UserTexts.Resources.ResourceManager.GetString("RequestDenyReasonClosedPeriod", _cultureInfo),
+	                        ((DenyAbsenceRequest) projectedOpenAbsenceRequestPeriods[0].AbsenceRequestProcess).DenyReason);
+            Assert.IsTrue(projectedOpenAbsenceRequestPeriods[1].AbsenceRequestProcess is PendingAbsenceRequest);
+            Assert.IsTrue(projectedOpenAbsenceRequestPeriods[2].AbsenceRequestProcess is DenyAbsenceRequest);
+	        Assert.AreEqual(UserTexts.Resources.ResourceManager.GetString("RequestDenyReasonClosedPeriod", _cultureInfo),
+	                        ((DenyAbsenceRequest) projectedOpenAbsenceRequestPeriods[2].AbsenceRequestProcess).DenyReason);
         }
 
         [Test]
