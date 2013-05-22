@@ -120,6 +120,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			get { return _mainShiftActivityLayers; }
 		}
+
+		public virtual void SetMainShift(IMainShift mainShift)
+		{
+			InParameter.NotNull("mainShift", mainShift); //use ClearMainShift method instead!
+			//fix nicer later
+			ClearMainShiftLayers();
+			mainShift.LayerCollection.ForEach(layer =>
+			{
+				layer.SetParent(this);
+				_mainShiftActivityLayers.Add((IMainShiftActivityLayer)layer);
+			});
+			ShiftCategory = mainShift.ShiftCategory;
+		}
 		///
 	
 		public virtual ReadOnlyCollection<IPersonalShift> PersonalShiftCollection
@@ -214,19 +227,6 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		public virtual void ClearMainShiftLayers()
 		{
 			_mainShiftActivityLayers.Clear();
-		}
-
-		public virtual void SetMainShift(IMainShift mainShift)
-		{
-			InParameter.NotNull("mainShift", mainShift); //use ClearMainShift method instead!
-			//fix nicer later
-			ClearMainShiftLayers();
-			mainShift.LayerCollection.ForEach(layer =>
-				{
-					layer.SetParent(this);
-					_mainShiftActivityLayers.Add((IMainShiftActivityLayer) layer);
-				});
-			ShiftCategory = mainShift.ShiftCategory;
 		}
 
 		#endregion
