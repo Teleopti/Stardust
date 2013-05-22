@@ -8,6 +8,7 @@
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Preference.PeriodFeedbackViewModel.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Preference.PreferencesAndScheduleViewModel.js" />
 /// <reference path="~/Areas/MyTime/Content/Scripts/Teleopti.MyTimeWeb.Preference.SelectionViewModel.js" />
+/// <reference path="../../../../Content/moment/moment.js" />
 
 
 if (typeof (Teleopti) === 'undefined') {
@@ -514,6 +515,9 @@ Teleopti.MyTimeWeb.PreferenceInitializer = function (ajax, portal) {
 			_initPeriodSelection();
 			_initExtendedPanels();
 			
+		},
+		InitViewModels: function () {
+			_initViewModels();
 		},
 		PreferencePartialDispose: function () {
 			_hideAddExtendedTooltip();
