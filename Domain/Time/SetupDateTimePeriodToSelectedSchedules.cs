@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.Domain.Time
             if (scheduleDay == null) return false;
 
             var assignment = scheduleDay.AssignmentHighZOrder();
-            return assignment!=null && assignment.MainShift!=null && assignment.MainShift.HasProjection;
+            return assignment!=null && assignment.ToMainShift()!=null && assignment.ToMainShift().HasProjection;
         }
 
         public DateTimePeriod Period

@@ -76,13 +76,13 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 			{
 				Expect.Call(_scheduleDayFrom.AssignmentHighZOrder()).Return(_personAssignmentFrom);
 				Expect.Call(_scheduleDayFrom.PersonMeetingCollection()).Return(new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting>()));
-				Expect.Call(_personAssignmentFrom.MainShift).Return(_mainShift).Repeat.Twice();
+				Expect.Call(_personAssignmentFrom.ToMainShift()).Return(_mainShift).Repeat.Twice();
 				Expect.Call(_mainShift.LayerCollection).Return(_layerCollectionFrom);
 				Expect.Call(_layerCollectionFrom.Period()).Return(_periodFrom);
 
 				Expect.Call(_scheduleDayTo.AssignmentHighZOrder()).Return(_personAssignmentTo);
 				Expect.Call(_scheduleDayTo.PersonMeetingCollection()).Return(_personMeetings);
-				Expect.Call(_personAssignmentTo.MainShift).Return(null);
+				Expect.Call(_personAssignmentTo.ToMainShift()).Return(null);
 				Expect.Call(_personMeeting.Period).Return(_periodTo);
 			}
 
@@ -103,13 +103,13 @@ namespace Teleopti.Ccc.DomainTest.WorkflowControl.ShiftTrades
 			{
 				Expect.Call(_scheduleDayTo.AssignmentHighZOrder()).Return(_personAssignmentTo);
 				Expect.Call(_scheduleDayTo.PersonMeetingCollection()).Return(new ReadOnlyCollection<IPersonMeeting>(new List<IPersonMeeting>()));
-				Expect.Call(_personAssignmentTo.MainShift).Return(_mainShift).Repeat.Twice();
+				Expect.Call(_personAssignmentTo.ToMainShift()).Return(_mainShift).Repeat.Twice();
 				Expect.Call(_mainShift.LayerCollection).Return(_layerCollectionTo);
 				Expect.Call(_layerCollectionTo.Period()).Return(_periodFrom);
 
 				Expect.Call(_scheduleDayFrom.AssignmentHighZOrder()).Return(_personAssignmentFrom);
 				Expect.Call(_scheduleDayFrom.PersonMeetingCollection()).Return(_personMeetings);
-				Expect.Call(_personAssignmentFrom.MainShift).Return(null);
+				Expect.Call(_personAssignmentFrom.ToMainShift()).Return(null);
 				Expect.Call(_personMeeting.Period).Return(_periodTo);
 			}
 

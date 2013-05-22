@@ -47,8 +47,8 @@ namespace Teleopti.Ccc.Domain.Optimization
             {
                 if(current.PersonAssignmentCollection().Count  > 0)
                 {
-                    IMainShift originalMainShift = original.PersonAssignmentCollection()[assignmentIndex].MainShift;
-                    IMainShift currentMainShift = current.PersonAssignmentCollection()[assignmentIndex].MainShift;
+                    IMainShift originalMainShift = original.PersonAssignmentCollection()[assignmentIndex].ToMainShift();
+                    IMainShift currentMainShift = current.PersonAssignmentCollection()[assignmentIndex].ToMainShift();
 
                     if (originalMainShift == null || currentMainShift == null)
                         return false;

@@ -13,7 +13,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                 //Check for the layers in mainshift...
                 foreach (var assignment in part.PersonAssignmentCollection())
                 {
-	                var mainShift = assignment.MainShift;
+	                var mainShift = assignment.ToMainShift();
 					if (mainShift == null)
                         continue;
 					if (mainShift.LayerCollection.Contains(layer))

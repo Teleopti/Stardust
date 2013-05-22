@@ -21,13 +21,13 @@ namespace Teleopti.Interfaces.Domain
                                             IProjectionSource, 
                                             ICloneableEntity<IPersonAssignment>
     {
-        /// <summary>
-        /// Gets the main shift.
-        /// </summary>
-        /// <value>The main shift.</value>
-        IMainShift MainShift { get; }
+	    /// <summary>
+	    /// Gets the main shift.
+	    /// </summary>
+	    /// <returns>The main shift.</returns>
+	    IMainShift ToMainShift();
 
-        /// <summary>
+	    /// <summary>
         /// Gets the personal shift collection.
         /// </summary>
         /// <value>The personal shift collection.</value>

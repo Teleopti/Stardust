@@ -485,7 +485,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				Expect.Call(_scheduleDay.AssignmentHighZOrder()).Return(personAssignment);
 				Expect.Call(() => _mainShiftOptimizeActivitySpecificationSetter.SetSpecification(_schedulingOptions,
 																						   optimizationPreferences,
-				                                                                           personAssignment.MainShift,
+				                                                                           personAssignment.ToMainShift(),
 				                                                                           new DateOnly())).IgnoreArguments();
 				Expect.Call(_scheduleDay.Person).Return(_person);
 				Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(_person, new DateOnly())).Return(groupPerson);
@@ -521,7 +521,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 				Expect.Call(_scheduleDay.AssignmentHighZOrder()).Return(personAssignment);
 				Expect.Call(() => _mainShiftOptimizeActivitySpecificationSetter.SetSpecification(_schedulingOptions,
 																						   optimizationPreferences,
-																						   personAssignment.MainShift,
+																						   personAssignment.ToMainShift(),
 																						   new DateOnly())).IgnoreArguments();
 				Expect.Call(_scheduleDay.Person).Return(_person);
 				Expect.Call(_groupPersonBuilderForOptimization.BuildGroupPerson(_person, new DateOnly())).Return(groupPerson);

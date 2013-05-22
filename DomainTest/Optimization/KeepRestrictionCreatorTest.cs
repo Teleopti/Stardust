@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             using (_mockRepository.Record())
             {
                 Expect.Call(_schedulePart.AssignmentHighZOrder()).Return(personAssignment);
-                Expect.Call(personAssignment.MainShift).Return(mainShift);
+                Expect.Call(personAssignment.ToMainShift()).Return(mainShift);
                 Expect.Call(mainShift.ProjectionService()).Return(projectionService);
                 Expect.Call(projectionService.CreateProjection()).Return(visualLayerCollection);
                 Expect.Call(visualLayerCollection.Period()).Return(new DateTimePeriod());

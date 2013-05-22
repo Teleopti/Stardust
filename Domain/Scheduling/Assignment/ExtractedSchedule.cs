@@ -334,7 +334,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
         {
             foreach (var assignment in PersonAssignmentCollection())
             {
-                if (assignment.PersonalShiftCollection.Count == 0 && assignment.OvertimeShiftCollection.Count == 0 && assignment.MainShift == null)
+                if (assignment.PersonalShiftCollection.Count == 0 && assignment.OvertimeShiftCollection.Count == 0 && assignment.ToMainShift() == null)
                     Remove(assignment);
             }
         }
@@ -416,7 +416,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 
                 IList<IPersonAbsence> splitList = new List<IPersonAbsence>();
                 var assignment = AssignmentHighZOrder();
-                if (assignment != null && assignment.MainShift != null && assignment.MainShift.HasProjection)
+                if (assignment != null && assignment.ToMainShift() != null && assignment.ToMainShift().HasProjection)
                 {
                     if (assignment.Period != personAbsenceUpForDelete.Period)
                     {
@@ -535,7 +535,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
                     assignment.RemoveOvertimeShift(overTime);
                 }
 
-                if (assignment.PersonalShiftCollection.Count == 0 && assignment.MainShift == null)
+                if (assignment.PersonalShiftCollection.Count == 0 && assignment.ToMainShift() == null)
                     personAssToRemoveList.Add(assignment);
             }
 
@@ -617,7 +617,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			if (personAssignment == null)
 				return;
 
-        	IMainShift sourceMainShift = personAssignment.MainShift;
+        	IMainShift sourceMainShift = personAssignment.ToMainShift();
 			if (sourceMainShift == null)
 				return;
 
@@ -882,13 +882,13 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			{
 				if (personAssignment.Period.Intersect(layer.Period) || personAssignment.Period.Adjacent(layer.Period))
 				{
-					if (personAssignment.MainShift == null)
+					if (personAssignment.ToMainShift() == null)
 					{
 						personAssignment.SetMainShift(mainShift);
 					}
 					else
 					{
-						var oldShift = personAssignment.MainShift;
+						var oldShift = personAssignment.ToMainShift();
 						oldShift.LayerCollection.Add(layer);
 						personAssignment.SetMainShift(oldShift);
 					}

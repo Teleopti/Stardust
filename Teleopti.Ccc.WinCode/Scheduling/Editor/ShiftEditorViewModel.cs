@@ -353,7 +353,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling.Editor
                     var assignement = SchedulePart.AssignmentHighZOrder();
                     if (assignement != null)
                     {
-                        assignement.MainShift.ShiftCategory = _category;
+                        assignement.ToMainShift().ShiftCategory = _category;
                         new TriggerShiftEditorUpdate().PublishEvent("ShiftEditorViewModel", _eventAggregator); 
                     }
                 }

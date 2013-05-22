@@ -21,10 +21,10 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
             //todo: rk - ta bort denna och ladda i de use case där de behövs istället!
             var assWithMainShifts = (from a in _personAssignments
-                                     where a.MainShift != null
+                                     where a.ToMainShift() != null
                                      select a);
             var mainShiftActivities = (from a in assWithMainShifts
-                                       from al in a.MainShift.LayerCollection
+                                       from al in a.ToMainShift().LayerCollection
                                        select al.Payload).Distinct();
             var persShiftActivities = (from a in _personAssignments
                                        from p in a.PersonalShiftCollection
@@ -35,7 +35,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
                                       from al in o.LayerCollection
                                       select al.Payload).Distinct();
             var mainShifts = (from s in assWithMainShifts
-                              select s.MainShift).Distinct();
+                              select s.ToMainShift()).Distinct();
             mainShiftActivities.ForEach(a =>
             {
                 if (!LazyLoadingManager.IsInitialized(a))

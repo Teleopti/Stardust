@@ -30,7 +30,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
                     if (hasMainShift(personAssignment))
                     {
                         IVisualLayerCollection visualLayerCollection =
-                            personAssignment.MainShift.ProjectionService().CreateProjection();
+                            personAssignment.ToMainShift().ProjectionService().CreateProjection();
                         checksum = checksum ^ GetMainShiftChecksum(visualLayerCollection);
                     }
                 }
@@ -41,7 +41,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
 
         private static bool hasMainShift(IPersonAssignment personAssignment)
         {
-            return personAssignment.MainShift != null;
+            return personAssignment.ToMainShift() != null;
         }
 
         private static long GetMainShiftChecksum(IEnumerable<IVisualLayer> layerCollection)

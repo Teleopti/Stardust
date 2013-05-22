@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 
                 Assert.AreEqual(dto.Version, entity.Version);
                 Assert.AreEqual(dto.Id, entity.Id);
-                Assert.IsNull(entity.MainShift.Id);
+                Assert.IsNull(entity.ToMainShift().Id);
                 Assert.AreEqual(1, entity.MainShiftActivityLayers.Count());
                 Assert.AreEqual(1, entity.PersonalShiftCollection.Count);
                 Assert.AreEqual(dto.PersonalShiftCollection.First().Id, entity.PersonalShiftCollection[0].Id);
@@ -194,11 +194,11 @@ namespace Teleopti.Ccc.Sdk.LogicTest.AssemblersTest
 
             Assert.AreEqual(0, dto.Version);
             Assert.AreEqual(ass.Id, dto.Id);
-            Assert.AreEqual(ass.MainShift.Id, dto.MainShift.Id);
+            Assert.AreEqual(ass.ToMainShift().Id, dto.MainShift.Id);
             Assert.AreEqual(ass.ShiftCategory.Id, dto.MainShift.ShiftCategoryId);
-            Assert.AreEqual(ass.MainShift.LayerCollection.Count, dto.MainShift.LayerCollection.Count);
-            Assert.AreEqual(ass.MainShift.LayerCollection[0].Payload.Id, firstMainShiftLayer.Activity.Id);
-            Assert.AreEqual(ass.MainShift.LayerCollection[0].Period,
+            Assert.AreEqual(ass.ToMainShift().LayerCollection.Count, dto.MainShift.LayerCollection.Count);
+            Assert.AreEqual(ass.ToMainShift().LayerCollection[0].Payload.Id, firstMainShiftLayer.Activity.Id);
+            Assert.AreEqual(ass.ToMainShift().LayerCollection[0].Period,
                             new DateTimePeriod(firstMainShiftLayer.Period.UtcStartTime, firstMainShiftLayer.Period.UtcEndTime));
             Assert.AreEqual(ass.PersonalShiftCollection[0].Id, dto.PersonalShiftCollection.First().Id);
             Assert.AreEqual(ass.PersonalShiftCollection.Count, dto.PersonalShiftCollection.Count);

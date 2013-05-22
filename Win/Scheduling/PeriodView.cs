@@ -81,7 +81,7 @@ namespace Teleopti.Ccc.Win.Scheduling
                 DisplayMode displayMode = ViewBaseHelper.GetAssignmentDisplayMode(pa, scheduleRange);
                 if (displayMode == DisplayMode.BeginsToday || displayMode == DisplayMode.BeginsAndEndsToday)
                 {
-                    if (pa.MainShift != null)
+                    if (pa.ToMainShift() != null)
                     {
                         Color c = pa.ShiftCategory.DisplayColor;
                         String shortName = pa.ShiftCategory.Description.ShortName;

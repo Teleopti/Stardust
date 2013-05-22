@@ -98,9 +98,9 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation
 			if (scheduleDay.PersonAssignmentCollection().Any())
 			{
 				var personAssignment = scheduleDay.AssignmentHighZOrder();
-				if (personAssignment.MainShift != null)
+				if (personAssignment.ToMainShift() != null)
 				{
-					tempDay.AddMainShift(((IMainShift)personAssignment.MainShift.NoneEntityClone()));
+					tempDay.AddMainShift(((IMainShift)personAssignment.ToMainShift().NoneEntityClone()));
 					hasSwapData = true;
 				}
 			}

@@ -67,7 +67,7 @@ namespace Teleopti.Ccc.Win.Scheduling
             {
                 Rectangle rect = DetailViewHelper.GetAssRect(e.Bounds, ViewBaseHelper.GetAssignmentDisplayMode(pa, scheduleRange));
 
-                if (pa.MainShift != null)
+                if (pa.ToMainShift() != null)
                 {
                     Color color = pa.ShiftCategory.DisplayColor;
                     string shortName = pa.ShiftCategory.Description.ShortName;

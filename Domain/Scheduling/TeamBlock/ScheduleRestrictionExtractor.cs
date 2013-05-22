@@ -78,7 +78,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
 					{
 						var assignment = schedulePart.AssignmentHighZOrder();
 						if (assignment == null) continue;
-						var mainShift = assignment.MainShift;
+						var mainShift = assignment.ToMainShift();
 						if (mainShift == null) continue;
 						if (restriction.CommonMainShift == null)
 						{

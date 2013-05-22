@@ -127,7 +127,7 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
         {
 			  if(!Session.Contains(personAssignment))
 				  Session.Lock(personAssignment, LockMode.None);
-            Session.Delete(personAssignment.MainShift);
+            Session.Delete(personAssignment.ToMainShift());
         }
 
         /// <summary>

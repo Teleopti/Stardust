@@ -94,18 +94,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		}
 
 		/// TO BE CONTINUED....
-		public virtual IMainShift MainShift
+		public virtual IMainShift ToMainShift()
 		{
-			get
-			{
-				if (!_mainShiftActivityLayers.Any())
-					return null;
+			if (!_mainShiftActivityLayers.Any())
+				return null;
 
-				var ret = new MainShift(ShiftCategory);
-				_mainShiftActivityLayers.ForEach(ret.LayerCollection.Add);
-				return ret;
-			}
+			var ret = new MainShift(ShiftCategory);
+			_mainShiftActivityLayers.ForEach(ret.LayerCollection.Add);
+			return ret;
 		}
+
 		public virtual IShiftCategory ShiftCategory
 		{
 			get
@@ -255,10 +253,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			if (HasProjection)
 			{
 				var validPeriods = new List<DateTimePeriod>();
-				if (MainShift != null)
+				if (ToMainShift() != null)
 				{
-					proj.Add(MainShift);
-					var mainShiftPeriod = MainShift.LayerCollection.Period();
+					proj.Add(ToMainShift());
+					var mainShiftPeriod = ToMainShift().LayerCollection.Period();
 					if (mainShiftPeriod.HasValue)
 						validPeriods.Add(mainShiftPeriod.Value);
 				}
@@ -289,7 +287,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			get
 			{
-				return (MainShift != null && MainShift.HasProjection) || (_overtimeShiftCollection.Count > 0);
+				return (ToMainShift() != null && ToMainShift().HasProjection) || (_overtimeShiftCollection.Count > 0);
 			}
 		}
 		#endregion

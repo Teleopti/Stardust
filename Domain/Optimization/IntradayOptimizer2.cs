@@ -89,7 +89,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         	var personAssignment = _workShiftOriginalStateContainer.OldPeriodDaysState[dateToBeRemoved].AssignmentHighZOrder();
 			if (personAssignment == null) return false;
 
-        	var originalShift = personAssignment.MainShift;
+        	var originalShift = personAssignment.ToMainShift();
 			if (originalShift == null) return false;
 
 			_mainShiftOptimizeActivitySpecificationSetter.SetSpecification(schedulingOptions, _optimizerPreferences, originalShift, dateToBeRemoved);

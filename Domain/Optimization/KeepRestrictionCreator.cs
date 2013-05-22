@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Optimization
         public IEffectiveRestriction CreateKeepStartAndEndTimeRestriction(IScheduleDay scheduleDay)
         {
 			IPerson person = scheduleDay.Person;
-			TimePeriod timePeriod = scheduleDay.AssignmentHighZOrder().MainShift.ProjectionService().
+			TimePeriod timePeriod = scheduleDay.AssignmentHighZOrder().ToMainShift().ProjectionService().
                 CreateProjection().Period().Value.TimePeriod(person.PermissionInformation.DefaultTimeZone());
             TimeSpan shiftStartTime = timePeriod.StartTime;
             TimeSpan shiftEndTime = timePeriod.EndTime;

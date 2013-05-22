@@ -32,8 +32,8 @@ namespace Teleopti.Ccc.Sdk.Logic.Assemblers
                 Id = entity.Id,
                 Version = entity.Version.GetValueOrDefault(0)
             };
-            if (entity.MainShift != null)
-                retDto.MainShift = CreateMainShiftDto(entity.MainShift, entity.Person);
+            if (entity.ToMainShift() != null)
+                retDto.MainShift = CreateMainShiftDto(entity.ToMainShift(), entity.Person);
             foreach (IPersonalShift personalShift in entity.PersonalShiftCollection)
             {
                 retDto.PersonalShiftCollection.Add(CreatePersonalShiftDto(personalShift, entity.Person));
