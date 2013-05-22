@@ -86,6 +86,9 @@ namespace Teleopti.Ccc.Domain.Scheduling.TeamBlock
                             var rollbackExecuted = false;
                             foreach (var matrix in teamBlockInfo.TeamInfo.MatrixesForGroupAndDate(datePointer))
                             {
+                                if (_cancelMe)
+                                    break;
+
                                 if (!selectedPersons.Contains(matrix.Person)) continue;
                                 _workShiftMinMaxCalculator.ResetCache();
                                 if (!_workShiftMinMaxCalculator.IsPeriodInLegalState(matrix, _schedulingOptions))
