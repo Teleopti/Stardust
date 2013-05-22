@@ -57,7 +57,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		}
 
 		public static PortalPage CurrentPortalPage { get { return Current as PortalPage; } }
-		public static IDeleteButton CurrentDeleteButton { get { return Current as IDeleteButton; } }
 		public static IOkButton CurrentOkButton { get { return Current as IOkButton; } }
 		public static ICancelButton CurrentCancelButton { get { return Current as ICancelButton; } }
 		public static IDateRangeSelector CurrentDateRangeSelector { get { return Current as IDateRangeSelector; } }

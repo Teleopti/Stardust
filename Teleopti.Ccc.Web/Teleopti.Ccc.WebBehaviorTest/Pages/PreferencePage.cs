@@ -8,7 +8,7 @@ using Browser = Teleopti.Ccc.WebBehaviorTest.Core.Browser;
 
 namespace Teleopti.Ccc.WebBehaviorTest.Pages
 {
-	public class PreferencePage : CalendarCellsPage, IDateRangeSelector, IDeleteButton
+	public class PreferencePage : CalendarCellsPage, IDateRangeSelector
 	{
 		[FindBy(Id = "PreferenceDateRangeSelector")] public Div DateRangeSelectorContainer { get; set; }
 
@@ -31,9 +31,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 
 		[FindBy(Id = "Preference-add-extended-button")]
 		public Button ExtendedPreferenceButton { get; set; }
-
-		[FindBy(Id = "Preference-delete-button")]
-		public Button DeleteButton { get; set; }
 
 		[FindBy(Id = "Preference-period")]
 		public Div PreferencePeriod;

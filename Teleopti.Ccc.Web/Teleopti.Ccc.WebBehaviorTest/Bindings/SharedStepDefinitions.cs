@@ -40,11 +40,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings
 			Pages.Pages.CurrentOkButton.OkButton.EventualClick();
 		}
 
-		[When(@"I click the delete button")]
-		public void WhenIClickTheDeleteButton()
-		{
-			Pages.Pages.CurrentDeleteButton.DeleteButton.EventualClick();
-		}
 
 		[When(@"I click the Cancel button")]
 		public void WhenIClickTheCancelButton()
