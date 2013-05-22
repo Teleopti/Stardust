@@ -1,6 +1,5 @@
 param($PhysicalPath,$DefaultSite,$SiteName,$AppName,$AppPoolName)
 import-module webadministration
-import-module .\MachineKey.psm1.ps1
 
 #Step 1: Create New Directories
 #We use the New-Item cmdlet to create four new file system directories. Execute the following commands (use 'md' instead of New-Item if you don't want to specify the -type parameter):
@@ -19,6 +18,3 @@ Set-ItemProperty IIS:\AppPools\$AppPoolName -name "ManagedRuntimeVersion" -Value
 #TestApp is assigned to the 'Default Web Site' (port 80)
 New-Item IIS:\Sites\$DefaultSite\$AppName -physicalPath $PhysicalPath -type Application
 Set-ItemProperty IIS:\sites\$DefaultSite\$AppName -name applicationPool -value $AppPoolName
-
-#Step 5: Set validation and decryption keys
-Set-MachineKey ("IIS:\sites\{0}\{1}" -f $DefaultSite, $AppName)

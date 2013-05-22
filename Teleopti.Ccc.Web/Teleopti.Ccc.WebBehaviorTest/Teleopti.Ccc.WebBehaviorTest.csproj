@@ -122,11 +122,17 @@
     <Compile Include="Bindings\Generic\ActivityStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\Anywhere\PersonSchedulePageStepDefinitions.cs" />
     <Compile Include="Core\BrowserDriver\IBrowserInteractions.cs" />
+    <Compile Include="Core\BrowserDriver\IExceptionCatcher.cs" />
     <Compile Include="Core\BrowserDriver\WatiNIE\WatiNIEBrowserInteractions.cs" />
-    <Compile Include="Core\BrowserDriver\WatiNIE\Retrying.cs" />
+    <Compile Include="Core\BrowserDriver\Retrying.cs" />
+    <Compile Include="Data\CryptoCreator.cs" />
     <Compile Include="Data\HardCodedResolver.cs" />
     <Compile Include="Pages\Common\Select2Box.cs" />
-    <Compile Include="TeamScheduleForGroups.feature.cs" />
+    <Compile Include="TeamScheduleForGroups.feature.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TeamScheduleForGroups.feature</DependentUpon>
+    </Compile>
     <Compile Include="Bindings\Generic\BudgetStepDefinitions.cs" />
     <Compile Include="Data\Setups\Generic\AbsenceTimeConfigurable.cs">
       <DependentUpon>TeamScheduleForGroups.feature</DependentUpon>
@@ -173,7 +179,6 @@
     <Compile Include="Core\Robustness\EventualAssert.cs" />
     <Compile Include="Core\Robustness\EventualElementActions.cs" />
     <Compile Include="Core\Robustness\Timeouts.cs" />
-    <Compile Include="Pages\AnywherePage.cs" />
     <Compile Include="Pages\SignInPage.cs" />
     <Compile Include="Routing.feature.cs">
       <DependentUpon>Routing.feature</DependentUpon>
@@ -197,7 +202,7 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="Core\BrowserDriver\WatiNIE\ExceptionHandling.cs" />
+    <Compile Include="Core\BrowserDriver\WatiNIE\WatiNIEExceptionCatcher.cs" />
     <Compile Include="Data\Setups\Generic\AvailabilityRotationConfigurable.cs" />
     <Compile Include="Bindings\Generic\AvailabilityStepDefinitions.cs" />
     <Compile Include="Bindings\Generic\BusinessUnitStepDefinitions.cs" />

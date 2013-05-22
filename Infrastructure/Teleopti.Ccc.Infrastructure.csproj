@@ -137,6 +137,7 @@
     <Compile Include="Foundation\IConfigurationWrapper.cs" />
     <Compile Include="Foundation\TeleoptiPrincipalCacheableFactory.cs" />
     <Compile Include="Foundation\ThreadPrincipalContext.cs" />
+    <Compile Include="NHibernateConfiguration\CompressedString.cs" />
     <Compile Include="NHibernateConfiguration\FasterProxyFactoryFactory.cs" />
     <Compile Include="Foundation\IMakeOrganisationMembershipFromPerson.cs" />
     <Compile Include="Foundation\IMakeRegionalFromPerson.cs" />
@@ -254,6 +255,7 @@
     <Compile Include="Persisters\ScheduleScreenRefresher.cs" />
     <Compile Include="Persisters\ScheduleScreenRetryingPersister.cs" />
     <Compile Include="Repositories\ApplicationRolePersonRepository.cs" />
+    <Compile Include="Util\CompressionExtensions.cs" />
     <Compile Include="Repositories\CurrentUnitOfWorkExtensions.cs" />
     <Compile Include="Repositories\EtlReadModelRepository.cs" />
     <Compile Include="Repositories\PersonScheduleDayReadModelStorage.cs" />

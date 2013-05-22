@@ -7,7 +7,6 @@ using Teleopti.Ccc.Domain.Common;
 using Teleopti.Ccc.Infrastructure.Repositories;
 using Teleopti.Ccc.Infrastructure.UnitOfWork;
 using Teleopti.Ccc.InfrastructureTest.Helper;
-using Teleopti.Ccc.InfrastructureTest.UnitOfWork;
 using Teleopti.Interfaces.Domain;
 using Teleopti.Interfaces.MessageBroker.Events;
 
@@ -115,14 +114,14 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories
 					PersonId = personId,
 					ShiftStart = date.AddHours(10),
 					ShiftEnd = date.AddHours(18),
-					Shift = "",
+					Shift = "{shift: blablabla}",
 				};
 
 			_target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(date), new DateOnly(date)), personId, businessUnitId, new[] {model}, false);
 		}
 
 		[Test]
-		public void ShouldNotCrashIfShiftIsBiggerThanFourThousand()
+		public void ShouldNotCrashIfShiftIsBiggerThanFourThousandAsCompressed()
 		{
 			_target = new PersonScheduleDayReadModelStorage(CurrentUnitOfWork.Make(), MockRepository.GenerateMock<IMessageBroker>(), MockRepository.GenerateMock<ICurrentDataSource>());
 			var personId = Guid.NewGuid();

@@ -9,7 +9,7 @@ namespace Teleopti.Ccc.WebBehaviorTest
 		[When(@"I navigate to unit test url (.*)")]
 		public void WhenINavigateTo(string url)
 		{
-			Navigation.GoToWaitForCompleted(url, new ForceRefresh());
+			Navigation.GoToWaitForCompleted(url, new BustCache());
 			Browser.Interactions.AssertUrlContains(".html");
 			Browser.Interactions.AssertExists("#qunit-tests");
 		}

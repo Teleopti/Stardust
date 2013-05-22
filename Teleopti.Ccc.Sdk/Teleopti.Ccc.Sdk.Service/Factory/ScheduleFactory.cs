@@ -18,13 +18,13 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
     {
         private readonly IScheduleRepository _scheduleRepository;
     	private readonly ISaveSchedulePartService _saveSchedulePartService;
-    	private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+		private readonly ICurrentUnitOfWorkFactory _unitOfWorkFactory;
     	private readonly IAssembler<IPerson, PersonDto> _personAssembler;
         private readonly IAssembler<IScheduleDay, SchedulePartDto> _scheduleDayAssembler;
         private readonly IAssembler<DateTimePeriod, DateTimePeriodDto> _dateTimePeriodAssembler;
         private readonly ICurrentScenario _scenarioRepository;
 
-		  public ScheduleFactory(IScheduleRepository scheduleRepository, ISaveSchedulePartService saveSchedulePartService, IUnitOfWorkFactory unitOfWorkFactory, IAssembler<IPerson, PersonDto> personAssembler, IAssembler<IScheduleDay, SchedulePartDto> scheduleDayAssembler, IAssembler<DateTimePeriod, DateTimePeriodDto> dateTimePeriodAssembler, ICurrentScenario scenarioRepository)
+		  public ScheduleFactory(IScheduleRepository scheduleRepository, ISaveSchedulePartService saveSchedulePartService, ICurrentUnitOfWorkFactory unitOfWorkFactory, IAssembler<IPerson, PersonDto> personAssembler, IAssembler<IScheduleDay, SchedulePartDto> scheduleDayAssembler, IAssembler<DateTimePeriod, DateTimePeriodDto> dateTimePeriodAssembler, ICurrentScenario scenarioRepository)
         {
             _scheduleRepository = scheduleRepository;
         	_saveSchedulePartService = saveSchedulePartService;
@@ -44,7 +44,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
             var datePeriod = new DateOnlyPeriod(new DateOnly(startDate.DateTime), new DateOnly(endDate.DateTime));
             DateTimePeriod period = new DateOnlyPeriod(datePeriod.StartDate, datePeriod.EndDate.AddDays(1)).ToDateTimePeriod(timeZone);
             
-            using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
+            using (_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
             {
                 IList<IPerson> personList = _personAssembler.DtosToDomainEntities(personCollection).ToList();
                 IScheduleDictionary scheduleDictonary = _scheduleRepository.FindSchedulesOnlyInGivenPeriod(new PersonProvider(personList), new ScheduleDictionaryLoadOptions(false, false), period, _scenarioRepository.Current());
@@ -103,7 +103,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
             DateTimePeriod period = new DateOnlyPeriod(datePeriod.StartDate,datePeriod.EndDate.AddDays(1)).ToDateTimePeriod(timeZone);
 
             ((DateTimePeriodAssembler) _dateTimePeriodAssembler).TimeZone = timeZone;
-            using (_unitOfWorkFactory.CreateAndOpenUnitOfWork())
+            using (_unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
             {
                 IList<IPerson> personList = _personAssembler.DtosToDomainEntities(personCollection).ToList();
 
@@ -131,7 +131,7 @@ namespace Teleopti.Ccc.Sdk.WcfService.Factory
         {
             using (new MessageBrokerSendEnabler())
             {
-                using (IUnitOfWork uow = _unitOfWorkFactory.CreateAndOpenUnitOfWork())
+                using (IUnitOfWork uow = _unitOfWorkFactory.LoggedOnUnitOfWorkFactory().CreateAndOpenUnitOfWork())
                 {
                     IScheduleDay schedulePart = _scheduleDayAssembler.DtoToDomainEntity(schedulePartDto);
                     _saveSchedulePartService.Save(schedulePart,NewBusinessRuleCollection.Minimum());

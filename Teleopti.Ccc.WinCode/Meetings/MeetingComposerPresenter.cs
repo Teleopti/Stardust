@@ -53,14 +53,14 @@ namespace Teleopti.Ccc.WinCode.Meetings
             }
         }
 
-        public static MeetingViewModel CreateDefaultMeeting(IPerson organizer, ISchedulerStateHolder schedulerStateHolder,DateOnly startDate, IEnumerable<IPerson> participants )
+        public static MeetingViewModel CreateDefaultMeeting(IPerson organizer, ISchedulerStateHolder schedulerStateHolder, DateOnly startDate, IEnumerable<IPerson> participants, INow now)
         {
             return CreateDefaultMeeting(organizer, schedulerStateHolder.RequestedScenario,
 										schedulerStateHolder.CommonStateHolder.ActiveActivities.FirstOrDefault(), startDate, participants,
-                                        schedulerStateHolder.CommonNameDescription, schedulerStateHolder.TimeZoneInfo);
+                                        schedulerStateHolder.CommonNameDescription, schedulerStateHolder.TimeZoneInfo, now);
         }
 
-        public static MeetingViewModel CreateDefaultMeeting(IPerson organizer, IScenario scenario, IActivity activity, DateOnly startDate, IEnumerable<IPerson> participants, CommonNameDescriptionSetting commonNameDescriptionSetting, TimeZoneInfo timeZoneInfo)
+        public static MeetingViewModel CreateDefaultMeeting(IPerson organizer, IScenario scenario, IActivity activity, DateOnly startDate, IEnumerable<IPerson> participants, CommonNameDescriptionSetting commonNameDescriptionSetting, TimeZoneInfo timeZoneInfo, INow now)
         {
             var meeting = new Meeting(organizer,
                                            participants.Select(p => (IMeetingPerson)new MeetingPerson(p, false)),
@@ -69,7 +69,7 @@ namespace Teleopti.Ccc.WinCode.Meetings
                                        TimeZone = timeZoneInfo,
                                        StartDate = startDate
                                    };
-            CreateMeetingDefaultTime(meeting,DateTime.Now.TimeOfDay);
+            CreateMeetingDefaultTime(meeting,now.LocalDateTime().TimeOfDay);
             return new MeetingViewModel(meeting,commonNameDescriptionSetting);
         }
 

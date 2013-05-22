@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.TestCommon
 					if (!database.Exists())
 						return false;
 
-					var backupName = BackupName(database.DatabaseType, database.SchemaVersion(), database.SchemaTrunkHash(), database.DatabaseName);
+					var backupName = BackupName(database.DatabaseType, database.SchemaVersion(), database.OtherScriptFilesHash(), database.DatabaseName);
 					var fileName = backupName + ".backup";
 					if (!System.IO.File.Exists(fileName))
 						return false;
@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.TestCommon
 			ExceptionToConsole(
 				() =>
 				{
-					var backupName = BackupName(database.DatabaseType, database.DatabaseVersion(), database.SchemaTrunkHash(), database.DatabaseName);
+					var backupName = BackupName(database.DatabaseType, database.DatabaseVersion(), database.OtherScriptFilesHash(), database.DatabaseName);
 					var backup = database.BackupByFileCopy(backupName);
 					var fileName = backupName + ".backup";
 					System.IO.File.WriteAllText(fileName, JsonConvert.SerializeObject(backup, Formatting.Indented));
@@ -125,9 +125,9 @@ namespace Teleopti.Ccc.TestCommon
 				);
 		}
 
-		private static string BackupName(DatabaseType databaseType, int databaseVersion, int trunkHash, string databaseName)
+		private static string BackupName(DatabaseType databaseType, int databaseVersion, int otherScriptFilesHash, string databaseName)
 		{
-			return databaseType + "." + databaseName + "." + databaseVersion + "." + trunkHash;
+			return databaseType + "." + databaseName + "." + databaseVersion + "." + otherScriptFilesHash;
 		}
 
 

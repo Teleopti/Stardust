@@ -5,15 +5,33 @@ define(
         errorTemplate
     ) {
 
-        function _displayError(message) {
-            message = message || "No message!";
-            if (typeof message != "string") {
-                message = JSON.stringify(message);
+        function _displayError(incoming) {
+            
+            var display = {
+                title: "Error!",
+                message: "No message!"
+            };
+            
+            if (typeof incoming != "string") {
+                display.title = incoming.title || display.title;
+                if (typeof incoming.message != "string") {
+                    display.message = JSON.stringify(incoming.message);
+                } else {
+                    display.message = incoming.message || display.message;
+                }
+            } else {
+                display.message = incoming;
             }
-            $('#error-placeholder')
+
+            var placeHolder = $('#error-placeholder')
                 .html(errorTemplate)
+                ;
+            placeHolder
+                .find('strong')
+                .text(display.title);
+            placeHolder
                 .find('span')
-                .text(message);
+                .text(display.message);
         }
 
         function _removeError() {
