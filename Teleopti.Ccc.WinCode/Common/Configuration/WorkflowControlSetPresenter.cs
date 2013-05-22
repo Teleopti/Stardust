@@ -466,7 +466,18 @@ namespace Teleopti.Ccc.WinCode.Common.Configuration
             if (AbsenceRequestPeriodsCopied == null || AbsenceRequestPeriodsCopied.Count == 0)
                 return;
 
-            int firstModelSelectedIndex = SelectedModel.DomainEntity.AbsenceRequestOpenPeriods.IndexOf(selectedPeriods[0].DomainEntity);
+            // Fix Issue 23573 - Workflow Control Set - Crash on Ctrl+C and Ctrl+V of check staffing rules
+            var firstModelSelectedIndex = 0;
+            if (selectedPeriods[0] != null)
+            {
+                firstModelSelectedIndex = SelectedModel.DomainEntity.AbsenceRequestOpenPeriods.IndexOf(selectedPeriods[0].DomainEntity);
+            }
+            else
+            {
+                if (selectedPeriods.Count > 1)
+                    firstModelSelectedIndex = SelectedModel.DomainEntity.AbsenceRequestOpenPeriods.IndexOf(selectedPeriods[1].DomainEntity);
+            }
+            
             int modelsToPasteCount = getNumberOfRowsToPaste(firstModelSelectedIndex, AbsenceRequestPeriodsCopied.Count, selectedPeriods.Count);
             int pasteModelOffsetIndex = 0;
             int clipIndex = 0;
