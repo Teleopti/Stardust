@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
@@ -594,7 +595,6 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 											new DateTimePeriod(2000, 1, 3, 2000, 1, 4)));
 			Assert.AreEqual(2, target.ProjectionService().CreateProjection().Count());
 		}
-
 
 		private class testAssignment : PersonAssignment
 		{

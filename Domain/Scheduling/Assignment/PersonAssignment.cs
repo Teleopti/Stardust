@@ -133,7 +133,19 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			});
 			ShiftCategory = mainShift.ShiftCategory;
 		}
-		///
+
+		public void SetMainShiftLayers(IEnumerable<IActivityLayer> activityLayers, IShiftCategory shiftCategory)
+		{
+			InParameter.NotNull("shiftCategory", shiftCategory); //for now
+
+			ClearMainShiftLayers();
+			activityLayers.ForEach(layer =>
+			{
+				layer.SetParent(this);
+				_mainShiftActivityLayers.Add((IMainShiftActivityLayer)layer);
+			});
+			ShiftCategory = shiftCategory;
+		}
 	
 		public virtual ReadOnlyCollection<IPersonalShift> PersonalShiftCollection
 		{
