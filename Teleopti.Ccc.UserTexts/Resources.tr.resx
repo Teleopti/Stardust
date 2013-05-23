@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="MaskedEditTextBox" xml:space="preserve">
     <value>Gizli Biçimle Metin Kutusu</value>
@@ -4350,9 +4350,6 @@
   <data name="TimeTypeWeeksSingular" xml:space="preserve">
     <value>hafta</value>
   </data>
-  <data name="StudentAvailability" xml:space="preserve">
-    <value>Öğrenci Uygunluğu</value>
-  </data>
   <data name="EnterValuesForTheDifferentCombinations" xml:space="preserve">
     <value>Farklı kombinasyonlar için değer gir</value>
   </data>
@@ -4373,9 +4370,6 @@
   </data>
   <data name="Budgeting" xml:space="preserve">
     <value>Bütçeleme</value>
-  </data>
-  <data name="CreateStudentAvailability" xml:space="preserve">
-    <value>Öğrenci Uygunluğu</value>
   </data>
   <data name="NewPlanningGroup" xml:space="preserve">
     <value>Yeni Planlama Grubu</value>
@@ -4574,9 +4568,6 @@
   </data>
   <data name="AreYouSureYouWantToDeleteContract" xml:space="preserve">
     <value>'{0}' sözleşmeyi silmek istediğinizden emin misiniz?</value>
-  </data>
-  <data name="NewStudentAvailability" xml:space="preserve">
-    <value>Yeni Öğrensi Uygunluğu</value>
   </data>
   <data name="AbsoluteStart" xml:space="preserve">
     <value>Mutlak Başlangıç</value>
@@ -4817,9 +4808,6 @@
   </data>
   <data name="AddPreferenceRestriction" xml:space="preserve">
     <value>Tercih kısıtı ekle</value>
-  </data>
-  <data name="AddStudentAvailability" xml:space="preserve">
-    <value>Öğrenci uygunluğu ekle</value>
   </data>
   <data name="Multiplicator" xml:space="preserve">
     <value>Çarpan</value>
@@ -6741,9 +6729,6 @@
   <data name="StaffEmployed" xml:space="preserve">
     <value>İstihdam edilem personel</value>
   </data>
-  <data name="StudentHours" xml:space="preserve">
-    <value>Yarı zamanlı saatleri</value>
-  </data>
   <data name="AddEfficiencyShrinkageRow" xml:space="preserve">
     <value>Verimlilik daralma etkisi ekle</value>
   </data>
@@ -7101,20 +7086,11 @@
   <data name="NextDayColon" xml:space="preserve">
     <value>Ertesi gün:</value>
   </data>
-  <data name="NoShiftsAvailableForThisStudentAvailabilityDot" xml:space="preserve">
-    <value>Yarı zamanlı uygunluğu için vardiya bulunamadı</value>
-  </data>
-  <data name="StudentAvailabilityPeriod" xml:space="preserve">
-    <value>Yarı zamanlı uygunluk periyodu</value>
-  </data>
   <data name="YouShouldWorkAtLeastParameterHDotYouAreNowAvailableForBetweenParameterHAndParameterHDot" xml:space="preserve">
     <value>{0} saat çalışmanız gerekiyor. Şu anda {1} ve {2} saatlari arası uygunsunuz.</value>
   </data>
   <data name="ResReportAgentQueueMetrics" xml:space="preserve">
     <value>Müşteri temsilcisi kuyruk metirkleri</value>
-  </data>
-  <data name="OpenStudentAvailability" xml:space="preserve">
-    <value>Açık yarı zamanlı uygunluğu</value>
   </data>
   <data name="SelectedPeriodShouldNotBeLongerThanParameterDot" xml:space="preserve">
     <value>Seçilen periyod {0} dan uzun olamaz</value>
@@ -7169,9 +7145,6 @@
   </data>
   <data name="LockRestrictions" xml:space="preserve">
     <value>Sınırlandırmaları kilitle</value>
-  </data>
-  <data name="LockStudentAvailability" xml:space="preserve">
-    <value>Yarı zamanlı uygunluklarını kilitle</value>
   </data>
   <data name="LockRotations" xml:space="preserve">
     <value>Rotasyonları kilitle</value>
@@ -7620,9 +7593,6 @@
   <data name="ShiftsForFlexibleWorkTime" xml:space="preserve">
     <value>Esnek çalışma saatleri için vardiyalar</value>
   </data>
-  <data name="StudentAvailabilities" xml:space="preserve">
-    <value>Yarı zamanlı uygunlukları</value>
-  </data>
   <data name="Teams" xml:space="preserve">
     <value>Ekipler</value>
   </data>
@@ -7898,9 +7868,6 @@
   </data>
   <data name="AbsenceRequestForOneDayHasBeenDeniedDot" xml:space="preserve">
     <value>{0} devamsızlık isteği reddedildi</value>
-  </data>
-  <data name="StudentAvailabilityFulfillment" xml:space="preserve">
-    <value>Yarı zamanlı uygunluğu karşılanması</value>
   </data>
   <data name="ANewShiftTradeForOneDayHasBeenCreatedDot" xml:space="preserve">
     <value>{0} vardiya takası ısteği. Onaylayın veya reddedin.</value>

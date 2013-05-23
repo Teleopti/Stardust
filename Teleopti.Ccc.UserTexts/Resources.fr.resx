@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="StartTimeAsc" xml:space="preserve">
     <value>Heure de début ascendante</value>
@@ -5709,9 +5709,6 @@
   <data name="UndoAll" xml:space="preserve">
     <value>Annuler tout</value>
   </data>
-  <data name="StudentAvailability" xml:space="preserve">
-    <value>Disponibilité étudiant</value>
-  </data>
   <data name="EnterValuesForTheDifferentCombinations" xml:space="preserve">
     <value>Entrer les valeurs pour les différentes combinaisons</value>
   </data>
@@ -5792,9 +5789,6 @@
   </data>
   <data name="StartColon" xml:space="preserve">
     <value>Début:</value>
-  </data>
-  <data name="NewStudentAvailability" xml:space="preserve">
-    <value>Nouvelle disponibilté étudiant</value>
   </data>
   <data name="AbsoluteStart" xml:space="preserve">
     <value>Début Absolu</value>
@@ -6327,9 +6321,6 @@
   <data name="StaffEmployed" xml:space="preserve">
     <value>Personnel salarié</value>
   </data>
-  <data name="StudentHours" xml:space="preserve">
-    <value>Heures étudiant</value>
-  </data>
   <data name="AddEfficiencyShrinkageRow" xml:space="preserve">
     <value>Ajouter réduction d'efficience</value>
   </data>
@@ -6471,14 +6462,8 @@
   <data name="PlanningTimeBankMinMaxInfo" xml:space="preserve">
     <value>{0} jusque {1}</value>
   </data>
-  <data name="StudentAvailabilityPeriod" xml:space="preserve">
-    <value>Période disponibilté étudiant</value>
-  </data>
   <data name="ResReportAgentQueueMetrics" xml:space="preserve">
     <value>Métriques File Agent</value>
-  </data>
-  <data name="OpenStudentAvailability" xml:space="preserve">
-    <value>Ouvrir disponibilté étudiant</value>
   </data>
   <data name="SelectedPeriodShouldNotBeLongerThanParameterDot" xml:space="preserve">
     <value>Période sélectionnée ne devrait pas être plus longue que {0}.</value>
@@ -6488,9 +6473,6 @@
   </data>
   <data name="LegalNotice" xml:space="preserve">
     <value>Communication légale</value>
-  </data>
-  <data name="LockStudentAvailability" xml:space="preserve">
-    <value>Bloquer disponibilités étudiant</value>
   </data>
   <data name="MissingWorkflowControlSet" xml:space="preserve">
     <value>Contrôle de flux d'activités manquant</value>
@@ -6554,9 +6536,6 @@
   </data>
   <data name="BusinessRuleDayOffErrorMessage1" xml:space="preserve">
     <value>Le Jour libre à {0} est en conflit avec l'activité avant et après le Jour Libre.</value>
-  </data>
-  <data name="NoShiftsAvailableForThisStudentAvailabilityDot" xml:space="preserve">
-    <value>Aucun horaire disponible pour cette disponibilté d'étudiant.</value>
   </data>
   <data name="YouShouldWorkAtLeastParameterHDotYouAreNowAvailableForBetweenParameterHAndParameterHDot" xml:space="preserve">
     <value>Vous devez travailler au moins {0} heures. Vous êtes disponible maintenant entre {1} et {2}heures. </value>
@@ -8059,9 +8038,6 @@ Si cette erreur de validation persiste vous devez vérifier que votre mot de pas
   <data name="ShiftsForFlexibleWorkTime" xml:space="preserve">
     <value>Horaires pour horaires flexibles</value>
   </data>
-  <data name="StudentAvailabilities" xml:space="preserve">
-    <value>Disponibilités Etudiant</value>
-  </data>
   <data name="Teams" xml:space="preserve">
     <value>Equipes</value>
   </data>
@@ -8187,9 +8163,6 @@ Si cette erreur de validation persiste vous devez vérifier que votre mot de pas
   </data>
   <data name="RotationFulfillment" xml:space="preserve">
     <value>Rotations remplies</value>
-  </data>
-  <data name="StudentAvailabilityFulfillment" xml:space="preserve">
-    <value>Disponibilités Etudiant remplies</value>
   </data>
   <data name="ResourceCalculateEveryColon" xml:space="preserve">
     <value>Calcule ressources tous les:</value>

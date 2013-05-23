@@ -273,7 +273,7 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.Portal.ViewModelFactory
 					{
 						Action = "Index",
 						Controller = "StudentAvailability",
-						Title = Resources.StudentAvailability,
+						Title = Resources.Availability,
 						NavigationItems = new List<NavigationItem>(),
 						ToolBarItems =
 							new ToolBarItemBase[]
