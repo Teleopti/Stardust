@@ -146,6 +146,7 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 			_target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(model.Date), new DateOnly(model.Date)), personId, model.BusinessUnitId, new[] { model }, false);
 		}
 
+        [Test]
 		public void ShouldSendToMessageBrokerOnCommit()
 		{
 			var messageBroker = MockRepository.GenerateMock<IMessageBroker>();
@@ -177,7 +178,7 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 			messageBroker.AssertWasCalled(x => x.SendEventMessage("datasource", model.BusinessUnitId, model.BelongsToDate, model.BelongsToDate, Guid.Empty, model.PersonId, typeof(Person), Guid.Empty, typeof(IPersonScheduleDayReadModel), DomainUpdateType.NotApplicable, null));
 		}
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
+        [Test]
         public void ShouldNotSendToMessageBrokerOnCommitWhenNoficationDisabled()
         {
             var messageBroker = MockRepository.GenerateMock<IMessageBroker>();
@@ -199,7 +200,7 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 
             using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
             {
-                _target.SaveReadModel(model, notifyBroker: false);
+                _target.UpdateReadModels(new DateOnlyPeriod(new DateOnly(model.Date), new DateOnly(model.Date)), model.PersonId, model.BusinessUnitId, new[] { model }, true);
 
                 messageBroker.AssertWasNotCalled(x => x.SendEventMessage("datasource", model.BusinessUnitId, model.BelongsToDate, model.BelongsToDate, Guid.Empty, model.PersonId, typeof(Person), Guid.Empty, typeof(IPersonScheduleDayReadModel), DomainUpdateType.NotApplicable, null));
 

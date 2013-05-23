@@ -57,15 +57,16 @@ namespace Teleopti.Ccc.Infrastructure.Repositories
 			                  .List<PersonScheduleDayReadModel>();
 		}
 
-		public void UpdateReadModels(DateOnlyPeriod period, Guid personId, Guid businessUnitId, IEnumerable<PersonScheduleDayReadModel> readModels, bool skipClear)
+		public void UpdateReadModels(DateOnlyPeriod period, Guid personId, Guid businessUnitId, IEnumerable<PersonScheduleDayReadModel> readModels, bool initialLoad)
 		{
-			if (!skipClear)
+			if (!initialLoad)
 				clearPeriodForPerson(period, personId);
 
 			if (readModels != null)
 				readModels.ForEach(saveReadModel);
 
-			_unitOfWork.Current().AfterSuccessfulTx(() => _messageBroker.SendEventMessage(_currentDataSource.CurrentName(), businessUnitId, period.StartDate, period.EndDate, Guid.Empty, personId, typeof(Person), Guid.Empty, typeof(IPersonScheduleDayReadModel), DomainUpdateType.NotApplicable, null));
+            if (!initialLoad)
+			    _unitOfWork.Current().AfterSuccessfulTx(() => _messageBroker.SendEventMessage(_currentDataSource.CurrentName(), businessUnitId, period.StartDate, period.EndDate, Guid.Empty, personId, typeof(Person), Guid.Empty, typeof(IPersonScheduleDayReadModel), DomainUpdateType.NotApplicable, null));
 		}
 
 		private void clearPeriodForPerson(DateOnlyPeriod period, Guid personId)
