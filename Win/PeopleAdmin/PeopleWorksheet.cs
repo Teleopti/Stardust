@@ -621,10 +621,7 @@ namespace Teleopti.Ccc.Win.PeopleAdmin
             _filteredPeopleHolder.UnitOfWork = uow;
 
             _filteredPeopleHolder.UnitOfWork.Reassociate(_filteredPeopleHolder.RuleSetBagCollection);
-            _filteredPeopleHolder.LoadTeams();
-            _filteredPeopleHolder.LoadAllApplicationRoles();
-            _filteredPeopleHolder.LoadAllOptionalColumns();
-            _filteredPeopleHolder.LoadAllApplicationRoles();
+            _filteredPeopleHolder.LoadIt();
             //Copy filtered people collection.
             IList<IPerson> filteredPeopleCollection =
                 new List<IPerson>(_filteredPeopleHolder.FilteredPersonCollection);
