@@ -151,7 +151,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             IScheduleDay current = schedulePartFactory.CreatePartWithMainShift();
             IPersonAssignment personAssingment = current.PersonAssignmentCollection()[0];
 	        var category = personAssingment.ShiftCategory;
-            Assert.AreEqual(2, personAssingment.ToMainShift().LayerCollection.Count);
+            Assert.AreEqual(2, personAssingment.MainShiftActivityLayers.Count());
 
             // change order
             ILayer<IActivity> activity1 = personAssingment.ToMainShift().LayerCollection[0];

@@ -81,9 +81,9 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 		public void VerifyMultiplePersonAbsencesAndCorrectUnderlyingLayers()
 		{
 			IPersonAssignment ass1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(scheduleDay.Scenario, scheduleDay.Person, createPeriod(2, 9));
-			ass1.ToMainShift().LayerCollection[0].Payload.Description = new Description("första");
+			ass1.MainShiftActivityLayers.First().Payload.Description = new Description("första");
 			IPersonAssignment ass2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(scheduleDay.Scenario, scheduleDay.Person, createPeriod(11, 19));
-			ass2.ToMainShift().LayerCollection[0].Payload.Description = new Description("andra");
+			ass2.MainShiftActivityLayers.First().Payload.Description = new Description("andra");
 			IPersonAbsence abs1 = createPersonAbsence(70, createPeriod(-1, 2)); //no
 			IPersonAbsence abs2 = createPersonAbsence(60, createPeriod(-50, 3));
 			IPersonAbsence abs3 = createPersonAbsence(50, createPeriod(10, 12));
@@ -152,7 +152,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			Assert.AreEqual(1, resWrapper.Count);
 			Assert.AreEqual(new DateTimePeriod(2000, 1, 1, 2001, 1, 1), retLayer.Period);
 			Assert.AreEqual("100", retLayer.Payload.ConfidentialDescription(null,DateOnly.Today).Name);
-			Assert.AreSame(ass.ToMainShift().LayerCollection[0].Payload, retLayer.HighestPriorityActivity);
+			Assert.AreSame(ass.MainShiftActivityLayers.First().Payload, retLayer.HighestPriorityActivity);
 			Assert.AreSame(abs.Layer.Payload, retLayer.HighestPriorityAbsence);
 		}
 
@@ -209,10 +209,10 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			Assert.AreEqual(new DateTimePeriod(2000, 1, 1, 2000, 6, 1), resWrapper[0].Period);
 			Assert.AreEqual(new DateTimePeriod(2000, 6, 1, 2001, 1, 1), resWrapper[1].Period);
 			Assert.AreEqual("100", resWrapper[0].Payload.ConfidentialDescription(null,DateOnly.Today).Name);
-			Assert.AreEqual(ass.ToMainShift().LayerCollection[0].Payload.Description, resWrapper[1].Payload.ConfidentialDescription(null,DateOnly.Today));
-			Assert.AreSame(ass.ToMainShift().LayerCollection[0].Payload, ((VisualLayer)resWrapper[0]).HighestPriorityActivity);
+			Assert.AreEqual(ass.MainShiftActivityLayers.First().Payload.Description, resWrapper[1].Payload.ConfidentialDescription(null,DateOnly.Today));
+			Assert.AreSame(ass.MainShiftActivityLayers.First().Payload, ((VisualLayer)resWrapper[0]).HighestPriorityActivity);
 			Assert.AreSame(abs.Layer.Payload, ((VisualLayer)resWrapper[0]).HighestPriorityAbsence);
-			Assert.AreSame(ass.ToMainShift().LayerCollection[0].Payload, ((VisualLayer)resWrapper[1]).HighestPriorityActivity);
+			Assert.AreSame(ass.MainShiftActivityLayers.First().Payload, ((VisualLayer)resWrapper[1]).HighestPriorityActivity);
 			Assert.IsNull(((VisualLayer)resWrapper[1]).HighestPriorityAbsence);
 		}
 
@@ -230,13 +230,13 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			Assert.AreEqual(new DateTimePeriod(2000, 1, 1, 2000, 6, 1), resWrapper[0].Period);
 			Assert.AreEqual(new DateTimePeriod(2000, 6, 1, 2000, 6, 2), resWrapper[1].Period);
 			Assert.AreEqual(new DateTimePeriod(2000, 6, 2, 2001, 1, 1), resWrapper[2].Period);
-			Assert.AreEqual(ass.ToMainShift().LayerCollection[0].Payload.Description, resWrapper[0].Payload.ConfidentialDescription(null,DateOnly.Today));
+			Assert.AreEqual(ass.MainShiftActivityLayers.First().Payload.Description, resWrapper[0].Payload.ConfidentialDescription(null,DateOnly.Today));
 			Assert.AreEqual("100", resWrapper[1].Payload.ConfidentialDescription(null,DateOnly.Today).Name);
-			Assert.AreEqual(ass.ToMainShift().LayerCollection[0].Payload.Description, resWrapper[2].Payload.ConfidentialDescription(null,DateOnly.Today));
+			Assert.AreEqual(ass.MainShiftActivityLayers.First().Payload.Description, resWrapper[2].Payload.ConfidentialDescription(null, DateOnly.Today));
 
-			Assert.AreSame(ass.ToMainShift().LayerCollection[0].Payload, resWrapper[0].Payload);
+			Assert.AreSame(ass.MainShiftActivityLayers.First().Payload, resWrapper[0].Payload);
 			Assert.AreSame(abs.Layer.Payload, resWrapper[1].Payload);
-			Assert.AreSame(ass.ToMainShift().LayerCollection[0].Payload, resWrapper[2].Payload);
+			Assert.AreSame(ass.MainShiftActivityLayers.First().Payload, resWrapper[2].Payload);
 		}
 
 		[Test]
@@ -255,7 +255,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
 			Assert.AreEqual(1, res.Count);
 			Assert.AreEqual(new DateTimePeriod(2000, 1, 1, 2002, 1, 1), res[0].Period);
 			Assert.AreEqual(abs.Layer.Payload, res[0].Payload);
-			Assert.AreSame(ass.ToMainShift().LayerCollection[0].Payload, ((VisualLayer)res[0]).HighestPriorityActivity);
+			Assert.AreSame(ass.MainShiftActivityLayers.First().Payload, ((VisualLayer)res[0]).HighestPriorityActivity);
 			Assert.AreSame(abs.Layer.Payload, ((VisualLayer)res[0]).HighestPriorityAbsence);
 		}
 
