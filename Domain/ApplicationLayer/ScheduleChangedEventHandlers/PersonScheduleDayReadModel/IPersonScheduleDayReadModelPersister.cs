@@ -8,7 +8,7 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1062:Validate arguments of public methods", MessageId = "1")]
 		void ClearPeriodForPerson(DateOnlyPeriod period, Guid personId);
 
-		void SaveReadModel(PersonScheduleDayReadModel model);
+		void SaveReadModel(PersonScheduleDayReadModel model, bool notifyBroker = true);
 		bool IsInitialized();
 	}
 }

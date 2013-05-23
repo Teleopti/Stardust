@@ -46,11 +46,16 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 			var readModels = _scheduleDayReadModelsCreator.GetReadModels(message);
 			foreach (var readModel in readModels)
 			{
-				_scheduleDayReadModelRepository.SaveReadModel(readModel);
+				_scheduleDayReadModelRepository.SaveReadModel(readModel,notifyBroker: shouldNotifyBroker(message));
 			}
 		}
 
-		public void Handle(ProjectionChangedEventForPersonScheduleDay @event)
+	    private static bool shouldNotifyBroker(ProjectionChangedEventBase message)
+	    {
+	        return !message.IsInitialLoad;
+	    }
+
+	    public void Handle(ProjectionChangedEventForPersonScheduleDay @event)
 		{
 			createReadModel(@event);
 		}
