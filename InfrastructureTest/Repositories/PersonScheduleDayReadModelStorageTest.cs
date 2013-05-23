@@ -177,6 +177,37 @@ d\':\'2012-01-12T15:14:00Z\',\'Minutes\':9,\'Title\':\'??????? / ????? ???????\'
 			messageBroker.AssertWasCalled(x => x.SendEventMessage("datasource", model.BusinessUnitId, model.BelongsToDate, model.BelongsToDate, Guid.Empty, model.PersonId, typeof(Person), Guid.Empty, typeof(IPersonScheduleDayReadModel), DomainUpdateType.NotApplicable, null));
 		}
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1822:MarkMembersAsStatic"), Test]
+        public void ShouldNotSendToMessageBrokerOnCommitWhenNoficationDisabled()
+        {
+            var messageBroker = MockRepository.GenerateMock<IMessageBroker>();
+            var currentDataSource = MockRepository.GenerateMock<ICurrentDataSource>();
+            currentDataSource.Stub(x => x.CurrentName()).Return("datasource");
+
+            _target = new PersonScheduleDayReadModelStorage(CurrentUnitOfWork.Make(), messageBroker, currentDataSource);
+
+            var model = new PersonScheduleDayReadModel
+            {
+                Date = new DateTime(2013, 4, 3),
+                TeamId = Guid.NewGuid(),
+                PersonId = Guid.NewGuid(),
+                BusinessUnitId = Guid.NewGuid(),
+                ShiftStart = new DateTime(2013, 4, 3, 10, 0, 0, DateTimeKind.Utc),
+                ShiftEnd = new DateTime(2013, 4, 3, 18, 0, 0, DateTimeKind.Utc),
+                Shift = "",
+            };
+
+            using (var uow = UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+            {
+                _target.SaveReadModel(model, notifyBroker: false);
+
+                messageBroker.AssertWasNotCalled(x => x.SendEventMessage("datasource", model.BusinessUnitId, model.BelongsToDate, model.BelongsToDate, Guid.Empty, model.PersonId, typeof(Person), Guid.Empty, typeof(IPersonScheduleDayReadModel), DomainUpdateType.NotApplicable, null));
+
+                uow.PersistAll();
+            }
+
+            messageBroker.AssertWasNotCalled(x => x.SendEventMessage("datasource", model.BusinessUnitId, model.BelongsToDate, model.BelongsToDate, Guid.Empty, model.PersonId, typeof(Person), Guid.Empty, typeof(IPersonScheduleDayReadModel), DomainUpdateType.NotApplicable, null));
+        }
 	}
 
 }
