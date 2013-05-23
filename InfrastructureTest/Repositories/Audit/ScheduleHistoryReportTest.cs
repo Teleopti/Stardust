@@ -225,8 +225,8 @@ namespace Teleopti.Ccc.InfrastructureTest.Repositories.Audit
 			{
 				uow.Reassociate(PersonAssignment);
 				var pShift = new PersonalShift();
-				pShift.LayerCollection.Add(new PersonalShiftActivityLayer(PersonAssignment.ToMainShift().LayerCollection[0].Payload,
-																							 PersonAssignment.ToMainShift().LayerCollection[0].Period));
+				pShift.LayerCollection.Add(new PersonalShiftActivityLayer(PersonAssignment.MainShiftActivityLayers.First().Payload,
+																							 PersonAssignment.MainShiftActivityLayers.First().Period));
 				PersonAssignment.ClearMainShiftLayers();
 				PersonAssignment.AddPersonalShift(pShift);
 				uow.PersistAll();
