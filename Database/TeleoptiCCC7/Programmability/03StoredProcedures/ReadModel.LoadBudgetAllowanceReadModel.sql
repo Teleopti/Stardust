@@ -6,7 +6,8 @@ GO
 -- Author:		RobinK
 -- Create date: 2011-09-26
 -- Description:	Lads the read model for allowance for a budget group
--- Change:		
+-- ChangeLog:	Date		Who		Description	
+--				2013-05-23	Eka		Added distinct to disregard duplicate rows in ReadModel
 -- =============================================
 
 CREATE PROCEDURE [ReadModel].[LoadBudgetAllowanceReadModel]
@@ -55,20 +56,23 @@ BEGIN
 	
 	--Return calculated result to client
 	SELECT
-		sp.PayloadId,
-		sp.BelongsToDate,
-		SUM(sp.ContractTime) as TotalContractTime,
-		MIN(sp.InsertedOn) as LeastUpdate
-	FROM ReadModel.ScheduleProjectionReadOnly sp
-	INNER JOIN #temppersonbudgetgroup t	
-		ON t.PersonId = sp.PersonId
-		AND sp.BelongsToDate BETWEEN t.startdate AND t.enddate	
-	INNER JOIN dbo.budgetabsencecollection bac ON bac.Absence=sp.PayloadId 
-	INNER JOIN dbo.customshrinkage cs ON cs.Id = bac.CustomShrinkage AND cs.Parent=@BudgetGroupId
+		result.PayloadId,
+		result.BelongsToDate,
+		SUM(result.ContractTime) as TotalContractTime,
+		MIN(result.InsertedOn) as LeastUpdate
+	FROM (
+			SELECT DISTINCT sp.PayloadId, sp.BelongsToDate, sp.ContractTime, sp.InsertedOn 
+			FROM ReadModel.ScheduleProjectionReadOnly sp
+			INNER JOIN #temppersonbudgetgroup t	
+				ON t.PersonId = sp.PersonId
+				AND sp.BelongsToDate BETWEEN t.startdate AND t.enddate	
+			INNER JOIN dbo.budgetabsencecollection bac ON bac.Absence=sp.PayloadId 
+			INNER JOIN dbo.customshrinkage cs ON cs.Id = bac.CustomShrinkage AND cs.Parent=@BudgetGroupId
 
-	WHERE sp.ScenarioId=@ScenarioId
-	AND sp.BelongsToDate BETWEEN @DateFrom AND @DateTo
-	GROUP BY sp.BelongsToDate,sp.PayloadId
+			WHERE sp.ScenarioId=@ScenarioId
+			AND sp.BelongsToDate BETWEEN @DateFrom AND @DateTo
+		) result
+	GROUP BY result.BelongsToDate,result.PayloadId
 END
 
 GO
