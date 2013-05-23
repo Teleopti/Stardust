@@ -1097,7 +1097,7 @@ namespace Teleopti.Ccc.Win.Common
 
         public string Paste(GridControl gridControl, Clip<string> clip, int rowIndex, int columnIndex)
         {
-            string returnValue;
+            string returnValue = string.Empty;
             try
             {
                 gridControl.Model[rowIndex, columnIndex].ApplyFormattedText(clip.ClipValue);
@@ -1115,6 +1115,14 @@ namespace Teleopti.Ccc.Win.Common
             {
                 returnValue = string.Empty;
             }
+            catch (Exception exp)
+            {
+                if (exp.InnerException.GetType() == typeof (FormatException))
+                {
+                    returnValue = string.Empty;
+                }
+            }
+
             return returnValue;
         }
 
