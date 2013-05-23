@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using Teleopti.Interfaces.Domain;
-using Teleopti.Interfaces.Infrastructure;
 
 namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.PersonScheduleDayReadModel
 {
@@ -25,9 +24,15 @@ namespace Teleopti.Ccc.Domain.ApplicationLayer.ScheduleChangedEventHandlers.Pers
 			createReadModel(@event);
 		}
 
+        private bool isDisabledForInitialLoad(ProjectionChangedEventBase message)
+        {
+            return message.IsInitialLoad;
+        }
+
 		private void createReadModel(ProjectionChangedEventBase message)
 		{
 			if (!message.IsDefaultScenario) return;
+            if (isDisabledForInitialLoad(message)) return;
 			if (message.ScheduleDays == null || message.ScheduleDays.Count == 0) return;
 
 			var dateOnlyPeriod = new DateOnlyPeriod(new DateOnly(message.ScheduleDays.Min(s => s.Date.Date)),
