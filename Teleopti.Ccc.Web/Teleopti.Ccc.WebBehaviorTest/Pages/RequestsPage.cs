@@ -36,9 +36,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 		[FindBy(Id = "Requests-addTextRequest-menuItem")]
 		public Link AddTextRequestMenuItem { get; set; }
 
-		[FindBy(Id = "Requests-addShiftTradeRequest-menuItem")]
-		public Link AddShiftTradeRequestMenuItem { get; set; }
-
 		[FindBy(Id = "Request-detail-section")]
 		public Div RequestDetailSection { get; set; }
 
@@ -197,5 +194,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages
 				return Document.Divs.Filter(QuicklyFind.ByClass("shift-trade-swap-detail-timeline"));
 			}
 		}
+	
 	}
 }

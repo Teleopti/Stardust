@@ -5,7 +5,6 @@ namespace Teleopti.Ccc.WebBehaviorTest.Pages.Common
 	public interface IEditRequestPage
 	{
 		Span AddRequestDropDown { get; }
-		Link AddShiftTradeRequestMenuItem { get; }
 		Link AddTextRequestMenuItem { get; }
 		Div RequestDetailSection { get; }
 		Span TextRequestTab { get; }

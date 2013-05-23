@@ -6,6 +6,7 @@ using TechTalk.SpecFlow;
 using Teleopti.Ccc.TestCommon;
 using Teleopti.Ccc.UserTexts;
 using Teleopti.Ccc.WebBehaviorTest.Core;
+using Teleopti.Ccc.WebBehaviorTest.Core.BrowserInteractions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Extensions;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using WatiN.Core;
@@ -23,6 +24,13 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			gotoAddRequestToday();
 		}
 
+		[When(@"I click '(.*)'")]
+		public void WhenIClick(string p0)
+		{
+			Browser.Interactions.Click(".cancel-button");
+		}
+
+
 		[When(@"I view Add Shift Trade Request for date '(.*)'")]
 		public void WhenIViewAddShiftTradeRequestForDate(DateTime date)
 		{
@@ -37,8 +45,7 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		{
 			TestControllerMethods.Logon();
 			Navigation.GotoRequests();
-			Pages.Pages.RequestsPage.AddRequestDropDown.EventualClick();
-			Pages.Pages.RequestsPage.AddShiftTradeRequestMenuItem.EventualClick();
+			Browser.Interactions.Click(".bdd-add-shifttrade-request-link");
 			EventualAssert.That(() => string.IsNullOrEmpty(Pages.Pages.Current.Document.Span(Find.ById("Request-add-loaded-date")).Text), Is.False);
 		}
 
@@ -86,12 +93,12 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 			EventualAssert.That(() => Pages.Pages.RequestsPage.ShiftTradeScheduleLayers[0].Title, Contains.Substring(expectedTimes));
 		}
 
-
-
 		[Then(@"the selected date should be '(.*)'")]
 		public void ThenTheSelectedDateShouldBe(DateTime date)
 		{
-			EventualAssert.That(() => DateTime.Parse(Pages.Pages.RequestsPage.AddShiftTradeDatePicker.Text), Is.EqualTo(date));
+			Browser.Interactions.AssertJavascriptResultContains("$('.add-shifttrade-datepicker').val();", date.Year.ToString());
+			Browser.Interactions.AssertJavascriptResultContains("$('.add-shifttrade-datepicker').val();", date.Month.ToString());
+			Browser.Interactions.AssertJavascriptResultContains("$('.add-shifttrade-datepicker').val();", date.Day.ToString());
 		}
 
 		[Then(@"I should see the time line hours span from '(.*)' to '(.*)'")]

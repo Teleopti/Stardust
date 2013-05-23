@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using Teleopti.Ccc.WebBehaviorTest.Core.Robustness;
 using WatiN.Core;
 
@@ -48,12 +49,23 @@ namespace Teleopti.Ccc.WebBehaviorTest.Core.BrowserInteractions.WatiNIE
 
 		public void AssertJavascriptResultContains(string javascript, string text)
 		{
+			var result = _browser.Eval(javascript);
 			EventualAssert.That(() => _browser.Eval(javascript), Is.StringContaining(text));
 		}
 
 		public void AssertInputValue(string selector, string value)
 		{
 			EventualAssert.That(() => _browser.TextField(Find.BySelector(selector)).Value, Is.EqualTo(value));
+		}
+
+		public void AssertIsSatisfiedBy(string selector, Func<string,bool> verifyText)
+		{
+			var element = _browser.Element(Find.BySelector(selector));
+			var elementText = element.Text;
+			var parsedText = DateTime.Parse(elementText);
+			var result = verifyText(elementText);
+
+			EventualAssert.That(() => verifyText(_browser.Element(Find.BySelector(selector)).Text), Is.True);
 		}
 
 		public void AssertExists(string selector)

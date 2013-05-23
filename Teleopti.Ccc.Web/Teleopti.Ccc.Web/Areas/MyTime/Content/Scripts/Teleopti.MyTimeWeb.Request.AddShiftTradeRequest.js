@@ -224,7 +224,7 @@ Teleopti.MyTimeWeb.Request.AddShiftTradeRequest = (function ($) {
 	}
 
 	function _openAddShiftTradeWindow() {
-		Teleopti.MyTimeWeb.Request.RequestDetail.HideEditSection();
+		//Teleopti.MyTimeWeb.Request.RequestDetail.HideEditSection();
 		$('#Request-add-shift-trade').show();
 	}
 
