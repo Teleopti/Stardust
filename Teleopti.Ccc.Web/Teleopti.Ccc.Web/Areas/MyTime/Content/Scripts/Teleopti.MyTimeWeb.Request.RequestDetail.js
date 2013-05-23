@@ -199,7 +199,7 @@ Teleopti.MyTimeWeb.Request.RequestViewModel = function RequestViewModel(addReque
     self.Message = ko.observable();
     self.EntityId = ko.observable();
     self.DenyReason = ko.observable();
-    self.IsEditable = ko.observable();
+    self.IsEditable = ko.observable(true);
     self.IsNewInProgress = ko.observable(false);
 
     self.IsTimeInputEnabled = ko.computed(function () {

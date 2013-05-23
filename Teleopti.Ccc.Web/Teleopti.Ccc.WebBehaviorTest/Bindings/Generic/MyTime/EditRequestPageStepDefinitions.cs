@@ -16,53 +16,35 @@ namespace Teleopti.Ccc.WebBehaviorTest.Bindings.Generic.MyTime
 		[Then(@"I should not see the New Absence Request menu item")]
 		public void ThenIShouldNotSeeTheNewAbsenceRequestMenuItem()
 		{
-			Browser.Interactions.AssertNotExists("#request-list", "#Requests-addAbsenceRequest-menuItem");
+			Browser.Interactions.AssertNotExists(".bdd-add-text-request-link", ".bdd-add-absence-request-link");
 		}
 
 		[Then(@"I should not see the New Shift Trade Request menu item")]
 		public void ThenIShouldNotSeeTheNewShiftTradeRequestMenuItem()
 		{
-			Browser.Interactions.AssertNotExists("#request-list", "#Requests-addShiftTradeRequest-menuItem");
-		}
-
-		[When(@"I click new text request menu item in the toolbar")]
-		public void WhenIClickNewTextRequestMenuItemInTheToolbar()
-		{
-			Pages.Pages.CurrentEditRequestPage.AddRequestDropDown.EventualClick();
-			Pages.Pages.CurrentEditRequestPage.AddTextRequestMenuItem.EventualClick();
-			Pages.Pages.CurrentEditRequestPage.RequestDetailSection.WaitUntilDisplayed();
+			Browser.Interactions.AssertNotExists(".bdd-add-text-request-link", ".bdd-add-shifttrade-request-link");
 		}
 
 		[When(@"I click to add a new absence request")]
 		public void WhenIClickToAddANewAbsenceRequest()
 		{
-			//Pages.Pages.CurrentEditRequestPage.AddRequestDropDown.EventualClick();
-			//Pages.Pages.CurrentEditRequestPage.AddAbsenceRequestMenuItem.EventualClick();
-			//Pages.Pages.CurrentEditRequestPage.RequestDetailSection.WaitUntilDisplayed();
 			Browser.Interactions.Click(".bdd-add-absence-request-link");
 			Browser.Interactions.Click(".bdd-add-absence-request-link");
 			Browser.Interactions.AssertExists("#Request-detail-section");
 		}
 
-		[When(@"I click absence request tab")]
-		public void WhenIClickAbsenceRequestTab()
-		{
-			Pages.Pages.CurrentEditRequestPage.RequestDetailSection.WaitUntilDisplayed();
-			Pages.Pages.CurrentEditRequestPage.AbsenceRequestTab.EventualClick();
-		}
-
 		[When(@"I unchecked the full day checkbox")]
 		public void WhenIUncheckedTheFullDayCheckbox()
 		{
-			Pages.Pages.CurrentEditRequestPage.RequestDetailSection.WaitUntilDisplayed();
-			Pages.Pages.CurrentEditRequestPage.FulldayCheck.Checked = false;
+			if (Browser.Interactions.Javascript("$('#Request-detail-section input[type=checkbox]:enabled').prop('checked')").ToString() == "true")
+				Browser.Interactions.Click("#Request-detail-section input[type='checkbox']");
 		}
 
 		[When(@"I checked the full day checkbox")]
 		public void WhenIClickFullDayCheckbox()
 		{
-			Pages.Pages.CurrentEditRequestPage.RequestDetailSection.WaitUntilDisplayed();
-			Pages.Pages.CurrentEditRequestPage.FulldayCheck.Checked = true;
+			if (Browser.Interactions.Javascript("$('#Request-detail-section input[type=checkbox]:enabled').prop('checked')").ToString() == "false")
+				Browser.Interactions.Click("#Request-detail-section input[type='checkbox']");
 		}
 
 
