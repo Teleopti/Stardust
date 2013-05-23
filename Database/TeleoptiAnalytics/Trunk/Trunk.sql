@@ -103,6 +103,8 @@ GO
 --Desc: new "Avaliability per Agent" report
 -----------------
 DECLARE @newreportid uniqueidentifier = 'A56B3EEF-17A2-4778-AA8A-D166232073D2'
+DECLARE @CollectionId uniqueidentifier = (SELECT DISTINCT CollectionId FROM mart.report_control_collection WHERE collection_id=28)
+
 INSERT INTO mart.report (
 		Id, 
 		report_id, 
@@ -133,9 +135,8 @@ INSERT INTO mart.report (
 		'mart.report_data_availability_per_agent',
 		'f01:Report+AvailabilityPerAgent',
 		'','','','',
-		'B69DBA82-38A3-4A12-BFF6-0FAB903C368B')
+		@CollectionId)
 GO
-
 ----------------  
 --Name: Karin
 --Date: 2013-05-15
