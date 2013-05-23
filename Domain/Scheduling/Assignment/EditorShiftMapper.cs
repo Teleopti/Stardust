@@ -33,10 +33,10 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			InParameter.NotNull("personassignment", personassignment);
 			InParameter.NotNull("editorShift", editorShift);
 
-			var layerList = new List<IMainShiftActivityLayer>();
+			var layerList = new List<IMainShiftActivityLayerNew>();
 			foreach (var layer in editorShift.LayerCollection)
 			{
-				layerList.Add(new MainShiftActivityLayer(layer.Payload, layer.Period));
+				layerList.Add(new MainShiftActivityLayerNew(layer.Payload, layer.Period));
 			}
 			personassignment.SetMainShiftLayers(layerList, editorShift.ShiftCategory);
 		}

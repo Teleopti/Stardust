@@ -489,6 +489,7 @@
     <Compile Include="Scheduling\Assignment\EditorActivityLayer.cs" />
     <Compile Include="Scheduling\Assignment\EditorShift.cs" />
     <Compile Include="Scheduling\Assignment\EditorShiftMapper.cs" />
+    <Compile Include="Scheduling\Assignment\MainShiftActivityLayerNew.cs" />
     <Compile Include="Scheduling\TeamBlock\StandardDeviationSumCalculator.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockScheduledDayChecker.cs" />
     <Compile Include="Scheduling\TeamBlock\TeamBlockSteadyStateDictionaryCreator.cs" />
