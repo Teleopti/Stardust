@@ -929,12 +929,9 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			var period = TimeZoneHelper.NewUtcDateTimePeriodFromLocalDateTime(_date, _date.AddDays(1), _timeZoneInfo);
 
             _personAssignment = new PersonAssignment(_person, _scenario, _date);
-            //_personAssignment2 = new PersonAssignment(_person, _scenario, _date.AddDays(1));
             IShiftCategory shiftCategory = ShiftCategoryFactory.ShiftCategoryWithId();
             _personAssignment.SetMainShift(new MainShift(shiftCategory));
-            //_personAssignment2.SetMainShift(new MainShift(shiftCategory));
             _personAssignmentsList.Add(_personAssignment);
-            //_personAssignmentsList.Add(_personAssignment2);
             readOnlyCollection = new ReadOnlyCollection<IPersonAssignment>(_personAssignmentsList);
 
             ExpectCallsDialogOnVerifyAddAbsence(period);
@@ -942,14 +939,12 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Expect.Call(_day2.Person).Return(_person).Repeat.AtLeastOnce();
             Expect.Call(_day1.Period).Return(new DateTimePeriod(2008, 11, 04, 2008, 11, 05)).Repeat.Any();
 			Expect.Call(() => _day1.CreateAndAddAbsence(null)).IgnoreArguments().Repeat.AtLeastOnce();
-			//Expect.Call(() => _ass.CheckRestrictions()).Repeat.AtLeastOnce();
-            //Expect.Call(_day1.PersonAssignmentCollection()).Return(new List<IPersonAssignment> { _ass }.AsReadOnly()).Repeat.AtLeastOnce();
             Expect.Call(_day1.PersonAssignmentCollection()).Return(readOnlyCollection).Repeat.AtLeastOnce();
             Expect.Call(_day2.PersonAssignmentCollection()).Return(readOnlyCollection).Repeat.AtLeastOnce();
             var scheduleDictionary = CreateExpectationForModifySchedulePart(_day1, _person);
             Expect.Call(_day1.TimeZone).Return(TimeZoneInfoFactory.StockholmTimeZoneInfo());
 
-            IScheduleRange range1 = _mocks.StrictMock<IScheduleRange>();
+            var range1 = _mocks.StrictMock<IScheduleRange>();
             Expect.Call(scheduleDictionary[_person]).Return(range1).Repeat.AtLeastOnce();
             Expect.Call(range1.ScheduledDay(new DateOnly(_date)))
                 .Return(_day1);
@@ -976,7 +971,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Expect.Call(_viewBase.CreateAddAbsenceViewModel(null, null, TimeZoneInfo.Local))
                   .IgnoreArguments().Return(_dialog)
                   .Repeat.Once();
-			//Expect.Call(_viewBase.CreateAddAbsenceViewModel(null, null, TimeZoneInfo.Local)).IgnoreArguments().Return(_dialog);
             Expect.Call(() => _viewBase.RefreshRangeForAgentPeriod(_person, period)).IgnoreArguments().Repeat.AtLeastOnce();
             Expect.Call(_viewBase.TheGrid).Return(_grid).Repeat.AtLeastOnce();
         }
@@ -999,11 +993,11 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             ExpectCallsDialogOnVerifyAddAbsenceMultipleDays(periodTotal);
             ExpectCallsViewBaseOnVerifyAddAbsenceMultipleDays(periodTotal);
             ExpectCallsSchedulePartsOnVerifyAddAbsenceMultipleDays(periodPart1, periodPart2);
-            //Expect.Call(() => _ass.CheckRestrictions()).Repeat.AtLeastOnce();
+            
             var scheduleDictionary = CreateExpectationForModifySchedulePart(_day1, _person);
 
             // <expect that we call for tags for each days
-            IScheduleRange range1 = _mocks.StrictMock<IScheduleRange>();
+            var range1 = _mocks.StrictMock<IScheduleRange>();
             Expect.Call(scheduleDictionary[_person]).Return(range1).Repeat.AtLeastOnce();
             Expect.Call(range1.ScheduledDay(new DateOnly(_date)))
                 .Return(_day1);
@@ -1011,8 +1005,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
                 .Return(_day1);
 			Expect.Call(range1.ScheduledDay(new DateOnly(_date.AddDays(2))))
 				.Return(_day1);
-            //Expect.Call(() => _viewBase.RefreshRangeForAgentPeriod(_person, periodPart1)).IgnoreArguments().Repeat.Times(3);
-
         
             _mocks.ReplayAll();
             _schedulerState.SchedulingResultState.Schedules = scheduleDictionary;
@@ -1029,13 +1021,10 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 
             Expect.Call(_day1.Period).Return(periodPart1).Repeat.Any();
             Expect.Call(_day2.Period).Return(periodPart2).Repeat.Any();
-            //Expect.Call(_day1.PersistableScheduleDataCollection()).Return(new List<IPersistableScheduleData> { null }).Repeat.AtLeastOnce();
-
-			Expect.Call(_day2.Person).Return(_person).Repeat.AtLeastOnce();
+            Expect.Call(_day2.Person).Return(_person).Repeat.AtLeastOnce();
             Expect.Call(() => _day1.CreateAndAddAbsence(null)).IgnoreArguments().Repeat.AtLeastOnce();
             Expect.Call(_day1.PersonAssignmentCollection()).Return(readOnlyCollection).Repeat.AtLeastOnce();
             Expect.Call(_day2.PersonAssignmentCollection()).Return(readOnlyCollection).Repeat.AtLeastOnce();
-            //Expect.Call(_day1.PersonAssignmentCollection()).Return(new List<IPersonAssignment> { _ass }.AsReadOnly()).Repeat.AtLeastOnce();
             Expect.Call(_day1.TimeZone).Return(TimeZoneInfoFactory.StockholmTimeZoneInfo());
         }
 
@@ -1052,8 +1041,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Expect.Call(_viewBase.CreateAddAbsenceViewModel(null, null, TimeZoneInfo.Local))
                   .IgnoreArguments()
                   .Return(_dialog);
-			//Expect.Call(_viewBase.CreateAddAbsenceViewModel(null, null, TimeZoneInfo.Local)).Constraints(Is.Anything(), Is.Matching(new Predicate<ISetupDateTimePeriod>(t => t.Period == period.ChangeEndTime(TimeSpan.FromMinutes(-1)))), Is.Anything()).Return(_dialog);
-            Expect.Call(() => _viewBase.RefreshRangeForAgentPeriod(_person, period)).IgnoreArguments().Repeat.Once();
+			Expect.Call(() => _viewBase.RefreshRangeForAgentPeriod(_person, period)).IgnoreArguments().Repeat.Once();
         	Expect.Call(_viewBase.TheGrid).Return(_grid).Repeat.AtLeastOnce();
 
         }
@@ -1115,8 +1103,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         private void ExpectCallsViewBaseOnShouldNotAddAbsenceOnLockedDay(DateTimePeriod period)
         {
             Expect.Call(_viewBase.SelectedSchedules()).Return(_selectedSchedules);
-			//Expect.Call(_viewBase.CreateAddAbsenceViewModel(null, null, TimeZoneInfo.Local)).Constraints(Is.Anything(), Is.Matching(new Predicate<ISetupDateTimePeriod>(t => t.Period == period.ChangeEndTime(TimeSpan.FromMinutes(-1)))),Is.Anything()).Return(_dialog);
-            Expect.Call(_viewBase.CreateAddAbsenceViewModel(null, null, TimeZoneInfo.Local)).IgnoreArguments().Return(_dialog).Repeat.Once();
+			Expect.Call(_viewBase.CreateAddAbsenceViewModel(null, null, TimeZoneInfo.Local)).IgnoreArguments().Return(_dialog).Repeat.Once();
             Expect.Call(() => _viewBase.RefreshRangeForAgentPeriod(_person, period)).IgnoreArguments().Repeat.AtLeastOnce();
             Expect.Call(_viewBase.TheGrid).Return(_grid);
         }
@@ -1151,12 +1138,10 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			ExpectCallsViewBaseOnShouldAddAbsenceWithDefaultPeriod(period);
 
             Expect.Call(schedulePart.PersonAssignmentCollection()).Return(readOnlyCollection).Repeat.AtLeastOnce();
-			//Expect.Call(ass.CheckRestrictions);
 			var scheduleDictionary = CreateExpectationForModifySchedulePart(schedulePart, _person);
 			Expect.Call(schedulePart.TimeZone).Return(TimeZoneInfoFactory.StockholmTimeZoneInfo());
 
-
-			Expect.Call(scheduleDictionary[_person])
+            Expect.Call(scheduleDictionary[_person])
 				.Return(scheduleRange);
 			Expect.Call(scheduleRange.ScheduledDay(date))
 				.Return(schedulePart);
@@ -1174,7 +1159,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
         private void ExpectCallsViewBaseOnShouldAddAbsenceWithDefaultPeriod(DateTimePeriod period)
         {
             Expect.Call(_viewBase.SelectedSchedules()).Return(_selectedSchedules);
-            //Expect.Call(_viewBase.CreateAddAbsenceViewModel(null, null, TimeZoneInfo.Local)).Constraints(Is.Anything(), Is.Matching(new Predicate<ISetupDateTimePeriod>(t => t.Period == period)), Is.Anything()).Return(_dialog);
             Expect.Call(_viewBase.CreateAddAbsenceViewModel(null, null, TimeZoneInfo.Local))
                   .IgnoreArguments().Return(_dialog)
                   .Repeat.Once();
@@ -1213,7 +1197,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Expect.Call(dialog.SelectedItem).Return(selectedItem);
             Expect.Call(dialog.SelectedPeriod).Return(period);
             Expect.Call(schedulePart.PersonAssignmentCollection()).Return(readOnlyCollection).Repeat.AtLeastOnce();
-            //Expect.Call(schedulePart.PersonAssignmentCollection()).Return(new List<IPersonAssignment> { ass }.AsReadOnly()).Repeat.AtLeastOnce();
             IScheduleDictionary scheduleDictionary = CreateExpectationForModifySchedulePart(schedulePart, _person);
             
             Expect.Call(_viewBase.TheGrid).Return(_grid);
@@ -1224,7 +1207,6 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			Expect.Call(scheduleRange.ScheduledDay(new DateOnly())).IgnoreArguments()
 				.Return(schedulePart).Repeat.AtLeastOnce();
 			Expect.Call(() => schedulePart.CreateAndAddAbsence(null)).IgnoreArguments(); // a new absence created, that why ignore arguments
-			//Expect.Call(ass.CheckRestrictions);
 			Expect.Call(() => _viewBase.RefreshRangeForAgentPeriod(_person, period));
             _mocks.ReplayAll();
             _schedulerState.SchedulingResultState.Schedules = scheduleDictionary;
