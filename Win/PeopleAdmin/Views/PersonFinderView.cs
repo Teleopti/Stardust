@@ -172,7 +172,10 @@ namespace Teleopti.Ccc.Win.PeopleAdmin.Views
 
         public void AttemptDatabaseConnectionFind(IExecutableCommand command)
         {
-            _dataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(() => _presenter.Find(command));
+            using (UnitOfWorkFactory.Current.CreateAndOpenUnitOfWork())
+            {
+                _dataSourceExceptionHandler.AttemptDatabaseConnectionDependentAction(() => _presenter.Find(command));
+            }
         }
 
         private PersonFinderSettings attemptDatabaseConnectionLoadSettings()

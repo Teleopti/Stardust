@@ -128,8 +128,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 foreach (IPersonAssignment pa in conflicts)
                 {
                     if (sb.Length > 0) sb.AppendLine();
-                    if(pa.MainShift != null)
-                        sb.Append(pa.MainShift.ShiftCategory.Description.Name);             //name
+                    if(pa.ShiftCategory != null)
+                        sb.Append(pa.ShiftCategory.Description.Name);             //name
                     sb.Append("  ");
                     sb.Append(ToLocalStartEndTimeString(pa.Period, cell.TimeZone));      //time
                 }
@@ -182,8 +182,8 @@ namespace Teleopti.Ccc.WinCode.Scheduling
                 foreach (IPersonAssignment pa in asses)
                 {
                     if (sb.Length > 0) sb.AppendLine();
-                    if(pa.MainShift != null)
-                        sb.Append(pa.MainShift.ShiftCategory.Description.Name);             //name
+                    if(pa.ShiftCategory != null)
+                        sb.Append(pa.ShiftCategory.Description.Name);             //name
                     sb.Append("  ");
                     sb.Append(ToLocalStartEndTimeString(pa.Period,scheduleDay.TimeZone));      //time
 
@@ -807,7 +807,7 @@ namespace Teleopti.Ccc.WinCode.Scheduling
 
             if (significantPart == SchedulePartView.MainShift)
             {
-                infoText = pa.MainShift.ShiftCategory.Description.Name;
+                infoText = pa.ShiftCategory.Description.Name;
                 periodText = ToLocalStartEndTimeString(pa.Period, schedulePart.TimeZone);
             }
 

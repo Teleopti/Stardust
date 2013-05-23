@@ -160,11 +160,11 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Core.WeekSchedule.Mapping
 				;
 
 			CreateMap<WeekScheduleDayDomainData, PersonAssignmentPeriodViewModel>()
-				.ForMember(d => d.Title, c => c.MapFrom(s => s.ScheduleDay.AssignmentHighZOrder().MainShift.ShiftCategory.Description.Name))
+				.ForMember(d => d.Title, c => c.MapFrom(s => s.ScheduleDay.AssignmentHighZOrder().ShiftCategory.Description.Name))
 				.ForMember(d => d.Summary, c => c.MapFrom(s => TimeHelper.GetLongHourMinuteTimeString(s.Projection.ContractTime(), CultureInfo.CurrentUICulture)))
 				.ForMember(d => d.Meeting, c => c.Ignore())
 				.ForMember(d => d.TimeSpan, c => c.MapFrom(s => s.ScheduleDay.AssignmentHighZOrder().Period.TimePeriod(s.ScheduleDay.TimeZone).ToShortTimeString()))
-				.ForMember(d => d.StyleClassName, c => c.MapFrom(s => s.ScheduleDay.AssignmentHighZOrder().MainShift.ShiftCategory.DisplayColor.ToStyleClass()))
+				.ForMember(d => d.StyleClassName, c => c.MapFrom(s => s.ScheduleDay.AssignmentHighZOrder().ShiftCategory.DisplayColor.ToStyleClass()))
 				.ForMember(d => d.StartPositionPercentage, c => c.Ignore())
 				.ForMember(d => d.EndPositionPercentage, c => c.Ignore())
 				.ForMember(d => d.Color, c => c.Ignore())

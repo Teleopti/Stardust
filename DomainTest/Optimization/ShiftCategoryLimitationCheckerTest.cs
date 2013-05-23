@@ -49,7 +49,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             _schedulePeriod = new SchedulePeriod(new DateOnly(2010, 1, 1), SchedulePeriodType.Day, 1);
             _person.AddSchedulePeriod(_schedulePeriod);
             _personAssignment = PersonAssignmentFactory.CreateAssignmentWithMainShift(_person,_dateTimePeriod);
-            _shiftCategoryLimitation = new ShiftCategoryLimitation(_personAssignment.MainShift.ShiftCategory);
+            _shiftCategoryLimitation = new ShiftCategoryLimitation(_personAssignment.ShiftCategory);
             _schedulePeriod.AddShiftCategoryLimitation(_shiftCategoryLimitation);
             _schedulePeriod2 = new SchedulePeriod(new DateOnly(2010, 1, 1), SchedulePeriodType.Day, 1);
             _range = _mocks.DynamicMock<IScheduleRange>();
@@ -74,7 +74,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         public void VerifyIsThisDayCorrectCategory()
         {
             var part = _mocks.DynamicMock<IScheduleDay>();
-            IShiftCategory shiftCategory = _personAssignment.MainShift.ShiftCategory;
+            IShiftCategory shiftCategory = _personAssignment.ShiftCategory;
 
             using(_mocks.Record())
             {
@@ -352,14 +352,14 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             person1.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(dateOnly));
             personAssignment1 = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person1, _dateTimePeriod);
             var shiftCategoryLimitation1 =
-                new ShiftCategoryLimitation(personAssignment1.MainShift.ShiftCategory) { MaxNumberOf = 1, Weekly = isWeekPerdiod };
+                new ShiftCategoryLimitation(personAssignment1.ShiftCategory) { MaxNumberOf = 1, Weekly = isWeekPerdiod };
             person1.SchedulePeriod(dateOnly).AddShiftCategoryLimitation(shiftCategoryLimitation1);
             var person2 = PersonFactory.CreatePerson("P2");
             person2.AddSchedulePeriod(_schedulePeriod2);
             person2.AddPersonPeriod(PersonPeriodFactory.CreatePersonPeriod(dateOnly));
             personAssignment2 = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, person2, _dateTimePeriod);
             var shiftCategoryLimitation2 =
-                new ShiftCategoryLimitation(personAssignment2.MainShift.ShiftCategory) { MaxNumberOf = 1, Weekly = isWeekPerdiod };
+                new ShiftCategoryLimitation(personAssignment2.ShiftCategory) { MaxNumberOf = 1, Weekly = isWeekPerdiod };
             if (!withSameShiftCategory)
                 person2.SchedulePeriod(dateOnly).AddShiftCategoryLimitation(shiftCategoryLimitation2);
             groupPerson = new GroupPersonFactory().CreateGroupPerson(new List<IPerson> { person1, person2 }, dateOnly, "gp1", null);

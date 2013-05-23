@@ -43,18 +43,17 @@ namespace Teleopti.Ccc.DomainTest.Optimization.ShiftCategoryFairness
         {
             IShiftCategory fm = new ShiftCategory("FM");
             IShiftCategory da = new ShiftCategory("DA");
+	        var activity = new Activity("hej");
             
-            IMainShift fm1 = new MainShift(fm);
-            IMainShift fm2 = new MainShift(fm);
-            IMainShift da1 = new MainShift(da);
+			IPersonAssignment assignment1 = PersonAssignmentFactory.CreatePersonAssignmentEmpty();
+			IPersonAssignment assignment2 = PersonAssignmentFactory.CreatePersonAssignmentEmpty();
+			IPersonAssignment assignment3 = PersonAssignmentFactory.CreatePersonAssignmentEmpty();
+	        IMainShift fm1 = MainShiftFactory.CreateMainShift(activity, assignment1.Period, fm);
+			IMainShift fm2 = MainShiftFactory.CreateMainShift(activity, assignment2.Period, fm);
+			IMainShift da1 = MainShiftFactory.CreateMainShift(activity, assignment3.Period, da);
 
-            IPersonAssignment assignment1 = PersonAssignmentFactory.CreatePersonAssignmentEmpty();
             assignment1.SetMainShift(fm1);
-            
-            IPersonAssignment assignment2 = PersonAssignmentFactory.CreatePersonAssignmentEmpty();
             assignment2.SetMainShift(fm2);
-
-            IPersonAssignment assignment3 = PersonAssignmentFactory.CreatePersonAssignmentEmpty();
             assignment3.SetMainShift(da1);
 
             using (_mockRepository.Record())

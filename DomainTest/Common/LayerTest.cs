@@ -165,9 +165,10 @@ namespace Teleopti.Ccc.DomainTest.Common
         [Test]
         public void VerifyOrderIndexWorks()
         {
-            var shift = MainShiftFactory.CreateMainShiftWithDefaultCategory();
-            var layer1 = new MainShiftActivityLayer(fakeActivity, new DateTimePeriod());
-            var layer2 = new MainShiftActivityLayer(fakeActivity, new DateTimePeriod());
+	        var shift = PersonalShiftFactory.CreatePersonalShift(fakeActivity, new DateTimePeriod());
+			shift.LayerCollection.Clear();
+            var layer1 = new PersonalShiftActivityLayer(fakeActivity, new DateTimePeriod());
+			var layer2 = new PersonalShiftActivityLayer(fakeActivity, new DateTimePeriod());
 
             shift.LayerCollection.Add(layer1);
             shift.LayerCollection.Add(layer2);

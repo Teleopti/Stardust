@@ -46,7 +46,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 				if (day.SignificantPart().Equals(SchedulePartView.MainShift))
 				{
 					var poss = new PossibleStartEndCategory();
-					var shift = day.AssignmentHighZOrder().MainShift;
+					var shift = day.AssignmentHighZOrder().ToMainShift();
 					if(schedulingOptions.UseGroupSchedulingCommonStart	 || schedulingOptions.UseGroupSchedulingCommonEnd)
 					{
 						var period = shift.ProjectionService().CreateProjection().Period().Value;						
@@ -99,7 +99,7 @@ namespace Teleopti.Ccc.Domain.ResourceCalculation.GroupScheduling
 				if (day.SignificantPart().Equals(SchedulePartView.MainShift))
 				{
 					var poss = new PossibleStartEndCategory();
-					var shift = day.AssignmentHighZOrder().MainShift;
+					var shift = day.AssignmentHighZOrder().ToMainShift();
 					if (schedulingOptions.UseGroupSchedulingCommonStart || schedulingOptions.UseGroupSchedulingCommonEnd)
 					{
 						var period = shift.ProjectionService().CreateProjection().Period().Value;

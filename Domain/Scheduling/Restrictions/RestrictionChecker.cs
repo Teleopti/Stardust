@@ -464,15 +464,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
         {
             foreach (IPersonAssignment assignment in _schedulePart.PersonAssignmentCollection())
             {
-                if (preference.ShiftCategory != null && assignment.MainShift == null)
+                if (preference.ShiftCategory != null && assignment.ToMainShift() == null)
                 {
                     permissionState = PermissionState.Broken;
                 }
 
-                if (assignment.MainShift == null)
+                if (assignment.ToMainShift() == null)
                     continue;
 
-                IShiftCategory shiftCategory = assignment.MainShift.ShiftCategory;
+                IShiftCategory shiftCategory = assignment.ShiftCategory;
                 if (preference.ShiftCategory != null)
                 {
                     if (!preference.ShiftCategory.Equals(shiftCategory))
@@ -488,15 +488,15 @@ namespace Teleopti.Ccc.Domain.Scheduling.Restrictions
         {
             foreach (IPersonAssignment assignment in _schedulePart.PersonAssignmentCollection())
             {
-                if (preference.ShiftCategory != null && assignment.MainShift == null)
+                if (preference.ShiftCategory != null && assignment.ToMainShift() == null)
                 {
                     permissionState = PermissionState.Broken;
                 }
 
-                if (assignment.MainShift == null)
+                if (assignment.ToMainShift() == null)
                     continue;
 
-                IShiftCategory shiftCategory = assignment.MainShift.ShiftCategory;
+                IShiftCategory shiftCategory = assignment.ShiftCategory;
                 if (preference.ShiftCategory != null)
                 {
                     if (!preference.ShiftCategory.Equals(shiftCategory))

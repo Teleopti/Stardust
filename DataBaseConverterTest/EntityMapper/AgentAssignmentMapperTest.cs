@@ -50,7 +50,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
             AgentAssignmentMapper agAssMapper = new AgentAssignmentMapper(mappedObjectPair, (TimeZoneInfo.Utc));
             IPersonAssignment newAgAss = agAssMapper.Map(_agDay);
             Assert.IsNotNull(newAgAss.Person);
-            Assert.IsNotNull(newAgAss.MainShift);
+            Assert.IsNotNull(newAgAss.ToMainShift());
             Assert.IsNotNull(newAgAss.Scenario);
         }
 
@@ -66,7 +66,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
             AgentAssignmentMapper agAssMapper = new AgentAssignmentMapper(mappedObjectPair, (TimeZoneInfo.Utc));
             IPersonAssignment newAgAss = agAssMapper.Map(_agDay);
             Assert.IsNotNull(newAgAss.Person);
-            Assert.IsNotNull(newAgAss.MainShift);
+            Assert.IsNotNull(newAgAss.ToMainShift());
             Assert.IsNotNull(newAgAss.Scenario);
         }
 
@@ -94,7 +94,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
             AgentAssignmentMapper agAssMapper = new AgentAssignmentMapper(mappedObjectPair, (TimeZoneInfo.Utc));
             IPersonAssignment newAgAss = agAssMapper.Map(_agDay);
             Assert.IsNotNull(newAgAss.Person);
-            Assert.IsNotNull(newAgAss.MainShift);
+            Assert.IsNotNull(newAgAss.ToMainShift());
             Assert.IsNotNull(newAgAss.Scenario);
             Assert.AreEqual(1, newAgAss.OvertimeShiftCollection.Count);
         }
@@ -123,7 +123,7 @@ namespace Teleopti.Ccc.DatabaseConverterTest.EntityMapper
             AgentAssignmentMapper agAssMapper = new AgentAssignmentMapper(mappedObjectPair, (TimeZoneInfo.Utc));
             IPersonAssignment newAgAss = agAssMapper.Map(_agDay);
             Assert.IsNotNull(newAgAss.Person);
-            Assert.IsNotNull(newAgAss.MainShift);
+            Assert.IsNotNull(newAgAss.ToMainShift());
             Assert.IsNotNull(newAgAss.Scenario);
             Assert.AreEqual(1,newAgAss.OvertimeShiftCollection.Count);
         }

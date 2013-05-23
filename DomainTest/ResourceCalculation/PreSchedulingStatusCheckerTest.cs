@@ -163,7 +163,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             {
                 Expect.Call(_part.PersonAssignmentCollection()).Return(readOnlyAssignments).Repeat.AtLeastOnce();
                 Expect.Call(personAssignment.PersonalShiftCollection).Return(readOnlyCollection).Repeat.AtLeastOnce();
-                Expect.Call(personAssignment.MainShift).Return(null).Repeat.AtLeastOnce();
+                Expect.Call(personAssignment.ToMainShift()).Return(null).Repeat.AtLeastOnce();
             }
 
             bool ret = PreSchedulingStatusChecker.CheckAssignments(_part);
@@ -184,7 +184,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
             using (_mocks.Record())
             {
                 Expect.Call(_part.PersonAssignmentCollection()).Return(readOnlyAssignments).Repeat.AtLeastOnce();
-                Expect.Call(personAssignment.MainShift).Return(null);
+                Expect.Call(personAssignment.ToMainShift()).Return(null);
                 Expect.Call(personAssignment.PersonalShiftCollection).Return(readOnlyPersonalShifts);
             }
             
@@ -220,7 +220,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation
                 Expect.Call(contract.EmploymentType).Return(EmploymentType.FixedStaffDayWorkTime);
 
                 Expect.Call(_part.PersonAssignmentCollection()).Return(readOnlyAssignments).Repeat.AtLeastOnce();
-                Expect.Call(personAssignment.MainShift).Return(mainShift);
+                Expect.Call(personAssignment.ToMainShift()).Return(mainShift);
                 Expect.Call(personAssignment.PersonalShiftCollection).Return(readOnlyPersonalShifts);
             }
 

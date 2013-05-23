@@ -1363,7 +1363,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Expect.Call(_day1.Period).Return(new DateTimePeriod(2001, 1, 1, 2001, 1, 2)).Repeat.Twice();
             Expect.Call(_ass.CheckRestrictions);
             Expect.Call(_ass.Period).Return(period);
-            Expect.Call(_ass.MainShift).Return(mainShift).Repeat.AtLeastOnce();
+            Expect.Call(_ass.ToMainShift()).Return(mainShift).Repeat.AtLeastOnce();
 
             var scheduleDictionary = CreateExpectationForModifySchedulePart(_day1, _person);
 
@@ -1452,7 +1452,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
 			Expect.Call(_viewBase.CreateAddOvertimeViewModel(null, null, multiplicatorDefinitionSets, null, new DateTimePeriod(2001, 1, 1, 2001, 1, 2), TimeZoneInfo.Local)).IgnoreArguments().Return(dialog);
             Expect.Call(schedulePart.PersonAssignmentCollection()).Return(new List<IPersonAssignment> { ass }.AsReadOnly());
             Expect.Call(ass.Period).Return(period);
-            Expect.Call(ass.MainShift).Return(mainShift).Repeat.Twice();
+            Expect.Call(ass.ToMainShift()).Return(mainShift).Repeat.Twice();
             Expect.Call(dialog.Result).Return(false);
             LastCall.Repeat.Once();
             Expect.Call(schedulePart.Person).Return(person);
@@ -1477,7 +1477,7 @@ namespace Teleopti.Ccc.WinCodeTest.Scheduler
             Expect.Call(_viewBase.SelectedSchedules()).Return(new List<IScheduleDay> { schedulePart });
             Expect.Call(schedulePart.PersonAssignmentCollection()).Return(new List<IPersonAssignment> { ass }.AsReadOnly());
             Expect.Call(ass.Period).Return(period);
-            Expect.Call(ass.MainShift).Return(mainShift).Repeat.Twice();
+            Expect.Call(ass.ToMainShift()).Return(mainShift).Repeat.Twice();
             Expect.Call(schedulePart.Period).Return(new DateTimePeriod(2001, 1, 1, 2001, 1, 2)).Repeat.Twice();
             Expect.Call(schedulePart.Person).Return(person);
             Expect.Call(schedulePart.DateOnlyAsPeriod).Return(dateOnlyAsDateTimePeriod);

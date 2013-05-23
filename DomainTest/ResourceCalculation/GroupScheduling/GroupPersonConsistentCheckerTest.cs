@@ -116,7 +116,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 			Expect.Call(_rangeScheduled.ScheduledDay(date)).Return(_scheduledDay).Repeat.Twice();
 			Expect.Call(_scheduledDay.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.Twice();
 			Expect.Call(_scheduledDay.AssignmentHighZOrder()).Return(ass).Repeat.Twice();
-			Expect.Call(ass.MainShift).Return(mainShift).Repeat.Twice();
+			Expect.Call(ass.ToMainShift()).Return(mainShift).Repeat.Twice();
 			Expect.Call(mainShift.ShiftCategory).Return(_category1).Repeat.Twice();
 			_mocks.ReplayAll();
 			var result = _target.AllPersonsHasSameOrNoneScheduled(_scheduleDictionary, _persons, date, schedulingOptions);
@@ -146,7 +146,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 			Expect.Call(_rangeScheduled.ScheduledDay(date)).Return(_scheduledDay).Repeat.Twice();
 			Expect.Call(_scheduledDay.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.Twice();
 			Expect.Call(_scheduledDay.AssignmentHighZOrder()).Return(ass).Repeat.Twice();
-			Expect.Call(ass.MainShift).Return(mainShift).Repeat.Twice();
+			Expect.Call(ass.ToMainShift()).Return(mainShift).Repeat.Twice();
             Expect.Call(mainShift.ProjectionService()).Return(projectionService).Repeat.Twice();
             Expect.Call(projectionService.CreateProjection()).Return(new VisualLayerCollection(_person1,
                                                                                                new List<IVisualLayer> { layerLunch }, new ProjectionPayloadMerger())).Repeat.Twice();
@@ -181,8 +181,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 			Expect.Call(_scheduledDay.AssignmentHighZOrder()).Return(ass);
 			Expect.Call(_scheduledDayOtherCategory.AssignmentHighZOrder()).Return(assOther);
 
-			Expect.Call(ass.MainShift).Return(mainShift);
-			Expect.Call(assOther.MainShift).Return(mainShiftOther);
+			Expect.Call(ass.ToMainShift()).Return(mainShift);
+			Expect.Call(assOther.ToMainShift()).Return(mainShiftOther);
 
 			Expect.Call(mainShift.ShiftCategory).Return(_category1);
 			Expect.Call(mainShiftOther.ShiftCategory).Return(_category2);
@@ -235,8 +235,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 			Expect.Call(_scheduledDay.AssignmentHighZOrder()).Return(ass);
 			Expect.Call(_scheduledDayOtherCategory.AssignmentHighZOrder()).Return(assOther);
 
-			Expect.Call(ass.MainShift).Return(mainShift);
-			Expect.Call(assOther.MainShift).Return(mainShiftOther);
+			Expect.Call(ass.ToMainShift()).Return(mainShift);
+			Expect.Call(assOther.ToMainShift()).Return(mainShiftOther);
 
 			Expect.Call(mainShift.ProjectionService()).Return(projectionService);
 			Expect.Call(mainShiftOther.ProjectionService()).Return(projectionService);
@@ -277,8 +277,8 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
 			Expect.Call(_scheduledDay.AssignmentHighZOrder()).Return(ass);
 			Expect.Call(_scheduledDayOtherCategory.AssignmentHighZOrder()).Return(assOther);
 
-			Expect.Call(ass.MainShift).Return(mainShift);
-			Expect.Call(assOther.MainShift).Return(mainShiftOther);
+			Expect.Call(ass.ToMainShift()).Return(mainShift);
+			Expect.Call(assOther.ToMainShift()).Return(mainShiftOther);
 
 			Expect.Call(mainShift.ProjectionService()).Return(projectionService);
 			Expect.Call(mainShiftOther.ProjectionService()).Return(projectionService);
@@ -314,7 +314,7 @@ namespace Teleopti.Ccc.DomainTest.ResourceCalculation.GroupScheduling
             Expect.Call(_rangeScheduled.ScheduledDay(date)).Return(_scheduledDay);
             Expect.Call(_scheduledDay.SignificantPart()).Return(SchedulePartView.MainShift);
             Expect.Call(_scheduledDay.AssignmentHighZOrder()).Return(ass);
-            Expect.Call(ass.MainShift).Return(mainShift);
+            Expect.Call(ass.ToMainShift()).Return(mainShift);
             Expect.Call(mainShift.ProjectionService()).Return(projectionService);
             Expect.Call(projectionService.CreateProjection()).Return(visualLayerCollection);
             Expect.Call(visualLayerCollection.Period()).Return(period);

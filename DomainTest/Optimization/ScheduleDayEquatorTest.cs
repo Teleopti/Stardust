@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.Common;
@@ -92,7 +93,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             IScheduleDay current = schedulePartFactory.CreatePartWithMainShift();
 
             SetIdOnShiftCategories(original, current, Guid.NewGuid());
-            IMainShift newMainShift = new MainShift(original.PersonAssignmentCollection()[0].MainShift.ShiftCategory);
+            IMainShift newMainShift = new MainShift(original.PersonAssignmentCollection()[0].ShiftCategory);
             original.AddMainShift(newMainShift);
 
             Assert.IsTrue(_target.DayOffEquals(original, current));
@@ -108,7 +109,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             IScheduleDay current = schedulePartFactory.CreatePartWithMainShift();
 
             SetIdOnShiftCategories(original, current, Guid.NewGuid());
-            IMainShift newMainShift = new MainShift(current.PersonAssignmentCollection()[0].MainShift.ShiftCategory);
+            IMainShift newMainShift = new MainShift(current.PersonAssignmentCollection()[0].ShiftCategory);
             current.AddMainShift(newMainShift);
 
             Assert.IsTrue(_target.DayOffEquals(original, current));
@@ -149,15 +150,18 @@ namespace Teleopti.Ccc.DomainTest.Optimization
             IScheduleDay original = schedulePartFactory.CreatePartWithMainShift();
             IScheduleDay current = schedulePartFactory.CreatePartWithMainShift();
             IPersonAssignment personAssingment = current.PersonAssignmentCollection()[0];
-            Assert.AreEqual(2, personAssingment.MainShift.LayerCollection.Count);
+	        var category = personAssingment.ShiftCategory;
+            Assert.AreEqual(2, personAssingment.ToMainShift().LayerCollection.Count);
 
             // change order
-            ILayer<IActivity> activity1 = personAssingment.MainShift.LayerCollection[0];
-            ILayer<IActivity> activity2 = personAssingment.MainShift.LayerCollection[1];
-            personAssingment.MainShift.LayerCollection.Clear();
-            Assert.AreEqual(0, personAssingment.MainShift.LayerCollection.Count);
-            personAssingment.MainShift.LayerCollection.Add(activity2);
-            personAssingment.MainShift.LayerCollection.Add(activity1);
+            ILayer<IActivity> activity1 = personAssingment.ToMainShift().LayerCollection[0];
+            ILayer<IActivity> activity2 = personAssingment.ToMainShift().LayerCollection[1];
+            personAssingment.ClearMainShiftLayers();
+            Assert.AreEqual(0, personAssingment.MainShiftActivityLayers.Count());
+	        var mainShift = new MainShift(category);
+			mainShift.LayerCollection.Add(activity2);
+			mainShift.LayerCollection.Add(activity1);
+			personAssingment.SetMainShift(mainShift);
 
             Assert.IsTrue(_target.DayOffEquals(original, current));
             Assert.IsFalse(_target.MainShiftEquals(original, current));
@@ -174,8 +178,8 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 
             IActivity activity = ActivityFactory.CreateActivity("Hej");
             DateTimePeriod layerPeriod =
-                scheduleDay2.PersonAssignmentCollection()[0].MainShift.LayerCollection[1].Period.ChangeEndTime(TimeSpan.FromHours(1));
-            IShiftCategory category = scheduleDay1.PersonAssignmentCollection()[0].MainShift.ShiftCategory;
+                scheduleDay2.PersonAssignmentCollection()[0].ToMainShift().LayerCollection[1].Period.ChangeEndTime(TimeSpan.FromHours(1));
+            IShiftCategory category = scheduleDay1.PersonAssignmentCollection()[0].ShiftCategory;
             scheduleDay2.PersonAssignmentCollection()[0].SetMainShift(MainShiftFactory.CreateMainShift(activity, layerPeriod, category));
 
             Assert.IsTrue(_target.DayOffEquals(scheduleDay1, scheduleDay2));
@@ -187,9 +191,9 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         {
             SchedulePartFactoryForDomain schedulePartFactory = CreateSchedulePartFactory();
             IScheduleDay original = schedulePartFactory.CreatePartWithMainShift();
-            original.PersonAssignmentCollection()[0].MainShift.ShiftCategory.SetId(Guid.NewGuid());
+            original.PersonAssignmentCollection()[0].ShiftCategory.SetId(Guid.NewGuid());
             IScheduleDay current = schedulePartFactory.CreatePartWithMainShift();
-            current.PersonAssignmentCollection()[0].MainShift.ShiftCategory.SetId(Guid.NewGuid());
+            current.PersonAssignmentCollection()[0].ShiftCategory.SetId(Guid.NewGuid());
 
             Assert.IsTrue(_target.DayOffEquals(original, current));
             Assert.IsFalse(_target.MainShiftEquals(original, current));
@@ -389,11 +393,11 @@ namespace Teleopti.Ccc.DomainTest.Optimization
         {
             foreach (IPersonAssignment assignment in scheduleDay1.PersonAssignmentCollection())
             {
-                ((IAggregateRoot)assignment.MainShift.ShiftCategory).SetId(shiftCategoryId);
+                assignment.ShiftCategory.SetId(shiftCategoryId);
             }
             foreach (IPersonAssignment assignment in scheduleDay2.PersonAssignmentCollection())
             {
-                ((IAggregateRoot)assignment.MainShift.ShiftCategory).SetId(shiftCategoryId);
+                assignment.ShiftCategory.SetId(shiftCategoryId);
             }
         }
 
@@ -414,10 +418,10 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 		{
 			var id1 = Guid.NewGuid();
 			var id2 = Guid.NewGuid();
-			scheduleDay1.PersonAssignmentCollection()[0].MainShift.LayerCollection[0].Payload.SetId(id1);
-			scheduleDay2.PersonAssignmentCollection()[0].MainShift.LayerCollection[0].Payload.SetId(id1);
-			scheduleDay1.PersonAssignmentCollection()[0].MainShift.LayerCollection[1].Payload.SetId(id2);
-			scheduleDay2.PersonAssignmentCollection()[0].MainShift.LayerCollection[1].Payload.SetId(id2);
+			scheduleDay1.PersonAssignmentCollection()[0].ToMainShift().LayerCollection[0].Payload.SetId(id1);
+			scheduleDay2.PersonAssignmentCollection()[0].ToMainShift().LayerCollection[0].Payload.SetId(id1);
+			scheduleDay1.PersonAssignmentCollection()[0].ToMainShift().LayerCollection[1].Payload.SetId(id2);
+			scheduleDay2.PersonAssignmentCollection()[0].ToMainShift().LayerCollection[1].Payload.SetId(id2);
 		}
     }
 }

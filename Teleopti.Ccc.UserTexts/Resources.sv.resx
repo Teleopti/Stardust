@@ -10864,7 +10864,7 @@ Licensen heter "{3}" och har dessa tillval aktiverade:
     <value>Snabbprognosen kommer att startas som ett bakgrundsjobb när denna guide avslutas. Titta i jobbhistoriken för att se status. </value>
   </data>
   <data name="CannotDisplayScheduleWhenShiftTradeStatusIsNew" xml:space="preserve">
-    <value>Kan inte visa schema när status på skiftbytesförfrågan är ny eller godkänd. </value>
+    <value>Kan inte visa schema när status på skiftbytesförfrågan är ny, nekad eller godkänd. </value>
   </data>
   <data name="NewTemplateName" xml:space="preserve">
     <value>Nytt namn på mall</value>
@@ -10992,5 +10992,14 @@ Minska komplexiteten för att kunna använda dessa skift.</value>
   </data>
   <data name="Poor" xml:space="preserve">
     <value>Dålig</value>
+  </data>
+  <data name="ConfirmRemoval" xml:space="preserve">
+    <value>Bekräfta borttagning</value>
+  </data>
+  <data name="CollectingData" xml:space="preserve">
+    <value>Laddar data...</value>
+  </data>
+  <data name="Improved" xml:space="preserve">
+    <value>Förbättrat</value>
   </data>
 </root>

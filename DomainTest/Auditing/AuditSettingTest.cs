@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System.Linq;
+using NUnit.Framework;
 using Rhino.Mocks;
 using SharpTestsEx;
 using Teleopti.Ccc.Domain.Auditing;
@@ -51,7 +52,7 @@ namespace Teleopti.Ccc.DomainTest.Auditing
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, new Person(), 
 			                                                               new DateTimePeriod(2000, 1, 1, 2000, 1, 12));
 			target.ShouldBeAudited(pa).Should().Be.True();
-			target.ShouldBeAudited(pa.MainShift.LayerCollection[0]).Should().Be.True();
+			target.ShouldBeAudited(pa.MainShiftActivityLayers.First()).Should().Be.True();
 		}
 
 		[Test]
@@ -63,7 +64,7 @@ namespace Teleopti.Ccc.DomainTest.Auditing
 			var pa = PersonAssignmentFactory.CreateAssignmentWithMainShift(scenario, new Person(),
 																								new DateTimePeriod(2000, 1, 1, 2000, 1, 12));
 			target.ShouldBeAudited(pa).Should().Be.False();
-			target.ShouldBeAudited(pa.MainShift.LayerCollection[0]).Should().Be.False();
+			target.ShouldBeAudited(pa.ToMainShift().LayerCollection[0]).Should().Be.False();
 		}
 
 		[Test]

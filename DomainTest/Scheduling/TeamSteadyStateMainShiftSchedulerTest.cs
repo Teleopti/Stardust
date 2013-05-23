@@ -126,7 +126,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 				Expect.Call(_scheduleRange1.ScheduledDay(_dateOnly)).Return(_scheduleDay1).Repeat.Twice();
 				Expect.Call(_scheduleDay1.AssignmentHighZOrder()).Return(_personAssignment1);
 				Expect.Call(_scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
-				Expect.Call(_personAssignment1.MainShift).Return(_mainShift1).Repeat.Twice();
+				Expect.Call(_personAssignment1.ToMainShift()).Return(_mainShift1).Repeat.Twice();
 				Expect.Call(_scheduleDictionary[_person2]).Return(_scheduleRange2);
 				Expect.Call(_scheduleRange2.ScheduledDay(_dateOnly)).Return(_scheduleDay2);
 				Expect.Call(_mainShift1.NoneEntityClone()).Return(_mainShift2).Repeat.Twice();
@@ -215,7 +215,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 				Expect.Call(_scheduleRange1.ScheduledDay(_dateOnly)).Return(_scheduleDay1).Repeat.Twice();	
 				Expect.Call(_scheduleDay1.AssignmentHighZOrder()).Return(_personAssignment1);
 				Expect.Call(_scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
-				Expect.Call(_personAssignment1.MainShift).Return(_mainShift1).Repeat.Twice();
+				Expect.Call(_personAssignment1.ToMainShift()).Return(_mainShift1).Repeat.Twice();
 				Expect.Call(_scheduleDictionary[_person2]).Return(_scheduleRange2);
 				Expect.Call(_scheduleRange2.ScheduledDay(_dateOnly)).Return(_scheduleDay2);
 				Expect.Call(_mainShift1.NoneEntityClone()).Return(_mainShift2).Repeat.Twice();
@@ -249,7 +249,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 				Expect.Call(_scheduleRange1.ScheduledDay(_dateOnly)).Return(_scheduleDay1).Repeat.Twice();
 				Expect.Call(_scheduleDay1.AssignmentHighZOrder()).Return(_personAssignment1);
 				Expect.Call(_scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
-				Expect.Call(_personAssignment1.MainShift).Return(_mainShift1).Repeat.Twice();
+				Expect.Call(_personAssignment1.ToMainShift()).Return(_mainShift1).Repeat.Twice();
 				Expect.Call(_scheduleDictionary[_person2]).Return(_scheduleRange2);
 				Expect.Call(_scheduleRange2.ScheduledDay(_dateOnly)).Return(_scheduleDay2);
 				Expect.Call(_mainShift1.NoneEntityClone()).Return(_mainShift2).Repeat.Twice();
@@ -304,7 +304,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 				Expect.Call(_scheduleRange1.ScheduledDay(_dateOnly)).Return(_scheduleDay1).Repeat.Twice();
 				Expect.Call(_scheduleDay1.AssignmentHighZOrder()).Return(_personAssignment1);
 				Expect.Call(_scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
-				Expect.Call(_personAssignment1.MainShift).Return(_mainShift1).Repeat.AtLeastOnce();
+				Expect.Call(_personAssignment1.ToMainShift()).Return(_mainShift1).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleDictionary[_person2]).Return(_scheduleRange2);
 				Expect.Call(_scheduleRange2.ScheduledDay(_dateOnly)).Return(_scheduleDay2);
 				Expect.Call(_mainShift1.NoneEntityClone()).Return(_mainShift2).Repeat.AtLeastOnce();
@@ -334,7 +334,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 				Expect.Call(_scheduleRange1.ScheduledDay(_dateOnly)).Return(_scheduleDay1).Repeat.Twice();
 				Expect.Call(_scheduleDay1.AssignmentHighZOrder()).Return(_personAssignment1);
 				Expect.Call(_scheduleDay1.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
-				Expect.Call(_personAssignment1.MainShift).Return(_mainShift1).Repeat.AtLeastOnce();
+				Expect.Call(_personAssignment1.ToMainShift()).Return(_mainShift1).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleDictionary[_person2]).Return(_scheduleRange2);
 				Expect.Call(_scheduleRange2.ScheduledDay(_dateOnly)).Return(_scheduleDay2);
 				Expect.Call(_mainShift1.NoneEntityClone()).Return(_mainShift2).Repeat.AtLeastOnce();
@@ -376,7 +376,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling
 				Expect.Call(_scheduleDay2.SignificantPart()).Return(SchedulePartView.MainShift).Repeat.AtLeastOnce();
 				Expect.Call(_scheduleDay2.SignificantPartForDisplay()).Return(SchedulePartView.MainShift);
 
-				Expect.Call(_personAssignment1.MainShift).Return(_mainShift1);
+				Expect.Call(_personAssignment1.ToMainShift()).Return(_mainShift1);
 				Expect.Call(_mainShift1.NoneEntityClone()).Return(_mainShift2);
 
 				Expect.Call(_coherentChecker.CheckCoherent(_matrixes, _dateOnly, _scheduleDictionary, _scheduleDay1, _groupPerson.GroupMembers)).Return(_scheduleDay1);

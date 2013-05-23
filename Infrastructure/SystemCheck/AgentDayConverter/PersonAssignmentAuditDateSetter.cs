@@ -5,7 +5,7 @@
 		protected override string NumberOfNotConvertedCommand
 		{
 			get { return "select COUNT(*) as cnt from [Auditing].PersonAssignment_AUD " +
-									 "where TheDate=@baseDate " +
+									 "where [Date]=@baseDate " +
 			             "and Person=@personId"; }
 		}
 
@@ -13,10 +13,10 @@
 		{
 			get
 			{
-				return "select pa.Id, pa.Minimum, pa.TheDate " +
+				return "select pa.Id, pa.Minimum, pa.Date " +
 				       "from [Auditing].PersonAssignment_AUD pa " +
 				       "inner join Person p on pa.Person = p.id " +
-							 "where pa.TheDate=@baseDate " +
+							 "where pa.[Date]=@baseDate " +
 				       "and p.Id=@personId";
 			}
 		}
@@ -26,8 +26,8 @@
 			get
 			{
 				return "update [Auditing].PersonAssignment_AUD " +
-				       "set TheDate = @newDate, version=version+1 " +
-				       "where Id=@id";
+								"set [Date]=@newDate, version=version+1 " +
+								"where Id=@id";
 			}
 		}
 	}

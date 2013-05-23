@@ -309,7 +309,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
 			Expect.Call(_originalStateContainerForTagChange.OldPeriodDaysState).Return(_dic).Repeat.Any();
 			Expect.Call(_scheduleDay1.AssignmentHighZOrder()).Return(_personAssignment).Repeat.Any();
 			Expect.Call(_scheduleDay2.AssignmentHighZOrder()).Return(_personAssignment).Repeat.Any();
-			Expect.Call(_personAssignment.MainShift).Return(MainShiftFactory.CreateMainShiftWithThreeActivityLayers()).
+			Expect.Call(_personAssignment.ToMainShift()).Return(MainShiftFactory.CreateMainShiftWithThreeActivityLayers()).
 				Repeat.Any();
 			Expect.Call(
 				() => _mainShiftOptimizeActivitySpecificationSetter.SetSpecification(null, null, null, DateOnly.MinValue))

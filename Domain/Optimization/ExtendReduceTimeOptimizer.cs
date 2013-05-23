@@ -194,7 +194,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 			IScheduleDay origScheduleDay = _originalStateContainerForTagChange.OldPeriodDaysState[day];
 			IPersonAssignment personAssignment = origScheduleDay.AssignmentHighZOrder();
-			IMainShift originalShift = personAssignment.MainShift;
+			IMainShift originalShift = personAssignment.ToMainShift();
 			_mainShiftOptimizeActivitySpecificationSetter.SetSpecification(schedulingOptions, _optimizerPreferences, originalShift, day);
 
 			if (!_scheduleServiceForFlexibleAgents.SchedulePersonOnDay(scheduleDay.DaySchedulePart(), schedulingOptions, effectiveRestriction, _resourceCalculateDelayer, null, _rollbackService))

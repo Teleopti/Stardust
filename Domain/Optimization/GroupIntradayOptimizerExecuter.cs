@@ -76,7 +76,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 
 				DateOnly shiftDate = scheduleDay.DateOnlyAsPeriod.DateOnly;
 				_mainShiftOptimizeActivitySpecificationSetter.SetSpecification(schedulingOptions, _optimizerPreferences,
-																			   scheduleDay.AssignmentHighZOrder().MainShift,
+																			   scheduleDay.AssignmentHighZOrder().ToMainShift(),
 																			   shiftDate);
 
 				var success = _groupMatrixHelper.ScheduleSinglePerson(shiftDate, scheduleDay.Person,

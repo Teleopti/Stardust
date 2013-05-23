@@ -26,18 +26,18 @@ namespace Teleopti.Ccc.Domain.WorkflowControl.ShiftTrades
 				var personMeetingsTo = shiftTradeSwapDetail.SchedulePartTo.PersonMeetingCollection();
 				if(personAssignmentTo == null && personMeetingsTo.Count == 0) continue;
 
-				if(personAssignmentFrom != null && personAssignmentFrom.MainShift != null)
+				if(personAssignmentFrom != null && personAssignmentFrom.ToMainShift() != null)
 				{
-					var periodFrom = personAssignmentFrom.MainShift.LayerCollection.Period();
+					var periodFrom = personAssignmentFrom.ToMainShift().LayerCollection.Period();
 					if (!periodFrom.HasValue) continue;
 
 					if (!CheckCover(personMeetingsTo, periodFrom.Value))
 						return false;
 				}
 
-				if(personAssignmentTo != null && personAssignmentTo.MainShift != null)
+				if(personAssignmentTo != null && personAssignmentTo.ToMainShift() != null)
 				{
-					var periodTo = personAssignmentTo.MainShift.LayerCollection.Period();
+					var periodTo = personAssignmentTo.ToMainShift().LayerCollection.Period();
 					if (!periodTo.HasValue) continue;
 
 					if (!CheckCover(personMeetingsFrom, periodTo.Value))

@@ -161,9 +161,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\packages\Rhino.ServiceBus.Autofac.3.0.2\lib\4.0\Rhino.ServiceBus.Autofac.dll</HintPath>
     </Reference>
-    <Reference Include="Rhino.ServiceBus.SqlQueues, Version=1.0.1.5, Culture=neutral, PublicKeyToken=345d633c75812f60, processorArchitecture=MSIL">
+    <Reference Include="Rhino.ServiceBus.SqlQueues, Version=1.0.1.6, Culture=neutral, PublicKeyToken=345d633c75812f60, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\packages\Rhino.ServiceBus.SqlQueues.1.0.1.5\lib\net40\Rhino.ServiceBus.SqlQueues.dll</HintPath>
+      <HintPath>..\..\packages\Rhino.ServiceBus.SqlQueues.1.0.1.6\lib\net40\Rhino.ServiceBus.SqlQueues.dll</HintPath>
     </Reference>
     <Reference Include="System.Net.Http, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.Net.Http.2.0.20710.0\lib\net40\System.Net.Http.dll</HintPath>
@@ -646,6 +646,7 @@
     <Content Include="Areas\Anywhere\Content\Templates\error.html" />
     <Content Include="Areas\Anywhere\Content\Templates\personschedule\view.html" />
     <Content Include="Areas\MyTime\Content\Css\StudentAvailability.css" />
+    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Preference.MustHaveCountViewModel.Tests.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.AddShiftTradeRequest.js" />
     <Content Include="Areas\MyTime\Content\Images\ajax-loader-small-f8f8f8.gif" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Request.ShiftTradeRequestDetailViewModel.js" />
@@ -681,7 +682,6 @@
     <Content Include="Areas\MyTime\Content\Css\TooltipCustom.css" />
     <Content Include="Areas\MyTime\Content\Css\Request.css" />
     <Content Include="Areas\MyTime\Content\Css\Settings.css" />
-    <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Preference.MustHaveCountViewModel.Tests.js" />
     <Content Include="Areas\MyTime\Content\Images\header_bg_2x.png" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Preference.MustHaveCountViewModel.js" />
     <Content Include="Areas\MyTime\Content\Scripts\Teleopti.MyTimeWeb.Preference.PreferencesAndScheduleViewModel.js" />

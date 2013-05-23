@@ -30,16 +30,25 @@
 							not-null="true"/>
 		<!--IEntity-->
 		<property name="Date" 
-					 column="TheDate"
+					 column="`Date`"
 					 access="property"
 					 type="Teleopti.Ccc.Infrastructure.NHibernateConfiguration.DateOnlyMappingType, Teleopti.Ccc.Infrastructure"
 					 not-null="true" 
 					 insert="true"
 					 update="false"/>
 		
-		<one-to-one name="MainShift"
-					 class="MainShift"
-					 cascade="all-delete-orphan"/>
+		<many-to-one name="ShiftCategory"
+						class="Teleopti.Ccc.Domain.Scheduling.ShiftCategory"
+						foreign-key="FK_PersonAssignment_ShiftCategory"
+						access="property"/>
+
+		<list name="MainShiftActivityLayers"
+		  cascade="all-delete-orphan"
+		  inverse="true">
+			<key column="Parent" on-delete="cascade" />
+			<index type="Byte" column ="OrderIndex" />
+			<one-to-many class="MainShiftActivityLayer"/>
+		</list>
 
 		<list name="PersonalShiftCollection"
 				cascade="all-delete-orphan"

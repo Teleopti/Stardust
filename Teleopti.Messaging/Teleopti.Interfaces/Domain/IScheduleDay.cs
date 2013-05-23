@@ -83,6 +83,8 @@ namespace Teleopti.Interfaces.Domain
         ///<returns></returns>
         SchedulePartView SignificantPartForDisplay();
 
+	    IEditorShift GetEditorShift();
+
         #region Shouldn't be here!
         /// <summary>
         /// Delete full day absence

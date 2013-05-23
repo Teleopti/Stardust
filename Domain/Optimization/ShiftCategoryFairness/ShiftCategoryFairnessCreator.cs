@@ -24,7 +24,7 @@ namespace Teleopti.Ccc.Domain.Optimization.ShiftCategoryFairness
                     continue;
 
                 IPersonAssignment assignment = scheduleDay.AssignmentHighZOrder();
-                IShiftCategory shiftCategory = assignment.MainShift.ShiftCategory;
+                IShiftCategory shiftCategory = assignment.ShiftCategory;
 
                 if (!shiftDic.ContainsKey(shiftCategory))
                     shiftDic.Add(shiftCategory, 0);

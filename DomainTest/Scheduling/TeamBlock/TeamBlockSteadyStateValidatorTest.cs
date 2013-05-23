@@ -239,7 +239,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
                 IVisualLayerCollection visualLayerCollection = _mock.StrictMock<IVisualLayerCollection>();
 
                 Expect.Call(_tomorrowScheduleDay  .AssignmentHighZOrder()).Return(null);
-                Expect.Call(personAssignment.MainShift).Return(mainShift).Repeat.AtLeastOnce();
+                Expect.Call(personAssignment.ToMainShift()).Return(mainShift).Repeat.AtLeastOnce();
                 Expect.Call(mainShift.ProjectionService()).Return(projectionService).Repeat.AtLeastOnce();
                 Expect.Call(projectionService.CreateProjection()).Return(visualLayerCollection).Repeat.AtLeastOnce();
                 Expect.Call(visualLayerCollection.Period()).Return(new DateTimePeriod(now, now.AddHours(1))).Repeat.AtLeastOnce();
@@ -373,7 +373,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             Expect.Call(scheduleDay.PersonAssignmentCollection()).Return(personAssignmentList);
             Expect.Call(scheduleDay.AssignmentHighZOrder()).Return(pA).Repeat.AtLeastOnce();
             
-            Expect.Call(pA.MainShift).Return(mainShift).Repeat.AtLeastOnce();
+            Expect.Call(pA.ToMainShift()).Return(mainShift).Repeat.AtLeastOnce();
             Expect.Call(mainShift.ShiftCategory).Return(shiftCategory).Repeat.AtLeastOnce();
             Expect.Call(shiftCategory.Id).Return(new Guid()).Repeat.AtLeastOnce();
             Expect.Call(mainShift.LayerCollection).Return(new LayerCollection<IActivity>()).Repeat.AtLeastOnce();
@@ -387,7 +387,7 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.TeamBlock
             IVisualLayerCollection visualLayerCollection = _mock.StrictMock<IVisualLayerCollection>();
 
             Expect.Call(scheduleDay.AssignmentHighZOrder()).Return(personAssignment).Repeat.AtLeastOnce();
-            Expect.Call(personAssignment.MainShift).Return(mainShift).Repeat.AtLeastOnce();
+            Expect.Call(personAssignment.ToMainShift()).Return(mainShift).Repeat.AtLeastOnce();
             Expect.Call(mainShift.ProjectionService()).Return(projectionService).Repeat.AtLeastOnce();
             Expect.Call(projectionService.CreateProjection()).Return(visualLayerCollection).Repeat.AtLeastOnce();
             Expect.Call(visualLayerCollection.Period()).Return(new DateTimePeriod(startTime, startTime.AddHours(1))).Repeat.AtLeastOnce();

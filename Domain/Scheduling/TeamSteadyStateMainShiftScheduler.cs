@@ -91,7 +91,7 @@ namespace Teleopti.Ccc.Domain.Scheduling
                 if (personAssignmentSource == null)
                     return false;
 
-                var mainShift = personAssignmentSource.MainShift;
+                var mainShift = personAssignmentSource.ToMainShift();
                 var scheduleRange = scheduleDictionary[groupMember];
                 var scheduleDay = scheduleRange.ScheduledDay(dateOnly);
                 var cloneMainShift = mainShift.NoneEntityClone() as IMainShift;

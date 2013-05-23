@@ -50,8 +50,8 @@ namespace Teleopti.Analytics.Etl.Transformer.ScheduleThreading
                 IPersonAssignment personAssignment =
                     ScheduleTransformer.GetPersonAssignmentForLayer(scheduleProjection.SchedulePart, layer);
                 row["activity_code"] = activity.Id;
-                if (personAssignment.MainShift != null && personAssignment.MainShift.ShiftCategory.Id != null)
-                    row["shift_category_code"] = personAssignment.MainShift.ShiftCategory.Id;
+								if (personAssignment.ShiftCategory != null && personAssignment.ShiftCategory.Id != null)
+									row["shift_category_code"] = personAssignment.ShiftCategory.Id;
                 else
                     row["shift_category_code"] = DBNull.Value;
             }

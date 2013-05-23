@@ -208,7 +208,7 @@ namespace Teleopti.Ccc.Domain.Optimization
 			foreach (var scheduleDay in removedDays)
 			{
 				DateOnly date = scheduleDay.DateOnlyAsPeriod.DateOnly;
-				_mainShiftOptimizeActivitySpecificationSetter.SetSpecification(schedulingOptions, optimizationPreferences, scheduleDay.AssignmentHighZOrder().MainShift, date);
+				_mainShiftOptimizeActivitySpecificationSetter.SetSpecification(schedulingOptions, optimizationPreferences, scheduleDay.AssignmentHighZOrder().ToMainShift(), date);
 				if (!ScheduleSinglePerson(date, scheduleDay.Person, groupSchedulingService, schedulePartModifyAndRollbackService, schedulingOptions, groupPersonBuilderForOptimization, allMatrixes))
 					return false;
 			}

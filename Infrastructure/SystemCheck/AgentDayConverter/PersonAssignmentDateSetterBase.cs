@@ -40,7 +40,7 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
 				using (var command = new SqlCommand(UpdateAssignmentDateCommand, transaction.Connection, transaction))
 				{
 					command.CommandType = CommandType.Text;
-					command.Parameters.AddWithValue("@newDate", string.Format("{0:s}", row["TheDate"]));
+					command.Parameters.AddWithValue("@newDate", string.Format("{0:s}", row["Date"]));
 					command.Parameters.AddWithValue("@id", row["Id"]);
 					command.ExecuteNonQuery();
 				}
@@ -53,7 +53,7 @@ namespace Teleopti.Ccc.Infrastructure.SystemCheck.AgentDayConverter
 			{
 				var utcTime = new DateTime(((DateTime)row["Minimum"]).Ticks, DateTimeKind.Utc);
 				var localDate = timeZoneInfo.SafeConvertTimeToUtc(utcTime);
-				row["TheDate"] = string.Format("{0:s}", localDate.Date);
+				row["Date"] = string.Format("{0:s}", localDate.Date);
 			}
 		}
 

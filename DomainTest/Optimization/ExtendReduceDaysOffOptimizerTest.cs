@@ -115,7 +115,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                                                              new WorkTimeLimitation(), null, null, null,
                                                              new List<IActivityRestriction>());
             _dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(DateOnly.MinValue, (TimeZoneInfo.Utc));
-			var useCategory = new PossibleStartEndCategory { ShiftCategory = _personAssignment.MainShift.ShiftCategory };
+			var useCategory = new PossibleStartEndCategory { ShiftCategory = _personAssignment.ShiftCategory };
             using (_mocks.Record())
             {
                 commonMocks();
@@ -186,7 +186,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                                                              new WorkTimeLimitation(), null, null, null,
                                                              new List<IActivityRestriction>());
             _dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(DateOnly.MinValue, (TimeZoneInfo.Utc));
-			var useCategory = new PossibleStartEndCategory { ShiftCategory = _personAssignment.MainShift.ShiftCategory };
+			var useCategory = new PossibleStartEndCategory { ShiftCategory = _personAssignment.ShiftCategory };
             using (_mocks.Record())
             {
                 commonMocks();
@@ -247,7 +247,7 @@ namespace Teleopti.Ccc.DomainTest.Optimization
                                                              new WorkTimeLimitation(), null, null, null,
                                                              new List<IActivityRestriction>());
             _dateOnlyAsDateTimePeriod = new DateOnlyAsDateTimePeriod(DateOnly.MinValue, (TimeZoneInfo.Utc));
-			var useCategory = new PossibleStartEndCategory { ShiftCategory = _personAssignment.MainShift.ShiftCategory };
+			var useCategory = new PossibleStartEndCategory { ShiftCategory = _personAssignment.ShiftCategory };
             using (_mocks.Record())
             {
                 commonMocks();
