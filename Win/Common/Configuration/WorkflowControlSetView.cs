@@ -682,7 +682,6 @@ namespace Teleopti.Ccc.Win.Common.Configuration
 			var minPeriod = new DateOnlyPeriod(new DateOnly(DateHelper.MinSmallDateTime), 
 											   new DateOnly(DateHelper.MaxSmallDateTime));
 			dateTimePickerAdvPublishedTo.SetAvailableTimeSpan(minPeriod);
-			dateTimePickerAdvPublishedTo.SetAvailableTimeSpan(minPeriod);
 			
             dateSelectionFromToIsOpen.SetCulture(cultureInfo);
             dateSelectionFromToPreferencePeriod.SetCulture(cultureInfo);
