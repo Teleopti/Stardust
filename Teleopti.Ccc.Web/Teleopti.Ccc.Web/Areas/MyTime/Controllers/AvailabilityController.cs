@@ -14,13 +14,13 @@ namespace Teleopti.Ccc.Web.Areas.MyTime.Controllers
 {
 	[OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
 	[ApplicationFunction(DefinedRaptorApplicationFunctionPaths.StudentAvailability)]
-	public class StudentAvailabilityController : Controller
+	public class AvailabilityController : Controller
 	{
 		private readonly IStudentAvailabilityViewModelFactory _viewModelFactory;
 		private readonly IVirtualSchedulePeriodProvider _virtualSchedulePeriodProvider;
 		private readonly IStudentAvailabilityPersister _studentAvailabilityPersister;
 
-		public StudentAvailabilityController(IStudentAvailabilityViewModelFactory viewModelFactory,
+		public AvailabilityController(IStudentAvailabilityViewModelFactory viewModelFactory,
 														IVirtualSchedulePeriodProvider virtualSchedulePeriodProvider,
 														IStudentAvailabilityPersister studentAvailabilityPersister)
 		{

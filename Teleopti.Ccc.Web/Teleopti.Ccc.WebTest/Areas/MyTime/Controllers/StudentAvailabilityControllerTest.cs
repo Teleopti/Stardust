@@ -22,7 +22,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			var viewModelFactory = MockRepository.GenerateMock<IStudentAvailabilityViewModelFactory>();
 			var virtualSchedulePeriodProvider = MockRepository.GenerateMock<IVirtualSchedulePeriodProvider>();
-			var target = new StudentAvailabilityController(viewModelFactory, virtualSchedulePeriodProvider, null);
+			var target = new AvailabilityController(viewModelFactory, virtualSchedulePeriodProvider, null);
 
 			viewModelFactory.Stub(x => x.CreateViewModel(DateOnly.Today)).Return(new StudentAvailabilityViewModel());
 
@@ -38,7 +38,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			var viewModelFactory = MockRepository.GenerateMock<IStudentAvailabilityViewModelFactory>();
 			var virtualSchedulePeriodProvider = MockRepository.GenerateMock<IVirtualSchedulePeriodProvider>();
-			var target = new StudentAvailabilityController(viewModelFactory, virtualSchedulePeriodProvider, null);
+			var target = new AvailabilityController(viewModelFactory, virtualSchedulePeriodProvider, null);
 			var defaultDate = DateOnly.Today.AddDays(23);
 
 			virtualSchedulePeriodProvider.Stub(x => x.CalculateStudentAvailabilityDefaultDate()).Return(defaultDate);
@@ -52,7 +52,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldReturnNoSchedulePeriodPartialWhenNoSchedulePeriod()
 		{
 			var virtualSchedulePeriodProvider = MockRepository.GenerateMock<IVirtualSchedulePeriodProvider>();
-			var target = new StudentAvailabilityController(null, virtualSchedulePeriodProvider, null);
+			var target = new AvailabilityController(null, virtualSchedulePeriodProvider, null);
 
 			virtualSchedulePeriodProvider.Stub(x => x.MissingSchedulePeriod()).Return(true);
 
@@ -65,7 +65,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldReturnStudentAvailabilitiesAndSchedules()
 		{
 			var viewModelFactory = MockRepository.GenerateMock<IStudentAvailabilityViewModelFactory>();
-			var target = new StudentAvailabilityController(viewModelFactory, null, null);
+			var target = new AvailabilityController(viewModelFactory, null, null);
 			var list = new List<StudentAvailabilityAndScheduleDayViewModel>();
 
 			viewModelFactory.Stub(x => x.CreateStudentAvailabilityAndSchedulesViewModels(DateOnly.Today, DateOnly.Today.AddDays(1))).Return(list);
@@ -80,7 +80,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		{
 			var viewModelFactory = MockRepository.GenerateMock<IStudentAvailabilityViewModelFactory>();
 
-			var target = new StudentAvailabilityController(viewModelFactory, null, null);
+			var target = new AvailabilityController(viewModelFactory, null, null);
 			var model = new StudentAvailabilityDayViewModel();
 
 			viewModelFactory.Stub(x => x.CreateDayViewModel(DateOnly.Today)).Return(model);
@@ -97,7 +97,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 			var form = new StudentAvailabilityDayInput();
 			var resultData = new StudentAvailabilityDayViewModel();
 
-			var target = new StudentAvailabilityController(null, null, studentAvailabilityPersister);
+			var target = new AvailabilityController(null, null, studentAvailabilityPersister);
 
 			studentAvailabilityPersister.Stub(x => x.Persist(form)).Return(resultData);
 
@@ -110,7 +110,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), Test]
 		public void ShouldReturnErrorMessageOnInvalidModel()
 		{
-			var target = new StudentAvailabilityController(null, null, null);
+			var target = new AvailabilityController(null, null, null);
 			const string message = "Test model validation error";
 
 			target.ModelState.AddModelError("Test", message);
@@ -125,7 +125,7 @@ namespace Teleopti.Ccc.WebTest.Areas.MyTime.Controllers
 		public void ShouldDeleteStudentAvailability()
 		{
 			var studentAvailabilityPersister = MockRepository.GenerateMock<IStudentAvailabilityPersister>();
-			var target = new StudentAvailabilityController(null, null, studentAvailabilityPersister);
+			var target = new AvailabilityController(null, null, studentAvailabilityPersister);
 			var resultData = new StudentAvailabilityDayViewModel();
 
 			studentAvailabilityPersister.Stub(x => x.Delete(DateOnly.Today)).Return(resultData);

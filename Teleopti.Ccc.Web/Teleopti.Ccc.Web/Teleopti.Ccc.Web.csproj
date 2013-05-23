@@ -562,7 +562,7 @@
     <Compile Include="Filters\ApplicationFunctionAttribute.cs" />
     <Compile Include="Areas\MyTime\Controllers\PortalController.cs" />
     <Compile Include="Areas\MyTime\Controllers\ScheduleController.cs" />
-    <Compile Include="Areas\MyTime\Controllers\StudentAvailabilityController.cs" />
+    <Compile Include="Areas\MyTime\Controllers\AvailabilityController.cs" />
     <Compile Include="Core\ErrorMessageProvider.cs" />
     <Compile Include="Core\IErrorMessageProvider.cs" />
     <Compile Include="Areas\MyTime\Core\JsonSerializationExtensions.cs" />
@@ -1031,10 +1031,10 @@
     <Content Include="Areas\MyTime\Views\Portal\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Areas\MyTime\Views\StudentAvailability\StudentAvailabilityPartial.cshtml" />
+    <Content Include="Areas\MyTime\Views\Availability\StudentAvailabilityPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Areas\MyTime\Views\StudentAvailability\NoSchedulePeriodPartial.cshtml" />
+    <Content Include="Areas\MyTime\Views\Availability\NoSchedulePeriodPartial.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\MyTime\Views\Preference\PreferencePartial.cshtml" />
