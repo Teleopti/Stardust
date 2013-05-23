@@ -951,7 +951,6 @@
     <Compile Include="Forecasting\SkillTypePhoneTest.cs" />
     <Compile Include="Forecasting\QueueSourceTest.cs" />
     <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="Common\LayerSorterTest.cs" />
     <Compile Include="Helper\DateHelperTest.cs" />
     <Compile Include="Helper\PerformanceOutputTest.cs" />
     <Compile Include="Helper\SkillDayStaffHelperTest.cs" />
