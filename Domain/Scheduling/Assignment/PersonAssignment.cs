@@ -134,15 +134,14 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 			ShiftCategory = mainShift.ShiftCategory;
 		}
 
-		public virtual void SetMainShiftLayers(IEnumerable<IActivityLayer> activityLayers, IShiftCategory shiftCategory)
+		public virtual void SetMainShiftLayers(IEnumerable<IMainShiftActivityLayer> activityLayers, IShiftCategory shiftCategory)
 		{
-			InParameter.NotNull("shiftCategory", shiftCategory); //for now
-
+			//fix nicer later - layer design is messed up
 			ClearMainShiftLayers();
 			activityLayers.ForEach(layer =>
 			{
-				layer.SetParent(this);
-				_mainShiftActivityLayers.Add((IMainShiftActivityLayer)layer);
+				((IAggregateEntity)layer).SetParent(this);
+				_mainShiftActivityLayers.Add(layer);
 			});
 			ShiftCategory = shiftCategory;
 		}
