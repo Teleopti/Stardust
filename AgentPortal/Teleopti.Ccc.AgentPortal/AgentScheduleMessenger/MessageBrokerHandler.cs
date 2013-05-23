@@ -75,7 +75,6 @@ namespace Teleopti.Ccc.AgentPortal.AgentScheduleMessenger
                 {
                     StateHolder.Instance.MessageBroker.UnregisterEventSubscription(OnEventMessageHandler);
                     StateHolder.Instance.MessageBroker.UnregisterEventSubscription(OnEventMessageHandler);
-                    StateHolder.Instance.MessageBroker.UnregisterEventSubscription(OnEventMessageHandler);
                 }
                 catch (RemotingException exp)
                 {
@@ -93,17 +92,10 @@ namespace Teleopti.Ccc.AgentPortal.AgentScheduleMessenger
                 try
                 {
                 	var referenceId = StateHolder.Instance.State.SessionScopeData.LoggedOnPerson.Id.GetValueOrDefault();
-                	var workflowControlSetId = Guid.Empty;
-					if (StateHolder.Instance.State.SessionScopeData.LoggedOnPerson.WorkflowControlSet!=null)
-					{
-						workflowControlSetId = StateHolder.Instance.State.SessionScopeData.LoggedOnPerson.WorkflowControlSet.Id.GetValueOrDefault();
-					}
-
                 	var businessUnitId = StateHolder.Instance.State.SessionScopeData.BusinessUnit.Id.GetValueOrDefault();
                 	var datasource = StateHolder.Instance.State.SessionScopeData.DataSource.Name;
 					StateHolder.Instance.MessageBroker.RegisterEventSubscription(datasource,businessUnitId, OnEventMessageHandler, referenceId, typeof(IPerson), typeof(IScheduleChangedInDefaultScenario));
 					StateHolder.Instance.MessageBroker.RegisterEventSubscription(datasource,businessUnitId, OnEventMessageHandler, referenceId, typeof(IPerson), typeof(IPushMessageDialogue));
-					StateHolder.Instance.MessageBroker.RegisterEventSubscription(datasource,businessUnitId, OnEventMessageHandler, workflowControlSetId, typeof(IWorkflowControlSet));
                 }
                 catch (RemotingException e)
                 {
@@ -116,12 +108,6 @@ namespace Teleopti.Ccc.AgentPortal.AgentScheduleMessenger
         //Checks if the message affects the schedule of the ASM
         private static bool CheckScheduleMessage(EventMessageArgs eventMessage)
         {
-			if (typeof(IWorkflowControlSet).IsAssignableFrom(eventMessage.Message.InterfaceType) &&
-				scheduleWasNotPublishedBefore())
-			{
-				return true;
-			}
-
 			if (eventMessage.Message.ReferenceObjectId == StateHolder.Instance.State.SessionScopeData.LoggedOnPerson.Id)
 			{
 				if (typeof (IScheduleChangedInDefaultScenario).IsAssignableFrom(eventMessage.Message.InterfaceType))
@@ -133,12 +119,5 @@ namespace Teleopti.Ccc.AgentPortal.AgentScheduleMessenger
 
         	return false;
         }
-
-		private static bool scheduleWasNotPublishedBefore()
-		{
-			return StateHolder.Instance.State.SessionScopeData.LoggedOnPerson.WorkflowControlSet.SchedulesPublishedToDate == null ||
-			       StateHolder.Instance.State.SessionScopeData.LoggedOnPerson.WorkflowControlSet.SchedulesPublishedToDate <
-			       DateTime.Today;
-		}
     }
 }
