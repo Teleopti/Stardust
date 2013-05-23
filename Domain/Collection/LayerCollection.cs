@@ -36,11 +36,6 @@ namespace Teleopti.Ccc.Domain.Collection
 				item.SetParent(owner);
         }
 
-        public bool LayerIsOverlapping(ILayer<T> layer)
-        {
-	        return Items.Any(presentLayer => layer.Period.Intersect(presentLayer.Period));
-        }
-
 	    public void MoveAllLayers(TimeSpan time)
         {
             foreach (var layer in Items)

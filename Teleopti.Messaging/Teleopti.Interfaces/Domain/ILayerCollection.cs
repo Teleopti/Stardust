@@ -10,17 +10,6 @@ namespace Teleopti.Interfaces.Domain
     public interface ILayerCollection<T> : IList<ILayer<T>>
     {
         /// <summary>
-        /// Layers the is overlapping.
-        /// </summary>
-        /// <param name="layer">The layer.</param>
-        /// <returns></returns>
-        /// <remarks>
-        /// Created by: rogerkr
-        /// Created date: 2008-01-25
-        /// </remarks>
-        bool LayerIsOverlapping(ILayer<T> layer);
-
-        /// <summary>
         /// Moves all layers.
         /// </summary>
         /// <param name="time">The time.</param>
