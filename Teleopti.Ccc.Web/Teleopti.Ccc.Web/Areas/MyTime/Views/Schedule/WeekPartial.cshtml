@@ -68,13 +68,13 @@
 					</div>
 					<div class="icon text-request ir floatright" />
 				</div>
-			    <div class="holiday-agents show-request floatright" data-bind="visible: absenceRequestPermission, attr: {title :  holidayChanceText()}">
-					  <div>
-						<div class="small-circle" data-bind="animateBackground: holidayChanceColor()">
-						    <div class="small-radial-circle"></div>
+				<div class="holiday-agents show-request floatright" data-bind="visible: absenceRequestPermission, attr: {title :  holidayChanceText()}">
+					<div>
+						<div class="small-circle" data-bind="style: {background: holidayChanceColor()}" >
+							<div class="small-radial-circle"></div>
 						</div>
-			        </div> 
-			    </div>
+					</div> 
+				</div>
 				<!-- ko if: hasNote -->
 				<div class="icon comment-day ir floatright" data-bind="attr: {'tooltip-text': noteMessage}">
 				</div>

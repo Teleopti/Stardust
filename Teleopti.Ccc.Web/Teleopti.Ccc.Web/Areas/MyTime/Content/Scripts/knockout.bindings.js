@@ -14,7 +14,7 @@ ko.bindingHandlers.animateBackground = {
 		var value = valueAccessor(), allBindings = allBindingsAccessor();
 		var fadeDuration = allBindings.fadeDuration || 1500;
 		var valueUnwrapped = ko.utils.unwrapObservable(value);
-		$(element).stop().animate({ backgroundColor: valueUnwrapped}, fadeDuration);
+		$(element).stop().animate({ backgroundColor: valueUnwrapped }, fadeDuration);
 	}
 };
 
