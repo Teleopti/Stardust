@@ -63,11 +63,12 @@ namespace Teleopti.Ccc.WinCode.Common
             IPersonAssignment assignment = scheduleDay.AssignmentHighZOrder();
             if (assignment != null)
             {
-                if (assignment.ToMainShift() != null)
+	            var ms = assignment.ToMainShift();
+                if (ms != null)
                 {
-                    foreach (ILayer<IActivity> layer in assignment.ToMainShift().LayerCollection)
+                    foreach (ILayer<IActivity> layer in ms.LayerCollection)
                     {
-                        layerViewModels.Add(new MainShiftLayerViewModel(observer, layer, assignment.ToMainShift(), eventAggregator));
+                        layerViewModels.Add(new MainShiftLayerViewModel(observer, layer, ms, eventAggregator));
                     }
                 }
 

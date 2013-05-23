@@ -94,14 +94,21 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		}
 
 		/// TO BE CONTINUED....
+		
+		//remove me later
 		public virtual IMainShift ToMainShift()
 		{
 			if (!_mainShiftActivityLayers.Any())
 				return null;
 
 			var ret = new MainShift(ShiftCategory);
-			_mainShiftActivityLayers.ForEach(
-				layer => ret.LayerCollection.Add(new MainShiftActivityLayer(layer.Payload, layer.Period)));
+			ret.SetParent(this);
+			_mainShiftActivityLayers.ForEach(layer =>
+				{
+					var mainShiftLayer = new MainShiftActivityLayer(layer.Payload, layer.Period);
+					mainShiftLayer.SetId(layer.Id);
+					ret.LayerCollection.Add(mainShiftLayer);
+				});
 			return ret;
 		}
 
@@ -132,6 +139,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				{
 					var newLayer = new MainShiftActivityLayerNew(layer.Payload, layer.Period);
 					newLayer.SetParent(this);
+					newLayer.SetId(((IMainShiftActivityLayer)layer).Id);
 					_mainShiftActivityLayers.Add(newLayer);
 				});
 			ShiftCategory = mainShift.ShiftCategory;

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Teleopti.Interfaces.Domain;
@@ -40,6 +41,16 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 				return false;
 
 			return (Id.Value == other.Id.Value);
+		}
+
+		public override bool Equals(object other)
+		{
+			return Equals((IEntity)other);
+		}
+
+		public override int GetHashCode()
+		{
+			throw new NotImplementedException("this class should disappear anyhow");
 		}
     }
 }

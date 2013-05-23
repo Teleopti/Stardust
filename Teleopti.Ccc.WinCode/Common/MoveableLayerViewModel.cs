@@ -44,8 +44,6 @@ namespace Teleopti.Ccc.WinCode.Common
             {
 				var layer = Layer as ILayer<IActivity>;
 				Parent.LayerCollection.MoveDownLayer(layer);
-				if (layer != null && layer.Parent is IPersonAssignment && Parent is IMainShift)
-					((IPersonAssignment)layer.Parent).SetMainShift((IMainShift)Parent);
                 LayerMoved();
             }
 
@@ -57,8 +55,6 @@ namespace Teleopti.Ccc.WinCode.Common
             {
 				var layer = Layer as ILayer<IActivity>;
 				Parent.LayerCollection.MoveUpLayer(layer);
-				if (layer != null && layer.Parent is IPersonAssignment && Parent is IMainShift)
-					((IPersonAssignment)layer.Parent).SetMainShift((IMainShift)Parent);
 				LayerMoved();
             }
         }

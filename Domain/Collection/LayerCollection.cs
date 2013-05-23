@@ -31,8 +31,7 @@ namespace Teleopti.Ccc.Domain.Collection
                 _owner.OnAdd(item);
             Items.Add(item);
 			var owner = _owner as IEntity;
-					//hack for now - will be removed
-			if(owner != null && !(owner is IMainShift))
+			if(owner != null)
 				item.SetParent(owner);
         }
 
