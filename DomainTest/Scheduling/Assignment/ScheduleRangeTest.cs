@@ -447,12 +447,12 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                     IScheduleDay day1 = _target.ScheduledDay(new DateOnly(2000, 1, 2));
                     IScheduleDay day2 = _target.ScheduledDay(new DateOnly(2000, 1, 3));
 
-                    Assert.AreEqual(ass1.ToMainShift().LayerCollection[0].Period,
-                                    day1.PersonAssignmentCollection()[0].ToMainShift().LayerCollection[0].Period);
-                    Assert.AreEqual(ass2.ToMainShift().LayerCollection[0].Period,
-                                    day2.PersonAssignmentCollection()[0].ToMainShift().LayerCollection[0].Period);
-                    Assert.AreEqual(ass3.ToMainShift().LayerCollection[0].Period,
-                                    day2.PersonAssignmentConflictCollection[0].ToMainShift().LayerCollection[0].Period);
+										Assert.AreEqual(ass1.MainShiftActivityLayers.First().Period,
+																		day1.PersonAssignmentCollection()[0].MainShiftActivityLayers.First().Period);
+										Assert.AreEqual(ass2.MainShiftActivityLayers.First().Period,
+																		day2.PersonAssignmentCollection()[0].MainShiftActivityLayers.First().Period);
+										Assert.AreEqual(ass3.MainShiftActivityLayers.First().Period,
+																		day2.PersonAssignmentConflictCollection[0].MainShiftActivityLayers.First().Period);
                     Assert.AreEqual(2, day1.PersonAbsenceCollection().Count);
                     Assert.AreEqual(2, day2.PersonAbsenceCollection().Count);
                     Assert.AreEqual(dayOff1.DayOff.Anchor, day1.PersonDayOffCollection()[0].DayOff.Anchor);
@@ -644,8 +644,8 @@ namespace Teleopti.Ccc.DomainTest.Scheduling.Assignment
                 IList<IPersonAssignment> res =
                     _target.ScheduledDay(new DateOnly(2000, 1, 1)).PersonAssignmentCollection();
                 Assert.AreEqual(2, res.Count);
-                Assert.AreEqual(pAssOk2.ToMainShift().LayerCollection[0].Period, res[0].ToMainShift().LayerCollection[0].Period);
-                Assert.AreEqual(pAssOk.ToMainShift().LayerCollection[0].Period, res[1].ToMainShift().LayerCollection[0].Period);
+								Assert.AreEqual(pAssOk2.MainShiftActivityLayers.First().Period, res[0].MainShiftActivityLayers.First().Period);
+								Assert.AreEqual(pAssOk.MainShiftActivityLayers.First().Period, res[1].MainShiftActivityLayers.First().Period);
             }
 			_mocks.VerifyAll();
 		}
