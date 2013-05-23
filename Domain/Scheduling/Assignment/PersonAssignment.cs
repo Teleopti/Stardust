@@ -309,7 +309,7 @@ namespace Teleopti.Ccc.Domain.Scheduling.Assignment
 		{
 			get
 			{
-				return (ToMainShift() != null && ToMainShift().HasProjection) || (_overtimeShiftCollection.Count > 0);
+				return MainShiftActivityLayers.Any() || _overtimeShiftCollection.Count > 0;
 			}
 		}
 		#endregion
