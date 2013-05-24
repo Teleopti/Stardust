@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using NUnit.Framework;
 using Teleopti.Ccc.Domain.SystemSetting.GlobalSetting;
 using Teleopti.Ccc.TestCommon.FakeData;
@@ -40,5 +41,37 @@ namespace Teleopti.Ccc.WinCodeTest.Meetings
             Assert.AreEqual("3, optional", _target.OptionalParticipants);
             Assert.AreEqual(1, _target.OptionalParticipantList.Count);
         }
+
+		[Test]
+		public void ShouldNotBePossibleToAddAlreadyExistingPersonToRequired()
+		{
+			var guid = Guid.NewGuid();
+			var person1 = PersonFactory.CreatePerson("firstName", "lastName");
+			person1.SetId(guid);
+			var contactPerson1 = new ContactPersonViewModel(person1);
+			var contactPerson2 = new ContactPersonViewModel(person1);
+			
+			_target.RequiredParticipantList.Clear();
+			_target.AddRequiredParticipant(contactPerson1);
+			_target.AddRequiredParticipant(contactPerson2);
+
+			Assert.AreEqual(1, _target.RequiredParticipantList.Count);
+		}
+
+		[Test]
+		public void ShouldNotBePossibleToAddAlreadyExistingPersonToOptional()
+		{
+			var guid = Guid.NewGuid();
+			var person1 = PersonFactory.CreatePerson("firstName", "lastName");
+			person1.SetId(guid);
+			var contactPerson1 = new ContactPersonViewModel(person1);
+			var contactPerson2 = new ContactPersonViewModel(person1);
+
+			_target.OptionalParticipantList.Clear();
+			_target.AddOptionalParticipant(contactPerson1);
+			_target.AddOptionalParticipant(contactPerson2);
+
+			Assert.AreEqual(1, _target.OptionalParticipantList.Count);
+		}
     }
 }
